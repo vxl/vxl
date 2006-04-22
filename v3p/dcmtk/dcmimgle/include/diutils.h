@@ -21,14 +21,6 @@
  *
  *  Purpose: Utilities (Header)
  *
- *  Last Update:      Author: peter_vanroose 
- *  Update Date:      Date: 2004/05/28 17:59:56 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmimgle/include/diutils.h,v 
- *  CVS/RCS Revision: Revision: 1.2 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -309,8 +301,7 @@ const SP_Interpretation PhotometricInterpretationNames[] =
  */
 class DicomImageClass
 {
-
- public:
+  public:
 
     /** calculate maximum value which could be stored in the specified number of bits
      *
@@ -406,99 +397,3 @@ class DicomImageClass
 
 
 #endif
-
-
-/*
- *
- * CVS/RCS Log:
- * Log: diutils.h,v 
- * Revision 1.2  2004/05/28 17:59:56  peter_vanroose
- * typo corrected
- *
- * Revision 1.1  2004/01/14 04:01:10  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.21  2002/11/27 14:08:08  meichel
- * Adapted module dcmimgle to use of new header file ofstdinc.h
- *
- * Revision 1.20  2002/06/26 16:08:14  joergr
- * Added configuration flag that enables the DicomImage class to take the
- * responsibility of an external DICOM dataset (i.e. delete it on destruction).
- *
- * Revision 1.19  2001/11/09 16:25:59  joergr
- * Added support for Window BMP file format.
- *
- * Revision 1.18  2001/09/28 13:11:00  joergr
- * Added new flag (CIF_KeepYCbCrColorModel) which avoids conversion of YCbCr
- * color models to RGB.
- *
- * Revision 1.17  2001/06/01 15:49:52  meichel
- * Updated copyright header
- *
- * Revision 1.16  2000/07/07 13:40:31  joergr
- * Added support for LIN OD presentation LUT shape.
- *
- * Revision 1.15  2000/06/07 14:30:28  joergr
- * Added method to set the image polarity (normal, reverse).
- *
- * Revision 1.14  2000/04/28 12:32:33  joergr
- * DebugLevel - global for the module - now derived from OFGlobal (MF-safe).
- *
- * Revision 1.13  2000/03/08 16:24:25  meichel
- * Updated copyright header.
- *
- * Revision 1.12  2000/02/23 15:12:16  meichel
- * Corrected macro for Borland C++ Builder 4 workaround.
- *
- * Revision 1.11  2000/02/01 10:52:38  meichel
- * Avoiding to include <stdlib.h> as extern "C" on Borland C++ Builder 4,
- *   workaround for bug in compiler header files.
- *
- * Revision 1.10  1999/09/17 13:08:13  joergr
- * Added/changed/completed DOC++ style comments in the header files.
- *
- * Revision 1.9  1999/07/23 14:16:16  joergr
- * Added flag to avoid color space conversion for color images (not yet
- * implemented).
- *
- * Revision 1.8  1999/04/30 16:33:19  meichel
- * Now including stdio.h in diutils.h, required on SunOS
- *
- * Revision 1.7  1999/04/28 14:55:41  joergr
- * Added experimental support to create grayscale images with more than 256
- * shades of gray to be displayed on a consumer monitor (use pastel colors).
- *
- * Revision 1.6  1999/03/24 17:20:28  joergr
- * Added/Modified comments and formatting.
- *
- * Revision 1.5  1999/02/03 17:36:06  joergr
- * Moved global functions maxval() and determineRepresentation() to class
- * DicomImageClass (as static methods).
- * Added BEGIN_EXTERN_C and END_EXTERN_C to some C includes.
- *
- * Revision 1.4  1999/01/20 15:13:12  joergr
- * Added new overlay plane mode for bitmap shutters.
- *
- * Revision 1.3  1998/12/23 11:38:08  joergr
- * Introduced new overlay mode item EMO_Graphic (= EMO_Replace).
- *
- * Revision 1.2  1998/12/16 16:40:15  joergr
- * Some layouting.
- *
- * Revision 1.1  1998/11/27 15:51:45  joergr
- * Added copyright message.
- * Introduced global debug level for dcmimage module to control error output.
- * Moved type definitions to diutils.h.
- * Added methods to support presentation LUTs and shapes.
- * Introduced configuration flags to adjust behaviour in different cases.
- *
- * Revision 1.5  1998/06/25 08:50:10  joergr
- * Added compatibility mode to support ACR-NEMA images and wrong
- * palette attribute tags.
- *
- * Revision 1.4  1998/05/11 14:53:30  joergr
- * Added CVS/RCS header to each file.
- *
- *
- */

@@ -21,14 +21,6 @@
  *
  *  Purpose: DicomPixelRepresentationTemplate (Header)
  *
- *  Last Update:      Author: peter_vanroose 
- *  Update Date:      Date: 2004/01/17 15:06:25 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmimgle/include/dipxrept.h,v 
- *  CVS/RCS Revision: Revision: 1.2 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -160,61 +152,3 @@ inline int DiPixelRepresentationTemplate<Sint32>::isSigned() const
 
 
 #endif
-
-
-/*
- *
- * CVS/RCS Log:
- * Log: dipxrept.h,v 
- * Revision 1.2  2004/01/17 15:06:25  peter_vanroose
- * DiPixelRepresentationTemplate::getRepresentation() should not be protected since it is to be used outside class hierarchy
- *
- * Revision 1.1  2004/01/14 04:01:10  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.12  2001/06/01 15:49:50  meichel
- * Updated copyright header
- *
- * Revision 1.11  2000/03/08 16:24:23  meichel
- * Updated copyright header.
- *
- * Revision 1.10  2000/02/02 11:02:39  joergr
- * Removed space characters before preprocessor directives.
- *
- * Revision 1.9  1999/09/17 12:47:52  joergr
- * Added/changed/completed DOC++ style comments in the header files.
- *
- * Revision 1.8  1999/04/28 17:03:17  joergr
- * Added test whether the compiler supports the new explicit template
- * specialization syntax (see below).
- *
- * Revision 1.7  1999/04/28 14:54:37  joergr
- * Added "template<>" to specialized template functions/methods to avoid
- * compiler warnings reported by gcc version egcs-2.91.66 (conforms with new
- * C++ standard).
- *
- * Revision 1.6  1999/03/24 17:20:23  joergr
- * Added/Modified comments and formatting.
- *
- * Revision 1.5  1999/02/11 16:41:39  joergr
- * Corrected some typos and formatting.
- *
- * Revision 1.4  1998/12/22 14:37:22  joergr
- * Removed methods getMinimum/Maximum().
- *
- * Revision 1.3  1998/12/16 16:38:23  joergr
- * Added methods to determine absolute minimum and maximum value for given
- * value representation.
- *
- * Revision 1.2  1998/12/14 17:28:53  joergr
- * Removed old source header.
- *
- * Revision 1.1  1998/11/27 15:45:50  joergr
- * Added copyright message.
- *
- * Revision 1.2  1998/05/11 14:53:28  joergr
- * Added CVS/RCS header to each file.
- *
- *
- */

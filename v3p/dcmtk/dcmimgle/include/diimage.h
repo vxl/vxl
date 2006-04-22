@@ -21,14 +21,6 @@
  *
  *  Purpose: DicomImage (Header)
  *
- *  Last Update:      Author: peter_vanroose 
- *  Update Date:      Date: 2004/05/28 17:59:56 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmimgle/include/diimage.h,v 
- *  CVS/RCS Revision: Revision: 1.2 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -74,7 +66,6 @@ class DiInputPixel;
  */
 class DiImage
 {
-
  public:
 
     /** constructor
@@ -626,145 +617,3 @@ class DiImage
 
 
 #endif
-
-
-
-
-/*
- *
- * CVS/RCS Log:
- * Log: diimage.h,v 
- * Revision 1.2  2004/05/28 17:59:56  peter_vanroose
- * typo corrected
- *
- * Revision 1.1  2004/01/14 04:01:10  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.29  2002/12/09 13:32:51  joergr
- * Renamed parameter/local variable to avoid name clashes with global
- * declaration left and/or right (used for as iostream manipulators).
- *
- * Revision 1.28  2002/11/27 14:08:04  meichel
- * Adapted module dcmimgle to use of new header file ofstdinc.h
- *
- * Revision 1.27  2002/11/26 14:48:32  joergr
- * Added Smallest/LargestImagePixelValue to the list of attributes to be
- * removed from a newly created dataset.
- *
- * Revision 1.26  2002/08/02 15:03:20  joergr
- * Enhanced writeFrameToDataset() routine (remove out-data DICOM attributes
- * from the dataset).
- * Added function to write the current image (not only a selected frame) to a
- * DICOM dataset.
- *
- * Revision 1.25  2002/06/26 16:01:55  joergr
- * Added support for polarity flag to color images.
- * Added new method to write a selected frame to a DICOM dataset (incl. required
- * attributes from the "Image Pixel Module").
- *
- * Revision 1.24  2002/04/16 13:53:11  joergr
- * Added configurable support for C++ ANSI standard includes (e.g. streams).
- * Thanks to Andreas Barth <Andreas.Barth@bruker-biospin.de> for his
- * contribution.
- *
- * Revision 1.23  2002/01/29 17:05:50  joergr
- * Added optional flag to the "Windows DIB" methods allowing to switch off the
- * scanline padding.
- *
- * Revision 1.22  2001/11/27 18:18:22  joergr
- * Added support for plugable output formats in class DicomImage. First
- * implementation is JPEG.
- *
- * Revision 1.21  2001/11/09 16:26:37  joergr
- * Added support for Window BMP file format.
- * Enhanced and renamed createTrueColorDIB() method.
- *
- * Revision 1.20  2001/06/20 15:12:49  joergr
- * Enhanced multi-frame support for command line tool 'dcm2pnm': extract all
- * or a range of frames with one call.
- *
- * Revision 1.19  2001/06/01 15:49:42  meichel
- * Updated copyright header
- *
- * Revision 1.18  2000/03/08 16:24:16  meichel
- * Updated copyright header.
- *
- * Revision 1.17  2000/02/02 11:02:38  joergr
- * Removed space characters before preprocessor directives.
- *
- * Revision 1.16  1999/10/06 13:28:21  joergr
- * Corrected creation of PrintBitmap pixel data: VOI windows should be applied
- * before clipping to avoid that the region outside the image (border) is also
- * windowed (this requires a new method in dcmimgle to create a DicomImage
- * with the grayscale transformations already applied).
- *
- * Revision 1.15  1999/09/17 12:12:18  joergr
- * Added/changed/completed DOC++ style comments in the header files.
- *
- * Revision 1.14  1999/08/25 16:39:31  joergr
- * Allow clipping region to be outside the image (overlapping).
- *
- * Revision 1.13  1999/07/23 13:53:00  joergr
- * Added support for attribute 'ImagerPixelSpacing'.
- * Added support for attribute 'RepresentativeFrameNumber'.
- * Added methods to set 'PixelAspectRatio'.
- *
- * Revision 1.12  1999/04/28 14:47:34  joergr
- * Added experimental support to create grayscale images with more than 256
- * shades of gray to be displayed on a consumer monitor (use pastel colors).
- *
- * Revision 1.11  1999/03/24 17:20:01  joergr
- * Added/Modified comments and formatting.
- *
- * Revision 1.10  1999/02/08 12:38:12  joergr
- * Added parameter 'idx' to some overlay methods to distinguish between
- * built-in and additional overlay planes.
- *
- * Revision 1.9  1999/02/03 17:01:45  joergr
- * Added BEGIN_EXTERN_C and END_EXTERN_C to some C includes.
- *
- * Revision 1.8  1999/01/20 14:59:37  joergr
- * Added new output method to fill external memory buffer with rendered pixel
- * data.
- *
- * Revision 1.7  1999/01/11 09:32:32  joergr
- * Removed method 'getMinMaxValues()' in class 'DicomImage'.
- *
- * Revision 1.6  1998/12/23 11:33:08  joergr
- * Corrected some typos and formatting.
- *
- * Revision 1.5  1998/12/22 14:03:53  joergr
- * Changed parameter declaration to avoid compiler warnings (hide parameter
- * name).
- *
- * Revision 1.4  1998/12/16 16:29:04  joergr
- * Removed several methods used for monochrome images only in base class
- * 'DiImage'. Introduced mechanism to use the methods directly.
- *
- * Revision 1.3  1998/12/14 17:17:29  joergr
- * Added methods to add and remove additional overlay planes (still untested).
- *
- * Revision 1.2  1998/11/30 12:24:07  joergr
- * Added const type qualifier to some parameters to avoid errors with MSVC5
- * (couldn't create instance of abstract class).
- *
- * Revision 1.1  1998/11/27 15:06:08  joergr
- * Added copyright message.
- * Added methods and constructors for flipping and rotating, changed for
- * scaling and clipping.
- * Added method to directly create java AWT bitmaps.
- * Renamed variable 'Status' to 'ImageStatus' because of possible conflicts
- * with X windows systems.
- * Added method to detach pixel data if it is no longer needed.
- * Added methods to support presentation LUTs and shapes.
- *
- * Revision 1.6  1998/07/01 08:39:21  joergr
- * Minor changes to avoid compiler warnings (gcc 2.8.1 with additional
- * options), e.g. add copy constructors.
- *
- * Revision 1.5  1998/05/11 14:53:16  joergr
- * Added CVS/RCS header to each file.
- *
- *
- */

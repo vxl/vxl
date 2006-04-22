@@ -21,14 +21,6 @@
  *
  *  Purpose: DicomRotateTemplate (Header)
  *
- *  Last Update:      Author: peter_vanroose 
- *  Update Date:      Date: 2004/08/04 10:36:46 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmimgle/include/dirotat.h,v 
- *  CVS/RCS Revision: Revision: 1.3 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -53,7 +45,6 @@ template<class T>
 class DiRotateTemplate
   : public DiTransTemplate<T>
 {
-
  public:
 
     /** constructor.
@@ -214,7 +205,7 @@ class DiRotateTemplate
                             *q = *p++;
                             q += this->Dest_X;
                         }
-                    }                    
+                    }
                     r += count;
                 }
             }
@@ -320,7 +311,7 @@ class DiRotateTemplate
                             *q = *p++;
                             q += this->Dest_X;
                         }
-                    }                    
+                    }
                     r += count;
                 }
             }
@@ -344,7 +335,7 @@ class DiRotateTemplate
         {
             s = data[j];
             for (unsigned long f = this->Frames; f != 0; f--)
-            {               
+            {
                 p = s;
                 q = s + count;
                 for (i = count / 2; i != 0; i--)
@@ -360,60 +351,3 @@ class DiRotateTemplate
 
 
 #endif
-                        
-
-/*
- *
- * CVS/RCS Log:
- * Log: dirotat.h,v 
- * Revision 1.3  2004/08/04 10:36:46  peter_vanroose
- * fix for gcc 3.4 (missing "this->")
- *
- * Revision 1.2  2004/05/28 17:59:56  peter_vanroose
- * typo corrected
- *
- * Revision 1.1  2004/01/14 04:01:10  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.10  2001/06/01 15:49:50  meichel
- * Updated copyright header
- *
- * Revision 1.9  2000/09/12 10:04:45  joergr
- * Corrected bug: wrong parameter for attribute search routine led to crashes
- * when multiple pixel data attributes were contained in the dataset (e.g.
- * IconImageSequence). Added new checking routines to avoid crashes when
- * processing corrupted image data.
- *
- * Revision 1.8  2000/03/08 16:24:24  meichel
- * Updated copyright header.
- *
- * Revision 1.7  2000/03/02 12:51:37  joergr
- * Rewrote variable initialization in class constructors to avoid warnings
- * reported on Irix.
- *
- * Revision 1.6  1999/09/17 13:07:20  joergr
- * Added/changed/completed DOC++ style comments in the header files.
- * Enhanced efficiency of some "for" loops.
- *
- * Revision 1.5  1999/03/24 17:17:20  joergr
- * Removed debug code.
- * Added/Modified comments and formatting.
- *
- * Revision 1.4  1999/01/20 15:12:47  joergr
- * Added debug code to measure time of some routines.
- *
- * Revision 1.3  1998/12/16 16:38:49  joergr
- * Added additional case to copy pixels.
- *
- * Revision 1.2  1998/12/14 17:30:49  joergr
- * Added (missing) implementation of methods to rotate images/frames without
- * creating a new DicomImage.
- *
- * Revision 1.1  1998/11/27 14:57:46  joergr
- * Added copyright message.
- * Added methods and classes for flipping and rotating, changed for
- * scaling and clipping.
- *
- *
- */

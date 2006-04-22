@@ -21,14 +21,6 @@
  *
  *  Purpose: DicomMonoOutputPixelTemplate (Header)
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:10 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmimgle/include/dimoopxt.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -66,7 +58,6 @@ class DiMonoOutputPixelTemplate
   : public DiMonoOutputPixel,
     public DiPixelRepresentationTemplate<T3>
 {
-
  public:
 
     /** constructor
@@ -396,7 +387,9 @@ class DiMonoOutputPixelTemplate
                             value = (T3)((double)low + (minvalue / (double)vlut->getAbsMaxRange()) * outrange);
                     }
                     OFBitmanipTemplate<T3>::setMem(Data, value, Count);                 // set output pixels to LUT value
-                } else {
+                }
+                else
+                {
                     register T2 value = 0;
                     const T2 absmin = (T2)inter->getAbsMinimum();
                     const T2 firstentry = vlut->getFirstEntry(value);                   // choose signed/unsigned method
@@ -517,7 +510,9 @@ class DiMonoOutputPixelTemplate
                                 }
                             }
                         }
-                    } else {                                                              // has no presentation LUT
+                    }
+                    else
+                    {                                                              // has no presentation LUT
                         createDisplayLUT(dlut, disp, vlut->getBits());
                         const double gradient = outrange / (double)vlut->getAbsMaxRange();
                         const T3 firstvalue = (T3)((double)low + (double)vlut->getFirstValue() * gradient);
@@ -728,7 +723,9 @@ class DiMonoOutputPixelTemplate
                             }
                         }
                     }
-                } else {                                                              // has no presentation LUT
+                }
+                else
+                {                                                              // has no presentation LUT
                     createDisplayLUT(dlut, disp, inter->getBits());
                     register const double gradient = outrange / (inter->getAbsMaxRange());
                     if (initOptimizationLUT(lut, ocnt))
@@ -1143,167 +1140,3 @@ class DiMonoOutputPixelTemplate
 
 
 #endif
-
-
-/*
- *
- * CVS/RCS Log:
- * Log: dimoopxt.h,v 
- * Revision 1.1  2004/01/14 04:01:10  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.39  2002/12/09 13:32:53  joergr
- * Renamed parameter/local variable to avoid name clashes with global
- * declaration left and/or right (used for as iostream manipulators).
- *
- * Revision 1.38  2002/11/27 14:08:06  meichel
- * Adapted module dcmimgle to use of new header file ofstdinc.h
- *
- * Revision 1.37  2002/06/19 08:12:01  meichel
- * Added typecasts to avoid ambiguity with built-in functions on gcc 3.2
- *
- * Revision 1.36  2001/06/01 15:49:46  meichel
- * Updated copyright header
- *
- * Revision 1.35  2000/05/03 09:46:28  joergr
- * Removed most informational and some warning messages from release built
- * (#ifndef DEBUG).
- *
- * Revision 1.34  2000/04/28 12:32:31  joergr
- * DebugLevel - global for the module - now derived from OFGlobal (MF-safe).
- *
- * Revision 1.33  2000/04/27 13:08:40  joergr
- * Dcmimgle library code now consistently uses ofConsole for error output.
- *
- * Revision 1.32  2000/03/08 16:24:20  meichel
- * Updated copyright header.
- *
- * Revision 1.31  2000/03/07 16:15:12  joergr
- * Added explicit type casts to make Sun CC 2.0.1 happy.
- *
- * Revision 1.30  2000/03/06 18:19:36  joergr
- * Moved get-method to base class, renamed method and made method virtual to
- * avoid hiding of methods (reported by Sun CC 4.2).
- *
- * Revision 1.29  2000/03/03 14:09:13  meichel
- * Implemented library support for redirecting error messages into memory
- *   instead of printing them to stdout/stderr for GUI applications.
- *
- * Revision 1.28  2000/02/01 10:52:37  meichel
- * Avoiding to include <stdlib.h> as extern "C" on Borland C++ Builder 4,
- *   workaround for bug in compiler header files.
- *
- * Revision 1.27  1999/10/11 20:14:14  joergr
- * Fixed bug in window() routine for cases where presentation LUT is active.
- *
- * Revision 1.26  1999/10/06 13:42:03  joergr
- * Added method to remove reference to (internally handled) pixel data.
- *
- * Revision 1.25  1999/09/17 12:40:45  joergr
- * Added/changed/completed DOC++ style comments in the header files.
- * Enhanced efficiency of some "for" loops.
- *
- * Revision 1.24  1999/09/10 08:45:19  joergr
- * Added support for CIELAB display function.
- *
- * Revision 1.23  1999/08/25 16:41:53  joergr
- * Added new feature: Allow clipping region to be outside the image
- * (overlapping).
- *
- * Revision 1.22  1999/08/17 10:26:08  joergr
- * Commented unused parameter names to avoid compiler warnings.
- *
- * Revision 1.21  1999/07/23 14:08:44  joergr
- * Changed implementation/interpretation of windows center/width (according to
- * new letter ballot of supplement 33).
- * Enhanced handling of corrupted pixel data (wrong length).
- *
- * Revision 1.20  1999/05/03 15:43:21  joergr
- * Replaced method applyOptimizationLUT by its contents (method body) to avoid
- * warnings (and possible errors) on Sun CC 2.0.1 :-/
- *
- * Revision 1.18  1999/04/30 16:10:50  meichel
- * Minor code purifications to keep IBM xlC quiet
- *
- * Revision 1.17  1999/04/29 16:46:46  meichel
- * Minor code purifications to keep DEC cxx 6 quiet.
- *
- * Revision 1.16  1999/04/29 09:38:34  joergr
- * Changed position of "#ifdef" to avoid compiler warnings.
- *
- * Revision 1.15  1999/04/29 09:20:01  joergr
- * Removed color related image files from public toolkit part.
- *
- * Revision 1.14  1999/04/28 18:56:07  joergr
- * Removed support for pastel color output from public DCMTK part.
- *
- * Revision 1.13  1999/04/28 14:51:44  joergr
- * Added experimental support to create grayscale images with more than 256
- * shades of gray to be displayed on a consumer monitor (use pastel colors).
- * Introduced new scheme for the debug level variable: now each level can be
- * set separately (there is no "include" relationship).
- *
- * Revision 1.12  1999/03/24 17:20:14  joergr
- * Added/Modified comments and formatting.
- *
- * Revision 1.11  1999/03/02 12:03:52  joergr
- * Corrected bug in output routine of monochrome pixel data (wrong scaling when
- * Barten transformation and windowing are active).
- *
- * Revision 1.10  1999/02/28 16:41:01  joergr
- * Corrected bug: the output bits for bitmaps shutters were inverted (this was
- * done due to an error in the used test images).
- *
- * Revision 1.9  1999/02/11 16:40:19  joergr
- * Added routine to check whether particular grayscale values are unused in
- * the output data.
- * Removed two small memory leaks reported by dmalloc library.
- *
- * Revision 1.8  1999/02/05 16:44:52  joergr
- * Corrected calculation of DDL value for bitmaps shutters (overlays).
- *
- * Revision 1.7  1999/02/05 15:13:36  joergr
- * Added conversion P-Value to DDL when display function is absent.
- *
- * Revision 1.6  1999/02/03 17:32:43  joergr
- * Added optimization LUT to transform pixel data.
- * Added support for calibration according to Barten transformation (incl.
- * a DISPLAY file describing the monitor characteristic).
- *
- * Revision 1.5  1999/01/20 15:11:05  joergr
- * Replaced invocation of getCount() by member variable Count where possible.
- * Added new output method to fill external memory buffer with rendered pixel
- * data.
- * Added new overlay plane mode for bitmap shutters.
- * Added optimization to modality and VOI transformation (using additional
- * LUTs).
- *
- * Revision 1.4  1998/12/23 12:40:01  joergr
- * Removed unused parameter (BitsPerSample).
- *
- * Revision 1.3  1998/12/22 14:32:49  joergr
- * Improved implementation of presentation LUT application (and other gray
- * scale transformations). Tested with ECR test images from David Clunie.
- *
- * Revision 1.2  1998/12/14 17:25:55  joergr
- * Added support for correct scaling of input/output values for grayscale
- * transformations.
- *
- * Revision 1.1  1998/11/27 15:29:53  joergr
- * Added copyright message.
- * Introduced global debug level for dcmimage module to control error output.
- * Corrected bug in VOI LUT transformation method.
- * Changed behaviour: now window width of 0 is valid and negative width
- * is invalid.
- *
- * Revision 1.6  1998/07/01 08:39:24  joergr
- * Minor changes to avoid compiler warnings (gcc 2.8.1 with additional
- * options), e.g. add copy constructors.
- *
- * Revision 1.5  1998/05/11 14:53:22  joergr
- * Added CVS/RCS header to each file.
- *
- *
- */
-

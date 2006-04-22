@@ -21,14 +21,6 @@
  *
  *  Purpose: DicomMonochromeCopyTemplate (Header)
  *
- *  Last Update:      Author: peter_vanroose 
- *  Update Date:      Date: 2004/08/04 10:36:46 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmimgle/include/dimocpt.h,v 
- *  CVS/RCS Revision: Revision: 1.2 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -52,7 +44,6 @@ template<class T>
 class DiMonoCopyTemplate
   : public DiMonoPixelTemplate<T>
 {
-
  public:
 
     /** constructor
@@ -101,44 +92,3 @@ class DiMonoCopyTemplate
 
 
 #endif
-
-
-/*
- *
- * CVS/RCS Log:
- * Log: dimocpt.h,v 
- * Revision 1.2  2004/08/04 10:36:46  peter_vanroose
- * fix for gcc 3.4 (missing "this->")
- *
- * Revision 1.1  2004/01/14 04:01:10  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.8  2001/06/01 15:49:44  meichel
- * Updated copyright header
- *
- * Revision 1.7  2000/09/12 10:04:44  joergr
- * Corrected bug: wrong parameter for attribute search routine led to crashes
- * when multiple pixel data attributes were contained in the dataset (e.g.
- * IconImageSequence). Added new checking routines to avoid crashes when
- * processing corrupted image data.
- *
- * Revision 1.6  2000/03/08 16:24:18  meichel
- * Updated copyright header.
- *
- * Revision 1.5  1999/09/17 12:23:56  joergr
- * Added/changed/completed DOC++ style comments in the header files.
- *
- * Revision 1.4  1999/04/28 14:49:19  joergr
- * Changed comments/formatting.
- *
- * Revision 1.2  1999/02/11 16:01:56  joergr
- * Corrected some typos and formatting.
- *
- * Revision 1.1  1998/11/27 15:15:50  joergr
- * Added copyright message.
- * Introduced new method and corresponding classes to create a copy of a
- * dcmimage object (optional parameters: frame start and count).
- *
- * 
- */

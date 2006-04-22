@@ -21,14 +21,6 @@
  *
  *  Purpose: DicomInputPixelTemplate (Header)
  *
- *  Last Update:      Author: peter_vanroose 
- *  Update Date:      Date: 2004/08/04 10:36:46 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmimgle/include/diinpxt.h,v 
- *  CVS/RCS Revision: Revision: 1.3 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -127,7 +119,6 @@ class DiInputPixelTemplate
   : public DiInputPixel,
     public DiPixelRepresentationTemplate<T2>
 {
-
  public:
 
     /** constructor
@@ -586,117 +577,3 @@ class DiInputPixelTemplate
 
 
 #endif
-
-
-/*
- *
- * CVS/RCS Log:
- * Log: diinpxt.h,v 
- * Revision 1.3  2004/08/04 10:36:46  peter_vanroose
- * fix for gcc 3.4 (missing "this->")
- *
- * Revision 1.2  2004/05/28 17:59:56  peter_vanroose
- * typo corrected
- *
- * Revision 1.1  2004/01/14 04:01:10  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.24  2002/10/21 10:13:50  joergr
- * Corrected wrong calculation of min/max pixel value in cases where the
- * stored pixel data exceeds the expected size.
- * Thanks to Andreas Barth <Andreas.Barth@bruker-biospin.de> for the bug
- * report.
- *
- * Revision 1.23  2001/11/13 18:07:36  joergr
- * Fixed bug occurring when processing monochrome images with an odd number of
- * pixels.
- *
- * Revision 1.22  2001/10/10 15:25:09  joergr
- * Removed redundant variable declarations to avoid compiler warnings
- * ("declaration of ... shadows previous local").
- *
- * Revision 1.21  2001/09/28 13:04:59  joergr
- * Enhanced algorithm to determine the min and max value.
- *
- * Revision 1.20  2001/06/01 15:49:42  meichel
- * Updated copyright header
- *
- * Revision 1.19  2000/05/03 09:46:28  joergr
- * Removed most informational and some warning messages from release built
- * (#ifndef DEBUG).
- *
- * Revision 1.18  2000/04/28 12:32:30  joergr
- * DebugLevel - global for the module - now derived from OFGlobal (MF-safe).
- *
- * Revision 1.17  2000/04/27 13:08:39  joergr
- * Dcmimgle library code now consistently uses ofConsole for error output.
- *
- * Revision 1.16  2000/03/08 16:24:17  meichel
- * Updated copyright header.
- *
- * Revision 1.15  2000/03/03 14:09:12  meichel
- * Implemented library support for redirecting error messages into memory
- *   instead of printing them to stdout/stderr for GUI applications.
- *
- * Revision 1.14  1999/09/17 12:21:57  joergr
- * Added/changed/completed DOC++ style comments in the header files.
- * Enhanced efficiency of some "for" loops and of the implementation to
- * determine min/max values of the input pixels.
- *
- * Revision 1.13  1999/07/23 13:54:38  joergr
- * Optimized memory usage for converting input pixel data (reference instead
- * of copying where possible).
- *
- * Revision 1.12  1999/05/04 09:20:39  meichel
- * Minor code purifications to keep IBM xlC quiet
- *
- * Revision 1.11  1999/04/30 16:23:59  meichel
- * Minor code purifications to keep IBM xlC quiet
- *
- * Revision 1.10  1999/04/28 14:48:39  joergr
- * Introduced new scheme for the debug level variable: now each level can be
- * set separately (there is no "include" relationship).
- *
- * Revision 1.9  1999/03/24 17:20:03  joergr
- * Added/Modified comments and formatting.
- *
- * Revision 1.8  1999/02/11 16:00:54  joergr
- * Removed inline declarations from several methods.
- *
- * Revision 1.7  1999/02/03 17:04:37  joergr
- * Moved global functions maxval() and determineRepresentation() to class
- * DicomImageClass (as static methods).
- *
- * Revision 1.6  1999/01/20 15:01:31  joergr
- * Replaced invocation of getCount() by member variable Count where possible.
- *
- * Revision 1.5  1999/01/11 09:34:28  joergr
- * Corrected bug in determining 'AbsMaximum' (removed '+ 1').
- *
- * Revision 1.4  1998/12/22 14:23:16  joergr
- * Added calculation of member variables AbsMinimum/AbsMaximum.
- * Replaced method copyMem by for-loop copying each item.
- * Removed some '#ifdef DEBUG'.
- *
- * Revision 1.3  1998/12/16 16:30:34  joergr
- * Added methods to determine absolute minimum and maximum value for given
- * value representation.
- *
- * Revision 1.2  1998/12/14 17:18:23  joergr
- * Reformatted source code.
- *
- * Revision 1.1  1998/11/27 15:08:21  joergr
- * Added copyright message.
- * Introduced global debug level for dcmimage module to control error output.
- * Added support for new bit manipulation class.
- *
- * Revision 1.8  1998/07/01 08:39:21  joergr
- * Minor changes to avoid compiler warnings (gcc 2.8.1 with additional
- * options), e.g. add copy constructors.
- *
- * Revision 1.7  1998/05/11 14:53:17  joergr
- * Added CVS/RCS header to each file.
- *
- *
- */

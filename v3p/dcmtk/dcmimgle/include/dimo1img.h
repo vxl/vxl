@@ -21,14 +21,6 @@
  *
  *  Purpose: DicomMonochrome1Image (Header)
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:10 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmimgle/include/dimo1img.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -50,7 +42,6 @@
 class DiMono1Image
   : public DiMonoImage
 {
-
  public:
 
     /** constructor
@@ -234,54 +225,3 @@ class DiMono1Image
 
 
 #endif
-
-
-/*
- *
- * CVS/RCS Log:
- * Log: dimo1img.h,v 
- * Revision 1.1  2004/01/14 04:01:10  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.10  2002/12/09 13:32:51  joergr
- * Renamed parameter/local variable to avoid name clashes with global
- * declaration left and/or right (used for as iostream manipulators).
- *
- * Revision 1.9  2001/11/27 18:18:23  joergr
- * Added support for plugable output formats in class DicomImage. First
- * implementation is JPEG.
- *
- * Revision 1.8  2001/11/09 16:28:03  joergr
- * Updated comments.
- *
- * Revision 1.7  2001/06/01 15:49:43  meichel
- * Updated copyright header
- *
- * Revision 1.6  2000/03/08 16:24:17  meichel
- * Updated copyright header.
- *
- * Revision 1.5  1999/09/17 12:22:54  joergr
- * Added/changed/completed DOC++ style comments in the header files.
- *
- * Revision 1.4  1999/08/25 16:41:51  joergr
- * Added new feature: Allow clipping region to be outside the image
- * (overlapping).
- *
- * Revision 1.3  1999/03/24 17:20:05  joergr
- * Added/Modified comments and formatting.
- *
- * Revision 1.2  1999/01/20 15:03:19  joergr
- * Added new output method to fill external memory buffer with rendered pixel
- * data.
- *
- * Revision 1.1  1998/11/27 15:12:17  joergr
- * Added copyright message.
- * Added methods and constructors for flipping and rotating, changed for
- * scaling and clipping.
- *
- * Revision 1.2  1998/05/11 14:53:18  joergr
- * Added CVS/RCS header to each file.
- *
- *
- */

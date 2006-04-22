@@ -21,14 +21,6 @@
  *
  *  Purpose: DicomMonochromeInputPixelTemplate (Header)
  *
- *  Last Update:      Author: peter_vanroose 
- *  Update Date:      Date: 2004/08/04 10:36:46 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmimgle/include/dimoipxt.h,v 
- *  CVS/RCS Revision: Revision: 1.2 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -52,7 +44,6 @@ template<class T1, class T2, class T3>
 class DiMonoInputPixelTemplate
   : public DiMonoPixelTemplate<T3>
 {
-
  public:
 
     /** constructor
@@ -233,7 +224,9 @@ class DiMonoInputPixelTemplate
                         for (i = this->InputCount; i != 0; i--)   // copy pixel data: can't use copyMem because T1 isn't always equal to T3
                             *(q++) = (T3)*(p++);
                     }
-                } else {
+                }
+                else
+                {
 #ifdef DEBUG
                     if (DicomImageClass::checkDebugLevel(DicomImageClass::DL_Informationals))
                     {
@@ -293,121 +286,3 @@ class DiMonoInputPixelTemplate
 
 
 #endif
-
-
-/*
- *
- * CVS/RCS Log:
- * Log: dimoipxt.h,v 
- * Revision 1.2  2004/08/04 10:36:46  peter_vanroose
- * fix for gcc 3.4 (missing "this->")
- *
- * Revision 1.1  2004/01/14 04:01:10  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.25  2002/10/21 10:13:51  joergr
- * Corrected wrong calculation of min/max pixel value in cases where the
- * stored pixel data exceeds the expected size.
- * Thanks to Andreas Barth <Andreas.Barth@bruker-biospin.de> for the bug
- * report.
- *
- * Revision 1.24  2002/06/26 16:05:43  joergr
- * Enhanced handling of corrupted pixel data and/or length.
- *
- * Revision 1.23  2001/11/13 18:10:43  joergr
- * Fixed bug occurring when processing monochrome images with an odd number of
- * pixels.
- * Fixed bug with incorrect calculation of min/max pixel values in images with
- * modality LUTs where not all LUT entries are used (previous optimization rule
- * was apparently too optimistic).
- *
- * Revision 1.22  2001/09/28 13:07:12  joergr
- * Added further robustness checks.
- *
- * Revision 1.21  2001/06/01 15:49:45  meichel
- * Updated copyright header
- *
- * Revision 1.20  2000/06/02 12:40:50  joergr
- * Removed debug message.
- *
- * Revision 1.19  2000/05/03 09:46:28  joergr
- * Removed most informational and some warning messages from release built
- * (#ifndef DEBUG).
- *
- * Revision 1.18  2000/04/28 12:32:31  joergr
- * DebugLevel - global for the module - now derived from OFGlobal (MF-safe).
- *
- * Revision 1.17  2000/04/27 13:08:39  joergr
- * Dcmimgle library code now consistently uses ofConsole for error output.
- *
- * Revision 1.16  2000/03/08 16:24:19  meichel
- * Updated copyright header.
- *
- * Revision 1.15  2000/03/03 14:09:12  meichel
- * Implemented library support for redirecting error messages into memory
- *   instead of printing them to stdout/stderr for GUI applications.
- *
- * Revision 1.14  1999/09/17 12:26:00  joergr
- * Added/changed/completed DOC++ style comments in the header files.
- * iEnhanced efficiency of some "for" loops.
- *
- * Revision 1.13  1999/07/23 14:04:35  joergr
- * Optimized memory usage for converting input pixel data (reference instead
- * of copying where possible).
- *
- * Revision 1.12  1999/05/03 15:43:20  joergr
- * Replaced method applyOptimizationLUT by its contents (method body) to avoid
- * warnings (and possible errors) on Sun CC 2.0.1 :-/
- *
- * Revision 1.11  1999/05/03 11:09:29  joergr
- * Minor code purifications to keep Sun CC 2.0.1 quiet.
- *
- * Revision 1.10  1999/04/29 16:46:45  meichel
- * Minor code purifications to keep DEC cxx 6 quiet.
- *
- * Revision 1.9  1999/04/28 14:50:35  joergr
- * Introduced new scheme for the debug level variable: now each level can be
- * set separately (there is no "include" relationship).
- *
- * Revision 1.8  1999/03/24 17:20:10  joergr
- * Added/Modified comments and formatting.
- *
- * Revision 1.7  1999/03/02 12:02:27  joergr
- * Corrected bug: when determining minimum and maximum pixel value (external)
- * modality LUTs were ignored.
- *
- * Revision 1.6  1999/02/11 16:37:10  joergr
- * Removed inline declarations from several methods.
- *
- * Revision 1.5  1999/02/03 17:29:19  joergr
- * Added optimization LUT to transform pixel data.
- *
- * Revision 1.4  1999/01/20 15:06:24  joergr
- * Replaced invocation of getCount() by member variable Count where possible.
- * Added optimization to modality and VOI transformation (using additional
- * LUTs).
- *
- * Revision 1.3  1998/12/22 14:29:39  joergr
- * Replaced method copyMem by for-loop copying each item.
- * Renamed some variables
- *
- * Revision 1.2  1998/12/14 17:21:09  joergr
- * Added support for signed values as second entry in look-up tables
- * (= first value mapped).
- *
- * Revision 1.1  1998/11/27 15:24:08  joergr
- * Added copyright message.
- * Added new cases to optimize rescaling.
- * Added support for new bit manipulation class.
- * Corrected bug in modality LUT transformation method.
- *
- * Revision 1.5  1998/07/01 08:39:23  joergr
- * Minor changes to avoid compiler warnings (gcc 2.8.1 with additional
- * options), e.g. add copy constructors.
- *
- * Revision 1.4  1998/05/11 14:53:21  joergr
- * Added CVS/RCS header to each file.
- *
- *
- */

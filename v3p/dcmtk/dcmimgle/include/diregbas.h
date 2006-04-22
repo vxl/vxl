@@ -21,14 +21,6 @@
  *
  *  Purpose: DicomRegisterBase (Header)
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date 
- *  Source File:      Source 
- *  CVS/RCS Revision: Revision 
- *  Status:           State 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -59,7 +51,6 @@ class DiRegisterBase;
  */
 class DiRegisterBase
 {
-
  public:
 
     /** constructor, default
@@ -73,7 +64,7 @@ class DiRegisterBase
     virtual ~DiRegisterBase()
     {
     }
-    
+
     /** create color image representation (abstract)
      *
      ** @param  docu    pointer to dataset (encapsulated)
@@ -106,31 +97,3 @@ class DiRegisterBase
 
 
 #endif
-
-
-/*
- *
- * CVS/RCS Log:
- * Log: diregbas.h,v 
- * Revision 1.1  2004/01/14 04:01:10  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.5  2001/06/01 15:49:50  meichel
- * Updated copyright header
- *
- * Revision 1.4  2000/03/08 16:24:23  meichel
- * Updated copyright header.
- *
- * Revision 1.3  1999/09/17 12:48:28  joergr
- * Added/changed/completed DOC++ style comments in the header files.
- *
- * Revision 1.2  1999/03/24 17:20:24  joergr
- * Added/Modified comments and formatting.
- *
- * Revision 1.1  1998/11/27 13:08:07  joergr
- * Added registration class to allow easy combination of both modules.
- * Added copyright message to all source files.
- *
- *
- */

@@ -21,14 +21,6 @@
  *
  *  Purpose: DicomMonochromeModality (Header)
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:10 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmimgle/include/dimomod.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -60,7 +52,6 @@ class DiInputPixel;
 class DiMonoModality
   : public DiObjectCounter
 {
-
  public:
 
     /** constructor
@@ -106,7 +97,7 @@ class DiMonoModality
     /** destructor
      */
     virtual ~DiMonoModality();
-    
+
     /** get integer representation
      *
      ** @return integer representation
@@ -124,7 +115,7 @@ class DiMonoModality
     {
         return MinValue;
     }
-    
+
     /** get maximum pixel value after modality transform
      *
      ** @return maximum pixel value
@@ -133,7 +124,7 @@ class DiMonoModality
     {
         return MaxValue;
     }
-    
+
     /** get number of bits describing the width of output data
      *
      ** @return number of bits
@@ -142,7 +133,7 @@ class DiMonoModality
     {
         return Bits;
     }
-    
+
     /** get absolute (possible) minimum pixel value after modality transform
      *
      ** @return absolute minimum pixel value
@@ -151,7 +142,7 @@ class DiMonoModality
     {
         return AbsMinimum;
     }
-    
+
     /** get absolute (possible) maximum pixel value after modality transform
      *
      ** @return absolute maximum pixel value
@@ -160,7 +151,7 @@ class DiMonoModality
     {
         return AbsMaximum;
     }
-    
+
     /** get rescale intercept value
      *
      ** @return rescale intercept value
@@ -169,7 +160,7 @@ class DiMonoModality
     {
         return RescaleIntercept;
     }
-    
+
     /** get rescale slope value
      *
      ** @return rescale slope value
@@ -178,7 +169,7 @@ class DiMonoModality
     {
         return RescaleSlope;
     }
-    
+
     /** get pointer to lookup table data
      *
      ** @return pointer to lookup table data or NULL if absent
@@ -187,7 +178,7 @@ class DiMonoModality
     {
         return TableData;
     }
-    
+
     /** get modality LUT explanation
      *
      ** @return modality LUT explanation or NULL if absent
@@ -205,7 +196,7 @@ class DiMonoModality
     {
         return LookupTable;
     }
-    
+
     /** check whether rescaling is present
      *
      ** @return true if rescaling is present, false otherwise
@@ -225,7 +216,7 @@ class DiMonoModality
      */
     int Init(const DiDocument *docu,
              DiInputPixel *pixel);
- 
+
     /** check lookup table for validity (and possibly correct it)
      */
     void checkTable();
@@ -236,12 +227,12 @@ class DiMonoModality
      */
     void checkRescaling(const DiInputPixel *pixel);
 
- 
+
  private:
 
     /// integer representation
     EP_Representation Representation;
-    
+
     /// minimum pixel value
     double MinValue;
     /// maximum pixel value
@@ -253,85 +244,25 @@ class DiMonoModality
     double AbsMinimum;
     /// absolute maximum pixel value
     double AbsMaximum;
-    
+
     /// rescale intercept
     double RescaleIntercept;
     /// rescale slope
     double RescaleSlope;
-    
+
     /// status flag: lookup table present
     int LookupTable;
     /// status flag: rescaling present
     int Rescaling;
-    
+
     /// pointer to modality lookup table
     DiLookupTable *TableData;
 
  // --- declarations to avoid compiler warnings
- 
+
     DiMonoModality(const DiMonoModality &);
     DiMonoModality &operator=(const DiMonoModality &);
 };
 
 
 #endif
-
-
-/*
- *
- * CVS/RCS Log:
- * Log: dimomod.h,v 
- * Revision 1.1  2004/01/14 04:01:10  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.12  2001/06/01 15:49:45  meichel
- * Updated copyright header
- *
- * Revision 1.11  2000/03/08 16:24:19  meichel
- * Updated copyright header.
- *
- * Revision 1.10  1999/10/06 13:40:25  joergr
- * Added Doc++ header comments.
- *
- * Revision 1.9  1999/09/17 12:26:25  joergr
- * iAdded/changed/completed DOC++ style comments in the header files.
- *
- * Revision 1.8  1999/05/31 12:35:15  joergr
- * Corrected bug concerning the conversion of color images to grayscale.
- *
- * Revision 1.7  1999/04/28 17:03:47  joergr
- * Added type casts to NULL pointers returned as 'const char *' to avoid
- * compiler warnings reported by gcc 2.7.2.1 (Linux).
- *
- * Revision 1.6  1999/03/24 17:20:12  joergr
- * Added/Modified comments and formatting.
- *
- * Revision 1.5  1999/02/03 17:30:00  joergr
- * Added member variable and related methods to store number of bits used for
- * pixel data.
- *
- * Revision 1.4  1998/12/22 14:31:01  joergr
- * Changed calculation of AbsMinimum/Maximum.
- * Removed member variable and method for isPotentiallySigned.
- *
- * Revision 1.3  1998/12/16 16:34:37  joergr
- * Added explanation string to LUT class (retrieved from dataset).
- *
- * Revision 1.2  1998/12/14 17:23:52  joergr
- * Added support for correct scaling of input/output values for grayscale
- * transformations.
- *
- * Revision 1.1  1998/11/27 15:25:15  joergr
- * Added copyright message.
- * Added constructors to use external modality transformations.
- *
- * Revision 1.5  1998/07/01 08:39:23  joergr
- * Minor changes to avoid compiler warnings (gcc 2.8.1 with additional
- * options), e.g. add copy constructors.
- *
- * Revision 1.4  1998/05/11 14:53:21  joergr
- * Added CVS/RCS header to each file.
- *
- * 
- */

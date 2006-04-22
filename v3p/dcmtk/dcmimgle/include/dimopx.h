@@ -21,14 +21,6 @@
  *
  *  Purpose: DicomMonochromePixel (Header)
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:10 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmimgle/include/dimopx.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -60,7 +52,6 @@ class DiMonoOutputPixel;
 class DiMonoPixel
   : public DiPixel
 {
-
  public:
 
     /** constructor
@@ -247,76 +238,3 @@ class DiMonoPixel
 
 
 #endif
-
-
-/*
- *
- * CVS/RCS Log:
- * Log: dimopx.h,v 
- * Revision 1.1  2004/01/14 04:01:10  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.15  2002/12/09 13:32:54  joergr
- * Renamed parameter/local variable to avoid name clashes with global
- * declaration left and/or right (used for as iostream manipulators).
- *
- * Revision 1.14  2001/11/19 12:56:15  joergr
- * Added parameter 'frame' to setRoiWindow().
- *
- * Revision 1.13  2001/09/28 13:07:43  joergr
- * Added method setRoiWindow() which automatically calculates a min-max VOI
- * window for a specified rectangular region of the image.
- *
- * Revision 1.12  2001/06/01 15:49:47  meichel
- * Updated copyright header
- *
- * Revision 1.11  2000/03/08 16:24:20  meichel
- * Updated copyright header.
- *
- * Revision 1.10  1999/10/06 13:43:29  joergr
- * Corrected creation of PrintBitmap pixel data: VOI windows should be applied
- * before clipping to avoid that the region outside the image (border) is also
- * windowed (this requires a new method in dcmimgle to create a DicomImage
- * with the grayscale transformations already applied).
- *
- * Revision 1.9  1999/09/17 12:41:26  joergr
- * Added/changed/completed DOC++ style comments in the header files.
- *
- * Revision 1.8  1999/05/31 12:35:16  joergr
- * Corrected bug concerning the conversion of color images to grayscale.
- *
- * Revision 1.7  1999/04/28 17:03:48  joergr
- * Added type casts to NULL pointers returned as 'const char *' to avoid
- * compiler warnings reported by gcc 2.7.2.1 (Linux).
- *
- * Revision 1.6  1999/03/24 17:20:15  joergr
- * Added/Modified comments and formatting.
- *
- * Revision 1.5  1999/02/03 17:33:18  joergr
- * Added member variable and related methods to store number of bits used for
- * pixel data.
- *
- * Revision 1.4  1999/01/11 09:35:56  joergr
- * Corrected some typos and formatting.
- *
- * Revision 1.3  1998/12/22 14:33:45  joergr
- * Added implementation of methods to return member variables AbsMinimum/
- * Maximum.
- *
- * Revision 1.2  1998/12/16 16:35:39  joergr
- * Added explanation string to LUT class (retrieved from dataset).
- *
- * Revision 1.1  1998/11/27 15:33:16  joergr
- * Added copyright message.
- * Introduced new pixel base class.
- *
- * Revision 1.4  1998/07/01 08:39:24  joergr
- * Minor changes to avoid compiler warnings (gcc 2.8.1 with additional
- * options), e.g. add copy constructors.
- *
- * Revision 1.3  1998/05/11 14:53:23  joergr
- * Added CVS/RCS header to each file.
- *
- *
- */

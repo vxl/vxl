@@ -21,14 +21,6 @@
  *
  *  Purpose: DicomDocument (Header)
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:10 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmimgle/include/didocu.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -66,7 +58,6 @@ class DcmSequenceOfItems;
 class DiDocument
   : public DiObjectCounter
 {
-
  public:
 
     /** constructor, open a DICOM file
@@ -368,81 +359,3 @@ class DiDocument
 
 
 #endif
-
-
-/*
- *
- * CVS/RCS Log:
- * Log: didocu.h,v 
- * Revision 1.1  2004/01/14 04:01:10  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.15  2002/11/27 14:08:03  meichel
- * Adapted module dcmimgle to use of new header file ofstdinc.h
- *
- * Revision 1.14  2002/08/21 09:51:44  meichel
- * Removed DicomImage and DiDocument constructors that take a DcmStream
- *   parameter
- *
- * Revision 1.13  2002/06/26 16:01:07  joergr
- * Added new methods to get the explanation string of stored VOI windows and
- * LUTs (not only of the currently selected VOI transformation).
- *
- * Revision 1.12  2001/11/29 16:56:51  joergr
- * Fixed bug in dcmimgle that caused incorrect decoding of some JPEG compressed
- * images (certain DICOM attributes, e.g. photometric interpretation, might
- * change during decompression process).
- *
- * Revision 1.11  2001/11/19 12:55:29  joergr
- * Adapted code to support new dcmjpeg module and JPEG compressed images.
- *
- * Revision 1.10  2001/06/01 15:49:41  meichel
- * Updated copyright header
- *
- * Revision 1.9  2000/09/12 10:04:43  joergr
- * Corrected bug: wrong parameter for attribute search routine led to crashes
- * when multiple pixel data attributes were contained in the dataset (e.g.
- * IconImageSequence). Added new checking routines to avoid crashes when
- * processing corrupted image data.
- *
- * Revision 1.8  2000/03/08 16:24:15  meichel
- * Updated copyright header.
- *
- * Revision 1.7  2000/02/02 11:02:37  joergr
- * Removed space characters before preprocessor directives.
- *
- * Revision 1.6  1999/09/17 12:09:20  joergr
- * Added/changed/completed DOC++ style comments in the header files.
- *
- * Revision 1.5  1999/03/24 17:19:59  joergr
- * Added/Modified comments and formatting.
- *
- * Revision 1.4  1999/02/03 17:00:33  joergr
- * Added BEGIN_EXTERN_C and END_EXTERN_C to some C includes.
- *
- * Revision 1.3  1998/12/16 16:26:52  joergr
- * Added methods to use getOFString from class DcmElement (incl. multi value
- * fields).
- *
- * Revision 1.2  1998/12/14 17:16:32  joergr
- * Added (simplified) methods to return values of a given DcmElement object.
- *
- * Revision 1.1  1998/11/27 14:53:59  joergr
- * Added copyright message.
- * Added static methods to return the value of a given element.
- * Added support of frame start and count for future use.
- *
- * Revision 1.7  1998/07/01 08:39:20  joergr
- * Minor changes to avoid compiler warnings (gcc 2.8.1 with additional
- * options), e.g. add copy constructors.
- *
- * Revision 1.6  1998/06/25 08:50:09  joergr
- * Added compatibility mode to support ACR-NEMA images and wrong
- * palette attribute tags.
- *
- * Revision 1.5  1998/05/11 14:53:15  joergr
- * Added CVS/RCS header to each file.
- *
- *
- */

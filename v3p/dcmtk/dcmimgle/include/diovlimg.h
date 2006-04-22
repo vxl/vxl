@@ -21,14 +21,6 @@
  *
  *  Purpose: DicomOverlayImage (Header)
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:10 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmimgle/include/diovlimg.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -49,7 +41,6 @@
 class DiOverlayImage
   : public DiMono2Image
 {
-
  public:
 
     /** constructor
@@ -67,33 +58,3 @@ class DiOverlayImage
 
 
 #endif
-
-
-/*
- *
- * CVS/RCS Log:
- * Log: diovlimg.h,v 
- * Revision 1.1  2004/01/14 04:01:10  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.5  2001/06/01 15:49:49  meichel
- * Updated copyright header
- *
- * Revision 1.4  2000/03/08 16:24:22  meichel
- * Updated copyright header.
- *
- * Revision 1.3  1999/09/17 12:46:58  joergr
- * Added/changed/completed DOC++ style comments in the header files.
- *
- * Revision 1.2  1999/03/24 17:20:20  joergr
- * Added/Modified comments and formatting.
- *
- * Revision 1.1  1998/11/27 15:43:13  joergr
- * Added copyright message.
- *
- * Revision 1.2  1998/05/11 14:53:25  joergr
- * Added CVS/RCS header to each file.
- *
- *
- */

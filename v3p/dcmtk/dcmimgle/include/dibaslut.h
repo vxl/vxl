@@ -21,14 +21,6 @@
  *
  *  Purpose: DicomBaseLUT (Header)
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:10 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmimgle/include/dibaslut.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -58,7 +50,6 @@
  */
 class DiBaseLUT
 {
-
  public:
 
     /** constructor
@@ -319,58 +310,3 @@ class DiBaseLUT
 
 
 #endif
-
-
-/*
- *
- * CVS/RCS Log:
- * Log: dibaslut.h,v 
- * Revision 1.1  2004/01/14 04:01:10  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.13  2001/06/01 15:49:39  meichel
- * Updated copyright header
- *
- * Revision 1.12  2000/03/08 16:24:13  meichel
- * Updated copyright header.
- *
- * Revision 1.11  2000/03/06 18:17:59  joergr
- * Moved get-method to base class and made method virtual to avoid hiding of
- * methods (reported by Sun CC 4.2).
- *
- * Revision 1.10  1999/10/20 10:34:43  joergr
- * Enhanced method invertTable to distinguish between copy of LUT data and
- * original (referenced) LUT data.
- *
- * Revision 1.9  1999/09/30 11:37:08  joergr
- * Added methods to compare two lookup tables.
- *
- * Revision 1.8  1999/09/17 12:07:23  joergr
- * Added/changed/completed DOC++ style comments in the header files.
- *
- * Revision 1.7  1999/09/08 15:19:24  joergr
- * Completed implementation of setting inverse presentation LUT as needed
- * e.g. for DICOM print (invert 8->12 bits PLUT).
- *
- * Revision 1.6  1999/07/23 13:51:44  joergr
- * Changed comments/formatting.
- *
- * Revision 1.5  1999/05/03 11:09:27  joergr
- * Minor code purifications to keep Sun CC 2.0.1 quiet.
- *
- * Revision 1.4  1999/03/24 17:19:58  joergr
- * Added/Modified comments and formatting.
- *
- * Revision 1.3  1999/03/03 11:46:26  joergr
- * Added method to invert lookup table data (used for presentation state LUTs).
- *
- * Revision 1.2  1999/02/11 15:42:49  joergr
- * Removed unnecessary include statement.
- *
- * Revision 1.1  1999/02/03 17:45:38  joergr
- * Added base class for look-up tables (moved main functionality of class
- * DiLookupTable to DiBaseLUT).
- *
- *
- */
