@@ -1,26 +1,24 @@
-/* Header */
-
 /*
  * Copyright (c) 1988-1997 Sam Leffler
  * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
- * Permission to use, copy, modify, distribute, and sell this software and 
+ * Permission to use, copy, modify, distribute, and sell this software and
  * its documentation for any purpose is hereby granted without fee, provided
  * that (i) the above copyright notices and this permission notice appear in
  * all copies of the software and related documentation, and (ii) the names of
  * Sam Leffler and Silicon Graphics may not be used in any advertising or
  * publicity relating to the software without the specific, prior written
  * permission of Sam Leffler and Silicon Graphics.
- * 
- * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
- * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
- * 
+ *
+ * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+ *
  * IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
  * ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
  * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
- * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
- * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
+ * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF
+ * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
  * OF THIS SOFTWARE.
  */
 
@@ -43,11 +41,11 @@
 #define	TIFF_LITTLEENDIAN	0x4949
 
 /*
- * The so called TIFF types conflict with definitions from inttypes.h 
- * included from sys/types.h on AIX (at least using VisualAge compiler). 
- * We try to work around this by detecting this case.  Defining 
+ * The so called TIFF types conflict with definitions from inttypes.h
+ * included from sys/types.h on AIX (at least using VisualAge compiler).
+ * We try to work around this by detecting this case.  Defining
  * _TIFF_DATA_TYPEDEFS_ short circuits the later definitions in tiff.h, and
- * we will in the holes not provided for by inttypes.h. 
+ * we will in the holes not provided for by inttypes.h.
  *
  * See http://bugzilla.remotesensing.org/show_bug.cgi?id=39
  */
@@ -91,15 +89,15 @@ typedef	unsigned long uint32;	/* sizeof (uint32) must == 4 */
 /*	For TIFFReassignTagToIgnore */
 enum TIFFIgnoreSense /* IGNORE tag table */
 {
-	TIS_STORE,
-	TIS_EXTRACT,
-	TIS_EMPTY
+        TIS_STORE,
+        TIS_EXTRACT,
+        TIS_EMPTY
 };
 
 typedef	struct {
-	uint16	tiff_magic;	/* magic number (defines byte order) */
-	uint16	tiff_version;	/* TIFF version number */
-	uint32	tiff_diroff;	/* byte offset to first directory */
+        uint16        tiff_magic;        /* magic number (defines byte order) */
+        uint16        tiff_version;        /* TIFF version number */
+        uint32        tiff_diroff;        /* byte offset to first directory */
 } TIFFHeader;
 
 /*
@@ -116,10 +114,10 @@ typedef	struct {
  * offset field.
  */
 typedef	struct {
-	uint16		tdir_tag;	/* see below */
-	uint16		tdir_type;	/* data type; see below */
-	uint32		tdir_count;	/* number of items; length in spec */
-	uint32		tdir_offset;	/* byte offset to field data */
+        uint16                tdir_tag;        /* see below */
+        uint16                tdir_type;        /* data type; see below */
+        uint32                tdir_count;        /* number of items; length in spec */
+        uint32                tdir_offset;        /* byte offset to field data */
 } TIFFDirEntry;
 
 /*
@@ -136,20 +134,20 @@ typedef	struct {
  * Note: RATIONALs are the ratio of two 32-bit integer values.
  */
 typedef	enum {
-	TIFF_NOTYPE	= 0,	/* placeholder */
-	TIFF_BYTE	= 1,	/* 8-bit unsigned integer */
-	TIFF_ASCII	= 2,	/* 8-bit bytes w/ last byte null */
-	TIFF_SHORT	= 3,	/* 16-bit unsigned integer */
-	TIFF_LONG	= 4,	/* 32-bit unsigned integer */
-	TIFF_RATIONAL	= 5,	/* 64-bit unsigned fraction */
-	TIFF_SBYTE	= 6,	/* !8-bit signed integer */
-	TIFF_UNDEFINED	= 7,	/* !8-bit untyped data */
-	TIFF_SSHORT	= 8,	/* !16-bit signed integer */
-	TIFF_SLONG	= 9,	/* !32-bit signed integer */
-	TIFF_SRATIONAL	= 10,	/* !64-bit signed fraction */
-	TIFF_FLOAT	= 11,	/* !32-bit IEEE floating point */
-	TIFF_DOUBLE	= 12,	/* !64-bit IEEE floating point */
-	TIFF_IFD	= 13	/* %32-bit unsigned integer (offset) */
+        TIFF_NOTYPE        = 0,        /* placeholder */
+        TIFF_BYTE        = 1,        /* 8-bit unsigned integer */
+        TIFF_ASCII        = 2,        /* 8-bit bytes w/ last byte null */
+        TIFF_SHORT        = 3,        /* 16-bit unsigned integer */
+        TIFF_LONG        = 4,        /* 32-bit unsigned integer */
+        TIFF_RATIONAL        = 5,        /* 64-bit unsigned fraction */
+        TIFF_SBYTE        = 6,        /* !8-bit signed integer */
+        TIFF_UNDEFINED        = 7,        /* !8-bit untyped data */
+        TIFF_SSHORT        = 8,        /* !16-bit signed integer */
+        TIFF_SLONG        = 9,        /* !32-bit signed integer */
+        TIFF_SRATIONAL        = 10,        /* !64-bit signed fraction */
+        TIFF_FLOAT        = 11,        /* !32-bit IEEE floating point */
+        TIFF_DOUBLE        = 12,        /* !64-bit IEEE floating point */
+        TIFF_IFD        = 13        /* %32-bit unsigned integer (offset) */
 } TIFFDataType;
 
 /*
@@ -356,7 +354,7 @@ typedef	enum {
 /* tags 33300-33309 are private tags registered to Pixar */
 /*
  * TIFFTAG_PIXAR_IMAGEFULLWIDTH and TIFFTAG_PIXAR_IMAGEFULLLENGTH
- * are set when an image has been cropped out of a larger image.  
+ * are set when an image has been cropped out of a larger image.
  * They reflect the size of the original uncropped image.
  * The TIFFTAG_XPOSITION and TIFFTAG_YPOSITION can be used
  * to determine the position of the smaller image in the larger one.
@@ -400,7 +398,7 @@ typedef	enum {
 /* tag 34750 is a private tag registered to Adobe? */
 #define TIFFTAG_ICCPROFILE		34675	/* ICC profile data */
 /* tag 34377 is private tag registered to Adobe for PhotoShop */
-#define TIFFTAG_PHOTOSHOP				34377 
+#define TIFFTAG_PHOTOSHOP				34377
 /* tag 34750 is a private tag registered to Pixel Magic */
 #define	TIFFTAG_JBIGOPTIONS		34750	/* JBIG options */
 /* tags 34908-34914 are private tags registered to SGI */
