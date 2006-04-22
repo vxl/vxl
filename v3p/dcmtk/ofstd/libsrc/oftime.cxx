@@ -21,14 +21,6 @@
  *
  *  Purpose: Class for time functions (Source)
  *
- *  Last Update:      Author: peter_vanroose 
- *  Update Date:      Date: 2004/08/06 14:11:49 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/ofstd/libsrc/oftime.cxx,v 
- *  CVS/RCS Revision: Revision: 1.2 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -491,10 +483,10 @@ OFBool OFTime::getISOFormattedTime(OFString &formattedTime,
             if (showFraction)
             {
                 char buf2[12];
-                OFStandard::ftoa(buf2, sizeof(buf2), Second, 
+                OFStandard::ftoa(buf2, sizeof(buf2), Second,
                   OFStandard::ftoa_format_f | OFStandard::ftoa_zeropad, 9, 6);
-                               
-                if (showDelimiter) 
+
+                if (showDelimiter)
                     strcat(buf, ":");  /* format: HH:MM:SS.FFFFFF */
                 strcat(buf, buf2);
             } else {
@@ -557,42 +549,3 @@ ostream& operator<<(ostream& stream, const OFTime &timeVal)
         stream << string;
     return stream;
 }
-
-
-/*
- *
- * CVS/RCS Log:
- * Log: oftime.cxx,v 
- * Revision 1.2  2004/08/06 14:11:49  peter_vanroose
- * fix for platform HPUX
- *
- * Revision 1.1  2004/01/14 04:01:11  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.7  2002/12/04 10:40:50  meichel
- * Changed toolkit to use OFStandard::ftoa instead of sprintf for all
- *   double to string conversions that are supposed to be locale independent
- *
- * Revision 1.6  2002/11/27 11:23:12  meichel
- * Adapted module ofstd to use of new header file ofstdinc.h
- *
- * Revision 1.5  2002/07/18 12:14:20  joergr
- * Corrected typos.
- *
- * Revision 1.4  2002/05/24 09:44:27  joergr
- * Renamed some parameters/variables to avoid ambiguities.
- *
- * Revision 1.3  2002/04/19 10:42:55  joergr
- * Added new helper routines to get the milli and micro seconds part as well as
- * the integral value of seconds.
- *
- * Revision 1.2  2002/04/15 09:41:52  joergr
- * Removed "include <sys/types.h>" from implementation file.
- * Added "include <windows.h>" for Windows systems.
- *
- * Revision 1.1  2002/04/11 12:14:34  joergr
- * Introduced new standard classes providing date and time functions.
- *
- *
- */

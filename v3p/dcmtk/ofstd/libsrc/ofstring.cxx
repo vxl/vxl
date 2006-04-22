@@ -20,14 +20,6 @@
  *  Author:  Andrew Hewett
  *
  *  Purpose: A simple string class
- * 
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:11 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/ofstd/libsrc/ofstring.cxx,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
  *
  */
 
@@ -51,7 +43,7 @@
 ** Constructors
 */
 
-OFString::OFString() 
+OFString::OFString()
     : theCString(NULL), theCapacity(0)
 {
     reserve(1);
@@ -67,14 +59,14 @@ OFString::OFString (const char* s, size_t n)
     : theCString(NULL), theCapacity(0)
 {
     if (s) {
-	if (n == OFString_npos) {
-	    n = strlen(s);
-	}
-	reserve(n);
-	strncpy(this->theCString, s, n);
-	this->theCString[n] = '\0';
+        if (n == OFString_npos) {
+            n = strlen(s);
+        }
+        reserve(n);
+        strncpy(this->theCString, s, n);
+        this->theCString[n] = '\0';
     } else {
-	reserve(1);
+        reserve(1);
     }
 }
 
@@ -82,10 +74,10 @@ OFString::OFString (const char* s)
     : theCString(NULL), theCapacity(0)
 {
     if (s) {
-	reserve(strlen(s));
-	strcpy(this->theCString, s);
+        reserve(strlen(s));
+        strcpy(this->theCString, s);
     } else {
-	reserve(1);
+        reserve(1);
     }
 }
 
@@ -95,7 +87,7 @@ OFString::OFString (size_t rep, char c)
 {
     reserve(rep);
     for (int i=0; i<(int)rep; i++) {
-	this->theCString[i] = c;
+        this->theCString[i] = c;
     }
 }
 
@@ -106,8 +98,8 @@ OFString::OFString (size_t rep, char c)
 OFString::~OFString()
 {
     if (theCString) {
-	delete[] theCString;
-	theCString = NULL;
+        delete[] theCString;
+        theCString = NULL;
     }
 }
 
@@ -115,21 +107,21 @@ OFString::~OFString()
 ** Operator =
 */
 
-OFString& 
+OFString&
 OFString::operator= (const OFString& rhs)
 {
     this->assign(rhs);
     return *this;
 }
 
-OFString& 
+OFString&
 OFString::operator= (const char* s)
 {
     this->assign(s);
     return *this;
 }
 
-OFString& 
+OFString&
 OFString::operator= (char s)
 {
     this->assign(1, s);
@@ -140,19 +132,19 @@ OFString::operator= (char s)
 ** Operator +=
 */
 
-OFString& 
+OFString&
 OFString::operator+= (const OFString& rhs)
 {
     return this->append(rhs);
 }
 
-OFString& 
+OFString&
 OFString::operator+= (const char* s)
 {
     return this->append(s);
 }
 
-OFString& 
+OFString&
 OFString::operator+= (char s)
 {
     return this->append(1, s);
@@ -162,7 +154,7 @@ OFString::operator+= (char s)
 ** Append
 */
 
-OFString& 
+OFString&
 OFString::append (const OFString& str, size_t pos, size_t n)
 {
     OFString b(str, pos, n);
@@ -171,21 +163,21 @@ OFString::append (const OFString& str, size_t pos, size_t n)
     return *this;
 }
 
-OFString& 
+OFString&
 OFString::append (const char* s, size_t n)
 {
     OFString str(s, n);
     return this->append(str);
 }
 
-OFString& 
+OFString&
 OFString::append (const char* s)
 {
     OFString str(s);
     return this->append(str);
 }
 
-OFString& 
+OFString&
 OFString::append (size_t rep, char c)
 {
     OFString str(rep, c);
@@ -196,41 +188,41 @@ OFString::append (size_t rep, char c)
 ** Assign
 */
 
-OFString& 
+OFString&
 OFString::assign (const OFString& str, size_t pos, size_t n)
 {
     OFSTRING_OUTOFRANGE(pos > str.size());
     size_t remain = (str.size() - pos);
     if ((n == OFString_npos) || (n > remain)) {
-	n = remain;
+        n = remain;
     }
     if (n > 0) {
-	this->reserve(n);
-	strncpy(this->theCString, str.theCString + pos, n);
-	this->theCString[n] = '\0';
+        this->reserve(n);
+        strncpy(this->theCString, str.theCString + pos, n);
+        this->theCString[n] = '\0';
     } else {
-	this->reserve(1);
-	/* assign an empty string */
-	this->theCString[0] = '\0';
+        this->reserve(1);
+        /* assign an empty string */
+        this->theCString[0] = '\0';
     }
     return *this;
 }
 
-OFString& 
+OFString&
 OFString::assign (const char* s, size_t n)
 {
     OFString str(s, n);
     return this->assign(str);
 }
 
-OFString& 
+OFString&
 OFString::assign (const char* s)
 {
     OFString str(s);
     return this->assign(str);
 }
 
-OFString& 
+OFString&
 OFString::assign (size_t rep, char c)
 {
     OFString str(rep, c);
@@ -241,7 +233,7 @@ OFString::assign (size_t rep, char c)
 ** Insert
 */
 
-OFString& 
+OFString&
 OFString::insert (size_t pos1, const OFString& str, size_t pos2, size_t n)
 {
     OFString i(str, pos2, n);
@@ -250,21 +242,21 @@ OFString::insert (size_t pos1, const OFString& str, size_t pos2, size_t n)
     return this->assign(a).append(i).append(b);
 }
 
-OFString& 
+OFString&
 OFString::insert (size_t pos, const char* s, size_t n)
 {
     OFString str(s, n);
     return this->insert(pos, str);
 }
 
-OFString& 
+OFString&
 OFString::insert (size_t pos, const char* s)
 {
     OFString str(s);
     return this->insert(pos, str);
 }
 
-OFString& 
+OFString&
 OFString::insert (size_t pos, size_t rep, char s)
 {
     OFString str(rep, s);
@@ -274,13 +266,13 @@ OFString::insert (size_t pos, size_t rep, char s)
 /*
 ** Erase
 */
-OFString& 
+OFString&
 OFString::erase (size_t pos, size_t n)
 {
     OFString a(*this, 0, pos);
     OFString b;
     if (n != OFString_npos) {
-	b.assign(*this, pos + n, OFString_npos);
+        b.assign(*this, pos + n, OFString_npos);
     }
     return this->assign(a).append(b);
 }
@@ -289,34 +281,34 @@ OFString::erase (size_t pos, size_t n)
 ** Replace
 */
 
-OFString& 
-OFString::replace (size_t pos1, size_t n1, const OFString& str, 
-		       size_t pos2, size_t n2)
+OFString&
+OFString::replace (size_t pos1, size_t n1, const OFString& str,
+                   size_t pos2, size_t n2)
 {
     OFString a(*this, (size_t)0, pos1);
     OFString b;
     if ((n1 < OFString_npos) && ((pos1 + n1) < this->size())) {
-	b.assign(*this, pos1 + n1, OFString_npos);
+        b.assign(*this, pos1 + n1, OFString_npos);
     }
     OFString i(str, pos2, n2);
     return this->assign(a).append(i).append(b);
 }
 
-OFString& 
+OFString&
 OFString::replace (size_t pos, size_t n, const char* s, size_t n2)
 {
     OFString str(s, n2);
     return this->replace(pos, n, str);
 }
 
-OFString& 
+OFString&
 OFString::replace (size_t pos, size_t n, const char* s)
 {
     OFString str(s);
     return this->replace(pos, n, str);
 }
 
-OFString& 
+OFString&
 OFString::replace (size_t pos, size_t n, size_t rep, char s)
 {
     OFString str(rep, s);
@@ -328,8 +320,8 @@ OFString::replace (size_t pos, size_t n, size_t rep, char s)
 ** Data
 */
 
-const char* 
-OFString::data () const 
+const char*
+OFString::data () const
 {
     return ((this->size() != 0)?(this->c_str()): "");
 }
@@ -339,7 +331,7 @@ OFString::data () const
 ** Resize
 */
 
-void 
+void
 OFString::resize (size_t n, char c)
 {
     OFSTRING_LENGTHERROR(n == OFString_npos);
@@ -347,14 +339,14 @@ OFString::resize (size_t n, char c)
     reserve(n);
     size_t len = this->size();
     if (n <= len) {
-	for (size_t i=n; i<len; i++) {
-	    this->theCString[i] = '\0';
-	}
+        for (size_t i=n; i<len; i++) {
+            this->theCString[i] = '\0';
+        }
     } else {
-	for (size_t i=len; i<n; i++) {
-	    this->theCString[i] = c;
-	}
-	this->theCString[n] = '\0';
+        for (size_t i=len; i<n; i++) {
+            this->theCString[i] = c;
+        }
+        this->theCString[n] = '\0';
     }
 }
 
@@ -362,31 +354,31 @@ OFString::resize (size_t n, char c)
 ** Reserve
 */
 
-void 
+void
 OFString::reserve (size_t res_arg)
 {
     if (res_arg == OFString_npos) {
-	res_arg = 0; /* let at least space for eos get reserved */
+        res_arg = 0; /* let at least space for eos get reserved */
     }
     res_arg++; /* add space for eos */
     if (this->theCapacity < res_arg) {
-	char* newstr = new char[res_arg];
-	if (newstr) {
-	    for (size_t i=0; i<res_arg; i++) {
-		newstr[i] = '\0';
-	    }
-	    this->theCapacity = res_arg - 1; /* not the eos */
-	    if (this->size() > 0) {
-	    	strcpy(newstr, this->theCString);
-	    } else {
-		newstr[0] = '\0';
-	    }
-	    char* oldstr = this->theCString;
-	    this->theCString = newstr;
-	    delete[] oldstr;
-	} else {
-	    OFSTRING_MEMORYALLOCERROR(newstr);
-	}
+        char* newstr = new char[res_arg];
+        if (newstr) {
+            for (size_t i=0; i<res_arg; i++) {
+                newstr[i] = '\0';
+            }
+            this->theCapacity = res_arg - 1; /* not the eos */
+            if (this->size() > 0) {
+                strcpy(newstr, this->theCString);
+            } else {
+                newstr[0] = '\0';
+            }
+            char* oldstr = this->theCString;
+            this->theCString = newstr;
+            delete[] oldstr;
+        } else {
+            OFSTRING_MEMORYALLOCERROR(newstr);
+        }
     }
 }
 
@@ -394,7 +386,7 @@ OFString::reserve (size_t res_arg)
 ** Copy
 */
 
-size_t 
+size_t
 OFString::copy (char* s, size_t n, size_t pos) const
 {
     OFString sub(this->substr(pos, n));
@@ -407,7 +399,7 @@ OFString::copy (char* s, size_t n, size_t pos) const
 ** Substr
 */
 
-OFString 
+OFString
 OFString::substr (size_t pos, size_t n) const
 {
     OFString sub;
@@ -418,7 +410,7 @@ OFString::substr (size_t pos, size_t n) const
 ** Swap
 */
 
-void 
+void
 OFString::swap(OFString& s)
 {
     char* tmpCString = s.theCString;
@@ -434,7 +426,7 @@ OFString::swap(OFString& s)
 ** Compare
 */
 
-int 
+int
 OFString::compare (const OFString& str) const
 {
     int this_size = this->size();
@@ -442,33 +434,33 @@ OFString::compare (const OFString& str) const
     int rlen = (this_size < str_size)?(this_size):(str_size);
     int result = strncmp(this->theCString, str.theCString, rlen);
     if (result == 0) {
-	result = (this_size - str_size);
+        result = (this_size - str_size);
     }
     return result;
 }
 
-int 
+int
 OFString::compare (size_t pos1, size_t n1, const OFString& str) const
 {
     return OFString(*this, pos1, n1).compare(str);
 }
 
-int 
+int
 OFString::compare (size_t pos1, size_t n1, const OFString& str,
-	     size_t pos2, size_t n2) const
+                   size_t pos2, size_t n2) const
 {
     return OFString(*this, pos1, n1).compare(OFString(str, pos2, n2));
 }
 
-int 
+int
 OFString::compare (const char* s) const
 {
     return this->compare(OFString(s));
 }
 
-int 
+int
 OFString::compare (size_t pos1, size_t n1,
-	     const char* s, size_t n2) const
+                   const char* s, size_t n2) const
 {
     return OFString(*this, pos1, n1).compare(OFString(s, n2));
 }
@@ -477,45 +469,45 @@ OFString::compare (size_t pos1, size_t n1,
 ** Find
 */
 
-size_t 
+size_t
 OFString::find (const OFString& pattern, size_t pos) const
 {
     if (size() == 0 || pattern.size() == 0 || pos == OFString_npos) {
-	return OFString_npos;
+        return OFString_npos;
     }
     for (size_t i=pos; i<this->size(); i++) {
-	/* is there enought space for the pattern? */
-	if ((i + pattern.size()) > this->size()) {
-	    return OFString_npos;
-	}
-	int match = 1; /* assume there is a match */
-	for (size_t j=0; (j<pattern.size()) && match; j++) {
-	    if (this->at(i+j) != pattern[j]) {
-		match = 0;
-	    }
-	}
-	if (match) {
-	    return i;
-	}
+        /* is there enought space for the pattern? */
+        if ((i + pattern.size()) > this->size()) {
+            return OFString_npos;
+        }
+        int match = 1; /* assume there is a match */
+        for (size_t j=0; (j<pattern.size()) && match; j++) {
+            if (this->at(i+j) != pattern[j]) {
+                match = 0;
+            }
+        }
+        if (match) {
+            return i;
+        }
     }
     return OFString_npos;
 }
 
-size_t 
+size_t
 OFString::find (const char* pattern, size_t pos, size_t n) const
 {
     OFString str(pattern, n);
     return this->find(str, pos);
 }
 
-size_t 
+size_t
 OFString::find (const char* pattern, size_t pos) const
 {
     OFString str(pattern);
     return this->find(str, pos);
 }
 
-size_t 
+size_t
 OFString::find (char pattern, size_t pos) const
 {
     OFString str(1, pattern);
@@ -526,45 +518,45 @@ OFString::find (char pattern, size_t pos) const
 ** Rfind
 */
 
-size_t 
+size_t
 OFString::rfind (const OFString& pattern, size_t pos) const
 {
     if (size() == 0 || pattern.size() == 0 || this->size()<pattern.size()) {
-	return OFString_npos;
+        return OFString_npos;
     }
-		
+
     int above = ((this->size()-pattern.size()) < pos)?
-		 (this->size()-pattern.size()):(pos);
-    
+                 (this->size()-pattern.size()):(pos);
+
     for (int i=above; i>=0; i--) {
-	int match = 1; /* assume there is a match */
-	for (size_t j=0; (j<pattern.size()) && match; j++) {
-	    if (this->at(i+j) != pattern[j]) {
-		match = 0;
-	    }
-	}
-	if (match) {
-	    return i;
-	}
+        int match = 1; /* assume there is a match */
+        for (size_t j=0; (j<pattern.size()) && match; j++) {
+            if (this->at(i+j) != pattern[j]) {
+                match = 0;
+            }
+        }
+        if (match) {
+            return i;
+        }
     }
     return OFString_npos;
 }
 
-size_t 
+size_t
 OFString::rfind (const char* pattern, size_t pos, size_t n) const
 {
     OFString str(pattern, n);
     return this->rfind(str, pos);
 }
 
-size_t 
+size_t
 OFString::rfind (const char* pattern, size_t pos) const
 {
     OFString str(pattern);
     return this->rfind(str, pos);
 }
 
-size_t 
+size_t
 OFString::rfind (char pattern, size_t pos) const
 {
     OFString str(1, pattern);
@@ -575,37 +567,37 @@ OFString::rfind (char pattern, size_t pos) const
 ** Find_first_of
 */
 
-size_t 
+size_t
 OFString::find_first_of (const OFString& str, size_t pos) const
 {
     if (size() == 0 || str.size() == 0 || pos == OFString_npos) {
-	return OFString_npos;
+        return OFString_npos;
     }
     for (size_t i=pos; i<this->size(); i++) {
-	for (size_t j=0; j<str.size(); j++) {
-	    if (this->at(i) == str[j]) {
-		return i;
-	    }
-	}
+        for (size_t j=0; j<str.size(); j++) {
+            if (this->at(i) == str[j]) {
+                return i;
+            }
+        }
     }
     return OFString_npos;
 }
 
-size_t 
+size_t
 OFString::find_first_of (const char* s, size_t pos, size_t n) const
 {
     OFString str(s, n);
     return this->find_first_of(str, pos);
 }
 
-size_t 
+size_t
 OFString::find_first_of (const char* s, size_t pos) const
 {
     OFString str(s);
     return this->find_first_of(str, pos);
 }
 
-size_t 
+size_t
 OFString::find_first_of (char s, size_t pos) const
 {
     OFString str(1, s);
@@ -616,40 +608,40 @@ OFString::find_first_of (char s, size_t pos) const
 ** Find_last_of
 */
 
-size_t 
+size_t
 OFString::find_last_of (const OFString& str, size_t pos) const
 {
     if (this->size() == 0 || str.size() == 0) {
-	return OFString_npos;
+        return OFString_npos;
     }
     if (pos == OFString_npos || pos > this->size()) {
-	pos = this->size();
+        pos = this->size();
     }
     for (int i=(int)pos-1; i>=0; i--) {
-	for (size_t j=0; j<str.size(); j++) {
-	    if (this->at(i) == str[j]) {
-		return i;
-	    }
-	}
+        for (size_t j=0; j<str.size(); j++) {
+            if (this->at(i) == str[j]) {
+                return i;
+            }
+        }
     }
     return OFString_npos;
 }
 
-size_t 
+size_t
 OFString::find_last_of (const char* s, size_t pos, size_t n) const
 {
     OFString str(s, n);
     return this->find_last_of(str, pos);
 }
 
-size_t 
+size_t
 OFString::find_last_of (const char* s, size_t pos) const
 {
     OFString str(s);
     return this->find_last_of(str, pos);
 }
 
-size_t 
+size_t
 OFString::find_last_of (char s, size_t pos) const
 {
     OFString str(1, s);
@@ -660,37 +652,37 @@ OFString::find_last_of (char s, size_t pos) const
 ** Find_first_not_of
 */
 
-size_t 
+size_t
 OFString::find_first_not_of (const OFString& str, size_t pos) const
 {
     if (this->size() == 0 || str.size() == 0 || pos == OFString_npos) {
-	return OFString_npos;
+        return OFString_npos;
     }
     for (size_t i=pos; i<this->size(); i++) {
-	for (size_t j=0; j<str.size(); j++) {
-	    if (this->at(i) != str[j]) {
-		return i;
-	    }
-	}
+        for (size_t j=0; j<str.size(); j++) {
+            if (this->at(i) != str[j]) {
+                return i;
+            }
+        }
     }
     return OFString_npos;
 }
 
-size_t 
+size_t
 OFString::find_first_not_of (const char* s, size_t pos, size_t n) const
 {
     OFString str(s, n);
     return this->find_first_not_of(str, pos);
 }
 
-size_t 
+size_t
 OFString::find_first_not_of (const char* s, size_t pos) const
 {
     OFString str(s);
     return this->find_first_not_of(str, pos);
 }
 
-size_t 
+size_t
 OFString::find_first_not_of (char s, size_t pos) const
 {
     OFString str(1, s);
@@ -701,40 +693,40 @@ OFString::find_first_not_of (char s, size_t pos) const
 ** Find_last_not_of
 */
 
-size_t 
+size_t
 OFString::find_last_not_of (const OFString& str, size_t pos) const
 {
     if (this->size() == 0 || str.size() == 0) {
-	return OFString_npos;
+        return OFString_npos;
     }
     if (pos == OFString_npos) {
-	pos = this->size();
+        pos = this->size();
     }
     for (int i=(int)pos-1; i>=0; i--) {
-	for (size_t j=0; j<str.size(); j++) {
-	    if (this->at(i) != str[j]) {
-		return i;
-	    }
-	}
+        for (size_t j=0; j<str.size(); j++) {
+            if (this->at(i) != str[j]) {
+                return i;
+            }
+        }
     }
     return OFString_npos;
 }
 
-size_t 
+size_t
 OFString::find_last_not_of (const char* s, size_t pos, size_t n) const
 {
     OFString str(s, n);
     return this->find_last_not_of(str, pos);
 }
 
-size_t 
+size_t
 OFString::find_last_not_of (const char* s, size_t pos) const
 {
     OFString str(s);
     return this->find_last_not_of(str, pos);
 }
 
-size_t 
+size_t
 OFString::find_last_not_of (char s, size_t pos) const
 {
     OFString str(1, s);
@@ -759,20 +751,20 @@ istream& operator>> (istream& i, OFString& s)
     char c = '\0';
     size_t n = s.max_size();
     if (i.width() > 0) {
-	n = i.width();
+        n = i.width();
     }
     // skip white space before word
     i.get(c);
     while (i.good() && isspace(c)) {
-	i.get(c);
+        i.get(c);
     }
     // get the word
     while (i.good() && !isspace(c) && n--) {
-	s += c;
-	i.get(c);
+        s += c;
+        i.get(c);
     }
     if (isspace(c)) {
-	i.putback(c);
+        i.putback(c);
     }
     i.width(0);
     return i;
@@ -998,72 +990,3 @@ OFBool operator>= (const OFString& lhs, char rhs)
 {
     return (!(lhs < rhs));
 }
-
-
-
-/*
-** CVS/RCS Log:
-** Log: ofstring.cxx,v 
-** Revision 1.1  2004/01/14 04:01:11  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.16  2002/11/27 11:23:11  meichel
-** Adapted module ofstd to use of new header file ofstdinc.h
-**
-** Revision 1.15  2001/12/04 16:48:18  meichel
-** Completed doc++ documentation, fixed bug in OFString::copy.
-**
-** Revision 1.14  2001/11/26 16:43:20  joergr
-** Fixed bug in OFString constructor.
-**
-** Revision 1.13  2001/06/01 15:51:39  meichel
-** Updated copyright header
-**
-** Revision 1.12  2000/04/14 15:21:33  meichel
-** Minor change to make OFString thread safe.
-**
-** Revision 1.11  2000/03/08 16:36:06  meichel
-** Updated copyright header.
-**
-** Revision 1.10  2000/02/02 14:30:17  joergr
-** Replaced 'delete' statements by 'delete[]' for objects created with 'new[]'.
-**
-** Revision 1.9  1999/09/09 14:22:38  thiel
-** bug in rfind: patternsize greater than string
-**
-** Revision 1.8  1998/11/27 12:43:54  joergr
-** Added copyright message to source files and changed CVS header.
-**
-** Revision 1.7  1998/06/29 12:09:26  meichel
-** Removed some name clashes (e.g. local variable with same
-**   name as class member) to improve maintainability.
-**   Applied some code purifications proposed by the gcc 2.8.1 -Weffc++ option.
-**
-** Revision 1.6  1997/10/06 11:31:13  hewett
-** Fixed OFString::operator<< handling of leading whitespace.  Leading
-** whitespace is now skipped.
-**
-** Revision 1.5  1997/10/01 11:53:57  hewett
-** Fixed segmentation fault for OFString's find_ methods when current
-** string is empty.
-**
-** Revision 1.4  1997/09/11 15:39:18  hewett
-** Fixed OFString bug associated with the assign method
-** when n == OFString_npos.  Since OFString_npos is represented
-** by -1 the assign method  was reserving zero space for the string.
-** This case is now explicitly handled.
-**
-** Revision 1.3  1997/09/01 10:00:20  hewett
-** Added absent  terminator to RCS/CVS Revision keyword in header.
-**
-** Revision 1.2  1997/07/07 14:05:33  hewett
-** Renamed the constant OFnpos to OFString_npos to look more like
-** the real ANSI constant string::npos.
-**
-** Revision 1.1  1997/07/07 11:52:22  meichel
-** Added string class OFString to ofstd library.
-** This class implements a subset of the ANSI C++ "string" class.
-**
-**
-*/

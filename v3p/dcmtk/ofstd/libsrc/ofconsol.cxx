@@ -21,14 +21,6 @@
  *
  *  Purpose: Define alias for cout, cerr and clog
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:11 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/ofstd/libsrc/ofconsol.cxx,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #include "osconfig.h"
@@ -101,16 +93,16 @@ void OFConsole::join()
   unlockCerr();
   return;
 }
-  
+
 void OFConsole::split()
 {
   lockCerr();
   if (joined)
   {
-  	// since status is joined, lockCerr() has locked both mutexes
+    // since status is joined, lockCerr() has locked both mutexes
     joined = 0;
 
-    // now status is unjoined, we have to unlock both mutexes manually  	
+    // now status is unjoined, we have to unlock both mutexes manually
     unlockCout();
   }
   unlockCerr();
@@ -135,11 +127,11 @@ OFConsole& OFConsole::instance()
 
 class OFConsoleInitializer
 {
-public:
+ public:
   OFConsoleInitializer()
   {
-  	OFConsole::instance();
-  }  
+    OFConsole::instance();
+  }
 };
 
 /* the constructor of this global object makes sure
@@ -147,57 +139,3 @@ public:
  * Required to make ofConsole thread-safe.
  */
 OFConsoleInitializer ofConsoleInitializer;
-
-
-/*
- *
- * CVS/RCS Log:
- * Log: ofconsol.cxx,v 
- * Revision 1.1  2004/01/14 04:01:11  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.10  2002/11/27 11:23:09  meichel
- * Adapted module ofstd to use of new header file ofstdinc.h
- *
- * Revision 1.9  2002/06/14 10:44:41  meichel
- * Fixed bug in ofConsole join/split mutex locking behaviour
- *
- * Revision 1.8  2002/05/16 15:56:35  meichel
- * Changed ofConsole into singleton implementation that can safely
- *   be used prior to start of main, i.e. from global constructors
- *
- * Revision 1.7  2002/05/16 08:16:46  meichel
- * changed return type of OFConsole::setCout() and OFConsole::setCerr()
- *   to pointer instead of reference.
- *
- * Revision 1.6  2002/05/02 14:06:07  joergr
- * Added support for standard and non-standard string streams (which one is
- * supported is detected automatically via the configure mechanism).
- * Thanks again to Andreas Barth <Andreas.Barth@bruker-biospin.de> for his
- * contribution.
- *
- * Revision 1.5  2002/04/16 13:36:26  joergr
- * Added configurable support for C++ ANSI standard includes (e.g. streams).
- * Thanks to Andreas Barth <Andreas.Barth@bruker-biospin.de> for his
- * contribution.
- *
- * Revision 1.4  2001/06/01 15:51:38  meichel
- * Updated copyright header
- *
- * Revision 1.3  2000/12/13 15:14:35  joergr
- * Introduced dummy parameter for "default" constructor of class OFConsole
- * to "convince" linker of gcc 2.5.8 (NeXTSTEP) to allocate memory for global
- * variable 'ofConsole'.
- *
- * Revision 1.2  2000/04/14 15:16:13  meichel
- * Added new class OFConsole and global instance ofConsole which provide
- *   access to standard output and error streams in a way that allows multiple
- *   threads to safely create output concurrently.
- *
- * Revision 1.1  2000/03/03 14:02:51  meichel
- * Implemented library support for redirecting error messages into memory
- *   instead of printing them to stdout/stderr for GUI applications.
- *
- *
- */

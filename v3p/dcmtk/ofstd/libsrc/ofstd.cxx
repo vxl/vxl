@@ -92,13 +92,6 @@
  *
  *  Purpose: Class for various helper functions
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:11 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -889,7 +882,7 @@ void OFStandard::ftoa(
  */
 class FTOAStringBuffer
 {
-public:
+ public:
   /** constructor
    *  @param theSize desired size of string buffer, in bytes
    */
@@ -898,7 +891,7 @@ public:
   , offset_(0)
   , size_(theSize)
   {
-  	if (size_ > 0) buf_ = new char[size_];
+    if (size_ > 0) buf_ = new char[size_];
   }
 
   /// destructor
@@ -922,7 +915,7 @@ public:
     return buf_;
   }
 
-private:
+ private:
   /// pointer to string buffer
   char *buf_;
 
@@ -1064,7 +1057,7 @@ static int ftoa_convert(double val, int prec, int flags, char *signp, char fmtch
     *p-- = FTOA_TOCHAR((int)((tmp + .01) * 10));
   }
 
-  switch(fmtch)
+  switch (fmtch)
   {
     case 'f':
       /* reverse integer into beginning of buffer */
@@ -1219,7 +1212,7 @@ eformat:
           {
             fract = modf(fract * 10, &tmp);
             *t++ = FTOA_TOCHAR((int)tmp);
-          } while(!tmp);
+          } while (!tmp);
           while (--prec && fract)
           {
             fract = modf(fract * 10, &tmp);
@@ -1355,88 +1348,26 @@ void OFStandard::ftoa(
 #endif /* DISABLE_OFSTD_FTOA */
 
 
-
 OFBool OFStandard::stringMatchesCharacterSet( const char *str, const char *charset )
 {
-  if( charset == NULL || str == NULL )
+  if ( charset == NULL || str == NULL )
     return OFTrue;
 
   OFBool result = OFTrue;
   unsigned int lenStr = strlen( str );
   unsigned int lenCharset = strlen( charset );
-  for( unsigned int i=0 ; i<lenStr && result ; i++ )
+  for ( unsigned int i=0 ; i<lenStr && result ; i++ )
   {
     OFBool charFound = OFFalse;
-    for( unsigned int j=0 ; j<lenCharset && !charFound ; j++ )
+    for ( unsigned int j=0 ; j<lenCharset && !charFound ; j++ )
     {
-      if( str[i] == charset[j] )
+      if ( str[i] == charset[j] )
         charFound = OFTrue;
     }
 
-    if( !charFound )
+    if ( !charFound )
       result = OFFalse;
   }
 
   return( result );
 }
-
-
-/*
- *  Log: ofstd.cxx,v 
- *  Revision 1.1  2004/01/14 04:01:11  amithaperera
- *  Add better DICOM support by wrapping DCMTK, and add a stripped down
- *  version of DCMTK to v3p. Add more DICOM test cases.
- *
- *  Revision 1.14  2002/12/13 13:45:35  meichel
- *  Removed const from decodeBase64() return code, needed on MIPSpro
- *
- *  Revision 1.13  2002/12/09 13:10:46  joergr
- *  Renamed parameter/local variable to avoid name clash with global function
- *  exp().
- *  Added private undefined copy constructor and/or assignment operator.
- *
- *  Revision 1.12  2002/12/05 13:50:08  joergr
- *  Moved definition of ftoa() processing flags to implementation file to avoid
- *  compiler errors (e.g. on Sun CC 2.0.1).
- *
- *  Revision 1.11  2002/12/04 09:13:03  meichel
- *  Implemented a locale independent function OFStandard::ftoa() that
- *    converts double to string and offers all the flexibility of the
- *    sprintf family of functions.
- *
- *  Revision 1.10  2002/11/27 11:23:11  meichel
- *  Adapted module ofstd to use of new header file ofstdinc.h
- *
- *  Revision 1.9  2002/07/18 12:14:19  joergr
- *  Corrected typos.
- *
- *  Revision 1.8  2002/07/02 15:18:24  wilkens
- *  Added function OFStandard::stringMatchesCharacterSet(...).
- *
- *  Revision 1.7  2002/06/20 12:06:47  meichel
- *  Fixed typo in ofstd.cc
- *
- *  Revision 1.6  2002/06/20 12:02:39  meichel
- *  Implemented a locale independent function OFStandard::atof() that
- *    converts strings to double and optionally returns a status code
- *
- *  Revision 1.5  2002/05/16 15:56:20  meichel
- *  Minor fixes to make ofstd compile on NeXTStep 3.3
- *
- *  Revision 1.4  2002/05/14 08:13:27  joergr
- *  Added support for Base64 (MIME) encoding and decoding.
- *
- *  Revision 1.3  2002/04/25 09:13:55  joergr
- *  Moved helper function which converts a conventional character string to an
- *  HTML/XML mnenonic string (e.g. using "&lt;" instead of "<") from module
- *  dcmsr to ofstd.
- *
- *  Revision 1.2  2002/04/11 12:08:06  joergr
- *  Added general purpose routines to check whether a file exists, a path points
- *  to a directory or a file, etc.
- *
- *  Revision 1.1  2001/12/04 16:57:18  meichel
- *  Implemented strlcpy and strlcat routines compatible with the
- *    corresponding BSD libc routines in class OFStandard
- *
- */

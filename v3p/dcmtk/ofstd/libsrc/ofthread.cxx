@@ -19,19 +19,11 @@
  *
  *  Author:  Marco Eichelberg
  *
- *  Purpose: Provides operating system independent abstractions for basic 
- *           multi-thread concepts: threads, thread specific data, 
- *           semaphores, mutexes and read/write locks. The implementation 
- *           of these classes supports the Solaris, POSIX and Win32 
+ *  Purpose: Provides operating system independent abstractions for basic
+ *           multi-thread concepts: threads, thread specific data,
+ *           semaphores, mutexes and read/write locks. The implementation
+ *           of these classes supports the Solaris, POSIX and Win32
  *           multi-thread APIs.
- *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:11 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/ofstd/libsrc/ofthread.cxx,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
  *
  */
 
@@ -120,14 +112,14 @@ OFThread::~OFThread()
 {
 #ifdef WINDOWS_INTERFACE
   CloseHandle((HANDLE)theThreadHandle);
-#endif  
+#endif
 }
 
 int OFThread::start()
 {
 #ifdef WINDOWS_INTERFACE
   unsigned int tid = 0;
-  theThreadHandle = _beginthreadex(NULL, 0, thread_stub, (void *)this, 0, &tid); 
+  theThreadHandle = _beginthreadex(NULL, 0, thread_stub, (void *)this, 0, &tid);
   if (theThreadHandle == 0) return errno; else
   {
     theThread = tid;
@@ -136,13 +128,13 @@ int OFThread::start()
 #elif defined(POSIX_INTERFACE)
   pthread_t tid=0;
   int result = pthread_create(&tid, NULL, thread_stub, (void *)this);
-  if (0 == result) theThread = (unsigned long) tid; else theThread = 0;      
-  return result;     
+  if (0 == result) theThread = (unsigned long) tid; else theThread = 0;
+  return result;
 #elif defined(SOLARIS_INTERFACE)
   thread_t tid=0;
   int result = thr_create(NULL, 0, thread_stub, (void *)this, 0, &tid);
-  if (0 == result) theThread = (unsigned long) tid; else theThread = 0;      
-  return result;     
+  if (0 == result) theThread = (unsigned long) tid; else theThread = 0;
+  return result;
 #else
   return -1;
 #endif
@@ -163,7 +155,7 @@ int OFThread::join()
   return -1;
 #endif
 }
-  
+
 unsigned long OFThread::threadID()
 {
   return theThread;
@@ -222,11 +214,11 @@ void OFThread::errorstr(OFString& description, int /* code */ )
   if (code == OFThread::busy) description = "another thread already waiting for join"; else
   {
     LPVOID buf;
-    FormatMessage( 
-      FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, 
+    FormatMessage(
+      FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
       NULL, (DWORD)code, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
       (LPTSTR) &buf, 0, NULL);
-    if (buf) description = (const char *)buf; 
+    if (buf) description = (const char *)buf;
     LocalFree(buf);
   }
 #elif defined(POSIX_INTERFACE) || defined(SOLARIS_INTERFACE)
@@ -301,7 +293,7 @@ int OFThreadSpecificData::set(void * /* value */ )
   if (theKey)
   {
     if (0 == TlsSetValue(*((DWORD *)theKey), value)) return (int)GetLastError(); else return 0;
-  } else return ERROR_INVALID_HANDLE;    
+  } else return ERROR_INVALID_HANDLE;
 #elif defined(POSIX_INTERFACE)
   if (theKey) return pthread_setspecific(*((pthread_key_t *)theKey), value); else return EINVAL;
 #elif defined(SOLARIS_INTERFACE)
@@ -312,7 +304,7 @@ int OFThreadSpecificData::set(void * /* value */ )
 }
 
 int OFThreadSpecificData::get(void *&value)
-{  
+{
 #ifdef WINDOWS_INTERFACE
   if (theKey)
   {
@@ -323,7 +315,7 @@ int OFThreadSpecificData::get(void *&value)
     return ERROR_INVALID_HANDLE;
   }
 #elif defined(POSIX_INTERFACE)
-  if (theKey) 
+  if (theKey)
   {
     value = pthread_getspecific(*((pthread_key_t *)theKey));
     return 0;
@@ -337,7 +329,7 @@ int OFThreadSpecificData::get(void *&value)
 #else
   value = NULL;
   return -1;
-#endif	
+#endif
 }
 
 #if defined(WINDOWS_INTERFACE) || defined(POSIX_INTERFACE) || defined(SOLARIS_INTERFACE)
@@ -348,11 +340,11 @@ void OFThreadSpecificData::errorstr(OFString& description, int /* code */ )
 {
 #ifdef WINDOWS_INTERFACE
   LPVOID buf;
-  FormatMessage( 
-    FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, 
+  FormatMessage(
+    FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
     NULL, (DWORD)code, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
     (LPTSTR) &buf, 0, NULL);
-  if (buf) description = (const char *)buf; 
+  if (buf) description = (const char *)buf;
   LocalFree(buf);
 #elif defined(POSIX_INTERFACE) || defined(SOLARIS_INTERFACE)
   const char *str = strerror(code);
@@ -391,14 +383,14 @@ OFSemaphore::OFSemaphore(unsigned int /* numResources */ )
   if (sem)
   {
     if (sem_init(sem, 0, numResources) == -1) delete sem;
-    else theSemaphore = sem;    
+    else theSemaphore = sem;
   }
 #elif defined(SOLARIS_INTERFACE)
   sema_t *sem = new sema_t;
   if (sem)
   {
     if (sema_init(sem, numResources, USYNC_THREAD, NULL)) delete sem;
-    else theSemaphore = sem;    
+    else theSemaphore = sem;
   }
 #else
 #endif
@@ -455,7 +447,7 @@ int OFSemaphore::trywait()
   if (theSemaphore)
   {
     if (sem_trywait((sem_t *)theSemaphore)) return errno; else return 0; // may return EAGAIN
-  } else return EINVAL;  
+  } else return EINVAL;
 #elif defined(SOLARIS_INTERFACE)
   if (theSemaphore) return sema_trywait((sema_t *)theSemaphore); else return EINVAL; // may return EBUSY
 #else
@@ -471,9 +463,9 @@ int OFSemaphore::post()
   if (theSemaphore)
   {
     if (sem_post((sem_t *)theSemaphore)) return errno; else return 0;
-  } else return EINVAL;  
+  } else return EINVAL;
 #elif defined(SOLARIS_INTERFACE)
-  if (theSemaphore) return sema_post((sema_t *)theSemaphore); else return EINVAL; 
+  if (theSemaphore) return sema_post((sema_t *)theSemaphore); else return EINVAL;
 #else
   return -1;
 #endif
@@ -489,11 +481,11 @@ void OFSemaphore::errorstr(OFString& description, int /* code */ )
   if (code == OFSemaphore::busy) description = "semaphore is already locked"; else
   {
     LPVOID buf;
-    FormatMessage( 
-      FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, 
+    FormatMessage(
+      FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
       NULL, (DWORD)code, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
       (LPTSTR) &buf, 0, NULL);
-    if (buf) description = (const char *)buf; 
+    if (buf) description = (const char *)buf;
     LocalFree(buf);
   }
 #elif defined(POSIX_INTERFACE) || defined(SOLARIS_INTERFACE)
@@ -565,7 +557,7 @@ OFBool OFMutex::initialized() const
 #endif
 }
 
-  
+
 int OFMutex::lock()
 {
 #ifdef WINDOWS_INTERFACE
@@ -619,11 +611,11 @@ void OFMutex::errorstr(OFString& description, int /* code */ )
   if (code == OFSemaphore::busy) description = "mutex is already locked"; else
   {
     LPVOID buf;
-    FormatMessage( 
-      FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, 
+    FormatMessage(
+      FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
       NULL, (DWORD)code, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
       (LPTSTR) &buf, 0, NULL);
-    if (buf) description = (const char *)buf; 
+    if (buf) description = (const char *)buf;
     LocalFree(buf);
   }
 #elif defined(POSIX_INTERFACE) || defined(SOLARIS_INTERFACE)
@@ -642,14 +634,14 @@ void OFMutex::errorstr(OFString& description, int /* code */ )
 
 class OFReadWriteLockHelper
 {
-public:
+ public:
   OFReadWriteLockHelper(): accessMutex(), usageSemaphore(1), numReaders(0) {}
   ~OFReadWriteLockHelper() {}
 
   OFMutex accessMutex;
   OFSemaphore usageSemaphore;
   int numReaders;
-private:
+ private:
   /* undefined */ OFReadWriteLockHelper(const OFReadWriteLockHelper& arg);
   /* undefined */ OFReadWriteLockHelper& operator=(const OFReadWriteLockHelper& arg);
 };
@@ -721,7 +713,7 @@ int OFReadWriteLock::rdlock()
   if (theLock)
   {
     OFReadWriteLockHelper *rwl = (OFReadWriteLockHelper *)theLock;
-    int result =0;    
+    int result =0;
     while (1)
     {
       if (0 != (result = rwl->accessMutex.lock())) return result; // lock mutex
@@ -733,7 +725,7 @@ int OFReadWriteLock::rdlock()
           {
             rwl->accessMutex.unlock();
             return result;
-          }        
+          }
         }
         (rwl->numReaders)++;
         return rwl->accessMutex.unlock();
@@ -759,7 +751,7 @@ int OFReadWriteLock::wrlock()
   if (theLock)
   {
     OFReadWriteLockHelper *rwl = (OFReadWriteLockHelper *)theLock;
-    int result =0;    
+    int result =0;
     while (1)
     {
       if (0 != (result = rwl->accessMutex.lock())) return result; // lock mutex
@@ -769,11 +761,11 @@ int OFReadWriteLock::wrlock()
         {
           rwl->accessMutex.unlock();
           return result;
-        }        
+        }
         rwl->numReaders = -1;
         return rwl->accessMutex.unlock();
       }
-    
+
       // we cannot grant the write lock, block thread.
       if (0 != (result = rwl->accessMutex.unlock())) return result;
       if (0 != (result = rwl->usageSemaphore.wait())) return result;
@@ -796,7 +788,7 @@ int OFReadWriteLock::tryrdlock()
   if (theLock)
   {
     OFReadWriteLockHelper *rwl = (OFReadWriteLockHelper *)theLock;
-    int result =0;    
+    int result =0;
     if (0 != (result = rwl->accessMutex.lock())) return result; // lock mutex
     if (rwl->numReaders >= 0) // we can grant the read lock
     {
@@ -806,7 +798,7 @@ int OFReadWriteLock::tryrdlock()
         {
           rwl->accessMutex.unlock();
           return result;
-        }        
+        }
       }
       (rwl->numReaders)++;
       return rwl->accessMutex.unlock();
@@ -829,7 +821,7 @@ int OFReadWriteLock::trywrlock()
   if (theLock)
   {
     OFReadWriteLockHelper *rwl = (OFReadWriteLockHelper *)theLock;
-    int result =0;    
+    int result =0;
     if (0 != (result = rwl->accessMutex.lock())) return result; // lock mutex
     if (rwl->numReaders == 0) // we can grant the write lock
     {
@@ -837,7 +829,7 @@ int OFReadWriteLock::trywrlock()
       {
         rwl->accessMutex.unlock();
         return result;
-      }        
+      }
       rwl->numReaders = -1;
       return rwl->accessMutex.unlock();
     }
@@ -860,7 +852,7 @@ int OFReadWriteLock::unlock()
   if (theLock)
   {
     OFReadWriteLockHelper *rwl = (OFReadWriteLockHelper *)theLock;
-    int result =0;    
+    int result =0;
     if (0 != (result = rwl->accessMutex.lock())) return result; // lock mutex
     if (rwl->numReaders == -1) rwl->numReaders = 0; else (rwl->numReaders)--;
     if ((rwl->numReaders == 0) && (0 != (result = rwl->usageSemaphore.post())))
@@ -889,11 +881,11 @@ void OFReadWriteLock::errorstr(OFString& description, int /* code */ )
   if (code == OFSemaphore::busy) description = "read/write lock is already locked"; else
   {
     LPVOID buf;
-    FormatMessage( 
-      FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, 
+    FormatMessage(
+      FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
       NULL, (DWORD)code, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
       (LPTSTR) &buf, 0, NULL);
-    if (buf) description = (const char *)buf; 
+    if (buf) description = (const char *)buf;
     LocalFree(buf);
   }
 #elif defined(POSIX_INTERFACE) || defined(SOLARIS_INTERFACE)
@@ -904,47 +896,3 @@ void OFReadWriteLock::errorstr(OFString& description, int /* code */ )
 #endif
   return;
 }
-
-
-
-/*
- *
- * CVS/RCS Log:
- * Log: ofthread.cxx,v 
- * Revision 1.1  2004/01/14 04:01:11  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.9  2002/11/27 11:23:11  meichel
- * Adapted module ofstd to use of new header file ofstdinc.h
- *
- * Revision 1.8  2002/02/27 14:13:22  meichel
- * Changed initialized() methods to const. Fixed some return values when
- *   compiled without thread support.
- *
- * Revision 1.7  2001/06/01 15:51:40  meichel
- * Updated copyright header
- *
- * Revision 1.6  2001/01/17 13:03:29  meichel
- * Fixed problem that leaded to compile errors if compiled on Windows without
- *   multi-thread support.
- *
- * Revision 1.5  2000/12/19 12:18:19  meichel
- * thread related classes now correctly disabled when configured
- *   with --disable-threads
- *
- * Revision 1.4  2000/06/26 09:27:38  joergr
- * Replaced _WIN32 by HAVE_WINDOWS_H to avoid compiler errors using CygWin-32.
- *
- * Revision 1.3  2000/04/14 15:17:16  meichel
- * Adapted all ofstd library classes to consistently use ofConsole for output.
- *
- * Revision 1.2  2000/04/11 15:24:45  meichel
- * Changed debug output to COUT instead of CERR
- *
- * Revision 1.1  2000/03/29 16:41:26  meichel
- * Added new classes providing an operating system independent abstraction
- *   for threads, thread specific data, semaphores, mutexes and read/write locks.
- *
- *
- */
