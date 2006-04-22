@@ -21,14 +21,6 @@
  *
  *  Purpose: Interface of class DcmDicomDir
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:09 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/include/dcdicdir.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #ifndef DCDICDIR_H
@@ -163,81 +155,3 @@ public:
 };
 
 #endif // DCDICDIR_H
-
-/*
-** CVS/RCS Log:
-** Log: dcdicdir.h,v 
-** Revision 1.1  2004/01/14 04:01:09  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.16  2002/12/06 12:49:09  joergr
-** Enhanced "print()" function by re-working the implementation and replacing
-** the boolean "showFullData" parameter by a more general integer flag.
-** Added doc++ documentation.
-** Made source code formatting more consistent with other modules/files.
-**
-** Revision 1.15  2001/09/25 17:19:25  meichel
-** Adapted dcmdata to class OFCondition
-**
-** Revision 1.14  2001/06/01 15:48:36  meichel
-** Updated copyright header
-**
-** Revision 1.13  2000/04/14 15:31:31  meichel
-** Removed default value from output stream passed to print() method.
-**   Required for use in multi-thread environments.
-**
-** Revision 1.12  2000/03/08 16:26:12  meichel
-** Updated copyright header.
-**
-** Revision 1.11  2000/03/03 14:05:23  meichel
-** Implemented library support for redirecting error messages into memory
-**   instead of printing them to stdout/stderr for GUI applications.
-**
-** Revision 1.10  2000/02/10 10:50:50  joergr
-** Added new feature to dcmdump (enhanced print method of dcmdata): write
-** pixel data/item value fields to raw files.
-**
-** Revision 1.9  1999/03/31 09:24:34  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.8  1998/07/15 15:48:44  joergr
-** Removed several compiler warnings reported by gcc 2.8.1 with
-** additional options, e.g. missing copy constructors and assignment
-** operators, initialization of member variables in the body of a
-** constructor instead of the member initialization list, hiding of
-** methods by use of identical names, uninitialized member variables,
-** missing const declaration of char pointers. Replaced tabs by spaces.
-**
-** Revision 1.7  1997/09/11 15:02:16  hewett
-** Changed DcmDicomDir constructor to take const char* arguments.
-**
-** Revision 1.6  1997/07/21 08:25:06  andreas
-** - Replace all boolean types (BOOLEAN, CTNBOOLEAN, DICOM_BOOL, BOOL)
-**   with one unique boolean type OFBool.
-**
-** Revision 1.5  1997/05/16 08:31:19  andreas
-** - Revised handling of GroupLength elements and support of
-**   DataSetTrailingPadding elements. The enumeratio E_GrpLenEncoding
-**   got additional enumeration values (for a description see dctypes.h).
-**   addGroupLength and removeGroupLength methods are replaced by
-**   computeGroupLengthAndPadding. To support Padding, the parameters of
-**   element and sequence write functions changed.
-**
-** Revision 1.4  1997/04/24 12:08:28  hewett
-** Fixed DICOMDIR generation bug affecting inclusion of Group Length
-** attributes (file offsets were not being computed correctly).
-**
-** Revision 1.3  1996/08/05 08:45:18  andreas
-** new print routine with additional parameters:
-**         - print into files
-**         - fix output length for elements
-** corrected error in search routine with parameter ESM_fromStackTop
-**
-** Revision 1.2  1996/01/05 13:22:54  andreas
-** - changed to support new streaming facilities
-** - more cleanups
-** - merged read / write methods for block and file transfer
-**
-*/
-

@@ -24,14 +24,6 @@
  *  between OB and OW (e.g. Tag PixelData, OverlayData). This class shall
  *  not be used directly in applications. No identification exists.
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:10 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/include/dcvrpobw.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #ifndef DCVRPOBW_H
@@ -109,50 +101,3 @@ public:
         Uint16 * & words);
 };
 #endif
-
-/*
-** CVS/RCS Log:
-** Log: dcvrpobw.h,v 
-** Revision 1.1  2004/01/14 04:01:10  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.11  2002/09/12 14:07:16  joergr
-** Added method "createUint8Array" which works similar to the 16 bit variant.
-**
-** Revision 1.10  2002/08/27 16:55:40  meichel
-** Initial release of new DICOM I/O stream classes that add support for stream
-**   compression (deflated little endian explicit VR transfer syntax)
-**
-** Revision 1.9  2001/09/25 17:19:33  meichel
-** Adapted dcmdata to class OFCondition
-**
-** Revision 1.8  2001/06/01 15:48:52  meichel
-** Updated copyright header
-**
-** Revision 1.7  2001/05/10 12:52:56  meichel
-** Added public createUint16Array() method in class DcmPolymorphOBOW.
-**
-** Revision 1.6  2000/11/07 16:56:11  meichel
-** Initial release of dcmsign module for DICOM Digital Signatures
-**
-** Revision 1.5  2000/03/08 16:26:25  meichel
-** Updated copyright header.
-**
-** Revision 1.4  1999/03/31 09:25:05  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.3  1998/11/12 16:47:53  meichel
-** Implemented operator= for all classes derived from DcmObject.
-**
-** Revision 1.2  1997/07/31 06:59:00  andreas
-** Error correction and additonal functionality for
-** DcmPolymorphOBOW to support getting and putting of Uint8 and
-** Uint16 data independent of the VR.
-**
-** Revision 1.1  1997/07/21 07:54:00  andreas
-** - Support for CP 14. PixelData and OverlayData can have VR OW or OB
-**   (depending on the transfer syntax). New internal value
-**   representation (only for ident()) for OverlayData.
-**
-*/

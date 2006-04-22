@@ -21,14 +21,6 @@
  *
  *  Purpose: Interface for a dictionary entry in the loadable DICOM data dictionary
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:09 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/include/dcdicent.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #ifndef DCDICENT_H
@@ -408,74 +400,3 @@ private:
 };
 
 #endif /* !DCDICENT_H */
-
-/*
-** CVS/RCS Log:
-** Log: dcdicent.h,v 
-** Revision 1.1  2004/01/14 04:01:09  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.17  2002/11/27 12:07:21  meichel
-** Adapted module dcmdata to use of new header file ofstdinc.h
-**
-** Revision 1.16  2002/07/23 14:21:25  meichel
-** Added support for private tag data dictionaries to dcmdata
-**
-** Revision 1.15  2002/04/16 13:41:44  joergr
-** Added configurable support for C++ ANSI standard includes (e.g. streams).
-** Thanks to Andreas Barth <Andreas.Barth@bruker-biospin.de> for his
-** contribution.
-**
-** Revision 1.14  2001/06/01 15:48:36  meichel
-** Updated copyright header
-**
-** Revision 1.13  2000/03/08 16:26:13  meichel
-** Updated copyright header.
-**
-** Revision 1.12  1999/03/31 09:24:35  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.11  1998/07/15 15:48:45  joergr
-** Removed several compiler warnings reported by gcc 2.8.1 with
-** additional options, e.g. missing copy constructors and assignment
-** operators, initialization of member variables in the body of a
-** constructor instead of the member initialization list, hiding of
-** methods by use of identical names, uninitialized member variables,
-** missing const declaration of char pointers. Replaced tabs by spaces.
-**
-** Revision 1.10  1997/08/26 13:44:59  hewett
-** Modified constructors to take const parameters.
-**
-** Revision 1.9  1997/07/31 14:40:35  meichel
-** Created copy constructor for class DcmDictEntry, required by dcmcheck.
-**
-** Revision 1.8  1997/07/21 08:25:07  andreas
-** - Replace all boolean types (BOOLEAN, CTNBOOLEAN, DICOM_BOOL, BOOL)
-**   with one unique boolean type OFBool.
-**
-** Revision 1.7  1997/04/18 08:04:39  andreas
-** - Minor corrections: correct some warnings of the SUN-C++ Compiler
-**   concerning the assignments of wrong types and inline compiler
-**   errors
-**
-** Revision 1.6  1997/04/15 16:25:05  hewett
-** Corrected data dictionary bug whereby the even/odd range restrictions
-** were not being taken into consideration when searching the dictionary.
-**
-** Revision 1.5  1996/09/24 16:24:58  hewett
-** Added preliminary support for the Macintosh environment (GUSI library).
-**
-** Revision 1.4  1996/09/18 16:37:09  hewett
-** Added capability to search data dictionary by tag name.  The
-** source code for these changes was contributed by Larry V. Streepy,
-** Jr., Chief Technical Officer,  Healthcare Communications, Inc.,
-** (mailto:streepy@healthcare.com).
-**
-** Revision 1.3  1996/03/20 16:43:49  hewett
-** Updated for revised data dictionary.  Repeating tags are now handled better.
-** A linear list of repeating tags has been introduced with a subset ordering
-** mechanism to ensure that dictionary searches locate the most precise
-** dictionary entry.
-**
-*/

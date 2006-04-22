@@ -21,14 +21,6 @@
  *
  *  Purpose: Hash table interface for DICOM data dictionary
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:09 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/include/dchashdi.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #ifndef DCHASHDI_H
@@ -281,53 +273,3 @@ private:
 };
 
 #endif /* DCHASHDI_H */
-
-/*
-** CVS/RCS Log:
-** Log: dchashdi.h,v 
-** Revision 1.1  2004/01/14 04:01:09  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.11  2002/07/23 14:21:26  meichel
-** Added support for private tag data dictionaries to dcmdata
-**
-** Revision 1.10  2001/06/01 15:48:40  meichel
-** Updated copyright header
-**
-** Revision 1.9  2000/05/03 14:19:08  meichel
-** Added new class GlobalDcmDataDictionary which implements read/write lock
-**   semantics for safe access to the DICOM dictionary from multiple threads
-**   in parallel. The global dcmDataDict now uses this class.
-**
-** Revision 1.8  2000/03/08 16:26:15  meichel
-** Updated copyright header.
-**
-** Revision 1.7  1999/03/31 09:24:39  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.6  1998/07/15 15:48:48  joergr
-** Removed several compiler warnings reported by gcc 2.8.1 with
-** additional options, e.g. missing copy constructors and assignment
-** operators, initialization of member variables in the body of a
-** constructor instead of the member initialization list, hiding of
-** methods by use of identical names, uninitialized member variables,
-** missing const declaration of char pointers. Replaced tabs by spaces.
-**
-** Revision 1.5  1997/09/18 11:41:13  meichel
-** Corrected forward and friend declarations (needed for DEC cxx).
-**
-** Revision 1.4  1997/09/18 07:24:07  meichel
-** Missing operator= added to class DcmDictEntryListIterator
-**
-** Revision 1.3  1997/08/29 13:11:09  andreas
-** Corrected copy constructor for DcmHashDictIterator
-**
-** Revision 1.2  1997/08/26 13:41:11  hewett
-** Corrected a couple of minor spelling errors.
-**
-** Revision 1.1  1997/08/26 13:30:29  hewett
-** Initial Version - Interface for hash table data structure for data dictionary.
-**
-*/
-

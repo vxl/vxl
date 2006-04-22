@@ -21,14 +21,6 @@
  *
  *  Purpose: Interface for loadable DICOM data dictionary
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:09 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/include/dcdict.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #ifndef DCMDICT_H
@@ -292,87 +284,3 @@ private:
 extern GlobalDcmDataDictionary dcmDataDict;
 
 #endif
-
-
-/*
-** CVS/RCS Log:
-** Log: dcdict.h,v 
-** Revision 1.1  2004/01/14 04:01:09  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.18  2002/07/23 14:21:25  meichel
-** Added support for private tag data dictionaries to dcmdata
-**
-** Revision 1.17  2002/02/27 14:21:20  meichel
-** Declare dcmdata read/write locks only when compiled in multi-thread mode
-**
-** Revision 1.16  2001/06/01 15:48:38  meichel
-** Updated copyright header
-**
-** Revision 1.15  2000/05/03 14:19:08  meichel
-** Added new class GlobalDcmDataDictionary which implements read/write lock
-**   semantics for safe access to the DICOM dictionary from multiple threads
-**   in parallel. The global dcmDataDict now uses this class.
-**
-** Revision 1.14  2000/03/08 16:26:13  meichel
-** Updated copyright header.
-**
-** Revision 1.13  1999/03/31 09:24:35  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.12  1998/07/15 15:48:45  joergr
-** Removed several compiler warnings reported by gcc 2.8.1 with
-** additional options, e.g. missing copy constructors and assignment
-** operators, initialization of member variables in the body of a
-** constructor instead of the member initialization list, hiding of
-** methods by use of identical names, uninitialized member variables,
-** missing const declaration of char pointers. Replaced tabs by spaces.
-**
-** Revision 1.11  1997/08/26 14:02:56  hewett
-** New data structures for data-dictionary.  The main part of the
-** data-dictionary is now stored in an hash table using an optimized
-** hash function.  This new data structure reduces data-dictionary
-** load times by a factor of 4!  he data-dictionary specific linked-list
-** has been replaced by a linked list derived from OFList class
-** (see ofstd/include/oflist.h).
-** The only interface modifications are related to iterating over the entire
-** data dictionary which should not be needed by "normal" applications.
-**
-** Revision 1.10  1997/07/21 08:25:07  andreas
-** - Replace all boolean types (BOOLEAN, CTNBOOLEAN, DICOM_BOOL, BOOL)
-**   with one unique boolean type OFBool.
-**
-** Revision 1.9  1997/05/22 13:15:54  hewett
-** Added method DcmDataDictionary::isDictionaryLoaded() to ask if a full
-** data dictionary has been loaded.  This method should be used in tests
-** rather that querying the number of entries (a sekelton dictionary is
-** now always present).
-**
-** Revision 1.8  1997/05/13 13:58:41  hewett
-** Added member function (loadSkeletomDictionary) to preload of a few
-** essential attribute descriptions into the data dictionary (e.g. Item
-** and ItemDelimitation tags).
-**
-** Revision 1.7  1996/09/18 16:37:10  hewett
-** Added capability to search data dictionary by tag name.  The
-** source code for these changes was contributed by Larry V. Streepy,
-** Jr., Chief Technical Officer,  Healthcare Communications, Inc.,
-** (mailto:streepy@healthcare.com).
-**
-** Revision 1.6  1996/03/22 13:09:12  hewett
-** Moved the definition of DCM_DICT_DEFAULT_PATH to the system
-** dependent configuration files included via "osconfig.h".
-**
-** Revision 1.5  1996/03/21 09:50:38  hewett
-** Added a  method numberOfEntries() to return the total number of
-** dictionary entries.
-**
-** Revision 1.4  1996/03/20 16:43:49  hewett
-** Updated for revised data dictionary.  Repeating tags are now handled better.
-** A linear list of repeating tags has been introduced with a subset ordering
-** mechanism to ensure that dictionary searches locate the most precise
-** dictionary entry.
-**
-*/
-

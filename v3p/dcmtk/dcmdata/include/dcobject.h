@@ -23,14 +23,6 @@
  *  This file contains the interface to routines which provide
  *  DICOM object encoding/decoding, search and lookup facilities.
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:09 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/include/dcobject.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -306,74 +298,3 @@ class DcmObject
 
 
 #endif // DCOBJECT_H
-
-
-/*
- * CVS/RCS Log:
- * Log: dcobject.h,v 
- * Revision 1.1  2004/01/14 04:01:09  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.34  2002/12/06 12:49:11  joergr
- * Enhanced "print()" function by re-working the implementation and replacing
- * the boolean "showFullData" parameter by a more general integer flag.
- * Added doc++ documentation.
- * Made source code formatting more consistent with other modules/files.
- *
- * Revision 1.33  2002/08/27 16:55:35  meichel
- * Initial release of new DICOM I/O stream classes that add support for stream
- *   compression (deflated little endian explicit VR transfer syntax)
- *
- * Revision 1.32  2002/08/20 12:18:35  meichel
- * Changed parameter list of loadFile and saveFile methods in class
- *   DcmFileFormat. Removed loadFile and saveFile from class DcmObject.
- *
- * Revision 1.31  2002/07/08 14:45:20  meichel
- * Improved dcmdata behaviour when reading odd tag length. Depending on the
- *   global boolean flag dcmAcceptOddAttributeLength, the parser now either accepts
- *   odd length attributes or implements the old behaviour, i.e. assumes a real
- *   length larger by one.
- *
- * Revision 1.30  2002/04/25 09:38:47  joergr
- * Added support for XML output of DICOM objects.
- *
- * Revision 1.29  2002/04/11 12:23:46  joergr
- * Added new methods for loading and saving DICOM files.
- *
- * Revision 1.28  2001/11/16 15:54:39  meichel
- * Adapted digital signature code to final text of supplement 41.
- *
- * Revision 1.27  2001/09/25 17:19:27  meichel
- * Adapted dcmdata to class OFCondition
- *
- * Revision 1.26  2001/06/01 15:48:41  meichel
- * Updated copyright header
- *
- * Revision 1.25  2000/11/07 16:56:07  meichel
- * Initial release of dcmsign module for DICOM Digital Signatures
- *
- * Revision 1.24  2000/04/14 16:02:39  meichel
- * Global flag dcmEnableAutomaticInputDataCorrection now derived from OFGlobal
- *   and, thus, safe for use in multi-thread applications.
- *
- * Revision 1.23  2000/03/08 16:26:16  meichel
- * Updated copyright header.
- *
- * Revision 1.22  2000/03/03 14:05:24  meichel
- * Implemented library support for redirecting error messages into memory
- *   instead of printing them to stdout/stderr for GUI applications.
- *
- * Revision 1.21  2000/02/10 10:50:52  joergr
- * Added new feature to dcmdump (enhanced print method of dcmdata): write
- * pixel data/item value fields to raw files.
- *
- * Revision 1.20  2000/02/01 10:12:02  meichel
- * Avoiding to include <stdlib.h> as extern "C" on Borland C++ Builder 4,
- *   workaround for bug in compiler header files.
- *
- * Revision 1.19  1999/03/31 09:24:42  meichel
- * Updated copyright header in module dcmdata
- *
- *
- */

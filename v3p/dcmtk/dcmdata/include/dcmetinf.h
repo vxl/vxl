@@ -21,14 +21,6 @@
  *
  *  Purpose: Interface of class DcmMetaInfo
  *
- *  Last Update:      Author: peter_vanroose 
- *  Update Date:      Date: 2004/05/28 17:59:55 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/include/dcmetinf.h,v 
- *  CVS/RCS Revision: Revision: 1.2 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -143,91 +135,3 @@ class DcmMetaInfo
 };
 
 #endif // DCMETINF_H
-
-/*
-** CVS/RCS Log:
-** Log: dcmetinf.h,v 
-** Revision 1.2  2004/05/28 17:59:55  peter_vanroose
-** typo corrected
-**
-** Revision 1.1  2004/01/14 04:01:09  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.18  2002/12/06 12:49:11  joergr
-** Enhanced "print()" function by re-working the implementation and replacing
-** the boolean "showFullData" parameter by a more general integer flag.
-** Added doc++ documentation.
-** Made source code formatting more consistent with other modules/files.
-**
-** Revision 1.17  2002/08/27 16:55:35  meichel
-** Initial release of new DICOM I/O stream classes that add support for stream
-**   compression (deflated little endian explicit VR transfer syntax)
-**
-** Revision 1.16  2002/04/25 09:40:56  joergr
-** Added support for XML output of DICOM objects.
-**
-** Revision 1.15  2001/09/25 17:19:27  meichel
-** Adapted dcmdata to class OFCondition
-**
-** Revision 1.14  2001/06/01 15:48:41  meichel
-** Updated copyright header
-**
-** Revision 1.13  2000/04/14 15:31:32  meichel
-** Removed default value from output stream passed to print() method.
-**   Required for use in multi-thread environments.
-**
-** Revision 1.12  2000/03/08 16:26:16  meichel
-** Updated copyright header.
-**
-** Revision 1.11  2000/03/03 14:05:24  meichel
-** Implemented library support for redirecting error messages into memory
-**   instead of printing them to stdout/stderr for GUI applications.
-**
-** Revision 1.10  2000/02/10 10:50:51  joergr
-** Added new feature to dcmdump (enhanced print method of dcmdata): write
-** pixel data/item value fields to raw files.
-**
-** Revision 1.9  1999/03/31 09:24:41  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.8  1997/09/22 14:56:12  hewett
-** Added a method to retrieve the original transfer syntax of a read
-** meta-header (getOriginalXfer).  This functionality is needed by
-** the DCMCHECK package.
-**
-** Revision 1.7  1997/07/21 08:25:09  andreas
-** - Replace all boolean types (BOOLEAN, CTNBOOLEAN, DICOM_BOOL, BOOL)
-**   with one unique boolean type OFBool.
-**
-** Revision 1.6  1997/05/16 08:23:47  andreas
-** - Revised handling of GroupLength elements and support of
-**   DataSetTrailingPadding elements. The enumeratio E_GrpLenEncoding
-**   got additional enumeration values (for a description see dctypes.h).
-**   addGroupLength and removeGroupLength methods are replaced by
-**   computeGroupLengthAndPadding. To support Padding, the parameters of
-**   element and sequence write functions changed.
-** - Added a new method calcElementLength to calculate the length of an
-**   element, item or sequence. For elements it returns the length of
-**   tag, length field, vr field, and value length, for item and
-**   sequences it returns the length of the whole item. sequence including
-**   the Delimitation tag (if appropriate).  It can never return
-**   UndefinedLength.
-**
-** Revision 1.5  1996/08/05 08:45:24  andreas
-** new print routine with additional parameters:
-**         - print into files
-**         - fix output length for elements
-** corrected error in search routine with parameter ESM_fromStackTop
-**
-** Revision 1.4  1996/01/09 11:06:16  andreas
-** New Support for Visual C++
-** Correct problems with inconsistent const declarations
-**
-** Revision 1.3  1996/01/05 13:22:57  andreas
-** - changed to support new streaming facilities
-** - more cleanups
-** - merged read / write methods for block and file transfer
-**
-*/
-

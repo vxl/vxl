@@ -21,14 +21,6 @@
  *
  *  Purpose: Interface of class DcmPixelData
  *
- *  Last Update:      Author: peter_vanroose 
- *  Update Date:      Date: 2004/05/28 17:59:55 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/include/dcpixel.h,v 
- *  CVS/RCS Revision: Revision: 1.2 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #ifndef DCPIXEL_H
@@ -368,91 +360,3 @@ public:
 };
 
 #endif
-
-/*
-** CVS/RCS Log:
-** Log: dcpixel.h,v 
-** Revision 1.2  2004/05/28 17:59:55  peter_vanroose
-** typo corrected
-**
-** Revision 1.1  2004/01/14 04:01:09  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.18  2002/12/09 09:31:16  wilkens
-** Modified/Added doc++ documentation.
-**
-** Revision 1.17  2002/12/06 12:49:12  joergr
-** Enhanced "print()" function by re-working the implementation and replacing
-** the boolean "showFullData" parameter by a more general integer flag.
-** Added doc++ documentation.
-** Made source code formatting more consistent with other modules/files.
-**
-** Revision 1.16  2002/08/27 16:55:37  meichel
-** Initial release of new DICOM I/O stream classes that add support for stream
-**   compression (deflated little endian explicit VR transfer syntax)
-**
-** Revision 1.15  2002/04/25 09:38:48  joergr
-** Added support for XML output of DICOM objects.
-**
-** Revision 1.14  2001/09/25 17:18:34  meichel
-** Updated abstract class DcmRepresentationParameter for use with dcmjpeg
-**
-** Revision 1.13  2001/06/01 15:48:42  meichel
-** Updated copyright header
-**
-** Revision 1.12  2000/11/07 16:56:08  meichel
-** Initial release of dcmsign module for DICOM Digital Signatures
-**
-** Revision 1.11  2000/09/27 08:19:55  meichel
-** Minor changes in DcmCodec interface, required for future dcmjpeg module.
-**
-** Revision 1.10  2000/04/14 15:31:33  meichel
-** Removed default value from output stream passed to print() method.
-**   Required for use in multi-thread environments.
-**
-** Revision 1.9  2000/03/08 16:26:17  meichel
-** Updated copyright header.
-**
-** Revision 1.8  2000/03/03 14:05:25  meichel
-** Implemented library support for redirecting error messages into memory
-**   instead of printing them to stdout/stderr for GUI applications.
-**
-** Revision 1.7  2000/02/10 10:50:52  joergr
-** Added new feature to dcmdump (enhanced print method of dcmdata): write
-** pixel data/item value fields to raw files.
-**
-** Revision 1.6  2000/02/03 16:28:10  joergr
-** Fixed bug: encapsulated data (pixel items) have never been loaded using
-** method 'loadAllDataIntoMemory'. Therefore, encapsulated pixel data was
-** never printed with 'dcmdump'.
-**
-** Revision 1.5  1999/03/31 09:24:44  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.4  1998/11/12 16:47:42  meichel
-** Implemented operator= for all classes derived from DcmObject.
-**
-** Revision 1.3  1998/07/15 15:48:50  joergr
-** Removed several compiler warnings reported by gcc 2.8.1 with
-** additional options, e.g. missing copy constructors and assignment
-** operators, initialization of member variables in the body of a
-** constructor instead of the member initialization list, hiding of
-** methods by use of identical names, uninitialized member variables,
-** missing const declaration of char pointers. Replaced tabs by spaces.
-**
-** Revision 1.2  1997/07/24 13:08:24  andreas
-** - Removed const for method DcmRepresentationParameter::copy
-**
-** Revision 1.1  1997/07/21 07:54:57  andreas
-** - New environment for encapsulated pixel representations. DcmPixelData
-**   can contain different representations and uses codecs to convert
-**   between them. Codecs are derived from the DcmCodec class. New error
-**   codes are introduced for handling of representations. New internal
-**   value representation (only for ident()) for PixelData
-**
-*/
-
-
-
-

@@ -22,14 +22,6 @@
  *  Purpose: Interface of class DcmUnlimitedText
  *           Value Representation UT is defined in Correction Proposal 101
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:10 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/include/dcvrut.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -89,37 +81,3 @@ class DcmUnlimitedText
 
 
 #endif // DCVRUT_H
-
-
-/*
-** CVS/RCS Log:
-** Log: dcvrut.h,v 
-** Revision 1.1  2004/01/14 04:01:10  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.7  2002/12/06 12:49:21  joergr
-** Enhanced "print()" function by re-working the implementation and replacing
-** the boolean "showFullData" parameter by a more general integer flag.
-** Added doc++ documentation.
-** Made source code formatting more consistent with other modules/files.
-**
-** Revision 1.6  2001/09/25 17:19:36  meichel
-** Adapted dcmdata to class OFCondition
-**
-** Revision 1.5  2001/06/01 15:48:55  meichel
-** Updated copyright header
-**
-** Revision 1.4  2000/03/08 16:26:28  meichel
-** Updated copyright header.
-**
-** Revision 1.3  1999/03/31 09:25:12  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.2  1998/11/12 16:47:58  meichel
-** Implemented operator= for all classes derived from DcmObject.
-**
-** Revision 1.1  1998/01/19 13:19:40  hewett
-** Initial version.
-**
-*/

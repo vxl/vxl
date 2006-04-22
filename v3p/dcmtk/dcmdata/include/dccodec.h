@@ -21,14 +21,6 @@
  *
  *  Purpose: Interface of abstract class DcmCodec and the class DcmCodecStruct
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:09 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/include/dccodec.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #ifndef DCCODEC_H
@@ -381,70 +373,3 @@ private:
  
 
 #endif
-
-/*
-** CVS/RCS Log:
-** Log: dccodec.h,v 
-** Revision 1.1  2004/01/14 04:01:09  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.14  2002/05/24 14:51:41  meichel
-** Moved helper methods that are useful for different compression techniques
-**   from module dcmjpeg to module dcmdata
-**
-** Revision 1.13  2002/02/27 14:21:20  meichel
-** Declare dcmdata read/write locks only when compiled in multi-thread mode
-**
-** Revision 1.12  2001/11/12 16:29:51  meichel
-** Added dummy friend class declaration to singleton class DcmCodecList
-**   to keep gcc from squawking.
-**
-** Revision 1.11  2001/11/08 16:19:39  meichel
-** Changed interface for codec registration. Now everything is thread-safe
-**   and multiple codecs can be registered for a single transfer syntax (e.g.
-**   one encoder and one decoder).
-**
-** Revision 1.10  2001/09/25 17:19:07  meichel
-** Updated abstract class DcmCodecParameter for use with dcmjpeg.
-**   Added new function deregisterGlobalCodec().
-**
-** Revision 1.9  2001/06/01 15:48:34  meichel
-** Updated copyright header
-**
-** Revision 1.8  2001/05/25 09:53:51  meichel
-** Modified DcmCodec::decode() interface, required for future dcmjpeg module.
-**
-** Revision 1.7  2000/09/27 08:19:54  meichel
-** Minor changes in DcmCodec interface, required for future dcmjpeg module.
-**
-** Revision 1.6  2000/04/14 16:09:12  meichel
-** Made function DcmCodec and related functions thread safe.
-**   registerGlobalCodec() should not be called anymore from the constructor
-**   of global objects.
-**
-** Revision 1.5  2000/03/08 16:26:11  meichel
-** Updated copyright header.
-**
-** Revision 1.4  1999/03/31 09:24:31  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.3  1998/07/15 15:48:43  joergr
-** Removed several compiler warnings reported by gcc 2.8.1 with
-** additional options, e.g. missing copy constructors and assignment
-** operators, initialization of member variables in the body of a
-** constructor instead of the member initialization list, hiding of
-** methods by use of identical names, uninitialized member variables,
-** missing const declaration of char pointers. Replaced tabs by spaces.
-**
-** Revision 1.2  1997/07/24 13:07:45  andreas
-** - Make DcmCodec:canChangeCoding abstract
-**
-** Revision 1.1  1997/07/21 07:54:57  andreas
-** - New environment for encapsulated pixel representations. DcmPixelData
-**   can contain different representations and uses codecs to convert
-**   between them. Codecs are derived from the DcmCodec class. New error
-**   codes are introduced for handling of representations. New internal
-**   value representation (only for ident()) for PixelData
-** 
-*/

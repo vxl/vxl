@@ -21,14 +21,6 @@
  *
  *  Purpose: Interface of class DcmLongText
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:10 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/include/dcvrlt.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #ifndef DCVRLT_H
@@ -103,63 +95,3 @@ class DcmLongText
 
 
 #endif // DCVRLT_H
-
-
-/*
-** CVS/RCS Log:
-** Log: dcvrlt.h,v 
-** Revision 1.1  2004/01/14 04:01:10  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.11  2002/12/06 12:49:17  joergr
-** Enhanced "print()" function by re-working the implementation and replacing
-** the boolean "showFullData" parameter by a more general integer flag.
-** Added doc++ documentation.
-** Made source code formatting more consistent with other modules/files.
-**
-** Revision 1.10  2001/09/25 17:19:32  meichel
-** Adapted dcmdata to class OFCondition
-**
-** Revision 1.9  2001/06/01 15:48:51  meichel
-** Updated copyright header
-**
-** Revision 1.8  2000/03/08 16:26:24  meichel
-** Updated copyright header.
-**
-** Revision 1.7  1999/03/31 09:25:03  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.6  1998/11/12 16:47:51  meichel
-** Implemented operator= for all classes derived from DcmObject.
-**
-** Revision 1.5  1997/09/11 15:13:15  hewett
-** Modified getOFString method arguments by removing a default value
-** for the pos argument.  By requiring the pos argument to be provided
-** ensures that callers realise getOFString only gets one component of
-** a multi-valued string.
-**
-** Revision 1.4  1997/08/29 08:32:43  andreas
-** - Added methods getOFString and getOFStringArray for all
-**   string VRs. These methods are able to normalise the value, i. e.
-**   to remove leading and trailing spaces. This will be done only if
-**   it is described in the standard that these spaces are not relevant.
-**   These methods do not test the strings for conformance, this means
-**   especially that they do not delete spaces where they are not allowed!
-**   getOFStringArray returns the string with all its parts separated by \
-**   and getOFString returns only one value of the string.
-**   CAUTION: Currently getString returns a string with trailing
-**   spaces removed (if dcmEnableAutomaticInputDataCorrection == OFTrue) and
-**   truncates the original string (since it is not copied!). If you rely on this
-**   behaviour please change your application now.
-**   Future changes will ensure that getString returns the original
-**   string from the DICOM object (NULL terminated) inclusive padding.
-**   Currently, if you call getOF... before calling getString without
-**   normalisation, you can get the original string read from the DICOM object.
-**
-** Revision 1.3  1996/01/05 13:23:07  andreas
-** - changed to support new streaming facilities
-** - more cleanups
-** - merged read / write methods for block and file transfer
-**
-*/

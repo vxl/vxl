@@ -21,14 +21,6 @@
  *
  *  Purpose: Print debug information
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:09 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/include/dcdebug.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #ifndef DCDEBUG_H
@@ -79,34 +71,3 @@ void debug_print(const char* text, ... );
 #endif // DEBUG
 
 #endif // DCDEBUG_H
-
-/*
- * CVS/RCS Log:
- * Log: dcdebug.h,v 
- * Revision 1.1  2004/01/14 04:01:09  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.10  2002/04/16 13:41:43  joergr
- * Added configurable support for C++ ANSI standard includes (e.g. streams).
- * Thanks to Andreas Barth <Andreas.Barth@bruker-biospin.de> for his
- * contribution.
- *
- * Revision 1.9  2001/06/01 15:48:35  meichel
- * Updated copyright header
- *
- * Revision 1.8  2000/04/14 15:45:30  meichel
- * Dcmdata debug facility now uses ofConsole for output.
- *
- * Revision 1.7  2000/03/08 16:26:12  meichel
- * Updated copyright header.
- *
- * Revision 1.6  2000/03/03 14:05:22  meichel
- * Implemented library support for redirecting error messages into memory
- *   instead of printing them to stdout/stderr for GUI applications.
- *
- * Revision 1.5  1999/03/31 09:24:33  meichel
- * Updated copyright header in module dcmdata
- *
- *
- */

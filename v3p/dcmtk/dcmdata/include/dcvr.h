@@ -21,14 +21,6 @@
  *
  *  Purpose: Definition of the DcmVR class for Value Representation
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:09 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/include/dcvr.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #ifndef DCMVR_H
@@ -155,47 +147,3 @@ public:
 
 
 #endif /* !DCMVR_H */
-
-
-/*
- * CVS/RCS Log:
- * Log: dcvr.h,v 
- * Revision 1.1  2004/01/14 04:01:09  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.19  2002/12/06 12:20:19  joergr
- * Added support for new value representation Other Float String (OF).
- *
- * Revision 1.18  2002/11/27 12:07:24  meichel
- * Adapted module dcmdata to use of new header file ofstdinc.h
- *
- * Revision 1.17  2001/06/01 15:48:47  meichel
- * Updated copyright header
- *
- * Revision 1.16  2000/04/14 15:42:56  meichel
- * Global VR generation flags are now derived from OFGlobal and, thus,
- *   safe for use in multi-thread applications.
- *
- * Revision 1.15  2000/03/08 16:26:21  meichel
- * Updated copyright header.
- *
- * Revision 1.14  2000/02/29 11:48:38  meichel
- * Removed support for VS value representation. This was proposed in CP 101
- *   but never became part of the standard.
- *
- * Revision 1.13  2000/02/23 15:11:42  meichel
- * Corrected macro for Borland C++ Builder 4 workaround.
- *
- * Revision 1.12  2000/02/01 10:12:03  meichel
- * Avoiding to include <stdlib.h> as extern "C" on Borland C++ Builder 4,
- *   workaround for bug in compiler header files.
- *
- * Revision 1.11  1999/06/10 10:44:51  meichel
- * Replaced some #if statements by more robust #ifdef
- *
- * Revision 1.10  1999/03/31 09:24:54  meichel
- * Updated copyright header in module dcmdata
- *
- *
- */

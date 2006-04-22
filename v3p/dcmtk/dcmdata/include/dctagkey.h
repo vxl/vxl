@@ -21,14 +21,6 @@
  *
  *  Purpose: Basis class for dicom tags.
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:09 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/include/dctagkey.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #ifndef DCMTAGKEY_H
@@ -256,56 +248,3 @@ DcmTagKey::operator >= (const DcmTagKey& key) const
 }
 
 #endif
-
-
-/*
-** CVS/RCS Log:
-** Log: dctagkey.h,v 
-** Revision 1.1  2004/01/14 04:01:09  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.12  2002/04/16 13:41:44  joergr
-** Added configurable support for C++ ANSI standard includes (e.g. streams).
-** Thanks to Andreas Barth <Andreas.Barth@bruker-biospin.de> for his
-** contribution.
-**
-** Revision 1.11  2001/11/19 15:23:11  meichel
-** Cleaned up signature code to avoid some gcc warnings.
-**
-** Revision 1.10  2001/11/16 15:54:40  meichel
-** Adapted digital signature code to final text of supplement 41.
-**
-** Revision 1.9  2001/06/01 15:48:45  meichel
-** Updated copyright header
-**
-** Revision 1.8  2000/11/07 16:56:10  meichel
-** Initial release of dcmsign module for DICOM Digital Signatures
-**
-** Revision 1.7  2000/03/08 16:26:19  meichel
-** Updated copyright header.
-**
-** Revision 1.6  2000/02/07 14:45:16  meichel
-** Removed const qualifier from DcmTagKey::toString(), avoids warning on Irix.
-**
-** Revision 1.5  1999/03/31 09:24:49  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.4  1999/03/17 11:08:54  meichel
-** added method DcmTagKey::toString()
-**
-** Revision 1.3  1998/07/15 15:48:54  joergr
-** Removed several compiler warnings reported by gcc 2.8.1 with
-** additional options, e.g. missing copy constructors and assignment
-** operators, initialization of member variables in the body of a
-** constructor instead of the member initialization list, hiding of
-** methods by use of identical names, uninitialized member variables,
-** missing const declaration of char pointers. Replaced tabs by spaces.
-**
-** Revision 1.2  1997/08/26 13:45:54  hewett
-** Added simple hash function method.
-**
-** Revision 1.1  1995/11/23 16:38:04  hewett
-** Updated for loadable data dictionary + some cleanup (more to do).
-**
-*/

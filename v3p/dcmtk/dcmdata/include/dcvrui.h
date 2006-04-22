@@ -21,14 +21,6 @@
  *
  *  Purpose: Interface of class DcmUniqueIdentifier
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:10 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/include/dcvrui.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #ifndef DCVRUI_H
@@ -117,88 +109,3 @@ class DcmUniqueIdentifier
 
 
 #endif // DCVRUI_H
-
-
-/*
-** CVS/RCS Log:
-** Log: dcvrui.h,v 
-** Revision 1.1  2004/01/14 04:01:10  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.18  2002/12/06 12:49:19  joergr
-** Enhanced "print()" function by re-working the implementation and replacing
-** the boolean "showFullData" parameter by a more general integer flag.
-** Added doc++ documentation.
-** Made source code formatting more consistent with other modules/files.
-**
-** Revision 1.17  2002/04/25 10:01:21  joergr
-** Made makeMachineByteString() virtual to avoid ambiguities.
-**
-** Revision 1.16  2001/09/25 17:19:35  meichel
-** Adapted dcmdata to class OFCondition
-**
-** Revision 1.15  2001/06/01 15:48:53  meichel
-** Updated copyright header
-**
-** Revision 1.14  2000/04/14 15:31:35  meichel
-** Removed default value from output stream passed to print() method.
-**   Required for use in multi-thread environments.
-**
-** Revision 1.13  2000/03/08 16:26:27  meichel
-** Updated copyright header.
-**
-** Revision 1.12  2000/03/03 14:05:28  meichel
-** Implemented library support for redirecting error messages into memory
-**   instead of printing them to stdout/stderr for GUI applications.
-**
-** Revision 1.11  2000/02/10 10:50:56  joergr
-** Added new feature to dcmdump (enhanced print method of dcmdata): write
-** pixel data/item value fields to raw files.
-**
-** Revision 1.10  1999/03/31 09:25:09  meichel
-** Updated copyright header in module dcmdata
-**
-** Revision 1.9  1998/11/12 16:47:56  meichel
-** Implemented operator= for all classes derived from DcmObject.
-**
-** Revision 1.8  1997/07/21 08:25:16  andreas
-** - Replace all boolean types (BOOLEAN, CTNBOOLEAN, DICOM_BOOL, BOOL)
-**   with one unique boolean type OFBool.
-**
-** Revision 1.7  1997/04/18 08:13:33  andreas
-** - The put/get-methods for all VRs did not conform to the C++-Standard
-**   draft. Some Compilers (e.g. SUN-C++ Compiler, Metroworks
-**   CodeWarrier, etc.) create many warnings concerning the hiding of
-**   overloaded get methods in all derived classes of DcmElement.
-**   So the interface of all value representation classes in the
-**   library are changed rapidly, e.g.
-**   OFCondition get(Uint16 & value, const unsigned long pos);
-**   becomes
-**   OFCondition getUint16(Uint16 & value, const unsigned long pos);
-**   All (retired) "returntype get(...)" methods are deleted.
-**   For more information see dcmdata/include/dcelem.h
-**
-** Revision 1.6  1996/08/05 08:45:38  andreas
-** new print routine with additional parameters:
-**         - print into files
-**         - fix output length for elements
-** corrected error in search routine with parameter ESM_fromStackTop
-**
-** Revision 1.5  1996/05/30 17:19:22  hewett
-** Added a makeMachineByteString() method to strip and trailing whitespace
-** from a UID.
-**
-** Revision 1.4  1996/01/29 13:38:18  andreas
-** - new put method for every VR to put value as a string
-** - better and unique print methods
-**
-** Revision 1.3  1996/01/05 13:23:10  andreas
-** - changed to support new streaming facilities
-** - more cleanups
-** - merged read / write methods for block and file transfer
-**
-**
-**
-*/
-
