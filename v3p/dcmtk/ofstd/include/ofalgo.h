@@ -18,18 +18,10 @@
  *  Module:  ofstd
  *
  *  Author:  Andreas Barth
- *				
+ *
  *  Purpose:
- *      Defines template algorithms for contaimer  classes with 
+ *      Defines template algorithms for contaimer  classes with
  *      interfaces similar to the C++ Standard
- *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:11 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/ofstd/include/ofalgo.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
  *
  */
 
@@ -41,7 +33,7 @@
 
 // Usage:
 //  Function_type OFForEach(InputIterator_type, Function_type, first, last ,f)
-//     Applies function f from type Function_type to the result of 
+//     Applies function f from type Function_type to the result of
 //     derferencing every iterator in the range [first, last) starting
 //     with first and proceeding to last -1 (first, last are of type
 //     InputIterator_type).  Returns f.
@@ -51,38 +43,38 @@
 //     [first, last) for which *i == value (of type T_type). Returns last,
 //     if no such iterator is found
 //
-//  InputIterator_type OFFindIf(InputIterator_type, Predicate_type, 
+//  InputIterator_type OFFindIf(InputIterator_type, Predicate_type,
 //                              first, last, pred)
 //     Returns the first iterator i of type InputIterator_type in the range
 //     [first, last) for which pred(*i) != false. The function pred is of
 //     type Predicate_type. Returns last, if no such iterator is found
-//  
+//
 //  ForwardIterator OFAdjacentFind(ForwardIterator_type, first, last)
 //     Returns the first iterator i of type ForwardIterator_type such
 //     that both i and i+1 are in the range [first, last) and *i == *(i+1)
 //     returns last, if no such iterator is found. i+1 means the successor
 //     of i.
 //
-// ForwardIterator OFAdjacentFindPred(ForwardIterator_type, 
+// ForwardIterator OFAdjacentFindPred(ForwardIterator_type,
 //                                    BinaryPredicate_type,
 //                                    first, last, pred)
 //     Returns the first iterator i of type ForwardIterator_type such
-//     that both i and i+1 are in the range [first, last) and 
+//     that both i and i+1 are in the range [first, last) and
 //     pred (*i, *(i+1)) != false.
 //     Returns last, if no such iterator is found. i+1 means the successor
 //     of i.
 //
 // Additional Remarks:
 //   In some template functions one template parameter is another function.
-//   Some compilers  cannot determine automatically the type of template 
-//   function parameters, so you must give  them a hint casting 
+//   Some compilers  cannot determine automatically the type of template
+//   function parameters, so you must give  them a hint casting
 //   the parameter function to the correct type (e.g. NeXT gcc 2.5.8)
 
 
 #if defined(HAVE_STL) || defined(HAVE_STL_ALGORITHMS)
-// It is possible to use the standard template library list class since the 
+// It is possible to use the standard template library list class since the
 // interface is nearly identical.
-// Important: If you want to use the standard template library (STL), no 
+// Important: If you want to use the standard template library (STL), no
 // variable within a namespace using a class of the STL shall have a name
 // of one class of the STL
 #include <algorithm>
@@ -124,29 +116,29 @@
 template <class InputIterator, class Function>
 #if defined(HAVE_STATIC_TEMPLATE_METHOD) && !defined(HAVE_FUNCTION_TEMPLATE)
 class OF_ForEachClass
-{ 
-public:
-static
+{
+  public:
+    static
 #endif
 Function OF_ForEach(InputIterator first, InputIterator last, Function f)
 {
     while (first != last)
-    { 
-	f(*first);
-	++first;
+    {
+        f(*first);
+        ++first;
     }
     return f;
 }
 #if defined(HAVE_STATIC_TEMPLATE_METHOD) && !defined(HAVE_FUNCTION_TEMPLATE)
 };
-#endif   
+#endif
 
 template <class InputIterator, class T>
 #if defined(HAVE_STATIC_TEMPLATE_METHOD) && !defined(HAVE_FUNCTION_TEMPLATE)
 class OF_FindClass
-{ 
-public:
-static
+{
+  public:
+    static
 #endif
 InputIterator OF_Find(InputIterator first, InputIterator last, const T & value)
 {
@@ -155,32 +147,32 @@ InputIterator OF_Find(InputIterator first, InputIterator last, const T & value)
 }
 #if defined(HAVE_STATIC_TEMPLATE_METHOD) && !defined(HAVE_FUNCTION_TEMPLATE)
 };
-#endif   
+#endif
 
 
 template <class InputIterator, class Predicate>
 #if defined(HAVE_STATIC_TEMPLATE_METHOD) && !defined(HAVE_FUNCTION_TEMPLATE)
 class OF_FindIfClass
-{ 
-public:
-static
+{
+  public:
+    static
 #endif
-InputIterator OF_FindIf(InputIterator first, InputIterator last, 
-			Predicate pred)
+InputIterator OF_FindIf(InputIterator first, InputIterator last,
+                        Predicate pred)
 {
     while (first != last && !pred(*first)) ++first;
     return first;
 }
 #if defined(HAVE_STATIC_TEMPLATE_METHOD) && !defined(HAVE_FUNCTION_TEMPLATE)
 };
-#endif   
+#endif
 
 template <class ForwardIterator>
 #if defined(HAVE_STATIC_TEMPLATE_METHOD) && !defined(HAVE_FUNCTION_TEMPLATE)
 class OF_AdjacentFindClass
-{ 
-public:
-static
+{
+  public:
+    static
 #endif
 ForwardIterator OF_AdjacentFind(ForwardIterator first, ForwardIterator last)
 {
@@ -188,41 +180,38 @@ ForwardIterator OF_AdjacentFind(ForwardIterator first, ForwardIterator last)
     ForwardIterator next(first);
     while (++next != last)
     {
-	if (*first == *next) return *first;
-	++first;
+        if (*first == *next) return *first;
+        ++first;
     }
     return last;
 }
 #if defined(HAVE_STATIC_TEMPLATE_METHOD) && !defined(HAVE_FUNCTION_TEMPLATE)
 };
-#endif   
+#endif
 
 template <class ForwardIterator, class BinaryPredicate>
 #if defined(HAVE_STATIC_TEMPLATE_METHOD) && !defined(HAVE_FUNCTION_TEMPLATE)
 class OF_AdjacentFindPredClass
-{ 
-public:
-static
+{
+  public:
+    static
 #endif
 ForwardIterator OF_AdjacentFind(ForwardIterator first, ForwardIterator last,
-				BinaryPredicate pred)
+                                BinaryPredicate pred)
 {
     if (first == last) return last;
     ForwardIterator next = first;
-    while(++next != last)
+    while (++next != last)
     {
-	if (pred(*first, *last)) return first;
-	++first;
+        if (pred(*first, *last)) return first;
+        ++first;
     }
     return last;
 }
 
 #if defined(HAVE_STATIC_TEMPLATE_METHOD) && !defined(HAVE_FUNCTION_TEMPLATE)
 };
-#endif   
-	    
-#endif
 #endif
 
-
-
+#endif
+#endif

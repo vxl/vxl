@@ -23,15 +23,6 @@
  *           of global objects, access to which is protected by a Mutex
  *           for multi-thread applications.
  *           class T must have copy constructor and assignment operator.
- * 
- *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:11 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/ofstd/include/ofglobal.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
  *
  */
 
@@ -42,14 +33,14 @@
 #include "osconfig.h"
 #include "ofthread.h"  /* for class OFBool */
 
-/** Template class which allows to declare global objects that are 
+/** Template class which allows to declare global objects that are
  *  protected by a Mutex if used in multi-thread applications.
  *  Must be compiled with -D_REENTRANT for multi-thread-operation.
  *  Template class T must have copy constructor and assignment operator.
  */
 template <class T> class OFGlobal
 {
-public:
+ public:
 
   /** constructor.
    *  @param arg value to which this object is initialised
@@ -62,7 +53,7 @@ public:
   {
   }
 
-  /** destructor. 
+  /** destructor.
    */
   virtual ~OFGlobal() { }
 
@@ -112,13 +103,13 @@ public:
 #endif
     return result;
   }
-  
-private:
+
+ private:
 
   /** value of this object
    */
   T val;
-  
+
 #ifdef _REENTRANT
   /** if compiled for multi-thread operation, the Mutex protecting
    *  access to the value of this object.
@@ -126,40 +117,15 @@ private:
   OFMutex theMutex;
 #endif
 
-  /** unimplemented private default constructor */  
+  /** unimplemented private default constructor */
   OFGlobal();
 
-  /** unimplemented private copy constructor */  
+  /** unimplemented private copy constructor */
   OFGlobal(const OFGlobal<T>& arg);
 
-  /** unimplemented private assignment operator */  
+  /** unimplemented private assignment operator */
   const OFGlobal<T>& operator=(const OFGlobal<T>& arg);
-  
 };
 
 
 #endif
-
-/*
- *
- * CVS/RCS Log:
- * Log: ofglobal.h,v 
- * Revision 1.1  2004/01/14 04:01:11  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.4  2001/06/01 15:51:34  meichel
- * Updated copyright header
- *
- * Revision 1.3  2000/10/10 12:01:21  meichel
- * Created/updated doc++ comments
- *
- * Revision 1.2  2000/05/30 17:03:38  meichel
- * Added default constructor for Mutex to initializer list in OFGlobal.
- *
- * Revision 1.1  2000/04/14 15:17:48  meichel
- * Created new templace class OFGlobal which allows to easily implement
- *   mutex protected global flags.
- *
- *
- */

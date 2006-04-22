@@ -21,14 +21,6 @@
  *
  *  Purpose: class OFCondition and helper classes
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:11 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/ofstd/include/ofcond.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -47,9 +39,9 @@ enum OFStatus
   /// no error, operation has completed successfully
   OF_ok,
 
-  /// operation has not completed successfully  
+  /// operation has not completed successfully
   OF_error,
-  
+
   /// application failure
   OF_failure
 };
@@ -59,7 +51,7 @@ enum OFStatus
  */
 class OFConditionBase
 {
-public:
+ public:
 
   /// default constructor
   OFConditionBase()
@@ -88,10 +80,10 @@ public:
    */
   virtual unsigned long codeAndModule() const = 0;
 
-  /// returns the status for this object.   
+  /// returns the status for this object.
   virtual OFStatus status() const = 0;
 
-  /// returns the error message text for this object.   
+  /// returns the error message text for this object.
   virtual const char *text() const = 0;
 
   /** checks if this object is deletable, e.g. all instances
@@ -100,13 +92,13 @@ public:
    */
   virtual OFBool deletable() const = 0;
 
-  /// returns the module identifier for this object.   
+  /// returns the module identifier for this object.
   unsigned short module() const
   {
     return (unsigned short)((codeAndModule() >> 16) & 0xFFFF);
   }
 
-  /// returns the status code identifier for this object.   
+  /// returns the status code identifier for this object.
   unsigned short code() const
   {
     return (unsigned short)(codeAndModule() & 0xFFFF);
@@ -119,7 +111,7 @@ public:
    */
   OFBool operator==(const OFConditionBase& arg) const
   {
-    return ((status() == arg.status()) && (codeAndModule() == arg.codeAndModule()));
+    return (status() == arg.status()) && (codeAndModule() == arg.codeAndModule());
   }
 
   /** comparison operator, not equal.
@@ -129,16 +121,14 @@ public:
    */
   OFBool operator!=(const OFConditionBase& arg) const
   {
-    return ((status() != arg.status()) || (code() != arg.code()) || (module() != arg.module()));
+    return (status() != arg.status()) || (code() != arg.code()) || (module() != arg.module());
   }
 
-private:
+ private:
 
   // private unimplemented copy assignment operator
   OFConditionBase& operator=(const OFConditionBase& arg);
-
 };
-
 
 
 /** this class is used to declare global condition constants.
@@ -147,7 +137,7 @@ private:
  */
 class OFConditionConst: public OFConditionBase
 {
-public:
+ public:
 
   /** constructor.
    *  @param aModule module identifier. 0 is reserved for global codes,
@@ -190,10 +180,10 @@ public:
    */
   virtual unsigned long codeAndModule() const;
 
-  /// returns the status for this object.   
+  /// returns the status for this object.
   virtual OFStatus status() const;
 
-  /// returns the error message text for this object.   
+  /// returns the error message text for this object.
   virtual const char *text() const;
 
   /** checks if this object is deletable, e.g. all instances
@@ -202,7 +192,7 @@ public:
    */
   virtual OFBool deletable() const;
 
-private:
+ private:
 
   /// private undefined copy assignment operator
   OFConditionConst& operator=(const OFConditionConst& arg);
@@ -215,9 +205,7 @@ private:
 
   /// condition description
   const char *theText;
-
 };
-
 
 
 /** this class is used to declare condition codes with
@@ -225,7 +213,7 @@ private:
  */
 class OFConditionString: public OFConditionBase
 {
-public:
+ public:
 
   /** constructor.
    *  @param aModule module identifier. 0 is reserved for global codes,
@@ -258,7 +246,7 @@ public:
   }
 
   /** this method returns a pointer to a OFConditionBase object containing a clone
-   *  of this object. The clone is a deep copy allocated on the heap.  
+   *  of this object. The clone is a deep copy allocated on the heap.
    *  @return deep copy of this object
    */
   virtual const OFConditionBase *clone() const;
@@ -268,10 +256,10 @@ public:
    */
   virtual unsigned long codeAndModule() const;
 
-  /// returns the status for this object.   
+  /// returns the status for this object.
   virtual OFStatus status() const;
 
-  /// returns the error message text for this object.   
+  /// returns the error message text for this object.
   virtual const char *text() const;
 
   /** checks if this object is deletable, e.g. all instances
@@ -280,7 +268,7 @@ public:
    */
   virtual OFBool deletable() const;
 
-private:
+ private:
   /// private undefined copy assignment operator
   OFConditionString& operator=(const OFConditionString& arg);
 
@@ -299,14 +287,14 @@ private:
 extern const OFConditionConst ECC_Normal;
 
 
-/* General purpose class for condition codes. Objects of this class can be 
- * efficiently passed by value since they only contain a single pointer and 
- * no virtual methods. The condition code is maintained by the object of class 
- * OFConditionBase pointed to.  
+/* General purpose class for condition codes. Objects of this class can be
+ * efficiently passed by value since they only contain a single pointer and
+ * no virtual methods. The condition code is maintained by the object of class
+ * OFConditionBase pointed to.
  */
 class OFCondition
 {
-public:
+ public:
 
   /** constructor for condition code with user-defined error text
    *  @param base pointer to error base, which must be allocated on the heap.
@@ -321,7 +309,7 @@ public:
 
   /** constructor for condition code with global const condition object
    *  @param base reference to condition base, which must be guaranteed
-   *     to exist for the lifetime of this (and every derived) object 
+   *     to exist for the lifetime of this (and every derived) object
    *     since it is only referenced but not copied.
    */
 #ifdef OFCONDITION_STRICT_MODE
@@ -366,25 +354,25 @@ public:
     return *this;
   }
 
-  /// returns the module identifier for this object.   
+  /// returns the module identifier for this object.
   inline unsigned short module() const
   {
     return theCondition->module();
   }
 
-  /// returns the status code identifier for this object.   
+  /// returns the status code identifier for this object.
   inline unsigned short code() const
   {
     return theCondition->code();
   }
 
-  /// returns the status for this object.   
+  /// returns the status for this object.
   inline OFStatus status() const
   {
     return theCondition->status();
   }
 
-  /// returns the error message text for this object.   
+  /// returns the error message text for this object.
   inline const char *text() const
   {
     return theCondition->text();
@@ -394,23 +382,23 @@ public:
   inline OFBool good() const
   {
     OFStatus s = theCondition->status();
-    return (s == OF_ok);    
+    return s == OF_ok;
   }
 
   /// returns true if status is not OK, i. e. error or failure
   inline OFBool bad() const
   {
     OFStatus s = theCondition->status();
-    return (s != OF_ok);    
+    return s != OF_ok;
   }
 
 #ifdef OFCONDITION_IMPLICIT_BOOL_CONVERSION
-  /* Implicit conversion from OFCondition to bool might 
+  /* Implicit conversion from OFCondition to bool might
    * not always be a good idea since it can hide unwanted constructs.
    * Therefore, we disable this operator by default.
    */
 
-  /** conversion operator to bool. 
+  /** conversion operator to bool.
    *  @return true if status is OK, false otherwise
    */
   inline operator OFBool() const
@@ -426,7 +414,7 @@ public:
    */
   inline OFBool operator==(const OFCondition& arg) const
   {
-    return (*theCondition == *arg.theCondition);
+    return *theCondition == *arg.theCondition;
   }
 
   /** comparison operator. Compares status, code and module
@@ -436,14 +424,13 @@ public:
    */
   inline OFBool operator!=(const OFCondition& arg) const
   {
-    return (*theCondition != *arg.theCondition);
+    return *theCondition != *arg.theCondition;
   }
-  
-private:
-  
+
+ private:
+
   /// pointer to the condition base object
   const OFConditionBase *theCondition;
-
 };
 
 
@@ -468,30 +455,3 @@ extern const OFCondition EC_MemoryExhausted;
 
 
 #endif
-
-/*
- * CVS/RCS Log:
- * Log: ofcond.h,v 
- * Revision 1.1  2004/01/14 04:01:11  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.4  2001/11/09 15:44:39  joergr
- * Removed ";" from macro definition to avoid compiler warnings reported by
- * Sun CC 2.0.1.
- *
- * Revision 1.3  2001/10/12 10:42:26  meichel
- * Introduced conditional define OFCONDITION_STRICT_MODE in which the
- *   compatibility options related to the transition to OFCondition are disabled:
- *   No OFCondition default constructor, no typedefs for E_Condition, CONDITION,
- *   no macros for SUCCESS and condition aliases.
- *
- * Revision 1.2  2001/09/25 17:07:24  meichel
- * Disabled implicit conversion to bool, added default constructor
- *   to class OFCondition.
- *
- * Revision 1.1  2001/08/23 16:08:37  meichel
- * Initial release of class OFCondition, a generic approach for condition codes
- *
- *
- */

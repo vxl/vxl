@@ -20,16 +20,8 @@
  *  Author:  Andreas Barth
  *
  *  Purpose:
- *      Defines some C++ standard types that are not consistently 
+ *      Defines some C++ standard types that are not consistently
  *      supported by all C++ Compilers
- *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:11 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/ofstd/include/oftypes.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
  *
  */
 
@@ -41,7 +33,7 @@
 
 #ifdef __CHAR_UNSIGNED__
 typedef signed char     Sint8;
-#else 
+#else
 typedef char            Sint8;
 #endif
 
@@ -72,54 +64,19 @@ typedef double          Float64;    /* 64 Bit Floating Point Double */
 
 #else
 
-/** the boolean type used throughout the DCMTK project. Mapped to the 
- *  built-in type "bool" if the current C++ compiler supports it. Mapped 
+/** the boolean type used throughout the DCMTK project. Mapped to the
+ *  built-in type "bool" if the current C++ compiler supports it. Mapped
  *  to int for old-fashioned compilers which do not yet support bool.
  */
 typedef int OFBool;
 
-#ifndef OFTrue 
+#ifndef OFTrue
 #define OFTrue (1)
 #endif
 
-#ifndef OFFalse 
+#ifndef OFFalse
 #define OFFalse (0)
 #endif
 
 #endif
 #endif
-
-/*
- * CVS/RCS Log:
- * Log: oftypes.h,v 
- * Revision 1.1  2004/01/14 04:01:11  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.6  2002/07/10 11:45:26  meichel
- * Moved definitions for Uint8, Sint8 ... Float64 from dcmdata to ofstd
- *   since these types are not DICOM specific
- *
- * Revision 1.5  2001/06/01 15:51:36  meichel
- * Updated copyright header
- *
- * Revision 1.4  2000/10/10 12:01:22  meichel
- * Created/updated doc++ comments
- *
- * Revision 1.3  2000/03/08 16:36:03  meichel
- * Updated copyright header.
- *
- * Revision 1.2  1998/11/27 12:42:53  joergr
- * Added copyright message to source files and changed CVS header.
- *
- * Revision 1.1  1997/07/02 11:51:16  andreas
- * - Preliminary release of the OFFIS Standard Library.
- *   In the future this library shall contain a subset of the
- *   ANSI C++ Library (Version 3) that works on a lot of different
- *   compilers. Additionally this library shall include classes and
- *   functions that are often used. All classes and functions begin
- *   with OF... This library is independent of the DICOM development and
- *   shall contain no DICOM specific stuff.
- *
- */
-

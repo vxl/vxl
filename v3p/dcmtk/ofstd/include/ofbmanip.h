@@ -21,14 +21,6 @@
  *
  *  Purpose: Template class for bit manipulations (Header)
  *
- *  Last Update:      Author: peter_vanroose 
- *  Update Date:      Date: 2004/05/28 17:59:57 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/ofstd/include/ofbmanip.h,v 
- *  CVS/RCS Revision: Revision: 1.2 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -60,9 +52,8 @@ END_EXTERN_C
 template<class T>
 class OFBitmanipTemplate
 {
-
  public:
- 
+
     /** copies specified number of elements from source to destination
      *
      ** @param  src    pointer to source memory
@@ -122,63 +113,11 @@ class OFBitmanipTemplate
 #ifdef HAVE_BZERO
         // some platforms, e.g. OSF1, require the first parameter to be char *.
         bzero((char *)dest, (size_t)count * sizeof(T));
-#else        
+#else
         setMem(dest, 0, count);
-#endif        
+#endif
     }
 };
 
 
 #endif
-
-
-/*
- *
- * CVS/RCS Log:
- * Log: ofbmanip.h,v 
- * Revision 1.2  2004/05/28 17:59:57  peter_vanroose
- * typo corrected
- *
- * Revision 1.1  2004/01/14 04:01:11  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.12  2002/11/27 11:23:04  meichel
- * Adapted module ofstd to use of new header file ofstdinc.h
- *
- * Revision 1.11  2001/06/01 15:51:31  meichel
- * Updated copyright header
- *
- * Revision 1.10  2000/03/08 16:36:00  meichel
- * Updated copyright header.
- *
- * Revision 1.9  2000/02/02 10:56:25  joergr
- * Removed space characters before preprocessor directives.
- *
- * Revision 1.8  1999/09/17 11:46:34  joergr
- * Enhanced efficiency of "for" loops.
- *
- * Revision 1.7  1999/08/25 16:44:44  joergr
- * Enhanced efficiency of inner loops (count loop variable down).
- *
- * Revision 1.6  1999/04/30 16:34:07  meichel
- * Added provision for systems which have bzero() but no prototype, e.g. SunOS
- *
- * Revision 1.5  1999/04/29 16:49:22  meichel
- * Changed first parameter in bzero() call to char *, required on OSF1.
- *
- * Revision 1.4  1999/04/26 16:07:52  joergr
- * Changed comments.
- *
- * Revision 1.3  1998/12/16 15:59:51  joergr
- * Corrected bug in setMem routine (expected 'value' parameter for system
- * function 'memset' is implicitely casted to 'unsigned char').
- *
- * Revision 1.2  1998/12/02 12:52:05  joergr
- * Corrected bug in setMem routine (parameter 'value' was ignored).
- *
- * Revision 1.1  1998/11/27 12:29:20  joergr
- * First release of class for plaform independent memory operations.
- *
- *
- */

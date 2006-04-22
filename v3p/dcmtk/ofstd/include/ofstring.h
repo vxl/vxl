@@ -21,14 +21,6 @@
  *
  *  Purpose: A simple string class
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:11 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/ofstd/include/ofstring.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 #ifndef OFSTRING_H
@@ -89,7 +81,7 @@ static const size_t OFString_npos = ((size_t)-1);
  */
 class OFString
 {
-public:
+  public:
     /*
      * The SunOS C++ 2.0.1 does not allow static const members.
      * We would like to define:
@@ -299,7 +291,7 @@ public:
     OFString& replace(size_t pos1, size_t n1, const OFString& str,
                size_t pos2 = 0, size_t n2 = OFString_npos);
 
-    /** constructs a temporary string from the input and replaces the range [pos, n] 
+    /** constructs a temporary string from the input and replaces the range [pos, n]
      *  in the current string with the constructed string.
      *  @param pos position to replace at
      *  @param n number of characters to be replaced
@@ -309,7 +301,7 @@ public:
      */
     OFString& replace(size_t pos, size_t n, const char* s, size_t n2);
 
-    /** constructs a temporary string from the input and replaces the range [pos, n] 
+    /** constructs a temporary string from the input and replaces the range [pos, n]
      *  in the current string with the constructed string.
      *  @param pos position to replace at
      *  @param n number of characters to be replaced
@@ -318,7 +310,7 @@ public:
      */
     OFString& replace(size_t pos, size_t n, const char* s);
 
-    /** constructs a temporary string from the input and replaces the range [pos, n] 
+    /** constructs a temporary string from the input and replaces the range [pos, n]
      *  in the current string with the constructed string.
      *  @param pos position to replace at
      *  @param n number of characters to be replaced
@@ -367,8 +359,8 @@ public:
         }
     }
 
-    /** returns the element at position pos of the current string. 
-     *  The reference returned is invalid after a subsequent call to any 
+    /** returns the element at position pos of the current string.
+     *  The reference returned is invalid after a subsequent call to any
      *  non-const member function for the object.
      *  @param pos position in string, must be < size().
      *  @return character in string at pos (by reference)
@@ -399,7 +391,7 @@ public:
     const char* data() const;
 
     /** returns a count of the number of char-like objects currently in
-     *  the string. 
+     *  the string.
      *  @return number of char-like objects currently in string
      */
     size_t size() const
@@ -444,7 +436,7 @@ public:
      */
     size_t max_size() const
     {
-        return ((OFString_npos - 1)/sizeof(char));
+        return (OFString_npos - 1)/sizeof(char);
     }
 
     /** empty the string of all contents
@@ -498,7 +490,7 @@ public:
      *  size() > str.size().
      *  @param str string to compare to
      *  @return comparison result as described above
-     */ 
+     */
     int compare(const OFString& str) const;
 
     /** constructs a temporary string from the input and compares
@@ -510,7 +502,7 @@ public:
      */
     int compare(size_t pos1, size_t n1, const OFString& str) const;
 
-    /** constructs a temporary string from this object and another 
+    /** constructs a temporary string from this object and another
      *  temporary from the input and compares the two temporaries
      *  @param pos1 position to start copying from this object
      *  @param n1 maximum number of characters to copy from this object
@@ -529,7 +521,7 @@ public:
      */
     int compare(const char* s) const;
 
-    /** constructs a temporary string from this object and another 
+    /** constructs a temporary string from this object and another
      *  temporary from the input  and compares the two temporaries
      *  @param pos1 position to start copying from this object
      *  @param n1 maximum number of characters to copy from this object
@@ -551,7 +543,7 @@ public:
      */
     size_t find(const OFString& pattern, size_t pos = 0) const;
 
-    /** creates a pattern string from the input and determines the earliest 
+    /** creates a pattern string from the input and determines the earliest
      *  occurrence of the pattern in the current string object, starting from position
      *  pos in the current string. If find can determine such an occurrence,
      *  it returns the starting index of pattern in the current string.
@@ -563,7 +555,7 @@ public:
      */
     size_t find(const char* pattern, size_t pos, size_t n) const;
 
-    /** creates a pattern string from the input and determines the earliest 
+    /** creates a pattern string from the input and determines the earliest
      *  occurrence of the pattern in the current string object, starting from position
      *  pos in the current string. If find can determine such an occurrence,
      *  it returns the starting index of pattern in the current string.
@@ -574,7 +566,7 @@ public:
      */
     size_t find(const char* pattern, size_t pos = 0) const;
 
-    /** creates a pattern string from the input and determines the earliest 
+    /** creates a pattern string from the input and determines the earliest
      *  occurrence of the pattern in the current string object, starting from position
      *  pos in the current string. If find can determine such an occurrence,
      *  it returns the starting index of pattern in the current string.
@@ -707,7 +699,7 @@ public:
     size_t find_last_of(const char* s, size_t pos = OFString_npos) const;
 
     /** determines the highest location, loc, up to pos, such
-     *  that the character at loc matches the given character. 
+     *  that the character at loc matches the given character.
      *  If such a location can be determined, it is
      *  returned. Otherwise, the function returns string::npos.
      *  @param s character to find
@@ -715,7 +707,7 @@ public:
      *  @return index of character
      */
     size_t find_last_of(char s, size_t pos = OFString_npos) const;
- 
+
     /** determines the first location loc, between pos and
      *  the end of the current string, such that the character at loc does not
      *  match any character from the set of characters. If such a location
@@ -756,7 +748,7 @@ public:
      *  @return index of character
      */
     size_t find_first_not_of(char c, size_t pos = 0) const;
- 
+
     /** scans the current string up to the position pos and
      *  determines the highest location, loc, such that the character at loc
      *  does not match any character from the set of characters. If such
@@ -802,13 +794,12 @@ public:
      */
     size_t find_last_not_of(char c, size_t pos = OFString_npos) const;
 
-private:
+  private:
     /// the "C" string pointer
     char* theCString;
 
     /// the capacity of str
     size_t theCapacity;
-
 };
 
 
@@ -1075,57 +1066,3 @@ OFBool operator>= (const OFString& lhs, char rhs);
 #endif /* HAVE_STD_STRING */
 
 #endif /* OFSTRING_H */
-
-/*
-** CVS/RCS Log:
-** Log: ofstring.h,v 
-** Revision 1.1  2004/01/14 04:01:11  amithaperera
-** Add better DICOM support by wrapping DCMTK, and add a stripped down
-** version of DCMTK to v3p. Add more DICOM test cases.
-**
-** Revision 1.13  2002/11/27 11:23:06  meichel
-** Adapted module ofstd to use of new header file ofstdinc.h
-**
-** Revision 1.12  2002/04/16 13:36:03  joergr
-** Added configurable support for C++ ANSI standard includes (e.g. streams).
-** Thanks to Andreas Barth <Andreas.Barth@bruker-biospin.de> for his
-** contribution.
-**
-** Revision 1.11  2001/12/04 16:48:16  meichel
-** Completed doc++ documentation, fixed bug in OFString::copy.
-**
-** Revision 1.10  2001/11/02 13:18:53  meichel
-** Removed character sequences that could be interpreted as ISO C++ trigraphs
-**
-** Revision 1.9  2001/06/01 15:51:35  meichel
-** Updated copyright header
-**
-** Revision 1.8  2000/03/08 16:36:02  meichel
-** Updated copyright header.
-**
-** Revision 1.7  2000/02/23 15:13:44  meichel
-** Corrected macro for Borland C++ Builder 4 workaround.
-**
-** Revision 1.6  2000/02/01 10:09:37  meichel
-** Avoiding to include <stdlib.h> as extern "C" on Borland C++ Builder 4,
-**   workaround for bug in compiler header files.
-**
-** Revision 1.5  1998/11/27 12:42:52  joergr
-** Added copyright message to source files and changed CVS header.
-**
-** Revision 1.4  1997/09/01 10:00:12  hewett
-** Added absent  terminator to RCS/CVS Revision keyword in header.
-**
-** Revision 1.3  1997/07/14 13:37:31  meichel
-** Simplified OFString code to allow compilation with Sun CC 2.0.1
-**
-** Revision 1.2  1997/07/07 14:05:24  hewett
-** Renamed the constant OFnpos to OFString_npos to look more like
-** the real ANSI constant string::npos.
-**
-** Revision 1.1  1997/07/07 11:52:18  meichel
-** Added string class OFString to ofstd library.
-** This class implements a subset of the ANSI C++ "string" class.
-**
-**
-*/

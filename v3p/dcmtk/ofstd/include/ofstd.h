@@ -21,14 +21,6 @@
  *
  *  Purpose: Class for various helper functions
  *
- *  Last Update:      Author: peter_vanroose 
- *  Update Date:      Date: 2004/05/28 17:59:57 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/ofstd/include/ofstd.h,v 
- *  CVS/RCS Revision: Revision: 1.2 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -58,7 +50,6 @@ END_EXTERN_C
  */
 class OFStandard
 {
-
  public:
 
     // --- string functions ---
@@ -369,69 +360,7 @@ class OFStandard
      *    create, i.e. the initial length of dst plus the length of src.
      */
     static size_t my_strlcat(char *dst, const char *src, size_t siz);
-
 };
 
 
 #endif
-
-
-/*
- *
- * CVS/RCS Log:
- * Log: ofstd.h,v 
- * Revision 1.2  2004/05/28 17:59:57  peter_vanroose
- * typo corrected
- *
- * Revision 1.1  2004/01/14 04:01:11  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.12  2002/12/13 13:45:33  meichel
- * Removed const from decodeBase64() return code, needed on MIPSpro
- *
- * Revision 1.11  2002/12/05 13:49:36  joergr
- * Moved definition of ftoa() processing flags to implementation file to avoid
- * compiler errors (e.g. on Sun CC 2.0.1).
- *
- * Revision 1.10  2002/12/04 09:13:00  meichel
- * Implemented a locale independent function OFStandard::ftoa() that
- *   converts double to string and offers all the flexibility of the
- *   sprintf family of functions.
- *
- * Revision 1.9  2002/11/27 11:23:06  meichel
- * Adapted module ofstd to use of new header file ofstdinc.h
- *
- * Revision 1.8  2002/07/02 15:17:57  wilkens
- * Added function OFStandard::stringMatchesCharacterSet(...).
- *
- * Revision 1.7  2002/06/20 12:02:38  meichel
- * Implemented a locale independent function OFStandard::atof() that
- *   converts strings to double and optionally returns a status code
- *
- * Revision 1.6  2002/05/14 08:12:51  joergr
- * Added support for Base64 (MIME) encoding and decoding.
- *
- * Revision 1.5  2002/04/25 09:13:52  joergr
- * Moved helper function which converts a conventional character string to an
- * HTML/XML mnenonic string (e.g. using "&lt;" instead of "<") from module
- * dcmsr to ofstd.
- *
- * Revision 1.4  2002/04/11 12:06:42  joergr
- * Added general purpose routines to check whether a file exists, a path points
- * to a directory or a file, etc.
- *
- * Revision 1.3  2001/12/04 16:57:15  meichel
- * Implemented strlcpy and strlcat routines compatible with the
- *   corresponding BSD libc routines in class OFStandard
- *
- * Revision 1.2  2001/06/01 15:51:35  meichel
- * Updated copyright header
- *
- * Revision 1.1  2000/03/02 12:42:57  joergr
- * Added new class comprising all general purpose helper functions (first
- * entry: strlcpy - a mixture of strcpy and strncpy).
- *
- *
- *
- */

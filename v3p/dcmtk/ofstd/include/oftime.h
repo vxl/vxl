@@ -21,14 +21,6 @@
  *
  *  Purpose: Class for time functions
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:11 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/ofstd/include/oftime.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -57,8 +49,7 @@ class OFTime
     // allow class OFDateTime to access protected class members
     friend class OFDateTime;
 
-
- public:
+  public:
 
     /** constructor
      */
@@ -212,7 +203,7 @@ class OFTime
      */
     OFBool setTimeZone(const signed int hour,
                        const unsigned int minute);
-                       
+
     /** set the time to the specified number of seconds
      *  @param seconds number of seconds since "00:00:00" specifying time to set
      *  @param timeZone optional offset to Coordinated Universal Time (UTC) in hours
@@ -275,7 +266,7 @@ class OFTime
     /** get the currently stored time zone value.
      *  The time zone is given as the offset (in hours) to the Coordinated Universal
      *  Time (UTC). Valid values are for instance "+1.0" (plus one hour) and "-2.5"
-     *  (minus two and a half hour, i.e. 2 hours and 30 minutes). 
+     *  (minus two and a half hour, i.e. 2 hours and 30 minutes).
      *  @return time zone value (might be invalid, i.e. out of range)
      */
     double getTimeZone() const;
@@ -291,14 +282,14 @@ class OFTime
      *  @return number of hours since "00:00:00" (incl. fraction of hours)
      */
     double getTimeInHours(const OFBool useTimeZone = OFFalse) const;
-    
+
     /** get the currently stored time as Coordinated Universal Time.
      *  The resulting time object always has a time zone of "+00:00" since the time is
      *  corrected regarding the Coordinated Universal Time (UTC).
      *  @return time object with the UTC corrected time set
      */
     OFTime getCoordinatedUniversalTime() const;
-    
+
     /** get the currently stored time in local time.
      *  The resulting time object always has the local time zone.
      *  @return time object with the corrected time set
@@ -340,7 +331,7 @@ class OFTime
     static double getLocalTimeZone();
 
 
- protected:
+  protected:
 
     /** set the time value to the current system time.
      *  This function uses operating system dependent routines. If they are unavailable
@@ -397,7 +388,7 @@ class OFTime
                                  const OFBool normalize = OFTrue);
 
 
- private:
+  private:
 
     /// currently stored hour value
     unsigned int Hour;
@@ -407,7 +398,7 @@ class OFTime
 
     /// currently stored second value (incl. fraction of seconds)
     double Second;
-    
+
     /// currently stored time zone value
     double TimeZone;
 };
@@ -423,28 +414,3 @@ ostream& operator<<(ostream& stream, const OFTime &timeVal);
 
 
 #endif
-
-
-/*
- *
- * CVS/RCS Log:
- * Log: oftime.h,v 
- * Revision 1.1  2004/01/14 04:01:11  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.4  2002/05/24 09:43:05  joergr
- * Renamed some parameters/variables to avoid ambiguities.
- *
- * Revision 1.3  2002/04/19 10:42:51  joergr
- * Added new helper routines to get the milli and micro seconds part as well as
- * the integral value of seconds.
- *
- * Revision 1.2  2002/04/15 09:38:59  joergr
- * Added "include <sys/types.h>" for struct time_t (required for MSVC).
- *
- * Revision 1.1  2002/04/11 12:12:24  joergr
- * Introduced new standard classes providing date and time functions.
- *
- *
- */

@@ -19,19 +19,11 @@
  *
  *  Author:  Marco Eichelberg
  *
- *  Purpose: Provides operating system independent abstractions for basic 
- *           multi-thread concepts: threads, thread specific data, 
- *           semaphores, mutexes and read/write locks. The implementation 
- *           of these classes supports the Solaris, POSIX and Win32 
+ *  Purpose: Provides operating system independent abstractions for basic
+ *           multi-thread concepts: threads, thread specific data,
+ *           semaphores, mutexes and read/write locks. The implementation
+ *           of these classes supports the Solaris, POSIX and Win32
  *           multi-thread APIs.
- *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:11 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/ofstd/include/ofthread.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
  *
  */
 
@@ -67,10 +59,10 @@ extern "C"
  */
 class OFThread
 {
-public:
+ public:
 
   /** default constructor. The new thread is not started immediately
-   *  upon creation of the OFThread object. Calling the start() 
+   *  upon creation of the OFThread object. Calling the start()
    *  method causes the creation of the thread.
    */
   OFThread();
@@ -78,40 +70,40 @@ public:
   /** destructor. Destruction of an OFThread object does not cause
    *  the referenced thread to be stopped and may result in undefined
    *  behaviour if the derived class maintains thread specific data
-   *  in this object (which is not recommended). 
+   *  in this object (which is not recommended).
    *  The join() method should be called prior to destruction
    *  of the thread object to make sure a thread has terminated.
    */
   virtual ~OFThread();
 
-  /** adds a new thread of control to the  current process. The main() 
-   *  procedure itself is a single thread of control. Each thread executes 
-   *  simultaneously  with  all  the other  threads  within  the  calling 
-   *  process. A newly created thread shares all of  the  calling  process' 
-   *  global data with the other threads in this process except the  
-   *  execution stack.   The new thread executes the run() method and 
-   *  terminates upon return from this method or a call to thread_exit() 
-   *  from within the thread. This method should not be called if a thread 
-   *  is already running, otherwise a new thread will be started and the 
-   *  identifier of the old thread will be overwritten, making it 
-   *  impossible to call join() for the old thread.  It may also result in 
-   *  undefined behaviour if the derived class maintains thread specific 
-   *  data in this object (which is not recommended). 
+  /** adds a new thread of control to the  current process. The main()
+   *  procedure itself is a single thread of control. Each thread executes
+   *  simultaneously  with  all  the other  threads  within  the  calling
+   *  process. A newly created thread shares all of  the  calling  process'
+   *  global data with the other threads in this process except the
+   *  execution stack.   The new thread executes the run() method and
+   *  terminates upon return from this method or a call to thread_exit()
+   *  from within the thread. This method should not be called if a thread
+   *  is already running, otherwise a new thread will be started and the
+   *  identifier of the old thread will be overwritten, making it
+   *  impossible to call join() for the old thread.  It may also result in
+   *  undefined behaviour if the derived class maintains thread specific
+   *  data in this object (which is not recommended).
    *  @return 0 upon success, an error code otherwise.
    */
   int start();
 
-  /** blocks the calling thread until the thread referenced by the OFThread 
-   *  object terminates. Several threads cannot wait for the same thread to 
-   *  complete; one  thread  will  complete the join() method successfully 
-   *  others may or may not return OFThread::busy. The method will not 
+  /** blocks the calling thread until the thread referenced by the OFThread
+   *  object terminates. Several threads cannot wait for the same thread to
+   *  complete; one  thread  will  complete the join() method successfully
+   *  others may or may not return OFThread::busy. The method will not
    *  block the calling thread if the target thread has already terminated.
    *  @return 0 upon success, OFThread::busy if another thread is already
-   *    waiting for the termination of the target thread, 
-   *    an error code otherwise. 
+   *    waiting for the termination of the target thread,
+   *    an error code otherwise.
    */
   int join();
-  
+
   /** returns the thread identifier of the thread referenced by the
    *  OFThread object, if the thread has already been started.
    *  Otherwise returns 0. On certain platforms like OSF/1, a thread ID
@@ -128,7 +120,7 @@ public:
    *  @return OFTrue if equal, OFFalse otherwise.
    */
   OFBool equal(unsigned long tID);
-  
+
   /** converts any of the error codes returned by the methods of this class
    *  into a textual description, which is written into the string object.
    *  @param description string object into which the error description is written.
@@ -139,14 +131,14 @@ public:
   /** this constant is returned by the join() method if another thread
    *  is already waiting for termination of the thread referenced by the
    *  OFThread object. Since this value is operating system dependent,
-   *  comparisons should always compare the return value of join() 
+   *  comparisons should always compare the return value of join()
    *  with this constant.
    */
   static const int busy;
 
-protected:
+ protected:
 
-  /** terminates the calling thread, in a similar way that exit() 
+  /** terminates the calling thread, in a similar way that exit()
    *  terminates the calling process. This method does not return.
    */
   static void thread_exit();
@@ -162,7 +154,7 @@ protected:
    */
   static unsigned long self();
 
-private:
+ private:
 
   /** this method implements the thread that is run by calling the start
    *  method of the OFThread object. Defined as abstract method in OFThread.
@@ -180,11 +172,11 @@ private:
 
   /** thread identifier */
   unsigned long theThread;
-  
-  /** unimplemented private copy constructor */  
+
+  /** unimplemented private copy constructor */
   OFThread(const OFThread& arg);
 
-  /** unimplemented private assignment operator */  
+  /** unimplemented private assignment operator */
   OFThread& operator=(const OFThread& arg);
 
   /** thread stub must be friend to call run() */
@@ -196,23 +188,23 @@ private:
 };
 
 
-/** provides an operating system independent abstraction for thread 
-  * specific data. An instance of this class manages a key which is global 
-  * to all threads in the process but locates data specific to each thread. 
-  * Each thread can set a different value once the object has been created. 
-  * Upon creation, the value NULL is assigned for all threads. This class 
-  * does not perform any memory management on the objects pointed to. 
-  * Threads must ensure on their own that the data pointed to by the thread 
+/** provides an operating system independent abstraction for thread
+  * specific data. An instance of this class manages a key which is global
+  * to all threads in the process but locates data specific to each thread.
+  * Each thread can set a different value once the object has been created.
+  * Upon creation, the value NULL is assigned for all threads. This class
+  * does not perform any memory management on the objects pointed to.
+  * Threads must ensure on their own that the data pointed to by the thread
   * specific data key is freed upon termination of the thread.
   */
 class OFThreadSpecificData
 {
-public:
-  
-  /** default constructor */ 
+ public:
+
+  /** default constructor */
   OFThreadSpecificData();
 
-  /** destructor. Deletes all thread specific key values (pointers), but 
+  /** destructor. Deletes all thread specific key values (pointers), but
    *  not the objects pointed to.
    */
   ~OFThreadSpecificData();
@@ -222,20 +214,20 @@ public:
    */
   OFBool initialized() const;
 
-  /** sets the thread specific value for this object. No attempt is made to 
-   *  automatically delete the object pointed to at the termination of the 
+  /** sets the thread specific value for this object. No attempt is made to
+   *  automatically delete the object pointed to at the termination of the
    *  thread.
    *  @param value new pointer to thread-specific data for this object.
    *  @return 0 if successful, an error code otherwise.
-   */ 
+   */
   int set(void *value);
 
   /** retrieves the thread specific value for this object. If no call to set()
    *  has been made for the calling thread before, NULL is returned.
-   *  @param value new pointer to thread-specific data for this object 
+   *  @param value new pointer to thread-specific data for this object
    *    returned in this parameter.
    *  @return 0 if successful, an error code otherwise.
-   */ 
+   */
   int get(void *&value);
 
   /** converts any of the error codes returned by the methods of this class
@@ -245,16 +237,16 @@ public:
    */
   static void errorstr(OFString& description, int code);
 
-private:
+ private:
 
   /** thread specific data key resource */
   void *theKey;
-  
-  /** unimplemented private copy constructor */  
+
+  /** unimplemented private copy constructor */
   OFThreadSpecificData(const OFThreadSpecificData& arg);
 
-  /** unimplemented private assignment operator */  
-  OFThreadSpecificData& operator=(const OFThreadSpecificData& arg);  
+  /** unimplemented private assignment operator */
+  OFThreadSpecificData& operator=(const OFThreadSpecificData& arg);
 };
 
 
@@ -268,7 +260,7 @@ private:
  */
 class OFSemaphore
 {
-public:
+ public:
 
   /** constructor.
    *  @param numResources is the initial and maximum value for the semaphore.
@@ -282,23 +274,23 @@ public:
    *  @return OFTrue if the object was successfully created, OFFalse otherwise.
    */
   OFBool initialized() const;
-  
+
   /** blocks the calling thread until the semaphore counter is greater than zero
    *  and then atomically decreases the counter.
-   *  @return 0 upon success, an error code otherwise.  
+   *  @return 0 upon success, an error code otherwise.
    */
   int wait();
 
-  /** atomically decreases the counter if it is larger than zero, 
+  /** atomically decreases the counter if it is larger than zero,
    *  otherwise returns OFSemaphore::busy.
    *  @return 0 upon success, OFSemaphore::busy if the semaphore is already locked,
-   *    an error code otherwise.  
+   *    an error code otherwise.
    */
   int trywait();
 
   /** atomically increases the counter. If threads are blocked on the semaphore,
    *  at least one of them is unblocked.
-   *  @return 0 upon success, an error code otherwise.  
+   *  @return 0 upon success, an error code otherwise.
    */
   int post();
 
@@ -311,34 +303,34 @@ public:
 
   /** this constant is returned by the trywait() method if the semaphore
    *  is already locked. Since this value is operating system dependent,
-   *  comparisons should always compare the return value of trywait() 
+   *  comparisons should always compare the return value of trywait()
    *  with this constant.
    */
   static const int busy;
 
-private:
+ private:
   /** semaphore resource */
   void * theSemaphore;
-  
-  /** unimplemented private copy constructor */  
+
+  /** unimplemented private copy constructor */
   OFSemaphore(const OFSemaphore& arg);
 
-  /** unimplemented private assignment operator */  
+  /** unimplemented private assignment operator */
   OFSemaphore& operator=(const OFSemaphore& arg);
 };
 
 
-/** provides an operating system independent abstraction for mutexes 
+/** provides an operating system independent abstraction for mutexes
  *  (mutual exclusion locks).
- *  Mutexes prevent multiple threads from simultaneously executing critical 
- *  sections of code which access shared data. A successful call for a 
- *  mutex lock by way of lock() will cause another thread that is also 
- *  trying to lock the same mutex to block until the owner thread unlocks 
- *  it by way of unlock(). 
+ *  Mutexes prevent multiple threads from simultaneously executing critical
+ *  sections of code which access shared data. A successful call for a
+ *  mutex lock by way of lock() will cause another thread that is also
+ *  trying to lock the same mutex to block until the owner thread unlocks
+ *  it by way of unlock().
  */
 class OFMutex
 {
-public:
+ public:
 
   /** default constructor */
   OFMutex();
@@ -351,28 +343,28 @@ public:
    */
   OFBool initialized() const;
 
-  /** locks the mutex object. If the mutex is already locked, the calling 
-   *  thread blocks until the mutex is freed; If the current owner of a 
-   *  mutex tries to relock the mutex, it may or may not result in 
+  /** locks the mutex object. If the mutex is already locked, the calling
+   *  thread blocks until the mutex is freed; If the current owner of a
+   *  mutex tries to relock the mutex, it may or may not result in
    *  deadlock.
-   *  @return 0 upon success, an error code otherwise.  
-   */   
-  int lock();   
+   *  @return 0 upon success, an error code otherwise.
+   */
+  int lock();
 
   /** tries to lock the mutex object. If the mutex is already locked,
    *  returns OFMutex::busy.
    *  @return 0 upon success, OFMutex::busy if the mutex is already locked,
-   *    an error code otherwise.  
+   *    an error code otherwise.
    */
-  int trylock(); 
+  int trylock();
 
-  /** releases the lock on the mutex object. The mutex must be locked and 
-   *  the calling thread must be the owner of the lock, otherwise the 
-   *  behaviour is undefined. If there are threads blocked on the mutex 
-   *  when unlock() is called, one of them is unblocked and receives 
+  /** releases the lock on the mutex object. The mutex must be locked and
+   *  the calling thread must be the owner of the lock, otherwise the
+   *  behaviour is undefined. If there are threads blocked on the mutex
+   *  when unlock() is called, one of them is unblocked and receives
    *  ownership of the mutex lock.
-   *  @return 0 upon success, an error code otherwise.  
-   */   
+   *  @return 0 upon success, an error code otherwise.
+   */
   int unlock();
 
   /** converts any of the error codes returned by the methods of this class
@@ -384,33 +376,33 @@ public:
 
   /** this constant is returned by the trylock() method if the mutex
    *  is already locked. Since this value is operating system dependent,
-   *  comparisons should always compare the return value of trylock() 
+   *  comparisons should always compare the return value of trylock()
    *  with this constant.
    */
   static const int busy;
 
-private:
+ private:
   /** mutex resource */
   void * theMutex;
-  
-  /** unimplemented private copy constructor */  
+
+  /** unimplemented private copy constructor */
   OFMutex(const OFMutex& arg);
 
-  /** unimplemented private assignment operator */  
+  /** unimplemented private assignment operator */
   OFMutex& operator=(const OFMutex& arg);
 };
 
 
-/** provides an operating system independent abstraction for read/write 
- *  locks. Many threads can have simultaneous read-only access to data, 
- *  while only one thread can have write access at any given time. 
- *  Multiple read access with single write access is controlled by 
- *  read/write locks, which are generally used to protect data that is 
+/** provides an operating system independent abstraction for read/write
+ *  locks. Many threads can have simultaneous read-only access to data,
+ *  while only one thread can have write access at any given time.
+ *  Multiple read access with single write access is controlled by
+ *  read/write locks, which are generally used to protect data that is
  *  frequently searched.
  */
 class OFReadWriteLock
 {
-public:
+ public:
 
   /** default constructor */
   OFReadWriteLock();
@@ -423,45 +415,45 @@ public:
    */
   OFBool initialized() const;
 
-  /** gets a read lock. If the read/write lock is currently locked for 
-   *  writing, the calling thread blocks until the write lock is freed. 
-   *  Multiple threads may simultaneously hold a read lock on a read/write 
+  /** gets a read lock. If the read/write lock is currently locked for
+   *  writing, the calling thread blocks until the write lock is freed.
+   *  Multiple threads may simultaneously hold a read lock on a read/write
    *  lock.
-   *  @return 0 upon success, an error code otherwise.  
-   */   
+   *  @return 0 upon success, an error code otherwise.
+   */
   int rdlock();
 
-  /** gets a write lock. If the read/write lock is currently locked for 
-   *  reading or writing, the calling thread blocks until all the read and 
-   *  write locks are freed. At any given time, only one thread may have a 
+  /** gets a write lock. If the read/write lock is currently locked for
+   *  reading or writing, the calling thread blocks until all the read and
+   *  write locks are freed. At any given time, only one thread may have a
    *  write lock on a read/write lock.
-   *  @return 0 upon success, an error code otherwise.  
-   */   
+   *  @return 0 upon success, an error code otherwise.
+   */
   int wrlock();
 
-  /** trys to get a read lock. If the read/write lock is locked for 
+  /** trys to get a read lock. If the read/write lock is locked for
    *  writing, returns OFReadWriteLock::busy.
-   *  @return 0 upon success, OFReadWriteLock::busy if the read/write lock 
-   *    is already locked, an error code otherwise.  
+   *  @return 0 upon success, OFReadWriteLock::busy if the read/write lock
+   *    is already locked, an error code otherwise.
    */
   int tryrdlock();
 
-  /** trys to get a write lock. If the read/write lock is currently locked 
+  /** trys to get a write lock. If the read/write lock is currently locked
    *  for reading or writing, returns OFReadWriteLock::busy.
-   *  @return 0 upon success, OFReadWriteLock::busy if the read/write lock 
-   *    is already locked, an error code otherwise.  
+   *  @return 0 upon success, OFReadWriteLock::busy if the read/write lock
+   *    is already locked, an error code otherwise.
    */
   int trywrlock();
 
-  /** unlocks the read/write lock. The read/write lock must be locked and 
-   *  the calling thread must be the owner of the lock, otherwise the 
-   *  behaviour is undefined. One of the other threads that is waiting for 
-   *  the read/write lock to be freed will be unblocked, provided there are 
-   *  other waiting threads. 
-   *  @return 0 upon success, an error code otherwise.  
-   */   
+  /** unlocks the read/write lock. The read/write lock must be locked and
+   *  the calling thread must be the owner of the lock, otherwise the
+   *  behaviour is undefined. One of the other threads that is waiting for
+   *  the read/write lock to be freed will be unblocked, provided there are
+   *  other waiting threads.
+   *  @return 0 upon success, an error code otherwise.
+   */
   int unlock();
-  
+
   /** converts any of the error codes returned by the methods of this class
    *  into a textual description, which is written into the string object.
    *  @param description string object into which the error description is written.
@@ -469,47 +461,22 @@ public:
    */
   static void errorstr(OFString& description, int code);
 
-  /** this constant is returned by the tryrdlock() and trywrlock() methods 
-   *  if the read/write lock is already locked. Since this value is operating 
-   *  system dependent, comparisons should always compare the return value 
+  /** this constant is returned by the tryrdlock() and trywrlock() methods
+   *  if the read/write lock is already locked. Since this value is operating
+   *  system dependent, comparisons should always compare the return value
    *  of tryrdlock() and trywrlock() with this constant.
    */
   static const int busy;
 
-private:
+ private:
   /** read/write lock resource */
   void * theLock;
-  
-  /** unimplemented private copy constructor */  
+
+  /** unimplemented private copy constructor */
   OFReadWriteLock(const OFReadWriteLock& arg);
 
-  /** unimplemented private assignment operator */  
+  /** unimplemented private assignment operator */
   OFReadWriteLock& operator=(const OFReadWriteLock& arg);
 };
 
 #endif
-
-/*
- *
- * CVS/RCS Log:
- * Log: ofthread.h,v 
- * Revision 1.1  2004/01/14 04:01:11  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.4  2002/02/27 14:13:19  meichel
- * Changed initialized() methods to const. Fixed some return values when
- *   compiled without thread support.
- *
- * Revision 1.3  2001/06/01 15:51:36  meichel
- * Updated copyright header
- *
- * Revision 1.2  2000/06/26 09:27:26  joergr
- * Replaced _WIN32 by HAVE_WINDOWS_H to avoid compiler errors using CygWin-32.
- *
- * Revision 1.1  2000/03/29 16:41:23  meichel
- * Added new classes providing an operating system independent abstraction
- *   for threads, thread specific data, semaphores, mutexes and read/write locks.
- *
- *
- */

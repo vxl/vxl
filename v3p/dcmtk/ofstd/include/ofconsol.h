@@ -51,14 +51,6 @@
  *  Caveat 2: The direct use of the COUT and CERR macros is unsafe
  *  in multithread applications. Use ofConsole instead.
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:11 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/ofstd/include/ofconsol.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -74,7 +66,7 @@
 
 
 /** Singleton class which provides thread-safe access to the standard console
- *  output and error streams. Allows multiple threads to concurrently create 
+ *  output and error streams. Allows multiple threads to concurrently create
  *  output even if that output is redirected to file or memory.
  *  Protection is implemented if the module is compiled with -D_REENTRANT
  *  and is based on Mutexes.
@@ -83,7 +75,7 @@
  */
 class OFConsole
 {
-public:
+ public:
 
   /** destructor.
    */
@@ -214,7 +206,7 @@ public:
    */
   static OFConsole& instance();
 
-private:
+ private:
 
   /** default constructor. After construction, the cout methods refer to the
    *  standard output stream and the cerr methods refer to the standard
@@ -275,66 +267,3 @@ extern OFOStringStream CERR;
 #endif /* DCMTK_GUI */
 
 #endif /* __OFCONSOL_H */
-
-
-/*
- *
- * CVS/RCS Log:
- * Log: ofconsol.h,v 
- * Revision 1.1  2004/01/14 04:01:11  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.13  2002/11/27 11:23:05  meichel
- * Adapted module ofstd to use of new header file ofstdinc.h
- *
- * Revision 1.12  2002/05/16 15:56:33  meichel
- * Changed ofConsole into singleton implementation that can safely
- *   be used prior to start of main, i.e. from global constructors
- *
- * Revision 1.11  2002/05/16 08:16:44  meichel
- * changed return type of OFConsole::setCout() and OFConsole::setCerr()
- *   to pointer instead of reference.
- *
- * Revision 1.10  2002/05/02 14:05:50  joergr
- * Added support for standard and non-standard string streams (which one is
- * supported is detected automatically via the configure mechanism).
- * Thanks again to Andreas Barth <Andreas.Barth@bruker-biospin.de> for his
- * contribution.
- *
- * Revision 1.9  2002/04/16 13:36:02  joergr
- * Added configurable support for C++ ANSI standard includes (e.g. streams).
- * Thanks to Andreas Barth <Andreas.Barth@bruker-biospin.de> for his
- * contribution.
- *
- * Revision 1.8  2001/06/01 15:51:33  meichel
- * Updated copyright header
- *
- * Revision 1.7  2000/12/13 15:14:25  joergr
- * Introduced dummy parameter for "default" constructor of class OFConsole
- * to "convince" linker of gcc 2.5.8 (NeXTSTEP) to allocate memory for global
- * variable 'ofConsole'.
- *
- * Revision 1.6  2000/10/10 12:01:21  meichel
- * Created/updated doc++ comments
- *
- * Revision 1.5  2000/09/26 13:46:12  meichel
- * Simplified inline code in ofconsol.h, required by Sun CC 2.x
- *
- * Revision 1.4  2000/06/21 15:47:54  meichel
- * Including stdlib.h, required for Sun CC 4.2
- *
- * Revision 1.3  2000/04/14 15:41:40  meichel
- * Added unprotected get methods, required for the cmdata debug facility.
- *
- * Revision 1.2  2000/04/14 15:16:08  meichel
- * Added new class OFConsole and global instance ofConsole which provide
- *   access to standard output and error streams in a way that allows multiple
- *   threads to safely create output concurrently.
- *
- * Revision 1.1  2000/03/03 14:02:47  meichel
- * Implemented library support for redirecting error messages into memory
- *   instead of printing them to stdout/stderr for GUI applications.
- *
- *
- */

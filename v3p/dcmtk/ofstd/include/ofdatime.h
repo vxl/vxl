@@ -21,14 +21,6 @@
  *
  *  Purpose: Combined class for date and time functions
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:11 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/ofstd/include/ofdatime.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -50,29 +42,28 @@
  */
 class OFDateTime
 {
-
  public:
 
     /** constructor
      */
     OFDateTime();
-    
+
     /** copy constructor
      *  @param dateTime date/time object to be copied
      */
     OFDateTime(const OFDateTime &dateTime);
-    
+
     /** copy constructor
      *  @param dateVal date object to be copied
      *  @param timeVal time object to be copied
      */
     OFDateTime(const OFDate &dateVal,
                const OFTime &timeVal);
-               
+
     /** destructor
      */
     virtual ~OFDateTime();
-    
+
     /** assignment operator
      *  @param dateTime date/time value to be set
      *  @return reference to this object (with new value)
@@ -99,13 +90,13 @@ class OFDateTime
      *  Sets all date and all time components to '0'. NB: Date becomes invalid.
      */
     virtual void clear();
-    
+
     /** check whether the currently stored date and time value is valid.
      *  See classes OFDate and OFTime for details.
      *  @return OFTrue if the current value is valid, OFFalse otherwise
      */
     virtual OFBool isValid() const;
-    
+
     /** set the date/time value.
      *  Before the new value is set it is checked using the "isValid()" routine.
      *  @param year new year value to be set
@@ -131,31 +122,31 @@ class OFDateTime
      *  @return OFTrue if the new value is valid and has been set, OFFalse otherwise
      */
     OFBool setDate(const OFDate &dateVal);
-    
+
     /** set the time component to the specified time.
      *  Before the new value is set it is checked using the "isValid()" routine.
      *  @param timeVal new time value to be set
      *  @return OFTrue if the new value is valid and has been set, OFFalse otherwise
      */
     OFBool setTime(const OFTime &timeVal);
-    
+
     /** set the date and time value to the current system date and time.
      *  This function uses operating system dependent routines. If the date or time function
      *  (or both) are unavailable for some reason the corresponding value is not modified.
      *  @return OFTrue if the current system date and time has been set, OFFalse otherwise
      */
     OFBool setCurrentDateTime();
-    
+
     /** get the current date component
      *  @return reference to date object
      */
     const OFDate &getDate() const;
-    
+
     /** get the current time component
      *  @return reference to time object
      */
     const OFTime &getTime() const;
-    
+
     /** get the current date/time value in ISO format.
      *  The two ISO time formats supported by this function are
      *    "YYYY-MM-DD HH:MM[:SS[.FFFFFF]][&ZZ:ZZ]" (with delimiters) and
@@ -176,20 +167,20 @@ class OFDateTime
                                    const OFBool showFraction = OFFalse,
                                    const OFBool showTimeZone = OFFalse,
                                    const OFBool showDelimiter = OFTrue) const;
-    
+
     /* --- static helper functions --- */
 
     /** get the current system date and time
      *  @return date/time object with the current system date and time set
      */
     static OFDateTime getCurrentDateTime();
-    
+
 
  private:
 
     /// currently stored date value
     OFDate Date;
-    
+
     /// currently stored time value
     OFTime Time;
 };
@@ -205,21 +196,3 @@ ostream& operator<<(ostream& stream, const OFDateTime &dateTime);
 
 
 #endif
-
-
-/*
- *
- * CVS/RCS Log:
- * Log: ofdatime.h,v 
- * Revision 1.1  2004/01/14 04:01:11  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.2  2002/05/24 09:43:04  joergr
- * Renamed some parameters/variables to avoid ambiguities.
- *
- * Revision 1.1  2002/04/11 12:12:23  joergr
- * Introduced new standard classes providing date and time functions.
- *
- *
- */

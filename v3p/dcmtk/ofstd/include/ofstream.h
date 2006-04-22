@@ -21,14 +21,6 @@
  *
  *  Purpose: C++ header to handle standard and old stream libraries.
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:11 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/ofstd/include/ofstream.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -63,7 +55,7 @@ using namespace std;
 
 #include <iostream.h>
 #include <fstream.h>
-// For old STREAMS library: preference for strstream 
+// For old STREAMS library: preference for strstream
 #if defined(HAVE_STRSTREA_H) || defined(HAVE_STRSTREAM_H)
 #ifdef HAVE_STRSTREA_H
 #include <strstrea.h>
@@ -121,27 +113,3 @@ typedef istrstream OFIStringStream;
 #endif /* USE_STRINGSTREAM */
 
 #endif /* USE_STD_CXX_INCLUDES */
-
-
-/*
- * CVS/RCS Log:
- * Log: ofstream.h,v 
- * Revision 1.1  2004/01/14 04:01:11  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.3  2002/12/11 15:54:48  meichel
- * Added empty namespace std declaration, needed on MSVC.
- *
- * Revision 1.2  2002/05/02 14:05:50  joergr
- * Added support for standard and non-standard string streams (which one is
- * supported is detected automatically via the configure mechanism).
- * Thanks again to Andreas Barth <Andreas.Barth@bruker-biospin.de> for his
- * contribution.
- *
- * Revision 1.1  2002/04/16 13:36:03  joergr
- * Added configurable support for C++ ANSI standard includes (e.g. streams).
- * Thanks to Andreas Barth <Andreas.Barth@bruker-biospin.de> for his
- * contribution.
- *
- */

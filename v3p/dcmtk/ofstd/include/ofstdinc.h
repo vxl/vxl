@@ -21,14 +21,6 @@
  *
  *  Purpose: encapsulation of old style vs. ISO C++ standard includes
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:11 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/ofstd/include/ofstdinc.h,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 // this file is not and should not be protected against multiple inclusion
@@ -268,7 +260,7 @@ BEGIN_EXTERN_C
 #include <string.h>
 END_EXTERN_C
 #endif
-// Some platforms define additional string functions like bzero or 
+// Some platforms define additional string functions like bzero or
 // strcasecmp in <strings.h>, so we always include this file if available.
 #ifdef HAVE_STRINGS_H
 BEGIN_EXTERN_C
@@ -298,34 +290,3 @@ BEGIN_EXTERN_C
 END_EXTERN_C
 #endif
 #endif
-
-
-/*
- * CVS/RCS Log:
- * Log: ofstdinc.h,v 
- * Revision 1.1  2004/01/14 04:01:11  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.6  2002/12/16 16:20:45  meichel
- * Added configure test that checks if extern "C" inclusion
- *   of <math.h> fails, e.g. on HP/UX 10 and WIN32
- *
- * Revision 1.5  2002/12/11 15:54:47  meichel
- * Added empty namespace std declaration, needed on MSVC.
- *
- * Revision 1.4  2002/11/28 17:16:39  meichel
- * Including <math.h> without extern "C" on Win32 to avoid problem with MSVC5.
- *
- * Revision 1.3  2002/11/27 17:21:18  meichel
- * Fixed bug in ofstack inclusion code
- *
- * Revision 1.2  2002/11/27 12:33:34  meichel
- * Now including <strings.h> even if <string.h> is present.
- *
- * Revision 1.1  2002/11/27 11:20:52  meichel
- * Added new file ofstdinc.h that encapsulates the inclusion
- *   of old style vs. ISO C++ standard header files.
- *
- *
- */
