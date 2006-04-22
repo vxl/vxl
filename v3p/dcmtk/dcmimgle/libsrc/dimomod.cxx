@@ -21,14 +21,6 @@
  *
  *  Purpose: DicomMonochromeModality (Source)
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:11 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmimgle/libsrc/dimomod.cxx,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -252,74 +244,3 @@ void DiMonoModality::checkRescaling(const DiInputPixel *pixel)
         }
     }
 }
-
-
-/*
- *
- * CVS/RCS Log:
- * Log: dimomod.cxx,v 
- * Revision 1.1  2004/01/14 04:01:11  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.15  2001/09/28 13:17:24  joergr
- * Enhanced algorithm to determine the min and max value.
- *
- * Revision 1.14  2001/06/01 15:49:58  meichel
- * Updated copyright header
- *
- * Revision 1.13  2000/12/14 13:46:45  joergr
- * Ignore modality LUT transform for XA and XRF images (report message on that
- * in verbose mode).
- *
- * Revision 1.12  2000/08/31 15:51:39  joergr
- * Corrected bug: min and max value were reversed for images with negative
- * rescale slope.
- *
- * Revision 1.11  2000/04/28 12:33:46  joergr
- * DebugLevel - global for the module - now derived from OFGlobal (MF-safe).
- *
- * Revision 1.10  2000/04/27 13:10:30  joergr
- * Dcmimgle library code now consistently uses ofConsole for error output.
- *
- * Revision 1.9  2000/03/08 16:24:31  meichel
- * Updated copyright header.
- *
- * Revision 1.8  2000/03/03 14:09:21  meichel
- * Implemented library support for redirecting error messages into memory
- *   instead of printing them to stdout/stderr for GUI applications.
- *
- * Revision 1.7  1999/05/31 12:35:58  joergr
- * Corrected bug concerning the conversion of color images to grayscale.
- *
- * Revision 1.6  1999/04/28 15:04:48  joergr
- * Introduced new scheme for the debug level variable: now each level can be
- * set separately (there is no "include" relationship).
- *
- * Revision 1.5  1999/02/03 17:41:45  joergr
- * Moved global functions maxval() and determineRepresentation() to class
- * DicomImageClass (as static methods).
- * Added member variable and related methods to store number of bits used for
- * pixel data.
- *
- * Revision 1.4  1998/12/22 13:41:04  joergr
- * Changed calculation of AbsMinimum/Maximum.
- * Removed member variable and method for isPotentiallySigned.
- *
- * Revision 1.3  1998/12/16 16:16:50  joergr
- * Added explanation string to LUT class (retrieved from dataset).
- *
- * Revision 1.2  1998/12/14 17:38:18  joergr
- * Added support for correct scaling of input/output values for grayscale
- * transformations.
- *
- * Revision 1.1  1998/11/27 16:14:35  joergr
- * Added copyright message.
- * Introduced global debug level for dcmimage module to control error output.
- * Added constructors to use external modality transformations.
- *
- * Revision 1.4  1998/05/11 14:52:33  joergr
- * Added CVS/RCS header to each file.
- *
- *
- */

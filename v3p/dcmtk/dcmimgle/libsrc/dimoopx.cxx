@@ -21,14 +21,6 @@
  *
  *  Purpose: DicomMonoOutputPixel (Source)
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:11 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmimgle/libsrc/dimoopx.cxx,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -77,7 +69,7 @@ DiMonoOutputPixel::~DiMonoOutputPixel()
 int DiMonoOutputPixel::isUnused(const unsigned long value)
 {
     if (UsedValues == NULL)
-        determineUsedValues();                  // create on demand 
+        determineUsedValues();                  // create on demand
     if (UsedValues != NULL)
     {
         if (value <= MaxValue)
@@ -86,38 +78,3 @@ int DiMonoOutputPixel::isUnused(const unsigned long value)
     }
     return 0;
 }
-
-
-/*
- *
- * CVS/RCS Log:
- * Log: dimoopx.cxx,v 
- * Revision 1.1  2004/01/14 04:01:11  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.6  2001/06/01 15:49:58  meichel
- * Updated copyright header
- *
- * Revision 1.5  2000/03/08 16:24:31  meichel
- * Updated copyright header.
- *
- * Revision 1.4  1999/07/23 13:45:39  joergr
- * Enhanced handling of corrupted pixel data (wrong length).
- *
- * Revision 1.3  1999/02/11 16:53:35  joergr
- * Added routine to check whether particular grayscale values are unused in
- * the output data.
- * Removed unused parameter / member variable.
- *
- * Revision 1.2  1999/01/20 14:54:30  joergr
- * Replaced invocation of getCount() by member variable Count where possible.
- *
- * Revision 1.1  1998/11/27 16:15:02  joergr
- * Added copyright message.
- *
- * Revision 1.3  1998/05/11 14:52:33  joergr
- * Added CVS/RCS header to each file.
- *
- *
- */

@@ -21,14 +21,6 @@
  *
  *  Purpose: DicomBaseLUT (Source)
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:11 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmimgle/libsrc/dibaslut.cxx,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -112,45 +104,3 @@ int DiBaseLUT::compare(const DiBaseLUT *lut)
     }
     return result;
 }
-
-
-/*
- *
- * CVS/RCS Log:
- * Log: dibaslut.cxx,v 
- * Revision 1.1  2004/01/14 04:01:11  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.9  2001/06/01 15:49:53  meichel
- * Updated copyright header
- *
- * Revision 1.8  2000/03/08 16:24:26  meichel
- * Updated copyright header.
- *
- * Revision 1.7  1999/10/20 10:36:36  joergr
- * Enhanced method invertTable to distinguish between copy of LUT data and
- * original (referenced) LUT data.
- *
- * Revision 1.6  1999/09/30 11:37:54  joergr
- * Added methods to compare two lookup tables.
- *
- * Revision 1.5  1999/09/17 13:13:27  joergr
- * Enhanced efficiency of some "for" loops.
- *
- * Revision 1.4  1999/09/08 15:20:31  joergr
- * Completed implementation of setting inverse presentation LUT as needed
- * e.g. for DICOM print (invert 8->12 bits PLUT).
- *
- * Revision 1.3  1999/03/03 17:56:12  joergr
- * Added type cast to avoid compiler warning on MSVC5.
- *
- * Revision 1.2  1999/03/03 12:05:43  joergr
- * Added method to invert lookup table data (used for presentation state LUTs).
- *
- * Revision 1.1  1999/02/03 17:47:44  joergr
- * Added base class for look-up tables (moved main functionality of class
- * DiLookupTable to DiBaseLUT).
- *
- *
- */

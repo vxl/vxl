@@ -21,14 +21,6 @@
  *
  *  Purpose: DicomGSDFunction (Source)
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/20 14:38:26 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmimgle/libsrc/digsdfn.cxx,v 
- *  CVS/RCS Revision: Revision: 1.2 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -395,92 +387,3 @@ double DiGSDFunction::getJNDIndex(const double lum)
     }
     return -1;
 }
-
-
-/*
- *
- * CVS/RCS Log:
- * Log: digsdfn.cxx,v 
- * Revision 1.2  2004/01/20 14:38:26  amithaperera
- * Attempt to compensate for VC7.1 broken pow()
- *
- * Revision 1.1  2004/01/14 04:01:11  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.21  2002/11/27 14:08:11  meichel
- * Adapted module dcmimgle to use of new header file ofstdinc.h
- *
- * Revision 1.20  2002/07/19 13:07:32  joergr
- * Enhanced/corrected comments.
- *
- * Revision 1.19  2002/07/18 12:34:53  joergr
- * Added support for hardcopy and softcopy input devices (camera and scanner).
- * Added polynomial curve fitting algorithm as an alternate interpolation
- * method.
- *
- * Revision 1.18  2002/07/05 10:39:03  joergr
- * Fixed sign bug.
- *
- * Revision 1.17  2002/07/03 13:51:00  joergr
- * Fixed inconsistencies regarding the handling of ambient light.
- *
- * Revision 1.16  2002/07/02 16:24:37  joergr
- * Added support for hardcopy devices to the calibrated output routines.
- *
- * Revision 1.15  2002/06/19 08:12:13  meichel
- * Added typecasts to avoid ambiguity with built-in functions on gcc 3.2
- *
- * Revision 1.14  2002/04/16 13:53:31  joergr
- * Added configurable support for C++ ANSI standard includes (e.g. streams).
- * Thanks to Andreas Barth <Andreas.Barth@bruker-biospin.de> for his
- * contribution.
- *
- * Revision 1.13  2001/06/01 15:49:55  meichel
- * Updated copyright header
- *
- * Revision 1.12  2000/07/17 14:37:52  joergr
- * Moved method getJNDIndex to public part of the interface.
- *
- * Revision 1.11  2000/04/28 12:33:43  joergr
- * DebugLevel - global for the module - now derived from OFGlobal (MF-safe).
- *
- * Revision 1.10  2000/04/27 13:10:26  joergr
- * Dcmimgle library code now consistently uses ofConsole for error output.
- *
- * Revision 1.9  2000/03/08 16:24:27  meichel
- * Updated copyright header.
- *
- * Revision 1.8  2000/03/06 18:20:35  joergr
- * Moved get-method to base class, renamed method and made method virtual to
- * avoid hiding of methods (reported by Sun CC 4.2).
- *
- * Revision 1.7  2000/03/03 14:09:18  meichel
- * Implemented library support for redirecting error messages into memory
- *   instead of printing them to stdout/stderr for GUI applications.
- *
- * Revision 1.6  2000/02/02 11:04:53  joergr
- * Removed space characters before preprocessor directives.
- *
- * Revision 1.5  1999/10/18 17:25:46  joergr
- * Added missing variables in member initialization list (reported by egcs on
- * Solaris with additional compiler options).
- *
- * Revision 1.4  1999/10/18 15:06:25  joergr
- * Enhanced command line tool dcmdspfn (added new options).
- *
- * Revision 1.3  1999/10/18 10:14:27  joergr
- * Moved min/max value determination to display function base class. Now the
- * actual min/max values are also used for GSDFunction (instead of first and
- * last luminance value).
- *
- * Revision 1.2  1999/09/17 13:13:29  joergr
- * Enhanced efficiency of some "for" loops.
- *
- * Revision 1.1  1999/09/10 08:54:49  joergr
- * Added support for CIELAB display function. Restructured class hierarchy
- * for display functions.
- *
- *
- */
-

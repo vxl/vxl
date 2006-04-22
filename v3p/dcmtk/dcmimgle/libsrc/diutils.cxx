@@ -21,14 +21,6 @@
  *
  *  Purpose: Utilities (Source)
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:11 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmimgle/libsrc/diutils.cxx,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -116,56 +108,3 @@ EP_Representation DicomImageClass::determineRepresentation(double minvalue,
 #endif
     return EPR_Uint32;
 }
-
-
-/*
- *
- * CVS/RCS Log:
- * Log: diutils.cxx,v 
- * Revision 1.1  2004/01/14 04:01:11  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.10  2002/04/16 13:53:32  joergr
- * Added configurable support for C++ ANSI standard includes (e.g. streams).
- * Thanks to Andreas Barth <Andreas.Barth@bruker-biospin.de> for his
- * contribution.
- *
- * Revision 1.9  2001/06/01 15:50:00  meichel
- * Updated copyright header
- *
- * Revision 1.8  2000/05/03 09:47:24  joergr
- * Removed most informational and some warning messages from release built
- * (#ifndef DEBUG).
- *
- * Revision 1.7  2000/04/28 12:33:48  joergr
- * DebugLevel - global for the module - now derived from OFGlobal (MF-safe).
- *
- * Revision 1.6  2000/04/27 13:10:33  joergr
- * Dcmimgle library code now consistently uses ofConsole for error output.
- *
- * Revision 1.5  2000/03/08 16:24:33  meichel
- * Updated copyright header.
- *
- * Revision 1.4  2000/03/03 14:09:22  meichel
- * Implemented library support for redirecting error messages into memory
- *   instead of printing them to stdout/stderr for GUI applications.
- *
- * Revision 1.3  1999/04/28 15:04:50  joergr
- * Introduced new scheme for the debug level variable: now each level can be
- * set separately (there is no "include" relationship).
- *
- * Revision 1.2  1999/02/03 17:44:33  joergr
- * Moved global functions maxval() and determineRepresentation() to class
- * DicomImageClass (as static methods).
- *
- * Revision 1.1  1998/11/27 16:23:32  joergr
- * Added copyright message.
- * Introduced global debug level for dcmimage module to control error output.
- * Introduced configuration flags to adjust behaviour in different cases.
- *
- * Revision 1.4  1998/05/11 14:52:37  joergr
- * Added CVS/RCS header to each file.
- *
- *
- */

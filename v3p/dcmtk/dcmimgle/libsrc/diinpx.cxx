@@ -21,14 +21,6 @@
  *
  *  Purpose: DicomInputPixel (Source)
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:11 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmimgle/libsrc/diinpx.cxx,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -62,37 +54,3 @@ DiInputPixel::DiInputPixel(const unsigned int bits,
 DiInputPixel::~DiInputPixel()
 {
 }
-
-
-/*
- *
- * CVS/RCS Log:
- * Log: diinpx.cxx,v 
- * Revision 1.1  2004/01/14 04:01:11  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.6  2002/06/26 16:11:34  joergr
- * Enhanced handling of corrupted pixel data and/or length.
- *
- * Revision 1.5  2001/06/01 15:49:56  meichel
- * Updated copyright header
- *
- * Revision 1.4  2000/04/27 13:10:28  joergr
- * Dcmimgle library code now consistently uses ofConsole for error output.
- *
- * Revision 1.3  2000/03/08 16:24:29  meichel
- * Updated copyright header.
- *
- * Revision 1.2  1999/02/03 17:39:20  joergr
- * Added member variable and related methods to store number of bits used for
- * pixel data.
- *
- * Revision 1.1  1998/11/27 16:02:13  joergr
- * Added copyright message.
- *
- * Revision 1.2  1998/05/11 14:52:29  joergr
- * Added CVS/RCS header to each file.
- *
- *
- */

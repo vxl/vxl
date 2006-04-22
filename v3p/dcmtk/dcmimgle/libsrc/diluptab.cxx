@@ -21,14 +21,6 @@
  *
  *  Purpose: DicomLookupTable (Source)
  *
- *  Last Update:      Author: amithaperera 
- *  Update Date:      Date: 2004/01/14 04:01:11 
- *  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmimgle/libsrc/diluptab.cxx,v 
- *  CVS/RCS Revision: Revision: 1.1 
- *  Status:           State: Exp 
- *
- *  CVS/RCS Log at end of file
- *
  */
 
 
@@ -198,7 +190,6 @@ void DiLookupTable::Init(const DiDocument *docu,
 }
 
 
-
 void DiLookupTable::checkTable(unsigned long count,
                                Uint16 bits,
                                EI_Status *status)
@@ -323,7 +314,6 @@ void DiLookupTable::checkTable(unsigned long count,
         }
     }
 }
-
 
 
 /********************************************************************/
@@ -589,117 +579,3 @@ OFBool DiLookupTable::operator==(const DiLookupTable &lut)
 {
     return (compare((const DiBaseLUT *)&lut) == 0);
 }
-
-
-/*
- *
- * CVS/RCS Log:
- * Log: diluptab.cxx,v 
- * Revision 1.1  2004/01/14 04:01:11  amithaperera
- * Add better DICOM support by wrapping DCMTK, and add a stripped down
- * version of DCMTK to v3p. Add more DICOM test cases.
- *
- * Revision 1.27  2002/12/09 13:34:50  joergr
- * Renamed parameter/local variable to avoid name clashes with global
- * declaration left and/or right (used for as iostream manipulators).
- *
- * Revision 1.26  2002/07/18 12:36:02  joergr
- * Corrected typos.
- *
- * Revision 1.25  2002/06/26 16:12:01  joergr
- * Added new methods to get the explanation string of stored VOI windows and
- * LUTs (not only of the currently selected VOI transformation).
- *
- * Revision 1.24  2001/06/01 15:49:56  meichel
- * Updated copyright header
- *
- * Revision 1.23  2000/07/07 13:44:11  joergr
- * Added support for LIN OD presentation LUT shape.
- *
- * Revision 1.22  2000/05/03 09:47:24  joergr
- * Removed most informational and some warning messages from release built
- * (#ifndef DEBUG).
- *
- * Revision 1.21  2000/04/28 12:33:45  joergr
- * DebugLevel - global for the module - now derived from OFGlobal (MF-safe).
- *
- * Revision 1.20  2000/04/27 13:10:29  joergr
- * Dcmimgle library code now consistently uses ofConsole for error output.
- *
- * Revision 1.19  2000/03/08 16:24:29  meichel
- * Updated copyright header.
- *
- * Revision 1.18  2000/03/06 18:20:35  joergr
- * Moved get-method to base class, renamed method and made method virtual to
- * avoid hiding of methods (reported by Sun CC 4.2).
- *
- * Revision 1.17  2000/03/03 14:09:19  meichel
- * Implemented library support for redirecting error messages into memory
- *   instead of printing them to stdout/stderr for GUI applications.
- *
- * Revision 1.16  1999/11/24 11:14:44  joergr
- * Added method to mirror order of entries in look-up tables.
- *
- * Revision 1.15  1999/10/20 18:40:26  joergr
- * Removed const from pointer declaration (problem reported by MSVC).
- *
- * Revision 1.14  1999/10/20 10:36:37  joergr
- * Enhanced method invertTable to distinguish between copy of LUT data and
- * original (referenced) LUT data.
- *
- * Revision 1.13  1999/09/30 11:37:55  joergr
- * Added methods to compare two lookup tables.
- *
- * Revision 1.12  1999/09/17 17:27:43  joergr
- * Modified error/warning messages for corrupt lookup table attributes.
- * Changed integer type for loop variable to avoid compiler warnings reported
- * by MSVC.
- *
- * Revision 1.11  1999/09/17 13:16:56  joergr
- * Removed bug: check pointer variable before dereferencing it.
- * Enhanced efficiency of some "for" loops.
- *
- * Revision 1.10  1999/09/08 16:58:36  joergr
- * Changed some integer types to avoid compiler warnings repoted by MSVC.
- *
- * Revision 1.9  1999/09/08 15:20:32  joergr
- * Completed implementation of setting inverse presentation LUT as needed
- * e.g. for DICOM print (invert 8->12 bits PLUT).
- *
- * Revision 1.8  1999/07/23 13:42:20  joergr
- * Corrected bug occurred when reading corrupted LUT descriptors.
- * Added dummy method (no implementation yet) to create inverse LUTs.
- *
- * Revision 1.7  1999/05/03 11:05:29  joergr
- * Minor code purifications to keep Sun CC 2.0.1 quiet.
- *
- * Revision 1.6  1999/04/28 15:01:42  joergr
- * Introduced new scheme for the debug level variable: now each level can be
- * set separately (there is no "include" relationship).
- *
- * Revision 1.5  1999/02/03 17:40:08  joergr
- * Added base class for look-up tables (moved main functionality of class
- * DiLookupTable to DiBaseLUT).
- * Moved global functions maxval() and determineRepresentation() to class
- * DicomImageClass (as static methods).
- *
- * Revision 1.4  1998/12/22 13:29:16  joergr
- * Changed parameter type.
- *
- * Revision 1.3  1998/12/16 16:11:54  joergr
- * Added explanation string to LUT class (retrieved from dataset).
- *
- * Revision 1.2  1998/12/14 17:34:44  joergr
- * Added support for signed values as second entry in look-up tables
- * (= first value mapped).
- *
- * Revision 1.1  1998/11/27 16:04:33  joergr
- * Added copyright message.
- * Added constructors to use external modality transformations.
- * Added methods to support presentation LUTs and shapes.
- *
- * Revision 1.3  1998/05/11 14:52:30  joergr
- * Added CVS/RCS header to each file.
- *
- *
- */
