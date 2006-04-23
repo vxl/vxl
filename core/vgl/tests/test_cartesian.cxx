@@ -760,7 +760,7 @@ inline bool collinear(vgl_line_2d<int> const& l1,
   return concurrent(l1,l2,l3);
 }
 
-inline bool collinear(float, float, float) { return true; }
+inline bool collinear(float const&, float const&, float const&) { return true; }
 
 inline double ratio(vgl_line_2d<int> const& l1,
                     vgl_line_2d<int> const& l2,
