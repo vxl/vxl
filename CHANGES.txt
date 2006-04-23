@@ -1,25 +1,27 @@
-This file summarizes the conceptual changes being made to VXL. It
+This file summarizes the conceptual changes being made to VXL.  It
 should document API changes and deprecations, and other "large"
-changes that have an effect on users. Bug fixes and minor changes
-aren't documented here, unless the bug-fix has a major observable 
-effect. If you change something in VXL, please document it here.
+changes that have an effect on users.  Bug fixes and minor changes
+aren't documented here, unless the bug-fix has a major observable
+effect.  If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
-VXL 1.5.0     - April 2006
+****************************
+VXL 1.5.0	- April 2006
+****************************
 
       - VC6 compilers are no longer supported
 
-      - VC7.0 compiler support is deprecated. VC7.0 will not be
+      - VC7.0 compiler support is deprecated.  VC7.0 will not be
         supported in vxl 1.6.
 
       - New (somewhat experimental) support for reading video files
         and receiving input from usb/1394 cameras through DirectShow in
-        Windows systems has been included in contrib/brl/bbas/vidl2. vidl2
+        Windows systems has been included in contrib/brl/bbas/vidl2.  vidl2
         also includes support for video-for-linux cameras and 1394 cameras
         under linux.
 
       - A new runtime logging facility with almost no overhead has
-        been introduced in contrib/mul/mbl/mbl_log. It is patterned after 
+        been introduced in contrib/mul/mbl/mbl_log.  It is patterned after
         Apache's log4j library.
 
       - vil now optionally supports reading JPEG 2000 compressed
@@ -28,46 +30,54 @@ VXL 1.5.0     - April 2006
 
       - vil now supports pyramid images in two forms - 1)
         multiple pyramid levels in a single directory and 2) the levels are
-        stored in a single tiff file. This capability is useful for displaying
+        stored in a single tiff file.  This capability is useful for displaying
         large files.
 
-      - vil now supports blocked images for large satellite images. 
- 
+      - vil now supports blocked images for large satellite images.
+
       - Clean up some of the compiler definitions (VCL_GCC_34, etc).
         Deprecate VCL_VC60, etc, in favour of the more consistent
-        VCL_VC_60, etc. VCL_VC60 will be removed in a future release.
+        VCL_VC_60, etc.  VCL_VC60 will be removed in a future release.
 
-VXL 1.4.0   - Jan 2006
+******************************
+VXL 1.4.0	- January 2006
+******************************
 
       - Added support for NITF image format v.2
 
-VXL 1.3.0   - Oct 2005
+******************************
+VXL 1.3.0	- October 2005
+******************************
 
       - New vgl_sphere_3d primitive, and some extra intersection calculations.
 
       - Added support for the Analyse 3D image file format
 
-      - VIL can now read NITF 2.1, NITF 2.0 and NSIF 1.0 image files.  All uncompressed
-        data formats are supported and plugin support is provided for handling
-        JPEG 2000 compressed NITF files.
+      - VIL can now read NITF 2.1, NITF 2.0 and NSIF 1.0 image files.
+        All uncompressed data formats are supported and plugin support is
+        provided for handling JPEG 2000 compressed NITF files.
 
+***************************
 VXL 1.2.0	- July 2005
+***************************
 
       - Added an implementation of the Mukres or Hungarian algorithm for
         finding a minimum cost assignment.
 
+**************************
 VXL 1.1.0	- May 2004
+**************************
 
       - Automated codec registration in vidl based on the approach of vil
         file formats.  vidl_io::register_codec() is no longer needed.
 
       - Added AVI file support in Linux to vidl using the avifile library.
 
-      - Brought mbl_mz_random into core/vnl/vnl_random. This random
+      - Brought mbl_mz_random into core/vnl/vnl_random.  This random
         random number generator provides the same sequence on many platforms.
 
-      - Added better DICOM support to vil by wrapping DCMTK. Added
-        DCMTK to v3p. Clean up DICOM header struct.
+      - Added better DICOM support to vil by wrapping DCMTK.  Added
+        DCMTK to v3p.  Clean up DICOM header struct.
 
       - vil file format configuration is now stored in a generated
         file (generated from vil_config.h.in)
@@ -79,11 +89,11 @@ VXL 1.1.0	- May 2004
 
       - Added vil_warp and vil_nearest_neighbour_interp functions
 
-      - Remove vcl_complex hackery on MSVC 6. vcl_complex is now the
+      - Remove vcl_complex hackery on MSVC 6.  vcl_complex is now the
         standard <complex>, since it seems to work with VC6sp5.
 
       - vnl_numeric_limits is deprecated in favour of vcl_numeric_limits.
-        (vnl_numeric_limits was written before vcl. vcl_numeric_limits is now
+        (vnl_numeric_limits was written before vcl.  vcl_numeric_limits is now
          more robust, and can use platform defaults.)
 
       - vbl_basic_tuple, vbl_basic_relation, etc. are deprecated since we have
@@ -91,7 +101,7 @@ VXL 1.1.0	- May 2004
 
       - VXL can now be compiled with Borland's bcc 5.5
 
-      - All the configure scripts have been rewritten in CMake. This should
+      - All the configure scripts have been rewritten in CMake.  This should
         mean less platform-specifc hacks, and easier porting to any new
         platforms supported by CMake.
 
@@ -99,25 +109,33 @@ VXL 1.1.0	- May 2004
         be done using the -mno-cygwin option to gcc in Cygwin and
         probably also with the basic MinGW tools as well.
 
+******************************
 VXL 1.0.0	- October 2003
+******************************
 
       - Support for MSVC 7
-      - Replaced "vil". The old "vil" is now called "vil1". "vil2" has been
+      - Replaced "vil".  The old "vil" is now called "vil1".  "vil2" has been
         renamed to "vil".   See the vil chapter in the VXL book for details.
       - vnl_matrix_fixed and vnl_vector_fixed upgraded to be fully space
         efficient.
       - Many hundreds of small bug fixes and improved functionality in the
         core and contributed libraries.
 
+********************************
 VXL 1.0 beta2	- September 2002
+********************************
 
       - CMake is now the default build system.
 
+*******************************
 VXL 1.0 beta1	- November 2000
+*******************************
 
       - The first official VXL beta release.
 
+*******************************
 VXL 0.1 	- February 2000
+*******************************
 
       - The very first version of VXL, written from scratch (using pieces of
         TargetJr) during an intensive coding week in Oxford.
