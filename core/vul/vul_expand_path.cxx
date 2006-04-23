@@ -7,13 +7,12 @@
 // \author fsm
 
 #include "vul_expand_path.h"
+#include <vcl_vector.h>
 
 #if defined(VCL_WIN32) || defined(como4301)
 
-#include <vcl_vector.h>
-
-//: \note This Windows version only performs some of the operations done
-// by the Unix version.
+//:
+// \note This Windows version only performs some of the operations done by the Unix version.
 vcl_string vul_expand_path_internal(vcl_string path)
 {
   if (path == "/")
@@ -83,16 +82,16 @@ vcl_string vul_expand_path_internal(vcl_string path)
   return path;
 }
 
-//: Note: this Windows version in similar to the uncached Unix version
-vcl_string vul_expand_path(vcl_string path) 
-{   
+//:
+// Note: this Windows version in similar to the uncached Unix version
+vcl_string vul_expand_path(vcl_string path)
+{
   return vul_expand_path_internal(path);
 }
 
 #else // #if defined(VCL_WIN32) || defined(como4301)
 
 #include <vcl_functional.h>
-#include <vcl_vector.h>
 #include <vcl_map.h>
 #include <vcl_cstdlib.h> // for getenv()
 #include <sys/types.h>
