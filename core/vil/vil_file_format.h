@@ -32,20 +32,20 @@ class vil_file_format
   virtual vil_image_resource_sptr make_input_image(vil_stream* vs) = 0;
 
   //: Read a pyramid resource from a list of image files in a directory
-  //  or from an image file_format that supports mulitple images per file.
-virtual vil_pyramid_image_resource_sptr 
+  //  ... or from an image file_format that supports multiple images per file.
+virtual vil_pyramid_image_resource_sptr
     make_input_pyramid_image(char const* directory_or_file)
     {return 0;}
 
-  //: Construct a pyramid image resource from a base image. All levels
-  //  are stored in the same resource file. Each level has the same 
-  //  scale ratio (0.5) to the preceeding level. Level 0 is the original 
+  //: Construct a pyramid image resource from a base image.
+  //  All levels are stored in the same resource file. Each level has the same
+  //  scale ratio (0.5) to the preceeding level. Level 0 is the original
   //  base image. The resource is returned open for reading.
   //  The temporary directory is for storing intermediate image
   //  resources during the construction of the pyramid. Files are
   //  be removed from the directory after completion.  If temp_dir is 0
   //  then the intermediate resources are created in memory.
-virtual vil_pyramid_image_resource_sptr 
+virtual vil_pyramid_image_resource_sptr
   make_pyramid_image_from_base(char const* filename,
                                vil_image_resource_sptr const& base_image,
                                unsigned nlevels,
@@ -64,7 +64,7 @@ virtual vil_pyramid_image_resource_sptr
                                                     enum vil_pixel_format) = 0;
   //: Construct a blocked output image resource
   // Returns a null resource unless the format supports blocking
-  virtual vil_blocked_image_resource_sptr  
+  virtual vil_blocked_image_resource_sptr
     make_blocked_output_image(vil_stream* /*vs*/,
                               unsigned /*nx*/,
                               unsigned /*ny*/,
@@ -74,7 +74,7 @@ virtual vil_pyramid_image_resource_sptr
                               enum vil_pixel_format /*fmt*/)
     {return 0;}
 
-  virtual vil_pyramid_image_resource_sptr 
+  virtual vil_pyramid_image_resource_sptr
     make_pyramid_output_image(char const* file)
     {return 0;}
 

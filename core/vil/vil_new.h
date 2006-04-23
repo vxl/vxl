@@ -78,14 +78,14 @@ vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
                                                vil_image_resource_sptr const& prototype,
                                                char const* file_format = 0);
 //: Make a new blocked resource file
-vil_blocked_image_resource_sptr 
+vil_blocked_image_resource_sptr
 vil_new_blocked_image_resource(vil_stream* os, unsigned ni, unsigned nj,
                                unsigned nplanes, vil_pixel_format format,
                                unsigned size_block_i, unsigned size_block_j,
                                char const* file_format = 0);
 
 //: Make a new blocked resource file
-vil_blocked_image_resource_sptr 
+vil_blocked_image_resource_sptr
 vil_new_blocked_image_resource(char const* filename, unsigned ni, unsigned nj,
                                unsigned nplanes, vil_pixel_format format,
                                unsigned size_block_i, unsigned size_block_j,
@@ -93,32 +93,32 @@ vil_new_blocked_image_resource(char const* filename, unsigned ni, unsigned nj,
 
 //: create a blocked interface around any image resource
 // For zero size blocks, appropriate default blocking is created
-vil_blocked_image_resource_sptr 
+vil_blocked_image_resource_sptr
 vil_new_blocked_image_facade(const vil_image_resource_sptr& src,
                              const unsigned size_block_i=0,
                              const unsigned size_block_j=0);
 //: Make a new cached resource
-vil_blocked_image_resource_sptr 
+vil_blocked_image_resource_sptr
 vil_new_cached_image_resource(const vil_blocked_image_resource_sptr& bir,
                               const unsigned cache_size = 100);
 
 
-//: Make a new pyramid image resource for writing.  
-//  Any number of pyramid layers can be inserted and with any scale. 
+//: Make a new pyramid image resource for writing.
+//  Any number of pyramid layers can be inserted and with any scale.
 //  Image resources that duplicate existing scales are not inserted.
 vil_pyramid_image_resource_sptr
 vil_new_pyramid_image_resource(char const* file_or_directory,
                                char const* file_format);
 
-//: Construct a pyramid image resource from a base image. All levels
-//  are stored in the same resource file. Each level has the same 
-//  scale ratio (0.5) to the preceeding level. Level 0 is the original 
+//: Construct a pyramid image resource from a base image.
+//  All levels are stored in the same resource file. Each level has the same
+//  scale ratio (0.5) to the preceeding level. Level 0 is the original
 //  base image. The resource is returned open for reading.
 //  The temporary directory is for storing intermediate image
 //  resources during the construction of the pyramid. Files are
 //  be removed from the directory after completion.  If temp_dir is 0
 //  then the intermediate resources are created in memory.
-vil_pyramid_image_resource_sptr 
+vil_pyramid_image_resource_sptr
 vil_new_pyramid_image_from_base(char const* filename,
                             vil_image_resource_sptr const& base_image,
                             unsigned nlevels,
@@ -126,21 +126,21 @@ vil_new_pyramid_image_from_base(char const* filename,
                             char const* temp_dir);
 
 //: Construct a new pyramid image resource from a base image
-//  The result is a directory containing separate images for each 
-//  pyramid level. Each level has the same scale ratio (0.5) to the 
-//  preceeding level and is created using level_file_format. 
+//  The result is a directory containing separate images for each
+//  pyramid level. Each level has the same scale ratio (0.5) to the
+//  preceeding level and is created using level_file_format.
 //  Level 0 is the original base image. If copy_base is false, then Level 0
 //  is already present in the directory and is used without modification.
 //  Each pyramid file in the directory is
 //   named filename + "level_index", e.g. R0, R1, ... Rn.
-vil_pyramid_image_resource_sptr 
+vil_pyramid_image_resource_sptr
 vil_new_pyramid_image_list_from_base(char const* directory,
                                      vil_image_resource_sptr const& base_image,
                                      unsigned nlevels,
                                      bool copy_base,
                                      char const* level_file_format,
                                      char const* filename
-                                     );
+                                    );
 
 //: Create a new image view whose plane step is 1.
 //  Pixel data type is the type of the last (dummy) argument.

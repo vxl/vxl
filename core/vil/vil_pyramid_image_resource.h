@@ -19,14 +19,14 @@
 #include <vil/vil_image_resource_sptr.h>
 #include <vil/vil_blocked_image_resource_sptr.h>
 //:
-// The pyramid consists of a set of scaled copies of the base image. 
-// A typical case is where the copies are each a factor of two smaller 
+// The pyramid consists of a set of scaled copies of the base image.
+// A typical case is where the copies are each a factor of two smaller
 // than the next lower image in the pyramid. However, there is no intrinsic
 // assumption about the scale difference between copies.
-// All image positions and sizes are expressed in the coordinate system of 
-// the base image. The transformation from base image coordinates to one 
-// of the copy images is given by:  ic = ib*scale, jc = jb*scale. Thus the 
-// base image is considered to have scale = 1.0.  
+// All image positions and sizes are expressed in the coordinate system of
+// the base image. The transformation from base image coordinates to one
+// of the copy images is given by:  ic = ib*scale, jc = jb*scale. Thus the
+// base image is considered to have scale = 1.0.
 // The copies all have scale<1.0.
 
 class vil_pyramid_image_resource : public vil_image_resource
@@ -35,17 +35,20 @@ class vil_pyramid_image_resource : public vil_image_resource
   vil_pyramid_image_resource(vcl_vector<vil_image_resource_sptr> const& images);
   virtual ~vil_pyramid_image_resource();
 
-  //: The following methods refer to the base (max resolution) image 
-  //: Dimensions:  Planes x ni x nj.
+  //: The number of planes (or components) in the image.
+  // Dimensions:  Planes x ni x nj.
+  // This method refers to the base (max resolution) image
   // This concept is treated as a synonym to components.
   virtual unsigned nplanes() const = 0;
 
-  //: Dimensions:  Planes x ni x nj.
-  // The number of pixels in each row.
+  //: The number of pixels in each row.
+  // Dimensions:  Planes x ni x nj.
+  // This method refers to the base (max resolution) image
   virtual unsigned ni() const = 0;
 
-  //: Dimensions:  Planes x ni x nj.
-  // The number of pixels in each column.
+  //: The number of pixels in each column.
+  // Dimensions:  Planes x ni x nj.
+  // This method refers to the base (max resolution) image
   virtual unsigned nj() const = 0;
 
   //: Pixel Format.
@@ -81,7 +84,7 @@ class vil_pyramid_image_resource : public vil_image_resource
                                                  unsigned j0, unsigned n_j,
                                                  unsigned level) const = 0;
 
-  //:get a complete view from a specified pyramid level. 
+  //:get a complete view from a specified pyramid level.
   virtual vil_image_view_base_sptr get_copy_view(unsigned level) const
     {return get_copy_view(0, ni(), 0, nj(), level);}
 
@@ -107,7 +110,7 @@ class vil_pyramid_image_resource : public vil_image_resource
                      vil_blocked_image_resource_sptr& dec_resc);
 
   //:utility for decimating a resource to create a new pyramid level
-  // The new scale is one half the input resource scale. Creates a 
+  // The new scale is one half the input resource scale. Creates a
   // new resource from filename according to file format
   static vil_image_resource_sptr decimate(vil_image_resource_sptr const& resc,
                                           char const* filename,
@@ -121,5 +124,7 @@ class vil_pyramid_image_resource : public vil_image_resource
   // no default constructor
   vil_pyramid_image_resource();
 };
+
 #include <vil/vil_pyramid_image_resource_sptr.h>
+
 #endif // vil_pyramid_image_resource_h_
