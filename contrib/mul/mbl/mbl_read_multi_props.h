@@ -15,13 +15,13 @@
 //: The type of the property dictionary
 class mbl_read_multi_props_type : public vcl_multimap<vcl_string, vcl_string >
 {
-public:
+ public:
 
   //: Return a vector of all values for a given property label \a label.
   // All entries of \a label are removed from the property list.
   // \throws mbl_exception_missing_property if \a label doesn't occur at least once.
-  // \param nmax The maximum number of permitted occurences of this label (default=max<unsigned>).
-  // \param nmin The minimum number of permitted occurences of this label (default=1).
+  // \param nmax The maximum number of permitted occurrences of this label (default=max<unsigned>).
+  // \param nmin The minimum number of permitted occurrences of this label (default=1).
   // \throws mbl_exception_read_props_parse_error if \a label occurs an invalid number of times.
   // \sa get_optional_property().
   void get_required_property(const vcl_string& label,
@@ -32,7 +32,7 @@ public:
   //: Return a vector of all values for a given property label \a label.
   // All entries of \a label are removed from the property list.
   // Returns an empty vector if \a label doesn't occur at least once.
-  // \param nmax The maximum number of permitted occurences of this label (default=max<unsigned>).
+  // \param nmax The maximum number of permitted occurrences of this label (default=max<unsigned>).
   // \throws mbl_exception_read_props_parse_error if \a label occurs too many times.
   // \sa get_required_property().
   void get_optional_property(const vcl_string& label,
