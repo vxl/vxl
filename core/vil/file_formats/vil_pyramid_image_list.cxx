@@ -7,7 +7,6 @@
 #include <vcl_cassert.h>
 #include <vcl_sstream.h>
 #include <vil/vil_stream_fstream.h>
-//#include <vil/file_formats/vil_image_list.h>
 #include <vil/vil_image_list.h>
 #include <vil/vil_blocked_image_facade.h>
 #include <vil/vil_new.h>
@@ -42,7 +41,7 @@ static bool copy_base_resc(vil_image_resource_sptr const& base_image,
                       char const* file_format,
                       vil_blocked_image_resource_sptr& copy)
 {
-  {//scope for closing resource
+  { //scope for closing resource
   //Create a new blocked base image resource
   vcl_cout << "Copying base resource\n";
   vil_blocked_image_resource_sptr brsc = blocked_image_resource(base_image);
@@ -51,11 +50,11 @@ static bool copy_base_resc(vil_image_resource_sptr const& base_image,
   vil_blocked_image_resource_sptr out_resc =
     vil_new_blocked_image_resource(full_filename.c_str(),
                                    brsc->ni(), brsc->nj(),
-                                       brsc->nplanes(),
-                                       brsc->pixel_format(),
-                                       brsc->size_block_i(),
-                                       brsc->size_block_j(),
-                                       file_format);
+                                   brsc->nplanes(),
+                                   brsc->pixel_format(),
+                                   brsc->size_block_i(),
+                                   brsc->size_block_j(),
+                                   file_format);
   if (!out_resc)
     return false;
   for (unsigned j = 0; j<brsc->n_block_j(); ++j)
@@ -102,7 +101,7 @@ vil_pyramid_image_resource_sptr vil_pyramid_image_list_format::
                                  bool copy_base,
                                  char const* level_file_format,
                                  char const* filename
-                                 )
+                                )
 {
   if (!vil_image_list::vil_is_directory(directory))
     return 0;
@@ -111,9 +110,10 @@ vil_pyramid_image_resource_sptr vil_pyramid_image_list_format::
   vcl_string full_filename = level_filename(d,fn, 0.0f) + '.'+ level_file_format;
   vil_blocked_image_resource_sptr blk_base;
   if (copy_base)
-  { if (!copy_base_resc(base_image, full_filename,
+  {
+    if (!copy_base_resc(base_image, full_filename,
                         level_file_format, blk_base))
-    return 0;
+      return 0;
   }
   else
   {
@@ -123,16 +123,15 @@ vil_pyramid_image_resource_sptr vil_pyramid_image_list_format::
       return 0;
   }
   //Create the other pyramid levels
-  {
+  { //program scope to close resource files
     vil_image_resource_sptr image = blk_base.ptr();
     for (unsigned L = 1; L<nlevels; ++L)
     {
       vcl_cout << "Decimating Level " << L << vcl_endl;
       full_filename = level_filename(d, fn, float(L)) + '.'+ level_file_format;
-      image =
-        vil_pyramid_image_resource::decimate(image, full_filename.c_str());
+      image = vil_pyramid_image_resource::decimate(image,full_filename.c_str());
     }
-  }//end program scope to close resource files
+  } //end program scope to close resource files
   vil_image_list il(directory);
   vcl_vector<vil_image_resource_sptr> rescs = il.resources();
   return new vil_pyramid_image_list(rescs);
@@ -157,10 +156,10 @@ vil_pyramid_image_list::vil_pyramid_image_list(vcl_vector<vil_image_resource_spt
 {
   for (vcl_vector<vil_image_resource_sptr>::const_iterator rit = images.begin();
        rit != images.end(); ++rit)
-    {
-      pyramid_level* level = new pyramid_level(*rit);
-      levels_.push_back(level);
-    }
+  {
+    pyramid_level* level = new pyramid_level(*rit);
+    levels_.push_back(level);
+  }
   //sort on image width
   vcl_sort(levels_.begin(), levels_.end(), level_compare);
   this->normalize_scales();
@@ -244,26 +243,26 @@ bool vil_pyramid_image_list::put_resource(vil_image_resource_sptr const& image)
   unsigned sbi = 0, sbj = 0;
   vil_blocked_image_resource_sptr bir = blocked_image_resource(image);
   if (bir)
-    {sbi = bir->size_block_i(); sbi = bir->size_block_j();}
+  { sbi = bir->size_block_i(); sbi = bir->size_block_j(); }
   vil_image_resource_sptr copy;
   if (sbi==0||sbj==0)
-    {
+  {
 #ifdef VIL_USE_FSTREAM64
-      vil_stream_fstream64* os = new vil_stream_fstream64(file.c_str(), "w");
+    vil_stream_fstream64* os = new vil_stream_fstream64(file.c_str(), "w");
 #else //VIL_USE_FSTREAM64
-      vil_stream_fstream* os = new vil_stream_fstream(file.c_str(), "w");
+    vil_stream_fstream* os = new vil_stream_fstream(file.c_str(), "w");
 #endif //VIL_USE_FSTREAM64
-      copy = vil_new_image_resource(os, image->ni(), image->nj(),
-                                    image->nplanes(), image->pixel_format(),
-                                    ffmt.c_str());
-    }
-      else
-        copy = vil_new_blocked_image_resource(file.c_str(),
-                                              image->ni(), image->nj(),
-                                              image->nplanes(),
-                                              image->pixel_format(),
-                                              sbi, sbj,
-                                              ffmt.c_str()).ptr();
+    copy = vil_new_image_resource(os, image->ni(), image->nj(),
+                                  image->nplanes(), image->pixel_format(),
+                                  ffmt.c_str());
+  }
+  else
+    copy = vil_new_blocked_image_resource(file.c_str(),
+                                          image->ni(), image->nj(),
+                                          image->nplanes(),
+                                          image->pixel_format(),
+                                          sbi, sbj,
+                                          ffmt.c_str()).ptr();
   if (!vil_copy_deep(image, copy))
     return false;
   return this->add_resource(copy);

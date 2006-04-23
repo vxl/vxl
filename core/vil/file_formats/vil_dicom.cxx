@@ -135,7 +135,7 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
 
   if ( cond != EC_Normal ) {
     vcl_cerr << "vil_dicom ERROR: could not read file (" << cond.text() << ")\n"
-             << "And the error code is: " << cond.code() << "\n";
+             << "And the error code is: " << cond.code() << vcl_endl;
     //if (cond.code() != 4)
       return;
   }
@@ -214,14 +214,14 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
 
   // Create an image resource to manage the pixel buffer
   //
-#define DOCASE( fmt )                                                   \
-      case fmt: {                                                       \
-        typedef vil_pixel_format_type_of<fmt>::component_type T;        \
-        pixels_ = vil_new_image_resource_of_view(                       \
-               vil_image_view<T>( pixel_buf,                            \
-                                  (T*)pixel_buf->data(),                \
-                                  ni(), nj(), nplanes(),                \
-                                  nplanes(), ni()*nplanes(), 1 ) );     \
+#define DOCASE( fmt )                                                \
+      case fmt: {                                                    \
+        typedef vil_pixel_format_type_of<fmt>::component_type T;     \
+        pixels_ = vil_new_image_resource_of_view(                    \
+                    vil_image_view<T>(pixel_buf,                     \
+                                      (T*)pixel_buf->data(),         \
+                                      ni(), nj(), nplanes(),         \
+                                      nplanes(), ni()*nplanes(), 1));\
       } break
 
   switch ( pixel_format ) {
@@ -905,11 +905,11 @@ static  unsigned short swap_short(unsigned short v)
 
 static void swap_shorts(unsigned short *ip, unsigned short *op, int count)
 {
-   while (count)
-   {
-      *op++ = swap_short(*ip++);
-      count--;
-   }
+  while (count)
+  {
+    *op++ = swap_short(*ip++);
+    count--;
+  }
 }
 #endif //MIXED_ENDIAN
 static

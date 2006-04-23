@@ -55,8 +55,8 @@ bool vil_tiff_file_format_probe(vil_stream* is)
   // and
   //   0x49 0x49 0x00 0x2A
   // are invalid TIFF headers.
-  if      (hdr[0]==0x4D && hdr[1]==0x4D &&
-           hdr[2]==0x00 && hdr[3]==0x2A)
+  if (hdr[0]==0x4D && hdr[1]==0x4D &&
+      hdr[2]==0x00 && hdr[3]==0x2A)
     return true;
 
   else if (hdr[0]==0x49 && hdr[1]==0x49 &&
@@ -221,7 +221,7 @@ make_pyramid_image_from_base(char const* file,
     vil_pyramid_image_resource_sptr pyr = make_pyramid_output_image(file);
     pyr->put_resource(base_image);
     //Create the other pyramid levels
-    {
+    {//scope for resource files
       vcl_string d = temp_dir;
       vcl_string fn = "tempR";
       vil_image_resource_sptr image = base_image;
@@ -233,8 +233,8 @@ make_pyramid_image_from_base(char const* file,
           vil_pyramid_image_resource::decimate(image, full_filename.c_str());
       }
     }//end program scope to close resource files
+
     //reopen them for reading
-    //
     {//scope for il resources
       vil_image_list il(temp_dir);
       vcl_vector<vil_image_resource_sptr> rescs = il.resources();
@@ -243,6 +243,7 @@ make_pyramid_image_from_base(char const* file,
         pyr->put_resource(*rit);
     }//close il resources
   }//close pyr
+
   //clean up the temporary directory
   vil_image_list vl(temp_dir);
   if (!vl.clean_directory())
@@ -468,11 +469,17 @@ tiff_maybe_byte_align_data(vil_memory_chunk_sptr in_data,
 
 // don't do anything for float and double (bit shifting isn't allowed)
 template<> vil_memory_chunk_sptr tiff_maybe_byte_align_data<float> (
-                                                                    vil_memory_chunk_sptr in_data, unsigned /* num_samples */, unsigned /* in_bits_per_sample */, unsigned /*bytes per block*/)
+                                                                    vil_memory_chunk_sptr in_data,
+                                                                    unsigned /* num_samples */,
+                                                                    unsigned /* in_bits_per_sample */,
+                                                                    unsigned /*bytes per block*/)
 { return in_data; }
 
 template<> vil_memory_chunk_sptr tiff_maybe_byte_align_data<double> (
-                                                                     vil_memory_chunk_sptr in_data, unsigned /* num_samples */, unsigned /* in_bits_per_sample */, unsigned/*bytes per block*/)
+                                                                     vil_memory_chunk_sptr in_data,
+                                                                     unsigned /* num_samples */,
+                                                                     unsigned /* in_bits_per_sample */,
+                                                                     unsigned/*bytes per block*/)
 { return in_data; }
 
 ////////// End of lifted material //////
@@ -542,6 +549,7 @@ unsigned vil_tiff_image::n_block_j() const
     return static_cast<unsigned>(h_->strips_per_image());
   return 0;
 }
+
 ///// end of simple virtual methods
 
 unsigned vil_tiff_image::
@@ -574,7 +582,7 @@ void vil_tiff_image::copy_byte_block(vxl_byte* data, const unsigned long nbytes,
 vil_image_view_base_sptr vil_tiff_image::
 view_from_buffer(vil_pixel_format& fmt, vil_memory_chunk_sptr const& buf,
                  unsigned samples_per_block, unsigned bits_per_sample
-                 ) const
+                ) const
 {
   vil_image_view_base_sptr view = 0;
   vil_memory_chunk_sptr  buf_out;
@@ -920,7 +928,7 @@ bool vil_tiff_image::write_block_to_file(unsigned bi, unsigned bj,
                                 block_size_bytes)>0;
   if (h_->is_striped())
     return TIFFWriteEncodedStrip(t_, blk_indx, block_buf,
-                                 block_size_bytes )>0;
+                                 block_size_bytes ) > 0;
   return false;
 }
 
@@ -1163,7 +1171,7 @@ vil_tiff_pyramid_resource::get_copy_view(unsigned i0, unsigned n_i,
   // setup the image header for the level
   unsigned header_index = levels_[level]->header_index_;
   // The status value should be checked here
-  if(TIFFSetDirectory(t_, header_index)<=0)
+  if (TIFFSetDirectory(t_, header_index)<=0)
     return 0;
   vil_tiff_header* h = new vil_tiff_header(t_);
   vil_tiff_image* resc = new vil_tiff_image(t_, h);
@@ -1208,8 +1216,7 @@ bool vil_tiff_pyramid_resource::put_resource(vil_image_resource_sptr const& ir)
   vil_pixel_format fmt = ir->pixel_format();
   vil_blocked_image_resource_sptr bir = blocked_image_resource(ir);
   unsigned sbi = 0, sbj = 0;
-  if (bir)
-    {sbi = bir->size_block_i(); sbj = bir->size_block_j();}
+  if (bir) { sbi = bir->size_block_i(); sbj = bir->size_block_j(); }
   // setup the image header for the level
   vil_tiff_header* h = new vil_tiff_header(t_, ni, nj, nplanes,
                                            fmt, sbi, sbj);

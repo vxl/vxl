@@ -169,25 +169,25 @@ decimate(vil_image_resource_sptr const& resc, char const* filename,
   //only handle grey scale images
   vil_pixel_format fmt = resc->pixel_format();
   switch (fmt)
-    {
-    case VIL_PIXEL_FORMAT_BYTE:
-      break;
-    case VIL_PIXEL_FORMAT_UINT_16:
-      break;
-    case VIL_PIXEL_FORMAT_UINT_32:
-      break;
+  {
+  case VIL_PIXEL_FORMAT_BYTE:
+    break;
+  case VIL_PIXEL_FORMAT_UINT_16:
+    break;
+  case VIL_PIXEL_FORMAT_UINT_32:
+    break;
 #if VXL_HAS_INT_64
-    case VIL_PIXEL_FORMAT_UINT_64:
-      break;
+  case VIL_PIXEL_FORMAT_UINT_64:
+    break;
 #endif
-    case VIL_PIXEL_FORMAT_FLOAT:
-      break;
-    case VIL_PIXEL_FORMAT_DOUBLE:
-      break;
-    default:
-      vcl_cout << "Pyramids can only be constructed from grey scale base images\n";
-      return 0;
-    }
+  case VIL_PIXEL_FORMAT_FLOAT:
+    break;
+  case VIL_PIXEL_FORMAT_DOUBLE:
+    break;
+  default:
+    vcl_cout << "Pyramids can only be constructed from grey scale base images\n";
+    return 0;
+  }
   //first determine if the resource is blocked, if not create a facade
   vil_blocked_image_resource_sptr brsc = blocked_image_resource(resc);
   if (brsc&&(brsc->size_block_i()%2!=0||brsc->size_block_j()%2!=0))
@@ -197,8 +197,9 @@ decimate(vil_image_resource_sptr const& resc, char const* filename,
   }
   if (!brsc)
     brsc = new vil_blocked_image_facade(resc);
+
   // create the output decimated resource
-  {
+  { //file scope to close resource
     unsigned dni = (resc->ni()+1)/2, dnj = (resc->nj()+1)/2;
     vil_blocked_image_resource_sptr dec_resc =
       vil_new_blocked_image_resource(filename, dni, dnj, 1,
@@ -208,7 +209,7 @@ decimate(vil_image_resource_sptr const& resc, char const* filename,
     //fill the resource with decimated blocks.
     if (!blocked_decimate(brsc, dec_resc))
       return 0;
-  }//file scope to close resource
+  } //file scope to close resource
   //reopen resource for reading
   vil_image_resource_sptr temp = vil_load_image_resource(filename);
   return temp;
