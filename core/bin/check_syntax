@@ -824,7 +824,7 @@ foreach $f (@FILES)
     if ($printed && $file =~ m!\n [^\n]*\bdelete\s*\([^;()]*(\([^;()]*\)[^;()]*)*\)\s*;!);
   $file =~ s!^\#.*!!g; $file =~ s!\n\#.*!!g;
   &msg(1, "$2 starts with underscore")
-    if ($cpp_file && $printed && $file_s =~ m!([^\"\# ] *\b|^)(_[a-z][a-zA-Z0-9_]*)(.)! && "$2$3" ne "_fmemset(" && "$2$3" ne "_declspec(");
+    if ($cpp_file && $printed && $file_s =~ m!([^\"\# ] *\b|^)(_[a-z][a-zA-Z0-9_]*)(.)! && "$2$3" ne "_fmemset(" && "$2$3" ne "_declspec(" && $2 ne "_finddata_t");
 
 # 16. too long { ... } section with the "{" not on the start of a line
   &msg(1, "has a block of more than 24 lines with the opening brace not on a line by itself")
