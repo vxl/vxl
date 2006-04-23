@@ -28,6 +28,7 @@
 #include <vcl_vector.h>
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
+#include <vcl_iosfwd.h>
 #include <vil/vil_file_format.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_memory_chunk.h>
@@ -36,7 +37,6 @@
 #include <vil/file_formats/vil_tiff_header.h>
 #include <tiffio.h>
 
-
 //: Loader for tiff files
 class vil_tiff_file_format : public vil_file_format
 {
@@ -44,18 +44,18 @@ class vil_tiff_file_format : public vil_file_format
   virtual char const *tag() const;
   virtual vil_image_resource_sptr make_input_image(vil_stream *vs);
 
-  virtual vil_pyramid_image_resource_sptr 
-    make_input_pyramid_image(char const* file);
+  virtual vil_pyramid_image_resource_sptr
+  make_input_pyramid_image(char const* file);
 
-  //: Construct a pyramid image resource from a base image. All levels
-  //  are stored in the same resource file. Each level has the same 
-  //  scale ratio (0.5) to the preceeding level. Level 0 is the original 
+  //: Construct a pyramid image resource from a base image.
+  //  All levels are stored in the same resource file. Each level has the same
+  //  scale ratio (0.5) to the preceeding level. Level 0 is the original
   //  base image. The resource is returned open for reading.
   //  The temporary directory is for storing intermediate image
   //  resources during the construction of the pyramid. Files are
   //  be removed from the directory after completion.  If temp_dir is 0
   //  then the intermediate resources are created in memory.
-virtual vil_pyramid_image_resource_sptr 
+  virtual vil_pyramid_image_resource_sptr
   make_pyramid_image_from_base(char const* filename,
                                vil_image_resource_sptr const& base_image,
                                unsigned nlevels,
@@ -67,19 +67,18 @@ virtual vil_pyramid_image_resource_sptr
                                                     unsigned nplanes,
                                                     enum vil_pixel_format);
 
-  virtual vil_blocked_image_resource_sptr 
-    make_blocked_output_image(vil_stream* vs,
-                              unsigned ni,
-                              unsigned nj,
-                              unsigned nplanes,
-                              unsigned size_block_i,
-                              unsigned size_block_j,
-                              enum vil_pixel_format);
+  virtual vil_blocked_image_resource_sptr
+  make_blocked_output_image(vil_stream* vs,
+                            unsigned ni,
+                            unsigned nj,
+                            unsigned nplanes,
+                            unsigned size_block_i,
+                            unsigned size_block_j,
+                            enum vil_pixel_format);
 
 
   virtual vil_pyramid_image_resource_sptr
-    make_pyramid_output_image(char const* file);
-
+  make_pyramid_output_image(char const* file);
 };
 
 struct tif_stream_structures;
@@ -126,8 +125,6 @@ class vil_tiff_image : public vil_blocked_image_resource
   virtual bool put_block( unsigned  block_index_i, unsigned  block_index_j,
                           const vil_image_view_base& blk );
 
-
-
   //: Put the data in this view back into the image source.
   virtual bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0);
 
@@ -149,7 +146,7 @@ class vil_tiff_image : public vil_blocked_image_resource
 
   //to keep the tiff file open during reuse of multiple tiff resources
   //in a single file otherwise the resource destructor would close the file
-  void clear_TIFF(){t_ = 0;}
+  void clear_TIFF() { t_ = 0; }
 
   //: the number of samples in a block
   unsigned samples_per_block() const;
@@ -219,13 +216,14 @@ class vil_tiff_image : public vil_blocked_image_resource
 // to form an ordered pyramid.
 struct tiff_pyramid_level
 {
-  public:
-tiff_pyramid_level(unsigned header_index, unsigned ni, 
-                   unsigned nj, unsigned nplanes, vil_pixel_format fmt):
-  header_index_(header_index), scale_(1.0f), ni_(ni), nj_(nj), 
-       nplanes_(nplanes), pix_fmt_(fmt), cur_level_(0)
+ public:
+  tiff_pyramid_level(unsigned header_index, unsigned ni,
+                     unsigned nj, unsigned nplanes, vil_pixel_format fmt)
+   : header_index_(header_index), scale_(1.0f), ni_(ni), nj_(nj),
+     nplanes_(nplanes), pix_fmt_(fmt), cur_level_(0)
   {}
-  ~tiff_pyramid_level(){}
+
+  ~tiff_pyramid_level() {}
 
   //:the tiff header index
   unsigned header_index_;
@@ -233,7 +231,7 @@ tiff_pyramid_level(unsigned header_index, unsigned ni,
   //:scale associated with level
   float scale_;
 
-  //:the image width 
+  //:the image width
   unsigned ni_;
 
   //: the image length
@@ -248,76 +246,73 @@ tiff_pyramid_level(unsigned header_index, unsigned ni,
   //: temporary variable for current level
   unsigned cur_level_;
 
-  void print(const unsigned l){vcl_cout << "level[" << l <<  "] hindex "
-                                        << header_index_ << " scale: " 
-                                        << scale_ 
-                                        << "  width: " << ni_ << "\n";}
+  void print(const unsigned l)
+  { vcl_cout << "level[" << l <<  "] hindex " << header_index_ << " scale: " << scale_ << "  width: " << ni_ << vcl_endl; }
 };
 
 //:Pyramid resource built on the multi-image capability of the TIFF format
-//If read is true then the resource is open for reading else it is 
-//open for writing
+// If read is true then the resource is open for reading else it is open for writing
 class vil_tiff_pyramid_resource : public vil_pyramid_image_resource
 {
  public:
-  vil_tiff_pyramid_resource(TIFF* t, bool read = true); 
+  vil_tiff_pyramid_resource(TIFF* t, bool read = true);
 
   virtual ~vil_tiff_pyramid_resource();
 
-  //: The following methods refer to the base (max resolution) image 
-  //: Dimensions:  Planes x ni x nj.
+  //: The number of planes (or components) of the image.
+  // This method refers to the base (max resolution) image
+  // Dimensions:  Planes x ni x nj.
   // This concept is treated as a synonym to components.
   inline virtual unsigned nplanes() const
-    {if(levels_[0]) return levels_[0]->nplanes_; return 1;}
+  { if (levels_[0]) return levels_[0]->nplanes_; return 1; }
 
-  //: Dimensions:  Planes x ni x nj.
-  // The number of pixels in each row.
+  //: The number of pixels in each row.
+  // Dimensions:  Planes x ni x nj.
   inline virtual unsigned ni() const
-    {if(levels_[0]) return levels_[0]->ni_; return 0;}
+  { if (levels_[0]) return levels_[0]->ni_; return 0; }
 
-  //: Dimensions:  Planes x ni x nj.
-  // The number of pixels in each column.
+  //: The number of pixels in each column.
+  // Dimensions:  Planes x ni x nj.
   inline virtual unsigned nj() const
-    {if(levels_[0]) return levels_[0]->nj_; return 0;}
+  { if (levels_[0]) return levels_[0]->nj_; return 0; }
 
   //: Pixel Format.
   inline virtual enum vil_pixel_format pixel_format() const
-    {if(levels_[0]) return levels_[0]->pix_fmt_; return VIL_PIXEL_FORMAT_UNKNOWN;}
-  
+  { if (levels_[0]) return levels_[0]->pix_fmt_; return VIL_PIXEL_FORMAT_UNKNOWN; }
+
   //: Return a string describing the file format.
   // Only file images have a format, others return 0
-  virtual char const* file_format() const
-    {return "ptif";}
+  virtual char const* file_format() const { return "ptif"; }
 
   //:Methods particular to pyramid resource
 
   //: number of pyramid levels
-  virtual unsigned nlevels() const
-    {return levels_.size();}
+  virtual unsigned nlevels() const { return levels_.size(); }
 
   //:Get a partial view from the image from a specified pyramid level
   virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned n_i,
                                                  unsigned j0, unsigned n_j,
                                                  unsigned level) const;
 
-  //:Get a partial view from the image in the pyramid closest to scale. The origin and size parameters are in the coordinate system of the base image.
+  //:Get a partial view from the image in the pyramid closest to scale.
+  // The origin and size parameters are in the coordinate system of the base image.
   // The scale factor is with respect to the base image (base scale = 1.0).
   virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned n_i,
                                                  unsigned j0, unsigned n_j,
                                                  const float scale,
                                                  float& actual_scale) const;
 
-
-  //: Caution! The resource is assigned a header and the data is permanently
+  //:
+  // Caution! The resource is assigned a header and the data is permanently
   // written into the file. Be sure you want to commit to the file.
-  bool put_resource(vil_image_resource_sptr const& resc); 
+  bool put_resource(vil_image_resource_sptr const& resc);
 
   //: for debug purposes
   void print(const unsigned level)
-    {if(level<levels_.size()) levels_[level]->print(level);}
- protected:  
+  { if (level<levels_.size()) levels_[level]->print(level); }
+ protected:
   //:default constructor
-  vil_tiff_pyramid_resource();  
+  vil_tiff_pyramid_resource();
   //utility methods
   //:normalize the scale factors so that the base image scale = 1.0
   void normalize_scales();
@@ -334,6 +329,7 @@ class vil_tiff_pyramid_resource : public vil_pyramid_image_resource
   //The set of images in the pyramid. levels_[0] is the base image
   vcl_vector<tiff_pyramid_level*> levels_;
 };//End of pyramid image
+
 //
 //
 //------------------------ Lifted from vil_nitf2_image ------------------------
