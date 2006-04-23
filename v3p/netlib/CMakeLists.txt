@@ -304,6 +304,7 @@ ENDIF(CMAKE_COMPILER_IS_GNUCC)
 
 ADD_LIBRARY( netlib ${netlib_sources} )
 INSTALL_TARGETS( /lib netlib )
+INSTALL_FILES( /include/v3p/netlib .h netlib )
 
 IF(UNIX)
   TARGET_LINK_LIBRARIES( netlib m )
