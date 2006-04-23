@@ -23,8 +23,8 @@
 
 //: Constructor from a parameter block, and gradients along x and y directions given as arrays
 //
-sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, 
-                                                 vbl_array_2d<double> &grad_x, 
+sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp,
+                                                 vbl_array_2d<double> &grad_x,
                                                  vbl_array_2d<double> &grad_y)
   : sdet_nonmax_suppression_params(nsp)
 {
@@ -35,7 +35,7 @@ sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params&
   grad_mag_.resize(width_, height_);
   grad_x_ = grad_x;
   grad_y_ = grad_y;
-  
+
   for (int j = 0; j < height_; j++)
   {
     for (int i = 0; i < width_; i++)
@@ -52,10 +52,10 @@ sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params&
 
 //: Constructor from a parameter block, gradient magnitudes given as an array and the search directions
 //
-sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, 
-                                                 vbl_array_2d<double> &grad_mag, 
+sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp,
+                                                 vbl_array_2d<double> &grad_mag,
                                                  vbl_array_2d<vgl_vector_2d <double> > &directions)
-                                                 : sdet_nonmax_suppression_params(nsp)
+  : sdet_nonmax_suppression_params(nsp)
 {
   width_ = grad_mag.rows();
   height_ = grad_mag.cols();
@@ -63,9 +63,9 @@ sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params&
   grad_y_.resize(width_, height_);
   grad_mag_.resize(width_, height_);
   grad_mag_ = grad_mag;
-  for(int j = 0; j < height_; j++)
+  for (int j = 0; j < height_; j++)
   {
-    for(int i = 0; i < width_; i++)
+    for (int i = 0; i < width_; i++)
     {
       vgl_vector_2d<double> direction = directions(i,j);
       normalize(direction);
@@ -82,10 +82,10 @@ sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params&
 
 //: Constructor from a parameter block, and gradients along x and y directions given as images
 //
-sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, 
-                                                 vil_image_view<double> &grad_x, 
+sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp,
+                                                 vil_image_view<double> &grad_x,
                                                  vil_image_view<double> &grad_y)
-                                                 : sdet_nonmax_suppression_params(nsp)
+  : sdet_nonmax_suppression_params(nsp)
 {
   width_ = grad_x.ni();
   height_ = grad_x.nj();
@@ -113,19 +113,19 @@ sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params&
 
 //: Constructor from a parameter block, gradient magnitudes given as an image and the search directions
 //
-sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, 
-                                                 vil_image_view<double> &grad_mag, 
+sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp,
+                                                 vil_image_view<double> &grad_mag,
                                                  vbl_array_2d<vgl_vector_2d <double> > &directions)
-                                                 : sdet_nonmax_suppression_params(nsp)
+  : sdet_nonmax_suppression_params(nsp)
 {
   width_ = grad_mag.ni();
   height_ = grad_mag.nj();
   grad_x_.resize(width_, height_);
   grad_y_.resize(width_, height_);
   grad_mag_.resize(width_, height_);
-  for(int j = 0; j < height_; j++)
+  for (int j = 0; j < height_; j++)
   {
-    for(int i = 0; i < width_; i++)
+    for (int i = 0; i < width_; i++)
     {
       double val = grad_mag(i,j);
       grad_mag_(i,j) = val;
@@ -178,17 +178,15 @@ void sdet_nonmax_suppression::apply()
           double f[3];
           f_values(x, y, gx, gy, s, face_num, f);
           double s_list[3];
-          s_list[0] = -s; 
+          s_list[0] = -s;
           s_list[1] = 0.0;
-          s_list[2] = s;;
+          s_list[2] = s;
           if (f[1] > f[0] && f[1] > f[2])
           {
-            double s_star;
-            if(parabola_fit_type_ == PFIT_3_POINTS)
-              s_star = subpixel_s(s_list, f);
-            else
-              s_star = subpixel_s(x, y, direction);
-            if(abs(s_star) < 1.5)
+            double s_star = (parabola_fit_type_ == PFIT_3_POINTS)
+                          ? subpixel_s(s_list, f)
+                          : subpixel_s(x, y, direction);
+            if (-1.5 < s_star && s_star < 1.5)
             {
               vgl_point_2d<double> subpix(x + s_star * direction.x(), y + s_star * direction.y());
               vsol_point_2d_sptr p = new vsol_point_2d(subpix.x(), subpix.y());
@@ -368,9 +366,9 @@ double sdet_nonmax_suppression::subpixel_s(int x, int y, vgl_vector_2d<double> d
   vnl_matrix<double> B(9, 1);
   vnl_matrix<double> P(3, 1);
   int index = 0;
-  for(int j = -1; j <= 1; j++)
+  for (int j = -1; j <= 1; j++)
   {
-    for(int i = -1; i <= 1; i++)
+    for (int i = -1; i <= 1; i++)
     {
       find_distance_s_and_f_for_point(i, j, line1, d, s, direction);
       f = grad_mag_(x+i,y+j);
@@ -391,7 +389,7 @@ double sdet_nonmax_suppression::subpixel_s(int x, int y, vgl_vector_2d<double> d
   return s_star;
 }
 
-void sdet_nonmax_suppression::find_distance_s_and_f_for_point(int x, int y, vgl_homg_line_2d<double> line, 
+void sdet_nonmax_suppression::find_distance_s_and_f_for_point(int x, int y, vgl_homg_line_2d<double> line,
                                                               double &d, double &s, vgl_vector_2d<double> direction)
 {
   vgl_homg_point_2d<double> point(x,y);
