@@ -1,4 +1,4 @@
-// This is core/vil/file_formats/vil_image_list.h
+// This is core/vil/vil_image_list.h
 #ifndef vil_image_list_h_
 #define vil_image_list_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -16,6 +16,7 @@
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vil/vil_image_resource_sptr.h>
+
 class vil_image_list
 {
  public:
@@ -42,10 +43,11 @@ class vil_image_list
   //:remove a file
   bool remove_file(vcl_string& filename );
 
-  //: cleans the directory, i.e. removes all the files 
+  //: cleans the directory, i.e. removes all the files
   bool clean_directory();
 
  private:
   vcl_string directory_;
 };
+
 #endif // vil_image_list_h_
