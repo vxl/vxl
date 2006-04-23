@@ -161,7 +161,7 @@ mbl_read_multi_props_type mbl_read_multi_props_ws(vcl_istream &afs)
 
             vcl_ostringstream os; os << "&#" << (i<0?int(c):i) << ';';
             vcl_string::size_type pos;
-            
+
             while ((pos=str1.find(s)) != vcl_string::npos)
               str1.replace(pos,1,os.str());
 
@@ -236,7 +236,7 @@ void mbl_read_multi_props_look_for_unused_props(
   const mbl_read_multi_props_type &ignore)
 {
   mbl_read_multi_props_type p2(props);
-  
+
   // Remove ignoreable properties
   for (mbl_read_multi_props_type::const_iterator it=ignore.begin();
          it != ignore.end(); ++it)
@@ -244,7 +244,6 @@ void mbl_read_multi_props_look_for_unused_props(
 
   if (!p2.empty())
   {
-
     vcl_ostringstream ss;
     mbl_read_multi_props_print(ss, p2);
     mbl_exception_error(mbl_exception_unused_props(function_name, ss.str()));
@@ -263,10 +262,10 @@ void mbl_read_multi_props_type::get_required_property(
   values.clear();
 
   mbl_read_multi_props_type::iterator beg = this->lower_bound(label);
-  mbl_read_multi_props_type::iterator end = this->upper_bound(label);
-  if (beg==end)
+  mbl_read_multi_props_type::iterator fin = this->upper_bound(label);
+  if (beg==fin)
     mbl_exception_error(mbl_exception_missing_property(label));
-  for (mbl_read_multi_props_type::iterator it=beg; it!=end; ++it)
+  for (mbl_read_multi_props_type::iterator it=beg; it!=fin; ++it)
   {
     values.push_back(it->second);
   }
@@ -283,7 +282,7 @@ void mbl_read_multi_props_type::get_required_property(
     mbl_exception_error(mbl_exception_read_props_parse_error(msg));
   }
 
-  this->erase(beg, end);
+  this->erase(beg, fin);
 }
 
 
@@ -297,9 +296,9 @@ void mbl_read_multi_props_type::get_optional_property(
   values.clear();
 
   mbl_read_multi_props_type::iterator beg = this->lower_bound(label);
-  mbl_read_multi_props_type::iterator end = this->upper_bound(label);
+  mbl_read_multi_props_type::iterator fin = this->upper_bound(label);
 
-  for (mbl_read_multi_props_type::iterator it=beg; it!=end; ++it)
+  for (mbl_read_multi_props_type::iterator it=beg; it!=fin; ++it)
   {
     values.push_back(it->second);
   }
@@ -311,5 +310,5 @@ void mbl_read_multi_props_type::get_optional_property(
     mbl_exception_error(mbl_exception_read_props_parse_error(msg));
   }
 
-  this->erase(beg, end);
+  this->erase(beg, fin);
 }
