@@ -9,6 +9,8 @@ effect.  If you change something in VXL, please document it here.
 VXL 1.5.0	- April 2006
 ****************************
 
+      - Add support for ICC 8.1
+
       - VC6 compilers are no longer supported
 
       - VC7.0 compiler support is deprecated.  VC7.0 will not be

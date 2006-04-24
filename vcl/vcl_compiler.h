@@ -185,6 +185,16 @@
 
 #if defined(__ICC) ||defined(__ECC) // Intel compiler?
 # define VCL_ICC
+#  if __ICC >= 800
+#   define VCL_ICC_8
+#   if __ICC >= 810
+#    define VCL_ICC_81
+#   elif __ICC >= 800
+#    define VCL_ICC_80
+#   else
+#    #error "Err.. ICC 8.x starts with ICC 8.0..."
+#   endif
+#  endif
 #endif
 
 #if defined(como4301) // Comeau C/C++ 4.3.0.1

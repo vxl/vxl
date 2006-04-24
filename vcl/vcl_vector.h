@@ -16,7 +16,7 @@
 # include "iso/vcl_vector.h"
 #endif
 
-#if defined(VCL_ICC)
+#if defined(VCL_ICC_80)
 # include "vcl_utility.h"
 // Intel compiler's std::swap can't handle the special bit-iterator of
 // vector<bool>
