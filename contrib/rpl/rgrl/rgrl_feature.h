@@ -11,6 +11,7 @@
 #include <vnl/vnl_matrix.h>
 
 #include "rgrl_feature_sptr.h"
+#include "rgrl_feature_reader.h"
 #include "rgrl_object.h"
 #include <vcl_iosfwd.h>
 
