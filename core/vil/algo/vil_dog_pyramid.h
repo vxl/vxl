@@ -32,8 +32,8 @@ void vil_dog_pyramid(const vil_image_view<T>& src_image,
                      unsigned min_size)
 {
   // Compute number of levels to build
-  int n = vcl_min(src_image.ni(),src_image.nj());
-  int nL = 0;
+  unsigned n = vcl_min(src_image.ni(),src_image.nj());
+  unsigned nL = 0;
   while (n>min_size) { nL++; n=(2*n)/3; }
 
   smooth_pyramid.resize(nL);
