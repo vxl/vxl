@@ -8,6 +8,7 @@ IF(NETLIB_FOUND)
 # Direct netlib dependencies are:
 # vnl_chi_squared                  dchscdf_
 # vnl_cholesky                     dpoco_ dpodi_ dpofa_ dposl_
+# vnl_ldl_cholesky                 dpoco_ dpodi_ dpofa_ dposl_
 # vnl_complex_eigensystem          zgeev_
 # vnl_conjugate_gradient           cg_
 # vnl_fft                          dgpfa_ dsetgpfa_ gpfa_ setgpfa_
@@ -37,6 +38,7 @@ IF(NETLIB_FOUND)
     vnl_qr.txx vnl_qr.h
     vnl_scatter_3x3.txx vnl_scatter_3x3.h
     vnl_cholesky.cxx vnl_cholesky.h
+    vnl_ldl_cholesky.cxx vnl_ldl_cholesky.h
     vnl_real_eigensystem.cxx vnl_real_eigensystem.h
     vnl_complex_eigensystem.cxx vnl_complex_eigensystem.h
     vnl_symmetric_eigensystem.cxx vnl_symmetric_eigensystem.h

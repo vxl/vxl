@@ -12,6 +12,7 @@ DECLARE( test_fft1d );
 DECLARE( test_fft2d );
 DECLARE( test_functions );
 DECLARE( test_generalized_eigensystem );
+DECLARE( test_ldl_cholesky );
 DECLARE( test_levenberg_marquardt );
 DECLARE( test_matrix_update );
 DECLARE( test_minimizers );
@@ -44,6 +45,7 @@ register_tests()
   REGISTER( test_fft2d );
   REGISTER( test_functions );
   REGISTER( test_generalized_eigensystem );
+  REGISTER( test_ldl_cholesky );
   REGISTER( test_levenberg_marquardt );
   REGISTER( test_matrix_update );
   REGISTER( test_minimizers );
