@@ -213,6 +213,17 @@ void vgl_box_2d<Type>::set_height(Type height)
   set_dim(min_pos_[1], max_pos_[1], height);
 }
 
+
+//: Scale width and height, centroid unchanged.
+template <class Type>
+void vgl_box_2d<Type>::scale_about_centroid(double s)
+{
+  assert(!is_empty());
+  set_dim(min_pos_[0], max_pos_[0], static_cast<Type>(width()*s));
+  set_dim(min_pos_[1], max_pos_[1], static_cast<Type>(height()*s));
+}
+
+
 template <class Type>
 void vgl_box_2d<Type>::setmin_position(Type const min_position[2])
 {

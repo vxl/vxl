@@ -545,6 +545,12 @@ static void test_box_2d()
   b2.set_height(1.0); vcl_cout << b2 << vcl_endl;
   TEST("set_height", b2.centroid(), p0);
   TEST("volume is now 1", b2.volume(), 1.0);
+  b2.scale_about_centroid(2.0);
+  TEST("scale_about_centroid", b2.centroid(), p0);
+  TEST("volume is now 4", b2.volume(), 4.0);
+  b2.scale_about_centroid(0.5);
+  TEST("scale_about_centroid", b2.centroid(), p0);
+  TEST("volume is now 1", b2.volume(), 1.0);
   b2.set_centroid(p12);
   b2.set_min_point(p0);
   TEST("set_min_point", b2.volume(), 2.25);
@@ -723,6 +729,13 @@ static void test_box_3d()
   b2.set_depth(1.0); vcl_cout << b2 << vcl_endl;
   TEST("set_depth", b2.centroid(), p0);
   TEST("volume is now 1", b2.volume(), 1.0);
+  b2.scale_about_centroid(2.0);
+  TEST("scale_about_centroid", b2.centroid(), p0);
+  TEST("volume is now 8", b2.volume(), 8.0);
+  b2.scale_about_centroid(0.5);
+  TEST("scale_about_centroid", b2.centroid(), p0);
+  TEST("volume is now 1", b2.volume(), 1.0);
+
   b2.set_centroid(p123);
   b2.set_min_point(p0);
   TEST("set_min_point", b2.volume(), 3.375);

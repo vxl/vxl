@@ -239,6 +239,19 @@ void vgl_box_3d<Type>::set_depth(Type depth)
   set_dim(min_pos_[2], max_pos_[2], depth);
 }
 
+
+//: Scale width, height and depth, centroid unchanged.
+template <class Type>
+void vgl_box_3d<Type>::scale_about_centroid(double s)
+{
+  assert(!is_empty());
+  set_dim(min_pos_[0], max_pos_[0], static_cast<Type>(width()*s));
+  set_dim(min_pos_[1], max_pos_[1], static_cast<Type>(height()*s));
+  set_dim(min_pos_[2], max_pos_[2], static_cast<Type>(depth()*s));
+
+}
+
+
 template <class Type>
 void vgl_box_3d<Type>::set_min_position(Type const min_position[3])
 {

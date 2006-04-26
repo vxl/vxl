@@ -207,6 +207,9 @@ class vgl_box_3d
   //: Set depth (z), centroid unchanged
   void set_depth(Type depth);
 
+  //: Scale width, height and depth, centroid unchanged.
+  void scale_about_centroid(double s);
+
   //: Modify min corner point. Max corner point only changed if necessary to avoid empty box
   void set_min_position(Type const m[3]);
   //: Modify max corner point. Min corner point only changed if necessary to avoid empty box
