@@ -18,7 +18,7 @@ class sdet_fit_conics_params : public gevd_param_mixin, public vbl_ref_count
 {
  public:
   sdet_fit_conics_params(int  min_fit_length = 10,
-                         double rms_distance = 1.0);
+                         double rms_distance = 1.0,int aspect_ratio = 4);
 
   sdet_fit_conics_params(const sdet_fit_conics_params& old_params);
  ~sdet_fit_conics_params() {}
@@ -28,13 +28,14 @@ class sdet_fit_conics_params : public gevd_param_mixin, public vbl_ref_count
   vcl_ostream& operator<<(vcl_ostream& os, const sdet_fit_conics_params& flp);
  protected:
   void InitParams(int min_fit_length,
-                  double rms_distance);
+                  double rms_distance,double aspect_ratio);
  public:
   //
   // Parameter blocks and parameters
   //
   int  min_fit_length_; //!< the shortest curve to fit a line
   double rms_distance_; //!< the max rms distance error for the fit
+  double aspect_ratio_;
 };
 
 #endif // sdet_fit_conics_params_h_

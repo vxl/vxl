@@ -78,7 +78,19 @@ bool sdet_fit_conics::fit_conics()
         {
           vsol_conic_2d_sptr conic = new vsol_conic_2d(*sit);
           vcl_cout << "Fitted a conic of type " << conic->real_type() << '\n';
-          conic_segs_.push_back(conic);
+          //adding a condition on aspect ratio
+          if (conic->real_type() != 1)
+          {
+              conic_segs_.push_back(conic);
+          }
+          else
+          {
+               double cx, cy, width, height, angle;
+              conic->ellipse_parameters(cx,cy,angle,width,height);
+                  if ((width/height)<aspect_ratio_)
+            conic_segs_.push_back(conic);
+          }
+          
         }
     }
   segs_valid_ = true;
