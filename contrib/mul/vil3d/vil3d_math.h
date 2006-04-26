@@ -389,4 +389,38 @@ inline void vil3d_math_image_difference(const vil3d_image_view<aT>& imA,
   }
 }
 
+//: imA = fa*imA + fb*imB  (Useful for moving averages!)
+// Can do running sum using vil_add_image_fraction(running_mean,1-f,new_im,f)
+// to update current mean by a fraction f of new_im
+// \relates vil_image_view
+template<class aT, class bT, class scaleT>
+inline void vil3d_math_add_image_fraction(vil3d_image_view<aT>& imA, scaleT fa,
+                                        const vil3d_image_view<bT>& imB, scaleT fb)
+{
+  unsigned ni = imA.ni(),nj = imA.nj(),nk = imA.nk(),np = imA.nplanes();
+  assert(imB.ni()==ni && imB.nj()==nj && imB.nk()==nk && imB.nplanes()==np);
+
+  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),kstepA=imA.kstep(),pstepA = imA.planestep();
+  vcl_ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),kstepB=imB.kstep(),pstepB = imB.planestep();
+  aT* planeA = imA.origin_ptr();
+  const bT* planeB = imB.origin_ptr();
+  for (unsigned p=0;p<np;++p,planeA += pstepA,planeB += pstepB)
+  {
+    aT* sliceA   = planeA;
+    const bT* sliceB   = planeB;
+    for (unsigned k=0;k<nk;++k,sliceA += kstepA,sliceB += kstepB)
+    {
+      aT* rowA = sliceA;
+      const bT* rowB = sliceB;
+      for (unsigned j=0;j<nj;++j,rowA += jstepA,rowB += jstepB)
+      {
+        aT* pixelA = rowA;
+        const bT* pixelB = rowB;
+        for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelB+=istepB)
+          *pixelA = aT(fa*(*pixelA)+fb*(*pixelB));
+      }
+    }
+  }
+}
+
 #endif
