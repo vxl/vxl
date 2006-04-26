@@ -229,18 +229,22 @@ for $var_exp (
   'VCL_BORLAND',
   'VCL_BORLAND_55',
   'VCL_BORLAND_56',
+  'VCL_ICC',
+  'VCL_ICC_8',
+  'VCL_ICC_80',
+  'VCL_ICC_81',
   'VCL_WIN32',
   'VCL_VC',
   'VCL_VC_DOTNET',
-  'VCL_VC_80',
   'VCL_VC_8',
+  'VCL_VC_80',
+  'VCL_VC_7',
   'VCL_VC_70',
   'VCL_VC_71',
-  'VCL_VC_7',
-  'VCL_VC_60',
   'VCL_VC_6',
-  'VCL_VC_50',
+  'VCL_VC_60',
   'VCL_VC_5',
+  'VCL_VC_50',
   'VCL_KAI',
   'VCL_METRO_WORKS',
   'GNU_LIBSTDCXX_V3',
@@ -275,6 +279,7 @@ for $var_exp (
   '__ICC',              # icc
   '__ECC',              # icc?
   '__INTEL_COMPILER',   # icc
+  '__INTEL_CXXLIB_ICC', # icc using its own library?
   '__BORLANDC__',       # bcc
   '__SUNPRO_CC',        # sun
   '_MSC_VER',           # msvc++
