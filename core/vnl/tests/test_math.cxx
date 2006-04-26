@@ -5,6 +5,7 @@
 #include <vnl/vnl_complex.h>
 #include <testlib/testlib_test.h>
 
+
 static
 void check_pointer( const void * )
 {
@@ -128,9 +129,9 @@ void test_math()
   long double qnan_q = vcl_numeric_limits<long double>::quiet_NaN();
 
 #define print_hex(p) \
-  vcl_hex<<vcl_setfill('0')<<vcl_setw(sizeof(unsigned int))<<*(unsigned int*)(&p); \
-  for (int i=1; i*sizeof(unsigned int)<sizeof(p); ++i) \
-    vcl_cout<<vcl_setfill('0')<<vcl_setw(sizeof(unsigned int))<<((unsigned int*)(&p))[i]; \
+  vcl_hex<<vcl_setfill('0')<<vcl_setw(sizeof(unsigned char))<<*reinterpret_cast<unsigned char*>(&p); \
+  for (int i=1; i*sizeof(unsigned char)<sizeof(p); ++i) \
+    vcl_cout<<vcl_setfill('0')<<vcl_setw(sizeof(unsigned char))<<(reinterpret_cast<unsigned char*>(&p))[i]; \
   vcl_cout<<vcl_dec
 
   vcl_cout << "pinf_f = " << pinf_f << " = " << print_hex(pinf_f) << vcl_endl
@@ -184,6 +185,9 @@ void test_math()
   testlib_test_assert(" isnan(qnan_q)   ",  vnl_math_isnan(qnan_q));
 #endif // 0
 #endif // __ICC
+
+  testlib_test_assert("!isfinite(huge_val(double))", !vnl_math_isfinite(vnl_huge_val(double())));
+  testlib_test_assert("!isfinite(huge_val(float))", !vnl_math_isfinite(vnl_huge_val(float())));
 }
 
 TESTMAIN(test_math);
