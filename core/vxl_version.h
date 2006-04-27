@@ -22,7 +22,7 @@
 // release of x.y.0. The VXL-maintainers do not usually distinguish between bug fixes
 // and feature improvements, so the fix for most known bugs will first be released
 // in x.(y+1).0
-#define VXL_VERSION_PATCH 0
+#define VXL_VERSION_PATCH 1
 
 //: Version date.  This is updated every day.
 // Formats are year=CCYY, month=MM, day=DD
