@@ -20,9 +20,7 @@ static void test_math_value_range()
     {
       int val = j*ni + i +1; // NB Ensure that data values not already sorted!
       img(i,j) = val;
-#ifndef NDEBUG
-      vcl_cout << val << "\n";
-#endif
+//       vcl_cout << val << "\n";
     }
   }
 
