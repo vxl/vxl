@@ -10,6 +10,12 @@ void test_log()
   vcl_cout << "*****************\n"
            << " Testing mbl_log\n"
            << "*****************\n";
+  {
+    mbl_logger foo("foo");
+    MBL_LOG(WARN, foo, "This is a simple test with no logger system initialisation");
+  }
+
+
   vcl_ostringstream output;
 
 
