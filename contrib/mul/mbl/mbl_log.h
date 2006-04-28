@@ -280,13 +280,15 @@ class mbl_logger_root
   // The known stream names are "vcl_cout" and "vcl_cerr", and additional
   // names can be provided through \p stream_names.
   //\verbatim
-  // root: { level: INFO registered_stream_output: test }
-  // obj3: { level: INFO stream_output: cout }\n
+  // root: { level: INFO stream_output: test }
+  // obj3: { level: INFO stream_output: vcl_cout }\n
+  // obj3.obj6: { level: INFO file_output: results.txt }\n
   //\endverbatim
   // where LEVEL is an integer - setting the logging level.
   // see mbl_logger:levels for useful values.
   void load_log_config_file(const stream_names_t &stream_names = stream_names_t());
   //: Force all loggers to update themselves in light of changes to the root and configuration.
+  // This is already called automatically by load_log_config_file().
   void update_all_loggers();
 };
 

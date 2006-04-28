@@ -367,39 +367,33 @@ void mbl_logger_root::load_log_config_file(
     config_file.open("~/.mbl_log.properties");
   if (!config_file.is_open())
   {
-    vcl_string home1("${HOMESHARE}/mbl_log.properties");
-    vcl_string home2("${HOMEDRIVE}${HOMEDIR}/mbl_log.properties");
-    vcl_string home3("${HOME}/mbl_log.properties");
-    vcl_string home4("${HOME}/.mbl_log.properties");
+    vcl_string home1("${HOME}/mbl_log.properties");
+    vcl_string home2("${HOME}/.mbl_log.properties");
+    vcl_string home3("${HOMESHARE}/mbl_log.properties");
+    vcl_string home4("${HOMEDRIVE}${HOMEDIR}/mbl_log.properties");
+    vcl_string home5("${USERPROFILE}/mbl_log.properties");
     if (vul_string_expand_var(home1))
       config_file.open(home1.c_str());
-    else if (vul_string_expand_var(home2))
+    if (!config_file.is_open() && vul_string_expand_var(home2))
       config_file.open(home2.c_str());
-    else if (vul_string_expand_var(home3))
+    if (!config_file.is_open() && vul_string_expand_var(home3))
       config_file.open(home3.c_str());
-    else if (vul_string_expand_var(home4))
+    if (!config_file.is_open() && vul_string_expand_var(home4))
       config_file.open(home4.c_str());
+    if (!config_file.is_open() && vul_string_expand_var(home5))
+      config_file.open(home5.c_str());
   }
   if (!config_file.is_open())
     config_file.open("C:\\mbl_log.properties");
 
   if (!config_file.is_open())
+  {
+    vcl_cerr << "WARNING: No mbl_log.properties file found." << vcl_endl;
     return;
+  }
 
-  config_file >> vcl_ws;
-  char a;
-  config_file >> a;
-  config_file.putback(a);
-  if (vcl_isdigit(a))
-  {
-    int level;
-    config_file >> level;
-    default_logger.set(level, default_logger.output_);
-  }
-  else
-  {
-    categories_.config(config_file, stream_names);
-  }
+  config_file.clear(); // May have been set to fail on failed open.
+  categories_.config(config_file, stream_names);
   update_all_loggers();
 }
 
@@ -414,8 +408,13 @@ void mbl_logger_root::update_all_loggers()
 
 mbl_log_categories::mbl_log_categories()
 {
-  cat_spec defult_spec; defult_spec.level = mbl_logger::NOTICE;
-  cat_list_[""] = defult_spec;
+  cat_spec default_spec;
+  default_spec.level = mbl_logger::NOTICE;
+  default_spec.output = cat_spec::NAMED_STREAM;
+  default_spec.name = "vcl_cerr";
+  default_spec.stream = &vcl_cerr;
+
+  cat_list_[""] = default_spec;
 }
 
 typedef vcl_map<vcl_string, vcl_ostream*> stream_names_t;
