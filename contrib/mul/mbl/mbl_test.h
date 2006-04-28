@@ -9,6 +9,7 @@
 
 #include <vcl_sstream.h>
 #include <vcl_string.h>
+#include <vcl_iostream.h>
 
 //: Test if the summaries of two objects are the same.
 // Both objects \a a and \a b must be the same class, and have
@@ -41,14 +42,21 @@ bool mbl_test_summaries_are_equal(const S &a, const S &b, const char **exception
     vcl_getline(ssa, sa);
     vcl_getline(ssb, sb);
     if (sa != sb && exceptions == 0)
+    {
+      vcl_cerr << "Found differences:\n>"<<sa<<"\n<"<<sb<<vcl_endl;
       return false;
+    }
     else if (sa != sb)
     {
       bool exception_found = false;
       for (const char **it = exceptions; *it!=0; ++it)
         if (sa.find(*it)!=vcl_string::npos && sb.find(*it)!=vcl_string::npos)
           exception_found = true;
-      if (!exception_found) return false;
+      if (!exception_found)
+      {
+        vcl_cerr << "Found differences:\n>"<<sa<<"\n<"<<sb<<vcl_endl;
+        return false;
+      }
     }
   }
   return true;
