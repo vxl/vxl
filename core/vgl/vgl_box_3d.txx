@@ -251,6 +251,18 @@ void vgl_box_3d<Type>::scale_about_centroid(double s)
 
 }
 
+//: Scale width, height and depth, keeping scaled position of origin unchanged.
+template <class Type>
+void vgl_box_3d<Type>::scale_about_origin(double s)
+{
+  min_pos_[0] = static_cast<Type>(min_pos_[0] * s);
+  min_pos_[1] = static_cast<Type>(min_pos_[1] * s);
+  min_pos_[2] = static_cast<Type>(min_pos_[2] * s);
+  max_pos_[0] = static_cast<Type>(max_pos_[0] * s);
+  max_pos_[1] = static_cast<Type>(max_pos_[1] * s);
+  max_pos_[2] = static_cast<Type>(max_pos_[2] * s);
+}
+
 
 template <class Type>
 void vgl_box_3d<Type>::set_min_position(Type const min_position[3])

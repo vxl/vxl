@@ -205,6 +205,8 @@ class vgl_box_2d
 
   //: Scale width and height, centroid unchanged.
   void scale_about_centroid(double s);
+  //: Scale width and height, keeping scaled position of origin unchanged.
+  void scale_about_origin(double s);
 
   //: Modify bottom left. Top right only changed if necessary to avoid empty box
   void setmin_position(Type const min_position[2]);

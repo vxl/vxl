@@ -224,6 +224,16 @@ void vgl_box_2d<Type>::scale_about_centroid(double s)
 }
 
 
+//: Scale width and height, keeping scaled position of origin unchanged.
+template <class Type>
+void vgl_box_2d<Type>::scale_about_origin(double s)
+{
+  min_pos_[0] = static_cast<Type>(min_pos_[0] * s);
+  min_pos_[1] = static_cast<Type>(min_pos_[1] * s);
+  max_pos_[0] = static_cast<Type>(max_pos_[0] * s);
+  max_pos_[1] = static_cast<Type>(max_pos_[1] * s);
+}
+
 template <class Type>
 void vgl_box_2d<Type>::setmin_position(Type const min_position[2])
 {
