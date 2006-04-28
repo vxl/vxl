@@ -71,27 +71,34 @@ inline void vil_math_value_range(const vil_image_view<vil_rgb<float> >& rgb_view
 }
 
 
-//: Compute value corresponding to a percentile of the range of im.
-// Percentiles expressed as fraction, e.g. 0.05, or 0.95.
+//: Compute the values corresponding to several percentiles of the range of im.
+// Percentiles are expressed as fraction, e.g. 0.05, or 0.95.
 // \param im The image to examine.
-// \param fraction The fraction of the data range (from the lower end).
-// \retval value The image data value corresponding to the specified percentile.
+// \param fraction The fractions of the data range (from the lower end).
+// \retval value The image data values corresponding to the specified percentiles.
 // \relates vil_image_view
 // \note This function requires the sorting of large parts of the image data
 // and can be very expensive in terms of both processing and memory.
 template <class T>
-inline void vil_math_value_range_percentile(const vil_image_view<T>& im,
-                                            const double fraction,
-                                            T& value)
+inline void vil_math_value_range_percentiles(const vil_image_view<T>& im,
+                                             const vcl_vector<double>& fraction,
+                                             vcl_vector<T>& value)
 {
+  value.clear();
+
   // Test for invalid inputs
-  if (im.size()==0 || fraction<0.0 || fraction>=1.0)
+  if (im.size()==0)
   {
-    value = 0;
     return;
   }
+  const unsigned nfrac = fraction.size();
+  for (unsigned f=0; f<nfrac; ++f)
+  {
+    if (fraction[f]<0.0 || fraction[f]>1.0)
+      return;
+  }
   
-  // Accumulate the pixel values into a list.
+  // Copy the pixel values into a list.
   unsigned ni = im.ni();
   unsigned nj = im.nj();
   unsigned np = im.nplanes();
@@ -115,13 +122,38 @@ inline void vil_math_value_range_percentile(const vil_image_view<T>& im,
       }
     }
   }
-  unsigned npix = data.size();
+  const unsigned npix = data.size();
   
-  // Get the nth_element corresponding to the specified fraction
-  int index = int (fraction*npix - 0.5);
-  typename vcl_vector<T>::iterator index_it = data.begin() + index;
-  vcl_nth_element(data.begin(), index_it, data.end());
-  value = *index_it;
+  // Get the nth_element corresponding to the specified fractions
+  value.resize(nfrac);
+  for (unsigned f=0; f<nfrac; ++f)
+  {
+    unsigned index = static_cast<unsigned>(fraction[f]*npix - 0.5);
+    typename vcl_vector<T>::iterator index_it = data.begin() + index;
+    vcl_nth_element(data.begin(), index_it, data.end());
+    value[f] = *index_it;
+  }
+}
+
+
+//: Compute the value corresponding to a percentile of the range of im.
+// Percentile is expressed as fraction, e.g. 0.05, or 0.95.
+// \param im The image to examine.
+// \param fraction The fraction of the data range (from the lower end).
+// \retval value The image data value corresponding to the specified percentile.
+// \relates vil_image_view
+// \note This function requires the sorting of large parts of the image data
+// and can be very expensive in terms of both processing and memory.
+template <class T>
+inline void vil_math_value_range_percentile(const vil_image_view<T>& im,
+                                            const double fraction,
+                                            T& value)
+{
+  vcl_vector<double> fractions(1, fraction);
+  vcl_vector<T> values;
+  vil_math_value_range_percentiles(im, fractions, values);
+  if (values.size() > 0)
+    value = values[0]; // Bounds-checked access in case previous line failed.
 }
 
 

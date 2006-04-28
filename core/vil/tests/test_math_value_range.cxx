@@ -18,9 +18,11 @@ static void test_math_value_range()
   {
     for (unsigned j=0; j<nj; ++j)
     {
-      int val = j*ni + i +1; // NB Data values not already sorted!
+      int val = j*ni + i +1; // NB Ensure that data values not already sorted!
       img(i,j) = val;
+#ifndef NDEBUG
       vcl_cout << val << "\n";
+#endif
     }
   }
 
@@ -50,6 +52,31 @@ static void test_math_value_range()
   TEST("vil_math_value_range_percentile(): 31 %", val==31, true);
   vil_math_value_range_percentile(img, 0.73, val);
   TEST("vil_math_value_range_percentile(): 73 %", val==73, true);  
+  
+  // Test several percentiles at once
+  unsigned int nfrac = 9;
+  vcl_vector<double> fraction(nfrac);
+  vcl_vector<double> true_value(nfrac);
+  fraction[0] = 0.00;  true_value[0] =   1;
+  fraction[1] = 0.05;  true_value[1] =   5;
+  fraction[2] = 0.10;  true_value[2] =  10;
+  fraction[3] = 0.31;  true_value[3] =  31;
+  fraction[4] = 0.50;  true_value[4] =  50;
+  fraction[5] = 0.73;  true_value[5] =  73;
+  fraction[6] = 0.90;  true_value[6] =  90;
+  fraction[7] = 0.95;  true_value[7] =  95;
+  fraction[8] = 1.00;  true_value[8] = 100;
+  vcl_vector<int> value;
+  vil_math_value_range_percentiles(img, fraction, value);
+  bool all_correct = true;
+  for (unsigned f=0; f<nfrac; ++f)
+  {
+    if (value[f] != true_value[f])
+    {
+      all_correct = false;
+    }
+  }
+  TEST("vil_math_value_range_percentiles(): all correct", all_correct, true);  
 }
 
 
