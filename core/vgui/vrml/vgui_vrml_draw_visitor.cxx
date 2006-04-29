@@ -94,20 +94,23 @@ static vgui_vrml_texture_map* gettexture(char const* filename)
 #endif // 0
 
 
-vgui_vrml_draw_visitor::vgui_vrml_draw_visitor() {
+vgui_vrml_draw_visitor::vgui_vrml_draw_visitor()
+{
   gl_mode = textured;
   quadric = gluNewQuadric();
   twosided = true;
   remake_texture = true;
 }
 
-vgui_vrml_draw_visitor::~vgui_vrml_draw_visitor() {
+vgui_vrml_draw_visitor::~vgui_vrml_draw_visitor()
+{
   gluDeleteQuadric(quadric);
 }
 
 // GROUPS
 
-bool vgui_vrml_draw_visitor::Visit(QvSeparator* node) {
+bool vgui_vrml_draw_visitor::Visit(QvSeparator* node)
+{
   // Mask Bit                 Attribute Group
   // GL_ACCUM_BUFFER_BIT      accum-buffer
   // GL_ALL_ATTRIB_BITS       ---
@@ -138,7 +141,8 @@ bool vgui_vrml_draw_visitor::Visit(QvSeparator* node) {
   return true;
 }
 
-bool vgui_vrml_draw_visitor::Visit(QvTransformSeparator* node) {
+bool vgui_vrml_draw_visitor::Visit(QvTransformSeparator* node)
+{
   glPushMatrix();
   QvVisitor::Visit(node);
   glPopMatrix();
@@ -147,7 +151,8 @@ bool vgui_vrml_draw_visitor::Visit(QvTransformSeparator* node) {
 
 #define QUADRIC_COMPLEXITY 24
 
-bool vgui_vrml_draw_visitor::Visit(QvShapeHints* /*node*/) {
+bool vgui_vrml_draw_visitor::Visit(QvShapeHints* /*node*/)
+{
   if (gl_mode == wireframe)
     return false;
   return true;
@@ -155,8 +160,8 @@ bool vgui_vrml_draw_visitor::Visit(QvShapeHints* /*node*/) {
 
 
 // GEOMETRY
-bool vgui_vrml_draw_visitor::Visit(QvCube* node) {
-
+bool vgui_vrml_draw_visitor::Visit(QvCube* node)
+{
   // cube has width height depth
 
   static GLfloat normals[6][3] = {
@@ -205,7 +210,8 @@ bool vgui_vrml_draw_visitor::Visit(QvCube* node) {
 }
 
 
-bool vgui_vrml_draw_visitor::Visit(QvSphere* node) {
+bool vgui_vrml_draw_visitor::Visit(QvSphere* node)
+{
   float r = node->radius.value;
 
   // gluQuadricDrawStyle GLU_LINE GLU_FILL GLU_POINT GLU_SILHOUETTE
@@ -218,7 +224,8 @@ bool vgui_vrml_draw_visitor::Visit(QvSphere* node) {
   return true;
 }
 
-bool vgui_vrml_draw_visitor::Visit(QvCylinder* node) {
+bool vgui_vrml_draw_visitor::Visit(QvCylinder* node)
+{
   float r = node->radius.value;
   float h = node->height.value;
   int parts = (int)node->parts.value;
@@ -255,7 +262,8 @@ bool vgui_vrml_draw_visitor::Visit(QvCylinder* node) {
   return true;
 }
 
-bool vgui_vrml_draw_visitor::Visit(QvCone* node) {
+bool vgui_vrml_draw_visitor::Visit(QvCone* node)
+{
   float r = node->bottomRadius.value;
   float h = node->height.value;
   int parts = (int)node->parts.value;
@@ -282,7 +290,8 @@ bool vgui_vrml_draw_visitor::Visit(QvCone* node) {
   return true;
 }
 
-bool vgui_vrml_draw_visitor::Visit(QvPointSet* ps) {
+bool vgui_vrml_draw_visitor::Visit(QvPointSet* ps)
+{
   glPushAttrib(GL_CURRENT_BIT);
   glDisable(GL_TEXTURE_2D);
   glBegin(GL_POINTS);
@@ -297,7 +306,8 @@ bool vgui_vrml_draw_visitor::Visit(QvPointSet* ps) {
   return true;
 }
 
-bool vgui_vrml_draw_visitor::Visit(QvIndexedLineSet* node) {
+bool vgui_vrml_draw_visitor::Visit(QvIndexedLineSet* node)
+{
   glPushAttrib(GL_CURRENT_BIT);
   glDisable(GL_TEXTURE_2D);
 
@@ -343,7 +353,8 @@ bool vgui_vrml_draw_visitor::Visit(QvIndexedFaceSet* node)
   vcl_vector<point3D const*> polyverts;
   vcl_vector<point2D const*> polytexcoords;
   //int i = 0;
-  for (int i = 0; i < numvertinds; ++i) {
+  for (int i = 0; i < numvertinds; ++i)
+  {
     // Collect verts
     polyverts.clear();
     polytexcoords.clear();
@@ -401,21 +412,25 @@ bool vgui_vrml_draw_visitor::Visit(QvIndexedFaceSet* node)
   return true;
 }
 
-bool vgui_vrml_draw_visitor::Visit(QvAsciiText* /*node*/) {
+bool vgui_vrml_draw_visitor::Visit(QvAsciiText* /*node*/)
+{
   return true;
 }
 
-static void GlRotate(double angle_rad, const float* axis) {
+static void GlRotate(double angle_rad, const float* axis)
+{
   static const double RAD2DEG = 180.0 / vnl_math::pi;
   glRotatef(angle_rad * RAD2DEG, axis[0], axis[1], axis[2]);
 }
 
-static void GlRotate(const QvSFRotation& r) {
+static void GlRotate(const QvSFRotation& r)
+{
   GlRotate(r.angle, r.axis);
 }
 
 // TRANSFORMS
-bool vgui_vrml_draw_visitor::Visit(QvTransform* node) {
+bool vgui_vrml_draw_visitor::Visit(QvTransform* node)
+{
   const vector3D* tran1 = (const vector3D*) node->translation.value;
   const vector3D* tran2 = (const vector3D*) node->center.value;
   const float* scale = node->scaleFactor.value;
@@ -433,7 +448,8 @@ bool vgui_vrml_draw_visitor::Visit(QvTransform* node) {
   return true;
 }
 
-bool vgui_vrml_draw_visitor::Visit(QvScale* node) {
+bool vgui_vrml_draw_visitor::Visit(QvScale* node)
+{
   const float* scale = node->scaleFactor.value;
   if (!scale[0] || !scale[1] || !scale[2])
     vcl_cerr << "Scale: scaling factors must all be non-zero\n";
@@ -441,12 +457,14 @@ bool vgui_vrml_draw_visitor::Visit(QvScale* node) {
   return true;
 }
 
-bool vgui_vrml_draw_visitor::Visit(QvRotation* node) {
+bool vgui_vrml_draw_visitor::Visit(QvRotation* node)
+{
   GlRotate(node->rotation);
   return true;
 }
 
-bool vgui_vrml_draw_visitor::Visit(QvTranslation* node) {
+bool vgui_vrml_draw_visitor::Visit(QvTranslation* node)
+{
   float* t = node->translation.value;
   glTranslatef(t[0], t[1], t[2]);
   return true;
@@ -470,7 +488,9 @@ bool vgui_vrml_draw_visitor::Visit(QvMaterial* node)
   glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, node->emissiveColor.values);
   glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, node->shininess.values[0]);
   float* c = node->emissiveColor.values;
-  // vcl_cerr << "rgba " << c[0] <<' '<< c[1] <<' '<< c[2] <<' '<< node->transparency.values[0] << '\n';
+#ifdef DEBUG
+  vcl_cerr << "rgba " << c[0] <<' '<< c[1] <<' '<< c[2] <<' '<< node->transparency.values[0] << '\n';
+#endif
   glColor4f(c[0], c[1], c[2], node->transparency.values[0]);
   return true;
 }

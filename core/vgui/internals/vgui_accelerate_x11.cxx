@@ -101,7 +101,8 @@ vgui_accelerate_x11::~vgui_accelerate_x11()
 
 bool vgui_accelerate_x11::vgui_glClear( GLbitfield mask )
 {
-  if (!vgui_no_acceleration) {
+  if (!vgui_no_acceleration)
+  {
 #if defined(VGUI_MESA) && defined(HAS_HERMES)
     GLint render_mode;
     GLboolean rgba_mode;
@@ -109,9 +110,10 @@ bool vgui_accelerate_x11::vgui_glClear( GLbitfield mask )
     glGetIntegerv (GL_RENDER_MODE, &render_mode);
     glGetBooleanv (GL_RGBA_MODE, &rgba_mode);
     glGetIntegerv (GL_DRAW_BUFFER, &draw_buffer);
-    if (render_mode == GL_RENDER && (draw_buffer == GL_BACK || draw_buffer == GL_BACK_LEFT) && rgba_mode == GL_TRUE) {
-      if (mask & GL_COLOR_BUFFER_BIT) {
-
+    if (render_mode == GL_RENDER && (draw_buffer == GL_BACK || draw_buffer == GL_BACK_LEFT) && rgba_mode == GL_TRUE)
+    {
+      if (mask & GL_COLOR_BUFFER_BIT)
+      {
         Pixmap p_dummy;
         XImage* backbuffer;
         XMesaBuffer mesabuf = XMesaGetCurrentBuffer();
@@ -166,7 +168,8 @@ bool vgui_accelerate_x11::vgui_glDrawPixels( GLsizei width, GLsizei height,
                                              GLenum format, GLenum type,
                                              const GLvoid *pixels )
 {
-  if (!vgui_no_acceleration) {
+  if (!vgui_no_acceleration)
+  {
 #if defined(VGUI_MESA) && defined(HAS_HERMES)
     GLint render_mode;
     GLboolean rgba_mode;
@@ -184,7 +187,8 @@ bool vgui_accelerate_x11::vgui_glDrawPixels( GLsizei width, GLsizei height,
     glGetFloatv (GL_ZOOM_X, &pixel_zoom_x);
     glGetFloatv (GL_ZOOM_Y, &pixel_zoom_y);
     if (render_mode == GL_RENDER && (draw_buffer == GL_BACK || draw_buffer == GL_BACK_LEFT) && rgba_mode == GL_TRUE &&
-        !depth_test_enabled && pixel_zoom_x > 0 && pixel_zoom_y < 0) {
+        !depth_test_enabled && pixel_zoom_x > 0 && pixel_zoom_y < 0)
+    {
       // See if there is a Hermes renderer for the specified GL format
       bool found_match = false;
       int format_index;
@@ -194,7 +198,8 @@ bool vgui_accelerate_x11::vgui_glDrawPixels( GLsizei width, GLsizei height,
           format_index = i;
         }
       }
-      if (found_match) {
+      if (found_match)
+      {
         HermesFormat* src_format =
              Hermes_FormatNew(gl_to_hermes_formats[format_index].bits_per_pixel,
                               gl_to_hermes_formats[format_index].red_mask,
@@ -367,7 +372,8 @@ bool vgui_accelerate_x11::vgui_glDrawPixels( GLsizei width, GLsizei height,
 // file.
 bool vgui_accelerate_x11::vgui_choose_cache_format(GLenum* format, GLenum* type)
 {
-  if (!vgui_no_acceleration) {
+  if (!vgui_no_acceleration)
+  {
 #if defined(VGUI_MESA) && defined(HAS_HERMES)
     // This function may be called before a valid GL context is in place, so we must get the
     // cache format from the current X display and assume that Mesa is going to create an XImage
@@ -414,7 +420,8 @@ bool vgui_accelerate_x11::vgui_choose_cache_format(GLenum* format, GLenum* type)
 
 bool vgui_accelerate_x11::vgui_copy_back_to_aux ()
 {
-  if (!vgui_no_acceleration) {
+  if (!vgui_no_acceleration)
+  {
 #if defined(VGUI_MESA)
     XMesaBuffer mesabuf = XMesaGetCurrentBuffer();
     assert(mesabuf != 0);   // There must be a valid GL context initialized before this call can be made
@@ -428,7 +435,9 @@ bool vgui_accelerate_x11::vgui_copy_back_to_aux ()
       XMesaGetBackBuffer(mesabuf, &p_dummy, &backbuffer);
       int blit_size = backbuffer->bytes_per_line * backbuffer->height;
       // resize the aux_buffer if necessary
-      //      vcl_cerr << blit_size << vcl_endl;
+#ifdef DEBUG
+      vcl_cerr << "blit_size = " << blit_size << '\n';
+#endif
       if (blit_size != aux_buffer_size) {
         delete[] aux_buffer;
         aux_buffer = new char[blit_size];

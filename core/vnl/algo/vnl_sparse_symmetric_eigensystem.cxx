@@ -139,53 +139,42 @@ int vnl_sparse_symmetric_eigensystem::CalculateNPairs(vnl_sparse_matrix<double>&
           &work[0],
           &ind[0],
           &ierr);
-  if (ierr > 0) {
-    if (ierr & 0x1) {
+  if (ierr > 0)
+  {
+    if (ierr & 0x1)
       vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: N < 6*NBLOCK\n";
-    }
-    if (ierr & 0x2) {
+    if (ierr & 0x2)
       vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: NFIG < 0\n";
-    }
-    if (ierr & 0x4) {
+    if (ierr & 0x4)
       vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: NMVEC < N\n";
-    }
-    if (ierr & 0x8) {
+    if (ierr & 0x8)
       vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: NPERM < 0\n";
-    }
-    if (ierr & 0x10) {
+    if (ierr & 0x10)
       vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: MAXJ < 6*NBLOCK\n";
-    }
-    if (ierr & 0x20) {
+    if (ierr & 0x20)
       vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: NVAL < max(1,NPERM)\n";
-    }
-    if (ierr & 0x40) {
+    if (ierr & 0x40)
       vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: NVAL > NMVAL\n";
-    }
-    if (ierr & 0x80) {
+    if (ierr & 0x80)
       vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: NVAL > MAXOP\n";
-    }
-    if (ierr & 0x100) {
+    if (ierr & 0x100)
       vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: NVAL > MAXJ/2\n";
-    }
-    if (ierr & 0x200) {
+    if (ierr & 0x200)
       vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem: NBLOCK < 1\n";
-    }
   }
-  else if (ierr < 0) {
-    if (ierr == -1) {
+  else if (ierr < 0)
+  {
+    if (ierr == -1)
       vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem:\n"
                << "  poor initial vectors chosen\n";
-    }
-    else if (ierr == -2) {
+    else if (ierr == -2)
       vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem:\n"
                << "  reached maximum operations " << maxop
                << " without finding all eigenvalues,\n"
                << "  found " << nperm << " eigenvalues\n";
-    }
-    else if (ierr == -8) {
+    else if (ierr == -8)
       vcl_cerr << "Error: vnl_sparse_symmetric_eigensystem:\n"
                << "  disastrous loss of orthogonality - internal error\n";
-    }
   }
 
   // Copy the eigenvalues and vectors.
@@ -240,7 +229,9 @@ int vnl_sparse_symmetric_eigensystem::SaveVectors(int n, int m,
 
   double* temp = new double[n*m];
   vcl_memcpy(temp,q,n*m*sizeof(double));
-  //  vcl_cout << "Save vectors " << base << " " << temp << vcl_endl;
+#ifdef DEBUG
+    vcl_cout << "Save vectors " << base << ' ' << temp << '\n';
+#endif
 
   temp_store.push_back(temp);
 
@@ -261,7 +252,9 @@ int vnl_sparse_symmetric_eigensystem::RestoreVectors(int n, int m,
 
   double* temp = temp_store[read_idx];
   vcl_memcpy(q,temp,n*m*sizeof(double));
-  //  vcl_cout << "Restore vectors " << base << " " << temp << vcl_endl;
+#ifdef DEBUG
+    vcl_cout << "Restore vectors " << base << ' ' << temp << '\n';
+#endif
 
   read_idx++;
   return 0;

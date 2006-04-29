@@ -27,7 +27,8 @@
 #include <vil/vil_new.h>
 
 //: the file probe, as a C function.
-bool vil_jpeg_file_probe(vil_stream *vs) {
+bool vil_jpeg_file_probe(vil_stream *vs)
+{
   char magic[2];
   vs->seek(0L);
   vil_streampos n = vs->read(magic, sizeof(magic));
@@ -47,12 +48,14 @@ static char const jpeg_string[] = "jpeg";
 //--------------------------------------------------------------------------------
 // class vil_jpeg_file_format
 
-char const* vil_jpeg_file_format::tag() const {
+char const* vil_jpeg_file_format::tag() const
+{
   return jpeg_string;
 }
 
 //:
-vil_image_resource_sptr  vil_jpeg_file_format::make_input_image(vil_stream *vs) {
+vil_image_resource_sptr  vil_jpeg_file_format::make_input_image(vil_stream *vs)
+{
   return vil_jpeg_file_probe(vs) ? new vil_jpeg_image(vs) : 0;
 }
 
@@ -107,12 +110,15 @@ vil_jpeg_image::vil_jpeg_image(vil_stream *s,
   // store size
   jc->jobj.image_width = nx;
   jc->jobj.image_height = ny;
-  //vcl_cerr << "w h = " << jobj.image_width << ' ' << jobj.image_height << vcl_endl;
+#ifdef DEBUG
+  vcl_cerr << "w h = " << nx << ' ' << ny << '\n';
+#endif
 
   assert(format == VIL_PIXEL_FORMAT_BYTE); // FIXME.
 }
 
-vil_jpeg_image::~vil_jpeg_image() {
+vil_jpeg_image::~vil_jpeg_image()
+{
   // FIXME: I suspect there's a core leak here because jpeg_destroy() does not
   // free the vil_jpeg_stream_source_mgr allocated in vil_jpeg_stream_xxx_set()
   if (jd)
@@ -131,12 +137,15 @@ vil_jpeg_image::~vil_jpeg_image() {
 vil_image_view_base_sptr vil_jpeg_image::get_copy_view(unsigned x0,
                                                        unsigned nx,
                                                        unsigned y0,
-                                                       unsigned ny) const {
+                                                       unsigned ny) const
+{
   if (!jd) {
     vcl_cerr << "attempted get_copy_view() failed -- no jpeg decompressor\n";
     return 0;
   }
-  //vcl_cerr << "get_copy_view " << ' ' << x0 << ' ' << nx << ' ' << y0 << ' ' << ny << vcl_endl;
+#ifdef DEBUG
+  vcl_cerr << "get_copy_view " << ' ' << x0 << ' ' << nx << ' ' << y0 << ' ' << ny << '\n';
+#endif
 
   // number of bytes per pixel
   unsigned bpp = jd->jobj.output_components;
@@ -221,31 +230,36 @@ bool vil_jpeg_image::put_view(const vil_image_view_base &view,
 //--------------------------------------------------------------------------------
 
 
-unsigned vil_jpeg_image::ni() const {
+unsigned vil_jpeg_image::ni() const
+{
   if (jd) return jd->jobj.output_width;
   if (jc) return jc->jobj.image_width;
   return 0;
 }
 
-unsigned vil_jpeg_image::nj() const {
+unsigned vil_jpeg_image::nj() const
+{
   if (jd) return jd->jobj.output_height;
   if (jc) return jc->jobj.image_height;
   return 0;
 }
 
-unsigned vil_jpeg_image::nplanes() const {
+unsigned vil_jpeg_image::nplanes() const
+{
   if (jd) return jd->jobj.output_components;
   if (jc) return jc->jobj.input_components;
   return 0;
 }
 
 
-vil_pixel_format vil_jpeg_image::pixel_format() const {
+vil_pixel_format vil_jpeg_image::pixel_format() const
+{
   return VIL_PIXEL_FORMAT_BYTE;
 }
 
 
-char const *vil_jpeg_image::file_format() const {
+char const *vil_jpeg_image::file_format() const
+{
   return jpeg_string;
 }
 

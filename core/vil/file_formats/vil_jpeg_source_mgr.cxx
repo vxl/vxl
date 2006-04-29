@@ -39,9 +39,11 @@ STATIC
 void
 vil_jpeg_init_source (j_decompress_ptr cinfo)
 {
-  //vcl_cerr << "vil_jpeg_init_source()\n";
-
   vil_jpeg_srcptr src = ( vil_jpeg_srcptr )( cinfo->src );
+
+#ifdef DEBUG
+  vcl_cerr << "vil_jpeg_init_source() " << src << '\n';
+#endif
 
   // We reset the empty-input-file flag for each image,
   // but we don't clear the input buffer.
@@ -166,7 +168,9 @@ vil_jpeg_stream_src_set (j_decompress_ptr cinfo, vil_stream *vs)
 
   assert(! src); // this function must be called only once on each cinfo.
 
-  //vcl_cerr << "vil_jpeg_stream_src() : creating new data source\n";
+#ifdef DEBUG
+  vcl_cerr << "vil_jpeg_stream_src_set() : creating new data source\n";
+#endif
 
   src = (vil_jpeg_srcptr) // allocate
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo,

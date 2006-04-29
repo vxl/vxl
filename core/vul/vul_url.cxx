@@ -214,7 +214,9 @@ vcl_istream * vul_http_open(char const *url)
     while ((n = ::read(tcp_socket, buffer, sizeof buffer)) > 0) {
 #endif
       contents.append(buffer, n);
-      //vcl_cerr << n << " bytes\n";
+#ifdef DEBUG
+      vcl_cerr << n << " bytes\n";
+#endif
     }
   }
 

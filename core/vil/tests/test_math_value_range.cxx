@@ -7,9 +7,9 @@
 
 static void test_math_value_range()
 {
-  vcl_cout << "********************************\n"
-           << " Testing vil_math_value_range \n"
-           << "********************************\n";
+  vcl_cout << "******************************\n"
+           << " Testing vil_math_value_range\n"
+           << "******************************\n";
 
   // Create a test image with values 1...100
   unsigned ni=10, nj=10;
@@ -20,12 +20,17 @@ static void test_math_value_range()
     {
       int val = j*ni + i +1; // NB Ensure that data values not already sorted!
       img(i,j) = val;
-//       vcl_cout << val << "\n";
+#ifdef DEBUG
+      vcl_cout << val << ' ';
+#endif
     }
+#ifdef DEBUG
+    vcl_cout << val << '\n';
+#endif
   }
 
   // Check the min/max values
-  int min; 
+  int min;
   int max;
   vil_math_value_range(img, min, max);
   TEST("vil_math_value_range(): min", min==1, true);
@@ -37,20 +42,20 @@ static void test_math_value_range()
   vil_math_value_range_percentile(img, 0.05, val);
   TEST("vil_math_value_range_percentile():  5 %", val==5, true);
   vil_math_value_range_percentile(img, 0.95, val);
-  TEST("vil_math_value_range_percentile(): 95 %", val==95, true);  
+  TEST("vil_math_value_range_percentile(): 95 %", val==95, true);
 
   // Test a likely pair of percentiles
   vil_math_value_range_percentile(img, 0.10, val);
   TEST("vil_math_value_range_percentile(): 10 %", val==10, true);
   vil_math_value_range_percentile(img, 0.90, val);
-  TEST("vil_math_value_range_percentile(): 90 %", val==90, true);  
-  
+  TEST("vil_math_value_range_percentile(): 90 %", val==90, true);
+
   // Test an unlikely pair of percentiles
   vil_math_value_range_percentile(img, 0.31, val);
   TEST("vil_math_value_range_percentile(): 31 %", val==31, true);
   vil_math_value_range_percentile(img, 0.73, val);
-  TEST("vil_math_value_range_percentile(): 73 %", val==73, true);  
-  
+  TEST("vil_math_value_range_percentile(): 73 %", val==73, true);
+
   // Test several percentiles at once
   unsigned int nfrac = 9;
   vcl_vector<double> fraction(nfrac);
@@ -74,8 +79,7 @@ static void test_math_value_range()
       all_correct = false;
     }
   }
-  TEST("vil_math_value_range_percentiles(): all correct", all_correct, true);  
+  TEST("vil_math_value_range_percentiles(): all correct", all_correct, true);
 }
-
 
 TESTMAIN(test_math_value_range);

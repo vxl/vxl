@@ -27,9 +27,11 @@ class XXX : public vnl_least_squares_function
     , N(z1_.size())
     , z1(z1_) , z2(z2_)
     {
+#ifdef DEBUG
+      vcl_cerr << "N=" << N << '\n';
+#endif
       assert(N == z1.size());
       assert(N == z2.size());
-      //      vcl_cerr << "N=" << N << vcl_endl;
     }
   ~XXX() { N=0; }
 
@@ -101,7 +103,7 @@ compute_cool_homg(const vcl_vector<vgl_homg_point_1d<double> >&p1,
   vgl_h_matrix_1d_compute_linear C;
   C.compute(p1,p2,M);
 
-  // map the points in p1 under M so that we are 
+  // map the points in p1 under M so that we are
   // looking for a correction near the identity :
   for (unsigned i=0;i<N;i++) {
     vgl_homg_point_1d<double>  v = M(p1[i]);

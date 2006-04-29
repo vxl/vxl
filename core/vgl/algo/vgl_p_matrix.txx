@@ -511,7 +511,9 @@ template <class T>
 bool vgl_p_matrix<T>::looks_conditioned()
 {
   double cond = svd()->W(0) / svd()->W(2);
-  // vcl_cerr << "vgl_p_matrix::looks_conditioned: cond = " << cond << vcl_endl;
+#ifdef DEBUG
+  vcl_cerr << "vgl_p_matrix::looks_conditioned: cond = " << cond << '\n';
+#endif
   return cond < 100;
 }
 

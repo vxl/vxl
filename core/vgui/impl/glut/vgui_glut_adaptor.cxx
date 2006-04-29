@@ -113,7 +113,6 @@ void vgui_glut_adaptor::post_redraw()
 
 void vgui_glut_adaptor::post_overlay_redraw()
 {
-  //vcl_cerr << "post_overlay_redraw\n";
   int old = glutGetWindow();
   glutSetWindow( id );
   establish_overlays();
@@ -213,19 +212,22 @@ bool vgui_glut_adaptor::glut_dispatch(vgui_event &e)
     }
 
     // overlay draw
-    else if (e.type == vgui_DRAW_OVERLAY) {
+    else if (e.type == vgui_DRAW_OVERLAY)
+    {
       //vgui_macro_warning << "hardware overlay redisplay\n";
       //glutUseLayer(GLenum(GLUT_OVERLAY));
 
       // set clear index or color :
       GLboolean is_index_mode;
       glGetBooleanv(GL_INDEX_MODE, &is_index_mode);
-      if (is_index_mode) {
+      if (is_index_mode)
+      {
         // color index mode
         int index = glutLayerGet(GLenum(GLUT_TRANSPARENT_INDEX));
         {
           static bool once=false;
-          if (!once) {
+          if (!once)
+          {
             GLint bits;
             glGetIntegerv(GL_INDEX_BITS, &bits);
             vcl_cerr << __FILE__ ": color index information:\n";
@@ -606,7 +608,9 @@ void vgui_glut_adaptor::make_popup()
     button = GLUT_RIGHT_BUTTON;
     break;
   }
-  //vcl_cerr << "button = " << button << vcl_endl;
+#ifdef DEBUG
+  vcl_cerr << "button = " << button << '\n';
+#endif
 
   // translate vgui modifiers to GLUT modifiers :
   int mods = 0;
@@ -616,7 +620,9 @@ void vgui_glut_adaptor::make_popup()
     mods |= GLUT_ACTIVE_SHIFT;
   if (popup_modifier & vgui_ALT)
     mods |= GLUT_ACTIVE_ALT;
-  //vcl_cerr << "mods = " << mods << vcl_endl;
+#ifdef DEBUG
+  vcl_cerr << "mods = " << mods << '\n';
+#endif
 
   // bind buttons and set the menu_hack callback.
   vgui_glut_menu_hack::bind(button, mods, popup->menu_id);

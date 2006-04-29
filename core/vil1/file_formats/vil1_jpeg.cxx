@@ -23,7 +23,8 @@
 #include <vil1/vil1_property.h>
 
 //: the file probe, as a C function.
-bool vil1_jpeg_file_probe(vil1_stream *vs) {
+bool vil1_jpeg_file_probe(vil1_stream *vs)
+{
   char magic[2];
   vs->seek(0L);
   int n = vs->read(magic, sizeof(magic));
@@ -43,12 +44,14 @@ static char const jpeg_string[] = "jpeg";
 //--------------------------------------------------------------------------------
 // class vil1_jpeg_file_format
 
-char const* vil1_jpeg_file_format::tag() const {
+char const* vil1_jpeg_file_format::tag() const
+{
   return jpeg_string;
 }
 
 //:
-vil1_image_impl *vil1_jpeg_file_format::make_input_image(vil1_stream *vs) {
+vil1_image_impl *vil1_jpeg_file_format::make_input_image(vil1_stream *vs)
+{
   return vil1_jpeg_file_probe(vs) ? new vil1_jpeg_generic_image(vs) : 0;
 }
 
@@ -110,13 +113,16 @@ vil1_jpeg_generic_image::vil1_jpeg_generic_image(vil1_stream *s,
   // store size
   jc->jobj.image_width = width;
   jc->jobj.image_height = height;
-  //vcl_cerr << "w h = " << jobj.image_width << ' ' << jobj.image_height << vcl_endl;
+#ifdef DEBUG
+  vcl_cerr << "w h = " << width << ' ' << height << '\n';
+#endif
 
   assert(bits_per_component == CHAR_BIT); // FIXME.
   assert(format == VIL1_COMPONENT_FORMAT_UNSIGNED_INT); // FIXME
 }
 
-vil1_jpeg_generic_image::~vil1_jpeg_generic_image() {
+vil1_jpeg_generic_image::~vil1_jpeg_generic_image()
+{
   // FIXME: I suspect there's a core leak here because jpeg_destroy() does not
   // free the vil1_jpeg_stream_source_mgr allocated in vil1_jpeg_stream_xxx_set()
   if (jd)
@@ -132,12 +138,15 @@ vil1_jpeg_generic_image::~vil1_jpeg_generic_image() {
 //--------------------------------------------------------------------------------
 
 //: decompressing from the vil1_stream to a section buffer.
-bool vil1_jpeg_generic_image::get_section(void *buf, int x0, int y0, int w, int h) const {
+bool vil1_jpeg_generic_image::get_section(void *buf, int x0, int y0, int w, int h) const
+{
   if (!jd) {
     vcl_cerr << "attempted put_section() failed -- no jpeg decompressor\n";
     return false;
   }
-  //vcl_cerr << "get_section " << buf << ' ' << x0 << ' ' << y0 << ' ' << w << ' ' << h << vcl_endl;
+#ifdef DEBUG
+  vcl_cerr << "get_section " << buf << ' ' << x0 << ' ' << y0 << ' ' << w << ' ' << h << '\n';
+#endif
 
   // number of bytes per pixel
   unsigned bpp = jd->jobj.output_components;
@@ -156,7 +165,8 @@ bool vil1_jpeg_generic_image::get_section(void *buf, int x0, int y0, int w, int 
 //--------------------------------------------------------------------------------
 
 //: compressing a section onto the vil1_stream.
-bool vil1_jpeg_generic_image::put_section(void const *buf, int x0, int y0, int w, int h) {
+bool vil1_jpeg_generic_image::put_section(void const *buf, int x0, int y0, int w, int h)
+{
   if (!jc) {
     vcl_cerr << "attempted get_section() failed -- no jpeg compressor\n";
     return false;
@@ -190,49 +200,57 @@ bool vil1_jpeg_generic_image::put_section(void const *buf, int x0, int y0, int w
 //--------------------------------------------------------------------------------
 
 //:
-int vil1_jpeg_generic_image::planes() const {
+int vil1_jpeg_generic_image::planes() const
+{
   return 1;
 }
 
 //:
-int vil1_jpeg_generic_image::width() const {
+int vil1_jpeg_generic_image::width() const
+{
   if (jd) return jd->jobj.output_width;
   if (jc) return jc->jobj.image_width;
   return 0;
 }
 
 //:
-int vil1_jpeg_generic_image::height() const {
+int vil1_jpeg_generic_image::height() const
+{
   if (jd) return jd->jobj.output_height;
   if (jc) return jc->jobj.image_height;
   return 0;
 }
 
 //:
-int vil1_jpeg_generic_image::components() const {
+int vil1_jpeg_generic_image::components() const
+{
   if (jd) return jd->jobj.output_components;
   if (jc) return jc->jobj.input_components;
   return 0;
 }
 
 //:
-int vil1_jpeg_generic_image::bits_per_component() const {
+int vil1_jpeg_generic_image::bits_per_component() const
+{
   return CHAR_BIT;
 }
 
 //:
-vil1_component_format vil1_jpeg_generic_image::component_format() const {
+vil1_component_format vil1_jpeg_generic_image::component_format() const
+{
   return VIL1_COMPONENT_FORMAT_UNSIGNED_INT;
 }
 
 //: assume only one plane
-vil1_image vil1_jpeg_generic_image::get_plane(unsigned int p) const {
+vil1_image vil1_jpeg_generic_image::get_plane(unsigned int p) const
+{
   assert(p == 0);
   return const_cast<vil1_jpeg_generic_image*>( this );
 }
 
 //:
-char const *vil1_jpeg_generic_image::file_format() const {
+char const *vil1_jpeg_generic_image::file_format() const
+{
   return jpeg_string;
 }
 

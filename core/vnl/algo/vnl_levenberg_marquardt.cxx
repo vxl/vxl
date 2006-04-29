@@ -183,7 +183,9 @@ bool vnl_levenberg_marquardt::minimize_without_gradient(vnl_vector<double>& x)
   vnl_vector<double> wa3(n);
   vnl_vector<double> wa4(m);
 
-  //vcl_cerr << "STATUS: " << failure_code_ << vcl_endl;
+#ifdef DEBUG
+  vcl_cerr << "STATUS: " << failure_code_ << '\n';
+#endif
   vnl_levenberg_marquardt_Activate activator(this);
 
   double errors[2] = {0,0};
@@ -275,27 +277,27 @@ void vnl_levenberg_marquardt::lmder_lsqfun(int* n,     // I   Number of residual
     {
       active->check_derivatives_--;
 
-      // use finite difference to compute Jacobian 
+      // use finite difference to compute Jacobian
       vnl_vector<double> feval( *n );
       vnl_matrix<double> finite_jac( *p, *n, 0.0 );
       vnl_vector<double> wa1( *n );
       int info=1;
       double diff;
       f->f( ref_x, feval );
-      fdjac2_(lmdif_lsqfun, n, p, x, 
-              feval.data_block(), 
+      fdjac2_(lmdif_lsqfun, n, p, x,
+              feval.data_block(),
               finite_jac.data_block(),
-              n, 
+              n,
               &info,
               &(active->epsfcn),
               wa1.data_block());
       // compute difference
-      for( unsigned i=0; i<ref_fJ.cols(); ++i )
-        for( unsigned j=0; j<ref_fJ.rows(); ++j ) {
+      for ( unsigned i=0; i<ref_fJ.cols(); ++i )
+        for ( unsigned j=0; j<ref_fJ.rows(); ++j ) {
           diff = ref_fJ(j,i) - finite_jac(j,i);
           diff = diff*diff;
-          if( diff > active->epsfcn ) {
-            vcl_cerr << "Jac(" << i << ", " << j << ") diff: " << ref_fJ(j,i) << ' ' << finite_jac(j,i) << vcl_endl;
+          if ( diff > active->epsfcn ) {
+            vcl_cerr << "Jac(" << i << ", " << j << ") diff: " << ref_fJ(j,i) << ' ' << finite_jac(j,i) << '\n';
           }
         }
     }

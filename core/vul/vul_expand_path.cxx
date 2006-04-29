@@ -38,9 +38,11 @@ vcl_string vul_expand_path_internal(vcl_string path)
     }
 
     // process the bits
-    while (true) {
+    while (true)
+    {
       bool again = false;
-      for (unsigned int i=0; i<bits.size(); ++i) {
+      for (unsigned int i=0; i<bits.size(); ++i)
+      {
         // remove repeated /
         if (i+1<bits.size() && bits[i] == "/" && bits[i+1] == "/") {
           bits.erase(bits.begin() + i);
@@ -75,7 +77,9 @@ vcl_string vul_expand_path_internal(vcl_string path)
     path = "";
     for (unsigned int i=0; i<bits.size(); ++i)
       path += bits[i];
-    //vcl_cerr << "recomposed : " << path << vcl_endl;
+#ifdef DEBUG
+    vcl_cerr << "recomposed : " << path << '\n';
+#endif
   }
 
   // no more ideas
@@ -147,9 +151,11 @@ vcl_string vul_expand_path_internal(vcl_string path)
     }
 
     // process the bits
-    while (true) {
+    while (true)
+    {
       bool again = false;
-      for (unsigned int i=0; i<bits.size(); ++i) {
+      for (unsigned int i=0; i<bits.size(); ++i)
+      {
         // remove repeated /
         if (i+1<bits.size() && bits[i] == "/" && bits[i+1] == "/") {
           bits.erase(bits.begin() + i);
@@ -184,25 +190,32 @@ vcl_string vul_expand_path_internal(vcl_string path)
     path = "";
     for (unsigned int i=0; i<bits.size(); ++i)
       path += bits[i];
-    //vcl_cerr << "recomposed : " << path << vcl_endl;
+#ifdef DEBUG
+    vcl_cerr << "recomposed : " << path << '\n';
+#endif
   }
 
   // look for symbolic links to expand
-  for (unsigned int i=1; i<=path.size(); ++i) {
-    if (i==path.size() || path[i] == '/') {
+  for (unsigned int i=1; i<=path.size(); ++i)
+  {
+    if (i==path.size() || path[i] == '/')
+    {
       vcl_string sub(path.c_str(), path.c_str() + i);
       char buf[4096];
       int len = readlink(sub.c_str(), buf, sizeof buf);
-      if (len != -1) {
+      if (len != -1)
+      {
         // it's a symlink. we should expand it and recurse.
-        //vcl_cerr << "before expansion : " << path << vcl_endl;
-
+#ifdef DEBUG
+        vcl_cerr << "before expansion : " << path << '\n';
+#endif
         if (buf[0] == '/') {
           // the target of the link starts with '/' so must be an
           // absolute path : ...foo/bar/etc... => buf/etc...
           path = vcl_string(buf, buf+len) + vcl_string(path.c_str() + i);
         }
-        else {
+        else
+        {
           // the target is relative to the symlink's directory.
           int j=i-1;
           while (j>=0 && path[j] != '/')
@@ -212,7 +225,9 @@ vcl_string vul_expand_path_internal(vcl_string path)
             vcl_string a = vcl_string(path.c_str(), path.c_str()+j+1);
             vcl_string b = vcl_string(buf, buf+len);
             vcl_string c = vcl_string(path.c_str() + i, path.c_str() + path.size());
-          //vcl_cerr << "a = " << a << "\nb = " << b << "\nc = " << c << '\n';
+#ifdef DEBUG
+            vcl_cerr << "a = " << a << "\nb = " << b << "\nc = " << c << '\n';
+#endif
             path = a + b + c;
           }
           else {
@@ -221,8 +236,9 @@ vcl_string vul_expand_path_internal(vcl_string path)
           }
         }
 
-        //vcl_cerr << "after expansion : " << path << vcl_endl;
-
+#ifdef DEBUG
+        vcl_cerr << "after expansion : " << path << '\n';
+#endif
         return vul_expand_path_internal(path);
       }
     }

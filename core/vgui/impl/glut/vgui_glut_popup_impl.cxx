@@ -15,10 +15,14 @@
 
 vgui_glut_popup_impl::vgui_glut_popup_impl()
 {
-  //vcl_cerr << "popup_impl ctor\n";
+#ifdef DEBUG
+  vcl_cerr << "popup_impl ctor\n";
+#endif
   int old_id = glutGetMenu();
   menu_id = glutCreateMenu(command_func);
-  //vcl_cerr << "created menu_id = " << menu_id << vcl_endl;
+#ifdef DEBUG
+  vcl_cerr << "created menu_id = " << menu_id << '\n';
+#endif
 
   //vgui_macro_warning << "before\n";
   if (old_id)
@@ -29,13 +33,14 @@ vgui_glut_popup_impl::vgui_glut_popup_impl()
 
 void vgui_glut_popup_impl::clear()
 {
-  //vcl_cerr << "popup_impl::clear()\n";
   int old_id = glutGetMenu();
   glutSetMenu(menu_id);
 
   //
   unsigned n = glutGet(GLenum(GLUT_MENU_NUM_ITEMS));
-  //vcl_cerr << "removing " << n << " items in menu\n";
+#ifdef DEBUG
+  vcl_cerr << "removing " << n << " items in menu\n";
+#endif
   for (int i=n; i>=1; --i)
     glutRemoveMenuItem(i);
 
@@ -53,7 +58,9 @@ void vgui_glut_popup_impl::clear()
 
 vgui_glut_popup_impl::~vgui_glut_popup_impl()
 {
-  //vcl_cerr << "popup_impl dtor\n";
+#ifdef DEBUG
+  vcl_cerr << "popup_impl dtor\n";
+#endif
   clear();
   glutDestroyMenu( menu_id );
   menu_id = 0;
@@ -67,7 +74,9 @@ void vgui_glut_popup_impl::build(vgui_menu const &m)
   // given menu stay alive while the popup menu is active :
   tmp_menu = m;
 
-  //vcl_cerr << "popup_impl::build : m =\n" << m << vcl_endl;
+#ifdef DEBUG
+  vcl_cerr << "popup_impl::build : m =\n" << m << '\n';
+#endif
   this->build_internal(m);
 }
 

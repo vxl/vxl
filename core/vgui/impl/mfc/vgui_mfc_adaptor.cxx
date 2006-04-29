@@ -596,14 +596,15 @@ void vgui_mfc_adaptor::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 //: Handles mouse press/release events.
 void vgui_mfc_adaptor::domouse(vgui_event_type et, UINT nFlags, CPoint point, vgui_button b)
 {
-//vcl_cerr <<"vgui_mfc_adaptor::domouse: wo = "<< point.x<<", "<< point.y<<'\n';
+#ifdef DEBUG
+ /vcl_cerr <<"vgui_mfc_adaptor::domouse: wo = "<< point.x<<", "<< point.y<<'\n';
+#endif
   // awf: BLETCH. This offset is consistent over resize, depth, screen position, machines,
   // and I can't find it... Sorry.
   point.x += 2;
   point.y += 2;
   // FIXME
 
-  //come_out_now = true;
   vgui_event e(et);
 
   e.button = b;
@@ -692,7 +693,9 @@ void vgui_mfc_adaptor::OnMouseMove(UINT nFlags, CPoint point)
 //: Called by MFC when a user rotates a mouse wheel.
 BOOL vgui_mfc_adaptor::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
-  //vcl_cerr << "Mouse wheel events are not handled\n";
+#ifdef DEBUG
+  vcl_cerr << "Mouse wheel events are not handled\n";
+#endif
   return FALSE;
 }
 

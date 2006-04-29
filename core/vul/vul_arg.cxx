@@ -419,15 +419,23 @@ static int list_parse(vcl_list<int> &out, char ** argv)
       return 0; // failure
     }
 
+#ifdef DEBUG
     // this is the current token.
-//  vcl_string token = str.substr(start, endp);
-//  vcl_cerr << "token = " << token << vcl_endl;
+    vcl_string token = str.substr(start, endp);
+    vcl_cerr << "token = " << token << '\n';
+#endif
     vcl_string match1 = range_regexp.match(1);
-//  vcl_cerr << "match1 = " << match1 << vcl_endl;
+#ifdef DEBUG
+    vcl_cerr << "match1 = " << match1 << '\n';
+#endif
     vcl_string match2 = range_regexp.match(2);
-//  vcl_cerr << "match2 = " << match2 << vcl_endl;
+#ifdef DEBUG
+    vcl_cerr << "match2 = " << match2 << '\n';
+#endif
     vcl_string match3 = range_regexp.match(3);
-//  vcl_cerr << "match3 = " << match3 << vcl_endl;
+#ifdef DEBUG
+    vcl_cerr << "match3 = " << match3 << '\n';
+#endif
 
     // Remove this match from the front of string.
     str.erase(0, endp + 1);
@@ -452,7 +460,9 @@ static int list_parse(vcl_list<int> &out, char ** argv)
     else if (matched2)
       e = vul_string_atoi(match2.substr(1));
 
-    // vcl_cerr << "  " << s << ':' << d << ':' << e << vcl_endl;
+#ifdef DEBUG
+    vcl_cerr << "  " << s << ':' << d << ':' << e << '\n';
+#endif
     if (e >= s) {
       if (d < 0) {
         vcl_cerr << "WARNING: d < 0\n";
@@ -507,9 +517,9 @@ VDS void print_value(vcl_ostream  &s, vul_arg<int> const &argmt)
 
 VDS int parse(vul_arg<int>* argmt, char ** argv)
 {
-  if( !argv ||  !argv[0] ) {
+  if ( !argv ||  !argv[0] ) {
     // no input
-    vcl_cerr << "vul_arg_parse: Expected integer, none is provided." << vcl_endl;
+    vcl_cerr << "vul_arg_parse: Expected integer, none is provided.\n";
     return -1;
   }
 
@@ -538,9 +548,9 @@ VDS void print_value(vcl_ostream &s, vul_arg<unsigned> const &argmt)
 
 VDS int parse(vul_arg<unsigned>* argmt, char ** argv)
 {
-  if( !argv ||  !argv[0] ) {
+  if ( !argv ||  !argv[0] ) {
     // no input
-    vcl_cerr << "vul_arg_parse: Expected integer, none is provided." << vcl_endl;
+    vcl_cerr << "vul_arg_parse: Expected integer, none is provided.\n";
     return -1;
   }
 
@@ -569,9 +579,9 @@ VDS void print_value(vcl_ostream &s, vul_arg<float> const &argmt)
 
 VDS int parse(vul_arg<float>* argmt, char ** argv)
 {
-  if( !argv ||  !argv[0] ) {
+  if ( !argv ||  !argv[0] ) {
     // no input
-    vcl_cerr << "vul_arg_parse: Expected floating number, none is provided." << vcl_endl;
+    vcl_cerr << "vul_arg_parse: Expected floating number, none is provided.\n";
     return -1;
   }
 
@@ -594,9 +604,9 @@ VDS void print_value(vcl_ostream &s, vul_arg<double> const &argmt)
 
 VDS int parse(vul_arg<double>* argmt, char ** argv)
 {
-  if( !argv ||  !argv[0] ) {
+  if ( !argv ||  !argv[0] ) {
     // no input
-    vcl_cerr << "vul_arg_parse: Expected floating number, none is provided." << vcl_endl;
+    vcl_cerr << "vul_arg_parse: Expected floating number, none is provided.\n";
     return -1;
   }
 
@@ -633,9 +643,9 @@ VDS void print_value(vcl_ostream &s, vul_arg<char const *> const &argmt)
 
 VDS int parse(vul_arg<char const *>* argmt, char ** argv)
 {
-  if( !argv ||  !argv[0] ) {
+  if ( !argv ||  !argv[0] ) {
     // no input
-    vcl_cerr << "vul_arg_parse: Expected string, none is provided." << vcl_endl;
+    vcl_cerr << "vul_arg_parse: Expected string, none is provided.\n";
     return -1;
   }
 
@@ -653,9 +663,9 @@ VDS void print_value(vcl_ostream &s, vul_arg<vcl_string> const &argmt)
 
 VDS int parse(vul_arg<vcl_string>* argmt, char ** argv)
 {
-  if( !argv ||  !argv[0] ) {
+  if ( !argv ||  !argv[0] ) {
     // no input
-    vcl_cerr << "vul_arg_parse: Expected string, none is provided." << vcl_endl;
+    vcl_cerr << "vul_arg_parse: Expected string, none is provided.\n";
     return -1;
   }
 
@@ -742,10 +752,9 @@ VDS void print_value(vcl_ostream &s, vul_arg<vcl_vector<double> > const &argmt)
 
 VDS int parse(vul_arg<vcl_vector<double> >* argmt, char ** argv)
 {
-
-  if( !argv ||  !argv[0] ) {
+  if ( !argv ||  !argv[0] ) {
     // no input
-    vcl_cerr << "vul_arg_parse: Expected a vector of floating number, none is provided." << vcl_endl;
+    vcl_cerr << "vul_arg_parse: Expected a vector of floating number, none is provided.\n";
     return -1;
   }
 

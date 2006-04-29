@@ -383,7 +383,9 @@ T tiff_get_bits( const T* in_val, unsigned i0, unsigned ni )
     temp += next;
 #endif
   }
-  //vcl_cout << "Out val = " << vcl_hex << temp << '\n';
+#ifdef DEBUG
+  vcl_cout << "Out val = " << vcl_hex << temp << vcl_dec << '\n';
+#endif
   return temp;
 }
 
