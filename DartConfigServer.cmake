@@ -57,7 +57,7 @@ SET (EXPECTED_BUILDS "\\
   {mobile FreeBSD-6.0_gcc-3.4.4_-Wall_-O_shared} \\
   {crd.ge.com FreeBSD-6.0_gcc-3.4.4_-Wall_profile_static} \\
   {crd.ge.com Linux-2.4.18_gcc-3.2_-Wall_static} \\
-  {crd.ge.com Linux-2.4.9_icc-8.0_-w1_-O2_shared} \\
+  {crd.ge.com Linux-2.4.9_icc-8.1_-w1_-O2_shared} \\
   {crd.ge.com MinGW-3.8_gcc-3.4.4_-Wall_-O2_static} \\
   {crd.ge.com Solaris-2.8_gcc-3.4.3_static} \\
   {crd.ge.com Win2k_bcc-5.5.1_Release} \\
