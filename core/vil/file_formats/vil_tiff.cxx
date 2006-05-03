@@ -22,6 +22,7 @@
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
+#include <vcl_sstream.h>
 #include <vil/vil_stream.h>
 #include <vil/vil_open.h>
 #include <vil/vil_property.h>
