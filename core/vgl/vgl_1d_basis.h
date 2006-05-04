@@ -37,6 +37,12 @@
 // the method project() has to be specialised (which is easily done by
 // taking its intersection with the line at infinity!)
 //
+// \warning the C++ standard requires that these functions are
+// declared before they are used, which, for this, means in the
+// definition of the functions in the .txx file. So, for maximum
+// portability, make sure they are at least declared before the .txx
+// file is included.
+//
 // \author Peter Vanroose
 // \date   7 July, 2001
 //
@@ -111,9 +117,7 @@ class vgl_1d_basis
   // just create a new one if you need a different one.
   // Hence it is not possible to read a vgl_basis_1d from stream with >>.
   //
-  inline vgl_1d_basis(T const& o, T const& u, T const& i)
-    : origin_(o), unity_(u), inf_pt_(i), affine_(false)
-  { assert(collinear(o,i,u) && o!=i && o!=u && i!=u); }
+  vgl_1d_basis(T const& o, T const& u, T const& i);
 
   //: Construct from two points (affine basis).
   // It will serve as origin (0,1) and unity point (1,1).

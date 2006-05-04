@@ -7,6 +7,13 @@
 #include <vcl_iostream.h>
 
 template <class T>
+vgl_1d_basis<T>::vgl_1d_basis(T const& o, T const& u, T const& i)
+  : origin_(o), unity_(u), inf_pt_(i), affine_(false)
+{
+  assert(collinear(o,i,u) && o!=i && o!=u && i!=u);
+}
+
+template <class T>
 vgl_1d_basis<T>::vgl_1d_basis(T const& o, T const& u)
   : origin_(o), unity_(u), affine_(true)
 {
