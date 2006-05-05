@@ -103,13 +103,14 @@ class vnl_ldl_cholesky
 
  protected:
   // Data Members--------------------------------------------------------------
-    //: Lower triangular matrix
+
+  //: Lower triangular matrix
   vnl_matrix<double> L_;
 
-    //: Elements of diagonal matrix
+  //: Elements of diagonal matrix
   vnl_vector<double> d_;
 
-    //: 1/(condition number)
+  //: 1/(condition number)
   double rcond_;
   int num_dims_rank_def_;
   vnl_vector<double> nullvector_;
