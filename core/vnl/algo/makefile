@@ -33,6 +33,7 @@ MANPAGE_SOURCES += vnl_matrix_inverse.txx
 MANPAGE_SOURCES += vnl_qr.txx
 MANPAGE_SOURCES += vnl_scatter_3x3.txx
 SOURCES += vnl_cholesky.cxx
+SOURCES += vnl_ldl_cholesky.cxx
 SOURCES += vnl_real_eigensystem.cxx
 SOURCES += vnl_complex_eigensystem.cxx
 SOURCES += vnl_symmetric_eigensystem.cxx

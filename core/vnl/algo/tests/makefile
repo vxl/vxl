@@ -27,6 +27,7 @@ TESTS += test_minimizers.cxx
 TESTS += test_convolve.cxx
 TESTS += test_amoeba.cxx
 TESTS += test_cholesky.cxx
+TESTS += test_ldl_cholesky.cxx
 TESTS += test_algo.cxx
 TESTS += test_integral.cxx
 TESTS += test_powell.cxx
