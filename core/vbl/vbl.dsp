@@ -204,6 +204,9 @@ SOURCE=.\Templates/vbl_array_3d+bool-.cxx
 SOURCE=.\Templates/vbl_array_3d+vcl_string-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vbl_array_3d+float-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vbl_bool_ostream.cxx
 # End Source File
 # Begin Source File

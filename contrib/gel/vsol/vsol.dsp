@@ -282,6 +282,12 @@ SOURCE=.\Templates/vsl_vector_io+vsol_cylinder_sptr-.cxx
 SOURCE=.\Templates/vbl_array_2d+vcl_vector+vcl_vector+vsol_point_3d_sptr--~-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+vsol_orient_box_3d-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+vsol_volume_3d-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vsol_box_2d.cxx
 # End Source File
 # Begin Source File
@@ -367,6 +373,9 @@ SOURCE=.\vsol_flags_id.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vsol_spatial_object.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vsol_orient_box_3d.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -568,6 +577,12 @@ SOURCE=.\vsol_cylinder.h
 # End Source File
 # Begin Source File
 SOURCE=.\vsol_cylinder_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsol_orient_box_3d.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsol_orient_box_3d_sptr.h
 # End Source File
 # End Group
 # End Target

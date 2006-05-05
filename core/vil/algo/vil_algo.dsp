@@ -282,6 +282,9 @@ SOURCE=.\Templates/vil_median+uint_16-.cxx
 SOURCE=.\Templates/vil_sobel_3x3+float.double-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil_gauss_filter+int_16.int_16-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vil_histogram.cxx
 # End Source File
 # Begin Source File

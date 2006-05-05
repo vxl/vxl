@@ -255,6 +255,12 @@ SOURCE=.\Templates/vil_resample_bilin+byte.float-.cxx
 SOURCE=.\Templates/vil_resample_bilin+float.double-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil_resample_bilin+int_16.int_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_resample_bilin+uint_16.uint_16-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil_sample_grid_bilin+float.float-.cxx
 # End Source File
 # Begin Source File

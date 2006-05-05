@@ -186,6 +186,12 @@ SOURCE=.\Templates/vil3d_resample_trilinear+int-.cxx
 SOURCE=.\Templates/vil3d_resample_simple+bool-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil3d_resample_trilinear+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_resample_trilinear+uint_16-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vil3d_memory_image.cxx
 # End Source File
 # Begin Source File
