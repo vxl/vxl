@@ -40,6 +40,9 @@ MANPAGE_SOURCES += vgl_homg_plane_3d.txx
 MANPAGE_SOURCES += vgl_sphere_3d.txx
 MANPAGE_SOURCES += vgl_cylinder.txx
 
+# Volumes
+MANPAGE_SOURCES += vgl_orient_box_3d.txx
+
 # Functions
 MANPAGE_SOURCES += vgl_closest_point.txx
 MANPAGE_SOURCES += vgl_distance.txx
