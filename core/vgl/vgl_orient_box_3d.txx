@@ -46,10 +46,10 @@ vcl_vector<vgl_point_3d<Type> > vgl_orient_box_3d<Type>::corners()
 
   // rotate the corner points
   for (unsigned int i=0; i < corner_points.size(); i++) {
-    vnl_vector<Type> p(3);
+    vnl_vector<double> p(3);
     p[0] = corner_points[i].x(); p[1] = corner_points[i].y(); p[2]=corner_points[i].z();
     p = orient_.rotate(p);
-    corner_points[i] = vgl_point_3d<Type> (p[0], p[1], p[2]);
+    corner_points[i] = vgl_point_3d<Type> (Type(p[0]), Type(p[1]), Type(p[2]));
   }
   return corner_points;
 }
