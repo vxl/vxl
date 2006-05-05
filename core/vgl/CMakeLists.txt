@@ -5,6 +5,7 @@ SET( vgl_sources
   vgl_fwd.h
   vgl_box_2d.h                   vgl_box_2d.txx
   vgl_box_3d.h                   vgl_box_3d.txx
+  vgl_orient_box_3d.h            vgl_orient_box_3d.txx
   vgl_vector_2d.h                vgl_vector_2d.txx
   vgl_vector_3d.h                vgl_vector_3d.txx
   vgl_1d_basis.h                 vgl_1d_basis.cxx  vgl_1d_basis.txx
