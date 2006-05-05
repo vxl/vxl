@@ -597,7 +597,7 @@ void vgui_mfc_adaptor::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 void vgui_mfc_adaptor::domouse(vgui_event_type et, UINT nFlags, CPoint point, vgui_button b)
 {
 #ifdef DEBUG
- /vcl_cerr <<"vgui_mfc_adaptor::domouse: wo = "<< point.x<<", "<< point.y<<'\n';
+  vcl_cerr <<"vgui_mfc_adaptor::domouse: wo = "<< point.x<<", "<< point.y<<'\n';
 #endif
   // awf: BLETCH. This offset is consistent over resize, depth, screen position, machines,
   // and I can't find it... Sorry.
