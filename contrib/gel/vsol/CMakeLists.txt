@@ -28,6 +28,7 @@ SET(vsol_sources
  # embedding dimension 3
  vsol_spatial_object_3d.cxx vsol_spatial_object_3d.h vsol_spatial_object_3d_sptr.h
  vsol_box_3d.cxx            vsol_box_3d.h            vsol_box_3d_sptr.h
+ vsol_orient_box_3d.cxx     vsol_orient_box_3d.h     vsol_orient_box_3d_sptr.h
  vsol_group_3d.cxx          vsol_group_3d.h          vsol_group_3d_sptr.h
  # 0-D
  vsol_point_3d.cxx          vsol_point_3d.h          vsol_point_3d_sptr.h
