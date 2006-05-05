@@ -276,6 +276,9 @@ SOURCE=.\vnl_simpson_integral.cxx
 SOURCE=.\vnl_solve_qp.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vnl_ldl_cholesky.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vnl_svd_economy+double-.cxx
 # End Source File
 # Begin Source File
@@ -448,6 +451,9 @@ SOURCE=.\vnl_solve_qp.h
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_matrix_update.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_ldl_cholesky.h
 # End Source File
 # End Group
 # End Target
