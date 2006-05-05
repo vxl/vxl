@@ -55,19 +55,19 @@ vnl_ldl_cholesky::vnl_ldl_cholesky(vnl_matrix<double> const & M, Operation mode)
     //: Sqrt of elements of diagonal matrix
   vnl_vector<double> sqrt_d(n);
 
-  for (unsigned i=0;i<n;++i)
+  for (int i=0; i<n; ++i)
   {
     sqrt_d[i]=L_(i,i);
     d_[i]=sqrt_d[i]*sqrt_d[i];
   }
 
   // Scale column j by 1/sqrt_d_[i] and set upper triangular elements to zero
-  for (unsigned i=0;i<n;++i)
+  for (int i=0; i<n; ++i)
   {
     double *row = L_[i];
-    for (unsigned j=0;j<i;++j) row[j]/=sqrt_d[j];
+    for (int j=0; j<i; ++j) row[j]/=sqrt_d[j];
     row[i]=1.0;
-    for (unsigned j=i+1;j<n;++j) row[j]=0.0;   // Zero upper triangle
+    for (int j=i+1; j<n; ++j) row[j]=0.0;   // Zero upper triangle
   }
 }
 
@@ -259,16 +259,15 @@ vnl_matrix<double> vnl_ldl_cholesky::inverse() const
     return vnl_matrix<double>();
   }
 
-  int n = d_.size();
+  unsigned int n = d_.size();
   vnl_matrix<double> R(n,n);
   R.set_identity();
 
   // Set each row to solution of Mx=(unit)
   // Since result should be symmetric, this is OK
-  for (unsigned i=0;i<n;++i)
+  for (unsigned int i=0; i<n; ++i)
     inplace_solve(R[i]);
 
   return R;
 }
-
 
