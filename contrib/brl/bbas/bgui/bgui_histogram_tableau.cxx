@@ -7,7 +7,6 @@
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_vil.h>
 #include <vil/vil_image_resource.h>
-#include <vil/vil_image_view.h>
 #include <vil/algo/vil_histogram.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_gl.h>
@@ -46,6 +45,38 @@ void bgui_histogram_tableau::update(vil1_memory_image_of< vil1_rgb<unsigned char
   vil_image_resource_sptr image = vil1_to_vil_image_resource(img);
   vil_image_view_base_sptr temp = image->get_view( 0 , image->ni() , 0 , image->nj() );
   vil_image_view<vxl_byte> img_view( temp );
+  data_.clear();
+  vil_histogram_byte( img_view , data_ );
+
+  double max = data_[0];
+  for (unsigned int i=1; i<data_.size(); ++i)
+    if (max < data_[i]) max = data_[i];
+
+  // scale and shift the data points
+  vcl_vector<float> xscaled, yscaled;
+  for (unsigned int i=0; i<data_.size(); ++i) {
+    xscaled.push_back(left_offset_ + i);
+    yscaled.push_back(top_offset_ + graph_height_ - data_[i]/max*graph_height_);
+  }
+
+  if (plot_)
+  {
+    // Update the plot points
+    // This is a bit more efficient that deleting and reconstructing
+    //   but not as "clean" 
+    for (unsigned int i=0; i<xscaled.size(); ++i) {
+      plot_->x[i] = xscaled[i];
+      plot_->y[i] = yscaled[i];
+    }
+  }
+  else
+    plot_ = easy_->add_linestrip(xscaled.size(), &xscaled[0], &yscaled[0]);
+
+  post_redraw();
+}
+
+void bgui_histogram_tableau::update(vil_image_view< vxl_byte >& img_view)
+{
   data_.clear();
   vil_histogram_byte( img_view , data_ );
 

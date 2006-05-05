@@ -6,9 +6,16 @@
 // \author  Matt Leotta
 // \brief   A tableau to a histogram for an image
 //  The histogram is plotted on an easy2D tableau
+//
+// \verbatim
+//  Modifications
+//   Ozge Can Ozcanli    May 2006  Added vil support to the update method
+//
+// \endverbatim
 
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_rgb.h>
+#include <vil/vil_image_view.h>
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_soview2D.h>
@@ -24,6 +31,7 @@ class bgui_histogram_tableau : public vgui_tableau
   ~bgui_histogram_tableau();
   //: Update the histogram
   void update(vil1_memory_image_of< vil1_rgb<unsigned char> >& img);
+  void update(vil_image_view< vxl_byte >& img);
   //: Return the name of this tableau.
   vcl_string type_name() const { return "bgui_histogram_tableau";}
   //: Handles all events for this tableau.
