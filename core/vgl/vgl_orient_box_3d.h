@@ -6,40 +6,39 @@
 // \brief A bounding oriented box
 //
 //  This class mimics the properties of an oriented
-//  box by keeping a regular axis aligned box and a 
-//  rotation direction. It keeps a bounding box of 
+//  box by keeping a regular axis aligned box and a
+//  rotation direction. It keeps a bounding box of
 //  the rotated box which is an axis aligned box.
-//  
-//  
+
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vnl/vnl_quaternion.h>
 #include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 
 template <class Type>
 class vgl_orient_box_3d
 {
-public:
-  vgl_orient_box_3d() {} 
+ public:
+  vgl_orient_box_3d() {}
 
-  //: constructor with only box definition, the direction will be 
-  //  set to (0, 0, 1) with no rotation
+  //: constructor with only box definition, the direction will be set to (0,0,1) with no rotation
   vgl_orient_box_3d(vgl_box_3d<Type> box);
 
   //: constructor with box and the orientation
   vgl_orient_box_3d(vgl_box_3d<Type> box, vnl_quaternion<double> orient);
 
-  virtual ~vgl_orient_box_3d(void){};
+  virtual ~vgl_orient_box_3d(void) {}
 
   inline bool operator==(vgl_orient_box_3d<Type> const& obb) const {
-    return ((obb.box_ == this->box_) && (obb.orient_ == this->orient_));
+    return obb.box_ == this->box_ && obb.orient_ == this->orient_;
   }
 
   // dimension related Data access
   Type width() const { return box_.width(); }
   Type height() const { return box_.height(); }
   Type depth() const { return box_.depth(); }
-  inline Type volume() const {return box_.width()*box_.height()*box_.depth(); }
+  inline Type volume() const { return box_.width()*box_.height()*box_.depth(); }
   vcl_vector<vgl_point_3d<Type> > corners();
 
   //: Return true if \a (x,y,z) is inside this box
@@ -49,7 +48,7 @@ public:
 
   vcl_istream& read(vcl_istream& s);
 
-private:
+ private:
   //: regular AABB(axis-aligned bounding box)
   vgl_box_3d<Type> box_;
 
@@ -67,4 +66,6 @@ vcl_ostream&  operator<<(vcl_ostream& s, vgl_orient_box_3d<Type> const& p);
 template <class Type>
 vcl_istream&  operator>>(vcl_istream& is,  vgl_orient_box_3d<Type>& p);
 
-#endif //vgl_orient_box_3d
+#define VGL_ORIENT_BOX_3D_INSTANTIATE(T) extern "Please #include <vgl/vgl_orient_box_3d.txx> instead"
+
+#endif // vgl_orient_box_3d_h
