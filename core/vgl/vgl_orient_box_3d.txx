@@ -97,9 +97,9 @@ vcl_istream&  operator>>(vcl_istream& is,  vgl_orient_box_3d<Type>& p)
 }
 
 #undef VGL_ORIENT_BOX_3D_INSTANTIATE
-#define VGL_ORIENT_BOX_3D_INSTANTIATE(Type) \
-template class vgl_orient_box_3d<Type >;\
-template vcl_ostream& operator<<(vcl_ostream&, vgl_box_3d<Type > const& p);\
-template vcl_istream& operator>>(vcl_istream&, vgl_box_3d<Type >& p)
+#define VGL_ORIENT_BOX_3D_INSTANTIATE(T) \
+template class vgl_orient_box_3d<T >;\
+template vcl_ostream& operator<<(vcl_ostream&, vgl_orient_box_3d<T > const& p);\
+template vcl_istream& operator>>(vcl_istream&, vgl_orient_box_3d<T >& p)
 
 #endif // vgl_orient_box_3d_txx_
