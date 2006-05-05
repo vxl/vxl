@@ -71,7 +71,7 @@ bool vgl_orient_box_3d<Type>::contains(Type const& x,
 }
 
 template <class Type>
-vcl_ostream& vgl_orient_box_3d<Type>::print(vcl_ostream& s)
+vcl_ostream& vgl_orient_box_3d<Type>::print(vcl_ostream& s) const
 {
   return s <<  "<vgl_orient_box_3d " << box_ << " dir=" << orient_  << '>' << vcl_endl;
 }
