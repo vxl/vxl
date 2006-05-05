@@ -5,9 +5,10 @@
 // \file
 
 #include "vgl_orient_box_3d.h"
+#include <vcl_iostream.h>
 
 template <class Type>
-vgl_orient_box_3d<Type>::vgl_orient_box_3d(vgl_box_3d<Type> box) 
+vgl_orient_box_3d<Type>::vgl_orient_box_3d(vgl_box_3d<Type> box)
 : box_(box)
 {
   vnl_vector<double> axis(3);
@@ -25,23 +26,24 @@ vgl_orient_box_3d<Type>::vgl_orient_box_3d(vgl_box_3d<Type> box, vnl_quaternion<
 
 //: returns the 8 corner points of the box
 template <class Type>
-vcl_vector<vgl_point_3d<Type> > vgl_orient_box_3d<Type>::corners() {
+vcl_vector<vgl_point_3d<Type> > vgl_orient_box_3d<Type>::corners()
+{
   vcl_vector<vgl_point_3d<Type> > corner_points(8);
-  
+
   //get the min and max of the aab and find the other corners
   vgl_point_3d<Type> min = box_.min_point();
   corner_points[0] = min;
-  
+
   vgl_point_3d<Type> max = box_.max_point();
   corner_points[7] = max;
-  
+
   corner_points[1] = vgl_point_3d<Type> (width()+min.x(), min.y(), min.z());
   corner_points[2] = vgl_point_3d<Type> (min.x(), min.y(), min.z()+depth());
   corner_points[3] = vgl_point_3d<Type> (corner_points[1].x(), corner_points[1].y(), corner_points[1].z()+depth());
   corner_points[4] = vgl_point_3d<Type> (min.x(), min.y()+height(), min.z());
   corner_points[5] = vgl_point_3d<Type> (corner_points[1].x(), corner_points[1].y()+height(), corner_points[1].z());
   corner_points[6] = vgl_point_3d<Type> (corner_points[2].x(), corner_points[2].y()+height(), corner_points[2].z());
-  
+
   // rotate the corner points
   for (unsigned int i=0; i < corner_points.size(); i++) {
     vnl_vector<Type> p(3);
@@ -54,13 +56,13 @@ vcl_vector<vgl_point_3d<Type> > vgl_orient_box_3d<Type>::corners() {
 
 //: Return true if \a (x,y,z) is inside this box
 template <class Type>
-bool vgl_orient_box_3d<Type>::contains(Type const& x, 
-                                       Type const& y, 
-                                       Type const& z) const {
-                                       
-  // first tranform the point to the coordinate system of AABB
+bool vgl_orient_box_3d<Type>::contains(Type const& x,
+                                       Type const& y,
+                                       Type const& z) const
+{
+  // first transform the point to the coordinate system of AABB
   vnl_quaternion<double> reverse_rot(orient_.axis(), -1*orient_.angle());
- 
+
   vnl_vector<double> p(3);
   p[0] = x; p[1] = y; p[2]=z;
   vnl_vector<double> p_transf = orient_.rotate(p);
@@ -71,7 +73,7 @@ bool vgl_orient_box_3d<Type>::contains(Type const& x,
 template <class Type>
 vcl_ostream&  print(vcl_ostream& s)
 {
-  return s <<  "<vgl_orient_box_3d " << box_ << " dir=" << orient_  << ">" << vcl_endl;
+  return s <<  "<vgl_orient_box_3d " << box_ << " dir=" << orient_  << '>' << vcl_endl;
 }
 
 template <class Type>
@@ -100,4 +102,4 @@ template class vgl_orient_box_3d<Type >;\
 template vcl_ostream& operator<<(vcl_ostream&, vgl_box_3d<Type > const& p);\
 template vcl_istream& operator>>(vcl_istream&, vgl_box_3d<Type >& p)
 
-#endif //vgl_orient_box_3d_txx
+#endif // vgl_orient_box_3d_txx_
