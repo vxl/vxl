@@ -175,8 +175,7 @@ void test_read_multi_props_ws()
       props.lower_bound("a")->second == "a" && !ss.fail(), true);
     TEST("Case 9b: props[ \"b\" ] == b_ans",
          strip_ws(props.lower_bound("b")->second) == strip_ws(b_ans) && !ss.fail(), true);
-    TEST("Case 9c: props[ \"c\" ] == \"c\"",
-      props.lower_bound("c")->second == "c", true);
+    TEST("Case 9c: props[ \"c\" ] == \"c\"", props.lower_bound("c")->second , "c");
   }
 
   {
@@ -189,11 +188,10 @@ void test_read_multi_props_ws()
 
     mbl_read_multi_props_print(vcl_cout, props);
     TEST("Case 10a: props[ \"a\" ] == \"a\"",
-      props.lower_bound("a")->second == "a" && !ss.fail(), true);
+         props.lower_bound("a")->second == "a" && !ss.fail(), true);
     TEST("Case 10b: props[ \"b\" ] == b_ans",
          strip_ws(props.lower_bound("b")->second) == strip_ws(b_ans) && !ss.fail(), true);
-    TEST("Case 10c: props[ \"c\" ] == \"c\"",
-      props.lower_bound("c")->second == "c", true);
+    TEST("Case 10c: props[ \"c\" ] == \"c\"", props.lower_bound("c")->second , "c");
     TEST("Case 10d: props[ \"d\" ] == d_ans",
          strip_ws(props.lower_bound("d")->second) == strip_ws(d_ans) && !ss.fail(), true);
   }
@@ -289,7 +287,7 @@ void test_read_multi_props_ws()
       true_val.push_back("a1");
       true_val.push_back("a2");
       true_val.push_back("a3");
-      TEST("Case 14a: present, correct", val==true_val, true);
+      TEST("Case 14a: present, correct", val, true_val);
     }
     {
       vcl_istringstream ss("{\n  a: a1\n  a: a2\n a: a3\n \n}");
@@ -352,7 +350,7 @@ void test_read_multi_props_ws()
       true_val.push_back("a1");
       true_val.push_back("a2");
       true_val.push_back("a3");
-      TEST("Case 15a: \"a\" present, correct", val==true_val, true);
+      TEST("Case 15a: \"a\" present, correct", val, true_val);
     }
     {
       vcl_istringstream ss("{\n  a: a1\n  a: a2\n a: a3\n \n}");
@@ -377,8 +375,7 @@ void test_read_multi_props_ws()
       vcl_vector<vcl_string> val;
       props.get_optional_property("z", val);
       vcl_vector<vcl_string> true_val;
-      TEST("Case 15c: \"z\" missing, returned empty vector", 
-           val==true_val, true);
+      TEST("Case 15c: \"z\" missing, returned empty vector", val, true_val);
     }
   }
 
