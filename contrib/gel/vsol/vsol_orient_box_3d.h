@@ -16,7 +16,7 @@
 #include <vsol/vsol_volume_3d.h>
 #include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_bounding_box.h>
-#include <vgl/vgl_orient_box_3d.h>
+#include <vgl/algo/vgl_orient_box_3d.h>
 
 //: An oriented bounding box for 3d spatial objects
 
