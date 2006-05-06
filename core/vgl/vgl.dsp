@@ -356,12 +356,6 @@ SOURCE=.\Templates/vgl_sphere_3d+double-.cxx
 # Begin Source File
 SOURCE=.\Templates/vgl_cylinder+double-.cxx
 # End Source File
-# Begin Source File
-SOURCE=.\Templates/vgl_orient_box_3d+double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vgl_orient_box_3d+float-.cxx
-# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -586,12 +580,6 @@ SOURCE=.\vgl_sphere_3d.h
 # End Source File
 # Begin Source File
 SOURCE=.\vgl_sphere_3d.txx
-# End Source File
-# Begin Source File
-SOURCE=.\vgl_orient_box_3d.h
-# End Source File
-# Begin Source File
-SOURCE=.\vgl_orient_box_3d.txx
 # End Source File
 # End Group
 # End Target
