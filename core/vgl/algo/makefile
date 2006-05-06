@@ -6,6 +6,7 @@ IMMEDIATE_LIBS := -lvnl-algo -lvnl
 
 MANPAGE_SOURCES += vgl_algo_fwd.h
 MANPAGE_SOURCES += vgl_rtree.txx
+MANPAGE_SOURCES += vgl_orient_box_3d.txx
 MANPAGE_SOURCES += vgl_homg_operators_1d.txx
 MANPAGE_SOURCES += vgl_homg_operators_2d.txx
 MANPAGE_SOURCES += vgl_homg_operators_3d.txx
