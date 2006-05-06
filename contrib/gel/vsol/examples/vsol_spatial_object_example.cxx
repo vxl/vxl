@@ -3,6 +3,7 @@
 // Author: Peter Vanroose, March 2006
 
 #include <vsol/vsol_conic_2d.h>
+#include <vsol/vsol_conic_2d_sptr.h>
 #include <vsol/vsol_point_2d.h>
 #include <vcl_ostream.h>
 
