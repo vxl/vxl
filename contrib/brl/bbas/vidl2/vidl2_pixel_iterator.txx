@@ -8,7 +8,7 @@
 // \file
 // \brief Templated definitions for pixel iterators
 //
-// \author Matt Leotta 
+// \author Matt Leotta
 // \date 3 Mar 2006
 //
 // This file contains the template definitions for pixel iterators
@@ -109,8 +109,8 @@ class vidl2_pixel_iterator_arranged<VIDL2_PIXEL_ARRANGE_PLANAR,FMT>
       const unsigned size = frame.ni()*frame.nj()*sizeof(typename vidl2_pixel_traits_of<FMT>::type);
 
       ptr_[0] = (cmp_type*)frame.data();
-      for(unsigned int i=1; i<vidl2_pixel_traits_of<FMT>::num_channels; ++i){
-        if(i==1)
+      for (unsigned int i=1; i<vidl2_pixel_traits_of<FMT>::num_channels; ++i){
+        if (i==1)
           ptr_[i] = ptr_[i-1] + size;
         else
           ptr_[i] = ptr_[i-1] + ((size>>csx)>>csy);
@@ -124,10 +124,10 @@ class vidl2_pixel_iterator_arranged<VIDL2_PIXEL_ARRANGE_PLANAR,FMT>
     vidl2_pixel_iterator_arranged<VIDL2_PIXEL_ARRANGE_PLANAR,FMT>& next()
     {
       ++ptr_[0];
-      if(vidl2_pixel_traits_of<FMT>::num_channels > 1){
+      if (vidl2_pixel_traits_of<FMT>::num_channels > 1){
         // step only if the last csx+1 bits of step_x_ are set
         int chroma_step = ((step_x_&x_mask) == x_mask)?1:0;
-        if(++line_cnt_ < line_size_){
+        if (++line_cnt_ < line_size_){
           step_x_ += 2;
         }
         else
@@ -136,11 +136,11 @@ class vidl2_pixel_iterator_arranged<VIDL2_PIXEL_ARRANGE_PLANAR,FMT>
           step_x_=1;
           chroma_step = 1;
           // step back to start of row unless the last csy+1 bits of step_y_ are set
-          if(!((step_y_&y_mask)==y_mask))
+          if (!((step_y_&y_mask)==y_mask))
             chroma_step -= (line_size_>>csx);
           step_y_ += 2;
         }
-        for(unsigned int i=1; i<vidl2_pixel_traits_of<FMT>::num_channels; ++i){
+        for (unsigned int i=1; i<vidl2_pixel_traits_of<FMT>::num_channels; ++i){
           ptr_[i] += chroma_step;
         }
       }
@@ -156,14 +156,14 @@ class vidl2_pixel_iterator_arranged<VIDL2_PIXEL_ARRANGE_PLANAR,FMT>
     //: Access the entire pixel at once
     void get(cmp_type* data) const
     {
-      for(unsigned int i=0; i<vidl2_pixel_traits_of<FMT>::num_channels; ++i)
+      for (unsigned int i=0; i<vidl2_pixel_traits_of<FMT>::num_channels; ++i)
         data[i] = *ptr_[i];
     }
 
     //: write the entire pixel at once
     void set(const cmp_type* data)
     {
-      for(unsigned int i=0; i<vidl2_pixel_traits_of<FMT>::num_channels; ++i)
+      for (unsigned int i=0; i<vidl2_pixel_traits_of<FMT>::num_channels; ++i)
         *ptr_[i] = data[i];
     }
 
@@ -205,7 +205,7 @@ class vidl2_pixel_iterator_arranged<VIDL2_PIXEL_ARRANGE_PACKED,FMT>
     vidl2_pixel_iterator_arranged<VIDL2_PIXEL_ARRANGE_PACKED,FMT>& next()
     {
       mode_ = (mode_+1)%macro_pix_size;
-      if(mode_==0)
+      if (mode_==0)
         ptr_ += pix_step_size;
       return *this;
     }
@@ -220,17 +220,16 @@ class vidl2_pixel_iterator_arranged<VIDL2_PIXEL_ARRANGE_PACKED,FMT>
     //: Access the entire pixel at once
     void get(cmp_type* data) const
     {
-      for(unsigned int i=0; i<vidl2_pixel_traits_of<FMT>::num_channels; ++i)
+      for (unsigned int i=0; i<vidl2_pixel_traits_of<FMT>::num_channels; ++i)
         data[i] = ptr_[vidl2_pixel_pack_of<FMT>::offset[mode_][i]];
     }
 
     //: write the entire pixel at once
     void set(const cmp_type* data)
     {
-      for(unsigned int i=0; i<vidl2_pixel_traits_of<FMT>::num_channels; ++i)
+      for (unsigned int i=0; i<vidl2_pixel_traits_of<FMT>::num_channels; ++i)
         ptr_[vidl2_pixel_pack_of<FMT>::offset[mode_][i]] = data[i];
     }
-
 
   private:
     vxl_byte mode_;
@@ -294,7 +293,6 @@ class vidl2_pixel_iterator_of : public vidl2_pixel_iterator
 //-----------------------------------------------------------------------------
 
 
-
 //: Iterator for monochrome boolean images
 VCL_DEFINE_SPECIALIZATION
 struct vidl2_pixel_iterator_valid<VIDL2_PIXEL_FORMAT_MONO_1>
@@ -319,12 +317,11 @@ class vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_MONO_1>
     virtual vidl2_pixel_format pixel_format() const
     { return VIDL2_PIXEL_FORMAT_MONO_1; }
 
-
     //: Step to the next pixel
     vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_MONO_1>& next()
     {
       bit_mask_ >>= 1;
-      if(!bit_mask_){
+      if (!bit_mask_){
         bit_mask_ = 128;
         ++ptr_;
       }
@@ -354,7 +351,7 @@ class vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_MONO_1>
     //: write the entire pixel at once
     void set(const bool* data)
     {
-      ptr_[0] &= ~bit_mask_ & data[0]?bit_mask_:0;
+      ptr_[0] &= ~bit_mask_ & (data[0]?bit_mask_:0);
     }
 
     //: Copy the pixel data into a byte array
@@ -376,4 +373,3 @@ class vidl2_pixel_iterator_of<VIDL2_PIXEL_FORMAT_MONO_1>
 
 
 #endif // vidl2_pixel_iterator_txx_
-
