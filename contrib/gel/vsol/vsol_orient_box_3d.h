@@ -6,11 +6,10 @@
 // \brief A bounding oriented box
 //
 //  This class mimics the properties of an oriented
-//  box by keeping a regular axis aligned box and a 
-//  rotation direction. It keeps a bounding box of 
+//  box by keeping a regular axis aligned box and a
+//  rotation direction. It keeps a bounding box of
 //  the rotated box which is an axis aligned box.
-//  
-//  
+//
 
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vsol/vsol_volume_3d.h>
@@ -29,12 +28,12 @@ class vsol_orient_box_3d : public vsol_volume_3d
  public:
   //: create an empty box
   vsol_orient_box_3d() {}
-  
+
   //: creates a bounding box from an oriented box
   vsol_orient_box_3d(vgl_orient_box_3d<double> const& orient_box);
 
   vsol_orient_box_3d(vsol_orient_box_3d const& b)
-    : box_(b.box_), orient_box_(b.orient_box_) {}
+    : vsol_volume_3d(b), box_(b.box_), orient_box_(b.orient_box_) {}
 
   ~vsol_orient_box_3d() {}
 
