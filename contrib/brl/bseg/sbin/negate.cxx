@@ -58,8 +58,7 @@ static bool negate_images(vcl_string const& image_indir,
 #define NEGATE_CASE(FORMAT, T) \
      case FORMAT: { \
       vil_image_view<T> view = imgr->get_copy_view(); \
-      vil_pixel_traits<T> t; \
-      T mxv = t.maxval(); \
+      T mxv = vil_pixel_traits<T>::maxval(); \
       vil_math_scale_and_offset_values(view, -1.0, mxv); \
       outr = vil_new_image_resource_of_view(view);  \
       break; \
