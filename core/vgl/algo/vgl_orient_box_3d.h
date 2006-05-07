@@ -1,4 +1,4 @@
-// This is core/vgl/vgl_orient_box_3d.h
+// This is core/vgl/algo/vgl_orient_box_3d.h
 #ifndef vgl_orient_box_3d_h
 #define vgl_orient_box_3d_h
 //:
