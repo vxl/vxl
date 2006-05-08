@@ -65,8 +65,8 @@ void vgl_conic_2d_regression<T>::set_sampson_error(T a, T b, T c, T d, T e, T f)
   {
     T x = pit->x(), y = pit->y();
     T alg_dist = (a*x + b*y + d)*x + (c*y + e)*y + f;
-    T dx = 2.0*a*x + b*y + d;
-    T dy = 2.0*c*y + b*x + e;
+    T dx = 2*a*x + b*y + d;
+    T dy = 2*c*y + b*x + e;
     T grad_mag_sqrd = dx*dx+dy*dy;
 
     sum += (alg_dist*alg_dist)/grad_mag_sqrd;
@@ -177,7 +177,7 @@ void vgl_conic_2d_regression<T>::fill_scatter_matrix()
   S22_.put(1,2,partial_sums_[13]); // y
   S22_.put(2,0,partial_sums_[12]); // x
   S22_.put(2,1,partial_sums_[13]); // y
-  S22_.put(2,2,npts_); // 1
+  S22_.put(2,2,T(npts_)); // 1
 }
 
 template <class T>
