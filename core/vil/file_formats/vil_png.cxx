@@ -11,6 +11,7 @@
 #include <vcl_cassert.h>
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
+#include <vcl_algorithm.h>
 
 #include <vil/vil_stream.h>
 #include <vil/vil_image_view.h>
@@ -174,6 +175,7 @@ struct vil_png_structures
 
     info_ptr = png_create_info_struct (png_ptr);
     if (!info_ptr) {
+      png_destroy_read_struct(&png_ptr, NULL, NULL);
       problem("cannot allocate LIBPNG structures");
       return;
     }
@@ -362,11 +364,22 @@ bool vil_png_image::read_header()
   this->components_ = png_get_channels(p_->png_ptr, p_->info_ptr);
   this->bits_per_component_ = png_get_bit_depth(p_->png_ptr, p_->info_ptr);
 
+  png_color_8p sig_bit;
+  if (png_get_sBIT(p_->png_ptr, p_->info_ptr, &sig_bit)) {
+    png_byte max_bits = sig_bit->red;
+    max_bits = vcl_max( max_bits, sig_bit->green );
+    max_bits = vcl_max( max_bits, sig_bit->blue );
+    max_bits = vcl_max( max_bits, sig_bit->gray );
+    max_bits = vcl_max( max_bits, sig_bit->alpha );
+    this->bits_per_component_ = max_bits;
+
+    png_set_shift(p_->png_ptr, sig_bit);
+  }
+
   if (this->bits_per_component_ == 1) format_ = VIL_PIXEL_FORMAT_BOOL;
   else if (this->bits_per_component_ <=8) format_=VIL_PIXEL_FORMAT_BYTE;
   else format_ = VIL_PIXEL_FORMAT_UINT_16;
 
-  if (png_get_valid(p_->png_ptr, p_->info_ptr, PNG_INFO_sBIT)) problem("LAZY AWF! PNG_INFO_sBIT");
 
   // if (p->info_ptr->valid & PNG_INFO_bKGD) problem("LAZY AWF! PNG_INFO_bKGD");
   png_setjmp_off();

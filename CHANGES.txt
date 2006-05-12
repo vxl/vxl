@@ -5,6 +5,8 @@ aren't documented here, unless the bug-fix has a major observable
 effect.  If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
+      - PNG reader now supports sBIT for recovering the original bitdepth.
+
 ****************************
 VXL 1.5.0	- April 2006
 ****************************
