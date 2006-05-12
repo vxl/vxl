@@ -12,11 +12,11 @@ ADD_EXECUTABLE ( bmrf_test_all
 )
 TARGET_LINK_LIBRARIES( bmrf_test_all bmrf vpl testlib )
 
-ADD_TEST( bmrf_test_epi_point       bmrf_test_all test_epi_point)
-ADD_TEST( bmrf_test_epi_seg         bmrf_test_all test_epi_seg)
-ADD_TEST( bmrf_test_node            bmrf_test_all test_node)
-ADD_TEST( bmrf_test_network         bmrf_test_all test_network)
-ADD_TEST( bmrf_test_network_builder bmrf_test_all test_network_builder)
+ADD_TEST( bmrf_test_epi_point       ${EXECUTABLE_OUTPUT_PATH}/bmrf_test_all test_epi_point)
+ADD_TEST( bmrf_test_epi_seg         ${EXECUTABLE_OUTPUT_PATH}/bmrf_test_all test_epi_seg)
+ADD_TEST( bmrf_test_node            ${EXECUTABLE_OUTPUT_PATH}/bmrf_test_all test_node)
+ADD_TEST( bmrf_test_network         ${EXECUTABLE_OUTPUT_PATH}/bmrf_test_all test_network)
+ADD_TEST( bmrf_test_network_builder ${EXECUTABLE_OUTPUT_PATH}/bmrf_test_all test_network_builder)
 
 #this is for test_includes
 ADD_EXECUTABLE( bmrf_test_include test_include.cxx)

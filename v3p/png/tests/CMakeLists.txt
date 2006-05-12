@@ -8,4 +8,4 @@ ENDIF (UNIX)
 ADD_DEFINITIONS(${PNG_DEFINITIONS})
 
 ADD_EXECUTABLE(pngtest pngtest.c)
-ADD_TEST(png_test pngtest ${CMAKE_CURRENT_SOURCE_DIR}/pngtest.png)
+ADD_TEST(png_test ${EXECUTABLE_OUTPUT_PATH}/pngtest ${CMAKE_CURRENT_SOURCE_DIR}/pngtest.png)

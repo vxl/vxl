@@ -23,7 +23,7 @@ ADD_EXECUTABLE( conversions_image_test_all
   test_image_conversions.cxx
 )
 
-ADD_TEST( conversions_test_vil1_vbl_conversions conversions_image_test_all test_vil1_vbl_conversions )
-ADD_TEST( conversions_test_image_conversions conversions_image_test_all test_image_conversions )
+ADD_TEST( conversions_test_vil1_vbl_conversions ${EXECUTABLE_OUTPUT_PATH}/conversions_image_test_all test_vil1_vbl_conversions )
+ADD_TEST( conversions_test_image_conversions ${EXECUTABLE_OUTPUT_PATH}/conversions_image_test_all test_image_conversions )
 
 ADD_EXECUTABLE( conversions_image_test_include test_include.cxx )

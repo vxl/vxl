@@ -35,8 +35,8 @@ ADD_EXECUTABLE( conversions_math_test_all
   test_IUE_matrix_conversions.cxx
 )
 
-ADD_TEST( conversions_test_matrix_conversions conversions_math_test_all test_matrix_conversions )
-ADD_TEST( conversions_test_CoolMatrix_conversions conversions_math_test_all test_CoolMatrix_conversions )
-ADD_TEST( conversions_test_IUE_matrix_conversions conversions_math_test_all test_IUE_matrix_conversions )
+ADD_TEST( conversions_test_matrix_conversions ${EXECUTABLE_OUTPUT_PATH}/conversions_math_test_all test_matrix_conversions )
+ADD_TEST( conversions_test_CoolMatrix_conversions ${EXECUTABLE_OUTPUT_PATH}/conversions_math_test_all test_CoolMatrix_conversions )
+ADD_TEST( conversions_test_IUE_matrix_conversions ${EXECUTABLE_OUTPUT_PATH}/conversions_math_test_all test_IUE_matrix_conversions )
 
 ADD_EXECUTABLE( conversions_math_test_include test_include.cxx )

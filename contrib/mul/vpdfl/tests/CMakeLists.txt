@@ -9,10 +9,10 @@ ADD_EXECUTABLE( vpdfl_test_all
   )
 TARGET_LINK_LIBRARIES( vpdfl_test_all vpdfl mbl vnl_io vsl vpl testlib )
 
-ADD_TEST( vpdfl_test_axis_gaussian vpdfl_test_all test_axis_gaussian )
-ADD_TEST( vpdfl_test_gaussian vpdfl_test_all test_gaussian )
-ADD_TEST( vpdfl_test_mixture vpdfl_test_all test_mixture )
-ADD_TEST( vpdfl_test_pc_gaussian vpdfl_test_all test_pc_gaussian )
+ADD_TEST( vpdfl_test_axis_gaussian ${EXECUTABLE_OUTPUT_PATH}/vpdfl_test_all test_axis_gaussian )
+ADD_TEST( vpdfl_test_gaussian ${EXECUTABLE_OUTPUT_PATH}/vpdfl_test_all test_gaussian )
+ADD_TEST( vpdfl_test_mixture ${EXECUTABLE_OUTPUT_PATH}/vpdfl_test_all test_mixture )
+ADD_TEST( vpdfl_test_pc_gaussian ${EXECUTABLE_OUTPUT_PATH}/vpdfl_test_all test_pc_gaussian )
 
 ADD_EXECUTABLE( vpdfl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vpdfl_test_include vpdfl )

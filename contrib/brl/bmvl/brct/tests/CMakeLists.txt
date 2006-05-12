@@ -34,8 +34,8 @@ ADD_EXECUTABLE(brct_test_all
 )
 TARGET_LINK_LIBRARIES(brct_test_all brct vsol vdgl vgl vil1 vnl testlib)
 
-ADD_TEST(brct_test_synthetic_data brct_test_all brct_test_synthetic_data)
-ADD_TEST(brct_test_compute_P      brct_test_all brct_test_compute_P)
+ADD_TEST(brct_test_synthetic_data ${EXECUTABLE_OUTPUT_PATH}/brct_test_all brct_test_synthetic_data)
+ADD_TEST(brct_test_compute_P      ${EXECUTABLE_OUTPUT_PATH}/brct_test_all brct_test_compute_P)
 
 ADD_EXECUTABLE(brct_test_include test_include.cxx)
 TARGET_LINK_LIBRARIES(brct_test_include brct)

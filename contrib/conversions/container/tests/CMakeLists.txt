@@ -21,7 +21,7 @@ ADD_EXECUTABLE( conversions_container_test_all
   test_COOL_container.cxx
 )
 
-ADD_TEST( conversions_test_container conversions_container_test_all test_container )
-ADD_TEST( conversions_test_COOL_container conversions_container_test_all test_COOL_container )
+ADD_TEST( conversions_test_container ${EXECUTABLE_OUTPUT_PATH}/conversions_container_test_all test_container )
+ADD_TEST( conversions_test_COOL_container ${EXECUTABLE_OUTPUT_PATH}/conversions_container_test_all test_COOL_container )
 
 ADD_EXECUTABLE( conversions_container_test_include test_include.cxx )

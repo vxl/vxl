@@ -10,6 +10,11 @@ PROJECT(vxl)
 SET( LIBRARY_OUTPUT_PATH ${vxl_BINARY_DIR}/lib CACHE PATH
      "Output directory for the vxl libraries" )
 
+IF( NOT EXECUTABLE_OUTPUT_PATH )
+    SET( EXECUTABLE_OUTPUT_PATH "." )
+ENDIF( NOT EXECUTABLE_OUTPUT_PATH )
+
+
 # CMake support directory.
 SET(VXL_CMAKE_DIR ${vxl_SOURCE_DIR}/config/cmake/Modules)
 

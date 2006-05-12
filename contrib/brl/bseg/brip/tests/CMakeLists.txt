@@ -13,13 +13,13 @@ ADD_EXECUTABLE( brip_test_all
 
 TARGET_LINK_LIBRARIES( brip_test_all brip bsta vgl_algo vgl vnl vil vil1 testlib)
 
-ADD_TEST( brip_test_histogram         brip_test_all test_histogram )
-ADD_TEST( brip_test_mutual_info       brip_test_all test_mutual_info )
-ADD_TEST( brip_test_watershed         brip_test_all test_watershed )
-ADD_TEST( brip_test_fourier           brip_test_all test_fourier )
-ADD_TEST( brip_test_homography        brip_test_all test_homography )
-ADD_TEST( brip_test_lucas_kanade      brip_test_all test_lucas_kanade )
-ADD_TEST( brip_test_Horn_Schunck      brip_test_all test_Horn_Schunck )
+ADD_TEST( brip_test_histogram         ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_histogram )
+ADD_TEST( brip_test_mutual_info       ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_mutual_info )
+ADD_TEST( brip_test_watershed         ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_watershed )
+ADD_TEST( brip_test_fourier           ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_fourier )
+ADD_TEST( brip_test_homography        ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_homography )
+ADD_TEST( brip_test_lucas_kanade      ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_lucas_kanade )
+ADD_TEST( brip_test_Horn_Schunck      ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_Horn_Schunck )
 
 ADD_EXECUTABLE( brip_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( brip_test_include brip )

@@ -42,60 +42,60 @@ ADD_EXECUTABLE( vil_test_all
 TARGET_LINK_LIBRARIES( vil_test_all vil vpl vul testlib vcl )
 
 # basic things
-ADD_TEST( vil_test_image_resource           vil_test_all test_image_resource)
-ADD_TEST( vil_test_image_view               vil_test_all test_image_view)
-ADD_TEST( vil_test_memory_chunk             vil_test_all test_memory_chunk)
-ADD_TEST( vil_test_pixel_format             vil_test_all test_pixel_format)
+ADD_TEST( vil_test_image_resource           ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_image_resource)
+ADD_TEST( vil_test_image_view               ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_image_view)
+ADD_TEST( vil_test_memory_chunk             ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_memory_chunk)
+ADD_TEST( vil_test_pixel_format             ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_pixel_format)
 
 # file format readers/writers
-ADD_TEST( vil_test_file_format_read         vil_test_all test_file_format_read ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
-ADD_TEST( vil_test_save_load_image          vil_test_all test_save_load_image)
-ADD_TEST( vil_test_image_loader_robustness  vil_test_all test_image_loader_robustness)
-ADD_TEST( vil_test_stream                   vil_test_all test_stream ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
+ADD_TEST( vil_test_file_format_read         ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_file_format_read ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
+ADD_TEST( vil_test_save_load_image          ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_save_load_image)
+ADD_TEST( vil_test_image_loader_robustness  ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_image_loader_robustness)
+ADD_TEST( vil_test_stream                   ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_stream ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
 
 # image operations
-ADD_TEST( vil_test_deep_copy_3_plane        vil_test_all test_deep_copy_3_plane )
-ADD_TEST( vil_test_image_view_maths         vil_test_all test_image_view_maths)
-ADD_TEST( vil_test_convert                  vil_test_all test_convert ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
-ADD_TEST( vil_test_rotate_image             vil_test_all test_rotate_image)
-ADD_TEST( vil_test_warp                     vil_test_all test_warp)
+ADD_TEST( vil_test_deep_copy_3_plane        ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_deep_copy_3_plane )
+ADD_TEST( vil_test_image_view_maths         ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_image_view_maths)
+ADD_TEST( vil_test_convert                  ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_convert ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
+ADD_TEST( vil_test_rotate_image             ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_rotate_image)
+ADD_TEST( vil_test_warp                     ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_warp)
 
 # Sampling Operations
-ADD_TEST( vil_test_bilin_interp             vil_test_all test_bilin_interp)
-ADD_TEST( vil_test_sample_profile_bilin     vil_test_all test_sample_profile_bilin)
-ADD_TEST( vil_test_sample_grid_bilin        vil_test_all test_sample_grid_bilin)
-ADD_TEST( vil_test_resample_bilin           vil_test_all test_resample_bilin)
-ADD_TEST( vil_test_bicub_interp             vil_test_all test_bicub_interp)
-ADD_TEST( vil_test_sample_profile_bicub     vil_test_all test_sample_profile_bicub)
-ADD_TEST( vil_test_sample_grid_bicub        vil_test_all test_sample_grid_bicub)
-ADD_TEST( vil_test_resample_bicub           vil_test_all test_resample_bicub)
+ADD_TEST( vil_test_bilin_interp             ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_bilin_interp)
+ADD_TEST( vil_test_sample_profile_bilin     ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_sample_profile_bilin)
+ADD_TEST( vil_test_sample_grid_bilin        ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_sample_grid_bilin)
+ADD_TEST( vil_test_resample_bilin           ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_resample_bilin)
+ADD_TEST( vil_test_bicub_interp             ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_bicub_interp)
+ADD_TEST( vil_test_sample_profile_bicub     ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_sample_profile_bicub)
+ADD_TEST( vil_test_sample_grid_bicub        ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_sample_grid_bicub)
+ADD_TEST( vil_test_resample_bicub           ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_resample_bicub)
 
 # Math
-ADD_TEST( vil_test_math_value_range         vil_test_all test_math_value_range)
+ADD_TEST( vil_test_math_value_range         ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_math_value_range)
 
 # Blocked images
-ADD_TEST( vil_test_blocked_image_resource   vil_test_all test_blocked_image_resource ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
+ADD_TEST( vil_test_blocked_image_resource   ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_blocked_image_resource ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
 
 # Pyramid images
-ADD_TEST( vil_test_image_list vil_test_all test_image_list )
-ADD_TEST( vil_test_pyramid_image_resource   vil_test_all test_pyramid_image_resource )
+ADD_TEST( vil_test_image_list ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_image_list )
+ADD_TEST( vil_test_pyramid_image_resource   ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_pyramid_image_resource )
 
 # To run timing tests
 #ADD_EXECUTABLE( vil_test_access_timings vil_test_access_timings.cxx)
 #TARGET_LINK_LIBRARIES( vil_test_access_timings vil mbl vcl )
-#ADD_TEST( vil_test_access_timings vil_test_access_timings )
+#ADD_TEST( vil_test_access_timings ${EXECUTABLE_OUTPUT_PATH}/vil_test_access_timings )
 
 #ADD_EXECUTABLE( vil_test_access_timings_noplanes vil_test_access_timings_noplanes.cxx)
 #TARGET_LINK_LIBRARIES( vil_test_access_timings_noplanes vil mbl vcl )
-#ADD_TEST( vil_test_access_timings_noplanes vil_test_access_timings_noplanes )
+#ADD_TEST( vil_test_access_timings_noplanes ${EXECUTABLE_OUTPUT_PATH}/vil_test_access_timings_noplanes )
 
 #ADD_EXECUTABLE( vil_test_pair_access_timings vil_test_pair_access_timings.cxx)
 #TARGET_LINK_LIBRARIES( vil_test_pair_access_timings vil mbl vcl )
-#ADD_TEST( vil_test_pair_access_timings vil_test_pair_access_timings )
+#ADD_TEST( vil_test_pair_access_timings ${EXECUTABLE_OUTPUT_PATH}/vil_test_pair_access_timings )
 
 #ADD_EXECUTABLE( vil_test_random_access_timings vil_test_random_access_timings.cxx)
 #TARGET_LINK_LIBRARIES( vil_test_random_access_timings vil mbl vcl )
-#ADD_TEST( vil_test_random_access_timings vil_test_random_access_timings )
+#ADD_TEST( vil_test_random_access_timings ${EXECUTABLE_OUTPUT_PATH}/vil_test_random_access_timings )
 
 ADD_EXECUTABLE( vil_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vil_test_include vil )
