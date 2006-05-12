@@ -124,8 +124,13 @@ mbl_logger::mbl_logger():
   // This will have to change to support proper hierarchical control over categories.
 //  logstream_.tie(output_.real_stream_);
   // Don't insert default root logger - this would cause infinite recursion.
+  root().all_loggers_.insert(this);
 }
 
+mbl_logger::~mbl_logger()
+{
+  root().all_loggers_.erase(this);
+}
 
 mbl_log_output_stream::mbl_log_output_stream(vcl_ostream& real_stream, const char *id):
   real_stream_(&real_stream), id_(id), has_started_(false)

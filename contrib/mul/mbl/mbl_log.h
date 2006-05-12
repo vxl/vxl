@@ -183,6 +183,7 @@ class mbl_logger
  public:
   static mbl_logger_root &root();
   mbl_logger(const char *id);
+  ~mbl_logger();
 
   //: logger will take ownership of output
   void set(int level, mbl_log_output_base* output);
@@ -255,8 +256,6 @@ class mbl_logger_root
     null_stream_(&null_streambuf_) {}
 
  public:
-
-  mbl_logger default_logger;
 
   //: List of category entries.
   const mbl_log_categories &categories() {return categories_;}
