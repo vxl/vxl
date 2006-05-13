@@ -39,7 +39,7 @@
 // The vcl_endl (or a vcl_flush) is necessary to terminate the log line. The problem with this
 // explicit version is that the stream insertion and call to the time() function take place,
 // even if the logging level is set below WARN. Ideally, we would like unsent log messages
-// to take as little time as poosible - so that there is no overhead in leaving the
+// to take as little time as possible - so that there is no overhead in leaving the
 // log message in your code. To achieve this we can test the log level first
 // \code
 // if (my_log.level() < mbl_logger::WARN)
