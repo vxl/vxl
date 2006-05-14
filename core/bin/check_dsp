@@ -266,6 +266,7 @@ foreach $dir (@DIRS)
   }
   $moc_files = "";
   $cmakefile =~ s/\n\s*\#[^\n]*//g;
+  $cmakefile =~ s/\$\{EXECUTABLE_OUTPUT_PATH\}\///g;
   if ($cmakefile =~ s/\bQT_WRAP_CPP\s*\(\s*(\S+)\s+(\S+)\s+([^()]+)\)//) {
     $moc_files = "$2";
     foreach $x (split /\s+/, "$3") {
