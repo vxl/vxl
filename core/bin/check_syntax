@@ -488,6 +488,7 @@ foreach $f (@FILES)
               ($f =~ m!\bcore/vnl/vnl_sample\.cxx$! && $t eq "stdlib") ||
               ($f =~ m!\bcore/vpl/os_unix/vpl\.cxx$! && $t eq "stdlib") ||
               ($f =~ m!/cmake/config/vxl_platform_tests\.cxx$!) ||
+              ($f =~ m!\bvidl2/vidl2_v4l_istream\.h$! && $t eq "errno") ||
               ($f =~ m!\bcore/vul/vul_temp_filename\.cxx$! && $t eq "stdio") ||
               ($f =~ m!\bcore/vul/vul_redirector\.cxx$! && $t eq "stddef"));
   }
@@ -669,6 +670,7 @@ foreach $f (@FILES)
           "$f.$wd" !~ m!\bvnl_quaternion\.h\.real$! &&
           "$f.$wd" !~ m!\bvnl/tests/test_complex\.cxx\.acos$! &&
           "$f.$wd" !~ m!\bmbl_arb_length_int\.h\.abs$! &&
+          "$f.$wd" !~ m!\bmbl_log\.h\.log$! &&
           "$f.$wd" !~ m!\bvnl_(bignum|rational)\.h\.abs$! &&
           "$f.$wd" !~ m!\bvnl/(vnl_rational\.h|tests/test_rational\.cxx)\.(ceil|floor)$! &&
           "$f.$wd" !~ m!\bvnl_finite\.h\.(exp|log|pow)$! &&
@@ -681,6 +683,7 @@ foreach $f (@FILES)
           "$f.$wd" !~ m!\bmvl/HomgConic\.(h|cxx)\.polar$! &&
           "$f.$wd" !~ m!\bbdgl_curve_clustering\.(cxx|h)\.(min|max)$! &&
           "$f.$wd" !~ m!\bbsta_histogram\.h\.(min|max)$! &&
+          "$f.$wd" !~ m!\bvidl2_pixel_format\.h\.(min|max)$! &&
           "$f.$wd" !~ m!\balgo/vnl_rn?poly_(solve|roots)\.h\.(real|imag)$! &&
           "$f"     !~ m!/cmake/config/vxl_platform_tests\.cxx$! &&
           $file_s =~ m![^.\005\006]\b$wd(\s*)\(! ); # \005 is :: and \006 is ->
