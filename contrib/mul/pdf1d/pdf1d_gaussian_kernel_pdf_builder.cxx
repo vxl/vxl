@@ -1,7 +1,5 @@
 // This is mul/pdf1d/pdf1d_gaussian_kernel_pdf_builder.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
+
 
 #include <vnl/vnl_fwd.h> // Leave this hack here to avoid a MSVC internal compiler error.
 #include "pdf1d_gaussian_kernel_pdf_builder.h"

@@ -1,7 +1,5 @@
 // This is mul/pdf1d/pdf1d_weighted_epanech_kernel_pdf.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
+
 //:
 // \file
 // \brief Univariate Weighted Epanechnikov kernel PDF

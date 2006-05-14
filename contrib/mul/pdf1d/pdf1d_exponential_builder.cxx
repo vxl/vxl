@@ -1,7 +1,5 @@
 // This is mul/pdf1d/pdf1d_exponential_builder.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
+
 //:
 // \file
 

@@ -1,9 +1,7 @@
 // This is mul/pdf1d/pdf1d_pdf.h
 #ifndef pdf1d_pdf_h
 #define pdf1d_pdf_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
+
 //:
 // \file
 // \brief Base class for Univariate Probability Density Function classes.

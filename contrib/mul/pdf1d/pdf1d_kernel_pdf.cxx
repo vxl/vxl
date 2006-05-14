@@ -1,7 +1,5 @@
 // This is mul/pdf1d/pdf1d_kernel_pdf.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
+
 //:
 // \file
 // \brief Base class for kernel PDFs.

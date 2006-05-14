@@ -1,9 +1,7 @@
 // This is mul/pdf1d/pdf1d_compare_to_pdf.h
 #ifndef pdf1d_compare_to_pdf_h
 #define pdf1d_compare_to_pdf_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
+
 //:
 // \file
 // \brief Base for classes with test whether data could come from a given pdf.

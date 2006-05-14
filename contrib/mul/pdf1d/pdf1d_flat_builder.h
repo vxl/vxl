@@ -1,9 +1,7 @@
 // This is mul/pdf1d/pdf1d_flat_builder.h
 #ifndef pdf1d_flat_builder_h
 #define pdf1d_flat_builder_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
+
 //:
 // \file
 // \author Tim Cootes

@@ -1,9 +1,7 @@
 // This is mul/pdf1d/pdf1d_compare_to_pdf_bhat.h
 #ifndef pdf1d_compare_to_pdf_bhat_h
 #define pdf1d_compare_to_pdf_bhat_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
+
 //:
 // \file
 // \author Tim Cootes

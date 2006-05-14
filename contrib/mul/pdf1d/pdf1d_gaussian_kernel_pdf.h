@@ -1,9 +1,7 @@
 // This is mul/pdf1d/pdf1d_gaussian_kernel_pdf.h
 #ifndef pdf1d_gaussian_kernel_pdf_h
 #define pdf1d_gaussian_kernel_pdf_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
+
 //:
 // \file
 // \brief Univariate gaussian kernel PDF

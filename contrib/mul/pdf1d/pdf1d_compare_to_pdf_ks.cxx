@@ -1,7 +1,5 @@
 // This is mul/pdf1d/pdf1d_compare_to_pdf_ks.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
+
 //:
 // \file
 // \author Tim Cootes

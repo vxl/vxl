@@ -1,9 +1,7 @@
 // This is mul/pdf1d/pdf1d_exponential.h
 #ifndef pdf1d_exponential_h
 #define pdf1d_exponential_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
+
 //:
 // \file
 // \brief Univariate exponential PDF

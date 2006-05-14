@@ -1,7 +1,5 @@
 // This is mul/pdf1d/pdf1d_flat.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
+
 //:
 // \file
 // \brief Univariate flat PDF.

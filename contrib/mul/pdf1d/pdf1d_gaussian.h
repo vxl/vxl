@@ -1,9 +1,8 @@
 // This is mul/pdf1d/pdf1d_gaussian.h
 #ifndef pdf1d_gaussian_h
 #define pdf1d_gaussian_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
+
+
 //:
 // \file
 // \brief Univariate gaussian PDF
