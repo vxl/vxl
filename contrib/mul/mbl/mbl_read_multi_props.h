@@ -13,7 +13,7 @@
 
 
 //: The type of the property dictionary
-class mbl_read_multi_props_type : public vcl_multimap<vcl_string, vcl_string >
+class mbl_read_multi_props_type : public vcl_multimap<vcl_string, vcl_string>
 {
  public:
 
@@ -26,7 +26,7 @@ class mbl_read_multi_props_type : public vcl_multimap<vcl_string, vcl_string >
   // \sa get_optional_property().
   void get_required_property(const vcl_string& label,
                              vcl_vector<vcl_string>& values,
-                             const unsigned nmax=-1, //=max<unsigned>
+                             const unsigned nmax= (unsigned)(-1), //=max<unsigned>
                              const unsigned nmin=1);
 
   //: Return a vector of all values for a given property label \a label.
@@ -37,7 +37,7 @@ class mbl_read_multi_props_type : public vcl_multimap<vcl_string, vcl_string >
   // \sa get_required_property().
   void get_optional_property(const vcl_string& label,
                              vcl_vector<vcl_string>& values,
-                             const unsigned nmax=-1); //=max<unsigned>
+                             const unsigned nmax= (unsigned)(-1)); //=max<unsigned>
 };
 
 
