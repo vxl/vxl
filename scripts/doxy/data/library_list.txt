@@ -8,7 +8,7 @@
 # are transitive. So if B depends on A, and C depends on A and B,
 # then C need only list A
 
-# package: vcl :pserver:anonymous@cvs.vxl.sourceforge.net:/cvsroot/vxl Cross platform STL library
+# package: vcl :pserver:anonymous@vxl.cvs.sourceforge.net:/cvsroot/vxl Cross platform STL library
 # . vcl vcl_ build
 
 search: http://www.isbe.man.ac.uk/search_vxl.html Search this Documentation Tree.
@@ -18,7 +18,7 @@ book: core : VXL overview documentation
 book: contrib/mul : Manchester University Library overview documentation
 book: contrib/tbl : The Image Processing Library
 
-package: :pserver:anonymous@cvs.sourceforge.net:/cvsroot/vxl core Core Vision Libraries
+package: :pserver:anonymous@vxl.cvs.sourceforge.net:/cvsroot/vxl core Core Vision Libraries
 core vsl     vsl_     build
 core vnl     vnl_     build core/vsl
 # should be replaced by the following three lines or something along these lines:
@@ -49,7 +49,7 @@ core vul     vul_     build core/vsl
 #core vul/io   vul_io_ build core/vul core/vsl
 core vpl     vpl_     build
 
-package: :pserver:anonymous@cvs.sourceforge.net:/cvsroot/vxl core Level-2 Vision Libraries
+package: :pserver:anonymous@vxl.cvs.sourceforge.net:/cvsroot/vxl core Level-2 Vision Libraries
 core vidl      vidl_     build core/vbl core/vul core/vil
 core vidl_vil1 vidl_vil1 build core/vbl core/vul core/vil1
 core vcsl      vcsl_     build core/vnl core/vbl
@@ -57,10 +57,10 @@ core vgui      vgui_     build core/vgl core/vpl core/vbl core/vul core/vnl core
 # should be replaced by the following line or something along these lines:
 #core vgui      vgui_     build core/vnl/algo core/vil core/vil1 core/vgl core/vpl core/vbl core/vul
 
-package: :pserver:anonymous@cvs.sourceforge.net:/cvsroot/vxl core Test Framework
+package: :pserver:anonymous@vxl.cvs.sourceforge.net:/cvsroot/vxl core Test Framework
 core testlib testlib_ build
 
-package: :pserver:anonymous@cvs.sourceforge.net:/cvsroot/vxl contrib/mul Manchester University Libraries
+package: :pserver:anonymous@vxl.cvs.sourceforge.net:/cvsroot/vxl contrib/mul Manchester University Libraries
 contrib/mul mbl    mbl_    build core/vnl core/vgl core/vsl
 # should be replaced by the following line or something along these lines:
 #contrib/mul mbl    mbl_    build core/vnl/io core/vnl/algo core/vgl/io core/vsl
@@ -90,12 +90,12 @@ contrib/mul vimt3d vimt3d_ build contrib/mul/vil3d contrib/mul/vimt core/vnl
 contrib/mul mvl2   mvl2_   build core/vil core/vul
 contrib/mul ipts   ipts_   build contrib/mul/vimt contrib/mul/mbl
 
-package: :pserver:anonymous@cvs.sourceforge.net:/cvsroot/vxl contrib/tbl Image Processing Libraries
+package: :pserver:anonymous@vxl.cvs.sourceforge.net:/cvsroot/vxl contrib/tbl Image Processing Libraries
 contrib/tbl vepl2  vepl2_  build contrib/tbl/vipl core/vil
 contrib/tbl vepl   vepl_   build contrib/tbl/vipl core/vil1
 contrib/tbl vipl   vipl_   build core/vnl
 
-package: :pserver:anonymous@cvs.sourceforge.net:/cvsroot/vxl contrib/oxl Oxford University Libraries
+package: :pserver:anonymous@vxl.cvs.sourceforge.net:/cvsroot/vxl contrib/oxl Oxford University Libraries
 contrib/oxl mvl    mvl_    build core/vnl core/vbl core/vgl core/vul core/vil1
 # should be replaced by the following line or something along these lines:
 #contrib/oxl mvl    mvl_    build core/vnl/algo core/vnl core/vbl core/vgl/algo core/vgl core/vul core/vil1
@@ -105,7 +105,7 @@ contrib/oxl osl    osl_    build core/vnl core/vil1 core/vbl
 contrib/oxl oxp    oxp_    build core/vnl core/vidl_vil1 core/vil1 core/vul core/vbl core/vpl
 contrib/oxl vrml   vrml_   build core/vul
 
-package: :pserver:anonymous@cvs.sourceforge.net:/cvsroot/vxl contrib/gel GE Libraries
+package: :pserver:anonymous@vxl.cvs.sourceforge.net:/cvsroot/vxl contrib/gel GE Libraries
 contrib/gel pop    pop_    build core/vgl core/vnl
 contrib/gel vsol   vsol_   build core/vgl core/vnl core/vbl core/vul core/vsl
 contrib/gel vdgl   vdgl_   build contrib/gel/vsol
@@ -124,12 +124,12 @@ contrib/gel vmal   vmal_   build contrib/gel/vgel contrib/oxl/osl
 contrib/gel jvid   jvid_   build core/vgui core/vidl_vil1
 contrib/gel/mrc vpgl vpgl_ build core/vcsl core/vnl core/vbl
 
-package: :pserver:anonymous@cvs.sourceforge.net:/cvsroot/vxl contrib/rpl RPI libraries
+package: :pserver:anonymous@vxl.cvs.sourceforge.net:/cvsroot/vxl contrib/rpl RPI libraries
 contrib/rpl rrel   rrel_   build core/vbl core/vgl core/vnl # core/vnl/algo
 contrib/rpl rsdl   rsdl_   build core/vnl core/vbl
 contrib/rpl rgrl   rgrl_   build contrib/rpl/rrel contrib/rpl/rsdl core/vnl core/vbl core/vil
 
-package: :pserver:anonymous@cvs.sourceforge.net:/cvsroot/vxl contrib/brl Brown University libraries
+package: :pserver:anonymous@vxl.cvs.sourceforge.net:/cvsroot/vxl contrib/brl Brown University libraries
 contrib/brl/bbas bgrl   bgrl_   build core/vbl core/vsl
 contrib/brl/bbas bvgl   bvgl_   build core/vgl core/vnl
 contrib/brl/bbas bsol   bsol_   build contrib/gel/vsol core/vul core/vbl
@@ -151,7 +151,7 @@ contrib/brl/bmvl bmvv   bmvv_   build contrib/brl/bmvl/brct contrib/brl/bbas/bgu
 contrib/brl/bmvl btom   btom_   build contrib/gel/gevd
 contrib/brl/bseg segv   segv_   build contrib/brl/bseg/strk contrib/brl/bbas/bgui contrib/brl/bbas/bxml
 
-package: :pserver:anonymous@cvs.sourceforge.net:/cvsroot/vxl contrib/oul Otago University libraries
+package: :pserver:anonymous@vxl.cvs.sourceforge.net:/cvsroot/vxl contrib/oul Otago University libraries
 contrib/oul ouel   ouel_  build core/vnl
 contrib/oul oufgl oufgl_  build core/vil1
 contrib/oul ouml   ouml_  build core/vnl core/vil1 core/vpl
