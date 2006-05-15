@@ -56,10 +56,10 @@ SET (EXPECTED_BUILDS "\\
   {cs.rpi.edu FreeBSD-fresh-gcc-3.4.2} \\
   {mobile FreeBSD-6.0_gcc-3.4.4_-Wall_-O_shared} \\
   {crd.ge.com FreeBSD-6.0_gcc-3.4.4_-Wall_profile_static} \\
-  {crd.ge.com FreeBSD-6.0_gcc-3.2.3_-Wall_­O2_shared} \\
-  {crd.ge.com FreeBSD-6.0_gcc-3.3.6_-Wall_­O2_shared} \\
-  {crd.ge.com FreeBSD-6.0_gcc-4.0.3_-Wall_­O2_shared} \\
-  {crd.ge.com FreeBSD-6.0_gcc-4.1.0_-Wall_­O2_shared} \\
+  {crd.ge.com FreeBSD-6.0_gcc-3.2.3_-Wall_-O2_shared} \\
+  {crd.ge.com FreeBSD-6.0_gcc-3.3.6_-Wall_-O2_shared} \\
+  {crd.ge.com FreeBSD-6.0_gcc-4.0.3_-Wall_-O2_shared} \\
+  {crd.ge.com FreeBSD-6.0_gcc-4.1.0_-Wall_-O2_shared} \\
   {crd.ge.com Linux-2.4.9_icc-8.1_-w1_-O2_shared} \\
   {crd.ge.com MinGW-3.8_gcc-3.4.4_-Wall_-O2_static} \\
   {crd.ge.com Solaris-2.8_gcc-3.4.3_static} \\
