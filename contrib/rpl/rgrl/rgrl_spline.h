@@ -76,7 +76,7 @@ class rgrl_spline
 
   //: The spline value
   //
-  //  \f[ f(\overlin{u},y,z) = \sum_{i=-1}^{m[0]_+1}
+  //  \f[ f(\overline{u},y,z) = \sum_{i=-1}^{m[0]_+1}
   //  \sum_{j=-1}^{m[1]_+1} \sum_{k=-1}^{m_[2]+1} V_{ijk} * B_i(x) *
   //  B_j(y) * B_k(z)\f]
   double f_x( vnl_vector<double> const& x ) const;
