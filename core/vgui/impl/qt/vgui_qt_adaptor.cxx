@@ -40,8 +40,7 @@ vgui_qt_adaptor::vgui_qt_adaptor(QWidget* parent, const char* name)
    connect (idle_timer_, SIGNAL(timeout()), this, SLOT(idle_slot()));
 }
 
-
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 vgui_qt_adaptor::~vgui_qt_adaptor()
 {
    if (ovl_helper)
@@ -50,8 +49,7 @@ vgui_qt_adaptor::~vgui_qt_adaptor()
    dispatch_to_tableau(vgui_DESTROY);
 }
 
-
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 bool
 vgui_qt_adaptor::dispatch_to_tableau (const vgui_event &event)
 {
@@ -61,7 +59,7 @@ vgui_qt_adaptor::dispatch_to_tableau (const vgui_event &event)
     return vgui_adaptor::dispatch_to_tableau(event);
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void vgui_qt_adaptor::paintGL()
 {
    if (this->doubleBuffer())
@@ -71,7 +69,6 @@ void vgui_qt_adaptor::paintGL()
    dispatch_to_tableau(vgui_DRAW);
    swap_buffers ();
 }
-
 
 void vgui_qt_adaptor::post_overlay_redraw()
 {
@@ -93,14 +90,13 @@ void vgui_qt_adaptor::idle_slot ()
      idle_request_posted_ =  dispatch_to_tableau( vgui_event( vgui_IDLE ) );
 }
 
-
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void vgui_qt_adaptor::post_idle_request()
 {
    idle_request_posted_ = true;
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void vgui_qt_adaptor::paintOverlayGL()
 {
    if (this->doubleBuffer())
@@ -111,8 +107,7 @@ void vgui_qt_adaptor::paintOverlayGL()
    swap_buffers ();
 }
 
-
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void vgui_qt_adaptor::resizeGL(int w, int h)
 {
    make_current();
@@ -123,8 +118,7 @@ void vgui_qt_adaptor::resizeGL(int w, int h)
    dispatch_to_tableau(vgui_RESHAPE);
 }
 
-
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void vgui_qt_adaptor::mouseMoveEvent   (QMouseEvent* e)
 {
    vgui_event ev = translate(e);
@@ -132,8 +126,7 @@ void vgui_qt_adaptor::mouseMoveEvent   (QMouseEvent* e)
    dispatch_to_tableau(ev);
 }
 
-
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void vgui_qt_adaptor::mousePressEvent  (QMouseEvent* e)
 {
    vgui_event ev = translate(e);
@@ -156,8 +149,7 @@ void vgui_qt_adaptor::mousePressEvent  (QMouseEvent* e)
    dispatch_to_tableau(ev);
 }
 
-
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void vgui_qt_adaptor::mouseReleaseEvent(QMouseEvent* e)
 {
    vgui_event ev = translate(e);
@@ -165,7 +157,7 @@ void vgui_qt_adaptor::mouseReleaseEvent(QMouseEvent* e)
    dispatch_to_tableau(ev);
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void vgui_qt_adaptor::keyPressEvent   (QKeyEvent* e)
 {
    vgui_event ev = translate(e);
@@ -180,19 +172,30 @@ void vgui_qt_adaptor::keyReleaseEvent (QKeyEvent* e)
    dispatch_to_tableau(ev);
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+void vgui_qt_adaptor::wheelEvent      (QWheelEvent* e)
+{
+   vgui_event ev = translate(e);
+
+   if (e->delta() > 0) ev.type = vgui_WHEEL_UP;
+   else                ev.type = vgui_WHEEL_DOWN;
+
+   dispatch_to_tableau(ev);
+}
+
+//------------------------------------------------------------------------------
 void vgui_qt_adaptor::windowActivationChange (bool oldActive)
 {
    vgui_event ev;
 
-   if(!oldActive)
+   if (!oldActive)
     ev.type = vgui_FOCUSGAINED;
    else
     ev.type = vgui_FOCUSLOST;
    dispatch_to_tableau(ev);
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 vgui_event vgui_qt_adaptor::translate(QMouseEvent* e)
 {
    vgui_event ev;
@@ -262,5 +265,18 @@ vgui_event vgui_qt_adaptor::translate(QKeyEvent* e)
    ev. set_key (key);
    ev. ascii_char = key;
 
+   return ev;
+}
+
+vgui_event vgui_qt_adaptor::translate(QWheelEvent* e)
+{
+   vgui_event ev;
+   int state = vgui_MODIFIER_NULL;
+   if (e-> state () & ControlButton) state |= vgui_CTRL;
+   if (e-> state () & AltButton) state |= vgui_ALT;
+   if (e-> state () & ShiftButton) state |= vgui_SHIFT;
+   ev. modifier = vgui_modifier (state);
+   ev. wx = e-> x ();
+   ev. wy = QGLWidget::height () - e-> y ();
    return ev;
 }

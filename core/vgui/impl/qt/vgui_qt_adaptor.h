@@ -12,6 +12,7 @@
 //  Modifications
 //   24.03.2000 JS  Initial Version, adapted from vgui_gtk_adaptor
 //   14.11.2005 Chanop Silpa-Anan  adapted to QT 3.3.5 for X11/Mac
+//   17.05.2006 Rowin Heymans      added mousewheel event handling
 // \endverbatim
 //-----------------------------------------------------------------------------
 
@@ -71,9 +72,11 @@ class vgui_qt_adaptor :
    void mouseReleaseEvent(QMouseEvent* e);
    void keyPressEvent    (QKeyEvent*   e);
    void keyReleaseEvent  (QKeyEvent*   e);
+   void wheelEvent       (QWheelEvent* e);
 
    vgui_event translate(QMouseEvent* e);
    vgui_event translate(QKeyEvent* e);
+   vgui_event translate(QWheelEvent* e);
 
  private:
    // pointer to overlay emulation data

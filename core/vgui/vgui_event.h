@@ -54,6 +54,8 @@ enum vgui_event_type
   vgui_OTHER,
   vgui_FOCUSGAINED,
   vgui_FOCUSLOST,
+  vgui_WHEEL_UP,
+  vgui_WHEEL_DOWN,
   vgui_EVENT_MAX    // This must be the last entry in the list
 };
 
