@@ -7,9 +7,6 @@
 # Begin Group "Source Files"
 # PROP Default_Filter "c;cxx"
 # Begin Source File
-SOURCE=.\asyncio.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\frame_grabber_v4l.cxx
 # End Source File
 # Begin Source File
