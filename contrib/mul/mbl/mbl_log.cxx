@@ -130,6 +130,7 @@ mbl_logger::mbl_logger():
 mbl_logger::~mbl_logger()
 {
   root().all_loggers_.erase(this);
+  delete output_;
 }
 
 mbl_log_output_stream::mbl_log_output_stream(vcl_ostream& real_stream, const char *id):
