@@ -286,6 +286,7 @@ IF (QT_FOUND)
       impl/qt/vgui_qt_adaptor.h
       impl/qt/vgui_qt_dialog_impl.h
       impl/qt/vgui_qt_menu.h
+      impl/qt/vgui_qt_statusbar.h
     )
 
     SET( vgui_sources ${vgui_sources} ${vgui_qt_sources} ${vgui_qt_moc_files} )
