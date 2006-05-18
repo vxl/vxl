@@ -252,15 +252,13 @@ typedef vcl_map<vcl_string, vcl_string, vcl_less<vcl_string> > map_t;
 
 vcl_string vul_expand_path(vcl_string path)
 {
-  // create the map if not already created.
-  static map_t *the_map = 0;
-  if (! the_map)
-    the_map = new map_t;
+  // create the cache.
+  static map_t the_map;
 
   // look for the given path in the map.
-  map_t::iterator i = the_map->find(path);
+  map_t::iterator i = the_map.find(path);
 
-  if (i == the_map->end()) {
+  if (i == the_map.end()) {
     // not in the map, so compute it :
     vcl_string mapped = vul_expand_path_internal(path);
     // cache it :
