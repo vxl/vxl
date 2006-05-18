@@ -64,5 +64,7 @@
 #include <vsol/vsol_flags_id_sptr.h>
 #include <vsol/vsol_spatial_object.h>
 #include <vsol/vsol_spatial_object_sptr.h>
+#include <vsol/vsol_orient_box_3d.h>
+#include <vsol/vsol_orient_box_3d_sptr.h>
 
 int main() { return 0; }

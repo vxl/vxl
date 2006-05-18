@@ -1,4 +1,5 @@
 #include <rgrl/rgrl_fwd.h>
+#include <rgrl/rgrl_internal_util.h>
 
 #include <rgrl/rgrl_command_sptr.h>
 #include <rgrl/rgrl_converge_status_sptr.h>

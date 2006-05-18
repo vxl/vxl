@@ -29,5 +29,9 @@
 #include <vidl2/vidl2_dshow_istream_params_esf.h>
 #endif // HAS_DIRECTSHOW_ESF
 #endif // HAS_DIRECTSHOW
+#if 0 // FIXME
+#include <vidl2/vidl2_v4l_istream.h>
+#include <vidl2/vidl2_v4l_params.h>
+#endif // 0
 
 int main() { return 0; }
