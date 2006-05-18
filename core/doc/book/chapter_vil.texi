@@ -1259,7 +1259,7 @@ When CMAKE creates your build files it will automatically add the
 appropriate source files and pre-processor definitions.  Once VIL
 is built, test the JPEG 2000 decompression capability using the
 test program ``test_file_format_read'' in project ``vil_test_all''.
-If things are set up correctly, these test program will report
+If things are set up correctly, the test program will report
 that these two tests passed:
 
 @itemize @bullet
