@@ -1,4 +1,5 @@
 SUBDIRS := ouel ouml
+MANPAGE_SOURCES += oul_copyright.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
