@@ -165,11 +165,6 @@ class vimt3d_transform_3d
   // it becomes a translation.
   void set_origin( const vgl_point_3d<double> & );
 
-  //: Modifies the transformation so that operator()(vgl_point_3d<double> (0,0)) == p.
-  // \deprecated in favour of set_origin()
-  // Can be deleted after release of VXL 1.3.0
-  void origin( const vgl_point_3d<double> &p) {set_origin(p);}
-
   //: Applies transformation to (x,y,z)
   // \param x  x coordinate
   // \param y  y co-ord
