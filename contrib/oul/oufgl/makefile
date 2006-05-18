@@ -4,6 +4,7 @@ LIBRARY := oufgl
 IMMEDIATE_LIBS = -lvil
 
 #SOURCES += asyncio.cxx
+MANPAGE_SOURCES += asyncio.h
 SOURCES += frame_grabber_v4l.cxx
 SOURCES += frame_grabber_vil.cxx
 MANPAGE_SOURCES += frame_grabber.h
