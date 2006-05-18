@@ -55,7 +55,8 @@ inline vimt_image_2d_of<T> vimt3d_slice_ij(const vimt3d_image_3d_of<T> &im, unsi
 
   // Check the transform
   vimt3d_transform_3d trans3 = im.world2im();
-    assert(trans3.is_identity() || trans3.form()==vimt3d_transform_3d::ZoomOnly);
+  assert(trans3.is_identity() || trans3.form()==vimt3d_transform_3d::ZoomOnly
+      || trans3.form()==vimt3d_transform_3d::Translation);
 
   // Get the appropriate transform details
   vimt_transform_2d trans2;
