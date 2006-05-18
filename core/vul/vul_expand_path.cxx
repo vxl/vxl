@@ -262,7 +262,7 @@ vcl_string vul_expand_path(vcl_string path)
     // not in the map, so compute it :
     vcl_string mapped = vul_expand_path_internal(path);
     // cache it :
-    i = the_map->insert(map_t::value_type(path, mapped)).first;
+    i = the_map.insert(map_t::value_type(path, mapped)).first;
   }
 
   //
