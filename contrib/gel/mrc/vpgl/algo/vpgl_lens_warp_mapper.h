@@ -79,7 +79,6 @@ vpgl_lens_warp_resize(const vil_image_view<sType>& in,
                        InterpFunctor interp)
 {
   vgl_box_2d<int> bounds = vpgl_lens_warp_bounds(ld, vgl_box_2d<int>(0,in.ni(),0,in.nj()));
-  vgl_point_2d<int> min_pt = bounds.min_point();
   vgl_vector_2d<T> offset(T(-bounds.min_x()), T(-bounds.min_y()));
   ld.set_translation( offset, true );
   vil_image_view<dType> out(bounds.width(), bounds.height(), in.nplanes());
@@ -135,7 +134,6 @@ vpgl_lens_unwarp_resize(const vil_image_view<sType>& in,
                          InterpFunctor interp)
 {
   vgl_box_2d<int> bounds = vpgl_lens_unwarp_bounds(ld, vgl_box_2d<int>(0,in.ni(),0,in.nj()));
-  vgl_point_2d<int> min_pt = bounds.min_point();
   vgl_vector_2d<T> offset(T(-bounds.min_x()), T(-bounds.min_y()));
   ld.set_translation( offset, false );
   vil_image_view<dType> out(bounds.width(), bounds.height(), in.nplanes());
