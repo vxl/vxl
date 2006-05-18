@@ -44,7 +44,9 @@ void vsl_b_read(vsl_b_istream& is, vcl_vector<T>& v)
   vsl_b_read(is, ver);
   unsigned n;
   vsl_b_read(is,n);
-  v.resize(n);
+  v.resize(n); // Note that this resize means that the object must be default
+               // constructable. It is very hard to see how to avoid this requirement,
+               // without designing types that are constructable directly from a stream.
 
   // There is nothing in the STL standard that says that vector<> has
   // to store its data in a contiguous memory block. However, most
