@@ -240,6 +240,17 @@ void vgl_box_3d<Type>::set_depth(Type depth)
 }
 
 
+//: Add to width and height, centroid unchanged.
+// Will move each side by \p expand / 2.
+template <class Type>
+void vgl_box_3d<Type>::expand_about_centroid(Type expand)
+{
+  assert(!is_empty());
+  set_dim(min_pos_[0], max_pos_[0], width() + expand );
+  set_dim(min_pos_[1], max_pos_[1], height() + expand );
+  set_dim(min_pos_[2], max_pos_[2], depth() + expand );
+}
+
 //: Scale width, height and depth, centroid unchanged.
 template <class Type>
 void vgl_box_3d<Type>::scale_about_centroid(double s)

@@ -207,6 +207,10 @@ class vgl_box_3d
   //: Set depth (z), centroid unchanged
   void set_depth(Type depth);
 
+
+  //: Add to width and height, centroid unchanged.
+  // Will move each side by \p expand / 2.
+  void expand_about_centroid(Type expand);
   //: Scale width, height and depth, centroid unchanged.
   void scale_about_centroid(double s);
   //: Scale width, height and depth, keeping scaled position of origin unchanged.

@@ -203,6 +203,9 @@ class vgl_box_2d
   //: Modify height, retaining centroid at current position
   void set_height(Type height);
 
+  //: Add to width and height, centroid unchanged.
+  // Will move each side by \p expand / 2.
+  void expand_about_centroid(Type expand);
   //: Scale width and height, centroid unchanged.
   void scale_about_centroid(double s);
   //: Scale width and height, keeping scaled position of origin unchanged.

@@ -214,6 +214,16 @@ void vgl_box_2d<Type>::set_height(Type height)
 }
 
 
+//: Add to width and height, centroid unchanged.
+// Will move each side by \p expand / 2.
+template <class Type>
+void vgl_box_2d<Type>::expand_about_centroid(Type expand)
+{
+  assert(!is_empty());
+  set_dim(min_pos_[0], max_pos_[0], width() + expand );
+  set_dim(min_pos_[1], max_pos_[1], height() + expand );
+}
+
 //: Scale width and height, centroid unchanged.
 template <class Type>
 void vgl_box_2d<Type>::scale_about_centroid(double s)
