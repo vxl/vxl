@@ -31,7 +31,9 @@ inline vimt_image_2d_of<T> vimt3d_slice_ji(const vimt3d_image_3d_of<T> &im, unsi
 
   // Check the transform
   vimt3d_transform_3d trans3 = im.world2im();
-    assert(trans3.is_identity() || trans3.form()==vimt3d_transform_3d::ZoomOnly);
+  assert(trans3.is_identity() || 
+         trans3.form()==vimt3d_transform_3d::Translation || 
+         trans3.form()==vimt3d_transform_3d::ZoomOnly);
 
   // Get the appropriate transform details
   vimt_transform_2d trans2;
@@ -55,8 +57,9 @@ inline vimt_image_2d_of<T> vimt3d_slice_ij(const vimt3d_image_3d_of<T> &im, unsi
 
   // Check the transform
   vimt3d_transform_3d trans3 = im.world2im();
-  assert(trans3.is_identity() || trans3.form()==vimt3d_transform_3d::ZoomOnly
-      || trans3.form()==vimt3d_transform_3d::Translation);
+  assert(trans3.is_identity() || 
+         trans3.form()==vimt3d_transform_3d::Translation || 
+         trans3.form()==vimt3d_transform_3d::ZoomOnly);
 
   // Get the appropriate transform details
   vimt_transform_2d trans2;
@@ -80,7 +83,9 @@ inline vimt_image_2d_of<T> vimt3d_slice_jk(const vimt3d_image_3d_of<T> &im, unsi
 
   // Check the transform
   vimt3d_transform_3d trans3 = im.world2im();
-    assert(trans3.is_identity() || trans3.form()==vimt3d_transform_3d::ZoomOnly);
+  assert(trans3.is_identity() || 
+         trans3.form()==vimt3d_transform_3d::Translation || 
+         trans3.form()==vimt3d_transform_3d::ZoomOnly);
 
   // Get the appropriate transform details
   vimt_transform_2d trans2;
@@ -104,7 +109,9 @@ inline vimt_image_2d_of<T> vimt3d_slice_kj(const vimt3d_image_3d_of<T> &im, unsi
  
   // Check the transform
   vimt3d_transform_3d trans3 = im.world2im();
-    assert(trans3.is_identity() || trans3.form()==vimt3d_transform_3d::ZoomOnly);
+  assert(trans3.is_identity() || 
+         trans3.form()==vimt3d_transform_3d::Translation || 
+         trans3.form()==vimt3d_transform_3d::ZoomOnly);
 
   // Get the appropriate transform details
   vimt_transform_2d trans2;
@@ -128,7 +135,9 @@ inline vimt_image_2d_of<T> vimt3d_slice_ki(const vimt3d_image_3d_of<T> &im, unsi
 
   // Check the transform
   vimt3d_transform_3d trans3 = im.world2im();
-    assert(trans3.is_identity() || trans3.form()==vimt3d_transform_3d::ZoomOnly);
+  assert(trans3.is_identity() || 
+         trans3.form()==vimt3d_transform_3d::Translation || 
+         trans3.form()==vimt3d_transform_3d::ZoomOnly);
 
   // Get the appropriate transform details
   vimt_transform_2d trans2;
@@ -152,7 +161,9 @@ inline vimt_image_2d_of<T> vimt3d_slice_ik(const vimt3d_image_3d_of<T> &im, unsi
 
   // Check the transform
   vimt3d_transform_3d trans3 = im.world2im();
-    assert(trans3.is_identity() || trans3.form()==vimt3d_transform_3d::ZoomOnly);
+  assert(trans3.is_identity() || 
+         trans3.form()==vimt3d_transform_3d::Translation || 
+         trans3.form()==vimt3d_transform_3d::ZoomOnly);
 
   // Get the appropriate transform details
   vimt_transform_2d trans2;
