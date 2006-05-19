@@ -67,7 +67,7 @@ SET (EXPECTED_BUILDS "\\
   {crd.ge.com Win2k_msvc-6.0sp5_Release} \\
   {crd.ge.com Win2k_msvc-7.1_Release} \\
   {imorphics WinXP_msvc-7.1_Debug} \\
-  {lems.brown.edu Linux-2.6.12_em64t_gcc-4.0.3_-Wall} \\
+  {lems.brown.edu Linux-2.6_em64t_gcc-4.0.3_-Wall} \\
   {lems.brown.edu Linux-2.6.8_gcc-3.3.5} \\
   {ZEPHYR@lems.brown.edu  Win32-vs71 } \\
 ")
