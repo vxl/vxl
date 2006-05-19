@@ -25,8 +25,10 @@ static void test_world_bounding_box()
     const vgl_box_2d<double> bbox = world_bounding_box(image);
     const vgl_point_2d<double> min_pt(0.0, 0.0);
     const vgl_point_2d<double> max_pt((ni-1)*pix.x(), (nj-1)*pix.y());
-    bool ok = (bbox.min_point()==min_pt && bbox.max_point()==max_pt);
-    TEST("With identity transform", ok, true);
+    TEST("With identity transform", 
+         (bbox.min_point()-min_pt).length()<1e-6 && 
+         (bbox.max_point()-max_pt).length()<1e-6,  
+         true);
   }
   
   // Image with zoom transform (i.e. non-unity pixel size)
@@ -42,8 +44,10 @@ static void test_world_bounding_box()
     const vgl_box_2d<double> bbox = world_bounding_box(image);
     const vgl_point_2d<double> min_pt(0.0, 0.0);
     const vgl_point_2d<double> max_pt((ni-1)*pix.x(), (nj-1)*pix.y());
-    bool ok = (bbox.min_point()==min_pt && bbox.max_point()==max_pt);
-    TEST("With zoom transform (i.e. non-unity pixels)", ok, true);
+    TEST("With zoom transform", 
+         (bbox.min_point()-min_pt).length()<1e-6 && 
+         (bbox.max_point()-max_pt).length()<1e-6,  
+          true);
   }
 }
 
@@ -70,7 +74,8 @@ static void test_centre_image_at_origin()
     
     const double cx = (ni-1)*pix.x()/2.0; // centre of image in world coords
     const double cy = (nj-1)*pix.y()/2.0; // centre of image in world coords
-    bool ok = (orig1!=orig2 && orig2==vgl_point_2d<double>(cx, cy));
+    bool ok = ((orig1-orig2).length()>1e-6 && 
+               (orig2-vgl_point_2d<double>(cx, cy)).length()<1e-6);
     TEST("With identity transform", ok, true);
   }
 
@@ -90,7 +95,8 @@ static void test_centre_image_at_origin()
 
     const double cx = (ni-1)*pix.x()/2.0; // centre of image in world coords
     const double cy = (nj-1)*pix.y()/2.0; // centre of image in world coords
-    bool ok = (orig1!=orig2 && orig2==vgl_point_2d<double>(cx, cy));
+    bool ok = ((orig1-orig2).length()>1e-6 && 
+               (orig2-vgl_point_2d<double>(cx, cy)).length()<1e-6);
     TEST("With zoom transform (i.e. non-unity pixels)", ok, true);
   }
 }
