@@ -1,9 +1,11 @@
 #include "CardinalSpline.h"
+//:
+// \file
 #include <vsl/vsl_vector_io.txx>
 #include <vcl_cassert.h>
 
-// Return a list of points on the boundary of the curve. This is
-// intended for drawing the curve as a list of line segments.
+//: Return a list of points on the boundary of the curve.
+// This is intended for drawing the curve as a list of line segments.
 // \param int num_points: the number of points to return.
 // \return vcl_vector<Vector3D>: a list of points.
 vcl_vector<CardinalSpline::Vector3D> CardinalSpline::getPoints(int num_points) const
@@ -20,7 +22,7 @@ vcl_vector<CardinalSpline::Vector3D> CardinalSpline::getPoints(int num_points) c
 }
 
 // Internal helper function. This is a commonly computed value which
-// I've just put in it's own method for convenience.
+// I've just put in its own method for convenience.
 CardinalSpline::Vector3D CardinalSpline::getVal(
     const vnl_matrix_fixed<double, 1, 4> &uvec, int pk) const
 {
@@ -41,11 +43,11 @@ CardinalSpline::Vector3D CardinalSpline::getVal(
   return res;
 }
 
-// Returns the relevant point on the spline parameterised by t. t
-// should be between 0 and 1, 0 being the start of the curve, 1 at the
+//: Returns the relevant point on the spline parameterised by t.
+// t should be between 0 and 1, 0 being the start of the curve, 1 at the
 // end. Actually, in this implementation, it is a closed curve, so 0
 // and 1 will return the same point.
-
+//
 // I am currently double checking this, I'm not convinced getPoint,
 // firstDeriv etc work near t=0.0 and t=1.0
 CardinalSpline::Vector3D CardinalSpline::getPoint(double t) const
@@ -65,7 +67,7 @@ CardinalSpline::Vector3D CardinalSpline::getPoint(double t) const
   return getVal(uvec, pk);
 }
 
-// Gradient of the spline functions - ie [d_c(x)/du d_c(y)/du d_c(z)/du]^T.
+//: Gradient of the spline functions - ie $[d_c(x)/du d_c(y)/du d_c(z)/du]^T$.
 CardinalSpline::Vector3D CardinalSpline::firstDerivative(double t) const
 {
   assert(t>=0.0);
@@ -86,8 +88,7 @@ CardinalSpline::Vector3D CardinalSpline::firstDerivative(double t) const
   return ((double)n)*getVal(uvec, pk);
 }
 
-// Second derivative of the spline functions -
-// ie [d^2_c(x)/du^2 d^2_c(y)/du^2 d^2_c(z)/du^2]^T.
+//: Second derivative of the spline functions - ie $[d^2_c(x)/du^2 d^2_c(y)/du^2 d^2_c(z)/du^2]^T$.
 CardinalSpline::Vector3D CardinalSpline::secondDerivative(double t) const
 {
   assert(t>=0.0);
@@ -107,8 +108,8 @@ CardinalSpline::Vector3D CardinalSpline::secondDerivative(double t) const
   return ((double)(n*n))*getVal(uvec, pk);
 }
 
-// This is the derivative of the distance function from a point to the
-// curve at parameter t. Useful for finding the closest point to the curve.
+//: Derivative of the distance function from a point to the curve at parameter t.
+// Useful for finding the closest point to the curve.
 double CardinalSpline::distanceFunctionFirstDerivative(double t,
                                                        const Vector3D &point) const
 {
@@ -129,8 +130,8 @@ double CardinalSpline::distanceFunctionSecondDerivative(double t,
        + 2*dot_product(firstDeriv, firstDeriv);
 }
 
-// Return the t value of the closest point to the input point. This is
-// calculated using Newton's method after an initial estimate is
+//: Return the t value of the closest point to the input point.
+// This is calculated using Newton's method after an initial estimate is
 // bracketed using the control points of the spline.
 double CardinalSpline::closest_point_t(const Vector3D &point) const
 {
@@ -173,12 +174,15 @@ double CardinalSpline::closest_point_t(const Vector3D &point) const
   }
 
   // now do a Newton's iteration until we converge
-  // do a simple interpolation
-  double t = t1; // = (d2*t1+d1*t2)/(d1+d2);
   int numloops=0;
-  delta = distanceFunctionFirstDerivative(t, point)/
-          distanceFunctionSecondDerivative(t, point);
-  while (vcl_fabs(delta)>1e-8)
+  delta = distanceFunctionFirstDerivative(t1, point)/
+          distanceFunctionSecondDerivative(t1, point);
+  for (double t = t1 /* (d2*t1+d1*t2)/(d1+d2) */;
+                     // do a simple interpolation
+       vcl_fabs(delta)>1e-8;
+       delta = distanceFunctionFirstDerivative(t, point)/
+               distanceFunctionSecondDerivative(t, point)
+      )
   {
     t -= delta;
     if (t<0.0) t += 1.0;
@@ -189,24 +193,21 @@ double CardinalSpline::closest_point_t(const Vector3D &point) const
     // so just return the closest point found so far
     if (dist>d1)
     {
-      t = t1;
       vcl_cerr << "Closest point not converging:\n"
-               << " t = " << t
+               << " t = " << t1
                << ", dist = " << dist << ", d1 = " << d1
                << ", delta = " << delta << vcl_endl;
       break;
     }
-    if (dist<d1)
+    else if (dist<d1)
     {
       t1 = t; d1 = dist;
     }
     if (++numloops>50)
       assert(false);
-    delta = distanceFunctionFirstDerivative(t, point)/
-            distanceFunctionSecondDerivative(t, point);
   }
 
-  return t;
+  return t1;
 }
 
 //
