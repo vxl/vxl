@@ -53,9 +53,20 @@ static void test_pyramid_image_resource()
       image3(i,j) = i + ni3*j;
   vil_image_resource_sptr ir3 = vil_new_image_resource_of_view(image3);
   vcl_string d = "pyramid_dir";
+  vcl_cout << "Made pyramid directory "<< d << "\n";
   vul_file::make_directory(d.c_str());
   //Test pyramid_image_list::put_resource(..)
   vil_pyramid_image_list* pir = new vil_pyramid_image_list(d.c_str());
+  if(pir)
+    {
+      vcl_cout << "Made a pyramid resource from directory " << d << '\n';
+      TEST("Make a directory-based pyramid resource", true, true);      
+    }
+  else
+    {
+      TEST("Make a directory-based pyramid resource", true, false);
+      return;
+    }
   pir->put_resource(ir3);
   for(unsigned i = 0; i<pir->nlevels(); ++i)
     pir->print(i);
@@ -77,7 +88,7 @@ static void test_pyramid_image_resource()
   //Clean up directory
   vil_image_list vl(d.c_str());
   vl.clean_directory();
-
+  vcl_cout << "Cleaned up the pyramid directory\n";
   //Test image decimation. Designed to work with blocked images
   vil_image_resource_sptr bir = new vil_blocked_image_facade(ir, 16, 16);
   //test decimation for generating a pyramid level
@@ -86,10 +97,20 @@ static void test_pyramid_image_resource()
     {
       vil_image_resource_sptr dec_resc =
         vil_pyramid_image_resource::decimate(bir, dec_file.c_str());
+      if(dec_resc)
+        vcl_cout << "Made a successful decimated resource\n";
     }
     vil_image_resource_sptr reload_dec = vil_load_image_resource(dec_file.c_str());
     if(reload_dec)
-      vcl_cout << "(" << reload_dec->ni() << ' ' << reload_dec->nj() << ")\n";
+      {
+        vcl_cout << "(" << reload_dec->ni() << ' ' << reload_dec->nj() << ")\n";
+        TEST("reload decimated resource", true, true);
+      }
+    else
+      {
+        TEST("reload decimated resource", true, false);
+        return;
+      }
     vil_image_view<unsigned short> dec_view = reload_dec->get_view();
 
     vcl_cout << "base view\n";
@@ -111,6 +132,7 @@ static void test_pyramid_image_resource()
     TEST("decimated image read", dec_view(0,0), 37);
   }//close open resource files
   vpl_unlink(dec_file.c_str());  
+  vcl_cout << "Clean up decimated resource file\n";
   {
     vil_pyramid_image_resource_sptr bpyr = 
       vil_new_pyramid_image_list_from_base(d.c_str(), ir, 3, true, "tiff", "R");
@@ -122,6 +144,7 @@ static void test_pyramid_image_resource()
         bool good = ni25 == 18;
         vil_image_view<unsigned short> v50 = bpyr->get_copy_view(0.5f , ac);
         unsigned ni50 = v50.ni();
+        vcl_cout << "ni25 = " << ni25 << "  ni50 " << ni50 << '\n';
         good = good && ni50 == 36;
         TEST("Pyramid create and read", good, true);
       }
@@ -130,8 +153,9 @@ static void test_pyramid_image_resource()
   }//close open resource files
   //clean directory
   vl.clean_directory();
+  vcl_cout << "Cleaning bpyr directory\n";
   //Test pyramid_image_list::put_resource 
-bool good = true;
+  bool good = true;
   {//scope for dpyr
   vil_pyramid_image_resource_sptr dpyr = 
     vil_new_pyramid_image_resource(d.c_str(), "pyil");
@@ -147,6 +171,13 @@ bool good = true;
   TEST("test pyramid_image_list::put_resource", good, true);
   { //open input pyramid rdpyr
     vil_pyramid_image_resource_sptr rdpyr = vil_load_pyramid_resource(d.c_str());
+    if(rdpyr)
+      TEST("load of pyramid resource rdpyr", true, true);
+    else
+      {
+        TEST("load of pyramid resource rdpry", false, true);
+        return;
+      }
     unsigned nlevels = rdpyr->nlevels();
     vcl_cout << "Read nlevels = " << nlevels << '\n';
     for(unsigned L = 0; L<nlevels; ++L)
@@ -184,6 +215,7 @@ bool good = true;
   TEST("multiimage tiff pyramid write", good, true);
   { //open input pyramid rpi
     vil_pyramid_image_resource_sptr rpi = vil_load_pyramid_resource(file.c_str());
+    vcl_cout << "loaded multi-image pyramid " << rpi  << '\n';
     unsigned nlevels = rpi->nlevels();
     vcl_cout << "Read nlevels = " << nlevels << '\n';
     for(unsigned L = 0; L<nlevels; ++L)
@@ -212,7 +244,7 @@ bool good = true;
     vil_image_view<unsigned short> rv1 = pyfb->get_copy_view(1);
     vil_image_view<unsigned short> rv2 = pyfb->get_copy_view(2);
     vcl_cout << "Level 0 \n";
-    for(unsigned j = 0; j<8; ++j)
+   for(unsigned j = 0; j<8; ++j)
       {
         for(unsigned i = 0; i<8; ++i)
           vcl_cout << rv0(i,j) << ' ';
@@ -227,6 +259,7 @@ bool good = true;
       
         vcl_cout << '\n';
       }
+	  
     vcl_cout << "Level 2 \n";
     for(unsigned j = 0; j<8; ++j)
       {
