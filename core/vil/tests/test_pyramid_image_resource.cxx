@@ -87,6 +87,7 @@ static void test_pyramid_image_resource()
   delete pir;
   //Clean up directory
   vil_image_list vl(d.c_str());
+   vcl_cout << "Starting to clean directory\n";
   vl.clean_directory();
   vcl_cout << "Cleaned up the pyramid directory\n";
   //Test image decimation. Designed to work with blocked images
@@ -275,6 +276,7 @@ static void test_pyramid_image_resource()
   vpl_unlink(fb.c_str());
   //remove the pyramid directory
   vpl_rmdir(d.c_str());
+  
 }
 
 TESTMAIN(test_pyramid_image_resource);
