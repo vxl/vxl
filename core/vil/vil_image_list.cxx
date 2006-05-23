@@ -171,9 +171,11 @@ bool vil_image_list::clean_directory()
 {
   vcl_vector<vcl_string> files = this->files();
   bool good = true;
+  vcl_cout << "starting to remove ..\n";
   for (vcl_vector<vcl_string>::iterator fit = files.begin();
        fit != files.end(); ++fit)
     if (!this->remove_file(*fit))
       good = false;
+  vcl_cout << "finished remove ..\n";
   return good;
 }
