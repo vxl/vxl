@@ -21,7 +21,7 @@ void vimt3d_sample_grid_trilin(vnl_vector<vecType>& vec,
                                const vgl_vector_3d<double>& u,
                                const vgl_vector_3d<double>& v,
                                const vgl_vector_3d<double>& w,
-                               int nu, int nv, int nw);
+                               unsigned nu, unsigned nv, unsigned nw);
 
 
 //: Sample grid p+i.u+j.v+k.w using trilinear interpolation in image coordinates
@@ -36,6 +36,6 @@ void vimt3d_sample_grid_trilin_ic(vnl_vector<vecType>& vec,
                                   const vgl_vector_3d<double>& im_u,
                                   const vgl_vector_3d<double>& im_v,
                                   const vgl_vector_3d<double>& im_w,
-                                  int nu, int nv, int nw);
+                                  unsigned nu, unsigned nv, unsigned nw);
 
 #endif // vimt3d_sample_grid_trilin_h_

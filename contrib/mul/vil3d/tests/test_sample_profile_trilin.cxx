@@ -55,6 +55,10 @@ static void test_sample_profile_trilin_float()
   vil3d_sample_profile_trilin(&vec[0],image3,x0,y0,z0,dx0,dy0,dz0,8);
   TEST_NEAR("First value",vec[0],55.5f,1e-6);
   TEST_NEAR("Last value (outside image)",vec[23],0,1e-6);
+
+  vil3d_sample_profile_trilin_extend(&vec[0],image3,x0,y0,z0,dx0,dy0,dz0,8);
+  TEST_NEAR("First value",vec[0],55.5f,1e-6);
+  TEST_NEAR("Last value (outside image)",vec[23],255.9,1e-1);
 }
 
 static void test_sample_profile_trilin()

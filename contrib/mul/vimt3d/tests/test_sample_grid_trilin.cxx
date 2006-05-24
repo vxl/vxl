@@ -44,9 +44,9 @@ static void test_sample_grid_trilin()
              << "**************************************\n";
 
     // set up image with anisotropic voxels
-    int nx=7;
-    int ny=11;
-    int nz=13;
+    unsigned nx=7;
+    unsigned ny=11;
+    unsigned nz=13;
     vimt3d_image_3d_of<vxl_int_32> image(nx,ny,nz);
     double vx=0.1;
     double vy=0.2;
@@ -61,15 +61,15 @@ static void test_sample_grid_trilin()
     // IGNORING THE EDGE PIXELS (i.e. i==0 || i==n-1 etc)
     double running_total=0;
 
-    for (int i=0;i<nx;++i)
+    for (unsigned i=0;i<nx;++i)
     {
-        for (int j=0;j<ny;++j)
+        for (unsigned j=0;j<ny;++j)
         {
-            for (int k=0;k<nz;++k)
+            for (unsigned k=0;k<nz;++k)
             {
                 if (i>0&&j>0&&k>0 && i<nx-1&&j<ny-1&&k<nz-1)
                 {
-                    int val=i+j*nx+k*nx*ny;
+                    unsigned val=i+j*nx+k*nx*ny;
                     image.image()(i,j,k)=val;
                     running_total += val;
                 }
