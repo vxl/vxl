@@ -192,7 +192,7 @@ class vidl2_pixel_iterator_arranged<VIDL2_PIXEL_ARRANGE_PACKED,FMT>
 
   //: Constructor
   vidl2_pixel_iterator_arranged(const vidl2_frame& frame)
-    : mode_(0), ptr_((vxl_byte*)frame.data())
+    : ptr_((vxl_byte*)frame.data()), mode_(0)
   {
   }
 
