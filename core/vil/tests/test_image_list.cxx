@@ -58,18 +58,23 @@ static void test_image_list()
     vil_image_list il(dir.c_str());
     vcl_vector<vil_image_resource_sptr> rescs = il.resources();
     good = good && rescs.size()==3;
-    if (good)
+    if (good&&rescs[0])
     {
+      vcl_cout << "Succefully read the resource list\n";
       unsigned ni0 = rescs[0]->ni();
       good = good && ni0 == 73;
     }
+    else
+      vcl_cout << "The resource list is corrupt\n";
     TEST("image_list read resources", good, true);
   }//close open resource files
   //Cleanup resource files
+  vcl_cout << "Cleaning up directory " << dir << '\n';;
   int chd = vpl_chdir(dir.c_str());
   vcl_string s =  "*.*";
   for (vul_file_iterator fit = s;fit; ++fit) 
     vpl_unlink(fit());
+  vcl_cout << "Removing the directory\n";
   chd = vpl_chdir("..");
   vpl_rmdir(dir.c_str());
 }
