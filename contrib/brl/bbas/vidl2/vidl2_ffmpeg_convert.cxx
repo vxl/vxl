@@ -13,6 +13,13 @@
 #include "vidl2_frame.h"
 #include <vcl_cstring.h>
 
+
+#if LIBAVFORMAT_BUILD <= 4623
+// PIX_FMT_NONE is undefined in old versions of FFMPEG
+#define PIX_FMT_NONE PixelFormat(-1)
+#endif
+
+
 //--------------------------------------------------------------------------------
 
 //: Convert the pixel format of a frame using FFMPEG
