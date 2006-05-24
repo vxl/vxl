@@ -153,7 +153,7 @@ class vil_tiff_image : public vil_blocked_image_resource
 
   enum vil_pixel_format compute_pixel_format();
 
-  void copy_byte_block(vxl_byte* data, const unsigned long nbytes,
+  void copy_byte_block(vxl_byte* data, const vxl_uint_32 nbytes,
                        vil_memory_chunk_sptr& cnk) const;
 
   //: convert a packed block to an expanded view

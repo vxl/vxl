@@ -570,7 +570,7 @@ unsigned vil_tiff_image::samples_per_block() const
 
 //Transfer data from block to memory chunk, row by row
 //Since view and block are the same we can just blast across
-void vil_tiff_image::copy_byte_block(vxl_byte* data, const unsigned long nbytes, vil_memory_chunk_sptr& cnk) const
+void vil_tiff_image::copy_byte_block(vxl_byte* data, const vxl_uint_32 nbytes, vil_memory_chunk_sptr& cnk) const
 {
   if (nbytes==0)
     return;
@@ -711,7 +711,7 @@ fill_block_from_tile(vil_memory_chunk_sptr const & buf) const
 vil_image_view_base_sptr vil_tiff_image::fill_block_from_strip(vil_memory_chunk_sptr const & buf) const
 {
   vil_image_view_base_sptr view = 0;
-  unsigned long tl = size_block_j();
+  vxl_uint_32 tl = size_block_j();
 
   unsigned bpl = h_->bytes_per_line();
   unsigned bytes_per_strip = h_->bytes_per_strip();

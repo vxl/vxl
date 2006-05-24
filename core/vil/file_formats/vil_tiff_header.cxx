@@ -27,14 +27,14 @@ static void read_string(TIFF* tif, ttag_t tag, vcl_string& stag, vcl_string cons
     stag = deflt;
 }
 
-static void read_short_tag(TIFF* tif, ttag_t tag, ushort_tag& utag, unsigned short deflt =0)
+static void read_short_tag(TIFF* tif, ttag_t tag, ushort_tag& utag, vxl_uint_16 deflt =0)
 {
   utag.valid = TIFFGetField(tif, tag, &(utag.val))>0;
   if (!utag.valid)
     utag.val = deflt;
 }
 
-static void read_long_tag(TIFF* tif, ttag_t tag, ulong_tag& utag, unsigned long deflt = 0)
+static void read_long_tag(TIFF* tif, ttag_t tag, ulong_tag& utag, vxl_uint_32 deflt = 0)
 {
   utag.valid = TIFFGetField(tif, tag, &(utag.val))>0;
   if (!utag.valid)
@@ -44,12 +44,12 @@ static void read_long_tag(TIFF* tif, ttag_t tag, ulong_tag& utag, unsigned long 
 #if 0 // unused static function
 //assumes array is resized properly
 static bool read_long_array(TIFF* tif, ttag_t tag,
-                            vcl_vector<unsigned long>& array)
+                            vcl_vector<vxl_uint_32>& array)
 {
-  unsigned long * a;
+  vxl_uint_32 * a;
   if (TIFFGetField(tif, tag, &a))
   {
-    for (unsigned long i=0; i<array.size(); ++i) { array[i]=a[i]; }
+    for (vxl_uint_32 i=0; i<array.size(); ++i) { array[i]=a[i]; }
     return true;
   }
   else return false;
@@ -107,13 +107,13 @@ bool vil_tiff_header::read_header()
      photometric.valid &&
      photometric.val == PHOTOMETRIC_PALETTE)
     {
-      unsigned short* cm[3];
+      vxl_uint_16* cm[3];
       TIFFGetField(tif_,TIFFTAG_COLORMAP, &cm[0], &cm[1], &cm[2]);
       unsigned size = 1<<bits_per_sample.val;
       color_map.resize(size);
       for (unsigned i = 0; i<size; ++i)
       {
-        vcl_vector<unsigned short> rgb(3);
+        vcl_vector<vxl_uint_16> rgb(3);
         rgb[0]=cm[0][i];  rgb[1]=cm[1][i];  rgb[2]=cm[2][i];
         color_map[i] = rgb;
 #ifdef DEBUG
@@ -127,7 +127,7 @@ bool vil_tiff_header::read_header()
   read_string(tif_,TIFFTAG_DATETIME,date_time);
   read_short_tag(tif_,TIFFTAG_EXTRASAMPLES, extra_samples);
   read_short_tag(tif_,TIFFTAG_FILLORDER, fill_order);
-  unsigned short* gc=0;
+  vxl_uint_16* gc=0;
   TIFFGetField(tif_,TIFFTAG_GRAYRESPONSECURVE, &gc);
   read_short_tag(tif_,TIFFTAG_GRAYRESPONSEUNIT, gray_response_unit);
   read_string(tif_,TIFFTAG_HOSTCOMPUTER, host_computer);
@@ -150,9 +150,9 @@ bool vil_tiff_header::read_header()
     strip_byte_counts_valid =
       TIFFGetField(tif_,TIFFTAG_STRIPBYTECOUNTS , &strip_byte_counts)>0;
 #ifdef DEBUG
-    //      unsigned long size = strips_per_image()*samples_per_pixel.val;
-    unsigned long size = strips_per_image();
-    for (unsigned long i = 0; i<size; ++i)
+    //      vxl_uint_32 size = strips_per_image()*samples_per_pixel.val;
+    vxl_uint_32 size = strips_per_image();
+    for (vxl_uint_32 i = 0; i<size; ++i)
       vcl_cout << "SBC[" << i << "]=" << strip_byte_counts[i] << '\n';
 #endif
   }
@@ -163,14 +163,14 @@ bool vil_tiff_header::read_header()
   {
     strip_offsets_valid =
       TIFFGetField(tif_, TIFFTAG_STRIPOFFSETS, &strip_offsets)>0;
-    //      unsigned long size = strips_per_image()*samples_per_pixel.val;
-    unsigned long size = strips_per_image();
-      for (unsigned long i = 0; i<size; ++i)
+    //      vxl_uint_32 size = strips_per_image()*samples_per_pixel.val;
+    vxl_uint_32 size = strips_per_image();
+      for (vxl_uint_32 i = 0; i<size; ++i)
       vcl_cout << "SOFF[" << i << "]=" << strip_offsets[i] << '\n';
   }
 #endif
   read_short_tag(tif_,TIFFTAG_THRESHHOLDING, thresholding);
-  unsigned long xneu, xden, yneu, yden;
+  vxl_uint_32 xneu, xden, yneu, yden;
   x_resolution_valid = false;
   x_resolution = 0;
   if (TIFFGetField(tif_,TIFFTAG_XRESOLUTION, &xneu, &xden))
@@ -194,9 +194,9 @@ bool vil_tiff_header::read_header()
   {
     tile_offsets_valid =
       TIFFGetField(tif_, TIFFTAG_TILEOFFSETS, &tile_offsets)>0;
-    //      unsigned long size = tiles_per_image()*samples_per_pixel.val;
-    unsigned long size = tiles_per_image();
-    for (unsigned long i = 0; i<size; ++i)
+    //      vxl_uint_32 size = tiles_per_image()*samples_per_pixel.val;
+    vxl_uint_32 size = tiles_per_image();
+    for (vxl_uint_32 i = 0; i<size; ++i)
       vcl_cout << "TOFF[" << i << "]=" << tile_offsets[i] << '\n';
   }
 #endif
@@ -207,9 +207,9 @@ bool vil_tiff_header::read_header()
   {
     tile_byte_counts_valid =
      TIFFGetField(tif_, TIFFTAG_TILEBYTECOUNTS, &tile_byte_counts)>0;
-    //      unsigned long size = tiles_per_image()*samples_per_pixel.val;
-    unsigned long size = tiles_per_image();
-    for (unsigned long i = 0; i<size; ++i)
+    //      vxl_uint_32 size = tiles_per_image()*samples_per_pixel.val;
+    vxl_uint_32 size = tiles_per_image();
+    for (vxl_uint_32 i = 0; i<size; ++i)
       vcl_cout << "TBC[" << i << "]=" << tile_byte_counts[i] << '\n';
   }
 #endif
@@ -257,23 +257,23 @@ unsigned vil_tiff_header::samples_per_line() const
   return 0;
 }
 
-unsigned long vil_tiff_header::bytes_per_line() const
+vxl_uint_32 vil_tiff_header::bytes_per_line() const
 {
   unsigned nsamp = this->samples_per_line();
   unsigned bits_per_line = bits_per_sample.val*nsamp;
   return (bits_per_line + 7)/8;
 }
 
-unsigned long vil_tiff_header::actual_bytes_per_line() const
+vxl_uint_32 vil_tiff_header::actual_bytes_per_line() const
 {
     return TIFFScanlineSize(tif_);
 }
 
-unsigned long vil_tiff_header::rows_in_strip() const
+vxl_uint_32 vil_tiff_header::rows_in_strip() const
 {
   if (rows_per_strip.valid&&image_length.valid)
   {
-    unsigned long rps = rows_per_strip.val;
+    vxl_uint_32 rps = rows_per_strip.val;
     if (rps>image_length.val)
       return image_length.val;
     return rps;
@@ -282,8 +282,8 @@ unsigned long vil_tiff_header::rows_in_strip() const
 }
 
 //this value can vary from one strip to the next
-unsigned long vil_tiff_header::
-actual_bytes_per_strip(const unsigned long strip_index) const
+vxl_uint_32 vil_tiff_header::
+actual_bytes_per_strip(const vxl_uint_32 strip_index) const
 {
   if (strip_byte_counts_valid)
   return strip_byte_counts[strip_index];
@@ -291,18 +291,18 @@ actual_bytes_per_strip(const unsigned long strip_index) const
 }
 
 //the theoretical amount needed
-unsigned long vil_tiff_header::bytes_per_strip() const
+vxl_uint_32 vil_tiff_header::bytes_per_strip() const
 {
   return rows_in_strip()*bytes_per_line();
 }
 
-unsigned long vil_tiff_header::bytes_per_tile() const
+vxl_uint_32 vil_tiff_header::bytes_per_tile() const
 {
   return TIFFTileSize(tif_);
 }
 
 //The number of images in the tiff file
-unsigned short  vil_tiff_header::n_images()
+vxl_uint_16  vil_tiff_header::n_images()
 {
   return TIFFNumberOfDirectories(tif_);
 }
@@ -319,8 +319,8 @@ if (!(bits_per_sample.valid) || !(samples_per_pixel.valid) ||
       return false;
     }
 
-  unsigned short b = bits_per_sample.val;
-  unsigned short bbs = bytes_per_sample();
+  vxl_uint_16 b = bits_per_sample.val;
+  vxl_uint_16 bbs = bytes_per_sample();
   nplanes = 1;
   //Let's do the easy case first -- scalar pixels but various types
   if (samples_per_pixel.val==1)
@@ -408,7 +408,7 @@ if (!(bits_per_sample.valid) || !(samples_per_pixel.valid) ||
   //handle sample formats (unsigned, signed, float, double)
   //vil normally doesn't directly express these interleaved formats but
   //pretends the samples are in different planes.
-  unsigned short s = samples_per_pixel.val;
+  vxl_uint_16 s = samples_per_pixel.val;
   if (samples_per_pixel.val>1 && photometric.val==2 &&
      sample_format.val == 1)
     switch (sample_format.val)

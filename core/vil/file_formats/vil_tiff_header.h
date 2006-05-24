@@ -32,6 +32,7 @@
 
 #include <vcl_string.h>
 #include <vcl_vector.h>
+#include <vxl_config.h>
 #include <vcl_cmath.h>
 #include <vil/vil_pixel_format.h>
 #include <tiffio.h>
@@ -39,14 +40,14 @@
 struct ushort_tag
 {
   ushort_tag(): valid(false) {}
-  unsigned short val;
+  vxl_uint_16 val;
   bool valid;
 };
 
 struct ulong_tag
 {
   ulong_tag() : valid(false) {}
-  unsigned long val;
+  vxl_uint_32 val;
   bool valid;
 };
 
@@ -68,9 +69,9 @@ class vil_tiff_header
 
   //**Issue** spec says this should be an array[samples_per_pixel] but
   //actual multi-sample tiff file headers have this as an
-  //unsigned short CHECK (JLM)
+  //vxl_uint_16 CHECK (JLM)
   ushort_tag bits_per_sample;
-  unsigned short bytes_per_sample() const
+  vxl_uint_16 bytes_per_sample() const
     { return bits_per_sample.valid ? (bits_per_sample.val + 7)/8 : 0; }
 
   ushort_tag cell_length;
@@ -79,7 +80,7 @@ class vil_tiff_header
 
   // color_map[index][pixel_sample] index ranges from 0->2^bits_per_sample-1
   // pixel_sample 0->samples_per_pixel -1
-  vcl_vector<vcl_vector<unsigned short> >color_map;
+  vcl_vector<vcl_vector<vxl_uint_16> >color_map;
   bool color_map_valid;
 
   ushort_tag compression;
@@ -95,7 +96,7 @@ class vil_tiff_header
 
   //for gray scale data provides a radiometry map, e.g. true reflectance
   //index ranges from 0->2^bits_per_sample-1
-  vcl_vector<unsigned short> gray_response_curve;
+  vcl_vector<vxl_uint_16> gray_response_curve;
   bool grey_response_curve_valid;
 
   //the unit of radiometry
@@ -107,10 +108,10 @@ class vil_tiff_header
   ulong_tag image_length;
 
   //:theoretical from samples per line
-  unsigned long bytes_per_line() const;
+  vxl_uint_32 bytes_per_line() const;
 
   //:As returned by the TIFF library
-  unsigned long actual_bytes_per_line() const;
+  vxl_uint_32 actual_bytes_per_line() const;
 
   ulong_tag image_width;
 
@@ -134,18 +135,18 @@ class vil_tiff_header
 
   ulong_tag rows_per_strip;
 
-  unsigned long rows_in_strip() const;
+  vxl_uint_32 rows_in_strip() const;
 
-  unsigned long strips_per_image() const
+  vxl_uint_32 strips_per_image() const
   { return rows_per_strip.valid ?
-      static_cast<unsigned long>(vcl_floor(1.0+(image_length.val-1)/rows_per_strip.val)) : 0L;
+      static_cast<vxl_uint_32>(vcl_floor(1.0+(image_length.val-1)/rows_per_strip.val)) : 0L;
   }
 
   //the acutal size of the strip in the file
-  unsigned long actual_bytes_per_strip(const unsigned long strip_index) const;
+  vxl_uint_32 actual_bytes_per_strip(const vxl_uint_32 strip_index) const;
 
   //the theoretical size based on rows_per_strip and bytes_per_line
- unsigned long bytes_per_strip() const;
+ vxl_uint_32 bytes_per_strip() const;
 
   ushort_tag sample_format;
   ushort_tag samples_per_pixel;
@@ -157,9 +158,9 @@ class vil_tiff_header
   //for planar_config = 2
   //[st0|st1|...|strips_per_image-1] ... [st0|st1|...|strips_per_image-1]
   //          sample 0               ...         samples_per_pixel-1
-  unsigned long* strip_byte_counts;
+  vxl_uint_32* strip_byte_counts;
   bool strip_byte_counts_valid;
-  unsigned long* strip_offsets;
+  vxl_uint_32* strip_offsets;
   bool strip_offsets_valid;
 
   ushort_tag subfile_type;
@@ -184,24 +185,24 @@ class vil_tiff_header
   //for planar_config = 2
   //[st0|st1|...|tiles_per_image-1] ... [st0|st1|...|tiles_per_image-1]
   //          sample 0               ...         samples_per_pixel-1
-  unsigned long*  tile_offsets;
+  vxl_uint_32*  tile_offsets;
   bool tile_offsets_valid;
-  unsigned long* tile_byte_counts;
+  vxl_uint_32* tile_byte_counts;
   bool tile_byte_counts_valid;
 
-  unsigned long tiles_across() const
+  vxl_uint_32 tiles_across() const
   { return tile_width.valid ?
-      static_cast<unsigned long>(vcl_floor(1.0+(image_width.val-1)/tile_width.val)) : 0L;
+      static_cast<vxl_uint_32>(vcl_floor(1.0+(image_width.val-1)/tile_width.val)) : 0L;
   }
 
-  unsigned long tiles_down() const
+  vxl_uint_32 tiles_down() const
   { return tile_length.valid ?
-      static_cast<unsigned long>(vcl_floor(1.0+(image_length.val-1)/tile_length.val)) : 0L;
+      static_cast<vxl_uint_32>(vcl_floor(1.0+(image_length.val-1)/tile_length.val)) : 0L;
   }
 
-  unsigned long tiles_per_image() const {return tiles_across()*tiles_down();}
+  vxl_uint_32 tiles_per_image() const {return tiles_across()*tiles_down();}
 
-  unsigned long bytes_per_tile() const;
+  vxl_uint_32 bytes_per_tile() const;
 
   //: the actual number of separate image planes in the tiff image
   unsigned n_separate_image_planes() const;
@@ -230,7 +231,7 @@ class vil_tiff_header
   bool format_supported;
 
   //: the number of images in the file
-  unsigned short  n_images();
+  vxl_uint_16  n_images();
  private:
   TIFF* tif_;
   //: read/write mode true for read.
