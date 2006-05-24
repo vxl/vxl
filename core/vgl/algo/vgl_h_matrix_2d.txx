@@ -391,6 +391,20 @@ void vgl_h_matrix_2d<T>::set_scale(const T scale)
       t12_matrix_[r][c]*=scale;
 }
 
+//: Compose the existing matrix with an aspect ratio transform 
+//        _     _
+//       |1  0  0|
+//  Hs = |0  r  0| Hinitial
+//       |0  0  1|
+//        -     -
+//
+template <class T>
+void vgl_h_matrix_2d<T>::set_aspect_ratio(const T aspect_ratio)
+{
+  for (unsigned c = 0; c<3; ++c)
+    t12_matrix_[1][c]*=aspect_ratio;
+}
+
 //----------------------------------------------------------------------------
 #undef VGL_H_MATRIX_2D_INSTANTIATE
 #define VGL_H_MATRIX_2D_INSTANTIATE(T) \

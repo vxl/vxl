@@ -75,16 +75,28 @@ class vgl_h_matrix_2d
   const vnl_matrix_fixed<T,3,3>& get_matrix() const { return t12_matrix_; }
   const vgl_h_matrix_2d get_inverse () const;
 
-  void set_identity();
   void set(const T *t_matrix);
   void set(vnl_matrix_fixed<T,3,3> const& t_matrix);
 
-  //:various transformations that set the corresponding parts of the matrix
+  //:various affine transformations that set the corresponding parts of the matrix
+  //:intialize the transformation to identity
+  void set_identity();
+
+  //:set T[0][2] = tx and T[1][2] = ty, other elements unaltered
   void set_translation(const T tx, const T ty);
-  //: theta is in radians, the upper 2x2 part of the matrix is replaced
+
+  //: theta is in radians, the upper 2x2 part of the matrix is replaced by a rotation matrix
   void set_rotation(const T theta);
-  //: transform is composed with a scaling transform (only upper 2x2 affected)
+
+  //: transform is composed with a scaling transform [s 0 0]
+  //                                             S = [0 s 0], Ts = S*T
+  //                                                 [0 0 1]
   void set_scale(const T scale);
+
+  //: transform is composed with a diagonal aspect transform [1 0 0]
+  //                                                     A = [0 r 0], Ta = A*T
+  //                                                         [0 0 1]
+  void set_aspect_ratio(const T aspect_ratio);
 
   //: transformation to projective basis (canonical frame)
   // Compute the homography that takes the input set of points to the
