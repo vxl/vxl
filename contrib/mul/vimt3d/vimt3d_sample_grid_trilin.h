@@ -24,6 +24,24 @@ void vimt3d_sample_grid_trilin(vnl_vector<vecType>& vec,
                                unsigned nu, unsigned nv, unsigned nw);
 
 
+//: Sample grid p+i.u+j.v+k.w using trilinear interpolation in world coordinates.
+//  Profile points are p+i.u+j.v+k.w, where i=[0..nu-1],j=[0..nv-1], k=[0..nw-1]
+//  Vector v is resized to nu*nv*nw*np elements, where np=image.n_planes().
+//  v[0]..v[np-1] are the values from point p.
+//  Samples are taken along direction w first. Samples
+//  outside the image are set to the value of the nearest voxel's value.
+template <class imType, class vecType>
+void vimt3d_sample_grid_trilin_extend(
+  vnl_vector<vecType>& vec,
+  const vimt3d_image_3d_of<imType>& image,
+  const vgl_point_3d<double>& p,
+  const vgl_vector_3d<double>& u,
+  const vgl_vector_3d<double>& v,
+  const vgl_vector_3d<double>& w,
+  unsigned nu, unsigned nv, unsigned nw);
+
+
+
 //: Sample grid p+i.u+j.v+k.w using trilinear interpolation in image coordinates
 //  Profile points are im_p+i.im_u+j.im_v+k.im_w, where i=[0..nu-1],j=[0..nv-1], k=[0..nw-1]
 //  Vector v is resized to nu*nv*nw*np elements, where np=image.n_planes().
