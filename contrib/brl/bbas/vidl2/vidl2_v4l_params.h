@@ -36,7 +36,7 @@ struct vidl2_v4l_params
     {};
 
     //: get the current resolution
-    vidl2_v4l_params& resolution(int &ni, int &nj){
+    vidl2_v4l_params& resolution(unsigned int ni, unsigned int nj){
         ni_=ni;nj_=nj;
         return *this;
     };
@@ -83,7 +83,7 @@ struct vidl2_v4l_params
         return *this;
     };
     
-    int ni_, nj_;
+    unsigned int ni_, nj_;
     int brightness_;
     int hue_;
     int colour_;
