@@ -16,9 +16,9 @@
 
 static void test_image_list()
 {
-  vcl_cout << "************************************\n"
-           << " Testing vil_image_list\n"
-           << "************************************\n";
+  vcl_cout << "************************************" << vcl_endl
+           << " Testing vil_image_list" << vcl_endl
+           << "************************************" << vcl_endl;
   //Test image list by saving three resource files and then
   //retrieving them using image_list. 
   const unsigned int ni = 73;
@@ -52,16 +52,16 @@ static void test_image_list()
     TEST("vil_is_directory", vil_image_list::vil_is_directory(dir.c_str()),true);
     int chd = vpl_chdir(dir.c_str());
     good = vil_save_image_resource(ir, "R0.tif", "tiff");
-    vcl_cout << "Saved R0\n";
+    vcl_cout << "Saved R0"  << vcl_endl;
     good = good && vil_save_image_resource(ir2, "R1.tif", "tiff");
-    vcl_cout << "Saved R1\n";
+    vcl_cout << "Saved R1" << vcl_endl;
     good = good && vil_save_image_resource(ir3, "R2.tif", "tiff");
-    vcl_cout << "Saved R2\n";
+    vcl_cout << "Saved R2" << vcl_endl;
     chd = vpl_chdir("..");
     vil_image_list il(dir.c_str());
     vcl_vector<vil_image_resource_sptr> rescs = il.resources();
     good = good && rescs.size()==3;
-    vcl_cout << "Size = " << rescs.size() << '\n';
+    vcl_cout << "Size = " << rescs.size() << vcl_endl;
     if (good&&rescs[0])
     {
       vcl_cout << "Succefully read the resource list\n";
