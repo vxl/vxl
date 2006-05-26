@@ -10,7 +10,7 @@
 #include <vil/vil_blocked_image_resource.h>
 #include <vil/vil_block_cache.h>
 
-#define DEBUG
+
 static vcl_string image_file;
 static void test_blocked_image_resource()
 {
@@ -68,7 +68,7 @@ static void test_blocked_image_resource()
     {
       vil_image_view<unsigned short> lview =
         bir->get_block(bir->n_block_i()-1, bir->n_block_j()-1);
-#ifdef DEBUG
+#if 0
       for (unsigned j = 0; j<lview.nj(); ++j)
         {
           for (unsigned i = 0; i<lview.ni(); ++i)
@@ -320,6 +320,7 @@ bool  valid = true;
 int
 test_blocked_image_resource_main( int argc, char* argv[] )
 {
+  vcl_cout << "test_blocked_image_resource main\n";
   if ( argc >= 2 ) {
     image_file = argv[1];
 #ifdef VCL_WIN32
@@ -329,6 +330,7 @@ test_blocked_image_resource_main( int argc, char* argv[] )
 #endif
     vcl_cout << image_file << '\n';
   }
+  vcl_cout << "Start test process\n";
   test_blocked_image_resource();
   return 0;
 }

@@ -303,12 +303,14 @@ vil_pyramid_image_list::get_copy_view(unsigned i0, unsigned n_i,
     return 0;
   pyramid_level* pl = levels_[level];
   float actual_scale = pl->scale_;
+  //jlm
+  float fi0 = actual_scale*i0, fni = actual_scale*n_i, fj0 = actual_scale*j0, fnj = actual_scale*n_j;
   //transform image coordinates by actual scale
-  unsigned si0 = static_cast<unsigned>(actual_scale*i0);
-  unsigned sni = static_cast<unsigned>(actual_scale*n_i);
+  unsigned si0 = static_cast<unsigned>(fi0);
+  unsigned sni = static_cast<unsigned>(fni);
   if (sni == 0) sni = 1;//can't have less than one pixel
-  unsigned sj0 = static_cast<unsigned>(actual_scale*j0);
-  unsigned snj = static_cast<unsigned>(actual_scale*n_j);
+  unsigned sj0 = static_cast<unsigned>(fj0);
+  unsigned snj = static_cast<unsigned>(fnj);
   if (snj == 0) snj = 1;//can't have less than one pixel
   return pl->image_->get_copy_view(si0, sni, sj0, snj);
 }

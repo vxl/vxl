@@ -142,11 +142,11 @@ static void test_pyramid_image_resource()
         float ac = 1.0f;
         vil_image_view<unsigned short> v25 = bpyr->get_copy_view(0.25f , ac);
         unsigned ni25 = v25.ni();
-        bool good = ni25 == 18;
+        bool good = ni25 == 19;
         vil_image_view<unsigned short> v50 = bpyr->get_copy_view(0.5f , ac);
         unsigned ni50 = v50.ni();
         vcl_cout << "ni25 = " << ni25 << "  ni50 " << ni50 << '\n';
-        good = good && ni50 == 36;
+        good = good && ni50 == 37;
         TEST("Pyramid create and read", good, true);
       }
     else
