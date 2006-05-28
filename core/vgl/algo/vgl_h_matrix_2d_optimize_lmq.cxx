@@ -21,15 +21,15 @@ vgl_h_matrix_2d_optimize_lmq(vgl_h_matrix_2d<double> const& initial_h)
 bool vgl_h_matrix_2d_optimize_lmq::
 optimize_h(vcl_vector<vgl_homg_point_2d<double> > const& points1,
            vcl_vector<vgl_homg_point_2d<double> > const& points2,
-           vgl_h_matrix_2d<double> const& h_initial, 
+           vgl_h_matrix_2d<double> const& h_initial,
            vgl_h_matrix_2d<double>& h_optimized)
 {
   projection_lsqf lsq(points1, points2);
   vnl_vector<double> hv(9);
   vnl_matrix_fixed<double,3,3> m =  h_initial.get_matrix();
   unsigned i = 0;
-  for(unsigned r = 0; r<3; ++r)
-    for(unsigned c = 0; c<3; ++c, ++i)
+  for (unsigned r=0; r<3; ++r)
+    for (unsigned c=0; c<3; ++c, ++i)
       hv[i] = m[r][c];
   vnl_levenberg_marquardt lm(lsq);
   lm.set_verbose(verbose_);
@@ -40,7 +40,7 @@ optimize_h(vcl_vector<vgl_homg_point_2d<double> > const& points1,
   bool success = lm.minimize(hv);
   lm.diagnose_outcome(vcl_cout);
 
-  if(success)
+  if (success)
     h_optimized.set(hv.data_block());
   else
     h_optimized = h_initial;
@@ -65,7 +65,7 @@ optimize_p(vcl_vector<vgl_homg_point_2d<double> > const& points1,
     return false;
   //normalize the input point sets
   vcl_vector<vgl_homg_point_2d<double> > tpoints1, tpoints2;
-  for (int i = 0; i<n; i++)
+  for (int i=0; i<n; ++i)
   {
     tpoints1.push_back(tr1(points1[i]));
     tpoints2.push_back(tr2(points2[i]));
@@ -82,7 +82,7 @@ optimize_p(vcl_vector<vgl_homg_point_2d<double> > const& points1,
 
   //The Levenberg-Marquardt algorithm can now be applied
   vgl_h_matrix_2d<double> hopt;
-  if(!optimize_h(tpoints1, tpoints2, initial_h_norm, hopt))
+  if (!optimize_h(tpoints1, tpoints2, initial_h_norm, hopt))
     return false;
 
   // hopt has to be transformed back to the coordinate system of
@@ -103,9 +103,8 @@ optimize_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
           vgl_h_matrix_2d<double>& H)
 {
   //number of lines must be the same
-  unsigned n = lines1.size();
-  assert(n == lines2.size());
-  assert(n>4);
+  assert(lines1.size() == lines2.size());
+  assert(lines1.size() > 4);
   //compute the normalizing transforms. By convention, these are point
   //transformations that act properly if the input is a line,
   // i.e., linei_norm = trx^-t(linei).
@@ -149,7 +148,7 @@ optimize_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
   h_initial_line.set(Ml_init);
 
   //run the optimization to refine the line transform
-  if(!this->optimize_h(tlines1, tlines2, h_initial_line, h_line_opt))
+  if (!this->optimize_h(tlines1, tlines2, h_initial_line, h_line_opt))
     return false;
 
   // Convert the optimized line transform back to point form.
@@ -158,7 +157,7 @@ optimize_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
   vnl_matrix_fixed<double, 3, 3> Mp_opt = vnl_inverse_transpose(Ml_opt);
   h_point_opt.set(Mp_opt);
 
-  // Finally, h_point_opt has to be transformed back to the coordinate 
+  // Finally, h_point_opt has to be transformed back to the coordinate
   // system of the original lines, i.e.,
   //  l1' = tr1 l1 , l2' = tr2 l2
   // h_point_opt was determined from the transform relation
@@ -183,7 +182,7 @@ optimize_pl(vcl_vector<vgl_homg_point_2d<double> > const& points1,
   //number of lines must be the same
   assert(lines1.size() == lines2.size());
   int nl = lines1.size();
-  // Must have enough equations 
+  // Must have enough equations
   assert((np+nl)>4);
   //compute the normalizing transforms
   vgl_norm_trans_2d<double> tr1, tr2;
@@ -192,12 +191,12 @@ optimize_pl(vcl_vector<vgl_homg_point_2d<double> > const& points1,
   if (!tr2.compute_from_points_and_lines(points2,lines2))
     return false;
   vcl_vector<vgl_homg_point_2d<double> > tpoints1, tpoints2;
-  for (int i = 0; i<np; i++)
+  for (int i=0; i<np; ++i)
   {
     tpoints1.push_back(tr1(points1[i]));
     tpoints2.push_back(tr2(points2[i]));
   }
-  for (int i = 0; i<nl; i++)
+  for (int i=0; i<nl; ++i)
   {
     double a=lines1[i].a(), b=lines1[i].b(), c=lines1[i].c(), d=vcl_sqrt(a*a+b*b);
     tpoints1.push_back(tr1(vgl_homg_point_2d<double>(-a*c,-b*c,d)));
@@ -210,7 +209,7 @@ optimize_pl(vcl_vector<vgl_homg_point_2d<double> > const& points1,
 
   //The Levenberg-Marquardt algorithm can now be applied
   vgl_h_matrix_2d<double> hopt;
-  if(!optimize_h(tpoints1, tpoints2, initial_h_norm, hopt))
+  if (!optimize_h(tpoints1, tpoints2, initial_h_norm, hopt))
     return false;
 
   // hopt has to be transformed back to the coordinate system of
