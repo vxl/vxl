@@ -53,7 +53,7 @@ struct vpgl_poly_deriv_helper{
 
 template <class T>
 struct vpgl_poly_deriv_helper<T,1>{
-  static inline T val(const T& radius, const T* k, unsigned int p)
+  static inline T val(const T& /*radius*/, const T* k, unsigned int p)
   {
     return p*(*k);
   }
