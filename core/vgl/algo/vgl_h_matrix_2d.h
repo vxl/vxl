@@ -78,24 +78,32 @@ class vgl_h_matrix_2d
   void set(const T *t_matrix);
   void set(vnl_matrix_fixed<T,3,3> const& t_matrix);
 
-  //:various affine transformations that set the corresponding parts of the matrix
-  //:intialize the transformation to identity
+  // various affine transformations that set the corresponding parts of the matrix
+
+  //:initialize the transformation to identity
   void set_identity();
 
-  //:set T[0][2] = tx and T[1][2] = ty, other elements unaltered
+  //: set T[0][2] = tx and T[1][2] = ty, other elements unaltered
   void set_translation(const T tx, const T ty);
 
-  //: theta is in radians, the upper 2x2 part of the matrix is replaced by a rotation matrix
+  //: the upper 2x2 part of the matrix is replaced by a rotation matrix.
+  // theta is in radians
   void set_rotation(const T theta);
 
-  //: transform is composed with a scaling transform [s 0 0]
-  //                                             S = [0 s 0], Ts = S*T
-  //                                                 [0 0 1]
+  //: initialize the transform to a scaling transform.
+  // $S = \left[ \begin{array}{ccc}
+  //                                s & 0 & 0 \\
+  //                                0 & s & 0 \\
+  //                                0 & 0 & 1
+  // \end{array}\right]$                         , Ts = S*T.
   void set_scale(const T scale);
 
-  //: transform is composed with a diagonal aspect transform [1 0 0]
-  //                                                     A = [0 r 0], Ta = A*T
-  //                                                         [0 0 1]
+  //: initialize the transform to a diagonal aspect transform.
+  // $A = \left[ \begin{array}{ccc}
+  //                                1 & 0 & 0 \\
+  //                                0 & a & 0 \\
+  //                                0 & 0 & 1
+  // \end{array}\right]$                         , Ta = A*T.
   void set_aspect_ratio(const T aspect_ratio);
 
   //: transformation to projective basis (canonical frame)
@@ -103,12 +111,12 @@ class vgl_h_matrix_2d
   // canonical frame.  The points act as the projective basis for
   // the canonical coordinate system.  In the canonical frame the points
   // have coordinates:
-  // \verbatim
-  //   p[0]p[1]p[2]p[3]
-  //     1   0   0   1
-  //     0   1   0   1
-  //     0   0   1   1
-  // \endverbatim
+  // $\begin{array}{cccc}
+  //   p[0] & p[1] & p[2] & p[3] \\
+  //     1  &   0  &   0  &   1  \\
+  //     0  &   1  &   0  &   1  \\
+  //     0  &   0  &   1  &   1
+  // \end{array}$
   bool projective_basis(vcl_vector<vgl_homg_point_2d<T> > const& four_points);
 
   //: transformation to projective basis (canonical frame)
