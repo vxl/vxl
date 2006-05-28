@@ -291,9 +291,9 @@ vgl_h_matrix_3d<T> get_canonical_h( vpgl_proj_camera<T>& camera )
 
 //--------------------------------
 template <class T>
-void fix_cheirality( vpgl_proj_camera<T>& camera )
+void fix_cheirality( vpgl_proj_camera<T>& /*camera*/ )
 {
-  vcl_cerr << "fix_cheirality( vpgl_proj_camera<T>& camera ) not implemented\n";
+  vcl_cerr << "fix_cheirality( vpgl_proj_camera<T>& ) not implemented\n";
 }
 
 
