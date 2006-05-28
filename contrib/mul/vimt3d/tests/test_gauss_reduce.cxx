@@ -7,9 +7,9 @@
 
 static void test_gauss_reduce_float()
 {
-  vcl_cout << "****************************\n"
+  vcl_cout << "*****************************\n"
            << " Testing vimt3d_gauss_reduce\n"
-           << "****************************\n";
+           << "*****************************\n";
 
   unsigned ni = 20, nj = 20, nk = 20;
   vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<" k "<<nk<<vcl_endl;

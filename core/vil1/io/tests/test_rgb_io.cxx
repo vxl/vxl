@@ -6,9 +6,9 @@
 
 void test_rgb_io()
 {
-  vcl_cout << "**************************\n"
+  vcl_cout << "***************************\n"
            << "Testing vil1_rgb<double> io\n"
-           << "**************************\n";
+           << "***************************\n";
 
   //// test constructors, accessors
   vil1_rgb<double> p_out(1.2,3.4,5.6), p_in;

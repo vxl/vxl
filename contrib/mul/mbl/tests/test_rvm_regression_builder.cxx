@@ -7,9 +7,9 @@
 
 void test_rvm_regression_builder()
 {
-  vcl_cout << "********************\n"
+  vcl_cout << "************************************\n"
            << " Testing mbl_rvm_regression_builder\n"
-           << "********************\n";
+           << "************************************\n";
 
   // Generate some sinusoidal data
   unsigned ns = 100;

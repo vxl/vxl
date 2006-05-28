@@ -18,10 +18,9 @@ double diff_li(const mbl_linear_interpolator &li, double x)
 
 void test_linear_interpolator()
 {
-
-  vcl_cout << "********************\n"
+  vcl_cout << "*********************************\n"
            << " Testing mbl_linear_interpolator\n"
-           << "********************\n";
+           << "*********************************\n";
 
   mbl_linear_interpolator li;
 
@@ -37,8 +36,8 @@ void test_linear_interpolator()
   }
 
   TEST("No data so return an NaN",vnl_math_isnan(li.y(1.5)),true);
- 
-  li.set(x,y); 
+
+  li.set(x,y);
 
   // test some values inside the tabulated interval
   TEST("Y value interpolated correctly",bool(diff_li(li,1.5)<1e-8),true);
@@ -46,14 +45,13 @@ void test_linear_interpolator()
   TEST("Y value interpolated correctly",bool(diff_li(li,4.2)<1e-8),true);
   TEST("Y value interpolated correctly",bool(diff_li(li,6.9)<1e-8),true);
   TEST("Y value interpolated correctly",bool(diff_li(li,2.45)<1e-8),true);
- 
+
   // test some values outside the tabulated interval
   TEST("Y value boundary condition correct",li.y(-10)==li.y(v1),true);
   TEST("Y value boundary condition correct",li.y(+20)==li.y(v2),true);
 
-  li.clear();  
+  li.clear();
   TEST("No data so return an NaN",vnl_math_isnan(li.y(1.5)),true);
-
 }
 
 TESTMAIN(test_linear_interpolator);

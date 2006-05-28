@@ -6,9 +6,9 @@
 
 void test_rgba_io()
 {
-  vcl_cout << "***************************\n"
+  vcl_cout << "****************************\n"
            << "Testing vil1_rgba<double> io\n"
-           << "***************************\n";
+           << "****************************\n";
 
   //// test constructors, accessors
   vil1_rgba<double> p_out(1.2,3.4,5.6,7.8), p_in;

@@ -10,9 +10,9 @@
 
 void test_memory_image_impl_io()
 {
-  vcl_cout << "********************************\n"
+  vcl_cout << "*********************************\n"
            << "Testing vil1_memory_image_impl io\n"
-           << "********************************\n";
+           << "*********************************\n";
 
   // Image set-up and construction
   int planes = 1;

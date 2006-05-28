@@ -6,9 +6,9 @@
 
 void test_memory_image_format_io()
 {
-  vcl_cout << "******************************************\n"
+  vcl_cout << "*******************************************\n"
            << "Testing vil1_memory_image_format<double> io\n"
-           << "******************************************\n";
+           << "*******************************************\n";
   //// test constructors, accessors
   vil1_memory_image_format p_out, p_in;
   p_out.components=2;

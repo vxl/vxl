@@ -33,9 +33,9 @@ static void test_parametric_point()
 
 void test_line_segment_3d()
 {
-  vcl_cout << "********************************\n"
-           << "  Testing vgl_line_segment_3d\n"
-           << "********************************\n\n";
+  vcl_cout << "*****************************\n"
+           << " Testing vgl_line_segment_3d\n"
+           << "*****************************\n\n";
 
   test_direction_vector();
 

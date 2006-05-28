@@ -96,9 +96,9 @@ void test_tpsw3d_at_fixed_points_with_weights(int n_points)
 
 void test_thin_plate_spline_weights_3d()
 {
-  vcl_cout << "*****************************************\n"
+  vcl_cout << "******************************************\n"
            << " Testing mbl_thin_plate_spline_weights_3d\n"
-           << "*****************************************\n";
+           << "******************************************\n";
 
   for (int i=1;i<=5;++i)
     test_tpsw3d_at_fixed_points(i);

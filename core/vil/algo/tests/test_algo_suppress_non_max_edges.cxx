@@ -12,9 +12,9 @@
 
 static void test_algo_suppress_non_max_edges()
 {
-  vcl_cout << "*******************\n"
+  vcl_cout << "************************************\n"
            << " Testing vil_suppress_non_max_edges\n"
-           << "*******************\n";
+           << "************************************\n";
 
   unsigned ni=20,nj=16;
   vil_image_view<vxl_byte> image0; image0.set_size(ni,nj);

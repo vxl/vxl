@@ -10,9 +10,9 @@
 
 static void test_algo_convolve_1d()
 {
-  vcl_cout << "*********************************************\n"
+  vcl_cout << "********************************\n"
            << " Testing vil3d_algo_convolve_1d\n"
-           << "*********************************************\n";
+           << "********************************\n";
 
   unsigned ni=5, nj=4, nk=3;
 
@@ -31,17 +31,17 @@ static void test_algo_convolve_1d()
   vil3d_print_all(vcl_cout, src_im);
   vcl_cout << "Image after smoothing in i" << vcl_endl;
   vil3d_print_all(vcl_cout, smoothed1_im);
-  
+
   test_im.fill(0);
   test_im(1,2,2) = 32;
   test_im(3,2,2) = -32;
   TEST("Correct output image after convolution",vil3d_image_view_deep_equality(test_im, smoothed1_im), true);
-  
+
   vil3d_convolve_1d(vil3d_switch_axes_jki(smoothed1_im), smoothed2_im,
     kernel+1,-1,1,float(),
     vil_convolve_zero_extend, vil_convolve_zero_extend);
   smoothed2_im = vil3d_switch_axes_kij(smoothed2_im);
-  
+
   vcl_cout << "Image after smoothing in i and j" << vcl_endl;
   vil3d_print_all(vcl_cout, smoothed2_im);
 
@@ -51,22 +51,21 @@ static void test_algo_convolve_1d()
   test_im(3,1,2) = -16;
   test_im(3,3,2) = 16;
   TEST("Correct output image after convolution",vil3d_image_view_deep_equality(test_im, smoothed2_im), true);
-  
+
   vil3d_convolve_1d(vil3d_switch_axes_kij(smoothed2_im), smoothed3_im,
     kernel+1,-1,1,float(),
     vil_convolve_zero_extend, vil_convolve_zero_extend);
   smoothed3_im = vil3d_switch_axes_jki(smoothed3_im);
- 
+
   vcl_cout << "Image after smoothing in i, j and k" << vcl_endl;
   vil3d_print_all(vcl_cout, smoothed3_im);
-  
+
   test_im.fill(0);
   test_im(1,1,1) = 8;
   test_im(1,3,1) = -8;
   test_im(3,1,1) = -8;
   test_im(3,3,1) = 8;
   TEST("Correct output image after convolution",vil3d_image_view_deep_equality(test_im, smoothed3_im), true);
-
 }
 
 

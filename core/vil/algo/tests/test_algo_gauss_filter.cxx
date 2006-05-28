@@ -72,7 +72,7 @@ static void test_algo_gaussian_filter_5tap_byte_float()
   TEST_NEAR("impulse response sums to input", sum, 255.0f, 1e-3);
 
 
-  vcl_cout << "**********Awkward cases***************" << vcl_endl;
+  vcl_cout << "**********Awkward cases***************\n";
 
   src.set_size(n,1);
   for (int i=0;i<n;++i)
@@ -225,9 +225,9 @@ static void test_algo_vil_gauss_filter_gen_ntaps()
 
 void test_algo_gauss_filter_1d()
 {
-  vcl_cout << "***********************************\n"
+  vcl_cout << "*****************************\n"
            << " Testing vil_gauss_filter_1d\n"
-           << "***********************************\n\n";
+           << "*****************************\n\n";
 
   unsigned nx=15,ny=17;
   vil_image_view<vxl_byte> src_im(2*nx+1,2*ny+1);
@@ -248,14 +248,13 @@ void test_algo_gauss_filter_1d()
   TEST_NEAR("Value at limit of filter",dest_im(nx-half_width,ny),100*filter[0],1e-6);
   TEST_NEAR("Value at limit of filter",dest_im(nx+half_width,ny),100*filter[0],1e-6);
   TEST_NEAR("Value at centre of filter",dest_im(nx,ny),100*filter[half_width],1e-6);
-
 }
 
 void test_algo_gauss_filter_2d()
 {
-  vcl_cout << "***********************************\n"
+  vcl_cout << "*****************************\n"
            << " Testing vil_gauss_filter_2d\n"
-           << "***********************************\n\n";
+           << "*****************************\n\n";
 
   unsigned nx=15,ny=17;
   vil_image_view<vxl_byte> src_im(2*nx+1,2*ny+1);

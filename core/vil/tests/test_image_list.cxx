@@ -16,11 +16,11 @@
 
 static void test_image_list()
 {
-  vcl_cout << "************************************" << vcl_endl
-           << " Testing vil_image_list" << vcl_endl
-           << "************************************" << vcl_endl;
+  vcl_cout << "************************\n"
+           << " Testing vil_image_list\n"
+           << "************************\n";
   //Test image list by saving three resource files and then
-  //retrieving them using image_list. 
+  //retrieving them using image_list.
   const unsigned int ni = 73;
   const unsigned int nj = 43;
   vil_image_view<unsigned short> image;
@@ -76,7 +76,7 @@ static void test_image_list()
   vcl_cout << "Cleaning up directory " << dir << '\n';;
   int chd = vpl_chdir(dir.c_str());
   vcl_string s =  "*.*";
-  for (vul_file_iterator fit = s;fit; ++fit) 
+  for (vul_file_iterator fit = s;fit; ++fit)
     vpl_unlink(fit());
   vcl_cout << "Removing the directory\n";
   chd = vpl_chdir("..");

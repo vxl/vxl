@@ -6,9 +6,9 @@
 
 static void test_algo_normalised_correlation_3d_byte()
 {
-  vcl_cout << "*********************************************\n"
+  vcl_cout << "**********************************************\n"
            << " Testing vil3d_algo_normalised_correlation_3d\n"
-           << "*********************************************\n";
+           << "**********************************************\n";
 
   unsigned ni=10, nj=11, nk=12, m=5;
 

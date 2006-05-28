@@ -9,9 +9,9 @@
 
 void test_memory_image_of_io()
 {
-  vcl_cout << "******************************\n"
+  vcl_cout << "*******************************\n"
            << "Testing vil1_memory_image_of io\n"
-           << "******************************\n";
+           << "*******************************\n";
 
   // Image set-up and construction
   int height = 10;

@@ -5,9 +5,9 @@
 
 static void test_algo_structuring_element()
 {
-  vcl_cout << "****************************\n"
+  vcl_cout << "***********************************\n"
            << " Testing vil3d_structuring_element\n"
-           << "****************************\n";
+           << "***********************************\n";
 
   int n = 5;
   vcl_vector<int> px(n),py(n),pz(n);

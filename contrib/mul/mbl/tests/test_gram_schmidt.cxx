@@ -5,9 +5,9 @@
 
 void test_gram_schmidt()
 {
-    vcl_cout << "*******************\n"
+    vcl_cout << "**************************\n"
              << " Testing mbl_gram_schmidt\n"
-             << "*******************\n";
+             << "**************************\n";
 
     //Construct a 3d basis in a 4 d space
     vnl_matrix<double > basis(4,3);
@@ -18,7 +18,7 @@ void test_gram_schmidt()
     basis.set_column(1,v1);
     basis.set_column(2,v2);
     vnl_matrix<double > norm_basis(4,3);
-    
+
     mbl_mod_gram_schmidt(basis,norm_basis);
     vnl_vector<double >  e0,e1,e2;
     e0 = norm_basis.get_column(0);
@@ -31,7 +31,6 @@ void test_gram_schmidt()
     TEST_NEAR("mbl_gram_schmidt e0 and e1 orthogonal", dot_product(e0,e1), 0.0, 1e-8);
     TEST_NEAR("mbl_gram_schmidt e0 and e2 orthogonal", dot_product(e0,e2), 0.0, 1e-8);
     TEST_NEAR("mbl_gram_schmidt e1 and e2 orthogonal", dot_product(e1,e2), 0.0, 1e-8);
-
 }
 
 TESTMAIN(test_gram_schmidt);

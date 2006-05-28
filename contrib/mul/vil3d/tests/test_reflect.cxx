@@ -13,14 +13,14 @@
 //========================================================================
 static void test_reflect_int()
 {
-  vcl_cout << "********************************** \n"
-           << " Testing vil3d_reflect<vxl_int_32> \n"
-           << "********************************** \n";
+  vcl_cout << "***********************************\n"
+           << " Testing vil3d_reflect<vxl_int_32>\n"
+           << "***********************************\n";
 
   const unsigned ni = 5;
   const unsigned nj = 5;
   const unsigned nk = 5;
-  
+
   vil3d_image_view<vxl_int_32> image(ni, nj, nk);
   for (unsigned k=0; k<nk; ++k)
   {
@@ -32,14 +32,14 @@ static void test_reflect_int()
       }
     }
   }
-  
+
   vil3d_image_view<vxl_int_32> tempi = vil3d_reflect_i(image);
   vil3d_image_view<vxl_int_32> tempj = vil3d_reflect_j(image);
   vil3d_image_view<vxl_int_32> tempk = vil3d_reflect_k(image);
-  
+
 
 //--- Additional output for Debug configurations -------------------------
-#ifndef NDEBUG  
+#ifndef NDEBUG
   vcl_cout << "Original image:\n";
   vil3d_print_all(vcl_cout, image);
   vcl_cout << vcl_endl;
@@ -56,7 +56,7 @@ static void test_reflect_int()
   vil3d_print_all(vcl_cout, tempk);
   vcl_cout << vcl_endl;
 #endif
-//------------------------------------------------------------------------  
+//------------------------------------------------------------------------
 
 
   bool refl_i_ok = true;
@@ -89,14 +89,14 @@ static void test_reflect_int()
 //========================================================================
 static void time_reflect()
 {
-  vcl_cout << "********************************** \n"
-           << " Timing vil3d_reflect<vxl_int_32> \n"
-           << "********************************** \n";
-  
+  vcl_cout << "**********************************\n"
+           << " Timing vil3d_reflect<vxl_int_32>\n"
+           << "**********************************\n";
+
   const unsigned ni = 256;
   const unsigned nj = 256;
   const unsigned nk = 256;
-  
+
   vil3d_image_view<vxl_int_32> image(ni, nj, nk);
   for (unsigned k=0; k<nk; ++k)
   {
@@ -108,7 +108,7 @@ static void time_reflect()
       }
     }
   }
-  
+
   vcl_clock_t beg_time1 = vcl_clock();
   //
   vil3d_image_view<vxl_int_32> temp1 = vil3d_reflect_k(image);
@@ -135,12 +135,10 @@ static void time_reflect()
   vcl_clock_t end_time2 = vcl_clock();
   double duration2 = (double)(end_time2 - beg_time2)/CLOCKS_PER_SEC;
 
-  vcl_cout << "==============================================================\n";
-  vcl_cout << "vil3d_reflect() duration: " << duration1      << " s. \n";
-  vcl_cout << "transposition duration:   " << duration2      << " s. \n";
-  vcl_cout << "==============================================================\n";
-  vcl_cout << vcl_endl;    
-
+  vcl_cout << "==============================================================\n"
+           << "vil3d_reflect() duration: " << duration1      << " s.\n"
+           << "transposition duration:   " << duration2      << " s.\n"
+           << "==============================================================\n\n";
 }
 #endif
 
