@@ -22,6 +22,7 @@
 #include <vul/vul_file_iterator.h>
 #include <vil/file_formats/vil_tiff_header.h>
 #define DEBUG
+
 static void test_pyramid_image_resource()
 {
   vcl_cout << "************************************\n"
@@ -53,33 +54,33 @@ static void test_pyramid_image_resource()
       image3(i,j) = i + ni3*j;
   vil_image_resource_sptr ir3 = vil_new_image_resource_of_view(image3);
   vcl_string d = "pyramid_dir";
-  vcl_cout << "Made pyramid directory "<< d << "\n";
+  vcl_cout << "Made pyramid directory "<< d << '\n';
   vul_file::make_directory(d.c_str());
   //Test pyramid_image_list::put_resource(..)
   vil_pyramid_image_list* pir = new vil_pyramid_image_list(d.c_str());
-  if(pir)
-    {
-      vcl_cout << "Made a pyramid resource from directory " << d << '\n';
-      TEST("Make a directory-based pyramid resource", true, true);      
-    }
+  if (pir)
+  {
+    vcl_cout << "Made a pyramid resource from directory " << d << '\n';
+    TEST("Make a directory-based pyramid resource", true, true);
+  }
   else
-    {
-      TEST("Make a directory-based pyramid resource", true, false);
-      return;
-    }
+  {
+    TEST("Make a directory-based pyramid resource", true, false);
+    return;
+  }
   pir->put_resource(ir3);
-  for(unsigned i = 0; i<pir->nlevels(); ++i)
+  for (unsigned i = 0; i<pir->nlevels(); ++i)
     pir->print(i);
   pir->put_resource(ir2);
   vcl_cout << '\n';
-  for(unsigned i = 0; i<pir->nlevels(); ++i)
+  for (unsigned i = 0; i<pir->nlevels(); ++i)
     pir->print(i);
   pir->put_resource(ir);
   vcl_cout << '\n';
-  for(unsigned i = 0; i<pir->nlevels(); ++i)
+  for (unsigned i = 0; i<pir->nlevels(); ++i)
     pir->print(i);
   float actual_scale = 1.0f;
-  vil_image_view<unsigned short> tview = 
+  vil_image_view<unsigned short> tview =
     pir->get_copy_view(15,10, 10, 20, 0.6f, actual_scale);
   vcl_cout << "tview dimensions (" << tview.ni() << ' ' << tview.nj()
            << ") actual scale = "<< actual_scale << '\n';
@@ -98,100 +99,100 @@ static void test_pyramid_image_resource()
     {
       vil_image_resource_sptr dec_resc =
         vil_pyramid_image_resource::decimate(bir, dec_file.c_str());
-      if(dec_resc)
+      if (dec_resc)
         vcl_cout << "Made a successful decimated resource\n";
     }
     vil_image_resource_sptr reload_dec = vil_load_image_resource(dec_file.c_str());
-    if(reload_dec)
-      {
-        vcl_cout << "(" << reload_dec->ni() << ' ' << reload_dec->nj() << ")\n";
-        TEST("reload decimated resource", true, true);
-      }
+    if (reload_dec)
+    {
+      vcl_cout << '(' << reload_dec->ni() << ' ' << reload_dec->nj() << ")\n";
+      TEST("reload decimated resource", true, true);
+    }
     else
-      {
-        TEST("reload decimated resource", true, false);
-        return;
-      }
+    {
+      TEST("reload decimated resource", true, false);
+      return;
+    }
     vil_image_view<unsigned short> dec_view = reload_dec->get_view();
 
     vcl_cout << "base view\n";
-    for(unsigned j = 0; j<4; ++j)
-      {
-        for(unsigned i = 0; i<4; ++i)
-          vcl_cout << image(i,j) << ' ';
-      
-        vcl_cout << '\n';
-      }
+    for (unsigned j = 0; j<4; ++j)
+    {
+      for (unsigned i = 0; i<4; ++i)
+        vcl_cout << image(i,j) << ' ';
+
+      vcl_cout << '\n';
+    }
     vcl_cout << "decimated view\n";
-    for(unsigned j = 0; j<2; ++j)
-      {
-        for(unsigned i = 0; i<2; ++i)
-          vcl_cout << dec_view(i,j) << ' ';
-      
-        vcl_cout << '\n';
-      }
+    for (unsigned j = 0; j<2; ++j)
+    {
+      for (unsigned i = 0; i<2; ++i)
+        vcl_cout << dec_view(i,j) << ' ';
+
+      vcl_cout << '\n';
+    }
     TEST("decimated image read", dec_view(0,0), 37);
   }//close open resource files
-  vpl_unlink(dec_file.c_str());  
+  vpl_unlink(dec_file.c_str());
   vcl_cout << "Clean up decimated resource file\n";
   {
-    vil_pyramid_image_resource_sptr bpyr = 
+    vil_pyramid_image_resource_sptr bpyr =
       vil_new_pyramid_image_list_from_base(d.c_str(), ir, 3, true, "tiff", "R");
-    if(bpyr)
-      {
-        float ac = 1.0f;
-        vil_image_view<unsigned short> v25 = bpyr->get_copy_view(0.25f , ac);
-        unsigned ni25 = v25.ni();
-        bool good = ni25 == 19;
-        vil_image_view<unsigned short> v50 = bpyr->get_copy_view(0.5f , ac);
-        unsigned ni50 = v50.ni();
-        vcl_cout << "ni25 = " << ni25 << "  ni50 " << ni50 << '\n';
-        good = good && ni50 == 37;
-        TEST("Pyramid create and read", good, true);
-      }
+    if (bpyr)
+    {
+      float ac = 1.0f;
+      vil_image_view<unsigned short> v25 = bpyr->get_copy_view(0.25f , ac);
+      unsigned ni25 = v25.ni();
+      bool good = ni25 == 19;
+      vil_image_view<unsigned short> v50 = bpyr->get_copy_view(0.5f , ac);
+      unsigned ni50 = v50.ni();
+      vcl_cout << "ni25 = " << ni25 << "  ni50 " << ni50 << '\n';
+      good = good && ni50 == 37;
+      TEST("Pyramid create and read", good, true);
+    }
     else
       TEST("Pyramid create and read", false, true);
   }//close open resource files
   //clean directory
   vl.clean_directory();
   vcl_cout << "Cleaning bpyr directory\n";
-  //Test pyramid_image_list::put_resource 
+  //Test pyramid_image_list::put_resource
   bool good = true;
   {//scope for dpyr
-  vil_pyramid_image_resource_sptr dpyr = 
-    vil_new_pyramid_image_resource(d.c_str(), "pyil");
-    if(dpyr)
-      {
-        good = good && dpyr->put_resource(ir);
-        good = good && dpyr->put_resource(ir2);
-        good = good && dpyr->put_resource(ir3);
-        vcl_cout << "Nlevels = " << dpyr->nlevels() << '\n';
-      }
+    vil_pyramid_image_resource_sptr dpyr =
+      vil_new_pyramid_image_resource(d.c_str(), "pyil");
+    if (dpyr)
+    {
+      good = good && dpyr->put_resource(ir);
+      good = good && dpyr->put_resource(ir2);
+      good = good && dpyr->put_resource(ir3);
+      vcl_cout << "Nlevels = " << dpyr->nlevels() << '\n';
+    }
     else good = false;
   }//close resource dpyr
   TEST("test pyramid_image_list::put_resource", good, true);
   { //open input pyramid rdpyr
     vil_pyramid_image_resource_sptr rdpyr = vil_load_pyramid_resource(d.c_str());
-    if(rdpyr)
+    if (rdpyr)
       TEST("load of pyramid resource rdpyr", true, true);
     else
-      {
-        TEST("load of pyramid resource rdpry", false, true);
-        return;
-      }
+    {
+      TEST("load of pyramid resource rdpry", false, true);
+      return;
+    }
     unsigned nlevels = rdpyr->nlevels();
     vcl_cout << "Read nlevels = " << nlevels << '\n';
-    for(unsigned L = 0; L<nlevels; ++L)
+    for (unsigned L = 0; L<nlevels; ++L)
       rdpyr->print(L);
     vil_image_view<unsigned short> rv = rdpyr->get_copy_view(2);
     vcl_cout << "single file pyramid level 2\n";
-    for(unsigned j = 0; j<2; ++j)
-      {
-        for(unsigned i = 0; i<2; ++i)
-          vcl_cout << rv(i,j) << ' ';
-      
-        vcl_cout << '\n';
-      }
+    for (unsigned j = 0; j<2; ++j)
+    {
+      for (unsigned i = 0; i<2; ++i)
+        vcl_cout << rv(i,j) << ' ';
+
+      vcl_cout << '\n';
+    }
     TEST("pyramid_image_list--reopen put resources", rv(1,1)==19, true);
   }//close dpyr resources
   //Cleanup pyramid directory
@@ -202,15 +203,15 @@ static void test_pyramid_image_resource()
   //  create_multi_file_resource(file);
   good = true;
   {//scope for pi
-    vil_pyramid_image_resource_sptr pi = 
+    vil_pyramid_image_resource_sptr pi =
       vil_new_pyramid_image_resource(file.c_str(), "tiff");
-    if(pi)
-      {
-        good = good && pi->put_resource(ir);
-        good = good && pi->put_resource(ir2);
-        good = good && pi->put_resource(ir3);
-        vcl_cout << "Nlevels = " << pi->nlevels() << '\n';
-      }
+    if (pi)
+    {
+      good = good && pi->put_resource(ir);
+      good = good && pi->put_resource(ir2);
+      good = good && pi->put_resource(ir3);
+      vcl_cout << "Nlevels = " << pi->nlevels() << '\n';
+    }
     else good = false;
   }//close resource pi
   TEST("multiimage tiff pyramid write", good, true);
@@ -219,56 +220,56 @@ static void test_pyramid_image_resource()
     vcl_cout << "loaded multi-image pyramid " << rpi  << '\n';
     unsigned nlevels = rpi->nlevels();
     vcl_cout << "Read nlevels = " << nlevels << '\n';
-    for(unsigned L = 0; L<nlevels; ++L)
+    for (unsigned L = 0; L<nlevels; ++L)
       rpi->print(L);
     vil_image_view<unsigned short> rv = rpi->get_copy_view(2);
     vcl_cout << "single file pyramid level 2\n";
-    for(unsigned j = 0; j<2; ++j)
-      {
-        for(unsigned i = 0; i<2; ++i)
-          vcl_cout << rv(i,j) << ' ';
-      
-        vcl_cout << '\n';
-      }
+    for (unsigned j = 0; j<2; ++j)
+    {
+      for (unsigned i = 0; i<2; ++i)
+        vcl_cout << rv(i,j) << ' ';
+
+      vcl_cout << '\n';
+    }
     TEST("multiimage tiff pyramid read", rv(1,1)==19, true);
   }//close input pyramid rpi
   vpl_unlink(file.c_str());
   vcl_string fb = "tiff_pyramid_from_base.tif";
   {//scope for pyfb
-    vil_pyramid_image_resource_sptr pyfb =  
+    vil_pyramid_image_resource_sptr pyfb =
       vil_new_pyramid_image_from_base(fb.c_str(), bir, 3, "tiff", d.c_str());
     unsigned nlevels = pyfb->nlevels();
     vcl_cout << "Read nlevels = " << nlevels << '\n';
-    for(unsigned L = 0; L<nlevels; ++L)
+    for (unsigned L = 0; L<nlevels; ++L)
       pyfb->print(L);
     vil_image_view<unsigned short> rv0 = pyfb->get_copy_view(0);
     vil_image_view<unsigned short> rv1 = pyfb->get_copy_view(1);
     vil_image_view<unsigned short> rv2 = pyfb->get_copy_view(2);
-    vcl_cout << "Level 0 \n";
-   for(unsigned j = 0; j<8; ++j)
-      {
-        for(unsigned i = 0; i<8; ++i)
-          vcl_cout << rv0(i,j) << ' ';
-      
-        vcl_cout << '\n';
-      }
-    vcl_cout << "Level 1 \n";
-    for(unsigned j = 0; j<8; ++j)
-      {
-        for(unsigned i = 0; i<8; ++i)
-          vcl_cout << rv1(i,j) << ' ';
-      
-        vcl_cout << '\n';
-      }
-	  
-    vcl_cout << "Level 2 \n";
-    for(unsigned j = 0; j<8; ++j)
-      {
-        for(unsigned i = 0; i<8; ++i)
-          vcl_cout << rv2(i,j) << ' ';
-      
-        vcl_cout << '\n';
-      }
+    vcl_cout << "Level 0\n";
+    for (unsigned j = 0; j<8; ++j)
+    {
+      for (unsigned i = 0; i<8; ++i)
+        vcl_cout << rv0(i,j) << ' ';
+
+      vcl_cout << '\n';
+    }
+    vcl_cout << "Level 1\n";
+    for (unsigned j = 0; j<8; ++j)
+    {
+      for (unsigned i = 0; i<8; ++i)
+        vcl_cout << rv1(i,j) << ' ';
+
+      vcl_cout << '\n';
+    }
+
+    vcl_cout << "Level 2\n";
+    for (unsigned j = 0; j<8; ++j)
+    {
+      for (unsigned i = 0; i<8; ++i)
+        vcl_cout << rv2(i,j) << ' ';
+
+      vcl_cout << '\n';
+    }
     good = rv0(1,1)==74 && rv1(1,1)==185&&rv2(1,1)==407;
     TEST("multi-image tiff pyramid from base", good, true);
     }//end scope for pyfb
@@ -276,7 +277,6 @@ static void test_pyramid_image_resource()
   vpl_unlink(fb.c_str());
   //remove the pyramid directory
   vpl_rmdir(d.c_str());
-  
 }
 
 TESTMAIN(test_pyramid_image_resource);
