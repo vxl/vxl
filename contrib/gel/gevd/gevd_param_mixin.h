@@ -52,6 +52,8 @@ class gevd_param_mixin
 
 class ParamModifier
 {
+ virtual ~ParamModifier() {}
+
  public:
   //------------------------------------------------------------
   //: These are some standard boolean choice styles defined for convenience.
