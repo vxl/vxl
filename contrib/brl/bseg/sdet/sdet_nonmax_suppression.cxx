@@ -157,14 +157,12 @@ void sdet_nonmax_suppression::apply()
 
   // run non-maximum suppression at every point
 
-  int num_entry = 0;
   for (int y = 1; y < height_-1; y++)
   {
     for (int x = 1; x < width_-1; x++)
     {
       if (grad_mag_(x,y) > max_grad_mag_ * thresh_ / 100.0)
       {
-        num_entry++;
         double gx = grad_x_(x,y);
         double gy = grad_y_(x,y);
         vgl_vector_2d<double> direction(gx,gy);
