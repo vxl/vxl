@@ -48,9 +48,12 @@ static void test_image_list()
   vil_image_resource_sptr ir3 = vil_new_image_resource_of_view(image3);
   vcl_string dir = "image_list_dir";
   {
-    vul_file::make_directory(dir.c_str());
+    bool mkdir = vul_file::make_directory(dir.c_str());
+    if(mkdir)
+      vcl_cout << "vul make directory worked " << vcl_endl;
     TEST("vil_is_directory", vil_image_list::vil_is_directory(dir.c_str()),true);
     int chd = vpl_chdir(dir.c_str());
+    vcl_cout << "return code for chdir " << chd << vcl_endl;
     good = vil_save_image_resource(ir, "R0.tif", "tiff");
     vcl_cout << "Saved R0"  << vcl_endl;
     good = good && vil_save_image_resource(ir2, "R1.tif", "tiff");
