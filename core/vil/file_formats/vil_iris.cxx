@@ -56,7 +56,7 @@ vil_image_resource_sptr vil_iris_file_format::make_input_image(vil_stream* is)
 
   is->seek(24L);
   char imagename[81];
-  is->read(imagename, 80L);
+  if (is->read(imagename, 80L) != 80) return 0;
 
   colormap_ = get_long(is);
 
@@ -482,7 +482,7 @@ vxl_sint_32 get_long(vil_stream* file, int location)
   if (location >= 0) file->seek(location);
 
   vxl_byte buff[4];
-  file->read((void*)buff, 4L);
+  if (file->read((void*)buff, 4L) != 4L) return 0;
 
   // Decode from two's complement to machine format
   vxl_uint_32 bits = ( vxl_uint_32(buff[0]) << 24 ) |
