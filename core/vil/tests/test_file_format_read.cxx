@@ -430,8 +430,8 @@ test_file_format_read_main( int argc, char* argv[] )
   // Test generic file loads
 
   vcl_cout << "GENERIC FILE LOAD\n\n"
-
            << "Portable aNy Map [pnm]: (pbm, pgm, ppm)\n";
+
   testlib_test_begin( "  1-bit pbm ascii" );
   testlib_test_perform(CheckFile(CompareGrey<bool>(), "ff_grey1bit_true.txt", "ff_grey1bit_ascii.pbm" ) );
   testlib_test_begin( "  1-bit pbm raw" );
@@ -488,6 +488,7 @@ test_file_format_read_main( int argc, char* argv[] )
   vcl_cout << "TIFF [tiff]\n";
   testlib_test_begin( "  8-bit RGB uncompressed" );
   testlib_test_perform(CheckFile(CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit_uncompressed.tif" ) );
+
   testlib_test_begin( "  8-bit RGB packbits" );
   testlib_test_perform(CheckFile(CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit_packbits.tif" ) );
   testlib_test_begin( "  32-bit float grey" );

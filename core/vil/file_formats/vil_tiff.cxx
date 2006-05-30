@@ -126,6 +126,7 @@ static int vil_tiff_closeproc(thandle_t h)
   tif_stream_structures* p = (tif_stream_structures*)h;
   p->vs->unref();
   p->vs = 0;
+  delete p;
   return 0;
 }
 
