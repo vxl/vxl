@@ -244,10 +244,10 @@ class vil_nitf2_tagged_record
   bool read(vil_nitf2_istream& input);
 
   // Static variables
-  static vil_nitf2_field_definition s_length_definition;
-  static vil_nitf2_field_definition s_tag_definition;
-  static vil_nitf2_integer_formatter s_length_formatter;
-  static vil_nitf2_string_formatter s_tag_formatter;
+  static vil_nitf2_field_definition & s_length_definition();
+  static vil_nitf2_field_definition & s_tag_definition();
+  static vil_nitf2_integer_formatter & s_length_formatter();
+  static vil_nitf2_string_formatter & s_tag_formatter();
 
   // Member variables
   vil_nitf2_scalar_field* m_length_field;

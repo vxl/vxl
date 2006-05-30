@@ -23,15 +23,31 @@
 #include "vil_nitf2_typed_field_formatter.h"
 #include "vil_nitf2_scalar_field.h"
 
-vil_nitf2_field_definition vil_nitf2_tagged_record::s_tag_definition
-  ("CETAG", "Extension Tag", new vil_nitf2_string_formatter(6));
+vil_nitf2_field_definition& vil_nitf2_tagged_record::s_length_definition()
+{
+  static vil_nitf2_field_definition length_definition(
+    "CEL", "Extension Length", new vil_nitf2_integer_formatter(5));
+  return length_definition;
+}
 
-vil_nitf2_field_definition vil_nitf2_tagged_record::s_length_definition
-  ("CEL", "Extension Length", new vil_nitf2_integer_formatter(5));
+vil_nitf2_field_definition& vil_nitf2_tagged_record::s_tag_definition()
+{
+  static vil_nitf2_field_definition tag_definition (
+    "CETAG", "Extension Tag", new vil_nitf2_string_formatter(6));
+  return tag_definition;
+}
 
-vil_nitf2_integer_formatter vil_nitf2_tagged_record::s_length_formatter(5);
+vil_nitf2_integer_formatter& vil_nitf2_tagged_record::s_length_formatter()
+{
+  static vil_nitf2_integer_formatter length_formatter(5);
+  return length_formatter;
+}
 
-vil_nitf2_string_formatter vil_nitf2_tagged_record::s_tag_formatter(6);
+vil_nitf2_string_formatter& vil_nitf2_tagged_record::s_tag_formatter()
+{
+  static vil_nitf2_string_formatter tag_formatter(6);
+  return tag_formatter;
+}
 
 vcl_string vil_nitf2_tagged_record::name() const
 {
@@ -60,7 +76,7 @@ vil_nitf2_tagged_record* vil_nitf2_tagged_record::create(vil_nitf2_istream& inpu
 bool vil_nitf2_tagged_record::read(vil_nitf2_istream& input)
 {
   // Read TRE tag
-  m_tag_field = vil_nitf2_scalar_field::read(input, &s_tag_definition);
+  m_tag_field = vil_nitf2_scalar_field::read(input, &s_tag_definition());
   if (!m_tag_field) {
     vcl_cerr << "Error reading extension tag at offset " << input.tell() << ".\n";
     // Can't continue reading file
@@ -70,7 +86,7 @@ bool vil_nitf2_tagged_record::read(vil_nitf2_istream& input)
   m_tag_field->value(cetag);
 
   // Read TRE data length
-  m_length_field = vil_nitf2_scalar_field::read(input, &s_length_definition);
+  m_length_field = vil_nitf2_scalar_field::read(input, &s_length_definition());
   if (!m_length_field) {
     vcl_cerr << "Error reading extension length for tag " << cetag << ".\n";
     // Can't continue reading file
@@ -363,7 +379,7 @@ bool vil_nitf2_tagged_record::write(vil_nitf2_ostream& output)
   // Check whether the vcl_right amount was written
   vil_streampos end = output.tell();
   vil_streampos length_written = end - start;
-  int expected_length = s_tag_formatter.field_width + s_length_formatter.field_width
+  int expected_length = s_tag_formatter().field_width + s_length_formatter().field_width
     + length();
   return length_written == expected_length;
 }
