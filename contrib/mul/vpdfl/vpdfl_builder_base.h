@@ -86,6 +86,16 @@ class vpdfl_builder_base
   //: Create a vpdfl_builder_base object given a config steram
   // \throw mbl_exception if parse error.
   static vcl_auto_ptr<vpdfl_builder_base> new_builder_from_stream(vcl_istream &is);
+
+  //: Read initialisation settings from a stream.
+  // \throw mbl_exception_parse_error if the parse fails.
+  virtual void config_from_stream(vcl_istream & is);
+
+  //: Create a vpdfl_builder_base object given a config stream (recursive style)
+  //  Creates object, then uses config_from_stream(is) to set up internals
+  // \throw vcl_runtime_exception if parse error.
+  static vcl_auto_ptr<vpdfl_builder_base> new_pdf_builder_from_stream(vcl_istream &);
+
 };
 
 //: Allows derived class to be loaded by base-class pointer

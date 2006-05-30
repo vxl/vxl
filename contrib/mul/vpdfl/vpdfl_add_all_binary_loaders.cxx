@@ -14,6 +14,8 @@
 #include <vpdfl/vpdfl_gaussian_kernel_pdf.h>
 #include <vpdfl/vpdfl_gaussian_kernel_pdf_builder.h>
 
+#include <mbl/mbl_cloneables_factory.h>
+
 void vpdfl_add_all_binary_loaders()
 {
   vsl_add_to_binary_loader(vpdfl_axis_gaussian());
@@ -26,4 +28,12 @@ void vpdfl_add_all_binary_loaders()
   vsl_add_to_binary_loader(vpdfl_pc_gaussian_builder());
   vsl_add_to_binary_loader(vpdfl_gaussian_kernel_pdf());
   vsl_add_to_binary_loader(vpdfl_gaussian_kernel_pdf_builder());
+
+  // Also add to factories for generating from streams
+  mbl_cloneables_factory<vpdfl_builder_base>::add(vpdfl_axis_gaussian_builder());
+  mbl_cloneables_factory<vpdfl_builder_base>::add(vpdfl_axis_gaussian_builder(),
+                                                  "axis_gaussian");
+  mbl_cloneables_factory<vpdfl_builder_base>::add(vpdfl_gaussian_builder());
+  mbl_cloneables_factory<vpdfl_builder_base>::add(vpdfl_gaussian_builder(),
+                                                  "gaussian");
 }

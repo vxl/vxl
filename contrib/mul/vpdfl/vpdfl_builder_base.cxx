@@ -18,6 +18,11 @@
 #include <vpdfl/vpdfl_axis_gaussian_builder.h>
 #include <vpdfl/vpdfl_gaussian_kernel_pdf_builder.h>
 #include <vpdfl/vpdfl_gaussian_builder.h>
+
+#include <mbl/mbl_cloneables_factory.h>
+#include <mbl/mbl_parse_block.h>
+#include <mbl/mbl_exception.h>
+
 //=======================================================================
 
 short vpdfl_builder_base::version_no() const
@@ -53,7 +58,7 @@ vcl_auto_ptr<vpdfl_builder_base> vpdfl_builder_base::new_builder_from_stream(vcl
   // This function should really be replaced by a general loader scheme
   // Ask Ian for examples from Manchester's private code base.
 
-  //: This will store the constructed limiter.
+  //: This will store the constructed builder.
   vcl_auto_ptr<vpdfl_builder_base> builder;
 
   vcl_string type;
@@ -134,3 +139,39 @@ vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_builder_base* b)
   vsl_print_summary(os,b);
   return os;
 }
+//=======================================================================
+//: Create a vpdfl_builder_base object given a config stream (recursive style)
+//  Creates object, then uses config_from_stream(is) to set up internals
+vcl_auto_ptr<vpdfl_builder_base> vpdfl_builder_base::
+  new_pdf_builder_from_stream(vcl_istream &is)
+{
+  vcl_string name;
+  is >> name;
+  vcl_auto_ptr<vpdfl_builder_base> builder;
+  try {
+    builder = mbl_cloneables_factory<vpdfl_builder_base>::get_clone(name);
+  }
+  catch (const mbl_exception_no_name_in_factory & e)
+  {
+    throw (mbl_exception_parse_error( e.what() ));
+  }
+  builder->config_from_stream(is);
+  return builder;
+}
+
+//=======================================================================
+//: Read initialisation settings from a stream.
+// The default implementation merely checks that no properties have
+// been specified.
+void vpdfl_builder_base::config_from_stream(
+  vcl_istream & is)
+{
+
+  vcl_string s = mbl_parse_block(is);
+  if (s.empty() || s=="{}") return;
+
+  throw mbl_exception_parse_error(
+    this->is_a() + " expects no properties in initialisation,\n"
+    "But the following properties were given:\n" + s);
+}
+

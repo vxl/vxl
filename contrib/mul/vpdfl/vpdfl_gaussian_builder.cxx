@@ -26,6 +26,11 @@
 #include <vpdfl/vpdfl_gaussian.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 
+#include <mbl/mbl_parse_block.h>
+#include <mbl/mbl_read_props.h>
+#include <vul/vul_string.h>
+#include <mbl/mbl_exception.h>
+
 // Weights smaller than this are assumed to be zero
 const double min_wt = 1e-8;
 
@@ -355,5 +360,42 @@ void vpdfl_gaussian_builder::b_read(vsl_b_istream& bfs)
       return;
   }
 }
+
+//: Read initialisation settings from a stream.
+// Parameters:
+// \verbatim
+// {
+//   min_var: 1.0e-6
+// }
+// \endverbatim
+// \throw mbl_exception_parse_error if the parse fails.
+void vpdfl_gaussian_builder::config_from_stream(vcl_istream & is)
+{
+  vcl_string s = mbl_parse_block(is);
+
+  vcl_istringstream ss(s);
+  mbl_read_props_type props = mbl_read_props_ws(ss);
+
+  double mv=1.0e-6;
+
+  if (!props["min_var"].empty())
+  {
+    mv=vul_string_atof(props["min_var"]);
+    props.erase("min_var");
+  }
+  set_min_var(mv);
+
+  try
+  {
+    mbl_read_props_look_for_unused_props(
+        "vpdfl_gaussian_builder::config_from_stream", props);
+  }
+  catch(mbl_exception_unused_props &e)
+  {
+    throw mbl_exception_parse_error(e.what());
+  }
+
+}
+
 
 //==================< end of vpdfl_gaussian_builder.cxx >====================

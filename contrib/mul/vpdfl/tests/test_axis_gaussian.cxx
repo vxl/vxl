@@ -9,6 +9,7 @@
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <vpdfl/vpdfl_axis_gaussian_builder.h>
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
+#include <vpdfl/vpdfl_add_all_binary_loaders.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vpl/vpl.h> // vpl_unlink()
@@ -142,6 +143,31 @@ void test_axis_gaussian()
   delete p_sampler2;
   delete base_pdf_ptr_in;
   delete base_builder_ptr_in;
+
+  // -------------------------------------------
+  //  Test configuring from stream
+  // -------------------------------------------
+  {
+    vpdfl_add_all_binary_loaders();
+    vcl_istringstream ss(
+          "axis_gaussian\n"
+          "{\n"
+          "  min_var: 0.1234e-5\n"
+          "}\n");
+
+    vcl_auto_ptr<vpdfl_builder_base>
+            builder = vpdfl_builder_base::new_pdf_builder_from_stream(ss);
+
+    TEST("Correct builder",builder->is_a(),"vpdfl_axis_gaussian_builder");
+    if (builder->is_a()=="vpdfl_axis_gaussian_builder")
+    {
+      vpdfl_axis_gaussian_builder &a_builder = static_cast<vpdfl_axis_gaussian_builder&>(*builder);
+      vcl_cout<<a_builder<<vcl_endl;
+      TEST_NEAR("Min var configured",
+              a_builder.min_var(),0.1234e-5,1e-8);
+    }
+    vsl_delete_all_loaders();
+  }
 }
 
 TESTMAIN(test_axis_gaussian);

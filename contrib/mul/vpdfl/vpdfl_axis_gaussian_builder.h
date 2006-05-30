@@ -73,6 +73,17 @@ class vpdfl_axis_gaussian_builder : public vpdfl_builder_base
 
   //: Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs);
+
+  //: Read initialisation settings from a stream.
+  // Parameters:
+  // \verbatim
+  // {
+  //   min_var: 1.0e-6
+  // }
+  // \endverbatim
+  // \throw mbl_exception_parse_error if the parse fails.
+  virtual void config_from_stream(vcl_istream & is);
+
 };
 
 #endif // vpdfl_axis_gaussian_builder_h
