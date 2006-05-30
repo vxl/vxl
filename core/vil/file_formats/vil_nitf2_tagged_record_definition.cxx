@@ -8,8 +8,28 @@
 #include <vcl_iostream.h>
 #include <vcl_utility.h>
 
-vil_nitf2_tagged_record_definition::tagged_record_definition_map 
-vil_nitf2_tagged_record_definition::all_definitions;
+
+vil_nitf2_tagged_record_definition::tagged_record_definition_map&
+  vil_nitf2_tagged_record_definition::all_definitions()
+{
+  class tagged_record_definition_map_t: public vil_nitf2_tagged_record_definition::tagged_record_definition_map
+  {
+  public:
+    ~tagged_record_definition_map_t()
+    {
+      for( iterator it = begin(), last = end(); 
+        it != last; it++ )
+      {
+        delete it->second;
+      }
+    }
+  };
+
+  
+  static tagged_record_definition_map_t tagged_record_definitions;
+  return tagged_record_definitions;
+}
+
 
 vil_nitf2_tagged_record_definition::vil_nitf2_tagged_record_definition(
   vcl_string name, vcl_string pretty_name, vil_nitf2_field_definitions* defs) 
@@ -25,10 +45,10 @@ vil_nitf2_tagged_record_definition& vil_nitf2_tagged_record_definition::define(
 {
   vil_nitf2_tagged_record_definition* definition = 
     new vil_nitf2_tagged_record_definition(name, pretty_name);
-  if (all_definitions.find(name) != all_definitions.end()) {
+  if (all_definitions().find(name) != all_definitions().end()) {
     throw("vil_nitf2_tagged_record_definition already defined.");
   }
-  all_definitions.insert(vcl_make_pair(name, definition));
+  all_definitions().insert(vcl_make_pair(name, definition));
   return *definition;
 }
 
@@ -76,8 +96,8 @@ vil_nitf2_tagged_record_definition& vil_nitf2_tagged_record_definition::end()
 
 vil_nitf2_tagged_record_definition* vil_nitf2_tagged_record_definition::find(vcl_string name)
 {
-  tagged_record_definition_map::iterator definition = all_definitions.find(name);
-  if (definition == all_definitions.end()) return 0;
+  tagged_record_definition_map::iterator definition = all_definitions().find(name);
+  if (definition == all_definitions().end()) return 0;
   return definition->second;
 }
 

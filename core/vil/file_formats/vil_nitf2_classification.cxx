@@ -10,22 +10,21 @@
 
 #include <vcl_cassert.h>
 
-class type_field_defs_map_t : public vil_nitf2_classification::type_field_defs_map
-{
-public:
-  ~type_field_defs_map_t()
-  {
-    for( vil_nitf2_classification::type_field_defs_map::iterator it = begin(),
-           last = end(); 
-      it != last; it++ )
-    {
-      delete it->second;
-    }
-  }
-};
 
 vil_nitf2_classification::type_field_defs_map & vil_nitf2_classification::s_field_definitions()
 {
+  class type_field_defs_map_t : public vil_nitf2_classification::type_field_defs_map
+  {
+  public:
+    ~type_field_defs_map_t()
+    {
+      for( iterator it = begin(), last = end(); 
+        it != last; it++ )
+      {
+        delete it->second;
+      }
+    }
+  };
   static type_field_defs_map_t field_definitions;
   return field_definitions;
 }

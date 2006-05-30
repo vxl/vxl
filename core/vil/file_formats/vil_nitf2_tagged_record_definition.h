@@ -77,7 +77,7 @@ public:
 
   typedef vcl_map<vcl_string, vil_nitf2_tagged_record_definition*> 
     tagged_record_definition_map;
-  static tagged_record_definition_map all_definitions;
+  static tagged_record_definition_map& all_definitions();
 
   const vil_nitf2_field_definitions& field_definitions() const {
     return *m_field_definitions; }
