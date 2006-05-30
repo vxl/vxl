@@ -6,16 +6,37 @@
 #include "vil_nitf2_field_definition.h"
 #include "vil_nitf2_typed_field_formatter.h"
 
-vil_nitf2_des::field_definition_map vil_nitf2_des::all_definitions;
+
+
+vil_nitf2_des::field_definition_map&
+  vil_nitf2_des::all_definitions()
+{
+  class field_definition_map_t: public vil_nitf2_des::field_definition_map
+  {
+  public:
+    ~field_definition_map_t()
+    {
+      for( iterator it = begin(), last = end(); 
+        it != last; it++ )
+      {
+        delete it->second;
+      }
+    }
+  };
+  
+  static field_definition_map_t field_definitions;
+  return field_definitions;
+}
+
 
 vil_nitf2_field_definitions&
 vil_nitf2_des::define(vcl_string desId )
 {
-  if (all_definitions.find(desId) != all_definitions.end()) {
+  if (all_definitions().find(desId) != all_definitions().end()) {
     throw("des with that name already defined.");
   }
   vil_nitf2_field_definitions* definition = new vil_nitf2_field_definitions();
-  all_definitions.insert( vcl_make_pair(desId, definition) );
+  all_definitions().insert( vcl_make_pair(desId, definition) );
   return *definition;
 }
 
@@ -34,8 +55,8 @@ bool vil_nitf2_des::read(vil_stream* stream)
     if( desId == "TRE_OVERFLOW" ){
       return true;
     } else {
-      field_definition_map::iterator it = all_definitions.find( desId );
-      if( it != all_definitions.end() ) {
+      field_definition_map::iterator it = all_definitions().find( desId );
+      if( it != all_definitions().end() ) {
         if( m_field_sequence2 ) delete m_field_sequence2;
         m_field_sequence2 = new vil_nitf2_field_sequence( *((*it).second) );
         return m_field_sequence2->read(*stream);

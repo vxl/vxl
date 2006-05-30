@@ -60,7 +60,7 @@ public:
 protected:
   typedef vcl_map<vcl_string, vil_nitf2_field_definitions*> 
     field_definition_map;
-  static field_definition_map all_definitions;
+  static field_definition_map & all_definitions();
 
   static void add_shared_field_defs_1( vil_nitf2_field_definitions* defs );
   static void add_shared_field_defs_2( vil_nitf2_field_definitions* defs, int data_width );
