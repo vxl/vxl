@@ -4,7 +4,7 @@
 
 CMAKE_MINIMUM_REQUIRED( VERSION 2.0 )
 
-SET (CVS_WEB_URL "http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/vxl/vxl/")
+SET (CVS_WEB_URL "http://vxl.cvs.sourceforge.net/vxl/vxl/")
 SET (USE_GNATS "OFF")
 
 SET (DELIVER_BROKEN_BUILD_EMAIL "Nightly Continuous")
