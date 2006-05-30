@@ -40,13 +40,6 @@ void vil_nitf2::cleanup_static_members()
     vil_nitf2_image_subheader::s_field_definitions_21 = 0;
   }
 
-  for( vil_nitf2_classification::type_field_defs_map::iterator it = vil_nitf2_classification::s_field_definitions.begin() ;
-       it != vil_nitf2_classification::s_field_definitions.end() ;
-       it++ )
-  {
-    delete it->second;
-  }
-  vil_nitf2_classification::s_field_definitions.clear();
 }
 
 class vil_nitf2_auto_cleanup

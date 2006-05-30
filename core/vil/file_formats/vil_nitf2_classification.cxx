@@ -10,7 +10,25 @@
 
 #include <vcl_cassert.h>
 
-vil_nitf2_classification::type_field_defs_map vil_nitf2_classification::s_field_definitions;
+class type_field_defs_map_t : public vil_nitf2_classification::type_field_defs_map
+{
+public:
+  ~type_field_defs_map_t()
+  {
+    for( vil_nitf2_classification::type_field_defs_map::iterator it = begin(),
+           last = end(); 
+      it != last; it++ )
+    {
+      delete it->second;
+    }
+  }
+};
+
+vil_nitf2_classification::type_field_defs_map & vil_nitf2_classification::s_field_definitions()
+{
+  static type_field_defs_map_t field_definitions;
+  return field_definitions;
+}
 
 const vil_nitf2_field_definitions* vil_nitf2_classification::
 get_field_definitions(const file_version& version,
@@ -20,13 +38,13 @@ get_field_definitions(const file_version& version,
   if (version == V_NITF_20 || version == V_NITF_21) {
     type_field_defs_key key =
       vcl_make_pair(version, vcl_make_pair(tag_prefix, pretty_name_prefix));
-    type_field_defs_map::const_iterator map_entry = s_field_definitions.find(key);
-    if (map_entry != s_field_definitions.end()) {
+    type_field_defs_map::const_iterator map_entry = s_field_definitions().find(key);
+    if (map_entry != s_field_definitions().end()) {
       field_defs = map_entry->second;
     } else {
       field_defs = new vil_nitf2_field_definitions();
       add_field_defs(field_defs, version, tag_prefix, pretty_name_prefix);
-      s_field_definitions.insert(vcl_make_pair(key, field_defs));
+      s_field_definitions().insert(vcl_make_pair(key, field_defs));
     }
   }
   else
