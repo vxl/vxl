@@ -15,6 +15,7 @@
 //   2004/05/10 Joseph Mundy   changed bounds access methods to const
 //   2004/09/27 Peter Vanroose grow_minmax_bounds() now takes smart pointer arg
 //   2004/11/15 H.Can Aras     added inheritance from vsol_box
+//   2006/05/31 O.C. Ozcanli   added inside method
 // \endverbatim
 
 #include <vsol/vsol_box.h>
@@ -69,6 +70,9 @@ class vsol_box_2d : public vsol_box, public vbl_ref_count, public vul_timestamp
 
   //: reset the bounds of the box, i.e., make the box empty
   void reset_bounds();
+
+  //: is a 2D point inside the bounding box
+  bool inside(double x, double y) const { return box_.inside(x, y); }
 
   // ==== Binary IO methods ======
 
