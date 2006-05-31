@@ -98,6 +98,15 @@ class vpdfl_mixture_builder : public vpdfl_builder_base
   //: Define maximum number of EM iterations allowed
   void set_max_iterations(int n);
 
+  //: Define maximum number of EM iterations allowed
+  int max_iterations() const { return max_its_; }
+
+  //: Number of basis builders
+  unsigned n_builders() const { return builder_.size(); }
+
+  //: Return i-th builder
+  vpdfl_builder_base& builder(unsigned i) { return *builder_[i]; };
+
   //: Create empty model
   virtual vpdfl_pdf_base* new_model() const;
 
@@ -159,6 +168,25 @@ class vpdfl_mixture_builder : public vpdfl_builder_base
 
   //: Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs);
+
+  //: Read initialisation settings from a stream.
+  // Parameters:
+  // \verbatim
+  // {
+  //   min_var: 1.0e-6
+  //   // Number of pdf bases to use
+  //   n_pdfs: 3
+  //   // Type of basis pdf
+  //   basis_pdf: axis_gaussian { min_var: 0.0001 }
+  //   // Maximum number of iterations
+  //   max_its: 10
+  //   // When true, fix weights during EM
+  //   weights_fixed: false
+  // }
+  // \endverbatim
+  // \throw mbl_exception_parse_error if the parse fails.
+  virtual void config_from_stream(vcl_istream & is);
+
 };
 
 #endif // vpdfl_mixture_builder_h_

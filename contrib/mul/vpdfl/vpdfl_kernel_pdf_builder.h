@@ -21,6 +21,11 @@ class vpdfl_kernel_pdf;
 //
 //  Simplest is to use equal widths (set_use_equal_width()).
 //
+//  A fixed width can be supplied (set_use_fixed_width(w))
+//
+//  The widths can be estimated from the proximity of neighbours
+//  set_use_width_from_separation()
+//
 //  More interesting is an adaptive kernel estimate (set_use_adaptive()).
 //  This tends to get results comparable with the equal width method for
 //  simple cases, but can match to more complex distributions more easily.
@@ -123,6 +128,21 @@ class vpdfl_kernel_pdf_builder : public vpdfl_builder_base
 
   //: Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs);
+
+  //: Read initialisation settings from a stream.
+  // Parameters:
+  // \verbatim
+  // {
+  //   min_var: 1.0e-6
+  //   // kernel_widths can be fixed_width,select_equal,width_from_sep,adaptive
+  //   kernel_widths: fixed_width
+  //   // Width to be used when it is fixed_width
+  //   fixed_width: 1.0
+  // }
+  // \endverbatim
+  // \throw mbl_exception_parse_error if the parse fails.
+  virtual void config_from_stream(vcl_istream & is);
+
 };
 
 #endif // vpdfl_kernel_pdf_builder_h

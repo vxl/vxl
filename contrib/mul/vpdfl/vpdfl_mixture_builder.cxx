@@ -27,6 +27,11 @@
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vnl/vnl_math.h>
 
+#include <mbl/mbl_parse_block.h>
+#include <mbl/mbl_read_props.h>
+#include <vul/vul_string.h>
+#include <mbl/mbl_exception.h>
+
 // Weights smaller than this are assumed to be zero
 const double min_wt = 1e-8;
 
@@ -550,7 +555,10 @@ vpdfl_builder_base* vpdfl_mixture_builder::clone() const
 
 void vpdfl_mixture_builder::print_summary(vcl_ostream& os) const
 {
-  os<<'\n';
+  os<<vcl_endl;
+  if (weights_fixed_) os<<vsl_indent()<<"Weights fixed"<<vcl_endl;
+  else                os<<vsl_indent()<<"Weights may vary"<<vcl_endl;
+  os<<vsl_indent()<<"Max iterations: "<<max_its_<<vcl_endl;
   for (unsigned int i=0;i<builder_.size();++i)
   {
     os<<vsl_indent()<<"Builder "<<i<<": ";
@@ -603,6 +611,74 @@ void vpdfl_mixture_builder::b_read(vsl_b_istream& bfs)
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
+}
+//: Read initialisation settings from a stream.
+// Parameters:
+// \verbatim
+// {
+//   min_var: 1.0e-6
+//   n_pdfs: 3
+//   // Type of basis pdf
+//   basis_pdf: axis_gaussian { min_var: 0.0001 }
+// }
+// \endverbatim
+// \throw mbl_exception_parse_error if the parse fails.
+void vpdfl_mixture_builder::config_from_stream(vcl_istream & is)
+{
+  vcl_string s = mbl_parse_block(is);
+
+  vcl_istringstream ss(s);
+  mbl_read_props_type props = mbl_read_props_ws(ss);
+
+  double mv=1.0e-6;
+  if (!props["min_var"].empty())
+  {
+    mv=vul_string_atof(props["min_var"]);
+    props.erase("min_var");
+  }
+  set_min_var(mv);
+
+  unsigned n_pdfs = 2;
+  if (!props["n_pdfs"].empty())
+  {
+    n_pdfs=vul_string_atoi(props["n_pdfs"]);
+    props.erase("n_pdfs");
+  }
+
+  max_its_=10;
+  if (!props["max_its"].empty())
+  {
+    max_its_=vul_string_atoi(props["max_its"]);
+    props.erase("max_its");
+  }
+
+  weights_fixed_=false;
+  if (!props["weights_fixed"].empty())
+  {
+    weights_fixed_=vul_string_to_bool(props["weights_fixed"]);
+    props.erase("weights_fixed");
+  }
+
+  if (!props["basis_pdf"].empty())
+  {
+    vcl_istringstream pdf_ss(props["basis_pdf"]);
+    vcl_auto_ptr<vpdfl_builder_base>
+            b = vpdfl_builder_base::new_pdf_builder_from_stream(pdf_ss);
+    init(*b,n_pdfs);
+    props.erase("basis_pdf");
+  }
+
+  try
+  {
+    mbl_read_props_look_for_unused_props(
+        "vpdfl_mixture_builder::config_from_stream", props);
+  }
+
+  catch(mbl_exception_unused_props &e)
+  {
+    throw mbl_exception_parse_error(e.what());
+  }
+
 }
 
 //==================< end of file: vpdfl_mixture_builder.cxx >====================

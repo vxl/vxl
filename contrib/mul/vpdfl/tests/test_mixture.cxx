@@ -20,6 +20,7 @@
 #include <vpdfl/vpdfl_sampler_base.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vsl/vsl_binary_loader.h>
+#include <vpdfl/vpdfl_add_all_binary_loaders.h>
 
 #ifndef LEAVE_FILES_BEHIND
 #define LEAVE_FILES_BEHIND 0
@@ -194,6 +195,44 @@ void test_mixture()
   delete p_builder2;
   delete p_pdf2;
   delete p_pdf3;
+
+  // -------------------------------------------
+  //  Test configuring from stream
+  // -------------------------------------------
+  {
+    vpdfl_add_all_binary_loaders();
+    vcl_istringstream ss(
+          "mixture\n"
+          "{\n"
+          "  min_var: 0.1234e-5\n"
+          "  n_pdfs: 3\n"
+          "  basis_pdf: axis_gaussian { min_var: 0.0001 }\n"
+          "  weights_fixed: true\n"
+          "  max_its: 7\n"
+          "}\n");
+
+    vcl_auto_ptr<vpdfl_builder_base>
+            builder = vpdfl_builder_base::new_pdf_builder_from_stream(ss);
+
+    TEST("Correct builder",builder->is_a(),"vpdfl_mixture_builder");
+    if (builder->is_a()=="vpdfl_mixture_builder")
+    {
+      vpdfl_mixture_builder &a_builder = static_cast<vpdfl_mixture_builder&>(*builder);
+      vcl_cout<<a_builder<<vcl_endl;
+      TEST_NEAR("Min var configured",
+              a_builder.min_var(),0.1234e-5,1e-8);
+      TEST("Max its configured",
+              a_builder.max_iterations(),7);
+      TEST("weights_fixed configured",
+              a_builder.weights_fixed(),true);
+      TEST("N.builders configured",
+              a_builder.n_builders(),3);
+      TEST("Builder type configured",
+              a_builder.builder(0).is_a(),"vpdfl_axis_gaussian_builder");
+    }
+    vsl_delete_all_loaders();
+  }
+
 }
 
 TESTMAIN(test_mixture);

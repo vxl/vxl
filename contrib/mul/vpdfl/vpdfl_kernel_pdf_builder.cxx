@@ -24,6 +24,12 @@
 #include <mbl/mbl_priority_bounded_queue.h>
 #endif
 
+#include <mbl/mbl_parse_block.h>
+#include <mbl/mbl_read_props.h>
+#include <vul/vul_string.h>
+#include <mbl/mbl_exception.h>
+
+
 //=======================================================================
 // Dflt ctor
 //=======================================================================
@@ -348,3 +354,70 @@ void vpdfl_kernel_pdf_builder::b_read(vsl_b_istream& bfs)
       return;
   }
 }
+
+//: Read initialisation settings from a stream.
+// Parameters:
+// \verbatim
+// {
+//   min_var: 1.0e-6
+//   // kernel_widths can be fixed_width,select_equal,width_from_sep,adaptive
+//   kernel_widths: fixed_width
+//   // Width to be used when it is fixed_width
+//   fixed_width: 1.0
+// }
+// \endverbatim
+// \throw mbl_exception_parse_error if the parse fails.
+void vpdfl_kernel_pdf_builder::config_from_stream(vcl_istream & is)
+{
+  vcl_string s = mbl_parse_block(is);
+
+  vcl_istringstream ss(s);
+  mbl_read_props_type props = mbl_read_props_ws(ss);
+
+  double mv=1.0e-6;
+  if (!props["min_var"].empty())
+  {
+    mv=vul_string_atof(props["min_var"]);
+    props.erase("min_var");
+  }
+  set_min_var(mv);
+
+  build_type bt=select_equal;
+  if (!props["kernel_widths"].empty())
+  {
+    if (props["kernel_widths"]=="fixed_width") bt=fixed_width;
+    else
+    if (props["kernel_widths"]=="select_equal") bt=select_equal;
+    else
+    if (props["kernel_widths"]=="width_from_sep") bt=width_from_sep;
+    else
+    if (props["kernel_widths"]=="adaptive") bt=adaptive;
+    else
+    {
+      vcl_string msg="Unknown kernel_width type : "+props["kernel_widths"];
+      throw mbl_exception_parse_error(msg);
+    }
+    props.erase("kernel_widths");
+  }
+  build_type_ = bt;
+
+  fixed_width_=1.0;
+  if (!props["fixed_width"].empty())
+  {
+    fixed_width_=vul_string_atof(props["fixed_width"]);
+    props.erase("fixed_width");
+  }
+
+  try
+  {
+    mbl_read_props_look_for_unused_props(
+        "vpdfl_kernel_pdf_builder::config_from_stream", props);
+  }
+
+  catch(mbl_exception_unused_props &e)
+  {
+    throw mbl_exception_parse_error(e.what());
+  }
+
+}
+
