@@ -381,10 +381,9 @@ void vpdfl_gaussian_builder::config_from_stream(vcl_istream & is)
   if (!props["min_var"].empty())
   {
     mv=vul_string_atof(props["min_var"]);
-    props.erase("min_var");
   }
   set_min_var(mv);
-
+  props.erase("min_var");
   try
   {
     mbl_read_props_look_for_unused_props(
