@@ -430,6 +430,15 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
       if (debug)
         vcl_cerr<< " vgui_easy2D_tableau: Adding polygon\n";
     }
+    else if (sv->type_name() == "vgui_soview2D_ellipse")
+    {
+      vgui_soview2D_ellipse* ellip = (vgui_soview2D_ellipse*)sv;
+      psfile.ellipse(ellip->x, ellip->y, ellip->w, ellip->h, ellip->phi);
+      if (debug)
+        vcl_cerr << "  vgui_easy2D_tableau: Adding ellipse, center " << ellip->x << ", "
+                 << ellip->y << " width " << ellip->w << " height " << ellip->h
+                 << " angle " << ellip->phi << vcl_endl;
+    }
     else
       vgui_macro_warning << "unknown soview typename = " << sv->type_name() << vcl_endl;
   }
