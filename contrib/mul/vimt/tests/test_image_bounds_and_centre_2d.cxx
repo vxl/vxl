@@ -70,13 +70,9 @@ static void test_centre_image_at_origin()
 
     vgl_point_2d<double> orig1 = image.world2im().origin();
     vgl_box_2d<double> bbox1 = world_bounding_box(image);
-    vcl_cout << "orig1: " << orig1 << vcl_endl;
-    vcl_cout << "bbox1: " << bbox1 << vcl_endl;
     vimt_centre_image_at_origin(image);
     vgl_point_2d<double> orig2 = image.world2im().origin();
     vgl_box_2d<double> bbox2 = world_bounding_box(image);
-    vcl_cout << "orig2: " << orig2 << vcl_endl;
-    vcl_cout << "bbox2: " << bbox2 << vcl_endl;
     
     const vgl_point_2d<double> orig_true((ni-1)/2.0, (nj-1)/2.0);
     bool orig_ok = ((orig1-orig2).length()>1e-6 && 
@@ -104,47 +100,9 @@ static void test_centre_image_at_origin()
 
     vgl_point_2d<double> orig1 = image.world2im().origin();
     vgl_box_2d<double> bbox1 = world_bounding_box(image);
-    vcl_cout << "orig1: " << orig1 << vcl_endl;
-    vcl_cout << "bbox1: " << bbox1 << vcl_endl;
     vimt_centre_image_at_origin(image);
     vgl_point_2d<double> orig2 = image.world2im().origin();
     vgl_box_2d<double> bbox2 = world_bounding_box(image);
-    vcl_cout << "orig2: " << orig2 << vcl_endl;
-    vcl_cout << "bbox2: " << bbox2 << vcl_endl;
-
-    const vgl_point_2d<double> orig_true((ni-1)/2.0, (nj-1)/2.0);
-    bool orig_ok = ((orig1-orig2).length()>1e-6 && 
-                    (orig2-orig_true).length()<1e-6);
-    TEST("With zoom transform, origin correct?", orig_ok, true);
-
-    const double hwx = (ni-1)*pix.x()/2.0; // half-width of centred image in world coords
-    const double hwy = (nj-1)*pix.y()/2.0; // half-width of centred image in world coords
-    const vgl_point_2d<double> lo(-hwx, -hwy); 
-    const vgl_point_2d<double> hi(+hwx, +hwy); 
-    const vgl_box_2d<double> bbox(lo, hi); // bbox of centred image in world coords
-    bool bbox_ok = !(bbox1==bbox2) && (bbox==bbox2);
-    TEST("With zoom transform, bbox correct?", bbox_ok, true);
-  }
-
-  // Image with zoom transform (i.e. non-unity pixel size)
-  {
-    const unsigned ni = 2500;  // image width (pixels)
-    const unsigned nj = 2048;  // image height (pixels)
-    const unsigned np = 1;
-    const vgl_point_2d<double> pix(0.168, 0.168); // pixel dimensions (mm)
-    vimt_transform_2d w2i;
-    w2i.set_zoom_only(1.0/pix.x(), 1.0/pix.y(), 0, 0);
-    vimt_image_2d_of<int> image(ni, nj, np, w2i);
-
-    vgl_point_2d<double> orig1 = image.world2im().origin();
-    vgl_box_2d<double> bbox1 = world_bounding_box(image);
-    vcl_cout << "orig1: " << orig1 << vcl_endl;
-    vcl_cout << "bbox1: " << bbox1 << vcl_endl;
-    vimt_centre_image_at_origin(image);
-    vgl_point_2d<double> orig2 = image.world2im().origin();
-    vgl_box_2d<double> bbox2 = world_bounding_box(image);
-    vcl_cout << "orig2: " << orig2 << vcl_endl;
-    vcl_cout << "bbox2: " << bbox2 << vcl_endl;
 
     const vgl_point_2d<double> orig_true((ni-1)/2.0, (nj-1)/2.0);
     bool orig_ok = ((orig1-orig2).length()>1e-6 && 
