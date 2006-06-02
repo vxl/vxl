@@ -49,7 +49,6 @@ SET (BUILD_MONITORS "\\
 
 SET (PROJECT_URL http://vxl.sourceforge.net/)
 SET (EXPECTED_BUILDS "\\
-  {crd.ge.com Cygwin_gcc-3.4.4_-Wall_-O2_static} \\
   {cs.rpi.edu FreeBSD-4.9-gcc-3.3} \\
   {cs.rpi.edu FreeBSD-4.9-gcc-3.3-static} \\
   {cs.rpi.edu FreeBSD-gcc-3.4} \\
@@ -63,8 +62,8 @@ SET (EXPECTED_BUILDS "\\
   {crd.ge.com Linux-2.4.9_icc-8.1_-w1_-O2_shared} \\
   {crd.ge.com MinGW-3.8_gcc-3.4.4_-Wall_-O2_static} \\
   {crd.ge.com Solaris-2.8_gcc-3.4.3_static} \\
+  {crd.ge.com Cygwin_gcc-3.4.4_-Wall_-O2_static} \\
   {crd.ge.com Win2k_bcc-5.5.1_Release} \\
-  {crd.ge.com Win2k_msvc-6.0sp5_Release} \\
   {crd.ge.com Win2k_msvc-7.1_Release} \\
   {imorphics WinXP_msvc-7.1_Debug} \\
   {lems.brown.edu Linux-2.6_em64t_gcc-4.0.3_-Wall} \\
