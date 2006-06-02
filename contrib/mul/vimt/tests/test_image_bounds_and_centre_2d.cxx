@@ -75,8 +75,8 @@ static void test_centre_image_at_origin()
     vgl_box_2d<double> bbox2 = world_bounding_box(image);
     
     const vgl_point_2d<double> orig_true((ni-1)/2.0, (nj-1)/2.0);
-    bool orig_ok = ((orig1-orig2).length()>1e-6 && 
-                    (orig2-orig_true).length()<1e-6);
+    bool orig_ok = ((orig1-orig2).length()>1e-6 &&    // check that origin has changed
+                    (orig2-orig_true).length()<1e-6); // check that new origin is correct
     TEST("With identity transform, orig OK?", orig_ok, true);
 
     const double hwx = (ni-1)*pix.x()/2.0; // half-width of centred image in world coords
@@ -84,7 +84,9 @@ static void test_centre_image_at_origin()
     const vgl_point_2d<double> lo(-hwx, -hwy); 
     const vgl_point_2d<double> hi(+hwx, +hwy); 
     const vgl_box_2d<double> bbox(lo, hi); // bbox of centred image in world coords
-    bool bbox_ok = !(bbox1==bbox2) && (bbox==bbox2);
+    bool bbox_ok = !(bbox1==bbox2) &&   // check that bbox has changed
+                   (bbox.min_point()-bbox2.min_point()).length()<1e-6 && // check that bbox is correct
+                   (bbox.max_point()-bbox2.max_point()).length()<1e-6;
     TEST("With identity transform, bbox correct?", bbox_ok, true);
   }
 
@@ -105,8 +107,8 @@ static void test_centre_image_at_origin()
     vgl_box_2d<double> bbox2 = world_bounding_box(image);
 
     const vgl_point_2d<double> orig_true((ni-1)/2.0, (nj-1)/2.0);
-    bool orig_ok = ((orig1-orig2).length()>1e-6 && 
-                    (orig2-orig_true).length()<1e-6);
+    bool orig_ok = ((orig1-orig2).length()>1e-6 &&    // check that origin has changed
+                    (orig2-orig_true).length()<1e-6); // check that new origin is correct
     TEST("With zoom transform, origin correct?", orig_ok, true);
 
     const double hwx = (ni-1)*pix.x()/2.0; // half-width of centred image in world coords
@@ -114,7 +116,9 @@ static void test_centre_image_at_origin()
     const vgl_point_2d<double> lo(-hwx, -hwy); 
     const vgl_point_2d<double> hi(+hwx, +hwy); 
     const vgl_box_2d<double> bbox(lo, hi); // bbox of centred image in world coords
-    bool bbox_ok = !(bbox1==bbox2) && (bbox==bbox2);
+    bool bbox_ok = !(bbox1==bbox2) &&   // check that bbox has changed
+                   (bbox.min_point()-bbox2.min_point()).length()<1e-6 && // check that bbox is correct
+                   (bbox.max_point()-bbox2.max_point()).length()<1e-6;
     TEST("With zoom transform, bbox correct?", bbox_ok, true);
   }
 }
