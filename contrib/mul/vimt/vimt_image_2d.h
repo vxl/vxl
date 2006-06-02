@@ -70,7 +70,7 @@ class vimt_image_2d : public vimt_image
 vgl_box_2d<double> world_bounding_box(const vimt_image_2d& img);
 
 
-//: Translate the image such that the image centre is at the origin of the world coordinate system.
+//: Translate the image so that its centre is at the origin of the world coordinate system.
 void vimt_centre_image_at_origin(vimt_image_2d& image);
 
 

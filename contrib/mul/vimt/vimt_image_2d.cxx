@@ -49,11 +49,11 @@ vgl_box_2d<double> world_bounding_box(const vimt_image_2d& img)
   return vgl_box_2d<double>(b_lo[0],b_hi[0],b_lo[1],b_hi[1]);
 }
 
-// Translate the image such that the image centre is at the origin of the world coordinate system.
+// Translate the image so that its centre is at the origin of the world coordinate system.
 void vimt_centre_image_at_origin(vimt_image_2d& image)
 {
   vgl_box_2d<double> bbox = world_bounding_box(image);
   vgl_point_2d<double> c = bbox.centroid();
   vimt_transform_2d& w2i = image.world2im();
-  w2i.set_origin(c);
+  w2i.set_origin(w2i(c));
 }
