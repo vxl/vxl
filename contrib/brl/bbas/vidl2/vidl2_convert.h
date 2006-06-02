@@ -21,13 +21,18 @@
 
 
 
-//: convert the frame into an image view
+//: Convert the frame into an image view
 // possibly converts the pixel data type
 // always create a deep copy of the data
 // \param force_rgb determines whether YUV formats are converted to RGB
 bool vidl2_convert_to_view(const vidl2_frame& frame,
                            vil_image_view_base& image,
                            bool force_rgb = true);
+
+
+//: Wrap the frame buffer in an image view if supported
+// Returns a null pointer if not possible
+vil_image_view_base_sptr vidl2_convert_wrap_in_view(const vidl2_frame& frame);
 
 
 //: Convert the pixel format of a frame
