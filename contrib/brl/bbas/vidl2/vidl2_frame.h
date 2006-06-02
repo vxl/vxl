@@ -132,6 +132,10 @@ class vidl2_memory_chunk_frame : public vidl2_frame
     vidl2_memory_chunk_frame(const vil_image_view_base& image,
                              vidl2_pixel_format fmt = VIDL2_PIXEL_FORMAT_UNKNOWN);
 
+    //: Return the memory chunk
+    // used in recreating a vil_image_view
+    inline const vil_memory_chunk_sptr& memory_chunk() const { return memory_; }
+
     //: Destructor
     virtual ~vidl2_memory_chunk_frame() {}
 
