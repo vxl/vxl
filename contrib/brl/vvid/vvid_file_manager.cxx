@@ -118,6 +118,8 @@ void vvid_file_manager::init()
   art_model_=0;
   background_model_ = 0;
   display_frame_repeat_=1;
+  display_frame_skip_=0;
+  skip_counter_=0;
   start_frame_ = 0;
   end_frame_ = 0;
   on_style_  = vgui_style::new_style(0.0, 1.0, 0.0, 3.0, 4.0);
@@ -149,6 +151,8 @@ vvid_file_manager::vvid_file_manager(): vgui_wrapper_tableau()
   video_process_ = 0;
   art_model_ = 0;
   display_frame_repeat_=1;
+  display_frame_skip_=0;
+  skip_counter_=0;
 }
 
 vvid_file_manager::~vvid_file_manager()
@@ -163,6 +167,11 @@ bool vvid_file_manager::handle(const vgui_event &e)
   return this->child.handle(e);
 }
 
+//: quit the application
+void vvid_file_manager::quit()
+{
+  vgui::quit();
+}
 //-------------------------------------------------------------
 //: Display a processed image
 //
@@ -830,6 +839,16 @@ void vvid_file_manager::save_display(int /* frame */)
 {
   if (!save_display_)
     return;
+
+  if(display_frame_skip_)
+    if(skip_counter_>0)
+      {
+        --skip_counter_;
+        return;
+      }
+    else
+      skip_counter_ = display_frame_skip_;
+
   if (!overlay_pane_)
   {
     vil1_image image = itab1_->get_image();
@@ -838,6 +857,7 @@ void vvid_file_manager::save_display(int /* frame */)
     display_output_frames_.push_back(image);
     return;
   }
+   
   vil1_memory_image_of<vil1_rgb<unsigned char> >
     temp = vgui_utils::colour_buffer_to_image();
   for (int i = 0; i<display_frame_repeat_; i++)
@@ -913,11 +933,13 @@ void vvid_file_manager::create_polygon()
 void vvid_file_manager::start_save_display()
 {
   save_display_ = true;
+  skip_counter_ = display_frame_skip_;
   display_output_frames_.clear();
   vgui_dialog output_dialog("Display Movie Output");
   static vcl_string ext = "avi";
   output_dialog.file("Movie File:", ext, display_output_file_);
   output_dialog.field("# Frame Repeats ", display_frame_repeat_);
+  output_dialog.field("# Frame Skips ", display_frame_skip_);
   output_dialog.checkbox("Save Overlay Pane (left) (or Image Pane (right))", overlay_pane_);
   if (!output_dialog.ask())
     return;

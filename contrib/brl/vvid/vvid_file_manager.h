@@ -68,6 +68,9 @@ class vvid_file_manager : public vgui_wrapper_tableau
   //: width (in pixels) of the video frame
   unsigned get_width() const { return width_; }
 
+  //: quit the application
+  void quit();
+
   //: load each frame of the video into a cached vector of overlays if caching is enabled
   void load_video_file();
 
@@ -224,6 +227,8 @@ class vvid_file_manager : public vgui_wrapper_tableau
   bool color_label_;//display with a different color for different labels
   float time_interval_;
   int display_frame_repeat_;//insert duplicate frames to slow playback
+  int display_frame_skip_;//skip frames to speed playback
+  int skip_counter_;
   unsigned width_;
   unsigned height_;
   vidl_vil1_movie_sptr my_movie_;

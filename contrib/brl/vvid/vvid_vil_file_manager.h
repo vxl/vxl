@@ -17,16 +17,22 @@
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_image_tableau_sptr.h>
+#include <bgui/bgui_image_tableau_sptr.h>
 #include <vgui/vgui_rubberband_tableau_sptr.h>
 #include <vgui/vgui_style_sptr.h>
 #include <vgui/vgui_range_map_params_sptr.h>
-#include <bgui/bgui_vtol2D_tableau_sptr.h>
+#include <bgui/bgui_vsol2D_tableau_sptr.h>
+#include <vgui/vgui_easy2D_tableau_sptr.h>
 #include <bgui/bgui_picker_tableau_sptr.h>
 #include <bgui/bgui_bargraph_clipon_tableau_sptr.h>
 #include <vgui/vgui_viewer2D_tableau_sptr.h>
 #include <vgui/vgui_window.h>
+#include <vsol/vsol_polygon_2d_sptr.h>
 #include <vidl/vidl_movie_sptr.h>
-
+#include <vil/vil_image_resource.h>
+#include <vil/vil_pyramid_image_resource.h>
+#include <vil/vil_image_list.h>
+#include <vpro/vpro_vil_video_process_sptr.h>
 //: A singleton manager class for playing videos.
 // A vector of images with
 // enclosing image and easy2D tableaux is cached so that computed overlays
@@ -64,11 +70,19 @@ class vvid_vil_file_manager : public vgui_wrapper_tableau
   //: width (in pixels) of the video frame
   unsigned get_width() const { return width_; }
 
+  //: quit the application
+  void quit();
   //: load each frame of the video into a cached vector of overlays if caching is enabled
   void load_video_file();
 
+  //: load a pyramid video as a set of tiff images
+  void load_pyramid_video();
+
   //: loop through the frames and display
   void play_video();
+
+  //: loop through the pyramid frames and display
+  void play_pyramid();
 
   //: stop at the current frame
   void pause_video();
@@ -94,6 +108,11 @@ class vvid_vil_file_manager : public vgui_wrapper_tableau
   //: set the range map rate
   void set_range_params();
 
+  //: create a box as a vsol_polygon
+  void create_box();
+
+  //: save a video of according to a specified roi
+  void save_roi();
   //: get the window of this player
   vgui_window* get_window() { return win_; }
 
@@ -107,6 +126,7 @@ class vvid_vil_file_manager : public vgui_wrapper_tableau
   //utility functions
   void init();
   void un_cached_play();
+  void pyramid_play();
  private:
   //flags
   bool cache_frames_;
@@ -122,20 +142,25 @@ class vvid_vil_file_manager : public vgui_wrapper_tableau
   int display_frame_repeat_;//insert duplicate frames to slow playback
   unsigned width_;
   unsigned height_;
+  unsigned x0_;
+  unsigned y0_;
+  unsigned xsize_;
+  unsigned ysize_;
   vidl_movie_sptr my_movie_;
+  vcl_vector<vil_image_resource_sptr> pyramid_movie_;
   vgui_window* win_;
-  vcl_vector<bgui_vtol2D_tableau_sptr> tabs_;
+  vsol_polygon_2d_sptr box_;
+  vcl_vector<vgui_easy2D_tableau_sptr> tabs_;
   vgui_viewer2D_tableau_sptr v2D0_;
   vgui_viewer2D_tableau_sptr v2D1_;
-  bgui_vtol2D_tableau_sptr easy0_;
-  bgui_vtol2D_tableau_sptr easy1_;
-  vgui_image_tableau_sptr itab0_;
+  vgui_easy2D_tableau_sptr easy0_;
+  vgui_easy2D_tableau_sptr easy1_;
+  bgui_image_tableau_sptr itab0_;
   vgui_rubberband_tableau_sptr rubber0_;
   bgui_picker_tableau_sptr picktab0_;
   vgui_image_tableau_sptr itab1_;
-  
+  vpro_vil_video_process_sptr video_process_;
   vgui_grid_tableau_sptr grid_;
-  
   static vvid_vil_file_manager *instance_;
 };
 

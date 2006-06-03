@@ -58,6 +58,10 @@ void vidfpl_vil_menus::load_video_callback()
    vvid_vil_file_manager::instance()->load_video_file();
 }
 
+void vidfpl_vil_menus::load_pyramid_video_callback()
+{
+  vvid_vil_file_manager::instance()->load_pyramid_video();
+}
 void vidfpl_vil_menus::pause_video_callback()
 {
   vvid_vil_file_manager::instance()->pause_video();
@@ -89,6 +93,11 @@ void vidfpl_vil_menus::play_video_callback()
   vvid_vil_file_manager::instance()->play_video();
 }
 
+void vidfpl_vil_menus::play_pyramid_callback()
+{
+  vvid_vil_file_manager::instance()->play_pyramid();
+}
+
 void vidfpl_vil_menus::stop_video_callback()
 {
   vvid_vil_file_manager::instance()->stop_video();
@@ -99,9 +108,20 @@ void vidfpl_vil_menus::set_range_params_callback()
   vvid_vil_file_manager::instance()->set_range_params();
 }
 
+
+void vidfpl_vil_menus::create_box_callback()
+{
+  vvid_vil_file_manager::instance()->create_box();
+}
+
+void vidfpl_vil_menus::save_roi_callback()
+{
+  vvid_vil_file_manager::instance()->save_roi();
+}
+
 void vidfpl_vil_menus::quit_callback()
 {
-  vcl_exit(1);
+  vvid_vil_file_manager::instance()->quit();
 }
 
 
@@ -118,6 +138,9 @@ vgui_menu vidfpl_vil_menus::get_menu()
 
   //file menu entries
   menufile.add( "Load", load_video_callback);
+  menufile.add( "Load Pyramid", load_pyramid_video_callback);
+
+  menufile.add( "Save with ROI", save_roi_callback);
   menufile.add( "Quit", quit_callback,(vgui_key)'q', vgui_CTRL);
 
   //view menu entries
@@ -125,6 +148,7 @@ vgui_menu vidfpl_vil_menus::get_menu()
   menuview.add( "Start Frame", start_frame_callback);
   menuview.add( "End Frame", end_frame_callback);
   menuview.add( "Play", play_video_callback);
+  menuview.add( "Play Pyramid", play_pyramid_callback);
   menuview.add( "Pause", pause_video_callback,(vgui_key)'p', vgui_CTRL);
   menuview.add( "Next", next_frame_callback,(vgui_key)'f', vgui_CTRL);
   menuview.add( "Prev", prev_frame_callback,(vgui_key)'b', vgui_CTRL);
@@ -132,7 +156,7 @@ vgui_menu vidfpl_vil_menus::get_menu()
   menuview.add( "Set Range Map", set_range_params_callback);
 
   //edit menu entries
-
+  menuedit.add( "Create Box", create_box_callback);
   //Process menu entries
 
   // debug menu entries

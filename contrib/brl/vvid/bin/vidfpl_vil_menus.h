@@ -24,14 +24,18 @@ class vidfpl_vil_menus
 {
  public:
   static void load_video_callback();
+  static void load_pyramid_video_callback();
   static void start_frame_callback();
   static void end_frame_callback();
   static void play_video_callback();
+  static void play_pyramid_callback();
   static void pause_video_callback();
   static void next_frame_callback();
   static void prev_frame_callback();
   static void stop_video_callback();
   static void set_range_params_callback();
+  static void create_box_callback();
+  static void save_roi_callback();
   static void quit_callback();
   static vgui_menu get_menu();
  private:

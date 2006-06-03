@@ -29,6 +29,11 @@ int main(int argc, char** argv)
   vcl_cout << " Has MPEG\n";
   vidl_io::register_codec(new vidl_mpegcodec);
 #endif
+#if defined(VCL_WIN32)
+vcl_cout << '\n'<< "Max number of open files has been reset from " << _getmaxstdio();
+_setmaxstdio(2048);
+#endif
+
    // Initialize the toolkit.
   vgui::init(argc, argv);
   vgui_menu menubar = vidfpl_vil_menus::get_menu();
@@ -43,6 +48,6 @@ int main(int argc, char** argv)
   win->show();
   vvid_vil_file_manager::instance()->set_window(win);
   vvid_vil_file_manager::instance()->post_redraw();
-
-  return  vgui::run();
+  vgui::run();
+  return 0;
 }
