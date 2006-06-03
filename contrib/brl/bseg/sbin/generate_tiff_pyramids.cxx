@@ -4,7 +4,6 @@
 #include <vcl_cstdio.h>
 #include <vcl_sstream.h>
 #include <vpl/vpl.h>
-#include <vul/vul_file.h>
 #include <vbl/vbl_bounding_box.h>
 #include <vul/vul_sprintf.h>
 #include <vul/vul_file.h>
@@ -77,10 +76,9 @@ static bool generate_pyramids(vcl_string const& image_indir,
       bim = vil_new_blocked_image_facade(imgr, blocksize, blocksize);
     else
       bim = vil_new_blocked_image_facade(imgr, 256, 256);
-   
-    vil_pyramid_image_resource_sptr pir = 
+
+    vil_pyramid_image_resource_sptr pir =
       vil_new_pyramid_image_from_base(outname.c_str(), bim.ptr(), nlevels, "tiff", tempdir.c_str());
-    
   }
   vpl_rmdir(tempdir.c_str());
   return true;
@@ -99,11 +97,11 @@ int main(int argc,char * argv[])
       vcl_string image_outdir(argv[2]);
 
       unsigned nlevels = vcl_atoi(argv[3]);
-      if(nlevels<2)
-        {
-          vcl_cout << "Must have at least 2 levels\n";
-            return 0;
-        }
+      if (nlevels<2)
+      {
+        vcl_cout << "Must have at least 2 levels\n";
+        return 0;
+      }
       unsigned blocksize = 0;
       if (argc==5)
         blocksize = vcl_atoi(argv[4]);
