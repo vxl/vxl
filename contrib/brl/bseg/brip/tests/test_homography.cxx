@@ -7,8 +7,9 @@
 #include <brip/brip_vil1_float_ops.h>
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_matrix_fixed.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
-
+#include <vnl/algo/vnl_svd.h>
 static void test_homography()
 {
   const int w = 100, h = 100;
@@ -43,6 +44,26 @@ static void test_homography()
   vil1_save(char_in, "./homg_input.tif");
   vil1_save(char_out, "./homg_out.tif");
 #endif
+#if 0
+  vnl_matrix_fixed<double,4, 3> A;
+  A[0][0]= 1.0 ;   A[0][1]= 0.0 ;   A[0][2]= 2.0 ;
+  A[1][0]= 1.0;   A[1][1]= 1.0;   A[1][2]= 0.0;
+  A[2][0]= 2.0;   A[2][1]= 0; A[2][2]= 4.1;
+  A[3][0]= 2;   A[3][1]= 2.1 ; A[3][2]= 0.0;
+  vnl_svd<double> SVD(A);
+  vnl_matrix_fixed<double, 4,3> U = SVD.U();
+  vcl_cout << "U\n" << U << '\n';
+
+  vnl_matrix_fixed<double, 3,3> W = SVD.W();
+  vcl_cout << "Sigma\n" << W << '\n';
+
+  vnl_matrix_fixed<double, 3,3> V = SVD.V();
+  vcl_cout << "V\n" << V << '\n';
+  vnl_vector_fixed<double, 3> nv = SVD.nullvector() ;
+  vcl_cout << "Nullvector " << nv << '\n';
+  vcl_cout << "nullresidue " << A*nv << '\n';
+#endif
 }
+
 
 TESTMAIN(test_homography);

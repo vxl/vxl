@@ -66,12 +66,12 @@ class brip_vil_float_ops
     half_resolution(vil_image_view<float> const& input,
                     float filter_coef=0.359375f);
 
-#if 0
+
   //: interpolates the input using the Bert-Adelson algorithm
   static vil_image_view<float>
     double_resolution(vil_image_view<float> const& input,
-                      float filter_coef=0.359375f);
-#endif
+                      float filter_coef=0.6f);
+
 
   //: subtracts image_1 from image_2
   static vil_image_view<float>
@@ -176,6 +176,11 @@ class brip_vil_float_ops
   static vil_image_view<unsigned short>
     convert_to_short(vil_image_view<float> const& image,
                      float min_val, float max_val);
+  //: converts an float image to an unsigned short image
+  // range determined automatically
+  static vil_image_view<unsigned short>
+    convert_to_short(vil_image_view<float> const& image);
+
   //: converts a generic image to an unsigned short image
   static vil_image_view<unsigned short>
     convert_to_short(vil_image_resource_sptr const& image);
@@ -222,11 +227,20 @@ class brip_vil_float_ops
                        vil_image_view<float> const& S,
                        vil_image_view<vil_rgb<vxl_byte> >& image);
 
-  //: Create a color image from multiple channels
+  //: Create a color image from multiple view channels
+  // all views have to have the same array dimensions
   static vil_image_view<vil_rgb<vxl_byte> >
     combine_color_planes(vil_image_view<unsigned char> const& R,
                          vil_image_view<unsigned char> const& G,
                          vil_image_view<unsigned char> const& B);
+
+  //: Create a unsigned char color image from multiple resource channels
+  // images do not have to be the same size arraysp
+  static vil_image_view<vil_rgb<vxl_byte> >
+   combine_color_planes(vil_image_resource_sptr const& R,
+                        vil_image_resource_sptr const& G,
+                        vil_image_resource_sptr const& B);
+
 
   //: converts a generic image to greyscale (RGB<unsigned char>)
   static vil_image_view<unsigned char>
@@ -419,6 +433,11 @@ class brip_vil_float_ops
   //: sub-sample a 1-d array using the Bert-Adelson algorithm
   static void half_resolution_1d(const float* input, unsigned n,
                                  float k0, float k1, float k2, float* output);
+
+  //: interpolate a 1-d array using the Bert-Adelson algorithm
+static void double_resolution_1d(const float* input, const unsigned n_input,
+                                 const float k0, const float k1, const float k2,
+                                 float* output);
 
   //: One dimensional fft
   static bool fft_1d(int dir, int m, double* x, double* y);
