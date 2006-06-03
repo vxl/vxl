@@ -195,7 +195,11 @@ vil_tiff_file_format::make_input_pyramid_image(char const* file)
   if (!in)
     return 0;
   bool open_for_reading = true;
-  return new vil_tiff_pyramid_resource(in, open_for_reading);
+  vil_pyramid_image_resource_sptr pyr = 
+    new vil_tiff_pyramid_resource(in, open_for_reading);
+  if(pyr->nlevels()<=1)
+    return 0;
+  return pyr;
 }
 
 static vcl_string level_filename(vcl_string& directory, vcl_string& filename,
@@ -1187,6 +1191,7 @@ vil_tiff_pyramid_resource::get_copy_view(unsigned i0, unsigned n_i,
   if (snj == 0) snj = 1;//can't have less than one pixel
   vil_image_view_base_sptr view = resc->get_copy_view(si0, sni, sj0, snj);
   resc->clear_TIFF();
+  delete resc;
   return view;
 }
 
