@@ -70,6 +70,7 @@ bmvv_cal_manager() : vgui_wrapper_tableau(), cam_(vgl_p_matrix<double>()),
 
 bmvv_cal_manager::~bmvv_cal_manager()
 {
+	delete instance_;
 }
 
 //======================================================================
@@ -113,7 +114,7 @@ bool bmvv_cal_manager::handle(const vgui_event &e)
 //=========================================================================
 void bmvv_cal_manager::quit()
 {
-  vcl_exit(1);
+  vgui::quit();
 }
 
 //=========================================================================

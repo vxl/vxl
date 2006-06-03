@@ -21,5 +21,6 @@ int main(int argc, char** argv)
   bmvv_cal_manager::instance()->set_window(win);
   bmvv_cal_manager::instance()->post_redraw();
 
-  return  vgui::run();
+  vgui::run();
+  return 0;
 }
