@@ -23,7 +23,6 @@
 #include <vtol/vtol_face_2d_sptr.h>
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_grid_tableau_sptr.h>
-#include <vgui/vgui_rubberband_tableau_sptr.h>
 #include <vgui/vgui_range_map_params_sptr.h>
 #include <vgui/vgui_style_sptr.h>
 #include <bgui/bgui_picker_tableau_sptr.h>
@@ -54,6 +53,7 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void fit_overlay_conics();
   void regions();
   void rotate_image();
+  void expand_image();
   //: visualization
   void display_images_as_color();
   void flip_image_lr();
@@ -63,6 +63,7 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void entropy();
   void intensity_profile();
   void minfo();
+  void max_trace_scale();
   //: tests and development only
     void test_inline_viewer();
     void test_ellipse_draw();
@@ -106,7 +107,6 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   bgui_image_tableau_sptr selected_image_tab();
   bgui_vtol2D_tableau_sptr selected_vtol2D_tab();
   bgui_picker_tableau_sptr selected_picker_tab();
-  vgui_rubberband_tableau_sptr selected_rubber_tab();
   vtol_face_2d_sptr face_at(const int col, const int row);
   vgui_range_map_params_sptr range_params(vil_image_resource_sptr const& image);
  private:

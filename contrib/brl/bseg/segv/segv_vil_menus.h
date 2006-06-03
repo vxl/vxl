@@ -37,11 +37,13 @@ class segv_vil_menus
   SEGV_VIL_DLL_DATA static void fit_overlay_conics_callback();
   SEGV_VIL_DLL_DATA static void regions_callback();
   SEGV_VIL_DLL_DATA static void rotate_image_callback();
+  SEGV_VIL_DLL_DATA static void expand_image_callback();
   SEGV_VIL_DLL_DATA static void flip_image_lr_callback();
   SEGV_VIL_DLL_DATA static void add_images_callback();
   SEGV_VIL_DLL_DATA static void subtract_images_callback();
   SEGV_VIL_DLL_DATA static void entropy_callback();
   SEGV_VIL_DLL_DATA static void minfo_callback();
+  SEGV_VIL_DLL_DATA static void max_trace_scale_callback();
   //test/development do not use
   SEGV_VIL_DLL_DATA static void test_inline_viewer_callback();
   SEGV_VIL_DLL_DATA static void test_ellipse_draw_callback();

@@ -6,7 +6,9 @@
 
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vcl_iostream.h>
+#include <vcl_cstdio.h> // sprintf
 #include <vcl_fstream.h>
+#include <vul/vul_file.h>
 #include <vnl/vnl_matlab_read.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vbl/vbl_array_2d.h>
@@ -50,11 +52,9 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
-#include <vgui/vgui_rubberband_tableau.h>
 #include <vgui/vgui_range_map_params.h>
 #include <bgui/bgui_image_tableau.h>
 #include <bgui/bgui_vtol2D_tableau.h>
-#include <bgui/bgui_vtol2D_rubberband_client.h>
 #include <bgui/bgui_picker_tableau.h>
 #include <bgui/bgui_range_adjuster_tableau.h>
 #include <vsol/vsol_point_2d.h>
@@ -116,10 +116,7 @@ void segv_vil_segmentation_manager::init()
 {
   bgui_image_tableau_sptr itab = bgui_image_tableau_new();
   bgui_vtol2D_tableau_sptr t2D = bgui_vtol2D_tableau_new(itab);
-  bgui_vtol2D_rubberband_client* rcl =  new bgui_vtol2D_rubberband_client(t2D);
-  vgui_rubberband_tableau_sptr rubber = vgui_rubberband_tableau_new(rcl);
-  vgui_composite_tableau_new comp(t2D,rubber);
-  bgui_picker_tableau_sptr picktab = bgui_picker_tableau_new(comp);
+  bgui_picker_tableau_sptr picktab = bgui_picker_tableau_new(t2D);
   vgui_viewer2D_tableau_sptr v2D = vgui_viewer2D_tableau_new(picktab);
   grid_ = vgui_grid_tableau_new(1,1);
   grid_->set_grid_size_changeable(true);
@@ -202,10 +199,7 @@ add_image_at(vil_image_resource_sptr const& image,
   bgui_image_tableau_sptr itab = bgui_image_tableau_new(image);
   itab->set_mapping(rmap);
   bgui_vtol2D_tableau_sptr t2D = bgui_vtol2D_tableau_new(itab);
-  bgui_vtol2D_rubberband_client* rcl =  new bgui_vtol2D_rubberband_client(t2D);
-  vgui_rubberband_tableau_sptr rubber = vgui_rubberband_tableau_new(rcl);
-  vgui_composite_tableau_new comp(t2D,rubber);
-  bgui_picker_tableau_sptr picktab = bgui_picker_tableau_new(comp);
+  bgui_picker_tableau_sptr picktab = bgui_picker_tableau_new(t2D);
   vgui_viewer2D_tableau_sptr v2D = vgui_viewer2D_tableau_new(picktab);
   grid_->add_at(v2D, col, row);
   itab->post_redraw();
@@ -278,24 +272,6 @@ bgui_picker_tableau_sptr segv_vil_segmentation_manager::selected_picker_tab()
   return bgui_picker_tableau_sptr();
 }
 
-//: Get the rubberband tableau at the selected grid cell
-vgui_rubberband_tableau_sptr segv_vil_segmentation_manager::selected_rubber_tab()
-{
-  unsigned row=0, col=0;
-  grid_->get_last_selected_position(&col, &row);
-  vgui_tableau_sptr top_tab = grid_->get_tableau_at(col, row);
-  if (top_tab)
-  {
-    vgui_rubberband_tableau_sptr rubber;
-    rubber.vertical_cast(vgui_find_below_by_type_name(top_tab,
-                                                      vcl_string("vgui_rubberband_tableau")));
-    if (rubber)
-      return rubber;
-  }
-  vcl_cout << "Unable to get vgui_rubberband_tableau at (" << col
-           << ", " << row << ")\n";
-  return vgui_rubberband_tableau_sptr();
-}
 
 vil_image_resource_sptr segv_vil_segmentation_manager::selected_image()
 {
@@ -512,7 +488,7 @@ void segv_vil_segmentation_manager::draw_regions(vcl_vector<vtol_intensity_face_
 
 void segv_vil_segmentation_manager::quit()
 {
-  vcl_exit(1);
+  vgui::quit();
 }
 
 void segv_vil_segmentation_manager::load_image()
@@ -527,18 +503,37 @@ void segv_vil_segmentation_manager::load_image()
   load_image_dlg.checkbox("blocked?:", sblock);
   if (!load_image_dlg.ask())
     return;
-
-  vil_image_resource_sptr image = vil_load_image_resource(image_filename.c_str());
+  //first check to see if the filename is a directory
+  //if so, then assume a pyramid image
+  bool pyrm = false;
+  vil_image_resource_sptr image;
+  if(vul_file::is_directory(image_filename.c_str()))
+    {
+      vil_pyramid_image_resource_sptr pyr = 
+        vil_load_pyramid_resource(image_filename.c_str());
+      if(pyr)
+        {
+          image = pyr.ptr();
+          pyrm = true;
+        }
+    }
   if (!image)
+    image = vil_load_pyramid_resource(image_filename.c_str()).ptr();
+
+  if (!image)
+    image = vil_load_image_resource(image_filename.c_str());
+
+  if(!image)
     return;
-  if (greyscale)
+
+  if (greyscale&&!pyrm)
   {
     vil_image_view<unsigned char> grey_view =
       brip_vil_float_ops::convert_to_grey(*image);
     image = vil_new_image_resource_of_view(grey_view);
   }
 
-  if (sblock)
+  if (sblock&&!pyrm)
   {
     vil_blocked_image_resource_sptr bimage = vil_new_blocked_image_facade(image);
     image = (vil_image_resource*)(vil_new_cached_image_resource(bimage)).ptr();
@@ -1108,84 +1103,26 @@ void segv_vil_segmentation_manager::display_images_as_color()
 
 void segv_vil_segmentation_manager::intensity_profile()
 {
-  bgui_picker_tableau_sptr picker = selected_picker_tab();
 
+  bgui_picker_tableau_sptr ptab = selected_picker_tab();
+  float start_col=0, end_col=0, start_row=0, end_row=0;
+  ptab->pick_line(&start_col, &start_row, &end_col, &end_row);
   bgui_image_tableau_sptr itab = selected_image_tab();
-
-  vil_image_resource_sptr imr_sptr = itab->get_image_resource();
-
-  vil_pixel_format type = imr_sptr->pixel_format();
-
-  float x1, y1, x2, y2;
-  picker->pick_line(&x1, &y1, &x2, &y2);
-
-  vgui_rubberband_tableau_sptr rubber = selected_rubber_tab();
-  rubber->draw_line(x1, y1, x2, y2);
-
-  // get pixel value in the line
-  vcl_vector<double> data;
-  if ( vcl_fabs(x1-x2) < vcl_fabs(y1-y2))
-  {
-    switch (type)
-    {
-      case VIL_PIXEL_FORMAT_UINT_16:
-      { // this extra bracket is a hack to make object initalization possible
-        vil_image_view<vxl_uint_16> viv = imr_sptr->get_view();
-        if (y1 < y2)
-        for (int j=static_cast<int>(y1+0.99); j<=y2; ++j)
-        {
-          int i = static_cast<int>(x1+(j-y1)*(x2-x1)/(y2-y1));
-          data.push_back(viv(i,j));
-        }
-        else
-        for (int j=static_cast<int>(y1); j>=y2; --j)
-        {
-          int i = static_cast<int>(x1+(j-y1)*(x2-x1)/(y2-y1));
-          data.push_back(viv(i,j));
-        }
-        break;
-      }
-      default:
-      vcl_cout << "image pixel format is not supported\n";
-    }
-  }
-  else
-  {
-    switch (type)
-    {
-      case VIL_PIXEL_FORMAT_UINT_16:
-      { // this extra bracket is a hack to make object initalization possible
-        vil_image_view<vxl_uint_16> viv = imr_sptr->get_view();
-        if (x1 < x2)
-        for (int i=static_cast<int>(x1+0.99); i<=x2; ++i)
-        {
-          int j = static_cast<int>(y1+(i-x1)*(y2-y1)/(x2-x1));
-          data.push_back(viv(i,j));
-        }
-        else
-        for (int i=static_cast<int>(x1); i>=x2; --i)
-        {
-          int j = static_cast<int>(y1+(i-x1)*(y2-y1)/(x2-x1));
-          data.push_back(viv(i,j));
-        }
-        break;
-      }
-      default:
-      vcl_cout << "image pixel format is not supported\n";
-    }
-  }
-
-  bgui_graph_tableau_sptr h= bgui_graph_tableau_new();
-
-  h->update(0, 65536, data);
-  vgui_viewer2D_tableau_sptr v = vgui_viewer2D_tableau_new(h);
-  vgui_shell_tableau_sptr s = vgui_shell_tableau_new(v);
-
+  vcl_vector<double> pos, vals;
+  itab->image_line(start_col, start_row, end_col, end_row, pos, vals);
+  bgui_graph_tableau_sptr g = bgui_graph_tableau_new(512, 512);
+  g->update(pos, vals);
   //popup a profile graph
-  vgui_dialog ip_dialog("intensity profile");
-  ip_dialog.inline_tableau(s, data.size()+20, 656);
-  if (!ip_dialog.ask())
+  char location[100];
+  vcl_sprintf(location, "scan:(%d, %d)<->(%d, %d)",
+              static_cast<unsigned>(start_col), 
+              static_cast<unsigned>(start_row),
+              static_cast<unsigned>(end_col), 
+              static_cast<unsigned>(end_row));
+  vgui_dialog* ip_dialog = g->popup_graph(location);
+  if (!ip_dialog->ask())
   {
+    delete ip_dialog;
     return;
   }
 }
@@ -1382,6 +1319,29 @@ void segv_vil_segmentation_manager::rotate_image()
   vil_image_resource_sptr out_image = vil_new_image_resource_of_view(temp);
   this->add_image(out_image);
 }
+void segv_vil_segmentation_manager::expand_image()
+{
+  vil_image_resource_sptr img = selected_image();
+  if (!img)
+  {
+    vcl_cout << "In segv_vil_segmentation_manager::expand_image - no image\n";
+    return;
+  }
+  static float coef=0.6f;
+  vgui_dialog expand_dialog("Expand Image");
+  expand_dialog.field("Filter coef", coef);
+  if (!expand_dialog.ask())
+    return;
+
+  vil_image_view<float> flt =
+    brip_vil_float_ops::convert_to_float(img);
+
+  vil_image_view<float> expanded = 
+    brip_vil_float_ops::double_resolution(flt, coef);
+  
+  vil_image_resource_sptr out_image = vil_new_image_resource_of_view(expanded);
+  this->add_image(out_image);
+}
 
 void segv_vil_segmentation_manager::test_float()
 {
@@ -1410,4 +1370,26 @@ void segv_vil_segmentation_manager::flip_image_lr()
                                                          flipr);
   vil_copy_deep(flipr, flipc);
   this->add_image(flipc);
+}
+void segv_vil_segmentation_manager::max_trace_scale()
+{
+  static float min_scale = 1.0f, max_scale = 20.0f, sinc = 1.0f;
+  vgui_dialog scale_dialog("Max Trace Scale");
+  scale_dialog.field("Minimum Scale", min_scale);
+  scale_dialog.field("Maximum Scale", max_scale);
+  scale_dialog.field("Scale Increment", sinc);
+  if (!scale_dialog.ask())
+    return;
+
+  vil_image_resource_sptr img = selected_image();
+  if (!img)
+    {
+      vcl_cout << "In segv_vil_segmentation_manager::max_trace_scale - no image\n";
+      return;
+    }
+  vil_image_view<float> fimg = brip_vil_float_ops::convert_to_float(img);
+  vil_image_view<float> scale_image;
+  scale_image = 
+    brip_vil_float_ops::max_scale_trace(fimg, min_scale, max_scale, sinc);
+  this->add_image(vil_new_image_resource_of_view(scale_image));
 }

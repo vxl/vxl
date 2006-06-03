@@ -77,6 +77,11 @@ void segv_vil_menus::rotate_image_callback()
   segv_vil_segmentation_manager::instance()->rotate_image();
 }
 
+void segv_vil_menus::expand_image_callback()
+{
+  segv_vil_segmentation_manager::instance()->expand_image();
+}
+
 void segv_vil_menus::flip_image_lr_callback()
 {
   segv_vil_segmentation_manager::instance()->flip_image_lr();
@@ -105,6 +110,11 @@ void segv_vil_menus::entropy_callback()
 void segv_vil_menus::minfo_callback()
 {
   segv_vil_segmentation_manager::instance()->minfo();
+}
+
+void segv_vil_menus::max_trace_scale_callback()
+{
+  segv_vil_segmentation_manager::instance()->max_trace_scale();
 }
 
 void segv_vil_menus::test_inline_viewer_callback()
@@ -149,6 +159,7 @@ vgui_menu segv_vil_menus::get_menu()
   menuview.add("Test Draw Conic", test_ellipse_draw_callback);
   menuview.add("Images as Color", display_images_as_color_callback);
   menuview.add("RotateImage ", rotate_image_callback);
+  menuview.add("ExpandImage ", expand_image_callback);
   menuview.add("Flip Image (LR)", flip_image_lr_callback);
 
   //edit menu entries
@@ -167,6 +178,7 @@ vgui_menu segv_vil_menus::get_menu()
   menuops.add("Subtract Images:", subtract_images_callback);
   menuops.add("Entropy", entropy_callback);
   menuops.add("Mutal Information", minfo_callback);
+  menuops.add("Max Trace Scale",  max_trace_scale_callback);
   //Top level menu layout
   menubar.add( "File", menufile);
   menubar.add( "View", menuview);
