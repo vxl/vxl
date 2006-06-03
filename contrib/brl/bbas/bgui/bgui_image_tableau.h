@@ -51,6 +51,13 @@ class bgui_image_tableau : public vgui_image_tableau
   //: Return the vil_image_resource
   vil_image_resource_sptr get_image_resource() const ;
 
+  void image_line(const float col_start,
+                  const float row_start, 
+                  const float col_end,
+                  const float row_end,
+                  vcl_vector<double>& line_pos,
+                  vcl_vector<double>& vals);
+
   //: set handle_motion true
   void set_handle_motion(){handle_motion_ = true;}
   void unset_handle_motion(){handle_motion_ = false;}
@@ -59,6 +66,9 @@ class bgui_image_tableau : public vgui_image_tableau
  protected:
   //: Handle all events for this tableau.
   bool handle(vgui_event const &e);
+
+  //: get the pixel value as a double. RGB converted to grey.
+  double get_pixel_value(const unsigned c, const unsigned r);
 
   //: Get pixel info from the frame buffer)
   void get_pixel_info_from_frame_buffer(const int x, const int y,

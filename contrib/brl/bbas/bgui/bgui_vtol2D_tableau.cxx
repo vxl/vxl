@@ -22,7 +22,9 @@ bgui_vtol2D_tableau::bgui_vtol2D_tableau(vgui_tableau_sptr const& t,
 
 bgui_vtol2D_tableau::~bgui_vtol2D_tableau()
 {
-  this->clear_all();
+#if 0 //not needed if vgui::quit() is used
+   this->clear_all();
+#endif
 }
 
 #ifdef DEBUG

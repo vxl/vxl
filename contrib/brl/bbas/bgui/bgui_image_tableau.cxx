@@ -246,7 +246,136 @@ get_pixel_info_from_image(const int x, const int y,
     vcl_sprintf(msg, "Pixel Not Available");
   }
 }
+double bgui_image_tableau::
+get_pixel_value(const unsigned c, const unsigned r)
+{
+  vil_image_resource_sptr rs = this->get_image_resource(); 
+  if (!rs)
+    return 0;
+  if (c<0||c>=rs->ni()||r<0||r>=rs->nj())
+    return 0;
+  unsigned n_p = rs->nplanes();
+  vil_pixel_format type = rs->pixel_format();
+  switch (type )
+    {
+    case VIL_PIXEL_FORMAT_BOOL: {
+      vil_image_view<bool> v = rs->get_view();
+      if (!v)
+        return 0;
+      else
+        return static_cast<double>(v(0,0));
+    }
+    case  VIL_PIXEL_FORMAT_BYTE: {
+     
+      vil_image_view<vxl_byte> v = rs->get_view(c,1,r,1);
+      if (!v)
+        return 0;
+      if(n_p==1)
+        return static_cast<double>(v(0,0));
+      else if (n_p==3)
+        return static_cast<double>(v(0,0,0)+v(0,0,1)+v(0,0,2))/3;
+    }
+    case  VIL_PIXEL_FORMAT_SBYTE: {
+      vil_image_view<vxl_sbyte> v = rs->get_view(c,1,r,1);
+      if (!v)
+        return 0;
+      else
+        if(n_p==1)
+          return static_cast<double>(v(0,0));
+        else if (n_p==3)
+          return static_cast<double>(v(0,0,0)+v(0,0,1)+v(0,0,2))/3;
+    }
+    case  VIL_PIXEL_FORMAT_UINT_16: {
+      vil_image_view<vxl_uint_16> v = rs->get_view(c,1,r,1);
+      if (!v)
+        return 0;
+      else
+        if(n_p==1)
+          return static_cast<double>(v(0,0));
+        else if (n_p==3)
+          return static_cast<double>(v(0,0,0)+v(0,0,1)+v(0,0,2))/3;
+    }
+    case  VIL_PIXEL_FORMAT_INT_16: {
+      vil_image_view<vxl_int_16> v = rs->get_view(c,1,r,1);
+      if (!v)
+        return 0;
+      else
+        if(n_p==1)
+          return static_cast<double>(v(0,0));
+        else if (n_p==3)
+          return static_cast<double>(v(0,0,0)+v(0,0,1)+v(0,0,2))/3;
+    }
+    case  VIL_PIXEL_FORMAT_FLOAT: {
+      vil_image_view<float> v = rs->get_view(c,1,r,1);
+      if (!v)
+        return 0;
+      else
+        return static_cast<double>(v(0,0));
+    }
+    case  VIL_PIXEL_FORMAT_DOUBLE: {
+      vil_image_view<double> v = rs->get_view(c,1,r,1);
+      if (!v)
+        return 0;
+      else
+        return v(0,0);
+    }
+    case VIL_PIXEL_FORMAT_RGB_BYTE: {
+      vil_image_view<vil_rgb<vxl_byte> > v = rs->get_view(c,1,r,1);
+      if (!v)
+        return 0;
+      else
+        return static_cast<double>(v(0,0).R()+v(0,0).G()+v(0,0).B())/3;
+    }
+    case VIL_PIXEL_FORMAT_RGB_UINT_16: {
+      vil_image_view<vil_rgb<vxl_uint_16> > v = rs->get_view(c,1,r,1);
+      if (!v)
+        return 0;
+      else
+        return static_cast<double>(v(0,0).R()+v(0,0).G()+v(0,0).B())/3;
+    }
+    default:
+      return 0;
+    }
+}
 
+void bgui_image_tableau::image_line(const float col_start,
+                                    const float row_start, 
+                                    const float col_end,
+                                    const float row_end,
+                                    vcl_vector<double>& line_pos,
+                                    vcl_vector<double>& vals)
+{
+  line_pos.clear();vals.clear();
+  //Get the image data
+  // the line length in pixels
+  float length = vcl_sqrt((col_end-col_start)*(col_end-col_start) +
+                          (row_end-row_start)*(row_end-row_start));
+  if(length == 0)
+    return;
+  //initialize the line scan parameters
+  float xstep = (col_end-col_start)/length;
+  float ystep = (row_end-row_start)/length;
+  float sinc = vcl_sqrt(xstep*xstep + ystep*ystep);
+  float spos = 0;
+  line_pos.push_back(spos);
+  unsigned c = static_cast<unsigned>(col_start), 
+   r = static_cast<unsigned>(row_start);
+  vals.push_back(get_pixel_value(c, r));
+  
+  //extract the pixel values along the line
+  float xpos = col_start, ypos = row_start;
+  unsigned nsteps = static_cast<unsigned>(length);
+  for(unsigned i = 0; i<nsteps; ++i)
+    {
+      xpos += xstep;
+      ypos += ystep;
+      spos += sinc;
+      c = static_cast<unsigned>(xpos);
+      r = static_cast<unsigned>(ypos);
+      line_pos.push_back(spos);
+      vals.push_back(get_pixel_value(c, r));
+    }
+}
 
 //--------------------------------------------------------------------------------
 //:

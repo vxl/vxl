@@ -5,78 +5,89 @@
 // \file
 // \author  K. Kang 
 // \brief   intended to be general graph tableau
-
+// \verbatim
+// modified extensively by J.L. Mundy June 3, 2006
+// \endverbatim
 #include <vgui/vgui_tableau.h>
+#include <vgui/vgui_dialog.h>
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_soview2D.h>
 #include <vgui/vgui_easy2D_tableau.h>
 #include "bgui_graph_tableau_sptr.h"
 
-class bgui_graph_tableau : public vgui_easy2D_tableau
+class bgui_graph_tableau : public  vgui_tableau
 {
  public:
 
-  //: Constructor takes all the labels used on the graph.
-  bgui_graph_tableau(const char* n="unnamed");
-
-  bgui_graph_tableau(vgui_tableau_sptr const& t, const char* n="unnamed");
-
-  bgui_graph_tableau(const vcl_vector<double> data)
-  {
-    data_ = data;
-  }
+  //: Constructors 
+  bgui_graph_tableau(const unsigned graph_width,
+                     const unsigned graph_height);
 
   //: Destructor.
   ~bgui_graph_tableau();
 
-  //: Update the graph from client
-  bool update(vcl_vector<double> const & data);
-
-  bool update(double min, double max, vcl_vector<double> const& data);
+  //: Update the graph with new data
+  void update(vcl_vector<double> const& pos, vcl_vector<double> const & vals);
+  void update(vcl_vector<float> const& pos, vcl_vector<float> const & vals);
 
   //: Clear the data
   void clear();
 
-  //: virtual
+  //: Accessors
+  float xmin(){return xmin_;}
+  float xmax(){return xmax_;}
+  float ymin(){return ymin_;}
+  float ymax(){return ymax_;}
+
+  //: Get a conveniently wrapped popup dialog
+  vgui_dialog* popup_graph(vcl_string const& info,
+                          const unsigned sizex =0,
+                          const unsigned sizey=0);
+
+  //: Handles all events for this tableau.
+  virtual bool handle(const vgui_event&);
+
  private:
   //Utility functions
   void init();
+  void rem();
+  void del();
   void draw_box();
+  void draw_tics();
   void draw_graph();
-  double map_display_to_val(const int display_x);
-
-  double max_;
-  double min_;
+  void compute_scale();
+  float map_x_to_display(const float x);
+  float map_y_to_display(const float y);
   //Members
-  vgui_soview2D_lineseg* min_bar_;
-  vgui_soview2D_lineseg* max_bar_;
-  int left_offset_;
-  int top_offset_;
-  int graph_width_;
-  int graph_height_;
-  //: List of points.
-  vcl_vector<float> xpoints_, ypoints_;
+  float xmin_;
+  float xmax_;
+  float ymin_;
+  float ymax_;
+  float xscale_;
+  float yscale_;
+  unsigned left_offset_;
+  unsigned top_offset_;
+  unsigned graph_width_;
+  unsigned graph_height_;
+  float tic_length_;
+  vgui_easy2D_tableau_sptr easy_;
+  //: The graph
   vgui_soview2D_linestrip* plot_;
-  vcl_vector<double> data_;
+  //: the tics
+  float xinc_, yinc_;
+  vcl_vector<vgui_soview2D_lineseg*> xtics_;
+  vcl_vector<vgui_soview2D_lineseg*> ytics_;
+  unsigned n_;
+  float* pos_;
+  float* vals_;
 };
 
-
-//this stuff is needed to establish inheritance between tableau  smart pointers
-//cloned from xcv_image_tableau
 struct bgui_graph_tableau_new : public bgui_graph_tableau_sptr
 {
   typedef bgui_graph_tableau_sptr base;
-
-  bgui_graph_tableau_new(const char* n="unnamed") :
-    base(new bgui_graph_tableau(n)) { }
-  bgui_graph_tableau_new(vgui_image_tableau_sptr const& it,
-                                  const char* n="unnamed") :
-    base(new bgui_graph_tableau(it,n)) { }
-
-  bgui_graph_tableau_new(vgui_tableau_sptr const& t, const char* n="unnamed")
-    :  base(new bgui_graph_tableau(t, n)) { }
-
-  operator vgui_easy2D_tableau_sptr () const { vgui_easy2D_tableau_sptr tt; tt.vertical_cast(*this); return tt; }
+  bgui_graph_tableau_new(const unsigned gwidth, const unsigned gheight)
+    : base(new bgui_graph_tableau(gwidth, gheight)) { }
 };
+
 
 #endif // bgui_graph_tableau_h_

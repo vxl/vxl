@@ -236,13 +236,13 @@ bool bgui_picker_tableau::handle(const vgui_event& event)
   // ---- Object type is line ----
   if (obj_type == line_enum)
     {
-      if (event.type == vgui_DRAW)
+      if (event.type == vgui_DRAW_OVERLAY)
         draw_line();
       else if (event.type == vgui_MOTION)
         {
           vgui_projection_inspector p_insp;
           p_insp.window_to_image_coordinates(event.wx, event.wy, pointx2, pointy2);
-          post_redraw();
+          post_overlay_redraw();
         }
       else if (event.type == vgui_BUTTON_DOWN)
         {
@@ -264,13 +264,13 @@ bool bgui_picker_tableau::handle(const vgui_event& event)
   // ---- Object type is box ----
   if (obj_type == box_enum)
     {
-      if (event.type == vgui_DRAW)
+      if (event.type == vgui_DRAW_OVERLAY)
         draw_box();
       else if (event.type == vgui_MOTION)
         {
           vgui_projection_inspector p_insp;
           p_insp.window_to_image_coordinates(event.wx, event.wy, pointx2, pointy2);
-          post_redraw();
+          post_overlay_redraw();
         }
       else if (event.type == vgui_BUTTON_DOWN)
         {
