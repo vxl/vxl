@@ -1319,6 +1319,31 @@ void segv_vil_segmentation_manager::rotate_image()
   vil_image_resource_sptr out_image = vil_new_image_resource_of_view(temp);
   this->add_image(out_image);
 }
+
+void segv_vil_segmentation_manager::reduce_image()
+{
+  vil_image_resource_sptr img = selected_image();
+  if (!img)
+  {
+    vcl_cout << "In segv_vil_segmentation_manager::reduce_image - no image\n";
+    return;
+  }
+  static float coef=0.6f;
+  vgui_dialog expand_dialog("Reduce Image");
+  expand_dialog.field("Filter coef", coef);
+  if (!expand_dialog.ask())
+    return;
+
+  vil_image_view<float> flt =
+    brip_vil_float_ops::convert_to_float(img);
+
+  vil_image_view<float> reduced = 
+    brip_vil_float_ops::half_resolution(flt, coef);
+  
+  vil_image_resource_sptr out_image = vil_new_image_resource_of_view(reduced);
+  this->add_image(out_image);
+}
+
 void segv_vil_segmentation_manager::expand_image()
 {
   vil_image_resource_sptr img = selected_image();

@@ -37,6 +37,7 @@ class segv_vil_menus
   SEGV_VIL_DLL_DATA static void fit_overlay_conics_callback();
   SEGV_VIL_DLL_DATA static void regions_callback();
   SEGV_VIL_DLL_DATA static void rotate_image_callback();
+  SEGV_VIL_DLL_DATA static void reduce_image_callback();
   SEGV_VIL_DLL_DATA static void expand_image_callback();
   SEGV_VIL_DLL_DATA static void flip_image_lr_callback();
   SEGV_VIL_DLL_DATA static void add_images_callback();

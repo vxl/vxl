@@ -53,6 +53,7 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void fit_overlay_conics();
   void regions();
   void rotate_image();
+  void reduce_image();
   void expand_image();
   //: visualization
   void display_images_as_color();
