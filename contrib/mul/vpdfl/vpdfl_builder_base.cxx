@@ -8,17 +8,16 @@
 // \date 12-Apr-2001
 // \brief Base for classes to build vpdfl_pdf_base objects.
 
-
 #include "vpdfl_builder_base.h"
+
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 
-#include <mbl/mbl_exception.h>
-#include <mbl/mbl_read_props.h>
 #include <vpdfl/vpdfl_axis_gaussian_builder.h>
 #include <vpdfl/vpdfl_gaussian_kernel_pdf_builder.h>
 #include <vpdfl/vpdfl_gaussian_builder.h>
 
+#include <mbl/mbl_read_props.h>
 #include <mbl/mbl_cloneables_factory.h>
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_exception.h>
@@ -85,7 +84,6 @@ vcl_auto_ptr<vpdfl_builder_base> vpdfl_builder_base::new_builder_from_stream(vcl
   // which should be empty (until we add some relevent parameters)
   mbl_read_props_look_for_unused_props("vpdfl_builder_base::new_builder_from_stream", props, mbl_read_props_type());
   return builder;
-
 }
 
 //=======================================================================
@@ -139,6 +137,7 @@ vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_builder_base* b)
   vsl_print_summary(os,b);
   return os;
 }
+
 //=======================================================================
 //: Create a vpdfl_builder_base object given a config stream (recursive style)
 //  Creates object, then uses config_from_stream(is) to set up internals
@@ -148,7 +147,8 @@ vcl_auto_ptr<vpdfl_builder_base> vpdfl_builder_base::
   vcl_string name;
   is >> name;
   vcl_auto_ptr<vpdfl_builder_base> builder;
-  try {
+  try
+  {
     builder = mbl_cloneables_factory<vpdfl_builder_base>::get_clone(name);
   }
   catch (const mbl_exception_no_name_in_factory & e)
@@ -166,7 +166,6 @@ vcl_auto_ptr<vpdfl_builder_base> vpdfl_builder_base::
 void vpdfl_builder_base::config_from_stream(
   vcl_istream & is)
 {
-
   vcl_string s = mbl_parse_block(is);
   if (s.empty() || s=="{}") return;
 
