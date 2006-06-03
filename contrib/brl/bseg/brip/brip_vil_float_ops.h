@@ -113,10 +113,8 @@ class brip_vil_float_ops
                               vil_image_view<float>& IyIy);
 
   //: Tr(IxIx.transpose) for a NxN region, N = 2n+1)
-  static  vil_image_view<float> 
+  static  vil_image_view<float>
     trace_grad_matrix_NxN(vil_image_view<float> const& input, unsigned n);
-                                
-
 
   //: Computes the Harris corner measure
   static vil_image_view<float> harris(vil_image_view<float> const& IxIx,
@@ -172,11 +170,11 @@ class brip_vil_float_ops
   static vil_image_view<unsigned char>
     convert_to_byte(vil_image_resource_sptr const& image);
 
-  //: converts an float image to an unsigned short image within a range
+  //: converts a float image to an unsigned short image within a range
   static vil_image_view<unsigned short>
     convert_to_short(vil_image_view<float> const& image,
                      float min_val, float max_val);
-  //: converts an float image to an unsigned short image
+  //: converts a float image to an unsigned short image.
   // range determined automatically
   static vil_image_view<unsigned short>
     convert_to_short(vil_image_view<float> const& image);

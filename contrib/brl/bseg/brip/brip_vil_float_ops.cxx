@@ -167,17 +167,17 @@ void brip_vil_float_ops::double_resolution_1d(const float* input, const unsigned
   unsigned i = 0;
   w[1]=input[i]; w[2]=input[i++];
   w[0]=w[2];
-  for(unsigned c = 0; c<2*n_input; c+=2)
-    {
-      output[c] = k0*w[1] + k2*(w[0]+w[2]);
-      output[c+1] = k1*(w[1]+w[2]);
-      w[0]=w[1];
-      w[1]=w[2];
-      if(c<2*(n_input-2))
-        w[2]=input[i++];
-      else
-        w[2]=w[0];
-    }
+  for (unsigned c = 0; c<2*n_input; c+=2)
+  {
+    output[c] = k0*w[1] + k2*(w[0]+w[2]);
+    output[c+1] = k1*(w[1]+w[2]);
+    w[0]=w[1];
+    w[1]=w[2];
+    if (c<2*(n_input-2))
+      w[2]=input[i++];
+    else
+      w[2]=w[0];
+  }
 }
 
 //: interpolates the input using the Bert-Adelson algorithm
@@ -201,37 +201,37 @@ brip_vil_float_ops::double_resolution(vil_image_view<float> const& input,
   float k0 = filter_coef*2.0f;
   float k1 = 0.5f;
   float k2 = 0.5f-filter_coef;
-  
+
   //initialize
   unsigned i = 0;
-  fill_1d_array(input, i++, input_1d); 
+  fill_1d_array(input, i++, input_1d);
   brip_vil_float_ops::double_resolution_1d(input_1d, ni_in, k0, k1, k2, output1);
-  fill_1d_array(input, i++, input_1d); 
+  fill_1d_array(input, i++, input_1d);
   brip_vil_float_ops::double_resolution_1d(input_1d, ni_in, k0, k1, k2, output2);
-  for(unsigned k = 0; k<ni_out; ++k)
+  for (unsigned k = 0; k<ni_out; ++k)
     output0[k]=output2[k];
-  for(unsigned r = 0; r<nj_out; r+=2)
+  for (unsigned r = 0; r<nj_out; r+=2)
+  {
+    unsigned rp = r+1;
+    for (unsigned c=0; c<ni_out; ++c)
     {
-      unsigned rp = r+1;
-      for(unsigned c=0; c<ni_out; ++c)
-        {
-          out(c, r) = k0*output1[c] + k2*(output0[c]+output2[c]);
-          out(c, rp) = k1*(output1[c]+output2[c]);
-        }
-      float* next = output0;
-      output0 = output1;
-      output1 = output2;
-      output2 = next;
-      if(r<nj_out-4)
-        {
-          fill_1d_array(input, i++, input_1d); 
-          brip_vil_float_ops::double_resolution_1d(input_1d, ni_in,
-                                                   k0, k1, k2, output2);
-        }
-      else
-        for(unsigned k = 0; k<ni_out; ++k)
-          output2[k]=output0[k];
+      out(c, r) = k0*output1[c] + k2*(output0[c]+output2[c]);
+      out(c, rp) = k1*(output1[c]+output2[c]);
     }
+    float* next = output0;
+    output0 = output1;
+    output1 = output2;
+    output2 = next;
+    if (r<nj_out-4)
+    {
+      fill_1d_array(input, i++, input_1d);
+      brip_vil_float_ops::double_resolution_1d(input_1d, ni_in,
+                                               k0, k1, k2, output2);
+    }
+    else
+      for (unsigned k = 0; k<ni_out; ++k)
+        output2[k]=output0[k];
+  }
   delete [] input_1d;
   delete [] output0;
   delete [] output1;
@@ -1184,23 +1184,24 @@ brip_vil_float_ops::convert_to_short(vil_image_view<float> const& image,
     }
   return output;
 }
-//: converts an float image to an unsigned short image
+
+//: converts a float image to an unsigned short image.
 // range determined automatically
 vil_image_view<unsigned short>
 brip_vil_float_ops::convert_to_short(vil_image_view<float> const& image)
 {
-	float minv = vnl_numeric_traits<float>::maxval;
+  float minv = vnl_numeric_traits<float>::maxval;
   float maxv = -minv;
   unsigned ni = image.ni(), nj = image.nj();
-  for(unsigned j = 0; j<nj; ++j)
-    for(unsigned i = 0; i<ni; ++i)
-      {
-        float v = image(i,j);
-        if(v<minv)
-          minv = v;
-        if(v>maxv)
-          maxv = v;
-      }
+  for (unsigned j = 0; j<nj; ++j)
+    for (unsigned i = 0; i<ni; ++i)
+    {
+      float v = image(i,j);
+      if (v<minv)
+        minv = v;
+      if (v>maxv)
+        maxv = v;
+    }
   return brip_vil_float_ops::convert_to_short(image, minv, maxv);
 }
 
@@ -1326,19 +1327,19 @@ void brip_vil_float_ops::rgb_to_ihs(vil_rgb<vxl_byte> const& rgb,
     s = delta / maxval;
 
   if (s== 0)
-    h = 0;                 //:      (Hue is undefined)
+    h = 0;                   //!< (Hue is undefined)
 
   if (r== maxval)
-    h = (g - b) / delta ;//:      (between yellow and magenta)
+    h = (g - b) / delta ;    //!< (between yellow and magenta)
   if (g == maxval)
-    h = 2 + (b - r)/delta ;//:(between cyan and yellow)
+    h = 2 + (b - r)/delta ;  //!< (between cyan and yellow)
   if (b == maxval)
-    h = 4 + (r - g) / delta; //:   (between magenta and cyan)
-  h = h * 60;//:                             (convert Hue to degrees)
+    h = 4 + (r - g) / delta; //!< (between magenta and cyan)
+  h = h * 60;                //!< (convert Hue to degrees)
   if (h < 0)
-    h = h + 360 ;  //:                (Hue must be positive)
+    h = h + 360 ;            //!< (Hue must be positive)
   if (h >= 360)
-    h = h - 360; //:              (Hue must be less than 360)
+    h = h - 360;             //!< (Hue must be less than 360)
 
   h = (vxl_byte)(h * (255.0 / 360.0));
   s = (vxl_byte)(s * 255.0);
@@ -1505,13 +1506,14 @@ combine_color_planes(vil_image_view<unsigned char> const& R,
     }
   return image;
 }
+
 vil_image_view<vil_rgb<vxl_byte> >
-   brip_vil_float_ops::combine_color_planes(vil_image_resource_sptr const& R,
-                                            vil_image_resource_sptr const& G,
-                                            vil_image_resource_sptr const& B)
+brip_vil_float_ops::combine_color_planes(vil_image_resource_sptr const& R,
+                                         vil_image_resource_sptr const& G,
+                                         vil_image_resource_sptr const& B)
 {
   vil_image_view<vil_rgb<vxl_byte> > view(0,0);
-  if(!R||!G||!B)
+  if (!R||!G||!B)
     return view;//return an empty view
   //determine the union of all the resources
   vbl_bounding_box<unsigned short, 2> b;
@@ -1530,20 +1532,21 @@ vil_image_view<vil_rgb<vxl_byte> >
   vil_image_view<unsigned char> cG = brip_vil_float_ops::convert_to_byte(fG);
   vil_image_view<float> fB = brip_vil_float_ops::convert_to_float(G);
   vil_image_view<unsigned char> cB = brip_vil_float_ops::convert_to_byte(fB);
-  for(unsigned short j = 0; j<n_j; ++j)
-    for(unsigned short i = 0; i<n_i; ++i)
-      {
-        vil_rgb<vxl_byte> v = zero;
-        if(i<r_ni&&j<r_nj)
-          v.r = cR(i,j);
-        if(i<g_ni&&j<g_nj)
-          v.g= cG(i,j);
-        if(i<b_ni&&j<b_nj)
-          v.b= cB(i,j);
-		view(i,j)=v;
-      }
+  for (unsigned short j = 0; j<n_j; ++j)
+    for (unsigned short i = 0; i<n_i; ++i)
+    {
+      vil_rgb<vxl_byte> v = zero;
+      if (i<r_ni&&j<r_nj)
+        v.r = cR(i,j);
+      if (i<g_ni&&j<g_nj)
+        v.g= cG(i,j);
+      if (i<b_ni&&j<b_nj)
+        v.b= cB(i,j);
+      view(i,j)=v;
+    }
   return view;
 }
+
 vil_image_view<float>
 brip_vil_float_ops::convert_to_float(vil_image_resource const& image)
 {
@@ -2344,7 +2347,7 @@ bool brip_vil_float_ops::chip(vil_image_view<float> const& input,
   if (rw<=0||rh<=0)
     return false;
   vil_image_view<float> temp(rw+1, rh+1, 1);
-  for (int y = y_min; y<=y_max; y++)        //: changed < to <= to include the boundary points too
+  for (int y = y_min; y<=y_max; y++)        //!< changed < to <= to include the boundary points too
     for (int x =x_min; x<=x_max; x++)
       temp(x-x_min, y-y_min) = input(x, y);
   chip = temp;
@@ -2466,7 +2469,7 @@ cross_correlate(vil_image_view<float> const& image1,
       sI2I2 += v2*v2;
       sI1I2 += v1*v2;
     }
-  //:compute correlation.
+  // compute correlation.
   float cc = cross_corr(area, sI1, sI2, sI1I1, sI2I2, sI1I2, intensity_thresh);
   return cc;
 }
