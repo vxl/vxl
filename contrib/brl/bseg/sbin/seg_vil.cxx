@@ -30,5 +30,6 @@ int main(int argc, char** argv)
    win->enable_vscrollbar(true);
    win->enable_hscrollbar(true);
    win->show();
-  return  vgui::run();
+   vgui::run();
+   return 0;
 }
