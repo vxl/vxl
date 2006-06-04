@@ -22,8 +22,8 @@
 template <class DataT, class BoxT>
 vgl_box_2d<BoxT>
 vpgl_lens_warp_bounds(const vpgl_lens_distortion<DataT>& lens,
-                       const vgl_box_2d<BoxT>& box,
-                       BoxT step_size = BoxT(1))
+                      const vgl_box_2d<BoxT>& box,
+                      BoxT step_size = BoxT(1))
 {
   vgl_box_2d<BoxT> new_box;
   for (BoxT x=box.min_x(); x<=box.max_x(); x+=step_size){
@@ -47,8 +47,8 @@ vpgl_lens_warp_bounds(const vpgl_lens_distortion<DataT>& lens,
 template <class DataT, class BoxT>
 vgl_box_2d<BoxT>
 vpgl_lens_unwarp_bounds(const vpgl_lens_distortion<DataT>& lens,
-                         const vgl_box_2d<BoxT>& box,
-                         BoxT step_size = BoxT(1))
+                        const vgl_box_2d<BoxT>& box,
+                        BoxT step_size = BoxT(1))
 {
   vgl_box_2d<BoxT> new_box;
   for (BoxT x=box.min_x(); x<=box.max_x(); x+=step_size){
@@ -74,9 +74,9 @@ vpgl_lens_unwarp_bounds(const vpgl_lens_distortion<DataT>& lens,
 template <class sType, class dType, class T, class InterpFunctor>
 vil_image_view<dType>
 vpgl_lens_warp_resize(const vil_image_view<sType>& in,
-                       dType out_dummy,
-                       vpgl_lens_distortion<T>& ld,
-                       InterpFunctor interp)
+                      dType /*out_dummy*/,
+                      vpgl_lens_distortion<T>& ld,
+                      InterpFunctor interp)
 {
   vgl_box_2d<int> bounds = vpgl_lens_warp_bounds(ld, vgl_box_2d<int>(0,in.ni(),0,in.nj()));
   vgl_vector_2d<T> offset(T(-bounds.min_x()), T(-bounds.min_y()));
@@ -92,9 +92,9 @@ vpgl_lens_warp_resize(const vil_image_view<sType>& in,
 // which should reduce iterations until convergence
 template <class sType, class dType, class T, class InterpFunctor>
 void vpgl_lens_warp(const vil_image_view<sType>& in,
-                     vil_image_view<dType>& out,
-                     const vpgl_lens_distortion<T>& ld,
-                     InterpFunctor interp)
+                    vil_image_view<dType>& out,
+                    const vpgl_lens_distortion<T>& ld,
+                    InterpFunctor interp)
 {
   unsigned const out_w = out.ni();
   unsigned const out_h = out.nj();
@@ -129,9 +129,9 @@ void vpgl_lens_warp(const vil_image_view<sType>& in,
 template <class sType, class dType, class T, class InterpFunctor>
 vil_image_view<dType>
 vpgl_lens_unwarp_resize(const vil_image_view<sType>& in,
-                         dType out_dummy,
-                         vpgl_lens_distortion<T>& ld,
-                         InterpFunctor interp)
+                        dType /*out_dummy*/,
+                        vpgl_lens_distortion<T>& ld,
+                        InterpFunctor interp)
 {
   vgl_box_2d<int> bounds = vpgl_lens_unwarp_bounds(ld, vgl_box_2d<int>(0,in.ni(),0,in.nj()));
   vgl_vector_2d<T> offset(T(-bounds.min_x()), T(-bounds.min_y()));
@@ -145,9 +145,9 @@ vpgl_lens_unwarp_resize(const vil_image_view<sType>& in,
 //: A version of vil_warp specialized for lens unwarping
 template <class sType, class dType, class T, class InterpFunctor>
 void vpgl_lens_unwarp(const vil_image_view<sType>& in,
-                       vil_image_view<dType>& out,
-                       const vpgl_lens_distortion<T>& ld,
-                       InterpFunctor interp)
+                      vil_image_view<dType>& out,
+                      const vpgl_lens_distortion<T>& ld,
+                      InterpFunctor interp)
 {
   unsigned const out_w = out.ni();
   unsigned const out_h = out.nj();
@@ -166,6 +166,5 @@ void vpgl_lens_unwarp(const vil_image_view<sType>& in,
     }
   }
 }
-
 
 #endif // vpgl_lens_warp_mapper_h_
