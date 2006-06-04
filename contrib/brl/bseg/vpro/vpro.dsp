@@ -99,9 +99,6 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx;c"
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+vpro_video_process-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\vpro_capture_process.cxx
 # End Source File
 # Begin Source File
@@ -163,6 +160,18 @@ SOURCE=.\vpro_ihs_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vpro_half_res_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vpro_roi_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vpro_vil_video_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+vpro_video_process-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+vpro_vil_video_process-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -232,6 +241,15 @@ SOURCE=.\vpro_ihs_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\vpro_half_res_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpro_roi_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpro_vil_video_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpro_vil_video_process_sptr.h
 # End Source File
 # End Group
 # End Target
