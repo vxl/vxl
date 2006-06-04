@@ -13,12 +13,12 @@
 #include <brip/brip_roi.h>
 #include <vpro/vpro_roi_process.h>
 
-vpro_roi_process::vpro_roi_process(vcl_string const & video_file, 
+vpro_roi_process::vpro_roi_process(vcl_string const & video_file,
                                    const unsigned x0,
                                    const unsigned y0,
                                    const unsigned xsize,
                                    const unsigned ysize) :
-  video_file_(video_file), x0_(x0), y0_(y0), xsize_(xsize), ysize_(ysize)
+  x0_(x0), y0_(y0), xsize_(xsize), ysize_(ysize), video_file_(video_file)
 {
 }
 
@@ -56,9 +56,8 @@ bool vpro_roi_process::finish()
   vidl_clip_sptr clip = new vidl_clip(out_frames_);
   vidl_movie_sptr mov= new vidl_movie();
   mov->add_clip(clip);
-  if (!vidl_io::save(mov.ptr(), video_file_.c_str(), "ImageList")){
-    vcl_cout << "In vpro_roi_process::finish()"
-             << " - failed to save video" << vcl_endl;
+  if (!vidl_io::save(mov.ptr(), video_file_.c_str(), "ImageList")) {
+    vcl_cerr << "In vpro_roi_process::finish() - failed to save video\n";
     return false;
   }
   out_frames_.clear();
