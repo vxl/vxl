@@ -1,6 +1,7 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vil/vil_crop.h>
+#include <vil/vil_new.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_memory_image.h>
 #include <vil/vil_pixel_format.h>
