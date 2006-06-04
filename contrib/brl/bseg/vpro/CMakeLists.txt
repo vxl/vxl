@@ -26,6 +26,10 @@ SET(vpro_sources
     vpro_spatial_filter_process.cxx  vpro_spatial_filter_process.h
     vpro_ihs_process.cxx             vpro_ihs_process.h
     vpro_half_res_process.cxx        vpro_half_res_process.h
+
+    vpro_roi_process.cxx             vpro_roi_process.h
+    vpro_vil_video_process.cxx       vpro_vil_video_process.h
+                                     vpro_vil_video_process_sptr.h
 )
 AUX_SOURCE_DIRECTORY(Templates vpro_sources)
 
@@ -33,7 +37,7 @@ ADD_LIBRARY(vpro ${vpro_sources})
 INSTALL_TARGETS(/lib vpro)
 INSTALL_NOBASE_HEADER_FILES(/include/contrib/vpro ${vpro_sources})
 
-TARGET_LINK_LIBRARIES(vpro sdet brip gevd vtol vsol vidl_vil1 vil1 vul vbl)
+TARGET_LINK_LIBRARIES(vpro sdet brip gevd vtol vsol vidl_vil1 vil1 vidl vil vul vbl)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)

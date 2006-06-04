@@ -1,11 +1,11 @@
 
-// This is brl/bseg/vpro/vpro_video_process.h
-#ifndef vpro_video_process_h_
-#define vpro_video_process_h_
+// This is brl/bseg/vpro/vpro_vil_video_process.h
+#ifndef vpro_vil_video_process_h_
+#define vpro_vil_video_process_h_
 //--------------------------------------------------------------------------------
 //:
 // \file
-// \brief live vpro_video_process
+// \brief live vpro_vil_video_process
 //
 //  A generic video processor that is called from the live_video_manager
 //  to carry out algorithms on the live video frames.
@@ -20,18 +20,18 @@
 // \endverbatim
 //--------------------------------------------------------------------------------
 #include <vcl_vector.h>
-#include <vil1/vil1_image.h>
+#include <vil/vil_image_resource.h>
 #include <vbl/vbl_ref_count.h>
 #include <vsol/vsol_spatial_object_2d.h>
 #include <vtol/vtol_topology_object.h>
 
-class vpro_video_process : public vbl_ref_count
+class vpro_vil_video_process : public vbl_ref_count
 {
  public:
   enum process_data_type {NOTYPE=0, IMAGE, SPATIAL_OBJECT, TOPOLOGY, IMAGE_SPATIAL_OBJECT};
 
-  vpro_video_process();
-  vpro_video_process(vpro_video_process const& p)
+  vpro_vil_video_process();
+  vpro_vil_video_process(vpro_vil_video_process const& p)
     : vbl_ref_count(),
       frame_index_(p.frame_index_), n_frames_(p.n_frames_),
       input_images_(p.input_images_),
@@ -40,7 +40,7 @@ class vpro_video_process : public vbl_ref_count
       output_image_(p.output_image_),
       output_topo_objs_(p.output_topo_objs_),
       output_spat_objs_(p.output_spat_objs_) {}
-  virtual ~vpro_video_process() {}
+  virtual ~vpro_vil_video_process() {}
   void clear_input();
   void clear_output();
 
@@ -48,7 +48,7 @@ class vpro_video_process : public vbl_ref_count
   void set_n_frames(int n_frames) { n_frames_ = n_frames; }
   void set_frame_index(int index) { frame_index_= index; }
 
-  void add_input_image(vil1_image const& im) { input_images_.push_back(im); }
+  void add_input_image(vil_image_resource_sptr const& im) { input_images_.push_back(im); }
 
   void add_input_spatial_object(vsol_spatial_object_2d_sptr const& so);
 
@@ -61,8 +61,8 @@ class vpro_video_process : public vbl_ref_count
   int n_frames() { return n_frames_; }
   int frame_index() { return frame_index_; }
   int get_N_input_images() { return input_images_.size(); }
-  vil1_image get_input_image(unsigned int i);
-  vil1_image get_output_image() { return output_image_; }
+  vil_image_resource_sptr get_input_image(unsigned int i);
+  vil_image_resource_sptr get_output_image() { return output_image_; }
 
   int get_N_input_spat_objs() { return input_spat_objs_.size(); }
   vcl_vector<vsol_spatial_object_2d_sptr> const& get_input_spatial_objects()
@@ -100,14 +100,14 @@ class vpro_video_process : public vbl_ref_count
   int n_frames_;
   unsigned int start_frame_;//start of the processed sequence
   unsigned int end_frame_;  //end of the processed sequence
-  vcl_vector<vil1_image> input_images_;
+  vcl_vector<vil_image_resource_sptr> input_images_;
   vcl_vector<vsol_spatial_object_2d_sptr> input_spat_objs_;
   vcl_vector<vtol_topology_object_sptr> input_topo_objs_;
-  vil1_image output_image_;
+  vil_image_resource_sptr output_image_;
   vcl_vector<vtol_topology_object_sptr> output_topo_objs_;
   vcl_vector<vsol_spatial_object_2d_sptr> output_spat_objs_;
   bool graph_flag_;
   vcl_vector<float> graph_;//for histograms and other plots
 };
 
-#endif // vpro_video_process_h_
+#endif // vpro_vil_video_process_h_

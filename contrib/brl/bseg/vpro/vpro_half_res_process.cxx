@@ -1,6 +1,7 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vil1/vil1_image.h>
+#include <vil1/vil1_memory_image_of.h>
 #include <vidl_vil1/vidl_vil1_movie.h>
 #include <vidl_vil1/vidl_vil1_clip.h>
 #include <vidl_vil1/vidl_vil1_io.h>
