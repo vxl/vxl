@@ -70,7 +70,7 @@ bmvv_cal_manager() : vgui_wrapper_tableau(), cam_(vgl_p_matrix<double>()),
 
 bmvv_cal_manager::~bmvv_cal_manager()
 {
-	delete instance_;
+  delete instance_;
 }
 
 //======================================================================
@@ -293,7 +293,6 @@ vcl_cout << "Image pixel format not handled\n";
 
 void bmvv_cal_manager::set_range_params()
 {
-  
   if (!itab_||!itab_->get_image_resource())
     return;
   static double min = 0.0, max = 255;
@@ -394,7 +393,7 @@ void bmvv_cal_manager::save_camera()
   static vcl_string cam_ext = "*.cam";
   static bool target = false;
   cam_dlg.file("Camera File", cam_ext, cam_file);
-  cam_dlg.checkbox("Target?", target); 
+  cam_dlg.checkbox("Target?", target);
   if (!cam_dlg.ask())
     return;
   vcl_ofstream cam_ostr(cam_file.c_str());
@@ -403,7 +402,7 @@ void bmvv_cal_manager::save_camera()
     vcl_cout << "Bad camera file\n";
     return;
   }
-  if(!target){
+  if (!target){
   cam_ostr << cam_;
   cam_ostr.close();
   return;}
@@ -413,9 +412,9 @@ void bmvv_cal_manager::save_camera()
 void bmvv_cal_manager::set_identity_camera()
 {
   vnl_matrix_fixed<double,3,4> M;
-  M[0][0] = 1.0;   M[0][1] = 0.0; M[0][2] = 0.0; M[0][3] = 0.0; 
-  M[1][0] = 0.0;   M[1][1] = 1.0; M[1][2] = 0.0; M[1][3] = 0.0; 
-  M[2][0] = 0.0;   M[2][1] = 0.0; M[2][2] = 0.0; M[2][3] = 1.0; 
+  M[0][0] = 1.0;   M[0][1] = 0.0; M[0][2] = 0.0; M[0][3] = 0.0;
+  M[1][0] = 0.0;   M[1][1] = 1.0; M[1][2] = 0.0; M[1][3] = 0.0;
+  M[2][0] = 0.0;   M[2][1] = 0.0; M[2][2] = 0.0; M[2][3] = 1.0;
   cam_ = vgl_p_matrix<double>(M);
 }
 
@@ -458,6 +457,7 @@ void bmvv_cal_manager::save_world()
   vcl_ofstream world_ostr(world_file.c_str());
   brct_algos::write_world(world_ostr, world_, indexed_face_set_);
 }
+
 void bmvv_cal_manager::save_world_ply2()
 {
   vgui_dialog world_dlg("Save World Ply2");
@@ -469,6 +469,7 @@ void bmvv_cal_manager::save_world_ply2()
   vcl_ofstream world_ostr(world_file.c_str());
   brct_algos::write_world_ply2(world_ostr, world_, indexed_face_set_);
 }
+
 bool bmvv_cal_manager::draw_correspondences()
 {
   if (!btab_)
@@ -485,6 +486,7 @@ bool bmvv_cal_manager::draw_correspondences()
   btab_->post_redraw();
   return true;
 }
+
 void bmvv_cal_manager::read_world_ply2()
 {
   vgui_dialog world_dlg("Read World Ply2");
@@ -497,6 +499,7 @@ void bmvv_cal_manager::read_world_ply2()
   brct_algos::read_world_ply2(world_istr, world_, polys_, indexed_face_set_);
   this->project_world();
 }
+
 void bmvv_cal_manager::clear_correspondences()
 {
   if (!btab_)
@@ -613,6 +616,7 @@ void bmvv_cal_manager::remove_correspondence()
   this->project_world();
   //  this->draw_correspondences();
 }
+
 void bmvv_cal_manager::pick_vertical()
 {
   ptab_->set_color(0.0f, 1.0f, 0.0f);
@@ -716,7 +720,7 @@ draw_vsol_points(const int cam, vcl_vector<vsol_point_2d_sptr> const & points,
     btab_->clear_all();
   vgui_style_sptr style = vgui_style::new_style(r, g, b, 3, 0);
   for (vcl_vector<vsol_point_2d_sptr>::const_iterator pit = points.begin();
-      pit != points.end(); pit++)
+       pit != points.end(); pit++)
     btab_->add_vsol_point_2d(*pit, style);
 }
 
@@ -820,19 +824,20 @@ void bmvv_cal_manager::compute_ransac_homography()
   //Also as a target camera for interest sake
   brct_algos::write_target_camera(ostr_tar, P.get_matrix());
 }
+
 //map the image back to cartesian world coordinates
 void bmvv_cal_manager::map_image_to_world()
 {
   vil_image_resource_sptr img = itab_->get_image_resource();
-  if(!img)
+  if (!img)
     return;
   vil_image_resource_sptr world_image =
     brct_algos::map_image_to_world(img, cam_);
-  if(world_image)
-    {
-      vgui_range_map_params_sptr rmps = range_params(world_image);
-      this->add_image(world_image, rmps);
-    }
+  if (world_image)
+  {
+    vgui_range_map_params_sptr rmps = range_params(world_image);
+    this->add_image(world_image, rmps);
+  }
 }
 
 void bmvv_cal_manager::save_constraints()
@@ -849,37 +854,39 @@ void bmvv_cal_manager::save_constraints()
     vcl_cout << "Bad constraint file\n";
     return;
   }
-  if(!brct_algos::save_constraint_file(corrs_, corrs_valid_, world_, verticals_, con_ostr))
+  if (!brct_algos::save_constraint_file(corrs_, corrs_valid_, world_, verticals_, con_ostr))
   {
     vcl_cout << "Couldn't save constraints\n";
     return;
   }
 }
-// add polygon vertices as world points to enable correspondence for 
+
+// add polygon vertices as world points to enable correspondence for
 // additional camera constraints.
 void bmvv_cal_manager::add_poly_vertices_to_world_pts(vsol_polygon_3d_sptr const& poly)
 {
   unsigned nv = poly->size();
   vcl_vector<unsigned> vert_indices(nv);
-  for(unsigned i = 0; i<nv; ++i)
-    {
-      vsol_point_3d_sptr v3d = poly->vertex(i);
-      vgl_point_3d<double> p(v3d->x(), v3d->y(), v3d->z());
-      world_.push_back(p);
-      vert_indices[i]=world_.size()-1;
-    }
+  for (unsigned i = 0; i<nv; ++i)
+  {
+    vsol_point_3d_sptr v3d = poly->vertex(i);
+    vgl_point_3d<double> p(v3d->x(), v3d->y(), v3d->z());
+    world_.push_back(p);
+    vert_indices[i]=world_.size()-1;
+  }
   indexed_face_set_.push_back(vert_indices);
 }
 
 // Add the most recently created polygon to the world
 void bmvv_cal_manager::confirm_polygon()
 {
-  if(!new_poly_)
+  if (!new_poly_)
     return;
   add_poly_vertices_to_world_pts(new_poly_);
   polys_.push_back(new_poly_);
   this->project_world();
 }
+
 void bmvv_cal_manager::pick_polygon()
 {
   vsol_polygon_2d_sptr poly;
@@ -897,8 +904,7 @@ void bmvv_cal_manager::draw_vsol_polygon_3d(vsol_polygon_3d_sptr const & poly,
 {
   if (!btab_)
   {
-    vcl_cout << "In bmvv_cal_manager::draw_vsol_polygon(..) -"
-             << " null btol tableau "<< vcl_endl;
+    vcl_cerr << "In bmvv_cal_manager::draw_vsol_polygon() - null btol tableau\n";
     return;
   }
   vsol_polygon_2d_sptr poly_2d = brct_algos::project(poly,cam_);
@@ -914,21 +920,22 @@ void bmvv_cal_manager::draw_polygons_3d(bool clear,
 {
   if (clear)
     btab_->clear_all();
-  for(vcl_vector<vsol_polygon_3d_sptr>::iterator pit = polys_.begin();
-      pit != polys_.end(); ++pit)
+  for (vcl_vector<vsol_polygon_3d_sptr>::iterator pit = polys_.begin();
+       pit != polys_.end(); ++pit)
     this->draw_vsol_polygon_3d(*pit, false, r, g, b);
 }
+
 //Create a box in the world from three top face corner points
 void bmvv_cal_manager::create_box()
 {
   //the polygon must have exactly 3 vertices
   vsol_polygon_2d_sptr poly;
   ptab_->pick_polygon(poly);
-  if(!poly||poly->size()!=3)
-    {
-      vcl_cout << "bad box corner pick\n";
-      return;
-    }
+  if (!poly||poly->size()!=3)
+  {
+    vcl_cout << "bad box corner pick\n";
+    return;
+  }
   vsol_polygon_3d_sptr top = brct_algos::back_project(poly, cam_, height_);
   vsol_point_3d_sptr p0=top->vertex(0), p1=top->vertex(1), p2=top->vertex(2);
   vgl_point_3d<double> c0(p0->x(), p0->y(), p0->z());
@@ -941,25 +948,26 @@ void bmvv_cal_manager::create_box()
   brct_algos::box_3d(c0, c1, c2, points, polys, indexed_face_set);
 
   unsigned vi0 = world_.size();//starting index for new points
-  for(vcl_vector<vgl_point_3d<double> >::iterator pt = points.begin();
-      pt != points.end(); ++pt)
+  for (vcl_vector<vgl_point_3d<double> >::iterator pt = points.begin();
+       pt != points.end(); ++pt)
     world_.push_back(*pt);
 
-  for(vcl_vector<vsol_polygon_3d_sptr>::iterator pl = polys.begin();
-      pl != polys.end(); ++pl)
+  for (vcl_vector<vsol_polygon_3d_sptr>::iterator pl = polys.begin();
+       pl != polys.end(); ++pl)
     polys_.push_back(*pl);
 
-  for(vcl_vector<vcl_vector<unsigned> >::iterator ifs=indexed_face_set.begin();
-      ifs != indexed_face_set.end(); ++ifs)
-    {
-      vcl_vector<unsigned> vi = *ifs;
-      vcl_vector<unsigned> index(4);
-      for(unsigned i = 0; i<4; ++i)
-        index[i] = vi[i]+vi0;
-      indexed_face_set_.push_back(index);
-    }
+  for (vcl_vector<vcl_vector<unsigned> >::iterator ifs=indexed_face_set.begin();
+       ifs != indexed_face_set.end(); ++ifs)
+  {
+    vcl_vector<unsigned> vi = *ifs;
+    vcl_vector<unsigned> index(4);
+    for (unsigned i = 0; i<4; ++i)
+      index[i] = vi[i]+vi0;
+    indexed_face_set_.push_back(index);
+  }
   this->project_world();
 }
+
 //Convert boxes in a merged indexed face set to individual boxes in VRML
 void bmvv_cal_manager::ply2_to_vrml()
 {
@@ -978,20 +986,21 @@ void bmvv_cal_manager::ply2_to_vrml()
     return;
   vcl_ifstream istr(ply2_file.c_str());
   vcl_ofstream ostr(vrml_file.c_str());
-  if(!brct_algos::translate_ply2_to_vrml(istr, ostr, r, g, b))
+  if (!brct_algos::translate_ply2_to_vrml(istr, ostr, r, g, b))
     vcl_cout << "Convert Ply to VRML Failed\n";
 }
+
 //Set the height of the X-Y create plane
 void bmvv_cal_manager::set_height()
 {
   static double height = 0.0;
   vgui_dialog box_dlg("Create Plane Z");
-  box_dlg.field("Plane Z", height); 
+  box_dlg.field("Plane Z", height);
   if (!box_dlg.ask())
     return;
   height_ = height;
 }
- 
+
 void bmvv_cal_manager::clear_world()
 {
   world_.clear();

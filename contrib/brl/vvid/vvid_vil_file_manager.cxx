@@ -34,7 +34,7 @@
 #include <vgui/vgui_rubberband_tableau.h>
 #include <bgui/bgui_vtol2D_rubberband_client.h>
 #include <vgui/vgui_composite_tableau.h>
-#include <vsol/vsol_point_2d.h> 
+#include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vpro/vpro_vil_video_process.h>
 #include <vpro/vpro_roi_process.h>
@@ -118,6 +118,7 @@ void vvid_vil_file_manager::quit()
 {
   vgui::quit();
 }
+
 //-----------------------------------------------------------------------------
 //: Loads a video file, e.g. avi into the viewer
 //-----------------------------------------------------------------------------
@@ -150,7 +151,7 @@ void vvid_vil_file_manager::load_video_file()
   end_frame_ = n_frames-1;
   vidl_movie::frame_iterator pframe = my_movie_->first();
   vil_image_resource_sptr img = pframe->get_resource();
-  if(!img)
+  if (!img)
     return;
   unsigned max = 255;
   if (img->pixel_format()==VIL_PIXEL_FORMAT_UINT_16)
@@ -197,17 +198,17 @@ void vvid_vil_file_manager::load_pyramid_video()
     return;
   vil_image_list il(video_dir.c_str());
   pyramid_movie_ = il.pyramids();
-  if(pyramid_movie_.size()==0)
-    {
-      vgui_error_dialog("Failed to load pyramid movie");
-      return;
-    }
-  
+  if (pyramid_movie_.size()==0)
+  {
+    vgui_error_dialog("Failed to load pyramid movie");
+    return;
+  }
+
   unsigned n_frames = pyramid_movie_.size();
   start_frame_ = 0;
   end_frame_ = n_frames-1;
   vil_image_resource_sptr img = pyramid_movie_[0].ptr();
-  if(!img)
+  if (!img)
     return;
   unsigned max = 255;
   rmps_=
@@ -252,7 +253,7 @@ void vvid_vil_file_manager::un_cached_play()
     int frame_index = pframe->get_real_frame_index();
     vgui::out << "frame["<< frame_index <<"]\n";
     vil_image_resource_sptr imgr = pframe->get_resource();
-    if(!imgr)
+    if (!imgr)
       continue;
     itab0_->set_image_resource(imgr);
     itab0_->set_mapping(rmps_);
@@ -274,14 +275,14 @@ void vvid_vil_file_manager::un_cached_play()
       --pframe;
     }
     else if (video_process_)
+    {
+      video_process_->set_frame_index(frame_index);
+      video_process_->add_input_image(imgr);
+      if (video_process_->execute())
       {
-        video_process_->set_frame_index(frame_index);
-        video_process_->add_input_image(imgr);
-        if (video_process_->execute())
-          {
-            vcl_cout << "Executing Frame " << frame_index << '\n';
-          }
+        vcl_cout << "Executing Frame " << frame_index << '\n';
       }
+    }
     grid_->post_redraw();
     vgui::run_till_idle();
   }
@@ -301,7 +302,7 @@ void vvid_vil_file_manager::pyramid_play()
   {
     vgui::out << "frame["<< pframe <<"]\n";
     vil_image_resource_sptr imgr = pyramid_movie_[pframe];
-    if(!imgr)
+    if (!imgr)
       continue;
     itab0_->set_image_resource(imgr);
     itab0_->set_mapping(rmps_);
@@ -333,7 +334,7 @@ void vvid_vil_file_manager::play_video()
   pause_video_ = false;
   time_interval_ = 10.0;
   easy0_->clear();
- 
+
   //return the display to the first frame after the play is finished
   this->un_cached_play();
   if (!my_movie_)
@@ -347,7 +348,7 @@ void vvid_vil_file_manager::play_pyramid()
   pause_video_ = false;
   time_interval_ = 10.0;
   easy0_->clear();
- 
+
   //return the display to the first frame after the play is finished
   this->pyramid_play();
   this->post_redraw();
@@ -412,24 +413,24 @@ void vvid_vil_file_manager::set_range_params()
   static bool invert = false;
   static bool gl_map = false;
   static bool cache = false;
-  if(rmps_)
+  if (rmps_)
+  {
+    invert = rmps_->invert_;
+    gl_map = rmps_->use_glPixelMap_;
+    cache = rmps_->cache_mapped_pix_;
+    if (rmps_->max_L_ > 0)
     {
-      invert = rmps_->invert_;
-      gl_map = rmps_->use_glPixelMap_;
-      cache = rmps_->cache_mapped_pix_;
-      if(rmps_->max_L_ > 0)
-      {
-        min = rmps_->min_L_;
-        max = rmps_->max_L_;
-        gamma = rmps_->gamma_L_;
-      }
-      else
-      {
-        min = rmps_->min_R_;
-        max = rmps_->max_R_;
-        gamma = rmps_->gamma_R_;
-      }
-	}
+      min = rmps_->min_L_;
+      max = rmps_->max_L_;
+      gamma = rmps_->gamma_L_;
+    }
+    else
+    {
+      min = rmps_->min_R_;
+      max = rmps_->max_R_;
+      gamma = rmps_->gamma_R_;
+    }
+  }
   vgui_dialog range_dlg("Set Range Map Params");
   range_dlg.field("Range min:", min);
   range_dlg.field("Range max:", max);
@@ -456,6 +457,7 @@ void vvid_vil_file_manager::set_range_params()
 
   itab0_->set_mapping(rmps_);
 }
+
 void vvid_vil_file_manager::create_box()
 {
   float x1, y1, x2, y2;
@@ -478,11 +480,11 @@ void vvid_vil_file_manager::create_box()
   easy0_->add_polygon(4, x, y);
   v2D0_->post_redraw();
   x0_=x1; y0_=y1;
-  if(x2>=x1)
-	xsize_ = (unsigned) (x2-x1 +1);
+  if (x2>=x1)
+    xsize_ = (unsigned) (x2-x1 +1);
   else
     xsize_ = (unsigned) (x1-x2 +1);
-  if(y2>y1)
+  if (y2>y1)
    ysize_ = (unsigned) (y2-y1 +1);
   else
    ysize_ = (unsigned) (y1 -y2 +1);
