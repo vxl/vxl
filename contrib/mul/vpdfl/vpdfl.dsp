@@ -117,6 +117,9 @@ SOURCE=.\Templates/vsl_vector_io+vpdfl_builder_base~-.cxx
 SOURCE=.\Templates/vsl_vector_io+vpdfl_pdf_base~-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/mbl_cloneables_factory+vpdfl_builder_base-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vpdfl_axis_gaussian.cxx
 # End Source File
 # Begin Source File
@@ -266,8 +269,6 @@ SOURCE=.\vpdfl_sampler_base.h
 # Begin Source File
 SOURCE=.\vpdfl_add_all_binary_loaders.h
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
