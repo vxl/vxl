@@ -1183,11 +1183,13 @@ vil_tiff_pyramid_resource::get_copy_view(unsigned i0, unsigned n_i,
   vil_tiff_image* resc = new vil_tiff_image(t_, h);
   //scale input coordinates to the scale of the level
   float scale = levels_[level]->scale_;
-  unsigned si0 = static_cast<unsigned>(scale*i0);
-  unsigned sj0 = static_cast<unsigned>(scale*j0);
-  unsigned sni = static_cast<unsigned>(scale*n_i);
+  float fi0 = vcl_floor(scale*i0), fj0 = vcl_floor(scale*j0);
+  float fni = vcl_floor(scale*n_i), fnj = vcl_floor(scale*n_j);
+  unsigned si0 = static_cast<unsigned>(fi0);
+  unsigned sj0 = static_cast<unsigned>(fj0);
+  unsigned sni = static_cast<unsigned>(fni);
   if (sni == 0) sni = 1;//can't have less than one pixel
-  unsigned snj = static_cast<unsigned>(scale*n_j);
+  unsigned snj = static_cast<unsigned>(fnj);
   if (snj == 0) snj = 1;//can't have less than one pixel
   vil_image_view_base_sptr view = resc->get_copy_view(si0, sni, sj0, snj);
   resc->clear_TIFF();

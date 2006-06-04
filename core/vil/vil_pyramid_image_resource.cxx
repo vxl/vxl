@@ -153,7 +153,7 @@ blocked_decimate(vil_blocked_image_resource_sptr const& brsc,
 
        default:
         assert(!"Unknown vil data type in pyramid image construction");
-        break;
+        return false;
       };
     }
   }
@@ -200,7 +200,11 @@ decimate(vil_image_resource_sptr const& resc, char const* filename,
 
   // create the output decimated resource
   { //file scope to close resource
-    unsigned dni = (resc->ni()+1)/2, dnj = (resc->nj()+1)/2;
+    unsigned rni = resc->ni(), rnj = resc->nj();
+    //if source image has even dimensions then just divide by 2
+    unsigned dni = rni/2, dnj = rnj/2;
+    //else if the dimension is odd, increase the output size by 1.
+    dni += rni%2; dnj += rnj%2;
     vil_blocked_image_resource_sptr dec_resc =
       vil_new_blocked_image_resource(filename, dni, dnj, 1,
                                      fmt, brsc->size_block_i(),
