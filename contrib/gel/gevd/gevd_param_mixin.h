@@ -30,7 +30,10 @@
 //======================================================================
 
 #include <vcl_string.h>
+
+#if 0 // not implemented
 class ParamModifier;
+#endif
 
 class gevd_param_mixin
 {
@@ -47,9 +50,11 @@ class gevd_param_mixin
   bool Valid() { return valid_; }
   const char* GetErrorMsg() { return error_msg_.c_str(); }
   void SetErrorMsg(const char* msg);
+#if 0// not implemented in vxl
   virtual void Describe(ParamModifier&) {}
+#endif
 };
-
+#if 0 // not implemented in vxl
 class ParamModifier
 {
  virtual ~ParamModifier() {}
@@ -88,5 +93,5 @@ class ParamModifier
   virtual void AddParam(const vcl_string& name, bool& value,
                         BoolChoiceStyle style = TrueFalse) = 0;
 };
-
+#endif
 #endif // gevd_param_mixin_h_

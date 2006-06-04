@@ -83,8 +83,9 @@ class gevd_detector_params : public gevd_param_mixin
   ~gevd_detector_params() {}
 
   bool SanityCheck();
+#if 0//not implemented in vxl
   void Describe(ParamModifier& mod);
-
+#endif
   void set_noise_weight(float noise_weight);
   void set_noise_multiplier(float noise_multiplier);
   void set_automatic_threshold(bool automatic_threshold);

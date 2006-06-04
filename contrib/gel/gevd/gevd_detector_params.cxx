@@ -233,10 +233,11 @@ bool gevd_detector_params::SanityCheck()
 
 //------------------------------------------------------------
 //: Describe the parameters to a parameter modifier.
+#if 0 //not implemented in vxl
 void gevd_detector_params::Describe(ParamModifier& /*mod*/)
 {
   vcl_cerr << "gevd_detector_params::Describe() not yet implemented\n";
-#if 0
+
   static UIChoice JunctionClosure[] =
   {
     UIChoicePair("Default",-1),
@@ -254,5 +255,5 @@ void gevd_detector_params::Describe(ParamModifier& /*mod*/)
                ParamModifier::OnOff);
   mod.AddParam("Junction Closure", aggressive_junction_closure,
                JunctionClosure);
-#endif
 }
+#endif
