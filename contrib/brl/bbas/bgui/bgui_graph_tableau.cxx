@@ -61,6 +61,7 @@ void bgui_graph_tableau::compute_scale()
   if (vcl_fabs(ymax_-ymin_)>0)
     yscale_ = (graph_height_-top_offset_)/(ymax_-ymin_);
 }
+
 void bgui_graph_tableau::update(vcl_vector<double> const& pos,
                                 vcl_vector<double> const & vals)
 {
@@ -71,15 +72,15 @@ void bgui_graph_tableau::update(vcl_vector<double> const& pos,
   xmax_ = -xmin_;
   ymin_ = xmin_;
   ymax_ = ymax_;
-  for(unsigned i = 0; i<n_; ++i)
-    {
-      pos_[i]=static_cast<float>(pos[i]);
-      xmin_ = vnl_math_min(xmin_, pos_[i]);
-      xmax_ = vnl_math_max(xmax_, pos_[i]);
-      vals_[i]=static_cast<float>(vals[i]);
-      ymin_ = vnl_math_min(ymin_, vals_[i]);
-      ymax_ = vnl_math_max(ymax_, vals_[i]);
-    }
+  for (unsigned i = 0; i<n_; ++i)
+  {
+    pos_[i]=static_cast<float>(pos[i]);
+    xmin_ = vnl_math_min(xmin_, pos_[i]);
+    xmax_ = vnl_math_max(xmax_, pos_[i]);
+    vals_[i]=static_cast<float>(vals[i]);
+    ymin_ = vnl_math_min(ymin_, vals_[i]);
+    ymax_ = vnl_math_max(ymax_, vals_[i]);
+  }
   compute_scale();
   draw_graph();
 }
@@ -91,31 +92,30 @@ void bgui_graph_tableau::update(vcl_vector<float> const& pos,
   n_ = pos.size();
   pos_ = new float[n_];
   vals_ = new float[n_];
-  for(unsigned i = 0; i<n_; ++i)
-    {
-      pos_[i]=pos[i];
-      xmin_ = vnl_math_min(xmin_, pos_[i]);
-      xmax_ = vnl_math_max(xmax_, pos_[i]);
-      vals_[i]=vals[i];
-      ymin_ = vnl_math_min(ymin_, vals_[i]);
-      ymax_ = vnl_math_max(ymax_, vals_[i]);
-    }
+  for (unsigned i = 0; i<n_; ++i)
+  {
+    pos_[i]=pos[i];
+    xmin_ = vnl_math_min(xmin_, pos_[i]);
+    xmax_ = vnl_math_max(xmax_, pos_[i]);
+    vals_[i]=vals[i];
+    ymin_ = vnl_math_min(ymin_, vals_[i]);
+    ymax_ = vnl_math_max(ymax_, vals_[i]);
+  }
   compute_scale();
   draw_graph();
 }
+
 //-----------------------------------------------------------------------------
-//: find_increment will return a "nice" tic mark increment, given the
-// scale factor between user's coordinates and screen coordinates.
+//: returns a "nice" tic mark increment, given the scale factor between user's coordinates and screen coordinates.
 static float find_increment(float scale, float def = 1.0)
 {
-
-  if(scale <= 0)
+  if (scale <= 0)
     return def;
 
   float separation = 50.0 / scale;
 
   // Find increment > separation
-  
+
   float inc = 1;
 
   while (inc < separation)
@@ -134,17 +134,18 @@ static float find_increment(float scale, float def = 1.0)
     inc *= 5;
   else
     inc *= 10;
-  
+
   return inc;
 }
+
 // Create the graph axes with tic marks. Every other tic is red and longer.
 void bgui_graph_tableau::draw_tics()
 {
   yinc_ = find_increment(yscale_);
   xinc_ = find_increment(xscale_);
-  if(yinc_ == 0.0)
+  if (yinc_ == 0.0)
     yinc_ = 1;
-  if(xinc_ == 0.0)
+  if (xinc_ == 0.0)
     xinc_ = 1;
   float xs = xmin_;
   float ys = ymin_;
@@ -153,47 +154,47 @@ void bgui_graph_tableau::draw_tics()
   //The bottom of the display
   float y0 = map_y_to_display(ymin_);
   //The tic marks on the horizontal axis
-  while(xs <= xmax_+xinc_)
+  while (xs <= xmax_+xinc_)
+  {
+    float xd = map_x_to_display(xs);
+    if (ix%2!=0)
+      xtics_.push_back(easy_->add_line(xd, y0, xd, y0-tl));
+    else
     {
-      float xd = map_x_to_display(xs);
-      if(ix%2!=0)
-        xtics_.push_back(easy_->add_line(xd, y0, xd, y0-tl));
-      else
-        {
-          easy_->set_foreground(1.0f, 0.0, 0.0);
-          xtics_.push_back(easy_->add_line(xd, y0, xd, y0-1.5f*tl));
-          easy_->set_foreground(0.0f, 1.0f, 0.0);
-        }
-      xs += xinc_;
-      ++ix;
+      easy_->set_foreground(1.0f, 0.0, 0.0);
+      xtics_.push_back(easy_->add_line(xd, y0, xd, y0-1.5f*tl));
+      easy_->set_foreground(0.0f, 1.0f, 0.0);
     }
+    xs += xinc_;
+    ++ix;
+  }
   xtics_.push_back(easy_->add_line(map_x_to_display(xmin_), y0,
                                    map_x_to_display(xmax_+xinc_), y0));
   //The tic marks on the vertical axis
   //the vertical axis is at one tic length from left edge of graph
-  while(ys <= ymax_+yinc_)
+  while (ys <= ymax_+yinc_)
+  {
+    float yd = map_y_to_display(ys);
+    if (iy%2!=0)
+      ytics_.push_back(easy_->add_line(tl,yd,2.0f*tl,yd));
+    else
     {
-      float yd = map_y_to_display(ys);
-      if(iy%2!=0)
-        ytics_.push_back(easy_->add_line(tl,yd,2.0f*tl,yd));
-      else
-        {
-          easy_->set_foreground(1.0f, 0.0, 0.0);
-          ytics_.push_back(easy_->add_line(tl,yd,2.5f*tl,yd));
-          easy_->set_foreground(0.0f, 1.0f, 0.0);
-        }
-      ys += yinc_;
-      ++iy;
+      easy_->set_foreground(1.0f, 0.0, 0.0);
+      ytics_.push_back(easy_->add_line(tl,yd,2.5f*tl,yd));
+      easy_->set_foreground(0.0f, 1.0f, 0.0);
     }
-  ytics_.push_back(easy_->add_line(tl,map_y_to_display(ymin_), 
+    ys += yinc_;
+    ++iy;
+  }
+  ytics_.push_back(easy_->add_line(tl,map_y_to_display(ymin_),
                                    tl,map_y_to_display(ymax_+yinc_)));
 
   //Make the tics and axes unselectable
-  for(vcl_vector<vgui_soview2D_lineseg*>::iterator cit = xtics_.begin();
-      cit!=xtics_.end(); ++cit)
+  for (vcl_vector<vgui_soview2D_lineseg*>::iterator cit = xtics_.begin();
+       cit!=xtics_.end(); ++cit)
     (*cit)->set_selectable(false);
-  for(vcl_vector<vgui_soview2D_lineseg*>::iterator cit = ytics_.begin();
-      cit!=ytics_.end(); ++cit)
+  for (vcl_vector<vgui_soview2D_lineseg*>::iterator cit = ytics_.begin();
+       cit!=ytics_.end(); ++cit)
     (*cit)->set_selectable(false);
 }
 
@@ -203,62 +204,63 @@ void bgui_graph_tableau::draw_graph()
   if (n_ == 0)
     return;
   vcl_vector<float> x(n_), y(n_);
-  if(plot_)
-    {
-      easy_->remove(plot_);
-      delete plot_;
-      plot_ = 0;
-    }
-  for(unsigned i = 0; i<n_; ++i)
-      {
-        x[i]=map_x_to_display(pos_[i]);
-        y[i]=map_y_to_display(vals_[i]);
-      }
-    plot_ = easy_->add_linestrip(n_, &x[0], &y[0]);
-    plot_->set_selectable(false);
-    draw_tics();
-    easy_->post_redraw();
+  if (plot_)
+  {
+    easy_->remove(plot_);
+    delete plot_;
+    plot_ = 0;
+  }
+  for (unsigned i = 0; i<n_; ++i)
+  {
+    x[i]=map_x_to_display(pos_[i]);
+    y[i]=map_y_to_display(vals_[i]);
+  }
+  plot_ = easy_->add_linestrip(n_, &x[0], &y[0]);
+  plot_->set_selectable(false);
+  draw_tics();
+  easy_->post_redraw();
 }
 
 //remove display items and delete the soviews
 void bgui_graph_tableau::rem()
 {
-  if(plot_)
+  if (plot_)
+  {
+    easy_->remove(plot_);
+    delete plot_;
+    plot_ = 0;
+  }
+  for (vcl_vector<vgui_soview2D_lineseg*>::iterator cit = xtics_.begin();
+       cit!=xtics_.end(); ++cit)
+    if (*cit)
     {
-      easy_->remove(plot_);
-      delete plot_;
-      plot_ = 0;
+      easy_->remove(*cit);
+      delete *cit;
     }
-  for(vcl_vector<vgui_soview2D_lineseg*>::iterator cit = xtics_.begin();
-      cit!=xtics_.end(); ++cit)
-    if(*cit)
-      {
-        easy_->remove(*cit);
-        delete *cit;
-      }
-  for(vcl_vector<vgui_soview2D_lineseg*>::iterator cit = ytics_.begin();
-      cit!=ytics_.end(); ++cit)
-    if(*cit)
-      {
-        easy_->remove(*cit);
-        delete *cit;
-      }
+  for (vcl_vector<vgui_soview2D_lineseg*>::iterator cit = ytics_.begin();
+       cit!=ytics_.end(); ++cit)
+    if (*cit)
+    {
+      easy_->remove(*cit);
+      delete *cit;
+    }
 }
 
 //Delete graph point data
 void bgui_graph_tableau::del()
 {
-  if(pos_)
-    {
-      delete [] pos_;
-      pos_ =0;
-    }
-  if(vals_)
-    {
-      delete [] vals_;
-      vals_ = 0;
-    }
+  if (pos_)
+  {
+    delete [] pos_;
+    pos_ =0;
+  }
+  if (vals_)
+  {
+    delete [] vals_;
+    vals_ = 0;
+  }
 }
+
 //Clear the graph
 void bgui_graph_tableau::clear()
 {
@@ -266,16 +268,17 @@ void bgui_graph_tableau::clear()
   this->del();
   this->post_redraw();
 }
+
 //Provide a popup dialog that contains the graph.  The string info
-//contains user defined documention for the graph. 
+//contains user defined documention for the graph.
 vgui_dialog* bgui_graph_tableau::popup_graph(vcl_string const& info,
-                                            const unsigned sizex,
-                                            const unsigned sizey)
+                                             const unsigned sizex,
+                                             const unsigned sizey)
 {
   unsigned w = graph_width_+25, h = graph_height_+25;
-  if(sizex>0)
+  if (sizex>0)
     w = sizex;
-  if(sizey>0)
+  if (sizey>0)
     h = sizey;
   vgui_viewer2D_tableau_sptr v = vgui_viewer2D_tableau_new(this);
   vgui_shell_tableau_sptr s = vgui_shell_tableau_new(v);
@@ -297,6 +300,5 @@ bool bgui_graph_tableau::handle(const vgui_event& event)
 {
   // Pass events on down to the child tableaux:
   return easy_->handle(event);
-
 }
 
