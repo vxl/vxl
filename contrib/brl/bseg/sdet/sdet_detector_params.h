@@ -115,8 +115,9 @@ class sdet_detector_params : public gevd_param_mixin
   ~sdet_detector_params() {}
   friend vcl_ostream& operator<<(vcl_ostream&, const sdet_detector_params& dp);
   bool SanityCheck();
+#if 0
   void Describe(ParamModifier& mod);
-
+#endif
   void set_noise_weight(float noise_weight);
   void set_noise_multiplier(float noise_multiplier);
   void set_automatic_threshold(bool automatic_threshold);

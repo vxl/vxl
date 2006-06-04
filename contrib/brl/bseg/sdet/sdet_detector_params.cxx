@@ -261,7 +261,7 @@ vcl_ostream& operator << (vcl_ostream& os, const sdet_detector_params& dp)
      << " Min Corner Length " << dp.min_corner_length << vcl_endl
      << " Close borders " << dp.borderp << vcl_endl << vcl_endl;
 }
-
+#if 0
 //------------------------------------------------------------
 //: Describe the parameters to a parameter modifier.
 void sdet_detector_params::Describe(ParamModifier& /* mod */)
@@ -284,3 +284,4 @@ void sdet_detector_params::Describe(ParamModifier& /* mod */)
 //   mod.AddParam("Junction Closure", aggressive_junction_closure,
 //             JunctionClosure);
 }
+#endif
