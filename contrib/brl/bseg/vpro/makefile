@@ -28,6 +28,9 @@ SOURCES += vpro_spatial_filter_params.cxx
 SOURCES += vpro_spatial_filter_process.cxx
 SOURCES += vpro_ihs_process.cxx
 SOURCES += vpro_half_res_process.cxx
+SOURCES += vpro_roi_process.cxx
+SOURCES += vpro_vil_video_process.cxx
+MANPAGE_SOURCES += vpro_vil_video_process_sptr.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
