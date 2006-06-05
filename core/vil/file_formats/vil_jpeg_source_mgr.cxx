@@ -164,15 +164,13 @@ vil_jpeg_stream_src_set (j_decompress_ptr cinfo, vil_stream *vs)
   // one image, we'd likely lose the start of the next one.)
   // This makes it unsafe to use this manager and a different source
   // manager serially with the same JPEG object.  Caveat programmer.
-  vil_jpeg_srcptr src = ( vil_jpeg_srcptr )( cinfo->src );
-
-  assert(! src); // this function must be called only once on each cinfo.
+  assert(! ( vil_jpeg_srcptr )( cinfo->src )); // check unused
 
 #ifdef DEBUG
   vcl_cerr << "vil_jpeg_stream_src_set() : creating new data source\n";
 #endif
 
-  src = (vil_jpeg_srcptr) // allocate
+  vil_jpeg_srcptr src = (vil_jpeg_srcptr) // allocate
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo,
                                 JPOOL_PERMANENT,
                                 SIZEOF(vil_jpeg_stream_source_mgr));
@@ -201,11 +199,9 @@ STATIC
 void
 vil_jpeg_stream_src_rewind(j_decompress_ptr cinfo, vil_stream *vs)
 {
-  { // verify
-    vil_jpeg_srcptr src = ( vil_jpeg_srcptr )( cinfo->src );
-    assert(src != 0);
-    assert(src->stream == vs);
-  }
+  // verify
+  assert((vil_jpeg_srcptr)(cinfo->src) != 0);
+  assert(((vil_jpeg_srcptr)(cinfo->src))->stream == vs);
 
   cinfo->src->bytes_in_buffer = 0; // forces fill_input_buffer on first read
   cinfo->src->next_input_byte = 0; // until buffer loaded
