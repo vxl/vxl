@@ -195,9 +195,9 @@ vil_tiff_file_format::make_input_pyramid_image(char const* file)
   if (!in)
     return 0;
   bool open_for_reading = true;
-  vil_pyramid_image_resource_sptr pyr = 
+  vil_pyramid_image_resource_sptr pyr =
     new vil_tiff_pyramid_resource(in, open_for_reading);
-  if(pyr->nlevels()<=1)
+  if (pyr->nlevels()<=1)
     return 0;
   return pyr;
 }
@@ -407,8 +407,8 @@ static void endian_swap( vxl_byte* a, unsigned n_bytes,
                          unsigned bytes_per_sample)
 {
   switch ( bytes_per_sample ) {
-  case 2: tif_swap16( a, n_bytes / 2 ); break; //16 bit
-  case 4: tif_swap32( a, n_bytes / 4 ); break; //32 bit
+   case 2: tif_swap16( a, n_bytes / 2 ); break; //16 bit
+   case 4: tif_swap32( a, n_bytes / 4 ); break; //32 bit
   }
 }
 
@@ -436,14 +436,10 @@ bool integral_type(unsigned bits_per_sample)
 {
   switch (bits_per_sample)
   {
-   case 8:
-    return true;
-   case 16:
-    return true;
-   case 32:
-    return true;
-   default:
-    break;
+   case  8: return true;
+   case 16: return true;
+   case 32: return true;
+   default: break;
   }
   return false;
 }
@@ -919,8 +915,7 @@ void vil_tiff_image::fill_block_from_view(unsigned bi, unsigned bj,
     vxl_byte* outbuf = new vxl_byte[outsize];
     this->bitpack_block(bytes_per_block, block_buf, outbuf);
     delete [] block_buf;
-    bytes_per_block=outsize;
-    block_buf = outbuf;
+    block_buf = outbuf; // bytes_per_block=outsize;
   }
 }
 
