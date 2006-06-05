@@ -179,7 +179,6 @@ vil_image_resource_sptr vil_tiff_file_format::make_input_image(vil_stream* is)
   if (!h->format_supported)
   {
     TIFFClose(tss->tif);
-    delete tss;
     delete h;
     return 0;
   }
