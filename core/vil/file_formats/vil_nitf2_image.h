@@ -91,13 +91,11 @@ class vil_nitf2_image : public vil_blocked_image_resource
   //: Block size in rows
   virtual unsigned size_block_j() const;
 
-
   //: Number of blocks in image width
   virtual unsigned n_block_i() const;
-  
+
   //: Number of blocks in image height
   virtual unsigned n_block_j() const;
-
 
 #if 0
   //: returns "nitf vM.N"
@@ -165,11 +163,11 @@ class vil_nitf2_image : public vil_blocked_image_resource
   bool parse_headers();
   vil_nitf2_classification::file_version file_version() const;
 
-  /**
-    * All instances of vil_nitf2_image will use s_decode_jpeg_2000() to decode JPEG 2000
-    * streams if you set the function.  If unset, then the library will not be able
-    * to read JPEG 2000 compressed NITF files.
-    */
+  //:
+  // All instances of vil_nitf2_image will use s_decode_jpeg_2000() to decode
+  // JPEG 2000 streams if you set the function.  If unset, then the library
+  // will not be able to read JPEG 2000 compressed NITF files.
+  //
   static vil_image_view_base_sptr ( *s_decode_jpeg_2000 )( vil_stream* vs,
                                                            unsigned i0, unsigned ni,
                                                            unsigned j0, unsigned nj,
@@ -314,12 +312,9 @@ T get_bits( const T* in_val, unsigned int i0, unsigned int ni )
 template< class T >
 T* byte_align_data( T* in_data, unsigned int num_samples, unsigned int in_bits_per_sample, T* out_data )
 {
-  unsigned int out_bytes_per_sample = sizeof(T);
-  unsigned int out_bits_per_sample = out_bytes_per_sample * 8;
-  assert( in_bits_per_sample < out_bits_per_sample );
+  assert( in_bits_per_sample < sizeof(T)*8 );
 
-  //grab each value from the bitstream (in_data) that we need... one
-  //at a time
+  //grab each value from the bitstream (in_data) that we need... one at a time
   unsigned int bit_offset = 0;
   for ( unsigned int o = 0 ; o < num_samples ; o++ ){
     out_data[o] = get_bits<T>( in_data, bit_offset, in_bits_per_sample );
