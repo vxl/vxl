@@ -57,6 +57,8 @@ vpgl_vsol_lens_warp(const vsol_point_2d_sptr& pt,
                     bool invert,
                     double midpt_thresh)
 {
+  if ( midpt_thresh <= 0 )
+    return 0;
   if (invert)
     return new vsol_point_2d( lens.undistort( vgl_homg_point_2d<double>(pt->get_p()) ) );
   else
@@ -304,6 +306,9 @@ vpgl_vsol_lens_warp(vsol_polyline_2d_sptr& pln,
                     const vpgl_lens_distortion<double>& lens,
                     bool invert)
 {
+  if (invert)
+    vcl_cerr << "Warning: polyline invert not yet implemented in vpgl_vsol_lens_warp\n";
+
   for (unsigned int i=0; i<pln->size(); ++i){
     vsol_point_2d_sptr p=pln->vertex(i);
     if (!vpgl_vsol_lens_warp(p, lens))
