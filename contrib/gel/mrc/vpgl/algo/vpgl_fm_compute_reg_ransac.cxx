@@ -36,11 +36,6 @@ vpgl_fm_compute_reg_ransac::compute(
   // The following block is hacked from similar code in rrel_homography2d_est.
   rrel_fm_reg_problem* estimator = new rrel_fm_reg_problem( pr, pl );
   estimator->verbose=true;
-#if 0
-//this variable is not used in the code.  PLEASE FIX!  -MM
-  int max_pops = 1;
-  int trace_level = 0;
-#endif
   rrel_muset_obj* ransac = new rrel_muset_obj((int)vcl_floor(pr.size()*.75));
   estimator->set_prior_scale( 1.0 );
   rrel_ran_sam_search* ransam = new rrel_ran_sam_search;
@@ -174,9 +169,9 @@ rrel_fm_reg_problem::params_to_fm(
 //--------------------------------------------
 bool
 rrel_fm_reg_problem::weighted_least_squares_fit(
-  vnl_vector<double>& params,
-  vnl_matrix<double>& norm_covar,
-  const vcl_vector<double>* weights ) const
+  vnl_vector<double>& /*params*/,
+  vnl_matrix<double>& /*norm_covar*/,
+  const vcl_vector<double>* /*weights*/ ) const
 {
   vcl_cerr << "rrel_fm_reg_problem::weighted_least_squares_fit was called, but is not implemented.\n";
   return false;

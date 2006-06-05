@@ -176,9 +176,9 @@ rrel_fm_problem::params_to_fm(
 //--------------------------------------------
 bool
 rrel_fm_problem::weighted_least_squares_fit(
-  vnl_vector<double>& params,
-  vnl_matrix<double>& norm_covar,
-  const vcl_vector<double>* weights ) const
+  vnl_vector<double>& /*params*/,
+  vnl_matrix<double>& /*norm_covar*/,
+  const vcl_vector<double>* /*weights*/ ) const
 {
   vcl_cerr << "rrel_fm_problem::weighted_least_squares_fit was called, but is not implemented.\n";
   return false;
