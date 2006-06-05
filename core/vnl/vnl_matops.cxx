@@ -25,7 +25,7 @@ vnl_matrix<double> vnl_matops::cat(vnl_matrix<double> const &A, vnl_matrix<doubl
 
 vnl_matrix<double> vnl_matops::cat(vnl_matrix<double> const &A, vnl_vector<double> const &B)
 {
-  assert(A.rows() == B.rows());
+  assert(A.rows() == B.size());
 
   vnl_matrix<double> M(A.rows(),A.columns()+1);
   M.update(A,0,0);
@@ -36,9 +36,9 @@ vnl_matrix<double> vnl_matops::cat(vnl_matrix<double> const &A, vnl_vector<doubl
 
 vnl_matrix<double> vnl_matops::cat(vnl_vector<double> const &A, vnl_matrix<double> const &B)
 {
-  assert(A.rows() == B.rows());
+  assert(A.size() == B.rows());
 
-  vnl_matrix<double> M(A.rows(),B.columns()+1);
+  vnl_matrix<double> M(B.rows(),B.columns()+1);
   M.set_column(0,A);
   M.update(B,0,1);
 
