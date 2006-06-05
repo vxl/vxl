@@ -22,8 +22,8 @@ void bgui_graph_tableau::init()
   pos_ = 0;
   vals_ = 0;
   tic_length_ = 10.0f;
-  left_offset_ = 10.0f + tic_length_;
-  top_offset_ = 10.0f + tic_length_;
+  left_offset_ = 20;
+  top_offset_ = 20;
 }
 
 //========================================================================
