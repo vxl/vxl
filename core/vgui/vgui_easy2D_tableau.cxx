@@ -277,14 +277,14 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
   if (wd < 0 || ht < 0)
   {
     assert(get_image_tableau());
-    if(get_image_tableau()->get_image_resource()) {
-      
+    if (get_image_tableau()->get_image_resource())
+    {
       vil_image_resource_sptr img_sptr = get_image_tableau()->get_image_resource();
       if (wd < 0) wd = img_sptr->ni();
       if (ht < 0) ht = img_sptr->nj();
-      
-    } else {
-
+    }
+    else
+    {
       vil1_image img = get_image_tableau()->get_image();
       if (wd < 0) wd = img.width();
       if (ht < 0) ht = img.height();
@@ -302,20 +302,19 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
   // Write image, if present
   if (get_image_tableau() && wd*ht > 0)
   {
-    if(get_image_tableau()->get_image_resource()) {
-
+    if (get_image_tableau()->get_image_resource())
+    {
       vil_image_resource_sptr img_sptr = get_image_tableau()->get_image_resource();
       vil_image_view<vxl_byte> img= img_sptr->get_view();
-      if(!img) {
-        
+      if (!img)
+      {
         // invalid pixel type
         vgui_macro_warning<< "failed to print image of unsupported pixel format: "
                           << img << vcl_endl;
       }
-      
-      if(img.nplanes()==1) { // greyscale image
-        
-        if(img.istep() != 1)
+      if (img.nplanes()==1) // greyscale image
+      {
+        if (img.istep() != 1)
           vgui_macro_warning<< "The istep of this image view is not 1: "
                             << img << vcl_endl;
         else {
@@ -325,16 +324,15 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
           psfile.print_greyscale_image(img.top_left_ptr(), img.ni(), img.nj());
         }
       }
-      else if (img.nplanes() == 3)  { // color image
-        
-      }
+      else if (img.nplanes() == 3) // color image
+      {}
       else
         // urgh
         vgui_macro_warning<< "Don't know how to handle image with "
                           << img.nplanes() << " planes" << vcl_endl;
-     
-    } else { 
-
+    }
+    else
+    {
       vil1_image img = get_image_tableau()->get_image();
       unsigned char* data = new unsigned char[img.get_size_bytes()];
       img.get_section(data, 0, 0, wd, ht);
@@ -433,11 +431,11 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
     else if (sv->type_name() == "vgui_soview2D_ellipse")
     {
       vgui_soview2D_ellipse* ellip = (vgui_soview2D_ellipse*)sv;
-      psfile.ellipse(ellip->x, ellip->y, ellip->w, ellip->h, ellip->phi);
+      psfile.ellipse(ellip->x, ellip->y, ellip->w, ellip->h, int(57.2957795 * ellip->phi + 0.5)); // convert radians to degrees
       if (debug)
         vcl_cerr << "  vgui_easy2D_tableau: Adding ellipse, center " << ellip->x << ", "
                  << ellip->y << " width " << ellip->w << " height " << ellip->h
-                 << " angle " << ellip->phi << vcl_endl;
+                 << " angle " << ellip->phi << " (" << int(57.2957795 * ellip->phi + 0.5) << " deg)\n";
     }
     else
       vgui_macro_warning << "unknown soview typename = " << sv->type_name() << vcl_endl;
