@@ -148,7 +148,6 @@ void bgui_picker_tableau::pick_line(float* x1, float* y1, float* x2, float* y2)
 {
   obj_type = line_enum;
   picking_completed = false;
-
   vgui::flush();  // handle any pending events before we grab the event loop.
 
   // Grab event loop until picking is completed:
@@ -214,7 +213,7 @@ void bgui_picker_tableau::pick_polygon(vsol_polygon_2d_sptr& poly)
 //  the gl matrices would have been reset.
 bool bgui_picker_tableau::handle(const vgui_event& event)
 {
-
+  //USE BUTTON_UP TO INITIALIZE, COMPETITION FOR BUTTON_DOWN on other tableaux
   // Pass events on down to the child tableaux:
   child_tab->handle(event);
 
@@ -232,6 +231,7 @@ bool bgui_picker_tableau::handle(const vgui_event& event)
             point_ret= false;
           picking_completed = true;
         }
+      return true;
     }
   // ---- Object type is line ----
   if (obj_type == line_enum)
@@ -241,10 +241,13 @@ bool bgui_picker_tableau::handle(const vgui_event& event)
       else if (event.type == vgui_MOTION)
         {
           vgui_projection_inspector p_insp;
-          p_insp.window_to_image_coordinates(event.wx, event.wy, pointx2, pointy2);
+          if(!FIRSTPOINT)
+            p_insp.window_to_image_coordinates(event.wx, event.wy, pointx2, pointy2);
+          else
+            p_insp.window_to_image_coordinates(event.wx, event.wy, pointx1, pointy1);
           post_overlay_redraw();
         }
-      else if (event.type == vgui_BUTTON_DOWN)
+      else if (event.type == vgui_BUTTON_UP)
         {
           if (FIRSTPOINT)
             {
@@ -259,6 +262,7 @@ bool bgui_picker_tableau::handle(const vgui_event& event)
               picking_completed = true;
             }
         }
+      return true;
     }
 
   // ---- Object type is box ----
@@ -287,6 +291,7 @@ bool bgui_picker_tableau::handle(const vgui_event& event)
               picking_completed = true;
             }
         }
+      return true;
     }
 
   // ---- Object type is anchor line ----
@@ -300,8 +305,9 @@ bool bgui_picker_tableau::handle(const vgui_event& event)
           p_insp.window_to_image_coordinates(event.wx, event.wy, pointx1, pointy1);
           post_overlay_redraw();
         }
-      else if (event.type == vgui_BUTTON_DOWN)
+      else if (event.type == vgui_BUTTON_UP)
         picking_completed = true;
+      return true;
     }
 
   // ---- Object type is polygon ----
@@ -317,7 +323,7 @@ bool bgui_picker_tableau::handle(const vgui_event& event)
           last_x = ix; last_y = iy;
           post_overlay_redraw();
         }
-      if( !active && gesture0(event) ) {
+      if( !active && event.type == vgui_BUTTON_UP ) {
         active = true;
         point_list.push_back( vsol_point_2d_sptr(new vsol_point_2d( ix , iy)));
         return true;

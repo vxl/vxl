@@ -9,6 +9,7 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_menu.h>
+#include <vgui/vgui_text_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <bgui/bgui_graph_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
@@ -53,7 +54,14 @@ int main(int argc, char ** argv)
   vgui::init(argc,argv);
   graph = bgui_graph_tableau_new(512,512);
   // Create and run the window
-  vgui_tableau_sptr v = vgui_viewer2D_tableau_new(graph);
+
+
+#ifdef HAS_GLUT
+  vcl_cout << "HAS GLUT\n";
+#endif
+  vgui_text_tableau_sptr tt = vgui_text_tableau_new();
+  tt->add(100,100,"hello world");
+  vgui_tableau_sptr v = vgui_viewer2D_tableau_new(tt);
   vgui_tableau_sptr s = vgui_shell_tableau_new(v);
   return vgui::run(s, 512, 512, create_menus());
 }
