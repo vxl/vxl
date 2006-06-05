@@ -445,9 +445,7 @@ T tiff_get_bits( const T* in_val, unsigned i0, unsigned ni )
 template< class T >
 T* tiff_byte_align_data( T* in_data, unsigned num_samples, unsigned in_bits_per_sample, T* out_data )
 {
-  unsigned out_bytes_per_sample = sizeof(T);
-  unsigned out_bits_per_sample = out_bytes_per_sample * 8;
-  assert( in_bits_per_sample < out_bits_per_sample );
+  assert( in_bits_per_sample < sizeof(T)*8 );
 
   //grab each value from the bitstream (in_data) that we need... one
   //at a time
