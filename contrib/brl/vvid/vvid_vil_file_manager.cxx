@@ -479,7 +479,7 @@ void vvid_vil_file_manager::create_box()
   y[0]=y[1] = y1; y[2]=y[3]=y2;
   easy0_->add_polygon(4, x, y);
   v2D0_->post_redraw();
-  x0_=x1; y0_=y1;
+  x0_=int(x1); y0_=int(y1);
   if (x2>=x1)
     xsize_ = (unsigned) (x2-x1 +1);
   else
