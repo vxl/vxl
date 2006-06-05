@@ -8,11 +8,10 @@ unsigned long bcell::time_ = 0;
 
 vil_block_cache::~vil_block_cache()
 {
-  unsigned nq = queue_.size();
-  unsigned nb = blocks_.size();
-  assert(nq==nb);
+  assert(queue_.size()==blocks_.size());
   blocks_.clear();//empty the index
   //empty the queue
+  unsigned nq = queue_.size();
   for (unsigned i = 0; i<nq; ++i)
   {
     bcell* fb = queue_.top();
