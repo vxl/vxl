@@ -215,6 +215,27 @@ add_image(vil_image_resource_sptr const& image,
   this->add_image_at(image, col, row, rmps);
 }
 
+//-----------------------------------------------------------------------------
+//: remove the selected image
+//-----------------------------------------------------------------------------
+void segv_vil_segmentation_manager::remove_image()
+{
+  unsigned row=0, col=0;
+  grid_->get_last_selected_position(&col, &row);
+  grid_->remove_at(col, row);
+}
+
+void segv_vil_segmentation_manager::convert_to_grey()
+{
+  vil_image_resource_sptr img = this->selected_image();
+  if(!img)
+    return;
+  vil_image_view<unsigned char> grey =
+    brip_vil_float_ops::convert_to_byte(img);
+  vil_image_resource_sptr gimg = vil_new_image_resource_of_view(grey);
+  this->add_image(gimg);
+}
+
 //: Get the image tableau for the currently selected grid cell
 bgui_image_tableau_sptr segv_vil_segmentation_manager::selected_image_tab()
 {
@@ -233,12 +254,11 @@ bgui_image_tableau_sptr segv_vil_segmentation_manager::selected_image_tab()
            << ", " << row << ")\n";
   return bgui_image_tableau_sptr();
 }
-
-//: Get the vtol2D tableau for the currently selected grid cell
-bgui_vtol2D_tableau_sptr segv_vil_segmentation_manager::selected_vtol2D_tab()
+//: Get the vtol2D tableau at the specified grid cell
+bgui_vtol2D_tableau_sptr 
+segv_vil_segmentation_manager::vtol2D_tab_at(const unsigned col,
+                                             const unsigned row)
 {
-  unsigned row=0, col=0;
-  grid_->get_last_selected_position(&col, &row);
   vgui_tableau_sptr top_tab = grid_->get_tableau_at(col, row);
   if (top_tab)
   {
@@ -251,6 +271,14 @@ bgui_vtol2D_tableau_sptr segv_vil_segmentation_manager::selected_vtol2D_tab()
   vcl_cout << "Unable to get bgui_vtol2D_tableau at (" << col
            << ", " << row << ")\n";
   return bgui_vtol2D_tableau_sptr();
+}
+
+//: Get the vtol2D tableau for the currently selected grid cell
+bgui_vtol2D_tableau_sptr segv_vil_segmentation_manager::selected_vtol2D_tab()
+{
+  unsigned row=0, col=0;
+  grid_->get_last_selected_position(&col, &row);
+  return this->vtol2D_tab_at(col, row);
 }
 
 //: Get the picker tableau for the currently selected grid cell
@@ -301,7 +329,7 @@ vil_image_resource_sptr segv_vil_segmentation_manager::image_at(const unsigned c
 }
 
 //-----------------------------------------------------------------------------
-//: Clear the display
+//: Clear spatial objects from the selected display
 //-----------------------------------------------------------------------------
 void segv_vil_segmentation_manager::clear_display()
 {
@@ -311,6 +339,20 @@ void segv_vil_segmentation_manager::clear_display()
   t2D->clear_all();
 }
 
+//-----------------------------------------------------------------------------
+//: Clear spatial objects from all spatial panes
+//-----------------------------------------------------------------------------
+void segv_vil_segmentation_manager::clear_all()
+{
+  unsigned ncols = grid_->cols(), nrows = grid_->rows();
+  for(unsigned r=0; r<nrows; ++r)
+    for(unsigned c=0; c<ncols; ++c)
+      {
+        bgui_vtol2D_tableau_sptr t = this->vtol2D_tab_at(c, r);
+        if(t)
+          t->clear_all();
+      }
+}
 //-----------------------------------------------------------------------------
 //: Draw edges onto the tableau
 //-----------------------------------------------------------------------------
@@ -488,6 +530,7 @@ void segv_vil_segmentation_manager::draw_regions(vcl_vector<vtol_intensity_face_
 
 void segv_vil_segmentation_manager::quit()
 {
+  this->clear_all();
   vgui::quit();
 }
 
@@ -1127,7 +1170,7 @@ void segv_vil_segmentation_manager::intensity_profile()
   }
 }
 
-void segv_vil_segmentation_manager::test_inline_viewer()
+void segv_vil_segmentation_manager::inline_viewer()
 {
   bgui_image_tableau_sptr itab = this->selected_image_tab();
   bgui_range_adjuster_tableau_sptr h= bgui_range_adjuster_tableau_new(itab);
@@ -1142,38 +1185,6 @@ void segv_vil_segmentation_manager::test_inline_viewer()
     return;
 }
 
-void segv_vil_segmentation_manager::test_ellipse_draw()
-{
-  vsol_conic_2d_sptr c0 = new vsol_conic_2d(0.01, 0.0,
-                                            0.01, 0.0,
-                                            0.0, -1.0);
-  vsol_point_2d_sptr pc0 = new vsol_point_2d(10.0, 0.0);
-  c0->set_p0(pc0);
-
-  vsol_point_2d_sptr pc1 = new vsol_point_2d(0.0, -10.0);
-  c0->set_p1(pc1);
-  //rotated 2:1 conic at 45
-  vsol_conic_2d_sptr c = new vsol_conic_2d(0.492577, -0.591093,
-                                           0.492577, 0.197032,
-                                           -1.37921, 0.492813);
-  vsol_point_2d_sptr inp0 = new vsol_point_2d(2.414, 3.414);
-  c->set_p0(c->closest_point_on_curve(inp0));
-  vsol_point_2d_sptr inp1 = new vsol_point_2d(1.0, 0.73528);
-  c->set_p1(c->closest_point_on_curve(inp1));
-
-  bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
-  if (!t2D)
-    return;
-  t2D->add_vsol_conic_2d(c0);
-  t2D->add_vsol_point_2d(c0->p0());
-  t2D->add_vsol_point_2d(c0->p1());
-
-  t2D->add_vsol_conic_2d(c);
-  t2D->add_vsol_point_2d(c->p0());
-  t2D->add_vsol_point_2d(c->p1());
-
-  t2D->post_redraw();
-}
 
 //=== Image Arithmetic (Uses the Image Stack)
 //Add the image in pane 0 to the image in pane 1. Result in pane 2.
@@ -1368,18 +1379,6 @@ void segv_vil_segmentation_manager::expand_image()
   this->add_image(out_image);
 }
 
-void segv_vil_segmentation_manager::test_float()
-{
-  vil_image_resource_sptr img = selected_image();
-  if (!img)
-  {
-    vcl_cout << "In segv_vil_segmentation_manager::test_float - no image\n";
-    return;
-  }
-  vil_image_view<float> flt =
-    brip_vil_float_ops::convert_to_float(img);
-  this->add_image(vil_new_image_resource_of_view(flt));
-}
 
 void segv_vil_segmentation_manager::flip_image_lr()
 {

@@ -43,7 +43,29 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void quit();
   void load_image();
   void save_image();
+
+  //: visualization
   void set_range_params();
+  void inline_viewer();
+  void intensity_profile();
+  void display_images_as_color();
+
+  //: image transformation
+  void flip_image_lr();
+  void rotate_image();
+  void reduce_image();
+  void expand_image();
+
+  //: image arithmetic
+  void add_images();
+  void subtract_images();
+
+  //: image processing
+  void entropy();
+  void minfo();
+  void max_trace_scale();
+
+  //: segmentation
   void threshold_image();
   void harris_corners();
   void nonmaximal_suppression();
@@ -52,26 +74,13 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void fit_conics();
   void fit_overlay_conics();
   void regions();
-  void rotate_image();
-  void reduce_image();
-  void expand_image();
-  //: visualization
-  void display_images_as_color();
-  void flip_image_lr();
-  //: image arithmetic
-  void add_images();
-  void subtract_images();
-  void entropy();
-  void intensity_profile();
-  void minfo();
-  void max_trace_scale();
-  //: tests and development only
-    void test_inline_viewer();
-    void test_ellipse_draw();
-    void test_float();
- //:internals
+
+ //:utilities
   void clear_display();
+  void clear_all();
   void init();
+  void remove_image();
+  void convert_to_grey();
 
   //: access to the window
   vgui_window* get_window(){return win_;}
@@ -106,6 +115,7 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   bool
   set_image_at(const unsigned col, const unsigned row, vil_image_resource_sptr const& image);
   bgui_image_tableau_sptr selected_image_tab();
+  bgui_vtol2D_tableau_sptr vtol2D_tab_at(const unsigned col,const unsigned row);
   bgui_vtol2D_tableau_sptr selected_vtol2D_tab();
   bgui_picker_tableau_sptr selected_picker_tab();
   vtol_face_2d_sptr face_at(const int col, const int row);

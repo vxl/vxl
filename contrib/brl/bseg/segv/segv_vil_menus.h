@@ -25,6 +25,8 @@ class segv_vil_menus
   SEGV_VIL_DLL_DATA static void quit_callback();
   SEGV_VIL_DLL_DATA static void load_image_callback();
   SEGV_VIL_DLL_DATA static void save_image_callback();
+  SEGV_VIL_DLL_DATA static void remove_image_callback();
+  SEGV_VIL_DLL_DATA static void convert_to_grey_callback();
   SEGV_VIL_DLL_DATA static void set_range_params_callback();
   SEGV_VIL_DLL_DATA static void clear_display_callback();
   SEGV_VIL_DLL_DATA static void display_images_as_color_callback();
@@ -45,11 +47,8 @@ class segv_vil_menus
   SEGV_VIL_DLL_DATA static void entropy_callback();
   SEGV_VIL_DLL_DATA static void minfo_callback();
   SEGV_VIL_DLL_DATA static void max_trace_scale_callback();
-  //test/development do not use
-  SEGV_VIL_DLL_DATA static void test_inline_viewer_callback();
-  SEGV_VIL_DLL_DATA static void test_ellipse_draw_callback();
+  SEGV_VIL_DLL_DATA static void inline_viewer_callback();
   SEGV_VIL_DLL_DATA static void intensity_profile_callback();
-  SEGV_VIL_DLL_DATA static void test_float_callback();
 
 
   SEGV_VIL_DLL_DATA static vgui_menu get_menu();
