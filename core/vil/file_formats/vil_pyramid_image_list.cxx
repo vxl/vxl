@@ -243,7 +243,7 @@ bool vil_pyramid_image_list::put_resource(vil_image_resource_sptr const& image)
   unsigned sbi = 0, sbj = 0;
   vil_blocked_image_resource_sptr bir = blocked_image_resource(image);
   if (bir)
-  { sbi = bir->size_block_i(); sbi = bir->size_block_j(); }
+  { sbi = bir->size_block_i(); sbj = bir->size_block_j(); }
   vil_image_resource_sptr copy;
   if (sbi==0||sbj==0)
   {
