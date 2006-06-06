@@ -37,10 +37,11 @@ class vsol_cylinder : public  vsol_spatial_object_3d
   : cyl_(centre, radius, length){ cyl_.set_orientation(orient); }
 
   // copy constructor
-  vsol_cylinder(vsol_cylinder const& cyl) { this->cyl_ = cyl.cyl_; }
+  vsol_cylinder(vsol_cylinder const& cyl)
+    : vsol_spatial_object_3d(cyl), cyl_(cyl.cyl_) {}
 
   //: Return true iff the point p is inside (or on) this cylinder
-  bool contains(vgl_point_3d<double> const& p);    
+  bool contains(vgl_point_3d<double> const& p);
 
   //: getters
   vgl_point_3d<double> center() { return cyl_.center(); }
@@ -51,7 +52,7 @@ class vsol_cylinder : public  vsol_spatial_object_3d
   //: setters
   void set_orientation(vgl_vector_3d<double> orient) {cyl_.set_orientation(orient);
   }
-  
+
   void set_center(vgl_point_3d<double> const & c) {cyl_.set_center(c);}
 
   void set_length(double l) {cyl_.set_length(l);}
@@ -97,4 +98,4 @@ void vsl_b_read(vsl_b_istream &is, vsol_cylinder* &p);
 //: Binary load vsol_cylinder_sptr from stream.
 void vsl_b_read(vsl_b_istream &is, vsol_cylinder_sptr &p);
 
-#endif
+#endif // vsol_cylinder_h_
