@@ -39,6 +39,9 @@ class vsol_cylinder : public  vsol_spatial_object_3d
   // copy constructor
   vsol_cylinder(vsol_cylinder const& cyl) { this->cyl_ = cyl.cyl_; }
 
+  //: Return true iff the point p is inside (or on) this cylinder
+  bool contains(vgl_point_3d<double> const& p);    
+
   //: getters
   vgl_point_3d<double> center() { return cyl_.center(); }
   double radius() {return cyl_.radius(); }
