@@ -7,7 +7,7 @@
 
 #include <vil/algo/vil_structuring_element.h>
 #include <vil/vil_image_view.h>
-
+#include <vil/vil_border.h>
 
 //: Return false if any im[offset[k]] is zero
 inline bool vil_binary_erode(const bool* im, const vcl_ptrdiff_t* offset, unsigned n)
@@ -18,7 +18,8 @@ inline bool vil_binary_erode(const bool* im, const vcl_ptrdiff_t* offset, unsign
 
 //: Return false if any image pixel under element centred at (i0,j0) is zero
 //  Checks boundary overlap
-inline bool vil_binary_erode(const vil_image_view<bool>& image, unsigned plane,
+template <class imAccessorT>
+inline bool vil_binary_erode(const imAccessorT& image, unsigned plane,
                              const vil_structuring_element& element, int i0, int j0)
 {
   unsigned n = element.p_i().size();
@@ -26,7 +27,7 @@ inline bool vil_binary_erode(const vil_image_view<bool>& image, unsigned plane,
   {
     unsigned int i = i0+element.p_i()[k];
     unsigned int j = j0+element.p_j()[k];
-    if (i<image.ni() && j<image.nj() && !image(i,j,plane))
+    if (!image(i,j,plane))
       return false;
   }
   return true;
@@ -38,5 +39,14 @@ inline bool vil_binary_erode(const vil_image_view<bool>& image, unsigned plane,
 void vil_binary_erode(const vil_image_view<bool>& src_image,
                       vil_image_view<bool>& dest_image,
                       const vil_structuring_element& element);
+
+//: Erodes src_image to produce dest_image (assumed single plane)
+// \relates vil_image_view
+// \relates vil_structuring_element
+// \relates vil_border
+void vil_binary_erode(const vil_image_view<bool>& src_image,
+                      vil_image_view<bool>& dest_image,
+                      const vil_structuring_element& element,
+                      const vil_border<vil_image_view<bool> >& border);
 
 #endif // vil_binary_erode_h_

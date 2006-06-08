@@ -10,6 +10,7 @@ ADD_EXECUTABLE( vil_test_all
   test_memory_chunk.cxx
   test_pixel_format.cxx
   test_pyramid_image_resource.cxx
+  test_border.cxx
 
   # file format readers/writers
   test_file_format_read.cxx
@@ -46,6 +47,7 @@ ADD_TEST( vil_test_image_resource           ${EXECUTABLE_OUTPUT_PATH}/vil_test_a
 ADD_TEST( vil_test_image_view               ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_image_view)
 ADD_TEST( vil_test_memory_chunk             ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_memory_chunk)
 ADD_TEST( vil_test_pixel_format             ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_pixel_format)
+ADD_TEST( vil_test_border                   ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_border)
 
 # file format readers/writers
 ADD_TEST( vil_test_file_format_read         ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_file_format_read ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)

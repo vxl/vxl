@@ -178,6 +178,7 @@ SET( vil_sources ${vil_sources}
   vil_nearest_neighbour_interp.h
 
   # Stuff
+  vil_border.h
   vil_smart_ptr.txx                     vil_smart_ptr.h
   vil_property.h
   vil_pixel_format.cxx                  vil_pixel_format.h
