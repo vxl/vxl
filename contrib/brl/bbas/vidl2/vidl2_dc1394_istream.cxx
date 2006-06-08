@@ -18,7 +18,8 @@
 #include <vil/vil_new.h>
 #include <vil/vil_image_view.h>
 
-#include <libdc1394/dc1394_control.h>
+#include <dc1394/dc1394_control.h>
+#include <dc1394/dc1394_utils.h>
 
 #include <vil/vil_convert.h>
 
@@ -30,7 +31,7 @@ struct vidl2_dc1394_istream::pimpl
   pimpl()
   : vid_index_( unsigned(-1) ),
     camera_info_(NULL),
-    max_speed_(DC1394_SPEED_400),
+    max_speed_(DC1394_ISO_SPEED_400),
     pixel_format_(VIDL2_PIXEL_FORMAT_UNKNOWN),
     cur_frame_(NULL),
     cur_frame_valid_(false)
@@ -81,50 +82,52 @@ open(const vcl_string& device_filename,
   // Close any currently opened file
   close();
 
-  is_->camera_info_ = dc1394_new_camera(0,0);//(params.port, params.node);
+  is_->camera_info_ = dc1394_new_camera(params.port_, params.node_);
 
-  if (dc1394_get_camera_info(is_->camera_info_) != DC1394_SUCCESS) {
+  if( dc1394_update_camera_info(is_->camera_info_) != DC1394_SUCCESS){
+    vcl_cerr << "Failed to find camera on port "
+        <<params.port_<<" node "<<params.node_ << ".\n";
     close();
     return false;
   }
 
-  if (dc1394_video_set_iso_channel_and_speed(is_->camera_info_, 0, params.speed_) != DC1394_SUCCESS) {
+
+  if (dc1394_video_set_iso_speed(is_->camera_info_, dc1394speed_t(params.speed_)) != DC1394_SUCCESS) {
     vcl_cerr << "Failed to set iso channel and speed.\n";
     close();
     return false;
   }
 
-  if (dc1394_video_set_mode(is_->camera_info_, params.video_mode_) != DC1394_SUCCESS) {
+  if (dc1394_video_set_mode(is_->camera_info_, dc1394video_mode_t(params.video_mode_)) != DC1394_SUCCESS) {
     vcl_cerr << "Failed to set video mode.\n";
     close();
     return false;
   }
   else
-    is_->camera_info_->mode = params.video_mode_;
+    is_->camera_info_->video_mode = dc1394video_mode_t(params.video_mode_);
 
-  if (dc1394_video_set_framerate(is_->camera_info_, params.frame_rate_) != DC1394_SUCCESS) {
+  if (dc1394_video_set_framerate(is_->camera_info_, dc1394framerate_t(params.frame_rate_)) != DC1394_SUCCESS) {
     vcl_cerr << "Failed to set frame rate.\n";
     close();
     return false;
   }
   else
-    is_->camera_info_->framerate = params.frame_rate_;
+    is_->camera_info_->framerate = dc1394framerate_t(params.frame_rate_);
 
-  if (!((is_->camera_info_->mode >= DC1394_MODE_FORMAT7_MIN) &&
-         (is_->camera_info_->mode <= DC1394_MODE_FORMAT7_MAX))) {
-    int err=dc1394_dma_setup_capture( is_->camera_info_, is_->camera_info_->iso_channel,
-                                      is_->camera_info_->mode, is_->max_speed_,
-                                      is_->camera_info_->framerate,
-                                      num_dma_buffers, drop_frames,
-                                      device_filename.c_str() );
-
-    if (err!=DC1394_SUCCESS) {
-      vcl_cerr << "Failed to setup DMA capture. Error code "<< err << '\n';
+  if(device_filename != ""){
+    char* dname = const_cast<char*>(device_filename.c_str());
+    if(dc1394_capture_set_dma_device_filename(is_->camera_info_,dname) != DC1394_SUCCESS) {
+      vcl_cerr << "Failed to set DMA device filename: "<<device_filename<<'\n';
       return false;
     }
   }
+  if (dc1394_capture_setup_dma(is_->camera_info_,num_dma_buffers, drop_frames) != DC1394_SUCCESS) {
+    vcl_cerr << "Failed to setup DMA capture.\n";
+    return false;
+  }
 
-  vidl2_iidc1394_params::video_mode_t vm = (vidl2_iidc1394_params::video_mode_t)is_->camera_info_->mode;
+
+  vidl2_iidc1394_params::video_mode_t vm = (vidl2_iidc1394_params::video_mode_t)is_->camera_info_->video_mode;
   is_->pixel_format_ = vidl2_iidc1394_params::pixel_format(vm);
 
 
@@ -163,7 +166,7 @@ close()
       dc1394_video_set_transmission(is_->camera_info_, DC1394_OFF);
     }
 
-    dc1394_dma_release_camera(is_->camera_info_);
+    dc1394_capture_stop(is_->camera_info_);
     dc1394_free_camera(is_->camera_info_);
     is_->camera_info_ = NULL;
   }
@@ -200,7 +203,7 @@ valid_params(vidl2_iidc1394_params::valid_options& options)
     options.cameras[i].vendor = dccameras[i]->vendor;
     options.cameras[i].model = dccameras[i]->model;
 
-    dc1394videomodes_t modes;
+    dc1394video_modes_t modes;
     if ( dc1394_video_get_supported_modes(dccameras[i], &modes ) <0 ) {
       vcl_cerr << "Could not find any supported video modes\n";
       return false;
@@ -277,8 +280,8 @@ advance()
 {
   ++is_->vid_index_;
   is_->cur_frame_valid_ = false;
-  dc1394_dma_done_with_buffer(is_->camera_info_);
-  if (dc1394_dma_capture(&is_->camera_info_, 1, DC1394_VIDEO1394_WAIT) != DC1394_SUCCESS) {
+  dc1394_capture_dma_done_with_buffer(is_->camera_info_);
+  if (dc1394_capture_dma(&is_->camera_info_, 1, DC1394_VIDEO1394_WAIT) != DC1394_SUCCESS) {
     vcl_cerr << "capture failed\n";
     return false;
   }
