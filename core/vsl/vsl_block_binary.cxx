@@ -32,6 +32,7 @@ vsl_block_t allocate_up_to(vcl_size_t nbytes)
     {
     }
 #else
+    //use malloc because gcc's new still tries to throw a bad alloc even with -fno_exceptions
     block.ptr = (char *)vcl_malloc(block.size);
 #endif
     if (block.ptr)
@@ -40,18 +41,80 @@ vsl_block_t allocate_up_to(vcl_size_t nbytes)
   }
 }
 
+
+//: Error checking.
+void vsl_block_binary_read_confirm_specialisation(vsl_b_istream &is, bool specialised)
+{
+  if (!is) return;
+  bool b;
+  vsl_b_read(is, b);
+  if (b != specialised)
+  {
+    vcl_cerr << "I/O ERROR: vsl_block_binary_read()\n";
+    if (specialised)
+      vcl_cerr << "           Data was saved using unspecialised slow form and is being loaded\n"
+               << "           using specialised fast form.\n\n";
+    else
+      vcl_cerr << "           Data was saved using specialised fast form and is being loaded\n"
+               << "           using unspecialised slow form.\n\n";
+
+    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+  }
+}
+
+
 /////////////////////////////////////////////////////////////////////////
 
-//: Write a block of signed ints to a vsl_b_ostream
-// This function is very speed efficient, but
-// temporarily allocates a block of memory the about 1.2 times
-// size of the block being read.
-VCL_DEFINE_SPECIALIZATION
-void vsl_block_binary_write(vsl_b_ostream &os, const int* begin, unsigned nelems)
+//: Write a block of floats to a vsl_b_ostream
+template <class T>
+void vsl_block_binary_write_float_impl(vsl_b_ostream &os, const T* begin, vcl_size_t nelems)
 {
   vsl_b_write(os, true); // Error check that this is a specialised version
 
-  const vcl_size_t wanted = VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(int)) * nelems;
+  const vcl_size_t wanted = sizeof(T) * nelems;
+  vsl_block_t block = allocate_up_to(wanted);
+  
+  // multiple-block version works equally efficiently with single block
+  const vcl_size_t items_per_block = block.size / sizeof(T);
+  
+  // convert and save the data from the start.
+  while (nelems > 0) 
+  {
+    vcl_size_t items = vcl_min(items_per_block, nelems);
+    vcl_size_t bytes = sizeof(T) * items;
+    vsl_swap_bytes_to_buffer((const char *)begin, (char *)block.ptr, sizeof(T), items);
+    os.os().write( block.ptr, bytes);
+    begin += items;
+    nelems -= items;
+  }
+#if VCL_HAS_EXCEPTIONS
+   delete [] block.ptr;
+#else
+  vcl_free(block.ptr);
+#endif
+}
+
+//: Write a block of floats to a vsl_b_ostream
+template <class T>
+void vsl_block_binary_read_float_impl(vsl_b_istream &is, T* begin, vcl_size_t nelems)
+{
+  // There are no complications here, to deal with low memory,
+  // because the byte swapping can be done in place.
+  vsl_block_binary_read_confirm_specialisation(is, true);
+  if (!is) return;
+  is.is().read((char*) begin, nelems*sizeof(T));
+  vsl_swap_bytes((char *)begin, sizeof(T), nelems);
+}
+
+/////////////////////////////////////////////////////////////////////////
+
+//: Write a block of signed ints to a vsl_b_ostream
+template <class T>
+void vsl_block_binary_write_int_impl(vsl_b_ostream &os, const T* begin, vcl_size_t nelems)
+{
+  vsl_b_write(os, true); // Error check that this is a specialised version
+
+  const vcl_size_t wanted = sizeof(T) * nelems;
   vsl_block_t block = allocate_up_to(wanted  );
   
   if(block.size == wanted)
@@ -65,9 +128,9 @@ void vsl_block_binary_write(vsl_b_ostream &os, const int* begin, unsigned nelems
   else
   {
     // Do multiple-block version
-    const vcl_size_t items_per_block = block.size / VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(int));
+    const vcl_size_t items_per_block = block.size / VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(T));
     vcl_size_t n=nelems; //Number of items still to be converted.
-    const int* p=begin; //Pointer to next block of data to be converted.
+    const T* p=begin; //Pointer to next block of data to be converted.
     assert (n > items_per_block);
     // Convert the data - just counting bytes for now.
     vcl_size_t n_bytes=0;
@@ -105,15 +168,12 @@ void vsl_block_binary_write(vsl_b_ostream &os, const int* begin, unsigned nelems
 /////////////////////////////////////////////////////////////////////////
 
 //: Read a block of signed ints from a vsl_b_istream
-// This function is very speed efficient, but
-// temporarily allocates a block of memory the about 1.2 times
-// size of the block being read.
-VCL_DEFINE_SPECIALIZATION
-void vsl_block_binary_read(vsl_b_istream &is, int* begin, unsigned nelems)
+template <class T>
+void vsl_block_binary_read_int_impl(vsl_b_istream &is, T* begin, vcl_size_t nelems)
 {
   vsl_block_binary_read_confirm_specialisation(is, true);
   if (!is) return;
-  unsigned long nbytes;
+  vcl_size_t nbytes;
   vsl_b_read(is, nbytes);
   if (nbytes==0) return;
 
@@ -190,4 +250,32 @@ void vsl_block_binary_read(vsl_b_istream &is, int* begin, unsigned nelems)
   vcl_free(block.ptr);
 #endif
 }
+
+
+// Instantiate templates for POD types.
+
+template void vsl_block_binary_write_float_impl(vsl_b_ostream &, const double*, vcl_size_t);
+template void vsl_block_binary_write_float_impl(vsl_b_ostream &, const float*, vcl_size_t);
+
+
+template void vsl_block_binary_read_float_impl(vsl_b_istream &, double*, vcl_size_t);
+template void vsl_block_binary_read_float_impl(vsl_b_istream &, float*, vcl_size_t);
+
+
+
+template void vsl_block_binary_write_int_impl(vsl_b_ostream &, const long*, vcl_size_t);
+template void vsl_block_binary_write_int_impl(vsl_b_ostream &, const unsigned long*, vcl_size_t);
+template void vsl_block_binary_write_int_impl(vsl_b_ostream &, const int*, vcl_size_t);
+template void vsl_block_binary_write_int_impl(vsl_b_ostream &, const unsigned int*, vcl_size_t);
+template void vsl_block_binary_write_int_impl(vsl_b_ostream &, const short*, vcl_size_t);
+template void vsl_block_binary_write_int_impl(vsl_b_ostream &, const unsigned short*, vcl_size_t);
+
+
+
+template void vsl_block_binary_read_int_impl(vsl_b_istream &, long*, vcl_size_t);
+template void vsl_block_binary_read_int_impl(vsl_b_istream &, unsigned long*, vcl_size_t);
+template void vsl_block_binary_read_int_impl(vsl_b_istream &, int*, vcl_size_t);
+template void vsl_block_binary_read_int_impl(vsl_b_istream &, unsigned int*, vcl_size_t);
+template void vsl_block_binary_read_int_impl(vsl_b_istream &, short*, vcl_size_t);
+template void vsl_block_binary_read_int_impl(vsl_b_istream &, unsigned short*, vcl_size_t);
 

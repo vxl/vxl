@@ -9,42 +9,27 @@
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_explicit_io.h>
 
-// IMS Hack: MSVC6.0 has the annoying habit of occasionally forgetting that inline implies static.
-#ifdef VCL_VC_6
-#define VCL_VC_6_STATIC static
-#else
-#define VCL_VC_6_STATIC /**/
-#endif
-
-
-inline void vsl_block_binary_read_confirm_specialisation(vsl_b_istream &is,
-                                                         bool specialised)
-{
-  if (!is) return;
-  bool b;
-  vsl_b_read(is, b);
-  if (b != specialised)
-  {
-    vcl_cerr << "I/O ERROR: vsl_block_binary_read()\n";
-    if (specialised)
-      vcl_cerr << "           Data was saved using unspecialised slow form and is being loaded\n"
-               << "           using specialised fast form.\n\n";
-    else
-      vcl_cerr << "           Data was saved using specialised fast form and is being loaded\n"
-               << "           using unspecialised slow form.\n\n";
-
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-  }
-}
-
+//: Error checking.
+void vsl_block_binary_read_confirm_specialisation(vsl_b_istream &is, bool specialised);
 
 //: Write a block of values to a vsl_b_ostream, potentially very efficiently for fundamental types.
 template <class T>
-inline void vsl_block_binary_write(vsl_b_ostream &os, const T* begin, unsigned nelems);
+inline void vsl_block_binary_write(vsl_b_ostream &os, const T* begin, vcl_size_t nelems);
 
 //: Read a block of values from a vsl_b_ostream, potentially very efficiently for fundamental types.
 template <class T>
-inline void vsl_block_binary_read(vsl_b_istream &is, T* begin, unsigned nelems);
+inline void vsl_block_binary_read(vsl_b_istream &is, T* begin, vcl_size_t nelems);
+
+
+/////////////////////////////////////////////////////////////////////////
+
+// Internal implementation
+template <class T>
+  void vsl_block_binary_write_float_impl(vsl_b_ostream &os, const T* begin, vcl_size_t nelems);
+
+// Internal implementation
+template <class T>
+  void vsl_block_binary_read_float_impl(vsl_b_istream &is, T* begin, vcl_size_t nelems);
 
 
 /////////////////////////////////////////////////////////////////////////
@@ -53,26 +38,17 @@ inline void vsl_block_binary_read(vsl_b_istream &is, T* begin, unsigned nelems);
 // temporarily allocates a block of memory the size of the
 // block being read.
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_block_binary_write(vsl_b_ostream &os, const double* begin, unsigned nelems)
+inline void vsl_block_binary_write(vsl_b_ostream &os, const double* begin, vcl_size_t nelems)
 {
-  vsl_b_write(os, true); // Error check that this is a specialised version
-  double *block = new double[nelems];
-
-  vsl_swap_bytes_to_buffer((const char *)begin, (char *)block, sizeof(double), nelems);
-
-  os.os().write((const char*) block, (unsigned long)(nelems*sizeof(double)));
-  delete [] block;
+  vsl_block_binary_write_float_impl(os, begin, nelems);
 }
 
 //: Read a block of doubles from a vsl_b_istream
 // This function is very speed efficient.
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_block_binary_read(vsl_b_istream &is, double* begin, unsigned nelems)
+inline void vsl_block_binary_read(vsl_b_istream &is, double* begin, vcl_size_t nelems)
 {
-  vsl_block_binary_read_confirm_specialisation(is, true);
-  if (!is) return;
-  is.is().read((char*) begin, (unsigned long)(nelems*sizeof(double)));
-  vsl_swap_bytes((char *)begin, sizeof(double), nelems);
+  vsl_block_binary_read_float_impl(is, begin, nelems);
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -82,27 +58,29 @@ VCL_VC_6_STATIC inline void vsl_block_binary_read(vsl_b_istream &is, double* beg
 // temporarily allocates a block of memory the size of the
 // block being read.
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_block_binary_write(vsl_b_ostream &os, const float* begin, unsigned nelems)
+inline void vsl_block_binary_write(vsl_b_ostream &os, const float* begin, vcl_size_t nelems)
 {
-  vsl_b_write(os, true); // Error check that this is a specialised version
-  float *block = new float[nelems];
-  vsl_swap_bytes_to_buffer((const char *)begin, (char *)block, sizeof(float), nelems);
-
-  os.os().write((const char*) block, (unsigned long)(nelems*sizeof(float)));
-  delete [] block;
+  vsl_block_binary_write_float_impl(os, begin, nelems);
 }
 
 //: Read a block of floats from a vsl_b_istream
 // This function is very speed efficient.
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_block_binary_read(vsl_b_istream &is, float* begin, unsigned nelems)
+inline void vsl_block_binary_read(vsl_b_istream &is, float* begin, vcl_size_t nelems)
 {
-  vsl_block_binary_read_confirm_specialisation(is, true);
-  if (!is) return;
-  is.is().read((char*) begin, (unsigned long)(nelems*sizeof(float)));
-  vsl_swap_bytes((char *)begin, sizeof(float), nelems);
+  vsl_block_binary_read_float_impl(is, begin, nelems);
 }
 
+/////////////////////////////////////////////////////////////////////////
+
+// Internal implementation
+template <class T>
+  void vsl_block_binary_write_int_impl(vsl_b_ostream &os, const T* begin, vcl_size_t nelems);
+
+// Internal implementation
+template <class T>
+  void vsl_block_binary_read_int_impl(vsl_b_istream &is, T* begin, vcl_size_t nelems);
+  
 /////////////////////////////////////////////////////////////////////////
 
 //: Write a block of signed ints to a vsl_b_ostream
@@ -110,15 +88,20 @@ VCL_VC_6_STATIC inline void vsl_block_binary_read(vsl_b_istream &is, float* begi
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 VCL_DEFINE_SPECIALIZATION
-void vsl_block_binary_write(vsl_b_ostream &os, const int* begin, unsigned nelems);
+inline void vsl_block_binary_write(vsl_b_ostream &os, const int* begin, vcl_size_t nelems)
+{
+  vsl_block_binary_write_int_impl(os, begin, nelems);
+}
 
 //: Read a block of signed ints from a vsl_b_istream
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 VCL_DEFINE_SPECIALIZATION
-void vsl_block_binary_read(vsl_b_istream &is, int* begin, unsigned nelems);
-
+inline void vsl_block_binary_read(vsl_b_istream &is, int* begin, vcl_size_t nelems)
+{
+  vsl_block_binary_read_int_impl(is, begin, nelems);
+}
 
 /////////////////////////////////////////////////////////////////////////
 
@@ -127,16 +110,9 @@ void vsl_block_binary_read(vsl_b_istream &is, int* begin, unsigned nelems);
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_block_binary_write(vsl_b_ostream &os, const unsigned int* begin, unsigned nelems)
+inline void vsl_block_binary_write(vsl_b_ostream &os, const unsigned int* begin, vcl_size_t nelems)
 {
-  vsl_b_write(os, true); // Error check that this is a specialised version
-  char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned int)) * nelems];
-
-  unsigned long nbytes = vsl_convert_to_arbitrary_length(begin, (unsigned char *)block, nelems);
-  vsl_b_write(os, nbytes);
-
-  os.os().write( block, nbytes);
-  delete [] block;
+  vsl_block_binary_write_int_impl(os, begin, nelems);
 }
 
 //: Read a block of unsigned ints from a vsl_b_istream
@@ -144,26 +120,9 @@ VCL_VC_6_STATIC inline void vsl_block_binary_write(vsl_b_ostream &os, const unsi
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_block_binary_read(vsl_b_istream &is, unsigned int* begin, unsigned nelems)
+inline void vsl_block_binary_read(vsl_b_istream &is, unsigned int* begin, vcl_size_t nelems)
 {
-  vsl_block_binary_read_confirm_specialisation(is, true);
-  if (!is) return;
-  unsigned long nbytes;
-  vsl_b_read(is, nbytes);
-  if (nbytes)
-  {
-    char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned int)) * nelems];
-    is.is().read(block, nbytes);
-    unsigned long n_bytes_converted =
-    vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
-    delete [] block;
-    if (n_bytes_converted != nbytes)
-    {
-      vcl_cerr << "\nI/O ERROR: vsl_block_binary_read(.., unsigned int*,..)"
-               << " Corrupted data stream\n";
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-    }
-  }
+  vsl_block_binary_read_int_impl(is, begin, nelems);
 }
 
 
@@ -174,16 +133,9 @@ VCL_VC_6_STATIC inline void vsl_block_binary_read(vsl_b_istream &is, unsigned in
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_block_binary_write(vsl_b_ostream &os, const short* begin, unsigned nelems)
+inline void vsl_block_binary_write(vsl_b_ostream &os, const short* begin, vcl_size_t nelems)
 {
-  vsl_b_write(os, true); // Error check that this is a specialised version
-  char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(short)) * nelems];
-
-  unsigned long nbytes = vsl_convert_to_arbitrary_length(begin, (unsigned char *)block, nelems);
-  vsl_b_write(os, nbytes);
-
-  os.os().write( block, nbytes);
-  delete [] block;
+  vsl_block_binary_write_int_impl(os, begin, nelems);
 }
 
 //: Read a block of signed shorts from a vsl_b_istream
@@ -191,26 +143,9 @@ VCL_VC_6_STATIC inline void vsl_block_binary_write(vsl_b_ostream &os, const shor
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_block_binary_read(vsl_b_istream &is, short* begin, unsigned nelems)
+inline void vsl_block_binary_read(vsl_b_istream &is, short* begin, vcl_size_t nelems)
 {
-  vsl_block_binary_read_confirm_specialisation(is, true);
-  if (!is) return;
-  unsigned long nbytes;
-  vsl_b_read(is, nbytes);
-  if (nbytes)
-  {
-    char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(short)) * nelems];
-    is.is().read(block, nbytes);
-    unsigned long n_bytes_converted =
-    vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
-    delete [] block;
-    if (n_bytes_converted != nbytes)
-    {
-      vcl_cerr << "\nI/O ERROR: vsl_block_binary_read(.., short*,..)"
-               << " Corrupted data stream\n";
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-    }
-  }
+  vsl_block_binary_read_int_impl(is, begin, nelems);
 }
 
 
@@ -221,16 +156,9 @@ VCL_VC_6_STATIC inline void vsl_block_binary_read(vsl_b_istream &is, short* begi
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_block_binary_write(vsl_b_ostream &os, const unsigned short* begin, unsigned nelems)
+inline void vsl_block_binary_write(vsl_b_ostream &os, const unsigned short* begin, vcl_size_t nelems)
 {
-  vsl_b_write(os, true); // Error check that this is a specialised version
-  char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short)) * nelems];
-
-  unsigned long nbytes = vsl_convert_to_arbitrary_length(begin, (unsigned char *)block, nelems);
-  vsl_b_write(os, nbytes);
-
-  os.os().write( block, nbytes);
-  delete [] block;
+  vsl_block_binary_write_int_impl(os, begin, nelems);
 }
 
 //: Read a block of unsigned shorts from a vsl_b_istream
@@ -238,26 +166,9 @@ VCL_VC_6_STATIC inline void vsl_block_binary_write(vsl_b_ostream &os, const unsi
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_block_binary_read(vsl_b_istream &is, unsigned short* begin, unsigned nelems)
+inline void vsl_block_binary_read(vsl_b_istream &is, unsigned short* begin, vcl_size_t nelems)
 {
-  vsl_block_binary_read_confirm_specialisation(is, true);
-  if (!is) return;
-  unsigned long nbytes;
-  vsl_b_read(is, nbytes);
-  if (nbytes)
-  {
-    char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned short)) * nelems];
-    is.is().read(block, nbytes);
-    unsigned long n_bytes_converted =
-    vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
-    delete [] block;
-    if (n_bytes_converted != nbytes)
-    {
-      vcl_cerr << "\nI/O ERROR: vsl_block_binary_read(.., unsigned short*,..)"
-               << " Corrupted data stream\n";
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-    }
-  }
+  vsl_block_binary_read_int_impl(is, begin, nelems);
 }
 
 
@@ -268,16 +179,9 @@ VCL_VC_6_STATIC inline void vsl_block_binary_read(vsl_b_istream &is, unsigned sh
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_block_binary_write(vsl_b_ostream &os, const long* begin, unsigned nelems)
+inline void vsl_block_binary_write(vsl_b_ostream &os, const long* begin, vcl_size_t nelems)
 {
-  vsl_b_write(os, true); // Error check that this is a specialised version
-  char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(long)) * nelems];
-
-  unsigned long nbytes = vsl_convert_to_arbitrary_length(begin, (unsigned char *)block, nelems);
-  vsl_b_write(os, nbytes);
-
-  os.os().write( block, nbytes);
-  delete [] block;
+  vsl_block_binary_write_int_impl(os, begin, nelems);
 }
 
 //: Read a block of signed longs from a vsl_b_istream
@@ -285,26 +189,9 @@ VCL_VC_6_STATIC inline void vsl_block_binary_write(vsl_b_ostream &os, const long
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_block_binary_read(vsl_b_istream &is, long* begin, unsigned nelems)
+inline void vsl_block_binary_read(vsl_b_istream &is, long* begin, vcl_size_t nelems)
 {
-  vsl_block_binary_read_confirm_specialisation(is, true);
-  if (!is) return;
-  unsigned long nbytes;
-  vsl_b_read(is, nbytes);
-  if (nbytes)
-  {
-    char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(long)) * nelems];
-    is.is().read(block, nbytes);
-    unsigned long n_bytes_converted =
-    vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
-    delete [] block;
-    if (n_bytes_converted != nbytes)
-    {
-      vcl_cerr << "\nI/O ERROR: vsl_block_binary_read(.., long*,..)"
-               << " Corrupted data stream\n";
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-    }
-  }
+  vsl_block_binary_read_int_impl(is, begin, nelems);
 }
 
 
@@ -315,16 +202,9 @@ VCL_VC_6_STATIC inline void vsl_block_binary_read(vsl_b_istream &is, long* begin
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_block_binary_write(vsl_b_ostream &os, const unsigned long* begin, unsigned nelems)
+inline void vsl_block_binary_write(vsl_b_ostream &os, const unsigned long* begin, vcl_size_t nelems)
 {
-  vsl_b_write(os, true); // Error check that this is a specialised version
-  char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned long)) * nelems];
-
-  unsigned long nbytes = vsl_convert_to_arbitrary_length(begin, (unsigned char *)block, nelems);
-  vsl_b_write(os, nbytes);
-
-  os.os().write( block, nbytes);
-  delete [] block;
+  vsl_block_binary_write_int_impl(os, begin, nelems);
 }
 
 //: Read a block of unsigned longs from a vsl_b_istream
@@ -332,26 +212,9 @@ VCL_VC_6_STATIC inline void vsl_block_binary_write(vsl_b_ostream &os, const unsi
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
 VCL_DEFINE_SPECIALIZATION
-VCL_VC_6_STATIC inline void vsl_block_binary_read(vsl_b_istream &is, unsigned long* begin, unsigned nelems)
+inline void vsl_block_binary_read(vsl_b_istream &is, unsigned long* begin, vcl_size_t nelems)
 {
-  vsl_block_binary_read_confirm_specialisation(is, true);
-  if (!is) return;
-  unsigned long nbytes;
-  vsl_b_read(is, nbytes);
-  if (nbytes)
-  {
-    char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(unsigned long)) * nelems];
-    is.is().read(block, nbytes);
-    unsigned long n_bytes_converted =
-    vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
-    delete [] block;
-    if (n_bytes_converted != nbytes)
-    {
-      vcl_cerr << "\nI/O ERROR: vsl_block_binary_read(.., unsigned long*,..)"
-               << " Corrupted data stream\n";
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-    }
-  }
+  vsl_block_binary_read_int_impl(is, begin, nelems);
 }
 
 
@@ -365,42 +228,20 @@ VCL_VC_6_STATIC inline void vsl_block_binary_read(vsl_b_istream &is, unsigned lo
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
-inline void vsl_block_binary_write(vsl_b_ostream &os, const vcl_ptrdiff_t* begin, unsigned nelems)
+VCL_DEFINE_SPECIALIZATION
+inline void vsl_block_binary_write(vsl_b_ostream &os, const vcl_ptrdiff_t* begin, vcl_size_t nelems)
 {
-  vsl_b_write(os, true); // Error check that this is a specialised version
-  char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vcl_ptrdiff_t)) * nelems];
-
-  unsigned long nbytes = vsl_convert_to_arbitrary_length(begin, (unsigned char *)block, nelems);
-  vsl_b_write(os, nbytes);
-
-  os.os().write( block, nbytes);
-  delete [] block;
+  vsl_block_binary_write_int_impl(os, begin, nelems);
 }
 
 //: Read a block of vcl_ptrdiff_ts from a vsl_b_istream
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
-inline void vsl_block_binary_read(vsl_b_istream &is, vcl_ptrdiff_t* begin, unsigned nelems)
+VCL_DEFINE_SPECIALIZATION
+inline void vsl_block_binary_read(vsl_b_istream &is, vcl_ptrdiff_t* begin, vcl_size_t nelems)
 {
-  vsl_block_binary_read_confirm_specialisation(is, true);
-  if (!is) return;
-  unsigned long nbytes;
-  vsl_b_read(is, nbytes);
-  if (nbytes)
-  {
-    char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vcl_ptrdiff_t)) * nelems];
-    is.is().read(block, nbytes);
-    unsigned long n_bytes_converted =
-    vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
-    delete [] block;
-    if (n_bytes_converted != nbytes)
-    {
-      vcl_cerr << "\nI/O ERROR: vsl_block_binary_read(.., vcl_ptrdiff_t*,..)"
-               << " Corrupted data stream\n";
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-    }
-  }
+  vsl_block_binary_read_int_impl(is, begin, nelems);
 }
 
 
@@ -410,42 +251,20 @@ inline void vsl_block_binary_read(vsl_b_istream &is, vcl_ptrdiff_t* begin, unsig
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
-inline void vsl_block_binary_write(vsl_b_ostream &os, const vcl_size_t* begin, unsigned nelems)
+VCL_DEFINE_SPECIALIZATION
+inline void vsl_block_binary_write(vsl_b_ostream &os, const vcl_size_t* begin, vcl_size_t nelems)
 {
-  vsl_b_write(os, true); // Error check that this is a specialised version
-  char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vcl_size_t)) * nelems];
-
-  unsigned long nbytes = vsl_convert_to_arbitrary_length(begin, (unsigned char *)block, nelems);
-  vsl_b_write(os, nbytes);
-
-  os.os().write( block, nbytes);
-  delete [] block;
+  vsl_block_binary_write_int_impl(os, begin, nelems);
 }
 
 //: Read a block of vcl_size_ts from a vsl_b_istream
 // This function is very speed efficient, but
 // temporarily allocates a block of memory the about 1.2 times
 // size of the block being read.
-inline void vsl_block_binary_read(vsl_b_istream &is, vcl_size_t* begin, unsigned nelems)
+VCL_DEFINE_SPECIALIZATION
+inline void vsl_block_binary_read(vsl_b_istream &is, vcl_size_t* begin, vcl_size_t nelems)
 {
-  vsl_block_binary_read_confirm_specialisation(is, true);
-  if (!is) return;
-  unsigned long nbytes;
-  vsl_b_read(is, nbytes);
-  if (nbytes)
-  {
-    char *block = new char[VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(vcl_size_t)) * nelems];
-    is.is().read(block, nbytes);
-    unsigned long n_bytes_converted =
-    vsl_convert_from_arbitrary_length((unsigned char *)block, begin, nelems);
-    delete [] block;
-    if (n_bytes_converted != nbytes)
-    {
-      vcl_cerr << "\nI/O ERROR: vsl_block_binary_read(.., vcl_size_t*,..)"
-               << " Corrupted data stream\n";
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-    }
-  }
+  vsl_block_binary_read_int_impl(is, begin, nelems);
 }
 
 #endif // 0
@@ -455,7 +274,7 @@ inline void vsl_block_binary_read(vsl_b_istream &is, vcl_size_t* begin, unsigned
 // If you want to output a block of fundamental data types very efficiently,
 // then just #include <vsl_binary_explicit_io.h>
 template <class T>
-VCL_VC_6_STATIC inline void vsl_block_binary_write(vsl_b_ostream &os, const T* begin, unsigned nelems)
+inline void vsl_block_binary_write(vsl_b_ostream &os, const T* begin, vcl_size_t nelems)
 {
   vsl_b_write(os, false); // Error check that this is a specialised version
   while (nelems--)
@@ -466,7 +285,7 @@ VCL_VC_6_STATIC inline void vsl_block_binary_write(vsl_b_ostream &os, const T* b
 // If you want to output a block of fundamental data types very efficiently,
 // then just #include <vsl_binary_explicit_io.h>
 template <class T>
-VCL_VC_6_STATIC inline void vsl_block_binary_read(vsl_b_istream &is, T* begin, unsigned nelems)
+inline void vsl_block_binary_read(vsl_b_istream &is, T* begin, vcl_size_t nelems)
 {
   vsl_block_binary_read_confirm_specialisation(is, false);
   if (!is) return;
