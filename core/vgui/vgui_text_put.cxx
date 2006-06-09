@@ -26,9 +26,23 @@ void vgui_text_put(char const *str, unsigned size)
   }
 }
 #else
+
+#if 1
+#include <vgui/vgui_font_sptr.h>
+//#include <vgui/vgui_font_textured.h>
+#include <vgui/vgui_font_bitmap.h>
+void vgui_text_put(char const *str, unsigned int size)
+{
+  //static vgui_font_sptr font = new vgui_font_textured("./fonts/times_new.bmf");
+  static vgui_font_sptr font = new vgui_font_bitmap;
+  font->draw(str, size);
+}
+#else
 #include <vcl_iostream.h>
 void vgui_text_put(char const *str, unsigned /*size*/)
 {
   vcl_cerr << __FILE__ ":!defined(HAS_GLUT):" << str << vcl_endl;
 }
+#endif
+
 #endif
