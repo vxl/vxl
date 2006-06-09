@@ -19,8 +19,8 @@ static void test_border_constant_byte()
   im(30, 40) = 69;
 
   vil_border<vil_image_view<vxl_byte> > border = vil_border_create_constant(im, 13);
-  vil_border<vil_image_view<vxl_byte> >::accessor 
-    accessor = border.image_accessor(im);
+  vil_border_accessor<vil_image_view<vxl_byte> >
+    accessor = vil_border_create_accessor(im,border);
 
   TEST("respect left border", accessor(0,10), 42);
   TEST("respect right border", accessor(63,2), 58);
@@ -46,8 +46,8 @@ static void test_border_constant_hsv()
   im(50, 63, 2) = 52.1;
 
   vil_border<vil_image_view<float> > border = vil_border_create_constant(im, 13.3);
-  vil_border<vil_image_view<float> >::accessor 
-    accessor = border.image_accessor(im);
+  vil_border_accessor<vil_image_view<float> >
+    accessor = vil_border_create_accessor(im,border);
 
   TEST_NEAR("respect left border plane 0", accessor(0,10), 41.2, 1e-5);
   TEST_NEAR("respect left border plane 1", accessor(0,10,1), 42.2, 1e-5);
@@ -78,8 +78,8 @@ static void test_border_geodesic()
   im(30, 40) = 69;
   im(63, 63) = 25;
 
-  vil_border<vil_image_view<vxl_byte> >::accessor 
-    accessor = vil_border_create_geodesic(im).image_accessor(im);
+  vil_border_accessor<vil_image_view<vxl_byte> >
+    accessor = vil_border_create_accessor(im,vil_border_create_geodesic(im));
 
   TEST("respect left border", accessor(0,10), 42);
   TEST("respect right border", accessor(63,2), 58);
@@ -107,8 +107,8 @@ static void test_border_reflect()
   im(63, 63) = 25;
   im(1, 61) = 70;
 
-  vil_border<vil_image_view<vxl_byte> >::accessor 
-    accessor = vil_border_create_reflect(im).image_accessor(im);
+  vil_border_accessor<vil_image_view<vxl_byte> >
+    accessor = vil_border_create_accessor(im,vil_border_create_reflect(im));
 
   TEST("respect left border", accessor(0,10), 42);
   TEST("respect right border", accessor(63,2), 58);
@@ -137,8 +137,8 @@ static void test_border_periodic()
   im(0,63) = 2;
   im(0,0) = 25;
 
-  vil_border<vil_image_view<vxl_byte> >::accessor 
-    accessor = vil_border_create_periodic(im).image_accessor(im);
+  vil_border_accessor<vil_image_view<vxl_byte> >
+    accessor = vil_border_create_accessor(im,vil_border_create_periodic(im));
 
   TEST("respect left border", accessor(0,10), 42);
   TEST("respect right border", accessor(63,2), 58);

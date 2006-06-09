@@ -41,8 +41,8 @@ void vil_binary_dilate(const vil_image_view<bool>& src_image,
   int jlo = -element.min_j();
   int jhi = nj-1-element.max_j();
 
-  vil_border<vil_image_view<bool> >::accessor 
-    border_accessor = border.image_accessor(src_image);
+  vil_border_accessor<vil_image_view<bool> >
+    border_accessor = vil_border_create_accessor(src_image, border);
 
   // Deal with left edge
   for (int i=0;i<ilo;++i)

@@ -52,32 +52,6 @@ public:
     constant_value_()
   {}
 
-  //: This class provides a pixel accessor which is syntax-compatible
-  // with vil_image_view. It acts like a proxy to the underlying image,
-  // transparently providing border pixel values if required.
-  class accessor
-  {
-  public:
-    //: Constructor.
-    accessor(const imT& im, const vil_border<imT>& border)
-      : im(im), border(border)
-    {}
-
-    //: Returns a const reference on the pixel (i,j,p). If the pixel
-    // falls out of the image range, a border value is returned.
-    inline const pixel_type&
-    operator()(int i, int j, int p = 0) const
-    { return border(im, i, j, p); }
-
-  private:
-    const imT& im;
-    vil_border<imT> border;
-  };
-
-  //: Returns a border accessor for the given image.
-  inline
-  accessor image_accessor(const imT& im) const { return accessor(im, *this); }
-
   //: Set the border kind.
   void set_kind (vil_border_mode kind) { border_kind_ = kind; }
   //: Get the current border kind.
@@ -115,16 +89,16 @@ protected:
       return constant_value_;
     case vil_border_geodesic:
       {
-        if (i < 0) i = 0; else if (i >= im.ni()) i = im.ni()-1;
-        if (j < 0) j = 0; else if (j >= im.nj()) j = im.nj()-1;
-        if (p < 0) p = 0; else if (p >= im.nplanes()) p = im.nplanes()-1;
+        if (i < 0) i = 0; else if (i >= (int)im.ni()) i = im.ni()-1;
+        if (j < 0) j = 0; else if (j >= (int)im.nj()) j = im.nj()-1;
+        if (p < 0) p = 0; else if (p >= (int)im.nplanes()) p = im.nplanes()-1;
         return im(i,j,p);
       }
     case vil_border_reflect:
       {
-        if (i < 0) i = -i-1; else if (i >= im.ni()) i = 2*im.ni()-i-1;
-        if (j < 0) j = -j-1; else if (j >= im.nj()) j = 2*im.nj()-j-1;
-        if (p < 0) p = -p-1; else if (p >= im.nplanes()) p = 2*im.nplanes()-p-1;
+        if (i < 0) i = -i-1; else if (i >= (int)im.ni()) i = 2*im.ni()-i-1;
+        if (j < 0) j = -j-1; else if (j >= (int)im.nj()) j = 2*im.nj()-j-1;
+        if (p < 0) p = -p-1; else if (p >= (int)im.nplanes()) p = 2*im.nplanes()-p-1;
         return im(i,j,p);
       }
     case vil_border_periodic:
@@ -141,7 +115,8 @@ protected:
         return im(i,j,p);
       }
     default:
-      assert(0);
+      assert(0); 
+      return constant_value_; // To avoid warnings
     };
   }
 
@@ -149,6 +124,40 @@ private:
   vil_border_mode border_kind_;
   pixel_type constant_value_;
 };
+
+//: Provides a pixel accessor which is syntax-compatible with
+// vil_image_view. It acts like a proxy to the underlying image,
+// transparently providing border pixel values if required.
+template <class imT>
+class vil_border_accessor
+{
+public:
+  typedef typename imT::pixel_type pixel_type;
+
+public:
+  //: Constructor.
+  vil_border_accessor(const imT& im, const vil_border<imT>& border)
+    : im(im), border(border)
+  {}
+  
+  //: Returns a const reference on the pixel (i,j,p). If the pixel
+  // falls out of the image range, a border value is returned.
+  inline const pixel_type&
+  operator()(int i, int j, int p = 0) const
+  { return border(im, i, j, p); }
+  
+private:
+  const imT& im;
+  vil_border<imT> border;  
+};
+
+//: Instantiates a border accessor, provided for convenience.
+template <class imT>
+vil_border_accessor<imT>
+vil_border_create_accessor(const imT& im, const vil_border<imT>& border)
+{
+  return vil_border_accessor<imT>(im, border);
+}
 
 //: Instantiate a constant border whose type is derived from imT.
 template <class imT>
