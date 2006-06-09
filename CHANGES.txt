@@ -5,6 +5,9 @@ aren't documented here, unless the bug-fix has a major observable
 effect.  If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
+      - vsl can now read/write very large matrices and images in low-memory
+        situations.
+      
       - PNG reader now supports sBIT for recovering the original bitdepth.
 
 ****************************
