@@ -179,11 +179,12 @@ class vil_image_view : public vil_image_view_base
 
   //: Return true if (i,j) is a valid index into this buffer.
   inline bool in_range (int i, int j) const 
-  { return (i>-1) && (i<ni_) && (j>-1) && (j<nj_); }
+  { return (i>-1) && (i<(int)ni_) && (j>-1) && (j<(int)nj_); }
  
   //: Return true if (i,j,p) is a valid index into this buffer.
   inline bool in_range (int i, int j, int p) const 
-  { return (i>-1) && (i<ni_) && (j>-1) && (j<nj_) && (p>-1) && (p<nplanes_); }
+  { return (i>-1) && (i<(int)ni_) && (j>-1) && (j<(int)nj_) 
+      && (p>-1) && (p<(int)nplanes_); }
   
   //: Return read-only reference to pixel at (i,j) in plane 0.
   inline const T& operator()(unsigned i, unsigned j) const {
