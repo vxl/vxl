@@ -112,7 +112,23 @@ unsigned int
 vidl2_iidc1394_params::
 video_format_val(video_mode_t m)
 {
-  return (m >> 5)-2;
+  if ((m>=MODE_160x120_YUV444)&&(m<=MODE_640x480_MONO16)) {
+    return 0;
+  }
+  else if ((m>=MODE_800x600_YUV422)&&(m<=MODE_1024x768_MONO16)) {
+    return 1;
+  }
+  else if ((m>=MODE_1280x960_YUV422)&&(m<=MODE_1600x1200_MONO16)) {
+    return 2;
+  }
+  else if (m==MODE_EXIF) {
+    return 6;
+  }
+  else if ((m>=MODE_FORMAT7_0)&&(m<=MODE_FORMAT7_7)) {
+    return 7;
+  }
+  // unknown format
+  return unsigned(-1);
 }
 
 
@@ -121,7 +137,23 @@ unsigned int
 vidl2_iidc1394_params::
 video_mode_val(video_mode_t m)
 {
-  return m && 31;
+  if ((m>=MODE_160x120_YUV444)&&(m<=MODE_640x480_MONO16)) {
+    return m - MODE_160x120_YUV444;
+  }
+  else if ((m>=MODE_800x600_YUV422)&&(m<=MODE_1024x768_MONO16)) {
+    return m - MODE_800x600_YUV422;
+  }
+  else if ((m>=MODE_1280x960_YUV422)&&(m<=MODE_1600x1200_MONO16)) {
+    return m - MODE_1280x960_YUV422;
+  }
+  else if (m==MODE_EXIF) {
+    return 0;
+  }
+  else if ((m>=MODE_FORMAT7_0)&&(m<=MODE_FORMAT7_7)) {
+    return m - MODE_FORMAT7_0;
+  }
+  // unknown mode value
+  return unsigned(-1);
 }
 
 
@@ -130,9 +162,24 @@ vidl2_iidc1394_params::video_mode_t
 vidl2_iidc1394_params::
 video_mode(unsigned int format, unsigned int mode)
 {
-  assert(format < 8);
   assert(mode < 8);
-  return (vidl2_iidc1394_params::video_mode_t) (((format+2) << 5) + mode);
+  switch(format){
+    case 0:
+      return video_mode_t(MODE_160x120_YUV444 + mode);
+    case 1:
+      return video_mode_t(MODE_800x600_YUV422 + mode);
+    case 2:
+      return video_mode_t(MODE_1280x960_YUV422 + mode);
+    case 6:
+      return MODE_EXIF;
+    case 7:
+      return video_mode_t(MODE_FORMAT7_0 + mode);
+    default:
+      break;
+  }
+
+  assert(false);
+  return MODE_FORMAT7_0;
 }
 
 
