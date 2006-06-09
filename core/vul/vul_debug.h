@@ -32,7 +32,7 @@ void vul_debug_core_dump_in_windows_se(const char * filename,
                                        void* pep);
 #include <vcl_config_compiler.h>
 
-#ifdef VCL_HAS_EXCEPTIONS
+#if VCL_HAS_EXCEPTIONS
 # include <vcl_exception.h>
 //: A translated structured exception.
 class vul_debug_windows_structured_exception : public vcl_exception

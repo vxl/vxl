@@ -8,6 +8,7 @@
 #include <vcl_iostream.h>
 #include <vxl_config.h>
 #include <vcl_new.h>
+#include <vcl_cstdlib.h>
 
 #ifdef _WIN32
 
@@ -216,7 +217,7 @@ void
   vul_debug_set_coredump_and_throw_on_out_of_memory_handler()
 {
   vul_debug_core_dump(out_out_memory_coredump_filename);
-#ifdef VCL_HAS_EXCEPTIONS
+#if VCL_HAS_EXCEPTIONS
   throw vcl_bad_alloc();
 #else
   vcl_cerr << "Out of Memory.\n";
