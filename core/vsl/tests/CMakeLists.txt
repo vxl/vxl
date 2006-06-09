@@ -17,6 +17,7 @@ ADD_EXECUTABLE( vsl_test_all
   test_stack_io.cxx
   test_string_io.cxx
   test_vector_io.cxx
+  test_vlarge_block_io.cxx
 )
  
 IF(CMAKE_COMPILER_IS_GNUCXX)
@@ -38,6 +39,19 @@ ADD_TEST(vsl_test_set_io                ${EXECUTABLE_OUTPUT_PATH}/vsl_test_all t
 ADD_TEST(vsl_test_stack_io              ${EXECUTABLE_OUTPUT_PATH}/vsl_test_all test_stack_io)
 ADD_TEST(vsl_test_string_io             ${EXECUTABLE_OUTPUT_PATH}/vsl_test_all test_string_io)
 ADD_TEST(vsl_test_vector_io             ${EXECUTABLE_OUTPUT_PATH}/vsl_test_all test_vector_io)
+
+# Don't add test_vlarge_block_io to the automatic list. It does nasty things 
+# to memory which can result in wierd error messages, system lockup, and other
+# unpleasant behaviour on some platforms
+# The following manual tests have been tried.
+# x86, Win2k, MSVC7.1 Release mode - test passes
+# x86, Win2k, MSVC7.1 Debug mode - OS complains that you are messing with the
+#            system dlls.
+# x86_64, Linux 2.6, gcc 4.0.2, Linux VM doesn't limit the amount of memory -
+#            so the test cannot simulate low memory conditions.
+# x86_64, Linux 2.6, gcc 4.0.2 -fno-exceptions, ulimit -v 2000000, test passes
+# x86_64, Linux 2.6, gcc 4.0.2, ulimit -v 2000000, test passes
+
 
 ADD_EXECUTABLE( vsl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vsl_test_include vsl )

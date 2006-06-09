@@ -13,6 +13,7 @@ DECLARE(test_set_io);
 DECLARE(test_stack_io);
 DECLARE(test_string_io);
 DECLARE(test_vector_io);
+DECLARE(test_vlarge_block_io);
 
 void
 register_tests()
@@ -30,6 +31,7 @@ register_tests()
   REGISTER(test_stack_io);
   REGISTER(test_string_io);
   REGISTER(test_vector_io);
+  REGISTER(test_vlarge_block_io);
 }
 
 DEFINE_MAIN;
