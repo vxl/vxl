@@ -408,7 +408,7 @@ ENDIF (GTK2_FOUND)
 
 IF (WXWIDGETS_FOUND)
 
-  OPTION(VGUI_USE_WX "Should wxWidgets support be compiled into vgui?" NO)
+  OPTION(VGUI_USE_WX "Should wxWidgets support be compiled into vgui?" YES)
 
   IF(VGUI_USE_WX)
 
