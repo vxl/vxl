@@ -212,7 +212,8 @@ void vgui_tview_tableau::add_icons(vcl_vector<vgui_tview_tableau::icon>* icons, 
 
   if (children.size() > 0) {
 
-    float ny = y+spacing;
+    float ny = y + spacing*children.size(); // fsm; was: y + spacing*children.size()/10;
+    //float ny = y+spacing;
     int num = children.size();
 
     float total_x = (num-1)*spacing;
