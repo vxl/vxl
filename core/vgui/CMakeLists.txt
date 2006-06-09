@@ -41,6 +41,10 @@ IF (OPENGL_FOUND)
     INCLUDE(${CMAKE_ROOT}/Modules/FindMFC.cmake)
   ENDIF(NOT MINGW)
 
+  SET(WXWIDGETS_USE_LIBS base core gl)
+  INCLUDE(${MODULE_PATH}/NewCMake/FindwxWidgets.cmake)
+  #FIND_PACKAGE(wxWidgets)
+
   INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
   IF( GLUT_FOUND )
     INCLUDE_DIRECTORIES(${GLUT_INCLUDE_DIR})
@@ -69,6 +73,9 @@ SET(vgui_sources
   vgui_observer.cxx             vgui_observer.h
   vgui_observable.cxx           vgui_observable.h
   vgui_satellite_tableau.txx vgui_satellite_tableau.h
+  vgui_font.cxx                 vgui_font.h       vgui_font_sptr.h
+  vgui_font_bitmap.cxx          vgui_font_bitmap.h
+  vgui_font_textured.cxx        vgui_font_textured.h
 
   # utility
   vgui_find.cxx                 vgui_find.h
@@ -395,6 +402,44 @@ IF (GTK2_FOUND)
 
 ENDIF (GTK2_FOUND)
 
+##################################################
+# wxWidgets
+##################################################
+
+IF (WXWIDGETS_FOUND)
+
+  OPTION(VGUI_USE_WX "Should wxWidgets support be compiled into vgui?" NO)
+
+  IF(VGUI_USE_WX)
+
+    IF(WXWIDGETS_INCLUDE_DIR)
+      INCLUDE_DIRECTORIES(${WXWIDGETS_INCLUDE_DIR})
+    ENDIF(WXWIDGETS_INCLUDE_DIR)
+    
+    IF (WXWIDGETS_CXX_FLAGS)
+      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${WXWIDGETS_CXX_FLAGS}")
+    ENDIF(WXWIDGETS_CXX_FLAGS)
+    
+    #IF(WXWIDGETS_DEFINITIONS)
+    #  ADD_DEFINITIONS(${WXWIDGETS_DEFINITIONS})
+    #ENDIF(WXWIDGETS_DEFINITIONS)
+
+    SET(vgui_wx_sources
+      impl/wx/vgui_wx_tag.cxx
+      impl/wx/vgui_wx.cxx             impl/wx/vgui_wx.h
+      impl/wx/vgui_wx_adaptor.cxx     impl/wx/vgui_wx_adaptor.h
+      impl/wx/vgui_wx_window.cxx      impl/wx/vgui_wx_window.h
+      impl/wx/vgui_wx_dialog_impl.cxx impl/wx/vgui_wx_dialog_impl.h
+      impl/wx/vgui_wx_menu.cxx        impl/wx/vgui_wx_menu.h
+      impl/wx/vgui_wx_statusbar.cxx   impl/wx/vgui_wx_statusbar.h
+    )
+
+    SET( vgui_sources ${vgui_sources} ${vgui_wx_sources} )
+
+  ENDIF(VGUI_USE_WX)
+
+ENDIF (WXWIDGETS_FOUND)
+
 ######################################################################
 # END TOOLKIT IMPLEMENTATIONS
 ######################################################################
@@ -430,6 +475,15 @@ ENDIF (VGUI_USE_GTK)
 IF (VGUI_USE_GTK2)
   TARGET_LINK_LIBRARIES(vgui ${GTK2_LIBRARIES})
 ENDIF (VGUI_USE_GTK2)
+IF (VGUI_USE_WX)
+  IF(WXWIDGETS_LINK_DIRECTORIES)
+    LINK_DIRECTORIES(${WXWIDGETS_LINK_DIRECTORIES})
+  ENDIF(WXWIDGETS_LINK_DIRECTORIES)
+  
+  IF(WXWIDGETS_LIBRARIES)
+    TARGET_LINK_LIBRARIES(vgui ${WXWIDGETS_LIBRARIES})
+  ENDIF(WXWIDGETS_LIBRARIES)
+ENDIF (VGUI_USE_WX)
 
 # Basic vgui dependencies.
 # These should appear after the above, because most of

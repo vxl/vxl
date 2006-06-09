@@ -45,6 +45,7 @@ extern int vgui_gtk_tag_function();
 extern int vgui_gtk2_tag_function();
 extern int vgui_glut_tag_function();
 extern int vgui_mfc_tag_function();
+extern int vgui_wx_tag_function();
 extern int vgui_fltk_tag_function();
 extern int vgui_glX_tag_function();
 extern int vgui_Xm_tag_function();
@@ -69,6 +70,9 @@ int vgui_register_all_implementations()
 #ifdef VGUI_USE_MFC
   vgui_mfc_tag_function();
   //vgui_accelerate_mfc_tag_function();
+#endif
+#ifdef VGUI_USE_WX
+  vgui_wx_tag_function();
 #endif
 #ifdef VGUI_USE_FLTK
   vgui_fltk_tag_function();
