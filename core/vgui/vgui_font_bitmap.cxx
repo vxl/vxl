@@ -51,8 +51,8 @@ vgui_font_bitmap::vgui_font_bitmap(bitmap_font_type t)
     }
     break;
 
-  default:
 #ifdef DEBUG
+  default:
     vcl_cerr << __FILE__ ":Invalid bitmap_font_type!" << vcl_endl;
 #endif
   }
