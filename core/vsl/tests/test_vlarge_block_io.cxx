@@ -30,7 +30,7 @@ void test_vlarge_block(void * block, vcl_size_t s, T /*dummy*/)
   
   vsl_b_ofstream bfs_out("vsl_vlarge_block_io_test.bvl.tmp");
   TEST("Created vsl_vlarge_block_io_test.bvl.tmp for writing", (!bfs_out), false);
-#if VCL_HAS_EXCEPTION
+#if VCL_HAS_EXCEPTIONS
   try { vsl_block_binary_write(bfs_out, numbers, n); }
   catch(...) { TEST ("vsl_block_binary_write didn't throw exception", true, false); }
 #else
@@ -45,7 +45,7 @@ void test_vlarge_block(void * block, vcl_size_t s, T /*dummy*/)
   vsl_b_ifstream bfs_in("vsl_vlarge_block_io_test.bvl.tmp");
   TEST("Opened vsl_vlarge_block_io_test.bvl.tmp for reading", (!bfs_in), false);
   unsigned sentinel;
-#if VCL_HAS_EXCEPTION 
+#if VCL_HAS_EXCEPTIONS
   try { vsl_block_binary_read(bfs_in, numbers, n); }
   catch(...) { TEST ("vsl_block_binary_read didn't throw exception", true, false); }
 #else
