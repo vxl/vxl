@@ -23,7 +23,6 @@ void test_vlarge_block(void * block, vcl_size_t s, T /*dummy*/)
   // fill one of the blocks with large numbers.
   T * const numbers = static_cast<T *>(block);
   vcl_size_t n = s / sizeof(T);
-  assert(s % sizeof(T) == 0);
 
   for (vcl_size_t i=0; i<n; ++i)
     numbers[i] = static_cast<T>(vcl_numeric_limits<T>::max() - i) ;
@@ -101,7 +100,9 @@ void test_vlarge_block_io()
 
   s /= 1024*4; // a sensible block size.
   s *= 1024;
-  unsigned max_blocks= vcl_numeric_limits<vcl_size_t>::max() / (s/2);
+  unsigned max_blocks = vcl_min<vcl_size_t>(1024*1024,
+    vcl_numeric_limits<vcl_size_t>::max() / (s/2) );
+  
   vcl_cout << "Try to allocate up to " << max_blocks << " blocks of " <<
     s/1024<<"KiB" << vcl_endl;
   vcl_vector<void *> blocks;
@@ -135,8 +136,16 @@ void test_vlarge_block_io()
   }
 
 
-  test_vlarge_block(blocks.back(), s, int());
-  test_vlarge_block(blocks.back(), s, float());
+  test_vlarge_block(blocks.back(), s, (int) 0);
+  test_vlarge_block(blocks.back(), s-1, (int) 0);
+  test_vlarge_block(blocks.back(), s-1019, (int) 0);
+  test_vlarge_block(blocks.back(), s, (unsigned long) 0);
+  test_vlarge_block(blocks.back(), s, (char) 0);
+  test_vlarge_block(blocks.back(), s, (short) 0);
+  test_vlarge_block(blocks.back(), s, (float) 0);
+  test_vlarge_block(blocks.back(), s-1, (float) 0);
+  test_vlarge_block(blocks.back(), s-1019, (float) 0);
+  test_vlarge_block(blocks.back(), s, (double) 0);
   free_blocks(blocks);
 }
 
