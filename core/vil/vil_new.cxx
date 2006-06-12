@@ -38,6 +38,19 @@ vil_image_resource_sptr vil_new_image_resource(unsigned ni, unsigned nj, unsigne
 }
 
 
+//: Make a new image of given format with interleaved planes.
+// The format must be scalar.
+// \relates vil_image_resource
+vil_image_resource_sptr vil_new_image_resource_interleaved(unsigned ni, unsigned nj,
+                                                           unsigned nplanes,
+                                                           vil_pixel_format format)
+{
+  assert(vil_pixel_format_num_components(format) == 1);
+
+  return new vil_memory_image(ni, nj, nplanes, format, true);
+}
+
+
 //: Make a new image resource that is a wrapper on an existing view's data.
 // \note The output will be a shallow copy of the input, so changing the pixel values
 // of one may change the pixel value of the other. Thanks to the magic of smart pointers,
