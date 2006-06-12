@@ -389,6 +389,87 @@ inline void vil3d_math_image_difference(const vil3d_image_view<aT>& imA,
   }
 }
 
+//: Compute sum of two images (im_sum = imA+imB)
+// \relates vil_image_view
+template<class aT, class bT, class sumT>
+inline void vil3d_math_image_sum(const vil3d_image_view<aT>& imA,
+                                        const vil3d_image_view<bT>& imB,
+                                        vil3d_image_view<sumT>& im_sum)
+{
+  unsigned ni = imA.ni(),nj = imA.nj(),nk = imA.nk(),np = imA.nplanes();
+  assert(imB.ni()==ni && imB.nj()==nj && imB.nk()==nk && imB.nplanes()==np);
+  im_sum.set_size(ni,nj,nk,np);
+
+  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),kstepA=imA.kstep(),pstepA = imA.planestep();
+  vcl_ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),kstepB=imB.kstep(),pstepB = imB.planestep();
+  vcl_ptrdiff_t istepS=im_sum.istep(),jstepS=im_sum.jstep(),kstepS=im_sum.kstep(),pstepS = im_sum.planestep();
+  const aT* planeA = imA.origin_ptr();
+  const bT* planeB = imB.origin_ptr();
+  sumT* planeS     = im_sum.origin_ptr();
+  for (unsigned p=0;p<np;++p,planeA += pstepA,planeB += pstepB,planeS += pstepS)
+  {
+    const aT* sliceA   = planeA;
+    const bT* sliceB   = planeB;
+    sumT* sliceS = planeS;
+    for (unsigned k=0;k<nk;++k,sliceA += kstepA,sliceB += kstepB,sliceS += kstepS)
+    {
+      const aT* rowA = sliceA;
+      const bT* rowB = sliceB;
+      sumT* rowS = sliceS;
+      for (unsigned j=0;j<nj;++j,rowA += jstepA,rowB += jstepB,rowS += jstepS)
+      {
+        const aT* pixelA = rowA;
+        const bT* pixelB = rowB;
+        sumT* pixelS = rowS;
+        for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelB+=istepB,pixelS+=istepS)
+          *pixelS = sumT(*pixelA)+sumT(*pixelB);
+      }
+    }
+  }
+}
+
+//: Compute pixel-wise product of two images (im_prod = imA*imB)
+// \relates vil_image_view
+template<class aT, class bT, class prodT>
+inline void vil3d_math_image_product(const vil3d_image_view<aT>& imA,
+                                        const vil3d_image_view<bT>& imB,
+                                        vil3d_image_view<prodT>& im_prod)
+{
+  unsigned ni = imA.ni(),nj = imA.nj(),nk = imA.nk(),np = imA.nplanes();
+  assert(imB.ni()==ni && imB.nj()==nj && imB.nk()==nk && imB.nplanes()==np);
+  im_prod.set_size(ni,nj,nk,np);
+
+  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),kstepA=imA.kstep(),pstepA = imA.planestep();
+  vcl_ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),kstepB=imB.kstep(),pstepB = imB.planestep();
+  vcl_ptrdiff_t istepS=im_prod.istep(),jstepS=im_prod.jstep(),kstepS=im_prod.kstep(),pstepS = im_prod.planestep();
+  const aT* planeA = imA.origin_ptr();
+  const bT* planeB = imB.origin_ptr();
+  prodT* planeS     = im_prod.origin_ptr();
+  for (unsigned p=0;p<np;++p,planeA += pstepA,planeB += pstepB,planeS += pstepS)
+  {
+    const aT* sliceA   = planeA;
+    const bT* sliceB   = planeB;
+    prodT* sliceS = planeS;
+    for (unsigned k=0;k<nk;++k,sliceA += kstepA,sliceB += kstepB,sliceS += kstepS)
+    {
+      const aT* rowA = sliceA;
+      const bT* rowB = sliceB;
+      prodT* rowS = sliceS;
+      for (unsigned j=0;j<nj;++j,rowA += jstepA,rowB += jstepB,rowS += jstepS)
+      {
+        const aT* pixelA = rowA;
+        const bT* pixelB = rowB;
+        prodT* pixelS = rowS;
+        for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelB+=istepB,pixelS+=istepS)
+          *pixelS = prodT(*pixelA)*prodT(*pixelB);
+      }
+    }
+  }
+}
+
+
+
+
 //: imA = fa*imA + fb*imB  (Useful for moving averages!)
 // Can do running sum using vil_add_image_fraction(running_mean,1-f,new_im,f)
 // to update current mean by a fraction f of new_im
