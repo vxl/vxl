@@ -177,6 +177,32 @@ struct convert<VIDL2_PIXEL_FORMAT_UYVY_422, VIDL2_PIXEL_FORMAT_RGB_24>
 };
 
 
+// UYVY_422 to MONO_8
+VCL_DEFINE_SPECIALIZATION
+struct convert<VIDL2_PIXEL_FORMAT_UYVY_422, VIDL2_PIXEL_FORMAT_MONO_8>
+{
+  enum { defined = true };
+  static inline bool apply(const vidl2_frame& in_frame,
+                           vidl2_frame& out_frame)
+  {
+    assert(in_frame.pixel_format()==VIDL2_PIXEL_FORMAT_UYVY_422);
+    assert(out_frame.pixel_format()==VIDL2_PIXEL_FORMAT_MONO_8);
+    const vxl_byte* uyvy = reinterpret_cast<const vxl_byte*>(in_frame.data());
+    vxl_byte* mono = reinterpret_cast<vxl_byte*>(out_frame.data());
+    unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1)/2;
+    for (unsigned int c=0; c<num_half_pix; ++c){
+      ++uyvy;
+      const vxl_byte& y1 = *(uyvy++);
+      ++uyvy;
+      const vxl_byte& y2 = *(uyvy++);
+      *(mono++) = y1;
+      *(mono++) = y2;
+    }
+    return true;
+  }
+};
+
+
 
 // End of pixel conversion specializations
 //=============================================================================
