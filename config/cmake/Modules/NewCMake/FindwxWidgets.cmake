@@ -66,7 +66,7 @@
 #         module stabilizes.
 #
 MACRO(DBG_MSG _MSG)
-#  MESSAGE(STATUS ${_MSG})
+  MESSAGE(STATUS ${_MSG})
 ENDMACRO(DBG_MSG)
 
 #
@@ -401,7 +401,9 @@ ELSE(WIN32)
     # - NOTE: wx-config doesn't verify that the libs requested exist
     #         it just produces the names. Maybe a TRY_COMPILE would
     #         be useful here...
-    STRING(REPLACE ";" "," WXWIDGETS_USE_LIBS "${WXWIDGETS_USE_LIBS}")
+    #STRING(REPLACE ";" "," WXWIDGETS_USE_LIBS "${WXWIDGETS_USE_LIBS}")
+    STRING(REGEX REPLACE ";" "," WXWIDGETS_USE_LIBS "${WXWIDGETS_USE_LIBS}")
+    DBG_MSG(${WXWIDGETS_USE_LIBS})
     EXEC_PROGRAM(${WXWIDGETS_CONFIG_EXE}
                  ARGS "--libs ${WXWIDGETS_USE_LIBS}"
                  OUTPUT_VARIABLE WXWIDGETS_LIBRARIES
