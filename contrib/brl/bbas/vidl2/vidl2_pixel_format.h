@@ -17,6 +17,7 @@
 //  - <b>type</b> the VXL C++ type used to return a pixel component
 //  - <b>bits per pixel</b> the number of bits used to represent a pixel
 //  - <b>number of channels</b> the number of color channels encoded
+//                              (now determined by color)
 //  - <b>color</b> the color encoding of the pixels (i.e. RGB, YUV)
 //  - <b>arrangement</b> the way pixels are arranged in memory.  This
 //       could be in single file, packed into macropixels, or in planes.
@@ -115,7 +116,7 @@ enum vidl2_pixel_arrangement
 //: Traits of the pixel formats
 // - name a string name for the format
 // - bits_per_pixel the effective number of bits per pixel
-// - num_channels the number of color channels
+// - color the color mode used
 // - planar are the pixel components arranged on multiple planes
 // - packed are the pixels packed into macro pixels
 struct vidl2_pixel_traits
@@ -178,6 +179,27 @@ struct vidl2_pixel_limits<double>
 };
 
 
+
+//: Define the color traits for each vidl2_pixel_color
+// for now this is just the number of channels
+template <vidl2_pixel_color color_type>
+    struct vidl2_color_traits_of;
+#define vidl2_ct_mac(COL,NC)\
+VCL_DEFINE_SPECIALIZATION \
+struct vidl2_color_traits_of<VIDL2_PIXEL_COLOR_##COL> \
+{\
+  enum { num_channels = NC }; \
+}
+
+vidl2_ct_mac( UNKNOWN,  0 );
+vidl2_ct_mac( MONO,     1 );
+vidl2_ct_mac( RGB,      3 );
+vidl2_ct_mac( RGBA,     4 );
+vidl2_ct_mac( YUV,      3 );
+
+#undef vidl2_ct_mac
+
+
 //: Define traits for a given vidl2_pixel_format
 // All pixel traits should be defined using the macro below
 // The anonymous enums allow the values available to the
@@ -186,14 +208,14 @@ struct vidl2_pixel_limits<double>
 // user does not need to worry about enum type clashes.
 template <vidl2_pixel_format pix_type>
 struct vidl2_pixel_traits_of;
-#define vidl2_pt_mac(FMT,NAME,T,BPP,NC,CLR,ARNG,XCS,YCS)\
+#define vidl2_pt_mac(FMT,NAME,T,BPP,CLR,ARNG,XCS,YCS)\
 VCL_DEFINE_SPECIALIZATION \
 struct vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_##FMT> \
 {\
   static inline vcl_string name() { return NAME; }\
   typedef T type;\
   enum { bits_per_pixel = BPP };\
-  enum { num_channels = NC };\
+  enum { num_channels = vidl2_color_traits_of<VIDL2_PIXEL_COLOR_##CLR>::num_channels };\
   static inline vidl2_pixel_color color() { return VIDL2_PIXEL_COLOR_##CLR; }\
   enum { color_idx = VIDL2_PIXEL_COLOR_##CLR };\
   static inline vidl2_pixel_arrangement arrangement() { return VIDL2_PIXEL_ARRANGE_##ARNG; }\
@@ -202,32 +224,32 @@ struct vidl2_pixel_traits_of<VIDL2_PIXEL_FORMAT_##FMT> \
   enum { chroma_shift_y = YCS };\
 }
 
-//            format    name        type         bpp  nc  color    arrange  xcs  ycs
-//            ------    ---------   ----         ---  --  -------  -------  ---  ---
-vidl2_pt_mac( UNKNOWN,  "unknown",  void,        0,   0,  UNKNOWN, UNKNOWN, 0,   0  );
+//            format    name        type         bpp  color    arrange  xcs  ycs
+//            ------    ---------   ----         ---  -------  -------  ---  ---
+vidl2_pt_mac( UNKNOWN,  "unknown",  void,        0,   UNKNOWN, UNKNOWN, 0,   0  );
 
-vidl2_pt_mac( RGB_24,   "RGB 24",   vxl_byte,    24,  3,  RGB,     SINGLE,  0,   0  );
-vidl2_pt_mac( RGB_24P,  "RGB 24P",  vxl_byte,    24,  3,  RGB,     PLANAR,  0,   0  );
-vidl2_pt_mac( BGR_24,   "BGR 24",   vxl_byte,    24,  3,  RGB,     SINGLE,  0,   0  );
-vidl2_pt_mac( RGBA_32,  "RGBA 32",  vxl_byte,    32,  4,  RGBA,    SINGLE,  0,   0  );
-vidl2_pt_mac( RGBA_32P, "RGBA 32P", vxl_byte,    32,  4,  RGBA,    PLANAR,  0,   0  );
-vidl2_pt_mac( RGB_565,  "RGB 565",  vxl_byte,    16,  3,  RGB,     SINGLE,  0,   0  );
-vidl2_pt_mac( RGB_555,  "RGB 555",  vxl_byte,    16,  3,  RGB,     SINGLE,  0,   0  );
+vidl2_pt_mac( RGB_24,   "RGB 24",   vxl_byte,    24,  RGB,     SINGLE,  0,   0  );
+vidl2_pt_mac( RGB_24P,  "RGB 24P",  vxl_byte,    24,  RGB,     PLANAR,  0,   0  );
+vidl2_pt_mac( BGR_24,   "BGR 24",   vxl_byte,    24,  RGB,     SINGLE,  0,   0  );
+vidl2_pt_mac( RGBA_32,  "RGBA 32",  vxl_byte,    32,  RGBA,    SINGLE,  0,   0  );
+vidl2_pt_mac( RGBA_32P, "RGBA 32P", vxl_byte,    32,  RGBA,    PLANAR,  0,   0  );
+vidl2_pt_mac( RGB_565,  "RGB 565",  vxl_byte,    16,  RGB,     SINGLE,  0,   0  );
+vidl2_pt_mac( RGB_555,  "RGB 555",  vxl_byte,    16,  RGB,     SINGLE,  0,   0  );
 
-vidl2_pt_mac( YUV_444P, "YUV 444P", vxl_byte,    24,  3,  YUV,     PLANAR,  0,   0  );
-vidl2_pt_mac( YUV_422P, "YUV 422P", vxl_byte,    16,  3,  YUV,     PLANAR,  1,   0  );
-vidl2_pt_mac( YUV_420P, "YUV 420P", vxl_byte,    12,  3,  YUV,     PLANAR,  1,   1  );
-vidl2_pt_mac( YVU_420P, "YVU 420P", vxl_byte,    12,  3,  YUV,     PLANAR,  1,   1  );
-vidl2_pt_mac( YUV_411P, "YUV 411P", vxl_byte,    12,  3,  YUV,     PLANAR,  2,   0  );
-vidl2_pt_mac( YUV_410P, "YUV 410P", vxl_byte,    10,  3,  YUV,     PLANAR,  2,   1  );
-vidl2_pt_mac( UYV_444,  "UYV 444",  vxl_byte,    24,  3,  YUV,     SINGLE,  0,   0  );
-vidl2_pt_mac( YUYV_422, "YUYV 422", vxl_byte,    16,  3,  YUV,     PACKED,  1,   0  );
-vidl2_pt_mac( UYVY_422, "UYVY 422", vxl_byte,    16,  3,  YUV,     PACKED,  1,   0  );
-vidl2_pt_mac( UYVY_411, "UYVY 411", vxl_byte,    12,  3,  YUV,     PACKED,  2,   0  );
+vidl2_pt_mac( YUV_444P, "YUV 444P", vxl_byte,    24,  YUV,     PLANAR,  0,   0  );
+vidl2_pt_mac( YUV_422P, "YUV 422P", vxl_byte,    16,  YUV,     PLANAR,  1,   0  );
+vidl2_pt_mac( YUV_420P, "YUV 420P", vxl_byte,    12,  YUV,     PLANAR,  1,   1  );
+vidl2_pt_mac( YVU_420P, "YVU 420P", vxl_byte,    12,  YUV,     PLANAR,  1,   1  );
+vidl2_pt_mac( YUV_411P, "YUV 411P", vxl_byte,    12,  YUV,     PLANAR,  2,   0  );
+vidl2_pt_mac( YUV_410P, "YUV 410P", vxl_byte,    10,  YUV,     PLANAR,  2,   1  );
+vidl2_pt_mac( UYV_444,  "UYV 444",  vxl_byte,    24,  YUV,     SINGLE,  0,   0  );
+vidl2_pt_mac( YUYV_422, "YUYV 422", vxl_byte,    16,  YUV,     PACKED,  1,   0  );
+vidl2_pt_mac( UYVY_422, "UYVY 422", vxl_byte,    16,  YUV,     PACKED,  1,   0  );
+vidl2_pt_mac( UYVY_411, "UYVY 411", vxl_byte,    12,  YUV,     PACKED,  2,   0  );
 
-vidl2_pt_mac( MONO_1,   "Mono 1",   bool,        1,   1,  MONO,    SINGLE,  0,   0  );
-vidl2_pt_mac( MONO_8,   "Mono 8",   vxl_byte,    8,   1,  MONO,    SINGLE,  0,   0  );
-vidl2_pt_mac( MONO_16,  "Mono 16",  vxl_uint_16, 16,  1,  MONO,    SINGLE,  0,   0  );
+vidl2_pt_mac( MONO_1,   "Mono 1",   bool,        1,   MONO,    SINGLE,  0,   0  );
+vidl2_pt_mac( MONO_8,   "Mono 8",   vxl_byte,    8,   MONO,    SINGLE,  0,   0  );
+vidl2_pt_mac( MONO_16,  "Mono 16",  vxl_uint_16, 16,  MONO,    SINGLE,  0,   0  );
 
 #undef vidl2_pt_mac
 
@@ -268,6 +290,11 @@ vidl2_pp_mac( UYVY_411 );
 // These use template metaprogramming to generate the conditionals to
 // check the traits of each vidl2_pixel_format.  You do not need to
 // modify the function definitions when adding new types.
+
+
+//: Return the number of channels needed in a color mode
+unsigned
+vidl2_pixel_color_num_channels(vidl2_pixel_color c);
 
 
 //: Return the set of traits for pixel format f

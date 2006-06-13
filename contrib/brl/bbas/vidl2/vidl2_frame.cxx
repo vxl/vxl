@@ -57,7 +57,7 @@ vidl2_memory_chunk_frame(const vil_image_view_base& image,
     {
       format_ = VIDL2_PIXEL_FORMAT_MONO_8;
     }
-    if (img.nplanes() == 3)
+    else if (img.nplanes() == 3)
     {
       if (img.planestep() == 1){
         if(fmt == VIDL2_PIXEL_FORMAT_UYV_444)
@@ -73,7 +73,7 @@ vidl2_memory_chunk_frame(const vil_image_view_base& image,
           format_ = VIDL2_PIXEL_FORMAT_RGB_24P;
       }
     }
-    if (img.nplanes() == 4)
+    else if (img.nplanes() == 4)
     {
       if (img.planestep() == 1)
         format_ = VIDL2_PIXEL_FORMAT_RGBA_32;

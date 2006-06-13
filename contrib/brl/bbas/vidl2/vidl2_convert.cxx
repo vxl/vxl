@@ -380,13 +380,18 @@ vidl2_frame_sptr vidl2_convert_to_frame(const vil_image_view_base_sptr& image)
 // always create a deep copy of the data
 bool vidl2_convert_to_view(const vidl2_frame& frame,
                            vil_image_view_base& image,
-                           bool force_rgb)
+                           vidl2_pixel_color require_color)
 {
-  unsigned ni = frame.ni(), nj = frame.nj();
-  unsigned np = vidl2_pixel_format_num_channels(frame.pixel_format());
   if (frame.pixel_format() == VIDL2_PIXEL_FORMAT_UNKNOWN ||
       frame.data() == NULL)
     return false;
+
+  unsigned ni = frame.ni(), nj = frame.nj(), np;
+  if(require_color == VIDL2_PIXEL_COLOR_UNKNOWN)
+    np = vidl2_pixel_format_num_channels(frame.pixel_format());
+  else
+    np = vidl2_pixel_color_num_channels(require_color);
+
 
   // special case for MONO_16
   if(frame.pixel_format() == VIDL2_PIXEL_FORMAT_MONO_16){
@@ -426,18 +431,33 @@ bool vidl2_convert_to_view(const vidl2_frame& frame,
   }
 
 
-  vidl2_pixel_color color = vidl2_pixel_format_color(frame.pixel_format());
+
   vidl2_pixel_format default_format = VIDL2_PIXEL_FORMAT_UNKNOWN;
-  if(!force_rgb && color == VIDL2_PIXEL_COLOR_YUV)
+  vidl2_pixel_color in_color = vidl2_pixel_format_color(frame.pixel_format());
+  if(require_color == VIDL2_PIXEL_COLOR_UNKNOWN)
+    require_color = in_color;
+  if(image.pixel_format() == VIL_PIXEL_FORMAT_BYTE)
   {
-    if(image.pixel_format() == VIL_PIXEL_FORMAT_BYTE){
-      vil_image_view<vxl_byte>& img = static_cast<vil_image_view<vxl_byte>&>(image);
-      if(img.planestep() == 1)
-        default_format = VIDL2_PIXEL_FORMAT_UYV_444;
-      else
-        default_format = VIDL2_PIXEL_FORMAT_YUV_444P;
+    vil_image_view<vxl_byte>& img = static_cast<vil_image_view<vxl_byte>&>(image);
+    bool interleaved = (img.planestep() == 1);
+
+    switch(require_color){
+      case VIDL2_PIXEL_COLOR_MONO:
+        default_format = VIDL2_PIXEL_FORMAT_MONO_8; break;
+      case VIDL2_PIXEL_COLOR_RGB:
+        default_format = interleaved?VIDL2_PIXEL_FORMAT_RGB_24
+                                    :VIDL2_PIXEL_FORMAT_RGB_24P; break;
+      case VIDL2_PIXEL_COLOR_RGBA:
+        default_format = interleaved?VIDL2_PIXEL_FORMAT_RGBA_32
+                                    :VIDL2_PIXEL_FORMAT_RGBA_32P; break;
+      case VIDL2_PIXEL_COLOR_YUV:
+        default_format = interleaved?VIDL2_PIXEL_FORMAT_UYV_444
+                                    :VIDL2_PIXEL_FORMAT_YUV_444P; break;
+      default:
+        break;
     }
   }
+
 
   vidl2_frame_sptr out_frame = new vidl2_memory_chunk_frame(image,default_format);
   // if the image can be wrapped as a frame
@@ -448,25 +468,19 @@ bool vidl2_convert_to_view(const vidl2_frame& frame,
 
   // use an intermediate format
   vidl2_pixel_format out_fmt;
-  switch(color){
+  switch(in_color){
     case VIDL2_PIXEL_COLOR_MONO:
-      out_fmt = VIDL2_PIXEL_FORMAT_MONO_8;
-      break;
+      out_fmt = VIDL2_PIXEL_FORMAT_MONO_8; break;
     case VIDL2_PIXEL_COLOR_RGB:
-      out_fmt = VIDL2_PIXEL_FORMAT_RGB_24P;
-      break;
+      out_fmt = VIDL2_PIXEL_FORMAT_RGB_24P; break;
     case VIDL2_PIXEL_COLOR_RGBA:
-      out_fmt = VIDL2_PIXEL_FORMAT_RGBA_32P;
-      break;
+      out_fmt = VIDL2_PIXEL_FORMAT_RGBA_32P; break;
     case VIDL2_PIXEL_COLOR_YUV:
-      if(force_rgb)
-        out_fmt = VIDL2_PIXEL_FORMAT_RGB_24P;
-      else
-        out_fmt = VIDL2_PIXEL_FORMAT_YUV_444P;
-      break;
+      out_fmt = VIDL2_PIXEL_FORMAT_YUV_444P; break;
     default:
       return false;
   }
+
   vil_image_view<vxl_byte> temp(ni,nj,np);
   out_frame = new vidl2_memory_chunk_frame(ni,nj,out_fmt,temp.memory_chunk());
   vidl2_convert_frame(frame, *out_frame);

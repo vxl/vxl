@@ -24,10 +24,11 @@
 //: Convert the frame into an image view
 // possibly converts the pixel data type
 // always create a deep copy of the data
-// \param force_rgb determines whether YUV formats are converted to RGB
+// \param require_color restricts the color mode of the output
+//         if set to UNKNOWN (default) the input color mode is used
 bool vidl2_convert_to_view(const vidl2_frame& frame,
                            vil_image_view_base& image,
-                           bool force_rgb = true);
+                           vidl2_pixel_color require_color = VIDL2_PIXEL_COLOR_UNKNOWN);
 
 
 //: Wrap the frame buffer in an image view if supported

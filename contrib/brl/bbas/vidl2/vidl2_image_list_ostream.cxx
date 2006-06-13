@@ -125,7 +125,7 @@ write_frame(const vidl2_frame_sptr& frame)
   vil_image_view<vxl_byte> image;
   if(!frame)
     return false;
-  if(!vidl2_convert_to_view(*frame, image, true))
+  if(!vidl2_convert_to_view(*frame, image, VIDL2_PIXEL_COLOR_RGB))
     return false;
 
   return vil_save(image,

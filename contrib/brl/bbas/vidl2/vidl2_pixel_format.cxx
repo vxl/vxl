@@ -86,6 +86,25 @@ struct check_types<VIDL2_PIXEL_FORMAT_UNKNOWN>
 
 //=============================================================================
 
+//: Return the number of channels needed in a color mode
+unsigned
+    vidl2_pixel_color_num_channels(vidl2_pixel_color c)
+{
+  switch(c){
+    case VIDL2_PIXEL_COLOR_MONO:
+      return vidl2_color_traits_of<VIDL2_PIXEL_COLOR_MONO>::num_channels;
+    case VIDL2_PIXEL_COLOR_RGB:
+      return vidl2_color_traits_of<VIDL2_PIXEL_COLOR_RGB>::num_channels;
+    case VIDL2_PIXEL_COLOR_YUV:
+      return vidl2_color_traits_of<VIDL2_PIXEL_COLOR_YUV>::num_channels;
+    case VIDL2_PIXEL_COLOR_RGBA:
+      return vidl2_color_traits_of<VIDL2_PIXEL_COLOR_RGBA>::num_channels;
+    default:
+      break;
+  }
+  return vidl2_color_traits_of<VIDL2_PIXEL_COLOR_UNKNOWN>::num_channels;
+}
+
 
 //: Return the set of traits for pixel format f
 vidl2_pixel_traits
