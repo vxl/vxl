@@ -87,4 +87,10 @@ IF(MFC_FOUND)
    SUBDIRS( mfc_example )
 ENDIF(MFC_FOUND)
 
+# wxWidgets example
+#------------------
+IF(VGUI_USE_WX)
+  SUBDIRS(wx_example)
+ENDIF(VGUI_USE_WX)
+
 ENDIF( HAS_VGUI )
