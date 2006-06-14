@@ -46,9 +46,9 @@
 # NOTES
 #
 #   This module has been tested on the WIN32 platform with wxWidgets
-#   2.6.2 and 2.6.3. However, it has been designed to easily extend
-#   support all possible builds (e.g., static/shared, debug/release,
-#   unicode, universal, multilib/monolithic, etc.).
+#   2.6.2, 2.6.3, and 2.5.3. However, it has been designed to be easily
+#   extended to support all possible builds (e.g., static/shared,
+#   debug/release, unicode, universal, multilib/monolithic, etc.).
 #
 #   If you want to use the module and your build type is not supported
 #   out-of-the-box, please contact me to exchange information on how
@@ -66,7 +66,7 @@
 #         module stabilizes.
 #
 MACRO(DBG_MSG _MSG)
-  MESSAGE(STATUS ${_MSG})
+#  MESSAGE(STATUS ${_MSG})
 ENDMACRO(DBG_MSG)
 
 #
@@ -115,25 +115,50 @@ MACRO(WX_FIND_LIBS _UNV _UCD _DBG)
        wx${LIB}${_UCD}${_DBG} # for regex
        wx${LIB}${_DBG}
      PATHS ${WX_LIB_DIR}
+     NO_DEFAULT_PATH
    )
    MARK_AS_ADVANCED(WX_${LIB}${_DBG})
  ENDFOREACH(LIB)
 
  # Find wxWidgets multilib base libraries
- FIND_LIBRARY(WX_base${_DBG} wxbase26${_UCD}${_DBG} ${WX_LIB_DIR})
+ FIND_LIBRARY(WX_base${_DBG}
+   NAMES
+     wxbase26${_UCD}${_DBG}
+     wxbase25${_UCD}${_DBG}
+   PATHS ${WX_LIB_DIR}
+   NO_DEFAULT_PATH
+ )
  MARK_AS_ADVANCED(WX_base${_DBG})
  FOREACH(LIB net odbc xml)
-   FIND_LIBRARY(WX_${LIB}${_DBG} wxbase26${_UCD}${_DBG}_${LIB} ${WX_LIB_DIR})
+   FIND_LIBRARY(WX_${LIB}${_DBG}
+     NAMES
+       wxbase26${_UCD}${_DBG}_${LIB}
+       wxbase25${_UCD}${_DBG}_${LIB}
+     PATHS ${WX_LIB_DIR}
+     NO_DEFAULT_PATH
+   )
    MARK_AS_ADVANCED(WX_${LIB}${_DBG})
  ENDFOREACH(LIB)
 
  # Find wxWidgets monolithic library
- FIND_LIBRARY(WX_mono${_DBG} wxmsw${_UNV}26${_UCD}${_DBG} ${WX_LIB_DIR})
+ FIND_LIBRARY(WX_mono${_DBG}
+   NAMES
+     wxmsw${_UNV}26${_UCD}${_DBG}
+     wxmsw${_UNV}25${_UCD}${_DBG}
+   PATHS ${WX_LIB_DIR}
+   NO_DEFAULT_PATH
+ )
  MARK_AS_ADVANCED(WX_mono${_DBG})
 
  # Find wxWidgets multilib libraries
  FOREACH(LIB core adv html media xrc dbgrid gl qa)
-   FIND_LIBRARY(WX_${LIB}${_DBG} wxmsw${_UNV}26${_UCD}${_DBG}_${LIB} ${WX_LIB_DIR})
+   FIND_LIBRARY(WX_${LIB}${_DBG}
+     NAMES
+       wxmsw${_UNV}26${_UCD}${_DBG}_${LIB}
+       wxmsw${_UNV}25${_UCD}${_DBG}_${LIB}
+     PATHS ${WX_LIB_DIR}
+     NO_DEFAULT_PATH
+   )
    MARK_AS_ADVANCED(WX_${LIB}${_DBG})
  ENDFOREACH(LIB)
 ENDMACRO(WX_FIND_LIBS)
@@ -247,6 +272,18 @@ FIND_PATH(WXWIDGETS_ROOT_DIR include/wx/wx.h
    D:\\wxWidgets-2.6.2
    C:\\wxWidgets-2.6.1
    D:\\wxWidgets-2.6.1
+   C:\\wxWidgets-2.6.0
+   D:\\wxWidgets-2.6.0
+   C:\\wxWidgets-2.5.5
+   D:\\wxWidgets-2.5.5
+   C:\\wxWidgets-2.5.4
+   D:\\wxWidgets-2.5.4
+   C:\\wxWidgets-2.5.3
+   D:\\wxWidgets-2.5.3
+   C:\\wxWidgets-2.5.2
+   D:\\wxWidgets-2.5.2
+   C:\\wxWidgets-2.5.1
+   D:\\wxWidgets-2.5.1
 #   C:\\wxWindows-2.4.2
 #   D:\\wxWindows-2.4.2
   DOC "wxWidgets base/installation directory?"
