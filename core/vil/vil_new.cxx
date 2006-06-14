@@ -47,7 +47,7 @@ vil_image_resource_sptr vil_new_image_resource_interleaved(unsigned ni, unsigned
 {
   assert(vil_pixel_format_num_components(format) == 1);
 
-  return new vil_memory_image(ni, nj, nplanes, format, true);
+  return new vil_memory_image(ni, nj, 1, format, nplanes);
 }
 
 
