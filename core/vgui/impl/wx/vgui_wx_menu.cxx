@@ -8,10 +8,14 @@
 //=========================================================================
 
 #include "vgui_wx_menu.h"
-
 #include <vgui/vgui_command.h>
 
 #include <wx/menu.h>
+
+#ifndef wxCommandEventHandler        // wxWidgets-2.5.3 doesn't define this
+#define wxCommandEventHandler(func) \
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxCommandEventFunction, &func)
+#endif
 
 #include <vcl_cctype.h>  // for vcl_toupper
 #include <vcl_cassert.h>

@@ -14,6 +14,7 @@
 #include <vgui/internals/vgui_dialog_field.h>
 #include <vgui/internals/vgui_simple_field.h>
 
+#include <wx/log.h>
 #include <wx/filename.h>
 
 #include <wx/dialog.h>
@@ -30,6 +31,11 @@
 #include <wx/stattext.h>
 #include <wx/statbox.h>
 #include <wx/button.h>
+
+#ifndef wxCommandEventHandler        // wxWidgets-2.5.3 doesn't define this
+#define wxCommandEventHandler(func) \
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxCommandEventFunction, &func)
+#endif
 
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
@@ -187,15 +193,14 @@ vgui_wx_dialog_impl::vgui_wx_dialog_impl(const char* name)
   , is_modal_(true)
   , adaptor_(0)
 {
+  wxLogTrace(wxTRACE_RefCount, "vgui_wx_dialog_impl::vgui_wx_dialog_impl");
 }
 
-#include <vgui/vgui_macro.h>
 //: Destructor.
 vgui_wx_dialog_impl::~vgui_wx_dialog_impl(void)
 {
-  vgui_macro_report_errors;
+  wxLogTrace(wxTRACE_RefCount, "vgui_wx_dialog_impl::~vgui_wx_dialog_impl");
   destroy_wx_dialog();
-  vgui_macro_report_errors;
 }
 
 //-------------------------------------------------------------------------
@@ -213,23 +218,18 @@ vgui_wx_dialog_impl::~vgui_wx_dialog_impl(void)
 // periodically refresh the dialog values.
 bool vgui_wx_dialog_impl::ask(void)
 {
-  vgui_macro_report_errors;
-
   // rebuild the dialog, if the elements have changed
   if (has_changed()) { build_wx_dialog(); }
 
   // show the dialog
   if (is_modal_)
   {
-    vgui_macro_report_errors;
     return dialog_->ShowModal() == wxID_OK ? true : false;
   }
   else
   {
     return dialog_->Show();
   }
-
-  vgui_macro_report_errors;
 }
 
 struct vgui_wx_dialog_choice
@@ -387,9 +387,12 @@ void vgui_wx_dialog_impl::build_wx_dialog(void)
       adaptor->set_tableau(static_cast<vgui_wx_dialog_inline_tab*>(e->widget)->tab);
       //adaptor->SetSize(static_cast<vgui_wx_dialog_inline_tab*>(e->widget)->width,
       //                 static_cast<vgui_wx_dialog_inline_tab*>(e->widget)->height);
-      wxBoxSizer* box_sizer = new wxBoxSizer(wxVERTICAL);
-      box_sizer->Add(adaptor);
-      holder->Add(box_sizer, flags);
+
+      //wxBoxSizer* box_sizer = new wxBoxSizer(wxVERTICAL);
+      //box_sizer->Add(adaptor);
+      //holder->Add(box_sizer, flags);
+      holder->Add(adaptor, flags);
+
       //adaptor->post_redraw();
       adaptor_ = adaptor;
       }
@@ -420,7 +423,6 @@ void vgui_wx_dialog_impl::build_wx_dialog(void)
 
 void vgui_wx_dialog_impl::destroy_wx_dialog(void)
 {
-  vcl_cout << "called vgui_wx_dialog_impl::destroy_wx_dialog" << vcl_endl;
   if (dialog_)
   {
     dialog_->PopEventHandler(true);
@@ -428,16 +430,11 @@ void vgui_wx_dialog_impl::destroy_wx_dialog(void)
     {
       adaptor_->post_destroy();
       //delete adaptor_;
-  vgui_macro_report_errors;
       adaptor_ = 0;
     }
     dialog_->Destroy();
-  vgui_macro_report_errors;
     dialog_ = 0;
   }
-
-  // *****
-  //if (adaptor) { adaptor->set_tableau(0); delete adaptor; adaptor = 0; }
 }
 
 //: Determine if dialog has changed since last construction (i.e., ask()).
@@ -581,7 +578,10 @@ vgui_wx_dialog_impl::text_with_button_element(vgui_dialog_field* field,
                                 0,
                                 vgui_wx_text_validator(field));
 
-  wxSizer* box = new wxStaticBoxSizer(wxVERTICAL, dialog_, field->label.c_str());
+  // ***** this constructor not available in wxWidgets-2.5.3
+  //wxSizer* box = new wxStaticBoxSizer(wxVERTICAL, dialog_, field->label.c_str());
+  wxSizer* box = new wxStaticBoxSizer(
+    new wxStaticBox(dialog_, wxID_ANY, field->label.c_str()), wxVERTICAL);
   box->Add(text_control, 0, wxGROW | wxALL, 2);
   box->Add(new wxButton(dialog_, event_id, button.c_str()),
            0, wxALIGN_RIGHT | wxALL, 2);

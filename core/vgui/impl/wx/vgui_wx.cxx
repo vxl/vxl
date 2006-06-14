@@ -16,6 +16,7 @@
 #include <vcl_iostream.h>
 
 #include <wx/app.h>
+#include <wx/log.h>
 
 //-------------------------------------------------------------------------
 // Private helpers - declarations.
@@ -101,6 +102,11 @@ void vgui_wx::init(int& argc, char** argv)
 
   // adaptor is being extended (i.e., vgui is controlling the event loop)
   adaptor_embedded_ = false;
+
+  // ***** Conditionally set these logging levels?
+  //wxLog* logger = new wxLogStderr;
+  //wxLog::SetActiveTarget(logger);
+  wxLog::AddTraceMask(wxTRACE_RefCount);
 }
 
 void vgui_wx::uninit(void)

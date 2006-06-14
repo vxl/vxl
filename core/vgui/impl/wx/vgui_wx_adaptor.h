@@ -35,7 +35,7 @@ class vgui_wx_adaptor
   , public vgui_adaptor
   , public vgui_adaptor_mixin
 {
-  //DECLARE_DYNAMIC_CLASS(vgui_wx_adaptor)
+  DECLARE_CLASS(vgui_wx_adaptor)
   DECLARE_EVENT_TABLE()
 
   typedef vgui_adaptor_mixin mixin;

@@ -13,9 +13,16 @@
 #include <vgui/vgui_command.h>
 #include <vgui/vgui_popup_params.h>
 
+#include <wx/log.h>
+
 #include <wx/menu.h>
 #include <wx/timer.h>
 #include <wx/dcclient.h>
+
+#ifndef wxEventHandler               // wxWidgets-2.5.3 doesn't define this
+#define wxEventHandler(func) \
+    (wxObjectEventFunction)wxStaticCastEvent(wxEventFunction, &func)
+#endif
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
@@ -40,7 +47,7 @@ namespace
 //-------------------------------------------------------------------------
 // vgui_wx_adaptor implementation - construction & destruction.
 //-------------------------------------------------------------------------
-//IMPLEMENT_DYNAMIC_CLASS(vgui_wx_adaptor, wxGLCanvas)
+IMPLEMENT_CLASS(vgui_wx_adaptor, wxGLCanvas)
 
 //: ***** To ensure the commands stay in scope for the lifetime of the popup.
 vgui_menu vgui_wx_adaptor::last_popup_;
@@ -61,11 +68,13 @@ vgui_wx_adaptor::vgui_wx_adaptor(wxWindow* parent,
   , idle_request_posted_(false)
   , destroy_posted_(false)
 {
+  wxLogTrace(wxTRACE_RefCount, "vgui_wx_adaptor::vgui_wx_adaptor");
 }
 
 //: Destructor.
 vgui_wx_adaptor::~vgui_wx_adaptor()
 {
+  wxLogTrace(wxTRACE_RefCount, "vgui_wx_adaptor::~vgui_wx_adaptor");
 }
 
 //-------------------------------------------------------------------------
@@ -111,12 +120,18 @@ void vgui_wx_adaptor::post_message(char const *, void const *)
 //: Schedules destruction of parent vgui_window.
 void vgui_wx_adaptor::post_destroy(void)
 {
+  // ***** forget about any posted redraws
+  redraw_posted_ = false;
+  overlay_redraw_posted_ = false;
+
   vgui_macro_report_errors;
+
   if (!destroy_posted_)
   {
     destroy_posted_ = true;
     Close();
   }
+
   //if (view_)
   //{
   //  view_->GetDocument()->DeleteAllViews();
@@ -128,9 +143,6 @@ void vgui_wx_adaptor::post_destroy(void)
   //}
   //destroy_posted_ = true;
 
-  // ***** forget about any posted redraws
-  redraw_posted_ = false;
-  overlay_redraw_posted_ = false;
   vgui_macro_report_errors;
 }
 
@@ -189,6 +201,10 @@ void vgui_wx_adaptor::on_paint(wxPaintEvent& WXUNUSED(event))
   vgui_macro_report_errors;
   // must always be here
   wxPaintDC dc(this);
+
+#ifndef __WXMOTIF__
+  if (!GetContext()) { return; }
+#endif
 
   SetCurrent();
 
@@ -407,7 +423,8 @@ void vgui_wx_adaptor::on_close(wxCloseEvent& event)
   vgui_macro_report_errors;
   dispatch_to_tableau(vgui_DESTROY);
   vgui_macro_report_errors;
-  GetParent()->Destroy();
+  Destroy();
+  //GetParent()->Destroy();
   vgui_macro_report_errors;
 }
 
@@ -561,7 +578,7 @@ namespace
       }
       else
       {
-#ifdef DEBUG
+#ifdef __WXDEBUG__
         vcl_cerr << "VGUI wx Error: Unknown key code." << vcl_endl;
 #endif
         return vgui_KEY_NULL;
