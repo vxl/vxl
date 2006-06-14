@@ -38,14 +38,14 @@ static void test_border_constant_hsv()
 {
   vil_image_view<float> im(64,64,3);
   vil_fill(im, float(0));
-  im(0, 10, 0) = 41.2;
-  im(0, 10, 1) = 42.2;
-  im(0, 10, 2) = 43.2;
-  im(50, 63, 0) = 50.1;
-  im(50, 63, 1) = 51.1;
-  im(50, 63, 2) = 52.1;
+  im(0, 10, 0) = 41.2f;
+  im(0, 10, 1) = 42.2f;
+  im(0, 10, 2) = 43.2f;
+  im(50, 63, 0) = 50.1f;
+  im(50, 63, 1) = 51.1f;
+  im(50, 63, 2) = 52.1f;
 
-  vil_border<vil_image_view<float> > border = vil_border_create_constant(im, 13.3);
+  vil_border<vil_image_view<float> > border = vil_border_create_constant(im, 13.3f);
   vil_border_accessor<vil_image_view<float> >
     accessor = vil_border_create_accessor(im,border);
 

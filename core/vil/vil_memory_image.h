@@ -29,12 +29,13 @@ class vil_memory_image : public vil_image_resource
 
   //: Create an in-memory image of given size and pixel type.
   // If not interleaved, pixel type must be scalar or nplanes must be 1.
-  // If interleaved, pixel type must be scalar.
+  // If n_interleaved_planes is not 1, pixel type must be scalar,
+  // and n_planes must be 1.
   vil_memory_image(unsigned ni,
                    unsigned nj,
                    unsigned nplanes,
                    vil_pixel_format format,
-                   bool interleaved = false);
+                   unsigned n_interleaved_planes = 1);
 
   //: Create a wrapper around the given image_view
   vil_memory_image(vil_image_view_base const &);

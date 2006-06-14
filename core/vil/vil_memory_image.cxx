@@ -27,23 +27,21 @@ vil_memory_image::vil_memory_image():
 
 //: Create an in-memory image of given size and pixel type.
 // If not interleaved, pixel type must be scalar or nplanes must be 1.
-// If interleaved, pixel type must be scalar.
+// If n_interleaved_planes is not 1, pixel type must be scalar, and n_planes must be 1.
 vil_memory_image::vil_memory_image(unsigned ni, unsigned nj, unsigned nplanes,
-                                   vil_pixel_format format, bool interleaved)
+                                   vil_pixel_format format, unsigned n_interleaved_planes/*=1*/)
 {
-  unsigned np, npi;
-  if(interleaved){
-    np = 1;
-    npi = nplanes;
-  }
-  else{
-    np = nplanes;
-    npi = vil_pixel_format_num_components(format);
-  }
+  //Check that only once source of multiple planes is not 1.
+  assert( ( (nplanes==1?0:1) + (n_interleaved_planes==1?0:1) +
+    (vil_pixel_format_num_components(format)==1?0:1) ) <= 1) ;
+
+  if (vil_pixel_format_num_components(format)!=1)
+    n_interleaved_planes = vil_pixel_format_num_components(format);
+
   switch (vil_pixel_format_component_format(format))
   {
 #define macro( F , T  ) \
-   case F : view_ = new vil_image_view<T >(ni, nj, np, npi); \
+   case F : view_ = new vil_image_view<T >(ni, nj, nplanes, n_interleaved_planes); \
             break;
    macro(VIL_PIXEL_FORMAT_BYTE ,   vxl_byte)
    macro(VIL_PIXEL_FORMAT_SBYTE ,  vxl_sbyte)
