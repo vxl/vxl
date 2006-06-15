@@ -9,26 +9,10 @@
 
 //----- Static menu callback functions -----
 
-void vidl2_player_menus::open_image_list_istream_callback()
+void vidl2_player_menus::open_istream_callback()
 {
-  vidl2_player_manager::instance()->open_image_list_istream();
+  vidl2_player_manager::instance()->open_istream();
 }
-
-
-#ifdef HAS_FFMPEG
-void vidl2_player_menus::open_ffmpeg_istream_callback()
-{
-  vidl2_player_manager::instance()->open_ffmpeg_istream();
-}
-#endif
-
-
-#ifdef HAS_DC1394
-void vidl2_player_menus::open_dc1394_istream_callback()
-{
-  vidl2_player_manager::instance()->open_dc1394_istream();
-}
-#endif
 
 
 void vidl2_player_menus::close_istream_callback()
@@ -37,18 +21,10 @@ void vidl2_player_menus::close_istream_callback()
 }
 
 
-void vidl2_player_menus::open_image_list_ostream_callback()
+void vidl2_player_menus::open_ostream_callback()
 {
-  vidl2_player_manager::instance()->open_image_list_ostream();
+  vidl2_player_manager::instance()->open_ostream();
 }
-
-
-#ifdef HAS_FFMPEG
-void vidl2_player_menus::open_ffmpeg_ostream_callback()
-{
-  vidl2_player_manager::instance()->open_ffmpeg_ostream();
-}
-#endif
 
 
 void vidl2_player_menus::close_ostream_callback()
@@ -117,25 +93,10 @@ vgui_menu vidl2_player_menus::get_menu()
   //file menu entries
   menufile.add( "Quit", quit_callback,(vgui_key)'q', vgui_CTRL);
 
-  vgui_menu menu_istream;
-  menu_istream.add( "Image List",  open_image_list_istream_callback);
-#ifdef HAS_FFMPEG
-  menu_istream.add( "FFMPEG",      open_ffmpeg_istream_callback);
-#endif
-#ifdef HAS_DC1394
-  menu_istream.add( "dc1394",      open_dc1394_istream_callback);
-#endif
-
-  vgui_menu menu_ostream;
-  menu_ostream.add( "Image List",  open_image_list_ostream_callback);
-#ifdef HAS_FFMPEG
-  menu_ostream.add( "FFMPEG",      open_ffmpeg_ostream_callback);
-#endif
-
-  menuvstream.add( "Open Input",   menu_istream);
+  menuvstream.add( "Open Input",   open_istream_callback);
   menuvstream.add( "Close Input",  close_istream_callback);
   menuvstream.separator();
-  menuvstream.add( "Open Output",  menu_ostream);
+  menuvstream.add( "Open Output",  open_ostream_callback);
   menuvstream.add( "Close Output", close_ostream_callback);
   menuvstream.separator();
   menuvstream.add( "Input to Output", pipe_streams_callback);

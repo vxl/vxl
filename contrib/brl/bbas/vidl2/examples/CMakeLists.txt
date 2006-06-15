@@ -12,7 +12,7 @@ SET(vidl2_player_sources
 )
 
 ADD_EXECUTABLE (vidl2_player ${vidl2_player_sources})
-TARGET_LINK_LIBRARIES(vidl2_player vidl2 vgui vil vul)
+TARGET_LINK_LIBRARIES(vidl2_player vidl2 vidl2_gui vul)
 
 ENDIF( HAS_VGUI )
 

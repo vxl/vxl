@@ -20,7 +20,6 @@
 //  The purpose this code is demonstrate the use of vidl2.  The vidl2_player
 //  loads, displays, and saves (saving not implemented yet) videos.
 //
-
 class vidl2_player_manager : public vgui_wrapper_tableau
 {
  public:
@@ -38,24 +37,11 @@ class vidl2_player_manager : public vgui_wrapper_tableau
   //: width (in pixels) of the video frame
   unsigned get_width() const { return width_; }
 
-  //: open an image list input video stream
-  void open_image_list_istream();
+  //: open the input video stream
+  void open_istream();
 
-  //: open an image list output video stream
-  void open_image_list_ostream();
-
-#ifdef HAS_FFMPEG
-  //: open a FFMPEG input video stream
-  void open_ffmpeg_istream();
-
-  //: open a FFMPEG output video stream
-  void open_ffmpeg_ostream();
-#endif
-
-#ifdef HAS_DC1394
-  //: open a dc1394 input video stream
-  void open_dc1394_istream();
-#endif
+  //: open the output video stream
+  void open_ostream();
 
   //: close the input video stream
   void close_istream();
