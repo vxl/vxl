@@ -412,12 +412,15 @@ bool vidl2_convert_to_view(const vidl2_frame& frame,
       frame.data() == NULL)
     return false;
 
-  unsigned ni = frame.ni(), nj = frame.nj(), np;
+  vidl2_pixel_color in_color = vidl2_pixel_format_color(frame.pixel_format());
   if(require_color == VIDL2_PIXEL_COLOR_UNKNOWN)
-    np = vidl2_pixel_format_num_channels(frame.pixel_format());
-  else
-    np = vidl2_pixel_color_num_channels(require_color);
+    require_color = in_color;
 
+  unsigned ni = frame.ni(), nj = frame.nj();
+  unsigned np = vidl2_pixel_color_num_channels(require_color);
+
+  // resize the image if necessary
+  image.set_size(ni,nj,np);
 
   // special case for MONO_16
   if(frame.pixel_format() == VIDL2_PIXEL_FORMAT_MONO_16){
@@ -459,9 +462,6 @@ bool vidl2_convert_to_view(const vidl2_frame& frame,
 
 
   vidl2_pixel_format default_format = VIDL2_PIXEL_FORMAT_UNKNOWN;
-  vidl2_pixel_color in_color = vidl2_pixel_format_color(frame.pixel_format());
-  if(require_color == VIDL2_PIXEL_COLOR_UNKNOWN)
-    require_color = in_color;
   if(image.pixel_format() == VIL_PIXEL_FORMAT_BYTE)
   {
     vil_image_view<vxl_byte>& img = static_cast<vil_image_view<vxl_byte>&>(image);
