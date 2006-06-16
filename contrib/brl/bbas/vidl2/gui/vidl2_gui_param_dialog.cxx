@@ -52,10 +52,14 @@ vidl2_istream* vidl2_gui_open_istream_dialog()
   switch(choice_codes[idx]){
     case IMAGE_LIST:
       return vidl2_gui_param_dialog::image_list_istream();
+#ifdef HAS_FFMPEG
     case FFMPEG:
       return vidl2_gui_param_dialog::ffmpeg_istream();
+#endif
+#ifdef HAS_DC1394
     case DC1394:
       return vidl2_gui_param_dialog::dc1394_istream();
+#endif
     default:
       break;
   }
@@ -87,8 +91,10 @@ vidl2_ostream* vidl2_gui_open_ostream_dialog()
   switch(choice_codes[idx]){
     case IMAGE_LIST:
       return vidl2_gui_param_dialog::image_list_ostream();
+#ifdef HAS_FFMPEG
     case FFMPEG:
       return vidl2_gui_param_dialog::ffmpeg_ostream();
+#endif
     default:
       break;
   }
