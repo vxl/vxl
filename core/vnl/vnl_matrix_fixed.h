@@ -108,6 +108,7 @@ template <class T, unsigned int num_rows, unsigned int num_cols>
 class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
 {
  public:
+  typedef vnl_matrix_fixed<T,num_rows,num_cols> self;
   typedef unsigned int size_type;
 
  private:
@@ -262,58 +263,59 @@ class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
   //: Add \a s to each element of lhs matrix in situ
   vnl_matrix_fixed& operator+= (T s)
   {
-    add( data_block(), s, data_block() ); return *this;
+    self::add( data_block(), s, data_block() ); return *this;
   }
 
   //: Subtract \a s from each element of lhs matrix in situ
   vnl_matrix_fixed& operator-= (T s)
   {
-    sub( data_block(), s, data_block() ); return *this;
+    self::sub( data_block(), s, data_block() ); return *this;
   }
 
   //:
   vnl_matrix_fixed& operator*= (T s)
   {
-    mul( data_block(), s, data_block() ); return *this;
+    self::mul( data_block(), s, data_block() ); return *this;
   }
 
   //:
   vnl_matrix_fixed& operator/= (T s)
   {
-    div( data_block(), s, data_block() ); return *this;
+    self::div( data_block(), s, data_block() ); return *this;
   }
 
   //:
   vnl_matrix_fixed& operator+= (vnl_matrix_fixed const& m)
   {
-    add( data_block(), m.data_block(), data_block() ); return *this;
+    self::add( data_block(), m.data_block(), data_block() ); return *this;
   }
 
   //:
   vnl_matrix_fixed& operator+= (vnl_matrix<T> const& m)
   {
     assert( m.rows() == rows() && m.cols() == cols() );
-    add( data_block(), m.data_block(), data_block() ); return *this;
+    self::add( data_block(), m.data_block(), data_block() ); return *this;
   }
 
   //:
   vnl_matrix_fixed& operator-= (vnl_matrix_fixed const& m)
   {
-    sub( data_block(), m.data_block(), data_block() ); return *this;
+    self::sub( data_block(), m.data_block(), data_block() ); return *this;
   }
 
   //:
   vnl_matrix_fixed& operator-= (vnl_matrix<T> const& m)
   {
     assert( m.rows() == rows() && m.cols() == cols() );
-    sub( data_block(), m.data_block(), data_block() ); return *this;
+    self::sub( data_block(), m.data_block(), data_block() );
+    return *this;
   }
 
   //: Negate all elements of matrix
   vnl_matrix_fixed operator- () const
   {
     vnl_matrix_fixed r;
-    sub( T(0), data_block(), r.data_block() );
+    self::sub( T(0), data_block(), r.data_block() );
     return r;
   }
 
