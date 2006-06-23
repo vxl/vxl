@@ -34,6 +34,7 @@ DECLARE( test_algo_sobel );
 DECLARE( test_algo_abs_shuffle_distance );
 DECLARE( test_algo_suppress_non_max_edges );
 DECLARE( test_algo_checker_board );
+DECLARE( test_algo_quad_distance_function );
 
 void
 register_tests()
@@ -72,6 +73,7 @@ register_tests()
   REGISTER( test_algo_abs_shuffle_distance );
   REGISTER( test_algo_suppress_non_max_edges );
   REGISTER( test_algo_checker_board );
+  REGISTER( test_algo_quad_distance_function );
 }
 
 DEFINE_MAIN;

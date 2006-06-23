@@ -36,6 +36,7 @@ ADD_EXECUTABLE( vil_algo_test_all
   test_algo_abs_shuffle_distance.cxx
   test_algo_suppress_non_max_edges.cxx
   test_algo_checker_board.cxx
+  test_algo_quad_distance_function.cxx
 )
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
@@ -46,6 +47,7 @@ TARGET_LINK_LIBRARIES( vil_algo_test_all vil_algo testlib vcl )
 
 
 # vil/algo
+
 ADD_TEST( vil_algo_test_gauss_filter        ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_gauss_filter)
 ADD_TEST( vil_algo_test_gauss_reduce        ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_gauss_reduce)
 ADD_TEST( vil_algo_test_colour_space        ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_colour_space)
@@ -80,6 +82,7 @@ ADD_TEST( vil_algo_test_algo_sobel          ${EXECUTABLE_OUTPUT_PATH}/vil_algo_t
 ADD_TEST( vil_algo_abs_shuffle_distance     ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_abs_shuffle_distance)
 ADD_TEST( vil_algo_suppress_non_max_edges   ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_suppress_non_max_edges)
 ADD_TEST( vil_algo_test_checker_board       ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_checker_board)
+ADD_TEST( vil_algo_test_quad_distance_function       ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_quad_distance_function)
 
 #ADD_EXECUTABLE( vil_mil_gauss_general_timings vil_mil_gauss_general_timings.cxx)
 #TARGET_LINK_LIBRARIES( vil_mil_gauss_general_timings vil_algo mil vpl vul mbl testlib vcl )
