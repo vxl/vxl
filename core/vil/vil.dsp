@@ -996,6 +996,9 @@ SOURCE=.\vil_blocked_image_resource_sptr.h
 SOURCE=.\vil_cached_image_resource.h
 # End Source File
 # Begin Source File
+SOURCE=.\vil_border.h
+# End Source File
+# Begin Source File
 SOURCE=.\vil_config.h.in
 # End Source File
 # End Group

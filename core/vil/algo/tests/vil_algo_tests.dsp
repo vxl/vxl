@@ -111,6 +111,9 @@ SOURCE=.\test_algo_checker_board.cxx
 # Begin Source File
 SOURCE=.\test_algo_colour_space.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_algo_quad_distance_function.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

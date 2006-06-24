@@ -318,6 +318,15 @@ SOURCE=.\vgui_window.cxx
 SOURCE=.\vgui_wrapper_tableau.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vgui_font.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vgui_font_bitmap.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vgui_font_textured.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vrml/vgui_vrml_draw_visitor.cxx
 # End Source File
 # Begin Source File
@@ -349,6 +358,27 @@ SOURCE=.\impl/glut/vgui_glut_tag.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\impl/glut/vgui_glut_window.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/wx/vgui_wx.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/wx/vgui_wx_adaptor.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/wx/vgui_wx_dialog_impl.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/wx/vgui_wx_menu.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/wx/vgui_wx_statusbar.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/wx/vgui_wx_tag.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/wx/vgui_wx_window.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+vgui_style-.cxx
@@ -394,6 +424,9 @@ SOURCE=.\Templates/vgui_range_map+vxl_uint_16-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vgui_range_map+bool-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+vgui_font-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\impl/gtk/vgui_gtk.cxx
@@ -1059,6 +1092,18 @@ SOURCE=.\vgui_tview_tableau.h
 SOURCE=.\vgui_viewer3D_tableau.h
 # End Source File
 # Begin Source File
+SOURCE=.\vgui_font.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgui_font_bitmap.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgui_font_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgui_font_textured.h
+# End Source File
+# Begin Source File
 SOURCE=.\internals/vgui_parent_child_link_data.h
 # End Source File
 # Begin Source File
@@ -1084,6 +1129,24 @@ SOURCE=.\impl/gtk2/vgui_gtk2_utils.h
 # End Source File
 # Begin Source File
 SOURCE=.\impl/gtk2/vgui_gtk2_window.h
+# End Source File
+# Begin Source File
+SOURCE=.\impl/wx/vgui_wx.h
+# End Source File
+# Begin Source File
+SOURCE=.\impl/wx/vgui_wx_adaptor.h
+# End Source File
+# Begin Source File
+SOURCE=.\impl/wx/vgui_wx_dialog_impl.h
+# End Source File
+# Begin Source File
+SOURCE=.\impl/wx/vgui_wx_menu.h
+# End Source File
+# Begin Source File
+SOURCE=.\impl/wx/vgui_wx_statusbar.h
+# End Source File
+# Begin Source File
+SOURCE=.\impl/wx/vgui_wx_window.h
 # End Source File
 # Begin Source File
 SOURCE=.\vgui_range_map.h

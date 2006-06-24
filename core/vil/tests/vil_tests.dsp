@@ -84,6 +84,9 @@ SOURCE=.\test_image_list.cxx
 # Begin Source File
 SOURCE=.\test_pyramid_image_resource.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_border.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

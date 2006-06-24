@@ -497,6 +497,9 @@ SOURCE=.\vil_checker_board.h
 # Begin Source File
 SOURCE=.\vil_checker_board.txx
 # End Source File
+# Begin Source File
+SOURCE=.\vil_quad_distance_function.h
+# End Source File
 # End Group
 # End Target
 # End Project

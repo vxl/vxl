@@ -136,6 +136,9 @@ SOURCE=.\test_rational.cxx
 SOURCE=.\test_real_polynomial.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_real_npolynomial.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_resize.cxx
 # End Source File
 # Begin Source File
