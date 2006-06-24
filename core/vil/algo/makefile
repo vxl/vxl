@@ -53,6 +53,7 @@ SOURCES += vil_orientations.cxx
 SOURCES += vil_colour_space.cxx
 MANPAGE_SOURCES += vil_abs_shuffle_distance.txx
 MANPAGE_SOURCES += vil_checker_board.txx
+MANPAGE_SOURCES += vil_quad_distance_function.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

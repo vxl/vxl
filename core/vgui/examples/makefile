@@ -53,6 +53,9 @@ MINI_PROG_SOURCES += gtk1_display_image.cxx
 MINI_PROG_SOURCES += gtk2_movie_player.cxx
 MINI_PROG_SOURCES += gtk3_vidl.cxx
 endif
+ifdef VGUI_USE_WX
+ SUBDIRS += wx_example
+endif
 
 ######################################
 include ${VXLROOT}/config/top-rules.mk

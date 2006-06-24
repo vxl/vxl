@@ -39,6 +39,10 @@ MANPAGE_SOURCES += vgui_satellite_tableau.txx
 MANPAGE_SOURCES += vgui_range_map.txx
 MANPAGE_SOURCES += vgui_range_map_params.h
 MANPAGE_SOURCES += vgui_range_map_params_sptr.h
+SOURCES += vgui_font.cxx
+MANPAGE_SOURCES += vgui_font_sptr.h
+SOURCES += vgui_font_bitmap.cxx
+SOURCES += vgui_font_textured.cxx
 
 # utility
 SOURCES += vgui_find.cxx
@@ -262,6 +266,17 @@ SOURCES += impl/mfc/vgui_mfc_utils.cxx
 SOURCES += impl/mfc/vgui_mfc_view.cxx
 SOURCES += impl/mfc/vgui_mfc_window.cxx
 endif
+
+ifeq ($(HAS_WX),1)
+SOURCES += impl/wx/vgui_wx.cxx
+SOURCES += impl/wx/vgui_wx_adaptor.cxx
+SOURCES += impl/wx/vgui_wx_dialog_impl.cxx
+SOURCES += impl/wx/vgui_wx_menu.cxx
+SOURCES += impl/wx/vgui_wx_statusbar.cxx
+SOURCES += impl/wx/vgui_wx_tag.cxx
+SOURCES += impl/wx/vgui_wx_window.cxx
+endif
+
 
 # This file uses the -DVGUI_USE_* preprocessor definitions set by
 # the implementations to register each toolkit that was compiled in.

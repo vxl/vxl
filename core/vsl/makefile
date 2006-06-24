@@ -6,6 +6,7 @@ VERSION := 1.0
 SOURCES += vsl_indent.cxx
 SOURCES += vsl_binary_io.cxx
 SOURCES += vsl_binary_loader_base.cxx
+SOURCES += vsl_block_binary.cxx
 SOURCES += vsl_vector_io_bool.cxx
 SOURCES += vsl_vector_io_vector_bool.cxx
 
@@ -26,7 +27,6 @@ MANPAGE_SOURCES += vsl_stack_io.txx
 MANPAGE_SOURCES += vsl_string_io.txx
 MANPAGE_SOURCES += vsl_vector_io.txx
 MANPAGE_SOURCES += vsl_quick_file.h
-MANPAGE_SOURCES += vsl_block_binary.h
 MANPAGE_SOURCES += vsl_b_read_block_old.h
 
 #######################################

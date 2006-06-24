@@ -28,6 +28,8 @@ SOURCES += vil_image_list.cxx
 SOURCES += vil_pyramid_image_resource.cxx
 MANPAGE_SOURCES += vil_pyramid_image_resource_sptr.h
 
+MANPAGE_SOURCES += vil_border.h
+
 # file format readers/writers
 SOURCES += file_formats/vil_pyramid_image_list.cxx
 SOURCES += file_formats/vil_pnm.cxx

@@ -24,6 +24,7 @@ TESTS += test_transpose.cxx
 TESTS += test_fastops.cxx
 TESTS += test_rational.cxx
 TESTS += test_real_polynomial.cxx
+TESTS += test_real_npolynomial.cxx
 TESTS += test_sym_matrix.cxx
 TESTS += test_bignum.cxx
 TESTS += test_finite.cxx
