@@ -122,9 +122,9 @@ vil_streampos vil_nitf2_image::size_to(vil_nitf2_header::section_type sec,
   //we are now at the proper index's subheader... if we need to get to the data
   //we've got one more jump to do
   if ( por == vil_nitf2_header::enum_data ) {
-    //if we've skipped past all the segments, then it doesn't make any sens
-    //to skip to the "data" section
-    assert( !going_past_end );
+    // if we've skipped past all the segments, then it doesn't make any sense
+    // to skip to the "data" section
+    if ( going_past_end ) { assert(!"skipped past all segments"); return 0L; }
     int current_header_size;
     m_file_header.get_property(sh, i, current_header_size);
     offset += current_header_size;
