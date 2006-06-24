@@ -36,6 +36,9 @@ SOURCES += vidl2_v4l_params.cxx
 
 MANPAGE_SOURCES += vidl2_exception.h
 
+# vgui add-on library
+SUBDIRS += gui
+
 #######################################
 include ${VXLROOT}/config/top-params.mk
 #######################################
