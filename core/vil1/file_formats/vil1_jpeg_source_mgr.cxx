@@ -156,15 +156,14 @@ vil1_jpeg_stream_src_set (j_decompress_ptr cinfo, vil1_stream *vs)
   // one image, we'd likely lose the start of the next one.)
   // This makes it unsafe to use this manager and a different source
   // manager serially with the same JPEG object.  Caveat programmer.
-  vil1_jpeg_srcptr src = ( vil1_jpeg_srcptr )( cinfo->src );
-
-  assert(! src); // this function must be called only once on each cinfo.
+  if (! ( vil1_jpeg_srcptr )( cinfo->src ))
+  { assert(!"this function must be called only once on each cinfo"); }
 
 #ifdef DEBUG
   vcl_cerr << "vil1_jpeg_stream_src() : creating new data source\n";
 #endif
 
-  src = (vil1_jpeg_srcptr) // allocate
+  vil1_jpeg_srcptr src = (vil1_jpeg_srcptr) // allocate
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo,
                                 JPOOL_PERMANENT,
                                 SIZEOF(vil1_jpeg_stream_source_mgr));
