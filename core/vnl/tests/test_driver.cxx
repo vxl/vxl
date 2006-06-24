@@ -16,6 +16,7 @@ DECLARE( test_numeric_traits );
 DECLARE( test_quaternion );
 DECLARE( test_rational );
 DECLARE( test_real_polynomial );
+DECLARE( test_real_npolynomial );
 DECLARE( test_resize );
 DECLARE( test_sample );
 DECLARE( test_sym_matrix );
@@ -49,6 +50,7 @@ register_tests()
   REGISTER( test_quaternion );
   REGISTER( test_rational );
   REGISTER( test_real_polynomial );
+  REGISTER( test_real_npolynomial );
   REGISTER( test_resize );
   REGISTER( test_sample );
   REGISTER( test_sym_matrix );
