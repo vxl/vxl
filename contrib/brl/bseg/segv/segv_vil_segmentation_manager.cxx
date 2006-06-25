@@ -228,7 +228,7 @@ void segv_vil_segmentation_manager::remove_image()
 void segv_vil_segmentation_manager::convert_to_grey()
 {
   vil_image_resource_sptr img = this->selected_image();
-  if(!img)
+  if (!img)
     return;
   vil_image_view<unsigned char> grey =
     brip_vil_float_ops::convert_to_byte(img);
@@ -254,8 +254,9 @@ bgui_image_tableau_sptr segv_vil_segmentation_manager::selected_image_tab()
            << ", " << row << ")\n";
   return bgui_image_tableau_sptr();
 }
+
 //: Get the vtol2D tableau at the specified grid cell
-bgui_vtol2D_tableau_sptr 
+bgui_vtol2D_tableau_sptr
 segv_vil_segmentation_manager::vtol2D_tab_at(const unsigned col,
                                              const unsigned row)
 {
@@ -345,14 +346,15 @@ void segv_vil_segmentation_manager::clear_display()
 void segv_vil_segmentation_manager::clear_all()
 {
   unsigned ncols = grid_->cols(), nrows = grid_->rows();
-  for(unsigned r=0; r<nrows; ++r)
-    for(unsigned c=0; c<ncols; ++c)
-      {
-        bgui_vtol2D_tableau_sptr t = this->vtol2D_tab_at(c, r);
-        if(t)
-          t->clear_all();
-      }
+  for (unsigned r=0; r<nrows; ++r)
+    for (unsigned c=0; c<ncols; ++c)
+    {
+      bgui_vtol2D_tableau_sptr t = this->vtol2D_tab_at(c, r);
+      if (t)
+        t->clear_all();
+    }
 }
+
 //-----------------------------------------------------------------------------
 //: Draw edges onto the tableau
 //-----------------------------------------------------------------------------
@@ -550,23 +552,23 @@ void segv_vil_segmentation_manager::load_image()
   //if so, then assume a pyramid image
   bool pyrm = false;
   vil_image_resource_sptr image;
-  if(vul_file::is_directory(image_filename.c_str()))
+  if (vul_file::is_directory(image_filename.c_str()))
+  {
+    vil_pyramid_image_resource_sptr pyr =
+      vil_load_pyramid_resource(image_filename.c_str());
+    if (pyr)
     {
-      vil_pyramid_image_resource_sptr pyr = 
-        vil_load_pyramid_resource(image_filename.c_str());
-      if(pyr)
-        {
-          image = pyr.ptr();
-          pyrm = true;
-        }
+      image = pyr.ptr();
+      pyrm = true;
     }
+  }
   if (!image)
     image = vil_load_pyramid_resource(image_filename.c_str()).ptr();
 
   if (!image)
     image = vil_load_image_resource(image_filename.c_str());
 
-  if(!image)
+  if (!image)
     return;
 
   if (greyscale&&!pyrm)
@@ -794,7 +796,7 @@ void segv_vil_segmentation_manager::nonmaximal_suppression()
   vcl_vector<vsol_point_2d_sptr>& points = ns.get_points();
   vcl_vector<vsol_line_2d_sptr>& lines = ns.get_lines();
   // not used below, just for demonstration purposes
-  vcl_vector<vgl_vector_2d<double> >& directions = ns.get_directions();
+  //vcl_vector<vgl_vector_2d<double> >& directions = ns.get_directions();
   int N = points.size();
   if (!N)
     return;
@@ -1146,7 +1148,6 @@ void segv_vil_segmentation_manager::display_images_as_color()
 
 void segv_vil_segmentation_manager::intensity_profile()
 {
-
   bgui_picker_tableau_sptr ptab = selected_picker_tab();
   float start_col=0, end_col=0, start_row=0, end_row=0;
   ptab->pick_line(&start_col, &start_row, &end_col, &end_row);
@@ -1158,9 +1159,9 @@ void segv_vil_segmentation_manager::intensity_profile()
   //popup a profile graph
   char location[100];
   vcl_sprintf(location, "scan:(%d, %d)<->(%d, %d)",
-              static_cast<unsigned>(start_col), 
+              static_cast<unsigned>(start_col),
               static_cast<unsigned>(start_row),
-              static_cast<unsigned>(end_col), 
+              static_cast<unsigned>(end_col),
               static_cast<unsigned>(end_row));
   vgui_dialog* ip_dialog = g->popup_graph(location);
   if (!ip_dialog->ask())
@@ -1348,9 +1349,9 @@ void segv_vil_segmentation_manager::reduce_image()
   vil_image_view<float> flt =
     brip_vil_float_ops::convert_to_float(img);
 
-  vil_image_view<float> reduced = 
+  vil_image_view<float> reduced =
     brip_vil_float_ops::half_resolution(flt, coef);
-  
+
   vil_image_resource_sptr out_image = vil_new_image_resource_of_view(reduced);
   this->add_image(out_image);
 }
@@ -1372,9 +1373,9 @@ void segv_vil_segmentation_manager::expand_image()
   vil_image_view<float> flt =
     brip_vil_float_ops::convert_to_float(img);
 
-  vil_image_view<float> expanded = 
+  vil_image_view<float> expanded =
     brip_vil_float_ops::double_resolution(flt, coef);
-  
+
   vil_image_resource_sptr out_image = vil_new_image_resource_of_view(expanded);
   this->add_image(out_image);
 }
@@ -1395,6 +1396,7 @@ void segv_vil_segmentation_manager::flip_image_lr()
   vil_copy_deep(flipr, flipc);
   this->add_image(flipc);
 }
+
 void segv_vil_segmentation_manager::max_trace_scale()
 {
   static float min_scale = 1.0f, max_scale = 20.0f, sinc = 1.0f;
@@ -1407,13 +1409,13 @@ void segv_vil_segmentation_manager::max_trace_scale()
 
   vil_image_resource_sptr img = selected_image();
   if (!img)
-    {
-      vcl_cout << "In segv_vil_segmentation_manager::max_trace_scale - no image\n";
-      return;
-    }
+  {
+    vcl_cout<< "In segv_vil_segmentation_manager::max_trace_scale - no image\n";
+    return;
+  }
   vil_image_view<float> fimg = brip_vil_float_ops::convert_to_float(img);
   vil_image_view<float> scale_image;
-  scale_image = 
+  scale_image =
     brip_vil_float_ops::max_scale_trace(fimg, min_scale, max_scale, sinc);
   this->add_image(vil_new_image_resource_of_view(scale_image));
 }
