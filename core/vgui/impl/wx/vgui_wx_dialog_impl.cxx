@@ -41,6 +41,7 @@
 #include <vcl_algorithm.h>
 #include <vcl_map.h>
 #include <vcl_utility.h>
+#include <vcl_cassert.h>
 
 //-------------------------------------------------------------------------
 // Private helpers - declarations.
@@ -49,7 +50,7 @@ namespace
 {
   class vgui_wx_event_handler : public wxEvtHandler
   {
-  public:
+   public:
     void insert_handle(int id, wxTextCtrl* control)
     {
       handles_.insert(vcl_pair<int,wxTextCtrl*>(id, control));
@@ -77,9 +78,9 @@ namespace
       wxString text = handles_[e.GetId()]->GetValue();
 
       wxColour color;
-      color.Set(red_value(text.c_str())   * 255.0,
-                green_value(text.c_str()) * 255.0,
-                blue_value(text.c_str())  * 255.0);
+      color.Set(int(red_value(text.c_str())   * 255.0),
+                int(green_value(text.c_str()) * 255.0),
+                int(blue_value(text.c_str())  * 255.0));
       wxColourData cdata;
       cdata.SetColour(color);
 
@@ -99,14 +100,14 @@ namespace
       }
     }
 
-  private:
+   private:
     vcl_map<int,wxTextCtrl*> handles_;
   };
 
   //: Used to transfer data between a vgui_dialog_field and wxTextControl.
   class vgui_wx_text_validator : public wxValidator
   {
-  public:
+   public:
     //: Constructor - default.
     vgui_wx_text_validator(vgui_dialog_field* field = 0)
       : field_(field)
@@ -132,7 +133,7 @@ namespace
     //: Called to transfer data to the window.
     virtual bool TransferToWindow()
     {
-      if(!check_validator()) { return false; }
+      if (!check_validator()) { return false; }
       if (field_)
       {
         dynamic_cast<wxTextCtrl*>(
@@ -144,7 +145,7 @@ namespace
     //: Called to transfer data from the window.
     virtual bool TransferFromWindow()
     {
-      if(!check_validator()) { return false; }
+      if (!check_validator()) { return false; }
       if (field_)
       {
         field_->update_value(
@@ -156,11 +157,11 @@ namespace
     //: Called when validation of the control data must be validated.
     virtual bool Validate(wxWindow* parent)
     {
-      if(!check_validator()) { return false; }
+      if (!check_validator()) { return false; }
       return true;
     }
 
-  private:
+   private:
     //: Check if validator parent window is valid.
     bool check_validator() const
     {
@@ -277,7 +278,7 @@ void vgui_wx_dialog_impl::build_wx_dialog(void)
 {
   // clean any previous construction
   destroy_wx_dialog();
-  
+
   dialog_ = new wxDialog(0,
                          wxID_ANY,
                          wxString(title_.c_str()),
@@ -455,16 +456,14 @@ int vgui_wx_dialog_impl::probe_for_max_label_width(void)
   {
     switch (e->type)
     {
-    case int_elem:
-    case long_elem:
-    case float_elem:
-    case double_elem:
-    case string_elem:
-    case choice_elem:
-      {
-        temp.SetLabel(e->field->label.c_str());
-        max_width = vcl_max(max_width, temp.GetSize().GetX());
-      }
+     case int_elem:
+     case long_elem:
+     case float_elem:
+     case double_elem:
+     case string_elem:
+     case choice_elem:
+      temp.SetLabel(e->field->label.c_str());
+      max_width = vcl_max(max_width, temp.GetSize().GetX());
       break;
     }
   }
