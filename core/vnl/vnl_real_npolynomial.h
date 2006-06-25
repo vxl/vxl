@@ -122,7 +122,7 @@ class vnl_real_npolynomial
   vnl_matrix<unsigned int>& polyn() { return polyn_; }
 
   //: Return the textual representation of this polynomial
-  vcl_string vnl_real_npolynomial::asString() const;
+  vcl_string asString() const;
 
  private:
   void simplify();
