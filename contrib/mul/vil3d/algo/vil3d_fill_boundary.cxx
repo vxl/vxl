@@ -93,12 +93,12 @@ void label_boundary_and_bkg(vil3d_image_view<int> &image,int i,int j, int k, int
   {
     image(i0,j0,k) = boundary_label;
 
-    for (m = 0; m < 8; m++)
+    for (m = 0; m < 8; ++m)
     {
       i1 = i0+x_offset[offset];
       j1 = j0+y_offset[offset];
       if (i1 >= int(ni) || j1 >= int(nj) || i1 < 0 || j1 < 0)
-        offset = ++offset%8;
+        offset = (++offset)%8;
       else
       {
         if (image(i1,j1,k)==1 || image(i1,j1,k) == boundary_label) // this means we visit some
@@ -110,7 +110,7 @@ void label_boundary_and_bkg(vil3d_image_view<int> &image,int i,int j, int k, int
         else
         {
           image(i1,j1,k) = background_label;
-          offset = ++offset%8;
+          offset = (++offset)%8;
         }
       }
     }
@@ -139,39 +139,39 @@ void fill_boundary(vil3d_image_view<int> &image, int j, int k, int boundary_labe
       }
     }
 
-    // assign the x and y offsets for the 8-neighbourhood
-    vcl_vector<int> x_offset(8); vcl_vector<int> y_offset(8);
-    x_offset[0] = -1; y_offset[0] =  0;
-    x_offset[1] = -1; y_offset[1] = -1;
-    x_offset[2] = 0;  y_offset[2] = -1;
-    x_offset[3] = 1;  y_offset[3] = -1;
-    x_offset[4] = 1;  y_offset[4] =  0;
-    x_offset[5] = 1;  y_offset[5] =  1;
-    x_offset[6] = 0;  y_offset[6] =  1;
-    x_offset[7] = -1; y_offset[7] =  1;
+  // assign the x and y offsets for the 8-neighbourhood
+  vcl_vector<int> x_offset(8); vcl_vector<int> y_offset(8);
+  x_offset[0] = -1; y_offset[0] =  0;
+  x_offset[1] = -1; y_offset[1] = -1;
+  x_offset[2] = 0;  y_offset[2] = -1;
+  x_offset[3] = 1;  y_offset[3] = -1;
+  x_offset[4] = 1;  y_offset[4] =  0;
+  x_offset[5] = 1;  y_offset[5] =  1;
+  x_offset[6] = 0;  y_offset[6] =  1;
+  x_offset[7] = -1; y_offset[7] =  1;
 
-    int i1,j1;
+  int i1,j1;
 
-    // Starting from first pixel on boundary, iteratively fill neighours in boundary
-    while (!x_stack.empty())
+  // Starting from first pixel on boundary, iteratively fill neighours in boundary
+  while (!x_stack.empty())
+  {
+    i = x_stack.top();
+    j = y_stack.top();
+    x_stack.pop();
+    y_stack.pop();
+    for (m = 0; m < 8; ++m)
     {
-      i = x_stack.top();
-      j = y_stack.top();
-      x_stack.pop();
-      y_stack.pop();
-      for (m = 0;m < 8;m++)
+      i1 = i+x_offset[m];
+      j1 = j+y_offset[m];
+      if (i1<int(ni) && i1>=0 && j1<int(nj) && j1 >=0)
       {
-        i1 = i+x_offset[m];
-        j1 = j+y_offset[m];
-        if (i1<int(ni) && i1>=0 && j1<int(nj) && j1 >=0)
+        if (image(i1,j1,k) != boundary_label && image(i1,j1,k) != background_label)
         {
-          if (image(i1,j1,k) != boundary_label && image(i1,j1,k) != background_label)
-          {
-            image(i1,j1,k) = boundary_label;
-            x_stack.push(i1);
-            y_stack.push(j1);
-          }
+          image(i1,j1,k) = boundary_label;
+          x_stack.push(i1);
+          y_stack.push(j1);
         }
       }
     }
+  }
 }
