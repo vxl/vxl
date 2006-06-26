@@ -22,19 +22,19 @@
 //-------------------------------------------------------------------------
 class vgui_font_bitmap : public vgui_font
 {
+public:
   enum bitmap_font_type
   {
     BITMAP_FONT_8_13
   };
 
-public:
   //: Constructor - default.
   vgui_font_bitmap(bitmap_font_type t = BITMAP_FONT_8_13);
 
   //: Draw a string of font symbols.
   virtual void draw(const vcl_string& str) const;
 
-protected:
+//protected:
   //: Destructor.
   virtual ~vgui_font_bitmap();
 

@@ -31,7 +31,7 @@ public:
   //: Draw a string of font symbols.
   virtual void draw(const vcl_string& str, unsigned int size) const;
 
-protected:
+//protected:
   //: Destructor.
   virtual ~vgui_font() { }
 

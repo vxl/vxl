@@ -69,12 +69,19 @@ vgui_font_bitmap::~vgui_font_bitmap(void)
 //: Draw a string of font symbols.
 void vgui_font_bitmap::draw(const vcl_string& str) const
 {
+  for (unsigned int i = 0; i < str.size(); ++i)
+  {
+    glBitmap(8, 13, 0.f, 2.f, 10.f, 0.f, bitmaps8x13[str[i]]);
+  }
+
+#if 0 // display lists not working
   if (!display_list_base_id_) { return; }
 
   glPushAttrib(GL_LIST_BIT);
   glListBase(display_list_base_id_);
   glCallLists(str.size(), GL_UNSIGNED_BYTE, str.c_str());
   glPopAttrib();
+#endif
 }
 
 //-------------------------------------------------------------------------

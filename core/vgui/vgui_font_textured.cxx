@@ -96,7 +96,7 @@ void vgui_font_textured::draw(const vcl_string& str) const
 
 //: Draw a string of font symbols.
 void vgui_font_textured::draw(const vcl_string& str,
-                                 unsigned int size) const
+                              unsigned int size) const
 {
   if (!display_list_base_id_) { return; }
 
