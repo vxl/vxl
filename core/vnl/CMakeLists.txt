@@ -32,6 +32,8 @@ CONFIGURE_FILE(${vxl_SOURCE_DIR}/core/vnl/vnl_config.h.in
                ${vxl_BINARY_DIR}/core/vnl/vnl_config.h @ONLY IMMEDIATE)
 
 SET( vnl_sources
+  dll.h
+
   vnl_config.h.in
   vnl_fwd.h
   vnl_tag.h
