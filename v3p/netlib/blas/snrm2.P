@@ -1,1 +1,1 @@
-extern E_f snrm2_(integer *n, real *x, integer *incx);
+extern doublereal snrm2_(integer *n, real *x, integer *incx);
