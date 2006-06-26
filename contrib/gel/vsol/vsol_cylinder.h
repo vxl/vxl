@@ -56,6 +56,8 @@ class vsol_cylinder : public  vsol_spatial_object_3d
   void set_center(vgl_point_3d<double> const & c) {cyl_.set_center(c);}
 
   void set_length(double l) {cyl_.set_length(l);}
+
+  void set_radius(double r) {cyl_.set_radius(r);}
   // ==== Binary IO methods ======
 
   //: Binary save self to stream.
