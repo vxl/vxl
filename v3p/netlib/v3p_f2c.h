@@ -1,6 +1,17 @@
 #ifndef v3p_f2c_h
 #define v3p_f2c_h
 
+/* Disable some warnings inside v3p_netlib sources.  */
+#ifdef V3P_NETLIB_SRC
+# if defined(_MSC_VER)
+#  pragma warning (disable: 4244) /* conversion with possible loss of data */
+#  if !defined(_COMPLEX_DEFINED)
+    struct _complex { double x,y; };
+#   define _COMPLEX_DEFINED /* block math.h from defining complex macro */
+#  endif
+# endif
+#endif
+
 /* Mangle the f2c symbols and types to have a v3p_netlib prefix.  */
 #include "v3p_f2c_mangle.h"
 
