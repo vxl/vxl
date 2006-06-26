@@ -317,3 +317,74 @@ ENDIF(BUILD_TESTING)
 IF(BUILD_EXAMPLES)
   SUBDIRS(examples)
 ENDIF(BUILD_EXAMPLES)
+
+# Allow sources in subdirectories to see the include files.
+INCLUDE_DIRECTORIES(${netlib_SOURCE_DIR})
+
+# Inform header files they are being included from a source inside the
+# v3p_netlib library.
+ADD_DEFINITIONS(-DV3P_NETLIB_SRC)
+
+# Create a netlib library with mangled symbols.
+ADD_LIBRARY(v3p_netlib
+  libf2c/f77_aloc.c
+  libf2c/exit_.c
+  libf2c/c_abs.c
+  libf2c/c_div.c
+  libf2c/cabs.c
+  libf2c/d_cnjg.c
+  libf2c/d_imag.c
+  libf2c/d_lg10.c
+  libf2c/d_sign.c
+  libf2c/i_dnnt.c
+  libf2c/pow_dd.c
+  libf2c/pow_di.c
+  libf2c/pow_ii.c
+  libf2c/pow_ri.c
+  libf2c/r_cnjg.c
+  libf2c/r_imag.c
+  libf2c/r_sign.c
+  libf2c/s_cat.c
+  libf2c/s_cmp.c
+  libf2c/s_copy.c
+  libf2c/sig_die.c
+  libf2c/z_abs.c
+  libf2c/z_div.c
+  libf2c/z_sqrt.c
+
+  blas/caxpy.c
+  blas/cdotc.c
+  blas/cscal.c
+  blas/csrot.c
+  blas/cswap.c
+  blas/daxpy.c
+  blas/ddot.c
+  blas/dnrm2.c
+  blas/drot.c
+  blas/drotg.c
+  blas/dscal.c
+  blas/dswap.c
+  blas/dznrm2.c
+  blas/saxpy.c
+  blas/scnrm2.c
+  blas/sdot.c
+  blas/snrm2.c
+  blas/srot.c
+  blas/srotg.c
+  blas/sscal.c
+  blas/sswap.c
+  blas/zaxpy.c
+  blas/zdotc.c
+  blas/zdrot.c
+  blas/zscal.c
+  blas/zswap.c
+
+  linpack/csvdc.c
+  linpack/dcabs1.c
+  linpack/dsvdc.c
+  linpack/ssvdc.c
+  linpack/zsvdc.c
+)
+IF(UNIX)
+  TARGET_LINK_LIBRARIES( v3p_netlib m )
+ENDIF(UNIX)
