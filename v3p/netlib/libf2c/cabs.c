@@ -1,3 +1,8 @@
+#include "v3p_f2c.h"
+#undef abs
+#undef min
+#undef max
+
 #ifdef KR_headers
 extern double sqrt();
 double f__cabs(real, imag) double real, imag;

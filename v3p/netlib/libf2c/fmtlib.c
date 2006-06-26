@@ -1,7 +1,7 @@
 /*	@(#)fmtlib.c	1.2	*/
 #define MAXINTLENGTH 23
 
-#include "f2c.h"
+#include "v3p_f2c.h"
 #ifdef __cplusplus
 extern "C" {
 #endif

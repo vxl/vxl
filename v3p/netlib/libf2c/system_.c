@@ -1,6 +1,6 @@
 /* f77 interface to system routine */
 
-#include "f2c.h"
+#include "v3p_f2c.h"
 
 #ifdef KR_headers
 extern char *F77_aloc();

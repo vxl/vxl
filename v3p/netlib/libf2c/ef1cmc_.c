@@ -1,6 +1,6 @@
 /* EFL support routine to compare two character strings */
 
-#include "f2c.h"
+#include "v3p_f2c.h"
 #ifdef __cplusplus
 extern "C" {
 #endif

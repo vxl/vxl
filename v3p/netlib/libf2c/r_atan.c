@@ -1,4 +1,4 @@
-#include "f2c.h"
+#include "v3p_f2c.h"
 
 #ifdef KR_headers
 double atan();

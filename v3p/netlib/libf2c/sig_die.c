@@ -1,3 +1,8 @@
+#include "v3p_f2c.h"
+#undef abs
+#undef min
+#undef max
+
 #include "stdio.h"
 #include "signal.h"
 
@@ -17,7 +22,6 @@ extern "C" {
 #ifdef __cplusplus
 extern "C" {
 #endif
- extern void f_exit(void);
 
 void sig_die(register char *s, int kill)
 #endif
@@ -27,19 +31,9 @@ void sig_die(register char *s, int kill)
 
 	if(kill)
 		{
-		fflush(stderr);
-		f_exit();
-		fflush(stderr);
-		/* now get a core */
-#ifdef SIGIOT
-		signal(SIGIOT, SIG_DFL);
-#endif
 		abort();
 		}
 	else {
-#ifdef NO_ONEXIT
-		f_exit();
-#endif
 		exit(1);
 		}
 	}

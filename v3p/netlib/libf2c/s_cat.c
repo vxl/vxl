@@ -3,7 +3,7 @@
  * to the Fortran 77 Standard, but in accordance with Fortran 90).
  */
 
-#include "f2c.h"
+#include "v3p_f2c.h"
 #ifndef NO_OVERWRITE
 #include "stdio.h"
 #undef abs

@@ -1,5 +1,5 @@
 #include "stdio.h"
-#include "f2c.h"
+#include "v3p_f2c.h"
 #define PAUSESIG 15
 
 #include "signal1.h"

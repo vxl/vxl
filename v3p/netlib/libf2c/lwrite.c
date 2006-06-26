@@ -1,4 +1,4 @@
-#include "f2c.h"
+#include "v3p_f2c.h"
 #include "fio.h"
 #include "fmt.h"
 #include "lio.h"

@@ -4,7 +4,7 @@
  * as in  a(2:5) = a(4:7) .
  */
 
-#include "f2c.h"
+#include "v3p_f2c.h"
 #ifdef __cplusplus
 extern "C" {
 #endif

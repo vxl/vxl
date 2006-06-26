@@ -1,4 +1,4 @@
-#include "f2c.h"
+#include "v3p_f2c.h"
 #include "fio.h"
 
 /* Compile this with -DNO_TRUNCATE if unistd.h does not exist or */

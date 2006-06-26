@@ -1,5 +1,5 @@
 #include "stdio.h"
-#include "f2c.h"
+#include "v3p_f2c.h"
 
 #ifdef KR_headers
 extern void f_exit();
