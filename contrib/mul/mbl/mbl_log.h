@@ -197,7 +197,8 @@ class mbl_logger
   void mtstop();
 
   //: Log priority levels.
-  // Based on POSIX syslog API
+  // Based on POSIX syslog API.
+  // Default level is NOTICE.
   enum levels
   {
     NONE=-100, EMERG=0, ALERT=100, CRIT=200, ERR=300, WARN=400,
