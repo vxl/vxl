@@ -38,22 +38,22 @@ x, ldx, m, n, sv, errors, u, ldu, v, ldv, work, job, info
 // xQRDC
 #define vnl_netlib_qrdc_proto(T) \
 T *x, \
-int const* ldx, \
-int const* n, \
-int const* p, \
+long int const* ldx, \
+long int const* n, \
+long int const* p, \
 T* qraux, \
-int *jpvt, \
+long int *jpvt, \
 T *work, \
-int const* job
+long int const* job
 #define vnl_netlib_qrdc_params \
 x, ldx, n, p, qraux, jpvt, work, job
 
 // xQRSL
 #define vnl_netlib_qrsl_proto(T) \
 T const *x, \
-int *ldx, \
-int *n, \
-int *k, \
+long int *ldx, \
+long int *n, \
+long int *k, \
 T const *qraux, \
 T const *y, \
 T *qy, \
@@ -61,8 +61,8 @@ T *qty, \
 T *b, \
 T *rsd, \
 T *xb, \
-int *job, \
-int *info
+long int *job, \
+long int *info
 #define vnl_netlib_qrsl_params \
 x, ldx, n, k, qraux, y, qy, qty, b, rsd, xb, job, info
 
