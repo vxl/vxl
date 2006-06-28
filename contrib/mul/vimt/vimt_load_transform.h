@@ -10,8 +10,16 @@
 #include <vimt/vimt_transform_2d.h>
 
 //: Create a transform from the properties of image resource.
-//NB unit scaling is to convert from metres to desired world unts (e.g. 0.001 for mm)
+// \param unit_scaling is to convert from metres to desired world units (e.g. 1000 for mm)
 vimt_transform_2d vimt_load_transform(const vil_image_resource_sptr &im,
-                                                float unit_scaling=1.0f);
+                                      float unit_scaling=1.0f);
+
+//: Create a transform from the properties of image resource.
+// \param unit_scaling is to convert from metres to desired world units (e.g. 1000 for mm)
+// \note This version incorporates a reflection through the x-axis so that 
+// the transform is put into a right-handed coordinate frame 
+// (with y increasing from bottom to top of image).
+vimt_transform_2d vimt_load_transform2(const vil_image_resource_sptr &im,
+                                       float unit_scaling=1.0f);
 
 #endif // vimt_load_transform_h_
