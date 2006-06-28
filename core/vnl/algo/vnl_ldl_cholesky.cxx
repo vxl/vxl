@@ -29,7 +29,7 @@
 vnl_ldl_cholesky::vnl_ldl_cholesky(vnl_matrix<double> const & M, Operation mode):
   L_(M)
 {
-  int n = M.columns();
+  long n = M.columns();
   assert(n == (int)(M.rows()));
   num_dims_rank_def_ = -1;
   if (vcl_fabs(M(0,n-1) - M(n-1,0)) > 1e-8) {
@@ -38,12 +38,12 @@ vnl_ldl_cholesky::vnl_ldl_cholesky(vnl_matrix<double> const & M, Operation mode)
 
   if (mode != estimate_condition) {
     // Quick factorization
-    dpofa_(L_.data_block(), &n, &n, &num_dims_rank_def_);
+    v3p_netlib_dpofa_(L_.data_block(), &n, &n, &num_dims_rank_def_);
     if (mode == verbose && num_dims_rank_def_ != 0)
       vcl_cerr << "vnl_ldl_cholesky: " << num_dims_rank_def_ << " dimensions of non-posdeffness\n";
   } else {
     vnl_vector<double> nullvector(n);
-    dpoco_(L_.data_block(), &n, &n, &rcond_, nullvector.data_block(), &num_dims_rank_def_);
+    v3p_netlib_dpoco_(L_.data_block(), &n, &n, &rcond_, nullvector.data_block(), &num_dims_rank_def_);
     if (num_dims_rank_def_ != 0)
       vcl_cerr << "vnl_ldl_cholesky: rcond=" << rcond_ << " so " << num_dims_rank_def_ << " dimensions of non-posdeffness\n";
   }

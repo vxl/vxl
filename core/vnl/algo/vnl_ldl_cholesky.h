@@ -112,7 +112,7 @@ class vnl_ldl_cholesky
 
   //: 1/(condition number)
   double rcond_;
-  int num_dims_rank_def_;
+  long num_dims_rank_def_;
   vnl_vector<double> nullvector_;
 
  private:
