@@ -18,16 +18,17 @@
 *          --------------------------------------
 *            IPQR = (2**IP) + (3**IQ) + (5**IR)
 *          --------------------------------------
-*        INFO = SET TO 0 ON SUCCESS AND 1 ON FAILURE
+*        NPQR = THREE INTEGERS HOLDING IP, IQ, IR
+*        INFO = SET TO 0 ON SUCCESS AND -1 ON FAILURE
 *
 *        WRITTEN BY CLIVE TEMPERTON 1990
 *
 *----------------------------------------------------------------------
 *
-      SUBROUTINE SETDGPFA(TRIGS,N,INFO)
+      SUBROUTINE SETDGPFA(TRIGS,N,NPQR,INFO)
 *
       DOUBLE PRECISION TRIGS(*)
-      INTEGER N, INFO
+      INTEGER N, NPQR(3), INFO
       DIMENSION NJ(3)
       INFO = 0
 *
@@ -44,20 +45,20 @@
       NN = NN / IFAC
       GO TO 10
    20 CONTINUE
-      NJ(LL) = KK
+      NPQR(LL) = KK
       IFAC = IFAC + LL
    30 CONTINUE
 *
       IF (NN.NE.1) THEN
 *        WRITE(6,40) N
 *  40    FORMAT(' *** WARNING!!!',I10,' IS NOT A LEGAL VALUE OF N ***')
-         INFO = 1
+         INFO = -1
          RETURN
       ENDIF
 *
-      IP = NJ(1)
-      IQ = NJ(2)
-      IR = NJ(3)
+      IP = NPQR(1)
+      IQ = NPQR(2)
+      IR = NPQR(3)
 *
 *     COMPUTE LIST OF ROTATED TWIDDLE FACTORS
 *     ---------------------------------------

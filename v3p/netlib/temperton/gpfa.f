@@ -4,7 +4,7 @@
 *        *** THIS IS THE ALL-FORTRAN VERSION ***
 *            -------------------------------
 *
-*        CALL GPFA(A,B,TRIGS,INC,JUMP,N,LOT,ISIGN,INFO)
+*        CALL GPFA(A,B,TRIGS,INC,JUMP,N,LOT,ISIGN,NPQR)
 *
 *        A IS FIRST REAL INPUT/OUTPUT VECTOR
 *        B IS FIRST IMAGINARY INPUT/OUTPUT VECTOR
@@ -19,7 +19,7 @@
 *        LOT IS THE NUMBER OF TRANSFORMS
 *        ISIGN = +1 FOR FORWARD TRANSFORM
 *              = -1 FOR INVERSE TRANSFORM
-*        INFO = SET TO 0 ON SUCCESS AND 1 ON FAILURE
+*        NPQR = NPQR OBTAINED FROM SETGPFA
 *
 *        WRITTEN BY CLIVE TEMPERTON
 *        RECHERCHE EN PREVISION NUMERIQUE
@@ -43,40 +43,14 @@
 *
 *----------------------------------------------------------------------
 *
-      SUBROUTINE GPFA(A,B,TRIGS,INC,JUMP,N,LOT,ISIGN,INFO)
+      SUBROUTINE GPFA(A,B,TRIGS,INC,JUMP,N,LOT,ISIGN,NPQR)
 *
       REAL A(*), B(*), TRIGS(*)
-      INTEGER INC, JUMP, N, LOT, ISIGN, INFO
-      DIMENSION NJ(3)
-      INFO = 0
+      INTEGER INC, JUMP, N, LOT, ISIGN, NPQR(3)
 *
-*     DECOMPOSE N INTO FACTORS 2,3,5
-*     ------------------------------
-      NN = N
-      IFAC = 2
-*
-      DO 30 LL = 1 , 3
-      KK = 0
-   10 CONTINUE
-      IF (MOD(NN,IFAC).NE.0) GO TO 20
-      KK = KK + 1
-      NN = NN / IFAC
-      GO TO 10
-   20 CONTINUE
-      NJ(LL) = KK
-      IFAC = IFAC + LL
-   30 CONTINUE
-*
-      IF (NN.NE.1) THEN
-*        WRITE(6,40) N
-*  40    FORMAT(' *** WARNING!!!',I10,' IS NOT A LEGAL VALUE OF N ***')
-         INFO = 1
-         RETURN
-      ENDIF
-*
-      IP = NJ(1)
-      IQ = NJ(2)
-      IR = NJ(3)
+      IP = NPQR(1)
+      IQ = NPQR(2)
+      IR = NPQR(3)
 *
 *     COMPUTE THE TRANSFORM
 *     ---------------------
