@@ -18,16 +18,18 @@
 *          --------------------------------------
 *            IPQR = (2**IP) + (3**IQ) + (5**IR)
 *          --------------------------------------
+*        INFO = SET TO 0 ON SUCCESS AND 1 ON FAILURE
 *
 *        WRITTEN BY CLIVE TEMPERTON 1990
 *
 *----------------------------------------------------------------------
 *
-      SUBROUTINE SETGPFA(TRIGS,N)
+      SUBROUTINE SETGPFA(TRIGS,N,INFO)
 *
       REAL TRIGS(*)
-      INTEGER N
+      INTEGER N, INFO
       DIMENSION NJ(3)
+      INFO = 0
 *
 *     DECOMPOSE N INTO FACTORS 2,3,5
 *     ------------------------------
@@ -47,8 +49,9 @@
    30 CONTINUE
 *
       IF (NN.NE.1) THEN
-         WRITE(6,40) N
-   40    FORMAT(' *** WARNING!!!',I10,' IS NOT A LEGAL VALUE OF N ***')
+*        WRITE(6,40) N
+*  40    FORMAT(' *** WARNING!!!',I10,' IS NOT A LEGAL VALUE OF N ***')
+         INFO = 1
          RETURN
       ENDIF
 *

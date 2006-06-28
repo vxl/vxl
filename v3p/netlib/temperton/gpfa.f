@@ -4,7 +4,7 @@
 *        *** THIS IS THE ALL-FORTRAN VERSION ***
 *            -------------------------------
 *
-*        CALL GPFA(A,B,TRIGS,INC,JUMP,N,LOT,ISIGN)
+*        CALL GPFA(A,B,TRIGS,INC,JUMP,N,LOT,ISIGN,INFO)
 *
 *        A IS FIRST REAL INPUT/OUTPUT VECTOR
 *        B IS FIRST IMAGINARY INPUT/OUTPUT VECTOR
@@ -19,6 +19,7 @@
 *        LOT IS THE NUMBER OF TRANSFORMS
 *        ISIGN = +1 FOR FORWARD TRANSFORM
 *              = -1 FOR INVERSE TRANSFORM
+*        INFO = SET TO 0 ON SUCCESS AND 1 ON FAILURE
 *
 *        WRITTEN BY CLIVE TEMPERTON
 *        RECHERCHE EN PREVISION NUMERIQUE
@@ -42,11 +43,12 @@
 *
 *----------------------------------------------------------------------
 *
-      SUBROUTINE GPFA(A,B,TRIGS,INC,JUMP,N,LOT,ISIGN)
+      SUBROUTINE GPFA(A,B,TRIGS,INC,JUMP,N,LOT,ISIGN,INFO)
 *
       REAL A(*), B(*), TRIGS(*)
-      INTEGER INC, JUMP, N, LOT, ISIGN
+      INTEGER INC, JUMP, N, LOT, ISIGN, INFO
       DIMENSION NJ(3)
+      INFO = 0
 *
 *     DECOMPOSE N INTO FACTORS 2,3,5
 *     ------------------------------
@@ -66,8 +68,9 @@
    30 CONTINUE
 *
       IF (NN.NE.1) THEN
-         WRITE(6,40) N
-   40    FORMAT(' *** WARNING!!!',I10,' IS NOT A LEGAL VALUE OF N ***')
+*        WRITE(6,40) N
+*  40    FORMAT(' *** WARNING!!!',I10,' IS NOT A LEGAL VALUE OF N ***')
+         INFO = 1
          RETURN
       ENDIF
 *
