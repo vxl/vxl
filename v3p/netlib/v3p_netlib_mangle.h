@@ -28,6 +28,10 @@ nm libv3p_netlib.a |grep " [TR] "
 #define dcabs1_ v3p_netlib_dcabs1_
 #define dcopy_ v3p_netlib_dcopy_
 #define ddot_ v3p_netlib_ddot_
+#define dgpfa2f_ v3p_netlib_dgpfa2f_
+#define dgpfa3f_ v3p_netlib_dgpfa3f_
+#define dgpfa5f_ v3p_netlib_dgpfa5f_
+#define dgpfa_ v3p_netlib_dgpfa_
 #define dnrm2_ v3p_netlib_dnrm2_
 #define dpoco_ v3p_netlib_dpoco_
 #define dpodi_ v3p_netlib_dpodi_
@@ -41,10 +45,16 @@ nm libv3p_netlib.a |grep " [TR] "
 #define dsvdc_ v3p_netlib_dsvdc_
 #define dswap_ v3p_netlib_dswap_
 #define dznrm2_ v3p_netlib_dznrm2_
+#define gpfa2f_ v3p_netlib_gpfa2f_
+#define gpfa3f_ v3p_netlib_gpfa3f_
+#define gpfa5f_ v3p_netlib_gpfa5f_
+#define gpfa_ v3p_netlib_gpfa_
 #define saxpy_ v3p_netlib_saxpy_
 #define scnrm2_ v3p_netlib_scnrm2_
 #define scopy_ v3p_netlib_scopy_
 #define sdot_ v3p_netlib_sdot_
+#define setdgpfa_ v3p_netlib_setdgpfa_
+#define setgpfa_ v3p_netlib_setgpfa_
 #define snrm2_ v3p_netlib_snrm2_
 #define sqrdc_ v3p_netlib_sqrdc_
 #define sqrsl_ v3p_netlib_sqrsl_

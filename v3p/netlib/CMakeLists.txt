@@ -391,6 +391,18 @@ SET(V3P_NETLIB_linpack_SOURCES
   linpack/dpofa.c
   linpack/dposl.c
   )
+SET(V3P_NETLIB_temperton_SOURCES
+  temperton/dgpfa.c
+  temperton/dgpfa2f.c
+  temperton/dgpfa3f.c
+  temperton/dgpfa5f.c
+  temperton/gpfa.c
+  temperton/gpfa2f.c
+  temperton/gpfa3f.c
+  temperton/gpfa5f.c
+  temperton/setdgpfa.c
+  temperton/setgpfa.c
+  )
 
 # Adjust the compiler flags to avoid problems with f2c-generated code.
 IF(CMAKE_COMPILER_IS_GNUCC)
@@ -411,6 +423,7 @@ ADD_LIBRARY(v3p_netlib
   ${V3P_NETLIB_libf2c_SOURCES}
   ${V3P_NETLIB_blas_SOURCES}
   ${V3P_NETLIB_linpack_SOURCES}
+  ${V3P_NETLIB_temperton_SOURCES}
   v3p_f2c.h
   v3p_f2c_mangle.h
   v3p_f2c_original.h

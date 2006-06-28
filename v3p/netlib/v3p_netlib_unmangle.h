@@ -19,6 +19,10 @@
 #undef dcabs1_
 #undef dcopy_
 #undef ddot_
+#undef dgpfa2f_
+#undef dgpfa3f_
+#undef dgpfa5f_
+#undef dgpfa_
 #undef dnrm2_
 #undef dpoco_
 #undef dpodi_
@@ -32,10 +36,16 @@
 #undef dsvdc_
 #undef dswap_
 #undef dznrm2_
+#undef gpfa2f_
+#undef gpfa3f_
+#undef gpfa5f_
+#undef gpfa_
 #undef saxpy_
 #undef scnrm2_
 #undef scopy_
 #undef sdot_
+#undef setdgpfa_
+#undef setgpfa_
 #undef snrm2_
 #undef sqrdc_
 #undef sqrsl_
