@@ -86,10 +86,6 @@ SET( netlib_sources
   lsqr.c
 
   # LINPACK
-  dpofa.c
-  dpoco.c
-  dposl.c
-  dpodi.c
   isamax.c
   idamax.c
 

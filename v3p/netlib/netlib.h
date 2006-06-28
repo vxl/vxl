@@ -166,18 +166,6 @@ float sqrtf(float);
                const int* nmvec, float* vec,
                const int* nblock, const int* maxop, const int* maxj, float* work, int* ind, int* ierr);
 
-  /*: Factors a symmetric positive definite matrix and estimates the condition of the matrix */
-  void dpoco_(double* a, int* lda, int* n, double* rcond, double* z, int* info);
-
-  /*: Computes determinant and inverse of a certain symmetric positive definite matrix using dpoco_, dposa_ or dqrdc_ output */
-  void dpodi_(double* a, const int* lda, const int* n, double* det, const int* job);
-
-  /*: Factors a double precision symmetric positive definite matrix */
-  void dpofa_(double* a, int* lda, int* n, int* info);
-
-  /*: Solves the symmetric positive definite system a * x = b dpoco or dpofa output */
-  void dposl_(const double* a, const int* lda, const int* n, double* b);
-
   /*: Solves the unconstrained minimization problem min F(x1..xN) */
   void lbfgs_(int* n, int* m, double* x, double* f, double* g,
               logical * diagco, double* diag, int* iprint,
