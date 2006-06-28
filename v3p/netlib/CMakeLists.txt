@@ -351,12 +351,14 @@ SET(V3P_NETLIB_libf2c_SOURCES
   )
 SET(V3P_NETLIB_blas_SOURCES
   blas/caxpy.c
+  blas/ccopy.c
   blas/cdotc.c
   blas/cscal.c
   blas/csrot.c
   blas/cswap.c
   blas/daxpy.c
   blas/dcabs1.c
+  blas/dcopy.c
   blas/ddot.c
   blas/dnrm2.c
   blas/drot.c
@@ -366,6 +368,7 @@ SET(V3P_NETLIB_blas_SOURCES
   blas/dznrm2.c
   blas/saxpy.c
   blas/scnrm2.c
+  blas/scopy.c
   blas/sdot.c
   blas/snrm2.c
   blas/srot.c
@@ -373,6 +376,7 @@ SET(V3P_NETLIB_blas_SOURCES
   blas/sscal.c
   blas/sswap.c
   blas/zaxpy.c
+  blas/zcopy.c
   blas/zdotc.c
   blas/zdrot.c
   blas/zscal.c
@@ -383,6 +387,10 @@ SET(V3P_NETLIB_linpack_SOURCES
   linpack/dqrdc.c
   linpack/cqrdc.c
   linpack/zqrdc.c
+  linpack/sqrsl.c
+  linpack/dqrsl.c
+  linpack/cqrsl.c
+  linpack/zqrsl.c
 
   linpack/csvdc.c
   linpack/dsvdc.c
