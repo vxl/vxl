@@ -95,58 +95,6 @@ float sqrtf(float);
             double *workspace_1_size_n, double *workspace_2_size_n, /*!< scratch */
             int* output_error_code); /*!< (OUT) normal completion code is 0 */
 
-  /*: Computes QR factorisation of an n x p double matrix */
-  void dqrdc_(double *x, const int* ldx, /*!< (IN/OUT) matrix, n rows, p columns, stored row-wise */
-              const int* n, const int* p,
-              double* qraux, /*!< (OUT) further info necessary to recover R part from x */
-              int *jpvt,  /*!< (IN/OUT) length p; selection of pivot columns: */
-                          /*   ==0 ==> any; >0 ==> initial column; <0 ==> final */
-              double *work,  /*!< (IN/OUT) scratch work area of length p */
-              const int* job); /*!< (IN) if == 0, no pivoting is done */
-
-  /*: Computes QR factorisation of an n x p float matrix */
-  void sqrdc_(float* x, const int* ldx, const int* n, const int* p,
-              float* qraux, int* jpvt, float* work, const int* job);
-
-  /*: Computes QR factorisation of an n x p double_complex matrix */
-  void zqrdc_(dcmplx* x, const int* ldx, const int* n, const int* p,
-              dcmplx* qraux, int* jpvt, dcmplx* work, const int* job);
-
-  /*: Computes QR factorisation of an n x p float_complex matrix */
-  void cqrdc_(cmplx* x, const int* ldx, const int* n, const int* p,
-              cmplx* qraux, int* jpvt, cmplx* work, const int* job);
-
-  /*: Computes coord transf etc from QR factorisation of double matrix */
-  void dqrsl_(const double* x, const int* ldx, /*!< (IN) output of dqrdc_, n x k matrix */
-              const int* n, const int* k, /*!< (IN) k <= min(n,p) with n,p from dqrdc_ */
-              const double* qraux, /*!< (IN) qraux output of dqrdc_ */
-              const double* y, /*!< (IN) n-vector to operate on */
-              double* qy,  /*!< (OUT) q*y */
-              double* qty, /*!< (OUT) q^T*y (conjugate transpose if complex) */
-              double* b,   /*!< (OUT) solution b of min norm_2(y - x*b) */
-              double* rsd, /*!< (OUT) least squares residual y - x*b = proj of y on orth complement of columns(x) */
-              double* xb,  /*!< (OUT) least squares approx of x*b = proj of y on columns(x) */
-              const int* job, /*!< (IN) decimal acbde: a:compute qy; c:qty; b:qty+b; d:qty+rsd; e:qty+xb */
-              int* info); /*!< non-zero if r is singular and b is set. */
-
-  /*: Computes coord transf etc from QR factorisation of float matrix */
-  void sqrsl_(const float* x, const int* ldx, const int* n, const int* k,
-              const float* qraux, const float* y,
-              float* qy, float* qty, float* b, float* rsd, float* xb,
-              const int* job, int* info);
-
-  /*: Computes coord transf etc from QR factorisation of double_complex matrix */
-  void zqrsl_(const dcmplx* x, const int* ldx, const int* n, const int* k,
-              const dcmplx* qraux, const dcmplx* y,
-              dcmplx* qy, dcmplx* qty, dcmplx* b, dcmplx* rsd, dcmplx* xb,
-              const int* job, int* info);
-
-  /*: Computes coord transf etc from QR factorisation of float_complex matrix */
-  void cqrsl_(const cmplx* x, const int* ldx, const int* n, const int* k,
-              const cmplx* qraux, const cmplx* y,
-              cmplx* qy, cmplx* qty, cmplx* b, cmplx* rsd, cmplx* xb,
-              int* job, int* info);
-
   /*: Minimizes a function using the conjugate gradient method */
   void cg_(double* x, /*!< (IN/OUT) minimizer, length n; input = starting guess */
            double* e, /*!< (OUT) max-norm of gradient */
