@@ -44,7 +44,7 @@ SET (EMAIL_PROJECT_NAME "VXL")
 SET (BUILD_MONITORS "\\
   {cs\\.rpi\\.edu .* amithaperera@users.sourceforge.net} \\
   {esat\\.kuleuven\\.be .* peter_vanroose@users.sourceforge.net} \\
-  {crd\\.ge\\.com_DISABLED .* fred_wheeler@users.sourceforge.net} \\
+  {grc\\.ge\\.com_DISABLED .* fred_wheeler@users.sourceforge.net} \\
 ")
 
 SET (PROJECT_URL http://vxl.sourceforge.net/)
@@ -54,17 +54,17 @@ SET (EXPECTED_BUILDS "\\
   {cs.rpi.edu FreeBSD-gcc-3.4} \\
   {cs.rpi.edu FreeBSD-fresh-gcc-3.4.2} \\
   {mobile FreeBSD-6.1_gcc-3.4.4_-Wall_-O_shared} \\
-  {crd.ge.com FreeBSD-6.1_gcc-3.4.4_-Wall_profile_static} \\
-  {crd.ge.com FreeBSD-6.1_gcc-3.2.3_-Wall_-O2_shared} \\
-  {crd.ge.com FreeBSD-6.1_gcc-3.3.6_-Wall_-O2_shared} \\
-  {crd.ge.com FreeBSD-6.1_gcc-4.0.3_-Wall_-O2_shared} \\
-  {crd.ge.com FreeBSD-6.1_gcc-4.1.0_-Wall_-O2_shared} \\
-  {crd.ge.com Linux-2.4.9_icc-8.1_-w1_-O2_shared} \\
-  {crd.ge.com MinGW-3.8_gcc-3.4.4_-Wall_-O2_static} \\
-  {crd.ge.com Solaris-2.8_gcc-3.4.3_static} \\
-  {crd.ge.com Cygwin_gcc-3.4.4_-Wall_-O2_static} \\
-  {crd.ge.com Win2k_bcc-5.5.1_Release} \\
-  {crd.ge.com Win2k_msvc-7.1_Release} \\
+  {grc.ge.com FreeBSD-6.1_gcc-3.4.4_-Wall_profile_static} \\
+  {grc.ge.com FreeBSD-6.1_gcc-3.2.3_-Wall_-O2_shared} \\
+  {grc.ge.com FreeBSD-6.1_gcc-3.3.6_-Wall_-O2_shared} \\
+  {grc.ge.com FreeBSD-6.1_gcc-4.0.3_-Wall_-O2_shared} \\
+  {grc.ge.com FreeBSD-6.1_gcc-4.1.0_-Wall_-O2_shared} \\
+  {grc.ge.com Linux-2.4.9_icc-8.1_-w1_-O2_shared} \\
+  {grc.ge.com MinGW-3.8_gcc-3.4.4_-Wall_-O2_static} \\
+  {grc.ge.com Solaris-2.8_gcc-3.4.3_static} \\
+  {grc.ge.com Cygwin_gcc-3.4.4_-Wall_-O2_static} \\
+  {grc.ge.com Win2k_bcc-5.5.1_Release} \\
+  {grc.ge.com Win2k_msvc-7.1_Release} \\
   {imorphics WinXP_msvc-7.1_Debug} \\
   {lems.brown.edu Linux-2.6_em64t_gcc-4.0.3_-Wall} \\
   {lems.brown.edu Linux-2.6.8_gcc-3.3.5} \\
