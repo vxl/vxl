@@ -64,7 +64,6 @@ static integer c__5 = 5;
     real del;
     integer ifac, kink, irot;
     real angle, twopi;
-    extern doublereal double_(integer *);
 
 
 /*<       DOUBLE PRECISION TRIGS(*) >*/
@@ -152,8 +151,8 @@ L20:
 	    goto L60;
 	}
 
-/*<       DEL = TWOPI / DOUBLE(NI) >*/
-	del = twopi / double_(&ni);
+/*<       DEL = TWOPI / DFLOAT(NI) >*/
+	del = twopi / (doublereal) ni;
 /*<       IROT = N / NI >*/
 	irot = *n / ni;
 /*<       KINK = MOD(IROT,NI) >*/
@@ -164,8 +163,8 @@ L20:
 /*<       DO 50 K = 1 , NI >*/
 	i__1 = ni;
 	for (k = 1; k <= i__1; ++k) {
-/*<       ANGLE = DOUBLE(KK) * DEL >*/
-	    angle = double_(&kk) * del;
+/*<       ANGLE = DFLOAT(KK) * DEL >*/
+	    angle = (doublereal) kk * del;
 /*<       TRIGS(I) = COS(ANGLE) >*/
 	    trigs[i__] = cos(angle);
 /*<       TRIGS(I+1) = SIN(ANGLE) >*/

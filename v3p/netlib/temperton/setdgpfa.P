@@ -1,2 +1,1 @@
 extern int setdgpfa_(doublereal *trigs, integer *n, integer *npqr, integer *info);
-/*:ref: double_ 6 1 4 */

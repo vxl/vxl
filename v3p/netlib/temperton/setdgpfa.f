@@ -73,13 +73,13 @@
       NI = NJ(LL)
       IF (NI.EQ.1) GO TO 60
 *
-      DEL = TWOPI / DOUBLE(NI)
+      DEL = TWOPI / DFLOAT(NI)
       IROT = N / NI
       KINK = MOD(IROT,NI)
       KK = 0
 *
       DO 50 K = 1 , NI
-      ANGLE = DOUBLE(KK) * DEL
+      ANGLE = DFLOAT(KK) * DEL
       TRIGS(I) = COS(ANGLE)
       TRIGS(I+1) = SIN(ANGLE)
       I = I + 2
