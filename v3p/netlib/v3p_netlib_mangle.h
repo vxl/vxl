@@ -45,47 +45,4 @@ nm libv3p_netlib.a |grep " [TR] "
 #define zsvdc_ v3p_netlib_zsvdc_
 #define zswap_ v3p_netlib_zswap_
 
-/* Types */
-#define C_f v3p_netlib_C_f
-#define C_fp v3p_netlib_C_fp
-#define E_f v3p_netlib_E_f
-#define E_fp v3p_netlib_E_fp
-#define H_f v3p_netlib_H_f
-#define H_fp v3p_netlib_H_fp
-#define I_fp v3p_netlib_I_fp
-#define J_fp v3p_netlib_J_fp
-#define K_fp v3p_netlib_K_fp
-#define L_fp v3p_netlib_L_fp
-#define Multitype v3p_netlib_Multitype
-#define Namelist v3p_netlib_Namelist
-#define R_fp v3p_netlib_R_fp
-#define S_fp v3p_netlib_S_fp
-#define U_fp v3p_netlib_U_fp
-#define Vardesc v3p_netlib_Vardesc
-#define Z_f v3p_netlib_Z_f
-#define Z_fp v3p_netlib_Z_fp
-#define address v3p_netlib_address
-#define alist v3p_netlib_alist
-#define cilist v3p_netlib_cilist
-#define cllist v3p_netlib_cllist
-#define complex v3p_netlib_complex
-#define doublecomplex v3p_netlib_doublecomplex
-#define doublereal v3p_netlib_doublereal
-#define flag v3p_netlib_flag
-#define ftnint v3p_netlib_ftnint
-#define ftnlen v3p_netlib_ftnlen
-#define icilist v3p_netlib_icilist
-#define inlist v3p_netlib_inlist
-#define integer v3p_netlib_integer
-#define integer1 v3p_netlib_integer1
-#define logical v3p_netlib_logical
-#define logical1 v3p_netlib_logical1
-#define longint v3p_netlib_longint
-#define olist v3p_netlib_olist
-#define real v3p_netlib_real
-#define shortint v3p_netlib_shortint
-#define shortlogical v3p_netlib_shortlogical
-#define uinteger v3p_netlib_uinteger
-#define ulongint v3p_netlib_ulongint
-
 #endif
