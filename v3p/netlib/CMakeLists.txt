@@ -86,10 +86,6 @@ SET( netlib_sources
   lsqr.c
 
   # LINPACK
-  ssvdc.c
-  dsvdc.c
-  csvdc.c
-  zsvdc.c
   sqrdc.c
   dqrdc.c
   cqrdc.c

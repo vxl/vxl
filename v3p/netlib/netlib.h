@@ -58,32 +58,6 @@ float sqrtf(float);
   double urand_(int *iy);
   void   xerbla_(const char *srname, int *info);
 
-  /*: Computes singular values and vectors of an mxn matrix (double version) */
-  void dsvdc_(double *x, const int* ldx, /*!< (IN) matrix, m rows, n columns, stored row-wise */
-              const int* m, const int* n,
-              double *singular_values, /*!< (OUT) in descending order of magnitude */
-              double *errors, /*!< (OUT) superdiagonal of u^T*x*v (normally 0) */
-              double *u, const int* ldu, /*!< (OUT) left singular vectors */
-              double *v, const int* ldv, /*!< (OUT) right singular vectors */
-              double *work,  /*!< (IN/OUT) scratch work area of length m */
-              const int* job, /*!< (IN) 2-digit number. First digit refers to u; 0 = do not compute, 1 = all m; 2 = only min(m,n) */
-              int *info); /*!< (OUT) singular values [info] and up are correct */
-
-  /*: Computes singular values and vectors of an mxn matrix (float version) */
-  void ssvdc_(float* x, const int* ldx, const int* m, const int* n,
-              float* s, float* e, float* u, const int* ldu, float* v, const int* ldv,
-              float* work, const int* job, int* info);
-
-  /*: Computes singular values and vectors of an mxn matrix (double_complex version) */
-  void zsvdc_(dcmplx* x, const int* ldx, const int* m, const int* n,
-              dcmplx* s, dcmplx* e, dcmplx* u, const int* ldu, dcmplx* v, const int* ldv,
-              dcmplx* work, const int* job, int* info);
-
-  /*: Computes singular values and vectors of an mxn matrix (float_complex version) */
-  void csvdc_(cmplx* x, const int* ldx, const int* m, const int* n,
-              cmplx* s, cmplx* e, cmplx* u, const int* ldu, cmplx* v, const int* ldv,
-              cmplx* work, const int* job, int* info);
-
   void sggsvd_(char *jobu, char *jobv, char *jobq, int *m, int *n, int *p, int *k, int *l, float *a, int *lda,
                float *b, int *ldb, float *alpha, float *beta, float *u, int * ldu, float *v, int *ldv, float *q, int *ldq,
                float *work, int *iwork, int *info);
