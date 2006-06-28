@@ -185,7 +185,7 @@ static complex c_b53 = {(float)-1.,(float)0.};
 
 /*     set the maximum number of iterations. */
 
-/*<       maxit = 30 >*/
+/*<       maxit = 1000 >*/
     /* Parameter adjustments */
     x_dim1 = *ldx;
     x_offset = 1 + x_dim1;
@@ -201,7 +201,7 @@ static complex c_b53 = {(float)-1.,(float)0.};
     --work;
 
     /* Function Body */
-    maxit = 30;
+    maxit = 1000;
 
 /*     determine what is to be computed. */
 
