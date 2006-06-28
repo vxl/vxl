@@ -7,5 +7,5 @@ extern int v3p_netlib_gpfa_(
   v3p_netlib_integer *n,
   v3p_netlib_integer *lot,
   v3p_netlib_integer *isign,
-  v3p_netlib_integer *info
+  v3p_netlib_integer *npqr
   );

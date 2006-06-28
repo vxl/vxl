@@ -26,7 +26,7 @@ static integer c__3 = 3;
 /*        *** THIS IS THE ALL-FORTRAN VERSION *** */
 /*            ------------------------------- */
 
-/*        CALL GPFA(A,B,TRIGS,INC,JUMP,N,LOT,ISIGN,INFO) */
+/*        CALL GPFA(A,B,TRIGS,INC,JUMP,N,LOT,ISIGN,NPQR) */
 
 /*        A IS FIRST REAL INPUT/OUTPUT VECTOR */
 /*        B IS FIRST IMAGINARY INPUT/OUTPUT VECTOR */
@@ -41,7 +41,7 @@ static integer c__3 = 3;
 /*        LOT IS THE NUMBER OF TRANSFORMS */
 /*        ISIGN = +1 FOR FORWARD TRANSFORM */
 /*              = -1 FOR INVERSE TRANSFORM */
-/*        INFO = SET TO 0 ON SUCCESS AND 1 ON FAILURE */
+/*        NPQR = NPQR OBTAINED FROM SETGPFA */
 
 /*        WRITTEN BY CLIVE TEMPERTON */
 /*        RECHERCHE EN PREVISION NUMERIQUE */
@@ -65,16 +65,16 @@ static integer c__3 = 3;
 
 /* ---------------------------------------------------------------------- */
 
-/*<       SUBROUTINE GPFA(A,B,TRIGS,INC,JUMP,N,LOT,ISIGN,INFO) >*/
+/*<       SUBROUTINE GPFA(A,B,TRIGS,INC,JUMP,N,LOT,ISIGN,NPQR) >*/
 /* Subroutine */ int gpfa_(real *a, real *b, real *trigs, integer *inc, 
 	integer *jump, integer *n, integer *lot, integer *isign, integer *
-	info)
+	npqr)
 {
     /* Builtin functions */
     integer pow_ii(integer *, integer *);
 
     /* Local variables */
-    integer i__, kk, nj[3], ll, ip, iq, nn, ir, ifac;
+    integer i__, ip, iq, ir;
     extern /* Subroutine */ int gpfa2f_(real *, real *, real *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *), gpfa3f_(
 	    real *, real *, real *, integer *, integer *, integer *, integer *
@@ -83,67 +83,21 @@ static integer c__3 = 3;
 
 
 /*<       REAL A(*), B(*), TRIGS(*) >*/
-/*<       INTEGER INC, JUMP, N, LOT, ISIGN, INFO >*/
-/*<       DIMENSION NJ(3) >*/
-/*<       INFO = 0 >*/
+/*<       INTEGER INC, JUMP, N, LOT, ISIGN, NPQR(3) >*/
+
+/*<       IP = NPQR(1) >*/
     /* Parameter adjustments */
+    --npqr;
     --trigs;
     --b;
     --a;
 
     /* Function Body */
-    *info = 0;
-
-/*     DECOMPOSE N INTO FACTORS 2,3,5 */
-/*     ------------------------------ */
-/*<       NN = N >*/
-    nn = *n;
-/*<       IFAC = 2 >*/
-    ifac = 2;
-
-/*<       DO 30 LL = 1 , 3 >*/
-    for (ll = 1; ll <= 3; ++ll) {
-/*<       KK = 0 >*/
-	kk = 0;
-/*<    10 CONTINUE >*/
-L10:
-/*<       IF (MOD(NN,IFAC).NE.0) GO TO 20 >*/
-	if (nn % ifac != 0) {
-	    goto L20;
-	}
-/*<       KK = KK + 1 >*/
-	++kk;
-/*<       NN = NN / IFAC >*/
-	nn /= ifac;
-/*<       GO TO 10 >*/
-	goto L10;
-/*<    20 CONTINUE >*/
-L20:
-/*<       NJ(LL) = KK >*/
-	nj[ll - 1] = kk;
-/*<       IFAC = IFAC + LL >*/
-	ifac += ll;
-/*<    30 CONTINUE >*/
-/* L30: */
-    }
-
-/*<       IF (NN.NE.1) THEN >*/
-    if (nn != 1) {
-/*        WRITE(6,40) N */
-/*  40    FORMAT(' *** WARNING!!!',I10,' IS NOT A LEGAL VALUE OF N ***') */
-/*<          INFO = 1 >*/
-	*info = 1;
-/*<          RETURN >*/
-	return 0;
-/*<       ENDIF >*/
-    }
-
-/*<       IP = NJ(1) >*/
-    ip = nj[0];
-/*<       IQ = NJ(2) >*/
-    iq = nj[1];
-/*<       IR = NJ(3) >*/
-    ir = nj[2];
+    ip = npqr[1];
+/*<       IQ = NPQR(2) >*/
+    iq = npqr[2];
+/*<       IR = NPQR(3) >*/
+    ir = npqr[3];
 
 /*     COMPUTE THE TRANSFORM */
 /*     --------------------- */

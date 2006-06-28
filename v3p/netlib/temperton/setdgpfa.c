@@ -41,14 +41,16 @@ static integer c__5 = 5;
 /*          -------------------------------------- */
 /*            IPQR = (2**IP) + (3**IQ) + (5**IR) */
 /*          -------------------------------------- */
-/*        INFO = SET TO 0 ON SUCCESS AND 1 ON FAILURE */
+/*        NPQR = THREE INTEGERS HOLDING IP, IQ, IR */
+/*        INFO = SET TO 0 ON SUCCESS AND -1 ON FAILURE */
 
 /*        WRITTEN BY CLIVE TEMPERTON 1990 */
 
 /* ---------------------------------------------------------------------- */
 
-/*<       SUBROUTINE SETDGPFA(TRIGS,N,INFO) >*/
-/* Subroutine */ int setdgpfa_(doublereal *trigs, integer *n, integer *info)
+/*<       SUBROUTINE SETDGPFA(TRIGS,N,NPQR,INFO) >*/
+/* Subroutine */ int setdgpfa_(doublereal *trigs, integer *n, integer *npqr, 
+	integer *info)
 {
     /* System generated locals */
     integer i__1;
@@ -66,10 +68,11 @@ static integer c__5 = 5;
 
 
 /*<       DOUBLE PRECISION TRIGS(*) >*/
-/*<       INTEGER N, INFO >*/
+/*<       INTEGER N, NPQR(3), INFO >*/
 /*<       DIMENSION NJ(3) >*/
 /*<       INFO = 0 >*/
     /* Parameter adjustments */
+    --npqr;
     --trigs;
 
     /* Function Body */
@@ -100,8 +103,8 @@ L10:
 	goto L10;
 /*<    20 CONTINUE >*/
 L20:
-/*<       NJ(LL) = KK >*/
-	nj[ll - 1] = kk;
+/*<       NPQR(LL) = KK >*/
+	npqr[ll] = kk;
 /*<       IFAC = IFAC + LL >*/
 	ifac += ll;
 /*<    30 CONTINUE >*/
@@ -112,19 +115,19 @@ L20:
     if (nn != 1) {
 /*        WRITE(6,40) N */
 /*  40    FORMAT(' *** WARNING!!!',I10,' IS NOT A LEGAL VALUE OF N ***') */
-/*<          INFO = 1 >*/
-	*info = 1;
+/*<          INFO = -1 >*/
+	*info = -1;
 /*<          RETURN >*/
 	return 0;
 /*<       ENDIF >*/
     }
 
-/*<       IP = NJ(1) >*/
-    ip = nj[0];
-/*<       IQ = NJ(2) >*/
-    iq = nj[1];
-/*<       IR = NJ(3) >*/
-    ir = nj[2];
+/*<       IP = NPQR(1) >*/
+    ip = npqr[1];
+/*<       IQ = NPQR(2) >*/
+    iq = npqr[2];
+/*<       IR = NPQR(3) >*/
+    ir = npqr[3];
 
 /*     COMPUTE LIST OF ROTATED TWIDDLE FACTORS */
 /*     --------------------------------------- */
