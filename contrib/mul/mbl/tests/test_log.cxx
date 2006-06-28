@@ -60,6 +60,14 @@ void test_log()
   vcl_cout << "Print some random stuff with no flush\n";
   MBL_LOG(WARN, obj3, "and check that this message doesn't preceed the direct output to cout");
 
+
+  // Check for standard macro as function compile problems.
+  if (true)
+    MBL_LOG(WARN, obj3, "Test");
+  else
+    MBL_LOG(WARN, obj3, "Test");
+
+
   vcl_cout << "\n\n";
 
   {

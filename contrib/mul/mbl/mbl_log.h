@@ -297,7 +297,7 @@ class mbl_logger_root
   if (logger.level() >= mbl_logger:: my_level) {\
     logger.mtstart(mbl_logger:: my_level, __FILE__, __LINE__); \
     logger.mtlog() << message << vcl_endl; \
-    logger.mtstop(); }
+    logger.mtstop(); } else (void) 0
 
 
 #endif // mbl_log_h
