@@ -39,12 +39,12 @@ static complex c_b53 = {(float)-1.,(float)0.};
 
     /* Local variables */
     real b, c__, f, g;
-    integer i__, j, k, l, m;
+    integer i__, j, k, l=0, m;
     complex r__, t;
     real t1, el;
     integer kk;
     real cs;
-    integer ll, mm, ls;
+    integer ll, mm, ls=0;
     real sl;
     integer lu;
     real sm, sn;

@@ -36,11 +36,11 @@ static doublereal c_b44 = -1.;
 
     /* Local variables */
     doublereal b, c__, f, g;
-    integer i__, j, k, l, m;
+    integer i__, j, k, l=0, m;
     doublereal t, t1, el;
     integer kk;
     doublereal cs;
-    integer ll, mm, ls;
+    integer ll, mm, ls=0;
     doublereal sl;
     integer lu;
     doublereal sm, sn;

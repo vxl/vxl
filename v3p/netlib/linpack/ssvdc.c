@@ -35,11 +35,11 @@ static real c_b44 = (float)-1.;
 
     /* Local variables */
     real b, c__, f, g;
-    integer i__, j, k, l, m;
+    integer i__, j, k, l=0, m;
     real t, t1, el;
     integer kk;
     real cs;
-    integer ll, mm, ls;
+    integer ll, mm, ls=0;
     real sl;
     integer lu;
     real sm, sn;

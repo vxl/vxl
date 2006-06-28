@@ -41,12 +41,12 @@ static doublecomplex c_b60 = {-1.,0.};
 
     /* Local variables */
     doublereal b, c__, f, g;
-    integer i__, j, k, l, m;
+    integer i__, j, k, l=0, m;
     doublecomplex r__, t;
     doublereal t1, el;
     integer kk;
     doublereal cs;
-    integer ll, mm, ls;
+    integer ll, mm, ls=0;
     doublereal sl;
     integer lu;
     doublereal sm, sn;
