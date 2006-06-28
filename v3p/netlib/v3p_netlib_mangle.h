@@ -13,8 +13,10 @@ nm libv3p_netlib.a |grep " [TR] "
 */
 
 /* Functions */
+
 #define caxpy_ v3p_netlib_caxpy_
 #define cdotc_ v3p_netlib_cdotc_
+#define cqrdc_ v3p_netlib_cqrdc_
 #define cscal_ v3p_netlib_cscal_
 #define csrot_ v3p_netlib_csrot_
 #define csvdc_ v3p_netlib_csvdc_
@@ -23,6 +25,7 @@ nm libv3p_netlib.a |grep " [TR] "
 #define dcabs1_ v3p_netlib_dcabs1_
 #define ddot_ v3p_netlib_ddot_
 #define dnrm2_ v3p_netlib_dnrm2_
+#define dqrdc_ v3p_netlib_dqrdc_
 #define drot_ v3p_netlib_drot_
 #define drotg_ v3p_netlib_drotg_
 #define dscal_ v3p_netlib_dscal_
@@ -33,6 +36,7 @@ nm libv3p_netlib.a |grep " [TR] "
 #define scnrm2_ v3p_netlib_scnrm2_
 #define sdot_ v3p_netlib_sdot_
 #define snrm2_ v3p_netlib_snrm2_
+#define sqrdc_ v3p_netlib_sqrdc_
 #define srot_ v3p_netlib_srot_
 #define srotg_ v3p_netlib_srotg_
 #define sscal_ v3p_netlib_sscal_
@@ -41,6 +45,7 @@ nm libv3p_netlib.a |grep " [TR] "
 #define zaxpy_ v3p_netlib_zaxpy_
 #define zdotc_ v3p_netlib_zdotc_
 #define zdrot_ v3p_netlib_zdrot_
+#define zqrdc_ v3p_netlib_zqrdc_
 #define zscal_ v3p_netlib_zscal_
 #define zsvdc_ v3p_netlib_zsvdc_
 #define zswap_ v3p_netlib_zswap_

@@ -327,6 +327,7 @@ SET(V3P_NETLIB_libf2c_SOURCES
   libf2c/exit_.c
   libf2c/c_abs.c
   libf2c/c_div.c
+  libf2c/c_sqrt.c
   libf2c/cabs.c
   libf2c/d_cnjg.c
   libf2c/d_imag.c
@@ -378,6 +379,11 @@ SET(V3P_NETLIB_blas_SOURCES
   blas/zswap.c
   )
 SET(V3P_NETLIB_linpack_SOURCES
+  linpack/sqrdc.c
+  linpack/dqrdc.c
+  linpack/cqrdc.c
+  linpack/zqrdc.c
+
   linpack/csvdc.c
   linpack/dsvdc.c
   linpack/ssvdc.c

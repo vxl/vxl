@@ -8,6 +8,7 @@
 #define exit_ v3p_netlib_exit_
 #define c_abs v3p_netlib_c_abs
 #define c_div v3p_netlib_c_div
+#define c_sqrt v3p_netlib_c_sqrt
 #define d_cnjg v3p_netlib_d_cnjg
 #define d_imag v3p_netlib_d_imag
 #define d_lg10 v3p_netlib_d_lg10

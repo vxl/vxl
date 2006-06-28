@@ -8,6 +8,7 @@
 #undef exit_
 #undef c_abs
 #undef c_div
+#undef c_sqrt
 #undef d_cnjg
 #undef d_imag
 #undef d_lg10
