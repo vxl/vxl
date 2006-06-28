@@ -5,7 +5,8 @@
 *-------------------------------------------------------------------
 *
       subroutine gpfa5f(a,b,trigs,inc,jump,n,mm,lot,isign)
-      dimension a(*), b(*), trigs(*)
+      real a(*), b(*), trigs(*)
+      integer inc, jump, n, mm, lot, isign
       data sin36/0.587785252292473/, sin72/0.951056516295154/,
      *      qrt5/0.559016994374947/
       data lvr/128/

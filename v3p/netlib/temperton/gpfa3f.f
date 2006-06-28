@@ -5,7 +5,8 @@
 *-------------------------------------------------------------------
 *
       subroutine gpfa3f(a,b,trigs,inc,jump,n,mm,lot,isign)
-      dimension a(*), b(*), trigs(*)
+      real a(*), b(*), trigs(*)
+      integer inc, jump, n, mm, lot, isign
       data sin60/0.866025403784437/
       data lvr/128/
 *

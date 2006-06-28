@@ -6,7 +6,8 @@
 *-------------------------------------------------------------------
 *
       subroutine gpfa2f(a,b,trigs,inc,jump,n,mm,lot,isign)
-      dimension a(*), b(*), trigs(*)
+      real a(*), b(*), trigs(*)
+      integer inc, jump, n, mm, lot, isign
       data lvr/1024/
 *
 *     ***************************************************************
