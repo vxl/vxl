@@ -325,8 +325,8 @@ INCLUDE_DIRECTORIES(${netlib_SOURCE_DIR})
 # v3p_netlib library.
 ADD_DEFINITIONS(-DV3P_NETLIB_SRC)
 
-# Create a netlib library with mangled symbols.
-ADD_LIBRARY(v3p_netlib
+# List sources for each library component.
+SET(V3P_NETLIB_libf2c_SOURCES
   libf2c/f77_aloc.c
   libf2c/exit_.c
   libf2c/c_abs.c
@@ -351,7 +351,8 @@ ADD_LIBRARY(v3p_netlib
   libf2c/z_abs.c
   libf2c/z_div.c
   libf2c/z_sqrt.c
-
+  )
+SET(V3P_NETLIB_blas_SOURCES
   blas/caxpy.c
   blas/cdotc.c
   blas/cscal.c
@@ -378,13 +379,43 @@ ADD_LIBRARY(v3p_netlib
   blas/zdrot.c
   blas/zscal.c
   blas/zswap.c
-
+  )
+SET(V3P_NETLIB_linpack_SOURCES
   linpack/csvdc.c
   linpack/dcabs1.c
   linpack/dsvdc.c
   linpack/ssvdc.c
   linpack/zsvdc.c
-)
+  )
+
+# Adjust the compiler flags to avoid problems with f2c-generated code.
+IF(CMAKE_COMPILER_IS_GNUCC)
+  # Hide warnings in f2c-generated code.
+  #SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -w")
+
+  # Remove all optimization flags.
+  #Currently this is not needed but is here for reference if someone
+  #finds a need to add it.
+  #FOREACH(c "" "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
+  #  STRING(REGEX REPLACE
+  #    "-O[^ ]*( |$)" "" CMAKE_C_FLAGS${c} ${CMAKE_C_FLAGS${c}})
+  #ENDFOREACH(c)
+ENDIF(CMAKE_COMPILER_IS_GNUCC)
+
+# Create a netlib library with mangled symbols.
+ADD_LIBRARY(v3p_netlib
+  ${V3P_NETLIB_libf2c_SOURCES}
+  ${V3P_NETLIB_blas_SOURCES}
+  ${V3P_NETLIB_linpack_SOURCES}
+  v3p_f2c.h
+  v3p_f2c_mangle.h
+  v3p_f2c_original.h
+  v3p_f2c_unmangle.h
+  v3p_netlib.h
+  v3p_netlib_mangle.h
+  v3p_netlib_prototypes.h
+  v3p_netlib_unmangle.h
+  )
 IF(UNIX)
   TARGET_LINK_LIBRARIES( v3p_netlib m )
 ENDIF(UNIX)
