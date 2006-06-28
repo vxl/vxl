@@ -355,6 +355,7 @@ SET(V3P_NETLIB_blas_SOURCES
   blas/csrot.c
   blas/cswap.c
   blas/daxpy.c
+  blas/dcabs1.c
   blas/ddot.c
   blas/dnrm2.c
   blas/drot.c
@@ -378,7 +379,6 @@ SET(V3P_NETLIB_blas_SOURCES
   )
 SET(V3P_NETLIB_linpack_SOURCES
   linpack/csvdc.c
-  linpack/dcabs1.c
   linpack/dsvdc.c
   linpack/ssvdc.c
   linpack/zsvdc.c
