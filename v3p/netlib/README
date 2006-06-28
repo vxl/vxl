@@ -71,7 +71,7 @@ The directories blas and linpack were created as follows:
 
 for d in blas linpack; do
   for f in ${d}/*.f; do
-    b=`echo "$f" | sed 's/.f//'`
+    b=`echo "$f" | sed 's/.f$//'`
     if [ ! -f "${b}.c" ]; then
       echo "Converting ${b}.f to ${b}.c"
       f2c -A -a -C++ -c -E -P -d${d} ${b}.f &&
