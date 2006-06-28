@@ -1,3 +1,5 @@
+/*: Factors a symmetric positive definite matrix and estimates the
+    condition of the matrix */
 extern int v3p_netlib_dpoco_(
   v3p_netlib_doublereal *a,
   v3p_netlib_integer *lda,
