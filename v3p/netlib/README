@@ -162,4 +162,6 @@ other sources which enforces const-correctness for code calling the
 routines.  Since the interface is extern "C" code, the symbol names
 are not changed by the precense or absence of const.
 
+cvs -q commit -m "Manually documented prototype and added v3p_netlib_const to appropriate arguments."
+
 ------------------------------------------------------------------------------
