@@ -23,11 +23,16 @@ nm libv3p_netlib.a |grep " [TR] "
 #define csrot_ v3p_netlib_csrot_
 #define csvdc_ v3p_netlib_csvdc_
 #define cswap_ v3p_netlib_cswap_
+#define dasum_ v3p_netlib_dasum_
 #define daxpy_ v3p_netlib_daxpy_
 #define dcabs1_ v3p_netlib_dcabs1_
 #define dcopy_ v3p_netlib_dcopy_
 #define ddot_ v3p_netlib_ddot_
 #define dnrm2_ v3p_netlib_dnrm2_
+#define dpoco_ v3p_netlib_dpoco_
+#define dpodi_ v3p_netlib_dpodi_
+#define dpofa_ v3p_netlib_dpofa_
+#define dposl_ v3p_netlib_dposl_
 #define dqrdc_ v3p_netlib_dqrdc_
 #define dqrsl_ v3p_netlib_dqrsl_
 #define drot_ v3p_netlib_drot_

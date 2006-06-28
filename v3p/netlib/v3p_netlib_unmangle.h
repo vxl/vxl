@@ -14,11 +14,16 @@
 #undef csrot_
 #undef csvdc_
 #undef cswap_
+#undef dasum_
 #undef daxpy_
 #undef dcabs1_
 #undef dcopy_
 #undef ddot_
 #undef dnrm2_
+#undef dpoco_
+#undef dpodi_
+#undef dpofa_
+#undef dposl_
 #undef dqrdc_
 #undef dqrsl_
 #undef drot_

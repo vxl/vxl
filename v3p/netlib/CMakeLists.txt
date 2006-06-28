@@ -348,6 +348,7 @@ SET(V3P_NETLIB_blas_SOURCES
   blas/cscal.c
   blas/csrot.c
   blas/cswap.c
+  blas/dasum.c
   blas/daxpy.c
   blas/dcabs1.c
   blas/dcopy.c
@@ -388,6 +389,11 @@ SET(V3P_NETLIB_linpack_SOURCES
   linpack/dsvdc.c
   linpack/ssvdc.c
   linpack/zsvdc.c
+
+  linpack/dpoco.c
+  linpack/dpodi.c
+  linpack/dpofa.c
+  linpack/dposl.c
   )
 
 # Adjust the compiler flags to avoid problems with f2c-generated code.
