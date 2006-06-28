@@ -19,17 +19,19 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
+#include <v3p_netlib.h>
+
 #include <netlib.h>
 
 // xSVDC
 #define vnl_netlib_svd_proto(T) \
-T *x, int const *ldx, int const *m, int const *n, \
+T *x, long int const *ldx, long int const *m, long int const *n, \
 T *sv, \
 T *errors, \
-T *u, int const *ldu, \
-T *v, int const *ldv, \
+T *u, long int const *ldu, \
+T *v, long int const *ldv, \
 T *work, \
-int const *job, int *info
+long int const *job, long int *info
 #define vnl_netlib_svd_params \
 x, ldx, m, n, sv, errors, u, ldu, v, ldv, work, job, info
 
