@@ -24,8 +24,11 @@ static integer c__1 = 1;
 /* ------------------------------------------------------------------ */
 
 /*<    >*/
-/* Subroutine */ int dnppla_(S_fp op, S_fp iovect, integer *n, integer *nperm,
-	 integer *nop, integer *nmval, doublereal *val, integer *nmvec, 
+/* Subroutine */ int dnppla_(
+        void (*op)(integer*,integer*,doublereal*,doublereal*),
+        void (*iovect)(integer*,integer*,doublereal*,integer*,integer*),
+        integer *n, integer *nperm,
+	integer *nop, integer *nmval, doublereal *val, integer *nmvec, 
 	doublereal *vec, integer *nblock, doublereal *h__, doublereal *hv, 
 	doublereal *p, doublereal *q, doublereal *bound, doublereal *d__, 
 	doublereal *delta, logical *small, logical *raritz, doublereal *eps)

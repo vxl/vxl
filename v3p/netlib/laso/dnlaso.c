@@ -61,11 +61,14 @@ static doublereal c_b88 = 0.;
 	    doublereal *, doublereal *, integer *);
     logical small;
     extern /* Subroutine */ int dcopy_(integer *, doublereal *, integer *, 
-	    doublereal *, integer *), dnppla_(S_fp, S_fp, integer *, integer *
-	    , integer *, integer *, doublereal *, integer *, doublereal *, 
-	    integer *, doublereal *, doublereal *, doublereal *, doublereal *,
-	     doublereal *, doublereal *, doublereal *, logical *, logical *, 
-	    doublereal *);
+	    doublereal *, integer *),
+            dnppla_(void (*op)(integer*,integer*,doublereal*,doublereal*),
+                    void (*iovect)(integer*,integer*,doublereal*,integer*,integer*),
+                    integer *, integer *
+                    , integer *, integer *, doublereal *, integer *, doublereal *, 
+                    integer *, doublereal *, doublereal *, doublereal *, doublereal *,
+                    doublereal *, doublereal *, doublereal *, logical *, logical *, 
+                    doublereal *);
     logical raritz;
     extern /* Subroutine */ int dortqr_(integer *, integer *, integer *, 
 	    doublereal *, doublereal *), dvsort_(integer *, doublereal *, 
@@ -495,7 +498,7 @@ L130:
 /*<       I6 = I5 + 2*NPERM + 4 >*/
     i6 = i5 + (*nperm << 1) + 4;
 /*<    >*/
-    dnppla_((S_fp)op, (S_fp)iovect, n, nperm, &nop, nmval, &val[val_offset], 
+    dnppla_(op, iovect, n, nperm, &nop, nmval, &val[val_offset], 
 	    nmvec, &vec[vec_offset], nblock, &work[i1], &work[i2], &work[i3], 
 	    &work[i4], &work[i5], &work[i6], &delta, &small, &raritz, &eps);
 
