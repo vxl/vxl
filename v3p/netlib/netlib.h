@@ -66,34 +66,10 @@ float sqrtf(float);
                double *a, int *lda, double *b, int *ldb, double *alpha, double *beta,
                double *u, int *ldu, double *v, int *ldv, double *q, int *ldq, double *work, int *iwork, int *info);
 
-  /*: Finds eigenvalues and eigenvectors of a general matrix */
-  void rg_(int* nm, int* n, double* a, double* wr, double* wi, int* matz, double* z, int* iv1, double* fv1, int* ierr);
-
   /*: Computes eigenvalues and eigenvectors of nxn complex general matrix */
   void zgeev_(const char* jobvl, const char* jobvr, const int* n, dcmplx* a, const int* lda, dcmplx* w,
               dcmplx* vl, const int* ldvl, dcmplx* vr, const int* ldvr,
               dcmplx* work, int* lwork, double* rwork, int* info);
-
-  /*: Computes eigenvalues and eigenvectors of a real symmetric matrix */
-  void rs_(const int* nm, /*!< (IN) leading dimension of matrices */
-           const int* n, /*!< (IN) order of the square matrix a */
-           double *a_matrix, /*!< (IN) real symmetric matrix */
-           double *eigenvalues,    /*!< (OUT) eigenvalues in ascending order */
-           const int* want_eigenvectors, /*!< (IN) set nonzero if eigenvectors wanted */
-           double *eigenvectors, /*!< (OUT) eigenvectors */
-           double *workspace_1_size_n, double *workspace_2_size_n, /*!< scratch */
-           int* output_error_code); /*!< (OUT) normal completion code is 0 */
-
-  /*: Computes eigenvalues and eigenvectors of a real symmetric generalized eigenproblem  ax = lambda bx.  */
-  void rsg_(const int* nm, /*!< (IN) leading dimension of matrices */
-            const int* n, /*!< (IN) order of the square matrices a and b */
-            double *a_matrix, /*!< (IN) real symmetric matrix */
-            double *b_matrix, /*!< (IN) positive definite real symm matrix */
-            double *eigenvalues,    /*!< (OUT) eigenvalues in ascending order */
-            const int* want_eigenvectors, /*!< (IN) set nonzero if eigenvectors wanted */
-            double *eigenvectors, /*!< (OUT) eigenvectors */
-            double *workspace_1_size_n, double *workspace_2_size_n, /*!< scratch */
-            int* output_error_code); /*!< (OUT) normal completion code is 0 */
 
   /*: Minimizes a function using the conjugate gradient method */
   void cg_(double* x, /*!< (IN/OUT) minimizer, length n; input = starting guess */
@@ -116,55 +92,6 @@ float sqrtf(float);
 
   /*: Computes the double cumulative distribution function value for the chi-squared distribution */
   void dchscdf_(double* x, int* nu, double* cdf);
-
-  /*: Self-sorting in-place generalized prime factor (complex) double fft */
-  void dgpfa_(double* a, /*!< (IN/OUT) Real part of input/output vectors */
-              double* b, /*!< (IN/OUT) Imaginary part of input/output vectors */
-              const double* trigs, /*!< (IN) output of dsetgfpa_ (twiddle factors) */
-              const int* inc, /*!< (IN) increment within each data vector (normally 1) */
-              const int* jump, /*!< (IN) increment between data vectors */
-              const int* n, /*!< (IN) length of the transforms; should only have 2,3,5 as prime factors */
-              const int* lot, /*!< (IN) number of transforms */
-              const int* isign, /*!< (IN) forward transform: +1; backward: -1 */
-              const int* npqr, /*!< (IN) 3-array with the number of factors of 2,3,5 */
-              int* info); /*!< (OUT) 0 if no problems */
-
-  /*: Self-sorting in-place generalized prime factor (complex) float fft */
-  void gpfa_(float* a, float* b, const float* trigs, const int* inc, const int* jump,
-             const int* n, const int* lot, const int* isign, const int* nj, int* info);
-
-  /*: Set-up routine for dgpfa_ */
-  void dsetgpfa_(double* trigs, const int* n, int* ires, int* info);
-
-  /*: Set-up routine for gpfa_ */
-  void setgpfa_(float* trigs, const int* n, int* ires, int* info);
-
-  void gpfa2f_(float *a, float *b, const float *trigs, const int *inc, const int *jump,
-               const int *n, const int *mm, const int *lot, const int *isign);
-  void gpfa3f_(float *a, float *b, const float *trigs, const int *inc, const int *jump,
-               const int *n, const int *mm, const int *lot, const int *isign);
-  void gpfa5f_(float *a, float *b, const float *trigs, const int *inc, const int *jump,
-               const int *n, const int *mm, const int *lot, const int *isign);
-  void dgpfa2f_(double *a, double *b, const double *trigs, const int *inc, const int *jump,
-                const int *n, const int *mm, const int *lot, const int *isign);
-  void dgpfa3f_(double *a, double *b, const double *trigs, const int *inc, const int *jump,
-                const int *n, const int *mm, const int *lot, const int *isign);
-  void dgpfa5f_(double *a, double *b, const double *trigs, const int *inc, const int *jump,
-                const int *n, const int *mm, const int *lot, const int *isign);
-
-  /*: Finds a few eigenvalues and eigenvectors at either end of the spectrum of a large sparse symmetric matrix.  */
-  void dnlaso_(void (*op)(const int* n,const int* m, const double* p, double* q),
-               void (*iovect)(const int* n,const int* m, double* q, const int* j, const int* k),
-               const int* n, const int* nval, const int* nfig, int* nperm,
-               const int* nmval, double* val,
-               const int* nmvec, double* vec,
-               const int* nblock, const int* maxop, const int* maxj, double* work, int* ind, int* ierr);
-  void snlaso_(void (*op)(const int* n,const int* m, const float* p, float* q),
-               void (*iovect)(const int* n,const int* m, float* q, const int* j, const int* k),
-               const int* n, const int* nval, const int* nfig, int* nperm,
-               const int* nmval, float* val,
-               const int* nmvec, float* vec,
-               const int* nblock, const int* maxop, const int* maxj, float* work, int* ind, int* ierr);
 
   /*: Solves the unconstrained minimization problem min F(x1..xN) */
   void lbfgs_(int* n, int* m, double* x, double* f, double* g,

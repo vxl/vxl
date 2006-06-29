@@ -117,10 +117,6 @@ SET( netlib_sources
   # from DATAPAC
   camsun.c
 
-  # from LASO2
-  dnlaso.c
-  snlaso.c
-
   # from OPT
   lbfgs.c lbfgs.h
   lbfgs-lb1.c
@@ -259,7 +255,6 @@ IF(CMAKE_COMPILER_IS_GNUCC)
 # These really need to be inserted later in the options list to gcc,
 # but this isn't supported in CMake 1.8.3
   SET_SOURCE_FILES_PROPERTIES(zlarfx.c PROPERTIES COMPILE_FLAGS -Os)
-  SET_SOURCE_FILES_PROPERTIES(dnlaso.c PROPERTIES COMPILE_FLAGS -O0)
 ENDIF(CMAKE_COMPILER_IS_GNUCC)
 
 ADD_LIBRARY( netlib ${netlib_sources} )
@@ -432,6 +427,7 @@ IF(CMAKE_COMPILER_IS_GNUCC)
   #SET_SOURCE_FILES_PROPERTIES(
   #  temperton/gpfa5f.c
   #  temperton/dgpfa5f.c
+  #  laso/dnlaso.c
   #  PROPERTIES COMPILE_FLAGS -O0
   #  )
 ENDIF(CMAKE_COMPILER_IS_GNUCC)
