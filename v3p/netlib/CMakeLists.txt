@@ -400,6 +400,20 @@ SET(V3P_NETLIB_eispack_SOURCES
   eispack/tred1.c
   eispack/tred2.c
   )
+SET(V3P_NETLIB_laso_SOURCES
+  laso/dlabax.c
+  laso/dlabcm.c
+  laso/dlabfc.c
+  laso/dlaeig.c
+  laso/dlager.c
+  laso/dlaran.c
+  laso/dmvpc.c
+  laso/dnlaso.c
+  laso/dnppla.c
+  laso/dortqr.c
+  laso/dvsort.c
+  laso/urand.c
+  )
 
 # Adjust the compiler flags to avoid problems with f2c-generated code.
 IF(CMAKE_COMPILER_IS_GNUCC)
@@ -429,6 +443,7 @@ ADD_LIBRARY(v3p_netlib
   ${V3P_NETLIB_linpack_SOURCES}
   ${V3P_NETLIB_temperton_SOURCES}
   ${V3P_NETLIB_eispack_SOURCES}
+  ${V3P_NETLIB_laso_SOURCES}
   v3p_f2c.h
   v3p_f2c_mangle.h
   v3p_f2c_original.h

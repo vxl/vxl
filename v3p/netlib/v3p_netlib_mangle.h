@@ -35,7 +35,18 @@ nm libv3p_netlib.a |grep " [TR] "
 #define dgpfa3f_ v3p_netlib_dgpfa3f_
 #define dgpfa5f_ v3p_netlib_dgpfa5f_
 #define dgpfa_ v3p_netlib_dgpfa_
+#define dlabax_ v3p_netlib_dlabax_
+#define dlabcm_ v3p_netlib_dlabcm_
+#define dlabfc_ v3p_netlib_dlabfc_
+#define dlaeig_ v3p_netlib_dlaeig_
+#define dlager_ v3p_netlib_dlager_
+#define dlaran_ v3p_netlib_dlaran_
+#define dmvpc_ v3p_netlib_dmvpc_
+#define dnlaso_ v3p_netlib_dnlaso_
+#define dnppla_ v3p_netlib_dnppla_
 #define dnrm2_ v3p_netlib_dnrm2_
+#define dnwla_ v3p_netlib_dnwla_
+#define dortqr_ v3p_netlib_dortqr_
 #define dpoco_ v3p_netlib_dpoco_
 #define dpodi_ v3p_netlib_dpodi_
 #define dpofa_ v3p_netlib_dpofa_
@@ -47,6 +58,7 @@ nm libv3p_netlib.a |grep " [TR] "
 #define dscal_ v3p_netlib_dscal_
 #define dsvdc_ v3p_netlib_dsvdc_
 #define dswap_ v3p_netlib_dswap_
+#define dvsort_ v3p_netlib_dvsort_
 #define dznrm2_ v3p_netlib_dznrm2_
 #define elmhes_ v3p_netlib_elmhes_
 #define eltran_ v3p_netlib_eltran_
@@ -82,6 +94,7 @@ nm libv3p_netlib.a |grep " [TR] "
 #define tqlrat_ v3p_netlib_tqlrat_
 #define tred1_ v3p_netlib_tred1_
 #define tred2_ v3p_netlib_tred2_
+#define urand_ v3p_netlib_urand_
 #define zaxpy_ v3p_netlib_zaxpy_
 #define zcopy_ v3p_netlib_zcopy_
 #define zdotc_ v3p_netlib_zdotc_

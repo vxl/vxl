@@ -26,7 +26,18 @@
 #undef dgpfa3f_
 #undef dgpfa5f_
 #undef dgpfa_
+#undef dlabax_
+#undef dlabcm_
+#undef dlabfc_
+#undef dlaeig_
+#undef dlager_
+#undef dlaran_
+#undef dmvpc_
+#undef dnlaso_
+#undef dnppla_
 #undef dnrm2_
+#undef dnwla_
+#undef dortqr_
 #undef dpoco_
 #undef dpodi_
 #undef dpofa_
@@ -38,6 +49,7 @@
 #undef dscal_
 #undef dsvdc_
 #undef dswap_
+#undef dvsort_
 #undef dznrm2_
 #undef elmhes_
 #undef eltran_
@@ -73,6 +85,7 @@
 #undef tqlrat_
 #undef tred1_
 #undef tred2_
+#undef urand_
 #undef zaxpy_
 #undef zcopy_
 #undef zdotc_
