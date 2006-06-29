@@ -32,7 +32,7 @@ static integer c__3 = 3;
 {
     /* Initialized data */
 
-    static real sin60 = (float).866025403784437;
+    static doublereal sin60 = .866025403784437;
     static integer lvr = 128;
 
     /* System generated locals */

@@ -32,9 +32,9 @@ static integer c__5 = 5;
 {
     /* Initialized data */
 
-    static real sin36 = (float).587785252292473;
-    static real sin72 = (float).951056516295154;
-    static real qrt5 = (float).559016994374947;
+    static doublereal sin36 = .587785252292473;
+    static doublereal sin72 = .951056516295154;
+    static doublereal qrt5 = .559016994374947;
     static integer lvr = 128;
 
     /* System generated locals */
