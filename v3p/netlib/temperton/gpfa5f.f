@@ -7,7 +7,19 @@
       subroutine gpfa5f(a,b,trigs,inc,jump,n,mm,lot,isign)
       real a(*), b(*), trigs(*)
       integer inc, jump, n, mm, lot, isign
-      data sin36/0.587785252292473/, sin72/0.951056516295154/,
+      real s, ax, bx, c1, c2, c3
+      real t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11
+      real u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11
+      real co1, co2, co3, co4, si1, si2, si3, si4
+      real aja, ajb, ajc, ajd, aje, bjb, bje, bjc
+      real bjd, bja, ajf, ajk, bjf, bjk, ajg, ajj
+      real ajh, aji, ajl, ajq, bjg, bjj, bjh, bji
+      real bjl, bjq, ajo, ajm, ajn, ajr, ajw, bjo
+      real bjm, bjn, bjr, bjw, ajt, ajs, ajx, ajp
+      real bjt, bjs, bjx, bjp, ajv, ajy, aju, bjv
+      real bjy, bju
+      data sin36/0.587785252292473/,
+     *     sin72/0.951056516295154/,
      *      qrt5/0.559016994374947/
       data lvr/128/
 *

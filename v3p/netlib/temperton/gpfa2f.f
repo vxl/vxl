@@ -8,7 +8,15 @@
       subroutine gpfa2f(a,b,trigs,inc,jump,n,mm,lot,isign)
       real a(*), b(*), trigs(*)
       integer inc, jump, n, mm, lot, isign
+      real s, ss, c1, c2, c3, t0, t1, t2, t3, u0, u1, u2, u3
+      real co1, co2, co3, co4, co5, co6, co7
+      real si1, si2, si3, si4, si5, si6, si7
+      real aja, ajb, ajc, ajd, bja, bjc, bjb, bjd
+      real aje, ajg, ajf, ajh, bje, bjg, bjf, bjh, aji
+      real bjm, ajj, bjj, ajk, ajl, bji, bjk
+      real ajo, bjl, bjo, ajm, ajn, ajp, bjn, bjp
       data lvr/1024/
+
 *
 *     ***************************************************************
 *     *                                                             *

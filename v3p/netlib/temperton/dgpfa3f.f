@@ -7,8 +7,12 @@
       subroutine dgpfa3f(a,b,trigs,inc,jump,n,mm,lot,isign)
       double precision a(*), b(*), trigs(*)
       integer inc, jump, n, mm, lot, isign
-      data sin60/0.866025403784437/
+      double precision s, c1, t1, t2, t3, u1, u2, u3, co1, co2
+      double precision si1, si2, aja, ajb, ajc, bjb, bjc, bja, ajd, bjd
+      double precision aje, ajf, ajh, bje, bjf, bjh, aji, ajg, bji, bjg
+      data sin60/0.866025403784437d+0/
       data lvr/128/
+
 *
 *     ***************************************************************
 *     *                                                             *
@@ -27,13 +31,13 @@
       if (isign.eq.-1) mu = 3-mu
       m = mm
       mh = (m+1)/2
-      s = float(isign)
+      s = dfloat(isign)
       c1 = sin60
       if (mu.eq.2) c1 = -c1
 *
       nblox = 1 + (lot-1)/lvr
       left = lot
-      s = float(isign)
+      s = dfloat(isign)
       istart = 1
 *
 *  loop on blocks of lvr transforms

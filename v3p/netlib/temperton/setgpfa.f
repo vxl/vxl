@@ -2,7 +2,7 @@
 *        SETUP ROUTINE FOR SELF-SORTING IN-PLACE
 *            GENERALIZED PRIME FACTOR (COMPLEX) FFT [GPFA]
 *
-*        CALL SETGPFA(TRIGS,N)
+*        CALL SETGPFA(TRIGS,N,NPQR,INFO)
 *
 *        INPUT :
 *        -----
@@ -30,6 +30,8 @@
       REAL TRIGS(*)
       INTEGER N, NPQR(3), INFO
       DIMENSION NJ(3)
+      REAL DEL
+      REAL ANGLE, TWOPI
       INFO = 0
 *
 *     DECOMPOSE N INTO FACTORS 2,3,5

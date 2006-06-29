@@ -7,8 +7,20 @@
       subroutine dgpfa5f(a,b,trigs,inc,jump,n,mm,lot,isign)
       double precision a(*), b(*), trigs(*)
       integer inc, jump, n, mm, lot, isign
-      data sin36/0.587785252292473/, sin72/0.951056516295154/,
-     *      qrt5/0.559016994374947/
+      double precision s, ax, bx, c1, c2, c3
+      double precision t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11
+      double precision u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11
+      double precision co1, co2, co3, co4, si1, si2, si3, si4
+      double precision aja, ajb, ajc, ajd, aje, bjb, bje, bjc
+      double precision bjd, bja, ajf, ajk, bjf, bjk, ajg, ajj
+      double precision ajh, aji, ajl, ajq, bjg, bjj, bjh, bji
+      double precision bjl, bjq, ajo, ajm, ajn, ajr, ajw, bjo
+      double precision bjm, bjn, bjr, bjw, ajt, ajs, ajx, ajp
+      double precision bjt, bjs, bjx, bjp, ajv, ajy, aju, bjv
+      double precision bjy, bju
+      data sin36/0.587785252292473d+0/,
+     *     sin72/0.951056516295154d+0/,
+     *      qrt5/0.559016994374947d+0/
       data lvr/128/
 *
 *     ***************************************************************
@@ -29,7 +41,7 @@
 *
       m = mm
       mh = (m+1)/2
-      s = float(isign)
+      s = dfloat(isign)
       c1 = qrt5
       c2 = sin72
       c3 = sin36
@@ -43,7 +55,7 @@
 *
       nblox = 1 + (lot-1)/lvr
       left = lot
-      s = float(isign)
+      s = dfloat(isign)
       istart = 1
 *
 *  loop on blocks of lvr transforms

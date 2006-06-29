@@ -8,7 +8,15 @@
       subroutine dgpfa2f(a,b,trigs,inc,jump,n,mm,lot,isign)
       double precision a(*), b(*), trigs(*)
       integer inc, jump, n, mm, lot, isign
+      double precision s, ss, c1, c2, c3, t0, t1, t2, t3, u0, u1, u2, u3
+      double precision co1, co2, co3, co4, co5, co6, co7
+      double precision si1, si2, si3, si4, si5, si6, si7
+      double precision aja, ajb, ajc, ajd, bja, bjc, bjb, bjd
+      double precision aje, ajg, ajf, ajh, bje, bjg, bjf, bjh, aji
+      double precision bjm, ajj, bjj, ajk, ajl, bji, bjk
+      double precision ajo, bjl, bjo, ajm, ajn, ajp, bjn, bjp
       data lvr/1024/
+
 *
 *     ***************************************************************
 *     *                                                             *
@@ -39,7 +47,7 @@
 *
       nblox = 1 + (lot-1)/lvr
       left = lot
-      s = float(isign)
+      s = dfloat(isign)
       istart = 1
 *
 *  loop on blocks of lvr transforms

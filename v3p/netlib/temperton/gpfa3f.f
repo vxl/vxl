@@ -7,8 +7,12 @@
       subroutine gpfa3f(a,b,trigs,inc,jump,n,mm,lot,isign)
       real a(*), b(*), trigs(*)
       integer inc, jump, n, mm, lot, isign
+      real s, c1, t1, t2, t3, u1, u2, u3, co1, co2
+      real si1, si2, aja, ajb, ajc, bjb, bjc, bja, ajd, bjd
+      real aje, ajf, ajh, bje, bjf, bjh, aji, ajg, bji, bjg
       data sin60/0.866025403784437/
       data lvr/128/
+
 *
 *     ***************************************************************
 *     *                                                             *
