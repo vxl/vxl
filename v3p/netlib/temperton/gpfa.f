@@ -25,6 +25,8 @@
 *        RECHERCHE EN PREVISION NUMERIQUE
 *        ATMOSPHERIC ENVIRONMENT SERVICE, CANADA
 *
+*        MODIFIED FOR VXL PROJECT TO ADD NPQR ARGUMENT
+*
 *----------------------------------------------------------------------
 *
 *        DEFINITION OF TRANSFORM
