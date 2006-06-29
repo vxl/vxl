@@ -403,6 +403,27 @@ SET(V3P_NETLIB_temperton_SOURCES
   temperton/setdgpfa.c
   temperton/setgpfa.c
   )
+SET(V3P_NETLIB_eispack_SOURCES
+  eispack/balanc.c
+  eispack/balbak.c
+  eispack/cdiv.c
+  eispack/elmhes.c
+  eispack/eltran.c
+  eispack/epslon.c
+  eispack/hqr.c
+  eispack/hqr2.c
+  eispack/otqlrat.c
+  eispack/pythag.c
+  eispack/rebak.c
+  eispack/reduc.c
+  eispack/rg.c
+  eispack/rs.c
+  eispack/rsg.c
+  eispack/tql1.c
+  eispack/tql2.c
+  eispack/tred1.c
+  eispack/tred2.c
+  )
 
 # Adjust the compiler flags to avoid problems with f2c-generated code.
 IF(CMAKE_COMPILER_IS_GNUCC)
@@ -424,6 +445,7 @@ ADD_LIBRARY(v3p_netlib
   ${V3P_NETLIB_blas_SOURCES}
   ${V3P_NETLIB_linpack_SOURCES}
   ${V3P_NETLIB_temperton_SOURCES}
+  ${V3P_NETLIB_eispack_SOURCES}
   v3p_f2c.h
   v3p_f2c_mangle.h
   v3p_f2c_original.h

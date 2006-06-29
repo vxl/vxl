@@ -5,8 +5,11 @@
 
 /* Functions */
 
+#undef balanc_
+#undef balbak_
 #undef caxpy_
 #undef ccopy_
+#undef cdiv_
 #undef cdotc_
 #undef cqrdc_
 #undef cqrsl_
@@ -36,10 +39,21 @@
 #undef dsvdc_
 #undef dswap_
 #undef dznrm2_
+#undef elmhes_
+#undef eltran_
+#undef epslon_
 #undef gpfa2f_
 #undef gpfa3f_
 #undef gpfa5f_
 #undef gpfa_
+#undef hqr2_
+#undef hqr_
+#undef pythag_
+#undef rebak_
+#undef reduc_
+#undef rg_
+#undef rs_
+#undef rsg_
 #undef saxpy_
 #undef scnrm2_
 #undef scopy_
@@ -54,6 +68,11 @@
 #undef sscal_
 #undef ssvdc_
 #undef sswap_
+#undef tql1_
+#undef tql2_
+#undef tqlrat_
+#undef tred1_
+#undef tred2_
 #undef zaxpy_
 #undef zcopy_
 #undef zdotc_

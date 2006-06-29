@@ -14,8 +14,11 @@ nm libv3p_netlib.a |grep " [TR] "
 
 /* Functions */
 
+#define balanc_ v3p_netlib_balanc_
+#define balbak_ v3p_netlib_balbak_
 #define caxpy_ v3p_netlib_caxpy_
 #define ccopy_ v3p_netlib_ccopy_
+#define cdiv_ v3p_netlib_cdiv_
 #define cdotc_ v3p_netlib_cdotc_
 #define cqrdc_ v3p_netlib_cqrdc_
 #define cqrsl_ v3p_netlib_cqrsl_
@@ -45,10 +48,21 @@ nm libv3p_netlib.a |grep " [TR] "
 #define dsvdc_ v3p_netlib_dsvdc_
 #define dswap_ v3p_netlib_dswap_
 #define dznrm2_ v3p_netlib_dznrm2_
+#define elmhes_ v3p_netlib_elmhes_
+#define eltran_ v3p_netlib_eltran_
+#define epslon_ v3p_netlib_epslon_
 #define gpfa2f_ v3p_netlib_gpfa2f_
 #define gpfa3f_ v3p_netlib_gpfa3f_
 #define gpfa5f_ v3p_netlib_gpfa5f_
 #define gpfa_ v3p_netlib_gpfa_
+#define hqr2_ v3p_netlib_hqr2_
+#define hqr_ v3p_netlib_hqr_
+#define pythag_ v3p_netlib_pythag_
+#define rebak_ v3p_netlib_rebak_
+#define reduc_ v3p_netlib_reduc_
+#define rg_ v3p_netlib_rg_
+#define rs_ v3p_netlib_rs_
+#define rsg_ v3p_netlib_rsg_
 #define saxpy_ v3p_netlib_saxpy_
 #define scnrm2_ v3p_netlib_scnrm2_
 #define scopy_ v3p_netlib_scopy_
@@ -63,6 +77,11 @@ nm libv3p_netlib.a |grep " [TR] "
 #define sscal_ v3p_netlib_sscal_
 #define ssvdc_ v3p_netlib_ssvdc_
 #define sswap_ v3p_netlib_sswap_
+#define tql1_ v3p_netlib_tql1_
+#define tql2_ v3p_netlib_tql2_
+#define tqlrat_ v3p_netlib_tqlrat_
+#define tred1_ v3p_netlib_tred1_
+#define tred2_ v3p_netlib_tred2_
 #define zaxpy_ v3p_netlib_zaxpy_
 #define zcopy_ v3p_netlib_zcopy_
 #define zdotc_ v3p_netlib_zdotc_
