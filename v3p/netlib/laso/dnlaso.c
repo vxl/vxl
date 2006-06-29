@@ -13,7 +13,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
+#include "v3p_netlib.h"
 
 /* Table of constant values */
 
@@ -27,7 +27,10 @@ static doublereal c_b88 = 0.;
 /* ------------------------------------------------------------------ */
 
 /*<    >*/
-/* Subroutine */ int dnlaso_(S_fp op, S_fp iovect, integer *n, integer *nval, 
+/* Subroutine */ int dnlaso_(
+        void (*op)(integer*,integer*,doublereal*,doublereal*),
+        void (*iovect)(integer*,integer*,doublereal*,integer*,integer*),
+        integer *n, integer *nval, 
 	integer *nfig, integer *nperm, integer *nmval, doublereal *val, 
 	integer *nmvec, doublereal *vec, integer *nblock, integer *maxop, 
 	integer *maxj, doublereal *work, integer *ind, integer *ierr)
@@ -45,7 +48,10 @@ static doublereal c_b88 = 0.;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     integer nband;
     doublereal delta;
-    extern /* Subroutine */ int dnwla_(S_fp, S_fp, integer *, integer *, 
+    extern /* Subroutine */ int dnwla_(
+            void (*op)(integer*,integer*,doublereal*,doublereal*),
+            void (*iovect)(integer*,integer*,doublereal*,integer*,integer*),
+            integer *, integer *, 
 	    integer *, integer *, integer *, doublereal *, integer *, 
 	    doublereal *, integer *, integer *, integer *, integer *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
@@ -459,7 +465,7 @@ L130:
 /*<       I13 = I12 + MAXJ >*/
     i13 = i12 + *maxj;
 /*<    >*/
-    dnwla_((S_fp)op, (S_fp)iovect, n, &nband, &nv, nfig, nperm, &val[
+    dnwla_(op, iovect, n, &nband, &nv, nfig, nperm, &val[
 	    val_offset], nmvec, &vec[vec_offset], nblock, maxop, maxj, &nop, &
 	    work[1], &work[i1], &work[i2], &work[i3], &work[i4], &work[i5], &
 	    work[i6], &work[i7], &work[i8], &work[i9], &work[i10], &work[i11],
@@ -505,7 +511,10 @@ L140:
 /* ------------------------------------------------------------------ */
 
 /*<    >*/
-/* Subroutine */ int dnwla_(S_fp op, S_fp iovect, integer *n, integer *nband, 
+/* Subroutine */ int dnwla_(
+        void (*op)(integer*,integer*,doublereal*,doublereal*),
+        void (*iovect)(integer*,integer*,doublereal*,integer*,integer*),
+        integer *n, integer *nband, 
 	integer *nval, integer *nfig, integer *nperm, doublereal *val, 
 	integer *nmvec, doublereal *vec, integer *nblock, integer *maxop, 
 	integer *maxj, integer *nop, doublereal *p1, doublereal *p0, 
@@ -1156,7 +1165,7 @@ L330:
 /*<       TOLA = UTOL*RNORM >*/
     tola = utol * rnorm;
 /*<    >*/
-    if (*maxj - j < *nblock || *nop >= *maxop && nleft != 0) {
+    if (*maxj - j < *nblock || (*nop >= *maxop && nleft != 0)) {
 	goto L390;
     }
 /*<       GO TO 400 >*/

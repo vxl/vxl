@@ -120,7 +120,7 @@ static integer c__1 = 1;
 /*  LOOP OVER EIGENVALUES */
 
 /*<       SIGMA = BOUND(2,NVAL+1) >*/
-    sigma = bound[(nval + 1 << 1) + 2];
+    sigma = bound[((nval + 1) << 1) + 2];
 /*<       DO 400 J = 1, NVAL >*/
     i__1 = nval;
     for (j = 1; j <= i__1; ++j) {
@@ -185,7 +185,7 @@ L30:
 /*  ACCEPT EIGENVALUE IF THE INTERVAL IS SMALL ENOUGH */
 
 /*<             IF(BOUND(2,J+1) - BOUND(1,J+1) .LT. 3.0D0*ATOL) GO TO 300 >*/
-	if (bound[(j + 1 << 1) + 2] - bound[(j + 1 << 1) + 1] < *atol * 3.) {
+	if (bound[((j + 1) << 1) + 2] - bound[((j + 1) << 1) + 1] < *atol * 3.) {
 	    goto L300;
 	}
 
@@ -195,7 +195,7 @@ L30:
 	errb = resid;
 /*<             GAP = DMIN1(BOUND(1,J+2) - RQ, RQ - BOUND(2,J)) >*/
 /* Computing MIN */
-	d__1 = bound[(j + 2 << 1) + 1] - rq, d__2 = rq - bound[(j << 1) + 2];
+	d__1 = bound[((j + 2) << 1) + 1] - rq, d__2 = rq - bound[(j << 1) + 2];
 	gap = min(d__1,d__2);
 /*<             IF(GAP .GT. RESID) ERRB = DMAX1(ATOL, RESID*RESID/GAP) >*/
 	if (gap > resid) {
@@ -207,7 +207,7 @@ L30:
 /*  TENTATIVE NEW SHIFT */
 
 /*<             SIGMA = 0.5D0*(BOUND(1,J+1) + BOUND(2,J+1)) >*/
-	sigma = (bound[(j + 1 << 1) + 1] + bound[(j + 1 << 1) + 2]) * .5;
+	sigma = (bound[((j + 1) << 1) + 1] + bound[((j + 1) << 1) + 2]) * .5;
 
 /*  CHECK FOR TERMINALTION */
 
@@ -216,7 +216,7 @@ L30:
 	    goto L40;
 	}
 /*<    >*/
-	if (rq - errb > bound[(j << 1) + 2] && rq + errb < bound[(j + 2 << 1) 
+	if (rq - errb > bound[(j << 1) + 2] && rq + errb < bound[((j + 2) << 1) 
 		+ 1]) {
 	    goto L310;
 	}
@@ -225,7 +225,7 @@ L30:
 
 /*<    40       IF(RQ .GE. BOUND(1,J+1)) GO TO 50 >*/
 L40:
-	if (rq >= bound[(j + 1 << 1) + 1]) {
+	if (rq >= bound[((j + 1) << 1) + 1]) {
 	    goto L50;
 	}
 /*<             IF(RQ - ERRB .GT. BOUND(2,J)) GO TO 100 >*/
@@ -233,7 +233,7 @@ L40:
 	    goto L100;
 	}
 /*<             IF(RQ + ERRB .LT. BOUND(1,J+1)) CALL DLARAN(N,EIGVEC(1,J)) >*/
-	if (rq + errb < bound[(j + 1 << 1) + 1]) {
+	if (rq + errb < bound[((j + 1) << 1) + 1]) {
 	    dlaran_(n, &eigvec[j * eigvec_dim1 + 1]);
 	}
 /*<             GO TO 200 >*/
@@ -243,25 +243,25 @@ L40:
 
 /*<    50       IF(RQ .LE. BOUND(2,J+1)) GO TO 100 >*/
 L50:
-	if (rq <= bound[(j + 1 << 1) + 2]) {
+	if (rq <= bound[((j + 1) << 1) + 2]) {
 	    goto L100;
 	}
 /*<             IF(RQ + ERRB .LT. BOUND(1,J+2)) GO TO 100 >*/
-	if (rq + errb < bound[(j + 2 << 1) + 1]) {
+	if (rq + errb < bound[((j + 2) << 1) + 1]) {
 	    goto L100;
 	}
 
 /*  SAVE THE REJECTED VECTOR IF INDICATED */
 
 /*<             IF(RQ - ERRB .LE. BOUND(2,J+1)) GO TO 200 >*/
-	if (rq - errb <= bound[(j + 1 << 1) + 2]) {
+	if (rq - errb <= bound[((j + 1) << 1) + 2]) {
 	    goto L200;
 	}
 /*<             DO 60 I = J, NVAL >*/
 	i__2 = nval;
 	for (i__ = j; i__ <= i__2; ++i__) {
 /*<                IF(BOUND(2,I+1) .GT. RQ) GO TO 70 >*/
-	    if (bound[(i__ + 1 << 1) + 2] > rq) {
+	    if (bound[((i__ + 1) << 1) + 2] > rq) {
 		goto L70;
 	    }
 /*<    60       CONTINUE >*/
@@ -304,7 +304,7 @@ L200:
 	i__2 = nval;
 	for (i__ = j; i__ <= i__2; ++i__) {
 /*<                IF(SIGMA .LT. BOUND(1,I+1)) GO TO 220 >*/
-	    if (sigma < bound[(i__ + 1 << 1) + 1]) {
+	    if (sigma < bound[((i__ + 1) << 1) + 1]) {
 		goto L220;
 	    }
 /*<   210       CONTINUE >*/
@@ -363,16 +363,16 @@ L227:
 	i__2 = nval;
 	for (i__ = j; i__ <= i__2; ++i__) {
 /*<                IF(SIGMA .LT. BOUND(1,I+1)) GO TO 20 >*/
-	    if (sigma < bound[(i__ + 1 << 1) + 1]) {
+	    if (sigma < bound[((i__ + 1) << 1) + 1]) {
 		goto L20;
 	    }
 /*<                IF(NUML .LT. I) BOUND(1,I+1) = SIGMA >*/
 	    if (numl < i__) {
-		bound[(i__ + 1 << 1) + 1] = sigma;
+		bound[((i__ + 1) << 1) + 1] = sigma;
 	    }
 /*<                IF(NUML .GE. I) BOUND(2,I+1) = SIGMA >*/
 	    if (numl >= i__) {
-		bound[(i__ + 1 << 1) + 2] = sigma;
+		bound[((i__ + 1) << 1) + 2] = sigma;
 	    }
 /*<   230       CONTINUE >*/
 /* L230: */
@@ -380,8 +380,8 @@ L227:
 /*<    >*/
 	if (numl < nval + 1) {
 /* Computing MAX */
-	    d__1 = sigma, d__2 = bound[(nval + 2 << 1) + 1];
-	    bound[(nval + 2 << 1) + 1] = max(d__1,d__2);
+	    d__1 = sigma, d__2 = bound[((nval + 2) << 1) + 1];
+	    bound[((nval + 2) << 1) + 1] = max(d__1,d__2);
 	}
 /*<             GO TO 20 >*/
 	goto L20;
@@ -400,7 +400,7 @@ L300:
 L305:
 	flag__ = FALSE_;
 /*<          RQ = 0.5D0*(BOUND(1,J+1) + BOUND(2,J+1)) >*/
-	rq = (bound[(j + 1 << 1) + 1] + bound[(j + 1 << 1) + 2]) * .5;
+	rq = (bound[((j + 1) << 1) + 1] + bound[((j + 1) << 1) + 2]) * .5;
 /*<    >*/
 	i__2 = (*nband << 1) - 1;
 	dlabfc_(n, nband, &a[a_offset], &rq, &numvec, lde, &eigvec[j * 

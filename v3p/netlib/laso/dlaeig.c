@@ -117,14 +117,14 @@ L30:
 /*<       BOUND(2,1) = TMAX >*/
     bound[4] = *tmax;
 /*<       BOUND(1,NVAL + 2) = TMIN >*/
-    bound[(nval + 2 << 1) + 1] = *tmin;
+    bound[((nval + 2) << 1) + 1] = *tmin;
 /*<       IF(NL .EQ. 1) BOUND(2,1) = TMIN >*/
     if (*nl == 1) {
 	bound[4] = *tmin;
     }
 /*<       IF(NR .EQ. N) BOUND(1,NVAL + 2) = TMAX >*/
     if (*nr == *n) {
-	bound[(nval + 2 << 1) + 1] = *tmax;
+	bound[((nval + 2) << 1) + 1] = *tmax;
     }
 
 /*<    >*/

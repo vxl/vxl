@@ -175,9 +175,9 @@ L40:
 		goto L50;
 	    }
 /*<    >*/
-	    if (d__[i__ + *nband * d_dim1] < 0. && d__[i__ + i__ * d_dim1] < 
-		    0. || d__[i__ + *nband * d_dim1] > 0. && d__[i__ + i__ * 
-		    d_dim1] >= 0.) {
+	    if ((d__[i__ + *nband * d_dim1] < 0. && d__[i__ + i__ * d_dim1] < 
+		    0.) || (d__[i__ + *nband * d_dim1] > 0. && d__[i__ + i__ * 
+		    d_dim1] >= 0.)) {
 		lpm = -lpm;
 	    }
 /*<             CALL DSWAP(LDAD-I+1, D(I,I), 1, D(I,NBAND), 1) >*/

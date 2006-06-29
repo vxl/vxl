@@ -1,6 +1,13 @@
 extern int v3p_netlib_dnlaso_(
-  S_fp op,
-  S_fp iovect,
+  void (*op)(v3p_netlib_integer*,
+             v3p_netlib_integer*,
+             v3p_netlib_doublereal*,
+             v3p_netlib_doublereal*),
+  void (*iovect)(v3p_netlib_integer*,
+                 v3p_netlib_integer*,
+                 v3p_netlib_doublereal*,
+                 v3p_netlib_integer*,
+                 v3p_netlib_integer*),
   v3p_netlib_integer *n,
   v3p_netlib_integer *nval,
   v3p_netlib_integer *nfig,
@@ -17,8 +24,15 @@ extern int v3p_netlib_dnlaso_(
   v3p_netlib_integer *ierr
   );
 extern int v3p_netlib_dnwla_(
-  S_fp op,
-  S_fp iovect,
+  void (*op)(v3p_netlib_integer*,
+             v3p_netlib_integer*,
+             v3p_netlib_doublereal*,
+             v3p_netlib_doublereal*),
+  void (*iovect)(v3p_netlib_integer*,
+                 v3p_netlib_integer*,
+                 v3p_netlib_doublereal*,
+                 v3p_netlib_integer*,
+                 v3p_netlib_integer*),
   v3p_netlib_integer *n,
   v3p_netlib_integer *nband,
   v3p_netlib_integer *nval,
