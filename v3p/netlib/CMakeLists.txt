@@ -89,15 +89,6 @@ SET( netlib_sources
   isamax.c
   idamax.c
 
-  # EISPACK
-  rsg.c
-  rg.c
-  rs.c
-  tql1.c
-  tql2.c
-  tred1.c
-  tred2.c
-
   # ITPACK
   dsrc2c.c
 
@@ -119,18 +110,6 @@ SET( netlib_sources
 
   # General
   machineparams.c
-
-  # Temperton FFT routines
-  dgpfa.c
-  dgpfa3f.c
-  dsetgpfa.c
-  gpfa2f.c
-  gpfa5f.c
-  dgpfa2f.c
-  dgpfa5f.c
-  gpfa.c
-  gpfa3f.c
-  setgpfa.c
 
   # NAPACK
   cg.c
@@ -279,10 +258,7 @@ SET( netlib_sources
 IF(CMAKE_COMPILER_IS_GNUCC)
 # These really need to be inserted later in the options list to gcc,
 # but this isn't supported in CMake 1.8.3
-  SET_SOURCE_FILES_PROPERTIES(gpfa5f.c PROPERTIES COMPILE_FLAGS -O0)
-  SET_SOURCE_FILES_PROPERTIES(dgpfa5f.c PROPERTIES COMPILE_FLAGS -O0)
   SET_SOURCE_FILES_PROPERTIES(zlarfx.c PROPERTIES COMPILE_FLAGS -Os)
-  SET_SOURCE_FILES_PROPERTIES(rg.c PROPERTIES COMPILE_FLAGS -O1)
   SET_SOURCE_FILES_PROPERTIES(dnlaso.c PROPERTIES COMPILE_FLAGS -O0)
 ENDIF(CMAKE_COMPILER_IS_GNUCC)
 
@@ -437,6 +413,13 @@ IF(CMAKE_COMPILER_IS_GNUCC)
   #  STRING(REGEX REPLACE
   #    "-O[^ ]*( |$)" "" CMAKE_C_FLAGS${c} ${CMAKE_C_FLAGS${c}})
   #ENDFOREACH(c)
+
+  # Disable buggy optimization on some source files.
+  #SET_SOURCE_FILES_PROPERTIES(
+  #  temperton/gpfa5f.c
+  #  temperton/dgpfa5f.c
+  #  PROPERTIES COMPILE_FLAGS -O0
+  #  )
 ENDIF(CMAKE_COMPILER_IS_GNUCC)
 
 # Create a netlib library with mangled symbols.
