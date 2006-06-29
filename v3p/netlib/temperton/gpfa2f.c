@@ -45,25 +45,25 @@ static integer c__2 = 2;
     integer j, k, l, m;
     real s, c1, c2, c3;
     integer m2, n2;
-    real t0;
-    integer m8;
-    real t2, t1, t3, u0, u2, u1, u3;
-    integer ja, jb, la, jc, jd, nb, je, jf, jg, jh, mh, kk, ji, ll, jj, jk, 
-	    jl, jm, jn, jo, jp, mu, nu;
+    real t0, t1, t2, t3, u0, u1, u2, u3;
+    integer m8, ja, jb, la, jc, jd, nb, je, jf, jg, jh, mh, kk, ji, ll, jj, 
+	    jk, jl, jm, jn, jo, jp, mu, nu;
     real ss, co1, co2, co3, co4, co5, co6, co7, si1, si2, si3, si4, si5, si6, 
 	    si7, aja, ajb, ajc, ajd, bja, bjc, bjb, bjd, aje, ajg, ajf, ajh, 
-	    bje, bjg, bjf, bjh, aji;
-    integer jjj;
-    real bjm, ajj;
-    integer ink;
-    real bjj, ajk, ajl, bji, bjk;
-    integer inq;
-    real ajo, bjl, bjo, ajm, ajn, ajp, bjn, bjp;
-    integer ninc, left, nvex, ipass, nblox, jstep, laincl, jstepl, istart, 
-	    jstepx;
+	    bje, bjg, bjf, bjh, aji, bjm, ajj, bjj, ajk, ajl, bji, bjk, ajo, 
+	    bjl, bjo, ajm, ajn, ajp, bjn, bjp;
+    integer inq, ink, jjj, ninc, left, nvex, ipass, nblox, jstep, laincl, 
+	    jstepl, istart, jstepx;
 
 /*<       real a(*), b(*), trigs(*) >*/
 /*<       integer inc, jump, n, mm, lot, isign >*/
+/*<       real s, ss, c1, c2, c3, t0, t1, t2, t3, u0, u1, u2, u3 >*/
+/*<       real co1, co2, co3, co4, co5, co6, co7 >*/
+/*<       real si1, si2, si3, si4, si5, si6, si7 >*/
+/*<       real aja, ajb, ajc, ajd, bja, bjc, bjb, bjd >*/
+/*<       real aje, ajg, ajf, ajh, bje, bjg, bjf, bjh, aji >*/
+/*<       real bjm, ajj, bjj, ajk, ajl, bji, bjk >*/
+/*<       real ajo, bjl, bjo, ajm, ajn, ajp, bjn, bjp >*/
 /*<       data lvr/1024/ >*/
     /* Parameter adjustments */
     --trigs;

@@ -43,20 +43,21 @@ static integer c__3 = 3;
 
     /* Local variables */
     integer j, k, l, m;
-    real s, c1;
+    doublereal s, c1;
     integer n3;
-    real t1, t2, t3, u1, u2, u3;
+    doublereal t1, t2, t3, u1, u2, u3;
     integer ja, jb, la, jc, jd, nb, je, jf, jg, jh, mh, kk, ji, ll, mu, nu;
-    real co1, co2, si1, si2, aja, ajb, ajc, bjb, bjc, bja, ajd, bjd, aje, ajf,
-	     ajh, bje, bjf, bjh, aji, ajg, bji;
-    integer jjj;
-    real bjg;
-    integer ink, inq, ninc, left, nvex, ipass, nblox, jstep, laincl, jstepl, 
-	    istart, jstepx;
+    doublereal co1, co2, si1, si2, aja, ajb, ajc, bjb, bjc, bja, ajd, bjd, 
+	    aje, ajf, ajh, bje, bjf, bjh, aji, ajg, bji, bjg;
+    integer jjj, ink, inq, ninc, left, nvex, ipass, nblox, jstep, laincl, 
+	    jstepl, istart, jstepx;
 
 /*<       double precision a(*), b(*), trigs(*) >*/
 /*<       integer inc, jump, n, mm, lot, isign >*/
-/*<       data sin60/0.866025403784437/ >*/
+/*<       double precision s, c1, t1, t2, t3, u1, u2, u3, co1, co2 >*/
+/*<       double precision si1, si2, aja, ajb, ajc, bjb, bjc, bja, ajd, bjd >*/
+/*<       double precision aje, ajf, ajh, bje, bjf, bjh, aji, ajg, bji, bjg >*/
+/*<       data sin60/0.866025403784437d+0/ >*/
     /* Parameter adjustments */
     --trigs;
     --b;
@@ -93,8 +94,8 @@ static integer c__3 = 3;
     m = *mm;
 /*<       mh = (m+1)/2 >*/
     mh = (m + 1) / 2;
-/*<       s = float(isign) >*/
-    s = (real) (*isign);
+/*<       s = dfloat(isign) >*/
+    s = (doublereal) (*isign);
 /*<       c1 = sin60 >*/
     c1 = sin60;
 /*<       if (mu.eq.2) c1 = -c1 >*/
@@ -106,8 +107,8 @@ static integer c__3 = 3;
     nblox = (*lot - 1) / lvr + 1;
 /*<       left = lot >*/
     left = *lot;
-/*<       s = float(isign) >*/
-    s = (real) (*isign);
+/*<       s = dfloat(isign) >*/
+    s = (doublereal) (*isign);
 /*<       istart = 1 >*/
     istart = 1;
 

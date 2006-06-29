@@ -45,28 +45,35 @@ static integer c__5 = 5;
 
     /* Local variables */
     integer j, k, l, m;
-    real s, c1, c2, c3;
+    doublereal s, c1, c2, c3;
     integer n5;
-    real t1, t2, t3, t4, t5, t6, t7, t8, t9, u1, u2, u3, u4, u5, u6, u7, u8, 
-	    u9;
-    integer ja, jb, la, jc, jd, nb, je, jf, jg, jh, mh, kk;
-    real t10, t11, u10, u11;
-    integer ll, ji, jj, jk, jl, jm, mu, nu, jn, jo, jp, jq, jr, js, jt, ju, 
-	    jv, jw, jx, jy;
-    real ax, bx, co1, co2, co3, co4, si1, si2, si3, si4, aja, ajb, ajc, ajd, 
-	    aje, bjb, bje, bjc, bjd, bja, ajf, ajk, bjf, bjk, ajg, ajj, ajh;
-    integer jjj;
-    real aji, ajl;
-    integer ink;
-    real ajq, bjg, bjj, bjh, bji;
-    integer inq;
-    real bjl, bjq, ajo, ajm, ajn, ajr, ajw, bjo, bjm, bjn, bjr, bjw, ajt, ajs,
-	     ajx, ajp, bjt, bjs, bjx, bjp, ajv, ajy, aju, bjv, bjy, bju;
-    integer ninc, left, nvex, ipass, nblox, jstep, laincl, jstepl, istart, 
-	    jstepx;
+    doublereal t1, t2, t3, t4, t5, t6, t7, t8, t9, u1, u2, u3, u4, u5, u6, u7,
+	     u8, u9;
+    integer ja, jb, la, jc, jd, nb, je, jf, jg, jh;
+    doublereal t10, t11, u10, u11, ax, bx;
+    integer mh, kk, ll, ji, jj, jk, mu, nu, jl, jm, jn, jo, jp, jq, jr, js, 
+	    jt, ju, jv, jw, jx, jy;
+    doublereal co1, co2, co3, co4, si1, si2, si3, si4, aja, ajb, ajc, ajd, 
+	    aje, bjb, bje, bjc, bjd, bja, ajf, ajk, bjf, bjk, ajg, ajj, ajh, 
+	    aji, ajl, ajq, bjg, bjj, bjh, bji, bjl, bjq, ajo, ajm, ajn, ajr, 
+	    ajw, bjo, bjm, bjn, bjr, bjw, ajt, ajs, ajx, ajp, bjt, bjs, bjx, 
+	    bjp, ajv, ajy, aju, bjv, bjy, bju;
+    integer inq, ink, jjj, ninc, left, nvex, ipass, nblox, jstep, laincl, 
+	    jstepl, istart, jstepx;
 
 /*<       double precision a(*), b(*), trigs(*) >*/
 /*<       integer inc, jump, n, mm, lot, isign >*/
+/*<       double precision s, ax, bx, c1, c2, c3 >*/
+/*<       double precision t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11 >*/
+/*<       double precision u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11 >*/
+/*<       double precision co1, co2, co3, co4, si1, si2, si3, si4 >*/
+/*<       double precision aja, ajb, ajc, ajd, aje, bjb, bje, bjc >*/
+/*<       double precision bjd, bja, ajf, ajk, bjf, bjk, ajg, ajj >*/
+/*<       double precision ajh, aji, ajl, ajq, bjg, bjj, bjh, bji >*/
+/*<       double precision bjl, bjq, ajo, ajm, ajn, ajr, ajw, bjo >*/
+/*<       double precision bjm, bjn, bjr, bjw, ajt, ajs, ajx, ajp >*/
+/*<       double precision bjt, bjs, bjx, bjp, ajv, ajy, aju, bjv >*/
+/*<       double precision bjy, bju >*/
 /*<    >*/
     /* Parameter adjustments */
     --trigs;
@@ -105,8 +112,8 @@ static integer c__5 = 5;
     m = *mm;
 /*<       mh = (m+1)/2 >*/
     mh = (m + 1) / 2;
-/*<       s = float(isign) >*/
-    s = (real) (*isign);
+/*<       s = dfloat(isign) >*/
+    s = (doublereal) (*isign);
 /*<       c1 = qrt5 >*/
     c1 = qrt5;
 /*<       c2 = sin72 >*/
@@ -136,8 +143,8 @@ static integer c__5 = 5;
     nblox = (*lot - 1) / lvr + 1;
 /*<       left = lot >*/
     left = *lot;
-/*<       s = float(isign) >*/
-    s = (real) (*isign);
+/*<       s = dfloat(isign) >*/
+    s = (doublereal) (*isign);
 /*<       istart = 1 >*/
     istart = 1;
 

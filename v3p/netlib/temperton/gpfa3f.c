@@ -47,14 +47,15 @@ static integer c__3 = 3;
     real t1, t2, t3, u1, u2, u3;
     integer ja, jb, la, jc, jd, nb, je, jf, jg, jh, mh, kk, ji, ll, mu, nu;
     real co1, co2, si1, si2, aja, ajb, ajc, bjb, bjc, bja, ajd, bjd, aje, ajf,
-	     ajh, bje, bjf, bjh, aji, ajg, bji;
-    integer jjj;
-    real bjg;
-    integer ink, inq, ninc, left, nvex, ipass, nblox, jstep, laincl, jstepl, 
-	    istart, jstepx;
+	     ajh, bje, bjf, bjh, aji, ajg, bji, bjg;
+    integer jjj, ink, inq, ninc, left, nvex, ipass, nblox, jstep, laincl, 
+	    jstepl, istart, jstepx;
 
 /*<       real a(*), b(*), trigs(*) >*/
 /*<       integer inc, jump, n, mm, lot, isign >*/
+/*<       real s, c1, t1, t2, t3, u1, u2, u3, co1, co2 >*/
+/*<       real si1, si2, aja, ajb, ajc, bjb, bjc, bja, ajd, bjd >*/
+/*<       real aje, ajf, ajh, bje, bjf, bjh, aji, ajg, bji, bjg >*/
 /*<       data sin60/0.866025403784437/ >*/
     /* Parameter adjustments */
     --trigs;

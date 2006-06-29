@@ -25,7 +25,7 @@ static integer c__5 = 5;
 /*        SETUP ROUTINE FOR SELF-SORTING IN-PLACE */
 /*            GENERALIZED PRIME FACTOR (COMPLEX) FFT [GPFA] */
 
-/*        CALL SETGPFA(TRIGS,N) */
+/*        CALL SETGPFA(TRIGS,N,NPQR,INFO) */
 
 /*        INPUT : */
 /*        ----- */
@@ -69,6 +69,8 @@ static integer c__5 = 5;
 /*<       REAL TRIGS(*) >*/
 /*<       INTEGER N, NPQR(3), INFO >*/
 /*<       DIMENSION NJ(3) >*/
+/*<       REAL DEL >*/
+/*<       REAL ANGLE, TWOPI >*/
 /*<       INFO = 0 >*/
     /* Parameter adjustments */
     --npqr;

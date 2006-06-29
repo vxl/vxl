@@ -48,24 +48,31 @@ static integer c__5 = 5;
     integer n5;
     real t1, t2, t3, t4, t5, t6, t7, t8, t9, u1, u2, u3, u4, u5, u6, u7, u8, 
 	    u9;
-    integer ja, jb, la, jc, jd, nb, je, jf, jg, jh, mh, kk;
-    real t10, t11, u10, u11;
-    integer ll, ji, jj, jk, jl, jm, mu, nu, jn, jo, jp, jq, jr, js, jt, ju, 
-	    jv, jw, jx, jy;
-    real ax, bx, co1, co2, co3, co4, si1, si2, si3, si4, aja, ajb, ajc, ajd, 
-	    aje, bjb, bje, bjc, bjd, bja, ajf, ajk, bjf, bjk, ajg, ajj, ajh;
-    integer jjj;
-    real aji, ajl;
-    integer ink;
-    real ajq, bjg, bjj, bjh, bji;
-    integer inq;
-    real bjl, bjq, ajo, ajm, ajn, ajr, ajw, bjo, bjm, bjn, bjr, bjw, ajt, ajs,
-	     ajx, ajp, bjt, bjs, bjx, bjp, ajv, ajy, aju, bjv, bjy, bju;
-    integer ninc, left, nvex, ipass, nblox, jstep, laincl, jstepl, istart, 
-	    jstepx;
+    integer ja, jb, la, jc, jd, nb, je, jf, jg, jh;
+    real t10, t11, u10, u11, ax, bx;
+    integer mh, kk, ll, ji, jj, jk, mu, nu, jl, jm, jn, jo, jp, jq, jr, js, 
+	    jt, ju, jv, jw, jx, jy;
+    real co1, co2, co3, co4, si1, si2, si3, si4, aja, ajb, ajc, ajd, aje, bjb,
+	     bje, bjc, bjd, bja, ajf, ajk, bjf, bjk, ajg, ajj, ajh, aji, ajl, 
+	    ajq, bjg, bjj, bjh, bji, bjl, bjq, ajo, ajm, ajn, ajr, ajw, bjo, 
+	    bjm, bjn, bjr, bjw, ajt, ajs, ajx, ajp, bjt, bjs, bjx, bjp, ajv, 
+	    ajy, aju, bjv, bjy, bju;
+    integer inq, ink, jjj, ninc, left, nvex, ipass, nblox, jstep, laincl, 
+	    jstepl, istart, jstepx;
 
 /*<       real a(*), b(*), trigs(*) >*/
 /*<       integer inc, jump, n, mm, lot, isign >*/
+/*<       real s, ax, bx, c1, c2, c3 >*/
+/*<       real t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11 >*/
+/*<       real u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11 >*/
+/*<       real co1, co2, co3, co4, si1, si2, si3, si4 >*/
+/*<       real aja, ajb, ajc, ajd, aje, bjb, bje, bjc >*/
+/*<       real bjd, bja, ajf, ajk, bjf, bjk, ajg, ajj >*/
+/*<       real ajh, aji, ajl, ajq, bjg, bjj, bjh, bji >*/
+/*<       real bjl, bjq, ajo, ajm, ajn, ajr, ajw, bjo >*/
+/*<       real bjm, bjn, bjr, bjw, ajt, ajs, ajx, ajp >*/
+/*<       real bjt, bjs, bjx, bjp, ajv, ajy, aju, bjv >*/
+/*<       real bjy, bju >*/
 /*<    >*/
     /* Parameter adjustments */
     --trigs;
