@@ -98,7 +98,7 @@ void label_boundary_and_bkg(vil3d_image_view<int> &image,int i,int j, int k, int
       i1 = i0+x_offset[offset];
       j1 = j0+y_offset[offset];
       if (i1 >= int(ni) || j1 >= int(nj) || i1 < 0 || j1 < 0)
-        offset = (++offset)%8;
+        offset = (offset+1)%8;
       else
       {
         if (image(i1,j1,k)==1 || image(i1,j1,k) == boundary_label) // this means we visit some
@@ -110,7 +110,7 @@ void label_boundary_and_bkg(vil3d_image_view<int> &image,int i,int j, int k, int
         else
         {
           image(i1,j1,k) = background_label;
-          offset = (++offset)%8;
+          offset = (offset+1)%8;
         }
       }
     }
