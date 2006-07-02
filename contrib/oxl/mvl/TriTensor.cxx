@@ -2068,9 +2068,8 @@ struct maxabs
   maxabs(const TriTensor& T);
 };
 
-maxabs::maxabs(const TriTensor& T)
+maxabs::maxabs(const TriTensor& T) : i(0), j(0), k(0), maxval(0.0)
 {
-  maxval = 0;
   for (int i = 0; i < 3; ++i)
     for (int j = 0; j < 3; ++j)
       for (int k = 0; k < 3; ++k) {
@@ -2084,7 +2083,8 @@ maxabs::maxabs(const TriTensor& T)
       }
 }
 
-static bool check_same(const TriTensor& T1, const TriTensor& T2) {
+static bool check_same(const TriTensor& T1, const TriTensor& T2)
+{
   maxabs m1(T1);
   double scale1 = 1/m1.maxval;
   double scale2 = 1/vcl_fabs(T2(m1.i,m1.j,m1.k));
