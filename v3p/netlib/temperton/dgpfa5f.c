@@ -53,7 +53,8 @@ static integer c__5 = 5;
     doublereal t10, t11, u10, u11, ax, bx;
     integer mh, kk, ll, ji, jj, jk, mu, nu, jl, jm, jn, jo, jp, jq, jr, js, 
 	    jt, ju, jv, jw, jx, jy;
-    doublereal co1, co2, co3, co4, si1, si2, si3, si4, aja, ajb, ajc, ajd, 
+    doublereal co1=0, co2=0, co3=0, co4=0, si1=0, si2=0, si3=0, si4=0,
+      aja, ajb, ajc, ajd, 
 	    aje, bjb, bje, bjc, bjd, bja, ajf, ajk, bjf, bjk, ajg, ajj, ajh, 
 	    aji, ajl, ajq, bjg, bjj, bjh, bji, bjl, bjq, ajo, ajm, ajn, ajr, 
 	    ajw, bjo, bjm, bjn, bjr, bjw, ajt, ajs, ajx, ajp, bjt, bjs, bjx, 

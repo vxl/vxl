@@ -537,17 +537,17 @@ L140:
     double sqrt(doublereal), pow_dd(doublereal *, doublereal *);
 
     /* Local variables */
-    integer i__, j, k, l, m, i1, ii, ng;
+    integer i__, j, k, l=0, m, i1, ii, ng;
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, 
 	    integer *);
-    doublereal tola, temp, tolg, tmin, tmax, tarr[1];
+    doublereal tola=0, temp, tolg=0, tmin, tmax, tarr[1];
     logical test;
     doublereal utol;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
 	    integer *);
     integer ngood, nleft;
-    doublereal anorm;
+    doublereal anorm=0;
     extern /* Subroutine */ int dmvpc_(integer *, doublereal *, integer *, 
 	    integer *, doublereal *, integer *, doublereal *, doublereal *, 
 	    doublereal *), dcopy_(integer *, doublereal *, integer *, 
@@ -563,7 +563,7 @@ L140:
 	    doublereal *, doublereal *, doublereal *), dlager_(integer *, 
 	    integer *, integer *, doublereal *, doublereal *, doublereal *), 
 	    dlaran_(integer *, doublereal *);
-    doublereal betmin, alpmin, betmax, alpmax;
+    doublereal betmin, alpmin=0, betmax, alpmax=0;
     integer ntheta;
     logical enough;
     integer number, nstart;

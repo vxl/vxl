@@ -31,8 +31,8 @@ doublereal urand_(integer *iy)
 
     /* Local variables */
     integer m;
-    real s;
-    integer ia, ic, mic;
+    real s=0;
+    integer ia=0, ic=0, mic=0;
     doublereal halfm;
 
 /*<       INTEGER  IY >*/

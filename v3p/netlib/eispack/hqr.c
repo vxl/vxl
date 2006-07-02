@@ -27,8 +27,8 @@ extern "C" {
     double sqrt(doublereal), d_sign(doublereal *, doublereal *);
 
     /* Local variables */
-    integer i__, j, k, l, m;
-    doublereal p, q, r__, s, t, w, x, y;
+    integer i__, j, k, l=0, m;
+    doublereal p, q=0, r__=0, s, t, w, x, y;
     integer na, en, ll, mm;
     doublereal zz;
     integer mp2, itn, its, enm2;

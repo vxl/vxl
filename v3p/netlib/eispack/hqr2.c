@@ -32,8 +32,8 @@ static doublereal c_b49 = 0.;
     double sqrt(doublereal), d_sign(doublereal *, doublereal *);
 
     /* Local variables */
-    integer i__, j, k, l, m;
-    doublereal p, q, r__, s, t, w, x, y;
+    integer i__, j, k, l=0, m=0;
+    doublereal p, q, r__=0, s=0, t, w, x, y;
     integer na, ii, en, jj;
     doublereal ra, sa;
     integer ll, mm, nn;

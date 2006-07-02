@@ -43,7 +43,7 @@ static integer c__2 = 2;
     double sqrt(doublereal);
 
     /* Local variables */
-    integer j, k, l, m;
+    integer j, k, l, m=0;
     doublereal s, c1, c2, c3;
     integer m2, n2;
     doublereal t0, t1, t2, t3, u0, u1, u2, u3;
