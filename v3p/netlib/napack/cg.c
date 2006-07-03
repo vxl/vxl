@@ -87,7 +87,12 @@ static integer c__1 = 1;
 /*<       SUBROUTINE CG(X,E,IT,STEP,T,LIMIT,N,M,VALUE,GRAD,BOTH,PRE,H) >*/
 /* Subroutine */ int cg_(doublereal *x, doublereal *e, integer *it, 
 	doublereal *step, doublereal *t, integer *limit, integer *n, integer *
-	m, D_fp value, S_fp grad, S_fp both, S_fp pre, doublereal *h__)
+	m,
+        double (*value)(double*),
+        void (*grad)(double*,double*),
+        void (*both)(double*,double*,double*),
+        void (*pre)(double*,double*),
+        doublereal *h__)
 {
     /* Initialized data */
 
@@ -116,14 +121,14 @@ static integer c__1 = 1;
     doublereal p, q, r__, s, v, w, y[50], z__[50], a8, c0, c1, d0, f0, f1, l3,
 	     da, db, fa, fb, fc;
     extern doublereal fd_(doublereal *, doublereal *, doublereal *, integer *,
-	     S_fp);
+                          void (*grad)(double*,double*));
     integer na, nb, nc, nd, iq;
     extern doublereal fv_(doublereal *, doublereal *, doublereal *, integer *,
-	     D_fp);
+                          double (*value)(double*));
     extern /* Subroutine */ int cub_(doublereal *, doublereal *, doublereal *,
 	     doublereal *, doublereal *, doublereal *, doublereal *), fvd_(
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, integer *, S_fp), ins_(doublereal *, doublereal *, 
+	    doublereal *, integer *, void (*)(double*,double*,double*)), ins_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, integer *, doublereal *, doublereal *)
 	    ;
@@ -654,7 +659,7 @@ L310:
     goto L250;
 /*< 320   DA = FD(A,X,H,N,GRAD) >*/
 L320:
-    da = fd_(&a, &x[1], &h__[h_offset], n, (S_fp)grad);
+    da = fd_(&a, &x[1], &h__[h_offset], n, grad);
 /*<       IF ( DA .GT. A6*G ) GOTO 410 >*/
     if (da > a6 * g) {
 	goto L410;
@@ -728,7 +733,7 @@ L340:
     goto L560;
 /*< 360   DA = FD(A,X,H,N,GRAD) >*/
 L360:
-    da = fd_(&a, &x[1], &h__[h_offset], n, (S_fp)grad);
+    da = fd_(&a, &x[1], &h__[h_offset], n, grad);
 /*<       IF ( DA .GT. A6*G ) GOTO 410 >*/
     if (da > a6 * g) {
 	goto L410;
@@ -830,7 +835,7 @@ L430:
     db = d__;
 /*<       IF ( B .NE. 0. ) DB = FD(B,X,H,N,GRAD) >*/
     if (b != (float)0.) {
-	db = fd_(&b, &x[1], &h__[h_offset], n, (S_fp)grad);
+	db = fd_(&b, &x[1], &h__[h_offset], n, grad);
     }
 /*< 440   W = 2.*DABS(B-A) >*/
 /* L440: */
@@ -912,7 +917,7 @@ L500:
 /*<       D0 = DA >*/
     d0 = da;
 /*<       CALL FVD(F,D,C,X,H,N,BOTH) >*/
-    fvd_(&f, &d__, &c__, &x[1], &h__[h_offset], n, (S_fp)both);
+    fvd_(&f, &d__, &c__, &x[1], &h__[h_offset], n, both);
 /*<       IF ( F .LT. FA ) GOTO 510 >*/
     if (f < fa) {
 	goto L510;
@@ -1108,7 +1113,7 @@ L660:
 
 /*<       DOUBLE PRECISION FUNCTION FV(A,X,H,N,VALUE) >*/
 doublereal fv_(doublereal *a, doublereal *x, doublereal *h__, integer *n, 
-	D_fp value)
+               double (*value)(double*))
 {
     /* System generated locals */
     integer h_dim1, h_offset, i__1;
@@ -1142,7 +1147,7 @@ doublereal fv_(doublereal *a, doublereal *x, doublereal *h__, integer *n,
 
 /*<       DOUBLE PRECISION FUNCTION FD(A,X,H,N,GRAD) >*/
 doublereal fd_(doublereal *a, doublereal *x, doublereal *h__, integer *n, 
-	S_fp grad)
+        void (*grad)(double*,double*))
 {
     /* System generated locals */
     integer h_dim1, h_offset, i__1;
@@ -1188,7 +1193,8 @@ doublereal fd_(doublereal *a, doublereal *x, doublereal *h__, integer *n,
 
 /*<       SUBROUTINE FVD(V,D,A,X,H,N,BOTH) >*/
 /* Subroutine */ int fvd_(doublereal *v, doublereal *d__, doublereal *a, 
-	doublereal *x, doublereal *h__, integer *n, S_fp both)
+                          doublereal *x, doublereal *h__, integer *n,
+                          void (*both)(double*,double*,double*))
 {
     /* System generated locals */
     integer h_dim1, h_offset, i__1;
