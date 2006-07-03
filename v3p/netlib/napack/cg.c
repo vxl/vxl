@@ -13,7 +13,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
+#include "v3p_netlib.h"
 
 /* Table of constant values */
 
