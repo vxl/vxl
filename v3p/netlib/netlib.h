@@ -66,11 +66,6 @@ float sqrtf(float);
                double *a, int *lda, double *b, int *ldb, double *alpha, double *beta,
                double *u, int *ldu, double *v, int *ldv, double *q, int *ldq, double *work, int *iwork, int *info);
 
-  /*: Computes eigenvalues and eigenvectors of nxn complex general matrix */
-  void zgeev_(const char* jobvl, const char* jobvr, const int* n, dcmplx* a, const int* lda, dcmplx* w,
-              dcmplx* vl, const int* ldvl, dcmplx* vr, const int* ldvr,
-              dcmplx* work, int* lwork, double* rwork, int* info);
-
   /*: Minimizes a function using the conjugate gradient method */
   void cg_(double* x, /*!< (IN/OUT) minimizer, length n; input = starting guess */
            double* e, /*!< (OUT) max-norm of gradient */

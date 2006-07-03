@@ -182,7 +182,6 @@ SET( netlib_sources
 
   zgebak.c
   zgebal.c
-  zgeev.c
   zgehd2.c
   zgehrd.c
   zhseqr.c
