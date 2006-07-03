@@ -848,15 +848,18 @@ L10:
 /* ** */
 /* Comment out this if block if EMIN is ok */
 /*<          IF( IWARN ) THEN >*/
-	if (iwarn) {
 /*<             FIRST = .TRUE. >*/
-	    first = TRUE_;
 /*<             WRITE( 6, FMT = 9999 )LEMIN >*/
-	    s_wsfe(&io___58);
-	    do_fio(&c__1, (char *)&lemin, (ftnlen)sizeof(integer));
-	    e_wsfe();
 /*<          END IF >*/
-	}
+        if (iwarn) {
+            first = TRUE_;
+            printf("\n\n WARNING. The value EMIN may be incorrect: - ");
+            printf("EMIN = %8i\n",lemin);
+            printf("If, after inspection, the value EMIN looks acceptable ");
+            printf("please comment out\n the IF block as marked within the ");
+            printf("code of routine DLAMC2,\n otherwise supply EMIN ");
+            printf("explicitly.\n");
+        }
 /* ** */
 
 /*        Assume IEEE arithmetic if we found denormalised  numbers above, */
