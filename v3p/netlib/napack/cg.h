@@ -7,10 +7,10 @@ extern int v3p_netlib_cg_(
   v3p_netlib_integer *limit,
   v3p_netlib_integer *n,
   v3p_netlib_integer *m,
-  D_fp value,
-  S_fp grad,
-  S_fp both,
-  S_fp pre,
+  double (*value)(double*),
+  void (*grad)(double*,double*),
+  void (*both)(double*,double*,double*),
+  void (*pre)(double*,double*),
   v3p_netlib_doublereal *h__
   );
 extern v3p_netlib_doublereal v3p_netlib_fv_(
@@ -18,14 +18,14 @@ extern v3p_netlib_doublereal v3p_netlib_fv_(
   v3p_netlib_doublereal *x,
   v3p_netlib_doublereal *h__,
   v3p_netlib_integer *n,
-  D_fp value
+  double (*value)(double*)
   );
 extern v3p_netlib_doublereal v3p_netlib_fd_(
   v3p_netlib_doublereal *a,
   v3p_netlib_doublereal *x,
   v3p_netlib_doublereal *h__,
   v3p_netlib_integer *n,
-  S_fp grad
+  void (*grad)(double*,double*)
   );
 extern int v3p_netlib_fvd_(
   v3p_netlib_doublereal *v,
@@ -34,7 +34,7 @@ extern int v3p_netlib_fvd_(
   v3p_netlib_doublereal *x,
   v3p_netlib_doublereal *h__,
   v3p_netlib_integer *n,
-  S_fp both
+  void (*both)(double*,double*,double*)
   );
 extern int v3p_netlib_cub_(
   v3p_netlib_doublereal *x,
