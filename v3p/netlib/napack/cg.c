@@ -15,11 +15,8 @@ extern "C" {
 #endif
 #include "v3p_netlib.h"
 
-/* Table of constant values */
-
-static integer c__9 = 9;
-static integer c__1 = 1;
-
+#include <assert.h>
+#include <stdio.h>
 
 /*      ________________________________________________________ */
 /*     |                                                        | */
@@ -132,13 +129,6 @@ static integer c__1 = 1;
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, integer *, doublereal *, doublereal *)
 	    ;
-
-    /* Fortran I/O blocks */
-    static cilist io___43 = { 0, 6, 0, 0, 0 };
-    static cilist io___44 = { 0, 6, 0, 0, 0 };
-    static cilist io___45 = { 0, 6, 0, 0, 0 };
-    static cilist io___46 = { 0, 6, 0, 0, 0 };
-
 
 /*<       INTEGER I,IT,J,K,L,LIMIT,M,N,NA,NB,NC,ND >*/
 /*<       REAL*8 H(N,1),X(1),Y(50),Z(50),A1,A2,A3,A4,A5,A6,A7,A8,A,B,C,C0,C1 >*/
@@ -1049,26 +1039,19 @@ L600:
 	goto L560;
     }
 /*<       WRITE(6,*) 'UNABLE TO OBTAIN DESCENT DIRECTION' >*/
-    s_wsle(&io___43);
-    do_lio(&c__9, &c__1, "UNABLE TO OBTAIN DESCENT DIRECTION", (ftnlen)34);
-    e_wsle();
+    printf("UNABLE TO OBTAIN DESCENT DIRECTION\n");
 /*<       STOP >*/
-    s_stop("", (ftnlen)0);
+    assert(0);
 /*< 610   WRITE(6,*) 'THE FUNCTION DECREASES WITH NO MINIMUM' >*/
 L610:
-    s_wsle(&io___44);
-    do_lio(&c__9, &c__1, "THE FUNCTION DECREASES WITH NO MINIMUM", (ftnlen)38)
-	    ;
-    e_wsle();
+    printf("THE FUNCTION DECREASES WITH NO MINIMUM\n");
 /*<       STOP >*/
-    s_stop("", (ftnlen)0);
+    assert(0);
 /*< 620   WRITE(6,*) 'PRECONDITIONER NOT POSITIVE DEFINITE' >*/
 L620:
-    s_wsle(&io___45);
-    do_lio(&c__9, &c__1, "PRECONDITIONER NOT POSITIVE DEFINITE", (ftnlen)36);
-    e_wsle();
+    printf("PRECONDITIONER NOT POSITIVE DEFINITE\n");
 /*<       STOP >*/
-    s_stop("", (ftnlen)0);
+    assert(0);
 /*< 630   Q = Q*A3**25 >*/
 L630:
 /* Computing 25th power */
@@ -1098,9 +1081,7 @@ L640:
     goto L135;
 /*< 650   WRITE(6,*) 'UNABLE TO SATISFY ARMIJO CONDITION' >*/
 L650:
-    s_wsle(&io___46);
-    do_lio(&c__9, &c__1, "UNABLE TO SATISFY ARMIJO CONDITION", (ftnlen)34);
-    e_wsle();
+    printf("UNABLE TO SATISFY ARMIJO CONDITION\n");
 /*<       RETURN >*/
     return 0;
 /*< 660   STEP = A >*/
