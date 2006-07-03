@@ -94,7 +94,8 @@ static logical c_false = FALSE_;
 	    doublecomplex *, ftnlen);
     doublereal smlnum;
     logical lquery;
-
+    (void)job_len;
+    (void)compz_len;
 
 /*  -- LAPACK routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -288,7 +289,7 @@ static logical c_false = FALSE_;
 /*<          INFO = -7 >*/
 	*info = -7;
 /*<       ELSE IF( LDZ.LT.1 .OR. WANTZ .AND. LDZ.LT.MAX( 1, N ) ) THEN >*/
-    } else if (*ldz < 1 || wantz && *ldz < max(1,*n)) {
+    } else if (*ldz < 1 || (wantz && *ldz < max(1,*n))) {
 /*<          INFO = -10 >*/
 	*info = -10;
 /*<       ELSE IF( LWORK.LT.MAX( 1, N ) .AND. .NOT.LQUERY ) THEN >*/

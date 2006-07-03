@@ -37,7 +37,7 @@ static integer c__1 = 1;
 	    doublecomplex *, integer *), zgemv_(char *, integer *, integer *, 
 	    doublecomplex *, doublecomplex *, integer *, doublecomplex *, 
 	    integer *, doublecomplex *, doublecomplex *, integer *, ftnlen);
-
+    (void)side_len;
 
 /*  -- LAPACK auxiliary routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */

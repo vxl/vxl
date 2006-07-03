@@ -64,7 +64,8 @@ static integer c__1 = 1;
 	    integer *, doublecomplex *, integer *, doublecomplex *, 
 	    doublereal *, doublereal *, integer *, ftnlen, ftnlen, ftnlen, 
 	    ftnlen);
-
+    (void)side_len;
+    (void)howmny_len;
 
 /*  -- LAPACK routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -310,11 +311,11 @@ static integer c__1 = 1;
 /*<          INFO = -6 >*/
 	*info = -6;
 /*<       ELSE IF( LDVL.LT.1 .OR. ( LEFTV .AND. LDVL.LT.N ) ) THEN >*/
-    } else if (*ldvl < 1 || leftv && *ldvl < *n) {
+    } else if (*ldvl < 1 || (leftv && *ldvl < *n)) {
 /*<          INFO = -8 >*/
 	*info = -8;
 /*<       ELSE IF( LDVR.LT.1 .OR. ( RIGHTV .AND. LDVR.LT.N ) ) THEN >*/
-    } else if (*ldvr < 1 || rightv && *ldvr < *n) {
+    } else if (*ldvr < 1 || (rightv && *ldvr < *n)) {
 /*<          INFO = -10 >*/
 	*info = -10;
 /*<       ELSE IF( MM.LT.M ) THEN >*/

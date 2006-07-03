@@ -38,6 +38,8 @@ extern "C" {
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     integer nrowa, nrowb;
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
+    (void)transa_len;
+    (void)transb_len;
 
 /*     .. Scalar Arguments .. */
 /*<       CHARACTER*1        TRANSA, TRANSB >*/
@@ -288,8 +290,8 @@ extern "C" {
 /*     Quick return if possible. */
 
 /*<    >*/
-    if (*m == 0 || *n == 0 || (alpha->r == 0. && alpha->i == 0. || *k == 0) &&
-	     (beta->r == 1. && beta->i == 0.)) {
+    if (*m == 0 || *n == 0 || (((alpha->r == 0. && alpha->i == 0.) || *k == 0) &&
+	     (beta->r == 1. && beta->i == 0.))) {
 	return 0;
     }
 

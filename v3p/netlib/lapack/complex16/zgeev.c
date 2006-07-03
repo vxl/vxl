@@ -95,7 +95,8 @@ static integer c__4 = 4;
     extern /* Subroutine */ int zunghr_(integer *, integer *, integer *, 
 	    doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
 	    integer *, integer *);
-
+    (void)jobvl_len;
+    (void)jobvr_len;
 
 /*  -- LAPACK driver routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -268,11 +269,11 @@ static integer c__4 = 4;
 /*<          INFO = -5 >*/
 	*info = -5;
 /*<       ELSE IF( LDVL.LT.1 .OR. ( WANTVL .AND. LDVL.LT.N ) ) THEN >*/
-    } else if (*ldvl < 1 || wantvl && *ldvl < *n) {
+    } else if (*ldvl < 1 || (wantvl && *ldvl < *n)) {
 /*<          INFO = -8 >*/
 	*info = -8;
 /*<       ELSE IF( LDVR.LT.1 .OR. ( WANTVR .AND. LDVR.LT.N ) ) THEN >*/
-    } else if (*ldvr < 1 || wantvr && *ldvr < *n) {
+    } else if (*ldvr < 1 || (wantvr && *ldvr < *n)) {
 /*<          INFO = -10 >*/
 	*info = -10;
 /*<       END IF >*/

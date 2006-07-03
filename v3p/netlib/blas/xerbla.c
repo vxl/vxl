@@ -54,7 +54,7 @@ extern "C" {
 /*<       WRITE( *, FMT = 9999 )SRNAME, INFO >*/
 /*<       STOP >*/
   (void)srname_len;
-  printf("** On entry to %6s, parameter number %2i had an illegal value\n", srname, *info);
+  printf("** On entry to %6s, parameter number %2ld had an illegal value\n", srname, *info);
 /*<  9 >*/
 
 /*     End of XERBLA */

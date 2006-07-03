@@ -42,7 +42,9 @@ integer ilaenv_(integer *ispec, char *name__, char *opts, integer *n1,
     integer nbmin;
     extern integer ieeeck_(integer *, real *, real *);
     char subnam[6];
-
+    (void)opts;
+    (void)n3;
+    (void)opts_len;
 
 /*  -- LAPACK auxiliary routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -225,8 +227,8 @@ L100:
 /*        EBCDIC character set */
 
 /*<    >*/
-	if (ic >= 129 && ic <= 137 || ic >= 145 && ic <= 153 || ic >= 162 && 
-		ic <= 169) {
+	if ((ic >= 129 && ic <= 137) || (ic >= 145 && ic <= 153) || (ic >= 162 && 
+		ic <= 169)) {
 /*<             SUBNAM( 1:1 ) = CHAR( IC+64 ) >*/
 	    *(unsigned char *)subnam = (char) (ic + 64);
 /*<             DO 20 I = 2, 6 >*/
@@ -234,8 +236,8 @@ L100:
 /*<                IC = ICHAR( SUBNAM( I:I ) ) >*/
 		ic = *(unsigned char *)&subnam[i__ - 1];
 /*<    >*/
-		if (ic >= 129 && ic <= 137 || ic >= 145 && ic <= 153 || ic >= 
-			162 && ic <= 169) {
+		if ((ic >= 129 && ic <= 137) || (ic >= 145 && ic <= 153) || (ic >= 
+			162 && ic <= 169)) {
 		    *(unsigned char *)&subnam[i__ - 1] = (char) (ic + 64);
 		}
 /*<    20       CONTINUE >*/

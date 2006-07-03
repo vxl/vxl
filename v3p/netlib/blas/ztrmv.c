@@ -33,6 +33,9 @@ extern "C" {
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
     logical noconj, nounit;
+    (void)uplo_len;
+    (void)trans_len;
+    (void)diag_len;
 
 /*     .. Scalar Arguments .. */
 /*<       INTEGER            INCX, LDA, N >*/

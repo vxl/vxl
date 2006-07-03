@@ -23,7 +23,8 @@ logical lsame_(char *ca, char *cb, ftnlen ca_len, ftnlen cb_len)
 
     /* Local variables */
     integer inta, intb, zcode;
-
+    (void)ca_len;
+    (void)cb_len;
 
 /*  -- LAPACK auxiliary routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -103,13 +104,13 @@ logical lsame_(char *ca, char *cb, ftnlen ca_len, ftnlen cb_len)
 /*        upper case 'Z'. */
 
 /*<    >*/
-	if (inta >= 129 && inta <= 137 || inta >= 145 && inta <= 153 || inta 
-		>= 162 && inta <= 169) {
+	if ((inta >= 129 && inta <= 137) || (inta >= 145 && inta <= 153) || (inta 
+		>= 162 && inta <= 169)) {
 	    inta += 64;
 	}
 /*<    >*/
-	if (intb >= 129 && intb <= 137 || intb >= 145 && intb <= 153 || intb 
-		>= 162 && intb <= 169) {
+	if ((intb >= 129 && intb <= 137) || (intb >= 145 && intb <= 153) || (intb 
+		>= 162 && intb <= 169)) {
 	    intb += 64;
 	}
 

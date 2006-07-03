@@ -48,7 +48,10 @@ static integer c__1 = 1;
 	    ftnlen, ftnlen, ftnlen), zlacgv_(integer *, doublecomplex *, 
 	    integer *);
     char transt[1];
-
+    (void)side_len;
+    (void)trans_len;
+    (void)direct_len;
+    (void)storev_len;
 
 /*  -- LAPACK auxiliary routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */

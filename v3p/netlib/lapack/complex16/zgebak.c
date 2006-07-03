@@ -33,7 +33,8 @@ extern "C" {
 	    doublecomplex *, integer *), xerbla_(char *, integer *, ftnlen), 
 	    zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     logical rightv;
-
+    (void)job_len;
+    (void)side_len;
 
 /*  -- LAPACK routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */

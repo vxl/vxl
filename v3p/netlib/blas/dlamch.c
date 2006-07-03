@@ -15,9 +15,10 @@ extern "C" {
 #endif
 #include "v3p_netlib.h"
 
+#include <stdio.h>
+
 /* Table of constant values */
 
-static integer c__1 = 1;
 static doublereal c_b32 = 0.;
 
 /*<       DOUBLE PRECISION FUNCTION DLAMCH( CMACH ) >*/
@@ -50,7 +51,7 @@ doublereal dlamch_(char *cmach, ftnlen cmach_len)
     extern /* Subroutine */ int dlamc2_(integer *, integer *, logical *, 
 	    doublereal *, integer *, doublereal *, integer *, doublereal *);
 
-
+    (void)cmach_len;
 /*  -- LAPACK auxiliary routine (version 1.1) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
 /*     Courant Institute, Argonne National Lab, and Rice University */
@@ -509,13 +510,6 @@ L30:
     static logical first = TRUE_;
     static logical iwarn = FALSE_;
 
-    /* Format strings */
-    static char fmt_9999[] = "(//\002 WARNING. The value EMIN may be incorre\
-ct:-\002,\002  EMIN = \002,i8,/\002 If, after inspection, the value EMIN loo\
-ks\002,\002 acceptable please comment out \002,/\002 the IF block as marked \
-within the code of routine\002,\002 DLAMC2,\002,/\002 otherwise supply EMIN \
-explicitly.\002,/)";
-
     /* System generated locals */
     integer i__1;
     doublereal d__1, d__2, d__3, d__4, d__5;
@@ -551,11 +545,6 @@ explicitly.\002,/)";
 	    dlamc5_(integer *, integer *, integer *, logical *, integer *, 
 	    doublereal *);
     integer ngnmin, ngpmin;
-
-    /* Fortran I/O blocks */
-    static cilist io___58 = { 0, 6, 0, fmt_9999, 0 };
-
-
 
 /*  -- LAPACK auxiliary routine (version 1.1) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -854,7 +843,7 @@ L10:
         if (iwarn) {
             first = TRUE_;
             printf("\n\n WARNING. The value EMIN may be incorrect: - ");
-            printf("EMIN = %8i\n",lemin);
+            printf("EMIN = %8ld\n", lemin);
             printf("If, after inspection, the value EMIN looks acceptable ");
             printf("please comment out\n the IF block as marked within the ");
             printf("code of routine DLAMC2,\n otherwise supply EMIN ");

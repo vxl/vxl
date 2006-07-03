@@ -39,7 +39,8 @@ static integer c__1 = 1;
 	    ztrmv_(char *, char *, char *, integer *, doublecomplex *, 
 	    integer *, doublecomplex *, integer *, ftnlen, ftnlen, ftnlen), 
 	    zlacgv_(integer *, doublecomplex *, integer *);
-
+    (void)direct_len;
+    (void)storev_len;
 
 /*  -- LAPACK auxiliary routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */

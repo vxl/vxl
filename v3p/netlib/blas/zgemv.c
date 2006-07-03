@@ -35,6 +35,7 @@ extern "C" {
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
     logical noconj;
+    (void)trans_len;
 
 /*     .. Scalar Arguments .. */
 /*<       COMPLEX*16         ALPHA, BETA >*/
@@ -208,8 +209,8 @@ extern "C" {
 /*     Quick return if possible. */
 
 /*<    >*/
-    if (*m == 0 || *n == 0 || alpha->r == 0. && alpha->i == 0. && (beta->r == 
-	    1. && beta->i == 0.)) {
+    if (*m == 0 || *n == 0 || (alpha->r == 0. && alpha->i == 0. && (beta->r == 
+	    1. && beta->i == 0.))) {
 	return 0;
     }
 

@@ -45,7 +45,7 @@ static integer c__1 = 1;
 	    integer *, doublereal *, doublecomplex *, integer *);
     extern integer izamax_(integer *, doublecomplex *, integer *);
     logical noconv;
-
+    (void)job_len;
 
 /*  -- LAPACK routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
