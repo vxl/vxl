@@ -11,12 +11,14 @@
 #undef ccopy_
 #undef cdiv_
 #undef cdotc_
+#undef cg_
 #undef cqrdc_
 #undef cqrsl_
 #undef cscal_
 #undef csrot_
 #undef csvdc_
 #undef cswap_
+#undef cub_
 #undef dasum_
 #undef daxpy_
 #undef dcabs1_
@@ -65,6 +67,9 @@
 #undef elmhes_
 #undef eltran_
 #undef epslon_
+#undef fd_
+#undef fv_
+#undef fvd_
 #undef gpfa2f_
 #undef gpfa3f_
 #undef gpfa5f_
@@ -74,6 +79,7 @@
 #undef idamax_
 #undef ieeeck_
 #undef ilaenv_
+#undef ins_
 #undef izamax_
 #undef lce_
 #undef lde_

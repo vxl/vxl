@@ -134,3 +134,4 @@
 #include "lapack/util/ieeeck.h"
 #include "lapack/util/ilaenv.h"
 #include "lapack/util/lsame.h"
+#include "napack/cg.h"

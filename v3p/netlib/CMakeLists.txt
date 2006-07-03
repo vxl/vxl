@@ -456,6 +456,9 @@ SET(V3P_NETLIB_lapack_SOURCES
   lapack/util/ilaenv.c
   lapack/util/lsame.c
   )
+SET(V3P_NETLIB_napack_SOURCES
+  napack/cg.c
+  )
 
 # Adjust the compiler flags to avoid problems with f2c-generated code.
 IF(CMAKE_COMPILER_IS_GNUCC)
@@ -488,6 +491,7 @@ ADD_LIBRARY(v3p_netlib
   ${V3P_NETLIB_eispack_SOURCES}
   ${V3P_NETLIB_laso_SOURCES}
   ${V3P_NETLIB_lapack_SOURCES}
+  ${V3P_NETLIB_napack_SOURCES}
   v3p_f2c.h
   v3p_f2c_mangle.h
   v3p_f2c_original.h

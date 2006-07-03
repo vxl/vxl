@@ -20,12 +20,14 @@ nm libv3p_netlib.a |grep " [TR] "
 #define ccopy_ v3p_netlib_ccopy_
 #define cdiv_ v3p_netlib_cdiv_
 #define cdotc_ v3p_netlib_cdotc_
+#define cg_ v3p_netlib_cg_
 #define cqrdc_ v3p_netlib_cqrdc_
 #define cqrsl_ v3p_netlib_cqrsl_
 #define cscal_ v3p_netlib_cscal_
 #define csrot_ v3p_netlib_csrot_
 #define csvdc_ v3p_netlib_csvdc_
 #define cswap_ v3p_netlib_cswap_
+#define cub_ v3p_netlib_cub_
 #define dasum_ v3p_netlib_dasum_
 #define daxpy_ v3p_netlib_daxpy_
 #define dcabs1_ v3p_netlib_dcabs1_
@@ -74,6 +76,9 @@ nm libv3p_netlib.a |grep " [TR] "
 #define elmhes_ v3p_netlib_elmhes_
 #define eltran_ v3p_netlib_eltran_
 #define epslon_ v3p_netlib_epslon_
+#define fd_ v3p_netlib_fd_
+#define fv_ v3p_netlib_fv_
+#define fvd_ v3p_netlib_fvd_
 #define gpfa2f_ v3p_netlib_gpfa2f_
 #define gpfa3f_ v3p_netlib_gpfa3f_
 #define gpfa5f_ v3p_netlib_gpfa5f_
@@ -83,6 +88,7 @@ nm libv3p_netlib.a |grep " [TR] "
 #define idamax_ v3p_netlib_idamax_
 #define ieeeck_ v3p_netlib_ieeeck_
 #define ilaenv_ v3p_netlib_ilaenv_
+#define ins_ v3p_netlib_ins_
 #define izamax_ v3p_netlib_izamax_
 #define lce_ v3p_netlib_lce_
 #define lde_ v3p_netlib_lde_
