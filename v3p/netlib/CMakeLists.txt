@@ -320,12 +320,16 @@ SET(V3P_NETLIB_blas_SOURCES
   blas/dcabs1.c
   blas/dcopy.c
   blas/ddot.c
+  blas/dlamch.c
   blas/dnrm2.c
   blas/drot.c
   blas/drotg.c
   blas/dscal.c
   blas/dswap.c
+  blas/dzasum.c
   blas/dznrm2.c
+  blas/idamax.c
+  blas/izamax.c
   blas/saxpy.c
   blas/scnrm2.c
   blas/scopy.c
@@ -335,12 +339,21 @@ SET(V3P_NETLIB_blas_SOURCES
   blas/srotg.c
   blas/sscal.c
   blas/sswap.c
+  blas/xerbla.c
   blas/zaxpy.c
   blas/zcopy.c
   blas/zdotc.c
+  blas/zdotu.c
   blas/zdrot.c
+  blas/zdscal.c
+  blas/zgemm.c
+  blas/zgemv.c
+  blas/zgerc.c
   blas/zscal.c
   blas/zswap.c
+  blas/ztrmm.c
+  blas/ztrmv.c
+  blas/ztrsv.c
   )
 SET(V3P_NETLIB_linpack_SOURCES
   linpack/sqrdc.c
@@ -409,6 +422,41 @@ SET(V3P_NETLIB_laso_SOURCES
   laso/dvsort.c
   laso/urand.c
   )
+SET(V3P_NETLIB_lapack_SOURCES
+  lapack/complex16/zgebak.c
+  lapack/complex16/zgebal.c
+  lapack/complex16/zgeev.c
+  lapack/complex16/zgehd2.c
+  lapack/complex16/zgehrd.c
+  lapack/complex16/zhseqr.c
+  lapack/complex16/zlacgv.c
+  lapack/complex16/zlacpy.c
+  lapack/complex16/zladiv.c
+  lapack/complex16/zlahqr.c
+  lapack/complex16/zlahrd.c
+  lapack/complex16/zlange.c
+  lapack/complex16/zlanhs.c
+  lapack/complex16/zlarf.c
+  lapack/complex16/zlarfb.c
+  lapack/complex16/zlarfg.c
+  lapack/complex16/zlarft.c
+  lapack/complex16/zlarfx.c
+  lapack/complex16/zlascl.c
+  lapack/complex16/zlaset.c
+  lapack/complex16/zlassq.c
+  lapack/complex16/zlatrs.c
+  lapack/complex16/ztrevc.c
+  lapack/complex16/zung2r.c
+  lapack/complex16/zunghr.c
+  lapack/complex16/zungqr.c
+  lapack/double/dlabad.c
+  lapack/double/dladiv.c
+  lapack/double/dlapy2.c
+  lapack/double/dlapy3.c
+  lapack/util/ieeeck.c
+  lapack/util/ilaenv.c
+  lapack/util/lsame.c
+  )
 
 # Adjust the compiler flags to avoid problems with f2c-generated code.
 IF(CMAKE_COMPILER_IS_GNUCC)
@@ -440,6 +488,7 @@ ADD_LIBRARY(v3p_netlib
   ${V3P_NETLIB_temperton_SOURCES}
   ${V3P_NETLIB_eispack_SOURCES}
   ${V3P_NETLIB_laso_SOURCES}
+  ${V3P_NETLIB_lapack_SOURCES}
   v3p_f2c.h
   v3p_f2c_mangle.h
   v3p_f2c_original.h
