@@ -20,8 +20,8 @@ extern "C" {
 static integer c__1 = 1;
 
 /*<       subroutine cqrsl(x,ldx,n,k,qraux,y,qy,qty,b,rsd,xb,job,info) >*/
-/* Subroutine */ int cqrsl_(complex *x, integer *ldx, integer *n, integer *k, 
-	complex *qraux, complex *y, complex *qy, complex *qty, complex *b, 
+/* Subroutine */ int cqrsl_(complex *x, integer *ldx, integer *n, integer *k,
+	complex *qraux, complex *y, complex *qy, complex *qty, complex *b,
 	complex *rsd, complex *xb, integer *job, integer *info)
 {
     /* System generated locals */
@@ -43,10 +43,10 @@ static integer c__1 = 1;
     logical cxb, cqy;
     complex temp;
     logical cqty;
-    extern /* Complex */ VOID cdotc_(complex *, integer *, complex *, integer 
+    extern /* Complex */ VOID cdotc_(complex *, integer *, complex *, integer
 	    *, complex *, integer *);
-    extern /* Subroutine */ int ccopy_(integer *, complex *, integer *, 
-	    complex *, integer *), caxpy_(integer *, complex *, complex *, 
+    extern /* Subroutine */ int ccopy_(integer *, complex *, integer *,
+	    complex *, integer *), caxpy_(integer *, complex *, complex *,
 	    integer *, complex *, integer *);
 
 /*<       integer ldx,n,k,job,info >*/
@@ -58,7 +58,7 @@ static integer c__1 = 1;
 
 /*            xk = (x(jpvt(1)),x(jpvt(2)), ... ,x(jpvt(k))) */
 
-/*     formed from columnns jpvt(1), ... ,jpvt(k) of the original */
+/*     formed from columns jpvt(1), ... ,jpvt(k) of the original */
 /*     n x p matrix x that was input to cqrdc (if no pivoting was */
 /*     done, xk consists of the first k columns of x in their */
 /*     original order).  cqrdc produces a factored unitary matrix q */
@@ -309,7 +309,7 @@ L40:
 	j = ju - jj + 1;
 /*<                if (cabs1(qraux(j)) .eq. 0.0e0) go to 50 >*/
 	i__2 = j;
-	if ((r__1 = qraux[i__2].r, dabs(r__1)) + (r__2 = r_imag(&qraux[j]), 
+	if ((r__1 = qraux[i__2].r, dabs(r__1)) + (r__2 = r_imag(&qraux[j]),
 		dabs(r__2)) == (float)0.) {
 	    goto L50;
 	}
@@ -352,7 +352,7 @@ L70:
     for (j = 1; j <= i__1; ++j) {
 /*<                if (cabs1(qraux(j)) .eq. 0.0e0) go to 80 >*/
 	i__2 = j;
-	if ((r__1 = qraux[i__2].r, dabs(r__1)) + (r__2 = r_imag(&qraux[j]), 
+	if ((r__1 = qraux[i__2].r, dabs(r__1)) + (r__2 = r_imag(&qraux[j]),
 		dabs(r__2)) == (float)0.) {
 	    goto L80;
 	}
@@ -495,7 +495,7 @@ L190:
 	j = ju - jj + 1;
 /*<                if (cabs1(qraux(j)) .eq. 0.0e0) go to 220 >*/
 	i__2 = j;
-	if ((r__1 = qraux[i__2].r, dabs(r__1)) + (r__2 = r_imag(&qraux[j]), 
+	if ((r__1 = qraux[i__2].r, dabs(r__1)) + (r__2 = r_imag(&qraux[j]),
 		dabs(r__2)) == (float)0.) {
 	    goto L220;
 	}

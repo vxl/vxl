@@ -21,8 +21,8 @@ static integer c__1 = 1;
 
 /*<       subroutine dqrsl(x,ldx,n,k,qraux,y,qy,qty,b,rsd,xb,job,info) >*/
 /* Subroutine */ int dqrsl_(doublereal *x, integer *ldx, integer *n, integer *
-	k, doublereal *qraux, doublereal *y, doublereal *qy, doublereal *qty, 
-	doublereal *b, doublereal *rsd, doublereal *xb, integer *job, integer 
+	k, doublereal *qraux, doublereal *y, doublereal *qy, doublereal *qty,
+	doublereal *b, doublereal *rsd, doublereal *xb, integer *job, integer
 	*info)
 {
     /* System generated locals */
@@ -36,12 +36,12 @@ static integer c__1 = 1;
     logical cr;
     integer ju, kp1;
     logical cxb, cqy;
-    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, 
+    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *,
 	    integer *);
     doublereal temp;
     logical cqty;
-    extern /* Subroutine */ int dcopy_(integer *, doublereal *, integer *, 
-	    doublereal *, integer *), daxpy_(integer *, doublereal *, 
+    extern /* Subroutine */ int dcopy_(integer *, doublereal *, integer *,
+	    doublereal *, integer *), daxpy_(integer *, doublereal *,
 	    doublereal *, integer *, doublereal *, integer *);
 
 /*<       integer ldx,n,k,job,info >*/
@@ -53,7 +53,7 @@ static integer c__1 = 1;
 
 /*            xk = (x(jpvt(1)),x(jpvt(2)), ... ,x(jpvt(k))) */
 
-/*     formed from columnns jpvt(1), ... ,jpvt(k) of the original */
+/*     formed from columns jpvt(1), ... ,jpvt(k) of the original */
 /*     n x p matrix x that was input to dqrdc (if no pivoting was */
 /*     done, xk consists of the first k columns of x in their */
 /*     original order).  dqrdc produces a factored orthogonal matrix q */
@@ -306,7 +306,7 @@ L40:
 	x[j + j * x_dim1] = qraux[j];
 /*<                   t = -ddot(n-j+1,x(j,j),1,qy(j),1)/x(j,j) >*/
 	i__2 = *n - j + 1;
-	t = -ddot_(&i__2, &x[j + j * x_dim1], &c__1, &qy[j], &c__1) / x[j + j 
+	t = -ddot_(&i__2, &x[j + j * x_dim1], &c__1, &qy[j], &c__1) / x[j + j
 		* x_dim1];
 /*<                   call daxpy(n-j+1,t,x(j,j),1,qy(j),1) >*/
 	i__2 = *n - j + 1;
@@ -341,7 +341,7 @@ L70:
 	x[j + j * x_dim1] = qraux[j];
 /*<                   t = -ddot(n-j+1,x(j,j),1,qty(j),1)/x(j,j) >*/
 	i__2 = *n - j + 1;
-	t = -ddot_(&i__2, &x[j + j * x_dim1], &c__1, &qty[j], &c__1) / x[j + 
+	t = -ddot_(&i__2, &x[j + j * x_dim1], &c__1, &qty[j], &c__1) / x[j +
 		j * x_dim1];
 /*<                   call daxpy(n-j+1,t,x(j,j),1,qty(j),1) >*/
 	i__2 = *n - j + 1;
@@ -472,7 +472,7 @@ L190:
 	}
 /*<                      t = -ddot(n-j+1,x(j,j),1,rsd(j),1)/x(j,j) >*/
 	i__2 = *n - j + 1;
-	t = -ddot_(&i__2, &x[j + j * x_dim1], &c__1, &rsd[j], &c__1) / x[j + 
+	t = -ddot_(&i__2, &x[j + j * x_dim1], &c__1, &rsd[j], &c__1) / x[j +
 		j * x_dim1];
 /*<                      call daxpy(n-j+1,t,x(j,j),1,rsd(j),1) >*/
 	i__2 = *n - j + 1;
@@ -485,7 +485,7 @@ L200:
 	}
 /*<                      t = -ddot(n-j+1,x(j,j),1,xb(j),1)/x(j,j) >*/
 	i__2 = *n - j + 1;
-	t = -ddot_(&i__2, &x[j + j * x_dim1], &c__1, &xb[j], &c__1) / x[j + j 
+	t = -ddot_(&i__2, &x[j + j * x_dim1], &c__1, &xb[j], &c__1) / x[j + j
 		* x_dim1];
 /*<                      call daxpy(n-j+1,t,x(j,j),1,xb(j),1) >*/
 	i__2 = *n - j + 1;

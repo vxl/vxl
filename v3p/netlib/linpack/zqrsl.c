@@ -20,9 +20,9 @@ extern "C" {
 static integer c__1 = 1;
 
 /*<       subroutine zqrsl(x,ldx,n,k,qraux,y,qy,qty,b,rsd,xb,job,info) >*/
-/* Subroutine */ int zqrsl_(doublecomplex *x, integer *ldx, integer *n, 
+/* Subroutine */ int zqrsl_(doublecomplex *x, integer *ldx, integer *n,
 	integer *k, doublecomplex *qraux, doublecomplex *y, doublecomplex *qy,
-	 doublecomplex *qty, doublecomplex *b, doublecomplex *rsd, 
+	 doublecomplex *qty, doublecomplex *b, doublecomplex *rsd,
 	doublecomplex *xb, integer *job, integer *info)
 {
     /* System generated locals */
@@ -43,10 +43,10 @@ static integer c__1 = 1;
     logical cxb, cqy;
     doublecomplex temp;
     logical cqty;
-    extern /* Double Complex */ VOID zdotc_(doublecomplex *, integer *, 
+    extern /* Double Complex */ VOID zdotc_(doublecomplex *, integer *,
 	    doublecomplex *, integer *, doublecomplex *, integer *);
-    extern /* Subroutine */ int zcopy_(integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *, 
+    extern /* Subroutine */ int zcopy_(integer *, doublecomplex *, integer *,
+	    doublecomplex *, integer *), zaxpy_(integer *, doublecomplex *,
 	    doublecomplex *, integer *, doublecomplex *, integer *);
 
 /*<       integer ldx,n,k,job,info >*/
@@ -58,7 +58,7 @@ static integer c__1 = 1;
 
 /*            xk = (x(jpvt(1)),x(jpvt(2)), ... ,x(jpvt(k))) */
 
-/*     formed from columnns jpvt(1), ... ,jpvt(k) of the original */
+/*     formed from columns jpvt(1), ... ,jpvt(k) of the original */
 /*     n x p matrix x that was input to zqrdc (if no pivoting was */
 /*     done, xk consists of the first k columns of x in their */
 /*     original order).  zqrdc produces a factored unitary matrix q */
@@ -318,7 +318,7 @@ L40:
 	i__3 = j;
 	z__1.r = qraux[i__3].r * 0. - qraux[i__3].i * -1., z__1.i = qraux[
 		i__3].i * 0. + qraux[i__3].r * -1.;
-	if ((d__1 = qraux[i__2].r, abs(d__1)) + (d__2 = z__1.r, abs(d__2)) == 
+	if ((d__1 = qraux[i__2].r, abs(d__1)) + (d__2 = z__1.r, abs(d__2)) ==
 		0.) {
 	    goto L50;
 	}
@@ -364,7 +364,7 @@ L70:
 	i__3 = j;
 	z__1.r = qraux[i__3].r * 0. - qraux[i__3].i * -1., z__1.i = qraux[
 		i__3].i * 0. + qraux[i__3].r * -1.;
-	if ((d__1 = qraux[i__2].r, abs(d__1)) + (d__2 = z__1.r, abs(d__2)) == 
+	if ((d__1 = qraux[i__2].r, abs(d__1)) + (d__2 = z__1.r, abs(d__2)) ==
 		0.) {
 	    goto L80;
 	}
@@ -458,9 +458,9 @@ L140:
 /*<                if (cabs1(x(j,j)) .ne. 0.0d0) go to 150 >*/
 	i__2 = j + j * x_dim1;
 	i__3 = j + j * x_dim1;
-	z__1.r = x[i__3].r * 0. - x[i__3].i * -1., z__1.i = x[i__3].i * 0. + 
+	z__1.r = x[i__3].r * 0. - x[i__3].i * -1., z__1.i = x[i__3].i * 0. +
 		x[i__3].r * -1.;
-	if ((d__1 = x[i__2].r, abs(d__1)) + (d__2 = z__1.r, abs(d__2)) != 0.) 
+	if ((d__1 = x[i__2].r, abs(d__1)) + (d__2 = z__1.r, abs(d__2)) != 0.)
 		{
 	    goto L150;
 	}
@@ -513,7 +513,7 @@ L190:
 	i__3 = j;
 	z__1.r = qraux[i__3].r * 0. - qraux[i__3].i * -1., z__1.i = qraux[
 		i__3].i * 0. + qraux[i__3].r * -1.;
-	if ((d__1 = qraux[i__2].r, abs(d__1)) + (d__2 = z__1.r, abs(d__2)) == 
+	if ((d__1 = qraux[i__2].r, abs(d__1)) + (d__2 = z__1.r, abs(d__2)) ==
 		0.) {
 	    goto L220;
 	}
