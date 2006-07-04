@@ -9,6 +9,7 @@
 #include <vcl_string.h>
 #include <vcl_cctype.h>
 #include <vcl_utility.h>
+#include <vcl_iterator.h>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_exception.h>
@@ -251,9 +252,28 @@ void mbl_read_multi_props_look_for_unused_props(
 }
 
 
+//: Return a single expected value of the given property \a label.
+// The matching entry is removed from the property list.
+// \throws mbl_exception_missing_property if \a label doesn't exist.
+// \throws mbl_exception_read_props_parse_error if there are two or more values of \a label.
+vcl_string mbl_read_multi_props_type::get_required_property(const vcl_string& label)
+{
+  vcl_pair<mbl_read_multi_props_type::iterator, mbl_read_multi_props_type::iterator>
+    its = this->equal_range(label);
+  if (its.first==its.second)
+    mbl_exception_error(mbl_exception_missing_property(label));
+  else if (vcl_distance(its.first, its.second) > 1)
+    mbl_exception_error(mbl_exception_read_props_parse_error(
+      vcl_string("Property label \"") + label + "\" occurs more than once.") );
+
+  vcl_string s = its.first->second;
+  this->erase(its.first);
+  return s;
+}
+
 // Return a vector of all values for a given property label.
 // Throw exception if label doesn't occur at least once.
-void mbl_read_multi_props_type::get_required_property(
+void mbl_read_multi_props_type::get_required_properties(
   const vcl_string& label,
   vcl_vector<vcl_string>& values,
   const unsigned nmax/*=-1*/, //=max<unsigned>
@@ -288,7 +308,7 @@ void mbl_read_multi_props_type::get_required_property(
 
 // Return a vector of all values for a given property label.
 // Vector is empty if label doesn't occur at least once.
-void mbl_read_multi_props_type::get_optional_property(
+void mbl_read_multi_props_type::get_optional_properties(
   const vcl_string& label,
   vcl_vector<vcl_string>& values,
   const unsigned nmax/*=-1*/) //=max<unsigned>
