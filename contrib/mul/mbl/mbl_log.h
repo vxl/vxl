@@ -294,10 +294,12 @@ class mbl_logger_root
 
 
 #define MBL_LOG(my_level, logger, message) \
-  if (logger.level() >= mbl_logger:: my_level) {\
-    logger.mtstart(mbl_logger:: my_level, __FILE__, __LINE__); \
-    logger.mtlog() << message << vcl_endl; \
-    logger.mtstop(); } else (void) 0
+  do { mbl_logger &rlogger = logger; \
+    if (rlogger.level() >= mbl_logger:: my_level) {\
+      rlogger.mtstart(mbl_logger:: my_level, __FILE__, __LINE__); \
+      rlogger.mtlog() << message << vcl_endl; \
+      rlogger.mtstop(); } \
+  } while(0)
 
 
 #endif // mbl_log_h
