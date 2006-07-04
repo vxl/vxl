@@ -29,7 +29,7 @@ extern "C" {
 	    doublecomplex *, doublecomplex *);
 
     /* Local variables */
-    integer i__, j, ix, jx, kx, info;
+    integer i__, j, ix, jx, kx=0, info;
     doublecomplex temp;
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);

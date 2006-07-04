@@ -114,12 +114,12 @@ extern "C" {
 
     /* Local variables */
     doublereal a, b, c__, d__, f, g;
-    integer i__, j, k, l;
-    doublereal p, q, r__, s, v, w, y[50], z__[50], a8, c0, c1, d0, f0, f1, l3,
-	     da, db, fa, fb, fc;
+    integer i__, j, k, l=0;
+    doublereal p, q, r__, s, v=0, w=0, y[50], z__[50], a8,
+               c0, c1=0, d0, f0, f1, l3, da, db, fa, fb, fc;
     extern doublereal fd_(doublereal *, doublereal *, doublereal *, integer *,
                           void (*grad)(double*,double*));
-    integer na, nb, nc, nd, iq;
+    integer na=0, nb, nc, nd, iq=0;
     extern doublereal fv_(doublereal *, doublereal *, doublereal *, integer *,
                           double (*value)(double*));
     extern /* Subroutine */ int cub_(doublereal *, doublereal *, doublereal *,

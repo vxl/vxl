@@ -31,7 +31,7 @@ static integer c__2 = 2;
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
 
     /* Local variables */
-    integer i__, j, l, ib, nb, ki, kk, nx, iws, nbmin, iinfo;
+    integer i__, j, l, ib, nb, ki=0, kk, nx, iws, nbmin, iinfo;
     extern /* Subroutine */ int zung2r_(integer *, integer *, integer *, 
 	    doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
 	    integer *), xerbla_(char *, integer *, ftnlen);

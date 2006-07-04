@@ -44,7 +44,7 @@ doublereal dlamch_(char *cmach, ftnlen cmach_len)
     integer imin, imax;
     logical lrnd;
     static doublereal rmin, rmax;
-    doublereal rmach;
+    doublereal rmach=0;
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     doublereal small;
     static doublereal sfmin;
@@ -1106,7 +1106,7 @@ L10:
     integer i__;
     doublereal y, z__;
     integer try__, lexp;
-    doublereal oldy;
+    doublereal oldy=0;
     integer uexp, nbits;
     extern doublereal dlamc3_(doublereal *, doublereal *);
     doublereal recbas;

@@ -38,7 +38,7 @@ static integer c__65 = 65;
     doublecomplex t[4160]	/* was [65][64] */;
     integer ib;
     doublecomplex ei;
-    integer nb, nh, nx, iws, nbmin, iinfo;
+    integer nb, nh, nx=0, iws, nbmin, iinfo;
     extern /* Subroutine */ int zgemm_(char *, char *, integer *, integer *, 
 	    integer *, doublecomplex *, doublecomplex *, integer *, 
 	    doublecomplex *, integer *, doublecomplex *, doublecomplex *, 

@@ -80,10 +80,10 @@ static integer c__4 = 4;
 	     integer *, integer *, ftnlen), zlacpy_(char *, integer *, 
 	    integer *, doublecomplex *, integer *, doublecomplex *, integer *,
 	     ftnlen);
-    integer minwrk, maxwrk;
+    integer minwrk, maxwrk=0;
     logical wantvl;
     doublereal smlnum;
-    integer hswork, irwork;
+    integer hswork, irwork=0;
     extern /* Subroutine */ int zhseqr_(char *, char *, integer *, integer *, 
 	    integer *, doublecomplex *, integer *, doublecomplex *, 
 	    doublecomplex *, integer *, doublecomplex *, integer *, integer *,

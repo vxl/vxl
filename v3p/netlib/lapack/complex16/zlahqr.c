@@ -41,7 +41,7 @@ static integer c__1 = 1;
     integer i__, j, k, l, m;
     doublereal s;
     doublecomplex t, u, v[2], x, y;
-    integer i1, i2;
+    integer i1=0, i2=0;
     doublecomplex t1;
     doublereal t2;
     doublecomplex v2;
