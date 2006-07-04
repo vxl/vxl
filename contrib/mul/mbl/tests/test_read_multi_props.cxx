@@ -339,6 +339,69 @@ void test_read_multi_props_ws()
     }
   }
   {
+    vcl_cout << "\nCase 14: get_required_property() \n";
+    {
+      vcl_istringstream ss("{\n  a: a1\n  a: a2\n a: a3\n \n}");
+      mbl_read_multi_props_type props = mbl_read_multi_props_ws( ss );
+      mbl_read_multi_props_print(vcl_cout, props);
+      vcl_vector<vcl_string> val;
+      props.get_required_properties("a", val);
+      vcl_vector<vcl_string> true_val;
+      true_val.push_back("a1");
+      true_val.push_back("a2");
+      true_val.push_back("a3");
+      TEST("Case 14a: present, correct", val, true_val);
+    }
+    {
+      vcl_istringstream ss("{\n  a: a1\n  a: a2\n a: a3\n \n}");
+      mbl_read_multi_props_type props = mbl_read_multi_props_ws( ss );
+      mbl_read_multi_props_print(vcl_cout, props);
+      vcl_vector<vcl_string> val;
+      bool exc = false;
+      try
+      {
+        props.get_required_properties("a", val, 10, 5);
+      }
+      catch (...)
+      {
+        exc = true;
+      }
+      TEST("Case 14b: not enough entries, exception thrown?", exc, true);
+    }
+    {
+      vcl_istringstream ss("{\n  a: a1\n  a: a2\n a: a3\n \n}");
+      mbl_read_multi_props_type props = mbl_read_multi_props_ws( ss );
+      mbl_read_multi_props_print(vcl_cout, props);
+      vcl_vector<vcl_string> val;
+      bool exc = false;
+      try
+      {
+        props.get_required_properties("a", val, 2);
+      }
+      catch (...)
+      {
+        exc = true;
+      }
+      TEST("Case 14c: too many entries, exception thrown?", exc, true);
+    }
+    {
+      vcl_istringstream ss("{\n  a: a1\n  a: a2\n a: a3\n \n}");
+      mbl_read_multi_props_type props = mbl_read_multi_props_ws( ss );
+      mbl_read_multi_props_print(vcl_cout, props);
+      vcl_vector<vcl_string> val;
+      bool exc = false;
+      try
+      {
+        props.get_required_properties("z", val);
+      }
+      catch (...)
+      {
+        exc = true;
+      }
+      TEST("Case 14d: missing, exception thrown?", exc, true);
+    }
+  }
+  {
     vcl_cout << "\nCase 15: get_optional_properties() \n";
     {
       vcl_istringstream ss("{\n  a: a1\n  a: a2\n a: a3\n \n}");
@@ -376,6 +439,48 @@ void test_read_multi_props_ws()
       props.get_optional_properties("z", val);
       vcl_vector<vcl_string> true_val;
       TEST("Case 15c: \"z\" missing, returned empty vector", val, true_val);
+    }
+  }
+  {
+    vcl_cout << "\nCase 16: get_required_property() \n";
+    {
+      vcl_istringstream ss("{\n  a: a1\n  b: b1\n}");
+      mbl_read_multi_props_type props = mbl_read_multi_props_ws( ss );
+      mbl_read_multi_props_print(vcl_cout, props);
+      vcl_string val = props.get_required_property("a");
+      TEST("Case 16a: present, correct", val, "a1");
+    }
+    {
+      vcl_istringstream ss("{\n  b: a1\n  b: a2\n b: a3\n \n}");
+      mbl_read_multi_props_type props = mbl_read_multi_props_ws( ss );
+      mbl_read_multi_props_print(vcl_cout, props);
+      vcl_string val;
+      bool exc = false;
+      try
+      {
+        val = props.get_required_property("a");
+      }
+      catch (...)
+      {
+        exc = true;
+      }
+      TEST("Case 16b: missing, exception thrown?", exc, true);
+    }
+    {
+      vcl_istringstream ss("{\n  a: a1\n  a: a2\n a: a3\n \n}");
+      mbl_read_multi_props_type props = mbl_read_multi_props_ws( ss );
+      mbl_read_multi_props_print(vcl_cout, props);
+      vcl_string val;
+      bool exc = false;
+      try
+      {
+        val = props.get_required_property("a");
+      }
+      catch (...)
+      {
+        exc = true;
+      }
+      TEST("Case 16c: too many entries, exception thrown?", exc, true);
     }
   }
 
