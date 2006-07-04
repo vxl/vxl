@@ -276,13 +276,13 @@ void test_read_multi_props_ws()
          strip_ws(props.lower_bound("a1")->second) == strip_ws(b_ans) && !ss.fail(), true);
   }
   {
-    vcl_cout << "\nCase 14: get_required_property() \n";
+    vcl_cout << "\nCase 14: get_required_properties() \n";
     {
       vcl_istringstream ss("{\n  a: a1\n  a: a2\n a: a3\n \n}");
       mbl_read_multi_props_type props = mbl_read_multi_props_ws( ss );
       mbl_read_multi_props_print(vcl_cout, props);
       vcl_vector<vcl_string> val;
-      props.get_required_property("a", val);
+      props.get_required_properties("a", val);
       vcl_vector<vcl_string> true_val;
       true_val.push_back("a1");
       true_val.push_back("a2");
@@ -297,7 +297,7 @@ void test_read_multi_props_ws()
       bool exc = false;
       try
       {
-        props.get_required_property("a", val, 10, 5);
+        props.get_required_properties("a", val, 10, 5);
       }
       catch (...)
       {
@@ -313,7 +313,7 @@ void test_read_multi_props_ws()
       bool exc = false;
       try
       {
-        props.get_required_property("a", val, 2);
+        props.get_required_properties("a", val, 2);
       }
       catch (...)
       {
@@ -329,7 +329,7 @@ void test_read_multi_props_ws()
       bool exc = false;
       try
       {
-        props.get_required_property("z", val);
+        props.get_required_properties("z", val);
       }
       catch (...)
       {
@@ -339,13 +339,13 @@ void test_read_multi_props_ws()
     }
   }
   {
-    vcl_cout << "\nCase 15: get_optional_property() \n";
+    vcl_cout << "\nCase 15: get_optional_properties() \n";
     {
       vcl_istringstream ss("{\n  a: a1\n  a: a2\n a: a3\n \n}");
       mbl_read_multi_props_type props = mbl_read_multi_props_ws( ss );
       mbl_read_multi_props_print(vcl_cout, props);
       vcl_vector<vcl_string> val;
-      props.get_optional_property("a", val);
+      props.get_optional_properties("a", val);
       vcl_vector<vcl_string> true_val;
       true_val.push_back("a1");
       true_val.push_back("a2");
@@ -360,7 +360,7 @@ void test_read_multi_props_ws()
       bool exc = false;
       try
       {
-        props.get_optional_property("a", val, 2);
+        props.get_optional_properties("a", val, 2);
       }
       catch (...)
       {
@@ -373,7 +373,7 @@ void test_read_multi_props_ws()
       mbl_read_multi_props_type props = mbl_read_multi_props_ws( ss );
       mbl_read_multi_props_print(vcl_cout, props);
       vcl_vector<vcl_string> val;
-      props.get_optional_property("z", val);
+      props.get_optional_properties("z", val);
       vcl_vector<vcl_string> true_val;
       TEST("Case 15c: \"z\" missing, returned empty vector", val, true_val);
     }
