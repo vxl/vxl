@@ -97,9 +97,12 @@ LIB32=link.exe -lib
 # Name "netlib - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "c"
 # Begin Source File
 SOURCE=.\F77_aloc.c
+# End Source File
+# Begin Source File
+SOURCE=.\adaquad.c
 # End Source File
 # Begin Source File
 SOURCE=.\c_abs.c
@@ -123,22 +126,10 @@ SOURCE=.\ccopy.c
 SOURCE=.\cdotc.c
 # End Source File
 # Begin Source File
-SOURCE=.\cg.c
-# End Source File
-# Begin Source File
-SOURCE=.\cqrdc.c
-# End Source File
-# Begin Source File
-SOURCE=.\cqrsl.c
-# End Source File
-# Begin Source File
 SOURCE=.\cscal.c
 # End Source File
 # Begin Source File
 SOURCE=.\csrot.c
-# End Source File
-# Begin Source File
-SOURCE=.\csvdc.c
 # End Source File
 # Begin Source File
 SOURCE=.\cswap.c
@@ -168,6 +159,12 @@ SOURCE=.\dcopy.c
 SOURCE=.\ddot.c
 # End Source File
 # Begin Source File
+SOURCE=.\dgecon.c
+# End Source File
+# Begin Source File
+SOURCE=.\dgemm.c
+# End Source File
+# Begin Source File
 SOURCE=.\dgemv.c
 # End Source File
 # Begin Source File
@@ -177,10 +174,31 @@ SOURCE=.\dgeqpf.c
 SOURCE=.\dgeqr2.c
 # End Source File
 # Begin Source File
+SOURCE=.\dgeqrf.c
+# End Source File
+# Begin Source File
 SOURCE=.\dger.c
 # End Source File
 # Begin Source File
 SOURCE=.\dgerq2.c
+# End Source File
+# Begin Source File
+SOURCE=.\dgesc2.c
+# End Source File
+# Begin Source File
+SOURCE=.\dgetc2.c
+# End Source File
+# Begin Source File
+SOURCE=.\dggbak.c
+# End Source File
+# Begin Source File
+SOURCE=.\dggbal.c
+# End Source File
+# Begin Source File
+SOURCE=.\dgges.c
+# End Source File
+# Begin Source File
+SOURCE=.\dgghrd.c
 # End Source File
 # Begin Source File
 SOURCE=.\dggsvd.c
@@ -189,19 +207,13 @@ SOURCE=.\dggsvd.c
 SOURCE=.\dggsvp.c
 # End Source File
 # Begin Source File
-SOURCE=.\dgpfa.c
-# End Source File
-# Begin Source File
-SOURCE=.\dgpfa2f.c
-# End Source File
-# Begin Source File
-SOURCE=.\dgpfa3f.c
-# End Source File
-# Begin Source File
-SOURCE=.\dgpfa5f.c
+SOURCE=.\dhgeqz.c
 # End Source File
 # Begin Source File
 SOURCE=.\dlabad.c
+# End Source File
+# Begin Source File
+SOURCE=.\dlacon.c
 # End Source File
 # Begin Source File
 SOURCE=.\dlacpy.c
@@ -210,13 +222,22 @@ SOURCE=.\dlacpy.c
 SOURCE=.\dladiv.c
 # End Source File
 # Begin Source File
+SOURCE=.\dlag2.c
+# End Source File
+# Begin Source File
 SOURCE=.\dlags2.c
+# End Source File
+# Begin Source File
+SOURCE=.\dlagv2.c
 # End Source File
 # Begin Source File
 SOURCE=.\dlamch.c
 # End Source File
 # Begin Source File
 SOURCE=.\dlange.c
+# End Source File
+# Begin Source File
+SOURCE=.\dlanhs.c
 # End Source File
 # Begin Source File
 SOURCE=.\dlapll.c
@@ -234,13 +255,22 @@ SOURCE=.\dlapy3.c
 SOURCE=.\dlarf.c
 # End Source File
 # Begin Source File
+SOURCE=.\dlarfb.c
+# End Source File
+# Begin Source File
 SOURCE=.\dlarfg.c
+# End Source File
+# Begin Source File
+SOURCE=.\dlarft.c
 # End Source File
 # Begin Source File
 SOURCE=.\dlartg.c
 # End Source File
 # Begin Source File
 SOURCE=.\dlas2.c
+# End Source File
+# Begin Source File
+SOURCE=.\dlascl.c
 # End Source File
 # Begin Source File
 SOURCE=.\dlaset.c
@@ -252,7 +282,13 @@ SOURCE=.\dlassq.c
 SOURCE=.\dlasv2.c
 # End Source File
 # Begin Source File
-SOURCE=.\dnlaso.c
+SOURCE=.\dlaswp.c
+# End Source File
+# Begin Source File
+SOURCE=.\dlatdf.c
+# End Source File
+# Begin Source File
+SOURCE=.\dlatrs.c
 # End Source File
 # Begin Source File
 SOURCE=.\dnrm2.c
@@ -261,28 +297,19 @@ SOURCE=.\dnrm2.c
 SOURCE=.\dorg2r.c
 # End Source File
 # Begin Source File
+SOURCE=.\dorgqr.c
+# End Source File
+# Begin Source File
+SOURCE=.\dorgr2.c
+# End Source File
+# Begin Source File
 SOURCE=.\dorm2r.c
 # End Source File
 # Begin Source File
+SOURCE=.\dormqr.c
+# End Source File
+# Begin Source File
 SOURCE=.\dormr2.c
-# End Source File
-# Begin Source File
-SOURCE=.\dpoco.c
-# End Source File
-# Begin Source File
-SOURCE=.\dpodi.c
-# End Source File
-# Begin Source File
-SOURCE=.\dpofa.c
-# End Source File
-# Begin Source File
-SOURCE=.\dposl.c
-# End Source File
-# Begin Source File
-SOURCE=.\dqrdc.c
-# End Source File
-# Begin Source File
-SOURCE=.\dqrsl.c
 # End Source File
 # Begin Source File
 SOURCE=.\drot.c
@@ -291,49 +318,58 @@ SOURCE=.\drot.c
 SOURCE=.\drotg.c
 # End Source File
 # Begin Source File
-SOURCE=.\dscal.c
+SOURCE=.\drscl.c
 # End Source File
 # Begin Source File
-SOURCE=.\dsetgpfa.c
+SOURCE=.\dscal.c
 # End Source File
 # Begin Source File
 SOURCE=.\dsrc2c.c
 # End Source File
 # Begin Source File
-SOURCE=.\dsvdc.c
+SOURCE=.\dswap.c
 # End Source File
 # Begin Source File
-SOURCE=.\dswap.c
+SOURCE=.\dtgex2.c
+# End Source File
+# Begin Source File
+SOURCE=.\dtgexc.c
+# End Source File
+# Begin Source File
+SOURCE=.\dtgsen.c
 # End Source File
 # Begin Source File
 SOURCE=.\dtgsja.c
 # End Source File
 # Begin Source File
+SOURCE=.\dtgsy2.c
+# End Source File
+# Begin Source File
+SOURCE=.\dtgsyl.c
+# End Source File
+# Begin Source File
 SOURCE=.\dtrans.c
+# End Source File
+# Begin Source File
+SOURCE=.\dtrmm.c
+# End Source File
+# Begin Source File
+SOURCE=.\dtrmv.c
+# End Source File
+# Begin Source File
+SOURCE=.\dtrsv.c
 # End Source File
 # Begin Source File
 SOURCE=.\dzasum.c
 # End Source File
 # Begin Source File
-SOURCE=.\enorm.c
+SOURCE=.\dznrm2.c
 # End Source File
 # Begin Source File
 SOURCE=.\exit.c
 # End Source File
 # Begin Source File
-SOURCE=.\fdjac2.c
-# End Source File
-# Begin Source File
-SOURCE=.\gpfa.c
-# End Source File
-# Begin Source File
-SOURCE=.\gpfa2f.c
-# End Source File
-# Begin Source File
-SOURCE=.\gpfa3f.c
-# End Source File
-# Begin Source File
-SOURCE=.\gpfa5f.c
+SOURCE=.\i_dnnt.c
 # End Source File
 # Begin Source File
 SOURCE=.\idamax.c
@@ -349,24 +385,6 @@ SOURCE=.\izamax.c
 # End Source File
 # Begin Source File
 SOURCE=.\izmax1.c
-# End Source File
-# Begin Source File
-SOURCE=.\lbfgs-lb1.c
-# End Source File
-# Begin Source File
-SOURCE=.\lbfgs.c
-# End Source File
-# Begin Source File
-SOURCE=.\lmder.c
-# End Source File
-# Begin Source File
-SOURCE=.\lmder1.c
-# End Source File
-# Begin Source File
-SOURCE=.\lmdif.c
-# End Source File
-# Begin Source File
-SOURCE=.\lmpar.c
 # End Source File
 # Begin Source File
 SOURCE=.\lsame.c
@@ -393,12 +411,6 @@ SOURCE=.\pow_ri.c
 SOURCE=.\pythag.c
 # End Source File
 # Begin Source File
-SOURCE=.\qrfac.c
-# End Source File
-# Begin Source File
-SOURCE=.\qrsolv.c
-# End Source File
-# Begin Source File
 SOURCE=.\r_cnjg.c
 # End Source File
 # Begin Source File
@@ -408,16 +420,7 @@ SOURCE=.\r_imag.c
 SOURCE=.\r_sign.c
 # End Source File
 # Begin Source File
-SOURCE=.\rg.c
-# End Source File
-# Begin Source File
 SOURCE=.\rpoly.c
-# End Source File
-# Begin Source File
-SOURCE=.\rs.c
-# End Source File
-# Begin Source File
-SOURCE=.\rsg.c
 # End Source File
 # Begin Source File
 SOURCE=.\s_cat.c
@@ -444,9 +447,6 @@ SOURCE=.\scopy.c
 SOURCE=.\sdot.c
 # End Source File
 # Begin Source File
-SOURCE=.\setgpfa.c
-# End Source File
-# Begin Source File
 SOURCE=.\sgemv.c
 # End Source File
 # Begin Source File
@@ -469,6 +469,9 @@ SOURCE=.\sggsvp.c
 # End Source File
 # Begin Source File
 SOURCE=.\sig_die.c
+# End Source File
+# Begin Source File
+SOURCE=.\simpson.c
 # End Source File
 # Begin Source File
 SOURCE=.\slacpy.c
@@ -513,9 +516,6 @@ SOURCE=.\slassq.c
 SOURCE=.\slasv2.c
 # End Source File
 # Begin Source File
-SOURCE=.\snlaso.c
-# End Source File
-# Begin Source File
 SOURCE=.\snrm2.c
 # End Source File
 # Begin Source File
@@ -528,12 +528,6 @@ SOURCE=.\sorm2r.c
 SOURCE=.\sormr2.c
 # End Source File
 # Begin Source File
-SOURCE=.\sqrdc.c
-# End Source File
-# Begin Source File
-SOURCE=.\sqrsl.c
-# End Source File
-# Begin Source File
 SOURCE=.\srot.c
 # End Source File
 # Begin Source File
@@ -543,28 +537,22 @@ SOURCE=.\srotg.c
 SOURCE=.\sscal.c
 # End Source File
 # Begin Source File
-SOURCE=.\ssvdc.c
-# End Source File
-# Begin Source File
 SOURCE=.\sswap.c
 # End Source File
 # Begin Source File
 SOURCE=.\stgsja.c
 # End Source File
 # Begin Source File
-SOURCE=.\tql1.c
-# End Source File
-# Begin Source File
-SOURCE=.\tql2.c
-# End Source File
-# Begin Source File
 SOURCE=.\trans.c
 # End Source File
 # Begin Source File
-SOURCE=.\tred1.c
+SOURCE=.\trapezod.c
 # End Source File
 # Begin Source File
-SOURCE=.\tred2.c
+SOURCE=.\triangle.c
+# End Source File
+# Begin Source File
+SOURCE=.\urand.c
 # End Source File
 # Begin Source File
 SOURCE=.\xerbla.c
@@ -601,9 +589,6 @@ SOURCE=.\zgebak.c
 # End Source File
 # Begin Source File
 SOURCE=.\zgebal.c
-# End Source File
-# Begin Source File
-SOURCE=.\zgeev.c
 # End Source File
 # Begin Source File
 SOURCE=.\zgehd2.c
@@ -672,16 +657,7 @@ SOURCE=.\zlassq.c
 SOURCE=.\zlatrs.c
 # End Source File
 # Begin Source File
-SOURCE=.\zqrdc.c
-# End Source File
-# Begin Source File
-SOURCE=.\zqrsl.c
-# End Source File
-# Begin Source File
 SOURCE=.\zscal.c
-# End Source File
-# Begin Source File
-SOURCE=.\zsvdc.c
 # End Source File
 # Begin Source File
 SOURCE=.\zswap.c
@@ -708,127 +684,523 @@ SOURCE=.\zunghr.c
 SOURCE=.\zungqr.c
 # End Source File
 # Begin Source File
-SOURCE=.\i_dnnt.c
+SOURCE=.\blas/caxpy.c
 # End Source File
 # Begin Source File
-SOURCE=.\dtrsv.c
+SOURCE=.\blas/ccopy.c
 # End Source File
 # Begin Source File
-SOURCE=.\dtrmv.c
+SOURCE=.\blas/cdotc.c
 # End Source File
 # Begin Source File
-SOURCE=.\dtrmm.c
+SOURCE=.\blas/cscal.c
 # End Source File
 # Begin Source File
-SOURCE=.\dtgsyl.c
+SOURCE=.\blas/csrot.c
 # End Source File
 # Begin Source File
-SOURCE=.\dtgsy2.c
+SOURCE=.\blas/cswap.c
 # End Source File
 # Begin Source File
-SOURCE=.\dtgsen.c
+SOURCE=.\blas/dasum.c
 # End Source File
 # Begin Source File
-SOURCE=.\dtgexc.c
+SOURCE=.\blas/daxpy.c
 # End Source File
 # Begin Source File
-SOURCE=.\dtgex2.c
+SOURCE=.\blas/dcabs1.c
 # End Source File
 # Begin Source File
-SOURCE=.\drscl.c
+SOURCE=.\blas/dcopy.c
 # End Source File
 # Begin Source File
-SOURCE=.\dormqr.c
+SOURCE=.\blas/ddot.c
 # End Source File
 # Begin Source File
-SOURCE=.\dorgr2.c
+SOURCE=.\blas/dlamch.c
 # End Source File
 # Begin Source File
-SOURCE=.\dorgqr.c
+SOURCE=.\blas/dnrm2.c
 # End Source File
 # Begin Source File
-SOURCE=.\dlatrs.c
+SOURCE=.\blas/drot.c
 # End Source File
 # Begin Source File
-SOURCE=.\dlatdf.c
+SOURCE=.\blas/drotg.c
 # End Source File
 # Begin Source File
-SOURCE=.\dlaswp.c
+SOURCE=.\blas/dscal.c
 # End Source File
 # Begin Source File
-SOURCE=.\dlascl.c
+SOURCE=.\blas/dswap.c
 # End Source File
 # Begin Source File
-SOURCE=.\dlarft.c
+SOURCE=.\blas/dzasum.c
 # End Source File
 # Begin Source File
-SOURCE=.\dlarfb.c
+SOURCE=.\blas/dznrm2.c
 # End Source File
 # Begin Source File
-SOURCE=.\dlanhs.c
+SOURCE=.\blas/idamax.c
 # End Source File
 # Begin Source File
-SOURCE=.\dlagv2.c
+SOURCE=.\blas/izamax.c
 # End Source File
 # Begin Source File
-SOURCE=.\dlag2.c
+SOURCE=.\blas/saxpy.c
 # End Source File
 # Begin Source File
-SOURCE=.\dlacon.c
+SOURCE=.\blas/scnrm2.c
 # End Source File
 # Begin Source File
-SOURCE=.\dhgeqz.c
+SOURCE=.\blas/scopy.c
 # End Source File
 # Begin Source File
-SOURCE=.\dgghrd.c
+SOURCE=.\blas/sdot.c
 # End Source File
 # Begin Source File
-SOURCE=.\dgges.c
+SOURCE=.\blas/snrm2.c
 # End Source File
 # Begin Source File
-SOURCE=.\dggbal.c
+SOURCE=.\blas/srot.c
 # End Source File
 # Begin Source File
-SOURCE=.\dggbak.c
+SOURCE=.\blas/srotg.c
 # End Source File
 # Begin Source File
-SOURCE=.\dgetc2.c
+SOURCE=.\blas/sscal.c
 # End Source File
 # Begin Source File
-SOURCE=.\dgesc2.c
+SOURCE=.\blas/sswap.c
 # End Source File
 # Begin Source File
-SOURCE=.\dgeqrf.c
+SOURCE=.\blas/xerbla.c
 # End Source File
 # Begin Source File
-SOURCE=.\dgemm.c
+SOURCE=.\blas/zaxpy.c
 # End Source File
 # Begin Source File
-SOURCE=.\dgecon.c
+SOURCE=.\blas/zcopy.c
 # End Source File
 # Begin Source File
-SOURCE=.\urand.c
+SOURCE=.\blas/zdotc.c
 # End Source File
 # Begin Source File
-SOURCE=.\dznrm2.c
+SOURCE=.\blas/zdotu.c
 # End Source File
 # Begin Source File
-SOURCE=.\triangle.c
+SOURCE=.\blas/zdrot.c
 # End Source File
 # Begin Source File
-SOURCE=.\adaquad.c
+SOURCE=.\blas/zdscal.c
 # End Source File
 # Begin Source File
-SOURCE=.\simpson.c
+SOURCE=.\blas/zgemm.c
 # End Source File
 # Begin Source File
-SOURCE=.\trapezod.c
+SOURCE=.\blas/zgemv.c
+# End Source File
+# Begin Source File
+SOURCE=.\blas/zgerc.c
+# End Source File
+# Begin Source File
+SOURCE=.\blas/zscal.c
+# End Source File
+# Begin Source File
+SOURCE=.\blas/zswap.c
+# End Source File
+# Begin Source File
+SOURCE=.\blas/ztrmm.c
+# End Source File
+# Begin Source File
+SOURCE=.\blas/ztrmv.c
+# End Source File
+# Begin Source File
+SOURCE=.\blas/ztrsv.c
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/balanc.c
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/balbak.c
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/cdiv.c
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/elmhes.c
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/eltran.c
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/epslon.c
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/hqr.c
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/hqr2.c
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/otqlrat.c
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/pythag.c
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/rebak.c
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/reduc.c
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/rg.c
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/rs.c
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/rsg.c
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/tql1.c
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/tql2.c
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/tred1.c
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/tred2.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zgebak.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zgebal.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zgeev.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zgehd2.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zgehrd.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zhseqr.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlacgv.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlacpy.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zladiv.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlahqr.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlahrd.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlange.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlanhs.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlarf.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlarfb.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlarfg.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlarft.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlarfx.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlascl.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlaset.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlassq.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlatrs.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/ztrevc.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zung2r.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zunghr.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zungqr.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlabad.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dladiv.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlapy2.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlapy3.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/util/ieeeck.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/util/ilaenv.c
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/util/lsame.c
+# End Source File
+# Begin Source File
+SOURCE=.\laso/dlabax.c
+# End Source File
+# Begin Source File
+SOURCE=.\laso/dlabcm.c
+# End Source File
+# Begin Source File
+SOURCE=.\laso/dlabfc.c
+# End Source File
+# Begin Source File
+SOURCE=.\laso/dlaeig.c
+# End Source File
+# Begin Source File
+SOURCE=.\laso/dlager.c
+# End Source File
+# Begin Source File
+SOURCE=.\laso/dlaran.c
+# End Source File
+# Begin Source File
+SOURCE=.\laso/dmvpc.c
+# End Source File
+# Begin Source File
+SOURCE=.\laso/dnlaso.c
+# End Source File
+# Begin Source File
+SOURCE=.\laso/dnppla.c
+# End Source File
+# Begin Source File
+SOURCE=.\laso/dortqr.c
+# End Source File
+# Begin Source File
+SOURCE=.\laso/dvsort.c
+# End Source File
+# Begin Source File
+SOURCE=.\laso/urand.c
+# End Source File
+# Begin Source File
+SOURCE=.\libf2c/c_abs.c
+# End Source File
+# Begin Source File
+SOURCE=.\libf2c/c_div.c
+# End Source File
+# Begin Source File
+SOURCE=.\libf2c/c_sqrt.c
+# End Source File
+# Begin Source File
+SOURCE=.\libf2c/cabs.c
+# End Source File
+# Begin Source File
+SOURCE=.\libf2c/d_cnjg.c
+# End Source File
+# Begin Source File
+SOURCE=.\libf2c/d_imag.c
+# End Source File
+# Begin Source File
+SOURCE=.\libf2c/d_lg10.c
+# End Source File
+# Begin Source File
+SOURCE=.\libf2c/d_sign.c
+# End Source File
+# Begin Source File
+SOURCE=.\libf2c/exit_.c
+# End Source File
+# Begin Source File
+SOURCE=.\libf2c/f77_aloc.c
+# End Source File
+# Begin Source File
+SOURCE=.\libf2c/i_dnnt.c
+# End Source File
+# Begin Source File
+SOURCE=.\libf2c/pow_dd.c
+# End Source File
+# Begin Source File
+SOURCE=.\libf2c/pow_di.c
+# End Source File
+# Begin Source File
+SOURCE=.\libf2c/pow_ii.c
+# End Source File
+# Begin Source File
+SOURCE=.\libf2c/pow_ri.c
+# End Source File
+# Begin Source File
+SOURCE=.\libf2c/r_cnjg.c
+# End Source File
+# Begin Source File
+SOURCE=.\libf2c/r_imag.c
+# End Source File
+# Begin Source File
+SOURCE=.\libf2c/r_sign.c
+# End Source File
+# Begin Source File
+SOURCE=.\libf2c/s_cat.c
+# End Source File
+# Begin Source File
+SOURCE=.\libf2c/s_cmp.c
+# End Source File
+# Begin Source File
+SOURCE=.\libf2c/s_copy.c
+# End Source File
+# Begin Source File
+SOURCE=.\libf2c/sig_die.c
+# End Source File
+# Begin Source File
+SOURCE=.\libf2c/z_abs.c
+# End Source File
+# Begin Source File
+SOURCE=.\libf2c/z_div.c
+# End Source File
+# Begin Source File
+SOURCE=.\libf2c/z_sqrt.c
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/cqrdc.c
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/cqrsl.c
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/csvdc.c
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/dpoco.c
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/dpodi.c
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/dpofa.c
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/dposl.c
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/dqrdc.c
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/dqrsl.c
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/dsvdc.c
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/sqrdc.c
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/sqrsl.c
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/ssvdc.c
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/zqrdc.c
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/zqrsl.c
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/zsvdc.c
+# End Source File
+# Begin Source File
+SOURCE=.\napack/cg.c
+# End Source File
+# Begin Source File
+SOURCE=.\temperton/dgpfa.c
+# End Source File
+# Begin Source File
+SOURCE=.\temperton/dgpfa2f.c
+# End Source File
+# Begin Source File
+SOURCE=.\temperton/dgpfa3f.c
+# End Source File
+# Begin Source File
+SOURCE=.\temperton/dgpfa5f.c
+# End Source File
+# Begin Source File
+SOURCE=.\temperton/gpfa.c
+# End Source File
+# Begin Source File
+SOURCE=.\temperton/gpfa2f.c
+# End Source File
+# Begin Source File
+SOURCE=.\temperton/gpfa3f.c
+# End Source File
+# Begin Source File
+SOURCE=.\temperton/gpfa5f.c
+# End Source File
+# Begin Source File
+SOURCE=.\temperton/setdgpfa.c
+# End Source File
+# Begin Source File
+SOURCE=.\temperton/setgpfa.c
+# End Source File
+# Begin Source File
+SOURCE=.\minpack/dpmpar.c
+# End Source File
+# Begin Source File
+SOURCE=.\minpack/enorm.c
+# End Source File
+# Begin Source File
+SOURCE=.\minpack/fdjac2.c
+# End Source File
+# Begin Source File
+SOURCE=.\minpack/lmder.c
+# End Source File
+# Begin Source File
+SOURCE=.\minpack/lmder1.c
+# End Source File
+# Begin Source File
+SOURCE=.\minpack/lmdif.c
+# End Source File
+# Begin Source File
+SOURCE=.\minpack/lmpar.c
+# End Source File
+# Begin Source File
+SOURCE=.\minpack/qrfac.c
+# End Source File
+# Begin Source File
+SOURCE=.\minpack/qrsolv.c
+# End Source File
+# Begin Source File
+SOURCE=.\opt/lbfgs.c
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter "h;hpp;hxx;hm;inl"
+# PROP Default_Filter "h"
 # Begin Source File
-SOURCE=.\lbfgs.h
+SOURCE=.\v3p_f2c.h
 # End Source File
 # Begin Source File
 SOURCE=.\triangle.h
@@ -838,6 +1210,465 @@ SOURCE=.\f2c.h
 # End Source File
 # Begin Source File
 SOURCE=.\netlib.h
+# End Source File
+# Begin Source File
+SOURCE=.\v3p_f2c_mangle.h
+# End Source File
+# Begin Source File
+SOURCE=.\v3p_f2c_original.h
+# End Source File
+# Begin Source File
+SOURCE=.\v3p_f2c_unmangle.h
+# End Source File
+# Begin Source File
+SOURCE=.\v3p_netlib.h
+# End Source File
+# Begin Source File
+SOURCE=.\v3p_netlib_mangle.h
+# End Source File
+# Begin Source File
+SOURCE=.\v3p_netlib_prototypes.h
+# End Source File
+# Begin Source File
+SOURCE=.\v3p_netlib_unmangle.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/caxpy.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/ccopy.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/cdotc.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/cscal.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/csrot.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/cswap.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/dasum.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/daxpy.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/dcabs1.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/dcopy.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/ddot.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/dlamch.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/dnrm2.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/drot.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/drotg.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/dscal.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/dswap.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/dzasum.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/dznrm2.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/idamax.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/izamax.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/saxpy.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/scnrm2.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/scopy.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/sdot.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/snrm2.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/srot.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/srotg.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/sscal.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/sswap.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/xerbla.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/zaxpy.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/zcopy.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/zdotc.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/zdotu.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/zdrot.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/zdscal.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/zgemm.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/zgemv.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/zgerc.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/zscal.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/zswap.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/ztrmm.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/ztrmv.h
+# End Source File
+# Begin Source File
+SOURCE=.\blas/ztrsv.h
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/balanc.h
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/balbak.h
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/cdiv.h
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/elmhes.h
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/eltran.h
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/epslon.h
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/hqr.h
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/hqr2.h
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/otqlrat.h
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/pythag.h
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/rebak.h
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/reduc.h
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/rg.h
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/rs.h
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/rsg.h
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/tql1.h
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/tql2.h
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/tred1.h
+# End Source File
+# Begin Source File
+SOURCE=.\eispack/tred2.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zgebak.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zgebal.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zgeev.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zgehd2.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zgehrd.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zhseqr.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlacgv.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlacpy.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zladiv.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlahqr.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlahrd.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlange.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlanhs.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlarf.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlarfb.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlarfg.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlarft.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlarfx.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlascl.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlaset.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlassq.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zlatrs.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/ztrevc.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zung2r.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zunghr.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/complex16/zungqr.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlabad.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dladiv.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlapy2.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/double/dlapy3.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/util/ieeeck.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/util/ilaenv.h
+# End Source File
+# Begin Source File
+SOURCE=.\lapack/util/lsame.h
+# End Source File
+# Begin Source File
+SOURCE=.\laso/dlabax.h
+# End Source File
+# Begin Source File
+SOURCE=.\laso/dlabcm.h
+# End Source File
+# Begin Source File
+SOURCE=.\laso/dlabfc.h
+# End Source File
+# Begin Source File
+SOURCE=.\laso/dlaeig.h
+# End Source File
+# Begin Source File
+SOURCE=.\laso/dlager.h
+# End Source File
+# Begin Source File
+SOURCE=.\laso/dlaran.h
+# End Source File
+# Begin Source File
+SOURCE=.\laso/dmvpc.h
+# End Source File
+# Begin Source File
+SOURCE=.\laso/dnlaso.h
+# End Source File
+# Begin Source File
+SOURCE=.\laso/dnppla.h
+# End Source File
+# Begin Source File
+SOURCE=.\laso/dortqr.h
+# End Source File
+# Begin Source File
+SOURCE=.\laso/dvsort.h
+# End Source File
+# Begin Source File
+SOURCE=.\laso/urand.h
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/cqrdc.h
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/cqrsl.h
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/csvdc.h
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/dpoco.h
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/dpodi.h
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/dpofa.h
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/dposl.h
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/dqrdc.h
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/dqrsl.h
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/dsvdc.h
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/sqrdc.h
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/sqrsl.h
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/ssvdc.h
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/zqrdc.h
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/zqrsl.h
+# End Source File
+# Begin Source File
+SOURCE=.\linpack/zsvdc.h
+# End Source File
+# Begin Source File
+SOURCE=.\napack/cg.h
+# End Source File
+# Begin Source File
+SOURCE=.\temperton/dgpfa.h
+# End Source File
+# Begin Source File
+SOURCE=.\temperton/dgpfa2f.h
+# End Source File
+# Begin Source File
+SOURCE=.\temperton/dgpfa3f.h
+# End Source File
+# Begin Source File
+SOURCE=.\temperton/dgpfa5f.h
+# End Source File
+# Begin Source File
+SOURCE=.\temperton/gpfa.h
+# End Source File
+# Begin Source File
+SOURCE=.\temperton/gpfa2f.h
+# End Source File
+# Begin Source File
+SOURCE=.\temperton/gpfa3f.h
+# End Source File
+# Begin Source File
+SOURCE=.\temperton/gpfa5f.h
+# End Source File
+# Begin Source File
+SOURCE=.\temperton/setdgpfa.h
+# End Source File
+# Begin Source File
+SOURCE=.\temperton/setgpfa.h
+# End Source File
+# Begin Source File
+SOURCE=.\minpack/dpmpar.h
+# End Source File
+# Begin Source File
+SOURCE=.\minpack/enorm.h
+# End Source File
+# Begin Source File
+SOURCE=.\minpack/fdjac2.h
+# End Source File
+# Begin Source File
+SOURCE=.\minpack/lmder.h
+# End Source File
+# Begin Source File
+SOURCE=.\minpack/lmder1.h
+# End Source File
+# Begin Source File
+SOURCE=.\minpack/lmdif.h
+# End Source File
+# Begin Source File
+SOURCE=.\minpack/lmpar.h
+# End Source File
+# Begin Source File
+SOURCE=.\minpack/qrfac.h
+# End Source File
+# Begin Source File
+SOURCE=.\minpack/qrsolv.h
+# End Source File
+# Begin Source File
+SOURCE=.\opt/lbfgs.h
 # End Source File
 # End Group
 # End Target
