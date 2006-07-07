@@ -21,7 +21,13 @@ static integer c__1 = 1;
 static logical c_true = TRUE_;
 
 /*<    >*/
-/* Subroutine */ int lmdif_(S_fp fcn, integer *m, integer *n, doublereal *x, 
+/* Subroutine */ int lmdif_(
+  void (*fcn)(v3p_netlib_integer*,
+              v3p_netlib_integer*,
+              v3p_netlib_doublereal*,
+              v3p_netlib_doublereal*,
+              v3p_netlib_integer*),
+  integer *m, integer *n, doublereal *x,
 	doublereal *fvec, doublereal *ftol, doublereal *xtol, doublereal *
 	gtol, integer *maxfev, doublereal *epsfcn, doublereal *diag, integer *
 	mode, doublereal *factor, integer *nprint, integer *info, integer *
@@ -62,7 +68,13 @@ static logical c_true = TRUE_;
     doublereal ratio;
     extern doublereal enorm_(integer *, doublereal *);
     doublereal fnorm, gnorm;
-    extern /* Subroutine */ int fdjac2_(S_fp, integer *, integer *, 
+    extern /* Subroutine */ int fdjac2_(
+      void (*)(v3p_netlib_integer*,
+               v3p_netlib_integer*,
+               v3p_netlib_doublereal*,
+               v3p_netlib_doublereal*,
+               v3p_netlib_integer*),
+            integer *, integer *,
 	    doublereal *, doublereal *, doublereal *, integer *, integer *, 
 	    doublereal *, doublereal *);
     doublereal pnorm, xnorm, fnorm1, actred, dirder, epsmch, prered;
@@ -342,7 +354,7 @@ L30:
 /*<          iflag = 2 >*/
     iflag = 2;
 /*<          call fdjac2(fcn,m,n,x,fvec,fjac,ldfjac,iflag,epsfcn,wa4) >*/
-    fdjac2_((S_fp)fcn, m, n, &x[1], &fvec[1], &fjac[fjac_offset], ldfjac, &
+    fdjac2_(fcn, m, n, &x[1], &fvec[1], &fjac[fjac_offset], ldfjac, &
 	    iflag, epsfcn, &wa4[1]);
 /*<          nfev = nfev + n >*/
     *nfev += *n;

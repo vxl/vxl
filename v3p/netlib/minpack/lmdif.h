@@ -1,5 +1,9 @@
 extern int v3p_netlib_lmdif_(
-  S_fp fcn,
+  void (*fcn)(v3p_netlib_integer*,
+              v3p_netlib_integer*,
+              v3p_netlib_doublereal*,
+              v3p_netlib_doublereal*,
+              v3p_netlib_integer*),
   v3p_netlib_integer *m,
   v3p_netlib_integer *n,
   v3p_netlib_doublereal *x,
