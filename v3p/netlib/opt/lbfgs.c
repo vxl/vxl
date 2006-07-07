@@ -998,122 +998,6 @@ CTING ERRORS.\002,/\002 IFLAG = 0\002)";
 /*<       DATA MP,LP,GTOL,STPMIN,STPMAX/6,6,9.0D-01,1.0D-20,1.0D+20/ >*/
 /*<       END >*/
 
-
-
-/*   ---------------------------------------------------------- */
-
-/*<       subroutine daxpy(n,da,dx,incx,dy,incy) >*/
-/* Subroutine */ int daxpy_(integer *n, doublereal *da, doublereal *dx, 
-	integer *incx, doublereal *dy, integer *incy)
-{
-    /* System generated locals */
-    integer i__1;
-
-    /* Local variables */
-    integer i__, m, ix, iy, mp1;
-
-
-/*     constant times a vector plus a vector. */
-/*     uses unrolled loops for increments equal to one. */
-/*     jack dongarra, linpack, 3/11/78. */
-
-/*<       double precision dx(1),dy(1),da >*/
-/*<       integer i,incx,incy,ix,iy,m,mp1,n >*/
-
-/*<       if(n.le.0)return >*/
-    /* Parameter adjustments */
-    --dy;
-    --dx;
-
-    /* Function Body */
-    if (*n <= 0) {
-	return 0;
-    }
-/*<       if (da .eq. 0.0d0) return >*/
-    if (*da == 0.) {
-	return 0;
-    }
-/*<       if(incx.eq.1.and.incy.eq.1)go to 20 >*/
-    if (*incx == 1 && *incy == 1) {
-	goto L20;
-    }
-
-/*        code for unequal increments or equal increments */
-/*          not equal to 1 */
-
-/*<       ix = 1 >*/
-    ix = 1;
-/*<       iy = 1 >*/
-    iy = 1;
-/*<       if(incx.lt.0)ix = (-n+1)*incx + 1 >*/
-    if (*incx < 0) {
-	ix = (-(*n) + 1) * *incx + 1;
-    }
-/*<       if(incy.lt.0)iy = (-n+1)*incy + 1 >*/
-    if (*incy < 0) {
-	iy = (-(*n) + 1) * *incy + 1;
-    }
-/*<       do 10 i = 1,n >*/
-    i__1 = *n;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-/*<         dy(iy) = dy(iy) + da*dx(ix) >*/
-	dy[iy] += *da * dx[ix];
-/*<         ix = ix + incx >*/
-	ix += *incx;
-/*<         iy = iy + incy >*/
-	iy += *incy;
-/*<    10 continue >*/
-/* L10: */
-    }
-/*<       return >*/
-    return 0;
-
-/*        code for both increments equal to 1 */
-
-
-/*        clean-up loop */
-
-/*<    20 m = mod(n,4) >*/
-L20:
-    m = *n % 4;
-/*<       if( m .eq. 0 ) go to 40 >*/
-    if (m == 0) {
-	goto L40;
-    }
-/*<       do 30 i = 1,m >*/
-    i__1 = m;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-/*<         dy(i) = dy(i) + da*dx(i) >*/
-	dy[i__] += *da * dx[i__];
-/*<    30 continue >*/
-/* L30: */
-    }
-/*<       if( n .lt. 4 ) return >*/
-    if (*n < 4) {
-	return 0;
-    }
-/*<    40 mp1 = m + 1 >*/
-L40:
-    mp1 = m + 1;
-/*<       do 50 i = mp1,n,4 >*/
-    i__1 = *n;
-    for (i__ = mp1; i__ <= i__1; i__ += 4) {
-/*<         dy(i) = dy(i) + da*dx(i) >*/
-	dy[i__] += *da * dx[i__];
-/*<         dy(i + 1) = dy(i + 1) + da*dx(i + 1) >*/
-	dy[i__ + 1] += *da * dx[i__ + 1];
-/*<         dy(i + 2) = dy(i + 2) + da*dx(i + 2) >*/
-	dy[i__ + 2] += *da * dx[i__ + 2];
-/*<         dy(i + 3) = dy(i + 3) + da*dx(i + 3) >*/
-	dy[i__ + 3] += *da * dx[i__ + 3];
-/*<    50 continue >*/
-/* L50: */
-    }
-/*<       return >*/
-    return 0;
-/*<       end >*/
-} /* daxpy_ */
-
 /*    ------------------------------------------------------------------ */
 
 /*     ************************** */
@@ -1160,7 +1044,7 @@ RECTION\002)";
 	     doublereal *, integer *);
 
     /* Fortran I/O blocks */
-    static cilist io___65 = { 0, 0, 0, fmt_15, 0 };
+    static cilist io___60 = { 0, 0, 0, fmt_15, 0 };
 
 
 /*<       INTEGER N,MAXFEV,INFO,NFEV >*/
@@ -1332,8 +1216,8 @@ RECTION\002)";
 /*<       IF (DGINIT .GE. ZERO) then >*/
     if (dginit >= zero) {
 /*<          write(LP,15) >*/
-	io___65.ciunit = lb3_1.lp;
-	s_wsfe(&io___65);
+	io___60.ciunit = lb3_1.lp;
+	s_wsfe(&io___60);
 	e_wsfe();
 /*<    15    FORMAT(/'  THE SEARCH DIRECTION IS NOT A DESCENT DIRECTION') >*/
 /*<          RETURN >*/
