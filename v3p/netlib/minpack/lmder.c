@@ -21,7 +21,15 @@ static integer c__1 = 1;
 static logical c_true = TRUE_;
 
 /*<    >*/
-/* Subroutine */ int lmder_(S_fp fcn, integer *m, integer *n, doublereal *x, 
+/* Subroutine */ int lmder_(
+  void (*fcn)(v3p_netlib_integer*,
+              v3p_netlib_integer*,
+              v3p_netlib_doublereal*,
+              v3p_netlib_doublereal*,
+              v3p_netlib_doublereal*,
+              v3p_netlib_integer*,
+              v3p_netlib_integer*),
+        integer *m, integer *n, doublereal *x,
 	doublereal *fvec, doublereal *fjac, integer *ldfjac, doublereal *ftol,
 	 doublereal *xtol, doublereal *gtol, integer *maxfev, doublereal *
 	diag, integer *mode, doublereal *factor, integer *nprint, integer *

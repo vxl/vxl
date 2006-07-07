@@ -16,7 +16,15 @@ extern "C" {
 #include "v3p_netlib.h"
 
 /*<    >*/
-/* Subroutine */ int lmder1_(U_fp fcn, integer *m, integer *n, doublereal *x, 
+/* Subroutine */ int lmder1_(
+  void (*fcn)(v3p_netlib_integer*,
+              v3p_netlib_integer*,
+              v3p_netlib_doublereal*,
+              v3p_netlib_doublereal*,
+              v3p_netlib_doublereal*,
+              v3p_netlib_integer*,
+              v3p_netlib_integer*),
+        integer *m, integer *n, doublereal *x, 
 	doublereal *fvec, doublereal *fjac, integer *ldfjac, doublereal *tol, 
 	integer *info, integer *ipvt, doublereal *wa, integer *lwa)
 {
@@ -31,7 +39,15 @@ extern "C" {
     /* Local variables */
     integer mode, nfev, njev;
     doublereal ftol, gtol, xtol;
-    extern /* Subroutine */ int lmder_(U_fp, integer *, integer *, doublereal 
+    extern /* Subroutine */ int lmder_(
+      void (*fcn)(v3p_netlib_integer*,
+                  v3p_netlib_integer*,
+                  v3p_netlib_doublereal*,
+                  v3p_netlib_doublereal*,
+                  v3p_netlib_doublereal*,
+                  v3p_netlib_integer*,
+                  v3p_netlib_integer*),
+            integer *, integer *, doublereal 
 	    *, doublereal *, doublereal *, integer *, doublereal *, 
 	    doublereal *, doublereal *, integer *, doublereal *, integer *, 
 	    doublereal *, integer *, integer *, integer *, integer *, integer 
@@ -204,7 +220,7 @@ extern "C" {
 /*<       nprint = 0 >*/
     nprint = 0;
 /*<    >*/
-    lmder_((U_fp)fcn, m, n, &x[1], &fvec[1], &fjac[fjac_offset], ldfjac, &
+    lmder_(fcn, m, n, &x[1], &fvec[1], &fjac[fjac_offset], ldfjac, &
 	    ftol, &xtol, &gtol, &maxfev, &wa[1], &mode, &factor, &nprint, 
 	    info, &nfev, &njev, &ipvt[1], &wa[*n + 1], &wa[(*n << 1) + 1], &
 	    wa[*n * 3 + 1], &wa[(*n << 2) + 1], &wa[*n * 5 + 1]);
