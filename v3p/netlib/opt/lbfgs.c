@@ -15,6 +15,9 @@ extern "C" {
 #endif
 #include "v3p_netlib.h"
 
+#include <stdio.h>
+#include <math.h>
+
 /* Common Block Declarations */
 
 struct lb3_1_ {
@@ -53,27 +56,12 @@ static integer c__1 = 1;
     static doublereal one = 1.;
     static doublereal zero = 0.;
 
-    /* Format strings */
-    static char fmt_245[] = "(/\002  GTOL IS LESS THAN OR EQUAL TO 1.D-04\
-\002,/\002 IT HAS BEEN RESET TO 9.D-01\002)";
-    static char fmt_200[] = "(/\002 IFLAG= -1 \002,/\002 LINE SEARCH FAILED.\
- SEE DOCUMENTATION OF ROUTINE MCSRCH\002,/\002 ERROR RETURN\002\002 OF LINE \
-SEARCH: INFO= \002,i2,/\002 POSSIBLE CAUSES: FUNCTION OR GRADIENT ARE INCORR\
-ECT\002,/\002 OR INCORRECT TOLERANCES\002)";
-    static char fmt_235[] = "(/\002 IFLAG= -2\002,/\002 THE\002,i5,\002-TH D\
-IAGONAL ELEMENT OF THE\002,/,\002 INVERSE HESSIAN APPROXIMATION IS NOT POSIT\
-IVE\002)";
-    static char fmt_240[] = "(/\002 IFLAG= -3\002,/\002 IMPROPER INPUT PARAM\
-ETERS (N OR M\002,\002 ARE NOT POSITIVE)\002)";
-
     /* System generated locals */
     integer i__1;
     doublereal d__1;
 
     /* Builtin functions */
-    integer s_wsfe(cilist *), e_wsfe();
     double sqrt(doublereal);
-    integer do_fio(integer *, char *, ftnlen);
 
     /* Local variables */
     static integer i__, cp;
@@ -99,14 +87,6 @@ ETERS (N OR M\002,\002 ARE NOT POSITIVE)\002)";
 	    doublereal *, integer *, integer *, integer *, doublereal *);
     static logical finish;
     static integer maxfev;
-
-    /* Fortran I/O blocks */
-    static cilist io___4 = { 0, 0, 0, fmt_245, 0 };
-    static cilist io___30 = { 0, 0, 0, fmt_200, 0 };
-    static cilist io___31 = { 0, 0, 0, fmt_235, 0 };
-    static cilist io___32 = { 0, 0, 0, fmt_240, 0 };
-
-
 
 /*<       INTEGER N,M,IPRINT(2),IFLAG >*/
 /*<       DOUBLE PRECISION X(N),G(N),DIAG(N),W(N*(2*M+1)+2*M) >*/
@@ -364,10 +344,13 @@ L10:
 /*<       IF(GTOL.LE.1.D-04) THEN >*/
     if (lb3_1.gtol <= 1e-4) {
 /*<         IF(LP.GT.0) WRITE(LP,245) >*/
+/*
+ 245  FORMAT(/'  GTOL IS LESS THAN OR EQUAL TO 1.D-04',
+     .       / ' IT HAS BEEN RESET TO 9.D-01')
+*/
 	if (lb3_1.lp > 0) {
-	    io___4.ciunit = lb3_1.lp;
-	    s_wsfe(&io___4);
-	    e_wsfe();
+            printf("  GTOL IS LESS THAN OR EQUAL TO 1.D-04");
+            printf("  IT HAS BEEN RESET TO 9.D-01");
 	}
 /*<         GTOL=9.D-01 >*/
 	lb3_1.gtol = .9;
@@ -691,11 +674,19 @@ L172:
 L190:
     *iflag = -1;
 /*<       IF(LP.GT.0) WRITE(LP,200) INFO >*/
+/*
+ 200  FORMAT(/' IFLAG= -1 ',/' LINE SEARCH FAILED. SEE'
+     .          ' DOCUMENTATION OF ROUTINE MCSRCH',/' ERROR RETURN'
+     .          ' OF LINE SEARCH: INFO= ',I2,/
+     .          ' POSSIBLE CAUSES: FUNCTION OR GRADIENT ARE INCORRECT',/,
+     .          ' OR INCORRECT TOLERANCES')
+*/
     if (lb3_1.lp > 0) {
-	io___30.ciunit = lb3_1.lp;
-	s_wsfe(&io___30);
-	do_fio(&c__1, (char *)&info, (ftnlen)sizeof(integer));
-	e_wsfe();
+        printf(" IFLAG= -1  LINE SEARCH FAILED. SEE"
+               " DOCUMENTATION OF ROUTINE MCSRCH ERROR RETURN"
+               " OF LINE SEARCH: INFO= %ld"
+               " POSSIBLE CAUSES: FUNCTION OR GRADIENT ARE INCORRECT"
+               " OR INCORRECT TOLERANCES", info);
     }
 /*<       RETURN >*/
     return 0;
@@ -703,11 +694,13 @@ L190:
 L195:
     *iflag = -2;
 /*<       IF(LP.GT.0) WRITE(LP,235) I >*/
+/*
+ 235  FORMAT(/' IFLAG= -2',/' THE',I5,'-TH DIAGONAL ELEMENT OF THE',/,
+     .       ' INVERSE HESSIAN APPROXIMATION IS NOT POSITIVE')
+*/
     if (lb3_1.lp > 0) {
-	io___31.ciunit = lb3_1.lp;
-	s_wsfe(&io___31);
-	do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(integer));
-	e_wsfe();
+        printf("IFLAG= -2 THE %ld-TH DIAGONAL ELEMENT OF THE"
+               " INVERSE HESSIAN APPROXIMATION IS NOT POSITIVE", i__);
     }
 /*<       RETURN >*/
     return 0;
@@ -715,10 +708,14 @@ L195:
 L196:
     *iflag = -3;
 /*<       IF(LP.GT.0) WRITE(LP,240) >*/
+/*
+ 240  FORMAT(/' IFLAG= -3',/' IMPROPER INPUT PARAMETERS (N OR M',
+     .       ' ARE NOT POSITIVE)')
+*/
+
     if (lb3_1.lp > 0) {
-	io___32.ciunit = lb3_1.lp;
-	s_wsfe(&io___32);
-	e_wsfe();
+        printf(" IFLAG= -3 IMPROPER INPUT PARAMETERS (N OR M"
+               " ARE NOT POSITIVE)");
     }
 
 /*     FORMATS */
@@ -736,61 +733,33 @@ L196:
 
 /*     LAST LINE OF SUBROUTINE LBFGS */
 
+static void write50(double* v, int n)
+{
+  int cols = 15;
+  double vmax = 0;
+  int i;
+  double vmaxscale;
+  for (i = 0; i < n; ++i)
+    if (fabs(v[i]) > vmax)
+      vmax = v[i];
+  vmaxscale = log(fabs(vmax)) / log(10.0);
+  vmaxscale = pow(10.0, ceil(vmaxscale) - 1);
+  if (vmaxscale != 1.0)
+    printf("  %e x\n", vmaxscale);
+
+  for (i = 0; i < n; ++i) {
+    if (i > 0 && i%cols == 0)
+      printf("\n");
+    printf(" %10.5f", v[i] / vmaxscale);
+  }
+  printf("\n");
+}
 
 /*<    >*/
 /* Subroutine */ int lb1_(integer *iprint, integer *iter, integer *nfun, 
 	doublereal *gnorm, integer *n, integer *m, doublereal *x, doublereal *
 	f, doublereal *g, doublereal *stp, logical *finish)
 {
-    /* Format strings */
-    static char fmt_10[] = "(\002*******************************************\
-******\002)";
-    static char fmt_20[] = "(\002  N=\002,i5,\002   NUMBER OF CORRECTIONS\
-=\002,i2,/,\002       INITIAL VALUES\002)";
-    static char fmt_30[] = "(\002 F= \002,1pd10.3,\002   GNORM= \002,1pd10.3)"
-	    ;
-    static char fmt_40[] = "(\002 VECTOR X= \002)";
-    static char fmt_50[] = "(6(2x,1pd10.3))";
-    static char fmt_60[] = "(\002 GRADIENT VECTOR G= \002)";
-    static char fmt_70[] = "(/\002   I   NFN\002,4x,\002FUNC\002,8x,\002GN\
-ORM\002,7x,\002STEPLENGTH\002/)";
-    static char fmt_80[] = "(2(i4,1x),3x,3(1pd10.3,2x))";
-    static char fmt_90[] = "(\002 FINAL POINT X= \002)";
-    static char fmt_100[] = "(/\002 THE MINIMIZATION TERMINATED WITHOUT DETE\
-CTING ERRORS.\002,/\002 IFLAG = 0\002)";
-
-    /* System generated locals */
-    integer i__1;
-
-    /* Builtin functions */
-    integer s_wsfe(cilist *), e_wsfe(), do_fio(integer *, char *, ftnlen);
-
-    /* Local variables */
-    integer i__;
-
-    /* Fortran I/O blocks */
-    static cilist io___33 = { 0, 0, 0, fmt_10, 0 };
-    static cilist io___34 = { 0, 0, 0, fmt_20, 0 };
-    static cilist io___35 = { 0, 0, 0, fmt_30, 0 };
-    static cilist io___36 = { 0, 0, 0, fmt_40, 0 };
-    static cilist io___37 = { 0, 0, 0, fmt_50, 0 };
-    static cilist io___39 = { 0, 0, 0, fmt_60, 0 };
-    static cilist io___40 = { 0, 0, 0, fmt_50, 0 };
-    static cilist io___41 = { 0, 0, 0, fmt_10, 0 };
-    static cilist io___42 = { 0, 0, 0, fmt_70, 0 };
-    static cilist io___43 = { 0, 0, 0, fmt_70, 0 };
-    static cilist io___44 = { 0, 0, 0, fmt_80, 0 };
-    static cilist io___45 = { 0, 0, 0, fmt_70, 0 };
-    static cilist io___46 = { 0, 0, 0, fmt_80, 0 };
-    static cilist io___47 = { 0, 0, 0, fmt_90, 0 };
-    static cilist io___48 = { 0, 0, 0, fmt_40, 0 };
-    static cilist io___49 = { 0, 0, 0, fmt_50, 0 };
-    static cilist io___50 = { 0, 0, 0, fmt_60, 0 };
-    static cilist io___51 = { 0, 0, 0, fmt_50, 0 };
-    static cilist io___52 = { 0, 0, 0, fmt_100, 0 };
-
-
-
 /*     ------------------------------------------------------------- */
 /*     THIS ROUTINE PRINTS MONITORING INFORMATION. THE FREQUENCY AND */
 /*     AMOUNT OF OUTPUT ARE CONTROLLED BY IPRINT. */
@@ -810,57 +779,56 @@ CTING ERRORS.\002,/\002 IFLAG = 0\002)";
     /* Function Body */
     if (*iter == 0) {
 /*<            WRITE(MP,10) >*/
-	io___33.ciunit = lb3_1.mp;
-	s_wsfe(&io___33);
-	e_wsfe();
+/*
+  10   FORMAT('*************************************************')
+*/
+        printf("*************************************************\n");
 /*<            WRITE(MP,20) N,M >*/
-	io___34.ciunit = lb3_1.mp;
-	s_wsfe(&io___34);
-	do_fio(&c__1, (char *)&(*n), (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&(*m), (ftnlen)sizeof(integer));
-	e_wsfe();
+/*
+ 20   FORMAT('  N=',I5,'   NUMBER OF CORRECTIONS=',I2,
+     .       /,  '       INITIAL VALUES')
+*/
+        printf("  N=%ld   NUMBER OF CORRECTIONS=%ld"
+               "       INITIAL VALUES", *n, *m);
 /*<            WRITE(MP,30)F,GNORM >*/
-	io___35.ciunit = lb3_1.mp;
-	s_wsfe(&io___35);
-	do_fio(&c__1, (char *)&(*f), (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&(*gnorm), (ftnlen)sizeof(doublereal));
-	e_wsfe();
+/*
+ 30   FORMAT(' F= ',1PD10.3,'   GNORM= ',1PD10.3)
+*/
+        printf(" F= %g   GNORM= %g\n", *f, *gnorm);
 /*<                  IF (IPRINT(2).GE.1)THEN >*/
 	if (iprint[2] >= 1) {
 /*<                      WRITE(MP,40) >*/
-	    io___36.ciunit = lb3_1.mp;
-	    s_wsfe(&io___36);
-	    e_wsfe();
+/*
+ 40   FORMAT(' VECTOR X= ')
+*/
+            printf(" VECTOR X= ");
 /*<                      WRITE(MP,50) (X(I),I=1,N) >*/
-	    io___37.ciunit = lb3_1.mp;
-	    s_wsfe(&io___37);
-	    i__1 = *n;
-	    for (i__ = 1; i__ <= i__1; ++i__) {
-		do_fio(&c__1, (char *)&x[i__], (ftnlen)sizeof(doublereal));
-	    }
-	    e_wsfe();
+/*
+ 50   FORMAT(6(2X,1PD10.3))
+*/
+            write50(x, *n);
 /*<                      WRITE(MP,60) >*/
-	    io___39.ciunit = lb3_1.mp;
-	    s_wsfe(&io___39);
-	    e_wsfe();
+/*
+ 60   FORMAT(' GRADIENT VECTOR G= ')
+*/
+            printf(" GRADIENT VECTOR G= ");
 /*<                      WRITE(MP,50) (G(I),I=1,N) >*/
-	    io___40.ciunit = lb3_1.mp;
-	    s_wsfe(&io___40);
-	    i__1 = *n;
-	    for (i__ = 1; i__ <= i__1; ++i__) {
-		do_fio(&c__1, (char *)&g[i__], (ftnlen)sizeof(doublereal));
-	    }
-	    e_wsfe();
+/*
+ 50   FORMAT(6(2X,1PD10.3))
+*/
+            write50(g, *n);
 /*<                   ENDIF >*/
 	}
 /*<            WRITE(MP,10) >*/
-	io___41.ciunit = lb3_1.mp;
-	s_wsfe(&io___41);
-	e_wsfe();
+/*
+  10   FORMAT('*************************************************')
+*/
+        printf("*************************************************\n");
 /*<            WRITE(MP,70) >*/
-	io___42.ciunit = lb3_1.mp;
-	s_wsfe(&io___42);
-	e_wsfe();
+/*
+ 70   FORMAT(/'   I   NFN',4X,'FUNC',8X,'GNORM',7X,'STEPLENGTH'/)
+*/
+        printf("   I   NFN    FUNC        GNORM       STEPLENGTH\n");
 /*<       ELSE >*/
     } else {
 /*<           IF ((IPRINT(1).EQ.0).AND.(ITER.NE.1.AND..NOT.FINISH))RETURN >*/
@@ -872,20 +840,17 @@ CTING ERRORS.\002,/\002 IFLAG = 0\002)";
 /*<                    IF(MOD(ITER-1,IPRINT(1)).EQ.0.OR.FINISH)THEN >*/
 	    if ((*iter - 1) % iprint[1] == 0 || *finish) {
 /*<                          IF(IPRINT(2).GT.1.AND.ITER.GT.1) WRITE(MP,70) >*/
+/*
+ 70   FORMAT(/'   I   NFN',4X,'FUNC',8X,'GNORM',7X,'STEPLENGTH'/)
+*/
 		if (iprint[2] > 1 && *iter > 1) {
-		    io___43.ciunit = lb3_1.mp;
-		    s_wsfe(&io___43);
-		    e_wsfe();
+                    printf("   I   NFN    FUNC        GNORM       STEPLENGTH\n");
 		}
 /*<                          WRITE(MP,80)ITER,NFUN,F,GNORM,STP >*/
-		io___44.ciunit = lb3_1.mp;
-		s_wsfe(&io___44);
-		do_fio(&c__1, (char *)&(*iter), (ftnlen)sizeof(integer));
-		do_fio(&c__1, (char *)&(*nfun), (ftnlen)sizeof(integer));
-		do_fio(&c__1, (char *)&(*f), (ftnlen)sizeof(doublereal));
-		do_fio(&c__1, (char *)&(*gnorm), (ftnlen)sizeof(doublereal));
-		do_fio(&c__1, (char *)&(*stp), (ftnlen)sizeof(doublereal));
-		e_wsfe();
+/*
+ 80   FORMAT(2(I4,1X),3X,3(1PD10.3,2X))
+*/
+                printf("%4ld %4ld    %10.3f  %10.3f  %10.3f\n", *iter, *nfun, *f, *gnorm, *stp);
 /*<                    ELSE >*/
 	    } else {
 /*<                          RETURN >*/
@@ -895,20 +860,17 @@ CTING ERRORS.\002,/\002 IFLAG = 0\002)";
 /*<               ELSE >*/
 	} else {
 /*<                    IF( IPRINT(2).GT.1.AND.FINISH) WRITE(MP,70) >*/
+/*
+ 70   FORMAT(/'   I   NFN',4X,'FUNC',8X,'GNORM',7X,'STEPLENGTH'/)
+*/
 	    if (iprint[2] > 1 && *finish) {
-		io___45.ciunit = lb3_1.mp;
-		s_wsfe(&io___45);
-		e_wsfe();
+                    printf("   I   NFN    FUNC        GNORM       STEPLENGTH\n");
 	    }
 /*<                    WRITE(MP,80)ITER,NFUN,F,GNORM,STP >*/
-	    io___46.ciunit = lb3_1.mp;
-	    s_wsfe(&io___46);
-	    do_fio(&c__1, (char *)&(*iter), (ftnlen)sizeof(integer));
-	    do_fio(&c__1, (char *)&(*nfun), (ftnlen)sizeof(integer));
-	    do_fio(&c__1, (char *)&(*f), (ftnlen)sizeof(doublereal));
-	    do_fio(&c__1, (char *)&(*gnorm), (ftnlen)sizeof(doublereal));
-	    do_fio(&c__1, (char *)&(*stp), (ftnlen)sizeof(doublereal));
-	    e_wsfe();
+/*
+ 80   FORMAT(2(I4,1X),3X,3(1PD10.3,2X))
+*/
+            printf("%4ld %4ld    %10.3f  %10.3f  %10.3f\n", *iter, *nfun, *f, *gnorm, *stp);
 /*<               ENDIF >*/
 	}
 /*<               IF (IPRINT(2).EQ.2.OR.IPRINT(2).EQ.3)THEN >*/
@@ -916,49 +878,47 @@ CTING ERRORS.\002,/\002 IFLAG = 0\002)";
 /*<                     IF (FINISH)THEN >*/
 	    if (*finish) {
 /*<                         WRITE(MP,90) >*/
-		io___47.ciunit = lb3_1.mp;
-		s_wsfe(&io___47);
-		e_wsfe();
+/*
+  90   FORMAT(' FINAL POINT X= ')
+*/
+                printf(" FINAL POINT X= ");
 /*<                     ELSE >*/
 	    } else {
 /*<                         WRITE(MP,40) >*/
-		io___48.ciunit = lb3_1.mp;
-		s_wsfe(&io___48);
-		e_wsfe();
+/*
+ 40   FORMAT(' VECTOR X= ')
+*/
+                printf(" VECTOR X= ");
 /*<                     ENDIF >*/
 	    }
 /*<                       WRITE(MP,50)(X(I),I=1,N) >*/
-	    io___49.ciunit = lb3_1.mp;
-	    s_wsfe(&io___49);
-	    i__1 = *n;
-	    for (i__ = 1; i__ <= i__1; ++i__) {
-		do_fio(&c__1, (char *)&x[i__], (ftnlen)sizeof(doublereal));
-	    }
-	    e_wsfe();
+/*
+ 50   FORMAT(6(2X,1PD10.3))
+*/
+            write50(x, *n);
 /*<                   IF (IPRINT(2).EQ.3)THEN >*/
 	    if (iprint[2] == 3) {
 /*<                       WRITE(MP,60) >*/
-		io___50.ciunit = lb3_1.mp;
-		s_wsfe(&io___50);
-		e_wsfe();
+/*
+ 60   FORMAT(' GRADIENT VECTOR G= ')
+*/
+                printf(" GRADIENT VECTOR G= ");
 /*<                       WRITE(MP,50)(G(I),I=1,N) >*/
-		io___51.ciunit = lb3_1.mp;
-		s_wsfe(&io___51);
-		i__1 = *n;
-		for (i__ = 1; i__ <= i__1; ++i__) {
-		    do_fio(&c__1, (char *)&g[i__], (ftnlen)sizeof(doublereal))
-			    ;
-		}
-		e_wsfe();
+/*
+ 50   FORMAT(6(2X,1PD10.3))
+*/
+                write50(g, *n);
 /*<                   ENDIF >*/
 	    }
 /*<               ENDIF >*/
 	}
 /*<             IF (FINISH) WRITE(MP,100) >*/
+/*
+ 100  FORMAT(/' THE MINIMIZATION TERMINATED WITHOUT DETECTING ERRORS.',
+     .       /' IFLAG = 0')
+*/
 	if (*finish) {
-	    io___52.ciunit = lb3_1.mp;
-	    s_wsfe(&io___52);
-	    e_wsfe();
+            printf(" THE MINIMIZATION TERMINATED WITHOUT DETECTING ERRORS.\n");
 	}
 /*<       ENDIF >*/
     }
@@ -1017,16 +977,9 @@ CTING ERRORS.\002,/\002 IFLAG = 0\002)";
     static doublereal xtrapf = 4.;
     static doublereal zero = 0.;
 
-    /* Format strings */
-    static char fmt_15[] = "(/\002  THE SEARCH DIRECTION IS NOT A DESCENT DI\
-RECTION\002)";
-
     /* System generated locals */
     integer i__1;
     doublereal d__1;
-
-    /* Builtin functions */
-    integer s_wsfe(cilist *), e_wsfe();
 
     /* Local variables */
     static integer j;
@@ -1042,10 +995,6 @@ RECTION\002)";
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, logical *, doublereal *,
 	     doublereal *, integer *);
-
-    /* Fortran I/O blocks */
-    static cilist io___60 = { 0, 0, 0, fmt_15, 0 };
-
 
 /*<       INTEGER N,MAXFEV,INFO,NFEV >*/
 /*<       DOUBLE PRECISION F,STP,FTOL,GTOL,XTOL,STPMIN,STPMAX >*/
@@ -1216,9 +1165,7 @@ RECTION\002)";
 /*<       IF (DGINIT .GE. ZERO) then >*/
     if (dginit >= zero) {
 /*<          write(LP,15) >*/
-	io___60.ciunit = lb3_1.lp;
-	s_wsfe(&io___60);
-	e_wsfe();
+        printf("  THE SEARCH DIRECTION IS NOT A DESCENT DIRECTION\n");
 /*<    15    FORMAT(/'  THE SEARCH DIRECTION IS NOT A DESCENT DIRECTION') >*/
 /*<          RETURN >*/
 	return 0;
