@@ -1,3 +1,4 @@
+/*: Minimizes the sum of the squares of m nonlin functions in n variables */
 extern int v3p_netlib_lmdif_(
   void (*fcn)(v3p_netlib_integer*,
               v3p_netlib_integer*,

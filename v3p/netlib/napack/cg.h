@@ -1,12 +1,13 @@
+/*: Minimizes a function using the conjugate gradient method */
 extern int v3p_netlib_cg_(
-  v3p_netlib_doublereal *x,
-  v3p_netlib_doublereal *e,
-  v3p_netlib_integer *it,
-  v3p_netlib_doublereal *step,
-  v3p_netlib_doublereal *t,
-  v3p_netlib_integer *limit,
-  v3p_netlib_integer *n,
-  v3p_netlib_integer *m,
+  v3p_netlib_doublereal *x, /*!< (IN/OUT) minimizer, length n; input = starting guess */
+  v3p_netlib_doublereal *e, /*!< (OUT) max-norm of gradient */
+  v3p_netlib_integer *it,   /*!< (OUT) number of iterations performed */
+  v3p_netlib_doublereal *step, /*!< (IN/OUT) step size along search direction */
+  v3p_netlib_doublereal v3p_netlib_const *tolerance_on_e,
+  v3p_netlib_integer v3p_netlib_const *max_iterations,
+  v3p_netlib_integer *n, /*!< (IN) number of unknowns */
+  v3p_netlib_integer *m, /*!< (IN) # iterations before calc new seach direction */
   double (*value)(double*),
   void (*grad)(double*,double*),
   void (*both)(double*,double*,double*),
