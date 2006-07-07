@@ -71,12 +71,12 @@ The directories blas and linpack were created as follows:
 5.) Convert the sources to C using f2c and replace the f2c.h header
     inclusion with v3p_netlib.h:
 
-for d in blas linpack temperton eispack laso lapack/complex16 lapack/double lapack/util napack minpack; do
+for d in blas linpack temperton eispack laso lapack/complex16 lapack/double lapack/util napack minpack opt; do
   for f in ${d}/*.f; do
     b=`echo "$f" | sed 's/.f$//'`
     if [ ! -f "${b}.c" ]; then
       echo "Converting ${b}.f to ${b}.c"
-      f2c -A -a -C++ -c -E -P -d${d} ${b}.f &&
+      f2c -A -a -C++ -c -ec -E -P -d${d} ${b}.f &&
       cat ${b}.c | sed 's/f2c.h/v3p_netlib.h/' > ${b}.c.tmp &&
       mv ${b}.c.tmp ${b}.c
     fi
@@ -91,6 +91,7 @@ done
     -a    = Make local variables automatic instead of static (for threads).
     -C++  = Make code C++ compatible.
     -c    = Include original fortran code in comments.
+    -ec   = Place uninitialized COMMON blocks in separate files
     -E    = Declare uninitialized common blocks to be extern.
     -P    = Write ANSI C prototypes to .P files.
     -ddir = Write output files to given directory.
@@ -116,7 +117,7 @@ done
     v3p_netlib_prototypes.h.
 
 echo "/* Include prototype headers. */" > v3p_netlib_prototypes.h
-for f in blas/*.P linpack/*.P temperton/*.P eispack/*.P laso/*.P lapack/*/*.P napack/*.P minpack/*.P; do
+for f in blas/*.P linpack/*.P temperton/*.P eispack/*.P laso/*.P lapack/*/*.P napack/*.P minpack/*.P opt/*.P; do
   b=`echo "$f" | sed 's/.P//'`
   if [ ! -f "${b}.h" ] ; then
     echo "Converting prototype $b"

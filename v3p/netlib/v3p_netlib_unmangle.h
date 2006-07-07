@@ -84,6 +84,9 @@
 #undef ilaenv_
 #undef ins_
 #undef izamax_
+#undef lb1_
+#undef lb2_
+#undef lbfgs_
 #undef lce_
 #undef lde_
 #undef lmder1_
@@ -92,6 +95,8 @@
 #undef lmpar_
 #undef lsame_
 #undef lse_
+#undef mcsrch_
+#undef mcstep_
 #undef pythag_
 #undef qrfac_
 #undef qrsolv_

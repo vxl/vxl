@@ -93,6 +93,9 @@ nm libv3p_netlib.a |grep " [TR] "
 #define ilaenv_ v3p_netlib_ilaenv_
 #define ins_ v3p_netlib_ins_
 #define izamax_ v3p_netlib_izamax_
+#define lb1_ v3p_netlib_lb1_
+#define lb2_ v3p_netlib_lb2_
+#define lbfgs_ v3p_netlib_lbfgs_
 #define lce_ v3p_netlib_lce_
 #define lde_ v3p_netlib_lde_
 #define lmder1_ v3p_netlib_lmder1_
@@ -101,6 +104,8 @@ nm libv3p_netlib.a |grep " [TR] "
 #define lmpar_ v3p_netlib_lmpar_
 #define lsame_ v3p_netlib_lsame_
 #define lse_ v3p_netlib_lse_
+#define mcsrch_ v3p_netlib_mcsrch_
+#define mcstep_ v3p_netlib_mcstep_
 #define pythag_ v3p_netlib_pythag_
 #define qrfac_ v3p_netlib_qrfac_
 #define qrsolv_ v3p_netlib_qrsolv_
