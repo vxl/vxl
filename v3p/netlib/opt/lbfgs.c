@@ -15,8 +15,14 @@ extern "C" {
 #endif
 #include "v3p_netlib.h"
 
-#include <stdio.h>
+#undef abs
+#undef min
+#undef max
 #include <math.h>
+#include <stdio.h>
+#define abs(x) ((x) >= 0 ? (x) : -(x))
+#define min(a,b) ((a) <= (b) ? (a) : (b))
+#define max(a,b) ((a) >= (b) ? (a) : (b))
 
 /* Initialized data */
 
