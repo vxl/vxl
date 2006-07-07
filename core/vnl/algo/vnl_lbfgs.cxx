@@ -51,10 +51,10 @@ bool vnl_lbfgs::minimize(vnl_vector<double>& x)
   /* Local variables */
   /*     The driver for vnl_lbfgs must always declare LB2 as EXTERNAL */
 
-  int n = f_->get_number_of_unknowns();
-  int m = memory; // The number of basis vectors to remember.
+  long n = f_->get_number_of_unknowns();
+  long m = memory; // The number of basis vectors to remember.
 
-  int iprint[2] = {1, 0};
+  long iprint[2] = {1, 0};
   vnl_vector<double> g(n);
 
   // Workspace
@@ -78,10 +78,10 @@ bool vnl_lbfgs::minimize(vnl_vector<double>& x)
   bool ok;
   this->num_evaluations_ = 0;
   this->num_iterations_ = 0;
-  int iflag = 0;
+  long iflag = 0;
   while (true) {
     // We do not wish to provide the diagonal matrices Hk0, and therefore set DIAGCO to FALSE.
-    logical diagco = false;
+    v3p_netlib_logical diagco = false;
 
     // Set these every iter in case user changes them to bail out
     double eps = gtol; // Gradient tolerance
@@ -131,8 +131,9 @@ bool vnl_lbfgs::minimize(vnl_vector<double>& x)
 
     iprint[0] = trace ? 1 : -1; // -1 no o/p, 0 start and end, 1 every iter.
     iprint[1] = 0; // 1 prints X and G
-    lbfgs_(&n, &m, x.data_block(), &f, g.data_block(), &diagco, diag.data_block(),
-           iprint, &eps, &local_xtol, w.data_block(), &iflag);
+    v3p_netlib_lbfgs_(
+      &n, &m, x.data_block(), &f, g.data_block(), &diagco, diag.data_block(),
+      iprint, &eps, &local_xtol, w.data_block(), &iflag);
     ++this->num_iterations_;
 
     if (we_trace)
