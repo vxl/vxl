@@ -23,8 +23,9 @@ doublereal dpmpar_(integer *i__)
     static struct {
 	doublereal e_1[3];
 	doublereal fill_2[1];
-	} equiv_2 = { 2.22044604926e-16, 2.22507385852e-308, 
-		1.79769313485e308 };
+	}
+    equiv_2 =
+      { {2.22044604926e-16, 2.22507385852e-308, 1.79769313485e308}, {0.0} };
 
 
     /* System generated locals */
@@ -207,7 +208,7 @@ doublereal dpmpar_(integer *i__)
 /*<       data dmach(3) /1.79769313485d+308/ >*/
 
 /*<       dpmpar = dmach(i) >*/
-    ret_val = dmach[(0 + (0 + (*i__ - 1 << 3))) / 8];
+    ret_val = dmach[(0 + (0 + ((*i__ - 1) << 3))) / 8];
 /*<       return >*/
     return ret_val;
 

@@ -48,6 +48,8 @@ static integer c__1 = 1;
     extern doublereal dpmpar_(integer *);
     doublereal ajnorm;
 
+    (void)lipvt;
+
 /*<       integer m,n,lda,lipvt >*/
 /*<       integer ipvt(lipvt) >*/
 /*<       logical pivot >*/
