@@ -96,11 +96,11 @@ vnl_levenberg_marquardt* vnl_levenberg_marquardt_Activate::current = 0;
 #ifdef VCL_SUNPRO_CC
 extern "C"
 #endif
-void vnl_levenberg_marquardt::lmdif_lsqfun(int* n,     // I   Number of residuals
-                                           int* p,     // I   Number of unknowns
+void vnl_levenberg_marquardt::lmdif_lsqfun(long* n,     // I   Number of residuals
+                                           long* p,     // I   Number of unknowns
                                            double* x,  // I   Solution vector, size n
                                            double* fx, // O   Residual vector f(x)
-                                           int* iflag) // IO  0 ==> print, -1 ==> terminate
+                                           long* iflag) // IO  0 ==> print, -1 ==> terminate
 {
   vnl_levenberg_marquardt* active = vnl_levenberg_marquardt_Activate::current;
   vnl_least_squares_function* f = active->f_;
@@ -156,8 +156,8 @@ bool vnl_levenberg_marquardt::minimize_without_gradient(vnl_vector<double>& x)
   }
 
   // e04fcf
-  int m = f_->get_number_of_residuals(); // I  Number of residuals, must be > #unknowns
-  int n = f_->get_number_of_unknowns();  // I  Number of unknowns
+  long m = f_->get_number_of_residuals(); // I  Number of residuals, must be > #unknowns
+  long n = f_->get_number_of_unknowns();  // I  Number of unknowns
 
   if (m < n) {
     vcl_cerr << "vnl_levenberg_marquardt: Number of unknowns("<<n<<") greater than number of data ("<<m<<")\n";
@@ -173,9 +173,9 @@ bool vnl_levenberg_marquardt::minimize_without_gradient(vnl_vector<double>& x)
 
   vnl_vector<double> fx(m);    // W m   Storage for residual vector
   vnl_vector<double> diag(n);  // I     Multiplicative scale factors for variables
-  int user_provided_scale_factors = 1;  // 1 is no, 2 is yes
+  long user_provided_scale_factors = 1;  // 1 is no, 2 is yes
   double factor = 100;
-  int nprint = 1;
+  long nprint = 1;
 
   vnl_vector<double> qtf(n);
   vnl_vector<double> wa1(n);
@@ -188,12 +188,12 @@ bool vnl_levenberg_marquardt::minimize_without_gradient(vnl_vector<double>& x)
 #endif
   vnl_levenberg_marquardt_Activate activator(this);
 
-  double errors[2] = {0,0};
   num_iterations_ = 0;
   set_covariance_ = false;
-  int info;
+  long info;
   start_error_ = 0; // Set to 0 so first call to lmdif_lsqfun will know to set it.
-  lmdif_(lmdif_lsqfun, &m, &n,
+  v3p_netlib_lmdif_(
+         lmdif_lsqfun, &m, &n,
          x.data_block(),
          fx.data_block(),
          &ftol, &xtol, &gtol, &maxfev, &epsfcn,
@@ -202,8 +202,7 @@ bool vnl_levenberg_marquardt::minimize_without_gradient(vnl_vector<double>& x)
          &info, &num_evaluations_,
          fdjac_.data_block(), &m, ipvt_.data_block(),
          &qtf[0],
-         &wa1[0], &wa2[0], &wa3[0], &wa4[0],
-         errors);
+         &wa1[0], &wa2[0], &wa3[0], &wa4[0]);
   failure_code_ = (ReturnCodes) info;
 
   // One more call to compute final error.
@@ -239,13 +238,13 @@ bool vnl_levenberg_marquardt::minimize_without_gradient(vnl_vector<double>& x)
 #ifdef VCL_SUNPRO_CC
 extern "C"
 #endif
-void vnl_levenberg_marquardt::lmder_lsqfun(int* n,     // I   Number of residuals
-                                           int* p,     // I   Number of unknowns
+void vnl_levenberg_marquardt::lmder_lsqfun(long* n,     // I   Number of residuals
+                                           long* p,     // I   Number of unknowns
                                            double* x,  // I   Solution vector, size n
                                            double* fx, // O   Residual vector f(x)
                                            double* fJ, // O   m * n Jacobian f(x)
-                                           int*,
-                                           int* iflag) // I   1 -> calc fx, 2 -> calc fjac
+                                           long*,
+                                           long* iflag) // I   1 -> calc fx, 2 -> calc fjac
 {
   vnl_levenberg_marquardt* active = vnl_levenberg_marquardt_Activate::current;
   vnl_least_squares_function* f = active->f_;
@@ -281,10 +280,11 @@ void vnl_levenberg_marquardt::lmder_lsqfun(int* n,     // I   Number of residual
       vnl_vector<double> feval( *n );
       vnl_matrix<double> finite_jac( *p, *n, 0.0 );
       vnl_vector<double> wa1( *n );
-      int info=1;
+      long info=1;
       double diff;
       f->f( ref_x, feval );
-      fdjac2_(lmdif_lsqfun, n, p, x,
+      v3p_netlib_fdjac2_(
+              lmdif_lsqfun, n, p, x,
               feval.data_block(),
               finite_jac.data_block(),
               n,
@@ -319,8 +319,8 @@ bool vnl_levenberg_marquardt::minimize_using_gradient(vnl_vector<double>& x)
     return false;
   }
 
-  int m = f_->get_number_of_residuals(); // I  Number of residuals, must be > #unknowns
-  int n = f_->get_number_of_unknowns();  // I  Number of unknowns
+  long m = f_->get_number_of_residuals(); // I  Number of residuals, must be > #unknowns
+  long n = f_->get_number_of_unknowns();  // I  Number of unknowns
 
   if (m < n) {
     vcl_cerr << __FILE__ ": Number of unknowns("<<n<<") greater than number of data ("<<m<<")\n";
@@ -335,10 +335,11 @@ bool vnl_levenberg_marquardt::minimize_using_gradient(vnl_vector<double>& x)
 
   num_iterations_ = 0;
   set_covariance_ = false;
-  int info;
-  int size = wa1.size();
+  long info;
+  long size = wa1.size();
   start_error_ = 0; // Set to 0 so first call to lmder_lsqfun will know to set it.
-  lmder1_(lmder_lsqfun, &m, &n,
+  v3p_netlib_lmder1_(
+          lmder_lsqfun, &m, &n,
           x.data_block(),
           fx.data_block(),
           fdjac_.data_block(), &m,

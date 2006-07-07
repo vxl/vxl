@@ -109,7 +109,7 @@ class vnl_levenberg_marquardt : public vnl_nonlinear_minimizer
 
   vnl_least_squares_function* f_;
   vnl_matrix<double> fdjac_; // Computed during lmdif/lmder
-  vnl_vector<int>    ipvt_;  // Also computed, both needed to get J'*J at end.
+  vnl_vector<long>    ipvt_; // Also computed, both needed to get J'*J at end.
 
   vnl_matrix<double> inv_covar_;
   bool set_covariance_; // Set if covariance_ holds J'*J
@@ -118,10 +118,10 @@ class vnl_levenberg_marquardt : public vnl_nonlinear_minimizer
 
   // Communication with callback
   friend class vnl_levenberg_marquardt_Activate;
-  static void lmdif_lsqfun(int* m, int* n, double* x,
-                           double* fx, int* iflag);
-  static void lmder_lsqfun(int* m, int* n, double* x,
-                           double* fx, double* fJ, int*, int* iflag);
+  static void lmdif_lsqfun(long* m, long* n, double* x,
+                           double* fx, long* iflag);
+  static void lmder_lsqfun(long* m, long* n, double* x,
+                           double* fx, double* fJ, long*, long* iflag);
 };
 
 //: Find minimum of "f", starting at "initial_estimate", and return.

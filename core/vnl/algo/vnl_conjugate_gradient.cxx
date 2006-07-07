@@ -15,7 +15,9 @@
 
 #include <vnl/vnl_cost_function.h>
 #include <vnl/vnl_vector_ref.h>
+#include <vnl/algo/vnl_netlib.h>
 
+#if 0
 // external netlib function
 extern "C"
 int cg_( double *x,                     // IO start guess
@@ -36,6 +38,7 @@ int cg_( double *x,                     // IO start guess
          int pre( double *y,
                   double *z),           // I preconditions (not necessarily needed) pre(y,z)
          double *h );                   // I space to work size h = 3*n
+#endif
 
 /////////////////////////////////////
 
@@ -89,7 +92,7 @@ double vnl_conjugate_gradient::valuecomputer_(double *x)
   return f->f(ref_x);
 }
 
-int vnl_conjugate_gradient::gradientcomputer_(double *g, double *x)
+void vnl_conjugate_gradient::gradientcomputer_(double *g, double *x)
 {
   vnl_conjugate_gradient* active = vnl_conjugate_gradient_Activate::current;
   vnl_cost_function* f = active->f_;
@@ -97,11 +100,9 @@ int vnl_conjugate_gradient::gradientcomputer_(double *g, double *x)
   vnl_vector_ref<double> ref_g(f->get_number_of_unknowns(), g);
 
   f->gradf(ref_x, ref_g);
-
-  return 0;
 }
 
-int vnl_conjugate_gradient::valueandgradientcomputer_(double *v, double *g, double *x)
+void vnl_conjugate_gradient::valueandgradientcomputer_(double *v, double *g, double *x)
 {
   vnl_conjugate_gradient* active = vnl_conjugate_gradient_Activate::current;
   vnl_cost_function* f = active->f_;
@@ -109,11 +110,9 @@ int vnl_conjugate_gradient::valueandgradientcomputer_(double *v, double *g, doub
   vnl_vector_ref<double> ref_g(f->get_number_of_unknowns(), g);
 
   f->compute(ref_x, v, &ref_g);
-
-  return 0;
 }
 
-int vnl_conjugate_gradient::preconditioner_( double *out, double *in)
+void vnl_conjugate_gradient::preconditioner_( double *out, double *in)
 {
   // FIXME - there should be some way to set a preconditioner if you have one
   // e.g. P = inv(diag(A'A)) for linear least squares systems.
@@ -124,8 +123,6 @@ int vnl_conjugate_gradient::preconditioner_( double *out, double *in)
   int n = f->get_number_of_unknowns();
   for (int i=0; i < n; ++i)
     out[i] = in[i];
-
-  return 0;
 }
 
 ///////////////////////////////////////
@@ -136,17 +133,17 @@ extern "C" double vnl_conjugate_gradient__valuecomputer_( double *x)
 {
   return vnl_conjugate_gradient::valuecomputer_(x);
 }
-extern "C" int vnl_conjugate_gradient__gradientcomputer_( double *g, double *x)
+extern "C" void vnl_conjugate_gradient__gradientcomputer_( double *g, double *x)
 {
-  return vnl_conjugate_gradient::gradientcomputer_(g,x);
+  vnl_conjugate_gradient::gradientcomputer_(g,x);
 }
-extern "C" int vnl_conjugate_gradient__valueandgradientcomputer_( double *v, double *g, double *x)
+extern "C" void vnl_conjugate_gradient__valueandgradientcomputer_( double *v, double *g, double *x)
 {
-  return vnl_conjugate_gradient::valueandgradientcomputer_(v,g,x);
+  vnl_conjugate_gradient::valueandgradientcomputer_(v,g,x);
 }
-extern "C" int vnl_conjugate_gradient__preconditioner_( double *out, double *in)
+extern "C" void vnl_conjugate_gradient__preconditioner_( double *out, double *in)
 {
-  return vnl_conjugate_gradient::preconditioner_(out,in);
+  vnl_conjugate_gradient::preconditioner_(out,in);
 }
 #endif
 
@@ -154,18 +151,19 @@ bool vnl_conjugate_gradient::minimize( vnl_vector<double> &x)
 {
   double *xp = x.data_block();
   double max_norm_of_gradient;
-  int number_of_iterations;
+  long number_of_iterations;
   final_step_size_ = 0;
   double gradient_tolerance = gtol;
   vnl_vector<double> workspace(f_->get_number_of_unknowns()*3);
-  int number_of_unknowns = f_->get_number_of_unknowns();
+  long number_of_unknowns = f_->get_number_of_unknowns();
 
   vnl_conjugate_gradient_Activate activator(this);
 
   start_error_ = valuecomputer_(xp);
   num_evaluations_ = 0;
 
-  cg_( xp,
+  v3p_netlib_cg_(
+       xp,
        &max_norm_of_gradient,
        &number_of_iterations,
        &final_step_size_,

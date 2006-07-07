@@ -74,9 +74,9 @@ class vnl_conjugate_gradient : public vnl_nonlinear_minimizer
  public:
 #endif
   static double valuecomputer_( double *x);
-  static int gradientcomputer_( double *g, double *x);
-  static int valueandgradientcomputer_( double *v, double *g, double *x);
-  static int preconditioner_( double *out, double *in);
+  static void gradientcomputer_( double *g, double *x);
+  static void valueandgradientcomputer_( double *v, double *g, double *x);
+  static void preconditioner_( double *out, double *in);
 
 #if 0
  protected:
