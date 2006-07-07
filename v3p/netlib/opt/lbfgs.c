@@ -1305,8 +1305,8 @@ L30:
 /*        STP BE THE LOWEST POINT OBTAINED SO FAR. */
 
 /*<    >*/
-    if (brackt && (*stp <= stmin || *stp >= stmax) || *nfev >= *maxfev - 1 || 
-	    infoc == 0 || brackt && stmax - stmin <= *xtol * stmax) {
+    if ((brackt && (*stp <= stmin || *stp >= stmax)) || *nfev >= *maxfev - 1 || 
+	    infoc == 0 || (brackt && stmax - stmin <= *xtol * stmax)) {
 	*stp = stx;
     }
 
@@ -1348,7 +1348,7 @@ L45:
 /*        TEST FOR CONVERGENCE. */
 
 /*<    >*/
-    if (brackt && (*stp <= stmin || *stp >= stmax) || infoc == 0) {
+    if ((brackt && (*stp <= stmin || *stp >= stmax)) || infoc == 0) {
 	*info = 6;
     }
 /*<    >*/
@@ -1549,7 +1549,7 @@ L45:
 /*     CHECK THE INPUT PARAMETERS FOR ERRORS. */
 
 /*<    >*/
-    if (*brackt && (*stp <= min(*stx,*sty) || *stp >= max(*stx,*sty)) || *dx *
+    if ((*brackt && (*stp <= min(*stx,*sty) || *stp >= max(*stx,*sty))) || *dx *
 	     (*stp - *stx) >= (float)0. || *stpmax < *stpmin) {
 	return 0;
     }
