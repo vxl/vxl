@@ -93,14 +93,6 @@ SET( netlib_sources
   dsrc2c.c
 
   # MINPACK
-  enorm.c
-  fdjac2.c
-  lmpar.c
-  qrfac.c
-  qrsolv.c
-  lmdif.c
-  lmder.c
-  lmder1.c
   pythag.c
   rpoly.c
 
@@ -110,9 +102,6 @@ SET( netlib_sources
 
   # General
   machineparams.c
-
-  # NAPACK
-  cg.c
 
   # from DATAPAC
   camsun.c

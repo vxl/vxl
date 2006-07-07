@@ -66,20 +66,6 @@ float sqrtf(float);
                double *a, int *lda, double *b, int *ldb, double *alpha, double *beta,
                double *u, int *ldu, double *v, int *ldv, double *q, int *ldq, double *work, int *iwork, int *info);
 
-  /*: Minimizes a function using the conjugate gradient method */
-  void cg_(double* x, /*!< (IN/OUT) minimizer, length n; input = starting guess */
-           double* e, /*!< (OUT) max-norm of gradient */
-           int* it,   /*!< (OUT) number of iterations performed */
-           double* step, /*!< (IN/OUT) step size along search direction */
-           const double* tolerance_on_e, const int* max_iterations,
-           const int* n, /*!< (IN) number of unknowns */
-           const int* m, /*!< (IN) # iterations before calc new seach direction */
-           double (*cost_function)(double*),
-           void (*gradient_func)(double*,double*),
-           void (*both)(double*,double*,double*),
-           void (*preconditioning_func)(double*,double*),
-           double *work);
-
   /*: Computes the float cumulative distribution function value for the chi-squared distribution */
   void chscdf_(const float* x, /*!< (IN) value where the cumulative distribution must be evaluated */
                const int* nu,  /*!< (IN) # degrees of freedom */
@@ -92,24 +78,6 @@ float sqrtf(float);
   void lbfgs_(int* n, int* m, double* x, double* f, double* g,
               logical * diagco, double* diag, int* iprint,
               double* eps, double* xtol, double* w, int* iflag);
-
-  /*: Minimizes the sum of the squares of m nonlin functions in n variables */
-  void lmder1_(void (*fcn)(int*,int*,double*,double*,double*,int*,int*),
-               int* m, int* n, double* x,
-               double* fvec, double* fjac, int* ldfjac,
-               double* tol, int* info, int* ipvt, double* wa, int* lwa);
-  void lmder_(void (*fcn)(int*,int*,double*,double*,double*,int*,int*),
-              int *m, int *n, double *x, double *fvec, double *fjac, int *ldfjac, double *ftol, double *xtol, double *gtol,
-              int *maxfev, double *diag, int *mode, double *factor, int *nprint, int *info,
-              int *nfev, int *njev, int *ipvt, double *qtf, double *wa1, double *wa2, double *wa3, double *wa4);
-
-  /*: Minimizes the sum of the squares of m nonlin functions in n variables */
-  void lmdif_(void (*fcn)(int*,int*,double*,double*,int*),
-              int* m, int* n, double* x, double* fvec, double* ftol,
-              double* xtol, double* gtol, int* maxfev, double* epsfcn, double* diag,
-              int* mode, double* factor, int* nprint, int* info, int* nfev,
-              double* fjac, int* ldfjac, int* ipvt, double* qtf,
-              double* wa1, double* wa2, double* wa3, double* wa4, double* errors);
 
   /*: Solves  A*x = b */
   void lsqr_(int* m, int* n,
@@ -302,7 +270,6 @@ double dlapy3_(const double *x, const double *y, const double *z);
 double dnrm2_(const int* n, const double* x, const int* incx);
  float scnrm2_(const int *n, const cmplx *x, const int *incx);
 double dznrm2_(const int *n, const dcmplx *x, const int *incx);
-double enorm_(const int *n, const double *x);
 
   void sorg2r_(int *m, int *n, int *k, float *a, int *lda, float *tau, float *work, int *info);
   void dorg2r_(int *m, int *n, int *k, double *a, int *lda, double *tau, double *work, int *info);
@@ -318,8 +285,6 @@ double enorm_(const int *n, const double *x);
   void sormr2_(char *side, char *trans, int *m, int *n, int*k,float*a,int*lda,float*tau,float*c,int*ldc,float*work,int*info);
   void dormr2_(char*side, char*trans, int*m, int*n, int*k, double*a, int*lda, double*tau, double*c, int*ldc, double*work, int*info);
 
-  void lmpar_(int *n, double *r, int *ldr, int *ipvt, double *diag, double *qtb, double *delta, double *par,
-              double *x, double *sdiag, double *wa1, double *wa2);
 double dpmpar_(const int *i);
 
   void srot_(const int *n, float *sx, const int *incx, float *sy, const int *incy, const float *c, const float *s);
@@ -376,9 +341,6 @@ double dpmpar_(const int *i);
 double dasum_(const int *n, const double *dx, const int *incx);
 double dzasum_(const int *n, const dcmplx *x, const int *incx);
 
-  void fdjac2_(void (*fcn)(int*,int*,double*,double*,int*),
-               int *m, int *n, double *x, double *fvec, double *fjac, int *ldfjac, int *iflag, double *epsfcn, double *wa);
-
    int isamax_(const int *n, const float *sx, const int *incx);
    int idamax_(const int *n, const double *dx, const int *incx);
    int izamax_(const int *n, const dcmplx *zx, const int *incx);
@@ -387,11 +349,6 @@ double dzasum_(const int *n, const dcmplx *x, const int *incx);
    int ilaenv_(const int *ispec, const char *name, const char *opts, const int *n1, const int *n2, const int *n3, const int *n4);
 logical lsame_(const char *ca, const char *cb);
 double pythag_(const double *a, const double *b);
-
-  void qrfac_(int *m, int *n, double *a, int *lda, logical *pivot, int *ipvt, int *lipvt,
-              double *rdiag, double *acnorm, double *wa);
-  void qrsolv_(const int *n, double *r, const int *ldr, const int *ipvt, const double *diag,
-               const double *qtb, double *x, double *sdiag, double *wa);
 
   void tql1_(const int *n, double *d, double *e, int *ierr);
   void tql2_(const int *nm, const int *n, double *d, double *e, double *z, int *ierr);
