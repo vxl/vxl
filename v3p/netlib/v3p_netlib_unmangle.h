@@ -50,6 +50,7 @@
 #undef dnrm2_
 #undef dnwla_
 #undef dortqr_
+#undef dpmpar_
 #undef dpoco_
 #undef dpodi_
 #undef dpofa_
@@ -66,8 +67,10 @@
 #undef dznrm2_
 #undef elmhes_
 #undef eltran_
+#undef enorm_
 #undef epslon_
 #undef fd_
+#undef fdjac2_
 #undef fv_
 #undef fvd_
 #undef gpfa2f_
@@ -83,9 +86,15 @@
 #undef izamax_
 #undef lce_
 #undef lde_
+#undef lmder1_
+#undef lmder_
+#undef lmdif_
+#undef lmpar_
 #undef lsame_
 #undef lse_
 #undef pythag_
+#undef qrfac_
+#undef qrsolv_
 #undef rebak_
 #undef reduc_
 #undef rg_

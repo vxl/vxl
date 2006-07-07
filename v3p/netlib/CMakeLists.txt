@@ -459,6 +459,17 @@ SET(V3P_NETLIB_lapack_SOURCES
 SET(V3P_NETLIB_napack_SOURCES
   napack/cg.c
   )
+SET(V3P_NETLIB_minpack_SOURCES
+  minpack/dpmpar.c
+  minpack/enorm.c
+  minpack/fdjac2.c
+  minpack/lmder.c
+  minpack/lmder1.c
+  minpack/lmdif.c
+  minpack/lmpar.c
+  minpack/qrfac.c
+  minpack/qrsolv.c
+  )
 
 # Adjust the compiler flags to avoid problems with f2c-generated code.
 IF(CMAKE_COMPILER_IS_GNUCC)
@@ -492,6 +503,7 @@ ADD_LIBRARY(v3p_netlib
   ${V3P_NETLIB_laso_SOURCES}
   ${V3P_NETLIB_lapack_SOURCES}
   ${V3P_NETLIB_napack_SOURCES}
+  ${V3P_NETLIB_minpack_SOURCES}
   v3p_f2c.h
   v3p_f2c_mangle.h
   v3p_f2c_original.h
