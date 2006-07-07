@@ -101,13 +101,13 @@ done
     and type names using the preprocessor to avoid sweeping changes of the
     code.  Use
 
-      nm libv3p_netlib.a | grep " [TR] "
+      nm libv3p_netlib.a | grep " [TRD] "
 
     to identify symbols in the library that have not been
     properly mangled.  Note if using shared libraries the command
     is
 
-      nm libv3p_netlib.so | grep " [TR] "
+      nm libv3p_netlib.so | grep " [TRD] "
 
     and the shared-library implementation functions _fini and _init should
     be left alone.

@@ -94,7 +94,6 @@ nm libv3p_netlib.a |grep " [TR] "
 #define ins_ v3p_netlib_ins_
 #define izamax_ v3p_netlib_izamax_
 #define lb1_ v3p_netlib_lb1_
-#define lb2_ v3p_netlib_lb2_
 #define lbfgs_ v3p_netlib_lbfgs_
 #define lce_ v3p_netlib_lce_
 #define lde_ v3p_netlib_lde_

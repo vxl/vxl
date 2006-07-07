@@ -16,9 +16,6 @@
 #include <vcl_iomanip.h> // for setw (replaces cout.form())
 
 #include <vnl/algo/vnl_netlib.h> // lbfgs_()
-extern "C" {
-#include <lbfgs.h> // from netlib, for lb3_ data struct
-}
 
 //: Default constructor.
 // memory is set to 5, line_search_accuracy to 0.9.
@@ -86,8 +83,8 @@ bool vnl_lbfgs::minimize(vnl_vector<double>& x)
     // Set these every iter in case user changes them to bail out
     double eps = gtol; // Gradient tolerance
     double local_xtol = 1e-16;
-    lb3_.gtol = line_search_accuracy; // set to 0.1 for huge problems or cheap functions
-    lb3_.stpawf = default_step_length;
+    v3p_netlib_lbfgs_global.gtol = line_search_accuracy; // set to 0.1 for huge problems or cheap functions
+    v3p_netlib_lbfgs_global.stpinit = default_step_length;
 
     // Call function
     double f;

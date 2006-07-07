@@ -18,22 +18,11 @@ extern "C" {
 #include <stdio.h>
 #include <math.h>
 
-/* Common Block Declarations */
-
-struct lb3_1_ {
-    integer mp, lp;
-    doublereal gtol, stpmin, stpmax;
-};
-
-#define lb3_1 (*(struct lb3_1_ *) &lb3_)
-
 /* Initialized data */
 
-struct {
-    integer e_1[2];
-    doublereal e_2[3];
-    } lb3_ = { {6, 6}, {.9, 1e-20, 1e20} };
-
+#define lb3_1 v3p_netlib_lbfgs_global
+struct v3p_netlib_lbfgs_global_s v3p_netlib_lbfgs_global =
+{ 6, 6, .9, 1e-20, 1e20, 1.0 };
 
 /* Table of constant values */
 
@@ -252,13 +241,6 @@ static integer c__1 = 1;
 /*    ON THE DRIVER: */
 
 /*    The program that calls LBFGS must contain the declaration: */
-
-/*                       EXTERNAL LB2 */
-
-/*    LB2 is a BLOCK DATA that defines the default values of several */
-/*    parameters described in the COMMON section. */
-
-
 
 /*    COMMON: */
 
@@ -583,7 +565,8 @@ L100:
 L165:
     nfev = 0;
 /*<       STP=ONE >*/
-    stp = one;
+/* awf changed initial step from ONE to be parametrized. */
+    stp = lb3_1.stpinit;
 /*<       IF (ITER.EQ.1) STP=STP1 >*/
     if (iter == 1) {
 	stp = stp1;
@@ -945,12 +928,6 @@ static void write50(double* v, int n)
 /*   ---------------------------------------------------------- */
 /*     DATA */
 /*   ---------------------------------------------------------- */
-
-/*<       BLOCK DATA LB2 >*/
-/* Subroutine */ int lb2_()
-{
-    return 0;
-} /* lb2_ */
 
 /*<       INTEGER LP,MP >*/
 /*<       DOUBLE PRECISION GTOL,STPMIN,STPMAX >*/

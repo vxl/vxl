@@ -85,7 +85,6 @@
 #undef ins_
 #undef izamax_
 #undef lb1_
-#undef lb2_
 #undef lbfgs_
 #undef lce_
 #undef lde_

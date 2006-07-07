@@ -106,10 +106,6 @@ SET( netlib_sources
   # from DATAPAC
   camsun.c
 
-  # from OPT
-  lbfgs.c lbfgs.h
-  lbfgs-lb1.c
-
   # from LAPACK
   ilaenv.c
   izmax1.c
