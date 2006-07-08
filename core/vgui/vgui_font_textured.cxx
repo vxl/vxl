@@ -17,6 +17,8 @@
 #include <vil/vil_stream_fstream.h>
 #include <vil/vil_stream_section.h>
 
+#include <vcl_cassert.h>
+
 //-------------------------------------------------------------------------
 // Helper functions.
 //-------------------------------------------------------------------------

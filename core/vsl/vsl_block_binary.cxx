@@ -4,13 +4,12 @@
 // \brief Set of functions to do binary IO on a block of values.
 // \author Ian Scott, ISBE Manchester, Feb 2003
 
-
 #include "vsl_block_binary.h"
 #include <vcl_cstddef.h>
 #include <vcl_new.h>
 #include <vcl_algorithm.h>
 #include <vcl_cstdlib.h>
-
+#include <vcl_cassert.h>
 
 struct vsl_block_t
 {
@@ -73,12 +72,12 @@ void vsl_block_binary_write_float_impl(vsl_b_ostream &os, const T* begin, vcl_si
 
   const vcl_size_t wanted = sizeof(T) * nelems;
   vsl_block_t block = allocate_up_to(wanted);
-  
+
   // multiple-block version works equally efficiently with single block
   const vcl_size_t items_per_block = block.size / sizeof(T);
-  
+
   // convert and save the data from the start.
-  while (nelems > 0) 
+  while (nelems > 0)
   {
     vcl_size_t items = vcl_min(items_per_block, nelems);
     vcl_size_t bytes = sizeof(T) * items;
@@ -116,8 +115,8 @@ void vsl_block_binary_write_int_impl(vsl_b_ostream &os, const T* begin, vcl_size
 
   const vcl_size_t wanted = sizeof(T) * nelems;
   vsl_block_t block = allocate_up_to(wanted  );
-  
-  if(block.size == wanted)
+
+  if (block.size == wanted)
   {
     // Do simple single block version
     vcl_size_t nbytes = vsl_convert_to_arbitrary_length(begin,
@@ -134,7 +133,7 @@ void vsl_block_binary_write_int_impl(vsl_b_ostream &os, const T* begin, vcl_size
     assert (n > items_per_block);
     // Convert the data - just counting bytes for now.
     vcl_size_t n_bytes=0;
-    while (n > 0) 
+    while (n > 0)
     {
       vcl_size_t items = vcl_min(items_per_block, n);
       n_bytes += vsl_convert_to_arbitrary_length(p,
@@ -146,9 +145,9 @@ void vsl_block_binary_write_int_impl(vsl_b_ostream &os, const T* begin, vcl_size
     vsl_b_write(os, n_bytes);
     n=nelems;
     p=begin;
-    
+
     // Now convert and save the data from the start.
-    while (n > 0) 
+    while (n > 0)
     {
       vcl_size_t items = vcl_min(items_per_block, n);
       vcl_size_t bytes = vsl_convert_to_arbitrary_length(p,
@@ -181,11 +180,11 @@ void vsl_block_binary_read_int_impl(vsl_b_istream &is, T* begin, vcl_size_t nele
   vsl_block_t block = allocate_up_to(nbytes);
 
   vcl_size_t n_bytes_converted = 0;
-  if(block.size == nbytes)
+  if (block.size == nbytes)
   {
     // Do simple single block version
     is.is().read(block.ptr, block.size);
-    n_bytes_converted = 
+    n_bytes_converted =
       vsl_convert_from_arbitrary_length((unsigned char *)block.ptr, begin, nelems);
   }
   else    // Do multi-block version
@@ -193,7 +192,7 @@ void vsl_block_binary_read_int_impl(vsl_b_istream &is, T* begin, vcl_size_t nele
     vcl_size_t offset=0;
     vcl_size_t bytes_left = nbytes;
     vcl_size_t bytes_read = 0;
-    while (nelems > 0)  
+    while (nelems > 0)
     {
       assert (offset < block.size);
 
@@ -212,13 +211,13 @@ void vsl_block_binary_read_int_impl(vsl_b_istream &is, T* begin, vcl_size_t nele
       if (elems > nelems)
       {
         vcl_cerr << "\nI/O ERROR: vsl_block_binary_read(.., int*,..)"
-                  << " Corrupted data stream\n";
+                 << " Corrupted data stream\n";
         is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
         break;
       }
 
       // convert ints;
-      vcl_size_t bytes_converted = 
+      vcl_size_t bytes_converted =
         vsl_convert_from_arbitrary_length((unsigned char *)block.ptr, begin, elems);
       nelems -= elems;
       begin += elems;
@@ -233,15 +232,14 @@ void vsl_block_binary_read_int_impl(vsl_b_istream &is, T* begin, vcl_size_t nele
     if (bytes_left != 0 || nelems != 0 || bytes_read != nbytes)
     {
       vcl_cerr << "\nI/O ERROR: vsl_block_binary_read(.., int*,..)"
-                << " Corrupted data stream\n";
+               << " Corrupted data stream\n";
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     }
-
   }
   if (n_bytes_converted != nbytes)
   {
     vcl_cerr << "\nI/O ERROR: vsl_block_binary_read(.., int*,..)"
-              << " Corrupted data stream\n";
+             << " Corrupted data stream\n";
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
   }
 #if VCL_HAS_EXCEPTIONS
@@ -257,11 +255,8 @@ void vsl_block_binary_read_int_impl(vsl_b_istream &is, T* begin, vcl_size_t nele
 template void vsl_block_binary_write_float_impl(vsl_b_ostream &, const double*, vcl_size_t);
 template void vsl_block_binary_write_float_impl(vsl_b_ostream &, const float*, vcl_size_t);
 
-
 template void vsl_block_binary_read_float_impl(vsl_b_istream &, double*, vcl_size_t);
 template void vsl_block_binary_read_float_impl(vsl_b_istream &, float*, vcl_size_t);
-
-
 
 template void vsl_block_binary_write_int_impl(vsl_b_ostream &, const long*, vcl_size_t);
 template void vsl_block_binary_write_int_impl(vsl_b_ostream &, const unsigned long*, vcl_size_t);
@@ -269,8 +264,6 @@ template void vsl_block_binary_write_int_impl(vsl_b_ostream &, const int*, vcl_s
 template void vsl_block_binary_write_int_impl(vsl_b_ostream &, const unsigned int*, vcl_size_t);
 template void vsl_block_binary_write_int_impl(vsl_b_ostream &, const short*, vcl_size_t);
 template void vsl_block_binary_write_int_impl(vsl_b_ostream &, const unsigned short*, vcl_size_t);
-
-
 
 template void vsl_block_binary_read_int_impl(vsl_b_istream &, long*, vcl_size_t);
 template void vsl_block_binary_read_int_impl(vsl_b_istream &, unsigned long*, vcl_size_t);
