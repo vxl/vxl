@@ -6,6 +6,7 @@ DEFINES += -DBUILDING_VNL_DLL
 MANPAGE_SOURCES += vnl_fwd.h
 MANPAGE_SOURCES += vnl_config.h.in vnl_config.h
 MANPAGE_SOURCES += vnl_tag.h
+MANPAGE_SOURCES += dll.h
 
 # vector and matrix
 MANPAGE_SOURCES += vnl_c_vector.txx
