@@ -46,8 +46,7 @@
 #include <vcl_iosfwd.h>
 #include <vxl_config.h>
 
-//: Describes the format of pixel encoding
-// in a video frame buffer
+//: Describes the format of pixel encoding in a video frame buffer
 enum vidl2_pixel_format
 {
   VIDL2_PIXEL_FORMAT_UNKNOWN = -1,
@@ -179,9 +178,8 @@ struct vidl2_pixel_limits<double>
 };
 
 
-
 //: Define the color traits for each vidl2_pixel_color
-// for now this is just the number of channels
+// For now this is just the number of channels
 template <vidl2_pixel_color color_type>
     struct vidl2_color_traits_of;
 #define vidl2_ct_mac(COL,NC)\
