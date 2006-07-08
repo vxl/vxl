@@ -241,7 +241,7 @@ L50:
 /*<             wa(k) = temp >*/
 	    wa[k] = temp;
 
-/*           accumulate the tranformation in the row of s. */
+/*           accumulate the transformation in the row of s. */
 
 /*<             kp1 = k + 1 >*/
 	    kp1 = k + 1;
