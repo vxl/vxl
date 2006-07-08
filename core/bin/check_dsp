@@ -27,7 +27,7 @@ else {
     exit 0;
   }
   $DIRS = `find \$VXLROOT/vcl \$VXLROOT/v3p \$VXLROOT/core \$VXLROOT/contrib  -type d \\\( -name xerces-c-src\\\* -prune -o -print \\\)`;
-  @DIRS = grep {! m!(/CVS|awfmfc|vgui_example_mfc)$!} sort split ' ', $DIRS;
+  @DIRS = grep { ! m!(/CVS|awfmfc|vgui_example_mfc)$! } sort split ' ', $DIRS;
 }
 
 foreach $dir (@DIRS)
@@ -96,11 +96,12 @@ foreach $dir (@DIRS)
       closedir(UPDIR);
     }
     $prefix=$dir; $prefix =~ s![^/]*$!!; $prefix =~ s!^.*/(vcl|core|contrib/brl/(bbas|bseg)|contrib/gel/mrc|contrib/[^/]*)/!!;
-    map {s/^/$prefix/} @updir_files;
-    @updir_files = grep(m/\.h$/, @updir_files);
-    @updir_files = grep(!m/vidl_(win|avifile)_avicodec/, @updir_files);
-    @updir_files = grep(!m/\bdll\.h$/, @updir_files);
-    @updir_files = sort(@updir_files); push @updir_files, '~END';
+    @updir_files = sort
+                   grep { !m/\bdll\.h$/ }
+                   grep { !m/vidl_(win|avifile)_avicodec/ }
+                   grep {  m/\.h$/ }
+                   map  { "$prefix$_" } @updir_files;
+    push @updir_files, '~END';
     open(FILE, "$dir/test_include.cxx");
     while (<FILE>) {
       push @inc_files, $1 if (m/^\s*\#\s*include\s*\<(\S+)\>\s*$/);
@@ -110,8 +111,7 @@ foreach $dir (@DIRS)
     $updir_files=""; $inc_files="";
     while (@inc_files || @updir_files) {
       unless ($updir_files eq '~END') {
-        $s = shift @updir_files;
-        $updir_files = $s;
+        $updir_files = $s = shift @updir_files;
       }
       unless ($inc_files eq '~END') {
         $s = shift @inc_files;
@@ -214,7 +214,7 @@ foreach $dir (@DIRS)
           print "$file\tspecified in $makef does not exist\n" unless (-f "$dir/$file");
           push @sources, $file;
           if ($file =~ s/\.(c|cxx|cc|cpp|C)$/.h/) {
-            push @hsources, $file if (-f "$dir/$file" && grep(/^$file$/, @hsources) == 0);
+            push @hsources, $file if (-f "$dir/$file" && grep(m/^$file$/, @hsources) == 0);
           } # I.e.: .h files which are not explicitly present in makefile are added only once.
         }
       }
@@ -223,7 +223,7 @@ foreach $dir (@DIRS)
         print "$file\tspecified in $makef does not exist\n" unless (-f "$dir/$file");
         push @hsources, $file;
         if ($file =~ s/\.txx$/.h/) {
-          push @hsources, $file if (-f "$dir/$file" && grep(/^$file$/, @hsources) == 0);
+          push @hsources, $file if (-f "$dir/$file" && grep(m/^$file$/, @hsources) == 0);
         } # I.e.: .h files which are not explicitly present in makefile are added only once.
       }
       @subdirs = split(/\s+/,$1) if (m/^\s*SUBDIRS\s*\:?\=\s*(.+)/);
@@ -282,7 +282,7 @@ foreach $dir (@DIRS)
       next;
     }
     $names{$name} = $_;
-    foreach (split /\s+/, $_) {
+    foreach (split /\s+/) {
       next if ($_ eq '');
       if (m/_sources$/) {
         $names{$name} = $source_files[0] if (defined($source_files[0]));
@@ -305,7 +305,7 @@ foreach $dir (@DIRS)
       print STDOUT "ADD_TEST($name) without ADD_EXECUTABLE($name)\tin $cmakef\n";
       next;
     }
-    @tmpl_list = grep(/\.(cxx|c|cc|C|cpp)$/, split(/\s+/, $names{$name}));
+    @tmpl_list = grep { m/\.(cxx|c|cc|C|cpp)$/ } split /\s+/, $names{$name};
     push @test_files, @tmpl_list unless ($testmain);
     push @test_files, "$tstname.cxx" if ($testmain && $tstname ne '' && -f "$dir/$tstname.cxx");
   }
