@@ -696,6 +696,18 @@ SOURCE=.\Templates/vnl_matrix_fixed+float.2.3-.cxx
 SOURCE=.\Templates/vnl_quaternion+float-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vnl_matrix_fixed+double.1.6-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matrix_fixed+double.3.6-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matrix_fixed+double.6.1-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matrix_fixed+double.6.3-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vnl_erf.cxx
 # End Source File
 # Begin Source File
@@ -1114,6 +1126,9 @@ SOURCE=.\vnl_integrant_fnct.h
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_bessel.h
+# End Source File
+# Begin Source File
+SOURCE=.\dll.h
 # End Source File
 # End Group
 # End Target
