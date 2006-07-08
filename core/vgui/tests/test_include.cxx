@@ -43,6 +43,10 @@
 #include <vgui/vgui_event_condition.h>
 #include <vgui/vgui_event_server.h>
 #include <vgui/vgui_find.h>
+#include <vgui/vgui_font.h>
+#include <vgui/vgui_font_bitmap.h>
+#include <vgui/vgui_font_sptr.h>
+#include <vgui/vgui_font_textured.h>
 #include <vgui/vgui_function_tableau.h>
 #include <vgui/vgui_function_tableau_sptr.h>
 #include <vgui/vgui_fwd.h>

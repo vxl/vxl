@@ -16,9 +16,12 @@
 #include <vpro/vpro_motion_params.h>
 #include <vpro/vpro_motion_process.h>
 #include <vpro/vpro_region_process.h>
+#include <vpro/vpro_roi_process.h>
 #include <vpro/vpro_spatial_filter_params.h>
 #include <vpro/vpro_spatial_filter_process.h>
 #include <vpro/vpro_video_process.h>
 #include <vpro/vpro_video_process_sptr.h>
+#include <vpro/vpro_vil_video_process.h>
+#include <vpro/vpro_vil_video_process_sptr.h>
 
 int main() { return 0; }
