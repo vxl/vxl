@@ -27,7 +27,7 @@
 
 
 
-//: Use vgui dialogs to prompt the user for parameters and open an istream 
+//: Use vgui dialogs to prompt the user for parameters and open an istream
 vidl2_istream* vidl2_gui_open_istream_dialog()
 {
   enum stream_type {IMAGE_LIST, FFMPEG, DC1394};
@@ -118,14 +118,14 @@ vidl2_image_list_istream* vidl2_gui_param_dialog::image_list_istream()
   if (!dlg.ask())
     return NULL;
 
-  vidl2_image_list_istream* istream = new vidl2_image_list_istream(image_filename);
-  if (!istream || !istream->is_open()) {
+  vidl2_image_list_istream* i_stream = new vidl2_image_list_istream(image_filename);
+  if (!i_stream || !i_stream->is_open()) {
     vgui_error_dialog("Failed to open the input stream");
-    delete istream;
+    delete i_stream;
     return NULL;
   }
 
-  return istream;
+  return i_stream;
 }
 
 
@@ -160,18 +160,18 @@ vidl2_image_list_ostream* vidl2_gui_param_dialog::image_list_ostream()
   if (!dlg.ask())
     return NULL;
 
-  vidl2_image_list_ostream* ostream = new vidl2_image_list_ostream(directory,
+  vidl2_image_list_ostream* o_stream = new vidl2_image_list_ostream(directory,
                                             name_format,
                                             fmt_choices[fmt_idx],
                                             start_index);
 
-  if (!ostream || !ostream->is_open()) {
+  if (!o_stream || !o_stream->is_open()) {
     vgui_error_dialog("Failed to create output image list stream");
-    delete ostream;
+    delete o_stream;
     return NULL;
   }
 
-  return ostream;
+  return o_stream;
 }
 
 
@@ -190,13 +190,13 @@ vidl2_ffmpeg_istream* vidl2_gui_param_dialog::ffmpeg_istream()
   if (!dlg.ask())
     return NULL;
 
-  vidl2_ffmpeg_istream* istream = new vidl2_ffmpeg_istream(image_filename);
-  if (!istream || !istream->is_open()) {
+  vidl2_ffmpeg_istream* i_stream = new vidl2_ffmpeg_istream(image_filename);
+  if (!i_stream || !i_stream->is_open()) {
     vgui_error_dialog("Failed to open the input stream");
-    delete istream;
+    delete i_stream;
     return NULL;
   }
-  return istream;
+  return i_stream;
 
 #else // HAS_FFMPEG
   vgui_error_dialog("FFMPEG support not compiled in");
@@ -241,14 +241,14 @@ vidl2_ffmpeg_ostream* vidl2_gui_param_dialog::ffmpeg_ostream()
   params.encoder(vidl2_ffmpeg_ostream_params::
       encoder_type(enc_choice));
 
-  vidl2_ffmpeg_ostream* ostream = new vidl2_ffmpeg_ostream(file, params);
+  vidl2_ffmpeg_ostream* o_stream = new vidl2_ffmpeg_ostream(file, params);
 
-  if (!ostream || !ostream->is_open()) {
+  if (!o_stream || !o_stream->is_open()) {
     vgui_error_dialog("Failed to create ffmpeg output stream");
-    delete ostream;
+    delete o_stream;
     return NULL;
   }
-  return ostream;
+  return o_stream;
 
 #else // HAS_FFMPEG
   vgui_error_dialog("FFMPEG support not compiled in");
@@ -374,14 +374,14 @@ vidl2_dc1394_istream* vidl2_gui_param_dialog::dc1394_istream()
       return NULL;
   }
 
-  vidl2_dc1394_istream* istream = new vidl2_dc1394_istream();
-  istream->open(dev_file, num_dma_buffers, drop_frames, params);
-  if (!istream || !istream->is_open()) {
+  vidl2_dc1394_istream* i_stream = new vidl2_dc1394_istream();
+  i_stream->open(dev_file, num_dma_buffers, drop_frames, params);
+  if (!i_stream || !i_stream->is_open()) {
     vgui_error_dialog("Failed to open the input stream");
-    delete istream;
+    delete i_stream;
     return NULL;
   }
-  return istream;
+  return i_stream;
 
 
 #else // HAS_DC1394
