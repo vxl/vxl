@@ -37,7 +37,7 @@ vidl2_ostream* vidl2_gui_open_ostream_dialog();
 
 
 //: struct with static members used as a namespace replacement
-// change to a namespace when they are allowed in VXL
+// Change to a namespace when they are allowed in VXL
 struct vidl2_gui_param_dialog
 {
   //: Use vgui dialogs to open an image list istream
