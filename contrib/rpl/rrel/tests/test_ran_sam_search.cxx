@@ -7,6 +7,7 @@
 
 #include <rrel/rrel_linear_regression.h>
 #include <rrel/rrel_lms_obj.h>
+#include <rrel/rrel_trunc_quad_obj.h>
 #include <rrel/rrel_ran_sam_search.h>
 
 #include "similarity_from_matches.h"
@@ -37,6 +38,44 @@ struct null_problem : public rrel_estimation_problem
                           vcl_vector<double>& /*residuals*/ ) const { }
   unsigned int ns;
 };
+
+
+static void test_ran_sam_residuals()
+{
+  // Make sure that the residuals returned correspond to the best
+  // parameter estimate. Use a location estimate to test.
+
+  vcl_vector< vnl_vector<double> > pts;
+
+  vnl_vector<double> mn(1);
+  mn(0) = 0;
+  pts.push_back( mn+0.1 );
+  pts.push_back( mn-0.1 );
+  pts.push_back( mn+0.0 );
+  pts.push_back( mn+10 ); // outlier
+
+  rrel_trunc_quad_obj obj_fcn( 2 );
+
+  rrel_linear_regression est_prob( pts, /*use_intercept=*/ true );
+  est_prob.set_prior_scale( 1 );
+
+  rrel_ran_sam_search search( 1 ); // use deterministic seed
+
+  bool success = search.estimate( &est_prob, &obj_fcn );
+  TEST( "Found estimate", success, true );
+  TEST_NEAR( "Accurate estimate", search.params()[0], 0, 0.005 );
+  if( success ) {
+    vcl_vector<int> const& idx = search.index();
+    assert( idx.size() == 1 );
+    vcl_cout << "used sample = " << idx[0] << "\n";
+    TEST( "Used correct sample", idx[0], 2 );
+
+    vcl_vector<double> const& res = search.residuals();
+    assert( res.size() == 4 );
+    vcl_cout << "residuals = " << res[0] << "," << res[1] << "," << res[2] << "," << res[3] << "\n";
+    TEST( "Residuals", res[0] == 0.1 && res[1] == -0.1 && res[2] == 0.0 && res[3] == 10, true );
+  }
+}
 
 
 static void test_ran_sam_search()
@@ -211,6 +250,8 @@ static void test_ran_sam_search()
   delete ransam;
   delete lms;
   delete match_prob;
+
+  test_ran_sam_residuals();
 }
 
 TESTMAIN(test_ran_sam_search);

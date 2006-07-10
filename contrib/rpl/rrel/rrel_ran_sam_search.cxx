@@ -146,9 +146,9 @@ rrel_ran_sam_search::estimate( const rrel_estimation_problem * problem,
         obj_set = true;
         min_obj_ = new_obj;
         params_ = new_params;
+        indices_ = point_indices;
+        residuals_ = residuals;
       }
-      indices_ = point_indices;
-      residuals_ = residuals;
     }
     else if (trace_level_ >= 1)
       vcl_cout << "No fit to sample.\n";
