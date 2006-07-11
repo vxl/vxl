@@ -328,21 +328,21 @@
       DOUBLE PRECISION   ZERO,           ONE
       PARAMETER        ( ZERO = 0.0D+0,  ONE = 1.0D+0 )
 
-      CHARACTER*16       ENTER, EXIT
-      CHARACTER*60       MSG(0:7)
+C      CHARACTER*16       ENTER, EXIT
+C      CHARACTER*60       MSG(0:7)
 
-      DATA               ENTER /' Enter LSQR.    '/,
-     $                   EXIT  /' Exit  LSQR.    '/
+C      DATA               ENTER /' Enter LSQR.    '/,
+C     $                   EXIT  /' Exit  LSQR.    '/
 
-      DATA               MSG
-     $ / 'The exact solution is  X = 0',
-     $   'Ax - b is small enough, given ATOL, BTOL',
-     $   'The least-squares solution is good enough, given ATOL',
-     $   'The estimate of cond(Abar) has exceeded CONLIM',
-     $   'Ax - b is small enough for this machine',
-     $   'The least-squares solution is good enough for this machine',
-     $   'Cond(Abar) seems to be too large for this machine',
-     $   'The iteration limit has been reached' /
+C      DATA               MSG
+C     $ / 'The exact solution is  X = 0',
+C     $   'Ax - b is small enough, given ATOL, BTOL',
+C     $   'The least-squares solution is good enough, given ATOL',
+C     $   'The estimate of cond(Abar) has exceeded CONLIM',
+C     $   'Ax - b is small enough for this machine',
+C     $   'The least-squares solution is good enough for this machine',
+C     $   'Cond(Abar) seems to be too large for this machine',
+C     $   'The iteration limit has been reached' /
 *-----------------------------------------------------------------------
 
 
