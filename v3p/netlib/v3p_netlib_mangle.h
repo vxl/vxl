@@ -103,6 +103,7 @@ nm libv3p_netlib.a |grep " [TR] "
 #define lmpar_ v3p_netlib_lmpar_
 #define lsame_ v3p_netlib_lsame_
 #define lse_ v3p_netlib_lse_
+#define lsqr_ v3p_netlib_lsqr_
 #define mcsrch_ v3p_netlib_mcsrch_
 #define mcstep_ v3p_netlib_mcstep_
 #define pythag_ v3p_netlib_pythag_

@@ -145,3 +145,4 @@
 #include "minpack/qrfac.h"
 #include "minpack/qrsolv.h"
 #include "opt/lbfgs.h"
+#include "linalg/lsqr.h"

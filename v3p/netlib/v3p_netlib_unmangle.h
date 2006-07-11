@@ -94,6 +94,7 @@
 #undef lmpar_
 #undef lsame_
 #undef lse_
+#undef lsqr_
 #undef mcsrch_
 #undef mcstep_
 #undef pythag_

@@ -468,6 +468,9 @@ SET(V3P_NETLIB_minpack_SOURCES
 SET(V3P_NETLIB_opt_SOURCES
   opt/lbfgs.c opt/lbfgs.h
   )
+SET(V3P_NETLIB_linalg_SOURCES
+  linalg/lsqr.c linalg/lsqr.h
+  )
 
 # Adjust the compiler flags to avoid problems with f2c-generated code.
 IF(CMAKE_COMPILER_IS_GNUCC)
@@ -503,6 +506,7 @@ ADD_LIBRARY(v3p_netlib
   ${V3P_NETLIB_napack_SOURCES}
   ${V3P_NETLIB_minpack_SOURCES}
   ${V3P_NETLIB_opt_SOURCES}
+  ${V3P_NETLIB_linalg_SOURCES}
   ${V3P_NETLIB_header_sources}
   )
 IF(UNIX)
