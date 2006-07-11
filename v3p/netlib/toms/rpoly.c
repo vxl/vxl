@@ -117,7 +117,7 @@ static doublereal c_b41 = 1.;
     base = (float)8.;
 /*<       ETA = .5*BASE**(1-26) >*/
 /* Computing 25th power */
-    r__1 = 1 / base, r__2 = r__1, r__1 *= r__1, r__1 *= r__1, r__1 *= r__1, 
+    r__1 = 1 / base, r__2 = r__1, r__1 *= r__1, r__1 *= r__1, r__1 *= r__1,
 	    r__2 *= r__1;
     global_1.eta = r__2 * (r__1 * r__1) * (float).5;
 /*<       INFIN = 4.3E68 >*/
@@ -364,7 +364,7 @@ L160:
 /*<   180 BND = X >*/
 L180:
     bnd = x;
-/* COMPUTE THE DERIVATIVE AS THE INTIAL K POLYNOMIAL */
+/* COMPUTE THE DERIVATIVE AS THE INITIAL K POLYNOMIAL */
 /* AND DO 5 STEPS WITH NO SHIFT */
 /*<       NM1 = N - 1 >*/
     nm1 = global_1.n - 1;
@@ -410,7 +410,7 @@ L180:
 /*<         K(1) = P(1) >*/
 	global_1.k[0] = global_1.p[0];
 /*<         ZEROK = DABS(K(N)).LE.DABS(BB)*ETA*10. >*/
-	zerok = (d__1 = global_1.k[global_1.n - 1], abs(d__1)) <= abs(bb) * 
+	zerok = (d__1 = global_1.k[global_1.n - 1], abs(d__1)) <= abs(bb) *
 		global_1.eta * (float)10.;
 /*<         GO TO 230 >*/
 	goto L230;
@@ -550,10 +550,10 @@ L260:
     logical spass;
     extern /* Subroutine */ int nextk_(integer *);
     logical vpass;
-    extern /* Subroutine */ int calcsc_(integer *), realit_(doublereal *, 
-	    integer *, integer *), quadsd_(integer *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *), quadit_(doublereal *, doublereal *, integer *), 
+    extern /* Subroutine */ int calcsc_(integer *), realit_(doublereal *,
+	    integer *, integer *), quadsd_(integer *, doublereal *,
+	    doublereal *, doublereal *, doublereal *, doublereal *,
+	    doublereal *), quadit_(doublereal *, doublereal *, integer *),
 	    newest_(integer *, doublereal *, doublereal *);
 
 /* COMPUTES UP TO  L2  FIXED SHIFT K-POLYNOMIALS, */
@@ -748,7 +748,7 @@ L50:
 /* RECOMPUTE QP AND SCALAR VALUES TO CONTINUE THE */
 /* SECOND STAGE */
 /*<         CALL QUADSD(NN, U, V, P, QP, A, B) >*/
-	quadsd_(&global_1.nn, &global_1.u, &global_1.v, global_1.p, 
+	quadsd_(&global_1.nn, &global_1.u, &global_1.v, global_1.p,
 		global_1.qp, &global_1.a, &global_1.b);
 /*<         CALL CALCSC(TYPE) >*/
 	calcsc_(&type__);
@@ -789,9 +789,9 @@ L70:
 	    , doublereal *, doublereal *, doublereal *, doublereal *);
     integer type__;
     logical tried;
-    extern /* Subroutine */ int nextk_(integer *), calcsc_(integer *), 
-	    quadsd_(integer *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *), newest_(integer *, 
+    extern /* Subroutine */ int nextk_(integer *), calcsc_(integer *),
+	    quadsd_(integer *, doublereal *, doublereal *, doublereal *,
+	    doublereal *, doublereal *, doublereal *), newest_(integer *,
 	    doublereal *, doublereal *);
     real relstp;
 
@@ -836,7 +836,7 @@ L10:
     quadsd_(&global_1.nn, &global_1.u, &global_1.v, global_1.p, global_1.qp, &
 	    global_1.a, &global_1.b);
 /*<       MP = DABS(A-SZR*B) + DABS(SZI*B) >*/
-    mp = (d__1 = global_1.a - global_1.szr * global_1.b, abs(d__1)) + (d__2 = 
+    mp = (d__1 = global_1.a - global_1.szr * global_1.b, abs(d__1)) + (d__2 =
 	    global_1.szi * global_1.b, abs(d__2));
 /* COMPUTE A RIGOROUS  BOUND ON THE ROUNDING ERROR IN */
 /* EVALUTING P */
@@ -859,7 +859,7 @@ L10:
 /*<    >*/
     ee = (global_1.mre * (float)5. + global_1.are * (float)4.) * ee - (
 	    global_1.mre * (float)5. + global_1.are * (float)2.) * ((r__2 = (
-	    real) global_1.a + t, dabs(r__2)) + (r__1 = (real) global_1.b, 
+	    real) global_1.a + t, dabs(r__2)) + (r__1 = (real) global_1.b,
 	    dabs(r__1)) * zm) + global_1.are * (float)2. * dabs(t);
 /* ITERATION HAS CONVERGED SUFFICIENTLY IF THE */
 /* POLYNOMIAL VALUE IS LESS THAN 20 TIMES THIS BOUND */
@@ -1007,7 +1007,7 @@ L10:
 /*<       MS = DABS(S) >*/
     ms = abs(s);
 /*<       EE = (MRE/(ARE+MRE))*ABS(SNGL(QP(1))) >*/
-    ee = global_1.mre / (global_1.are + global_1.mre) * (r__1 = (real) 
+    ee = global_1.mre / (global_1.are + global_1.mre) * (r__1 = (real)
 	    global_1.qp[0], dabs(r__1));
 /*<       DO 30 I=2,NN >*/
     i__1 = global_1.nn;
@@ -1124,7 +1124,7 @@ L100:
 /*<       T = 0.D0 >*/
     t = 0.;
 /*<       IF (DABS(KV).GT.DABS(K(N))*10.*ETA) T = -PV/KV >*/
-    if (abs(kv) > (d__1 = global_1.k[global_1.n - 1], abs(d__1)) * (float)10. 
+    if (abs(kv) > (d__1 = global_1.k[global_1.n - 1], abs(d__1)) * (float)10.
 	    * global_1.eta) {
 	t = -pv / kv;
     }
@@ -1214,12 +1214,12 @@ L20:
 /*<       H = V*B >*/
     global_1.h__ = global_1.v * global_1.b;
 /*<       A3 = A*E + (H/C+G)*B >*/
-    global_1.a3 = global_1.a * global_1.e + (global_1.h__ / global_1.c__ + 
+    global_1.a3 = global_1.a * global_1.e + (global_1.h__ / global_1.c__ +
 	    global_1.g) * global_1.b;
 /*<       A1 = B - A*(D/C) >*/
     global_1.a1 = global_1.b - global_1.a * (global_1.d__ / global_1.c__);
 /*<       A7 = A + G*D + H*F >*/
-    global_1.a7 = global_1.a + global_1.g * global_1.d__ + global_1.h__ * 
+    global_1.a7 = global_1.a + global_1.g * global_1.d__ + global_1.h__ *
 	    global_1.f;
 /*<       RETURN >*/
     return 0;
@@ -1268,7 +1268,7 @@ L20:
     i__1 = global_1.n;
     for (i__ = 3; i__ <= i__1; ++i__) {
 /*<         K(I) = A3*QK(I-2) - A7*QP(I-1) >*/
-	global_1.k[i__ - 1] = global_1.a3 * global_1.qk[i__ - 3] - 
+	global_1.k[i__ - 1] = global_1.a3 * global_1.qk[i__ - 3] -
 		global_1.a7 * global_1.qp[i__ - 2];
 /*<    10 CONTINUE >*/
 /* L10: */
@@ -1289,7 +1289,7 @@ L20:
     i__1 = global_1.n;
     for (i__ = 3; i__ <= i__1; ++i__) {
 /*<         K(I) = A3*QK(I-2) - A7*QP(I-1) + QP(I) >*/
-	global_1.k[i__ - 1] = global_1.a3 * global_1.qk[i__ - 3] - 
+	global_1.k[i__ - 1] = global_1.a3 * global_1.qk[i__ - 3] -
 		global_1.a7 * global_1.qp[i__ - 2] + global_1.qp[i__ - 1];
 /*<    30 CONTINUE >*/
 /* L30: */
@@ -1353,7 +1353,7 @@ L10:
 L20:
     b1 = -global_1.k[global_1.n - 1] / global_1.p[global_1.nn - 1];
 /*<       B2 = -(K(N-1)+B1*P(N))/P(NN) >*/
-    b2 = -(global_1.k[global_1.n - 2] + b1 * global_1.p[global_1.n - 1]) / 
+    b2 = -(global_1.k[global_1.n - 2] + b1 * global_1.p[global_1.n - 1]) /
 	    global_1.p[global_1.nn - 1];
 /*<       C1 = V*B2*A1 >*/
     c1 = global_1.v * b2 * global_1.a1;
@@ -1370,7 +1370,7 @@ L20:
 	goto L30;
     }
 /*<       UU = U - (U*(C3+C2)+V*(B1*A1+B2*A7))/TEMP >*/
-    *uu = global_1.u - (global_1.u * (c3 + c2) + global_1.v * (b1 * 
+    *uu = global_1.u - (global_1.u * (c3 + c2) + global_1.v * (b1 *
 	    global_1.a1 + b2 * global_1.a7)) / temp;
 /*<       VV = V*(1.+C4/TEMP) >*/
     *vv = global_1.v * (c4 / temp + (float)1.);
@@ -1388,7 +1388,7 @@ L30:
 } /* newest_ */
 
 /*<       SUBROUTINE QUADSD(NN, U, V, P, Q, A, B)                            >*/
-/* Subroutine */ int quadsd_(integer *nn, doublereal *u, doublereal *v, 
+/* Subroutine */ int quadsd_(integer *nn, doublereal *u, doublereal *v,
 	doublereal *p, doublereal *q, doublereal *a, doublereal *b)
 {
     /* System generated locals */
@@ -1435,7 +1435,7 @@ L30:
 } /* quadsd_ */
 
 /*<       SUBROUTINE QUAD(A, B1, C, SR, SI, LR, LI)                          >*/
-/* Subroutine */ int quad_(doublereal *a, doublereal *b1, doublereal *c__, 
+/* Subroutine */ int quad_(doublereal *a, doublereal *b1, doublereal *c__,
 	doublereal *sr, doublereal *si, doublereal *lr, doublereal *li)
 {
     /* System generated locals */
