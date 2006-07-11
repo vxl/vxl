@@ -218,7 +218,7 @@ L50:
     d__ = -g;
 /*< 70    FA = FV(A,X,H,N,VALUE) >*/
 L70:
-    fa = fv_(&a, &x[1], &h__[h_offset], n, (D_fp)value);
+    fa = fv_(&a, &x[1], &h__[h_offset], n, value);
 /*<       C0 = A >*/
     c0 = a;
 /*<       F0 = FA >*/
@@ -295,7 +295,7 @@ L100:
 /*<       Q = A3*Q >*/
     q = a3 * q;
 /*<       P = FV(Q,X,H,N,VALUE) >*/
-    p = fv_(&q, &x[1], &h__[h_offset], n, (D_fp)value);
+    p = fv_(&q, &x[1], &h__[h_offset], n, value);
 /*<       CALL INS(Q,P,A,B,C,FA,FB,FC,J,Y,Z) >*/
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       IF ( P-F .LT. W*Q ) GOTO 100 >*/
@@ -312,7 +312,7 @@ L110:
 	q = c0 * (float).01;
     }
 /*<       P = FV(Q,X,H,N,VALUE) >*/
-    p = fv_(&q, &x[1], &h__[h_offset], n, (D_fp)value);
+    p = fv_(&q, &x[1], &h__[h_offset], n, value);
 /*<       IF ( P .LE. F0 ) GOTO 120 >*/
     if (p <= f0) {
 	goto L120;
@@ -367,7 +367,7 @@ L150:
 /*<       Q = A4*Q >*/
     q = a4 * q;
 /*<       P = FV(Q,X,H,N,VALUE) >*/
-    p = fv_(&q, &x[1], &h__[h_offset], n, (D_fp)value);
+    p = fv_(&q, &x[1], &h__[h_offset], n, value);
 /*<       CALL INS(Q,P,A,B,C,FA,FB,FC,J,Y,Z) >*/
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       IF ( P-F .GE. V*Q ) GOTO 150 >*/
@@ -409,7 +409,7 @@ L170:
 	goto L320;
     }
 /*<       P = FV(Q,X,H,N,VALUE) >*/
-    p = fv_(&q, &x[1], &h__[h_offset], n, (D_fp)value);
+    p = fv_(&q, &x[1], &h__[h_offset], n, value);
 /*<       CALL INS(Q,P,A,B,C,FA,FB,FC,J,Y,Z) >*/
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       NA = NA + 1 >*/
@@ -433,7 +433,7 @@ L190:
 /*<       Q = A4*Q >*/
     q = a4 * q;
 /*<       P = FV(Q,X,H,N,VALUE) >*/
-    p = fv_(&q, &x[1], &h__[h_offset], n, (D_fp)value);
+    p = fv_(&q, &x[1], &h__[h_offset], n, value);
 /*<       CALL INS(Q,P,A,B,C,FA,FB,FC,J,Y,Z) >*/
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       IF ( P-F .GE. V*Q ) GOTO 190 >*/
@@ -472,7 +472,7 @@ L220:
 /*<       Q = A3*Q >*/
     q = a3 * q;
 /*<       P = FV(Q,X,H,N,VALUE) >*/
-    p = fv_(&q, &x[1], &h__[h_offset], n, (D_fp)value);
+    p = fv_(&q, &x[1], &h__[h_offset], n, value);
 /*<       CALL INS(Q,P,A,B,C,FA,FB,FC,J,Y,Z) >*/
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       IF ( P-F .LT. W*Q ) GOTO 220 >*/
@@ -504,7 +504,7 @@ L240:
 /*<       ND = ND + 1 >*/
     ++nd;
 /*<       P = FV(Q,X,H,N,VALUE) >*/
-    p = fv_(&q, &x[1], &h__[h_offset], n, (D_fp)value);
+    p = fv_(&q, &x[1], &h__[h_offset], n, value);
 /*<       CALL INS(Q,P,A,B,C,FA,FB,FC,J,Y,Z) >*/
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       IF ( P-F .LT. W*Q ) GOTO 240 >*/
@@ -553,7 +553,7 @@ L260:
 /*<       Q = A - .5*Q/E >*/
     q = a - q * (float).5 / *e;
 /*<       P = FV(Q,X,H,N,VALUE) >*/
-    p = fv_(&q, &x[1], &h__[h_offset], n, (D_fp)value);
+    p = fv_(&q, &x[1], &h__[h_offset], n, value);
 /*<       CALL INS(Q,P,A,B,C,FA,FB,FC,J,Y,Z) >*/
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       GOTO 320 >*/
@@ -592,7 +592,7 @@ L270:
 	goto L320;
     }
 /*<       P = FV(Q,X,H,N,VALUE) >*/
-    p = fv_(&q, &x[1], &h__[h_offset], n, (D_fp)value);
+    p = fv_(&q, &x[1], &h__[h_offset], n, value);
 /*<       CALL INS(Q,P,A,B,C,FA,FB,FC,J,Y,Z) >*/
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       GOTO 320 >*/
@@ -611,7 +611,7 @@ L280:
 /*<       Q = .5*D/Q >*/
     q = d__ * (float).5 / q;
 /*<       P = FV(Q,X,H,N,VALUE) >*/
-    p = fv_(&q, &x[1], &h__[h_offset], n, (D_fp)value);
+    p = fv_(&q, &x[1], &h__[h_offset], n, value);
 /*<       CALL INS(Q,P,A,B,C,FA,FB,FC,J,Y,Z) >*/
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       GOTO 320 >*/
@@ -638,7 +638,7 @@ L310:
 /*<       Q = A3*Q >*/
     q = a3 * q;
 /*<       P = FV(Q,X,H,N,VALUE) >*/
-    p = fv_(&q, &x[1], &h__[h_offset], n, (D_fp)value);
+    p = fv_(&q, &x[1], &h__[h_offset], n, value);
 /*<       CALL INS(Q,P,A,B,C,FA,FB,FC,J,Y,Z) >*/
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       IF ( P-F .LT. W*Q ) GOTO 310 >*/
@@ -699,7 +699,7 @@ L340:
 /*<       Q = A3*Q >*/
     q = a3 * q;
 /*<       P = FV(Q,X,H,N,VALUE) >*/
-    p = fv_(&q, &x[1], &h__[h_offset], n, (D_fp)value);
+    p = fv_(&q, &x[1], &h__[h_offset], n, value);
 /*<       F1 = FA >*/
     f1 = fa;
 /*<       CALL INS(Q,P,A,B,C,FA,FB,FC,J,Y,Z) >*/
@@ -768,7 +768,7 @@ L390:
 	goto L320;
     }
 /*<       P = FV(S,X,H,N,VALUE) >*/
-    p = fv_(&s, &x[1], &h__[h_offset], n, (D_fp)value);
+    p = fv_(&s, &x[1], &h__[h_offset], n, value);
 /*<       F1 = FA >*/
     f1 = fa;
 /*<       CALL INS(S,P,A,B,C,FA,FB,FC,J,Y,Z) >*/
@@ -1070,7 +1070,7 @@ L640:
 /*<       Q = A3*Q >*/
     q = a3 * q;
 /*<       P = FV(Q,X,H,N,VALUE) >*/
-    p = fv_(&q, &x[1], &h__[h_offset], n, (D_fp)value);
+    p = fv_(&q, &x[1], &h__[h_offset], n, value);
 /*<       CALL INS(Q,P,A,B,C,FA,FB,FC,J,Y,Z) >*/
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       IF ( P-F .GT. V*Q ) GOTO 640 >*/
