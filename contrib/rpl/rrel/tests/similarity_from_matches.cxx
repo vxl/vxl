@@ -40,7 +40,7 @@ similarity_from_matches::fit_from_minimal_set( const vcl_vector<int>& match_indi
        (matches_[match_indices[0]].to_loc_ - matches_[match_indices[1]].to_loc_).squared_magnitude()
        < 1.0e-6 )
   {
-    vcl_cout << "identical from points or to points: returning false\n";
+    vcl_cerr << "identical from points or to points: returning false\n";
     return false;
   }
 
