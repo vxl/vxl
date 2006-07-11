@@ -22,7 +22,17 @@ static integer c__2 = 2;
 
 /* From arpa!sol-michael.stanford.edu!mike 5 May 89 23:53:00 PDT */
 /*<    >*/
-/* Subroutine */ int lsqr_(integer *m, integer *n, S_fp aprod, doublereal *
+/* Subroutine */ int lsqr_(integer *m, integer *n,
+        void (*aprod)(v3p_netlib_integer*,
+                      v3p_netlib_integer*,
+                      v3p_netlib_integer*,
+                      v3p_netlib_doublereal*,
+                      v3p_netlib_doublereal*,
+                      v3p_netlib_integer*,
+                      v3p_netlib_integer*,
+                      v3p_netlib_integer*,
+                      v3p_netlib_doublereal*),
+        doublereal *
 	damp, integer *leniw, integer *lenrw, integer *iw, doublereal *rw, 
 	doublereal *u, doublereal *v, doublereal *w, doublereal *x, 
 	doublereal *se, doublereal *atol, doublereal *btol, doublereal *

@@ -1,7 +1,16 @@
+/*: Solves  A*x = b */
 extern int v3p_netlib_lsqr_(
   v3p_netlib_integer *m,
   v3p_netlib_integer *n,
-  S_fp aprod,
+  void (*aprod)(v3p_netlib_integer*,
+                v3p_netlib_integer*,
+                v3p_netlib_integer*,
+                v3p_netlib_doublereal*,
+                v3p_netlib_doublereal*,
+                v3p_netlib_integer*,
+                v3p_netlib_integer*,
+                v3p_netlib_integer*,
+                v3p_netlib_doublereal*),
   v3p_netlib_doublereal *damp,
   v3p_netlib_integer *leniw,
   v3p_netlib_integer *lenrw,
