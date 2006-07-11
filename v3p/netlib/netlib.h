@@ -74,19 +74,6 @@ float sqrtf(float);
   /*: Computes the double cumulative distribution function value for the chi-squared distribution */
   void dchscdf_(double* x, int* nu, double* cdf);
 
-  /*: Solves the unconstrained minimization problem min F(x1..xN) */
-  void lbfgs_(int* n, int* m, double* x, double* f, double* g,
-              logical * diagco, double* diag, int* iprint,
-              double* eps, double* xtol, double* w, int* iflag);
-
-  /*: Solves  A*x = b */
-  void lsqr_(int* m, int* n,
-             void (*aprod)(int*,int*,int*,double*,double*,int*,int*,int*,double*),
-             double* damp, int* leniw, int* lenrw,
-             int* iw, double* rw, double* u, double* v, double* w, double* x, double* se,
-             double* atol, double* btol, double* conlim, int* itnlim, int* nout, int* istop,
-             int* itn, double* anorm, double* acond, double* rnorm, double* arnorm, double* xnorm);
-
   /*: Finds the zeros of a real polynomial */
   void rpoly_(double* op, int* degree, double* zeror, double* zeroi, logical* fail);
 

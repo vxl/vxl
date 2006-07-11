@@ -82,9 +82,6 @@ SET( netlib_sources
   ztrsv.c
   zswap.c
 
-  # LINALG
-  lsqr.c
-
   # LINPACK
   isamax.c
   idamax.c
