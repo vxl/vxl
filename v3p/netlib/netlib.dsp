@@ -390,7 +390,7 @@ SOURCE=.\izmax1.c
 SOURCE=.\lsame.c
 # End Source File
 # Begin Source File
-SOURCE=.\lsqr.c
+SOURCE=.\linalg/lsqr.c
 # End Source File
 # Begin Source File
 SOURCE=.\machineparams.c
@@ -1666,6 +1666,9 @@ SOURCE=.\minpack/qrfac.h
 # End Source File
 # Begin Source File
 SOURCE=.\minpack/qrsolv.h
+# End Source File
+# Begin Source File
+SOURCE=.\linalg/lsqr.h
 # End Source File
 # Begin Source File
 SOURCE=.\opt/lbfgs.h
