@@ -57,7 +57,7 @@ static logical c_true = TRUE_;
     integer i__, j, l;
     doublereal par, sum;
     integer iter;
-    doublereal temp, temp1, temp2;
+    doublereal temp=0, temp1, temp2;
     integer iflag;
     doublereal delta;
     extern /* Subroutine */ int qrfac_(integer *, integer *, doublereal *, 
@@ -68,7 +68,7 @@ static logical c_true = TRUE_;
 	    doublereal *);
     doublereal ratio;
     extern doublereal enorm_(integer *, doublereal *);
-    doublereal fnorm, gnorm, pnorm, xnorm, fnorm1, actred, dirder, epsmch, 
+    doublereal fnorm, gnorm, pnorm, xnorm=0, fnorm1, actred, dirder, epsmch, 
 	    prered;
     extern doublereal dpmpar_(integer *);
 
