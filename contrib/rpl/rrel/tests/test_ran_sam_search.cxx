@@ -1,5 +1,6 @@
 // This is rpl/rrel/tests/test_ran_sam_search.cxx
 #include <vcl_iostream.h>
+#include <vcl_cassert.h>
 
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_4.h>
@@ -64,15 +65,15 @@ static void test_ran_sam_residuals()
   bool success = search.estimate( &est_prob, &obj_fcn );
   TEST( "Found estimate", success, true );
   TEST_NEAR( "Accurate estimate", search.params()[0], 0, 0.005 );
-  if( success ) {
+  if ( success ) {
     vcl_vector<int> const& idx = search.index();
     assert( idx.size() == 1 );
-    vcl_cout << "used sample = " << idx[0] << "\n";
+    vcl_cout << "used sample = " << idx[0] << '\n';
     TEST( "Used correct sample", idx[0], 2 );
 
     vcl_vector<double> const& res = search.residuals();
     assert( res.size() == 4 );
-    vcl_cout << "residuals = " << res[0] << "," << res[1] << "," << res[2] << "," << res[3] << "\n";
+    vcl_cout << "residuals = " << res[0] << ',' << res[1] << ',' << res[2] << ',' << res[3] << '\n';
     TEST( "Residuals", res[0] == 0.1 && res[1] == -0.1 && res[2] == 0.0 && res[3] == 10, true );
   }
 }
