@@ -88,9 +88,6 @@ SOURCES += ztrmv.c
 SOURCES += ztrsv.c
 SOURCES += zswap.c
 
-# LINALG
-SOURCES += lsqr.c
-
 # LINPACK
 SOURCES += isamax.c
 SOURCES += idamax.c
@@ -347,6 +344,8 @@ SOURCES += linpack/dpoco.c #
 SOURCES += linpack/dpodi.c
 SOURCES += linpack/dpofa.c
 SOURCES += linpack/dposl.c
+# LINALG
+SOURCES += linalg/lsqr.c
 # V3P_NETLIB_temperton_SOURCES
 SOURCES += temperton/dgpfa.c  # FFT
 SOURCES += temperton/dgpfa2f.c
