@@ -43,7 +43,7 @@ vnl_lsqr::~vnl_lsqr()
 }
 
 // Requires number_of_residuals() of workspace in rw.
-void vnl_lsqr::aprod_(int* mode, int* m, int* n, double* x, double* y, int* /*leniw*/, int* /*lenrw*/, int* /*iw*/, double* rw )
+int vnl_lsqr::aprod_(long* mode, long* m, long* n, double* x, double* y, long* /*leniw*/, long* /*lenrw*/, long* /*iw*/, double* rw )
 {
   vnl_lsqr* active = vnl_lsqr_Activate::current;
 
@@ -63,16 +63,18 @@ void vnl_lsqr::aprod_(int* mode, int* m, int* n, double* x, double* y, int* /*le
     active->ls_->transpose_multiply(y_ref, tmp);
     x_ref += tmp;
   }
+
+  return 0;
 }
 
 int vnl_lsqr::minimize(vnl_vector<double>& result)
 {
-  int m = ls_->get_number_of_residuals();
-  int n = ls_->get_number_of_unknowns();
+  long m = ls_->get_number_of_residuals();
+  long n = ls_->get_number_of_unknowns();
   double damp = 0;
-  int leniw = 1;
-  int* iw = 0;
-  int lenrw = m;
+  long leniw = 1;
+  long* iw = 0;
+  long lenrw = m;
 #ifdef __GNUC__
   double rw[m];
   double v[n];
@@ -87,7 +89,7 @@ int vnl_lsqr::minimize(vnl_vector<double>& result)
   double atol = 0;
   double btol = 0;
   double conlim = 0;
-  int nout = -1;
+  long nout = -1;
   double anorm, acond, rnorm, arnorm, xnorm;
 
   vnl_vector<double> rhs(m);
@@ -95,7 +97,8 @@ int vnl_lsqr::minimize(vnl_vector<double>& result)
 
   vnl_lsqr_Activate activator(this); // This variable is not used, but the constructor must be called.
 
-  lsqr_(&m, &n, aprod_, &damp, &leniw, &lenrw, iw, &rw[0],
+  v3p_netlib_lsqr_(
+        &m, &n, aprod_, &damp, &leniw, &lenrw, iw, &rw[0],
         rhs.data_block(), &v[0], &w[0], result.data_block(), &se[0],
         &atol, &btol, &conlim, &max_iter_, &nout, &return_code_,
         &num_iter_, &anorm, &acond, &rnorm, &arnorm, &xnorm);
