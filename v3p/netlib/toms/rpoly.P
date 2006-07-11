@@ -1,0 +1,10 @@
+extern int rpoly_(doublereal *op, integer *degree, doublereal *zeror, doublereal *zeroi, logical *fail);
+extern int fxshfr_(integer *l2, integer *nz);
+extern int quadit_(doublereal *uu, doublereal *vv, integer *nz);
+extern int realit_(doublereal *sss, integer *nz, integer *iflag);
+extern int calcsc_(integer *type__);
+extern int nextk_(integer *type__);
+extern int newest_(integer *type__, doublereal *uu, doublereal *vv);
+extern int quadsd_(integer *nn, doublereal *u, doublereal *v, doublereal *p, doublereal *q, doublereal *a, doublereal *b);
+extern int quad_(doublereal *a, doublereal *b1, doublereal *c__, doublereal *sr, doublereal *si, doublereal *lr, doublereal *li);
+/* comlen global_ 4228 */
