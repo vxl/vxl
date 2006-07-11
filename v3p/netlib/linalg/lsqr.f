@@ -544,6 +544,7 @@ C      END IF
 
 *     Print a line for this iteration.
 
+  400 IF (1 .EQ. 1) GO TO 600
 C  400 WRITE(NOUT, 1500) ITN, X(1), RNORM, TEST1, TEST2, ANORM, ACOND
 C      IF (MOD(ITN,10) .EQ. 0) WRITE(NOUT, 1600)
 *     ==================================================================
@@ -577,6 +578,7 @@ C      IF (MOD(ITN,10) .EQ. 0) WRITE(NOUT, 1600)
 
 *     Print the stopping condition.
 
+  800 IF (1 .EQ. 1) GO TO 900
 C  800 IF (NOUT .GT. 0) THEN
 C         WRITE(NOUT, 2000) EXIT, ISTOP, ITN,
 C     $                     EXIT, ANORM, ACOND,
