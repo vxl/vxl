@@ -1,3 +1,5 @@
+typedef struct v3p_netlib_lbfgs_global_s v3p_netlib_lbfgs_global_t;
+
 /*: Solves the unconstrained minimization problem min F(x1..xN) */
 extern int v3p_netlib_lbfgs_(
   v3p_netlib_integer *n,
@@ -11,7 +13,8 @@ extern int v3p_netlib_lbfgs_(
   v3p_netlib_doublereal *eps,
   v3p_netlib_doublereal *xtol,
   v3p_netlib_doublereal *w,
-  v3p_netlib_integer *iflag
+  v3p_netlib_integer *iflag,
+  v3p_netlib_lbfgs_global_t* v3p_netlib_lbfgs_global_arg
   );
 extern int v3p_netlib_lb1_(
   v3p_netlib_integer *iprint,
@@ -38,7 +41,8 @@ extern int v3p_netlib_mcsrch_(
   v3p_netlib_integer *maxfev,
   v3p_netlib_integer *info,
   v3p_netlib_integer *nfev,
-  v3p_netlib_doublereal *wa
+  v3p_netlib_doublereal *wa,
+  v3p_netlib_lbfgs_global_t* v3p_netlib_lbfgs_global_arg
   );
 extern int v3p_netlib_mcstep_(
   v3p_netlib_doublereal *stx,
@@ -54,6 +58,9 @@ extern int v3p_netlib_mcstep_(
   v3p_netlib_doublereal *stpmin,
   v3p_netlib_doublereal *stpmax,
   v3p_netlib_integer *info
+  );
+extern void v3p_netlib_lbfgs_init(
+  v3p_netlib_lbfgs_global_t* v3p_netlib_lbfgs_global_arg
   );
 
 /*
@@ -78,4 +85,3 @@ struct v3p_netlib_lbfgs_global_s
   v3p_netlib_doublereal gtol, stpmin, stpmax;
   v3p_netlib_doublereal stpinit; /* line search default step length, added by awf */
 };
-extern struct v3p_netlib_lbfgs_global_s v3p_netlib_lbfgs_global;

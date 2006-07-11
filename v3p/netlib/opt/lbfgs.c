@@ -24,11 +24,18 @@ extern "C" {
 #define min(a,b) ((a) <= (b) ? (a) : (b))
 #define max(a,b) ((a) >= (b) ? (a) : (b))
 
-/* Initialized data */
-
-#define lb3_1 v3p_netlib_lbfgs_global
-struct v3p_netlib_lbfgs_global_s v3p_netlib_lbfgs_global =
-{ 6, 6, .9, 1e-20, 1e20, 1.0 };
+/* Provide initialization function for global data argument.  */
+#define lb3_1 (*v3p_netlib_lbfgs_global_arg)
+void
+v3p_netlib_lbfgs_init(v3p_netlib_lbfgs_global_t* v3p_netlib_lbfgs_global_arg)
+{
+  lb3_1.mp = 6;
+  lb3_1.lp = 6;
+  lb3_1.gtol = 0.9;
+  lb3_1.stpmin = 1e-20;
+  lb3_1.stpmax = 1e20;
+  lb3_1.stpinit = 1; /* line search default step length, added by awf */
+}
 
 /* Table of constant values */
 
@@ -44,7 +51,8 @@ static integer c__1 = 1;
 /*<       SUBROUTINE LBFGS(N,M,X,F,G,DIAGCO,DIAG,IPRINT,EPS,XTOL,W,IFLAG) >*/
 /* Subroutine */ int lbfgs_(integer *n, integer *m, doublereal *x, doublereal 
 	*f, doublereal *g, logical *diagco, doublereal *diag, integer *iprint,
-	 doublereal *eps, doublereal *xtol, doublereal *w, integer *iflag)
+	 doublereal *eps, doublereal *xtol, doublereal *w, integer *iflag,
+         v3p_netlib_lbfgs_global_t* v3p_netlib_lbfgs_global_arg)
 {
     /* Initialized data */
 
@@ -79,7 +87,8 @@ static integer c__1 = 1;
     static doublereal xnorm;
     extern /* Subroutine */ int mcsrch_(integer *, doublereal *, doublereal *,
 	     doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, integer *, integer *, integer *, doublereal *);
+	    doublereal *, integer *, integer *, integer *, doublereal *,
+            v3p_netlib_lbfgs_global_t*);
     static logical finish;
     static integer maxfev;
 
@@ -588,7 +597,7 @@ L165:
 L172:
 /*<    >*/
     mcsrch_(n, &x[1], f, &g[1], &w[ispt + point * *n + 1], &stp, &ftol, xtol, 
-	    &maxfev, &info, &nfev, &diag[1]);
+	    &maxfev, &info, &nfev, &diag[1], v3p_netlib_lbfgs_global_arg);
 /*<       IF (INFO .EQ. -1) THEN >*/
     if (info == -1) {
 /*<         IFLAG=1 >*/
@@ -951,7 +960,8 @@ static void write50(double* v, int n)
 /* Subroutine */ int mcsrch_(integer *n, doublereal *x, doublereal *f, 
 	doublereal *g, doublereal *s, doublereal *stp, doublereal *ftol, 
 	doublereal *xtol, integer *maxfev, integer *info, integer *nfev, 
-	doublereal *wa)
+	doublereal *wa,
+        v3p_netlib_lbfgs_global_t* v3p_netlib_lbfgs_global_arg)
 {
     /* Initialized data */
 

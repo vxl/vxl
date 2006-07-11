@@ -38,6 +38,9 @@
     logical diagco;
     integer iprint[2];
 
+    v3p_netlib_lbfgs_global_t lbfgs_global;
+    v3p_netlib_lbfgs_init(&lbfgs_global);
+
 /*<       PARAMETER(NDIM=2000,MSAVE=7,NWORK=NDIM*(2*MSAVE +1)+2*MSAVE) >*/
 /*<       DOUBLE PRECISION X(NDIM),G(NDIM),DIAG(NDIM),W(NWORK) >*/
 /*<       DOUBLE PRECISION F,EPS,XTOL,GTOL,T1,T2,STPMIN,STPMAX >*/
@@ -110,7 +113,8 @@ L20:
     }
 /*<       CALL LBFGS(N,M,X,F,G,DIAGCO,DIAG,IPRINT,EPS,XTOL,W,IFLAG) >*/
     v3p_netlib_lbfgs_(
-      &n, &m, x, &f, g, &diagco, diag, iprint, &eps, &xtol, w, &iflag);
+      &n, &m, x, &f, g, &diagco, diag, iprint, &eps, &xtol, w, &iflag,
+      &lbfgs_global);
 /*<       IF(IFLAG.LE.0) GO TO 50 >*/
     if (iflag <= 0) {
 	goto L50;

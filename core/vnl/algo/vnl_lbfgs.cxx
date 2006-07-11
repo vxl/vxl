@@ -51,6 +51,12 @@ bool vnl_lbfgs::minimize(vnl_vector<double>& x)
   long n = f_->get_number_of_unknowns();
   long m = memory; // The number of basis vectors to remember.
 
+  // Create an instance of the lbfgs global data to pass as an
+  // argument.  It must persist through all calls in this
+  // minimization.
+  v3p_netlib_lbfgs_global_t lbfgs_global;
+  v3p_netlib_lbfgs_init(&lbfgs_global);
+
   long iprint[2] = {1, 0};
   vnl_vector<double> g(n);
 
@@ -83,8 +89,8 @@ bool vnl_lbfgs::minimize(vnl_vector<double>& x)
     // Set these every iter in case user changes them to bail out
     double eps = gtol; // Gradient tolerance
     double local_xtol = 1e-16;
-    v3p_netlib_lbfgs_global.gtol = line_search_accuracy; // set to 0.1 for huge problems or cheap functions
-    v3p_netlib_lbfgs_global.stpinit = default_step_length;
+    lbfgs_global.gtol = line_search_accuracy; // set to 0.1 for huge problems or cheap functions
+    lbfgs_global.stpinit = default_step_length;
 
     // Call function
     double f;
@@ -130,7 +136,7 @@ bool vnl_lbfgs::minimize(vnl_vector<double>& x)
     iprint[1] = 0; // 1 prints X and G
     v3p_netlib_lbfgs_(
       &n, &m, x.data_block(), &f, g.data_block(), &diagco, diag.data_block(),
-      iprint, &eps, &local_xtol, w.data_block(), &iflag);
+      iprint, &eps, &local_xtol, w.data_block(), &iflag, &lbfgs_global);
     ++this->num_iterations_;
 
     if (we_trace)
