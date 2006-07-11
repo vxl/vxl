@@ -6,7 +6,7 @@ IF(BUILD_TESTING)
   # test
   ADD_EXECUTABLE( netlib_lsqr_test lsqr-test.c )
   ADD_TEST( netlib_test_lsqr ${EXECUTABLE_OUTPUT_PATH}/netlib_lsqr_test )
-  TARGET_LINK_LIBRARIES(netlib_lsqr_test netlib)
+  TARGET_LINK_LIBRARIES(netlib_lsqr_test v3p_netlib)
   # test
   ADD_EXECUTABLE( netlib_slamch_test slamch-test.c )
   ADD_TEST( netlib_test_slamch ${EXECUTABLE_OUTPUT_PATH}/netlib_slamch_test )
