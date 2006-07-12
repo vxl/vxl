@@ -26,6 +26,8 @@
 // static data
 vgui_toolkit *vgui::instance_ = 0;
 bool vgui::init_called = false;
+bool vgui::quit_called = false;
+
 
 vcl_ostream vgui::out(vcl_cout.rdbuf());
 
@@ -252,6 +254,7 @@ vgui_dialog_impl *vgui::produce_dialog(vcl_string const &name)
 //: Quit application.
 void vgui::quit()
 {
+  quit_called = true;
   if (instance_)
     instance_->quit();
   else {
@@ -259,6 +262,13 @@ void vgui::quit()
     //exit(1);
   }
 }
+
+
+bool vgui::quit_was_called()
+{
+  return quit_called;
+}
+
 
 //----------------------------------------------------------------------------
 //: Run until quit is called.

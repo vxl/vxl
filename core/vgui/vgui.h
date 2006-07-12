@@ -62,6 +62,9 @@ class vgui
 
   //: True once init() has been called.
   static vgui_DLLDATA bool init_called;
+
+  //: True once quit() has been called.
+  static vgui_DLLDATA bool quit_called;
  public:
   //: Needed for statusbar.
   static vgui_DLLDATA vcl_ostream out;
@@ -145,6 +148,12 @@ class vgui
 
   //: Quit application.
   static void quit();
+
+  //: Was quit called eariler?
+  //
+  // This is to help application-driven vgui programs determine when
+  // the user has requested the GUI to close.
+  static bool quit_was_called();
 };
 
 
