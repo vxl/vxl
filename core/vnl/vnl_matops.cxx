@@ -56,8 +56,6 @@ vnl_matrix<double> vnl_matops::vcat(vnl_matrix<double> const &A, vnl_matrix<doub
   return M;
 }
 
-extern "C" int dtrans_(double *a, const int& m, const int& n, const int& mn, int* move, const int& iwrk, int* iok);
-
 //: Return fro_norm( (A ./ B) - mean(A ./ B) )
 double vnl_matops::homg_diff(vnl_matrix<double> const& A, vnl_matrix<double> const& B)
 {
