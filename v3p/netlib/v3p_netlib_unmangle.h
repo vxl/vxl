@@ -48,6 +48,7 @@
 #undef dlaran_
 #undef dmvpc_
 #undef dnlaso_
+#undef dnorcdf_
 #undef dnppla_
 #undef dnrm2_
 #undef dnwla_

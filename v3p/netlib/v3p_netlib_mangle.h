@@ -57,6 +57,7 @@ nm libv3p_netlib.a |grep " [TR] "
 #define dlaran_ v3p_netlib_dlaran_
 #define dmvpc_ v3p_netlib_dmvpc_
 #define dnlaso_ v3p_netlib_dnlaso_
+#define dnorcdf_ v3p_netlib_dnorcdf_
 #define dnppla_ v3p_netlib_dnppla_
 #define dnrm2_ v3p_netlib_dnrm2_
 #define dnwla_ v3p_netlib_dnwla_
