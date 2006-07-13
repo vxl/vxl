@@ -470,6 +470,9 @@ SET(V3P_NETLIB_linalg_SOURCES
 SET(V3P_NETLIB_toms_SOURCES
   toms/rpoly.c toms/rpoly.h
   )
+SET(V3P_NETLIB_datapac_SOURCES
+  datapac/dchscdf.c datapac/dchscdf.h
+  )
 
 # Adjust the compiler flags to avoid problems with f2c-generated code.
 IF(CMAKE_COMPILER_IS_GNUCC)
@@ -495,6 +498,7 @@ ENDIF(CMAKE_COMPILER_IS_GNUCC)
 
 # Create a netlib library with mangled symbols.
 ADD_LIBRARY(v3p_netlib
+  ${V3P_NETLIB_header_sources}
   ${V3P_NETLIB_libf2c_SOURCES}
   ${V3P_NETLIB_blas_SOURCES}
   ${V3P_NETLIB_linpack_SOURCES}
@@ -507,7 +511,7 @@ ADD_LIBRARY(v3p_netlib
   ${V3P_NETLIB_opt_SOURCES}
   ${V3P_NETLIB_linalg_SOURCES}
   ${V3P_NETLIB_toms_SOURCES}
-  ${V3P_NETLIB_header_sources}
+  ${V3P_NETLIB_datapac_SOURCES}
   )
 IF(UNIX)
   TARGET_LINK_LIBRARIES( v3p_netlib m )

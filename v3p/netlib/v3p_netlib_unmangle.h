@@ -23,6 +23,7 @@
 #undef dasum_
 #undef daxpy_
 #undef dcabs1_
+#undef dchscdf_
 #undef dcopy_
 #undef ddot_
 #undef dgpfa2f_

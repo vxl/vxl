@@ -32,6 +32,7 @@ nm libv3p_netlib.a |grep " [TR] "
 #define dasum_ v3p_netlib_dasum_
 #define daxpy_ v3p_netlib_daxpy_
 #define dcabs1_ v3p_netlib_dcabs1_
+#define dchscdf_ v3p_netlib_dchscdf_
 #define dcopy_ v3p_netlib_dcopy_
 #define ddot_ v3p_netlib_ddot_
 #define dgpfa2f_ v3p_netlib_dgpfa2f_
