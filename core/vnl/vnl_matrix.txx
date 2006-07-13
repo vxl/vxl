@@ -1437,9 +1437,9 @@ typename vnl_matrix<T>::abs_t vnl_matrix<T>::operator_inf_norm() const
 template <class doublereal>              // ideally, char* should be bool* - PVr
 int vnl_inplace_transpose(doublereal *a, unsigned m, unsigned n, char* move, unsigned iwrk)
 {
-  static doublereal b, c;
+  doublereal b, c;
   int k = m * n - 1;
-  static int iter, i1, i2, im, i1c, i2c, ncount, max_;
+  int iter, i1, i2, im, i1c, i2c, ncount, max_;
 
 // *****
 //  ALGORITHM 380 - REVISED
