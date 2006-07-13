@@ -101,7 +101,9 @@ static doublereal c_b34 = 1.;
     integer minwrk, maxwrk;
     doublereal smlnum;
     logical wantst, lquery;
-
+    (void)jobvsl_len;
+    (void)jobvsr_len;
+    (void)sort_len;
 
 /*  -- LAPACK driver routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -407,11 +409,11 @@ static doublereal c_b34 = 1.;
 /*<          INFO = -9 >*/
 	*info = -9;
 /*<       ELSE IF( LDVSL.LT.1 .OR. ( ILVSL .AND. LDVSL.LT.N ) ) THEN >*/
-    } else if (*ldvsl < 1 || ilvsl && *ldvsl < *n) {
+    } else if (*ldvsl < 1 || (ilvsl && *ldvsl) < *n) {
 /*<          INFO = -15 >*/
 	*info = -15;
 /*<       ELSE IF( LDVSR.LT.1 .OR. ( ILVSR .AND. LDVSR.LT.N ) ) THEN >*/
-    } else if (*ldvsr < 1 || ilvsr && *ldvsr < *n) {
+    } else if (*ldvsr < 1 || (ilvsr && *ldvsr) < *n) {
 /*<          INFO = -17 >*/
 	*info = -17;
 /*<       END IF >*/

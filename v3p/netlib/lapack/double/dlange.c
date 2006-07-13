@@ -37,7 +37,7 @@ doublereal dlange_(char *norm, integer *m, integer *n, doublereal *a, integer
     doublereal value;
     extern /* Subroutine */ int dlassq_(integer *, doublereal *, integer *, 
 	    doublereal *, doublereal *);
-
+    (void)norm_len;
 
 /*  -- LAPACK auxiliary routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */

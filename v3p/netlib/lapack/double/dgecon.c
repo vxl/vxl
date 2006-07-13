@@ -49,7 +49,7 @@ static integer c__1 = 1;
     logical onenrm;
     char normin[1];
     doublereal smlnum;
-
+    (void)norm_len;
 
 /*  -- LAPACK routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */

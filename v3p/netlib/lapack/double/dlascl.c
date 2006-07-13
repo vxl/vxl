@@ -35,7 +35,7 @@ extern "C" {
     doublereal cfromc;
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
     doublereal bignum, smlnum;
-
+    (void)type_len;
 
 /*  -- LAPACK auxiliary routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -193,7 +193,7 @@ extern "C" {
 /*<          INFO = -6 >*/
 	*info = -6;
 /*<    >*/
-    } else if (*n < 0 || itype == 4 && *n != *m || itype == 5 && *n != *m) {
+    } else if (*n < 0 || (itype == 4 && *n != *m) || (itype == 5 && *n != *m)) {
 /*<          INFO = -7 >*/
 	*info = -7;
 /*<       ELSE IF( ITYPE.LE.3 .AND. LDA.LT.MAX( 1, M ) ) THEN >*/
@@ -212,13 +212,13 @@ extern "C" {
 	} else /* if(complicated condition) */ {
 /* Computing MAX */
 	    i__1 = *n - 1;
-	    if (*ku < 0 || *ku > max(i__1,0) || (itype == 4 || itype == 5) && 
-		    *kl != *ku) {
+	    if (*ku < 0 || *ku > max(i__1,0) || ((itype == 4 || itype == 5) && 
+		    *kl != *ku)) {
 /*<             INFO = -3 >*/
 		*info = -3;
 /*<    >*/
-	    } else if (itype == 4 && *lda < *kl + 1 || itype == 5 && *lda < *
-		    ku + 1 || itype == 6 && *lda < (*kl << 1) + *ku + 1) {
+	    } else if ((itype == 4 && *lda < *kl + 1) || (itype == 5 && *lda < *
+		    ku + 1) || (itype == 6 && *lda < (*kl << 1) + *ku + 1)) {
 /*<             INFO = -9 >*/
 		*info = -9;
 /*<          END IF >*/

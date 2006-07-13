@@ -71,7 +71,7 @@ static doublereal c_b54 = 1.;
     logical notran;
     integer isolve;
     logical lquery;
-
+    (void)trans_len;
 
 /*  -- LAPACK routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -433,7 +433,7 @@ static doublereal c_b54 = 1.;
     }
 
 /*<    >*/
-    if (mb <= 1 && nb <= 1 || mb >= *m && nb >= *n) {
+    if ((mb <= 1 && nb <= 1) || (mb >= *m && nb >= *n)) {
 
 /*<          DO 30 IROUND = 1, ISOLVE >*/
 	i__1 = isolve;

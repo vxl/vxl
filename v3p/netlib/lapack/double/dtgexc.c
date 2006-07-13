@@ -226,11 +226,11 @@ static integer c__2 = 2;
 /*<          INFO = -7 >*/
 	*info = -7;
 /*<       ELSE IF( LDQ.LT.1 .OR. WANTQ .AND. ( LDQ.LT.MAX( 1, N ) ) ) THEN >*/
-    } else if (*ldq < 1 || *wantq && *ldq < max(1,*n)) {
+    } else if (*ldq < 1 || (*wantq && *ldq < max(1,*n))) {
 /*<          INFO = -9 >*/
 	*info = -9;
 /*<       ELSE IF( LDZ.LT.1 .OR. WANTZ .AND. ( LDZ.LT.MAX( 1, N ) ) ) THEN >*/
-    } else if (*ldz < 1 || *wantz && *ldz < max(1,*n)) {
+    } else if (*ldz < 1 || (*wantz && *ldz < max(1,*n))) {
 /*<          INFO = -11 >*/
 	*info = -11;
 /*<       ELSE IF( IFST.LT.1 .OR. IFST.GT.N ) THEN >*/

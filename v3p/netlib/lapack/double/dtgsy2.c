@@ -66,7 +66,7 @@ static integer c__0 = 0;
     doublereal scaloc;
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
     logical notran;
-
+    (void)trans_len;
 
 /*  -- LAPACK auxiliary routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */

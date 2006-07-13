@@ -43,7 +43,10 @@ static doublereal c_b25 = -1.;
 	    integer *, integer *, doublereal *, doublereal *, integer *, 
 	    doublereal *, integer *, ftnlen, ftnlen, ftnlen, ftnlen);
     char transt[1];
-
+    (void)side_len;
+    (void)trans_len;
+    (void)direct_len;
+    (void)storev_len;
 
 /*  -- LAPACK auxiliary routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */

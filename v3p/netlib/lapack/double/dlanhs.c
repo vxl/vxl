@@ -37,7 +37,7 @@ doublereal dlanhs_(char *norm, integer *n, doublereal *a, integer *lda,
     doublereal value;
     extern /* Subroutine */ int dlassq_(integer *, doublereal *, integer *, 
 	    doublereal *, doublereal *);
-
+    (void)norm_len;
 
 /*  -- LAPACK auxiliary routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */

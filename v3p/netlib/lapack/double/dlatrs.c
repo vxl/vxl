@@ -59,7 +59,10 @@ static doublereal c_b36 = .5;
     integer jfirst;
     doublereal smlnum;
     logical nounit;
-
+    (void)uplo_len;
+    (void)trans_len;
+    (void)diag_len;
+    (void)normin_len;
 
 /*  -- LAPACK auxiliary routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */

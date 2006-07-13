@@ -38,7 +38,8 @@ static doublereal c_b8 = 0.;
 	    doublereal *, doublereal *, integer *, ftnlen), dtrmv_(char *, 
 	    char *, char *, integer *, doublereal *, integer *, doublereal *, 
 	    integer *, ftnlen, ftnlen, ftnlen);
-
+    (void)direct_len;
+    (void)storev_len;
 
 /*  -- LAPACK auxiliary routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */

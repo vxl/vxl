@@ -504,15 +504,15 @@ static doublereal c_b44 = -1.;
 /*        for R and L. Solutions in LI and IR. */
 
 /*<          CALL DLACPY( 'Full', N1, N2, T( 1, N1+1 ), LDST, LI, LDST ) >*/
-	dlacpy_("Full", n1, n2, &t[(*n1 + 1 << 2) - 4], &c__4, li, &c__4, (
+	dlacpy_("Full", n1, n2, &t[((*n1 + 1) << 2) - 4], &c__4, li, &c__4, (
 		ftnlen)4);
 /*<    >*/
-	dlacpy_("Full", n1, n2, &s[(*n1 + 1 << 2) - 4], &c__4, &ir[*n2 + 1 + (
-		*n1 + 1 << 2) - 5], &c__4, (ftnlen)4);
+	dlacpy_("Full", n1, n2, &s[((*n1 + 1) << 2) - 4], &c__4, &ir[*n2 + 1 + (
+		(*n1 + 1) << 2) - 5], &c__4, (ftnlen)4);
 /*<    >*/
-	dtgsy2_("N", &c__0, n1, n2, s, &c__4, &s[*n1 + 1 + (*n1 + 1 << 2) - 5]
-		, &c__4, &ir[*n2 + 1 + (*n1 + 1 << 2) - 5], &c__4, t, &c__4, &
-		t[*n1 + 1 + (*n1 + 1 << 2) - 5], &c__4, li, &c__4, &scale, &
+	dtgsy2_("N", &c__0, n1, n2, s, &c__4, &s[(*n1 + 1) + ((*n1 + 1) << 2) - 5]
+		, &c__4, &ir[*n2 + 1 + ((*n1 + 1) << 2) - 5], &c__4, t, &c__4, &
+		t[(*n1 + 1) + ((*n1 + 1) << 2) - 5], &c__4, li, &c__4, &scale, &
 		dsum, &dscale, iwork, &idum, &linfo, (ftnlen)1);
 
 /*        Compute orthogonal matrix QL: */
@@ -703,7 +703,7 @@ static doublereal c_b44 = -1.;
 	for (i__ = 2; i__ <= i__1; ++i__) {
 /*<             CALL DCOPY( M-I+1, ZERO, 0, T( I, I-1 ), 1 ) >*/
 	    i__2 = m - i__ + 1;
-	    dcopy_(&i__2, &c_b3, &c__0, &t[i__ + (i__ - 1 << 2) - 5], &c__1);
+	    dcopy_(&i__2, &c_b3, &c__0, &t[i__ + ((i__ - 1) << 2) - 5], &c__1);
 /*<    50    CONTINUE >*/
 /* L50: */
 	}
@@ -815,15 +815,15 @@ static doublereal c_b44 = -1.;
 	    dlagv2_(&a[*j1 + *n2 + (*j1 + *n2) * a_dim1], lda, &b[*j1 + *n2 + 
 		    (*j1 + *n2) * b_dim1], ldb, taur, taul, &work[m * m + 1], 
 		    &work[*n2 * m + *n2 + 1], &work[*n2 * m + *n2 + 2], &t[*
-		    n2 + 1 + (*n2 + 1 << 2) - 5], &t[m + (m - 1 << 2) - 5]);
+		    n2 + 1 + ((*n2 + 1) << 2) - 5], &t[m + ((m - 1) << 2) - 5]);
 /*<             WORK( M*M ) = WORK( N2*M+N2+1 ) >*/
 	    work[m * m] = work[*n2 * m + *n2 + 1];
 /*<             WORK( M*M-1 ) = -WORK( N2*M+N2+2 ) >*/
 	    work[m * m - 1] = -work[*n2 * m + *n2 + 2];
 /*<             T( M, M ) = T( N2+1, N2+1 ) >*/
-	    t[m + (m << 2) - 5] = t[*n2 + 1 + (*n2 + 1 << 2) - 5];
+	    t[m + (m << 2) - 5] = t[*n2 + 1 + ((*n2 + 1) << 2) - 5];
 /*<             T( M-1, M ) = -T( M, M-1 ) >*/
-	    t[m - 1 + (m << 2) - 5] = -t[m + (m - 1 << 2) - 5];
+	    t[m - 1 + (m << 2) - 5] = -t[m + ((m - 1) << 2) - 5];
 /*<          END IF >*/
 	}
 /*<    >*/
@@ -847,14 +847,14 @@ static doublereal c_b44 = -1.;
 	dlacpy_("Full", &m, &m, &work[m * m + 1], &m, li, &c__4, (ftnlen)4);
 /*<    >*/
 	dgemm_("N", "N", n2, n1, n1, &c_b38, &a[*j1 + (*j1 + *n2) * a_dim1], 
-		lda, &t[*n2 + 1 + (*n2 + 1 << 2) - 5], &c__4, &c_b3, &work[1],
+		lda, &t[*n2 + 1 + ((*n2 + 1) << 2) - 5], &c__4, &c_b3, &work[1],
 		 n2, (ftnlen)1, (ftnlen)1);
 /*<          CALL DLACPY( 'Full', N2, N1, WORK, N2, A( J1, J1+N2 ), LDA ) >*/
 	dlacpy_("Full", n2, n1, &work[1], n2, &a[*j1 + (*j1 + *n2) * a_dim1], 
 		lda, (ftnlen)4);
 /*<    >*/
 	dgemm_("N", "N", n2, n1, n1, &c_b38, &b[*j1 + (*j1 + *n2) * b_dim1], 
-		lda, &t[*n2 + 1 + (*n2 + 1 << 2) - 5], &c__4, &c_b3, &work[1],
+		lda, &t[*n2 + 1 + ((*n2 + 1) << 2) - 5], &c__4, &c_b3, &work[1],
 		 n2, (ftnlen)1, (ftnlen)1);
 /*<          CALL DLACPY( 'Full', N2, N1, WORK, N2, B( J1, J1+N2 ), LDB ) >*/
 	dlacpy_("Full", n2, n1, &work[1], n2, &b[*j1 + (*j1 + *n2) * b_dim1], 

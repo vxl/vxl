@@ -93,7 +93,9 @@ static integer c__3 = 3;
     logical ilazro;
     integer icompz, ifirst, ifrstm, istart;
     logical ilpivt, lquery;
-
+    (void)job_len;
+    (void)compq_len;
+    (void)compz_len;
 
 /*  -- LAPACK routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -455,11 +457,11 @@ static integer c__3 = 3;
 /*<          INFO = -10 >*/
 	*info = -10;
 /*<       ELSE IF( LDQ.LT.1 .OR. ( ILQ .AND. LDQ.LT.N ) ) THEN >*/
-    } else if (*ldq < 1 || ilq && *ldq < *n) {
+    } else if (*ldq < 1 || (ilq && *ldq < *n)) {
 /*<          INFO = -15 >*/
 	*info = -15;
 /*<       ELSE IF( LDZ.LT.1 .OR. ( ILZ .AND. LDZ.LT.N ) ) THEN >*/
-    } else if (*ldz < 1 || ilz && *ldz < *n) {
+    } else if (*ldz < 1 || (ilz && *ldz < *n)) {
 /*<          INFO = -17 >*/
 	*info = -17;
 /*<       ELSE IF( LWORK.LT.MAX( 1, N ) .AND. .NOT.LQUERY ) THEN >*/

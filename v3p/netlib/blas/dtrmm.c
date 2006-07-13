@@ -33,6 +33,10 @@ extern "C" {
     logical upper;
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
     logical nounit;
+    (void)side_len;
+    (void)uplo_len;
+    (void)transa_len;
+    (void)diag_len;
 
 /*     .. Scalar Arguments .. */
 /*<       CHARACTER*1        SIDE, UPLO, TRANSA, DIAG >*/

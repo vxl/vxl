@@ -58,7 +58,8 @@ static integer c__65 = 65;
     logical notran;
     integer ldwork, lwkopt;
     logical lquery;
-
+    (void)side_len;
+    (void)trans_len;
 
 /*  -- LAPACK routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -345,7 +346,7 @@ static integer c__65 = 65;
 /*        Use blocked code */
 
 /*<    >*/
-	if (left && ! notran || ! left && notran) {
+	if ((left && ! notran) || (! left && notran)) {
 /*<             I1 = 1 >*/
 	    i1 = 1;
 /*<             I2 = K >*/

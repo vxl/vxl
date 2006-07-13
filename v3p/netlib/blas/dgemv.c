@@ -29,6 +29,7 @@ extern "C" {
     integer lenx, leny;
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
+    (void)trans_len;
 
 /*     .. Scalar Arguments .. */
 /*<       DOUBLE PRECISION   ALPHA, BETA >*/
@@ -197,7 +198,7 @@ extern "C" {
 /*     Quick return if possible. */
 
 /*<    >*/
-    if (*m == 0 || *n == 0 || *alpha == 0. && *beta == 1.) {
+    if (*m == 0 || *n == 0 || (*alpha == 0. && *beta == 1.)) {
 	return 0;
     }
 

@@ -38,7 +38,8 @@ static integer c__1 = 1;
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
     logical notran;
-
+    (void)side_len;
+    (void)trans_len;
 
 /*  -- LAPACK routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -230,7 +231,7 @@ static integer c__1 = 1;
     }
 
 /*<    >*/
-    if (left && ! notran || ! left && notran) {
+    if ((left && ! notran) || (! left && notran)) {
 /*<          I1 = 1 >*/
 	i1 = 1;
 /*<          I2 = K >*/

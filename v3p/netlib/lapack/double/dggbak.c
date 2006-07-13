@@ -34,7 +34,8 @@ extern "C" {
     logical leftv;
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
     logical rightv;
-
+    (void)job_len;
+    (void)side_len;
 
 /*  -- LAPACK routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
