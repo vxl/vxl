@@ -303,12 +303,18 @@ SET(V3P_NETLIB_blas_SOURCES
   blas/dcabs1.c blas/dcabs1.h
   blas/dcopy.c blas/dcopy.h
   blas/ddot.c blas/ddot.h
+  blas/dgemm.c blas/dgemm.h
+  blas/dgemv.c blas/dgemv.h
+  blas/dger.c blas/dger.h
   blas/dlamch.c blas/dlamch.h
   blas/dnrm2.c blas/dnrm2.h
   blas/drot.c blas/drot.h
   blas/drotg.c blas/drotg.h
   blas/dscal.c blas/dscal.h
   blas/dswap.c blas/dswap.h
+  blas/dtrmm.c blas/dtrmm.h
+  blas/dtrmv.c blas/dtrmv.h
+  blas/dtrsv.c blas/dtrsv.h
   blas/dzasum.c blas/dzasum.h
   blas/dznrm2.c blas/dznrm2.h
   blas/idamax.c blas/idamax.h
@@ -432,10 +438,51 @@ SET(V3P_NETLIB_lapack_SOURCES
   lapack/complex16/zung2r.c lapack/complex16/zung2r.h
   lapack/complex16/zunghr.c lapack/complex16/zunghr.h
   lapack/complex16/zungqr.c lapack/complex16/zungqr.h
+  lapack/double/dgecon.c lapack/double/dgecon.h
+  lapack/double/dgeqr2.c lapack/double/dgeqr2.h
+  lapack/double/dgeqrf.c lapack/double/dgeqrf.h
+  lapack/double/dgerq2.c lapack/double/dgerq2.h
+  lapack/double/dgesc2.c lapack/double/dgesc2.h
+  lapack/double/dgetc2.c lapack/double/dgetc2.h
+  lapack/double/dggbak.c lapack/double/dggbak.h
+  lapack/double/dggbal.c lapack/double/dggbal.h
+  lapack/double/dgges.c lapack/double/dgges.h
+  lapack/double/dgghrd.c lapack/double/dgghrd.h
+  lapack/double/dhgeqz.c lapack/double/dhgeqz.h
   lapack/double/dlabad.c lapack/double/dlabad.h
+  lapack/double/dlacon.c lapack/double/dlacon.h
+  lapack/double/dlacpy.c lapack/double/dlacpy.h
   lapack/double/dladiv.c lapack/double/dladiv.h
+  lapack/double/dlag2.c lapack/double/dlag2.h
+  lapack/double/dlagv2.c lapack/double/dlagv2.h
+  lapack/double/dlange.c lapack/double/dlange.h
+  lapack/double/dlanhs.c lapack/double/dlanhs.h
   lapack/double/dlapy2.c lapack/double/dlapy2.h
   lapack/double/dlapy3.c lapack/double/dlapy3.h
+  lapack/double/dlarf.c lapack/double/dlarf.h
+  lapack/double/dlarfb.c lapack/double/dlarfb.h
+  lapack/double/dlarfg.c lapack/double/dlarfg.h
+  lapack/double/dlarft.c lapack/double/dlarft.h
+  lapack/double/dlartg.c lapack/double/dlartg.h
+  lapack/double/dlascl.c lapack/double/dlascl.h
+  lapack/double/dlaset.c lapack/double/dlaset.h
+  lapack/double/dlassq.c lapack/double/dlassq.h
+  lapack/double/dlasv2.c lapack/double/dlasv2.h
+  lapack/double/dlaswp.c lapack/double/dlaswp.h
+  lapack/double/dlatdf.c lapack/double/dlatdf.h
+  lapack/double/dlatrs.c lapack/double/dlatrs.h
+  lapack/double/dorg2r.c lapack/double/dorg2r.h
+  lapack/double/dorgqr.c lapack/double/dorgqr.h
+  lapack/double/dorgr2.c lapack/double/dorgr2.h
+  lapack/double/dorm2r.c lapack/double/dorm2r.h
+  lapack/double/dormqr.c lapack/double/dormqr.h
+  lapack/double/dormr2.c lapack/double/dormr2.h
+  lapack/double/drscl.c lapack/double/drscl.h
+  lapack/double/dtgex2.c lapack/double/dtgex2.h
+  lapack/double/dtgexc.c lapack/double/dtgexc.h
+  lapack/double/dtgsen.c lapack/double/dtgsen.h
+  lapack/double/dtgsy2.c lapack/double/dtgsy2.h
+  lapack/double/dtgsyl.c lapack/double/dtgsyl.h
   lapack/util/ieeeck.c lapack/util/ieeeck.h
   lapack/util/ilaenv.c lapack/util/ilaenv.h
   lapack/util/lsame.c lapack/util/lsame.h
