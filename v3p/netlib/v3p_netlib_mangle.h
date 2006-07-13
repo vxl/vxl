@@ -22,6 +22,7 @@ nm libv3p_netlib.a |grep " [TR] "
 #define cdiv_ v3p_netlib_cdiv_
 #define cdotc_ v3p_netlib_cdotc_
 #define cg_ v3p_netlib_cg_
+#define chscdf_ v3p_netlib_chscdf_
 #define cqrdc_ v3p_netlib_cqrdc_
 #define cqrsl_ v3p_netlib_cqrsl_
 #define cscal_ v3p_netlib_cscal_

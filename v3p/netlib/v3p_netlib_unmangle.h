@@ -13,6 +13,7 @@
 #undef cdiv_
 #undef cdotc_
 #undef cg_
+#undef chscdf_
 #undef cqrdc_
 #undef cqrsl_
 #undef cscal_

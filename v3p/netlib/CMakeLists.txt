@@ -471,8 +471,7 @@ SET(V3P_NETLIB_toms_SOURCES
   toms/rpoly.c toms/rpoly.h
   )
 SET(V3P_NETLIB_datapac_SOURCES
-  datapac/dchscdf.c datapac/dchscdf.h
-  datapac/dnorcdf.c datapac/dnorcdf.h
+  datapac/camsun.c datapac/camsun.h
   )
 
 # Adjust the compiler flags to avoid problems with f2c-generated code.

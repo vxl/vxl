@@ -1,2 +1,0 @@
-extern int dchscdf_(doublereal *x, integer *nu, doublereal *cdf);
-/*:ref: dnorcdf_ 14 2 7 7 */
