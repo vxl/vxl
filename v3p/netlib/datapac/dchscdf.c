@@ -17,25 +17,21 @@ extern "C" {
 
 #include <stdio.h>
 
-/* Table of constant values */
-
-static integer c__1 = 1;
-
 /*<       SUBROUTINE DCHSCDF(X,NU,CDF) >*/
 /* Subroutine */ int dchscdf_(doublereal *x, integer *nu, doublereal *cdf)
 {
     /* Initialized data */
 
-    static integer nucut = 1000;
-    static doublereal b43 = 17.;
-    static doublereal pi = 3.14159265358979;
-    static doublereal dpower = .33333333333333;
-    static doublereal b11 = .33333333333333;
-    static doublereal b21 = -.02777777777778;
-    static doublereal b31 = -6.1728395061e-4;
-    static doublereal b32 = -13.;
-    static doublereal b41 = 1.8004115226e-4;
-    static doublereal b42 = 6.;
+    integer nucut = 1000;
+    doublereal b43 = 17.;
+    doublereal pi = 3.14159265358979;
+    doublereal dpower = .33333333333333;
+    doublereal b11 = .33333333333333;
+    doublereal b21 = -.02777777777778;
+    doublereal b31 = -6.1728395061e-4;
+    doublereal b32 = -13.;
+    doublereal b41 = 1.8004115226e-4;
+    doublereal b42 = 6.;
 
     /* System generated locals */
     integer i__1;
