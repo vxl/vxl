@@ -91,7 +91,6 @@ SET( netlib_sources
 
   # MINPACK
   pythag.c
-  rpoly.c
 
   # TOMS Misc
   dtrans.c

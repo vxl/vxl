@@ -74,9 +74,6 @@ float sqrtf(float);
   /*: Computes the double cumulative distribution function value for the chi-squared distribution */
   void dchscdf_(double* x, int* nu, double* cdf);
 
-  /*: Finds the zeros of a real polynomial */
-  void rpoly_(double* op, int* degree, double* zeror, double* zeroi, logical* fail);
-
   void saxpy_(const int *n, const float *sa, const float *sx, const int *incx, float *sy, const int *incy);
   void daxpy_(const int *n, const double *da, const double *dx, const int *incx, double *dy, const int *incy);
   void caxpy_(const int *n, const cmplx *ca, const cmplx *cx, const int *incx, cmplx *cy, const int *incy);
