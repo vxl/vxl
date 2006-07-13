@@ -146,3 +146,4 @@
 #include "minpack/qrsolv.h"
 #include "opt/lbfgs.h"
 #include "linalg/lsqr.h"
+#include "toms/rpoly.h"

@@ -7,6 +7,7 @@
 
 #undef balanc_
 #undef balbak_
+#undef calcsc_
 #undef caxpy_
 #undef ccopy_
 #undef cdiv_
@@ -73,6 +74,7 @@
 #undef fdjac2_
 #undef fv_
 #undef fvd_
+#undef fxshfr_
 #undef gpfa2f_
 #undef gpfa3f_
 #undef gpfa5f_
@@ -97,12 +99,19 @@
 #undef lsqr_
 #undef mcsrch_
 #undef mcstep_
+#undef newest_
+#undef nextk_
 #undef pythag_
 #undef qrfac_
 #undef qrsolv_
+#undef quad_
+#undef quadit_
+#undef quadsd_
+#undef realit_
 #undef rebak_
 #undef reduc_
 #undef rg_
+#undef rpoly_
 #undef rs_
 #undef rsg_
 #undef saxpy_

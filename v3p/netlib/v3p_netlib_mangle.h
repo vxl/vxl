@@ -16,6 +16,7 @@ nm libv3p_netlib.a |grep " [TR] "
 
 #define balanc_ v3p_netlib_balanc_
 #define balbak_ v3p_netlib_balbak_
+#define calcsc_ v3p_netlib_calcsc_
 #define caxpy_ v3p_netlib_caxpy_
 #define ccopy_ v3p_netlib_ccopy_
 #define cdiv_ v3p_netlib_cdiv_
@@ -82,6 +83,7 @@ nm libv3p_netlib.a |grep " [TR] "
 #define fdjac2_ v3p_netlib_fdjac2_
 #define fv_ v3p_netlib_fv_
 #define fvd_ v3p_netlib_fvd_
+#define fxshfr_ v3p_netlib_fxshfr_
 #define gpfa2f_ v3p_netlib_gpfa2f_
 #define gpfa3f_ v3p_netlib_gpfa3f_
 #define gpfa5f_ v3p_netlib_gpfa5f_
@@ -106,12 +108,19 @@ nm libv3p_netlib.a |grep " [TR] "
 #define lsqr_ v3p_netlib_lsqr_
 #define mcsrch_ v3p_netlib_mcsrch_
 #define mcstep_ v3p_netlib_mcstep_
+#define newest_ v3p_netlib_newest_
+#define nextk_ v3p_netlib_nextk_
 #define pythag_ v3p_netlib_pythag_
 #define qrfac_ v3p_netlib_qrfac_
 #define qrsolv_ v3p_netlib_qrsolv_
+#define quad_ v3p_netlib_quad_
+#define quadit_ v3p_netlib_quadit_
+#define quadsd_ v3p_netlib_quadsd_
+#define realit_ v3p_netlib_realit_
 #define rebak_ v3p_netlib_rebak_
 #define reduc_ v3p_netlib_reduc_
 #define rg_ v3p_netlib_rg_
+#define rpoly_ v3p_netlib_rpoly_
 #define rs_ v3p_netlib_rs_
 #define rsg_ v3p_netlib_rsg_
 #define saxpy_ v3p_netlib_saxpy_
