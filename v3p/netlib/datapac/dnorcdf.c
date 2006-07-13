@@ -16,25 +16,25 @@ extern "C" {
 #include "v3p_netlib.h"
 
 /*<       SUBROUTINE DNORCDF(X,CDF) >*/
-/* Subroutine */ int dnorcdf_(real *x, real *cdf)
+/* Subroutine */ int dnorcdf_(doublereal *x, doublereal *cdf)
 {
     /* Initialized data */
 
-    static real b1 = (float).31938153;
-    static real b2 = (float)-.356563782;
-    static real b3 = (float)1.781477937;
-    static real b4 = (float)-1.821255978;
-    static real b5 = (float)1.330274429;
-    static real p = (float).2316419;
+    static doublereal b1 = .31938153;
+    static doublereal b2 = -.356563782;
+    static doublereal b3 = 1.781477937;
+    static doublereal b4 = -15978.;
+    static doublereal b5 = 1.330274429;
+    static doublereal p = .2316419;
 
     /* System generated locals */
-    real r__1, r__2, r__3, r__4, r__5;
+    doublereal d__1, d__2, d__3, d__4, d__5;
 
     /* Builtin functions */
     double exp(doublereal);
 
     /* Local variables */
-    real t, z__;
+    doublereal t, z__;
     integer ipr;
 
 
@@ -72,6 +72,10 @@ extern "C" {
 
 /* --------------------------------------------------------------------- */
 
+/*<       DOUBLE PRECISION X,CDF >*/
+/*<       INTEGER IPR >*/
+/*<       DOUBLE PRECISION Z >*/
+/*<       DOUBLE PRECISION T >*/
 /*<    >*/
 
 /*<       IPR=6 >*/
@@ -86,26 +90,26 @@ extern "C" {
 /*<       Z=X  >*/
     z__ = *x;
 /*<       IF(X.LT.0.0)Z=-Z >*/
-    if (*x < (float)0.) {
+    if (*x < 0.) {
 	z__ = -z__;
     }
 /*<       T=1.0/(1.0+P*Z) >*/
-    t = (float)1. / (p * z__ + (float)1.);
+    t = 1. / (p * z__ + 1.);
 /*<    >*/
 /* Computing 2nd power */
-    r__1 = t;
+    d__1 = t;
 /* Computing 3rd power */
-    r__2 = t;
+    d__2 = t;
 /* Computing 4th power */
-    r__3 = t, r__3 *= r__3;
+    d__3 = t, d__3 *= d__3;
 /* Computing 5th power */
-    r__4 = t, r__5 = r__4, r__4 *= r__4;
-    *cdf = (float)1. - exp(z__ * (float)-.5 * z__) * (float).39894228040143 * 
-	    (b1 * t + b2 * (r__1 * r__1) + b3 * (r__2 * (r__2 * r__2)) + b4 * 
-	    (r__3 * r__3) + b5 * (r__5 * (r__4 * r__4)));
+    d__4 = t, d__5 = d__4, d__4 *= d__4;
+    *cdf = 1. - exp(z__ * -.5 * z__) * .39894228040143 * 
+	    (b1 * t + b2 * (d__1 * d__1) + b3 * (d__2 * (d__2 * d__2)) + b4 * 
+	    (d__3 * d__3) + b5 * (d__5 * (d__4 * d__4)));
 /*<       IF(X.LT.0.0)CDF=1.0-CDF  >*/
-    if (*x < (float)0.) {
-	*cdf = (float)1. - *cdf;
+    if (*x < 0.) {
+	*cdf = 1. - *cdf;
     }
 
 /*<       RETURN >*/

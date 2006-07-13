@@ -1,1 +1,1 @@
-extern int dnorcdf_(real *x, real *cdf);
+extern int dnorcdf_(doublereal *x, doublereal *cdf);

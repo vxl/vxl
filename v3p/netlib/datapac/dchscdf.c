@@ -35,7 +35,6 @@ extern "C" {
 
     /* System generated locals */
     integer i__1;
-    real r__1;
     doublereal d__1;
 
     /* Builtin functions */
@@ -45,22 +44,15 @@ extern "C" {
 
     /* Local variables */
     integer i__;
-    real u, z__;
-    doublereal d1, d2, d3, ai;
-    real sd;
-    doublereal dw, dx, chi;
-    real anu;
-    doublereal dnu;
+    doublereal u, z__, d1, d2, d3, ai, sd, dw, dx, chi, anu, dnu;
     integer ipr;
-    doublereal sum;
-    real cdfn, danu;
+    doublereal sum, cdfn, danu;
     integer imin, imax;
-    doublereal term, term0, term1, term2, term3, term4, dcdfn, dfact;
-    real amean;
+    doublereal term, term0, term1, term2, term3, term4, dcdfn, dfact, amean;
     integer ibran;
-    real spchi;
+    doublereal spchi;
     integer ievodd;
-    extern /* Subroutine */ int dnorcdf_(real *, real *);
+    extern /* Subroutine */ int dnorcdf_(doublereal *, doublereal *);
 
 /*     PURPOSE--THIS SUBROUTINE COMPUTES THE CUMULATIVE DISTRIBUTION */
 /*              FUNCTION VALUE FOR THE CHI-SQUARED DISTRIBUTION */
@@ -201,7 +193,7 @@ L90:
 /*<       DX=X >*/
     dx = *x;
 /*<       ANU=NU >*/
-    anu = (real) (*nu);
+    anu = (doublereal) (*nu);
 /*<       DNU=NU >*/
     dnu = (doublereal) (*nu);
 
@@ -420,16 +412,16 @@ L3000:
     term1 = b11 * danu;
 /*<       TERM2=B21*D1*(DANU**2) >*/
 /* Computing 2nd power */
-    r__1 = danu;
-    term2 = b21 * d1 * (r__1 * r__1);
+    d__1 = danu;
+    term2 = b21 * d1 * (d__1 * d__1);
 /*<       TERM3=B31*(D2+B32)*(DANU**3) >*/
 /* Computing 3rd power */
-    r__1 = danu;
-    term3 = b31 * (d2 + b32) * (r__1 * (r__1 * r__1));
+    d__1 = danu;
+    term3 = b31 * (d2 + b32) * (d__1 * (d__1 * d__1));
 /*<       TERM4=B41*(B42*D3+B43*D1)*(DANU**4) >*/
 /* Computing 4th power */
-    r__1 = danu, r__1 *= r__1;
-    term4 = b41 * (b42 * d3 + b43 * d1) * (r__1 * r__1);
+    d__1 = danu, d__1 *= d__1;
+    term4 = b41 * (b42 * d3 + b43 * d1) * (d__1 * d__1);
 /*<       U=TERM0+TERM1+TERM2+TERM3+TERM4 >*/
     u = term0 + term1 + term2 + term3 + term4;
 /*<       CALL DNORCDF(U,CDFN) >*/
