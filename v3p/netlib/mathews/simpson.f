@@ -17,7 +17,7 @@ C     Srule: output parameter to store simpson rule result
       
       SUBROUTINE SIMPRU(F,A,B,M,Srule)
       INTEGER K,M
-      REAL A,B,H,Sum,SumEven,SumOdd,Srule,X
+      DOUBLE PRECISION A,B,H,Sum,SumEven,SumOdd,Srule,X
       EXTERNAL F
       H=(B-A)/(2*M)
       SumEven=0
@@ -38,7 +38,7 @@ C     Srule: output parameter to store simpson rule result
       SUBROUTINE XSIMPRU(F,A,B,M,Srule)
 C     This subroutine uses labeled DO loop(s).
       INTEGER K,M
-      REAL A,B,H,Sum,SumEven,SumOdd,Srule,X
+      DOUBLE PRECISION A,B,H,Sum,SumEven,SumOdd,Srule,X
       EXTERNAL F
       H=(B-A)/(2*M)
       SumEven=0

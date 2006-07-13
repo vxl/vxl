@@ -31,24 +31,25 @@ extern "C" {
 /*     M: number of intervals. Notice, the subintervals used is 2M */
 /*     Srule: output parameter to store simpson rule result */
 /*<       SUBROUTINE SIMPRU(F,A,B,M,Srule) >*/
-/* Subroutine */ int simpru_(E_fp f, real *a, real *b, integer *m, real *
-	srule)
+/* Subroutine */ int simpru_(doublereal (*f)(doublereal*),
+                             doublereal *a, doublereal *b, integer *m,
+                             doublereal *srule)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
-    real h__;
+    doublereal h__;
     integer k;
-    real x, sum, sumodd, sumeven;
+    doublereal x, sum, sumodd, sumeven;
 
 /*<       INTEGER K,M >*/
-/*<       REAL A,B,H,Sum,SumEven,SumOdd,Srule,X >*/
+/*<       DOUBLE PRECISION A,B,H,Sum,SumEven,SumOdd,Srule,X >*/
 /*<       EXTERNAL F >*/
 /*<       H=(B-A)/(2*M) >*/
     h__ = (*b - *a) / (*m << 1);
 /*<       SumEven=0 >*/
-    sumeven = (float)0.;
+    sumeven = 0.;
 /*<       DO K=1,(M-1) >*/
     i__1 = *m - 1;
     for (k = 1; k <= i__1; ++k) {
@@ -59,7 +60,7 @@ extern "C" {
 /*<       ENDDO >*/
     }
 /*<       SumOdd=0 >*/
-    sumodd = (float)0.;
+    sumodd = 0.;
 /*<       DO K=1,M >*/
     i__1 = *m;
     for (k = 1; k <= i__1; ++k) {
@@ -79,25 +80,26 @@ extern "C" {
 } /* simpru_ */
 
 /*<       SUBROUTINE XSIMPRU(F,A,B,M,Srule) >*/
-/* Subroutine */ int xsimpru_(E_fp f, real *a, real *b, integer *m, real *
-	srule)
+/* Subroutine */ int xsimpru_(doublereal (*f)(doublereal*),
+                              doublereal *a, doublereal *b, integer *
+                              m, doublereal *srule)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
-    real h__;
+    doublereal h__;
     integer k;
-    real x, sum, sumodd, sumeven;
+    doublereal x, sum, sumodd, sumeven;
 
 /*     This subroutine uses labeled DO loop(s). */
 /*<       INTEGER K,M >*/
-/*<       REAL A,B,H,Sum,SumEven,SumOdd,Srule,X >*/
+/*<       DOUBLE PRECISION A,B,H,Sum,SumEven,SumOdd,Srule,X >*/
 /*<       EXTERNAL F >*/
 /*<       H=(B-A)/(2*M) >*/
     h__ = (*b - *a) / (*m << 1);
 /*<       SumEven=0 >*/
-    sumeven = (float)0.;
+    sumeven = 0.;
 /*<       DO 10 K=1,(M-1) >*/
     i__1 = *m - 1;
     for (k = 1; k <= i__1; ++k) {
@@ -109,7 +111,7 @@ extern "C" {
 /* L10: */
     }
 /*<       SumOdd=0 >*/
-    sumodd = (float)0.;
+    sumodd = 0.;
 /*<       DO 20 K=1,M >*/
     i__1 = *m;
     for (k = 1; k <= i__1; ++k) {
