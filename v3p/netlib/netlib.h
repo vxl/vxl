@@ -66,14 +66,6 @@ float sqrtf(float);
                double *a, int *lda, double *b, int *ldb, double *alpha, double *beta,
                double *u, int *ldu, double *v, int *ldv, double *q, int *ldq, double *work, int *iwork, int *info);
 
-  /*: Computes the float cumulative distribution function value for the chi-squared distribution */
-  void chscdf_(const float* x, /*!< (IN) value where the cumulative distribution must be evaluated */
-               const int* nu,  /*!< (IN) # degrees of freedom */
-               float* cdf);    /*!< (OUT) the function value */
-
-  /*: Computes the double cumulative distribution function value for the chi-squared distribution */
-  void dchscdf_(double* x, int* nu, double* cdf);
-
   void saxpy_(const int *n, const float *sa, const float *sx, const int *incx, float *sy, const int *incy);
   void daxpy_(const int *n, const double *da, const double *dx, const int *incx, double *dy, const int *incy);
   void caxpy_(const int *n, const cmplx *ca, const cmplx *cx, const int *incx, cmplx *cy, const int *incy);

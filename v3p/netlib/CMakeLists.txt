@@ -99,9 +99,6 @@ SET( netlib_sources
   # General
   machineparams.c
 
-  # from DATAPAC
-  camsun.c
-
   # from LAPACK
   ilaenv.c
   izmax1.c
