@@ -133,10 +133,6 @@ double ddot_(const int *n, const double *dx, const int *incx, const double *dy, 
                double *lscale, double *rscale, double *work, int *info);
   void zgebal_(const char *job, const int *n, dcmplx *a, const int *lda, int *ilo, int *ihi, double *scale, int *info);
 
-  void dgges_(const char *jobvsl, const char *jobvsr, const char *sort, logical (*delctg)(double*,double*,double*),
-              int *n, double *a, int *lda, double *b, int *ldb, int *sdim, double *alphar, double *alphai, double *beta,
-              double *vsl, int *ldvsl, double *vsr, int *ldvsr, double *work, int *lwork, logical *bwork, int *info);
-
   void dgghrd_(const char *compq, const char *compz, const int *n, int *ilo, int *ihi, double *a, const int *lda,
                double *b, const int *ldb, double *q, const int *ldq, double *z, const int *ldz, int *info);
   void zgehrd_(const int *n, int *ilo, int *ihi, dcmplx *a, const int *lda, dcmplx *tau, dcmplx *work, int *lwork, int *info);
