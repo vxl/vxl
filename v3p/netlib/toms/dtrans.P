@@ -1,1 +1,0 @@
-extern int dtrans_(doublereal *a, integer *m, integer *n, integer *mn, integer *move, integer *iwrk, integer *iok);

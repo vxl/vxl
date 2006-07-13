@@ -292,9 +292,6 @@ double dpmpar_(const int *i);
                double *a, int *lda, double *b, int *ldb, double *c, int *ldc, double *d, int *ldd, double *e, int *lde,
                double *f, int *ldf, double *scale, double *dif, double *work, int *lwork, int *iwork, int *info);
 
-  void trans_(float *a, const int *m, const int *n, const int *mn, int *move, int *iwrk, int *iok);
-  void dtrans_(double *a, const int *m, const int *n, const int *mn, int *move, int *iwrk, int *iok);
-
   void dtrmm_(const char *side, const char *uplo, const char *transa, const char *diag, const int *m, const int *n,
               double *alpha, double *a, const int *lda, double *b, const int *ldb);
   void ztrmm_(const char *side, const char *uplo, const char *transa, const char *diag, const int *m, const int *n,

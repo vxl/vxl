@@ -75,7 +75,6 @@ nm libv3p_netlib.a |grep " [TR] "
 #define dscal_ v3p_netlib_dscal_
 #define dsvdc_ v3p_netlib_dsvdc_
 #define dswap_ v3p_netlib_dswap_
-#define dtrans_ v3p_netlib_dtrans_
 #define dvsort_ v3p_netlib_dvsort_
 #define dzasum_ v3p_netlib_dzasum_
 #define dznrm2_ v3p_netlib_dznrm2_
@@ -171,7 +170,6 @@ nm libv3p_netlib.a |grep " [TR] "
 #define tql1_ v3p_netlib_tql1_
 #define tql2_ v3p_netlib_tql2_
 #define tqlrat_ v3p_netlib_tqlrat_
-#define trans_ v3p_netlib_trans_
 #define tred1_ v3p_netlib_tred1_
 #define tred2_ v3p_netlib_tred2_
 #define urand_ v3p_netlib_urand_
