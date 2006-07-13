@@ -66,6 +66,7 @@
 #undef dscal_
 #undef dsvdc_
 #undef dswap_
+#undef dtrans_
 #undef dvsort_
 #undef dzasum_
 #undef dznrm2_
@@ -161,6 +162,7 @@
 #undef tql1_
 #undef tql2_
 #undef tqlrat_
+#undef trans_
 #undef tred1_
 #undef tred2_
 #undef urand_

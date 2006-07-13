@@ -466,6 +466,8 @@ SET(V3P_NETLIB_linalg_SOURCES
   )
 SET(V3P_NETLIB_toms_SOURCES
   toms/rpoly.c toms/rpoly.h
+  toms/trans.c toms/trans.h
+  toms/dtrans.c toms/dtrans.h
   )
 SET(V3P_NETLIB_datapac_SOURCES
   datapac/camsun.c datapac/camsun.h

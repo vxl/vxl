@@ -146,5 +146,7 @@
 #include "minpack/qrsolv.h"
 #include "opt/lbfgs.h"
 #include "linalg/lsqr.h"
+#include "toms/dtrans.h"
 #include "toms/rpoly.h"
+#include "toms/trans.h"
 #include "datapac/camsun.h"
