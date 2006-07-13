@@ -195,3 +195,4 @@
 #include "linalg/lsqr.h"
 #include "toms/rpoly.h"
 #include "datapac/camsun.h"
+#include "mathews/simpson.h"

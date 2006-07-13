@@ -181,6 +181,7 @@
 #undef sgbmv_
 #undef sgemv_
 #undef sger_
+#undef simpru_
 #undef smake_
 #undef smessg_
 #undef snrm2_
@@ -212,6 +213,7 @@
 #undef tred2_
 #undef urand_
 #undef xerbla_
+#undef xsimpru_
 #undef zaxpy_
 #undef zcopy_
 #undef zdotc_

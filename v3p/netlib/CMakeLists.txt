@@ -188,7 +188,6 @@ SET( netlib_sources
   dgetc2.c
   dggbak.c
   dggbal.c
-  dgges.c
   dgghrd.c
   dhgeqz.c
   dlacon.c
@@ -513,6 +512,9 @@ SET(V3P_NETLIB_toms_SOURCES
 SET(V3P_NETLIB_datapac_SOURCES
   datapac/camsun.c datapac/camsun.h
   )
+SET(V3P_NETLIB_mathews_SOURCES
+  mathews/simpson.c mathews/simpson.h
+  )
 
 # Adjust the compiler flags to avoid problems with f2c-generated code.
 IF(CMAKE_COMPILER_IS_GNUCC)
@@ -552,6 +554,7 @@ ADD_LIBRARY(v3p_netlib
   ${V3P_NETLIB_linalg_SOURCES}
   ${V3P_NETLIB_toms_SOURCES}
   ${V3P_NETLIB_datapac_SOURCES}
+  ${V3P_NETLIB_mathews_SOURCES}
   )
 IF(UNIX)
   TARGET_LINK_LIBRARIES( v3p_netlib m )
