@@ -48,6 +48,9 @@ C     UPDATED         --OCTOBER   1976.
 C
 C---------------------------------------------------------------------
 C
+      DOUBLE PRECISION X
+      INTEGER NU
+      DOUBLE PRECISION CDF
       DOUBLE PRECISION DX,PI,CHI,SUM,TERM,AI,DCDFN
       DOUBLE PRECISION DNU
       DOUBLE PRECISION DSQRT,DEXP
