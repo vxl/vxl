@@ -60,7 +60,7 @@ extern "C" {
     integer ibran;
     real spchi;
     integer ievodd;
-    extern /* Subroutine */ int norcdf_(real *, real *);
+    extern /* Subroutine */ int dnorcdf_(real *, real *);
 
 /*     PURPOSE--THIS SUBROUTINE COMPUTES THE CUMULATIVE DISTRIBUTION */
 /*              FUNCTION VALUE FOR THE CHI-SQUARED DISTRIBUTION */
@@ -83,7 +83,7 @@ extern "C" {
 /*     PRINTING--NONE UNLESS AN INPUT ARGUMENT ERROR CONDITION EXISTS. */
 /*     RESTRICTIONS--X SHOULD BE NON-NEGATIVE. */
 /*                 --NU SHOULD BE A POSITIVE INTEGER VARIABLE. */
-/*     OTHER DATAPAC   SUBROUTINES NEEDED--NORCDF. */
+/*     OTHER DATAPAC   SUBROUTINES NEEDED--DNORCDF. */
 /*     FORTRAN LIBRARY SUBROUTINES NEEDED--DSQRT, DEXP. */
 /*     MODE OF INTERNAL OPERATIONS--DOUBLE PRECISION. */
 /*     LANGUAGE--ANSI FORTRAN. */
@@ -360,8 +360,8 @@ L160:
     sum = sqrt(2. / pi) * sum;
 /*<       SPCHI=CHI >*/
     spchi = chi;
-/*<       CALL NORCDF(SPCHI,CDFN)  >*/
-    norcdf_(&spchi, &cdfn);
+/*<       CALL DNORCDF(SPCHI,CDFN)  >*/
+    dnorcdf_(&spchi, &cdfn);
 /*<       DCDFN=CDFN >*/
     dcdfn = cdfn;
 /*<       SUM=SUM+2.0D0*(1.0D0-DCDFN) >*/
@@ -385,8 +385,8 @@ L2000:
 /*<       U=(((DX/DNU)**DPOWER)-1.0D0+(1.0D0/DFACT))*DSQRT(DFACT) >*/
     d__1 = dx / dnu;
     u = (pow_dd(&d__1, &dpower) - 1. + 1. / dfact) * sqrt(dfact);
-/*<       CALL NORCDF(U,CDFN) >*/
-    norcdf_(&u, &cdfn);
+/*<       CALL DNORCDF(U,CDFN) >*/
+    dnorcdf_(&u, &cdfn);
 /*<       CDF=CDFN >*/
     *cdf = cdfn;
 /*<       RETURN >*/
@@ -432,8 +432,8 @@ L3000:
     term4 = b41 * (b42 * d3 + b43 * d1) * (r__1 * r__1);
 /*<       U=TERM0+TERM1+TERM2+TERM3+TERM4 >*/
     u = term0 + term1 + term2 + term3 + term4;
-/*<       CALL NORCDF(U,CDFN) >*/
-    norcdf_(&u, &cdfn);
+/*<       CALL DNORCDF(U,CDFN) >*/
+    dnorcdf_(&u, &cdfn);
 /*<       CDF=CDFN >*/
     *cdf = cdfn;
 /*<       RETURN >*/
