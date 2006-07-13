@@ -1,0 +1,1 @@
+extern int trans_(real *a, integer *m, integer *n, integer *mn, integer *move, integer *iwrk, integer *iok);
