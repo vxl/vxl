@@ -24,8 +24,9 @@ static doublereal c_b33 = 0.;
 static doublereal c_b34 = 1.;
 
 /*<    >*/
-/* Subroutine */ int dgges_(char *jobvsl, char *jobvsr, char *sort, L_fp 
-	delctg, integer *n, doublereal *a, integer *lda, doublereal *b, 
+/* Subroutine */ int dgges_(char *jobvsl, char *jobvsr, char *sort,
+        logical (*delctg)(doublereal*,doublereal*,doublereal*),
+        integer *n, doublereal *a, integer *lda, doublereal *b, 
 	integer *ldb, integer *sdim, doublereal *alphar, doublereal *alphai, 
 	doublereal *beta, doublereal *vsl, integer *ldvsl, doublereal *vsr, 
 	integer *ldvsr, doublereal *work, integer *lwork, logical *bwork, 
