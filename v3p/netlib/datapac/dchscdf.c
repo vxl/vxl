@@ -15,12 +15,14 @@ extern "C" {
 #endif
 #include "v3p_netlib.h"
 
+#include <stdio.h>
+
 /* Table of constant values */
 
 static integer c__1 = 1;
 
 /*<       SUBROUTINE DCHSCDF(X,NU,CDF) >*/
-/* Subroutine */ int dchscdf_(real *x, integer *nu, real *cdf)
+/* Subroutine */ int dchscdf_(doublereal *x, integer *nu, doublereal *cdf)
 {
     /* Initialized data */
 
@@ -34,18 +36,6 @@ static integer c__1 = 1;
     static doublereal b32 = -13.;
     static doublereal b41 = 1.8004115226e-4;
     static doublereal b42 = 6.;
-
-    /* Format strings */
-    static char fmt_15[] = "(\002 \002,\002***** FATAL ERROR--THE SECOND INP\
-UT ARGUMENT TO THE DCHSCDF SUBROUTINE IS NON-POSITIVE ****\002*)";
-    static char fmt_47[] = "(\002 \002,\002***** THE VALUE OF THE ARGUMENT I\
-S \002,i8,\002 *****\002)";
-    static char fmt_4[] = "(\002 \002,\002***** NON-FATAL DIAGNOSTIC--THE FI\
-RST  INPUT ARGUMENT TO THE DCHSCDF SUBROUTINE IS NEGATIVE ****\002*)";
-    static char fmt_46[] = "(\002 \002,\002***** THE VALUE OF THE ARGUMENT I\
-S \002,e15.8,\002 *****\002)";
-    static char fmt_99[] = "(\002 \002,\002*****INTERNAL ERROR IN DCHSCDF SU\
-BROUTINE-\002-,\002IMPOSSIBLE BRANCH CONDITION AT BRANCH POINT = \002,i8)";
 
     /* System generated locals */
     integer i__1;
@@ -75,15 +65,6 @@ BROUTINE-\002-,\002IMPOSSIBLE BRANCH CONDITION AT BRANCH POINT = \002,i8)";
     real spchi;
     integer ievodd;
     extern /* Subroutine */ int norcdf_(real *, real *);
-
-    /* Fortran I/O blocks */
-    static cilist io___12 = { 0, 0, 0, fmt_15, 0 };
-    static cilist io___13 = { 0, 0, 0, fmt_47, 0 };
-    static cilist io___14 = { 0, 0, 0, fmt_4, 0 };
-    static cilist io___15 = { 0, 0, 0, fmt_46, 0 };
-    static cilist io___23 = { 0, 0, 0, fmt_99, 0 };
-
-
 
 /*     PURPOSE--THIS SUBROUTINE COMPUTES THE CUMULATIVE DISTRIBUTION */
 /*              FUNCTION VALUE FOR THE CHI-SQUARED DISTRIBUTION */
@@ -133,6 +114,9 @@ BROUTINE-\002-,\002IMPOSSIBLE BRANCH CONDITION AT BRANCH POINT = \002,i8)";
 
 /* --------------------------------------------------------------------- */
 
+/*<       DOUBLE PRECISION X >*/
+/*<       INTEGER NU >*/
+/*<       DOUBLE PRECISION CDF >*/
 /*<       DOUBLE PRECISION DX,PI,CHI,SUM,TERM,AI,DCDFN >*/
 /*<       DOUBLE PRECISION DNU >*/
 /*<       DOUBLE PRECISION DSQRT,DEXP >*/
@@ -172,29 +156,39 @@ BROUTINE-\002-,\002IMPOSSIBLE BRANCH CONDITION AT BRANCH POINT = \002,i8)";
 /*<       GOTO90 >*/
     goto L90;
 /*<    50 WRITE(IPR,15)  >*/
+/*
+   15 FORMAT(1H , 91H***** FATAL ERROR--THE SECOND INPUT ARGUMENT TO THE
+     1 DCHSCDF SUBROUTINE IS NON-POSITIVE *****)
+*/
 L50:
-    io___12.ciunit = ipr;
-    s_wsfe(&io___12);
-    e_wsfe();
+    fprintf(stderr,
+            "(***** FATAL ERROR--THE SECOND INPUT ARGUMENT TO THE "
+            "DCHSCDF SUBROUTINE IS NON-POSITIVE *****)\n");
 /*<       WRITE(IPR,47)NU >*/
-    io___13.ciunit = ipr;
-    s_wsfe(&io___13);
-    do_fio(&c__1, (char *)&(*nu), (ftnlen)sizeof(integer));
-    e_wsfe();
+/*
+   47 FORMAT(1H , 35H***** THE VALUE OF THE ARGUMENT IS ,I8   ,6H *****)
+*/
+    fprintf(stderr,
+            "(***** THE VALUE OF THE ARGUMENT IS %ld *****)\n", *nu);
 /*<       CDF=0.0 >*/
     *cdf = (float)0.;
 /*<       RETURN >*/
     return 0;
 /*<    55 WRITE(IPR,4) >*/
+/*
+    4 FORMAT(1H , 96H***** NON-FATAL DIAGNOSTIC--THE FIRST  INPUT ARGUME
+     1NT TO THE DCHSCDF SUBROUTINE IS NEGATIVE *****)
+*/
 L55:
-    io___14.ciunit = ipr;
-    s_wsfe(&io___14);
-    e_wsfe();
+    fprintf(stderr,
+            "(***** NON-FATAL DIAGNOSTIC--THE FIRST INPUT ARGUMENT TO THE "
+            "DCHSCDF SUBROUTINE IS NEGATIVE *****)\n");
 /*<       WRITE(IPR,46)X >*/
-    io___15.ciunit = ipr;
-    s_wsfe(&io___15);
-    do_fio(&c__1, (char *)&(*x), (ftnlen)sizeof(real));
-    e_wsfe();
+/*
+   46 FORMAT(1H , 35H***** THE VALUE OF THE ARGUMENT IS ,E15.8,6H *****)
+*/
+    fprintf(stderr,
+            "(***** THE VALUE OF THE ARGUMENT IS %f *****)\n", *x);
 /*<       CDF=0.0 >*/
     *cdf = (float)0.;
 /*<       RETURN >*/
@@ -291,10 +285,14 @@ L109:
 /*<       IBRAN=1 >*/
     ibran = 1;
 /*<       WRITE(IPR,99)IBRAN >*/
-    io___23.ciunit = ipr;
-    s_wsfe(&io___23);
-    do_fio(&c__1, (char *)&ibran, (ftnlen)sizeof(integer));
-    e_wsfe();
+/*
+   99 FORMAT(1H ,42H*****INTERNAL ERROR IN DCHSCDF SUBROUTINE--,
+     146HIMPOSSIBLE BRANCH CONDITION AT BRANCH POINT = ,I8) 
+*/
+    fprintf(stderr,
+            "(*****INTERNAL ERROR IN DCHSCDF SUBROUTINE "
+            "-- IMPOSSIBLE BRANCH CONDITION AT BRANCH POINT %ld)\n",
+            ibran);
 /*<    >*/
 /*<       RETURN >*/
     return 0;
