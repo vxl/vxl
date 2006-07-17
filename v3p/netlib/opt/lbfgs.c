@@ -71,7 +71,8 @@ static integer c__1 = 1;
     doublereal sq, yr, ys, yy;
     extern /* Subroutine */ int lb1_(integer *, integer *, integer *, 
 	    doublereal *, integer *, integer *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, logical *);
+	    doublereal *, doublereal *, logical *,
+            v3p_netlib_lbfgs_global_t*);
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, 
 	    integer *);
     extern /* Subroutine */ int daxpy_(integer *, doublereal *, doublereal *, 
@@ -432,8 +433,8 @@ L10:
 
 /*<    >*/
     if (iprint[1] >= 0) {
-	lb1_(&iprint[1], &iter, &nfun, &gnorm, n, m, &x[1], f, &g[1], &stp, &
-		finish);
+	lb1_(&iprint[1], &iter, &nfun, &gnorm, n, m, &x[1], f, &g[1], &stp,
+             &finish, v3p_netlib_lbfgs_global_arg);
     }
 
 /*    -------------------- */
@@ -660,8 +661,8 @@ L172:
 
 /*<    >*/
     if (iprint[1] >= 0) {
-	lb1_(&iprint[1], &iter, &nfun, &gnorm, n, m, &x[1], f, &g[1], &stp, &
-		finish);
+	lb1_(&iprint[1], &iter, &nfun, &gnorm, n, m, &x[1], f, &g[1], &stp,
+             &finish, v3p_netlib_lbfgs_global_arg);
     }
 /*<       IF (FINISH) THEN >*/
     if (finish) {
@@ -764,10 +765,14 @@ static void write50(double* v, int n)
 }
 
 /*<    >*/
-/* Subroutine */ int lb1_(integer *iprint, integer *iter, integer *nfun, 
-	doublereal *gnorm, integer *n, integer *m, doublereal *x, doublereal *
-	f, doublereal *g, doublereal *stp, logical *finish)
+/* Subroutine */ int lb1_(
+  integer *iprint, integer *iter, integer *nfun,
+  doublereal *gnorm, integer *n, integer *m, doublereal *x, doublereal *f,
+  doublereal *g, doublereal *stp, logical *finish,
+  v3p_netlib_lbfgs_global_t* v3p_netlib_lbfgs_global_arg
+  )
 {
+  (void)v3p_netlib_lbfgs_global_arg;
 /*     ------------------------------------------------------------- */
 /*     THIS ROUTINE PRINTS MONITORING INFORMATION. THE FREQUENCY AND */
 /*     AMOUNT OF OUTPUT ARE CONTROLLED BY IPRINT. */
