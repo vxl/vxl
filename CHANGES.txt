@@ -8,6 +8,9 @@ effect.  If you change something in VXL, please document it here.
       - Add VXL_IMPORT_BUILD_SETTINGS option (default to YES) to allow
         private libraries to have different compiler settings. (Setting
         to NO will permit differences.)
+        
+      - vsl can now read/write very large matrices and images in low-memory
+        situations.
 
       - PNG reader now supports sBIT for recovering the original bitdepth.
 
