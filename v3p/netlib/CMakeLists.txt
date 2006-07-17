@@ -108,7 +108,6 @@ SET( netlib_sources
   dgeqpf.c
   dgeqr2.c
   dgerq2.c
-  dggsvd.c
   dggsvp.c
   dlacpy.c
   dlags2.c
@@ -131,7 +130,6 @@ SET( netlib_sources
   dorm2r.c
   dormr2.c
   dtgsja.c
-  sggsvd.c
   sgeqpf.c
   sgeqr2.c
   sgerq2.c

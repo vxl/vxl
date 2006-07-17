@@ -58,14 +58,6 @@ float sqrtf(float);
   double urand_(int *iy);
   void   xerbla_(const char *srname, int *info);
 
-  void sggsvd_(char *jobu, char *jobv, char *jobq, int *m, int *n, int *p, int *k, int *l, float *a, int *lda,
-               float *b, int *ldb, float *alpha, float *beta, float *u, int * ldu, float *v, int *ldv, float *q, int *ldq,
-               float *work, int *iwork, int *info);
-
-  void dggsvd_(char *jobu, char *jobv, char *jobq, int *m, int *n, int *p, int *k, int *l,
-               double *a, int *lda, double *b, int *ldb, double *alpha, double *beta,
-               double *u, int *ldu, double *v, int *ldv, double *q, int *ldq, double *work, int *iwork, int *info);
-
   void saxpy_(const int *n, const float *sa, const float *sx, const int *incx, float *sy, const int *incy);
   void daxpy_(const int *n, const double *da, const double *dx, const int *incx, double *dy, const int *incy);
   void caxpy_(const int *n, const cmplx *ca, const cmplx *cx, const int *incx, cmplx *cy, const int *incy);
