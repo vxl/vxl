@@ -30,6 +30,7 @@
 #include "blas/scnrm2.h"
 #include "blas/scopy.h"
 #include "blas/sdot.h"
+#include "blas/slamch.h"
 #include "blas/snrm2.h"
 #include "blas/srot.h"
 #include "blas/srotg.h"

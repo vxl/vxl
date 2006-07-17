@@ -193,6 +193,12 @@ nm libv3p_netlib.a |grep " [TR] "
 #define sgemv_ v3p_netlib_sgemv_
 #define sger_ v3p_netlib_sger_
 #define simpru_ v3p_netlib_simpru_
+#define slamc1_ v3p_netlib_slamc1_
+#define slamc2_ v3p_netlib_slamc2_
+#define slamc3_ v3p_netlib_slamc3_
+#define slamc4_ v3p_netlib_slamc4_
+#define slamc5_ v3p_netlib_slamc5_
+#define slamch_ v3p_netlib_slamch_
 #define smake_ v3p_netlib_smake_
 #define smessg_ v3p_netlib_smessg_
 #define snrm2_ v3p_netlib_snrm2_

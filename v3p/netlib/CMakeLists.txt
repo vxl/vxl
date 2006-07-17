@@ -317,6 +317,7 @@ SET(V3P_NETLIB_blas_SOURCES
   blas/scnrm2.c blas/scnrm2.h
   blas/scopy.c blas/scopy.h
   blas/sdot.c blas/sdot.h
+  blas/slamch.c blas/slamch.h
   blas/snrm2.c blas/snrm2.h
   blas/srot.c blas/srot.h
   blas/srotg.c blas/srotg.h

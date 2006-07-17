@@ -184,6 +184,12 @@
 #undef sgemv_
 #undef sger_
 #undef simpru_
+#undef slamc1_
+#undef slamc2_
+#undef slamc3_
+#undef slamc4_
+#undef slamc5_
+#undef slamch_
 #undef smake_
 #undef smessg_
 #undef snrm2_
