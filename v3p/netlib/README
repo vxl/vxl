@@ -1,12 +1,11 @@
-This directory contains two netlib versions.  Files in tests,
-examplse, and this directory with names not starting in v3p_ belong to
-the original netlib for vxl.  Other files belong to the newer
-v3p_netlib library.
+This directory contains two netlib versions.  The routines have been
+grabbed from netlib and other places.  In general the C files are
+direct translations of the FORTRAN, so the .f should be edited if
+improvements are required or mods are to be made.
 
-The netlib library contains various routines grabbed from netlib and
-other places.  In general the C files are direct translations of the
-FORTRAN, so the .f should be edited if improvements are required or
-mods are to be made.
+The old netlib library has been almost completely removed.  All code
+but triangle.c and related code belong to the newer v3p_netlib
+library.
 
 The v3p_netlib library contains updated netlib code converted with f2c
 in a thread-safe manner.  Sources have been modified to use the
@@ -49,7 +48,7 @@ branch and then merging the changes to the main tree.
 
 ------------------------------------------------------------------------------
 
-The directories blas and linpack were created as follows:
+The other directories were created as follows:
 
 1.) Find needed fortran routines from http://www.netlib.org/liblist.html
 
@@ -165,5 +164,20 @@ routines.  Since the interface is extern "C" code, the symbol names
 are not changed by the precense or absence of const.
 
 cvs -q commit -m "Manually documented prototype and added v3p_netlib_const to appropriate arguments."
+
+------------------------------------------------------------------------------
+
+Thread safety can be partially checked in this directory by running
+
+grep "  static" **/*.c |grep -v constant
+
+Global data declared static seem to be constant, so only local
+variables are of concern, which is why the grep expression contains
+spaces.  Local statics that have been manually deemed safe (constant)
+should be marked with a "/* constant */" comment to avoid being listed
+in the grep output.
+
+Functions that call back to user functions have been manually given a
+userdata callback argument.  This allows them to be reentrant.
 
 ------------------------------------------------------------------------------
