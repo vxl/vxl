@@ -1,0 +1,14 @@
+m23d_ortho_flexible_builder
+ - Not fully tested yet
+ - make_pure_projections needs work to ensure each row has scaled version of the same matrix
+   - There may be a problem when calculating this due to the possible z-ambiguity?
+   - Perhaps that should be resolved first
+     - Having fixed ambiguity for mode 0, can we propogate it to
+       subsequent modes by checking the relevant z columns of P?
+       (Need to take scaling factors into account, which may be -ive)
+
+- compute_correction() on pure P produces noisy result
+  - identity is a solution to Aq=rhs
+  - However, found solution is worse.
+  - there is ambiguity due to near zero eigenvalues
+  - Allowing for this still produces a poor result (unclear why)

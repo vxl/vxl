@@ -1,0 +1,10 @@
+// The following text is included in the main documentation page by doxygen
+/*! \mainpage m23d : Manchester's Library for Generating 3D models from 2D data
+* Various functions for generating linear models of 3D point positions
+* and their variation, given multiple 2D views.
+*
+* Initial classes assume orthographic projection models, and that all points
+* are visible in all frames.  Note that the Oxford libraries contain more
+* well developed tools for dealing with tracking of rigid objects under
+* projective projections.
+*/
