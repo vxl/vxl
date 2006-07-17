@@ -18,5 +18,5 @@ IF(BUILD_TESTING)
   # test
   ADD_EXECUTABLE( netlib_integral_test integral-test.c )
   ADD_TEST( netlib_test_integral ${EXECUTABLE_OUTPUT_PATH}/netlib_integral_test )
-  TARGET_LINK_LIBRARIES(netlib_integral_test netlib)
+  TARGET_LINK_LIBRARIES(netlib_integral_test v3p_netlib)
 ENDIF(BUILD_TESTING)
