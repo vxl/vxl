@@ -37,101 +37,54 @@ v3p_netlib_lbfgs_init(v3p_netlib_lbfgs_global_t* v3p_netlib_lbfgs_global_arg)
   lb3_1.stpinit = 1; /* line search default step length, added by awf */
 }
 
+/* Map persistent data.  */
+#define info (*v3p_netlib_lbfgs_global_arg).private_info
+#define infoc (*v3p_netlib_lbfgs_global_arg).private_infoc
+#define nfev (*v3p_netlib_lbfgs_global_arg).private_nfev
+#define maxfev (*v3p_netlib_lbfgs_global_arg).private_maxfev
+#define stp (*v3p_netlib_lbfgs_global_arg).private_stp
+#define stp1 (*v3p_netlib_lbfgs_global_arg).private_stp1
+#define beta (*v3p_netlib_lbfgs_global_arg).private_beta
+#define ftol (*v3p_netlib_lbfgs_global_arg).private_ftol
+#define gnorm (*v3p_netlib_lbfgs_global_arg).private_gnorm
+#define xnorm (*v3p_netlib_lbfgs_global_arg).private_xnorm
+#define inmc (*v3p_netlib_lbfgs_global_arg).private_inmc
+#define iscn (*v3p_netlib_lbfgs_global_arg).private_iscn
+#define iycn (*v3p_netlib_lbfgs_global_arg).private_iycn
+#define iter (*v3p_netlib_lbfgs_global_arg).private_iter
+#define nfun (*v3p_netlib_lbfgs_global_arg).private_nfun
+#define ispt (*v3p_netlib_lbfgs_global_arg).private_ispt
+#define iypt (*v3p_netlib_lbfgs_global_arg).private_iypt
+#define bound (*v3p_netlib_lbfgs_global_arg).private_bound
+#define point (*v3p_netlib_lbfgs_global_arg).private_point
+#define finish (*v3p_netlib_lbfgs_global_arg).private_finish
+#define dg (*v3p_netlib_lbfgs_global_arg).private_dg
+#define fm (*v3p_netlib_lbfgs_global_arg).private_fm
+#define fx (*v3p_netlib_lbfgs_global_arg).private_fx
+#define fy (*v3p_netlib_lbfgs_global_arg).private_fy
+#define dgm (*v3p_netlib_lbfgs_global_arg).private_dgm
+#define dgx (*v3p_netlib_lbfgs_global_arg).private_dgx
+#define dgy (*v3p_netlib_lbfgs_global_arg).private_dgy
+#define fxm (*v3p_netlib_lbfgs_global_arg).private_fxm
+#define fym (*v3p_netlib_lbfgs_global_arg).private_fym
+#define stx (*v3p_netlib_lbfgs_global_arg).private_stx
+#define sty (*v3p_netlib_lbfgs_global_arg).private_sty
+#define dgxm (*v3p_netlib_lbfgs_global_arg).private_dgxm
+#define dgym (*v3p_netlib_lbfgs_global_arg).private_dgym
+#define finit (*v3p_netlib_lbfgs_global_arg).private_finit
+#define width (*v3p_netlib_lbfgs_global_arg).private_width
+#define stmin (*v3p_netlib_lbfgs_global_arg).private_stmin
+#define stmax (*v3p_netlib_lbfgs_global_arg).private_stmax
+#define stage1 (*v3p_netlib_lbfgs_global_arg).private_stage1
+#define width1 (*v3p_netlib_lbfgs_global_arg).private_width1
+#define ftest1 (*v3p_netlib_lbfgs_global_arg).private_ftest1
+#define brackt (*v3p_netlib_lbfgs_global_arg).private_brackt
+#define dginit (*v3p_netlib_lbfgs_global_arg).private_dginit
+#define dgtest (*v3p_netlib_lbfgs_global_arg).private_dgtest
+
 /* Table of constant values */
 
 static integer c__1 = 1;
-
-struct v3p_netlib_lbfgs_global2_s
-{
-  v3p_netlib_integer private_info;
-  v3p_netlib_integer private_infoc;
-  v3p_netlib_integer private_nfev;
-  v3p_netlib_integer private_maxfev;
-  v3p_netlib_doublereal private_stp;
-  v3p_netlib_doublereal private_stp1;
-  v3p_netlib_doublereal private_beta;
-  v3p_netlib_doublereal private_ftol;
-  v3p_netlib_doublereal private_gnorm;
-  v3p_netlib_doublereal private_xnorm;
-  v3p_netlib_integer private_inmc;
-  v3p_netlib_integer private_iscn;
-  v3p_netlib_integer private_iycn;
-  v3p_netlib_integer private_iter;
-  v3p_netlib_integer private_nfun;
-  v3p_netlib_integer private_ispt;
-  v3p_netlib_integer private_iypt;
-  v3p_netlib_integer private_bound;
-  v3p_netlib_integer private_point;
-  v3p_netlib_logical private_finish;
-  v3p_netlib_doublereal private_dg;
-  v3p_netlib_doublereal private_fm;
-  v3p_netlib_doublereal private_fx;
-  v3p_netlib_doublereal private_fy;
-  v3p_netlib_doublereal private_dgm;
-  v3p_netlib_doublereal private_dgx;
-  v3p_netlib_doublereal private_dgy;
-  v3p_netlib_doublereal private_fxm;
-  v3p_netlib_doublereal private_fym;
-  v3p_netlib_doublereal private_stx;
-  v3p_netlib_doublereal private_sty;
-  v3p_netlib_doublereal private_dgxm;
-  v3p_netlib_doublereal private_dgym;
-  v3p_netlib_doublereal private_finit;
-  v3p_netlib_doublereal private_width;
-  v3p_netlib_doublereal private_stmin;
-  v3p_netlib_doublereal private_stmax;
-  v3p_netlib_logical private_stage1;
-  v3p_netlib_doublereal private_width1;
-  v3p_netlib_doublereal private_ftest1;
-  v3p_netlib_logical private_brackt;
-  v3p_netlib_doublereal private_dginit;
-  v3p_netlib_doublereal private_dgtest;
-};
-static struct v3p_netlib_lbfgs_global2_s v3p_netlib_lbfgs_global2_inst;
-#define info v3p_netlib_lbfgs_global2_inst.private_info
-#define infoc v3p_netlib_lbfgs_global2_inst.private_infoc
-#define nfev v3p_netlib_lbfgs_global2_inst.private_nfev
-#define maxfev v3p_netlib_lbfgs_global2_inst.private_maxfev
-#define stp v3p_netlib_lbfgs_global2_inst.private_stp
-#define stp1 v3p_netlib_lbfgs_global2_inst.private_stp1
-#define beta v3p_netlib_lbfgs_global2_inst.private_beta
-#define ftol v3p_netlib_lbfgs_global2_inst.private_ftol
-#define gnorm v3p_netlib_lbfgs_global2_inst.private_gnorm
-#define xnorm v3p_netlib_lbfgs_global2_inst.private_xnorm
-#define inmc v3p_netlib_lbfgs_global2_inst.private_inmc
-#define iscn v3p_netlib_lbfgs_global2_inst.private_iscn
-#define iycn v3p_netlib_lbfgs_global2_inst.private_iycn
-#define iter v3p_netlib_lbfgs_global2_inst.private_iter
-#define nfun v3p_netlib_lbfgs_global2_inst.private_nfun
-#define ispt v3p_netlib_lbfgs_global2_inst.private_ispt
-#define iypt v3p_netlib_lbfgs_global2_inst.private_iypt
-#define bound v3p_netlib_lbfgs_global2_inst.private_bound
-#define point v3p_netlib_lbfgs_global2_inst.private_point
-#define finish v3p_netlib_lbfgs_global2_inst.private_finish
-#define dg v3p_netlib_lbfgs_global2_inst.private_dg
-#define fm v3p_netlib_lbfgs_global2_inst.private_fm
-#define fx v3p_netlib_lbfgs_global2_inst.private_fx
-#define fy v3p_netlib_lbfgs_global2_inst.private_fy
-#define dgm v3p_netlib_lbfgs_global2_inst.private_dgm
-#define dgx v3p_netlib_lbfgs_global2_inst.private_dgx
-#define dgy v3p_netlib_lbfgs_global2_inst.private_dgy
-#define fxm v3p_netlib_lbfgs_global2_inst.private_fxm
-#define fym v3p_netlib_lbfgs_global2_inst.private_fym
-#define stx v3p_netlib_lbfgs_global2_inst.private_stx
-#define sty v3p_netlib_lbfgs_global2_inst.private_sty
-#define dgxm v3p_netlib_lbfgs_global2_inst.private_dgxm
-#define dgym v3p_netlib_lbfgs_global2_inst.private_dgym
-#define finit v3p_netlib_lbfgs_global2_inst.private_finit
-#define width v3p_netlib_lbfgs_global2_inst.private_width
-#define stmin v3p_netlib_lbfgs_global2_inst.private_stmin
-#define stmax v3p_netlib_lbfgs_global2_inst.private_stmax
-#define stage1 v3p_netlib_lbfgs_global2_inst.private_stage1
-#define width1 v3p_netlib_lbfgs_global2_inst.private_width1
-#define ftest1 v3p_netlib_lbfgs_global2_inst.private_ftest1
-#define brackt v3p_netlib_lbfgs_global2_inst.private_brackt
-#define dginit v3p_netlib_lbfgs_global2_inst.private_dginit
-#define dgtest v3p_netlib_lbfgs_global2_inst.private_dgtest
-
 
 /*     ---------------------------------------------------------------------- */
 /*     This file contains the LBFGS algorithm and supporting routines */
@@ -840,7 +793,6 @@ static void write50(double* v, int n)
   doublereal *g, v3p_netlib_lbfgs_global_t* v3p_netlib_lbfgs_global_arg
   )
 {
-  (void)v3p_netlib_lbfgs_global_arg;
 /*     ------------------------------------------------------------- */
 /*     THIS ROUTINE PRINTS MONITORING INFORMATION. THE FREQUENCY AND */
 /*     AMOUNT OF OUTPUT ARE CONTROLLED BY IPRINT. */
@@ -1060,9 +1012,9 @@ static void write50(double* v, int n)
 
     /* Local variables */
     integer j;
-    extern /* Subroutine */ int mcstep_(doublereal *, doublereal *,
-                                        doublereal *, doublereal *,
-                                        doublereal *, doublereal *);
+    extern /* Subroutine */ int mcstep_(
+      doublereal *, doublereal *, doublereal *, doublereal *,
+      doublereal *, doublereal *, v3p_netlib_lbfgs_global_t*);
 
 /*<       INTEGER N,MAXFEV,INFO,NFEV >*/
 /*<       DOUBLE PRECISION F,STP,FTOL,GTOL,XTOL,STPMIN,STPMAX >*/
@@ -1429,7 +1381,8 @@ L45:
 /*           AND TO COMPUTE THE NEW STEP. */
 
 /*<    >*/
-	mcstep_(&dgxm, &dgym, &fm, &dgm, &stmin, &stmax);
+	mcstep_(&dgxm, &dgym, &fm, &dgm, &stmin, &stmax,
+                v3p_netlib_lbfgs_global_arg);
 
 /*           RESET THE FUNCTION AND GRADIENT VALUES FOR F. */
 
@@ -1448,7 +1401,8 @@ L45:
 /*           AND TO COMPUTE THE NEW STEP. */
 
 /*<    >*/
-	mcstep_(&dgx, &dgy, f, &dg, &stmin, &stmax);
+	mcstep_(&dgx, &dgy, f, &dg, &stmin, &stmax,
+                v3p_netlib_lbfgs_global_arg);
 /*<             END IF >*/
     }
 
@@ -1479,9 +1433,12 @@ L45:
 } /* mcsrch_ */
 
 /*<    >*/
-/* Subroutine */ int mcstep_(doublereal *dx, doublereal *dy,
-	doublereal *fp, doublereal *dp, doublereal *stpmin, 
-	doublereal *stpmax)
+/* Subroutine */ int mcstep_(
+  doublereal *dx, doublereal *dy,
+  doublereal *fp, doublereal *dp,
+  doublereal *stpmin, doublereal *stpmax,
+  v3p_netlib_lbfgs_global_t* v3p_netlib_lbfgs_global_arg
+  )
 {
     /* System generated locals */
     doublereal d__1, d__2, d__3;
@@ -1539,7 +1496,7 @@ L45:
 /*         IS BRACKETED THEN ON OUTPUT BRACKT IS SET TRUE. */
 
 /*       STPMIN AND STPMAX ARE INPUT VARIABLES WHICH SPECIFY LOWER */
-/*         AND UPPER MCBOUNDS FOR THE STEP. */
+/*         AND UPPER BOUNDS FOR THE STEP. */
 
 /*       INFOC IS AN INTEGER OUTPUT VARIABLE SET AS FOLLOWS: */
 /*         IF INFOC = 1,2,3,4,5, THEN THE STEP HAS BEEN COMPUTED */
