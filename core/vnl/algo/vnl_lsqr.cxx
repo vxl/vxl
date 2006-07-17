@@ -17,35 +17,14 @@
 
 #include <vnl/algo/vnl_netlib.h> // lsqr_()
 
-class vnl_lsqr_Activate
-{
- public:
-  static vnl_lsqr* current;
-
-  vnl_lsqr_Activate(vnl_lsqr* minimizer) {
-    if (current) {
-      vcl_cerr << "vnl_lsqr: ERROR: Nested minimizations not supported.\n";
-      vcl_abort();
-      // This is a copy of what goes on in LevenbergMarquardt, so if awf decides to
-      // fix that one, then maybe he could do the same here...
-    }
-    current = minimizer;
-  }
-  ~vnl_lsqr_Activate() {
-    current = 0;
-  }
-};
-
-vnl_lsqr *vnl_lsqr_Activate::current= 0;
-
 vnl_lsqr::~vnl_lsqr()
 {
 }
 
 // Requires number_of_residuals() of workspace in rw.
-int vnl_lsqr::aprod_(long* mode, long* m, long* n, double* x, double* y, long* /*leniw*/, long* /*lenrw*/, long* /*iw*/, double* rw )
+int vnl_lsqr::aprod_(long* mode, long* m, long* n, double* x, double* y, long* /*leniw*/, long* /*lenrw*/, long* /*iw*/, double* rw, void* userdata)
 {
-  vnl_lsqr* active = vnl_lsqr_Activate::current;
+  vnl_lsqr* self = static_cast<vnl_lsqr*>(userdata);
 
   //  If MODE = 1, compute  y = y + A*x.
   //  If MODE = 2, compute  x = x + A(transpose)*y.
@@ -55,12 +34,12 @@ int vnl_lsqr::aprod_(long* mode, long* m, long* n, double* x, double* y, long* /
 
   if (*mode == 1) {
     vnl_vector_ref<double> tmp(*m,rw);
-    active->ls_->multiply(x_ref, tmp);
+    self->ls_->multiply(x_ref, tmp);
     y_ref += tmp;
   }
   else {
     vnl_vector_ref<double> tmp(*n,rw);
-    active->ls_->transpose_multiply(y_ref, tmp);
+    self->ls_->transpose_multiply(y_ref, tmp);
     x_ref += tmp;
   }
 
@@ -95,13 +74,12 @@ int vnl_lsqr::minimize(vnl_vector<double>& result)
   vnl_vector<double> rhs(m);
   ls_->get_rhs(rhs);
 
-  vnl_lsqr_Activate activator(this); // This variable is not used, but the constructor must be called.
-
   v3p_netlib_lsqr_(
         &m, &n, aprod_, &damp, &leniw, &lenrw, iw, &rw[0],
         rhs.data_block(), &v[0], &w[0], result.data_block(), &se[0],
         &atol, &btol, &conlim, &max_iter_, &nout, &return_code_,
-        &num_iter_, &anorm, &acond, &rnorm, &arnorm, &xnorm);
+        &num_iter_, &anorm, &acond, &rnorm, &arnorm, &xnorm,
+        this);
 
   resid_norm_estimate_ = rnorm;
   result_norm_estimate_ = xnorm;

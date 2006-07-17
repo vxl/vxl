@@ -10,7 +10,8 @@ extern int v3p_netlib_lsqr_(
                v3p_netlib_integer*,
                v3p_netlib_integer*,
                v3p_netlib_integer*,
-               v3p_netlib_doublereal*),
+               v3p_netlib_doublereal*,
+               void*),
   v3p_netlib_doublereal *damp,
   v3p_netlib_integer *leniw,
   v3p_netlib_integer *lenrw,
@@ -32,5 +33,6 @@ extern int v3p_netlib_lsqr_(
   v3p_netlib_doublereal *acond,
   v3p_netlib_doublereal *rnorm,
   v3p_netlib_doublereal *arnorm,
-  v3p_netlib_doublereal *xnorm
+  v3p_netlib_doublereal *xnorm,
+  void* userdata
   );

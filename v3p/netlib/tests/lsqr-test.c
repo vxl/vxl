@@ -32,7 +32,7 @@ static integer c__80 = 80;
 /*<       SUBROUTINE APROD ( MODE, M, N, X, Y, LENIW, LENRW, IW, RW ) >*/
 /* Subroutine */ int aprod_(integer *mode, integer *m, integer *n, doublereal 
 	*x, doublereal *y, integer *leniw, integer *lenrw, integer *iw, 
-	doublereal *rw)
+	doublereal *rw, void* userdata)
 {
     integer locd, locw, lochy, lochz;
     extern /* Subroutine */ int aprod1_(integer *, integer *, doublereal *, 
@@ -42,6 +42,7 @@ static integer c__80 = 80;
 	    doublereal *);
     (void)leniw;
     (void)lenrw;
+    (void)userdata;
 
 /*<       INTEGER            MODE, M, N, LENIW, LENRW >*/
 /*<       INTEGER            IW(LENIW) >*/
@@ -461,7 +462,8 @@ static integer c__80 = 80;
     doublereal acond;
     extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
 	    integer *), aprod_(integer *, integer *, integer *, doublereal *, 
-	    doublereal *, integer *, integer *, integer *, doublereal *);
+	    doublereal *, integer *, integer *, integer *, doublereal *,
+            void*);
     doublereal anorm;
     integer lochy;
     doublereal enorm;
@@ -560,7 +562,7 @@ static integer c__80 = 80;
 /*<    >*/
     lsqr_(m, n, aprod_, damp, &c__1, &c__600, iw, rw, u, v, w, x, se, &
 	    atol, &btol, &conlim, &itnlim, &nout, &istop, &itn, &anorm, &
-	    acond, &rnorm, &arnorm, &xnorm);
+	    acond, &rnorm, &arnorm, &xnorm, 0);
 /*     Examine the results. */
 /*     We print the residual norms  RNORM  and  ARNORM  given by LSQR, */
 /*     and then compute their true values in terms of the solution  X */
@@ -591,7 +593,7 @@ static integer c__80 = 80;
 /*<       CALL DSCAL ( M, (-ONE), U, 1 ) >*/
     dscal_(m, &c_b53, u, &c__1);
 /*<       CALL APROD ( 1, M, N, X, U, LENIW, LENRW, IW, RW ) >*/
-    aprod_(&c__1, m, n, x, u, &c__1, &c__600, iw, rw);
+    aprod_(&c__1, m, n, x, u, &c__1, &c__600, iw, rw, 0);
 /*     Compute  V = A(transpose)*U  +  DAMP**2 * X. */
 /*     This will be close to zero in all cases */
 /*     if  X  is close to a solution. */
@@ -600,7 +602,7 @@ static integer c__80 = 80;
 /*<       CALL DSCAL ( N, DAMPSQ, V, 1 ) >*/
     dscal_(n, &dampsq, v, &c__1);
 /*<       CALL APROD ( 2, M, N, V, U, LENIW, LENRW, IW, RW ) >*/
-    aprod_(&c__2, m, n, v, u, &c__1, &c__600, iw, rw);
+    aprod_(&c__2, m, n, v, u, &c__1, &c__600, iw, rw, 0);
 /*     Compute the norms associated with  X, U, V. */
 /*<       XNORM  = DNRM2 ( N, X, 1 ) >*/
     xnorm = dnrm2_(n, x, &c__1);

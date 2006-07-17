@@ -31,14 +31,15 @@ static integer c__2 = 2;
                      v3p_netlib_integer*,
                      v3p_netlib_integer*,
                      v3p_netlib_integer*,
-                     v3p_netlib_doublereal*),
+                     v3p_netlib_doublereal*,
+                     void*),
         doublereal *
 	damp, integer *leniw, integer *lenrw, integer *iw, doublereal *rw, 
 	doublereal *u, doublereal *v, doublereal *w, doublereal *x, 
 	doublereal *se, doublereal *atol, doublereal *btol, doublereal *
 	conlim, integer *itnlim, integer *nout, integer *istop, integer *itn, 
 	doublereal *anorm, doublereal *acond, doublereal *rnorm, doublereal *
-	arnorm, doublereal *xnorm)
+	arnorm, doublereal *xnorm, void* userdata)
 {
     /* System generated locals */
     integer i__1;
@@ -460,7 +461,8 @@ static integer c__2 = 2;
 	d__1 = 1. / beta;
 	dscal_(m, &d__1, &u[1], &c__1);
 /*<          CALL APROD ( 2, M, N, V, U, LENIW, LENRW, IW, RW ) >*/
-	(*aprod)(&c__2, m, n, &v[1], &u[1], leniw, lenrw, &iw[1], &rw[1]);
+	(*aprod)(&c__2, m, n, &v[1], &u[1], leniw, lenrw, &iw[1], &rw[1],
+                 userdata);
 /*<          ALFA   =   DNRM2 ( N, V, 1 ) >*/
 	alfa = dnrm2_(n, &v[1], &c__1);
 /*<       END IF >*/
@@ -513,7 +515,8 @@ L100:
     d__1 = -alfa;
     dscal_(m, &d__1, &u[1], &c__1);
 /*<       CALL APROD ( 1, M, N, V, U, LENIW, LENRW, IW, RW ) >*/
-    (*aprod)(&c__1, m, n, &v[1], &u[1], leniw, lenrw, &iw[1], &rw[1]);
+    (*aprod)(&c__1, m, n, &v[1], &u[1], leniw, lenrw, &iw[1], &rw[1],
+             userdata);
 /*<       BETA   =   DNRM2 ( M, U, 1 ) >*/
     beta = dnrm2_(m, &u[1], &c__1);
 /*<       BBNORM =   BBNORM  +  ALFA**2  +  BETA**2  +  DAMPSQ >*/
@@ -531,7 +534,8 @@ L100:
 	d__1 = -beta;
 	dscal_(n, &d__1, &v[1], &c__1);
 /*<          CALL APROD ( 2, M, N, V, U, LENIW, LENRW, IW, RW ) >*/
-	(*aprod)(&c__2, m, n, &v[1], &u[1], leniw, lenrw, &iw[1], &rw[1]);
+	(*aprod)(&c__2, m, n, &v[1], &u[1], leniw, lenrw, &iw[1], &rw[1],
+                 userdata);
 /*<          ALFA   =   DNRM2 ( N, V, 1 ) >*/
 	alfa = dnrm2_(n, &v[1], &c__1);
 /*<          IF (ALFA .GT. ZERO) THEN >*/
