@@ -10,7 +10,7 @@ IF(BUILD_TESTING)
   # test
   ADD_EXECUTABLE( netlib_slamch_test slamch-test.c )
   ADD_TEST( netlib_test_slamch ${EXECUTABLE_OUTPUT_PATH}/netlib_slamch_test )
-  TARGET_LINK_LIBRARIES(netlib_slamch_test netlib)
+  TARGET_LINK_LIBRARIES(netlib_slamch_test v3p_netlib)
   # test
   ADD_EXECUTABLE( netlib_tricall tricall.c )
   ADD_TEST( netlib_test_tricall ${EXECUTABLE_OUTPUT_PATH}/netlib_tricall )
