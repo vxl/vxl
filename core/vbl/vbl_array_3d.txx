@@ -28,6 +28,12 @@ void vbl_array_3d<T>::construct(int n1, int n2, int n3)
   row2_count_ = n2;
   row3_count_ = n3;
 
+  // If any of the dimensions are 0, don't allocate memory, just return.
+  if ((n1 * n2 * n3)==0) {
+    element_ = 0;
+    return;
+  }
+
   // allocate the memory for the first level pointers.
   element_ = new T** [n1];
 
