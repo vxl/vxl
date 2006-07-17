@@ -22,9 +22,9 @@ extern "C" {
 {
     /* Initialized data */
 
-    static doublereal p5 = .5;
-    static doublereal p25 = .25;
-    static doublereal zero = 0.;
+    static doublereal p5 = .5; /* constant */
+    static doublereal p25 = .25; /* constant */
+    static doublereal zero = 0.; /* constant */
 
     /* System generated locals */
     integer r_dim1, r_offset, i__1, i__2, i__3;

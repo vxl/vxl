@@ -27,9 +27,9 @@ static integer c__2 = 2;
 {
     /* Initialized data */
 
-    static doublereal p1 = .1;
-    static doublereal p001 = .001;
-    static doublereal zero = 0.;
+    static doublereal p1 = .1; /* constant */
+    static doublereal p001 = .001; /* constant */
+    static doublereal zero = 0.; /* constant */
 
     /* System generated locals */
     integer r_dim1, r_offset, i__1, i__2;

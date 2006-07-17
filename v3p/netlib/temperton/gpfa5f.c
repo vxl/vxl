@@ -31,10 +31,10 @@ static integer c__5 = 5;
 {
     /* Initialized data */
 
-    static real sin36 = (float).587785252292473;
-    static real sin72 = (float).951056516295154;
-    static real qrt5 = (float).559016994374947;
-    static integer lvr = 128;
+    static real sin36 = (float).587785252292473; /* constant */
+    static real sin72 = (float).951056516295154; /* constant */
+    static real qrt5 = (float).559016994374947; /* constant */
+    static integer lvr = 128; /* constant */
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8, i__9, i__10;

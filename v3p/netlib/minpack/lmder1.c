@@ -30,8 +30,8 @@ extern "C" {
 {
     /* Initialized data */
 
-    static doublereal factor = 100.;
-    static doublereal zero = 0.;
+    static doublereal factor = 100.; /* constant */
+    static doublereal zero = 0.; /* constant */
 
     /* System generated locals */
     integer fjac_dim1, fjac_offset;

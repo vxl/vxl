@@ -20,10 +20,10 @@ doublereal enorm_(integer *n, doublereal *x)
 {
     /* Initialized data */
 
-    static doublereal one = 1.;
-    static doublereal zero = 0.;
-    static doublereal rdwarf = 3.834e-20;
-    static doublereal rgiant = 1.304e19;
+    static doublereal one = 1.; /* constant */
+    static doublereal zero = 0.; /* constant */
+    static doublereal rdwarf = 3.834e-20; /* constant */
+    static doublereal rgiant = 1.304e19; /* constant */
 
     /* System generated locals */
     integer i__1;

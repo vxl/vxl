@@ -33,7 +33,7 @@ static integer c__2 = 2;
 {
     /* Initialized data */
 
-    static integer lvr = 1024;
+    static integer lvr = 1024; /* constant */
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8, i__9, i__10;

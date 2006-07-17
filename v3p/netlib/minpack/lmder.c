@@ -38,13 +38,13 @@ static logical c_true = TRUE_;
 {
     /* Initialized data */
 
-    static doublereal one = 1.;
-    static doublereal p1 = .1;
-    static doublereal p5 = .5;
-    static doublereal p25 = .25;
-    static doublereal p75 = .75;
-    static doublereal p0001 = 1e-4;
-    static doublereal zero = 0.;
+    static doublereal one = 1.; /* constant */
+    static doublereal p1 = .1; /* constant */
+    static doublereal p5 = .5; /* constant */
+    static doublereal p25 = .25; /* constant */
+    static doublereal p75 = .75; /* constant */
+    static doublereal p0001 = 1e-4; /* constant */
+    static doublereal zero = 0.; /* constant */
 
     /* System generated locals */
     integer fjac_dim1, fjac_offset, i__1, i__2;

@@ -28,7 +28,7 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static doublereal zero = 0.;
+    static doublereal zero = 0.; /* constant */
 
     /* System generated locals */
     integer fjac_dim1, fjac_offset, i__1, i__2;

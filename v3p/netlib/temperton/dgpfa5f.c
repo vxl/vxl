@@ -32,10 +32,10 @@ static integer c__5 = 5;
 {
     /* Initialized data */
 
-    static doublereal sin36 = .587785252292473;
-    static doublereal sin72 = .951056516295154;
-    static doublereal qrt5 = .559016994374947;
-    static integer lvr = 128;
+    static doublereal sin36 = .587785252292473; /* constant */
+    static doublereal sin72 = .951056516295154; /* constant */
+    static doublereal qrt5 = .559016994374947; /* constant */
+    static integer lvr = 128; /* constant */
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8, i__9, i__10;

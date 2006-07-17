@@ -23,7 +23,7 @@ extern "C" {
 {
     /* Initialized data */
 
-    static integer iurand = 0;
+    static integer iurand = 0; /* constant */
 
     /* System generated locals */
     integer i__1;

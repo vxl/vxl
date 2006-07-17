@@ -32,8 +32,8 @@ static integer c__3 = 3;
 {
     /* Initialized data */
 
-    static doublereal sin60 = .866025403784437;
-    static integer lvr = 128;
+    static doublereal sin60 = .866025403784437; /* constant */
+    static integer lvr = 128; /* constant */
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8, i__9, i__10;

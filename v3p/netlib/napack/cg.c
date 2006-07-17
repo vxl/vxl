@@ -93,13 +93,13 @@ extern "C" {
 {
     /* Initialized data */
 
-    static doublereal a1 = .1;
-    static doublereal a2 = .9;
-    static doublereal a3 = 5.;
-    static doublereal a4 = .2;
-    static doublereal a5 = 10.;
-    static doublereal a6 = .9;
-    static doublereal a7 = .3;
+    static doublereal a1 = .1; /* constant */
+    static doublereal a2 = .9; /* constant */
+    static doublereal a3 = 5.; /* constant */
+    static doublereal a4 = .2; /* constant */
+    static doublereal a5 = 10.; /* constant */
+    static doublereal a6 = .9; /* constant */
+    static doublereal a7 = .3; /* constant */
 
     /* System generated locals */
     integer h_dim1, h_offset, i__1;
