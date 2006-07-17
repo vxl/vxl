@@ -20,7 +20,7 @@ doublereal dpmpar_(integer *i__)
 {
     /* Initialized data */
 
-    static struct {
+    static struct { /* constant */
 	doublereal e_1[3];
 	doublereal fill_2[1];
 	}
@@ -167,7 +167,7 @@ doublereal dpmpar_(integer *i__)
 /*     Machine constants for the Data General Eclipse S/200. */
 
 /*     Note - it may be appropriate to include the following card - */
-/*     static dmach(3) */
+/*     static dmach(3) */ /* constant */
 
 /*     data minmag/20k,3*0/,maxmag/77777k,3*177777k/ */
 /*     data mcheps/32020k,3*0/ */
