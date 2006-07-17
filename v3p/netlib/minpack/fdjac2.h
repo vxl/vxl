@@ -3,7 +3,8 @@ extern int v3p_netlib_fdjac2_(
               v3p_netlib_integer*,
               v3p_netlib_doublereal*,
               v3p_netlib_doublereal*,
-              v3p_netlib_integer*),
+              v3p_netlib_integer*,
+              void*),
   v3p_netlib_integer *m,
   v3p_netlib_integer *n,
   v3p_netlib_doublereal *x,
@@ -12,5 +13,6 @@ extern int v3p_netlib_fdjac2_(
   v3p_netlib_integer *ldfjac,
   v3p_netlib_integer *iflag,
   v3p_netlib_doublereal *epsfcn,
-  v3p_netlib_doublereal *wa
+  v3p_netlib_doublereal *wa,
+  void* userdata
   );

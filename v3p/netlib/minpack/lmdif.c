@@ -26,14 +26,15 @@ static logical c_true = TRUE_;
               v3p_netlib_integer*,
               v3p_netlib_doublereal*,
               v3p_netlib_doublereal*,
-              v3p_netlib_integer*),
+              v3p_netlib_integer*,
+              void*),
   integer *m, integer *n, doublereal *x,
 	doublereal *fvec, doublereal *ftol, doublereal *xtol, doublereal *
 	gtol, integer *maxfev, doublereal *epsfcn, doublereal *diag, integer *
 	mode, doublereal *factor, integer *nprint, integer *info, integer *
 	nfev, doublereal *fjac, integer *ldfjac, integer *ipvt, doublereal *
 	qtf, doublereal *wa1, doublereal *wa2, doublereal *wa3, doublereal *
-	wa4)
+	wa4, void* userdata)
 {
     /* Initialized data */
 
@@ -73,10 +74,11 @@ static logical c_true = TRUE_;
                v3p_netlib_integer*,
                v3p_netlib_doublereal*,
                v3p_netlib_doublereal*,
-               v3p_netlib_integer*),
+               v3p_netlib_integer*,
+               void*),
             integer *, integer *,
 	    doublereal *, doublereal *, doublereal *, integer *, integer *, 
-	    doublereal *, doublereal *);
+	    doublereal *, doublereal *, void*);
     doublereal pnorm, xnorm=0, fnorm1, actred, dirder, epsmch, prered;
     extern doublereal dpmpar_(integer *);
 
@@ -327,7 +329,7 @@ L20:
 /*<       iflag = 1 >*/
     iflag = 1;
 /*<       call fcn(m,n,x,fvec,iflag) >*/
-    (*fcn)(m, n, &x[1], &fvec[1], &iflag);
+    (*fcn)(m, n, &x[1], &fvec[1], &iflag, userdata);
 /*<       nfev = 1 >*/
     *nfev = 1;
 /*<       if (iflag .lt. 0) go to 300 >*/
@@ -355,7 +357,7 @@ L30:
     iflag = 2;
 /*<          call fdjac2(fcn,m,n,x,fvec,fjac,ldfjac,iflag,epsfcn,wa4) >*/
     fdjac2_(fcn, m, n, &x[1], &fvec[1], &fjac[fjac_offset], ldfjac, &
-	    iflag, epsfcn, &wa4[1]);
+	    iflag, epsfcn, &wa4[1], userdata);
 /*<          nfev = nfev + n >*/
     *nfev += *n;
 /*<          if (iflag .lt. 0) go to 300 >*/
@@ -373,7 +375,7 @@ L30:
     iflag = 0;
 /*<          if (mod(iter-1,nprint) .eq. 0) call fcn(m,n,x,fvec,iflag) >*/
     if ((iter - 1) % *nprint == 0) {
-	(*fcn)(m, n, &x[1], &fvec[1], &iflag);
+	(*fcn)(m, n, &x[1], &fvec[1], &iflag, userdata);
     }
 /*<          if (iflag .lt. 0) go to 300 >*/
     if (iflag < 0) {
@@ -594,7 +596,7 @@ L200:
 /*<             iflag = 1 >*/
     iflag = 1;
 /*<             call fcn(m,n,wa2,wa4,iflag) >*/
-    (*fcn)(m, n, &wa2[1], &wa4[1], &iflag);
+    (*fcn)(m, n, &wa2[1], &wa4[1], &iflag, userdata);
 /*<             nfev = nfev + 1 >*/
     ++(*nfev);
 /*<             if (iflag .lt. 0) go to 300 >*/
@@ -809,7 +811,7 @@ L300:
     iflag = 0;
 /*<       if (nprint .gt. 0) call fcn(m,n,x,fvec,iflag) >*/
     if (*nprint > 0) {
-	(*fcn)(m, n, &x[1], &fvec[1], &iflag);
+	(*fcn)(m, n, &x[1], &fvec[1], &iflag, userdata);
     }
 /*<       return >*/
     return 0;

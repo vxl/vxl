@@ -117,11 +117,11 @@ class vnl_levenberg_marquardt : public vnl_nonlinear_minimizer
   void init(vnl_least_squares_function* f);
 
   // Communication with callback
-  friend class vnl_levenberg_marquardt_Activate;
   static void lmdif_lsqfun(long* m, long* n, double* x,
-                           double* fx, long* iflag);
+                           double* fx, long* iflag, void* userdata);
   static void lmder_lsqfun(long* m, long* n, double* x,
-                           double* fx, double* fJ, long*, long* iflag);
+                           double* fx, double* fJ, long*, long* iflag,
+                           void* userdata);
 };
 
 //: Find minimum of "f", starting at "initial_estimate", and return.

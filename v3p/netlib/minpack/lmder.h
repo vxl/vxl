@@ -6,7 +6,8 @@ extern int v3p_netlib_lmder_(
               v3p_netlib_doublereal*,
               v3p_netlib_doublereal*,
               v3p_netlib_integer*,
-              v3p_netlib_integer*),
+              v3p_netlib_integer*,
+              void*),
   v3p_netlib_integer *m,
   v3p_netlib_integer *n,
   v3p_netlib_doublereal *x,
@@ -29,5 +30,6 @@ extern int v3p_netlib_lmder_(
   v3p_netlib_doublereal *wa1,
   v3p_netlib_doublereal *wa2,
   v3p_netlib_doublereal *wa3,
-  v3p_netlib_doublereal *wa4
+  v3p_netlib_doublereal *wa4,
+  void* userdata
   );

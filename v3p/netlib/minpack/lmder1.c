@@ -23,10 +23,12 @@ extern "C" {
               v3p_netlib_doublereal*,
               v3p_netlib_doublereal*,
               v3p_netlib_integer*,
-              v3p_netlib_integer*),
+              v3p_netlib_integer*,
+              void*),
         integer *m, integer *n, doublereal *x, 
 	doublereal *fvec, doublereal *fjac, integer *ldfjac, doublereal *tol, 
-	integer *info, integer *ipvt, doublereal *wa, integer *lwa)
+	integer *info, integer *ipvt, doublereal *wa, integer *lwa,
+        void* userdata)
 {
     /* Initialized data */
 
@@ -46,13 +48,14 @@ extern "C" {
                   v3p_netlib_doublereal*,
                   v3p_netlib_doublereal*,
                   v3p_netlib_integer*,
-                  v3p_netlib_integer*),
+                  v3p_netlib_integer*,
+                  void*),
             integer *, integer *, doublereal 
 	    *, doublereal *, doublereal *, integer *, doublereal *, 
 	    doublereal *, doublereal *, integer *, doublereal *, integer *, 
 	    doublereal *, integer *, integer *, integer *, integer *, integer 
 	    *, doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *);
+	    doublereal *, void*);
     integer maxfev, nprint;
 
 /*<       integer m,n,ldfjac,info,lwa >*/
@@ -223,7 +226,8 @@ extern "C" {
     lmder_(fcn, m, n, &x[1], &fvec[1], &fjac[fjac_offset], ldfjac, &
 	    ftol, &xtol, &gtol, &maxfev, &wa[1], &mode, &factor, &nprint, 
 	    info, &nfev, &njev, &ipvt[1], &wa[*n + 1], &wa[(*n << 1) + 1], &
-	    wa[*n * 3 + 1], &wa[(*n << 2) + 1], &wa[*n * 5 + 1]);
+	    wa[*n * 3 + 1], &wa[(*n << 2) + 1], &wa[*n * 5 + 1],
+           userdata);
 /*<       if (info .eq. 8) info = 4 >*/
     if (*info == 8) {
 	*info = 4;
