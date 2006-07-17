@@ -85,11 +85,12 @@ extern "C" {
 /* Subroutine */ int cg_(doublereal *x, doublereal *e, integer *it, 
 	doublereal *step, doublereal *t, integer *limit, integer *n, integer *
 	m,
-        double (*value)(double*),
-        void (*grad)(double*,double*),
-        void (*both)(double*,double*,double*),
-        void (*pre)(double*,double*),
-        doublereal *h__)
+        double (*value)(double*,void*),
+        void (*grad)(double*,double*,void*),
+        void (*both)(double*,double*,double*,void*),
+        void (*pre)(double*,double*,void*),
+        doublereal *h__,
+        void* userdata)
 {
     /* Initialized data */
 
@@ -118,14 +119,15 @@ extern "C" {
     doublereal p, q, r__, s, v=0, w=0, y[50], z__[50], a8,
                c0, c1=0, d0, f0, f1, l3, da, db, fa, fb, fc;
     extern doublereal fd_(doublereal *, doublereal *, doublereal *, integer *,
-                          void (*grad)(double*,double*));
+                          void (*grad)(double*,double*,void*), void*);
     integer na=0, nb, nc, nd, iq=0;
     extern doublereal fv_(doublereal *, doublereal *, doublereal *, integer *,
-                          double (*value)(double*));
+                          double (*value)(double*,void*), void*);
     extern /* Subroutine */ int cub_(doublereal *, doublereal *, doublereal *,
 	     doublereal *, doublereal *, doublereal *, doublereal *), fvd_(
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, integer *, void (*)(double*,double*,double*)), ins_(doublereal *, doublereal *, 
+	    doublereal *, integer *, void (*)(double*,double*,double*,void*), void*),
+            ins_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, integer *, doublereal *, doublereal *)
 	    ;
@@ -149,7 +151,7 @@ extern "C" {
 /*<       IT = 0 >*/
     *it = 0;
 /*<       CALL BOTH(F,H(1,3),X) >*/
-    (*both)(&f, &h__[h_dim1 * 3 + 1], &x[1]);
+    (*both)(&f, &h__[h_dim1 * 3 + 1], &x[1], userdata);
 /*<       E = 0. >*/
     *e = (float)0.;
 /*<       DO 10 I = 1,N >*/
@@ -168,7 +170,7 @@ extern "C" {
 /*<       L3 = 1./DLOG(A3) >*/
     l3 = (float)1. / log(a3);
 /*<       CALL PRE(H(1,2),H(1,3)) >*/
-    (*pre)(&h__[(h_dim1 << 1) + 1], &h__[h_dim1 * 3 + 1]);
+    (*pre)(&h__[(h_dim1 << 1) + 1], &h__[h_dim1 * 3 + 1], userdata);
 /*<       A = STEP >*/
     a = *step;
 /*<       IF ( A .GT. 0. ) GOTO 30 >*/
@@ -218,7 +220,7 @@ L50:
     d__ = -g;
 /*< 70    FA = FV(A,X,H,N,VALUE) >*/
 L70:
-    fa = fv_(&a, &x[1], &h__[h_offset], n, value);
+    fa = fv_(&a, &x[1], &h__[h_offset], n, value, userdata);
 /*<       C0 = A >*/
     c0 = a;
 /*<       F0 = FA >*/
@@ -295,7 +297,7 @@ L100:
 /*<       Q = A3*Q >*/
     q = a3 * q;
 /*<       P = FV(Q,X,H,N,VALUE) >*/
-    p = fv_(&q, &x[1], &h__[h_offset], n, value);
+    p = fv_(&q, &x[1], &h__[h_offset], n, value, userdata);
 /*<       CALL INS(Q,P,A,B,C,FA,FB,FC,J,Y,Z) >*/
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       IF ( P-F .LT. W*Q ) GOTO 100 >*/
@@ -312,7 +314,7 @@ L110:
 	q = c0 * (float).01;
     }
 /*<       P = FV(Q,X,H,N,VALUE) >*/
-    p = fv_(&q, &x[1], &h__[h_offset], n, value);
+    p = fv_(&q, &x[1], &h__[h_offset], n, value, userdata);
 /*<       IF ( P .LE. F0 ) GOTO 120 >*/
     if (p <= f0) {
 	goto L120;
@@ -367,7 +369,7 @@ L150:
 /*<       Q = A4*Q >*/
     q = a4 * q;
 /*<       P = FV(Q,X,H,N,VALUE) >*/
-    p = fv_(&q, &x[1], &h__[h_offset], n, value);
+    p = fv_(&q, &x[1], &h__[h_offset], n, value, userdata);
 /*<       CALL INS(Q,P,A,B,C,FA,FB,FC,J,Y,Z) >*/
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       IF ( P-F .GE. V*Q ) GOTO 150 >*/
@@ -409,7 +411,7 @@ L170:
 	goto L320;
     }
 /*<       P = FV(Q,X,H,N,VALUE) >*/
-    p = fv_(&q, &x[1], &h__[h_offset], n, value);
+    p = fv_(&q, &x[1], &h__[h_offset], n, value, userdata);
 /*<       CALL INS(Q,P,A,B,C,FA,FB,FC,J,Y,Z) >*/
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       NA = NA + 1 >*/
@@ -433,7 +435,7 @@ L190:
 /*<       Q = A4*Q >*/
     q = a4 * q;
 /*<       P = FV(Q,X,H,N,VALUE) >*/
-    p = fv_(&q, &x[1], &h__[h_offset], n, value);
+    p = fv_(&q, &x[1], &h__[h_offset], n, value, userdata);
 /*<       CALL INS(Q,P,A,B,C,FA,FB,FC,J,Y,Z) >*/
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       IF ( P-F .GE. V*Q ) GOTO 190 >*/
@@ -472,7 +474,7 @@ L220:
 /*<       Q = A3*Q >*/
     q = a3 * q;
 /*<       P = FV(Q,X,H,N,VALUE) >*/
-    p = fv_(&q, &x[1], &h__[h_offset], n, value);
+    p = fv_(&q, &x[1], &h__[h_offset], n, value, userdata);
 /*<       CALL INS(Q,P,A,B,C,FA,FB,FC,J,Y,Z) >*/
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       IF ( P-F .LT. W*Q ) GOTO 220 >*/
@@ -504,7 +506,7 @@ L240:
 /*<       ND = ND + 1 >*/
     ++nd;
 /*<       P = FV(Q,X,H,N,VALUE) >*/
-    p = fv_(&q, &x[1], &h__[h_offset], n, value);
+    p = fv_(&q, &x[1], &h__[h_offset], n, value, userdata);
 /*<       CALL INS(Q,P,A,B,C,FA,FB,FC,J,Y,Z) >*/
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       IF ( P-F .LT. W*Q ) GOTO 240 >*/
@@ -553,7 +555,7 @@ L260:
 /*<       Q = A - .5*Q/E >*/
     q = a - q * (float).5 / *e;
 /*<       P = FV(Q,X,H,N,VALUE) >*/
-    p = fv_(&q, &x[1], &h__[h_offset], n, value);
+    p = fv_(&q, &x[1], &h__[h_offset], n, value, userdata);
 /*<       CALL INS(Q,P,A,B,C,FA,FB,FC,J,Y,Z) >*/
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       GOTO 320 >*/
@@ -592,7 +594,7 @@ L270:
 	goto L320;
     }
 /*<       P = FV(Q,X,H,N,VALUE) >*/
-    p = fv_(&q, &x[1], &h__[h_offset], n, value);
+    p = fv_(&q, &x[1], &h__[h_offset], n, value, userdata);
 /*<       CALL INS(Q,P,A,B,C,FA,FB,FC,J,Y,Z) >*/
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       GOTO 320 >*/
@@ -611,7 +613,7 @@ L280:
 /*<       Q = .5*D/Q >*/
     q = d__ * (float).5 / q;
 /*<       P = FV(Q,X,H,N,VALUE) >*/
-    p = fv_(&q, &x[1], &h__[h_offset], n, value);
+    p = fv_(&q, &x[1], &h__[h_offset], n, value, userdata);
 /*<       CALL INS(Q,P,A,B,C,FA,FB,FC,J,Y,Z) >*/
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       GOTO 320 >*/
@@ -638,7 +640,7 @@ L310:
 /*<       Q = A3*Q >*/
     q = a3 * q;
 /*<       P = FV(Q,X,H,N,VALUE) >*/
-    p = fv_(&q, &x[1], &h__[h_offset], n, value);
+    p = fv_(&q, &x[1], &h__[h_offset], n, value, userdata);
 /*<       CALL INS(Q,P,A,B,C,FA,FB,FC,J,Y,Z) >*/
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       IF ( P-F .LT. W*Q ) GOTO 310 >*/
@@ -649,7 +651,7 @@ L310:
     goto L250;
 /*< 320   DA = FD(A,X,H,N,GRAD) >*/
 L320:
-    da = fd_(&a, &x[1], &h__[h_offset], n, grad);
+    da = fd_(&a, &x[1], &h__[h_offset], n, grad, userdata);
 /*<       IF ( DA .GT. A6*G ) GOTO 410 >*/
     if (da > a6 * g) {
 	goto L410;
@@ -699,7 +701,7 @@ L340:
 /*<       Q = A3*Q >*/
     q = a3 * q;
 /*<       P = FV(Q,X,H,N,VALUE) >*/
-    p = fv_(&q, &x[1], &h__[h_offset], n, value);
+    p = fv_(&q, &x[1], &h__[h_offset], n, value, userdata);
 /*<       F1 = FA >*/
     f1 = fa;
 /*<       CALL INS(Q,P,A,B,C,FA,FB,FC,J,Y,Z) >*/
@@ -723,7 +725,7 @@ L340:
     goto L560;
 /*< 360   DA = FD(A,X,H,N,GRAD) >*/
 L360:
-    da = fd_(&a, &x[1], &h__[h_offset], n, grad);
+    da = fd_(&a, &x[1], &h__[h_offset], n, grad, userdata);
 /*<       IF ( DA .GT. A6*G ) GOTO 410 >*/
     if (da > a6 * g) {
 	goto L410;
@@ -768,7 +770,7 @@ L390:
 	goto L320;
     }
 /*<       P = FV(S,X,H,N,VALUE) >*/
-    p = fv_(&s, &x[1], &h__[h_offset], n, value);
+    p = fv_(&s, &x[1], &h__[h_offset], n, value, userdata);
 /*<       F1 = FA >*/
     f1 = fa;
 /*<       CALL INS(S,P,A,B,C,FA,FB,FC,J,Y,Z) >*/
@@ -825,7 +827,7 @@ L430:
     db = d__;
 /*<       IF ( B .NE. 0. ) DB = FD(B,X,H,N,GRAD) >*/
     if (b != (float)0.) {
-	db = fd_(&b, &x[1], &h__[h_offset], n, grad);
+	db = fd_(&b, &x[1], &h__[h_offset], n, grad, userdata);
     }
 /*< 440   W = 2.*DABS(B-A) >*/
 /* L440: */
@@ -907,7 +909,7 @@ L500:
 /*<       D0 = DA >*/
     d0 = da;
 /*<       CALL FVD(F,D,C,X,H,N,BOTH) >*/
-    fvd_(&f, &d__, &c__, &x[1], &h__[h_offset], n, both);
+    fvd_(&f, &d__, &c__, &x[1], &h__[h_offset], n, both, userdata);
 /*<       IF ( F .LT. FA ) GOTO 510 >*/
     if (f < fa) {
 	goto L510;
@@ -996,7 +998,7 @@ L560:
 /*<       A = A7*A >*/
     a = a7 * a;
 /*<       CALL PRE(H(1,2),H(1,3)) >*/
-    (*pre)(&h__[(h_dim1 << 1) + 1], &h__[h_dim1 * 3 + 1]);
+    (*pre)(&h__[(h_dim1 << 1) + 1], &h__[h_dim1 * 3 + 1], userdata);
 /*<       R = 0. >*/
     r__ = (float)0.;
 /*<       DO 580 I = 1,N >*/
@@ -1070,7 +1072,7 @@ L640:
 /*<       Q = A3*Q >*/
     q = a3 * q;
 /*<       P = FV(Q,X,H,N,VALUE) >*/
-    p = fv_(&q, &x[1], &h__[h_offset], n, value);
+    p = fv_(&q, &x[1], &h__[h_offset], n, value, userdata);
 /*<       CALL INS(Q,P,A,B,C,FA,FB,FC,J,Y,Z) >*/
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       IF ( P-F .GT. V*Q ) GOTO 640 >*/
@@ -1094,7 +1096,7 @@ L660:
 
 /*<       DOUBLE PRECISION FUNCTION FV(A,X,H,N,VALUE) >*/
 doublereal fv_(doublereal *a, doublereal *x, doublereal *h__, integer *n, 
-               double (*value)(double*))
+               double (*value)(double*,void*), void* userdata)
 {
     /* System generated locals */
     integer h_dim1, h_offset, i__1;
@@ -1120,7 +1122,7 @@ doublereal fv_(doublereal *a, doublereal *x, doublereal *h__, integer *n,
 	h__[i__ + (h_dim1 << 1)] = x[i__] + *a * h__[i__ + h_dim1];
     }
 /*<       FV = VALUE(H(1,2)) >*/
-    ret_val = (*value)(&h__[(h_dim1 << 1) + 1]);
+    ret_val = (*value)(&h__[(h_dim1 << 1) + 1], userdata);
 /*<       RETURN >*/
     return ret_val;
 /*<       END >*/
@@ -1128,7 +1130,7 @@ doublereal fv_(doublereal *a, doublereal *x, doublereal *h__, integer *n,
 
 /*<       DOUBLE PRECISION FUNCTION FD(A,X,H,N,GRAD) >*/
 doublereal fd_(doublereal *a, doublereal *x, doublereal *h__, integer *n, 
-        void (*grad)(double*,double*))
+        void (*grad)(double*,double*,void*), void* userdata)
 {
     /* System generated locals */
     integer h_dim1, h_offset, i__1;
@@ -1155,7 +1157,7 @@ doublereal fd_(doublereal *a, doublereal *x, doublereal *h__, integer *n,
 	h__[i__ + (h_dim1 << 1)] = x[i__] + *a * h__[i__ + h_dim1];
     }
 /*<       CALL GRAD(H(1,3),H(1,2)) >*/
-    (*grad)(&h__[h_dim1 * 3 + 1], &h__[(h_dim1 << 1) + 1]);
+    (*grad)(&h__[h_dim1 * 3 + 1], &h__[(h_dim1 << 1) + 1], userdata);
 /*<       D = 0. >*/
     d__ = (float)0.;
 /*<       DO 20 I = 1,N >*/
@@ -1175,7 +1177,8 @@ doublereal fd_(doublereal *a, doublereal *x, doublereal *h__, integer *n,
 /*<       SUBROUTINE FVD(V,D,A,X,H,N,BOTH) >*/
 /* Subroutine */ int fvd_(doublereal *v, doublereal *d__, doublereal *a, 
                           doublereal *x, doublereal *h__, integer *n,
-                          void (*both)(double*,double*,double*))
+                          void (*both)(double*,double*,double*,void*),
+                          void* userdata)
 {
     /* System generated locals */
     integer h_dim1, h_offset, i__1;
@@ -1200,7 +1203,7 @@ doublereal fd_(doublereal *a, doublereal *x, doublereal *h__, integer *n,
 	h__[i__ + (h_dim1 << 1)] = x[i__] + *a * h__[i__ + h_dim1];
     }
 /*<       CALL BOTH(V,H(1,3),H(1,2)) >*/
-    (*both)(v, &h__[h_dim1 * 3 + 1], &h__[(h_dim1 << 1) + 1]);
+    (*both)(v, &h__[h_dim1 * 3 + 1], &h__[(h_dim1 << 1) + 1], userdata);
 /*<       D = 0. >*/
     *d__ = (float)0.;
 /*<       DO 20 I = 1,N >*/

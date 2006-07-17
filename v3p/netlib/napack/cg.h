@@ -8,25 +8,28 @@ extern int v3p_netlib_cg_(
   v3p_netlib_integer v3p_netlib_const *max_iterations,
   v3p_netlib_integer *n, /*!< (IN) number of unknowns */
   v3p_netlib_integer *m, /*!< (IN) # iterations before calc new seach direction */
-  double (*value)(double*),
-  void (*grad)(double*,double*),
-  void (*both)(double*,double*,double*),
-  void (*pre)(double*,double*),
-  v3p_netlib_doublereal *h__
+  double (*value)(double*,void*),
+  void (*grad)(double*,double*,void*),
+  void (*both)(double*,double*,double*,void*),
+  void (*pre)(double*,double*,void*),
+  v3p_netlib_doublereal *h__,
+  void* userdata
   );
 extern v3p_netlib_doublereal v3p_netlib_fv_(
   v3p_netlib_doublereal *a,
   v3p_netlib_doublereal *x,
   v3p_netlib_doublereal *h__,
   v3p_netlib_integer *n,
-  double (*value)(double*)
+  double (*value)(double*,void*),
+  void* userdata
   );
 extern v3p_netlib_doublereal v3p_netlib_fd_(
   v3p_netlib_doublereal *a,
   v3p_netlib_doublereal *x,
   v3p_netlib_doublereal *h__,
   v3p_netlib_integer *n,
-  void (*grad)(double*,double*)
+  void (*grad)(double*,double*,void*),
+  void* userdata
   );
 extern int v3p_netlib_fvd_(
   v3p_netlib_doublereal *v,
@@ -35,7 +38,8 @@ extern int v3p_netlib_fvd_(
   v3p_netlib_doublereal *x,
   v3p_netlib_doublereal *h__,
   v3p_netlib_integer *n,
-  void (*both)(double*,double*,double*)
+  void (*both)(double*,double*,double*,void*),
+  void* userdata
   );
 extern int v3p_netlib_cub_(
   v3p_netlib_doublereal *x,
