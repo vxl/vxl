@@ -195,4 +195,6 @@
 #include "linalg/lsqr.h"
 #include "toms/rpoly.h"
 #include "datapac/camsun.h"
+#include "mathews/adaquad.h"
 #include "mathews/simpson.h"
+#include "mathews/trapezod.h"

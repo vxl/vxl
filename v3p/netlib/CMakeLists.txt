@@ -514,6 +514,8 @@ SET(V3P_NETLIB_datapac_SOURCES
   )
 SET(V3P_NETLIB_mathews_SOURCES
   mathews/simpson.c mathews/simpson.h
+  mathews/trapezod.c mathews/trapezod.h
+  mathews/adaquad.c mathews/adaquad.h
   )
 
 # Adjust the compiler flags to avoid problems with f2c-generated code.

@@ -5,6 +5,7 @@
 
 /* Functions */
 
+#undef adaptquad_
 #undef balanc_
 #undef balbak_
 #undef calcsc_
@@ -160,6 +161,7 @@
 #undef realit_
 #undef rebak_
 #undef reduc_
+#undef refine_
 #undef rg_
 #undef rpoly_
 #undef rs_
@@ -190,6 +192,7 @@
 #undef sqrsl_
 #undef srot_
 #undef srotg_
+#undef srule_
 #undef ssbmv_
 #undef sscal_
 #undef sspmv_
@@ -209,11 +212,13 @@
 #undef tql1_
 #undef tql2_
 #undef tqlrat_
+#undef trapru_
 #undef tred1_
 #undef tred2_
 #undef urand_
 #undef xerbla_
 #undef xsimpru_
+#undef xtrapru_
 #undef zaxpy_
 #undef zcopy_
 #undef zdotc_

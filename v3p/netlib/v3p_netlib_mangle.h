@@ -14,6 +14,7 @@ nm libv3p_netlib.a |grep " [TR] "
 
 /* Functions */
 
+#define adaptquad_ v3p_netlib_adaptquad_
 #define balanc_ v3p_netlib_balanc_
 #define balbak_ v3p_netlib_balbak_
 #define calcsc_ v3p_netlib_calcsc_
@@ -169,6 +170,7 @@ nm libv3p_netlib.a |grep " [TR] "
 #define realit_ v3p_netlib_realit_
 #define rebak_ v3p_netlib_rebak_
 #define reduc_ v3p_netlib_reduc_
+#define refine_ v3p_netlib_refine_
 #define rg_ v3p_netlib_rg_
 #define rpoly_ v3p_netlib_rpoly_
 #define rs_ v3p_netlib_rs_
@@ -199,6 +201,7 @@ nm libv3p_netlib.a |grep " [TR] "
 #define sqrsl_ v3p_netlib_sqrsl_
 #define srot_ v3p_netlib_srot_
 #define srotg_ v3p_netlib_srotg_
+#define srule_ v3p_netlib_srule_
 #define ssbmv_ v3p_netlib_ssbmv_
 #define sscal_ v3p_netlib_sscal_
 #define sspmv_ v3p_netlib_sspmv_
@@ -218,11 +221,13 @@ nm libv3p_netlib.a |grep " [TR] "
 #define tql1_ v3p_netlib_tql1_
 #define tql2_ v3p_netlib_tql2_
 #define tqlrat_ v3p_netlib_tqlrat_
+#define trapru_ v3p_netlib_trapru_
 #define tred1_ v3p_netlib_tred1_
 #define tred2_ v3p_netlib_tred2_
 #define urand_ v3p_netlib_urand_
 #define xerbla_ v3p_netlib_xerbla_
 #define xsimpru_ v3p_netlib_xsimpru_
+#define xtrapru_ v3p_netlib_xtrapru_
 #define zaxpy_ v3p_netlib_zaxpy_
 #define zcopy_ v3p_netlib_zcopy_
 #define zdotc_ v3p_netlib_zdotc_
