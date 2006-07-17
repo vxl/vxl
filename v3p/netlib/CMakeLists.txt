@@ -216,11 +216,6 @@ SET( netlib_sources
 
   # The "Triangle" program of Jonathan Richard Shewchuk
   triangle.c triangle.h
-
-  # numeric integration
-  trapezod.c
-  simpson.c
-  adaquad.c
 )
 
 IF(CMAKE_COMPILER_IS_GNUCC)
