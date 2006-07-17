@@ -56,8 +56,8 @@ static integer c__1 = 1;
 {
     /* Initialized data */
 
-    static doublereal one = 1.;
-    static doublereal zero = 0.;
+    static doublereal one = 1.;  /* constant */
+    static doublereal zero = 0.;  /* constant */
 
     /* System generated locals */
     integer i__1;
@@ -67,30 +67,40 @@ static integer c__1 = 1;
     double sqrt(doublereal);
 
     /* Local variables */
-    static integer i__, cp;
-    static doublereal sq, yr, ys, yy;
+    integer i__, cp;
+    doublereal sq, yr, ys, yy;
     extern /* Subroutine */ int lb1_(integer *, integer *, integer *, 
 	    doublereal *, integer *, integer *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, logical *);
-    static integer npt;
-    static doublereal stp, stp1, beta;
-    static integer inmc;
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, 
 	    integer *);
-    static integer info, iscn, nfev, iycn, iter;
-    static doublereal ftol;
-    static integer nfun, ispt, iypt, bound;
-    static doublereal gnorm;
     extern /* Subroutine */ int daxpy_(integer *, doublereal *, doublereal *, 
 	    integer *, doublereal *, integer *);
-    static integer point;
-    static doublereal xnorm;
     extern /* Subroutine */ int mcsrch_(integer *, doublereal *, doublereal *,
 	     doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, integer *, integer *, integer *, doublereal *,
             v3p_netlib_lbfgs_global_t*);
-    static logical finish;
+    integer npt;
+
+    static doublereal stp;
+    static doublereal stp1;
+    static doublereal beta;
+    static doublereal ftol;
+    static doublereal gnorm;
+    static doublereal xnorm;
+    static integer inmc;
+    static integer info;
+    static integer iscn;
+    static integer nfev;
+    static integer iycn;
+    static integer iter;
+    static integer nfun;
+    static integer ispt;
+    static integer iypt;
+    static integer bound;
+    static integer point;
     static integer maxfev;
+    static logical finish;
 
 /*<       INTEGER N,M,IPRINT(2),IFLAG >*/
 /*<       DOUBLE PRECISION X(N),G(N),DIAG(N),W(N*(2*M+1)+2*M) >*/
@@ -965,29 +975,45 @@ static void write50(double* v, int n)
 {
     /* Initialized data */
 
-    static doublereal p5 = .5;
-    static doublereal p66 = .66;
-    static doublereal xtrapf = 4.;
-    static doublereal zero = 0.;
+    static doublereal p5 = .5;  /* constant */
+    static doublereal p66 = .66;  /* constant */
+    static doublereal xtrapf = 4.;  /* constant */
+    static doublereal zero = 0.;  /* constant */
 
     /* System generated locals */
     integer i__1;
     doublereal d__1;
 
     /* Local variables */
-    static integer j;
-    static doublereal dg, fm, fx, fy, dgm, dgx, dgy, fxm, fym, stx, sty, dgxm,
-	     dgym;
-    static integer infoc;
-    static doublereal finit, width, stmin, stmax;
-    static logical stage1;
-    static doublereal width1, ftest1;
-    static logical brackt;
-    static doublereal dginit, dgtest;
+    integer j;
     extern /* Subroutine */ int mcstep_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, logical *, doublereal *,
 	     doublereal *, integer *);
+    static doublereal dg;
+    static doublereal fm;
+    static doublereal fx;
+    static doublereal fy;
+    static doublereal dgm;
+    static doublereal dgx;
+    static doublereal dgy;
+    static doublereal fxm;
+    static doublereal fym;
+    static doublereal stx;
+    static doublereal sty;
+    static doublereal dgxm;
+    static doublereal dgym;
+    static integer infoc;
+    static doublereal finit;
+    static doublereal width;
+    static doublereal stmin;
+    static doublereal stmax;
+    static logical stage1;
+    static doublereal width1;
+    static doublereal ftest1;
+    static logical brackt;
+    static doublereal dginit;
+    static doublereal dgtest;
 
 /*<       INTEGER N,MAXFEV,INFO,NFEV >*/
 /*<       DOUBLE PRECISION F,STP,FTOL,GTOL,XTOL,STPMIN,STPMAX >*/
