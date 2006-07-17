@@ -77,7 +77,7 @@ static void vbl_test_array_2d()
   TEST("element (1,1) is 1", v(1,1), vbl_test_array_x(1,0));
   TEST("element (1,2) is -1", v(1,2), vbl_test_array_x(-1,0));
 
-  vbl_array_3d<vbl_test_array_x> z(0,0,0); // Create Zero sized array
+  vbl_array_2d<vbl_test_array_x> z(0,0); // Create Zero sized array
 }
 
 static void vbl_test_array_3d()
