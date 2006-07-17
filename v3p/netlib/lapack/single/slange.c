@@ -37,7 +37,7 @@ doublereal slange_(char *norm, integer *m, integer *n, real *a, integer *lda,
     real value;
     extern /* Subroutine */ int slassq_(integer *, real *, integer *, real *, 
 	    real *);
-
+    (void)norm_len;
 
 /*  -- LAPACK auxiliary routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */

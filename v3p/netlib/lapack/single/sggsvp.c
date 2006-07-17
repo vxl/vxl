@@ -52,7 +52,9 @@ static real c_b22 = (float)1.;
 	    integer *, real *, real *, real *, integer *, ftnlen), slapmt_(
 	    logical *, integer *, integer *, real *, integer *, integer *);
     logical forwrd;
-
+    (void)jobu_len;
+    (void)jobv_len;
+    (void)jobq_len;
 
 /*  -- LAPACK routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -284,15 +286,15 @@ static real c_b22 = (float)1.;
 /*<          INFO = -10 >*/
 	*info = -10;
 /*<       ELSE IF( LDU.LT.1 .OR. ( WANTU .AND. LDU.LT.M ) ) THEN >*/
-    } else if (*ldu < 1 || wantu && *ldu < *m) {
+    } else if (*ldu < 1 || (wantu && *ldu < *m)) {
 /*<          INFO = -16 >*/
 	*info = -16;
 /*<       ELSE IF( LDV.LT.1 .OR. ( WANTV .AND. LDV.LT.P ) ) THEN >*/
-    } else if (*ldv < 1 || wantv && *ldv < *p) {
+    } else if (*ldv < 1 || (wantv && *ldv < *p)) {
 /*<          INFO = -18 >*/
 	*info = -18;
 /*<       ELSE IF( LDQ.LT.1 .OR. ( WANTQ .AND. LDQ.LT.N ) ) THEN >*/
-    } else if (*ldq < 1 || wantq && *ldq < *n) {
+    } else if (*ldq < 1 || (wantq && *ldq < *n)) {
 /*<          INFO = -20 >*/
 	*info = -20;
 /*<       END IF >*/

@@ -56,7 +56,9 @@ static integer c__1 = 1;
 	    real *, integer *, real *, integer *, real *, real *, integer *, 
 	    integer *, real *, integer *, real *, integer *, real *, integer *
 	    , integer *, real *, real *, integer *, ftnlen, ftnlen, ftnlen);
-
+    (void)jobu_len;
+    (void)jobv_len;
+    (void)jobq_len;
 
 /*  -- LAPACK driver routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -362,15 +364,15 @@ static integer c__1 = 1;
 /*<          INFO = -12 >*/
 	*info = -12;
 /*<       ELSE IF( LDU.LT.1 .OR. ( WANTU .AND. LDU.LT.M ) ) THEN >*/
-    } else if (*ldu < 1 || wantu && *ldu < *m) {
+    } else if (*ldu < 1 || (wantu && *ldu < *m)) {
 /*<          INFO = -16 >*/
 	*info = -16;
 /*<       ELSE IF( LDV.LT.1 .OR. ( WANTV .AND. LDV.LT.P ) ) THEN >*/
-    } else if (*ldv < 1 || wantv && *ldv < *p) {
+    } else if (*ldv < 1 || (wantv && *ldv < *p)) {
 /*<          INFO = -18 >*/
 	*info = -18;
 /*<       ELSE IF( LDQ.LT.1 .OR. ( WANTQ .AND. LDQ.LT.N ) ) THEN >*/
-    } else if (*ldq < 1 || wantq && *ldq < *n) {
+    } else if (*ldq < 1 || (wantq && *ldq < *n)) {
 /*<          INFO = -20 >*/
 	*info = -20;
 /*<       END IF >*/
