@@ -15,9 +15,10 @@ extern "C" {
 #endif
 #include "v3p_netlib.h"
 
+#include <stdio.h>
+
 /* Table of constant values */
 
-static integer c__1 = 1;
 static real c_b32 = (float)0.;
 
 /*<       REAL             FUNCTION SLAMCH( CMACH ) >*/
@@ -508,20 +509,12 @@ L30:
     static logical first = TRUE_;
     static logical iwarn = FALSE_;
 
-    /* Format strings */
-    static char fmt_9999[] = "(//\002 WARNING. The value EMIN may be incorre\
-ct:-\002,\002  EMIN = \002,i8,/\002 If, after inspection, the value EMIN loo\
-ks\002,\002 acceptable please comment out \002,/\002 the IF block as marked \
-within the code of routine\002,\002 SLAMC2,\002,/\002 otherwise supply EMIN \
-explicitly.\002,/)";
-
     /* System generated locals */
     integer i__1;
     real r__1, r__2, r__3, r__4, r__5;
 
     /* Builtin functions */
     double pow_ri(real *, integer *);
-    integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe();
 
     /* Local variables */
     real a, b, c__;
@@ -550,11 +543,6 @@ explicitly.\002,/)";
 	    slamc5_(integer *, integer *, integer *, logical *, integer *, 
 	    real *);
     integer ngnmin, ngpmin;
-
-    /* Fortran I/O blocks */
-    static cilist io___58 = { 0, 6, 0, fmt_9999, 0 };
-
-
 
 /*  -- LAPACK auxiliary routine (version 1.1) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
@@ -851,9 +839,12 @@ L10:
 /*<             FIRST = .TRUE. >*/
 	    first = TRUE_;
 /*<             WRITE( 6, FMT = 9999 )LEMIN >*/
-	    s_wsfe(&io___58);
-	    do_fio(&c__1, (char *)&lemin, (ftnlen)sizeof(integer));
-	    e_wsfe();
+            printf("\n\n WARNING. The value EMIN may be incorrect: - ");
+            printf("EMIN = %8li\n",lemin);
+            printf("If, after inspection, the value EMIN looks acceptable");
+            printf(" please comment out\n the IF block as marked within the");
+            printf(" code of routine SLAMC2,\n otherwise supply EMIN");
+            printf(" explicitly.\n");
 /*<          END IF >*/
 	}
 /* ** */
