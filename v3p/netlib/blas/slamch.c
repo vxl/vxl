@@ -49,7 +49,7 @@ doublereal slamch_(char *cmach, ftnlen cmach_len)
     static real sfmin;
     extern /* Subroutine */ int slamc2_(integer *, integer *, logical *, real 
 	    *, integer *, real *, integer *, real *);
-
+    (void)cmach_len;
 
 /*  -- LAPACK auxiliary routine (version 1.1) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
