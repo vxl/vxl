@@ -43,10 +43,16 @@ static integer c__1 = 1;
 
 struct v3p_netlib_lbfgs_global2_s
 {
+  v3p_netlib_integer private_info;
   v3p_netlib_integer private_infoc;
+  v3p_netlib_integer private_nfev;
+  v3p_netlib_integer private_maxfev;
 };
 static struct v3p_netlib_lbfgs_global2_s v3p_netlib_lbfgs_global2_inst;
+#define info v3p_netlib_lbfgs_global2_inst.private_info
 #define infoc v3p_netlib_lbfgs_global2_inst.private_infoc
+#define nfev v3p_netlib_lbfgs_global2_inst.private_nfev
+#define maxfev v3p_netlib_lbfgs_global2_inst.private_maxfev
 
 /*     ---------------------------------------------------------------------- */
 /*     This file contains the LBFGS algorithm and supporting routines */
@@ -86,7 +92,7 @@ static struct v3p_netlib_lbfgs_global2_s v3p_netlib_lbfgs_global2_inst;
 	    integer *, doublereal *, integer *);
     extern /* Subroutine */ int mcsrch_(integer *, doublereal *, doublereal *,
 	     doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, integer *, integer *, integer *, doublereal *,
+	    doublereal *, doublereal *,
             v3p_netlib_lbfgs_global_t*);
     integer npt;
 
@@ -97,9 +103,7 @@ static struct v3p_netlib_lbfgs_global2_s v3p_netlib_lbfgs_global2_inst;
     static doublereal gnorm;
     static doublereal xnorm;
     static integer inmc;
-    static integer info;
     static integer iscn;
-    static integer nfev;
     static integer iycn;
     static integer iter;
     static integer nfun;
@@ -107,7 +111,6 @@ static struct v3p_netlib_lbfgs_global2_s v3p_netlib_lbfgs_global2_inst;
     static integer iypt;
     static integer bound;
     static integer point;
-    static integer maxfev;
     static logical finish;
 
 /*<       INTEGER N,M,IPRINT(2),IFLAG >*/
@@ -615,7 +618,7 @@ L165:
 L172:
 /*<    >*/
     mcsrch_(n, &x[1], f, &g[1], &w[ispt + point * *n + 1], &stp, &ftol, xtol, 
-	    &maxfev, &info, &nfev, &diag[1], v3p_netlib_lbfgs_global_arg);
+	    &diag[1], v3p_netlib_lbfgs_global_arg);
 /*<       IF (INFO .EQ. -1) THEN >*/
     if (info == -1) {
 /*<         IFLAG=1 >*/
@@ -981,8 +984,7 @@ static void write50(double* v, int n)
 /*<       SUBROUTINE MCSRCH(N,X,F,G,S,STP,FTOL,XTOL,MAXFEV,INFO,NFEV,WA) >*/
 /* Subroutine */ int mcsrch_(integer *n, doublereal *x, doublereal *f, 
 	doublereal *g, doublereal *s, doublereal *stp, doublereal *ftol, 
-	doublereal *xtol, integer *maxfev, integer *info, integer *nfev, 
-	doublereal *wa,
+	doublereal *xtol, doublereal *wa,
         v3p_netlib_lbfgs_global_t* v3p_netlib_lbfgs_global_arg)
 {
     /* Initialized data */
@@ -1164,7 +1166,7 @@ static void write50(double* v, int n)
 
     /* Function Body */
 /*<       IF(INFO.EQ.-1) GO TO 45 >*/
-    if (*info == -1) {
+    if (info == -1) {
 	goto L45;
     }
 /*<       INFOC = 1 >*/
@@ -1174,8 +1176,8 @@ static void write50(double* v, int n)
 
 /*<    >*/
     if (*n <= 0 || *stp <= zero || *ftol < zero || lb3_1.gtol < zero || *xtol 
-	    < zero || lb3_1.stpmin < zero || lb3_1.stpmax < lb3_1.stpmin || *
-	    maxfev <= 0) {
+	    < zero || lb3_1.stpmin < zero || lb3_1.stpmax < lb3_1.stpmin ||
+        maxfev <= 0) {
 	return 0;
     }
 
@@ -1209,7 +1211,7 @@ static void write50(double* v, int n)
 /*<       STAGE1 = .TRUE. >*/
     stage1 = TRUE_;
 /*<       NFEV = 0 >*/
-    *nfev = 0;
+    nfev = 0;
 /*<       FINIT = F >*/
     finit = *f;
 /*<       DGTEST = FTOL*DGINIT >*/
@@ -1282,7 +1284,7 @@ L30:
 /*        STP BE THE LOWEST POINT OBTAINED SO FAR. */
 
 /*<    >*/
-    if ((brackt && (*stp <= stmin || *stp >= stmax)) || *nfev >= *maxfev - 1 || 
+    if ((brackt && (*stp <= stmin || *stp >= stmax)) || nfev >= maxfev - 1 || 
 	    infoc == 0 || (brackt && stmax - stmin <= *xtol * stmax)) {
 	*stp = stx;
     }
@@ -1300,15 +1302,15 @@ L30:
 /* L40: */
     }
 /*<          INFO=-1 >*/
-    *info = -1;
+    info = -1;
 /*<          RETURN >*/
     return 0;
 
 /*<    45    INFO=0 >*/
 L45:
-    *info = 0;
+    info = 0;
 /*<          NFEV = NFEV + 1 >*/
-    ++(*nfev);
+    ++(nfev);
 /*<          DG = ZERO >*/
     dg = zero;
 /*<          DO 50 J = 1, N >*/
@@ -1326,33 +1328,33 @@ L45:
 
 /*<    >*/
     if ((brackt && (*stp <= stmin || *stp >= stmax)) || infoc == 0) {
-	*info = 6;
+	info = 6;
     }
 /*<    >*/
     if (*stp == lb3_1.stpmax && *f <= ftest1 && dg <= dgtest) {
-	*info = 5;
+	info = 5;
     }
 /*<    >*/
     if (*stp == lb3_1.stpmin && (*f > ftest1 || dg >= dgtest)) {
-	*info = 4;
+	info = 4;
     }
 /*<          IF (NFEV .GE. MAXFEV) INFO = 3 >*/
-    if (*nfev >= *maxfev) {
-	*info = 3;
+    if (nfev >= maxfev) {
+	info = 3;
     }
 /*<          IF (BRACKT .AND. STMAX-STMIN .LE. XTOL*STMAX) INFO = 2 >*/
     if (brackt && stmax - stmin <= *xtol * stmax) {
-	*info = 2;
+	info = 2;
     }
 /*<          IF (F .LE. FTEST1 .AND. ABS(DG) .LE. GTOL*(-DGINIT)) INFO = 1 >*/
     if (*f <= ftest1 && abs(dg) <= lb3_1.gtol * (-dginit)) {
-	*info = 1;
+	info = 1;
     }
 
 /*        CHECK FOR TERMINATION. */
 
 /*<          IF (INFO .NE. 0) RETURN >*/
-    if (*info != 0) {
+    if (info != 0) {
 	return 0;
     }
 
