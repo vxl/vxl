@@ -41,6 +41,13 @@ v3p_netlib_lbfgs_init(v3p_netlib_lbfgs_global_t* v3p_netlib_lbfgs_global_arg)
 
 static integer c__1 = 1;
 
+struct v3p_netlib_lbfgs_global2_s
+{
+  v3p_netlib_integer private_infoc;
+};
+static struct v3p_netlib_lbfgs_global2_s v3p_netlib_lbfgs_global2_inst;
+#define infoc v3p_netlib_lbfgs_global2_inst.private_infoc
+
 /*     ---------------------------------------------------------------------- */
 /*     This file contains the LBFGS algorithm and supporting routines */
 
@@ -994,7 +1001,7 @@ static void write50(double* v, int n)
     extern /* Subroutine */ int mcstep_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, logical *, doublereal *,
-	     doublereal *, integer *);
+	     doublereal *);
     static doublereal dg;
     static doublereal fm;
     static doublereal fx;
@@ -1008,7 +1015,6 @@ static void write50(double* v, int n)
     static doublereal sty;
     static doublereal dgxm;
     static doublereal dgym;
-    static integer infoc;
     static doublereal finit;
     static doublereal width;
     static doublereal stmin;
@@ -1387,7 +1393,7 @@ L45:
 
 /*<    >*/
 	mcstep_(&stx, &fxm, &dgxm, &sty, &fym, &dgym, stp, &fm, &dgm, &brackt,
-		 &stmin, &stmax, &infoc);
+		 &stmin, &stmax);
 
 /*           RESET THE FUNCTION AND GRADIENT VALUES FOR F. */
 
@@ -1407,7 +1413,7 @@ L45:
 
 /*<    >*/
 	mcstep_(&stx, &fx, &dgx, &sty, &fy, &dgy, stp, f, &dg, &brackt, &
-		stmin, &stmax, &infoc);
+		stmin, &stmax);
 /*<             END IF >*/
     }
 
@@ -1441,7 +1447,7 @@ L45:
 /* Subroutine */ int mcstep_(doublereal *stx, doublereal *fx, doublereal *dx, 
 	doublereal *sty, doublereal *fy, doublereal *dy, doublereal *stp, 
 	doublereal *fp, doublereal *dp, logical *brackt, doublereal *stpmin, 
-	doublereal *stpmax, integer *info)
+	doublereal *stpmax)
 {
     /* System generated locals */
     doublereal d__1, d__2, d__3;
@@ -1453,7 +1459,7 @@ L45:
     doublereal p, q, r__, s, sgnd, stpc, stpf, stpq, gamma, theta;
     logical bound;
 
-/*<       INTEGER INFO >*/
+/*<       INTEGER INFOC >*/
 /*<       DOUBLE PRECISION STX,FX,DX,STY,FY,DY,STP,FP,DP,STPMIN,STPMAX >*/
 /*<       LOGICAL BRACKT,BOUND >*/
 
@@ -1473,7 +1479,7 @@ L45:
 /*     THE SUBROUTINE STATEMENT IS */
 
 /*       SUBROUTINE MCSTEP(STX,FX,DX,STY,FY,DY,STP,FP,DP,BRACKT, */
-/*                        STPMIN,STPMAX,INFO) */
+/*                        STPMIN,STPMAX,INFOC) */
 
 /*     WHERE */
 
@@ -1501,10 +1507,10 @@ L45:
 /*       STPMIN AND STPMAX ARE INPUT VARIABLES WHICH SPECIFY LOWER */
 /*         AND UPPER BOUNDS FOR THE STEP. */
 
-/*       INFO IS AN INTEGER OUTPUT VARIABLE SET AS FOLLOWS: */
-/*         IF INFO = 1,2,3,4,5, THEN THE STEP HAS BEEN COMPUTED */
+/*       INFOC IS AN INTEGER OUTPUT VARIABLE SET AS FOLLOWS: */
+/*         IF INFOC = 1,2,3,4,5, THEN THE STEP HAS BEEN COMPUTED */
 /*         ACCORDING TO ONE OF THE FIVE CASES BELOW. OTHERWISE */
-/*         INFO = 0, AND THIS INDICATES IMPROPER INPUT PARAMETERS. */
+/*         INFOC = 0, AND THIS INDICATES IMPROPER INPUT PARAMETERS. */
 
 /*     SUBPROGRAMS CALLED */
 
@@ -1514,8 +1520,8 @@ L45:
 /*     JORGE J. MORE', DAVID J. THUENTE */
 
 /*<       DOUBLE PRECISION GAMMA,P,Q,R,S,SGND,STPC,STPF,STPQ,THETA >*/
-/*<       INFO = 0 >*/
-    *info = 0;
+/*<       INFOC = 0 >*/
+    infoc = 0;
 
 /*     CHECK THE INPUT PARAMETERS FOR ERRORS. */
 
@@ -1537,8 +1543,8 @@ L45:
 
 /*<       IF (FP .GT. FX) THEN >*/
     if (*fp > *fx) {
-/*<          INFO = 1 >*/
-	*info = 1;
+/*<          INFOC = 1 >*/
+	infoc = 1;
 /*<          BOUND = .TRUE. >*/
 	bound = TRUE_;
 /*<          THETA = 3*(FX - FP)/(STP - STX) + DX + DP >*/
@@ -1588,8 +1594,8 @@ L45:
 
 /*<       ELSE IF (SGND .LT. 0.0) THEN >*/
     } else if (sgnd < (float)0.) {
-/*<          INFO = 2 >*/
-	*info = 2;
+/*<          INFOC = 2 >*/
+	infoc = 2;
 /*<          BOUND = .FALSE. >*/
 	bound = FALSE_;
 /*<          THETA = 3*(FX - FP)/(STP - STX) + DX + DP >*/
@@ -1642,8 +1648,8 @@ L45:
 
 /*<       ELSE IF (ABS(DP) .LT. ABS(DX)) THEN >*/
     } else if (abs(*dp) < abs(*dx)) {
-/*<          INFO = 3 >*/
-	*info = 3;
+/*<          INFOC = 3 >*/
+	infoc = 3;
 /*<          BOUND = .TRUE. >*/
 	bound = TRUE_;
 /*<          THETA = 3*(FX - FP)/(STP - STX) + DX + DP >*/
@@ -1725,8 +1731,8 @@ L45:
 
 /*<       ELSE >*/
     } else {
-/*<          INFO = 4 >*/
-	*info = 4;
+/*<          INFOC = 4 >*/
+	infoc = 4;
 /*<          BOUND = .FALSE. >*/
 	bound = FALSE_;
 /*<          IF (BRACKT) THEN >*/
