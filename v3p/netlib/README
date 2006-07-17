@@ -71,7 +71,7 @@ The directories blas and linpack were created as follows:
 5.) Convert the sources to C using f2c and replace the f2c.h header
     inclusion with v3p_netlib.h:
 
-for d in blas linpack temperton eispack laso lapack/complex16 lapack/double lapack/util napack minpack opt linalg toms datapac mathews; do
+for d in blas linpack temperton eispack laso lapack/complex16 lapack/double lapack/single lapack/util napack minpack opt linalg toms datapac mathews; do
   for f in ${d}/*.f; do
     b=`echo "$f" | sed 's/.f$//'`
     if [ ! -f "${b}.c" ]; then

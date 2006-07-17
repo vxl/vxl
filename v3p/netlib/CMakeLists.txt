@@ -312,6 +312,7 @@ SET(V3P_NETLIB_blas_SOURCES
   blas/dzasum.c blas/dzasum.h
   blas/dznrm2.c blas/dznrm2.h
   blas/idamax.c blas/idamax.h
+  blas/isamax.c blas/isamax.h
   blas/izamax.c blas/izamax.h
   blas/saxpy.c blas/saxpy.h
   blas/scnrm2.c blas/scnrm2.h
@@ -478,6 +479,28 @@ SET(V3P_NETLIB_lapack_SOURCES
   lapack/double/dtgsen.c lapack/double/dtgsen.h
   lapack/double/dtgsy2.c lapack/double/dtgsy2.h
   lapack/double/dtgsyl.c lapack/double/dtgsyl.h
+  lapack/single/sgeqpf.c lapack/single/sgeqpf.h
+  lapack/single/sgeqr2.c lapack/single/sgeqr2.h
+  lapack/single/sgerq2.c lapack/single/sgerq2.h
+  lapack/single/sggsvd.c lapack/single/sggsvd.h
+  lapack/single/sggsvp.c lapack/single/sggsvp.h
+  lapack/single/slacpy.c lapack/single/slacpy.h
+  lapack/single/slags2.c lapack/single/slags2.h
+  lapack/single/slange.c lapack/single/slange.h
+  lapack/single/slapll.c lapack/single/slapll.h
+  lapack/single/slapmt.c lapack/single/slapmt.h
+  lapack/single/slapy2.c lapack/single/slapy2.h
+  lapack/single/slarf.c lapack/single/slarf.h
+  lapack/single/slarfg.c lapack/single/slarfg.h
+  lapack/single/slartg.c lapack/single/slartg.h
+  lapack/single/slas2.c lapack/single/slas2.h
+  lapack/single/slaset.c lapack/single/slaset.h
+  lapack/single/slassq.c lapack/single/slassq.h
+  lapack/single/slasv2.c lapack/single/slasv2.h
+  lapack/single/sorg2r.c lapack/single/sorg2r.h
+  lapack/single/sorm2r.c lapack/single/sorm2r.h
+  lapack/single/sormr2.c lapack/single/sormr2.h
+  lapack/single/stgsja.c lapack/single/stgsja.h
   lapack/util/ieeeck.c lapack/util/ieeeck.h
   lapack/util/ilaenv.c lapack/util/ilaenv.h
   lapack/util/lsame.c lapack/util/lsame.h
