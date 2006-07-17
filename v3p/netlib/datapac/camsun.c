@@ -28,13 +28,6 @@ static void dnorcdf_(doublereal *x, doublereal *cdf);
     doublereal b41 = 1.8004115226e-4;
     doublereal b42 = 6.;
 
-    /* Error strings */
-    static char fmt_15[] = "(***** FATAL ERROR--THE SECOND INPUT ARGUMENT TO THE CHSCDF SUBROUTINE IS NON-POSITIVE *****)";
-    static char fmt_47[] = "(***** THE VALUE OF THE ARGUMENT IS %d *****\002)";
-    static char fmt_4[] = "(***** NON-FATAL DIAGNOSTIC--THE FIRST  INPUT ARGUMENT TO THE CHSCDF SUBROUTINE IS NEGATIVE *****)";
-    static char fmt_46[] = "(***** THE VALUE OF THE ARGUMENT IS %f *****\002)";
-    static char fmt_99[] = "(*****INTERNAL ERROR IN CHSCDF SUBROUTINE -- IMPOSSIBLE BRANCH CONDITION AT BRANCH POINT %d)";
-
     /* Local variables */
     real cdfn;
     integer imin, imax;
@@ -104,14 +97,14 @@ static void dnorcdf_(doublereal *x, doublereal *cdf);
 /*     CHECK THE INPUT ARGUMENTS FOR ERRORS */
 
     if (*nu <= 0) {
-        fprintf(stderr,fmt_15);
-        fprintf(stderr,fmt_47,*nu);
+        fprintf(stderr,"(***** FATAL ERROR--THE SECOND INPUT ARGUMENT TO THE CHSCDF SUBROUTINE IS NON-POSITIVE *****)");
+        fprintf(stderr,"(***** THE VALUE OF THE ARGUMENT IS %ld *****\002)",*nu);
         *cdf = 0.f;
         return;
     }
     if (*x < 0.f) {
-        fprintf(stderr,fmt_4);
-        fprintf(stderr,fmt_46,*x);
+        fprintf(stderr,"(***** NON-FATAL DIAGNOSTIC--THE FIRST  INPUT ARGUMENT TO THE CHSCDF SUBROUTINE IS NEGATIVE *****)");
+        fprintf(stderr,"(***** THE VALUE OF THE ARGUMENT IS %f *****\002)",*x);
         *cdf = 0.f;
         return;
     }
@@ -174,7 +167,7 @@ static void dnorcdf_(doublereal *x, doublereal *cdf);
         goto L3000;
     }
     ibran = 1;
-    fprintf(stderr,fmt_99,ibran);
+    fprintf(stderr,"(*****INTERNAL ERROR IN CHSCDF SUBROUTINE -- IMPOSSIBLE BRANCH CONDITION AT BRANCH POINT %ld)",ibran);
     return;
 
 /*     TREAT THE SMALL AND MODERATE DEGREES OF FREEDOM CASE */
@@ -331,13 +324,6 @@ static void norcdf_(real *x, real *cdf)
     doublereal b41 = 1.8004115226e-4;
     doublereal b42 = 6.;
 
-    /* Error strings */
-    static char fmt_15[] = "(***** FATAL ERROR--THE SECOND INPUT ARGUMENT TO THE CHSCDF SUBROUTINE IS NON-POSITIVE *****)";
-    static char fmt_47[] = "(***** THE VALUE OF THE ARGUMENT IS %d *****\002)";
-    static char fmt_4[] = "(***** NON-FATAL DIAGNOSTIC--THE FIRST  INPUT ARGUMENT TO THE CHSCDF SUBROUTINE IS NEGATIVE *****)";
-    static char fmt_46[] = "(***** THE VALUE OF THE ARGUMENT IS %f *****\002)";
-    static char fmt_99[] = "(*****INTERNAL ERROR IN CHSCDF SUBROUTINE -- IMPOSSIBLE BRANCH CONDITION AT BRANCH POINT %d)";
-
     /* System generated locals */
     doublereal danu2;
 
@@ -410,14 +396,14 @@ static void norcdf_(real *x, real *cdf)
 /*     CHECK THE INPUT ARGUMENTS FOR ERRORS */
 
     if (*nu <= 0) {
-        fprintf(stderr,fmt_15);
-        fprintf(stderr,fmt_47,*nu);
+        fprintf(stderr,"(***** FATAL ERROR--THE SECOND INPUT ARGUMENT TO THE CHSCDF SUBROUTINE IS NON-POSITIVE *****)");
+        fprintf(stderr,"(***** THE VALUE OF THE ARGUMENT IS %ld *****\002)",*nu);
         *cdf = 0.0;
         return;
     }
     if (*x < 0.0) {
-        fprintf(stderr,fmt_4);
-        fprintf(stderr,fmt_46,*x);
+        fprintf(stderr,"(***** NON-FATAL DIAGNOSTIC--THE FIRST  INPUT ARGUMENT TO THE CHSCDF SUBROUTINE IS NEGATIVE *****)");
+        fprintf(stderr,"(***** THE VALUE OF THE ARGUMENT IS %f *****\002)",*x);
         *cdf = 0.0;
         return;
     }
@@ -480,7 +466,7 @@ static void norcdf_(real *x, real *cdf)
         goto L3000;
     }
     ibran = 1;
-    fprintf(stderr,fmt_99,ibran);
+    fprintf(stderr,"(*****INTERNAL ERROR IN CHSCDF SUBROUTINE -- IMPOSSIBLE BRANCH CONDITION AT BRANCH POINT %ld)",ibran);
     return;
 
 /*     TREAT THE SMALL AND MODERATE DEGREES OF FREEDOM CASE */
