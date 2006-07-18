@@ -346,8 +346,8 @@ IF(CMAKE_COMPILER_IS_GNUCC)
   #  )
 ENDIF(CMAKE_COMPILER_IS_GNUCC)
 
-# Create a netlib library with mangled symbols.
-ADD_LIBRARY(v3p_netlib
+# Collect full source list.
+SET(v3p_netlib_sources
   ${V3P_NETLIB_base_SOURCES}
   ${V3P_NETLIB_libf2c_SOURCES}
   ${V3P_NETLIB_blas_SOURCES}
@@ -364,6 +364,11 @@ ADD_LIBRARY(v3p_netlib
   ${V3P_NETLIB_datapac_SOURCES}
   ${V3P_NETLIB_mathews_SOURCES}
   )
+
+# Create a netlib library with mangled symbols.
+ADD_LIBRARY(v3p_netlib ${v3p_netlib_sources})
+INSTALL_TARGETS( /lib v3p_netlib )
+INSTALL_NOBASE_HEADER_FILES(/include/v3p/netlib ${v3p_netlib_sources})
 IF(UNIX)
   TARGET_LINK_LIBRARIES( v3p_netlib m )
 ENDIF(UNIX)
