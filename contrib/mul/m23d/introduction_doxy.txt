@@ -3,8 +3,12 @@
 * Various functions for generating linear models of 3D point positions
 * and their variation, given multiple 2D views.
 *
-* Initial classes assume orthographic projection models, and that all points
-* are visible in all frames.  Note that the Oxford libraries contain more
+* Initial classes assume scaled orthographic projection models, and that all
+* points are visible in all frames.  Note that the Oxford libraries contain more
 * well developed tools for dealing with tracking of rigid objects under
 * projective projections.
+*
+* Key classes:
+* - m23d_ortho_rigid_builder: Reconstruct 3D shape of rigid object
+* - m23d_ortho_flexible_builder: Reconstruct 3D shape basis of deformable object
 */
