@@ -52,10 +52,14 @@ class vgui_mfc_window : public vgui_window
   vgui_menu menubar;
   void set_menubar(vgui_menu const &m) { menubar = m; }
 
-  vgui_mfc_adaptor *mfcwin;
+  vgui_mfc_adaptor   *mfcwin;
   vgui_mfc_statusbar *statusbar;
+
   //: Return the vgui_mfc_adaptor associated with this window.
   vgui_adaptor *get_adaptor();
+
+  //: Return the vgui_mfc_adaptor associated with this window.
+  vgui_statusbar *get_statusbar();
 
   //
   void show();

@@ -98,6 +98,12 @@ vgui_adaptor* vgui_mfc_window::get_adaptor()
   return mfcwin;
 }
 
+//: Return the vgui_mfc_statusbar associated with this window.
+vgui_statusbar* vgui_mfc_window::get_statusbar()
+{
+  return statusbar;
+}
+
 void vgui_mfc_window::show()
 {
   CWnd *wnd = AfxGetApp()->GetMainWnd();

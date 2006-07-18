@@ -477,6 +477,7 @@ void vgui_mfc_adaptor::OnSize(UINT nType, int cx, int cy)
     create_bitmap( cx, cy, m_pDC_aux, obmp );
     DeleteObject( obmp );
   }
+  dispatch_to_tableau(vgui_RESHAPE);
   post_redraw();
 }
 
