@@ -55,7 +55,7 @@ static doublereal c_b54 = 1.;
     extern /* Subroutine */ int dcopy_(integer *, doublereal *, integer *, 
 	    doublereal *, integer *);
     integer lwmin;
-    doublereal scale2;
+    doublereal scale2=0;
     extern /* Subroutine */ int dtgsy2_(char *, integer *, integer *, integer 
 	    *, doublereal *, integer *, doublereal *, integer *, doublereal *,
 	     integer *, doublereal *, integer *, doublereal *, integer *, 

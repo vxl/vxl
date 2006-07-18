@@ -34,7 +34,7 @@ doublereal dlange_(char *norm, integer *m, integer *n, doublereal *a, integer
     integer i__, j;
     doublereal sum, scale;
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
-    doublereal value;
+    doublereal value=0;
     extern /* Subroutine */ int dlassq_(integer *, doublereal *, integer *, 
 	    doublereal *, doublereal *);
     (void)norm_len;

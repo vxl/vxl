@@ -99,7 +99,7 @@ static doublereal c_b34 = 1.;
     extern /* Subroutine */ int dormqr_(char *, char *, integer *, integer *, 
 	    integer *, doublereal *, integer *, doublereal *, doublereal *, 
 	    integer *, doublereal *, integer *, integer *, ftnlen, ftnlen);
-    integer minwrk, maxwrk;
+    integer minwrk, maxwrk=0;
     doublereal smlnum;
     logical wantst, lquery;
     (void)jobvsl_len;

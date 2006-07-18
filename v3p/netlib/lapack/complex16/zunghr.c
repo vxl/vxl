@@ -33,7 +33,7 @@ static integer c_n1 = -1;
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, 
 	    integer *, integer *, ftnlen, ftnlen);
-    integer lwkopt;
+    integer lwkopt=0;
     logical lquery;
     extern /* Subroutine */ int zungqr_(integer *, integer *, integer *, 
 	    doublecomplex *, integer *, doublecomplex *, doublecomplex *, 

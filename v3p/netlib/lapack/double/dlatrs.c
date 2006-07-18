@@ -38,7 +38,7 @@ static doublereal c_b36 = .5;
 	    integer *);
     doublereal xbnd;
     integer imax;
-    doublereal tmax, tjjs, xmax, grow, sumj;
+    doublereal tmax, tjjs=0, xmax, grow, sumj;
     extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
 	    integer *);
     extern logical lsame_(char *, char *, ftnlen, ftnlen);

@@ -52,9 +52,9 @@ static integer c__3 = 3;
 	     a2r, b1r, b2r, wr2, ad11, ad12, ad21, ad22, c11i, c22i;
     integer jch;
     doublereal c11r, c22r, u12l;
-    logical ilq;
+    logical ilq=0;
     doublereal tau, sqi;
-    logical ilz;
+    logical ilz=0;
     doublereal ulp, sqr, szi, szr, ad11l, ad12l, ad21l, ad22l, ad32l, wabs, 
 	    atol, btol, temp;
     extern /* Subroutine */ int drot_(integer *, doublereal *, integer *, 
@@ -88,7 +88,7 @@ static integer c__3 = 3;
     doublereal safmax;
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
     doublereal eshift;
-    logical ilschr;
+    logical ilschr=0;
     integer icompq, ilastm, ischur;
     logical ilazro;
     integer icompz, ifirst, ifrstm, istart;

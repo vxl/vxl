@@ -33,7 +33,7 @@ static integer c__1 = 1;
 
     /* Local variables */
     doublereal c__, s;
-    logical ilq, ilz;
+    logical ilq=0, ilz=0;
     integer jcol;
     doublereal temp;
     extern /* Subroutine */ int drot_(integer *, doublereal *, integer *, 

@@ -44,7 +44,7 @@ doublereal slamch_(char *cmach, ftnlen cmach_len)
     integer imin, imax;
     logical lrnd;
     static real rmin, rmax;
-    real rmach;
+    real rmach=0;
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     real small;
     static real sfmin;

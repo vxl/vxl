@@ -31,7 +31,7 @@ static integer c__2 = 2;
     integer a_dim1, a_offset, i__1, i__2, i__3;
 
     /* Local variables */
-    integer i__, j, l, ib, nb, ki, kk, nx, iws, nbmin, iinfo;
+    integer i__, j, l, ib, nb, ki=0, kk, nx, iws, nbmin, iinfo;
     extern /* Subroutine */ int dorg2r_(integer *, integer *, integer *, 
 	    doublereal *, integer *, doublereal *, doublereal *, integer *), 
 	    dlarfb_(char *, char *, char *, char *, integer *, integer *, 

@@ -31,11 +31,11 @@ static doublereal c_b10 = -1.;
     /* Local variables */
     integer i__, j, ip, jp;
     doublereal eps;
-    integer ipv, jpv;
+    integer ipv=0, jpv=0;
     extern /* Subroutine */ int dger_(integer *, integer *, doublereal *, 
 	    doublereal *, integer *, doublereal *, integer *, doublereal *, 
 	    integer *);
-    doublereal smin, xmax;
+    doublereal smin=0, xmax;
     extern /* Subroutine */ int dswap_(integer *, doublereal *, integer *, 
 	    doublereal *, integer *), dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *, ftnlen);

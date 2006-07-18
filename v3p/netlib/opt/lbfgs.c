@@ -113,7 +113,7 @@ static integer c__1 = 1;
 
     /* Local variables */
     integer i__, cp;
-    doublereal sq, yr, ys, yy;
+    doublereal sq, yr, ys=0, yy;
     extern /* Subroutine */ int lb1_(
       integer *iprint, integer *n, integer *m, doublereal *x, doublereal *f,
       doublereal *g, v3p_netlib_lbfgs_global_t* v3p_netlib_lbfgs_global_arg);
@@ -125,7 +125,7 @@ static integer c__1 = 1;
                                         doublereal *, doublereal *,
                                         doublereal *, doublereal *,
                                         v3p_netlib_lbfgs_global_t*);
-    integer npt;
+    integer npt=0;
 
 
 /*<       INTEGER N,M,IPRINT(2),IFLAG >*/

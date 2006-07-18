@@ -40,7 +40,7 @@ static integer c__65 = 65;
     /* Local variables */
     integer i__;
     doublereal t[4160]	/* was [65][64] */;
-    integer i1, i2, i3, ib, ic, jc, nb, mi, ni, nq, nw, iws;
+    integer i1, i2, i3, ib, ic, jc, nb=0, mi, ni, nq, nw, iws;
     logical left;
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     integer nbmin, iinfo;
@@ -56,7 +56,7 @@ static integer c__65 = 65;
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, 
 	    integer *, integer *, ftnlen, ftnlen);
     logical notran;
-    integer ldwork, lwkopt;
+    integer ldwork, lwkopt=0;
     logical lquery;
     (void)side_len;
     (void)trans_len;

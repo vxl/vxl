@@ -350,7 +350,7 @@ static void fxshfr_(integer *l2, integer *nz,
     logical vpass;
     doublereal ui, vi;
     real ts, tv, vv;
-    real ots, otv, tss;
+    real ots=0, otv=0, tss;
     doublereal ss, oss, ovv, svu, svv;
     real tvv;
 
@@ -492,7 +492,7 @@ static void quadit_(doublereal *uu, doublereal *vv, integer *nz,
     real ee;
     doublereal ui, vi;
     real mp, zm;
-    real relstp, omp;
+    real relstp=0, omp=0;
 
 /* VARIABLE-SHIFT K-POLYNOMIAL ITERATION FOR A */
 /* QUADRATIC FACTOR CONVERGES ONLY IF THE ZEROS ARE */
@@ -584,10 +584,10 @@ static void realit_(doublereal *sss, integer *nz, integer *iflag,
 {
     /* Local variables */
     integer i, j;
-    doublereal s, t;
+    doublereal s, t=0;
     real ee, mp, ms;
     doublereal kv, pv;
-    real omp;
+    real omp=0;
 
 /* VARIABLE-SHIFT H POLYNOMIAL ITERATION FOR A REAL */
 /* ZERO. */

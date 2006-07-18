@@ -24,7 +24,7 @@ extern "C" {
     integer a_dim1, a_offset, i__1, i__2;
 
     /* Local variables */
-    integer i__, j, ix, jx, kx, info;
+    integer i__, j, ix, jx, kx=0, info;
     doublereal temp;
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);

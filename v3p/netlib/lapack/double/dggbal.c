@@ -62,7 +62,7 @@ static doublereal c_b70 = .5;
 	    integer *, doublereal *, integer *);
     integer kount;
     extern doublereal dlamch_(char *, ftnlen);
-    doublereal pgamma;
+    doublereal pgamma=0;
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
     integer lsfmin, lsfmax;
