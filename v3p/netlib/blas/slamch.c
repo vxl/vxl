@@ -17,6 +17,15 @@ extern "C" {
 
 #include <stdio.h>
 
+/* Initialization function just calls the function once so that its
+   runtime-initialized constants are initialized.  After the first
+   call it is safe to call the function from multiple threads at
+   once.  */
+void v3p_netlib_slamch_init()
+{
+  slamch_(" ", 1);
+}
+
 /* Table of constant values */
 
 static real c_b32 = (float)0.;
@@ -26,7 +35,7 @@ doublereal slamch_(char *cmach, ftnlen cmach_len)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static logical first = TRUE_; /* runtime-initialized constant */
 
     /* System generated locals */
     integer i__1;
@@ -36,18 +45,18 @@ doublereal slamch_(char *cmach, ftnlen cmach_len)
     double pow_ri(real *, integer *);
 
     /* Local variables */
-    static real t;
+    static real t; /* runtime-initialized constant */
     integer it;
-    static real rnd, eps, base;
+    static real rnd, eps, base; /* runtime-initialized constant */
     integer beta;
-    static real emin, prec, emax;
+    static real emin, prec, emax; /* runtime-initialized constant */
     integer imin, imax;
     logical lrnd;
-    static real rmin, rmax;
+    static real rmin, rmax; /* runtime-initialized constant */
     real rmach=0;
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     real small;
-    static real sfmin;
+    static real sfmin; /* runtime-initialized constant */
     extern /* Subroutine */ int slamc2_(integer *, integer *, logical *, real 
 	    *, integer *, real *, integer *, real *);
     (void)cmach_len;
@@ -232,19 +241,19 @@ doublereal slamch_(char *cmach, ftnlen cmach_len)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static logical first = TRUE_; /* runtime-initialized constant */
 
     /* System generated locals */
     real r__1, r__2;
 
     /* Local variables */
     real a, b, c__, f, t1, t2;
-    static integer lt;
+    static integer lt; /* runtime-initialized constant */
     real one, qtr;
-    static logical lrnd;
-    static integer lbeta;
+    static logical lrnd; /* runtime-initialized constant */
+    static integer lbeta; /* runtime-initialized constant */
     real savec;
-    static logical lieee1;
+    static logical lieee1; /* runtime-initialized constant */
     extern doublereal slamc3_(real *, real *);
 
 
@@ -506,8 +515,8 @@ L30:
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static logical iwarn = FALSE_;
+    static logical first = TRUE_; /* runtime-initialized constant */
+    static logical iwarn = FALSE_; /* runtime-initialized constant */
 
     /* System generated locals */
     integer i__1;
@@ -519,21 +528,21 @@ L30:
     /* Local variables */
     real a, b, c__;
     integer i__;
-    static integer lt;
+    static integer lt; /* runtime-initialized constant */
     real one, two;
     logical ieee;
     real half;
     logical lrnd;
-    static real leps;
+    static real leps; /* runtime-initialized constant */
     real zero;
-    static integer lbeta;
+    static integer lbeta; /* runtime-initialized constant */
     real rbase;
-    static integer lemin, lemax;
+    static integer lemin, lemax; /* runtime-initialized constant */
     integer gnmin;
     real small;
     integer gpmin;
     real third;
-    static real lrmin, lrmax;
+    static real lrmin, lrmax; /* runtime-initialized constant */
     real sixth;
     logical lieee1;
     extern /* Subroutine */ int slamc1_(integer *, integer *, logical *, 

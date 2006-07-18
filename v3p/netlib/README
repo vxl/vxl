@@ -174,8 +174,18 @@ grep "  static" **/*.c |grep -v constant
 Global data declared static seem to be constant, so only local
 variables are of concern, which is why the grep expression contains
 spaces.  Local statics that have been manually deemed safe (constant)
-should be marked with a "/* constant */" comment to avoid being listed
-in the grep output.
+should be marked with a
+
+   /* constant */"
+
+comment to avoid being listed in the grep output.  Local statics that
+require one-time initialization at run-time should be marked with a
+
+   /* runtime-initialized constant */
+
+comment to avoid being listed in the grep output.  The routines
+holding them should be given a v3p_netlib_*_init() function that is
+called from v3p_netlib_init.c in the v3p_netlib_initialize function.
 
 Functions that call back to user functions have been manually given a
 userdata callback argument.  This allows them to be reentrant.

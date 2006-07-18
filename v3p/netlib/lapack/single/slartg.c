@@ -15,12 +15,22 @@ extern "C" {
 #endif
 #include "v3p_netlib.h"
 
+/* Initialization function just calls the function once so that its
+   runtime-initialized constants are initialized.  After the first
+   call it is safe to call the function from multiple threads at
+   once.  */
+void v3p_netlib_slartg_init()
+{
+  real f=0, g=0, cs=0, sn=0, r=0;
+  slartg_(&f, &g, &cs, &sn, &r);
+}
+
 /*<       SUBROUTINE SLARTG( F, G, CS, SN, R ) >*/
 /* Subroutine */ int slartg_(real *f, real *g, real *cs, real *sn, real *r__)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static logical first = TRUE_; /* runtime-initialized constant */
 
     /* System generated locals */
     integer i__1;
@@ -33,9 +43,9 @@ extern "C" {
     integer i__;
     real f1, g1, eps, scale;
     integer count;
-    static real safmn2, safmx2;
+    static real safmn2, safmx2; /* runtime-initialized constant */
     extern doublereal slamch_(char *, ftnlen);
-    static real safmin;
+    static real safmin; /* runtime-initialized constant */
 
 
 /*  -- LAPACK auxiliary routine (version 3.0) -- */

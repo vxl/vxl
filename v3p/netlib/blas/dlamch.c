@@ -17,6 +17,15 @@ extern "C" {
 
 #include <stdio.h>
 
+/* Initialization function just calls the function once so that its
+   runtime-initialized constants are initialized.  After the first
+   call it is safe to call the function from multiple threads at
+   once.  */
+void v3p_netlib_dlamch_init()
+{
+  dlamch_(" ", 1);
+}
+
 /* Table of constant values */
 
 static doublereal c_b32 = 0.;
@@ -26,7 +35,7 @@ doublereal dlamch_(char *cmach, ftnlen cmach_len)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static logical first = TRUE_; /* runtime-initialized constant */
 
     /* System generated locals */
     integer i__1;
@@ -36,18 +45,18 @@ doublereal dlamch_(char *cmach, ftnlen cmach_len)
     double pow_di(doublereal *, integer *);
 
     /* Local variables */
-    static doublereal t;
+    static doublereal t; /* runtime-initialized constant */
     integer it;
-    static doublereal rnd, eps, base;
+    static doublereal rnd, eps, base; /* runtime-initialized constant */
     integer beta;
-    static doublereal emin, prec, emax;
+    static doublereal emin, prec, emax; /* runtime-initialized constant */
     integer imin, imax;
     logical lrnd;
-    static doublereal rmin, rmax;
+    static doublereal rmin, rmax; /* runtime-initialized constant */
     doublereal rmach=0;
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     doublereal small;
-    static doublereal sfmin;
+    static doublereal sfmin; /* runtime-initialized constant */
     extern /* Subroutine */ int dlamc2_(integer *, integer *, logical *, 
 	    doublereal *, integer *, doublereal *, integer *, doublereal *);
 
@@ -232,20 +241,20 @@ doublereal dlamch_(char *cmach, ftnlen cmach_len)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static logical first = TRUE_; /* runtime-initialized constant */
 
     /* System generated locals */
     doublereal d__1, d__2;
 
     /* Local variables */
     doublereal a, b, c__, f, t1, t2;
-    static integer lt;
+    static integer lt; /* runtime-initialized constant */
     doublereal one, qtr;
-    static logical lrnd;
-    static integer lbeta;
+    static logical lrnd; /* runtime-initialized constant */
+    static integer lbeta; /* runtime-initialized constant */
     doublereal savec;
     extern doublereal dlamc3_(doublereal *, doublereal *);
-    static logical lieee1;
+    static logical lieee1; /* runtime-initialized constant */
 
 
 /*  -- LAPACK auxiliary routine (version 1.1) -- */
@@ -507,8 +516,8 @@ L30:
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
-    static logical iwarn = FALSE_;
+    static logical first = TRUE_; /* runtime-initialized constant */
+    static logical iwarn = FALSE_; /* runtime-initialized constant */
 
     /* System generated locals */
     integer i__1;
@@ -521,21 +530,21 @@ L30:
     /* Local variables */
     doublereal a, b, c__;
     integer i__;
-    static integer lt;
+    static integer lt; /* runtime-initialized constant */
     doublereal one, two;
     logical ieee;
     doublereal half;
     logical lrnd;
-    static doublereal leps;
+    static doublereal leps; /* runtime-initialized constant */
     doublereal zero;
-    static integer lbeta;
+    static integer lbeta; /* runtime-initialized constant */
     doublereal rbase;
-    static integer lemin, lemax;
+    static integer lemin, lemax; /* runtime-initialized constant */
     integer gnmin;
     doublereal small;
     integer gpmin;
     doublereal third;
-    static doublereal lrmin, lrmax;
+    static doublereal lrmin, lrmax; /* runtime-initialized constant */
     doublereal sixth;
     extern /* Subroutine */ int dlamc1_(integer *, integer *, logical *, 
 	    logical *);

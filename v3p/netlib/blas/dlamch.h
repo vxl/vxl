@@ -1,3 +1,4 @@
+extern void v3p_netlib_dlamch_init();
 extern v3p_netlib_doublereal v3p_netlib_dlamch_(
   char *cmach,
   v3p_netlib_ftnlen cmach_len

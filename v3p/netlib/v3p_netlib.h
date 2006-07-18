@@ -26,6 +26,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+extern void v3p_netlib_initialize();
 #include "v3p_netlib_prototypes.h"
 #ifdef __cplusplus
 }
@@ -34,6 +35,15 @@ extern "C" {
 /* Cleanup the namespace if not inside a v3p_netlib source.  */
 #ifndef V3P_NETLIB_SRC
 # include "v3p_netlib_unmangle.h"
+#endif
+
+/* Automatically initialize the netlib library for C++ clients.  */
+#if defined(__cplusplus) && !defined(V3P_NETLIB_SRC)
+struct v3p_netlib_initializer
+{
+  v3p_netlib_initializer() { v3p_netlib_initialize(); }
+};
+static v3p_netlib_initializer v3p_netlib_initializer_instance;
 #endif
 
 #endif

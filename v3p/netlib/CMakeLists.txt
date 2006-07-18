@@ -31,7 +31,7 @@ INCLUDE_DIRECTORIES(${netlib_SOURCE_DIR})
 ADD_DEFINITIONS(-DV3P_NETLIB_SRC)
 
 # List sources for each library component.
-SET(V3P_NETLIB_header_sources
+SET(V3P_NETLIB_base_SOURCES
   v3p_f2c.h
   v3p_f2c_mangle.h
   v3p_f2c_original.h
@@ -40,6 +40,7 @@ SET(V3P_NETLIB_header_sources
   v3p_netlib_mangle.h
   v3p_netlib_prototypes.h
   v3p_netlib_unmangle.h
+  v3p_netlib_init.c
   )
 SET(V3P_NETLIB_libf2c_SOURCES
   libf2c/f77_aloc.c
@@ -347,7 +348,7 @@ ENDIF(CMAKE_COMPILER_IS_GNUCC)
 
 # Create a netlib library with mangled symbols.
 ADD_LIBRARY(v3p_netlib
-  ${V3P_NETLIB_header_sources}
+  ${V3P_NETLIB_base_SOURCES}
   ${V3P_NETLIB_libf2c_SOURCES}
   ${V3P_NETLIB_blas_SOURCES}
   ${V3P_NETLIB_linpack_SOURCES}
