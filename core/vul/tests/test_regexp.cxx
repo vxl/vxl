@@ -253,4 +253,12 @@ void test_regexp()
   TEST("rxp.match(2) == \"\"", rxp.match(2), "");
 }
 
-TESTMAIN(test_regexp);
+//TESTMAIN(test_regexp);
+int test_regexp(int, char*[])
+{
+  testlib_test_start("test_regexp");
+
+  test_regexp();
+
+  return testlib_test_summary();
+}

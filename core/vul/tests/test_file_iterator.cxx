@@ -314,4 +314,12 @@ void test_file_iterator()
 }
 
 
-TESTMAIN(test_file_iterator);
+//TESTMAIN(test_file_iterator);
+int test_file_iterator(int, char*[])
+{
+  testlib_test_start("test_file_iterator");
+
+  test_file_iterator();
+
+  return testlib_test_summary();
+}

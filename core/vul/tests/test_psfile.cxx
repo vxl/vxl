@@ -241,4 +241,12 @@ static void test_psfile() {
   test_psfile_combined();
 }
 
-TESTMAIN(test_psfile);
+//TESTMAIN(test_psfile);
+int test_psfile(int, char*[])
+{
+  testlib_test_start("test_psfile");
+
+  test_psfile();
+
+  return testlib_test_summary();
+}

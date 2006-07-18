@@ -39,4 +39,12 @@ void test_vul_file()
 
 }
 
-TESTMAIN(test_vul_file);
+//TESTMAIN(test_vul_file);
+int test_vul_file(int, char*[])
+{
+  testlib_test_start("test_vul_file");
+
+  test_vul_file();
+
+  return testlib_test_summary();
+}

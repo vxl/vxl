@@ -16,4 +16,12 @@ void test_sleep_timer()
   TEST_NEAR_REL("Sleep for between 0.4 and 2.5 seconds", t, 1.0, 0.6);
 }
 
-TESTMAIN(test_sleep_timer);
+//TESTMAIN(test_sleep_timer);
+int test_sleep_timer(int, char*[])
+{
+  testlib_test_start("test_sleep_timer");
+
+  test_sleep_timer();
+
+  return testlib_test_summary();
+}

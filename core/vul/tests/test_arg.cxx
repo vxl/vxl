@@ -115,4 +115,12 @@ void test_arg()
   test_do_vul_arg();
 }
 
-TESTMAIN(test_arg);
+//TESTMAIN(test_arg);
+int test_arg(int, char*[])
+{
+  testlib_test_start("test_arg");
+
+  test_arg();
+
+  return testlib_test_summary();
+}
