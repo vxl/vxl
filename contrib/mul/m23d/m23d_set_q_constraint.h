@@ -28,6 +28,13 @@ void m23d_set_q_constraint2(vnl_matrix<double> & A,
                       const vnl_vector<double>& a,
                       const vnl_vector<double>& b);
 
+//: Generate matrix of all constraints on elements of Q
+// Q symmetric, encoded using elements i,j<=i in the vector q
+// q obtained by solving Aq=rhs
+void m23d_set_q_constraints(const vnl_matrix<double> & M, unsigned k,
+                            vnl_matrix<double>& A,
+                            vnl_vector<double>& rhs);
+
 #endif // m23d_set_q_constraint_h_
 
 

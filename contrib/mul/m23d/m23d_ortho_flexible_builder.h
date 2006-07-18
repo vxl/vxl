@@ -41,11 +41,28 @@ class m23d_ortho_flexible_builder
     //  Each 2D shape has been translated so that it's CoG is at the origin
     vnl_matrix<double> P2Dc_;
 
+    //: The 2ns x 3 matrix. Each 2x3 block is the projection for a given view.
+    //  Each 2x3 sub-matrix is a scaled orthographic projection matrix
+    vnl_matrix<double> pure_P_;
+
+    //: ns x (m+1) matrix, each row of which contains the weights for a shape
+    vnl_matrix<double> coeffs_;
+
     //: Modify projection matrices so they are scaled orthographic projections
     //  P = s(I|0)*R
     void make_pure_projections();
 
   public:
+    //: Reconstruct approximate structure of 3D points given multiple 2D views
+    //  Data assumed to be scaled orthographic projections
+    //  The result is stored in the shape_3d() matrix.
+    //  The estimated projection matricies are stored in the projections() matrix
+    //  However, the projection matricies are not necesarily consistant.
+    //  Call refine() to ensure consistancy, (or use reconstruct(P2D,n_modes)
+    //  This is exposed to aid testing and debugging.
+    //  \param P2D 2ns x np matrix. Rows contain alternating x's and y's from 2D shapes
+    void partial_reconstruct(const vnl_matrix<double>& P2D, unsigned n_modes);
+
     //: Reconstruct structure of 3D points given multiple 2D views
     //  Data assumed to be scaled orthographic projections
     //  The result is stored in the shape_3d() matrix.
@@ -66,6 +83,13 @@ class m23d_ortho_flexible_builder
     //: Centred version of the 2D views supplied to reconstruct()
     //  Each 2D shape has been translated so that it's CoG is at the origin
     const vnl_matrix<double>& centred_views() const { return P2Dc_; }
+
+    //: The 2ns x 3 matrix. Each 2x3 block is the projection for a given view.
+    //  Each 2x3 sub-matrix is a scaled orthographic projection matrix
+    const vnl_matrix<double>& pure_projections() const { return pure_P_; }
+
+    //: ns x (m+1) matrix, each row of which contains the weights for a shape
+    const vnl_matrix<double>& coeffs() const { return coeffs_; }
 
     //: Refine estimates of projection and structure
     void refine();

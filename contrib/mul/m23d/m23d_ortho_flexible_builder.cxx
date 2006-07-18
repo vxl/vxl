@@ -13,120 +13,7 @@
 #include <vcl_algorithm.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
-#include <mbl/mbl_matxvec.h>
-
-//: Computes error on constraints when computing correction matrix
-//  Given g, returns error vector (Aq-rhs), where vector q are the
-//  unique elements of the symmetric matrix Q=GG', G being the
-//  3(m+1) x 3 matrix formed from the elements of the supplied
-//  vector g.
-class m23d_correction_matrix_error : public vnl_least_squares_function
-{
-  //: Workspace for unique elements of symmetric matrix GG'
-  vnl_vector<double> q_;
-
-  //: Constraints on q
-  vnl_matrix<double> A_;
-
-  //: RHS for constraints on q  (Aq=rhs)
-  vnl_vector<double> rhs_;
-
-  //: Workspace for residual vector
-  vnl_vector<double> r_;
-
-  //: Number of model modes
-  unsigned n_modes_;
-
-  //: Compute q from supplied g
-  //  g1==g2 for full q, g2 = (0 0 ..1 ...0) when computing derivatives
-  void compute_q(const vnl_vector<double>& g1,
-                 const vnl_vector<double>& g2,
-                 vnl_vector<double>& q);
-
-public:
-  m23d_correction_matrix_error(const vnl_matrix<double>& A,
-                                 const vnl_vector<double>& rhs,
-                                 unsigned n_modes);
-
-  //: The main function.
-  //  Given g, returns error vector fx=(Aq-rhs), where vector q are the
-  //  unique elements of the symmetric matrix Q=GG', G being the
-  //  3(m+1) x 3 matrix formed from the elements of the supplied
-  //  vector g.
-  virtual void f(vnl_vector<double> const& g,
-                 vnl_vector<double>& fx);
-
-  //: Calculate the Jacobian, given the parameter vector g.
-  virtual void gradf(vnl_vector<double> const& g,
-                     vnl_matrix<double>& jacobian);
-
-};
-
-m23d_correction_matrix_error::m23d_correction_matrix_error(const vnl_matrix<double>& A,
-                              const vnl_vector<double>& rhs,
-                              unsigned n_modes)
-  : vnl_least_squares_function(9*(n_modes+1),A.rows(),use_gradient),
-    A_(A),rhs_(rhs),n_modes_(n_modes)
-{
-  unsigned t = 3*(n_modes+1);
-  assert(A.cols() == (t*(t+1))/2);
-  q_.set_size(A.cols());
-}
-
-//: Compute q from supplied g
-//  g1==g2 for full q, g2 = (0 0 ..1 ...0) when computing derivatives
-//  q is set to the unique elements of G1.G2', where G1 and G2 are the
-//  3*(m+1) x 3 matrices formed from the elements of g1 and g2.
-void m23d_correction_matrix_error::compute_q(const vnl_vector<double>& g1,
-                 const vnl_vector<double>& g2,
-                 vnl_vector<double>& q)
-{
-  unsigned t = 3*(n_modes_+1);
-  unsigned c=0;
-  unsigned k=0;
-  const double* r1=g1.data_block();
-  for (unsigned i=0;i<t;++i,r1+=3)
-  {
-    const double* r2=g2.data_block();
-    for (unsigned j=0;j<=i;++j,++k,r2+=3)
-       q[k]= r1[0]*r2[0] + r1[1]*r2[1] +r1[2]*r2[2];
-  }
-}
-
-
-//: The main function.
-//  Given g, returns error vector fx=(Aq-rhs), where vector q are the
-//  unique elements of the symmetric matrix Q=GG', G being the
-//  3(m+1) x 3 matrix formed from the elements of the supplied
-//  vector g.
-void m23d_correction_matrix_error::f(vnl_vector<double> const& g,
-                                     vnl_vector<double>& fx)
-{
-  assert(g.size() == 9*(n_modes_+1));
-  compute_q(g,g,q_);
-  mbl_matxvec_prod_mv(A_,q_,fx);
-  fx-=rhs_;
-}
-
-//: Calculate the Jacobian, given the parameter vector g.
-void m23d_correction_matrix_error::gradf(vnl_vector<double> const& g,
-                                         vnl_matrix<double>& jacobian)
-{
-  unsigned ng = 9*(n_modes_+1);
-  assert(g.size() == ng);
-  jacobian.set_size(get_number_of_residuals(),ng);
-  r_.set_size(get_number_of_residuals());
-
-  vnl_vector<double> g1(ng,0.0);
-  for (unsigned j=0;j<ng;++j)
-  {
-    g1[j]=2.0;  // To allow for factor of 2 in derivative (=2AG.G1')
-    compute_q(g,g1,q_);
-    mbl_matxvec_prod_mv(A_,q_,r_);
-    jacobian.set_column(j,r_);
-    g1[j]=0.0;  // Reset to zero
-  }
-}
+#include <m23d/m23d_correction_matrix_error.h>
 
 //: Reconstruct structure of 3D points given multiple 2D views
 //  Data assumed to be scaled orthographic projections
@@ -134,6 +21,18 @@ void m23d_correction_matrix_error::gradf(vnl_vector<double> const& g,
 //  The estimated projection matricies are stored in the projections() matrix
 //  \param P2D 2ns x np matrix. Rows contain alternating x's and y's from 2D shapes
 void m23d_ortho_flexible_builder::reconstruct(const vnl_matrix<double>& P2D,
+                                              unsigned n_modes)
+{
+  partial_reconstruct(P2D,n_modes);
+  refine();
+}
+
+//: Reconstruct structure of 3D points given multiple 2D views
+//  Data assumed to be scaled orthographic projections
+//  The result is stored in the shape_3d() matrix.
+//  The estimated projection matricies are stored in the projections() matrix
+//  \param P2D 2ns x np matrix. Rows contain alternating x's and y's from 2D shapes
+void m23d_ortho_flexible_builder::partial_reconstruct(const vnl_matrix<double>& P2D,
                                               unsigned n_modes)
 {
   assert(P2D.rows()%2==0);
@@ -240,18 +139,15 @@ static vnl_matrix<double> am_solve_for_G0(const vnl_matrix<double>& A,
 {
   unsigned n=3;
   vnl_svd<double> svd(A);
-  vcl_cout<<"Singular Values of A: "<<svd.W().diagonal()<<vcl_endl;
   vnl_vector<double> q0 = svd.solve(rhs);
   vnl_matrix<double> Q0=sym_matrix_from_vec(q0,n);
   unsigned nq = q0.size();
-  vcl_cout<<"Error for q0 = "<<(A*q0-rhs).rms()<<vcl_endl;
 
   // If Gk is the t x 3 matrix, the k-th triplet of columns of G,
   // then Gk.Gk'=Q0
   // Use eigen decomposition to compute Gk
   vnl_symmetric_eigensystem<double> eig(Q0);
   vnl_matrix<double> Gk(n,3);
-  vcl_cout<<"Eigenvalues: "<<eig.D.diagonal()<<vcl_endl;
   for (unsigned i=0;i<3;++i)
   {
     Gk.set_column(i,vcl_sqrt(eig.get_eigenvalue(n-1-i))
@@ -265,7 +161,7 @@ static vnl_matrix<double> am_solve_for_Gk(const vnl_matrix<double>& A,
                                    const vnl_vector<double>& rhs,
                                    unsigned m, unsigned k)
 {
-  m23d_correction_matrix_error err_fn(A,rhs,m);
+  m23d_correction_matrix_error err_fn(A,rhs,m,k);
 
   vnl_levenberg_marquardt LM(err_fn);
 
@@ -274,7 +170,7 @@ static vnl_matrix<double> am_solve_for_Gk(const vnl_matrix<double>& A,
   for (unsigned i=0;i<3;++i) g[9*k+4*i]=1.0;
 
 //  LM.minimize_using_gradient(g);  *** Seem to get a different result with gradient! ***
-  if (!LM.minimize_without_gradient(g))
+  if (!LM.minimize_using_gradient(g))
     vcl_cout<<"LM failed!!"<<vcl_endl;
 
   vcl_cout<<"am_solve_for_Gk (k="<<k<<") RMS="<<err_fn.rms(g)<<vcl_endl;
@@ -315,88 +211,21 @@ static vnl_matrix<double> am_solve_for_Gk(const vnl_matrix<double>& A,
 }
 */
 
-void compute_Gk(const vnl_matrix<double> & M, unsigned k,
+static void compute_Gk(const vnl_matrix<double> & M, unsigned k,
                 vnl_matrix<double>& Gk)
 {
-  unsigned mc = M.cols();
   unsigned m = M.cols()/3 -1;
-  unsigned ns = M.rows()/2;
-  unsigned nq = ((M.cols()+1)*M.cols())/2;
 
-  unsigned n_con = 4*(m*(ns-m-1)+(m+m*m)/2)+3*m+2*(ns-m)+1;
-
-  // Set up constraints on elements of Q
-  // Q symmetric, encoded using elements i,j<=i in the vector q
-  // q obtained by solving Aq=rhs
-  vnl_matrix<double> A(n_con,nq);
-  vnl_vector<double> rhs(n_con);
-
-  unsigned c=0;
-
-  // Impose the basis constraints
-  for (unsigned j=0;j<ns;++j)
-  {
-    vnl_vector<double> rxj = M.get_row(2*j);
-    vnl_vector<double> ryj = M.get_row(2*j+1);
-    for (unsigned i=0;i<=vcl_min(j,m);++i)
-    {
-      vnl_vector<double> rxi = M.get_row(2*i);
-      vnl_vector<double> ryi = M.get_row(2*i+1);
-
-      if (i==j)
-      {
-        if  (i==k)
-        {
-          // MiQMi' = I
-          m23d_set_q_constraint1(A,rhs,c,rxi,rxi,1.0); ++c;
-          m23d_set_q_constraint1(A,rhs,c,ryi,ryi,1.0); ++c;
-          m23d_set_q_constraint1(A,rhs,c,rxi,ryi,0.0); ++c;
-        }
-        else
-        {
-          // MiQMi' = 0
-          m23d_set_q_constraint1(A,rhs,c,rxi,rxi,0); ++c;
-          m23d_set_q_constraint1(A,rhs,c,ryi,ryi,0); ++c;
-          m23d_set_q_constraint1(A,rhs,c,rxi,ryi,0); ++c;
-        }
-      }
-      else   // i!=j
-      if (!((i==k) && j>m))
-      {
-        // MiQMj' = 0
-        m23d_set_q_constraint1(A,rhs,c,rxi,rxj,0); ++c;
-        m23d_set_q_constraint1(A,rhs,c,ryi,ryj,0); ++c;
-        m23d_set_q_constraint1(A,rhs,c,rxi,ryj,0); ++c;
-        m23d_set_q_constraint1(A,rhs,c,ryi,rxj,0); ++c;
-      }
-    }
-  }
-
-  // These constraints aim to impose orthogonality on rows of projection
-  // matrices.
-  for (unsigned i=m+1;i<ns;++i)
-  {
-    vnl_vector<double> rxi = M.get_row(2*i);
-    vnl_vector<double> ryi = M.get_row(2*i+1);
-    m23d_set_q_constraint2(A,rhs,c,rxi,ryi); ++c;
-    m23d_set_q_constraint1(A,rhs,c,rxi,ryi,0); ++c;
-  }
-
-  assert(c==n_con);
+  vnl_matrix<double> A;
+  vnl_vector<double> rhs;
+  m23d_set_q_constraints(M,k,A,rhs);
 
   if (m==0)
     Gk=am_solve_for_G0(A,rhs);
   else
   {
-    vcl_cout<<"Solving for Gk:"<<vcl_endl;
     Gk=am_solve_for_Gk(A,rhs,m,k);
   }
-
-  // Test: Generate q0 for identity
-  vnl_matrix<double> Q0(3*(m+1),3*(m+1),0.0);
-  for (unsigned i=0;i<3;++i) Q0(3*k+i,3*k+i)=1.0;
-  vnl_vector<double> q0=vec_from_sym_matrix(Q0);
-  vcl_cout<<"Error for identity: "<<(A*q0-rhs).rms()<<vcl_endl;
 
   if (k==0)
   {
@@ -406,8 +235,6 @@ void compute_Gk(const vnl_matrix<double> & M, unsigned k,
 
     // Compute a rotation matrix for this
     vnl_matrix<double> R=m23d_rotation_from_ortho_projection(M0);
-
-    vcl_cout<<"M0*Rt (k="<<k<<")"<<vcl_endl<<M0*R.transpose()<<vcl_endl;
 
     // Apply inverse so that P.G gives unit projection
     Gk=Gk*R.transpose();
@@ -531,6 +358,9 @@ void m23d_ortho_flexible_builder::make_pure_projections()
   unsigned ns = P_.rows()/2;
   unsigned m = P_.cols()/3-1;
 
+  pure_P_.set_size(2*ns,3);
+  coeffs_.set_size(ns,m+1);
+
   // Generate identity projection
   vnl_matrix<double> PI(2,3),Pzero(2,3,0.0);
   PI(0,0)=1; PI(0,1)=0; PI(0,2)=0;
@@ -538,8 +368,13 @@ void m23d_ortho_flexible_builder::make_pure_projections()
 
   // Force first row to be the identity
   P_.update(PI,0,0);
+  pure_P_.update(PI,0,0);
+  coeffs_(0,0)=1.0;
   for (unsigned i=1;i<=m;++i)
+  {
     P_.update(Pzero,0,3*i);
+    coeffs_(0,i)=0.0;
+  }
 
   // Force next m rows to only contain one non-zero pure projection
   for (unsigned i=1;i<=m;++i)
@@ -547,20 +382,49 @@ void m23d_ortho_flexible_builder::make_pure_projections()
     {
       if (i==j)
       {
-        P_.update(m23d_pure_ortho_projection(P_.extract(2,3,2*i,3*j)),2*i,3*j);
+        vnl_matrix<double> P0=m23d_pure_ortho_projection(P_.extract(2,3,2*i,3*j));
+        P_.update(P0,2*i,3*j);
+        pure_P_.update(P0,2*i,0);
+        coeffs_(i,j)=1.0;
       }
-      else P_.update(Pzero,2*i,3*j);
+      else
+      {
+        P_.update(Pzero,2*i,3*j);
+        coeffs_(i,j)=0.0;
+      }
     }
 
   // Replace each subsequent 2x3 projection with the
   // closest pure scaled orthogonal projection.
   for (unsigned i=m+1;i<ns;++i)
   {
+    // Generate a (m+1) x 6 matrix, each row containing one projection matrix
+    vnl_matrix<double> Mi(m+1,6);
     for (unsigned j=0;j<=m;++j)
     {
-      vnl_matrix<double> newPi = m23d_scaled_ortho_projection(P_.extract(2,3,2*i,3*j));
-      P_.update(newPi,2*i,3*j);
+      Mi(j,0)=P_(2*i,3*j);   Mi(j,1)=P_(2*i,3*j+1);   Mi(j,2)=P_(2*i,3*j+2);
+      Mi(j,3)=P_(2*i+1,3*j); Mi(j,4)=P_(2*i+1,3*j+1); Mi(j,5)=P_(2*i+1,3*j+2);
     }
+    // Mi should be a'p where a are coeffs and p is mean projection
+    // |p| should be sqrt(2) for a pure projection (no scaling)
+    vnl_svd<double> Mi_svd(Mi);
+    vnl_vector<double> p=Mi_svd.V().get_column(0)*vcl_sqrt(2.0);
+
+    vnl_matrix<double> Pi0 = vnl_matrix<double>(p.data_block(),2,3);
+    vnl_matrix<double> Pi = m23d_pure_ortho_projection(Pi0);
+    vnl_vector<double> pi(Pi.data_block(),6);
+
+    // Estimate weight for each basis vector
+    // Each row of Mi should be a[j]*pi'
+    // Since pi.pi = 2  (each 3 elements is a unit vector)
+    // a = 0.5*Mi*pi
+    vnl_vector<double> a = Mi*pi*0.5;
+
+    for (unsigned j=0;j<=m;++j)
+      P_.update(Pi*a[j],2*i,3*j);
+
+    pure_P_.update(Pi,2*i,0);
+    coeffs_.set_row(i,a);
   }
 }
 
