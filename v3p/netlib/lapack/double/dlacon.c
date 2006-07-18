@@ -13,6 +13,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#include <stdio.h> /* fprintf */
 #include "v3p_netlib.h"
 
 /* Table of constant values */
@@ -43,6 +44,12 @@ static doublereal c_b11 = 1.;
     extern integer idamax_(integer *, doublereal *, integer *);
     static doublereal altsgn, estold;
 
+    fprintf(stderr,
+            "WARNING: dlacon_ has not been converted for thread safety "
+            "because the vnl test suite does not manage to call it "
+            "through dgges.  Please send the case for which you get this "
+            "message to the vxl-users mailing list:\n"
+            "https://lists.sourceforge.net/lists/listinfo/vxl-users\n\n");
 
 /*  -- LAPACK auxiliary routine (version 3.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */
