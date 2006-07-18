@@ -132,7 +132,7 @@ static void dnorcdf_(doublereal *x, doublereal *cdf);
         return;
     }
     amean = anu;
-    sd = sqrtf(anu * 2.f);
+    sd = (float)sqrt(anu * 2.f);
     z = (*x - amean) / sd;
     if (*nu < 10 && z < -200.f) {
         *cdf = 0.f;

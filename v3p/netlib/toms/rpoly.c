@@ -551,7 +551,7 @@ L10:
     if (relstp < global_1.eta) {
         relstp = global_1.eta;
     }
-    relstp = sqrtf(relstp);
+    relstp = (float)sqrt(relstp);
     global_1.u -= global_1.u * relstp;
     global_1.v += global_1.v * relstp;
     quadsd_(&global_1.nn, &global_1.u, &global_1.v, global_1.p, global_1.qp, &global_1.a, &global_1.b);
