@@ -436,5 +436,24 @@ void m23d_ortho_flexible_builder::refine()
   vnl_svd<double> svd(P_);
   P3D_ = svd.pinverse() * P2Dc_;
        // Slightly less stable than backsub, but what the heck.
+
+  compute_mean(mean_shape_,mean_coeffs_);
 }
 
+//: Compute the mean 3D shape using the current co-effs
+void m23d_ortho_flexible_builder::compute_mean(vnl_matrix<double>& mean_shape,
+                                               vnl_vector<double>& mean_coeffs)
+{
+  // Compute average for each coefficient
+  unsigned ns=coeffs_.rows();
+  unsigned nm=coeffs_.cols();
+  unsigned np=P3D_.cols();
+  mean_coeffs.set_size(nm);
+  mean_coeffs.fill(0.0);
+  for (unsigned i=0;i<ns;++i) mean_coeffs+=coeffs_.get_row(i);
+  mean_coeffs/=ns;
+  mean_shape.set_size(3,np);
+  mean_shape.fill(0.0);
+  for (unsigned j=0;j<nm;++j)
+    mean_shape += P3D_.extract(3,np,3*j,0) * mean_coeffs[j];
+}

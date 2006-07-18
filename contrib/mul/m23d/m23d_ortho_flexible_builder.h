@@ -7,6 +7,7 @@
 #define m2d3_ortho_flexible_builder_h_
 
 #include <vnl/vnl_matrix.h>
+#include <vnl/vnl_vector.h>
 #include <vcl_vector.h>
 #include <vgl/vgl_point_2d.h>
 
@@ -48,9 +49,19 @@ class m23d_ortho_flexible_builder
     //: ns x (m+1) matrix, each row of which contains the weights for a shape
     vnl_matrix<double> coeffs_;
 
+    //: Mean 3D shape as a 3 x np matrix
+    vnl_matrix<double> mean_shape_;
+
+    //: Mean coefficients
+    vnl_vector<double> mean_coeffs_;
+
     //: Modify projection matrices so they are scaled orthographic projections
     //  P = s(I|0)*R
     void make_pure_projections();
+
+    //: Compute the mean 3D shape
+    void compute_mean(vnl_matrix<double>& mean_shape,
+                       vnl_vector<double>& mean_coeffs);
 
   public:
     //: Reconstruct approximate structure of 3D points given multiple 2D views
@@ -103,6 +114,12 @@ class m23d_ortho_flexible_builder
     //: Compute correction matrix so that M1.G has suitable projection properties
     void compute_correction(const vnl_matrix<double>& M1,
                             vnl_matrix<double>& G);
+
+    //: Return mean 3D shape as a 3 x np matrix
+    const vnl_matrix<double>& mean_shape() const { return mean_shape_; }
+
+    //: Mean coefficients
+    const vnl_vector<double>& mean_coeffs() const { return mean_coeffs_; }
 
 };
 
