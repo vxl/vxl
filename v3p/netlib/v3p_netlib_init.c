@@ -19,5 +19,6 @@ void v3p_netlib_initialize()
     v3p_netlib_slamch_init();
     v3p_netlib_dlamch_init();
     v3p_netlib_slartg_init();
+    v3p_netlib_dlartg_init();
     }
 }
