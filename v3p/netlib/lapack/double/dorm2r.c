@@ -29,7 +29,7 @@ static integer c__1 = 1;
     integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
 
     /* Local variables */
-    integer i__, i1, i2, i3, ic, jc, mi, ni, nq;
+    integer i__, i1, i2, i3, ic=0, jc=0, mi, ni, nq;
     doublereal aii;
     logical left;
     extern /* Subroutine */ int dlarf_(char *, integer *, integer *, 

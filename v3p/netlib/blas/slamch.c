@@ -1113,7 +1113,7 @@ L10:
     integer i__;
     real y, z__;
     integer try__, lexp;
-    real oldy;
+    real oldy=0;
     integer uexp, nbits;
     extern doublereal slamc3_(real *, real *);
     real recbas;
