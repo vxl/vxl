@@ -1,4 +1,4 @@
-// This is core/vgl/algo/vgl_orient_box_3d.txx
+// This is core/vgl/vgl_orient_box_3d.txx
 #ifndef vgl_orient_box_3d_txx_
 #define vgl_orient_box_3d_txx_
 //:
@@ -11,8 +11,10 @@ template <class Type>
 vgl_orient_box_3d<Type>::vgl_orient_box_3d(vgl_box_3d<Type> box)
 : box_(box)
 {
-  vnl_vector_fixed<double,3> axis(0.0, 0.0, 1.0);
+  vnl_vector<double> axis(3);
+  axis[0] = 0.0; axis[1] = 0.0; axis[2]=1.0;
   double angle = 0.0;
+
   orient_ = vnl_quaternion<double> (axis, angle);
 }
 
@@ -44,10 +46,13 @@ vcl_vector<vgl_point_3d<Type> > vgl_orient_box_3d<Type>::corners()
 
   // rotate the corner points
   for (unsigned int i=0; i < corner_points.size(); i++) {
-    vnl_vector_fixed<double,3> p;
-    p[0] = corner_points[i].x(); p[1] = corner_points[i].y(); p[2]=corner_points[i].z();
+    vnl_vector<double> p(3);
+    p[0] = corner_points[i].x() - box_.centroid_x(); 
+    p[1] = corner_points[i].y() - box_.centroid_y();
+    p[2] = corner_points[i].z() - box_.centroid_z();;
     p = orient_.rotate(p);
-    corner_points[i] = vgl_point_3d<Type> (Type(p[0]), Type(p[1]), Type(p[2]));
+    corner_points[i] = vgl_point_3d<Type> (Type(p[0]) + box_.centroid_x(), 
+      Type(p[1]) + box_.centroid_y(), Type(p[2])+ box_.centroid_z());
   }
   return corner_points;
 }
@@ -59,12 +64,15 @@ bool vgl_orient_box_3d<Type>::contains(Type const& x,
                                        Type const& z) const
 {
   // first transform the point to the coordinate system of AABB
-  vnl_quaternion<double> reverse_rot(orient_.axis(), -1*orient_.angle());
+  vnl_quaternion<double> reverse_rot(orient_.axis(), -1.*orient_.angle());
 
-  vnl_vector_fixed<double,3> p(x,y,z);
-  vnl_vector_fixed<double,3> p_transf = orient_.rotate(p);
-  vcl_cout << p_transf << vcl_endl;
-  return box_.contains(Type(p_transf[0]), Type(p_transf[1]), Type(p_transf[2]));
+  vnl_vector<double> p(3);
+  p[0] = x - box_.centroid_x(); 
+  p[1] = y - box_.centroid_y(); 
+  p[2] = z - box_.centroid_z();
+  vnl_vector<double> p_transf = reverse_rot.rotate(p);
+  return box_.contains(p_transf[0] + box_.centroid_x() , 
+  p_transf[1] + box_.centroid_y(), p_transf[2] + box_.centroid_z());
 }
 
 template <class Type>
