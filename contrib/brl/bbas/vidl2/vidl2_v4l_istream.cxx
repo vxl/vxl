@@ -80,10 +80,15 @@ bool vidl2_v4l_istream::open(const vcl_string &device_name)
     // this looks a bit redundant (and it is), but some other things
     // are also set in set_params besides the actual driver controls
     bool sp_ret = set_params(defaults_);
+    vcl_cerr << "sp_ret = " << sp_ret << vcl_endl;
     // serious problems if we can't set the params to the defaults
-    assert(sp_ret==true);
+    if (!sp_ret)
+    {
+        vcl_cerr << "Problem in constructor, can't set camera to default\n";
+        vcl_cerr << "Trying to continue anyway ...\n";
+    }
 
-    return true;
+    return sp_ret;
 }
 
 //: return true if the stream is open for reading
@@ -111,18 +116,23 @@ bool vidl2_v4l_istream::set_params(const vidl2_v4l_params &p)
 {
     bool success=true;
 
+    params_ = p;
+
     vw.width = p.ni_;
     vw.height = p.nj_;
     if (-1 == ioctl (fd_, VIDIOCSWIN, &vw)) {
+        vcl_cerr << "VIDIOCSWIN\n";
         perror ("VIDIOCGWIN");
         return false;
     }
     if (-1 == ioctl (fd_, VIDIOCGWIN, &vw)) {
+        vcl_cerr << "VIDIOCGWIN\n";
         perror ("VIDIOCGWIN");
         return false;
     }
     if ((vw.width!=p.ni_)||(vw.height!=p.nj_))
     {
+        vcl_cerr << "width not equal to default\n";
         success = false;
     }
 
@@ -134,10 +144,12 @@ bool vidl2_v4l_istream::set_params(const vidl2_v4l_params &p)
     vp.depth = p.depth_;
     vp.palette = vidl2_v4l_params::vidl2pf_to_v4lpf(p.pixel_format_);
     if (-1 == ioctl (fd_, VIDIOCSPICT, &vp)) {
+        vcl_cerr << "VIDIOCSPICT\n";
         perror ("VIDIOCSPICT");
         return false;
     }
     if (-1 == ioctl (fd_, VIDIOCGPICT, &vp)) {
+        vcl_cerr << "VIDIOCGPICT\n";
         perror ("VIDIOCGPICT");
         return false;
     }
@@ -193,6 +205,7 @@ bool vidl2_v4l_istream::set_params(const vidl2_v4l_params &p)
     cur_frame_ = new vidl2_shared_frame(
         buf, vw.width, vw.height, vidl2_v4l_params::v4lpf_to_vidl2pf(vp.palette));
 
+    vcl_cerr << "success = " << success << vcl_endl;
     return success;
 }
 

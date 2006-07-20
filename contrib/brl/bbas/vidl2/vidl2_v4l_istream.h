@@ -82,6 +82,7 @@ public:
 
     //: set the params for the device
     bool set_params(const vidl2_v4l_params &p);
+    vidl2_v4l_params get_params(){return params_;};
 
     //: Advance to the next frame (but don't acquire an image)
     virtual bool advance();
@@ -103,6 +104,7 @@ private:
     struct video_mmap mm;
     mutable vidl2_frame_sptr cur_frame_;
     vidl2_v4l_params defaults_;
+    vidl2_v4l_params params_;
     int fd_;
     unsigned int frame_number_;
     void *buf;
