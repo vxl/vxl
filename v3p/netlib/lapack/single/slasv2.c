@@ -31,8 +31,8 @@ static real c_b4 = (float)1.;
     double sqrt(doublereal), r_sign(real *, real *);
 
     /* Local variables */
-    real a, d__, l, m, r__, s, t, fa, ga, ha, ft, gt, ht, mm, tt, clt, crt, 
-	    slt, srt;
+    real a, d__, l, m, r__, s, t, fa, ga, ha, ft, gt, ht, mm, tt, clt=0, crt=0, 
+	    slt=0, srt=0;
     integer pmax;
     real temp;
     logical swap;
