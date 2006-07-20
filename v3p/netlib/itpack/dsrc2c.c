@@ -15,6 +15,14 @@ extern "C" {
 #endif
 #include "v3p_netlib.h"
 
+#undef abs
+#undef min
+#undef max
+#include <math.h>
+#define abs(x) ((x) >= 0 ? (x) : -(x))
+#define min(a,b) ((a) <= (b) ? (a) : (b))
+#define max(a,b) ((a) >= (b) ? (a) : (b))
+
 /* Common Block Declarations */
 
 Extern struct {
@@ -54,61 +62,8 @@ static integer c__7 = 7;
 	a, doublereal *rhs, doublereal *u, integer *iwksp, integer *nw, 
 	doublereal *wksp, integer *iparm, doublereal *rparm, integer *ierr)
 {
-    /* Format strings */
-    static char fmt_10[] = "(\0020\002///1x,\002BEGINNING OF ITPACK SOLUTION\
- MODULE  JCG\002)";
-    static char fmt_40[] = "(\0020\002,\002*** W A R N I N G ************\
-\002/\0020\002,\002    IN ITPACK ROUTINE JCG\002/\002 \002,\002    RPARM(1) =\
-\002,d10.3,\002 (ZETA)\002/\002 \002,\002    A VALUE THIS SMALL MAY HINDER C\
-ONVERGENCE \002/\002 \002,\002    SINCE MACHINE PRECISION DRELPR =\002,d10.3/\
-\002 \002,\002    ZETA RESET TO \002,d10.3)";
-    static char fmt_60[] = "(\0020\002,\002*** F A T A L     E R R O R *****\
-*******\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE JCG \002/\002 \002\
-,\002    INVALID MATRIX DIMENSION, N =\002,i8)";
-    static char fmt_80[] = "(\0020\002,\002*** F A T A L     E R R O R *****\
-*******\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE JCG \002/\002 \002\
-,\002    ERROR DETECTED IN SUBROUTINE  SBELM \002/\002 \002,\002    WHICH RE\
-MOVES ROWS AND COLUMNS OF SYSTEM \002/\002 \002,\002    WHEN DIAGONAL ENTRY \
-TOO LARGE  \002/\002 \002,\002    IER = \002,i5,5x,\002 RPARM(8) = \002,d10.\
-3,\002 (TOL)\002)";
-    static char fmt_100[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE JCG \002/\002 \002,\
-\002    NOT ENOUGH WORKSPACE AT \002,i10/\002 \002,\002    SET IPARM(8) =\
-\002,i10,\002 (NW)\002)";
-    static char fmt_120[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE JCG \002/\002 \002,\
-\002    ERROR DETECTED IN SUBROUTINE  PRBNDX\002/\002 \002,\002    WHICH COM\
-PUTES THE RED-BLACK INDEXING\002/\002 \002,\002    IER = \002,i5,\002 IPARM(\
-9) = \002,i5,\002 (NB)\002)";
-    static char fmt_140[] = "(/10x,\002ORDER OF BLACK SUBSYSTEM = \002,i5\
-,\002 (NB)\002)";
-    static char fmt_150[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE JCG \002/\002 \002,\
-\002    ERROR DETECTED IN SUBROUTINE  PERMAT\002/\002 \002,\002    WHICH DOE\
-S THE RED-BLACK PERMUTATION\002/\002 \002,\002    IER = \002,i5)";
-    static char fmt_180[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE JCG \002/\002 \002,\
-\002    ERROR DETECTED IN SUBROUTINE  SCAL  \002/\002 \002,\002    WHICH SCA\
-LES THE SYSTEM   \002/\002 \002,\002    IER = \002,i5)";
-    static char fmt_200[] = "(///1x,\002IN THE FOLLOWING, RHO AND GAMMA AR\
-E\002,\002 ACCELERATION PARAMETERS\002)";
-    static char fmt_210[] = "(1x,\002CME IS THE ESTIMATE OF THE LARGEST EIGE\
-NVALUE OF\002,\002 THE JACOBI MATRIX\002)";
-    static char fmt_270[] = "(\0020\002,\002*** W A R N I N G ***********\
-*\002/\0020\002,\002    IN ITPACK ROUTINE JCG\002/\002 \002,\002    FAILURE \
-TO CONVERGE IN\002,i5,\002 ITERATIONS\002)";
-    static char fmt_300[] = "(/1x,\002JCG  HAS CONVERGED IN \002,i5,\002 ITE\
-RATIONS\002)";
-    static char fmt_320[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE JCG \002/\002 \002,\
-\002    ERROR DETECTED IN SUBROUTINE  PERMAT\002/\002 \002,\002    WHICH UND\
-OES THE RED-BLACK PERMUTATION   \002/\002 \002,\002    IER = \002,i5)";
-
     /* System generated locals */
     integer i__1;
-
-    /* Builtin functions */
-    integer s_wsfe(cilist *), e_wsfe(), do_fio(integer *, char *, ftnlen);
 
     /* Local variables */
     integer n, n3, nb, ib1, ib2, ib3, ib4, ib5, ier;
@@ -150,24 +105,6 @@ OES THE RED-BLACK PERMUTATION   \002/\002 \002,\002    IER = \002,i5)";
 	    integer *), perror_(integer *, integer *, integer *, doublereal *,
 	     doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, integer *);
-
-    /* Fortran I/O blocks */
-    static cilist io___1 = { 0, 0, 0, fmt_10, 0 };
-    static cilist io___7 = { 0, 0, 0, fmt_40, 0 };
-    static cilist io___12 = { 0, 0, 0, fmt_60, 0 };
-    static cilist io___14 = { 0, 0, 0, fmt_80, 0 };
-    static cilist io___20 = { 0, 0, 0, fmt_100, 0 };
-    static cilist io___23 = { 0, 0, 0, fmt_120, 0 };
-    static cilist io___24 = { 0, 0, 0, fmt_140, 0 };
-    static cilist io___25 = { 0, 0, 0, fmt_150, 0 };
-    static cilist io___26 = { 0, 0, 0, fmt_180, 0 };
-    static cilist io___27 = { 0, 0, 0, fmt_200, 0 };
-    static cilist io___28 = { 0, 0, 0, fmt_210, 0 };
-    static cilist io___33 = { 0, 0, 0, fmt_270, 0 };
-    static cilist io___34 = { 0, 0, 0, fmt_300, 0 };
-    static cilist io___36 = { 0, 0, 0, fmt_320, 0 };
-
-
 
 /*     ITPACK 2C MAIN SUBROUTINE  JCG  (JACOBI CONJUGATE GRADIENT) */
 /*     EACH OF THE MAIN SUBROUTINES: */
@@ -332,9 +269,6 @@ OES THE RED-BLACK PERMUTATION   \002/\002 \002,\002    IER = \002,i5)";
     itcom1_1.nout = iparm[4];
 /*<       IF (LEVEL.GE.1) WRITE (NOUT,10) >*/
     if (itcom1_1.level >= 1) {
-	io___1.ciunit = itcom1_1.nout;
-	s_wsfe(&io___1);
-	e_wsfe();
     }
 /*<    10 FORMAT ('0'///1X,'BEGINNING OF ITPACK SOLUTION MODULE  JCG') >*/
 /*<       IER = 0 >*/
@@ -369,12 +303,6 @@ L30:
     }
 /*<       IF (LEVEL.GE.1) WRITE (NOUT,40) ZETA,DRELPR,TEMP >*/
     if (itcom1_1.level >= 1) {
-	io___7.ciunit = itcom1_1.nout;
-	s_wsfe(&io___7);
-	do_fio(&c__1, (char *)&itcom3_1.zeta, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&itcom3_1.drelpr, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&temp, (ftnlen)sizeof(doublereal));
-	e_wsfe();
     }
 /*<    >*/
 /*<       ZETA = TEMP >*/
@@ -400,10 +328,6 @@ L50:
     ier = 11;
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,60) N >*/
     if (itcom1_1.level >= 0) {
-	io___12.ciunit = itcom1_1.nout;
-	s_wsfe(&io___12);
-	do_fio(&c__1, (char *)&n, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 370 >*/
@@ -432,11 +356,6 @@ L70:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,80) IER,TOL >*/
     if (itcom1_1.level >= 0) {
-	io___14.ciunit = itcom1_1.nout;
-	s_wsfe(&io___14);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&tol, (ftnlen)sizeof(doublereal));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 370 >*/
@@ -469,11 +388,6 @@ L90:
     ier = 12;
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,100) NW,IPARM(8) >*/
     if (itcom1_1.level >= 0) {
-	io___20.ciunit = itcom1_1.nout;
-	s_wsfe(&io___20);
-	do_fio(&c__1, (char *)&(*nw), (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&iparm[8], (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 370 >*/
@@ -501,11 +415,6 @@ L110:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,120) IER,NB >*/
     if (itcom1_1.level >= 0) {
-	io___23.ciunit = itcom1_1.nout;
-	s_wsfe(&io___23);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&nb, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 370 >*/
@@ -516,10 +425,6 @@ L110:
 /*<   130 IF (LEVEL.GE.2) WRITE (NOUT,140) NB >*/
 L130:
     if (itcom1_1.level >= 2) {
-	io___24.ciunit = itcom1_1.nout;
-	s_wsfe(&io___24);
-	do_fio(&c__1, (char *)&nb, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<   140 FORMAT (/10X,'ORDER OF BLACK SUBSYSTEM = ',I5,' (NB)') >*/
 /*<       CALL PERMAT (N,IA,JA,A,IWKSP,IWKSP(IB3),ISYM,LEVEL,NOUT,IER) >*/
@@ -531,10 +436,6 @@ L130:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,150) IER >*/
     if (itcom1_1.level >= 0) {
-	io___25.ciunit = itcom1_1.nout;
-	s_wsfe(&io___25);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 370 >*/
@@ -561,10 +462,6 @@ L170:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,180) IER >*/
     if (itcom1_1.level >= 0) {
-	io___26.ciunit = itcom1_1.nout;
-	s_wsfe(&io___26);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 370 >*/
@@ -575,15 +472,9 @@ L190:
 	goto L220;
     }
 /*<       WRITE (NOUT,200) >*/
-    io___27.ciunit = itcom1_1.nout;
-    s_wsfe(&io___27);
-    e_wsfe();
 /*<    >*/
 /*<       IF (ADAPT) WRITE (NOUT,210) >*/
     if (itcom2_1.adapt) {
-	io___28.ciunit = itcom1_1.nout;
-	s_wsfe(&io___28);
-	e_wsfe();
     }
 /*<    >*/
 /*<   220 IF (IPARM(11).NE.0) GO TO 230 >*/
@@ -669,10 +560,6 @@ L260:
     ier = 13;
 /*<       IF (LEVEL.GE.1) WRITE (NOUT,270) ITMAX >*/
     if (itcom1_1.level >= 1) {
-	io___33.ciunit = itcom1_1.nout;
-	s_wsfe(&io___33);
-	do_fio(&c__1, (char *)&itcom1_1.itmax, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       IF (IPARM(3).EQ.0) RPARM(1) = STPTST >*/
@@ -696,10 +583,6 @@ L280:
 /*<   290 IF (LEVEL.GE.1) WRITE (NOUT,300) IN >*/
 L290:
     if (itcom1_1.level >= 1) {
-	io___34.ciunit = itcom1_1.nout;
-	s_wsfe(&io___34);
-	do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<   300 FORMAT (/1X,'JCG  HAS CONVERGED IN ',I5,' ITERATIONS') >*/
 
@@ -732,10 +615,6 @@ L310:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,320) IERPER >*/
     if (itcom1_1.level >= 0) {
-	io___36.ciunit = itcom1_1.nout;
-	s_wsfe(&io___36);
-	do_fio(&c__1, (char *)&ierper, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       IF (IER.EQ.0) IER = IERPER >*/
@@ -826,59 +705,8 @@ L370:
 	a, doublereal *rhs, doublereal *u, integer *iwksp, integer *nw, 
 	doublereal *wksp, integer *iparm, doublereal *rparm, integer *ierr)
 {
-    /* Format strings */
-    static char fmt_10[] = "(\0020\002///1x,\002BEGINNING OF ITPACK SOLUTION\
- MODULE  JSI\002)";
-    static char fmt_40[] = "(\0020\002,\002*** W A R N I N G ************\
-\002/\0020\002,\002    IN ITPACK ROUTINE JSI\002/\002 \002,\002    RPARM(1) =\
-\002,d10.3,\002 (ZETA)\002/\002 \002,\002    A VALUE THIS SMALL MAY HINDER C\
-ONVERGENCE \002/\002 \002,\002    SINCE MACHINE PRECISION DRELPR =\002,d10.3/\
-\002 \002,\002    ZETA RESET TO \002,d10.3)";
-    static char fmt_60[] = "(\0020\002,\002*** F A T A L     E R R O R *****\
-*******\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE JSI \002/\002 \002\
-,\002    INVALID MATRIX DIMENSION, N =\002,i8)";
-    static char fmt_80[] = "(\0020\002,\002*** F A T A L     E R R O R *****\
-*******\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE JSI \002/\002 \002\
-,\002    ERROR DETECTED IN SUBROUTINE  SBELM \002/\002 \002,\002    WHICH RE\
-MOVES ROWS AND COLUMNS OF SYSTEM \002/\002 \002,\002    WHEN DIAGONAL ENTRY \
-TOO LARGE  \002/\002 \002,\002    IER = \002,i5,5x,\002 RPARM(8) = \002,d10.\
-3,\002 (TOL)\002)";
-    static char fmt_100[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE JSI \002/\002 \002,\
-\002    NOT ENOUGH WORKSPACE AT \002,i10/\002 \002,\002    SET IPARM(8) =\
-\002,i10,\002 (NW)\002)";
-    static char fmt_120[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE JSI \002/\002 \002,\
-\002    ERROR DETECTED IN SUBROUTINE  PRBNDX\002/\002 \002,\002    WHICH COM\
-PUTES THE RED-BLACK INDEXING\002/\002 \002,\002    IER = \002,i5,\002 IPARM(\
-9) = \002,i5,\002 (NB)\002)";
-    static char fmt_140[] = "(/10x,\002ORDER OF BLACK SUBSYSTEM = \002,i5\
-,\002 (NB)\002)";
-    static char fmt_150[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE JSI \002/\002 \002,\
-\002    ERROR DETECTED IN SUBROUTINE  PERMAT\002/\002 \002,\002    WHICH DOE\
-S THE RED-BLACK PERMUTATION\002/\002 \002,\002    IER = \002,i5)";
-    static char fmt_180[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE JSI \002/\002 \002,\
-\002    ERROR DETECTED IN SUBROUTINE  SCAL  \002/\002 \002,\002    WHICH SCA\
-LES THE SYSTEM   \002/\002 \002,\002    IER = \002,i5)";
-    static char fmt_200[] = "(///1x,\002IN THE FOLLOWING, RHO AND GAMMA AR\
-E\002,\002 ACCELERATION PARAMETERS\002)";
-    static char fmt_260[] = "(\0020\002,\002*** W A R N I N G ***********\
-*\002/\0020\002,\002    IN ITPACK ROUTINE JSI\002/\002 \002,\002    FAILURE \
-TO CONVERGE IN\002,i5,\002 ITERATIONS\002)";
-    static char fmt_290[] = "(/1x,\002JSI  HAS CONVERGED IN \002,i5,\002 ITE\
-RATIONS\002)";
-    static char fmt_310[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE JSI \002/\002 \002,\
-\002    ERROR DETECTED IN SUBROUTINE  PERMAT\002/\002 \002,\002    WHICH UND\
-OES THE RED-BLACK PERMUTATION   \002/\002 \002,\002    IER = \002,i5)";
-
     /* System generated locals */
     integer i__1;
-
-    /* Builtin functions */
-    integer s_wsfe(cilist *), e_wsfe(), do_fio(integer *, char *, ftnlen);
 
     /* Local variables */
     integer n, n3, nb, ib1, ib2, ib3, ier;
@@ -919,23 +747,6 @@ OES THE RED-BLACK PERMUTATION   \002/\002 \002,\002    IER = \002,i5)";
 	    integer *), perror_(integer *, integer *, integer *, doublereal *,
 	     doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, integer *);
-
-    /* Fortran I/O blocks */
-    static cilist io___39 = { 0, 0, 0, fmt_10, 0 };
-    static cilist io___45 = { 0, 0, 0, fmt_40, 0 };
-    static cilist io___50 = { 0, 0, 0, fmt_60, 0 };
-    static cilist io___52 = { 0, 0, 0, fmt_80, 0 };
-    static cilist io___56 = { 0, 0, 0, fmt_100, 0 };
-    static cilist io___59 = { 0, 0, 0, fmt_120, 0 };
-    static cilist io___60 = { 0, 0, 0, fmt_140, 0 };
-    static cilist io___61 = { 0, 0, 0, fmt_150, 0 };
-    static cilist io___62 = { 0, 0, 0, fmt_180, 0 };
-    static cilist io___63 = { 0, 0, 0, fmt_200, 0 };
-    static cilist io___69 = { 0, 0, 0, fmt_260, 0 };
-    static cilist io___70 = { 0, 0, 0, fmt_290, 0 };
-    static cilist io___72 = { 0, 0, 0, fmt_310, 0 };
-
-
 
 /*     ITPACK 2C MAIN SUBROUTINE  JSI  (JACOBI SEMI-ITERATIVE) */
 /*     EACH OF THE MAIN SUBROUTINES: */
@@ -1097,9 +908,6 @@ OES THE RED-BLACK PERMUTATION   \002/\002 \002,\002    IER = \002,i5)";
     itcom1_1.nout = iparm[4];
 /*<       IF (LEVEL.GE.1) WRITE (NOUT,10) >*/
     if (itcom1_1.level >= 1) {
-	io___39.ciunit = itcom1_1.nout;
-	s_wsfe(&io___39);
-	e_wsfe();
     }
 /*<    10 FORMAT ('0'///1X,'BEGINNING OF ITPACK SOLUTION MODULE  JSI') >*/
 /*<       IER = 0 >*/
@@ -1134,12 +942,6 @@ L30:
     }
 /*<       IF (LEVEL.GE.1) WRITE (NOUT,40) ZETA,DRELPR,TEMP >*/
     if (itcom1_1.level >= 1) {
-	io___45.ciunit = itcom1_1.nout;
-	s_wsfe(&io___45);
-	do_fio(&c__1, (char *)&itcom3_1.zeta, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&itcom3_1.drelpr, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&temp, (ftnlen)sizeof(doublereal));
-	e_wsfe();
     }
 /*<    >*/
 /*<       ZETA = TEMP >*/
@@ -1165,10 +967,6 @@ L50:
     ier = 21;
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,60) N >*/
     if (itcom1_1.level >= 0) {
-	io___50.ciunit = itcom1_1.nout;
-	s_wsfe(&io___50);
-	do_fio(&c__1, (char *)&n, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 360 >*/
@@ -1197,11 +995,6 @@ L70:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,80) IER,TOL >*/
     if (itcom1_1.level >= 0) {
-	io___52.ciunit = itcom1_1.nout;
-	s_wsfe(&io___52);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&tol, (ftnlen)sizeof(doublereal));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 360 >*/
@@ -1226,11 +1019,6 @@ L90:
     ier = 22;
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,100) NW,IPARM(8) >*/
     if (itcom1_1.level >= 0) {
-	io___56.ciunit = itcom1_1.nout;
-	s_wsfe(&io___56);
-	do_fio(&c__1, (char *)&(*nw), (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&iparm[8], (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 360 >*/
@@ -1258,11 +1046,6 @@ L110:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,120) IER,NB >*/
     if (itcom1_1.level >= 0) {
-	io___59.ciunit = itcom1_1.nout;
-	s_wsfe(&io___59);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&nb, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 360 >*/
@@ -1273,10 +1056,6 @@ L110:
 /*<   130 IF (LEVEL.GE.2) WRITE (NOUT,140) NB >*/
 L130:
     if (itcom1_1.level >= 2) {
-	io___60.ciunit = itcom1_1.nout;
-	s_wsfe(&io___60);
-	do_fio(&c__1, (char *)&nb, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<   140 FORMAT (/10X,'ORDER OF BLACK SUBSYSTEM = ',I5,' (NB)') >*/
 /*<       CALL PERMAT (N,IA,JA,A,IWKSP,IWKSP(IB3),ISYM,LEVEL,NOUT,IER) >*/
@@ -1288,10 +1067,6 @@ L130:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,150) IER >*/
     if (itcom1_1.level >= 0) {
-	io___61.ciunit = itcom1_1.nout;
-	s_wsfe(&io___61);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 360 >*/
@@ -1318,10 +1093,6 @@ L170:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,180) IER >*/
     if (itcom1_1.level >= 0) {
-	io___62.ciunit = itcom1_1.nout;
-	s_wsfe(&io___62);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 360 >*/
@@ -1332,9 +1103,6 @@ L190:
 	goto L210;
     }
 /*<       WRITE (NOUT,200) >*/
-    io___63.ciunit = itcom1_1.nout;
-    s_wsfe(&io___63);
-    e_wsfe();
 /*<    >*/
 /*<   210 IF (IPARM(11).NE.0) GO TO 220 >*/
 L210:
@@ -1409,10 +1177,6 @@ L250:
     ier = 23;
 /*<       IF (LEVEL.GE.1) WRITE (NOUT,260) ITMAX >*/
     if (itcom1_1.level >= 1) {
-	io___69.ciunit = itcom1_1.nout;
-	s_wsfe(&io___69);
-	do_fio(&c__1, (char *)&itcom1_1.itmax, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       IF (IPARM(3).EQ.0) RPARM(1) = STPTST >*/
@@ -1436,10 +1200,6 @@ L270:
 /*<   280 IF (LEVEL.GE.1) WRITE (NOUT,290) IN >*/
 L280:
     if (itcom1_1.level >= 1) {
-	io___70.ciunit = itcom1_1.nout;
-	s_wsfe(&io___70);
-	do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<   290 FORMAT (/1X,'JSI  HAS CONVERGED IN ',I5,' ITERATIONS') >*/
 
@@ -1472,10 +1232,6 @@ L300:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,310) IERPER >*/
     if (itcom1_1.level >= 0) {
-	io___72.ciunit = itcom1_1.nout;
-	s_wsfe(&io___72);
-	do_fio(&c__1, (char *)&ierper, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       IF (IER.EQ.0) IER = IERPER >*/
@@ -1560,60 +1316,8 @@ L360:
 	a, doublereal *rhs, doublereal *u, integer *iwksp, integer *nw, 
 	doublereal *wksp, integer *iparm, doublereal *rparm, integer *ierr)
 {
-    /* Format strings */
-    static char fmt_10[] = "(\0020\002///1x,\002BEGINNING OF ITPACK SOLUTION\
- MODULE  SOR\002)";
-    static char fmt_40[] = "(\0020\002,\002*** W A R N I N G ************\
-\002/\0020\002,\002    IN ITPACK ROUTINE SOR\002/\002 \002,\002    RPARM(1) =\
-\002,d10.3,\002 (ZETA)\002/\002 \002,\002    A VALUE THIS SMALL MAY HINDER C\
-ONVERGENCE \002/\002 \002,\002    SINCE MACHINE PRECISION DRELPR =\002,d10.3/\
-\002 \002,\002    ZETA RESET TO \002,d10.3)";
-    static char fmt_60[] = "(\0020\002,\002*** F A T A L     E R R O R *****\
-*******\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE SOR \002/\002 \002\
-,\002    INVALID MATRIX DIMENSION, N =\002,i8)";
-    static char fmt_80[] = "(\0020\002,\002*** F A T A L     E R R O R *****\
-*******\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE SOR \002/\002 \002\
-,\002    ERROR DETECTED IN SUBROUTINE  SBELM \002/\002 \002,\002    WHICH RE\
-MOVES ROWS AND COLUMNS OF SYSTEM \002/\002 \002,\002    WHEN DIAGONAL ENTRY \
-TOO LARGE  \002/\002 \002,\002    IER = \002,i5,5x,\002 RPARM(8) = \002,d10.\
-3,\002 (TOL)\002)";
-    static char fmt_100[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE SOR \002/\002 \002,\
-\002    NOT ENOUGH WORKSPACE AT \002,i10/\002 \002,\002    SET IPARM(8) =\
-\002,i10,\002 (NW)\002)";
-    static char fmt_120[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE SOR \002/\002 \002,\
-\002    ERROR DETECTED IN SUBROUTINE  PRBNDX\002/\002 \002,\002    WHICH COM\
-PUTES THE RED-BLACK INDEXING\002/\002 \002,\002    IER = \002,i5,\002 IPARM(\
-9) = \002,i5,\002 (NB)\002)";
-    static char fmt_140[] = "(/10x,\002ORDER OF BLACK SUBSYSTEM = \002,i5\
-,\002 (NB)\002)";
-    static char fmt_150[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE SOR \002/\002 \002,\
-\002    ERROR DETECTED IN SUBROUTINE  PERMAT\002/\002 \002,\002    WHICH DOE\
-S THE RED-BLACK PERMUTATION\002/\002 \002,\002    IER = \002,i5)";
-    static char fmt_180[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE SOR \002/\002 \002,\
-\002    ERROR DETECTED IN SUBROUTINE  SCAL  \002/\002 \002,\002    WHICH SCA\
-LES THE SYSTEM   \002/\002 \002,\002    IER = \002,i5)";
-    static char fmt_200[] = "(///1x,\002CME IS THE ESTIMATE OF THE LARGEST E\
-IGENVALUE OF\002,\002 THE JACOBI MATRIX\002)";
-    static char fmt_210[] = "(1x,\002OMEGA IS THE RELAXATION FACTOR\002)";
-    static char fmt_260[] = "(\0020\002,\002*** W A R N I N G ***********\
-*\002/\0020\002,\002    IN ITPACK ROUTINE SOR\002/\002 \002,\002    FAILURE \
-TO CONVERGE IN\002,i5,\002 ITERATIONS\002)";
-    static char fmt_290[] = "(/1x,\002SOR  HAS CONVERGED IN \002,i5,\002 ITE\
-RATIONS\002)";
-    static char fmt_310[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE SOR \002/\002 \002,\
-\002    ERROR DETECTED IN SUBROUTINE  PERMAT\002/\002 \002,\002    WHICH UND\
-OES THE RED-BLACK PERMUTATION   \002/\002 \002,\002    IER = \002,i5)";
-
     /* System generated locals */
     integer i__1;
-
-    /* Builtin functions */
-    integer s_wsfe(cilist *), e_wsfe(), do_fio(integer *, char *, ftnlen);
 
     /* Local variables */
     integer n, n3, nb, ib1, ib2, ib3, ier;
@@ -1650,24 +1354,6 @@ OES THE RED-BLACK PERMUTATION   \002/\002 \002,\002    IER = \002,i5)";
 	    integer *), perror_(integer *, integer *, integer *, doublereal *,
 	     doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, integer *);
-
-    /* Fortran I/O blocks */
-    static cilist io___75 = { 0, 0, 0, fmt_10, 0 };
-    static cilist io___81 = { 0, 0, 0, fmt_40, 0 };
-    static cilist io___86 = { 0, 0, 0, fmt_60, 0 };
-    static cilist io___88 = { 0, 0, 0, fmt_80, 0 };
-    static cilist io___92 = { 0, 0, 0, fmt_100, 0 };
-    static cilist io___95 = { 0, 0, 0, fmt_120, 0 };
-    static cilist io___96 = { 0, 0, 0, fmt_140, 0 };
-    static cilist io___97 = { 0, 0, 0, fmt_150, 0 };
-    static cilist io___98 = { 0, 0, 0, fmt_180, 0 };
-    static cilist io___99 = { 0, 0, 0, fmt_200, 0 };
-    static cilist io___100 = { 0, 0, 0, fmt_210, 0 };
-    static cilist io___105 = { 0, 0, 0, fmt_260, 0 };
-    static cilist io___106 = { 0, 0, 0, fmt_290, 0 };
-    static cilist io___108 = { 0, 0, 0, fmt_310, 0 };
-
-
 
 /*     ITPACK 2C MAIN SUBROUTINE  SOR  (SUCCESSIVE OVERRELATION) */
 /*     EACH OF THE MAIN SUBROUTINES: */
@@ -1827,9 +1513,6 @@ OES THE RED-BLACK PERMUTATION   \002/\002 \002,\002    IER = \002,i5)";
     itcom1_1.nout = iparm[4];
 /*<       IF (LEVEL.GE.1) WRITE (NOUT,10) >*/
     if (itcom1_1.level >= 1) {
-	io___75.ciunit = itcom1_1.nout;
-	s_wsfe(&io___75);
-	e_wsfe();
     }
 /*<    10 FORMAT ('0'///1X,'BEGINNING OF ITPACK SOLUTION MODULE  SOR') >*/
 /*<       IER = 0 >*/
@@ -1864,12 +1547,6 @@ L30:
     }
 /*<       IF (LEVEL.GE.1) WRITE (NOUT,40) ZETA,DRELPR,TEMP >*/
     if (itcom1_1.level >= 1) {
-	io___81.ciunit = itcom1_1.nout;
-	s_wsfe(&io___81);
-	do_fio(&c__1, (char *)&itcom3_1.zeta, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&itcom3_1.drelpr, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&temp, (ftnlen)sizeof(doublereal));
-	e_wsfe();
     }
 /*<    >*/
 /*<       ZETA = TEMP >*/
@@ -1895,10 +1572,6 @@ L50:
     ier = 31;
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,60) N >*/
     if (itcom1_1.level >= 0) {
-	io___86.ciunit = itcom1_1.nout;
-	s_wsfe(&io___86);
-	do_fio(&c__1, (char *)&n, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 360 >*/
@@ -1927,11 +1600,6 @@ L70:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,80) IER,TOL >*/
     if (itcom1_1.level >= 0) {
-	io___88.ciunit = itcom1_1.nout;
-	s_wsfe(&io___88);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&tol, (ftnlen)sizeof(doublereal));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 360 >*/
@@ -1956,11 +1624,6 @@ L90:
     ier = 32;
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,100) NW,IPARM(8) >*/
     if (itcom1_1.level >= 0) {
-	io___92.ciunit = itcom1_1.nout;
-	s_wsfe(&io___92);
-	do_fio(&c__1, (char *)&(*nw), (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&iparm[8], (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 360 >*/
@@ -1988,11 +1651,6 @@ L110:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,120) IER,NB >*/
     if (itcom1_1.level >= 0) {
-	io___95.ciunit = itcom1_1.nout;
-	s_wsfe(&io___95);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&nb, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 360 >*/
@@ -2003,10 +1661,6 @@ L110:
 /*<   130 IF (LEVEL.GE.2) WRITE (NOUT,140) NB >*/
 L130:
     if (itcom1_1.level >= 2) {
-	io___96.ciunit = itcom1_1.nout;
-	s_wsfe(&io___96);
-	do_fio(&c__1, (char *)&nb, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<   140 FORMAT (/10X,'ORDER OF BLACK SUBSYSTEM = ',I5,' (NB)') >*/
 /*<       CALL PERMAT (N,IA,JA,A,IWKSP,IWKSP(IB3),ISYM,LEVEL,NOUT,IER) >*/
@@ -2018,10 +1672,6 @@ L130:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,150) IER >*/
     if (itcom1_1.level >= 0) {
-	io___97.ciunit = itcom1_1.nout;
-	s_wsfe(&io___97);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 360 >*/
@@ -2048,10 +1698,6 @@ L170:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,180) IER >*/
     if (itcom1_1.level >= 0) {
-	io___98.ciunit = itcom1_1.nout;
-	s_wsfe(&io___98);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 360 >*/
@@ -2063,15 +1709,9 @@ L190:
     }
 /*<       IF (ADAPT) WRITE (NOUT,200) >*/
     if (itcom2_1.adapt) {
-	io___99.ciunit = itcom1_1.nout;
-	s_wsfe(&io___99);
-	e_wsfe();
     }
 /*<    >*/
 /*<       WRITE (NOUT,210) >*/
-    io___100.ciunit = itcom1_1.nout;
-    s_wsfe(&io___100);
-    e_wsfe();
 /*<   210 FORMAT (1X,'OMEGA IS THE RELAXATION FACTOR') >*/
 /*<   220 IF (IPARM(11).NE.0) GO TO 230 >*/
 L220:
@@ -2120,10 +1760,6 @@ L230:
 /*<   250 IF (LEVEL.GE.1) WRITE (NOUT,260) ITMAX >*/
 L250:
     if (itcom1_1.level >= 1) {
-	io___105.ciunit = itcom1_1.nout;
-	s_wsfe(&io___105);
-	do_fio(&c__1, (char *)&itcom1_1.itmax, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       IER = 33 >*/
@@ -2149,10 +1785,6 @@ L270:
 /*<   280 IF (LEVEL.GE.1) WRITE (NOUT,290) IN >*/
 L280:
     if (itcom1_1.level >= 1) {
-	io___106.ciunit = itcom1_1.nout;
-	s_wsfe(&io___106);
-	do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<   290 FORMAT (/1X,'SOR  HAS CONVERGED IN ',I5,' ITERATIONS') >*/
 
@@ -2177,10 +1809,6 @@ L300:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,310) IERPER >*/
     if (itcom1_1.level >= 0) {
-	io___108.ciunit = itcom1_1.nout;
-	s_wsfe(&io___108);
-	do_fio(&c__1, (char *)&ierper, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       IF (IER.EQ.0) IER = IERPER >*/
@@ -2268,62 +1896,9 @@ L360:
 	integer *nw, doublereal *wksp, integer *iparm, doublereal *rparm, 
 	integer *ierr)
 {
-    /* Format strings */
-    static char fmt_10[] = "(\0020\002///1x,\002BEGINNING OF ITPACK SOLUTION\
- MODULE  SSORCG\002)";
-    static char fmt_40[] = "(\0020\002,\002*** W A R N I N G ************\
-\002/\0020\002,\002    IN ITPACK ROUTINE SSORCG\002/\002 \002,\002    RPARM(\
-1) =\002,d10.3,\002 (ZETA)\002/\002 \002,\002    A VALUE THIS SMALL MAY HIND\
-ER CONVERGENCE \002/\002 \002,\002    SINCE MACHINE PRECISION DRELPR =\002,d\
-10.3/\002 \002,\002    ZETA RESET TO \002,d10.3)";
-    static char fmt_60[] = "(\0020\002,\002*** F A T A L     E R R O R *****\
-*******\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE SSORCG \002/\002\
- \002,\002    INVALID MATRIX DIMENSION, N =\002,i8)";
-    static char fmt_80[] = "(\0020\002,\002*** F A T A L     E R R O R *****\
-*******\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE SSORCG \002/\002\
- \002,\002    ERROR DETECTED IN SUBROUTINE  SBELM \002/\002 \002,\002    WHI\
-CH REMOVES ROWS AND COLUMNS OF SYSTEM \002/\002 \002,\002    WHEN DIAGONAL E\
-NTRY TOO LARGE  \002/\002 \002,\002    IER = \002,i5,5x,\002 RPARM(8) = \002\
-,d10.3,\002 (TOL)\002)";
-    static char fmt_100[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE SSORCG \002/\002\
- \002,\002    NOT ENOUGH WORKSPACE AT \002,i10/\002 \002,\002    SET IPARM(8\
-) =\002,i10,\002 (NW)\002)";
-    static char fmt_120[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE SSORCG \002/\002\
- \002,\002    ERROR DETECTED IN SUBROUTINE  PRBNDX\002/\002 \002,\002    WHI\
-CH COMPUTES THE RED-BLACK INDEXING\002/\002 \002,\002    IER = \002,i5,\002 \
-IPARM(9) = \002,i5,\002 (NB)\002)";
-    static char fmt_140[] = "(/10x,\002ORDER OF BLACK SUBSYSTEM = \002,i5\
-,\002 (NB)\002)";
-    static char fmt_150[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE SSORCG \002/\002\
- \002,\002    ERROR DETECTED IN SUBROUTINE  PERMAT\002/\002 \002,\002    WHI\
-CH DOES THE RED-BLACK PERMUTATION\002/\002 \002,\002    IER = \002,i5)";
-    static char fmt_180[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE SSORCG \002/\002\
- \002,\002    ERROR DETECTED IN SUBROUTINE  SCAL  \002/\002 \002,\002    WHI\
-CH SCALES THE SYSTEM   \002/\002 \002,\002    IER = \002,i5)";
-    static char fmt_200[] = "(///1x,\002IN THE FOLLOWING, RHO AND GAMMA AR\
-E\002,\002 ACCELERATION PARAMETERS\002)";
-    static char fmt_210[] = "(1x,\002S-PRIME IS AN INITIAL ESTIMATE FOR NEW \
-CME\002)";
-    static char fmt_290[] = "(\0020\002,\002*** W A R N I N G ***********\
-*\002/\0020\002,\002    IN ITPACK ROUTINE SSORCG\002/\002 \002,\002    FAILU\
-RE TO CONVERGE IN\002,i5,\002 ITERATIONS\002)";
-    static char fmt_320[] = "(/1x,\002SSORCG  HAS CONVERGED IN \002,i5,\002 \
-ITERATIONS\002)";
-    static char fmt_340[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE SSORCG \002/\002\
- \002,\002    ERROR DETECTED IN SUBROUTINE  PERMAT\002/\002 \002,\002    WHI\
-CH UNDOES THE RED-BLACK PERMUTATION   \002/\002 \002,\002    IER = \002,i5)";
-
     /* System generated locals */
     integer i__1;
     doublereal d__1;
-
-    /* Builtin functions */
-    integer s_wsfe(cilist *), e_wsfe(), do_fio(integer *, char *, ftnlen);
 
     /* Local variables */
     integer n, n3, nb, ib1, ib2, ib3, ib4, ib5, ib6, ib7, ier;
@@ -2368,24 +1943,6 @@ CH UNDOES THE RED-BLACK PERMUTATION   \002/\002 \002,\002    IER = \002,i5)";
 	    integer *, integer *, integer *, integer *), perror_(integer *, 
 	    integer *, integer *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, integer *);
-
-    /* Fortran I/O blocks */
-    static cilist io___111 = { 0, 0, 0, fmt_10, 0 };
-    static cilist io___117 = { 0, 0, 0, fmt_40, 0 };
-    static cilist io___122 = { 0, 0, 0, fmt_60, 0 };
-    static cilist io___124 = { 0, 0, 0, fmt_80, 0 };
-    static cilist io___132 = { 0, 0, 0, fmt_100, 0 };
-    static cilist io___135 = { 0, 0, 0, fmt_120, 0 };
-    static cilist io___136 = { 0, 0, 0, fmt_140, 0 };
-    static cilist io___137 = { 0, 0, 0, fmt_150, 0 };
-    static cilist io___138 = { 0, 0, 0, fmt_180, 0 };
-    static cilist io___139 = { 0, 0, 0, fmt_200, 0 };
-    static cilist io___140 = { 0, 0, 0, fmt_210, 0 };
-    static cilist io___146 = { 0, 0, 0, fmt_290, 0 };
-    static cilist io___147 = { 0, 0, 0, fmt_320, 0 };
-    static cilist io___149 = { 0, 0, 0, fmt_340, 0 };
-
-
 
 /*     ITPACK 2C MAIN SUBROUTINE  SSORCG  (SYMMETRIC SUCCESSIVE OVER- */
 /*                                        RELAXATION CONJUGATE GRADIENT) */
@@ -2555,9 +2112,6 @@ CH UNDOES THE RED-BLACK PERMUTATION   \002/\002 \002,\002    IER = \002,i5)";
     }
 /*<       IF (LEVEL.GE.1) WRITE (NOUT,10) >*/
     if (itcom1_1.level >= 1) {
-	io___111.ciunit = itcom1_1.nout;
-	s_wsfe(&io___111);
-	e_wsfe();
     }
 /*<    10 FORMAT ('0'///1X,'BEGINNING OF ITPACK SOLUTION MODULE  SSORCG') >*/
 /*<       IER = 0 >*/
@@ -2592,12 +2146,6 @@ L30:
     }
 /*<       IF (LEVEL.GE.1) WRITE (NOUT,40) ZETA,DRELPR,TEMP >*/
     if (itcom1_1.level >= 1) {
-	io___117.ciunit = itcom1_1.nout;
-	s_wsfe(&io___117);
-	do_fio(&c__1, (char *)&itcom3_1.zeta, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&itcom3_1.drelpr, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&temp, (ftnlen)sizeof(doublereal));
-	e_wsfe();
     }
 /*<    >*/
 /*<       ZETA = TEMP >*/
@@ -2623,10 +2171,6 @@ L50:
     ier = 41;
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,60) N >*/
     if (itcom1_1.level >= 0) {
-	io___122.ciunit = itcom1_1.nout;
-	s_wsfe(&io___122);
-	do_fio(&c__1, (char *)&n, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 390 >*/
@@ -2655,11 +2199,6 @@ L70:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,80) IER,TOL >*/
     if (itcom1_1.level >= 0) {
-	io___124.ciunit = itcom1_1.nout;
-	s_wsfe(&io___124);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&tol, (ftnlen)sizeof(doublereal));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 390 >*/
@@ -2696,11 +2235,6 @@ L90:
     ier = 42;
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,100) NW,IPARM(8) >*/
     if (itcom1_1.level >= 0) {
-	io___132.ciunit = itcom1_1.nout;
-	s_wsfe(&io___132);
-	do_fio(&c__1, (char *)&(*nw), (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&iparm[8], (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 390 >*/
@@ -2728,11 +2262,6 @@ L110:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,120) IER,NB >*/
     if (itcom1_1.level >= 0) {
-	io___135.ciunit = itcom1_1.nout;
-	s_wsfe(&io___135);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&nb, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 390 >*/
@@ -2743,10 +2272,6 @@ L110:
 /*<   130 IF (LEVEL.GE.2) WRITE (NOUT,140) NB >*/
 L130:
     if (itcom1_1.level >= 2) {
-	io___136.ciunit = itcom1_1.nout;
-	s_wsfe(&io___136);
-	do_fio(&c__1, (char *)&nb, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<   140 FORMAT (/10X,'ORDER OF BLACK SUBSYSTEM = ',I5,' (NB)') >*/
 /*<       CALL PERMAT (N,IA,JA,A,IWKSP,IWKSP(IB3),ISYM,LEVEL,NOUT,IER) >*/
@@ -2758,10 +2283,6 @@ L130:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,150) IER >*/
     if (itcom1_1.level >= 0) {
-	io___137.ciunit = itcom1_1.nout;
-	s_wsfe(&io___137);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 390 >*/
@@ -2788,10 +2309,6 @@ L170:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,180) IER >*/
     if (itcom1_1.level >= 0) {
-	io___138.ciunit = itcom1_1.nout;
-	s_wsfe(&io___138);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 390 >*/
@@ -2802,14 +2319,8 @@ L190:
 	goto L220;
     }
 /*<       WRITE (NOUT,200) >*/
-    io___139.ciunit = itcom1_1.nout;
-    s_wsfe(&io___139);
-    e_wsfe();
 /*<    >*/
 /*<       WRITE (NOUT,210) >*/
-    io___140.ciunit = itcom1_1.nout;
-    s_wsfe(&io___140);
-    e_wsfe();
 /*<   210 FORMAT (1X,'S-PRIME IS AN INITIAL ESTIMATE FOR NEW CME') >*/
 /*<   220 IF (IPARM(11).NE.0) GO TO 230 >*/
 L220:
@@ -2922,10 +2433,6 @@ L270:
 /*<   280 IF (LEVEL.GE.1) WRITE (NOUT,290) ITMAX >*/
 L280:
     if (itcom1_1.level >= 1) {
-	io___146.ciunit = itcom1_1.nout;
-	s_wsfe(&io___146);
-	do_fio(&c__1, (char *)&itcom1_1.itmax, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       IER = 43 >*/
@@ -2951,10 +2458,6 @@ L300:
 /*<   310 IF (LEVEL.GE.1) WRITE (NOUT,320) IN >*/
 L310:
     if (itcom1_1.level >= 1) {
-	io___147.ciunit = itcom1_1.nout;
-	s_wsfe(&io___147);
-	do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<   320 FORMAT (/1X,'SSORCG  HAS CONVERGED IN ',I5,' ITERATIONS') >*/
 
@@ -2987,10 +2490,6 @@ L330:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,340) IERPER >*/
     if (itcom1_1.level >= 0) {
-	io___149.ciunit = itcom1_1.nout;
-	s_wsfe(&io___149);
-	do_fio(&c__1, (char *)&ierper, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       IF (IER.EQ.0) IER = IERPER >*/
@@ -3088,60 +2587,9 @@ L390:
 	integer *nw, doublereal *wksp, integer *iparm, doublereal *rparm, 
 	integer *ierr)
 {
-    /* Format strings */
-    static char fmt_10[] = "(\0020\002///1x,\002BEGINNING OF ITPACK SOLUTION\
- MODULE  SSORSI\002)";
-    static char fmt_40[] = "(\0020\002,\002*** W A R N I N G ************\
-\002/\0020\002,\002    IN ITPACK ROUTINE SSORSI\002/\002 \002,\002    RPARM(\
-1) =\002,d10.3,\002 (ZETA)\002/\002 \002,\002    A VALUE THIS SMALL MAY HIND\
-ER CONVERGENCE \002/\002 \002,\002    SINCE MACHINE PRECISION DRELPR =\002,d\
-10.3/\002 \002,\002    ZETA RESET TO \002,d10.3)";
-    static char fmt_60[] = "(\0020\002,\002*** F A T A L     E R R O R *****\
-*******\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE SSORSI \002/\002\
- \002,\002    INVALID MATRIX DIMENSION, N =\002,i8)";
-    static char fmt_80[] = "(\0020\002,\002*** F A T A L     E R R O R *****\
-*******\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE SSORSI \002/\002\
- \002,\002    ERROR DETECTED IN SUBROUTINE  SBELM \002/\002 \002,\002    WHI\
-CH REMOVES ROWS AND COLUMNS OF SYSTEM \002/\002 \002,\002    WHEN DIAGONAL E\
-NTRY TOO LARGE  \002/\002 \002,\002    IER = \002,i5,5x,\002 RPARM(8) = \002\
-,d10.3,\002 (TOL)\002)";
-    static char fmt_100[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE SSORSI \002/\002\
- \002,\002    NOT ENOUGH WORKSPACE AT \002,i10/\002 \002,\002    SET IPARM(8\
-) =\002,i10,\002 (NW)\002)";
-    static char fmt_120[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE SSORSI \002/\002\
- \002,\002    ERROR DETECTED IN SUBROUTINE  PRBNDX\002/\002 \002,\002    WHI\
-CH COMPUTES THE RED-BLACK INDEXING\002/\002 \002,\002    IER = \002,i5,\002 \
-IPARM(9) = \002,i5,\002 (NB)\002)";
-    static char fmt_140[] = "(/10x,\002ORDER OF BLACK SUBSYSTEM = \002,i5\
-,\002 (NB)\002)";
-    static char fmt_150[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE SSORSI \002/\002\
- \002,\002    ERROR DETECTED IN SUBROUTINE  PERMAT\002/\002 \002,\002    WHI\
-CH DOES THE RED-BLACK PERMUTATION\002/\002 \002,\002    IER = \002,i5)";
-    static char fmt_180[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE SSORSI \002/\002\
- \002,\002    ERROR DETECTED IN SUBROUTINE  SCAL  \002/\002 \002,\002    WHI\
-CH SCALES THE SYSTEM   \002/\002 \002,\002    IER = \002,i5)";
-    static char fmt_200[] = "(///1x,\002IN THE FOLLOWING, RHO AND GAMMA AR\
-E\002,\002 ACCELERATION PARAMETERS\002)";
-    static char fmt_280[] = "(\0020\002,\002*** W A R N I N G ***********\
-*\002/\0020\002,\002    IN ITPACK ROUTINE SSORSI\002/\002 \002,\002    FAILU\
-RE TO CONVERGE IN\002,i5,\002 ITERATIONS\002)";
-    static char fmt_310[] = "(/1x,\002SSORSI  HAS CONVERGED IN \002,i5,\002 \
-ITERATIONS\002)";
-    static char fmt_330[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE SSORSI \002/\002\
- \002,\002    ERROR DETECTED IN SUBROUTINE  PERMAT\002/\002 \002,\002    WHI\
-CH UNDOES THE RED-BLACK PERMUTATION   \002/\002 \002,\002    IER = \002,i5)";
-
     /* System generated locals */
     integer i__1;
     doublereal d__1;
-
-    /* Builtin functions */
-    integer s_wsfe(cilist *), e_wsfe(), do_fio(integer *, char *, ftnlen);
 
     /* Local variables */
     integer n, n3, nb, ib1, ib2, ib3, ib4, ib5, ier;
@@ -3183,23 +2631,6 @@ CH UNDOES THE RED-BLACK PERMUTATION   \002/\002 \002,\002    IER = \002,i5)";
 	    integer *, integer *, integer *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
-
-    /* Fortran I/O blocks */
-    static cilist io___152 = { 0, 0, 0, fmt_10, 0 };
-    static cilist io___158 = { 0, 0, 0, fmt_40, 0 };
-    static cilist io___163 = { 0, 0, 0, fmt_60, 0 };
-    static cilist io___165 = { 0, 0, 0, fmt_80, 0 };
-    static cilist io___171 = { 0, 0, 0, fmt_100, 0 };
-    static cilist io___174 = { 0, 0, 0, fmt_120, 0 };
-    static cilist io___175 = { 0, 0, 0, fmt_140, 0 };
-    static cilist io___176 = { 0, 0, 0, fmt_150, 0 };
-    static cilist io___177 = { 0, 0, 0, fmt_180, 0 };
-    static cilist io___178 = { 0, 0, 0, fmt_200, 0 };
-    static cilist io___184 = { 0, 0, 0, fmt_280, 0 };
-    static cilist io___185 = { 0, 0, 0, fmt_310, 0 };
-    static cilist io___187 = { 0, 0, 0, fmt_330, 0 };
-
-
 
 /*     ITPACK 2C MAIN SUBROUTINE  SSORSI  (SYMMETRIC SUCCESSIVE RELAX- */
 /*                                         ATION SEMI-ITERATION) */
@@ -3366,9 +2797,6 @@ CH UNDOES THE RED-BLACK PERMUTATION   \002/\002 \002,\002    IER = \002,i5)";
     }
 /*<       IF (LEVEL.GE.1) WRITE (NOUT,10) >*/
     if (itcom1_1.level >= 1) {
-	io___152.ciunit = itcom1_1.nout;
-	s_wsfe(&io___152);
-	e_wsfe();
     }
 /*<    10 FORMAT ('0'///1X,'BEGINNING OF ITPACK SOLUTION MODULE  SSORSI') >*/
 /*<       IER = 0 >*/
@@ -3403,12 +2831,6 @@ L30:
     }
 /*<       IF (LEVEL.GE.1) WRITE (NOUT,40) ZETA,DRELPR,TEMP >*/
     if (itcom1_1.level >= 1) {
-	io___158.ciunit = itcom1_1.nout;
-	s_wsfe(&io___158);
-	do_fio(&c__1, (char *)&itcom3_1.zeta, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&itcom3_1.drelpr, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&temp, (ftnlen)sizeof(doublereal));
-	e_wsfe();
     }
 /*<    >*/
 /*<       ZETA = TEMP >*/
@@ -3434,10 +2856,6 @@ L50:
     ier = 51;
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,60) N >*/
     if (itcom1_1.level >= 0) {
-	io___163.ciunit = itcom1_1.nout;
-	s_wsfe(&io___163);
-	do_fio(&c__1, (char *)&n, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 380 >*/
@@ -3466,11 +2884,6 @@ L70:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,80) IER,TOL >*/
     if (itcom1_1.level >= 0) {
-	io___165.ciunit = itcom1_1.nout;
-	s_wsfe(&io___165);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&tol, (ftnlen)sizeof(doublereal));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 380 >*/
@@ -3499,11 +2912,6 @@ L90:
     ier = 52;
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,100) NW,IPARM(8) >*/
     if (itcom1_1.level >= 0) {
-	io___171.ciunit = itcom1_1.nout;
-	s_wsfe(&io___171);
-	do_fio(&c__1, (char *)&(*nw), (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&iparm[8], (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 
@@ -3529,11 +2937,6 @@ L110:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,120) IER,NB >*/
     if (itcom1_1.level >= 0) {
-	io___174.ciunit = itcom1_1.nout;
-	s_wsfe(&io___174);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&nb, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 380 >*/
@@ -3544,10 +2947,6 @@ L110:
 /*<   130 IF (LEVEL.GE.2) WRITE (NOUT,140) NB >*/
 L130:
     if (itcom1_1.level >= 2) {
-	io___175.ciunit = itcom1_1.nout;
-	s_wsfe(&io___175);
-	do_fio(&c__1, (char *)&nb, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<   140 FORMAT (/10X,'ORDER OF BLACK SUBSYSTEM = ',I5,' (NB)') >*/
 /*<       CALL PERMAT (N,IA,JA,A,IWKSP,IWKSP(IB3),ISYM,LEVEL,NOUT,IER) >*/
@@ -3559,10 +2958,6 @@ L130:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,150) IER >*/
     if (itcom1_1.level >= 0) {
-	io___176.ciunit = itcom1_1.nout;
-	s_wsfe(&io___176);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 380 >*/
@@ -3589,10 +2984,6 @@ L170:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,180) IER >*/
     if (itcom1_1.level >= 0) {
-	io___177.ciunit = itcom1_1.nout;
-	s_wsfe(&io___177);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 380 >*/
@@ -3603,9 +2994,6 @@ L190:
 	goto L210;
     }
 /*<       WRITE (NOUT,200) >*/
-    io___178.ciunit = itcom1_1.nout;
-    s_wsfe(&io___178);
-    e_wsfe();
 /*<    >*/
 /*<   210 IF (IPARM(11).NE.0) GO TO 220 >*/
 L210:
@@ -3705,10 +3093,6 @@ L260:
 /*<   270 IF (LEVEL.GE.1) WRITE (NOUT,280) ITMAX >*/
 L270:
     if (itcom1_1.level >= 1) {
-	io___184.ciunit = itcom1_1.nout;
-	s_wsfe(&io___184);
-	do_fio(&c__1, (char *)&itcom1_1.itmax, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       IER = 53 >*/
@@ -3734,10 +3118,6 @@ L290:
 /*<   300 IF (LEVEL.GE.1) WRITE (NOUT,310) IN >*/
 L300:
     if (itcom1_1.level >= 1) {
-	io___185.ciunit = itcom1_1.nout;
-	s_wsfe(&io___185);
-	do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<   310 FORMAT (/1X,'SSORSI  HAS CONVERGED IN ',I5,' ITERATIONS') >*/
 
@@ -3770,10 +3150,6 @@ L320:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,330) IERPER >*/
     if (itcom1_1.level >= 0) {
-	io___187.ciunit = itcom1_1.nout;
-	s_wsfe(&io___187);
-	do_fio(&c__1, (char *)&ierper, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       IF (IER.EQ.0) IER = IERPER >*/
@@ -3864,65 +3240,8 @@ L380:
 	a, doublereal *rhs, doublereal *u, integer *iwksp, integer *nw, 
 	doublereal *wksp, integer *iparm, doublereal *rparm, integer *ierr)
 {
-    /* Format strings */
-    static char fmt_10[] = "(\0020\002///1x,\002BEGINNING OF ITPACK SOLUTION\
- MODULE  RSCG\002)";
-    static char fmt_40[] = "(\0020\002,\002*** W A R N I N G ************\
-\002/\0020\002,\002    IN ITPACK ROUTINE RSCG\002/\002 \002,\002    RPARM(1)\
- =\002,d10.3,\002 (ZETA)\002/\002 \002,\002    A VALUE THIS SMALL MAY HINDER\
- CONVERGENCE \002/\002 \002,\002    SINCE MACHINE PRECISION DRELPR =\002,d10\
-.3/\002 \002,\002    ZETA RESET TO \002,d10.3)";
-    static char fmt_60[] = "(\0020\002,\002*** F A T A L     E R R O R *****\
-*******\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE RSCG \002/\002 \002,\
-\002    INVALID MATRIX DIMENSION, N =\002,i8)";
-    static char fmt_80[] = "(\0020\002,\002*** F A T A L     E R R O R *****\
-*******\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE RSCG \002/\002 \002,\
-\002    ERROR DETECTED IN SUBROUTINE  SBELM \002/\002 \002,\002    WHICH REM\
-OVES ROWS AND COLUMNS OF SYSTEM \002/\002 \002,\002    WHEN DIAGONAL ENTRY T\
-OO LARGE  \002/\002 \002,\002    IER = \002,i5,5x,\002 RPARM(8) = \002,d10.3,\
-\002 (TOL)\002)";
-    static char fmt_100[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE RSCG \002/\002 \
-\002,\002    ERROR DETECTED IN SUBROUTINE  PRBNDX\002/\002 \002,\002    WHIC\
-H COMPUTES THE RED-BLACK INDEXING\002/\002 \002,\002    IER = \002,i5,\002 I\
-PARM(9) = \002,i5,\002 (NB)\002)";
-    static char fmt_120[] = "(/10x,\002ERROR DETECTED IN RED-BLACK SUBSYSTEM\
- INDEX\002/10x,\002IER =\002,i5,\002 IPARM(9) =\002,i5,\002 (NB)\002)";
-    static char fmt_140[] = "(/10x,\002 IPARM(9) = \002,i5,\002 IMPLIES MATR\
-IX IS DIAGONAL\002/10x,\002 NB RESET TO \002,i5)";
-    static char fmt_160[] = "(/10x,\002ORDER OF BLACK SUBSYSTEM = \002,i5\
-,\002 (NB)\002)";
-    static char fmt_170[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE RSCG \002/\002 \
-\002,\002    ERROR DETECTED IN SUBROUTINE  PERMAT\002/\002 \002,\002    WHIC\
-H DOES THE RED-BLACK PERMUTATION\002/\002 \002,\002    IER = \002,i5)";
-    static char fmt_200[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE RSCG \002/\002 \
-\002,\002    NOT ENOUGH WORKSPACE AT \002,i10/\002 \002,\002    SET IPARM(8)\
- =\002,i10,\002 (NW)\002)";
-    static char fmt_220[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE RSCG \002/\002 \
-\002,\002    ERROR DETECTED IN SUBROUTINE  SCAL  \002/\002 \002,\002    WHIC\
-H SCALES THE SYSTEM   \002/\002 \002,\002    IER = \002,i5)";
-    static char fmt_240[] = "(///1x,\002IN THE FOLLOWING, RHO AND GAMMA AR\
-E\002,\002 ACCELERATION PARAMETERS\002)";
-    static char fmt_250[] = "(1x,\002CME IS THE ESTIMATE OF THE LARGEST EIGE\
-NVALUE OF\002,\002 THE JACOBI MATRIX\002)";
-    static char fmt_320[] = "(\0020\002,\002*** W A R N I N G ***********\
-*\002/\0020\002,\002    IN ITPACK ROUTINE RSCG\002/\002 \002,\002    FAILURE\
- TO CONVERGE IN\002,i5,\002 ITERATIONS\002)";
-    static char fmt_350[] = "(/1x,\002RSCG  HAS CONVERGED IN \002,i5,\002 IT\
-ERATIONS\002)";
-    static char fmt_380[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE RSCG \002/\002 \
-\002,\002    ERROR DETECTED IN SUBROUTINE  PERMAT\002/\002 \002,\002    WHIC\
-H UNDOES THE RED-BLACK PERMUTATION   \002/\002 \002,\002    IER = \002,i5)";
-
     /* System generated locals */
     integer i__1;
-
-    /* Builtin functions */
-    integer s_wsfe(cilist *), e_wsfe(), do_fio(integer *, char *, ftnlen);
 
     /* Local variables */
     integer n, n3, nb, nr, ib1, ib2, ib3, ib4, ib5, jb3, ier;
@@ -3966,26 +3285,6 @@ H UNDOES THE RED-BLACK PERMUTATION   \002/\002 \002,\002    IER = \002,i5)";
 	    doublereal *, doublereal *), perror_(integer *, integer *, 
 	    integer *, doublereal *, doublereal *, doublereal *, doublereal *,
 	     doublereal *, doublereal *, integer *);
-
-    /* Fortran I/O blocks */
-    static cilist io___190 = { 0, 0, 0, fmt_10, 0 };
-    static cilist io___196 = { 0, 0, 0, fmt_40, 0 };
-    static cilist io___201 = { 0, 0, 0, fmt_60, 0 };
-    static cilist io___203 = { 0, 0, 0, fmt_80, 0 };
-    static cilist io___209 = { 0, 0, 0, fmt_100, 0 };
-    static cilist io___210 = { 0, 0, 0, fmt_120, 0 };
-    static cilist io___211 = { 0, 0, 0, fmt_140, 0 };
-    static cilist io___212 = { 0, 0, 0, fmt_160, 0 };
-    static cilist io___213 = { 0, 0, 0, fmt_170, 0 };
-    static cilist io___219 = { 0, 0, 0, fmt_200, 0 };
-    static cilist io___220 = { 0, 0, 0, fmt_220, 0 };
-    static cilist io___221 = { 0, 0, 0, fmt_240, 0 };
-    static cilist io___222 = { 0, 0, 0, fmt_250, 0 };
-    static cilist io___227 = { 0, 0, 0, fmt_320, 0 };
-    static cilist io___228 = { 0, 0, 0, fmt_350, 0 };
-    static cilist io___230 = { 0, 0, 0, fmt_380, 0 };
-
-
 
 /*     ITPACK 2C MAIN SUBROUTINE  RSCG  (REDUCED SYSTEM CONJUGATE */
 /*                                       GRADIENT) */
@@ -4151,9 +3450,6 @@ H UNDOES THE RED-BLACK PERMUTATION   \002/\002 \002,\002    IER = \002,i5)";
     itcom1_1.nout = iparm[4];
 /*<       IF (LEVEL.GE.1) WRITE (NOUT,10) >*/
     if (itcom1_1.level >= 1) {
-	io___190.ciunit = itcom1_1.nout;
-	s_wsfe(&io___190);
-	e_wsfe();
     }
 /*<    10 FORMAT ('0'///1X,'BEGINNING OF ITPACK SOLUTION MODULE  RSCG') >*/
 /*<       IER = 0 >*/
@@ -4188,12 +3484,6 @@ L30:
     }
 /*<       IF (LEVEL.GE.1) WRITE (NOUT,40) ZETA,DRELPR,TEMP >*/
     if (itcom1_1.level >= 1) {
-	io___196.ciunit = itcom1_1.nout;
-	s_wsfe(&io___196);
-	do_fio(&c__1, (char *)&itcom3_1.zeta, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&itcom3_1.drelpr, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&temp, (ftnlen)sizeof(doublereal));
-	e_wsfe();
     }
 /*<    >*/
 /*<       ZETA = TEMP >*/
@@ -4219,10 +3509,6 @@ L50:
     ier = 61;
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,60) N >*/
     if (itcom1_1.level >= 0) {
-	io___201.ciunit = itcom1_1.nout;
-	s_wsfe(&io___201);
-	do_fio(&c__1, (char *)&n, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 430 >*/
@@ -4251,11 +3537,6 @@ L70:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,80) IER,TOL >*/
     if (itcom1_1.level >= 0) {
-	io___203.ciunit = itcom1_1.nout;
-	s_wsfe(&io___203);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&tol, (ftnlen)sizeof(doublereal));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 430 >*/
@@ -4292,11 +3573,6 @@ L90:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,100) IER,NB >*/
     if (itcom1_1.level >= 0) {
-	io___209.ciunit = itcom1_1.nout;
-	s_wsfe(&io___209);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&nb, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 430 >*/
@@ -4310,11 +3586,6 @@ L110:
     ier = 64;
 /*<       IF (LEVEL.GE.1) WRITE (NOUT,120) IER,NB >*/
     if (itcom1_1.level >= 1) {
-	io___210.ciunit = itcom1_1.nout;
-	s_wsfe(&io___210);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&nb, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 430 >*/
@@ -4328,11 +3599,6 @@ L130:
     nb = n / 2;
 /*<       IF (LEVEL.GE.2.AND.IPARM(9).GE.0) WRITE (NOUT,140) IPARM(9),NB >*/
     if (itcom1_1.level >= 2 && iparm[9] >= 0) {
-	io___211.ciunit = itcom1_1.nout;
-	s_wsfe(&io___211);
-	do_fio(&c__1, (char *)&iparm[9], (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&nb, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 
@@ -4345,10 +3611,6 @@ L150:
     }
 /*<       IF (LEVEL.GE.2) WRITE (NOUT,160) NB >*/
     if (itcom1_1.level >= 2) {
-	io___212.ciunit = itcom1_1.nout;
-	s_wsfe(&io___212);
-	do_fio(&c__1, (char *)&nb, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<   160 FORMAT (/10X,'ORDER OF BLACK SUBSYSTEM = ',I5,' (NB)') >*/
 /*<       CALL PERMAT (N,IA,JA,A,IWKSP,IWKSP(JB3),ISYM,LEVEL,NOUT,IER) >*/
@@ -4360,10 +3622,6 @@ L150:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,170) IER >*/
     if (itcom1_1.level >= 0) {
-	io___213.ciunit = itcom1_1.nout;
-	s_wsfe(&io___213);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 430 >*/
@@ -4401,11 +3659,6 @@ L190:
     ier = 62;
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,200) NW,IPARM(8) >*/
     if (itcom1_1.level >= 0) {
-	io___219.ciunit = itcom1_1.nout;
-	s_wsfe(&io___219);
-	do_fio(&c__1, (char *)&(*nw), (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&iparm[8], (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 430 >*/
@@ -4427,10 +3680,6 @@ L210:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,220) IER >*/
     if (itcom1_1.level >= 0) {
-	io___220.ciunit = itcom1_1.nout;
-	s_wsfe(&io___220);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 430 >*/
@@ -4441,15 +3690,9 @@ L230:
 	goto L260;
     }
 /*<       WRITE (NOUT,240) >*/
-    io___221.ciunit = itcom1_1.nout;
-    s_wsfe(&io___221);
-    e_wsfe();
 /*<    >*/
 /*<       IF (ADAPT) WRITE (NOUT,250) >*/
     if (itcom2_1.adapt) {
-	io___222.ciunit = itcom1_1.nout;
-	s_wsfe(&io___222);
-	e_wsfe();
     }
 /*<    >*/
 /*<   260 IF (IPARM(11).NE.0) GO TO 270 >*/
@@ -4546,10 +3789,6 @@ L300:
 /*<   310 IF (LEVEL.GE.1) WRITE (NOUT,320) ITMAX >*/
 L310:
     if (itcom1_1.level >= 1) {
-	io___227.ciunit = itcom1_1.nout;
-	s_wsfe(&io___227);
-	do_fio(&c__1, (char *)&itcom1_1.itmax, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       IER = 63 >*/
@@ -4575,10 +3814,6 @@ L330:
 /*<   340 IF (LEVEL.GE.1) WRITE (NOUT,350) IN >*/
 L340:
     if (itcom1_1.level >= 1) {
-	io___228.ciunit = itcom1_1.nout;
-	s_wsfe(&io___228);
-	do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<   350 FORMAT (/1X,'RSCG  HAS CONVERGED IN ',I5,' ITERATIONS') >*/
 
@@ -4620,10 +3855,6 @@ L370:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,380) IERPER >*/
     if (itcom1_1.level >= 0) {
-	io___230.ciunit = itcom1_1.nout;
-	s_wsfe(&io___230);
-	do_fio(&c__1, (char *)&ierper, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       IF (IER.EQ.0) IER = IERPER >*/
@@ -4714,63 +3945,8 @@ L430:
 	a, doublereal *rhs, doublereal *u, integer *iwksp, integer *nw, 
 	doublereal *wksp, integer *iparm, doublereal *rparm, integer *ierr)
 {
-    /* Format strings */
-    static char fmt_10[] = "(\0020\002///1x,\002BEGINNING OF ITPACK SOLUTION\
- MODULE  RSSI\002)";
-    static char fmt_40[] = "(\0020\002,\002*** W A R N I N G ************\
-\002/\0020\002,\002    IN ITPACK ROUTINE RSSI\002/\002 \002,\002    RPARM(1)\
- =\002,d10.3,\002 (ZETA)\002/\002 \002,\002    A VALUE THIS SMALL MAY HINDER\
- CONVERGENCE \002/\002 \002,\002    SINCE MACHINE PRECISION DRELPR =\002,d10\
-.3/\002 \002,\002    ZETA RESET TO \002,d10.3)";
-    static char fmt_60[] = "(\0020\002,\002*** F A T A L     E R R O R *****\
-*******\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE RSSI \002/\002 \002,\
-\002    INVALID MATRIX DIMENSION, N =\002,i8)";
-    static char fmt_80[] = "(\0020\002,\002*** F A T A L     E R R O R *****\
-*******\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE RSSI \002/\002 \002,\
-\002    ERROR DETECTED IN SUBROUTINE  SBELM \002/\002 \002,\002    WHICH REM\
-OVES ROWS AND COLUMNS OF SYSTEM \002/\002 \002,\002    WHEN DIAGONAL ENTRY T\
-OO LARGE  \002/\002 \002,\002    IER = \002,i5,5x,\002 RPARM(8) = \002,d10.3,\
-\002 (TOL)\002)";
-    static char fmt_100[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE RSSI \002/\002 \
-\002,\002    ERROR DETECTED IN SUBROUTINE  PRBNDX\002/\002 \002,\002    WHIC\
-H COMPUTES THE RED-BLACK INDEXING\002/\002 \002,\002    IER = \002,i5,\002 I\
-PARM(9) = \002,i5,\002 (NB)\002)";
-    static char fmt_120[] = "(/10x,\002ERROR DETECTED IN RED-BLACK SUBSYSTEM\
- INDEX\002/10x,\002IER =\002,i5,\002 IPARM(9) =\002,i5,\002 (NB)\002)";
-    static char fmt_140[] = "(/10x,\002 IPARM(9) = \002,i5,\002 IMPLIES MATR\
-IX IS DIAGONAL\002/10x,\002 NB RESET TO \002,i5)";
-    static char fmt_160[] = "(/10x,\002ORDER OF BLACK SUBSYSTEM = \002,i5\
-,\002 (NB)\002)";
-    static char fmt_170[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE RSSI \002/\002 \
-\002,\002    ERROR DETECTED IN SUBROUTINE  PERMAT\002/\002 \002,\002    WHIC\
-H DOES THE RED-BLACK PERMUTATION\002/\002 \002,\002    IER = \002,i5)";
-    static char fmt_200[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE RSSI \002/\002 \
-\002,\002    NOT ENOUGH WORKSPACE AT \002,i10/\002 \002,\002    SET IPARM(8)\
- =\002,i10,\002 (NW)\002)";
-    static char fmt_220[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE RSSI \002/\002 \
-\002,\002    ERROR DETECTED IN SUBROUTINE  SCAL  \002/\002 \002,\002    WHIC\
-H SCALES THE SYSTEM   \002/\002 \002,\002    IER = \002,i5)";
-    static char fmt_240[] = "(///1x,\002IN THE FOLLOWING, RHO AND GAMMA AR\
-E\002,\002 ACCELERATION PARAMETERS\002)";
-    static char fmt_310[] = "(\0020\002,\002*** W A R N I N G ***********\
-*\002/\0020\002,\002    IN ITPACK ROUTINE RSSI\002/\002 \002,\002    FAILURE\
- TO CONVERGE IN\002,i5,\002 ITERATIONS\002)";
-    static char fmt_340[] = "(/1x,\002RSSI  HAS CONVERGED IN \002,i5,\002 IT\
-ERATIONS\002)";
-    static char fmt_370[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    CALLED FROM ITPACK ROUTINE RSSI \002/\002 \
-\002,\002    ERROR DETECTED IN SUBROUTINE  PERMAT\002/\002 \002,\002    WHIC\
-H UNDOES THE RED-BLACK PERMUTATION   \002/\002 \002,\002    IER = \002,i5)";
-
     /* System generated locals */
     integer i__1;
-
-    /* Builtin functions */
-    integer s_wsfe(cilist *), e_wsfe(), do_fio(integer *, char *, ftnlen);
 
     /* Local variables */
     integer n, n3, nb, nr, ib1, ib2, jb3, ier;
@@ -4811,25 +3987,6 @@ H UNDOES THE RED-BLACK PERMUTATION   \002/\002 \002,\002    IER = \002,i5)";
 	    doublereal *, doublereal *, doublereal *, integer *), itrssi_(
 	    integer *, integer *, integer *, integer *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *);
-
-    /* Fortran I/O blocks */
-    static cilist io___233 = { 0, 0, 0, fmt_10, 0 };
-    static cilist io___239 = { 0, 0, 0, fmt_40, 0 };
-    static cilist io___244 = { 0, 0, 0, fmt_60, 0 };
-    static cilist io___246 = { 0, 0, 0, fmt_80, 0 };
-    static cilist io___252 = { 0, 0, 0, fmt_100, 0 };
-    static cilist io___253 = { 0, 0, 0, fmt_120, 0 };
-    static cilist io___254 = { 0, 0, 0, fmt_140, 0 };
-    static cilist io___255 = { 0, 0, 0, fmt_160, 0 };
-    static cilist io___256 = { 0, 0, 0, fmt_170, 0 };
-    static cilist io___259 = { 0, 0, 0, fmt_200, 0 };
-    static cilist io___260 = { 0, 0, 0, fmt_220, 0 };
-    static cilist io___261 = { 0, 0, 0, fmt_240, 0 };
-    static cilist io___266 = { 0, 0, 0, fmt_310, 0 };
-    static cilist io___267 = { 0, 0, 0, fmt_340, 0 };
-    static cilist io___269 = { 0, 0, 0, fmt_370, 0 };
-
-
 
 /*     ITPACK 2C MAIN SUBROUTINE  RSSI  (REDUCED SYSTEM SEMI-ITERATIVE) */
 /*     EACH OF THE MAIN SUBROUTINES: */
@@ -4992,9 +4149,6 @@ H UNDOES THE RED-BLACK PERMUTATION   \002/\002 \002,\002    IER = \002,i5)";
     itcom1_1.nout = iparm[4];
 /*<       IF (LEVEL.GE.1) WRITE (NOUT,10) >*/
     if (itcom1_1.level >= 1) {
-	io___233.ciunit = itcom1_1.nout;
-	s_wsfe(&io___233);
-	e_wsfe();
     }
 /*<    10 FORMAT ('0'///1X,'BEGINNING OF ITPACK SOLUTION MODULE  RSSI') >*/
 /*<       IER = 0 >*/
@@ -5029,12 +4183,6 @@ L30:
     }
 /*<       IF (LEVEL.GE.1) WRITE (NOUT,40) ZETA,DRELPR,TEMP >*/
     if (itcom1_1.level >= 1) {
-	io___239.ciunit = itcom1_1.nout;
-	s_wsfe(&io___239);
-	do_fio(&c__1, (char *)&itcom3_1.zeta, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&itcom3_1.drelpr, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&temp, (ftnlen)sizeof(doublereal));
-	e_wsfe();
     }
 /*<    >*/
 /*<       ZETA = TEMP >*/
@@ -5060,10 +4208,6 @@ L50:
     ier = 71;
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,60) N >*/
     if (itcom1_1.level >= 0) {
-	io___244.ciunit = itcom1_1.nout;
-	s_wsfe(&io___244);
-	do_fio(&c__1, (char *)&n, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 420 >*/
@@ -5092,11 +4236,6 @@ L70:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,80) IER,TOL >*/
     if (itcom1_1.level >= 0) {
-	io___246.ciunit = itcom1_1.nout;
-	s_wsfe(&io___246);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&tol, (ftnlen)sizeof(doublereal));
-	e_wsfe();
     }
 /*<    >*/
 
@@ -5131,11 +4270,6 @@ L90:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,100) IER,NB >*/
     if (itcom1_1.level >= 0) {
-	io___252.ciunit = itcom1_1.nout;
-	s_wsfe(&io___252);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&nb, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 420 >*/
@@ -5149,11 +4283,6 @@ L110:
     ier = 74;
 /*<       IF (LEVEL.GE.1) WRITE (NOUT,120) IER,NB >*/
     if (itcom1_1.level >= 1) {
-	io___253.ciunit = itcom1_1.nout;
-	s_wsfe(&io___253);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&nb, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 420 >*/
@@ -5167,11 +4296,6 @@ L130:
     nb = n / 2;
 /*<       IF (LEVEL.GE.2.AND.IPARM(9).GE.0) WRITE (NOUT,140) IPARM(9),NB >*/
     if (itcom1_1.level >= 2 && iparm[9] >= 0) {
-	io___254.ciunit = itcom1_1.nout;
-	s_wsfe(&io___254);
-	do_fio(&c__1, (char *)&iparm[9], (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&nb, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 
@@ -5184,10 +4308,6 @@ L150:
     }
 /*<       IF (LEVEL.GE.2) WRITE (NOUT,160) NB >*/
     if (itcom1_1.level >= 2) {
-	io___255.ciunit = itcom1_1.nout;
-	s_wsfe(&io___255);
-	do_fio(&c__1, (char *)&nb, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<   160 FORMAT (/10X,'ORDER OF BLACK SUBSYSTEM = ',I5,' (NB)') >*/
 /*<       CALL PERMAT (N,IA,JA,A,IWKSP,IWKSP(JB3),ISYM,LEVEL,NOUT,IER) >*/
@@ -5199,10 +4319,6 @@ L150:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,170) IER >*/
     if (itcom1_1.level >= 0) {
-	io___256.ciunit = itcom1_1.nout;
-	s_wsfe(&io___256);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 420 >*/
@@ -5231,11 +4347,6 @@ L190:
     ier = 72;
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,200) NW,IPARM(8) >*/
     if (itcom1_1.level >= 0) {
-	io___259.ciunit = itcom1_1.nout;
-	s_wsfe(&io___259);
-	do_fio(&c__1, (char *)&(*nw), (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&iparm[8], (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 420 >*/
@@ -5257,10 +4368,6 @@ L210:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,220) IER >*/
     if (itcom1_1.level >= 0) {
-	io___260.ciunit = itcom1_1.nout;
-	s_wsfe(&io___260);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 420 >*/
@@ -5271,9 +4378,6 @@ L230:
 	goto L250;
     }
 /*<       WRITE (NOUT,240) >*/
-    io___261.ciunit = itcom1_1.nout;
-    s_wsfe(&io___261);
-    e_wsfe();
 /*<    >*/
 /*<   250 IF (IPARM(11).NE.0) GO TO 260 >*/
 L250:
@@ -5355,10 +4459,6 @@ L290:
 /*<   300 IF (LEVEL.GE.1) WRITE (NOUT,310) ITMAX >*/
 L300:
     if (itcom1_1.level >= 1) {
-	io___266.ciunit = itcom1_1.nout;
-	s_wsfe(&io___266);
-	do_fio(&c__1, (char *)&itcom1_1.itmax, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       IER = 73 >*/
@@ -5384,10 +4484,6 @@ L320:
 /*<   330 IF (LEVEL.GE.1) WRITE (NOUT,340) IN >*/
 L330:
     if (itcom1_1.level >= 1) {
-	io___267.ciunit = itcom1_1.nout;
-	s_wsfe(&io___267);
-	do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<   340 FORMAT (/1X,'RSSI  HAS CONVERGED IN ',I5,' ITERATIONS') >*/
 
@@ -5429,10 +4525,6 @@ L360:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,370) IERPER >*/
     if (itcom1_1.level >= 0) {
-	io___269.ciunit = itcom1_1.nout;
-	s_wsfe(&io___269);
-	do_fio(&c__1, (char *)&ierper, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       IF (IER.EQ.0) IER = IERPER >*/
@@ -7214,24 +6306,8 @@ doublereal cheby_(doublereal *qa, doublereal *qt, doublereal *rrr, integer *
 /* Subroutine */ int chgcon_(doublereal *tri, doublereal *gamold, doublereal *
 	rhoold, integer *ibmth)
 {
-    /* Format strings */
-    static char fmt_70[] = "(/10x,\002DIFFICULTY IN COMPUTATION OF MAXIMUM E\
-IGENVALUE\002/15x,\002OF ITERATION MATRIX\002/10x,\002SUBROUTINE ZBRENT RETU\
-RNED IER =\002,i5)";
-    static char fmt_90[] = "(/10x,\002DIFFICULTY IN COMPUTATION OF MAXIMUM E\
-IGENVALUE\002/15x,\002OF ITERATION MATRIX\002/10x,\002SUBROUTINE EQRT1S RETU\
-RNED IER =\002,i5)";
-    static char fmt_140[] = "(/10x,\002ESTIMATE OF MAXIMUM EIGENVALUE OF JAC\
-OBI   \002/15x,\002MATRIX (CME) NOT ACCURATE\002/10x,\002ADAPTIVE PROCEDURE \
-TURNED OFF AT ITERATION \002,i5/10x,\002FINAL ESTIMATE OF MAXIMUM EIGENVALUE\
- =\002,d15.7/)";
-
     /* System generated locals */
     doublereal d__1;
-
-    /* Builtin functions */
-    integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe();
-    double sqrt(doublereal);
 
     /* Local variables */
     integer ip, ib2, ib3;
@@ -7241,13 +6317,6 @@ TURNED OFF AT ITERATION \002,i5/10x,\002FINAL ESTIMATE OF MAXIMUM EIGENVALUE\
     extern doublereal eigvns_(integer *, doublereal *, doublereal *, 
 	    doublereal *, integer *), eigvss_(integer *, doublereal *, 
 	    doublereal *, doublereal *, integer *, integer *);
-
-    /* Fortran I/O blocks */
-    static cilist io___357 = { 0, 0, 0, fmt_70, 0 };
-    static cilist io___360 = { 0, 0, 0, fmt_90, 0 };
-    static cilist io___361 = { 0, 0, 0, fmt_140, 0 };
-
-
 
 /*     COMPUTES THE NEW ESTIMATE FOR THE LARGEST EIGENVALUE FOR */
 /*     CONJUGATE GRADIENT ACCELERATION. */
@@ -7400,10 +6469,6 @@ L60:
     }
 /*<       IF (LEVEL.GE.2) WRITE (NOUT,70) IER >*/
     if (itcom1_1.level >= 2) {
-	io___357.ciunit = itcom1_1.nout;
-	s_wsfe(&io___357);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 100 >*/
@@ -7422,10 +6487,6 @@ L80:
     }
 /*<       IF (LEVEL.GE.2) WRITE (NOUT,90) IER >*/
     if (itcom1_1.level >= 2) {
-	io___360.ciunit = itcom1_1.nout;
-	s_wsfe(&io___360);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<   100 CONTINUE >*/
@@ -7478,11 +6539,6 @@ L130:
     itcom2_1.partad = FALSE_;
 /*<       IF (LEVEL.GE.2) WRITE (NOUT,140) IN,START >*/
     if (itcom1_1.level >= 2) {
-	io___361.ciunit = itcom1_1.nout;
-	s_wsfe(&io___361);
-	do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&start, (ftnlen)sizeof(doublereal));
-	e_wsfe();
     }
 /*<    >*/
 
@@ -7494,43 +6550,18 @@ L130:
 /*<       SUBROUTINE CHGSI (DTNRM,IBMTH) >*/
 /* Subroutine */ int chgsi_(doublereal *dtnrm, integer *ibmth)
 {
-    /* Format strings */
-    static char fmt_90[] = "(/30x,\002PARAMETERS WERE CHANGED AT ITERATION N\
-O.\002,i5/35x,\002SOLUTION TO CHEBYSHEV EQN.       =\002,d15.7/35x,\002SOLUT\
-ION TO RAYLEIGH QUOTIENT    =\002,d15.7/35x,\002NEW ESTIMATE FOR CME        \
-     =\002,d15.7/35x,\002NEW ESTIMATE FOR GAMMA           =\002,d15.7/35x\
-,\002NEW ESTIMATE FOR SPECTRAL RADIUS =\002,d15.7/)";
-    static char fmt_110[] = "(/10x,\002ESTIMATE OF MAXIMUM EIGENVALUE OF JAC\
-OBI   \002/15x,\002MATRIX (CME) TOO LARGE\002/10x,\002ADAPTIVE PROCEDURE TUR\
-NED OFF AT ITERATION \002,i5/10x,\002FINAL ESTIMATE OF MAXIMUM EIGENVALUE \
-=\002,d15.7/)";
-    static char fmt_100[] = "(/30x,\002PARAMETERS WERE CHANGED AT ITERATION \
-NO.\002,i5/35x,\002SOLUTION TO CHEBYSHEV EQN.       =\002,d15.7/35x,\002SOLU\
-TION TO RAYLEIGH QUOTIENT    =\002,d15.7/35x,\002NEW ESTIMATE FOR CME       \
-      =\002,d15.7/35x,\002NEW ESTIMATE FOR SPECTRAL RADIUS =\002,d15.7/)";
-
     /* System generated locals */
     integer i__1;
     doublereal d__1, d__2;
 
     /* Builtin functions */
     double sqrt(doublereal);
-    integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe();
 
     /* Local variables */
     doublereal zm1, zm2;
     extern doublereal cheby_(doublereal *, doublereal *, doublereal *, 
 	    integer *, doublereal *, doublereal *);
     doublereal cmold;
-
-    /* Fortran I/O blocks */
-    static cilist io___365 = { 0, 0, 0, fmt_90, 0 };
-    static cilist io___366 = { 0, 0, 0, fmt_110, 0 };
-    static cilist io___367 = { 0, 0, 0, fmt_90, 0 };
-    static cilist io___368 = { 0, 0, 0, fmt_110, 0 };
-    static cilist io___369 = { 0, 0, 0, fmt_100, 0 };
-
-
 
 /* ... COMPUTES NEW CHEBYSHEV ACCELERATION PARAMETERS ADAPTIVELY. */
 
@@ -7634,15 +6665,6 @@ L10:
     itcom3_1.rho = 1.;
 /*<       IF (LEVEL.GE.2) WRITE (NOUT,90) IN,ZM1,ZM2,CME,GAMMA,CME >*/
     if (itcom1_1.level >= 2) {
-	io___365.ciunit = itcom1_1.nout;
-	s_wsfe(&io___365);
-	do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&zm1, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&zm2, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&itcom3_1.cme, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&itcom3_1.gamma, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&itcom3_1.cme, (ftnlen)sizeof(doublereal));
-	e_wsfe();
     }
 /*<       RETURN >*/
     return 0;
@@ -7656,11 +6678,6 @@ L20:
     itcom2_1.adapt = FALSE_;
 /*<       IF (LEVEL.GE.2) WRITE (NOUT,110) IN,CME >*/
     if (itcom1_1.level >= 2) {
-	io___366.ciunit = itcom1_1.nout;
-	s_wsfe(&io___366);
-	do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&itcom3_1.cme, (ftnlen)sizeof(doublereal));
-	e_wsfe();
     }
 /*<       RETURN >*/
     return 0;
@@ -7718,15 +6735,6 @@ L30:
     itcom3_1.rho = 1.;
 /*<       IF (LEVEL.GE.2) WRITE (NOUT,90) IN,ZM1,ZM2,CME,GAMMA,CME >*/
     if (itcom1_1.level >= 2) {
-	io___367.ciunit = itcom1_1.nout;
-	s_wsfe(&io___367);
-	do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&zm1, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&zm2, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&itcom3_1.cme, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&itcom3_1.gamma, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&itcom3_1.cme, (ftnlen)sizeof(doublereal));
-	e_wsfe();
     }
 /*<       RETURN >*/
     return 0;
@@ -7740,11 +6748,6 @@ L40:
     itcom2_1.adapt = FALSE_;
 /*<       IF (LEVEL.GE.2) WRITE (NOUT,110) IN,CME >*/
     if (itcom1_1.level >= 2) {
-	io___368.ciunit = itcom1_1.nout;
-	s_wsfe(&io___368);
-	do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&itcom3_1.cme, (ftnlen)sizeof(doublereal));
-	e_wsfe();
     }
 /*<       RETURN >*/
     return 0;
@@ -7800,14 +6803,6 @@ L70:
     itcom3_1.delsnm = itcom3_1.delnnm;
 /*<       IF (LEVEL.GE.2) WRITE (NOUT,100) IN,ZM1,ZM2,CME,SPECR >*/
     if (itcom1_1.level >= 2) {
-	io___369.ciunit = itcom1_1.nout;
-	s_wsfe(&io___369);
-	do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&zm1, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&zm2, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&itcom3_1.cme, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&itcom3_1.specr, (ftnlen)sizeof(doublereal));
-	e_wsfe();
     }
 /*<       RETURN >*/
     return 0;
@@ -7836,12 +6831,6 @@ L80:
 /*<       LOGICAL FUNCTION CHGSME (OLDNRM,ICNT) >*/
 logical chgsme_(doublereal *oldnrm, integer *icnt)
 {
-    /* Format strings */
-    static char fmt_20[] = "(/30x,\002ESTIMATE OF SMALLEST EIGENVALUE OF JAC\
-OBI\002/37x,\002MATRIX (SME) CHANGED AT ITERATION \002,i5/35x,\002FIRST ESTI\
-MATE OF SME            =\002,d15.7/35x,\002SECOND ESTIMATE OF SME           =\
-\002,d15.7/35x,\002NEW ESTIMATE OF SME              =\002,d15.7/)";
-
     /* System generated locals */
     integer i__1;
     doublereal d__1, d__2, d__3;
@@ -7850,17 +6839,11 @@ MATE OF SME            =\002,d15.7/35x,\002SECOND ESTIMATE OF SME           =\
     /* Builtin functions */
     double sqrt(doublereal), pow_di(doublereal *, integer *), pow_dd(
 	    doublereal *, doublereal *);
-    integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe();
 
     /* Local variables */
     doublereal q, z__;
     integer ip;
     doublereal rn, wp, sm1, sm2;
-
-    /* Fortran I/O blocks */
-    static cilist io___377 = { 0, 0, 0, fmt_20, 0 };
-
-
 
 /* ... THIS FUNCTION TESTS FOR JACOBI SI WHETHER SME SHOULD BE CHANGED */
 /* ... WHEN CASEII = .FALSE..  IF THE TEST IS POSITIVE THE NEW VALUE */
@@ -7993,13 +6976,6 @@ L10:
 
 /*<       IF (LEVEL.GE.2) WRITE (NOUT,20) IN,SM1,SM2,SME >*/
     if (itcom1_1.level >= 2) {
-	io___377.ciunit = itcom1_1.nout;
-	s_wsfe(&io___377);
-	do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&sm1, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&sm2, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&itcom3_1.sme, (ftnlen)sizeof(doublereal));
-	e_wsfe();
     }
 
 /*<    >*/
@@ -8211,64 +7187,8 @@ L20:
 	doublereal *a, doublereal *rhs, integer *iparm, doublereal *rparm, 
 	integer *icall)
 {
-    /* Format strings */
-    static char fmt_10[] = "(///30x,\002THE LINEAR SYSTEM IS AS FOLLOWS\002)";
-    static char fmt_20[] = "(/2x,\002IA ARRAY\002)";
-    static char fmt_30[] = "(2x,10(2x,i8))";
-    static char fmt_40[] = "(/2x,\002JA ARRAY\002)";
-    static char fmt_50[] = "(/2x,\002 A ARRAY\002)";
-    static char fmt_60[] = "(2x,5(2x,d20.13))";
-    static char fmt_70[] = "(/2x,\002RHS ARRAY\002)";
-    static char fmt_90[] = "(///30x,\002INITIAL ITERATIVE PARAMETERS\002)";
-    static char fmt_110[] = "(///30x,\002FINAL ITERATIVE PARAMETERS\002)";
-    static char fmt_130[] = "(35x,\002IPARM(1)  =\002,i15,4x,\002(ITMAX)\002\
-/35x,\002IPARM(2)  =\002,i15,4x,\002(LEVEL) \002/35x,\002IPARM(3)  =\002,i15\
-,4x,\002(IRESET)\002/35x,\002IPARM(4)  =\002,i15,4x,\002(NOUT)  \002/35x,\
-\002IPARM(5)  =\002,i15,4x,\002(ISYM)  \002/35x,\002IPARM(6)  =\002,i15,4x\
-,\002(IADAPT)\002)";
-    static char fmt_140[] = "(35x,\002IPARM(7)  =\002,i15,4x,\002(ICASE)\002\
-/35x,\002IPARM(8)  =\002,i15,4x,\002(NWKSP)\002/35x,\002IPARM(9)  =\002,i15,\
-4x,\002(NB)    \002/35x,\002IPARM(10) =\002,i15,4x,\002(IREMOVE)\002/35x,\
-\002IPARM(11) =\002,i15,4x,\002(ITIME)\002/35x,\002IPARM(12) =\002,i15,4x\
-,\002(IDGTS)\002)";
-    static char fmt_150[] = "(35x,\002RPARM(1)  =\002,d15.8,4x,\002(ZETA) \
- \002/35x,\002RPARM(2)  =\002,d15.8,4x,\002(CME)   \002/35x,\002RPARM(3)  \
-=\002,d15.8,4x,\002(SME)   \002/35x,\002RPARM(4)  =\002,d15.8,4x,\002(FF)    \
-\002/35x,\002RPARM(5)  =\002,d15.8,4x,\002(OMEGA) \002/35x,\002RPARM(6)  \
-=\002,d15.8,4x,\002(SPECR) \002)";
-    static char fmt_160[] = "(35x,\002RPARM(7)  =\002,d15.8,4x,\002(BETAB)\
- \002/35x,\002RPARM(8)  =\002,d15.8,4x,\002(TOL)\002/35x,\002RPARM(9)  =\002\
-,d15.8,4x,\002(TIME1)\002/35x,\002RPARM(10) =\002,d15.8,4x,\002(TIME2)\002/3\
-5x,\002RPARM(11) =\002,d15.8,4x,\002(DIGIT1)\002/35x,\002RPARM(12) =\002,d15\
-.8,4x,\002(DIGIT2)\002)";
-
-    /* System generated locals */
-    integer i__1;
-
-    /* Builtin functions */
-    integer s_wsfe(cilist *), e_wsfe(), do_fio(integer *, char *, ftnlen);
-
     /* Local variables */
-    integer i__, n, np1, nzro;
-
-    /* Fortran I/O blocks */
-    static cilist io___387 = { 0, 0, 0, fmt_10, 0 };
-    static cilist io___388 = { 0, 0, 0, fmt_20, 0 };
-    static cilist io___389 = { 0, 0, 0, fmt_30, 0 };
-    static cilist io___391 = { 0, 0, 0, fmt_40, 0 };
-    static cilist io___392 = { 0, 0, 0, fmt_30, 0 };
-    static cilist io___393 = { 0, 0, 0, fmt_50, 0 };
-    static cilist io___394 = { 0, 0, 0, fmt_60, 0 };
-    static cilist io___395 = { 0, 0, 0, fmt_70, 0 };
-    static cilist io___396 = { 0, 0, 0, fmt_60, 0 };
-    static cilist io___397 = { 0, 0, 0, fmt_90, 0 };
-    static cilist io___398 = { 0, 0, 0, fmt_110, 0 };
-    static cilist io___399 = { 0, 0, 0, fmt_130, 0 };
-    static cilist io___400 = { 0, 0, 0, fmt_140, 0 };
-    static cilist io___401 = { 0, 0, 0, fmt_150, 0 };
-    static cilist io___402 = { 0, 0, 0, fmt_160, 0 };
-
-
+    integer n, np1, nzro;
 
 /* ... THIS ROUTINE INITIALIZES THE ITPACK COMMON BLOCKS FROM THE */
 /* ... INFORMATION CONTAINED IN IPARM AND RPARM. ECHALL ALSO PRINTS THE */
@@ -8427,122 +7347,37 @@ L20:
 /*     THE ITERATIVE PARAMETERS */
 
 /*<       WRITE (NOUT,10) >*/
-    io___387.ciunit = itcom1_1.nout;
-    s_wsfe(&io___387);
-    e_wsfe();
 /*<    10 FORMAT (///30X,'THE LINEAR SYSTEM IS AS FOLLOWS') >*/
 /*<       WRITE (NOUT,20) >*/
-    io___388.ciunit = itcom1_1.nout;
-    s_wsfe(&io___388);
-    e_wsfe();
 /*<    20 FORMAT (/2X,'IA ARRAY') >*/
 /*<       WRITE (NOUT,30) (IA(I),I=1,NP1) >*/
-    io___389.ciunit = itcom1_1.nout;
-    s_wsfe(&io___389);
-    i__1 = np1;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	do_fio(&c__1, (char *)&ia[i__], (ftnlen)sizeof(integer));
-    }
-    e_wsfe();
 /*<    30 FORMAT (2X,10(2X,I8)) >*/
 /*<       WRITE (NOUT,40) >*/
-    io___391.ciunit = itcom1_1.nout;
-    s_wsfe(&io___391);
-    e_wsfe();
 /*<    40 FORMAT (/2X,'JA ARRAY') >*/
 /*<       WRITE (NOUT,30) (JA(I),I=1,NZRO) >*/
-    io___392.ciunit = itcom1_1.nout;
-    s_wsfe(&io___392);
-    i__1 = nzro;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	do_fio(&c__1, (char *)&ja[i__], (ftnlen)sizeof(integer));
-    }
-    e_wsfe();
 /*<       WRITE (NOUT,50) >*/
-    io___393.ciunit = itcom1_1.nout;
-    s_wsfe(&io___393);
-    e_wsfe();
 /*<    50 FORMAT (/2X,' A ARRAY') >*/
 /*<       WRITE (NOUT,60) (A(I),I=1,NZRO) >*/
-    io___394.ciunit = itcom1_1.nout;
-    s_wsfe(&io___394);
-    i__1 = nzro;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	do_fio(&c__1, (char *)&a[i__], (ftnlen)sizeof(doublereal));
-    }
-    e_wsfe();
 /*<    60 FORMAT (2X,5(2X,D20.13)) >*/
 /*<       WRITE (NOUT,70) >*/
-    io___395.ciunit = itcom1_1.nout;
-    s_wsfe(&io___395);
-    e_wsfe();
 /*<    70 FORMAT (/2X,'RHS ARRAY') >*/
 /*<       WRITE (NOUT,60) (RHS(I),I=1,N) >*/
-    io___396.ciunit = itcom1_1.nout;
-    s_wsfe(&io___396);
-    i__1 = n;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	do_fio(&c__1, (char *)&rhs[i__], (ftnlen)sizeof(doublereal));
-    }
-    e_wsfe();
 /*<    80 WRITE (NOUT,90) >*/
 L80:
-    io___397.ciunit = itcom1_1.nout;
-    s_wsfe(&io___397);
-    e_wsfe();
 /*<    90 FORMAT (///30X,'INITIAL ITERATIVE PARAMETERS') >*/
 /*<       GO TO 120 >*/
     goto L120;
 /*<   100 WRITE (NOUT,110) >*/
 L100:
-    io___398.ciunit = itcom1_1.nout;
-    s_wsfe(&io___398);
-    e_wsfe();
 /*<   110 FORMAT (///30X,'FINAL ITERATIVE PARAMETERS') >*/
 /*<   120 WRITE (NOUT,130) IPARM(1),LEVEL,IPARM(3),NOUT,ISYM,IPARM(6) >*/
 L120:
-    io___399.ciunit = itcom1_1.nout;
-    s_wsfe(&io___399);
-    do_fio(&c__1, (char *)&iparm[1], (ftnlen)sizeof(integer));
-    do_fio(&c__1, (char *)&itcom1_1.level, (ftnlen)sizeof(integer));
-    do_fio(&c__1, (char *)&iparm[3], (ftnlen)sizeof(integer));
-    do_fio(&c__1, (char *)&itcom1_1.nout, (ftnlen)sizeof(integer));
-    do_fio(&c__1, (char *)&itcom1_1.isym, (ftnlen)sizeof(integer));
-    do_fio(&c__1, (char *)&iparm[6], (ftnlen)sizeof(integer));
-    e_wsfe();
 /*<    >*/
 /*<    >*/
-    io___400.ciunit = itcom1_1.nout;
-    s_wsfe(&io___400);
-    do_fio(&c__1, (char *)&iparm[7], (ftnlen)sizeof(integer));
-    do_fio(&c__1, (char *)&iparm[8], (ftnlen)sizeof(integer));
-    do_fio(&c__1, (char *)&iparm[9], (ftnlen)sizeof(integer));
-    do_fio(&c__1, (char *)&iparm[10], (ftnlen)sizeof(integer));
-    do_fio(&c__1, (char *)&iparm[11], (ftnlen)sizeof(integer));
-    do_fio(&c__1, (char *)&iparm[12], (ftnlen)sizeof(integer));
-    e_wsfe();
 /*<    >*/
 /*<       WRITE (NOUT,150) ZETA,CME,SME,FF,OMEGA,SPECR >*/
-    io___401.ciunit = itcom1_1.nout;
-    s_wsfe(&io___401);
-    do_fio(&c__1, (char *)&itcom3_1.zeta, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.cme, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.sme, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.ff, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.omega, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.specr, (ftnlen)sizeof(doublereal));
-    e_wsfe();
 /*<    >*/
 /*<    >*/
-    io___402.ciunit = itcom1_1.nout;
-    s_wsfe(&io___402);
-    do_fio(&c__1, (char *)&itcom3_1.betab, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&rparm[8], (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&rparm[9], (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&rparm[10], (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&rparm[11], (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&rparm[12], (ftnlen)sizeof(doublereal));
-    e_wsfe();
 /*<    >*/
 
 /*<       RETURN >*/
@@ -8554,40 +7389,6 @@ L120:
 /* Subroutine */ int echout_(integer *iparm, doublereal *rparm, integer *
 	imthd)
 {
-    /* Format strings */
-    static char fmt_10[] = "(///30x,\002INITIAL ITERATIVE PARAMETERS\002,3x\
-,\002RELEVANT SWITCHES\002/35x,\002ISYM   =\002,i15,8x,\002IPARM(5)\002/35x\
-,\002ITMAX  =\002,i15,8x,\002IPARM(1)\002/35x,\002ZETA   =\002,d15.8,8x,\002\
-RPARM(1)\002/35x,\002ADAPT  =\002,l15,8x,\002IPARM(6)\002/35x,\002CASEII \
-=\002,l15,8x,\002IPARM(7)\002)";
-    static char fmt_30[] = "(35x,\002FF     =\002,d15.8,8x,\002RPARM(4)\002/\
-35x,\002CME    =\002,d15.8,8x,\002RPARM(2)\002/35x,\002SME    =\002,d15.8,8x,\
-\002RPARM(3)\002///)";
-    static char fmt_50[] = "(35x,\002PARTAD =\002,l15,8x,\002IPARM(6)\002/35\
-x,\002FF     =\002,d15.8,8x,\002RPARM(4)\002/35x,\002CME    =\002,d15.8,8x\
-,\002RPARM(2)\002/35x,\002OMEGA  =\002,d15.8,8x,\002RPARM(5)\002/35x,\002SPE\
-CR  =\002,d15.8,8x,\002RPARM(6)\002/35x,\002BETAB  =\002,d15.8,8x,\002RPARM(\
-7)\002/35x,\002BETADT =\002,l15,8x,\002IPARM(6)\002///)";
-    static char fmt_70[] = "(35x,\002PARTAD =\002,l15,8x,\002IPARM(6)\002/35\
-x,\002CME    =\002,d15.8,8x,\002RPARM(2)\002/35x,\002OMEGA  =\002,d15.8,8x\
-,\002RPARM(5)\002/35x,\002SPECR  =\002,d15.8,8x,\002RPARM(6)\002/35x,\002BET\
-AB  =\002,d15.8,8x,\002RPARM(7)\002/35x,\002BETADT =\002,l15,8x,\002IPARM(6\
-)\002///)";
-    static char fmt_90[] = "(35x,\002CME    =\002,d15.8,8x,\002RPARM(2)\002/\
-//)";
-
-    /* Builtin functions */
-    integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe();
-
-    /* Fortran I/O blocks */
-    static cilist io___403 = { 0, 0, 0, fmt_10, 0 };
-    static cilist io___404 = { 0, 0, 0, fmt_30, 0 };
-    static cilist io___405 = { 0, 0, 0, fmt_50, 0 };
-    static cilist io___406 = { 0, 0, 0, fmt_70, 0 };
-    static cilist io___407 = { 0, 0, 0, fmt_90, 0 };
-
-
-
 /*     THIS ROUTINE INITIALIZES THE ITPACK COMMON BLOCKS FROM THE */
 /*     INFORMATION CONTAINED IN IPARM AND RPARM. */
 
@@ -8729,14 +7530,6 @@ AB  =\002,d15.8,8x,\002RPARM(7)\002/35x,\002BETADT =\002,l15,8x,\002IPARM(6\
 /*     ITERATIVE PARAMETERS */
 
 /*<       WRITE (NOUT,10) ISYM,ITMAX,ZETA,ADAPT,CASEII >*/
-    io___403.ciunit = itcom1_1.nout;
-    s_wsfe(&io___403);
-    do_fio(&c__1, (char *)&itcom1_1.isym, (ftnlen)sizeof(integer));
-    do_fio(&c__1, (char *)&itcom1_1.itmax, (ftnlen)sizeof(integer));
-    do_fio(&c__1, (char *)&itcom3_1.zeta, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom2_1.adapt, (ftnlen)sizeof(logical));
-    do_fio(&c__1, (char *)&itcom2_1.caseii, (ftnlen)sizeof(logical));
-    e_wsfe();
 /*<    >*/
 /*<       GO TO (80,20,100,60,40,80,20), IMTHD >*/
     switch (*imthd) {
@@ -8753,12 +7546,6 @@ AB  =\002,d15.8,8x,\002RPARM(7)\002/35x,\002BETADT =\002,l15,8x,\002IPARM(6\
 
 /*<    20 WRITE (NOUT,30) FF,CME,SME >*/
 L20:
-    io___404.ciunit = itcom1_1.nout;
-    s_wsfe(&io___404);
-    do_fio(&c__1, (char *)&itcom3_1.ff, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.cme, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.sme, (ftnlen)sizeof(doublereal));
-    e_wsfe();
 /*<    >*/
 /*<       RETURN >*/
     return 0;
@@ -8767,16 +7554,6 @@ L20:
 
 /*<    40 WRITE (NOUT,50) PARTAD,FF,CME,OMEGA,SPECR,BETAB,BETADT >*/
 L40:
-    io___405.ciunit = itcom1_1.nout;
-    s_wsfe(&io___405);
-    do_fio(&c__1, (char *)&itcom2_1.partad, (ftnlen)sizeof(logical));
-    do_fio(&c__1, (char *)&itcom3_1.ff, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.cme, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.omega, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.specr, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.betab, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom2_1.betadt, (ftnlen)sizeof(logical));
-    e_wsfe();
 /*<    >*/
 /*<       RETURN >*/
     return 0;
@@ -8785,15 +7562,6 @@ L40:
 
 /*<    60 WRITE (NOUT,70) PARTAD,CME,OMEGA,SPECR,BETAB,BETADT >*/
 L60:
-    io___406.ciunit = itcom1_1.nout;
-    s_wsfe(&io___406);
-    do_fio(&c__1, (char *)&itcom2_1.partad, (ftnlen)sizeof(logical));
-    do_fio(&c__1, (char *)&itcom3_1.cme, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.omega, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.specr, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.betab, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom2_1.betadt, (ftnlen)sizeof(logical));
-    e_wsfe();
 /*<    >*/
 /*<       RETURN >*/
     return 0;
@@ -8806,10 +7574,6 @@ L80:
 	return 0;
     }
 /*<       WRITE (NOUT,90) CME >*/
-    io___407.ciunit = itcom1_1.nout;
-    s_wsfe(&io___407);
-    do_fio(&c__1, (char *)&itcom3_1.cme, (ftnlen)sizeof(doublereal));
-    e_wsfe();
 /*<    90 FORMAT (35X,'CME    =',D15.8,8X,'RPARM(2)'///) >*/
 
 /*<   100 CONTINUE >*/
@@ -8961,22 +7725,12 @@ doublereal eigvss_(integer *n, doublereal *tri, doublereal *start, doublereal
 /* Subroutine */ int eqrt1s_(doublereal *d__, doublereal *e2, integer *nn, 
 	integer *m, integer *isw, integer *ierr)
 {
-    /* Format strings */
-    static char fmt_80[] = "(\0020\002,\002*** W A R N I N G ************\
-\002/\002 \002,\002    IN ITPACK ROUTINE EQRT1S  \002/\002 \002,\002    PARA\
-METER ISW = 1 BUT MATRIX   \002/\002 \002,\002    NOT POSITIVE DEFINITE\002)";
-    static char fmt_150[] = "(\0020\002,\002*** W A R N I N G ***********\
-*\002/\0020\002,\002    IN ITPACK ROUTINE EQRT1S  \002/\002 \002,\002    SUC\
-CESSIVE ITERATES TO THE\002,i10/\002 \002,\002    EIGENVALUE WERE NOT MONOTO\
-NE INCREASING \002)";
-
     /* System generated locals */
     integer i__1, i__2;
     doublereal d__1, d__2;
 
     /* Builtin functions */
     double sqrt(doublereal);
-    integer s_wsfe(cilist *), e_wsfe(), do_fio(integer *, char *, ftnlen);
 
     /* Local variables */
     doublereal f;
@@ -8986,13 +7740,6 @@ NE INCREASING \002)";
     doublereal ep, qp;
     integer ier;
     doublereal err, tot, dlam, delta;
-
-    /* Fortran I/O blocks */
-    static cilist io___428 = { 0, 0, 0, fmt_80, 0 };
-    static cilist io___434 = { 0, 0, 0, fmt_80, 0 };
-    static cilist io___435 = { 0, 0, 0, fmt_150, 0 };
-
-
 
 /*   MODIFIED IMSL ROUTINE NAME   - EQRT1S */
 
@@ -9198,9 +7945,6 @@ L70:
 	ier = 602;
 /*<          IF (LEVEL.GE.1) WRITE (NOUT,80) >*/
 	if (itcom1_1.level >= 1) {
-	    io___428.ciunit = itcom1_1.nout;
-	    s_wsfe(&io___428);
-	    e_wsfe();
 	}
 /*<    >*/
 /*<          GO TO 210 >*/
@@ -9271,9 +8015,6 @@ L110:
 	    ier = 602;
 /*<             IF (LEVEL.GE.0) WRITE (NOUT,80) >*/
 	    if (itcom1_1.level >= 0) {
-		io___434.ciunit = itcom1_1.nout;
-		s_wsfe(&io___434);
-		e_wsfe();
 	    }
 /*<             GO TO 210 >*/
 	    goto L210;
@@ -9302,10 +8043,6 @@ L140:
 	e2[1] = (doublereal) k;
 /*<          IF (LEVEL.GE.1) WRITE (NOUT,150) K >*/
 	if (itcom1_1.level >= 1) {
-	    io___435.ciunit = itcom1_1.nout;
-	    s_wsfe(&io___435);
-	    do_fio(&c__1, (char *)&k, (ftnlen)sizeof(integer));
-	    e_wsfe();
 	}
 /*<    >*/
 
@@ -9442,71 +8179,16 @@ L10:
 /* Subroutine */ int iterm_(integer *nn, doublereal *a, doublereal *u, 
 	doublereal *wk, integer *imthdd)
 {
-    /* Format strings */
-    static char fmt_20[] = "(////15x,\002INTERMEDIATE OUTPUT AFTER EACH ITER\
-ATION\002//\002 NUMBER OF\002,5x,\002CONVERGENCE\002,7x,\002CME \002,11x,\
-\002RHO\002,12x,\002GAMMA\002/\002 ITERATIONS\002,4x,\002TEST \002//)";
-    static char fmt_40[] = "(4x,i5,3x,4d15.7)";
-    static char fmt_60[] = "(////15x,\002INTERMEDIATE OUTPUT AFTER EACH ITER\
-ATION\002//\002 NUMBER OF\002,4x,\002CONVERGENCE\002,7x,\002PARAMETER CHANGE\
- TEST\002,10x,\002RHO\002,12x,\002GAMMA\002/\002 ITERATIONS\002,3x,\002TEST\
- \002,11x,\002LHS(QA)\002,7x,\002RHS(QT**FF)\002//)";
-    static char fmt_80[] = "(4x,i5,3x,5d15.7)";
-    static char fmt_100[] = "(4x,i5,3x,d15.7,30x,2d15.7)";
-    static char fmt_120[] = "(////15x,\002INTERMEDIATE OUTPUT AFTER EACH ITE\
-RATION\002//\002 NUMBER OF\002,4x,\002CONVERGENCE\002,7x,\002PARAMETER CHANG\
-E TEST\002,10x,\002RHO\002/\002 ITERATIONS\002,3x,\002TEST \002,11x,\002LHS(\
-QA)\002,7x,\002RHS(QT**FF)\002//)";
-    static char fmt_140[] = "(4x,i5,3x,5d15.7)";
-    static char fmt_160[] = "(4x,i5,3x,d15.7,30x,d15.7)";
-    static char fmt_180[] = "(////15x,\002INTERMEDIATE OUTPUT AFTER EACH ITE\
-RATION\002//\002 NUMBER OF\002,4x,\002CONVERGENCE\002,6x,\002CME \002,9x,\
-\002OMEGA\002,7x,\002SPECTRAL\002/\002 ITERATIONS\002,3x,\002TEST\002,38x\
-,\002RADIUS\002//)";
-    static char fmt_200[] = "(4x,i5,3x,4d14.7)";
-    static char fmt_220[] = "(////15x,\002INTERMEDIATE OUTPUT AFTER EACH ITE\
-RATION\002//\002 NUMBER OF\002,4x,\002CONVERGENCE\002,3x,\002 SPECTRAL\002,6\
-x,\002S-PRIME\002,9x,\002RHO\002,10x,\002GAMMA\002/\002 ITERATIONS\002,3x\
-,\002TEST \002,10x,\002RADIUS\002//)";
-    static char fmt_240[] = "(4x,i5,3x,5d14.7)";
-    static char fmt_260[] = "(\0020\002,2x,\002ESTIMATE OF SOLUTION AT ITERA\
-TION \002,i5)";
-    static char fmt_280[] = "(\0020\002,2x,\002ESTIMATE OF SOLUTION AT BLACK\
- POINTS \002,\002AT ITERATION \002,i5)";
-    static char fmt_310[] = "(2x,5(2x,d20.13))";
-    static char fmt_320[] = "(//)";
-
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer s_wsfe(cilist *), e_wsfe(), do_fio(integer *, char *, ftnlen);
     double pow_dd(doublereal *, doublereal *);
 
     /* Local variables */
     integer i__, n, ip;
     doublereal qtff;
     integer imthd;
-
-    /* Fortran I/O blocks */
-    static cilist io___441 = { 0, 0, 0, fmt_20, 0 };
-    static cilist io___442 = { 0, 0, 0, fmt_40, 0 };
-    static cilist io___443 = { 0, 0, 0, fmt_60, 0 };
-    static cilist io___446 = { 0, 0, 0, fmt_80, 0 };
-    static cilist io___447 = { 0, 0, 0, fmt_100, 0 };
-    static cilist io___448 = { 0, 0, 0, fmt_120, 0 };
-    static cilist io___449 = { 0, 0, 0, fmt_140, 0 };
-    static cilist io___450 = { 0, 0, 0, fmt_160, 0 };
-    static cilist io___451 = { 0, 0, 0, fmt_180, 0 };
-    static cilist io___452 = { 0, 0, 0, fmt_200, 0 };
-    static cilist io___453 = { 0, 0, 0, fmt_220, 0 };
-    static cilist io___454 = { 0, 0, 0, fmt_240, 0 };
-    static cilist io___455 = { 0, 0, 0, fmt_260, 0 };
-    static cilist io___456 = { 0, 0, 0, fmt_280, 0 };
-    static cilist io___458 = { 0, 0, 0, fmt_310, 0 };
-    static cilist io___459 = { 0, 0, 0, fmt_320, 0 };
-
-
 
 /*     THIS ROUTINE PRODUCES THE ITERATION SUMMARY LINE AT THE END */
 /*     OF EACH ITERATION. IF LEVEL = 5, THE LATEST APPROXIMATION */
@@ -9587,23 +8269,12 @@ L10:
 /* ... PRINT HEADER FOR JCG AND RSCG */
 
 /*<       WRITE (NOUT,20) >*/
-    io___441.ciunit = itcom1_1.nout;
-    s_wsfe(&io___441);
-    e_wsfe();
 /*<    >*/
 
 /* ... PRINT SUMMARY LINE */
 
 /*<    30 WRITE (NOUT,40) IN,STPTST,CME,RHO,GAMMA >*/
 L30:
-    io___442.ciunit = itcom1_1.nout;
-    s_wsfe(&io___442);
-    do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
-    do_fio(&c__1, (char *)&itcom3_1.stptst, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.cme, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.rho, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.gamma, (ftnlen)sizeof(doublereal));
-    e_wsfe();
 /*<    40 FORMAT (4X,I5,3X,4D15.7) >*/
 /*<       IF (LEVEL.GE.4) GO TO 250 >*/
     if (itcom1_1.level >= 4) {
@@ -9622,9 +8293,6 @@ L50:
 /* ... PRINT HEADER FOR SSOR-SI */
 
 /*<       WRITE (NOUT,60) >*/
-    io___443.ciunit = itcom1_1.nout;
-    s_wsfe(&io___443);
-    e_wsfe();
 /*<    >*/
 
 /* ... PRINT SUMMARY LINE */
@@ -9643,15 +8311,6 @@ L70:
 /*<       QTFF = QT**FF >*/
     qtff = pow_dd(&itcom3_1.qt, &itcom3_1.ff);
 /*<       WRITE (NOUT,80) IN,STPTST,QA,QTFF,RHO,GAMMA >*/
-    io___446.ciunit = itcom1_1.nout;
-    s_wsfe(&io___446);
-    do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
-    do_fio(&c__1, (char *)&itcom3_1.stptst, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.qa, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&qtff, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.rho, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.gamma, (ftnlen)sizeof(doublereal));
-    e_wsfe();
 /*<    80 FORMAT (4X,I5,3X,5D15.7) >*/
 /*<       IF (LEVEL.GE.4) GO TO 250 >*/
     if (itcom1_1.level >= 4) {
@@ -9662,13 +8321,6 @@ L70:
 
 /*<    90 WRITE (NOUT,100) IN,STPTST,RHO,GAMMA >*/
 L90:
-    io___447.ciunit = itcom1_1.nout;
-    s_wsfe(&io___447);
-    do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
-    do_fio(&c__1, (char *)&itcom3_1.stptst, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.rho, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.gamma, (ftnlen)sizeof(doublereal));
-    e_wsfe();
 /*<   100 FORMAT (4X,I5,3X,D15.7,30X,2D15.7) >*/
 /*<       IF (LEVEL.GE.4) GO TO 250 >*/
     if (itcom1_1.level >= 4) {
@@ -9686,9 +8338,6 @@ L110:
 /* ... PRINT HEADER FOR J-SI AND RS-SI */
 
 /*<       WRITE (NOUT,120) >*/
-    io___448.ciunit = itcom1_1.nout;
-    s_wsfe(&io___448);
-    e_wsfe();
 /*<    >*/
 
 /* ... PRINT SUMMARY LINE */
@@ -9707,14 +8356,6 @@ L130:
 /*<       QTFF = QT**FF >*/
     qtff = pow_dd(&itcom3_1.qt, &itcom3_1.ff);
 /*<       WRITE (NOUT,140) IN,STPTST,QA,QTFF,RHO >*/
-    io___449.ciunit = itcom1_1.nout;
-    s_wsfe(&io___449);
-    do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
-    do_fio(&c__1, (char *)&itcom3_1.stptst, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.qa, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&qtff, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.rho, (ftnlen)sizeof(doublereal));
-    e_wsfe();
 /*<   140 FORMAT (4X,I5,3X,5D15.7) >*/
 /*<       IF (LEVEL.GE.4) GO TO 250 >*/
     if (itcom1_1.level >= 4) {
@@ -9725,12 +8366,6 @@ L130:
 
 /*<   150 WRITE (NOUT,160) IN,STPTST,RHO >*/
 L150:
-    io___450.ciunit = itcom1_1.nout;
-    s_wsfe(&io___450);
-    do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
-    do_fio(&c__1, (char *)&itcom3_1.stptst, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.rho, (ftnlen)sizeof(doublereal));
-    e_wsfe();
 /*<   160 FORMAT (4X,I5,3X,D15.7,30X,D15.7) >*/
 /*<       IF (LEVEL.GE.4) GO TO 250 >*/
     if (itcom1_1.level >= 4) {
@@ -9750,9 +8385,6 @@ L170:
 /* ... PRINT HEADER FOR SOR */
 
 /*<       WRITE (NOUT,180) >*/
-    io___451.ciunit = itcom1_1.nout;
-    s_wsfe(&io___451);
-    e_wsfe();
 /*<    >*/
 
 /* ... PRINT SUMMARY LINE FOR SOR */
@@ -9760,14 +8392,6 @@ L170:
 /*<   190 CONTINUE >*/
 L190:
 /*<       WRITE (NOUT,200) IN,STPTST,CME,OMEGA,SPECR >*/
-    io___452.ciunit = itcom1_1.nout;
-    s_wsfe(&io___452);
-    do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
-    do_fio(&c__1, (char *)&itcom3_1.stptst, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.cme, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.omega, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.specr, (ftnlen)sizeof(doublereal));
-    e_wsfe();
 /*<   200 FORMAT (4X,I5,3X,4D14.7) >*/
 /*<       IF (LEVEL.GE.4) GO TO 250 >*/
     if (itcom1_1.level >= 4) {
@@ -9788,9 +8412,6 @@ L210:
 /* ... PRINT HEADER FOR SSOR-CG */
 
 /*<       WRITE (NOUT,220) >*/
-    io___453.ciunit = itcom1_1.nout;
-    s_wsfe(&io___453);
-    e_wsfe();
 /*<    >*/
 
 /* ... PRINT SUMMARY LINE FOR SSOR-CG */
@@ -9798,15 +8419,6 @@ L210:
 /*<   230 CONTINUE >*/
 L230:
 /*<       WRITE (NOUT,240) IN,STPTST,SPECR,SPR,RHO,GAMMA >*/
-    io___454.ciunit = itcom1_1.nout;
-    s_wsfe(&io___454);
-    do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
-    do_fio(&c__1, (char *)&itcom3_1.stptst, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.specr, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.spr, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.rho, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&itcom3_1.gamma, (ftnlen)sizeof(doublereal));
-    e_wsfe();
 /*<   240 FORMAT (4X,I5,3X,5D14.7) >*/
 /*<       IF (LEVEL.GE.4) GO TO 250 >*/
     if (itcom1_1.level >= 4) {
@@ -9821,19 +8433,11 @@ L250:
 	goto L270;
     }
 /*<       WRITE (NOUT,260) IN >*/
-    io___455.ciunit = itcom1_1.nout;
-    s_wsfe(&io___455);
-    do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
-    e_wsfe();
 /*<   260 FORMAT ('0',2X,'ESTIMATE OF SOLUTION AT ITERATION ',I5) >*/
 /*<       GO TO 290 >*/
     goto L290;
 /*<   270 WRITE (NOUT,280) IN >*/
 L270:
-    io___456.ciunit = itcom1_1.nout;
-    s_wsfe(&io___456);
-    do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
-    e_wsfe();
 /*<    >*/
 /*<   290 DO 300 I = 1,N >*/
 L290:
@@ -9845,18 +8449,8 @@ L290:
 /* L300: */
     }
 /*<       WRITE (NOUT,310) (WK(I),I=1,N) >*/
-    io___458.ciunit = itcom1_1.nout;
-    s_wsfe(&io___458);
-    i__1 = n;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	do_fio(&c__1, (char *)&wk[i__], (ftnlen)sizeof(doublereal));
-    }
-    e_wsfe();
 /*<   310 FORMAT (2X,5(2X,D20.13)) >*/
 /*<       WRITE (NOUT,320) >*/
-    io___459.ciunit = itcom1_1.nout;
-    s_wsfe(&io___459);
-    e_wsfe();
 /*<   320 FORMAT (//) >*/
 
 /*<       RETURN >*/
@@ -9958,29 +8552,14 @@ L20:
 /*<       SUBROUTINE OMEG (DNRM,IFLAG) >*/
 /* Subroutine */ int omeg_(doublereal *dnrm, integer *iflag)
 {
-    /* Format strings */
-    static char fmt_20[] = "(/30x,\002PARAMETERS WERE CHANGED AT ITERATION N\
-O.\002,i5/35x,\002NEW ESTIMATE OF BETAB            =\002,d15.7/35x,\002SOLUT\
-ION TO CHEBYSHEV EQN.       =\002,d15.7/35x,\002SOLUTION TO RAYLEIGH QUOTIEN\
-T    =\002,d15.7/35x,\002NEW ESTIMATE FOR CME             =\002,d15.7/35x\
-,\002NEW ESTIMATE FOR OMEGA           =\002,d15.7/35x,\002NEW ESTIMATE FOR S\
-PECTRAL RADIUS =\002,d15.7/)";
-
     /* System generated locals */
     doublereal d__1;
 
     /* Builtin functions */
     double sqrt(doublereal);
-    integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe();
 
     /* Local variables */
     doublereal zm1, zm2, temp;
-
-    /* Fortran I/O blocks */
-    static cilist io___466 = { 0, 0, 0, fmt_20, 0 };
-    static cilist io___467 = { 0, 0, 0, fmt_20, 0 };
-
-
 
 /*     COMPUTES NEW VALUES FOR  CME, OMEGA, AND SPECR FOR */
 /*     FULLY ADAPTIVE SSOR METHODS. */
@@ -10078,16 +8657,6 @@ L10:
     }
 /*<       IF (LEVEL.GE.2) WRITE (NOUT,20) IN,BETAB,ZM1,ZM2,CME,OMEGA,SPECR >*/
     if (itcom1_1.level >= 2) {
-	io___466.ciunit = itcom1_1.nout;
-	s_wsfe(&io___466);
-	do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&itcom3_1.betab, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&zm1, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&zm2, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&itcom3_1.cme, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&itcom3_1.omega, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&itcom3_1.specr, (ftnlen)sizeof(doublereal));
-	e_wsfe();
     }
 /*<    >*/
 
@@ -10112,16 +8681,6 @@ L30:
     itcom2_1.partad = FALSE_;
 /*<       IF (LEVEL.GE.2) WRITE (NOUT,20) IN,BETAB,ZM1,ZM2,CME,OMEGA,SPECR >*/
     if (itcom1_1.level >= 2) {
-	io___467.ciunit = itcom1_1.nout;
-	s_wsfe(&io___467);
-	do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&itcom3_1.betab, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&zm1, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&zm2, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&itcom3_1.cme, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&itcom3_1.omega, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&itcom3_1.specr, (ftnlen)sizeof(doublereal));
-	e_wsfe();
     }
 
 /*<       RETURN >*/
@@ -10219,25 +8778,15 @@ L10:
 /*<       LOGICAL FUNCTION OMGSTR (NDUMMY) >*/
 logical omgstr_(integer *ndummy)
 {
-    /* Format strings */
-    static char fmt_20[] = "(/30x,\002OMEGA-STAR, AN ALTERNATE ESTIMATE O\
-F\002,\002 OMEGA, WAS CHOSEN AT ITERATION\002,i5/35x,\002NEW ESTIMATE FOR CM\
-E             =\002,d15.7/35x,\002NEW ESTIMATE FOR OMEGA           =\002,d15\
-.7/35x,\002NEW ESTIMATE FOR SPECTRAL RADIUS =\002,d15.7/)";
-
     /* System generated locals */
     doublereal d__1, d__2, d__3, d__4;
     logical ret_val;
 
     /* Builtin functions */
     double sqrt(doublereal), log(doublereal);
-    integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe();
 
     /* Local variables */
     doublereal temp, temp1, omstar;
-
-    /* Fortran I/O blocks */
-    static cilist io___473 = { 0, 0, 0, fmt_20, 0 };
 
     (void)ndummy;
 
@@ -10339,13 +8888,6 @@ L10:
     itcom3_1.delsnm = itcom3_1.delnnm;
 /*<       IF (LEVEL.GE.2) WRITE (NOUT,20) IN,CME,OMEGA,SPECR >*/
     if (itcom1_1.level >= 2) {
-	io___473.ciunit = itcom1_1.nout;
-	s_wsfe(&io___473);
-	do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&itcom3_1.cme, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&itcom3_1.omega, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&itcom3_1.specr, (ftnlen)sizeof(doublereal));
-	e_wsfe();
     }
 /*<    >*/
 
@@ -11023,23 +9565,8 @@ L80:
 	doublereal *a, integer *p, integer *newia, integer *isym, integer *
 	level, integer *nout, integer *ierr)
 {
-    /* Format strings */
-    static char fmt_100[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    IN ITPACK ROUTINE PERMAT  \002/\002 \002,\002\
-    NO ENTRY IN ROW \002,i10,\002 OF ORIGINAL MATRIX \002)";
-    static char fmt_120[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    IN ITPACK ROUTINE PRBNDX  \002/\002 \002,\002\
-    NO ENTRY IN ROW \002,i10,\002 OF PERMUTED MATRIX \002)";
-    static char fmt_140[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    IN ITPACK ROUTINE QSORT   \002/\002 \002,\002\
-    ERROR IN SORTING PERMUTED ROW \002,i12/\002 \002,\002    CALLED FROM ITP\
-ACK ROUTINE PRBNDX   \002)";
-
     /* System generated locals */
     integer i__1, i__2;
-
-    /* Builtin functions */
-    integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe();
 
     /* Local variables */
     integer i__, j, k, n, ip, jp, jaj, ier, ipp, npl1, ibgn, iend;
@@ -11050,13 +9577,7 @@ ACK ROUTINE PRBNDX   \002)";
     extern /* Subroutine */ int qsort_(integer *, integer *, doublereal *, 
 	    integer *);
     extern integer bisrch_(integer *, integer *, integer *);
-
-    /* Fortran I/O blocks */
-    static cilist io___518 = { 0, 0, 0, fmt_100, 0 };
-    static cilist io___519 = { 0, 0, 0, fmt_120, 0 };
-    static cilist io___520 = { 0, 0, 0, fmt_140, 0 };
-
-
+    (void)nout;
 
 /* ********************************************************************* */
 
@@ -11331,10 +9852,6 @@ L90:
     ier = 301;
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,100) I >*/
     if (*level >= 0) {
-	io___518.ciunit = *nout;
-	s_wsfe(&io___518);
-	do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 150 >*/
@@ -11347,10 +9864,6 @@ L110:
     ier = 302;
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,120) I >*/
     if (*level >= 0) {
-	io___519.ciunit = *nout;
-	s_wsfe(&io___519);
-	do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 150 >*/
@@ -11363,10 +9876,6 @@ L130:
     ier = 303;
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,140) I >*/
     if (*level >= 0) {
-	io___520.ciunit = *nout;
-	s_wsfe(&io___520);
-	do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 
@@ -11384,17 +9893,11 @@ L150:
 	doublereal *a, doublereal *rhs, doublereal *u, doublereal *w, 
 	doublereal *digtt1, doublereal *digtt2, integer *idgtts)
 {
-    /* Format strings */
-    static char fmt_30[] = "(/6x,\002APPROX. NO. OF DIGITS (EST. REL. ERROR)\
- =\002,f5.1,2x,\002(DIGIT1)\002/3x,\002APPROX. NO. OF DIGITS (EST. REL. RESI\
-DUAL) =\002,f5.1,2x,\002(DIGIT2)\002)";
-
     /* System generated locals */
     doublereal d__1;
 
     /* Builtin functions */
     double d_lg10(doublereal *);
-    integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe();
 
     /* Local variables */
     integer n;
@@ -11408,11 +9911,6 @@ DUAL) =\002,f5.1,2x,\002(DIGIT2)\002)";
 	    doublereal *, doublereal *, doublereal *), wevmw_(integer *, 
 	    doublereal *, doublereal *);
     doublereal digit1, digit2;
-
-    /* Fortran I/O blocks */
-    static cilist io___528 = { 0, 0, 0, fmt_30, 0 };
-
-
 
 /*     PERROR COMPUTES THE RESIDUAL, R = RHS - A*U.  THE USER */
 /*     ALSO HAS THE OPTION OF PRINTING THE RESIDUAL AND/OR THE */
@@ -11533,11 +10031,6 @@ L20:
 	goto L40;
     }
 /*<       WRITE (NOUT,30) DIGIT1,DIGIT2 >*/
-    io___528.ciunit = itcom1_1.nout;
-    s_wsfe(&io___528);
-    do_fio(&c__1, (char *)&digit1, (ftnlen)sizeof(doublereal));
-    do_fio(&c__1, (char *)&digit2, (ftnlen)sizeof(doublereal));
-    e_wsfe();
 /*<    >*/
 
 /*<       IF (IDGTS.LE.1.OR.IDGTS.GT.4) GO TO 40 >*/
@@ -12287,11 +10780,6 @@ L60:
 	integer *ja, integer *p, integer *ip, integer *level, integer *nout, 
 	integer *ier)
 {
-    /* Format strings */
-    static char fmt_170[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    IN ITPACK ROUTINE PRBNDX  \002/\002 \002,\002\
-    RED-BLACK INDEXING NOT POSSIBLE\002)";
-
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;
 
@@ -12301,11 +10789,7 @@ L60:
     /* Local variables */
     integer i__, j, k, n, old, ibgn, iend, nred, last, next, type__, first, 
 	    young, curtyp, nxttyp;
-
-    /* Fortran I/O blocks */
-    static cilist io___585 = { 0, 0, 0, fmt_170, 0 };
-
-
+    (void)nout;
 
 /* ************************************************************** */
 
@@ -12687,9 +11171,6 @@ L160:
     *ier = 201;
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,170) >*/
     if (*level >= 0) {
-	io___585.ciunit = *nout;
-	s_wsfe(&io___585);
-	e_wsfe();
     }
 /*<    >*/
 
@@ -13875,25 +12356,11 @@ L240:
 	 doublereal *a, integer *iwork, integer *levell, integer *noutt, 
 	integer *ierr)
 {
-    /* Format strings */
-    static char fmt_10[] = "(\0020\002,\002*** F A T A L     E R R O R *****\
-*******\002/\0020\002,\002    IN ITPACK ROUTINE SBAGN   \002/\002 \002,\002 \
-   IER = \002,i10/\002 \002,\002    NZ TOO SMALL - NO ROOM FOR NEW ENTRY\002)"
-	    ;
-
     /* System generated locals */
     integer i__1;
 
-    /* Builtin functions */
-    integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe();
-
     /* Local variables */
     integer i__, j, np1, ier, ntn, nto, now, nadd, nout, level, naddp1;
-
-    /* Fortran I/O blocks */
-    static cilist io___649 = { 0, 0, 0, fmt_10, 0 };
-
-
 
 /* ... THE ROUTINES SBINI, SBSIJ, AND SBEND CREATE A SPARSE */
 /*     MATRIX STRUCTURE BY MEANS OF A LINKED LIST WHICH IS */
@@ -13959,10 +12426,6 @@ L240:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,10) IER >*/
     if (level >= 0) {
-	io___649.ciunit = nout;
-	s_wsfe(&io___649);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 90 >*/
@@ -14067,32 +12530,15 @@ L90:
 	*a, doublereal *rhs, integer *iw, doublereal *rw, doublereal *tol, 
 	integer *isym, integer *level, integer *nout, integer *ier)
 {
-    /* Format strings */
-    static char fmt_30[] = "(\0020\002,\002*** F A T A L     E R R O R *****\
-*******\002/\0020\002,\002    IN ITPACK ROUTINE SBELM   \002/\002 \002,\002 \
-   DIAGONAL ELEMENT\002,i10,\002 NOT POSITIVE  \002/\002 \002,\002    CURREN\
-T VALUE = \002,d15.8)";
-    static char fmt_150[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    IN ITPACK ROUTINE SBELM   \002/\002 \002,\002\
-    NO DIAGONAL ENTRY IN ROW  \002,i10)";
-
     /* System generated locals */
     integer i__1, i__2;
     doublereal d__1, d__2, d__3;
-
-    /* Builtin functions */
-    integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe();
 
     /* Local variables */
     integer n;
     doublereal di;
     integer ii, jj, kk, ibgn, iend, jjdi, icnt;
-
-    /* Fortran I/O blocks */
-    static cilist io___665 = { 0, 0, 0, fmt_30, 0 };
-    static cilist io___666 = { 0, 0, 0, fmt_150, 0 };
-
-
+    (void)nout;
 
 /* ... SBELM IS DESIGNED TO REMOVE ROWS AND COLUMNS OF THE MATRIX */
 /* ... WHERE DABS(A(I,J))/A(I,I) .LE. TOL FOR J = 1 TO N AND A(I,I) */
@@ -14246,11 +12692,6 @@ L20:
 	    *ier = 101;
 /*<             IF (LEVEL.GE.0) WRITE (NOUT,30) II,DI >*/
 	    if (*level >= 0) {
-		io___665.ciunit = *nout;
-		s_wsfe(&io___665);
-		do_fio(&c__1, (char *)&ii, (ftnlen)sizeof(integer));
-		do_fio(&c__1, (char *)&di, (ftnlen)sizeof(doublereal));
-		e_wsfe();
 	    }
 /*<    >*/
 /*<             RETURN >*/
@@ -14402,10 +12843,6 @@ L140:
     *ier = 102;
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,150) II >*/
     if (*level >= 0) {
-	io___666.ciunit = *nout;
-	s_wsfe(&io___666);
-	do_fio(&c__1, (char *)&ii, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 
@@ -14801,47 +13238,12 @@ L80:
 	 doublereal *a, integer *iwork, integer *ii, integer *jj, doublereal *
 	vall, integer *mode, integer *levell, integer *noutt, integer *ierr)
 {
-    /* Format strings */
-    static char fmt_10[] = "(\0020\002,\002*** F A T A L     E R R O R *****\
-*******\002/\0020\002,\002    IN ITPACK ROUTINE SBSIJ   \002/\002 \002,\002 \
-   IER = \002,i10/\002 \002,\002    ( \002,i10,\002 , \002,i10,\002 )\002\
-/\002 \002,\002    IMPROPER VALUE FOR I OR J \002)";
-    static char fmt_50[] = "(\0020\002,\002*** W A R N I N G ************\
-\002/\0020\002,\002    IN ITPACK ROUTINE SBSIJ   \002/\002 \002,\002    IER \
-= \002,i10/\002 \002,\002    ( \002,i10,\002 , \002,i10,\002 )\002/\002 \002,\
-\002    ENTRY ALREADY SET AND IS LEFT AS \002,d15.8)";
-    static char fmt_70[] = "(\0020\002,\002*** W A R N I N G ************\
-\002/\0020\002,\002    IN ITPACK ROUTINE SBSIJ   \002/\002 \002,\002    IER \
-= \002,i10/\002 \002,\002    ( \002,i10,\002 , \002,i10,\002 )\002/\002 \002,\
-\002    ENTRY ALREADY SET - CURRENT VALUE OF\002,d15.8/\002 \002,\002       \
-                         RESET TO\002,d15.8)";
-    static char fmt_90[] = "(\0020\002,\002*** W A R N I N G ************\
-\002/\0020\002,\002    IN ITPACK ROUTINE SBSIJ   \002/\002 \002,\002    IER \
-= \002,i10/\002 \002,\002    ( \002,i10,\002 , \002,i10,\002 )\002/\002 \002,\
-\002    ENTRY ALREADY SET - CURRENT VALUE OF\002,d15.8/\002 \002,\002       \
-                         RESET TO\002,d15.8)";
-    static char fmt_120[] = "(\0020\002,\002*** F A T A L     E R R O R ****\
-********\002/\0020\002,\002    IN ITPACK ROUTINE SBSIJ   \002/\002 \002,\002\
-    IER = \002,i10/\002 \002,\002    NZ TOO SMALL - NO ROOM FOR NEW ENTRY\
-\002)";
-
-    /* Builtin functions */
-    integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe();
-
     /* Local variables */
     integer i__, j, ier;
     doublereal val;
     integer npl1, link;
     doublereal temp;
     integer next, nout, level;
-
-    /* Fortran I/O blocks */
-    static cilist io___687 = { 0, 0, 0, fmt_10, 0 };
-    static cilist io___691 = { 0, 0, 0, fmt_50, 0 };
-    static cilist io___692 = { 0, 0, 0, fmt_70, 0 };
-    static cilist io___694 = { 0, 0, 0, fmt_90, 0 };
-    static cilist io___695 = { 0, 0, 0, fmt_120, 0 };
-
     (void)nz;
 
 /* *********************************************************************** */
@@ -14950,12 +13352,6 @@ L80:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,10) IER,I,J >*/
     if (level >= 0) {
-	io___687.ciunit = nout;
-	s_wsfe(&io___687);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&j, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 130 >*/
@@ -15024,13 +13420,6 @@ L40:
     }
 /*<       IF (LEVEL.GE.1) WRITE (NOUT,50) IER,I,J,A(LINK) >*/
     if (level >= 1) {
-	io___691.ciunit = nout;
-	s_wsfe(&io___691);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&j, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&a[link], (ftnlen)sizeof(doublereal));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 130 >*/
@@ -15042,14 +13431,6 @@ L60:
     }
 /*<       IF (LEVEL.GE.1) WRITE (NOUT,70) IER,I,J,A(LINK),VAL >*/
     if (level >= 1) {
-	io___692.ciunit = nout;
-	s_wsfe(&io___692);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&j, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&a[link], (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&val, (ftnlen)sizeof(doublereal));
-	e_wsfe();
     }
 /*<    >*/
 /*<       A(LINK) = VAL >*/
@@ -15061,14 +13442,6 @@ L80:
     temp = a[link] + val;
 /*<       IF (LEVEL.GE.1) WRITE (NOUT,90) IER,I,J,A(LINK),TEMP >*/
     if (level >= 1) {
-	io___694.ciunit = nout;
-	s_wsfe(&io___694);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&j, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&a[link], (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&temp, (ftnlen)sizeof(doublereal));
-	e_wsfe();
     }
 /*<    >*/
 /*<       A(LINK) = TEMP >*/
@@ -15108,10 +13481,6 @@ L110:
     ier = 702;
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,120) IER >*/
     if (level >= 0) {
-	io___695.ciunit = nout;
-	s_wsfe(&io___695);
-	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 
@@ -15129,35 +13498,17 @@ L130:
 	a, doublereal *rhs, doublereal *u, doublereal *d__, integer *level, 
 	integer *nout, integer *ier)
 {
-    /* Format strings */
-    static char fmt_10[] = "(\0020\002,\002*** F A T A L     E R R O R *****\
-*******\002/\0020\002,\002    IN ITPACK ROUTINE SCAL    \002/\002 \002,\002 \
-   DIAGONAL ENTRY IN ROW \002,i10,\002 NEGATIVE\002)";
-    static char fmt_30[] = "(\0020\002,\002*** F A T A L     E R R O R *****\
-*******\002/\0020\002,\002    IN ITPACK ROUTINE SCAL    \002/\002 \002,\002 \
-   DIAGONAL ENTRY IN ROW \002,i10,\002 IS ZERO\002)";
-    static char fmt_60[] = "(\0020\002,\002*** F A T A L     E R R O R *****\
-*******\002/\0020\002,\002    IN ITPACK ROUTINE SCAL    \002/\002 \002,\002 \
-   NO DIAGONAL ENTRY IN ROW\002,i10)";
-
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe();
     double sqrt(doublereal);
 
     /* Local variables */
     integer i__, j, n;
     doublereal di;
     integer ii, jj, im1, np1, jadd, jajj, ibgn, iend, jjpi;
-
-    /* Fortran I/O blocks */
-    static cilist io___702 = { 0, 0, 0, fmt_10, 0 };
-    static cilist io___703 = { 0, 0, 0, fmt_30, 0 };
-    static cilist io___704 = { 0, 0, 0, fmt_60, 0 };
-
-
+    (void)nout;
 
 /* ... ORIGINAL MATRIX IS SCALED TO A UNIT DIAGONAL MATRIX.  RHS */
 /* ... AND U ARE SCALED ACCORDINGLY.  THE MATRIX IS THEN SPLIT AND */
@@ -15235,10 +13586,6 @@ L130:
 	    *ier = 401;
 /*<             IF (LEVEL.GE.0) WRITE (NOUT,10) II >*/
 	    if (*level >= 0) {
-		io___702.ciunit = *nout;
-		s_wsfe(&io___702);
-		do_fio(&c__1, (char *)&ii, (ftnlen)sizeof(integer));
-		e_wsfe();
 	    }
 /*<    >*/
 /*<             RETURN >*/
@@ -15248,9 +13595,6 @@ L20:
 	    *ier = 401;
 /*<             IF (LEVEL.GE.0) WRITE (NOUT,30) >*/
 	    if (*level >= 0) {
-		io___703.ciunit = *nout;
-		s_wsfe(&io___703);
-		e_wsfe();
 	    }
 /*<    >*/
 /*<             RETURN >*/
@@ -15264,10 +13608,6 @@ L50:
 	*ier = 402;
 /*<          IF (LEVEL.GE.0) WRITE (NOUT,60) II >*/
 	if (*level >= 0) {
-	    io___704.ciunit = *nout;
-	    s_wsfe(&io___704);
-	    do_fio(&c__1, (char *)&ii, (ftnlen)sizeof(integer));
-	    e_wsfe();
 	}
 /*<    >*/
 /*<          RETURN >*/
@@ -16033,30 +14373,11 @@ L20:
 /* Subroutine */ int vout_(integer *n, doublereal *v, integer *iswt, integer *
 	noutt)
 {
-    /* Format strings */
-    static char fmt_10[] = "(//5x,\002RESIDUAL VECTOR\002)";
-    static char fmt_20[] = "(//5x,\002SOLUTION VECTOR\002)";
-    static char fmt_30[] = "(10x,8i15)";
-    static char fmt_40[] = "(10x,120(\002-\002)/)";
-    static char fmt_50[] = "(4x,i5,\002+  \002,8d15.5)";
-
     /* System generated locals */
     integer i__1, i__2;
 
-    /* Builtin functions */
-    integer s_wsfe(cilist *), e_wsfe(), do_fio(integer *, char *, ftnlen);
-
     /* Local variables */
-    integer i__, j, k, jm1, nout, kupper;
-
-    /* Fortran I/O blocks */
-    static cilist io___737 = { 0, 0, 0, fmt_10, 0 };
-    static cilist io___738 = { 0, 0, 0, fmt_20, 0 };
-    static cilist io___739 = { 0, 0, 0, fmt_30, 0 };
-    static cilist io___741 = { 0, 0, 0, fmt_40, 0 };
-    static cilist io___744 = { 0, 0, 0, fmt_50, 0 };
-
-
+    integer j, jm1, nout, kupper;
 
 /*     THIS SUBROUTINE EFFECTS PRINTING OF RESIDUAL AND SOLUTION */
 /*     VECTORS - CALLED FROM PERROR */
@@ -16089,31 +14410,15 @@ L20:
     kupper = min(*n,8);
 /*<       IF (ISWT.EQ.1) WRITE (NOUT,10) >*/
     if (*iswt == 1) {
-	io___737.ciunit = nout;
-	s_wsfe(&io___737);
-	e_wsfe();
     }
 /*<    10 FORMAT (//5X,'RESIDUAL VECTOR') >*/
 /*<       IF (ISWT.EQ.2) WRITE (NOUT,20) >*/
     if (*iswt == 2) {
-	io___738.ciunit = nout;
-	s_wsfe(&io___738);
-	e_wsfe();
     }
 /*<    20 FORMAT (//5X,'SOLUTION VECTOR') >*/
 /*<       WRITE (NOUT,30) (I,I=1,KUPPER) >*/
-    io___739.ciunit = nout;
-    s_wsfe(&io___739);
-    i__1 = kupper;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(integer));
-    }
-    e_wsfe();
 /*<    30 FORMAT (10X,8I15) >*/
 /*<       WRITE (NOUT,40) >*/
-    io___741.ciunit = nout;
-    s_wsfe(&io___741);
-    e_wsfe();
 /*<    40 FORMAT (10X,120('-')/) >*/
 
 /*<       DO 60 J = 1,N,8 >*/
@@ -16126,14 +14431,6 @@ L20:
 /*<          JM1 = J-1 >*/
 	jm1 = j - 1;
 /*<          WRITE (NOUT,50) JM1,(V(K),K=J,KUPPER) >*/
-	io___744.ciunit = nout;
-	s_wsfe(&io___744);
-	do_fio(&c__1, (char *)&jm1, (ftnlen)sizeof(integer));
-	i__2 = kupper;
-	for (k = j; k <= i__2; ++k) {
-	    do_fio(&c__1, (char *)&v[k], (ftnlen)sizeof(doublereal));
-	}
-	e_wsfe();
 /*<    50    FORMAT (4X,I5,'+  ',8D15.5) >*/
 /*<    60 CONTINUE >*/
 /* L60: */
@@ -16235,23 +14532,13 @@ L20:
     static doublereal three = 3.;
     static doublereal ten = 10.;
 
-    /* Format strings */
-    static char fmt_100[] = "(\0020\002,\002*** W A R N I N G ***********\
-*\002/\0020\002,\002    IN ITPACK ROUTINE ZBRENT  \002/\002 \002,\002    ALG\
-ORITHM FAILED TO CONVERGE   \002/\002 \002,\002    IN\002,i6,\002 ITERATIONS \
-\002)";
-    static char fmt_120[] = "(\0020\002,\002*** W A R N I N G ***********\
-*\002/\0020\002,\002    IN ITPACK ROUTINE ZBRENT  \002/\002 \002,\002    F(A\
-) AND F(B) HAVE SAME SIGN   \002)";
-
     /* System generated locals */
     integer i__1;
     doublereal d__1;
 
     /* Builtin functions */
-    double pow_di(doublereal *, integer *), d_sign(doublereal *, doublereal *)
-	    ;
-    integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe();
+    double pow_di(doublereal *, integer *);
+    double d_sign(doublereal *, doublereal *);
 
     /* Local variables */
     doublereal a, b, c__, d__, e, p, q, r__, s, t, fa, fb, fc;
@@ -16259,12 +14546,6 @@ ORITHM FAILED TO CONVERGE   \002/\002 \002,\002    IN\002,i6,\002 ITERATIONS \
     doublereal rm, tol, rone, temp;
     integer maxfn;
     extern doublereal determ_(integer *, doublereal *, doublereal *);
-
-    /* Fortran I/O blocks */
-    static cilist io___773 = { 0, 0, 0, fmt_100, 0 };
-    static cilist io___774 = { 0, 0, 0, fmt_120, 0 };
-
-
 
 /*   MODIFIED IMSL ROUTINE NAME   - ZBRENT */
 
@@ -16591,10 +14872,6 @@ L90:
     maxfn = ic;
 /*<       IF (LEVEL.GE.1) WRITE (NOUT,100) MAXFN >*/
     if (itcom1_1.level >= 1) {
-	io___773.ciunit = itcom1_1.nout;
-	s_wsfe(&io___773);
-	do_fio(&c__1, (char *)&maxfn, (ftnlen)sizeof(integer));
-	e_wsfe();
     }
 /*<    >*/
 /*<       GO TO 130 >*/
@@ -16610,9 +14887,6 @@ L110:
     maxfn = ic;
 /*<       IF (LEVEL.GE.1) WRITE (NOUT,120) >*/
     if (itcom1_1.level >= 1) {
-	io___774.ciunit = itcom1_1.nout;
-	s_wsfe(&io___774);
-	e_wsfe();
     }
 /*<    >*/
 /*<   130 CONTINUE >*/
