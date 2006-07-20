@@ -1,7 +1,6 @@
-#ifndef v3p_f2c_unmangle_h
-#define v3p_f2c_unmangle_h
-
-/* This header undefines mangled names defined by v3p_f2c_mangle.h */
+/* This header undefines mangled names defined by v3p_f2c_mangle.h
+   There are purposely no include blockers so translation units can
+   mangle/unmangle repeatedly.  */
 
 /* Functions */
 #undef F77_aloc
@@ -72,5 +71,3 @@
 #undef shortlogical
 #undef uinteger
 #undef ulongint
-
-#endif

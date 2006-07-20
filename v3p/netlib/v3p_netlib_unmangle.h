@@ -1,7 +1,6 @@
-#ifndef v3p_netlib_unmangle_h
-#define v3p_netlib_unmangle_h
-
-/* This header undefines mangled names defined by v3p_netlib_mangle.h. */
+/* This header undefines mangled names defined by v3p_netlib_mangle.h.
+   There are purposely no include blockers so translation units can
+   mangle/unmangle repeatedly. */
 
 /* Functions */
 
@@ -291,5 +290,3 @@
 #undef zung2r_
 #undef zunghr_
 #undef zungqr_
-
-#endif

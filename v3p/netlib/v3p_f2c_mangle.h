@@ -1,7 +1,6 @@
-#ifndef v3p_f2c_mangle_h
-#define v3p_f2c_mangle_h
-
-/* This header file mangles names added to the namespace by v3p_f2c.h */
+/* This header file mangles names added to the namespace by v3p_f2c.h.
+   There are purposely no include blockers so translation units can
+   mangle/unmangle repeatedly.  */
 
 /* Functions */
 #define F77_aloc v3p_netlib_F77_aloc
@@ -72,5 +71,3 @@
 #define shortlogical v3p_netlib_shortlogical
 #define uinteger v3p_netlib_uinteger
 #define ulongint v3p_netlib_ulongint
-
-#endif

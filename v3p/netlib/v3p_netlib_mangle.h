@@ -1,10 +1,9 @@
-#ifndef v3p_netlib_mangle_h
-#define v3p_netlib_mangle_h
-
 /*
 
 This header file mangles all symbols exported from the v3p_netlib
-library.  It is included in all files while building the library.
+library.  There are purposely no include blockers so translation units
+can mangle/unmangle repeatedly.  It is included in all files while
+building the library.
 
 The following command was used to obtain the symbol list:
 
@@ -300,5 +299,3 @@ nm libv3p_netlib.a |grep " [TR] "
 #define zung2r_ v3p_netlib_zung2r_
 #define zunghr_ v3p_netlib_zunghr_
 #define zungqr_ v3p_netlib_zungqr_
-
-#endif
