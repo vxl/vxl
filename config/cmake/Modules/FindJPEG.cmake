@@ -36,7 +36,7 @@ ELSE(JPEG_FOUND)
     SET( JPEG_LIBRARIES jpeg )  
     SET( JPEG_INCLUDE_DIR ${vxl_SOURCE_DIR}/v3p/jpeg)
     SET( JPEG_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/v3p/jpeg)
-	
+        
   ENDIF(EXISTS ${vxl_SOURCE_DIR}/v3p/jpeg/jpeglib.h)
 
 ENDIF(JPEG_FOUND)
