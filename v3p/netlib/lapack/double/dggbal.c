@@ -1,13 +1,13 @@
 /* lapack/double/dggbal.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -23,9 +23,9 @@ static doublereal c_b70 = .5;
 
 /*<    >*/
 /* Subroutine */ int dggbal_(char *job, integer *n, doublereal *a, integer *
-	lda, doublereal *b, integer *ldb, integer *ilo, integer *ihi, 
-	doublereal *lscale, doublereal *rscale, doublereal *work, integer *
-	info, ftnlen job_len)
+        lda, doublereal *b, integer *ldb, integer *ilo, integer *ihi, 
+        doublereal *lscale, doublereal *rscale, doublereal *work, integer *
+        info, ftnlen job_len)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
@@ -33,7 +33,7 @@ static doublereal c_b70 = .5;
 
     /* Builtin functions */
     double d_lg10(doublereal *), d_sign(doublereal *, doublereal *), pow_di(
-	    doublereal *, integer *);
+            doublereal *, integer *);
 
     /* Local variables */
     integer i__, j, k, l, m;
@@ -49,17 +49,17 @@ static doublereal c_b70 = .5;
     integer irab, lrab;
     doublereal basl, cmax;
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, 
-	    integer *);
+            integer *);
     doublereal coef2, coef5, gamma, alpha;
     extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
-	    integer *);
+            integer *);
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     doublereal sfmin, sfmax;
     extern /* Subroutine */ int dswap_(integer *, doublereal *, integer *, 
-	    doublereal *, integer *);
+            doublereal *, integer *);
     integer iflow;
     extern /* Subroutine */ int daxpy_(integer *, doublereal *, doublereal *, 
-	    integer *, doublereal *, integer *);
+            integer *, doublereal *, integer *);
     integer kount;
     extern doublereal dlamch_(char *, ftnlen);
     doublereal pgamma=0;
@@ -210,31 +210,31 @@ static doublereal c_b70 = .5;
     *info = 0;
 /*<    >*/
     if (! lsame_(job, "N", (ftnlen)1, (ftnlen)1) && ! lsame_(job, "P", (
-	    ftnlen)1, (ftnlen)1) && ! lsame_(job, "S", (ftnlen)1, (ftnlen)1) 
-	    && ! lsame_(job, "B", (ftnlen)1, (ftnlen)1)) {
+            ftnlen)1, (ftnlen)1) && ! lsame_(job, "S", (ftnlen)1, (ftnlen)1) 
+            && ! lsame_(job, "B", (ftnlen)1, (ftnlen)1)) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<       ELSE IF( N.LT.0 ) THEN >*/
     } else if (*n < 0) {
 /*<          INFO = -2 >*/
-	*info = -2;
+        *info = -2;
 /*<       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN >*/
     } else if (*lda < max(1,*n)) {
 /*<          INFO = -4 >*/
-	*info = -4;
+        *info = -4;
 /*<       ELSE IF( LDB.LT.MAX( 1, N ) ) THEN >*/
     } else if (*ldb < max(1,*n)) {
 /*<          INFO = -5 >*/
-	*info = -5;
+        *info = -5;
 /*<       END IF >*/
     }
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'DGGBAL', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("DGGBAL", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("DGGBAL", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -247,48 +247,48 @@ static doublereal c_b70 = .5;
 
 /*<    >*/
     if (*n == 0) {
-	return 0;
+        return 0;
     }
 
 /*<       IF( LSAME( JOB, 'N' ) ) THEN >*/
     if (lsame_(job, "N", (ftnlen)1, (ftnlen)1)) {
 /*<          ILO = 1 >*/
-	*ilo = 1;
+        *ilo = 1;
 /*<          IHI = N >*/
-	*ihi = *n;
+        *ihi = *n;
 /*<          DO 10 I = 1, N >*/
-	i__1 = *n;
-	for (i__ = 1; i__ <= i__1; ++i__) {
+        i__1 = *n;
+        for (i__ = 1; i__ <= i__1; ++i__) {
 /*<             LSCALE( I ) = ONE >*/
-	    lscale[i__] = 1.;
+            lscale[i__] = 1.;
 /*<             RSCALE( I ) = ONE >*/
-	    rscale[i__] = 1.;
+            rscale[i__] = 1.;
 /*<    10    CONTINUE >*/
 /* L10: */
-	}
+        }
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
 /*<       IF( K.EQ.L ) THEN >*/
     if (k == l) {
 /*<          ILO = 1 >*/
-	*ilo = 1;
+        *ilo = 1;
 /*<          IHI = 1 >*/
-	*ihi = 1;
+        *ihi = 1;
 /*<          LSCALE( 1 ) = ONE >*/
-	lscale[1] = 1.;
+        lscale[1] = 1.;
 /*<          RSCALE( 1 ) = ONE >*/
-	rscale[1] = 1.;
+        rscale[1] = 1.;
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
 /*<    >*/
     if (lsame_(job, "S", (ftnlen)1, (ftnlen)1)) {
-	goto L190;
+        goto L190;
     }
 
 /*<       GO TO 30 >*/
@@ -304,7 +304,7 @@ L20:
     l = lm1;
 /*<    >*/
     if (l != 1) {
-	goto L30;
+        goto L30;
     }
 
 /*<       RSCALE( 1 ) = 1 >*/
@@ -321,48 +321,48 @@ L30:
 /*<       DO 80 I = L, 1, -1 >*/
     for (i__ = l; i__ >= 1; --i__) {
 /*<          DO 40 J = 1, LM1 >*/
-	i__1 = lm1;
-	for (j = 1; j <= i__1; ++j) {
+        i__1 = lm1;
+        for (j = 1; j <= i__1; ++j) {
 /*<             JP1 = J + 1 >*/
-	    jp1 = j + 1;
+            jp1 = j + 1;
 /*<    >*/
-	    if (a[i__ + j * a_dim1] != 0. || b[i__ + j * b_dim1] != 0.) {
-		goto L50;
-	    }
+            if (a[i__ + j * a_dim1] != 0. || b[i__ + j * b_dim1] != 0.) {
+                goto L50;
+            }
 /*<    40    CONTINUE >*/
 /* L40: */
-	}
+        }
 /*<          J = L >*/
-	j = l;
+        j = l;
 /*<          GO TO 70 >*/
-	goto L70;
+        goto L70;
 
 /*<    50    CONTINUE >*/
 L50:
 /*<          DO 60 J = JP1, L >*/
-	i__1 = l;
-	for (j = jp1; j <= i__1; ++j) {
+        i__1 = l;
+        for (j = jp1; j <= i__1; ++j) {
 /*<    >*/
-	    if (a[i__ + j * a_dim1] != 0. || b[i__ + j * b_dim1] != 0.) {
-		goto L80;
-	    }
+            if (a[i__ + j * a_dim1] != 0. || b[i__ + j * b_dim1] != 0.) {
+                goto L80;
+            }
 /*<    60    CONTINUE >*/
 /* L60: */
-	}
+        }
 /*<          J = JP1 - 1 >*/
-	j = jp1 - 1;
+        j = jp1 - 1;
 
 /*<    70    CONTINUE >*/
 L70:
 /*<          M = L >*/
-	m = l;
+        m = l;
 /*<          IFLOW = 1 >*/
-	iflow = 1;
+        iflow = 1;
 /*<          GO TO 160 >*/
-	goto L160;
+        goto L160;
 /*<    80 CONTINUE >*/
 L80:
-	;
+        ;
     }
 /*<       GO TO 100 >*/
     goto L100;
@@ -380,46 +380,46 @@ L100:
     i__1 = l;
     for (j = k; j <= i__1; ++j) {
 /*<          DO 110 I = K, LM1 >*/
-	i__2 = lm1;
-	for (i__ = k; i__ <= i__2; ++i__) {
+        i__2 = lm1;
+        for (i__ = k; i__ <= i__2; ++i__) {
 /*<             IP1 = I + 1 >*/
-	    ip1 = i__ + 1;
+            ip1 = i__ + 1;
 /*<    >*/
-	    if (a[i__ + j * a_dim1] != 0. || b[i__ + j * b_dim1] != 0.) {
-		goto L120;
-	    }
+            if (a[i__ + j * a_dim1] != 0. || b[i__ + j * b_dim1] != 0.) {
+                goto L120;
+            }
 /*<   110    CONTINUE >*/
 /* L110: */
-	}
+        }
 /*<          I = L >*/
-	i__ = l;
+        i__ = l;
 /*<          GO TO 140 >*/
-	goto L140;
+        goto L140;
 /*<   120    CONTINUE >*/
 L120:
 /*<          DO 130 I = IP1, L >*/
-	i__2 = l;
-	for (i__ = ip1; i__ <= i__2; ++i__) {
+        i__2 = l;
+        for (i__ = ip1; i__ <= i__2; ++i__) {
 /*<    >*/
-	    if (a[i__ + j * a_dim1] != 0. || b[i__ + j * b_dim1] != 0.) {
-		goto L150;
-	    }
+            if (a[i__ + j * a_dim1] != 0. || b[i__ + j * b_dim1] != 0.) {
+                goto L150;
+            }
 /*<   130    CONTINUE >*/
 /* L130: */
-	}
+        }
 /*<          I = IP1 - 1 >*/
-	i__ = ip1 - 1;
+        i__ = ip1 - 1;
 /*<   140    CONTINUE >*/
 L140:
 /*<          M = K >*/
-	m = k;
+        m = k;
 /*<          IFLOW = 2 >*/
-	iflow = 2;
+        iflow = 2;
 /*<          GO TO 160 >*/
-	goto L160;
+        goto L160;
 /*<   150 CONTINUE >*/
 L150:
-	;
+        ;
     }
 /*<       GO TO 190 >*/
     goto L190;
@@ -432,7 +432,7 @@ L160:
     lscale[m] = (doublereal) i__;
 /*<    >*/
     if (i__ == m) {
-	goto L170;
+        goto L170;
     }
 /*<       CALL DSWAP( N-K+1, A( I, K ), LDA, A( M, K ), LDA ) >*/
     i__1 = *n - k + 1;
@@ -449,7 +449,7 @@ L170:
     rscale[m] = (doublereal) j;
 /*<    >*/
     if (j == m) {
-	goto L180;
+        goto L180;
     }
 /*<       CALL DSWAP( L, A( 1, J ), 1, A( 1, M ), 1 ) >*/
     dswap_(&l, &a[j * a_dim1 + 1], &c__1, &a[m * a_dim1 + 1], &c__1);
@@ -460,8 +460,8 @@ L170:
 L180:
 /*<       GO TO ( 20, 90 )IFLOW >*/
     switch (iflow) {
-	case 1:  goto L20;
-	case 2:  goto L90;
+        case 1:  goto L20;
+        case 2:  goto L90;
     }
 
 /*<   190 CONTINUE >*/
@@ -473,12 +473,12 @@ L190:
 
 /*<    >*/
     if (*ilo == *ihi) {
-	return 0;
+        return 0;
     }
 
 /*<    >*/
     if (lsame_(job, "P", (ftnlen)1, (ftnlen)1)) {
-	return 0;
+        return 0;
     }
 
 /*     Balance the submatrix in rows ILO to IHI. */
@@ -489,22 +489,22 @@ L190:
     i__1 = *ihi;
     for (i__ = *ilo; i__ <= i__1; ++i__) {
 /*<          RSCALE( I ) = ZERO >*/
-	rscale[i__] = 0.;
+        rscale[i__] = 0.;
 /*<          LSCALE( I ) = ZERO >*/
-	lscale[i__] = 0.;
+        lscale[i__] = 0.;
 
 /*<          WORK( I ) = ZERO >*/
-	work[i__] = 0.;
+        work[i__] = 0.;
 /*<          WORK( I+N ) = ZERO >*/
-	work[i__ + *n] = 0.;
+        work[i__ + *n] = 0.;
 /*<          WORK( I+2*N ) = ZERO >*/
-	work[i__ + (*n << 1)] = 0.;
+        work[i__ + (*n << 1)] = 0.;
 /*<          WORK( I+3*N ) = ZERO >*/
-	work[i__ + *n * 3] = 0.;
+        work[i__ + *n * 3] = 0.;
 /*<          WORK( I+4*N ) = ZERO >*/
-	work[i__ + (*n << 2)] = 0.;
+        work[i__ + (*n << 2)] = 0.;
 /*<          WORK( I+5*N ) = ZERO >*/
-	work[i__ + *n * 5] = 0.;
+        work[i__ + *n * 5] = 0.;
 /*<   200 CONTINUE >*/
 /* L200: */
     }
@@ -517,37 +517,37 @@ L190:
     i__1 = *ihi;
     for (i__ = *ilo; i__ <= i__1; ++i__) {
 /*<          DO 230 J = ILO, IHI >*/
-	i__2 = *ihi;
-	for (j = *ilo; j <= i__2; ++j) {
+        i__2 = *ihi;
+        for (j = *ilo; j <= i__2; ++j) {
 /*<             TB = B( I, J ) >*/
-	    tb = b[i__ + j * b_dim1];
+            tb = b[i__ + j * b_dim1];
 /*<             TA = A( I, J ) >*/
-	    ta = a[i__ + j * a_dim1];
+            ta = a[i__ + j * a_dim1];
 /*<    >*/
-	    if (ta == 0.) {
-		goto L210;
-	    }
+            if (ta == 0.) {
+                goto L210;
+            }
 /*<             TA = LOG10( ABS( TA ) ) / BASL >*/
-	    d__1 = abs(ta);
-	    ta = d_lg10(&d__1) / basl;
+            d__1 = abs(ta);
+            ta = d_lg10(&d__1) / basl;
 /*<   210       CONTINUE >*/
 L210:
 /*<    >*/
-	    if (tb == 0.) {
-		goto L220;
-	    }
+            if (tb == 0.) {
+                goto L220;
+            }
 /*<             TB = LOG10( ABS( TB ) ) / BASL >*/
-	    d__1 = abs(tb);
-	    tb = d_lg10(&d__1) / basl;
+            d__1 = abs(tb);
+            tb = d_lg10(&d__1) / basl;
 /*<   220       CONTINUE >*/
 L220:
 /*<             WORK( I+4*N ) = WORK( I+4*N ) - TA - TB >*/
-	    work[i__ + (*n << 2)] = work[i__ + (*n << 2)] - ta - tb;
+            work[i__ + (*n << 2)] = work[i__ + (*n << 2)] - ta - tb;
 /*<             WORK( J+5*N ) = WORK( J+5*N ) - TA - TB >*/
-	    work[j + *n * 5] = work[j + *n * 5] - ta - tb;
+            work[j + *n * 5] = work[j + *n * 5] - ta - tb;
 /*<   230    CONTINUE >*/
 /* L230: */
-	}
+        }
 /*<   240 CONTINUE >*/
 /* L240: */
     }
@@ -572,8 +572,8 @@ L250:
 
 /*<    >*/
     gamma = ddot_(&nr, &work[*ilo + (*n << 2)], &c__1, &work[*ilo + (*n << 2)]
-	    , &c__1) + ddot_(&nr, &work[*ilo + *n * 5], &c__1, &work[*ilo + *
-	    n * 5], &c__1);
+            , &c__1) + ddot_(&nr, &work[*ilo + *n * 5], &c__1, &work[*ilo + *
+            n * 5], &c__1);
 
 /*<       EW = ZERO >*/
     ew = 0.;
@@ -583,9 +583,9 @@ L250:
     i__1 = *ihi;
     for (i__ = *ilo; i__ <= i__1; ++i__) {
 /*<          EW = EW + WORK( I+4*N ) >*/
-	ew += work[i__ + (*n << 2)];
+        ew += work[i__ + (*n << 2)];
 /*<          EWC = EWC + WORK( I+5*N ) >*/
-	ewc += work[i__ + *n * 5];
+        ewc += work[i__ + *n * 5];
 /*<   260 CONTINUE >*/
 /* L260: */
     }
@@ -598,14 +598,14 @@ L250:
 /* Computing 2nd power */
     d__3 = ew - ewc;
     gamma = coef * gamma - coef2 * (d__1 * d__1 + d__2 * d__2) - coef5 * (
-	    d__3 * d__3);
+            d__3 * d__3);
 /*<    >*/
     if (gamma == 0.) {
-	goto L350;
+        goto L350;
     }
 /*<    >*/
     if (it != 1) {
-	beta = gamma / pgamma;
+        beta = gamma / pgamma;
     }
 /*<       T = COEF5*( EWC-THREE*EW ) >*/
     t = coef5 * (ewc - ew * 3.);
@@ -619,7 +619,7 @@ L250:
 
 /*<       CALL DAXPY( NR, COEF, WORK( ILO+4*N ), 1, WORK( ILO+N ), 1 ) >*/
     daxpy_(&nr, &coef, &work[*ilo + (*n << 2)], &c__1, &work[*ilo + *n], &
-	    c__1);
+            c__1);
 /*<       CALL DAXPY( NR, COEF, WORK( ILO+5*N ), 1, WORK( ILO ), 1 ) >*/
     daxpy_(&nr, &coef, &work[*ilo + *n * 5], &c__1, &work[*ilo], &c__1);
 
@@ -627,9 +627,9 @@ L250:
     i__1 = *ihi;
     for (i__ = *ilo; i__ <= i__1; ++i__) {
 /*<          WORK( I ) = WORK( I ) + TC >*/
-	work[i__] += tc;
+        work[i__] += tc;
 /*<          WORK( I+N ) = WORK( I+N ) + T >*/
-	work[i__ + *n] += t;
+        work[i__ + *n] += t;
 /*<   270 CONTINUE >*/
 /* L270: */
     }
@@ -640,36 +640,36 @@ L250:
     i__1 = *ihi;
     for (i__ = *ilo; i__ <= i__1; ++i__) {
 /*<          KOUNT = 0 >*/
-	kount = 0;
+        kount = 0;
 /*<          SUM = ZERO >*/
-	sum = 0.;
+        sum = 0.;
 /*<          DO 290 J = ILO, IHI >*/
-	i__2 = *ihi;
-	for (j = *ilo; j <= i__2; ++j) {
+        i__2 = *ihi;
+        for (j = *ilo; j <= i__2; ++j) {
 /*<    >*/
-	    if (a[i__ + j * a_dim1] == 0.) {
-		goto L280;
-	    }
+            if (a[i__ + j * a_dim1] == 0.) {
+                goto L280;
+            }
 /*<             KOUNT = KOUNT + 1 >*/
-	    ++kount;
+            ++kount;
 /*<             SUM = SUM + WORK( J ) >*/
-	    sum += work[j];
+            sum += work[j];
 /*<   280       CONTINUE >*/
 L280:
 /*<    >*/
-	    if (b[i__ + j * b_dim1] == 0.) {
-		goto L290;
-	    }
+            if (b[i__ + j * b_dim1] == 0.) {
+                goto L290;
+            }
 /*<             KOUNT = KOUNT + 1 >*/
-	    ++kount;
+            ++kount;
 /*<             SUM = SUM + WORK( J ) >*/
-	    sum += work[j];
+            sum += work[j];
 /*<   290    CONTINUE >*/
 L290:
-	    ;
-	}
+            ;
+        }
 /*<          WORK( I+2*N ) = DBLE( KOUNT )*WORK( I+N ) + SUM >*/
-	work[i__ + (*n << 1)] = (doublereal) kount * work[i__ + *n] + sum;
+        work[i__ + (*n << 1)] = (doublereal) kount * work[i__ + *n] + sum;
 /*<   300 CONTINUE >*/
 /* L300: */
     }
@@ -678,43 +678,43 @@ L290:
     i__1 = *ihi;
     for (j = *ilo; j <= i__1; ++j) {
 /*<          KOUNT = 0 >*/
-	kount = 0;
+        kount = 0;
 /*<          SUM = ZERO >*/
-	sum = 0.;
+        sum = 0.;
 /*<          DO 320 I = ILO, IHI >*/
-	i__2 = *ihi;
-	for (i__ = *ilo; i__ <= i__2; ++i__) {
+        i__2 = *ihi;
+        for (i__ = *ilo; i__ <= i__2; ++i__) {
 /*<    >*/
-	    if (a[i__ + j * a_dim1] == 0.) {
-		goto L310;
-	    }
+            if (a[i__ + j * a_dim1] == 0.) {
+                goto L310;
+            }
 /*<             KOUNT = KOUNT + 1 >*/
-	    ++kount;
+            ++kount;
 /*<             SUM = SUM + WORK( I+N ) >*/
-	    sum += work[i__ + *n];
+            sum += work[i__ + *n];
 /*<   310       CONTINUE >*/
 L310:
 /*<    >*/
-	    if (b[i__ + j * b_dim1] == 0.) {
-		goto L320;
-	    }
+            if (b[i__ + j * b_dim1] == 0.) {
+                goto L320;
+            }
 /*<             KOUNT = KOUNT + 1 >*/
-	    ++kount;
+            ++kount;
 /*<             SUM = SUM + WORK( I+N ) >*/
-	    sum += work[i__ + *n];
+            sum += work[i__ + *n];
 /*<   320    CONTINUE >*/
 L320:
-	    ;
-	}
+            ;
+        }
 /*<          WORK( J+3*N ) = DBLE( KOUNT )*WORK( J ) + SUM >*/
-	work[j + *n * 3] = (doublereal) kount * work[j] + sum;
+        work[j + *n * 3] = (doublereal) kount * work[j] + sum;
 /*<   330 CONTINUE >*/
 /* L330: */
     }
 
 /*<    >*/
     sum = ddot_(&nr, &work[*ilo + *n], &c__1, &work[*ilo + (*n << 1)], &c__1) 
-	    + ddot_(&nr, &work[*ilo], &c__1, &work[*ilo + *n * 3], &c__1);
+            + ddot_(&nr, &work[*ilo], &c__1, &work[*ilo + *n * 3], &c__1);
 /*<       ALPHA = GAMMA / SUM >*/
     alpha = gamma / sum;
 
@@ -726,37 +726,37 @@ L320:
     i__1 = *ihi;
     for (i__ = *ilo; i__ <= i__1; ++i__) {
 /*<          COR = ALPHA*WORK( I+N ) >*/
-	cor = alpha * work[i__ + *n];
+        cor = alpha * work[i__ + *n];
 /*<    >*/
-	if (abs(cor) > cmax) {
-	    cmax = abs(cor);
-	}
+        if (abs(cor) > cmax) {
+            cmax = abs(cor);
+        }
 /*<          LSCALE( I ) = LSCALE( I ) + COR >*/
-	lscale[i__] += cor;
+        lscale[i__] += cor;
 /*<          COR = ALPHA*WORK( I ) >*/
-	cor = alpha * work[i__];
+        cor = alpha * work[i__];
 /*<    >*/
-	if (abs(cor) > cmax) {
-	    cmax = abs(cor);
-	}
+        if (abs(cor) > cmax) {
+            cmax = abs(cor);
+        }
 /*<          RSCALE( I ) = RSCALE( I ) + COR >*/
-	rscale[i__] += cor;
+        rscale[i__] += cor;
 /*<   340 CONTINUE >*/
 /* L340: */
     }
 /*<    >*/
     if (cmax < .5) {
-	goto L350;
+        goto L350;
     }
 
 /*<       CALL DAXPY( NR, -ALPHA, WORK( ILO+2*N ), 1, WORK( ILO+4*N ), 1 ) >*/
     d__1 = -alpha;
     daxpy_(&nr, &d__1, &work[*ilo + (*n << 1)], &c__1, &work[*ilo + (*n << 2)]
-	    , &c__1);
+            , &c__1);
 /*<       CALL DAXPY( NR, -ALPHA, WORK( ILO+3*N ), 1, WORK( ILO+5*N ), 1 ) >*/
     d__1 = -alpha;
     daxpy_(&nr, &d__1, &work[*ilo + *n * 3], &c__1, &work[*ilo + *n * 5], &
-	    c__1);
+            c__1);
 
 /*<       PGAMMA = GAMMA >*/
     pgamma = gamma;
@@ -764,7 +764,7 @@ L320:
     ++it;
 /*<    >*/
     if (it <= nrp2) {
-	goto L250;
+        goto L250;
     }
 
 /*     End generalized conjugate gradient iteration */
@@ -783,50 +783,50 @@ L350:
     i__1 = *ihi;
     for (i__ = *ilo; i__ <= i__1; ++i__) {
 /*<          IRAB = IDAMAX( N-ILO+1, A( I, ILO ), LDA ) >*/
-	i__2 = *n - *ilo + 1;
-	irab = idamax_(&i__2, &a[i__ + *ilo * a_dim1], lda);
+        i__2 = *n - *ilo + 1;
+        irab = idamax_(&i__2, &a[i__ + *ilo * a_dim1], lda);
 /*<          RAB = ABS( A( I, IRAB+ILO-1 ) ) >*/
-	rab = (d__1 = a[i__ + (irab + *ilo - 1) * a_dim1], abs(d__1));
+        rab = (d__1 = a[i__ + (irab + *ilo - 1) * a_dim1], abs(d__1));
 /*<          IRAB = IDAMAX( N-ILO+1, B( I, ILO ), LDA ) >*/
-	i__2 = *n - *ilo + 1;
-	irab = idamax_(&i__2, &b[i__ + *ilo * b_dim1], lda);
+        i__2 = *n - *ilo + 1;
+        irab = idamax_(&i__2, &b[i__ + *ilo * b_dim1], lda);
 /*<          RAB = MAX( RAB, ABS( B( I, IRAB+ILO-1 ) ) ) >*/
 /* Computing MAX */
-	d__2 = rab, d__3 = (d__1 = b[i__ + (irab + *ilo - 1) * b_dim1], abs(
-		d__1));
-	rab = max(d__2,d__3);
+        d__2 = rab, d__3 = (d__1 = b[i__ + (irab + *ilo - 1) * b_dim1], abs(
+                d__1));
+        rab = max(d__2,d__3);
 /*<          LRAB = INT( LOG10( RAB+SFMIN ) / BASL+ONE ) >*/
-	d__1 = rab + sfmin;
-	lrab = (integer) (d_lg10(&d__1) / basl + 1.);
+        d__1 = rab + sfmin;
+        lrab = (integer) (d_lg10(&d__1) / basl + 1.);
 /*<          IR = LSCALE( I ) + SIGN( HALF, LSCALE( I ) ) >*/
-	ir = (integer) (lscale[i__] + d_sign(&c_b70, &lscale[i__]));
+        ir = (integer) (lscale[i__] + d_sign(&c_b70, &lscale[i__]));
 /*<          IR = MIN( MAX( IR, LSFMIN ), LSFMAX, LSFMAX-LRAB ) >*/
 /* Computing MIN */
-	i__2 = max(ir,lsfmin), i__2 = min(i__2,lsfmax), i__3 = lsfmax - lrab;
-	ir = min(i__2,i__3);
+        i__2 = max(ir,lsfmin), i__2 = min(i__2,lsfmax), i__3 = lsfmax - lrab;
+        ir = min(i__2,i__3);
 /*<          LSCALE( I ) = SCLFAC**IR >*/
-	lscale[i__] = pow_di(&c_b34, &ir);
+        lscale[i__] = pow_di(&c_b34, &ir);
 /*<          ICAB = IDAMAX( IHI, A( 1, I ), 1 ) >*/
-	icab = idamax_(ihi, &a[i__ * a_dim1 + 1], &c__1);
+        icab = idamax_(ihi, &a[i__ * a_dim1 + 1], &c__1);
 /*<          CAB = ABS( A( ICAB, I ) ) >*/
-	cab = (d__1 = a[icab + i__ * a_dim1], abs(d__1));
+        cab = (d__1 = a[icab + i__ * a_dim1], abs(d__1));
 /*<          ICAB = IDAMAX( IHI, B( 1, I ), 1 ) >*/
-	icab = idamax_(ihi, &b[i__ * b_dim1 + 1], &c__1);
+        icab = idamax_(ihi, &b[i__ * b_dim1 + 1], &c__1);
 /*<          CAB = MAX( CAB, ABS( B( ICAB, I ) ) ) >*/
 /* Computing MAX */
-	d__2 = cab, d__3 = (d__1 = b[icab + i__ * b_dim1], abs(d__1));
-	cab = max(d__2,d__3);
+        d__2 = cab, d__3 = (d__1 = b[icab + i__ * b_dim1], abs(d__1));
+        cab = max(d__2,d__3);
 /*<          LCAB = INT( LOG10( CAB+SFMIN ) / BASL+ONE ) >*/
-	d__1 = cab + sfmin;
-	lcab = (integer) (d_lg10(&d__1) / basl + 1.);
+        d__1 = cab + sfmin;
+        lcab = (integer) (d_lg10(&d__1) / basl + 1.);
 /*<          JC = RSCALE( I ) + SIGN( HALF, RSCALE( I ) ) >*/
-	jc = (integer) (rscale[i__] + d_sign(&c_b70, &rscale[i__]));
+        jc = (integer) (rscale[i__] + d_sign(&c_b70, &rscale[i__]));
 /*<          JC = MIN( MAX( JC, LSFMIN ), LSFMAX, LSFMAX-LCAB ) >*/
 /* Computing MIN */
-	i__2 = max(jc,lsfmin), i__2 = min(i__2,lsfmax), i__3 = lsfmax - lcab;
-	jc = min(i__2,i__3);
+        i__2 = max(jc,lsfmin), i__2 = min(i__2,lsfmax), i__3 = lsfmax - lcab;
+        jc = min(i__2,i__3);
 /*<          RSCALE( I ) = SCLFAC**JC >*/
-	rscale[i__] = pow_di(&c_b34, &jc);
+        rscale[i__] = pow_di(&c_b34, &jc);
 /*<   360 CONTINUE >*/
 /* L360: */
     }
@@ -837,11 +837,11 @@ L350:
     i__1 = *ihi;
     for (i__ = *ilo; i__ <= i__1; ++i__) {
 /*<          CALL DSCAL( N-ILO+1, LSCALE( I ), A( I, ILO ), LDA ) >*/
-	i__2 = *n - *ilo + 1;
-	dscal_(&i__2, &lscale[i__], &a[i__ + *ilo * a_dim1], lda);
+        i__2 = *n - *ilo + 1;
+        dscal_(&i__2, &lscale[i__], &a[i__ + *ilo * a_dim1], lda);
 /*<          CALL DSCAL( N-ILO+1, LSCALE( I ), B( I, ILO ), LDB ) >*/
-	i__2 = *n - *ilo + 1;
-	dscal_(&i__2, &lscale[i__], &b[i__ + *ilo * b_dim1], ldb);
+        i__2 = *n - *ilo + 1;
+        dscal_(&i__2, &lscale[i__], &b[i__ + *ilo * b_dim1], ldb);
 /*<   370 CONTINUE >*/
 /* L370: */
     }
@@ -852,9 +852,9 @@ L350:
     i__1 = *ihi;
     for (j = *ilo; j <= i__1; ++j) {
 /*<          CALL DSCAL( IHI, RSCALE( J ), A( 1, J ), 1 ) >*/
-	dscal_(ihi, &rscale[j], &a[j * a_dim1 + 1], &c__1);
+        dscal_(ihi, &rscale[j], &a[j * a_dim1 + 1], &c__1);
 /*<          CALL DSCAL( IHI, RSCALE( J ), B( 1, J ), 1 ) >*/
-	dscal_(ihi, &rscale[j], &b[j * b_dim1 + 1], &c__1);
+        dscal_(ihi, &rscale[j], &b[j * b_dim1 + 1], &c__1);
 /*<   380 CONTINUE >*/
 /* L380: */
     }
@@ -868,5 +868,5 @@ L350:
 } /* dggbal_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

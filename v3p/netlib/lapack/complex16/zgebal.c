@@ -1,13 +1,13 @@
 /* lapack/complex16/zgebal.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -21,8 +21,8 @@ static integer c__1 = 1;
 
 /*<       SUBROUTINE ZGEBAL( JOB, N, A, LDA, ILO, IHI, SCALE, INFO ) >*/
 /* Subroutine */ int zgebal_(char *job, integer *n, doublecomplex *a, integer 
-	*lda, integer *ilo, integer *ihi, doublereal *scale, integer *info, 
-	ftnlen job_len)
+        *lda, integer *ilo, integer *ihi, doublereal *scale, integer *info, 
+        ftnlen job_len)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
@@ -38,11 +38,11 @@ static integer c__1 = 1;
     integer ica, ira, iexc;
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int zswap_(integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *);
+            doublecomplex *, integer *);
     doublereal sfmin1, sfmin2, sfmax1, sfmax2;
     extern doublereal dlamch_(char *, ftnlen);
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen), zdscal_(
-	    integer *, doublereal *, doublecomplex *, integer *);
+            integer *, doublereal *, doublecomplex *, integer *);
     extern integer izamax_(integer *, doublecomplex *, integer *);
     logical noconv;
     (void)job_len;
@@ -196,27 +196,27 @@ static integer c__1 = 1;
     *info = 0;
 /*<    >*/
     if (! lsame_(job, "N", (ftnlen)1, (ftnlen)1) && ! lsame_(job, "P", (
-	    ftnlen)1, (ftnlen)1) && ! lsame_(job, "S", (ftnlen)1, (ftnlen)1) 
-	    && ! lsame_(job, "B", (ftnlen)1, (ftnlen)1)) {
+            ftnlen)1, (ftnlen)1) && ! lsame_(job, "S", (ftnlen)1, (ftnlen)1) 
+            && ! lsame_(job, "B", (ftnlen)1, (ftnlen)1)) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<       ELSE IF( N.LT.0 ) THEN >*/
     } else if (*n < 0) {
 /*<          INFO = -2 >*/
-	*info = -2;
+        *info = -2;
 /*<       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN >*/
     } else if (*lda < max(1,*n)) {
 /*<          INFO = -4 >*/
-	*info = -4;
+        *info = -4;
 /*<       END IF >*/
     }
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'ZGEBAL', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("ZGEBAL", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("ZGEBAL", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -227,27 +227,27 @@ static integer c__1 = 1;
 
 /*<    >*/
     if (*n == 0) {
-	goto L210;
+        goto L210;
     }
 
 /*<       IF( LSAME( JOB, 'N' ) ) THEN >*/
     if (lsame_(job, "N", (ftnlen)1, (ftnlen)1)) {
 /*<          DO 10 I = 1, N >*/
-	i__1 = *n;
-	for (i__ = 1; i__ <= i__1; ++i__) {
+        i__1 = *n;
+        for (i__ = 1; i__ <= i__1; ++i__) {
 /*<             SCALE( I ) = ONE >*/
-	    scale[i__] = 1.;
+            scale[i__] = 1.;
 /*<    10    CONTINUE >*/
 /* L10: */
-	}
+        }
 /*<          GO TO 210 >*/
-	goto L210;
+        goto L210;
 /*<       END IF >*/
     }
 
 /*<    >*/
     if (lsame_(job, "S", (ftnlen)1, (ftnlen)1)) {
-	goto L120;
+        goto L120;
     }
 
 /*     Permutation to isolate eigenvalues if possible */
@@ -263,7 +263,7 @@ L20:
     scale[m] = (doublereal) j;
 /*<    >*/
     if (j == m) {
-	goto L30;
+        goto L30;
     }
 
 /*<       CALL ZSWAP( L, A( 1, J ), 1, A( 1, M ), 1 ) >*/
@@ -276,8 +276,8 @@ L20:
 L30:
 /*<       GO TO ( 40, 80 )IEXC >*/
     switch (iexc) {
-	case 1:  goto L40;
-	case 2:  goto L80;
+        case 1:  goto L40;
+        case 2:  goto L80;
     }
 
 /*     Search for rows isolating an eigenvalue and push them down. */
@@ -286,7 +286,7 @@ L30:
 L40:
 /*<    >*/
     if (l == 1) {
-	goto L210;
+        goto L210;
     }
 /*<       L = L - 1 >*/
     --l;
@@ -297,31 +297,31 @@ L50:
     for (j = l; j >= 1; --j) {
 
 /*<          DO 60 I = 1, L >*/
-	i__1 = l;
-	for (i__ = 1; i__ <= i__1; ++i__) {
+        i__1 = l;
+        for (i__ = 1; i__ <= i__1; ++i__) {
 /*<    >*/
-	    if (i__ == j) {
-		goto L60;
-	    }
+            if (i__ == j) {
+                goto L60;
+            }
 /*<    >*/
-	    i__2 = j + i__ * a_dim1;
-	    if (a[i__2].r != 0. || d_imag(&a[j + i__ * a_dim1]) != 0.) {
-		goto L70;
-	    }
+            i__2 = j + i__ * a_dim1;
+            if (a[i__2].r != 0. || d_imag(&a[j + i__ * a_dim1]) != 0.) {
+                goto L70;
+            }
 /*<    60    CONTINUE >*/
 L60:
-	    ;
-	}
+            ;
+        }
 
 /*<          M = L >*/
-	m = l;
+        m = l;
 /*<          IEXC = 1 >*/
-	iexc = 1;
+        iexc = 1;
 /*<          GO TO 20 >*/
-	goto L20;
+        goto L20;
 /*<    70 CONTINUE >*/
 L70:
-	;
+        ;
     }
 
 /*<       GO TO 90 >*/
@@ -341,31 +341,31 @@ L90:
     for (j = k; j <= i__1; ++j) {
 
 /*<          DO 100 I = K, L >*/
-	i__2 = l;
-	for (i__ = k; i__ <= i__2; ++i__) {
+        i__2 = l;
+        for (i__ = k; i__ <= i__2; ++i__) {
 /*<    >*/
-	    if (i__ == j) {
-		goto L100;
-	    }
+            if (i__ == j) {
+                goto L100;
+            }
 /*<    >*/
-	    i__3 = i__ + j * a_dim1;
-	    if (a[i__3].r != 0. || d_imag(&a[i__ + j * a_dim1]) != 0.) {
-		goto L110;
-	    }
+            i__3 = i__ + j * a_dim1;
+            if (a[i__3].r != 0. || d_imag(&a[i__ + j * a_dim1]) != 0.) {
+                goto L110;
+            }
 /*<   100    CONTINUE >*/
 L100:
-	    ;
-	}
+            ;
+        }
 
 /*<          M = K >*/
-	m = k;
+        m = k;
 /*<          IEXC = 2 >*/
-	iexc = 2;
+        iexc = 2;
 /*<          GO TO 20 >*/
-	goto L20;
+        goto L20;
 /*<   110 CONTINUE >*/
 L110:
-	;
+        ;
     }
 
 /*<   120 CONTINUE >*/
@@ -374,14 +374,14 @@ L120:
     i__1 = l;
     for (i__ = k; i__ <= i__1; ++i__) {
 /*<          SCALE( I ) = ONE >*/
-	scale[i__] = 1.;
+        scale[i__] = 1.;
 /*<   130 CONTINUE >*/
 /* L130: */
     }
 
 /*<    >*/
     if (lsame_(job, "P", (ftnlen)1, (ftnlen)1)) {
-	goto L210;
+        goto L210;
     }
 
 /*     Balance the submatrix in rows K to L. */
@@ -405,148 +405,148 @@ L140:
     i__1 = l;
     for (i__ = k; i__ <= i__1; ++i__) {
 /*<          C = ZERO >*/
-	c__ = 0.;
+        c__ = 0.;
 /*<          R = ZERO >*/
-	r__ = 0.;
+        r__ = 0.;
 
 /*<          DO 150 J = K, L >*/
-	i__2 = l;
-	for (j = k; j <= i__2; ++j) {
+        i__2 = l;
+        for (j = k; j <= i__2; ++j) {
 /*<    >*/
-	    if (j == i__) {
-		goto L150;
-	    }
+            if (j == i__) {
+                goto L150;
+            }
 /*<             C = C + CABS1( A( J, I ) ) >*/
-	    i__3 = j + i__ * a_dim1;
-	    c__ += (d__1 = a[i__3].r, abs(d__1)) + (d__2 = d_imag(&a[j + i__ *
-		     a_dim1]), abs(d__2));
+            i__3 = j + i__ * a_dim1;
+            c__ += (d__1 = a[i__3].r, abs(d__1)) + (d__2 = d_imag(&a[j + i__ *
+                     a_dim1]), abs(d__2));
 /*<             R = R + CABS1( A( I, J ) ) >*/
-	    i__3 = i__ + j * a_dim1;
-	    r__ += (d__1 = a[i__3].r, abs(d__1)) + (d__2 = d_imag(&a[i__ + j *
-		     a_dim1]), abs(d__2));
+            i__3 = i__ + j * a_dim1;
+            r__ += (d__1 = a[i__3].r, abs(d__1)) + (d__2 = d_imag(&a[i__ + j *
+                     a_dim1]), abs(d__2));
 /*<   150    CONTINUE >*/
 L150:
-	    ;
-	}
+            ;
+        }
 /*<          ICA = IZAMAX( L, A( 1, I ), 1 ) >*/
-	ica = izamax_(&l, &a[i__ * a_dim1 + 1], &c__1);
+        ica = izamax_(&l, &a[i__ * a_dim1 + 1], &c__1);
 /*<          CA = ABS( A( ICA, I ) ) >*/
-	ca = z_abs(&a[ica + i__ * a_dim1]);
+        ca = z_abs(&a[ica + i__ * a_dim1]);
 /*<          IRA = IZAMAX( N-K+1, A( I, K ), LDA ) >*/
-	i__2 = *n - k + 1;
-	ira = izamax_(&i__2, &a[i__ + k * a_dim1], lda);
+        i__2 = *n - k + 1;
+        ira = izamax_(&i__2, &a[i__ + k * a_dim1], lda);
 /*<          RA = ABS( A( I, IRA+K-1 ) ) >*/
-	ra = z_abs(&a[i__ + (ira + k - 1) * a_dim1]);
+        ra = z_abs(&a[i__ + (ira + k - 1) * a_dim1]);
 
 /*        Guard against zero C or R due to underflow. */
 
 /*<    >*/
-	if (c__ == 0. || r__ == 0.) {
-	    goto L200;
-	}
+        if (c__ == 0. || r__ == 0.) {
+            goto L200;
+        }
 /*<          G = R / SCLFAC >*/
-	g = r__ / 8.;
+        g = r__ / 8.;
 /*<          F = ONE >*/
-	f = 1.;
+        f = 1.;
 /*<          S = C + R >*/
-	s = c__ + r__;
+        s = c__ + r__;
 /*<   160    CONTINUE >*/
 L160:
 /*<    >*/
 /* Computing MAX */
-	d__1 = max(f,c__);
+        d__1 = max(f,c__);
 /* Computing MIN */
-	d__2 = min(r__,g);
-	if (c__ >= g || max(d__1,ca) >= sfmax2 || min(d__2,ra) <= sfmin2) {
-	    goto L170;
-	}
+        d__2 = min(r__,g);
+        if (c__ >= g || max(d__1,ca) >= sfmax2 || min(d__2,ra) <= sfmin2) {
+            goto L170;
+        }
 /*<          F = F*SCLFAC >*/
-	f *= 8.;
+        f *= 8.;
 /*<          C = C*SCLFAC >*/
-	c__ *= 8.;
+        c__ *= 8.;
 /*<          CA = CA*SCLFAC >*/
-	ca *= 8.;
+        ca *= 8.;
 /*<          R = R / SCLFAC >*/
-	r__ /= 8.;
+        r__ /= 8.;
 /*<          G = G / SCLFAC >*/
-	g /= 8.;
+        g /= 8.;
 /*<          RA = RA / SCLFAC >*/
-	ra /= 8.;
+        ra /= 8.;
 /*<          GO TO 160 >*/
-	goto L160;
+        goto L160;
 
 /*<   170    CONTINUE >*/
 L170:
 /*<          G = C / SCLFAC >*/
-	g = c__ / 8.;
+        g = c__ / 8.;
 /*<   180    CONTINUE >*/
 L180:
 /*<    >*/
 /* Computing MIN */
-	d__1 = min(f,c__), d__1 = min(d__1,g);
-	if (g < r__ || max(r__,ra) >= sfmax2 || min(d__1,ca) <= sfmin2) {
-	    goto L190;
-	}
+        d__1 = min(f,c__), d__1 = min(d__1,g);
+        if (g < r__ || max(r__,ra) >= sfmax2 || min(d__1,ca) <= sfmin2) {
+            goto L190;
+        }
 /*<          F = F / SCLFAC >*/
-	f /= 8.;
+        f /= 8.;
 /*<          C = C / SCLFAC >*/
-	c__ /= 8.;
+        c__ /= 8.;
 /*<          G = G / SCLFAC >*/
-	g /= 8.;
+        g /= 8.;
 /*<          CA = CA / SCLFAC >*/
-	ca /= 8.;
+        ca /= 8.;
 /*<          R = R*SCLFAC >*/
-	r__ *= 8.;
+        r__ *= 8.;
 /*<          RA = RA*SCLFAC >*/
-	ra *= 8.;
+        ra *= 8.;
 /*<          GO TO 180 >*/
-	goto L180;
+        goto L180;
 
 /*        Now balance. */
 
 /*<   190    CONTINUE >*/
 L190:
 /*<    >*/
-	if (c__ + r__ >= s * .95) {
-	    goto L200;
-	}
+        if (c__ + r__ >= s * .95) {
+            goto L200;
+        }
 /*<          IF( F.LT.ONE .AND. SCALE( I ).LT.ONE ) THEN >*/
-	if (f < 1. && scale[i__] < 1.) {
+        if (f < 1. && scale[i__] < 1.) {
 /*<    >*/
-	    if (f * scale[i__] <= sfmin1) {
-		goto L200;
-	    }
+            if (f * scale[i__] <= sfmin1) {
+                goto L200;
+            }
 /*<          END IF >*/
-	}
+        }
 /*<          IF( F.GT.ONE .AND. SCALE( I ).GT.ONE ) THEN >*/
-	if (f > 1. && scale[i__] > 1.) {
+        if (f > 1. && scale[i__] > 1.) {
 /*<    >*/
-	    if (scale[i__] >= sfmax1 / f) {
-		goto L200;
-	    }
+            if (scale[i__] >= sfmax1 / f) {
+                goto L200;
+            }
 /*<          END IF >*/
-	}
+        }
 /*<          G = ONE / F >*/
-	g = 1. / f;
+        g = 1. / f;
 /*<          SCALE( I ) = SCALE( I )*F >*/
-	scale[i__] *= f;
+        scale[i__] *= f;
 /*<          NOCONV = .TRUE. >*/
-	noconv = TRUE_;
+        noconv = TRUE_;
 
 /*<          CALL ZDSCAL( N-K+1, G, A( I, K ), LDA ) >*/
-	i__2 = *n - k + 1;
-	zdscal_(&i__2, &g, &a[i__ + k * a_dim1], lda);
+        i__2 = *n - k + 1;
+        zdscal_(&i__2, &g, &a[i__ + k * a_dim1], lda);
 /*<          CALL ZDSCAL( L, F, A( 1, I ), 1 ) >*/
-	zdscal_(&l, &f, &a[i__ * a_dim1 + 1], &c__1);
+        zdscal_(&l, &f, &a[i__ * a_dim1 + 1], &c__1);
 
 /*<   200 CONTINUE >*/
 L200:
-	;
+        ;
     }
 
 /*<    >*/
     if (noconv) {
-	goto L140;
+        goto L140;
     }
 
 /*<   210 CONTINUE >*/
@@ -565,5 +565,5 @@ L210:
 } /* zgebal_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

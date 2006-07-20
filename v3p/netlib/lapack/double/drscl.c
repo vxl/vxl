@@ -1,13 +1,13 @@
 /* lapack/double/drscl.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -17,13 +17,13 @@ extern "C" {
 
 /*<       SUBROUTINE DRSCL( N, SA, SX, INCX ) >*/
 /* Subroutine */ int drscl_(integer *n, doublereal *sa, doublereal *sx, 
-	integer *incx)
+        integer *incx)
 {
     doublereal mul, cden;
     logical done;
     doublereal cnum, cden1, cnum1;
     extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
-	    integer *), dlabad_(doublereal *, doublereal *);
+            integer *), dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *, ftnlen);
     doublereal bignum, smlnum;
 
@@ -96,7 +96,7 @@ extern "C" {
 
     /* Function Body */
     if (*n <= 0) {
-	return 0;
+        return 0;
     }
 
 /*     Get machine parameters */
@@ -127,31 +127,31 @@ L10:
 /*        Pre-multiply X by SMLNUM if CDEN is large compared to CNUM. */
 
 /*<          MUL = SMLNUM >*/
-	mul = smlnum;
+        mul = smlnum;
 /*<          DONE = .FALSE. >*/
-	done = FALSE_;
+        done = FALSE_;
 /*<          CDEN = CDEN1 >*/
-	cden = cden1;
+        cden = cden1;
 /*<       ELSE IF( ABS( CNUM1 ).GT.ABS( CDEN ) ) THEN >*/
     } else if (abs(cnum1) > abs(cden)) {
 
 /*        Pre-multiply X by BIGNUM if CDEN is small compared to CNUM. */
 
 /*<          MUL = BIGNUM >*/
-	mul = bignum;
+        mul = bignum;
 /*<          DONE = .FALSE. >*/
-	done = FALSE_;
+        done = FALSE_;
 /*<          CNUM = CNUM1 >*/
-	cnum = cnum1;
+        cnum = cnum1;
 /*<       ELSE >*/
     } else {
 
 /*        Multiply X by CNUM / CDEN and return. */
 
 /*<          MUL = CNUM / CDEN >*/
-	mul = cnum / cden;
+        mul = cnum / cden;
 /*<          DONE = .TRUE. >*/
-	done = TRUE_;
+        done = TRUE_;
 /*<       END IF >*/
     }
 
@@ -162,7 +162,7 @@ L10:
 
 /*<    >*/
     if (! done) {
-	goto L10;
+        goto L10;
     }
 
 /*<       RETURN >*/
@@ -174,5 +174,5 @@ L10:
 } /* drscl_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

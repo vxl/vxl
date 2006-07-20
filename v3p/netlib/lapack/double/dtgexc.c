@@ -1,13 +1,13 @@
 /* lapack/double/dtgexc.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -22,21 +22,21 @@ static integer c__2 = 2;
 
 /*<    >*/
 /* Subroutine */ int dtgexc_(logical *wantq, logical *wantz, integer *n, 
-	doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *
-	q, integer *ldq, doublereal *z__, integer *ldz, integer *ifst, 
-	integer *ilst, doublereal *work, integer *lwork, integer *info)
+        doublereal *a, integer *lda, doublereal *b, integer *ldb, doublereal *
+        q, integer *ldq, doublereal *z__, integer *ldz, integer *ifst, 
+        integer *ilst, doublereal *work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, 
-	    z_offset, i__1, i__2;
+            z_offset, i__1, i__2;
 
     /* Local variables */
     integer nbf, nbl, here, lwmin;
     extern /* Subroutine */ int dtgex2_(logical *, logical *, integer *, 
-	    doublereal *, integer *, doublereal *, integer *, doublereal *, 
-	    integer *, doublereal *, integer *, integer *, integer *, integer 
-	    *, doublereal *, integer *, integer *), xerbla_(char *, integer *,
-	     ftnlen);
+            doublereal *, integer *, doublereal *, integer *, doublereal *, 
+            integer *, doublereal *, integer *, integer *, integer *, integer 
+            *, doublereal *, integer *, integer *), xerbla_(char *, integer *,
+             ftnlen);
     integer nbnext;
     logical lquery;
 
@@ -216,56 +216,56 @@ static integer c__2 = 2;
 /*<       IF( N.LT.0 ) THEN >*/
     if (*n < 0) {
 /*<          INFO = -3 >*/
-	*info = -3;
+        *info = -3;
 /*<       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN >*/
     } else if (*lda < max(1,*n)) {
 /*<          INFO = -5 >*/
-	*info = -5;
+        *info = -5;
 /*<       ELSE IF( LDB.LT.MAX( 1, N ) ) THEN >*/
     } else if (*ldb < max(1,*n)) {
 /*<          INFO = -7 >*/
-	*info = -7;
+        *info = -7;
 /*<       ELSE IF( LDQ.LT.1 .OR. WANTQ .AND. ( LDQ.LT.MAX( 1, N ) ) ) THEN >*/
     } else if (*ldq < 1 || (*wantq && *ldq < max(1,*n))) {
 /*<          INFO = -9 >*/
-	*info = -9;
+        *info = -9;
 /*<       ELSE IF( LDZ.LT.1 .OR. WANTZ .AND. ( LDZ.LT.MAX( 1, N ) ) ) THEN >*/
     } else if (*ldz < 1 || (*wantz && *ldz < max(1,*n))) {
 /*<          INFO = -11 >*/
-	*info = -11;
+        *info = -11;
 /*<       ELSE IF( IFST.LT.1 .OR. IFST.GT.N ) THEN >*/
     } else if (*ifst < 1 || *ifst > *n) {
 /*<          INFO = -12 >*/
-	*info = -12;
+        *info = -12;
 /*<       ELSE IF( ILST.LT.1 .OR. ILST.GT.N ) THEN >*/
     } else if (*ilst < 1 || *ilst > *n) {
 /*<          INFO = -13 >*/
-	*info = -13;
+        *info = -13;
 /*<       ELSE IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN >*/
     } else if (*lwork < lwmin && ! lquery) {
 /*<          INFO = -15 >*/
-	*info = -15;
+        *info = -15;
 /*<       END IF >*/
     }
 
 /*<       IF( INFO.EQ.0 ) THEN >*/
     if (*info == 0) {
 /*<          WORK( 1 ) = LWMIN >*/
-	work[1] = (doublereal) lwmin;
+        work[1] = (doublereal) lwmin;
 /*<       END IF >*/
     }
 
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'DTGEXC', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("DTGEXC", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("DTGEXC", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       ELSE IF( LQUERY ) THEN >*/
     } else if (lquery) {
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -273,7 +273,7 @@ static integer c__2 = 2;
 
 /*<    >*/
     if (*n <= 1) {
-	return 0;
+        return 0;
     }
 
 /*     Determine the first row of the specified block and find out */
@@ -282,9 +282,9 @@ static integer c__2 = 2;
 /*<       IF( IFST.GT.1 ) THEN >*/
     if (*ifst > 1) {
 /*<    >*/
-	if (a[*ifst + (*ifst - 1) * a_dim1] != 0.) {
-	    --(*ifst);
-	}
+        if (a[*ifst + (*ifst - 1) * a_dim1] != 0.) {
+            --(*ifst);
+        }
 /*<       END IF >*/
     }
 /*<       NBF = 1 >*/
@@ -292,9 +292,9 @@ static integer c__2 = 2;
 /*<       IF( IFST.LT.N ) THEN >*/
     if (*ifst < *n) {
 /*<    >*/
-	if (a[*ifst + 1 + *ifst * a_dim1] != 0.) {
-	    nbf = 2;
-	}
+        if (a[*ifst + 1 + *ifst * a_dim1] != 0.) {
+            nbf = 2;
+        }
 /*<       END IF >*/
     }
 
@@ -304,9 +304,9 @@ static integer c__2 = 2;
 /*<       IF( ILST.GT.1 ) THEN >*/
     if (*ilst > 1) {
 /*<    >*/
-	if (a[*ilst + (*ilst - 1) * a_dim1] != 0.) {
-	    --(*ilst);
-	}
+        if (a[*ilst + (*ilst - 1) * a_dim1] != 0.) {
+            --(*ilst);
+        }
 /*<       END IF >*/
     }
 /*<       NBL = 1 >*/
@@ -314,14 +314,14 @@ static integer c__2 = 2;
 /*<       IF( ILST.LT.N ) THEN >*/
     if (*ilst < *n) {
 /*<    >*/
-	if (a[*ilst + 1 + *ilst * a_dim1] != 0.) {
-	    nbl = 2;
-	}
+        if (a[*ilst + 1 + *ilst * a_dim1] != 0.) {
+            nbl = 2;
+        }
 /*<       END IF >*/
     }
 /*<    >*/
     if (*ifst == *ilst) {
-	return 0;
+        return 0;
     }
 
 /*<       IF( IFST.LT.ILST ) THEN >*/
@@ -330,16 +330,16 @@ static integer c__2 = 2;
 /*        Update ILST. */
 
 /*<    >*/
-	if (nbf == 2 && nbl == 1) {
-	    --(*ilst);
-	}
+        if (nbf == 2 && nbl == 1) {
+            --(*ilst);
+        }
 /*<    >*/
-	if (nbf == 1 && nbl == 2) {
-	    ++(*ilst);
-	}
+        if (nbf == 1 && nbl == 2) {
+            ++(*ilst);
+        }
 
 /*<          HERE = IFST >*/
-	here = *ifst;
+        here = *ifst;
 
 /*<    10    CONTINUE >*/
 L10:
@@ -347,171 +347,171 @@ L10:
 /*        Swap with next one below. */
 
 /*<          IF( NBF.EQ.1 .OR. NBF.EQ.2 ) THEN >*/
-	if (nbf == 1 || nbf == 2) {
+        if (nbf == 1 || nbf == 2) {
 
 /*           Current block either 1-by-1 or 2-by-2. */
 
 /*<             NBNEXT = 1 >*/
-	    nbnext = 1;
+            nbnext = 1;
 /*<             IF( HERE+NBF+1.LE.N ) THEN >*/
-	    if (here + nbf + 1 <= *n) {
+            if (here + nbf + 1 <= *n) {
 /*<    >*/
-		if (a[here + nbf + 1 + (here + nbf) * a_dim1] != 0.) {
-		    nbnext = 2;
-		}
+                if (a[here + nbf + 1 + (here + nbf) * a_dim1] != 0.) {
+                    nbnext = 2;
+                }
 /*<             END IF >*/
-	    }
+            }
 /*<    >*/
-	    dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[
-		    q_offset], ldq, &z__[z_offset], ldz, &here, &nbf, &nbnext,
-		     &work[1], lwork, info);
+            dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[
+                    q_offset], ldq, &z__[z_offset], ldz, &here, &nbf, &nbnext,
+                     &work[1], lwork, info);
 /*<             IF( INFO.NE.0 ) THEN >*/
-	    if (*info != 0) {
+            if (*info != 0) {
 /*<                ILST = HERE >*/
-		*ilst = here;
+                *ilst = here;
 /*<                RETURN >*/
-		return 0;
+                return 0;
 /*<             END IF >*/
-	    }
+            }
 /*<             HERE = HERE + NBNEXT >*/
-	    here += nbnext;
+            here += nbnext;
 
 /*           Test if 2-by-2 block breaks into two 1-by-1 blocks. */
 
 /*<             IF( NBF.EQ.2 ) THEN >*/
-	    if (nbf == 2) {
+            if (nbf == 2) {
 /*<    >*/
-		if (a[here + 1 + here * a_dim1] == 0.) {
-		    nbf = 3;
-		}
+                if (a[here + 1 + here * a_dim1] == 0.) {
+                    nbf = 3;
+                }
 /*<             END IF >*/
-	    }
+            }
 
 /*<          ELSE >*/
-	} else {
+        } else {
 
 /*           Current block consists of two 1-by-1 blocks, each of which */
 /*           must be swapped individually. */
 
 /*<             NBNEXT = 1 >*/
-	    nbnext = 1;
+            nbnext = 1;
 /*<             IF( HERE+3.LE.N ) THEN >*/
-	    if (here + 3 <= *n) {
+            if (here + 3 <= *n) {
 /*<    >*/
-		if (a[here + 3 + (here + 2) * a_dim1] != 0.) {
-		    nbnext = 2;
-		}
+                if (a[here + 3 + (here + 2) * a_dim1] != 0.) {
+                    nbnext = 2;
+                }
 /*<             END IF >*/
-	    }
+            }
 /*<    >*/
-	    i__1 = here + 1;
-	    dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[
-		    q_offset], ldq, &z__[z_offset], ldz, &i__1, &c__1, &
-		    nbnext, &work[1], lwork, info);
+            i__1 = here + 1;
+            dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[
+                    q_offset], ldq, &z__[z_offset], ldz, &i__1, &c__1, &
+                    nbnext, &work[1], lwork, info);
 /*<             IF( INFO.NE.0 ) THEN >*/
-	    if (*info != 0) {
+            if (*info != 0) {
 /*<                ILST = HERE >*/
-		*ilst = here;
+                *ilst = here;
 /*<                RETURN >*/
-		return 0;
+                return 0;
 /*<             END IF >*/
-	    }
+            }
 /*<             IF( NBNEXT.EQ.1 ) THEN >*/
-	    if (nbnext == 1) {
+            if (nbnext == 1) {
 
 /*              Swap two 1-by-1 blocks. */
 
 /*<    >*/
-		dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb,
-			 &q[q_offset], ldq, &z__[z_offset], ldz, &here, &c__1,
-			 &c__1, &work[1], lwork, info);
+                dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb,
+                         &q[q_offset], ldq, &z__[z_offset], ldz, &here, &c__1,
+                         &c__1, &work[1], lwork, info);
 /*<                IF( INFO.NE.0 ) THEN >*/
-		if (*info != 0) {
+                if (*info != 0) {
 /*<                   ILST = HERE >*/
-		    *ilst = here;
+                    *ilst = here;
 /*<                   RETURN >*/
-		    return 0;
+                    return 0;
 /*<                END IF >*/
-		}
+                }
 /*<                HERE = HERE + 1 >*/
-		++here;
+                ++here;
 
 /*<             ELSE >*/
-	    } else {
+            } else {
 
 /*              Recompute NBNEXT in case of 2-by-2 split. */
 
 /*<    >*/
-		if (a[here + 2 + (here + 1) * a_dim1] == 0.) {
-		    nbnext = 1;
-		}
+                if (a[here + 2 + (here + 1) * a_dim1] == 0.) {
+                    nbnext = 1;
+                }
 /*<                IF( NBNEXT.EQ.2 ) THEN >*/
-		if (nbnext == 2) {
+                if (nbnext == 2) {
 
 /*                 2-by-2 block did not split. */
 
 /*<    >*/
-		    dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], 
-			    ldb, &q[q_offset], ldq, &z__[z_offset], ldz, &
-			    here, &c__1, &nbnext, &work[1], lwork, info);
+                    dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], 
+                            ldb, &q[q_offset], ldq, &z__[z_offset], ldz, &
+                            here, &c__1, &nbnext, &work[1], lwork, info);
 /*<                   IF( INFO.NE.0 ) THEN >*/
-		    if (*info != 0) {
+                    if (*info != 0) {
 /*<                      ILST = HERE >*/
-			*ilst = here;
+                        *ilst = here;
 /*<                      RETURN >*/
-			return 0;
+                        return 0;
 /*<                   END IF >*/
-		    }
+                    }
 /*<                   HERE = HERE + 2 >*/
-		    here += 2;
+                    here += 2;
 /*<                ELSE >*/
-		} else {
+                } else {
 
 /*                 2-by-2 block did split. */
 
 /*<    >*/
-		    dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], 
-			    ldb, &q[q_offset], ldq, &z__[z_offset], ldz, &
-			    here, &c__1, &c__1, &work[1], lwork, info);
+                    dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], 
+                            ldb, &q[q_offset], ldq, &z__[z_offset], ldz, &
+                            here, &c__1, &c__1, &work[1], lwork, info);
 /*<                   IF( INFO.NE.0 ) THEN >*/
-		    if (*info != 0) {
+                    if (*info != 0) {
 /*<                      ILST = HERE >*/
-			*ilst = here;
+                        *ilst = here;
 /*<                      RETURN >*/
-			return 0;
+                        return 0;
 /*<                   END IF >*/
-		    }
+                    }
 /*<                   HERE = HERE + 1 >*/
-		    ++here;
+                    ++here;
 /*<    >*/
-		    dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], 
-			    ldb, &q[q_offset], ldq, &z__[z_offset], ldz, &
-			    here, &c__1, &c__1, &work[1], lwork, info);
+                    dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], 
+                            ldb, &q[q_offset], ldq, &z__[z_offset], ldz, &
+                            here, &c__1, &c__1, &work[1], lwork, info);
 /*<                   IF( INFO.NE.0 ) THEN >*/
-		    if (*info != 0) {
+                    if (*info != 0) {
 /*<                      ILST = HERE >*/
-			*ilst = here;
+                        *ilst = here;
 /*<                      RETURN >*/
-			return 0;
+                        return 0;
 /*<                   END IF >*/
-		    }
+                    }
 /*<                   HERE = HERE + 1 >*/
-		    ++here;
+                    ++here;
 /*<                END IF >*/
-		}
+                }
 
 /*<             END IF >*/
-	    }
+            }
 /*<          END IF >*/
-	}
+        }
 /*<    >*/
-	if (here < *ilst) {
-	    goto L10;
-	}
+        if (here < *ilst) {
+            goto L10;
+        }
 /*<       ELSE >*/
     } else {
 /*<          HERE = IFST >*/
-	here = *ifst;
+        here = *ifst;
 
 /*<    20    CONTINUE >*/
 L20:
@@ -519,167 +519,167 @@ L20:
 /*        Swap with next one below. */
 
 /*<          IF( NBF.EQ.1 .OR. NBF.EQ.2 ) THEN >*/
-	if (nbf == 1 || nbf == 2) {
+        if (nbf == 1 || nbf == 2) {
 
 /*           Current block either 1-by-1 or 2-by-2. */
 
 /*<             NBNEXT = 1 >*/
-	    nbnext = 1;
+            nbnext = 1;
 /*<             IF( HERE.GE.3 ) THEN >*/
-	    if (here >= 3) {
+            if (here >= 3) {
 /*<    >*/
-		if (a[here - 1 + (here - 2) * a_dim1] != 0.) {
-		    nbnext = 2;
-		}
+                if (a[here - 1 + (here - 2) * a_dim1] != 0.) {
+                    nbnext = 2;
+                }
 /*<             END IF >*/
-	    }
+            }
 /*<    >*/
-	    i__1 = here - nbnext;
-	    dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[
-		    q_offset], ldq, &z__[z_offset], ldz, &i__1, &nbnext, &nbf,
-		     &work[1], lwork, info);
+            i__1 = here - nbnext;
+            dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[
+                    q_offset], ldq, &z__[z_offset], ldz, &i__1, &nbnext, &nbf,
+                     &work[1], lwork, info);
 /*<             IF( INFO.NE.0 ) THEN >*/
-	    if (*info != 0) {
+            if (*info != 0) {
 /*<                ILST = HERE >*/
-		*ilst = here;
+                *ilst = here;
 /*<                RETURN >*/
-		return 0;
+                return 0;
 /*<             END IF >*/
-	    }
+            }
 /*<             HERE = HERE - NBNEXT >*/
-	    here -= nbnext;
+            here -= nbnext;
 
 /*           Test if 2-by-2 block breaks into two 1-by-1 blocks. */
 
 /*<             IF( NBF.EQ.2 ) THEN >*/
-	    if (nbf == 2) {
+            if (nbf == 2) {
 /*<    >*/
-		if (a[here + 1 + here * a_dim1] == 0.) {
-		    nbf = 3;
-		}
+                if (a[here + 1 + here * a_dim1] == 0.) {
+                    nbf = 3;
+                }
 /*<             END IF >*/
-	    }
+            }
 
 /*<          ELSE >*/
-	} else {
+        } else {
 
 /*           Current block consists of two 1-by-1 blocks, each of which */
 /*           must be swapped individually. */
 
 /*<             NBNEXT = 1 >*/
-	    nbnext = 1;
+            nbnext = 1;
 /*<             IF( HERE.GE.3 ) THEN >*/
-	    if (here >= 3) {
+            if (here >= 3) {
 /*<    >*/
-		if (a[here - 1 + (here - 2) * a_dim1] != 0.) {
-		    nbnext = 2;
-		}
+                if (a[here - 1 + (here - 2) * a_dim1] != 0.) {
+                    nbnext = 2;
+                }
 /*<             END IF >*/
-	    }
+            }
 /*<    >*/
-	    i__1 = here - nbnext;
-	    dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[
-		    q_offset], ldq, &z__[z_offset], ldz, &i__1, &nbnext, &
-		    c__1, &work[1], lwork, info);
+            i__1 = here - nbnext;
+            dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb, &q[
+                    q_offset], ldq, &z__[z_offset], ldz, &i__1, &nbnext, &
+                    c__1, &work[1], lwork, info);
 /*<             IF( INFO.NE.0 ) THEN >*/
-	    if (*info != 0) {
+            if (*info != 0) {
 /*<                ILST = HERE >*/
-		*ilst = here;
+                *ilst = here;
 /*<                RETURN >*/
-		return 0;
+                return 0;
 /*<             END IF >*/
-	    }
+            }
 /*<             IF( NBNEXT.EQ.1 ) THEN >*/
-	    if (nbnext == 1) {
+            if (nbnext == 1) {
 
 /*              Swap two 1-by-1 blocks. */
 
 /*<    >*/
-		dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb,
-			 &q[q_offset], ldq, &z__[z_offset], ldz, &here, &
-			nbnext, &c__1, &work[1], lwork, info);
+                dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], ldb,
+                         &q[q_offset], ldq, &z__[z_offset], ldz, &here, &
+                        nbnext, &c__1, &work[1], lwork, info);
 /*<                IF( INFO.NE.0 ) THEN >*/
-		if (*info != 0) {
+                if (*info != 0) {
 /*<                   ILST = HERE >*/
-		    *ilst = here;
+                    *ilst = here;
 /*<                   RETURN >*/
-		    return 0;
+                    return 0;
 /*<                END IF >*/
-		}
+                }
 /*<                HERE = HERE - 1 >*/
-		--here;
+                --here;
 /*<             ELSE >*/
-	    } else {
+            } else {
 
 /*             Recompute NBNEXT in case of 2-by-2 split. */
 
 /*<    >*/
-		if (a[here + (here - 1) * a_dim1] == 0.) {
-		    nbnext = 1;
-		}
+                if (a[here + (here - 1) * a_dim1] == 0.) {
+                    nbnext = 1;
+                }
 /*<                IF( NBNEXT.EQ.2 ) THEN >*/
-		if (nbnext == 2) {
+                if (nbnext == 2) {
 
 /*                 2-by-2 block did not split. */
 
 /*<    >*/
-		    i__1 = here - 1;
-		    dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], 
-			    ldb, &q[q_offset], ldq, &z__[z_offset], ldz, &
-			    i__1, &c__2, &c__1, &work[1], lwork, info);
+                    i__1 = here - 1;
+                    dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], 
+                            ldb, &q[q_offset], ldq, &z__[z_offset], ldz, &
+                            i__1, &c__2, &c__1, &work[1], lwork, info);
 /*<                   IF( INFO.NE.0 ) THEN >*/
-		    if (*info != 0) {
+                    if (*info != 0) {
 /*<                      ILST = HERE >*/
-			*ilst = here;
+                        *ilst = here;
 /*<                      RETURN >*/
-			return 0;
+                        return 0;
 /*<                   END IF >*/
-		    }
+                    }
 /*<                   HERE = HERE - 2 >*/
-		    here += -2;
+                    here += -2;
 /*<                ELSE >*/
-		} else {
+                } else {
 
 /*                 2-by-2 block did split. */
 
 /*<    >*/
-		    dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], 
-			    ldb, &q[q_offset], ldq, &z__[z_offset], ldz, &
-			    here, &c__1, &c__1, &work[1], lwork, info);
+                    dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], 
+                            ldb, &q[q_offset], ldq, &z__[z_offset], ldz, &
+                            here, &c__1, &c__1, &work[1], lwork, info);
 /*<                   IF( INFO.NE.0 ) THEN >*/
-		    if (*info != 0) {
+                    if (*info != 0) {
 /*<                      ILST = HERE >*/
-			*ilst = here;
+                        *ilst = here;
 /*<                      RETURN >*/
-			return 0;
+                        return 0;
 /*<                   END IF >*/
-		    }
+                    }
 /*<                   HERE = HERE - 1 >*/
-		    --here;
+                    --here;
 /*<    >*/
-		    dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], 
-			    ldb, &q[q_offset], ldq, &z__[z_offset], ldz, &
-			    here, &c__1, &c__1, &work[1], lwork, info);
+                    dtgex2_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], 
+                            ldb, &q[q_offset], ldq, &z__[z_offset], ldz, &
+                            here, &c__1, &c__1, &work[1], lwork, info);
 /*<                   IF( INFO.NE.0 ) THEN >*/
-		    if (*info != 0) {
+                    if (*info != 0) {
 /*<                      ILST = HERE >*/
-			*ilst = here;
+                        *ilst = here;
 /*<                      RETURN >*/
-			return 0;
+                        return 0;
 /*<                   END IF >*/
-		    }
+                    }
 /*<                   HERE = HERE - 1 >*/
-		    --here;
+                    --here;
 /*<                END IF >*/
-		}
+                }
 /*<             END IF >*/
-	    }
+            }
 /*<          END IF >*/
-	}
+        }
 /*<    >*/
-	if (here > *ilst) {
-	    goto L20;
-	}
+        if (here > *ilst) {
+            goto L20;
+        }
 /*<       END IF >*/
     }
 /*<       ILST = HERE >*/
@@ -695,5 +695,5 @@ L20:
 } /* dtgexc_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

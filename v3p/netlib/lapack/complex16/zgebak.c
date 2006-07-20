@@ -1,13 +1,13 @@
 /* lapack/complex16/zgebak.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -17,8 +17,8 @@ extern "C" {
 
 /*<    >*/
 /* Subroutine */ int zgebak_(char *job, char *side, integer *n, integer *ilo, 
-	integer *ihi, doublereal *scale, integer *m, doublecomplex *v, 
-	integer *ldv, integer *info, ftnlen job_len, ftnlen side_len)
+        integer *ihi, doublereal *scale, integer *m, doublecomplex *v, 
+        integer *ldv, integer *info, ftnlen job_len, ftnlen side_len)
 {
     /* System generated locals */
     integer v_dim1, v_offset, i__1;
@@ -30,8 +30,8 @@ extern "C" {
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     logical leftv;
     extern /* Subroutine */ int zswap_(integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *), xerbla_(char *, integer *, ftnlen), 
-	    zdscal_(integer *, doublereal *, doublecomplex *, integer *);
+            doublecomplex *, integer *), xerbla_(char *, integer *, ftnlen), 
+            zdscal_(integer *, doublereal *, doublecomplex *, integer *);
     logical rightv;
     (void)job_len;
     (void)side_len;
@@ -141,43 +141,43 @@ extern "C" {
     *info = 0;
 /*<    >*/
     if (! lsame_(job, "N", (ftnlen)1, (ftnlen)1) && ! lsame_(job, "P", (
-	    ftnlen)1, (ftnlen)1) && ! lsame_(job, "S", (ftnlen)1, (ftnlen)1) 
-	    && ! lsame_(job, "B", (ftnlen)1, (ftnlen)1)) {
+            ftnlen)1, (ftnlen)1) && ! lsame_(job, "S", (ftnlen)1, (ftnlen)1) 
+            && ! lsame_(job, "B", (ftnlen)1, (ftnlen)1)) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<       ELSE IF( .NOT.RIGHTV .AND. .NOT.LEFTV ) THEN >*/
     } else if (! rightv && ! leftv) {
 /*<          INFO = -2 >*/
-	*info = -2;
+        *info = -2;
 /*<       ELSE IF( N.LT.0 ) THEN >*/
     } else if (*n < 0) {
 /*<          INFO = -3 >*/
-	*info = -3;
+        *info = -3;
 /*<       ELSE IF( ILO.LT.1 .OR. ILO.GT.MAX( 1, N ) ) THEN >*/
     } else if (*ilo < 1 || *ilo > max(1,*n)) {
 /*<          INFO = -4 >*/
-	*info = -4;
+        *info = -4;
 /*<       ELSE IF( IHI.LT.MIN( ILO, N ) .OR. IHI.GT.N ) THEN >*/
     } else if (*ihi < min(*ilo,*n) || *ihi > *n) {
 /*<          INFO = -5 >*/
-	*info = -5;
+        *info = -5;
 /*<       ELSE IF( M.LT.0 ) THEN >*/
     } else if (*m < 0) {
 /*<          INFO = -7 >*/
-	*info = -7;
+        *info = -7;
 /*<       ELSE IF( LDV.LT.MAX( 1, N ) ) THEN >*/
     } else if (*ldv < max(1,*n)) {
 /*<          INFO = -9 >*/
-	*info = -9;
+        *info = -9;
 /*<       END IF >*/
     }
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'ZGEBAK', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("ZGEBAK", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("ZGEBAK", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -185,57 +185,57 @@ extern "C" {
 
 /*<    >*/
     if (*n == 0) {
-	return 0;
+        return 0;
     }
 /*<    >*/
     if (*m == 0) {
-	return 0;
+        return 0;
     }
 /*<    >*/
     if (lsame_(job, "N", (ftnlen)1, (ftnlen)1)) {
-	return 0;
+        return 0;
     }
 
 /*<    >*/
     if (*ilo == *ihi) {
-	goto L30;
+        goto L30;
     }
 
 /*     Backward balance */
 
 /*<       IF( LSAME( JOB, 'S' ) .OR. LSAME( JOB, 'B' ) ) THEN >*/
     if (lsame_(job, "S", (ftnlen)1, (ftnlen)1) || lsame_(job, "B", (ftnlen)1, 
-	    (ftnlen)1)) {
+            (ftnlen)1)) {
 
 /*<          IF( RIGHTV ) THEN >*/
-	if (rightv) {
+        if (rightv) {
 /*<             DO 10 I = ILO, IHI >*/
-	    i__1 = *ihi;
-	    for (i__ = *ilo; i__ <= i__1; ++i__) {
+            i__1 = *ihi;
+            for (i__ = *ilo; i__ <= i__1; ++i__) {
 /*<                S = SCALE( I ) >*/
-		s = scale[i__];
+                s = scale[i__];
 /*<                CALL ZDSCAL( M, S, V( I, 1 ), LDV ) >*/
-		zdscal_(m, &s, &v[i__ + v_dim1], ldv);
+                zdscal_(m, &s, &v[i__ + v_dim1], ldv);
 /*<    10       CONTINUE >*/
 /* L10: */
-	    }
+            }
 /*<          END IF >*/
-	}
+        }
 
 /*<          IF( LEFTV ) THEN >*/
-	if (leftv) {
+        if (leftv) {
 /*<             DO 20 I = ILO, IHI >*/
-	    i__1 = *ihi;
-	    for (i__ = *ilo; i__ <= i__1; ++i__) {
+            i__1 = *ihi;
+            for (i__ = *ilo; i__ <= i__1; ++i__) {
 /*<                S = ONE / SCALE( I ) >*/
-		s = 1. / scale[i__];
+                s = 1. / scale[i__];
 /*<                CALL ZDSCAL( M, S, V( I, 1 ), LDV ) >*/
-		zdscal_(m, &s, &v[i__ + v_dim1], ldv);
+                zdscal_(m, &s, &v[i__ + v_dim1], ldv);
 /*<    20       CONTINUE >*/
 /* L20: */
-	    }
+            }
 /*<          END IF >*/
-	}
+        }
 
 /*<       END IF >*/
     }
@@ -249,66 +249,66 @@ extern "C" {
 L30:
 /*<       IF( LSAME( JOB, 'P' ) .OR. LSAME( JOB, 'B' ) ) THEN >*/
     if (lsame_(job, "P", (ftnlen)1, (ftnlen)1) || lsame_(job, "B", (ftnlen)1, 
-	    (ftnlen)1)) {
+            (ftnlen)1)) {
 /*<          IF( RIGHTV ) THEN >*/
-	if (rightv) {
+        if (rightv) {
 /*<             DO 40 II = 1, N >*/
-	    i__1 = *n;
-	    for (ii = 1; ii <= i__1; ++ii) {
+            i__1 = *n;
+            for (ii = 1; ii <= i__1; ++ii) {
 /*<                I = II >*/
-		i__ = ii;
+                i__ = ii;
 /*<    >*/
-		if (i__ >= *ilo && i__ <= *ihi) {
-		    goto L40;
-		}
+                if (i__ >= *ilo && i__ <= *ihi) {
+                    goto L40;
+                }
 /*<    >*/
-		if (i__ < *ilo) {
-		    i__ = *ilo - ii;
-		}
+                if (i__ < *ilo) {
+                    i__ = *ilo - ii;
+                }
 /*<                K = SCALE( I ) >*/
-		k = (integer) scale[i__];
+                k = (integer) scale[i__];
 /*<    >*/
-		if (k == i__) {
-		    goto L40;
-		}
+                if (k == i__) {
+                    goto L40;
+                }
 /*<                CALL ZSWAP( M, V( I, 1 ), LDV, V( K, 1 ), LDV ) >*/
-		zswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
+                zswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
 /*<    40       CONTINUE >*/
 L40:
-		;
-	    }
+                ;
+            }
 /*<          END IF >*/
-	}
+        }
 
 /*<          IF( LEFTV ) THEN >*/
-	if (leftv) {
+        if (leftv) {
 /*<             DO 50 II = 1, N >*/
-	    i__1 = *n;
-	    for (ii = 1; ii <= i__1; ++ii) {
+            i__1 = *n;
+            for (ii = 1; ii <= i__1; ++ii) {
 /*<                I = II >*/
-		i__ = ii;
+                i__ = ii;
 /*<    >*/
-		if (i__ >= *ilo && i__ <= *ihi) {
-		    goto L50;
-		}
+                if (i__ >= *ilo && i__ <= *ihi) {
+                    goto L50;
+                }
 /*<    >*/
-		if (i__ < *ilo) {
-		    i__ = *ilo - ii;
-		}
+                if (i__ < *ilo) {
+                    i__ = *ilo - ii;
+                }
 /*<                K = SCALE( I ) >*/
-		k = (integer) scale[i__];
+                k = (integer) scale[i__];
 /*<    >*/
-		if (k == i__) {
-		    goto L50;
-		}
+                if (k == i__) {
+                    goto L50;
+                }
 /*<                CALL ZSWAP( M, V( I, 1 ), LDV, V( K, 1 ), LDV ) >*/
-		zswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
+                zswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
 /*<    50       CONTINUE >*/
 L50:
-		;
-	    }
+                ;
+            }
 /*<          END IF >*/
-	}
+        }
 /*<       END IF >*/
     }
 
@@ -321,5 +321,5 @@ L50:
 } /* zgebak_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

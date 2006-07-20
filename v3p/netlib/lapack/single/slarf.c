@@ -1,13 +1,13 @@
 /* lapack/single/slarf.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -23,8 +23,8 @@ static integer c__1 = 1;
 
 /*<       SUBROUTINE SLARF( SIDE, M, N, V, INCV, TAU, C, LDC, WORK ) >*/
 /* Subroutine */ int slarf_(char *side, integer *m, integer *n, real *v, 
-	integer *incv, real *tau, real *c__, integer *ldc, real *work, ftnlen 
-	side_len)
+        integer *incv, real *tau, real *c__, integer *ldc, real *work, ftnlen 
+        side_len)
 {
     /* System generated locals */
     integer c_dim1, c_offset;
@@ -32,11 +32,11 @@ static integer c__1 = 1;
 
     /* Local variables */
     extern /* Subroutine */ int sger_(integer *, integer *, real *, real *, 
-	    integer *, real *, integer *, real *, integer *);
+            integer *, real *, integer *, real *, integer *);
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int sgemv_(char *, integer *, integer *, real *, 
-	    real *, integer *, real *, integer *, real *, real *, integer *, 
-	    ftnlen);
+            real *, integer *, real *, integer *, real *, real *, integer *, 
+            ftnlen);
     (void)side_len;
 
 /*  -- LAPACK auxiliary routine (version 3.0) -- */
@@ -131,44 +131,44 @@ static integer c__1 = 1;
 /*        Form  H * C */
 
 /*<          IF( TAU.NE.ZERO ) THEN >*/
-	if (*tau != (float)0.) {
+        if (*tau != (float)0.) {
 
 /*           w := C' * v */
 
 /*<    >*/
-	    sgemv_("Transpose", m, n, &c_b4, &c__[c_offset], ldc, &v[1], incv,
-		     &c_b5, &work[1], &c__1, (ftnlen)9);
+            sgemv_("Transpose", m, n, &c_b4, &c__[c_offset], ldc, &v[1], incv,
+                     &c_b5, &work[1], &c__1, (ftnlen)9);
 
 /*           C := C - v * w' */
 
 /*<             CALL SGER( M, N, -TAU, V, INCV, WORK, 1, C, LDC ) >*/
-	    r__1 = -(*tau);
-	    sger_(m, n, &r__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], 
-		    ldc);
+            r__1 = -(*tau);
+            sger_(m, n, &r__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], 
+                    ldc);
 /*<          END IF >*/
-	}
+        }
 /*<       ELSE >*/
     } else {
 
 /*        Form  C * H */
 
 /*<          IF( TAU.NE.ZERO ) THEN >*/
-	if (*tau != (float)0.) {
+        if (*tau != (float)0.) {
 
 /*           w := C * v */
 
 /*<    >*/
-	    sgemv_("No transpose", m, n, &c_b4, &c__[c_offset], ldc, &v[1], 
-		    incv, &c_b5, &work[1], &c__1, (ftnlen)12);
+            sgemv_("No transpose", m, n, &c_b4, &c__[c_offset], ldc, &v[1], 
+                    incv, &c_b5, &work[1], &c__1, (ftnlen)12);
 
 /*           C := C - w * v' */
 
 /*<             CALL SGER( M, N, -TAU, WORK, 1, V, INCV, C, LDC ) >*/
-	    r__1 = -(*tau);
-	    sger_(m, n, &r__1, &work[1], &c__1, &v[1], incv, &c__[c_offset], 
-		    ldc);
+            r__1 = -(*tau);
+            sger_(m, n, &r__1, &work[1], &c__1, &v[1], incv, &c__[c_offset], 
+                    ldc);
 /*<          END IF >*/
-	}
+        }
 /*<       END IF >*/
     }
 /*<       RETURN >*/
@@ -180,5 +180,5 @@ static integer c__1 = 1;
 } /* slarf_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

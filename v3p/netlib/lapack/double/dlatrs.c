@@ -1,13 +1,13 @@
 /* lapack/double/dlatrs.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -22,9 +22,9 @@ static doublereal c_b36 = .5;
 
 /*<    >*/
 /* Subroutine */ int dlatrs_(char *uplo, char *trans, char *diag, char *
-	normin, integer *n, doublereal *a, integer *lda, doublereal *x, 
-	doublereal *scale, doublereal *cnorm, integer *info, ftnlen uplo_len, 
-	ftnlen trans_len, ftnlen diag_len, ftnlen normin_len)
+        normin, integer *n, doublereal *a, integer *lda, doublereal *x, 
+        doublereal *scale, doublereal *cnorm, integer *info, ftnlen uplo_len, 
+        ftnlen trans_len, ftnlen diag_len, ftnlen normin_len)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
@@ -35,22 +35,22 @@ static doublereal c_b36 = .5;
     doublereal xj, rec, tjj;
     integer jinc;
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, 
-	    integer *);
+            integer *);
     doublereal xbnd;
     integer imax;
     doublereal tmax, tjjs=0, xmax, grow, sumj;
     extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
-	    integer *);
+            integer *);
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     doublereal tscal, uscal;
     extern doublereal dasum_(integer *, doublereal *, integer *);
     integer jlast;
     extern /* Subroutine */ int daxpy_(integer *, doublereal *, doublereal *, 
-	    integer *, doublereal *, integer *);
+            integer *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */ int dtrsv_(char *, char *, char *, integer *, 
-	    doublereal *, integer *, doublereal *, integer *, ftnlen, ftnlen, 
-	    ftnlen);
+            doublereal *, integer *, doublereal *, integer *, ftnlen, ftnlen, 
+            ftnlen);
     extern doublereal dlamch_(char *, ftnlen);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
@@ -277,38 +277,38 @@ static doublereal c_b36 = .5;
 /*<       IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN >*/
     if (! upper && ! lsame_(uplo, "L", (ftnlen)1, (ftnlen)1)) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<    >*/
     } else if (! notran && ! lsame_(trans, "T", (ftnlen)1, (ftnlen)1) && ! 
-	    lsame_(trans, "C", (ftnlen)1, (ftnlen)1)) {
+            lsame_(trans, "C", (ftnlen)1, (ftnlen)1)) {
 /*<          INFO = -2 >*/
-	*info = -2;
+        *info = -2;
 /*<       ELSE IF( .NOT.NOUNIT .AND. .NOT.LSAME( DIAG, 'U' ) ) THEN >*/
     } else if (! nounit && ! lsame_(diag, "U", (ftnlen)1, (ftnlen)1)) {
 /*<          INFO = -3 >*/
-	*info = -3;
+        *info = -3;
 /*<    >*/
     } else if (! lsame_(normin, "Y", (ftnlen)1, (ftnlen)1) && ! lsame_(normin,
-	     "N", (ftnlen)1, (ftnlen)1)) {
+             "N", (ftnlen)1, (ftnlen)1)) {
 /*<          INFO = -4 >*/
-	*info = -4;
+        *info = -4;
 /*<       ELSE IF( N.LT.0 ) THEN >*/
     } else if (*n < 0) {
 /*<          INFO = -5 >*/
-	*info = -5;
+        *info = -5;
 /*<       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN >*/
     } else if (*lda < max(1,*n)) {
 /*<          INFO = -7 >*/
-	*info = -7;
+        *info = -7;
 /*<       END IF >*/
     }
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'DLATRS', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("DLATRS", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("DLATRS", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -316,14 +316,14 @@ static doublereal c_b36 = .5;
 
 /*<    >*/
     if (*n == 0) {
-	return 0;
+        return 0;
     }
 
 /*     Determine machine dependent parameters to control overflow. */
 
 /*<       SMLNUM = DLAMCH( 'Safe minimum' ) / DLAMCH( 'Precision' ) >*/
     smlnum = dlamch_("Safe minimum", (ftnlen)12) / dlamch_("Precision", (
-	    ftnlen)9);
+            ftnlen)9);
 /*<       BIGNUM = ONE / SMLNUM >*/
     bignum = 1. / smlnum;
 /*<       SCALE = ONE >*/
@@ -335,37 +335,37 @@ static doublereal c_b36 = .5;
 /*        Compute the 1-norm of each column, not including the diagonal. */
 
 /*<          IF( UPPER ) THEN >*/
-	if (upper) {
+        if (upper) {
 
 /*           A is upper triangular. */
 
 /*<             DO 10 J = 1, N >*/
-	    i__1 = *n;
-	    for (j = 1; j <= i__1; ++j) {
+            i__1 = *n;
+            for (j = 1; j <= i__1; ++j) {
 /*<                CNORM( J ) = DASUM( J-1, A( 1, J ), 1 ) >*/
-		i__2 = j - 1;
-		cnorm[j] = dasum_(&i__2, &a[j * a_dim1 + 1], &c__1);
+                i__2 = j - 1;
+                cnorm[j] = dasum_(&i__2, &a[j * a_dim1 + 1], &c__1);
 /*<    10       CONTINUE >*/
 /* L10: */
-	    }
+            }
 /*<          ELSE >*/
-	} else {
+        } else {
 
 /*           A is lower triangular. */
 
 /*<             DO 20 J = 1, N - 1 >*/
-	    i__1 = *n - 1;
-	    for (j = 1; j <= i__1; ++j) {
+            i__1 = *n - 1;
+            for (j = 1; j <= i__1; ++j) {
 /*<                CNORM( J ) = DASUM( N-J, A( J+1, J ), 1 ) >*/
-		i__2 = *n - j;
-		cnorm[j] = dasum_(&i__2, &a[j + 1 + j * a_dim1], &c__1);
+                i__2 = *n - j;
+                cnorm[j] = dasum_(&i__2, &a[j + 1 + j * a_dim1], &c__1);
 /*<    20       CONTINUE >*/
 /* L20: */
-	    }
+            }
 /*<             CNORM( N ) = ZERO >*/
-	    cnorm[*n] = 0.;
+            cnorm[*n] = 0.;
 /*<          END IF >*/
-	}
+        }
 /*<       END IF >*/
     }
 
@@ -379,13 +379,13 @@ static doublereal c_b36 = .5;
 /*<       IF( TMAX.LE.BIGNUM ) THEN >*/
     if (tmax <= bignum) {
 /*<          TSCAL = ONE >*/
-	tscal = 1.;
+        tscal = 1.;
 /*<       ELSE >*/
     } else {
 /*<          TSCAL = ONE / ( SMLNUM*TMAX ) >*/
-	tscal = 1. / (smlnum * tmax);
+        tscal = 1. / (smlnum * tmax);
 /*<          CALL DSCAL( N, TSCAL, CNORM, 1 ) >*/
-	dscal_(n, &tscal, &cnorm[1], &c__1);
+        dscal_(n, &tscal, &cnorm[1], &c__1);
 /*<       END IF >*/
     }
 
@@ -404,35 +404,35 @@ static doublereal c_b36 = .5;
 /*        Compute the growth in A * x = b. */
 
 /*<          IF( UPPER ) THEN >*/
-	if (upper) {
+        if (upper) {
 /*<             JFIRST = N >*/
-	    jfirst = *n;
+            jfirst = *n;
 /*<             JLAST = 1 >*/
-	    jlast = 1;
+            jlast = 1;
 /*<             JINC = -1 >*/
-	    jinc = -1;
+            jinc = -1;
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             JFIRST = 1 >*/
-	    jfirst = 1;
+            jfirst = 1;
 /*<             JLAST = N >*/
-	    jlast = *n;
+            jlast = *n;
 /*<             JINC = 1 >*/
-	    jinc = 1;
+            jinc = 1;
 /*<          END IF >*/
-	}
+        }
 
 /*<          IF( TSCAL.NE.ONE ) THEN >*/
-	if (tscal != 1.) {
+        if (tscal != 1.) {
 /*<             GROW = ZERO >*/
-	    grow = 0.;
+            grow = 0.;
 /*<             GO TO 50 >*/
-	    goto L50;
+            goto L50;
 /*<          END IF >*/
-	}
+        }
 
 /*<          IF( NOUNIT ) THEN >*/
-	if (nounit) {
+        if (nounit) {
 
 /*           A is non-unit triangular. */
 
@@ -440,52 +440,52 @@ static doublereal c_b36 = .5;
 /*           Initially, G(0) = max{x(i), i=1,...,n}. */
 
 /*<             GROW = ONE / MAX( XBND, SMLNUM ) >*/
-	    grow = 1. / max(xbnd,smlnum);
+            grow = 1. / max(xbnd,smlnum);
 /*<             XBND = GROW >*/
-	    xbnd = grow;
+            xbnd = grow;
 /*<             DO 30 J = JFIRST, JLAST, JINC >*/
-	    i__1 = jlast;
-	    i__2 = jinc;
-	    for (j = jfirst; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2) {
+            i__1 = jlast;
+            i__2 = jinc;
+            for (j = jfirst; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2) {
 
 /*              Exit the loop if the growth factor is too small. */
 
 /*<    >*/
-		if (grow <= smlnum) {
-		    goto L50;
-		}
+                if (grow <= smlnum) {
+                    goto L50;
+                }
 
 /*              M(j) = G(j-1) / abs(A(j,j)) */
 
 /*<                TJJ = ABS( A( J, J ) ) >*/
-		tjj = (d__1 = a[j + j * a_dim1], abs(d__1));
+                tjj = (d__1 = a[j + j * a_dim1], abs(d__1));
 /*<                XBND = MIN( XBND, MIN( ONE, TJJ )*GROW ) >*/
 /* Computing MIN */
-		d__1 = xbnd, d__2 = min(1.,tjj) * grow;
-		xbnd = min(d__1,d__2);
+                d__1 = xbnd, d__2 = min(1.,tjj) * grow;
+                xbnd = min(d__1,d__2);
 /*<                IF( TJJ+CNORM( J ).GE.SMLNUM ) THEN >*/
-		if (tjj + cnorm[j] >= smlnum) {
+                if (tjj + cnorm[j] >= smlnum) {
 
 /*                 G(j) = G(j-1)*( 1 + CNORM(j) / abs(A(j,j)) ) */
 
 /*<                   GROW = GROW*( TJJ / ( TJJ+CNORM( J ) ) ) >*/
-		    grow *= tjj / (tjj + cnorm[j]);
+                    grow *= tjj / (tjj + cnorm[j]);
 /*<                ELSE >*/
-		} else {
+                } else {
 
 /*                 G(j) could overflow, set GROW to 0. */
 
 /*<                   GROW = ZERO >*/
-		    grow = 0.;
+                    grow = 0.;
 /*<                END IF >*/
-		}
+                }
 /*<    30       CONTINUE >*/
 /* L30: */
-	    }
+            }
 /*<             GROW = XBND >*/
-	    grow = xbnd;
+            grow = xbnd;
 /*<          ELSE >*/
-	} else {
+        } else {
 
 /*           A is unit triangular. */
 
@@ -493,68 +493,68 @@ static doublereal c_b36 = .5;
 
 /*<             GROW = MIN( ONE, ONE / MAX( XBND, SMLNUM ) ) >*/
 /* Computing MIN */
-	    d__1 = 1., d__2 = 1. / max(xbnd,smlnum);
-	    grow = min(d__1,d__2);
+            d__1 = 1., d__2 = 1. / max(xbnd,smlnum);
+            grow = min(d__1,d__2);
 /*<             DO 40 J = JFIRST, JLAST, JINC >*/
-	    i__2 = jlast;
-	    i__1 = jinc;
-	    for (j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1) {
+            i__2 = jlast;
+            i__1 = jinc;
+            for (j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1) {
 
 /*              Exit the loop if the growth factor is too small. */
 
 /*<    >*/
-		if (grow <= smlnum) {
-		    goto L50;
-		}
+                if (grow <= smlnum) {
+                    goto L50;
+                }
 
 /*              G(j) = G(j-1)*( 1 + CNORM(j) ) */
 
 /*<                GROW = GROW*( ONE / ( ONE+CNORM( J ) ) ) >*/
-		grow *= 1. / (cnorm[j] + 1.);
+                grow *= 1. / (cnorm[j] + 1.);
 /*<    40       CONTINUE >*/
 /* L40: */
-	    }
+            }
 /*<          END IF >*/
-	}
+        }
 /*<    50    CONTINUE >*/
 L50:
 
 /*<       ELSE >*/
-	;
+        ;
     } else {
 
 /*        Compute the growth in A' * x = b. */
 
 /*<          IF( UPPER ) THEN >*/
-	if (upper) {
+        if (upper) {
 /*<             JFIRST = 1 >*/
-	    jfirst = 1;
+            jfirst = 1;
 /*<             JLAST = N >*/
-	    jlast = *n;
+            jlast = *n;
 /*<             JINC = 1 >*/
-	    jinc = 1;
+            jinc = 1;
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             JFIRST = N >*/
-	    jfirst = *n;
+            jfirst = *n;
 /*<             JLAST = 1 >*/
-	    jlast = 1;
+            jlast = 1;
 /*<             JINC = -1 >*/
-	    jinc = -1;
+            jinc = -1;
 /*<          END IF >*/
-	}
+        }
 
 /*<          IF( TSCAL.NE.ONE ) THEN >*/
-	if (tscal != 1.) {
+        if (tscal != 1.) {
 /*<             GROW = ZERO >*/
-	    grow = 0.;
+            grow = 0.;
 /*<             GO TO 80 >*/
-	    goto L80;
+            goto L80;
 /*<          END IF >*/
-	}
+        }
 
 /*<          IF( NOUNIT ) THEN >*/
-	if (nounit) {
+        if (nounit) {
 
 /*           A is non-unit triangular. */
 
@@ -562,45 +562,45 @@ L50:
 /*           Initially, M(0) = max{x(i), i=1,...,n}. */
 
 /*<             GROW = ONE / MAX( XBND, SMLNUM ) >*/
-	    grow = 1. / max(xbnd,smlnum);
+            grow = 1. / max(xbnd,smlnum);
 /*<             XBND = GROW >*/
-	    xbnd = grow;
+            xbnd = grow;
 /*<             DO 60 J = JFIRST, JLAST, JINC >*/
-	    i__1 = jlast;
-	    i__2 = jinc;
-	    for (j = jfirst; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2) {
+            i__1 = jlast;
+            i__2 = jinc;
+            for (j = jfirst; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2) {
 
 /*              Exit the loop if the growth factor is too small. */
 
 /*<    >*/
-		if (grow <= smlnum) {
-		    goto L80;
-		}
+                if (grow <= smlnum) {
+                    goto L80;
+                }
 
 /*              G(j) = max( G(j-1), M(j-1)*( 1 + CNORM(j) ) ) */
 
 /*<                XJ = ONE + CNORM( J ) >*/
-		xj = cnorm[j] + 1.;
+                xj = cnorm[j] + 1.;
 /*<                GROW = MIN( GROW, XBND / XJ ) >*/
 /* Computing MIN */
-		d__1 = grow, d__2 = xbnd / xj;
-		grow = min(d__1,d__2);
+                d__1 = grow, d__2 = xbnd / xj;
+                grow = min(d__1,d__2);
 
 /*              M(j) = M(j-1)*( 1 + CNORM(j) ) / abs(A(j,j)) */
 
 /*<                TJJ = ABS( A( J, J ) ) >*/
-		tjj = (d__1 = a[j + j * a_dim1], abs(d__1));
+                tjj = (d__1 = a[j + j * a_dim1], abs(d__1));
 /*<    >*/
-		if (xj > tjj) {
-		    xbnd *= tjj / xj;
-		}
+                if (xj > tjj) {
+                    xbnd *= tjj / xj;
+                }
 /*<    60       CONTINUE >*/
 /* L60: */
-	    }
+            }
 /*<             GROW = MIN( GROW, XBND ) >*/
-	    grow = min(grow,xbnd);
+            grow = min(grow,xbnd);
 /*<          ELSE >*/
-	} else {
+        } else {
 
 /*           A is unit triangular. */
 
@@ -608,35 +608,35 @@ L50:
 
 /*<             GROW = MIN( ONE, ONE / MAX( XBND, SMLNUM ) ) >*/
 /* Computing MIN */
-	    d__1 = 1., d__2 = 1. / max(xbnd,smlnum);
-	    grow = min(d__1,d__2);
+            d__1 = 1., d__2 = 1. / max(xbnd,smlnum);
+            grow = min(d__1,d__2);
 /*<             DO 70 J = JFIRST, JLAST, JINC >*/
-	    i__2 = jlast;
-	    i__1 = jinc;
-	    for (j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1) {
+            i__2 = jlast;
+            i__1 = jinc;
+            for (j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1) {
 
 /*              Exit the loop if the growth factor is too small. */
 
 /*<    >*/
-		if (grow <= smlnum) {
-		    goto L80;
-		}
+                if (grow <= smlnum) {
+                    goto L80;
+                }
 
 /*              G(j) = ( 1 + CNORM(j) )*G(j-1) */
 
 /*<                XJ = ONE + CNORM( J ) >*/
-		xj = cnorm[j] + 1.;
+                xj = cnorm[j] + 1.;
 /*<                GROW = GROW / XJ >*/
-		grow /= xj;
+                grow /= xj;
 /*<    70       CONTINUE >*/
 /* L70: */
-	    }
+            }
 /*<          END IF >*/
-	}
+        }
 /*<    80    CONTINUE >*/
 L80:
 /*<       END IF >*/
-	;
+        ;
     }
 
 /*<       IF( ( GROW*TSCAL ).GT.SMLNUM ) THEN >*/
@@ -646,145 +646,145 @@ L80:
 /*        elements of X is not too small. */
 
 /*<          CALL DTRSV( UPLO, TRANS, DIAG, N, A, LDA, X, 1 ) >*/
-	dtrsv_(uplo, trans, diag, n, &a[a_offset], lda, &x[1], &c__1, (ftnlen)
-		1, (ftnlen)1, (ftnlen)1);
+        dtrsv_(uplo, trans, diag, n, &a[a_offset], lda, &x[1], &c__1, (ftnlen)
+                1, (ftnlen)1, (ftnlen)1);
 /*<       ELSE >*/
     } else {
 
 /*        Use a Level 1 BLAS solve, scaling intermediate results. */
 
 /*<          IF( XMAX.GT.BIGNUM ) THEN >*/
-	if (xmax > bignum) {
+        if (xmax > bignum) {
 
 /*           Scale X so that its components are less than or equal to */
 /*           BIGNUM in absolute value. */
 
 /*<             SCALE = BIGNUM / XMAX >*/
-	    *scale = bignum / xmax;
+            *scale = bignum / xmax;
 /*<             CALL DSCAL( N, SCALE, X, 1 ) >*/
-	    dscal_(n, scale, &x[1], &c__1);
+            dscal_(n, scale, &x[1], &c__1);
 /*<             XMAX = BIGNUM >*/
-	    xmax = bignum;
+            xmax = bignum;
 /*<          END IF >*/
-	}
+        }
 
 /*<          IF( NOTRAN ) THEN >*/
-	if (notran) {
+        if (notran) {
 
 /*           Solve A * x = b */
 
 /*<             DO 110 J = JFIRST, JLAST, JINC >*/
-	    i__1 = jlast;
-	    i__2 = jinc;
-	    for (j = jfirst; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2) {
+            i__1 = jlast;
+            i__2 = jinc;
+            for (j = jfirst; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2) {
 
 /*              Compute x(j) = b(j) / A(j,j), scaling x if necessary. */
 
 /*<                XJ = ABS( X( J ) ) >*/
-		xj = (d__1 = x[j], abs(d__1));
+                xj = (d__1 = x[j], abs(d__1));
 /*<                IF( NOUNIT ) THEN >*/
-		if (nounit) {
+                if (nounit) {
 /*<                   TJJS = A( J, J )*TSCAL >*/
-		    tjjs = a[j + j * a_dim1] * tscal;
+                    tjjs = a[j + j * a_dim1] * tscal;
 /*<                ELSE >*/
-		} else {
+                } else {
 /*<                   TJJS = TSCAL >*/
-		    tjjs = tscal;
+                    tjjs = tscal;
 /*<    >*/
-		    if (tscal == 1.) {
-			goto L100;
-		    }
+                    if (tscal == 1.) {
+                        goto L100;
+                    }
 /*<                END IF >*/
-		}
+                }
 /*<                TJJ = ABS( TJJS ) >*/
-		tjj = abs(tjjs);
+                tjj = abs(tjjs);
 /*<                IF( TJJ.GT.SMLNUM ) THEN >*/
-		if (tjj > smlnum) {
+                if (tjj > smlnum) {
 
 /*                    abs(A(j,j)) > SMLNUM: */
 
 /*<                   IF( TJJ.LT.ONE ) THEN >*/
-		    if (tjj < 1.) {
+                    if (tjj < 1.) {
 /*<                      IF( XJ.GT.TJJ*BIGNUM ) THEN >*/
-			if (xj > tjj * bignum) {
+                        if (xj > tjj * bignum) {
 
 /*                          Scale x by 1/b(j). */
 
 /*<                         REC = ONE / XJ >*/
-			    rec = 1. / xj;
+                            rec = 1. / xj;
 /*<                         CALL DSCAL( N, REC, X, 1 ) >*/
-			    dscal_(n, &rec, &x[1], &c__1);
+                            dscal_(n, &rec, &x[1], &c__1);
 /*<                         SCALE = SCALE*REC >*/
-			    *scale *= rec;
+                            *scale *= rec;
 /*<                         XMAX = XMAX*REC >*/
-			    xmax *= rec;
+                            xmax *= rec;
 /*<                      END IF >*/
-			}
+                        }
 /*<                   END IF >*/
-		    }
+                    }
 /*<                   X( J ) = X( J ) / TJJS >*/
-		    x[j] /= tjjs;
+                    x[j] /= tjjs;
 /*<                   XJ = ABS( X( J ) ) >*/
-		    xj = (d__1 = x[j], abs(d__1));
+                    xj = (d__1 = x[j], abs(d__1));
 /*<                ELSE IF( TJJ.GT.ZERO ) THEN >*/
-		} else if (tjj > 0.) {
+                } else if (tjj > 0.) {
 
 /*                    0 < abs(A(j,j)) <= SMLNUM: */
 
 /*<                   IF( XJ.GT.TJJ*BIGNUM ) THEN >*/
-		    if (xj > tjj * bignum) {
+                    if (xj > tjj * bignum) {
 
 /*                       Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM */
 /*                       to avoid overflow when dividing by A(j,j). */
 
 /*<                      REC = ( TJJ*BIGNUM ) / XJ >*/
-			rec = tjj * bignum / xj;
+                        rec = tjj * bignum / xj;
 /*<                      IF( CNORM( J ).GT.ONE ) THEN >*/
-			if (cnorm[j] > 1.) {
+                        if (cnorm[j] > 1.) {
 
 /*                          Scale by 1/CNORM(j) to avoid overflow when */
 /*                          multiplying x(j) times column j. */
 
 /*<                         REC = REC / CNORM( J ) >*/
-			    rec /= cnorm[j];
+                            rec /= cnorm[j];
 /*<                      END IF >*/
-			}
+                        }
 /*<                      CALL DSCAL( N, REC, X, 1 ) >*/
-			dscal_(n, &rec, &x[1], &c__1);
+                        dscal_(n, &rec, &x[1], &c__1);
 /*<                      SCALE = SCALE*REC >*/
-			*scale *= rec;
+                        *scale *= rec;
 /*<                      XMAX = XMAX*REC >*/
-			xmax *= rec;
+                        xmax *= rec;
 /*<                   END IF >*/
-		    }
+                    }
 /*<                   X( J ) = X( J ) / TJJS >*/
-		    x[j] /= tjjs;
+                    x[j] /= tjjs;
 /*<                   XJ = ABS( X( J ) ) >*/
-		    xj = (d__1 = x[j], abs(d__1));
+                    xj = (d__1 = x[j], abs(d__1));
 /*<                ELSE >*/
-		} else {
+                } else {
 
 /*                    A(j,j) = 0:  Set x(1:n) = 0, x(j) = 1, and */
 /*                    scale = 0, and compute a solution to A*x = 0. */
 
 /*<                   DO 90 I = 1, N >*/
-		    i__3 = *n;
-		    for (i__ = 1; i__ <= i__3; ++i__) {
+                    i__3 = *n;
+                    for (i__ = 1; i__ <= i__3; ++i__) {
 /*<                      X( I ) = ZERO >*/
-			x[i__] = 0.;
+                        x[i__] = 0.;
 /*<    90             CONTINUE >*/
 /* L90: */
-		    }
+                    }
 /*<                   X( J ) = ONE >*/
-		    x[j] = 1.;
+                    x[j] = 1.;
 /*<                   XJ = ONE >*/
-		    xj = 1.;
+                    xj = 1.;
 /*<                   SCALE = ZERO >*/
-		    *scale = 0.;
+                    *scale = 0.;
 /*<                   XMAX = ZERO >*/
-		    xmax = 0.;
+                    xmax = 0.;
 /*<                END IF >*/
-		}
+                }
 /*<   100          CONTINUE >*/
 L100:
 
@@ -792,319 +792,319 @@ L100:
 /*              multiple of column j of A. */
 
 /*<                IF( XJ.GT.ONE ) THEN >*/
-		if (xj > 1.) {
+                if (xj > 1.) {
 /*<                   REC = ONE / XJ >*/
-		    rec = 1. / xj;
+                    rec = 1. / xj;
 /*<                   IF( CNORM( J ).GT.( BIGNUM-XMAX )*REC ) THEN >*/
-		    if (cnorm[j] > (bignum - xmax) * rec) {
+                    if (cnorm[j] > (bignum - xmax) * rec) {
 
 /*                    Scale x by 1/(2*abs(x(j))). */
 
 /*<                      REC = REC*HALF >*/
-			rec *= .5;
+                        rec *= .5;
 /*<                      CALL DSCAL( N, REC, X, 1 ) >*/
-			dscal_(n, &rec, &x[1], &c__1);
+                        dscal_(n, &rec, &x[1], &c__1);
 /*<                      SCALE = SCALE*REC >*/
-			*scale *= rec;
+                        *scale *= rec;
 /*<                   END IF >*/
-		    }
+                    }
 /*<                ELSE IF( XJ*CNORM( J ).GT.( BIGNUM-XMAX ) ) THEN >*/
-		} else if (xj * cnorm[j] > bignum - xmax) {
+                } else if (xj * cnorm[j] > bignum - xmax) {
 
 /*                 Scale x by 1/2. */
 
 /*<                   CALL DSCAL( N, HALF, X, 1 ) >*/
-		    dscal_(n, &c_b36, &x[1], &c__1);
+                    dscal_(n, &c_b36, &x[1], &c__1);
 /*<                   SCALE = SCALE*HALF >*/
-		    *scale *= .5;
+                    *scale *= .5;
 /*<                END IF >*/
-		}
+                }
 
 /*<                IF( UPPER ) THEN >*/
-		if (upper) {
+                if (upper) {
 /*<                   IF( J.GT.1 ) THEN >*/
-		    if (j > 1) {
+                    if (j > 1) {
 
 /*                    Compute the update */
 /*                       x(1:j-1) := x(1:j-1) - x(j) * A(1:j-1,j) */
 
 /*<    >*/
-			i__3 = j - 1;
-			d__1 = -x[j] * tscal;
-			daxpy_(&i__3, &d__1, &a[j * a_dim1 + 1], &c__1, &x[1],
-				 &c__1);
+                        i__3 = j - 1;
+                        d__1 = -x[j] * tscal;
+                        daxpy_(&i__3, &d__1, &a[j * a_dim1 + 1], &c__1, &x[1],
+                                 &c__1);
 /*<                      I = IDAMAX( J-1, X, 1 ) >*/
-			i__3 = j - 1;
-			i__ = idamax_(&i__3, &x[1], &c__1);
+                        i__3 = j - 1;
+                        i__ = idamax_(&i__3, &x[1], &c__1);
 /*<                      XMAX = ABS( X( I ) ) >*/
-			xmax = (d__1 = x[i__], abs(d__1));
+                        xmax = (d__1 = x[i__], abs(d__1));
 /*<                   END IF >*/
-		    }
+                    }
 /*<                ELSE >*/
-		} else {
+                } else {
 /*<                   IF( J.LT.N ) THEN >*/
-		    if (j < *n) {
+                    if (j < *n) {
 
 /*                    Compute the update */
 /*                       x(j+1:n) := x(j+1:n) - x(j) * A(j+1:n,j) */
 
 /*<    >*/
-			i__3 = *n - j;
-			d__1 = -x[j] * tscal;
-			daxpy_(&i__3, &d__1, &a[j + 1 + j * a_dim1], &c__1, &
-				x[j + 1], &c__1);
+                        i__3 = *n - j;
+                        d__1 = -x[j] * tscal;
+                        daxpy_(&i__3, &d__1, &a[j + 1 + j * a_dim1], &c__1, &
+                                x[j + 1], &c__1);
 /*<                      I = J + IDAMAX( N-J, X( J+1 ), 1 ) >*/
-			i__3 = *n - j;
-			i__ = j + idamax_(&i__3, &x[j + 1], &c__1);
+                        i__3 = *n - j;
+                        i__ = j + idamax_(&i__3, &x[j + 1], &c__1);
 /*<                      XMAX = ABS( X( I ) ) >*/
-			xmax = (d__1 = x[i__], abs(d__1));
+                        xmax = (d__1 = x[i__], abs(d__1));
 /*<                   END IF >*/
-		    }
+                    }
 /*<                END IF >*/
-		}
+                }
 /*<   110       CONTINUE >*/
 /* L110: */
-	    }
+            }
 
 /*<          ELSE >*/
-	} else {
+        } else {
 
 /*           Solve A' * x = b */
 
 /*<             DO 160 J = JFIRST, JLAST, JINC >*/
-	    i__2 = jlast;
-	    i__1 = jinc;
-	    for (j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1) {
+            i__2 = jlast;
+            i__1 = jinc;
+            for (j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1) {
 
 /*              Compute x(j) = b(j) - sum A(k,j)*x(k). */
 /*                                    k<>j */
 
 /*<                XJ = ABS( X( J ) ) >*/
-		xj = (d__1 = x[j], abs(d__1));
+                xj = (d__1 = x[j], abs(d__1));
 /*<                USCAL = TSCAL >*/
-		uscal = tscal;
+                uscal = tscal;
 /*<                REC = ONE / MAX( XMAX, ONE ) >*/
-		rec = 1. / max(xmax,1.);
+                rec = 1. / max(xmax,1.);
 /*<                IF( CNORM( J ).GT.( BIGNUM-XJ )*REC ) THEN >*/
-		if (cnorm[j] > (bignum - xj) * rec) {
+                if (cnorm[j] > (bignum - xj) * rec) {
 
 /*                 If x(j) could overflow, scale x by 1/(2*XMAX). */
 
 /*<                   REC = REC*HALF >*/
-		    rec *= .5;
+                    rec *= .5;
 /*<                   IF( NOUNIT ) THEN >*/
-		    if (nounit) {
+                    if (nounit) {
 /*<                      TJJS = A( J, J )*TSCAL >*/
-			tjjs = a[j + j * a_dim1] * tscal;
+                        tjjs = a[j + j * a_dim1] * tscal;
 /*<                   ELSE >*/
-		    } else {
+                    } else {
 /*<                      TJJS = TSCAL >*/
-			tjjs = tscal;
+                        tjjs = tscal;
 /*<                   END IF >*/
-		    }
+                    }
 /*<                   TJJ = ABS( TJJS ) >*/
-		    tjj = abs(tjjs);
+                    tjj = abs(tjjs);
 /*<                   IF( TJJ.GT.ONE ) THEN >*/
-		    if (tjj > 1.) {
+                    if (tjj > 1.) {
 
 /*                       Divide by A(j,j) when scaling x if A(j,j) > 1. */
 
 /*<                      REC = MIN( ONE, REC*TJJ ) >*/
 /* Computing MIN */
-			d__1 = 1., d__2 = rec * tjj;
-			rec = min(d__1,d__2);
+                        d__1 = 1., d__2 = rec * tjj;
+                        rec = min(d__1,d__2);
 /*<                      USCAL = USCAL / TJJS >*/
-			uscal /= tjjs;
+                        uscal /= tjjs;
 /*<                   END IF >*/
-		    }
+                    }
 /*<                   IF( REC.LT.ONE ) THEN >*/
-		    if (rec < 1.) {
+                    if (rec < 1.) {
 /*<                      CALL DSCAL( N, REC, X, 1 ) >*/
-			dscal_(n, &rec, &x[1], &c__1);
+                        dscal_(n, &rec, &x[1], &c__1);
 /*<                      SCALE = SCALE*REC >*/
-			*scale *= rec;
+                        *scale *= rec;
 /*<                      XMAX = XMAX*REC >*/
-			xmax *= rec;
+                        xmax *= rec;
 /*<                   END IF >*/
-		    }
+                    }
 /*<                END IF >*/
-		}
+                }
 
 /*<                SUMJ = ZERO >*/
-		sumj = 0.;
+                sumj = 0.;
 /*<                IF( USCAL.EQ.ONE ) THEN >*/
-		if (uscal == 1.) {
+                if (uscal == 1.) {
 
 /*                 If the scaling needed for A in the dot product is 1, */
 /*                 call DDOT to perform the dot product. */
 
 /*<                   IF( UPPER ) THEN >*/
-		    if (upper) {
+                    if (upper) {
 /*<                      SUMJ = DDOT( J-1, A( 1, J ), 1, X, 1 ) >*/
-			i__3 = j - 1;
-			sumj = ddot_(&i__3, &a[j * a_dim1 + 1], &c__1, &x[1], 
-				&c__1);
+                        i__3 = j - 1;
+                        sumj = ddot_(&i__3, &a[j * a_dim1 + 1], &c__1, &x[1], 
+                                &c__1);
 /*<                   ELSE IF( J.LT.N ) THEN >*/
-		    } else if (j < *n) {
+                    } else if (j < *n) {
 /*<                      SUMJ = DDOT( N-J, A( J+1, J ), 1, X( J+1 ), 1 ) >*/
-			i__3 = *n - j;
-			sumj = ddot_(&i__3, &a[j + 1 + j * a_dim1], &c__1, &x[
-				j + 1], &c__1);
+                        i__3 = *n - j;
+                        sumj = ddot_(&i__3, &a[j + 1 + j * a_dim1], &c__1, &x[
+                                j + 1], &c__1);
 /*<                   END IF >*/
-		    }
+                    }
 /*<                ELSE >*/
-		} else {
+                } else {
 
 /*                 Otherwise, use in-line code for the dot product. */
 
 /*<                   IF( UPPER ) THEN >*/
-		    if (upper) {
+                    if (upper) {
 /*<                      DO 120 I = 1, J - 1 >*/
-			i__3 = j - 1;
-			for (i__ = 1; i__ <= i__3; ++i__) {
+                        i__3 = j - 1;
+                        for (i__ = 1; i__ <= i__3; ++i__) {
 /*<                         SUMJ = SUMJ + ( A( I, J )*USCAL )*X( I ) >*/
-			    sumj += a[i__ + j * a_dim1] * uscal * x[i__];
+                            sumj += a[i__ + j * a_dim1] * uscal * x[i__];
 /*<   120                CONTINUE >*/
 /* L120: */
-			}
+                        }
 /*<                   ELSE IF( J.LT.N ) THEN >*/
-		    } else if (j < *n) {
+                    } else if (j < *n) {
 /*<                      DO 130 I = J + 1, N >*/
-			i__3 = *n;
-			for (i__ = j + 1; i__ <= i__3; ++i__) {
+                        i__3 = *n;
+                        for (i__ = j + 1; i__ <= i__3; ++i__) {
 /*<                         SUMJ = SUMJ + ( A( I, J )*USCAL )*X( I ) >*/
-			    sumj += a[i__ + j * a_dim1] * uscal * x[i__];
+                            sumj += a[i__ + j * a_dim1] * uscal * x[i__];
 /*<   130                CONTINUE >*/
 /* L130: */
-			}
+                        }
 /*<                   END IF >*/
-		    }
+                    }
 /*<                END IF >*/
-		}
+                }
 
 /*<                IF( USCAL.EQ.TSCAL ) THEN >*/
-		if (uscal == tscal) {
+                if (uscal == tscal) {
 
 /*                 Compute x(j) := ( x(j) - sumj ) / A(j,j) if 1/A(j,j) */
 /*                 was not used to scale the dotproduct. */
 
 /*<                   X( J ) = X( J ) - SUMJ >*/
-		    x[j] -= sumj;
+                    x[j] -= sumj;
 /*<                   XJ = ABS( X( J ) ) >*/
-		    xj = (d__1 = x[j], abs(d__1));
+                    xj = (d__1 = x[j], abs(d__1));
 /*<                   IF( NOUNIT ) THEN >*/
-		    if (nounit) {
+                    if (nounit) {
 /*<                      TJJS = A( J, J )*TSCAL >*/
-			tjjs = a[j + j * a_dim1] * tscal;
+                        tjjs = a[j + j * a_dim1] * tscal;
 /*<                   ELSE >*/
-		    } else {
+                    } else {
 /*<                      TJJS = TSCAL >*/
-			tjjs = tscal;
+                        tjjs = tscal;
 /*<    >*/
-			if (tscal == 1.) {
-			    goto L150;
-			}
+                        if (tscal == 1.) {
+                            goto L150;
+                        }
 /*<                   END IF >*/
-		    }
+                    }
 
 /*                    Compute x(j) = x(j) / A(j,j), scaling if necessary. */
 
 /*<                   TJJ = ABS( TJJS ) >*/
-		    tjj = abs(tjjs);
+                    tjj = abs(tjjs);
 /*<                   IF( TJJ.GT.SMLNUM ) THEN >*/
-		    if (tjj > smlnum) {
+                    if (tjj > smlnum) {
 
 /*                       abs(A(j,j)) > SMLNUM: */
 
 /*<                      IF( TJJ.LT.ONE ) THEN >*/
-			if (tjj < 1.) {
+                        if (tjj < 1.) {
 /*<                         IF( XJ.GT.TJJ*BIGNUM ) THEN >*/
-			    if (xj > tjj * bignum) {
+                            if (xj > tjj * bignum) {
 
 /*                             Scale X by 1/abs(x(j)). */
 
 /*<                            REC = ONE / XJ >*/
-				rec = 1. / xj;
+                                rec = 1. / xj;
 /*<                            CALL DSCAL( N, REC, X, 1 ) >*/
-				dscal_(n, &rec, &x[1], &c__1);
+                                dscal_(n, &rec, &x[1], &c__1);
 /*<                            SCALE = SCALE*REC >*/
-				*scale *= rec;
+                                *scale *= rec;
 /*<                            XMAX = XMAX*REC >*/
-				xmax *= rec;
+                                xmax *= rec;
 /*<                         END IF >*/
-			    }
+                            }
 /*<                      END IF >*/
-			}
+                        }
 /*<                      X( J ) = X( J ) / TJJS >*/
-			x[j] /= tjjs;
+                        x[j] /= tjjs;
 /*<                   ELSE IF( TJJ.GT.ZERO ) THEN >*/
-		    } else if (tjj > 0.) {
+                    } else if (tjj > 0.) {
 
 /*                       0 < abs(A(j,j)) <= SMLNUM: */
 
 /*<                      IF( XJ.GT.TJJ*BIGNUM ) THEN >*/
-			if (xj > tjj * bignum) {
+                        if (xj > tjj * bignum) {
 
 /*                          Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM. */
 
 /*<                         REC = ( TJJ*BIGNUM ) / XJ >*/
-			    rec = tjj * bignum / xj;
+                            rec = tjj * bignum / xj;
 /*<                         CALL DSCAL( N, REC, X, 1 ) >*/
-			    dscal_(n, &rec, &x[1], &c__1);
+                            dscal_(n, &rec, &x[1], &c__1);
 /*<                         SCALE = SCALE*REC >*/
-			    *scale *= rec;
+                            *scale *= rec;
 /*<                         XMAX = XMAX*REC >*/
-			    xmax *= rec;
+                            xmax *= rec;
 /*<                      END IF >*/
-			}
+                        }
 /*<                      X( J ) = X( J ) / TJJS >*/
-			x[j] /= tjjs;
+                        x[j] /= tjjs;
 /*<                   ELSE >*/
-		    } else {
+                    } else {
 
 /*                       A(j,j) = 0:  Set x(1:n) = 0, x(j) = 1, and */
 /*                       scale = 0, and compute a solution to A'*x = 0. */
 
 /*<                      DO 140 I = 1, N >*/
-			i__3 = *n;
-			for (i__ = 1; i__ <= i__3; ++i__) {
+                        i__3 = *n;
+                        for (i__ = 1; i__ <= i__3; ++i__) {
 /*<                         X( I ) = ZERO >*/
-			    x[i__] = 0.;
+                            x[i__] = 0.;
 /*<   140                CONTINUE >*/
 /* L140: */
-			}
+                        }
 /*<                      X( J ) = ONE >*/
-			x[j] = 1.;
+                        x[j] = 1.;
 /*<                      SCALE = ZERO >*/
-			*scale = 0.;
+                        *scale = 0.;
 /*<                      XMAX = ZERO >*/
-			xmax = 0.;
+                        xmax = 0.;
 /*<                   END IF >*/
-		    }
+                    }
 /*<   150             CONTINUE >*/
 L150:
 /*<                ELSE >*/
-		    ;
-		} else {
+                    ;
+                } else {
 
 /*                 Compute x(j) := x(j) / A(j,j)  - sumj if the dot */
 /*                 product has already been divided by 1/A(j,j). */
 
 /*<                   X( J ) = X( J ) / TJJS - SUMJ >*/
-		    x[j] = x[j] / tjjs - sumj;
+                    x[j] = x[j] / tjjs - sumj;
 /*<                END IF >*/
-		}
+                }
 /*<                XMAX = MAX( XMAX, ABS( X( J ) ) ) >*/
 /* Computing MAX */
-		d__2 = xmax, d__3 = (d__1 = x[j], abs(d__1));
-		xmax = max(d__2,d__3);
+                d__2 = xmax, d__3 = (d__1 = x[j], abs(d__1));
+                xmax = max(d__2,d__3);
 /*<   160       CONTINUE >*/
 /* L160: */
-	    }
+            }
 /*<          END IF >*/
-	}
+        }
 /*<          SCALE = SCALE / TSCAL >*/
-	*scale /= tscal;
+        *scale /= tscal;
 /*<       END IF >*/
     }
 
@@ -1113,8 +1113,8 @@ L150:
 /*<       IF( TSCAL.NE.ONE ) THEN >*/
     if (tscal != 1.) {
 /*<          CALL DSCAL( N, ONE / TSCAL, CNORM, 1 ) >*/
-	d__1 = 1. / tscal;
-	dscal_(n, &d__1, &cnorm[1], &c__1);
+        d__1 = 1. / tscal;
+        dscal_(n, &d__1, &cnorm[1], &c__1);
 /*<       END IF >*/
     }
 
@@ -1127,5 +1127,5 @@ L150:
 } /* dlatrs_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

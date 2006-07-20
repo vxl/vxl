@@ -5,11 +5,11 @@ copy one of the other makefile.* files to makefile.
 
 If you use a C++ compiler, first say
 
-	make hadd
+        make hadd
 
 to create a suitable f2c.h from f2c.h0 and f2ch.add.  Otherwise,
 
-	make f2c.h
+        make f2c.h
 
 will just copy f2c.h0 to f2c.h .
 
@@ -30,16 +30,16 @@ is the IEEE remainder function (with double a, b), then you may
 wish to compile r_mod.c and d_mod.c with IEEE_drem defined.
 
 To check for transmission errors, issue the command
-	make check
+        make check
 or
-	make -f makefile.u check
+        make -f makefile.u check
 
 This assumes you have the xsum program whose source, xsum.c,
 is distributed as part of "all from f2c/src", and that it
 is installed somewhere in your search path.  If you do not
 have xsum, you can obtain xsum.c by sending the following E-mail
 message to netlib@netlib.bell-labs.com
-	send xsum.c from f2c/src
+        send xsum.c from f2c/src
 
 For convenience, the f2c.h0 in this directory is a copy of netlib's
 "f2c.h from f2c".  It is best to install f2c.h in a standard place,
@@ -52,12 +52,12 @@ sizeof(short) == 2, sizeof(int) == sizeof(float) == 4, and
 sizeof(long) == sizeof(double) == 8, it suffices to modify f2c.h by
 removing the first occurrence of "long " on each line containing
 "long ".  On Unix systems, you can do this by issuing the commands
-	mv f2c.h f2c.h0
-	sed 's/long int /int /' f2c.h0 >f2c.h
+        mv f2c.h f2c.h0
+        sed 's/long int /int /' f2c.h0 >f2c.h
 On such machines, one can enable INTEGER*8 by uncommenting the typedefs
 of longint and ulongint in f2c.h and adjusting them, so they read
-	typedef long longint;
-	typedef unsigned long ulongint;
+        typedef long longint;
+        typedef unsigned long ulongint;
 and by compiling libf2c with -DAllow_TYQUAD, as discussed below.
 
 
@@ -72,65 +72,65 @@ DTIME, and ETIME) with "f2c -R", then you need to compile the
 corresponding source files with -DREAL=float.  To do this, it is
 perhaps simplest to add "-DREAL=float" to CFLAGS in the makefile.
 
-1.	CALL ABORT prints a message and causes a core dump.
+1.      CALL ABORT prints a message and causes a core dump.
 
-2.	ERF(r) and DERF(d) and the REAL and DOUBLE PRECISION
-	error functions (with x REAL and d DOUBLE PRECISION);
-	DERF must be declared DOUBLE PRECISION in your program.
-	Both ERF and DERF assume your C library provides the
-	underlying erf() function (which not all systems do).
+2.      ERF(r) and DERF(d) and the REAL and DOUBLE PRECISION
+        error functions (with x REAL and d DOUBLE PRECISION);
+        DERF must be declared DOUBLE PRECISION in your program.
+        Both ERF and DERF assume your C library provides the
+        underlying erf() function (which not all systems do).
 
-3.	ERFC(r) and DERFC(d) are the complementary error functions:
-	ERFC(r) = 1 - ERF(r) and DERFC(d) = 1.d0 - DERFC(d)
-	(except that their results may be more accurate than
-	explicitly evaluating the above formulae would give).
-	Again, ERFC and r are REAL, and DERFC and d are DOUBLE
-	PRECISION (and must be declared as such in your program),
-	and ERFC and DERFC rely on your system's erfc().
+3.      ERFC(r) and DERFC(d) are the complementary error functions:
+        ERFC(r) = 1 - ERF(r) and DERFC(d) = 1.d0 - DERFC(d)
+        (except that their results may be more accurate than
+        explicitly evaluating the above formulae would give).
+        Again, ERFC and r are REAL, and DERFC and d are DOUBLE
+        PRECISION (and must be declared as such in your program),
+        and ERFC and DERFC rely on your system's erfc().
 
-4.	CALL GETARG(n,s), where n is an INTEGER and s is a CHARACTER
-	variable, sets s to the n-th command-line argument (or to
-	all blanks if there are fewer than n command-line arguments);
-	CALL GETARG(0,s) sets s to the name of the program (on systems
-	that support this feature).  See IARGC below.
+4.      CALL GETARG(n,s), where n is an INTEGER and s is a CHARACTER
+        variable, sets s to the n-th command-line argument (or to
+        all blanks if there are fewer than n command-line arguments);
+        CALL GETARG(0,s) sets s to the name of the program (on systems
+        that support this feature).  See IARGC below.
 
-5.	CALL GETENV(name, value), where name and value are of type
-	CHARACTER, sets value to the environment value, $name, of
-	name (or to blanks if $name has not been set).
+5.      CALL GETENV(name, value), where name and value are of type
+        CHARACTER, sets value to the environment value, $name, of
+        name (or to blanks if $name has not been set).
 
-6.	NARGS = IARGC() sets NARGS to the number of command-line
-	arguments (an INTEGER value).
+6.      NARGS = IARGC() sets NARGS to the number of command-line
+        arguments (an INTEGER value).
 
-7.	CALL SIGNAL(n,func), where n is an INTEGER and func is an
-	EXTERNAL procedure, arranges for func to be invoked when n
-	occurs (on systems where this makes sense).
-	
+7.      CALL SIGNAL(n,func), where n is an INTEGER and func is an
+        EXTERNAL procedure, arranges for func to be invoked when n
+        occurs (on systems where this makes sense).
+        
 If your compiler complains about the signal calls in main.c, s_paus.c,
 and signal_.c, you may need to adjust signal1.h suitably.  See the
 comments in signal1.h.
 
-8.	ETIME(ARR) and DTIME(ARR) are REAL functions that return
-	execution times.  ARR is declared REAL ARR(2).  The elapsed
-	user and system CPU times are stored in ARR(1) and ARR(2),
-	respectively.  ETIME returns the total elapsed CPU time,
-	i.e., ARR(1) + ARR(2).  DTIME returns total elapsed CPU
-	time since the previous call on DTIME.
+8.      ETIME(ARR) and DTIME(ARR) are REAL functions that return
+        execution times.  ARR is declared REAL ARR(2).  The elapsed
+        user and system CPU times are stored in ARR(1) and ARR(2),
+        respectively.  ETIME returns the total elapsed CPU time,
+        i.e., ARR(1) + ARR(2).  DTIME returns total elapsed CPU
+        time since the previous call on DTIME.
 
-9.	CALL SYSTEM(cmd), where cmd is of type CHARACTER, passes
-	cmd to the system's command processor (on systems where
-	this can be done).
+9.      CALL SYSTEM(cmd), where cmd is of type CHARACTER, passes
+        cmd to the system's command processor (on systems where
+        this can be done).
 
-10.	CALL FLUSH flushes all buffers.
+10.     CALL FLUSH flushes all buffers.
 
-11.	FTELL(i) is an INTEGER function that returns the current
-	offset of Fortran unit i (or -1 if unit i is not open).
+11.     FTELL(i) is an INTEGER function that returns the current
+        offset of Fortran unit i (or -1 if unit i is not open).
 
-12.	CALL FSEEK(i, offset, whence, *errlab) attemps to move
-	Fortran unit i to the specified offset: absolute offset
-	if whence = 0; relative to the current offset if whence = 1;
-	relative to the end of the file if whence = 2.  It branches
-	to label errlab if unit i is not open or if the call
-	otherwise fails.
+12.     CALL FSEEK(i, offset, whence, *errlab) attemps to move
+        Fortran unit i to the specified offset: absolute offset
+        if whence = 0; relative to the current offset if whence = 1;
+        relative to the end of the file if whence = 2.  It branches
+        to label errlab if unit i is not open or if the call
+        otherwise fails.
 
 The routines whose objects are makefile.u's $(I77) are for I/O.
 The following comments apply to them.
@@ -330,11 +330,11 @@ Either comment out the makefile's ranlib invocation, or install
 a harmless "ranlib" command somewhere in your PATH, such as the
 one-line shell script
 
-	exit 0
+        exit 0
 
 or (on some systems)
 
-	exec /usr/bin/ar lts $1 >/dev/null
+        exec /usr/bin/ar lts $1 >/dev/null
 
 By default, the routines that implement complex and double complex
 division, c_div.c and z_div.c, call sig_die to print an error message
@@ -345,7 +345,7 @@ the real and imaginary parts of the result to +INFINITY if the
 numerator is nonzero, or to NaN if it vanishes.
 
 Nowadays most Unix and Linux systems have function
-	int ftruncate(int fildes, off_t len);
+        int ftruncate(int fildes, off_t len);
 defined in system header file unistd.h that adjusts the length of file
 descriptor fildes to length len.  Unless endfile.c is compiled with
 -DNO_TRUNCATE, endfile.c #includes "unistd.h" and calls ftruncate() if

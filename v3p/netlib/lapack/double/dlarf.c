@@ -1,13 +1,13 @@
 /* lapack/double/dlarf.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -23,8 +23,8 @@ static integer c__1 = 1;
 
 /*<       SUBROUTINE DLARF( SIDE, M, N, V, INCV, TAU, C, LDC, WORK ) >*/
 /* Subroutine */ int dlarf_(char *side, integer *m, integer *n, doublereal *v,
-	 integer *incv, doublereal *tau, doublereal *c__, integer *ldc, 
-	doublereal *work, ftnlen side_len)
+         integer *incv, doublereal *tau, doublereal *c__, integer *ldc, 
+        doublereal *work, ftnlen side_len)
 {
     /* System generated locals */
     integer c_dim1, c_offset;
@@ -32,12 +32,12 @@ static integer c__1 = 1;
 
     /* Local variables */
     extern /* Subroutine */ int dger_(integer *, integer *, doublereal *, 
-	    doublereal *, integer *, doublereal *, integer *, doublereal *, 
-	    integer *);
+            doublereal *, integer *, doublereal *, integer *, doublereal *, 
+            integer *);
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int dgemv_(char *, integer *, integer *, 
-	    doublereal *, doublereal *, integer *, doublereal *, integer *, 
-	    doublereal *, doublereal *, integer *, ftnlen);
+            doublereal *, doublereal *, integer *, doublereal *, integer *, 
+            doublereal *, doublereal *, integer *, ftnlen);
     (void)side_len;
 
 /*  -- LAPACK auxiliary routine (version 3.0) -- */
@@ -132,44 +132,44 @@ static integer c__1 = 1;
 /*        Form  H * C */
 
 /*<          IF( TAU.NE.ZERO ) THEN >*/
-	if (*tau != 0.) {
+        if (*tau != 0.) {
 
 /*           w := C' * v */
 
 /*<    >*/
-	    dgemv_("Transpose", m, n, &c_b4, &c__[c_offset], ldc, &v[1], incv,
-		     &c_b5, &work[1], &c__1, (ftnlen)9);
+            dgemv_("Transpose", m, n, &c_b4, &c__[c_offset], ldc, &v[1], incv,
+                     &c_b5, &work[1], &c__1, (ftnlen)9);
 
 /*           C := C - v * w' */
 
 /*<             CALL DGER( M, N, -TAU, V, INCV, WORK, 1, C, LDC ) >*/
-	    d__1 = -(*tau);
-	    dger_(m, n, &d__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], 
-		    ldc);
+            d__1 = -(*tau);
+            dger_(m, n, &d__1, &v[1], incv, &work[1], &c__1, &c__[c_offset], 
+                    ldc);
 /*<          END IF >*/
-	}
+        }
 /*<       ELSE >*/
     } else {
 
 /*        Form  C * H */
 
 /*<          IF( TAU.NE.ZERO ) THEN >*/
-	if (*tau != 0.) {
+        if (*tau != 0.) {
 
 /*           w := C * v */
 
 /*<    >*/
-	    dgemv_("No transpose", m, n, &c_b4, &c__[c_offset], ldc, &v[1], 
-		    incv, &c_b5, &work[1], &c__1, (ftnlen)12);
+            dgemv_("No transpose", m, n, &c_b4, &c__[c_offset], ldc, &v[1], 
+                    incv, &c_b5, &work[1], &c__1, (ftnlen)12);
 
 /*           C := C - w * v' */
 
 /*<             CALL DGER( M, N, -TAU, WORK, 1, V, INCV, C, LDC ) >*/
-	    d__1 = -(*tau);
-	    dger_(m, n, &d__1, &work[1], &c__1, &v[1], incv, &c__[c_offset], 
-		    ldc);
+            d__1 = -(*tau);
+            dger_(m, n, &d__1, &work[1], &c__1, &v[1], incv, &c__[c_offset], 
+                    ldc);
 /*<          END IF >*/
-	}
+        }
 /*<       END IF >*/
     }
 /*<       RETURN >*/
@@ -181,5 +181,5 @@ static integer c__1 = 1;
 } /* dlarf_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

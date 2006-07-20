@@ -1,13 +1,13 @@
 /* blas/sger.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -17,7 +17,7 @@ extern "C" {
 
 /*<       SUBROUTINE SGER  ( M, N, ALPHA, X, INCX, Y, INCY, A, LDA ) >*/
 /* Subroutine */ int sger_(integer *m, integer *n, real *alpha, real *x, 
-	integer *incx, real *y, integer *incy, real *a, integer *lda)
+        integer *incx, real *y, integer *incy, real *a, integer *lda)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -132,31 +132,31 @@ extern "C" {
 /*<       IF     ( M.LT.0 )THEN >*/
     if (*m < 0) {
 /*<          INFO = 1 >*/
-	info = 1;
+        info = 1;
 /*<       ELSE IF( N.LT.0 )THEN >*/
     } else if (*n < 0) {
 /*<          INFO = 2 >*/
-	info = 2;
+        info = 2;
 /*<       ELSE IF( INCX.EQ.0 )THEN >*/
     } else if (*incx == 0) {
 /*<          INFO = 5 >*/
-	info = 5;
+        info = 5;
 /*<       ELSE IF( INCY.EQ.0 )THEN >*/
     } else if (*incy == 0) {
 /*<          INFO = 7 >*/
-	info = 7;
+        info = 7;
 /*<       ELSE IF( LDA.LT.MAX( 1, M ) )THEN >*/
     } else if (*lda < max(1,*m)) {
 /*<          INFO = 9 >*/
-	info = 9;
+        info = 9;
 /*<       END IF >*/
     }
 /*<       IF( INFO.NE.0 )THEN >*/
     if (info != 0) {
 /*<          CALL XERBLA( 'SGER  ', INFO ) >*/
-	xerbla_("SGER  ", &info, (ftnlen)6);
+        xerbla_("SGER  ", &info, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -164,7 +164,7 @@ extern "C" {
 
 /*<    >*/
     if (*m == 0 || *n == 0 || *alpha == (float)0.) {
-	return 0;
+        return 0;
     }
 
 /*     Start the operations. In this version the elements of A are */
@@ -173,75 +173,75 @@ extern "C" {
 /*<       IF( INCY.GT.0 )THEN >*/
     if (*incy > 0) {
 /*<          JY = 1 >*/
-	jy = 1;
+        jy = 1;
 /*<       ELSE >*/
     } else {
 /*<          JY = 1 - ( N - 1 )*INCY >*/
-	jy = 1 - (*n - 1) * *incy;
+        jy = 1 - (*n - 1) * *incy;
 /*<       END IF >*/
     }
 /*<       IF( INCX.EQ.1 )THEN >*/
     if (*incx == 1) {
 /*<          DO 20, J = 1, N >*/
-	i__1 = *n;
-	for (j = 1; j <= i__1; ++j) {
+        i__1 = *n;
+        for (j = 1; j <= i__1; ++j) {
 /*<             IF( Y( JY ).NE.ZERO )THEN >*/
-	    if (y[jy] != (float)0.) {
+            if (y[jy] != (float)0.) {
 /*<                TEMP = ALPHA*Y( JY ) >*/
-		temp = *alpha * y[jy];
+                temp = *alpha * y[jy];
 /*<                DO 10, I = 1, M >*/
-		i__2 = *m;
-		for (i__ = 1; i__ <= i__2; ++i__) {
+                i__2 = *m;
+                for (i__ = 1; i__ <= i__2; ++i__) {
 /*<                   A( I, J ) = A( I, J ) + X( I )*TEMP >*/
-		    a[i__ + j * a_dim1] += x[i__] * temp;
+                    a[i__ + j * a_dim1] += x[i__] * temp;
 /*<    10          CONTINUE >*/
 /* L10: */
-		}
+                }
 /*<             END IF >*/
-	    }
+            }
 /*<             JY = JY + INCY >*/
-	    jy += *incy;
+            jy += *incy;
 /*<    20    CONTINUE >*/
 /* L20: */
-	}
+        }
 /*<       ELSE >*/
     } else {
 /*<          IF( INCX.GT.0 )THEN >*/
-	if (*incx > 0) {
+        if (*incx > 0) {
 /*<             KX = 1 >*/
-	    kx = 1;
+            kx = 1;
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             KX = 1 - ( M - 1 )*INCX >*/
-	    kx = 1 - (*m - 1) * *incx;
+            kx = 1 - (*m - 1) * *incx;
 /*<          END IF >*/
-	}
+        }
 /*<          DO 40, J = 1, N >*/
-	i__1 = *n;
-	for (j = 1; j <= i__1; ++j) {
+        i__1 = *n;
+        for (j = 1; j <= i__1; ++j) {
 /*<             IF( Y( JY ).NE.ZERO )THEN >*/
-	    if (y[jy] != (float)0.) {
+            if (y[jy] != (float)0.) {
 /*<                TEMP = ALPHA*Y( JY ) >*/
-		temp = *alpha * y[jy];
+                temp = *alpha * y[jy];
 /*<                IX   = KX >*/
-		ix = kx;
+                ix = kx;
 /*<                DO 30, I = 1, M >*/
-		i__2 = *m;
-		for (i__ = 1; i__ <= i__2; ++i__) {
+                i__2 = *m;
+                for (i__ = 1; i__ <= i__2; ++i__) {
 /*<                   A( I, J ) = A( I, J ) + X( IX )*TEMP >*/
-		    a[i__ + j * a_dim1] += x[ix] * temp;
+                    a[i__ + j * a_dim1] += x[ix] * temp;
 /*<                   IX        = IX        + INCX >*/
-		    ix += *incx;
+                    ix += *incx;
 /*<    30          CONTINUE >*/
 /* L30: */
-		}
+                }
 /*<             END IF >*/
-	    }
+            }
 /*<             JY = JY + INCY >*/
-	    jy += *incy;
+            jy += *incy;
 /*<    40    CONTINUE >*/
 /* L40: */
-	}
+        }
 /*<       END IF >*/
     }
 
@@ -254,5 +254,5 @@ extern "C" {
 } /* sger_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

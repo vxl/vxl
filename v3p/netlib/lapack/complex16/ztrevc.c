@@ -1,13 +1,13 @@
 /* lapack/complex16/ztrevc.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -22,14 +22,14 @@ static integer c__1 = 1;
 
 /*<    >*/
 /* Subroutine */ int ztrevc_(char *side, char *howmny, logical *select, 
-	integer *n, doublecomplex *t, integer *ldt, doublecomplex *vl, 
-	integer *ldvl, doublecomplex *vr, integer *ldvr, integer *mm, integer 
-	*m, doublecomplex *work, doublereal *rwork, integer *info, ftnlen 
-	side_len, ftnlen howmny_len)
+        integer *n, doublecomplex *t, integer *ldt, doublecomplex *vl, 
+        integer *ldvl, doublecomplex *vr, integer *ldvr, integer *mm, integer 
+        *m, doublecomplex *work, doublereal *rwork, integer *info, ftnlen 
+        side_len, ftnlen howmny_len)
 {
     /* System generated locals */
     integer t_dim1, t_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, 
-	    i__2, i__3, i__4, i__5;
+            i__2, i__3, i__4, i__5;
     doublereal d__1, d__2, d__3;
     doublecomplex z__1, z__2;
 
@@ -48,22 +48,22 @@ static integer c__1 = 1;
     doublereal remax;
     logical leftv, bothv;
     extern /* Subroutine */ int zgemv_(char *, integer *, integer *, 
-	    doublecomplex *, doublecomplex *, integer *, doublecomplex *, 
-	    integer *, doublecomplex *, doublecomplex *, integer *, ftnlen);
+            doublecomplex *, doublecomplex *, integer *, doublecomplex *, 
+            integer *, doublecomplex *, doublecomplex *, integer *, ftnlen);
     logical somev;
     extern /* Subroutine */ int zcopy_(integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *), dlabad_(doublereal *, doublereal *);
+            doublecomplex *, integer *), dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *, ftnlen);
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen), zdscal_(
-	    integer *, doublereal *, doublecomplex *, integer *);
+            integer *, doublereal *, doublecomplex *, integer *);
     extern integer izamax_(integer *, doublecomplex *, integer *);
     logical rightv;
     extern doublereal dzasum_(integer *, doublecomplex *, integer *);
     doublereal smlnum;
     extern /* Subroutine */ int zlatrs_(char *, char *, char *, char *, 
-	    integer *, doublecomplex *, integer *, doublecomplex *, 
-	    doublereal *, doublereal *, integer *, ftnlen, ftnlen, ftnlen, 
-	    ftnlen);
+            integer *, doublecomplex *, integer *, doublecomplex *, 
+            doublereal *, doublereal *, integer *, ftnlen, ftnlen, ftnlen, 
+            ftnlen);
     (void)side_len;
     (void)howmny_len;
 
@@ -274,21 +274,21 @@ static integer c__1 = 1;
 /*<       IF( SOMEV ) THEN >*/
     if (somev) {
 /*<          M = 0 >*/
-	*m = 0;
+        *m = 0;
 /*<          DO 10 J = 1, N >*/
-	i__1 = *n;
-	for (j = 1; j <= i__1; ++j) {
+        i__1 = *n;
+        for (j = 1; j <= i__1; ++j) {
 /*<    >*/
-	    if (select[j]) {
-		++(*m);
-	    }
+            if (select[j]) {
+                ++(*m);
+            }
 /*<    10    CONTINUE >*/
 /* L10: */
-	}
+        }
 /*<       ELSE >*/
     } else {
 /*<          M = N >*/
-	*m = *n;
+        *m = *n;
 /*<       END IF >*/
     }
 
@@ -297,40 +297,40 @@ static integer c__1 = 1;
 /*<       IF( .NOT.RIGHTV .AND. .NOT.LEFTV ) THEN >*/
     if (! rightv && ! leftv) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<       ELSE IF( .NOT.ALLV .AND. .NOT.OVER .AND. .NOT.SOMEV ) THEN >*/
     } else if (! allv && ! over && ! somev) {
 /*<          INFO = -2 >*/
-	*info = -2;
+        *info = -2;
 /*<       ELSE IF( N.LT.0 ) THEN >*/
     } else if (*n < 0) {
 /*<          INFO = -4 >*/
-	*info = -4;
+        *info = -4;
 /*<       ELSE IF( LDT.LT.MAX( 1, N ) ) THEN >*/
     } else if (*ldt < max(1,*n)) {
 /*<          INFO = -6 >*/
-	*info = -6;
+        *info = -6;
 /*<       ELSE IF( LDVL.LT.1 .OR. ( LEFTV .AND. LDVL.LT.N ) ) THEN >*/
     } else if (*ldvl < 1 || (leftv && *ldvl < *n)) {
 /*<          INFO = -8 >*/
-	*info = -8;
+        *info = -8;
 /*<       ELSE IF( LDVR.LT.1 .OR. ( RIGHTV .AND. LDVR.LT.N ) ) THEN >*/
     } else if (*ldvr < 1 || (rightv && *ldvr < *n)) {
 /*<          INFO = -10 >*/
-	*info = -10;
+        *info = -10;
 /*<       ELSE IF( MM.LT.M ) THEN >*/
     } else if (*mm < *m) {
 /*<          INFO = -11 >*/
-	*info = -11;
+        *info = -11;
 /*<       END IF >*/
     }
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'ZTREVC', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("ZTREVC", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("ZTREVC", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -338,7 +338,7 @@ static integer c__1 = 1;
 
 /*<    >*/
     if (*n == 0) {
-	return 0;
+        return 0;
     }
 
 /*     Set the constants to control overflow. */
@@ -360,9 +360,9 @@ static integer c__1 = 1;
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          WORK( I+N ) = T( I, I ) >*/
-	i__2 = i__ + *n;
-	i__3 = i__ + i__ * t_dim1;
-	work[i__2].r = t[i__3].r, work[i__2].i = t[i__3].i;
+        i__2 = i__ + *n;
+        i__3 = i__ + i__ * t_dim1;
+        work[i__2].r = t[i__3].r, work[i__2].i = t[i__3].i;
 /*<    20 CONTINUE >*/
 /* L20: */
     }
@@ -376,8 +376,8 @@ static integer c__1 = 1;
     i__1 = *n;
     for (j = 2; j <= i__1; ++j) {
 /*<          RWORK( J ) = DZASUM( J-1, T( 1, J ), 1 ) >*/
-	i__2 = j - 1;
-	rwork[j] = dzasum_(&i__2, &t[j * t_dim1 + 1], &c__1);
+        i__2 = j - 1;
+        rwork[j] = dzasum_(&i__2, &t[j * t_dim1 + 1], &c__1);
 /*<    30 CONTINUE >*/
 /* L30: */
     }
@@ -388,145 +388,145 @@ static integer c__1 = 1;
 /*        Compute right eigenvectors. */
 
 /*<          IS = M >*/
-	is = *m;
+        is = *m;
 /*<          DO 80 KI = N, 1, -1 >*/
-	for (ki = *n; ki >= 1; --ki) {
+        for (ki = *n; ki >= 1; --ki) {
 
 /*<             IF( SOMEV ) THEN >*/
-	    if (somev) {
+            if (somev) {
 /*<    >*/
-		if (! select[ki]) {
-		    goto L80;
-		}
+                if (! select[ki]) {
+                    goto L80;
+                }
 /*<             END IF >*/
-	    }
+            }
 /*<             SMIN = MAX( ULP*( CABS1( T( KI, KI ) ) ), SMLNUM ) >*/
 /* Computing MAX */
-	    i__1 = ki + ki * t_dim1;
-	    d__3 = ulp * ((d__1 = t[i__1].r, abs(d__1)) + (d__2 = d_imag(&t[
-		    ki + ki * t_dim1]), abs(d__2)));
-	    smin = max(d__3,smlnum);
+            i__1 = ki + ki * t_dim1;
+            d__3 = ulp * ((d__1 = t[i__1].r, abs(d__1)) + (d__2 = d_imag(&t[
+                    ki + ki * t_dim1]), abs(d__2)));
+            smin = max(d__3,smlnum);
 
 /*<             WORK( 1 ) = CMONE >*/
-	    work[1].r = 1., work[1].i = 0.;
+            work[1].r = 1., work[1].i = 0.;
 
 /*           Form right-hand side. */
 
 /*<             DO 40 K = 1, KI - 1 >*/
-	    i__1 = ki - 1;
-	    for (k = 1; k <= i__1; ++k) {
+            i__1 = ki - 1;
+            for (k = 1; k <= i__1; ++k) {
 /*<                WORK( K ) = -T( K, KI ) >*/
-		i__2 = k;
-		i__3 = k + ki * t_dim1;
-		z__1.r = -t[i__3].r, z__1.i = -t[i__3].i;
-		work[i__2].r = z__1.r, work[i__2].i = z__1.i;
+                i__2 = k;
+                i__3 = k + ki * t_dim1;
+                z__1.r = -t[i__3].r, z__1.i = -t[i__3].i;
+                work[i__2].r = z__1.r, work[i__2].i = z__1.i;
 /*<    40       CONTINUE >*/
 /* L40: */
-	    }
+            }
 
 /*           Solve the triangular system: */
 /*              (T(1:KI-1,1:KI-1) - T(KI,KI))*X = SCALE*WORK. */
 
 /*<             DO 50 K = 1, KI - 1 >*/
-	    i__1 = ki - 1;
-	    for (k = 1; k <= i__1; ++k) {
+            i__1 = ki - 1;
+            for (k = 1; k <= i__1; ++k) {
 /*<                T( K, K ) = T( K, K ) - T( KI, KI ) >*/
-		i__2 = k + k * t_dim1;
-		i__3 = k + k * t_dim1;
-		i__4 = ki + ki * t_dim1;
-		z__1.r = t[i__3].r - t[i__4].r, z__1.i = t[i__3].i - t[i__4]
-			.i;
-		t[i__2].r = z__1.r, t[i__2].i = z__1.i;
+                i__2 = k + k * t_dim1;
+                i__3 = k + k * t_dim1;
+                i__4 = ki + ki * t_dim1;
+                z__1.r = t[i__3].r - t[i__4].r, z__1.i = t[i__3].i - t[i__4]
+                        .i;
+                t[i__2].r = z__1.r, t[i__2].i = z__1.i;
 /*<    >*/
-		i__2 = k + k * t_dim1;
-		if ((d__1 = t[i__2].r, abs(d__1)) + (d__2 = d_imag(&t[k + k * 
-			t_dim1]), abs(d__2)) < smin) {
-		    i__3 = k + k * t_dim1;
-		    t[i__3].r = smin, t[i__3].i = 0.;
-		}
+                i__2 = k + k * t_dim1;
+                if ((d__1 = t[i__2].r, abs(d__1)) + (d__2 = d_imag(&t[k + k * 
+                        t_dim1]), abs(d__2)) < smin) {
+                    i__3 = k + k * t_dim1;
+                    t[i__3].r = smin, t[i__3].i = 0.;
+                }
 /*<    50       CONTINUE >*/
 /* L50: */
-	    }
+            }
 
 /*<             IF( KI.GT.1 ) THEN >*/
-	    if (ki > 1) {
+            if (ki > 1) {
 /*<    >*/
-		i__1 = ki - 1;
-		zlatrs_("Upper", "No transpose", "Non-unit", "Y", &i__1, &t[
-			t_offset], ldt, &work[1], &scale, &rwork[1], info, (
-			ftnlen)5, (ftnlen)12, (ftnlen)8, (ftnlen)1);
+                i__1 = ki - 1;
+                zlatrs_("Upper", "No transpose", "Non-unit", "Y", &i__1, &t[
+                        t_offset], ldt, &work[1], &scale, &rwork[1], info, (
+                        ftnlen)5, (ftnlen)12, (ftnlen)8, (ftnlen)1);
 /*<                WORK( KI ) = SCALE >*/
-		i__1 = ki;
-		work[i__1].r = scale, work[i__1].i = 0.;
+                i__1 = ki;
+                work[i__1].r = scale, work[i__1].i = 0.;
 /*<             END IF >*/
-	    }
+            }
 
 /*           Copy the vector x or Q*x to VR and normalize. */
 
 /*<             IF( .NOT.OVER ) THEN >*/
-	    if (! over) {
+            if (! over) {
 /*<                CALL ZCOPY( KI, WORK( 1 ), 1, VR( 1, IS ), 1 ) >*/
-		zcopy_(&ki, &work[1], &c__1, &vr[is * vr_dim1 + 1], &c__1);
+                zcopy_(&ki, &work[1], &c__1, &vr[is * vr_dim1 + 1], &c__1);
 
 /*<                II = IZAMAX( KI, VR( 1, IS ), 1 ) >*/
-		ii = izamax_(&ki, &vr[is * vr_dim1 + 1], &c__1);
+                ii = izamax_(&ki, &vr[is * vr_dim1 + 1], &c__1);
 /*<                REMAX = ONE / CABS1( VR( II, IS ) ) >*/
-		i__1 = ii + is * vr_dim1;
-		remax = 1. / ((d__1 = vr[i__1].r, abs(d__1)) + (d__2 = d_imag(
-			&vr[ii + is * vr_dim1]), abs(d__2)));
+                i__1 = ii + is * vr_dim1;
+                remax = 1. / ((d__1 = vr[i__1].r, abs(d__1)) + (d__2 = d_imag(
+                        &vr[ii + is * vr_dim1]), abs(d__2)));
 /*<                CALL ZDSCAL( KI, REMAX, VR( 1, IS ), 1 ) >*/
-		zdscal_(&ki, &remax, &vr[is * vr_dim1 + 1], &c__1);
+                zdscal_(&ki, &remax, &vr[is * vr_dim1 + 1], &c__1);
 
 /*<                DO 60 K = KI + 1, N >*/
-		i__1 = *n;
-		for (k = ki + 1; k <= i__1; ++k) {
+                i__1 = *n;
+                for (k = ki + 1; k <= i__1; ++k) {
 /*<                   VR( K, IS ) = CMZERO >*/
-		    i__2 = k + is * vr_dim1;
-		    vr[i__2].r = 0., vr[i__2].i = 0.;
+                    i__2 = k + is * vr_dim1;
+                    vr[i__2].r = 0., vr[i__2].i = 0.;
 /*<    60          CONTINUE >*/
 /* L60: */
-		}
+                }
 /*<             ELSE >*/
-	    } else {
+            } else {
 /*<    >*/
-		if (ki > 1) {
-		    i__1 = ki - 1;
-		    z__1.r = scale, z__1.i = 0.;
-		    zgemv_("N", n, &i__1, &c_b2, &vr[vr_offset], ldvr, &work[
-			    1], &c__1, &z__1, &vr[ki * vr_dim1 + 1], &c__1, (
-			    ftnlen)1);
-		}
+                if (ki > 1) {
+                    i__1 = ki - 1;
+                    z__1.r = scale, z__1.i = 0.;
+                    zgemv_("N", n, &i__1, &c_b2, &vr[vr_offset], ldvr, &work[
+                            1], &c__1, &z__1, &vr[ki * vr_dim1 + 1], &c__1, (
+                            ftnlen)1);
+                }
 
 /*<                II = IZAMAX( N, VR( 1, KI ), 1 ) >*/
-		ii = izamax_(n, &vr[ki * vr_dim1 + 1], &c__1);
+                ii = izamax_(n, &vr[ki * vr_dim1 + 1], &c__1);
 /*<                REMAX = ONE / CABS1( VR( II, KI ) ) >*/
-		i__1 = ii + ki * vr_dim1;
-		remax = 1. / ((d__1 = vr[i__1].r, abs(d__1)) + (d__2 = d_imag(
-			&vr[ii + ki * vr_dim1]), abs(d__2)));
+                i__1 = ii + ki * vr_dim1;
+                remax = 1. / ((d__1 = vr[i__1].r, abs(d__1)) + (d__2 = d_imag(
+                        &vr[ii + ki * vr_dim1]), abs(d__2)));
 /*<                CALL ZDSCAL( N, REMAX, VR( 1, KI ), 1 ) >*/
-		zdscal_(n, &remax, &vr[ki * vr_dim1 + 1], &c__1);
+                zdscal_(n, &remax, &vr[ki * vr_dim1 + 1], &c__1);
 /*<             END IF >*/
-	    }
+            }
 
 /*           Set back the original diagonal elements of T. */
 
 /*<             DO 70 K = 1, KI - 1 >*/
-	    i__1 = ki - 1;
-	    for (k = 1; k <= i__1; ++k) {
+            i__1 = ki - 1;
+            for (k = 1; k <= i__1; ++k) {
 /*<                T( K, K ) = WORK( K+N ) >*/
-		i__2 = k + k * t_dim1;
-		i__3 = k + *n;
-		t[i__2].r = work[i__3].r, t[i__2].i = work[i__3].i;
+                i__2 = k + k * t_dim1;
+                i__3 = k + *n;
+                t[i__2].r = work[i__3].r, t[i__2].i = work[i__3].i;
 /*<    70       CONTINUE >*/
 /* L70: */
-	    }
+            }
 
 /*<             IS = IS - 1 >*/
-	    --is;
+            --is;
 /*<    80    CONTINUE >*/
 L80:
-	    ;
-	}
+            ;
+        }
 /*<       END IF >*/
     }
 
@@ -536,152 +536,152 @@ L80:
 /*        Compute left eigenvectors. */
 
 /*<          IS = 1 >*/
-	is = 1;
+        is = 1;
 /*<          DO 130 KI = 1, N >*/
-	i__1 = *n;
-	for (ki = 1; ki <= i__1; ++ki) {
+        i__1 = *n;
+        for (ki = 1; ki <= i__1; ++ki) {
 
 /*<             IF( SOMEV ) THEN >*/
-	    if (somev) {
+            if (somev) {
 /*<    >*/
-		if (! select[ki]) {
-		    goto L130;
-		}
+                if (! select[ki]) {
+                    goto L130;
+                }
 /*<             END IF >*/
-	    }
+            }
 /*<             SMIN = MAX( ULP*( CABS1( T( KI, KI ) ) ), SMLNUM ) >*/
 /* Computing MAX */
-	    i__2 = ki + ki * t_dim1;
-	    d__3 = ulp * ((d__1 = t[i__2].r, abs(d__1)) + (d__2 = d_imag(&t[
-		    ki + ki * t_dim1]), abs(d__2)));
-	    smin = max(d__3,smlnum);
+            i__2 = ki + ki * t_dim1;
+            d__3 = ulp * ((d__1 = t[i__2].r, abs(d__1)) + (d__2 = d_imag(&t[
+                    ki + ki * t_dim1]), abs(d__2)));
+            smin = max(d__3,smlnum);
 
 /*<             WORK( N ) = CMONE >*/
-	    i__2 = *n;
-	    work[i__2].r = 1., work[i__2].i = 0.;
+            i__2 = *n;
+            work[i__2].r = 1., work[i__2].i = 0.;
 
 /*           Form right-hand side. */
 
 /*<             DO 90 K = KI + 1, N >*/
-	    i__2 = *n;
-	    for (k = ki + 1; k <= i__2; ++k) {
+            i__2 = *n;
+            for (k = ki + 1; k <= i__2; ++k) {
 /*<                WORK( K ) = -DCONJG( T( KI, K ) ) >*/
-		i__3 = k;
-		d_cnjg(&z__2, &t[ki + k * t_dim1]);
-		z__1.r = -z__2.r, z__1.i = -z__2.i;
-		work[i__3].r = z__1.r, work[i__3].i = z__1.i;
+                i__3 = k;
+                d_cnjg(&z__2, &t[ki + k * t_dim1]);
+                z__1.r = -z__2.r, z__1.i = -z__2.i;
+                work[i__3].r = z__1.r, work[i__3].i = z__1.i;
 /*<    90       CONTINUE >*/
 /* L90: */
-	    }
+            }
 
 /*           Solve the triangular system: */
 /*              (T(KI+1:N,KI+1:N) - T(KI,KI))'*X = SCALE*WORK. */
 
 /*<             DO 100 K = KI + 1, N >*/
-	    i__2 = *n;
-	    for (k = ki + 1; k <= i__2; ++k) {
+            i__2 = *n;
+            for (k = ki + 1; k <= i__2; ++k) {
 /*<                T( K, K ) = T( K, K ) - T( KI, KI ) >*/
-		i__3 = k + k * t_dim1;
-		i__4 = k + k * t_dim1;
-		i__5 = ki + ki * t_dim1;
-		z__1.r = t[i__4].r - t[i__5].r, z__1.i = t[i__4].i - t[i__5]
-			.i;
-		t[i__3].r = z__1.r, t[i__3].i = z__1.i;
+                i__3 = k + k * t_dim1;
+                i__4 = k + k * t_dim1;
+                i__5 = ki + ki * t_dim1;
+                z__1.r = t[i__4].r - t[i__5].r, z__1.i = t[i__4].i - t[i__5]
+                        .i;
+                t[i__3].r = z__1.r, t[i__3].i = z__1.i;
 /*<    >*/
-		i__3 = k + k * t_dim1;
-		if ((d__1 = t[i__3].r, abs(d__1)) + (d__2 = d_imag(&t[k + k * 
-			t_dim1]), abs(d__2)) < smin) {
-		    i__4 = k + k * t_dim1;
-		    t[i__4].r = smin, t[i__4].i = 0.;
-		}
+                i__3 = k + k * t_dim1;
+                if ((d__1 = t[i__3].r, abs(d__1)) + (d__2 = d_imag(&t[k + k * 
+                        t_dim1]), abs(d__2)) < smin) {
+                    i__4 = k + k * t_dim1;
+                    t[i__4].r = smin, t[i__4].i = 0.;
+                }
 /*<   100       CONTINUE >*/
 /* L100: */
-	    }
+            }
 
 /*<             IF( KI.LT.N ) THEN >*/
-	    if (ki < *n) {
+            if (ki < *n) {
 /*<    >*/
-		i__2 = *n - ki;
-		zlatrs_("Upper", "Conjugate transpose", "Non-unit", "Y", &
-			i__2, &t[ki + 1 + (ki + 1) * t_dim1], ldt, &work[ki + 
-			1], &scale, &rwork[1], info, (ftnlen)5, (ftnlen)19, (
-			ftnlen)8, (ftnlen)1);
+                i__2 = *n - ki;
+                zlatrs_("Upper", "Conjugate transpose", "Non-unit", "Y", &
+                        i__2, &t[ki + 1 + (ki + 1) * t_dim1], ldt, &work[ki + 
+                        1], &scale, &rwork[1], info, (ftnlen)5, (ftnlen)19, (
+                        ftnlen)8, (ftnlen)1);
 /*<                WORK( KI ) = SCALE >*/
-		i__2 = ki;
-		work[i__2].r = scale, work[i__2].i = 0.;
+                i__2 = ki;
+                work[i__2].r = scale, work[i__2].i = 0.;
 /*<             END IF >*/
-	    }
+            }
 
 /*           Copy the vector x or Q*x to VL and normalize. */
 
 /*<             IF( .NOT.OVER ) THEN >*/
-	    if (! over) {
+            if (! over) {
 /*<                CALL ZCOPY( N-KI+1, WORK( KI ), 1, VL( KI, IS ), 1 ) >*/
-		i__2 = *n - ki + 1;
-		zcopy_(&i__2, &work[ki], &c__1, &vl[ki + is * vl_dim1], &c__1)
-			;
+                i__2 = *n - ki + 1;
+                zcopy_(&i__2, &work[ki], &c__1, &vl[ki + is * vl_dim1], &c__1)
+                        ;
 
 /*<                II = IZAMAX( N-KI+1, VL( KI, IS ), 1 ) + KI - 1 >*/
-		i__2 = *n - ki + 1;
-		ii = izamax_(&i__2, &vl[ki + is * vl_dim1], &c__1) + ki - 1;
+                i__2 = *n - ki + 1;
+                ii = izamax_(&i__2, &vl[ki + is * vl_dim1], &c__1) + ki - 1;
 /*<                REMAX = ONE / CABS1( VL( II, IS ) ) >*/
-		i__2 = ii + is * vl_dim1;
-		remax = 1. / ((d__1 = vl[i__2].r, abs(d__1)) + (d__2 = d_imag(
-			&vl[ii + is * vl_dim1]), abs(d__2)));
+                i__2 = ii + is * vl_dim1;
+                remax = 1. / ((d__1 = vl[i__2].r, abs(d__1)) + (d__2 = d_imag(
+                        &vl[ii + is * vl_dim1]), abs(d__2)));
 /*<                CALL ZDSCAL( N-KI+1, REMAX, VL( KI, IS ), 1 ) >*/
-		i__2 = *n - ki + 1;
-		zdscal_(&i__2, &remax, &vl[ki + is * vl_dim1], &c__1);
+                i__2 = *n - ki + 1;
+                zdscal_(&i__2, &remax, &vl[ki + is * vl_dim1], &c__1);
 
 /*<                DO 110 K = 1, KI - 1 >*/
-		i__2 = ki - 1;
-		for (k = 1; k <= i__2; ++k) {
+                i__2 = ki - 1;
+                for (k = 1; k <= i__2; ++k) {
 /*<                   VL( K, IS ) = CMZERO >*/
-		    i__3 = k + is * vl_dim1;
-		    vl[i__3].r = 0., vl[i__3].i = 0.;
+                    i__3 = k + is * vl_dim1;
+                    vl[i__3].r = 0., vl[i__3].i = 0.;
 /*<   110          CONTINUE >*/
 /* L110: */
-		}
+                }
 /*<             ELSE >*/
-	    } else {
+            } else {
 /*<    >*/
-		if (ki < *n) {
-		    i__2 = *n - ki;
-		    z__1.r = scale, z__1.i = 0.;
-		    zgemv_("N", n, &i__2, &c_b2, &vl[(ki + 1) * vl_dim1 + 1], 
-			    ldvl, &work[ki + 1], &c__1, &z__1, &vl[ki * 
-			    vl_dim1 + 1], &c__1, (ftnlen)1);
-		}
+                if (ki < *n) {
+                    i__2 = *n - ki;
+                    z__1.r = scale, z__1.i = 0.;
+                    zgemv_("N", n, &i__2, &c_b2, &vl[(ki + 1) * vl_dim1 + 1], 
+                            ldvl, &work[ki + 1], &c__1, &z__1, &vl[ki * 
+                            vl_dim1 + 1], &c__1, (ftnlen)1);
+                }
 
 /*<                II = IZAMAX( N, VL( 1, KI ), 1 ) >*/
-		ii = izamax_(n, &vl[ki * vl_dim1 + 1], &c__1);
+                ii = izamax_(n, &vl[ki * vl_dim1 + 1], &c__1);
 /*<                REMAX = ONE / CABS1( VL( II, KI ) ) >*/
-		i__2 = ii + ki * vl_dim1;
-		remax = 1. / ((d__1 = vl[i__2].r, abs(d__1)) + (d__2 = d_imag(
-			&vl[ii + ki * vl_dim1]), abs(d__2)));
+                i__2 = ii + ki * vl_dim1;
+                remax = 1. / ((d__1 = vl[i__2].r, abs(d__1)) + (d__2 = d_imag(
+                        &vl[ii + ki * vl_dim1]), abs(d__2)));
 /*<                CALL ZDSCAL( N, REMAX, VL( 1, KI ), 1 ) >*/
-		zdscal_(n, &remax, &vl[ki * vl_dim1 + 1], &c__1);
+                zdscal_(n, &remax, &vl[ki * vl_dim1 + 1], &c__1);
 /*<             END IF >*/
-	    }
+            }
 
 /*           Set back the original diagonal elements of T. */
 
 /*<             DO 120 K = KI + 1, N >*/
-	    i__2 = *n;
-	    for (k = ki + 1; k <= i__2; ++k) {
+            i__2 = *n;
+            for (k = ki + 1; k <= i__2; ++k) {
 /*<                T( K, K ) = WORK( K+N ) >*/
-		i__3 = k + k * t_dim1;
-		i__4 = k + *n;
-		t[i__3].r = work[i__4].r, t[i__3].i = work[i__4].i;
+                i__3 = k + k * t_dim1;
+                i__4 = k + *n;
+                t[i__3].r = work[i__4].r, t[i__3].i = work[i__4].i;
 /*<   120       CONTINUE >*/
 /* L120: */
-	    }
+            }
 
 /*<             IS = IS + 1 >*/
-	    ++is;
+            ++is;
 /*<   130    CONTINUE >*/
 L130:
-	    ;
-	}
+            ;
+        }
 /*<       END IF >*/
     }
 
@@ -694,5 +694,5 @@ L130:
 } /* ztrevc_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

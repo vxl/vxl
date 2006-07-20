@@ -1,13 +1,13 @@
 /* minpack/lmder1.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -26,8 +26,8 @@ extern "C" {
               v3p_netlib_integer*,
               void*),
         integer *m, integer *n, doublereal *x, 
-	doublereal *fvec, doublereal *fjac, integer *ldfjac, doublereal *tol, 
-	integer *info, integer *ipvt, doublereal *wa, integer *lwa,
+        doublereal *fvec, doublereal *fjac, integer *ldfjac, doublereal *tol, 
+        integer *info, integer *ipvt, doublereal *wa, integer *lwa,
         void* userdata)
 {
     /* Initialized data */
@@ -51,11 +51,11 @@ extern "C" {
                   v3p_netlib_integer*,
                   void*),
             integer *, integer *, doublereal 
-	    *, doublereal *, doublereal *, integer *, doublereal *, 
-	    doublereal *, doublereal *, integer *, doublereal *, integer *, 
-	    doublereal *, integer *, integer *, integer *, integer *, integer 
-	    *, doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, void*);
+            *, doublereal *, doublereal *, integer *, doublereal *, 
+            doublereal *, doublereal *, integer *, doublereal *, integer *, 
+            doublereal *, integer *, integer *, integer *, integer *, integer 
+            *, doublereal *, doublereal *, doublereal *, doublereal *, 
+            doublereal *, void*);
     integer maxfev, nprint;
 
 /*<       integer m,n,ldfjac,info,lwa >*/
@@ -204,8 +204,8 @@ extern "C" {
 
 /*<    >*/
     if (*n <= 0 || *m < *n || *ldfjac < *m || *tol < zero || *lwa < *n * 5 + *
-	    m) {
-	goto L10;
+            m) {
+        goto L10;
     }
 
 /*     call lmder. */
@@ -224,13 +224,13 @@ extern "C" {
     nprint = 0;
 /*<    >*/
     lmder_(fcn, m, n, &x[1], &fvec[1], &fjac[fjac_offset], ldfjac, &
-	    ftol, &xtol, &gtol, &maxfev, &wa[1], &mode, &factor, &nprint, 
-	    info, &nfev, &njev, &ipvt[1], &wa[*n + 1], &wa[(*n << 1) + 1], &
-	    wa[*n * 3 + 1], &wa[(*n << 2) + 1], &wa[*n * 5 + 1],
+            ftol, &xtol, &gtol, &maxfev, &wa[1], &mode, &factor, &nprint, 
+            info, &nfev, &njev, &ipvt[1], &wa[*n + 1], &wa[(*n << 1) + 1], &
+            wa[*n * 3 + 1], &wa[(*n << 2) + 1], &wa[*n * 5 + 1],
            userdata);
 /*<       if (info .eq. 8) info = 4 >*/
     if (*info == 8) {
-	*info = 4;
+        *info = 4;
     }
 /*<    10 continue >*/
 L10:
@@ -243,5 +243,5 @@ L10:
 } /* lmder1_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

@@ -1,13 +1,13 @@
 /* linalg/lsqr.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -34,12 +34,12 @@ static integer c__2 = 2;
                      v3p_netlib_doublereal*,
                      void*),
         doublereal *
-	damp, integer *leniw, integer *lenrw, integer *iw, doublereal *rw, 
-	doublereal *u, doublereal *v, doublereal *w, doublereal *x, 
-	doublereal *se, doublereal *atol, doublereal *btol, doublereal *
-	conlim, integer *itnlim, integer *nout, integer *istop, integer *itn, 
-	doublereal *anorm, doublereal *acond, doublereal *rnorm, doublereal *
-	arnorm, doublereal *xnorm, void* userdata)
+        damp, integer *leniw, integer *lenrw, integer *iw, doublereal *rw, 
+        doublereal *u, doublereal *v, doublereal *w, doublereal *x, 
+        doublereal *se, doublereal *atol, doublereal *btol, doublereal *
+        conlim, integer *itnlim, integer *nout, integer *istop, integer *itn, 
+        doublereal *anorm, doublereal *acond, doublereal *rnorm, doublereal *
+        arnorm, doublereal *xnorm, void* userdata)
 {
     /* System generated locals */
     integer i__1;
@@ -51,17 +51,17 @@ static integer c__2 = 2;
     /* Local variables */
     integer i__;
     doublereal t, z__, t1, t2, t3, cs, sn, cs1, cs2, sn1, sn2, phi, rho, tau, 
-	    psi, rhs, res1, res2, alfa, beta, zbar, ctol, rtol;
+            psi, rhs, res1, res2, alfa, beta, zbar, ctol, rtol;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     doublereal test1, test2, test3, gamma;
     extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
-	    integer *);
+            integer *);
     doublereal delta, theta, bnorm;
     extern /* Subroutine */ int dcopy_(integer *, doublereal *, integer *, 
-	    doublereal *, integer *);
+            doublereal *, integer *);
     integer nconv, nstop;
     doublereal rhbar1, rhbar2, gambar, phibar, rhobar, bbnorm, ddnorm, dampsq,
-	     xxnorm;
+             xxnorm;
 
 /*<       EXTERNAL           APROD >*/
 /*<       INTEGER            M, N, LENIW, LENRW, ITNLIM, NOUT, ISTOP, ITN >*/
@@ -411,7 +411,7 @@ static integer c__2 = 2;
     ctol = 0.;
 /*<       IF (CONLIM .GT. ZERO) CTOL = ONE / CONLIM >*/
     if (*conlim > 0.) {
-	ctol = 1. / *conlim;
+        ctol = 1. / *conlim;
     }
 /*<       ANORM  =   ZERO >*/
     *anorm = 0.;
@@ -441,11 +441,11 @@ static integer c__2 = 2;
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          V(I)  =  ZERO >*/
-	v[i__] = 0.;
+        v[i__] = 0.;
 /*<          X(I)  =  ZERO >*/
-	x[i__] = 0.;
+        x[i__] = 0.;
 /*<         SE(I)  =  ZERO >*/
-	se[i__] = 0.;
+        se[i__] = 0.;
 /*<    10 CONTINUE >*/
 /* L10: */
     }
@@ -458,29 +458,29 @@ static integer c__2 = 2;
 /*<       IF (BETA .GT. ZERO) THEN >*/
     if (beta > 0.) {
 /*<          CALL DSCAL ( M, (ONE / BETA), U, 1 ) >*/
-	d__1 = 1. / beta;
-	dscal_(m, &d__1, &u[1], &c__1);
+        d__1 = 1. / beta;
+        dscal_(m, &d__1, &u[1], &c__1);
 /*<          CALL APROD ( 2, M, N, V, U, LENIW, LENRW, IW, RW ) >*/
-	(*aprod)(&c__2, m, n, &v[1], &u[1], leniw, lenrw, &iw[1], &rw[1],
+        (*aprod)(&c__2, m, n, &v[1], &u[1], leniw, lenrw, &iw[1], &rw[1],
                  userdata);
 /*<          ALFA   =   DNRM2 ( N, V, 1 ) >*/
-	alfa = dnrm2_(n, &v[1], &c__1);
+        alfa = dnrm2_(n, &v[1], &c__1);
 /*<       END IF >*/
     }
 /*<       IF (ALFA .GT. ZERO) THEN >*/
     if (alfa > 0.) {
 /*<          CALL DSCAL ( N, (ONE / ALFA), V, 1 ) >*/
-	d__1 = 1. / alfa;
-	dscal_(n, &d__1, &v[1], &c__1);
+        d__1 = 1. / alfa;
+        dscal_(n, &d__1, &v[1], &c__1);
 /*<          CALL DCOPY ( N, V, 1, W, 1 ) >*/
-	dcopy_(n, &v[1], &c__1, &w[1], &c__1);
+        dcopy_(n, &v[1], &c__1, &w[1], &c__1);
 /*<       END IF >*/
     }
 /*<       ARNORM =   ALFA * BETA >*/
     *arnorm = alfa * beta;
 /*<       IF (ARNORM .EQ. ZERO) GO TO 800 >*/
     if (*arnorm == 0.) {
-	goto L800;
+        goto L800;
     }
 /*<       RHOBAR =   ALFA >*/
     rhobar = alfa;
@@ -528,23 +528,23 @@ L100:
 /*<       IF (BETA .GT. ZERO) THEN >*/
     if (beta > 0.) {
 /*<          CALL DSCAL ( M, (ONE / BETA), U, 1 ) >*/
-	d__1 = 1. / beta;
-	dscal_(m, &d__1, &u[1], &c__1);
+        d__1 = 1. / beta;
+        dscal_(m, &d__1, &u[1], &c__1);
 /*<          CALL DSCAL ( N, (- BETA), V, 1 ) >*/
-	d__1 = -beta;
-	dscal_(n, &d__1, &v[1], &c__1);
+        d__1 = -beta;
+        dscal_(n, &d__1, &v[1], &c__1);
 /*<          CALL APROD ( 2, M, N, V, U, LENIW, LENRW, IW, RW ) >*/
-	(*aprod)(&c__2, m, n, &v[1], &u[1], leniw, lenrw, &iw[1], &rw[1],
+        (*aprod)(&c__2, m, n, &v[1], &u[1], leniw, lenrw, &iw[1], &rw[1],
                  userdata);
 /*<          ALFA   =   DNRM2 ( N, V, 1 ) >*/
-	alfa = dnrm2_(n, &v[1], &c__1);
+        alfa = dnrm2_(n, &v[1], &c__1);
 /*<          IF (ALFA .GT. ZERO) THEN >*/
-	if (alfa > 0.) {
+        if (alfa > 0.) {
 /*<             CALL DSCAL ( N, (ONE / ALFA), V, 1 ) >*/
-	    d__1 = 1. / alfa;
-	    dscal_(n, &d__1, &v[1], &c__1);
+            d__1 = 1. / alfa;
+            dscal_(n, &d__1, &v[1], &c__1);
 /*<          END IF >*/
-	}
+        }
 /*<       END IF >*/
     }
 /*     Use a plane rotation to eliminate the damping parameter. */
@@ -594,19 +594,19 @@ L100:
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          T      =  W(I) >*/
-	t = w[i__];
+        t = w[i__];
 /*<          X(I)   =  T1*T  +  X(I) >*/
-	x[i__] = t1 * t + x[i__];
+        x[i__] = t1 * t + x[i__];
 /*<          W(I)   =  T2*T  +  V(I) >*/
-	w[i__] = t2 * t + v[i__];
+        w[i__] = t2 * t + v[i__];
 /*<          T      = (T3*T)**2 >*/
 /* Computing 2nd power */
-	d__1 = t3 * t;
-	t = d__1 * d__1;
+        d__1 = t3 * t;
+        t = d__1 * d__1;
 /*<          SE(I)  =  T     +  SE(I) >*/
-	se[i__] = t + se[i__];
+        se[i__] = t + se[i__];
 /*<          DDNORM =  T     +  DDNORM >*/
-	ddnorm = t + ddnorm;
+        ddnorm = t + ddnorm;
 /*<   200 CONTINUE >*/
 /* L200: */
     }
@@ -668,7 +668,7 @@ L100:
     test2 = 0.;
 /*<       IF (RNORM .GT. ZERO) TEST2 = ARNORM / (ANORM * RNORM) >*/
     if (*rnorm > 0.) {
-	test2 = *arnorm / (*anorm * *rnorm);
+        test2 = *arnorm / (*anorm * *rnorm);
     }
 /*<       TEST3  =   ONE   /  ACOND >*/
     test3 = 1. / *acond;
@@ -689,70 +689,70 @@ L100:
     t1 += 1.;
 /*<       IF (ITN .GE. ITNLIM) ISTOP = 7 >*/
     if (*itn >= *itnlim) {
-	*istop = 7;
+        *istop = 7;
     }
 /*<       IF (T3  .LE. ONE   ) ISTOP = 6 >*/
     if (t3 <= 1.) {
-	*istop = 6;
+        *istop = 6;
     }
 /*<       IF (T2  .LE. ONE   ) ISTOP = 5 >*/
     if (t2 <= 1.) {
-	*istop = 5;
+        *istop = 5;
     }
 /*<       IF (T1  .LE. ONE   ) ISTOP = 4 >*/
     if (t1 <= 1.) {
-	*istop = 4;
+        *istop = 4;
     }
 /*     Allow for tolerances set by the user. */
 /*<       IF (TEST3 .LE. CTOL) ISTOP = 3 >*/
     if (test3 <= ctol) {
-	*istop = 3;
+        *istop = 3;
     }
 /*<       IF (TEST2 .LE. ATOL) ISTOP = 2 >*/
     if (test2 <= *atol) {
-	*istop = 2;
+        *istop = 2;
     }
 /*<       IF (TEST1 .LE. RTOL) ISTOP = 1 >*/
     if (test1 <= rtol) {
-	*istop = 1;
+        *istop = 1;
     }
 /*     ================================================================== */
 /*     See if it is time to print something. */
 /*<       IF (NOUT  .LE.  0       ) GO TO 600 >*/
     if (*nout <= 0) {
-	goto L600;
+        goto L600;
     }
 /*<       IF (N     .LE. 40       ) GO TO 400 >*/
     if (*n <= 40) {
-	goto L400;
+        goto L400;
     }
 /*<       IF (ITN   .LE. 10       ) GO TO 400 >*/
     if (*itn <= 10) {
-	goto L400;
+        goto L400;
     }
 /*<       IF (ITN   .GE. ITNLIM-10) GO TO 400 >*/
     if (*itn >= *itnlim - 10) {
-	goto L400;
+        goto L400;
     }
 /*<       IF (MOD(ITN,10) .EQ. 0  ) GO TO 400 >*/
     if (*itn % 10 == 0) {
-	goto L400;
+        goto L400;
     }
 /*<       IF (TEST3 .LE.  2.0*CTOL) GO TO 400 >*/
     if (test3 <= ctol * (float)2.) {
-	goto L400;
+        goto L400;
     }
 /*<       IF (TEST2 .LE. 10.0*ATOL) GO TO 400 >*/
     if (test2 <= *atol * (float)10.) {
-	goto L400;
+        goto L400;
     }
 /*<       IF (TEST1 .LE. 10.0*RTOL) GO TO 400 >*/
     if (test1 <= rtol * (float)10.) {
-	goto L400;
+        goto L400;
     }
 /*<       IF (ISTOP .NE.  0       ) GO TO 400 >*/
     if (*istop != 0) {
-	goto L400;
+        goto L400;
     }
 /*<       GO TO 600 >*/
     goto L600;
@@ -760,7 +760,7 @@ L100:
 /*<   400 IF (1 .EQ. 1) GO TO 600 >*/
 L400:
     if (TRUE_) {
-	goto L600;
+        goto L600;
     }
 /*  400 WRITE(NOUT, 1500) ITN, X(1), RNORM, TEST1, TEST2, ANORM, ACOND */
 /*      IF (MOD(ITN,10) .EQ. 0) WRITE(NOUT, 1600) */
@@ -772,11 +772,11 @@ L400:
 /*<   600 IF (ISTOP .EQ. 0) NSTOP = 0 >*/
 L600:
     if (*istop == 0) {
-	nstop = 0;
+        nstop = 0;
     }
 /*<       IF (ISTOP .EQ. 0) GO TO 100 >*/
     if (*istop == 0) {
-	goto L100;
+        goto L100;
     }
 /*<       NCONV  =   1 >*/
     nconv = 1;
@@ -784,11 +784,11 @@ L600:
     ++nstop;
 /*<       IF (NSTOP .LT. NCONV  .AND.  ITN .LT. ITNLIM) ISTOP = 0 >*/
     if (nstop < nconv && *itn < *itnlim) {
-	*istop = 0;
+        *istop = 0;
     }
 /*<       IF (ISTOP .EQ. 0) GO TO 100 >*/
     if (*istop == 0) {
-	goto L100;
+        goto L100;
     }
 /*     ------------------------------------------------------------------ */
 /*     End of iteration loop. */
@@ -798,11 +798,11 @@ L600:
     t = 1.;
 /*<       IF (M      .GT.   N )  T = M - N >*/
     if (*m > *n) {
-	t = (doublereal) (*m - *n);
+        t = (doublereal) (*m - *n);
     }
 /*<       IF (DAMPSQ .GT. ZERO)  T = M >*/
     if (dampsq > 0.) {
-	t = (doublereal) (*m);
+        t = (doublereal) (*m);
     }
 /*<       T    =   RNORM / SQRT( T ) >*/
     t = *rnorm / sqrt(t);
@@ -810,7 +810,7 @@ L600:
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          SE(I)  = T * SQRT( SE(I) ) >*/
-	se[i__] = t * sqrt(se[i__]);
+        se[i__] = t * sqrt(se[i__]);
 /*<   700 CONTINUE >*/
 /* L700: */
     }
@@ -818,7 +818,7 @@ L600:
 /*<   800 IF (1 .EQ. 1) GO TO 900 >*/
 L800:
     if (TRUE_) {
-	goto L900;
+        goto L900;
     }
 /*  800 IF (NOUT .GT. 0) THEN */
 /*         WRITE(NOUT, 2000) EXIT, ISTOP, ITN, */
@@ -851,5 +851,5 @@ L900:
 } /* lsqr_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

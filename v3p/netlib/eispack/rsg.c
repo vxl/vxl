@@ -1,13 +1,13 @@
 /* eispack/rsg.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -17,22 +17,22 @@ extern "C" {
 
 /*<       subroutine rsg(nm,n,a,b,w,matz,z,fv1,fv2,ierr) >*/
 /* Subroutine */ int rsg_(integer *nm, integer *n, doublereal *a, doublereal *
-	b, doublereal *w, integer *matz, doublereal *z__, doublereal *fv1, 
-	doublereal *fv2, integer *ierr)
+        b, doublereal *w, integer *matz, doublereal *z__, doublereal *fv1, 
+        doublereal *fv2, integer *ierr)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, z_dim1, z_offset;
 
     /* Local variables */
     extern /* Subroutine */ int tql2_(integer *, integer *, doublereal *, 
-	    doublereal *, doublereal *, integer *), tred1_(integer *, integer 
-	    *, doublereal *, doublereal *, doublereal *, doublereal *), 
-	    tred2_(integer *, integer *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *), rebak_(integer *, integer *, 
-	    doublereal *, doublereal *, integer *, doublereal *), reduc_(
-	    integer *, integer *, doublereal *, doublereal *, doublereal *, 
-	    integer *), tqlrat_(integer *, doublereal *, doublereal *, 
-	    integer *);
+            doublereal *, doublereal *, integer *), tred1_(integer *, integer 
+            *, doublereal *, doublereal *, doublereal *, doublereal *), 
+            tred2_(integer *, integer *, doublereal *, doublereal *, 
+            doublereal *, doublereal *), rebak_(integer *, integer *, 
+            doublereal *, doublereal *, integer *, doublereal *), reduc_(
+            integer *, integer *, doublereal *, doublereal *, doublereal *, 
+            integer *), tqlrat_(integer *, doublereal *, doublereal *, 
+            integer *);
 
 
 /*<       integer n,nm,ierr,matz >*/
@@ -95,7 +95,7 @@ extern "C" {
 
     /* Function Body */
     if (*n <= *nm) {
-	goto L10;
+        goto L10;
     }
 /*<       ierr = 10 * n >*/
     *ierr = *n * 10;
@@ -107,11 +107,11 @@ L10:
     reduc_(nm, n, &a[a_offset], &b[b_offset], &fv2[1], ierr);
 /*<       if (ierr .ne. 0) go to 50 >*/
     if (*ierr != 0) {
-	goto L50;
+        goto L50;
     }
 /*<       if (matz .ne. 0) go to 20 >*/
     if (*matz != 0) {
-	goto L20;
+        goto L20;
     }
 /*     .......... find eigenvalues only .......... */
 /*<       call  tred1(nm,n,a,w,fv1,fv2) >*/
@@ -128,7 +128,7 @@ L20:
     tql2_(nm, n, &w[1], &fv1[1], &z__[z_offset], ierr);
 /*<       if (ierr .ne. 0) go to 50 >*/
     if (*ierr != 0) {
-	goto L50;
+        goto L50;
     }
 /*<       call  rebak(nm,n,b,fv2,n,z) >*/
     rebak_(nm, n, &b[b_offset], &fv2[1], n, &z__[z_offset]);
@@ -139,5 +139,5 @@ L50:
 } /* rsg_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

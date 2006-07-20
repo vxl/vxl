@@ -1,13 +1,13 @@
 /* lapack/single/sggsvd.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -21,15 +21,15 @@ static integer c__1 = 1;
 
 /*<    >*/
 /* Subroutine */ int sggsvd_(char *jobu, char *jobv, char *jobq, integer *m, 
-	integer *n, integer *p, integer *k, integer *l, real *a, integer *lda,
-	 real *b, integer *ldb, real *alpha, real *beta, real *u, integer *
-	ldu, real *v, integer *ldv, real *q, integer *ldq, real *work, 
-	integer *iwork, integer *info, ftnlen jobu_len, ftnlen jobv_len, 
-	ftnlen jobq_len)
+        integer *n, integer *p, integer *k, integer *l, real *a, integer *lda,
+         real *b, integer *ldb, real *alpha, real *beta, real *u, integer *
+        ldu, real *v, integer *ldv, real *q, integer *ldq, real *work, 
+        integer *iwork, integer *info, ftnlen jobu_len, ftnlen jobv_len, 
+        ftnlen jobq_len)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, u_dim1, 
-	    u_offset, v_dim1, v_offset, i__1, i__2;
+            u_offset, v_dim1, v_offset, i__1, i__2;
 
     /* Local variables */
     integer i__, j;
@@ -42,20 +42,20 @@ static integer c__1 = 1;
     real anorm, bnorm;
     logical wantq;
     extern /* Subroutine */ int scopy_(integer *, real *, integer *, real *, 
-	    integer *);
+            integer *);
     logical wantu, wantv;
     extern doublereal slamch_(char *, ftnlen), slange_(char *, integer *, 
-	    integer *, real *, integer *, real *, ftnlen);
+            integer *, real *, integer *, real *, ftnlen);
     integer ncycle;
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen), stgsja_(
-	    char *, char *, char *, integer *, integer *, integer *, integer *
-	    , integer *, real *, integer *, real *, integer *, real *, real *,
-	     real *, real *, real *, integer *, real *, integer *, real *, 
-	    integer *, real *, integer *, integer *, ftnlen, ftnlen, ftnlen), 
-	    sggsvp_(char *, char *, char *, integer *, integer *, integer *, 
-	    real *, integer *, real *, integer *, real *, real *, integer *, 
-	    integer *, real *, integer *, real *, integer *, real *, integer *
-	    , integer *, real *, real *, integer *, ftnlen, ftnlen, ftnlen);
+            char *, char *, char *, integer *, integer *, integer *, integer *
+            , integer *, real *, integer *, real *, integer *, real *, real *,
+             real *, real *, real *, integer *, real *, integer *, real *, 
+            integer *, real *, integer *, integer *, ftnlen, ftnlen, ftnlen), 
+            sggsvp_(char *, char *, char *, integer *, integer *, integer *, 
+            real *, integer *, real *, integer *, real *, real *, integer *, 
+            integer *, real *, integer *, real *, integer *, real *, integer *
+            , integer *, real *, real *, integer *, ftnlen, ftnlen, ftnlen);
     (void)jobu_len;
     (void)jobv_len;
     (void)jobq_len;
@@ -334,56 +334,56 @@ static integer c__1 = 1;
 /*<       IF( .NOT.( WANTU .OR. LSAME( JOBU, 'N' ) ) ) THEN >*/
     if (! (wantu || lsame_(jobu, "N", (ftnlen)1, (ftnlen)1))) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<       ELSE IF( .NOT.( WANTV .OR. LSAME( JOBV, 'N' ) ) ) THEN >*/
     } else if (! (wantv || lsame_(jobv, "N", (ftnlen)1, (ftnlen)1))) {
 /*<          INFO = -2 >*/
-	*info = -2;
+        *info = -2;
 /*<       ELSE IF( .NOT.( WANTQ .OR. LSAME( JOBQ, 'N' ) ) ) THEN >*/
     } else if (! (wantq || lsame_(jobq, "N", (ftnlen)1, (ftnlen)1))) {
 /*<          INFO = -3 >*/
-	*info = -3;
+        *info = -3;
 /*<       ELSE IF( M.LT.0 ) THEN >*/
     } else if (*m < 0) {
 /*<          INFO = -4 >*/
-	*info = -4;
+        *info = -4;
 /*<       ELSE IF( N.LT.0 ) THEN >*/
     } else if (*n < 0) {
 /*<          INFO = -5 >*/
-	*info = -5;
+        *info = -5;
 /*<       ELSE IF( P.LT.0 ) THEN >*/
     } else if (*p < 0) {
 /*<          INFO = -6 >*/
-	*info = -6;
+        *info = -6;
 /*<       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN >*/
     } else if (*lda < max(1,*m)) {
 /*<          INFO = -10 >*/
-	*info = -10;
+        *info = -10;
 /*<       ELSE IF( LDB.LT.MAX( 1, P ) ) THEN >*/
     } else if (*ldb < max(1,*p)) {
 /*<          INFO = -12 >*/
-	*info = -12;
+        *info = -12;
 /*<       ELSE IF( LDU.LT.1 .OR. ( WANTU .AND. LDU.LT.M ) ) THEN >*/
     } else if (*ldu < 1 || (wantu && *ldu < *m)) {
 /*<          INFO = -16 >*/
-	*info = -16;
+        *info = -16;
 /*<       ELSE IF( LDV.LT.1 .OR. ( WANTV .AND. LDV.LT.P ) ) THEN >*/
     } else if (*ldv < 1 || (wantv && *ldv < *p)) {
 /*<          INFO = -18 >*/
-	*info = -18;
+        *info = -18;
 /*<       ELSE IF( LDQ.LT.1 .OR. ( WANTQ .AND. LDQ.LT.N ) ) THEN >*/
     } else if (*ldq < 1 || (wantq && *ldq < *n)) {
 /*<          INFO = -20 >*/
-	*info = -20;
+        *info = -20;
 /*<       END IF >*/
     }
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'SGGSVD', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("SGGSVD", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("SGGSVD", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -410,17 +410,17 @@ static integer c__1 = 1;
 
 /*<    >*/
     sggsvp_(jobu, jobv, jobq, m, p, n, &a[a_offset], lda, &b[b_offset], ldb, &
-	    tola, &tolb, k, l, &u[u_offset], ldu, &v[v_offset], ldv, &q[
-	    q_offset], ldq, &iwork[1], &work[1], &work[*n + 1], info, (ftnlen)
-	    1, (ftnlen)1, (ftnlen)1);
+            tola, &tolb, k, l, &u[u_offset], ldu, &v[v_offset], ldv, &q[
+            q_offset], ldq, &iwork[1], &work[1], &work[*n + 1], info, (ftnlen)
+            1, (ftnlen)1, (ftnlen)1);
 
 /*     Compute the GSVD of two upper "triangular" matrices */
 
 /*<    >*/
     stgsja_(jobu, jobv, jobq, m, p, n, k, l, &a[a_offset], lda, &b[b_offset], 
-	    ldb, &tola, &tolb, &alpha[1], &beta[1], &u[u_offset], ldu, &v[
-	    v_offset], ldv, &q[q_offset], ldq, &work[1], &ncycle, info, (
-	    ftnlen)1, (ftnlen)1, (ftnlen)1);
+            ldb, &tola, &tolb, &alpha[1], &beta[1], &u[u_offset], ldu, &v[
+            v_offset], ldv, &q[q_offset], ldq, &work[1], &ncycle, info, (
+            ftnlen)1, (ftnlen)1, (ftnlen)1);
 
 /*     Sort the singular values and store the pivot indices in IWORK */
 /*     Copy ALPHA to WORK, then sort ALPHA in WORK */
@@ -438,39 +438,39 @@ static integer c__1 = 1;
 /*        Scan for largest ALPHA(K+I) */
 
 /*<          ISUB = I >*/
-	isub = i__;
+        isub = i__;
 /*<          SMAX = WORK( K+I ) >*/
-	smax = work[*k + i__];
+        smax = work[*k + i__];
 /*<          DO 10 J = I + 1, IBND >*/
-	i__2 = ibnd;
-	for (j = i__ + 1; j <= i__2; ++j) {
+        i__2 = ibnd;
+        for (j = i__ + 1; j <= i__2; ++j) {
 /*<             TEMP = WORK( K+J ) >*/
-	    temp = work[*k + j];
+            temp = work[*k + j];
 /*<             IF( TEMP.GT.SMAX ) THEN >*/
-	    if (temp > smax) {
+            if (temp > smax) {
 /*<                ISUB = J >*/
-		isub = j;
+                isub = j;
 /*<                SMAX = TEMP >*/
-		smax = temp;
+                smax = temp;
 /*<             END IF >*/
-	    }
+            }
 /*<    10    CONTINUE >*/
 /* L10: */
-	}
+        }
 /*<          IF( ISUB.NE.I ) THEN >*/
-	if (isub != i__) {
+        if (isub != i__) {
 /*<             WORK( K+ISUB ) = WORK( K+I ) >*/
-	    work[*k + isub] = work[*k + i__];
+            work[*k + isub] = work[*k + i__];
 /*<             WORK( K+I ) = SMAX >*/
-	    work[*k + i__] = smax;
+            work[*k + i__] = smax;
 /*<             IWORK( K+I ) = K + ISUB >*/
-	    iwork[*k + i__] = *k + isub;
+            iwork[*k + i__] = *k + isub;
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             IWORK( K+I ) = K + I >*/
-	    iwork[*k + i__] = *k + i__;
+            iwork[*k + i__] = *k + i__;
 /*<          END IF >*/
-	}
+        }
 /*<    20 CONTINUE >*/
 /* L20: */
     }
@@ -484,5 +484,5 @@ static integer c__1 = 1;
 } /* sggsvd_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

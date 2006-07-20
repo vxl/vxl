@@ -1,13 +1,13 @@
 /* blas/ztrsv.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -17,8 +17,8 @@ extern "C" {
 
 /*<       SUBROUTINE ZTRSV ( UPLO, TRANS, DIAG, N, A, LDA, X, INCX ) >*/
 /* Subroutine */ int ztrsv_(char *uplo, char *trans, char *diag, integer *n, 
-	doublecomplex *a, integer *lda, doublecomplex *x, integer *incx, 
-	ftnlen uplo_len, ftnlen trans_len, ftnlen diag_len)
+        doublecomplex *a, integer *lda, doublecomplex *x, integer *incx, 
+        ftnlen uplo_len, ftnlen trans_len, ftnlen diag_len)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
@@ -26,7 +26,7 @@ extern "C" {
 
     /* Builtin functions */
     void z_div(doublecomplex *, doublecomplex *, doublecomplex *), d_cnjg(
-	    doublecomplex *, doublecomplex *);
+            doublecomplex *, doublecomplex *);
 
     /* Local variables */
     integer i__, j, ix, jx, kx=0, info;
@@ -169,40 +169,40 @@ extern "C" {
     info = 0;
 /*<    >*/
     if (! lsame_(uplo, "U", (ftnlen)1, (ftnlen)1) && ! lsame_(uplo, "L", (
-	    ftnlen)1, (ftnlen)1)) {
+            ftnlen)1, (ftnlen)1)) {
 /*<          INFO = 1 >*/
-	info = 1;
+        info = 1;
 /*<    >*/
     } else if (! lsame_(trans, "N", (ftnlen)1, (ftnlen)1) && ! lsame_(trans, 
-	    "T", (ftnlen)1, (ftnlen)1) && ! lsame_(trans, "C", (ftnlen)1, (
-	    ftnlen)1)) {
+            "T", (ftnlen)1, (ftnlen)1) && ! lsame_(trans, "C", (ftnlen)1, (
+            ftnlen)1)) {
 /*<          INFO = 2 >*/
-	info = 2;
+        info = 2;
 /*<    >*/
     } else if (! lsame_(diag, "U", (ftnlen)1, (ftnlen)1) && ! lsame_(diag, 
-	    "N", (ftnlen)1, (ftnlen)1)) {
+            "N", (ftnlen)1, (ftnlen)1)) {
 /*<          INFO = 3 >*/
-	info = 3;
+        info = 3;
 /*<       ELSE IF( N.LT.0 )THEN >*/
     } else if (*n < 0) {
 /*<          INFO = 4 >*/
-	info = 4;
+        info = 4;
 /*<       ELSE IF( LDA.LT.MAX( 1, N ) )THEN >*/
     } else if (*lda < max(1,*n)) {
 /*<          INFO = 6 >*/
-	info = 6;
+        info = 6;
 /*<       ELSE IF( INCX.EQ.0 )THEN >*/
     } else if (*incx == 0) {
 /*<          INFO = 8 >*/
-	info = 8;
+        info = 8;
 /*<       END IF >*/
     }
 /*<       IF( INFO.NE.0 )THEN >*/
     if (info != 0) {
 /*<          CALL XERBLA( 'ZTRSV ', INFO ) >*/
-	xerbla_("ZTRSV ", &info, (ftnlen)6);
+        xerbla_("ZTRSV ", &info, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -210,7 +210,7 @@ extern "C" {
 
 /*<    >*/
     if (*n == 0) {
-	return 0;
+        return 0;
     }
 
 /*<       NOCONJ = LSAME( TRANS, 'T' ) >*/
@@ -224,11 +224,11 @@ extern "C" {
 /*<       IF( INCX.LE.0 )THEN >*/
     if (*incx <= 0) {
 /*<          KX = 1 - ( N - 1 )*INCX >*/
-	kx = 1 - (*n - 1) * *incx;
+        kx = 1 - (*n - 1) * *incx;
 /*<       ELSE IF( INCX.NE.1 )THEN >*/
     } else if (*incx != 1) {
 /*<          KX = 1 >*/
-	kx = 1;
+        kx = 1;
 /*<       END IF >*/
     }
 
@@ -241,458 +241,458 @@ extern "C" {
 /*        Form  x := inv( A )*x. */
 
 /*<          IF( LSAME( UPLO, 'U' ) )THEN >*/
-	if (lsame_(uplo, "U", (ftnlen)1, (ftnlen)1)) {
+        if (lsame_(uplo, "U", (ftnlen)1, (ftnlen)1)) {
 /*<             IF( INCX.EQ.1 )THEN >*/
-	    if (*incx == 1) {
+            if (*incx == 1) {
 /*<                DO 20, J = N, 1, -1 >*/
-		for (j = *n; j >= 1; --j) {
+                for (j = *n; j >= 1; --j) {
 /*<                   IF( X( J ).NE.ZERO )THEN >*/
-		    i__1 = j;
-		    if (x[i__1].r != 0. || x[i__1].i != 0.) {
+                    i__1 = j;
+                    if (x[i__1].r != 0. || x[i__1].i != 0.) {
 /*<    >*/
-			if (nounit) {
-			    i__1 = j;
-			    z_div(&z__1, &x[j], &a[j + j * a_dim1]);
-			    x[i__1].r = z__1.r, x[i__1].i = z__1.i;
-			}
+                        if (nounit) {
+                            i__1 = j;
+                            z_div(&z__1, &x[j], &a[j + j * a_dim1]);
+                            x[i__1].r = z__1.r, x[i__1].i = z__1.i;
+                        }
 /*<                      TEMP = X( J ) >*/
-			i__1 = j;
-			temp.r = x[i__1].r, temp.i = x[i__1].i;
+                        i__1 = j;
+                        temp.r = x[i__1].r, temp.i = x[i__1].i;
 /*<                      DO 10, I = J - 1, 1, -1 >*/
-			for (i__ = j - 1; i__ >= 1; --i__) {
+                        for (i__ = j - 1; i__ >= 1; --i__) {
 /*<                         X( I ) = X( I ) - TEMP*A( I, J ) >*/
-			    i__1 = i__;
-			    i__2 = i__;
-			    i__3 = i__ + j * a_dim1;
-			    z__2.r = temp.r * a[i__3].r - temp.i * a[i__3].i, 
-				    z__2.i = temp.r * a[i__3].i + temp.i * a[
-				    i__3].r;
-			    z__1.r = x[i__2].r - z__2.r, z__1.i = x[i__2].i - 
-				    z__2.i;
-			    x[i__1].r = z__1.r, x[i__1].i = z__1.i;
+                            i__1 = i__;
+                            i__2 = i__;
+                            i__3 = i__ + j * a_dim1;
+                            z__2.r = temp.r * a[i__3].r - temp.i * a[i__3].i, 
+                                    z__2.i = temp.r * a[i__3].i + temp.i * a[
+                                    i__3].r;
+                            z__1.r = x[i__2].r - z__2.r, z__1.i = x[i__2].i - 
+                                    z__2.i;
+                            x[i__1].r = z__1.r, x[i__1].i = z__1.i;
 /*<    10                CONTINUE >*/
 /* L10: */
-			}
+                        }
 /*<                   END IF >*/
-		    }
+                    }
 /*<    20          CONTINUE >*/
 /* L20: */
-		}
+                }
 /*<             ELSE >*/
-	    } else {
+            } else {
 /*<                JX = KX + ( N - 1 )*INCX >*/
-		jx = kx + (*n - 1) * *incx;
+                jx = kx + (*n - 1) * *incx;
 /*<                DO 40, J = N, 1, -1 >*/
-		for (j = *n; j >= 1; --j) {
+                for (j = *n; j >= 1; --j) {
 /*<                   IF( X( JX ).NE.ZERO )THEN >*/
-		    i__1 = jx;
-		    if (x[i__1].r != 0. || x[i__1].i != 0.) {
+                    i__1 = jx;
+                    if (x[i__1].r != 0. || x[i__1].i != 0.) {
 /*<    >*/
-			if (nounit) {
-			    i__1 = jx;
-			    z_div(&z__1, &x[jx], &a[j + j * a_dim1]);
-			    x[i__1].r = z__1.r, x[i__1].i = z__1.i;
-			}
+                        if (nounit) {
+                            i__1 = jx;
+                            z_div(&z__1, &x[jx], &a[j + j * a_dim1]);
+                            x[i__1].r = z__1.r, x[i__1].i = z__1.i;
+                        }
 /*<                      TEMP = X( JX ) >*/
-			i__1 = jx;
-			temp.r = x[i__1].r, temp.i = x[i__1].i;
+                        i__1 = jx;
+                        temp.r = x[i__1].r, temp.i = x[i__1].i;
 /*<                      IX   = JX >*/
-			ix = jx;
+                        ix = jx;
 /*<                      DO 30, I = J - 1, 1, -1 >*/
-			for (i__ = j - 1; i__ >= 1; --i__) {
+                        for (i__ = j - 1; i__ >= 1; --i__) {
 /*<                         IX      = IX      - INCX >*/
-			    ix -= *incx;
+                            ix -= *incx;
 /*<                         X( IX ) = X( IX ) - TEMP*A( I, J ) >*/
-			    i__1 = ix;
-			    i__2 = ix;
-			    i__3 = i__ + j * a_dim1;
-			    z__2.r = temp.r * a[i__3].r - temp.i * a[i__3].i, 
-				    z__2.i = temp.r * a[i__3].i + temp.i * a[
-				    i__3].r;
-			    z__1.r = x[i__2].r - z__2.r, z__1.i = x[i__2].i - 
-				    z__2.i;
-			    x[i__1].r = z__1.r, x[i__1].i = z__1.i;
+                            i__1 = ix;
+                            i__2 = ix;
+                            i__3 = i__ + j * a_dim1;
+                            z__2.r = temp.r * a[i__3].r - temp.i * a[i__3].i, 
+                                    z__2.i = temp.r * a[i__3].i + temp.i * a[
+                                    i__3].r;
+                            z__1.r = x[i__2].r - z__2.r, z__1.i = x[i__2].i - 
+                                    z__2.i;
+                            x[i__1].r = z__1.r, x[i__1].i = z__1.i;
 /*<    30                CONTINUE >*/
 /* L30: */
-			}
+                        }
 /*<                   END IF >*/
-		    }
+                    }
 /*<                   JX = JX - INCX >*/
-		    jx -= *incx;
+                    jx -= *incx;
 /*<    40          CONTINUE >*/
 /* L40: */
-		}
+                }
 /*<             END IF >*/
-	    }
+            }
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             IF( INCX.EQ.1 )THEN >*/
-	    if (*incx == 1) {
+            if (*incx == 1) {
 /*<                DO 60, J = 1, N >*/
-		i__1 = *n;
-		for (j = 1; j <= i__1; ++j) {
+                i__1 = *n;
+                for (j = 1; j <= i__1; ++j) {
 /*<                   IF( X( J ).NE.ZERO )THEN >*/
-		    i__2 = j;
-		    if (x[i__2].r != 0. || x[i__2].i != 0.) {
+                    i__2 = j;
+                    if (x[i__2].r != 0. || x[i__2].i != 0.) {
 /*<    >*/
-			if (nounit) {
-			    i__2 = j;
-			    z_div(&z__1, &x[j], &a[j + j * a_dim1]);
-			    x[i__2].r = z__1.r, x[i__2].i = z__1.i;
-			}
+                        if (nounit) {
+                            i__2 = j;
+                            z_div(&z__1, &x[j], &a[j + j * a_dim1]);
+                            x[i__2].r = z__1.r, x[i__2].i = z__1.i;
+                        }
 /*<                      TEMP = X( J ) >*/
-			i__2 = j;
-			temp.r = x[i__2].r, temp.i = x[i__2].i;
+                        i__2 = j;
+                        temp.r = x[i__2].r, temp.i = x[i__2].i;
 /*<                      DO 50, I = J + 1, N >*/
-			i__2 = *n;
-			for (i__ = j + 1; i__ <= i__2; ++i__) {
+                        i__2 = *n;
+                        for (i__ = j + 1; i__ <= i__2; ++i__) {
 /*<                         X( I ) = X( I ) - TEMP*A( I, J ) >*/
-			    i__3 = i__;
-			    i__4 = i__;
-			    i__5 = i__ + j * a_dim1;
-			    z__2.r = temp.r * a[i__5].r - temp.i * a[i__5].i, 
-				    z__2.i = temp.r * a[i__5].i + temp.i * a[
-				    i__5].r;
-			    z__1.r = x[i__4].r - z__2.r, z__1.i = x[i__4].i - 
-				    z__2.i;
-			    x[i__3].r = z__1.r, x[i__3].i = z__1.i;
+                            i__3 = i__;
+                            i__4 = i__;
+                            i__5 = i__ + j * a_dim1;
+                            z__2.r = temp.r * a[i__5].r - temp.i * a[i__5].i, 
+                                    z__2.i = temp.r * a[i__5].i + temp.i * a[
+                                    i__5].r;
+                            z__1.r = x[i__4].r - z__2.r, z__1.i = x[i__4].i - 
+                                    z__2.i;
+                            x[i__3].r = z__1.r, x[i__3].i = z__1.i;
 /*<    50                CONTINUE >*/
 /* L50: */
-			}
+                        }
 /*<                   END IF >*/
-		    }
+                    }
 /*<    60          CONTINUE >*/
 /* L60: */
-		}
+                }
 /*<             ELSE >*/
-	    } else {
+            } else {
 /*<                JX = KX >*/
-		jx = kx;
+                jx = kx;
 /*<                DO 80, J = 1, N >*/
-		i__1 = *n;
-		for (j = 1; j <= i__1; ++j) {
+                i__1 = *n;
+                for (j = 1; j <= i__1; ++j) {
 /*<                   IF( X( JX ).NE.ZERO )THEN >*/
-		    i__2 = jx;
-		    if (x[i__2].r != 0. || x[i__2].i != 0.) {
+                    i__2 = jx;
+                    if (x[i__2].r != 0. || x[i__2].i != 0.) {
 /*<    >*/
-			if (nounit) {
-			    i__2 = jx;
-			    z_div(&z__1, &x[jx], &a[j + j * a_dim1]);
-			    x[i__2].r = z__1.r, x[i__2].i = z__1.i;
-			}
+                        if (nounit) {
+                            i__2 = jx;
+                            z_div(&z__1, &x[jx], &a[j + j * a_dim1]);
+                            x[i__2].r = z__1.r, x[i__2].i = z__1.i;
+                        }
 /*<                      TEMP = X( JX ) >*/
-			i__2 = jx;
-			temp.r = x[i__2].r, temp.i = x[i__2].i;
+                        i__2 = jx;
+                        temp.r = x[i__2].r, temp.i = x[i__2].i;
 /*<                      IX   = JX >*/
-			ix = jx;
+                        ix = jx;
 /*<                      DO 70, I = J + 1, N >*/
-			i__2 = *n;
-			for (i__ = j + 1; i__ <= i__2; ++i__) {
+                        i__2 = *n;
+                        for (i__ = j + 1; i__ <= i__2; ++i__) {
 /*<                         IX      = IX      + INCX >*/
-			    ix += *incx;
+                            ix += *incx;
 /*<                         X( IX ) = X( IX ) - TEMP*A( I, J ) >*/
-			    i__3 = ix;
-			    i__4 = ix;
-			    i__5 = i__ + j * a_dim1;
-			    z__2.r = temp.r * a[i__5].r - temp.i * a[i__5].i, 
-				    z__2.i = temp.r * a[i__5].i + temp.i * a[
-				    i__5].r;
-			    z__1.r = x[i__4].r - z__2.r, z__1.i = x[i__4].i - 
-				    z__2.i;
-			    x[i__3].r = z__1.r, x[i__3].i = z__1.i;
+                            i__3 = ix;
+                            i__4 = ix;
+                            i__5 = i__ + j * a_dim1;
+                            z__2.r = temp.r * a[i__5].r - temp.i * a[i__5].i, 
+                                    z__2.i = temp.r * a[i__5].i + temp.i * a[
+                                    i__5].r;
+                            z__1.r = x[i__4].r - z__2.r, z__1.i = x[i__4].i - 
+                                    z__2.i;
+                            x[i__3].r = z__1.r, x[i__3].i = z__1.i;
 /*<    70                CONTINUE >*/
 /* L70: */
-			}
+                        }
 /*<                   END IF >*/
-		    }
+                    }
 /*<                   JX = JX + INCX >*/
-		    jx += *incx;
+                    jx += *incx;
 /*<    80          CONTINUE >*/
 /* L80: */
-		}
+                }
 /*<             END IF >*/
-	    }
+            }
 /*<          END IF >*/
-	}
+        }
 /*<       ELSE >*/
     } else {
 
 /*        Form  x := inv( A' )*x  or  x := inv( conjg( A' ) )*x. */
 
 /*<          IF( LSAME( UPLO, 'U' ) )THEN >*/
-	if (lsame_(uplo, "U", (ftnlen)1, (ftnlen)1)) {
+        if (lsame_(uplo, "U", (ftnlen)1, (ftnlen)1)) {
 /*<             IF( INCX.EQ.1 )THEN >*/
-	    if (*incx == 1) {
+            if (*incx == 1) {
 /*<                DO 110, J = 1, N >*/
-		i__1 = *n;
-		for (j = 1; j <= i__1; ++j) {
+                i__1 = *n;
+                for (j = 1; j <= i__1; ++j) {
 /*<                   TEMP = X( J ) >*/
-		    i__2 = j;
-		    temp.r = x[i__2].r, temp.i = x[i__2].i;
+                    i__2 = j;
+                    temp.r = x[i__2].r, temp.i = x[i__2].i;
 /*<                   IF( NOCONJ )THEN >*/
-		    if (noconj) {
+                    if (noconj) {
 /*<                      DO 90, I = 1, J - 1 >*/
-			i__2 = j - 1;
-			for (i__ = 1; i__ <= i__2; ++i__) {
+                        i__2 = j - 1;
+                        for (i__ = 1; i__ <= i__2; ++i__) {
 /*<                         TEMP = TEMP - A( I, J )*X( I ) >*/
-			    i__3 = i__ + j * a_dim1;
-			    i__4 = i__;
-			    z__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[
-				    i__4].i, z__2.i = a[i__3].r * x[i__4].i + 
-				    a[i__3].i * x[i__4].r;
-			    z__1.r = temp.r - z__2.r, z__1.i = temp.i - 
-				    z__2.i;
-			    temp.r = z__1.r, temp.i = z__1.i;
+                            i__3 = i__ + j * a_dim1;
+                            i__4 = i__;
+                            z__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[
+                                    i__4].i, z__2.i = a[i__3].r * x[i__4].i + 
+                                    a[i__3].i * x[i__4].r;
+                            z__1.r = temp.r - z__2.r, z__1.i = temp.i - 
+                                    z__2.i;
+                            temp.r = z__1.r, temp.i = z__1.i;
 /*<    90                CONTINUE >*/
 /* L90: */
-			}
+                        }
 /*<    >*/
-			if (nounit) {
-			    z_div(&z__1, &temp, &a[j + j * a_dim1]);
-			    temp.r = z__1.r, temp.i = z__1.i;
-			}
+                        if (nounit) {
+                            z_div(&z__1, &temp, &a[j + j * a_dim1]);
+                            temp.r = z__1.r, temp.i = z__1.i;
+                        }
 /*<                   ELSE >*/
-		    } else {
+                    } else {
 /*<                      DO 100, I = 1, J - 1 >*/
-			i__2 = j - 1;
-			for (i__ = 1; i__ <= i__2; ++i__) {
+                        i__2 = j - 1;
+                        for (i__ = 1; i__ <= i__2; ++i__) {
 /*<                         TEMP = TEMP - DCONJG( A( I, J ) )*X( I ) >*/
-			    d_cnjg(&z__3, &a[i__ + j * a_dim1]);
-			    i__3 = i__;
-			    z__2.r = z__3.r * x[i__3].r - z__3.i * x[i__3].i, 
-				    z__2.i = z__3.r * x[i__3].i + z__3.i * x[
-				    i__3].r;
-			    z__1.r = temp.r - z__2.r, z__1.i = temp.i - 
-				    z__2.i;
-			    temp.r = z__1.r, temp.i = z__1.i;
+                            d_cnjg(&z__3, &a[i__ + j * a_dim1]);
+                            i__3 = i__;
+                            z__2.r = z__3.r * x[i__3].r - z__3.i * x[i__3].i, 
+                                    z__2.i = z__3.r * x[i__3].i + z__3.i * x[
+                                    i__3].r;
+                            z__1.r = temp.r - z__2.r, z__1.i = temp.i - 
+                                    z__2.i;
+                            temp.r = z__1.r, temp.i = z__1.i;
 /*<   100                CONTINUE >*/
 /* L100: */
-			}
+                        }
 /*<    >*/
-			if (nounit) {
-			    d_cnjg(&z__2, &a[j + j * a_dim1]);
-			    z_div(&z__1, &temp, &z__2);
-			    temp.r = z__1.r, temp.i = z__1.i;
-			}
+                        if (nounit) {
+                            d_cnjg(&z__2, &a[j + j * a_dim1]);
+                            z_div(&z__1, &temp, &z__2);
+                            temp.r = z__1.r, temp.i = z__1.i;
+                        }
 /*<                   END IF >*/
-		    }
+                    }
 /*<                   X( J ) = TEMP >*/
-		    i__2 = j;
-		    x[i__2].r = temp.r, x[i__2].i = temp.i;
+                    i__2 = j;
+                    x[i__2].r = temp.r, x[i__2].i = temp.i;
 /*<   110          CONTINUE >*/
 /* L110: */
-		}
+                }
 /*<             ELSE >*/
-	    } else {
+            } else {
 /*<                JX = KX >*/
-		jx = kx;
+                jx = kx;
 /*<                DO 140, J = 1, N >*/
-		i__1 = *n;
-		for (j = 1; j <= i__1; ++j) {
+                i__1 = *n;
+                for (j = 1; j <= i__1; ++j) {
 /*<                   IX   = KX >*/
-		    ix = kx;
+                    ix = kx;
 /*<                   TEMP = X( JX ) >*/
-		    i__2 = jx;
-		    temp.r = x[i__2].r, temp.i = x[i__2].i;
+                    i__2 = jx;
+                    temp.r = x[i__2].r, temp.i = x[i__2].i;
 /*<                   IF( NOCONJ )THEN >*/
-		    if (noconj) {
+                    if (noconj) {
 /*<                      DO 120, I = 1, J - 1 >*/
-			i__2 = j - 1;
-			for (i__ = 1; i__ <= i__2; ++i__) {
+                        i__2 = j - 1;
+                        for (i__ = 1; i__ <= i__2; ++i__) {
 /*<                         TEMP = TEMP - A( I, J )*X( IX ) >*/
-			    i__3 = i__ + j * a_dim1;
-			    i__4 = ix;
-			    z__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[
-				    i__4].i, z__2.i = a[i__3].r * x[i__4].i + 
-				    a[i__3].i * x[i__4].r;
-			    z__1.r = temp.r - z__2.r, z__1.i = temp.i - 
-				    z__2.i;
-			    temp.r = z__1.r, temp.i = z__1.i;
+                            i__3 = i__ + j * a_dim1;
+                            i__4 = ix;
+                            z__2.r = a[i__3].r * x[i__4].r - a[i__3].i * x[
+                                    i__4].i, z__2.i = a[i__3].r * x[i__4].i + 
+                                    a[i__3].i * x[i__4].r;
+                            z__1.r = temp.r - z__2.r, z__1.i = temp.i - 
+                                    z__2.i;
+                            temp.r = z__1.r, temp.i = z__1.i;
 /*<                         IX   = IX   + INCX >*/
-			    ix += *incx;
+                            ix += *incx;
 /*<   120                CONTINUE >*/
 /* L120: */
-			}
+                        }
 /*<    >*/
-			if (nounit) {
-			    z_div(&z__1, &temp, &a[j + j * a_dim1]);
-			    temp.r = z__1.r, temp.i = z__1.i;
-			}
+                        if (nounit) {
+                            z_div(&z__1, &temp, &a[j + j * a_dim1]);
+                            temp.r = z__1.r, temp.i = z__1.i;
+                        }
 /*<                   ELSE >*/
-		    } else {
+                    } else {
 /*<                      DO 130, I = 1, J - 1 >*/
-			i__2 = j - 1;
-			for (i__ = 1; i__ <= i__2; ++i__) {
+                        i__2 = j - 1;
+                        for (i__ = 1; i__ <= i__2; ++i__) {
 /*<                         TEMP = TEMP - DCONJG( A( I, J ) )*X( IX ) >*/
-			    d_cnjg(&z__3, &a[i__ + j * a_dim1]);
-			    i__3 = ix;
-			    z__2.r = z__3.r * x[i__3].r - z__3.i * x[i__3].i, 
-				    z__2.i = z__3.r * x[i__3].i + z__3.i * x[
-				    i__3].r;
-			    z__1.r = temp.r - z__2.r, z__1.i = temp.i - 
-				    z__2.i;
-			    temp.r = z__1.r, temp.i = z__1.i;
+                            d_cnjg(&z__3, &a[i__ + j * a_dim1]);
+                            i__3 = ix;
+                            z__2.r = z__3.r * x[i__3].r - z__3.i * x[i__3].i, 
+                                    z__2.i = z__3.r * x[i__3].i + z__3.i * x[
+                                    i__3].r;
+                            z__1.r = temp.r - z__2.r, z__1.i = temp.i - 
+                                    z__2.i;
+                            temp.r = z__1.r, temp.i = z__1.i;
 /*<                         IX   = IX   + INCX >*/
-			    ix += *incx;
+                            ix += *incx;
 /*<   130                CONTINUE >*/
 /* L130: */
-			}
+                        }
 /*<    >*/
-			if (nounit) {
-			    d_cnjg(&z__2, &a[j + j * a_dim1]);
-			    z_div(&z__1, &temp, &z__2);
-			    temp.r = z__1.r, temp.i = z__1.i;
-			}
+                        if (nounit) {
+                            d_cnjg(&z__2, &a[j + j * a_dim1]);
+                            z_div(&z__1, &temp, &z__2);
+                            temp.r = z__1.r, temp.i = z__1.i;
+                        }
 /*<                   END IF >*/
-		    }
+                    }
 /*<                   X( JX ) = TEMP >*/
-		    i__2 = jx;
-		    x[i__2].r = temp.r, x[i__2].i = temp.i;
+                    i__2 = jx;
+                    x[i__2].r = temp.r, x[i__2].i = temp.i;
 /*<                   JX      = JX   + INCX >*/
-		    jx += *incx;
+                    jx += *incx;
 /*<   140          CONTINUE >*/
 /* L140: */
-		}
+                }
 /*<             END IF >*/
-	    }
+            }
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             IF( INCX.EQ.1 )THEN >*/
-	    if (*incx == 1) {
+            if (*incx == 1) {
 /*<                DO 170, J = N, 1, -1 >*/
-		for (j = *n; j >= 1; --j) {
+                for (j = *n; j >= 1; --j) {
 /*<                   TEMP = X( J ) >*/
-		    i__1 = j;
-		    temp.r = x[i__1].r, temp.i = x[i__1].i;
+                    i__1 = j;
+                    temp.r = x[i__1].r, temp.i = x[i__1].i;
 /*<                   IF( NOCONJ )THEN >*/
-		    if (noconj) {
+                    if (noconj) {
 /*<                      DO 150, I = N, J + 1, -1 >*/
-			i__1 = j + 1;
-			for (i__ = *n; i__ >= i__1; --i__) {
+                        i__1 = j + 1;
+                        for (i__ = *n; i__ >= i__1; --i__) {
 /*<                         TEMP = TEMP - A( I, J )*X( I ) >*/
-			    i__2 = i__ + j * a_dim1;
-			    i__3 = i__;
-			    z__2.r = a[i__2].r * x[i__3].r - a[i__2].i * x[
-				    i__3].i, z__2.i = a[i__2].r * x[i__3].i + 
-				    a[i__2].i * x[i__3].r;
-			    z__1.r = temp.r - z__2.r, z__1.i = temp.i - 
-				    z__2.i;
-			    temp.r = z__1.r, temp.i = z__1.i;
+                            i__2 = i__ + j * a_dim1;
+                            i__3 = i__;
+                            z__2.r = a[i__2].r * x[i__3].r - a[i__2].i * x[
+                                    i__3].i, z__2.i = a[i__2].r * x[i__3].i + 
+                                    a[i__2].i * x[i__3].r;
+                            z__1.r = temp.r - z__2.r, z__1.i = temp.i - 
+                                    z__2.i;
+                            temp.r = z__1.r, temp.i = z__1.i;
 /*<   150                CONTINUE >*/
 /* L150: */
-			}
+                        }
 /*<    >*/
-			if (nounit) {
-			    z_div(&z__1, &temp, &a[j + j * a_dim1]);
-			    temp.r = z__1.r, temp.i = z__1.i;
-			}
+                        if (nounit) {
+                            z_div(&z__1, &temp, &a[j + j * a_dim1]);
+                            temp.r = z__1.r, temp.i = z__1.i;
+                        }
 /*<                   ELSE >*/
-		    } else {
+                    } else {
 /*<                      DO 160, I = N, J + 1, -1 >*/
-			i__1 = j + 1;
-			for (i__ = *n; i__ >= i__1; --i__) {
+                        i__1 = j + 1;
+                        for (i__ = *n; i__ >= i__1; --i__) {
 /*<                         TEMP = TEMP - DCONJG( A( I, J ) )*X( I ) >*/
-			    d_cnjg(&z__3, &a[i__ + j * a_dim1]);
-			    i__2 = i__;
-			    z__2.r = z__3.r * x[i__2].r - z__3.i * x[i__2].i, 
-				    z__2.i = z__3.r * x[i__2].i + z__3.i * x[
-				    i__2].r;
-			    z__1.r = temp.r - z__2.r, z__1.i = temp.i - 
-				    z__2.i;
-			    temp.r = z__1.r, temp.i = z__1.i;
+                            d_cnjg(&z__3, &a[i__ + j * a_dim1]);
+                            i__2 = i__;
+                            z__2.r = z__3.r * x[i__2].r - z__3.i * x[i__2].i, 
+                                    z__2.i = z__3.r * x[i__2].i + z__3.i * x[
+                                    i__2].r;
+                            z__1.r = temp.r - z__2.r, z__1.i = temp.i - 
+                                    z__2.i;
+                            temp.r = z__1.r, temp.i = z__1.i;
 /*<   160                CONTINUE >*/
 /* L160: */
-			}
+                        }
 /*<    >*/
-			if (nounit) {
-			    d_cnjg(&z__2, &a[j + j * a_dim1]);
-			    z_div(&z__1, &temp, &z__2);
-			    temp.r = z__1.r, temp.i = z__1.i;
-			}
+                        if (nounit) {
+                            d_cnjg(&z__2, &a[j + j * a_dim1]);
+                            z_div(&z__1, &temp, &z__2);
+                            temp.r = z__1.r, temp.i = z__1.i;
+                        }
 /*<                   END IF >*/
-		    }
+                    }
 /*<                   X( J ) = TEMP >*/
-		    i__1 = j;
-		    x[i__1].r = temp.r, x[i__1].i = temp.i;
+                    i__1 = j;
+                    x[i__1].r = temp.r, x[i__1].i = temp.i;
 /*<   170          CONTINUE >*/
 /* L170: */
-		}
+                }
 /*<             ELSE >*/
-	    } else {
+            } else {
 /*<                KX = KX + ( N - 1 )*INCX >*/
-		kx += (*n - 1) * *incx;
+                kx += (*n - 1) * *incx;
 /*<                JX = KX >*/
-		jx = kx;
+                jx = kx;
 /*<                DO 200, J = N, 1, -1 >*/
-		for (j = *n; j >= 1; --j) {
+                for (j = *n; j >= 1; --j) {
 /*<                   IX   = KX >*/
-		    ix = kx;
+                    ix = kx;
 /*<                   TEMP = X( JX ) >*/
-		    i__1 = jx;
-		    temp.r = x[i__1].r, temp.i = x[i__1].i;
+                    i__1 = jx;
+                    temp.r = x[i__1].r, temp.i = x[i__1].i;
 /*<                   IF( NOCONJ )THEN >*/
-		    if (noconj) {
+                    if (noconj) {
 /*<                      DO 180, I = N, J + 1, -1 >*/
-			i__1 = j + 1;
-			for (i__ = *n; i__ >= i__1; --i__) {
+                        i__1 = j + 1;
+                        for (i__ = *n; i__ >= i__1; --i__) {
 /*<                         TEMP = TEMP - A( I, J )*X( IX ) >*/
-			    i__2 = i__ + j * a_dim1;
-			    i__3 = ix;
-			    z__2.r = a[i__2].r * x[i__3].r - a[i__2].i * x[
-				    i__3].i, z__2.i = a[i__2].r * x[i__3].i + 
-				    a[i__2].i * x[i__3].r;
-			    z__1.r = temp.r - z__2.r, z__1.i = temp.i - 
-				    z__2.i;
-			    temp.r = z__1.r, temp.i = z__1.i;
+                            i__2 = i__ + j * a_dim1;
+                            i__3 = ix;
+                            z__2.r = a[i__2].r * x[i__3].r - a[i__2].i * x[
+                                    i__3].i, z__2.i = a[i__2].r * x[i__3].i + 
+                                    a[i__2].i * x[i__3].r;
+                            z__1.r = temp.r - z__2.r, z__1.i = temp.i - 
+                                    z__2.i;
+                            temp.r = z__1.r, temp.i = z__1.i;
 /*<                         IX   = IX   - INCX >*/
-			    ix -= *incx;
+                            ix -= *incx;
 /*<   180                CONTINUE >*/
 /* L180: */
-			}
+                        }
 /*<    >*/
-			if (nounit) {
-			    z_div(&z__1, &temp, &a[j + j * a_dim1]);
-			    temp.r = z__1.r, temp.i = z__1.i;
-			}
+                        if (nounit) {
+                            z_div(&z__1, &temp, &a[j + j * a_dim1]);
+                            temp.r = z__1.r, temp.i = z__1.i;
+                        }
 /*<                   ELSE >*/
-		    } else {
+                    } else {
 /*<                      DO 190, I = N, J + 1, -1 >*/
-			i__1 = j + 1;
-			for (i__ = *n; i__ >= i__1; --i__) {
+                        i__1 = j + 1;
+                        for (i__ = *n; i__ >= i__1; --i__) {
 /*<                         TEMP = TEMP - DCONJG( A( I, J ) )*X( IX ) >*/
-			    d_cnjg(&z__3, &a[i__ + j * a_dim1]);
-			    i__2 = ix;
-			    z__2.r = z__3.r * x[i__2].r - z__3.i * x[i__2].i, 
-				    z__2.i = z__3.r * x[i__2].i + z__3.i * x[
-				    i__2].r;
-			    z__1.r = temp.r - z__2.r, z__1.i = temp.i - 
-				    z__2.i;
-			    temp.r = z__1.r, temp.i = z__1.i;
+                            d_cnjg(&z__3, &a[i__ + j * a_dim1]);
+                            i__2 = ix;
+                            z__2.r = z__3.r * x[i__2].r - z__3.i * x[i__2].i, 
+                                    z__2.i = z__3.r * x[i__2].i + z__3.i * x[
+                                    i__2].r;
+                            z__1.r = temp.r - z__2.r, z__1.i = temp.i - 
+                                    z__2.i;
+                            temp.r = z__1.r, temp.i = z__1.i;
 /*<                         IX   = IX   - INCX >*/
-			    ix -= *incx;
+                            ix -= *incx;
 /*<   190                CONTINUE >*/
 /* L190: */
-			}
+                        }
 /*<    >*/
-			if (nounit) {
-			    d_cnjg(&z__2, &a[j + j * a_dim1]);
-			    z_div(&z__1, &temp, &z__2);
-			    temp.r = z__1.r, temp.i = z__1.i;
-			}
+                        if (nounit) {
+                            d_cnjg(&z__2, &a[j + j * a_dim1]);
+                            z_div(&z__1, &temp, &z__2);
+                            temp.r = z__1.r, temp.i = z__1.i;
+                        }
 /*<                   END IF >*/
-		    }
+                    }
 /*<                   X( JX ) = TEMP >*/
-		    i__1 = jx;
-		    x[i__1].r = temp.r, x[i__1].i = temp.i;
+                    i__1 = jx;
+                    x[i__1].r = temp.r, x[i__1].i = temp.i;
 /*<                   JX      = JX   - INCX >*/
-		    jx -= *incx;
+                    jx -= *incx;
 /*<   200          CONTINUE >*/
 /* L200: */
-		}
+                }
 /*<             END IF >*/
-	    }
+            }
 /*<          END IF >*/
-	}
+        }
 /*<       END IF >*/
     }
 
@@ -705,5 +705,5 @@ extern "C" {
 } /* ztrsv_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

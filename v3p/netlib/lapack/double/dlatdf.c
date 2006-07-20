@@ -1,13 +1,13 @@
 /* lapack/double/dlatdf.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -24,8 +24,8 @@ static doublereal c_b37 = -1.;
 
 /*<    >*/
 /* Subroutine */ int dlatdf_(integer *ijob, integer *n, doublereal *z__, 
-	integer *ldz, doublereal *rhs, doublereal *rdsum, doublereal *rdscal, 
-	integer *ipiv, integer *jpiv)
+        integer *ldz, doublereal *rhs, doublereal *rdsum, doublereal *rdscal, 
+        integer *ipiv, integer *jpiv)
 {
     /* System generated locals */
     integer z_dim1, z_offset, i__1, i__2;
@@ -38,26 +38,26 @@ static doublereal c_b37 = -1.;
     integer i__, j, k;
     doublereal bm, bp, xm[8], xp[8];
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, 
-	    integer *);
+            integer *);
     integer info;
     doublereal temp, work[32];
     extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
-	    integer *);
+            integer *);
     extern doublereal dasum_(integer *, doublereal *, integer *);
     doublereal pmone;
     extern /* Subroutine */ int dcopy_(integer *, doublereal *, integer *, 
-	    doublereal *, integer *), daxpy_(integer *, doublereal *, 
-	    doublereal *, integer *, doublereal *, integer *);
+            doublereal *, integer *), daxpy_(integer *, doublereal *, 
+            doublereal *, integer *, doublereal *, integer *);
     doublereal sminu;
     integer iwork[8];
     doublereal splus;
     extern /* Subroutine */ int dgesc2_(integer *, doublereal *, integer *, 
-	    doublereal *, integer *, integer *, doublereal *), dgecon_(char *,
-	     integer *, doublereal *, integer *, doublereal *, doublereal *, 
-	    doublereal *, integer *, integer *, ftnlen), dlassq_(integer *, 
-	    doublereal *, integer *, doublereal *, doublereal *), dlaswp_(
-	    integer *, doublereal *, integer *, integer *, integer *, integer 
-	    *, integer *);
+            doublereal *, integer *, integer *, doublereal *), dgecon_(char *,
+             integer *, doublereal *, integer *, doublereal *, doublereal *, 
+            doublereal *, integer *, integer *, ftnlen), dlassq_(integer *, 
+            doublereal *, integer *, doublereal *, doublereal *), dlaswp_(
+            integer *, doublereal *, integer *, integer *, integer *, integer 
+            *, integer *);
 
 
 /*  -- LAPACK auxiliary routine (version 3.0) -- */
@@ -202,47 +202,47 @@ static doublereal c_b37 = -1.;
 /*        Apply permutations IPIV to RHS */
 
 /*<          CALL DLASWP( 1, RHS, LDZ, 1, N-1, IPIV, 1 ) >*/
-	i__1 = *n - 1;
-	dlaswp_(&c__1, &rhs[1], ldz, &c__1, &i__1, &ipiv[1], &c__1);
+        i__1 = *n - 1;
+        dlaswp_(&c__1, &rhs[1], ldz, &c__1, &i__1, &ipiv[1], &c__1);
 
 /*        Solve for L-part choosing RHS either to +1 or -1. */
 
 /*<          PMONE = -ONE >*/
-	pmone = -1.;
+        pmone = -1.;
 
 /*<          DO 10 J = 1, N - 1 >*/
-	i__1 = *n - 1;
-	for (j = 1; j <= i__1; ++j) {
+        i__1 = *n - 1;
+        for (j = 1; j <= i__1; ++j) {
 /*<             BP = RHS( J ) + ONE >*/
-	    bp = rhs[j] + 1.;
+            bp = rhs[j] + 1.;
 /*<             BM = RHS( J ) - ONE >*/
-	    bm = rhs[j] - 1.;
+            bm = rhs[j] - 1.;
 /*<             SPLUS = ONE >*/
-	    splus = 1.;
+            splus = 1.;
 
 /*           Look-ahead for L-part RHS(1:N-1) = + or -1, SPLUS and */
 /*           SMIN computed more efficiently than in BSOLVE [1]. */
 
 /*<             SPLUS = SPLUS + DDOT( N-J, Z( J+1, J ), 1, Z( J+1, J ), 1 ) >*/
-	    i__2 = *n - j;
-	    splus += ddot_(&i__2, &z__[j + 1 + j * z_dim1], &c__1, &z__[j + 1 
-		    + j * z_dim1], &c__1);
+            i__2 = *n - j;
+            splus += ddot_(&i__2, &z__[j + 1 + j * z_dim1], &c__1, &z__[j + 1 
+                    + j * z_dim1], &c__1);
 /*<             SMINU = DDOT( N-J, Z( J+1, J ), 1, RHS( J+1 ), 1 ) >*/
-	    i__2 = *n - j;
-	    sminu = ddot_(&i__2, &z__[j + 1 + j * z_dim1], &c__1, &rhs[j + 1],
-		     &c__1);
+            i__2 = *n - j;
+            sminu = ddot_(&i__2, &z__[j + 1 + j * z_dim1], &c__1, &rhs[j + 1],
+                     &c__1);
 /*<             SPLUS = SPLUS*RHS( J ) >*/
-	    splus *= rhs[j];
+            splus *= rhs[j];
 /*<             IF( SPLUS.GT.SMINU ) THEN >*/
-	    if (splus > sminu) {
+            if (splus > sminu) {
 /*<                RHS( J ) = BP >*/
-		rhs[j] = bp;
+                rhs[j] = bp;
 /*<             ELSE IF( SMINU.GT.SPLUS ) THEN >*/
-	    } else if (sminu > splus) {
+            } else if (sminu > splus) {
 /*<                RHS( J ) = BM >*/
-		rhs[j] = bm;
+                rhs[j] = bm;
 /*<             ELSE >*/
-	    } else {
+            } else {
 
 /*              In this case the updating sums are equal and we can */
 /*              choose RHS(J) +1 or -1. The first time this happens */
@@ -251,24 +251,24 @@ static doublereal c_b37 = -1.;
 /*              example (see [1]). (Not done in BSOLVE.) */
 
 /*<                RHS( J ) = RHS( J ) + PMONE >*/
-		rhs[j] += pmone;
+                rhs[j] += pmone;
 /*<                PMONE = ONE >*/
-		pmone = 1.;
+                pmone = 1.;
 /*<             END IF >*/
-	    }
+            }
 
 /*           Compute the remaining r.h.s. */
 
 /*<             TEMP = -RHS( J ) >*/
-	    temp = -rhs[j];
+            temp = -rhs[j];
 /*<             CALL DAXPY( N-J, TEMP, Z( J+1, J ), 1, RHS( J+1 ), 1 ) >*/
-	    i__2 = *n - j;
-	    daxpy_(&i__2, &temp, &z__[j + 1 + j * z_dim1], &c__1, &rhs[j + 1],
-		     &c__1);
+            i__2 = *n - j;
+            daxpy_(&i__2, &temp, &z__[j + 1 + j * z_dim1], &c__1, &rhs[j + 1],
+                     &c__1);
 
 /*<    10    CONTINUE >*/
 /* L10: */
-	}
+        }
 
 /*        Solve for U-part, look-ahead for RHS(N) = +-1. This is not done */
 /*        in BSOLVE and will hopefully give us a better estimate because */
@@ -276,56 +276,56 @@ static doublereal c_b37 = -1.;
 /*        and not to L. U(N, N) is an approximation to sigma_min(LU). */
 
 /*<          CALL DCOPY( N-1, RHS, 1, XP, 1 ) >*/
-	i__1 = *n - 1;
-	dcopy_(&i__1, &rhs[1], &c__1, xp, &c__1);
+        i__1 = *n - 1;
+        dcopy_(&i__1, &rhs[1], &c__1, xp, &c__1);
 /*<          XP( N ) = RHS( N ) + ONE >*/
-	xp[*n - 1] = rhs[*n] + 1.;
+        xp[*n - 1] = rhs[*n] + 1.;
 /*<          RHS( N ) = RHS( N ) - ONE >*/
-	rhs[*n] += -1.;
+        rhs[*n] += -1.;
 /*<          SPLUS = ZERO >*/
-	splus = 0.;
+        splus = 0.;
 /*<          SMINU = ZERO >*/
-	sminu = 0.;
+        sminu = 0.;
 /*<          DO 30 I = N, 1, -1 >*/
-	for (i__ = *n; i__ >= 1; --i__) {
+        for (i__ = *n; i__ >= 1; --i__) {
 /*<             TEMP = ONE / Z( I, I ) >*/
-	    temp = 1. / z__[i__ + i__ * z_dim1];
+            temp = 1. / z__[i__ + i__ * z_dim1];
 /*<             XP( I ) = XP( I )*TEMP >*/
-	    xp[i__ - 1] *= temp;
+            xp[i__ - 1] *= temp;
 /*<             RHS( I ) = RHS( I )*TEMP >*/
-	    rhs[i__] *= temp;
+            rhs[i__] *= temp;
 /*<             DO 20 K = I + 1, N >*/
-	    i__1 = *n;
-	    for (k = i__ + 1; k <= i__1; ++k) {
+            i__1 = *n;
+            for (k = i__ + 1; k <= i__1; ++k) {
 /*<                XP( I ) = XP( I ) - XP( K )*( Z( I, K )*TEMP ) >*/
-		xp[i__ - 1] -= xp[k - 1] * (z__[i__ + k * z_dim1] * temp);
+                xp[i__ - 1] -= xp[k - 1] * (z__[i__ + k * z_dim1] * temp);
 /*<                RHS( I ) = RHS( I ) - RHS( K )*( Z( I, K )*TEMP ) >*/
-		rhs[i__] -= rhs[k] * (z__[i__ + k * z_dim1] * temp);
+                rhs[i__] -= rhs[k] * (z__[i__ + k * z_dim1] * temp);
 /*<    20       CONTINUE >*/
 /* L20: */
-	    }
+            }
 /*<             SPLUS = SPLUS + ABS( XP( I ) ) >*/
-	    splus += (d__1 = xp[i__ - 1], abs(d__1));
+            splus += (d__1 = xp[i__ - 1], abs(d__1));
 /*<             SMINU = SMINU + ABS( RHS( I ) ) >*/
-	    sminu += (d__1 = rhs[i__], abs(d__1));
+            sminu += (d__1 = rhs[i__], abs(d__1));
 /*<    30    CONTINUE >*/
 /* L30: */
-	}
+        }
 /*<    >*/
-	if (splus > sminu) {
-	    dcopy_(n, xp, &c__1, &rhs[1], &c__1);
-	}
+        if (splus > sminu) {
+            dcopy_(n, xp, &c__1, &rhs[1], &c__1);
+        }
 
 /*        Apply the permutations JPIV to the computed solution (RHS) */
 
 /*<          CALL DLASWP( 1, RHS, LDZ, 1, N-1, JPIV, -1 ) >*/
-	i__1 = *n - 1;
-	dlaswp_(&c__1, &rhs[1], ldz, &c__1, &i__1, &jpiv[1], &c_n1);
+        i__1 = *n - 1;
+        dlaswp_(&c__1, &rhs[1], ldz, &c__1, &i__1, &jpiv[1], &c_n1);
 
 /*        Compute the sum of squares */
 
 /*<          CALL DLASSQ( N, RHS, 1, RDSCAL, RDSUM ) >*/
-	dlassq_(n, &rhs[1], &c__1, rdscal, rdsum);
+        dlassq_(n, &rhs[1], &c__1, rdscal, rdsum);
 
 /*<       ELSE >*/
     } else {
@@ -333,39 +333,39 @@ static doublereal c_b37 = -1.;
 /*        IJOB = 2, Compute approximate nullvector XM of Z */
 
 /*<          CALL DGECON( 'I', N, Z, LDZ, ONE, TEMP, WORK, IWORK, INFO ) >*/
-	dgecon_("I", n, &z__[z_offset], ldz, &c_b23, &temp, work, iwork, &
-		info, (ftnlen)1);
+        dgecon_("I", n, &z__[z_offset], ldz, &c_b23, &temp, work, iwork, &
+                info, (ftnlen)1);
 /*<          CALL DCOPY( N, WORK( N+1 ), 1, XM, 1 ) >*/
-	dcopy_(n, &work[*n], &c__1, xm, &c__1);
+        dcopy_(n, &work[*n], &c__1, xm, &c__1);
 
 /*        Compute RHS */
 
 /*<          CALL DLASWP( 1, XM, LDZ, 1, N-1, IPIV, -1 ) >*/
-	i__1 = *n - 1;
-	dlaswp_(&c__1, xm, ldz, &c__1, &i__1, &ipiv[1], &c_n1);
+        i__1 = *n - 1;
+        dlaswp_(&c__1, xm, ldz, &c__1, &i__1, &ipiv[1], &c_n1);
 /*<          TEMP = ONE / SQRT( DDOT( N, XM, 1, XM, 1 ) ) >*/
-	temp = 1. / sqrt(ddot_(n, xm, &c__1, xm, &c__1));
+        temp = 1. / sqrt(ddot_(n, xm, &c__1, xm, &c__1));
 /*<          CALL DSCAL( N, TEMP, XM, 1 ) >*/
-	dscal_(n, &temp, xm, &c__1);
+        dscal_(n, &temp, xm, &c__1);
 /*<          CALL DCOPY( N, XM, 1, XP, 1 ) >*/
-	dcopy_(n, xm, &c__1, xp, &c__1);
+        dcopy_(n, xm, &c__1, xp, &c__1);
 /*<          CALL DAXPY( N, ONE, RHS, 1, XP, 1 ) >*/
-	daxpy_(n, &c_b23, &rhs[1], &c__1, xp, &c__1);
+        daxpy_(n, &c_b23, &rhs[1], &c__1, xp, &c__1);
 /*<          CALL DAXPY( N, -ONE, XM, 1, RHS, 1 ) >*/
-	daxpy_(n, &c_b37, xm, &c__1, &rhs[1], &c__1);
+        daxpy_(n, &c_b37, xm, &c__1, &rhs[1], &c__1);
 /*<          CALL DGESC2( N, Z, LDZ, RHS, IPIV, JPIV, TEMP ) >*/
-	dgesc2_(n, &z__[z_offset], ldz, &rhs[1], &ipiv[1], &jpiv[1], &temp);
+        dgesc2_(n, &z__[z_offset], ldz, &rhs[1], &ipiv[1], &jpiv[1], &temp);
 /*<          CALL DGESC2( N, Z, LDZ, XP, IPIV, JPIV, TEMP ) >*/
-	dgesc2_(n, &z__[z_offset], ldz, xp, &ipiv[1], &jpiv[1], &temp);
+        dgesc2_(n, &z__[z_offset], ldz, xp, &ipiv[1], &jpiv[1], &temp);
 /*<    >*/
-	if (dasum_(n, xp, &c__1) > dasum_(n, &rhs[1], &c__1)) {
-	    dcopy_(n, xp, &c__1, &rhs[1], &c__1);
-	}
+        if (dasum_(n, xp, &c__1) > dasum_(n, &rhs[1], &c__1)) {
+            dcopy_(n, xp, &c__1, &rhs[1], &c__1);
+        }
 
 /*        Compute the sum of squares */
 
 /*<          CALL DLASSQ( N, RHS, 1, RDSCAL, RDSUM ) >*/
-	dlassq_(n, &rhs[1], &c__1, rdscal, rdsum);
+        dlassq_(n, &rhs[1], &c__1, rdscal, rdsum);
 
 /*<       END IF >*/
     }
@@ -379,5 +379,5 @@ static doublereal c_b37 = -1.;
 } /* dlatdf_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

@@ -1,13 +1,13 @@
 /* lapack/single/slarfg.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -17,7 +17,7 @@ extern "C" {
 
 /*<       SUBROUTINE SLARFG( N, ALPHA, X, INCX, TAU ) >*/
 /* Subroutine */ int slarfg_(integer *n, real *alpha, real *x, integer *incx, 
-	real *tau)
+        real *tau)
 {
     /* System generated locals */
     integer i__1;
@@ -122,9 +122,9 @@ extern "C" {
     /* Function Body */
     if (*n <= 1) {
 /*<          TAU = ZERO >*/
-	*tau = (float)0.;
+        *tau = (float)0.;
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -138,81 +138,81 @@ extern "C" {
 /*        H  =  I */
 
 /*<          TAU = ZERO >*/
-	*tau = (float)0.;
+        *tau = (float)0.;
 /*<       ELSE >*/
     } else {
 
 /*        general case */
 
 /*<          BETA = -SIGN( SLAPY2( ALPHA, XNORM ), ALPHA ) >*/
-	r__1 = slapy2_(alpha, &xnorm);
-	beta = -r_sign(&r__1, alpha);
+        r__1 = slapy2_(alpha, &xnorm);
+        beta = -r_sign(&r__1, alpha);
 /*<          SAFMIN = SLAMCH( 'S' ) / SLAMCH( 'E' ) >*/
-	safmin = slamch_("S", (ftnlen)1) / slamch_("E", (ftnlen)1);
+        safmin = slamch_("S", (ftnlen)1) / slamch_("E", (ftnlen)1);
 /*<          IF( ABS( BETA ).LT.SAFMIN ) THEN >*/
-	if (dabs(beta) < safmin) {
+        if (dabs(beta) < safmin) {
 
 /*           XNORM, BETA may be inaccurate; scale X and recompute them */
 
 /*<             RSAFMN = ONE / SAFMIN >*/
-	    rsafmn = (float)1. / safmin;
+            rsafmn = (float)1. / safmin;
 /*<             KNT = 0 >*/
-	    knt = 0;
+            knt = 0;
 /*<    10       CONTINUE >*/
 L10:
 /*<             KNT = KNT + 1 >*/
-	    ++knt;
+            ++knt;
 /*<             CALL SSCAL( N-1, RSAFMN, X, INCX ) >*/
-	    i__1 = *n - 1;
-	    sscal_(&i__1, &rsafmn, &x[1], incx);
+            i__1 = *n - 1;
+            sscal_(&i__1, &rsafmn, &x[1], incx);
 /*<             BETA = BETA*RSAFMN >*/
-	    beta *= rsafmn;
+            beta *= rsafmn;
 /*<             ALPHA = ALPHA*RSAFMN >*/
-	    *alpha *= rsafmn;
+            *alpha *= rsafmn;
 /*<    >*/
-	    if (dabs(beta) < safmin) {
-		goto L10;
-	    }
+            if (dabs(beta) < safmin) {
+                goto L10;
+            }
 
 /*           New BETA is at most 1, at least SAFMIN */
 
 /*<             XNORM = SNRM2( N-1, X, INCX ) >*/
-	    i__1 = *n - 1;
-	    xnorm = snrm2_(&i__1, &x[1], incx);
+            i__1 = *n - 1;
+            xnorm = snrm2_(&i__1, &x[1], incx);
 /*<             BETA = -SIGN( SLAPY2( ALPHA, XNORM ), ALPHA ) >*/
-	    r__1 = slapy2_(alpha, &xnorm);
-	    beta = -r_sign(&r__1, alpha);
+            r__1 = slapy2_(alpha, &xnorm);
+            beta = -r_sign(&r__1, alpha);
 /*<             TAU = ( BETA-ALPHA ) / BETA >*/
-	    *tau = (beta - *alpha) / beta;
+            *tau = (beta - *alpha) / beta;
 /*<             CALL SSCAL( N-1, ONE / ( ALPHA-BETA ), X, INCX ) >*/
-	    i__1 = *n - 1;
-	    r__1 = (float)1. / (*alpha - beta);
-	    sscal_(&i__1, &r__1, &x[1], incx);
+            i__1 = *n - 1;
+            r__1 = (float)1. / (*alpha - beta);
+            sscal_(&i__1, &r__1, &x[1], incx);
 
 /*           If ALPHA is subnormal, it may lose relative accuracy */
 
 /*<             ALPHA = BETA >*/
-	    *alpha = beta;
+            *alpha = beta;
 /*<             DO 20 J = 1, KNT >*/
-	    i__1 = knt;
-	    for (j = 1; j <= i__1; ++j) {
+            i__1 = knt;
+            for (j = 1; j <= i__1; ++j) {
 /*<                ALPHA = ALPHA*SAFMIN >*/
-		*alpha *= safmin;
+                *alpha *= safmin;
 /*<    20       CONTINUE >*/
 /* L20: */
-	    }
+            }
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             TAU = ( BETA-ALPHA ) / BETA >*/
-	    *tau = (beta - *alpha) / beta;
+            *tau = (beta - *alpha) / beta;
 /*<             CALL SSCAL( N-1, ONE / ( ALPHA-BETA ), X, INCX ) >*/
-	    i__1 = *n - 1;
-	    r__1 = (float)1. / (*alpha - beta);
-	    sscal_(&i__1, &r__1, &x[1], incx);
+            i__1 = *n - 1;
+            r__1 = (float)1. / (*alpha - beta);
+            sscal_(&i__1, &r__1, &x[1], incx);
 /*<             ALPHA = BETA >*/
-	    *alpha = beta;
+            *alpha = beta;
 /*<          END IF >*/
-	}
+        }
 /*<       END IF >*/
     }
 
@@ -225,5 +225,5 @@ L10:
 } /* slarfg_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

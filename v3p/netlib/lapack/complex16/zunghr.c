@@ -1,13 +1,13 @@
 /* lapack/complex16/zunghr.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -22,8 +22,8 @@ static integer c_n1 = -1;
 
 /*<       SUBROUTINE ZUNGHR( N, ILO, IHI, A, LDA, TAU, WORK, LWORK, INFO ) >*/
 /* Subroutine */ int zunghr_(integer *n, integer *ilo, integer *ihi, 
-	doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *
-	work, integer *lwork, integer *info)
+        doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *
+        work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
@@ -32,12 +32,12 @@ static integer c_n1 = -1;
     integer i__, j, nb, nh, iinfo;
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, 
-	    integer *, integer *, ftnlen, ftnlen);
+            integer *, integer *, ftnlen, ftnlen);
     integer lwkopt=0;
     logical lquery;
     extern /* Subroutine */ int zungqr_(integer *, integer *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
-	    integer *, integer *);
+            doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
+            integer *, integer *);
 
 
 /*  -- LAPACK routine (version 3.0) -- */
@@ -144,49 +144,49 @@ static integer c_n1 = -1;
 /*<       IF( N.LT.0 ) THEN >*/
     if (*n < 0) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<       ELSE IF( ILO.LT.1 .OR. ILO.GT.MAX( 1, N ) ) THEN >*/
     } else if (*ilo < 1 || *ilo > max(1,*n)) {
 /*<          INFO = -2 >*/
-	*info = -2;
+        *info = -2;
 /*<       ELSE IF( IHI.LT.MIN( ILO, N ) .OR. IHI.GT.N ) THEN >*/
     } else if (*ihi < min(*ilo,*n) || *ihi > *n) {
 /*<          INFO = -3 >*/
-	*info = -3;
+        *info = -3;
 /*<       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN >*/
     } else if (*lda < max(1,*n)) {
 /*<          INFO = -5 >*/
-	*info = -5;
+        *info = -5;
 /*<       ELSE IF( LWORK.LT.MAX( 1, NH ) .AND. .NOT.LQUERY ) THEN >*/
     } else if (*lwork < max(1,nh) && ! lquery) {
 /*<          INFO = -8 >*/
-	*info = -8;
+        *info = -8;
 /*<       END IF >*/
     }
 
 /*<       IF( INFO.EQ.0 ) THEN >*/
     if (*info == 0) {
 /*<          NB = ILAENV( 1, 'ZUNGQR', ' ', NH, NH, NH, -1 ) >*/
-	nb = ilaenv_(&c__1, "ZUNGQR", " ", &nh, &nh, &nh, &c_n1, (ftnlen)6, (
-		ftnlen)1);
+        nb = ilaenv_(&c__1, "ZUNGQR", " ", &nh, &nh, &nh, &c_n1, (ftnlen)6, (
+                ftnlen)1);
 /*<          LWKOPT = MAX( 1, NH )*NB >*/
-	lwkopt = max(1,nh) * nb;
+        lwkopt = max(1,nh) * nb;
 /*<          WORK( 1 ) = LWKOPT >*/
-	work[1].r = (doublereal) lwkopt, work[1].i = 0.;
+        work[1].r = (doublereal) lwkopt, work[1].i = 0.;
 /*<       END IF >*/
     }
 
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'ZUNGHR', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("ZUNGHR", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("ZUNGHR", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       ELSE IF( LQUERY ) THEN >*/
     } else if (lquery) {
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -195,9 +195,9 @@ static integer c_n1 = -1;
 /*<       IF( N.EQ.0 ) THEN >*/
     if (*n == 0) {
 /*<          WORK( 1 ) = 1 >*/
-	work[1].r = 1., work[1].i = 0.;
+        work[1].r = 1., work[1].i = 0.;
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -209,33 +209,33 @@ static integer c_n1 = -1;
     i__1 = *ilo + 1;
     for (j = *ihi; j >= i__1; --j) {
 /*<          DO 10 I = 1, J - 1 >*/
-	i__2 = j - 1;
-	for (i__ = 1; i__ <= i__2; ++i__) {
+        i__2 = j - 1;
+        for (i__ = 1; i__ <= i__2; ++i__) {
 /*<             A( I, J ) = ZERO >*/
-	    i__3 = i__ + j * a_dim1;
-	    a[i__3].r = 0., a[i__3].i = 0.;
+            i__3 = i__ + j * a_dim1;
+            a[i__3].r = 0., a[i__3].i = 0.;
 /*<    10    CONTINUE >*/
 /* L10: */
-	}
+        }
 /*<          DO 20 I = J + 1, IHI >*/
-	i__2 = *ihi;
-	for (i__ = j + 1; i__ <= i__2; ++i__) {
+        i__2 = *ihi;
+        for (i__ = j + 1; i__ <= i__2; ++i__) {
 /*<             A( I, J ) = A( I, J-1 ) >*/
-	    i__3 = i__ + j * a_dim1;
-	    i__4 = i__ + (j - 1) * a_dim1;
-	    a[i__3].r = a[i__4].r, a[i__3].i = a[i__4].i;
+            i__3 = i__ + j * a_dim1;
+            i__4 = i__ + (j - 1) * a_dim1;
+            a[i__3].r = a[i__4].r, a[i__3].i = a[i__4].i;
 /*<    20    CONTINUE >*/
 /* L20: */
-	}
+        }
 /*<          DO 30 I = IHI + 1, N >*/
-	i__2 = *n;
-	for (i__ = *ihi + 1; i__ <= i__2; ++i__) {
+        i__2 = *n;
+        for (i__ = *ihi + 1; i__ <= i__2; ++i__) {
 /*<             A( I, J ) = ZERO >*/
-	    i__3 = i__ + j * a_dim1;
-	    a[i__3].r = 0., a[i__3].i = 0.;
+            i__3 = i__ + j * a_dim1;
+            a[i__3].r = 0., a[i__3].i = 0.;
 /*<    30    CONTINUE >*/
 /* L30: */
-	}
+        }
 /*<    40 CONTINUE >*/
 /* L40: */
     }
@@ -243,17 +243,17 @@ static integer c_n1 = -1;
     i__1 = *ilo;
     for (j = 1; j <= i__1; ++j) {
 /*<          DO 50 I = 1, N >*/
-	i__2 = *n;
-	for (i__ = 1; i__ <= i__2; ++i__) {
+        i__2 = *n;
+        for (i__ = 1; i__ <= i__2; ++i__) {
 /*<             A( I, J ) = ZERO >*/
-	    i__3 = i__ + j * a_dim1;
-	    a[i__3].r = 0., a[i__3].i = 0.;
+            i__3 = i__ + j * a_dim1;
+            a[i__3].r = 0., a[i__3].i = 0.;
 /*<    50    CONTINUE >*/
 /* L50: */
-	}
+        }
 /*<          A( J, J ) = ONE >*/
-	i__2 = j + j * a_dim1;
-	a[i__2].r = 1., a[i__2].i = 0.;
+        i__2 = j + j * a_dim1;
+        a[i__2].r = 1., a[i__2].i = 0.;
 /*<    60 CONTINUE >*/
 /* L60: */
     }
@@ -261,17 +261,17 @@ static integer c_n1 = -1;
     i__1 = *n;
     for (j = *ihi + 1; j <= i__1; ++j) {
 /*<          DO 70 I = 1, N >*/
-	i__2 = *n;
-	for (i__ = 1; i__ <= i__2; ++i__) {
+        i__2 = *n;
+        for (i__ = 1; i__ <= i__2; ++i__) {
 /*<             A( I, J ) = ZERO >*/
-	    i__3 = i__ + j * a_dim1;
-	    a[i__3].r = 0., a[i__3].i = 0.;
+            i__3 = i__ + j * a_dim1;
+            a[i__3].r = 0., a[i__3].i = 0.;
 /*<    70    CONTINUE >*/
 /* L70: */
-	}
+        }
 /*<          A( J, J ) = ONE >*/
-	i__2 = j + j * a_dim1;
-	a[i__2].r = 1., a[i__2].i = 0.;
+        i__2 = j + j * a_dim1;
+        a[i__2].r = 1., a[i__2].i = 0.;
 /*<    80 CONTINUE >*/
 /* L80: */
     }
@@ -282,8 +282,8 @@ static integer c_n1 = -1;
 /*        Generate Q(ilo+1:ihi,ilo+1:ihi) */
 
 /*<    >*/
-	zungqr_(&nh, &nh, &nh, &a[*ilo + 1 + (*ilo + 1) * a_dim1], lda, &tau[*
-		ilo], &work[1], lwork, &iinfo);
+        zungqr_(&nh, &nh, &nh, &a[*ilo + 1 + (*ilo + 1) * a_dim1], lda, &tau[*
+                ilo], &work[1], lwork, &iinfo);
 /*<       END IF >*/
     }
 /*<       WORK( 1 ) = LWKOPT >*/
@@ -297,5 +297,5 @@ static integer c_n1 = -1;
 } /* zunghr_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

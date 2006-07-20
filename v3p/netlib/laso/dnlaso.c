@@ -1,13 +1,13 @@
 /* laso/dnlaso.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -31,9 +31,9 @@ static doublereal c_b88 = 0.;
         void (*op)(integer*,integer*,doublereal*,doublereal*),
         void (*iovect)(integer*,integer*,doublereal*,integer*,integer*),
         integer *n, integer *nval, 
-	integer *nfig, integer *nperm, integer *nmval, doublereal *val, 
-	integer *nmvec, doublereal *vec, integer *nblock, integer *maxop, 
-	integer *maxj, doublereal *work, integer *ind, integer *ierr)
+        integer *nfig, integer *nperm, integer *nmval, doublereal *val, 
+        integer *nmvec, doublereal *vec, integer *nblock, integer *maxop, 
+        integer *maxj, doublereal *work, integer *ind, integer *ierr)
 {
     /* System generated locals */
     integer vec_dim1, vec_offset, val_dim1, val_offset, i__1, i__2;
@@ -41,7 +41,7 @@ static doublereal c_b88 = 0.;
 
     /* Local variables */
     integer i__, m, i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, 
-	    nv;
+            nv;
     doublereal eps;
     integer nop;
     doublereal temp, tarr[1];
@@ -52,16 +52,16 @@ static doublereal c_b88 = 0.;
             void (*op)(integer*,integer*,doublereal*,doublereal*),
             void (*iovect)(integer*,integer*,doublereal*,integer*,integer*),
             integer *, integer *, 
-	    integer *, integer *, integer *, doublereal *, integer *, 
-	    doublereal *, integer *, integer *, integer *, integer *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, integer *, logical *, logical *, 
-	    doublereal *, doublereal *, integer *);
+            integer *, integer *, integer *, doublereal *, integer *, 
+            doublereal *, integer *, integer *, integer *, integer *, 
+            doublereal *, doublereal *, doublereal *, doublereal *, 
+            doublereal *, doublereal *, doublereal *, doublereal *, 
+            doublereal *, doublereal *, doublereal *, doublereal *, 
+            doublereal *, doublereal *, integer *, logical *, logical *, 
+            doublereal *, doublereal *, integer *);
     logical small;
     extern /* Subroutine */ int dcopy_(integer *, doublereal *, integer *, 
-	    doublereal *, integer *),
+            doublereal *, integer *),
             dnppla_(void (*op)(integer*,integer*,doublereal*,doublereal*),
                     void (*iovect)(integer*,integer*,doublereal*,integer*,integer*),
                     integer *, integer *
@@ -71,9 +71,9 @@ static doublereal c_b88 = 0.;
                     doublereal *);
     logical raritz;
     extern /* Subroutine */ int dortqr_(integer *, integer *, integer *, 
-	    doublereal *, doublereal *), dvsort_(integer *, doublereal *, 
-	    doublereal *, integer *, doublereal *, integer *, integer *, 
-	    doublereal *);
+            doublereal *, doublereal *), dvsort_(integer *, doublereal *, 
+            doublereal *, integer *, doublereal *, integer *, integer *, 
+            doublereal *);
 
 
 /*<    >*/
@@ -277,47 +277,47 @@ static doublereal c_b88 = 0.;
     *ierr = 0;
 /*<       IF (N.LT.6*NBLOCK) IERR = 1 >*/
     if (*n < *nblock * 6) {
-	*ierr = 1;
+        *ierr = 1;
     }
 /*<       IF (NFIG.LE.0) IERR = IERR + 2 >*/
     if (*nfig <= 0) {
-	*ierr += 2;
+        *ierr += 2;
     }
 /*<       IF (NMVEC.LT.N) IERR = IERR + 4 >*/
     if (*nmvec < *n) {
-	*ierr += 4;
+        *ierr += 4;
     }
 /*<       IF (NPERM.LT.0) IERR = IERR + 8 >*/
     if (*nperm < 0) {
-	*ierr += 8;
+        *ierr += 8;
     }
 /*<       IF (MAXJ.LT.6*NBLOCK) IERR = IERR + 16 >*/
     if (*maxj < *nblock * 6) {
-	*ierr += 16;
+        *ierr += 16;
     }
 /*<       IF (NV.LT.MAX0(1,NPERM)) IERR = IERR + 32 >*/
     if (nv < max(1,*nperm)) {
-	*ierr += 32;
+        *ierr += 32;
     }
 /*<       IF (NV.GT.NMVAL) IERR = IERR + 64 >*/
     if (nv > *nmval) {
-	*ierr += 64;
+        *ierr += 64;
     }
 /*<       IF (NV.GT.MAXOP) IERR = IERR + 128 >*/
     if (nv > *maxop) {
-	*ierr += 128;
+        *ierr += 128;
     }
 /*<       IF (NV.GE.MAXJ/2) IERR = IERR + 256 >*/
     if (nv >= *maxj / 2) {
-	*ierr += 256;
+        *ierr += 256;
     }
 /*<       IF (NBLOCK.LT.1) IERR = IERR + 512 >*/
     if (*nblock < 1) {
-	*ierr += 512;
+        *ierr += 512;
     }
 /*<       IF (IERR.NE.0) RETURN >*/
     if (*ierr != 0) {
-	return 0;
+        return 0;
     }
 
 /*<       SMALL = NVAL.LT.0 >*/
@@ -332,7 +332,7 @@ static doublereal c_b88 = 0.;
 
 /*<       IF (NPERM.EQ.0) GO TO 110 >*/
     if (*nperm == 0) {
-	goto L110;
+        goto L110;
     }
 
 /* THIS NEGATES THE USER SUPPLIED EIGENVALUES WHEN THE LARGEST */
@@ -341,13 +341,13 @@ static doublereal c_b88 = 0.;
 
 /*<       IF (SMALL) GO TO 20 >*/
     if (small) {
-	goto L20;
+        goto L20;
     }
 /*<       DO 10 I=1,NPERM >*/
     i__1 = *nperm;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          VAL(I,1) = -VAL(I,1) >*/
-	val[i__ + val_dim1] = -val[i__ + val_dim1];
+        val[i__ + val_dim1] = -val[i__ + val_dim1];
 /*<    10 CONTINUE >*/
 /* L10: */
     }
@@ -357,7 +357,7 @@ static doublereal c_b88 = 0.;
 /*<    20 CALL DVSORT(NPERM, VAL, VAL(1,2), 0, TARR, NMVEC, N, VEC) >*/
 L20:
     dvsort_(nperm, &val[val_offset], &val[(val_dim1 << 1) + 1], &c__0, tarr, 
-	    nmvec, n, &vec[vec_offset]);
+            nmvec, n, &vec[vec_offset]);
 
 /* THIS STORES THE NORMS OF THE VECTORS FOR LATER COMPARISON. */
 /* IT ALSO INSURES THAT THE RESIDUAL NORMS ARE POSITIVE. */
@@ -366,10 +366,10 @@ L20:
     i__1 = *nperm;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          VAL(I,2) = DABS(VAL(I,2)) >*/
-	val[i__ + (val_dim1 << 1)] = (d__1 = val[i__ + (val_dim1 << 1)], abs(
-		d__1));
+        val[i__ + (val_dim1 << 1)] = (d__1 = val[i__ + (val_dim1 << 1)], abs(
+                d__1));
 /*<          VAL(I,3) = DNRM2(N,VEC(1,I),1) >*/
-	val[i__ + val_dim1 * 3] = dnrm2_(n, &vec[i__ * vec_dim1 + 1], &c__1);
+        val[i__ + val_dim1 * 3] = dnrm2_(n, &vec[i__ * vec_dim1 + 1], &c__1);
 /*<    60 CONTINUE >*/
 /* L60: */
     }
@@ -386,20 +386,20 @@ L20:
     i__1 = *nperm;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          M = M + NPERM + 1 >*/
-	m = m + *nperm + 1;
+        m = m + *nperm + 1;
 /*<          IF(DABS(WORK(M)) .GT. 0.9*VAL(I,3)) GO TO 70 >*/
-	if ((d__1 = work[m], abs(d__1)) > val[i__ + val_dim1 * 3] * (float).9)
-		 {
-	    goto L70;
-	}
+        if ((d__1 = work[m], abs(d__1)) > val[i__ + val_dim1 * 3] * (float).9)
+                 {
+            goto L70;
+        }
 /*<          IERR = -1 >*/
-	*ierr = -1;
+        *ierr = -1;
 /*<          RETURN >*/
-	return 0;
+        return 0;
 
 /*<    70 CONTINUE >*/
 L70:
-	;
+        ;
     }
 
 /* THIS COPIES THE RESIDUAL NORMS INTO THE CORRECT LOCATIONS IN */
@@ -422,13 +422,13 @@ L110:
 /*<       DO 120 I = 1,1000 >*/
     for (i__ = 1; i__ <= 1000; ++i__) {
 /*<          EPS = 0.5D0*EPS >*/
-	eps *= .5;
+        eps *= .5;
 /*<          TEMP = 1.0D0 + EPS >*/
-	temp = eps + 1.;
+        temp = eps + 1.;
 /*<          IF(TEMP.EQ.1.0D0) GO TO 130 >*/
-	if (temp == 1.) {
-	    goto L130;
-	}
+        if (temp == 1.) {
+            goto L130;
+        }
 /*<   120 CONTINUE >*/
 /* L120: */
     }
@@ -469,11 +469,11 @@ L130:
     i13 = i12 + *maxj;
 /*<    >*/
     dnwla_(op, iovect, n, &nband, &nv, nfig, nperm, &val[
-	    val_offset], nmvec, &vec[vec_offset], nblock, maxop, maxj, &nop, &
-	    work[1], &work[i1], &work[i2], &work[i3], &work[i4], &work[i5], &
-	    work[i6], &work[i7], &work[i8], &work[i9], &work[i10], &work[i11],
-	     &work[i12], &work[i13], &ind[1], &small, &raritz, &delta, &eps, 
-	    ierr);
+            val_offset], nmvec, &vec[vec_offset], nblock, maxop, maxj, &nop, &
+            work[1], &work[i1], &work[i2], &work[i3], &work[i4], &work[i5], &
+            work[i6], &work[i7], &work[i8], &work[i9], &work[i10], &work[i11],
+             &work[i12], &work[i13], &ind[1], &small, &raritz, &delta, &eps, 
+            ierr);
 
 /* ------------------------------------------------------------------ */
 
@@ -481,7 +481,7 @@ L130:
 
 /*<       IF (NPERM.EQ.0) GO TO 140 >*/
     if (*nperm == 0) {
-	goto L140;
+        goto L140;
     }
 /*<       I1 = N*NBLOCK + 1 >*/
     i1 = *n * *nblock + 1;
@@ -499,8 +499,8 @@ L130:
     i6 = i5 + (*nperm << 1) + 4;
 /*<    >*/
     dnppla_(op, iovect, n, nperm, &nop, nmval, &val[val_offset], 
-	    nmvec, &vec[vec_offset], nblock, &work[i1], &work[i2], &work[i3], 
-	    &work[i4], &work[i5], &work[i6], &delta, &small, &raritz, &eps);
+            nmvec, &vec[vec_offset], nblock, &work[i1], &work[i2], &work[i3], 
+            &work[i4], &work[i5], &work[i6], &delta, &small, &raritz, &eps);
 
 /*<   140 IND(1) = NOP >*/
 L140:
@@ -518,19 +518,19 @@ L140:
         void (*op)(integer*,integer*,doublereal*,doublereal*),
         void (*iovect)(integer*,integer*,doublereal*,integer*,integer*),
         integer *n, integer *nband, 
-	integer *nval, integer *nfig, integer *nperm, doublereal *val, 
-	integer *nmvec, doublereal *vec, integer *nblock, integer *maxop, 
-	integer *maxj, integer *nop, doublereal *p1, doublereal *p0, 
-	doublereal *res, doublereal *tau, doublereal *otau, doublereal *t, 
-	doublereal *alp, doublereal *bet, doublereal *s, doublereal *p2, 
-	doublereal *bound, doublereal *atemp, doublereal *vtemp, doublereal *
-	d__, integer *ind, logical *small, logical *raritz, doublereal *delta,
-	 doublereal *eps, integer *ierr)
+        integer *nval, integer *nfig, integer *nperm, doublereal *val, 
+        integer *nmvec, doublereal *vec, integer *nblock, integer *maxop, 
+        integer *maxj, integer *nop, doublereal *p1, doublereal *p0, 
+        doublereal *res, doublereal *tau, doublereal *otau, doublereal *t, 
+        doublereal *alp, doublereal *bet, doublereal *s, doublereal *p2, 
+        doublereal *bound, doublereal *atemp, doublereal *vtemp, doublereal *
+        d__, integer *ind, logical *small, logical *raritz, doublereal *delta,
+         doublereal *eps, integer *ierr)
 {
     /* System generated locals */
     integer vec_dim1, vec_offset, p0_dim1, p0_offset, p1_dim1, p1_offset, 
-	    p2_dim1, p2_offset, t_dim1, t_offset, alp_dim1, alp_offset, 
-	    bet_dim1, bet_offset, s_dim1, s_offset, i__1, i__2, i__3, i__4;
+            p2_dim1, p2_offset, t_dim1, t_offset, alp_dim1, alp_offset, 
+            bet_dim1, bet_offset, s_dim1, s_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2, d__3;
 
     /* Builtin functions */
@@ -539,38 +539,38 @@ L140:
     /* Local variables */
     integer i__, j, k, l=0, m, i1, ii, ng;
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, 
-	    integer *);
+            integer *);
     doublereal tola=0, temp, tolg=0, tmin, tmax, tarr[1];
     logical test;
     doublereal utol;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
-	    integer *);
+            integer *);
     integer ngood, nleft;
     doublereal anorm=0;
     extern /* Subroutine */ int dmvpc_(integer *, doublereal *, integer *, 
-	    integer *, doublereal *, integer *, doublereal *, doublereal *, 
-	    doublereal *), dcopy_(integer *, doublereal *, integer *, 
-	    doublereal *, integer *);
+            integer *, doublereal *, integer *, doublereal *, doublereal *, 
+            doublereal *), dcopy_(integer *, doublereal *, integer *, 
+            doublereal *, integer *);
     integer mtemp;
     doublereal dzero[1];
     extern /* Subroutine */ int daxpy_(integer *, doublereal *, doublereal *, 
-	    integer *, doublereal *, integer *);
+            integer *, doublereal *, integer *);
     doublereal pnorm, epsrt, rnorm;
     extern /* Subroutine */ int dlaeig_(integer *, integer *, integer *, 
-	    integer *, doublereal *, doublereal *, integer *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *), dlager_(integer *, 
-	    integer *, integer *, doublereal *, doublereal *, doublereal *), 
-	    dlaran_(integer *, doublereal *);
+            integer *, doublereal *, doublereal *, integer *, doublereal *, 
+            doublereal *, doublereal *, doublereal *, doublereal *, 
+            doublereal *, doublereal *, doublereal *), dlager_(integer *, 
+            integer *, integer *, doublereal *, doublereal *, doublereal *), 
+            dlaran_(integer *, doublereal *);
     doublereal betmin, alpmin=0, betmax, alpmax=0;
     integer ntheta;
     logical enough;
     integer number, nstart;
     extern /* Subroutine */ int dortqr_(integer *, integer *, integer *, 
-	    doublereal *, doublereal *), dvsort_(integer *, doublereal *, 
-	    doublereal *, integer *, doublereal *, integer *, integer *, 
-	    doublereal *);
+            doublereal *, doublereal *), dvsort_(integer *, doublereal *, 
+            doublereal *, integer *, doublereal *, integer *, integer *, 
+            doublereal *);
 
 
 /*<    >*/
@@ -692,8 +692,8 @@ L140:
 /*<       IF (NPERM.NE.0) RNORM = DMAX1(-VAL(1),VAL(NPERM)) >*/
     if (*nperm != 0) {
 /* Computing MAX */
-	d__1 = -val[1], d__2 = val[*nperm];
-	rnorm = max(d__1,d__2);
+        d__1 = -val[1], d__2 = val[*nperm];
+        rnorm = max(d__1,d__2);
     }
 /*<       PNORM = RNORM >*/
     pnorm = rnorm;
@@ -726,25 +726,25 @@ L30:
     i__1 = *nblock;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          TEMP = DNRM2(N,P1(1,I),1) >*/
-	temp = dnrm2_(n, &p1[i__ * p1_dim1 + 1], &c__1);
+        temp = dnrm2_(n, &p1[i__ * p1_dim1 + 1], &c__1);
 /*<          IF (TEMP.EQ.0D0) CALL DLARAN(N, P1(1,I)) >*/
-	if (temp == 0.) {
-	    dlaran_(n, &p1[i__ * p1_dim1 + 1]);
-	}
+        if (temp == 0.) {
+            dlaran_(n, &p1[i__ * p1_dim1 + 1]);
+        }
 /*<    50 CONTINUE >*/
 /* L50: */
     }
 /*<       IF (NPERM.EQ.0) GO TO 70 >*/
     if (*nperm == 0) {
-	goto L70;
+        goto L70;
     }
 /*<       DO 60 I=1,NPERM >*/
     i__1 = *nperm;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          TAU(I) = 1.0D0 >*/
-	tau[i__] = 1.;
+        tau[i__] = 1.;
 /*<          OTAU(I) = 0.0D0 >*/
-	otau[i__] = 0.;
+        otau[i__] = 0.;
 /*<    60 CONTINUE >*/
 /* L60: */
     }
@@ -764,7 +764,7 @@ L70:
     i__1 = mtemp;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          CALL DCOPY(J, DZERO, 0, S(1,I), 1) >*/
-	dcopy_(&j, dzero, &c__0, &s[i__ * s_dim1 + 1], &c__1);
+        dcopy_(&j, dzero, &c__0, &s[i__ * s_dim1 + 1], &c__1);
 /*<    75 CONTINUE >*/
 /* L75: */
     }
@@ -795,49 +795,49 @@ L80:
 
 /*<       IF (NUMBER.EQ.0) GO TO 110 >*/
     if (number == 0) {
-	goto L110;
+        goto L110;
     }
 /*<       DO 100 I=1,NUMBER >*/
     i__1 = number;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          IF (TAU(I).LT.EPSRT) GO TO 100 >*/
-	if (tau[i__] < epsrt) {
-	    goto L100;
-	}
+        if (tau[i__] < epsrt) {
+            goto L100;
+        }
 /*<          TEST = .TRUE. >*/
-	test = TRUE_;
+        test = TRUE_;
 /*<          TAU(I) = 0.0D0 >*/
-	tau[i__] = 0.;
+        tau[i__] = 0.;
 /*<          IF (OTAU(I).NE.0.0D0) OTAU(I) = 1.0D0 >*/
-	if (otau[i__] != 0.) {
-	    otau[i__] = 1.;
-	}
+        if (otau[i__] != 0.) {
+            otau[i__] = 1.;
+        }
 /*<          DO 90 K=1,NBLOCK >*/
-	i__2 = *nblock;
-	for (k = 1; k <= i__2; ++k) {
+        i__2 = *nblock;
+        for (k = 1; k <= i__2; ++k) {
 /*<             TEMP = -DDOT(N,VEC(1,I),1,P1(1,K),1) >*/
-	    temp = -ddot_(n, &vec[i__ * vec_dim1 + 1], &c__1, &p1[k * p1_dim1 
-		    + 1], &c__1);
+            temp = -ddot_(n, &vec[i__ * vec_dim1 + 1], &c__1, &p1[k * p1_dim1 
+                    + 1], &c__1);
 /*<             CALL DAXPY(N, TEMP, VEC(1,I), 1, P1(1,K), 1) >*/
-	    daxpy_(n, &temp, &vec[i__ * vec_dim1 + 1], &c__1, &p1[k * p1_dim1 
-		    + 1], &c__1);
+            daxpy_(n, &temp, &vec[i__ * vec_dim1 + 1], &c__1, &p1[k * p1_dim1 
+                    + 1], &c__1);
 
 /* THIS CHECKS FOR TOO GREAT A LOSS OF ORTHOGONALITY BETWEEN A */
 /* NEW LANCZOS VECTOR AND A GOOD RITZ VECTOR.  THE ALGORITHM IS */
 /* TERMINATED IF TOO MUCH ORTHOGONALITY IS LOST. */
 
 /*<    >*/
-	    if ((d__1 = temp * bet[k + k * bet_dim1], abs(d__1)) > (
-		    doublereal) ((real) (*n)) * epsrt * anorm && i__ > *nperm)
-		     {
-		goto L380;
-	    }
+            if ((d__1 = temp * bet[k + k * bet_dim1], abs(d__1)) > (
+                    doublereal) ((real) (*n)) * epsrt * anorm && i__ > *nperm)
+                     {
+                goto L380;
+            }
 /*<    90    CONTINUE >*/
 /* L90: */
-	}
+        }
 /*<   100 CONTINUE >*/
 L100:
-	;
+        ;
     }
 
 /* IF NECESSARY, THIS REORTHONORMALIZES P1 AND UPDATES BET. */
@@ -845,7 +845,7 @@ L100:
 /*<   110 IF(.NOT. TEST) GO TO 160 >*/
 L110:
     if (! test) {
-	goto L160;
+        goto L160;
     }
 /*<       CALL DORTQR(N, N, NBLOCK, P1, ALP) >*/
     dortqr_(n, n, nblock, &p1[p1_offset], &alp[alp_offset]);
@@ -853,36 +853,36 @@ L110:
     test = FALSE_;
 /*<       IF(J .EQ. NBLOCK) GO TO 160 >*/
     if (j == *nblock) {
-	goto L160;
+        goto L160;
     }
 /*<       DO 130 I = 1,NBLOCK >*/
     i__1 = *nblock;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          IF(ALP(I,I) .GT. 0.0D0) GO TO 130 >*/
-	if (alp[i__ + i__ * alp_dim1] > 0.) {
-	    goto L130;
-	}
+        if (alp[i__ + i__ * alp_dim1] > 0.) {
+            goto L130;
+        }
 /*<          M = J - 2*NBLOCK + I >*/
-	m = j - (*nblock << 1) + i__;
+        m = j - (*nblock << 1) + i__;
 /*<          L = NBLOCK + 1 >*/
-	l = *nblock + 1;
+        l = *nblock + 1;
 /*<          DO 120 K = I,NBLOCK >*/
-	i__2 = *nblock;
-	for (k = i__; k <= i__2; ++k) {
+        i__2 = *nblock;
+        for (k = i__; k <= i__2; ++k) {
 /*<             BET(I,K) = -BET(I,K) >*/
-	    bet[i__ + k * bet_dim1] = -bet[i__ + k * bet_dim1];
+            bet[i__ + k * bet_dim1] = -bet[i__ + k * bet_dim1];
 /*<             T(L,M) = -T(L,M) >*/
-	    t[l + m * t_dim1] = -t[l + m * t_dim1];
+            t[l + m * t_dim1] = -t[l + m * t_dim1];
 /*<             L = L - 1 >*/
-	    --l;
+            --l;
 /*<             M = M + 1 >*/
-	    ++m;
+            ++m;
 /*<   120    CONTINUE >*/
 /* L120: */
-	}
+        }
 /*<   130 CONTINUE >*/
 L130:
-	;
+        ;
     }
 
 /* THIS IS THE LANCZOS STEP. */
@@ -901,15 +901,15 @@ L160:
     i__1 = *nblock;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          DO 170 K=I,NBLOCK >*/
-	i__2 = *nblock;
-	for (k = i__; k <= i__2; ++k) {
+        i__2 = *nblock;
+        for (k = i__; k <= i__2; ++k) {
 /*<             CALL DAXPY(N, -BET(I,K), P0(1,K), 1, P2(1,I), 1) >*/
-	    d__1 = -bet[i__ + k * bet_dim1];
-	    daxpy_(n, &d__1, &p0[k * p0_dim1 + 1], &c__1, &p2[i__ * p2_dim1 + 
-		    1], &c__1);
+            d__1 = -bet[i__ + k * bet_dim1];
+            daxpy_(n, &d__1, &p0[k * p0_dim1 + 1], &c__1, &p2[i__ * p2_dim1 + 
+                    1], &c__1);
 /*<   170    CONTINUE >*/
 /* L170: */
-	}
+        }
 /*<   180 CONTINUE >*/
 /* L180: */
     }
@@ -920,26 +920,26 @@ L160:
     i__1 = *nblock;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          DO 190 K=1,I >*/
-	i__2 = i__;
-	for (k = 1; k <= i__2; ++k) {
+        i__2 = i__;
+        for (k = 1; k <= i__2; ++k) {
 /*<             II = I - K + 1 >*/
-	    ii = i__ - k + 1;
+            ii = i__ - k + 1;
 /*<             ALP(II,K) = DDOT(N,P1(1,I),1,P2(1,K),1) >*/
-	    alp[ii + k * alp_dim1] = ddot_(n, &p1[i__ * p1_dim1 + 1], &c__1, &
-		    p2[k * p2_dim1 + 1], &c__1);
+            alp[ii + k * alp_dim1] = ddot_(n, &p1[i__ * p1_dim1 + 1], &c__1, &
+                    p2[k * p2_dim1 + 1], &c__1);
 /*<             CALL DAXPY(N, -ALP(II,K), P1(1,I), 1, P2(1,K), 1) >*/
-	    d__1 = -alp[ii + k * alp_dim1];
-	    daxpy_(n, &d__1, &p1[i__ * p1_dim1 + 1], &c__1, &p2[k * p2_dim1 + 
-		    1], &c__1);
+            d__1 = -alp[ii + k * alp_dim1];
+            daxpy_(n, &d__1, &p1[i__ * p1_dim1 + 1], &c__1, &p2[k * p2_dim1 + 
+                    1], &c__1);
 /*<    >*/
-	    if (k != i__) {
-		d__1 = -alp[ii + k * alp_dim1];
-		daxpy_(n, &d__1, &p1[k * p1_dim1 + 1], &c__1, &p2[i__ * 
-			p2_dim1 + 1], &c__1);
-	    }
+            if (k != i__) {
+                d__1 = -alp[ii + k * alp_dim1];
+                daxpy_(n, &d__1, &p1[k * p1_dim1 + 1], &c__1, &p2[i__ * 
+                        p2_dim1 + 1], &c__1);
+            }
 /*<   190   CONTINUE >*/
 /* L190: */
-	}
+        }
 /*<   200 CONTINUE >*/
 /* L200: */
     }
@@ -948,34 +948,34 @@ L160:
 
 /*<       IF(J .NE. NBLOCK) GO TO 220 >*/
     if (j != *nblock) {
-	goto L220;
+        goto L220;
     }
 /*<       DO 215 I=1,NBLOCK >*/
     i__1 = *nblock;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          DO 210 K=1,I >*/
-	i__2 = i__;
-	for (k = 1; k <= i__2; ++k) {
+        i__2 = i__;
+        for (k = 1; k <= i__2; ++k) {
 /*<             TEMP = DDOT(N,P1(1,I),1,P2(1,K),1) >*/
-	    temp = ddot_(n, &p1[i__ * p1_dim1 + 1], &c__1, &p2[k * p2_dim1 + 
-		    1], &c__1);
+            temp = ddot_(n, &p1[i__ * p1_dim1 + 1], &c__1, &p2[k * p2_dim1 + 
+                    1], &c__1);
 /*<             CALL DAXPY(N, -TEMP, P1(1,I), 1, P2(1,K), 1) >*/
-	    d__1 = -temp;
-	    daxpy_(n, &d__1, &p1[i__ * p1_dim1 + 1], &c__1, &p2[k * p2_dim1 + 
-		    1], &c__1);
+            d__1 = -temp;
+            daxpy_(n, &d__1, &p1[i__ * p1_dim1 + 1], &c__1, &p2[k * p2_dim1 + 
+                    1], &c__1);
 /*<    >*/
-	    if (k != i__) {
-		d__1 = -temp;
-		daxpy_(n, &d__1, &p1[k * p1_dim1 + 1], &c__1, &p2[i__ * 
-			p2_dim1 + 1], &c__1);
-	    }
+            if (k != i__) {
+                d__1 = -temp;
+                daxpy_(n, &d__1, &p1[k * p1_dim1 + 1], &c__1, &p2[i__ * 
+                        p2_dim1 + 1], &c__1);
+            }
 /*<             II = I - K + 1 >*/
-	    ii = i__ - k + 1;
+            ii = i__ - k + 1;
 /*<             ALP(II,K) = ALP(II,K) + TEMP             >*/
-	    alp[ii + k * alp_dim1] += temp;
+            alp[ii + k * alp_dim1] += temp;
 /*<   210   CONTINUE >*/
 /* L210: */
-	}
+        }
 /*<   215 CONTINUE >*/
 /* L215: */
     }
@@ -992,27 +992,27 @@ L220:
     i__1 = *nblock;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          M = J - NBLOCK + I >*/
-	m = j - *nblock + i__;
+        m = j - *nblock + i__;
 /*<          DO 230 K=I,NBLOCK >*/
-	i__2 = *nblock;
-	for (k = i__; k <= i__2; ++k) {
+        i__2 = *nblock;
+        for (k = i__; k <= i__2; ++k) {
 /*<             L = K - I + 1 >*/
-	    l = k - i__ + 1;
+            l = k - i__ + 1;
 /*<             T(L,M) = ALP(L,I) >*/
-	    t[l + m * t_dim1] = alp[l + i__ * alp_dim1];
+            t[l + m * t_dim1] = alp[l + i__ * alp_dim1];
 /*<   230    CONTINUE >*/
 /* L230: */
-	}
+        }
 /*<          DO 240 K=1,I >*/
-	i__2 = i__;
-	for (k = 1; k <= i__2; ++k) {
+        i__2 = i__;
+        for (k = 1; k <= i__2; ++k) {
 /*<             L = NBLOCK - I + K + 1 >*/
-	    l = *nblock - i__ + k + 1;
+            l = *nblock - i__ + k + 1;
 /*<             T(L,M) = BET(K,I) >*/
-	    t[l + m * t_dim1] = bet[k + i__ * bet_dim1];
+            t[l + m * t_dim1] = bet[k + i__ * bet_dim1];
 /*<   240    CONTINUE >*/
 /* L240: */
-	}
+        }
 /*<   250 CONTINUE >*/
 /* L250: */
     }
@@ -1021,7 +1021,7 @@ L220:
 
 /*<       IF (SMALL) GO TO 280 >*/
     if (*small) {
-	goto L280;
+        goto L280;
     }
 /*<       M = J - NBLOCK + 1 >*/
     m = j - *nblock + 1;
@@ -1029,13 +1029,13 @@ L220:
     i__1 = j;
     for (i__ = m; i__ <= i__1; ++i__) {
 /*<          DO 260 K=1,L >*/
-	i__2 = l;
-	for (k = 1; k <= i__2; ++k) {
+        i__2 = l;
+        for (k = 1; k <= i__2; ++k) {
 /*<             T(K,I) = -T(K,I) >*/
-	    t[k + i__ * t_dim1] = -t[k + i__ * t_dim1];
+            t[k + i__ * t_dim1] = -t[k + i__ * t_dim1];
 /*<   260    CONTINUE >*/
 /* L260: */
-	}
+        }
 /*<   270 CONTINUE >*/
 /* L270: */
     }
@@ -1058,7 +1058,7 @@ L280:
     anorm = max(d__1,d__2);
 /*<       IF (NUMBER.EQ.0) GO TO 305 >*/
     if (number == 0) {
-	goto L305;
+        goto L305;
     }
 
 /* THIS COMPUTES THE EXTREME EIGENVALUES OF ALP. */
@@ -1067,16 +1067,16 @@ L280:
     dcopy_(nblock, dzero, &c__0, &p2[p2_offset], &c__1);
 /*<    >*/
     dlaeig_(nblock, nblock, &c__1, &c__1, &alp[alp_offset], tarr, nblock, &p2[
-	    p2_offset], &bound[1], &atemp[1], &d__[1], &vtemp[1], eps, &tmin, 
-	    &tmax);
+            p2_offset], &bound[1], &atemp[1], &d__[1], &vtemp[1], eps, &tmin, 
+            &tmax);
 /*<       ALPMIN = TARR(1) >*/
     alpmin = tarr[0];
 /*<       CALL DCOPY(NBLOCK, DZERO, 0, P2, 1) >*/
     dcopy_(nblock, dzero, &c__0, &p2[p2_offset], &c__1);
 /*<    >*/
     dlaeig_(nblock, nblock, nblock, nblock, &alp[alp_offset], tarr, nblock, &
-	    p2[p2_offset], &bound[1], &atemp[1], &d__[1], &vtemp[1], eps, &
-	    tmin, &tmax);
+            p2[p2_offset], &bound[1], &atemp[1], &d__[1], &vtemp[1], eps, &
+            tmin, &tmax);
 /*<       ALPMAX = TARR(1) >*/
     alpmax = tarr[0];
 
@@ -1087,23 +1087,23 @@ L305:
     i__1 = *nblock;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          DO 300 K = 1, I >*/
-	i__2 = i__;
-	for (k = 1; k <= i__2; ++k) {
+        i__2 = i__;
+        for (k = 1; k <= i__2; ++k) {
 /*<             L = I - K + 1 >*/
-	    l = i__ - k + 1;
+            l = i__ - k + 1;
 /*<    >*/
-	    i__3 = *nblock - i__ + 1;
-	    alp[l + k * alp_dim1] = ddot_(&i__3, &bet[i__ + i__ * bet_dim1], 
-		    nblock, &bet[k + i__ * bet_dim1], nblock);
+            i__3 = *nblock - i__ + 1;
+            alp[l + k * alp_dim1] = ddot_(&i__3, &bet[i__ + i__ * bet_dim1], 
+                    nblock, &bet[k + i__ * bet_dim1], nblock);
 /*<   300    CONTINUE >*/
 /* L300: */
-	}
+        }
 /*<   310 CONTINUE >*/
 /* L310: */
     }
 /*<       IF(NUMBER .EQ. 0) GO TO 330 >*/
     if (number == 0) {
-	goto L330;
+        goto L330;
     }
 
 /* THIS COMPUTES THE SMALLEST SINGULAR VALUE OF BET. */
@@ -1113,8 +1113,8 @@ L305:
 /*<    >*/
     d__1 = anorm * anorm;
     dlaeig_(nblock, nblock, &c__1, &c__1, &alp[alp_offset], tarr, nblock, &p2[
-	    p2_offset], &bound[1], &atemp[1], &d__[1], &vtemp[1], eps, &c_b88,
-	     &d__1);
+            p2_offset], &bound[1], &atemp[1], &d__[1], &vtemp[1], eps, &c_b88,
+             &d__1);
 /*<       BETMIN = DSQRT(TARR(1)) >*/
     betmin = sqrt(tarr[0]);
 
@@ -1125,17 +1125,17 @@ L305:
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<    >*/
 /* Computing MAX */
-	d__1 = alpmax - val[i__], d__2 = val[i__] - alpmin;
-	temp = (tau[i__] * max(d__1,d__2) + otau[i__] * betmax + *eps * anorm)
-		 / betmin;
+        d__1 = alpmax - val[i__], d__2 = val[i__] - alpmin;
+        temp = (tau[i__] * max(d__1,d__2) + otau[i__] * betmax + *eps * anorm)
+                 / betmin;
 /*<          IF (I.LE.NPERM) TEMP = TEMP + RES(I)/BETMIN >*/
-	if (i__ <= *nperm) {
-	    temp += res[i__] / betmin;
-	}
+        if (i__ <= *nperm) {
+            temp += res[i__] / betmin;
+        }
 /*<          OTAU(I) = TAU(I) >*/
-	otau[i__] = tau[i__];
+        otau[i__] = tau[i__];
 /*<          TAU(I) = TEMP >*/
-	tau[i__] = temp;
+        tau[i__] = temp;
 /*<   320 CONTINUE >*/
 /* L320: */
     }
@@ -1148,13 +1148,13 @@ L330:
 /*<    >*/
     d__1 = anorm * anorm;
     dlaeig_(nblock, nblock, nblock, nblock, &alp[alp_offset], tarr, nblock, &
-	    p2[p2_offset], &bound[1], &atemp[1], &d__[1], &vtemp[1], eps, &
-	    c_b88, &d__1);
+            p2[p2_offset], &bound[1], &atemp[1], &d__[1], &vtemp[1], eps, &
+            c_b88, &d__1);
 /*<       BETMAX = DSQRT(TARR(1)) >*/
     betmax = sqrt(tarr[0]);
 /*<       IF (J.LE.2*NBLOCK) GO TO 80 >*/
     if (j <= *nblock << 1) {
-	goto L80;
+        goto L80;
     }
 
 /* ------------------------------------------------------------------ */
@@ -1169,7 +1169,7 @@ L330:
     tola = utol * rnorm;
 /*<    >*/
     if (*maxj - j < *nblock || (*nop >= *maxop && nleft != 0)) {
-	goto L390;
+        goto L390;
     }
 /*<       GO TO 400 >*/
     goto L400;
@@ -1189,7 +1189,7 @@ L380:
 /*<   390 IF (NLEFT.EQ.0) RETURN >*/
 L390:
     if (nleft == 0) {
-	return 0;
+        return 0;
     }
 /*<       TEST = .TRUE. >*/
     test = TRUE_;
@@ -1200,21 +1200,21 @@ L400:
     ntheta = min(i__1,i__2);
 /*<    >*/
     dlaeig_(&j, nband, &c__1, &ntheta, &t[t_offset], &val[number + 1], maxj, &
-	    s[s_offset], &bound[1], &atemp[1], &d__[1], &vtemp[1], eps, &tmin,
-	     &tmax);
+            s[s_offset], &bound[1], &atemp[1], &d__[1], &vtemp[1], eps, &tmin,
+             &tmax);
 /*<       CALL DMVPC(NBLOCK, BET, MAXJ, J, S, NTHETA, ATEMP, VTEMP, D) >*/
     dmvpc_(nblock, &bet[bet_offset], maxj, &j, &s[s_offset], &ntheta, &atemp[
-	    1], &vtemp[1], &d__[1]);
+            1], &vtemp[1], &d__[1]);
 
 /* THIS CHECKS FOR TERMINATION OF A CHECK RUN */
 
 /*<       IF(NLEFT .NE. 0 .OR. J .LT. 6*NBLOCK) GO TO 410 >*/
     if (nleft != 0 || j < *nblock * 6) {
-	goto L410;
+        goto L410;
     }
 /*<       IF(VAL(NUMBER+1)-ATEMP(1) .GT. VAL(NPERM) - TOLA) GO TO 790  >*/
     if (val[number + 1] - atemp[1] > val[*nperm] - tola) {
-	goto L790;
+        goto L790;
     }
 
 /* THIS UPDATES NLEFT BY EXAMINING THE COMPUTED EIGENVALUES OF T */
@@ -1223,17 +1223,17 @@ L400:
 /*<  410  IF (NTHETA.LE.NLEFT) GO TO 470 >*/
 L410:
     if (ntheta <= nleft) {
-	goto L470;
+        goto L470;
     }
 /*<       IF (NPERM.EQ.0) GO TO 430 >*/
     if (*nperm == 0) {
-	goto L430;
+        goto L430;
     }
 /*<       M = NUMBER + NLEFT + 1 >*/
     m = number + nleft + 1;
 /*<       IF (VAL(M).GE.VAL(NPERM)) GO TO 430 >*/
     if (val[m] >= val[*nperm]) {
-	goto L430;
+        goto L430;
     }
 /*<       NPERM = NPERM - 1 >*/
     --(*nperm);
@@ -1259,7 +1259,7 @@ L430:
     enough = TRUE_;
 /*<       IF(NLEFT .EQ. 0) GO TO 80 >*/
     if (nleft == 0) {
-	goto L80;
+        goto L80;
     }
 /*<       NTHETA = NLEFT >*/
     ntheta = nleft;
@@ -1274,7 +1274,7 @@ L430:
 
 /*<       IF (.NOT.(TEST .OR. ENOUGH)) GO TO 470 >*/
     if (! (test || enough)) {
-	goto L470;
+        goto L470;
     }
 /*<       DELTA = DMIN1(DELTA,ANORM) >*/
     *delta = min(*delta,anorm);
@@ -1292,32 +1292,32 @@ L430:
     i__1 = ntheta;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          M = NUMBER + I >*/
-	m = number + i__;
+        m = number + i__;
 /*<    >*/
 /* Computing MIN */
-	d__1 = atemp[i__] * atemp[i__] / (*delta - val[m]), d__2 = atemp[i__];
-	if (min(d__1,d__2) > tola) {
-	    goto L450;
-	}
+        d__1 = atemp[i__] * atemp[i__] / (*delta - val[m]), d__2 = atemp[i__];
+        if (min(d__1,d__2) > tola) {
+            goto L450;
+        }
 /*<          IND(I) = -1 >*/
-	ind[i__] = -1;
+        ind[i__] = -1;
 /*<          GO TO 460 >*/
-	goto L460;
+        goto L460;
 
 /*<   450    ENOUGH = .FALSE. >*/
 L450:
-	enough = FALSE_;
+        enough = FALSE_;
 /*<          IF (.NOT.TEST) GO TO 470 >*/
-	if (! test) {
-	    goto L470;
-	}
+        if (! test) {
+            goto L470;
+        }
 /*<          IND(I) = 1 >*/
-	ind[i__] = 1;
+        ind[i__] = 1;
 /*<          NSTART = NSTART + 1 >*/
-	++nstart;
+        ++nstart;
 /*<   460 CONTINUE >*/
 L460:
-	;
+        ;
     }
 
 /*  COPY VALUES OF IND INTO VTEMP */
@@ -1326,7 +1326,7 @@ L460:
     i__1 = ntheta;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          VTEMP(I) = DBLE(FLOAT(IND(I))) >*/
-	vtemp[i__] = (doublereal) ((real) ind[i__]);
+        vtemp[i__] = (doublereal) ((real) ind[i__]);
 /*<   465 CONTINUE >*/
 /* L465: */
     }
@@ -1342,27 +1342,27 @@ L470:
     i__1 = ntheta;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          IF (VTEMP(I).GT.TOLG) GO TO 480 >*/
-	if (vtemp[i__] > tolg) {
-	    goto L480;
-	}
+        if (vtemp[i__] > tolg) {
+            goto L480;
+        }
 /*<          NG = NG + 1 >*/
-	++ng;
+        ++ng;
 /*<          VTEMP(I) = -1 >*/
-	vtemp[i__] = -1.;
+        vtemp[i__] = -1.;
 /*<          GO TO 490 >*/
-	goto L490;
+        goto L490;
 
 /*<   480    VTEMP(I) = 1 >*/
 L480:
-	vtemp[i__] = 1.;
+        vtemp[i__] = 1.;
 /*<   490 CONTINUE >*/
 L490:
-	;
+        ;
     }
 
 /*<       IF (NG.LE.NGOOD) GO TO 80 >*/
     if (ng <= ngood) {
-	goto L80;
+        goto L80;
     }
 /*<       NSTART = NTHETA - NG >*/
     nstart = ntheta - ng;
@@ -1392,15 +1392,15 @@ L500:
     dcopy_(&ntheta, &val[number + 1], &c__1, &val[*nperm + 1], &c__1);
 /*<       IF (NSTART.EQ.0) GO TO 580 >*/
     if (nstart == 0) {
-	goto L580;
+        goto L580;
     }
 /*<       IF (NSTART.EQ.NTHETA) GO TO 530 >*/
     if (nstart == ntheta) {
-	goto L530;
+        goto L530;
     }
 /*<    >*/
     dvsort_(&ntheta, &vtemp[1], &atemp[1], &c__1, &val[*nperm + 1], maxj, &j, 
-	    &s[s_offset]);
+            &s[s_offset]);
 
 /* THES ACCUMULATES THE J-VECTORS USED TO FORM THE STARTING */
 /* VECTORS. */
@@ -1408,11 +1408,11 @@ L500:
 /*<   530 IF (.NOT.TEST) NSTART = 0 >*/
 L530:
     if (! test) {
-	nstart = 0;
+        nstart = 0;
     }
 /*<       IF (.NOT.TEST) GO TO 580 >*/
     if (! test) {
-	goto L580;
+        goto L580;
     }
 
 /*  FIND MINIMUM ATEMP VALUE TO AVOID POSSIBLE OVERFLOW */
@@ -1424,8 +1424,8 @@ L530:
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          TEMP = DMIN1(TEMP, ATEMP(I)) >*/
 /* Computing MIN */
-	d__1 = temp, d__2 = atemp[i__];
-	temp = min(d__1,d__2);
+        d__1 = temp, d__2 = atemp[i__];
+        temp = min(d__1,d__2);
 /*<   535 CONTINUE >*/
 /* L535: */
     }
@@ -1437,8 +1437,8 @@ L530:
     i__1 = l;
     for (i__ = m; i__ <= i__1; ++i__) {
 /*<          CALL DSCAL(J, TEMP/ATEMP(I), S(1,I), 1) >*/
-	d__1 = temp / atemp[i__];
-	dscal_(&j, &d__1, &s[i__ * s_dim1 + 1], &c__1);
+        d__1 = temp / atemp[i__];
+        dscal_(&j, &d__1, &s[i__ * s_dim1 + 1], &c__1);
 /*<   540 CONTINUE >*/
 /* L540: */
     }
@@ -1446,7 +1446,7 @@ L530:
     m = (nstart - 1) / *nblock;
 /*<       IF (M.EQ.0) GO TO 570 >*/
     if (m == 0) {
-	goto L570;
+        goto L570;
     }
 /*<       L = NGOOD + NBLOCK >*/
     l = ngood + *nblock;
@@ -1454,23 +1454,23 @@ L530:
     i__1 = m;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          DO 550 K=1,NBLOCK >*/
-	i__2 = *nblock;
-	for (k = 1; k <= i__2; ++k) {
+        i__2 = *nblock;
+        for (k = 1; k <= i__2; ++k) {
 /*<             L = L + 1 >*/
-	    ++l;
+            ++l;
 /*<             IF (L.GT.NTHETA) GO TO 570 >*/
-	    if (l > ntheta) {
-		goto L570;
-	    }
+            if (l > ntheta) {
+                goto L570;
+            }
 /*<             I1 = NGOOD + K >*/
-	    i1 = ngood + k;
+            i1 = ngood + k;
 /*<             CALL DAXPY(J, TEMP/ATEMP(L), S(1,L), 1, S(1,I1), 1) >*/
-	    d__1 = temp / atemp[l];
-	    daxpy_(&j, &d__1, &s[l * s_dim1 + 1], &c__1, &s[i1 * s_dim1 + 1], 
-		    &c__1);
+            d__1 = temp / atemp[l];
+            daxpy_(&j, &d__1, &s[l * s_dim1 + 1], &c__1, &s[i1 * s_dim1 + 1], 
+                    &c__1);
 /*<   550    CONTINUE >*/
 /* L550: */
-	}
+        }
 /*<   560 CONTINUE >*/
 /* L560: */
     }
@@ -1483,15 +1483,15 @@ L570:
 /*<   580 IF (NGOOD.EQ.0 .OR. .NOT.(TEST .OR. ENOUGH)) GO TO 600 >*/
 L580:
     if (ngood == 0 || ! (test || enough)) {
-	goto L600;
+        goto L600;
     }
 /*<       DO 590 I=1,NGOOD >*/
     i__1 = ngood;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          M = NPERM + I >*/
-	m = *nperm + i__;
+        m = *nperm + i__;
 /*<          RES(M) = ATEMP(I) >*/
-	res[m] = atemp[i__];
+        res[m] = atemp[i__];
 /*<   590 CONTINUE >*/
 /* L590: */
     }
@@ -1504,12 +1504,12 @@ L600:
     number = *nperm + ngood;
 /*<       IF (TEST .OR. ENOUGH) CALL DCOPY(N*NBLOCK, DZERO, 0, P1, 1) >*/
     if (test || enough) {
-	i__1 = *n * *nblock;
-	dcopy_(&i__1, dzero, &c__0, &p1[p1_offset], &c__1);
+        i__1 = *n * *nblock;
+        dcopy_(&i__1, dzero, &c__0, &p1[p1_offset], &c__1);
     }
 /*<       IF (NGOOD.EQ.0) GO TO 620 >*/
     if (ngood == 0) {
-	goto L620;
+        goto L620;
     }
 /*<       M = NPERM + 1 >*/
     m = *nperm + 1;
@@ -1517,7 +1517,7 @@ L600:
     i__1 = number;
     for (i__ = m; i__ <= i__1; ++i__) {
 /*<          CALL DCOPY(N, DZERO, 0, VEC(1,I), 1) >*/
-	dcopy_(n, dzero, &c__0, &vec[i__ * vec_dim1 + 1], &c__1);
+        dcopy_(n, dzero, &c__0, &vec[i__ * vec_dim1 + 1], &c__1);
 /*<   610 CONTINUE >*/
 /* L610: */
     }
@@ -1527,53 +1527,53 @@ L620:
     i__2 = *nblock;
     for (i__ = *nblock; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2) {
 /*<          CALL IOVECT(N, NBLOCK, P2, I, 1) >*/
-	(*iovect)(n, nblock, &p2[p2_offset], &i__, &c__1);
+        (*iovect)(n, nblock, &p2[p2_offset], &i__, &c__1);
 /*<          DO 660 K=1,NBLOCK >*/
-	i__3 = *nblock;
-	for (k = 1; k <= i__3; ++k) {
+        i__3 = *nblock;
+        for (k = 1; k <= i__3; ++k) {
 /*<             M = I - NBLOCK + K >*/
-	    m = i__ - *nblock + k;
+            m = i__ - *nblock + k;
 /*<             IF (NSTART.EQ.0) GO TO 640 >*/
-	    if (nstart == 0) {
-		goto L640;
-	    }
+            if (nstart == 0) {
+                goto L640;
+            }
 /*<             DO 630 L=1,NSTART >*/
-	    i__4 = nstart;
-	    for (l = 1; l <= i__4; ++l) {
+            i__4 = nstart;
+            for (l = 1; l <= i__4; ++l) {
 /*<                I1 = NGOOD + L >*/
-		i1 = ngood + l;
+                i1 = ngood + l;
 /*<                CALL DAXPY(N, S(M,I1), P2(1,K), 1, P1(1,L), 1) >*/
-		daxpy_(n, &s[m + i1 * s_dim1], &p2[k * p2_dim1 + 1], &c__1, &
-			p1[l * p1_dim1 + 1], &c__1);
+                daxpy_(n, &s[m + i1 * s_dim1], &p2[k * p2_dim1 + 1], &c__1, &
+                        p1[l * p1_dim1 + 1], &c__1);
 /*<   630       CONTINUE >*/
 /* L630: */
-	    }
+            }
 /*<   640       IF (NGOOD.EQ.0) GO TO 660 >*/
 L640:
-	    if (ngood == 0) {
-		goto L660;
-	    }
+            if (ngood == 0) {
+                goto L660;
+            }
 /*<             DO 650 L=1,NGOOD >*/
-	    i__4 = ngood;
-	    for (l = 1; l <= i__4; ++l) {
+            i__4 = ngood;
+            for (l = 1; l <= i__4; ++l) {
 /*<                I1 = L + NPERM >*/
-		i1 = l + *nperm;
+                i1 = l + *nperm;
 /*<                CALL DAXPY(N, S(M,L), P2(1,K), 1, VEC(1,I1), 1) >*/
-		daxpy_(n, &s[m + l * s_dim1], &p2[k * p2_dim1 + 1], &c__1, &
-			vec[i1 * vec_dim1 + 1], &c__1);
+                daxpy_(n, &s[m + l * s_dim1], &p2[k * p2_dim1 + 1], &c__1, &
+                        vec[i1 * vec_dim1 + 1], &c__1);
 /*<   650       CONTINUE >*/
 /* L650: */
-	    }
+            }
 /*<   660    CONTINUE >*/
 L660:
-	    ;
-	}
+            ;
+        }
 /*<   670 CONTINUE >*/
 /* L670: */
     }
 /*<       IF (TEST .OR. ENOUGH) GO TO 690 >*/
     if (test || enough) {
-	goto L690;
+        goto L690;
     }
 
 /* THIS NORMALIZES THE RITZ VECTORS AND INITIALIZES THE */
@@ -1585,13 +1585,13 @@ L660:
     i__2 = number;
     for (i__ = m; i__ <= i__2; ++i__) {
 /*<          TEMP = 1.0D0/DNRM2(N,VEC(1,I),1) >*/
-	temp = 1. / dnrm2_(n, &vec[i__ * vec_dim1 + 1], &c__1);
+        temp = 1. / dnrm2_(n, &vec[i__ * vec_dim1 + 1], &c__1);
 /*<          CALL DSCAL(N, TEMP, VEC(1,I), 1) >*/
-	dscal_(n, &temp, &vec[i__ * vec_dim1 + 1], &c__1);
+        dscal_(n, &temp, &vec[i__ * vec_dim1 + 1], &c__1);
 /*<          TAU(I) = 1.0D0 >*/
-	tau[i__] = 1.;
+        tau[i__] = 1.;
 /*<          OTAU(I) = 1.0D0 >*/
-	otau[i__] = 1.;
+        otau[i__] = 1.;
 /*<   680 CONTINUE >*/
 /* L680: */
     }
@@ -1602,7 +1602,7 @@ L660:
     dcopy_(&ntheta, &val[*nperm + 1], &c__1, &vtemp[1], &c__1);
 /*<       CALL DVSORT(NTHETA, VTEMP, ATEMP, 0, TARR, MAXJ, J, S) >*/
     dvsort_(&ntheta, &vtemp[1], &atemp[1], &c__0, tarr, maxj, &j, &s[s_offset]
-	    );
+            );
 /*<       GO TO 80 >*/
     goto L80;
 
@@ -1615,11 +1615,11 @@ L660:
 /*<   690 IF (NGOOD.EQ.0 .AND. NOP.GE.MAXOP) GO TO 810 >*/
 L690:
     if (ngood == 0 && *nop >= *maxop) {
-	goto L810;
+        goto L810;
     }
 /*<       IF (NGOOD.EQ.0) GO TO 30 >*/
     if (ngood == 0) {
-	goto L30;
+        goto L30;
     }
 
 /* THIS ORTHONORMALIZES THE VECTORS */
@@ -1632,9 +1632,9 @@ L690:
 
 /*<    >*/
     if (*nperm != 0) {
-	i__2 = *nperm + ngood;
-	dvsort_(&i__2, &val[1], &res[1], &c__0, &temp, nmvec, n, &vec[
-		vec_offset]);
+        i__2 = *nperm + ngood;
+        dvsort_(&i__2, &val[1], &res[1], &c__0, &temp, nmvec, n, &vec[
+                vec_offset]);
     }
 /*<       NPERM = NPERM + NGOOD >*/
     *nperm += ngood;
@@ -1649,15 +1649,15 @@ L690:
 
 /*<       IF (NOP.GE.MAXOP .AND. NLEFT.NE.0) GO TO 810 >*/
     if (*nop >= *maxop && nleft != 0) {
-	goto L810;
+        goto L810;
     }
 /*<       IF (NLEFT.NE.0) GO TO 30 >*/
     if (nleft != 0) {
-	goto L30;
+        goto L30;
     }
 /*<       IF (VAL(NVAL)-VAL(1).LT.TOLA) GO TO 790 >*/
     if (val[*nval] - val[1] < tola) {
-	goto L790;
+        goto L790;
     }
 
 /* THIS DOES A CLUSTER TEST TO SEE IF A CHECK RUN IS NEEDED */
@@ -1667,17 +1667,17 @@ L690:
     m = *nperm - *nblock + 1;
 /*<       IF (M.LE.0) RETURN >*/
     if (m <= 0) {
-	return 0;
+        return 0;
     }
 /*<       DO 780 I=1,M >*/
     i__2 = m;
     for (i__ = 1; i__ <= i__2; ++i__) {
 /*<          L = I + NBLOCK - 1 >*/
-	l = i__ + *nblock - 1;
+        l = i__ + *nblock - 1;
 /*<          IF (VAL(L)-VAL(I).LT.TOLA) GO TO 30 >*/
-	if (val[l] - val[i__] < tola) {
-	    goto L30;
-	}
+        if (val[l] - val[i__] < tola) {
+            goto L30;
+        }
 /*<   780 CONTINUE >*/
 /* L780: */
     }
@@ -1690,24 +1690,24 @@ L790:
     m = *nperm - *nblock;
 /*<       IF (M.LE.0) RETURN >*/
     if (m <= 0) {
-	return 0;
+        return 0;
     }
 /*<       DO 800 I=1,M >*/
     i__2 = m;
     for (i__ = 1; i__ <= i__2; ++i__) {
 /*<          L = I + NBLOCK >*/
-	l = i__ + *nblock;
+        l = i__ + *nblock;
 /*<          IF (VAL(L)-VAL(I).GE.TOLA) GO TO 800 >*/
-	if (val[l] - val[i__] >= tola) {
-	    goto L800;
-	}
+        if (val[l] - val[i__] >= tola) {
+            goto L800;
+        }
 /*<          RARITZ = .TRUE. >*/
-	*raritz = TRUE_;
+        *raritz = TRUE_;
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<   800 CONTINUE >*/
 L800:
-	;
+        ;
     }
 
 /*<       RETURN >*/
@@ -1727,5 +1727,5 @@ L810:
 } /* dnwla_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

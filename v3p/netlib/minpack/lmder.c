@@ -1,13 +1,13 @@
 /* minpack/lmder.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -31,11 +31,11 @@ static logical c_true = TRUE_;
               v3p_netlib_integer*,
               void*),
         integer *m, integer *n, doublereal *x,
-	doublereal *fvec, doublereal *fjac, integer *ldfjac, doublereal *ftol,
-	 doublereal *xtol, doublereal *gtol, integer *maxfev, doublereal *
-	diag, integer *mode, doublereal *factor, integer *nprint, integer *
-	info, integer *nfev, integer *njev, integer *ipvt, doublereal *qtf, 
-	doublereal *wa1, doublereal *wa2, doublereal *wa3, doublereal *wa4,
+        doublereal *fvec, doublereal *fjac, integer *ldfjac, doublereal *ftol,
+         doublereal *xtol, doublereal *gtol, integer *maxfev, doublereal *
+        diag, integer *mode, doublereal *factor, integer *nprint, integer *
+        info, integer *nfev, integer *njev, integer *ipvt, doublereal *qtf, 
+        doublereal *wa1, doublereal *wa2, doublereal *wa3, doublereal *wa4,
         void* userdata)
 {
     /* Initialized data */
@@ -63,15 +63,15 @@ static logical c_true = TRUE_;
     integer iflag;
     doublereal delta;
     extern /* Subroutine */ int qrfac_(integer *, integer *, doublereal *, 
-	    integer *, logical *, integer *, integer *, doublereal *, 
-	    doublereal *, doublereal *), lmpar_(integer *, doublereal *, 
-	    integer *, integer *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *);
+            integer *, logical *, integer *, integer *, doublereal *, 
+            doublereal *, doublereal *), lmpar_(integer *, doublereal *, 
+            integer *, integer *, doublereal *, doublereal *, doublereal *, 
+            doublereal *, doublereal *, doublereal *, doublereal *, 
+            doublereal *);
     doublereal ratio;
     extern doublereal enorm_(integer *, doublereal *);
     doublereal fnorm, gnorm, pnorm, xnorm=0, fnorm1, actred, dirder, epsmch, 
-	    prered;
+            prered;
     extern doublereal dpmpar_(integer *);
 
 /*<       integer m,n,ldfjac,maxfev,mode,nprint,info,nfev,njev >*/
@@ -293,20 +293,20 @@ static logical c_true = TRUE_;
 
 /*<    >*/
     if (*n <= 0 || *m < *n || *ldfjac < *m || *ftol < zero || *xtol < zero || 
-	    *gtol < zero || *maxfev <= 0 || *factor <= zero) {
-	goto L300;
+            *gtol < zero || *maxfev <= 0 || *factor <= zero) {
+        goto L300;
     }
 /*<       if (mode .ne. 2) go to 20 >*/
     if (*mode != 2) {
-	goto L20;
+        goto L20;
     }
 /*<       do 10 j = 1, n >*/
     i__1 = *n;
     for (j = 1; j <= i__1; ++j) {
 /*<          if (diag(j) .le. zero) go to 300 >*/
-	if (diag[j] <= zero) {
-	    goto L300;
-	}
+        if (diag[j] <= zero) {
+            goto L300;
+        }
 /*<    10    continue >*/
 /* L10: */
     }
@@ -325,7 +325,7 @@ L20:
     *nfev = 1;
 /*<       if (iflag .lt. 0) go to 300 >*/
     if (iflag < 0) {
-	goto L300;
+        goto L300;
     }
 /*<       fnorm = enorm(m,fvec) >*/
     fnorm = enorm_(m, &fvec[1]);
@@ -353,25 +353,25 @@ L30:
     ++(*njev);
 /*<          if (iflag .lt. 0) go to 300 >*/
     if (iflag < 0) {
-	goto L300;
+        goto L300;
     }
 
 /*        if requested, call fcn to enable printing of iterates. */
 
 /*<          if (nprint .le. 0) go to 40 >*/
     if (*nprint <= 0) {
-	goto L40;
+        goto L40;
     }
 /*<          iflag = 0 >*/
     iflag = 0;
 /*<    >*/
     if ((iter - 1) % *nprint == 0) {
-	(*fcn)(m, n, &x[1], &fvec[1], &fjac[fjac_offset], ldfjac, &iflag,
+        (*fcn)(m, n, &x[1], &fvec[1], &fjac[fjac_offset], ldfjac, &iflag,
                userdata);
     }
 /*<          if (iflag .lt. 0) go to 300 >*/
     if (iflag < 0) {
-	goto L300;
+        goto L300;
     }
 /*<    40    continue >*/
 L40:
@@ -380,28 +380,28 @@ L40:
 
 /*<          call qrfac(m,n,fjac,ldfjac,.true.,ipvt,n,wa1,wa2,wa3) >*/
     qrfac_(m, n, &fjac[fjac_offset], ldfjac, &c_true, &ipvt[1], n, &wa1[1], &
-	    wa2[1], &wa3[1]);
+            wa2[1], &wa3[1]);
 
 /*        on the first iteration and if mode is 1, scale according */
 /*        to the norms of the columns of the initial jacobian. */
 
 /*<          if (iter .ne. 1) go to 80 >*/
     if (iter != 1) {
-	goto L80;
+        goto L80;
     }
 /*<          if (mode .eq. 2) go to 60 >*/
     if (*mode == 2) {
-	goto L60;
+        goto L60;
     }
 /*<          do 50 j = 1, n >*/
     i__1 = *n;
     for (j = 1; j <= i__1; ++j) {
 /*<             diag(j) = wa2(j) >*/
-	diag[j] = wa2[j];
+        diag[j] = wa2[j];
 /*<             if (wa2(j) .eq. zero) diag(j) = one >*/
-	if (wa2[j] == zero) {
-	    diag[j] = one;
-	}
+        if (wa2[j] == zero) {
+            diag[j] = one;
+        }
 /*<    50       continue >*/
 /* L50: */
     }
@@ -415,7 +415,7 @@ L60:
     i__1 = *n;
     for (j = 1; j <= i__1; ++j) {
 /*<             wa3(j) = diag(j)*x(j) >*/
-	wa3[j] = diag[j] * x[j];
+        wa3[j] = diag[j] * x[j];
 /*<    70       continue >*/
 /* L70: */
     }
@@ -425,7 +425,7 @@ L60:
     delta = *factor * xnorm;
 /*<          if (delta .eq. zero) delta = factor >*/
     if (delta == zero) {
-	delta = *factor;
+        delta = *factor;
     }
 /*<    80    continue >*/
 L80:
@@ -437,7 +437,7 @@ L80:
     i__1 = *m;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<             wa4(i) = fvec(i) >*/
-	wa4[i__] = fvec[i__];
+        wa4[i__] = fvec[i__];
 /*<    90       continue >*/
 /* L90: */
     }
@@ -445,35 +445,35 @@ L80:
     i__1 = *n;
     for (j = 1; j <= i__1; ++j) {
 /*<             if (fjac(j,j) .eq. zero) go to 120 >*/
-	if (fjac[j + j * fjac_dim1] == zero) {
-	    goto L120;
-	}
+        if (fjac[j + j * fjac_dim1] == zero) {
+            goto L120;
+        }
 /*<             sum = zero >*/
-	sum = zero;
+        sum = zero;
 /*<             do 100 i = j, m >*/
-	i__2 = *m;
-	for (i__ = j; i__ <= i__2; ++i__) {
+        i__2 = *m;
+        for (i__ = j; i__ <= i__2; ++i__) {
 /*<                sum = sum + fjac(i,j)*wa4(i) >*/
-	    sum += fjac[i__ + j * fjac_dim1] * wa4[i__];
+            sum += fjac[i__ + j * fjac_dim1] * wa4[i__];
 /*<   100          continue >*/
 /* L100: */
-	}
+        }
 /*<             temp = -sum/fjac(j,j) >*/
-	temp = -sum / fjac[j + j * fjac_dim1];
+        temp = -sum / fjac[j + j * fjac_dim1];
 /*<             do 110 i = j, m >*/
-	i__2 = *m;
-	for (i__ = j; i__ <= i__2; ++i__) {
+        i__2 = *m;
+        for (i__ = j; i__ <= i__2; ++i__) {
 /*<                wa4(i) = wa4(i) + fjac(i,j)*temp >*/
-	    wa4[i__] += fjac[i__ + j * fjac_dim1] * temp;
+            wa4[i__] += fjac[i__ + j * fjac_dim1] * temp;
 /*<   110          continue >*/
 /* L110: */
-	}
+        }
 /*<   120       continue >*/
 L120:
 /*<             fjac(j,j) = wa1(j) >*/
-	fjac[j + j * fjac_dim1] = wa1[j];
+        fjac[j + j * fjac_dim1] = wa1[j];
 /*<             qtf(j) = wa4(j) >*/
-	qtf[j] = wa4[j];
+        qtf[j] = wa4[j];
 /*<   130       continue >*/
 /* L130: */
     }
@@ -484,36 +484,36 @@ L120:
     gnorm = zero;
 /*<          if (fnorm .eq. zero) go to 170 >*/
     if (fnorm == zero) {
-	goto L170;
+        goto L170;
     }
 /*<          do 160 j = 1, n >*/
     i__1 = *n;
     for (j = 1; j <= i__1; ++j) {
 /*<             l = ipvt(j) >*/
-	l = ipvt[j];
+        l = ipvt[j];
 /*<             if (wa2(l) .eq. zero) go to 150 >*/
-	if (wa2[l] == zero) {
-	    goto L150;
-	}
+        if (wa2[l] == zero) {
+            goto L150;
+        }
 /*<             sum = zero >*/
-	sum = zero;
+        sum = zero;
 /*<             do 140 i = 1, j >*/
-	i__2 = j;
-	for (i__ = 1; i__ <= i__2; ++i__) {
+        i__2 = j;
+        for (i__ = 1; i__ <= i__2; ++i__) {
 /*<                sum = sum + fjac(i,j)*(qtf(i)/fnorm) >*/
-	    sum += fjac[i__ + j * fjac_dim1] * (qtf[i__] / fnorm);
+            sum += fjac[i__ + j * fjac_dim1] * (qtf[i__] / fnorm);
 /*<   140          continue >*/
 /* L140: */
-	}
+        }
 /*<             gnorm = dmax1(gnorm,dabs(sum/wa2(l))) >*/
 /* Computing MAX */
-	d__2 = gnorm, d__3 = (d__1 = sum / wa2[l], abs(d__1));
-	gnorm = max(d__2,d__3);
+        d__2 = gnorm, d__3 = (d__1 = sum / wa2[l], abs(d__1));
+        gnorm = max(d__2,d__3);
 /*<   150       continue >*/
 L150:
 /*<   160       continue >*/
 /* L160: */
-	;
+        ;
     }
 /*<   170    continue >*/
 L170:
@@ -522,26 +522,26 @@ L170:
 
 /*<          if (gnorm .le. gtol) info = 4 >*/
     if (gnorm <= *gtol) {
-	*info = 4;
+        *info = 4;
     }
 /*<          if (info .ne. 0) go to 300 >*/
     if (*info != 0) {
-	goto L300;
+        goto L300;
     }
 
 /*        rescale if necessary. */
 
 /*<          if (mode .eq. 2) go to 190 >*/
     if (*mode == 2) {
-	goto L190;
+        goto L190;
     }
 /*<          do 180 j = 1, n >*/
     i__1 = *n;
     for (j = 1; j <= i__1; ++j) {
 /*<             diag(j) = dmax1(diag(j),wa2(j)) >*/
 /* Computing MAX */
-	d__1 = diag[j], d__2 = wa2[j];
-	diag[j] = max(d__1,d__2);
+        d__1 = diag[j], d__2 = wa2[j];
+        diag[j] = max(d__1,d__2);
 /*<   180       continue >*/
 /* L180: */
     }
@@ -557,7 +557,7 @@ L200:
 
 /*<    >*/
     lmpar_(n, &fjac[fjac_offset], ldfjac, &ipvt[1], &diag[1], &qtf[1], &delta,
-	     &par, &wa1[1], &wa2[1], &wa3[1], &wa4[1]);
+             &par, &wa1[1], &wa2[1], &wa3[1], &wa4[1]);
 
 /*           store the direction p and x + p. calculate the norm of p. */
 
@@ -565,11 +565,11 @@ L200:
     i__1 = *n;
     for (j = 1; j <= i__1; ++j) {
 /*<                wa1(j) = -wa1(j) >*/
-	wa1[j] = -wa1[j];
+        wa1[j] = -wa1[j];
 /*<                wa2(j) = x(j) + wa1(j) >*/
-	wa2[j] = x[j] + wa1[j];
+        wa2[j] = x[j] + wa1[j];
 /*<                wa3(j) = diag(j)*wa1(j) >*/
-	wa3[j] = diag[j] * wa1[j];
+        wa3[j] = diag[j] * wa1[j];
 /*<   210          continue >*/
 /* L210: */
     }
@@ -580,7 +580,7 @@ L200:
 
 /*<             if (iter .eq. 1) delta = dmin1(delta,pnorm) >*/
     if (iter == 1) {
-	delta = min(delta,pnorm);
+        delta = min(delta,pnorm);
     }
 
 /*           evaluate the function at x + p and calculate its norm. */
@@ -594,7 +594,7 @@ L200:
     ++(*nfev);
 /*<             if (iflag .lt. 0) go to 300 >*/
     if (iflag < 0) {
-	goto L300;
+        goto L300;
     }
 /*<             fnorm1 = enorm(m,wa4) >*/
     fnorm1 = enorm_(m, &wa4[1]);
@@ -606,8 +606,8 @@ L200:
 /*<             if (p1*fnorm1 .lt. fnorm) actred = one - (fnorm1/fnorm)**2 >*/
     if (p1 * fnorm1 < fnorm) {
 /* Computing 2nd power */
-	d__1 = fnorm1 / fnorm;
-	actred = one - d__1 * d__1;
+        d__1 = fnorm1 / fnorm;
+        actred = one - d__1 * d__1;
     }
 
 /*           compute the scaled predicted reduction and */
@@ -617,19 +617,19 @@ L200:
     i__1 = *n;
     for (j = 1; j <= i__1; ++j) {
 /*<                wa3(j) = zero >*/
-	wa3[j] = zero;
+        wa3[j] = zero;
 /*<                l = ipvt(j) >*/
-	l = ipvt[j];
+        l = ipvt[j];
 /*<                temp = wa1(l) >*/
-	temp = wa1[l];
+        temp = wa1[l];
 /*<                do 220 i = 1, j >*/
-	i__2 = j;
-	for (i__ = 1; i__ <= i__2; ++i__) {
+        i__2 = j;
+        for (i__ = 1; i__ <= i__2; ++i__) {
 /*<                   wa3(i) = wa3(i) + fjac(i,j)*temp >*/
-	    wa3[i__] += fjac[i__ + j * fjac_dim1] * temp;
+            wa3[i__] += fjac[i__ + j * fjac_dim1] * temp;
 /*<   220             continue >*/
 /* L220: */
-	}
+        }
 /*<   230          continue >*/
 /* L230: */
     }
@@ -657,26 +657,26 @@ L200:
     ratio = zero;
 /*<             if (prered .ne. zero) ratio = actred/prered >*/
     if (prered != zero) {
-	ratio = actred / prered;
+        ratio = actred / prered;
     }
 
 /*           update the step bound. */
 
 /*<             if (ratio .gt. p25) go to 240 >*/
     if (ratio > p25) {
-	goto L240;
+        goto L240;
     }
 /*<                if (actred .ge. zero) temp = p5 >*/
     if (actred >= zero) {
-	temp = p5;
+        temp = p5;
     }
 /*<    >*/
     if (actred < zero) {
-	temp = p5 * dirder / (dirder + p5 * actred);
+        temp = p5 * dirder / (dirder + p5 * actred);
     }
 /*<                if (p1*fnorm1 .ge. fnorm .or. temp .lt. p1) temp = p1 >*/
     if (p1 * fnorm1 >= fnorm || temp < p1) {
-	temp = p1;
+        temp = p1;
     }
 /*<                delta = temp*dmin1(delta,pnorm/p1) >*/
 /* Computing MIN */
@@ -690,7 +690,7 @@ L200:
 L240:
 /*<                if (par .ne. zero .and. ratio .lt. p75) go to 250 >*/
     if (par != zero && ratio < p75) {
-	goto L250;
+        goto L250;
     }
 /*<                delta = pnorm/p5 >*/
     delta = pnorm / p5;
@@ -705,7 +705,7 @@ L260:
 
 /*<             if (ratio .lt. p0001) go to 290 >*/
     if (ratio < p0001) {
-	goto L290;
+        goto L290;
     }
 
 /*           successful iteration. update x, fvec, and their norms. */
@@ -714,9 +714,9 @@ L260:
     i__1 = *n;
     for (j = 1; j <= i__1; ++j) {
 /*<                x(j) = wa2(j) >*/
-	x[j] = wa2[j];
+        x[j] = wa2[j];
 /*<                wa2(j) = diag(j)*x(j) >*/
-	wa2[j] = diag[j] * x[j];
+        wa2[j] = diag[j] * x[j];
 /*<   270          continue >*/
 /* L270: */
     }
@@ -724,7 +724,7 @@ L260:
     i__1 = *m;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<                fvec(i) = wa4(i) >*/
-	fvec[i__] = wa4[i__];
+        fvec[i__] = wa4[i__];
 /*<   280          continue >*/
 /* L280: */
     }
@@ -741,50 +741,50 @@ L290:
 
 /*<    >*/
     if (abs(actred) <= *ftol && prered <= *ftol && p5 * ratio <= one) {
-	*info = 1;
+        *info = 1;
     }
 /*<             if (delta .le. xtol*xnorm) info = 2 >*/
     if (delta <= *xtol * xnorm) {
-	*info = 2;
+        *info = 2;
     }
 /*<    >*/
     if (abs(actred) <= *ftol && prered <= *ftol && p5 * ratio <= one && *info 
-	    == 2) {
-	*info = 3;
+            == 2) {
+        *info = 3;
     }
 /*<             if (info .ne. 0) go to 300 >*/
     if (*info != 0) {
-	goto L300;
+        goto L300;
     }
 
 /*           tests for termination and stringent tolerances. */
 
 /*<             if (nfev .ge. maxfev) info = 5 >*/
     if (*nfev >= *maxfev) {
-	*info = 5;
+        *info = 5;
     }
 /*<    >*/
     if (abs(actred) <= epsmch && prered <= epsmch && p5 * ratio <= one) {
-	*info = 6;
+        *info = 6;
     }
 /*<             if (delta .le. epsmch*xnorm) info = 7 >*/
     if (delta <= epsmch * xnorm) {
-	*info = 7;
+        *info = 7;
     }
 /*<             if (gnorm .le. epsmch) info = 8 >*/
     if (gnorm <= epsmch) {
-	*info = 8;
+        *info = 8;
     }
 /*<             if (info .ne. 0) go to 300 >*/
     if (*info != 0) {
-	goto L300;
+        goto L300;
     }
 
 /*           end of the inner loop. repeat if iteration unsuccessful. */
 
 /*<             if (ratio .lt. p0001) go to 200 >*/
     if (ratio < p0001) {
-	goto L200;
+        goto L200;
     }
 
 /*        end of the outer loop. */
@@ -798,13 +798,13 @@ L300:
 
 /*<       if (iflag .lt. 0) info = iflag >*/
     if (iflag < 0) {
-	*info = iflag;
+        *info = iflag;
     }
 /*<       iflag = 0 >*/
     iflag = 0;
 /*<       if (nprint .gt. 0) call fcn(m,n,x,fvec,fjac,ldfjac,iflag) >*/
     if (*nprint > 0) {
-	(*fcn)(m, n, &x[1], &fvec[1], &fjac[fjac_offset], ldfjac, &iflag,
+        (*fcn)(m, n, &x[1], &fvec[1], &fjac[fjac_offset], ldfjac, &iflag,
                userdata);
     }
 /*<       return >*/
@@ -816,5 +816,5 @@ L300:
 } /* lmder_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

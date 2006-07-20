@@ -1,13 +1,13 @@
 /* tests/lsqr-test.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #include "v3p_netlib.h"
@@ -31,15 +31,15 @@ static integer c__80 = 80;
 /* ******************************************************** */
 /*<       SUBROUTINE APROD ( MODE, M, N, X, Y, LENIW, LENRW, IW, RW ) >*/
 /* Subroutine */ int aprod_(integer *mode, integer *m, integer *n, doublereal 
-	*x, doublereal *y, integer *leniw, integer *lenrw, integer *iw, 
-	doublereal *rw, void* userdata)
+        *x, doublereal *y, integer *leniw, integer *lenrw, integer *iw, 
+        doublereal *rw, void* userdata)
 {
     integer locd, locw, lochy, lochz;
     extern /* Subroutine */ int aprod1_(integer *, integer *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *), aprod2_(integer *, integer *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *);
+            doublereal *, doublereal *, doublereal *, doublereal *, 
+            doublereal *), aprod2_(integer *, integer *, doublereal *, 
+            doublereal *, doublereal *, doublereal *, doublereal *, 
+            doublereal *);
     (void)leniw;
     (void)lenrw;
     (void)userdata;
@@ -72,13 +72,13 @@ static integer c__80 = 80;
     locw = lochz + *n;
 /*<    >*/
     if (*mode == 1) {
-	aprod1_(m, n, &x[1], &y[1], &rw[locd], &rw[lochy], &rw[lochz], &rw[
-		locw]);
+        aprod1_(m, n, &x[1], &y[1], &rw[locd], &rw[lochy], &rw[lochz], &rw[
+                locw]);
     }
 /*<    >*/
     if (*mode != 1) {
-	aprod2_(m, n, &x[1], &y[1], &rw[locd], &rw[lochy], &rw[lochz], &rw[
-		locw]);
+        aprod2_(m, n, &x[1], &y[1], &rw[locd], &rw[lochy], &rw[lochz], &rw[
+                locw]);
     }
 /*     End of APROD */
 /*<       END >*/
@@ -87,8 +87,8 @@ static integer c__80 = 80;
 
 /*<       SUBROUTINE APROD1( M, N, X, Y, D, HY, HZ, W ) >*/
 /* Subroutine */ int aprod1_(integer *m, integer *n, doublereal *x, 
-	doublereal *y, doublereal *d__, doublereal *hy, doublereal *hz, 
-	doublereal *w)
+        doublereal *y, doublereal *d__, doublereal *hy, doublereal *hz, 
+        doublereal *w)
 {
     /* System generated locals */
     integer i__1;
@@ -96,7 +96,7 @@ static integer c__80 = 80;
     /* Local variables */
     integer i__;
     extern /* Subroutine */ int hprod_(integer *, doublereal *, doublereal *, 
-	    doublereal *);
+            doublereal *);
 
 /*<       INTEGER            M, N >*/
 /*<       DOUBLE PRECISION   X(N), Y(M), D(N), HY(M), HZ(N), W(M) >*/
@@ -124,7 +124,7 @@ static integer c__80 = 80;
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          W(I)  = D(I) * W(I) >*/
-	w[i__] = d__[i__] * w[i__];
+        w[i__] = d__[i__] * w[i__];
 /*<   100 CONTINUE >*/
 /* L100: */
     }
@@ -132,7 +132,7 @@ static integer c__80 = 80;
     i__1 = *m;
     for (i__ = *n + 1; i__ <= i__1; ++i__) {
 /*<          W(I)  = ZERO >*/
-	w[i__] = 0.;
+        w[i__] = 0.;
 /*<   200 CONTINUE >*/
 /* L200: */
     }
@@ -142,7 +142,7 @@ static integer c__80 = 80;
     i__1 = *m;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          Y(I)  = Y(I) + W(I) >*/
-	y[i__] += w[i__];
+        y[i__] += w[i__];
 /*<   600 CONTINUE >*/
 /* L600: */
     }
@@ -153,8 +153,8 @@ static integer c__80 = 80;
 
 /*<       SUBROUTINE APROD2( M, N, X, Y, D, HY, HZ, W ) >*/
 /* Subroutine */ int aprod2_(integer *m, integer *n, doublereal *x, 
-	doublereal *y, doublereal *d__, doublereal *hy, doublereal *hz, 
-	doublereal *w)
+        doublereal *y, doublereal *d__, doublereal *hy, doublereal *hz, 
+        doublereal *w)
 {
     /* System generated locals */
     integer i__1;
@@ -162,7 +162,7 @@ static integer c__80 = 80;
     /* Local variables */
     integer i__;
     extern /* Subroutine */ int hprod_(integer *, doublereal *, doublereal *, 
-	    doublereal *);
+            doublereal *);
 
 /*<       INTEGER            M, N >*/
 /*<       DOUBLE PRECISION   X(N), Y(M), D(N), HY(M), HZ(N), W(M) >*/
@@ -188,7 +188,7 @@ static integer c__80 = 80;
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          W(I)  = D(I)*W(I) >*/
-	w[i__] = d__[i__] * w[i__];
+        w[i__] = d__[i__] * w[i__];
 /*<   100 CONTINUE >*/
 /* L100: */
     }
@@ -198,7 +198,7 @@ static integer c__80 = 80;
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          X(I)  = X(I) + W(I) >*/
-	x[i__] += w[i__];
+        x[i__] += w[i__];
 /*<   600 CONTINUE >*/
 /* L600: */
     }
@@ -209,7 +209,7 @@ static integer c__80 = 80;
 
 /*<       SUBROUTINE HPROD ( N, HZ, X, Y ) >*/
 /* Subroutine */ int hprod_(integer *n, doublereal *hz, doublereal *x, 
-	doublereal *y)
+        doublereal *y)
 {
     /* System generated locals */
     integer i__1;
@@ -238,7 +238,7 @@ static integer c__80 = 80;
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          S     = HZ(I) * X(I)  +  S >*/
-	s = hz[i__] * x[i__] + s;
+        s = hz[i__] * x[i__] + s;
 /*<   100 CONTINUE >*/
 /* L100: */
     }
@@ -248,7 +248,7 @@ static integer c__80 = 80;
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          Y(I)  = X(I)  -  S * HZ(I) >*/
-	y[i__] = x[i__] - s * hz[i__];
+        y[i__] = x[i__] - s * hz[i__];
 /*<   200 CONTINUE >*/
 /* L200: */
     }
@@ -259,9 +259,9 @@ static integer c__80 = 80;
 
 /*<    >*/
 /* Subroutine */ int lstp_(integer *m, integer *n, integer *nduplc, integer *
-	npower, doublereal *damp, doublereal *x, doublereal *b, doublereal *
-	d__, doublereal *hy, doublereal *hz, doublereal *w, doublereal *acond,
-	 doublereal *rnorm)
+        npower, doublereal *damp, doublereal *x, doublereal *b, doublereal *
+        d__, doublereal *hy, doublereal *hz, doublereal *w, doublereal *acond,
+         doublereal *rnorm)
 {
     /* System generated locals */
     integer i__1;
@@ -269,17 +269,17 @@ static integer c__80 = 80;
 
     /* Builtin functions */
     double sin(doublereal), cos(doublereal), pow_di(doublereal *, integer *), 
-	    sqrt(doublereal);
+            sqrt(doublereal);
 
     /* Local variables */
     integer i__, j;
     doublereal t, alfa, beta;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
-	    integer *), hprod_(integer *, doublereal *, doublereal *, 
-	    doublereal *), aprod1_(integer *, integer *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *);
+            integer *), hprod_(integer *, doublereal *, doublereal *, 
+            doublereal *), aprod1_(integer *, integer *, doublereal *, 
+            doublereal *, doublereal *, doublereal *, doublereal *, 
+            doublereal *);
     doublereal dampsq, fourpi;
 
 /*<       INTEGER            M, N, MAXMN, NDUPLC, NPOWER >*/
@@ -338,7 +338,7 @@ static integer c__80 = 80;
     i__1 = *m;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          HY(I) = SIN( I * ALFA ) >*/
-	hy[i__] = sin(i__ * alfa);
+        hy[i__] = sin(i__ * alfa);
 /*<   100 CONTINUE >*/
 /* L100: */
     }
@@ -346,7 +346,7 @@ static integer c__80 = 80;
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          HZ(I) = COS( I * BETA ) >*/
-	hz[i__] = cos(i__ * beta);
+        hz[i__] = cos(i__ * beta);
 /*<   200 CONTINUE                 >*/
 /* L200: */
     }
@@ -368,13 +368,13 @@ static integer c__80 = 80;
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          J     = (I - 1 + NDUPLC) / NDUPLC >*/
-	j = (i__ - 1 + *nduplc) / *nduplc;
+        j = (i__ - 1 + *nduplc) / *nduplc;
 /*<          T     =  J * NDUPLC >*/
-	t = (doublereal) (j * *nduplc);
+        t = (doublereal) (j * *nduplc);
 /*<          T     =  T / N >*/
-	t /= *n;
+        t /= *n;
 /*<          D(I)  =  T**NPOWER >*/
-	d__[i__] = pow_di(&t, npower);
+        d__[i__] = pow_di(&t, npower);
 /*<   300 CONTINUE >*/
 /* L300: */
     }
@@ -397,7 +397,7 @@ static integer c__80 = 80;
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          B(I)  = DAMPSQ * B(I) / D(I) >*/
-	b[i__] = dampsq * b[i__] / d__[i__];
+        b[i__] = dampsq * b[i__] / d__[i__];
 /*<   500 CONTINUE >*/
 /* L500: */
     }
@@ -407,11 +407,11 @@ static integer c__80 = 80;
     i__1 = *m;
     for (i__ = *n + 1; i__ <= i__1; ++i__) {
 /*<          J     =   I - N >*/
-	j = i__ - *n;
+        j = i__ - *n;
 /*<          B(I)  =  (T * J) / M >*/
-	b[i__] = t * j / *m;
+        b[i__] = t * j / *m;
 /*<          T     = - T >*/
-	t = -t;
+        t = -t;
 /*<   600 CONTINUE >*/
 /* L600: */
     }
@@ -435,7 +435,7 @@ static integer c__80 = 80;
 
 /*<       SUBROUTINE TEST  ( M, N, NDUPLC, NPOWER, DAMP ) >*/
 /* Subroutine */ int test_(integer *m, integer *n, integer *nduplc, integer *
-	npower, doublereal *damp)
+        npower, doublereal *damp)
 {
     /* System generated locals */
     integer i__1;
@@ -454,22 +454,22 @@ static integer c__80 = 80;
     doublereal atol, btol, etol;
     integer locw;
     extern int lstp_(integer *, integer *, integer *
-	    , integer *, doublereal *, doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *);
+            , integer *, doublereal *, doublereal *, doublereal *, doublereal 
+            *, doublereal *, doublereal *, doublereal *, doublereal *, 
+            doublereal *);
     integer nout;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     doublereal acond;
     extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
-	    integer *), aprod_(integer *, integer *, integer *, doublereal *, 
-	    doublereal *, integer *, integer *, integer *, doublereal *,
+            integer *), aprod_(integer *, integer *, integer *, doublereal *, 
+            doublereal *, integer *, integer *, integer *, doublereal *,
             void*);
     doublereal anorm;
     integer lochy;
     doublereal enorm;
     integer lochz;
     extern /* Subroutine */ int dcopy_(integer *, doublereal *, integer *, 
-	    doublereal *, integer *);
+            doublereal *, integer *);
     doublereal rnorm;
     integer istop;
     doublereal xnorm, xtrue[100], conlim, dampsq;
@@ -512,7 +512,7 @@ static integer c__80 = 80;
     i__1 = *n;
     for (j = 1; j <= i__1; ++j) {
 /*<          XTRUE(J) = N - J >*/
-	xtrue[j - 1] = (doublereal) (*n - j);
+        xtrue[j - 1] = (doublereal) (*n - j);
 /*<   100 CONTINUE >*/
 /* L100: */
     }
@@ -534,11 +534,11 @@ static integer c__80 = 80;
     ltotal = locw + max(*m,*n) - 1;
 /*<       IF (LTOTAL .GT. LENRW) GO TO 900 >*/
     if (ltotal > 600) {
-	goto L900;
+        goto L900;
     }
 /*<    >*/
     lstp_(m, n, nduplc, npower, damp, xtrue, b, &rw[locd - 1], &rw[lochy - 1],
-	     &rw[lochz - 1], &rw[locw - 1], &acond, &rnorm);
+             &rw[lochz - 1], &rw[locw - 1], &acond, &rnorm);
 /*     Solve the problem defined by APROD, DAMP and B. */
 /*     Copy the rhs vector B into U  (LSQR will overwrite U) */
 /*     and set the other input parameters for LSQR. */
@@ -561,8 +561,8 @@ static integer c__80 = 80;
     printf(" --------------------------------------------------------------------\n");
 /*<    >*/
     lsqr_(m, n, aprod_, damp, &c__1, &c__600, iw, rw, u, v, w, x, se, &
-	    atol, &btol, &conlim, &itnlim, &nout, &istop, &itn, &anorm, &
-	    acond, &rnorm, &arnorm, &xnorm, 0);
+            atol, &btol, &conlim, &itnlim, &nout, &istop, &itn, &anorm, &
+            acond, &rnorm, &arnorm, &xnorm, 0);
 /*     Examine the results. */
 /*     We print the residual norms  RNORM  and  ARNORM  given by LSQR, */
 /*     and then compute their true values in terms of the solution  X */
@@ -640,7 +640,7 @@ static integer c__80 = 80;
     i__1 = *n;
     for (j = 1; j <= i__1; ++j) {
 /*<          W(J)  = X(J) - XTRUE(J) >*/
-	w[j - 1] = x[j - 1] - xtrue[j - 1];
+        w[j - 1] = x[j - 1] - xtrue[j - 1];
 /*<   500 CONTINUE >*/
 /* L500: */
     }
@@ -699,7 +699,7 @@ L900:
     /* Local variables */
     doublereal zero;
     extern /* Subroutine */ int test_(integer *, integer *, integer *, 
-	    integer *, doublereal *);
+            integer *, doublereal *);
     doublereal damp1, damp2, damp3, damp4;
 
 

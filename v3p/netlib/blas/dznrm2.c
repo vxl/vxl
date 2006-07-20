@@ -1,13 +1,13 @@
 /* blas/dznrm2.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -64,72 +64,72 @@ doublereal dznrm2_(integer *n, doublecomplex *x, integer *incx)
     /* Function Body */
     if (*n < 1 || *incx < 1) {
 /*<          NORM  = ZERO >*/
-	norm = 0.;
+        norm = 0.;
 /*<       ELSE >*/
     } else {
 /*<          SCALE = ZERO >*/
-	scale = 0.;
+        scale = 0.;
 /*<          SSQ   = ONE >*/
-	ssq = 1.;
+        ssq = 1.;
 /*        The following loop is equivalent to this call to the LAPACK */
 /*        auxiliary routine: */
 /*        CALL ZLASSQ( N, X, INCX, SCALE, SSQ ) */
 
 /*<          DO 10, IX = 1, 1 + ( N - 1 )*INCX, INCX >*/
-	i__1 = (*n - 1) * *incx + 1;
-	i__2 = *incx;
-	for (ix = 1; i__2 < 0 ? ix >= i__1 : ix <= i__1; ix += i__2) {
+        i__1 = (*n - 1) * *incx + 1;
+        i__2 = *incx;
+        for (ix = 1; i__2 < 0 ? ix >= i__1 : ix <= i__1; ix += i__2) {
 /*<             IF( DBLE( X( IX ) ).NE.ZERO )THEN >*/
-	    i__3 = ix;
-	    if (x[i__3].r != 0.) {
+            i__3 = ix;
+            if (x[i__3].r != 0.) {
 /*<                TEMP = ABS( DBLE( X( IX ) ) ) >*/
-		i__3 = ix;
-		temp = (d__1 = x[i__3].r, abs(d__1));
+                i__3 = ix;
+                temp = (d__1 = x[i__3].r, abs(d__1));
 /*<                IF( SCALE.LT.TEMP )THEN >*/
-		if (scale < temp) {
+                if (scale < temp) {
 /*<                   SSQ   = ONE   + SSQ*( SCALE/TEMP )**2 >*/
 /* Computing 2nd power */
-		    d__1 = scale / temp;
-		    ssq = ssq * (d__1 * d__1) + 1.;
+                    d__1 = scale / temp;
+                    ssq = ssq * (d__1 * d__1) + 1.;
 /*<                   SCALE = TEMP >*/
-		    scale = temp;
+                    scale = temp;
 /*<                ELSE >*/
-		} else {
+                } else {
 /*<                   SSQ   = SSQ   +     ( TEMP/SCALE )**2 >*/
 /* Computing 2nd power */
-		    d__1 = temp / scale;
-		    ssq += d__1 * d__1;
+                    d__1 = temp / scale;
+                    ssq += d__1 * d__1;
 /*<                END IF >*/
-		}
+                }
 /*<             END IF >*/
-	    }
+            }
 /*<             IF( DIMAG( X( IX ) ).NE.ZERO )THEN >*/
-	    if (d_imag(&x[ix]) != 0.) {
+            if (d_imag(&x[ix]) != 0.) {
 /*<                TEMP = ABS( DIMAG( X( IX ) ) ) >*/
-		temp = (d__1 = d_imag(&x[ix]), abs(d__1));
+                temp = (d__1 = d_imag(&x[ix]), abs(d__1));
 /*<                IF( SCALE.LT.TEMP )THEN >*/
-		if (scale < temp) {
+                if (scale < temp) {
 /*<                   SSQ   = ONE   + SSQ*( SCALE/TEMP )**2 >*/
 /* Computing 2nd power */
-		    d__1 = scale / temp;
-		    ssq = ssq * (d__1 * d__1) + 1.;
+                    d__1 = scale / temp;
+                    ssq = ssq * (d__1 * d__1) + 1.;
 /*<                   SCALE = TEMP >*/
-		    scale = temp;
+                    scale = temp;
 /*<                ELSE >*/
-		} else {
+                } else {
 /*<                   SSQ   = SSQ   +     ( TEMP/SCALE )**2 >*/
 /* Computing 2nd power */
-		    d__1 = temp / scale;
-		    ssq += d__1 * d__1;
+                    d__1 = temp / scale;
+                    ssq += d__1 * d__1;
 /*<                END IF >*/
-		}
+                }
 /*<             END IF >*/
-	    }
+            }
 /*<    10    CONTINUE >*/
 /* L10: */
-	}
+        }
 /*<          NORM  = SCALE * SQRT( SSQ ) >*/
-	norm = scale * sqrt(ssq);
+        norm = scale * sqrt(ssq);
 /*<       END IF >*/
     }
 
@@ -144,5 +144,5 @@ doublereal dznrm2_(integer *n, doublecomplex *x, integer *incx)
 } /* dznrm2_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

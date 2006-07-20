@@ -26,17 +26,17 @@ extern "C" {
 void sig_die(register char *s, int kill)
 #endif
 {
-	/* print error message, then clear buffers */
-	fprintf(stderr, "%s\n", s);
+        /* print error message, then clear buffers */
+        fprintf(stderr, "%s\n", s);
 
-	if(kill)
-		{
-		abort();
-		}
-	else {
-		exit(1);
-		}
-	}
+        if(kill)
+                {
+                abort();
+                }
+        else {
+                exit(1);
+                }
+        }
 #ifdef __cplusplus
 }
 #endif

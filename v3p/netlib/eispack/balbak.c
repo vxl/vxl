@@ -1,13 +1,13 @@
 /* eispack/balbak.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -17,7 +17,7 @@ extern "C" {
 
 /*<       subroutine balbak(nm,n,low,igh,scale,m,z) >*/
 /* Subroutine */ int balbak_(integer *nm, integer *n, integer *low, integer *
-	igh, doublereal *scale, integer *m, doublereal *z__)
+        igh, doublereal *scale, integer *m, doublereal *z__)
 {
     /* System generated locals */
     integer z_dim1, z_offset, i__1, i__2;
@@ -79,28 +79,28 @@ extern "C" {
 
     /* Function Body */
     if (*m == 0) {
-	goto L200;
+        goto L200;
     }
 /*<       if (igh .eq. low) go to 120 >*/
     if (*igh == *low) {
-	goto L120;
+        goto L120;
     }
 
 /*<       do 110 i = low, igh >*/
     i__1 = *igh;
     for (i__ = *low; i__ <= i__1; ++i__) {
 /*<          s = scale(i) >*/
-	s = scale[i__];
+        s = scale[i__];
 /*     .......... left hand eigenvectors are back transformed */
 /*                if the foregoing statement is replaced by */
 /*                s=1.0d0/scale(i). .......... */
 /*<          do 100 j = 1, m >*/
-	i__2 = *m;
-	for (j = 1; j <= i__2; ++j) {
+        i__2 = *m;
+        for (j = 1; j <= i__2; ++j) {
 /*<   100    z(i,j) = z(i,j) * s >*/
 /* L100: */
-	    z__[i__ + j * z_dim1] *= s;
-	}
+            z__[i__ + j * z_dim1] *= s;
+        }
 
 /*<   110 continue >*/
 /* L110: */
@@ -112,38 +112,38 @@ L120:
     i__1 = *n;
     for (ii = 1; ii <= i__1; ++ii) {
 /*<          i = ii >*/
-	i__ = ii;
+        i__ = ii;
 /*<          if (i .ge. low .and. i .le. igh) go to 140 >*/
-	if (i__ >= *low && i__ <= *igh) {
-	    goto L140;
-	}
+        if (i__ >= *low && i__ <= *igh) {
+            goto L140;
+        }
 /*<          if (i .lt. low) i = low - ii >*/
-	if (i__ < *low) {
-	    i__ = *low - ii;
-	}
+        if (i__ < *low) {
+            i__ = *low - ii;
+        }
 /*<          k = scale(i) >*/
-	k = (integer) scale[i__];
+        k = (integer) scale[i__];
 /*<          if (k .eq. i) go to 140 >*/
-	if (k == i__) {
-	    goto L140;
-	}
+        if (k == i__) {
+            goto L140;
+        }
 
 /*<          do 130 j = 1, m >*/
-	i__2 = *m;
-	for (j = 1; j <= i__2; ++j) {
+        i__2 = *m;
+        for (j = 1; j <= i__2; ++j) {
 /*<             s = z(i,j) >*/
-	    s = z__[i__ + j * z_dim1];
+            s = z__[i__ + j * z_dim1];
 /*<             z(i,j) = z(k,j) >*/
-	    z__[i__ + j * z_dim1] = z__[k + j * z_dim1];
+            z__[i__ + j * z_dim1] = z__[k + j * z_dim1];
 /*<             z(k,j) = s >*/
-	    z__[k + j * z_dim1] = s;
+            z__[k + j * z_dim1] = s;
 /*<   130    continue >*/
 /* L130: */
-	}
+        }
 
 /*<   140 continue >*/
 L140:
-	;
+        ;
     }
 
 /*<   200 return >*/
@@ -153,5 +153,5 @@ L200:
 } /* balbak_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

@@ -1,13 +1,13 @@
 /* lapack/double/dtgsen.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -23,16 +23,16 @@ static doublereal c_b28 = 1.;
 
 /*<    >*/
 /* Subroutine */ int dtgsen_(integer *ijob, logical *wantq, logical *wantz, 
-	logical *select, integer *n, doublereal *a, integer *lda, doublereal *
-	b, integer *ldb, doublereal *alphar, doublereal *alphai, doublereal *
-	beta, doublereal *q, integer *ldq, doublereal *z__, integer *ldz, 
-	integer *m, doublereal *pl, doublereal *pr, doublereal *dif, 
-	doublereal *work, integer *lwork, integer *iwork, integer *liwork, 
-	integer *info)
+        logical *select, integer *n, doublereal *a, integer *lda, doublereal *
+        b, integer *ldb, doublereal *alphar, doublereal *alphai, doublereal *
+        beta, doublereal *q, integer *ldq, doublereal *z__, integer *ldz, 
+        integer *m, doublereal *pl, doublereal *pr, doublereal *dif, 
+        doublereal *work, integer *lwork, integer *iwork, integer *liwork, 
+        integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, q_dim1, q_offset, z_dim1, 
-	    z_offset, i__1, i__2;
+            z_offset, i__1, i__2;
     doublereal d__1;
 
     /* Builtin functions */
@@ -47,29 +47,29 @@ static doublereal c_b28 = 1.;
     doublereal dsum;
     logical swap;
     extern /* Subroutine */ int dlag2_(doublereal *, integer *, doublereal *, 
-	    integer *, doublereal *, doublereal *, doublereal *, doublereal *,
-	     doublereal *, doublereal *);
+            integer *, doublereal *, doublereal *, doublereal *, doublereal *,
+             doublereal *, doublereal *);
     logical wantd;
     integer lwmin;
     logical wantp, wantd1, wantd2;
     extern doublereal dlamch_(char *, ftnlen);
     doublereal dscale;
     extern /* Subroutine */ int dlacon_(integer *, doublereal *, doublereal *,
-	     integer *, doublereal *, integer *);
+             integer *, doublereal *, integer *);
     doublereal rdscal;
     extern /* Subroutine */ int dlacpy_(char *, integer *, integer *, 
-	    doublereal *, integer *, doublereal *, integer *, ftnlen), 
-	    xerbla_(char *, integer *, ftnlen), dtgexc_(logical *, logical *, 
-	    integer *, doublereal *, integer *, doublereal *, integer *, 
-	    doublereal *, integer *, doublereal *, integer *, integer *, 
-	    integer *, doublereal *, integer *, integer *), dlassq_(integer *,
-	     doublereal *, integer *, doublereal *, doublereal *);
+            doublereal *, integer *, doublereal *, integer *, ftnlen), 
+            xerbla_(char *, integer *, ftnlen), dtgexc_(logical *, logical *, 
+            integer *, doublereal *, integer *, doublereal *, integer *, 
+            doublereal *, integer *, doublereal *, integer *, integer *, 
+            integer *, doublereal *, integer *, integer *), dlassq_(integer *,
+             doublereal *, integer *, doublereal *, doublereal *);
     integer liwmin;
     extern /* Subroutine */ int dtgsyl_(char *, integer *, integer *, integer 
-	    *, doublereal *, integer *, doublereal *, integer *, doublereal *,
-	     integer *, doublereal *, integer *, doublereal *, integer *, 
-	    doublereal *, integer *, doublereal *, doublereal *, doublereal *,
-	     integer *, integer *, integer *, ftnlen);
+            *, doublereal *, integer *, doublereal *, integer *, doublereal *,
+             integer *, doublereal *, integer *, doublereal *, integer *, 
+            doublereal *, integer *, doublereal *, doublereal *, doublereal *,
+             integer *, integer *, integer *, ftnlen);
     doublereal smlnum;
     logical lquery;
 
@@ -454,37 +454,37 @@ static doublereal c_b28 = 1.;
 /*<       IF( IJOB.LT.0 .OR. IJOB.GT.5 ) THEN >*/
     if (*ijob < 0 || *ijob > 5) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<       ELSE IF( N.LT.0 ) THEN >*/
     } else if (*n < 0) {
 /*<          INFO = -5 >*/
-	*info = -5;
+        *info = -5;
 /*<       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN >*/
     } else if (*lda < max(1,*n)) {
 /*<          INFO = -7 >*/
-	*info = -7;
+        *info = -7;
 /*<       ELSE IF( LDB.LT.MAX( 1, N ) ) THEN >*/
     } else if (*ldb < max(1,*n)) {
 /*<          INFO = -9 >*/
-	*info = -9;
+        *info = -9;
 /*<       ELSE IF( LDQ.LT.1 .OR. ( WANTQ .AND. LDQ.LT.N ) ) THEN >*/
     } else if (*ldq < 1 || (*wantq && *ldq < *n)) {
 /*<          INFO = -14 >*/
-	*info = -14;
+        *info = -14;
 /*<       ELSE IF( LDZ.LT.1 .OR. ( WANTZ .AND. LDZ.LT.N ) ) THEN >*/
     } else if (*ldz < 1 || (*wantz && *ldz < *n)) {
 /*<          INFO = -16 >*/
-	*info = -16;
+        *info = -16;
 /*<       END IF >*/
     }
 
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'DTGSEN', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("DTGSEN", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("DTGSEN", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -517,39 +517,39 @@ static doublereal c_b28 = 1.;
     i__1 = *n;
     for (k = 1; k <= i__1; ++k) {
 /*<          IF( PAIR ) THEN >*/
-	if (pair) {
+        if (pair) {
 /*<             PAIR = .FALSE. >*/
-	    pair = FALSE_;
+            pair = FALSE_;
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             IF( K.LT.N ) THEN >*/
-	    if (k < *n) {
+            if (k < *n) {
 /*<                IF( A( K+1, K ).EQ.ZERO ) THEN >*/
-		if (a[k + 1 + k * a_dim1] == 0.) {
+                if (a[k + 1 + k * a_dim1] == 0.) {
 /*<    >*/
-		    if (select[k]) {
-			++(*m);
-		    }
+                    if (select[k]) {
+                        ++(*m);
+                    }
 /*<                ELSE >*/
-		} else {
+                } else {
 /*<                   PAIR = .TRUE. >*/
-		    pair = TRUE_;
+                    pair = TRUE_;
 /*<    >*/
-		    if (select[k] || select[k + 1]) {
-			*m += 2;
-		    }
+                    if (select[k] || select[k + 1]) {
+                        *m += 2;
+                    }
 /*<                END IF >*/
-		}
+                }
 /*<             ELSE >*/
-	    } else {
+            } else {
 /*<    >*/
-		if (select[*n]) {
-		    ++(*m);
-		}
+                if (select[*n]) {
+                    ++(*m);
+                }
 /*<             END IF >*/
-	    }
+            }
 /*<          END IF >*/
-	}
+        }
 /*<    10 CONTINUE >*/
 /* L10: */
     }
@@ -558,33 +558,33 @@ static doublereal c_b28 = 1.;
     if (*ijob == 1 || *ijob == 2 || *ijob == 4) {
 /*<          LWMIN = MAX( 1, 4*N+16, 2*M*( N-M ) ) >*/
 /* Computing MAX */
-	i__1 = 1, i__2 = (*n << 2) + 16, i__1 = max(i__1,i__2), i__2 = (*m << 
-		1) * (*n - *m);
-	lwmin = max(i__1,i__2);
+        i__1 = 1, i__2 = (*n << 2) + 16, i__1 = max(i__1,i__2), i__2 = (*m << 
+                1) * (*n - *m);
+        lwmin = max(i__1,i__2);
 /*<          LIWMIN = MAX( 1, N+6 ) >*/
 /* Computing MAX */
-	i__1 = 1, i__2 = *n + 6;
-	liwmin = max(i__1,i__2);
+        i__1 = 1, i__2 = *n + 6;
+        liwmin = max(i__1,i__2);
 /*<       ELSE IF( IJOB.EQ.3 .OR. IJOB.EQ.5 ) THEN >*/
     } else if (*ijob == 3 || *ijob == 5) {
 /*<          LWMIN = MAX( 1, 4*N+16, 4*M*( N-M ) ) >*/
 /* Computing MAX */
-	i__1 = 1, i__2 = (*n << 2) + 16, i__1 = max(i__1,i__2), i__2 = (*m << 
-		2) * (*n - *m);
-	lwmin = max(i__1,i__2);
+        i__1 = 1, i__2 = (*n << 2) + 16, i__1 = max(i__1,i__2), i__2 = (*m << 
+                2) * (*n - *m);
+        lwmin = max(i__1,i__2);
 /*<          LIWMIN = MAX( 1, 2*M*( N-M ), N+6 ) >*/
 /* Computing MAX */
-	i__1 = 1, i__2 = (*m << 1) * (*n - *m), i__1 = max(i__1,i__2), i__2 = 
-		*n + 6;
-	liwmin = max(i__1,i__2);
+        i__1 = 1, i__2 = (*m << 1) * (*n - *m), i__1 = max(i__1,i__2), i__2 = 
+                *n + 6;
+        liwmin = max(i__1,i__2);
 /*<       ELSE >*/
     } else {
 /*<          LWMIN = MAX( 1, 4*N+16 ) >*/
 /* Computing MAX */
-	i__1 = 1, i__2 = (*n << 2) + 16;
-	lwmin = max(i__1,i__2);
+        i__1 = 1, i__2 = (*n << 2) + 16;
+        lwmin = max(i__1,i__2);
 /*<          LIWMIN = 1 >*/
-	liwmin = 1;
+        liwmin = 1;
 /*<       END IF >*/
     }
 
@@ -596,25 +596,25 @@ static doublereal c_b28 = 1.;
 /*<       IF( LWORK.LT.LWMIN .AND. .NOT.LQUERY ) THEN >*/
     if (*lwork < lwmin && ! lquery) {
 /*<          INFO = -22 >*/
-	*info = -22;
+        *info = -22;
 /*<       ELSE IF( LIWORK.LT.LIWMIN .AND. .NOT.LQUERY ) THEN >*/
     } else if (*liwork < liwmin && ! lquery) {
 /*<          INFO = -24 >*/
-	*info = -24;
+        *info = -24;
 /*<       END IF >*/
     }
 
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'DTGSEN', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("DTGSEN", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("DTGSEN", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       ELSE IF( LQUERY ) THEN >*/
     } else if (lquery) {
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -623,37 +623,37 @@ static doublereal c_b28 = 1.;
 /*<       IF( M.EQ.N .OR. M.EQ.0 ) THEN >*/
     if (*m == *n || *m == 0) {
 /*<          IF( WANTP ) THEN >*/
-	if (wantp) {
+        if (wantp) {
 /*<             PL = ONE >*/
-	    *pl = 1.;
+            *pl = 1.;
 /*<             PR = ONE >*/
-	    *pr = 1.;
+            *pr = 1.;
 /*<          END IF >*/
-	}
+        }
 /*<          IF( WANTD ) THEN >*/
-	if (wantd) {
+        if (wantd) {
 /*<             DSCALE = ZERO >*/
-	    dscale = 0.;
+            dscale = 0.;
 /*<             DSUM = ONE >*/
-	    dsum = 1.;
+            dsum = 1.;
 /*<             DO 20 I = 1, N >*/
-	    i__1 = *n;
-	    for (i__ = 1; i__ <= i__1; ++i__) {
+            i__1 = *n;
+            for (i__ = 1; i__ <= i__1; ++i__) {
 /*<                CALL DLASSQ( N, A( 1, I ), 1, DSCALE, DSUM ) >*/
-		dlassq_(n, &a[i__ * a_dim1 + 1], &c__1, &dscale, &dsum);
+                dlassq_(n, &a[i__ * a_dim1 + 1], &c__1, &dscale, &dsum);
 /*<                CALL DLASSQ( N, B( 1, I ), 1, DSCALE, DSUM ) >*/
-		dlassq_(n, &b[i__ * b_dim1 + 1], &c__1, &dscale, &dsum);
+                dlassq_(n, &b[i__ * b_dim1 + 1], &c__1, &dscale, &dsum);
 /*<    20       CONTINUE >*/
 /* L20: */
-	    }
+            }
 /*<             DIF( 1 ) = DSCALE*SQRT( DSUM ) >*/
-	    dif[1] = dscale * sqrt(dsum);
+            dif[1] = dscale * sqrt(dsum);
 /*<             DIF( 2 ) = DIF( 1 ) >*/
-	    dif[2] = dif[1];
+            dif[2] = dif[1];
 /*<          END IF >*/
-	}
+        }
 /*<          GO TO 60 >*/
-	goto L60;
+        goto L60;
 /*<       END IF >*/
     }
 
@@ -667,31 +667,31 @@ static doublereal c_b28 = 1.;
     i__1 = *n;
     for (k = 1; k <= i__1; ++k) {
 /*<          IF( PAIR ) THEN >*/
-	if (pair) {
+        if (pair) {
 /*<             PAIR = .FALSE. >*/
-	    pair = FALSE_;
+            pair = FALSE_;
 /*<          ELSE >*/
-	} else {
+        } else {
 
 /*<             SWAP = SELECT( K ) >*/
-	    swap = select[k];
+            swap = select[k];
 /*<             IF( K.LT.N ) THEN >*/
-	    if (k < *n) {
+            if (k < *n) {
 /*<                IF( A( K+1, K ).NE.ZERO ) THEN >*/
-		if (a[k + 1 + k * a_dim1] != 0.) {
+                if (a[k + 1 + k * a_dim1] != 0.) {
 /*<                   PAIR = .TRUE. >*/
-		    pair = TRUE_;
+                    pair = TRUE_;
 /*<                   SWAP = SWAP .OR. SELECT( K+1 ) >*/
-		    swap = swap || select[k + 1];
+                    swap = swap || select[k + 1];
 /*<                END IF >*/
-		}
+                }
 /*<             END IF >*/
-	    }
+            }
 
 /*<             IF( SWAP ) THEN >*/
-	    if (swap) {
+            if (swap) {
 /*<                KS = KS + 1 >*/
-		++ks;
+                ++ks;
 
 /*              Swap the K-th block to position KS. */
 /*              Perform the reordering of diagonal blocks in (A, B) */
@@ -699,50 +699,50 @@ static doublereal c_b28 = 1.;
 /*              Q and Z accordingly (if requested): */
 
 /*<                KK = K >*/
-		kk = k;
+                kk = k;
 /*<    >*/
-		if (k != ks) {
-		    dtgexc_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], 
-			    ldb, &q[q_offset], ldq, &z__[z_offset], ldz, &kk, 
-			    &ks, &work[1], lwork, &ierr);
-		}
+                if (k != ks) {
+                    dtgexc_(wantq, wantz, n, &a[a_offset], lda, &b[b_offset], 
+                            ldb, &q[q_offset], ldq, &z__[z_offset], ldz, &kk, 
+                            &ks, &work[1], lwork, &ierr);
+                }
 
 /*<                IF( IERR.GT.0 ) THEN >*/
-		if (ierr > 0) {
+                if (ierr > 0) {
 
 /*                 Swap is rejected: exit. */
 
 /*<                   INFO = 1 >*/
-		    *info = 1;
+                    *info = 1;
 /*<                   IF( WANTP ) THEN >*/
-		    if (wantp) {
+                    if (wantp) {
 /*<                      PL = ZERO >*/
-			*pl = 0.;
+                        *pl = 0.;
 /*<                      PR = ZERO >*/
-			*pr = 0.;
+                        *pr = 0.;
 /*<                   END IF >*/
-		    }
+                    }
 /*<                   IF( WANTD ) THEN >*/
-		    if (wantd) {
+                    if (wantd) {
 /*<                      DIF( 1 ) = ZERO >*/
-			dif[1] = 0.;
+                        dif[1] = 0.;
 /*<                      DIF( 2 ) = ZERO >*/
-			dif[2] = 0.;
+                        dif[2] = 0.;
 /*<                   END IF >*/
-		    }
+                    }
 /*<                   GO TO 60 >*/
-		    goto L60;
+                    goto L60;
 /*<                END IF >*/
-		}
+                }
 
 /*<    >*/
-		if (pair) {
-		    ++ks;
-		}
+                if (pair) {
+                    ++ks;
+                }
 /*<             END IF >*/
-	    }
+            }
 /*<          END IF >*/
-	}
+        }
 /*<    30 CONTINUE >*/
 /* L30: */
     }
@@ -753,67 +753,67 @@ static doublereal c_b28 = 1.;
 /*        and compute PL and PR. */
 
 /*<          N1 = M >*/
-	n1 = *m;
+        n1 = *m;
 /*<          N2 = N - M >*/
-	n2 = *n - *m;
+        n2 = *n - *m;
 /*<          I = N1 + 1 >*/
-	i__ = n1 + 1;
+        i__ = n1 + 1;
 /*<          IJB = 0 >*/
-	ijb = 0;
+        ijb = 0;
 /*<          CALL DLACPY( 'Full', N1, N2, A( 1, I ), LDA, WORK, N1 ) >*/
-	dlacpy_("Full", &n1, &n2, &a[i__ * a_dim1 + 1], lda, &work[1], &n1, (
-		ftnlen)4);
+        dlacpy_("Full", &n1, &n2, &a[i__ * a_dim1 + 1], lda, &work[1], &n1, (
+                ftnlen)4);
 /*<    >*/
-	dlacpy_("Full", &n1, &n2, &b[i__ * b_dim1 + 1], ldb, &work[n1 * n2 + 
-		1], &n1, (ftnlen)4);
+        dlacpy_("Full", &n1, &n2, &b[i__ * b_dim1 + 1], ldb, &work[n1 * n2 + 
+                1], &n1, (ftnlen)4);
 /*<    >*/
-	i__1 = *lwork - (n1 << 1) * n2;
-	dtgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1]
-		, lda, &work[1], &n1, &b[b_offset], ldb, &b[i__ + i__ * 
-		b_dim1], ldb, &work[n1 * n2 + 1], &n1, &dscale, &dif[1], &
-		work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], &ierr, (ftnlen)1);
+        i__1 = *lwork - (n1 << 1) * n2;
+        dtgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * a_dim1]
+                , lda, &work[1], &n1, &b[b_offset], ldb, &b[i__ + i__ * 
+                b_dim1], ldb, &work[n1 * n2 + 1], &n1, &dscale, &dif[1], &
+                work[(n1 * n2 << 1) + 1], &i__1, &iwork[1], &ierr, (ftnlen)1);
 
 /*        Estimate the reciprocal of norms of "projections" onto left */
 /*        and right eigenspaces. */
 
 /*<          RDSCAL = ZERO >*/
-	rdscal = 0.;
+        rdscal = 0.;
 /*<          DSUM = ONE >*/
-	dsum = 1.;
+        dsum = 1.;
 /*<          CALL DLASSQ( N1*N2, WORK, 1, RDSCAL, DSUM ) >*/
-	i__1 = n1 * n2;
-	dlassq_(&i__1, &work[1], &c__1, &rdscal, &dsum);
+        i__1 = n1 * n2;
+        dlassq_(&i__1, &work[1], &c__1, &rdscal, &dsum);
 /*<          PL = RDSCAL*SQRT( DSUM ) >*/
-	*pl = rdscal * sqrt(dsum);
+        *pl = rdscal * sqrt(dsum);
 /*<          IF( PL.EQ.ZERO ) THEN >*/
-	if (*pl == 0.) {
+        if (*pl == 0.) {
 /*<             PL = ONE >*/
-	    *pl = 1.;
+            *pl = 1.;
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             PL = DSCALE / ( SQRT( DSCALE*DSCALE / PL+PL )*SQRT( PL ) ) >*/
-	    *pl = dscale / (sqrt(dscale * dscale / *pl + *pl) * sqrt(*pl));
+            *pl = dscale / (sqrt(dscale * dscale / *pl + *pl) * sqrt(*pl));
 /*<          END IF >*/
-	}
+        }
 /*<          RDSCAL = ZERO >*/
-	rdscal = 0.;
+        rdscal = 0.;
 /*<          DSUM = ONE >*/
-	dsum = 1.;
+        dsum = 1.;
 /*<          CALL DLASSQ( N1*N2, WORK( N1*N2+1 ), 1, RDSCAL, DSUM ) >*/
-	i__1 = n1 * n2;
-	dlassq_(&i__1, &work[n1 * n2 + 1], &c__1, &rdscal, &dsum);
+        i__1 = n1 * n2;
+        dlassq_(&i__1, &work[n1 * n2 + 1], &c__1, &rdscal, &dsum);
 /*<          PR = RDSCAL*SQRT( DSUM ) >*/
-	*pr = rdscal * sqrt(dsum);
+        *pr = rdscal * sqrt(dsum);
 /*<          IF( PR.EQ.ZERO ) THEN >*/
-	if (*pr == 0.) {
+        if (*pr == 0.) {
 /*<             PR = ONE >*/
-	    *pr = 1.;
+            *pr = 1.;
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             PR = DSCALE / ( SQRT( DSCALE*DSCALE / PR+PR )*SQRT( PR ) ) >*/
-	    *pr = dscale / (sqrt(dscale * dscale / *pr + *pr) * sqrt(*pr));
+            *pr = dscale / (sqrt(dscale * dscale / *pr + *pr) * sqrt(*pr));
 /*<          END IF >*/
-	}
+        }
 /*<       END IF >*/
     }
 
@@ -823,37 +823,37 @@ static doublereal c_b28 = 1.;
 /*        Compute estimates of Difu and Difl. */
 
 /*<          IF( WANTD1 ) THEN >*/
-	if (wantd1) {
+        if (wantd1) {
 /*<             N1 = M >*/
-	    n1 = *m;
+            n1 = *m;
 /*<             N2 = N - M >*/
-	    n2 = *n - *m;
+            n2 = *n - *m;
 /*<             I = N1 + 1 >*/
-	    i__ = n1 + 1;
+            i__ = n1 + 1;
 /*<             IJB = IDIFJB >*/
-	    ijb = 3;
+            ijb = 3;
 
 /*           Frobenius norm-based Difu-estimate. */
 
 /*<    >*/
-	    i__1 = *lwork - (n1 << 1) * n2;
-	    dtgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * 
-		    a_dim1], lda, &work[1], &n1, &b[b_offset], ldb, &b[i__ + 
-		    i__ * b_dim1], ldb, &work[n1 * n2 + 1], &n1, &dscale, &
-		    dif[1], &work[(n1 << 1) * n2 + 1], &i__1, &iwork[1], &
-		    ierr, (ftnlen)1);
+            i__1 = *lwork - (n1 << 1) * n2;
+            dtgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + i__ * 
+                    a_dim1], lda, &work[1], &n1, &b[b_offset], ldb, &b[i__ + 
+                    i__ * b_dim1], ldb, &work[n1 * n2 + 1], &n1, &dscale, &
+                    dif[1], &work[(n1 << 1) * n2 + 1], &i__1, &iwork[1], &
+                    ierr, (ftnlen)1);
 
 /*           Frobenius norm-based Difl-estimate. */
 
 /*<    >*/
-	    i__1 = *lwork - (n1 << 1) * n2;
-	    dtgsyl_("N", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, &a[
-		    a_offset], lda, &work[1], &n2, &b[i__ + i__ * b_dim1], 
-		    ldb, &b[b_offset], ldb, &work[n1 * n2 + 1], &n2, &dscale, 
-		    &dif[2], &work[(n1 << 1) * n2 + 1], &i__1, &iwork[1], &
-		    ierr, (ftnlen)1);
+            i__1 = *lwork - (n1 << 1) * n2;
+            dtgsyl_("N", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, &a[
+                    a_offset], lda, &work[1], &n2, &b[i__ + i__ * b_dim1], 
+                    ldb, &b[b_offset], ldb, &work[n1 * n2 + 1], &n2, &dscale, 
+                    &dif[2], &work[(n1 << 1) * n2 + 1], &i__1, &iwork[1], &
+                    ierr, (ftnlen)1);
 /*<          ELSE >*/
-	} else {
+        } else {
 
 
 /*           Compute 1-norm-based estimates of Difu and Difl using */
@@ -862,104 +862,104 @@ static doublereal c_b28 = 1.;
 /*           is solved. */
 
 /*<             KASE = 0 >*/
-	    kase = 0;
+            kase = 0;
 /*<             N1 = M >*/
-	    n1 = *m;
+            n1 = *m;
 /*<             N2 = N - M >*/
-	    n2 = *n - *m;
+            n2 = *n - *m;
 /*<             I = N1 + 1 >*/
-	    i__ = n1 + 1;
+            i__ = n1 + 1;
 /*<             IJB = 0 >*/
-	    ijb = 0;
+            ijb = 0;
 /*<             MN2 = 2*N1*N2 >*/
-	    mn2 = (n1 << 1) * n2;
+            mn2 = (n1 << 1) * n2;
 
 /*           1-norm-based estimate of Difu. */
 
 /*<    40       CONTINUE >*/
 L40:
 /*<    >*/
-	    dlacon_(&mn2, &work[mn2 + 1], &work[1], &iwork[1], &dif[1], &kase)
-		    ;
+            dlacon_(&mn2, &work[mn2 + 1], &work[1], &iwork[1], &dif[1], &kase)
+                    ;
 /*<             IF( KASE.NE.0 ) THEN >*/
-	    if (kase != 0) {
+            if (kase != 0) {
 /*<                IF( KASE.EQ.1 ) THEN >*/
-		if (kase == 1) {
+                if (kase == 1) {
 
 /*                 Solve generalized Sylvester equation. */
 
 /*<    >*/
-		    i__1 = *lwork - (n1 << 1) * n2;
-		    dtgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + 
-			    i__ * a_dim1], lda, &work[1], &n1, &b[b_offset], 
-			    ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 
-			    1], &n1, &dscale, &dif[1], &work[(n1 << 1) * n2 + 
-			    1], &i__1, &iwork[1], &ierr, (ftnlen)1);
+                    i__1 = *lwork - (n1 << 1) * n2;
+                    dtgsyl_("N", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + 
+                            i__ * a_dim1], lda, &work[1], &n1, &b[b_offset], 
+                            ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 
+                            1], &n1, &dscale, &dif[1], &work[(n1 << 1) * n2 + 
+                            1], &i__1, &iwork[1], &ierr, (ftnlen)1);
 /*<                ELSE >*/
-		} else {
+                } else {
 
 /*                 Solve the transposed variant. */
 
 /*<    >*/
-		    i__1 = *lwork - (n1 << 1) * n2;
-		    dtgsyl_("T", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + 
-			    i__ * a_dim1], lda, &work[1], &n1, &b[b_offset], 
-			    ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 
-			    1], &n1, &dscale, &dif[1], &work[(n1 << 1) * n2 + 
-			    1], &i__1, &iwork[1], &ierr, (ftnlen)1);
+                    i__1 = *lwork - (n1 << 1) * n2;
+                    dtgsyl_("T", &ijb, &n1, &n2, &a[a_offset], lda, &a[i__ + 
+                            i__ * a_dim1], lda, &work[1], &n1, &b[b_offset], 
+                            ldb, &b[i__ + i__ * b_dim1], ldb, &work[n1 * n2 + 
+                            1], &n1, &dscale, &dif[1], &work[(n1 << 1) * n2 + 
+                            1], &i__1, &iwork[1], &ierr, (ftnlen)1);
 /*<                END IF >*/
-		}
+                }
 /*<                GO TO 40 >*/
-		goto L40;
+                goto L40;
 /*<             END IF >*/
-	    }
+            }
 /*<             DIF( 1 ) = DSCALE / DIF( 1 ) >*/
-	    dif[1] = dscale / dif[1];
+            dif[1] = dscale / dif[1];
 
 /*           1-norm-based estimate of Difl. */
 
 /*<    50       CONTINUE >*/
 L50:
 /*<    >*/
-	    dlacon_(&mn2, &work[mn2 + 1], &work[1], &iwork[1], &dif[2], &kase)
-		    ;
+            dlacon_(&mn2, &work[mn2 + 1], &work[1], &iwork[1], &dif[2], &kase)
+                    ;
 /*<             IF( KASE.NE.0 ) THEN >*/
-	    if (kase != 0) {
+            if (kase != 0) {
 /*<                IF( KASE.EQ.1 ) THEN >*/
-		if (kase == 1) {
+                if (kase == 1) {
 
 /*                 Solve generalized Sylvester equation. */
 
 /*<    >*/
-		    i__1 = *lwork - (n1 << 1) * n2;
-		    dtgsyl_("N", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, 
-			    &a[a_offset], lda, &work[1], &n2, &b[i__ + i__ * 
-			    b_dim1], ldb, &b[b_offset], ldb, &work[n1 * n2 + 
-			    1], &n2, &dscale, &dif[2], &work[(n1 << 1) * n2 + 
-			    1], &i__1, &iwork[1], &ierr, (ftnlen)1);
+                    i__1 = *lwork - (n1 << 1) * n2;
+                    dtgsyl_("N", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, 
+                            &a[a_offset], lda, &work[1], &n2, &b[i__ + i__ * 
+                            b_dim1], ldb, &b[b_offset], ldb, &work[n1 * n2 + 
+                            1], &n2, &dscale, &dif[2], &work[(n1 << 1) * n2 + 
+                            1], &i__1, &iwork[1], &ierr, (ftnlen)1);
 /*<                ELSE >*/
-		} else {
+                } else {
 
 /*                 Solve the transposed variant. */
 
 /*<    >*/
-		    i__1 = *lwork - (n1 << 1) * n2;
-		    dtgsyl_("T", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, 
-			    &a[a_offset], lda, &work[1], &n2, &b[i__ + i__ * 
-			    b_dim1], ldb, &b[b_offset], ldb, &work[n1 * n2 + 
-			    1], &n2, &dscale, &dif[2], &work[(n1 << 1) * n2 + 
-			    1], &i__1, &iwork[1], &ierr, (ftnlen)1);
+                    i__1 = *lwork - (n1 << 1) * n2;
+                    dtgsyl_("T", &ijb, &n2, &n1, &a[i__ + i__ * a_dim1], lda, 
+                            &a[a_offset], lda, &work[1], &n2, &b[i__ + i__ * 
+                            b_dim1], ldb, &b[b_offset], ldb, &work[n1 * n2 + 
+                            1], &n2, &dscale, &dif[2], &work[(n1 << 1) * n2 + 
+                            1], &i__1, &iwork[1], &ierr, (ftnlen)1);
 /*<                END IF >*/
-		}
+                }
 /*<                GO TO 50 >*/
-		goto L50;
+                goto L50;
 /*<             END IF >*/
-	    }
+            }
 /*<             DIF( 2 ) = DSCALE / DIF( 2 ) >*/
-	    dif[2] = dscale / dif[2];
+            dif[2] = dscale / dif[2];
 
 /*<          END IF >*/
-	}
+        }
 /*<       END IF >*/
     }
 
@@ -975,85 +975,85 @@ L60:
     i__1 = *n;
     for (k = 1; k <= i__1; ++k) {
 /*<          IF( PAIR ) THEN >*/
-	if (pair) {
+        if (pair) {
 /*<             PAIR = .FALSE. >*/
-	    pair = FALSE_;
+            pair = FALSE_;
 /*<          ELSE >*/
-	} else {
+        } else {
 
 /*<             IF( K.LT.N ) THEN >*/
-	    if (k < *n) {
+            if (k < *n) {
 /*<                IF( A( K+1, K ).NE.ZERO ) THEN >*/
-		if (a[k + 1 + k * a_dim1] != 0.) {
+                if (a[k + 1 + k * a_dim1] != 0.) {
 /*<                   PAIR = .TRUE. >*/
-		    pair = TRUE_;
+                    pair = TRUE_;
 /*<                END IF >*/
-		}
+                }
 /*<             END IF >*/
-	    }
+            }
 
 /*<             IF( PAIR ) THEN >*/
-	    if (pair) {
+            if (pair) {
 
 /*             Compute the eigenvalue(s) at position K. */
 
 /*<                WORK( 1 ) = A( K, K ) >*/
-		work[1] = a[k + k * a_dim1];
+                work[1] = a[k + k * a_dim1];
 /*<                WORK( 2 ) = A( K+1, K ) >*/
-		work[2] = a[k + 1 + k * a_dim1];
+                work[2] = a[k + 1 + k * a_dim1];
 /*<                WORK( 3 ) = A( K, K+1 ) >*/
-		work[3] = a[k + (k + 1) * a_dim1];
+                work[3] = a[k + (k + 1) * a_dim1];
 /*<                WORK( 4 ) = A( K+1, K+1 ) >*/
-		work[4] = a[k + 1 + (k + 1) * a_dim1];
+                work[4] = a[k + 1 + (k + 1) * a_dim1];
 /*<                WORK( 5 ) = B( K, K ) >*/
-		work[5] = b[k + k * b_dim1];
+                work[5] = b[k + k * b_dim1];
 /*<                WORK( 6 ) = B( K+1, K ) >*/
-		work[6] = b[k + 1 + k * b_dim1];
+                work[6] = b[k + 1 + k * b_dim1];
 /*<                WORK( 7 ) = B( K, K+1 ) >*/
-		work[7] = b[k + (k + 1) * b_dim1];
+                work[7] = b[k + (k + 1) * b_dim1];
 /*<                WORK( 8 ) = B( K+1, K+1 ) >*/
-		work[8] = b[k + 1 + (k + 1) * b_dim1];
+                work[8] = b[k + 1 + (k + 1) * b_dim1];
 /*<    >*/
-		d__1 = smlnum * eps;
-		dlag2_(&work[1], &c__2, &work[5], &c__2, &d__1, &beta[k], &
-			beta[k + 1], &alphar[k], &alphar[k + 1], &alphai[k]);
+                d__1 = smlnum * eps;
+                dlag2_(&work[1], &c__2, &work[5], &c__2, &d__1, &beta[k], &
+                        beta[k + 1], &alphar[k], &alphar[k + 1], &alphai[k]);
 /*<                ALPHAI( K+1 ) = -ALPHAI( K ) >*/
-		alphai[k + 1] = -alphai[k];
+                alphai[k + 1] = -alphai[k];
 
 /*<             ELSE >*/
-	    } else {
+            } else {
 
 /*<                IF( SIGN( ONE, B( K, K ) ).LT.ZERO ) THEN >*/
-		if (d_sign(&c_b28, &b[k + k * b_dim1]) < 0.) {
+                if (d_sign(&c_b28, &b[k + k * b_dim1]) < 0.) {
 
 /*                 If B(K,K) is negative, make it positive */
 
 /*<                   DO 70 I = 1, N >*/
-		    i__2 = *n;
-		    for (i__ = 1; i__ <= i__2; ++i__) {
+                    i__2 = *n;
+                    for (i__ = 1; i__ <= i__2; ++i__) {
 /*<                      A( K, I ) = -A( K, I ) >*/
-			a[k + i__ * a_dim1] = -a[k + i__ * a_dim1];
+                        a[k + i__ * a_dim1] = -a[k + i__ * a_dim1];
 /*<                      B( K, I ) = -B( K, I ) >*/
-			b[k + i__ * b_dim1] = -b[k + i__ * b_dim1];
+                        b[k + i__ * b_dim1] = -b[k + i__ * b_dim1];
 /*<                      Q( I, K ) = -Q( I, K ) >*/
-			q[i__ + k * q_dim1] = -q[i__ + k * q_dim1];
+                        q[i__ + k * q_dim1] = -q[i__ + k * q_dim1];
 /*<    70             CONTINUE >*/
 /* L70: */
-		    }
+                    }
 /*<                END IF >*/
-		}
+                }
 
 /*<                ALPHAR( K ) = A( K, K ) >*/
-		alphar[k] = a[k + k * a_dim1];
+                alphar[k] = a[k + k * a_dim1];
 /*<                ALPHAI( K ) = ZERO >*/
-		alphai[k] = 0.;
+                alphai[k] = 0.;
 /*<                BETA( K ) = B( K, K ) >*/
-		beta[k] = b[k + k * b_dim1];
+                beta[k] = b[k + k * b_dim1];
 
 /*<             END IF >*/
-	    }
+            }
 /*<          END IF >*/
-	}
+        }
 /*<    80 CONTINUE >*/
 /* L80: */
     }
@@ -1072,5 +1072,5 @@ L60:
 } /* dtgsen_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

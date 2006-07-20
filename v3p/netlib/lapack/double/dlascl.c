@@ -1,13 +1,13 @@
 /* lapack/double/dlascl.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -17,8 +17,8 @@ extern "C" {
 
 /*<       SUBROUTINE DLASCL( TYPE, KL, KU, CFROM, CTO, M, N, A, LDA, INFO ) >*/
 /* Subroutine */ int dlascl_(char *type__, integer *kl, integer *ku, 
-	doublereal *cfrom, doublereal *cto, integer *m, integer *n, 
-	doublereal *a, integer *lda, integer *info, ftnlen type_len)
+        doublereal *cfrom, doublereal *cto, integer *m, integer *n, 
+        doublereal *a, integer *lda, integer *info, ftnlen type_len)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
@@ -148,92 +148,92 @@ extern "C" {
 /*<       IF( LSAME( TYPE, 'G' ) ) THEN >*/
     if (lsame_(type__, "G", (ftnlen)1, (ftnlen)1)) {
 /*<          ITYPE = 0 >*/
-	itype = 0;
+        itype = 0;
 /*<       ELSE IF( LSAME( TYPE, 'L' ) ) THEN >*/
     } else if (lsame_(type__, "L", (ftnlen)1, (ftnlen)1)) {
 /*<          ITYPE = 1 >*/
-	itype = 1;
+        itype = 1;
 /*<       ELSE IF( LSAME( TYPE, 'U' ) ) THEN >*/
     } else if (lsame_(type__, "U", (ftnlen)1, (ftnlen)1)) {
 /*<          ITYPE = 2 >*/
-	itype = 2;
+        itype = 2;
 /*<       ELSE IF( LSAME( TYPE, 'H' ) ) THEN >*/
     } else if (lsame_(type__, "H", (ftnlen)1, (ftnlen)1)) {
 /*<          ITYPE = 3 >*/
-	itype = 3;
+        itype = 3;
 /*<       ELSE IF( LSAME( TYPE, 'B' ) ) THEN >*/
     } else if (lsame_(type__, "B", (ftnlen)1, (ftnlen)1)) {
 /*<          ITYPE = 4 >*/
-	itype = 4;
+        itype = 4;
 /*<       ELSE IF( LSAME( TYPE, 'Q' ) ) THEN >*/
     } else if (lsame_(type__, "Q", (ftnlen)1, (ftnlen)1)) {
 /*<          ITYPE = 5 >*/
-	itype = 5;
+        itype = 5;
 /*<       ELSE IF( LSAME( TYPE, 'Z' ) ) THEN >*/
     } else if (lsame_(type__, "Z", (ftnlen)1, (ftnlen)1)) {
 /*<          ITYPE = 6 >*/
-	itype = 6;
+        itype = 6;
 /*<       ELSE >*/
     } else {
 /*<          ITYPE = -1 >*/
-	itype = -1;
+        itype = -1;
 /*<       END IF >*/
     }
 
 /*<       IF( ITYPE.EQ.-1 ) THEN >*/
     if (itype == -1) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<       ELSE IF( CFROM.EQ.ZERO ) THEN >*/
     } else if (*cfrom == 0.) {
 /*<          INFO = -4 >*/
-	*info = -4;
+        *info = -4;
 /*<       ELSE IF( M.LT.0 ) THEN >*/
     } else if (*m < 0) {
 /*<          INFO = -6 >*/
-	*info = -6;
+        *info = -6;
 /*<    >*/
     } else if (*n < 0 || (itype == 4 && *n != *m) || (itype == 5 && *n != *m)) {
 /*<          INFO = -7 >*/
-	*info = -7;
+        *info = -7;
 /*<       ELSE IF( ITYPE.LE.3 .AND. LDA.LT.MAX( 1, M ) ) THEN >*/
     } else if (itype <= 3 && *lda < max(1,*m)) {
 /*<          INFO = -9 >*/
-	*info = -9;
+        *info = -9;
 /*<       ELSE IF( ITYPE.GE.4 ) THEN >*/
     } else if (itype >= 4) {
 /*<          IF( KL.LT.0 .OR. KL.GT.MAX( M-1, 0 ) ) THEN >*/
 /* Computing MAX */
-	i__1 = *m - 1;
-	if (*kl < 0 || *kl > max(i__1,0)) {
+        i__1 = *m - 1;
+        if (*kl < 0 || *kl > max(i__1,0)) {
 /*<             INFO = -2 >*/
-	    *info = -2;
+            *info = -2;
 /*<    >*/
-	} else /* if(complicated condition) */ {
+        } else /* if(complicated condition) */ {
 /* Computing MAX */
-	    i__1 = *n - 1;
-	    if (*ku < 0 || *ku > max(i__1,0) || ((itype == 4 || itype == 5) && 
-		    *kl != *ku)) {
+            i__1 = *n - 1;
+            if (*ku < 0 || *ku > max(i__1,0) || ((itype == 4 || itype == 5) && 
+                    *kl != *ku)) {
 /*<             INFO = -3 >*/
-		*info = -3;
+                *info = -3;
 /*<    >*/
-	    } else if ((itype == 4 && *lda < *kl + 1) || (itype == 5 && *lda < *
-		    ku + 1) || (itype == 6 && *lda < (*kl << 1) + *ku + 1)) {
+            } else if ((itype == 4 && *lda < *kl + 1) || (itype == 5 && *lda < *
+                    ku + 1) || (itype == 6 && *lda < (*kl << 1) + *ku + 1)) {
 /*<             INFO = -9 >*/
-		*info = -9;
+                *info = -9;
 /*<          END IF >*/
-	    }
-	}
+            }
+        }
 /*<       END IF >*/
     }
 
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'DLASCL', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("DLASCL", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("DLASCL", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -241,7 +241,7 @@ extern "C" {
 
 /*<    >*/
     if (*n == 0 || *m == 0) {
-	return 0;
+        return 0;
     }
 
 /*     Get machine parameters */
@@ -265,25 +265,25 @@ L10:
 /*<       IF( ABS( CFROM1 ).GT.ABS( CTOC ) .AND. CTOC.NE.ZERO ) THEN >*/
     if (abs(cfrom1) > abs(ctoc) && ctoc != 0.) {
 /*<          MUL = SMLNUM >*/
-	mul = smlnum;
+        mul = smlnum;
 /*<          DONE = .FALSE. >*/
-	done = FALSE_;
+        done = FALSE_;
 /*<          CFROMC = CFROM1 >*/
-	cfromc = cfrom1;
+        cfromc = cfrom1;
 /*<       ELSE IF( ABS( CTO1 ).GT.ABS( CFROMC ) ) THEN >*/
     } else if (abs(cto1) > abs(cfromc)) {
 /*<          MUL = BIGNUM >*/
-	mul = bignum;
+        mul = bignum;
 /*<          DONE = .FALSE. >*/
-	done = FALSE_;
+        done = FALSE_;
 /*<          CTOC = CTO1 >*/
-	ctoc = cto1;
+        ctoc = cto1;
 /*<       ELSE >*/
     } else {
 /*<          MUL = CTOC / CFROMC >*/
-	mul = ctoc / cfromc;
+        mul = ctoc / cfromc;
 /*<          DONE = .TRUE. >*/
-	done = TRUE_;
+        done = TRUE_;
 /*<       END IF >*/
     }
 
@@ -293,19 +293,19 @@ L10:
 /*        Full matrix */
 
 /*<          DO 30 J = 1, N >*/
-	i__1 = *n;
-	for (j = 1; j <= i__1; ++j) {
+        i__1 = *n;
+        for (j = 1; j <= i__1; ++j) {
 /*<             DO 20 I = 1, M >*/
-	    i__2 = *m;
-	    for (i__ = 1; i__ <= i__2; ++i__) {
+            i__2 = *m;
+            for (i__ = 1; i__ <= i__2; ++i__) {
 /*<                A( I, J ) = A( I, J )*MUL >*/
-		a[i__ + j * a_dim1] *= mul;
+                a[i__ + j * a_dim1] *= mul;
 /*<    20       CONTINUE >*/
 /* L20: */
-	    }
+            }
 /*<    30    CONTINUE >*/
 /* L30: */
-	}
+        }
 
 /*<       ELSE IF( ITYPE.EQ.1 ) THEN >*/
     } else if (itype == 1) {
@@ -313,19 +313,19 @@ L10:
 /*        Lower triangular matrix */
 
 /*<          DO 50 J = 1, N >*/
-	i__1 = *n;
-	for (j = 1; j <= i__1; ++j) {
+        i__1 = *n;
+        for (j = 1; j <= i__1; ++j) {
 /*<             DO 40 I = J, M >*/
-	    i__2 = *m;
-	    for (i__ = j; i__ <= i__2; ++i__) {
+            i__2 = *m;
+            for (i__ = j; i__ <= i__2; ++i__) {
 /*<                A( I, J ) = A( I, J )*MUL >*/
-		a[i__ + j * a_dim1] *= mul;
+                a[i__ + j * a_dim1] *= mul;
 /*<    40       CONTINUE >*/
 /* L40: */
-	    }
+            }
 /*<    50    CONTINUE >*/
 /* L50: */
-	}
+        }
 
 /*<       ELSE IF( ITYPE.EQ.2 ) THEN >*/
     } else if (itype == 2) {
@@ -333,19 +333,19 @@ L10:
 /*        Upper triangular matrix */
 
 /*<          DO 70 J = 1, N >*/
-	i__1 = *n;
-	for (j = 1; j <= i__1; ++j) {
+        i__1 = *n;
+        for (j = 1; j <= i__1; ++j) {
 /*<             DO 60 I = 1, MIN( J, M ) >*/
-	    i__2 = min(j,*m);
-	    for (i__ = 1; i__ <= i__2; ++i__) {
+            i__2 = min(j,*m);
+            for (i__ = 1; i__ <= i__2; ++i__) {
 /*<                A( I, J ) = A( I, J )*MUL >*/
-		a[i__ + j * a_dim1] *= mul;
+                a[i__ + j * a_dim1] *= mul;
 /*<    60       CONTINUE >*/
 /* L60: */
-	    }
+            }
 /*<    70    CONTINUE >*/
 /* L70: */
-	}
+        }
 
 /*<       ELSE IF( ITYPE.EQ.3 ) THEN >*/
     } else if (itype == 3) {
@@ -353,21 +353,21 @@ L10:
 /*        Upper Hessenberg matrix */
 
 /*<          DO 90 J = 1, N >*/
-	i__1 = *n;
-	for (j = 1; j <= i__1; ++j) {
+        i__1 = *n;
+        for (j = 1; j <= i__1; ++j) {
 /*<             DO 80 I = 1, MIN( J+1, M ) >*/
 /* Computing MIN */
-	    i__3 = j + 1;
-	    i__2 = min(i__3,*m);
-	    for (i__ = 1; i__ <= i__2; ++i__) {
+            i__3 = j + 1;
+            i__2 = min(i__3,*m);
+            for (i__ = 1; i__ <= i__2; ++i__) {
 /*<                A( I, J ) = A( I, J )*MUL >*/
-		a[i__ + j * a_dim1] *= mul;
+                a[i__ + j * a_dim1] *= mul;
 /*<    80       CONTINUE >*/
 /* L80: */
-	    }
+            }
 /*<    90    CONTINUE >*/
 /* L90: */
-	}
+        }
 
 /*<       ELSE IF( ITYPE.EQ.4 ) THEN >*/
     } else if (itype == 4) {
@@ -375,25 +375,25 @@ L10:
 /*        Lower half of a symmetric band matrix */
 
 /*<          K3 = KL + 1 >*/
-	k3 = *kl + 1;
+        k3 = *kl + 1;
 /*<          K4 = N + 1 >*/
-	k4 = *n + 1;
+        k4 = *n + 1;
 /*<          DO 110 J = 1, N >*/
-	i__1 = *n;
-	for (j = 1; j <= i__1; ++j) {
+        i__1 = *n;
+        for (j = 1; j <= i__1; ++j) {
 /*<             DO 100 I = 1, MIN( K3, K4-J ) >*/
 /* Computing MIN */
-	    i__3 = k3, i__4 = k4 - j;
-	    i__2 = min(i__3,i__4);
-	    for (i__ = 1; i__ <= i__2; ++i__) {
+            i__3 = k3, i__4 = k4 - j;
+            i__2 = min(i__3,i__4);
+            for (i__ = 1; i__ <= i__2; ++i__) {
 /*<                A( I, J ) = A( I, J )*MUL >*/
-		a[i__ + j * a_dim1] *= mul;
+                a[i__ + j * a_dim1] *= mul;
 /*<   100       CONTINUE >*/
 /* L100: */
-	    }
+            }
 /*<   110    CONTINUE >*/
 /* L110: */
-	}
+        }
 
 /*<       ELSE IF( ITYPE.EQ.5 ) THEN >*/
     } else if (itype == 5) {
@@ -401,25 +401,25 @@ L10:
 /*        Upper half of a symmetric band matrix */
 
 /*<          K1 = KU + 2 >*/
-	k1 = *ku + 2;
+        k1 = *ku + 2;
 /*<          K3 = KU + 1 >*/
-	k3 = *ku + 1;
+        k3 = *ku + 1;
 /*<          DO 130 J = 1, N >*/
-	i__1 = *n;
-	for (j = 1; j <= i__1; ++j) {
+        i__1 = *n;
+        for (j = 1; j <= i__1; ++j) {
 /*<             DO 120 I = MAX( K1-J, 1 ), K3 >*/
 /* Computing MAX */
-	    i__2 = k1 - j;
-	    i__3 = k3;
-	    for (i__ = max(i__2,1); i__ <= i__3; ++i__) {
+            i__2 = k1 - j;
+            i__3 = k3;
+            for (i__ = max(i__2,1); i__ <= i__3; ++i__) {
 /*<                A( I, J ) = A( I, J )*MUL >*/
-		a[i__ + j * a_dim1] *= mul;
+                a[i__ + j * a_dim1] *= mul;
 /*<   120       CONTINUE >*/
 /* L120: */
-	    }
+            }
 /*<   130    CONTINUE >*/
 /* L130: */
-	}
+        }
 
 /*<       ELSE IF( ITYPE.EQ.6 ) THEN >*/
     } else if (itype == 6) {
@@ -427,38 +427,38 @@ L10:
 /*        Band matrix */
 
 /*<          K1 = KL + KU + 2 >*/
-	k1 = *kl + *ku + 2;
+        k1 = *kl + *ku + 2;
 /*<          K2 = KL + 1 >*/
-	k2 = *kl + 1;
+        k2 = *kl + 1;
 /*<          K3 = 2*KL + KU + 1 >*/
-	k3 = (*kl << 1) + *ku + 1;
+        k3 = (*kl << 1) + *ku + 1;
 /*<          K4 = KL + KU + 1 + M >*/
-	k4 = *kl + *ku + 1 + *m;
+        k4 = *kl + *ku + 1 + *m;
 /*<          DO 150 J = 1, N >*/
-	i__1 = *n;
-	for (j = 1; j <= i__1; ++j) {
+        i__1 = *n;
+        for (j = 1; j <= i__1; ++j) {
 /*<             DO 140 I = MAX( K1-J, K2 ), MIN( K3, K4-J ) >*/
 /* Computing MAX */
-	    i__3 = k1 - j;
+            i__3 = k1 - j;
 /* Computing MIN */
-	    i__4 = k3, i__5 = k4 - j;
-	    i__2 = min(i__4,i__5);
-	    for (i__ = max(i__3,k2); i__ <= i__2; ++i__) {
+            i__4 = k3, i__5 = k4 - j;
+            i__2 = min(i__4,i__5);
+            for (i__ = max(i__3,k2); i__ <= i__2; ++i__) {
 /*<                A( I, J ) = A( I, J )*MUL >*/
-		a[i__ + j * a_dim1] *= mul;
+                a[i__ + j * a_dim1] *= mul;
 /*<   140       CONTINUE >*/
 /* L140: */
-	    }
+            }
 /*<   150    CONTINUE >*/
 /* L150: */
-	}
+        }
 
 /*<       END IF >*/
     }
 
 /*<    >*/
     if (! done) {
-	goto L10;
+        goto L10;
     }
 
 /*<       RETURN >*/
@@ -470,5 +470,5 @@ L10:
 } /* dlascl_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

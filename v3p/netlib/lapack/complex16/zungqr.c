@@ -1,13 +1,13 @@
 /* lapack/complex16/zungqr.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -24,8 +24,8 @@ static integer c__2 = 2;
 
 /*<       SUBROUTINE ZUNGQR( M, N, K, A, LDA, TAU, WORK, LWORK, INFO ) >*/
 /* Subroutine */ int zungqr_(integer *m, integer *n, integer *k, 
-	doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *
-	work, integer *lwork, integer *info)
+        doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *
+        work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
@@ -33,18 +33,18 @@ static integer c__2 = 2;
     /* Local variables */
     integer i__, j, l, ib, nb, ki=0, kk, nx, iws, nbmin, iinfo;
     extern /* Subroutine */ int zung2r_(integer *, integer *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
-	    integer *), xerbla_(char *, integer *, ftnlen);
+            doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
+            integer *), xerbla_(char *, integer *, ftnlen);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, 
-	    integer *, integer *, ftnlen, ftnlen);
+            integer *, integer *, ftnlen, ftnlen);
     extern /* Subroutine */ int zlarfb_(char *, char *, char *, char *, 
-	    integer *, integer *, integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, ftnlen, ftnlen, ftnlen, ftnlen);
+            integer *, integer *, integer *, doublecomplex *, integer *, 
+            doublecomplex *, integer *, doublecomplex *, integer *, 
+            doublecomplex *, integer *, ftnlen, ftnlen, ftnlen, ftnlen);
     integer ldwork;
     extern /* Subroutine */ int zlarft_(char *, char *, integer *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
-	    integer *, ftnlen, ftnlen);
+            doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
+            integer *, ftnlen, ftnlen);
     integer lwkopt;
     logical lquery;
 
@@ -161,36 +161,36 @@ static integer c__2 = 2;
 /*<       IF( M.LT.0 ) THEN >*/
     if (*m < 0) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<       ELSE IF( N.LT.0 .OR. N.GT.M ) THEN >*/
     } else if (*n < 0 || *n > *m) {
 /*<          INFO = -2 >*/
-	*info = -2;
+        *info = -2;
 /*<       ELSE IF( K.LT.0 .OR. K.GT.N ) THEN >*/
     } else if (*k < 0 || *k > *n) {
 /*<          INFO = -3 >*/
-	*info = -3;
+        *info = -3;
 /*<       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN >*/
     } else if (*lda < max(1,*m)) {
 /*<          INFO = -5 >*/
-	*info = -5;
+        *info = -5;
 /*<       ELSE IF( LWORK.LT.MAX( 1, N ) .AND. .NOT.LQUERY ) THEN >*/
     } else if (*lwork < max(1,*n) && ! lquery) {
 /*<          INFO = -8 >*/
-	*info = -8;
+        *info = -8;
 /*<       END IF >*/
     }
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'ZUNGQR', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("ZUNGQR", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("ZUNGQR", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       ELSE IF( LQUERY ) THEN >*/
     } else if (lquery) {
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -199,9 +199,9 @@ static integer c__2 = 2;
 /*<       IF( N.LE.0 ) THEN >*/
     if (*n <= 0) {
 /*<          WORK( 1 ) = 1 >*/
-	work[1].r = 1., work[1].i = 0.;
+        work[1].r = 1., work[1].i = 0.;
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -218,35 +218,35 @@ static integer c__2 = 2;
 
 /*<          NX = MAX( 0, ILAENV( 3, 'ZUNGQR', ' ', M, N, K, -1 ) ) >*/
 /* Computing MAX */
-	i__1 = 0, i__2 = ilaenv_(&c__3, "ZUNGQR", " ", m, n, k, &c_n1, (
-		ftnlen)6, (ftnlen)1);
-	nx = max(i__1,i__2);
+        i__1 = 0, i__2 = ilaenv_(&c__3, "ZUNGQR", " ", m, n, k, &c_n1, (
+                ftnlen)6, (ftnlen)1);
+        nx = max(i__1,i__2);
 /*<          IF( NX.LT.K ) THEN >*/
-	if (nx < *k) {
+        if (nx < *k) {
 
 /*           Determine if workspace is large enough for blocked code. */
 
 /*<             LDWORK = N >*/
-	    ldwork = *n;
+            ldwork = *n;
 /*<             IWS = LDWORK*NB >*/
-	    iws = ldwork * nb;
+            iws = ldwork * nb;
 /*<             IF( LWORK.LT.IWS ) THEN >*/
-	    if (*lwork < iws) {
+            if (*lwork < iws) {
 
 /*              Not enough workspace to use optimal NB:  reduce NB and */
 /*              determine the minimum value of NB. */
 
 /*<                NB = LWORK / LDWORK >*/
-		nb = *lwork / ldwork;
+                nb = *lwork / ldwork;
 /*<                NBMIN = MAX( 2, ILAENV( 2, 'ZUNGQR', ' ', M, N, K, -1 ) ) >*/
 /* Computing MAX */
-		i__1 = 2, i__2 = ilaenv_(&c__2, "ZUNGQR", " ", m, n, k, &c_n1,
-			 (ftnlen)6, (ftnlen)1);
-		nbmin = max(i__1,i__2);
+                i__1 = 2, i__2 = ilaenv_(&c__2, "ZUNGQR", " ", m, n, k, &c_n1,
+                         (ftnlen)6, (ftnlen)1);
+                nbmin = max(i__1,i__2);
 /*<             END IF >*/
-	    }
+            }
 /*<          END IF >*/
-	}
+        }
 /*<       END IF >*/
     }
 
@@ -257,33 +257,33 @@ static integer c__2 = 2;
 /*        The first kk columns are handled by the block method. */
 
 /*<          KI = ( ( K-NX-1 ) / NB )*NB >*/
-	ki = (*k - nx - 1) / nb * nb;
+        ki = (*k - nx - 1) / nb * nb;
 /*<          KK = MIN( K, KI+NB ) >*/
 /* Computing MIN */
-	i__1 = *k, i__2 = ki + nb;
-	kk = min(i__1,i__2);
+        i__1 = *k, i__2 = ki + nb;
+        kk = min(i__1,i__2);
 
 /*        Set A(1:kk,kk+1:n) to zero. */
 
 /*<          DO 20 J = KK + 1, N >*/
-	i__1 = *n;
-	for (j = kk + 1; j <= i__1; ++j) {
+        i__1 = *n;
+        for (j = kk + 1; j <= i__1; ++j) {
 /*<             DO 10 I = 1, KK >*/
-	    i__2 = kk;
-	    for (i__ = 1; i__ <= i__2; ++i__) {
+            i__2 = kk;
+            for (i__ = 1; i__ <= i__2; ++i__) {
 /*<                A( I, J ) = ZERO >*/
-		i__3 = i__ + j * a_dim1;
-		a[i__3].r = 0., a[i__3].i = 0.;
+                i__3 = i__ + j * a_dim1;
+                a[i__3].r = 0., a[i__3].i = 0.;
 /*<    10       CONTINUE >*/
 /* L10: */
-	    }
+            }
 /*<    20    CONTINUE >*/
 /* L20: */
-	}
+        }
 /*<       ELSE >*/
     } else {
 /*<          KK = 0 >*/
-	kk = 0;
+        kk = 0;
 /*<       END IF >*/
     }
 
@@ -291,11 +291,11 @@ static integer c__2 = 2;
 
 /*<    >*/
     if (kk < *n) {
-	i__1 = *m - kk;
-	i__2 = *n - kk;
-	i__3 = *k - kk;
-	zung2r_(&i__1, &i__2, &i__3, &a[kk + 1 + (kk + 1) * a_dim1], lda, &
-		tau[kk + 1], &work[1], &iinfo);
+        i__1 = *m - kk;
+        i__2 = *n - kk;
+        i__3 = *k - kk;
+        zung2r_(&i__1, &i__2, &i__3, &a[kk + 1 + (kk + 1) * a_dim1], lda, &
+                tau[kk + 1], &work[1], &iinfo);
     }
 
 /*<       IF( KK.GT.0 ) THEN >*/
@@ -304,64 +304,64 @@ static integer c__2 = 2;
 /*        Use blocked code */
 
 /*<          DO 50 I = KI + 1, 1, -NB >*/
-	i__1 = -nb;
-	for (i__ = ki + 1; i__1 < 0 ? i__ >= 1 : i__ <= 1; i__ += i__1) {
+        i__1 = -nb;
+        for (i__ = ki + 1; i__1 < 0 ? i__ >= 1 : i__ <= 1; i__ += i__1) {
 /*<             IB = MIN( NB, K-I+1 ) >*/
 /* Computing MIN */
-	    i__2 = nb, i__3 = *k - i__ + 1;
-	    ib = min(i__2,i__3);
+            i__2 = nb, i__3 = *k - i__ + 1;
+            ib = min(i__2,i__3);
 /*<             IF( I+IB.LE.N ) THEN >*/
-	    if (i__ + ib <= *n) {
+            if (i__ + ib <= *n) {
 
 /*              Form the triangular factor of the block reflector */
 /*              H = H(i) H(i+1) . . . H(i+ib-1) */
 
 /*<    >*/
-		i__2 = *m - i__ + 1;
-		zlarft_("Forward", "Columnwise", &i__2, &ib, &a[i__ + i__ * 
-			a_dim1], lda, &tau[i__], &work[1], &ldwork, (ftnlen)7,
-			 (ftnlen)10);
+                i__2 = *m - i__ + 1;
+                zlarft_("Forward", "Columnwise", &i__2, &ib, &a[i__ + i__ * 
+                        a_dim1], lda, &tau[i__], &work[1], &ldwork, (ftnlen)7,
+                         (ftnlen)10);
 
 /*              Apply H to A(i:m,i+ib:n) from the left */
 
 /*<    >*/
-		i__2 = *m - i__ + 1;
-		i__3 = *n - i__ - ib + 1;
-		zlarfb_("Left", "No transpose", "Forward", "Columnwise", &
-			i__2, &i__3, &ib, &a[i__ + i__ * a_dim1], lda, &work[
-			1], &ldwork, &a[i__ + (i__ + ib) * a_dim1], lda, &
-			work[ib + 1], &ldwork, (ftnlen)4, (ftnlen)12, (ftnlen)
-			7, (ftnlen)10);
+                i__2 = *m - i__ + 1;
+                i__3 = *n - i__ - ib + 1;
+                zlarfb_("Left", "No transpose", "Forward", "Columnwise", &
+                        i__2, &i__3, &ib, &a[i__ + i__ * a_dim1], lda, &work[
+                        1], &ldwork, &a[i__ + (i__ + ib) * a_dim1], lda, &
+                        work[ib + 1], &ldwork, (ftnlen)4, (ftnlen)12, (ftnlen)
+                        7, (ftnlen)10);
 /*<             END IF >*/
-	    }
+            }
 
 /*           Apply H to rows i:m of current block */
 
 /*<    >*/
-	    i__2 = *m - i__ + 1;
-	    zung2r_(&i__2, &ib, &ib, &a[i__ + i__ * a_dim1], lda, &tau[i__], &
-		    work[1], &iinfo);
+            i__2 = *m - i__ + 1;
+            zung2r_(&i__2, &ib, &ib, &a[i__ + i__ * a_dim1], lda, &tau[i__], &
+                    work[1], &iinfo);
 
 /*           Set rows 1:i-1 of current block to zero */
 
 /*<             DO 40 J = I, I + IB - 1 >*/
-	    i__2 = i__ + ib - 1;
-	    for (j = i__; j <= i__2; ++j) {
+            i__2 = i__ + ib - 1;
+            for (j = i__; j <= i__2; ++j) {
 /*<                DO 30 L = 1, I - 1 >*/
-		i__3 = i__ - 1;
-		for (l = 1; l <= i__3; ++l) {
+                i__3 = i__ - 1;
+                for (l = 1; l <= i__3; ++l) {
 /*<                   A( L, J ) = ZERO >*/
-		    i__4 = l + j * a_dim1;
-		    a[i__4].r = 0., a[i__4].i = 0.;
+                    i__4 = l + j * a_dim1;
+                    a[i__4].r = 0., a[i__4].i = 0.;
 /*<    30          CONTINUE >*/
 /* L30: */
-		}
+                }
 /*<    40       CONTINUE >*/
 /* L40: */
-	    }
+            }
 /*<    50    CONTINUE >*/
 /* L50: */
-	}
+        }
 /*<       END IF >*/
     }
 
@@ -376,5 +376,5 @@ static integer c__2 = 2;
 } /* zungqr_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

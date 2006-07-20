@@ -1,13 +1,13 @@
 /* linpack/dposl.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -21,7 +21,7 @@ static integer c__1 = 1;
 
 /*<       subroutine dposl(a,lda,n,b) >*/
 /* Subroutine */ int dposl_(doublereal *a, integer *lda, integer *n, 
-	doublereal *b)
+        doublereal *b)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -31,9 +31,9 @@ static integer c__1 = 1;
     doublereal t;
     integer kb;
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, 
-	    integer *);
+            integer *);
     extern /* Subroutine */ int daxpy_(integer *, doublereal *, doublereal *, 
-	    integer *, doublereal *, integer *);
+            integer *, doublereal *, integer *);
 
 /*<       integer lda,n >*/
 /*<       double precision a(lda,1),b(1) >*/
@@ -101,10 +101,10 @@ static integer c__1 = 1;
     i__1 = *n;
     for (k = 1; k <= i__1; ++k) {
 /*<          t = ddot(k-1,a(1,k),1,b(1),1) >*/
-	i__2 = k - 1;
-	t = ddot_(&i__2, &a[k * a_dim1 + 1], &c__1, &b[1], &c__1);
+        i__2 = k - 1;
+        t = ddot_(&i__2, &a[k * a_dim1 + 1], &c__1, &b[1], &c__1);
 /*<          b(k) = (b(k) - t)/a(k,k) >*/
-	b[k] = (b[k] - t) / a[k + k * a_dim1];
+        b[k] = (b[k] - t) / a[k + k * a_dim1];
 /*<    10 continue >*/
 /* L10: */
     }
@@ -115,14 +115,14 @@ static integer c__1 = 1;
     i__1 = *n;
     for (kb = 1; kb <= i__1; ++kb) {
 /*<          k = n + 1 - kb >*/
-	k = *n + 1 - kb;
+        k = *n + 1 - kb;
 /*<          b(k) = b(k)/a(k,k) >*/
-	b[k] /= a[k + k * a_dim1];
+        b[k] /= a[k + k * a_dim1];
 /*<          t = -b(k) >*/
-	t = -b[k];
+        t = -b[k];
 /*<          call daxpy(k-1,t,a(1,k),1,b(1),1) >*/
-	i__2 = k - 1;
-	daxpy_(&i__2, &t, &a[k * a_dim1 + 1], &c__1, &b[1], &c__1);
+        i__2 = k - 1;
+        daxpy_(&i__2, &t, &a[k * a_dim1 + 1], &c__1, &b[1], &c__1);
 /*<    20 continue >*/
 /* L20: */
     }
@@ -132,5 +132,5 @@ static integer c__1 = 1;
 } /* dposl_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

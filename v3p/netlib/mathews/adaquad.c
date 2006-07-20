@@ -1,13 +1,13 @@
 /* mathews/adaquad.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -29,8 +29,8 @@ extern "C" {
 /* Subroutine */ int adaptquad_(
   v3p_netlib_doublereal (*f)(v3p_netlib_doublereal*),
   doublereal *a, doublereal *b, 
-	doublereal *tol, doublereal *srmat, doublereal *integral, doublereal *
-	errbdd, integer *m, integer *state)
+        doublereal *tol, doublereal *srmat, doublereal *integral, doublereal *
+        errbdd, integer *m, integer *state)
 {
     /* System generated locals */
     integer i__1;
@@ -44,7 +44,7 @@ extern "C" {
     extern /* Subroutine */ int srule_(
       v3p_netlib_doublereal (*f)(v3p_netlib_doublereal*),
             doublereal *, doublereal *, 
-	    doublereal *, doublereal *),
+            doublereal *, doublereal *),
       refine_(v3p_netlib_doublereal (*f)(v3p_netlib_doublereal*),
               integer *, doublereal * , integer *, integer *);
 
@@ -67,7 +67,7 @@ extern "C" {
 /*<       DO K=1,11 >*/
     for (k = 1; k <= 11; ++k) {
 /*<         SRmat(1, K) = SRvec(K) >*/
-	srmat[k * 101 + 1] = srvec[k - 1];
+        srmat[k * 101 + 1] = srvec[k - 1];
 /*<       ENDDO >*/
     }
 /*<       M = 1 >*/
@@ -77,13 +77,13 @@ extern "C" {
 /*<       DO WHILE (State .EQ. Iterating) >*/
     while(*state == iterating) {
 /*<         N = M >*/
-	n = *m;
+        n = *m;
 /*<         DO J=N,1,-1 >*/
-	for (j = n; j >= 1; --j) {
+        for (j = n; j >= 1; --j) {
 /*<           CALL Refine(F,J,SRmat,M,State) >*/
-	    refine_(f, &j, &srmat[102], m, state);
+            refine_(f, &j, &srmat[102], m, state);
 /*<         ENDDO >*/
-	}
+        }
 /*<       ENDDO >*/
     }
 /*<       Sum1 = 0 >*/
@@ -94,9 +94,9 @@ extern "C" {
     i__1 = *m;
     for (j = 1; j <= i__1; ++j) {
 /*<         Sum1 = Sum1 + SRmat(J, 8) >*/
-	sum1 += srmat[j + 808];
+        sum1 += srmat[j + 808];
 /*<         Sum2 = Sum2 + Abs(SRmat(J, 9)) >*/
-	sum2 += (d__1 = srmat[j + 909], abs(d__1));
+        sum2 += (d__1 = srmat[j + 909], abs(d__1));
 /*<       ENDDO >*/
     }
 /*<       Integral = Sum1 >*/
@@ -129,7 +129,7 @@ extern "C" {
     extern /* Subroutine */ int srule_(
       v3p_netlib_doublereal (*f)(v3p_netlib_doublereal*),
       doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+            doublereal *, doublereal *);
     doublereal sr0vec[11], sr1vec[11], sr2vec[11];
 
 /*<       INTEGER P,M,State >*/
@@ -153,7 +153,7 @@ extern "C" {
 /*<       DO K=1,11 >*/
     for (k = 1; k <= 11; ++k) {
 /*<         SR0vec(K) = SRmat(P, K) >*/
-	sr0vec[k - 1] = srmat[*p + k * 101];
+        sr0vec[k - 1] = srmat[*p + k * 101];
 /*<       ENDDO >*/
     }
 /*<       A = SR0vec(1) >*/
@@ -180,7 +180,7 @@ extern "C" {
     check = sr0vec[10];
 /*<       IF (Check .EQ. 1) RETURN >*/
     if (check == 1.) {
-	return 0;
+        return 0;
     }
 /*<       Tol2 = Tol / 2 >*/
     tol2 = tol / 2;
@@ -193,50 +193,50 @@ extern "C" {
 /*<       IF (Err .LT. Tol) THEN >*/
     if (err < tol) {
 /*<         SR0vec(11) = 1 >*/
-	sr0vec[10] = 1.;
+        sr0vec[10] = 1.;
 /*<       ENDIF >*/
     }
 /*<       IF (Err .LT. Tol) THEN >*/
     if (err < tol) {
 /*<         DO K=1,11 >*/
-	for (k = 1; k <= 11; ++k) {
+        for (k = 1; k <= 11; ++k) {
 /*<           SRmat(P, K) = SR0vec(K) >*/
-	    srmat[*p + k * 101] = sr0vec[k - 1];
+            srmat[*p + k * 101] = sr0vec[k - 1];
 /*<         ENDDO >*/
-	}
+        }
 /*<         SRmat(P, 8) = SR1vec(7) + SR2vec(7) >*/
-	srmat[*p + 808] = sr1vec[6] + sr2vec[6];
+        srmat[*p + 808] = sr1vec[6] + sr2vec[6];
 /*<         SRmat(P, 9) = Err >*/
-	srmat[*p + 909] = err;
+        srmat[*p + 909] = err;
 /*<       ELSE >*/
     } else {
 /*<         DO J=(M + 1),P,-1 >*/
-	i__1 = *p;
-	for (j = *m + 1; j >= i__1; --j) {
+        i__1 = *p;
+        for (j = *m + 1; j >= i__1; --j) {
 /*<           DO K=1,11 >*/
-	    for (k = 1; k <= 11; ++k) {
+            for (k = 1; k <= 11; ++k) {
 /*<             SRmat(J, K) = SRmat(J - 1, K) >*/
-		srmat[j + k * 101] = srmat[j - 1 + k * 101];
+                srmat[j + k * 101] = srmat[j - 1 + k * 101];
 /*<           ENDDO >*/
-	    }
+            }
 /*<         ENDDO >*/
-	}
+        }
 /*<         M = M + 1 >*/
-	++(*m);
+        ++(*m);
 /*<         DO K=1,11 >*/
-	for (k = 1; k <= 11; ++k) {
+        for (k = 1; k <= 11; ++k) {
 /*<           SRmat(P, K) = SR1vec(K) >*/
-	    srmat[*p + k * 101] = sr1vec[k - 1];
+            srmat[*p + k * 101] = sr1vec[k - 1];
 /*<         ENDDO >*/
-	}
+        }
 /*<         DO K=1,11 >*/
-	for (k = 1; k <= 11; ++k) {
+        for (k = 1; k <= 11; ++k) {
 /*<           SRmat(P + 1, K) = SR2vec(K) >*/
-	    srmat[*p + 1 + k * 101] = sr2vec[k - 1];
+            srmat[*p + 1 + k * 101] = sr2vec[k - 1];
 /*<         ENDDO >*/
-	}
+        }
 /*<         State = Iterating >*/
-	*state = iterating;
+        *state = iterating;
 /*<       ENDIF >*/
     }
 /*<       RETURN >*/
@@ -307,5 +307,5 @@ extern "C" {
 } /* srule_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

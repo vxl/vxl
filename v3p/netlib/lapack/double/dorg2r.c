@@ -1,13 +1,13 @@
 /* lapack/double/dorg2r.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -21,7 +21,7 @@ static integer c__1 = 1;
 
 /*<       SUBROUTINE DORG2R( M, N, K, A, LDA, TAU, WORK, INFO ) >*/
 /* Subroutine */ int dorg2r_(integer *m, integer *n, integer *k, doublereal *
-	a, integer *lda, doublereal *tau, doublereal *work, integer *info)
+        a, integer *lda, doublereal *tau, doublereal *work, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -30,9 +30,9 @@ static integer c__1 = 1;
     /* Local variables */
     integer i__, j, l;
     extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
-	    integer *), dlarf_(char *, integer *, integer *, doublereal *, 
-	    integer *, doublereal *, doublereal *, integer *, doublereal *, 
-	    ftnlen), xerbla_(char *, integer *, ftnlen);
+            integer *), dlarf_(char *, integer *, integer *, doublereal *, 
+            integer *, doublereal *, doublereal *, integer *, doublereal *, 
+            ftnlen), xerbla_(char *, integer *, ftnlen);
 
 
 /*  -- LAPACK routine (version 3.0) -- */
@@ -123,28 +123,28 @@ static integer c__1 = 1;
 /*<       IF( M.LT.0 ) THEN >*/
     if (*m < 0) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<       ELSE IF( N.LT.0 .OR. N.GT.M ) THEN >*/
     } else if (*n < 0 || *n > *m) {
 /*<          INFO = -2 >*/
-	*info = -2;
+        *info = -2;
 /*<       ELSE IF( K.LT.0 .OR. K.GT.N ) THEN >*/
     } else if (*k < 0 || *k > *n) {
 /*<          INFO = -3 >*/
-	*info = -3;
+        *info = -3;
 /*<       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN >*/
     } else if (*lda < max(1,*m)) {
 /*<          INFO = -5 >*/
-	*info = -5;
+        *info = -5;
 /*<       END IF >*/
     }
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'DORG2R', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("DORG2R", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("DORG2R", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -152,7 +152,7 @@ static integer c__1 = 1;
 
 /*<    >*/
     if (*n <= 0) {
-	return 0;
+        return 0;
     }
 
 /*     Initialise columns k+1:n to columns of the unit matrix */
@@ -161,15 +161,15 @@ static integer c__1 = 1;
     i__1 = *n;
     for (j = *k + 1; j <= i__1; ++j) {
 /*<          DO 10 L = 1, M >*/
-	i__2 = *m;
-	for (l = 1; l <= i__2; ++l) {
+        i__2 = *m;
+        for (l = 1; l <= i__2; ++l) {
 /*<             A( L, J ) = ZERO >*/
-	    a[l + j * a_dim1] = 0.;
+            a[l + j * a_dim1] = 0.;
 /*<    10    CONTINUE >*/
 /* L10: */
-	}
+        }
 /*<          A( J, J ) = ONE >*/
-	a[j + j * a_dim1] = 1.;
+        a[j + j * a_dim1] = 1.;
 /*<    20 CONTINUE >*/
 /* L20: */
     }
@@ -180,36 +180,36 @@ static integer c__1 = 1;
 /*        Apply H(i) to A(i:m,i:n) from the left */
 
 /*<          IF( I.LT.N ) THEN >*/
-	if (i__ < *n) {
+        if (i__ < *n) {
 /*<             A( I, I ) = ONE >*/
-	    a[i__ + i__ * a_dim1] = 1.;
+            a[i__ + i__ * a_dim1] = 1.;
 /*<    >*/
-	    i__1 = *m - i__ + 1;
-	    i__2 = *n - i__;
-	    dlarf_("Left", &i__1, &i__2, &a[i__ + i__ * a_dim1], &c__1, &tau[
-		    i__], &a[i__ + (i__ + 1) * a_dim1], lda, &work[1], (
-		    ftnlen)4);
+            i__1 = *m - i__ + 1;
+            i__2 = *n - i__;
+            dlarf_("Left", &i__1, &i__2, &a[i__ + i__ * a_dim1], &c__1, &tau[
+                    i__], &a[i__ + (i__ + 1) * a_dim1], lda, &work[1], (
+                    ftnlen)4);
 /*<          END IF >*/
-	}
+        }
 /*<    >*/
-	if (i__ < *m) {
-	    i__1 = *m - i__;
-	    d__1 = -tau[i__];
-	    dscal_(&i__1, &d__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
-	}
+        if (i__ < *m) {
+            i__1 = *m - i__;
+            d__1 = -tau[i__];
+            dscal_(&i__1, &d__1, &a[i__ + 1 + i__ * a_dim1], &c__1);
+        }
 /*<          A( I, I ) = ONE - TAU( I ) >*/
-	a[i__ + i__ * a_dim1] = 1. - tau[i__];
+        a[i__ + i__ * a_dim1] = 1. - tau[i__];
 
 /*        Set A(1:i-1,i) to zero */
 
 /*<          DO 30 L = 1, I - 1 >*/
-	i__1 = i__ - 1;
-	for (l = 1; l <= i__1; ++l) {
+        i__1 = i__ - 1;
+        for (l = 1; l <= i__1; ++l) {
 /*<             A( L, I ) = ZERO >*/
-	    a[l + i__ * a_dim1] = 0.;
+            a[l + i__ * a_dim1] = 0.;
 /*<    30    CONTINUE >*/
 /* L30: */
-	}
+        }
 /*<    40 CONTINUE >*/
 /* L40: */
     }
@@ -222,5 +222,5 @@ static integer c__1 = 1;
 } /* dorg2r_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

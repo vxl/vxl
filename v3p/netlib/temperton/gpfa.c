@@ -1,13 +1,13 @@
 /* temperton/gpfa.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -69,8 +69,8 @@ static integer c__3 = 3;
 
 /*<       SUBROUTINE GPFA(A,B,TRIGS,INC,JUMP,N,LOT,ISIGN,NPQR) >*/
 /* Subroutine */ int gpfa_(real *a, real *b, real *trigs, integer *inc, 
-	integer *jump, integer *n, integer *lot, integer *isign, integer *
-	npqr)
+        integer *jump, integer *n, integer *lot, integer *isign, integer *
+        npqr)
 {
     /* Builtin functions */
     integer pow_ii(integer *, integer *);
@@ -78,10 +78,10 @@ static integer c__3 = 3;
     /* Local variables */
     integer i__, ip, iq, ir;
     extern /* Subroutine */ int gpfa2f_(real *, real *, real *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *), gpfa3f_(
-	    real *, real *, real *, integer *, integer *, integer *, integer *
-	    , integer *, integer *), gpfa5f_(real *, real *, real *, integer *
-	    , integer *, integer *, integer *, integer *, integer *);
+            integer *, integer *, integer *, integer *, integer *), gpfa3f_(
+            real *, real *, real *, integer *, integer *, integer *, integer *
+            , integer *, integer *), gpfa5f_(real *, real *, real *, integer *
+            , integer *, integer *, integer *, integer *, integer *);
 
 
 /*<       REAL A(*), B(*), TRIGS(*) >*/
@@ -108,23 +108,23 @@ static integer c__3 = 3;
 /*<       IF (IP.GT.0) THEN >*/
     if (ip > 0) {
 /*<          CALL GPFA2F(A,B,TRIGS,INC,JUMP,N,IP,LOT,ISIGN) >*/
-	gpfa2f_(&a[1], &b[1], &trigs[1], inc, jump, n, &ip, lot, isign);
+        gpfa2f_(&a[1], &b[1], &trigs[1], inc, jump, n, &ip, lot, isign);
 /*<          I = I + 2 * ( 2**IP) >*/
-	i__ += pow_ii(&c__2, &ip) << 1;
+        i__ += pow_ii(&c__2, &ip) << 1;
 /*<       ENDIF >*/
     }
 /*<       IF (IQ.GT.0) THEN >*/
     if (iq > 0) {
 /*<          CALL GPFA3F(A,B,TRIGS(I),INC,JUMP,N,IQ,LOT,ISIGN) >*/
-	gpfa3f_(&a[1], &b[1], &trigs[i__], inc, jump, n, &iq, lot, isign);
+        gpfa3f_(&a[1], &b[1], &trigs[i__], inc, jump, n, &iq, lot, isign);
 /*<          I = I + 2 * (3**IQ) >*/
-	i__ += pow_ii(&c__3, &iq) << 1;
+        i__ += pow_ii(&c__3, &iq) << 1;
 /*<       ENDIF >*/
     }
 /*<       IF (IR.GT.0) THEN >*/
     if (ir > 0) {
 /*<          CALL GPFA5F(A,B,TRIGS(I),INC,JUMP,N,IR,LOT,ISIGN) >*/
-	gpfa5f_(&a[1], &b[1], &trigs[i__], inc, jump, n, &ir, lot, isign);
+        gpfa5f_(&a[1], &b[1], &trigs[i__], inc, jump, n, &ir, lot, isign);
 /*<       ENDIF >*/
     }
 
@@ -134,5 +134,5 @@ static integer c__3 = 3;
 } /* gpfa_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

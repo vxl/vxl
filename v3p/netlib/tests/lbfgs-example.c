@@ -1,13 +1,13 @@
 /* tests/lbfgs-example.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #include "v3p_netlib.h"
@@ -78,9 +78,9 @@
     i__1 = n;
     for (j = 1; j <= i__1; j += 2) {
 /*<          X(J)=-1.2D0 >*/
-	x[j - 1] = -1.2;
+        x[j - 1] = -1.2;
 /*<          X(J+1)=1.D0 >*/
-	x[j] = 1.;
+        x[j] = 1.;
 /*<  10   CONTINUE >*/
 /* L10: */
     }
@@ -93,21 +93,21 @@ L20:
     i__1 = n;
     for (j = 1; j <= i__1; j += 2) {
 /*<         T1= 1.D0-X(J) >*/
-	t1 = 1. - x[j - 1];
+        t1 = 1. - x[j - 1];
 /*<         T2= 1.D1*(X(J+1)-X(J)**2) >*/
 /* Computing 2nd power */
-	d__1 = x[j - 1];
-	t2 = (x[j] - d__1 * d__1) * 10.;
+        d__1 = x[j - 1];
+        t2 = (x[j] - d__1 * d__1) * 10.;
 /*<         G(J+1)= 2.D1*T2 >*/
-	g[j] = t2 * 20.;
+        g[j] = t2 * 20.;
 /*<         G(J)= -2.D0*(X(J)*G(J+1)+T1) >*/
-	g[j - 1] = (x[j - 1] * g[j] + t1) * -2.;
+        g[j - 1] = (x[j - 1] * g[j] + t1) * -2.;
 /*<         F= F+T1**2+T2**2 >*/
 /* Computing 2nd power */
-	d__1 = t1;
+        d__1 = t1;
 /* Computing 2nd power */
-	d__2 = t2;
-	f = f + d__1 * d__1 + d__2 * d__2;
+        d__2 = t2;
+        f = f + d__1 * d__1 + d__2 * d__2;
 /*<  30   CONTINUE >*/
 /* L30: */
     }
@@ -117,14 +117,14 @@ L20:
       &lbfgs_global);
 /*<       IF(IFLAG.LE.0) GO TO 50 >*/
     if (iflag <= 0) {
-	goto L50;
+        goto L50;
     }
 /*<       ICALL=ICALL + 1 >*/
     ++icall;
 /*     We allow at most 2000 evaluations of F and G */
 /*<       IF(ICALL.GT.2000) GO TO 50 >*/
     if (icall > 2000) {
-	goto L50;
+        goto L50;
     }
 /*<       GO TO 20 >*/
     goto L20;

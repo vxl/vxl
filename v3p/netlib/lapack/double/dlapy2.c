@@ -1,13 +1,13 @@
 /* lapack/double/dlapy2.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -77,13 +77,13 @@ doublereal dlapy2_(doublereal *x, doublereal *y)
 /*<       IF( Z.EQ.ZERO ) THEN >*/
     if (z__ == 0.) {
 /*<          DLAPY2 = W >*/
-	ret_val = w;
+        ret_val = w;
 /*<       ELSE >*/
     } else {
 /*<          DLAPY2 = W*SQRT( ONE+( Z / W )**2 ) >*/
 /* Computing 2nd power */
-	d__1 = z__ / w;
-	ret_val = w * sqrt(d__1 * d__1 + 1.);
+        d__1 = z__ / w;
+        ret_val = w * sqrt(d__1 * d__1 + 1.);
 /*<       END IF >*/
     }
 /*<       RETURN >*/
@@ -95,5 +95,5 @@ doublereal dlapy2_(doublereal *x, doublereal *y)
 } /* dlapy2_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

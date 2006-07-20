@@ -1,13 +1,13 @@
 /* lapack/complex16/zgehrd.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -26,8 +26,8 @@ static integer c__65 = 65;
 
 /*<       SUBROUTINE ZGEHRD( N, ILO, IHI, A, LDA, TAU, WORK, LWORK, INFO ) >*/
 /* Subroutine */ int zgehrd_(integer *n, integer *ilo, integer *ihi, 
-	doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *
-	work, integer *lwork, integer *info)
+        doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *
+        work, integer *lwork, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
@@ -35,25 +35,25 @@ static integer c__65 = 65;
 
     /* Local variables */
     integer i__;
-    doublecomplex t[4160]	/* was [65][64] */;
+    doublecomplex t[4160]       /* was [65][64] */;
     integer ib;
     doublecomplex ei;
     integer nb, nh, nx=0, iws, nbmin, iinfo;
     extern /* Subroutine */ int zgemm_(char *, char *, integer *, integer *, 
-	    integer *, doublecomplex *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
-	    integer *, ftnlen, ftnlen), zgehd2_(integer *, integer *, integer 
-	    *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
-	    integer *), xerbla_(char *, integer *, ftnlen);
+            integer *, doublecomplex *, doublecomplex *, integer *, 
+            doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
+            integer *, ftnlen, ftnlen), zgehd2_(integer *, integer *, integer 
+            *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
+            integer *), xerbla_(char *, integer *, ftnlen);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, 
-	    integer *, integer *, ftnlen, ftnlen);
+            integer *, integer *, ftnlen, ftnlen);
     extern /* Subroutine */ int zlarfb_(char *, char *, char *, char *, 
-	    integer *, integer *, integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, ftnlen, ftnlen, ftnlen, ftnlen), 
-	    zlahrd_(integer *, integer *, integer *, doublecomplex *, integer 
-	    *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, 
-	    integer *);
+            integer *, integer *, integer *, doublecomplex *, integer *, 
+            doublecomplex *, integer *, doublecomplex *, integer *, 
+            doublecomplex *, integer *, ftnlen, ftnlen, ftnlen, ftnlen), 
+            zlahrd_(integer *, integer *, integer *, doublecomplex *, integer 
+            *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, 
+            integer *);
     integer ldwork, lwkopt;
     logical lquery;
 
@@ -199,7 +199,7 @@ static integer c__65 = 65;
 /*<       NB = MIN( NBMAX, ILAENV( 1, 'ZGEHRD', ' ', N, ILO, IHI, -1 ) ) >*/
 /* Computing MIN */
     i__1 = 64, i__2 = ilaenv_(&c__1, "ZGEHRD", " ", n, ilo, ihi, &c_n1, (
-	    ftnlen)6, (ftnlen)1);
+            ftnlen)6, (ftnlen)1);
     nb = min(i__1,i__2);
 /*<       LWKOPT = N*NB >*/
     lwkopt = *n * nb;
@@ -210,36 +210,36 @@ static integer c__65 = 65;
 /*<       IF( N.LT.0 ) THEN >*/
     if (*n < 0) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<       ELSE IF( ILO.LT.1 .OR. ILO.GT.MAX( 1, N ) ) THEN >*/
     } else if (*ilo < 1 || *ilo > max(1,*n)) {
 /*<          INFO = -2 >*/
-	*info = -2;
+        *info = -2;
 /*<       ELSE IF( IHI.LT.MIN( ILO, N ) .OR. IHI.GT.N ) THEN >*/
     } else if (*ihi < min(*ilo,*n) || *ihi > *n) {
 /*<          INFO = -3 >*/
-	*info = -3;
+        *info = -3;
 /*<       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN >*/
     } else if (*lda < max(1,*n)) {
 /*<          INFO = -5 >*/
-	*info = -5;
+        *info = -5;
 /*<       ELSE IF( LWORK.LT.MAX( 1, N ) .AND. .NOT.LQUERY ) THEN >*/
     } else if (*lwork < max(1,*n) && ! lquery) {
 /*<          INFO = -8 >*/
-	*info = -8;
+        *info = -8;
 /*<       END IF >*/
     }
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'ZGEHRD', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("ZGEHRD", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("ZGEHRD", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       ELSE IF( LQUERY ) THEN >*/
     } else if (lquery) {
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -249,8 +249,8 @@ static integer c__65 = 65;
     i__1 = *ilo - 1;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          TAU( I ) = ZERO >*/
-	i__2 = i__;
-	tau[i__2].r = 0., tau[i__2].i = 0.;
+        i__2 = i__;
+        tau[i__2].r = 0., tau[i__2].i = 0.;
 /*<    10 CONTINUE >*/
 /* L10: */
     }
@@ -258,8 +258,8 @@ static integer c__65 = 65;
     i__1 = *n - 1;
     for (i__ = max(1,*ihi); i__ <= i__1; ++i__) {
 /*<          TAU( I ) = ZERO >*/
-	i__2 = i__;
-	tau[i__2].r = 0., tau[i__2].i = 0.;
+        i__2 = i__;
+        tau[i__2].r = 0., tau[i__2].i = 0.;
 /*<    20 CONTINUE >*/
 /* L20: */
     }
@@ -271,9 +271,9 @@ static integer c__65 = 65;
 /*<       IF( NH.LE.1 ) THEN >*/
     if (nh <= 1) {
 /*<          WORK( 1 ) = 1 >*/
-	work[1].r = 1., work[1].i = 0.;
+        work[1].r = 1., work[1].i = 0.;
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -289,18 +289,18 @@ static integer c__65 = 65;
 
 /*<          NX = MAX( NB, ILAENV( 3, 'ZGEHRD', ' ', N, ILO, IHI, -1 ) ) >*/
 /* Computing MAX */
-	i__1 = nb, i__2 = ilaenv_(&c__3, "ZGEHRD", " ", n, ilo, ihi, &c_n1, (
-		ftnlen)6, (ftnlen)1);
-	nx = max(i__1,i__2);
+        i__1 = nb, i__2 = ilaenv_(&c__3, "ZGEHRD", " ", n, ilo, ihi, &c_n1, (
+                ftnlen)6, (ftnlen)1);
+        nx = max(i__1,i__2);
 /*<          IF( NX.LT.NH ) THEN >*/
-	if (nx < nh) {
+        if (nx < nh) {
 
 /*           Determine if workspace is large enough for blocked code. */
 
 /*<             IWS = N*NB >*/
-	    iws = *n * nb;
+            iws = *n * nb;
 /*<             IF( LWORK.LT.IWS ) THEN >*/
-	    if (*lwork < iws) {
+            if (*lwork < iws) {
 
 /*              Not enough workspace to use optimal NB:  determine the */
 /*              minimum value of NB, and reduce NB or force use of */
@@ -308,23 +308,23 @@ static integer c__65 = 65;
 
 /*<    >*/
 /* Computing MAX */
-		i__1 = 2, i__2 = ilaenv_(&c__2, "ZGEHRD", " ", n, ilo, ihi, &
-			c_n1, (ftnlen)6, (ftnlen)1);
-		nbmin = max(i__1,i__2);
+                i__1 = 2, i__2 = ilaenv_(&c__2, "ZGEHRD", " ", n, ilo, ihi, &
+                        c_n1, (ftnlen)6, (ftnlen)1);
+                nbmin = max(i__1,i__2);
 /*<                IF( LWORK.GE.N*NBMIN ) THEN >*/
-		if (*lwork >= *n * nbmin) {
+                if (*lwork >= *n * nbmin) {
 /*<                   NB = LWORK / N >*/
-		    nb = *lwork / *n;
+                    nb = *lwork / *n;
 /*<                ELSE >*/
-		} else {
+                } else {
 /*<                   NB = 1 >*/
-		    nb = 1;
+                    nb = 1;
 /*<                END IF >*/
-		}
+                }
 /*<             END IF >*/
-	    }
+            }
 /*<          END IF >*/
-	}
+        }
 /*<       END IF >*/
     }
 /*<       LDWORK = N >*/
@@ -336,7 +336,7 @@ static integer c__65 = 65;
 /*        Use unblocked code below */
 
 /*<          I = ILO >*/
-	i__ = *ilo;
+        i__ = *ilo;
 
 /*<       ELSE >*/
     } else {
@@ -344,56 +344,56 @@ static integer c__65 = 65;
 /*        Use blocked code */
 
 /*<          DO 30 I = ILO, IHI - 1 - NX, NB >*/
-	i__1 = *ihi - 1 - nx;
-	i__2 = nb;
-	for (i__ = *ilo; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2) {
+        i__1 = *ihi - 1 - nx;
+        i__2 = nb;
+        for (i__ = *ilo; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2) {
 /*<             IB = MIN( NB, IHI-I ) >*/
 /* Computing MIN */
-	    i__3 = nb, i__4 = *ihi - i__;
-	    ib = min(i__3,i__4);
+            i__3 = nb, i__4 = *ihi - i__;
+            ib = min(i__3,i__4);
 
 /*           Reduce columns i:i+ib-1 to Hessenberg form, returning the */
 /*           matrices V and T of the block reflector H = I - V*T*V' */
 /*           which performs the reduction, and also the matrix Y = A*V*T */
 
 /*<    >*/
-	    zlahrd_(ihi, &i__, &ib, &a[i__ * a_dim1 + 1], lda, &tau[i__], t, &
-		    c__65, &work[1], &ldwork);
+            zlahrd_(ihi, &i__, &ib, &a[i__ * a_dim1 + 1], lda, &tau[i__], t, &
+                    c__65, &work[1], &ldwork);
 
 /*           Apply the block reflector H to A(1:ihi,i+ib:ihi) from the */
 /*           right, computing  A := A - Y * V'. V(i+ib,ib-1) must be set */
 /*           to 1. */
 
 /*<             EI = A( I+IB, I+IB-1 ) >*/
-	    i__3 = i__ + ib + (i__ + ib - 1) * a_dim1;
-	    ei.r = a[i__3].r, ei.i = a[i__3].i;
+            i__3 = i__ + ib + (i__ + ib - 1) * a_dim1;
+            ei.r = a[i__3].r, ei.i = a[i__3].i;
 /*<             A( I+IB, I+IB-1 ) = ONE >*/
-	    i__3 = i__ + ib + (i__ + ib - 1) * a_dim1;
-	    a[i__3].r = 1., a[i__3].i = 0.;
+            i__3 = i__ + ib + (i__ + ib - 1) * a_dim1;
+            a[i__3].r = 1., a[i__3].i = 0.;
 /*<    >*/
-	    i__3 = *ihi - i__ - ib + 1;
-	    z__1.r = -1., z__1.i = -0.;
-	    zgemm_("No transpose", "Conjugate transpose", ihi, &i__3, &ib, &
-		    z__1, &work[1], &ldwork, &a[i__ + ib + i__ * a_dim1], lda,
-		     &c_b2, &a[(i__ + ib) * a_dim1 + 1], lda, (ftnlen)12, (
-		    ftnlen)19);
+            i__3 = *ihi - i__ - ib + 1;
+            z__1.r = -1., z__1.i = -0.;
+            zgemm_("No transpose", "Conjugate transpose", ihi, &i__3, &ib, &
+                    z__1, &work[1], &ldwork, &a[i__ + ib + i__ * a_dim1], lda,
+                     &c_b2, &a[(i__ + ib) * a_dim1 + 1], lda, (ftnlen)12, (
+                    ftnlen)19);
 /*<             A( I+IB, I+IB-1 ) = EI >*/
-	    i__3 = i__ + ib + (i__ + ib - 1) * a_dim1;
-	    a[i__3].r = ei.r, a[i__3].i = ei.i;
+            i__3 = i__ + ib + (i__ + ib - 1) * a_dim1;
+            a[i__3].r = ei.r, a[i__3].i = ei.i;
 
 /*           Apply the block reflector H to A(i+1:ihi,i+ib:n) from the */
 /*           left */
 
 /*<    >*/
-	    i__3 = *ihi - i__;
-	    i__4 = *n - i__ - ib + 1;
-	    zlarfb_("Left", "Conjugate transpose", "Forward", "Columnwise", &
-		    i__3, &i__4, &ib, &a[i__ + 1 + i__ * a_dim1], lda, t, &
-		    c__65, &a[i__ + 1 + (i__ + ib) * a_dim1], lda, &work[1], &
-		    ldwork, (ftnlen)4, (ftnlen)19, (ftnlen)7, (ftnlen)10);
+            i__3 = *ihi - i__;
+            i__4 = *n - i__ - ib + 1;
+            zlarfb_("Left", "Conjugate transpose", "Forward", "Columnwise", &
+                    i__3, &i__4, &ib, &a[i__ + 1 + i__ * a_dim1], lda, t, &
+                    c__65, &a[i__ + 1 + (i__ + ib) * a_dim1], lda, &work[1], &
+                    ldwork, (ftnlen)4, (ftnlen)19, (ftnlen)7, (ftnlen)10);
 /*<    30    CONTINUE >*/
 /* L30: */
-	}
+        }
 /*<       END IF >*/
     }
 
@@ -413,5 +413,5 @@ static integer c__65 = 65;
 } /* zgehrd_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

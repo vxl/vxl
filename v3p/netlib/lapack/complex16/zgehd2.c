@@ -1,13 +1,13 @@
 /* lapack/complex16/zgehd2.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -21,8 +21,8 @@ static integer c__1 = 1;
 
 /*<       SUBROUTINE ZGEHD2( N, ILO, IHI, A, LDA, TAU, WORK, INFO ) >*/
 /* Subroutine */ int zgehd2_(integer *n, integer *ilo, integer *ihi, 
-	doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *
-	work, integer *info)
+        doublecomplex *a, integer *lda, doublecomplex *tau, doublecomplex *
+        work, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
@@ -35,10 +35,10 @@ static integer c__1 = 1;
     integer i__;
     doublecomplex alpha;
     extern /* Subroutine */ int zlarf_(char *, integer *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
-	    integer *, doublecomplex *, ftnlen), xerbla_(char *, integer *, 
-	    ftnlen), zlarfg_(integer *, doublecomplex *, doublecomplex *, 
-	    integer *, doublecomplex *);
+            doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
+            integer *, doublecomplex *, ftnlen), xerbla_(char *, integer *, 
+            ftnlen), zlarfg_(integer *, doublecomplex *, doublecomplex *, 
+            integer *, doublecomplex *);
 
 
 /*  -- LAPACK routine (version 3.0) -- */
@@ -160,28 +160,28 @@ static integer c__1 = 1;
 /*<       IF( N.LT.0 ) THEN >*/
     if (*n < 0) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<       ELSE IF( ILO.LT.1 .OR. ILO.GT.MAX( 1, N ) ) THEN >*/
     } else if (*ilo < 1 || *ilo > max(1,*n)) {
 /*<          INFO = -2 >*/
-	*info = -2;
+        *info = -2;
 /*<       ELSE IF( IHI.LT.MIN( ILO, N ) .OR. IHI.GT.N ) THEN >*/
     } else if (*ihi < min(*ilo,*n) || *ihi > *n) {
 /*<          INFO = -3 >*/
-	*info = -3;
+        *info = -3;
 /*<       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN >*/
     } else if (*lda < max(1,*n)) {
 /*<          INFO = -5 >*/
-	*info = -5;
+        *info = -5;
 /*<       END IF >*/
     }
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'ZGEHD2', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("ZGEHD2", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("ZGEHD2", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -192,37 +192,37 @@ static integer c__1 = 1;
 /*        Compute elementary reflector H(i) to annihilate A(i+2:ihi,i) */
 
 /*<          ALPHA = A( I+1, I ) >*/
-	i__2 = i__ + 1 + i__ * a_dim1;
-	alpha.r = a[i__2].r, alpha.i = a[i__2].i;
+        i__2 = i__ + 1 + i__ * a_dim1;
+        alpha.r = a[i__2].r, alpha.i = a[i__2].i;
 /*<          CALL ZLARFG( IHI-I, ALPHA, A( MIN( I+2, N ), I ), 1, TAU( I ) ) >*/
-	i__2 = *ihi - i__;
+        i__2 = *ihi - i__;
 /* Computing MIN */
-	i__3 = i__ + 2;
-	zlarfg_(&i__2, &alpha, &a[min(i__3,*n) + i__ * a_dim1], &c__1, &tau[
-		i__]);
+        i__3 = i__ + 2;
+        zlarfg_(&i__2, &alpha, &a[min(i__3,*n) + i__ * a_dim1], &c__1, &tau[
+                i__]);
 /*<          A( I+1, I ) = ONE >*/
-	i__2 = i__ + 1 + i__ * a_dim1;
-	a[i__2].r = 1., a[i__2].i = 0.;
+        i__2 = i__ + 1 + i__ * a_dim1;
+        a[i__2].r = 1., a[i__2].i = 0.;
 
 /*        Apply H(i) to A(1:ihi,i+1:ihi) from the right */
 
 /*<    >*/
-	i__2 = *ihi - i__;
-	zlarf_("Right", ihi, &i__2, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[
-		i__], &a[(i__ + 1) * a_dim1 + 1], lda, &work[1], (ftnlen)5);
+        i__2 = *ihi - i__;
+        zlarf_("Right", ihi, &i__2, &a[i__ + 1 + i__ * a_dim1], &c__1, &tau[
+                i__], &a[(i__ + 1) * a_dim1 + 1], lda, &work[1], (ftnlen)5);
 
 /*        Apply H(i)' to A(i+1:ihi,i+1:n) from the left */
 
 /*<    >*/
-	i__2 = *ihi - i__;
-	i__3 = *n - i__;
-	d_cnjg(&z__1, &tau[i__]);
-	zlarf_("Left", &i__2, &i__3, &a[i__ + 1 + i__ * a_dim1], &c__1, &z__1,
-		 &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1], (ftnlen)4);
+        i__2 = *ihi - i__;
+        i__3 = *n - i__;
+        d_cnjg(&z__1, &tau[i__]);
+        zlarf_("Left", &i__2, &i__3, &a[i__ + 1 + i__ * a_dim1], &c__1, &z__1,
+                 &a[i__ + 1 + (i__ + 1) * a_dim1], lda, &work[1], (ftnlen)4);
 
 /*<          A( I+1, I ) = ALPHA >*/
-	i__2 = i__ + 1 + i__ * a_dim1;
-	a[i__2].r = alpha.r, a[i__2].i = alpha.i;
+        i__2 = i__ + 1 + i__ * a_dim1;
+        a[i__2].r = alpha.r, a[i__2].i = alpha.i;
 /*<    10 CONTINUE >*/
 /* L10: */
     }
@@ -236,5 +236,5 @@ static integer c__1 = 1;
 } /* zgehd2_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

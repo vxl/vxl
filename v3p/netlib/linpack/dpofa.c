@@ -1,13 +1,13 @@
 /* linpack/dpofa.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -21,7 +21,7 @@ static integer c__1 = 1;
 
 /*<       subroutine dpofa(a,lda,n,info) >*/
 /* Subroutine */ int dpofa_(doublereal *a, integer *lda, integer *n, integer *
-	info)
+        info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
@@ -34,7 +34,7 @@ static integer c__1 = 1;
     doublereal s, t;
     integer jm1;
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, 
-	    integer *);
+            integer *);
 
 /*<       integer lda,n,info >*/
 /*<       double precision a(lda,1) >*/
@@ -96,42 +96,42 @@ static integer c__1 = 1;
     i__1 = *n;
     for (j = 1; j <= i__1; ++j) {
 /*<             info = j >*/
-	*info = j;
+        *info = j;
 /*<             s = 0.0d0 >*/
-	s = 0.;
+        s = 0.;
 /*<             jm1 = j - 1 >*/
-	jm1 = j - 1;
+        jm1 = j - 1;
 /*<             if (jm1 .lt. 1) go to 20 >*/
-	if (jm1 < 1) {
-	    goto L20;
-	}
+        if (jm1 < 1) {
+            goto L20;
+        }
 /*<             do 10 k = 1, jm1 >*/
-	i__2 = jm1;
-	for (k = 1; k <= i__2; ++k) {
+        i__2 = jm1;
+        for (k = 1; k <= i__2; ++k) {
 /*<                t = a(k,j) - ddot(k-1,a(1,k),1,a(1,j),1) >*/
-	    i__3 = k - 1;
-	    t = a[k + j * a_dim1] - ddot_(&i__3, &a[k * a_dim1 + 1], &c__1, &
-		    a[j * a_dim1 + 1], &c__1);
+            i__3 = k - 1;
+            t = a[k + j * a_dim1] - ddot_(&i__3, &a[k * a_dim1 + 1], &c__1, &
+                    a[j * a_dim1 + 1], &c__1);
 /*<                t = t/a(k,k) >*/
-	    t /= a[k + k * a_dim1];
+            t /= a[k + k * a_dim1];
 /*<                a(k,j) = t >*/
-	    a[k + j * a_dim1] = t;
+            a[k + j * a_dim1] = t;
 /*<                s = s + t*t >*/
-	    s += t * t;
+            s += t * t;
 /*<    10       continue >*/
 /* L10: */
-	}
+        }
 /*<    20       continue >*/
 L20:
 /*<             s = a(j,j) - s >*/
-	s = a[j + j * a_dim1] - s;
+        s = a[j + j * a_dim1] - s;
 /*     ......exit */
 /*<             if (s .le. 0.0d0) go to 40 >*/
-	if (s <= 0.) {
-	    goto L40;
-	}
+        if (s <= 0.) {
+            goto L40;
+        }
 /*<             a(j,j) = dsqrt(s) >*/
-	a[j + j * a_dim1] = sqrt(s);
+        a[j + j * a_dim1] = sqrt(s);
 /*<    30    continue >*/
 /* L30: */
     }
@@ -145,5 +145,5 @@ L40:
 } /* dpofa_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

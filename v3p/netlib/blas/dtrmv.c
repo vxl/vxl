@@ -1,13 +1,13 @@
 /* blas/dtrmv.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -17,8 +17,8 @@ extern "C" {
 
 /*<       SUBROUTINE DTRMV ( UPLO, TRANS, DIAG, N, A, LDA, X, INCX ) >*/
 /* Subroutine */ int dtrmv_(char *uplo, char *trans, char *diag, integer *n, 
-	doublereal *a, integer *lda, doublereal *x, integer *incx, ftnlen 
-	uplo_len, ftnlen trans_len, ftnlen diag_len)
+        doublereal *a, integer *lda, doublereal *x, integer *incx, ftnlen 
+        uplo_len, ftnlen trans_len, ftnlen diag_len)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -161,40 +161,40 @@ extern "C" {
     info = 0;
 /*<    >*/
     if (! lsame_(uplo, "U", (ftnlen)1, (ftnlen)1) && ! lsame_(uplo, "L", (
-	    ftnlen)1, (ftnlen)1)) {
+            ftnlen)1, (ftnlen)1)) {
 /*<          INFO = 1 >*/
-	info = 1;
+        info = 1;
 /*<    >*/
     } else if (! lsame_(trans, "N", (ftnlen)1, (ftnlen)1) && ! lsame_(trans, 
-	    "T", (ftnlen)1, (ftnlen)1) && ! lsame_(trans, "C", (ftnlen)1, (
-	    ftnlen)1)) {
+            "T", (ftnlen)1, (ftnlen)1) && ! lsame_(trans, "C", (ftnlen)1, (
+            ftnlen)1)) {
 /*<          INFO = 2 >*/
-	info = 2;
+        info = 2;
 /*<    >*/
     } else if (! lsame_(diag, "U", (ftnlen)1, (ftnlen)1) && ! lsame_(diag, 
-	    "N", (ftnlen)1, (ftnlen)1)) {
+            "N", (ftnlen)1, (ftnlen)1)) {
 /*<          INFO = 3 >*/
-	info = 3;
+        info = 3;
 /*<       ELSE IF( N.LT.0 )THEN >*/
     } else if (*n < 0) {
 /*<          INFO = 4 >*/
-	info = 4;
+        info = 4;
 /*<       ELSE IF( LDA.LT.MAX( 1, N ) )THEN >*/
     } else if (*lda < max(1,*n)) {
 /*<          INFO = 6 >*/
-	info = 6;
+        info = 6;
 /*<       ELSE IF( INCX.EQ.0 )THEN >*/
     } else if (*incx == 0) {
 /*<          INFO = 8 >*/
-	info = 8;
+        info = 8;
 /*<       END IF >*/
     }
 /*<       IF( INFO.NE.0 )THEN >*/
     if (info != 0) {
 /*<          CALL XERBLA( 'DTRMV ', INFO ) >*/
-	xerbla_("DTRMV ", &info, (ftnlen)6);
+        xerbla_("DTRMV ", &info, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -202,7 +202,7 @@ extern "C" {
 
 /*<    >*/
     if (*n == 0) {
-	return 0;
+        return 0;
     }
 
 /*<       NOUNIT = LSAME( DIAG, 'N' ) >*/
@@ -214,11 +214,11 @@ extern "C" {
 /*<       IF( INCX.LE.0 )THEN >*/
     if (*incx <= 0) {
 /*<          KX = 1 - ( N - 1 )*INCX >*/
-	kx = 1 - (*n - 1) * *incx;
+        kx = 1 - (*n - 1) * *incx;
 /*<       ELSE IF( INCX.NE.1 )THEN >*/
     } else if (*incx != 1) {
 /*<          KX = 1 >*/
-	kx = 1;
+        kx = 1;
 /*<       END IF >*/
     }
 
@@ -231,258 +231,258 @@ extern "C" {
 /*        Form  x := A*x. */
 
 /*<          IF( LSAME( UPLO, 'U' ) )THEN >*/
-	if (lsame_(uplo, "U", (ftnlen)1, (ftnlen)1)) {
+        if (lsame_(uplo, "U", (ftnlen)1, (ftnlen)1)) {
 /*<             IF( INCX.EQ.1 )THEN >*/
-	    if (*incx == 1) {
+            if (*incx == 1) {
 /*<                DO 20, J = 1, N >*/
-		i__1 = *n;
-		for (j = 1; j <= i__1; ++j) {
+                i__1 = *n;
+                for (j = 1; j <= i__1; ++j) {
 /*<                   IF( X( J ).NE.ZERO )THEN >*/
-		    if (x[j] != 0.) {
+                    if (x[j] != 0.) {
 /*<                      TEMP = X( J ) >*/
-			temp = x[j];
+                        temp = x[j];
 /*<                      DO 10, I = 1, J - 1 >*/
-			i__2 = j - 1;
-			for (i__ = 1; i__ <= i__2; ++i__) {
+                        i__2 = j - 1;
+                        for (i__ = 1; i__ <= i__2; ++i__) {
 /*<                         X( I ) = X( I ) + TEMP*A( I, J ) >*/
-			    x[i__] += temp * a[i__ + j * a_dim1];
+                            x[i__] += temp * a[i__ + j * a_dim1];
 /*<    10                CONTINUE >*/
 /* L10: */
-			}
+                        }
 /*<    >*/
-			if (nounit) {
-			    x[j] *= a[j + j * a_dim1];
-			}
+                        if (nounit) {
+                            x[j] *= a[j + j * a_dim1];
+                        }
 /*<                   END IF >*/
-		    }
+                    }
 /*<    20          CONTINUE >*/
 /* L20: */
-		}
+                }
 /*<             ELSE >*/
-	    } else {
+            } else {
 /*<                JX = KX >*/
-		jx = kx;
+                jx = kx;
 /*<                DO 40, J = 1, N >*/
-		i__1 = *n;
-		for (j = 1; j <= i__1; ++j) {
+                i__1 = *n;
+                for (j = 1; j <= i__1; ++j) {
 /*<                   IF( X( JX ).NE.ZERO )THEN >*/
-		    if (x[jx] != 0.) {
+                    if (x[jx] != 0.) {
 /*<                      TEMP = X( JX ) >*/
-			temp = x[jx];
+                        temp = x[jx];
 /*<                      IX   = KX >*/
-			ix = kx;
+                        ix = kx;
 /*<                      DO 30, I = 1, J - 1 >*/
-			i__2 = j - 1;
-			for (i__ = 1; i__ <= i__2; ++i__) {
+                        i__2 = j - 1;
+                        for (i__ = 1; i__ <= i__2; ++i__) {
 /*<                         X( IX ) = X( IX ) + TEMP*A( I, J ) >*/
-			    x[ix] += temp * a[i__ + j * a_dim1];
+                            x[ix] += temp * a[i__ + j * a_dim1];
 /*<                         IX      = IX      + INCX >*/
-			    ix += *incx;
+                            ix += *incx;
 /*<    30                CONTINUE >*/
 /* L30: */
-			}
+                        }
 /*<    >*/
-			if (nounit) {
-			    x[jx] *= a[j + j * a_dim1];
-			}
+                        if (nounit) {
+                            x[jx] *= a[j + j * a_dim1];
+                        }
 /*<                   END IF >*/
-		    }
+                    }
 /*<                   JX = JX + INCX >*/
-		    jx += *incx;
+                    jx += *incx;
 /*<    40          CONTINUE >*/
 /* L40: */
-		}
+                }
 /*<             END IF >*/
-	    }
+            }
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             IF( INCX.EQ.1 )THEN >*/
-	    if (*incx == 1) {
+            if (*incx == 1) {
 /*<                DO 60, J = N, 1, -1 >*/
-		for (j = *n; j >= 1; --j) {
+                for (j = *n; j >= 1; --j) {
 /*<                   IF( X( J ).NE.ZERO )THEN >*/
-		    if (x[j] != 0.) {
+                    if (x[j] != 0.) {
 /*<                      TEMP = X( J ) >*/
-			temp = x[j];
+                        temp = x[j];
 /*<                      DO 50, I = N, J + 1, -1 >*/
-			i__1 = j + 1;
-			for (i__ = *n; i__ >= i__1; --i__) {
+                        i__1 = j + 1;
+                        for (i__ = *n; i__ >= i__1; --i__) {
 /*<                         X( I ) = X( I ) + TEMP*A( I, J ) >*/
-			    x[i__] += temp * a[i__ + j * a_dim1];
+                            x[i__] += temp * a[i__ + j * a_dim1];
 /*<    50                CONTINUE >*/
 /* L50: */
-			}
+                        }
 /*<    >*/
-			if (nounit) {
-			    x[j] *= a[j + j * a_dim1];
-			}
+                        if (nounit) {
+                            x[j] *= a[j + j * a_dim1];
+                        }
 /*<                   END IF >*/
-		    }
+                    }
 /*<    60          CONTINUE >*/
 /* L60: */
-		}
+                }
 /*<             ELSE >*/
-	    } else {
+            } else {
 /*<                KX = KX + ( N - 1 )*INCX >*/
-		kx += (*n - 1) * *incx;
+                kx += (*n - 1) * *incx;
 /*<                JX = KX >*/
-		jx = kx;
+                jx = kx;
 /*<                DO 80, J = N, 1, -1 >*/
-		for (j = *n; j >= 1; --j) {
+                for (j = *n; j >= 1; --j) {
 /*<                   IF( X( JX ).NE.ZERO )THEN >*/
-		    if (x[jx] != 0.) {
+                    if (x[jx] != 0.) {
 /*<                      TEMP = X( JX ) >*/
-			temp = x[jx];
+                        temp = x[jx];
 /*<                      IX   = KX >*/
-			ix = kx;
+                        ix = kx;
 /*<                      DO 70, I = N, J + 1, -1 >*/
-			i__1 = j + 1;
-			for (i__ = *n; i__ >= i__1; --i__) {
+                        i__1 = j + 1;
+                        for (i__ = *n; i__ >= i__1; --i__) {
 /*<                         X( IX ) = X( IX ) + TEMP*A( I, J ) >*/
-			    x[ix] += temp * a[i__ + j * a_dim1];
+                            x[ix] += temp * a[i__ + j * a_dim1];
 /*<                         IX      = IX      - INCX >*/
-			    ix -= *incx;
+                            ix -= *incx;
 /*<    70                CONTINUE >*/
 /* L70: */
-			}
+                        }
 /*<    >*/
-			if (nounit) {
-			    x[jx] *= a[j + j * a_dim1];
-			}
+                        if (nounit) {
+                            x[jx] *= a[j + j * a_dim1];
+                        }
 /*<                   END IF >*/
-		    }
+                    }
 /*<                   JX = JX - INCX >*/
-		    jx -= *incx;
+                    jx -= *incx;
 /*<    80          CONTINUE >*/
 /* L80: */
-		}
+                }
 /*<             END IF >*/
-	    }
+            }
 /*<          END IF >*/
-	}
+        }
 /*<       ELSE >*/
     } else {
 
 /*        Form  x := A'*x. */
 
 /*<          IF( LSAME( UPLO, 'U' ) )THEN >*/
-	if (lsame_(uplo, "U", (ftnlen)1, (ftnlen)1)) {
+        if (lsame_(uplo, "U", (ftnlen)1, (ftnlen)1)) {
 /*<             IF( INCX.EQ.1 )THEN >*/
-	    if (*incx == 1) {
+            if (*incx == 1) {
 /*<                DO 100, J = N, 1, -1 >*/
-		for (j = *n; j >= 1; --j) {
+                for (j = *n; j >= 1; --j) {
 /*<                   TEMP = X( J ) >*/
-		    temp = x[j];
+                    temp = x[j];
 /*<    >*/
-		    if (nounit) {
-			temp *= a[j + j * a_dim1];
-		    }
+                    if (nounit) {
+                        temp *= a[j + j * a_dim1];
+                    }
 /*<                   DO 90, I = J - 1, 1, -1 >*/
-		    for (i__ = j - 1; i__ >= 1; --i__) {
+                    for (i__ = j - 1; i__ >= 1; --i__) {
 /*<                      TEMP = TEMP + A( I, J )*X( I ) >*/
-			temp += a[i__ + j * a_dim1] * x[i__];
+                        temp += a[i__ + j * a_dim1] * x[i__];
 /*<    90             CONTINUE >*/
 /* L90: */
-		    }
+                    }
 /*<                   X( J ) = TEMP >*/
-		    x[j] = temp;
+                    x[j] = temp;
 /*<   100          CONTINUE >*/
 /* L100: */
-		}
+                }
 /*<             ELSE >*/
-	    } else {
+            } else {
 /*<                JX = KX + ( N - 1 )*INCX >*/
-		jx = kx + (*n - 1) * *incx;
+                jx = kx + (*n - 1) * *incx;
 /*<                DO 120, J = N, 1, -1 >*/
-		for (j = *n; j >= 1; --j) {
+                for (j = *n; j >= 1; --j) {
 /*<                   TEMP = X( JX ) >*/
-		    temp = x[jx];
+                    temp = x[jx];
 /*<                   IX   = JX >*/
-		    ix = jx;
+                    ix = jx;
 /*<    >*/
-		    if (nounit) {
-			temp *= a[j + j * a_dim1];
-		    }
+                    if (nounit) {
+                        temp *= a[j + j * a_dim1];
+                    }
 /*<                   DO 110, I = J - 1, 1, -1 >*/
-		    for (i__ = j - 1; i__ >= 1; --i__) {
+                    for (i__ = j - 1; i__ >= 1; --i__) {
 /*<                      IX   = IX   - INCX >*/
-			ix -= *incx;
+                        ix -= *incx;
 /*<                      TEMP = TEMP + A( I, J )*X( IX ) >*/
-			temp += a[i__ + j * a_dim1] * x[ix];
+                        temp += a[i__ + j * a_dim1] * x[ix];
 /*<   110             CONTINUE >*/
 /* L110: */
-		    }
+                    }
 /*<                   X( JX ) = TEMP >*/
-		    x[jx] = temp;
+                    x[jx] = temp;
 /*<                   JX      = JX   - INCX >*/
-		    jx -= *incx;
+                    jx -= *incx;
 /*<   120          CONTINUE >*/
 /* L120: */
-		}
+                }
 /*<             END IF >*/
-	    }
+            }
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             IF( INCX.EQ.1 )THEN >*/
-	    if (*incx == 1) {
+            if (*incx == 1) {
 /*<                DO 140, J = 1, N >*/
-		i__1 = *n;
-		for (j = 1; j <= i__1; ++j) {
+                i__1 = *n;
+                for (j = 1; j <= i__1; ++j) {
 /*<                   TEMP = X( J ) >*/
-		    temp = x[j];
+                    temp = x[j];
 /*<    >*/
-		    if (nounit) {
-			temp *= a[j + j * a_dim1];
-		    }
+                    if (nounit) {
+                        temp *= a[j + j * a_dim1];
+                    }
 /*<                   DO 130, I = J + 1, N >*/
-		    i__2 = *n;
-		    for (i__ = j + 1; i__ <= i__2; ++i__) {
+                    i__2 = *n;
+                    for (i__ = j + 1; i__ <= i__2; ++i__) {
 /*<                      TEMP = TEMP + A( I, J )*X( I ) >*/
-			temp += a[i__ + j * a_dim1] * x[i__];
+                        temp += a[i__ + j * a_dim1] * x[i__];
 /*<   130             CONTINUE >*/
 /* L130: */
-		    }
+                    }
 /*<                   X( J ) = TEMP >*/
-		    x[j] = temp;
+                    x[j] = temp;
 /*<   140          CONTINUE >*/
 /* L140: */
-		}
+                }
 /*<             ELSE >*/
-	    } else {
+            } else {
 /*<                JX = KX >*/
-		jx = kx;
+                jx = kx;
 /*<                DO 160, J = 1, N >*/
-		i__1 = *n;
-		for (j = 1; j <= i__1; ++j) {
+                i__1 = *n;
+                for (j = 1; j <= i__1; ++j) {
 /*<                   TEMP = X( JX ) >*/
-		    temp = x[jx];
+                    temp = x[jx];
 /*<                   IX   = JX >*/
-		    ix = jx;
+                    ix = jx;
 /*<    >*/
-		    if (nounit) {
-			temp *= a[j + j * a_dim1];
-		    }
+                    if (nounit) {
+                        temp *= a[j + j * a_dim1];
+                    }
 /*<                   DO 150, I = J + 1, N >*/
-		    i__2 = *n;
-		    for (i__ = j + 1; i__ <= i__2; ++i__) {
+                    i__2 = *n;
+                    for (i__ = j + 1; i__ <= i__2; ++i__) {
 /*<                      IX   = IX   + INCX >*/
-			ix += *incx;
+                        ix += *incx;
 /*<                      TEMP = TEMP + A( I, J )*X( IX ) >*/
-			temp += a[i__ + j * a_dim1] * x[ix];
+                        temp += a[i__ + j * a_dim1] * x[ix];
 /*<   150             CONTINUE >*/
 /* L150: */
-		    }
+                    }
 /*<                   X( JX ) = TEMP >*/
-		    x[jx] = temp;
+                    x[jx] = temp;
 /*<                   JX      = JX   + INCX >*/
-		    jx += *incx;
+                    jx += *incx;
 /*<   160          CONTINUE >*/
 /* L160: */
-		}
+                }
 /*<             END IF >*/
-	    }
+            }
 /*<          END IF >*/
-	}
+        }
 /*<       END IF >*/
     }
 
@@ -495,5 +495,5 @@ extern "C" {
 } /* dtrmv_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

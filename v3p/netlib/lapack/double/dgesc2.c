@@ -1,13 +1,13 @@
 /* lapack/double/dgesc2.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -22,7 +22,7 @@ static integer c_n1 = -1;
 
 /*<       SUBROUTINE DGESC2( N, A, LDA, RHS, IPIV, JPIV, SCALE ) >*/
 /* Subroutine */ int dgesc2_(integer *n, doublereal *a, integer *lda, 
-	doublereal *rhs, integer *ipiv, integer *jpiv, doublereal *scale)
+        doublereal *rhs, integer *ipiv, integer *jpiv, doublereal *scale)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -32,12 +32,12 @@ static integer c_n1 = -1;
     integer i__, j;
     doublereal eps, temp;
     extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
-	    integer *), dlabad_(doublereal *, doublereal *);
+            integer *), dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *, ftnlen);
     extern integer idamax_(integer *, doublereal *, integer *);
     doublereal bignum;
     extern /* Subroutine */ int dlaswp_(integer *, doublereal *, integer *, 
-	    integer *, integer *, integer *, integer *);
+            integer *, integer *, integer *, integer *);
     doublereal smlnum;
 
 
@@ -156,13 +156,13 @@ static integer c_n1 = -1;
     i__1 = *n - 1;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          DO 10 J = I + 1, N >*/
-	i__2 = *n;
-	for (j = i__ + 1; j <= i__2; ++j) {
+        i__2 = *n;
+        for (j = i__ + 1; j <= i__2; ++j) {
 /*<             RHS( J ) = RHS( J ) - A( J, I )*RHS( I ) >*/
-	    rhs[j] -= a[j + i__ * a_dim1] * rhs[i__];
+            rhs[j] -= a[j + i__ * a_dim1] * rhs[i__];
 /*<    10    CONTINUE >*/
 /* L10: */
-	}
+        }
 /*<    20 CONTINUE >*/
 /* L20: */
     }
@@ -178,30 +178,30 @@ static integer c_n1 = -1;
     i__ = idamax_(n, &rhs[1], &c__1);
 /*<       IF( TWO*SMLNUM*ABS( RHS( I ) ).GT.ABS( A( N, N ) ) ) THEN >*/
     if (smlnum * 2. * (d__1 = rhs[i__], abs(d__1)) > (d__2 = a[*n + *n * 
-	    a_dim1], abs(d__2))) {
+            a_dim1], abs(d__2))) {
 /*<          TEMP = ( ONE / TWO ) / ABS( RHS( I ) ) >*/
-	temp = .5 / (d__1 = rhs[i__], abs(d__1));
+        temp = .5 / (d__1 = rhs[i__], abs(d__1));
 /*<          CALL DSCAL( N, TEMP, RHS( 1 ), 1 ) >*/
-	dscal_(n, &temp, &rhs[1], &c__1);
+        dscal_(n, &temp, &rhs[1], &c__1);
 /*<          SCALE = SCALE*TEMP >*/
-	*scale *= temp;
+        *scale *= temp;
 /*<       END IF >*/
     }
 
 /*<       DO 40 I = N, 1, -1 >*/
     for (i__ = *n; i__ >= 1; --i__) {
 /*<          TEMP = ONE / A( I, I ) >*/
-	temp = 1. / a[i__ + i__ * a_dim1];
+        temp = 1. / a[i__ + i__ * a_dim1];
 /*<          RHS( I ) = RHS( I )*TEMP >*/
-	rhs[i__] *= temp;
+        rhs[i__] *= temp;
 /*<          DO 30 J = I + 1, N >*/
-	i__1 = *n;
-	for (j = i__ + 1; j <= i__1; ++j) {
+        i__1 = *n;
+        for (j = i__ + 1; j <= i__1; ++j) {
 /*<             RHS( I ) = RHS( I ) - RHS( J )*( A( I, J )*TEMP ) >*/
-	    rhs[i__] -= rhs[j] * (a[i__ + j * a_dim1] * temp);
+            rhs[i__] -= rhs[j] * (a[i__ + j * a_dim1] * temp);
 /*<    30    CONTINUE >*/
 /* L30: */
-	}
+        }
 /*<    40 CONTINUE >*/
 /* L40: */
     }
@@ -220,5 +220,5 @@ static integer c_n1 = -1;
 } /* dgesc2_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

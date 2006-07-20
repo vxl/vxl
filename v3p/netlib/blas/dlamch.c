@@ -1,13 +1,13 @@
 /* blas/dlamch.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -58,7 +58,7 @@ doublereal dlamch_(char *cmach, ftnlen cmach_len)
     doublereal small;
     static doublereal sfmin; /* runtime-initialized constant */
     extern /* Subroutine */ int dlamc2_(integer *, integer *, logical *, 
-	    doublereal *, integer *, doublereal *, integer *, doublereal *);
+            doublereal *, integer *, doublereal *, integer *, doublereal *);
 
     (void)cmach_len;
 /*  -- LAPACK auxiliary routine (version 1.1) -- */
@@ -133,92 +133,92 @@ doublereal dlamch_(char *cmach, ftnlen cmach_len)
 /*<       IF( FIRST ) THEN >*/
     if (first) {
 /*<          FIRST = .FALSE. >*/
-	first = FALSE_;
+        first = FALSE_;
 /*<          CALL DLAMC2( BETA, IT, LRND, EPS, IMIN, RMIN, IMAX, RMAX ) >*/
-	dlamc2_(&beta, &it, &lrnd, &eps, &imin, &rmin, &imax, &rmax);
+        dlamc2_(&beta, &it, &lrnd, &eps, &imin, &rmin, &imax, &rmax);
 /*<          BASE = BETA >*/
-	base = (doublereal) beta;
+        base = (doublereal) beta;
 /*<          T = IT >*/
-	t = (doublereal) it;
+        t = (doublereal) it;
 /*<          IF( LRND ) THEN >*/
-	if (lrnd) {
+        if (lrnd) {
 /*<             RND = ONE >*/
-	    rnd = 1.;
+            rnd = 1.;
 /*<             EPS = ( BASE**( 1-IT ) ) / 2 >*/
-	    i__1 = 1 - it;
-	    eps = pow_di(&base, &i__1) / 2;
+            i__1 = 1 - it;
+            eps = pow_di(&base, &i__1) / 2;
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             RND = ZERO >*/
-	    rnd = 0.;
+            rnd = 0.;
 /*<             EPS = BASE**( 1-IT ) >*/
-	    i__1 = 1 - it;
-	    eps = pow_di(&base, &i__1);
+            i__1 = 1 - it;
+            eps = pow_di(&base, &i__1);
 /*<          END IF >*/
-	}
+        }
 /*<          PREC = EPS*BASE >*/
-	prec = eps * base;
+        prec = eps * base;
 /*<          EMIN = IMIN >*/
-	emin = (doublereal) imin;
+        emin = (doublereal) imin;
 /*<          EMAX = IMAX >*/
-	emax = (doublereal) imax;
+        emax = (doublereal) imax;
 /*<          SFMIN = RMIN >*/
-	sfmin = rmin;
+        sfmin = rmin;
 /*<          SMALL = ONE / RMAX >*/
-	small = 1. / rmax;
+        small = 1. / rmax;
 /*<          IF( SMALL.GE.SFMIN ) THEN >*/
-	if (small >= sfmin) {
+        if (small >= sfmin) {
 
 /*           Use SMALL plus a bit, to avoid the possibility of rounding */
 /*           causing overflow when computing  1/sfmin. */
 
 /*<             SFMIN = SMALL*( ONE+EPS ) >*/
-	    sfmin = small * (eps + 1.);
+            sfmin = small * (eps + 1.);
 /*<          END IF >*/
-	}
+        }
 /*<       END IF >*/
     }
 
 /*<       IF( LSAME( CMACH, 'E' ) ) THEN >*/
     if (lsame_(cmach, "E", (ftnlen)1, (ftnlen)1)) {
 /*<          RMACH = EPS >*/
-	rmach = eps;
+        rmach = eps;
 /*<       ELSE IF( LSAME( CMACH, 'S' ) ) THEN >*/
     } else if (lsame_(cmach, "S", (ftnlen)1, (ftnlen)1)) {
 /*<          RMACH = SFMIN >*/
-	rmach = sfmin;
+        rmach = sfmin;
 /*<       ELSE IF( LSAME( CMACH, 'B' ) ) THEN >*/
     } else if (lsame_(cmach, "B", (ftnlen)1, (ftnlen)1)) {
 /*<          RMACH = BASE >*/
-	rmach = base;
+        rmach = base;
 /*<       ELSE IF( LSAME( CMACH, 'P' ) ) THEN >*/
     } else if (lsame_(cmach, "P", (ftnlen)1, (ftnlen)1)) {
 /*<          RMACH = PREC >*/
-	rmach = prec;
+        rmach = prec;
 /*<       ELSE IF( LSAME( CMACH, 'N' ) ) THEN >*/
     } else if (lsame_(cmach, "N", (ftnlen)1, (ftnlen)1)) {
 /*<          RMACH = T >*/
-	rmach = t;
+        rmach = t;
 /*<       ELSE IF( LSAME( CMACH, 'R' ) ) THEN >*/
     } else if (lsame_(cmach, "R", (ftnlen)1, (ftnlen)1)) {
 /*<          RMACH = RND >*/
-	rmach = rnd;
+        rmach = rnd;
 /*<       ELSE IF( LSAME( CMACH, 'M' ) ) THEN >*/
     } else if (lsame_(cmach, "M", (ftnlen)1, (ftnlen)1)) {
 /*<          RMACH = EMIN >*/
-	rmach = emin;
+        rmach = emin;
 /*<       ELSE IF( LSAME( CMACH, 'U' ) ) THEN >*/
     } else if (lsame_(cmach, "U", (ftnlen)1, (ftnlen)1)) {
 /*<          RMACH = RMIN >*/
-	rmach = rmin;
+        rmach = rmin;
 /*<       ELSE IF( LSAME( CMACH, 'L' ) ) THEN >*/
     } else if (lsame_(cmach, "L", (ftnlen)1, (ftnlen)1)) {
 /*<          RMACH = EMAX >*/
-	rmach = emax;
+        rmach = emax;
 /*<       ELSE IF( LSAME( CMACH, 'O' ) ) THEN >*/
     } else if (lsame_(cmach, "O", (ftnlen)1, (ftnlen)1)) {
 /*<          RMACH = RMAX >*/
-	rmach = rmax;
+        rmach = rmax;
 /*<       END IF >*/
     }
 
@@ -237,7 +237,7 @@ doublereal dlamch_(char *cmach, ftnlen cmach_len)
 
 /*<       SUBROUTINE DLAMC1( BETA, T, RND, IEEE1 ) >*/
 /* Subroutine */ int dlamc1_(integer *beta, integer *t, logical *rnd, logical 
-	*ieee1)
+        *ieee1)
 {
     /* Initialized data */
 
@@ -327,9 +327,9 @@ doublereal dlamch_(char *cmach, ftnlen cmach_len)
 /*<       IF( FIRST ) THEN >*/
     if (first) {
 /*<          FIRST = .FALSE. >*/
-	first = FALSE_;
+        first = FALSE_;
 /*<          ONE = 1 >*/
-	one = 1.;
+        one = 1.;
 
 /*        LBETA,  LIEEE1,  LT and  LRND  are the  local values  of  BETA, */
 /*        IEEE1, T and RND. */
@@ -344,26 +344,26 @@ doublereal dlamch_(char *cmach, ftnlen cmach_len)
 /*           fl( a + 1.0 ) = a. */
 
 /*<          A = 1 >*/
-	a = 1.;
+        a = 1.;
 /*<          C = 1 >*/
-	c__ = 1.;
+        c__ = 1.;
 
 /* +       WHILE( C.EQ.ONE )LOOP */
 /*<    10    CONTINUE >*/
 L10:
 /*<          IF( C.EQ.ONE ) THEN >*/
-	if (c__ == one) {
+        if (c__ == one) {
 /*<             A = 2*A >*/
-	    a *= 2;
+            a *= 2;
 /*<             C = DLAMC3( A, ONE ) >*/
-	    c__ = dlamc3_(&a, &one);
+            c__ = dlamc3_(&a, &one);
 /*<             C = DLAMC3( C, -A ) >*/
-	    d__1 = -a;
-	    c__ = dlamc3_(&c__, &d__1);
+            d__1 = -a;
+            c__ = dlamc3_(&c__, &d__1);
 /*<             GO TO 10 >*/
-	    goto L10;
+            goto L10;
 /*<          END IF >*/
-	}
+        }
 /* +       END WHILE */
 
 /*        Now compute  b = 2.0**m  with the smallest positive integer m */
@@ -372,23 +372,23 @@ L10:
 /*           fl( a + b ) .gt. a. */
 
 /*<          B = 1 >*/
-	b = 1.;
+        b = 1.;
 /*<          C = DLAMC3( A, B ) >*/
-	c__ = dlamc3_(&a, &b);
+        c__ = dlamc3_(&a, &b);
 
 /* +       WHILE( C.EQ.A )LOOP */
 /*<    20    CONTINUE >*/
 L20:
 /*<          IF( C.EQ.A ) THEN >*/
-	if (c__ == a) {
+        if (c__ == a) {
 /*<             B = 2*B >*/
-	    b *= 2;
+            b *= 2;
 /*<             C = DLAMC3( A, B ) >*/
-	    c__ = dlamc3_(&a, &b);
+            c__ = dlamc3_(&a, &b);
 /*<             GO TO 20 >*/
-	    goto L20;
+            goto L20;
 /*<          END IF >*/
-	}
+        }
 /* +       END WHILE */
 
 /*        Now compute the base.  a and c  are neighbouring floating point */
@@ -397,46 +397,46 @@ L20:
 /*        is truncated to beta and not ( beta - 1 ). */
 
 /*<          QTR = ONE / 4 >*/
-	qtr = one / 4;
+        qtr = one / 4;
 /*<          SAVEC = C >*/
-	savec = c__;
+        savec = c__;
 /*<          C = DLAMC3( C, -A ) >*/
-	d__1 = -a;
-	c__ = dlamc3_(&c__, &d__1);
+        d__1 = -a;
+        c__ = dlamc3_(&c__, &d__1);
 /*<          LBETA = C + QTR >*/
-	lbeta = (integer) (c__ + qtr);
+        lbeta = (integer) (c__ + qtr);
 
 /*        Now determine whether rounding or chopping occurs,  by adding a */
 /*        bit  less  than  beta/2  and a  bit  more  than  beta/2  to  a. */
 
 /*<          B = LBETA >*/
-	b = (doublereal) lbeta;
+        b = (doublereal) lbeta;
 /*<          F = DLAMC3( B / 2, -B / 100 ) >*/
-	d__1 = b / 2;
-	d__2 = -b / 100;
-	f = dlamc3_(&d__1, &d__2);
+        d__1 = b / 2;
+        d__2 = -b / 100;
+        f = dlamc3_(&d__1, &d__2);
 /*<          C = DLAMC3( F, A ) >*/
-	c__ = dlamc3_(&f, &a);
+        c__ = dlamc3_(&f, &a);
 /*<          IF( C.EQ.A ) THEN >*/
-	if (c__ == a) {
+        if (c__ == a) {
 /*<             LRND = .TRUE. >*/
-	    lrnd = TRUE_;
+            lrnd = TRUE_;
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             LRND = .FALSE. >*/
-	    lrnd = FALSE_;
+            lrnd = FALSE_;
 /*<          END IF >*/
-	}
+        }
 /*<          F = DLAMC3( B / 2, B / 100 ) >*/
-	d__1 = b / 2;
-	d__2 = b / 100;
-	f = dlamc3_(&d__1, &d__2);
+        d__1 = b / 2;
+        d__2 = b / 100;
+        f = dlamc3_(&d__1, &d__2);
 /*<          C = DLAMC3( F, A ) >*/
-	c__ = dlamc3_(&f, &a);
+        c__ = dlamc3_(&f, &a);
 /*<    >*/
-	if (lrnd && c__ == a) {
-	    lrnd = FALSE_;
-	}
+        if (lrnd && c__ == a) {
+            lrnd = FALSE_;
+        }
 
 /*        Try and decide whether rounding is done in the  IEEE  'round to */
 /*        nearest' style. B/2 is half a unit in the last place of the two */
@@ -445,13 +445,13 @@ L20:
 /*        A, but adding B/2 to SAVEC should change SAVEC. */
 
 /*<          T1 = DLAMC3( B / 2, A ) >*/
-	d__1 = b / 2;
-	t1 = dlamc3_(&d__1, &a);
+        d__1 = b / 2;
+        t1 = dlamc3_(&d__1, &a);
 /*<          T2 = DLAMC3( B / 2, SAVEC ) >*/
-	d__1 = b / 2;
-	t2 = dlamc3_(&d__1, &savec);
+        d__1 = b / 2;
+        t2 = dlamc3_(&d__1, &savec);
 /*<          LIEEE1 = ( T1.EQ.A ) .AND. ( T2.GT.SAVEC ) .AND. LRND >*/
-	lieee1 = t1 == a && t2 > savec && lrnd;
+        lieee1 = t1 == a && t2 > savec && lrnd;
 
 /*        Now find  the  mantissa, t.  It should  be the  integer part of */
 /*        log to the base beta of a,  however it is safer to determine  t */
@@ -461,30 +461,30 @@ L20:
 /*           fl( beta**t + 1.0 ) = 1.0. */
 
 /*<          LT = 0 >*/
-	lt = 0;
+        lt = 0;
 /*<          A = 1 >*/
-	a = 1.;
+        a = 1.;
 /*<          C = 1 >*/
-	c__ = 1.;
+        c__ = 1.;
 
 /* +       WHILE( C.EQ.ONE )LOOP */
 /*<    30    CONTINUE >*/
 L30:
 /*<          IF( C.EQ.ONE ) THEN >*/
-	if (c__ == one) {
+        if (c__ == one) {
 /*<             LT = LT + 1 >*/
-	    ++lt;
+            ++lt;
 /*<             A = A*LBETA >*/
-	    a *= lbeta;
+            a *= lbeta;
 /*<             C = DLAMC3( A, ONE ) >*/
-	    c__ = dlamc3_(&a, &one);
+            c__ = dlamc3_(&a, &one);
 /*<             C = DLAMC3( C, -A ) >*/
-	    d__1 = -a;
-	    c__ = dlamc3_(&c__, &d__1);
+            d__1 = -a;
+            c__ = dlamc3_(&c__, &d__1);
 /*<             GO TO 30 >*/
-	    goto L30;
+            goto L30;
 /*<          END IF >*/
-	}
+        }
 /* +       END WHILE */
 
 /*<       END IF >*/
@@ -511,8 +511,8 @@ L30:
 
 /*<       SUBROUTINE DLAMC2( BETA, T, RND, EPS, EMIN, RMIN, EMAX, RMAX ) >*/
 /* Subroutine */ int dlamc2_(integer *beta, integer *t, logical *rnd, 
-	doublereal *eps, integer *emin, doublereal *rmin, integer *emax, 
-	doublereal *rmax)
+        doublereal *eps, integer *emin, doublereal *rmin, integer *emax, 
+        doublereal *rmax)
 {
     /* Initialized data */
 
@@ -547,12 +547,12 @@ L30:
     static doublereal lrmin, lrmax; /* runtime-initialized constant */
     doublereal sixth;
     extern /* Subroutine */ int dlamc1_(integer *, integer *, logical *, 
-	    logical *);
+            logical *);
     extern doublereal dlamc3_(doublereal *, doublereal *);
     logical lieee1;
     extern /* Subroutine */ int dlamc4_(integer *, doublereal *, integer *), 
-	    dlamc5_(integer *, integer *, integer *, logical *, integer *, 
-	    doublereal *);
+            dlamc5_(integer *, integer *, integer *, logical *, integer *, 
+            doublereal *);
     integer ngnmin, ngpmin;
 
 /*  -- LAPACK auxiliary routine (version 1.1) -- */
@@ -644,13 +644,13 @@ L30:
 /*<       IF( FIRST ) THEN >*/
     if (first) {
 /*<          FIRST = .FALSE. >*/
-	first = FALSE_;
+        first = FALSE_;
 /*<          ZERO = 0 >*/
-	zero = 0.;
+        zero = 0.;
 /*<          ONE = 1 >*/
-	one = 1.;
+        one = 1.;
 /*<          TWO = 2 >*/
-	two = 2.;
+        two = 2.;
 
 /*        LBETA, LT, LRND, LEPS, LEMIN and LRMIN  are the local values of */
 /*        BETA, T, RND, EPS, EMIN and RMIN. */
@@ -662,79 +662,79 @@ L30:
 /*        DLAMC1 returns the parameters  LBETA, LT, LRND and LIEEE1. */
 
 /*<          CALL DLAMC1( LBETA, LT, LRND, LIEEE1 ) >*/
-	dlamc1_(&lbeta, &lt, &lrnd, &lieee1);
+        dlamc1_(&lbeta, &lt, &lrnd, &lieee1);
 
 /*        Start to find EPS. */
 
 /*<          B = LBETA >*/
-	b = (doublereal) lbeta;
+        b = (doublereal) lbeta;
 /*<          A = B**( -LT ) >*/
-	i__1 = -lt;
-	a = pow_di(&b, &i__1);
+        i__1 = -lt;
+        a = pow_di(&b, &i__1);
 /*<          LEPS = A >*/
-	leps = a;
+        leps = a;
 
 /*        Try some tricks to see whether or not this is the correct  EPS. */
 
 /*<          B = TWO / 3 >*/
-	b = two / 3;
+        b = two / 3;
 /*<          HALF = ONE / 2 >*/
-	half = one / 2;
+        half = one / 2;
 /*<          SIXTH = DLAMC3( B, -HALF ) >*/
-	d__1 = -half;
-	sixth = dlamc3_(&b, &d__1);
+        d__1 = -half;
+        sixth = dlamc3_(&b, &d__1);
 /*<          THIRD = DLAMC3( SIXTH, SIXTH ) >*/
-	third = dlamc3_(&sixth, &sixth);
+        third = dlamc3_(&sixth, &sixth);
 /*<          B = DLAMC3( THIRD, -HALF ) >*/
-	d__1 = -half;
-	b = dlamc3_(&third, &d__1);
+        d__1 = -half;
+        b = dlamc3_(&third, &d__1);
 /*<          B = DLAMC3( B, SIXTH ) >*/
-	b = dlamc3_(&b, &sixth);
+        b = dlamc3_(&b, &sixth);
 /*<          B = ABS( B ) >*/
-	b = abs(b);
+        b = abs(b);
 /*<    >*/
-	if (b < leps) {
-	    b = leps;
-	}
+        if (b < leps) {
+            b = leps;
+        }
 
 /*<          LEPS = 1 >*/
-	leps = 1.;
+        leps = 1.;
 
 /* +       WHILE( ( LEPS.GT.B ).AND.( B.GT.ZERO ) )LOOP */
 /*<    10    CONTINUE >*/
 L10:
 /*<          IF( ( LEPS.GT.B ) .AND. ( B.GT.ZERO ) ) THEN >*/
-	if (leps > b && b > zero) {
+        if (leps > b && b > zero) {
 /*<             LEPS = B >*/
-	    leps = b;
+            leps = b;
 /*<             C = DLAMC3( HALF*LEPS, ( TWO**5 )*( LEPS**2 ) ) >*/
-	    d__1 = half * leps;
+            d__1 = half * leps;
 /* Computing 5th power */
-	    d__3 = two, d__4 = d__3, d__3 *= d__3;
+            d__3 = two, d__4 = d__3, d__3 *= d__3;
 /* Computing 2nd power */
-	    d__5 = leps;
-	    d__2 = d__4 * (d__3 * d__3) * (d__5 * d__5);
-	    c__ = dlamc3_(&d__1, &d__2);
+            d__5 = leps;
+            d__2 = d__4 * (d__3 * d__3) * (d__5 * d__5);
+            c__ = dlamc3_(&d__1, &d__2);
 /*<             C = DLAMC3( HALF, -C ) >*/
-	    d__1 = -c__;
-	    c__ = dlamc3_(&half, &d__1);
+            d__1 = -c__;
+            c__ = dlamc3_(&half, &d__1);
 /*<             B = DLAMC3( HALF, C ) >*/
-	    b = dlamc3_(&half, &c__);
+            b = dlamc3_(&half, &c__);
 /*<             C = DLAMC3( HALF, -B ) >*/
-	    d__1 = -b;
-	    c__ = dlamc3_(&half, &d__1);
+            d__1 = -b;
+            c__ = dlamc3_(&half, &d__1);
 /*<             B = DLAMC3( HALF, C ) >*/
-	    b = dlamc3_(&half, &c__);
+            b = dlamc3_(&half, &c__);
 /*<             GO TO 10 >*/
-	    goto L10;
+            goto L10;
 /*<          END IF >*/
-	}
+        }
 /* +       END WHILE */
 
 /*<    >*/
-	if (a < leps) {
-	    leps = a;
-	}
+        if (a < leps) {
+            leps = a;
+        }
 
 /*        Computation of EPS complete. */
 
@@ -743,106 +743,106 @@ L10:
 /*        is detected when we cannot recover the previous A. */
 
 /*<          RBASE = ONE / LBETA >*/
-	rbase = one / lbeta;
+        rbase = one / lbeta;
 /*<          SMALL = ONE >*/
-	small = one;
+        small = one;
 /*<          DO 20 I = 1, 3 >*/
-	for (i__ = 1; i__ <= 3; ++i__) {
+        for (i__ = 1; i__ <= 3; ++i__) {
 /*<             SMALL = DLAMC3( SMALL*RBASE, ZERO ) >*/
-	    d__1 = small * rbase;
-	    small = dlamc3_(&d__1, &zero);
+            d__1 = small * rbase;
+            small = dlamc3_(&d__1, &zero);
 /*<    20    CONTINUE >*/
 /* L20: */
-	}
+        }
 /*<          A = DLAMC3( ONE, SMALL ) >*/
-	a = dlamc3_(&one, &small);
+        a = dlamc3_(&one, &small);
 /*<          CALL DLAMC4( NGPMIN, ONE, LBETA ) >*/
-	dlamc4_(&ngpmin, &one, &lbeta);
+        dlamc4_(&ngpmin, &one, &lbeta);
 /*<          CALL DLAMC4( NGNMIN, -ONE, LBETA ) >*/
-	d__1 = -one;
-	dlamc4_(&ngnmin, &d__1, &lbeta);
+        d__1 = -one;
+        dlamc4_(&ngnmin, &d__1, &lbeta);
 /*<          CALL DLAMC4( GPMIN, A, LBETA ) >*/
-	dlamc4_(&gpmin, &a, &lbeta);
+        dlamc4_(&gpmin, &a, &lbeta);
 /*<          CALL DLAMC4( GNMIN, -A, LBETA ) >*/
-	d__1 = -a;
-	dlamc4_(&gnmin, &d__1, &lbeta);
+        d__1 = -a;
+        dlamc4_(&gnmin, &d__1, &lbeta);
 /*<          IEEE = .FALSE. >*/
-	ieee = FALSE_;
+        ieee = FALSE_;
 
 /*<          IF( ( NGPMIN.EQ.NGNMIN ) .AND. ( GPMIN.EQ.GNMIN ) ) THEN >*/
-	if (ngpmin == ngnmin && gpmin == gnmin) {
+        if (ngpmin == ngnmin && gpmin == gnmin) {
 /*<             IF( NGPMIN.EQ.GPMIN ) THEN >*/
-	    if (ngpmin == gpmin) {
+            if (ngpmin == gpmin) {
 /*<                LEMIN = NGPMIN >*/
-		lemin = ngpmin;
+                lemin = ngpmin;
 /*            ( Non twos-complement machines, no gradual underflow; */
 /*              e.g.,  VAX ) */
 /*<             ELSE IF( ( GPMIN-NGPMIN ).EQ.3 ) THEN >*/
-	    } else if (gpmin - ngpmin == 3) {
+            } else if (gpmin - ngpmin == 3) {
 /*<                LEMIN = NGPMIN - 1 + LT >*/
-		lemin = ngpmin - 1 + lt;
+                lemin = ngpmin - 1 + lt;
 /*<                IEEE = .TRUE. >*/
-		ieee = TRUE_;
+                ieee = TRUE_;
 /*            ( Non twos-complement machines, with gradual underflow; */
 /*              e.g., IEEE standard followers ) */
 /*<             ELSE >*/
-	    } else {
+            } else {
 /*<                LEMIN = MIN( NGPMIN, GPMIN ) >*/
-		lemin = min(ngpmin,gpmin);
+                lemin = min(ngpmin,gpmin);
 /*            ( A guess; no known machine ) */
 /*<                IWARN = .TRUE. >*/
-		iwarn = TRUE_;
+                iwarn = TRUE_;
 /*<             END IF >*/
-	    }
+            }
 
 /*<          ELSE IF( ( NGPMIN.EQ.GPMIN ) .AND. ( NGNMIN.EQ.GNMIN ) ) THEN >*/
-	} else if (ngpmin == gpmin && ngnmin == gnmin) {
+        } else if (ngpmin == gpmin && ngnmin == gnmin) {
 /*<             IF( ABS( NGPMIN-NGNMIN ).EQ.1 ) THEN >*/
-	    if ((i__1 = ngpmin - ngnmin, abs(i__1)) == 1) {
+            if ((i__1 = ngpmin - ngnmin, abs(i__1)) == 1) {
 /*<                LEMIN = MAX( NGPMIN, NGNMIN ) >*/
-		lemin = max(ngpmin,ngnmin);
+                lemin = max(ngpmin,ngnmin);
 /*            ( Twos-complement machines, no gradual underflow; */
 /*              e.g., CYBER 205 ) */
 /*<             ELSE >*/
-	    } else {
+            } else {
 /*<                LEMIN = MIN( NGPMIN, NGNMIN ) >*/
-		lemin = min(ngpmin,ngnmin);
+                lemin = min(ngpmin,ngnmin);
 /*            ( A guess; no known machine ) */
 /*<                IWARN = .TRUE. >*/
-		iwarn = TRUE_;
+                iwarn = TRUE_;
 /*<             END IF >*/
-	    }
+            }
 
 /*<    >*/
-	} else if ((i__1 = ngpmin - ngnmin, abs(i__1)) == 1 && gpmin == gnmin)
-		 {
+        } else if ((i__1 = ngpmin - ngnmin, abs(i__1)) == 1 && gpmin == gnmin)
+                 {
 /*<             IF( ( GPMIN-MIN( NGPMIN, NGNMIN ) ).EQ.3 ) THEN >*/
-	    if (gpmin - min(ngpmin,ngnmin) == 3) {
+            if (gpmin - min(ngpmin,ngnmin) == 3) {
 /*<                LEMIN = MAX( NGPMIN, NGNMIN ) - 1 + LT >*/
-		lemin = max(ngpmin,ngnmin) - 1 + lt;
+                lemin = max(ngpmin,ngnmin) - 1 + lt;
 /*            ( Twos-complement machines with gradual underflow; */
 /*              no known machine ) */
 /*<             ELSE >*/
-	    } else {
+            } else {
 /*<                LEMIN = MIN( NGPMIN, NGNMIN ) >*/
-		lemin = min(ngpmin,ngnmin);
+                lemin = min(ngpmin,ngnmin);
 /*            ( A guess; no known machine ) */
 /*<                IWARN = .TRUE. >*/
-		iwarn = TRUE_;
+                iwarn = TRUE_;
 /*<             END IF >*/
-	    }
+            }
 
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             LEMIN = MIN( NGPMIN, NGNMIN, GPMIN, GNMIN ) >*/
 /* Computing MIN */
-	    i__1 = min(ngpmin,ngnmin), i__1 = min(i__1,gpmin);
-	    lemin = min(i__1,gnmin);
+            i__1 = min(ngpmin,ngnmin), i__1 = min(i__1,gpmin);
+            lemin = min(i__1,gnmin);
 /*         ( A guess; no known machine ) */
 /*<             IWARN = .TRUE. >*/
-	    iwarn = TRUE_;
+            iwarn = TRUE_;
 /*<          END IF >*/
-	}
+        }
 /* ** */
 /* Comment out this if block if EMIN is ok */
 /*<          IF( IWARN ) THEN >*/
@@ -866,28 +866,28 @@ L10:
 /*        true; however, faulty machines may have one or the other. */
 
 /*<          IEEE = IEEE .OR. LIEEE1 >*/
-	ieee = ieee || lieee1;
+        ieee = ieee || lieee1;
 
 /*        Compute  RMIN by successive division by  BETA. We could compute */
 /*        RMIN as BASE**( EMIN - 1 ),  but some machines underflow during */
 /*        this computation. */
 
 /*<          LRMIN = 1 >*/
-	lrmin = 1.;
+        lrmin = 1.;
 /*<          DO 30 I = 1, 1 - LEMIN >*/
-	i__1 = 1 - lemin;
-	for (i__ = 1; i__ <= i__1; ++i__) {
+        i__1 = 1 - lemin;
+        for (i__ = 1; i__ <= i__1; ++i__) {
 /*<             LRMIN = DLAMC3( LRMIN*RBASE, ZERO ) >*/
-	    d__1 = lrmin * rbase;
-	    lrmin = dlamc3_(&d__1, &zero);
+            d__1 = lrmin * rbase;
+            lrmin = dlamc3_(&d__1, &zero);
 /*<    30    CONTINUE >*/
 /* L30: */
-	}
+        }
 
 /*        Finally, call DLAMC5 to compute EMAX and RMAX. */
 
 /*<          CALL DLAMC5( LBETA, LT, LEMIN, IEEE, LEMAX, LRMAX ) >*/
-	dlamc5_(&lbeta, &lt, &lemin, &ieee, &lemax, &lrmax);
+        dlamc5_(&lbeta, &lt, &lemin, &ieee, &lemax, &lrmax);
 /*<       END IF >*/
     }
 
@@ -1051,43 +1051,43 @@ L10:
 /*<    >*/
     if (c1 == a && c2 == a && d1 == a && d2 == a) {
 /*<          EMIN = EMIN - 1 >*/
-	--(*emin);
+        --(*emin);
 /*<          A = B1 >*/
-	a = b1;
+        a = b1;
 /*<          B1 = DLAMC3( A / BASE, ZERO ) >*/
-	d__1 = a / *base;
-	b1 = dlamc3_(&d__1, &zero);
+        d__1 = a / *base;
+        b1 = dlamc3_(&d__1, &zero);
 /*<          C1 = DLAMC3( B1*BASE, ZERO ) >*/
-	d__1 = b1 * *base;
-	c1 = dlamc3_(&d__1, &zero);
+        d__1 = b1 * *base;
+        c1 = dlamc3_(&d__1, &zero);
 /*<          D1 = ZERO >*/
-	d1 = zero;
+        d1 = zero;
 /*<          DO 20 I = 1, BASE >*/
-	i__1 = *base;
-	for (i__ = 1; i__ <= i__1; ++i__) {
+        i__1 = *base;
+        for (i__ = 1; i__ <= i__1; ++i__) {
 /*<             D1 = D1 + B1 >*/
-	    d1 += b1;
+            d1 += b1;
 /*<    20    CONTINUE >*/
 /* L20: */
-	}
+        }
 /*<          B2 = DLAMC3( A*RBASE, ZERO ) >*/
-	d__1 = a * rbase;
-	b2 = dlamc3_(&d__1, &zero);
+        d__1 = a * rbase;
+        b2 = dlamc3_(&d__1, &zero);
 /*<          C2 = DLAMC3( B2 / RBASE, ZERO ) >*/
-	d__1 = b2 / rbase;
-	c2 = dlamc3_(&d__1, &zero);
+        d__1 = b2 / rbase;
+        c2 = dlamc3_(&d__1, &zero);
 /*<          D2 = ZERO >*/
-	d2 = zero;
+        d2 = zero;
 /*<          DO 30 I = 1, BASE >*/
-	i__1 = *base;
-	for (i__ = 1; i__ <= i__1; ++i__) {
+        i__1 = *base;
+        for (i__ = 1; i__ <= i__1; ++i__) {
 /*<             D2 = D2 + B2 >*/
-	    d2 += b2;
+            d2 += b2;
 /*<    30    CONTINUE >*/
 /* L30: */
-	}
+        }
 /*<          GO TO 10 >*/
-	goto L10;
+        goto L10;
 /*<       END IF >*/
     }
 /* +    END WHILE */
@@ -1105,7 +1105,7 @@ L10:
 
 /*<       SUBROUTINE DLAMC5( BETA, P, EMIN, IEEE, EMAX, RMAX ) >*/
 /* Subroutine */ int dlamc5_(integer *beta, integer *p, integer *emin, 
-	logical *ieee, integer *emax, doublereal *rmax)
+        logical *ieee, integer *emax, doublereal *rmax)
 {
     /* System generated locals */
     integer i__1;
@@ -1201,23 +1201,23 @@ L10:
 /*<       IF( TRY.LE.( -EMIN ) ) THEN >*/
     if (try__ <= -(*emin)) {
 /*<          LEXP = TRY >*/
-	lexp = try__;
+        lexp = try__;
 /*<          EXBITS = EXBITS + 1 >*/
-	++exbits;
+        ++exbits;
 /*<          GO TO 10 >*/
-	goto L10;
+        goto L10;
 /*<       END IF >*/
     }
 /*<       IF( LEXP.EQ.-EMIN ) THEN >*/
     if (lexp == -(*emin)) {
 /*<          UEXP = LEXP >*/
-	uexp = lexp;
+        uexp = lexp;
 /*<       ELSE >*/
     } else {
 /*<          UEXP = TRY >*/
-	uexp = try__;
+        uexp = try__;
 /*<          EXBITS = EXBITS + 1 >*/
-	++exbits;
+        ++exbits;
 /*<       END IF >*/
     }
 
@@ -1228,11 +1228,11 @@ L10:
 /*<       IF( ( UEXP+EMIN ).GT.( -LEXP-EMIN ) ) THEN >*/
     if (uexp + *emin > -lexp - *emin) {
 /*<          EXPSUM = 2*LEXP >*/
-	expsum = lexp << 1;
+        expsum = lexp << 1;
 /*<       ELSE >*/
     } else {
 /*<          EXPSUM = 2*UEXP >*/
-	expsum = uexp << 1;
+        expsum = uexp << 1;
 /*<       END IF >*/
     }
 
@@ -1262,7 +1262,7 @@ L10:
 /*        unnecessarily. */
 
 /*<          EMAX = EMAX - 1 >*/
-	--(*emax);
+        --(*emax);
 /*<       END IF >*/
     }
 
@@ -1273,7 +1273,7 @@ L10:
 /*        for infinity and NaN. */
 
 /*<          EMAX = EMAX - 1 >*/
-	--(*emax);
+        --(*emax);
 /*<       END IF >*/
     }
 
@@ -1293,19 +1293,19 @@ L10:
     i__1 = *p;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          Z = Z*RECBAS >*/
-	z__ *= recbas;
+        z__ *= recbas;
 /*<    >*/
-	if (y < 1.) {
-	    oldy = y;
-	}
+        if (y < 1.) {
+            oldy = y;
+        }
 /*<          Y = DLAMC3( Y, Z ) >*/
-	y = dlamc3_(&y, &z__);
+        y = dlamc3_(&y, &z__);
 /*<    20 CONTINUE >*/
 /* L20: */
     }
 /*<    >*/
     if (y >= 1.) {
-	y = oldy;
+        y = oldy;
     }
 
 /*     Now multiply by BETA**EMAX to get RMAX. */
@@ -1314,8 +1314,8 @@ L10:
     i__1 = *emax;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          Y = DLAMC3( Y*BETA, ZERO ) >*/
-	d__1 = y * *beta;
-	y = dlamc3_(&d__1, &c_b32);
+        d__1 = y * *beta;
+        y = dlamc3_(&d__1, &c_b32);
 /*<    30 CONTINUE >*/
 /* L30: */
     }
@@ -1331,5 +1331,5 @@ L10:
 } /* dlamc5_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

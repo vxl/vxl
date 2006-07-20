@@ -1,13 +1,13 @@
 /* lapack/complex16/zlaset.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -17,8 +17,8 @@ extern "C" {
 
 /*<       SUBROUTINE ZLASET( UPLO, M, N, ALPHA, BETA, A, LDA ) >*/
 /* Subroutine */ int zlaset_(char *uplo, integer *m, integer *n, 
-	doublecomplex *alpha, doublecomplex *beta, doublecomplex *a, integer *
-	lda, ftnlen uplo_len)
+        doublecomplex *alpha, doublecomplex *beta, doublecomplex *a, integer *
+        lda, ftnlen uplo_len)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
@@ -106,31 +106,31 @@ extern "C" {
 /*        part of the array to ALPHA. */
 
 /*<          DO 20 J = 2, N >*/
-	i__1 = *n;
-	for (j = 2; j <= i__1; ++j) {
+        i__1 = *n;
+        for (j = 2; j <= i__1; ++j) {
 /*<             DO 10 I = 1, MIN( J-1, M ) >*/
 /* Computing MIN */
-	    i__3 = j - 1;
-	    i__2 = min(i__3,*m);
-	    for (i__ = 1; i__ <= i__2; ++i__) {
+            i__3 = j - 1;
+            i__2 = min(i__3,*m);
+            for (i__ = 1; i__ <= i__2; ++i__) {
 /*<                A( I, J ) = ALPHA >*/
-		i__3 = i__ + j * a_dim1;
-		a[i__3].r = alpha->r, a[i__3].i = alpha->i;
+                i__3 = i__ + j * a_dim1;
+                a[i__3].r = alpha->r, a[i__3].i = alpha->i;
 /*<    10       CONTINUE >*/
 /* L10: */
-	    }
+            }
 /*<    20    CONTINUE >*/
 /* L20: */
-	}
+        }
 /*<          DO 30 I = 1, MIN( N, M ) >*/
-	i__1 = min(*n,*m);
-	for (i__ = 1; i__ <= i__1; ++i__) {
+        i__1 = min(*n,*m);
+        for (i__ = 1; i__ <= i__1; ++i__) {
 /*<             A( I, I ) = BETA >*/
-	    i__2 = i__ + i__ * a_dim1;
-	    a[i__2].r = beta->r, a[i__2].i = beta->i;
+            i__2 = i__ + i__ * a_dim1;
+            a[i__2].r = beta->r, a[i__2].i = beta->i;
 /*<    30    CONTINUE >*/
 /* L30: */
-	}
+        }
 
 /*<       ELSE IF( LSAME( UPLO, 'L' ) ) THEN >*/
     } else if (lsame_(uplo, "L", (ftnlen)1, (ftnlen)1)) {
@@ -139,29 +139,29 @@ extern "C" {
 /*        part of the array to ALPHA. */
 
 /*<          DO 50 J = 1, MIN( M, N ) >*/
-	i__1 = min(*m,*n);
-	for (j = 1; j <= i__1; ++j) {
+        i__1 = min(*m,*n);
+        for (j = 1; j <= i__1; ++j) {
 /*<             DO 40 I = J + 1, M >*/
-	    i__2 = *m;
-	    for (i__ = j + 1; i__ <= i__2; ++i__) {
+            i__2 = *m;
+            for (i__ = j + 1; i__ <= i__2; ++i__) {
 /*<                A( I, J ) = ALPHA >*/
-		i__3 = i__ + j * a_dim1;
-		a[i__3].r = alpha->r, a[i__3].i = alpha->i;
+                i__3 = i__ + j * a_dim1;
+                a[i__3].r = alpha->r, a[i__3].i = alpha->i;
 /*<    40       CONTINUE >*/
 /* L40: */
-	    }
+            }
 /*<    50    CONTINUE >*/
 /* L50: */
-	}
+        }
 /*<          DO 60 I = 1, MIN( N, M ) >*/
-	i__1 = min(*n,*m);
-	for (i__ = 1; i__ <= i__1; ++i__) {
+        i__1 = min(*n,*m);
+        for (i__ = 1; i__ <= i__1; ++i__) {
 /*<             A( I, I ) = BETA >*/
-	    i__2 = i__ + i__ * a_dim1;
-	    a[i__2].r = beta->r, a[i__2].i = beta->i;
+            i__2 = i__ + i__ * a_dim1;
+            a[i__2].r = beta->r, a[i__2].i = beta->i;
 /*<    60    CONTINUE >*/
 /* L60: */
-	}
+        }
 
 /*<       ELSE >*/
     } else {
@@ -170,29 +170,29 @@ extern "C" {
 /*        offdiagonal. */
 
 /*<          DO 80 J = 1, N >*/
-	i__1 = *n;
-	for (j = 1; j <= i__1; ++j) {
+        i__1 = *n;
+        for (j = 1; j <= i__1; ++j) {
 /*<             DO 70 I = 1, M >*/
-	    i__2 = *m;
-	    for (i__ = 1; i__ <= i__2; ++i__) {
+            i__2 = *m;
+            for (i__ = 1; i__ <= i__2; ++i__) {
 /*<                A( I, J ) = ALPHA >*/
-		i__3 = i__ + j * a_dim1;
-		a[i__3].r = alpha->r, a[i__3].i = alpha->i;
+                i__3 = i__ + j * a_dim1;
+                a[i__3].r = alpha->r, a[i__3].i = alpha->i;
 /*<    70       CONTINUE >*/
 /* L70: */
-	    }
+            }
 /*<    80    CONTINUE >*/
 /* L80: */
-	}
+        }
 /*<          DO 90 I = 1, MIN( M, N ) >*/
-	i__1 = min(*m,*n);
-	for (i__ = 1; i__ <= i__1; ++i__) {
+        i__1 = min(*m,*n);
+        for (i__ = 1; i__ <= i__1; ++i__) {
 /*<             A( I, I ) = BETA >*/
-	    i__2 = i__ + i__ * a_dim1;
-	    a[i__2].r = beta->r, a[i__2].i = beta->i;
+            i__2 = i__ + i__ * a_dim1;
+            a[i__2].r = beta->r, a[i__2].i = beta->i;
 /*<    90    CONTINUE >*/
 /* L90: */
-	}
+        }
 /*<       END IF >*/
     }
 
@@ -205,5 +205,5 @@ extern "C" {
 } /* zlaset_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

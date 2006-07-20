@@ -1,13 +1,13 @@
 /* lapack/double/dgetc2.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -22,7 +22,7 @@ static doublereal c_b10 = -1.;
 
 /*<       SUBROUTINE DGETC2( N, A, LDA, IPIV, JPIV, INFO ) >*/
 /* Subroutine */ int dgetc2_(integer *n, doublereal *a, integer *lda, integer 
-	*ipiv, integer *jpiv, integer *info)
+        *ipiv, integer *jpiv, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
@@ -33,11 +33,11 @@ static doublereal c_b10 = -1.;
     doublereal eps;
     integer ipv=0, jpv=0;
     extern /* Subroutine */ int dger_(integer *, integer *, doublereal *, 
-	    doublereal *, integer *, doublereal *, integer *, doublereal *, 
-	    integer *);
+            doublereal *, integer *, doublereal *, integer *, doublereal *, 
+            integer *);
     doublereal smin=0, xmax;
     extern /* Subroutine */ int dswap_(integer *, doublereal *, integer *, 
-	    doublereal *, integer *), dlabad_(doublereal *, doublereal *);
+            doublereal *, integer *), dlabad_(doublereal *, doublereal *);
     extern doublereal dlamch_(char *, ftnlen);
     doublereal bignum, smlnum;
 
@@ -155,79 +155,79 @@ static doublereal c_b10 = -1.;
 /*        Find max element in matrix A */
 
 /*<          XMAX = ZERO >*/
-	xmax = 0.;
+        xmax = 0.;
 /*<          DO 20 IP = I, N >*/
-	i__2 = *n;
-	for (ip = i__; ip <= i__2; ++ip) {
+        i__2 = *n;
+        for (ip = i__; ip <= i__2; ++ip) {
 /*<             DO 10 JP = I, N >*/
-	    i__3 = *n;
-	    for (jp = i__; jp <= i__3; ++jp) {
+            i__3 = *n;
+            for (jp = i__; jp <= i__3; ++jp) {
 /*<                IF( ABS( A( IP, JP ) ).GE.XMAX ) THEN >*/
-		if ((d__1 = a[ip + jp * a_dim1], abs(d__1)) >= xmax) {
+                if ((d__1 = a[ip + jp * a_dim1], abs(d__1)) >= xmax) {
 /*<                   XMAX = ABS( A( IP, JP ) ) >*/
-		    xmax = (d__1 = a[ip + jp * a_dim1], abs(d__1));
+                    xmax = (d__1 = a[ip + jp * a_dim1], abs(d__1));
 /*<                   IPV = IP >*/
-		    ipv = ip;
+                    ipv = ip;
 /*<                   JPV = JP >*/
-		    jpv = jp;
+                    jpv = jp;
 /*<                END IF >*/
-		}
+                }
 /*<    10       CONTINUE >*/
 /* L10: */
-	    }
+            }
 /*<    20    CONTINUE >*/
 /* L20: */
-	}
+        }
 /*<    >*/
-	if (i__ == 1) {
+        if (i__ == 1) {
 /* Computing MAX */
-	    d__1 = eps * xmax;
-	    smin = max(d__1,smlnum);
-	}
+            d__1 = eps * xmax;
+            smin = max(d__1,smlnum);
+        }
 
 /*        Swap rows */
 
 /*<    >*/
-	if (ipv != i__) {
-	    dswap_(n, &a[ipv + a_dim1], lda, &a[i__ + a_dim1], lda);
-	}
+        if (ipv != i__) {
+            dswap_(n, &a[ipv + a_dim1], lda, &a[i__ + a_dim1], lda);
+        }
 /*<          IPIV( I ) = IPV >*/
-	ipiv[i__] = ipv;
+        ipiv[i__] = ipv;
 
 /*        Swap columns */
 
 /*<    >*/
-	if (jpv != i__) {
-	    dswap_(n, &a[jpv * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &
-		    c__1);
-	}
+        if (jpv != i__) {
+            dswap_(n, &a[jpv * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &
+                    c__1);
+        }
 /*<          JPIV( I ) = JPV >*/
-	jpiv[i__] = jpv;
+        jpiv[i__] = jpv;
 
 /*        Check for singularity */
 
 /*<          IF( ABS( A( I, I ) ).LT.SMIN ) THEN >*/
-	if ((d__1 = a[i__ + i__ * a_dim1], abs(d__1)) < smin) {
+        if ((d__1 = a[i__ + i__ * a_dim1], abs(d__1)) < smin) {
 /*<             INFO = I >*/
-	    *info = i__;
+            *info = i__;
 /*<             A( I, I ) = SMIN >*/
-	    a[i__ + i__ * a_dim1] = smin;
+            a[i__ + i__ * a_dim1] = smin;
 /*<          END IF >*/
-	}
+        }
 /*<          DO 30 J = I + 1, N >*/
-	i__2 = *n;
-	for (j = i__ + 1; j <= i__2; ++j) {
+        i__2 = *n;
+        for (j = i__ + 1; j <= i__2; ++j) {
 /*<             A( J, I ) = A( J, I ) / A( I, I ) >*/
-	    a[j + i__ * a_dim1] /= a[i__ + i__ * a_dim1];
+            a[j + i__ * a_dim1] /= a[i__ + i__ * a_dim1];
 /*<    30    CONTINUE >*/
 /* L30: */
-	}
+        }
 /*<    >*/
-	i__2 = *n - i__;
-	i__3 = *n - i__;
-	dger_(&i__2, &i__3, &c_b10, &a[i__ + 1 + i__ * a_dim1], &c__1, &a[i__ 
-		+ (i__ + 1) * a_dim1], lda, &a[i__ + 1 + (i__ + 1) * a_dim1], 
-		lda);
+        i__2 = *n - i__;
+        i__3 = *n - i__;
+        dger_(&i__2, &i__3, &c_b10, &a[i__ + 1 + i__ * a_dim1], &c__1, &a[i__ 
+                + (i__ + 1) * a_dim1], lda, &a[i__ + 1 + (i__ + 1) * a_dim1], 
+                lda);
 /*<    40 CONTINUE >*/
 /* L40: */
     }
@@ -235,9 +235,9 @@ static doublereal c_b10 = -1.;
 /*<       IF( ABS( A( N, N ) ).LT.SMIN ) THEN >*/
     if ((d__1 = a[*n + *n * a_dim1], abs(d__1)) < smin) {
 /*<          INFO = N >*/
-	*info = *n;
+        *info = *n;
 /*<          A( N, N ) = SMIN >*/
-	a[*n + *n * a_dim1] = smin;
+        a[*n + *n * a_dim1] = smin;
 /*<       END IF >*/
     }
 
@@ -250,5 +250,5 @@ static doublereal c_b10 = -1.;
 } /* dgetc2_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

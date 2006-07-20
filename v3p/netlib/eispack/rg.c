@@ -1,13 +1,13 @@
 /* eispack/rg.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -17,8 +17,8 @@ extern "C" {
 
 /*<       subroutine rg(nm,n,a,wr,wi,matz,z,iv1,fv1,ierr) >*/
 /* Subroutine */ int rg_(integer *nm, integer *n, doublereal *a, doublereal *
-	wr, doublereal *wi, integer *matz, doublereal *z__, integer *iv1, 
-	doublereal *fv1, integer *ierr)
+        wr, doublereal *wi, integer *matz, doublereal *z__, integer *iv1, 
+        doublereal *fv1, integer *ierr)
 {
     /* System generated locals */
     integer a_dim1, a_offset, z_dim1, z_offset;
@@ -26,15 +26,15 @@ extern "C" {
     /* Local variables */
     integer is1, is2;
     extern /* Subroutine */ int hqr_(integer *, integer *, integer *, integer 
-	    *, doublereal *, doublereal *, doublereal *, integer *), hqr2_(
-	    integer *, integer *, integer *, integer *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, integer *), balbak_(
-	    integer *, integer *, integer *, integer *, doublereal *, integer 
-	    *, doublereal *), balanc_(integer *, integer *, doublereal *, 
-	    integer *, integer *, doublereal *), elmhes_(integer *, integer *,
-	     integer *, integer *, doublereal *, integer *), eltran_(integer *
-	    , integer *, integer *, integer *, doublereal *, integer *, 
-	    doublereal *);
+            *, doublereal *, doublereal *, doublereal *, integer *), hqr2_(
+            integer *, integer *, integer *, integer *, doublereal *, 
+            doublereal *, doublereal *, doublereal *, integer *), balbak_(
+            integer *, integer *, integer *, integer *, doublereal *, integer 
+            *, doublereal *), balanc_(integer *, integer *, doublereal *, 
+            integer *, integer *, doublereal *), elmhes_(integer *, integer *,
+             integer *, integer *, doublereal *, integer *), eltran_(integer *
+            , integer *, integer *, integer *, doublereal *, integer *, 
+            doublereal *);
 
 
 /*<       integer n,nm,is1,is2,ierr,matz >*/
@@ -103,7 +103,7 @@ extern "C" {
 
     /* Function Body */
     if (*n <= *nm) {
-	goto L10;
+        goto L10;
     }
 /*<       ierr = 10 * n >*/
     *ierr = *n * 10;
@@ -117,7 +117,7 @@ L10:
     elmhes_(nm, n, &is1, &is2, &a[a_offset], &iv1[1]);
 /*<       if (matz .ne. 0) go to 20 >*/
     if (*matz != 0) {
-	goto L20;
+        goto L20;
     }
 /*     .......... find eigenvalues only .......... */
 /*<       call  hqr(nm,n,is1,is2,a,wr,wi,ierr) >*/
@@ -130,10 +130,10 @@ L20:
     eltran_(nm, n, &is1, &is2, &a[a_offset], &iv1[1], &z__[z_offset]);
 /*<       call  hqr2(nm,n,is1,is2,a,wr,wi,z,ierr) >*/
     hqr2_(nm, n, &is1, &is2, &a[a_offset], &wr[1], &wi[1], &z__[z_offset], 
-	    ierr);
+            ierr);
 /*<       if (ierr .ne. 0) go to 50 >*/
     if (*ierr != 0) {
-	goto L50;
+        goto L50;
     }
 /*<       call  balbak(nm,n,is1,is2,fv1,n,z) >*/
     balbak_(nm, n, &is1, &is2, &fv1[1], n, &z__[z_offset]);
@@ -144,5 +144,5 @@ L50:
 } /* rg_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

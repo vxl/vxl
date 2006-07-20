@@ -1,13 +1,13 @@
 /* eispack/pythag.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -35,7 +35,7 @@ doublereal pythag_(doublereal *a, doublereal *b)
     p = max(d__1,d__2);
 /*<       if (p .eq. 0.0d0) go to 20 >*/
     if (p == 0.) {
-	goto L20;
+        goto L20;
     }
 /*<       r = (dmin1(dabs(a),dabs(b))/p)**2 >*/
 /* Computing MIN */
@@ -49,7 +49,7 @@ L10:
     t = r__ + 4.;
 /*<          if (t .eq. 4.0d0) go to 20 >*/
     if (t == 4.) {
-	goto L20;
+        goto L20;
     }
 /*<          s = r/t >*/
     s = r__ / t;
@@ -72,5 +72,5 @@ L20:
 } /* pythag_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

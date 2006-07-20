@@ -1,13 +1,13 @@
 /* lapack/util/ieeeck.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -76,9 +76,9 @@ integer ieeeck_(integer *ispec, real *zero, real *one)
 /*<       IF( POSINF.LE.ONE ) THEN >*/
     if (posinf <= *one) {
 /*<          IEEECK = 0 >*/
-	ret_val = 0;
+        ret_val = 0;
 /*<          RETURN >*/
-	return ret_val;
+        return ret_val;
 /*<       END IF >*/
     }
 
@@ -87,9 +87,9 @@ integer ieeeck_(integer *ispec, real *zero, real *one)
 /*<       IF( NEGINF.GE.ZERO ) THEN >*/
     if (neginf >= *zero) {
 /*<          IEEECK = 0 >*/
-	ret_val = 0;
+        ret_val = 0;
 /*<          RETURN >*/
-	return ret_val;
+        return ret_val;
 /*<       END IF >*/
     }
 
@@ -98,9 +98,9 @@ integer ieeeck_(integer *ispec, real *zero, real *one)
 /*<       IF( NEGZRO.NE.ZERO ) THEN >*/
     if (negzro != *zero) {
 /*<          IEEECK = 0 >*/
-	ret_val = 0;
+        ret_val = 0;
 /*<          RETURN >*/
-	return ret_val;
+        return ret_val;
 /*<       END IF >*/
     }
 
@@ -109,9 +109,9 @@ integer ieeeck_(integer *ispec, real *zero, real *one)
 /*<       IF( NEGINF.GE.ZERO ) THEN >*/
     if (neginf >= *zero) {
 /*<          IEEECK = 0 >*/
-	ret_val = 0;
+        ret_val = 0;
 /*<          RETURN >*/
-	return ret_val;
+        return ret_val;
 /*<       END IF >*/
     }
 
@@ -120,9 +120,9 @@ integer ieeeck_(integer *ispec, real *zero, real *one)
 /*<       IF( NEWZRO.NE.ZERO ) THEN >*/
     if (newzro != *zero) {
 /*<          IEEECK = 0 >*/
-	ret_val = 0;
+        ret_val = 0;
 /*<          RETURN >*/
-	return ret_val;
+        return ret_val;
 /*<       END IF >*/
     }
 
@@ -131,9 +131,9 @@ integer ieeeck_(integer *ispec, real *zero, real *one)
 /*<       IF( POSINF.LE.ONE ) THEN >*/
     if (posinf <= *one) {
 /*<          IEEECK = 0 >*/
-	ret_val = 0;
+        ret_val = 0;
 /*<          RETURN >*/
-	return ret_val;
+        return ret_val;
 /*<       END IF >*/
     }
 
@@ -142,9 +142,9 @@ integer ieeeck_(integer *ispec, real *zero, real *one)
 /*<       IF( NEGINF.GE.ZERO ) THEN >*/
     if (neginf >= *zero) {
 /*<          IEEECK = 0 >*/
-	ret_val = 0;
+        ret_val = 0;
 /*<          RETURN >*/
-	return ret_val;
+        return ret_val;
 /*<       END IF >*/
     }
 
@@ -153,9 +153,9 @@ integer ieeeck_(integer *ispec, real *zero, real *one)
 /*<       IF( POSINF.LE.ONE ) THEN >*/
     if (posinf <= *one) {
 /*<          IEEECK = 0 >*/
-	ret_val = 0;
+        ret_val = 0;
 /*<          RETURN >*/
-	return ret_val;
+        return ret_val;
 /*<       END IF >*/
     }
 
@@ -166,7 +166,7 @@ integer ieeeck_(integer *ispec, real *zero, real *one)
 
 /*<    >*/
     if (*ispec == 0) {
-	return ret_val;
+        return ret_val;
     }
 
 /*<       NAN1 = POSINF + NEGINF >*/
@@ -190,54 +190,54 @@ integer ieeeck_(integer *ispec, real *zero, real *one)
 /*<       IF( NAN1.EQ.NAN1 ) THEN >*/
     if (nan1 == nan1) {
 /*<          IEEECK = 0 >*/
-	ret_val = 0;
+        ret_val = 0;
 /*<          RETURN >*/
-	return ret_val;
+        return ret_val;
 /*<       END IF >*/
     }
 
 /*<       IF( NAN2.EQ.NAN2 ) THEN >*/
     if (nan2 == nan2) {
 /*<          IEEECK = 0 >*/
-	ret_val = 0;
+        ret_val = 0;
 /*<          RETURN >*/
-	return ret_val;
+        return ret_val;
 /*<       END IF >*/
     }
 
 /*<       IF( NAN3.EQ.NAN3 ) THEN >*/
     if (nan3 == nan3) {
 /*<          IEEECK = 0 >*/
-	ret_val = 0;
+        ret_val = 0;
 /*<          RETURN >*/
-	return ret_val;
+        return ret_val;
 /*<       END IF >*/
     }
 
 /*<       IF( NAN4.EQ.NAN4 ) THEN >*/
     if (nan4 == nan4) {
 /*<          IEEECK = 0 >*/
-	ret_val = 0;
+        ret_val = 0;
 /*<          RETURN >*/
-	return ret_val;
+        return ret_val;
 /*<       END IF >*/
     }
 
 /*<       IF( NAN5.EQ.NAN5 ) THEN >*/
     if (nan5 == nan5) {
 /*<          IEEECK = 0 >*/
-	ret_val = 0;
+        ret_val = 0;
 /*<          RETURN >*/
-	return ret_val;
+        return ret_val;
 /*<       END IF >*/
     }
 
 /*<       IF( NAN6.EQ.NAN6 ) THEN >*/
     if (nan6 == nan6) {
 /*<          IEEECK = 0 >*/
-	ret_val = 0;
+        ret_val = 0;
 /*<          RETURN >*/
-	return ret_val;
+        return ret_val;
 /*<       END IF >*/
     }
 
@@ -247,5 +247,5 @@ integer ieeeck_(integer *ispec, real *zero, real *one)
 } /* ieeeck_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

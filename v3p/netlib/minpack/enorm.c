@@ -1,13 +1,13 @@
 /* minpack/enorm.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -100,71 +100,71 @@ doublereal enorm_(integer *n, doublereal *x)
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          xabs = dabs(x(i)) >*/
-	xabs = (d__1 = x[i__], abs(d__1));
+        xabs = (d__1 = x[i__], abs(d__1));
 /*<          if (xabs .gt. rdwarf .and. xabs .lt. agiant) go to 70 >*/
-	if (xabs > rdwarf && xabs < agiant) {
-	    goto L70;
-	}
+        if (xabs > rdwarf && xabs < agiant) {
+            goto L70;
+        }
 /*<             if (xabs .le. rdwarf) go to 30 >*/
-	if (xabs <= rdwarf) {
-	    goto L30;
-	}
+        if (xabs <= rdwarf) {
+            goto L30;
+        }
 
 /*              sum for large components. */
 
 /*<                if (xabs .le. x1max) go to 10 >*/
-	if (xabs <= x1max) {
-	    goto L10;
-	}
+        if (xabs <= x1max) {
+            goto L10;
+        }
 /*<                   s1 = one + s1*(x1max/xabs)**2 >*/
 /* Computing 2nd power */
-	d__1 = x1max / xabs;
-	s1 = one + s1 * (d__1 * d__1);
+        d__1 = x1max / xabs;
+        s1 = one + s1 * (d__1 * d__1);
 /*<                   x1max = xabs >*/
-	x1max = xabs;
+        x1max = xabs;
 /*<                   go to 20 >*/
-	goto L20;
+        goto L20;
 /*<    10          continue >*/
 L10:
 /*<                   s1 = s1 + (xabs/x1max)**2 >*/
 /* Computing 2nd power */
-	d__1 = xabs / x1max;
-	s1 += d__1 * d__1;
+        d__1 = xabs / x1max;
+        s1 += d__1 * d__1;
 /*<    20          continue >*/
 L20:
 /*<                go to 60 >*/
-	goto L60;
+        goto L60;
 /*<    30       continue >*/
 L30:
 
 /*              sum for small components. */
 
 /*<                if (xabs .le. x3max) go to 40 >*/
-	if (xabs <= x3max) {
-	    goto L40;
-	}
+        if (xabs <= x3max) {
+            goto L40;
+        }
 /*<                   s3 = one + s3*(x3max/xabs)**2 >*/
 /* Computing 2nd power */
-	d__1 = x3max / xabs;
-	s3 = one + s3 * (d__1 * d__1);
+        d__1 = x3max / xabs;
+        s3 = one + s3 * (d__1 * d__1);
 /*<                   x3max = xabs >*/
-	x3max = xabs;
+        x3max = xabs;
 /*<                   go to 50 >*/
-	goto L50;
+        goto L50;
 /*<    40          continue >*/
 L40:
 /*<                   if (xabs .ne. zero) s3 = s3 + (xabs/x3max)**2 >*/
-	if (xabs != zero) {
+        if (xabs != zero) {
 /* Computing 2nd power */
-	    d__1 = xabs / x3max;
-	    s3 += d__1 * d__1;
-	}
+            d__1 = xabs / x3max;
+            s3 += d__1 * d__1;
+        }
 /*<    50          continue >*/
 L50:
 /*<    60       continue >*/
 L60:
 /*<             go to 80 >*/
-	goto L80;
+        goto L80;
 /*<    70    continue >*/
 L70:
 
@@ -172,20 +172,20 @@ L70:
 
 /*<             s2 = s2 + xabs**2 >*/
 /* Computing 2nd power */
-	d__1 = xabs;
-	s2 += d__1 * d__1;
+        d__1 = xabs;
+        s2 += d__1 * d__1;
 /*<    80    continue >*/
 L80:
 /*<    90    continue >*/
 /* L90: */
-	;
+        ;
     }
 
 /*     calculation of norm. */
 
 /*<       if (s1 .eq. zero) go to 100 >*/
     if (s1 == zero) {
-	goto L100;
+        goto L100;
     }
 /*<          enorm = x1max*dsqrt(s1+(s2/x1max)/x1max) >*/
     ret_val = x1max * sqrt(s1 + s2 / x1max / x1max);
@@ -195,15 +195,15 @@ L80:
 L100:
 /*<          if (s2 .eq. zero) go to 110 >*/
     if (s2 == zero) {
-	goto L110;
+        goto L110;
     }
 /*<    >*/
     if (s2 >= x3max) {
-	ret_val = sqrt(s2 * (one + x3max / s2 * (x3max * s3)));
+        ret_val = sqrt(s2 * (one + x3max / s2 * (x3max * s3)));
     }
 /*<    >*/
     if (s2 < x3max) {
-	ret_val = sqrt(x3max * (s2 / x3max + x3max * s3));
+        ret_val = sqrt(x3max * (s2 / x3max + x3max * s3));
     }
 /*<             go to 120 >*/
     goto L120;
@@ -224,5 +224,5 @@ L130:
 } /* enorm_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

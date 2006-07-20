@@ -1,13 +1,13 @@
 /* opt/lbfgs.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -95,8 +95,8 @@ static integer c__1 = 1;
 
 /*<       SUBROUTINE LBFGS(N,M,X,F,G,DIAGCO,DIAG,IPRINT,EPS,XTOL,W,IFLAG) >*/
 /* Subroutine */ int lbfgs_(integer *n, integer *m, doublereal *x, doublereal 
-	*f, doublereal *g, logical *diagco, doublereal *diag, integer *iprint,
-	 doublereal *eps, doublereal *xtol, doublereal *w, integer *iflag,
+        *f, doublereal *g, logical *diagco, doublereal *diag, integer *iprint,
+         doublereal *eps, doublereal *xtol, doublereal *w, integer *iflag,
          v3p_netlib_lbfgs_global_t* v3p_netlib_lbfgs_global_arg)
 {
     /* Initialized data */
@@ -118,9 +118,9 @@ static integer c__1 = 1;
       integer *iprint, integer *n, integer *m, doublereal *x, doublereal *f,
       doublereal *g, v3p_netlib_lbfgs_global_t* v3p_netlib_lbfgs_global_arg);
     extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, 
-	    integer *);
+            integer *);
     extern /* Subroutine */ int daxpy_(integer *, doublereal *, doublereal *, 
-	    integer *, doublereal *, integer *);
+            integer *, doublereal *, integer *);
     extern /* Subroutine */ int mcsrch_(integer *, doublereal *, doublereal *,
                                         doublereal *, doublereal *,
                                         doublereal *, doublereal *,
@@ -360,19 +360,19 @@ static integer c__1 = 1;
 
 /*<       IF(IFLAG.EQ.0) GO TO 10 >*/
     if (*iflag == 0) {
-	goto L10;
+        goto L10;
     }
 /*<       GO TO (172,100) IFLAG >*/
     switch (*iflag) {
-	case 1:  goto L172;
-	case 2:  goto L100;
+        case 1:  goto L172;
+        case 2:  goto L100;
     }
 /*<   10  ITER= 0 >*/
 L10:
     iter = 0;
 /*<       IF(N.LE.0.OR.M.LE.0) GO TO 196 >*/
     if (*n <= 0 || *m <= 0) {
-	goto L196;
+        goto L196;
     }
 /*<       IF(GTOL.LE.1.D-04) THEN >*/
     if (lb3_1.gtol <= 1e-4) {
@@ -381,12 +381,12 @@ L10:
  245  FORMAT(/'  GTOL IS LESS THAN OR EQUAL TO 1.D-04',
      .       / ' IT HAS BEEN RESET TO 9.D-01')
 */
-	if (lb3_1.lp > 0) {
+        if (lb3_1.lp > 0) {
             printf("  GTOL IS LESS THAN OR EQUAL TO 1.D-04");
             printf("  IT HAS BEEN RESET TO 9.D-01");
-	}
+        }
 /*<         GTOL=9.D-01 >*/
-	lb3_1.gtol = .9;
+        lb3_1.gtol = .9;
 /*<       ENDIF >*/
     }
 /*<       NFUN= 1 >*/
@@ -398,23 +398,23 @@ L10:
 /*<       IF(DIAGCO) THEN >*/
     if (*diagco) {
 /*<          DO 30 I=1,N >*/
-	i__1 = *n;
-	for (i__ = 1; i__ <= i__1; ++i__) {
+        i__1 = *n;
+        for (i__ = 1; i__ <= i__1; ++i__) {
 /*<  30      IF (DIAG(I).LE.ZERO) GO TO 195 >*/
 /* L30: */
-	    if (diag[i__] <= zero) {
-		goto L195;
-	    }
-	}
+            if (diag[i__] <= zero) {
+                goto L195;
+            }
+        }
 /*<       ELSE >*/
     } else {
 /*<          DO 40 I=1,N >*/
-	i__1 = *n;
-	for (i__ = 1; i__ <= i__1; ++i__) {
+        i__1 = *n;
+        for (i__ = 1; i__ <= i__1; ++i__) {
 /*<  40      DIAG(I)= 1.0D0 >*/
 /* L40: */
-	    diag[i__] = 1.;
-	}
+            diag[i__] = 1.;
+        }
 /*<       ENDIF >*/
     }
 
@@ -442,7 +442,7 @@ L10:
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<  50   W(ISPT+I)= -G(I)*DIAG(I) >*/
 /* L50: */
-	w[ispt + i__] = -g[i__] * diag[i__];
+        w[ispt + i__] = -g[i__] * diag[i__];
     }
 /*<       GNORM= DSQRT(DDOT(N,G,1,G,1)) >*/
     gnorm = sqrt(ddot_(n, &g[1], &c__1, &g[1], &c__1));
@@ -458,7 +458,7 @@ L10:
 
 /*<    >*/
     if (iprint[1] >= 0) {
-	lb1_(&iprint[1], n, m, &x[1], f, &g[1], v3p_netlib_lbfgs_global_arg);
+        lb1_(&iprint[1], n, m, &x[1], f, &g[1], v3p_netlib_lbfgs_global_arg);
     }
 
 /*    -------------------- */
@@ -474,11 +474,11 @@ L80:
     bound = iter - 1;
 /*<       IF(ITER.EQ.1) GO TO 165 >*/
     if (iter == 1) {
-	goto L165;
+        goto L165;
     }
 /*<       IF (ITER .GT. M)BOUND=M >*/
     if (iter > *m) {
-	bound = *m;
+        bound = *m;
     }
 
 /*<          YS= DDOT(N,W(IYPT+NPT+1),1,W(ISPT+NPT+1),1) >*/
@@ -486,20 +486,20 @@ L80:
 /*<       IF(.NOT.DIAGCO) THEN >*/
     if (! (*diagco)) {
 /*<          YY= DDOT(N,W(IYPT+NPT+1),1,W(IYPT+NPT+1),1) >*/
-	yy = ddot_(n, &w[iypt + npt + 1], &c__1, &w[iypt + npt + 1], &c__1);
+        yy = ddot_(n, &w[iypt + npt + 1], &c__1, &w[iypt + npt + 1], &c__1);
 /*<          DO 90 I=1,N >*/
-	i__1 = *n;
-	for (i__ = 1; i__ <= i__1; ++i__) {
+        i__1 = *n;
+        for (i__ = 1; i__ <= i__1; ++i__) {
 /*<    90    DIAG(I)= YS/YY >*/
 /* L90: */
-	    diag[i__] = ys / yy;
-	}
+            diag[i__] = ys / yy;
+        }
 /*<       ELSE >*/
     } else {
 /*<          IFLAG=2 >*/
-	*iflag = 2;
+        *iflag = 2;
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       ENDIF >*/
     }
 /*<  100  CONTINUE >*/
@@ -507,14 +507,14 @@ L100:
 /*<       IF(DIAGCO) THEN >*/
     if (*diagco) {
 /*<         DO 110 I=1,N >*/
-	i__1 = *n;
-	for (i__ = 1; i__ <= i__1; ++i__) {
+        i__1 = *n;
+        for (i__ = 1; i__ <= i__1; ++i__) {
 /*<  110    IF (DIAG(I).LE.ZERO) GO TO 195 >*/
 /* L110: */
-	    if (diag[i__] <= zero) {
-		goto L195;
-	    }
-	}
+            if (diag[i__] <= zero) {
+                goto L195;
+            }
+        }
 /*<       ENDIF >*/
     }
 
@@ -527,7 +527,7 @@ L100:
     cp = point;
 /*<       IF (POINT.EQ.0) CP=M >*/
     if (point == 0) {
-	cp = *m;
+        cp = *m;
     }
 /*<       W(N+CP)= ONE/YS >*/
     w[*n + cp] = one / ys;
@@ -536,7 +536,7 @@ L100:
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<  112  W(I)= -G(I) >*/
 /* L112: */
-	w[i__] = -g[i__];
+        w[i__] = -g[i__];
     }
 /*<       CP= POINT >*/
     cp = point;
@@ -544,22 +544,22 @@ L100:
     i__1 = bound;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          CP=CP-1 >*/
-	--cp;
+        --cp;
 /*<          IF (CP.EQ. -1)CP=M-1 >*/
-	if (cp == -1) {
-	    cp = *m - 1;
-	}
+        if (cp == -1) {
+            cp = *m - 1;
+        }
 /*<          SQ= DDOT(N,W(ISPT+CP*N+1),1,W,1) >*/
-	sq = ddot_(n, &w[ispt + cp * *n + 1], &c__1, &w[1], &c__1);
+        sq = ddot_(n, &w[ispt + cp * *n + 1], &c__1, &w[1], &c__1);
 /*<          INMC=N+M+CP+1 >*/
-	inmc = *n + *m + cp + 1;
+        inmc = *n + *m + cp + 1;
 /*<          IYCN=IYPT+CP*N >*/
-	iycn = iypt + cp * *n;
+        iycn = iypt + cp * *n;
 /*<          W(INMC)= W(N+CP+1)*SQ >*/
-	w[inmc] = w[*n + cp + 1] * sq;
+        w[inmc] = w[*n + cp + 1] * sq;
 /*<          CALL DAXPY(N,-W(INMC),W(IYCN+1),1,W,1) >*/
-	d__1 = -w[inmc];
-	daxpy_(n, &d__1, &w[iycn + 1], &c__1, &w[1], &c__1);
+        d__1 = -w[inmc];
+        daxpy_(n, &d__1, &w[iycn + 1], &c__1, &w[1], &c__1);
 /*<  125  CONTINUE >*/
 /* L125: */
     }
@@ -569,30 +569,30 @@ L100:
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<  130  W(I)=DIAG(I)*W(I) >*/
 /* L130: */
-	w[i__] = diag[i__] * w[i__];
+        w[i__] = diag[i__] * w[i__];
     }
 
 /*<       DO 145 I=1,BOUND >*/
     i__1 = bound;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          YR= DDOT(N,W(IYPT+CP*N+1),1,W,1) >*/
-	yr = ddot_(n, &w[iypt + cp * *n + 1], &c__1, &w[1], &c__1);
+        yr = ddot_(n, &w[iypt + cp * *n + 1], &c__1, &w[1], &c__1);
 /*<          BETA= W(N+CP+1)*YR >*/
-	beta = w[*n + cp + 1] * yr;
+        beta = w[*n + cp + 1] * yr;
 /*<          INMC=N+M+CP+1 >*/
-	inmc = *n + *m + cp + 1;
+        inmc = *n + *m + cp + 1;
 /*<          BETA= W(INMC)-BETA >*/
-	beta = w[inmc] - beta;
+        beta = w[inmc] - beta;
 /*<          ISCN=ISPT+CP*N >*/
-	iscn = ispt + cp * *n;
+        iscn = ispt + cp * *n;
 /*<          CALL DAXPY(N,BETA,W(ISCN+1),1,W,1) >*/
-	daxpy_(n, &beta, &w[iscn + 1], &c__1, &w[1], &c__1);
+        daxpy_(n, &beta, &w[iscn + 1], &c__1, &w[1], &c__1);
 /*<          CP=CP+1 >*/
-	++cp;
+        ++cp;
 /*<          IF (CP.EQ.M)CP=0 >*/
-	if (cp == *m) {
-	    cp = 0;
-	}
+        if (cp == *m) {
+            cp = 0;
+        }
 /*<  145  CONTINUE >*/
 /* L145: */
     }
@@ -605,7 +605,7 @@ L100:
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<  160   W(ISPT+POINT*N+I)= W(I) >*/
 /* L160: */
-	w[ispt + point * *n + i__] = w[i__];
+        w[ispt + point * *n + i__] = w[i__];
     }
 
 /*     OBTAIN THE ONE-DIMENSIONAL MINIMIZER OF THE FUNCTION */
@@ -619,31 +619,31 @@ L165:
     stp = lb3_1.stpinit;
 /*<       IF (ITER.EQ.1) STP=STP1 >*/
     if (iter == 1) {
-	stp = stp1;
+        stp = stp1;
     }
 /*<       DO 170 I=1,N >*/
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<  170  W(I)=G(I) >*/
 /* L170: */
-	w[i__] = g[i__];
+        w[i__] = g[i__];
     }
 /*<  172  CONTINUE >*/
 L172:
 /*<    >*/
     mcsrch_(n, &x[1], f, &g[1], &w[ispt + point * *n + 1], xtol,
-	    &diag[1], v3p_netlib_lbfgs_global_arg);
+            &diag[1], v3p_netlib_lbfgs_global_arg);
 /*<       IF (INFO .EQ. -1) THEN >*/
     if (info == -1) {
 /*<         IFLAG=1 >*/
-	*iflag = 1;
+        *iflag = 1;
 /*<         RETURN >*/
-	return 0;
+        return 0;
 /*<       ENDIF >*/
     }
 /*<       IF (INFO .NE. 1) GO TO 190 >*/
     if (info != 1) {
-	goto L190;
+        goto L190;
     }
 /*<       NFUN= NFUN + NFEV >*/
     nfun += nfev;
@@ -657,16 +657,16 @@ L172:
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<       W(ISPT+NPT+I)= STP*W(ISPT+NPT+I) >*/
-	w[ispt + npt + i__] = stp * w[ispt + npt + i__];
+        w[ispt + npt + i__] = stp * w[ispt + npt + i__];
 /*<  175  W(IYPT+NPT+I)= G(I)-W(I) >*/
 /* L175: */
-	w[iypt + npt + i__] = g[i__] - w[i__];
+        w[iypt + npt + i__] = g[i__] - w[i__];
     }
 /*<       POINT=POINT+1 >*/
     ++point;
 /*<       IF (POINT.EQ.M)POINT=0 >*/
     if (point == *m) {
-	point = 0;
+        point = 0;
     }
 
 /*     TERMINATION TEST */
@@ -680,19 +680,19 @@ L172:
     xnorm = max(1.,xnorm);
 /*<       IF (GNORM/XNORM .LE. EPS) FINISH=.TRUE. >*/
     if (gnorm / xnorm <= *eps) {
-	finish = TRUE_;
+        finish = TRUE_;
     }
 
 /*<    >*/
     if (iprint[1] >= 0) {
-	lb1_(&iprint[1], n, m, &x[1], f, &g[1], v3p_netlib_lbfgs_global_arg);
+        lb1_(&iprint[1], n, m, &x[1], f, &g[1], v3p_netlib_lbfgs_global_arg);
     }
 /*<       IF (FINISH) THEN >*/
     if (finish) {
 /*<          IFLAG=0 >*/
-	*iflag = 0;
+        *iflag = 0;
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       ENDIF >*/
     }
 /*<       GO TO 80 >*/
@@ -829,7 +829,7 @@ static void write50(double* v, int n)
 */
         printf(" F= %g   GNORM= %g\n", *f, gnorm);
 /*<                  IF (IPRINT(2).GE.1)THEN >*/
-	if (iprint[2] >= 1) {
+        if (iprint[2] >= 1) {
 /*<                      WRITE(MP,40) >*/
 /*
  40   FORMAT(' VECTOR X= ')
@@ -851,7 +851,7 @@ static void write50(double* v, int n)
 */
             write50(g, *n);
 /*<                   ENDIF >*/
-	}
+        }
 /*<            WRITE(MP,10) >*/
 /*
   10   FORMAT('*************************************************')
@@ -865,72 +865,72 @@ static void write50(double* v, int n)
 /*<       ELSE >*/
     } else {
 /*<           IF ((IPRINT(1).EQ.0).AND.(ITER.NE.1.AND..NOT.FINISH))RETURN >*/
-	if (iprint[1] == 0 && (iter != 1 && ! (finish))) {
-	    return 0;
-	}
+        if (iprint[1] == 0 && (iter != 1 && ! (finish))) {
+            return 0;
+        }
 /*<               IF (IPRINT(1).NE.0)THEN >*/
-	if (iprint[1] != 0) {
+        if (iprint[1] != 0) {
 /*<                    IF(MOD(ITER-1,IPRINT(1)).EQ.0.OR.FINISH)THEN >*/
-	    if ((iter - 1) % iprint[1] == 0 || finish) {
+            if ((iter - 1) % iprint[1] == 0 || finish) {
 /*<                          IF(IPRINT(2).GT.1.AND.ITER.GT.1) WRITE(MP,70) >*/
 /*
  70   FORMAT(/'   I   NFN',4X,'FUNC',8X,'GNORM',7X,'STEPLENGTH'/)
 */
-		if (iprint[2] > 1 && iter > 1) {
+                if (iprint[2] > 1 && iter > 1) {
                     printf("   I   NFN    FUNC        GNORM       STEPLENGTH\n");
-		}
+                }
 /*<                          WRITE(MP,80)ITER,NFUN,F,GNORM,STP >*/
 /*
  80   FORMAT(2(I4,1X),3X,3(1PD10.3,2X))
 */
                 printf("%4ld %4ld    %10.3f  %10.3f  %10.3f\n", iter, nfun, *f, gnorm, stp);
 /*<                    ELSE >*/
-	    } else {
+            } else {
 /*<                          RETURN >*/
-		return 0;
+                return 0;
 /*<                    ENDIF >*/
-	    }
+            }
 /*<               ELSE >*/
-	} else {
+        } else {
 /*<                    IF( IPRINT(2).GT.1.AND.FINISH) WRITE(MP,70) >*/
 /*
  70   FORMAT(/'   I   NFN',4X,'FUNC',8X,'GNORM',7X,'STEPLENGTH'/)
 */
-	    if (iprint[2] > 1 && finish) {
+            if (iprint[2] > 1 && finish) {
                     printf("   I   NFN    FUNC        GNORM       STEPLENGTH\n");
-	    }
+            }
 /*<                    WRITE(MP,80)ITER,NFUN,F,GNORM,STP >*/
 /*
  80   FORMAT(2(I4,1X),3X,3(1PD10.3,2X))
 */
             printf("%4ld %4ld    %10.3f  %10.3f  %10.3f\n", iter, nfun, *f, gnorm, stp);
 /*<               ENDIF >*/
-	}
+        }
 /*<               IF (IPRINT(2).EQ.2.OR.IPRINT(2).EQ.3)THEN >*/
-	if (iprint[2] == 2 || iprint[2] == 3) {
+        if (iprint[2] == 2 || iprint[2] == 3) {
 /*<                     IF (FINISH)THEN >*/
-	    if (finish) {
+            if (finish) {
 /*<                         WRITE(MP,90) >*/
 /*
   90   FORMAT(' FINAL POINT X= ')
 */
                 printf(" FINAL POINT X= ");
 /*<                     ELSE >*/
-	    } else {
+            } else {
 /*<                         WRITE(MP,40) >*/
 /*
  40   FORMAT(' VECTOR X= ')
 */
                 printf(" VECTOR X= ");
 /*<                     ENDIF >*/
-	    }
+            }
 /*<                       WRITE(MP,50)(X(I),I=1,N) >*/
 /*
  50   FORMAT(6(2X,1PD10.3))
 */
             write50(x, *n);
 /*<                   IF (IPRINT(2).EQ.3)THEN >*/
-	    if (iprint[2] == 3) {
+            if (iprint[2] == 3) {
 /*<                       WRITE(MP,60) >*/
 /*
  60   FORMAT(' GRADIENT VECTOR G= ')
@@ -942,17 +942,17 @@ static void write50(double* v, int n)
 */
                 write50(g, *n);
 /*<                   ENDIF >*/
-	    }
+            }
 /*<               ENDIF >*/
-	}
+        }
 /*<             IF (FINISH) WRITE(MP,100) >*/
 /*
  100  FORMAT(/' THE MINIMIZATION TERMINATED WITHOUT DETECTING ERRORS.',
      .       /' IFLAG = 0')
 */
-	if (finish) {
+        if (finish) {
             printf(" THE MINIMIZATION TERMINATED WITHOUT DETECTING ERRORS.\n");
-	}
+        }
 /*<       ENDIF >*/
     }
 
@@ -1155,7 +1155,7 @@ static void write50(double* v, int n)
     /* Function Body */
 /*<       IF(INFO.EQ.-1) GO TO 45 >*/
     if (info == -1) {
-	goto L45;
+        goto L45;
     }
 /*<       INFOC = 1 >*/
     infoc = 1;
@@ -1163,9 +1163,9 @@ static void write50(double* v, int n)
 /*     CHECK THE INPUT PARAMETERS FOR ERRORS. */
 
 /*<    >*/ if (*n <= 0 || stp <= zero || ftol < zero || lb3_1.gtol < zero || *xtol 
-	    < zero || lb3_1.stpmin < zero || lb3_1.stpmax < lb3_1.stpmin ||
+            < zero || lb3_1.stpmin < zero || lb3_1.stpmax < lb3_1.stpmin ||
         maxfev <= 0) {
-	return 0;
+        return 0;
     }
 
 /*     COMPUTE THE INITIAL GRADIENT IN THE SEARCH DIRECTION */
@@ -1177,7 +1177,7 @@ static void write50(double* v, int n)
     i__1 = *n;
     for (j = 1; j <= i__1; ++j) {
 /*<          DGINIT = DGINIT + G(J)*S(J) >*/
-	dginit += g[j] * s[j];
+        dginit += g[j] * s[j];
 /*<    10    CONTINUE >*/
 /* L10: */
     }
@@ -1187,7 +1187,7 @@ static void write50(double* v, int n)
         printf("  THE SEARCH DIRECTION IS NOT A DESCENT DIRECTION\n");
 /*<    15    FORMAT(/'  THE SEARCH DIRECTION IS NOT A DESCENT DIRECTION') >*/
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<          ENDIF >*/
     }
 
@@ -1211,7 +1211,7 @@ static void write50(double* v, int n)
     i__1 = *n;
     for (j = 1; j <= i__1; ++j) {
 /*<          WA(J) = X(J) >*/
-	wa[j] = x[j];
+        wa[j] = x[j];
 /*<    20    CONTINUE >*/
 /* L20: */
     }
@@ -1248,15 +1248,15 @@ L30:
 /*<          IF (BRACKT) THEN >*/
     if (brackt) {
 /*<             STMIN = MIN(STX,STY) >*/
-	stmin = min(stx,sty);
+        stmin = min(stx,sty);
 /*<             STMAX = MAX(STX,STY) >*/
-	stmax = max(stx,sty);
+        stmax = max(stx,sty);
 /*<          ELSE >*/
     } else {
 /*<             STMIN = STX >*/
-	stmin = stx;
+        stmin = stx;
 /*<             STMAX = STP + XTRAPF*(STP - STX) >*/
-	stmax = stp + xtrapf * (stp - stx);
+        stmax = stp + xtrapf * (stp - stx);
 /*<             END IF >*/
     }
 
@@ -1272,8 +1272,8 @@ L30:
 
 /*<    >*/
     if ((brackt && (stp <= stmin || stp >= stmax)) || nfev >= maxfev - 1 || 
-	    infoc == 0 || (brackt && stmax - stmin <= *xtol * stmax)) {
-	stp = stx;
+            infoc == 0 || (brackt && stmax - stmin <= *xtol * stmax)) {
+        stp = stx;
     }
 
 /*        EVALUATE THE FUNCTION AND GRADIENT AT STP */
@@ -1284,7 +1284,7 @@ L30:
     i__1 = *n;
     for (j = 1; j <= i__1; ++j) {
 /*<             X(J) = WA(J) + STP*S(J) >*/
-	x[j] = wa[j] + stp * s[j];
+        x[j] = wa[j] + stp * s[j];
 /*<    40       CONTINUE >*/
 /* L40: */
     }
@@ -1304,7 +1304,7 @@ L45:
     i__1 = *n;
     for (j = 1; j <= i__1; ++j) {
 /*<             DG = DG + G(J)*S(J) >*/
-	dg += g[j] * s[j];
+        dg += g[j] * s[j];
 /*<    50       CONTINUE >*/
 /* L50: */
     }
@@ -1315,34 +1315,34 @@ L45:
 
 /*<    >*/
     if ((brackt && (stp <= stmin || stp >= stmax)) || infoc == 0) {
-	info = 6;
+        info = 6;
     }
 /*<    >*/
     if (stp == lb3_1.stpmax && *f <= ftest1 && dg <= dgtest) {
-	info = 5;
+        info = 5;
     }
 /*<    >*/
     if (stp == lb3_1.stpmin && (*f > ftest1 || dg >= dgtest)) {
-	info = 4;
+        info = 4;
     }
 /*<          IF (NFEV .GE. MAXFEV) INFO = 3 >*/
     if (nfev >= maxfev) {
-	info = 3;
+        info = 3;
     }
 /*<          IF (BRACKT .AND. STMAX-STMIN .LE. XTOL*STMAX) INFO = 2 >*/
     if (brackt && stmax - stmin <= *xtol * stmax) {
-	info = 2;
+        info = 2;
     }
 /*<          IF (F .LE. FTEST1 .AND. ABS(DG) .LE. GTOL*(-DGINIT)) INFO = 1 >*/
     if (*f <= ftest1 && abs(dg) <= lb3_1.gtol * (-dginit)) {
-	info = 1;
+        info = 1;
     }
 
 /*        CHECK FOR TERMINATION. */
 
 /*<          IF (INFO .NE. 0) RETURN >*/
     if (info != 0) {
-	return 0;
+        return 0;
     }
 
 /*        IN THE FIRST STAGE WE SEEK A STEP FOR WHICH THE MODIFIED */
@@ -1350,7 +1350,7 @@ L45:
 
 /*<    >*/
     if (stage1 && *f <= ftest1 && dg >= min(ftol,lb3_1.gtol) * dginit) {
-	stage1 = FALSE_;
+        stage1 = FALSE_;
     }
 
 /*        A MODIFIED FUNCTION IS USED TO PREDICT THE STEP ONLY IF */
@@ -1365,35 +1365,35 @@ L45:
 /*           DEFINE THE MODIFIED FUNCTION AND DERIVATIVE VALUES. */
 
 /*<             FM = F - STP*DGTEST >*/
-	fm = *f - stp * dgtest;
+        fm = *f - stp * dgtest;
 /*<             FXM = FX - STX*DGTEST >*/
-	fxm = fx - stx * dgtest;
+        fxm = fx - stx * dgtest;
 /*<             FYM = FY - STY*DGTEST >*/
-	fym = fy - sty * dgtest;
+        fym = fy - sty * dgtest;
 /*<             DGM = DG - DGTEST >*/
-	dgm = dg - dgtest;
+        dgm = dg - dgtest;
 /*<             DGXM = DGX - DGTEST >*/
-	dgxm = dgx - dgtest;
+        dgxm = dgx - dgtest;
 /*<             DGYM = DGY - DGTEST >*/
-	dgym = dgy - dgtest;
+        dgym = dgy - dgtest;
 
 /*           CALL CSTEP TO UPDATE THE INTERVAL OF UNCERTAINTY */
 /*           AND TO COMPUTE THE NEW STEP. */
 
 /*<    >*/
-	mcstep_(&dgxm, &dgym, &fm, &dgm, &stmin, &stmax,
+        mcstep_(&dgxm, &dgym, &fm, &dgm, &stmin, &stmax,
                 v3p_netlib_lbfgs_global_arg);
 
 /*           RESET THE FUNCTION AND GRADIENT VALUES FOR F. */
 
 /*<             FX = FXM + STX*DGTEST >*/
-	fx = fxm + stx * dgtest;
+        fx = fxm + stx * dgtest;
 /*<             FY = FYM + STY*DGTEST >*/
-	fy = fym + sty * dgtest;
+        fy = fym + sty * dgtest;
 /*<             DGX = DGXM + DGTEST >*/
-	dgx = dgxm + dgtest;
+        dgx = dgxm + dgtest;
 /*<             DGY = DGYM + DGTEST >*/
-	dgy = dgym + dgtest;
+        dgy = dgym + dgtest;
 /*<          ELSE >*/
     } else {
 
@@ -1401,7 +1401,7 @@ L45:
 /*           AND TO COMPUTE THE NEW STEP. */
 
 /*<    >*/
-	mcstep_(&dgx, &dgy, f, &dg, &stmin, &stmax,
+        mcstep_(&dgx, &dgy, f, &dg, &stmin, &stmax,
                 v3p_netlib_lbfgs_global_arg);
 /*<             END IF >*/
     }
@@ -1412,13 +1412,13 @@ L45:
 /*<          IF (BRACKT) THEN >*/
     if (brackt) {
 /*<    >*/
-	if ((d__1 = sty - stx, abs(d__1)) >= p66 * width1) {
-	    stp = stx + p5 * (sty - stx);
-	}
+        if ((d__1 = sty - stx, abs(d__1)) >= p66 * width1) {
+            stp = stx + p5 * (sty - stx);
+        }
 /*<             WIDTH1 = WIDTH >*/
-	width1 = width;
+        width1 = width;
 /*<             WIDTH = ABS(STY-STX) >*/
-	width = (d__1 = sty - stx, abs(d__1));
+        width = (d__1 = sty - stx, abs(d__1));
 /*<             END IF >*/
     }
 
@@ -1518,8 +1518,8 @@ L45:
 
 /*<    >*/
     if ((brackt && (stp <= min(stx,sty) || stp >= max(stx,sty))) || *dx *
-	     (stp - stx) >= (float)0. || *stpmax < *stpmin) {
-	return 0;
+             (stp - stx) >= (float)0. || *stpmax < *stpmin) {
+        return 0;
     }
 
 /*     DETERMINE IF THE DERIVATIVES HAVE OPPOSITE SIGN. */
@@ -1535,48 +1535,48 @@ L45:
 /*<       IF (FP .GT. FX) THEN >*/
     if (*fp > fx) {
 /*<          INFOC = 1 >*/
-	infoc = 1;
+        infoc = 1;
 /*<          MCBOUND = .TRUE. >*/
-	mcbound = TRUE_;
+        mcbound = TRUE_;
 /*<          THETA = 3*(FX - FP)/(STP - STX) + DX + DP >*/
-	theta = (fx - *fp) * 3 / (stp - stx) + *dx + *dp;
+        theta = (fx - *fp) * 3 / (stp - stx) + *dx + *dp;
 /*<          S = MAX(ABS(THETA),ABS(DX),ABS(DP)) >*/
 /* Computing MAX */
-	d__1 = abs(theta), d__2 = abs(*dx), d__1 = max(d__1,d__2), d__2 = abs(
-		*dp);
-	s = max(d__1,d__2);
+        d__1 = abs(theta), d__2 = abs(*dx), d__1 = max(d__1,d__2), d__2 = abs(
+                *dp);
+        s = max(d__1,d__2);
 /*<          GAMMA = S*SQRT((THETA/S)**2 - (DX/S)*(DP/S)) >*/
 /* Computing 2nd power */
-	d__1 = theta / s;
-	gamma = s * sqrt(d__1 * d__1 - *dx / s * (*dp / s));
+        d__1 = theta / s;
+        gamma = s * sqrt(d__1 * d__1 - *dx / s * (*dp / s));
 /*<          IF (STP .LT. STX) GAMMA = -GAMMA >*/
-	if (stp < stx) {
-	    gamma = -gamma;
-	}
+        if (stp < stx) {
+            gamma = -gamma;
+        }
 /*<          P = (GAMMA - DX) + THETA >*/
-	p = gamma - *dx + theta;
+        p = gamma - *dx + theta;
 /*<          Q = ((GAMMA - DX) + GAMMA) + DP >*/
-	q = gamma - *dx + gamma + *dp;
+        q = gamma - *dx + gamma + *dp;
 /*<          R = P/Q >*/
-	r__ = p / q;
+        r__ = p / q;
 /*<          STPC = STX + R*(STP - STX) >*/
-	stpc = stx + r__ * (stp - stx);
+        stpc = stx + r__ * (stp - stx);
 /*<          STPQ = STX + ((DX/((FX-FP)/(STP-STX)+DX))/2)*(STP - STX) >*/
-	stpq = stx + *dx / ((fx - *fp) / (stp - stx) + *dx) / 2 * (stp - 
-		stx);
+        stpq = stx + *dx / ((fx - *fp) / (stp - stx) + *dx) / 2 * (stp - 
+                stx);
 /*<          IF (ABS(STPC-STX) .LT. ABS(STPQ-STX)) THEN >*/
-	if ((d__1 = stpc - stx, abs(d__1)) < (d__2 = stpq - stx, abs(d__2)))
-		 {
+        if ((d__1 = stpc - stx, abs(d__1)) < (d__2 = stpq - stx, abs(d__2)))
+                 {
 /*<             STPF = STPC >*/
-	    stpf = stpc;
+            stpf = stpc;
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<            STPF = STPC + (STPQ - STPC)/2 >*/
-	    stpf = stpc + (stpq - stpc) / 2;
+            stpf = stpc + (stpq - stpc) / 2;
 /*<            END IF >*/
-	}
+        }
 /*<          BRACKT = .TRUE. >*/
-	brackt = TRUE_;
+        brackt = TRUE_;
 
 /*     SECOND CASE. A LOWER FUNCTION VALUE AND DERIVATIVES OF */
 /*     OPPOSITE SIGN. THE MINIMUM IS BRACKETED. IF THE CUBIC */
@@ -1586,47 +1586,47 @@ L45:
 /*<       ELSE IF (SGND .LT. 0.0) THEN >*/
     } else if (sgnd < (float)0.) {
 /*<          INFOC = 2 >*/
-	infoc = 2;
+        infoc = 2;
 /*<          MCBOUND = .FALSE. >*/
-	mcbound = FALSE_;
+        mcbound = FALSE_;
 /*<          THETA = 3*(FX - FP)/(STP - STX) + DX + DP >*/
-	theta = (fx - *fp) * 3 / (stp - stx) + *dx + *dp;
+        theta = (fx - *fp) * 3 / (stp - stx) + *dx + *dp;
 /*<          S = MAX(ABS(THETA),ABS(DX),ABS(DP)) >*/
 /* Computing MAX */
-	d__1 = abs(theta), d__2 = abs(*dx), d__1 = max(d__1,d__2), d__2 = abs(
-		*dp);
-	s = max(d__1,d__2);
+        d__1 = abs(theta), d__2 = abs(*dx), d__1 = max(d__1,d__2), d__2 = abs(
+                *dp);
+        s = max(d__1,d__2);
 /*<          GAMMA = S*SQRT((THETA/S)**2 - (DX/S)*(DP/S)) >*/
 /* Computing 2nd power */
-	d__1 = theta / s;
-	gamma = s * sqrt(d__1 * d__1 - *dx / s * (*dp / s));
+        d__1 = theta / s;
+        gamma = s * sqrt(d__1 * d__1 - *dx / s * (*dp / s));
 /*<          IF (STP .GT. STX) GAMMA = -GAMMA >*/
-	if (stp > stx) {
-	    gamma = -gamma;
-	}
+        if (stp > stx) {
+            gamma = -gamma;
+        }
 /*<          P = (GAMMA - DP) + THETA >*/
-	p = gamma - *dp + theta;
+        p = gamma - *dp + theta;
 /*<          Q = ((GAMMA - DP) + GAMMA) + DX >*/
-	q = gamma - *dp + gamma + *dx;
+        q = gamma - *dp + gamma + *dx;
 /*<          R = P/Q >*/
-	r__ = p / q;
+        r__ = p / q;
 /*<          STPC = STP + R*(STX - STP) >*/
-	stpc = stp + r__ * (stx - stp);
+        stpc = stp + r__ * (stx - stp);
 /*<          STPQ = STP + (DP/(DP-DX))*(STX - STP) >*/
-	stpq = stp + *dp / (*dp - *dx) * (stx - stp);
+        stpq = stp + *dp / (*dp - *dx) * (stx - stp);
 /*<          IF (ABS(STPC-STP) .GT. ABS(STPQ-STP)) THEN >*/
-	if ((d__1 = stpc - stp, abs(d__1)) > (d__2 = stpq - stp, abs(d__2)))
-		 {
+        if ((d__1 = stpc - stp, abs(d__1)) > (d__2 = stpq - stp, abs(d__2)))
+                 {
 /*<             STPF = STPC >*/
-	    stpf = stpc;
+            stpf = stpc;
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             STPF = STPQ >*/
-	    stpf = stpq;
+            stpf = stpq;
 /*<             END IF >*/
-	}
+        }
 /*<          BRACKT = .TRUE. >*/
-	brackt = TRUE_;
+        brackt = TRUE_;
 
 /*     THIRD CASE. A LOWER FUNCTION VALUE, DERIVATIVES OF THE */
 /*     SAME SIGN, AND THE MAGNITUDE OF THE DERIVATIVE DECREASES. */
@@ -1640,16 +1640,16 @@ L45:
 /*<       ELSE IF (ABS(DP) .LT. ABS(DX)) THEN >*/
     } else if (abs(*dp) < abs(*dx)) {
 /*<          INFOC = 3 >*/
-	infoc = 3;
+        infoc = 3;
 /*<          MCBOUND = .TRUE. >*/
-	mcbound = TRUE_;
+        mcbound = TRUE_;
 /*<          THETA = 3*(FX - FP)/(STP - STX) + DX + DP >*/
-	theta = (fx - *fp) * 3 / (stp - stx) + *dx + *dp;
+        theta = (fx - *fp) * 3 / (stp - stx) + *dx + *dp;
 /*<          S = MAX(ABS(THETA),ABS(DX),ABS(DP)) >*/
 /* Computing MAX */
-	d__1 = abs(theta), d__2 = abs(*dx), d__1 = max(d__1,d__2), d__2 = abs(
-		*dp);
-	s = max(d__1,d__2);
+        d__1 = abs(theta), d__2 = abs(*dx), d__1 = max(d__1,d__2), d__2 = abs(
+                *dp);
+        s = max(d__1,d__2);
 
 /*        THE CASE GAMMA = 0 ONLY ARISES IF THE CUBIC DOES NOT TEND */
 /*        TO INFINITY IN THE DIRECTION OF THE STEP. */
@@ -1657,63 +1657,63 @@ L45:
 /*<          GAMMA = S*SQRT(MAX(0.0D0,(THETA/S)**2 - (DX/S)*(DP/S))) >*/
 /* Computing MAX */
 /* Computing 2nd power */
-	d__3 = theta / s;
-	d__1 = 0., d__2 = d__3 * d__3 - *dx / s * (*dp / s);
-	gamma = s * sqrt((max(d__1,d__2)));
+        d__3 = theta / s;
+        d__1 = 0., d__2 = d__3 * d__3 - *dx / s * (*dp / s);
+        gamma = s * sqrt((max(d__1,d__2)));
 /*<          IF (STP .GT. STX) GAMMA = -GAMMA >*/
-	if (stp > stx) {
-	    gamma = -gamma;
-	}
+        if (stp > stx) {
+            gamma = -gamma;
+        }
 /*<          P = (GAMMA - DP) + THETA >*/
-	p = gamma - *dp + theta;
+        p = gamma - *dp + theta;
 /*<          Q = (GAMMA + (DX - DP)) + GAMMA >*/
-	q = gamma + (*dx - *dp) + gamma;
+        q = gamma + (*dx - *dp) + gamma;
 /*<          R = P/Q >*/
-	r__ = p / q;
+        r__ = p / q;
 /*<          IF (R .LT. 0.0 .AND. GAMMA .NE. 0.0) THEN >*/
-	if (r__ < (float)0. && gamma != (float)0.) {
+        if (r__ < (float)0. && gamma != (float)0.) {
 /*<             STPC = STP + R*(STX - STP) >*/
-	    stpc = stp + r__ * (stx - stp);
+            stpc = stp + r__ * (stx - stp);
 /*<          ELSE IF (STP .GT. STX) THEN >*/
-	} else if (stp > stx) {
+        } else if (stp > stx) {
 /*<             STPC = STPMAX >*/
-	    stpc = *stpmax;
+            stpc = *stpmax;
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             STPC = STPMIN >*/
-	    stpc = *stpmin;
+            stpc = *stpmin;
 /*<             END IF >*/
-	}
+        }
 /*<          STPQ = STP + (DP/(DP-DX))*(STX - STP) >*/
-	stpq = stp + *dp / (*dp - *dx) * (stx - stp);
+        stpq = stp + *dp / (*dp - *dx) * (stx - stp);
 /*<          IF (BRACKT) THEN >*/
-	if (brackt) {
+        if (brackt) {
 /*<             IF (ABS(STP-STPC) .LT. ABS(STP-STPQ)) THEN >*/
-	    if ((d__1 = stp - stpc, abs(d__1)) < (d__2 = stp - stpq, abs(
-		    d__2))) {
+            if ((d__1 = stp - stpc, abs(d__1)) < (d__2 = stp - stpq, abs(
+                    d__2))) {
 /*<                STPF = STPC >*/
-		stpf = stpc;
+                stpf = stpc;
 /*<             ELSE >*/
-	    } else {
+            } else {
 /*<                STPF = STPQ >*/
-		stpf = stpq;
+                stpf = stpq;
 /*<                END IF >*/
-	    }
+            }
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             IF (ABS(STP-STPC) .GT. ABS(STP-STPQ)) THEN >*/
-	    if ((d__1 = stp - stpc, abs(d__1)) > (d__2 = stp - stpq, abs(
-		    d__2))) {
+            if ((d__1 = stp - stpc, abs(d__1)) > (d__2 = stp - stpq, abs(
+                    d__2))) {
 /*<                STPF = STPC >*/
-		stpf = stpc;
+                stpf = stpc;
 /*<             ELSE >*/
-	    } else {
+            } else {
 /*<                STPF = STPQ >*/
-		stpf = stpq;
+                stpf = stpq;
 /*<                END IF >*/
-	    }
+            }
 /*<             END IF >*/
-	}
+        }
 
 /*     FOURTH CASE. A LOWER FUNCTION VALUE, DERIVATIVES OF THE */
 /*     SAME SIGN, AND THE MAGNITUDE OF THE DERIVATIVE DOES */
@@ -1723,46 +1723,46 @@ L45:
 /*<       ELSE >*/
     } else {
 /*<          INFOC = 4 >*/
-	infoc = 4;
+        infoc = 4;
 /*<          MCBOUND = .FALSE. >*/
-	mcbound = FALSE_;
+        mcbound = FALSE_;
 /*<          IF (BRACKT) THEN >*/
-	if (brackt) {
+        if (brackt) {
 /*<             THETA = 3*(FP - FY)/(STY - STP) + DY + DP >*/
-	    theta = (*fp - fy) * 3 / (sty - stp) + *dy + *dp;
+            theta = (*fp - fy) * 3 / (sty - stp) + *dy + *dp;
 /*<             S = MAX(ABS(THETA),ABS(DY),ABS(DP)) >*/
 /* Computing MAX */
-	    d__1 = abs(theta), d__2 = abs(*dy), d__1 = max(d__1,d__2), d__2 = 
-		    abs(*dp);
-	    s = max(d__1,d__2);
+            d__1 = abs(theta), d__2 = abs(*dy), d__1 = max(d__1,d__2), d__2 = 
+                    abs(*dp);
+            s = max(d__1,d__2);
 /*<             GAMMA = S*SQRT((THETA/S)**2 - (DY/S)*(DP/S)) >*/
 /* Computing 2nd power */
-	    d__1 = theta / s;
-	    gamma = s * sqrt(d__1 * d__1 - *dy / s * (*dp / s));
+            d__1 = theta / s;
+            gamma = s * sqrt(d__1 * d__1 - *dy / s * (*dp / s));
 /*<             IF (STP .GT. STY) GAMMA = -GAMMA >*/
-	    if (stp > sty) {
-		gamma = -gamma;
-	    }
+            if (stp > sty) {
+                gamma = -gamma;
+            }
 /*<             P = (GAMMA - DP) + THETA >*/
-	    p = gamma - *dp + theta;
+            p = gamma - *dp + theta;
 /*<             Q = ((GAMMA - DP) + GAMMA) + DY >*/
-	    q = gamma - *dp + gamma + *dy;
+            q = gamma - *dp + gamma + *dy;
 /*<             R = P/Q >*/
-	    r__ = p / q;
+            r__ = p / q;
 /*<             STPC = STP + R*(STY - STP) >*/
-	    stpc = stp + r__ * (sty - stp);
+            stpc = stp + r__ * (sty - stp);
 /*<             STPF = STPC >*/
-	    stpf = stpc;
+            stpf = stpc;
 /*<          ELSE IF (STP .GT. STX) THEN >*/
-	} else if (stp > stx) {
+        } else if (stp > stx) {
 /*<             STPF = STPMAX >*/
-	    stpf = *stpmax;
+            stpf = *stpmax;
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             STPF = STPMIN >*/
-	    stpf = *stpmin;
+            stpf = *stpmin;
 /*<             END IF >*/
-	}
+        }
 /*<          END IF >*/
     }
 
@@ -1772,29 +1772,29 @@ L45:
 /*<       IF (FP .GT. FX) THEN >*/
     if (*fp > fx) {
 /*<          STY = STP >*/
-	sty = stp;
+        sty = stp;
 /*<          FY = FP >*/
-	fy = *fp;
+        fy = *fp;
 /*<          DY = DP >*/
-	*dy = *dp;
+        *dy = *dp;
 /*<       ELSE >*/
     } else {
 /*<          IF (SGND .LT. 0.0) THEN >*/
-	if (sgnd < (float)0.) {
+        if (sgnd < (float)0.) {
 /*<             STY = STX >*/
-	    sty = stx;
+            sty = stx;
 /*<             FY = FX >*/
-	    fy = fx;
+            fy = fx;
 /*<             DY = DX >*/
-	    *dy = *dx;
+            *dy = *dx;
 /*<             END IF >*/
-	}
+        }
 /*<          STX = STP >*/
-	stx = stp;
+        stx = stp;
 /*<          FX = FP >*/
-	fx = *fp;
+        fx = *fp;
 /*<          DX = DP >*/
-	*dx = *dp;
+        *dx = *dp;
 /*<          END IF >*/
     }
 
@@ -1809,19 +1809,19 @@ L45:
 /*<       IF (BRACKT .AND. MCBOUND) THEN >*/
     if (brackt && mcbound) {
 /*<          IF (STY .GT. STX) THEN >*/
-	if (sty > stx) {
+        if (sty > stx) {
 /*<             STP = MIN(STX+0.66*(STY-STX),STP) >*/
 /* Computing MIN */
-	    d__1 = stx + (sty - stx) * (float).66;
-	    stp = min(d__1,stp);
+            d__1 = stx + (sty - stx) * (float).66;
+            stp = min(d__1,stp);
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             STP = MAX(STX+0.66*(STY-STX),STP) >*/
 /* Computing MAX */
-	    d__1 = stx + (sty - stx) * (float).66;
-	    stp = max(d__1,stp);
+            d__1 = stx + (sty - stx) * (float).66;
+            stp = max(d__1,stp);
 /*<             END IF >*/
-	}
+        }
 /*<          END IF >*/
     }
 /*<       RETURN >*/
@@ -1833,5 +1833,5 @@ L45:
 } /* mcstep_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

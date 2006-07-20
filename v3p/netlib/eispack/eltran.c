@@ -1,13 +1,13 @@
 /* eispack/eltran.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -17,7 +17,7 @@ extern "C" {
 
 /*<       subroutine eltran(nm,n,low,igh,a,int,z) >*/
 /* Subroutine */ int eltran_(integer *nm, integer *n, integer *low, integer *
-	igh, doublereal *a, integer *int__, doublereal *z__)
+        igh, doublereal *a, integer *int__, doublereal *z__)
 {
     /* System generated locals */
     integer a_dim1, a_offset, z_dim1, z_offset, i__1, i__2;
@@ -86,15 +86,15 @@ extern "C" {
     for (j = 1; j <= i__1; ++j) {
 
 /*<          do 60 i = 1, n >*/
-	i__2 = *n;
-	for (i__ = 1; i__ <= i__2; ++i__) {
+        i__2 = *n;
+        for (i__ = 1; i__ <= i__2; ++i__) {
 /*<    60    z(i,j) = 0.0d0 >*/
 /* L60: */
-	    z__[i__ + j * z_dim1] = 0.;
-	}
+            z__[i__ + j * z_dim1] = 0.;
+        }
 
 /*<          z(j,j) = 1.0d0 >*/
-	z__[j + j * z_dim1] = 1.;
+        z__[j + j * z_dim1] = 1.;
 /*<    80 continue >*/
 /* L80: */
     }
@@ -103,48 +103,48 @@ extern "C" {
     kl = *igh - *low - 1;
 /*<       if (kl .lt. 1) go to 200 >*/
     if (kl < 1) {
-	goto L200;
+        goto L200;
     }
 /*     .......... for mp=igh-1 step -1 until low+1 do -- .......... */
 /*<       do 140 mm = 1, kl >*/
     i__1 = kl;
     for (mm = 1; mm <= i__1; ++mm) {
 /*<          mp = igh - mm >*/
-	mp = *igh - mm;
+        mp = *igh - mm;
 /*<          mp1 = mp + 1 >*/
-	mp1 = mp + 1;
+        mp1 = mp + 1;
 
 /*<          do 100 i = mp1, igh >*/
-	i__2 = *igh;
-	for (i__ = mp1; i__ <= i__2; ++i__) {
+        i__2 = *igh;
+        for (i__ = mp1; i__ <= i__2; ++i__) {
 /*<   100    z(i,mp) = a(i,mp-1) >*/
 /* L100: */
-	    z__[i__ + mp * z_dim1] = a[i__ + (mp - 1) * a_dim1];
-	}
+            z__[i__ + mp * z_dim1] = a[i__ + (mp - 1) * a_dim1];
+        }
 
 /*<          i = int(mp) >*/
-	i__ = int__[mp];
+        i__ = int__[mp];
 /*<          if (i .eq. mp) go to 140 >*/
-	if (i__ == mp) {
-	    goto L140;
-	}
+        if (i__ == mp) {
+            goto L140;
+        }
 
 /*<          do 130 j = mp, igh >*/
-	i__2 = *igh;
-	for (j = mp; j <= i__2; ++j) {
+        i__2 = *igh;
+        for (j = mp; j <= i__2; ++j) {
 /*<             z(mp,j) = z(i,j) >*/
-	    z__[mp + j * z_dim1] = z__[i__ + j * z_dim1];
+            z__[mp + j * z_dim1] = z__[i__ + j * z_dim1];
 /*<             z(i,j) = 0.0d0 >*/
-	    z__[i__ + j * z_dim1] = 0.;
+            z__[i__ + j * z_dim1] = 0.;
 /*<   130    continue >*/
 /* L130: */
-	}
+        }
 
 /*<          z(i,mp) = 1.0d0 >*/
-	z__[i__ + mp * z_dim1] = 1.;
+        z__[i__ + mp * z_dim1] = 1.;
 /*<   140 continue >*/
 L140:
-	;
+        ;
     }
 
 /*<   200 return >*/
@@ -154,5 +154,5 @@ L200:
 } /* eltran_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

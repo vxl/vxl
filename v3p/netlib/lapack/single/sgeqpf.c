@@ -1,13 +1,13 @@
 /* lapack/single/sgeqpf.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -21,7 +21,7 @@ static integer c__1 = 1;
 
 /*<       SUBROUTINE SGEQPF( M, N, A, LDA, JPVT, TAU, WORK, INFO ) >*/
 /* Subroutine */ int sgeqpf_(integer *m, integer *n, real *a, integer *lda, 
-	integer *jpvt, real *tau, real *work, integer *info)
+        integer *jpvt, real *tau, real *work, integer *info)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3;
@@ -37,14 +37,14 @@ static integer c__1 = 1;
     real temp, temp2;
     extern doublereal snrm2_(integer *, real *, integer *);
     extern /* Subroutine */ int slarf_(char *, integer *, integer *, real *, 
-	    integer *, real *, real *, integer *, real *, ftnlen);
+            integer *, real *, real *, integer *, real *, ftnlen);
     integer itemp;
     extern /* Subroutine */ int sswap_(integer *, real *, integer *, real *, 
-	    integer *), sgeqr2_(integer *, integer *, real *, integer *, real 
-	    *, real *, integer *), sorm2r_(char *, char *, integer *, integer 
-	    *, integer *, real *, integer *, real *, real *, integer *, real *
-	    , integer *, ftnlen, ftnlen), xerbla_(char *, integer *, ftnlen), 
-	    slarfg_(integer *, real *, real *, integer *, real *);
+            integer *), sgeqr2_(integer *, integer *, real *, integer *, real 
+            *, real *, integer *), sorm2r_(char *, char *, integer *, integer 
+            *, integer *, real *, integer *, real *, real *, integer *, real *
+            , integer *, ftnlen, ftnlen), xerbla_(char *, integer *, ftnlen), 
+            slarfg_(integer *, real *, real *, integer *, real *);
     extern integer isamax_(integer *, real *, integer *);
 
 
@@ -162,24 +162,24 @@ static integer c__1 = 1;
 /*<       IF( M.LT.0 ) THEN >*/
     if (*m < 0) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<       ELSE IF( N.LT.0 ) THEN >*/
     } else if (*n < 0) {
 /*<          INFO = -2 >*/
-	*info = -2;
+        *info = -2;
 /*<       ELSE IF( LDA.LT.MAX( 1, M ) ) THEN >*/
     } else if (*lda < max(1,*m)) {
 /*<          INFO = -4 >*/
-	*info = -4;
+        *info = -4;
 /*<       END IF >*/
     }
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'SGEQPF', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("SGEQPF", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("SGEQPF", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -194,30 +194,30 @@ static integer c__1 = 1;
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          IF( JPVT( I ).NE.0 ) THEN >*/
-	if (jpvt[i__] != 0) {
+        if (jpvt[i__] != 0) {
 /*<             IF( I.NE.ITEMP ) THEN >*/
-	    if (i__ != itemp) {
+            if (i__ != itemp) {
 /*<                CALL SSWAP( M, A( 1, I ), 1, A( 1, ITEMP ), 1 ) >*/
-		sswap_(m, &a[i__ * a_dim1 + 1], &c__1, &a[itemp * a_dim1 + 1],
-			 &c__1);
+                sswap_(m, &a[i__ * a_dim1 + 1], &c__1, &a[itemp * a_dim1 + 1],
+                         &c__1);
 /*<                JPVT( I ) = JPVT( ITEMP ) >*/
-		jpvt[i__] = jpvt[itemp];
+                jpvt[i__] = jpvt[itemp];
 /*<                JPVT( ITEMP ) = I >*/
-		jpvt[itemp] = i__;
+                jpvt[itemp] = i__;
 /*<             ELSE >*/
-	    } else {
+            } else {
 /*<                JPVT( I ) = I >*/
-		jpvt[i__] = i__;
+                jpvt[i__] = i__;
 /*<             END IF >*/
-	    }
+            }
 /*<             ITEMP = ITEMP + 1 >*/
-	    ++itemp;
+            ++itemp;
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             JPVT( I ) = I >*/
-	    jpvt[i__] = i__;
+            jpvt[i__] = i__;
 /*<          END IF >*/
-	}
+        }
 /*<    10 CONTINUE >*/
 /* L10: */
     }
@@ -229,18 +229,18 @@ static integer c__1 = 1;
 /*<       IF( ITEMP.GT.0 ) THEN >*/
     if (itemp > 0) {
 /*<          MA = MIN( ITEMP, M ) >*/
-	ma = min(itemp,*m);
+        ma = min(itemp,*m);
 /*<          CALL SGEQR2( M, MA, A, LDA, TAU, WORK, INFO ) >*/
-	sgeqr2_(m, &ma, &a[a_offset], lda, &tau[1], &work[1], info);
+        sgeqr2_(m, &ma, &a[a_offset], lda, &tau[1], &work[1], info);
 /*<          IF( MA.LT.N ) THEN >*/
-	if (ma < *n) {
+        if (ma < *n) {
 /*<    >*/
-	    i__1 = *n - ma;
-	    sorm2r_("Left", "Transpose", m, &i__1, &ma, &a[a_offset], lda, &
-		    tau[1], &a[(ma + 1) * a_dim1 + 1], lda, &work[1], info, (
-		    ftnlen)4, (ftnlen)9);
+            i__1 = *n - ma;
+            sorm2r_("Left", "Transpose", m, &i__1, &ma, &a[a_offset], lda, &
+                    tau[1], &a[(ma + 1) * a_dim1 + 1], lda, &work[1], info, (
+                    ftnlen)4, (ftnlen)9);
 /*<          END IF >*/
-	}
+        }
 /*<       END IF >*/
     }
 
@@ -251,133 +251,133 @@ static integer c__1 = 1;
 /*        work store the exact column norms. */
 
 /*<          DO 20 I = ITEMP + 1, N >*/
-	i__1 = *n;
-	for (i__ = itemp + 1; i__ <= i__1; ++i__) {
+        i__1 = *n;
+        for (i__ = itemp + 1; i__ <= i__1; ++i__) {
 /*<             WORK( I ) = SNRM2( M-ITEMP, A( ITEMP+1, I ), 1 ) >*/
-	    i__2 = *m - itemp;
-	    work[i__] = snrm2_(&i__2, &a[itemp + 1 + i__ * a_dim1], &c__1);
+            i__2 = *m - itemp;
+            work[i__] = snrm2_(&i__2, &a[itemp + 1 + i__ * a_dim1], &c__1);
 /*<             WORK( N+I ) = WORK( I ) >*/
-	    work[*n + i__] = work[i__];
+            work[*n + i__] = work[i__];
 /*<    20    CONTINUE >*/
 /* L20: */
-	}
+        }
 
 /*        Compute factorization */
 
 /*<          DO 40 I = ITEMP + 1, MN >*/
-	i__1 = mn;
-	for (i__ = itemp + 1; i__ <= i__1; ++i__) {
+        i__1 = mn;
+        for (i__ = itemp + 1; i__ <= i__1; ++i__) {
 
 /*           Determine ith pivot column and swap if necessary */
 
 /*<             PVT = ( I-1 ) + ISAMAX( N-I+1, WORK( I ), 1 ) >*/
-	    i__2 = *n - i__ + 1;
-	    pvt = i__ - 1 + isamax_(&i__2, &work[i__], &c__1);
+            i__2 = *n - i__ + 1;
+            pvt = i__ - 1 + isamax_(&i__2, &work[i__], &c__1);
 
 /*<             IF( PVT.NE.I ) THEN >*/
-	    if (pvt != i__) {
+            if (pvt != i__) {
 /*<                CALL SSWAP( M, A( 1, PVT ), 1, A( 1, I ), 1 ) >*/
-		sswap_(m, &a[pvt * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &
-			c__1);
+                sswap_(m, &a[pvt * a_dim1 + 1], &c__1, &a[i__ * a_dim1 + 1], &
+                        c__1);
 /*<                ITEMP = JPVT( PVT ) >*/
-		itemp = jpvt[pvt];
+                itemp = jpvt[pvt];
 /*<                JPVT( PVT ) = JPVT( I ) >*/
-		jpvt[pvt] = jpvt[i__];
+                jpvt[pvt] = jpvt[i__];
 /*<                JPVT( I ) = ITEMP >*/
-		jpvt[i__] = itemp;
+                jpvt[i__] = itemp;
 /*<                WORK( PVT ) = WORK( I ) >*/
-		work[pvt] = work[i__];
+                work[pvt] = work[i__];
 /*<                WORK( N+PVT ) = WORK( N+I ) >*/
-		work[*n + pvt] = work[*n + i__];
+                work[*n + pvt] = work[*n + i__];
 /*<             END IF >*/
-	    }
+            }
 
 /*           Generate elementary reflector H(i) */
 
 /*<             IF( I.LT.M ) THEN >*/
-	    if (i__ < *m) {
+            if (i__ < *m) {
 /*<                CALL SLARFG( M-I+1, A( I, I ), A( I+1, I ), 1, TAU( I ) ) >*/
-		i__2 = *m - i__ + 1;
-		slarfg_(&i__2, &a[i__ + i__ * a_dim1], &a[i__ + 1 + i__ * 
-			a_dim1], &c__1, &tau[i__]);
+                i__2 = *m - i__ + 1;
+                slarfg_(&i__2, &a[i__ + i__ * a_dim1], &a[i__ + 1 + i__ * 
+                        a_dim1], &c__1, &tau[i__]);
 /*<             ELSE >*/
-	    } else {
+            } else {
 /*<                CALL SLARFG( 1, A( M, M ), A( M, M ), 1, TAU( M ) ) >*/
-		slarfg_(&c__1, &a[*m + *m * a_dim1], &a[*m + *m * a_dim1], &
-			c__1, &tau[*m]);
+                slarfg_(&c__1, &a[*m + *m * a_dim1], &a[*m + *m * a_dim1], &
+                        c__1, &tau[*m]);
 /*<             END IF >*/
-	    }
+            }
 
 /*<             IF( I.LT.N ) THEN >*/
-	    if (i__ < *n) {
+            if (i__ < *n) {
 
 /*              Apply H(i) to A(i:m,i+1:n) from the left */
 
 /*<                AII = A( I, I ) >*/
-		aii = a[i__ + i__ * a_dim1];
+                aii = a[i__ + i__ * a_dim1];
 /*<                A( I, I ) = ONE >*/
-		a[i__ + i__ * a_dim1] = (float)1.;
+                a[i__ + i__ * a_dim1] = (float)1.;
 /*<    >*/
-		i__2 = *m - i__ + 1;
-		i__3 = *n - i__;
-		slarf_("LEFT", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &
-			tau[i__], &a[i__ + (i__ + 1) * a_dim1], lda, &work[(*
-			n << 1) + 1], (ftnlen)4);
+                i__2 = *m - i__ + 1;
+                i__3 = *n - i__;
+                slarf_("LEFT", &i__2, &i__3, &a[i__ + i__ * a_dim1], &c__1, &
+                        tau[i__], &a[i__ + (i__ + 1) * a_dim1], lda, &work[(*
+                        n << 1) + 1], (ftnlen)4);
 /*<                A( I, I ) = AII >*/
-		a[i__ + i__ * a_dim1] = aii;
+                a[i__ + i__ * a_dim1] = aii;
 /*<             END IF >*/
-	    }
+            }
 
 /*           Update partial column norms */
 
 /*<             DO 30 J = I + 1, N >*/
-	    i__2 = *n;
-	    for (j = i__ + 1; j <= i__2; ++j) {
+            i__2 = *n;
+            for (j = i__ + 1; j <= i__2; ++j) {
 /*<                IF( WORK( J ).NE.ZERO ) THEN >*/
-		if (work[j] != (float)0.) {
+                if (work[j] != (float)0.) {
 /*<                   TEMP = ONE - ( ABS( A( I, J ) ) / WORK( J ) )**2 >*/
 /* Computing 2nd power */
-		    r__2 = (r__1 = a[i__ + j * a_dim1], dabs(r__1)) / work[j];
-		    temp = (float)1. - r__2 * r__2;
+                    r__2 = (r__1 = a[i__ + j * a_dim1], dabs(r__1)) / work[j];
+                    temp = (float)1. - r__2 * r__2;
 /*<                   TEMP = MAX( TEMP, ZERO ) >*/
-		    temp = dmax(temp,(float)0.);
+                    temp = dmax(temp,(float)0.);
 /*<                   TEMP2 = ONE + 0.05*TEMP*( WORK( J ) / WORK( N+J ) )**2 >*/
 /* Computing 2nd power */
-		    r__1 = work[j] / work[*n + j];
-		    temp2 = temp * (float).05 * (r__1 * r__1) + (float)1.;
+                    r__1 = work[j] / work[*n + j];
+                    temp2 = temp * (float).05 * (r__1 * r__1) + (float)1.;
 /*<                   IF( TEMP2.EQ.ONE ) THEN >*/
-		    if (temp2 == (float)1.) {
+                    if (temp2 == (float)1.) {
 /*<                      IF( M-I.GT.0 ) THEN >*/
-			if (*m - i__ > 0) {
+                        if (*m - i__ > 0) {
 /*<                         WORK( J ) = SNRM2( M-I, A( I+1, J ), 1 ) >*/
-			    i__3 = *m - i__;
-			    work[j] = snrm2_(&i__3, &a[i__ + 1 + j * a_dim1], 
-				    &c__1);
+                            i__3 = *m - i__;
+                            work[j] = snrm2_(&i__3, &a[i__ + 1 + j * a_dim1], 
+                                    &c__1);
 /*<                         WORK( N+J ) = WORK( J ) >*/
-			    work[*n + j] = work[j];
+                            work[*n + j] = work[j];
 /*<                      ELSE >*/
-			} else {
+                        } else {
 /*<                         WORK( J ) = ZERO >*/
-			    work[j] = (float)0.;
+                            work[j] = (float)0.;
 /*<                         WORK( N+J ) = ZERO >*/
-			    work[*n + j] = (float)0.;
+                            work[*n + j] = (float)0.;
 /*<                      END IF >*/
-			}
+                        }
 /*<                   ELSE >*/
-		    } else {
+                    } else {
 /*<                      WORK( J ) = WORK( J )*SQRT( TEMP ) >*/
-			work[j] *= sqrt(temp);
+                        work[j] *= sqrt(temp);
 /*<                   END IF >*/
-		    }
+                    }
 /*<                END IF >*/
-		}
+                }
 /*<    30       CONTINUE >*/
 /* L30: */
-	    }
+            }
 
 /*<    40    CONTINUE >*/
 /* L40: */
-	}
+        }
 /*<       END IF >*/
     }
 /*<       RETURN >*/
@@ -389,5 +389,5 @@ static integer c__1 = 1;
 } /* sgeqpf_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

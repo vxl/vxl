@@ -1,13 +1,13 @@
 /* lapack/double/dgecon.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -21,8 +21,8 @@ static integer c__1 = 1;
 
 /*<    >*/
 /* Subroutine */ int dgecon_(char *norm, integer *n, doublereal *a, integer *
-	lda, doublereal *anorm, doublereal *rcond, doublereal *work, integer *
-	iwork, integer *info, ftnlen norm_len)
+        lda, doublereal *anorm, doublereal *rcond, doublereal *work, integer *
+        iwork, integer *info, ftnlen norm_len)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
@@ -36,16 +36,16 @@ static integer c__1 = 1;
     doublereal scale;
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int drscl_(integer *, doublereal *, doublereal *, 
-	    integer *);
+            integer *);
     extern doublereal dlamch_(char *, ftnlen);
     extern /* Subroutine */ int dlacon_(integer *, doublereal *, doublereal *,
-	     integer *, doublereal *, integer *);
+             integer *, doublereal *, integer *);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
     doublereal ainvnm;
     extern /* Subroutine */ int dlatrs_(char *, char *, char *, char *, 
-	    integer *, doublereal *, integer *, doublereal *, doublereal *, 
-	    doublereal *, integer *, ftnlen, ftnlen, ftnlen, ftnlen);
+            integer *, doublereal *, integer *, doublereal *, doublereal *, 
+            doublereal *, integer *, ftnlen, ftnlen, ftnlen, ftnlen);
     logical onenrm;
     char normin[1];
     doublereal smlnum;
@@ -152,32 +152,32 @@ static integer c__1 = 1;
     *info = 0;
 /*<       ONENRM = NORM.EQ.'1' .OR. LSAME( NORM, 'O' ) >*/
     onenrm = *(unsigned char *)norm == '1' || lsame_(norm, "O", (ftnlen)1, (
-	    ftnlen)1);
+            ftnlen)1);
 /*<       IF( .NOT.ONENRM .AND. .NOT.LSAME( NORM, 'I' ) ) THEN >*/
     if (! onenrm && ! lsame_(norm, "I", (ftnlen)1, (ftnlen)1)) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<       ELSE IF( N.LT.0 ) THEN >*/
     } else if (*n < 0) {
 /*<          INFO = -2 >*/
-	*info = -2;
+        *info = -2;
 /*<       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN >*/
     } else if (*lda < max(1,*n)) {
 /*<          INFO = -4 >*/
-	*info = -4;
+        *info = -4;
 /*<       ELSE IF( ANORM.LT.ZERO ) THEN >*/
     } else if (*anorm < 0.) {
 /*<          INFO = -5 >*/
-	*info = -5;
+        *info = -5;
 /*<       END IF >*/
     }
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'DGECON', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("DGECON", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("DGECON", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -188,13 +188,13 @@ static integer c__1 = 1;
 /*<       IF( N.EQ.0 ) THEN >*/
     if (*n == 0) {
 /*<          RCOND = ONE >*/
-	*rcond = 1.;
+        *rcond = 1.;
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       ELSE IF( ANORM.EQ.ZERO ) THEN >*/
     } else if (*anorm == 0.) {
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -210,11 +210,11 @@ static integer c__1 = 1;
 /*<       IF( ONENRM ) THEN >*/
     if (onenrm) {
 /*<          KASE1 = 1 >*/
-	kase1 = 1;
+        kase1 = 1;
 /*<       ELSE >*/
     } else {
 /*<          KASE1 = 2 >*/
-	kase1 = 2;
+        kase1 = 2;
 /*<       END IF >*/
     }
 /*<       KASE = 0 >*/
@@ -226,61 +226,61 @@ L10:
 /*<       IF( KASE.NE.0 ) THEN >*/
     if (kase != 0) {
 /*<          IF( KASE.EQ.KASE1 ) THEN >*/
-	if (kase == kase1) {
+        if (kase == kase1) {
 
 /*           Multiply by inv(L). */
 
 /*<    >*/
-	    dlatrs_("Lower", "No transpose", "Unit", normin, n, &a[a_offset], 
-		    lda, &work[1], &sl, &work[(*n << 1) + 1], info, (ftnlen)5,
-		     (ftnlen)12, (ftnlen)4, (ftnlen)1);
+            dlatrs_("Lower", "No transpose", "Unit", normin, n, &a[a_offset], 
+                    lda, &work[1], &sl, &work[(*n << 1) + 1], info, (ftnlen)5,
+                     (ftnlen)12, (ftnlen)4, (ftnlen)1);
 
 /*           Multiply by inv(U). */
 
 /*<    >*/
-	    dlatrs_("Upper", "No transpose", "Non-unit", normin, n, &a[
-		    a_offset], lda, &work[1], &su, &work[*n * 3 + 1], info, (
-		    ftnlen)5, (ftnlen)12, (ftnlen)8, (ftnlen)1);
+            dlatrs_("Upper", "No transpose", "Non-unit", normin, n, &a[
+                    a_offset], lda, &work[1], &su, &work[*n * 3 + 1], info, (
+                    ftnlen)5, (ftnlen)12, (ftnlen)8, (ftnlen)1);
 /*<          ELSE >*/
-	} else {
+        } else {
 
 /*           Multiply by inv(U'). */
 
 /*<    >*/
-	    dlatrs_("Upper", "Transpose", "Non-unit", normin, n, &a[a_offset],
-		     lda, &work[1], &su, &work[*n * 3 + 1], info, (ftnlen)5, (
-		    ftnlen)9, (ftnlen)8, (ftnlen)1);
+            dlatrs_("Upper", "Transpose", "Non-unit", normin, n, &a[a_offset],
+                     lda, &work[1], &su, &work[*n * 3 + 1], info, (ftnlen)5, (
+                    ftnlen)9, (ftnlen)8, (ftnlen)1);
 
 /*           Multiply by inv(L'). */
 
 /*<    >*/
-	    dlatrs_("Lower", "Transpose", "Unit", normin, n, &a[a_offset], 
-		    lda, &work[1], &sl, &work[(*n << 1) + 1], info, (ftnlen)5,
-		     (ftnlen)9, (ftnlen)4, (ftnlen)1);
+            dlatrs_("Lower", "Transpose", "Unit", normin, n, &a[a_offset], 
+                    lda, &work[1], &sl, &work[(*n << 1) + 1], info, (ftnlen)5,
+                     (ftnlen)9, (ftnlen)4, (ftnlen)1);
 /*<          END IF >*/
-	}
+        }
 
 /*        Divide X by 1/(SL*SU) if doing so will not cause overflow. */
 
 /*<          SCALE = SL*SU >*/
-	scale = sl * su;
+        scale = sl * su;
 /*<          NORMIN = 'Y' >*/
-	*(unsigned char *)normin = 'Y';
+        *(unsigned char *)normin = 'Y';
 /*<          IF( SCALE.NE.ONE ) THEN >*/
-	if (scale != 1.) {
+        if (scale != 1.) {
 /*<             IX = IDAMAX( N, WORK, 1 ) >*/
-	    ix = idamax_(n, &work[1], &c__1);
+            ix = idamax_(n, &work[1], &c__1);
 /*<    >*/
-	    if (scale < (d__1 = work[ix], abs(d__1)) * smlnum || scale == 0.) 
-		    {
-		goto L20;
-	    }
+            if (scale < (d__1 = work[ix], abs(d__1)) * smlnum || scale == 0.) 
+                    {
+                goto L20;
+            }
 /*<             CALL DRSCL( N, SCALE, WORK, 1 ) >*/
-	    drscl_(n, &scale, &work[1], &c__1);
+            drscl_(n, &scale, &work[1], &c__1);
 /*<          END IF >*/
-	}
+        }
 /*<          GO TO 10 >*/
-	goto L10;
+        goto L10;
 /*<       END IF >*/
     }
 
@@ -288,7 +288,7 @@ L10:
 
 /*<    >*/
     if (ainvnm != 0.) {
-	*rcond = 1. / ainvnm / *anorm;
+        *rcond = 1. / ainvnm / *anorm;
     }
 
 /*<    20 CONTINUE >*/
@@ -302,5 +302,5 @@ L20:
 } /* dgecon_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

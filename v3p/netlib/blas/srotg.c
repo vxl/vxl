@@ -1,13 +1,13 @@
 /* blas/srotg.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -41,13 +41,13 @@ static real c_b4 = (float)1.;
     roe = *sb;
 /*<       if( abs(sa) .gt. abs(sb) ) roe = sa >*/
     if (dabs(*sa) > dabs(*sb)) {
-	roe = *sa;
+        roe = *sa;
     }
 /*<       scale = abs(sa) + abs(sb) >*/
     scale = dabs(*sa) + dabs(*sb);
 /*<       if( scale .ne. 0.0 ) go to 10 >*/
     if (scale != (float)0.) {
-	goto L10;
+        goto L10;
     }
 /*<          c = 1.0 >*/
     *c__ = (float)1.;
@@ -76,11 +76,11 @@ L10:
     z__ = (float)1.;
 /*<       if( abs(sa) .gt. abs(sb) ) z = s >*/
     if (dabs(*sa) > dabs(*sb)) {
-	z__ = *s;
+        z__ = *s;
     }
 /*<       if( abs(sb) .ge. abs(sa) .and. c .ne. 0.0 ) z = 1.0/c >*/
     if (dabs(*sb) >= dabs(*sa) && *c__ != (float)0.) {
-	z__ = (float)1. / *c__;
+        z__ = (float)1. / *c__;
     }
 /*<    20 sa = r >*/
 L20:
@@ -93,5 +93,5 @@ L20:
 } /* srotg_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

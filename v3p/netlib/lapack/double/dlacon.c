@@ -1,13 +1,13 @@
 /* lapack/double/dlacon.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -23,7 +23,7 @@ static doublereal c_b11 = 1.;
 
 /*<       SUBROUTINE DLACON( N, V, X, ISGN, EST, KASE ) >*/
 /* Subroutine */ int dlacon_(integer *n, doublereal *v, doublereal *x, 
-	integer *isgn, doublereal *est, integer *kase)
+        integer *isgn, doublereal *est, integer *kase)
 {
     /* System generated locals */
     integer i__1;
@@ -40,7 +40,7 @@ static doublereal c_b11 = 1.;
     extern doublereal dasum_(integer *, doublereal *, integer *);
     static integer jlast;
     extern /* Subroutine */ int dcopy_(integer *, doublereal *, integer *, 
-	    doublereal *, integer *);
+            doublereal *, integer *);
     extern integer idamax_(integer *, doublereal *, integer *);
     static doublereal altsgn, estold;
 
@@ -146,29 +146,29 @@ static doublereal c_b11 = 1.;
     /* Function Body */
     if (*kase == 0) {
 /*<          DO 10 I = 1, N >*/
-	i__1 = *n;
-	for (i__ = 1; i__ <= i__1; ++i__) {
+        i__1 = *n;
+        for (i__ = 1; i__ <= i__1; ++i__) {
 /*<             X( I ) = ONE / DBLE( N ) >*/
-	    x[i__] = 1. / (doublereal) (*n);
+            x[i__] = 1. / (doublereal) (*n);
 /*<    10    CONTINUE >*/
 /* L10: */
-	}
+        }
 /*<          KASE = 1 >*/
-	*kase = 1;
+        *kase = 1;
 /*<          JUMP = 1 >*/
-	jump = 1;
+        jump = 1;
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
 /*<       GO TO ( 20, 40, 70, 110, 140 )JUMP >*/
     switch (jump) {
-	case 1:  goto L20;
-	case 2:  goto L40;
-	case 3:  goto L70;
-	case 4:  goto L110;
-	case 5:  goto L140;
+        case 1:  goto L20;
+        case 2:  goto L40;
+        case 3:  goto L70;
+        case 4:  goto L110;
+        case 5:  goto L140;
     }
 
 /*     ................ ENTRY   (JUMP = 1) */
@@ -179,12 +179,12 @@ L20:
 /*<       IF( N.EQ.1 ) THEN >*/
     if (*n == 1) {
 /*<          V( 1 ) = X( 1 ) >*/
-	v[1] = x[1];
+        v[1] = x[1];
 /*<          EST = ABS( V( 1 ) ) >*/
-	*est = abs(v[1]);
+        *est = abs(v[1]);
 /*        ... QUIT */
 /*<          GO TO 150 >*/
-	goto L150;
+        goto L150;
 /*<       END IF >*/
     }
 /*<       EST = DASUM( N, X, 1 ) >*/
@@ -194,9 +194,9 @@ L20:
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          X( I ) = SIGN( ONE, X( I ) ) >*/
-	x[i__] = d_sign(&c_b11, &x[i__]);
+        x[i__] = d_sign(&c_b11, &x[i__]);
 /*<          ISGN( I ) = NINT( X( I ) ) >*/
-	isgn[i__] = i_dnnt(&x[i__]);
+        isgn[i__] = i_dnnt(&x[i__]);
 /*<    30 CONTINUE >*/
 /* L30: */
     }
@@ -225,7 +225,7 @@ L50:
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          X( I ) = ZERO >*/
-	x[i__] = 0.;
+        x[i__] = 0.;
 /*<    60 CONTINUE >*/
 /* L60: */
     }
@@ -253,10 +253,10 @@ L70:
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<    >*/
-	d__1 = d_sign(&c_b11, &x[i__]);
-	if (i_dnnt(&d__1) != isgn[i__]) {
-	    goto L90;
-	}
+        d__1 = d_sign(&c_b11, &x[i__]);
+        if (i_dnnt(&d__1) != isgn[i__]) {
+            goto L90;
+        }
 /*<    80 CONTINUE >*/
 /* L80: */
     }
@@ -269,16 +269,16 @@ L90:
 /*     TEST FOR CYCLING. */
 /*<    >*/
     if (*est <= estold) {
-	goto L120;
+        goto L120;
     }
 
 /*<       DO 100 I = 1, N >*/
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          X( I ) = SIGN( ONE, X( I ) ) >*/
-	x[i__] = d_sign(&c_b11, &x[i__]);
+        x[i__] = d_sign(&c_b11, &x[i__]);
 /*<          ISGN( I ) = NINT( X( I ) ) >*/
-	isgn[i__] = i_dnnt(&x[i__]);
+        isgn[i__] = i_dnnt(&x[i__]);
 /*<   100 CONTINUE >*/
 /* L100: */
     }
@@ -301,9 +301,9 @@ L110:
 /*<       IF( ( X( JLAST ).NE.ABS( X( J ) ) ) .AND. ( ITER.LT.ITMAX ) ) THEN >*/
     if (x[jlast] != (d__1 = x[j], abs(d__1)) && iter < 5) {
 /*<          ITER = ITER + 1 >*/
-	++iter;
+        ++iter;
 /*<          GO TO 50 >*/
-	goto L50;
+        goto L50;
 /*<       END IF >*/
     }
 
@@ -317,10 +317,10 @@ L120:
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          X( I ) = ALTSGN*( ONE+DBLE( I-1 ) / DBLE( N-1 ) ) >*/
-	x[i__] = altsgn * ((doublereal) (i__ - 1) / (doublereal) (*n - 1) + 
-		1.);
+        x[i__] = altsgn * ((doublereal) (i__ - 1) / (doublereal) (*n - 1) + 
+                1.);
 /*<          ALTSGN = -ALTSGN >*/
-	altsgn = -altsgn;
+        altsgn = -altsgn;
 /*<   130 CONTINUE >*/
 /* L130: */
     }
@@ -341,9 +341,9 @@ L140:
 /*<       IF( TEMP.GT.EST ) THEN >*/
     if (temp > *est) {
 /*<          CALL DCOPY( N, X, 1, V, 1 ) >*/
-	dcopy_(n, &x[1], &c__1, &v[1], &c__1);
+        dcopy_(n, &x[1], &c__1, &v[1], &c__1);
 /*<          EST = TEMP >*/
-	*est = temp;
+        *est = temp;
 /*<       END IF >*/
     }
 
@@ -360,5 +360,5 @@ L150:
 } /* dlacon_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

@@ -1,13 +1,13 @@
 /* laso/urand.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -51,7 +51,7 @@ doublereal urand_(integer *iy)
 /*<       DATA M2/0/,ITWO/2/ >*/
 /*<       IF (M2 .NE. 0) GO TO 20 >*/
     if (m2 != 0) {
-	goto L20;
+        goto L20;
     }
 
 /*  IF FIRST ENTRY, COMPUTE MACHINE INTEGER WORD LENGTH */
@@ -65,7 +65,7 @@ L10:
     m = itwo * m2;
 /*<       IF (M .GT. M2) GO TO 10 >*/
     if (m > m2) {
-	goto L10;
+        goto L10;
     }
 /*<       HALFM = M2 >*/
     halfm = (doublereal) m2;
@@ -95,7 +95,7 @@ L20:
 
 /*<       IF (IY .GT. MIC) IY = (IY - M2) - M2 >*/
     if (*iy > mic) {
-	*iy = *iy - m2 - m2;
+        *iy = *iy - m2 - m2;
     }
 
 /*<       IY = IY + IC >*/
@@ -106,7 +106,7 @@ L20:
 
 /*<       IF (IY/2 .GT. M2) IY = (IY - M2) - M2 >*/
     if (*iy / 2 > m2) {
-	*iy = *iy - m2 - m2;
+        *iy = *iy - m2 - m2;
     }
 
 /*  THE FOLLOWING STATEMENT IS FOR COMPUTERS WHERE INTEGER */
@@ -114,7 +114,7 @@ L20:
 
 /*<       IF (IY .LT. 0) IY = (IY + M2) + M2 >*/
     if (*iy < 0) {
-	*iy = *iy + m2 + m2;
+        *iy = *iy + m2 + m2;
     }
 /*<       URAND = FLOAT(IY)*S >*/
     ret_val = (real) (*iy) * s;
@@ -124,5 +124,5 @@ L20:
 } /* urand_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

@@ -1,13 +1,13 @@
 /* lapack/complex16/zlatrs.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -22,9 +22,9 @@ static doublereal c_b36 = .5;
 
 /*<    >*/
 /* Subroutine */ int zlatrs_(char *uplo, char *trans, char *diag, char *
-	normin, integer *n, doublecomplex *a, integer *lda, doublecomplex *x, 
-	doublereal *scale, doublereal *cnorm, integer *info, ftnlen uplo_len, 
-	ftnlen trans_len, ftnlen diag_len, ftnlen normin_len)
+        normin, integer *n, doublecomplex *a, integer *lda, doublecomplex *x, 
+        doublereal *scale, doublereal *cnorm, integer *info, ftnlen uplo_len, 
+        ftnlen trans_len, ftnlen diag_len, ftnlen normin_len)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
@@ -45,30 +45,30 @@ static doublereal c_b36 = .5;
     doublecomplex tjjs;
     doublereal xmax, grow;
     extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
-	    integer *);
+            integer *);
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     doublereal tscal;
     doublecomplex uscal;
     integer jlast;
     doublecomplex csumj;
     extern /* Double Complex */ VOID zdotc_(doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *);
+            doublecomplex *, integer *, doublecomplex *, integer *);
     logical upper;
     extern /* Double Complex */ VOID zdotu_(doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *);
+            doublecomplex *, integer *, doublecomplex *, integer *);
     extern /* Subroutine */ int zaxpy_(integer *, doublecomplex *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *), ztrsv_(
-	    char *, char *, char *, integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, ftnlen, ftnlen, ftnlen), dlabad_(
-	    doublereal *, doublereal *);
+            doublecomplex *, integer *, doublecomplex *, integer *), ztrsv_(
+            char *, char *, char *, integer *, doublecomplex *, integer *, 
+            doublecomplex *, integer *, ftnlen, ftnlen, ftnlen), dlabad_(
+            doublereal *, doublereal *);
     extern doublereal dlamch_(char *, ftnlen);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen), zdscal_(
-	    integer *, doublereal *, doublecomplex *, integer *);
+            integer *, doublereal *, doublecomplex *, integer *);
     doublereal bignum;
     extern integer izamax_(integer *, doublecomplex *, integer *);
     extern /* Double Complex */ VOID zladiv_(doublecomplex *, doublecomplex *,
-	     doublecomplex *);
+             doublecomplex *);
     logical notran;
     integer jfirst;
     extern doublereal dzasum_(integer *, doublecomplex *, integer *);
@@ -302,38 +302,38 @@ static doublereal c_b36 = .5;
 /*<       IF( .NOT.UPPER .AND. .NOT.LSAME( UPLO, 'L' ) ) THEN >*/
     if (! upper && ! lsame_(uplo, "L", (ftnlen)1, (ftnlen)1)) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<    >*/
     } else if (! notran && ! lsame_(trans, "T", (ftnlen)1, (ftnlen)1) && ! 
-	    lsame_(trans, "C", (ftnlen)1, (ftnlen)1)) {
+            lsame_(trans, "C", (ftnlen)1, (ftnlen)1)) {
 /*<          INFO = -2 >*/
-	*info = -2;
+        *info = -2;
 /*<       ELSE IF( .NOT.NOUNIT .AND. .NOT.LSAME( DIAG, 'U' ) ) THEN >*/
     } else if (! nounit && ! lsame_(diag, "U", (ftnlen)1, (ftnlen)1)) {
 /*<          INFO = -3 >*/
-	*info = -3;
+        *info = -3;
 /*<    >*/
     } else if (! lsame_(normin, "Y", (ftnlen)1, (ftnlen)1) && ! lsame_(normin,
-	     "N", (ftnlen)1, (ftnlen)1)) {
+             "N", (ftnlen)1, (ftnlen)1)) {
 /*<          INFO = -4 >*/
-	*info = -4;
+        *info = -4;
 /*<       ELSE IF( N.LT.0 ) THEN >*/
     } else if (*n < 0) {
 /*<          INFO = -5 >*/
-	*info = -5;
+        *info = -5;
 /*<       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN >*/
     } else if (*lda < max(1,*n)) {
 /*<          INFO = -7 >*/
-	*info = -7;
+        *info = -7;
 /*<       END IF >*/
     }
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'ZLATRS', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("ZLATRS", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("ZLATRS", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -341,7 +341,7 @@ static doublereal c_b36 = .5;
 
 /*<    >*/
     if (*n == 0) {
-	return 0;
+        return 0;
     }
 
 /*     Determine machine dependent parameters to control overflow. */
@@ -365,37 +365,37 @@ static doublereal c_b36 = .5;
 /*        Compute the 1-norm of each column, not including the diagonal. */
 
 /*<          IF( UPPER ) THEN >*/
-	if (upper) {
+        if (upper) {
 
 /*           A is upper triangular. */
 
 /*<             DO 10 J = 1, N >*/
-	    i__1 = *n;
-	    for (j = 1; j <= i__1; ++j) {
+            i__1 = *n;
+            for (j = 1; j <= i__1; ++j) {
 /*<                CNORM( J ) = DZASUM( J-1, A( 1, J ), 1 ) >*/
-		i__2 = j - 1;
-		cnorm[j] = dzasum_(&i__2, &a[j * a_dim1 + 1], &c__1);
+                i__2 = j - 1;
+                cnorm[j] = dzasum_(&i__2, &a[j * a_dim1 + 1], &c__1);
 /*<    10       CONTINUE >*/
 /* L10: */
-	    }
+            }
 /*<          ELSE >*/
-	} else {
+        } else {
 
 /*           A is lower triangular. */
 
 /*<             DO 20 J = 1, N - 1 >*/
-	    i__1 = *n - 1;
-	    for (j = 1; j <= i__1; ++j) {
+            i__1 = *n - 1;
+            for (j = 1; j <= i__1; ++j) {
 /*<                CNORM( J ) = DZASUM( N-J, A( J+1, J ), 1 ) >*/
-		i__2 = *n - j;
-		cnorm[j] = dzasum_(&i__2, &a[j + 1 + j * a_dim1], &c__1);
+                i__2 = *n - j;
+                cnorm[j] = dzasum_(&i__2, &a[j + 1 + j * a_dim1], &c__1);
 /*<    20       CONTINUE >*/
 /* L20: */
-	    }
+            }
 /*<             CNORM( N ) = ZERO >*/
-	    cnorm[*n] = 0.;
+            cnorm[*n] = 0.;
 /*<          END IF >*/
-	}
+        }
 /*<       END IF >*/
     }
 
@@ -409,13 +409,13 @@ static doublereal c_b36 = .5;
 /*<       IF( TMAX.LE.BIGNUM*HALF ) THEN >*/
     if (tmax <= bignum * .5) {
 /*<          TSCAL = ONE >*/
-	tscal = 1.;
+        tscal = 1.;
 /*<       ELSE >*/
     } else {
 /*<          TSCAL = HALF / ( SMLNUM*TMAX ) >*/
-	tscal = .5 / (smlnum * tmax);
+        tscal = .5 / (smlnum * tmax);
 /*<          CALL DSCAL( N, TSCAL, CNORM, 1 ) >*/
-	dscal_(n, &tscal, &cnorm[1], &c__1);
+        dscal_(n, &tscal, &cnorm[1], &c__1);
 /*<       END IF >*/
     }
 
@@ -429,10 +429,10 @@ static doublereal c_b36 = .5;
     for (j = 1; j <= i__1; ++j) {
 /*<          XMAX = MAX( XMAX, CABS2( X( J ) ) ) >*/
 /* Computing MAX */
-	i__2 = j;
-	d__3 = xmax, d__4 = (d__1 = x[i__2].r / 2., abs(d__1)) + (d__2 = 
-		d_imag(&x[j]) / 2., abs(d__2));
-	xmax = max(d__3,d__4);
+        i__2 = j;
+        d__3 = xmax, d__4 = (d__1 = x[i__2].r / 2., abs(d__1)) + (d__2 = 
+                d_imag(&x[j]) / 2., abs(d__2));
+        xmax = max(d__3,d__4);
 /*<    30 CONTINUE >*/
 /* L30: */
     }
@@ -445,35 +445,35 @@ static doublereal c_b36 = .5;
 /*        Compute the growth in A * x = b. */
 
 /*<          IF( UPPER ) THEN >*/
-	if (upper) {
+        if (upper) {
 /*<             JFIRST = N >*/
-	    jfirst = *n;
+            jfirst = *n;
 /*<             JLAST = 1 >*/
-	    jlast = 1;
+            jlast = 1;
 /*<             JINC = -1 >*/
-	    jinc = -1;
+            jinc = -1;
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             JFIRST = 1 >*/
-	    jfirst = 1;
+            jfirst = 1;
 /*<             JLAST = N >*/
-	    jlast = *n;
+            jlast = *n;
 /*<             JINC = 1 >*/
-	    jinc = 1;
+            jinc = 1;
 /*<          END IF >*/
-	}
+        }
 
 /*<          IF( TSCAL.NE.ONE ) THEN >*/
-	if (tscal != 1.) {
+        if (tscal != 1.) {
 /*<             GROW = ZERO >*/
-	    grow = 0.;
+            grow = 0.;
 /*<             GO TO 60 >*/
-	    goto L60;
+            goto L60;
 /*<          END IF >*/
-	}
+        }
 
 /*<          IF( NOUNIT ) THEN >*/
-	if (nounit) {
+        if (nounit) {
 
 /*           A is non-unit triangular. */
 
@@ -481,70 +481,70 @@ static doublereal c_b36 = .5;
 /*           Initially, G(0) = max{x(i), i=1,...,n}. */
 
 /*<             GROW = HALF / MAX( XBND, SMLNUM ) >*/
-	    grow = .5 / max(xbnd,smlnum);
+            grow = .5 / max(xbnd,smlnum);
 /*<             XBND = GROW >*/
-	    xbnd = grow;
+            xbnd = grow;
 /*<             DO 40 J = JFIRST, JLAST, JINC >*/
-	    i__1 = jlast;
-	    i__2 = jinc;
-	    for (j = jfirst; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2) {
+            i__1 = jlast;
+            i__2 = jinc;
+            for (j = jfirst; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2) {
 
 /*              Exit the loop if the growth factor is too small. */
 
 /*<    >*/
-		if (grow <= smlnum) {
-		    goto L60;
-		}
+                if (grow <= smlnum) {
+                    goto L60;
+                }
 
 /*<                TJJS = A( J, J ) >*/
-		i__3 = j + j * a_dim1;
-		tjjs.r = a[i__3].r, tjjs.i = a[i__3].i;
+                i__3 = j + j * a_dim1;
+                tjjs.r = a[i__3].r, tjjs.i = a[i__3].i;
 /*<                TJJ = CABS1( TJJS ) >*/
-		tjj = (d__1 = tjjs.r, abs(d__1)) + (d__2 = d_imag(&tjjs), abs(
-			d__2));
+                tjj = (d__1 = tjjs.r, abs(d__1)) + (d__2 = d_imag(&tjjs), abs(
+                        d__2));
 
 /*<                IF( TJJ.GE.SMLNUM ) THEN >*/
-		if (tjj >= smlnum) {
+                if (tjj >= smlnum) {
 
 /*                 M(j) = G(j-1) / abs(A(j,j)) */
 
 /*<                   XBND = MIN( XBND, MIN( ONE, TJJ )*GROW ) >*/
 /* Computing MIN */
-		    d__1 = xbnd, d__2 = min(1.,tjj) * grow;
-		    xbnd = min(d__1,d__2);
+                    d__1 = xbnd, d__2 = min(1.,tjj) * grow;
+                    xbnd = min(d__1,d__2);
 /*<                ELSE >*/
-		} else {
+                } else {
 
 /*                 M(j) could overflow, set XBND to 0. */
 
 /*<                   XBND = ZERO >*/
-		    xbnd = 0.;
+                    xbnd = 0.;
 /*<                END IF >*/
-		}
+                }
 
 /*<                IF( TJJ+CNORM( J ).GE.SMLNUM ) THEN >*/
-		if (tjj + cnorm[j] >= smlnum) {
+                if (tjj + cnorm[j] >= smlnum) {
 
 /*                 G(j) = G(j-1)*( 1 + CNORM(j) / abs(A(j,j)) ) */
 
 /*<                   GROW = GROW*( TJJ / ( TJJ+CNORM( J ) ) ) >*/
-		    grow *= tjj / (tjj + cnorm[j]);
+                    grow *= tjj / (tjj + cnorm[j]);
 /*<                ELSE >*/
-		} else {
+                } else {
 
 /*                 G(j) could overflow, set GROW to 0. */
 
 /*<                   GROW = ZERO >*/
-		    grow = 0.;
+                    grow = 0.;
 /*<                END IF >*/
-		}
+                }
 /*<    40       CONTINUE >*/
 /* L40: */
-	    }
+            }
 /*<             GROW = XBND >*/
-	    grow = xbnd;
+            grow = xbnd;
 /*<          ELSE >*/
-	} else {
+        } else {
 
 /*           A is unit triangular. */
 
@@ -552,68 +552,68 @@ static doublereal c_b36 = .5;
 
 /*<             GROW = MIN( ONE, HALF / MAX( XBND, SMLNUM ) ) >*/
 /* Computing MIN */
-	    d__1 = 1., d__2 = .5 / max(xbnd,smlnum);
-	    grow = min(d__1,d__2);
+            d__1 = 1., d__2 = .5 / max(xbnd,smlnum);
+            grow = min(d__1,d__2);
 /*<             DO 50 J = JFIRST, JLAST, JINC >*/
-	    i__2 = jlast;
-	    i__1 = jinc;
-	    for (j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1) {
+            i__2 = jlast;
+            i__1 = jinc;
+            for (j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1) {
 
 /*              Exit the loop if the growth factor is too small. */
 
 /*<    >*/
-		if (grow <= smlnum) {
-		    goto L60;
-		}
+                if (grow <= smlnum) {
+                    goto L60;
+                }
 
 /*              G(j) = G(j-1)*( 1 + CNORM(j) ) */
 
 /*<                GROW = GROW*( ONE / ( ONE+CNORM( J ) ) ) >*/
-		grow *= 1. / (cnorm[j] + 1.);
+                grow *= 1. / (cnorm[j] + 1.);
 /*<    50       CONTINUE >*/
 /* L50: */
-	    }
+            }
 /*<          END IF >*/
-	}
+        }
 /*<    60    CONTINUE >*/
 L60:
 
 /*<       ELSE >*/
-	;
+        ;
     } else {
 
 /*        Compute the growth in A**T * x = b  or  A**H * x = b. */
 
 /*<          IF( UPPER ) THEN >*/
-	if (upper) {
+        if (upper) {
 /*<             JFIRST = 1 >*/
-	    jfirst = 1;
+            jfirst = 1;
 /*<             JLAST = N >*/
-	    jlast = *n;
+            jlast = *n;
 /*<             JINC = 1 >*/
-	    jinc = 1;
+            jinc = 1;
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             JFIRST = N >*/
-	    jfirst = *n;
+            jfirst = *n;
 /*<             JLAST = 1 >*/
-	    jlast = 1;
+            jlast = 1;
 /*<             JINC = -1 >*/
-	    jinc = -1;
+            jinc = -1;
 /*<          END IF >*/
-	}
+        }
 
 /*<          IF( TSCAL.NE.ONE ) THEN >*/
-	if (tscal != 1.) {
+        if (tscal != 1.) {
 /*<             GROW = ZERO >*/
-	    grow = 0.;
+            grow = 0.;
 /*<             GO TO 90 >*/
-	    goto L90;
+            goto L90;
 /*<          END IF >*/
-	}
+        }
 
 /*<          IF( NOUNIT ) THEN >*/
-	if (nounit) {
+        if (nounit) {
 
 /*           A is non-unit triangular. */
 
@@ -621,62 +621,62 @@ L60:
 /*           Initially, M(0) = max{x(i), i=1,...,n}. */
 
 /*<             GROW = HALF / MAX( XBND, SMLNUM ) >*/
-	    grow = .5 / max(xbnd,smlnum);
+            grow = .5 / max(xbnd,smlnum);
 /*<             XBND = GROW >*/
-	    xbnd = grow;
+            xbnd = grow;
 /*<             DO 70 J = JFIRST, JLAST, JINC >*/
-	    i__1 = jlast;
-	    i__2 = jinc;
-	    for (j = jfirst; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2) {
+            i__1 = jlast;
+            i__2 = jinc;
+            for (j = jfirst; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2) {
 
 /*              Exit the loop if the growth factor is too small. */
 
 /*<    >*/
-		if (grow <= smlnum) {
-		    goto L90;
-		}
+                if (grow <= smlnum) {
+                    goto L90;
+                }
 
 /*              G(j) = max( G(j-1), M(j-1)*( 1 + CNORM(j) ) ) */
 
 /*<                XJ = ONE + CNORM( J ) >*/
-		xj = cnorm[j] + 1.;
+                xj = cnorm[j] + 1.;
 /*<                GROW = MIN( GROW, XBND / XJ ) >*/
 /* Computing MIN */
-		d__1 = grow, d__2 = xbnd / xj;
-		grow = min(d__1,d__2);
+                d__1 = grow, d__2 = xbnd / xj;
+                grow = min(d__1,d__2);
 
 /*<                TJJS = A( J, J ) >*/
-		i__3 = j + j * a_dim1;
-		tjjs.r = a[i__3].r, tjjs.i = a[i__3].i;
+                i__3 = j + j * a_dim1;
+                tjjs.r = a[i__3].r, tjjs.i = a[i__3].i;
 /*<                TJJ = CABS1( TJJS ) >*/
-		tjj = (d__1 = tjjs.r, abs(d__1)) + (d__2 = d_imag(&tjjs), abs(
-			d__2));
+                tjj = (d__1 = tjjs.r, abs(d__1)) + (d__2 = d_imag(&tjjs), abs(
+                        d__2));
 
 /*<                IF( TJJ.GE.SMLNUM ) THEN >*/
-		if (tjj >= smlnum) {
+                if (tjj >= smlnum) {
 
 /*                 M(j) = M(j-1)*( 1 + CNORM(j) ) / abs(A(j,j)) */
 
 /*<    >*/
-		    if (xj > tjj) {
-			xbnd *= tjj / xj;
-		    }
+                    if (xj > tjj) {
+                        xbnd *= tjj / xj;
+                    }
 /*<                ELSE >*/
-		} else {
+                } else {
 
 /*                 M(j) could overflow, set XBND to 0. */
 
 /*<                   XBND = ZERO >*/
-		    xbnd = 0.;
+                    xbnd = 0.;
 /*<                END IF >*/
-		}
+                }
 /*<    70       CONTINUE >*/
 /* L70: */
-	    }
+            }
 /*<             GROW = MIN( GROW, XBND ) >*/
-	    grow = min(grow,xbnd);
+            grow = min(grow,xbnd);
 /*<          ELSE >*/
-	} else {
+        } else {
 
 /*           A is unit triangular. */
 
@@ -684,35 +684,35 @@ L60:
 
 /*<             GROW = MIN( ONE, HALF / MAX( XBND, SMLNUM ) ) >*/
 /* Computing MIN */
-	    d__1 = 1., d__2 = .5 / max(xbnd,smlnum);
-	    grow = min(d__1,d__2);
+            d__1 = 1., d__2 = .5 / max(xbnd,smlnum);
+            grow = min(d__1,d__2);
 /*<             DO 80 J = JFIRST, JLAST, JINC >*/
-	    i__2 = jlast;
-	    i__1 = jinc;
-	    for (j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1) {
+            i__2 = jlast;
+            i__1 = jinc;
+            for (j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1) {
 
 /*              Exit the loop if the growth factor is too small. */
 
 /*<    >*/
-		if (grow <= smlnum) {
-		    goto L90;
-		}
+                if (grow <= smlnum) {
+                    goto L90;
+                }
 
 /*              G(j) = ( 1 + CNORM(j) )*G(j-1) */
 
 /*<                XJ = ONE + CNORM( J ) >*/
-		xj = cnorm[j] + 1.;
+                xj = cnorm[j] + 1.;
 /*<                GROW = GROW / XJ >*/
-		grow /= xj;
+                grow /= xj;
 /*<    80       CONTINUE >*/
 /* L80: */
-	    }
+            }
 /*<          END IF >*/
-	}
+        }
 /*<    90    CONTINUE >*/
 L90:
 /*<       END IF >*/
-	;
+        ;
     }
 
 /*<       IF( ( GROW*TSCAL ).GT.SMLNUM ) THEN >*/
@@ -722,164 +722,164 @@ L90:
 /*        elements of X is not too small. */
 
 /*<          CALL ZTRSV( UPLO, TRANS, DIAG, N, A, LDA, X, 1 ) >*/
-	ztrsv_(uplo, trans, diag, n, &a[a_offset], lda, &x[1], &c__1, (ftnlen)
-		1, (ftnlen)1, (ftnlen)1);
+        ztrsv_(uplo, trans, diag, n, &a[a_offset], lda, &x[1], &c__1, (ftnlen)
+                1, (ftnlen)1, (ftnlen)1);
 /*<       ELSE >*/
     } else {
 
 /*        Use a Level 1 BLAS solve, scaling intermediate results. */
 
 /*<          IF( XMAX.GT.BIGNUM*HALF ) THEN >*/
-	if (xmax > bignum * .5) {
+        if (xmax > bignum * .5) {
 
 /*           Scale X so that its components are less than or equal to */
 /*           BIGNUM in absolute value. */
 
 /*<             SCALE = ( BIGNUM*HALF ) / XMAX >*/
-	    *scale = bignum * .5 / xmax;
+            *scale = bignum * .5 / xmax;
 /*<             CALL ZDSCAL( N, SCALE, X, 1 ) >*/
-	    zdscal_(n, scale, &x[1], &c__1);
+            zdscal_(n, scale, &x[1], &c__1);
 /*<             XMAX = BIGNUM >*/
-	    xmax = bignum;
+            xmax = bignum;
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             XMAX = XMAX*TWO >*/
-	    xmax *= 2.;
+            xmax *= 2.;
 /*<          END IF >*/
-	}
+        }
 
 /*<          IF( NOTRAN ) THEN >*/
-	if (notran) {
+        if (notran) {
 
 /*           Solve A * x = b */
 
 /*<             DO 120 J = JFIRST, JLAST, JINC >*/
-	    i__1 = jlast;
-	    i__2 = jinc;
-	    for (j = jfirst; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2) {
+            i__1 = jlast;
+            i__2 = jinc;
+            for (j = jfirst; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2) {
 
 /*              Compute x(j) = b(j) / A(j,j), scaling x if necessary. */
 
 /*<                XJ = CABS1( X( J ) ) >*/
-		i__3 = j;
-		xj = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = d_imag(&x[j]), 
-			abs(d__2));
+                i__3 = j;
+                xj = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = d_imag(&x[j]), 
+                        abs(d__2));
 /*<                IF( NOUNIT ) THEN >*/
-		if (nounit) {
+                if (nounit) {
 /*<                   TJJS = A( J, J )*TSCAL >*/
-		    i__3 = j + j * a_dim1;
-		    z__1.r = tscal * a[i__3].r, z__1.i = tscal * a[i__3].i;
-		    tjjs.r = z__1.r, tjjs.i = z__1.i;
+                    i__3 = j + j * a_dim1;
+                    z__1.r = tscal * a[i__3].r, z__1.i = tscal * a[i__3].i;
+                    tjjs.r = z__1.r, tjjs.i = z__1.i;
 /*<                ELSE >*/
-		} else {
+                } else {
 /*<                   TJJS = TSCAL >*/
-		    tjjs.r = tscal, tjjs.i = 0.;
+                    tjjs.r = tscal, tjjs.i = 0.;
 /*<    >*/
-		    if (tscal == 1.) {
-			goto L110;
-		    }
+                    if (tscal == 1.) {
+                        goto L110;
+                    }
 /*<                END IF >*/
-		}
+                }
 /*<                TJJ = CABS1( TJJS ) >*/
-		tjj = (d__1 = tjjs.r, abs(d__1)) + (d__2 = d_imag(&tjjs), abs(
-			d__2));
+                tjj = (d__1 = tjjs.r, abs(d__1)) + (d__2 = d_imag(&tjjs), abs(
+                        d__2));
 /*<                IF( TJJ.GT.SMLNUM ) THEN >*/
-		if (tjj > smlnum) {
+                if (tjj > smlnum) {
 
 /*                    abs(A(j,j)) > SMLNUM: */
 
 /*<                   IF( TJJ.LT.ONE ) THEN >*/
-		    if (tjj < 1.) {
+                    if (tjj < 1.) {
 /*<                      IF( XJ.GT.TJJ*BIGNUM ) THEN >*/
-			if (xj > tjj * bignum) {
+                        if (xj > tjj * bignum) {
 
 /*                          Scale x by 1/b(j). */
 
 /*<                         REC = ONE / XJ >*/
-			    rec = 1. / xj;
+                            rec = 1. / xj;
 /*<                         CALL ZDSCAL( N, REC, X, 1 ) >*/
-			    zdscal_(n, &rec, &x[1], &c__1);
+                            zdscal_(n, &rec, &x[1], &c__1);
 /*<                         SCALE = SCALE*REC >*/
-			    *scale *= rec;
+                            *scale *= rec;
 /*<                         XMAX = XMAX*REC >*/
-			    xmax *= rec;
+                            xmax *= rec;
 /*<                      END IF >*/
-			}
+                        }
 /*<                   END IF >*/
-		    }
+                    }
 /*<                   X( J ) = ZLADIV( X( J ), TJJS ) >*/
-		    i__3 = j;
-		    zladiv_(&z__1, &x[j], &tjjs);
-		    x[i__3].r = z__1.r, x[i__3].i = z__1.i;
+                    i__3 = j;
+                    zladiv_(&z__1, &x[j], &tjjs);
+                    x[i__3].r = z__1.r, x[i__3].i = z__1.i;
 /*<                   XJ = CABS1( X( J ) ) >*/
-		    i__3 = j;
-		    xj = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = d_imag(&x[j])
-			    , abs(d__2));
+                    i__3 = j;
+                    xj = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = d_imag(&x[j])
+                            , abs(d__2));
 /*<                ELSE IF( TJJ.GT.ZERO ) THEN >*/
-		} else if (tjj > 0.) {
+                } else if (tjj > 0.) {
 
 /*                    0 < abs(A(j,j)) <= SMLNUM: */
 
 /*<                   IF( XJ.GT.TJJ*BIGNUM ) THEN >*/
-		    if (xj > tjj * bignum) {
+                    if (xj > tjj * bignum) {
 
 /*                       Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM */
 /*                       to avoid overflow when dividing by A(j,j). */
 
 /*<                      REC = ( TJJ*BIGNUM ) / XJ >*/
-			rec = tjj * bignum / xj;
+                        rec = tjj * bignum / xj;
 /*<                      IF( CNORM( J ).GT.ONE ) THEN >*/
-			if (cnorm[j] > 1.) {
+                        if (cnorm[j] > 1.) {
 
 /*                          Scale by 1/CNORM(j) to avoid overflow when */
 /*                          multiplying x(j) times column j. */
 
 /*<                         REC = REC / CNORM( J ) >*/
-			    rec /= cnorm[j];
+                            rec /= cnorm[j];
 /*<                      END IF >*/
-			}
+                        }
 /*<                      CALL ZDSCAL( N, REC, X, 1 ) >*/
-			zdscal_(n, &rec, &x[1], &c__1);
+                        zdscal_(n, &rec, &x[1], &c__1);
 /*<                      SCALE = SCALE*REC >*/
-			*scale *= rec;
+                        *scale *= rec;
 /*<                      XMAX = XMAX*REC >*/
-			xmax *= rec;
+                        xmax *= rec;
 /*<                   END IF >*/
-		    }
+                    }
 /*<                   X( J ) = ZLADIV( X( J ), TJJS ) >*/
-		    i__3 = j;
-		    zladiv_(&z__1, &x[j], &tjjs);
-		    x[i__3].r = z__1.r, x[i__3].i = z__1.i;
+                    i__3 = j;
+                    zladiv_(&z__1, &x[j], &tjjs);
+                    x[i__3].r = z__1.r, x[i__3].i = z__1.i;
 /*<                   XJ = CABS1( X( J ) ) >*/
-		    i__3 = j;
-		    xj = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = d_imag(&x[j])
-			    , abs(d__2));
+                    i__3 = j;
+                    xj = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = d_imag(&x[j])
+                            , abs(d__2));
 /*<                ELSE >*/
-		} else {
+                } else {
 
 /*                    A(j,j) = 0:  Set x(1:n) = 0, x(j) = 1, and */
 /*                    scale = 0, and compute a solution to A*x = 0. */
 
 /*<                   DO 100 I = 1, N >*/
-		    i__3 = *n;
-		    for (i__ = 1; i__ <= i__3; ++i__) {
+                    i__3 = *n;
+                    for (i__ = 1; i__ <= i__3; ++i__) {
 /*<                      X( I ) = ZERO >*/
-			i__4 = i__;
-			x[i__4].r = 0., x[i__4].i = 0.;
+                        i__4 = i__;
+                        x[i__4].r = 0., x[i__4].i = 0.;
 /*<   100             CONTINUE >*/
 /* L100: */
-		    }
+                    }
 /*<                   X( J ) = ONE >*/
-		    i__3 = j;
-		    x[i__3].r = 1., x[i__3].i = 0.;
+                    i__3 = j;
+                    x[i__3].r = 1., x[i__3].i = 0.;
 /*<                   XJ = ONE >*/
-		    xj = 1.;
+                    xj = 1.;
 /*<                   SCALE = ZERO >*/
-		    *scale = 0.;
+                    *scale = 0.;
 /*<                   XMAX = ZERO >*/
-		    xmax = 0.;
+                    xmax = 0.;
 /*<                END IF >*/
-		}
+                }
 /*<   110          CONTINUE >*/
 L110:
 
@@ -887,663 +887,663 @@ L110:
 /*              multiple of column j of A. */
 
 /*<                IF( XJ.GT.ONE ) THEN >*/
-		if (xj > 1.) {
+                if (xj > 1.) {
 /*<                   REC = ONE / XJ >*/
-		    rec = 1. / xj;
+                    rec = 1. / xj;
 /*<                   IF( CNORM( J ).GT.( BIGNUM-XMAX )*REC ) THEN >*/
-		    if (cnorm[j] > (bignum - xmax) * rec) {
+                    if (cnorm[j] > (bignum - xmax) * rec) {
 
 /*                    Scale x by 1/(2*abs(x(j))). */
 
 /*<                      REC = REC*HALF >*/
-			rec *= .5;
+                        rec *= .5;
 /*<                      CALL ZDSCAL( N, REC, X, 1 ) >*/
-			zdscal_(n, &rec, &x[1], &c__1);
+                        zdscal_(n, &rec, &x[1], &c__1);
 /*<                      SCALE = SCALE*REC >*/
-			*scale *= rec;
+                        *scale *= rec;
 /*<                   END IF >*/
-		    }
+                    }
 /*<                ELSE IF( XJ*CNORM( J ).GT.( BIGNUM-XMAX ) ) THEN >*/
-		} else if (xj * cnorm[j] > bignum - xmax) {
+                } else if (xj * cnorm[j] > bignum - xmax) {
 
 /*                 Scale x by 1/2. */
 
 /*<                   CALL ZDSCAL( N, HALF, X, 1 ) >*/
-		    zdscal_(n, &c_b36, &x[1], &c__1);
+                    zdscal_(n, &c_b36, &x[1], &c__1);
 /*<                   SCALE = SCALE*HALF >*/
-		    *scale *= .5;
+                    *scale *= .5;
 /*<                END IF >*/
-		}
+                }
 
 /*<                IF( UPPER ) THEN >*/
-		if (upper) {
+                if (upper) {
 /*<                   IF( J.GT.1 ) THEN >*/
-		    if (j > 1) {
+                    if (j > 1) {
 
 /*                    Compute the update */
 /*                       x(1:j-1) := x(1:j-1) - x(j) * A(1:j-1,j) */
 
 /*<    >*/
-			i__3 = j - 1;
-			i__4 = j;
-			z__2.r = -x[i__4].r, z__2.i = -x[i__4].i;
-			z__1.r = tscal * z__2.r, z__1.i = tscal * z__2.i;
-			zaxpy_(&i__3, &z__1, &a[j * a_dim1 + 1], &c__1, &x[1],
-				 &c__1);
+                        i__3 = j - 1;
+                        i__4 = j;
+                        z__2.r = -x[i__4].r, z__2.i = -x[i__4].i;
+                        z__1.r = tscal * z__2.r, z__1.i = tscal * z__2.i;
+                        zaxpy_(&i__3, &z__1, &a[j * a_dim1 + 1], &c__1, &x[1],
+                                 &c__1);
 /*<                      I = IZAMAX( J-1, X, 1 ) >*/
-			i__3 = j - 1;
-			i__ = izamax_(&i__3, &x[1], &c__1);
+                        i__3 = j - 1;
+                        i__ = izamax_(&i__3, &x[1], &c__1);
 /*<                      XMAX = CABS1( X( I ) ) >*/
-			i__3 = i__;
-			xmax = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = d_imag(
-				&x[i__]), abs(d__2));
+                        i__3 = i__;
+                        xmax = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = d_imag(
+                                &x[i__]), abs(d__2));
 /*<                   END IF >*/
-		    }
+                    }
 /*<                ELSE >*/
-		} else {
+                } else {
 /*<                   IF( J.LT.N ) THEN >*/
-		    if (j < *n) {
+                    if (j < *n) {
 
 /*                    Compute the update */
 /*                       x(j+1:n) := x(j+1:n) - x(j) * A(j+1:n,j) */
 
 /*<    >*/
-			i__3 = *n - j;
-			i__4 = j;
-			z__2.r = -x[i__4].r, z__2.i = -x[i__4].i;
-			z__1.r = tscal * z__2.r, z__1.i = tscal * z__2.i;
-			zaxpy_(&i__3, &z__1, &a[j + 1 + j * a_dim1], &c__1, &
-				x[j + 1], &c__1);
+                        i__3 = *n - j;
+                        i__4 = j;
+                        z__2.r = -x[i__4].r, z__2.i = -x[i__4].i;
+                        z__1.r = tscal * z__2.r, z__1.i = tscal * z__2.i;
+                        zaxpy_(&i__3, &z__1, &a[j + 1 + j * a_dim1], &c__1, &
+                                x[j + 1], &c__1);
 /*<                      I = J + IZAMAX( N-J, X( J+1 ), 1 ) >*/
-			i__3 = *n - j;
-			i__ = j + izamax_(&i__3, &x[j + 1], &c__1);
+                        i__3 = *n - j;
+                        i__ = j + izamax_(&i__3, &x[j + 1], &c__1);
 /*<                      XMAX = CABS1( X( I ) ) >*/
-			i__3 = i__;
-			xmax = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = d_imag(
-				&x[i__]), abs(d__2));
+                        i__3 = i__;
+                        xmax = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = d_imag(
+                                &x[i__]), abs(d__2));
 /*<                   END IF >*/
-		    }
+                    }
 /*<                END IF >*/
-		}
+                }
 /*<   120       CONTINUE >*/
 /* L120: */
-	    }
+            }
 
 /*<          ELSE IF( LSAME( TRANS, 'T' ) ) THEN >*/
-	} else if (lsame_(trans, "T", (ftnlen)1, (ftnlen)1)) {
+        } else if (lsame_(trans, "T", (ftnlen)1, (ftnlen)1)) {
 
 /*           Solve A**T * x = b */
 
 /*<             DO 170 J = JFIRST, JLAST, JINC >*/
-	    i__2 = jlast;
-	    i__1 = jinc;
-	    for (j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1) {
+            i__2 = jlast;
+            i__1 = jinc;
+            for (j = jfirst; i__1 < 0 ? j >= i__2 : j <= i__2; j += i__1) {
 
 /*              Compute x(j) = b(j) - sum A(k,j)*x(k). */
 /*                                    k<>j */
 
 /*<                XJ = CABS1( X( J ) ) >*/
-		i__3 = j;
-		xj = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = d_imag(&x[j]), 
-			abs(d__2));
+                i__3 = j;
+                xj = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = d_imag(&x[j]), 
+                        abs(d__2));
 /*<                USCAL = TSCAL >*/
-		uscal.r = tscal, uscal.i = 0.;
+                uscal.r = tscal, uscal.i = 0.;
 /*<                REC = ONE / MAX( XMAX, ONE ) >*/
-		rec = 1. / max(xmax,1.);
+                rec = 1. / max(xmax,1.);
 /*<                IF( CNORM( J ).GT.( BIGNUM-XJ )*REC ) THEN >*/
-		if (cnorm[j] > (bignum - xj) * rec) {
+                if (cnorm[j] > (bignum - xj) * rec) {
 
 /*                 If x(j) could overflow, scale x by 1/(2*XMAX). */
 
 /*<                   REC = REC*HALF >*/
-		    rec *= .5;
+                    rec *= .5;
 /*<                   IF( NOUNIT ) THEN >*/
-		    if (nounit) {
+                    if (nounit) {
 /*<                      TJJS = A( J, J )*TSCAL >*/
-			i__3 = j + j * a_dim1;
-			z__1.r = tscal * a[i__3].r, z__1.i = tscal * a[i__3]
-				.i;
-			tjjs.r = z__1.r, tjjs.i = z__1.i;
+                        i__3 = j + j * a_dim1;
+                        z__1.r = tscal * a[i__3].r, z__1.i = tscal * a[i__3]
+                                .i;
+                        tjjs.r = z__1.r, tjjs.i = z__1.i;
 /*<                   ELSE >*/
-		    } else {
+                    } else {
 /*<                      TJJS = TSCAL >*/
-			tjjs.r = tscal, tjjs.i = 0.;
+                        tjjs.r = tscal, tjjs.i = 0.;
 /*<                   END IF >*/
-		    }
+                    }
 /*<                   TJJ = CABS1( TJJS ) >*/
-		    tjj = (d__1 = tjjs.r, abs(d__1)) + (d__2 = d_imag(&tjjs), 
-			    abs(d__2));
+                    tjj = (d__1 = tjjs.r, abs(d__1)) + (d__2 = d_imag(&tjjs), 
+                            abs(d__2));
 /*<                   IF( TJJ.GT.ONE ) THEN >*/
-		    if (tjj > 1.) {
+                    if (tjj > 1.) {
 
 /*                       Divide by A(j,j) when scaling x if A(j,j) > 1. */
 
 /*<                      REC = MIN( ONE, REC*TJJ ) >*/
 /* Computing MIN */
-			d__1 = 1., d__2 = rec * tjj;
-			rec = min(d__1,d__2);
+                        d__1 = 1., d__2 = rec * tjj;
+                        rec = min(d__1,d__2);
 /*<                      USCAL = ZLADIV( USCAL, TJJS ) >*/
-			zladiv_(&z__1, &uscal, &tjjs);
-			uscal.r = z__1.r, uscal.i = z__1.i;
+                        zladiv_(&z__1, &uscal, &tjjs);
+                        uscal.r = z__1.r, uscal.i = z__1.i;
 /*<                   END IF >*/
-		    }
+                    }
 /*<                   IF( REC.LT.ONE ) THEN >*/
-		    if (rec < 1.) {
+                    if (rec < 1.) {
 /*<                      CALL ZDSCAL( N, REC, X, 1 ) >*/
-			zdscal_(n, &rec, &x[1], &c__1);
+                        zdscal_(n, &rec, &x[1], &c__1);
 /*<                      SCALE = SCALE*REC >*/
-			*scale *= rec;
+                        *scale *= rec;
 /*<                      XMAX = XMAX*REC >*/
-			xmax *= rec;
+                        xmax *= rec;
 /*<                   END IF >*/
-		    }
+                    }
 /*<                END IF >*/
-		}
+                }
 
 /*<                CSUMJ = ZERO >*/
-		csumj.r = 0., csumj.i = 0.;
+                csumj.r = 0., csumj.i = 0.;
 /*<                IF( USCAL.EQ.DCMPLX( ONE ) ) THEN >*/
-		if (uscal.r == 1. && uscal.i == 0.) {
+                if (uscal.r == 1. && uscal.i == 0.) {
 
 /*                 If the scaling needed for A in the dot product is 1, */
 /*                 call ZDOTU to perform the dot product. */
 
 /*<                   IF( UPPER ) THEN >*/
-		    if (upper) {
+                    if (upper) {
 /*<                      CSUMJ = ZDOTU( J-1, A( 1, J ), 1, X, 1 ) >*/
-			i__3 = j - 1;
-			zdotu_(&z__1, &i__3, &a[j * a_dim1 + 1], &c__1, &x[1],
-				 &c__1);
-			csumj.r = z__1.r, csumj.i = z__1.i;
+                        i__3 = j - 1;
+                        zdotu_(&z__1, &i__3, &a[j * a_dim1 + 1], &c__1, &x[1],
+                                 &c__1);
+                        csumj.r = z__1.r, csumj.i = z__1.i;
 /*<                   ELSE IF( J.LT.N ) THEN >*/
-		    } else if (j < *n) {
+                    } else if (j < *n) {
 /*<                      CSUMJ = ZDOTU( N-J, A( J+1, J ), 1, X( J+1 ), 1 ) >*/
-			i__3 = *n - j;
-			zdotu_(&z__1, &i__3, &a[j + 1 + j * a_dim1], &c__1, &
-				x[j + 1], &c__1);
-			csumj.r = z__1.r, csumj.i = z__1.i;
+                        i__3 = *n - j;
+                        zdotu_(&z__1, &i__3, &a[j + 1 + j * a_dim1], &c__1, &
+                                x[j + 1], &c__1);
+                        csumj.r = z__1.r, csumj.i = z__1.i;
 /*<                   END IF >*/
-		    }
+                    }
 /*<                ELSE >*/
-		} else {
+                } else {
 
 /*                 Otherwise, use in-line code for the dot product. */
 
 /*<                   IF( UPPER ) THEN >*/
-		    if (upper) {
+                    if (upper) {
 /*<                      DO 130 I = 1, J - 1 >*/
-			i__3 = j - 1;
-			for (i__ = 1; i__ <= i__3; ++i__) {
+                        i__3 = j - 1;
+                        for (i__ = 1; i__ <= i__3; ++i__) {
 /*<                         CSUMJ = CSUMJ + ( A( I, J )*USCAL )*X( I ) >*/
-			    i__4 = i__ + j * a_dim1;
-			    z__3.r = a[i__4].r * uscal.r - a[i__4].i * 
-				    uscal.i, z__3.i = a[i__4].r * uscal.i + a[
-				    i__4].i * uscal.r;
-			    i__5 = i__;
-			    z__2.r = z__3.r * x[i__5].r - z__3.i * x[i__5].i, 
-				    z__2.i = z__3.r * x[i__5].i + z__3.i * x[
-				    i__5].r;
-			    z__1.r = csumj.r + z__2.r, z__1.i = csumj.i + 
-				    z__2.i;
-			    csumj.r = z__1.r, csumj.i = z__1.i;
+                            i__4 = i__ + j * a_dim1;
+                            z__3.r = a[i__4].r * uscal.r - a[i__4].i * 
+                                    uscal.i, z__3.i = a[i__4].r * uscal.i + a[
+                                    i__4].i * uscal.r;
+                            i__5 = i__;
+                            z__2.r = z__3.r * x[i__5].r - z__3.i * x[i__5].i, 
+                                    z__2.i = z__3.r * x[i__5].i + z__3.i * x[
+                                    i__5].r;
+                            z__1.r = csumj.r + z__2.r, z__1.i = csumj.i + 
+                                    z__2.i;
+                            csumj.r = z__1.r, csumj.i = z__1.i;
 /*<   130                CONTINUE >*/
 /* L130: */
-			}
+                        }
 /*<                   ELSE IF( J.LT.N ) THEN >*/
-		    } else if (j < *n) {
+                    } else if (j < *n) {
 /*<                      DO 140 I = J + 1, N >*/
-			i__3 = *n;
-			for (i__ = j + 1; i__ <= i__3; ++i__) {
+                        i__3 = *n;
+                        for (i__ = j + 1; i__ <= i__3; ++i__) {
 /*<                         CSUMJ = CSUMJ + ( A( I, J )*USCAL )*X( I ) >*/
-			    i__4 = i__ + j * a_dim1;
-			    z__3.r = a[i__4].r * uscal.r - a[i__4].i * 
-				    uscal.i, z__3.i = a[i__4].r * uscal.i + a[
-				    i__4].i * uscal.r;
-			    i__5 = i__;
-			    z__2.r = z__3.r * x[i__5].r - z__3.i * x[i__5].i, 
-				    z__2.i = z__3.r * x[i__5].i + z__3.i * x[
-				    i__5].r;
-			    z__1.r = csumj.r + z__2.r, z__1.i = csumj.i + 
-				    z__2.i;
-			    csumj.r = z__1.r, csumj.i = z__1.i;
+                            i__4 = i__ + j * a_dim1;
+                            z__3.r = a[i__4].r * uscal.r - a[i__4].i * 
+                                    uscal.i, z__3.i = a[i__4].r * uscal.i + a[
+                                    i__4].i * uscal.r;
+                            i__5 = i__;
+                            z__2.r = z__3.r * x[i__5].r - z__3.i * x[i__5].i, 
+                                    z__2.i = z__3.r * x[i__5].i + z__3.i * x[
+                                    i__5].r;
+                            z__1.r = csumj.r + z__2.r, z__1.i = csumj.i + 
+                                    z__2.i;
+                            csumj.r = z__1.r, csumj.i = z__1.i;
 /*<   140                CONTINUE >*/
 /* L140: */
-			}
+                        }
 /*<                   END IF >*/
-		    }
+                    }
 /*<                END IF >*/
-		}
+                }
 
 /*<                IF( USCAL.EQ.DCMPLX( TSCAL ) ) THEN >*/
-		z__1.r = tscal, z__1.i = 0.;
-		if (uscal.r == z__1.r && uscal.i == z__1.i) {
+                z__1.r = tscal, z__1.i = 0.;
+                if (uscal.r == z__1.r && uscal.i == z__1.i) {
 
 /*                 Compute x(j) := ( x(j) - CSUMJ ) / A(j,j) if 1/A(j,j) */
 /*                 was not used to scale the dotproduct. */
 
 /*<                   X( J ) = X( J ) - CSUMJ >*/
-		    i__3 = j;
-		    i__4 = j;
-		    z__1.r = x[i__4].r - csumj.r, z__1.i = x[i__4].i - 
-			    csumj.i;
-		    x[i__3].r = z__1.r, x[i__3].i = z__1.i;
+                    i__3 = j;
+                    i__4 = j;
+                    z__1.r = x[i__4].r - csumj.r, z__1.i = x[i__4].i - 
+                            csumj.i;
+                    x[i__3].r = z__1.r, x[i__3].i = z__1.i;
 /*<                   XJ = CABS1( X( J ) ) >*/
-		    i__3 = j;
-		    xj = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = d_imag(&x[j])
-			    , abs(d__2));
+                    i__3 = j;
+                    xj = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = d_imag(&x[j])
+                            , abs(d__2));
 /*<                   IF( NOUNIT ) THEN >*/
-		    if (nounit) {
+                    if (nounit) {
 /*<                      TJJS = A( J, J )*TSCAL >*/
-			i__3 = j + j * a_dim1;
-			z__1.r = tscal * a[i__3].r, z__1.i = tscal * a[i__3]
-				.i;
-			tjjs.r = z__1.r, tjjs.i = z__1.i;
+                        i__3 = j + j * a_dim1;
+                        z__1.r = tscal * a[i__3].r, z__1.i = tscal * a[i__3]
+                                .i;
+                        tjjs.r = z__1.r, tjjs.i = z__1.i;
 /*<                   ELSE >*/
-		    } else {
+                    } else {
 /*<                      TJJS = TSCAL >*/
-			tjjs.r = tscal, tjjs.i = 0.;
+                        tjjs.r = tscal, tjjs.i = 0.;
 /*<    >*/
-			if (tscal == 1.) {
-			    goto L160;
-			}
+                        if (tscal == 1.) {
+                            goto L160;
+                        }
 /*<                   END IF >*/
-		    }
+                    }
 
 /*                    Compute x(j) = x(j) / A(j,j), scaling if necessary. */
 
 /*<                   TJJ = CABS1( TJJS ) >*/
-		    tjj = (d__1 = tjjs.r, abs(d__1)) + (d__2 = d_imag(&tjjs), 
-			    abs(d__2));
+                    tjj = (d__1 = tjjs.r, abs(d__1)) + (d__2 = d_imag(&tjjs), 
+                            abs(d__2));
 /*<                   IF( TJJ.GT.SMLNUM ) THEN >*/
-		    if (tjj > smlnum) {
+                    if (tjj > smlnum) {
 
 /*                       abs(A(j,j)) > SMLNUM: */
 
 /*<                      IF( TJJ.LT.ONE ) THEN >*/
-			if (tjj < 1.) {
+                        if (tjj < 1.) {
 /*<                         IF( XJ.GT.TJJ*BIGNUM ) THEN >*/
-			    if (xj > tjj * bignum) {
+                            if (xj > tjj * bignum) {
 
 /*                             Scale X by 1/abs(x(j)). */
 
 /*<                            REC = ONE / XJ >*/
-				rec = 1. / xj;
+                                rec = 1. / xj;
 /*<                            CALL ZDSCAL( N, REC, X, 1 ) >*/
-				zdscal_(n, &rec, &x[1], &c__1);
+                                zdscal_(n, &rec, &x[1], &c__1);
 /*<                            SCALE = SCALE*REC >*/
-				*scale *= rec;
+                                *scale *= rec;
 /*<                            XMAX = XMAX*REC >*/
-				xmax *= rec;
+                                xmax *= rec;
 /*<                         END IF >*/
-			    }
+                            }
 /*<                      END IF >*/
-			}
+                        }
 /*<                      X( J ) = ZLADIV( X( J ), TJJS ) >*/
-			i__3 = j;
-			zladiv_(&z__1, &x[j], &tjjs);
-			x[i__3].r = z__1.r, x[i__3].i = z__1.i;
+                        i__3 = j;
+                        zladiv_(&z__1, &x[j], &tjjs);
+                        x[i__3].r = z__1.r, x[i__3].i = z__1.i;
 /*<                   ELSE IF( TJJ.GT.ZERO ) THEN >*/
-		    } else if (tjj > 0.) {
+                    } else if (tjj > 0.) {
 
 /*                       0 < abs(A(j,j)) <= SMLNUM: */
 
 /*<                      IF( XJ.GT.TJJ*BIGNUM ) THEN >*/
-			if (xj > tjj * bignum) {
+                        if (xj > tjj * bignum) {
 
 /*                          Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM. */
 
 /*<                         REC = ( TJJ*BIGNUM ) / XJ >*/
-			    rec = tjj * bignum / xj;
+                            rec = tjj * bignum / xj;
 /*<                         CALL ZDSCAL( N, REC, X, 1 ) >*/
-			    zdscal_(n, &rec, &x[1], &c__1);
+                            zdscal_(n, &rec, &x[1], &c__1);
 /*<                         SCALE = SCALE*REC >*/
-			    *scale *= rec;
+                            *scale *= rec;
 /*<                         XMAX = XMAX*REC >*/
-			    xmax *= rec;
+                            xmax *= rec;
 /*<                      END IF >*/
-			}
+                        }
 /*<                      X( J ) = ZLADIV( X( J ), TJJS ) >*/
-			i__3 = j;
-			zladiv_(&z__1, &x[j], &tjjs);
-			x[i__3].r = z__1.r, x[i__3].i = z__1.i;
+                        i__3 = j;
+                        zladiv_(&z__1, &x[j], &tjjs);
+                        x[i__3].r = z__1.r, x[i__3].i = z__1.i;
 /*<                   ELSE >*/
-		    } else {
+                    } else {
 
 /*                       A(j,j) = 0:  Set x(1:n) = 0, x(j) = 1, and */
 /*                       scale = 0 and compute a solution to A**T *x = 0. */
 
 /*<                      DO 150 I = 1, N >*/
-			i__3 = *n;
-			for (i__ = 1; i__ <= i__3; ++i__) {
+                        i__3 = *n;
+                        for (i__ = 1; i__ <= i__3; ++i__) {
 /*<                         X( I ) = ZERO >*/
-			    i__4 = i__;
-			    x[i__4].r = 0., x[i__4].i = 0.;
+                            i__4 = i__;
+                            x[i__4].r = 0., x[i__4].i = 0.;
 /*<   150                CONTINUE >*/
 /* L150: */
-			}
+                        }
 /*<                      X( J ) = ONE >*/
-			i__3 = j;
-			x[i__3].r = 1., x[i__3].i = 0.;
+                        i__3 = j;
+                        x[i__3].r = 1., x[i__3].i = 0.;
 /*<                      SCALE = ZERO >*/
-			*scale = 0.;
+                        *scale = 0.;
 /*<                      XMAX = ZERO >*/
-			xmax = 0.;
+                        xmax = 0.;
 /*<                   END IF >*/
-		    }
+                    }
 /*<   160             CONTINUE >*/
 L160:
 /*<                ELSE >*/
-		    ;
-		} else {
+                    ;
+                } else {
 
 /*                 Compute x(j) := x(j) / A(j,j) - CSUMJ if the dot */
 /*                 product has already been divided by 1/A(j,j). */
 
 /*<                   X( J ) = ZLADIV( X( J ), TJJS ) - CSUMJ >*/
-		    i__3 = j;
-		    zladiv_(&z__2, &x[j], &tjjs);
-		    z__1.r = z__2.r - csumj.r, z__1.i = z__2.i - csumj.i;
-		    x[i__3].r = z__1.r, x[i__3].i = z__1.i;
+                    i__3 = j;
+                    zladiv_(&z__2, &x[j], &tjjs);
+                    z__1.r = z__2.r - csumj.r, z__1.i = z__2.i - csumj.i;
+                    x[i__3].r = z__1.r, x[i__3].i = z__1.i;
 /*<                END IF >*/
-		}
+                }
 /*<                XMAX = MAX( XMAX, CABS1( X( J ) ) ) >*/
 /* Computing MAX */
-		i__3 = j;
-		d__3 = xmax, d__4 = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = 
-			d_imag(&x[j]), abs(d__2));
-		xmax = max(d__3,d__4);
+                i__3 = j;
+                d__3 = xmax, d__4 = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = 
+                        d_imag(&x[j]), abs(d__2));
+                xmax = max(d__3,d__4);
 /*<   170       CONTINUE >*/
 /* L170: */
-	    }
+            }
 
 /*<          ELSE >*/
-	} else {
+        } else {
 
 /*           Solve A**H * x = b */
 
 /*<             DO 220 J = JFIRST, JLAST, JINC >*/
-	    i__1 = jlast;
-	    i__2 = jinc;
-	    for (j = jfirst; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2) {
+            i__1 = jlast;
+            i__2 = jinc;
+            for (j = jfirst; i__2 < 0 ? j >= i__1 : j <= i__1; j += i__2) {
 
 /*              Compute x(j) = b(j) - sum A(k,j)*x(k). */
 /*                                    k<>j */
 
 /*<                XJ = CABS1( X( J ) ) >*/
-		i__3 = j;
-		xj = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = d_imag(&x[j]), 
-			abs(d__2));
+                i__3 = j;
+                xj = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = d_imag(&x[j]), 
+                        abs(d__2));
 /*<                USCAL = TSCAL >*/
-		uscal.r = tscal, uscal.i = 0.;
+                uscal.r = tscal, uscal.i = 0.;
 /*<                REC = ONE / MAX( XMAX, ONE ) >*/
-		rec = 1. / max(xmax,1.);
+                rec = 1. / max(xmax,1.);
 /*<                IF( CNORM( J ).GT.( BIGNUM-XJ )*REC ) THEN >*/
-		if (cnorm[j] > (bignum - xj) * rec) {
+                if (cnorm[j] > (bignum - xj) * rec) {
 
 /*                 If x(j) could overflow, scale x by 1/(2*XMAX). */
 
 /*<                   REC = REC*HALF >*/
-		    rec *= .5;
+                    rec *= .5;
 /*<                   IF( NOUNIT ) THEN >*/
-		    if (nounit) {
+                    if (nounit) {
 /*<                      TJJS = DCONJG( A( J, J ) )*TSCAL >*/
-			d_cnjg(&z__2, &a[j + j * a_dim1]);
-			z__1.r = tscal * z__2.r, z__1.i = tscal * z__2.i;
-			tjjs.r = z__1.r, tjjs.i = z__1.i;
+                        d_cnjg(&z__2, &a[j + j * a_dim1]);
+                        z__1.r = tscal * z__2.r, z__1.i = tscal * z__2.i;
+                        tjjs.r = z__1.r, tjjs.i = z__1.i;
 /*<                   ELSE >*/
-		    } else {
+                    } else {
 /*<                      TJJS = TSCAL >*/
-			tjjs.r = tscal, tjjs.i = 0.;
+                        tjjs.r = tscal, tjjs.i = 0.;
 /*<                   END IF >*/
-		    }
+                    }
 /*<                   TJJ = CABS1( TJJS ) >*/
-		    tjj = (d__1 = tjjs.r, abs(d__1)) + (d__2 = d_imag(&tjjs), 
-			    abs(d__2));
+                    tjj = (d__1 = tjjs.r, abs(d__1)) + (d__2 = d_imag(&tjjs), 
+                            abs(d__2));
 /*<                   IF( TJJ.GT.ONE ) THEN >*/
-		    if (tjj > 1.) {
+                    if (tjj > 1.) {
 
 /*                       Divide by A(j,j) when scaling x if A(j,j) > 1. */
 
 /*<                      REC = MIN( ONE, REC*TJJ ) >*/
 /* Computing MIN */
-			d__1 = 1., d__2 = rec * tjj;
-			rec = min(d__1,d__2);
+                        d__1 = 1., d__2 = rec * tjj;
+                        rec = min(d__1,d__2);
 /*<                      USCAL = ZLADIV( USCAL, TJJS ) >*/
-			zladiv_(&z__1, &uscal, &tjjs);
-			uscal.r = z__1.r, uscal.i = z__1.i;
+                        zladiv_(&z__1, &uscal, &tjjs);
+                        uscal.r = z__1.r, uscal.i = z__1.i;
 /*<                   END IF >*/
-		    }
+                    }
 /*<                   IF( REC.LT.ONE ) THEN >*/
-		    if (rec < 1.) {
+                    if (rec < 1.) {
 /*<                      CALL ZDSCAL( N, REC, X, 1 ) >*/
-			zdscal_(n, &rec, &x[1], &c__1);
+                        zdscal_(n, &rec, &x[1], &c__1);
 /*<                      SCALE = SCALE*REC >*/
-			*scale *= rec;
+                        *scale *= rec;
 /*<                      XMAX = XMAX*REC >*/
-			xmax *= rec;
+                        xmax *= rec;
 /*<                   END IF >*/
-		    }
+                    }
 /*<                END IF >*/
-		}
+                }
 
 /*<                CSUMJ = ZERO >*/
-		csumj.r = 0., csumj.i = 0.;
+                csumj.r = 0., csumj.i = 0.;
 /*<                IF( USCAL.EQ.DCMPLX( ONE ) ) THEN >*/
-		if (uscal.r == 1. && uscal.i == 0.) {
+                if (uscal.r == 1. && uscal.i == 0.) {
 
 /*                 If the scaling needed for A in the dot product is 1, */
 /*                 call ZDOTC to perform the dot product. */
 
 /*<                   IF( UPPER ) THEN >*/
-		    if (upper) {
+                    if (upper) {
 /*<                      CSUMJ = ZDOTC( J-1, A( 1, J ), 1, X, 1 ) >*/
-			i__3 = j - 1;
-			zdotc_(&z__1, &i__3, &a[j * a_dim1 + 1], &c__1, &x[1],
-				 &c__1);
-			csumj.r = z__1.r, csumj.i = z__1.i;
+                        i__3 = j - 1;
+                        zdotc_(&z__1, &i__3, &a[j * a_dim1 + 1], &c__1, &x[1],
+                                 &c__1);
+                        csumj.r = z__1.r, csumj.i = z__1.i;
 /*<                   ELSE IF( J.LT.N ) THEN >*/
-		    } else if (j < *n) {
+                    } else if (j < *n) {
 /*<                      CSUMJ = ZDOTC( N-J, A( J+1, J ), 1, X( J+1 ), 1 ) >*/
-			i__3 = *n - j;
-			zdotc_(&z__1, &i__3, &a[j + 1 + j * a_dim1], &c__1, &
-				x[j + 1], &c__1);
-			csumj.r = z__1.r, csumj.i = z__1.i;
+                        i__3 = *n - j;
+                        zdotc_(&z__1, &i__3, &a[j + 1 + j * a_dim1], &c__1, &
+                                x[j + 1], &c__1);
+                        csumj.r = z__1.r, csumj.i = z__1.i;
 /*<                   END IF >*/
-		    }
+                    }
 /*<                ELSE >*/
-		} else {
+                } else {
 
 /*                 Otherwise, use in-line code for the dot product. */
 
 /*<                   IF( UPPER ) THEN >*/
-		    if (upper) {
+                    if (upper) {
 /*<                      DO 180 I = 1, J - 1 >*/
-			i__3 = j - 1;
-			for (i__ = 1; i__ <= i__3; ++i__) {
+                        i__3 = j - 1;
+                        for (i__ = 1; i__ <= i__3; ++i__) {
 /*<    >*/
-			    d_cnjg(&z__4, &a[i__ + j * a_dim1]);
-			    z__3.r = z__4.r * uscal.r - z__4.i * uscal.i, 
-				    z__3.i = z__4.r * uscal.i + z__4.i * 
-				    uscal.r;
-			    i__4 = i__;
-			    z__2.r = z__3.r * x[i__4].r - z__3.i * x[i__4].i, 
-				    z__2.i = z__3.r * x[i__4].i + z__3.i * x[
-				    i__4].r;
-			    z__1.r = csumj.r + z__2.r, z__1.i = csumj.i + 
-				    z__2.i;
-			    csumj.r = z__1.r, csumj.i = z__1.i;
+                            d_cnjg(&z__4, &a[i__ + j * a_dim1]);
+                            z__3.r = z__4.r * uscal.r - z__4.i * uscal.i, 
+                                    z__3.i = z__4.r * uscal.i + z__4.i * 
+                                    uscal.r;
+                            i__4 = i__;
+                            z__2.r = z__3.r * x[i__4].r - z__3.i * x[i__4].i, 
+                                    z__2.i = z__3.r * x[i__4].i + z__3.i * x[
+                                    i__4].r;
+                            z__1.r = csumj.r + z__2.r, z__1.i = csumj.i + 
+                                    z__2.i;
+                            csumj.r = z__1.r, csumj.i = z__1.i;
 /*<   180                CONTINUE >*/
 /* L180: */
-			}
+                        }
 /*<                   ELSE IF( J.LT.N ) THEN >*/
-		    } else if (j < *n) {
+                    } else if (j < *n) {
 /*<                      DO 190 I = J + 1, N >*/
-			i__3 = *n;
-			for (i__ = j + 1; i__ <= i__3; ++i__) {
+                        i__3 = *n;
+                        for (i__ = j + 1; i__ <= i__3; ++i__) {
 /*<    >*/
-			    d_cnjg(&z__4, &a[i__ + j * a_dim1]);
-			    z__3.r = z__4.r * uscal.r - z__4.i * uscal.i, 
-				    z__3.i = z__4.r * uscal.i + z__4.i * 
-				    uscal.r;
-			    i__4 = i__;
-			    z__2.r = z__3.r * x[i__4].r - z__3.i * x[i__4].i, 
-				    z__2.i = z__3.r * x[i__4].i + z__3.i * x[
-				    i__4].r;
-			    z__1.r = csumj.r + z__2.r, z__1.i = csumj.i + 
-				    z__2.i;
-			    csumj.r = z__1.r, csumj.i = z__1.i;
+                            d_cnjg(&z__4, &a[i__ + j * a_dim1]);
+                            z__3.r = z__4.r * uscal.r - z__4.i * uscal.i, 
+                                    z__3.i = z__4.r * uscal.i + z__4.i * 
+                                    uscal.r;
+                            i__4 = i__;
+                            z__2.r = z__3.r * x[i__4].r - z__3.i * x[i__4].i, 
+                                    z__2.i = z__3.r * x[i__4].i + z__3.i * x[
+                                    i__4].r;
+                            z__1.r = csumj.r + z__2.r, z__1.i = csumj.i + 
+                                    z__2.i;
+                            csumj.r = z__1.r, csumj.i = z__1.i;
 /*<   190                CONTINUE >*/
 /* L190: */
-			}
+                        }
 /*<                   END IF >*/
-		    }
+                    }
 /*<                END IF >*/
-		}
+                }
 
 /*<                IF( USCAL.EQ.DCMPLX( TSCAL ) ) THEN >*/
-		z__1.r = tscal, z__1.i = 0.;
-		if (uscal.r == z__1.r && uscal.i == z__1.i) {
+                z__1.r = tscal, z__1.i = 0.;
+                if (uscal.r == z__1.r && uscal.i == z__1.i) {
 
 /*                 Compute x(j) := ( x(j) - CSUMJ ) / A(j,j) if 1/A(j,j) */
 /*                 was not used to scale the dotproduct. */
 
 /*<                   X( J ) = X( J ) - CSUMJ >*/
-		    i__3 = j;
-		    i__4 = j;
-		    z__1.r = x[i__4].r - csumj.r, z__1.i = x[i__4].i - 
-			    csumj.i;
-		    x[i__3].r = z__1.r, x[i__3].i = z__1.i;
+                    i__3 = j;
+                    i__4 = j;
+                    z__1.r = x[i__4].r - csumj.r, z__1.i = x[i__4].i - 
+                            csumj.i;
+                    x[i__3].r = z__1.r, x[i__3].i = z__1.i;
 /*<                   XJ = CABS1( X( J ) ) >*/
-		    i__3 = j;
-		    xj = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = d_imag(&x[j])
-			    , abs(d__2));
+                    i__3 = j;
+                    xj = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = d_imag(&x[j])
+                            , abs(d__2));
 /*<                   IF( NOUNIT ) THEN >*/
-		    if (nounit) {
+                    if (nounit) {
 /*<                      TJJS = DCONJG( A( J, J ) )*TSCAL >*/
-			d_cnjg(&z__2, &a[j + j * a_dim1]);
-			z__1.r = tscal * z__2.r, z__1.i = tscal * z__2.i;
-			tjjs.r = z__1.r, tjjs.i = z__1.i;
+                        d_cnjg(&z__2, &a[j + j * a_dim1]);
+                        z__1.r = tscal * z__2.r, z__1.i = tscal * z__2.i;
+                        tjjs.r = z__1.r, tjjs.i = z__1.i;
 /*<                   ELSE >*/
-		    } else {
+                    } else {
 /*<                      TJJS = TSCAL >*/
-			tjjs.r = tscal, tjjs.i = 0.;
+                        tjjs.r = tscal, tjjs.i = 0.;
 /*<    >*/
-			if (tscal == 1.) {
-			    goto L210;
-			}
+                        if (tscal == 1.) {
+                            goto L210;
+                        }
 /*<                   END IF >*/
-		    }
+                    }
 
 /*                    Compute x(j) = x(j) / A(j,j), scaling if necessary. */
 
 /*<                   TJJ = CABS1( TJJS ) >*/
-		    tjj = (d__1 = tjjs.r, abs(d__1)) + (d__2 = d_imag(&tjjs), 
-			    abs(d__2));
+                    tjj = (d__1 = tjjs.r, abs(d__1)) + (d__2 = d_imag(&tjjs), 
+                            abs(d__2));
 /*<                   IF( TJJ.GT.SMLNUM ) THEN >*/
-		    if (tjj > smlnum) {
+                    if (tjj > smlnum) {
 
 /*                       abs(A(j,j)) > SMLNUM: */
 
 /*<                      IF( TJJ.LT.ONE ) THEN >*/
-			if (tjj < 1.) {
+                        if (tjj < 1.) {
 /*<                         IF( XJ.GT.TJJ*BIGNUM ) THEN >*/
-			    if (xj > tjj * bignum) {
+                            if (xj > tjj * bignum) {
 
 /*                             Scale X by 1/abs(x(j)). */
 
 /*<                            REC = ONE / XJ >*/
-				rec = 1. / xj;
+                                rec = 1. / xj;
 /*<                            CALL ZDSCAL( N, REC, X, 1 ) >*/
-				zdscal_(n, &rec, &x[1], &c__1);
+                                zdscal_(n, &rec, &x[1], &c__1);
 /*<                            SCALE = SCALE*REC >*/
-				*scale *= rec;
+                                *scale *= rec;
 /*<                            XMAX = XMAX*REC >*/
-				xmax *= rec;
+                                xmax *= rec;
 /*<                         END IF >*/
-			    }
+                            }
 /*<                      END IF >*/
-			}
+                        }
 /*<                      X( J ) = ZLADIV( X( J ), TJJS ) >*/
-			i__3 = j;
-			zladiv_(&z__1, &x[j], &tjjs);
-			x[i__3].r = z__1.r, x[i__3].i = z__1.i;
+                        i__3 = j;
+                        zladiv_(&z__1, &x[j], &tjjs);
+                        x[i__3].r = z__1.r, x[i__3].i = z__1.i;
 /*<                   ELSE IF( TJJ.GT.ZERO ) THEN >*/
-		    } else if (tjj > 0.) {
+                    } else if (tjj > 0.) {
 
 /*                       0 < abs(A(j,j)) <= SMLNUM: */
 
 /*<                      IF( XJ.GT.TJJ*BIGNUM ) THEN >*/
-			if (xj > tjj * bignum) {
+                        if (xj > tjj * bignum) {
 
 /*                          Scale x by (1/abs(x(j)))*abs(A(j,j))*BIGNUM. */
 
 /*<                         REC = ( TJJ*BIGNUM ) / XJ >*/
-			    rec = tjj * bignum / xj;
+                            rec = tjj * bignum / xj;
 /*<                         CALL ZDSCAL( N, REC, X, 1 ) >*/
-			    zdscal_(n, &rec, &x[1], &c__1);
+                            zdscal_(n, &rec, &x[1], &c__1);
 /*<                         SCALE = SCALE*REC >*/
-			    *scale *= rec;
+                            *scale *= rec;
 /*<                         XMAX = XMAX*REC >*/
-			    xmax *= rec;
+                            xmax *= rec;
 /*<                      END IF >*/
-			}
+                        }
 /*<                      X( J ) = ZLADIV( X( J ), TJJS ) >*/
-			i__3 = j;
-			zladiv_(&z__1, &x[j], &tjjs);
-			x[i__3].r = z__1.r, x[i__3].i = z__1.i;
+                        i__3 = j;
+                        zladiv_(&z__1, &x[j], &tjjs);
+                        x[i__3].r = z__1.r, x[i__3].i = z__1.i;
 /*<                   ELSE >*/
-		    } else {
+                    } else {
 
 /*                       A(j,j) = 0:  Set x(1:n) = 0, x(j) = 1, and */
 /*                       scale = 0 and compute a solution to A**H *x = 0. */
 
 /*<                      DO 200 I = 1, N >*/
-			i__3 = *n;
-			for (i__ = 1; i__ <= i__3; ++i__) {
+                        i__3 = *n;
+                        for (i__ = 1; i__ <= i__3; ++i__) {
 /*<                         X( I ) = ZERO >*/
-			    i__4 = i__;
-			    x[i__4].r = 0., x[i__4].i = 0.;
+                            i__4 = i__;
+                            x[i__4].r = 0., x[i__4].i = 0.;
 /*<   200                CONTINUE >*/
 /* L200: */
-			}
+                        }
 /*<                      X( J ) = ONE >*/
-			i__3 = j;
-			x[i__3].r = 1., x[i__3].i = 0.;
+                        i__3 = j;
+                        x[i__3].r = 1., x[i__3].i = 0.;
 /*<                      SCALE = ZERO >*/
-			*scale = 0.;
+                        *scale = 0.;
 /*<                      XMAX = ZERO >*/
-			xmax = 0.;
+                        xmax = 0.;
 /*<                   END IF >*/
-		    }
+                    }
 /*<   210             CONTINUE >*/
 L210:
 /*<                ELSE >*/
-		    ;
-		} else {
+                    ;
+                } else {
 
 /*                 Compute x(j) := x(j) / A(j,j) - CSUMJ if the dot */
 /*                 product has already been divided by 1/A(j,j). */
 
 /*<                   X( J ) = ZLADIV( X( J ), TJJS ) - CSUMJ >*/
-		    i__3 = j;
-		    zladiv_(&z__2, &x[j], &tjjs);
-		    z__1.r = z__2.r - csumj.r, z__1.i = z__2.i - csumj.i;
-		    x[i__3].r = z__1.r, x[i__3].i = z__1.i;
+                    i__3 = j;
+                    zladiv_(&z__2, &x[j], &tjjs);
+                    z__1.r = z__2.r - csumj.r, z__1.i = z__2.i - csumj.i;
+                    x[i__3].r = z__1.r, x[i__3].i = z__1.i;
 /*<                END IF >*/
-		}
+                }
 /*<                XMAX = MAX( XMAX, CABS1( X( J ) ) ) >*/
 /* Computing MAX */
-		i__3 = j;
-		d__3 = xmax, d__4 = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = 
-			d_imag(&x[j]), abs(d__2));
-		xmax = max(d__3,d__4);
+                i__3 = j;
+                d__3 = xmax, d__4 = (d__1 = x[i__3].r, abs(d__1)) + (d__2 = 
+                        d_imag(&x[j]), abs(d__2));
+                xmax = max(d__3,d__4);
 /*<   220       CONTINUE >*/
 /* L220: */
-	    }
+            }
 /*<          END IF >*/
-	}
+        }
 /*<          SCALE = SCALE / TSCAL >*/
-	*scale /= tscal;
+        *scale /= tscal;
 /*<       END IF >*/
     }
 
@@ -1552,8 +1552,8 @@ L210:
 /*<       IF( TSCAL.NE.ONE ) THEN >*/
     if (tscal != 1.) {
 /*<          CALL DSCAL( N, ONE / TSCAL, CNORM, 1 ) >*/
-	d__1 = 1. / tscal;
-	dscal_(n, &d__1, &cnorm[1], &c__1);
+        d__1 = 1. / tscal;
+        dscal_(n, &d__1, &cnorm[1], &c__1);
 /*<       END IF >*/
     }
 
@@ -1566,5 +1566,5 @@ L210:
 } /* zlatrs_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

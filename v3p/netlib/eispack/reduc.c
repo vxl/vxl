@@ -1,13 +1,13 @@
 /* eispack/reduc.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -17,7 +17,7 @@ extern "C" {
 
 /*<       subroutine reduc(nm,n,a,b,dl,ierr) >*/
 /* Subroutine */ int reduc_(integer *nm, integer *n, doublereal *a, 
-	doublereal *b, doublereal *dl, integer *ierr)
+        doublereal *b, doublereal *dl, integer *ierr)
 {
     /* System generated locals */
     integer a_dim1, a_offset, b_dim1, b_offset, i__1, i__2, i__3;
@@ -99,55 +99,55 @@ extern "C" {
     nn = abs(*n);
 /*<       if (n .lt. 0) go to 100 >*/
     if (*n < 0) {
-	goto L100;
+        goto L100;
     }
 /*     .......... form l in the arrays b and dl .......... */
 /*<       do 80 i = 1, n >*/
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          i1 = i - 1 >*/
-	i1 = i__ - 1;
+        i1 = i__ - 1;
 
 /*<          do 80 j = i, n >*/
-	i__2 = *n;
-	for (j = i__; j <= i__2; ++j) {
+        i__2 = *n;
+        for (j = i__; j <= i__2; ++j) {
 /*<             x = b(i,j) >*/
-	    x = b[i__ + j * b_dim1];
+            x = b[i__ + j * b_dim1];
 /*<             if (i .eq. 1) go to 40 >*/
-	    if (i__ == 1) {
-		goto L40;
-	    }
+            if (i__ == 1) {
+                goto L40;
+            }
 
 /*<             do 20 k = 1, i1 >*/
-	    i__3 = i1;
-	    for (k = 1; k <= i__3; ++k) {
+            i__3 = i1;
+            for (k = 1; k <= i__3; ++k) {
 /*<    20       x = x - b(i,k) * b(j,k) >*/
 /* L20: */
-		x -= b[i__ + k * b_dim1] * b[j + k * b_dim1];
-	    }
+                x -= b[i__ + k * b_dim1] * b[j + k * b_dim1];
+            }
 
 /*<    40       if (j .ne. i) go to 60 >*/
 L40:
-	    if (j != i__) {
-		goto L60;
-	    }
+            if (j != i__) {
+                goto L60;
+            }
 /*<             if (x .le. 0.0d0) go to 1000 >*/
-	    if (x <= 0.) {
-		goto L1000;
-	    }
+            if (x <= 0.) {
+                goto L1000;
+            }
 /*<             y = dsqrt(x) >*/
-	    y = sqrt(x);
+            y = sqrt(x);
 /*<             dl(i) = y >*/
-	    dl[i__] = y;
+            dl[i__] = y;
 /*<             go to 80 >*/
-	    goto L80;
+            goto L80;
 /*<    60       b(j,i) = x / y >*/
 L60:
-	    b[j + i__ * b_dim1] = x / y;
+            b[j + i__ * b_dim1] = x / y;
 /*<    80 continue >*/
 L80:
-	    ;
-	}
+            ;
+        }
     }
 /*     .......... form the transpose of the upper triangle of inv(l)*a */
 /*                in the lower triangle of the array a .......... */
@@ -156,82 +156,82 @@ L100:
     i__2 = nn;
     for (i__ = 1; i__ <= i__2; ++i__) {
 /*<          i1 = i - 1 >*/
-	i1 = i__ - 1;
+        i1 = i__ - 1;
 /*<          y = dl(i) >*/
-	y = dl[i__];
+        y = dl[i__];
 
 /*<          do 200 j = i, nn >*/
-	i__1 = nn;
-	for (j = i__; j <= i__1; ++j) {
+        i__1 = nn;
+        for (j = i__; j <= i__1; ++j) {
 /*<             x = a(i,j) >*/
-	    x = a[i__ + j * a_dim1];
+            x = a[i__ + j * a_dim1];
 /*<             if (i .eq. 1) go to 180 >*/
-	    if (i__ == 1) {
-		goto L180;
-	    }
+            if (i__ == 1) {
+                goto L180;
+            }
 
 /*<             do 160 k = 1, i1 >*/
-	    i__3 = i1;
-	    for (k = 1; k <= i__3; ++k) {
+            i__3 = i1;
+            for (k = 1; k <= i__3; ++k) {
 /*<   160       x = x - b(i,k) * a(j,k) >*/
 /* L160: */
-		x -= b[i__ + k * b_dim1] * a[j + k * a_dim1];
-	    }
+                x -= b[i__ + k * b_dim1] * a[j + k * a_dim1];
+            }
 
 /*<   180       a(j,i) = x / y >*/
 L180:
-	    a[j + i__ * a_dim1] = x / y;
+            a[j + i__ * a_dim1] = x / y;
 /*<   200 continue >*/
 /* L200: */
-	}
+        }
     }
 /*     .......... pre-multiply by inv(l) and overwrite .......... */
 /*<       do 300 j = 1, nn >*/
     i__1 = nn;
     for (j = 1; j <= i__1; ++j) {
 /*<          j1 = j - 1 >*/
-	j1 = j - 1;
+        j1 = j - 1;
 
 /*<          do 300 i = j, nn >*/
-	i__2 = nn;
-	for (i__ = j; i__ <= i__2; ++i__) {
+        i__2 = nn;
+        for (i__ = j; i__ <= i__2; ++i__) {
 /*<             x = a(i,j) >*/
-	    x = a[i__ + j * a_dim1];
+            x = a[i__ + j * a_dim1];
 /*<             if (i .eq. j) go to 240 >*/
-	    if (i__ == j) {
-		goto L240;
-	    }
+            if (i__ == j) {
+                goto L240;
+            }
 /*<             i1 = i - 1 >*/
-	    i1 = i__ - 1;
+            i1 = i__ - 1;
 
 /*<             do 220 k = j, i1 >*/
-	    i__3 = i1;
-	    for (k = j; k <= i__3; ++k) {
+            i__3 = i1;
+            for (k = j; k <= i__3; ++k) {
 /*<   220       x = x - a(k,j) * b(i,k) >*/
 /* L220: */
-		x -= a[k + j * a_dim1] * b[i__ + k * b_dim1];
-	    }
+                x -= a[k + j * a_dim1] * b[i__ + k * b_dim1];
+            }
 
 /*<   240       if (j .eq. 1) go to 280 >*/
 L240:
-	    if (j == 1) {
-		goto L280;
-	    }
+            if (j == 1) {
+                goto L280;
+            }
 
 /*<             do 260 k = 1, j1 >*/
-	    i__3 = j1;
-	    for (k = 1; k <= i__3; ++k) {
+            i__3 = j1;
+            for (k = 1; k <= i__3; ++k) {
 /*<   260       x = x - a(j,k) * b(i,k) >*/
 /* L260: */
-		x -= a[j + k * a_dim1] * b[i__ + k * b_dim1];
-	    }
+                x -= a[j + k * a_dim1] * b[i__ + k * b_dim1];
+            }
 
 /*<   280       a(i,j) = x / dl(i) >*/
 L280:
-	    a[i__ + j * a_dim1] = x / dl[i__];
+            a[i__ + j * a_dim1] = x / dl[i__];
 /*<   300 continue >*/
 /* L300: */
-	}
+        }
     }
 
 /*<       go to 1001 >*/
@@ -247,5 +247,5 @@ L1001:
 } /* reduc_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

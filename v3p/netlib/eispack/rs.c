@@ -1,13 +1,13 @@
 /* eispack/rs.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -17,19 +17,19 @@ extern "C" {
 
 /*<       subroutine rs(nm,n,a,w,matz,z,fv1,fv2,ierr) >*/
 /* Subroutine */ int rs_(integer *nm, integer *n, doublereal *a, doublereal *
-	w, integer *matz, doublereal *z__, doublereal *fv1, doublereal *fv2, 
-	integer *ierr)
+        w, integer *matz, doublereal *z__, doublereal *fv1, doublereal *fv2, 
+        integer *ierr)
 {
     /* System generated locals */
     integer a_dim1, a_offset, z_dim1, z_offset;
 
     /* Local variables */
     extern /* Subroutine */ int tql1_(integer *, doublereal *, doublereal *, 
-	    integer *), tql2_(integer *, integer *, doublereal *, doublereal *
-	    , doublereal *, integer *), tred1_(integer *, integer *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *), tred2_(
-	    integer *, integer *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *);
+            integer *), tql2_(integer *, integer *, doublereal *, doublereal *
+            , doublereal *, integer *), tred1_(integer *, integer *, 
+            doublereal *, doublereal *, doublereal *, doublereal *), tred2_(
+            integer *, integer *, doublereal *, doublereal *, doublereal *, 
+            doublereal *);
 
 
 /*<       integer n,nm,ierr,matz >*/
@@ -87,7 +87,7 @@ extern "C" {
 
     /* Function Body */
     if (*n <= *nm) {
-	goto L10;
+        goto L10;
     }
 /*<       ierr = 10 * n >*/
     *ierr = *n * 10;
@@ -97,7 +97,7 @@ extern "C" {
 /*<    10 if (matz .ne. 0) go to 20 >*/
 L10:
     if (*matz != 0) {
-	goto L20;
+        goto L20;
     }
 /*     .......... find eigenvalues only .......... */
 /*<       call  tred1(nm,n,a,w,fv1,fv2) >*/
@@ -121,5 +121,5 @@ L50:
 } /* rs_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

@@ -1,13 +1,13 @@
 /* mathews/simpson.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -54,9 +54,9 @@ extern "C" {
     i__1 = *m - 1;
     for (k = 1; k <= i__1; ++k) {
 /*<         X=A+H*2*K >*/
-	x = *a + h__ * 2 * k;
+        x = *a + h__ * 2 * k;
 /*<         SumEven=SumEven+F(X) >*/
-	sumeven += (*f)(&x);
+        sumeven += (*f)(&x);
 /*<       ENDDO >*/
     }
 /*<       SumOdd=0 >*/
@@ -65,9 +65,9 @@ extern "C" {
     i__1 = *m;
     for (k = 1; k <= i__1; ++k) {
 /*<         X=A+H*(2*K-1) >*/
-	x = *a + h__ * ((k << 1) - 1);
+        x = *a + h__ * ((k << 1) - 1);
 /*<         SumOdd=SumOdd+F(X) >*/
-	sumodd += (*f)(&x);
+        sumodd += (*f)(&x);
 /*<       ENDDO >*/
     }
 /*<       Sum=H*(F(A)+F(B)+2*SumEven+4*SumOdd)/3 >*/
@@ -104,9 +104,9 @@ extern "C" {
     i__1 = *m - 1;
     for (k = 1; k <= i__1; ++k) {
 /*<         X=A+H*2*K >*/
-	x = *a + h__ * 2 * k;
+        x = *a + h__ * 2 * k;
 /*<         SumEven=SumEven+F(X) >*/
-	sumeven += (*f)(&x);
+        sumeven += (*f)(&x);
 /*< 10    CONTINUE >*/
 /* L10: */
     }
@@ -116,9 +116,9 @@ extern "C" {
     i__1 = *m;
     for (k = 1; k <= i__1; ++k) {
 /*<         X=A+H*(2*K-1) >*/
-	x = *a + h__ * ((k << 1) - 1);
+        x = *a + h__ * ((k << 1) - 1);
 /*<         SumOdd=SumOdd+F(X) >*/
-	sumodd += (*f)(&x);
+        sumodd += (*f)(&x);
 /*< 20    CONTINUE >*/
 /* L20: */
     }
@@ -132,5 +132,5 @@ extern "C" {
 } /* xsimpru_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

@@ -1,13 +1,13 @@
 /* lapack/single/slas2.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -17,7 +17,7 @@ extern "C" {
 
 /*<       SUBROUTINE SLAS2( F, G, H, SSMIN, SSMAX ) >*/
 /* Subroutine */ int slas2_(real *f, real *g, real *h__, real *ssmin, real *
-	ssmax)
+        ssmax)
 {
     /* System generated locals */
     real r__1, r__2;
@@ -115,75 +115,75 @@ extern "C" {
 /*<       IF( FHMN.EQ.ZERO ) THEN >*/
     if (fhmn == (float)0.) {
 /*<          SSMIN = ZERO >*/
-	*ssmin = (float)0.;
+        *ssmin = (float)0.;
 /*<          IF( FHMX.EQ.ZERO ) THEN >*/
-	if (fhmx == (float)0.) {
+        if (fhmx == (float)0.) {
 /*<             SSMAX = GA >*/
-	    *ssmax = ga;
+            *ssmax = ga;
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<    >*/
 /* Computing 2nd power */
-	    r__1 = dmin(fhmx,ga) / dmax(fhmx,ga);
-	    *ssmax = dmax(fhmx,ga) * sqrt(r__1 * r__1 + (float)1.);
+            r__1 = dmin(fhmx,ga) / dmax(fhmx,ga);
+            *ssmax = dmax(fhmx,ga) * sqrt(r__1 * r__1 + (float)1.);
 /*<          END IF >*/
-	}
+        }
 /*<       ELSE >*/
     } else {
 /*<          IF( GA.LT.FHMX ) THEN >*/
-	if (ga < fhmx) {
+        if (ga < fhmx) {
 /*<             AS = ONE + FHMN / FHMX >*/
-	    as = fhmn / fhmx + (float)1.;
+            as = fhmn / fhmx + (float)1.;
 /*<             AT = ( FHMX-FHMN ) / FHMX >*/
-	    at = (fhmx - fhmn) / fhmx;
+            at = (fhmx - fhmn) / fhmx;
 /*<             AU = ( GA / FHMX )**2 >*/
 /* Computing 2nd power */
-	    r__1 = ga / fhmx;
-	    au = r__1 * r__1;
+            r__1 = ga / fhmx;
+            au = r__1 * r__1;
 /*<             C = TWO / ( SQRT( AS*AS+AU )+SQRT( AT*AT+AU ) ) >*/
-	    c__ = (float)2. / (sqrt(as * as + au) + sqrt(at * at + au));
+            c__ = (float)2. / (sqrt(as * as + au) + sqrt(at * at + au));
 /*<             SSMIN = FHMN*C >*/
-	    *ssmin = fhmn * c__;
+            *ssmin = fhmn * c__;
 /*<             SSMAX = FHMX / C >*/
-	    *ssmax = fhmx / c__;
+            *ssmax = fhmx / c__;
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             AU = FHMX / GA >*/
-	    au = fhmx / ga;
+            au = fhmx / ga;
 /*<             IF( AU.EQ.ZERO ) THEN >*/
-	    if (au == (float)0.) {
+            if (au == (float)0.) {
 
 /*              Avoid possible harmful underflow if exponent range */
 /*              asymmetric (true SSMIN may not underflow even if */
 /*              AU underflows) */
 
 /*<                SSMIN = ( FHMN*FHMX ) / GA >*/
-		*ssmin = fhmn * fhmx / ga;
+                *ssmin = fhmn * fhmx / ga;
 /*<                SSMAX = GA >*/
-		*ssmax = ga;
+                *ssmax = ga;
 /*<             ELSE >*/
-	    } else {
+            } else {
 /*<                AS = ONE + FHMN / FHMX >*/
-		as = fhmn / fhmx + (float)1.;
+                as = fhmn / fhmx + (float)1.;
 /*<                AT = ( FHMX-FHMN ) / FHMX >*/
-		at = (fhmx - fhmn) / fhmx;
+                at = (fhmx - fhmn) / fhmx;
 /*<    >*/
 /* Computing 2nd power */
-		r__1 = as * au;
+                r__1 = as * au;
 /* Computing 2nd power */
-		r__2 = at * au;
-		c__ = (float)1. / (sqrt(r__1 * r__1 + (float)1.) + sqrt(r__2 *
-			 r__2 + (float)1.));
+                r__2 = at * au;
+                c__ = (float)1. / (sqrt(r__1 * r__1 + (float)1.) + sqrt(r__2 *
+                         r__2 + (float)1.));
 /*<                SSMIN = ( FHMN*C )*AU >*/
-		*ssmin = fhmn * c__ * au;
+                *ssmin = fhmn * c__ * au;
 /*<                SSMIN = SSMIN + SSMIN >*/
-		*ssmin += *ssmin;
+                *ssmin += *ssmin;
 /*<                SSMAX = GA / ( C+C ) >*/
-		*ssmax = ga / (c__ + c__);
+                *ssmax = ga / (c__ + c__);
 /*<             END IF >*/
-	    }
+            }
 /*<          END IF >*/
-	}
+        }
 /*<       END IF >*/
     }
 /*<       RETURN >*/
@@ -195,5 +195,5 @@ extern "C" {
 } /* slas2_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

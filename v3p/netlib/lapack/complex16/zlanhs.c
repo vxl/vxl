@@ -1,13 +1,13 @@
 /* lapack/complex16/zlanhs.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -21,7 +21,7 @@ static integer c__1 = 1;
 
 /*<       DOUBLE PRECISION FUNCTION ZLANHS( NORM, N, A, LDA, WORK ) >*/
 doublereal zlanhs_(char *norm, integer *n, doublecomplex *a, integer *lda, 
-	doublereal *work, ftnlen norm_len)
+        doublereal *work, ftnlen norm_len)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
@@ -36,7 +36,7 @@ doublereal zlanhs_(char *norm, integer *n, doublecomplex *a, integer *lda,
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     doublereal value=0;
     extern /* Subroutine */ int zlassq_(integer *, doublecomplex *, integer *,
-	     doublereal *, doublereal *);
+             doublereal *, doublereal *);
     (void)norm_len;
 
 /*  -- LAPACK auxiliary routine (version 3.0) -- */
@@ -132,124 +132,124 @@ doublereal zlanhs_(char *norm, integer *n, doublecomplex *a, integer *lda,
     /* Function Body */
     if (*n == 0) {
 /*<          VALUE = ZERO >*/
-	value = 0.;
+        value = 0.;
 /*<       ELSE IF( LSAME( NORM, 'M' ) ) THEN >*/
     } else if (lsame_(norm, "M", (ftnlen)1, (ftnlen)1)) {
 
 /*        Find max(abs(A(i,j))). */
 
 /*<          VALUE = ZERO >*/
-	value = 0.;
+        value = 0.;
 /*<          DO 20 J = 1, N >*/
-	i__1 = *n;
-	for (j = 1; j <= i__1; ++j) {
+        i__1 = *n;
+        for (j = 1; j <= i__1; ++j) {
 /*<             DO 10 I = 1, MIN( N, J+1 ) >*/
 /* Computing MIN */
-	    i__3 = *n, i__4 = j + 1;
-	    i__2 = min(i__3,i__4);
-	    for (i__ = 1; i__ <= i__2; ++i__) {
+            i__3 = *n, i__4 = j + 1;
+            i__2 = min(i__3,i__4);
+            for (i__ = 1; i__ <= i__2; ++i__) {
 /*<                VALUE = MAX( VALUE, ABS( A( I, J ) ) ) >*/
 /* Computing MAX */
-		d__1 = value, d__2 = z_abs(&a[i__ + j * a_dim1]);
-		value = max(d__1,d__2);
+                d__1 = value, d__2 = z_abs(&a[i__ + j * a_dim1]);
+                value = max(d__1,d__2);
 /*<    10       CONTINUE >*/
 /* L10: */
-	    }
+            }
 /*<    20    CONTINUE >*/
 /* L20: */
-	}
+        }
 /*<       ELSE IF( ( LSAME( NORM, 'O' ) ) .OR. ( NORM.EQ.'1' ) ) THEN >*/
     } else if (lsame_(norm, "O", (ftnlen)1, (ftnlen)1) || *(unsigned char *)
-	    norm == '1') {
+            norm == '1') {
 
 /*        Find norm1(A). */
 
 /*<          VALUE = ZERO >*/
-	value = 0.;
+        value = 0.;
 /*<          DO 40 J = 1, N >*/
-	i__1 = *n;
-	for (j = 1; j <= i__1; ++j) {
+        i__1 = *n;
+        for (j = 1; j <= i__1; ++j) {
 /*<             SUM = ZERO >*/
-	    sum = 0.;
+            sum = 0.;
 /*<             DO 30 I = 1, MIN( N, J+1 ) >*/
 /* Computing MIN */
-	    i__3 = *n, i__4 = j + 1;
-	    i__2 = min(i__3,i__4);
-	    for (i__ = 1; i__ <= i__2; ++i__) {
+            i__3 = *n, i__4 = j + 1;
+            i__2 = min(i__3,i__4);
+            for (i__ = 1; i__ <= i__2; ++i__) {
 /*<                SUM = SUM + ABS( A( I, J ) ) >*/
-		sum += z_abs(&a[i__ + j * a_dim1]);
+                sum += z_abs(&a[i__ + j * a_dim1]);
 /*<    30       CONTINUE >*/
 /* L30: */
-	    }
+            }
 /*<             VALUE = MAX( VALUE, SUM ) >*/
-	    value = max(value,sum);
+            value = max(value,sum);
 /*<    40    CONTINUE >*/
 /* L40: */
-	}
+        }
 /*<       ELSE IF( LSAME( NORM, 'I' ) ) THEN >*/
     } else if (lsame_(norm, "I", (ftnlen)1, (ftnlen)1)) {
 
 /*        Find normI(A). */
 
 /*<          DO 50 I = 1, N >*/
-	i__1 = *n;
-	for (i__ = 1; i__ <= i__1; ++i__) {
+        i__1 = *n;
+        for (i__ = 1; i__ <= i__1; ++i__) {
 /*<             WORK( I ) = ZERO >*/
-	    work[i__] = 0.;
+            work[i__] = 0.;
 /*<    50    CONTINUE >*/
 /* L50: */
-	}
+        }
 /*<          DO 70 J = 1, N >*/
-	i__1 = *n;
-	for (j = 1; j <= i__1; ++j) {
+        i__1 = *n;
+        for (j = 1; j <= i__1; ++j) {
 /*<             DO 60 I = 1, MIN( N, J+1 ) >*/
 /* Computing MIN */
-	    i__3 = *n, i__4 = j + 1;
-	    i__2 = min(i__3,i__4);
-	    for (i__ = 1; i__ <= i__2; ++i__) {
+            i__3 = *n, i__4 = j + 1;
+            i__2 = min(i__3,i__4);
+            for (i__ = 1; i__ <= i__2; ++i__) {
 /*<                WORK( I ) = WORK( I ) + ABS( A( I, J ) ) >*/
-		work[i__] += z_abs(&a[i__ + j * a_dim1]);
+                work[i__] += z_abs(&a[i__ + j * a_dim1]);
 /*<    60       CONTINUE >*/
 /* L60: */
-	    }
+            }
 /*<    70    CONTINUE >*/
 /* L70: */
-	}
+        }
 /*<          VALUE = ZERO >*/
-	value = 0.;
+        value = 0.;
 /*<          DO 80 I = 1, N >*/
-	i__1 = *n;
-	for (i__ = 1; i__ <= i__1; ++i__) {
+        i__1 = *n;
+        for (i__ = 1; i__ <= i__1; ++i__) {
 /*<             VALUE = MAX( VALUE, WORK( I ) ) >*/
 /* Computing MAX */
-	    d__1 = value, d__2 = work[i__];
-	    value = max(d__1,d__2);
+            d__1 = value, d__2 = work[i__];
+            value = max(d__1,d__2);
 /*<    80    CONTINUE >*/
 /* L80: */
-	}
+        }
 /*<       ELSE IF( ( LSAME( NORM, 'F' ) ) .OR. ( LSAME( NORM, 'E' ) ) ) THEN >*/
     } else if (lsame_(norm, "F", (ftnlen)1, (ftnlen)1) || lsame_(norm, "E", (
-	    ftnlen)1, (ftnlen)1)) {
+            ftnlen)1, (ftnlen)1)) {
 
 /*        Find normF(A). */
 
 /*<          SCALE = ZERO >*/
-	scale = 0.;
+        scale = 0.;
 /*<          SUM = ONE >*/
-	sum = 1.;
+        sum = 1.;
 /*<          DO 90 J = 1, N >*/
-	i__1 = *n;
-	for (j = 1; j <= i__1; ++j) {
+        i__1 = *n;
+        for (j = 1; j <= i__1; ++j) {
 /*<             CALL ZLASSQ( MIN( N, J+1 ), A( 1, J ), 1, SCALE, SUM ) >*/
 /* Computing MIN */
-	    i__3 = *n, i__4 = j + 1;
-	    i__2 = min(i__3,i__4);
-	    zlassq_(&i__2, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
+            i__3 = *n, i__4 = j + 1;
+            i__2 = min(i__3,i__4);
+            zlassq_(&i__2, &a[j * a_dim1 + 1], &c__1, &scale, &sum);
 /*<    90    CONTINUE >*/
 /* L90: */
-	}
+        }
 /*<          VALUE = SCALE*SQRT( SUM ) >*/
-	value = scale * sqrt(sum);
+        value = scale * sqrt(sum);
 /*<       END IF >*/
     }
 
@@ -264,5 +264,5 @@ doublereal zlanhs_(char *norm, integer *n, doublecomplex *a, integer *lda,
 } /* zlanhs_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

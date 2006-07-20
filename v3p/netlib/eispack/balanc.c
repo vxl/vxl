@@ -1,13 +1,13 @@
 /* eispack/balanc.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -17,7 +17,7 @@ extern "C" {
 
 /*<       subroutine balanc(nm,n,a,low,igh,scale) >*/
 /* Subroutine */ int balanc_(integer *nm, integer *n, doublereal *a, integer *
-	low, integer *igh, doublereal *scale)
+        low, integer *igh, doublereal *scale)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2;
@@ -114,18 +114,18 @@ L20:
     scale[m] = (doublereal) j;
 /*<       if (j .eq. m) go to 50 >*/
     if (j == m) {
-	goto L50;
+        goto L50;
     }
 
 /*<       do 30 i = 1, l >*/
     i__1 = l;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          f = a(i,j) >*/
-	f = a[i__ + j * a_dim1];
+        f = a[i__ + j * a_dim1];
 /*<          a(i,j) = a(i,m) >*/
-	a[i__ + j * a_dim1] = a[i__ + m * a_dim1];
+        a[i__ + j * a_dim1] = a[i__ + m * a_dim1];
 /*<          a(i,m) = f >*/
-	a[i__ + m * a_dim1] = f;
+        a[i__ + m * a_dim1] = f;
 /*<    30 continue >*/
 /* L30: */
     }
@@ -134,11 +134,11 @@ L20:
     i__1 = *n;
     for (i__ = k; i__ <= i__1; ++i__) {
 /*<          f = a(j,i) >*/
-	f = a[j + i__ * a_dim1];
+        f = a[j + i__ * a_dim1];
 /*<          a(j,i) = a(m,i) >*/
-	a[j + i__ * a_dim1] = a[m + i__ * a_dim1];
+        a[j + i__ * a_dim1] = a[m + i__ * a_dim1];
 /*<          a(m,i) = f >*/
-	a[m + i__ * a_dim1] = f;
+        a[m + i__ * a_dim1] = f;
 /*<    40 continue >*/
 /* L40: */
     }
@@ -146,15 +146,15 @@ L20:
 /*<    50 go to (80,130), iexc >*/
 L50:
     switch (iexc) {
-	case 1:  goto L80;
-	case 2:  goto L130;
+        case 1:  goto L80;
+        case 2:  goto L130;
     }
 /*     .......... search for rows isolating an eigenvalue */
 /*                and push them down .......... */
 /*<    80 if (l .eq. 1) go to 280 >*/
 L80:
     if (l == 1) {
-	goto L280;
+        goto L280;
     }
 /*<       l = l - 1 >*/
     --l;
@@ -164,33 +164,33 @@ L100:
     i__1 = l;
     for (jj = 1; jj <= i__1; ++jj) {
 /*<          j = l + 1 - jj >*/
-	j = l + 1 - jj;
+        j = l + 1 - jj;
 
 /*<          do 110 i = 1, l >*/
-	i__2 = l;
-	for (i__ = 1; i__ <= i__2; ++i__) {
+        i__2 = l;
+        for (i__ = 1; i__ <= i__2; ++i__) {
 /*<             if (i .eq. j) go to 110 >*/
-	    if (i__ == j) {
-		goto L110;
-	    }
+            if (i__ == j) {
+                goto L110;
+            }
 /*<             if (a(j,i) .ne. 0.0d0) go to 120 >*/
-	    if (a[j + i__ * a_dim1] != 0.) {
-		goto L120;
-	    }
+            if (a[j + i__ * a_dim1] != 0.) {
+                goto L120;
+            }
 /*<   110    continue >*/
 L110:
-	    ;
-	}
+            ;
+        }
 
 /*<          m = l >*/
-	m = l;
+        m = l;
 /*<          iexc = 1 >*/
-	iexc = 1;
+        iexc = 1;
 /*<          go to 20 >*/
-	goto L20;
+        goto L20;
 /*<   120 continue >*/
 L120:
-	;
+        ;
     }
 
 /*<       go to 140 >*/
@@ -207,30 +207,30 @@ L140:
     for (j = k; j <= i__1; ++j) {
 
 /*<          do 150 i = k, l >*/
-	i__2 = l;
-	for (i__ = k; i__ <= i__2; ++i__) {
+        i__2 = l;
+        for (i__ = k; i__ <= i__2; ++i__) {
 /*<             if (i .eq. j) go to 150 >*/
-	    if (i__ == j) {
-		goto L150;
-	    }
+            if (i__ == j) {
+                goto L150;
+            }
 /*<             if (a(i,j) .ne. 0.0d0) go to 170 >*/
-	    if (a[i__ + j * a_dim1] != 0.) {
-		goto L170;
-	    }
+            if (a[i__ + j * a_dim1] != 0.) {
+                goto L170;
+            }
 /*<   150    continue >*/
 L150:
-	    ;
-	}
+            ;
+        }
 
 /*<          m = k >*/
-	m = k;
+        m = k;
 /*<          iexc = 2 >*/
-	iexc = 2;
+        iexc = 2;
 /*<          go to 20 >*/
-	goto L20;
+        goto L20;
 /*<   170 continue >*/
 L170:
-	;
+        ;
     }
 /*     .......... now balance the submatrix in rows k to l .......... */
 /*<       do 180 i = k, l >*/
@@ -238,7 +238,7 @@ L170:
     for (i__ = k; i__ <= i__1; ++i__) {
 /*<   180 scale(i) = 1.0d0 >*/
 /* L180: */
-	scale[i__] = 1.;
+        scale[i__] = 1.;
     }
 /*     .......... iterative loop for norm reduction .......... */
 /*<   190 noconv = .false. >*/
@@ -249,98 +249,98 @@ L190:
     i__1 = l;
     for (i__ = k; i__ <= i__1; ++i__) {
 /*<          c = 0.0d0 >*/
-	c__ = 0.;
+        c__ = 0.;
 /*<          r = 0.0d0 >*/
-	r__ = 0.;
+        r__ = 0.;
 
 /*<          do 200 j = k, l >*/
-	i__2 = l;
-	for (j = k; j <= i__2; ++j) {
+        i__2 = l;
+        for (j = k; j <= i__2; ++j) {
 /*<             if (j .eq. i) go to 200 >*/
-	    if (j == i__) {
-		goto L200;
-	    }
+            if (j == i__) {
+                goto L200;
+            }
 /*<             c = c + dabs(a(j,i)) >*/
-	    c__ += (d__1 = a[j + i__ * a_dim1], abs(d__1));
+            c__ += (d__1 = a[j + i__ * a_dim1], abs(d__1));
 /*<             r = r + dabs(a(i,j)) >*/
-	    r__ += (d__1 = a[i__ + j * a_dim1], abs(d__1));
+            r__ += (d__1 = a[i__ + j * a_dim1], abs(d__1));
 /*<   200    continue >*/
 L200:
-	    ;
-	}
+            ;
+        }
 /*     .......... guard against zero c or r due to underflow .......... */
 /*<          if (c .eq. 0.0d0 .or. r .eq. 0.0d0) go to 270 >*/
-	if (c__ == 0. || r__ == 0.) {
-	    goto L270;
-	}
+        if (c__ == 0. || r__ == 0.) {
+            goto L270;
+        }
 /*<          g = r / radix >*/
-	g = r__ / radix;
+        g = r__ / radix;
 /*<          f = 1.0d0 >*/
-	f = 1.;
+        f = 1.;
 /*<          s = c + r >*/
-	s = c__ + r__;
+        s = c__ + r__;
 /*<   210    if (c .ge. g) go to 220 >*/
 L210:
-	if (c__ >= g) {
-	    goto L220;
-	}
+        if (c__ >= g) {
+            goto L220;
+        }
 /*<          f = f * radix >*/
-	f *= radix;
+        f *= radix;
 /*<          c = c * b2 >*/
-	c__ *= b2;
+        c__ *= b2;
 /*<          go to 210 >*/
-	goto L210;
+        goto L210;
 /*<   220    g = r * radix >*/
 L220:
-	g = r__ * radix;
+        g = r__ * radix;
 /*<   230    if (c .lt. g) go to 240 >*/
 L230:
-	if (c__ < g) {
-	    goto L240;
-	}
+        if (c__ < g) {
+            goto L240;
+        }
 /*<          f = f / radix >*/
-	f /= radix;
+        f /= radix;
 /*<          c = c / b2 >*/
-	c__ /= b2;
+        c__ /= b2;
 /*<          go to 230 >*/
-	goto L230;
+        goto L230;
 /*     .......... now balance .......... */
 /*<   240    if ((c + r) / f .ge. 0.95d0 * s) go to 270 >*/
 L240:
-	if ((c__ + r__) / f >= s * .95) {
-	    goto L270;
-	}
+        if ((c__ + r__) / f >= s * .95) {
+            goto L270;
+        }
 /*<          g = 1.0d0 / f >*/
-	g = 1. / f;
+        g = 1. / f;
 /*<          scale(i) = scale(i) * f >*/
-	scale[i__] *= f;
+        scale[i__] *= f;
 /*<          noconv = .true. >*/
-	noconv = TRUE_;
+        noconv = TRUE_;
 
 /*<          do 250 j = k, n >*/
-	i__2 = *n;
-	for (j = k; j <= i__2; ++j) {
+        i__2 = *n;
+        for (j = k; j <= i__2; ++j) {
 /*<   250    a(i,j) = a(i,j) * g >*/
 /* L250: */
-	    a[i__ + j * a_dim1] *= g;
-	}
+            a[i__ + j * a_dim1] *= g;
+        }
 
 /*<          do 260 j = 1, l >*/
-	i__2 = l;
-	for (j = 1; j <= i__2; ++j) {
+        i__2 = l;
+        for (j = 1; j <= i__2; ++j) {
 /*<   260    a(j,i) = a(j,i) * f >*/
 /* L260: */
-	    a[j + i__ * a_dim1] *= f;
-	}
+            a[j + i__ * a_dim1] *= f;
+        }
 
 /*<   270 continue >*/
 L270:
-	;
+        ;
     }
 
 /*<       if (noconv) go to 190 >*/
     if (noconv) {
-	goto L190;
+        goto L190;
     }
 
 /*<   280 low = k >*/
@@ -354,5 +354,5 @@ L280:
 } /* balanc_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

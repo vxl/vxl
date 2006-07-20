@@ -1,13 +1,13 @@
 /* lapack/double/dlaswp.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -17,7 +17,7 @@ extern "C" {
 
 /*<       SUBROUTINE DLASWP( N, A, LDA, K1, K2, IPIV, INCX ) >*/
 /* Subroutine */ int dlaswp_(integer *n, doublereal *a, integer *lda, integer 
-	*k1, integer *k2, integer *ipiv, integer *incx)
+        *k1, integer *k2, integer *ipiv, integer *incx)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4;
@@ -103,27 +103,27 @@ extern "C" {
     /* Function Body */
     if (*incx > 0) {
 /*<          IX0 = K1 >*/
-	ix0 = *k1;
+        ix0 = *k1;
 /*<          I1 = K1 >*/
-	i1 = *k1;
+        i1 = *k1;
 /*<          I2 = K2 >*/
-	i2 = *k2;
+        i2 = *k2;
 /*<          INC = 1 >*/
-	inc = 1;
+        inc = 1;
 /*<       ELSE IF( INCX.LT.0 ) THEN >*/
     } else if (*incx < 0) {
 /*<          IX0 = 1 + ( 1-K2 )*INCX >*/
-	ix0 = (1 - *k2) * *incx + 1;
+        ix0 = (1 - *k2) * *incx + 1;
 /*<          I1 = K2 >*/
-	i1 = *k2;
+        i1 = *k2;
 /*<          I2 = K1 >*/
-	i2 = *k1;
+        i2 = *k1;
 /*<          INC = -1 >*/
-	inc = -1;
+        inc = -1;
 /*<       ELSE >*/
     } else {
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -132,76 +132,76 @@ extern "C" {
 /*<       IF( N32.NE.0 ) THEN >*/
     if (n32 != 0) {
 /*<          DO 30 J = 1, N32, 32 >*/
-	i__1 = n32;
-	for (j = 1; j <= i__1; j += 32) {
+        i__1 = n32;
+        for (j = 1; j <= i__1; j += 32) {
 /*<             IX = IX0 >*/
-	    ix = ix0;
+            ix = ix0;
 /*<             DO 20 I = I1, I2, INC >*/
-	    i__2 = i2;
-	    i__3 = inc;
-	    for (i__ = i1; i__3 < 0 ? i__ >= i__2 : i__ <= i__2; i__ += i__3) 
-		    {
+            i__2 = i2;
+            i__3 = inc;
+            for (i__ = i1; i__3 < 0 ? i__ >= i__2 : i__ <= i__2; i__ += i__3) 
+                    {
 /*<                IP = IPIV( IX ) >*/
-		ip = ipiv[ix];
+                ip = ipiv[ix];
 /*<                IF( IP.NE.I ) THEN >*/
-		if (ip != i__) {
+                if (ip != i__) {
 /*<                   DO 10 K = J, J + 31 >*/
-		    i__4 = j + 31;
-		    for (k = j; k <= i__4; ++k) {
+                    i__4 = j + 31;
+                    for (k = j; k <= i__4; ++k) {
 /*<                      TEMP = A( I, K ) >*/
-			temp = a[i__ + k * a_dim1];
+                        temp = a[i__ + k * a_dim1];
 /*<                      A( I, K ) = A( IP, K ) >*/
-			a[i__ + k * a_dim1] = a[ip + k * a_dim1];
+                        a[i__ + k * a_dim1] = a[ip + k * a_dim1];
 /*<                      A( IP, K ) = TEMP >*/
-			a[ip + k * a_dim1] = temp;
+                        a[ip + k * a_dim1] = temp;
 /*<    10             CONTINUE >*/
 /* L10: */
-		    }
+                    }
 /*<                END IF >*/
-		}
+                }
 /*<                IX = IX + INCX >*/
-		ix += *incx;
+                ix += *incx;
 /*<    20       CONTINUE >*/
 /* L20: */
-	    }
+            }
 /*<    30    CONTINUE >*/
 /* L30: */
-	}
+        }
 /*<       END IF >*/
     }
 /*<       IF( N32.NE.N ) THEN >*/
     if (n32 != *n) {
 /*<          N32 = N32 + 1 >*/
-	++n32;
+        ++n32;
 /*<          IX = IX0 >*/
-	ix = ix0;
+        ix = ix0;
 /*<          DO 50 I = I1, I2, INC >*/
-	i__1 = i2;
-	i__3 = inc;
-	for (i__ = i1; i__3 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__3) {
+        i__1 = i2;
+        i__3 = inc;
+        for (i__ = i1; i__3 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__3) {
 /*<             IP = IPIV( IX ) >*/
-	    ip = ipiv[ix];
+            ip = ipiv[ix];
 /*<             IF( IP.NE.I ) THEN >*/
-	    if (ip != i__) {
+            if (ip != i__) {
 /*<                DO 40 K = N32, N >*/
-		i__2 = *n;
-		for (k = n32; k <= i__2; ++k) {
+                i__2 = *n;
+                for (k = n32; k <= i__2; ++k) {
 /*<                   TEMP = A( I, K ) >*/
-		    temp = a[i__ + k * a_dim1];
+                    temp = a[i__ + k * a_dim1];
 /*<                   A( I, K ) = A( IP, K ) >*/
-		    a[i__ + k * a_dim1] = a[ip + k * a_dim1];
+                    a[i__ + k * a_dim1] = a[ip + k * a_dim1];
 /*<                   A( IP, K ) = TEMP >*/
-		    a[ip + k * a_dim1] = temp;
+                    a[ip + k * a_dim1] = temp;
 /*<    40          CONTINUE >*/
 /* L40: */
-		}
+                }
 /*<             END IF >*/
-	    }
+            }
 /*<             IX = IX + INCX >*/
-	    ix += *incx;
+            ix += *incx;
 /*<    50    CONTINUE >*/
 /* L50: */
-	}
+        }
 /*<       END IF >*/
     }
 
@@ -214,5 +214,5 @@ extern "C" {
 } /* dlaswp_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

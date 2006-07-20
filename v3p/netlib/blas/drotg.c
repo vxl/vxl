@@ -1,13 +1,13 @@
 /* blas/drotg.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -21,7 +21,7 @@ static doublereal c_b4 = 1.;
 
 /*<       subroutine drotg(da,db,c,s) >*/
 /* Subroutine */ int drotg_(doublereal *da, doublereal *db, doublereal *c__, 
-	doublereal *s)
+        doublereal *s)
 {
     /* System generated locals */
     doublereal d__1, d__2;
@@ -42,13 +42,13 @@ static doublereal c_b4 = 1.;
     roe = *db;
 /*<       if( dabs(da) .gt. dabs(db) ) roe = da >*/
     if (abs(*da) > abs(*db)) {
-	roe = *da;
+        roe = *da;
     }
 /*<       scale = dabs(da) + dabs(db) >*/
     scale = abs(*da) + abs(*db);
 /*<       if( scale .ne. 0.0d0 ) go to 10 >*/
     if (scale != 0.) {
-	goto L10;
+        goto L10;
     }
 /*<          c = 1.0d0 >*/
     *c__ = 1.;
@@ -77,11 +77,11 @@ L10:
     z__ = 1.;
 /*<       if( dabs(da) .gt. dabs(db) ) z = s >*/
     if (abs(*da) > abs(*db)) {
-	z__ = *s;
+        z__ = *s;
     }
 /*<       if( dabs(db) .ge. dabs(da) .and. c .ne. 0.0d0 ) z = 1.0d0/c >*/
     if (abs(*db) >= abs(*da) && *c__ != 0.) {
-	z__ = 1. / *c__;
+        z__ = 1. / *c__;
     }
 /*<    20 da = r >*/
 L20:
@@ -94,5 +94,5 @@ L20:
 } /* drotg_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

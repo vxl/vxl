@@ -1,13 +1,13 @@
 /* eispack/hqr.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -17,7 +17,7 @@ extern "C" {
 
 /*<       subroutine hqr(nm,n,low,igh,h,wr,wi,ierr) >*/
 /* Subroutine */ int hqr_(integer *nm, integer *n, integer *low, integer *igh,
-	 doublereal *h__, doublereal *wr, doublereal *wi, integer *ierr)
+         doublereal *h__, doublereal *wr, doublereal *wi, integer *ierr)
 {
     /* System generated locals */
     integer h_dim1, h_offset, i__1, i__2, i__3;
@@ -113,26 +113,26 @@ extern "C" {
     for (i__ = 1; i__ <= i__1; ++i__) {
 
 /*<          do 40 j = k, n >*/
-	i__2 = *n;
-	for (j = k; j <= i__2; ++j) {
+        i__2 = *n;
+        for (j = k; j <= i__2; ++j) {
 /*<    40    norm = norm + dabs(h(i,j)) >*/
 /* L40: */
-	    norm += (d__1 = h__[i__ + j * h_dim1], abs(d__1));
-	}
+            norm += (d__1 = h__[i__ + j * h_dim1], abs(d__1));
+        }
 
 /*<          k = i >*/
-	k = i__;
+        k = i__;
 /*<          if (i .ge. low .and. i .le. igh) go to 50 >*/
-	if (i__ >= *low && i__ <= *igh) {
-	    goto L50;
-	}
+        if (i__ >= *low && i__ <= *igh) {
+            goto L50;
+        }
 /*<          wr(i) = h(i,i) >*/
-	wr[i__] = h__[i__ + i__ * h_dim1];
+        wr[i__] = h__[i__ + i__ * h_dim1];
 /*<          wi(i) = 0.0d0 >*/
-	wi[i__] = 0.;
+        wi[i__] = 0.;
 /*<    50 continue >*/
 L50:
-	;
+        ;
     }
 
 /*<       en = igh >*/
@@ -145,7 +145,7 @@ L50:
 /*<    60 if (en .lt. low) go to 1001 >*/
 L60:
     if (en < *low) {
-	goto L1001;
+        goto L1001;
     }
 /*<       its = 0 >*/
     its = 0;
@@ -160,26 +160,26 @@ L70:
     i__1 = en;
     for (ll = *low; ll <= i__1; ++ll) {
 /*<          l = en + low - ll >*/
-	l = en + *low - ll;
+        l = en + *low - ll;
 /*<          if (l .eq. low) go to 100 >*/
-	if (l == *low) {
-	    goto L100;
-	}
+        if (l == *low) {
+            goto L100;
+        }
 /*<          s = dabs(h(l-1,l-1)) + dabs(h(l,l)) >*/
-	s = (d__1 = h__[l - 1 + (l - 1) * h_dim1], abs(d__1)) + (d__2 = h__[l 
-		+ l * h_dim1], abs(d__2));
+        s = (d__1 = h__[l - 1 + (l - 1) * h_dim1], abs(d__1)) + (d__2 = h__[l 
+                + l * h_dim1], abs(d__2));
 /*<          if (s .eq. 0.0d0) s = norm >*/
-	if (s == 0.) {
-	    s = norm;
-	}
+        if (s == 0.) {
+            s = norm;
+        }
 /*<          tst1 = s >*/
-	tst1 = s;
+        tst1 = s;
 /*<          tst2 = tst1 + dabs(h(l,l-1)) >*/
-	tst2 = tst1 + (d__1 = h__[l + (l - 1) * h_dim1], abs(d__1));
+        tst2 = tst1 + (d__1 = h__[l + (l - 1) * h_dim1], abs(d__1));
 /*<          if (tst2 .eq. tst1) go to 100 >*/
-	if (tst2 == tst1) {
-	    goto L100;
-	}
+        if (tst2 == tst1) {
+            goto L100;
+        }
 /*<    80 continue >*/
 /* L80: */
     }
@@ -189,7 +189,7 @@ L100:
     x = h__[en + en * h_dim1];
 /*<       if (l .eq. en) go to 270 >*/
     if (l == en) {
-	goto L270;
+        goto L270;
     }
 /*<       y = h(na,na) >*/
     y = h__[na + na * h_dim1];
@@ -197,15 +197,15 @@ L100:
     w = h__[en + na * h_dim1] * h__[na + en * h_dim1];
 /*<       if (l .eq. na) go to 280 >*/
     if (l == na) {
-	goto L280;
+        goto L280;
     }
 /*<       if (itn .eq. 0) go to 1000 >*/
     if (itn == 0) {
-	goto L1000;
+        goto L1000;
     }
 /*<       if (its .ne. 10 .and. its .ne. 20) go to 130 >*/
     if (its != 10 && its != 20) {
-	goto L130;
+        goto L130;
     }
 /*     .......... form exceptional shift .......... */
 /*<       t = t + x >*/
@@ -216,12 +216,12 @@ L100:
     for (i__ = *low; i__ <= i__1; ++i__) {
 /*<   120 h(i,i) = h(i,i) - x >*/
 /* L120: */
-	h__[i__ + i__ * h_dim1] -= x;
+        h__[i__ + i__ * h_dim1] -= x;
     }
 
 /*<       s = dabs(h(en,na)) + dabs(h(na,enm2)) >*/
     s = (d__1 = h__[en + na * h_dim1], abs(d__1)) + (d__2 = h__[na + enm2 * 
-	    h_dim1], abs(d__2));
+            h_dim1], abs(d__2));
 /*<       x = 0.75d0 * s >*/
     x = s * .75;
 /*<       y = x >*/
@@ -240,42 +240,42 @@ L130:
     i__1 = enm2;
     for (mm = l; mm <= i__1; ++mm) {
 /*<          m = enm2 + l - mm >*/
-	m = enm2 + l - mm;
+        m = enm2 + l - mm;
 /*<          zz = h(m,m) >*/
-	zz = h__[m + m * h_dim1];
+        zz = h__[m + m * h_dim1];
 /*<          r = x - zz >*/
-	r__ = x - zz;
+        r__ = x - zz;
 /*<          s = y - zz >*/
-	s = y - zz;
+        s = y - zz;
 /*<          p = (r * s - w) / h(m+1,m) + h(m,m+1) >*/
-	p = (r__ * s - w) / h__[m + 1 + m * h_dim1] + h__[m + (m + 1) * 
-		h_dim1];
+        p = (r__ * s - w) / h__[m + 1 + m * h_dim1] + h__[m + (m + 1) * 
+                h_dim1];
 /*<          q = h(m+1,m+1) - zz - r - s >*/
-	q = h__[m + 1 + (m + 1) * h_dim1] - zz - r__ - s;
+        q = h__[m + 1 + (m + 1) * h_dim1] - zz - r__ - s;
 /*<          r = h(m+2,m+1) >*/
-	r__ = h__[m + 2 + (m + 1) * h_dim1];
+        r__ = h__[m + 2 + (m + 1) * h_dim1];
 /*<          s = dabs(p) + dabs(q) + dabs(r) >*/
-	s = abs(p) + abs(q) + abs(r__);
+        s = abs(p) + abs(q) + abs(r__);
 /*<          p = p / s >*/
-	p /= s;
+        p /= s;
 /*<          q = q / s >*/
-	q /= s;
+        q /= s;
 /*<          r = r / s >*/
-	r__ /= s;
+        r__ /= s;
 /*<          if (m .eq. l) go to 150 >*/
-	if (m == l) {
-	    goto L150;
-	}
+        if (m == l) {
+            goto L150;
+        }
 /*<          tst1 = dabs(p)*(dabs(h(m-1,m-1)) + dabs(zz) + dabs(h(m+1,m+1))) >*/
-	tst1 = abs(p) * ((d__1 = h__[m - 1 + (m - 1) * h_dim1], abs(d__1)) + 
-		abs(zz) + (d__2 = h__[m + 1 + (m + 1) * h_dim1], abs(d__2)));
+        tst1 = abs(p) * ((d__1 = h__[m - 1 + (m - 1) * h_dim1], abs(d__1)) + 
+                abs(zz) + (d__2 = h__[m + 1 + (m + 1) * h_dim1], abs(d__2)));
 /*<          tst2 = tst1 + dabs(h(m,m-1))*(dabs(q) + dabs(r)) >*/
-	tst2 = tst1 + (d__1 = h__[m + (m - 1) * h_dim1], abs(d__1)) * (abs(q) 
-		+ abs(r__));
+        tst2 = tst1 + (d__1 = h__[m + (m - 1) * h_dim1], abs(d__1)) * (abs(q) 
+                + abs(r__));
 /*<          if (tst2 .eq. tst1) go to 150 >*/
-	if (tst2 == tst1) {
-	    goto L150;
-	}
+        if (tst2 == tst1) {
+            goto L150;
+        }
 /*<   140 continue >*/
 /* L140: */
     }
@@ -288,16 +288,16 @@ L150:
     i__1 = en;
     for (i__ = mp2; i__ <= i__1; ++i__) {
 /*<          h(i,i-2) = 0.0d0 >*/
-	h__[i__ + (i__ - 2) * h_dim1] = 0.;
+        h__[i__ + (i__ - 2) * h_dim1] = 0.;
 /*<          if (i .eq. mp2) go to 160 >*/
-	if (i__ == mp2) {
-	    goto L160;
-	}
+        if (i__ == mp2) {
+            goto L160;
+        }
 /*<          h(i,i-3) = 0.0d0 >*/
-	h__[i__ + (i__ - 3) * h_dim1] = 0.;
+        h__[i__ + (i__ - 3) * h_dim1] = 0.;
 /*<   160 continue >*/
 L160:
-	;
+        ;
     }
 /*     .......... double qr step involving rows l to en and */
 /*                columns m to en .......... */
@@ -305,145 +305,145 @@ L160:
     i__1 = na;
     for (k = m; k <= i__1; ++k) {
 /*<          notlas = k .ne. na >*/
-	notlas = k != na;
+        notlas = k != na;
 /*<          if (k .eq. m) go to 170 >*/
-	if (k == m) {
-	    goto L170;
-	}
+        if (k == m) {
+            goto L170;
+        }
 /*<          p = h(k,k-1) >*/
-	p = h__[k + (k - 1) * h_dim1];
+        p = h__[k + (k - 1) * h_dim1];
 /*<          q = h(k+1,k-1) >*/
-	q = h__[k + 1 + (k - 1) * h_dim1];
+        q = h__[k + 1 + (k - 1) * h_dim1];
 /*<          r = 0.0d0 >*/
-	r__ = 0.;
+        r__ = 0.;
 /*<          if (notlas) r = h(k+2,k-1) >*/
-	if (notlas) {
-	    r__ = h__[k + 2 + (k - 1) * h_dim1];
-	}
+        if (notlas) {
+            r__ = h__[k + 2 + (k - 1) * h_dim1];
+        }
 /*<          x = dabs(p) + dabs(q) + dabs(r) >*/
-	x = abs(p) + abs(q) + abs(r__);
+        x = abs(p) + abs(q) + abs(r__);
 /*<          if (x .eq. 0.0d0) go to 260 >*/
-	if (x == 0.) {
-	    goto L260;
-	}
+        if (x == 0.) {
+            goto L260;
+        }
 /*<          p = p / x >*/
-	p /= x;
+        p /= x;
 /*<          q = q / x >*/
-	q /= x;
+        q /= x;
 /*<          r = r / x >*/
-	r__ /= x;
+        r__ /= x;
 /*<   170    s = dsign(dsqrt(p*p+q*q+r*r),p) >*/
 L170:
-	d__1 = sqrt(p * p + q * q + r__ * r__);
-	s = d_sign(&d__1, &p);
+        d__1 = sqrt(p * p + q * q + r__ * r__);
+        s = d_sign(&d__1, &p);
 /*<          if (k .eq. m) go to 180 >*/
-	if (k == m) {
-	    goto L180;
-	}
+        if (k == m) {
+            goto L180;
+        }
 /*<          h(k,k-1) = -s * x >*/
-	h__[k + (k - 1) * h_dim1] = -s * x;
+        h__[k + (k - 1) * h_dim1] = -s * x;
 /*<          go to 190 >*/
-	goto L190;
+        goto L190;
 /*<   180    if (l .ne. m) h(k,k-1) = -h(k,k-1) >*/
 L180:
-	if (l != m) {
-	    h__[k + (k - 1) * h_dim1] = -h__[k + (k - 1) * h_dim1];
-	}
+        if (l != m) {
+            h__[k + (k - 1) * h_dim1] = -h__[k + (k - 1) * h_dim1];
+        }
 /*<   190    p = p + s >*/
 L190:
-	p += s;
+        p += s;
 /*<          x = p / s >*/
-	x = p / s;
+        x = p / s;
 /*<          y = q / s >*/
-	y = q / s;
+        y = q / s;
 /*<          zz = r / s >*/
-	zz = r__ / s;
+        zz = r__ / s;
 /*<          q = q / p >*/
-	q /= p;
+        q /= p;
 /*<          r = r / p >*/
-	r__ /= p;
+        r__ /= p;
 /*<          if (notlas) go to 225 >*/
-	if (notlas) {
-	    goto L225;
-	}
+        if (notlas) {
+            goto L225;
+        }
 /*     .......... row modification .......... */
 /*<          do 200 j = k, EN >*/
-	i__2 = en;
-	for (j = k; j <= i__2; ++j) {
+        i__2 = en;
+        for (j = k; j <= i__2; ++j) {
 /*<             p = h(k,j) + q * h(k+1,j) >*/
-	    p = h__[k + j * h_dim1] + q * h__[k + 1 + j * h_dim1];
+            p = h__[k + j * h_dim1] + q * h__[k + 1 + j * h_dim1];
 /*<             h(k,j) = h(k,j) - p * x >*/
-	    h__[k + j * h_dim1] -= p * x;
+            h__[k + j * h_dim1] -= p * x;
 /*<             h(k+1,j) = h(k+1,j) - p * y >*/
-	    h__[k + 1 + j * h_dim1] -= p * y;
+            h__[k + 1 + j * h_dim1] -= p * y;
 /*<   200    continue >*/
 /* L200: */
-	}
+        }
 
 /*<          j = min0(en,k+3) >*/
 /* Computing MIN */
-	i__2 = en, i__3 = k + 3;
-	j = min(i__2,i__3);
+        i__2 = en, i__3 = k + 3;
+        j = min(i__2,i__3);
 /*     .......... column modification .......... */
 /*<          do 210 i = L, j >*/
-	i__2 = j;
-	for (i__ = l; i__ <= i__2; ++i__) {
+        i__2 = j;
+        for (i__ = l; i__ <= i__2; ++i__) {
 /*<             p = x * h(i,k) + y * h(i,k+1) >*/
-	    p = x * h__[i__ + k * h_dim1] + y * h__[i__ + (k + 1) * h_dim1];
+            p = x * h__[i__ + k * h_dim1] + y * h__[i__ + (k + 1) * h_dim1];
 /*<             h(i,k) = h(i,k) - p >*/
-	    h__[i__ + k * h_dim1] -= p;
+            h__[i__ + k * h_dim1] -= p;
 /*<             h(i,k+1) = h(i,k+1) - p * q >*/
-	    h__[i__ + (k + 1) * h_dim1] -= p * q;
+            h__[i__ + (k + 1) * h_dim1] -= p * q;
 /*<   210    continue >*/
 /* L210: */
-	}
+        }
 /*<          go to 255 >*/
-	goto L255;
+        goto L255;
 /*<   225    continue >*/
 L225:
 /*     .......... row modification .......... */
 /*<          do 230 j = k, EN >*/
-	i__2 = en;
-	for (j = k; j <= i__2; ++j) {
+        i__2 = en;
+        for (j = k; j <= i__2; ++j) {
 /*<             p = h(k,j) + q * h(k+1,j) + r * h(k+2,j) >*/
-	    p = h__[k + j * h_dim1] + q * h__[k + 1 + j * h_dim1] + r__ * h__[
-		    k + 2 + j * h_dim1];
+            p = h__[k + j * h_dim1] + q * h__[k + 1 + j * h_dim1] + r__ * h__[
+                    k + 2 + j * h_dim1];
 /*<             h(k,j) = h(k,j) - p * x >*/
-	    h__[k + j * h_dim1] -= p * x;
+            h__[k + j * h_dim1] -= p * x;
 /*<             h(k+1,j) = h(k+1,j) - p * y >*/
-	    h__[k + 1 + j * h_dim1] -= p * y;
+            h__[k + 1 + j * h_dim1] -= p * y;
 /*<             h(k+2,j) = h(k+2,j) - p * zz >*/
-	    h__[k + 2 + j * h_dim1] -= p * zz;
+            h__[k + 2 + j * h_dim1] -= p * zz;
 /*<   230    continue >*/
 /* L230: */
-	}
+        }
 
 /*<          j = min0(en,k+3) >*/
 /* Computing MIN */
-	i__2 = en, i__3 = k + 3;
-	j = min(i__2,i__3);
+        i__2 = en, i__3 = k + 3;
+        j = min(i__2,i__3);
 /*     .......... column modification .......... */
 /*<          do 240 i = L, j >*/
-	i__2 = j;
-	for (i__ = l; i__ <= i__2; ++i__) {
+        i__2 = j;
+        for (i__ = l; i__ <= i__2; ++i__) {
 /*<             p = x * h(i,k) + y * h(i,k+1) + zz * h(i,k+2) >*/
-	    p = x * h__[i__ + k * h_dim1] + y * h__[i__ + (k + 1) * h_dim1] + 
-		    zz * h__[i__ + (k + 2) * h_dim1];
+            p = x * h__[i__ + k * h_dim1] + y * h__[i__ + (k + 1) * h_dim1] + 
+                    zz * h__[i__ + (k + 2) * h_dim1];
 /*<             h(i,k) = h(i,k) - p >*/
-	    h__[i__ + k * h_dim1] -= p;
+            h__[i__ + k * h_dim1] -= p;
 /*<             h(i,k+1) = h(i,k+1) - p * q >*/
-	    h__[i__ + (k + 1) * h_dim1] -= p * q;
+            h__[i__ + (k + 1) * h_dim1] -= p * q;
 /*<             h(i,k+2) = h(i,k+2) - p * r >*/
-	    h__[i__ + (k + 2) * h_dim1] -= p * r__;
+            h__[i__ + (k + 2) * h_dim1] -= p * r__;
 /*<   240    continue >*/
 /* L240: */
-	}
+        }
 /*<   255    continue >*/
 L255:
 
 /*<   260 continue >*/
 L260:
-	;
+        ;
     }
 
 /*<       go to 70 >*/
@@ -470,7 +470,7 @@ L280:
     x += t;
 /*<       if (q .lt. 0.0d0) go to 320 >*/
     if (q < 0.) {
-	goto L320;
+        goto L320;
     }
 /*     .......... real pair .......... */
 /*<       zz = p + dsign(zz,p) >*/
@@ -481,7 +481,7 @@ L280:
     wr[en] = wr[na];
 /*<       if (zz .ne. 0.0d0) wr(en) = x - w / zz >*/
     if (zz != 0.) {
-	wr[en] = x - w / zz;
+        wr[en] = x - w / zz;
     }
 /*<       wi(na) = 0.0d0 >*/
     wi[na] = 0.;
@@ -516,5 +516,5 @@ L1001:
 } /* hqr_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

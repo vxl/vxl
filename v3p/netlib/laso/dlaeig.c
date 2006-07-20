@@ -1,13 +1,13 @@
 /* laso/dlaeig.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -19,10 +19,10 @@ extern "C" {
 
 /*<    >*/
 /* Subroutine */ int dlaeig_(integer *n, integer *nband, integer *nl, integer 
-	*nr, doublereal *a, doublereal *eigval, integer *lde, doublereal *
-	eigvec, doublereal *bound, doublereal *atemp, doublereal *d__, 
-	doublereal *vtemp, doublereal *eps, doublereal *tmin, doublereal *
-	tmax)
+        *nr, doublereal *a, doublereal *eigval, integer *lde, doublereal *
+        eigvec, doublereal *bound, doublereal *atemp, doublereal *d__, 
+        doublereal *vtemp, doublereal *eps, doublereal *tmin, doublereal *
+        tmax)
 {
     /* System generated locals */
     integer a_dim1, a_offset, eigvec_dim1, eigvec_offset, i__1;
@@ -37,9 +37,9 @@ extern "C" {
     integer nval;
     doublereal artol;
     extern /* Subroutine */ int dlabcm_(integer *, integer *, integer *, 
-	    integer *, doublereal *, doublereal *, integer *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+            integer *, doublereal *, doublereal *, integer *, doublereal *, 
+            doublereal *, doublereal *, doublereal *, doublereal *, 
+            doublereal *, doublereal *);
 
 
 /*  THIS IS A SPECIALIZED VERSION OF THE SUBROUTINE BNDEIG TAILORED */
@@ -90,7 +90,7 @@ extern "C" {
 
 /*<       IF(N .NE. 1) GO TO 30 >*/
     if (*n != 1) {
-	goto L30;
+        goto L30;
     }
 /*<       EIGVAL(1) = A(1,1) >*/
     eigval[1] = a[a_dim1 + 1];
@@ -108,9 +108,9 @@ L30:
     i__1 = m;
     for (i__ = 2; i__ <= i__1; ++i__) {
 /*<          BOUND(1,I) = TMIN >*/
-	bound[(i__ << 1) + 1] = *tmin;
+        bound[(i__ << 1) + 1] = *tmin;
 /*<          BOUND(2,I) = TMAX >*/
-	bound[(i__ << 1) + 2] = *tmax;
+        bound[(i__ << 1) + 2] = *tmax;
 /*<    50 CONTINUE >*/
 /* L50: */
     }
@@ -120,23 +120,23 @@ L30:
     bound[((nval + 2) << 1) + 1] = *tmin;
 /*<       IF(NL .EQ. 1) BOUND(2,1) = TMIN >*/
     if (*nl == 1) {
-	bound[4] = *tmin;
+        bound[4] = *tmin;
     }
 /*<       IF(NR .EQ. N) BOUND(1,NVAL + 2) = TMAX >*/
     if (*nr == *n) {
-	bound[((nval + 2) << 1) + 1] = *tmax;
+        bound[((nval + 2) << 1) + 1] = *tmax;
     }
 
 /*<    >*/
 /* L60: */
     dlabcm_(n, nband, nl, nr, &a[a_offset], &eigval[1], lde, &eigvec[
-	    eigvec_offset], &atol, &artol, &bound[3], &atemp[1], &d__[1], &
-	    vtemp[1]);
+            eigvec_offset], &atol, &artol, &bound[3], &atemp[1], &d__[1], &
+            vtemp[1]);
 /*<       RETURN >*/
     return 0;
 /*<       END >*/
 } /* dlaeig_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

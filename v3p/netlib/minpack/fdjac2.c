@@ -1,13 +1,13 @@
 /* minpack/fdjac2.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -23,8 +23,8 @@ static integer c__1 = 1;
 /* Subroutine */ int fdjac2_(
         void (*fcn)(integer*,integer*,doublereal*,doublereal*,integer*,void*),
         integer *m, integer *n, doublereal *x, 
-	doublereal *fvec, doublereal *fjac, integer *ldfjac, integer *iflag, 
-	doublereal *epsfcn, doublereal *wa, void* userdata)
+        doublereal *fvec, doublereal *fjac, integer *ldfjac, integer *iflag, 
+        doublereal *epsfcn, doublereal *wa, void* userdata)
 {
     /* Initialized data */
 
@@ -145,31 +145,31 @@ static integer c__1 = 1;
     i__1 = *n;
     for (j = 1; j <= i__1; ++j) {
 /*<          temp = x(j) >*/
-	temp = x[j];
+        temp = x[j];
 /*<          h = eps*dabs(temp) >*/
-	h__ = eps * abs(temp);
+        h__ = eps * abs(temp);
 /*<          if (h .eq. zero) h = eps >*/
-	if (h__ == zero) {
-	    h__ = eps;
-	}
+        if (h__ == zero) {
+            h__ = eps;
+        }
 /*<          x(j) = temp + h >*/
-	x[j] = temp + h__;
+        x[j] = temp + h__;
 /*<          call fcn(m,n,x,wa,iflag) >*/
-	(*fcn)(m, n, &x[1], &wa[1], iflag, userdata);
+        (*fcn)(m, n, &x[1], &wa[1], iflag, userdata);
 /*<          if (iflag .lt. 0) go to 30 >*/
-	if (*iflag < 0) {
-	    goto L30;
-	}
+        if (*iflag < 0) {
+            goto L30;
+        }
 /*<          x(j) = temp >*/
-	x[j] = temp;
+        x[j] = temp;
 /*<          do 10 i = 1, m >*/
-	i__2 = *m;
-	for (i__ = 1; i__ <= i__2; ++i__) {
+        i__2 = *m;
+        for (i__ = 1; i__ <= i__2; ++i__) {
 /*<             fjac(i,j) = (wa(i) - fvec(i))/h >*/
-	    fjac[i__ + j * fjac_dim1] = (wa[i__] - fvec[i__]) / h__;
+            fjac[i__ + j * fjac_dim1] = (wa[i__] - fvec[i__]) / h__;
 /*<    10       continue >*/
 /* L10: */
-	}
+        }
 /*<    20    continue >*/
 /* L20: */
     }
@@ -184,5 +184,5 @@ L30:
 } /* fdjac2_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

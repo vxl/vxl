@@ -1,13 +1,13 @@
 /* lapack/complex16/zgeev.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -25,14 +25,14 @@ static integer c__4 = 4;
 
 /*<    >*/
 /* Subroutine */ int zgeev_(char *jobvl, char *jobvr, integer *n, 
-	doublecomplex *a, integer *lda, doublecomplex *w, doublecomplex *vl, 
-	integer *ldvl, doublecomplex *vr, integer *ldvr, doublecomplex *work, 
-	integer *lwork, doublereal *rwork, integer *info, ftnlen jobvl_len, 
-	ftnlen jobvr_len)
+        doublecomplex *a, integer *lda, doublecomplex *w, doublecomplex *vl, 
+        integer *ldvl, doublecomplex *vr, integer *ldvr, doublecomplex *work, 
+        integer *lwork, doublereal *rwork, integer *info, ftnlen jobvl_len, 
+        ftnlen jobvr_len)
 {
     /* System generated locals */
     integer a_dim1, a_offset, vl_dim1, vl_offset, vr_dim1, vr_offset, i__1, 
-	    i__2, i__3, i__4;
+            i__2, i__3, i__4;
     doublereal d__1, d__2;
     doublecomplex z__1, z__2;
 
@@ -53,48 +53,48 @@ static integer c__4 = 4;
     integer ierr, itau, iwrk, nout;
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int zscal_(integer *, doublecomplex *, 
-	    doublecomplex *, integer *), dlabad_(doublereal *, doublereal *);
+            doublecomplex *, integer *), dlabad_(doublereal *, doublereal *);
     extern doublereal dznrm2_(integer *, doublecomplex *, integer *);
     logical scalea;
     extern doublereal dlamch_(char *, ftnlen);
     doublereal cscale;
     extern /* Subroutine */ int zgebak_(char *, char *, integer *, integer *, 
-	    integer *, doublereal *, integer *, doublecomplex *, integer *, 
-	    integer *, ftnlen, ftnlen), zgebal_(char *, integer *, 
-	    doublecomplex *, integer *, integer *, integer *, doublereal *, 
-	    integer *, ftnlen);
+            integer *, doublereal *, integer *, doublecomplex *, integer *, 
+            integer *, ftnlen, ftnlen), zgebal_(char *, integer *, 
+            doublecomplex *, integer *, integer *, integer *, doublereal *, 
+            integer *, ftnlen);
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
     extern integer ilaenv_(integer *, char *, char *, integer *, integer *, 
-	    integer *, integer *, ftnlen, ftnlen);
+            integer *, integer *, ftnlen, ftnlen);
     logical select[1];
     extern /* Subroutine */ int zdscal_(integer *, doublereal *, 
-	    doublecomplex *, integer *);
+            doublecomplex *, integer *);
     doublereal bignum;
     extern doublereal zlange_(char *, integer *, integer *, doublecomplex *, 
-	    integer *, doublereal *, ftnlen);
+            integer *, doublereal *, ftnlen);
     extern /* Subroutine */ int zgehrd_(integer *, integer *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
-	    integer *, integer *), zlascl_(char *, integer *, integer *, 
-	    doublereal *, doublereal *, integer *, integer *, doublecomplex *,
-	     integer *, integer *, ftnlen), zlacpy_(char *, integer *, 
-	    integer *, doublecomplex *, integer *, doublecomplex *, integer *,
-	     ftnlen);
+            doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
+            integer *, integer *), zlascl_(char *, integer *, integer *, 
+            doublereal *, doublereal *, integer *, integer *, doublecomplex *,
+             integer *, integer *, ftnlen), zlacpy_(char *, integer *, 
+            integer *, doublecomplex *, integer *, doublecomplex *, integer *,
+             ftnlen);
     integer minwrk, maxwrk=0;
     logical wantvl;
     doublereal smlnum;
     integer hswork, irwork=0;
     extern /* Subroutine */ int zhseqr_(char *, char *, integer *, integer *, 
-	    integer *, doublecomplex *, integer *, doublecomplex *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *, integer *,
-	     ftnlen, ftnlen), ztrevc_(char *, char *, logical *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, integer *, integer *, doublecomplex *,
-	     doublereal *, integer *, ftnlen, ftnlen);
+            integer *, doublecomplex *, integer *, doublecomplex *, 
+            doublecomplex *, integer *, doublecomplex *, integer *, integer *,
+             ftnlen, ftnlen), ztrevc_(char *, char *, logical *, integer *, 
+            doublecomplex *, integer *, doublecomplex *, integer *, 
+            doublecomplex *, integer *, integer *, integer *, doublecomplex *,
+             doublereal *, integer *, ftnlen, ftnlen);
     logical lquery, wantvr;
     extern /* Subroutine */ int zunghr_(integer *, integer *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
-	    integer *, integer *);
+            doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
+            integer *, integer *);
     (void)jobvl_len;
     (void)jobvr_len;
 
@@ -255,27 +255,27 @@ static integer c__4 = 4;
 /*<       IF( ( .NOT.WANTVL ) .AND. ( .NOT.LSAME( JOBVL, 'N' ) ) ) THEN >*/
     if (! wantvl && ! lsame_(jobvl, "N", (ftnlen)1, (ftnlen)1)) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<       ELSE IF( ( .NOT.WANTVR ) .AND. ( .NOT.LSAME( JOBVR, 'N' ) ) ) THEN >*/
     } else if (! wantvr && ! lsame_(jobvr, "N", (ftnlen)1, (ftnlen)1)) {
 /*<          INFO = -2 >*/
-	*info = -2;
+        *info = -2;
 /*<       ELSE IF( N.LT.0 ) THEN >*/
     } else if (*n < 0) {
 /*<          INFO = -3 >*/
-	*info = -3;
+        *info = -3;
 /*<       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN >*/
     } else if (*lda < max(1,*n)) {
 /*<          INFO = -5 >*/
-	*info = -5;
+        *info = -5;
 /*<       ELSE IF( LDVL.LT.1 .OR. ( WANTVL .AND. LDVL.LT.N ) ) THEN >*/
     } else if (*ldvl < 1 || (wantvl && *ldvl < *n)) {
 /*<          INFO = -8 >*/
-	*info = -8;
+        *info = -8;
 /*<       ELSE IF( LDVR.LT.1 .OR. ( WANTVR .AND. LDVR.LT.N ) ) THEN >*/
     } else if (*ldvr < 1 || (wantvr && *ldvr < *n)) {
 /*<          INFO = -10 >*/
-	*info = -10;
+        *info = -10;
 /*<       END IF >*/
     }
 
@@ -295,86 +295,86 @@ static integer c__4 = 4;
 /*<       IF( INFO.EQ.0 .AND. ( LWORK.GE.1 .OR. LQUERY ) ) THEN >*/
     if (*info == 0 && (*lwork >= 1 || lquery)) {
 /*<          MAXWRK = N + N*ILAENV( 1, 'ZGEHRD', ' ', N, 1, N, 0 ) >*/
-	maxwrk = *n + *n * ilaenv_(&c__1, "ZGEHRD", " ", n, &c__1, n, &c__0, (
-		ftnlen)6, (ftnlen)1);
+        maxwrk = *n + *n * ilaenv_(&c__1, "ZGEHRD", " ", n, &c__1, n, &c__0, (
+                ftnlen)6, (ftnlen)1);
 /*<          IF( ( .NOT.WANTVL ) .AND. ( .NOT.WANTVR ) ) THEN >*/
-	if (! wantvl && ! wantvr) {
+        if (! wantvl && ! wantvr) {
 /*<             MINWRK = MAX( 1, 2*N ) >*/
 /* Computing MAX */
-	    i__1 = 1, i__2 = *n << 1;
-	    minwrk = max(i__1,i__2);
+            i__1 = 1, i__2 = *n << 1;
+            minwrk = max(i__1,i__2);
 /*<             MAXB = MAX( ILAENV( 8, 'ZHSEQR', 'EN', N, 1, N, -1 ), 2 ) >*/
 /* Computing MAX */
-	    i__1 = ilaenv_(&c__8, "ZHSEQR", "EN", n, &c__1, n, &c_n1, (ftnlen)
-		    6, (ftnlen)2);
-	    maxb = max(i__1,2);
+            i__1 = ilaenv_(&c__8, "ZHSEQR", "EN", n, &c__1, n, &c_n1, (ftnlen)
+                    6, (ftnlen)2);
+            maxb = max(i__1,2);
 /*<    >*/
 /* Computing MIN */
 /* Computing MAX */
-	    i__3 = 2, i__4 = ilaenv_(&c__4, "ZHSEQR", "EN", n, &c__1, n, &
-		    c_n1, (ftnlen)6, (ftnlen)2);
-	    i__1 = min(maxb,*n), i__2 = max(i__3,i__4);
-	    k = min(i__1,i__2);
+            i__3 = 2, i__4 = ilaenv_(&c__4, "ZHSEQR", "EN", n, &c__1, n, &
+                    c_n1, (ftnlen)6, (ftnlen)2);
+            i__1 = min(maxb,*n), i__2 = max(i__3,i__4);
+            k = min(i__1,i__2);
 /*<             HSWORK = MAX( K*( K+2 ), 2*N ) >*/
 /* Computing MAX */
-	    i__1 = k * (k + 2), i__2 = *n << 1;
-	    hswork = max(i__1,i__2);
+            i__1 = k * (k + 2), i__2 = *n << 1;
+            hswork = max(i__1,i__2);
 /*<             MAXWRK = MAX( MAXWRK, HSWORK ) >*/
-	    maxwrk = max(maxwrk,hswork);
+            maxwrk = max(maxwrk,hswork);
 /*<          ELSE >*/
-	} else {
+        } else {
 /*<             MINWRK = MAX( 1, 2*N ) >*/
 /* Computing MAX */
-	    i__1 = 1, i__2 = *n << 1;
-	    minwrk = max(i__1,i__2);
+            i__1 = 1, i__2 = *n << 1;
+            minwrk = max(i__1,i__2);
 /*<    >*/
 /* Computing MAX */
-	    i__1 = maxwrk, i__2 = *n + (*n - 1) * ilaenv_(&c__1, "ZUNGHR", 
-		    " ", n, &c__1, n, &c_n1, (ftnlen)6, (ftnlen)1);
-	    maxwrk = max(i__1,i__2);
+            i__1 = maxwrk, i__2 = *n + (*n - 1) * ilaenv_(&c__1, "ZUNGHR", 
+                    " ", n, &c__1, n, &c_n1, (ftnlen)6, (ftnlen)1);
+            maxwrk = max(i__1,i__2);
 /*<             MAXB = MAX( ILAENV( 8, 'ZHSEQR', 'SV', N, 1, N, -1 ), 2 ) >*/
 /* Computing MAX */
-	    i__1 = ilaenv_(&c__8, "ZHSEQR", "SV", n, &c__1, n, &c_n1, (ftnlen)
-		    6, (ftnlen)2);
-	    maxb = max(i__1,2);
+            i__1 = ilaenv_(&c__8, "ZHSEQR", "SV", n, &c__1, n, &c_n1, (ftnlen)
+                    6, (ftnlen)2);
+            maxb = max(i__1,2);
 /*<    >*/
 /* Computing MIN */
 /* Computing MAX */
-	    i__3 = 2, i__4 = ilaenv_(&c__4, "ZHSEQR", "SV", n, &c__1, n, &
-		    c_n1, (ftnlen)6, (ftnlen)2);
-	    i__1 = min(maxb,*n), i__2 = max(i__3,i__4);
-	    k = min(i__1,i__2);
+            i__3 = 2, i__4 = ilaenv_(&c__4, "ZHSEQR", "SV", n, &c__1, n, &
+                    c_n1, (ftnlen)6, (ftnlen)2);
+            i__1 = min(maxb,*n), i__2 = max(i__3,i__4);
+            k = min(i__1,i__2);
 /*<             HSWORK = MAX( K*( K+2 ), 2*N ) >*/
 /* Computing MAX */
-	    i__1 = k * (k + 2), i__2 = *n << 1;
-	    hswork = max(i__1,i__2);
+            i__1 = k * (k + 2), i__2 = *n << 1;
+            hswork = max(i__1,i__2);
 /*<             MAXWRK = MAX( MAXWRK, HSWORK, 2*N ) >*/
 /* Computing MAX */
-	    i__1 = max(maxwrk,hswork), i__2 = *n << 1;
-	    maxwrk = max(i__1,i__2);
+            i__1 = max(maxwrk,hswork), i__2 = *n << 1;
+            maxwrk = max(i__1,i__2);
 /*<          END IF >*/
-	}
+        }
 /*<          WORK( 1 ) = MAXWRK >*/
-	work[1].r = (doublereal) maxwrk, work[1].i = 0.;
+        work[1].r = (doublereal) maxwrk, work[1].i = 0.;
 /*<       END IF >*/
     }
 /*<       IF( LWORK.LT.MINWRK .AND. .NOT.LQUERY ) THEN >*/
     if (*lwork < minwrk && ! lquery) {
 /*<          INFO = -12 >*/
-	*info = -12;
+        *info = -12;
 /*<       END IF >*/
     }
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'ZGEEV ', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("ZGEEV ", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("ZGEEV ", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       ELSE IF( LQUERY ) THEN >*/
     } else if (lquery) {
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -382,7 +382,7 @@ static integer c__4 = 4;
 
 /*<    >*/
     if (*n == 0) {
-	return 0;
+        return 0;
     }
 
 /*     Get machine constants */
@@ -409,21 +409,21 @@ static integer c__4 = 4;
 /*<       IF( ANRM.GT.ZERO .AND. ANRM.LT.SMLNUM ) THEN >*/
     if (anrm > 0. && anrm < smlnum) {
 /*<          SCALEA = .TRUE. >*/
-	scalea = TRUE_;
+        scalea = TRUE_;
 /*<          CSCALE = SMLNUM >*/
-	cscale = smlnum;
+        cscale = smlnum;
 /*<       ELSE IF( ANRM.GT.BIGNUM ) THEN >*/
     } else if (anrm > bignum) {
 /*<          SCALEA = .TRUE. >*/
-	scalea = TRUE_;
+        scalea = TRUE_;
 /*<          CSCALE = BIGNUM >*/
-	cscale = bignum;
+        cscale = bignum;
 /*<       END IF >*/
     }
 /*<    >*/
     if (scalea) {
-	zlascl_("G", &c__0, &c__0, &anrm, &cscale, n, n, &a[a_offset], lda, &
-		ierr, (ftnlen)1);
+        zlascl_("G", &c__0, &c__0, &anrm, &cscale, n, n, &a[a_offset], lda, &
+                ierr, (ftnlen)1);
     }
 
 /*     Balance the matrix */
@@ -434,7 +434,7 @@ static integer c__4 = 4;
     ibal = 1;
 /*<       CALL ZGEBAL( 'B', N, A, LDA, ILO, IHI, RWORK( IBAL ), IERR ) >*/
     zgebal_("B", n, &a[a_offset], lda, &ilo, &ihi, &rwork[ibal], &ierr, (
-	    ftnlen)1);
+            ftnlen)1);
 
 /*     Reduce to upper Hessenberg form */
 /*     (CWorkspace: need 2*N, prefer N+N*NB) */
@@ -447,7 +447,7 @@ static integer c__4 = 4;
 /*<    >*/
     i__1 = *lwork - iwrk + 1;
     zgehrd_(n, &ilo, &ihi, &a[a_offset], lda, &work[itau], &work[iwrk], &i__1,
-	     &ierr);
+             &ierr);
 
 /*<       IF( WANTVL ) THEN >*/
     if (wantvl) {
@@ -456,45 +456,45 @@ static integer c__4 = 4;
 /*        Copy Householder vectors to VL */
 
 /*<          SIDE = 'L' >*/
-	*(unsigned char *)side = 'L';
+        *(unsigned char *)side = 'L';
 /*<          CALL ZLACPY( 'L', N, N, A, LDA, VL, LDVL ) >*/
-	zlacpy_("L", n, n, &a[a_offset], lda, &vl[vl_offset], ldvl, (ftnlen)1)
-		;
+        zlacpy_("L", n, n, &a[a_offset], lda, &vl[vl_offset], ldvl, (ftnlen)1)
+                ;
 
 /*        Generate unitary matrix in VL */
 /*        (CWorkspace: need 2*N-1, prefer N+(N-1)*NB) */
 /*        (RWorkspace: none) */
 
 /*<    >*/
-	i__1 = *lwork - iwrk + 1;
-	zunghr_(n, &ilo, &ihi, &vl[vl_offset], ldvl, &work[itau], &work[iwrk],
-		 &i__1, &ierr);
+        i__1 = *lwork - iwrk + 1;
+        zunghr_(n, &ilo, &ihi, &vl[vl_offset], ldvl, &work[itau], &work[iwrk],
+                 &i__1, &ierr);
 
 /*        Perform QR iteration, accumulating Schur vectors in VL */
 /*        (CWorkspace: need 1, prefer HSWORK (see comments) ) */
 /*        (RWorkspace: none) */
 
 /*<          IWRK = ITAU >*/
-	iwrk = itau;
+        iwrk = itau;
 /*<    >*/
-	i__1 = *lwork - iwrk + 1;
-	zhseqr_("S", "V", n, &ilo, &ihi, &a[a_offset], lda, &w[1], &vl[
-		vl_offset], ldvl, &work[iwrk], &i__1, info, (ftnlen)1, (
-		ftnlen)1);
+        i__1 = *lwork - iwrk + 1;
+        zhseqr_("S", "V", n, &ilo, &ihi, &a[a_offset], lda, &w[1], &vl[
+                vl_offset], ldvl, &work[iwrk], &i__1, info, (ftnlen)1, (
+                ftnlen)1);
 
 /*<          IF( WANTVR ) THEN >*/
-	if (wantvr) {
+        if (wantvr) {
 
 /*           Want left and right eigenvectors */
 /*           Copy Schur vectors to VR */
 
 /*<             SIDE = 'B' >*/
-	    *(unsigned char *)side = 'B';
+            *(unsigned char *)side = 'B';
 /*<             CALL ZLACPY( 'F', N, N, VL, LDVL, VR, LDVR ) >*/
-	    zlacpy_("F", n, n, &vl[vl_offset], ldvl, &vr[vr_offset], ldvr, (
-		    ftnlen)1);
+            zlacpy_("F", n, n, &vl[vl_offset], ldvl, &vr[vr_offset], ldvr, (
+                    ftnlen)1);
 /*<          END IF >*/
-	}
+        }
 
 /*<       ELSE IF( WANTVR ) THEN >*/
     } else if (wantvr) {
@@ -503,31 +503,31 @@ static integer c__4 = 4;
 /*        Copy Householder vectors to VR */
 
 /*<          SIDE = 'R' >*/
-	*(unsigned char *)side = 'R';
+        *(unsigned char *)side = 'R';
 /*<          CALL ZLACPY( 'L', N, N, A, LDA, VR, LDVR ) >*/
-	zlacpy_("L", n, n, &a[a_offset], lda, &vr[vr_offset], ldvr, (ftnlen)1)
-		;
+        zlacpy_("L", n, n, &a[a_offset], lda, &vr[vr_offset], ldvr, (ftnlen)1)
+                ;
 
 /*        Generate unitary matrix in VR */
 /*        (CWorkspace: need 2*N-1, prefer N+(N-1)*NB) */
 /*        (RWorkspace: none) */
 
 /*<    >*/
-	i__1 = *lwork - iwrk + 1;
-	zunghr_(n, &ilo, &ihi, &vr[vr_offset], ldvr, &work[itau], &work[iwrk],
-		 &i__1, &ierr);
+        i__1 = *lwork - iwrk + 1;
+        zunghr_(n, &ilo, &ihi, &vr[vr_offset], ldvr, &work[itau], &work[iwrk],
+                 &i__1, &ierr);
 
 /*        Perform QR iteration, accumulating Schur vectors in VR */
 /*        (CWorkspace: need 1, prefer HSWORK (see comments) ) */
 /*        (RWorkspace: none) */
 
 /*<          IWRK = ITAU >*/
-	iwrk = itau;
+        iwrk = itau;
 /*<    >*/
-	i__1 = *lwork - iwrk + 1;
-	zhseqr_("S", "V", n, &ilo, &ihi, &a[a_offset], lda, &w[1], &vr[
-		vr_offset], ldvr, &work[iwrk], &i__1, info, (ftnlen)1, (
-		ftnlen)1);
+        i__1 = *lwork - iwrk + 1;
+        zhseqr_("S", "V", n, &ilo, &ihi, &a[a_offset], lda, &w[1], &vr[
+                vr_offset], ldvr, &work[iwrk], &i__1, info, (ftnlen)1, (
+                ftnlen)1);
 
 /*<       ELSE >*/
     } else {
@@ -537,12 +537,12 @@ static integer c__4 = 4;
 /*        (RWorkspace: none) */
 
 /*<          IWRK = ITAU >*/
-	iwrk = itau;
+        iwrk = itau;
 /*<    >*/
-	i__1 = *lwork - iwrk + 1;
-	zhseqr_("E", "N", n, &ilo, &ihi, &a[a_offset], lda, &w[1], &vr[
-		vr_offset], ldvr, &work[iwrk], &i__1, info, (ftnlen)1, (
-		ftnlen)1);
+        i__1 = *lwork - iwrk + 1;
+        zhseqr_("E", "N", n, &ilo, &ihi, &a[a_offset], lda, &w[1], &vr[
+                vr_offset], ldvr, &work[iwrk], &i__1, info, (ftnlen)1, (
+                ftnlen)1);
 /*<       END IF >*/
     }
 
@@ -550,7 +550,7 @@ static integer c__4 = 4;
 
 /*<    >*/
     if (*info > 0) {
-	goto L50;
+        goto L50;
     }
 
 /*<       IF( WANTVL .OR. WANTVR ) THEN >*/
@@ -561,11 +561,11 @@ static integer c__4 = 4;
 /*        (RWorkspace: need 2*N) */
 
 /*<          IRWORK = IBAL + N >*/
-	irwork = ibal + *n;
+        irwork = ibal + *n;
 /*<    >*/
-	ztrevc_(side, "B", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl,
-		 &vr[vr_offset], ldvr, n, &nout, &work[iwrk], &rwork[irwork], 
-		&ierr, (ftnlen)1, (ftnlen)1);
+        ztrevc_(side, "B", select, n, &a[a_offset], lda, &vl[vl_offset], ldvl,
+                 &vr[vr_offset], ldvr, n, &nout, &work[iwrk], &rwork[irwork], 
+                &ierr, (ftnlen)1, (ftnlen)1);
 /*<       END IF >*/
     }
 
@@ -577,49 +577,49 @@ static integer c__4 = 4;
 /*        (RWorkspace: need N) */
 
 /*<    >*/
-	zgebak_("B", "L", n, &ilo, &ihi, &rwork[ibal], n, &vl[vl_offset], 
-		ldvl, &ierr, (ftnlen)1, (ftnlen)1);
+        zgebak_("B", "L", n, &ilo, &ihi, &rwork[ibal], n, &vl[vl_offset], 
+                ldvl, &ierr, (ftnlen)1, (ftnlen)1);
 
 /*        Normalize left eigenvectors and make largest component real */
 
 /*<          DO 20 I = 1, N >*/
-	i__1 = *n;
-	for (i__ = 1; i__ <= i__1; ++i__) {
+        i__1 = *n;
+        for (i__ = 1; i__ <= i__1; ++i__) {
 /*<             SCL = ONE / DZNRM2( N, VL( 1, I ), 1 ) >*/
-	    scl = 1. / dznrm2_(n, &vl[i__ * vl_dim1 + 1], &c__1);
+            scl = 1. / dznrm2_(n, &vl[i__ * vl_dim1 + 1], &c__1);
 /*<             CALL ZDSCAL( N, SCL, VL( 1, I ), 1 ) >*/
-	    zdscal_(n, &scl, &vl[i__ * vl_dim1 + 1], &c__1);
+            zdscal_(n, &scl, &vl[i__ * vl_dim1 + 1], &c__1);
 /*<             DO 10 K = 1, N >*/
-	    i__2 = *n;
-	    for (k = 1; k <= i__2; ++k) {
+            i__2 = *n;
+            for (k = 1; k <= i__2; ++k) {
 /*<    >*/
-		i__3 = k + i__ * vl_dim1;
+                i__3 = k + i__ * vl_dim1;
 /* Computing 2nd power */
-		d__1 = vl[i__3].r;
+                d__1 = vl[i__3].r;
 /* Computing 2nd power */
-		d__2 = d_imag(&vl[k + i__ * vl_dim1]);
-		rwork[irwork + k - 1] = d__1 * d__1 + d__2 * d__2;
+                d__2 = d_imag(&vl[k + i__ * vl_dim1]);
+                rwork[irwork + k - 1] = d__1 * d__1 + d__2 * d__2;
 /*<    10       CONTINUE >*/
 /* L10: */
-	    }
+            }
 /*<             K = IDAMAX( N, RWORK( IRWORK ), 1 ) >*/
-	    k = idamax_(n, &rwork[irwork], &c__1);
+            k = idamax_(n, &rwork[irwork], &c__1);
 /*<             TMP = DCONJG( VL( K, I ) ) / SQRT( RWORK( IRWORK+K-1 ) ) >*/
-	    d_cnjg(&z__2, &vl[k + i__ * vl_dim1]);
-	    d__1 = sqrt(rwork[irwork + k - 1]);
-	    z__1.r = z__2.r / d__1, z__1.i = z__2.i / d__1;
-	    tmp.r = z__1.r, tmp.i = z__1.i;
+            d_cnjg(&z__2, &vl[k + i__ * vl_dim1]);
+            d__1 = sqrt(rwork[irwork + k - 1]);
+            z__1.r = z__2.r / d__1, z__1.i = z__2.i / d__1;
+            tmp.r = z__1.r, tmp.i = z__1.i;
 /*<             CALL ZSCAL( N, TMP, VL( 1, I ), 1 ) >*/
-	    zscal_(n, &tmp, &vl[i__ * vl_dim1 + 1], &c__1);
+            zscal_(n, &tmp, &vl[i__ * vl_dim1 + 1], &c__1);
 /*<             VL( K, I ) = DCMPLX( DBLE( VL( K, I ) ), ZERO ) >*/
-	    i__2 = k + i__ * vl_dim1;
-	    i__3 = k + i__ * vl_dim1;
-	    d__1 = vl[i__3].r;
-	    z__1.r = d__1, z__1.i = 0.;
-	    vl[i__2].r = z__1.r, vl[i__2].i = z__1.i;
+            i__2 = k + i__ * vl_dim1;
+            i__3 = k + i__ * vl_dim1;
+            d__1 = vl[i__3].r;
+            z__1.r = d__1, z__1.i = 0.;
+            vl[i__2].r = z__1.r, vl[i__2].i = z__1.i;
 /*<    20    CONTINUE >*/
 /* L20: */
-	}
+        }
 /*<       END IF >*/
     }
 
@@ -631,49 +631,49 @@ static integer c__4 = 4;
 /*        (RWorkspace: need N) */
 
 /*<    >*/
-	zgebak_("B", "R", n, &ilo, &ihi, &rwork[ibal], n, &vr[vr_offset], 
-		ldvr, &ierr, (ftnlen)1, (ftnlen)1);
+        zgebak_("B", "R", n, &ilo, &ihi, &rwork[ibal], n, &vr[vr_offset], 
+                ldvr, &ierr, (ftnlen)1, (ftnlen)1);
 
 /*        Normalize right eigenvectors and make largest component real */
 
 /*<          DO 40 I = 1, N >*/
-	i__1 = *n;
-	for (i__ = 1; i__ <= i__1; ++i__) {
+        i__1 = *n;
+        for (i__ = 1; i__ <= i__1; ++i__) {
 /*<             SCL = ONE / DZNRM2( N, VR( 1, I ), 1 ) >*/
-	    scl = 1. / dznrm2_(n, &vr[i__ * vr_dim1 + 1], &c__1);
+            scl = 1. / dznrm2_(n, &vr[i__ * vr_dim1 + 1], &c__1);
 /*<             CALL ZDSCAL( N, SCL, VR( 1, I ), 1 ) >*/
-	    zdscal_(n, &scl, &vr[i__ * vr_dim1 + 1], &c__1);
+            zdscal_(n, &scl, &vr[i__ * vr_dim1 + 1], &c__1);
 /*<             DO 30 K = 1, N >*/
-	    i__2 = *n;
-	    for (k = 1; k <= i__2; ++k) {
+            i__2 = *n;
+            for (k = 1; k <= i__2; ++k) {
 /*<    >*/
-		i__3 = k + i__ * vr_dim1;
+                i__3 = k + i__ * vr_dim1;
 /* Computing 2nd power */
-		d__1 = vr[i__3].r;
+                d__1 = vr[i__3].r;
 /* Computing 2nd power */
-		d__2 = d_imag(&vr[k + i__ * vr_dim1]);
-		rwork[irwork + k - 1] = d__1 * d__1 + d__2 * d__2;
+                d__2 = d_imag(&vr[k + i__ * vr_dim1]);
+                rwork[irwork + k - 1] = d__1 * d__1 + d__2 * d__2;
 /*<    30       CONTINUE >*/
 /* L30: */
-	    }
+            }
 /*<             K = IDAMAX( N, RWORK( IRWORK ), 1 ) >*/
-	    k = idamax_(n, &rwork[irwork], &c__1);
+            k = idamax_(n, &rwork[irwork], &c__1);
 /*<             TMP = DCONJG( VR( K, I ) ) / SQRT( RWORK( IRWORK+K-1 ) ) >*/
-	    d_cnjg(&z__2, &vr[k + i__ * vr_dim1]);
-	    d__1 = sqrt(rwork[irwork + k - 1]);
-	    z__1.r = z__2.r / d__1, z__1.i = z__2.i / d__1;
-	    tmp.r = z__1.r, tmp.i = z__1.i;
+            d_cnjg(&z__2, &vr[k + i__ * vr_dim1]);
+            d__1 = sqrt(rwork[irwork + k - 1]);
+            z__1.r = z__2.r / d__1, z__1.i = z__2.i / d__1;
+            tmp.r = z__1.r, tmp.i = z__1.i;
 /*<             CALL ZSCAL( N, TMP, VR( 1, I ), 1 ) >*/
-	    zscal_(n, &tmp, &vr[i__ * vr_dim1 + 1], &c__1);
+            zscal_(n, &tmp, &vr[i__ * vr_dim1 + 1], &c__1);
 /*<             VR( K, I ) = DCMPLX( DBLE( VR( K, I ) ), ZERO ) >*/
-	    i__2 = k + i__ * vr_dim1;
-	    i__3 = k + i__ * vr_dim1;
-	    d__1 = vr[i__3].r;
-	    z__1.r = d__1, z__1.i = 0.;
-	    vr[i__2].r = z__1.r, vr[i__2].i = z__1.i;
+            i__2 = k + i__ * vr_dim1;
+            i__3 = k + i__ * vr_dim1;
+            d__1 = vr[i__3].r;
+            z__1.r = d__1, z__1.i = 0.;
+            vr[i__2].r = z__1.r, vr[i__2].i = z__1.i;
 /*<    40    CONTINUE >*/
 /* L40: */
-	}
+        }
 /*<       END IF >*/
     }
 
@@ -684,20 +684,20 @@ L50:
 /*<       IF( SCALEA ) THEN >*/
     if (scalea) {
 /*<    >*/
-	i__1 = *n - *info;
+        i__1 = *n - *info;
 /* Computing MAX */
-	i__3 = *n - *info;
-	i__2 = max(i__3,1);
-	zlascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &w[*info + 1]
-		, &i__2, &ierr, (ftnlen)1);
+        i__3 = *n - *info;
+        i__2 = max(i__3,1);
+        zlascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &w[*info + 1]
+                , &i__2, &ierr, (ftnlen)1);
 /*<          IF( INFO.GT.0 ) THEN >*/
-	if (*info > 0) {
+        if (*info > 0) {
 /*<             CALL ZLASCL( 'G', 0, 0, CSCALE, ANRM, ILO-1, 1, W, N, IERR ) >*/
-	    i__1 = ilo - 1;
-	    zlascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &w[1], n,
-		     &ierr, (ftnlen)1);
+            i__1 = ilo - 1;
+            zlascl_("G", &c__0, &c__0, &cscale, &anrm, &i__1, &c__1, &w[1], n,
+                     &ierr, (ftnlen)1);
 /*<          END IF >*/
-	}
+        }
 /*<       END IF >*/
     }
 
@@ -712,5 +712,5 @@ L50:
 } /* zgeev_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

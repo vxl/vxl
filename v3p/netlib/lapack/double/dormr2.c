@@ -1,13 +1,13 @@
 /* lapack/double/dormr2.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -17,9 +17,9 @@ extern "C" {
 
 /*<    >*/
 /* Subroutine */ int dormr2_(char *side, char *trans, integer *m, integer *n, 
-	integer *k, doublereal *a, integer *lda, doublereal *tau, doublereal *
-	c__, integer *ldc, doublereal *work, integer *info, ftnlen side_len, 
-	ftnlen trans_len)
+        integer *k, doublereal *a, integer *lda, doublereal *tau, doublereal *
+        c__, integer *ldc, doublereal *work, integer *info, ftnlen side_len, 
+        ftnlen trans_len)
 {
     /* System generated locals */
     integer a_dim1, a_offset, c_dim1, c_offset, i__1, i__2;
@@ -29,8 +29,8 @@ extern "C" {
     doublereal aii;
     logical left;
     extern /* Subroutine */ int dlarf_(char *, integer *, integer *, 
-	    doublereal *, integer *, doublereal *, doublereal *, integer *, 
-	    doublereal *, ftnlen);
+            doublereal *, integer *, doublereal *, doublereal *, integer *, 
+            doublereal *, ftnlen);
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
     logical notran;
@@ -172,50 +172,50 @@ extern "C" {
 /*<       IF( LEFT ) THEN >*/
     if (left) {
 /*<          NQ = M >*/
-	nq = *m;
+        nq = *m;
 /*<       ELSE >*/
     } else {
 /*<          NQ = N >*/
-	nq = *n;
+        nq = *n;
 /*<       END IF >*/
     }
 /*<       IF( .NOT.LEFT .AND. .NOT.LSAME( SIDE, 'R' ) ) THEN >*/
     if (! left && ! lsame_(side, "R", (ftnlen)1, (ftnlen)1)) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<       ELSE IF( .NOT.NOTRAN .AND. .NOT.LSAME( TRANS, 'T' ) ) THEN >*/
     } else if (! notran && ! lsame_(trans, "T", (ftnlen)1, (ftnlen)1)) {
 /*<          INFO = -2 >*/
-	*info = -2;
+        *info = -2;
 /*<       ELSE IF( M.LT.0 ) THEN >*/
     } else if (*m < 0) {
 /*<          INFO = -3 >*/
-	*info = -3;
+        *info = -3;
 /*<       ELSE IF( N.LT.0 ) THEN >*/
     } else if (*n < 0) {
 /*<          INFO = -4 >*/
-	*info = -4;
+        *info = -4;
 /*<       ELSE IF( K.LT.0 .OR. K.GT.NQ ) THEN >*/
     } else if (*k < 0 || *k > nq) {
 /*<          INFO = -5 >*/
-	*info = -5;
+        *info = -5;
 /*<       ELSE IF( LDA.LT.MAX( 1, K ) ) THEN >*/
     } else if (*lda < max(1,*k)) {
 /*<          INFO = -7 >*/
-	*info = -7;
+        *info = -7;
 /*<       ELSE IF( LDC.LT.MAX( 1, M ) ) THEN >*/
     } else if (*ldc < max(1,*m)) {
 /*<          INFO = -10 >*/
-	*info = -10;
+        *info = -10;
 /*<       END IF >*/
     }
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'DORMR2', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("DORMR2", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("DORMR2", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -223,36 +223,36 @@ extern "C" {
 
 /*<    >*/
     if (*m == 0 || *n == 0 || *k == 0) {
-	return 0;
+        return 0;
     }
 
 /*<    >*/
     if ((left && ! notran) || (! left && notran)) {
 /*<          I1 = 1 >*/
-	i1 = 1;
+        i1 = 1;
 /*<          I2 = K >*/
-	i2 = *k;
+        i2 = *k;
 /*<          I3 = 1 >*/
-	i3 = 1;
+        i3 = 1;
 /*<       ELSE >*/
     } else {
 /*<          I1 = K >*/
-	i1 = *k;
+        i1 = *k;
 /*<          I2 = 1 >*/
-	i2 = 1;
+        i2 = 1;
 /*<          I3 = -1 >*/
-	i3 = -1;
+        i3 = -1;
 /*<       END IF >*/
     }
 
 /*<       IF( LEFT ) THEN >*/
     if (left) {
 /*<          NI = N >*/
-	ni = *n;
+        ni = *n;
 /*<       ELSE >*/
     } else {
 /*<          MI = M >*/
-	mi = *m;
+        mi = *m;
 /*<       END IF >*/
     }
 
@@ -261,33 +261,33 @@ extern "C" {
     i__2 = i3;
     for (i__ = i1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2) {
 /*<          IF( LEFT ) THEN >*/
-	if (left) {
+        if (left) {
 
 /*           H(i) is applied to C(1:m-k+i,1:n) */
 
 /*<             MI = M - K + I >*/
-	    mi = *m - *k + i__;
+            mi = *m - *k + i__;
 /*<          ELSE >*/
-	} else {
+        } else {
 
 /*           H(i) is applied to C(1:m,1:n-k+i) */
 
 /*<             NI = N - K + I >*/
-	    ni = *n - *k + i__;
+            ni = *n - *k + i__;
 /*<          END IF >*/
-	}
+        }
 
 /*        Apply H(i) */
 
 /*<          AII = A( I, NQ-K+I ) >*/
-	aii = a[i__ + (nq - *k + i__) * a_dim1];
+        aii = a[i__ + (nq - *k + i__) * a_dim1];
 /*<          A( I, NQ-K+I ) = ONE >*/
-	a[i__ + (nq - *k + i__) * a_dim1] = 1.;
+        a[i__ + (nq - *k + i__) * a_dim1] = 1.;
 /*<    >*/
-	dlarf_(side, &mi, &ni, &a[i__ + a_dim1], lda, &tau[i__], &c__[
-		c_offset], ldc, &work[1], (ftnlen)1);
+        dlarf_(side, &mi, &ni, &a[i__ + a_dim1], lda, &tau[i__], &c__[
+                c_offset], ldc, &work[1], (ftnlen)1);
 /*<          A( I, NQ-K+I ) = AII >*/
-	a[i__ + (nq - *k + i__) * a_dim1] = aii;
+        a[i__ + (nq - *k + i__) * a_dim1] = aii;
 /*<    10 CONTINUE >*/
 /* L10: */
     }
@@ -300,5 +300,5 @@ extern "C" {
 } /* dormr2_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

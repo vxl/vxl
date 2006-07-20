@@ -1,13 +1,13 @@
 /* lapack/double/dggbak.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -17,9 +17,9 @@ extern "C" {
 
 /*<    >*/
 /* Subroutine */ int dggbak_(char *job, char *side, integer *n, integer *ilo, 
-	integer *ihi, doublereal *lscale, doublereal *rscale, integer *m, 
-	doublereal *v, integer *ldv, integer *info, ftnlen job_len, ftnlen 
-	side_len)
+        integer *ihi, doublereal *lscale, doublereal *rscale, integer *m, 
+        doublereal *v, integer *ldv, integer *info, ftnlen job_len, ftnlen 
+        side_len)
 {
     /* System generated locals */
     integer v_dim1, v_offset, i__1;
@@ -27,10 +27,10 @@ extern "C" {
     /* Local variables */
     integer i__, k;
     extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
-	    integer *);
+            integer *);
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int dswap_(integer *, doublereal *, integer *, 
-	    doublereal *, integer *);
+            doublereal *, integer *);
     logical leftv;
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
     logical rightv;
@@ -148,43 +148,43 @@ extern "C" {
     *info = 0;
 /*<    >*/
     if (! lsame_(job, "N", (ftnlen)1, (ftnlen)1) && ! lsame_(job, "P", (
-	    ftnlen)1, (ftnlen)1) && ! lsame_(job, "S", (ftnlen)1, (ftnlen)1) 
-	    && ! lsame_(job, "B", (ftnlen)1, (ftnlen)1)) {
+            ftnlen)1, (ftnlen)1) && ! lsame_(job, "S", (ftnlen)1, (ftnlen)1) 
+            && ! lsame_(job, "B", (ftnlen)1, (ftnlen)1)) {
 /*<          INFO = -1 >*/
-	*info = -1;
+        *info = -1;
 /*<       ELSE IF( .NOT.RIGHTV .AND. .NOT.LEFTV ) THEN >*/
     } else if (! rightv && ! leftv) {
 /*<          INFO = -2 >*/
-	*info = -2;
+        *info = -2;
 /*<       ELSE IF( N.LT.0 ) THEN >*/
     } else if (*n < 0) {
 /*<          INFO = -3 >*/
-	*info = -3;
+        *info = -3;
 /*<       ELSE IF( ILO.LT.1 ) THEN >*/
     } else if (*ilo < 1) {
 /*<          INFO = -4 >*/
-	*info = -4;
+        *info = -4;
 /*<       ELSE IF( IHI.LT.ILO .OR. IHI.GT.MAX( 1, N ) ) THEN >*/
     } else if (*ihi < *ilo || *ihi > max(1,*n)) {
 /*<          INFO = -5 >*/
-	*info = -5;
+        *info = -5;
 /*<       ELSE IF( M.LT.0 ) THEN >*/
     } else if (*m < 0) {
 /*<          INFO = -6 >*/
-	*info = -6;
+        *info = -6;
 /*<       ELSE IF( LDV.LT.MAX( 1, N ) ) THEN >*/
     } else if (*ldv < max(1,*n)) {
 /*<          INFO = -10 >*/
-	*info = -10;
+        *info = -10;
 /*<       END IF >*/
     }
 /*<       IF( INFO.NE.0 ) THEN >*/
     if (*info != 0) {
 /*<          CALL XERBLA( 'DGGBAK', -INFO ) >*/
-	i__1 = -(*info);
-	xerbla_("DGGBAK", &i__1, (ftnlen)6);
+        i__1 = -(*info);
+        xerbla_("DGGBAK", &i__1, (ftnlen)6);
 /*<          RETURN >*/
-	return 0;
+        return 0;
 /*<       END IF >*/
     }
 
@@ -192,57 +192,57 @@ extern "C" {
 
 /*<    >*/
     if (*n == 0) {
-	return 0;
+        return 0;
     }
 /*<    >*/
     if (*m == 0) {
-	return 0;
+        return 0;
     }
 /*<    >*/
     if (lsame_(job, "N", (ftnlen)1, (ftnlen)1)) {
-	return 0;
+        return 0;
     }
 
 /*<    >*/
     if (*ilo == *ihi) {
-	goto L30;
+        goto L30;
     }
 
 /*     Backward balance */
 
 /*<       IF( LSAME( JOB, 'S' ) .OR. LSAME( JOB, 'B' ) ) THEN >*/
     if (lsame_(job, "S", (ftnlen)1, (ftnlen)1) || lsame_(job, "B", (ftnlen)1, 
-	    (ftnlen)1)) {
+            (ftnlen)1)) {
 
 /*        Backward transformation on right eigenvectors */
 
 /*<          IF( RIGHTV ) THEN >*/
-	if (rightv) {
+        if (rightv) {
 /*<             DO 10 I = ILO, IHI >*/
-	    i__1 = *ihi;
-	    for (i__ = *ilo; i__ <= i__1; ++i__) {
+            i__1 = *ihi;
+            for (i__ = *ilo; i__ <= i__1; ++i__) {
 /*<                CALL DSCAL( M, RSCALE( I ), V( I, 1 ), LDV ) >*/
-		dscal_(m, &rscale[i__], &v[i__ + v_dim1], ldv);
+                dscal_(m, &rscale[i__], &v[i__ + v_dim1], ldv);
 /*<    10       CONTINUE >*/
 /* L10: */
-	    }
+            }
 /*<          END IF >*/
-	}
+        }
 
 /*        Backward transformation on left eigenvectors */
 
 /*<          IF( LEFTV ) THEN >*/
-	if (leftv) {
+        if (leftv) {
 /*<             DO 20 I = ILO, IHI >*/
-	    i__1 = *ihi;
-	    for (i__ = *ilo; i__ <= i__1; ++i__) {
+            i__1 = *ihi;
+            for (i__ = *ilo; i__ <= i__1; ++i__) {
 /*<                CALL DSCAL( M, LSCALE( I ), V( I, 1 ), LDV ) >*/
-		dscal_(m, &lscale[i__], &v[i__ + v_dim1], ldv);
+                dscal_(m, &lscale[i__], &v[i__ + v_dim1], ldv);
 /*<    20       CONTINUE >*/
 /* L20: */
-	    }
+            }
 /*<          END IF >*/
-	}
+        }
 /*<       END IF >*/
     }
 
@@ -252,104 +252,104 @@ extern "C" {
 L30:
 /*<       IF( LSAME( JOB, 'P' ) .OR. LSAME( JOB, 'B' ) ) THEN >*/
     if (lsame_(job, "P", (ftnlen)1, (ftnlen)1) || lsame_(job, "B", (ftnlen)1, 
-	    (ftnlen)1)) {
+            (ftnlen)1)) {
 
 /*        Backward permutation on right eigenvectors */
 
 /*<          IF( RIGHTV ) THEN >*/
-	if (rightv) {
+        if (rightv) {
 /*<    >*/
-	    if (*ilo == 1) {
-		goto L50;
-	    }
+            if (*ilo == 1) {
+                goto L50;
+            }
 
 /*<             DO 40 I = ILO - 1, 1, -1 >*/
-	    for (i__ = *ilo - 1; i__ >= 1; --i__) {
+            for (i__ = *ilo - 1; i__ >= 1; --i__) {
 /*<                K = RSCALE( I ) >*/
-		k = (integer) rscale[i__];
+                k = (integer) rscale[i__];
 /*<    >*/
-		if (k == i__) {
-		    goto L40;
-		}
+                if (k == i__) {
+                    goto L40;
+                }
 /*<                CALL DSWAP( M, V( I, 1 ), LDV, V( K, 1 ), LDV ) >*/
-		dswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
+                dswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
 /*<    40       CONTINUE >*/
 L40:
-		;
-	    }
+                ;
+            }
 
 /*<    50       CONTINUE >*/
 L50:
 /*<    >*/
-	    if (*ihi == *n) {
-		goto L70;
-	    }
+            if (*ihi == *n) {
+                goto L70;
+            }
 /*<             DO 60 I = IHI + 1, N >*/
-	    i__1 = *n;
-	    for (i__ = *ihi + 1; i__ <= i__1; ++i__) {
+            i__1 = *n;
+            for (i__ = *ihi + 1; i__ <= i__1; ++i__) {
 /*<                K = RSCALE( I ) >*/
-		k = (integer) rscale[i__];
+                k = (integer) rscale[i__];
 /*<    >*/
-		if (k == i__) {
-		    goto L60;
-		}
+                if (k == i__) {
+                    goto L60;
+                }
 /*<                CALL DSWAP( M, V( I, 1 ), LDV, V( K, 1 ), LDV ) >*/
-		dswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
+                dswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
 /*<    60       CONTINUE >*/
 L60:
-		;
-	    }
+                ;
+            }
 /*<          END IF >*/
-	}
+        }
 
 /*        Backward permutation on left eigenvectors */
 
 /*<    70    CONTINUE >*/
 L70:
 /*<          IF( LEFTV ) THEN >*/
-	if (leftv) {
+        if (leftv) {
 /*<    >*/
-	    if (*ilo == 1) {
-		goto L90;
-	    }
+            if (*ilo == 1) {
+                goto L90;
+            }
 /*<             DO 80 I = ILO - 1, 1, -1 >*/
-	    for (i__ = *ilo - 1; i__ >= 1; --i__) {
+            for (i__ = *ilo - 1; i__ >= 1; --i__) {
 /*<                K = LSCALE( I ) >*/
-		k = (integer) lscale[i__];
+                k = (integer) lscale[i__];
 /*<    >*/
-		if (k == i__) {
-		    goto L80;
-		}
+                if (k == i__) {
+                    goto L80;
+                }
 /*<                CALL DSWAP( M, V( I, 1 ), LDV, V( K, 1 ), LDV ) >*/
-		dswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
+                dswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
 /*<    80       CONTINUE >*/
 L80:
-		;
-	    }
+                ;
+            }
 
 /*<    90       CONTINUE >*/
 L90:
 /*<    >*/
-	    if (*ihi == *n) {
-		goto L110;
-	    }
+            if (*ihi == *n) {
+                goto L110;
+            }
 /*<             DO 100 I = IHI + 1, N >*/
-	    i__1 = *n;
-	    for (i__ = *ihi + 1; i__ <= i__1; ++i__) {
+            i__1 = *n;
+            for (i__ = *ihi + 1; i__ <= i__1; ++i__) {
 /*<                K = LSCALE( I ) >*/
-		k = (integer) lscale[i__];
+                k = (integer) lscale[i__];
 /*<    >*/
-		if (k == i__) {
-		    goto L100;
-		}
+                if (k == i__) {
+                    goto L100;
+                }
 /*<                CALL DSWAP( M, V( I, 1 ), LDV, V( K, 1 ), LDV ) >*/
-		dswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
+                dswap_(m, &v[i__ + v_dim1], ldv, &v[k + v_dim1], ldv);
 /*<   100       CONTINUE >*/
 L100:
-		;
-	    }
+                ;
+            }
 /*<          END IF >*/
-	}
+        }
 /*<       END IF >*/
     }
 
@@ -365,5 +365,5 @@ L110:
 } /* dggbak_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

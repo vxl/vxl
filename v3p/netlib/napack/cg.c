@@ -1,13 +1,13 @@
 /* napack/cg.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -83,8 +83,8 @@ extern "C" {
 
 /*<       SUBROUTINE CG(X,E,IT,STEP,T,LIMIT,N,M,VALUE,GRAD,BOTH,PRE,H) >*/
 /* Subroutine */ int cg_(doublereal *x, doublereal *e, integer *it, 
-	doublereal *step, doublereal *t, integer *limit, integer *n, integer *
-	m,
+        doublereal *step, doublereal *t, integer *limit, integer *n, integer *
+        m,
         double (*value)(double*,void*),
         void (*grad)(double*,double*,void*),
         void (*both)(double*,double*,double*,void*),
@@ -108,9 +108,9 @@ extern "C" {
 
     /* Builtin functions */
     double log(doublereal), exp(doublereal), d_sign(doublereal *, doublereal *
-	    ), sqrt(doublereal);
+            ), sqrt(doublereal);
     integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	    e_wsle();
+            e_wsle();
     /* Subroutine */ int s_stop(char *, ftnlen);
 
     /* Local variables */
@@ -124,13 +124,13 @@ extern "C" {
     extern doublereal fv_(doublereal *, doublereal *, doublereal *, integer *,
                           double (*value)(double*,void*), void*);
     extern /* Subroutine */ int cub_(doublereal *, doublereal *, doublereal *,
-	     doublereal *, doublereal *, doublereal *, doublereal *), fvd_(
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, integer *, void (*)(double*,double*,double*,void*), void*),
+             doublereal *, doublereal *, doublereal *, doublereal *), fvd_(
+            doublereal *, doublereal *, doublereal *, doublereal *, 
+            doublereal *, integer *, void (*)(double*,double*,double*,void*), void*),
             ins_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, integer *, doublereal *, doublereal *)
-	    ;
+            doublereal *, doublereal *, doublereal *, doublereal *, 
+            doublereal *, doublereal *, integer *, doublereal *, doublereal *)
+            ;
 
 /*<       INTEGER I,IT,J,K,L,LIMIT,M,N,NA,NB,NC,ND >*/
 /*<       REAL*8 H(N,1),X(1),Y(50),Z(50),A1,A2,A3,A4,A5,A6,A7,A8,A,B,C,C0,C1 >*/
@@ -159,13 +159,13 @@ extern "C" {
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*< 10         IF ( DABS(H(I,3)) .GT. E ) E = DABS(H(I,3)) >*/
 /* L10: */
-	if ((d__1 = h__[i__ + h_dim1 * 3], abs(d__1)) > *e) {
-	    *e = (d__2 = h__[i__ + h_dim1 * 3], abs(d__2));
-	}
+        if ((d__1 = h__[i__ + h_dim1 * 3], abs(d__1)) > *e) {
+            *e = (d__2 = h__[i__ + h_dim1 * 3], abs(d__2));
+        }
     }
 /*<       IF ( E .LE. T ) RETURN >*/
     if (*e <= *t) {
-	return 0;
+        return 0;
     }
 /*<       L3 = 1./DLOG(A3) >*/
     l3 = (float)1. / log(a3);
@@ -175,22 +175,22 @@ extern "C" {
     a = *step;
 /*<       IF ( A .GT. 0. ) GOTO 30 >*/
     if (a > (float)0.) {
-	goto L30;
+        goto L30;
     }
 /*<       DO 20 I = 1,N >*/
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*< 20         IF ( DABS(X(I)) .GT. A ) A = DABS(X(I)) >*/
 /* L20: */
-	if ((d__1 = x[i__], abs(d__1)) > a) {
-	    a = (d__2 = x[i__], abs(d__2));
-	}
+        if ((d__1 = x[i__], abs(d__1)) > a) {
+            a = (d__2 = x[i__], abs(d__2));
+        }
     }
 /*<       A = .01*A/E >*/
     a = a * (float).01 / *e;
 /*<       IF ( A .EQ. 0. ) A = 1. >*/
     if (a == (float)0.) {
-	a = (float)1.;
+        a = (float)1.;
     }
 /*< 30    G = 0. >*/
 L30:
@@ -200,11 +200,11 @@ L30:
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*< 40         G = G + H(I,2)*H(I,3) >*/
 /* L40: */
-	g += h__[i__ + (h_dim1 << 1)] * h__[i__ + h_dim1 * 3];
+        g += h__[i__ + (h_dim1 << 1)] * h__[i__ + h_dim1 * 3];
     }
 /*<       IF ( G .LT. 0. ) GOTO 620 >*/
     if (g < (float)0.) {
-	goto L620;
+        goto L620;
     }
 /*< 50    L = 0 >*/
 L50:
@@ -214,7 +214,7 @@ L50:
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*< 60         H(I,1) = -H(I,2) >*/
 /* L60: */
-	h__[i__ + h_dim1] = -h__[i__ + (h_dim1 << 1)];
+        h__[i__ + h_dim1] = -h__[i__ + (h_dim1 << 1)];
     }
 /*<       D = -G >*/
     d__ = -g;
@@ -243,7 +243,7 @@ L70:
     iq = 0;
 /*<       IF ( FA .LE. F ) GOTO 80 >*/
     if (fa <= f) {
-	goto L80;
+        goto L80;
     }
 /*<       C = A >*/
     c__ = a;
@@ -283,7 +283,7 @@ L90:
     q = (d__ + (f - f0) / c0) / c0;
 /*<       IF ( Q .LT. 0. ) GOTO 110 >*/
     if (q < (float)0.) {
-	goto L110;
+        goto L110;
     }
 /*<       Q = A >*/
     q = a;
@@ -292,7 +292,7 @@ L100:
     ++nd;
 /*<       IF ( ND .GT. 25 ) GOTO 610 >*/
     if (nd > 25) {
-	goto L610;
+        goto L610;
     }
 /*<       Q = A3*Q >*/
     q = a3 * q;
@@ -302,7 +302,7 @@ L100:
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       IF ( P-F .LT. W*Q ) GOTO 100 >*/
     if (p - f < w * q) {
-	goto L100;
+        goto L100;
     }
 /*<       GOTO 260 >*/
     goto L260;
@@ -311,13 +311,13 @@ L110:
     q = d__ * (float).5 / q;
 /*<       IF ( Q .LT. .01*C0 ) Q = .01*C0 >*/
     if (q < c0 * (float).01) {
-	q = c0 * (float).01;
+        q = c0 * (float).01;
     }
 /*<       P = FV(Q,X,H,N,VALUE) >*/
     p = fv_(&q, &x[1], &h__[h_offset], n, value, userdata);
 /*<       IF ( P .LE. F0 ) GOTO 120 >*/
     if (p <= f0) {
-	goto L120;
+        goto L120;
     }
 /*<       F1 = F0 >*/
     f1 = f0;
@@ -340,15 +340,15 @@ L130:
 /*< 135   IF ( A .EQ. 0. ) GOTO 140 >*/
 L135:
     if (a == (float)0.) {
-	goto L140;
+        goto L140;
     }
 /*<       IF ( FA-F .GE. V*A ) GOTO 160 >*/
     if (fa - f >= v * a) {
-	goto L160;
+        goto L160;
     }
 /*<       IF ( FA-F .LT. W*A ) GOTO 210 >*/
     if (fa - f < w * a) {
-	goto L210;
+        goto L210;
     }
 /*<       GOTO 280 >*/
     goto L280;
@@ -357,14 +357,14 @@ L140:
     q = c0;
 /*<       IF ( C1 .LT. Q ) Q = C1 >*/
     if (c1 < q) {
-	q = c1;
+        q = c1;
     }
 /*< 150   NA = NA + 1 >*/
 L150:
     ++na;
 /*<       IF ( NA .GT. 25 ) GOTO 630 >*/
     if (na > 25) {
-	goto L630;
+        goto L630;
     }
 /*<       Q = A4*Q >*/
     q = a4 * q;
@@ -374,26 +374,26 @@ L150:
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       IF ( P-F .GE. V*Q ) GOTO 150 >*/
     if (p - f >= v * q) {
-	goto L150;
+        goto L150;
     }
 /*<       GOTO 250 >*/
     goto L250;
 /*< 160   IF ( C0 .GT. C1 ) GOTO 200 >*/
 L160:
     if (c0 > c1) {
-	goto L200;
+        goto L200;
     }
 /*<       IF ( F0-F .GT. V*C0 ) GOTO 180 >*/
     if (f0 - f > v * c0) {
-	goto L180;
+        goto L180;
     }
 /*<       IF ( F0-F .GE. W*C0 ) GOTO 320 >*/
     if (f0 - f >= w * c0) {
-	goto L320;
+        goto L320;
     }
 /*<       IF ( C1 .LE. A5*C0 ) GOTO 320 >*/
     if (c1 <= a5 * c0) {
-	goto L320;
+        goto L320;
     }
 /*<       R = DLOG(C1/C0) >*/
     r__ = log(c1 / c0);
@@ -408,7 +408,7 @@ L170:
     q *= r__;
 /*<       IF ( Q .LT. C0 ) GOTO 320 >*/
     if (q < c0) {
-	goto L320;
+        goto L320;
     }
 /*<       P = FV(Q,X,H,N,VALUE) >*/
     p = fv_(&q, &x[1], &h__[h_offset], n, value, userdata);
@@ -418,7 +418,7 @@ L170:
     ++na;
 /*<       IF ( P-F .GT. V*Q ) GOTO 170 >*/
     if (p - f > v * q) {
-	goto L170;
+        goto L170;
     }
 /*<       GOTO 320 >*/
     goto L320;
@@ -430,7 +430,7 @@ L190:
     ++na;
 /*<       IF ( NA .GT. 25 ) GOTO 630 >*/
     if (na > 25) {
-	goto L630;
+        goto L630;
     }
 /*<       Q = A4*Q >*/
     q = a4 * q;
@@ -440,7 +440,7 @@ L190:
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       IF ( P-F .GE. V*Q ) GOTO 190 >*/
     if (p - f >= v * q) {
-	goto L190;
+        goto L190;
     }
 /*<       GOTO 250 >*/
     goto L250;
@@ -452,15 +452,15 @@ L200:
 /*< 210   IF ( C0 .LT. C1 ) GOTO 290 >*/
 L210:
     if (c0 < c1) {
-	goto L290;
+        goto L290;
     }
 /*<       IF ( F0-F .GE. V*C0 ) GOTO 230 >*/
     if (f0 - f >= v * c0) {
-	goto L230;
+        goto L230;
     }
 /*<       IF ( F0-F .GE. W*C0 ) GOTO 250 >*/
     if (f0 - f >= w * c0) {
-	goto L250;
+        goto L250;
     }
 /*<       Q = C0 >*/
     q = c0;
@@ -469,7 +469,7 @@ L220:
     ++nd;
 /*<       IF ( ND .GT. 25 ) GOTO 610 >*/
     if (nd > 25) {
-	goto L610;
+        goto L610;
     }
 /*<       Q = A3*Q >*/
     q = a3 * q;
@@ -479,14 +479,14 @@ L220:
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       IF ( P-F .LT. W*Q ) GOTO 220 >*/
     if (p - f < w * q) {
-	goto L220;
+        goto L220;
     }
 /*<       GOTO 250 >*/
     goto L250;
 /*< 230   IF ( C0 .LE. A5*C1 ) GOTO 250 >*/
 L230:
     if (c0 <= a5 * c1) {
-	goto L250;
+        goto L250;
     }
 /*<       R = DLOG(C0/C1) >*/
     r__ = log(c0 / c1);
@@ -501,7 +501,7 @@ L240:
     q *= r__;
 /*<       IF ( Q .GT. C0 ) GOTO 250 >*/
     if (q > c0) {
-	goto L250;
+        goto L250;
     }
 /*<       ND = ND + 1 >*/
     ++nd;
@@ -511,21 +511,21 @@ L240:
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       IF ( P-F .LT. W*Q ) GOTO 240 >*/
     if (p - f < w * q) {
-	goto L240;
+        goto L240;
     }
 /*< 250   IF ( IQ .EQ. 1 ) GOTO 320 >*/
 L250:
     if (iq == 1) {
-	goto L320;
+        goto L320;
     }
 /*< 260   IF ( B .EQ. 0. ) GOTO 280 >*/
 L260:
     if (b == (float)0.) {
-	goto L280;
+        goto L280;
     }
 /*<       IF ( C .EQ. 0. ) GOTO 270 >*/
     if (c__ == (float)0.) {
-	goto L270;
+        goto L270;
     }
 /*<       V = C - A >*/
     v = c__ - a;
@@ -544,11 +544,11 @@ L260:
 /*<       IF ( DSIGN(E,C-B) .NE. E ) GOTO 320 >*/
     d__1 = c__ - b;
     if (d_sign(e, &d__1) != *e) {
-	goto L320;
+        goto L320;
     }
 /*<       IF ( E .EQ. 0. ) GOTO 320 >*/
     if (*e == (float)0.) {
-	goto L320;
+        goto L320;
     }
 /*<       Q = (P*R)*W - (Q*S)*V >*/
     q = p * r__ * w - q * s * v;
@@ -579,19 +579,19 @@ L270:
     v = w * w - v * (float)3. * d__;
 /*<       IF ( V .LT. 0. ) V = 0. >*/
     if (v < (float)0.) {
-	v = (float)0.;
+        v = (float)0.;
     }
 /*<       V = DSQRT(V) >*/
     v = sqrt(v);
 /*<       IF ( W+V .EQ. 0. ) GOTO 320 >*/
     if (w + v == (float)0.) {
-	goto L320;
+        goto L320;
     }
 /*<       Q = -D/(W+V) >*/
     q = -d__ / (w + v);
 /*<       IF ( Q .LE. 0. ) GOTO 320 >*/
     if (q <= (float)0.) {
-	goto L320;
+        goto L320;
     }
 /*<       P = FV(Q,X,H,N,VALUE) >*/
     p = fv_(&q, &x[1], &h__[h_offset], n, value, userdata);
@@ -602,13 +602,13 @@ L270:
 /*< 280   IF ( IQ .EQ. 1 ) GOTO  320 >*/
 L280:
     if (iq == 1) {
-	goto L320;
+        goto L320;
     }
 /*<       Q = (D+(F-FA)/A)/A >*/
     q = (d__ + (f - fa) / a) / a;
 /*<       IF ( Q .GE. 0. ) GOTO 320 >*/
     if (q >= (float)0.) {
-	goto L320;
+        goto L320;
     }
 /*<       Q = .5*D/Q >*/
     q = d__ * (float).5 / q;
@@ -621,11 +621,11 @@ L280:
 /*< 290   IF ( F0-F .GT. V*C0 ) GOTO 300 >*/
 L290:
     if (f0 - f > v * c0) {
-	goto L300;
+        goto L300;
     }
 /*<       IF ( F0-F .GT. W*C0 ) GOTO 320 >*/
     if (f0 - f > w * c0) {
-	goto L320;
+        goto L320;
     }
 /*< 300   Q = A >*/
 L300:
@@ -635,7 +635,7 @@ L310:
     ++nd;
 /*<       IF ( ND .GT. 25 ) GOTO 610 >*/
     if (nd > 25) {
-	goto L610;
+        goto L610;
     }
 /*<       Q = A3*Q >*/
     q = a3 * q;
@@ -645,7 +645,7 @@ L310:
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       IF ( P-F .LT. W*Q ) GOTO 310 >*/
     if (p - f < w * q) {
-	goto L310;
+        goto L310;
     }
 /*<       GOTO 250 >*/
     goto L250;
@@ -654,11 +654,11 @@ L320:
     da = fd_(&a, &x[1], &h__[h_offset], n, grad, userdata);
 /*<       IF ( DA .GT. A6*G ) GOTO 410 >*/
     if (da > a6 * g) {
-	goto L410;
+        goto L410;
     }
 /*<       IF ( DA .GE. 0. ) GOTO 560 >*/
     if (da >= (float)0.) {
-	goto L560;
+        goto L560;
     }
 /*<       R = A >*/
     r__ = a;
@@ -668,26 +668,26 @@ L320:
     i__1 = j;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<            IF ( Y(I) .GT. A ) GOTO 370 >*/
-	if (y[i__ - 1] > a) {
-	    goto L370;
-	}
+        if (y[i__ - 1] > a) {
+            goto L370;
+        }
 /*<            IF ( Y(I) .LE. Q ) GOTO 330 >*/
-	if (y[i__ - 1] <= q) {
-	    goto L330;
-	}
+        if (y[i__ - 1] <= q) {
+            goto L330;
+        }
 /*<            IF ( Y(I) .EQ. A ) GOTO 330 >*/
-	if (y[i__ - 1] == a) {
-	    goto L330;
-	}
+        if (y[i__ - 1] == a) {
+            goto L330;
+        }
 /*<            Q = Y(I) >*/
-	q = y[i__ - 1];
+        q = y[i__ - 1];
 /*< 330   CONTINUE >*/
 L330:
-	;
+        ;
     }
 /*<       IF ( A .LE. A8*Q ) GOTO 560 >*/
     if (a <= a8 * q) {
-	goto L560;
+        goto L560;
     }
 /*<       Q = A >*/
     q = a;
@@ -696,7 +696,7 @@ L340:
     ++nd;
 /*<       IF ( ND .GT. 25 ) GOTO 610 >*/
     if (nd > 25) {
-	goto L610;
+        goto L610;
     }
 /*<       Q = A3*Q >*/
     q = a3 * q;
@@ -708,18 +708,18 @@ L340:
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       IF ( P .LT. F1 ) GOTO 340 >*/
     if (p < f1) {
-	goto L340;
+        goto L340;
     }
 /*<       IF ( A .GT. R ) GOTO 360 >*/
     if (a > r__) {
-	goto L360;
+        goto L360;
     }
 /*<       DO 350 I = 1,N >*/
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*< 350        H(I,2) = X(I) + A*H(I,1) >*/
 /* L350: */
-	h__[i__ + (h_dim1 << 1)] = x[i__] + a * h__[i__ + h_dim1];
+        h__[i__ + (h_dim1 << 1)] = x[i__] + a * h__[i__ + h_dim1];
     }
 /*<       GOTO 560 >*/
     goto L560;
@@ -728,7 +728,7 @@ L360:
     da = fd_(&a, &x[1], &h__[h_offset], n, grad, userdata);
 /*<       IF ( DA .GT. A6*G ) GOTO 410 >*/
     if (da > a6 * g) {
-	goto L410;
+        goto L410;
     }
 /*<       GOTO 560 >*/
     goto L560;
@@ -739,20 +739,20 @@ L370:
     i__1 = j;
     for (k = i__; k <= i__1; ++k) {
 /*<            IF ( Y(K) .LE. A ) GOTO 380 >*/
-	if (y[k - 1] <= a) {
-	    goto L380;
-	}
+        if (y[k - 1] <= a) {
+            goto L380;
+        }
 /*<            IF ( Y(K) .LT. Q ) Q = Y(K) >*/
-	if (y[k - 1] < q) {
-	    q = y[k - 1];
-	}
+        if (y[k - 1] < q) {
+            q = y[k - 1];
+        }
 /*< 380   CONTINUE >*/
 L380:
-	;
+        ;
     }
 /*<       IF ( Q .LE. A5*A ) GOTO 560 >*/
     if (q <= a5 * a) {
-	goto L560;
+        goto L560;
     }
 /*<       F0 = DLOG(Q/A) >*/
     f0 = log(q / a);
@@ -767,7 +767,7 @@ L390:
     s *= f0;
 /*<       IF ( S .GE. Q ) GOTO 320 >*/
     if (s >= q) {
-	goto L320;
+        goto L320;
     }
 /*<       P = FV(S,X,H,N,VALUE) >*/
     p = fv_(&s, &x[1], &h__[h_offset], n, value, userdata);
@@ -777,18 +777,18 @@ L390:
     ins_(&s, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       IF ( P .LT. F1 ) GOTO 390 >*/
     if (p < f1) {
-	goto L390;
+        goto L390;
     }
 /*<       IF ( A .GT. R ) GOTO 320 >*/
     if (a > r__) {
-	goto L320;
+        goto L320;
     }
 /*<       DO 400 I = 1,N >*/
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*< 400        H(I,2) = X(I) + A*H(I,1) >*/
 /* L400: */
-	h__[i__ + (h_dim1 << 1)] = x[i__] + a * h__[i__ + h_dim1];
+        h__[i__ + (h_dim1 << 1)] = x[i__] + a * h__[i__ + h_dim1];
     }
 /*<       GOTO 560 >*/
     goto L560;
@@ -804,15 +804,15 @@ L420:
     ++i__;
 /*<       IF ( I .GT. J ) GOTO 430 >*/
     if (i__ > j) {
-	goto L430;
+        goto L430;
     }
 /*<       IF ( Y(I) .GE. A ) GOTO 420 >*/
     if (y[i__ - 1] >= a) {
-	goto L420;
+        goto L420;
     }
 /*<       IF ( Y(I) .LT. B ) GOTO 420 >*/
     if (y[i__ - 1] < b) {
-	goto L420;
+        goto L420;
     }
 /*<       B = Y(I) >*/
     b = y[i__ - 1];
@@ -827,7 +827,7 @@ L430:
     db = d__;
 /*<       IF ( B .NE. 0. ) DB = FD(B,X,H,N,GRAD) >*/
     if (b != (float)0.) {
-	db = fd_(&b, &x[1], &h__[h_offset], n, grad, userdata);
+        db = fd_(&b, &x[1], &h__[h_offset], n, grad, userdata);
     }
 /*< 440   W = 2.*DABS(B-A) >*/
 /* L440: */
@@ -843,22 +843,22 @@ L450:
     w *= (float).5;
 /*<       IF ( W .LT. DABS(C0-C) ) GOTO 550 >*/
     if (w < (d__1 = c0 - c__, abs(d__1))) {
-	goto L550;
+        goto L550;
     }
 /*<       IF ( C0 .LT. C ) GOTO 460 >*/
     if (c0 < c__) {
-	goto L460;
+        goto L460;
     }
 /*<       IF ( D0 .GE. D ) GOTO 470 >*/
     if (d0 >= d__) {
-	goto L470;
+        goto L470;
     }
 /*<       GOTO 550 >*/
     goto L550;
 /*< 460   IF ( D0 .GT. D ) GOTO 550 >*/
 L460:
     if (d0 > d__) {
-	goto L550;
+        goto L550;
     }
 /*< 470   CALL CUB(C,C,C0,F,F0,D,D0) >*/
 L470:
@@ -867,7 +867,7 @@ L470:
     ++nc;
 /*<       IF ( NC .GT. 30 ) GOTO 600 >*/
     if (nc > 30) {
-	goto L600;
+        goto L600;
     }
 /*< 480   R = DMAX1(A,B) >*/
 L480:
@@ -876,11 +876,11 @@ L480:
     s = min(a,b);
 /*<       IF ( C .GT. R ) GOTO 490 >*/
     if (c__ > r__) {
-	goto L490;
+        goto L490;
     }
 /*<       IF ( C .GT. S ) GOTO 500 >*/
     if (c__ > s) {
-	goto L500;
+        goto L500;
     }
 /*<       C = S + (S-C) >*/
     c__ = s + (s - c__);
@@ -888,7 +888,7 @@ L480:
     s = (a + b) * (float).5;
 /*<       IF ( C .GT. S ) C = S >*/
     if (c__ > s) {
-	c__ = s;
+        c__ = s;
     }
 /*<       GOTO 500 >*/
     goto L500;
@@ -899,7 +899,7 @@ L490:
     s = (a + b) * (float).5;
 /*<       IF ( C .LT. S ) C = S >*/
     if (c__ < s) {
-	c__ = s;
+        c__ = s;
     }
 /*< 500   C0 = A >*/
 L500:
@@ -912,7 +912,7 @@ L500:
     fvd_(&f, &d__, &c__, &x[1], &h__[h_offset], n, both, userdata);
 /*<       IF ( F .LT. FA ) GOTO 510 >*/
     if (f < fa) {
-	goto L510;
+        goto L510;
     }
 /*<       B = C >*/
     b = c__;
@@ -925,11 +925,11 @@ L500:
 /*< 510   IF ( C .LT. A ) GOTO 540 >*/
 L510:
     if (c__ < a) {
-	goto L540;
+        goto L540;
     }
 /*<       IF ( D .LT. 0. ) GOTO 530 >*/
     if (d__ < (float)0.) {
-	goto L530;
+        goto L530;
     }
 /*< 520   B = A >*/
 L520:
@@ -947,14 +947,14 @@ L530:
     da = d__;
 /*<       IF ( D .GT. A6*G ) GOTO 450 >*/
     if (d__ > a6 * g) {
-	goto L450;
+        goto L450;
     }
 /*<       GOTO 560 >*/
     goto L560;
 /*< 540   IF ( D .LT. 0. ) GOTO 520 >*/
 L540:
     if (d__ < (float)0.) {
-	goto L520;
+        goto L520;
     }
 /*<       GOTO 530 >*/
     goto L530;
@@ -974,22 +974,22 @@ L560:
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<            IF ( DABS(H(I,3)) .GT. E ) E = DABS(H(I,3)) >*/
-	if ((d__1 = h__[i__ + h_dim1 * 3], abs(d__1)) > *e) {
-	    *e = (d__2 = h__[i__ + h_dim1 * 3], abs(d__2));
-	}
+        if ((d__1 = h__[i__ + h_dim1 * 3], abs(d__1)) > *e) {
+            *e = (d__2 = h__[i__ + h_dim1 * 3], abs(d__2));
+        }
 /*< 570        X(I) = H(I,2) >*/
 /* L570: */
-	x[i__] = h__[i__ + (h_dim1 << 1)];
+        x[i__] = h__[i__ + (h_dim1 << 1)];
     }
 /*<       IT = IT + 1 >*/
     ++(*it);
 /*<       IF ( E .LE. T ) GOTO 660 >*/
     if (*e <= *t) {
-	goto L660;
+        goto L660;
     }
 /*<       IF ( IT .GE. LIMIT ) GOTO 660 >*/
     if (*it >= *limit) {
-	goto L660;
+        goto L660;
     }
 /*<       F = FA >*/
     f = fa;
@@ -1006,11 +1006,11 @@ L560:
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*< 580        R = R + H(I,2)*H(I,3) >*/
 /* L580: */
-	r__ += h__[i__ + (h_dim1 << 1)] * h__[i__ + h_dim1 * 3];
+        r__ += h__[i__ + (h_dim1 << 1)] * h__[i__ + h_dim1 * 3];
     }
 /*<       IF ( R .LT. 0. ) GOTO 620 >*/
     if (r__ < (float)0.) {
-	goto L620;
+        goto L620;
     }
 /*<       S = R/G >*/
     s = r__ / g;
@@ -1020,7 +1020,7 @@ L560:
     ++l;
 /*<       IF ( L .GE. M ) GOTO 50 >*/
     if (l >= *m) {
-	goto L50;
+        goto L50;
     }
 /*<       D = 0. >*/
     d__ = (float)0.;
@@ -1028,17 +1028,17 @@ L560:
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<            H(I,1) = -H(I,2) + S*H(I,1) >*/
-	h__[i__ + h_dim1] = -h__[i__ + (h_dim1 << 1)] + s * h__[i__ + h_dim1];
+        h__[i__ + h_dim1] = -h__[i__ + (h_dim1 << 1)] + s * h__[i__ + h_dim1];
 /*< 590        D = D + H(I,1)*H(I,3) >*/
 /* L590: */
-	d__ += h__[i__ + h_dim1] * h__[i__ + h_dim1 * 3];
+        d__ += h__[i__ + h_dim1] * h__[i__ + h_dim1 * 3];
     }
 /*<       GOTO 70 >*/
     goto L70;
 /*< 600   IF ( D .LT. G ) GOTO 560 >*/
 L600:
     if (d__ < g) {
-	goto L560;
+        goto L560;
     }
 /*<       WRITE(6,*) 'UNABLE TO OBTAIN DESCENT DIRECTION' >*/
     printf("UNABLE TO OBTAIN DESCENT DIRECTION\n");
@@ -1058,7 +1058,7 @@ L620:
 L630:
 /* Computing 25th power */
     d__1 = a3, d__2 = d__1, d__1 *= d__1, d__1 *= d__1, d__1 *= d__1, d__2 *= 
-	    d__1;
+            d__1;
     q *= d__2 * (d__1 * d__1);
 /*<       ND = 0 >*/
     nd = 0;
@@ -1067,7 +1067,7 @@ L640:
     ++nd;
 /*<       IF ( ND .GT. 25 ) GOTO 650 >*/
     if (nd > 25) {
-	goto L650;
+        goto L650;
     }
 /*<       Q = A3*Q >*/
     q = a3 * q;
@@ -1077,7 +1077,7 @@ L640:
     ins_(&q, &p, &a, &b, &c__, &fa, &fb, &fc, &j, y, z__);
 /*<       IF ( P-F .GT. V*Q ) GOTO 640 >*/
     if (p - f > v * q) {
-	goto L640;
+        goto L640;
     }
 /*<       GOTO 135 >*/
     goto L135;
@@ -1119,7 +1119,7 @@ doublereal fv_(doublereal *a, doublereal *x, doublereal *h__, integer *n,
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*< 10         H(I,2) = X(I) + A*H(I,1) >*/
 /* L10: */
-	h__[i__ + (h_dim1 << 1)] = x[i__] + *a * h__[i__ + h_dim1];
+        h__[i__ + (h_dim1 << 1)] = x[i__] + *a * h__[i__ + h_dim1];
     }
 /*<       FV = VALUE(H(1,2)) >*/
     ret_val = (*value)(&h__[(h_dim1 << 1) + 1], userdata);
@@ -1154,7 +1154,7 @@ doublereal fd_(doublereal *a, doublereal *x, doublereal *h__, integer *n,
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*< 10         H(I,2) = X(I) + A*H(I,1) >*/
 /* L10: */
-	h__[i__ + (h_dim1 << 1)] = x[i__] + *a * h__[i__ + h_dim1];
+        h__[i__ + (h_dim1 << 1)] = x[i__] + *a * h__[i__ + h_dim1];
     }
 /*<       CALL GRAD(H(1,3),H(1,2)) >*/
     (*grad)(&h__[h_dim1 * 3 + 1], &h__[(h_dim1 << 1) + 1], userdata);
@@ -1165,7 +1165,7 @@ doublereal fd_(doublereal *a, doublereal *x, doublereal *h__, integer *n,
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*< 20         D = D + H(I,1)*H(I,3) >*/
 /* L20: */
-	d__ += h__[i__ + h_dim1] * h__[i__ + h_dim1 * 3];
+        d__ += h__[i__ + h_dim1] * h__[i__ + h_dim1 * 3];
     }
 /*<       FD = D >*/
     ret_val = d__;
@@ -1200,7 +1200,7 @@ doublereal fd_(doublereal *a, doublereal *x, doublereal *h__, integer *n,
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*< 10         H(I,2) = X(I) + A*H(I,1) >*/
 /* L10: */
-	h__[i__ + (h_dim1 << 1)] = x[i__] + *a * h__[i__ + h_dim1];
+        h__[i__ + (h_dim1 << 1)] = x[i__] + *a * h__[i__ + h_dim1];
     }
 /*<       CALL BOTH(V,H(1,3),H(1,2)) >*/
     (*both)(v, &h__[h_dim1 * 3 + 1], &h__[(h_dim1 << 1) + 1], userdata);
@@ -1211,7 +1211,7 @@ doublereal fd_(doublereal *a, doublereal *x, doublereal *h__, integer *n,
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*< 20         D = D + H(I,1)*H(I,3) >*/
 /* L20: */
-	*d__ += h__[i__ + h_dim1] * h__[i__ + h_dim1 * 3];
+        *d__ += h__[i__ + h_dim1] * h__[i__ + h_dim1 * 3];
     }
 /*<       RETURN >*/
     return 0;
@@ -1220,7 +1220,7 @@ doublereal fd_(doublereal *a, doublereal *x, doublereal *h__, integer *n,
 
 /*<       SUBROUTINE CUB(X,A,B,C,D,E,F) >*/
 /* Subroutine */ int cub_(doublereal *x, doublereal *a, doublereal *b, 
-	doublereal *c__, doublereal *d__, doublereal *e, doublereal *f)
+        doublereal *c__, doublereal *d__, doublereal *e, doublereal *f)
 {
     /* System generated locals */
     doublereal d__1;
@@ -1236,7 +1236,7 @@ doublereal fd_(doublereal *a, doublereal *x, doublereal *h__, integer *n,
     g = *b - *a;
 /*<       IF ( G .EQ. 0. ) GOTO 50 >*/
     if (g == (float)0.) {
-	goto L50;
+        goto L50;
     }
 /*<       V = E + F - 3*(D-C)/G >*/
     v = *e + *f - (*d__ - *c__) * 3 / g;
@@ -1244,7 +1244,7 @@ doublereal fd_(doublereal *a, doublereal *x, doublereal *h__, integer *n,
     w = v * v - *e * *f;
 /*<       IF ( W .LT. 0. ) W = 0. >*/
     if (w < (float)0.) {
-	w = (float)0.;
+        w = (float)0.;
     }
 /*<       W = DSIGN(DSQRT(W),G) >*/
     d__1 = sqrt(w);
@@ -1255,15 +1255,15 @@ doublereal fd_(doublereal *a, doublereal *x, doublereal *h__, integer *n,
     z__ = *f + v;
 /*<       IF ( DSIGN(Y,G) .NE. Y ) GOTO 30 >*/
     if (d_sign(&y, &g) != y) {
-	goto L30;
+        goto L30;
     }
 /*<       IF ( DSIGN(Z,G) .NE. Z ) GOTO 20 >*/
     if (d_sign(&z__, &g) != z__) {
-	goto L20;
+        goto L20;
     }
 /*<       IF ( Z .EQ. 0. ) GOTO 20 >*/
     if (z__ == (float)0.) {
-	goto L20;
+        goto L20;
     }
 /*< 10    X = B - G*F/(Z+W) >*/
 L10:
@@ -1273,22 +1273,22 @@ L10:
 /*< 20    IF ( C .LT. D ) X = A >*/
 L20:
     if (*c__ < *d__) {
-	*x = *a;
+        *x = *a;
     }
 /*<       IF ( C .GE. D ) X = B >*/
     if (*c__ >= *d__) {
-	*x = *b;
+        *x = *b;
     }
 /*<       RETURN >*/
     return 0;
 /*< 30    IF ( DSIGN(Z,G) .NE. Z ) GOTO 40 >*/
 L30:
     if (d_sign(&z__, &g) != z__) {
-	goto L40;
+        goto L40;
     }
 /*<       IF ( DABS(E) .GT. DABS(F) ) GOTO 10 >*/
     if (abs(*e) > abs(*f)) {
-	goto L10;
+        goto L10;
     }
 /*< 40    X = A + G*E/(Y-W) >*/
 L40:
@@ -1305,8 +1305,8 @@ L50:
 
 /*<       SUBROUTINE INS(S,F,A,B,C,FA,FB,FC,J,Y,Z) >*/
 /* Subroutine */ int ins_(doublereal *s, doublereal *f, doublereal *a, 
-	doublereal *b, doublereal *c__, doublereal *fa, doublereal *fb, 
-	doublereal *fc, integer *j, doublereal *y, doublereal *z__)
+        doublereal *b, doublereal *c__, doublereal *fa, doublereal *fb, 
+        doublereal *fc, integer *j, doublereal *y, doublereal *z__)
 {
 /*<       REAL*8 A,B,C,F,FA,FB,FC,S,Y(1),Z(1) >*/
 /*<       INTEGER J >*/
@@ -1323,15 +1323,15 @@ L50:
     z__[*j] = *f;
 /*<       IF ( F .LE. FA ) GOTO 20 >*/
     if (*f <= *fa) {
-	goto L20;
+        goto L20;
     }
 /*<       IF ( F .LE. FB ) GOTO 10 >*/
     if (*f <= *fb) {
-	goto L10;
+        goto L10;
     }
 /*<       IF ( F .GT. FC ) RETURN >*/
     if (*f > *fc) {
-	return 0;
+        return 0;
     }
 /*<       C = S >*/
     *c__ = *s;
@@ -1369,5 +1369,5 @@ L20:
 } /* ins_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

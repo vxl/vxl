@@ -1,13 +1,13 @@
 /* lapack/double/dladiv.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -17,7 +17,7 @@ extern "C" {
 
 /*<       SUBROUTINE DLADIV( A, B, C, D, P, Q ) >*/
 /* Subroutine */ int dladiv_(doublereal *a, doublereal *b, doublereal *c__, 
-	doublereal *d__, doublereal *p, doublereal *q)
+        doublereal *d__, doublereal *p, doublereal *q)
 {
     doublereal e, f;
 
@@ -69,23 +69,23 @@ extern "C" {
 /*<       IF( ABS( D ).LT.ABS( C ) ) THEN >*/
     if (abs(*d__) < abs(*c__)) {
 /*<          E = D / C >*/
-	e = *d__ / *c__;
+        e = *d__ / *c__;
 /*<          F = C + D*E >*/
-	f = *c__ + *d__ * e;
+        f = *c__ + *d__ * e;
 /*<          P = ( A+B*E ) / F >*/
-	*p = (*a + *b * e) / f;
+        *p = (*a + *b * e) / f;
 /*<          Q = ( B-A*E ) / F >*/
-	*q = (*b - *a * e) / f;
+        *q = (*b - *a * e) / f;
 /*<       ELSE >*/
     } else {
 /*<          E = C / D >*/
-	e = *c__ / *d__;
+        e = *c__ / *d__;
 /*<          F = D + C*E >*/
-	f = *d__ + *c__ * e;
+        f = *d__ + *c__ * e;
 /*<          P = ( B+A*E ) / F >*/
-	*p = (*b + *a * e) / f;
+        *p = (*b + *a * e) / f;
 /*<          Q = ( -A+B*E ) / F >*/
-	*q = (-(*a) + *b * e) / f;
+        *q = (-(*a) + *b * e) / f;
 /*<       END IF >*/
     }
 
@@ -98,5 +98,5 @@ extern "C" {
 } /* dladiv_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif
