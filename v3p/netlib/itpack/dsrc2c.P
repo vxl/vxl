@@ -17,9 +17,6 @@ extern doublereal cheby_(doublereal *qa, doublereal *qt, doublereal *rrr, intege
 extern int chgcon_(doublereal *tri, doublereal *gamold, doublereal *rhoold, integer *ibmth);
 extern int chgsi_(doublereal *dtnrm, integer *ibmth);
 extern logical chgsme_(doublereal *oldnrm, integer *icnt);
-extern int daxpy_(integer *n, doublereal *da, doublereal *dx, integer *incx, doublereal *dy, integer *incy);
-extern int dcopy_(integer *n, doublereal *dx, integer *incx, doublereal *dy, integer *incy);
-extern doublereal ddot_(integer *n, doublereal *dx, integer *incx, doublereal *dy, integer *incy);
 extern doublereal determ_(integer *n, doublereal *tri, doublereal *xlmda);
 extern int dfault_(integer *iparm, doublereal *rparm);
 extern int echall_(integer *nn, integer *ia, integer *ja, doublereal *a, doublereal *rhs, integer *iparm, doublereal *rparm, integer *icall);
@@ -71,4 +68,7 @@ extern int zbrent_(integer *n, doublereal *tri, doublereal *eps, integer *nsig, 
 /* comlen itcom1_ 24 */
 /* comlen itcom2_ 20 */
 /* comlen itcom3_ 160 */
+/*:ref: dcopy_ 14 5 4 7 4 7 4 */
+/*:ref: ddot_ 7 5 4 7 4 7 4 */
+/*:ref: daxpy_ 14 6 4 7 7 4 7 4 */
 /*:ref: etime_ 6 1 6 */

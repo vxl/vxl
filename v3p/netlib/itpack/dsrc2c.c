@@ -8009,395 +8009,6 @@ L10:
 /*<       END >*/
 } /* chgsme_ */
 
-/*<       SUBROUTINE DAXPY (N,DA,DX,INCX,DY,INCY) >*/
-/* Subroutine */ int daxpy_(integer *n, doublereal *da, doublereal *dx, 
-	integer *incx, doublereal *dy, integer *incy)
-{
-    /* System generated locals */
-    integer i__1, i__2;
-
-    /* Local variables */
-    integer i__, m, ix, iy, ns, mp1;
-
-
-/*     OVERWRITE DOUBLE PRECISION DY WITH DOUBLE PRECISION DA*DX + DY. */
-
-/*<       DOUBLE PRECISION DX(1),DY(1),DA >*/
-/*<       IF (N.LE.0.OR.DA.EQ.0.D0) RETURN >*/
-    /* Parameter adjustments */
-    --dy;
-    --dx;
-
-    /* Function Body */
-    if (*n <= 0 || *da == 0.) {
-	return 0;
-    }
-/*<       IF (INCX.EQ.INCY) IF (INCX-1) 10 , 30 , 70 >*/
-    if (*incx == *incy) {
-	if ((i__1 = *incx - 1) < 0) {
-	    goto L10;
-	} else if (i__1 == 0) {
-	    goto L30;
-	} else {
-	    goto L70;
-	}
-    }
-/*<    10 CONTINUE >*/
-L10:
-
-/*        CODE FOR NONEQUAL OR NONPOSITIVE INCREMENTS. */
-
-/*<       IX = 1 >*/
-    ix = 1;
-/*<       IY = 1 >*/
-    iy = 1;
-/*<       IF (INCX.LT.0) IX = (-N+1)*INCX+1 >*/
-    if (*incx < 0) {
-	ix = (-(*n) + 1) * *incx + 1;
-    }
-/*<       IF (INCY.LT.0) IY = (-N+1)*INCY+1 >*/
-    if (*incy < 0) {
-	iy = (-(*n) + 1) * *incy + 1;
-    }
-/*<       DO 20 I = 1,N >*/
-    i__1 = *n;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-/*<          DY(IY) = DY(IY)+DA*DX(IX) >*/
-	dy[iy] += *da * dx[ix];
-/*<          IX = IX+INCX >*/
-	ix += *incx;
-/*<          IY = IY+INCY >*/
-	iy += *incy;
-/*<    20 CONTINUE >*/
-/* L20: */
-    }
-/*<       RETURN >*/
-    return 0;
-
-/*        CODE FOR BOTH INCREMENTS EQUAL TO 1 */
-
-/*        CLEAN-UP LOOP SO REMAINING VECTOR LENGTH IS A MULTIPLE OF 4. */
-
-/*<    30 M = N-(N/4)*4 >*/
-L30:
-    m = *n - (*n / 4 << 2);
-/*<       IF (M.EQ.0) GO TO 50 >*/
-    if (m == 0) {
-	goto L50;
-    }
-/*<       DO 40 I = 1,M >*/
-    i__1 = m;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-/*<          DY(I) = DY(I)+DA*DX(I) >*/
-	dy[i__] += *da * dx[i__];
-/*<    40 CONTINUE >*/
-/* L40: */
-    }
-/*<       IF (N.LT.4) RETURN >*/
-    if (*n < 4) {
-	return 0;
-    }
-/*<    50 MP1 = M+1 >*/
-L50:
-    mp1 = m + 1;
-/*<       DO 60 I = MP1,N,4 >*/
-    i__1 = *n;
-    for (i__ = mp1; i__ <= i__1; i__ += 4) {
-/*<          DY(I) = DY(I)+DA*DX(I) >*/
-	dy[i__] += *da * dx[i__];
-/*<          DY(I+1) = DY(I+1)+DA*DX(I+1) >*/
-	dy[i__ + 1] += *da * dx[i__ + 1];
-/*<          DY(I+2) = DY(I+2)+DA*DX(I+2) >*/
-	dy[i__ + 2] += *da * dx[i__ + 2];
-/*<          DY(I+3) = DY(I+3)+DA*DX(I+3) >*/
-	dy[i__ + 3] += *da * dx[i__ + 3];
-/*<    60 CONTINUE >*/
-/* L60: */
-    }
-/*<       RETURN >*/
-    return 0;
-
-/*        CODE FOR EQUAL, POSITIVE, NONUNIT INCREMENTS. */
-
-/*<    70 CONTINUE >*/
-L70:
-/*<       NS = N*INCX >*/
-    ns = *n * *incx;
-/*<       DO 80 I = 1,NS,INCX >*/
-    i__1 = ns;
-    i__2 = *incx;
-    for (i__ = 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2) {
-/*<          DY(I) = DA*DX(I)+DY(I) >*/
-	dy[i__] = *da * dx[i__] + dy[i__];
-/*<    80 CONTINUE >*/
-/* L80: */
-    }
-/*<       RETURN >*/
-    return 0;
-/*<       END >*/
-} /* daxpy_ */
-
-/*<       SUBROUTINE DCOPY (N,DX,INCX,DY,INCY) >*/
-/* Subroutine */ int dcopy_(integer *n, doublereal *dx, integer *incx, 
-	doublereal *dy, integer *incy)
-{
-    /* System generated locals */
-    integer i__1, i__2;
-
-    /* Local variables */
-    integer i__, m, ix, iy, ns, mp1;
-
-
-/*     COPY DOUBLE PRECISION DX TO DOUBLE PRECISION DY. */
-
-/*<       DOUBLE PRECISION DX(1),DY(1) >*/
-/*<       IF (N.LE.0) RETURN >*/
-    /* Parameter adjustments */
-    --dy;
-    --dx;
-
-    /* Function Body */
-    if (*n <= 0) {
-	return 0;
-    }
-/*<       IF (INCX.EQ.INCY) IF (INCX-1) 10 , 30 , 70 >*/
-    if (*incx == *incy) {
-	if ((i__1 = *incx - 1) < 0) {
-	    goto L10;
-	} else if (i__1 == 0) {
-	    goto L30;
-	} else {
-	    goto L70;
-	}
-    }
-/*<    10 CONTINUE >*/
-L10:
-
-/*        CODE FOR UNEQUAL OR NONPOSITIVE INCREMENTS. */
-
-/*<       IX = 1 >*/
-    ix = 1;
-/*<       IY = 1 >*/
-    iy = 1;
-/*<       IF (INCX.LT.0) IX = (-N+1)*INCX+1 >*/
-    if (*incx < 0) {
-	ix = (-(*n) + 1) * *incx + 1;
-    }
-/*<       IF (INCY.LT.0) IY = (-N+1)*INCY+1 >*/
-    if (*incy < 0) {
-	iy = (-(*n) + 1) * *incy + 1;
-    }
-/*<       DO 20 I = 1,N >*/
-    i__1 = *n;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-/*<          DY(IY) = DX(IX) >*/
-	dy[iy] = dx[ix];
-/*<          IX = IX+INCX >*/
-	ix += *incx;
-/*<          IY = IY+INCY >*/
-	iy += *incy;
-/*<    20 CONTINUE >*/
-/* L20: */
-    }
-/*<       RETURN >*/
-    return 0;
-
-/*        CODE FOR BOTH INCREMENTS EQUAL TO 1 */
-
-/*        CLEAN-UP LOOP SO REMAINING VECTOR LENGTH IS A MULTIPLE OF 7. */
-
-/*<    30 M = N-(N/7)*7 >*/
-L30:
-    m = *n - *n / 7 * 7;
-/*<       IF (M.EQ.0) GO TO 50 >*/
-    if (m == 0) {
-	goto L50;
-    }
-/*<       DO 40 I = 1,M >*/
-    i__1 = m;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-/*<          DY(I) = DX(I) >*/
-	dy[i__] = dx[i__];
-/*<    40 CONTINUE >*/
-/* L40: */
-    }
-/*<       IF (N.LT.7) RETURN >*/
-    if (*n < 7) {
-	return 0;
-    }
-/*<    50 MP1 = M+1 >*/
-L50:
-    mp1 = m + 1;
-/*<       DO 60 I = MP1,N,7 >*/
-    i__1 = *n;
-    for (i__ = mp1; i__ <= i__1; i__ += 7) {
-/*<          DY(I) = DX(I) >*/
-	dy[i__] = dx[i__];
-/*<          DY(I+1) = DX(I+1) >*/
-	dy[i__ + 1] = dx[i__ + 1];
-/*<          DY(I+2) = DX(I+2) >*/
-	dy[i__ + 2] = dx[i__ + 2];
-/*<          DY(I+3) = DX(I+3) >*/
-	dy[i__ + 3] = dx[i__ + 3];
-/*<          DY(I+4) = DX(I+4) >*/
-	dy[i__ + 4] = dx[i__ + 4];
-/*<          DY(I+5) = DX(I+5) >*/
-	dy[i__ + 5] = dx[i__ + 5];
-/*<          DY(I+6) = DX(I+6) >*/
-	dy[i__ + 6] = dx[i__ + 6];
-/*<    60 CONTINUE >*/
-/* L60: */
-    }
-/*<       RETURN >*/
-    return 0;
-
-/*        CODE FOR EQUAL, POSITIVE, NONUNIT INCREMENTS. */
-
-/*<    70 CONTINUE >*/
-L70:
-/*<       NS = N*INCX >*/
-    ns = *n * *incx;
-/*<       DO 80 I = 1,NS,INCX >*/
-    i__1 = ns;
-    i__2 = *incx;
-    for (i__ = 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2) {
-/*<          DY(I) = DX(I) >*/
-	dy[i__] = dx[i__];
-/*<    80 CONTINUE >*/
-/* L80: */
-    }
-/*<       RETURN >*/
-    return 0;
-/*<       END >*/
-} /* dcopy_ */
-
-/*<       DOUBLE PRECISION FUNCTION DDOT (N,DX,INCX,DY,INCY) >*/
-doublereal ddot_(integer *n, doublereal *dx, integer *incx, doublereal *dy, 
-	integer *incy)
-{
-    /* System generated locals */
-    integer i__1, i__2;
-    doublereal ret_val;
-
-    /* Local variables */
-    integer i__, m, ix, iy, ns, mp1;
-
-
-/*     RETURNS THE DOT PRODUCT OF DOUBLE PRECISION DX AND DY. */
-
-/*<       DOUBLE PRECISION DX(1),DY(1) >*/
-/*<       DDOT = 0.D0 >*/
-    /* Parameter adjustments */
-    --dy;
-    --dx;
-
-    /* Function Body */
-    ret_val = 0.;
-/*<       IF (N.LE.0) RETURN >*/
-    if (*n <= 0) {
-	return ret_val;
-    }
-/*<       IF (INCX.EQ.INCY) IF (INCX-1) 10 , 30 , 70 >*/
-    if (*incx == *incy) {
-	if ((i__1 = *incx - 1) < 0) {
-	    goto L10;
-	} else if (i__1 == 0) {
-	    goto L30;
-	} else {
-	    goto L70;
-	}
-    }
-/*<    10 CONTINUE >*/
-L10:
-
-/*         CODE FOR UNEQUAL OR NONPOSITIVE INCREMENTS. */
-
-/*<       IX = 1 >*/
-    ix = 1;
-/*<       IY = 1 >*/
-    iy = 1;
-/*<       IF (INCX.LT.0) IX = (-N+1)*INCX+1 >*/
-    if (*incx < 0) {
-	ix = (-(*n) + 1) * *incx + 1;
-    }
-/*<       IF (INCY.LT.0) IY = (-N+1)*INCY+1 >*/
-    if (*incy < 0) {
-	iy = (-(*n) + 1) * *incy + 1;
-    }
-/*<       DO 20 I = 1,N >*/
-    i__1 = *n;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-/*<          DDOT = DDOT+DX(IX)*DY(IY) >*/
-	ret_val += dx[ix] * dy[iy];
-/*<          IX = IX+INCX >*/
-	ix += *incx;
-/*<          IY = IY+INCY >*/
-	iy += *incy;
-/*<    20 CONTINUE >*/
-/* L20: */
-    }
-/*<       RETURN >*/
-    return ret_val;
-
-/*        CODE FOR BOTH INCREMENTS EQUAL TO 1. */
-
-/*        CLEAN-UP LOOP SO REMAINING VECTOR LENGTH IS A MULTIPLE OF 5. */
-
-/*<    30 M = N-(N/5)*5 >*/
-L30:
-    m = *n - *n / 5 * 5;
-/*<       IF (M.EQ.0) GO TO 50 >*/
-    if (m == 0) {
-	goto L50;
-    }
-/*<       DO 40 I = 1,M >*/
-    i__1 = m;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-/*<          DDOT = DDOT+DX(I)*DY(I) >*/
-	ret_val += dx[i__] * dy[i__];
-/*<    40 CONTINUE >*/
-/* L40: */
-    }
-/*<       IF (N.LT.5) RETURN >*/
-    if (*n < 5) {
-	return ret_val;
-    }
-/*<    50 MP1 = M+1 >*/
-L50:
-    mp1 = m + 1;
-/*<       DO 60 I = MP1,N,5 >*/
-    i__1 = *n;
-    for (i__ = mp1; i__ <= i__1; i__ += 5) {
-/*<    >*/
-	ret_val = ret_val + dx[i__] * dy[i__] + dx[i__ + 1] * dy[i__ + 1] + 
-		dx[i__ + 2] * dy[i__ + 2] + dx[i__ + 3] * dy[i__ + 3] + dx[
-		i__ + 4] * dy[i__ + 4];
-/*<    60 CONTINUE >*/
-/* L60: */
-    }
-/*<       RETURN >*/
-    return ret_val;
-
-/*         CODE FOR POSITIVE EQUAL INCREMENTS .NE.1. */
-
-/*<    70 CONTINUE >*/
-L70:
-/*<       NS = N*INCX >*/
-    ns = *n * *incx;
-/*<       DO 80 I = 1,NS,INCX >*/
-    i__1 = ns;
-    i__2 = *incx;
-    for (i__ = 1; i__2 < 0 ? i__ >= i__1 : i__ <= i__1; i__ += i__2) {
-/*<          DDOT = DDOT+DX(I)*DY(I) >*/
-	ret_val += dx[i__] * dy[i__];
-/*<    80 CONTINUE >*/
-/* L80: */
-    }
-/*<       RETURN >*/
-    return ret_val;
-/*<       END >*/
-} /* ddot_ */
-
 /*<       DOUBLE PRECISION FUNCTION DETERM (N,TRI,XLMDA) >*/
 doublereal determ_(integer *n, doublereal *tri, doublereal *xlmda)
 {
@@ -8641,21 +8252,21 @@ L20:
     integer i__, n, np1, nzro;
 
     /* Fortran I/O blocks */
-    static cilist io___405 = { 0, 0, 0, fmt_10, 0 };
-    static cilist io___406 = { 0, 0, 0, fmt_20, 0 };
-    static cilist io___407 = { 0, 0, 0, fmt_30, 0 };
-    static cilist io___409 = { 0, 0, 0, fmt_40, 0 };
-    static cilist io___410 = { 0, 0, 0, fmt_30, 0 };
-    static cilist io___411 = { 0, 0, 0, fmt_50, 0 };
-    static cilist io___412 = { 0, 0, 0, fmt_60, 0 };
-    static cilist io___413 = { 0, 0, 0, fmt_70, 0 };
-    static cilist io___414 = { 0, 0, 0, fmt_60, 0 };
-    static cilist io___415 = { 0, 0, 0, fmt_90, 0 };
-    static cilist io___416 = { 0, 0, 0, fmt_110, 0 };
-    static cilist io___417 = { 0, 0, 0, fmt_130, 0 };
-    static cilist io___418 = { 0, 0, 0, fmt_140, 0 };
-    static cilist io___419 = { 0, 0, 0, fmt_150, 0 };
-    static cilist io___420 = { 0, 0, 0, fmt_160, 0 };
+    static cilist io___387 = { 0, 0, 0, fmt_10, 0 };
+    static cilist io___388 = { 0, 0, 0, fmt_20, 0 };
+    static cilist io___389 = { 0, 0, 0, fmt_30, 0 };
+    static cilist io___391 = { 0, 0, 0, fmt_40, 0 };
+    static cilist io___392 = { 0, 0, 0, fmt_30, 0 };
+    static cilist io___393 = { 0, 0, 0, fmt_50, 0 };
+    static cilist io___394 = { 0, 0, 0, fmt_60, 0 };
+    static cilist io___395 = { 0, 0, 0, fmt_70, 0 };
+    static cilist io___396 = { 0, 0, 0, fmt_60, 0 };
+    static cilist io___397 = { 0, 0, 0, fmt_90, 0 };
+    static cilist io___398 = { 0, 0, 0, fmt_110, 0 };
+    static cilist io___399 = { 0, 0, 0, fmt_130, 0 };
+    static cilist io___400 = { 0, 0, 0, fmt_140, 0 };
+    static cilist io___401 = { 0, 0, 0, fmt_150, 0 };
+    static cilist io___402 = { 0, 0, 0, fmt_160, 0 };
 
 
 
@@ -8816,18 +8427,18 @@ L20:
 /*     THE ITERATIVE PARAMETERS */
 
 /*<       WRITE (NOUT,10) >*/
-    io___405.ciunit = itcom1_1.nout;
-    s_wsfe(&io___405);
+    io___387.ciunit = itcom1_1.nout;
+    s_wsfe(&io___387);
     e_wsfe();
 /*<    10 FORMAT (///30X,'THE LINEAR SYSTEM IS AS FOLLOWS') >*/
 /*<       WRITE (NOUT,20) >*/
-    io___406.ciunit = itcom1_1.nout;
-    s_wsfe(&io___406);
+    io___388.ciunit = itcom1_1.nout;
+    s_wsfe(&io___388);
     e_wsfe();
 /*<    20 FORMAT (/2X,'IA ARRAY') >*/
 /*<       WRITE (NOUT,30) (IA(I),I=1,NP1) >*/
-    io___407.ciunit = itcom1_1.nout;
-    s_wsfe(&io___407);
+    io___389.ciunit = itcom1_1.nout;
+    s_wsfe(&io___389);
     i__1 = np1;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	do_fio(&c__1, (char *)&ia[i__], (ftnlen)sizeof(integer));
@@ -8835,26 +8446,26 @@ L20:
     e_wsfe();
 /*<    30 FORMAT (2X,10(2X,I8)) >*/
 /*<       WRITE (NOUT,40) >*/
-    io___409.ciunit = itcom1_1.nout;
-    s_wsfe(&io___409);
+    io___391.ciunit = itcom1_1.nout;
+    s_wsfe(&io___391);
     e_wsfe();
 /*<    40 FORMAT (/2X,'JA ARRAY') >*/
 /*<       WRITE (NOUT,30) (JA(I),I=1,NZRO) >*/
-    io___410.ciunit = itcom1_1.nout;
-    s_wsfe(&io___410);
+    io___392.ciunit = itcom1_1.nout;
+    s_wsfe(&io___392);
     i__1 = nzro;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	do_fio(&c__1, (char *)&ja[i__], (ftnlen)sizeof(integer));
     }
     e_wsfe();
 /*<       WRITE (NOUT,50) >*/
-    io___411.ciunit = itcom1_1.nout;
-    s_wsfe(&io___411);
+    io___393.ciunit = itcom1_1.nout;
+    s_wsfe(&io___393);
     e_wsfe();
 /*<    50 FORMAT (/2X,' A ARRAY') >*/
 /*<       WRITE (NOUT,60) (A(I),I=1,NZRO) >*/
-    io___412.ciunit = itcom1_1.nout;
-    s_wsfe(&io___412);
+    io___394.ciunit = itcom1_1.nout;
+    s_wsfe(&io___394);
     i__1 = nzro;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	do_fio(&c__1, (char *)&a[i__], (ftnlen)sizeof(doublereal));
@@ -8862,13 +8473,13 @@ L20:
     e_wsfe();
 /*<    60 FORMAT (2X,5(2X,D20.13)) >*/
 /*<       WRITE (NOUT,70) >*/
-    io___413.ciunit = itcom1_1.nout;
-    s_wsfe(&io___413);
+    io___395.ciunit = itcom1_1.nout;
+    s_wsfe(&io___395);
     e_wsfe();
 /*<    70 FORMAT (/2X,'RHS ARRAY') >*/
 /*<       WRITE (NOUT,60) (RHS(I),I=1,N) >*/
-    io___414.ciunit = itcom1_1.nout;
-    s_wsfe(&io___414);
+    io___396.ciunit = itcom1_1.nout;
+    s_wsfe(&io___396);
     i__1 = n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	do_fio(&c__1, (char *)&rhs[i__], (ftnlen)sizeof(doublereal));
@@ -8876,22 +8487,22 @@ L20:
     e_wsfe();
 /*<    80 WRITE (NOUT,90) >*/
 L80:
-    io___415.ciunit = itcom1_1.nout;
-    s_wsfe(&io___415);
+    io___397.ciunit = itcom1_1.nout;
+    s_wsfe(&io___397);
     e_wsfe();
 /*<    90 FORMAT (///30X,'INITIAL ITERATIVE PARAMETERS') >*/
 /*<       GO TO 120 >*/
     goto L120;
 /*<   100 WRITE (NOUT,110) >*/
 L100:
-    io___416.ciunit = itcom1_1.nout;
-    s_wsfe(&io___416);
+    io___398.ciunit = itcom1_1.nout;
+    s_wsfe(&io___398);
     e_wsfe();
 /*<   110 FORMAT (///30X,'FINAL ITERATIVE PARAMETERS') >*/
 /*<   120 WRITE (NOUT,130) IPARM(1),LEVEL,IPARM(3),NOUT,ISYM,IPARM(6) >*/
 L120:
-    io___417.ciunit = itcom1_1.nout;
-    s_wsfe(&io___417);
+    io___399.ciunit = itcom1_1.nout;
+    s_wsfe(&io___399);
     do_fio(&c__1, (char *)&iparm[1], (ftnlen)sizeof(integer));
     do_fio(&c__1, (char *)&itcom1_1.level, (ftnlen)sizeof(integer));
     do_fio(&c__1, (char *)&iparm[3], (ftnlen)sizeof(integer));
@@ -8901,8 +8512,8 @@ L120:
     e_wsfe();
 /*<    >*/
 /*<    >*/
-    io___418.ciunit = itcom1_1.nout;
-    s_wsfe(&io___418);
+    io___400.ciunit = itcom1_1.nout;
+    s_wsfe(&io___400);
     do_fio(&c__1, (char *)&iparm[7], (ftnlen)sizeof(integer));
     do_fio(&c__1, (char *)&iparm[8], (ftnlen)sizeof(integer));
     do_fio(&c__1, (char *)&iparm[9], (ftnlen)sizeof(integer));
@@ -8912,8 +8523,8 @@ L120:
     e_wsfe();
 /*<    >*/
 /*<       WRITE (NOUT,150) ZETA,CME,SME,FF,OMEGA,SPECR >*/
-    io___419.ciunit = itcom1_1.nout;
-    s_wsfe(&io___419);
+    io___401.ciunit = itcom1_1.nout;
+    s_wsfe(&io___401);
     do_fio(&c__1, (char *)&itcom3_1.zeta, (ftnlen)sizeof(doublereal));
     do_fio(&c__1, (char *)&itcom3_1.cme, (ftnlen)sizeof(doublereal));
     do_fio(&c__1, (char *)&itcom3_1.sme, (ftnlen)sizeof(doublereal));
@@ -8923,8 +8534,8 @@ L120:
     e_wsfe();
 /*<    >*/
 /*<    >*/
-    io___420.ciunit = itcom1_1.nout;
-    s_wsfe(&io___420);
+    io___402.ciunit = itcom1_1.nout;
+    s_wsfe(&io___402);
     do_fio(&c__1, (char *)&itcom3_1.betab, (ftnlen)sizeof(doublereal));
     do_fio(&c__1, (char *)&rparm[8], (ftnlen)sizeof(doublereal));
     do_fio(&c__1, (char *)&rparm[9], (ftnlen)sizeof(doublereal));
@@ -8969,11 +8580,11 @@ AB  =\002,d15.8,8x,\002RPARM(7)\002/35x,\002BETADT =\002,l15,8x,\002IPARM(6\
     integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe();
 
     /* Fortran I/O blocks */
-    static cilist io___421 = { 0, 0, 0, fmt_10, 0 };
-    static cilist io___422 = { 0, 0, 0, fmt_30, 0 };
-    static cilist io___423 = { 0, 0, 0, fmt_50, 0 };
-    static cilist io___424 = { 0, 0, 0, fmt_70, 0 };
-    static cilist io___425 = { 0, 0, 0, fmt_90, 0 };
+    static cilist io___403 = { 0, 0, 0, fmt_10, 0 };
+    static cilist io___404 = { 0, 0, 0, fmt_30, 0 };
+    static cilist io___405 = { 0, 0, 0, fmt_50, 0 };
+    static cilist io___406 = { 0, 0, 0, fmt_70, 0 };
+    static cilist io___407 = { 0, 0, 0, fmt_90, 0 };
 
 
 
@@ -9118,8 +8729,8 @@ AB  =\002,d15.8,8x,\002RPARM(7)\002/35x,\002BETADT =\002,l15,8x,\002IPARM(6\
 /*     ITERATIVE PARAMETERS */
 
 /*<       WRITE (NOUT,10) ISYM,ITMAX,ZETA,ADAPT,CASEII >*/
-    io___421.ciunit = itcom1_1.nout;
-    s_wsfe(&io___421);
+    io___403.ciunit = itcom1_1.nout;
+    s_wsfe(&io___403);
     do_fio(&c__1, (char *)&itcom1_1.isym, (ftnlen)sizeof(integer));
     do_fio(&c__1, (char *)&itcom1_1.itmax, (ftnlen)sizeof(integer));
     do_fio(&c__1, (char *)&itcom3_1.zeta, (ftnlen)sizeof(doublereal));
@@ -9142,8 +8753,8 @@ AB  =\002,d15.8,8x,\002RPARM(7)\002/35x,\002BETADT =\002,l15,8x,\002IPARM(6\
 
 /*<    20 WRITE (NOUT,30) FF,CME,SME >*/
 L20:
-    io___422.ciunit = itcom1_1.nout;
-    s_wsfe(&io___422);
+    io___404.ciunit = itcom1_1.nout;
+    s_wsfe(&io___404);
     do_fio(&c__1, (char *)&itcom3_1.ff, (ftnlen)sizeof(doublereal));
     do_fio(&c__1, (char *)&itcom3_1.cme, (ftnlen)sizeof(doublereal));
     do_fio(&c__1, (char *)&itcom3_1.sme, (ftnlen)sizeof(doublereal));
@@ -9156,8 +8767,8 @@ L20:
 
 /*<    40 WRITE (NOUT,50) PARTAD,FF,CME,OMEGA,SPECR,BETAB,BETADT >*/
 L40:
-    io___423.ciunit = itcom1_1.nout;
-    s_wsfe(&io___423);
+    io___405.ciunit = itcom1_1.nout;
+    s_wsfe(&io___405);
     do_fio(&c__1, (char *)&itcom2_1.partad, (ftnlen)sizeof(logical));
     do_fio(&c__1, (char *)&itcom3_1.ff, (ftnlen)sizeof(doublereal));
     do_fio(&c__1, (char *)&itcom3_1.cme, (ftnlen)sizeof(doublereal));
@@ -9174,8 +8785,8 @@ L40:
 
 /*<    60 WRITE (NOUT,70) PARTAD,CME,OMEGA,SPECR,BETAB,BETADT >*/
 L60:
-    io___424.ciunit = itcom1_1.nout;
-    s_wsfe(&io___424);
+    io___406.ciunit = itcom1_1.nout;
+    s_wsfe(&io___406);
     do_fio(&c__1, (char *)&itcom2_1.partad, (ftnlen)sizeof(logical));
     do_fio(&c__1, (char *)&itcom3_1.cme, (ftnlen)sizeof(doublereal));
     do_fio(&c__1, (char *)&itcom3_1.omega, (ftnlen)sizeof(doublereal));
@@ -9195,8 +8806,8 @@ L80:
 	return 0;
     }
 /*<       WRITE (NOUT,90) CME >*/
-    io___425.ciunit = itcom1_1.nout;
-    s_wsfe(&io___425);
+    io___407.ciunit = itcom1_1.nout;
+    s_wsfe(&io___407);
     do_fio(&c__1, (char *)&itcom3_1.cme, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /*<    90 FORMAT (35X,'CME    =',D15.8,8X,'RPARM(2)'///) >*/
@@ -9377,9 +8988,9 @@ NE INCREASING \002)";
     doublereal err, tot, dlam, delta;
 
     /* Fortran I/O blocks */
-    static cilist io___446 = { 0, 0, 0, fmt_80, 0 };
-    static cilist io___452 = { 0, 0, 0, fmt_80, 0 };
-    static cilist io___453 = { 0, 0, 0, fmt_150, 0 };
+    static cilist io___428 = { 0, 0, 0, fmt_80, 0 };
+    static cilist io___434 = { 0, 0, 0, fmt_80, 0 };
+    static cilist io___435 = { 0, 0, 0, fmt_150, 0 };
 
 
 
@@ -9587,8 +9198,8 @@ L70:
 	ier = 602;
 /*<          IF (LEVEL.GE.1) WRITE (NOUT,80) >*/
 	if (itcom1_1.level >= 1) {
-	    io___446.ciunit = itcom1_1.nout;
-	    s_wsfe(&io___446);
+	    io___428.ciunit = itcom1_1.nout;
+	    s_wsfe(&io___428);
 	    e_wsfe();
 	}
 /*<    >*/
@@ -9660,8 +9271,8 @@ L110:
 	    ier = 602;
 /*<             IF (LEVEL.GE.0) WRITE (NOUT,80) >*/
 	    if (itcom1_1.level >= 0) {
-		io___452.ciunit = itcom1_1.nout;
-		s_wsfe(&io___452);
+		io___434.ciunit = itcom1_1.nout;
+		s_wsfe(&io___434);
 		e_wsfe();
 	    }
 /*<             GO TO 210 >*/
@@ -9691,8 +9302,8 @@ L140:
 	e2[1] = (doublereal) k;
 /*<          IF (LEVEL.GE.1) WRITE (NOUT,150) K >*/
 	if (itcom1_1.level >= 1) {
-	    io___453.ciunit = itcom1_1.nout;
-	    s_wsfe(&io___453);
+	    io___435.ciunit = itcom1_1.nout;
+	    s_wsfe(&io___435);
 	    do_fio(&c__1, (char *)&k, (ftnlen)sizeof(integer));
 	    e_wsfe();
 	}
@@ -9878,22 +9489,22 @@ TION \002,i5)";
     integer imthd;
 
     /* Fortran I/O blocks */
-    static cilist io___459 = { 0, 0, 0, fmt_20, 0 };
-    static cilist io___460 = { 0, 0, 0, fmt_40, 0 };
-    static cilist io___461 = { 0, 0, 0, fmt_60, 0 };
-    static cilist io___464 = { 0, 0, 0, fmt_80, 0 };
-    static cilist io___465 = { 0, 0, 0, fmt_100, 0 };
-    static cilist io___466 = { 0, 0, 0, fmt_120, 0 };
-    static cilist io___467 = { 0, 0, 0, fmt_140, 0 };
-    static cilist io___468 = { 0, 0, 0, fmt_160, 0 };
-    static cilist io___469 = { 0, 0, 0, fmt_180, 0 };
-    static cilist io___470 = { 0, 0, 0, fmt_200, 0 };
-    static cilist io___471 = { 0, 0, 0, fmt_220, 0 };
-    static cilist io___472 = { 0, 0, 0, fmt_240, 0 };
-    static cilist io___473 = { 0, 0, 0, fmt_260, 0 };
-    static cilist io___474 = { 0, 0, 0, fmt_280, 0 };
-    static cilist io___476 = { 0, 0, 0, fmt_310, 0 };
-    static cilist io___477 = { 0, 0, 0, fmt_320, 0 };
+    static cilist io___441 = { 0, 0, 0, fmt_20, 0 };
+    static cilist io___442 = { 0, 0, 0, fmt_40, 0 };
+    static cilist io___443 = { 0, 0, 0, fmt_60, 0 };
+    static cilist io___446 = { 0, 0, 0, fmt_80, 0 };
+    static cilist io___447 = { 0, 0, 0, fmt_100, 0 };
+    static cilist io___448 = { 0, 0, 0, fmt_120, 0 };
+    static cilist io___449 = { 0, 0, 0, fmt_140, 0 };
+    static cilist io___450 = { 0, 0, 0, fmt_160, 0 };
+    static cilist io___451 = { 0, 0, 0, fmt_180, 0 };
+    static cilist io___452 = { 0, 0, 0, fmt_200, 0 };
+    static cilist io___453 = { 0, 0, 0, fmt_220, 0 };
+    static cilist io___454 = { 0, 0, 0, fmt_240, 0 };
+    static cilist io___455 = { 0, 0, 0, fmt_260, 0 };
+    static cilist io___456 = { 0, 0, 0, fmt_280, 0 };
+    static cilist io___458 = { 0, 0, 0, fmt_310, 0 };
+    static cilist io___459 = { 0, 0, 0, fmt_320, 0 };
 
 
 
@@ -9976,8 +9587,8 @@ L10:
 /* ... PRINT HEADER FOR JCG AND RSCG */
 
 /*<       WRITE (NOUT,20) >*/
-    io___459.ciunit = itcom1_1.nout;
-    s_wsfe(&io___459);
+    io___441.ciunit = itcom1_1.nout;
+    s_wsfe(&io___441);
     e_wsfe();
 /*<    >*/
 
@@ -9985,8 +9596,8 @@ L10:
 
 /*<    30 WRITE (NOUT,40) IN,STPTST,CME,RHO,GAMMA >*/
 L30:
-    io___460.ciunit = itcom1_1.nout;
-    s_wsfe(&io___460);
+    io___442.ciunit = itcom1_1.nout;
+    s_wsfe(&io___442);
     do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
     do_fio(&c__1, (char *)&itcom3_1.stptst, (ftnlen)sizeof(doublereal));
     do_fio(&c__1, (char *)&itcom3_1.cme, (ftnlen)sizeof(doublereal));
@@ -10011,8 +9622,8 @@ L50:
 /* ... PRINT HEADER FOR SSOR-SI */
 
 /*<       WRITE (NOUT,60) >*/
-    io___461.ciunit = itcom1_1.nout;
-    s_wsfe(&io___461);
+    io___443.ciunit = itcom1_1.nout;
+    s_wsfe(&io___443);
     e_wsfe();
 /*<    >*/
 
@@ -10032,8 +9643,8 @@ L70:
 /*<       QTFF = QT**FF >*/
     qtff = pow_dd(&itcom3_1.qt, &itcom3_1.ff);
 /*<       WRITE (NOUT,80) IN,STPTST,QA,QTFF,RHO,GAMMA >*/
-    io___464.ciunit = itcom1_1.nout;
-    s_wsfe(&io___464);
+    io___446.ciunit = itcom1_1.nout;
+    s_wsfe(&io___446);
     do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
     do_fio(&c__1, (char *)&itcom3_1.stptst, (ftnlen)sizeof(doublereal));
     do_fio(&c__1, (char *)&itcom3_1.qa, (ftnlen)sizeof(doublereal));
@@ -10051,8 +9662,8 @@ L70:
 
 /*<    90 WRITE (NOUT,100) IN,STPTST,RHO,GAMMA >*/
 L90:
-    io___465.ciunit = itcom1_1.nout;
-    s_wsfe(&io___465);
+    io___447.ciunit = itcom1_1.nout;
+    s_wsfe(&io___447);
     do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
     do_fio(&c__1, (char *)&itcom3_1.stptst, (ftnlen)sizeof(doublereal));
     do_fio(&c__1, (char *)&itcom3_1.rho, (ftnlen)sizeof(doublereal));
@@ -10075,8 +9686,8 @@ L110:
 /* ... PRINT HEADER FOR J-SI AND RS-SI */
 
 /*<       WRITE (NOUT,120) >*/
-    io___466.ciunit = itcom1_1.nout;
-    s_wsfe(&io___466);
+    io___448.ciunit = itcom1_1.nout;
+    s_wsfe(&io___448);
     e_wsfe();
 /*<    >*/
 
@@ -10096,8 +9707,8 @@ L130:
 /*<       QTFF = QT**FF >*/
     qtff = pow_dd(&itcom3_1.qt, &itcom3_1.ff);
 /*<       WRITE (NOUT,140) IN,STPTST,QA,QTFF,RHO >*/
-    io___467.ciunit = itcom1_1.nout;
-    s_wsfe(&io___467);
+    io___449.ciunit = itcom1_1.nout;
+    s_wsfe(&io___449);
     do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
     do_fio(&c__1, (char *)&itcom3_1.stptst, (ftnlen)sizeof(doublereal));
     do_fio(&c__1, (char *)&itcom3_1.qa, (ftnlen)sizeof(doublereal));
@@ -10114,8 +9725,8 @@ L130:
 
 /*<   150 WRITE (NOUT,160) IN,STPTST,RHO >*/
 L150:
-    io___468.ciunit = itcom1_1.nout;
-    s_wsfe(&io___468);
+    io___450.ciunit = itcom1_1.nout;
+    s_wsfe(&io___450);
     do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
     do_fio(&c__1, (char *)&itcom3_1.stptst, (ftnlen)sizeof(doublereal));
     do_fio(&c__1, (char *)&itcom3_1.rho, (ftnlen)sizeof(doublereal));
@@ -10139,8 +9750,8 @@ L170:
 /* ... PRINT HEADER FOR SOR */
 
 /*<       WRITE (NOUT,180) >*/
-    io___469.ciunit = itcom1_1.nout;
-    s_wsfe(&io___469);
+    io___451.ciunit = itcom1_1.nout;
+    s_wsfe(&io___451);
     e_wsfe();
 /*<    >*/
 
@@ -10149,8 +9760,8 @@ L170:
 /*<   190 CONTINUE >*/
 L190:
 /*<       WRITE (NOUT,200) IN,STPTST,CME,OMEGA,SPECR >*/
-    io___470.ciunit = itcom1_1.nout;
-    s_wsfe(&io___470);
+    io___452.ciunit = itcom1_1.nout;
+    s_wsfe(&io___452);
     do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
     do_fio(&c__1, (char *)&itcom3_1.stptst, (ftnlen)sizeof(doublereal));
     do_fio(&c__1, (char *)&itcom3_1.cme, (ftnlen)sizeof(doublereal));
@@ -10177,8 +9788,8 @@ L210:
 /* ... PRINT HEADER FOR SSOR-CG */
 
 /*<       WRITE (NOUT,220) >*/
-    io___471.ciunit = itcom1_1.nout;
-    s_wsfe(&io___471);
+    io___453.ciunit = itcom1_1.nout;
+    s_wsfe(&io___453);
     e_wsfe();
 /*<    >*/
 
@@ -10187,8 +9798,8 @@ L210:
 /*<   230 CONTINUE >*/
 L230:
 /*<       WRITE (NOUT,240) IN,STPTST,SPECR,SPR,RHO,GAMMA >*/
-    io___472.ciunit = itcom1_1.nout;
-    s_wsfe(&io___472);
+    io___454.ciunit = itcom1_1.nout;
+    s_wsfe(&io___454);
     do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
     do_fio(&c__1, (char *)&itcom3_1.stptst, (ftnlen)sizeof(doublereal));
     do_fio(&c__1, (char *)&itcom3_1.specr, (ftnlen)sizeof(doublereal));
@@ -10210,8 +9821,8 @@ L250:
 	goto L270;
     }
 /*<       WRITE (NOUT,260) IN >*/
-    io___473.ciunit = itcom1_1.nout;
-    s_wsfe(&io___473);
+    io___455.ciunit = itcom1_1.nout;
+    s_wsfe(&io___455);
     do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
     e_wsfe();
 /*<   260 FORMAT ('0',2X,'ESTIMATE OF SOLUTION AT ITERATION ',I5) >*/
@@ -10219,8 +9830,8 @@ L250:
     goto L290;
 /*<   270 WRITE (NOUT,280) IN >*/
 L270:
-    io___474.ciunit = itcom1_1.nout;
-    s_wsfe(&io___474);
+    io___456.ciunit = itcom1_1.nout;
+    s_wsfe(&io___456);
     do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
     e_wsfe();
 /*<    >*/
@@ -10234,8 +9845,8 @@ L290:
 /* L300: */
     }
 /*<       WRITE (NOUT,310) (WK(I),I=1,N) >*/
-    io___476.ciunit = itcom1_1.nout;
-    s_wsfe(&io___476);
+    io___458.ciunit = itcom1_1.nout;
+    s_wsfe(&io___458);
     i__1 = n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	do_fio(&c__1, (char *)&wk[i__], (ftnlen)sizeof(doublereal));
@@ -10243,8 +9854,8 @@ L290:
     e_wsfe();
 /*<   310 FORMAT (2X,5(2X,D20.13)) >*/
 /*<       WRITE (NOUT,320) >*/
-    io___477.ciunit = itcom1_1.nout;
-    s_wsfe(&io___477);
+    io___459.ciunit = itcom1_1.nout;
+    s_wsfe(&io___459);
     e_wsfe();
 /*<   320 FORMAT (//) >*/
 
@@ -10366,8 +9977,8 @@ PECTRAL RADIUS =\002,d15.7/)";
     doublereal zm1, zm2, temp;
 
     /* Fortran I/O blocks */
-    static cilist io___484 = { 0, 0, 0, fmt_20, 0 };
-    static cilist io___485 = { 0, 0, 0, fmt_20, 0 };
+    static cilist io___466 = { 0, 0, 0, fmt_20, 0 };
+    static cilist io___467 = { 0, 0, 0, fmt_20, 0 };
 
 
 
@@ -10467,8 +10078,8 @@ L10:
     }
 /*<       IF (LEVEL.GE.2) WRITE (NOUT,20) IN,BETAB,ZM1,ZM2,CME,OMEGA,SPECR >*/
     if (itcom1_1.level >= 2) {
-	io___484.ciunit = itcom1_1.nout;
-	s_wsfe(&io___484);
+	io___466.ciunit = itcom1_1.nout;
+	s_wsfe(&io___466);
 	do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
 	do_fio(&c__1, (char *)&itcom3_1.betab, (ftnlen)sizeof(doublereal));
 	do_fio(&c__1, (char *)&zm1, (ftnlen)sizeof(doublereal));
@@ -10501,8 +10112,8 @@ L30:
     itcom2_1.partad = FALSE_;
 /*<       IF (LEVEL.GE.2) WRITE (NOUT,20) IN,BETAB,ZM1,ZM2,CME,OMEGA,SPECR >*/
     if (itcom1_1.level >= 2) {
-	io___485.ciunit = itcom1_1.nout;
-	s_wsfe(&io___485);
+	io___467.ciunit = itcom1_1.nout;
+	s_wsfe(&io___467);
 	do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
 	do_fio(&c__1, (char *)&itcom3_1.betab, (ftnlen)sizeof(doublereal));
 	do_fio(&c__1, (char *)&zm1, (ftnlen)sizeof(doublereal));
@@ -10626,7 +10237,7 @@ E             =\002,d15.7/35x,\002NEW ESTIMATE FOR OMEGA           =\002,d15\
     doublereal temp, temp1, omstar;
 
     /* Fortran I/O blocks */
-    static cilist io___491 = { 0, 0, 0, fmt_20, 0 };
+    static cilist io___473 = { 0, 0, 0, fmt_20, 0 };
 
 
 
@@ -10728,8 +10339,8 @@ L10:
     itcom3_1.delsnm = itcom3_1.delnnm;
 /*<       IF (LEVEL.GE.2) WRITE (NOUT,20) IN,CME,OMEGA,SPECR >*/
     if (itcom1_1.level >= 2) {
-	io___491.ciunit = itcom1_1.nout;
-	s_wsfe(&io___491);
+	io___473.ciunit = itcom1_1.nout;
+	s_wsfe(&io___473);
 	do_fio(&c__1, (char *)&itcom1_1.in, (ftnlen)sizeof(integer));
 	do_fio(&c__1, (char *)&itcom3_1.cme, (ftnlen)sizeof(doublereal));
 	do_fio(&c__1, (char *)&itcom3_1.omega, (ftnlen)sizeof(doublereal));
@@ -11441,9 +11052,9 @@ ACK ROUTINE PRBNDX   \002)";
     extern integer bisrch_(integer *, integer *, integer *);
 
     /* Fortran I/O blocks */
-    static cilist io___536 = { 0, 0, 0, fmt_100, 0 };
-    static cilist io___537 = { 0, 0, 0, fmt_120, 0 };
-    static cilist io___538 = { 0, 0, 0, fmt_140, 0 };
+    static cilist io___518 = { 0, 0, 0, fmt_100, 0 };
+    static cilist io___519 = { 0, 0, 0, fmt_120, 0 };
+    static cilist io___520 = { 0, 0, 0, fmt_140, 0 };
 
 
 
@@ -11720,8 +11331,8 @@ L90:
     ier = 301;
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,100) I >*/
     if (*level >= 0) {
-	io___536.ciunit = *nout;
-	s_wsfe(&io___536);
+	io___518.ciunit = *nout;
+	s_wsfe(&io___518);
 	do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(integer));
 	e_wsfe();
     }
@@ -11736,8 +11347,8 @@ L110:
     ier = 302;
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,120) I >*/
     if (*level >= 0) {
-	io___537.ciunit = *nout;
-	s_wsfe(&io___537);
+	io___519.ciunit = *nout;
+	s_wsfe(&io___519);
 	do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(integer));
 	e_wsfe();
     }
@@ -11752,8 +11363,8 @@ L130:
     ier = 303;
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,140) I >*/
     if (*level >= 0) {
-	io___538.ciunit = *nout;
-	s_wsfe(&io___538);
+	io___520.ciunit = *nout;
+	s_wsfe(&io___520);
 	do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(integer));
 	e_wsfe();
     }
@@ -11799,7 +11410,7 @@ DUAL) =\002,f5.1,2x,\002(DIGIT2)\002)";
     doublereal digit1, digit2;
 
     /* Fortran I/O blocks */
-    static cilist io___546 = { 0, 0, 0, fmt_30, 0 };
+    static cilist io___528 = { 0, 0, 0, fmt_30, 0 };
 
 
 
@@ -11922,8 +11533,8 @@ L20:
 	goto L40;
     }
 /*<       WRITE (NOUT,30) DIGIT1,DIGIT2 >*/
-    io___546.ciunit = itcom1_1.nout;
-    s_wsfe(&io___546);
+    io___528.ciunit = itcom1_1.nout;
+    s_wsfe(&io___528);
     do_fio(&c__1, (char *)&digit1, (ftnlen)sizeof(doublereal));
     do_fio(&c__1, (char *)&digit2, (ftnlen)sizeof(doublereal));
     e_wsfe();
@@ -12692,7 +12303,7 @@ L60:
 	    young, curtyp, nxttyp;
 
     /* Fortran I/O blocks */
-    static cilist io___603 = { 0, 0, 0, fmt_170, 0 };
+    static cilist io___585 = { 0, 0, 0, fmt_170, 0 };
 
 
 
@@ -13076,8 +12687,8 @@ L160:
     *ier = 201;
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,170) >*/
     if (*level >= 0) {
-	io___603.ciunit = *nout;
-	s_wsfe(&io___603);
+	io___585.ciunit = *nout;
+	s_wsfe(&io___585);
 	e_wsfe();
     }
 /*<    >*/
@@ -14280,7 +13891,7 @@ L240:
     integer i__, j, np1, ier, ntn, nto, now, nadd, nout, level, naddp1;
 
     /* Fortran I/O blocks */
-    static cilist io___667 = { 0, 0, 0, fmt_10, 0 };
+    static cilist io___649 = { 0, 0, 0, fmt_10, 0 };
 
 
 
@@ -14348,8 +13959,8 @@ L240:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,10) IER >*/
     if (level >= 0) {
-	io___667.ciunit = nout;
-	s_wsfe(&io___667);
+	io___649.ciunit = nout;
+	s_wsfe(&io___649);
 	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
 	e_wsfe();
     }
@@ -14478,8 +14089,8 @@ T VALUE = \002,d15.8)";
     integer ii, jj, kk, ibgn, iend, jjdi, icnt;
 
     /* Fortran I/O blocks */
-    static cilist io___683 = { 0, 0, 0, fmt_30, 0 };
-    static cilist io___684 = { 0, 0, 0, fmt_150, 0 };
+    static cilist io___665 = { 0, 0, 0, fmt_30, 0 };
+    static cilist io___666 = { 0, 0, 0, fmt_150, 0 };
 
 
 
@@ -14635,8 +14246,8 @@ L20:
 	    *ier = 101;
 /*<             IF (LEVEL.GE.0) WRITE (NOUT,30) II,DI >*/
 	    if (*level >= 0) {
-		io___683.ciunit = *nout;
-		s_wsfe(&io___683);
+		io___665.ciunit = *nout;
+		s_wsfe(&io___665);
 		do_fio(&c__1, (char *)&ii, (ftnlen)sizeof(integer));
 		do_fio(&c__1, (char *)&di, (ftnlen)sizeof(doublereal));
 		e_wsfe();
@@ -14791,8 +14402,8 @@ L140:
     *ier = 102;
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,150) II >*/
     if (*level >= 0) {
-	io___684.ciunit = *nout;
-	s_wsfe(&io___684);
+	io___666.ciunit = *nout;
+	s_wsfe(&io___666);
 	do_fio(&c__1, (char *)&ii, (ftnlen)sizeof(integer));
 	e_wsfe();
     }
@@ -15225,11 +14836,11 @@ L80:
     integer next, nout, level;
 
     /* Fortran I/O blocks */
-    static cilist io___705 = { 0, 0, 0, fmt_10, 0 };
-    static cilist io___709 = { 0, 0, 0, fmt_50, 0 };
-    static cilist io___710 = { 0, 0, 0, fmt_70, 0 };
-    static cilist io___712 = { 0, 0, 0, fmt_90, 0 };
-    static cilist io___713 = { 0, 0, 0, fmt_120, 0 };
+    static cilist io___687 = { 0, 0, 0, fmt_10, 0 };
+    static cilist io___691 = { 0, 0, 0, fmt_50, 0 };
+    static cilist io___692 = { 0, 0, 0, fmt_70, 0 };
+    static cilist io___694 = { 0, 0, 0, fmt_90, 0 };
+    static cilist io___695 = { 0, 0, 0, fmt_120, 0 };
 
 
 
@@ -15339,8 +14950,8 @@ L80:
     }
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,10) IER,I,J >*/
     if (level >= 0) {
-	io___705.ciunit = nout;
-	s_wsfe(&io___705);
+	io___687.ciunit = nout;
+	s_wsfe(&io___687);
 	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
 	do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(integer));
 	do_fio(&c__1, (char *)&j, (ftnlen)sizeof(integer));
@@ -15413,8 +15024,8 @@ L40:
     }
 /*<       IF (LEVEL.GE.1) WRITE (NOUT,50) IER,I,J,A(LINK) >*/
     if (level >= 1) {
-	io___709.ciunit = nout;
-	s_wsfe(&io___709);
+	io___691.ciunit = nout;
+	s_wsfe(&io___691);
 	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
 	do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(integer));
 	do_fio(&c__1, (char *)&j, (ftnlen)sizeof(integer));
@@ -15431,8 +15042,8 @@ L60:
     }
 /*<       IF (LEVEL.GE.1) WRITE (NOUT,70) IER,I,J,A(LINK),VAL >*/
     if (level >= 1) {
-	io___710.ciunit = nout;
-	s_wsfe(&io___710);
+	io___692.ciunit = nout;
+	s_wsfe(&io___692);
 	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
 	do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(integer));
 	do_fio(&c__1, (char *)&j, (ftnlen)sizeof(integer));
@@ -15450,8 +15061,8 @@ L80:
     temp = a[link] + val;
 /*<       IF (LEVEL.GE.1) WRITE (NOUT,90) IER,I,J,A(LINK),TEMP >*/
     if (level >= 1) {
-	io___712.ciunit = nout;
-	s_wsfe(&io___712);
+	io___694.ciunit = nout;
+	s_wsfe(&io___694);
 	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
 	do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(integer));
 	do_fio(&c__1, (char *)&j, (ftnlen)sizeof(integer));
@@ -15497,8 +15108,8 @@ L110:
     ier = 702;
 /*<       IF (LEVEL.GE.0) WRITE (NOUT,120) IER >*/
     if (level >= 0) {
-	io___713.ciunit = nout;
-	s_wsfe(&io___713);
+	io___695.ciunit = nout;
+	s_wsfe(&io___695);
 	do_fio(&c__1, (char *)&ier, (ftnlen)sizeof(integer));
 	e_wsfe();
     }
@@ -15542,9 +15153,9 @@ L130:
     integer ii, jj, im1, np1, jadd, jajj, ibgn, iend, jjpi;
 
     /* Fortran I/O blocks */
-    static cilist io___720 = { 0, 0, 0, fmt_10, 0 };
-    static cilist io___721 = { 0, 0, 0, fmt_30, 0 };
-    static cilist io___722 = { 0, 0, 0, fmt_60, 0 };
+    static cilist io___702 = { 0, 0, 0, fmt_10, 0 };
+    static cilist io___703 = { 0, 0, 0, fmt_30, 0 };
+    static cilist io___704 = { 0, 0, 0, fmt_60, 0 };
 
 
 
@@ -15624,8 +15235,8 @@ L130:
 	    *ier = 401;
 /*<             IF (LEVEL.GE.0) WRITE (NOUT,10) II >*/
 	    if (*level >= 0) {
-		io___720.ciunit = *nout;
-		s_wsfe(&io___720);
+		io___702.ciunit = *nout;
+		s_wsfe(&io___702);
 		do_fio(&c__1, (char *)&ii, (ftnlen)sizeof(integer));
 		e_wsfe();
 	    }
@@ -15637,8 +15248,8 @@ L20:
 	    *ier = 401;
 /*<             IF (LEVEL.GE.0) WRITE (NOUT,30) >*/
 	    if (*level >= 0) {
-		io___721.ciunit = *nout;
-		s_wsfe(&io___721);
+		io___703.ciunit = *nout;
+		s_wsfe(&io___703);
 		e_wsfe();
 	    }
 /*<    >*/
@@ -15653,8 +15264,8 @@ L50:
 	*ier = 402;
 /*<          IF (LEVEL.GE.0) WRITE (NOUT,60) II >*/
 	if (*level >= 0) {
-	    io___722.ciunit = *nout;
-	    s_wsfe(&io___722);
+	    io___704.ciunit = *nout;
+	    s_wsfe(&io___704);
 	    do_fio(&c__1, (char *)&ii, (ftnlen)sizeof(integer));
 	    e_wsfe();
 	}
@@ -16438,11 +16049,11 @@ L20:
     integer i__, j, k, jm1, nout, kupper;
 
     /* Fortran I/O blocks */
-    static cilist io___755 = { 0, 0, 0, fmt_10, 0 };
-    static cilist io___756 = { 0, 0, 0, fmt_20, 0 };
-    static cilist io___757 = { 0, 0, 0, fmt_30, 0 };
-    static cilist io___759 = { 0, 0, 0, fmt_40, 0 };
-    static cilist io___762 = { 0, 0, 0, fmt_50, 0 };
+    static cilist io___737 = { 0, 0, 0, fmt_10, 0 };
+    static cilist io___738 = { 0, 0, 0, fmt_20, 0 };
+    static cilist io___739 = { 0, 0, 0, fmt_30, 0 };
+    static cilist io___741 = { 0, 0, 0, fmt_40, 0 };
+    static cilist io___744 = { 0, 0, 0, fmt_50, 0 };
 
 
 
@@ -16477,21 +16088,21 @@ L20:
     kupper = min(*n,8);
 /*<       IF (ISWT.EQ.1) WRITE (NOUT,10) >*/
     if (*iswt == 1) {
-	io___755.ciunit = nout;
-	s_wsfe(&io___755);
+	io___737.ciunit = nout;
+	s_wsfe(&io___737);
 	e_wsfe();
     }
 /*<    10 FORMAT (//5X,'RESIDUAL VECTOR') >*/
 /*<       IF (ISWT.EQ.2) WRITE (NOUT,20) >*/
     if (*iswt == 2) {
-	io___756.ciunit = nout;
-	s_wsfe(&io___756);
+	io___738.ciunit = nout;
+	s_wsfe(&io___738);
 	e_wsfe();
     }
 /*<    20 FORMAT (//5X,'SOLUTION VECTOR') >*/
 /*<       WRITE (NOUT,30) (I,I=1,KUPPER) >*/
-    io___757.ciunit = nout;
-    s_wsfe(&io___757);
+    io___739.ciunit = nout;
+    s_wsfe(&io___739);
     i__1 = kupper;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(integer));
@@ -16499,8 +16110,8 @@ L20:
     e_wsfe();
 /*<    30 FORMAT (10X,8I15) >*/
 /*<       WRITE (NOUT,40) >*/
-    io___759.ciunit = nout;
-    s_wsfe(&io___759);
+    io___741.ciunit = nout;
+    s_wsfe(&io___741);
     e_wsfe();
 /*<    40 FORMAT (10X,120('-')/) >*/
 
@@ -16514,8 +16125,8 @@ L20:
 /*<          JM1 = J-1 >*/
 	jm1 = j - 1;
 /*<          WRITE (NOUT,50) JM1,(V(K),K=J,KUPPER) >*/
-	io___762.ciunit = nout;
-	s_wsfe(&io___762);
+	io___744.ciunit = nout;
+	s_wsfe(&io___744);
 	do_fio(&c__1, (char *)&jm1, (ftnlen)sizeof(integer));
 	i__2 = kupper;
 	for (k = j; k <= i__2; ++k) {
@@ -16649,8 +16260,8 @@ ORITHM FAILED TO CONVERGE   \002/\002 \002,\002    IN\002,i6,\002 ITERATIONS \
     extern doublereal determ_(integer *, doublereal *, doublereal *);
 
     /* Fortran I/O blocks */
-    static cilist io___791 = { 0, 0, 0, fmt_100, 0 };
-    static cilist io___792 = { 0, 0, 0, fmt_120, 0 };
+    static cilist io___773 = { 0, 0, 0, fmt_100, 0 };
+    static cilist io___774 = { 0, 0, 0, fmt_120, 0 };
 
 
 
@@ -16979,8 +16590,8 @@ L90:
     maxfn = ic;
 /*<       IF (LEVEL.GE.1) WRITE (NOUT,100) MAXFN >*/
     if (itcom1_1.level >= 1) {
-	io___791.ciunit = itcom1_1.nout;
-	s_wsfe(&io___791);
+	io___773.ciunit = itcom1_1.nout;
+	s_wsfe(&io___773);
 	do_fio(&c__1, (char *)&maxfn, (ftnlen)sizeof(integer));
 	e_wsfe();
     }
@@ -16998,8 +16609,8 @@ L110:
     maxfn = ic;
 /*<       IF (LEVEL.GE.1) WRITE (NOUT,120) >*/
     if (itcom1_1.level >= 1) {
-	io___792.ciunit = itcom1_1.nout;
-	s_wsfe(&io___792);
+	io___774.ciunit = itcom1_1.nout;
+	s_wsfe(&io___774);
 	e_wsfe();
     }
 /*<    >*/
