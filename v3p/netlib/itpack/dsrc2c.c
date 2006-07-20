@@ -771,7 +771,7 @@ L340:
 
 /*<   350 IPARM(8) = IPARM(8)-2*(ITMAX-IN) >*/
 L350:
-    iparm[8] -= itcom1_1.itmax - itcom1_1.in << 1;
+    iparm[8] -= (itcom1_1.itmax - itcom1_1.in) << 1;
 /*<       IF (IPARM(11).NE.0) GO TO 360 >*/
     if (iparm[11] != 0) {
 	goto L360;
@@ -783,7 +783,7 @@ L350:
 /*<   360 IF (ISYM.NE.0) IPARM(8) = IPARM(8)-2*(ITMAX-IN) >*/
 L360:
     if (itcom1_1.isym != 0) {
-	iparm[8] -= itcom1_1.itmax - itcom1_1.in << 1;
+	iparm[8] -= (itcom1_1.itmax - itcom1_1.in) << 1;
     }
 /*<       IF (IPARM(3).NE.0) GO TO 370 >*/
     if (iparm[3] != 0) {
@@ -3035,10 +3035,10 @@ L370:
     time2 = (doublereal) (timj2 - timj1);
 /*<   380 IPARM(8) = IPARM(8)-2*(ITMAX-IN) >*/
 L380:
-    iparm[8] -= itcom1_1.itmax - itcom1_1.in << 1;
+    iparm[8] -= (itcom1_1.itmax - itcom1_1.in) << 1;
 /*<       IF (ISYM.NE.0) IPARM(8) = IPARM(8)-2*(ITMAX-IN) >*/
     if (itcom1_1.isym != 0) {
-	iparm[8] -= itcom1_1.itmax - itcom1_1.in << 1;
+	iparm[8] -= (itcom1_1.itmax - itcom1_1.in) << 1;
     }
 /*<       IF (IPARM(3).NE.0) GO TO 390 >*/
     if (iparm[3] != 0) {
@@ -4668,10 +4668,10 @@ L410:
     time2 = (doublereal) (timj2 - timj1);
 /*<   420 IPARM(8) = IPARM(8)-2*(ITMAX-IN) >*/
 L420:
-    iparm[8] -= itcom1_1.itmax - itcom1_1.in << 1;
+    iparm[8] -= (itcom1_1.itmax - itcom1_1.in) << 1;
 /*<       IF (ISYM.NE.0) IPARM(8) = IPARM(8)-2*(ITMAX-IN) >*/
     if (itcom1_1.isym != 0) {
-	iparm[8] -= itcom1_1.itmax - itcom1_1.in << 1;
+	iparm[8] -= (itcom1_1.itmax - itcom1_1.in) << 1;
     }
 /*<       IF (IPARM(3).NE.0) GO TO 430 >*/
     if (iparm[3] != 0) {
@@ -7679,7 +7679,7 @@ L30:
     }
 /*<       IF (IN.NE.0) ZM1 = CHEBY(QA,QT,RRR,2*(IN-IS),0.D0,0.D0) >*/
     if (itcom1_1.in != 0) {
-	i__1 = itcom1_1.in - itcom1_1.is << 1;
+	i__1 = (itcom1_1.in - itcom1_1.is) << 1;
 	zm1 = cheby_(&itcom3_1.qa, &itcom3_1.qt, &itcom3_1.rrr, &i__1, &c_b21,
 		 &c_b21);
     }
@@ -8068,7 +8068,7 @@ doublereal determ_(integer *n, doublereal *tri, doublereal *xlmda)
 /*<          D2 = D1 >*/
 	d2 = d1;
 /*<          D1 = (TRI(1,L-1)-XLMDA)*D2-D3*TRI(2,L) >*/
-	d1 = (tri[(l - 1 << 1) + 1] - *xlmda) * d2 - d3 * tri[(l << 1) + 2];
+	d1 = (tri[((l - 1) << 1) + 1] - *xlmda) * d2 - d3 * tri[(l << 1) + 2];
 /*<    10 CONTINUE >*/
 /* L10: */
     }
@@ -10141,7 +10141,7 @@ logical omgchg_(integer *ndummy)
 
     /* Local variables */
     doublereal del1, del2;
-
+    (void)ndummy;
 
 /* ... THIS FUNCTION TESTS TO SEE WHETHER OMEGA SHOULD BE CHANGED */
 /* ... FOR SSOR CG METHOD. */
@@ -10239,7 +10239,7 @@ E             =\002,d15.7/35x,\002NEW ESTIMATE FOR OMEGA           =\002,d15\
     /* Fortran I/O blocks */
     static cilist io___473 = { 0, 0, 0, fmt_20, 0 };
 
-
+    (void)ndummy;
 
 /*     TESTS FOR FULLY ADAPTIVE SSOR METHODS WHETHER OMEGA-STAR */
 /*     SHOULD BE USED FOR OMEGA AND THE ADAPTIVE PROCESS TURNED */
@@ -14842,7 +14842,7 @@ L80:
     static cilist io___694 = { 0, 0, 0, fmt_90, 0 };
     static cilist io___695 = { 0, 0, 0, fmt_120, 0 };
 
-
+    (void)nz;
 
 /* *********************************************************************** */
 
@@ -15505,6 +15505,7 @@ doublereal timer_(real *timdmy)
     extern doublereal etime_(real *);
     real total, tarray[2];
 
+    (void)timdmy;
 
 /* ... TIMER IS A ROUTINE TO RETURN THE EXECUTION TIME IN */
 /* ... SECONDS. */
