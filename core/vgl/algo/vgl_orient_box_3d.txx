@@ -11,7 +11,7 @@ template <class Type>
 vgl_orient_box_3d<Type>::vgl_orient_box_3d(vgl_box_3d<Type> box)
 : box_(box)
 {
-  vnl_vector<double> axis(3);
+  vnl_vector_fixed<double,3> axis;
   axis[0] = 0.0; axis[1] = 0.0; axis[2]=1.0;
   double angle = 0.0;
 
@@ -46,7 +46,7 @@ vcl_vector<vgl_point_3d<Type> > vgl_orient_box_3d<Type>::corners()
 
   // rotate the corner points
   for (unsigned int i=0; i < corner_points.size(); i++) {
-    vnl_vector<double> p(3);
+    vnl_vector_fixed<double,3> p;
     p[0] = corner_points[i].x() - box_.centroid_x(); 
     p[1] = corner_points[i].y() - box_.centroid_y();
     p[2] = corner_points[i].z() - box_.centroid_z();;
@@ -66,7 +66,7 @@ bool vgl_orient_box_3d<Type>::contains(Type const& x,
   // first transform the point to the coordinate system of AABB
   vnl_quaternion<double> reverse_rot(orient_.axis(), -1.*orient_.angle());
 
-  vnl_vector<double> p(3);
+  vnl_vector_fixed<double,3> p;
   p[0] = x - box_.centroid_x(); 
   p[1] = y - box_.centroid_y(); 
   p[2] = z - box_.centroid_z();
