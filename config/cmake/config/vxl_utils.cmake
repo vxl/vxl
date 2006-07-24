@@ -2,6 +2,12 @@
 #   CMakeConfigurableFile.in from config/cmake/Modules/NewCmake
 #   (This is used in GENERATE_TEST_INCLUDE)
 # CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
+IF(CMAKE_MINIMUM_REQUIRED_VERSION GREATER "2.3")
+  MESSAGE(SEND_ERROR
+    "The file CMakeConfigurableFile.in can be removed\n"
+    "from config/cmake/Modules/NewCMake/ now!\n"
+    "It should be available from CMake distribution. (miguelfv)")
+ENDIF(CMAKE_MINIMUM_REQUIRED_VERSION GREATER "2.3")
 
 #
 # INSTALL_NOBASE_HEADER_FILES(prefix file file file ...)
