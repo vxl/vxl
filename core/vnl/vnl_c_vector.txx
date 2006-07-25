@@ -399,7 +399,6 @@ inline void vnl_c_vector_dealloc(void* v, int, int)
 }
 #endif
 
-
 template<class T>
 T** vnl_c_vector<T>::allocate_Tptr(int n)
 {
