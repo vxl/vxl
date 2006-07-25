@@ -112,7 +112,4 @@ template <class T> vcl_complex<T> vcl_sqrt(const vcl_complex<T>& x) { return std
 template <class T> vcl_complex<T> vcl_tan(const vcl_complex<T>& x) { return std::tan(x); }
 template <class T> vcl_complex<T> vcl_tanh(const vcl_complex<T>& x) { return std::tanh(x); }
 
-
-
 #endif // vcl_win32_vc60_complex_h_
-
