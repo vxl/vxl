@@ -1061,14 +1061,14 @@ int main()
 
 //-------------------------------------
 
-#ifdef VXL_C_MATH_HAS_LRINT
+#ifdef VXL_C_MATH_HAS_LROUND
 
 // This C99 func is a much faster version of standard vnl_math_round
 #include <cmath>
 
-int main() { long c = lrint(100.0); }
+int main() { long c = lround(100.0); }
 
-#endif // VXL_C_MATH_HAS_LRINT
+#endif // VXL_C_MATH_HAS_LROUND
 
 //-------------------------------------
 

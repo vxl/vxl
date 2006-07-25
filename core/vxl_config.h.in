@@ -155,8 +155,8 @@
 /* true if <math.h> declares sqrtf() for the C compiler */
 #define VXL_C_MATH_HAS_SQRTF      @VXL_C_MATH_HAS_SQRTF@
 
-/* true if <math.h> declares lrint() */
-#define VXL_C_MATH_HAS_LRINT      @VXL_C_MATH_HAS_LRINT@
+/* true if <math.h> declares lround() */
+#define VXL_C_MATH_HAS_LROUND      @VXL_C_MATH_HAS_LROUND@
 
 /* true if usleep() returns void */
 #define VXL_UNISTD_USLEEP_IS_VOID @VXL_UNISTD_USLEEP_IS_VOID@

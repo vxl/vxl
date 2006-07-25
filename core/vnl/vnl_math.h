@@ -37,7 +37,7 @@
 
 #include <vcl_cmath.h>
 #include "dll.h"
-#include <vxl_config.h> // for VXL_C_MATH_HAS_LRINT
+#include <vxl_config.h> // for VXL_C_MATH_HAS_LROUND
 
 //: Type-accessible infinities for use in templates.
 template <class T> T vnl_huge_val(T);
@@ -141,11 +141,11 @@ template <class T> bool vnl_math_isfinite(T);
 #endif
 
 // rnd (rounding; 0.5 rounds up)
-#if VXL_C_MATH_HAS_LRINT
+#if VXL_C_MATH_HAS_LROUND
 // Use C99 functions, which GCC implements as an intrinsic
 // Or in simpler terms - is at least 3 times faster.
-inline int vnl_math_rnd(float  x) { return lrintf(x); }
-inline int vnl_math_rnd(double x) { return lrint(x); }
+inline int vnl_math_rnd(float  x) { return lroundf(x); }
+inline int vnl_math_rnd(double x) { return lround(x); }
 #elif defined (VCL_VC)
 // Use assembly inline function from
 // http://mega-nerd.com/FPcast/

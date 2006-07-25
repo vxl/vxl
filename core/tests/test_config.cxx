@@ -1112,9 +1112,9 @@ MAIN( test_config )
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VXL_C_MATH_HAS_LRINT ";
-#ifdef VXL_C_MATH_HAS_LRINT
-  vcl_cout << "is set to " << quote(VXL_C_MATH_HAS_LRINT);
+  vcl_cout << "VXL_C_MATH_HAS_LROUND ";
+#ifdef VXL_C_MATH_HAS_LROUND
+  vcl_cout << "is set to " << quote(VXL_C_MATH_HAS_LROUND);
 #else
   vcl_cout << "is not set";
 #endif
@@ -1691,6 +1691,14 @@ MAIN( test_config )
   vcl_cout << "__INTEL_COMPILER ";
 #ifdef __INTEL_COMPILER
   vcl_cout << "is set to " << quote(__INTEL_COMPILER);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "__INTEL_CXXLIB_ICC ";
+#ifdef __INTEL_CXXLIB_ICC
+  vcl_cout << "is set to " << quote(__INTEL_CXXLIB_ICC);
 #else
   vcl_cout << "is not set";
 #endif
