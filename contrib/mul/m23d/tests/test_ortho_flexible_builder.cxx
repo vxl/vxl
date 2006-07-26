@@ -245,7 +245,7 @@ void test_ortho_flexible_builder_on_flexible()
 
   TEST_NEAR("RMS error on first 3D basis",(P3D-C).extract(3,C.cols()).rms(),0,0.05);
 
-
+/*
   vcl_cout<<"Projection 4, mode 0:"<<vcl_endl;
   vcl_cout<<P1.extract(2,3,8,0)<<vcl_endl;
   vcl_cout<<"Projection 4, mode 1:"<<vcl_endl;
@@ -255,7 +255,25 @@ void test_ortho_flexible_builder_on_flexible()
   vcl_cout<<P.extract(2,3,8,0)<<vcl_endl;
   vcl_cout<<"Pure Projection 4, mode 1:"<<vcl_endl;
   vcl_cout<<P.extract(2,3,8,3)<<vcl_endl;
+*/
+  vcl_cout<<"Mean shape: "<<vcl_endl;
+  vcl_cout<<builder.mean_shape().transpose()<<vcl_endl;
 
+  vcl_cout<<"== Use non-basis version of projection matrices =="<<vcl_endl;
+  P=m23d_make_ortho_projection(r,ns,n_modes,false,false);
+  C=make_cube_model();
+  D=P*C;
+  builder.reconstruct(D,1);
+  vcl_cout<<"Mean shape: "<<vcl_endl;
+  vcl_cout<<builder.mean_shape().transpose()<<vcl_endl;
+
+  vnl_matrix<double> MS=builder.mean_shape();
+  // Check that each pair of the last points is approximately orthogonal
+  for (unsigned i=8;i<14;i+=2)
+  {
+    vnl_vector<double> dp = MS.get_column(i)+MS.get_column(i+1);
+    TEST_NEAR("Moving points symmetric about origin",dp.rms(),0.0,0.001);
+  }
 }
 
 void test_ortho_flexible_builder()

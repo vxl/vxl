@@ -10,6 +10,7 @@ SET(m23d_sources
   m23d_ortho_flexible_builder.cxx         m23d_ortho_flexible_builder.h
   m23d_scaled_ortho_projection.cxx        m23d_scaled_ortho_projection.h
   m23d_correction_matrix_error.cxx        m23d_correction_matrix_error.h
+  m23d_select_basis_views.cxx             m23d_select_basis_views.h
 )
 AUX_SOURCE_DIRECTORY(Templates m23d_sources)
 
