@@ -27,6 +27,24 @@ class mbl_random_n_from_m
   //  n is required to be <= m; otherwise, the function abort()s.
   //  But n might be 0, in which case an empty list is returned.
   // \retval chosen  Array [0,n-1] of chosen elements
+  void choose_n_from_m(vcl_vector<unsigned>& chosen,
+                       unsigned int n, unsigned int m);
+
+  //: Select n integers from range [0,m-1], without replacement.
+  //  ie all different
+  //  n is required to be <= m; otherwise, the function abort()s.
+  //  But n might be 0, in which case an empty list is returned.
+  // \retval chosen  Array [0,n-1] of chosen elements
+  // \retval not_chosen  Array[0,m-n-1] of not chosen elements
+  void choose_n_from_m(vcl_vector<unsigned>& chosen,
+                       vcl_vector<unsigned>& not_chosen,
+                       unsigned int n, unsigned int m);
+
+  //: Select n integers from range [0,m-1], without replacement.
+  //  ie all different
+  //  n is required to be <= m; otherwise, the function abort()s.
+  //  But n might be 0, in which case an empty list is returned.
+  // \retval chosen  Array [0,n-1] of chosen elements
   void choose_n_from_m(vcl_vector<int>& chosen,
                        unsigned int n, unsigned int m);
 
