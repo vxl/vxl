@@ -17,6 +17,8 @@
 
 #include <wx/app.h>
 #include <wx/log.h>
+#include <wx/wxchar.h>
+#include <wx/strconv.h>
 
 //-------------------------------------------------------------------------
 // Private helpers - declarations.
@@ -25,6 +27,8 @@ namespace
 {
   class vgui_wx_app;
   wxAppConsole* vgui_wx_create_app(void);
+  wxChar** g_wxCharArgv = NULL;
+  int g_Argc = 0;
 }
 
 //-------------------------------------------------------------------------
@@ -83,8 +87,25 @@ void vgui_wx::init(int& argc, char** argv)
   wxApp::m_nCmdShow = 0;
 #endif
 
+  // If necessary, convert the char** argv to the Unicode wxChar**
+  // version.
+  wxChar** wxArgv;
+#if wxUSE_UNICODE
+  g_Argc = argc;
+  g_wxCharArgv = new wxChar*[argc+1];
+  for( int cnt = 0; cnt < argc; ++cnt ) {
+    size_t len = wxConvLocal.MB2WC( NULL, argv[cnt], 0 );
+    g_wxCharArgv[cnt] = new wxChar[len+1];
+    wxConvLocal.MB2WC( g_wxCharArgv[cnt], argv[cnt], len+1 );
+  }
+  g_wxCharArgv[argc] = NULL;
+  wxArgv = g_wxCharArgv;
+#else
+  wxArgv = argv;
+#endif
+
   // wxWidgets initialization
-  if (!wxInitialize(argc, argv))
+  if (!wxInitialize(argc, wxArgv))
   {
     vcl_cerr << "vgui_wx::init(): wxInitialize failed!" << vcl_endl;
     // ***** exit here... or can we recover from this?
@@ -134,6 +155,17 @@ void vgui_wx::uninit(void)
   //  delete windows_to_delete_[i]; // ***** what if user deleted it???
   //  windows_to_delete_.clear();
   //}
+
+  // If we convert the char** argv to a wxChar** version, free our
+  // conversion now.
+#if wxUSE_UNICODE
+  for( int cnt = 0; cnt < g_Argc; ++cnt ) {
+    delete[] g_wxCharArgv[cnt];
+  }
+  delete g_wxCharArgv;
+  g_wxCharArgv = NULL;
+  g_Argc = 0;
+#endif
 }
 
 //-------------------------------------------------------------------------
