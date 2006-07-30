@@ -8,242 +8,20 @@ IULIBS = # no dependencies whatsoever
 LIBRARY := netlib
 VERSION := 1.0
 
-#*********************
-# Std Fortran Library
-#*********************
-SOURCES += F77_aloc.c
-SOURCES += exit.c
-SOURCES += s_cmp.c
-SOURCES += d_lg10.c
-SOURCES += s_cat.c
-SOURCES += s_copy.c
-SOURCES += d_sign.c
-SOURCES += d_cnjg.c
-SOURCES += d_imag.c
-SOURCES += z_div.c
-SOURCES += z_abs.c
-SOURCES += z_sqrt.c
-SOURCES += cabs.c
-SOURCES += c_abs.c
-SOURCES += c_div.c
-SOURCES += sig_die.c
-SOURCES += r_sign.c
-SOURCES += r_imag.c
-SOURCES += r_cnjg.c
-
-SOURCES += pow_ii.c
-SOURCES += pow_ri.c
-SOURCES += pow_di.c
-SOURCES += pow_dd.c
-
-# BLAS
-SOURCES += izamax.c
-
-SOURCES += daxpy.c
-SOURCES += dcopy.c
-SOURCES += ddot.c
-SOURCES += dnrm2.c
-SOURCES += drot.c
-SOURCES += drotg.c
-SOURCES += dscal.c
-SOURCES += dasum.c
-SOURCES += dzasum.c
-SOURCES += dswap.c
-SOURCES += dgemv.c
-SOURCES += dger.c
-
-SOURCES += saxpy.c
-SOURCES += scopy.c
-SOURCES += sdot.c
-SOURCES += snrm2.c
-SOURCES += srot.c
-SOURCES += srotg.c
-SOURCES += sscal.c
-SOURCES += sasum.c
-SOURCES += sswap.c
-SOURCES += sgemv.c
-SOURCES += sger.c
-
-SOURCES += caxpy.c
-SOURCES += ccopy.c
-SOURCES += cdotc.c
-SOURCES += csrot.c
-SOURCES += scnrm2.c
-SOURCES += cscal.c
-SOURCES += cswap.c
-
-SOURCES += zaxpy.c
-SOURCES += zcopy.c
-SOURCES += zdotc.c
-SOURCES += zdotu.c
-SOURCES += zdrot.c
-SOURCES += dznrm2.c
-SOURCES += zdscal.c
-SOURCES += zgemm.c
-SOURCES += zgemv.c
-SOURCES += zgerc.c
-SOURCES += zscal.c
-SOURCES += ztrmm.c
-SOURCES += ztrmv.c
-SOURCES += ztrsv.c
-SOURCES += zswap.c
-
-# LINPACK
-SOURCES += isamax.c
-SOURCES += idamax.c
-
-# ITPACK
-SOURCES += dsrc2c.c
-
-# MINPACK
-SOURCES += pythag.c
-SOURCES += rpoly.c
-
 # TOMS Misc
-SOURCES += dtrans.c
-SOURCES += trans.c
+#SOURCES += dtrans.c
+#SOURCES += trans.c
 
 # General
-SOURCES += machineparams.c
-
-# from DATAPAC
-SOURCES += camsun.c
-
-# from LAPACK
-SOURCES += ilaenv.c
-SOURCES += izmax1.c
-
-SOURCES += xerbla.c
-SOURCES += urand.c
-SOURCES += lsame.c
-SOURCES += dlamch.c
-SOURCES += slamch.c
-
-SOURCES += dgeqpf.c
-SOURCES += dgeqr2.c
-SOURCES += dgerq2.c
-SOURCES += dggsvd.c
-SOURCES += dggsvp.c
-SOURCES += dlacpy.c
-SOURCES += dlags2.c
-SOURCES += dlange.c
-SOURCES += dlapll.c
-SOURCES += dlapmt.c
-SOURCES += dlapy2.c
-SOURCES += dlarf.c
-SOURCES += dlarfg.c
-SOURCES += dlartg.c
-SOURCES += dlas2.c
-SOURCES += dlaset.c
-SOURCES += dlassq.c
-SOURCES += dlasv2.c
-SOURCES += dlabad.c
-SOURCES += dladiv.c
-SOURCES += dlapy3.c
-
-SOURCES += dorg2r.c
-SOURCES += dorm2r.c
-SOURCES += dormr2.c
-SOURCES += dtgsja.c
-SOURCES += sggsvd.c
-SOURCES += sgeqpf.c
-SOURCES += sgeqr2.c
-SOURCES += sgerq2.c
-SOURCES += sggsvp.c
-SOURCES += slacpy.c
-SOURCES += slags2.c
-SOURCES += slange.c
-SOURCES += slapll.c
-SOURCES += slapmt.c
-SOURCES += slapy2.c
-SOURCES += slarf.c
-SOURCES += slarfg.c
-SOURCES += slartg.c
-SOURCES += slas2.c
-SOURCES += slaset.c
-SOURCES += slassq.c
-SOURCES += slasv2.c
-SOURCES += sorg2r.c
-SOURCES += sorm2r.c
-SOURCES += sormr2.c
-SOURCES += stgsja.c
-
-SOURCES += zgebak.c
-SOURCES += zgebal.c
-#SOURCES += zgeev.c
-SOURCES += zgehd2.c
-SOURCES += zgehrd.c
-SOURCES += zhseqr.c
-SOURCES += zlacgv.c
-SOURCES += zlacpy.c
-SOURCES += zladiv.c
-SOURCES += zlahqr.c
-SOURCES += zlahrd.c
-SOURCES += zlange.c
-SOURCES += zlanhs.c
-SOURCES += zlarf.c
-SOURCES += zlarfb.c
-SOURCES += zlarfg.c
-SOURCES += zlarft.c
-SOURCES += zlarfx.c
-SOURCES += zlascl.c
-SOURCES += zlaset.c
-SOURCES += zlassq.c
-SOURCES += zlatrs.c
-SOURCES += ztrevc.c
-SOURCES += zung2r.c
-SOURCES += zunghr.c
-SOURCES += zungqr.c
-
-# Added by fsm for generalized chur
-SOURCES += dgecon.c
-SOURCES += dgemm.c
-SOURCES += dgeqrf.c
-SOURCES += dgesc2.c
-SOURCES += dgetc2.c
-SOURCES += dggbak.c
-SOURCES += dggbal.c
-SOURCES += dgges.c
-SOURCES += dgghrd.c
-SOURCES += dhgeqz.c
-SOURCES += dlacon.c
-SOURCES += dlag2.c
-SOURCES += dlagv2.c
-SOURCES += dlanhs.c
-SOURCES += dlarfb.c
-SOURCES += dlarft.c
-SOURCES += dlascl.c
-SOURCES += dlaswp.c
-SOURCES += dlatdf.c
-SOURCES += dlatrs.c
-SOURCES += dorgqr.c
-SOURCES += dorgr2.c
-SOURCES += dormqr.c
-SOURCES += drscl.c
-SOURCES += dtgex2.c
-SOURCES += dtgexc.c
-SOURCES += dtgsen.c
-SOURCES += dtgsy2.c
-SOURCES += dtgsyl.c
-SOURCES += dtrmm.c
-SOURCES += dtrmv.c
-SOURCES += dtrsv.c
-SOURCES += i_dnnt.c
+#SOURCES += machineparams.c
 
 # The "Triangle" program of Jonathan Richard Shewchuk
 SOURCES += triangle.c
 
-# numeric integration
-SOURCES += trapezod.c
-SOURCES += simpson.c
-SOURCES += adaquad.c
-
-MANPAGE_SOURCES += f2c.h
-MANPAGE_SOURCES += netlib.h
-
 # List sources for each library component.
 
 # V3P_NETLIB_header_files
+SOURCES += v3p_netlib_init.c
 MANPAGE_SOURCES += v3p_f2c.h
 MANPAGE_SOURCES += v3p_f2c_mangle.h
 MANPAGE_SOURCES += v3p_f2c_original.h
@@ -253,6 +31,9 @@ MANPAGE_SOURCES += v3p_netlib_mangle.h
 MANPAGE_SOURCES += v3p_netlib_prototypes.h
 MANPAGE_SOURCES += v3p_netlib_unmangle.h
 
+#*********************
+# Std Fortran Library
+#*********************
 # V3P_NETLIB_libf2c_SOURCES
 SOURCES += libf2c/f77_aloc.c
 SOURCES += libf2c/exit_.c
@@ -325,6 +106,16 @@ SOURCES += blas/zswap.c
 SOURCES += blas/ztrmm.c
 SOURCES += blas/ztrmv.c
 SOURCES += blas/ztrsv.c
+SOURCES += blas/dgemm.c
+SOURCES += blas/dgemv.c
+SOURCES += blas/dger.c
+SOURCES += blas/dtrmm.c
+SOURCES += blas/dtrmv.c
+SOURCES += blas/dtrsv.c
+SOURCES += blas/isamax.c
+SOURCES += blas/sgemv.c
+SOURCES += blas/sger.c
+SOURCES += blas/slamch.c
 # V3P_NETLIB_linpack_SOURCES
 SOURCES += linpack/sqrdc.c # xQRDC
 SOURCES += linpack/dqrdc.c
@@ -344,7 +135,7 @@ SOURCES += linpack/dpoco.c #
 SOURCES += linpack/dpodi.c
 SOURCES += linpack/dpofa.c
 SOURCES += linpack/dposl.c
-# LINALG
+# V3P_NETLIB_linalg_SOURCES
 SOURCES += linalg/lsqr.c
 # V3P_NETLIB_temperton_SOURCES
 SOURCES += temperton/dgpfa.c  # FFT
@@ -421,6 +212,74 @@ SOURCES += lapack/double/dlabad.c
 SOURCES += lapack/double/dladiv.c
 SOURCES += lapack/double/dlapy2.c
 SOURCES += lapack/double/dlapy3.c
+SOURCES += lapack/double/dgecon.c
+SOURCES += lapack/double/dgeqr2.c
+SOURCES += lapack/double/dgeqrf.c
+SOURCES += lapack/double/dgerq2.c
+SOURCES += lapack/double/dgesc2.c
+SOURCES += lapack/double/dgetc2.c
+SOURCES += lapack/double/dggbak.c
+SOURCES += lapack/double/dggbal.c
+SOURCES += lapack/double/dgges.c
+SOURCES += lapack/double/dgghrd.c
+SOURCES += lapack/double/dhgeqz.c
+SOURCES += lapack/double/dlacon.c
+SOURCES += lapack/double/dlacpy.c
+SOURCES += lapack/double/dlag2.c
+SOURCES += lapack/double/dlagv2.c
+SOURCES += lapack/double/dlange.c
+SOURCES += lapack/double/dlanhs.c
+SOURCES += lapack/double/dlarf.c
+SOURCES += lapack/double/dlarfb.c
+SOURCES += lapack/double/dlarfg.c
+SOURCES += lapack/double/dlarft.c
+SOURCES += lapack/double/dlartg.c
+SOURCES += lapack/double/dlascl.c
+SOURCES += lapack/double/dlaset.c
+SOURCES += lapack/double/dlassq.c
+SOURCES += lapack/double/dlasv2.c
+SOURCES += lapack/double/dlaswp.c
+SOURCES += lapack/double/dlatdf.c
+SOURCES += lapack/double/dlatrs.c
+SOURCES += lapack/double/dorg2r.c
+SOURCES += lapack/double/dorgqr.c
+SOURCES += lapack/double/dorgr2.c
+SOURCES += lapack/double/dorm2r.c
+SOURCES += lapack/double/dormqr.c
+SOURCES += lapack/double/dormr2.c
+SOURCES += lapack/double/drscl.c
+SOURCES += lapack/double/dtgex2.c
+SOURCES += lapack/double/dtgexc.c
+SOURCES += lapack/double/dtgsen.c
+SOURCES += lapack/double/dtgsy2.c
+SOURCES += lapack/double/dtgsyl.c
+SOURCES += lapack/double/dlaev2.c
+SOURCES += lapack/double/dspr.c
+SOURCES += lapack/double/dsptrf.c
+SOURCES += lapack/double/dsptrs.c
+SOURCES += lapack/single/sgeqr2.c
+SOURCES += lapack/single/sgeqpf.c
+SOURCES += lapack/single/sgerq2.c
+SOURCES += lapack/single/sggsvd.c
+SOURCES += lapack/single/sggsvp.c
+SOURCES += lapack/single/slacpy.c
+SOURCES += lapack/single/slags2.c
+SOURCES += lapack/single/slange.c
+SOURCES += lapack/single/slapll.c
+SOURCES += lapack/single/slapmt.c
+SOURCES += lapack/single/slapy2.c
+SOURCES += lapack/single/slarf.c
+SOURCES += lapack/single/slarfg.c
+SOURCES += lapack/single/slartg.c
+SOURCES += lapack/single/slas2.c
+SOURCES += lapack/single/slaset.c
+SOURCES += lapack/single/slassq.c
+SOURCES += lapack/single/slasv2.c
+SOURCES += lapack/single/sorg2r.c
+SOURCES += lapack/single/sorm2r.c
+SOURCES += lapack/single/sormr2.c
+SOURCES += lapack/single/stgsja.c
+#SOURCES += izmax1.c
 SOURCES += lapack/util/ieeeck.c
 SOURCES += lapack/util/ilaenv.c
 SOURCES += lapack/util/lsame.c
@@ -438,6 +297,14 @@ SOURCES += minpack/qrfac.c
 SOURCES += minpack/qrsolv.c
 # V3P_NETLIB_opt_SOURCES
 SOURCES += opt/lbfgs.c
+# V3P_NETLIB_toms_SOURCES
+SOURCES += toms/rpoly.c
+# V3P_NETLIB_datapac_SOURCES
+SOURCES += datapac/camsun.c
+# V3P_NETLIB_mathews_SOURCES
+SOURCES += mathews/adaquad.c
+SOURCES += mathews/simpson.c
+SOURCES += mathews/trapezod.c
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
