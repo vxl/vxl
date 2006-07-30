@@ -62,6 +62,7 @@ nm libv3p_netlib.a |grep " [TR] "
 #define dlacpy_ v3p_netlib_dlacpy_
 #define dladiv_ v3p_netlib_dladiv_
 #define dlaeig_ v3p_netlib_dlaeig_
+#define dlaev2_ v3p_netlib_dlaev2_
 #define dlag2_ v3p_netlib_dlag2_
 #define dlager_ v3p_netlib_dlager_
 #define dlagv2_ v3p_netlib_dlagv2_
@@ -112,6 +113,9 @@ nm libv3p_netlib.a |grep " [TR] "
 #define drotg_ v3p_netlib_drotg_
 #define drscl_ v3p_netlib_drscl_
 #define dscal_ v3p_netlib_dscal_
+#define dspr_ v3p_netlib_dspr_
+#define dsptrf_ v3p_netlib_dsptrf_
+#define dsptrs_ v3p_netlib_dsptrs_
 #define dsvdc_ v3p_netlib_dsvdc_
 #define dswap_ v3p_netlib_dswap_
 #define dtgex2_ v3p_netlib_dtgex2_

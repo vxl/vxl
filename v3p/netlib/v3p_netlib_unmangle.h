@@ -53,6 +53,7 @@
 #undef dlacpy_
 #undef dladiv_
 #undef dlaeig_
+#undef dlaev2_
 #undef dlag2_
 #undef dlager_
 #undef dlagv2_
@@ -103,6 +104,9 @@
 #undef drotg_
 #undef drscl_
 #undef dscal_
+#undef dspr_
+#undef dsptrf_
+#undef dsptrs_
 #undef dsvdc_
 #undef dswap_
 #undef dtgex2_
