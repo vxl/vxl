@@ -1,5 +1,7 @@
 # core/vgui/CMakeLists.txt
 
+PROJECT(vgui)
+
 # Default the dashboard builds to "YES" so that
 # we have some clients that try to compile vgui
 IF( DART_ROOT )
@@ -212,7 +214,7 @@ ENDIF (X11_FOUND)
 IF (MFC_FOUND)
   # add stuff to use MFC in this executable
   ADD_DEFINITIONS( "-D_AFXDLL" )
-  SET(CMAKE_MFC_FLAG 6)
+  SET(CMAKE_MFC_FLAG 2)
 ENDIF (MFC_FOUND)
 
 
@@ -408,7 +410,7 @@ ENDIF (GTK2_FOUND)
 
 IF (WXWIDGETS_FOUND)
 
-  OPTION(VGUI_USE_WX "Should wxWidgets support be compiled into vgui?" YES)
+  OPTION(VGUI_USE_WX "Should wxWidgets support be compiled into vgui?" NO)
 
   IF(VGUI_USE_WX)
 

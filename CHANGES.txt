@@ -5,6 +5,13 @@ aren't documented here, unless the bug-fix has a major observable
 effect.  If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
+      - VXL's GUI Library (vgui) now has preliminary support for wxWidgets
+        as the rendering toolkit. It has been tested only in Windows
+        platforms and has known problems with UNICODE builds of wxWidgets
+        (to be solved in a later release). To turn-on compilation of the
+        wxWidgets support set the VGUI_USE_WX option in CMake to ON (OFF
+        by default).
+
       - Add VXL_IMPORT_BUILD_SETTINGS option (default to YES) to allow
         private libraries to have different compiler settings. (Setting
         to NO will permit differences.)
