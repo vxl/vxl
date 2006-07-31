@@ -68,13 +68,13 @@ vgui_wx_adaptor::vgui_wx_adaptor(wxWindow* parent,
   , idle_request_posted_(false)
   , destroy_posted_(false)
 {
-  wxLogTrace(wxTRACE_RefCount, "vgui_wx_adaptor::vgui_wx_adaptor");
+  wxLogTrace(wxTRACE_RefCount, wxT("vgui_wx_adaptor::vgui_wx_adaptor"));
 }
 
 //: Destructor.
 vgui_wx_adaptor::~vgui_wx_adaptor()
 {
-  wxLogTrace(wxTRACE_RefCount, "vgui_wx_adaptor::~vgui_wx_adaptor");
+  wxLogTrace(wxTRACE_RefCount, wxT("vgui_wx_adaptor::~vgui_wx_adaptor"));
 }
 
 //-------------------------------------------------------------------------

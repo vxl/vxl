@@ -168,7 +168,7 @@ void vgui_wx_window::reposition(int x, int y)
 //: Use the given text as the window title (if the window has a title).
 void vgui_wx_window::set_title(vcl_string const& title)
 {
-  frame_->SetTitle(title.c_str());
+  frame_->SetTitle( wxString(title) );
 }
 
 //: Set the position of the horizontal scrollbar, returns old position.

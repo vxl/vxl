@@ -40,7 +40,7 @@ int vgui_wx_statusbar::write(const char* text, int n)
       if (text[0] == '\n')
       {
         // buffer filled, print to wxStatusBar and reset
-        widget_->SetStatusText(linebuffer_.c_str());
+        widget_->SetStatusText(linebuffer_);
         linebuffer_ = "";
       }
       else { linebuffer_ += text[0]; }
@@ -51,7 +51,7 @@ int vgui_wx_statusbar::write(const char* text, int n)
       if (linebuffer_.find('\n') != vcl_string::npos)
       {
         // buffer filled, print to wxStatusBar and reset
-        widget_->SetStatusText(linebuffer_.c_str());
+        widget_->SetStatusText(linebuffer_);
         linebuffer_ = "";
       }
     }
@@ -65,7 +65,7 @@ int vgui_wx_statusbar::write(const char* text)
   if (widget_)
   {
     linebuffer_ = text;
-    widget_->SetStatusText(linebuffer_.c_str());
+    widget_->SetStatusText(linebuffer_);
   }
 
   return 1;
