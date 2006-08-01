@@ -347,12 +347,12 @@ IF(CMAKE_COMPILER_IS_GNUCC)
   #  temperton/gpfa5f.c
   #  temperton/dgpfa5f.c
   #  laso/dnlaso.c
-  #  lapack/complex16/zlarfx.c
   #  PROPERTIES COMPILE_FLAGS -O0
   #  )
   SET_SOURCE_FILES_PROPERTIES(
     blas/slamch.c # gcc 3.4 optimization produces infinite loop
     blas/dlamch.c # gcc 3.4 optimization produces infinite loop
+    lapack/complex16/zlarfx.c
     PROPERTIES COMPILE_FLAGS -O0
     )
 ENDIF(CMAKE_COMPILER_IS_GNUCC)
