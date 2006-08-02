@@ -574,6 +574,29 @@ inline void vil_convert_stretch_range_limited(const vil_image_view<inP>& src,
 }
 
 
+//: Convert src image<inP> to dest image<vxl_byte> by stretching input range [src_lo, src_hi] to output range [0, 255].
+// Inputs < src_lo are mapped to 0, and inputs > src_hi to 255.
+template <class inP>
+inline void vil_convert_stretch_range_limited(const vil_image_view<inP>& src,
+                                              vil_image_view<vxl_byte>& dest,
+                                              const inP src_lo,
+                                              const inP src_hi)
+{
+  const double dsrc = static_cast<double>(src_hi - src_lo);
+  const double dds = 255.0 / dsrc;
+
+  dest.set_size(src.ni(), src.nj(), src.nplanes());
+  for (unsigned p = 0; p < src.nplanes(); ++p)
+    for (unsigned j = 0; j < src.nj(); ++j)
+      for (unsigned i = 0; i < src.ni(); ++i)
+      {
+        inP s = src(i,j,p);
+        dest(i,j,p) = s<=src_lo ? 0 :
+                      ( s>=src_hi ? 255 :
+                                    static_cast<vxl_byte>(dds*(s-src_lo)+0.5) );
+      }
+}
+
 //: Cast the unknown pixel type to the known one.
 //
 // This function is designed to be used with vil_load or
