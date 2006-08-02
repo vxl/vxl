@@ -19,6 +19,7 @@
 #include "vidl2_ostream.h"
 #include <vcl_string.h>
 #include <vil/vil_image_resource_sptr.h>
+#include "vidl2_ffmpeg_ostream_params.h"
 
 
 //: The parameters used to initialize a ffmpeg writer.
@@ -41,8 +42,7 @@ class vidl2_ffmpeg_ostream
   virtual ~vidl2_ffmpeg_ostream();
 
   //: Open the stream
-  virtual bool open(const vcl_string& filename,
-                    const vidl2_ffmpeg_ostream_params& params);
+  virtual bool open();
 
   //: Close the stream
   virtual void close();
@@ -54,11 +54,30 @@ class vidl2_ffmpeg_ostream
   // \retval false if the image could not be written
   virtual bool write_frame(const vidl2_frame_sptr& frame);
 
+  //: Set the filename
+  void set_filename(const vcl_string& filename) { filename_ = filename; }
+
+  //: Set the parameters
+  void set_params(const vidl2_ffmpeg_ostream_params& params) { params_ = params; }
+
+  //: Access the filename
+  vcl_string filename() const { return filename_; }
+
+  //: Access the parameters
+  const vidl2_ffmpeg_ostream_params& params() const { return params_; }
+
+
  private:
   //: The private implementation (PIMPL) details
   //  This isolates the clients from the ffmpeg details
   struct pimpl;
   pimpl* os_;
+
+  //: The filename to open
+  vcl_string filename_;
+
+  //: The parameters
+  vidl2_ffmpeg_ostream_params params_;
 };
 
 #endif // vidl2_ffmpeg_ostream_h_

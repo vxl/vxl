@@ -230,8 +230,6 @@ vidl2_ffmpeg_ostream* vidl2_gui_param_dialog::ffmpeg_ostream()
   int enc_choice = params.encoder_;
   dlg.choice("encoder", enc_choices, enc_choice);
 
-  dlg.field("image width", params.ni_);
-  dlg.field("image height", params.nj_);
   dlg.field("frame rate (fps)", params.frame_rate_);
   dlg.field("bit rate", params.bit_rate_);
 
@@ -243,7 +241,7 @@ vidl2_ffmpeg_ostream* vidl2_gui_param_dialog::ffmpeg_ostream()
 
   vidl2_ffmpeg_ostream* o_stream = new vidl2_ffmpeg_ostream(file, params);
 
-  if (!o_stream || !o_stream->is_open()) {
+  if (!o_stream) {
     vgui_error_dialog("Failed to create ffmpeg output stream");
     delete o_stream;
     return NULL;

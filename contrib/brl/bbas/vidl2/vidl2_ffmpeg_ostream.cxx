@@ -10,7 +10,6 @@
 //-----------------------------------------------------------------------------
 
 #include "vidl2_ffmpeg_ostream.h"
-#include "vidl2_ffmpeg_ostream_params.h"
 #include "vidl2_ffmpeg_init.h"
 #include "vidl2_ffmpeg_convert.h"
 #include "vidl2_frame.h"
@@ -69,34 +68,33 @@ vidl2_ffmpeg_ostream::
 vidl2_ffmpeg_ostream::
 vidl2_ffmpeg_ostream(const vcl_string& filename,
                      const vidl2_ffmpeg_ostream_params& params)
-  : os_( new vidl2_ffmpeg_ostream::pimpl )
+  : os_( new vidl2_ffmpeg_ostream::pimpl ),
+    filename_(filename), params_(params)
 {
   vidl2_ffmpeg_init();
-  open(filename, params);
 }
 
 
 //: Open the stream
 bool
 vidl2_ffmpeg_ostream::
-open(const vcl_string& filename,
-     const vidl2_ffmpeg_ostream_params& params)
+open()
 {
   // Close any open files
   close();
 
   // a raw video packet is the same size as the input image. Others
   // are smaller.
-  os_->bit_buf_ = new vil_memory_chunk( params.ni_ * params.nj_ * 3, VIL_PIXEL_FORMAT_BYTE );
+  os_->bit_buf_ = new vil_memory_chunk( params_.ni_ * params_.nj_ * 3, VIL_PIXEL_FORMAT_BYTE );
 
   os_->fmt_cxt_ = av_alloc_format_context();
 
   AVOutputFormat* file_oformat = 0;
-  if ( params.file_format_ == vidl2_ffmpeg_ostream_params::GUESS ) {
-    file_oformat = guess_format(NULL, filename.c_str(), NULL);
+  if ( params_.file_format_ == vidl2_ffmpeg_ostream_params::GUESS ) {
+    file_oformat = guess_format(NULL, filename_.c_str(), NULL);
     if (!file_oformat) {
       vcl_cerr << "ffmpeg: Unable for find a suitable output format for "
-               << filename << '\n';
+               << filename_ << '\n';
       close();
       return false;
     }
@@ -129,7 +127,7 @@ open(const vcl_string& filename,
       vcl_strcmp(file_oformat->name, "3gp") != 0 )
     video_enc->flags |= CODEC_FLAG_GLOBAL_HEADER;
 
-  switch ( params.encoder_ )
+  switch ( params_.encoder_ )
   {
    case vidl2_ffmpeg_ostream_params::DEFAULT:
     video_enc->codec_id = file_oformat->video_codec;
@@ -167,14 +165,14 @@ open(const vcl_string& filename,
     return false;
   }
 
-  video_enc->bit_rate = params.bit_rate_ * 1000;
-  video_enc->bit_rate_tolerance = params.video_bit_rate_tolerance_;
+  video_enc->bit_rate = params_.bit_rate_ * 1000;
+  video_enc->bit_rate_tolerance = params_.video_bit_rate_tolerance_;
 #if LIBAVCODEC_BUILD <= 4753
-  video_enc->frame_rate      = int( params.frame_rate_ * 1000 );
+  video_enc->frame_rate      = int( params_.frame_rate_ * 1000 );
   video_enc->frame_rate_base = 1000;
 #else
   video_enc->time_base.num = 1000;
-  video_enc->time_base.den = int(params.frame_rate_*1000);
+  video_enc->time_base.den = int(params_.frame_rate_*1000);
 #endif
 
   if ( codec && codec->supported_framerates )
@@ -206,9 +204,9 @@ open(const vcl_string& filename,
 #endif
   }
 
-  video_enc->width  = params.ni_;
-  video_enc->height = params.nj_;
-  video_enc->sample_aspect_ratio = av_d2q(params.frame_aspect_ratio_*params.ni_/params.nj_, 255);
+  video_enc->width  = params_.ni_;
+  video_enc->height = params_.nj_;
+  video_enc->sample_aspect_ratio = av_d2q(params_.frame_aspect_ratio_*params_.ni_/params_.nj_, 255);
 
   // Our source is packed RGB. Use that if possible.
   video_enc->pix_fmt = PIX_FMT_RGB24;
@@ -230,172 +228,172 @@ open(const vcl_string& filename,
     video_enc->pix_fmt = PIX_FMT_YUV420P;
   }
 
-  if (!params.intra_only_)
-    video_enc->gop_size = params.gop_size_;
+  if (!params_.intra_only_)
+    video_enc->gop_size = params_.gop_size_;
   else
     video_enc->gop_size = 0;
-  if (params.video_qscale_ || params.same_quality_)
+  if (params_.video_qscale_ || params_.same_quality_)
   {
     video_enc->flags |= CODEC_FLAG_QSCALE;
-    st->quality = FF_QP2LAMBDA * params.video_qscale_;
+    st->quality = FF_QP2LAMBDA * params_.video_qscale_;
   }
   // if (bitexact)
   //   video_enc->flags |= CODEC_FLAG_BITEXACT;
 
-  video_enc->mb_decision = params.mb_decision_;
-  video_enc->mb_cmp = params.mb_cmp_;
-  video_enc->ildct_cmp = params.ildct_cmp_;
-  video_enc->me_sub_cmp = params.sub_cmp_;
-  video_enc->me_cmp = params.cmp_;
-  video_enc->me_pre_cmp = params.pre_cmp_;
-  video_enc->pre_me = params.pre_me_;
-  video_enc->lumi_masking = params.lumi_mask_;
-  video_enc->dark_masking = params.dark_mask_;
-  video_enc->spatial_cplx_masking = params.scplx_mask_;
-  video_enc->temporal_cplx_masking = params.tcplx_mask_;
-  video_enc->p_masking = params.p_mask_;
-  video_enc->quantizer_noise_shaping= params.qns_;
+  video_enc->mb_decision = params_.mb_decision_;
+  video_enc->mb_cmp = params_.mb_cmp_;
+  video_enc->ildct_cmp = params_.ildct_cmp_;
+  video_enc->me_sub_cmp = params_.sub_cmp_;
+  video_enc->me_cmp = params_.cmp_;
+  video_enc->me_pre_cmp = params_.pre_cmp_;
+  video_enc->pre_me = params_.pre_me_;
+  video_enc->lumi_masking = params_.lumi_mask_;
+  video_enc->dark_masking = params_.dark_mask_;
+  video_enc->spatial_cplx_masking = params_.scplx_mask_;
+  video_enc->temporal_cplx_masking = params_.tcplx_mask_;
+  video_enc->p_masking = params_.p_mask_;
+  video_enc->quantizer_noise_shaping= params_.qns_;
 
-  if (params.use_umv_)
+  if (params_.use_umv_)
   {
     video_enc->flags |= CODEC_FLAG_H263P_UMV;
   }
-  if (params.use_ss_)
+  if (params_.use_ss_)
   {
     video_enc->flags |= CODEC_FLAG_H263P_SLICE_STRUCT;
   }
-  if (params.use_aic_)
+  if (params_.use_aic_)
   {
     video_enc->flags |= CODEC_FLAG_H263P_AIC;
   }
-  if (params.use_aiv_)
+  if (params_.use_aiv_)
   {
     video_enc->flags |= CODEC_FLAG_H263P_AIV;
   }
-  if (params.use_4mv_)
+  if (params_.use_4mv_)
   {
     video_enc->flags |= CODEC_FLAG_4MV;
   }
-  if (params.use_obmc_)
+  if (params_.use_obmc_)
   {
     video_enc->flags |= CODEC_FLAG_OBMC;
   }
-  if (params.use_loop_)
+  if (params_.use_loop_)
   {
     video_enc->flags |= CODEC_FLAG_LOOP_FILTER;
   }
 
-  if (params.use_part_)
+  if (params_.use_part_)
   {
     video_enc->flags |= CODEC_FLAG_PART;
   }
-  if (params.use_alt_scan_)
+  if (params_.use_alt_scan_)
   {
     video_enc->flags |= CODEC_FLAG_ALT_SCAN;
   }
-  if (params.use_trell_)
+  if (params_.use_trell_)
   {
     video_enc->flags |= CODEC_FLAG_TRELLIS_QUANT;
   }
-  if (params.use_scan_offset_)
+  if (params_.use_scan_offset_)
   {
     video_enc->flags |= CODEC_FLAG_SVCD_SCAN_OFFSET;
   }
-  if (params.closed_gop_)
+  if (params_.closed_gop_)
   {
     video_enc->flags |= CODEC_FLAG_CLOSED_GOP;
   }
-  if (params.use_qpel_)
+  if (params_.use_qpel_)
   {
     video_enc->flags |= CODEC_FLAG_QPEL;
   }
-  if (params.use_qprd_)
+  if (params_.use_qprd_)
   {
     video_enc->flags |= CODEC_FLAG_QP_RD;
   }
-  if (params.use_cbprd_)
+  if (params_.use_cbprd_)
   {
     video_enc->flags |= CODEC_FLAG_CBP_RD;
   }
-  if (params.b_frames_)
+  if (params_.b_frames_)
   {
-    video_enc->max_b_frames = params.b_frames_;
+    video_enc->max_b_frames = params_.b_frames_;
     video_enc->b_frame_strategy = 0;
     video_enc->b_quant_factor = 2.0;
   }
-  if (params.do_interlace_dct_)
+  if (params_.do_interlace_dct_)
   {
     video_enc->flags |= CODEC_FLAG_INTERLACED_DCT;
   }
-  if (params.do_interlace_me_)
+  if (params_.do_interlace_me_)
   {
     video_enc->flags |= CODEC_FLAG_INTERLACED_ME;
   }
-  video_enc->qmin = params.video_qmin_;
-  video_enc->qmax = params.video_qmax_;
-  video_enc->lmin = params.video_lmin_;
-  video_enc->lmax = params.video_lmax_;
-  video_enc->mb_qmin = params.video_mb_qmin_;
-  video_enc->mb_qmax = params.video_mb_qmax_;
-  video_enc->max_qdiff = params.video_qdiff_;
-  video_enc->qblur = params.video_qblur_;
-  video_enc->qcompress = params.video_qcomp_;
+  video_enc->qmin = params_.video_qmin_;
+  video_enc->qmax = params_.video_qmax_;
+  video_enc->lmin = params_.video_lmin_;
+  video_enc->lmax = params_.video_lmax_;
+  video_enc->mb_qmin = params_.video_mb_qmin_;
+  video_enc->mb_qmax = params_.video_mb_qmax_;
+  video_enc->max_qdiff = params_.video_qdiff_;
+  video_enc->qblur = params_.video_qblur_;
+  video_enc->qcompress = params_.video_qcomp_;
 
   // delete when the stream is closed
-  os_->video_rc_eq_ = new char[params.video_rc_eq_.length()];
-  vcl_strcpy(os_->video_rc_eq_, params.video_rc_eq_.c_str());
+  os_->video_rc_eq_ = new char[params_.video_rc_eq_.length()];
+  vcl_strcpy(os_->video_rc_eq_, params_.video_rc_eq_.c_str());
   video_enc->rc_eq = os_->video_rc_eq_;
 
-  video_enc->debug = params.debug_;
-  video_enc->debug_mv = params.debug_mv_;
+  video_enc->debug = params_.debug_;
+  video_enc->debug_mv = params_.debug_mv_;
   video_enc->thread_count = 1;
 
-  video_enc->rc_max_rate = params.video_rc_max_rate_;
-  video_enc->rc_min_rate = params.video_rc_min_rate_;
-  video_enc->rc_buffer_size = params.video_rc_buffer_size_;
-  video_enc->rc_buffer_aggressivity= params.video_rc_buffer_aggressivity_;
-  video_enc->rc_initial_cplx= params.video_rc_initial_cplx_;
-  video_enc->i_quant_factor = params.video_i_qfactor_;
-  video_enc->b_quant_factor = params.video_b_qfactor_;
-  video_enc->i_quant_offset = params.video_i_qoffset_;
-  video_enc->b_quant_offset = params.video_b_qoffset_;
-  video_enc->intra_quant_bias = params.video_intra_quant_bias_;
-  video_enc->inter_quant_bias = params.video_inter_quant_bias_;
-  video_enc->dct_algo = params.dct_algo_;
-  video_enc->idct_algo = params.idct_algo_;
-  video_enc->me_threshold= params.me_threshold_;
-  video_enc->mb_threshold= params.mb_threshold_;
-  video_enc->intra_dc_precision= params.intra_dc_precision_ - 8;
-  video_enc->strict_std_compliance = params.strict_;
-  video_enc->error_rate = params.error_rate_;
-  video_enc->noise_reduction= params.noise_reduction_;
-  video_enc->scenechange_threshold= params.sc_threshold_;
-  video_enc->me_range = params.me_range_;
-  video_enc->coder_type= params.coder_;
-  video_enc->context_model= params.context_;
-  video_enc->prediction_method= params.predictor_;
+  video_enc->rc_max_rate = params_.video_rc_max_rate_;
+  video_enc->rc_min_rate = params_.video_rc_min_rate_;
+  video_enc->rc_buffer_size = params_.video_rc_buffer_size_;
+  video_enc->rc_buffer_aggressivity= params_.video_rc_buffer_aggressivity_;
+  video_enc->rc_initial_cplx= params_.video_rc_initial_cplx_;
+  video_enc->i_quant_factor = params_.video_i_qfactor_;
+  video_enc->b_quant_factor = params_.video_b_qfactor_;
+  video_enc->i_quant_offset = params_.video_i_qoffset_;
+  video_enc->b_quant_offset = params_.video_b_qoffset_;
+  video_enc->intra_quant_bias = params_.video_intra_quant_bias_;
+  video_enc->inter_quant_bias = params_.video_inter_quant_bias_;
+  video_enc->dct_algo = params_.dct_algo_;
+  video_enc->idct_algo = params_.idct_algo_;
+  video_enc->me_threshold= params_.me_threshold_;
+  video_enc->mb_threshold= params_.mb_threshold_;
+  video_enc->intra_dc_precision= params_.intra_dc_precision_ - 8;
+  video_enc->strict_std_compliance = params_.strict_;
+  video_enc->error_rate = params_.error_rate_;
+  video_enc->noise_reduction= params_.noise_reduction_;
+  video_enc->scenechange_threshold= params_.sc_threshold_;
+  video_enc->me_range = params_.me_range_;
+  video_enc->coder_type= params_.coder_;
+  video_enc->context_model= params_.context_;
+  video_enc->prediction_method= params_.predictor_;
 #if 0
   // old versions of FFMPEG don't support these
   // so lets ignore them for now
-  video_enc->profile= params.video_profile_;
-  video_enc->level= params.video_level_;
+  video_enc->profile= params_.video_profile_;
+  video_enc->level= params_.video_level_;
 #endif
 
-  if (params.packet_size_)
+  if (params_.packet_size_)
   {
     video_enc->rtp_mode= 1;
-    video_enc->rtp_payload_size= params.packet_size_;
+    video_enc->rtp_payload_size= params_.packet_size_;
   }
 
-  if (params.do_psnr_)
+  if (params_.do_psnr_)
     video_enc->flags|= CODEC_FLAG_PSNR;
 
-  video_enc->me_method = params.me_method_;
+  video_enc->me_method = params_.me_method_;
 
   /* two pass mode */
-  if (params.do_pass_)
+  if (params_.do_pass_)
   {
-    if (params.do_pass_ == 1)
+    if (params_.do_pass_ == 1)
     {
       video_enc->flags |= CODEC_FLAG_PASS1;
     }
@@ -411,11 +409,11 @@ open(const vcl_string& filename,
   os_->fmt_cxt_->copyright[0] = '\0';
   os_->fmt_cxt_->comment[0] = '\0';
 
-  vcl_strncpy( os_->fmt_cxt_->filename, filename.c_str(), 1023 );
+  vcl_strncpy( os_->fmt_cxt_->filename, filename_.c_str(), 1023 );
 
-  if ( url_fopen( &os_->fmt_cxt_->pb, filename.c_str(), URL_WRONLY) < 0 )
+  if ( url_fopen( &os_->fmt_cxt_->pb, filename_.c_str(), URL_WRONLY) < 0 )
   {
-    vcl_cerr << "ffmpeg: couldn't open " << filename << " for writing\n";
+    vcl_cerr << "ffmpeg: couldn't open " << filename_ << " for writing\n";
     close();
     return false;
   }
@@ -430,7 +428,7 @@ open(const vcl_string& filename,
     return false;
   }
 
-  //dump_format( os_->fmt_cxt_, 1, filename, 1 );
+  //dump_format( os_->fmt_cxt_, 1, filename_, 1 );
 
   if ( avcodec_open( video_enc, codec ) < 0 )
   {
@@ -508,6 +506,12 @@ bool
 vidl2_ffmpeg_ostream::
 write_frame(const vidl2_frame_sptr& frame)
 {
+  if(!is_open()){
+    // resize to the first frame
+    params_.size(frame->ni(),frame->nj());
+    open();
+  }
+
 #if LIBAVFORMAT_BUILD <= 4628
   AVCodecContext* codec = &os_->fmt_cxt_->streams[0]->codec;
 #else
