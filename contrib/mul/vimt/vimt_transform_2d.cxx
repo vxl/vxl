@@ -645,7 +645,7 @@ void vimt_transform_2d::print_summary(vcl_ostream& o) const
 
         case RigidBody:
             o << "RigidBody\n"
-              << vsl_indent()<< "angle = " << vcl_atan2(yx_,xx_) << vcl_endl
+              << vsl_indent()<< "angle = " << vcl_atan2(yx_,xx_) << '\n'
               << vsl_indent()<< "translation = (" << xt_ << ',' << yt_ << ')';
             break;
 
@@ -658,22 +658,22 @@ void vimt_transform_2d::print_summary(vcl_ostream& o) const
 
         case Reflection:
             o << "Reflection\n"
-              << vsl_indent()<< xx_ << ' ' << xy_ << vcl_endl
-              << vsl_indent()<< yx_ << ' ' << yy_ << vcl_endl
+              << vsl_indent()<< xx_ << ' ' << xy_ << '\n'
+              << vsl_indent()<< yx_ << ' ' << yy_ << '\n'
               << vsl_indent()<< "translation = (" << xt_ << ',' << yt_ << ')';
             break;
 
         case Affine:
             o << "Affine\n"
-              << vsl_indent()<< xx_ << ' ' << xy_ << vcl_endl
-              << vsl_indent()<< yx_ << ' ' << yy_ << vcl_endl
+              << vsl_indent()<< xx_ << ' ' << xy_ << '\n'
+              << vsl_indent()<< yx_ << ' ' << yy_ << '\n'
               << vsl_indent()<< "translation = (" << xt_ << ',' << yt_ << ')';
             break;
 
         case Projective:
             o << "Projective\n"
-              << vsl_indent()<< xx_ << ' ' << xy_ << ' ' << xt_ << vcl_endl
-              << vsl_indent()<< yx_ << ' ' << yy_ << ' ' << yt_ << vcl_endl
+              << vsl_indent()<< xx_ << ' ' << xy_ << ' ' << xt_ << '\n'
+              << vsl_indent()<< yx_ << ' ' << yy_ << ' ' << yt_ << '\n'
               << vsl_indent()<< tx_ << ' ' << ty_ << ' ' << tt_;
             break;
     }

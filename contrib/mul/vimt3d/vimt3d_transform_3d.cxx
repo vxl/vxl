@@ -622,7 +622,7 @@ void vimt3d_transform_3d::print_summary(vcl_ostream& o) const
       vnl_vector<double> p(6);
       params(p);
       o << "RigidBody\n"
-        << vsl_indent()<< "angles = " << p(0) << ',' << p(1) << ',' << p(2) << vcl_endl
+        << vsl_indent()<< "angles = " << p(0) << ',' << p(1) << ',' << p(2) << '\n'
         << vsl_indent()<< "translation = (" << p(3) << ',' << p(4) << ',' << p(5) << ")\n";
       break;
     }
@@ -633,7 +633,7 @@ void vimt3d_transform_3d::print_summary(vcl_ostream& o) const
       params(p);
       o << "Similarity\n"
         << vsl_indent()<< "scale factor = " << p(0) << vcl_endl
-        << vsl_indent()<< "angles = " << p(1) << ',' << p(2) << ',' << p(3) << vcl_endl
+        << vsl_indent()<< "angles = " << p(1) << ',' << p(2) << ',' << p(3) << '\n'
         << vsl_indent()<< "translation = (" << p(4) << ',' << p(5) << ',' << p(5) << ")\n";
       break;
     }
@@ -642,8 +642,8 @@ void vimt3d_transform_3d::print_summary(vcl_ostream& o) const
       vnl_vector<double> p(9);
       params(p);
       o << "Affine\n"
-        << vsl_indent()<< "scale factors = " << p(0) << ',' << p(1) << ',' << p(2) << vcl_endl
-        << vsl_indent()<< "angles = " << p(3) << ',' << p(4) << ',' << p(5) << vcl_endl
+        << vsl_indent()<< "scale factors = " << p(0) << ',' << p(1) << ',' << p(2) << '\n'
+        << vsl_indent()<< "angles = " << p(3) << ',' << p(4) << ',' << p(5) << '\n'
         << vsl_indent()<< "translation = (" << p(6) << ',' << p(7) << ',' << p(8) << ")\n";
       break;
     }
