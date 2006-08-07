@@ -368,11 +368,13 @@ IF(CMAKE_COMPILER_IS_GNUCC)
   #  laso/dnlaso.c
   #  PROPERTIES COMPILE_FLAGS -O0
   #  )
+  # Disable global optimizations for some source files.  See comments in
+  # the sources for details.
   SET_SOURCE_FILES_PROPERTIES(
-    blas/slamch.c # gcc 3.4 optimization produces infinite loop
-    blas/dlamch.c # gcc 3.4 optimization produces infinite loop
+    blas/slamch.c
+    blas/dlamch.c
     lapack/complex16/zlarfx.c
-    PROPERTIES COMPILE_FLAGS -O0
+    PROPERTIES COMPILE_FLAGS -fno-gcse
     )
 ENDIF(CMAKE_COMPILER_IS_GNUCC)
 
