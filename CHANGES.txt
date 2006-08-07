@@ -5,6 +5,14 @@ aren't documented here, unless the bug-fix has a major observable
 effect.  If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
+
+****************************
+VXL 1.6.0	- August 2006
+****************************
+
+      - vnl has been made thread safe, fixing a major weakness with
+        vxl
+
       - VXL's GUI Library (vgui) now has preliminary support for wxWidgets
         as the rendering toolkit. It has been tested only in Windows
         platforms and has known problems with UNICODE builds of wxWidgets
