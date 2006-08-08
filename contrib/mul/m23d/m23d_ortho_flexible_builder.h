@@ -67,8 +67,8 @@ class m23d_ortho_flexible_builder
     //: Reconstruct approximate structure of 3D points given multiple 2D views
     //  Data assumed to be scaled orthographic projections
     //  The result is stored in the shape_3d() matrix.
-    //  The estimated projection matricies are stored in the projections() matrix
-    //  However, the projection matricies are not necesarily consistant.
+    //  The estimated projection matrices are stored in the projections() matrix
+    //  However, the projection matrices are not necessarily consistent.
     //  Call refine() to ensure consistancy, (or use reconstruct(P2D,n_modes)
     //  This is exposed to aid testing and debugging.
     //  \param P2D 2ns x np matrix. Rows contain alternating x's and y's from 2D shapes
@@ -77,7 +77,7 @@ class m23d_ortho_flexible_builder
     //: Reconstruct structure of 3D points given multiple 2D views
     //  Data assumed to be scaled orthographic projections
     //  The result is stored in the shape_3d() matrix.
-    //  The estimated projection matricies are stored in the projections() matrix
+    //  The estimated projection matrices are stored in the projections() matrix
     //  \param P2D 2ns x np matrix. Rows contain alternating x's and y's from 2D shapes
     void reconstruct(const vnl_matrix<double>& P2D, unsigned n_modes);
 
@@ -105,7 +105,7 @@ class m23d_ortho_flexible_builder
     //: Refine estimates of projection and structure
     void refine();
 
-    //: Apply rotation matricies to each 3 columns of P (and inverse to rows of B)
+    //: Apply rotation matrices to each 3 columns of P (and inverse to rows of B)
     // Matrix selected so that projection matrices in each 3 cols have same
     // effective rotation.
     void correct_coord_frame(vnl_matrix<double>& P,
@@ -120,8 +120,6 @@ class m23d_ortho_flexible_builder
 
     //: Mean coefficients
     const vnl_vector<double>& mean_coeffs() const { return mean_coeffs_; }
-
 };
 
 #endif // m2d3_ortho_flexible_builder_h_
-

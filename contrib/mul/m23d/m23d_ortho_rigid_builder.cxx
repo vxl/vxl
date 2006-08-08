@@ -6,15 +6,16 @@
 #include <m23d/m23d_ortho_rigid_builder.h>
 #include <m23d/m23d_rotation_from_ortho_projection.h>
 #include <m23d/m23d_scaled_ortho_projection.h>
-#include <vnl/algo/vnl_svd.h>
 #include <m23d/m23d_set_q_constraint.h>
+#include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vcl_iostream.h>
+#include <vcl_cassert.h>
 
 //: Reconstruct structure of 3D points given multiple 2D views
 //  Data assumed to be scaled orthographic projections
 //  The result is stored in the shape_3d() matrix.
-//  The estimated projection matricies are stored in the projections() matrix
+//  The estimated projection matrices are stored in the projections() matrix
 //  \param P2D 2ns x np matrix. Rows contain alternating x's and y's from 2D shapes
 void m23d_ortho_rigid_builder::reconstruct(const vnl_matrix<double>& P2D)
 {
@@ -109,7 +110,7 @@ void m23d_ortho_rigid_builder::reconstruct(const vnl_matrix<double>& P2D)
   // Compute a rotation matrix for this
   vnl_matrix<double> R=m23d_rotation_from_ortho_projection(P0);
 
-vcl_cout<<"P0*Rt"<<vcl_endl<<P0*R.transpose()<<vcl_endl;
+vcl_cout<<"P0*Rt\n"<<P0*R.transpose()<<vcl_endl;
   // Apply inverse so that P.G gives unit projection
   G=G*R.transpose();
 

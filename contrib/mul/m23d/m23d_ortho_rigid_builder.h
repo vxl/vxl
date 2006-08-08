@@ -48,7 +48,7 @@ class m23d_ortho_rigid_builder
     //: Reconstruct structure of 3D points given multiple 2D views
     //  Data assumed to be scaled orthographic projections
     //  The result is stored in the shape_3d() matrix.
-    //  The estimated projection matricies are stored in the projections() matrix
+    //  The estimated projection matrices are stored in the projections() matrix
     //  \param P2D 2ns x np matrix. Rows contain alternating x's and y's from 2D shapes
     void reconstruct(const vnl_matrix<double>& P2D);
 
@@ -67,8 +67,6 @@ class m23d_ortho_rigid_builder
 
     //: Refine estimates of projection and structure
     void refine();
-
 };
 
 #endif // m2d3_ortho_rigid_builder_h_
-
