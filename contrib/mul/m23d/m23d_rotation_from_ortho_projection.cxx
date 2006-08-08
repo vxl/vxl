@@ -1,4 +1,6 @@
 #include <m23d/m23d_rotation_from_ortho_projection.h>
+//:
+// \file
 #include <vnl/vnl_cross.h>
 #include <m23d/m23d_pure_ortho_projection.h>
 
