@@ -12,6 +12,7 @@
 #include "vgui_wx_dialog_impl.h"
 
 #include <vcl_cstdlib.h> // for vcl_exit()
+#include <vcl_cstddef.h> // for vcl_size_t
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 
@@ -73,7 +74,7 @@ void vgui_wx::init(int& argc, char** argv)
   if (wxTheApp)
   {
     // if we are here, then we aren't trying to use vgui in a wxWidgets App
-    vcl_cerr << "vgui_wx::init(): wxApp object already exists!" << vcl_endl;
+    vcl_cerr << "vgui_wx::init(): wxApp object already exists!\n";
     // ***** exit here... or can we recover from this?
     vcl_exit(-1);
   }
@@ -93,8 +94,8 @@ void vgui_wx::init(int& argc, char** argv)
 #if wxUSE_UNICODE
   g_Argc = argc;
   g_wxCharArgv = new wxChar*[argc+1];
-  for( int cnt = 0; cnt < argc; ++cnt ) {
-    size_t len = wxConvLocal.MB2WC( NULL, argv[cnt], 0 );
+  for ( int cnt = 0; cnt < argc; ++cnt ) {
+    vcl_size_t len = wxConvLocal.MB2WC( NULL, argv[cnt], 0 );
     g_wxCharArgv[cnt] = new wxChar[len+1];
     wxConvLocal.MB2WC( g_wxCharArgv[cnt], argv[cnt], len+1 );
   }
@@ -107,7 +108,7 @@ void vgui_wx::init(int& argc, char** argv)
   // wxWidgets initialization
   if (!wxInitialize(argc, wxArgv))
   {
-    vcl_cerr << "vgui_wx::init(): wxInitialize failed!" << vcl_endl;
+    vcl_cerr << "vgui_wx::init(): wxInitialize failed!\n";
     // ***** exit here... or can we recover from this?
     vcl_exit(-1);
   }
@@ -115,7 +116,7 @@ void vgui_wx::init(int& argc, char** argv)
   // wxApp initialization
   if (!wxTheApp->CallOnInit())
   {
-    vcl_cerr << "vgui_wx::init(): wxTheApp->OnInit failed!" << vcl_endl;
+    vcl_cerr << "vgui_wx::init(): wxTheApp->OnInit failed!\n";
     // ***** exit here... or can we recover from this?
     // ***** do we need to call wxUninitialize (or uninit) before exit?
     vcl_exit(-1);
@@ -139,7 +140,7 @@ void vgui_wx::uninit(void)
   // not controlling the main loop from vgui_wx
   if (adaptor_embedded_)
   {
-    vcl_cerr << __FILE__ ":embedding adaptor; don't call uninit!" << vcl_endl;
+    vcl_cerr << __FILE__ ":embedding adaptor; don't call uninit!\n";
     return;
   }
 
@@ -159,7 +160,7 @@ void vgui_wx::uninit(void)
   // If we convert the char** argv to a wxChar** version, free our
   // conversion now.
 #if wxUSE_UNICODE
-  for( int cnt = 0; cnt < g_Argc; ++cnt ) {
+  for ( int cnt = 0; cnt < g_Argc; ++cnt ) {
     delete[] g_wxCharArgv[cnt];
   }
   delete g_wxCharArgv;
@@ -185,7 +186,7 @@ void vgui_wx::run(void)
   // not controlling the main loop from vgui_wx
   if (adaptor_embedded_)
   {
-    vcl_cerr << __FILE__ ":embedding adaptor; don't call run!" << vcl_endl;
+    vcl_cerr << __FILE__ ":embedding adaptor; don't call run!\n";
     return;
   }
 
@@ -274,7 +275,7 @@ namespace
 {
   class vgui_wx_app : public wxApp
   {
-  public:
+   public:
     //: Constructor - default.
     vgui_wx_app()
     {
