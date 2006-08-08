@@ -1,4 +1,4 @@
-// This is mul/m23d/tests/test_arc.cxx
+// This is mul/m23d/tests/test_rotation_from_ortho_projection.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <m23d/m23d_rotation_from_ortho_projection.h>
@@ -28,8 +28,8 @@ void test_rotation_from_ortho_projection()
 
   vcl_cout<<"Recover R1 from reflected projection"<<vcl_endl;
   vnl_matrix<double> R1c = m23d_rotation_from_ortho_projection(-0.19*P1);
-  vcl_cout<<"R1:"<<R1<<vcl_endl;
-  vcl_cout<<"R1c:"<<R1c<<vcl_endl;
+  vcl_cout<<"R1:"<<R1<<vcl_endl
+          <<"R1c:"<<R1c<<vcl_endl;
   TEST_NEAR("Recovered R1 (1st 2 rows)",(R1c+R1).extract(2,3).rms(),0.0,1e-6);
   vnl_matrix<double> P1R1t=(-0.19*P1)*R1c.transpose();
   vcl_cout<<"R1R1t:"<<P1R1t<<vcl_endl;

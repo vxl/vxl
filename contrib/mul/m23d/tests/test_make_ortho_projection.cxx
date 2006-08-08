@@ -1,8 +1,7 @@
-// This is mul/m23d/tests/test_arc.cxx
+// This is mul/m23d/tests/test_make_ortho_projection.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <m23d/m23d_make_ortho_projection.h>
-
 
 void test_make_ortho_projection()
 {

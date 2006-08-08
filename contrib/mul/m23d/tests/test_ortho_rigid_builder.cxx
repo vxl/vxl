@@ -1,4 +1,4 @@
-// This is mul/m23d/tests/test_arc.cxx
+// This is mul/m23d/tests/test_ortho_rigid_builder.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <m23d/m23d_make_ortho_projection.h>
@@ -45,8 +45,8 @@ void test_ortho_rigid_builder()
   pure_P0(0,0)=1; pure_P0(0,1)=0; pure_P0(0,2)=0;
   pure_P0(1,0)=0; pure_P0(1,1)=1; pure_P0(1,2)=0;
 
-  vcl_cout<<"First projection:"<<vcl_endl;
-  vcl_cout<<P1.extract(2,3)<<vcl_endl;
+  vcl_cout<<"First projection:"<<vcl_endl
+          <<P1.extract(2,3)<<vcl_endl;
   TEST_NEAR("First projection is identity",
             (P1.extract(2,3)-pure_P0).rms(),0,1e-6);
 
@@ -78,11 +78,11 @@ void test_ortho_rigid_builder()
             (P1.extract(2,3)-pure_P0).rms(),0,0.05);
 
   vnl_matrix<double> P_0 = P1.extract(2,3);
-  vcl_cout<<"P0:"<<vcl_endl<<P_0<<vcl_endl;
-  vcl_cout<<"P0.P0'="<<vcl_endl<<P_0*P_0.transpose()<<vcl_endl;
+  vcl_cout<<"P0:"<<vcl_endl<<P_0<<vcl_endl
+          <<"P0.P0'="<<vcl_endl<<P_0*P_0.transpose()<<vcl_endl;
   vnl_matrix<double> P_1 = P1.extract(2,3,2,0);
-  vcl_cout<<"P0:"<<vcl_endl<<P_1<<vcl_endl;
-  vcl_cout<<"P0.P0'="<<vcl_endl<<P_1*P_1.transpose()<<vcl_endl;
+  vcl_cout<<"P0:"<<vcl_endl<<P_1<<vcl_endl
+          <<"P0.P0'="<<vcl_endl<<P_1*P_1.transpose()<<vcl_endl;
 
   vcl_cout<<"=== Test refinement ==="<<vcl_endl;
   builder.refine();
@@ -95,8 +95,8 @@ void test_ortho_rigid_builder()
             (P1.extract(2,3)-pure_P0).rms(),0,0.05);
 
 
-//  vcl_cout<<"Recovered 3D points: "<<vcl_endl<<P3D<<vcl_endl;
-//  vcl_cout<<"True 3D points: "<<vcl_endl<<C<<vcl_endl;
+//  vcl_cout<<"Recovered 3D points: "<<vcl_endl<<P3D<<vcl_endl
+//          <<"True 3D points: "<<vcl_endl<<C<<vcl_endl;
 }
 
 TESTMAIN(test_ortho_rigid_builder);

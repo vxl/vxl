@@ -1,4 +1,4 @@
-// This is mul/m23d/tests/test_arc.cxx
+// This is mul/m23d/tests/test_rotation_matrix.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <m23d/m23d_rotation_matrix.h>

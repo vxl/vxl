@@ -1,4 +1,4 @@
-// This is mul/m23d/tests/test_arc.cxx
+// This is mul/m23d/tests/test_ortho_flexible_builder.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <m23d/m23d_make_ortho_projection.h>
@@ -37,7 +37,6 @@ void test_projection_matrix1(const vnl_matrix<double>& P)
   }
   if (test_ok)
     vcl_cout<<"Projection matrix passed the tests."<<vcl_endl;
-
 }
 
 void test_ortho_flexible_builder_on_rigid()
@@ -79,8 +78,8 @@ void test_ortho_flexible_builder_on_rigid()
   pure_P0(0,0)=1; pure_P0(0,1)=0; pure_P0(0,2)=0;
   pure_P0(1,0)=0; pure_P0(1,1)=1; pure_P0(1,2)=0;
 
-  vcl_cout<<"First projection:"<<vcl_endl;
-  vcl_cout<<P1.extract(2,3)<<vcl_endl;
+  vcl_cout<<"First projection:"<<vcl_endl
+          <<P1.extract(2,3)<<vcl_endl;
   TEST_NEAR("First projection is identity",
             (P1.extract(2,3)-pure_P0).rms(),0,1e-6);
 
@@ -112,11 +111,11 @@ void test_ortho_flexible_builder_on_rigid()
             (P1.extract(2,3)-pure_P0).rms(),0,0.05);
 
   vnl_matrix<double> P_0 = P1.extract(2,3);
-  vcl_cout<<"P0:"<<vcl_endl<<P_0<<vcl_endl;
-  vcl_cout<<"P0.P0'="<<vcl_endl<<P_0*P_0.transpose()<<vcl_endl;
+  vcl_cout<<"P0:"<<vcl_endl<<P_0<<vcl_endl
+          <<"P0.P0'="<<vcl_endl<<P_0*P_0.transpose()<<vcl_endl;
   vnl_matrix<double> P_1 = P1.extract(2,3,2,0);
-  vcl_cout<<"P0:"<<vcl_endl<<P_1<<vcl_endl;
-  vcl_cout<<"P0.P0'="<<vcl_endl<<P_1*P_1.transpose()<<vcl_endl;
+  vcl_cout<<"P0:"<<vcl_endl<<P_1<<vcl_endl
+          <<"P0.P0'="<<vcl_endl<<P_1*P_1.transpose()<<vcl_endl;
 
   vcl_cout<<"=== Test refinement ==="<<vcl_endl;
   builder.refine();
@@ -129,8 +128,8 @@ void test_ortho_flexible_builder_on_rigid()
             (P1.extract(2,3)-pure_P0).rms(),0,0.05);
 
 
-//  vcl_cout<<"Recovered 3D points: "<<vcl_endl<<P3D<<vcl_endl;
-//  vcl_cout<<"True 3D points: "<<vcl_endl<<C<<vcl_endl;
+//  vcl_cout<<"Recovered 3D points: "<<vcl_endl<<P3D<<vcl_endl
+//          <<"True 3D points: "<<vcl_endl<<C<<vcl_endl;
 }
 
   // Generate cube test data, with one (symmetric) mode
@@ -190,8 +189,8 @@ void test_ortho_flexible_builder_on_flexible()
   pure_P0(0,0)=1; pure_P0(0,1)=0; pure_P0(0,2)=0;
   pure_P0(1,0)=0; pure_P0(1,1)=1; pure_P0(1,2)=0;
 
-  vcl_cout<<"Projection 0, mode 0:"<<vcl_endl;
-  vcl_cout<<P1.extract(2,3)<<vcl_endl;
+  vcl_cout<<"Projection 0, mode 0:"<<vcl_endl
+          <<P1.extract(2,3)<<vcl_endl;
   TEST_NEAR("Projection 0, mode 0 is identity",
             (P1.extract(2,3)-pure_P0).rms(),0,0.02);
 
@@ -245,27 +244,27 @@ void test_ortho_flexible_builder_on_flexible()
 
   TEST_NEAR("RMS error on first 3D basis",(P3D-C).extract(3,C.cols()).rms(),0,0.05);
 
-/*
-  vcl_cout<<"Projection 4, mode 0:"<<vcl_endl;
-  vcl_cout<<P1.extract(2,3,8,0)<<vcl_endl;
-  vcl_cout<<"Projection 4, mode 1:"<<vcl_endl;
-  vcl_cout<<P1.extract(2,3,8,3)<<vcl_endl;
-  vcl_cout<<"Projection 4 coeffs: "<<builder.coeffs().get_row(4)<<vcl_endl;
-  vcl_cout<<"Pure Projection 4, mode 0:"<<vcl_endl;
-  vcl_cout<<P.extract(2,3,8,0)<<vcl_endl;
-  vcl_cout<<"Pure Projection 4, mode 1:"<<vcl_endl;
-  vcl_cout<<P.extract(2,3,8,3)<<vcl_endl;
-*/
-  vcl_cout<<"Mean shape: "<<vcl_endl;
-  vcl_cout<<builder.mean_shape().transpose()<<vcl_endl;
+#if 0
+  vcl_cout<<"Projection 4, mode 0:"<<vcl_endl
+          <<P1.extract(2,3,8,0)<<vcl_endl
+          <<"Projection 4, mode 1:"<<vcl_endl
+          <<P1.extract(2,3,8,3)<<vcl_endl
+          <<"Projection 4 coeffs: "<<builder.coeffs().get_row(4)<<vcl_endl
+          <<"Pure Projection 4, mode 0:"<<vcl_endl
+          <<P.extract(2,3,8,0)<<vcl_endl
+          <<"Pure Projection 4, mode 1:"<<vcl_endl
+          <<P.extract(2,3,8,3)<<vcl_endl;
+#endif / 0
+  vcl_cout<<"Mean shape: "<<vcl_endl
+          <<builder.mean_shape().transpose()<<vcl_endl;
 
   vcl_cout<<"== Use non-basis version of projection matrices =="<<vcl_endl;
   P=m23d_make_ortho_projection(r,ns,n_modes,false,false);
   C=make_cube_model();
   D=P*C;
   builder.reconstruct(D,1);
-  vcl_cout<<"Mean shape: "<<vcl_endl;
-  vcl_cout<<builder.mean_shape().transpose()<<vcl_endl;
+  vcl_cout<<"Mean shape: "<<vcl_endl
+          <<builder.mean_shape().transpose()<<vcl_endl;
 
   vnl_matrix<double> MS=builder.mean_shape();
   // Check that each pair of the last points is approximately orthogonal

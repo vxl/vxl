@@ -1,4 +1,4 @@
-// This is mul/m23d/tests/test_arc.cxx
+// This is mul/m23d/tests/test_correction_matrix_error.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <m23d/m23d_correction_matrix_error.h>
@@ -44,7 +44,7 @@ bool test_projection_matrix(const vnl_matrix<double>& P)
   return test_ok;
 }
 
-//: Fill a symmetric matrix with elements from v
+//  Fill a symmetric matrix with elements from v
 static vnl_matrix<double> sym_matrix_from_vec(const vnl_vector<double>& v, unsigned n)
 {
   vnl_matrix<double> S(n,n);
@@ -55,7 +55,7 @@ static vnl_matrix<double> sym_matrix_from_vec(const vnl_vector<double>& v, unsig
   return S;
 }
 
-//: Solve for correction matrix for zero mode case
+//  Solve for correction matrix for zero mode case
 static vnl_matrix<double> am_solve_for_G0(const vnl_matrix<double>& A,
                                    const vnl_vector<double>& rhs)
 {
@@ -132,7 +132,7 @@ void compute_Gk(const vnl_matrix<double> & M, unsigned k,
     // Compute a rotation matrix for this
     vnl_matrix<double> R=m23d_rotation_from_ortho_projection(M0);
 
-    vcl_cout<<"M0*Rt (k="<<k<<")"<<vcl_endl<<M0*R.transpose()<<vcl_endl;
+    vcl_cout<<"M0*Rt (k="<<k<<')'<<vcl_endl<<M0*R.transpose()<<vcl_endl;
 
     // Apply inverse so that P.G gives unit projection
     Gk=Gk*R.transpose();
@@ -241,7 +241,7 @@ void test_correction_matrix_error()
     cme.f(g1,f1);
     f1-=f0;
     f1/=delta;
-    vcl_cout<<f1(0)<<","<<J(0,i)/f1(0)<<vcl_endl;
+    vcl_cout<<f1(0)<<','<<J(0,i)/f1(0)<<vcl_endl;
     TEST_NEAR("Jacobian column",(f1-J.get_column(i)).rms(),0.0,1e-5);
   }
 }

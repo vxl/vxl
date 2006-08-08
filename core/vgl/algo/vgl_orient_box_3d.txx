@@ -1,4 +1,4 @@
-// This is core/vgl/vgl_orient_box_3d.txx
+// This is core/vgl/algo/vgl_orient_box_3d.txx
 #ifndef vgl_orient_box_3d_txx_
 #define vgl_orient_box_3d_txx_
 //:
