@@ -130,6 +130,9 @@ SOURCE=.\test_string_io.cxx
 SOURCE=.\test_vector_io.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_vlarge_block_io.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

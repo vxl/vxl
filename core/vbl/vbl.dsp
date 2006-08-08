@@ -135,6 +135,9 @@ SOURCE=.\Templates/vbl_array_3d+uchar-.cxx
 SOURCE=.\Templates/vbl_array_3d+uint-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vbl_array_3d+ushort-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_array_3d+void~-.cxx
 # End Source File
 # Begin Source File
