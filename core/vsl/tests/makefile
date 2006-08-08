@@ -19,7 +19,7 @@ TESTS += test_set_io.cxx
 TESTS += test_stack_io.cxx
 TESTS += test_string_io.cxx
 TESTS += test_vector_io.cxx
-#TESTS += test_vlarge_block_io.cxx # don't add !!
+SOURCES += test_vlarge_block_io.cxx # don't add to tests !!
 
 MINI_PROG_SOURCES += test_include.cxx
 
