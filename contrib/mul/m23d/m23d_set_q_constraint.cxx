@@ -5,6 +5,7 @@
 
 #include <m23d/m23d_set_q_constraint.h>
 #include <vcl_algorithm.h>
+#include <vcl_cassert.h>
 
 //: Defines constraint on elements of Q of form a'Qb=r
 //  Q is a symmetric matrix, with n(n+1)/2 independent elements
@@ -117,6 +118,3 @@ void m23d_set_q_constraints(const vnl_matrix<double> & M, unsigned k,
 
   assert(c==n_con);
 }
-
-
-

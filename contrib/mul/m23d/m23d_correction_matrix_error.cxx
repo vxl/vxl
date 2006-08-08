@@ -6,6 +6,7 @@
 #include <m23d/m23d_correction_matrix_error.h>
 #include <mbl/mbl_matxvec.h>
 #include <vcl_iostream.h>
+#include <vcl_cassert.h>
 
 m23d_correction_matrix_error::m23d_correction_matrix_error(const vnl_matrix<double>& A,
                               const vnl_vector<double>& rhs,

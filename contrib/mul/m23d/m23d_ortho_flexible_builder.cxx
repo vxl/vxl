@@ -6,19 +6,20 @@
 #include <m23d/m23d_ortho_flexible_builder.h>
 #include <m23d/m23d_rotation_from_ortho_projection.h>
 #include <m23d/m23d_scaled_ortho_projection.h>
-#include <vnl/algo/vnl_svd.h>
 #include <m23d/m23d_set_q_constraint.h>
+#include <m23d/m23d_correction_matrix_error.h>
+#include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
+#include <vnl/algo/vnl_levenberg_marquardt.h>
+#include <vnl/vnl_least_squares_function.h>
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
-#include <vnl/vnl_least_squares_function.h>
-#include <vnl/algo/vnl_levenberg_marquardt.h>
-#include <m23d/m23d_correction_matrix_error.h>
+#include <vcl_cassert.h>
 
 //: Reconstruct structure of 3D points given multiple 2D views
 //  Data assumed to be scaled orthographic projections
 //  The result is stored in the shape_3d() matrix.
-//  The estimated projection matricies are stored in the projections() matrix
+//  The estimated projection matrices are stored in the projections() matrix
 //  \param P2D 2ns x np matrix. Rows contain alternating x's and y's from 2D shapes
 void m23d_ortho_flexible_builder::reconstruct(const vnl_matrix<double>& P2D,
                                               unsigned n_modes)
@@ -30,7 +31,7 @@ void m23d_ortho_flexible_builder::reconstruct(const vnl_matrix<double>& P2D,
 //: Reconstruct structure of 3D points given multiple 2D views
 //  Data assumed to be scaled orthographic projections
 //  The result is stored in the shape_3d() matrix.
-//  The estimated projection matricies are stored in the projections() matrix
+//  The estimated projection matrices are stored in the projections() matrix
 //  \param P2D 2ns x np matrix. Rows contain alternating x's and y's from 2D shapes
 void m23d_ortho_flexible_builder::partial_reconstruct(const vnl_matrix<double>& P2D,
                                               unsigned n_modes)
@@ -76,12 +77,13 @@ void m23d_ortho_flexible_builder::partial_reconstruct(const vnl_matrix<double>& 
   P_=P_*G;
   vnl_svd<double> G_svd(G);
   P3D_=G_svd.inverse() * P3D_;
-  vcl_cout<<"Singular values of G: "<<G_svd.W().diagonal()<<vcl_endl;
-  vcl_cout<<"Revised reconstruction error: "<<(P_*P3D_-P2Dc_).rms()<<vcl_endl;
+  vcl_cout<<"Singular values of G: "<<G_svd.W().diagonal()<<vcl_endl
+          <<"Revised reconstruction error: "<<(P_*P3D_-P2Dc_).rms()<<vcl_endl;
 
   // Disambiguate the ambiguity in the sign of the z ordinates
   // First non-zero element should be negative.
-/*  for (unsigned k=0;k<=n_modes;++k)
+#if 0
+  for (unsigned k=0;k<=n_modes;++k)
   {
     for (unsigned i=0;i<np;++i)
     {
@@ -94,7 +96,8 @@ void m23d_ortho_flexible_builder::partial_reconstruct(const vnl_matrix<double>& 
         break;
       }
     }
-  }*/
+  }
+#endif // 0
   for (unsigned i=0;i<np;++i)
   {
     if (P3D_(2,i)<0) break;
@@ -179,7 +182,7 @@ static vnl_matrix<double> am_solve_for_Gk(const vnl_matrix<double>& A,
   return vnl_matrix<double>(g.data_block(),3*(m+1),3);
 }
 
-/*
+#if 0
   // Now refine the solution   *** Not sure that this helps ***
   vnl_diag_matrix<double> W(nq);
   double w0=0.01*svd.W(0);
@@ -209,7 +212,7 @@ static vnl_matrix<double> am_solve_for_Gk(const vnl_matrix<double>& A,
 
   return Gk;
 }
-*/
+#endif // 0
 
 static void compute_Gk(const vnl_matrix<double> & M, unsigned k,
                 vnl_matrix<double>& Gk)
@@ -268,7 +271,7 @@ static double min_row_scale(const vnl_matrix<double>& M)
   }
   return vcl_sqrt(vcl_min(r1,r2));
 }
-// Apply rotation matricies to each 3 columns of M (and inverse to rows of B)
+// Apply rotation matrices to each 3 columns of M (and inverse to rows of B)
 // Matrix selected so that projection matrices in each 3 cols have same
 // effective rotation.
 void m23d_ortho_flexible_builder::correct_coord_frame(vnl_matrix<double>& M,
