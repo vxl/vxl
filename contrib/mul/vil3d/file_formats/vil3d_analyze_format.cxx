@@ -717,13 +717,13 @@ bool vil3d_analyze_image::put_view(const vil3d_image_view_base& view,
    }
    case VIL_PIXEL_FORMAT_DOUBLE:
    {
-    vil3d_image_view<double> view_copy(ni(),nj(),nk(),nplanes());
-    vil3d_copy_reformat(static_cast<const vil3d_image_view<double>&>(view),view_copy);
-    if (header_.needSwap())
-      swap32_for_big_endian((char *)(view_copy.origin_ptr()), ni()*nj()*nk()*nplanes());
-    os->write(view_copy.origin_ptr(),ni()*nj()*nk()*nplanes()*sizeof(double));
-    // Should check that write was successful
-    return true;
+     vil3d_image_view<double> view_copy(ni(),nj(),nk(),nplanes());
+     vil3d_copy_reformat(static_cast<const vil3d_image_view<double>&>(view),view_copy);
+     if (header_.needSwap())
+       swap32_for_big_endian((char *)(view_copy.origin_ptr()), ni()*nj()*nk()*nplanes());
+     os->write(view_copy.origin_ptr(),ni()*nj()*nk()*nplanes()*sizeof(double));
+     // Should check that write was successful
+     return true;
    }
    default:
     vcl_cout<<"ERROR: vil3d_analyze_format::put_view()\n"
@@ -739,6 +739,8 @@ bool vil3d_analyze_image::put_view(const vil3d_image_view_base& view,
 bool vil3d_analyze_image::set_voxel_size(float si,float sj,float sk)
 {
   header_.set_voxel_size(si,sj,sk);
+  // Overwrite the header in the file
+  if (!header_.write_file(base_path_+".hdr")) return false;
   return true;
 }
 
