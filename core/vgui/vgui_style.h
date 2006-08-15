@@ -18,6 +18,7 @@
 //   07-AUG-2002 K.Y.McGaul - Changed to and added Doxygen style comments.
 //   06-APR-2004 M.Leotta - Updated for use with smart pointers and no style factory
 //   2004/09/10 Peter Vanroose - Added explicit copy constructor (ref_count !)
+//   07-AUG-2006 M.Leotta - Enabled alpha channel for transparency
 // \endverbatim
 
 #include <vbl/vbl_ref_count.h>
@@ -42,7 +43,9 @@ class vgui_style : public vbl_ref_count
   static vgui_style_sptr new_style();
 
   //: Create a new style object
-  static vgui_style_sptr new_style(float r, float g, float b, float point_size, float line_width);
+  static vgui_style_sptr new_style(float r, float g, float b,
+                                   float point_size, float line_width,
+                                   float alpha = 1.0f);
 
   //: Create a new style object from an existing one;
   static vgui_style_sptr new_style(const vgui_style_sptr& style);
@@ -79,7 +82,7 @@ class vgui_style : public vbl_ref_count
   vgui_style();
 
   //: Constructor - creates a style and initializes the values
-  vgui_style(float r, float g, float b, float point_size, float line_width);
+  vgui_style(float r, float g, float b, float point_size, float line_width, float alpha);
 
   // Copy constructor
   vgui_style(vgui_style const& s)

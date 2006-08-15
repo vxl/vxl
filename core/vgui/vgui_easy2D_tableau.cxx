@@ -122,8 +122,8 @@ void vgui_easy2D_tableau::set_child(vgui_tableau_sptr const& i)
   image_slot.assign(i);
 }
 
-//: Set the colour of objects to the given red, green, blue values.
-void vgui_easy2D_tableau::set_foreground(float r, float g, float b)
+//: Set the colour of objects to the given red, green, blue, alpha values.
+void vgui_easy2D_tableau::set_foreground(float r, float g, float b, float a)
 {
   // create a new style object so that already added objects don't
   // suddenly change
@@ -131,6 +131,7 @@ void vgui_easy2D_tableau::set_foreground(float r, float g, float b)
   style_->rgba[0] = r;
   style_->rgba[1] = g;
   style_->rgba[2] = b;
+  style_->rgba[3] = a;
 }
 
 //: Set the width of lines to the given width.

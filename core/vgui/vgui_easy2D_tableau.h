@@ -96,8 +96,8 @@ class vgui_easy2D_tableau : public vgui_displaylist2D_tableau
   //: Set the child tableau to be the given tableau.
   void set_child(vgui_tableau_sptr const&);
 
-  //: Set the colour of objects to the given red, green, blue values.
-  void set_foreground(float r, float g, float b);
+  //: Set the colour of objects to the given red, green, blue, alpha values.
+  void set_foreground(float r, float g, float b, float a = 1.0f);
 
   //: Set the width of lines to the given width.
   void set_line_width(float w);

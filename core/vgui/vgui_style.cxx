@@ -27,9 +27,9 @@ vgui_style::new_style()
 
 //: Create a new style object
 vgui_style_sptr
-vgui_style::new_style(float r, float g, float b, float point_size, float line_width)
+vgui_style::new_style(float r, float g, float b, float point_size, float line_width, float alpha)
 {
-  return vgui_style_sptr(new vgui_style(r, g, b, point_size, line_width));
+  return vgui_style_sptr(new vgui_style(r, g, b, point_size, line_width, alpha));
 }
 
 //: Create a new style object from an existing one;
@@ -37,15 +37,15 @@ vgui_style_sptr
 vgui_style::new_style(const vgui_style_sptr& s)
 {
   return vgui_style_sptr( new vgui_style( s->rgba[0],s->rgba[1],s->rgba[2],
-                                          s->point_size,s->line_width ) );
+                                          s->point_size,s->line_width,s->rgba[3] ) );
 }
 
 
 vgui_style::vgui_style()
 {
-  for (int i=0; i<2; ++i)
-    rgba[i] = 1;
-
+  rgba[0] = 1;
+  rgba[1] = 1;
+  rgba[2] = 1;
   rgba[3] = 1;
   line_width = 1;
   point_size = 1;
@@ -53,21 +53,21 @@ vgui_style::vgui_style()
 
 
 //: Constructor - creates a style and initializes the values
-vgui_style::vgui_style(float r, float g, float b, float ps, float lw)
+vgui_style::vgui_style(float r, float g, float b, float ps, float lw, float alpha)
  : point_size(ps), line_width(lw)
 {
   rgba[0] = r;
   rgba[1] = g;
   rgba[2] = b;
-  rgba[3] = 1;
+  rgba[3] = alpha;
 }
 
 
 vgui_style::~vgui_style() {
   // to aid in debugging destroyed styles
-  for (int i=0; i<2; ++i)
-    rgba[i] = -1.0f;
-
+  rgba[0] = -1.0f;
+  rgba[1] = -1.0f;
+  rgba[2] = -1.0f;
   rgba[3] = -1.0f;
   line_width = -1.0f;
   point_size = -1.0f;
@@ -76,7 +76,7 @@ vgui_style::~vgui_style() {
 void
 vgui_style::apply_color() const
 {
-  glColor3f( rgba[0], rgba[1], rgba[2] );
+  glColor4f( rgba[0], rgba[1], rgba[2], rgba[3] );
 }
 
 void
@@ -113,6 +113,7 @@ bool vgui_style_equal::operator() (vgui_style_sptr s2)
   return s_->rgba[0] == s2->rgba[0] &&
          s_->rgba[1] == s2->rgba[1] &&
          s_->rgba[2] == s2->rgba[2] &&
+         s_->rgba[3] == s2->rgba[3] &&
          s_->point_size == s2->point_size &&
          s_->line_width == s2->line_width;
 }
