@@ -526,8 +526,8 @@ static void test_pixel_iterator()
       bool data[1];
       pitr->get_data(reinterpret_cast<vxl_byte*>(data));
       vcl_cout << itr(0) << ' ';
-      success = success && (itr(0) == (buffer[i/8] & 128>>i%8));
-      psuccess = psuccess && (data[0] == (buffer[i/8] & 128>>i%8));
+      success = success && (itr(0) == ((buffer[i/8] & 128>>i%8)!=0));
+      psuccess = psuccess && (data[0] == ((buffer[i/8] & 128>>i%8)!=0));
     }
     vcl_cout << '\n';
     TEST("vidl2_pixel_iterator (Mono 1)",success,true);
