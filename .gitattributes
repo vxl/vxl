@@ -10,8 +10,8 @@
 *.sh             crlf=input
 *.tif           -crlf
 *.tiff          -crlf
+check_consistency  crlf=input
 check_dsp        crlf=input
-check_syntax     crlf=input
 configure        crlf=input
 install-sh       crlf=input
 script           crlf=input
