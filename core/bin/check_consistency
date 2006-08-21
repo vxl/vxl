@@ -18,7 +18,7 @@ exec perl -w -x $0 ${1+"$@"}
 #
 # ;; sample compile command for emacs
 # (setq compile-command
-#  "find $VXLROOT -type f \( -name \*.cxx -o -name \*.txx -o -name \*.h \) -exec $VXLROOT/core/bin/check_syntax -e -f {} \\;" )
+#  "find . $VXLROOT -type f \( -name \*.cxx -o -name \*.txx -o -name \*.h \) | xargs $VXLROOT/core/bin/check_consistency -e" )
 # ESC-x compile
 
 undef $/;
