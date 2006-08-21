@@ -90,12 +90,12 @@ static void test_pyramid_image_resource()
   //test decimation for generating a pyramid level
   vcl_string dec_file = "decimated_resource";
   {
-    {
-      vil_image_resource_sptr dec_resc =
-        vil_pyramid_image_resource::decimate(bir, dec_file.c_str());
-      if (dec_resc)
-        vcl_cout << "Made a successful decimated resource\n";
-    }
+    vil_image_resource_sptr dec_resc =
+      vil_pyramid_image_resource::decimate(bir, dec_file.c_str());
+    if (dec_resc)
+      vcl_cout << "Made a successful decimated resource\n";
+  }//close open resource files
+  {
     vil_image_resource_sptr reload_dec =
       vil_load_image_resource(dec_file.c_str());
     if (!reload_dec)
@@ -136,16 +136,16 @@ static void test_pyramid_image_resource()
       float ac = 1.0f;
       vil_image_view<unsigned short> v25 = bpyr->get_copy_view(0.25f , ac);
       unsigned ni25 = v25.ni();
-      bool good = ni25 == 19;
       vil_image_view<unsigned short> v50 = bpyr->get_copy_view(0.5f , ac);
       unsigned ni50 = v50.ni();
-      vcl_cout << "ni25 = " << ni25 << "  ni50 " << ni50 << '\n';
-      good = good && ni50 == 37;
+      vcl_cout << "ni25 = " << ni25 << ",  ni50 = " << ni50 << '\n';
+      bool good = (ni25 == 19 && ni50 == 37) || (ni25 == 18 && ni50 == 36);
       TEST("Pyramid read", good, true);
     }
     else
       TEST("Pyramid create", false, true);
   }//close open resource files
+
   //clean directory
   vl.clean_directory();
   vcl_cout << "Cleaning bpyr directory\n";
