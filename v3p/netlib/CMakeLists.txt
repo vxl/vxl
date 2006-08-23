@@ -235,7 +235,7 @@ SET(V3P_NETLIB_lapack_SOURCES
   lapack/double/dlacon.c lapack/double/dlacon.h
   lapack/double/dlacpy.c lapack/double/dlacpy.h
   lapack/double/dladiv.c lapack/double/dladiv.h
-	lapack/double/dlaev2.c lapack/double/dlaev2.h
+  lapack/double/dlaev2.c lapack/double/dlaev2.h
   lapack/double/dlag2.c lapack/double/dlag2.h
   lapack/double/dlagv2.c lapack/double/dlagv2.h
   lapack/double/dlange.c lapack/double/dlange.h
@@ -254,16 +254,16 @@ SET(V3P_NETLIB_lapack_SOURCES
   lapack/double/dlaswp.c lapack/double/dlaswp.h
   lapack/double/dlatdf.c lapack/double/dlatdf.h
   lapack/double/dlatrs.c lapack/double/dlatrs.h
-	lapack/double/dorg2r.c lapack/double/dorg2r.h
+  lapack/double/dorg2r.c lapack/double/dorg2r.h
   lapack/double/dorgqr.c lapack/double/dorgqr.h
   lapack/double/dorgr2.c lapack/double/dorgr2.h
   lapack/double/dorm2r.c lapack/double/dorm2r.h
   lapack/double/dormqr.c lapack/double/dormqr.h
   lapack/double/dormr2.c lapack/double/dormr2.h
   lapack/double/drscl.c lapack/double/drscl.h
-	lapack/double/dsptrf.c lapack/double/dsptrf.h
-	lapack/double/dsptrs.c lapack/double/dsptrs.h
-	lapack/double/dspr.c lapack/double/dspr.h
+  lapack/double/dsptrf.c lapack/double/dsptrf.h
+  lapack/double/dsptrs.c lapack/double/dsptrs.h
+  lapack/double/dspr.c lapack/double/dspr.h
   lapack/double/dtgex2.c lapack/double/dtgex2.h
   lapack/double/dtgexc.c lapack/double/dtgexc.h
   lapack/double/dtgsen.c lapack/double/dtgsen.h
