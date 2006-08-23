@@ -1,5 +1,8 @@
 # core/vil/CMakeLists.txt
 
+# avoid undefined macro in subsequent SETs:
+SET( vil_sources vil_config.h.in )
+
 INCLUDE(${MODULE_PATH}/FindPNG.cmake)
 IF(PNG_FOUND)
   INCLUDE_DIRECTORIES( ${PNG_INCLUDE_DIR})
@@ -72,7 +75,6 @@ CONFIGURE_FILE( ${vxl_SOURCE_DIR}/core/vil/vil_config.h.in
 SET( vil_sources ${vil_sources}
 
   # basic things
-  vil_config.h.in
   vil_memory_chunk.cxx                  vil_memory_chunk.h
   vil_image_view_base.h
   vil_image_view.h                      vil_image_view.txx
