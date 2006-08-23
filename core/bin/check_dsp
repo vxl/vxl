@@ -86,7 +86,8 @@ foreach $dir (@DIRS)
   }
 
   # verify #includes in test_include.cxx
-  if (-f "$dir/test_include.cxx" && $dir =~ m!^/!) {
+  if (-f "$dir/test_include.cxx" && $dir =~ m!^/!)
+  {
     if ($dir !~ m!/v(i|n|pg)l/tests$! && opendir(UPDIR,"$dir/../algo")) {
       @updir_files = map { "algo/$_" } readdir(UPDIR);
       closedir(UPDIR);
@@ -109,7 +110,8 @@ foreach $dir (@DIRS)
     close(FILE);
     @inc_files = sort(@inc_files); push @inc_files, '~END';
     $updir_files=""; $inc_files="";
-    while (@inc_files || @updir_files) {
+    while (@inc_files || @updir_files)
+    {
       unless ($updir_files eq '~END') {
         $updir_files = $s = shift @updir_files;
       }
@@ -136,7 +138,8 @@ foreach $dir (@DIRS)
   }
 
   @hfiles = ();
-  foreach $fx (@tmp_list) {
+  foreach $fx (@tmp_list)
+  {
     next unless ($fx =~ m/\.(h|txx)(\.in)?$/);
     next if ($dir =~ m!\bvcl/generic$!);
     next if ($fx =~ m/^(dll|resource|stdafx)\.h$/i);
@@ -148,12 +151,14 @@ foreach $dir (@DIRS)
   @source = ();
   @hsource = ();
   $f = '';
-  foreach $fx (@tmp_list) {
+  foreach $fx (@tmp_list)
+  {
     next unless ($fx =~ m/\.dsp$/);
     next unless open(FILE, "$dir/$fx");
     $f .= " $dir/$fx";
     $start = '';
-    while (<FILE>) {
+    while (<FILE>)
+    {
       print STDOUT "Line of $dir/$fx does not end in <CR><LF>\n" unless m/\r$/;
       $start = 1  if (m/^\# Begin Group \"Source Files\"/);
       $start = 2  if (m/^\# Begin Group \"Header Files\"/);
@@ -184,8 +189,9 @@ foreach $dir (@DIRS)
   if (open(MAKEFILE, $makef)) {
     @hsources = ();
     @aux_sources = ('Templates');
-    while (<MAKEFILE>) {
-      s/\$\(wildcard (.*)\)/$1/g; s/\#.*//; s/\$\([^()]+\)//;
+    while (<MAKEFILE>)
+    {
+      s/\$\(wildcard (.*)\)/$1/g; s/\#.*//; s/\$\(.+?\)//s;
       if (m/^\s*TESTMAIN\s*\:?\=\s*(\S+)/) {
         @sources = ($1);
         $testmain = $1;
@@ -203,9 +209,10 @@ foreach $dir (@DIRS)
         push @hsources, $file;
         push @hsources, $file if ($file =~ s/\.txx$/.h/ && -f "$dir/$file");
       }
-      while (s/^\s*(SOURCES|MINI_PROG_SOURCES|TESTS)\s*\+\=\s*(\S+)/$1+=/) {
-        push @tests, $2 if ($1 eq 'TESTS');
+      while (s/^\s*(SOURCES|MINI_PROG_SOURCES|TESTS)\s*\+\=\s*(\S+)/$1+=/)
+      {
         $file = $2;
+        push @tests, $file if ($1 eq 'TESTS');
         if ($file eq '${MOCSOURCES}') {
           @tmp_list = @sources;
           push @sources, grep { s/\.cxx$/_mocced.cxx/ && -f "$dir/$_" } @tmp_list;
@@ -252,18 +259,66 @@ foreach $dir (@DIRS)
     $cmakefile = <CMAKEFILE>;
     close CMAKEFILE;
     $/=$old_v;
+    %names = ();
   }
   $moc_files = '';
   $cmakefile =~ s/\n\s*\#[^\n]*//g;
   $cmakefile =~ s!\$\{EXECUTABLE_OUTPUT_PATH\}/!!g;
-  if ($cmakefile =~ s/\bQT_WRAP_CPP\s*\(\s*(\S+)\s+(\S+)\s+([^()]+)\)//) {
+  if ($cmakefile =~ s/\bQT_WRAP_CPP\s*\(\s*(\S+)\s+(\S+)\s+(.+?)\)//s) {
     $moc_files = $2;
     push @source_files, map {s/\.h$/_mocced.cxx/; $_} split(/\s+/, $3);
   }
-  while ($cmakefile =~ s/\b(SOURCE_FILES|SET)\s*\(\s*\S+(sources|SOURCES)\s*([^()]+)\)//) {
-    foreach (split /\s+/, $3) {
-      next if ($_ eq "\$\{$moc_files\}");
-      if (m/^\$\{(\S+sources)\}$/ ) { ; }
+  $cmakefile =~ s/\$\{$moc_files\}//g;
+  while ($cmakefile =~ s/\bSET\s*\(\s*(\S+)\s*(.*?)\)//s)
+  {
+    $n = $1; # $n is typically of the form ..._sources or ..._SOURCES
+    $l = $2; # the list of files constituting the definition of $n.
+    next if $n =~ m/_(PREFIX|FLAGS|LIBRARIES|PATH|SOURCE_DIR|INCLUDE_DIR)$/;
+    next if $n =~ m/^[a-z0-9]+_test_include_sources$/;
+    next if $n =~ m/^\${/;
+    foreach ($l =~ m/\$\{(.*?)\}/g) { print STDOUT "$_ is and undefined variable in $cmakef\n" unless (defined $names{$_}); }
+    $l =~ s/\$\{(.*?)\}/$names{$1}/g;
+    # %names is a global hash list, first filled in here
+    $names{$n} = $l;
+  }
+  while ($cmakefile =~ s/\bAUX_SOURCE_DIRECTORY\s*\(\s*(\S+)\s+(\S+)\s*\)//s)
+  {
+    $f = $1; $n = $2;
+    if (opendir(TMPL,"$dir/$f")) {
+      $names{$n} .= join '',map { " $f/$_" } grep {$_ ne '.' && $_ ne '..' && $_ ne 'CVS' && $_ ne '.NoDartCoverage'} readdir(TMPL);
+      closedir(TMPL);
+    }
+  }
+  # now replace all variables by their content:
+  foreach $n (keys %names) {
+    $cmakefile =~ s/\$\{$n\}/$names{$n}/g;
+  }
+
+  while ($cmakefile =~ s/\bGENERATE_TEST_DRIVER\s*\(\s*\S+\s+(\S+)(.*?)\)//s)
+  {
+    $n = $1;
+    $cmakefile .= "ADD_EXECUTABLE(x test_driver.cxx $names{$n})\n";
+    foreach (split /\s+/, $names{$n}) {
+      $f = $_;
+      $cmakefile .= "ADD_TEST(x x $_)\n" if s/\.cxx$//;
+      @source_files = grep { !/^$f$/ } @source_files;
+    }
+  }
+  while ($cmakefile =~ s/\bGENERATE_TEST_INCLUDE\s*\(.*?\)//s)
+  {
+    $cmakefile .= "ADD_EXECUTABLE(x test_include.cxx)\n";
+  }
+  # now try to do a reasonable guess about the IF .. ELSE .. ENDIF constructs:
+  while ($cmakefile =~ s/\bIF\s*\(\s*([A-Z0-9_]+_FOUND)\s*\)(.*?)ELSE\s*\(\s*\1\s*\).*?ENDIF\s*\(\s*\1\s*\)/$2/gs) {}
+  while ($cmakefile =~ s/\bIF\s*\(\s*(HAS_[A-Z0-9_]+)\s*\)(.*?)ELSE\s*\(\s*\1\s*\).*?ENDIF\s*\(\s*\1\s*\)/$2/gs) {}
+  while ($cmakefile =~ s/\bIF\s*\(\s*(NOT.*?)\)(.*?)ELSE\s*\(\s*\1\s*\).*?ENDIF\s*\(\s*\1\s*\)/$2/gs) {}
+  while ($cmakefile =~ s/\bIF\s*\(\s*(.*?)\).*?ELSE\s*\(\s*\1\s*\)(.*?)ENDIF\s*\(\s*\1\s*\)/$2/gs) {}
+
+  while ($cmakefile =~ s/\bADD_LIBRARY\s*\(\s*\S+\s+(.*?)\)//s)
+  {
+    $f = $1; # list of file names
+    foreach (split /\s+/, $f) {
+      if (m/^\s*$/) { next; }
       elsif (-f "$dir/$_" && m/\.(h(\.in)?|txx)$/) { push @hsource_files, $_; }
       elsif (-f "$dir/$_")                         { push @source_files, $_; }
       elsif (-f "$dir/$_.cxx") { printf "Should replace $_ by $_.cxx in $cmakef\n"; push @source_files, "$_.cxx"; }
@@ -272,10 +327,20 @@ foreach $dir (@DIRS)
       elsif (-f "$dir/$_.C")   { printf "Should replace $_ by $_.C in $cmakef\n"; push @source_files, "$_.C"; }
       elsif (-f "$dir/$_.cpp") { printf "Should replace $_ by $_.cpp in $cmakef\n"; push @source_files, "$_.cpp"; }
       else                     { printf "No source file $_.* found in $dir\n"; }
-      push @hsource_files, $1 if (m/^(.*\.h)\.in$/ && -f "$dir/$1");
+      push @hsource_files, $1 if (m/^(.*\.h)\.in$/ && -f "$dir/$1"); # generated .h file
     }
   }
-  while ($cmakefile =~ s/\bADD_EXECUTABLE\s*\(\s*(\S+)((\s+[^\s()]+)+)\s*\)//) {
+  while ($cmakefile =~ s/\bINSTALL_NOBASE_HEADER_FILES\s*\(\s*\S+\s+(.*?)\)//s)
+  {
+    $f = $1; # list of file names
+    foreach $x (split /\s+/, $f) {
+      if ($x =~ m/^\s*$/) { next; }
+      elsif (! -f "$dir/$x") { print STDOUT "file $x listed in INSTALL_NOBASE_HEADER_FILES does not exist\n"; }
+      elsif ($x =~ m/\.(h|txx)$/) { push @hsource_files, $x unless grep { $_ eq $x } @hsource_files; }
+    }
+  }
+  while ($cmakefile =~ s/\bADD_EXECUTABLE\s*\(\s*(\S+)((\s+[^\s()]+)+)\s*\)//)
+  {
     $name = $1; $_ = $2; s/\$\{(\S+)\}/$1/g;
     if (m/^\s*\S+_sources$/) {
       $names{$name} = $source_files[0] if (defined($source_files[0]));
@@ -299,7 +364,8 @@ foreach $dir (@DIRS)
       push @hsource_files, $1 if (m/^(.*\.h)\.in$/ && -f "$dir/$1");
     }
   }
-  while ($cmakefile =~ s/\bADD_TEST\s*\(\s*\S+\s+(\S+)\s*(([^\s()]+)?)((\s+[^()]+)?)\s*\)//) {
+  while ($cmakefile =~ s/\bADD_TEST\s*\(\s*\S+\s+(\S+)\s*(([^\s()]+)?)((\s+[^()]+)?)\s*\)//s)
+  {
     $name = $1; $tstname = $2;
     if (! exists ($names{$name}) ) {
       print STDOUT "ADD_TEST($name) without ADD_EXECUTABLE($name)\tin $cmakef\n";
@@ -309,17 +375,10 @@ foreach $dir (@DIRS)
     push @test_files, @tmpl_list unless ($testmain);
     push @test_files, "$tstname.cxx" if ($testmain && $tstname ne '' && -f "$dir/$tstname.cxx");
   }
-  while ($cmakefile =~ s/\bSUBDIRS\s*\(\s*([^()]+)\)//) {
+  while ($cmakefile =~ s/\bSUBDIRS\s*\(\s*(.+?)\)//s)
+  {
     @tmpl_list = split /\s+/, $1;
     push @subdirs2, @tmpl_list;
-  }
-  # add Templates to source_files, if asked
-  while ($cmakefile =~ s/\bAUX_SOURCE_DIRECTORY\s*\(\s*(\S+)\s+\S+sources\s*\)//) {
-    $file = $1;
-    if (opendir(TMPL,"$dir/$file")) {
-      push @source_files, map { "$file/$_" } grep {$_ ne '.' && $_ ne '..' && $_ ne 'CVS' && $_ ne '.NoDartCoverage'} readdir(TMPL);
-      closedir(TMPL);
-    }
   }
 
   next unless ($f || -f $makef || -f $cmakef);
@@ -345,7 +404,8 @@ foreach $dir (@DIRS)
   # Hence '~END' is popped off last, and is also alphabetically last.
 
   # compare file lists
-  while (@source || @sources || @source_files) {
+  while (@source || @sources || @source_files)
+  {
     unless ($source eq '~END') {
       $s = shift @source;
       while ($s eq $source) {
@@ -411,7 +471,8 @@ foreach $dir (@DIRS)
   # compare "tests" files in makefile and CMakeLists.txt
   $tests=""; $test_files="";
 
-  while (@tests || @test_files) {
+  while (@tests || @test_files)
+  {
     unless ($tests eq '~END') {
       $s = shift @tests;
       while ($s eq $tests) {
@@ -430,7 +491,8 @@ foreach $dir (@DIRS)
     }
     last if ($tests eq '~END' && $test_files eq '~END');
     next if ($tests eq $test_files);
-    while ($test_files lt $tests) {
+    while ($test_files lt $tests)
+    {
       if (-f "$dir/$test_files") {
         print STDOUT "TESTS += $test_files\tis missing from $makef\n"
           unless ($test_files eq 'my_pyramid.cxx' || $test_files eq 'my_top_level.cxx');
@@ -452,7 +514,8 @@ foreach $dir (@DIRS)
   # compare header file lists
   $hsource=""; $hsources=""; $hsource_files=""; $hfiles="";
 
-  while (@hsource || @hsources || @hsource_files || @hfiles) {
+  while (@hsource || @hsources || @hsource_files || @hfiles)
+  {
     unless ($hsource eq '~END') {
       $s = shift @hsource;
       while ($s eq $hsource) {
@@ -525,7 +588,8 @@ foreach $dir (@DIRS)
   @subdirs  = sort(@subdirs);  push @subdirs, '~END';
   @subdirs2 = sort(@subdirs2); push @subdirs2, '~END';
   $subdirs=''; $subdirs2='';
-  while (@subdirs || @subdirs2) {
+  while (@subdirs || @subdirs2)
+  {
     $subdirs  = shift @subdirs  unless ($subdirs eq '~END');
     $subdirs2 = shift @subdirs2 unless ($subdirs2 eq '~END');
     last if ($subdirs eq '~END' && $subdirs2 eq '~END');
