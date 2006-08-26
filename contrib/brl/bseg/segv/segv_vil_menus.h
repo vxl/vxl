@@ -44,6 +44,7 @@ class segv_vil_menus
   SEGV_VIL_DLL_DATA static void flip_image_lr_callback();
   SEGV_VIL_DLL_DATA static void add_images_callback();
   SEGV_VIL_DLL_DATA static void subtract_images_callback();
+  SEGV_VIL_DLL_DATA static void negate_image_callback();
   SEGV_VIL_DLL_DATA static void entropy_callback();
   SEGV_VIL_DLL_DATA static void minfo_callback();
   SEGV_VIL_DLL_DATA static void max_trace_scale_callback();

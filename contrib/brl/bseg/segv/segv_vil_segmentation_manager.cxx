@@ -1239,7 +1239,18 @@ void segv_vil_segmentation_manager::subtract_images()
   unsigned col = 2, row = 0;
   this->add_image_at(diff,col,row);
 }
-
+void segv_vil_segmentation_manager::negate_image()
+{
+    vil_image_resource_sptr img = selected_image();
+  if (!img)
+  {
+    vcl_cout << "In segv_segmentation_manager::negate_image - no image\n";
+    return;
+  }
+  vil_image_resource_sptr neg = brip_vil_float_ops::negate(img);
+  if(neg)
+    this->add_image(neg);
+}
 void segv_vil_segmentation_manager::entropy()
 {
   vgui_dialog entropy_dlg("Entropy of Image");

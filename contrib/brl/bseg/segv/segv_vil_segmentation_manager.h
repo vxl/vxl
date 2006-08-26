@@ -59,7 +59,7 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   //: image arithmetic
   void add_images();
   void subtract_images();
-
+  void negate_image();
   //: image processing
   void entropy();
   void minfo();

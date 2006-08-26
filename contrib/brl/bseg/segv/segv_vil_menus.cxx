@@ -117,6 +117,10 @@ void segv_vil_menus::subtract_images_callback()
 {
   segv_vil_segmentation_manager::instance()->subtract_images();
 }
+void segv_vil_menus::negate_image_callback()
+{
+  segv_vil_segmentation_manager::instance()->negate_image();
+}
 
 void segv_vil_menus::entropy_callback()
 {
@@ -183,6 +187,8 @@ vgui_menu segv_vil_menus::get_menu()
   menuops.add("Convert To Greyscale:", convert_to_grey_callback);
   menuops.add("Add Images:", add_images_callback);
   menuops.add("Subtract Images:", subtract_images_callback);
+
+  menuops.add("Negate Image:", negate_image_callback);
   menuops.add("Entropy", entropy_callback);
   menuops.add("Mutal Information", minfo_callback);
   menuops.add("Max Trace Scale",  max_trace_scale_callback);
