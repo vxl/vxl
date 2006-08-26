@@ -102,6 +102,10 @@ vil_jpeg_image::vil_jpeg_image(vil_stream *s,
   , jd(0)
   , stream(s)
 {
+  if (format != VIL_PIXEL_FORMAT_BYTE)
+    vcl_cerr << "Sorry -- pixel format " << format << " not yet supported\n";
+  assert(format == VIL_PIXEL_FORMAT_BYTE); // FIXME.
+
   stream->ref();
 
   // use same number of components as prototype, obviously.
@@ -113,8 +117,6 @@ vil_jpeg_image::vil_jpeg_image(vil_stream *s,
 #ifdef DEBUG
   vcl_cerr << "w h = " << nx << ' ' << ny << '\n';
 #endif
-
-  assert(format == VIL_PIXEL_FORMAT_BYTE); // FIXME.
 }
 
 vil_jpeg_image::~vil_jpeg_image()
