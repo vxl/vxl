@@ -31,28 +31,38 @@ vcl_vector<vgl_point_3d<Type> > vgl_orient_box_3d<Type>::corners()
   vcl_vector<vgl_point_3d<Type> > corner_points(8);
 
   //get the min and max of the aab and find the other corners
-  vgl_point_3d<Type> min = box_.min_point();
-  corner_points[0] = min;
+  corner_points[0] = box_.min_point();
+  corner_points[7] = box_.max_point();
 
-  vgl_point_3d<Type> max = box_.max_point();
-  corner_points[7] = max;
-
-  corner_points[1] = vgl_point_3d<Type> (width()+min.x(), min.y(), min.z());
-  corner_points[2] = vgl_point_3d<Type> (min.x(), min.y(), min.z()+depth());
-  corner_points[3] = vgl_point_3d<Type> (corner_points[1].x(), corner_points[1].y(), corner_points[1].z()+depth());
-  corner_points[4] = vgl_point_3d<Type> (min.x(), min.y()+height(), min.z());
-  corner_points[5] = vgl_point_3d<Type> (corner_points[1].x(), corner_points[1].y()+height(), corner_points[1].z());
-  corner_points[6] = vgl_point_3d<Type> (corner_points[2].x(), corner_points[2].y()+height(), corner_points[2].z());
+  corner_points[1] = vgl_point_3d<Type> (corner_points[0].x()+width(),
+                                         corner_points[0].y(),
+                                         corner_points[0].z());
+  corner_points[2] = vgl_point_3d<Type> (corner_points[0].x(),
+                                         corner_points[0].y(),
+                                         corner_points[0].z()+depth());
+  corner_points[3] = vgl_point_3d<Type> (corner_points[1].x(),
+                                         corner_points[1].y(),
+                                         corner_points[1].z()+depth());
+  corner_points[4] = vgl_point_3d<Type> (corner_points[0].x(),
+                                         corner_points[0].y()+height(),
+                                         corner_points[0].z());
+  corner_points[5] = vgl_point_3d<Type> (corner_points[1].x(),
+                                         corner_points[1].y()+height(),
+                                         corner_points[1].z());
+  corner_points[6] = vgl_point_3d<Type> (corner_points[2].x(),
+                                         corner_points[2].y()+height(),
+                                         corner_points[2].z());
 
   // rotate the corner points
   for (unsigned int i=0; i < corner_points.size(); i++) {
     vnl_vector_fixed<double,3> p;
-    p[0] = corner_points[i].x() - box_.centroid_x(); 
+    p[0] = corner_points[i].x() - box_.centroid_x();
     p[1] = corner_points[i].y() - box_.centroid_y();
-    p[2] = corner_points[i].z() - box_.centroid_z();;
+    p[2] = corner_points[i].z() - box_.centroid_z();
     p = orient_.rotate(p);
-    corner_points[i] = vgl_point_3d<Type> (Type(p[0]) + box_.centroid_x(), 
-      Type(p[1]) + box_.centroid_y(), Type(p[2])+ box_.centroid_z());
+    corner_points[i] = vgl_point_3d<Type> (Type(p[0]) + box_.centroid_x(),
+                                           Type(p[1]) + box_.centroid_y(),
+                                           Type(p[2]) + box_.centroid_z());
   }
   return corner_points;
 }
@@ -67,12 +77,13 @@ bool vgl_orient_box_3d<Type>::contains(Type const& x,
   vnl_quaternion<double> reverse_rot(orient_.axis(), -1.*orient_.angle());
 
   vnl_vector_fixed<double,3> p;
-  p[0] = x - box_.centroid_x(); 
-  p[1] = y - box_.centroid_y(); 
+  p[0] = x - box_.centroid_x();
+  p[1] = y - box_.centroid_y();
   p[2] = z - box_.centroid_z();
-  vnl_vector<double> p_transf = reverse_rot.rotate(p);
-  return box_.contains(p_transf[0] + box_.centroid_x() , 
-  p_transf[1] + box_.centroid_y(), p_transf[2] + box_.centroid_z());
+  vnl_vector_fixed<double,3> p_transf = reverse_rot.rotate(p);
+  return box_.contains(p_transf[0] + box_.centroid_x(),
+                       p_transf[1] + box_.centroid_y(),
+                       p_transf[2] + box_.centroid_z());
 }
 
 template <class Type>
