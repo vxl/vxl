@@ -80,11 +80,13 @@ vil_bmp_image::vil_bmp_image(vil_stream* vs, unsigned nx, unsigned ny,
                              unsigned nplanes, vil_pixel_format format):
   is_(vs), bit_map_start(-1L)
 {
-  is_->ref();
-
+  if (format != VIL_PIXEL_FORMAT_BYTE)
+    vcl_cerr << "Sorry -- pixel format " << format << " not yet supported\n";
   // FIXME - we only support 8 and 24 bpp; add support for 1, 4, 16 and 32 bpp
   assert(format == VIL_PIXEL_FORMAT_BYTE);
   assert(nplanes == 1 || nplanes == 3);
+
+  is_->ref();
 
   // core_hdr.header_size is set up for us.
   core_hdr.width = nx;
