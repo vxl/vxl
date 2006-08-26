@@ -23,7 +23,7 @@ static doublereal c_b19 = 1.;
 
 /*<       SUBROUTINE DSPTRS( UPLO, N, NRHS, AP, IPIV, B, LDB, INFO ) >*/
 /* Subroutine */ int dsptrs_(char *uplo, integer *n, integer *nrhs, 
-	doublereal *ap, integer *ipiv, doublereal *b, integer *ldb, integer *
+	doublereal *ap, integer *ipiv, doublereal *b, integer *ldb, integer * 
 	info, ftnlen uplo_len)
 {
     /* System generated locals */
@@ -284,9 +284,9 @@ L10:
 /* L20: */
 	    }
 /*<             KC = KC - K + 1 >*/
-	    kc = kc - k + 1;
+	    kc -= k - 1;
 /*<             K = K - 2 >*/
-	    k += -2;
+	    k -= 2;
 /*<          END IF >*/
 	}
 
@@ -365,7 +365,7 @@ L40:
 		dswap_(nrhs, &b[k + b_dim1], ldb, &b[kp + b_dim1], ldb);
 	    }
 /*<             KC = KC + 2*K + 1 >*/
-	    kc = kc + (k << 1) + 1;
+	    kc += (k << 1) + 1;
 /*<             K = K + 2 >*/
 	    k += 2;
 /*<          END IF >*/
@@ -431,7 +431,7 @@ L60:
 	    d__1 = 1. / ap[kc];
 	    dscal_(nrhs, &d__1, &b[k + b_dim1], ldb);
 /*<             KC = KC + N - K + 1 >*/
-	    kc = kc + *n - k + 1;
+	    kc += *n - k + 1;
 /*<             K = K + 1 >*/
 	    ++k;
 /*<          ELSE >*/
@@ -489,7 +489,7 @@ L60:
 /* L70: */
 	    }
 /*<             KC = KC + 2*( N-K ) + 1 >*/
-	    kc = kc + (*n - k << 1) + 1;
+	    kc += ((*n - k) << 1) + 1;
 /*<             K = K + 2 >*/
 	    k += 2;
 /*<          END IF >*/
