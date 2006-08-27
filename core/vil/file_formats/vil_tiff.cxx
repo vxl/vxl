@@ -9,11 +9,10 @@
 // \author  awf@robots.ox.ac.uk
 //
 // \verbatim
-// Modifications:
-//   09-NOV-2001  K.Y.McGaul  Use default value for orientation when it can't be read.
-//   DEC-2005  J.L. Mundy - Essentially a complete rewrite to support blocking.
-//                          All header parameters moved to vil_tiff_header for
-//                          cleaner structuring.
+//  Modifications:
+//   2001-11-09 K.Y.McGaul  Use dflt value for orientation when it can't be read
+//   2005-12-xx J.L. Mundy  Essentially a complete rewrite to support blocking.
+//                          Cleaner struct: hdr params moved to vil_tiff_header
 // \endverbatim
 
 #include "vil_tiff.h"
@@ -133,12 +132,18 @@ static int vil_tiff_closeproc(thandle_t h)
 static toff_t vil_tiff_sizeproc(thandle_t)
 {
   // TODO
+#ifdef DEBUG
+  vcl_cerr << "Warning: vil_tiff_sizeproc() not yet implemented\n";
+#endif
   return (toff_t)(-1); // could be unsigned - avoid compiler warning
 }
 
 static int vil_tiff_mapfileproc(thandle_t, tdata_t*, toff_t*)
 {
   // TODO: Add mmap support to vil_tiff_mapfileproc
+#ifdef DEBUG
+  vcl_cerr << "Warning: mmap support not yet in vil_tiff_mapfileproc()\n";
+#endif
   return 0;
 }
 
@@ -435,8 +440,8 @@ bool integral_type(unsigned bits_per_sample)
 {
   switch (bits_per_sample)
   {
-   case  8: return true;
-   case 16: return true;
+   case  8:
+   case 16:
    case 32: return true;
    default: break;
   }
@@ -453,16 +458,20 @@ tiff_maybe_byte_align_data(vil_memory_chunk_sptr in_data,
   if (!integral_type(in_bits_per_sample))
   {
     vil_memory_chunk_sptr new_memory = new vil_memory_chunk(bytes_per_block, in_data->pixel_format());
-    T* out_ptr = reinterpret_cast<T*>(new_memory->data());
 #ifdef DEBUG
-    vcl_cout << "Start Debug of byte align data\n"
-             << "Num Samples = " << num_samples << "  Bits/Sample = "
-             << in_bits_per_sample << " Output Bytes Per Sample = "
-             << vil_pixel_format_sizeof_components(in_data->pixel_format())
-             << '\n';
+    vcl_cout << "Debug tiff_byte_align_data:"
+             << "  Num Samples = " << num_samples
+             << "  Input Bits/Sample = " << in_bits_per_sample
+             << "  Bytes/Block = " << bytes_per_block
+             << "  Output Bytes/Sample = " << vil_pixel_format_sizeof_components(in_data->pixel_format())
+             << vcl_flush;
 #endif
+    T* out_ptr = reinterpret_cast<T*>(new_memory->data());
     T* in_ptr = reinterpret_cast<T*>(in_data->data());
     tiff_byte_align_data(in_ptr, num_samples, in_bits_per_sample, out_ptr );
+#ifdef DEBUG
+    vcl_cout << " .\n" << vcl_flush;
+#endif
     return new_memory;
   }
   return in_data;
