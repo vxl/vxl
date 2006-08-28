@@ -418,6 +418,8 @@ class brip_vil_float_ops
   static vil_image_resource_sptr difference(vil_image_resource_sptr const& img0,
                                             vil_image_resource_sptr const& img1);
 
+  //: negate an image returning the same pixel type (only greyscale)
+  static vil_image_resource_sptr negate(vil_image_resource_sptr const& imgr);
  private:
 
   //: find if the center pixel of a neighborhood is the maximum value
