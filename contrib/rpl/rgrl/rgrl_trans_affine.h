@@ -108,10 +108,11 @@ class rgrl_trans_affine
                 vnl_vector<double> const& from_dir,
                 vnl_vector<double>      & to_dir    ) const;
 
+  vnl_vector<double> from_centre_;
+
  private:
   vnl_matrix<double> A_;
   vnl_vector<double> trans_;
-  vnl_vector<double> from_centre_;
 };
 
 #endif
