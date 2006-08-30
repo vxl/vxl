@@ -88,6 +88,9 @@ class rgrl_trans_affine
   //: Compute jacobian w.r.t. location
   virtual void jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& from_loc ) const;
 
+  //: Accessor for from_centre_
+  vnl_vector<double> const &  from_centre() { return from_centre_; }
+
   //:  transform the transformation for images of different resolution
   rgrl_transformation_sptr scale_by( double scale ) const;
 
