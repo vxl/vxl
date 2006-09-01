@@ -85,6 +85,9 @@ public:
   // Registers some TREs for testing
   static void register_test_tre();
 
+  vil_nitf2_tagged_record_definition( const vil_nitf2_tagged_record_definition& rhs );
+  vil_nitf2_tagged_record_definition& operator=( const vil_nitf2_tagged_record_definition& rhs );
+
 private:
   vcl_string m_name;
   vcl_string m_pretty_name;

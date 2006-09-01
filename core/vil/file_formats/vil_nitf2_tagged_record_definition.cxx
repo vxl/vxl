@@ -101,6 +101,21 @@ vil_nitf2_tagged_record_definition* vil_nitf2_tagged_record_definition::find(vcl
   return definition->second;
 }
 
+vil_nitf2_tagged_record_definition::vil_nitf2_tagged_record_definition( const vil_nitf2_tagged_record_definition& rhs )
+{
+  *this = rhs;
+}
+
+vil_nitf2_tagged_record_definition& vil_nitf2_tagged_record_definition::operator=( const vil_nitf2_tagged_record_definition& rhs )
+{
+  m_name = rhs.m_name;
+  m_pretty_name = rhs.m_pretty_name;
+  m_field_definitions = new vil_nitf2_field_definitions( *rhs.m_field_definitions );
+  m_definition_completed = rhs.m_definition_completed;
+  return *this;
+}
+
+
 vil_nitf2_tagged_record_definition::~vil_nitf2_tagged_record_definition()
 {
   delete m_field_definitions;
