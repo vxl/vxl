@@ -237,7 +237,7 @@ inline void vil_math_sum(sumT& sum, const vil_image_view<imT>& im, unsigned p)
   const imT* row = im.top_left_ptr()+p*im.planestep();
   vcl_ptrdiff_t istep = im.istep(),jstep=im.jstep();
   const imT* row_end = row + im.nj()*jstep;
-  int row_len = im.ni()*im.istep();
+  vcl_ptrdiff_t row_len = im.ni()*im.istep();
   sum = 0;
   for (;row!=row_end;row+=jstep)
   {
@@ -264,7 +264,7 @@ inline void vil_math_sum_squares(sumT& sum, sumT& sum_sq, const vil_image_view<i
   const imT* row = im.top_left_ptr()+p*im.planestep();
   vcl_ptrdiff_t istep = im.istep(),jstep=im.jstep();
   const imT* row_end = row + im.nj()*jstep;
-  int row_len = im.ni()*im.istep();
+  vcl_ptrdiff_t row_len = im.ni()*im.istep();
   sum = 0; sum_sq = 0;
   for (;row!=row_end;row+=jstep)
   {

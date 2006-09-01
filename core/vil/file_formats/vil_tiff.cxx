@@ -857,7 +857,7 @@ void vil_tiff_image::fill_block_from_view(unsigned bi, unsigned bj,
   //Causes warnings. Leave here to document default values
   unsigned view_istep = 1, view_jstep = im.ni()*bytes_per_pixel, view_pstep = 1;
 #endif
-  unsigned view_istep, view_jstep, view_pstep;
+  vcl_ptrdiff_t view_istep, view_jstep, view_pstep;
   vxl_byte* view_buf;
   //Cast the pixel type and reinterpret upper_left_ptr as a byte array.
   switch (h_->pix_fmt)
@@ -889,21 +889,21 @@ void vil_tiff_image::fill_block_from_view(unsigned bi, unsigned bj,
   //initial index into block buffer
   unsigned bptr = joff*block_jstep;
   unsigned ibstart = ioff*bytes_per_pixel;
-  unsigned vistp = view_istep*bytes_per_sample;
-  unsigned vjstp = view_jstep*bytes_per_sample;
-  unsigned vpstp = view_pstep*bytes_per_sample;
+  vcl_ptrdiff_t vistp = view_istep*bytes_per_sample;
+  vcl_ptrdiff_t vjstp = view_jstep*bytes_per_sample;
+  vcl_ptrdiff_t vpstp = view_pstep*bytes_per_sample;
   //initial index into view buffer
   // note that it is necessary to add the offset to the start of the
   // current block within the view, (view_i0, view_j0)
-  unsigned vptr = (view_j0 + joff)*vjstp;
+  vcl_ptrdiff_t vptr = (view_j0 + joff)*vjstp;
   unsigned ivstart = (view_i0 + ioff)*bytes_per_pixel;
   for (unsigned j = joff; j<jclip; ++j)
   {
-    unsigned vrow_ptr = ivstart;
-    unsigned brow_ptr = ibstart;
+    vcl_ptrdiff_t vrow_ptr = ivstart;
+    vcl_ptrdiff_t brow_ptr = ibstart;
     for (unsigned i = ioff; i<iclip; ++i)
     {
-      unsigned bpptr = 0, vpptr = 0;
+      vcl_ptrdiff_t bpptr = 0, vpptr = 0;
       for (unsigned p = 0; p<nplanes(); ++p)
       {
         for (unsigned b = 0; b<bytes_per_sample; ++b)

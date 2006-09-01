@@ -20,9 +20,12 @@ void vil_fill(vil_image_view<T>& view, T value)
   if (view.is_contiguous())
     vcl_fill(view.begin(), view.end(), value);
 
-  unsigned ni = view.ni(), istep=view.istep();
-  unsigned nj = view.nj(), jstep=view.jstep();
-  unsigned np = view.nplanes(), pstep = view.planestep();
+  unsigned ni = view.ni();
+  vcl_ptrdiff_t istep=view.istep();
+  unsigned nj = view.nj();
+  vcl_ptrdiff_t jstep=view.jstep();
+  unsigned np = view.nplanes();
+  vcl_ptrdiff_t pstep = view.planestep();
 
   T* plane = view.top_left_ptr();
   for (unsigned p=0;p<np;++p,plane += pstep)
