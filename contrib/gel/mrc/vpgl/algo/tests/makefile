@@ -5,6 +5,7 @@ include ${VXLROOT}/core/testlib/config.mk
 TESTMAIN := test_driver.cxx
 
 TESTS += test_camera_compute.cxx
+TESTS += test_construct_cameras.cxx
 TESTS += test_fm_compute.cxx
 TESTS += test_lens_warp_mapper.cxx
 TESTS += test_optimize_camera.cxx
