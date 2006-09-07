@@ -380,10 +380,17 @@ IF(CMAKE_COMPILER_IS_GNUCC)
   # Disable global optimizations for some source files.
   # See comments in the sources for details.
   SET_SOURCE_FILES_PROPERTIES(
-    blas/slamch.c
-    blas/dlamch.c
     lapack/complex16/zlarfx.c
     PROPERTIES COMPILE_FLAGS -fno-gcse
+    )
+
+  # Adjust optimization of floating point computation and disable global
+  # optimizations for some sources.
+  # See comments in the sources for details.
+  SET_SOURCE_FILES_PROPERTIES(
+    blas/slamch.c
+    blas/dlamch.c
+    PROPERTIES COMPILE_FLAGS "-fno-gcse -ffloat-store"
     )
 ENDIF(CMAKE_COMPILER_IS_GNUCC)
 
