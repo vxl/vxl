@@ -117,6 +117,9 @@ SOURCE=.\test_lens_warp_mapper.cxx
 SOURCE=.\test_optimize_camera.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_construct_cameras.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_project.cxx
 # End Source File
 # End Group
