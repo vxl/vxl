@@ -14,7 +14,7 @@ SOURCES += vpgl_optimize_camera.cxx
 SOURCES += vpgl_project.cxx
 SOURCES += vpgl_vsol_lens_warp.cxx
 MANPAGE_SOURCES += vpgl_lens_warp_mapper.h
-MANPAGE_SOURCES += vpgl_construct_cameras.h
+SOURCES += vpgl_construct_cameras.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
