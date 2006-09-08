@@ -151,11 +151,11 @@ void rrel_util_intercept_adjust_stats( Ran first, Ran last,
   const T mu = 2.5;
   T bound = mu * std_dev;
 
-  Ran begin_itr=first-1;
-  while ( *(++begin_itr) < center-bound ) ;
+  Ran begin_itr;
+  for( begin_itr=first; *begin_itr < center-bound; ++begin_itr ) ;
   Ran end_itr=begin_itr;
   T sum = *begin_itr;
-  while ( ++end_itr < last && *end_itr <= center+bound ) {
+  while ( ++end_itr != last && *end_itr <= center+bound ) {
     sum += *end_itr;
   }
   long inliers = long(end_itr - begin_itr); // VC6 & 7 has broken iterator_traits
