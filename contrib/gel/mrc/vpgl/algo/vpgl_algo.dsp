@@ -126,6 +126,9 @@ SOURCE=.\vpgl_project.cxx
 SOURCE=.\vpgl_vsol_lens_warp.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vpgl_construct_cameras.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vpgl_list+vgl_h_matrix_2d+double--.cxx
 # End Source File
 # Begin Source File
