@@ -28,6 +28,14 @@ class rgrl_trans_affine
                      vnl_vector<double> const& trans,
                      vnl_matrix<double> const& covar );
 
+  //: Construct affine standard transform
+  //
+  //  The transform is q = \a A * p + \a trans.
+  //
+  rgrl_trans_affine( vnl_matrix<double> const& A,
+                     vnl_vector<double> const& trans,
+                     vnl_vector<double> const& from_centre );
+
   //: Construct affine standard transform with unknown covariance
   //
   //  The transform is q = \a A * p + \a trans.

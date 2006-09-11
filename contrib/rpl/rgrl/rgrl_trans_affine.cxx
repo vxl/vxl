@@ -44,6 +44,19 @@ rgrl_trans_affine( vnl_matrix<double> const& in_A,
 
 rgrl_trans_affine::
 rgrl_trans_affine( vnl_matrix<double> const& in_A,
+                   vnl_vector<double> const& in_trans,
+                   vnl_vector<double> const& from_centre )
+  : A_( in_A ),
+    trans_( in_trans ),
+    from_centre_( from_centre )
+{
+  assert ( A_.rows() == A_.cols() );
+  assert ( A_.rows() == trans_.size() );
+  assert ( from_centre_.size() == trans_.size() );
+}
+
+rgrl_trans_affine::
+rgrl_trans_affine( vnl_matrix<double> const& in_A,
                    vnl_vector<double> const& in_trans )
   : A_( in_A ),
     trans_( in_trans ),
