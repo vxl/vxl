@@ -35,13 +35,17 @@ class rgrl_initializer_reader
   bool next_initial( rgrl_view_sptr           & view,
                      rgrl_scale_sptr          & prior_scale );
 
+  //: Set index pointing to vector of initializations to zero.
   void reset_xform_index( ) { xform_index_ = 0; }
 
-  //: return number of initializations
+  //: Set index pointing to the vector of initializations to a given value.
+  void set_xform_index( unsigned int index ) { xform_index_ = index; }
+
+  //: Return number of initializations
   //  -1 stands for unknown
   virtual int size() const;
 
-  // Defines type-related functions
+  //: Defines type-related functions
   rgrl_type_macro( rgrl_initializer_reader, rgrl_initializer );
 
  protected:
@@ -52,14 +56,17 @@ class rgrl_initializer_reader
     rgrl_transformation_sptr  xform_;
   };
 
+  //: Initializations read from a stream
   vcl_vector< init_record >           init_records_;
+
+  //: Index pointing into initialization in init_records_ vector that will be used
   unsigned int xform_index_;
 
   rgrl_mask_sptr       from_image_roi_;
   rgrl_mask_sptr       to_image_roi_;
-  rgrl_scale_sptr     prior_scale_;
-  rgrl_estimator_sptr estimator_;
-  unsigned int        res_;
+  rgrl_scale_sptr      prior_scale_;
+  rgrl_estimator_sptr  estimator_;
+  unsigned int         res_;
 };
 
 #endif
