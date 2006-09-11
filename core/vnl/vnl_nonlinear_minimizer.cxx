@@ -55,14 +55,15 @@ void vnl_nonlinear_minimizer::report_eval(double f)
   ++num_evaluations_;
 }
 
-//: Called by derived classes after each iteration
-void vnl_nonlinear_minimizer::report_iter()
+//: Called by derived classes after each iteration.
+bool vnl_nonlinear_minimizer::report_iter()
 {
   ++num_iterations_;
   if (verbose_)
     vcl_cerr << "Iter " << vcl_setw(4) << num_iterations_ << ", Eval "
              << vcl_setw(4) << num_evaluations_ << ": Best F = "
              << vcl_setw(10) << end_error_ << '\n';
+  return false;
 }
 
 //: Return the name of the class
