@@ -156,6 +156,7 @@ class vnl_nonlinear_minimizer
 
   //: Called by derived classes after each iteration.
   //  When true is returned, minimizer should stop with code FAILED_USER_REQUEST.
+  //  Derived classes can redefine this function to make the optimizer stop when a condition is satisfied.
   virtual bool report_iter();
 };
 
