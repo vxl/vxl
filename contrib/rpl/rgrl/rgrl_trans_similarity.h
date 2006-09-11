@@ -92,6 +92,9 @@ class rgrl_trans_similarity
   //:  transform the transformation for images of different resolution
   rgrl_transformation_sptr scale_by( double scale ) const;
 
+  //: Accessor for from_centre_
+  vnl_vector<double> const &  from_centre() { return from_centre_; }
+
   // Defines type-related functions
   rgrl_type_macro( rgrl_trans_similarity, rgrl_transformation );
 
