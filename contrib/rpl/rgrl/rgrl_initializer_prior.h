@@ -67,7 +67,7 @@ class rgrl_initializer_prior
  protected:
   rgrl_view_sptr           init_view_;
   rgrl_scale_sptr          prior_scale_;
-  vcl_vector< rgrl_transformation_sptr > xforms_;
+  vcl_vector< rgrl_view_sptr > views_;
   unsigned int xform_index_;
 };
 

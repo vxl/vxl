@@ -13,7 +13,7 @@ rgrl_initializer_prior( rgrl_view_sptr           prior_view,
     prior_scale_( prior_scale ),
     xform_index_( 0 )
 {
-  xforms_.push_back( init_view_->xform_estimate() );
+  views_.push_back( prior_view );
 }
 
 rgrl_initializer_prior::
@@ -33,7 +33,7 @@ rgrl_initializer_prior( rgrl_mask_sptr             const& from_image_roi,
                               global_region, xform_estimator,
                               xform_estimate,
                               initial_resolution );
-  xforms_.push_back( xform_estimate );
+  views_.push_back( init_view_ );
 }
 
 rgrl_initializer_prior::
@@ -51,7 +51,7 @@ rgrl_initializer_prior( rgrl_mask_sptr             const& from_image_roi,
                               global_region, global_region,
                               xform_estimator, xform_estimate,
                               initial_resolution );
-  xforms_.push_back( xform_estimate );
+  views_.push_back( init_view_ );
 }
 
 rgrl_initializer_prior::
@@ -67,13 +67,21 @@ rgrl_initializer_prior( rgrl_mask_sptr             const& from_image_roi,
   init_view_ = new rgrl_view( from_image_roi, from_image_roi, 
                               global_region, global_region, xform_estimator, xform_estimate,
                               initial_resolution );
-  xforms_.push_back( xform_estimate );
+  views_.push_back( init_view_ );
 }
 
 void
 rgrl_initializer_prior::add_prior_xform( rgrl_transformation_sptr   xform_estimate )
 {
-  xforms_.push_back( xform_estimate );
+
+  rgrl_view_sptr view = new rgrl_view( init_view_->from_image_roi(),
+                        init_view_->to_image_roi(),
+                        init_view_->region(),
+                        init_view_->global_region(),
+                        init_view_->xform_estimator(),
+                        xform_estimate,
+                        init_view_->resolution() );
+  views_.push_back( view );
 }
 
 bool
@@ -81,16 +89,10 @@ rgrl_initializer_prior::
 next_initial( rgrl_view_sptr           & view,
               rgrl_scale_sptr          & prior_scale )
 {
-  if ( xform_index_ >= xforms_.size())
+  if ( xform_index_ >= views_.size())
     return false;
 
-  view = new rgrl_view( init_view_->from_image_roi(),
-                        init_view_->to_image_roi(),
-                        init_view_->region(),
-                        init_view_->global_region(),
-                        init_view_->xform_estimator(),
-                        xforms_[xform_index_],
-                        init_view_->resolution() );
+  view = views_[xform_index_];
   prior_scale = this->prior_scale_;
   xform_index_++;
 
