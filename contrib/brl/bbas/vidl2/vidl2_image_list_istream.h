@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \brief A video input stream from a list of images
+// \brief A video input stream from a list of images on disk
 //
 // \author Matt Leotta
 // \date 19 Dec 2005
@@ -14,19 +14,22 @@
 #include "vidl2_istream.h"
 #include <vcl_vector.h>
 #include <vcl_string.h>
-#include <vil/vil_image_resource_sptr.h>
 
 
-//: A video input stream from a list of images
+//: A video input stream from a list of images on disk
+// This istream will try to open and validate (but not read image data from)
+// every file in a list of file paths.  The paths to valid image files
+// are maintained, but only one image is opened at a time.  Keeping a list of
+// open file descriptors (via vil_image_resource_sptr) was found to be problematic.
+// The number of simultaneously open files is limited on many platforms.
+// The paths are tested for validity at the "open" stage rather than the "stream"
+// stage so that we have random access to the frames (i.e. the stream is seekable).
 class vidl2_image_list_istream
   : public vidl2_istream
 {
  public:
   //: Constructor - default
   vidl2_image_list_istream();
-
-  //: Constructor - from a vector of image resources
-  vidl2_image_list_istream(const vcl_vector<vil_image_resource_sptr>& images);
 
   //: Constructor - from a file glob string
   vidl2_image_list_istream(const vcl_string& glob);
@@ -38,14 +41,12 @@ class vidl2_image_list_istream
   virtual ~vidl2_image_list_istream() { close(); }
 
 
-  //: Open a new stream using an existing vector of images
-  virtual bool open(const vcl_vector<vil_image_resource_sptr>& images);
-
   //: Open a new stream using a file glob (see vul_file_iterator)
   // \note files are loaded in alphanumeric order by path name
   virtual bool open(const vcl_string& glob);
 
   //: Open a new stream using a vector of file paths
+  // \note all files are tested and only valid image files are retained 
   virtual bool open(const vcl_vector<vcl_string>& paths);
 
   //: Close the stream
@@ -53,10 +54,11 @@ class vidl2_image_list_istream
 
 
   //: Return true if the stream is open for reading
-  virtual bool is_open() const { return !images_.empty(); }
+  virtual bool is_open() const { return !image_paths_.empty(); }
 
   //: Return true if the stream is in a valid state
-  virtual bool is_valid() const { return is_open() && index_ < images_.size(); }
+  virtual bool is_valid() const { return is_open() &&
+                                         index_ < image_paths_.size(); }
 
   //: Return true if the stream support seeking
   virtual bool is_seekable() const { return true; }
@@ -65,7 +67,7 @@ class vidl2_image_list_istream
   virtual unsigned int frame_number() const { return index_; }
 
 
-  //: Advance to the next frame (but don't acquire an image)
+  //: Advance to the next frame (but do not open the next image)
   virtual bool advance();
 
   //: Read the next frame from the stream
@@ -74,16 +76,19 @@ class vidl2_image_list_istream
   //: Return the current frame in the stream
   virtual vidl2_frame_sptr current_frame();
 
-  //: Seek to the given frame number
+  //: Seek to the given frame number (but do not load the image)
   // \returns true if successful
   virtual bool seek_frame(unsigned int frame_number);
 
  private:
   //: The vector of images
-  vcl_vector<vil_image_resource_sptr> images_;
+  vcl_vector<vcl_string> image_paths_;
 
   //: The current index
   unsigned int index_;
+
+  //: The current frame (cached)
+  vidl2_frame_sptr current_frame_;
 };
 
 #endif // vidl2_image_list_istream_h_

@@ -15,6 +15,7 @@
 #include <vcl_algorithm.h>
 #include <vul/vul_file_iterator.h>
 #include <vul/vul_file.h>
+#include <vil/vil_image_resource_sptr.h>
 #include <vil/vil_load.h>
 
 //--------------------------------------------------------------------------------
@@ -27,30 +28,14 @@ static const unsigned int INIT_INDEX = unsigned(-1);
 
 //: Constructor
 vidl2_image_list_istream::
-vidl2_image_list_istream() : index_(INIT_INDEX) {}
-
-
-//: Constructor
-vidl2_image_list_istream::
-vidl2_image_list_istream(const vcl_vector<vil_image_resource_sptr>& images)
-  : images_(images), index_(INIT_INDEX) {}
+vidl2_image_list_istream()
+  : index_(INIT_INDEX), current_frame_(NULL) {}
 
 
 //: Constructor
 vidl2_image_list_istream::
 vidl2_image_list_istream(const vcl_string& glob)
-  : index_(INIT_INDEX) { open(glob); }
-
-
-//: Open a new stream using an existing vector of images
-bool
-vidl2_image_list_istream::
-open(const vcl_vector<vil_image_resource_sptr>& images)
-{
-  index_ = INIT_INDEX;
-  images_ = images;
-  return true;
-}
+  : index_(INIT_INDEX), current_frame_(NULL) { open(glob); }
 
 
 //: Open a new stream using a file glob (see vul_file_iterator)
@@ -85,15 +70,16 @@ bool
 vidl2_image_list_istream::
 open(const vcl_vector<vcl_string>& paths)
 {
-  images_.clear();
+  image_paths_.clear();
+  // test each file to ensure it exists and is a supported image format
   for (vcl_vector<vcl_string>::const_iterator i = paths.begin(); i!=paths.end(); ++i)
   {
-    vil_image_resource_sptr img =  vil_load_image_resource(i->c_str());
-    if (img)
-      images_.push_back(img);
+    if (vil_load_image_resource(i->c_str()))
+      image_paths_.push_back(*i);
   }
   index_ = INIT_INDEX;
-  return !images_.empty();
+  current_frame_ = NULL;
+  return !image_paths_.empty();
 }
 
 
@@ -102,18 +88,20 @@ void
 vidl2_image_list_istream::
 close()
 {
-  images_.clear();
+  image_paths_.clear();
   index_ = INIT_INDEX;
+  current_frame_ = NULL;
 }
 
 
-//: Advance to the next frame (but don't acquire an image)
+//: Advance to the next frame (but do not load the next image)
 bool
 vidl2_image_list_istream::
 advance()
 {
-  if(index_ < images_.size() || index_ == INIT_INDEX )
-    return ++index_ < images_.size();
+  current_frame_ = NULL;
+  if(index_ < image_paths_.size() || index_ == INIT_INDEX )
+    return ++index_ < image_paths_.size();
 
   return false;
 }
@@ -133,19 +121,25 @@ vidl2_frame_sptr
 vidl2_image_list_istream::current_frame()
 {
   if (is_valid()){
-    return vidl2_convert_to_frame(images_[index_]->get_view());
+    if(!current_frame_){
+      vil_image_resource_sptr img = vil_load_image_resource(image_paths_[index_].c_str());
+      current_frame_ = vidl2_convert_to_frame(img->get_view());
+    }
+    return current_frame_;
   }
   return NULL;
 }
 
 
-//: Seek to the given frame number
+//: Seek to the given frame number (but do not load the image)
 // \returns true if successful
 bool
 vidl2_image_list_istream::
 seek_frame(unsigned int frame_number)
 {
-  if (is_open() && frame_number < images_.size()){
+  if (is_open() && frame_number < image_paths_.size()){
+    if(index_ != frame_number)
+      current_frame_ = NULL;
     index_ = frame_number;
     return true;
   }
