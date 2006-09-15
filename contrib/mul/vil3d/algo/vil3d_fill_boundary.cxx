@@ -89,7 +89,8 @@ void label_boundary_and_bkg(vil3d_image_view<int> &image,int i,int j, int k, int
   int i1, j1;
 
   // check the 8-neighbourhood of the pixels on the boundary
-  while (image(i0,j0,k) != boundary_label || (i!=i0 && j!=j0))
+//  while (image(i0,j0,k) != boundary_label || (i!=i0 && j!=j0))
+    while (image(i0,j0,k) != boundary_label || ((i==i0 && j==j0) && offset != 1))
   {
     image(i0,j0,k) = boundary_label;
 
