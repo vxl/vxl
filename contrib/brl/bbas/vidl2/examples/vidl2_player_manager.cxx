@@ -163,7 +163,7 @@ void vidl2_player_manager::pipe_streams()
     return;
   }
 
-  if (!ostream_ || !ostream_->is_open()) {
+  if (!ostream_) {
     vgui_error_dialog("Output stream not open");
     return;
   }
