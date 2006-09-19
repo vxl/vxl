@@ -22,5 +22,8 @@ void label_boundary_and_bkg(vil3d_image_view<int> &image,
 //:  Fill interior of current boundary.
 void fill_boundary(vil3d_image_view<int> &image, int j, int k, int boundary_label, int background_label);
 
+//:  Reset background pixels to 0
+void reset_background(vil3d_image_view<int> &image, int background_label);
+
 
 #endif

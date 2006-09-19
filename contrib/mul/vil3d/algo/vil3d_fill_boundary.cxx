@@ -47,6 +47,7 @@ void vil3d_fill_boundary(vil3d_image_view<bool>& bool_image)
           label_boundary_and_bkg(image,i,j,k,boundary_label,background_label);
           fill_boundary(image,j,k,boundary_label,background_label);
           boundary_label+=1;
+          reset_background(image,background_label);
         }
       }
     }
@@ -90,7 +91,9 @@ void label_boundary_and_bkg(vil3d_image_view<int> &image,int i,int j, int k, int
 
   // check the 8-neighbourhood of the pixels on the boundary
 //  while (image(i0,j0,k) != boundary_label || (i!=i0 && j!=j0))
-    while (image(i0,j0,k) != boundary_label || ((i==i0 && j==j0) && offset != 1))
+//    while (image(i0,j0,k) != boundary_label || ((i==i0 && j==j0) && (offset != 0 || offset != 1)))
+  while (image(i0,j0,k) != boundary_label || (i != i0 || j != j0) ||
+          (i == i0 && j == j0 && offset == 7))
   {
     image(i0,j0,k) = boundary_label;
 
@@ -106,6 +109,11 @@ void label_boundary_and_bkg(vil3d_image_view<int> &image,int i,int j, int k, int
         {                                                          // pixels more than once.
           i0 = i1; j0 = j1;                                        // Needed for degenerate cases
           offset = next_dir[offset];
+          break;
+        }
+        else if (image(i1,j1,k)==background_label)
+        {
+          offset = (offset+1)%8;
           break;
         }
         else
@@ -175,4 +183,21 @@ void fill_boundary(vil3d_image_view<int> &image, int j, int k, int boundary_labe
       }
     }
   }
+}
+
+//:  Reset background pixels to 0
+void reset_background(vil3d_image_view<int> &image, int background_label)
+{
+  for (unsigned k = 0; k < image.nk(); k++)
+  {
+    for (unsigned j = 0; j < image.nj(); j++)
+    {
+      for (unsigned i = 0; i < image.ni(); i++)
+      {
+        if (image(i,j,k) == background_label)
+          image(i,j,k) = 0;
+      }
+    }
+  }
+  return;
 }
