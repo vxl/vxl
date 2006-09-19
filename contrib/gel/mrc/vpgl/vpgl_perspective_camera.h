@@ -174,6 +174,17 @@ template <class T>
 bool vpgl_perspective_decomposition( const vnl_matrix_fixed<T,3,4>& camera_matrix,
                                      vpgl_perspective_camera<T>& p_camera );
 
+//: Changes the coordinate system of camera p1 such that the same change would
+// transform p0 to K[I|0].
+template <class T>
+vpgl_perspective_camera<T> vpgl_align_down( const vpgl_perspective_camera<T>& p0,
+                                            const vpgl_perspective_camera<T>& p1 );
+
+//: Changes the coordinate system of camera p1 such that the same change would
+// transform K[I|0] to p0.
+template <class T>
+vpgl_perspective_camera<T> vpgl_align_up( const vpgl_perspective_camera<T>& p0,
+                                          const vpgl_perspective_camera<T>& p1 );
 
 template <class T>
 vpgl_perspective_camera<T>
