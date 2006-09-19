@@ -41,7 +41,7 @@ public:
   // Return my description
   vcl_string description() const;
 
-  // Return number of dimensions: 0 for scalar fields, positive for array fields.
+  // Return number of dimensions: 0 for scalar fields, positive for array fields
   virtual int num_dimensions() const = 0;
 
   // Downcast methods
@@ -66,8 +66,7 @@ public:
     ~field_tree();
   };
 
-  // I allocate the return value, but you own it after I return it to you
-  // so you need to delete it
+  // Returns a field tree, which caller owns
   virtual field_tree* get_tree() const;
 
 protected:
