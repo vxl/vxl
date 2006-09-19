@@ -56,11 +56,15 @@ public:
     vil_nitf2_field_functor<int>* repeat_functor,
     vil_nitf2_field_definitions& field_definitions);
 
-  // Same as above where the repeat count is simply the value of a tag.
-  vil_nitf2_tagged_record_definition& repeat(vcl_string intTag,
-                                             vil_nitf2_field_definitions& field_definitions)
-  { return repeat(new vil_nitf2_field_value<int>(intTag), field_definitions); }
+  // Convenience overload where repeat count is simply the value of a tag.
+  vil_nitf2_tagged_record_definition& repeat(
+    vcl_string int_tag,
+    vil_nitf2_field_definitions& field_definitions);
 
+  // Convenience overload where repeat count is a fixed value.
+  vil_nitf2_tagged_record_definition& repeat(
+    int repeat_count,
+    vil_nitf2_field_definitions& field_definitions);
 
   // Declares that definition is finished, preventing further invocations
   // of field() or repeat().
@@ -75,18 +79,23 @@ public:
   // Destructor
   ~vil_nitf2_tagged_record_definition();
 
+  // All tagged record definitions
   typedef vcl_map<vcl_string, vil_nitf2_tagged_record_definition*> 
     tagged_record_definition_map;
   static tagged_record_definition_map& all_definitions();
 
+  // Return field definitions
   const vil_nitf2_field_definitions& field_definitions() const {
     return *m_field_definitions; }
 
   // Registers some TREs for testing
   static void register_test_tre();
 
-  vil_nitf2_tagged_record_definition( const vil_nitf2_tagged_record_definition& rhs );
-  vil_nitf2_tagged_record_definition& operator=( const vil_nitf2_tagged_record_definition& rhs );
+  // Copy constructor
+  vil_nitf2_tagged_record_definition(const vil_nitf2_tagged_record_definition&);
+
+  // Assignment operator
+  vil_nitf2_tagged_record_definition& operator=(const vil_nitf2_tagged_record_definition&);
 
 private:
   vcl_string m_name;
@@ -99,7 +108,8 @@ private:
   bool m_definition_completed;
 
   // Constructor
-  vil_nitf2_tagged_record_definition(vcl_string name, vcl_string pretty_name, vil_nitf2_field_definitions* defs = 0); 
+  vil_nitf2_tagged_record_definition(vcl_string name, vcl_string pretty_name, 
+    vil_nitf2_field_definitions* defs = 0); 
 };
 
 #endif // VIL_NITF2_TAGGED_RECORD_DEFINITION_H

@@ -121,6 +121,18 @@ vil_nitf2_tagged_record_definition::~vil_nitf2_tagged_record_definition()
   delete m_field_definitions;
 }
 
+vil_nitf2_tagged_record_definition& vil_nitf2_tagged_record_definition::repeat(
+  vcl_string int_tag, vil_nitf2_field_definitions& field_definitions)
+{
+  return repeat(new vil_nitf2_field_value<int>(int_tag), field_definitions); 
+}
+
+vil_nitf2_tagged_record_definition& vil_nitf2_tagged_record_definition::repeat(
+  int repeat_count, vil_nitf2_field_definitions& field_definitions)
+{ 
+  return repeat(new vil_nitf2_constant_functor<int>(repeat_count), field_definitions); 
+}
+
 void vil_nitf2_tagged_record_definition::register_test_tre()
 {
   define("PIAIMB", "Profile for Imagery Archives Image" )

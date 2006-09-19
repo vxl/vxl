@@ -239,6 +239,9 @@ bool vil_nitf2_tagged_record::test()
            .field("B", "Test repeat B", NITF_STR_BCSA(1))
            .repeat(new vil_nitf2_field_value<int>("A"), vil_nitf2_field_definitions()
               .field("C", "Test repeat C", NITF_STR_BCSA(1)))))
+     // test fixed repeat count
+     .repeat(4, vil_nitf2_field_definitions()
+       .field("D", "Test fixed repeat", NITF_INT(1)))
 
     .end();
   // Create a test input vcl_string
@@ -281,6 +284,8 @@ bool vil_nitf2_tagged_record::test()
     "cc"    // C[1,0,0:1]
     "B"    // B[1,1]
     "CC"   //  C[1,1,0:1]
+    // test fixed repeat
+    "7890"
   ;
   vcl_stringstream test_stream;
   test_stream << "MTIRPB"; // CETAG
@@ -332,6 +337,11 @@ bool vil_nitf2_tagged_record::test()
       error = true;
     } else {
       vcl_cerr << "TGT_2_SPEED = " << tgt_speed[2] << vcl_endl;
+    }
+    int d2;
+    if (!record->get_value("D", vil_nitf2_index_vector(2), d2) || d2 != 9) {
+      vcl_cerr << "Get fixed repeat count test failed!\n";
+      error = true;
     }
   } else {
     vcl_cerr << "Didn't create record!\n";

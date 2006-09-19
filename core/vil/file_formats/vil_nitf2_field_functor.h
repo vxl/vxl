@@ -288,4 +288,30 @@ class vil_nitf2_choose_field_value : public vil_nitf2_field_functor<T>
   vil_nitf2_field_functor<bool>* choose_tag_1_predicate;
 };
 
+// Functor vil_nitf2_constant_functor defines a function that sets its
+// output value to a constant that does not depend on the field sequence
+// passed to it.
+//
+template<typename T>
+class vil_nitf2_constant_functor : public vil_nitf2_field_functor<T>
+{
+public:
+  vil_nitf2_constant_functor(T value) : value_(value) {}
+
+  virtual vil_nitf2_constant_functor* copy() const {
+    return new vil_nitf2_constant_functor(value_);
+  }
+
+  virtual ~vil_nitf2_constant_functor() {}
+
+  bool operator() (vil_nitf2_field_sequence* record,
+                  const vil_nitf2_index_vector& indexes, T& value) {
+    value = value_;
+    return true;
+  }
+
+private:
+  T value_;
+}; 
+
 #endif // VIL_NITF2_FIELD_FUNCTOR_H
