@@ -289,6 +289,26 @@ vpgl_perspective_camera<T> vpgl_align_down(
 }
 
 
+//-------------------------------------------
+template <class T>
+vpgl_perspective_camera<T> vpgl_align_up( 
+  const vpgl_perspective_camera<T>& p0,
+  const vpgl_perspective_camera<T>& p1 )
+{
+  vpgl_perspective_camera<T> new_camera;
+  new_camera.set_calibration( p0.get_calibration() );
+  new_camera.set_rotation_matrix( p1.get_rotation_matrix()*p0.get_rotation_matrix() );
+  vgl_homg_point_3d<T> a = 
+    p0.get_rotation_matrix().get_inverse()*vgl_homg_point_3d<T>( p1.get_camera_center() );
+  vgl_point_3d<T> new_camera_center( 
+    p0.get_camera_center().x() + a.x()/a.w(),
+    p0.get_camera_center().y() + a.y()/a.w(),
+    p0.get_camera_center().z() + a.z()/a.w() );
+  new_camera.set_camera_center( new_camera_center );
+  return new_camera;
+}
+
+
 //Post-multiply this perspective camera with a 3-d Euclidean transformation
 // Must check if the transformation is Euclidean, i.e. rotation matrix
 // and translation.   Since we can only work with the external interface
@@ -427,6 +447,8 @@ template bool vpgl_is_rotation( const vgl_h_matrix_3d<T >& H ); \
 template bool vpgl_perspective_decomposition( \
   const vnl_matrix_fixed<T,3,4>& camera_matrix, vpgl_perspective_camera<T >& p_camera ); \
 template vpgl_perspective_camera<T> vpgl_align_down( \
+  const vpgl_perspective_camera<T>& p0, const vpgl_perspective_camera<T>& p1 ); \
+template vpgl_perspective_camera<T> vpgl_align_up( \
   const vpgl_perspective_camera<T>& p0, const vpgl_perspective_camera<T>& p1 ); \
 template void vsl_b_read(vsl_b_istream &is, vpgl_perspective_camera<T >* &p); \
 template void vsl_b_write(vsl_b_ostream &os, const vpgl_perspective_camera<T > * p); \

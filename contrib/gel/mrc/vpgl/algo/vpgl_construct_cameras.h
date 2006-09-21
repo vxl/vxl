@@ -41,12 +41,15 @@ class vpgl_construct_cameras
 
     ~vpgl_construct_cameras();
 
-    //: fuunction to construct cameras
+    //: function to construct cameras
     bool construct();
 
     //: returns the projection matrix for the cameras
     const vpgl_perspective_camera<double>& get_camera1(){return P1_;}
     const vpgl_perspective_camera<double>& get_camera2(){return P2_;}
+
+    //: gets the world points
+    void get_world_points( vcl_vector< vgl_point_3d<double> >& world_points );
 
  private:
 

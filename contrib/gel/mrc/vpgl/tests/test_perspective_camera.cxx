@@ -77,6 +77,29 @@ static void test_perspective_camera()
   vgl_point_2d<double> hurt = P_rott.project(X);
   vcl_cout << X << '\n' << hurt << '\n';
   TEST_NEAR("test postmultipy with general Euclidean", hurt.x(),  7843.59, 0.01);
+
+  // test align up/down
+  {
+    vgl_h_matrix_3d<double> P0_R;
+    P0_R.set_identity();
+    P0_R.set_rotation_euler(.1,.4,-1);
+    vpgl_perspective_camera<double> P0;
+    P0.set_rotation_matrix( P0_R );
+    P0.set_camera_center( vgl_point_3d<double>( 0, 2, -1 ) );
+
+    vgl_h_matrix_3d<double> P1_R;
+    P1_R.set_identity();
+    P1_R.set_rotation_euler(.2,-.3,.7);
+    vpgl_perspective_camera<double> P1;
+    P1.set_rotation_matrix( P1_R );
+    P1.set_camera_center( vgl_point_3d<double>( 6, -1, 2 ) );
+
+    vpgl_perspective_camera<double> P2 = P1;
+    P1 = vpgl_align_up( P0, P1 );
+    P1 = vpgl_align_down( P0, P1 );
+    TEST_NEAR( "testing align up/down:", 
+      (P2.get_matrix()-P1.get_matrix()).frobenius_norm(), 0.0, .01 );
+  }
 }
 
 TESTMAIN(test_perspective_camera);

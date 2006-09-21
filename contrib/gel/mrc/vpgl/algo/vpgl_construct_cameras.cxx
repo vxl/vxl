@@ -143,6 +143,19 @@ bool vpgl_construct_cameras::construct()
 };
 
 
+void
+vpgl_construct_cameras::get_world_points( 
+  vcl_vector< vgl_point_3d<double> >& world_points )
+{
+  world_points.clear();
+  for( int p = 0; p < points0_.size(); p++ ){
+    world_points.push_back( triangulate_3d_point(
+      points0_[p], P1_.get_matrix(), points1_[p], P2_.get_matrix() ) );
+  }
+};
+
+
+
 vgl_point_3d<double>
 vpgl_construct_cameras::triangulate_3d_point(
   const vgl_point_2d<double>& x1, 
