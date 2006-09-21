@@ -15,6 +15,7 @@
 #include <vcl_cctype.h>
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
+#include <vcl_cstdio.h> // for EOF
 
 //: Construct from input stream
 vul_awk::vul_awk(vcl_istream& s, ModeFlags mode):

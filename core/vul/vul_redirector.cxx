@@ -22,6 +22,7 @@
 
 #include "vul_redirector.h"
 #include <vcl_iostream.h>
+#include <vcl_cstdio.h> // for EOF
 
 //----------------------------------------------------------------------
 // This class is used as a stream buffer that can

@@ -8,8 +8,8 @@
 #include <vcl_ctime.h>
 #include <vcl_cstdlib.h> // for rand/srand
 
-#if defined(VCL_BORLAND)
-# include <vcl_cstdio.h> // for _tempnam on borland.
+#if defined(VCL_BORLAND) || defined (VCL_VC)
+# include <vcl_cstdio.h> // for _tempnam on borland (and stlport5 with VC8)
 #endif
 
 #if defined(VCL_VC) || defined(VCL_BORLAND) || defined(__MINGW32__)
