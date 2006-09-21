@@ -57,6 +57,8 @@
 #include <vcl_set.h>
 #include <vcl_map.h>
 
+// define MBL_LOG_DISABLE_ALL_LOGGING to stop all logging.
+
 class mbl_logger_root;
 class mbl_logger;
 
@@ -98,6 +100,7 @@ class mbl_log_output_base
   virtual const char *id()=0;
 };
 
+#if !defined MBL_LOG_DISABLE_ALL_LOGGING
 //: Outputs log messages to an existing stream (e.g. vcl_cerr).
 class mbl_log_output_stream: public mbl_log_output_base
 {
@@ -162,10 +165,20 @@ class mbl_log_output_file: public mbl_log_output_base
   virtual const char *id() {return id_;}
 };
 
+#endif
 
 //: Main user logging class - represents a category.
 class mbl_logger
 {
+#ifdef MBL_LOG_DISABLE_ALL_LOGGING
+  mbl_logger(): nullstream_(&nullbuf_) {};
+  mbl_log_null_streambuf nullbuf_;
+  vcl_ostream nullstream_;
+public:  mbl_logger(const char *id): nullstream_(&nullbuf_) {}
+  int level() const { return -1000; }
+  vcl_ostream &log(int level) { return nullstream_; }
+  vcl_ostream &mtlog() {return nullstream_;}
+#else
   int level_;
   mbl_log_output_base *output_;
   mbl_log_streambuf streambuf_;
@@ -181,7 +194,6 @@ class mbl_logger
   void reinitialise();
 
  public:
-  static mbl_logger_root &root();
   mbl_logger(const char *id);
   ~mbl_logger();
 
@@ -195,6 +207,9 @@ class mbl_logger
   vcl_ostream &mtlog() {return *mt_logstream_;}
   void mtstart(int level, const char * srcfile="", int srcline=0);
   void mtstop();
+#endif
+
+  static mbl_logger_root &root();
 
   //: Log priority levels.
   // Based on POSIX syslog API.
@@ -206,7 +221,7 @@ class mbl_logger
   };
   friend class mbl_log_streambuf;
   friend class mbl_logger_root;
-};
+}; 
 
 
 //: This class handles category lists.
@@ -243,11 +258,11 @@ class mbl_log_categories
 
 //: Singleton, keeps records of logging state.
 class mbl_logger_root
-{
+{ 
   friend class mbl_logger;
-
   mbl_log_categories categories_;
 
+#ifndef MBL_LOG_DISABLE_ALL_LOGGING
   mbl_log_null_streambuf null_streambuf_;
   vcl_ostream null_stream_;
 
@@ -255,7 +270,7 @@ class mbl_logger_root
 
   mbl_logger_root():
     null_stream_(&null_streambuf_) {}
-
+#endif 
  public:
 
   //: List of category entries.
@@ -290,16 +305,18 @@ class mbl_logger_root
   //: Force all loggers to update themselves in light of changes to the root and configuration.
   // This is already called automatically by load_log_config_file().
   void update_all_loggers();
-};
+}; 
 
-
-#define MBL_LOG(my_level, logger, message) \
+#ifdef MBL_LOG_DISABLE_ALL_LOGGING
+# define MBL_LOG(my_level, logger, message) do {} while (0)
+#else
+# define MBL_LOG(my_level, logger, message) \
   do { mbl_logger &rlogger = logger; \
     if (rlogger.level() >= mbl_logger:: my_level) {\
       rlogger.mtstart(mbl_logger:: my_level, __FILE__, __LINE__); \
       rlogger.mtlog() << message << vcl_endl; \
       rlogger.mtstop(); } \
   } while(0)
-
+#endif
 
 #endif // mbl_log_h

@@ -75,6 +75,8 @@ vcl_ostream& operator<<(vcl_ostream&os, mbl_logger::levels level)
 
 int mbl_log_streambuf::sync()
 {
+#ifndef MBL_LOG_DISABLE_ALL_LOGGING
+
   vcl_ptrdiff_t n = pptr() - pbase();
 
   if (n)
@@ -82,11 +84,13 @@ int mbl_log_streambuf::sync()
   logger_->output_->terminate_flush();
 
   pbump(-n);  // Reset pptr().
+#endif
   return 0;
 }
 
 int mbl_log_streambuf::overflow(int ch)
 {
+#ifndef MBL_LOG_DISABLE_ALL_LOGGING
   vcl_ptrdiff_t n = pptr() - pbase();
 
   if (n)
@@ -99,10 +103,15 @@ int mbl_log_streambuf::overflow(int ch)
   char cbuf = ch;
   logger_->output_->append(&cbuf, 1);
   return ch;
+#else
+  return EOF;
+#endif
 }
 
 vcl_streamsize mbl_log_streambuf::xsputn( const char *ptr, vcl_streamsize nchar)
 {
+#ifndef MBL_LOG_DISABLE_ALL_LOGGING
+
   // Output anything already in buffer
   long n = pptr() - pbase();
   if (n)
@@ -111,7 +120,12 @@ vcl_streamsize mbl_log_streambuf::xsputn( const char *ptr, vcl_streamsize nchar)
 
   logger_->output_->append(ptr, nchar);
   return nchar;
+#else
+  return 0;
+#endif
 }
+
+#ifndef MBL_LOG_DISABLE_ALL_LOGGING
 
 //: Default constructor only available to root's default logger.
 mbl_logger::mbl_logger():
@@ -119,7 +133,7 @@ mbl_logger::mbl_logger():
   output_(new mbl_log_output_stream(vcl_cerr, "")),
   streambuf_(this),
   logstream_(&streambuf_),
-  mt_logstream_(&logstream_)
+  mt_logstream_(&logstream_) 
 {
   // This will have to change to support proper hierarchical control over categories.
 //  logstream_.tie(output_.real_stream_);
@@ -344,6 +358,7 @@ void mbl_logger::mtstop()
   logstream_.flush();
   output_->terminate_manual();
 }
+#endif
 
 
 mbl_logger_root &mbl_logger::root()
@@ -366,6 +381,7 @@ mbl_logger_root &mbl_logger::root()
 void mbl_logger_root::load_log_config_file(
   const vcl_map<vcl_string, vcl_ostream *> &stream_names)
 {
+#ifndef MBL_LOG_DISABLE_ALL_LOGGING
   vcl_ifstream config_file("mbl_log.properties");
   if (!config_file.is_open())
     config_file.open("~/mbl_log.properties");
@@ -401,14 +417,17 @@ void mbl_logger_root::load_log_config_file(
   config_file.clear(); // May have been set to fail on failed open.
   categories_.config(config_file, stream_names);
   update_all_loggers();
+#endif
 }
 
 // Make sure all known loggers reinitialise themselves.
 void mbl_logger_root::update_all_loggers()
 {
+#ifndef MBL_LOG_DISABLE_ALL_LOGGING
   for (vcl_set<mbl_logger *>::iterator it=all_loggers_.begin(),
        end=all_loggers_.end(); it!=end; ++it)
     (*it)->reinitialise();
+#endif
 }
 
 
