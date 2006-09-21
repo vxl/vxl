@@ -69,6 +69,9 @@ public:
   void set_est_scale( int iterations_for_scale=dflt_iterations_for_scale_,
                       bool use_weighted_scale=false );
 
+  //: Set lower bound of scale estimate
+  void set_scale_lower_bound( double lower_scale );
+  
   //: Set for no scale estimation.
   //  Scale must be initialized or supplied by the problem.
   void set_no_scale_est( );
@@ -168,6 +171,7 @@ protected:
   bool est_scale_during_;
   bool use_weighted_scale_;
   int iterations_for_scale_est_;
+  double scale_lower_bound_;
   int trace_level_;
 
   //  Variables of estimation.

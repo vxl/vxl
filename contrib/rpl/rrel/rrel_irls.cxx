@@ -21,6 +21,7 @@ rrel_irls::rrel_irls( int max_iterations )
   : max_iterations_(max_iterations), test_converge_(true),
     convergence_tol_(dflt_convergence_tol_), est_scale_during_(true),
     iterations_for_scale_est_(dflt_iterations_for_scale_),
+    scale_lower_bound_( -1.0 ),
     trace_level_(0), params_initialized_(false), scale_initialized_(false),
     obj_fcn_(1e256), prev_obj_fcn_(1e256),
     converged_(false), iteration_(0)
@@ -41,6 +42,13 @@ rrel_irls::set_est_scale( int iterations_for_scale_est,
              << "negative, so scale will not be estimated!\n";
 }
 
+// -------------------------------------------------------------------------
+//: Set lower bound of scale estimate
+void 
+rrel_irls::set_scale_lower_bound( double lower_scale )
+{
+  scale_lower_bound_ = lower_scale;
+}
 
 // -------------------------------------------------------------------------
 void
@@ -206,6 +214,10 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
         vcl_cerr << "rrel_irls::estimate:  scale has gone to 0.\n";
         break;
       }
+      
+      // check lower bound
+      if( scale_lower_bound_ > 0 && scale_ < scale_lower_bound_ )
+        scale_ = scale_lower_bound_;
     }
     else
       allow_convergence_test = true;
