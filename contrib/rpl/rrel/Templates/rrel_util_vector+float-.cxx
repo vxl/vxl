@@ -1,7 +1,7 @@
 #include <vcl_vector.h>
 #include <rrel/rrel_util.txx>
 
-#if defined(VCL_GCC_3) || defined(VCL_GCC_4) || defined(VCL_ICC)
+#if defined(VCL_GCC_3) || defined(VCL_GCC_4) || defined(VCL_ICC) || defined(VCL_VC_8)
 
 // Apply explicit instantiation
 // ICC 8.1 has problems with the following 
