@@ -19,6 +19,7 @@
 //   16-MAR-2001 K.Y.McGaul - Added menu accelerators
 //   22-AUG-2001 K.Y.McGaul - Added destructor to fix memory leak: all
 //                            menus now deleted.
+//   25-JUL-2006  A. Tamrakar Fixed the "Popup Menu timeout" bug.
 // \endverbatim
 
 #include <vgui/vgui_menu.h>
@@ -50,7 +51,7 @@ class vgui_mfc_utils
   static vgui_mfc_utils *instance();
 
   //: Constructor.
-  vgui_mfc_utils() : item_count(0) {}
+  vgui_mfc_utils() : item_count(0), first_popup(true) {}
 
   //: Destructor.
   ~vgui_mfc_utils();
@@ -64,6 +65,9 @@ class vgui_mfc_utils
   //: Create popup menu.
   CMenu *set_popup_menu(const vgui_menu & menu);
 
+  //: Delete the callback functions from the last popup menu.
+  void delete_last_popup_menu_callbacks();
+
   //: Called within message service routine of vgui_mfc_mainfrm.
   virtual void menu_dispatcher(UINT nID);
 
@@ -73,6 +77,13 @@ class vgui_mfc_utils
  private:
   //: List of menus to be deleted when we are finished:
   vcl_vector<CMenu*> menus_to_be_deleted;
+
+  //: first time a popup menu was created
+  bool first_popup;
+
+  //: last item_count before a popup menu is created
+  int last_item_count;
+
 };
 
 #endif // vgui_mfc_utils_h_

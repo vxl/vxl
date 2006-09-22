@@ -12,6 +12,7 @@
 //  Modifications
 //   20-JUL-2001  K.Y.McGaul  Added menu accelerators.
 //   22-AUG-2001  K.Y.McGaul  Added destructor to fix memory leak: all menus now deleted.
+//   25-JUL-2006  A. Tamrakar Fixed the "Popup Menu timeout" bug.
 // \endverbatim
 
 #include "vgui_mfc_utils.h"
@@ -170,10 +171,18 @@ void vgui_mfc_utils::set_menu(const vgui_menu& menu)
 //  Make sure to call delete after its use otherwise MLK!!!
 CMenu *vgui_mfc_utils::set_popup_menu(const vgui_menu &menu)
 {
-  CMenu *pop_up;
+  //if there was a popup menu created before, 
+  //delete the callback functions from that menu
+  if (!first_popup)
+    delete_last_popup_menu_callbacks();
+  else
+    first_popup = false;
+
+  //store the current item count
+  last_item_count = item_count;
 
   // Create a new menu
-  pop_up = new CMenu();
+  CMenu *pop_up = new CMenu();
   pop_up->CreatePopupMenu();
 
   for (unsigned i=0;i<menu.size();i++)
@@ -206,4 +215,23 @@ CMenu *vgui_mfc_utils::set_popup_menu(const vgui_menu &menu)
     }
   }
   return pop_up;
+}
+
+//: Delete the callback functions from the last popup menu.
+void vgui_mfc_utils::delete_last_popup_menu_callbacks()
+{
+  //Amir: Delete the callbacks that were created for the last popup menu
+  //      Without this step, the menu ids keep increasing everytime 
+  //      a popup menu is created. However, the menu servicing table has a
+  //      predefined range of ids it can handle (see line 32 of vgui_mfc_mainfrm.cxx)
+  //      which means that after a while the popup menus just stop functioning. 
+  //      The local lab jargon for this event is "Menu timeout" :)
+
+  //delete all the callbacks up to the last item count
+  for (int i=0; i<item_count-last_item_count; i++)
+    callbacks.pop_back();
+
+  //reset item_count
+  item_count = last_item_count;
+
 }
