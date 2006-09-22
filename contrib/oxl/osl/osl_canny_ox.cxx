@@ -245,6 +245,8 @@ int osl_canny_ox::HysteresisOX(osl_edgel_chain *&edgels_NMS,
                                int *&status)
 {
   unsigned int n_edgels_NMS = edgels_NMS->size();
+  if (!n_edgels_NMS)
+    return 0;
 
   // Allocate arrays ..
   vcl_vector<unsigned> rows(ysize_+1); // rows[i] will contain the index in 'edgels_NMS' of the first
