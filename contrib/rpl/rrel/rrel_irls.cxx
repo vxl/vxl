@@ -1,4 +1,7 @@
+// This is rpl/rrel/rrel_irls.cxx
 #include "rrel_irls.h"
+//:
+// \file
 
 #include <rrel/rrel_estimation_problem.h>
 #include <rrel/rrel_wls_obj.h>
@@ -44,7 +47,7 @@ rrel_irls::set_est_scale( int iterations_for_scale_est,
 
 // -------------------------------------------------------------------------
 //: Set lower bound of scale estimate
-void 
+void
 rrel_irls::set_scale_lower_bound( double lower_scale )
 {
   scale_lower_bound_ = lower_scale;
@@ -214,9 +217,9 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
         vcl_cerr << "rrel_irls::estimate:  scale has gone to 0.\n";
         break;
       }
-      
+
       // check lower bound
-      if( scale_lower_bound_ > 0 && scale_ < scale_lower_bound_ )
+      if ( scale_lower_bound_ > 0 && scale_ < scale_lower_bound_ )
         scale_ = scale_lower_bound_;
     }
     else
@@ -268,14 +271,15 @@ rrel_irls::has_converged( const vcl_vector<double>& residuals,
                           vnl_vector<double>* params )
 {
   prev_obj_fcn_ = obj_fcn_;
-  switch( problem->scale_type() ) {
-  case rrel_estimation_problem::NONE:
+  switch ( problem->scale_type() )
+  {
+   case rrel_estimation_problem::NONE:
     obj_fcn_ = obj->fcn( residuals.begin(), residuals.end(), scale_, params );
     break;
-  case rrel_estimation_problem::SINGLE:
+   case rrel_estimation_problem::SINGLE:
     obj_fcn_ = obj->fcn( residuals.begin(), residuals.end(), problem->prior_scale(), params );
     break;
-  case rrel_estimation_problem::MULTIPLE:
+   case rrel_estimation_problem::MULTIPLE:
     obj_fcn_ = obj->fcn( residuals.begin(), residuals.end(), problem->prior_multiple_scales().begin(), params );
     break;
   }
