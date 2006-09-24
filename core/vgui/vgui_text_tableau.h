@@ -84,13 +84,13 @@ class vgui_text_tableau : public vgui_tableau
   //: Delete text associated to given handle from the display.
   void remove(int handle);
 
- protected:
-  //: Destructor - called by vgui_text_tableau_sptr.
-  ~vgui_text_tableau() { }
-
   //: Handles all events sent to this tableau.
   //  In particular, uses draw events to render the text.
   bool handle(vgui_event const &);
+
+ protected:
+  //: Destructor - called by vgui_text_tableau_sptr.
+  ~vgui_text_tableau() { }
 
  private:
   vcl_vector<float> xs;
