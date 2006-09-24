@@ -59,9 +59,8 @@ map_pixel_byte(const Type pix, const Type min, const Type max,
   // if gamma >0 && !=1 make the gamma correction
   if (gamma > 0 && gamma !=1)
     y = vcl_pow((long double)y, (long double)1/gamma);
-  return (vxl_byte)((y*255.0) +0.5);//round to nearest byte
+  return static_cast<vxl_byte>((y*255.0) +0.5);//round to nearest byte
 }
-
 
 //Compute the float mapping.  Used for types that are table mappable
 template <class Type>
@@ -87,7 +86,7 @@ map_pixel_float(const Type pix, const Type min, const Type max,
   // if gamma >0 && !=1 make the gamma correction
   if (gamma > 0 && gamma!=1)
     y = vcl_pow((long double)y, (long double)1/gamma);
-  return (float)y;
+  return static_cast<float>(y);
 }
 
 template <class Type>
@@ -98,15 +97,18 @@ compute_byte_table(const Type min, const Type max, const float gamma,
   vbl_array_1d<vxl_byte> bmap(size_, 0);
   //there are two cases, signed and unsigned map domains
   if (!vil_pixel_traits<Type>::is_signed())
-    for (unsigned int i = 0; i < size_; i++)
-      bmap[i] = map_pixel_byte(Type(i), min, max, gamma, ratio);
+    for (unsigned long i = 0; i < size_; i++)
+      bmap[i] = map_pixel_byte(static_cast<Type>(i), min, max, gamma, ratio);
   else
   {
     //The values have to be shifted by min
-    Type mint = vil_pixel_traits<Type>::minval();
-    Type maxt = vil_pixel_traits<Type>::maxval();
-    for (unsigned int i = 0; mint+i <= maxt; ++i)
-      bmap[i] = map_pixel_byte(mint+i, min, max, gamma, ratio);
+    unsigned long mint = 
+      static_cast<unsigned long>(vil_pixel_traits<Type>::minval());
+    unsigned long maxt = 
+      static_cast<unsigned long>(vil_pixel_traits<Type>::maxval());
+    for (unsigned long i = 0; mint+i <= maxt; ++i)
+      bmap[i] = map_pixel_byte(static_cast<Type>(mint+i), min, max,
+                               gamma, ratio);
   }
   return bmap;
 }

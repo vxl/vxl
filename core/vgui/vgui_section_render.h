@@ -10,6 +10,10 @@
 
 #include <vgui/vgui_gl.h>
 #include <vbl/vbl_array_1d.h>
+//: Get the required image view given the state of the viewport and scale
+bool pixel_view(unsigned& i0, unsigned& ni, unsigned& j0, unsigned& nj,
+                float& zoomx, float& zoomy);
+
 //: Render the pixels onto the frame buffer
 //
 // This renders the portion of the image within (x0,y0)-(x1,y1). The
@@ -32,5 +36,19 @@ bool vgui_section_render(void const *pixels,
                          vbl_array_1d<float>* fBmap=0,
                          vbl_array_1d<float>* fAmap=0);
                          
+
+bool vgui_view_render(void const *pixels,
+                      unsigned w, unsigned h, // Size of image.
+                      float zoomx, float zoomy,
+                      GLenum format,
+                      GLenum type ,
+                      bool hardware_map = false,
+                      vbl_array_1d<float>* fLmap=0,
+                      vbl_array_1d<float>* fRmap=0,
+                      vbl_array_1d<float>* fGmap=0,
+                      vbl_array_1d<float>* fBmap=0,
+                      vbl_array_1d<float>* fAmap=0);
+                         
+
 
 #endif // vgui_section_render_h_

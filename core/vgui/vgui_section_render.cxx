@@ -25,29 +25,11 @@ static inline float fsm_min(float x, float y) { return x<y ? x : y; }
 #else
 static inline void fsm_debug(char const *, ...) { }
 #endif
-
-//
-bool vgui_section_render(void const *pixels,
-                         unsigned w, unsigned h, // Size of image.
-                         float x0, float y0,  // Region of image
-                         float x1, float y1,  // to render.
-                         GLenum format,
-                         GLenum type ,
-                         bool hardware_map,
-                         vbl_array_1d<float>* fLmap,
-                         vbl_array_1d<float>* fRmap,
-                         vbl_array_1d<float>* fGmap,
-                         vbl_array_1d<float>* fBmap,
-                         vbl_array_1d<float>* fAmap)
+static bool clamped_viewport(float x0, float y0, float x1, float y1,
+                             unsigned& i0, unsigned& j0, 
+                             unsigned& ni, unsigned& nj,
+                             float& zoomx, float& zoomy)
 {
-  assert(h>0);//eliminates warning of unused h
-  assert(pixels);
-  assert(x0 <= x1);
-  assert(y0 <= y1);
-  //If we 
-  assert(!hardware_map||format != GL_LUMINANCE||fLmap);
-  assert(!hardware_map||format != GL_RGB||fRmap&&fGmap&&fBmap);
-  assert(!hardware_map||format != GL_RGBA||fRmap&&fGmap&&fBmap&&fAmap);
   // Get current matrix state, in fortran order.
   double Pt[4][4], Mt[4][4];
   glGetDoublev(GL_PROJECTION_MATRIX, &Pt[0][0]);
@@ -72,8 +54,7 @@ bool vgui_section_render(void const *pixels,
       T[1][0] ||!T[1][1] || T[1][2] ||
       T[2][0] || T[2][1] ||!T[2][2] ||
       T[3][0] || T[3][1] || T[3][2] || !T[3][3])
-    return false; // cannot do
-
+    return false; // cannot do 
   // From image to device coordinates, the projection is :
   // [ T00  0  T03 ]   [ a   u ]
   // [  0  T11 T13 ] ~ [   b v ]
@@ -99,8 +80,8 @@ bool vgui_section_render(void const *pixels,
   // where vp_x, vp_y, vp_w, vp_h are the start, width and height of the viewport.
 
   // Compute pixel zoom, as passed to glPixelZoom().
-  float zoomx = a*vp_w/2;
-  float zoomy = b*vp_h/2;
+ zoomx = a*vp_w/2;
+ zoomy = b*vp_h/2;
 
   // Clip the given region [x0, x1] x [y0, y1] to the viewport.  In
   // device coordinates, the viewport is [-1, +1] x [-1, +1] so it's
@@ -113,7 +94,7 @@ bool vgui_section_render(void const *pixels,
     x0 = fsm_max(x0, (-1-u)/a);
     x1 = fsm_min(x1, (+1-u)/a);
   }
-  else {
+  else {  
     // [ (+1-u)/a, (-1-u)/a ]
     x0 = fsm_max(x0, (+1-u)/a);
     x1 = fsm_min(x1, (-1-u)/a);
@@ -142,21 +123,31 @@ bool vgui_section_render(void const *pixels,
 
   int i_x0 = int(vcl_floor(x0)), i_y0 = int(vcl_floor(y0));
   int i_x1 = int(vcl_ceil (x1)), i_y1 = int(vcl_ceil (y1));
-
+  //Set the raster position
   vgui_rasterpos2i( i_x0, i_y0 );
+  //return the view parameters
+  i0 = static_cast<unsigned>(i_x0);   ni = static_cast<unsigned>(i_x1-i_x0); 
+  j0 = static_cast<unsigned>(i_y0);   nj = static_cast<unsigned>(i_y1-i_y0); 
+  return true;
+}
 
-  // this should never happen, but it doesn't hurt to fail gracefully.
-  if (!vgui_rasterpos_valid()) {
-    fsm_debug("invalid rasterpos\n");
-    return false; //
-  }
+bool pixel_view(unsigned& i0, unsigned& ni, unsigned& j0, unsigned& nj,
+                float& zoomx, float& zoomy)
+{
+  float x0 = i0, x1 = ni, y0 = j0, y1 = nj;
+  return clamped_viewport(x0, y0, x1, y1, i0, j0, ni, nj, zoomx, zoomy); 
+}
 
-  // Store old transfer characteristics for restoring it in a bit.
-  GLint alignment, row_length, skip_pixels, skip_rows, table_size;
-  GLboolean map_color;
+static void GL_setup(GLenum format, GLenum type , bool hardware_map,
+                     GLint& alignment, GLint& row_length, GLint& skip_pixels,
+                     GLint& skip_rows, GLint& table_size, GLboolean& map_color,
+                     vbl_array_1d<float>* fLmap,  vbl_array_1d<float>* fRmap,
+                     vbl_array_1d<float>* fGmap,  vbl_array_1d<float>* fBmap,
+                     vbl_array_1d<float>* fAmap)
+{
   glGetIntegerv(GL_UNPACK_ALIGNMENT,   &alignment);
   glGetIntegerv(GL_UNPACK_ROW_LENGTH,  &row_length);
-  glGetIntegerv(GL_UNPACK_SKIP_PIXELS, &skip_pixels);
+   glGetIntegerv(GL_UNPACK_SKIP_PIXELS, &skip_pixels);
   glGetIntegerv(GL_UNPACK_SKIP_ROWS,   &skip_rows);
   glGetIntegerv(GL_MAX_PIXEL_MAP_TABLE, &table_size);
   glGetBooleanv(GL_MAP_COLOR, &map_color);
@@ -202,7 +193,51 @@ bool vgui_section_render(void const *pixels,
       glPixelMapfv(GL_PIXEL_MAP_G_TO_G, USHRT_MAX, tfLmap);
       glPixelMapfv(GL_PIXEL_MAP_B_TO_B, USHRT_MAX, tfLmap);
     }
-  
+}
+static void GL_restore(GLboolean& map_color, GLint alignment, GLint row_length,
+                       GLint skip_pixels, GLint skip_rows)
+{
+  // Restore previous values.
+  glPixelTransferi(GL_MAP_COLOR, map_color);
+  glPixelStorei(GL_UNPACK_ALIGNMENT,   alignment);
+  glPixelStorei(GL_UNPACK_ROW_LENGTH,  row_length);
+  glPixelStorei(GL_UNPACK_SKIP_ROWS  , skip_pixels);
+  glPixelStorei(GL_UNPACK_SKIP_PIXELS, skip_rows);
+
+
+}
+bool vgui_section_render(void const *pixels,
+                         unsigned w, unsigned h, // Size of image.
+                         float x0, float y0,  // Region of image
+                         float x1, float y1,  // to render.
+                         GLenum format,
+                         GLenum type ,
+                         bool hardware_map,
+                         vbl_array_1d<float>* fLmap,
+                         vbl_array_1d<float>* fRmap,
+                         vbl_array_1d<float>* fGmap,
+                         vbl_array_1d<float>* fBmap,
+                         vbl_array_1d<float>* fAmap)
+{
+  assert(h>0);//eliminates warning of unused h
+  assert(pixels);
+  assert(x0 <= x1);
+  assert(y0 <= y1);
+  //If we 
+  assert(!hardware_map||format != GL_LUMINANCE||fLmap);
+  assert(!hardware_map||format != GL_RGB||fRmap&&fGmap&&fBmap);
+  assert(!hardware_map||format != GL_RGBA||fRmap&&fGmap&&fBmap&&fAmap);
+  float zoomx=1.0f, zoomy=1.0f;
+  unsigned i0=0, j0=0, ni=0, nj=0;
+  if(!clamped_viewport(x0, y0, x1, y1, i0, j0, ni, nj, zoomx, zoomy))
+    return false;
+  int i_x0 = i0, i_y0 = j0, i_x1 = i0+ni, i_y1 = j0+nj;
+  // Store old transfer characteristics for restoring it in a bit.
+  GLint alignment, row_length, skip_pixels, skip_rows, table_size;
+  GLboolean map_color;
+  GL_setup(format, type, hardware_map, alignment, row_length,
+           skip_pixels, skip_rows, table_size, map_color, fLmap, fRmap,
+           fGmap, fBmap, fAmap);
   // Set pixel transfer characteristics.
   glPixelStorei(GL_UNPACK_ALIGNMENT,   1);         // use byte alignment for now.
   glPixelStorei(GL_UNPACK_ROW_LENGTH,  w);         // size of image rows.
@@ -215,14 +250,45 @@ bool vgui_section_render(void const *pixels,
                                                  format,
                                                  type,
                                                  pixels);
+  GL_restore(map_color, alignment, row_length, skip_pixels, skip_rows);
+  return true; // could do
+}
+bool vgui_view_render(void const *pixels,
+                      unsigned w, unsigned h, // Size of view
+                      float zoomx, float zoomy,
+                      GLenum format,
+                      GLenum type ,
+                      bool hardware_map,
+                      vbl_array_1d<float>* fLmap,
+                      vbl_array_1d<float>* fRmap,
+                      vbl_array_1d<float>* fGmap,
+                      vbl_array_1d<float>* fBmap,
+                      vbl_array_1d<float>* fAmap)
+{
+  
+  assert(pixels);
+  assert(!hardware_map||format != GL_LUMINANCE||fLmap);
+  assert(!hardware_map||format != GL_RGB||fRmap&&fGmap&&fBmap);
+  assert(!hardware_map||format != GL_RGBA||fRmap&&fGmap&&fBmap&&fAmap);
 
-  // Restore previous values.
-  glPixelTransferi(GL_MAP_COLOR, map_color);
-  glPixelStorei(GL_UNPACK_ALIGNMENT,   alignment);
-  glPixelStorei(GL_UNPACK_ROW_LENGTH,  row_length);
-  glPixelStorei(GL_UNPACK_SKIP_ROWS  , skip_pixels);
-  glPixelStorei(GL_UNPACK_SKIP_PIXELS, skip_rows);
+  // Store old transfer characteristics for restoring it in a bit.
+  GLint alignment, row_length, table_size, skip_pixels, skip_rows;
+  GLboolean map_color;
+  GL_setup(format, type, hardware_map, alignment, row_length,
+           skip_pixels, skip_rows, table_size, map_color, fLmap, fRmap,
+           fGmap, fBmap, fAmap);
+  // Set pixel transfer characteristics.
+  glPixelStorei(GL_UNPACK_ALIGNMENT,   1);         // use byte alignment for now.
+  glPixelStorei(GL_UNPACK_ROW_LENGTH,  w);         // size of image rows.
+  glPixelZoom( zoomx+0.001, zoomy+0.001 );       // something wierd happens
+                                                   // for identity zoom
+  vgui_accelerate::instance()->vgui_glDrawPixels(w, // Size of pixel rectangle
+                                                 h, // to be written to frame buffer.
+                                                 format,
+                                                 type,
+                                                 pixels);
 
+  GL_restore(map_color, alignment, row_length, skip_pixels, skip_rows);
   return true; // could do
 }
 

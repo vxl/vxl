@@ -10,7 +10,9 @@
 
 #include <vcl_iostream.h>
 #include <vul/vul_timer.h>
+#include <vil/vil_property.h>
 #include <vil/vil_image_resource.h>
+#include <vil/vil_pyramid_image_resource.h>
 #include <vil/vil_image_view.h>
 #include <vgui/vgui_section_render.h>
 #include "vgui_gl.h"
@@ -22,6 +24,7 @@
 static const bool debug = false;
 #define trace if (true) { } else vcl_cerr
 
+//#define RENDER_TIMER
 
 vgui_vil_image_renderer::
 vgui_vil_image_renderer()
@@ -101,6 +104,16 @@ render_directly(vgui_range_map_params_sptr const& rmp)
     this->draw_pixels();
     return true;
   }
+  //Get the viewport parameters
+  unsigned i0=0, j0=0;
+  unsigned ni =the_image_->ni(), nj=the_image_->nj();
+  float zoomx = 1, zoomy = -1;
+  pixel_view(i0, ni, j0, nj, zoomx, zoomy);
+  //Check if the resource is a pyramid image
+  float actual_scale = 1.0f;
+  vil_pyramid_image_resource_sptr pyr;
+  if(the_image_->get_property(vil_property_pyramid))
+    pyr = (vil_pyramid_image_resource*)the_image_.ptr();
   vul_timer t;
   //we are guaranteed that the image and range map are present
   //further we know that pixel type unsigned char or unsigned short
@@ -115,7 +128,13 @@ render_directly(vgui_range_map_params_sptr const& rmp)
    case VIL_PIXEL_FORMAT_BYTE:
     {
       vgui_range_map<unsigned char> rm(*rmp);
-      vil_image_view<unsigned char> view = the_image_->get_view();
+      vil_image_view<unsigned char> view; 
+      if(!pyr)
+        view = the_image_->get_view(i0, ni, j0, nj);
+      else
+        view = pyr->get_copy_view(i0, ni, j0, nj, zoomx, actual_scale);
+      unsigned sni = view.ni(), snj = view.nj();
+      zoomx/=actual_scale;       zoomy/=actual_scale; 
       void* buf = view.top_left_ptr();
       switch ( the_image_->nplanes() )
       {
@@ -124,12 +143,14 @@ render_directly(vgui_range_map_params_sptr const& rmp)
           vbl_array_1d<float> fLmap = rm.fLmap();
           if (!fLmap.size())
             return false;
-          if (vgui_section_render(buf, view.ni(), view.nj(),
-                                 0, 0, view.ni(), view.nj(),
-                                 GL_LUMINANCE, GL_UNSIGNED_BYTE, true, &fLmap))
+          if (vgui_view_render(buf, sni, snj,
+                               zoomx, zoomy,
+                               GL_LUMINANCE, GL_UNSIGNED_BYTE, true, &fLmap))
           {
+#ifdef RENDER_TIMER
             vcl_cout << "Directly Byte Luminance Rendered in "
                      << t.real() << "msecs\n";
+#endif
             valid_buffer_ = false;
             buffer_params_ = rmp;
             return true;
@@ -143,13 +164,15 @@ render_directly(vgui_range_map_params_sptr const& rmp)
           vbl_array_1d<float> fBmap = rm.fBmap();
           if (!(fRmap.size()&&fGmap.size()&&fBmap.size()))
             return false;
-          if (vgui_section_render(buf, view.ni(), view.nj(),
-                                  0, 0, view.ni(), view.nj(),
-                                  GL_RGB, GL_UNSIGNED_BYTE, true,
-                                  0, &fRmap, &fGmap, &fBmap))
+          if (vgui_view_render(buf, sni, snj,
+                               zoomx, zoomy,
+                               GL_RGB, GL_UNSIGNED_BYTE, true,
+                               0, &fRmap, &fGmap, &fBmap))
           {
+#ifdef RENDER_TIMER
             vcl_cout << "Directly Byte RGB Rendered in "
                      << t.real() << "msecs\n";
+#endif
             valid_buffer_ = false;
             buffer_params_ = rmp;
             return true;
@@ -164,13 +187,15 @@ render_directly(vgui_range_map_params_sptr const& rmp)
           vbl_array_1d<float> fAmap = rm.fAmap();
           if (!(fRmap.size()&&fGmap.size()&&fBmap.size()&&fAmap.size()))
             return false;
-          if (vgui_section_render(buf, view.ni(), view.nj(),
-                                  0, 0, view.ni(), view.nj(),
-                                  GL_RGBA, GL_UNSIGNED_BYTE, true,
-                                  0, &fRmap, &fGmap, &fBmap, &fAmap))
+          if (vgui_view_render(buf, sni, snj,
+                               zoomx, zoomy,
+                               GL_RGBA, GL_UNSIGNED_BYTE, true,
+                               0, &fRmap, &fGmap, &fBmap, &fAmap))
           {
+#ifdef RENDER_TIMER
             vcl_cout << "Directly Byte RGBA Rendered in "
                      << t.real() << "msecs\n";
+#endif
             valid_buffer_ = false;
             buffer_params_ = rmp;
             return true;
@@ -187,14 +212,23 @@ render_directly(vgui_range_map_params_sptr const& rmp)
       vbl_array_1d<float> fLmap = rm.fLmap();
       if (!fLmap.size())
         return false;
-      vil_image_view<unsigned short> view = the_image_->get_view();
+
+      vil_image_view<unsigned short> view;
+      if(!pyr)
+        view = the_image_->get_view(i0, ni, j0, nj);
+      else
+        view = pyr->get_copy_view(i0, ni, j0, nj, zoomx, actual_scale);
+      unsigned sni = view.ni(), snj = view.nj();
+      zoomx/=actual_scale;       zoomy/=actual_scale; 
       void* buf = view.top_left_ptr();
-      if (vgui_section_render(buf, view.ni(), view.nj(),
-                              0, 0, view.ni(), view.nj(),
-                              GL_LUMINANCE, GL_UNSIGNED_SHORT, true, &fLmap))
+      if (vgui_view_render(buf,  sni, snj,
+                           zoomx, zoomy,
+                           GL_LUMINANCE, GL_UNSIGNED_SHORT, true, &fLmap))
       {
+#ifdef RENDER_TIMER
         vcl_cout << "Directly Short Luminance Rendered in "
                  << t.real() << "msecs\n";
+#endif
         valid_buffer_ = false;
         buffer_params_ = rmp;
         return true;
