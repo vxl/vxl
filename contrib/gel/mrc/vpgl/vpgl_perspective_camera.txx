@@ -269,18 +269,18 @@ bool vpgl_perspective_decomposition( const vnl_matrix_fixed<T,3,4>& camera_matri
 
 //-------------------------------------------
 template <class T>
-vpgl_perspective_camera<T> vpgl_align_down( 
+vpgl_perspective_camera<T> vpgl_align_down(
   const vpgl_perspective_camera<T>& p0,
   const vpgl_perspective_camera<T>& p1 )
 {
   vpgl_perspective_camera<T> new_camera;
   new_camera.set_calibration( p0.get_calibration() );
   new_camera.set_rotation_matrix( p1.get_rotation_matrix()*p0.get_rotation_matrix().get_inverse() );
-  vgl_homg_point_3d<T> a0 = 
+  vgl_homg_point_3d<T> a0 =
     p0.get_rotation_matrix()*vgl_homg_point_3d<T>( p0.get_camera_center() );
-  vgl_homg_point_3d<T> a1 = 
+  vgl_homg_point_3d<T> a1 =
     p0.get_rotation_matrix()*vgl_homg_point_3d<T>( p1.get_camera_center() );
-  vgl_point_3d<T> new_camera_center( 
+  vgl_point_3d<T> new_camera_center(
     a1.x()/a1.w() - a0.x()/a0.w(),
     a1.y()/a1.w() - a0.y()/a0.w(),
     a1.z()/a1.w() - a0.z()/a0.w() );
@@ -291,16 +291,16 @@ vpgl_perspective_camera<T> vpgl_align_down(
 
 //-------------------------------------------
 template <class T>
-vpgl_perspective_camera<T> vpgl_align_up( 
+vpgl_perspective_camera<T> vpgl_align_up(
   const vpgl_perspective_camera<T>& p0,
   const vpgl_perspective_camera<T>& p1 )
 {
   vpgl_perspective_camera<T> new_camera;
   new_camera.set_calibration( p0.get_calibration() );
   new_camera.set_rotation_matrix( p1.get_rotation_matrix()*p0.get_rotation_matrix() );
-  vgl_homg_point_3d<T> a = 
+  vgl_homg_point_3d<T> a =
     p0.get_rotation_matrix().get_inverse()*vgl_homg_point_3d<T>( p1.get_camera_center() );
-  vgl_point_3d<T> new_camera_center( 
+  vgl_point_3d<T> new_camera_center(
     p0.get_camera_center().x() + a.x()/a.w(),
     p0.get_camera_center().y() + a.y()/a.w(),
     p0.get_camera_center().z() + a.z()/a.w() );
@@ -446,10 +446,10 @@ template class vpgl_perspective_camera<T >; \
 template bool vpgl_is_rotation( const vgl_h_matrix_3d<T >& H ); \
 template bool vpgl_perspective_decomposition( \
   const vnl_matrix_fixed<T,3,4>& camera_matrix, vpgl_perspective_camera<T >& p_camera ); \
-template vpgl_perspective_camera<T> vpgl_align_down( \
-  const vpgl_perspective_camera<T>& p0, const vpgl_perspective_camera<T>& p1 ); \
-template vpgl_perspective_camera<T> vpgl_align_up( \
-  const vpgl_perspective_camera<T>& p0, const vpgl_perspective_camera<T>& p1 ); \
+template vpgl_perspective_camera<T > vpgl_align_down( \
+  const vpgl_perspective_camera<T >& p0, const vpgl_perspective_camera<T >& p1 ); \
+template vpgl_perspective_camera<T > vpgl_align_up( \
+  const vpgl_perspective_camera<T >& p0, const vpgl_perspective_camera<T >& p1 ); \
 template void vsl_b_read(vsl_b_istream &is, vpgl_perspective_camera<T >* &p); \
 template void vsl_b_write(vsl_b_ostream &os, const vpgl_perspective_camera<T > * p); \
 template vcl_ostream& operator<<(vcl_ostream&, const vpgl_perspective_camera<T >&)
