@@ -14,7 +14,6 @@
 #include <vcl_fstream.h>
 
 //: Compute a mask where the regions in each slice of a 3D image bounded by contours are set to "on"
-
 void vil3d_fill_boundary(vil3d_image_view<bool>& bool_image)
 {
   unsigned ni = bool_image.ni();
@@ -58,8 +57,7 @@ void vil3d_fill_boundary(vil3d_image_view<bool>& bool_image)
 }
 
 //: Follow the current boundary in the current slice.
-//  labelling boundary pixels and background pixels
-//  that border the boundary.
+//  labeling boundary pixels and background pixels that border the boundary.
 void label_boundary_and_bkg(vil3d_image_view<int> &image,int i,int j, int k, int boundary_label, int background_label)
 {
   unsigned ni = image.ni();
