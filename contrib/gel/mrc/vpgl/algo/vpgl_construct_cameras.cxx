@@ -3,12 +3,13 @@
 //:
 // \file
 
+#include <vcl_cmath.h> // for std::abs
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_double_4.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vpgl/vpgl_fundamental_matrix.h>
-#include "vpgl_fm_compute_8_point.h"
+#include <vpgl/algo/vpgl_fm_compute_8_point.h>
 
 //: constructor
 vpgl_construct_cameras::vpgl_construct_cameras()
@@ -24,17 +25,16 @@ vpgl_construct_cameras::vpgl_construct_cameras(
     points0_=p0;
     points1_=p1;
 
-    if( p0.size() < 8 ) 
+    if ( p0.size() < 8 )
       vcl_cerr << "ERROR: vpgl_construct_cameras: need at least 7 correspondences.\n";
 
-    if( K == NULL ){
+    if ( K == NULL ) {
       K_[0][0]=2000;K_[0][1]=0;K_[0][2]=512;
       K_[1][0]=0;K_[1][1]=2000;K_[1][2]=384;
       K_[2][0]=0;K_[2][1]=0;K_[2][2]=1;
     }
     else
       K_ = K->get_matrix();
-
 }
 
 vpgl_construct_cameras::~vpgl_construct_cameras()
@@ -62,14 +62,14 @@ bool vpgl_construct_cameras::construct()
     fmcomp.compute( p0, p1, fm );
 
     double fm_error = 0;
-    for( int i = 0; i < p0.size(); i++ ){
+    for ( int i = 0; i < p0.size(); i++ ) {
       vnl_vector<double> pt0(3), pt1(3);
       pt0(0) = p0[i].x(); pt0(1) = p0[i].y(); pt0(2) = 1;
       pt1(0) = p1[i].x(); pt1(1) = p1[i].y(); pt1(2) = 1;
       vnl_vector<double> m = fm.get_matrix()*pt0;
-      fm_error += abs( pt1(0)*m(0)+pt1(1)*m(1)+pt1(2)*m(2) );
+      fm_error += vcl_abs( pt1(0)*m(0)+pt1(1)*m(1)+pt1(2)*m(2) );
     }
-    if( fm_error > .2 ){
+    if ( fm_error > .2 ) {
       vcl_cerr << "\nWARNING: vpgl_construct_cameras: fundamental matrix error is " <<
         fm_error << '\n';
     }
@@ -81,7 +81,7 @@ bool vpgl_construct_cameras::construct()
     //: computing the essential matrix
     E_=Kt*fm.get_matrix()*K_;
     vnl_double_3x3 U, V, W;
-    
+
     W[0][0]=0;W[0][1]=-1;W[0][2]=0;
     W[1][0]=1;W[1][1]=0;W[1][2]=0;
     W[2][0]=0;W[2][1]=0;W[2][2]=1;
@@ -101,26 +101,27 @@ bool vpgl_construct_cameras::construct()
     vgl_point_2d<double> pnorm2(point2d2[0]/point2d2[2],point2d2[1]/point2d2[2]);
 
     // checking for the correct combination of cameras
-    for( int c = 0; c < 4; c++ ){
+    for ( int c = 0; c < 4; c++ )
+    {
       vnl_double_3x3 R;
       vnl_vector<double> t;
-      if( c == 0 ){ //case 1
+      if ( c == 0 ) { //case 1
         R=U*W.transpose()*V.transpose();
         t=U.get_column(2);
       }
-      if( c == 1 ){ //case 2
+      if ( c == 1 ) { //case 2
         R=U*W*V.transpose();
         t=U.get_column(2);
       }
-      if( c == 2 ){ //case 3
+      if ( c == 2 ) { //case 3
         R=U*W.transpose()*V.transpose();
         t=-U.get_column(2);
       }
-      if( c == 3 ){ //case 4
+      if ( c == 3 ) { //case 4
         R=U*W*V.transpose();
         t=-U.get_column(2);
-      } 
-      if( vnl_det<double>( R ) < 0 ) R = -R;
+      }
+      if ( vnl_det<double>( R ) < 0 ) R = -R;
       vnl_vector<double> cc = -R.transpose()*t;
       vnl_vector_fixed<double,3> zeros(0.0);
       vgl_h_matrix_3d<double> R_vgl(R,zeros);
@@ -131,7 +132,7 @@ bool vpgl_construct_cameras::construct()
       vgl_homg_point_3d<double> ph3d(p3d);
       if (!P1_.is_behind_camera(ph3d) && !P2_.is_behind_camera(ph3d))
         break;
-      if( c == 3 ){
+      if ( c == 3 ) {
         vcl_cerr << "ERROR: vpgl_construct_cameras failed.\n";
         return false;
       }
@@ -140,32 +141,31 @@ bool vpgl_construct_cameras::construct()
     P1_.set_calibration( K_ );
     P2_.set_calibration( K_ );
     return true;
-};
+}
 
 
 void
-vpgl_construct_cameras::get_world_points( 
+vpgl_construct_cameras::get_world_points(
   vcl_vector< vgl_point_3d<double> >& world_points )
 {
   world_points.clear();
-  for( int p = 0; p < points0_.size(); p++ ){
+  for ( int p = 0; p < points0_.size(); p++ ) {
     world_points.push_back( triangulate_3d_point(
       points0_[p], P1_.get_matrix(), points1_[p], P2_.get_matrix() ) );
   }
-};
-
+}
 
 
 vgl_point_3d<double>
 vpgl_construct_cameras::triangulate_3d_point(
-  const vgl_point_2d<double>& x1, 
+  const vgl_point_2d<double>& x1,
   const vnl_double_3x4& P1,
-  const vgl_point_2d<double>& x2, 
+  const vgl_point_2d<double>& x2,
   const vnl_double_3x4& P2 )
 {
   vnl_double_4x4 A;
 
-  for (int i=0; i<4; i++){
+  for (int i=0; i<4; i++) {
     A[0][i] = x1.x()*P1[2][i] - P1[0][i];
     A[1][i] = x1.y()*P1[2][i] - P1[1][i];
     A[2][i] = x2.x()*P2[2][i] - P2[0][i];
