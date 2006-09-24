@@ -26,16 +26,18 @@
 #include <vsl/vsl_binary_io.h>
 
 
-//: This class implements the perspective camera class as described in Hartley &
-//  Zisserman as a finite camera.  This is the camera model based on three objects:
+//: This class implements the perspective camera class as described in Hartley & Zisserman as a finite camera.
+//  This is the camera model based on three objects:
 //  the camera calibration matrix (see "vpgl_calibration_matrix.h"), the camera center,
 //  and the rotation of the camera from its canonical orientation staring down the
 //  positive z axis.
 //
 //  All rotation matrices entered will be checked that they are indeed rotations, i.e.
 //  that R.transpose()*R = Identity and in the form:
+//  \verbatim
 //   [ R 0 ]
 //   [ 0 1 ]
+//  \endverbatim
 //
 //  For adding to this class:
 //
@@ -59,7 +61,6 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
 
   //: Destructor
   virtual ~vpgl_perspective_camera(){}
-
 
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
@@ -92,7 +93,7 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
   virtual vgl_homg_point_3d<T> camera_center() const
   { return vgl_homg_point_3d<T>(camera_center_); }
 
-  //: static public functions
+  // static public functions -----------------------------------------------
 
   //: Post-multiply this perspective camera with a 3-d Euclidean transformation
   static  vpgl_perspective_camera<T>
@@ -145,7 +146,6 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
 // External Functions:-------------------------------------------------------------
 
 //: Write vpgl_perspective_camera to stream
-
 template <class Type>
 vcl_ostream&  operator<<(vcl_ostream& s, vpgl_perspective_camera<Type> const& p);
 
@@ -153,7 +153,7 @@ vcl_ostream&  operator<<(vcl_ostream& s, vpgl_perspective_camera<Type> const& p)
 template <class Type>
 vcl_istream&  operator>>(vcl_istream& s, vpgl_perspective_camera<Type>& p)
 {
-  //not implemented
+  //not yet implemented - FIXME
   return s;
 }
 
@@ -174,14 +174,12 @@ template <class T>
 bool vpgl_perspective_decomposition( const vnl_matrix_fixed<T,3,4>& camera_matrix,
                                      vpgl_perspective_camera<T>& p_camera );
 
-//: Changes the coordinate system of camera p1 such that the same change would
-// transform p0 to K[I|0].
+//: Changes the coordinate system of camera p1 such that the same change would transform p0 to K[I|0].
 template <class T>
 vpgl_perspective_camera<T> vpgl_align_down( const vpgl_perspective_camera<T>& p0,
                                             const vpgl_perspective_camera<T>& p1 );
 
-//: Changes the coordinate system of camera p1 such that the same change would
-// transform K[I|0] to p0.
+//: Changes the coordinate system of camera p1 such that the same change would transform K[I|0] to p0.
 template <class T>
 vpgl_perspective_camera<T> vpgl_align_up( const vpgl_perspective_camera<T>& p0,
                                           const vpgl_perspective_camera<T>& p1 );
