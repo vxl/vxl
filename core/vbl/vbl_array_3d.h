@@ -57,9 +57,12 @@ class vbl_array_3d
   }
 
   vbl_array_3d(vbl_array_3d<T> const& that)
+  : element_(0), row1_count_(0), row2_count_(0), row3_count_(0)
   {
-    construct(that.row1_count_,that.row2_count_,that.row3_count_);
-    set(that.data_block());
+    if(that.element_){
+      construct(that.row1_count_,that.row2_count_,that.row3_count_);
+      set(that.data_block());
+    }
   }
 
   ~vbl_array_3d () { destruct(); }
