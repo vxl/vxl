@@ -62,7 +62,7 @@ bool vpgl_construct_cameras::construct()
     fmcomp.compute( p0, p1, fm );
 
     double fm_error = 0;
-    for ( int i = 0; i < p0.size(); i++ ) {
+    for ( unsigned int i = 0; i < p0.size(); ++i ) {
       vnl_vector<double> pt0(3), pt1(3);
       pt0(0) = p0[i].x(); pt0(1) = p0[i].y(); pt0(2) = 1;
       pt1(0) = p1[i].x(); pt1(1) = p1[i].y(); pt1(2) = 1;
@@ -149,7 +149,7 @@ vpgl_construct_cameras::get_world_points(
   vcl_vector< vgl_point_3d<double> >& world_points )
 {
   world_points.clear();
-  for ( int p = 0; p < points0_.size(); p++ ) {
+  for ( unsigned int p = 0; p < points0_.size(); ++p ) {
     world_points.push_back( triangulate_3d_point(
       points0_[p], P1_.get_matrix(), points1_[p], P2_.get_matrix() ) );
   }
