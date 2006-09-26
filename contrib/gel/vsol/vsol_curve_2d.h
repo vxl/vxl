@@ -28,6 +28,7 @@ class vsol_line_2d;
 class vsol_conic_2d;
 class vsol_polyline_2d;
 class vsol_digital_curve_2d;
+class dbsol_circ_arc_2d;
 
 class vsol_curve_2d : public vsol_spatial_object_2d
 {
@@ -35,6 +36,7 @@ class vsol_curve_2d : public vsol_spatial_object_2d
   enum vsol_curve_2d_type
   { CURVE_NO_TYPE=0,
     LINE,
+	CIRCULAR_ARC,
     CONIC,
     POLYLINE,
     DIGITAL_CURVE,
@@ -88,6 +90,13 @@ class vsol_curve_2d : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   virtual vsol_line_2d const*cast_to_line()const{return 0;}
   virtual vsol_line_2d *cast_to_line() {return 0;}
+
+  //---------------------------------------------------------------------------
+  //: Return `this' if `this' is an conic, 0 otherwise
+  //---------------------------------------------------------------------------
+  virtual dbsol_circ_arc_2d const*cast_to_circ_arc()const{return 0;}
+  virtual dbsol_circ_arc_2d *cast_to_circ_arc() {return 0;}
+
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an conic, 0 otherwise
