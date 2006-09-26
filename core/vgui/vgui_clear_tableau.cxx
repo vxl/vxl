@@ -23,9 +23,10 @@ vgui_clear_tableau::vgui_clear_tableau()
 {
   // These are the initial glClear() colour
   // values given in the OpenGL man pages.
-  colour[0] = 0;
-  colour[1] = 0;
-  colour[2] = 0;
+  // ozge: made into white
+  colour[0] = 0.95;
+  colour[1] = 0.95;
+  colour[2] = 0.95;
   colour[3] = 0;
 
   clearing_ = true;
