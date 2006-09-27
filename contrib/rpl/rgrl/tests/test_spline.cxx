@@ -6,10 +6,9 @@
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_math.h> // for vnl_math_isnan()
 
-namespace {
-
 vnl_random random;
 
+static
 double
 spline_1d_value(double u, vnl_vector<double> c)
 {
@@ -28,6 +27,7 @@ spline_1d_value(double u, vnl_vector<double> c)
            ) / 6;
 }
 
+static
 double
 spline_2d_value( vnl_vector<double> pt, vnl_vector<double> c, vnl_vector< unsigned > m )
 {
@@ -56,6 +56,7 @@ spline_2d_value( vnl_vector<double> pt, vnl_vector<double> c, vnl_vector< unsign
   return spline_1d_value( v, control_v );
 }
 
+static
 double
 spline_3d_value(vnl_vector<double> pt, vnl_vector<double> c, vnl_vector< unsigned > m )
 {
@@ -91,6 +92,7 @@ spline_3d_value(vnl_vector<double> pt, vnl_vector<double> c, vnl_vector< unsigne
   return spline_1d_value( w, control_w );
 }
 
+static
 void
 test_1d_spline()
 {
@@ -119,6 +121,7 @@ test_1d_spline()
   TEST_NEAR_REL(" test random spline value: ", return_spline_value, true_spline_value, 1e-9);
 }
 
+static
 void
 test_2d_spline()
 {
@@ -157,6 +160,7 @@ test_2d_spline()
   TEST_NEAR_REL("test random spline value: ", return_spline_value, true_spline_value, 1e-9);
 }
 
+static
 void
 test_3d_spline()
 {
@@ -219,6 +223,7 @@ test_3d_spline()
   TEST_NEAR_REL(" test spline value: ", return_spline_value, true_spline_value, 1e-9);
 }
 
+static
 void
 test_refine_1d_spline()
 {
@@ -249,6 +254,7 @@ test_refine_1d_spline()
   }
 }
 
+static
 void
 test_refine_2d_spline()
 {
@@ -282,6 +288,7 @@ test_refine_2d_spline()
   }
 }
 
+static
 void
 test_refine_3d_spline()
 {
@@ -316,8 +323,6 @@ test_refine_3d_spline()
     }
   }
 }
-
-} // end anonymous namespace
 
 MAIN( test_spline )
 {
