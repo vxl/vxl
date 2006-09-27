@@ -40,6 +40,7 @@ void vnl_nonlinear_minimizer::reset()
   num_iterations_ = 0;
   num_evaluations_ = 0;
   start_error_ = 0;
+  end_error_ = 0;
 }
 
 //: Called by derived classes after each function evaluation.
