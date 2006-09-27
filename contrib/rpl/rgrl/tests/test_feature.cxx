@@ -11,9 +11,7 @@
 
 #include <rgrl/rgrl_trans_affine.h>
 
-
-namespace {
-
+static
 void
 test_feature_caster()
 {
@@ -27,6 +25,7 @@ test_feature_caster()
   testlib_test_perform( rgrl_feature_caster<rgrl_feature_point>(fsptr) == pf2d );
 }
 
+static
 void
 test_feature_point()
 {
@@ -88,6 +87,7 @@ test_feature_point()
 }
 
 
+static
 void
 test_feature_trace_pt()
 {
@@ -180,6 +180,7 @@ test_feature_trace_pt()
 }
 
 
+static
 void
 test_feature_face()
 {
@@ -277,8 +278,6 @@ test_feature_face()
                ( result->error_projector() - real_proj ).absolute_value_max(), 0, 0.05 );
   }
 }
-
-} // end anonymous namespace
 
 MAIN( test_feature )
 {
