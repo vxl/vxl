@@ -18,7 +18,7 @@
 // version 1 API.  Linking to both version of libdc1394 will result
 // in linking errors.
 //
-// Currently this code works with libdc1394 version 2.0.0-pre7.
+// Currently this code works with libdc1394 version 2.0.0-rc3.
 // The authors note that the libdc1394 API is subject to change in
 // prerelease version.  As a result, the vidl2_dc1394_istream is
 // is subject to change with it.
@@ -46,8 +46,7 @@ class vidl2_dc1394_istream
   virtual ~vidl2_dc1394_istream();
 
   //: Open a new stream using a filename
-  virtual bool open(const vcl_string& device_filename = "/dev/video1394/0",
-                    unsigned int num_dma_buffers = 2,
+  virtual bool open(unsigned int num_dma_buffers = 2,
                     bool drop_frames = false,
                     const vidl2_iidc1394_params& params = vidl2_iidc1394_params());
 

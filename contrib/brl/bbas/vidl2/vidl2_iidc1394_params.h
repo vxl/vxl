@@ -178,11 +178,14 @@ struct vidl2_iidc1394_params::valid_options
     vcl_string model;
     speed_t speed;
     vcl_vector<valid_mode> modes;
+    video_mode_t curr_mode;
+    frame_rate_t curr_frame_rate;
   };
 
   //: A vector of the valid cameras
   // one object for each camera detected on the bus
   vcl_vector<camera> cameras;
+
 };
 
 #endif // vidl2_iidc1394_params_h_

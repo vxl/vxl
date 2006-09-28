@@ -326,6 +326,8 @@ vidl2_dc1394_istream* vidl2_gui_param_dialog::dc1394_istream()
     vgui_dialog dlg("Select a capture mode");
     vcl_vector<vcl_string> mode_names;
     for (unsigned int i=0; i<cam.modes.size(); ++i){
+      if(cam.modes[i].mode ==  cam.curr_mode)
+        mode_id = i;
       mode_names.push_back(vidl2_iidc1394_params::video_mode_string(cam.modes[i].mode));
     }
     dlg.choice("Mode",mode_names,mode_id);
@@ -348,6 +350,8 @@ vidl2_dc1394_istream* vidl2_gui_param_dialog::dc1394_istream()
       vgui_dialog dlg("Select a frame rate");
       vcl_vector<vcl_string> rate_names;
       for (unsigned int i=0; i<m.frame_rates.size(); ++i){
+        if(m.frame_rates[i] == cam.curr_frame_rate)
+          fr_id = i;
         vcl_stringstream name;
         name << vidl2_iidc1394_params::frame_rate_val(m.frame_rates[i]) << " fps";
         rate_names.push_back(name.str());
@@ -359,13 +363,10 @@ vidl2_dc1394_istream* vidl2_gui_param_dialog::dc1394_istream()
     params.frame_rate_ = m.frame_rates[fr_id];
   }
 
-  static vcl_string dev_file = "/dev/video1394/0";
   static unsigned int num_dma_buffers = 2;
   static bool drop_frames = false;
   {
-    vgui_dialog dlg("Enter Device File");
-    vcl_string regexp("*");
-    dlg.file("Device",regexp,dev_file);
+    vgui_dialog dlg("Enter DMA Options");
     dlg.field("Number of DMA Buffers",num_dma_buffers);
     dlg.checkbox("Drop Frames",drop_frames);
     if (!dlg.ask())
@@ -373,7 +374,7 @@ vidl2_dc1394_istream* vidl2_gui_param_dialog::dc1394_istream()
   }
 
   vidl2_dc1394_istream* i_stream = new vidl2_dc1394_istream();
-  i_stream->open(dev_file, num_dma_buffers, drop_frames, params);
+  i_stream->open(num_dma_buffers, drop_frames, params);
   if (!i_stream || !i_stream->is_open()) {
     vgui_error_dialog("Failed to open the input stream");
     delete i_stream;

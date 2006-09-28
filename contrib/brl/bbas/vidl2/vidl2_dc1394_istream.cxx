@@ -74,17 +74,32 @@ vidl2_dc1394_istream::
 //: Open a new stream using a filename
 bool
 vidl2_dc1394_istream::
-open(const vcl_string& device_filename,
-     unsigned int num_dma_buffers,
+open(unsigned int num_dma_buffers,
      bool drop_frames,
      const vidl2_iidc1394_params& params)
 {
   // Close any currently opened file
   close();
 
-  is_->camera_info_ = dc1394_new_camera(params.port_, params.node_);
+  dc1394ring_buffer_policy_t rb_policy = drop_frames? DC1394_RING_BUFFER_LAST: DC1394_RING_BUFFER_NEXT;
 
-  if( dc1394_update_camera_info(is_->camera_info_) != DC1394_SUCCESS){
+  dc1394camera_t **dccameras=NULL;
+  unsigned int camnum=0;
+
+  // find the cameras using classic libdc functions:
+  unsigned int err = dc1394_find_cameras(&dccameras,&camnum);
+
+  // find the camera with matching port and node and delete the rest
+  for (unsigned int i=0; i<camnum; ++i) {
+    if(dccameras[i]->port == params.port_ && dccameras[i]->node == params.node_)
+      is_->camera_info_ = dccameras[i];
+    else
+      dc1394_free_camera(dccameras[i]);
+  }
+  free(dccameras);
+
+
+  if( !is_->camera_info_ || dc1394_update_camera_info(is_->camera_info_) != DC1394_SUCCESS){
     vcl_cerr << "Failed to find camera on port "
         <<params.port_<<" node "<<params.node_ << ".\n";
     close();
@@ -114,14 +129,8 @@ open(const vcl_string& device_filename,
   else
     is_->camera_info_->framerate = dc1394framerate_t(params.frame_rate_);
 
-  if(device_filename != ""){
-    char* dname = const_cast<char*>(device_filename.c_str());
-    if(dc1394_capture_set_dma_device_filename(is_->camera_info_,dname) != DC1394_SUCCESS) {
-      vcl_cerr << "Failed to set DMA device filename: "<<device_filename<<'\n';
-      return false;
-    }
-  }
-  if (dc1394_capture_setup_dma(is_->camera_info_,num_dma_buffers, drop_frames) != DC1394_SUCCESS) {
+
+  if (dc1394_capture_setup_dma(is_->camera_info_,num_dma_buffers, rb_policy) != DC1394_SUCCESS) {
     vcl_cerr << "Failed to setup DMA capture.\n";
     return false;
   }
@@ -140,6 +149,10 @@ open(const vcl_string& device_filename,
     }
     if (dc1394_video_set_transmission(is_->camera_info_, DC1394_ON) == DC1394_SUCCESS) {
       vcl_cerr << "power turned on\n";
+    }
+    else{
+      vcl_cerr << "unable to power on\n";
+      return false;
     }
     return true;
   }
@@ -202,6 +215,8 @@ valid_params(vidl2_iidc1394_params::valid_options& options)
     options.cameras[i].port = dccameras[i]->port;
     options.cameras[i].vendor = dccameras[i]->vendor;
     options.cameras[i].model = dccameras[i]->model;
+    options.cameras[i].curr_mode = static_cast<vidl2_iidc1394_params::video_mode_t>(dccameras[i]->video_mode);
+    options.cameras[i].curr_frame_rate = static_cast<vidl2_iidc1394_params::frame_rate_t>(dccameras[i]->framerate);
 
     dc1394video_modes_t modes;
     if ( dc1394_video_get_supported_modes(dccameras[i], &modes ) <0 ) {
@@ -228,7 +243,7 @@ valid_params(vidl2_iidc1394_params::valid_options& options)
   if (camnum > 0) {
     // free the cameras
     for (unsigned int i=0; i<camnum; ++i)
-      free(dccameras[i]);
+      dc1394_free_camera(dccameras[i]);
 
     free(dccameras);
   }
@@ -313,10 +328,10 @@ vidl2_dc1394_istream::current_frame()
     if(is_->cur_frame_)
       is_->cur_frame_->invalidate();
 
-    is_->cur_frame_ = new vidl2_shared_frame(is_->camera_info_->capture.capture_buffer,
-                                        is_->camera_info_->capture.frame_width,
-                                        is_->camera_info_->capture.frame_height,
-                                        is_->pixel_format_);
+    is_->cur_frame_ = new vidl2_shared_frame(dc1394_capture_get_dma_buffer(is_->camera_info_),
+                                             dc1394_capture_get_width(is_->camera_info_),
+                                             dc1394_capture_get_height(is_->camera_info_),
+                                             is_->pixel_format_);
 
     is_->cur_frame_valid_ = true;
   }
