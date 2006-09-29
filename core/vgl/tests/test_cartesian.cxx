@@ -112,6 +112,9 @@ static void test_vector_3d()
   TEST("dot_product", dot_product(v,v1), 4.890625);
   TEST("cross_product", cross_product(v1,v).z(), 0.625*1.5);
   TEST_NEAR("angle", angle(v1,v), 0.18939573, 1e-8); // 10^51'06"
+  vgl_vector_3d<double> v3(-0.20177410616759889,0,0.97943208548641414),
+    v4(-0.17524370403971115,0,0.85065080835203988);
+  TEST_NEAR("pathalogical angle", angle(v3,v4), 0, 1e-10); // "
 
   TEST("parallel", (parallel(v,v)), true);
   TEST("parallel", (parallel(v,vgl_vector_3d<float>())), true); // parallel to (0,0)
@@ -130,6 +133,7 @@ static void test_vector_3d()
   TEST("!orthogonal", orthogonal(v,v1,0.1), false); // even not with tolorance
   TEST("orthogonal", orthogonal(v,cross_product(v1,v)), true);
   TEST("orthogonal", orthogonal(v1,cross_product(v1,v)), true);
+
 }
 
 static void test_point_2d()

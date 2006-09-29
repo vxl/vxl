@@ -18,7 +18,17 @@ double vgl_vector_3d<T>::length() const
 template<class T>
 double angle(vgl_vector_3d<T> const& a, vgl_vector_3d<T> const& b)
 {
-  return vcl_acos(cos_angle(a,b));
+  double ca = cos_angle(a,b);
+  // Deal with numerical errors giving values slightly outside range.
+  if (ca>=-1.0)
+  {
+    if (ca<=1.0)
+      return vcl_acos(ca);
+    else
+      return 0;
+  }
+  else
+    return 3.14159265358979323846;
 }
 
 template <class T>
