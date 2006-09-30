@@ -6,7 +6,7 @@
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_math.h> // for vnl_math_isnan()
 
-static vnl_random random;
+static vnl_random random_;
 
 static
 double
@@ -113,7 +113,7 @@ test_1d_spline()
   }
   // random point
   vnl_vector<double> pt(1);
-  pt[0] = random.drand32(0,2);
+  pt[0] = random_.drand32(0,2);
   double return_spline_value = spline_1d.f_x( pt );
   vcl_cout << "\nreturn spline value  f(" << pt[0] << ")=" << return_spline_value;
   double true_spline_value = spline_1d_value( pt[0], c );
@@ -149,8 +149,8 @@ test_2d_spline()
   }
   // test random point
   vnl_vector<double> pt(2);
-  pt[0] = random.drand32(0,2);
-  pt[1] = random.drand32(0,2);
+  pt[0] = random_.drand32(0,2);
+  pt[1] = random_.drand32(0,2);
   vcl_cout << pt << vcl_endl;
   double return_spline_value = spline_2d.f_x( pt );
   vcl_cout << "\nreturn spline value  f(" << pt<< ")=" << return_spline_value;
@@ -211,9 +211,9 @@ test_3d_spline()
   }
   // test random point
   vnl_vector<double> pt(3);
-  pt[0] = random.drand32( 0, 2 );
-  pt[1] = random.drand32( 0, 2 );
-  pt[2] = random.drand32( 0, 1 );
+  pt[0] = random_.drand32( 0, 2 );
+  pt[1] = random_.drand32( 0, 2 );
+  pt[2] = random_.drand32( 0, 1 );
   vcl_cout << pt << vcl_endl;
   double return_spline_value = spline_3d.f_x( pt );
   vcl_cout << "\nreturn spline value  f(" << pt<< ")=" << return_spline_value << vcl_endl;
@@ -235,7 +235,7 @@ test_refine_1d_spline()
   vnl_vector< double > c( spline.num_of_control_points() );
 
   for (unsigned i=0; i<spline.num_of_control_points(); ++i )
-    c[ i ] = random.drand32(0,2);
+    c[ i ] = random_.drand32(0,2);
 
   spline.set_control_points( c );
 
@@ -248,7 +248,7 @@ test_refine_1d_spline()
 #endif
   for (unsigned i=0; i < 100; ++i ) {
     vnl_vector< double > p( 1 );
-    p[0] = random.drand32( 0, new_m[0]*0.5 );
+    p[0] = random_.drand32( 0, new_m[0]*0.5 );
     vcl_cout << "f(" <<p[0] << ")= " << spline.f_x( p ) << " => " << refine_spline->f_x( p*2.0 ) << '\n';
     TEST_NEAR_REL( " test refined spline value: ", refine_spline->f_x( p*2.0 ), spline.f_x( p ), 1e-9);
   }
@@ -266,7 +266,7 @@ test_refine_2d_spline()
   vnl_vector< double > c( spline.num_of_control_points() );
 
   for (unsigned i=0; i<c.size(); ++i )
-    c[ i ] = random.drand32(0,5);
+    c[ i ] = random_.drand32(0,5);
 
   spline.set_control_points( c );
 
@@ -279,9 +279,9 @@ test_refine_2d_spline()
 #endif
   for (unsigned i=0; i < 10; ++i ) {
     vnl_vector< double > p( 2 );
-    p[ 0 ] = random.drand32( 0, new_m[0]*0.5 );
+    p[ 0 ] = random_.drand32( 0, new_m[0]*0.5 );
     for (unsigned j=0; j < 10; ++j ) {
-      p[ 1 ] = random.drand32( 0, new_m[1]*0.5 );
+      p[ 1 ] = random_.drand32( 0, new_m[1]*0.5 );
       vcl_cout << "f(" <<p << ")= " << spline.f_x( p ) << " => " << refine_spline->f_x( p*2 ) << '\n';
       TEST_NEAR_REL( " test refined spline value: ", refine_spline->f_x( p*2.0 ), spline.f_x( p ), 1e-9);
     }
@@ -300,7 +300,7 @@ test_refine_3d_spline()
   vnl_vector< double > c( spline.num_of_control_points() );
 
   for (unsigned i=0; i<spline.num_of_control_points(); ++i )
-    c[ i ] = random.drand32(0,10);
+    c[ i ] = random_.drand32(0,10);
 
   spline.set_control_points( c );
 
@@ -313,11 +313,11 @@ test_refine_3d_spline()
 #endif
   for (unsigned i=0; i < 10; ++i ) {
     vnl_vector< double > p( 3 );
-    p[ 0 ] = random.drand32( 0, new_m[0]*0.5 );
+    p[ 0 ] = random_.drand32( 0, new_m[0]*0.5 );
     for (unsigned j=0; j < 10; ++j ) {
-      p[ 1 ] = random.drand32( 0, new_m[1]*0.5 );
+      p[ 1 ] = random_.drand32( 0, new_m[1]*0.5 );
       for (unsigned k=0; k < 10; ++k ) {
-        p[ 2 ] = random.drand32( 0, new_m[2]*0.5 );
+        p[ 2 ] = random_.drand32( 0, new_m[2]*0.5 );
         TEST_NEAR_REL( " test refined spline value: ", refine_spline->f_x( p*2.0 ), spline.f_x( p ), 1e-9);
       }
     }
