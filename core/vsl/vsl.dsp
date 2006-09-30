@@ -207,6 +207,9 @@ SOURCE=.\Templates/vsl_pair_io+int.double-.cxx
 SOURCE=.\Templates/vsl_vector_io+ulong-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vcl_vector+double--.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vsl_pair_io+int.float-.cxx
 # End Source File
 # Begin Source File
