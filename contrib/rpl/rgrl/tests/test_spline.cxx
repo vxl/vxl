@@ -6,7 +6,7 @@
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_math.h> // for vnl_math_isnan()
 
-vnl_random random;
+static vnl_random random;
 
 static
 double
