@@ -95,9 +95,20 @@ template <class T> class bsta_histogram
  //: Increase the count of the bin corresponding to val by mag
   void upcount(T val, T mag);
 
+  //: set the count for a given bin
+  void set_count(const unsigned bin, const T count)
+    {if(bin>0&&bin<nbins_) counts_[bin]=count;}
+    
+  //: array of bin values
+  vcl_vector<T> value_array(){vcl_vector<T> v(nbins_);
+  for(unsigned b = 0; b<nbins_; ++b) v[b]=avg_bin_value(b); return v;}
+
+  //: array of bin counts
+  vcl_vector<T> count_array(){vcl_vector<T> v(nbins_);
+  for(unsigned b = 0; b<nbins_; ++b) v[b]=counts(b); return v;}
+
  //: Smooth the histogram with a Parzen window of sigma
   void parzen(const T sigma);
-
 
   void print() const;
  private:
