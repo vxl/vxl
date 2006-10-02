@@ -147,6 +147,10 @@ void segv_vil_menus::intensity_profile_callback()
   segv_vil_segmentation_manager::instance()->intensity_profile();
 }
 
+void segv_vil_menus::intensity_histogram_callback()
+{
+  segv_vil_segmentation_manager::instance()->intensity_histogram();
+}
 
 //segv_vil_menus definition
 vgui_menu segv_vil_menus::get_menu()
@@ -167,6 +171,7 @@ vgui_menu segv_vil_menus::get_menu()
   menuview.add("Intensity Profile", intensity_profile_callback);
   menuview.add("Set Range Params", set_range_params_callback);
   menuview.add("Inline Histogram Viewer", inline_viewer_callback);
+  menuview.add("Histogram Plot ", intensity_histogram_callback);
   menuview.add("RotateImage ", rotate_image_callback);
   menuview.add("ReduceImage ", reduce_image_callback);
   menuview.add("ExpandImage ", expand_image_callback);

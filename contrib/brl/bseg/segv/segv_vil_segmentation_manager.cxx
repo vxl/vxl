@@ -57,6 +57,7 @@
 #include <bgui/bgui_vtol2D_tableau.h>
 #include <bgui/bgui_picker_tableau.h>
 #include <bgui/bgui_range_adjuster_tableau.h>
+#include <bgui/bgui_image_utils.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_conic_2d.h>
@@ -134,40 +135,17 @@ range_params(vil_image_resource_sptr const& image)
   bool invert = false;
   bool gl_map = false;
   bool cache = true;
-  unsigned min = 0, max = 255;
-  if (image->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
-  {
-    vil_image_view<unsigned char> temp = image->get_view();
-    unsigned char vmin=0, vmax=255;
-    vil_math_value_range<unsigned char>(temp, vmin, vmax);
-    min = static_cast<unsigned>(vmin);
-    max = static_cast<unsigned>(vmax);
-    return  new vgui_range_map_params(min, max, gamma, invert,
-                                      gl_map, cache);
-  }
-  if (image->pixel_format()==VIL_PIXEL_FORMAT_UINT_16)
-  {
-    vil_image_view<unsigned short> temp = image->get_view();
-    unsigned short vmin=0, vmax=60000;
-    vil_math_value_range<unsigned short>(temp, vmin, vmax);
-    min = static_cast<unsigned>(vmin);
-    max = static_cast<unsigned>(vmax);
-    //gl_map = true;
-    return  new vgui_range_map_params(min, max, gamma, invert,
-                                      gl_map, cache);
-  }
-  if (image->pixel_format()==VIL_PIXEL_FORMAT_FLOAT)
-  {
-    vil_image_view<float> temp = image->get_view();
-    float vmin = -vnl_numeric_traits<float>::maxval;
-    float vmax = vnl_numeric_traits<float>::maxval;
-    vil_math_value_range<float>(temp, vmin, vmax);
-    gl_map = true;
-    return  new vgui_range_map_params(vmin, vmax, gamma, invert,
-                                      gl_map, cache);
-  }
 
-  return new vgui_range_map_params(0, 255, gamma, invert,
+  //Check if the image is blocked
+  vil_blocked_image_resource_sptr bir = blocked_image_resource(image);
+  if(bir)
+  { gl_map = true; cache = false;}
+
+  //Get max min parameters
+  bgui_image_utils iu(image);
+  double minv, maxv;
+  iu.range(minv, maxv);
+  return new vgui_range_map_params(minv, maxv, gamma, invert,
                                    gl_map, cache);
 }
 
@@ -585,6 +563,9 @@ void segv_vil_segmentation_manager::load_image()
   }
 
   vgui_range_map_params_sptr rmps = range_params(image);
+
+  if(pyrm)
+    {rmps->use_glPixelMap_ = true; rmps->cache_mapped_pix_ = false;}
 
   if (first_)
   {
@@ -1169,6 +1150,7 @@ void segv_vil_segmentation_manager::intensity_profile()
     delete ip_dialog;
     return;
   }
+delete ip_dialog;
 }
 
 void segv_vil_segmentation_manager::inline_viewer()
@@ -1186,6 +1168,28 @@ void segv_vil_segmentation_manager::inline_viewer()
     return;
 }
 
+void segv_vil_segmentation_manager::intensity_histogram()
+{
+  vil_image_resource_sptr img = selected_image();
+  if (!img||!img->ni()||!img->nj())
+  {
+    vcl_cout << "In segv_vil_segmentation_manager::intensity_histogram() - no image\n";
+    return;
+  }
+  bgui_image_utils iu(img);
+  bgui_graph_tableau_sptr g = iu.hist_graph();
+
+  //popup a profile graph
+  char location[100];
+  vcl_sprintf(location, "Intensity Histogram");
+  vgui_dialog* ip_dialog = g->popup_graph(location);
+  if (!ip_dialog->ask())
+  {
+    delete ip_dialog;
+    return;
+  }
+  delete ip_dialog;
+}
 
 //=== Image Arithmetic (Uses the Image Stack)
 //Add the image in pane 0 to the image in pane 1. Result in pane 2.

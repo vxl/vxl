@@ -48,6 +48,7 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void set_range_params();
   void inline_viewer();
   void intensity_profile();
+  void intensity_histogram();
   void display_images_as_color();
 
   //: image transformation

@@ -50,6 +50,7 @@ class segv_vil_menus
   SEGV_VIL_DLL_DATA static void max_trace_scale_callback();
   SEGV_VIL_DLL_DATA static void inline_viewer_callback();
   SEGV_VIL_DLL_DATA static void intensity_profile_callback();
+  SEGV_VIL_DLL_DATA static void intensity_histogram_callback();
 
 
   SEGV_VIL_DLL_DATA static vgui_menu get_menu();
