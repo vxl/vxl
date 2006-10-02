@@ -100,8 +100,11 @@ class vil_pyramid_image_resource : public vil_image_resource
   virtual vil_image_view_base_sptr get_copy_view(const float scale, float& actual_scale) const
     {return get_copy_view(0, ni(), 0, nj(), scale, actual_scale);}
 
-  //:copy a resource into the pyramid at the specified level
+  //:copy a resource into the pyramid, level is determined by resource scale
   virtual bool put_resource(vil_image_resource_sptr const& resc) = 0;
+
+  //:get an image resource from the pyramid at the specified level
+  virtual vil_image_resource_sptr get_resource(const unsigned level) = 0;
 
   //: a utility function to decimate a resource using blocks
   // The new scale is one half the input resource scale

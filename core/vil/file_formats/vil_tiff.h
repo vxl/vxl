@@ -307,6 +307,9 @@ class vil_tiff_pyramid_resource : public vil_pyramid_image_resource
   // written into the file. Be sure you want to commit to the file.
   bool put_resource(vil_image_resource_sptr const& resc);
 
+  //: returns the pyramid resource at the specified level
+  vil_image_resource_sptr get_resource(const unsigned level);
+
   //: for debug purposes
   void print(const unsigned level)
   { if (level<levels_.size()) levels_[level]->print(level); }

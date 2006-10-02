@@ -88,7 +88,7 @@ static vcl_string level_filename(vcl_string& directory, vcl_string& filename,
 #endif
   vcl_stringstream cs;
   cs << level;
-  return directory + slash + filename + cs.str();
+  return directory + slash + filename + "_" + cs.str();
 }
 
 //: Construct pyramid image files in the directory
@@ -118,7 +118,7 @@ vil_pyramid_image_resource_sptr vil_pyramid_image_list_format::
   else
   {
     blk_base =
-      blocked_image_resource(vil_load_image_resource(full_filename.c_str()));
+      blocked_image_resource(base_image);
     if (!blk_base)
       return 0;
   }

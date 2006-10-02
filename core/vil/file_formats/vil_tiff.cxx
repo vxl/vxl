@@ -1247,4 +1247,18 @@ bool vil_tiff_pyramid_resource::put_resource(vil_image_resource_sptr const& ir)
   int status = TIFFWriteDirectory(t_);
   return status == 1 ;
 }
+//: returns the pyramid resource at the specified level
+vil_image_resource_sptr vil_tiff_pyramid_resource::get_resource(const unsigned level)
+{
+  if (level>=this->nlevels())
+    return 0;
+  // setup the image header for the level
+  unsigned header_index = levels_[level]->header_index_;
+  // The status value should be checked here
+  if (TIFFSetDirectory(t_, header_index)<=0)
+    return 0;
+  vil_tiff_header* h = new vil_tiff_header(t_);
+  return new vil_tiff_image(t_, h);
+}
+  
 
