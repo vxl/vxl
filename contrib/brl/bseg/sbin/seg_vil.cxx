@@ -6,7 +6,7 @@
 
 int main(int argc, char** argv)
 {
-#if 0
+#if 1
   int my_argc = argc+1;
   char** my_argv = new char*[argc+1];
   for (int i=0; i<argc; i++)
@@ -17,7 +17,7 @@ int main(int argc, char** argv)
   vgui::init(my_argc, my_argv);
   delete [] my_argv;
 #endif
-  vgui::init(argc, argv);
+//  vgui::init(argc, argv);
   vgui_menu menubar = segv_vil_menus::get_menu();
   unsigned w = 400, h = 340;
    vcl_string title = "SEG_VIL";

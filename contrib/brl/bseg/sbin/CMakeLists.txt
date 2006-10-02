@@ -28,3 +28,6 @@ TARGET_LINK_LIBRARIES(vil_convert brip)
 
 ADD_EXECUTABLE (generate_tiff_pyramids generate_tiff_pyramids.cxx)
 TARGET_LINK_LIBRARIES(generate_tiff_pyramids brip vpl vil)
+
+ADD_EXECUTABLE (generate_tiff_rset generate_tiff_rset.cxx)
+TARGET_LINK_LIBRARIES(generate_tiff_rset brip vpl vil)
