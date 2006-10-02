@@ -2,11 +2,11 @@
 #define vsol_curve_2d_h_
 //*****************************************************************************
 //:
-//  \file
+// \file
 // \brief Abstract curve in a 2D space
 //
 // \author
-// François BERTEL
+//  François BERTEL
 //
 // \verbatim
 //  Modifications
@@ -36,7 +36,7 @@ class vsol_curve_2d : public vsol_spatial_object_2d
   enum vsol_curve_2d_type
   { CURVE_NO_TYPE=0,
     LINE,
-	CIRCULAR_ARC,
+    CIRCULAR_ARC,
     CONIC,
     POLYLINE,
     DIGITAL_CURVE,
