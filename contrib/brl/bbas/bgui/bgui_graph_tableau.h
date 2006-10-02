@@ -12,6 +12,7 @@
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_soview2D.h>
+#include <vgui/vgui_text_tableau.h>
 #include <vgui/vgui_easy2D_tableau.h>
 #include "bgui_graph_tableau_sptr.h"
 
@@ -70,11 +71,13 @@ class bgui_graph_tableau : public  vgui_tableau
   unsigned graph_width_;
   unsigned graph_height_;
   float tic_length_;
+  vgui_text_tableau_sptr tt_;
   vgui_easy2D_tableau_sptr easy_;
   //: The graph
   vgui_soview2D_linestrip* plot_;
   //: the tics
   float xinc_, yinc_;
+  float yorigin_;
   vcl_vector<vgui_soview2D_lineseg*> xtics_;
   vcl_vector<vgui_soview2D_lineseg*> ytics_;
   unsigned n_;
