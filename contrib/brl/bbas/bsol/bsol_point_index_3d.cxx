@@ -49,7 +49,7 @@ bsol_point_index_3d::bsol_point_index_3d(int nrows, int ncols, int nslabs,
       vcl_vector<vcl_vector<vsol_point_3d_sptr> >* v =
         new vcl_vector<vcl_vector<vsol_point_3d_sptr> >(nslabs);
       point_array_[r][c] = v;
-      v->clear();
+    //  v->clear();
     }
   b_box_ = bb;
   double w = b_box_->width(), h = b_box_->height(), d = b_box_->depth();
@@ -79,7 +79,7 @@ bsol_point_index_3d(int nrows, int ncols, int nslabs,
       vcl_vector<vcl_vector<vsol_point_3d_sptr> >* v =
         new vcl_vector<vcl_vector<vsol_point_3d_sptr> >(nslabs);
       point_array_[r][c] = v;
-      v->clear();
+      //  v->clear();
     }
   vbl_bounding_box<double,3> box = bsol_algs::bounding_box(points);
   b_box_ = new vsol_box_3d(box);
