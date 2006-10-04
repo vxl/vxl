@@ -40,6 +40,16 @@ bool parallel(vgl_vector_2d<T> const& a, vgl_vector_2d<T> const& b, double eps)
   return cross*cross < eps;
 }
 
+
+template <class T> 
+vgl_vector_2d<T>  rotated(vgl_vector_2d<T> const& a, double angle)
+{ 
+  return vgl_vector_2d<T>( T(vcl_cos(angle)*a.x()-vcl_sin(angle)*a.y()), 
+           T(vcl_sin(angle)*a.x() + vcl_cos(angle)*a.y()) ); 
+}
+
+
+
 //: Write "<vgl_vector_2d x,y> " to stream
 template <class T>
 vcl_ostream&  operator<<(vcl_ostream& s, vgl_vector_2d<T> const& p)
@@ -80,6 +90,7 @@ template               bool   parallel     (vgl_vector_2d<T > const&, vgl_vector
 VCL_INSTANTIATE_INLINE(double operator/    (vgl_vector_2d<T > const&, vgl_vector_2d<T > const&));\
 VCL_INSTANTIATE_INLINE(vgl_vector_2d<T >&     normalize    (vgl_vector_2d<T >&));\
 VCL_INSTANTIATE_INLINE(vgl_vector_2d<T >      normalized   (vgl_vector_2d<T > const&));\
+template vgl_vector_2d<T >    rotated      (vgl_vector_2d<T > const&, double);\
 template        vcl_ostream&  operator<<   (vcl_ostream&, vgl_vector_2d<T >const&);\
 template        vcl_istream&  operator>>   (vcl_istream&, vgl_vector_2d<T >&)
 

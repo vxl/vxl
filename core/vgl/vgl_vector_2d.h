@@ -183,6 +183,10 @@ template <class T> inline v&     normalize(v& a) { double l=a.length(); return l
 // \relates vgl_vector_2d
 template <class T> inline v      normalized(v const& a) { double l=a.length(); return l?a/l:a; }
 
+//: Return a CCW rotated version of a (angle in radian)
+// \relates vgl_vector_2d
+template <class T> v      rotated(v const& a, double angle);
+
 #undef v
 
 #define VGL_VECTOR_2D_INSTANTIATE(T) extern "please include vgl/vgl_vector_2d.txx first"
