@@ -17,7 +17,7 @@ SET(vimt_sources
     vimt_sample_grid_bicub.txx                    vimt_sample_grid_bicub.h
     vimt_bilin_interp.h
     vimt_resample_bilin.h
-    vimt_load_transform.h			  vimt_load_transform.cxx
+    vimt_load_transform.h                         vimt_load_transform.cxx
     vimt_add_all_binary_loaders.h                 vimt_add_all_binary_loaders.cxx
     vimt_fwd.h
 )

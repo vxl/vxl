@@ -62,9 +62,9 @@ ELSE( VXL_MPEG_USE_CONFIGURE )
   ENDIF( CMAKE_SYSTEM_PROCESSOR MATCHES ppc )
 
   IF( CMAKE_SYSTEM_PROCESSOR MATCHES i[56]86 )
-	  SET( MPEG_ARCH_X86 1 )
+    SET( MPEG_ARCH_X86 1 )
   ELSE( CMAKE_SYSTEM_PROCESSOR MATCHES i[56]86 )
-	  SET( MPEG_ARCH_X86 0 )
+    SET( MPEG_ARCH_X86 0 )
   ENDIF( CMAKE_SYSTEM_PROCESSOR MATCHES i[56]86 )
   IF(WIN32)
   # unfortunately MSVC6 (and probably other Windows compilers
@@ -74,7 +74,7 @@ ELSE( VXL_MPEG_USE_CONFIGURE )
 
 
   # Calculate the largest value of __aligned
-  
+
   PERFORM_CHECK_HEADER(inttypes.h MPEG_HAVE_INTTYPES_H)
   PERFORM_C_CHECK_FUNCTION(memalign "stdlib.h" MPEG_HAVE_MEMALIGN)
 
@@ -107,7 +107,7 @@ SET( mpeg2_sources
   libmpeg2/idct_mmx.c
   libmpeg2/idct_altivec.c
 )
-ADD_LIBRARY( mpeg2 ${mpeg2_sources} )  
+ADD_LIBRARY( mpeg2 ${mpeg2_sources} )
 INSTALL_TARGETS( /lib mpeg2 )
 
 SET( vo_sources
@@ -123,7 +123,7 @@ SET( vo_sources
 
   libvo/yuv2rgb.c
   libvo/yuv2rgb_mlib.c
-  libvo/yuv2rgb_mmx.c 
+  libvo/yuv2rgb_mmx.c
 )
 ADD_LIBRARY( vo ${vo_sources} )
 INSTALL_TARGETS( /lib vo )

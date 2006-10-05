@@ -61,9 +61,9 @@ SET(mbl_sources
   mbl_progress_composite.cxx            mbl_progress_composite.h
   mbl_exception.h                       mbl_exception.cxx
   mbl_rvm_regression_builder.cxx        mbl_rvm_regression_builder.h
-  mbl_test.h							              mbl_test.cxx
-  mbl_log.h							                mbl_log.cxx
- 
+  mbl_test.h                            mbl_test.cxx
+  mbl_log.h                             mbl_log.cxx
+
   mbl_chord.h
   mbl_chord_3d.h
   mbl_cloneable_ptr.h
@@ -76,7 +76,7 @@ SET(mbl_sources
   mbl_stl.h
   mbl_jarque_bera.h
   mbl_stl_pred.h
-  
+
   mbl_config.h.in
   mbl_mod_gram_schmidt.cxx             mbl_mod_gram_schmidt.h
   mbl_linear_interpolator.cxx          mbl_linear_interpolator.h
