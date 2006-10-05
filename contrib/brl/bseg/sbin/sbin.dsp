@@ -175,6 +175,9 @@ SOURCE=.\vil_convert.cxx
 # Begin Source File
 SOURCE=.\generate_tiff_pyramids.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\generate_tiff_rset.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
