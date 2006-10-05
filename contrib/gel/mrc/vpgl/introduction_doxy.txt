@@ -1,0 +1,13 @@
+// The following text is included in the main documentation page by doxygen
+/*! \mainpage vpgl : Photogrammetry Library
+* A set of classes to represent cameras and projections from 3-d geometry to 2-d geometry
+*
+* \section intro Introduction
+* This library contains a hierarchy of camera classes derived from vpgl_camera.
+* There are also classes to represent fundamental matrices (vpgl_fundamental_matrix), and
+* lens distortions (vpgl_lens_distortion).
+*
+* This library is based on vgl and primarily manipulates vgl objects.  However, vnl is also
+* as needed.  The add-on library vpgl_algo contains functions to estimate parameters of vpgl 
+* objects.
+*/
