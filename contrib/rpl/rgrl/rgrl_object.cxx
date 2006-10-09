@@ -72,7 +72,7 @@ invoke_event( const rgrl_event & event)
   obs_itr i = observers_.begin();
   for ( ; i != observers_.end(); ++i) {
     rgrl_event_sptr e =  i->second.event_;
-    if (e->is_same_type(&event)) {
+    if (e->is_same_type(event)) {
       i->second.command_->execute(this, event);
     }
   }
@@ -86,7 +86,7 @@ invoke_event( const rgrl_event & event) const
   const_obs_itr i = observers_.begin();
   for ( ; i != observers_.end(); ++i) {
     const rgrl_event_sptr e =  i->second.event_;
-    if (e->is_same_type(&event)) {
+    if (e->is_same_type(event)) {
       i->second.command_->execute(this, event);
     }
   }
@@ -110,7 +110,7 @@ has_observer( const rgrl_event & event ) const
   const_obs_itr i = observers_.begin();
   for ( ; i != observers_.end(); ++i) {
     const rgrl_event_sptr e = i->second.event_;
-    if ( e->is_same_type(&event) ) {
+    if ( e->is_same_type(event) ) {
       return true;
     }
   }
