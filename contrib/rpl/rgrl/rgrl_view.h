@@ -8,6 +8,7 @@
 // \verbatim
 // Modifications
 //   June.2005 - Gehua Yang - change image ROI from rgrl_mask_box to rgrl_mask_sptr
+//   Oct. 2006 - Gehua Yang - add a virtual function to scale the view by a scalar ratio
 // \endverbatim
 
 
@@ -122,6 +123,10 @@ class rgrl_view
   //:  Return true if both xform_estimator_ and xform_estimate_ are not null
   virtual
   bool is_valid() const;
+
+  //: scale a view by a ratio
+  virtual
+  rgrl_view_sptr scale_by( unsigned new_resol, double scaling ) const;
 
 #if 0
   //: True iff all the components are equal.

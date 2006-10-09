@@ -89,6 +89,55 @@ rgrl_view::is_valid() const
   return xform_estimator_ && xform_estimate_;
 }
 
+rgrl_view_sptr
+rgrl_view::
+scale_by( unsigned new_resol, double scaling ) const
+{
+  // HACK: to PROPERLY scale image roi
+  //       different resolutions of ROI should be provided rather than being computed
+  // --GY--
+  //assert( dynamic_cast<rgrl_mask_box*>(current_view.from_image_roi().ptr()) );
+  //assert( dynamic_cast<rgrl_mask_box*>(current_view.to_image_roi().ptr()) );
+
+  rgrl_mask_sptr from_new_roi, to_new_roi;
+  
+  if( vcl_abs(scaling-1.0) <= 1e-5 ) { // if scaling is 1.0
+    
+    from_new_roi = from_image_roi();
+    to_new_roi   = to_image_roi();
+  
+  } else { //approximation
+  
+    // WarningMacro( "Approximating the region of interest by scale " << scale << vcl_endl );
+    from_new_roi = new rgrl_mask_box( from_image_roi()->x0()*scaling,
+                                      from_image_roi()->x1()*scaling );
+    to_new_roi = new rgrl_mask_box( to_image_roi()->x0()*scaling,
+                                    to_image_roi()->x1()*scaling );
+  }
+  
+  rgrl_mask_box new_current_region( region().x0()*scaling,
+                                    region().x1()*scaling);
+  rgrl_mask_box new_global_region( global_region().x0()*scaling,
+                                   global_region().x1()*scaling );
+
+  // forward transformation
+  rgrl_transformation_sptr new_xform_estimate;
+  if( xform_estimate() )
+    new_xform_estimate = xform_estimate()->scale_by( scaling );
+
+  // backward transformation
+  rgrl_transformation_sptr new_inv_xform_estimate;
+  if( inverse_xform_estimate() )
+    new_inv_xform_estimate = inverse_xform_estimate()->scale_by( scaling );
+
+  return new rgrl_view( from_new_roi, to_new_roi, 
+                        new_current_region, new_global_region,
+                        xform_estimator(),
+                        new_xform_estimate,
+                        new_resol, 
+                        new_inv_xform_estimate);
+}
+
 #if 0
 bool
 rgrl_view::
