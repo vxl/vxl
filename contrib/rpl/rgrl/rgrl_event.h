@@ -35,7 +35,7 @@ class rgrl_event: public vbl_ref_count
   //: Return the string name associated with the event
   virtual vcl_string name(void) const = 0;
 
-  virtual bool is_same_type(rgrl_event const* e) const = 0;
+  virtual bool is_same_type(rgrl_event const& e) const = 0;
 };
 
 // Macro for creating new Events (from ITK)
@@ -46,8 +46,8 @@ class rgrl_event: public vbl_ref_count
    classname(classname const& c) : rgrl_event(c) {} \
    virtual ~classname() {} \
    virtual vcl_string name() const { return #classname; } \
-   virtual bool is_same_type(rgrl_event const* e) const \
-     { return dynamic_cast<const classname*>(e) ? true : false; } \
+   virtual bool is_same_type(rgrl_event const& e) const \
+     { rgrl_event const* p=&e; return dynamic_cast<classname const*>(p) ? true : false; } \
  }
 
 // Define some common events. To Add new type rgrl_event_X, simply add
