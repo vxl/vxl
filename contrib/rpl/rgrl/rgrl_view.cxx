@@ -44,6 +44,14 @@ rgrl_view( rgrl_mask_sptr          const& from_image_roi,
   }
 }
 
+//: return a self copy
+rgrl_view_sptr
+rgrl_view::
+self_copy() const
+{
+  return new rgrl_view( *this ); 
+}
+
 bool
 rgrl_view::
 is_at_finest_resolution() const

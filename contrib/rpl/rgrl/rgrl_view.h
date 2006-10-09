@@ -44,6 +44,11 @@ class rgrl_view
 
   // default copy and assignment are good.
 
+  //: return a self copy
+  virtual
+  rgrl_view_sptr
+  self_copy() const;
+  
   //:  Access "from" image region of interest
   rgrl_mask_sptr const& from_image_roi() const
   { return from_image_roi_; }
