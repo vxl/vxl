@@ -29,6 +29,7 @@ SOURCES += bgui_range_adjuster_tableau.cxx
 MANPAGE_SOURCES += bgui_range_adjuster_tableau_sptr.h
 SOURCES += bgui_graph_tableau.cxx
 MANPAGE_SOURCES += bgui_graph_tableau_sptr.h
+SOURCES += bgui_image_utils.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
