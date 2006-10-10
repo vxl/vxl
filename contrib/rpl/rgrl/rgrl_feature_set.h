@@ -64,7 +64,7 @@ class rgrl_feature_set
   typedef vcl_vector<rgrl_feature_sptr>  feature_vector;
 
  public:
-  rgrl_feature_set( rgrl_feature_set_label const& label = rgrl_feature_set_label() );
+  rgrl_feature_set( feature_vector const& fea_vec, rgrl_feature_set_label const& label = rgrl_feature_set_label() );
 
   virtual ~rgrl_feature_set();
 
@@ -76,6 +76,13 @@ class rgrl_feature_set
   rgrl_feature_set_label const& label() const
   { return label_; }
   
+  //:  Return all the features
+  //
+  virtual
+  feature_vector const&
+  all_features( ) const
+  { return fea_vec_; }
+
   //:  Return the features in a given ROI.
   //
   virtual
@@ -140,6 +147,7 @@ class rgrl_feature_set
 
  protected:
   rgrl_feature_set_label label_;
+  feature_vector         fea_vec_;
 };
 
 

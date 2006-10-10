@@ -26,7 +26,7 @@ rgrl_feature_set_bins_2d( feature_vector const& features,
                            double bin_size,
                            rgrl_feature_set_label const& label)
   :
-  rgrl_feature_set( label ),
+  rgrl_feature_set( features, label ),
   bounding_box_( 2 )
 {
   assert( !features.empty() );

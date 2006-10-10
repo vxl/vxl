@@ -28,7 +28,7 @@ rgrl_feature_set_location( feature_vector const& features,
                            double bin_size,
                            rgrl_feature_set_label const& label)
   :
-  rgrl_feature_set( label ),
+  rgrl_feature_set( features, label ),
   bounding_box_( N ),
   use_bins_(use_bins)
 {
