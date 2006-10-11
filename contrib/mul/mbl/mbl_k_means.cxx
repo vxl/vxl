@@ -131,6 +131,8 @@ unsigned mbl_k_means(mbl_data_wrapper<vnl_vector<double> > &data, unsigned k,
           assert ((*p_partition)[j] = i);
           if ((*p_partition)[j] > i) (*p_partition)[j]--;
         }
+
+        changed= true;
       }
     }
 
