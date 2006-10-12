@@ -9,7 +9,7 @@
 rgrl_scale::
 rgrl_scale()
   : has_geometric_scale_( false ),
-    has_signature_covar_( false )
+    has_signature_inv_covar_( false )
 {
 }
 
@@ -32,28 +32,28 @@ geometric_scale( ) const
 
 bool
 rgrl_scale::
-has_signature_covar() const
+has_signature_inv_covar() const
 {
-  return has_signature_covar_;
+  return has_signature_inv_covar_;
 }
 
 
 vnl_matrix<double> const&
 rgrl_scale::
-signature_covar() const
+signature_inv_covar() const
 {
-  return signature_covar_;
+  return signature_inv_covar_;
 }
 
 
 void
 rgrl_scale::
 set_scales( double                     geometric_scale,
-            vnl_matrix<double>  const& signature_covar,
+            vnl_matrix<double>  const& signature_inv_covar,
             type new_type )
 {
   set_geometric_scale( geometric_scale );
-  set_signature_covar( signature_covar );
+  set_signature_inv_covar( signature_inv_covar );
   set_geo_scale_type( new_type );
 }
 
@@ -70,8 +70,8 @@ set_geometric_scale( double scale, type new_type )
 
 void
 rgrl_scale::
-set_signature_covar( vnl_matrix<double> const& covar )
+set_signature_inv_covar( vnl_matrix<double> const& covar )
 {
-  signature_covar_ = covar;
-  has_signature_covar_ = true;
+  signature_inv_covar_ = covar;
+  has_signature_inv_covar_ = true;
 }

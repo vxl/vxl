@@ -8,7 +8,6 @@
 #include <vcl_cassert.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_math.h>
-#include <vnl/algo/vnl_svd.h>
 #include <rrel/rrel_m_est_obj.h>
 
 #include "rgrl_match_set.h"
@@ -43,10 +42,8 @@ compute_weights( rgrl_scale const&  scales,
 
   vnl_matrix<double> signature_inv_covar;
   if ( use_signature_error_ && !signature_precomputed_ ) {
-    assert ( scales.has_signature_covar() );
-    vnl_svd<double> svd( scales.signature_covar() );
-    svd.zero_out_absolute();
-    signature_inv_covar = svd.inverse();   // pseudo-inverse at this point
+    assert ( scales.has_signature_inv_covar() );
+    signature_inv_covar = scales.signature_inv_covar();
   }
 
   //  cache the geometric scale.
@@ -89,7 +86,9 @@ compute_weights( rgrl_scale const&  scales,
       }
       else if ( use_signature_error_ ) {
         vnl_vector<double> error_vector = to_feature->signature_error_vector( *mapped_from );
-        assert ( error_vector.size() > 0 );
+        assert ( error_vector.size() > 0 && 
+                 error_vector.size() == signature_inv_covar.rows() &&
+                 error_vector.size() == signature_inv_covar.cols());
         double signature_err = vcl_sqrt( dot_product( error_vector * signature_inv_covar, error_vector ) );
         // CS: we may need to add some chi-squared normalization
         // here for large signature vectors.

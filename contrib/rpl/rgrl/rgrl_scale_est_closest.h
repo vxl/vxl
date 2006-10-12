@@ -64,8 +64,8 @@ class rgrl_scale_est_closest
                            bool penalize_scaling ) const;
 
   bool
-  compute_signature_covar( vnl_matrix<double>&covar, 
-                           rgrl_match_set const& match_set ) const;
+  compute_signature_inv_covar( vnl_matrix<double>&covar, 
+                               rgrl_match_set const& match_set ) const;
 
  protected:
   bool do_signature_scale_;

@@ -77,7 +77,7 @@ test_est()
     testlib_test_begin( "Estimate scale from one-to-one" );
     rgrl_scale_sptr scale = closest_est.estimate_unweighted( ms, 0 );
     testlib_test_perform( scale->has_geometric_scale() &&
-                          ! scale->has_signature_covar() );
+                          ! scale->has_signature_inv_covar() );
 
     TEST_NEAR( "Geometric scale is correct", scale->geometric_scale(), vcl_sqrt(var), 0.25 );
     one_to_one_scale = scale->geometric_scale();
@@ -102,7 +102,7 @@ test_est()
     testlib_test_begin( "Estimate scale from closest in one-to-many" );
     rgrl_scale_sptr scale = closest_est.estimate_unweighted( ms, 0 );
     testlib_test_perform( scale->has_geometric_scale() &&
-                          ! scale->has_signature_covar() );
+                          ! scale->has_signature_inv_covar() );
 
     TEST_NEAR( "Geometric scale is correct", scale->geometric_scale(), one_to_one_scale, 1e-8 );
   }
@@ -121,7 +121,7 @@ test_est()
     testlib_test_begin( "Estimate weighted scale from one-to-one, unit weight" );
     rgrl_scale_sptr scale = allwgt_est.estimate_weighted( ms, 0, false );
     testlib_test_perform( scale->has_geometric_scale() &&
-                          ! scale->has_signature_covar() );
+                          ! scale->has_signature_inv_covar() );
 
     TEST_NEAR( "Geometric scale is correct", scale->geometric_scale(), vcl_sqrt(var), 1e-6 );
   }

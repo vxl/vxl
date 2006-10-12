@@ -7,6 +7,7 @@
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_math.h>
+#include <vnl/algo/vnl_svd.h>
 
 #include "rgrl_scale.h"
 #include "rgrl_match_set.h"
@@ -34,7 +35,7 @@ estimate_weighted( rgrl_match_set const& match_set,
     scales->set_geometric_scale( scale );
 
   if ( do_signature_scale_ ) {
-    scales->set_signature_covar( compute_signature_covar( match_set ) );
+    scales->set_signature_inv_covar( compute_signature_inv_covar( match_set ) );
   }
 
   return scales;
@@ -101,7 +102,7 @@ compute_geometric_scale( double& return_scale,
 
 vnl_matrix<double>
 rgrl_scale_est_all_weights::
-compute_signature_covar( rgrl_match_set const&  match_set ) const
+compute_signature_inv_covar( rgrl_match_set const&  match_set ) const
 {
   typedef rgrl_match_set::const_from_iterator from_iter;
   typedef from_iter::to_iterator              to_iter;
@@ -123,5 +124,11 @@ compute_signature_covar( rgrl_match_set const&  match_set ) const
     }
   }
 
-  return weighted_covar / sum_weights;
+  // compute the inverse of covariance matrix
+  // use pseudo inverse in case it is degenerate
+  weighted_covar /= sum_weights;
+  vnl_svd<double> svd( weighted_covar );
+  svd.zero_out_absolute();
+
+  return svd.inverse();   // pseudo-inverse at this point
 }

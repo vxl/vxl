@@ -46,7 +46,7 @@ class rgrl_scale_est_all_weights
                            bool penalize_scaling ) const;
 
   vnl_matrix<double>
-  compute_signature_covar( rgrl_match_set const& match_set ) const;
+  compute_signature_inv_covar( rgrl_match_set const& match_set ) const;
 
  private:
   bool do_signature_scale_;

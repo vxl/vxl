@@ -39,13 +39,13 @@ estimate_unweighted( rgrl_match_set const& match_set,
   rgrl_scale_sptr scales = new rgrl_scale;
 
   double scale = -1.0;
-  vnl_matrix<double> covar;
+  vnl_matrix<double> inv_covar;
   
   if( compute_geometric_scale( scale, match_set, penalize_scaling ) )
     scales->set_geometric_scale( scale );
 
-  if ( do_signature_scale_ && compute_signature_covar( covar, match_set ) ) {
-    scales->set_signature_covar( covar );
+  if ( do_signature_scale_ && compute_signature_inv_covar( inv_covar, match_set ) ) {
+    scales->set_signature_inv_covar( inv_covar );
   }
 
   return scales;
@@ -121,7 +121,7 @@ compute_geometric_scale( double& return_scale,
 
 bool
 rgrl_scale_est_closest::
-compute_signature_covar( vnl_matrix<double>& covar, rgrl_match_set const& match_set ) const
+compute_signature_inv_covar( vnl_matrix<double>& inv_covar, rgrl_match_set const& match_set ) const
 {
   //  Do the same as above, one component at a time, BUT use the
   //  closest geometric feature to determine which signature vector to
@@ -167,8 +167,8 @@ compute_signature_covar( vnl_matrix<double>& covar, rgrl_match_set const& match_
     }
   }
 
-  covar.set_size( nrows, nrows );
-  covar.fill( 0.0 );
+  inv_covar.set_size( nrows, nrows );
+  inv_covar.fill( 0.0 );
 
   double var;
   for ( unsigned r = 0; r < nrows&&success; ++r ) {
@@ -180,7 +180,10 @@ compute_signature_covar( vnl_matrix<double>& covar, rgrl_match_set const& match_
     
     var = vnl_math_sqr( obj_->scale( all_errors[r].begin(), all_errors[r].end() ) );
     success = success && vnl_math_isfinite( var );
-    covar(r,r) = var;
+    if( var < 1e-12 )  // if variance is too small
+      inv_covar(r,r) = 0.0;
+    else
+      inv_covar(r,r) = 1 / var;
   }
 
   return success;
