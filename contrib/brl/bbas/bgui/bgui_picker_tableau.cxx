@@ -198,7 +198,8 @@ void bgui_picker_tableau::pick_polygon(vsol_polygon_2d_sptr& poly)
   // Grab event loop until picking is completed:
   while (picking_completed == false)
     next();
-  poly =  new vsol_polygon_2d( point_list );
+  if(point_list.size() >=3)
+    poly =  new vsol_polygon_2d( point_list );
   obj_type = none_enum;   
 }
 
