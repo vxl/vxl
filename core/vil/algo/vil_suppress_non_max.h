@@ -24,6 +24,10 @@
 //  on a raised plateau, then all the pixels on the plateau will be
 //  suppressed.  This can cause some peaks to be missed.  The effect
 //  can be reduced by using float images and pre-smoothing slightly.
+//  Alternatively, use vil_suppress_non_plateau_3x3() to retain plateau 
+//  points as well as strict maxima.
+// 
+// \sa vil_suppress_non_plateau_3x3()
 template <class T>
 inline void vil_suppress_non_max_3x3(const vil_image_view<T>& src_im,
                                      vil_image_view<T>& dest_im,

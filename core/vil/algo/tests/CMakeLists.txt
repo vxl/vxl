@@ -23,6 +23,7 @@ ADD_EXECUTABLE( vil_algo_test_all
   test_algo_distance_transform.cxx
   test_algo_blob_finder.cxx
   test_algo_find_peaks.cxx
+  test_algo_find_plateaus.cxx
   test_algo_region_finder.cxx
   test_algo_cartesian_differential_invariants.cxx
   test_algo_corners.cxx
@@ -32,6 +33,7 @@ ADD_EXECUTABLE( vil_algo_test_all
   test_greyscale_erode.cxx
   test_median.cxx
   test_suppress_non_max.cxx
+  test_algo_suppress_non_plateau.cxx
   test_algo_sobel.cxx
   test_algo_abs_shuffle_distance.cxx
   test_algo_suppress_non_max_edges.cxx
@@ -69,6 +71,7 @@ ADD_TEST( vil_algo_test_histogram_equalise  ${EXECUTABLE_OUTPUT_PATH}/vil_algo_t
 ADD_TEST( vil_algo_test_distance_transform  ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_distance_transform )
 ADD_TEST( vil_algo_test_blob_finder         ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_blob_finder )
 ADD_TEST( vil_algo_test_find_peaks          ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_find_peaks )
+ADD_TEST( vil_algo_test_find_plateaus       ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_find_plateaus )
 ADD_TEST( vil_algo_test_region_finder       ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_region_finder )
 ADD_TEST( vil_algo_test_corners             ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_corners )
 ADD_TEST( vil_algo_test_cartesian_differential_invariants ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_cartesian_differential_invariants )
@@ -78,6 +81,7 @@ ADD_TEST( vil_algo_test_greyscale_dilate    ${EXECUTABLE_OUTPUT_PATH}/vil_algo_t
 ADD_TEST( vil_algo_test_greyscale_erode     ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_greyscale_erode)
 ADD_TEST( vil_algo_test_median              ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_median)
 ADD_TEST( vil_algo_test_suppress_non_max    ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_suppress_non_max )
+ADD_TEST( vil_algo_test_suppress_non_plateau ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_suppress_non_plateau )
 ADD_TEST( vil_algo_test_algo_sobel          ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_sobel)
 ADD_TEST( vil_algo_abs_shuffle_distance     ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_abs_shuffle_distance)
 ADD_TEST( vil_algo_suppress_non_max_edges   ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_suppress_non_max_edges)
