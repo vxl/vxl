@@ -20,6 +20,7 @@
 #include <vil/vil_copy.h>
 #include <vil/vil_math.h>
 #include <vil/vil_decimate.h>
+#include <vil/vil_property.h>
 #include <vil/vil_flip.h>
 #include <vil/vil_convert.h>
 #include <vil/algo/vil_sobel_1x3.h>
@@ -141,12 +142,30 @@ range_params(vil_image_resource_sptr const& image)
   if(bir)
   { gl_map = true; cache = false;}
 
+  //Check if the image is a pyramid
+  bool pyr = image->get_property(vil_property_pyramid, 0);
+  if(pyr)
+  { gl_map = true; cache = false;}
   //Get max min parameters
-  bgui_image_utils iu(image);
-  double minv, maxv;
-  iu.range(minv, maxv);
-  return new vgui_range_map_params(minv, maxv, gamma, invert,
-                                   gl_map, cache);
+
+  double min=0, max=0;
+  unsigned n_components = image->nplanes();
+  vgui_range_map_params_sptr rmps;
+  if (n_components == 1)
+    {
+      bgui_image_utils iu(image);
+      iu.range(min, max);
+      rmps= new vgui_range_map_params(min, max, gamma, invert,
+                                      gl_map, cache);
+    }
+  else if (n_components == 3)
+    {
+      min = 0; max = 255;//for now - ultimately need to compute color histogram
+      rmps = new vgui_range_map_params(min, max, min, max, min, max,
+                                       gamma, gamma, gamma, invert,
+                                       gl_map, cache);
+    }
+  return rmps;
 }
 
 //: set the image at the currently selected grid cell
@@ -541,9 +560,6 @@ void segv_vil_segmentation_manager::load_image()
     }
   }
   if (!image)
-    image = vil_load_pyramid_resource(image_filename.c_str()).ptr();
-
-  if (!image)
     image = vil_load_image_resource(image_filename.c_str());
 
   if (!image)
@@ -563,9 +579,6 @@ void segv_vil_segmentation_manager::load_image()
   }
 
   vgui_range_map_params_sptr rmps = range_params(image);
-
-  if(pyrm)
-    {rmps->use_glPixelMap_ = true; rmps->cache_mapped_pix_ = false;}
 
   if (first_)
   {
@@ -624,13 +637,31 @@ void segv_vil_segmentation_manager::save_image()
 void segv_vil_segmentation_manager::set_range_params()
 {
   bgui_image_tableau_sptr itab = this->selected_image_tab();
-  if (!itab||!itab->get_image_resource())
+  if(!itab)
     return;
-  static double min = 0.0, max = 255;
-  static float gamma = 1.0;
-  static bool invert = false;
-  static bool gl_map = false;
-  static bool cache = false;
+  vgui_range_map_params_sptr rmps = itab->map_params();
+  if(!rmps)
+    {
+      vil_image_resource_sptr img = itab->get_image_resource();
+      if(!img)
+        return;
+      rmps = range_params(img);
+      if(!rmps)
+        return;
+    }
+  unsigned nc = rmps->n_components_;
+  static double min = static_cast<double>(rmps->min_L_),
+    max = static_cast<double>(rmps->max_L_);
+  static float gamma = rmps->gamma_L_;
+  static bool invert = rmps->invert_;
+  static bool gl_map = rmps->use_glPixelMap_;
+  static bool cache = rmps->cache_mapped_pix_;
+  if(nc==3)
+    {
+      min = static_cast<double>(rmps->min_R_);
+      max = static_cast<double>(rmps->max_R_);
+      gamma = rmps->gamma_R_;
+    }
   vgui_dialog range_dlg("Set Range Map Params");
   range_dlg.field("Range min:", min);
   range_dlg.field("Range max:", max);
@@ -640,13 +671,10 @@ void segv_vil_segmentation_manager::set_range_params()
   range_dlg.checkbox("Cache Pixels", cache);
   if (!range_dlg.ask())
     return;
-  vil_image_resource_sptr img = itab->get_image_resource();
-  unsigned n_components = img->nplanes();
-  vgui_range_map_params_sptr rmps;
-  if (n_components == 1)
+  if(nc==1)
     rmps= new vgui_range_map_params(min, max, gamma, invert,
                                     gl_map, cache);
-  else if (n_components == 3)
+  else if (nc == 3)
     rmps = new vgui_range_map_params(min, max, min, max, min, max,
                                      gamma, gamma, gamma, invert,
                                      gl_map, cache);
@@ -1178,6 +1206,11 @@ void segv_vil_segmentation_manager::intensity_histogram()
   }
   bgui_image_utils iu(img);
   bgui_graph_tableau_sptr g = iu.hist_graph();
+
+  if(!g)
+  { vcl_cout << "In segv_vil_segmentation_manager::intensity_histogram()- color images not supported\n";
+    return;
+  }
 
   //popup a profile graph
   char location[100];
