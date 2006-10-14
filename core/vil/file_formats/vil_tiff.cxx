@@ -31,7 +31,7 @@
 #include <vil/vil_copy.h>
 #include <vil/vil_image_list.h>
 #include "vil_tiff_header.h"
-#define DEBUG
+//#define DEBUG
 
 // Constants
 char const* vil_tiff_format_tag = "tiff";
