@@ -52,7 +52,6 @@ vcl_vector<vgl_point_3d<Type> > vgl_orient_box_3d<Type>::corners()
   corner_points[6] = vgl_point_3d<Type> (corner_points[2].x(),
                                          corner_points[2].y()+height(),
                                          corner_points[2].z());
-
   // rotate the corner points
   for (unsigned int i=0; i < corner_points.size(); i++) {
     vnl_vector_fixed<double,3> p;
@@ -81,9 +80,10 @@ bool vgl_orient_box_3d<Type>::contains(Type const& x,
   p[1] = y - box_.centroid_y();
   p[2] = z - box_.centroid_z();
   vnl_vector_fixed<double,3> p_transf = reverse_rot.rotate(p);
-  return box_.contains(p_transf[0] + box_.centroid_x(),
-                       p_transf[1] + box_.centroid_y(),
-                       p_transf[2] + box_.centroid_z());
+  Type xt = static_cast<Type>(p_transf[0] + box_.centroid_x());
+  Type yt = static_cast<Type>(p_transf[1] + box_.centroid_y());
+  Type zt = static_cast<Type>(p_transf[2] + box_.centroid_z());
+  return box_.contains(xt, yt, zt);
 }
 
 template <class Type>

@@ -44,6 +44,10 @@ class vgl_orient_box_3d
   //: Return true if \a (x,y,z) is inside this box
   bool contains(Type const& x, Type const& y, Type const& z) const;
 
+  //: Return true if point is inside this box
+  bool contains(vgl_point_3d<Type> const& p) const
+    {return contains(p.x(), p.y(), p.z());}
+
   vcl_ostream& print(vcl_ostream& s) const;
 
   vcl_istream& read(vcl_istream& s);
