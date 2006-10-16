@@ -26,6 +26,7 @@ DECLARE( test_algo_convolve_1d );
 DECLARE( test_algo_histogram_equalise );
 DECLARE( test_algo_histogram );
 DECLARE( test_algo_anisotropic_filter );
+DECLARE( test_algo_smooth_121 );
 
 void
 register_tests()
@@ -56,6 +57,7 @@ register_tests()
   REGISTER( test_algo_histogram_equalise );
   REGISTER( test_algo_histogram );
   REGISTER( test_algo_anisotropic_filter );
+  REGISTER( test_algo_smooth_121 );
 }
 
 DEFINE_MAIN;
