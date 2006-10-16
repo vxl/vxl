@@ -55,6 +55,17 @@ class m23d_ortho_flexible_builder
     //: Mean coefficients
     vnl_vector<double> mean_coeffs_;
 
+    //: Take copy of 2D points and remove CoG from each
+    void set_view_data(const vnl_matrix<double>& P2D);
+
+    //: Decompose centred view data to get initial estimate of shape/projection
+    //  Uncertain up to an affine transformation
+    void initial_decomposition(unsigned n_modes);
+
+    //: Disambiguate the ambiguity in the sign of the z ordinates
+    // First non-zero element should be negative.
+    void disambiguate_z();
+
     //: Modify projection matrices so they are scaled orthographic projections
     //  P = s(I|0)*R
     void make_pure_projections();
@@ -77,7 +88,18 @@ class m23d_ortho_flexible_builder
     //: Reconstruct structure of 3D points given multiple 2D views
     //  Data assumed to be scaled orthographic projections
     //  The result is stored in the shape_3d() matrix.
-    //  The estimated projection matrices are stored in the projections() matrix
+    //  The estimated projection matricies are stored in the projections() matrix
+    //  The first (n_modes+1) views are assumed to define a basis for the
+    //  modes.  This might not be ideal.  Use reconstruct() to automatically
+    //  select views which form a good basis.
+    //  \param P2D 2ns x np matrix. Rows contain alternating x's and y's from 2D shapes
+    void reconstruct_with_first_as_basis(const vnl_matrix<double>& P2D, unsigned n_modes);
+
+    //: Reconstruct structure of 3D points given multiple 2D views
+    //  Data assumed to be scaled orthographic projections
+    //  The result is stored in the shape_3d() matrix.
+    //  The estimated projection matricies are stored in the projections() matrix
+    //  Automatically select views which form a good basis.
     //  \param P2D 2ns x np matrix. Rows contain alternating x's and y's from 2D shapes
     void reconstruct(const vnl_matrix<double>& P2D, unsigned n_modes);
 
@@ -117,6 +139,9 @@ class m23d_ortho_flexible_builder
 
     //: Return mean 3D shape as a 3 x np matrix
     const vnl_matrix<double>& mean_shape() const { return mean_shape_; }
+
+    //: Return 3D shape i as a 3 x np matrix
+    vnl_matrix<double> shape(unsigned i) const;
 
     //: Mean coefficients
     const vnl_vector<double>& mean_coeffs() const { return mean_coeffs_; }

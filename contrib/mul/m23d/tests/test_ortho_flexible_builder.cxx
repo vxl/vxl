@@ -262,11 +262,27 @@ void test_ortho_flexible_builder_on_flexible()
   P=m23d_make_ortho_projection(r,ns,n_modes,false,false);
   C=make_cube_model();
   D=P*C;
+  builder.reconstruct_with_first_as_basis(D,1);
+  vcl_cout<<"Mean shape: "<<vcl_endl;
+  vcl_cout<<builder.mean_shape().transpose()<<vcl_endl;
+
+  vnl_matrix<double> MS=builder.mean_shape();
+  // Check that each pair of the last points is approximately orthogonal
+  for (unsigned i=8;i<14;i+=2)
+  {
+    vnl_vector<double> dp = MS.get_column(i)+MS.get_column(i+1);
+    TEST_NEAR("Moving points symmetric about origin",dp.rms(),0.0,0.001);
+  }
+
+  vcl_cout<<"== Automatic selection of basis =="<<vcl_endl;
+  P=m23d_make_ortho_projection(r,ns,n_modes,false,false);
+  C=make_cube_model();
+  D=P*C;
   builder.reconstruct(D,1);
   vcl_cout<<"Mean shape: "<<vcl_endl
           <<builder.mean_shape().transpose()<<vcl_endl;
 
-  vnl_matrix<double> MS=builder.mean_shape();
+  MS=builder.mean_shape();
   // Check that each pair of the last points is approximately orthogonal
   for (unsigned i=8;i<14;i+=2)
   {
@@ -283,3 +299,4 @@ void test_ortho_flexible_builder()
 
 
 TESTMAIN(test_ortho_flexible_builder);
+

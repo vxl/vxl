@@ -25,6 +25,7 @@ vcl_vector<unsigned> m23d_select_basis_views(const vnl_matrix<double>& P2D,
   vcl_vector<unsigned> s(n_modes+1),best_s(n_modes+1);
   for (unsigned i=0;i<=n_modes;++i) best_s[i]=i;
   double best_v = m23d_evaluate_basis(P2D,best_s);
+  vcl_cout<<"Quality of first basis: "<<best_v<<vcl_endl;
 
   // Now generate random subsets and select the best
   mbl_random_n_from_m n_from_m;
@@ -33,9 +34,10 @@ vcl_vector<unsigned> m23d_select_basis_views(const vnl_matrix<double>& P2D,
   for (unsigned i=0;i<n_tries;++i)
   {
     n_from_m.choose_n_from_m(s1,n_modes,ns-1);
-    for (unsigned j=0;j<n_modes;++j) s[j+1]=s[j]+1;
+    for (unsigned j=0;j<n_modes;++j) s[j+1]=s1[j]+1;
     
     double v = m23d_evaluate_basis(P2D,s);
+
     if (v>best_v)
     {
       best_v=v;
@@ -44,6 +46,11 @@ vcl_vector<unsigned> m23d_select_basis_views(const vnl_matrix<double>& P2D,
   }
 
   vcl_sort(best_s.begin(),best_s.end());
+  vcl_cout<<"Quality of selected basis: "<<best_v<<vcl_endl;
+  vcl_cout<<"Selected basis: [ ";
+  for (unsigned i=0;i<best_s.size();++i)
+    vcl_cout<<best_s[i]<<" ";
+  vcl_cout<<"]"<<vcl_endl;
 
   return best_s;
 }
