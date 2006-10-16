@@ -15,6 +15,7 @@
 
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
+#include <vcl_iostream.h>
 template <class T> class bsta_histogram
 {
  public:
@@ -110,6 +111,12 @@ template <class T> class bsta_histogram
  //: Smooth the histogram with a Parzen window of sigma
   void parzen(const T sigma);
 
+  //: Write to stream
+  vcl_ostream& write(vcl_ostream&) const;
+
+  //: Read from stream
+  vcl_istream& read(vcl_istream&);
+
   void print() const;
  private:
   void compute_area() const; // mutable const
@@ -123,6 +130,19 @@ template <class T> class bsta_histogram
   T max_;
   vcl_vector<T> counts_;
 };
+
+//: Write histogram to stream
+// \relates bsta_histogram 
+template <class T>
+vcl_ostream&  operator<<(vcl_ostream& s, bsta_histogram<T> const& h);
+
+//: Read histogram from stream
+// \relates bsta_histogram
+template <class T>
+vcl_istream&  operator>>(vcl_istream& is,  bsta_histogram<T>& h);
+
+
+
 
 #define BSTA_HISTOGRAM_INSTANTIATE(T) extern "Please #include <bsta/bsta_histogram.txx>"
 

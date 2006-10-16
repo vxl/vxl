@@ -297,8 +297,59 @@ void bsta_histogram<T>::print() const
       vcl_cout << "p[" << i << "]=" << p(i) << '\n';
 }
 
+template <class T>
+vcl_ostream& bsta_histogram<T>::write(vcl_ostream& s) const
+{
+  s << 
+    area_valid_ << ' ' <<
+    area_ << ' ' <<
+    nbins_ << ' ' <<
+    range_ << ' ' <<
+    delta_ << ' ' <<
+    min_prob_ << ' ' <<
+    min_ << ' ' <<
+    max_ << ' ';
+    for(int i = 0; i < counts_.size() ; i++)
+      s << counts_[i] << ' ';
+
+    return  s << '\n';
+}
+
+template <class T>
+vcl_istream& bsta_histogram<T>::read(vcl_istream& s)
+{
+  s >> 
+    area_valid_ >> 
+    area_ >> 
+    nbins_ >> 
+    range_ >> 
+    delta_ >> 
+    min_prob_ >> 
+    min_ >> 
+    max_;
+    counts_.resize(nbins_);
+    for(int i = 0; i < counts_.size() ; i++)
+      s >> counts_[i] ;
+    return  s;
+}
+
+//: Write to stream
+template <class T>
+vcl_ostream& operator<<(vcl_ostream& s, bsta_histogram<T> const& h) {
+  return h.write(s);
+}
+
+//: Read from stream
+template <class T>
+vcl_istream& operator>>(vcl_istream& is, bsta_histogram<T>& h) {
+  return h.read(is);
+}
+
+
 #undef BSTA_HISTOGRAM_INSTANTIATE
 #define BSTA_HISTOGRAM_INSTANTIATE(T) \
-template class bsta_histogram<T >
+template class bsta_histogram<T >;\
+template vcl_istream& operator>>(vcl_istream&, bsta_histogram<T>&);\
+template vcl_ostream& operator<<(vcl_ostream&, bsta_histogram<T> const&);
 
 #endif // bsta_histogram_txx_
