@@ -30,7 +30,7 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(vtol ${vtol_sources})
 INSTALL_TARGETS(/lib vtol)
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/gel/vtol ${vtol_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/vtol ${vtol_sources})
 TARGET_LINK_LIBRARIES(vtol vdgl vsol vnl vbl vul ${CMAKE_THREAD_LIBS})
 
 SUBDIRS( algo )

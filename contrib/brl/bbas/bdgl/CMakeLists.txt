@@ -11,7 +11,7 @@ SET(bdgl_sources
 
 ADD_LIBRARY(bdgl ${bdgl_sources})
 INSTALL_TARGETS(/lib bdgl)
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/brl/bbas/bdgl ${bdgl_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bdgl ${bdgl_sources})
 
 TARGET_LINK_LIBRARIES(bdgl vdgl vsol vgl_algo vgl vnl_algo vnl)
 

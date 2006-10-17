@@ -15,7 +15,7 @@ AUX_SOURCE_DIRECTORY(Templates mil3d_sources)
 
 ADD_LIBRARY(mil3d ${mil3d_sources})
 INSTALL_TARGETS(/lib mil3d)
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/mul/mil3d ${mil3d_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/mil3d ${mil3d_sources})
 TARGET_LINK_LIBRARIES(mil3d mil vbl_io vnl_io vnl vgl vbl vsl)
 
 IF (BUILD_TESTING)

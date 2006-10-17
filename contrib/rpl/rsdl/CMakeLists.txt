@@ -21,7 +21,7 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(rsdl ${rsdl_sources})
 INSTALL_TARGETS(/lib rsdl)
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/rpl/rsdl ${rsdl_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/rpl/rsdl ${rsdl_sources})
 TARGET_LINK_LIBRARIES( rsdl vnl vbl )
 
 IF (BUILD_TESTING)

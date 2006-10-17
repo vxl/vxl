@@ -16,7 +16,7 @@ IF(HAS_VGUI)
 
   ADD_LIBRARY(jvid ${jvid_sources})
   INSTALL_TARGETS(/lib jvid)
-  INSTALL_NOBASE_HEADER_FILES(/include/contrib/gel/jvid ${jvid_sources})
+  INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/jvid ${jvid_sources})
   TARGET_LINK_LIBRARIES( jvid vgui vidl_vil1 vul vil1 )
   IF(MPEG2_FOUND)
     TARGET_LINK_LIBRARIES( jvid ${MPEG2_LIBRARIES} )

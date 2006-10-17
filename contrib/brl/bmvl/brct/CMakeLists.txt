@@ -24,7 +24,7 @@ AUX_SOURCE_DIRECTORY(Templates brct_sources)
 
 ADD_LIBRARY(brct ${brct_sources})
 INSTALL_TARGETS(/lib brct)
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/brl/bmvl/brct ${brct_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bmvl/brct ${brct_sources})
 
 TARGET_LINK_LIBRARIES(brct sdet brip rrel vsrl bsol gevd vdgl vsol mvl vil vil1 vgl_algo vgl vnl vbl bdgl bugl)
 

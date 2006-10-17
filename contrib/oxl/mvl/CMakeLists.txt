@@ -108,7 +108,7 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(mvl ${mvl_sources})
 INSTALL_TARGETS(/lib mvl)
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/oxl/mvl ${mvl_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/oxl/mvl ${mvl_sources})
 TARGET_LINK_LIBRARIES(mvl vil1 vnl_algo vnl vbl vgl vgl_algo vul)
 
 IF (BUILD_EXAMPLES)

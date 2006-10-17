@@ -197,7 +197,7 @@ ADD_LIBRARY(vnl ${vnl_sources})
 TARGET_LINK_LIBRARIES( vnl vcl )
 
 INSTALL_TARGETS(/lib vnl)
-INSTALL_NOBASE_HEADER_FILES(/include/core/vnl ${vnl_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vnl ${vnl_sources})
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)

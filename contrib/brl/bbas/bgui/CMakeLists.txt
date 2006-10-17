@@ -30,7 +30,7 @@ IF(HAS_VGUI)
  AUX_SOURCE_DIRECTORY(Templates bgui_sources)
  ADD_LIBRARY(bgui ${bgui_sources})
  INSTALL_TARGETS(/lib bgui)
- INSTALL_NOBASE_HEADER_FILES(/include/contrib/brl/bbas/bgui ${bgui_sources})
+ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bgui ${bgui_sources})
 
  TARGET_LINK_LIBRARIES(bgui bsta bmrf vdgl vtol vsol vgui vgl_algo vgl vil_algo vil vil1 vnl vbl vcl)
 

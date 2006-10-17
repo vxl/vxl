@@ -4,7 +4,7 @@ PROJECT( gel )
 
 SET( GEL_INCLUDE_DIR ${gel_SOURCE_DIR} CACHE STATIC "GE package include files" )
 SET( GEL_INSTALL_INCLUDE_DIR 
-  ${CMAKE_INSTALL_PREFIX}/include/contrib/gel
+  ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/gel
   CACHE INTERNAL "GE package include files"
 )
 

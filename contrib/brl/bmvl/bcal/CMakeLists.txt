@@ -15,7 +15,7 @@ SET(bcal_sources
 
 ADD_LIBRARY(bcal ${bcal_sources})
 INSTALL_TARGETS(/lib bcal)
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/brl/bmvl/bcal ${bcal_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bmvl/bcal ${bcal_sources})
 TARGET_LINK_LIBRARIES(bcal vgl_algo vnl_algo vnl vgl vcsl)
 
 IF(BUILD_TESTING)

@@ -41,7 +41,7 @@ ADD_LIBRARY(vbl ${vbl_sources})
 TARGET_LINK_LIBRARIES( vbl vcl )
 
 INSTALL_TARGETS(/lib vbl)
-INSTALL_NOBASE_HEADER_FILES(/include/core/vbl ${vbl_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vbl ${vbl_sources})
 
 IF( BUILD_EXAMPLES )
   SUBDIRS( examples )

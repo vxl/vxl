@@ -40,7 +40,7 @@ AUX_SOURCE_DIRECTORY(Templates osl_sources)
 
 ADD_LIBRARY(osl ${osl_sources})
 INSTALL_TARGETS(/lib osl)
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/oxl/osl ${osl_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/oxl/osl ${osl_sources})
 TARGET_LINK_LIBRARIES(osl vnl_algo vnl vgl vil1 vbl)
 
 IF (BUILD_EXAMPLES)

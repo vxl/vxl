@@ -13,7 +13,7 @@ ADD_LIBRARY(vgl_xio ${vgl_xio_sources})
 TARGET_LINK_LIBRARIES( vgl_xio vgl vsl )
 
 INSTALL_TARGETS(/lib vgl_xio)
-INSTALL_NOBASE_HEADER_FILES(/include/core/vgl/xio ${vgl_xio_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vgl/xio ${vgl_xio_sources})
 
 #IF( BUILD_TESTING)
 #  SUBDIRS(tests)

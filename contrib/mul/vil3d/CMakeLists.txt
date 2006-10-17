@@ -40,7 +40,7 @@ ADD_LIBRARY(vil3d ${vil3d_sources})
 TARGET_LINK_LIBRARIES( vil3d vil vul vsl vcl )
 
 INSTALL_TARGETS(/lib vil3d)
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/mul/vil3d ${vil3d_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/vil3d ${vil3d_sources})
 
 SUBDIRS(algo io)
 

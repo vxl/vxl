@@ -39,7 +39,7 @@ ENDIF(WIN32)
 
 ADD_LIBRARY(vidl_vil1 ${vidl_vil1_sources})
 INSTALL_TARGETS(/lib vidl_vil1)
-INSTALL_NOBASE_HEADER_FILES(/include/core/vidl_vil1 ${vidl_vil1_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vidl_vil1 ${vidl_vil1_sources})
 TARGET_LINK_LIBRARIES( vidl_vil1 vbl vul vil1 vcl )
 IF( MPEG2_FOUND )
   TARGET_LINK_LIBRARIES( vidl_vil1 ${MPEG2_LIBRARIES} )

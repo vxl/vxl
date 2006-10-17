@@ -72,7 +72,7 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(vipl ${vipl_sources})
 INSTALL_TARGETS(/lib vipl)
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/tbl/vipl ${vipl_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/tbl/vipl ${vipl_sources})
 TARGET_LINK_LIBRARIES(vipl vil vil1 vnl)
 
 IF (BUILD_EXAMPLES)

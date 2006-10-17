@@ -24,7 +24,7 @@ AUX_SOURCE_DIRECTORY(Templates bmrf_sources)
 
 ADD_LIBRARY(bmrf ${bmrf_sources})
 INSTALL_TARGETS(/lib bmrf)
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/brl/bseg/bmrf ${bmrf_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/bmrf ${bmrf_sources})
 
 TARGET_LINK_LIBRARIES(bmrf bugl vtol gevd vil vnl_io)
 

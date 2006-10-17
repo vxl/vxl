@@ -12,4 +12,4 @@ SET(geometry_sources
  DigitalCurve_to_vdgl.h
 )
 
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/conversions/geometry ${geometry_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/conversions/geometry ${geometry_sources})

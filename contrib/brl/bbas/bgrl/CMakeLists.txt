@@ -12,7 +12,7 @@ AUX_SOURCE_DIRECTORY(Templates bgrl_sources)
 
 ADD_LIBRARY(bgrl ${bgrl_sources})
 INSTALL_TARGETS(/lib bgrl)
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/brl/bbas/bgrl ${bgrl_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bgrl ${bgrl_sources})
 
 TARGET_LINK_LIBRARIES(bgrl vbl_io vbl vsl)
 

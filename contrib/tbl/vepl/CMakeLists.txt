@@ -40,7 +40,7 @@ ADD_DEFINITIONS(-DINSTANTIATE_TEMPLATES)
 
 ADD_LIBRARY(vepl ${vepl_sources})
 INSTALL_TARGETS(/lib vepl)
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/tbl/vepl ${vepl_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/tbl/vepl ${vepl_sources})
 TARGET_LINK_LIBRARIES(vepl vipl vil1 ${CMAKE_THREAD_LIBS})
 
 IF (BUILD_EXAMPLES)

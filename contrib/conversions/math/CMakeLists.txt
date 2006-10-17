@@ -22,4 +22,4 @@ SET(math_sources
  vnl_vector_to_vbl_array.h
 )
 
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/conversions/math ${math_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/conversions/math ${math_sources})

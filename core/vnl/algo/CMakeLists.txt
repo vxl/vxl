@@ -89,7 +89,7 @@ IF(NETLIB_FOUND)
   TARGET_LINK_LIBRARIES( vnl_algo ${NETLIB_LIBRARIES} vnl )
 
   INSTALL_TARGETS(/lib vnl_algo)
-  INSTALL_NOBASE_HEADER_FILES(/include/core/vnl/algo ${vnl_algo_sources})
+  INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vnl/algo ${vnl_algo_sources})
 
   IF( BUILD_TESTING )
     SUBDIRS(tests)

@@ -32,7 +32,7 @@ ADD_LIBRARY(vsl ${vsl_sources})
 TARGET_LINK_LIBRARIES( vsl vcl )
 
 INSTALL_TARGETS(/lib vsl)
-INSTALL_NOBASE_HEADER_FILES(/include/core/vsl ${vsl_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vsl ${vsl_sources})
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)

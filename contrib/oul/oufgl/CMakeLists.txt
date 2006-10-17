@@ -10,7 +10,7 @@ SET(oufgl_sources
 
 ADD_LIBRARY(oufgl ${oufgl_sources})
 INSTALL_TARGETS(/lib oufgl)
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/oul/oufgl ${oufgl_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/oul/oufgl ${oufgl_sources})
 TARGET_LINK_LIBRARIES( oufgl vil vil1 rt)
 
 SUBDIRS(examples)

@@ -28,7 +28,7 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(gevd ${gevd_sources})
 INSTALL_TARGETS(/lib gevd)
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/gel/gevd ${gevd_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/gevd ${gevd_sources})
 TARGET_LINK_LIBRARIES(gevd vtol vsol vdgl vil1 vil vnl vbl vul)
 
 IF (BUILD_TESTING)

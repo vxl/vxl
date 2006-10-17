@@ -24,4 +24,4 @@ SET(container_sources
  vnl_vector_to_vcl_vector.h
 )
 
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/conversions/container ${container_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/conversions/container ${container_sources})

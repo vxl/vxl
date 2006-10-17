@@ -59,7 +59,7 @@ ADD_LIBRARY(vil_algo ${vil_algo_sources})
 TARGET_LINK_LIBRARIES( vil_algo vil vnl_algo vnl vcl )
 
 INSTALL_TARGETS(/lib vil_algo)
-INSTALL_NOBASE_HEADER_FILES(/include/core/vil/algo ${vil_algo_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vil/algo ${vil_algo_sources})
 
 IF( BUILD_EXAMPLES )
   SUBDIRS( examples )

@@ -5,7 +5,7 @@ PROJECT( brl )
 
 SET( BRL_INCLUDE_DIR ${brl_SOURCE_DIR} CACHE STATIC "Brown University package include files" )
 SET( BRL_INSTALL_INCLUDE_DIR 
-  ${CMAKE_INSTALL_PREFIX}/include/contrib/brl 
+  ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/brl 
   CACHE INTERNAL "Brown University package include files"
 )
 
@@ -26,4 +26,3 @@ SUBDIRS(bmvl)
 
 # standalone executables
 SUBDIRS(bexe)
-

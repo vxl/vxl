@@ -18,7 +18,7 @@ AUX_SOURCE_DIRECTORY(Templates vdgl_sources)
 
 ADD_LIBRARY(vdgl ${vdgl_sources})
 INSTALL_TARGETS(/lib vdgl)
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/gel/vdgl ${vdgl_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/vdgl ${vdgl_sources})
 TARGET_LINK_LIBRARIES(vdgl vsol vgl_algo vgl vnl_algo vnl vbl_io vbl vsl vul vcl)
 
 IF (BUILD_TESTING)

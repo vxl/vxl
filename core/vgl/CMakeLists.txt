@@ -63,7 +63,7 @@ ADD_LIBRARY(vgl ${vgl_sources})
 TARGET_LINK_LIBRARIES( vgl vcl )
 
 INSTALL_TARGETS(/lib vgl)
-INSTALL_NOBASE_HEADER_FILES(/include/core/vgl ${vgl_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vgl ${vgl_sources})
 
 SUBDIRS( algo )
 

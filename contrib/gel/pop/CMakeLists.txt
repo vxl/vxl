@@ -25,7 +25,7 @@ SET(pop_sources
 
 ADD_LIBRARY(pop ${pop_sources})
 INSTALL_TARGETS(/lib pop)
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/gel/pop ${pop_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/pop ${pop_sources})
 TARGET_LINK_LIBRARIES( pop vcl vnl vgl vnl_algo vgl_algo)
 
 IF( BUILD_EXAMPLES )

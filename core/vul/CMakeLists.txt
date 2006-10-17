@@ -71,7 +71,7 @@ ENDIF(APPLE)
 
 TARGET_LINK_LIBRARIES( vul vcl )
 
-INSTALL_NOBASE_HEADER_FILES(/include/core/vul 
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vul 
   ${vul_sources}
   ${vul_network_sources}
 )

@@ -19,7 +19,7 @@ AUX_SOURCE_DIRECTORY(Templates bvgl_sources)
 
 ADD_LIBRARY(bvgl ${bvgl_sources})
 INSTALL_TARGETS(/lib bvgl)
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/brl/bbas/bvgl ${bvgl_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bvgl ${bvgl_sources})
 TARGET_LINK_LIBRARIES(bvgl vgl vnl_algo vnl)
 
 IF( BUILD_TESTING )

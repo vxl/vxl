@@ -34,4 +34,4 @@ ADD_LIBRARY(vgl_algo ${vgl_algo_sources})
 TARGET_LINK_LIBRARIES( vgl_algo vgl vnl_algo vnl )
 
 INSTALL_TARGETS(/lib vgl_algo)
-INSTALL_NOBASE_HEADER_FILES(/include/core/vgl/algo ${vgl_algo_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vgl/algo ${vgl_algo_sources})

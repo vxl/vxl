@@ -17,7 +17,7 @@ ADD_LIBRARY(vil_io ${vil_io_sources})
 TARGET_LINK_LIBRARIES( vil_io vil vsl )
 
 INSTALL_TARGETS(/lib vil_io)
-INSTALL_NOBASE_HEADER_FILES(/include/core/vil/io ${vil_io_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vil/io ${vil_io_sources})
 
 IF( BUILD_TESTING)
   SUBDIRS(tests)

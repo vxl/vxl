@@ -11,7 +11,7 @@ SET(vidl2_gui_sources
 
 ADD_LIBRARY(vidl2_gui ${vidl2_gui_sources})
 INSTALL_TARGETS(/lib vidl2_gui)
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/brl/bbas/vidl2/gui ${vidl_gui_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/vidl2/gui ${vidl_gui_sources})
 TARGET_LINK_LIBRARIES( vidl2_gui vidl2 vgui )
 
 

@@ -81,7 +81,7 @@ ENDIF (AVIFILE_FOUND)
 
 ADD_LIBRARY(vidl ${vidl_sources})
 INSTALL_TARGETS(/lib vidl)
-INSTALL_NOBASE_HEADER_FILES(/include/core/vidl ${vidl_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vidl ${vidl_sources})
 
 TARGET_LINK_LIBRARIES( vidl vbl vul vil vcl )
 IF( MPEG2_FOUND )

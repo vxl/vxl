@@ -16,7 +16,7 @@ AUX_SOURCE_DIRECTORY(Templates bsol_sources)
 
 ADD_LIBRARY(bsol ${bsol_sources})
 INSTALL_TARGETS(/lib bsol)
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/brl/bbas/bsol ${bsol_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bsol ${bsol_sources})
 TARGET_LINK_LIBRARIES(bsol vsol vgl_algo vgl vnl vbl)
 
 IF(BUILD_TESTING)

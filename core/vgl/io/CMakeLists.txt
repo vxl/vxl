@@ -30,7 +30,7 @@ ADD_LIBRARY(vgl_io ${vgl_io_sources})
 TARGET_LINK_LIBRARIES( vgl_io vgl vsl )
 
 INSTALL_TARGETS(/lib vgl_io)
-INSTALL_NOBASE_HEADER_FILES(/include/core/vgl/io ${vgl_io_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vgl/io ${vgl_io_sources})
 
 IF( BUILD_TESTING)
   SUBDIRS(tests)

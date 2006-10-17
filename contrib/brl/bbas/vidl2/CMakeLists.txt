@@ -96,7 +96,7 @@ AUX_SOURCE_DIRECTORY(Templates vidl2_sources)
 
 ADD_LIBRARY(vidl2 ${vidl2_sources})
 INSTALL_TARGETS(/lib vidl2)
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/brl/bbas/vidl2 ${vidl_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/vidl2 ${vidl_sources})
 
 TARGET_LINK_LIBRARIES( vidl2 vil vul )
 IF( FFMPEG_FOUND )

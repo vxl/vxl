@@ -15,7 +15,7 @@ AUX_SOURCE_DIRECTORY(Templates bsta_sources)
 
 ADD_LIBRARY(bsta ${bsta_sources})
 INSTALL_TARGETS(/lib bsta)
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/bsta ${bsta_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/bsta ${bsta_sources})
 
 TARGET_LINK_LIBRARIES(bsta vnl vbl vcl)
 

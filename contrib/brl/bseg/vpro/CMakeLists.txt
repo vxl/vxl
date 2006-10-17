@@ -35,7 +35,7 @@ AUX_SOURCE_DIRECTORY(Templates vpro_sources)
 
 ADD_LIBRARY(vpro ${vpro_sources})
 INSTALL_TARGETS(/lib vpro)
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/vpro ${vpro_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/vpro ${vpro_sources})
 
 TARGET_LINK_LIBRARIES(vpro sdet brip gevd vtol vsol vidl_vil1 vil1 vidl vil vul vbl)
 

@@ -4,7 +4,7 @@ PROJECT( oul )
 
 SET( OUL_INCLUDE_DIR ${oul_SOURCE_DIR} CACHE INTERNAL "Otago University package include files" )
 SET( OUL_INSTALL_INCLUDE_DIR 
-  ${CMAKE_INSTALL_PREFIX}/include/contrib/oul
+  ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/oul
   CACHE INTERNAL "Otago University package include files"
 )
 

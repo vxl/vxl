@@ -357,7 +357,7 @@ ENDIF(UNIX)
 
 # Installation
 INSTALL_TARGETS(/lib vcl)
-INSTALL_NOBASE_HEADER_FILES(/include/vcl ${vcl_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/vcl ${vcl_sources})
 
 # INCLUDE( ${vxl_SOURCE_DIR}/vcl/LinkSTLPort.cmake )
 

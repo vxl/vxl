@@ -21,7 +21,7 @@ IF(HAS_VGUI)
 
  ADD_LIBRARY(segv ${segv_sources})
  INSTALL_TARGETS(/lib segv)
- INSTALL_NOBASE_HEADER_FILES(/include/contrib/brl/bseg/segv ${segv_sources})
+ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/segv ${segv_sources})
 
  TARGET_LINK_LIBRARIES(segv bgui vgui strk sdet bsol brip vtol vdgl vsol vil vil_algo vil1 vnl vbl)
 

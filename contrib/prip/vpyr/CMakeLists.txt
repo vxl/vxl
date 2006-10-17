@@ -24,7 +24,7 @@ SET(vpyr_sources
 
 ADD_LIBRARY(vpyr ${vpyr_sources})
 INSTALL_TARGETS(/lib vpyr)
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/prip/vpyr ${vpyr_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/prip/vpyr ${vpyr_sources})
 TARGET_LINK_LIBRARIES(vpyr vmap)
 
 #IF (BUILD_EXAMPLES)

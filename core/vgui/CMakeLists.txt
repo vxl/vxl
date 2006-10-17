@@ -460,7 +460,7 @@ SET( vgui_sources ${vgui_sources}
 
 ADD_LIBRARY(vgui ${vgui_sources})
 INSTALL_TARGETS(/lib vgui)
-INSTALL_NOBASE_HEADER_FILES(/include/core/vgui ${vgui_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vgui ${vgui_sources})
 SET( VGUI_FOUND "YES" CACHE INTERNAL "Was vgui successfully built?" )
 
 # Dependencies on other vxl libraries

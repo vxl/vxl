@@ -57,7 +57,7 @@
   ADD_LIBRARY( vcsl ${vcsl_sources} )
   TARGET_LINK_LIBRARIES( vcsl vnl vbl )
   INSTALL_TARGETS(/lib vcsl)
-  INSTALL_NOBASE_HEADER_FILES(/include/core/vcsl ${vcsl_sources})
+  INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vcsl ${vcsl_sources})
 
   IF( BUILD_EXAMPLES )
     SUBDIRS( examples )

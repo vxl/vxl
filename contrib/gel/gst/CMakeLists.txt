@@ -12,6 +12,6 @@ AUX_SOURCE_DIRECTORY(Templates gst_sources)
 
 ADD_LIBRARY(gst ${gst_sources})
 INSTALL_TARGETS(/lib gst)
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/gel/gst ${gst_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/gst ${gst_sources})
 
 TARGET_LINK_LIBRARIES(gst vbl)

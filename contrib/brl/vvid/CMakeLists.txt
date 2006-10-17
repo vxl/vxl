@@ -41,7 +41,7 @@ IF(HAS_VGUI)
  ENDIF(HAS_CMU1394CAMERA)
 
  INSTALL_TARGETS(/lib vvid)
- INSTALL_NOBASE_HEADER_FILES(/include/contrib/brl/vvid ${vvid_sources})
+ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/vvid ${vvid_sources})
 
  TARGET_LINK_LIBRARIES(vvid vpro strk sdet btol bsol vtol vsol brip bgui vgui vidl vidl_vil1 vul vil vil1)
 

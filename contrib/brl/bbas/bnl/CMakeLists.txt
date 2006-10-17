@@ -8,7 +8,7 @@ SET(bnl_sources
 
 ADD_LIBRARY(bnl ${bnl_sources})
 INSTALL_TARGETS(/lib bnl)
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/brl/bbas/bnl ${bnl_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bnl ${bnl_sources})
 
 TARGET_LINK_LIBRARIES(bnl vnl vnl_algo) 
 

@@ -261,7 +261,7 @@ IF (SOLARIS)
   TARGET_LINK_LIBRARIES( vil nsl vil_network socket )
 ENDIF (SOLARIS)
 
-INSTALL_NOBASE_HEADER_FILES(/include/core/vil
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vil
   ${vil_sources}
   ${vil_network_sources}
 )

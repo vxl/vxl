@@ -9,7 +9,7 @@ SET( netlib_sources
 
 ADD_LIBRARY( netlib ${netlib_sources} )
 INSTALL_TARGETS( /lib netlib )
-INSTALL_FILES( /include/v3p/netlib .h triangle )
+INSTALL_FILES( /include/vxl/v3p/netlib .h triangle )
 
 IF(UNIX)
   TARGET_LINK_LIBRARIES( netlib m )
@@ -397,7 +397,7 @@ ENDIF(CMAKE_COMPILER_IS_GNUCC)
 # Create a netlib library with mangled symbols.
 ADD_LIBRARY(v3p_netlib ${v3p_netlib_sources})
 INSTALL_TARGETS( /lib v3p_netlib )
-INSTALL_NOBASE_HEADER_FILES(/include/v3p/netlib ${v3p_netlib_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/v3p/netlib ${v3p_netlib_sources})
 IF(UNIX)
   TARGET_LINK_LIBRARIES( v3p_netlib m )
 ENDIF(UNIX)

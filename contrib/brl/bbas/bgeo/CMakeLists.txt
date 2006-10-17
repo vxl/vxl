@@ -13,7 +13,7 @@ AUX_SOURCE_DIRECTORY(Templates bgeo_sources)
 
 ADD_LIBRARY(bgeo ${bgeo_sources})
 INSTALL_TARGETS(/lib bgeo)
-INSTALL_NOBASE_HEADER_FILES(/include/contrib/brl/bbas/bgeo ${bgeo_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bgeo ${bgeo_sources})
 
 TARGET_LINK_LIBRARIES(bgeo vnl vbl)
 
