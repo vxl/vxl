@@ -34,6 +34,10 @@ rsdl_bins_2d( const vnl_vector_fixed< COORD_T, 2 > & min_pt,
   num_bins_x_ = int( vcl_ceil( double( max_pt_[0] - min_pt_[0] ) / bin_sizes_[0] ) );
   num_bins_y_ = int( vcl_ceil( double( max_pt_[1] - min_pt_[1] ) / bin_sizes_[1] ) );
 
+  // make sure the number is at least 1
+  if( num_bins_x_ <=0 )  num_bins_x_ = 1;
+  if( num_bins_y_ <=0 )  num_bins_y_ = 1;
+
   bins_.resize( num_bins_x_, num_bins_y_ );
 }
 
