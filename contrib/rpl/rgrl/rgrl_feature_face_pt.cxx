@@ -198,6 +198,41 @@ absolute_signature_weight( rgrl_feature_sptr other ) const
   return  dir_wgt* vcl_sqrt(scale_wgt);
 }
 
+//:  Compute the signature error vector between two features.
+vnl_vector<double> 
+rgrl_feature_face_pt::
+signature_error_vector( rgrl_feature const& other ) const
+{
+  if( !other.is_type( rgrl_feature_face_pt::type_id() ) ) 
+    return vnl_vector<double>();
+  
+  // cast it to face point type
+  rgrl_feature_face_pt const& other_face_pt = static_cast<rgrl_feature_face_pt const&>(other);
+  
+  // compute cos between normals 
+  const double dot = dot_product( this->normal_, other_face_pt.normal_ );
+  const double half_pi = vnl_math::pi / 2.0;
+  double ang = vcl_acos( dot );
+
+  // make it between [-pi/2, pi/2]
+  if( ang > half_pi )  ang -= vnl_math::pi;
+    
+  vnl_vector<double> error_vec(1, ang);
+  return error_vec;
+  
+}
+
+//:  the dimensions of the signature error vector.
+unsigned 
+rgrl_feature_face_pt::
+signature_error_dimension( const vcl_type_info& other_feature_type ) const
+{
+  if( other_feature_type == rgrl_feature_face_pt::type_id() )
+    return 1; 
+  else
+    return 0;
+}
+
 //: write out feature
 void
 rgrl_feature_face_pt::

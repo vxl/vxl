@@ -7,6 +7,10 @@
 //    There could be a defined image region surrounding these.
 // \author Chuck Stewart
 // \date 16 Sep 2003
+// \verbatim
+// Modifications
+// 17 Oct 2006  GY:  put in signature error vector
+// \endverbatim
 
 #include <rgrl/rgrl_feature.h>
 #include <vcl_iosfwd.h>
@@ -66,6 +70,12 @@ class rgrl_feature_face_pt
 
   //:  Compute the signature weight between two features.
   virtual double absolute_signature_weight( rgrl_feature_sptr other ) const;
+
+  //:  Compute the signature error vector between two features.
+  virtual vnl_vector<double> signature_error_vector( rgrl_feature const& other ) const;
+
+  //:  the dimensions of the signature error vector.
+  virtual unsigned signature_error_dimension( const vcl_type_info& other_feature_type ) const;
 
  protected:
   //:
