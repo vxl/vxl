@@ -66,6 +66,12 @@ public:
   void set_geo_scale_type(type new_type)
   { geo_scale_type_ = new_type; }
   
+  //: write to io stream
+  void write( vcl_ostream& os ) const;
+
+  //: read from io stream
+  bool read( vcl_istream& is );
+  
 private:
   bool                has_geometric_scale_;
   double              geometric_scale_;
