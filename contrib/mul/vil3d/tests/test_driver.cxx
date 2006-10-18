@@ -27,6 +27,8 @@ DECLARE( test_algo_histogram_equalise );
 DECLARE( test_algo_histogram );
 DECLARE( test_algo_anisotropic_filter );
 DECLARE( test_algo_smooth_121 );
+DECLARE( test_algo_corners );
+DECLARE( test_algo_quad_distance_function );
 
 void
 register_tests()
@@ -58,6 +60,8 @@ register_tests()
   REGISTER( test_algo_histogram );
   REGISTER( test_algo_anisotropic_filter );
   REGISTER( test_algo_smooth_121 );
+  REGISTER( test_algo_corners );
+  REGISTER( test_algo_quad_distance_function );
 }
 
 DEFINE_MAIN;

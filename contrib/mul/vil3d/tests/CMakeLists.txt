@@ -30,6 +30,8 @@ ADD_EXECUTABLE( vil3d_test_all
   test_algo_histogram_equalise.cxx
   test_algo_anisotropic_filter.cxx
   test_algo_smooth_121.cxx
+  test_algo_corners.cxx
+  test_algo_quad_distance_function.cxx
 )
 
 TARGET_LINK_LIBRARIES( vil3d_test_all vil3d_algo vil3d vil vpl vul testlib vcl )
@@ -61,6 +63,8 @@ ADD_TEST( vil3d_test_algo_histogram                   ${EXECUTABLE_OUTPUT_PATH}/
 ADD_TEST( vil3d_test_algo_histogram_equalise          ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all  test_algo_histogram_equalise )
 ADD_TEST( vil3d_test_algo_anisotropic_filter          ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all  test_algo_anisotropic_filter )
 ADD_TEST( vil3d_test_algo_smooth_121                  ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all  test_algo_smooth_121 )
+ADD_TEST( vil3d_test_algo_corners                     ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all  test_algo_corners )
+ADD_TEST( vil3d_test_algo_quad_distance_function      ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all  test_algo_quad_distance_function )
 
 ADD_EXECUTABLE( vil3d_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( vil3d_test_include vil3d_algo vil3d )
+TARGET_LINK_LIBRARIES( vil3d_test_include vil3d_algo vil3d vgl )
