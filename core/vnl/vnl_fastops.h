@@ -34,6 +34,8 @@ class vnl_fastops
   static void Ab (vnl_vector<double>& out, const vnl_matrix<double>& A, const vnl_vector<double>& b);
   static void ABt(vnl_matrix<double>& out, const vnl_matrix<double>& A, const vnl_matrix<double>& B);
 
+  static double btAb (const vnl_matrix<double>& A, const vnl_vector<double>& b);
+
   static void inc_X_by_AtA(vnl_matrix<double>& X, const vnl_matrix<double>& A);
   static void inc_X_by_AB (vnl_matrix<double>& X, const vnl_matrix<double>& A, const vnl_matrix<double>& B);
   static void inc_X_by_AtB(vnl_matrix<double>& X, const vnl_matrix<double>& A, const vnl_matrix<double>& B);
