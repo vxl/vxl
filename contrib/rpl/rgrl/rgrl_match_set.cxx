@@ -746,6 +746,13 @@ rgrl_match_set_const_from_iterator()
 {
 };
 
+rgrl_match_set_const_from_iterator::
+rgrl_match_set_const_from_iterator( rgrl_match_set_from_iterator const& from_iter )
+  : match_set_( from_iter.match_set_ ),
+    index_( from_iter.index_ )
+{
+  
+}
 
 rgrl_match_set_const_from_iterator&
 rgrl_match_set_const_from_iterator::
@@ -845,7 +852,13 @@ rgrl_match_set_const_from_to_iterator()
 {
 };
 
-
+//: copy constructor
+//  it is used to convert from_to_iterator to const type
+rgrl_match_set_const_from_to_iterator::
+rgrl_match_set_const_from_to_iterator( rgrl_match_set_from_to_iterator const& to_iter )
+  : itr_( to_iter.itr_ )
+{
+}
 rgrl_match_set_const_from_to_iterator&
 rgrl_match_set_const_from_to_iterator::
 operator++()

@@ -266,7 +266,8 @@ class rgrl_match_set_from_iterator
 
  private:
   friend class rgrl_match_set;
-
+  friend class rgrl_match_set_const_from_iterator;
+  
   // For use by rgrl_match_set
   rgrl_match_set_from_iterator( rgrl_match_set* ms,
                                 vcl_vector< rgrl_feature_sptr >::size_type ind );
@@ -290,6 +291,10 @@ class rgrl_match_set_const_from_iterator
   // set to point into a rgrl_match_set.
   rgrl_match_set_const_from_iterator( );
 
+  //: copy constructor
+  //  it is used to convert a from_iterator into const type
+  rgrl_match_set_const_from_iterator( rgrl_match_set_from_iterator const& from_iter );
+  
   rgrl_match_set_const_from_iterator& operator++();
   rgrl_match_set_const_from_iterator operator++( int );
   rgrl_match_set_const_from_iterator& operator+( int );
@@ -367,6 +372,8 @@ class rgrl_match_set_from_to_iterator
  protected:
 
   friend class rgrl_match_set_from_iterator;
+  friend class rgrl_match_set_const_from_to_iterator;
+  
   typedef rgrl_match_set::match_info match_info;
   typedef vcl_vector< match_info >::iterator MatchInfoIter;
   // for use by rgrl_match_set_from_iterator
@@ -387,6 +394,10 @@ class rgrl_match_set_const_from_to_iterator
   // job
   // rgrl_match_set_from_to_iterator( rgrl_match_set_from_to_iterator const& );
 
+  //: copy constructor
+  //  it is used to convert from_to_iterator to const type
+  rgrl_match_set_const_from_to_iterator( rgrl_match_set_from_to_iterator const& to_iter );
+  
   //:
   self_type& operator++();
   self_type& operator+(int RHS);
