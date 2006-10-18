@@ -43,7 +43,7 @@ void vil3d_grad_3x3x3_j(const vil3d_image_view<srcT>& src_im,
 //  Smooths in i and j with 1-2-1 filters, then applies (-0.5 0 0.5)
 //  filter along k.  Intermediate images of type destT
 template<class srcT, class destT>
-void vil3d_grad_3x3x3_j(const vil3d_image_view<srcT>& src_im,
+void vil3d_grad_3x3x3_k(const vil3d_image_view<srcT>& src_im,
                         vil3d_image_view<destT>& grad_im)
 {
   vil3d_image_view<destT> tmp_im;
@@ -74,3 +74,5 @@ void vil3d_grad_3x3x3(const vil3d_image_view<srcT>& src_im,
   vil3d_smooth_121_k(smth_j,smth_jk);
   vil3d_grad_1x3_i(smth_jk,grad_i);
 }
+
+#endif
