@@ -100,7 +100,11 @@ for (unsigned p=0;p<nplanes;++p)
 * - vil3d_threshold_below(src_im,dest_im,t)
 * - vil3d_threshold_inside(src_im,dest_im,tlo,thi)
 * - vil3d_threshold_outside(src_im,dest_im,tlo,thi)
-* - vil3d_grad_1x3(...)  : Compute gradients in 3D
+* - vil3d_grad_1x3(...)  : Compute gradients in 3D using (-1 0 1) filter
+* - vil3d_grad_3x3x3     : Compute gradients using Sobel like 3x3x3 filter
+* - vil3d_smooth_121     : Smooth using 1-2-1 shape filter
+* - vil3d_quad_distance_function : Cunning square distance filtering
+* - vil3d_distance_function : Efficient distance function computation
 *
 * Morphological functions  (using vil3d_structuring_element)
 * - vil3d_binary_erode
