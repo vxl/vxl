@@ -81,4 +81,12 @@ private:
   type                geo_scale_type_;
 };
 
+//: output operator
+vcl_ostream&
+operator<<( vcl_ostream& ofs, rgrl_scale const& scale );
+
+//: input operator
+vcl_istream&
+operator>>( vcl_istream& ifs, rgrl_scale& scale );
+
 #endif

@@ -92,7 +92,7 @@ write( vcl_ostream& os ) const
   if( has_signature_inv_covar_ ) {
     
     os << "SIGNATURE_INV_COVARIANCE" << vcl_endl;
-    os << signature_inv_covar_.row() << " " 
+    os << signature_inv_covar_.rows() << " " 
       << signature_inv_covar_.cols() << vcl_endl;
     os << signature_inv_covar_ << vcl_endl;
   }
@@ -169,3 +169,18 @@ read( vcl_istream& is )
   return true;
 }
 
+//: output operator
+vcl_ostream&
+operator<<( vcl_ostream& ofs, rgrl_scale const& scale )
+{
+  scale.write(ofs);
+  return ofs;
+}
+
+//: input operator
+vcl_istream&
+operator>>( vcl_istream& ifs, rgrl_scale& scale )
+{
+  scale.read(ifs);
+  return ifs;
+}
