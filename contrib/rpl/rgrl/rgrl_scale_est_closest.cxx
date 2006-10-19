@@ -123,6 +123,8 @@ bool
 rgrl_scale_est_closest::
 compute_signature_inv_covar( vnl_matrix<double>& inv_covar, rgrl_match_set const& match_set ) const
 {
+  if( !match_set.from_size() ) return false;
+    
   //  Do the same as above, one component at a time, BUT use the
   //  closest geometric feature to determine which signature vector to
   //  use.  (We really need to do better.)  This yields a diagonal
@@ -132,8 +134,10 @@ compute_signature_inv_covar( vnl_matrix<double>& inv_covar, rgrl_match_set const
   typedef from_iter::to_iterator              to_iter;
 
   from_iter fitr = match_set.from_begin();
-  unsigned nrows = fitr.from_feature()->signature_error_dimension( match_set.to_feature_type() );
-  assert( nrows );
+  const unsigned nrows = fitr.from_feature()->signature_error_dimension( match_set.to_feature_type() );
+  
+  // check on the error vector dimension
+  if( !nrows ) return false;
 
   vcl_vector< vcl_vector<double> > all_errors( nrows );
   bool success = true;
@@ -147,7 +151,7 @@ compute_signature_inv_covar( vnl_matrix<double>& inv_covar, rgrl_match_set const
       }
     } else {
       to_iter titr = fitr.begin();
-//    to_iter best_titr = titr;
+      to_iter best_titr = titr;
 
       rgrl_feature_sptr mapped_from = fitr.mapped_from_feature();
       double min_distance = titr.to_feature()->geometric_error( *mapped_from );
@@ -156,11 +160,11 @@ compute_signature_inv_covar( vnl_matrix<double>& inv_covar, rgrl_match_set const
         double distance = titr.to_feature()->geometric_error( *mapped_from );
         if ( distance < min_distance ) {
           min_distance = distance;
-//        best_titr = titr;
+          best_titr = titr;
         }
       }
 
-      vnl_vector<double> signature_error = titr.to_feature()->signature_error_vector( *mapped_from );
+      vnl_vector<double> signature_error = best_titr.to_feature()->signature_error_vector( *mapped_from );
       for ( unsigned r = 0; r < nrows; ++r ) {
         all_errors[r].push_back( signature_error[r] );
       }
@@ -170,7 +174,6 @@ compute_signature_inv_covar( vnl_matrix<double>& inv_covar, rgrl_match_set const
   inv_covar.set_size( nrows, nrows );
   inv_covar.fill( 0.0 );
 
-  double var;
   for ( unsigned r = 0; r < nrows&&success; ++r ) {
     
     if( all_errors[r].empty() ) {
@@ -178,12 +181,12 @@ compute_signature_inv_covar( vnl_matrix<double>& inv_covar, rgrl_match_set const
       break;
     }
     
-    var = vnl_math_sqr( obj_->scale( all_errors[r].begin(), all_errors[r].end() ) );
-    success = success && vnl_math_isfinite( var );
-    if( var < 1e-12 )  // if variance is too small
+    const double std = obj_->scale( all_errors[r].begin(), all_errors[r].end() );
+    success = success && vnl_math_isfinite( std );
+    if( std < 1e-10 )  // if variance is too small
       inv_covar(r,r) = 0.0;
     else
-      inv_covar(r,r) = 1 / var;
+      inv_covar(r,r) = 1 / vnl_math_sqr( std );
   }
 
   return success;
