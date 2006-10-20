@@ -72,7 +72,7 @@ class m23d_ortho_flexible_builder
 
     //: Compute the mean 3D shape
     void compute_mean(vnl_matrix<double>& mean_shape,
-                       vnl_vector<double>& mean_coeffs);
+                      vnl_vector<double>& mean_coeffs);
 
   public:
     //: Reconstruct approximate structure of 3D points given multiple 2D views
@@ -88,7 +88,7 @@ class m23d_ortho_flexible_builder
     //: Reconstruct structure of 3D points given multiple 2D views
     //  Data assumed to be scaled orthographic projections
     //  The result is stored in the shape_3d() matrix.
-    //  The estimated projection matricies are stored in the projections() matrix
+    //  The estimated projection matrices are stored in the projections() matrix
     //  The first (n_modes+1) views are assumed to define a basis for the
     //  modes.  This might not be ideal.  Use reconstruct() to automatically
     //  select views which form a good basis.
@@ -98,7 +98,7 @@ class m23d_ortho_flexible_builder
     //: Reconstruct structure of 3D points given multiple 2D views
     //  Data assumed to be scaled orthographic projections
     //  The result is stored in the shape_3d() matrix.
-    //  The estimated projection matricies are stored in the projections() matrix
+    //  The estimated projection matrices are stored in the projections() matrix
     //  Automatically select views which form a good basis.
     //  \param P2D 2ns x np matrix. Rows contain alternating x's and y's from 2D shapes
     void reconstruct(const vnl_matrix<double>& P2D, unsigned n_modes);
@@ -107,7 +107,6 @@ class m23d_ortho_flexible_builder
     //  Points are centred on the origin.
     //  Each 3 rows contains one of the (1+m) bases.
     const vnl_matrix<double>& shape_3d() const { return P3D_; };
-
 
     //: The 2ns x 3(m+1) projection matrix
     //  Each 2x3 sub-matrix is a scaled orthographic projection matrix
