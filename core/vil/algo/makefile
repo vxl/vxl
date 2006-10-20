@@ -54,6 +54,8 @@ SOURCES += vil_colour_space.cxx
 MANPAGE_SOURCES += vil_abs_shuffle_distance.txx
 MANPAGE_SOURCES += vil_checker_board.txx
 MANPAGE_SOURCES += vil_quad_distance_function.h
+MANPAGE_SOURCES += vil_find_plateaus.h
+MANPAGE_SOURCES += vil_suppress_non_plateau.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

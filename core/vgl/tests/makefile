@@ -28,6 +28,7 @@ TESTS += test_convex_hull_2d.cxx
 TESTS += test_line_3d_2_points.cxx
 TESTS += test_sphere.cxx
 TESTS += test_line_segment_3d.cxx
+TESTS += test_orient_box_3d.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

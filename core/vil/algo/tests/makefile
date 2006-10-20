@@ -39,6 +39,8 @@ TESTS += test_algo_suppress_non_max_edges.cxx
 TESTS += test_algo_checker_board.cxx
 TESTS += test_algo_colour_space.cxx
 TESTS += test_algo_quad_distance_function.cxx
+TESTS += test_algo_find_plateaus.cxx
+TESTS += test_algo_suppress_non_plateau.cxx
 
 #MINI_PROG_SOURCES += vil_mil_gauss_general_timings.cxx
 

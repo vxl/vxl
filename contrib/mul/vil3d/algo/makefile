@@ -21,6 +21,11 @@ SOURCES += vil3d_distance_transform.cxx
 SOURCES += vil3d_fill_boundary.cxx
 MANPAGE_SOURCES += vil3d_anisotropic_filter.h
 MANPAGE_SOURCES += vil3d_gauss_reduce.txx
+MANPAGE_SOURCES += vil3d_corners.txx
+MANPAGE_SOURCES += vil3d_find_peaks.h
+MANPAGE_SOURCES += vil3d_grad_3x3x3.h
+MANPAGE_SOURCES += vil3d_quad_distance_function.h
+MANPAGE_SOURCES += vil3d_smooth_121.h
 
 ################################
 include ${VXLROOT}/config/top.mk
