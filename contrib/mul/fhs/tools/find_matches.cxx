@@ -3,6 +3,7 @@
 // \author Tim Cootes
 // \brief Example program using F&H method to locate matches on a pair of images
 
+#include <vcl_cassert.h>
 #include <vul/vul_arg.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_gaussian_pyramid_builder_2d.h>
@@ -23,19 +24,19 @@
 
 void print_usage()
 {
-  vcl_cout<<"find_matches -i1 image1.jpg -i2 image2.jpg"<<vcl_endl;
-  vcl_cout<<"Loads in image1 and image2."<<vcl_endl;
-  vcl_cout<<"Locates a set of interesting features on image1."<<vcl_endl;
-  vcl_cout<<"Constructs a model of their relative positions."<<vcl_endl;
-  vcl_cout<<"Uses normalised correllation and this model to locate"<<vcl_endl;
-  vcl_cout<<"equivalent points on the second image."<<vcl_endl;
+  vcl_cout << "find_matches -i1 image1.jpg -i2 image2.jpg\n"
+           << "Loads in image1 and image2.\n"
+           << "Locates a set of interesting features on image1.\n"
+           << "Constructs a model of their relative positions.\n"
+           << "Uses normalised correllation and this model to locate\n"
+           << "equivalent points on the second image." << vcl_endl;
   vul_arg_display_usage_and_exit();
 }
 
 //: Select the smallest pair s.t. first is in a, second in b
 static vcl_pair<int,int> mbl_mst_next_pair(const vnl_matrix<double>& D,
-                            const vcl_vector<unsigned>& a,
-                            const vcl_vector<unsigned>& b)
+                                           const vcl_vector<unsigned>& a,
+                                           const vcl_vector<unsigned>& b)
 {
   vcl_pair<int,int> p;
   double min_sim = 9.9e9;
@@ -54,11 +55,12 @@ static vcl_pair<int,int> mbl_mst_next_pair(const vnl_matrix<double>& D,
 }
 
 //: Compute the minimum spanning tree given a distance matrix
-//  pairs[0].first is the root node
-//  Tree defined by pairs.  pairs[i].second is linked to pairs[i].first
+//  \param pairs[0].first is the root node
+//  Tree defined by pairs.
+//  \param pairs[i].second is linked to \param pairs[i].first
 //  We compute the minimum spanning tree of the graph using Prim's algorithm.
 void mbl_minimum_spanning_tree(const vnl_matrix<double>& D,
-                              vcl_vector<vcl_pair<int,int> >& pairs)
+                               vcl_vector<vcl_pair<int,int> >& pairs)
 {
   unsigned n = D.rows();
   vcl_vector<unsigned> a(0),b(n);
@@ -84,11 +86,12 @@ void mbl_minimum_spanning_tree(const vnl_matrix<double>& D,
 }
 
 //: Compute the minimum spanning tree of given points
-//  pairs[0].first is the root node
-//  Tree defined by pairs.  pairs[i].second is linked to pairs[i].first
+//  \param pairs[0].first is the root node
+//  Tree defined by pairs.
+//  \param pairs[i].second is linked to \param pairs[i].first
 //  We compute the minimum spanning tree of the graph using Prim's algorithm.
 void mbl_minimum_spanning_tree(const vcl_vector<vgl_point_2d<double> >& pts,
-                              vcl_vector<vcl_pair<int,int> >& pairs)
+                               vcl_vector<vcl_pair<int,int> >& pairs)
 {
   unsigned n=pts.size();
   vnl_matrix<double> D(n,n);
@@ -307,7 +310,6 @@ int main( int argc, char* argv[] )
   {
     vcl_cout<<"Saved output image 2 to "<<output_image2_path()<<vcl_endl;
   }
-
 
   return 0;
 }

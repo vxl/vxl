@@ -7,8 +7,9 @@
 
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_plane.h>
-#include <vil/algo/vil_quad_distance_function.h>
 #include <vil3d/vil3d_switch_axes.h>
+#include <vil/algo/vil_quad_distance_function.h>
+#include <vcl_cassert.h>
 
 //: Apply quadratic distance transform along each row of src
 //
@@ -44,6 +45,7 @@ inline void vil3d_quad_distance_function_i(const vil3d_image_view<srcT>& src,
 
 
 //: Apply quadratic distance transform
+//
 //  dest(x,y,z)=min_i,j,k (src(x+i,y+j,z+k)+ai(i^2)+aj(j^2)+ak(k^2))
 template<class srcT, class destT>
 inline void vil3d_quad_distance_function(const vil3d_image_view<srcT>& src,
@@ -70,6 +72,7 @@ inline void vil3d_quad_distance_function(const vil3d_image_view<srcT>& src,
 }
 
 //: Apply quadratic distance transform along i, storing relative position of minima
+//
 //  dest(x,y,z)=min_i (src(x+i,y,z)+ai(i^2))
 //  (pos(x,y,0)) gives the position (x+i,y,z) leading to minima
 template<class srcT, class destT, class posT>
@@ -107,6 +110,7 @@ inline void vil3d_quad_distance_function_i(const vil3d_image_view<srcT>& src,
 }
 
 //: Apply quadratic distance transform, storing relative position of minima
+//
 //  dest(x,y,z)=min_i,j,k (src(x+i,y+j,z+k)+ai(i^2)+aj(j^2)+ak(k^2))
 //  (pos(x,y,0),pos(x,y,1),pos(x,y,2))
 //  gives the position (x+i,y+j,z+k) leading to minima

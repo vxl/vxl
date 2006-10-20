@@ -1,4 +1,4 @@
-// This is mul/vil3d/algo/vil3d_corners.h
+// This is mul/vil3d/algo/vil3d_corners.txx
 #ifndef vil3d_corners_txx_
 #define vil3d_corners_txx_
 //:
@@ -11,6 +11,7 @@
 #include <vil3d/vil3d_plane.h>
 #include <vil3d/algo/vil3d_grad_3x3x3.h>
 #include <vil3d/algo/vil3d_smooth_121.h>
+#include <vcl_cassert.h>
 
 //: Compute gradients, products and smoothed versions
 template <class srcT, class destT>
@@ -114,6 +115,6 @@ void vil3d_corners<srcT,destT>::cornerness1(
 }
 
 #define VIL3D_CORNERS_INSTANTIATE(srcT, destT) \
-template class vil3d_corners<srcT, destT>;
+template class vil3d_corners<srcT, destT >
 
 #endif // vil3d_corners_txx_
