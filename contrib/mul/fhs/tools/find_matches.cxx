@@ -222,7 +222,7 @@ int main( int argc, char* argv[] )
     int kx = im_pts[i].x()-ilo;
     int ky = im_pts[i].y()-jlo;
     patch_ref[i] =vgl_point_2d<double>(kx,ky);
-    vil_convert_cast(vil_crop(image1.image(),ilo,1+ihi-ilo, jlo,1+jhi-jlo),
+    vil_convert_cast(vil_crop(image1_L.image(),ilo,1+ihi-ilo, jlo,1+jhi-jlo),
                      patch[i]);
     vil_math_normalise(patch[i]);
   }

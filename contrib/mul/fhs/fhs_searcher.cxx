@@ -162,8 +162,17 @@ void fhs_searcher::search(const vcl_vector<vimt_image_2d_of<float> >& feature_re
     // the children of node_a
     combine_responses(node_a,feature_response[node_a]);
 
+    // Compute scaling applied to x and y axes
+    const vimt_transform_2d& w2im = feature_response[node_a].world2im();
+    double sx = w2im.delta(vgl_point_2d<double>(0,0),
+                       vgl_vector_2d<double>(1,0)).length();
+    double sy = w2im.delta(vgl_point_2d<double>(0,0),
+                       vgl_vector_2d<double>(0,1)).length();
+
+
     vil_quad_distance_function(sum_im_[node_a].image(),
-                               1.0/arc_[a].var_x(),1.0/arc_[a].var_y(),
+                               1.0/(sx*sx*arc_[a].var_x()),
+                               1.0/(sy*sy*arc_[a].var_y()),
                                dist_im_[node_a].image(),
                                pos_im_[node_a].image());
     dist_im_[node_a].set_world2im(sum_im_[node_a].world2im());
