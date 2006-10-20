@@ -1,4 +1,4 @@
-// This is core/vil/algo/vil3d_find_peaks.h
+// This is mul/vil3d/algo/vil3d_find_peaks.h
 #ifndef vil3d_find_peaks_h_
 #define vil3d_find_peaks_h_
 //:
