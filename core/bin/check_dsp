@@ -283,9 +283,9 @@ foreach $dir (@DIRS)
   }
   while ($cmakefile =~ s/\bAUX_SOURCE_DIRECTORY\s*\(\s*(\S+)\s+(\S+)\s*\)//s)
   {
-    $f = $1; $n = $2;
-    if (opendir(TMPL,"$dir/$f")) {
-      $names{$n} .= join '',map { " $f/$_" } grep {$_ ne '.' && $_ ne '..' && $_ ne 'CVS' && $_ ne '.NoDartCoverage'} readdir(TMPL);
+    $g = $1; $n = $2;
+    if (opendir(TMPL,"$dir/$g")) {
+      $names{$n} .= join '',map { " $g/$_" } grep {$_ ne '.' && $_ ne '..' && $_ ne 'CVS' && $_ ne '.NoDartCoverage'} readdir(TMPL);
       closedir(TMPL);
     }
   }
@@ -299,9 +299,9 @@ foreach $dir (@DIRS)
     $n = $1;
     $cmakefile .= "ADD_EXECUTABLE(x test_driver.cxx $names{$n})\n";
     foreach (split /\s+/, $names{$n}) {
-      $f = $_;
+      $g = $_;
       $cmakefile .= "ADD_TEST(x x $_)\n" if s/\.cxx$//;
-      @source_files = grep { !/^$f$/ } @source_files;
+      @source_files = grep { !/^$g$/ } @source_files;
     }
   }
   while ($cmakefile =~ s/\bGENERATE_TEST_INCLUDE\s*\(.*?\)//s)
@@ -316,8 +316,8 @@ foreach $dir (@DIRS)
 
   while ($cmakefile =~ s/\bADD_LIBRARY\s*\(\s*\S+\s+(.*?)\)//s)
   {
-    $f = $1; # list of file names
-    foreach (split /\s+/, $f) {
+    $g = $1; # list of file names
+    foreach (split /\s+/, $g) {
       if (m/^\s*$/) { next; }
       elsif (-f "$dir/$_" && m/\.(h(\.in)?|txx)$/) { push @hsource_files, $_; }
       elsif (-f "$dir/$_")                         { push @source_files, $_; }
@@ -332,8 +332,8 @@ foreach $dir (@DIRS)
   }
   while ($cmakefile =~ s/\bINSTALL_NOBASE_HEADER_FILES\s*\(\s*\S+\s+(.*?)\)//s)
   {
-    $f = $1; # list of file names
-    foreach $x (split /\s+/, $f) {
+    $g = $1; # list of file names
+    foreach $x (split /\s+/, $g) {
       if ($x =~ m/^\s*$/) { next; }
       elsif (! -f "$dir/$x") { print STDOUT "file $x listed in INSTALL_NOBASE_HEADER_FILES does not exist\n"; }
       elsif ($x =~ m/\.(h|txx)$/) { push @hsource_files, $x unless grep { $_ eq $x } @hsource_files; }
