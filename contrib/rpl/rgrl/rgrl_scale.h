@@ -1,6 +1,5 @@
 #ifndef rgrl_scale_h_
 #define rgrl_scale_h_
-
 //:
 // \file
 // \brief  Class to represent error scale estimates.
@@ -16,6 +15,7 @@
 
 
 #include <vnl/vnl_matrix.h>
+#include <vcl_iosfwd.h>
 
 #include "rgrl_scale_sptr.h"
 #include "rgrl_object.h"
@@ -26,11 +26,11 @@
 class rgrl_scale
   : public rgrl_object
 {
-public:
+ public:
   rgrl_scale( );
 
   //: scale type
-  enum type { prior, estimate }; 
+  enum type { prior, estimate };
 
   //:
   bool has_geometric_scale() const;
@@ -47,7 +47,7 @@ public:
   //:  Set all scale information
   void set_scales( double                     geometric_scale,
                    vnl_matrix<double>  const& signature_inv_covar,
-                   type new_type = estimate );
+                   type                       new_type = estimate );
 
   //:  Set the geometric scale
   void set_geometric_scale( double scale, type new_type = estimate );
@@ -59,25 +59,24 @@ public:
   rgrl_type_macro( rgrl_scale, rgrl_object );
 
   //: return scale type
-  type geo_scale_type() const 
-  { return geo_scale_type_; }
+  type geo_scale_type() const { return geo_scale_type_; }
 
   //: set scale type
   void set_geo_scale_type(type new_type)
   { geo_scale_type_ = new_type; }
-  
+
   //: write to io stream
   void write( vcl_ostream& os ) const;
 
   //: read from io stream
   bool read( vcl_istream& is );
-  
-private:
+
+ private:
   bool                has_geometric_scale_;
   double              geometric_scale_;
   bool                has_signature_inv_covar_;
   vnl_matrix<double>  signature_inv_covar_;
-  
+
   type                geo_scale_type_;
 };
 
@@ -89,4 +88,4 @@ operator<<( vcl_ostream& ofs, rgrl_scale const& scale );
 vcl_istream&
 operator>>( vcl_istream& ifs, rgrl_scale& scale );
 
-#endif
+#endif // rgrl_scale_h_
