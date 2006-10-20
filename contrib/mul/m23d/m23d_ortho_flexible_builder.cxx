@@ -8,17 +8,14 @@
 #include <m23d/m23d_scaled_ortho_projection.h>
 #include <m23d/m23d_set_q_constraint.h>
 #include <m23d/m23d_correction_matrix_error.h>
+#include <m23d/m23d_select_basis_views.h>
+#include <m23d/m23d_pure_ortho_projection.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
-#include <vnl/vnl_least_squares_function.h>
-#include <vnl/algo/vnl_levenberg_marquardt.h>
-#include <m23d/m23d_correction_matrix_error.h>
-#include <m23d/m23d_select_basis_views.h>
-#include <m23d/m23d_pure_ortho_projection.h>
 #include <vcl_cstdlib.h>  // abort()
 #include <vcl_cassert.h>
 
@@ -28,7 +25,7 @@
 //  The estimated projection matrices are stored in the projections() matrix
 //  \param P2D 2ns x np matrix. Rows contain alternating x's and y's from 2D shapes
 void m23d_ortho_flexible_builder::reconstruct_with_first_as_basis(const vnl_matrix<double>& P2D,
-                                              unsigned n_modes)
+                                                                  unsigned n_modes)
 {
   partial_reconstruct(P2D,n_modes);
   refine();
@@ -46,7 +43,7 @@ inline void m23d_swap_rows(vnl_matrix<double>& M,
 //: Reconstruct structure of 3D points given multiple 2D views
 //  Data assumed to be scaled orthographic projections
 //  The result is stored in the shape_3d() matrix.
-//  The estimated projection matricies are stored in the projections() matrix
+//  The estimated projection matrices are stored in the projections() matrix
 //  Automatically select views which form a good basis.
 //  \param P2D 2ns x np matrix. Rows contain alternating x's and y's from 2D shapes
 void m23d_ortho_flexible_builder::reconstruct(const vnl_matrix<double>& P2D, unsigned n_modes)
@@ -157,10 +154,10 @@ void m23d_ortho_flexible_builder::disambiguate_z()
 //: Reconstruct structure of 3D points given multiple 2D views
 //  Data assumed to be scaled orthographic projections
 //  The result is stored in the shape_3d() matrix.
-//  The estimated projection matricies are stored in the projections() matrix
+//  The estimated projection matrices are stored in the projections() matrix
 //  \param P2D 2ns x np matrix. Rows contain alternating x's and y's from 2D shapes
 void m23d_ortho_flexible_builder::partial_reconstruct(const vnl_matrix<double>& P2D,
-                                              unsigned n_modes)
+                                                      unsigned n_modes)
 {
   assert(P2D.rows()%2==0);
   unsigned ns = P2D.rows()/2;
@@ -205,7 +202,7 @@ static vnl_matrix<double> sym_matrix_from_vec(const vnl_vector<double>& v, unsig
 
 //: Solve for correction matrix for zero mode case
 static vnl_matrix<double> am_solve_for_G0(const vnl_matrix<double>& A,
-                                   const vnl_vector<double>& rhs)
+                                          const vnl_vector<double>& rhs)
 {
   unsigned n=3;
   vnl_svd<double> svd(A);
@@ -228,8 +225,8 @@ static vnl_matrix<double> am_solve_for_G0(const vnl_matrix<double>& A,
 }
 
 static vnl_matrix<double> am_solve_for_Gk(const vnl_matrix<double>& A,
-                                   const vnl_vector<double>& rhs,
-                                   unsigned m, unsigned k)
+                                          const vnl_vector<double>& rhs,
+                                          unsigned m, unsigned k)
 {
   m23d_correction_matrix_error err_fn(A,rhs,m,k);
 
@@ -251,7 +248,8 @@ static vnl_matrix<double> am_solve_for_Gk(const vnl_matrix<double>& A,
   return vnl_matrix<double>(g.data_block(),3*(m+1),3);
 }
 
-#if 0
+#if 0 // refinement of am_solve_for_Gk()
+{
   // Now refine the solution   *** Not sure that this helps ***
   vnl_diag_matrix<double> W(nq);
   double w0=0.01*svd.W(0);
@@ -284,7 +282,7 @@ static vnl_matrix<double> am_solve_for_Gk(const vnl_matrix<double>& A,
 #endif // 0
 
 static void compute_Gk(const vnl_matrix<double> & M, unsigned k,
-                vnl_matrix<double>& Gk)
+                       vnl_matrix<double>& Gk)
 {
   assert(M.cols()>=3);
   unsigned m = M.cols()/3 -1;
@@ -314,7 +312,6 @@ static void compute_Gk(const vnl_matrix<double> & M, unsigned k,
   }
 }
 
-
 // Compute correction matrix G (t x t) s.t.  M=M1.G and B=(inv(G)).B1
 void m23d_ortho_flexible_builder::compute_correction(
                            const vnl_matrix<double>& M1,
@@ -341,11 +338,12 @@ static double min_row_scale(const vnl_matrix<double>& M)
   }
   return vcl_sqrt(vcl_min(r1,r2));
 }
+
 // Apply rotation matrices to each 3 columns of M (and inverse to rows of B)
 // Matrix selected so that projection matrices in each 3 cols have same
 // effective rotation.
 void m23d_ortho_flexible_builder::correct_coord_frame(vnl_matrix<double>& M,
-                            vnl_matrix<double>& B)
+                                                      vnl_matrix<double>& B)
 {
   unsigned m = M.cols()/3-1;
   unsigned ns = M.rows()/2;
@@ -373,12 +371,14 @@ void m23d_ortho_flexible_builder::correct_coord_frame(vnl_matrix<double>& M,
       vnl_matrix<double> Uij = m23d_rotation_from_ortho_projection(Mij);
 //      vcl_cout<<Mij*Uij.transpose()<<vcl_endl;
       U.push_back(Uij.transpose()*Ui0);
-//      vcl_cout<<"j="<<j<<" i="<<i<<") C1:"<<vcl_endl<<Uij.transpose()*Ui0<<vcl_endl;
+//      vcl_cout<<"j="<<j<<" i="<<i<<") C1:"<<vcl_endl
+//              <<Uij.transpose()*Ui0<<vcl_endl;
       // Swap sign of 3rd row of Uij
       for (unsigned k=0;k<3;++k) Uij(2,k)*=-1;
       U.push_back(Uij.transpose()*Ui0);
-//      vcl_cout<<"j="<<j<<" i="<<i<<") C2:"<<vcl_endl<<Uij.transpose()*Ui0<<vcl_endl;
-//      vcl_cout<<"Rel wts: "<<Mij(0,0)/Mi0(0,0)<<vcl_endl;
+//      vcl_cout<<"j="<<j<<" i="<<i<<") C2:"<<vcl_endl
+//              <<Uij.transpose()*Ui0<<vcl_endl
+//              <<"Rel wts: "<<Mij(0,0)/Mi0(0,0)<<vcl_endl;
     }
 
     // Now find the mean and variance for a variety of possible
@@ -504,8 +504,8 @@ void m23d_ortho_flexible_builder::make_pure_projections()
 //: Refine estimates of projection and structure
 void m23d_ortho_flexible_builder::refine()
 {
-  vcl_cout<<"RMS Reconstruction error before refine = ";
-  vcl_cout<<(P2Dc_-P_*P3D_).rms()<<vcl_endl;
+  vcl_cout<<"RMS Reconstruction error before refine = "
+          <<(P2Dc_-P_*P3D_).rms()<<vcl_endl;
 
   make_pure_projections();
   // Re-estimate the 3D shape by solving the linear equation
@@ -513,8 +513,8 @@ void m23d_ortho_flexible_builder::refine()
   P3D_ = svd.pinverse() * P2Dc_;
        // Slightly less stable than backsub, but what the heck.
 
-  vcl_cout<<"RMS Reconstruction error after refine = ";
-  vcl_cout<<(P2Dc_-P_*P3D_).rms()<<vcl_endl;
+  vcl_cout<<"RMS Reconstruction error after refine = "
+          <<(P2Dc_-P_*P3D_).rms()<<vcl_endl;
 
   compute_mean(mean_shape_,mean_coeffs_);
 }
@@ -546,4 +546,3 @@ vnl_matrix<double> m23d_ortho_flexible_builder::shape(unsigned i) const
     S += P3D_.extract(3,np,3*j,0) * coeffs_(i,j);
   return S;
 }
-
