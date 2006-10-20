@@ -24,7 +24,11 @@ fhs_searcher::fhs_searcher()
 void fhs_searcher::set_tree(const vcl_vector<fhs_arc>& arcs,
                             unsigned root_node)
 {
-  fhs_order_tree_from_root(arcs,arc_,children_,root_node);
+  if (!fhs_order_tree_from_root(arcs,arc_,children_,root_node))
+  {
+    vcl_cerr<<"fhs_searcher::set_tree() Failed to set up the tree."<<vcl_endl;
+    return;
+  }
 
   // Fill in elements of arc_to_j_
   arc_to_j_.resize(arc_.size()+1);
@@ -153,10 +157,13 @@ void fhs_searcher::search(const vcl_vector<vimt_image_2d_of<float> >& feature_re
     // arc_[a].j() is unique, and is only visited after its children
     unsigned node_a = arc_[a].j();
 
+    // Set sum_im_[node_a] to be the feature response image
+    // combined with the suitably offset summed responses from
+    // the children of node_a
     combine_responses(node_a,feature_response[node_a]);
 
     vil_quad_distance_function(sum_im_[node_a].image(),
-                               arc_[a].var_x(),arc_[a].var_y(),
+                               1.0/arc_[a].var_x(),1.0/arc_[a].var_y(),
                                dist_im_[node_a].image(),
                                pos_im_[node_a].image());
     dist_im_[node_a].set_world2im(sum_im_[node_a].world2im());

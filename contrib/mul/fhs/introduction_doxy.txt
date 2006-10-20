@@ -1,0 +1,15 @@
+// The following text is included in the main documentation page by doxygen
+/*! \mainpage fhs : Feature matching using Felzenszwalb and Huttenlocker's method
+* Classes to implement Felzenszwalb and Huttenlocker's elegant dynamic
+* programming style approach to matching object part models to new images.
+*
+* A model consists of a set of feature detectors together with a tree
+* structure describing the spacial relationships between the model points.
+* The algorithm uses the vil_quadratic_distance_function applied to the
+* feature response images to significantly reduce the complexity of search,
+* leading to a fast method of locating the globally optimal positions of all
+* model points.
+*
+* (See example in tests directory for usage).
+*
+*/

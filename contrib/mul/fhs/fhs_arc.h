@@ -72,6 +72,9 @@ bool fhs_order_tree_from_root(const vcl_vector<fhs_arc>& arc0,
 //: Print
 vcl_ostream& operator<<(vcl_ostream& os, const fhs_arc& c);
 
+//: Print set
+vcl_ostream& operator<<(vcl_ostream& os, const vcl_vector<fhs_arc>& arc);
+
 //: Save
 inline void vsl_b_write(vsl_b_ostream& bfs, const fhs_arc& t)
 {

@@ -36,6 +36,15 @@ vcl_ostream& operator<<(vcl_ostream& os, const fhs_arc& a)
   return os;
 }
 
+//: Print set
+vcl_ostream& operator<<(vcl_ostream& os, const vcl_vector<fhs_arc>& arc)
+{
+  os<<arc.size()<<" arcs:"<<vcl_endl;
+  for (unsigned i=0;i<arc.size();++i)
+    os<<i<<") "<<arc[i]<<vcl_endl;
+  return os;
+}
+
 //: Print
 void vsl_print_summary(vcl_ostream& os, const fhs_arc& a)
 {
@@ -84,7 +93,12 @@ bool fhs_order_tree_from_root(const vcl_vector<fhs_arc>& arc0,
   unsigned n=arc0.size()+1;
   // Check that all nodes are in range [0,n-1]
   for (unsigned i=0;i<arc0.size();++i)
-    if (arc0[i].i()>=n || arc0[i].j()>=n) return false;
+    if (arc0[i].i()>=n || arc0[i].j()>=n)
+    {
+      vcl_cerr<<"Arc index outside range [0,"<<n-1<<"]"<<vcl_endl;
+      vcl_cerr<<"Arc = "<<arc0[i]<<vcl_endl;
+      return false;
+    }
 
   children.resize(n);
   for (unsigned i=0;i<n;++i) children[i].resize(0);
@@ -101,14 +115,8 @@ bool fhs_order_tree_from_root(const vcl_vector<fhs_arc>& arc0,
   unsigned p=0;
   while (p<new_arc.size() && new_arc.size()!=(n-1))
   {
-    unsigned p_node = new_arc[p].i();
-    // Find grandchildren of p_node
-    for (unsigned j=0;j<children[p_node].size();++j)
-    {
-      unsigned c_node = children[p_node][j];
-        // Find children of c_node
-      fhs_find_children(arc0,used,new_arc,children[c_node],c_node);
-    }
+    unsigned p_node = new_arc[p].j();
+    fhs_find_children(arc0,used,new_arc,children[p_node],p_node);
     p++;
   }
 
