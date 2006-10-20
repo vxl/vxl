@@ -14,6 +14,8 @@ ifndef NOTEST
  SUBDIRS += tests
 endif
 
+SUBDIRS += tools
+
 ######################################
 include ${VXLROOT}/config/top-rules.mk
 ######################################
