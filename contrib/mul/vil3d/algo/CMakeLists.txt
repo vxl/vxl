@@ -21,6 +21,7 @@ SET(vil3d_algo_sources
   vil3d_corners.h               vil3d_corners.txx
   vil3d_find_peaks.h
   vil3d_quad_distance_function.h 
+  vil3d_smooth_121.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vil3d_algo_sources)
