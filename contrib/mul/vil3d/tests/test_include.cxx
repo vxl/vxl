@@ -14,6 +14,11 @@
 #include <vil3d/algo/vil3d_normalised_correlation_3d.h>
 #include <vil3d/algo/vil3d_structuring_element.h>
 #include <vil3d/algo/vil3d_threshold.h>
+#include <vil3d/algo/vil3d_corners.h>
+#include <vil3d/algo/vil3d_find_peaks.h>
+#include <vil3d/algo/vil3d_grad_3x3x3.h>
+#include <vil3d/algo/vil3d_quad_distance_function.h>
+#include <vil3d/algo/vil3d_smooth_121.h>
 #include <vil3d/vil3d_convert.h>
 #include <vil3d/vil3d_copy.h>
 #include <vil3d/vil3d_crop.h>
