@@ -500,6 +500,12 @@ SOURCE=.\vil_checker_board.txx
 # Begin Source File
 SOURCE=.\vil_quad_distance_function.h
 # End Source File
+# Begin Source File
+SOURCE=.\vil_find_plateaus.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_suppress_non_plateau.h
+# End Source File
 # End Group
 # End Target
 # End Project

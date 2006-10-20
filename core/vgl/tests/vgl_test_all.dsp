@@ -158,6 +158,9 @@ SOURCE=.\test_sphere.cxx
 # Begin Source File
 SOURCE=.\test_line_segment_3d.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_orient_box_3d.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

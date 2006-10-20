@@ -114,6 +114,12 @@ SOURCE=.\test_algo_colour_space.cxx
 # Begin Source File
 SOURCE=.\test_algo_quad_distance_function.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_algo_find_plateaus.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_algo_suppress_non_plateau.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

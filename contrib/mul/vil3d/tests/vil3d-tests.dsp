@@ -296,6 +296,15 @@ SOURCE=.\test_algo_histogram.cxx
 SOURCE=.\test_algo_histogram_equalise.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_algo_corners.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_algo_quad_distance_function.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_algo_smooth_121.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_from_image_2d.cxx
 # End Source File
 # Begin Source File

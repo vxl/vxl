@@ -152,6 +152,15 @@ SOURCE=.\Templates/vil3d_gauss_reduce+int-.cxx
 # Begin Source File
 SOURCE=.\Templates/vil3d_gauss_reduce+int_16-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_corners+byte.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_corners+float.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_corners+int_16.float-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -211,6 +220,24 @@ SOURCE=.\vil3d_anisotropic_filter.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil3d_gauss_reduce.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_corners.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_corners.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_find_peaks.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_grad_3x3x3.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_quad_distance_function.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_smooth_121.h
 # End Source File
 # End Group
 # End Target
