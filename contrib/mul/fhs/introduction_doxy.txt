@@ -1,7 +1,8 @@
 // The following text is included in the main documentation page by doxygen
-/*! \mainpage fhs : Feature matching using Felzenszwalb and Huttenlocker's method
-* Classes to implement Felzenszwalb and Huttenlocker's elegant dynamic
+/*! \mainpage fhs : Feature matching using Felzenszwalb and Huttenlocher's method
+* Classes to implement Felzenszwalb and Huttenlocher's elegant dynamic
 * programming style approach to matching object part models to new images.
+* (Efficient Pictoral Structure Matching).
 *
 * A model consists of a set of feature detectors together with a tree
 * structure describing the spacial relationships between the model points.
@@ -10,6 +11,6 @@
 * leading to a fast method of locating the globally optimal positions of all
 * model points.
 *
-* (See example in tests directory for usage).
+* (See example in tools directory for usage).
 *
 */

@@ -21,6 +21,9 @@
 //  This is achieved using a combination of a quadratic distance function
 //  applied to each feature response image F(i), and a dynamic programming
 //  approach to combining the data.
+//
+//  Algorithm based on papers by Felzenszwalb and Huttenlocher on
+//  Pictoral Structure Matching.
 class fhs_searcher
 {
 private:
