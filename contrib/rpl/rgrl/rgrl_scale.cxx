@@ -102,6 +102,7 @@ bool
 rgrl_scale::
 read( vcl_istream& is )
 {
+  static const vcl_string white_chars = " \t\r";
   vcl_string tag;
   
   // continue when stream does not reach the end 
@@ -109,6 +110,9 @@ read( vcl_istream& is )
   while( is && !is.eof() && (!has_geometric_scale_ || !has_signature_inv_covar_))  {
     
     vcl_getline( is, tag );
+    
+    if( tag.empty() || tag.find_first_not_of( white_chars ) == vcl_string::npos )
+      continue;
     
     // geometric scale
     if( tag.find("GEOMETRIC_SCALE") != vcl_string::npos ) {
