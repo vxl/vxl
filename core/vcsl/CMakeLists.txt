@@ -9,6 +9,8 @@
     vcsl_unit.h vcsl_unit_sptr.h
     vcsl_length_unit.cxx vcsl_length_unit.h vcsl_length_unit_sptr.h
     vcsl_meter.cxx vcsl_meter.h vcsl_meter_sptr.h
+    vcsl_millimeter.cxx vcsl_millimeter.h vcsl_millimeter_sptr.h
+    vcsl_micron.cxx vcsl_micron.h vcsl_micron_sptr.h
 
     vcsl_angle_unit.cxx vcsl_angle_unit.h vcsl_angle_unit_sptr.h
     vcsl_radian.cxx vcsl_radian.h vcsl_radian_sptr.h
