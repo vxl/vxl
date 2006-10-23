@@ -199,9 +199,14 @@ vil_tiff_file_format::make_input_pyramid_image(char const* file)
   if (!in)
     return 0;
   bool open_for_reading = true;
+  bool find_test_failure = true;
+  if(find_test_failure)//find test failure
+    vcl_cout << "Opening multi-image tiff pyramid resource \n";
   vil_pyramid_image_resource_sptr pyr =
     new vil_tiff_pyramid_resource(in, open_for_reading);
-  if (pyr->nlevels()<=1)
+  if(find_test_failure)//find test failure
+    vcl_cout << "Opened multi-image tiff pyramid resource \n";
+    if (pyr->nlevels()<=1)
     return 0;
   return pyr;
 }
