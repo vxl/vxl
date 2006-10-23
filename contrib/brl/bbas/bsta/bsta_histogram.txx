@@ -308,7 +308,7 @@ vcl_ostream& bsta_histogram<T>::write(vcl_ostream& s) const
     << min_prob_ << ' '
     << min_ << ' '
     << max_ << ' ';
-  for (int i = 0; i < counts_.size() ; i++)
+  for (unsigned i = 0; i < counts_.size() ; i++)
     s << counts_[i] << ' ';
 
   return  s << '\n';
@@ -326,7 +326,7 @@ vcl_istream& bsta_histogram<T>::read(vcl_istream& s)
     >> min_
     >> max_;
   counts_.resize(nbins_);
-  for (int i = 0; i < counts_.size() ; i++)
+  for (unsigned i = 0; i < counts_.size() ; i++)
     s >> counts_[i] ;
   return  s;
 }
