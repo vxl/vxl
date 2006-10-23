@@ -53,7 +53,7 @@ static void test_convert()
   }
 
   {
-    vxl_byte buffer1[12], buffer2[12];
+    vxl_byte buffer1[16], buffer2[16];
     int num_unsupported = 0;
     for (int i=0; i<VIDL2_PIXEL_FORMAT_ENUM_END; ++i){
       vidl2_shared_frame frame1(buffer1, 2, 2, vidl2_pixel_format(i));
@@ -63,7 +63,7 @@ static void test_convert()
           ++num_unsupported;
       }
     }
-//  TEST("vidl2_convert_frame - support for all formats", num_unsupported, 0);
+    TEST("vidl2_convert_frame - support for all formats", num_unsupported, 0);
     if (num_unsupported > 0)
       vcl_cerr << "Warning:  conversion failed for "<< num_unsupported << " out of "
                << VIDL2_PIXEL_FORMAT_ENUM_END*VIDL2_PIXEL_FORMAT_ENUM_END
