@@ -21,109 +21,39 @@
 #include <vnl/vnl_matrix.h>
 #include <fhs/fhs_searcher.h>
 #include <vimt/algo/vimt_normalised_correlation_2d.h>
+#include <mbl/mbl_minimum_spanning_tree.h>
+#include <mbl/mbl_draw_line.h>
 
 void print_usage()
 {
-  vcl_cout << "find_matches -i1 image1.jpg -i2 image2.jpg\n"
-           << "Loads in image1 and image2.\n"
-           << "Locates a set of interesting features on image1.\n"
-           << "Constructs a model of their relative positions.\n"
-           << "Uses normalised correllation and this model to locate\n"
-           << "equivalent points on the second image." << vcl_endl;
+  vcl_cout<<"find_matches -i1 image1.jpg -i2 image2.jpg -L 2"<<vcl_endl;
+  vcl_cout<<"Loads in image1 and image2."<<vcl_endl;
+  vcl_cout<<"Locates a set of interesting features (corners) on level L of image1."<<vcl_endl;
+  vcl_cout<<"Constructs a model of their relative positions."<<vcl_endl;
+  vcl_cout<<"Uses normalised correllation and this model to locate"<<vcl_endl;
+  vcl_cout<<"equivalent points on the same level of the second image."<<vcl_endl;
   vul_arg_display_usage_and_exit();
 }
 
-//: Select the smallest pair s.t. first is in a, second in b
-static vcl_pair<int,int> mbl_mst_next_pair(const vnl_matrix<double>& D,
-                                           const vcl_vector<unsigned>& a,
-                                           const vcl_vector<unsigned>& b)
+//: Write tree into the image
+// Draw disks at each point, and lines between linked points
+void draw_tree(vil_image_view<vxl_byte>& image,
+               const vcl_vector<vgl_point_2d<double> >& pts,
+               const vcl_vector<vcl_pair<int,int> >& pairs)
 {
-  vcl_pair<int,int> p;
-  double min_sim = 9.9e9;
-  for (unsigned i=0;i<a.size();++i)
-    for (unsigned j=0;j<b.size();++j)
-    {
-      double s = D(a[i],b[j]);
-      if (s<min_sim)
-      {
-        min_sim=s;
-        p.first=a[i];
-        p.second=b[j];
-      }
-    }
-  return p;
-}
+  // Draw tree into image for display purposes
+  for (unsigned i=0;i<pairs.size();++i)
+    mbl_draw_line(image,
+                  pts[pairs[i].first],
+                  pts[pairs[i].second],vxl_byte(255));
 
-//: Compute the minimum spanning tree given a distance matrix
-//  \param pairs[0].first is the root node
-//  Tree defined by pairs.
-//  \param pairs[i].second is linked to \param pairs[i].first
-//  We compute the minimum spanning tree of the graph using Prim's algorithm.
-void mbl_minimum_spanning_tree(const vnl_matrix<double>& D,
-                               vcl_vector<vcl_pair<int,int> >& pairs)
-{
-  unsigned n = D.rows();
-  vcl_vector<unsigned> a(0),b(n);
-  for (unsigned i=0;i<n;++i) b[i]=i;
-  // Select element closest to all others on average
-  double min_sum=9e9;
-  unsigned best_i=0;
-  for (unsigned i=0;i<n;++i)
+  // Write position of selected points into the original image
+  // for display purposes.
+  for (unsigned i=0;i<pts.size();++i)
   {
-    double sum = D.get_row(i).sum();
-    if (sum<min_sum) { min_sum=sum; best_i=i; }
-  }
-  b.erase(vcl_find(b.begin(),b.end(),best_i));
-  a.push_back(best_i);
-
-  for (unsigned i=1;i<n;++i)
-  {
-    vcl_pair<int,int> p = mbl_mst_next_pair(D,a,b);
-    pairs.push_back(p);
-    b.erase(vcl_find(b.begin(),b.end(),p.second));
-    a.push_back(p.second);
+    vil_fill_disk(image,pts[i].x(),pts[i].y(),4,vxl_byte(255));
   }
 }
-
-//: Compute the minimum spanning tree of given points
-//  \param pairs[0].first is the root node
-//  Tree defined by pairs.
-//  \param pairs[i].second is linked to \param pairs[i].first
-//  We compute the minimum spanning tree of the graph using Prim's algorithm.
-void mbl_minimum_spanning_tree(const vcl_vector<vgl_point_2d<double> >& pts,
-                               vcl_vector<vcl_pair<int,int> >& pairs)
-{
-  unsigned n=pts.size();
-  vnl_matrix<double> D(n,n);
-  for (unsigned i=0;i<n;++i) D(i,i)=0.0;
-  for (unsigned i=1;i<n;++i)
-    for (unsigned j=0;j<i;++j)
-    {
-      D(i,j) = (pts[i]-pts[j]).length();
-      D(j,i) = D(i,j);
-    }
-
-  mbl_minimum_spanning_tree(D,pairs);
-}
-
-// Draws value along line between p1 and p2
-template<class T>
-void draw_line(vil_image_view<T>& image,
-               vgl_point_2d<double> p1,
-               vgl_point_2d<double> p2, T value)
-{
-  vgl_vector_2d<double> dp = p2-p1;
-  unsigned n = unsigned(1.5+vcl_max(vcl_fabs(dp.x()),vcl_fabs(dp.y())));
-  dp/=n;
-  unsigned ni=image.ni(), nj=image.nj();
-  for (unsigned i=0;i<=n;++i,p1+=dp)
-  {
-    unsigned pi=unsigned(p1.x()+0.5); if (pi>=ni) continue;
-    unsigned pj=unsigned(p1.y()+0.5); if (pj>=nj) continue;
-    image(pi,pj)=value;
-  }
-}
-
 
 int main( int argc, char* argv[] )
 {
@@ -237,16 +167,7 @@ int main( int argc, char* argv[] )
   assert(pairs.size()==n_c-1);
 
   // Draw tree into image for display purposes
-  for (unsigned i=0;i<pairs.size();++i)
-    draw_line(image1.image(),
-              w_pts[pairs[i].first],w_pts[pairs[i].second],vxl_byte(255));
-
-  // Write position of selected points into the original image
-  // for display purposes.
-  for (unsigned i=0;i<n_c;++i)
-  {
-    vil_fill_disk(image1.image(),w_pts[i].x(),w_pts[i].y(),4,vxl_byte(255));
-  }
+  draw_tree(image1.image(),w_pts,pairs);
 
   if (vil_save(image1.image(),output_image1_path().c_str()))
   {
@@ -295,16 +216,7 @@ int main( int argc, char* argv[] )
   searcher.best_points(pts2);
 
   // Draw tree into image for display purposes
-  for (unsigned i=0;i<pairs.size();++i)
-    draw_line(image2.image(),
-              pts2[pairs[i].first],pts2[pairs[i].second],vxl_byte(255));
-
-  // Write position of selected points into the original image
-  // for display purposes.
-  for (unsigned i=0;i<n_c;++i)
-  {
-    vil_fill_disk(image2.image(),pts2[i].x(),pts2[i].y(),4,vxl_byte(255));
-  }
+  draw_tree(image2.image(),pts2,pairs);
 
   if (vil_save(image2.image(),output_image2_path().c_str()))
   {
