@@ -205,6 +205,7 @@ static void test_pyramid_image_resource()
   }//close resource pi
   TEST("multiimage tiff pyramid write", good, true);
   { //open input pyramid rpi
+    vcl_cout << "Load multi-image pyramid\n";
     vil_pyramid_image_resource_sptr rpi = vil_load_pyramid_resource(file.c_str());
     vcl_cout << "loaded multi-image pyramid " << rpi  << '\n';
     unsigned nlevels = rpi->nlevels();

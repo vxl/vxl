@@ -18,6 +18,7 @@
 #include <vil/vil_stream_fstream.h>
 
 //#define DEBUG
+#define HAS_J2K 0
 
 // Amitha Perera
 // Apr 2002
