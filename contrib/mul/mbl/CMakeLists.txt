@@ -99,4 +99,4 @@ IF (BUILD_TESTING)
   SUBDIRS(tests)
 ENDIF (BUILD_TESTING)
 
-#SUBDIRS(tools)
+SUBDIRS(examples)
