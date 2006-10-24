@@ -9,7 +9,8 @@ SET( rgrl_sources
   rgrl_object.h                        rgrl_object.cxx
   rgrl_object_sptr.h
 
-  rgrl_mask.h                          rgrl_mask.cxx                 
+  rgrl_mask.h                          rgrl_mask.cxx
+  rgrl_mask_3d_image.h                 rgrl_mask_3d_image.cxx
   rgrl_mask_sptr.h
 
   rgrl_cast.h
