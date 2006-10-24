@@ -8,6 +8,7 @@
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_gaussian_pyramid_builder_2d.h>
 #include <vimt/vimt_image_pyramid.h>
+#include <vimt/vimt_crop.h>
 #include <vil/algo/vil_corners.h>
 #include <vil/algo/vil_find_peaks.h>
 #include <vil/vil_load.h>
@@ -16,6 +17,7 @@
 #include <vil/vil_crop.h>
 #include <vil/vil_math.h>
 #include <vil/vil_convert.h>
+#include <vil/vil_resample_bilin.h>
 #include <mbl/mbl_index_sort.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
@@ -147,6 +149,26 @@ unsigned closest_pt_index(const vcl_vector<vgl_point_2d<double> >& pts,
   return c;
 }
 
+//: Generate a new image with resolution suitable for dest_L
+// Requires dest_L>src_L, else dest_im is a (shallow) copy of src_im
+void vimt_resample(const vimt_image_2d_of<float>& src_im, int src_L,
+                   vimt_image_2d_of<float>& dest_im, int dest_L)
+{
+  if (dest_L<=src_L)
+  {
+    dest_im=src_im;
+    return;
+  }
+  unsigned ni = src_im.image().ni();
+  unsigned nj = src_im.image().nj();
+  unsigned s=1;
+  for (int L=dest_L;L>=src_L;--L) s*=2;
+
+  vil_resample_bilin(src_im.image(),dest_im.image(),1+s*(ni-1),1+s*(nj-1));
+  vimt_transform_2d scale;
+  scale.set_zoom_only(s,s,0.0,0.0);
+  dest_im.set_world2im(scale*src_im.world2im());
+}
 int main( int argc, char* argv[] )
 {
   vul_arg<vcl_string> image1_path("-i1","Input image 1");
@@ -275,8 +297,8 @@ int main( int argc, char* argv[] )
     int i1 = pairs[i].first;
     int i2 = pairs[i].second;
     vgl_vector_2d<double> dp = pts[i2]-pts[i1];
-    double sd_x = vcl_max(20.0,0.2*dp.length());  // Make this level dependent?
-    double sd_y = vcl_max(20.0,0.2*dp.length());
+    double sd_x = vcl_max(vcl_pow(2.0,im_level[i]),0.2*dp.length());
+    double sd_y = vcl_max(vcl_pow(2.0,im_level[i]),0.2*dp.length());
     arcs[i]=fhs_arc(i1,i2,dp.x(),dp.y(),sd_x*sd_x,sd_y*sd_y);
   }
 
@@ -289,11 +311,33 @@ int main( int argc, char* argv[] )
     const vimt_image_2d_of<vxl_byte>& byte_im =
        static_cast<const vimt_image_2d_of<vxl_byte>&>(image_pyr2(im_level[i]));
 
+    // Compute region over which to search (20% of image, centered on point)
+    int ni=byte_im.image().ni();
+    int xw = ni/10+1+w();
+    int nj=byte_im.image().nj();
+    int yw = nj/10+1+w();
+    vgl_point_2d<double> im_p = byte_im.world2im()(pts[i]);
+    int xc = int(0.5+im_p.x());
+    int yc = int(0.5+im_p.y());
+    int ilo = vcl_max(0,xc-xw);
+    int ihi = vcl_min(ni-1,xc+xw);
+    int jlo = vcl_max(0,yc-yw);
+    int jhi = vcl_min(nj-1,yc+yw);
+    vimt_image_2d_of<vxl_byte> cropped_im = vimt_crop(byte_im,
+                                                      ilo, 1+ihi-ilo,
+                                                      jlo, 1+jhi-jlo);
+
     // Apply to whole image in first instance
     // Ideally would crop a region around expected position
-    vimt_normalised_correlation_2d(byte_im,feature_response[i],
+    vimt_normalised_correlation_2d(cropped_im,feature_response[i],
                                    patch[i],patch_ref[i],float());
-
+    if (im_level[i]!=level_lo())
+    {
+      // Resample the feature response at resolution of image level_lo()
+      vimt_image_2d_of<float> fr;
+      fr.deep_copy(feature_response[i]);
+      vimt_resample(fr,im_level[i], feature_response[i],level_lo());
+    }
     // Need good values to be small, not large, so apply -ve factor
     vil_math_scale_values(feature_response[i].image(),-f());
   }
