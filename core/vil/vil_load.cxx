@@ -83,6 +83,9 @@ vil_load_pyramid_resource(char const* directory_or_file)
   for (vil_file_format** p = vil_file_format::all(); *p; ++p) {
 #if 1 // debugging
     vcl_cerr << __FILE__ " : trying \'" << (*p)->tag() << "\'\n";
+
+
+    vcl_cout << "make_input_pyramid_image(" << directory_or_file << ")\n";
 #endif
     vil_pyramid_image_resource_sptr pir =
       (*p)->make_input_pyramid_image(directory_or_file);
