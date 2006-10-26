@@ -17,15 +17,12 @@ vil_nitf2_tagged_record_definition::tagged_record_definition_map&
   public:
     ~tagged_record_definition_map_t()
     {
-      for( iterator it = begin(), last = end(); 
-        it != last; it++ )
-      {
+      for (iterator it = begin(), last = end(); it != last; it++) {
         delete it->second;
       }
     }
   };
 
-  
   static tagged_record_definition_map_t tagged_record_definitions;
   return tagged_record_definitions;
 }
@@ -50,6 +47,17 @@ vil_nitf2_tagged_record_definition& vil_nitf2_tagged_record_definition::define(
   }
   all_definitions().insert(vcl_make_pair(name, definition));
   return *definition;
+}
+
+bool vil_nitf2_tagged_record_definition::undefine(vcl_string name)
+{
+  tagged_record_definition_map::iterator definition = all_definitions().find(name);
+  if (definition == all_definitions().end()) {
+    return false;
+  }
+  delete definition->second;
+  all_definitions().erase(definition);
+  return true;
 }
 
 vil_nitf2_tagged_record_definition& vil_nitf2_tagged_record_definition::field(
@@ -88,10 +96,9 @@ vil_nitf2_tagged_record_definition::repeat(vil_nitf2_field_functor<int>* repeat_
   return *this;
 }
 
-vil_nitf2_tagged_record_definition& vil_nitf2_tagged_record_definition::end() 
+void vil_nitf2_tagged_record_definition::end() 
 { 
   m_definition_completed = true; 
-  return *this; 
 }
 
 vil_nitf2_tagged_record_definition* vil_nitf2_tagged_record_definition::find(vcl_string name)
@@ -100,21 +107,6 @@ vil_nitf2_tagged_record_definition* vil_nitf2_tagged_record_definition::find(vcl
   if (definition == all_definitions().end()) return 0;
   return definition->second;
 }
-
-vil_nitf2_tagged_record_definition::vil_nitf2_tagged_record_definition( const vil_nitf2_tagged_record_definition& rhs )
-{
-  *this = rhs;
-}
-
-vil_nitf2_tagged_record_definition& vil_nitf2_tagged_record_definition::operator=( const vil_nitf2_tagged_record_definition& rhs )
-{
-  m_name = rhs.m_name;
-  m_pretty_name = rhs.m_pretty_name;
-  m_field_definitions = new vil_nitf2_field_definitions( *rhs.m_field_definitions );
-  m_definition_completed = rhs.m_definition_completed;
-  return *this;
-}
-
 
 vil_nitf2_tagged_record_definition::~vil_nitf2_tagged_record_definition()
 {

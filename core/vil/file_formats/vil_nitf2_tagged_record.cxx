@@ -201,77 +201,82 @@ vil_nitf2_tagged_record::vil_nitf2_tagged_record()
 bool vil_nitf2_tagged_record::test()
 {
   bool error = false;
+  const char* test_tre_tag = "@TEST@";
   // Example Tagged Record Extension definition
-  vil_nitf2_tagged_record_definition MTIRPB =
-    vil_nitf2_tagged_record_definition::define("MTIRPB", "Test Definition" )
-    .field("MTI_DP",           "Destination Point",     NITF_INT(2))
-    .field("MTI_PACKET_ID",    "MTI Packed ID Number",  NITF_INT(3))
-    .field("DATIME",           "Scan Date & Time",      NITF_DAT(14), true)
-    .field("ACFT_LOC",         "Aircraft Position",     NITF_LOC(21))
-    .field("ACFT_LOC2",        "Aircraft Position 2",   NITF_LOC(21))
-    .field("SQUINT_ANGLE",     "Squint Angle",          NITF_DBL(6, 2, true), true)
-    .field("NO_VALID_TARGETS", "Number of Targets",     NITF_INT(3))
-    .field("TGT_CAT",        "Target Classification Category",
-           NITF_ENUM(1, vil_nitf2_enum_values()
+  vil_nitf2_tagged_record_definition::define(test_tre_tag, "Test Definition" )
+   .field("MTI_DP",           "Destination Point",     NITF_INT(2))
+   .field("MTI_PACKET_ID",    "MTI Packed ID Number",  NITF_INT(3))
+   .field("DATIME",           "Scan Date & Time",      NITF_DAT(14), true)
+   .field("ACFT_LOC",         "Aircraft Position",     NITF_LOC(21))
+   .field("ACFT_LOC2",        "Aircraft Position 2",   NITF_LOC(21))
+   .field("SQUINT_ANGLE",     "Squint Angle",          NITF_DBL(6, 2, true), true)
+   .field("NO_VALID_TARGETS", "Number of Targets",     NITF_INT(3))
+   .field("TGT_CAT",        "Target Classification Category",
+          NITF_ENUM(1, vil_nitf2_enum_values()
             .value("H", "Helicopter")
             .value("T", "Tracked")
             .value("U", "Unknown")
             .value("W", "Wheeled")
             .value("TOO LONG", "Too long value test")
             .value("T", "Duplicate value test")))
-    .repeat(new vil_nitf2_field_value<int>("NO_VALID_TARGETS"),
-            vil_nitf2_field_definitions()
-        .field("TGT_n_SPEED", "Target Estimated Ground Speed", NITF_INT(4),
-             true)
-        .field("TGT_n_CAT",   "Target Classification Category",
-             NITF_ENUM(1, vil_nitf2_enum_values()
-               .value("H", "Helicopter")
-               .value("T", "Tracked")
-               .value("U", "Unknown")
-               .value("W", "Wheeled")),
-             true) )
-    .field("TEST_NEG_COND", "Test False Condition", NITF_STR_BCSA(14), false,
-           0, new vil_nitf2_field_value_greater_than<int>("MTI_DP", 5))
-    .field("TEST_POS_COND", "Test True Condition",  NITF_STR_BCSA(14), false,
-           0, new vil_nitf2_field_value_greater_than<int>("MTI_DP", 1))
-    .field("CLASS",  "Security Classification",
-           NITF_ENUM(1, vil_nitf2_enum_values()
+   .repeat(new vil_nitf2_field_value<int>("NO_VALID_TARGETS"),
+           vil_nitf2_field_definitions()
+     .field("TGT_n_SPEED", "Target Estimated Ground Speed", NITF_INT(4),
+            true)
+     .field("TGT_n_CAT",   "Target Classification Category",
+            NITF_ENUM(1, vil_nitf2_enum_values()
+              .value("H", "Helicopter")
+              .value("T", "Tracked")
+              .value("U", "Unknown")
+              .value("W", "Wheeled")),
+            true))
+   .field("TEST_NEG_COND", "Test False Condition", NITF_STR_BCSA(14), false,
+          0, new vil_nitf2_field_value_greater_than<int>("MTI_DP", 5))
+   .field("TEST_POS_COND", "Test True Condition",  NITF_STR_BCSA(14), false,
+          0, new vil_nitf2_field_value_greater_than<int>("MTI_DP", 1))
+   .field("CLASS",  "Security Classification",
+          NITF_ENUM(1, vil_nitf2_enum_values()
             .value("T", "Top Secret")
             .value("S", "Secret")
             .value("C", "Confindential")
             .value("R", "Restricted")
             .value("U", "Unclassified")),
             true, 0, 0)
-     .field( "CODEW", "Code Words",                  NITF_STR_BCSA(15), false,
-              0, new vil_nitf2_field_value_one_of<vcl_string>( "CLASS", "T" ) )
-     .field( "CWTEST", "Another Code Word Test",     NITF_STR_BCSA(15), false,
-              0, new vil_nitf2_field_value_one_of<vcl_string>( "CLASS", "U" ) )
-     .field( "NBANDS", "Number of bands",            NITF_INT(1), false,
-             0, 0 )
-     .field( "XBANDS", "Large number of bands",      NITF_INT(2), false,
-             0, new vil_nitf2_field_value_one_of<int>("NBANDS",0))
-     .repeat(new vil_nitf2_choose_field_value<int>("NBANDS", "XBANDS",
-                new vil_nitf2_field_value_greater_than<int>("NBANDS", 0)),
+   .field("CODEW", "Code Words",                  NITF_STR_BCSA(15), false,
+          0, new vil_nitf2_field_value_one_of<vcl_string>( "CLASS", "T" ) )
+   .field("CWTEST", "Another Code Word Test",     NITF_STR_BCSA(15), false,
+          0, new vil_nitf2_field_value_one_of<vcl_string>( "CLASS", "U" ) )
+   .field("NBANDS", "Number of bands",            NITF_INT(1), false,
+          0, 0 )
+   .field("XBANDS", "Large number of bands",      NITF_INT(2), false,
+          0, new vil_nitf2_field_value_one_of<int>("NBANDS",0))
+   .repeat(new vil_nitf2_choose_field_value<int>("NBANDS", "XBANDS",
+             new vil_nitf2_field_value_greater_than<int>("NBANDS", 0)),
              vil_nitf2_field_definitions()
-       .field( "BAND_LTR", "Band Description",       NITF_CHAR(), true,
-              0))
-     .field( "EXP_TEST", "Exponential format test",  NITF_EXP(6,1))
-     // test nested repeats and functor references to tags within and
-     // outside repeat loops
-     .field( "N",   "Test repeat N", NITF_INT(1))
+     .field("BAND_LTR", "Band Description",       NITF_CHAR(), true,
+            0)
+   )
+   .field( "EXP_TEST", "Exponential format test",  NITF_EXP(6,1))
+   // test nested repeats and functor references to tags within and
+   // outside repeat loops
+   .field( "N",   "Test repeat N", NITF_INT(1))
+   .repeat(new vil_nitf2_field_value<int>("N"), vil_nitf2_field_definitions()
+     .field("A", "Test repeat A", NITF_INT(1))
      .repeat(new vil_nitf2_field_value<int>("N"), vil_nitf2_field_definitions()
-        .field("A", "Test repeat A", NITF_INT(1))
-        .repeat(new vil_nitf2_field_value<int>("N"), vil_nitf2_field_definitions()
-           .field("S", "Test repeat S", NITF_STR(3)))
-        .repeat(new vil_nitf2_field_value<int>("A"), vil_nitf2_field_definitions()
-           .field("B", "Test repeat B", NITF_STR_BCSA(3))
-           .repeat(new vil_nitf2_field_value<int>("A"), vil_nitf2_field_definitions()
-              .field("C", "Test repeat C", NITF_STR_BCSA(4)))))
-     // test fixed repeat count
-     .repeat(4, vil_nitf2_field_definitions()
-       .field("D", "Test fixed repeat", NITF_INT(1)))
-
-    .end();
+        .field("S", "Test repeat S", NITF_STR(3))
+     )
+     .repeat(new vil_nitf2_field_value<int>("A"), vil_nitf2_field_definitions()
+       .field("B", "Test repeat B", NITF_STR_BCSA(3))
+       .repeat(new vil_nitf2_field_value<int>("A"), vil_nitf2_field_definitions()
+         .field("C", "Test repeat C", NITF_STR_BCSA(4))
+       )
+     )
+   )
+   // test fixed repeat count
+   .repeat(4, vil_nitf2_field_definitions()
+     .field("D", "Test fixed repeat", NITF_INT(1))
+   )
+  .end();
   // Create a test input vcl_string
   vcl_string testFieldsStr =
     "02"                     // MTI_DP
@@ -321,7 +326,7 @@ bool vil_nitf2_tagged_record::test()
     "7890"
   ;
   vcl_stringstream test_stream;
-  test_stream << "MTIRPB"; // CETAG
+  test_stream << test_tre_tag; // CETAG
   test_stream << vcl_setw(5) << vcl_setfill('0') << testFieldsStr.length(); // CELENGTH
   test_stream << testFieldsStr; // rest of fields
   vcl_string read_string = test_stream.str();
@@ -417,7 +422,11 @@ bool vil_nitf2_tagged_record::test()
   // Try output of vector field
   vcl_cerr << "Output of vector field C:\n"
            << *(record->get_field("C"));
-
+  // Clean up test definition and test cleanup
+  if (!vil_nitf2_tagged_record_definition::undefine(test_tre_tag)) {
+    vcl_cerr << "Error undefining TRE." << vcl_endl;
+    error = true;
+  }
   return !error;
 }
 

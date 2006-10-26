@@ -68,7 +68,7 @@ public:
 
   // Declares that definition is finished, preventing further invocations
   // of field() or repeat().
-  vil_nitf2_tagged_record_definition& end();
+  void end();
     
   // Look up a record definition
   static vil_nitf2_tagged_record_definition* find(vcl_string name);
@@ -88,28 +88,30 @@ public:
   const vil_nitf2_field_definitions& field_definitions() const {
     return *m_field_definitions; }
 
+  // Undefines a TRE. Returns whether TRE with specified name was found.
+  static bool undefine(vcl_string name);
+
   // Registers some TREs for testing
   static void register_test_tre();
 
-  // Copy constructor
+private:
+  // No copy constructor
   vil_nitf2_tagged_record_definition(const vil_nitf2_tagged_record_definition&);
 
-  // Assignment operator
+  // No assignment operator
   vil_nitf2_tagged_record_definition& operator=(const vil_nitf2_tagged_record_definition&);
-
-private:
-  vcl_string m_name;
-  vcl_string m_pretty_name;
-  vil_nitf2_field_definitions* m_field_definitions;
-
-  // to implement
-  //virtual bool validate(vil_nitf2_tagged_record*) const;
-
-  bool m_definition_completed;
 
   // Constructor
   vil_nitf2_tagged_record_definition(vcl_string name, vcl_string pretty_name, 
     vil_nitf2_field_definitions* defs = 0); 
+  
+  // to implement
+  //virtual bool validate(const vil_nitf2_tagged_record*) const;
+
+  vcl_string m_name;
+  vcl_string m_pretty_name;
+  vil_nitf2_field_definitions* m_field_definitions;
+  bool m_definition_completed;
 };
 
 #endif // VIL_NITF2_TAGGED_RECORD_DEFINITION_H
