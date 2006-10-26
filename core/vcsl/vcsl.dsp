@@ -204,6 +204,18 @@ SOURCE=.\Templates/vbl_smart_ptr+vcsl_unit-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+vcsl_utm-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_micron-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+vcsl_millimeter-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vcsl_micron.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vcsl_millimeter.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vcsl_angle.cxx
 # End Source File
 # Begin Source File
@@ -505,6 +517,18 @@ SOURCE=.\vcsl_unit_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\vcsl_utm_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vcsl_micron.h
+# End Source File
+# Begin Source File
+SOURCE=.\vcsl_micron_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vcsl_millimeter.h
+# End Source File
+# Begin Source File
+SOURCE=.\vcsl_millimeter_sptr.h
 # End Source File
 # End Group
 # End Target
