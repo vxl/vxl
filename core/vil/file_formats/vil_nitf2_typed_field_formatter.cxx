@@ -4,6 +4,7 @@
 
 #include "vil_nitf2_typed_field_formatter.h"
 
+#include <vcl_algorithm.h>
 #include <vcl_iomanip.h>
 #include <vcl_iostream.h>
 #include <vcl_utility.h>
@@ -232,6 +233,70 @@ bool vil_nitf2_double_formatter::write_vcl_stream(vcl_ostream& output, const dou
   }
   output << vcl_internal << vcl_setfill('0') << vcl_setprecision(precision);
   output << value;
+  return !output.fail();
+}
+
+//==============================================================================
+// Class vil_nitf2_exponential_formatter
+
+vil_nitf2_exponential_formatter::
+vil_nitf2_exponential_formatter(int mantissa_width, int exponent_width)
+  : vil_nitf2_typed_field_formatter<double>(vil_nitf2::type_double, 
+      mantissa_width + exponent_width + 5),
+    mantissa_width(mantissa_width),
+    exponent_width(exponent_width)
+{};
+
+vil_nitf2_field_formatter* vil_nitf2_exponential_formatter::copy() const 
+{
+  return new vil_nitf2_exponential_formatter(mantissa_width, exponent_width); 
+}
+
+bool vil_nitf2_exponential_formatter::read_vcl_stream(vcl_istream& input,
+                                            double& out_value, bool& out_blank)
+{
+  char* cstr;
+  if (!read_c_str(input, field_width, cstr, out_blank)) {
+    delete[] cstr;
+    return false;
+  }
+  char* endp;
+  errno=0;
+  out_value = strtod(cstr, &endp);
+  // Check locations of non-digits in format: +d.dddddE+dd
+  const char base_sign = cstr[0];
+  const bool base_sign_ok = base_sign=='+' || base_sign=='-';
+  const bool decimal_ok = cstr[2]=='.';
+  const char e_ok = cstr[3+mantissa_width]=='E';
+  const char exp_sign = cstr[4+mantissa_width];
+  const bool exp_sign_ok = exp_sign=='+' || exp_sign=='-';
+  bool retVal =
+    (endp-cstr)==field_width   // processed all chars
+     && errno==0               // read a number with no errors
+     && base_sign_ok           // base sign in right place
+     && decimal_ok             // decimal point in right place
+     && e_ok                   // 'E' in right place
+     && exp_sign_ok;           // exponent sign in right place
+  delete[] cstr;
+  return retVal;
+}
+
+bool vil_nitf2_exponential_formatter::write_vcl_stream(vcl_ostream& output, 
+                                                       const double& value)
+{
+  // Can't control the width of exponent (it's 3) so write it to a buffer first
+  vcl_ostringstream buffer;
+  buffer << vcl_setw(field_width) << vcl_scientific;
+  buffer << vcl_showpos << vcl_uppercase;
+  buffer << vcl_internal << vcl_setfill('0') << vcl_setprecision(mantissa_width);
+  buffer << value;
+  vcl_string buffer_string = buffer.str();
+  unsigned int length = buffer_string.length();
+  // Write everything up to the exponent sign
+  output << buffer_string.substr(0,length-3);
+  // Write exponent digits, padding or unpadding them to desired width
+  output << vcl_setw(exponent_width) << vcl_setfill('0') 
+    << buffer_string.substr(length-vcl_min(3,exponent_width), vcl_min(3,exponent_width));
   return !output.fail();
 }
 

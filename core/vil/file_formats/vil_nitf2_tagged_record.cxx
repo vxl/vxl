@@ -228,9 +228,10 @@ bool vil_nitf2_tagged_record::test()
              vil_nitf2_field_definitions()
        .field( "BAND_LTR", "Band Description",       NITF_CHAR(), true,
               0))
-     .field( "N",   "Test repeat N", NITF_INT(1))
+     .field( "EXP_TEST", "Exponential format test",  NITF_EXP(6,1))
      // test nested repeats and functor references to tags within and
      // outside repeat loops
+     .field( "N",   "Test repeat N", NITF_INT(1))
      .repeat(new vil_nitf2_field_value<int>("N"), vil_nitf2_field_definitions()
         .field("A", "Test repeat A", NITF_INT(1))
         .repeat(new vil_nitf2_field_value<int>("N"), vil_nitf2_field_definitions()
@@ -266,6 +267,7 @@ bool vil_nitf2_tagged_record::test()
     "0"                      // NBANDS (0, so use XBANDS instead)
     "12"                     // XBANDS (present because NBANDS=0)
     "abcdefghijkl"           // 12 BAND_LTRs (XBAND=12)
+    "+1.234567E-8"           // Exponential format test
     // test nested repeats
     "2"    // N
     // for i=0..N: i=0

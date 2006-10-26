@@ -12,6 +12,7 @@
 #define NITF_LOC  new vil_nitf2_location_formatter
 #define NITF_INT  new vil_nitf2_integer_formatter
 #define NITF_DBL  new vil_nitf2_double_formatter
+#define NITF_EXP  new vil_nitf2_exponential_formatter
 #define NITF_LONG new vil_nitf2_long_long_formatter
 #define NITF_CHAR new vil_nitf2_char_formatter
 #define NITF_BIN  new vil_nitf2_binary_formatter

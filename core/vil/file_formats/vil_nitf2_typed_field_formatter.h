@@ -172,7 +172,7 @@ class vil_nitf2_long_long_formatter : public vil_nitf2_typed_field_formatter<vil
   bool show_sign;
 };
 
-// Reads and writes a vcl_fixed point field, with or without sign, and with
+// Reads and writes a fixed point field, with or without sign, and with
 // specified precision.
 //
 class vil_nitf2_double_formatter : public vil_nitf2_typed_field_formatter<double>
@@ -190,6 +190,27 @@ class vil_nitf2_double_formatter : public vil_nitf2_typed_field_formatter<double
 
   int precision;
   bool show_sign;
+};
+
+// Reads and writes a floating point field in exponential format: sign, digit, 
+// decimal point, mantissa digits, 'E', sign, exponent digits; 
+// e.g., "+3.1416E+00", which has mantissa width 4 and exponent width 2.
+//
+class vil_nitf2_exponential_formatter : public vil_nitf2_typed_field_formatter<double>
+{
+public:
+  vil_nitf2_exponential_formatter(int mantissa_width, int exponent_width);
+
+  vil_nitf2_field_formatter* copy() const;
+
+  // partially overridden read/write methods
+  using vil_nitf2_typed_field_formatter<double>::read;
+  using vil_nitf2_typed_field_formatter<double>::write;
+  virtual bool read_vcl_stream(vcl_istream& input, double& out_value, bool& out_blank);
+  virtual bool write_vcl_stream(vcl_ostream& output, const double& value);
+
+  int mantissa_width;
+  int exponent_width;
 };
 
 // Reads and writes a character field. (I know this seems like overkill,
