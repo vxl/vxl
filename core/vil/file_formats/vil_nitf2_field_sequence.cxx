@@ -443,7 +443,7 @@ bool vil_nitf2_field_sequence::get_values(vcl_string tag, \
     out_values.clear(); \
   } \
   int num_dims = field->num_dimensions(); \
-  if (num_dims == indexes.size()) { \
+  if (num_dims == (int)indexes.size()) { \
     /* get single value */\
     T value; \
     if (get_value(tag, indexes, value, false)) { \

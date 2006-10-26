@@ -129,9 +129,9 @@ class vil_nitf2_image : public vil_blocked_image_resource
   virtual bool put_view (const vil_image_view_base& /* im */, unsigned /* i0 */, unsigned /* j0 */ )
   { return false; }
 
-  virtual bool put_block( unsigned  block_index_i, unsigned  block_index_j,
-                          const vil_image_view_base& blk )
-    {return false;}
+  virtual bool put_block(unsigned  /*block_index_i*/, unsigned  /*block_index_j*/,
+                         const vil_image_view_base& /*blk*/ )
+  { return false; }
 
   virtual vil_image_view_base_sptr get_block( unsigned int blockIndexX, unsigned int blockIndexY ) const;
 
