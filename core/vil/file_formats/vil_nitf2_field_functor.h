@@ -304,8 +304,8 @@ public:
 
   virtual ~vil_nitf2_constant_functor() {}
 
-  bool operator() (vil_nitf2_field_sequence* record,
-                  const vil_nitf2_index_vector& indexes, T& value) {
+  bool operator() (vil_nitf2_field_sequence* /*record*/,
+                  const vil_nitf2_index_vector& /*indexes*/, T& value) {
     value = value_;
     return true;
   }
