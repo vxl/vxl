@@ -22,6 +22,10 @@ SOURCES += vcsl_angle.cxx
 MANPAGE_SOURCES += vcsl_unit.h
 SOURCES += vcsl_length_unit.cxx
 SOURCES += vcsl_meter.cxx
+SOURCES += vcsl_millimeter.cxx
+MANPAGE_SOURCES += vcsl_millimeter_sptr.h
+SOURCES += vcsl_micron.cxx
+MANPAGE_SOURCES += vcsl_micron_sptr.h
 
 SOURCES += vcsl_angle_unit.cxx
 SOURCES += vcsl_radian.cxx
