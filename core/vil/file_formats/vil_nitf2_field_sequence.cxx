@@ -8,6 +8,7 @@
 #include "vil_nitf2_field_definition.h"
 #include "vil_nitf2_scalar_field.h"
 #include "vil_nitf2_array_field.h"
+#include "vil_nitf2_compound_field_value.h"
 
 #include <vcl_utility.h>
 
@@ -424,9 +425,69 @@ NITF_FIELD_SEQ_GET_ARRAY_VALUE(vcl_string)
 NITF_FIELD_SEQ_GET_ARRAY_VALUE(vil_nitf2_location*)
 NITF_FIELD_SEQ_GET_ARRAY_VALUE(vil_nitf2_date_time)
 
+// Macro to generate overloads of get_values(), since VXL coding
+// standards forbid using templated member functions.
+//
+#define NITF_FIELD_SEQ_GET_VALUES(T) \
+bool vil_nitf2_field_sequence::get_values(vcl_string tag, \
+                                          const vil_nitf2_index_vector& indexes, \
+                                          vcl_vector<T>& out_values, \
+                                          bool clear_out_values) const \
+{ \
+  vil_nitf2_field* field = get_field(tag); \
+  if (!field) { \
+    /*vcl_cerr << "vil_nitf2_field_sequence::get_value(" << tag << ", const vil_nitf2_index_vector&): tag not found.\n"; */\
+    return false; \
+  } \
+  if (clear_out_values) { \
+    out_values.clear(); \
+  } \
+  int num_dims = field->num_dimensions(); \
+  if (num_dims == indexes.size()) { \
+    /* get single value */\
+    T value; \
+    if (get_value(tag, indexes, value, false)) { \
+      out_values.push_back(value); \
+      return true; \
+    } else { \
+      return false; \
+    } \
+  } else { \
+    vil_nitf2_array_field* array_field = field->array_field(); \
+    if (!array_field) { \
+      /* indexes is too long */\
+      return false; \
+    } \
+    /* traverse value tree depth-first, collecting values into out_values */\
+    int dimension = array_field->next_dimension(indexes); \
+    for (int index=0; index < dimension; ++index) { \
+      vil_nitf2_index_vector next_indexes = indexes; \
+      next_indexes.push_back(index); \
+      if (!get_values(tag, next_indexes, out_values, false)) { \
+        return false; \
+      } \
+    } \
+    return true; \
+  } \
+} \
+\
+bool vil_nitf2_field_sequence::get_values(vcl_string tag, vcl_vector<T>& out_values) const \
+{ \
+  return get_values(tag, vil_nitf2_index_vector(), out_values, true); \
+}
+
+NITF_FIELD_SEQ_GET_VALUES(int)
+NITF_FIELD_SEQ_GET_VALUES(double)
+NITF_FIELD_SEQ_GET_VALUES(char)
+NITF_FIELD_SEQ_GET_VALUES(void*)
+NITF_FIELD_SEQ_GET_VALUES(vcl_string)
+NITF_FIELD_SEQ_GET_VALUES(vil_nitf2_location*)
+NITF_FIELD_SEQ_GET_VALUES(vil_nitf2_date_time)
+
 #if VXL_HAS_INT_64
 //if not VXL_HAS_INT_64 isn't defined the vil_nitf2_long is the same as just plain 'int'
 //and this function will be a duplicate of that get_value
 NITF_FIELD_SEQ_GET_VALUE(vil_nitf2_long)
 NITF_FIELD_SEQ_GET_ARRAY_VALUE(vil_nitf2_long)
+NITF_FIELD_SEQ_GET_VALUES(vil_nitf2_long)
 #endif

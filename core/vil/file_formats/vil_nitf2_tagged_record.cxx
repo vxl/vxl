@@ -142,6 +142,12 @@ bool vil_nitf2_tagged_record::get_value(vcl_string tag, vil_nitf2_location*& out
   return m_field_sequence->get_value(tag, out_value); }
 bool vil_nitf2_tagged_record::get_value(vcl_string tag, vil_nitf2_date_time& out_value) const {
   return m_field_sequence->get_value(tag, out_value); }
+#if VXL_HAS_INT_64
+// if not VXL_HAS_INT_64 isn't defined the vil_nitf2_long is the same as just plain 'int'
+// and this function will be a duplicate of that get_value
+bool vil_nitf2_tagged_record::get_value(vcl_string tag, vil_nitf2_long& out_value) const {
+  return m_field_sequence->get_value(tag, out_value); }
+#endif
 
 bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, int& out_value) const {
   return m_field_sequence->get_value(tag, indexes, out_value); }
@@ -153,24 +159,45 @@ bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_ve
   return m_field_sequence->get_value(tag, indexes, out_value); }
 bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vcl_string& out_value) const {
   return m_field_sequence->get_value(tag, indexes, out_value); }
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_location*& out_value)const{
+bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_location*& out_value) const {
   return m_field_sequence->get_value(tag, indexes, out_value); }
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_date_time& out_value)const{
+bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_date_time& out_value) const {
   return m_field_sequence->get_value(tag, indexes, out_value); }
-
 #if VXL_HAS_INT_64
-//if not VXL_HAS_INT_64 isn't defined the vil_nitf2_long is the same as just plain 'int'
-//and this function will be a duplicate of that get_value
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, vil_nitf2_long& out_value) const {
-  return m_field_sequence->get_value(tag, out_value); }
+// if not VXL_HAS_INT_64 isn't defined the vil_nitf2_long is the same as just plain 'int'
+// and this function will be a duplicate of that get_value
 bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_long& out_value) const {
   return m_field_sequence->get_value(tag, indexes, out_value); }
 #endif
+
+// Macro to define both overloads of get_values()
+#define VIL_NITF2_TAGGED_RECORD_GET_VALUES(T) \
+bool vil_nitf2_tagged_record::get_values(vcl_string tag, const vil_nitf2_index_vector& indexes, \
+                                         vcl_vector<T>& out_values, bool clear_out_values) const { \
+  return m_field_sequence->get_values(tag, indexes, out_values, clear_out_values); \
+} \
+bool vil_nitf2_tagged_record::get_values(vcl_string tag, vcl_vector<T>& out_values) const { \
+  return m_field_sequence->get_values(tag, out_values); \
+}
+  
+VIL_NITF2_TAGGED_RECORD_GET_VALUES(int);
+VIL_NITF2_TAGGED_RECORD_GET_VALUES(double);
+VIL_NITF2_TAGGED_RECORD_GET_VALUES(char);
+VIL_NITF2_TAGGED_RECORD_GET_VALUES(void*);
+VIL_NITF2_TAGGED_RECORD_GET_VALUES(vcl_string);
+VIL_NITF2_TAGGED_RECORD_GET_VALUES(vil_nitf2_location*);
+VIL_NITF2_TAGGED_RECORD_GET_VALUES(vil_nitf2_date_time);
+#if VXL_HAS_INT_64
+  VIL_NITF2_TAGGED_RECORD_GET_VALUES(vil_nitf2_long);
+#endif
+
 
 vil_nitf2_tagged_record::vil_nitf2_tagged_record()
   : m_length_field(0), m_tag_field(0), m_length(0), m_definition(0), m_field_sequence(0)
 {}
 
+// TO DO: rewrite this method a sequence of unit tests!
+//
 bool vil_nitf2_tagged_record::test()
 {
   bool error = false;
@@ -235,11 +262,11 @@ bool vil_nitf2_tagged_record::test()
      .repeat(new vil_nitf2_field_value<int>("N"), vil_nitf2_field_definitions()
         .field("A", "Test repeat A", NITF_INT(1))
         .repeat(new vil_nitf2_field_value<int>("N"), vil_nitf2_field_definitions()
-           .field("S", "Test repeat S", NITF_STR(1)))
+           .field("S", "Test repeat S", NITF_STR(3)))
         .repeat(new vil_nitf2_field_value<int>("A"), vil_nitf2_field_definitions()
-           .field("B", "Test repeat B", NITF_STR_BCSA(1))
+           .field("B", "Test repeat B", NITF_STR_BCSA(3))
            .repeat(new vil_nitf2_field_value<int>("A"), vil_nitf2_field_definitions()
-              .field("C", "Test repeat C", NITF_STR_BCSA(1)))))
+              .field("C", "Test repeat C", NITF_STR_BCSA(4)))))
      // test fixed repeat count
      .repeat(4, vil_nitf2_field_definitions()
        .field("D", "Test fixed repeat", NITF_INT(1)))
@@ -269,23 +296,27 @@ bool vil_nitf2_tagged_record::test()
     "abcdefghijkl"           // 12 BAND_LTRs (XBAND=12)
     "+1.234567E-8"           // Exponential format test
     // test nested repeats
-    "2"    // N
-    // for i=0..N: i=0
-    "1"    // A[0]
-    "ST"   // S[0,0:1]
-    //   for j=0..A[i]
-    "B"    // B[0,0]
-    //     for k=0..A[i]
-    "C"    // C[0,0,0]
+    "2"       // N
+    // for i=0...N-1: i=0
+    "1"       // A[0]
+    "S00"     // S[0,0]
+    "S01"     // S[0,1]
+    //   for j=0...A[i]-1: j=0
+    "B00"     // B[0,0]
+    //     for k=0..A[i]-1: k=0
+    "C000"    // C[0,0,0]
     // i=1:
-    "2"    // A[1]
-    "st"   // S[1,0:1]
+    "2"       // A[1]
+    "S10"     // S[1,0]
+    "S11"     // S[1,1]
     //   for j=0..A[i]: j=0
-    "b"    // B[1,0]
+    "B10"     // B[1,0]
     //     for k=0..A[i]
-    "cc"    // C[1,0,0:1]
-    "B"    // B[1,1]
-    "CC"   //  C[1,1,0:1]
+    "C100"      // C[1,0,0]
+    "C101"      // C[1,0,1]
+    "B11"       // B[1,1]
+    "C110"      // C[1,1,0]
+    "C111"      // C[1,1,1]
     // test fixed repeat
     "7890"
   ;
@@ -344,6 +375,40 @@ bool vil_nitf2_tagged_record::test()
     if (!record->get_value("D", vil_nitf2_index_vector(2), d2) || d2 != 9) {
       vcl_cerr << "Get fixed repeat count test failed!\n";
       error = true;
+    }
+    // fetch C[*]
+    vcl_cerr << "Testing get_values (all values)...\n";
+    vcl_vector<vcl_string> c_values;
+    if (!record->get_values("C", c_values) ||
+        c_values.size() != 5 ||
+        c_values[0]!="C000" ||
+        c_values[1]!="C100" ||
+        c_values[2]!="C101" ||
+        c_values[3]!="C110" ||
+        c_values[4]!="C111") {
+      vcl_cerr << "failed!\n" << vcl_endl;
+      error = true;
+    }
+    // Fetch A[1,*]
+    vcl_cerr << "Get values (partial index)...\n";
+    vil_nitf2_index_vector indexes;
+    vcl_vector<int> a_values;
+    indexes.push_back(1);
+    if (!record->get_values("A", indexes, a_values) ||
+        a_values.size() != 1 ||
+        a_values[0] != 2) {
+      vcl_cerr << "failed!\n" << vcl_endl;
+      error = true;
+    }
+    // Fetch C[1,*]
+    if (!record->get_values("C", indexes, c_values) ||
+        c_values.size() != 4 ||
+        c_values[0]!="C100" ||
+        c_values[1]!="C101" ||
+        c_values[2]!="C110" ||
+        c_values[3]!="C111")
+    {
+      vcl_cerr << "failed!\n" << vcl_endl;
     }
   } else {
     vcl_cerr << "Didn't create record!\n";
