@@ -94,6 +94,18 @@ void test_mixture()
           <<"Mean: " << p_pdf->mean()<<vcl_endl
           <<"Var:  " << p_pdf->variance()<<vcl_endl;
 
+  vpdfl_pdf_base* p_pdf_MI = builder.new_model();
+  builder.preset_initial_means(mean);
+  vcl_cout<<"Now building with preset initial means"<<vcl_endl;
+  builder.build(*p_pdf_MI,data_array);
+
+  vcl_cout<<"Original PDF: "<<pdf<<vcl_endl
+          <<"Mean: "<< pdf.mean() <<vcl_endl
+          <<"Var:  "<<pdf.variance()<<vcl_endl
+          <<"New PDF: "<<p_pdf_MI<<vcl_endl
+          <<"Mean: " << p_pdf_MI->mean()<<vcl_endl
+          <<"Var:  " << p_pdf_MI->variance()<<vcl_endl;
+ 
   vpdfl_mixture & gmm =  static_cast<vpdfl_mixture &>(*p_pdf);
 
   vcl_vector<double> test_wts(n_comp, 1.0/n_comp);
@@ -114,6 +126,28 @@ void test_mixture()
     TEST("Means are about correct",
          (vnl_vector_ssd(gmm.component(0).mean(), mean[1]) < 0.05 &&
           vnl_vector_ssd(gmm.component(1).mean(), mean[0]) < 0.05),
+         true);
+  }
+
+  vpdfl_mixture & gmm_MI =  static_cast<vpdfl_mixture &>(*p_pdf);
+
+  TEST_NEAR("Weights are about correct",
+            vnl_c_vector<double>:: euclid_dist_sq(&gmm_MI.weights()[0], &test_wts[0], n_comp),
+            0.0, 0.01);
+
+  if (vnl_vector_ssd(gmm_MI.component(0).mean(), mean[0]) <
+      vnl_vector_ssd(gmm_MI.component(0).mean(), mean[1]) )
+  {
+    TEST("Means are about correct",
+         (vnl_vector_ssd(gmm_MI.component(0).mean(), mean[0]) < 0.05 &&
+          vnl_vector_ssd(gmm_MI.component(1).mean(), mean[1]) < 0.05),
+         true);
+  }
+  else
+  {
+    TEST("Means are about correct",
+         (vnl_vector_ssd(gmm_MI.component(0).mean(), mean[1]) < 0.05 &&
+          vnl_vector_ssd(gmm_MI.component(1).mean(), mean[0]) < 0.05),
          true);
   }
 
@@ -195,6 +229,7 @@ void test_mixture()
   delete p_builder2;
   delete p_pdf2;
   delete p_pdf3;
+  delete p_pdf_MI;
 
   // -------------------------------------------
   //  Test configuring from stream

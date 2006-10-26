@@ -41,6 +41,7 @@ void vpdfl_mixture_builder::init()
   min_var_ = 1.0e-6;
   max_its_ = 10;
   weights_fixed_ = false;
+  initial_means_.clear();
 }
 
 //=======================================================================
@@ -75,7 +76,8 @@ vpdfl_mixture_builder& vpdfl_mixture_builder::operator=(const vpdfl_mixture_buil
   min_var_ = b.min_var_;
   max_its_ = b.max_its_;
   weights_fixed_ = b.weights_fixed_;
-
+  initial_means_ = b.initial_means_;
+  
   return *this;
 }
 
@@ -87,6 +89,7 @@ void vpdfl_mixture_builder::delete_stuff()
   for (unsigned int i=0;i<n;++i)
     delete builder_[i];
   builder_.resize(0);
+  initial_means_.clear();
 }
 
 vpdfl_mixture_builder::~vpdfl_mixture_builder()
@@ -208,7 +211,7 @@ void vpdfl_mixture_builder::weighted_build(vpdfl_pdf_base& base_model,
     data_ptr = &data_array[0]/*.begin()*/;
   }
 
-  if (!model_setup)
+  if (!model_setup || !initial_means_.empty())
     initialise(model,data_ptr,wts);
 
   vcl_vector<vnl_vector<double> > probs;
@@ -342,9 +345,20 @@ void vpdfl_mixture_builder::initialise(vpdfl_mixture& model,
           const vcl_vector<double>& wts) const
 {
   // Later add a switch to decide on how to initialise
-  initialise_to_regular_samples(model,data,wts);
+  if(!initial_means_.empty() )
+  {
+    initialise_given_means(model,data,initial_means_,wts);
+  }
+  else
+  {
+    initialise_to_regular_samples(model,data,wts);
+  }
 }
 
+void vpdfl_mixture_builder::preset_initial_means(const vcl_vector<vnl_vector<double> >& component_means)
+{
+    initial_means_ = component_means;
+}
 //=======================================================================
 
 void vpdfl_mixture_builder::e_step(vpdfl_mixture& model,

@@ -30,7 +30,8 @@ class vpdfl_mixture_builder : public vpdfl_builder_base
   vcl_vector<vpdfl_builder_base*> builder_;
   double min_var_;
   int max_its_;
-
+  vcl_vector<vnl_vector<double> > initial_means_;
+  
   //: Whether weights changed during iterations
   bool weights_fixed_;
 
@@ -148,6 +149,12 @@ class vpdfl_mixture_builder : public vpdfl_builder_base
                               mbl_data_wrapper<vnl_vector<double> >& data,
                               const vcl_vector<double>& wts) const;
 
+  //: Preset initial component means
+  // When initialise is called these means will be used as the initial guess
+  // Note that the vector must  is copied
+  void preset_initial_means(const vcl_vector<vnl_vector<double> >& component_means);
+
+  
   //: Version number for I/O
   short version_no() const;
 
