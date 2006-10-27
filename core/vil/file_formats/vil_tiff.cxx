@@ -1148,22 +1148,42 @@ vil_tiff_pyramid_resource::
 vil_tiff_pyramid_resource(TIFF* t, bool read)
   : read_(read), t_(t)
 {
+  bool trace = true;
   if (!read)
     return;
   //for reading we need to set up the levels
   while (true)
   {
     vil_tiff_header h(t_);
+    if(trace)
+    {  vcl_cerr << "In vil_tiff_pyramid_resource constructor"
+               << " constructed header\n"
+                << "n-levels = " << this->nlevels() << '\n';
+    }
     tiff_pyramid_level* pl = new tiff_pyramid_level(this->nlevels(),
                                                     h.image_width.val,
                                                     h.image_length.val,
                                                     h.nplanes,
                                                     h.pix_fmt);
     levels_.push_back(pl);
+    if(trace)
+    {  vcl_cerr << "In vil_tiff_pyramid_resource constructor"
+                << " constructed level\n";
+    }
     int status = TIFFReadDirectory(t_);
+    if(trace)
+      {  vcl_cerr << "In vil_tiff_pyramid_resource constructor"
+                  << " Read new directory\n";
+      }
+    
     if (!status)
       break;
   }
+    if(trace)
+      {  
+        vcl_cerr       << "In vil_tiff_pyramid_resource constructor"
+                       << " Begin sorting\n";
+      }
   //sort the pyramid
   vcl_sort(levels_.begin(), levels_.end(), level_compare);
   //normalize the scales
