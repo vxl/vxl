@@ -48,6 +48,82 @@ void vil_fill_line(T* data, unsigned n, vcl_ptrdiff_t step, T value)
   while (data!=end_data) { *data=value; data+=step; }
 }
 
+
+//: Fill line from (ai,aj) to (bi,bj) using Bresenham's algorithm.
+// Only modifies first plane.
+// \relates vil_image_view
+template<class T>
+void vil_fill_line(vil_image_view<T> &im,
+                   int ai, int aj, int bi, int bj,
+                   T value)
+{
+  if (ai == bi && aj==bj)
+  {
+    im(ai,aj) = value;
+    return;
+  }
+
+  int d, x, y, xinc, yinc, incr1, incr2;
+
+  int dx = bi-ai;
+  int dy = bj-aj;
+  if (dy<0) 
+  {
+    dy=-dy;
+    yinc=-1;
+  }
+  else
+    yinc=1;
+
+  if (dx<0) 
+  {
+    dx=-dx;
+    xinc=-1;
+  }
+  else
+    xinc=1;
+
+  if (im.in_range(ai, aj)) im(ai, aj)=value;
+  x=ai;
+  y=aj;
+  if (dy<=dx) 
+  {
+    d=(dy<<1)-dx;
+    incr1=dy<<1;
+    incr2=-((dx-dy)<<1);
+    while (x!=bi) 
+    {
+      x+=xinc;
+      if (d<0) 
+        d+=incr1;
+      else 
+      {
+        y+=yinc;
+        d+=incr2;
+      }
+      if (im.in_range(x, y)) im(x, y)=value;
+    }
+  }
+  else 
+  {
+    d=(dx<<1)-dy;
+    incr1=dx<<1;
+    incr2=-((dy-dx)<<1);
+    while (y!=bj) 
+    {
+      y+=yinc;
+      if (d<0)
+        d+=incr1;
+      else 
+      {
+        x+=xinc;
+        d+=incr2;
+      }
+      if (im.in_range(x, y)) im(x, y)=value;
+    }
+  }
+}
+
 //: Fill row j in view with given value
 //  O(ni).
 // \relates vil_image_view

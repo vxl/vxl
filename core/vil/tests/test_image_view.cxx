@@ -13,6 +13,7 @@
 #include <vil/vil_view_as.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_new.h>
+#include <vil/vil_fill.h>
 
 template <class S, class T>
 void test_image_view_rgba(vil_image_view<S> & /*image2*/, vil_image_view<T> & /*image7*/)
@@ -335,6 +336,24 @@ static void test_image_view_fill()
   TEST("fill (no i over-run) ", image(8,4,0), vxl_byte(11));
   TEST("fill (no j under-run) ", image(4,3,0), vxl_byte(11));
   TEST("fill (no j over-run) ", image(8,4,0), vxl_byte(11));
+
+  image.fill(vxl_byte(11));
+  vil_fill_line<vxl_byte>(image, 0, 0, 9, 4, 25);
+  unsigned n_pix=0, n_wrong_pix=0;
+  for (unsigned i=0; i<10; ++i)
+    for (unsigned j=0; j<10; ++j)
+    {
+      if (image(i,j) == 25)
+      {
+        n_pix++;
+        if (i/2 != j) n_wrong_pix++;
+      }
+    }
+  TEST("fill line, expected number of pixels",n_pix, 10);
+  TEST("fill line, correct places",n_wrong_pix, 0);
+  vil_print_all(vcl_cout , image);
+
+
 }
 
 static void test_complex_image_view()
