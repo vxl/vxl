@@ -1,6 +1,7 @@
 #ifndef vcsl_millimeter_h_
 #define vcsl_millimeter_h_
-
+//:
+// \file
 #include <vcsl/vcsl_length_unit.h>
 #include "vcsl_millimeter_sptr.h"
 
