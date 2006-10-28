@@ -1,11 +1,13 @@
 #include <mbl/mbl_minimum_spanning_tree.h>
+//:
+// \file
 #include <vnl/vnl_vector.h>
 #include <vcl_algorithm.h>
 
-//: Select the smallest pair s.t. first is in a, second in b
+//: Select the smallest pair s.t. first is in \param a, second in \param b
 static vcl_pair<int,int> mbl_mst_next_pair(const vnl_matrix<double>& D,
-                            const vcl_vector<unsigned>& a,
-                            const vcl_vector<unsigned>& b)
+                                           const vcl_vector<unsigned>& a,
+                                           const vcl_vector<unsigned>& b)
 {
   vcl_pair<int,int> p;
   double min_sim = 9.9e9;
@@ -24,11 +26,12 @@ static vcl_pair<int,int> mbl_mst_next_pair(const vnl_matrix<double>& D,
 }
 
 //: Compute the minimum spanning tree given a distance matrix
-//  pairs[0].first is the root node
-//  Tree defined by pairs.  pairs[i].second is linked to pairs[i].first
+//  \param pairs[0].first is the root node
+//  Tree defined by pairs.
+//  \param pairs[i].second is linked to \param pairs[i].first
 //  We compute the minimum spanning tree of the graph using Prim's algorithm.
 void mbl_minimum_spanning_tree(const vnl_matrix<double>& D,
-                              vcl_vector<vcl_pair<int,int> >& pairs)
+                               vcl_vector<vcl_pair<int,int> >& pairs)
 {
   unsigned n = D.rows();
   vcl_vector<unsigned> a(0),b(n);
@@ -54,11 +57,12 @@ void mbl_minimum_spanning_tree(const vnl_matrix<double>& D,
 }
 
 //: Compute the minimum spanning tree of given points
-//  pairs[0].first is the root node
-//  Tree defined by pairs.  pairs[i].second is linked to pairs[i].first
+// \param  pairs[0].first is the root node
+//  Tree defined by pairs.
+//  \param pairs[i].second is linked to \param pairs[i].first
 //  We compute the minimum spanning tree of the graph using Prim's algorithm.
 void mbl_minimum_spanning_tree(const vcl_vector<vgl_point_2d<double> >& pts,
-                              vcl_vector<vcl_pair<int,int> >& pairs)
+                               vcl_vector<vcl_pair<int,int> >& pairs)
 {
   unsigned n=pts.size();
   vnl_matrix<double> D(n,n);
@@ -74,11 +78,12 @@ void mbl_minimum_spanning_tree(const vcl_vector<vgl_point_2d<double> >& pts,
 }
 
 //: Compute the minimum spanning tree of given points
-//  pairs[0].first is the root node
-//  Tree defined by pairs.  pairs[i].second is linked to pairs[i].first
+//  \param pairs[0].first is the root node
+//  Tree defined by pairs.
+//  \param pairs[i].second is linked to \param pairs[i].first
 //  We compute the minimum spanning tree of the graph using Prim's algorithm.
 void mbl_minimum_spanning_tree(const vcl_vector<vgl_point_3d<double> >& pts,
-                              vcl_vector<vcl_pair<int,int> >& pairs)
+                               vcl_vector<vcl_pair<int,int> >& pairs)
 {
   unsigned n=pts.size();
   vnl_matrix<double> D(n,n);
