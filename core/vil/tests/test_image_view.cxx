@@ -353,6 +353,22 @@ static void test_image_view_fill()
   TEST("fill line, correct places",n_wrong_pix, 0);
   vil_print_all(vcl_cout , image);
 
+  image.fill(vxl_byte(11));
+  vil_fill_line<vxl_byte>(image, 0, 0, 4, 9, 25);
+  n_pix=0, n_wrong_pix=0;
+  for (unsigned i=0; i<10; ++i)
+    for (unsigned j=0; j<10; ++j)
+    {
+      if (image(i,j) == 25)
+      {
+        n_pix++;
+        if (j/2 != i) n_wrong_pix++;
+      }
+    }
+  TEST("fill line, expected number of pixels",n_pix, 10);
+  TEST("fill line, correct places",n_wrong_pix, 0);
+  vil_print_all(vcl_cout , image);
+
 
 }
 
