@@ -153,6 +153,11 @@ template <class T> inline double cos_angle(v const& a, v const& b) { return inne
 // \relates vgl_vector_2d
 template <class T>        double angle(v const& a, v const& b); // return acos(cos_angle(a,b));
 
+//: signed angle between two vectors (in radians, between -Pi and Pi).
+// return the rotation angle to go from `a' to `b'
+// \relates vgl_vector_2d
+template <class T>        double signed_angle(v const& a, v const& b);
+
 //: are two vectors orthogonal, i.e., is their dot product zero?
 // If the third argument is specified, it is taken as the "tolerance", i.e.
 // in that case this function returns true if the vectors are almost orthogonal.
