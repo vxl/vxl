@@ -35,8 +35,8 @@
 //   NOTE FOR DEVELOPERS:  If you write any member functions that change the
 //   underlying matrix P_ you should call set_matrix to change it, rather than
 //   changing P_ itself.  The automatic SVD caching will be screwed up otherwise.
-
 #include <vnl/vnl_fwd.h>
+#include <vgl/vgl_fwd.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vgl/vgl_homg_point_3d.h>
@@ -86,11 +86,17 @@ class vpgl_proj_camera : public vpgl_camera<T>
 
   virtual ~vpgl_proj_camera();
 
-
   // Projections and Backprojections:------------------------
+
+  //: Projection from base class
+  virtual void project(const T x, const T y, const T z, T& u, T& v) const;
 
   //: Project a point in world coordinates onto the image plane.
   virtual vgl_homg_point_2d<T> project( const vgl_homg_point_3d<T>& world_point ) const;
+
+  //: Non-homogeneous version of the above.
+  vgl_homg_point_2d<T> project( const vgl_point_3d<T>& world_point ) const {
+    return project( vgl_homg_point_3d<T>( world_point ) ); }
 
   //: A shortcut to the above function.
   vgl_homg_point_2d<T> operator()( const vgl_homg_point_3d<T>& world_point ) const{

@@ -124,6 +124,14 @@ static void test_proj_camera()
   P1.set_matrix( random_matrix3 );
   TEST_NEAR( "automatic svd computation", random_matrix3(2,3),
     P1.svd()->recompose()(2,3), 1e-06 );
+
+  // Test basic projection method
+  vpgl_proj_camera<double> Pb;
+  Pb.set_matrix( random_matrix );  
+  double u = 0, v = 0;
+  double X = x1.x(), Y = x1.y(), Z = x1.z();
+  Pb.project(X, Y, Z, u, v);
+  TEST( "base class point projection", y2(0)/u - y2(1)/v, 0.0 );  
 }
 
 

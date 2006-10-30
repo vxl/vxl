@@ -19,6 +19,8 @@ SET( vpgl_algo_sources
   vpgl_lens_warp_mapper.h
   vpgl_vsol_lens_warp.h         vpgl_vsol_lens_warp.cxx
   vpgl_list.h                   vpgl_list.txx
+  vpgl_invmap_cost_function.h   vpgl_invmap_cost_function.cxx	
+  vpgl_backproject.h            vpgl_backproject.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vpgl_algo_sources)

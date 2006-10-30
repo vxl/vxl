@@ -97,7 +97,23 @@ vgl_homg_point_2d<T> vpgl_proj_camera<T>::project( const vgl_homg_point_3d<T>& w
   return image_point;
 }
 
-
+// -----------------------------------
+template <class T>
+void 
+vpgl_proj_camera<T>::project(const T x, const T y, const T z, T& u, T& v) const
+{
+  vgl_homg_point_3d<T> world_point(x, y, z);
+  vgl_homg_point_2d<T> image_point = this->project(world_point);
+  if(image_point.ideal(static_cast<T>(1.0e-10)))
+    { 
+      u = 0; v = 0;
+      vcl_cerr << "Warning: projection to ideal image point"
+               << " in vpgl_proj_camera - result not valid\n";
+      return;
+    }
+  u = image_point.x()/image_point.w();
+  v = image_point.y()/image_point.w();
+}
 //------------------------------------
 template <class T>
 vgl_line_segment_2d<T> vpgl_proj_camera<T>::project(
