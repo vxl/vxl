@@ -81,7 +81,7 @@ vil_pyramid_image_resource_sptr
 vil_load_pyramid_resource(char const* directory_or_file)
 {
   for (vil_file_format** p = vil_file_format::all(); *p; ++p) {
-#if 1 // debugging
+#if 0 // debugging
     vcl_cerr << __FILE__ " : trying \'" << (*p)->tag() << "\'\n";
 
 
