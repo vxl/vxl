@@ -193,22 +193,18 @@ vil_image_resource_sptr vil_tiff_file_format::make_input_image(vil_stream* is)
 vil_pyramid_image_resource_sptr
 vil_tiff_file_format::make_input_pyramid_image(char const* file)
 {
-  bool find_test_failure = true;
-  if(find_test_failure)//find test failure
-    vcl_cerr << "make_input_pyramid_image::check for directory \n";
+  bool trace = false;
   if (vil_image_list::vil_is_directory(file))
     return 0;
-  if(find_test_failure)//find test failure
-    vcl_cerr << "make_input_pyramid_image::TIFFOpen \n";
   TIFF* in  = TIFFOpen(file, "rC");
   if (!in)
     return 0;
   bool open_for_reading = true;
-  if(find_test_failure)//find test failure
+  if(trace)//find test failure
     vcl_cerr << "make_input_pyramid_image::opening multi-image tiff pyramid resource \n";
   vil_pyramid_image_resource_sptr pyr =
     new vil_tiff_pyramid_resource(in, open_for_reading);
-  if(find_test_failure)//find test failure
+  if(trace)//find test failure
     vcl_cerr << "make_input_pyramid_image::opened multi-image tiff pyramid resource \n";
     if (pyr->nlevels()<=1)
     return 0;
@@ -1148,7 +1144,7 @@ vil_tiff_pyramid_resource::
 vil_tiff_pyramid_resource(TIFF* t, bool read)
   : read_(read), t_(t)
 {
-  bool trace = true;
+  bool trace = false;
   if (!read)
     return;
   //for reading we need to set up the levels
