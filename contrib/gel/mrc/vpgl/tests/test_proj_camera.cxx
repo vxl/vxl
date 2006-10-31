@@ -131,7 +131,7 @@ static void test_proj_camera()
   double u = 0, v = 0;
   double X = x1.x(), Y = x1.y(), Z = x1.z();
   Pb.project(X, Y, Z, u, v);
-  TEST( "base class point projection", y2(0)/u - y2(1)/v, 0.0 );  
+  TEST_NEAR( "base class point projection", y2(0)/u - y2(1)/v, 0.0, 0.001);  
 }
 
 
