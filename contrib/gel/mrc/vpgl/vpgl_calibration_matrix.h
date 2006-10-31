@@ -92,8 +92,5 @@ void vsl_b_write(vsl_b_ostream &os, const vpgl_calibration_matrix<T>* p);
 template <class T>
 void vsl_b_read(vsl_b_istream &is, vpgl_calibration_matrix<T>* &p);
 
-//: XML write
-template <class T>
-void x_write(vcl_ostream &os, vpgl_calibration_matrix<T> p);
 
 #endif // vpgl_calibration_matrix_h_
