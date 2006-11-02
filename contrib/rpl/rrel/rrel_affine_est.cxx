@@ -188,7 +188,7 @@ weighted_least_squares_fit( vnl_vector<double>& params,
   }
   //  Aside:  this probably would be faster if I used iterators...
 
-  vnl_vector<double> ind_vars( min_num_pts_ );
+  vnl_vector<double> ind_vars( min_num_pts_, 1.0 );
   for ( unsigned int i=0; i<num_samples_; ++i ) {
     // copy first #dim# elements
     copy_to_nth_pos( ind_vars, 0, from_pts_[i] );
@@ -208,7 +208,7 @@ weighted_least_squares_fit( vnl_vector<double>& params,
 
   vnl_svd<double> svd( sumProds, 1.0e-8 );
   if ( (unsigned int)svd.rank() < min_num_pts_ ) {
-    vcl_cerr << "rrel_linear_regression::WeightedLeastSquaresFit --- singularity!\n";
+    vcl_cerr << "rrel_affine_est::WeightedLeastSquaresFit --- singularity!\n";
     return false;
   }
   else {
