@@ -14,7 +14,6 @@ static void test_calibration_matrix()
   vpgl_calibration_matrix<double> K1( focal_length, principal_point,
     x_scale, y_scale, skew );
 
-  x_write(vcl_cout, K1);
   // Test equality of constructors.
   vnl_matrix_fixed<double,3,3> M(0.0);
   double scale_factor = -100;
