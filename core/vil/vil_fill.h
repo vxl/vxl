@@ -59,7 +59,7 @@ void vil_fill_line(vil_image_view<T> &im,
 {
   if (ai == bi && aj==bj)
   {
-    im(ai,aj) = value;
+    if (im.in_range(ai, aj)) im(ai,aj) = value;
     return;
   }
 
