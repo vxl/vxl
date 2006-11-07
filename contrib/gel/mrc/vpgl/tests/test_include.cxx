@@ -9,5 +9,6 @@
 #include <vpgl/vpgl_poly_radial_distortion.h>
 #include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/vpgl_radial_distortion.h>
+#include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_reg_fundamental_matrix.h>
 int main() { return 0; }

@@ -44,6 +44,10 @@
 #include <vcsl/vcsl_matrix_sptr.h>
 #include <vcsl/vcsl_meter.h>
 #include <vcsl/vcsl_meter_sptr.h>
+#include <vcsl/vcsl_micron.h>
+#include <vcsl/vcsl_micron_sptr.h>
+#include <vcsl/vcsl_millimeter.h>
+#include <vcsl/vcsl_millimeter_sptr.h>
 #include <vcsl/vcsl_perspective.h>
 #include <vcsl/vcsl_perspective_sptr.h>
 #include <vcsl/vcsl_polar.h>

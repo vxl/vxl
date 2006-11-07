@@ -14,6 +14,7 @@
 #include <mbl/mbl_data_collector_list.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <mbl/mbl_data_wrapper_mixer.h>
+#include <mbl/mbl_draw_line.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_file_data_collector.h>
 #include <mbl/mbl_file_data_wrapper.h>
@@ -26,6 +27,7 @@
 #include <mbl/mbl_lru_cache.h>
 #include <mbl/mbl_matrix_products.h>
 #include <mbl/mbl_matxvec.h>
+#include <mbl/mbl_minimum_spanning_tree.h>
 #include <mbl/mbl_mod_gram_schmidt.h>
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_print.h>

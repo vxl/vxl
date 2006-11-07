@@ -16,6 +16,7 @@
 #include <rrel/rrel_muset_obj.h>
 #include <rrel/rrel_objective.h>
 #include <rrel/rrel_orthogonal_regression.h>
+#include <rrel/rrel_quad_est.h>
 #include <rrel/rrel_ran_sam_search.h>
 #include <rrel/rrel_ransac_obj.h>
 #include <rrel/rrel_trunc_quad_obj.h>
