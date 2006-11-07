@@ -48,15 +48,15 @@ vpgl_rational_camera<T>::
                        const T z_scale, const T z_off,
                        const T u_scale, const T u_off,
                        const T v_scale, const T v_off
-                       )
+                      )
 {
-  for(unsigned i = 0; i<20; ++i)
-    {
-      rational_coeffs_[NEU_U][i] = neu_u[i];
-      rational_coeffs_[DEN_U][i] = den_u[i];
-      rational_coeffs_[NEU_V][i] = neu_v[i];
-      rational_coeffs_[DEN_V][i] = den_v[i];
-    }
+  for (unsigned i = 0; i<20; ++i)
+  {
+    rational_coeffs_[NEU_U][i] = neu_u[i];
+    rational_coeffs_[DEN_U][i] = den_u[i];
+    rational_coeffs_[NEU_V][i] = neu_v[i];
+    rational_coeffs_[DEN_V][i] = den_v[i];
+  }
   scale_offsets_.resize(5);
   scale_offsets_[X_INDX] = vpgl_scale_offset<T>(x_scale, x_off);
   scale_offsets_[Y_INDX] = vpgl_scale_offset<T>(y_scale, y_off);
@@ -64,12 +64,13 @@ vpgl_rational_camera<T>::
   scale_offsets_[U_INDX] = vpgl_scale_offset<T>(u_scale, u_off);
   scale_offsets_[V_INDX] = vpgl_scale_offset<T>(v_scale, v_off);
 }
+
 template <class T>
 void vpgl_rational_camera<T>::
 set_coefficients(vcl_vector<vcl_vector<T> > const& rational_coeffs)
 {
-  for(unsigned j = 0; j<4; ++j)
-    for(unsigned i = 0; i<20; ++i)
+  for (unsigned j = 0; j<4; ++j)
+    for (unsigned i = 0; i<20; ++i)
       rational_coeffs_[j][i] = rational_coeffs[j][i];
 }
 
@@ -77,17 +78,18 @@ template <class T>
 vcl_vector<vcl_vector<T> > vpgl_rational_camera<T>::coefficients() const
 {
   vcl_vector<vcl_vector<T> > result(4);
-  for(unsigned j = 0; j<4; ++j)
-    {
-      result[j].resize(20);
-      for(unsigned i = 0; i<20; ++i)
-        result[j][i]=rational_coeffs_[j][i];
-    }
+  for (unsigned j = 0; j<4; ++j)
+  {
+    result[j].resize(20);
+    for (unsigned i = 0; i<20; ++i)
+      result[j][i]=rational_coeffs_[j][i];
+  }
   return result;
 }
+
 //: Create a vector with the standard order of monomial terms
 template <class T>
-vnl_vector_fixed<T, 20> 
+vnl_vector_fixed<T, 20>
 vpgl_rational_camera<T>::power_vector(const T x, const T y, const T z) const
 {
   // Form the monomials in homogeneous form
@@ -118,7 +120,7 @@ vpgl_rational_camera<T>::power_vector(const T x, const T y, const T z) const
   double yyw = yy*w;
   double yzw = yz*w;
   double zzw = zz*w;
-  
+
   //fill the vector
   vnl_vector_fixed<T, 20> pv;
   pv.put( 0, xxx);
@@ -161,37 +163,36 @@ void vpgl_rational_camera<T>::project(const T x, const T y, const T z,
   u = scale_offsets_[U_INDX].un_normalize(su);
   v = scale_offsets_[V_INDX].un_normalize(sv);
 }
+
 //vnl interface methods
 template <class T>
-vnl_vector_fixed<T, 2> 
+vnl_vector_fixed<T, 2>
 vpgl_rational_camera<T>::project(vnl_vector_fixed<T, 3> const& world_point)const
 {
   vnl_vector_fixed<T, 2> image_point;
   this->project(world_point[0], world_point[1], world_point[2],
                 image_point[0], image_point[1]);
- return image_point;               
+ return image_point;
 }
-
 
 
 //vgl interface methods
 template <class T>
 vgl_point_2d<T> vpgl_rational_camera<T>::project(vgl_point_3d<T> world_point)const
 {
-  T u = 0, v = 0;  
+  T u = 0, v = 0;
   this->project(world_point.x(), world_point.y(), world_point.z(), u, v);
   return vgl_point_2d<T>(u, v);
 }
 
 
-
 // Code for easy instantiation.
 #undef vpgl_RATIONAL_CAMERA_INSTANTIATE
 #define vpgl_RATIONAL_CAMERA_INSTANTIATE(T) \
-template class vpgl_scale_offset<T>; \
+template class vpgl_scale_offset<T >; \
 template class vpgl_rational_camera<T >; \
-typedef vpgl_scale_offset<T> soff; \
-VCL_VECTOR_INSTANTIATE(soff);
+typedef vpgl_scale_offset<T > soff; \
+VCL_VECTOR_INSTANTIATE(soff)
 
 
 #endif // vpgl_rational_camera_txx_
