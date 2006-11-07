@@ -72,13 +72,15 @@ class vpgl_scale_offset
 
   // normalize a coordinate value
   T normalize(const T value) const
-    {return (value-offset_)*scale_;}
-  // un-normalize a coordinate value
-  T un_normalize(const T value) const
     {
       if(scale_==0)
         return 0;
-      T temp = value/scale_;
+      return (value-offset_)/scale_;
+    }
+  // un-normalize a coordinate value
+  T un_normalize(const T value) const
+    {
+      T temp = value*scale_;
       return temp + offset_;
     }
  private:
@@ -195,3 +197,4 @@ vcl_istream& operator>>(vcl_istream& is, vpgl_rational_camera<T>& p);
 
 
 #endif // vpgl_rational_camera_h_
+

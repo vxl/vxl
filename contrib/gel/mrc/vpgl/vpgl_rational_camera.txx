@@ -118,6 +118,7 @@ vpgl_rational_camera<T>::power_vector(const T x, const T y, const T z) const
   double yyw = yy*w;
   double yzw = yz*w;
   double zzw = zz*w;
+  
   //fill the vector
   vnl_vector_fixed<T, 20> pv;
   pv.put( 0, xxx);
@@ -194,3 +195,4 @@ VCL_VECTOR_INSTANTIATE(soff);
 
 
 #endif // vpgl_rational_camera_txx_
+
