@@ -26,7 +26,7 @@
 mbl_thin_plate_spline_2d::mbl_thin_plate_spline_2d()
   : Wx_(0),Wy_(0),
     Ax0_(0),AxX_(1),AxY_(0),Ay0_(0),AyX_(0),AyY_(1),
-    energy_x_(0),energy_y_(0)
+    energy_x_(0),energy_y_(0),return_pure_affine_(false)
 {
 }
 
@@ -444,7 +444,7 @@ vgl_point_2d<double>  mbl_thin_plate_spline_2d::operator()(double x, double y) c
   double x_sum = Ax0_ + AxX_ * x + AxY_ * y;
   double y_sum = Ay0_ + AyX_ * x + AyY_ * y;
 
-  if (n<=3)  // Pure affine
+  if (n<=3 || return_pure_affine_)  // Pure affine
     return vgl_point_2d<double>(x_sum,y_sum);
 
   const vgl_point_2d<double> * pts_data = &src_pts_[0];
