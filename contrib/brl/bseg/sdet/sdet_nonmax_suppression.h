@@ -53,23 +53,33 @@
 class sdet_nonmax_suppression : public sdet_nonmax_suppression_params
 {
 public:
-  //Constructor from a parameter block, and gradients along x and y directions given as arrays
+  //: Constructor from a parameter block, and gradients along x and y directions given as arrays
   sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, 
                           vbl_array_2d<double> &grad_x, 
                           vbl_array_2d<double> &grad_y);
-  //Constructor from a parameter block, gradient magnitudes given as an array and the search directions
+  //: Constructor from a parameter block, gradient magnitudes given as an array and directions given as component arrays
+  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, 
+                          vbl_array_2d<double> &dir_x, 
+                          vbl_array_2d<double> &dir_y,
+                          vbl_array_2d<double> &grad_mag);
+  //: Constructor from a parameter block, gradient magnitudes given as an array and the search directions
   sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, 
                           vbl_array_2d<double> &grad_mag, 
                           vbl_array_2d<vgl_vector_2d <double> > &directions);
-  //Constructor from a parameter block, and gradients along x and y directions given as images
+  //: Constructor from a parameter block, and gradients along x and y directions given as images
   sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, 
                           vil_image_view<double> &grad_x, 
                           vil_image_view<double> &grad_y);
-  //Constructor from a parameter block, gradient magnitudes given as an image and the search directions
+  //: Constructor from a parameter block, gradient magnitudes given as an image and directions given as component image
+  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, 
+                          vil_image_view<double> &dir_x, 
+                          vil_image_view<double> &dir_y,
+                          vil_image_view<double> &grad_mag);
+  //: Constructor from a parameter block, gradient magnitudes given as an image and the search directions
   sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, 
                           vil_image_view<double> &grad_mag, 
                           vbl_array_2d<vgl_vector_2d <double> > &directions);
-  //Destructor
+  //: Destructor
   ~sdet_nonmax_suppression();
   //Accessors
   vcl_vector<vsol_point_2d_sptr>& get_points(){return points_;}
