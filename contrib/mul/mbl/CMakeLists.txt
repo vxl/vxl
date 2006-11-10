@@ -81,6 +81,8 @@ SET(mbl_sources
   mbl_mod_gram_schmidt.cxx             mbl_mod_gram_schmidt.h
   mbl_linear_interpolator.cxx          mbl_linear_interpolator.h
   mbl_minimum_spanning_tree.cxx        mbl_minimum_spanning_tree.h
+  mbl_stepwise_regression.cxx          mbl_stepwise_regression.h
+
 )
 
 AUX_SOURCE_DIRECTORY(Templates mbl_sources)

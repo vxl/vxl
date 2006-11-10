@@ -40,6 +40,7 @@ DECLARE( test_cloneable_ptr );
 DECLARE( test_exception );
 DECLARE( test_gram_schmidt );
 DECLARE( test_linear_interpolator );
+DECLARE( test_stepwise_regression );
 
 void
 register_tests()
@@ -84,6 +85,7 @@ register_tests()
   REGISTER( test_exception );
   REGISTER( test_gram_schmidt );
   REGISTER( test_linear_interpolator );
+  REGISTER( test_stepwise_regression );
 }
 
 DEFINE_MAIN;

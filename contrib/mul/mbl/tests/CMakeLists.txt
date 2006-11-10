@@ -43,6 +43,7 @@ ADD_EXECUTABLE( mbl_test_all
   test_exception.cxx
   test_gram_schmidt.cxx
   test_linear_interpolator.cxx
+  test_stepwise_regression.cxx
 )
 
 TARGET_LINK_LIBRARIES(mbl_test_all mbl vgl vnl_io vnl vbl vsl vul vpl testlib )
@@ -88,6 +89,7 @@ ADD_TEST( mbl_test_cloneable_ptr ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_clo
 ADD_TEST( mbl_test_exception ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_exception )
 ADD_TEST (mbl_gram_schmidt ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_gram_schmidt)
 ADD_TEST (mbl_test_linear_interpolator ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_linear_interpolator)
+ADD_TEST (mbl_test_stepwise_regression ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_stepwise_regression)
 
 
 ADD_EXECUTABLE( mbl_test_include test_include.cxx )
