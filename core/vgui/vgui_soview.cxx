@@ -7,6 +7,10 @@
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   24 Mar 99
 // \brief  See vgui_soview.h for a description of this file.
+//
+// \modified 14 Nov 2006, by B. McCane. Set AWF_USE_MAP to 1 so the
+// map is used by default and added a destructor that removes the id
+// from the map and therefore prevents a memory leak.
 
 #include "vgui_soview.h"
 
@@ -24,7 +28,7 @@ static T& var () { \
   return *t; \
 }
 
-#define AWF_USE_MAP 0
+#define AWF_USE_MAP 1
 
 unsigned vgui_soview::current_id = 1;
 
@@ -36,6 +40,14 @@ typedef vcl_vector<void* > Map_soview;
 VGUI_STATIC_OBJECT(Map_soview, object_map);
 #endif
 
+//: Destructor - delete this soview.
+// Modified to erase the id from the map - otherwise we get a memory leak
+vgui_soview::~vgui_soview()
+{
+#if AWF_USE_MAP
+    object_map().erase(id);
+#endif
+}
 
 unsigned vgui_soview::create_id()
 {

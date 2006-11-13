@@ -36,7 +36,7 @@ class vgui_soview
   vgui_soview() : selectable(true), style(0) { add_id(); }
 
   //: Destructor - delete this soview.
-  virtual ~vgui_soview() {}
+  virtual ~vgui_soview();
 
   //: Render this soview on the display.
   virtual void draw() const = 0;
