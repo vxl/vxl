@@ -407,9 +407,11 @@ if (!(bits_per_sample.valid) || !(samples_per_pixel.valid) ||
   // Now for regular color images
   //handle sample formats (unsigned, signed, float, double)
   //vil normally doesn't directly express these interleaved formats but
-  //pretends the samples are in different planes.
+  //pretends the samples are in different planes. 
+  //The current implementation can't handle planar_config ==2, which is
+  //separate color bands.
   vxl_uint_16 s = samples_per_pixel.val;
-  if (samples_per_pixel.val>1 && photometric.val==2 &&
+  if (samples_per_pixel.val>1 && photometric.val==2 && planar_config.val == 1 &&
      sample_format.val == 1)
     switch (sample_format.val)
     {

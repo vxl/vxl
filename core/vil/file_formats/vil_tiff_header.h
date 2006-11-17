@@ -25,6 +25,9 @@
 //      byte count is equal to the number of bytes in the image. In this
 //      case, the block size is truncated to the image_length.
 //   3) The width and height of a tile must be a multiple of 16
+//   4) The current implementation can't handle Planar Configuration =2,
+//      which is RGB in separate color bands.
+//
 // \verbatim
 //  Modifications
 //   <none>
