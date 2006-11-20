@@ -223,7 +223,6 @@ void test_binary_hyperplane()
 
 void test_clsfy_geman_mcclure_build()
 {
-    using namespace clsfy_binary_hyperplane_gmrho_builder_helpers;
     
     vcl_vector<vpdfl_axis_gaussian_sampler *> generator(2);//
     const unsigned nDims = 2;
@@ -351,60 +350,65 @@ void test_clsfy_geman_mcclure_build()
     builderGM.set_auto_estimate_sigma(false);
     builderGM.set_sigma_preset(10.0);
 
-    //Now copy from the urggghh data wrapper into a sensible data structure (matrix!)
-    training_set.reset();
-    unsigned num_vars_ = training_set.current().size();
-    unsigned num_examples_ =  training_set.size();
-    vnl_matrix<double> data(num_examples_,num_vars_,0.0);
-    unsigned i=0;
-    do
+
+
+    #if 0
     {
-        double* row=data[i++];
-        vcl_copy(training_set.current().begin(),training_set.current().end(),row);
-     }while(training_set.next());
+        using namespace clsfy_binary_hyperplane_gmrho_builder_helpers;
+        //Now copy from the urggghh data wrapper into a sensible data structure (matrix!)
+        training_set.reset();
+        unsigned num_vars_ = training_set.current().size();
+        unsigned num_examples_ =  training_set.size();
+        vnl_matrix<double> data(num_examples_,num_vars_,0.0);
+        unsigned i=0;
+        do
+        {
+            double* row=data[i++];
+            vcl_copy(training_set.current().begin(),training_set.current().end(),row);
+        }while(training_set.next());
 
-    //Set up category regression values determined by output class
-    vnl_vector<double> y(num_examples_,0.0);
-    vcl_transform(labels.begin(),labels.end(),
-                  y.begin(),
-                  category_value(vcl_count(labels.begin(),labels.end(),1u),labels.size()));
+        Set up category regression values determined by output class
+            vnl_vector<double> y(num_examples_,0.0);
+        vcl_transform(labels.begin(),labels.end(),
+                      y.begin(),
+                      category_value(vcl_count(labels.begin(),labels.end(),1u),labels.size()));
 
 
-    vnl_vector<double> weights(weightsLS);
+        vnl_vector<double> weights(weightsLS);
 
-    weights.set_size(num_vars_+1);
+        weights.set_size(num_vars_+1);
 
-    weights.update(weightsLS,0);
-    weights[num_vars_] = pClassifier->bias();
-
-    gmrho_sum costFn(data,y,1.5);
-    double epsilon=0.001;
-    vnl_vector<double> delta(num_vars_+1,epsilon);
-    vnl_vector<double> weights0(weights);
-    weights0+= 2.0*delta;
-    double f0 = costFn.f(weights0);
-    vnl_vector<double > gradf0(num_vars_+1,0.0);
-    vnl_vector<double > gradf1(num_vars_+1,0.0);
-    epsilon=1.0E-6;
-    for(unsigned i=0; i<weights.size();i++)
-    {
-        weights = weights0;
-        weights[i] += epsilon;
-        double f1 = costFn.f(weights);
-        weights = weights0;
-        weights[i] -= epsilon;
-        double f2 = costFn.f(weights);
-        gradf0[i] = (f1 - f2)/(2.0*epsilon);
+        weights.update(weightsLS,0);
+        weights[num_vars_] = pClassifier->bias();
+        gmrho_sum costFn(data,y,1.5);
+        double epsilon=0.001;
+        vnl_vector<double> delta(num_vars_+1,epsilon);
+        vnl_vector<double> weights0(weights);
+        weights0+= 2.0*delta;
+        double f0 = costFn.f(weights0);
+        vnl_vector<double > gradf0(num_vars_+1,0.0);
+        vnl_vector<double > gradf1(num_vars_+1,0.0);
+        epsilon=1.0E-6;
+        for(unsigned i=0; i<weights.size();i++)
+        {
+            weights = weights0;
+            weights[i] += epsilon;
+            double f1 = costFn.f(weights);
+            weights = weights0;
+            weights[i] -= epsilon;
+            double f2 = costFn.f(weights);
+            gradf0[i] = (f1 - f2)/(2.0*epsilon);
+        }
+        costFn.gradf(weights0,gradf1);
+        vnl_vector<double> dg = gradf1-gradf0;
+        TEST_NEAR("GM cost function gradient is consistent", dg.inf_norm(), 0.0, 1.0E-4);    
     }
-    costFn.gradf(weights0,gradf1);
-    vnl_vector<double> dg = gradf1-gradf0;
-    TEST_NEAR("GM cost function gradient is consistent", dg.inf_norm(), 0.0, 1.0E-4);    
-
-
+    #endif
+        
     double train_error = builderGM.build(*pClassifier, training_set, labels);
     vcl_cout << train_error << vcl_endl;
     TEST_NEAR("Train error on classifier is good enough", train_error, 0.0, 0.15);
-    weights = pClassifier->weights();
+    vnl_vector<double > weights = pClassifier->weights();
     weights.normalize();
     weightsLS.normalize();
     vnl_vector<double> diff=weightsLS - weights;

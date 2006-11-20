@@ -1,8 +1,8 @@
-// This is mul/clsfy/clsfy_binary_hyperplane_ls_builder.cxx
+// This is mul/clsfy/clsfy_binary_hyperplane_gmrho_builder.cxx
 #include "clsfy_binary_hyperplane_gmrho_builder.h"
 //:
 // \file
-// \brief Implement a two-class output linear classifier builder
+// \brief Implement a two-class output linear classifier builder using a Geman-McClure robust error function
 // \author Martin Roberts
 // \date 4 Nov 2006
 
@@ -20,6 +20,82 @@
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector_ref.h>
 #include <vnl/algo/vnl_lbfgs.h>
+
+
+
+
+//: Some helper stuff, like the error function to be minimised
+namespace clsfy_binary_hyperplane_gmrho_builder_helpers
+{
+    //: The cost function, sum Geman-McClure error functions over all training examples
+    class gmrho_sum : public vnl_cost_function
+    {
+        //: Reference to data matrix, one row per training example
+        const vnl_matrix<double>& x_;
+        //: Reference to required outputs
+        const vnl_vector<double>& y_;
+        //: Scale factor used in Geman-McClure error function
+        double sigma_;
+        //: sigma squared
+        double var_;
+        //: Number of training examples (x_.rows())
+        unsigned num_examples_;
+        //: Number of dimensions (x_.cols())
+        unsigned num_vars_;
+        //: var_/(1+var_)^2 - ensures continuity of derivative at hyperplane boundary
+        double alpha_;
+        //: 1/(1+var_)^2 - with alpha, ensures continuity of function at hyperplane boundary
+        double beta_;
+     public:
+        //: construct passing in reference to data matrix
+        gmrho_sum(const vnl_matrix<double>& x,
+                  const vnl_vector<double>& y,double sigma=1);
+        
+        //: reset the scaling factor
+        void set_sigma(double sigma); 
+
+        //:  The main function.  Given the vector of weights parameters vector , compute the value of f(x).
+        virtual double f(vnl_vector<double> const& w);
+
+        //:  Calculate the gradient of f at parameter vector x.
+        virtual void gradf(vnl_vector<double> const& x, vnl_vector<double>& gradient);
+        
+    };
+
+    //: functor to accumulate gradient contributions for given training example
+    class gm_grad_accum
+    {
+        const double* px_;
+        const double wt_;
+      public:
+        gm_grad_accum(const double* px,double wt) : px_(px),wt_(wt) {}
+        void operator()(double& grad)
+        {
+            grad += (*px_++) * wt_;
+        }
+    };
+
+    //: Given the class category variable, return the associated regression value (e.g. 1 for class 1, -1 for class 0)
+    class category_value
+    {
+        const double y0;
+        const double y1;
+    public:
+        category_value(unsigned num_category1,unsigned num_total):
+                y0(-1.0*double(num_total-num_category1)/double(num_total)),
+                y1(double(num_category1)/double(num_total)) {}
+            
+        double operator()(const unsigned& classNum)
+        {
+            //return classNum ? y1 : y0;
+            return classNum ? 1.0 : -1.0;
+        }
+    };
+};
+
+//-----------------------------------------------------------------------------------------------
+//------------------------ The builder member functions ------------------------------------------
+//------------------------------------------------------------------------------------------------
 
 //: Build a linear hyperplane classifier with the given data.
 // Reduce the influence of well classified points far into their correct region by
@@ -251,14 +327,23 @@ clsfy_binary_hyperplane_gmrho_builder_helpers::gmrho_sum::gmrho_sum(const vnl_ma
                                                                     const vnl_vector<double>& y,
                                                                     double sigma):
         vnl_cost_function(x.cols()+1),
-        x_(x),y_(y),sigma_(sigma),var_(sigma*sigma),num_examples_(x.rows()),num_vars_(x.cols())
+        x_(x),y_(y),sigma_(1.0),var_(1.0),num_examples_(x.rows()),num_vars_(x.cols())
 {
+    set_sigma(sigma);
+}
+
+void clsfy_binary_hyperplane_gmrho_builder_helpers::gmrho_sum::set_sigma(double sigma)
+{
+    sigma_ = sigma;
+    var_ = sigma*sigma;
     double s=1.0+var_;
     s = s*s;
     alpha_ = var_/s;
-    beta_ = 1.0/s;
+    beta_ = 1.0/s;    
 }
 
+
+//: Return the error sum function
 double clsfy_binary_hyperplane_gmrho_builder_helpers::gmrho_sum::f(vnl_vector<double> const& w)
 {
     //Sum the error contributions from each example
@@ -288,6 +373,8 @@ double clsfy_binary_hyperplane_gmrho_builder_helpers::gmrho_sum::f(vnl_vector<do
     }
     return sum;
 }
+
+//: Calculate gradient of the error sum function
 void clsfy_binary_hyperplane_gmrho_builder_helpers::gmrho_sum::gradf(vnl_vector<double> const& w,
                                                                      vnl_vector<double>& gradient)
                                                                      
@@ -329,7 +416,4 @@ void clsfy_binary_hyperplane_gmrho_builder_helpers::gmrho_sum::gradf(vnl_vector<
     vcl_transform(gradient.begin(),gradient.end(),gradient.begin(),
                   vcl_bind2nd(vcl_multiplies<double>(),2.0*var_));
 }
-
-
-
 
