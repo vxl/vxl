@@ -9,6 +9,7 @@
 //=======================================================================
 
 #include <vcl_string.h>
+#include <vcl_iterator.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
@@ -18,71 +19,7 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector_ref.h>
-#include <vnl/vnl_cost_function.h>
 #include <vnl/algo/vnl_lbfgs.h>
-
-//: Some helper stuff, like the error function to be minimised
-namespace clsfy_binary_hyperplane_gmrho_builder_helpers
-{
-    //: The cost function, sum Geman-McClure error functions over all training examples
-    class gmrho_sum : public vnl_cost_function
-    {
-        //: Reference to data matrix, one row per training example
-        const vnl_matrix<double>& x_;
-        const vnl_vector<double>& y_;
-        double sigma_;
-        double var_;
-        unsigned num_examples_;
-        unsigned num_vars_;
-        double alpha_;
-        double beta_;
-     public:
-        //: construct passing in reference to data matrix
-        gmrho_sum(const vnl_matrix<double>& x,
-                  const vnl_vector<double>& y,double sigma=1);
-        
-        //: reset the scaling factor
-        void set_sigma(double sigma) {sigma_ = sigma; var_ = sigma*sigma;}
-
-        //:  The main function.  Given the vector of weights parameters vector , compute the value of f(x).
-        virtual double f(vnl_vector<double> const& w);
-
-        //:  Calculate the gradient of f at parameter vector x.
-        virtual void gradf(vnl_vector<double> const& x, vnl_vector<double>& gradient);
-        
-    };
-
-    //: functor to accumulate gradient contributions for given training example
-    class gm_grad_accum
-    {
-        const double* px_;
-        const double wt_;
-      public:
-        gm_grad_accum(const double* px,double wt) : px_(px),wt_(wt) {}
-        void operator()(double& grad)
-        {
-            grad += (*px_++) * wt_;
-        }
-    };
-
-    //: Given the class category variable, return the associated regression value (e.g. 1 for class 1, -1 for class 0)
-    class category_value
-    {
-        const double y0;
-        const double y1;
-    public:
-        category_value(unsigned num_category1,unsigned num_total):
-                y0(-1.0*double(num_total-num_category1)/double(num_total)),
-                y1(double(num_category1)/double(num_total)) {}
-            
-        double operator()(const unsigned& classNum)
-        {
-            //return classNum ? y1 : y0;
-            return classNum ? 1.0 : -1.0;
-        }
-    };
-};
-
 
 //: Build a linear hyperplane classifier with the given data.
 // Reduce the influence of well classified points far into their correct region by
@@ -128,7 +65,9 @@ double clsfy_binary_hyperplane_gmrho_builder::build(clsfy_classifier_base& class
     weights_[num_vars_] = hyperplane.bias();
 
     //Estimate the scaling factor used in the Geman-McClure function
-    double sigma_scale_target=estimate_sigma(data,y);
+    double sigma_scale_target = sigma_preset_;
+    if(auto_estimate_sigma_)
+        sigma_scale_target=estimate_sigma(data,y);
 
     //To avoid local minima perform deterministic annealing starting from a large initial sigma
     //Set initial kappa so that everything is an inlier
@@ -152,10 +91,14 @@ double clsfy_binary_hyperplane_gmrho_builder::build(clsfy_classifier_base& class
     //Then re-estimate sigma scale and do a final pair of iterations
     //as sigma depends on the mis-classification overlap depth
 
-    for(unsigned iter=0;iter<2;++iter)
-    {    
-        sigma_scale_target=estimate_sigma(data,y);
-        //Finally do it at exactly the original target sigma
+
+    for(unsigned iter=0;iter<(auto_estimate_sigma_ ? 2 : 1);++iter)
+    {
+        if(auto_estimate_sigma_)
+            sigma_scale_target=estimate_sigma(data,y);
+        else
+            sigma_scale_target = sigma_preset_;
+        //Finally do it at exactly the target sigma
         determine_weights(data,y,sigma_scale_target);
     }
     //And finally copy the parameters into the hyperplane
@@ -323,6 +266,7 @@ double clsfy_binary_hyperplane_gmrho_builder_helpers::gmrho_sum::f(vnl_vector<do
     double b=w[num_vars_]; //constant stored as final variable
     for(unsigned i=0; i<num_examples_;++i) //Loop over examples (matrix rows)
     {
+        
         const double* px=x_[i];
         double pred = vcl_inner_product(px,px+num_vars_,w.begin(),0.0) - b;
         double e =  y_[i] - pred;
@@ -333,6 +277,7 @@ double clsfy_binary_hyperplane_gmrho_builder_helpers::gmrho_sum::f(vnl_vector<do
             //In the correctly classified region
             //So use Geman-McClure function
             sum += e2/(e2+var_);
+            
         }
         else
         {
@@ -347,7 +292,8 @@ void clsfy_binary_hyperplane_gmrho_builder_helpers::gmrho_sum::gradf(vnl_vector<
                                                                      vnl_vector<double>& gradient)
                                                                      
 {
-    //Return gradient vector
+   
+    
     using clsfy_binary_hyperplane_gmrho_builder_helpers::gm_grad_accum;
     double sum=0.0;
     double b=w[num_vars_]; //constant stored as final variable
@@ -357,10 +303,10 @@ void clsfy_binary_hyperplane_gmrho_builder_helpers::gmrho_sum::gradf(vnl_vector<
     {
         const double* px=x_[i];
         double pred = vcl_inner_product(px,px+num_vars_,w.begin(),0.0) - b;
+
         double e =  y_[i] - pred;
         double e2 = e*e;
         double wt=1.0;
-
         if( ((y_[i] > 0.0) && (e <= 1.0)) ||
             ((y_[i] < 0.0) && (e >= -1.0)) )
         {
@@ -372,19 +318,18 @@ void clsfy_binary_hyperplane_gmrho_builder_helpers::gmrho_sum::gradf(vnl_vector<
             wt = 1.0 + var_;
         }
             
-        double wtInv = -e/wt*wt;
-
-        //Add in to each gradient component the contribution from this example (loop over columns)
+        double wtInv = -e/(wt*wt);
         vcl_for_each(gradient.begin(),gradient.begin()+num_vars_,
                      gm_grad_accum(px,wtInv));
       
-        gradient[num_vars_] += wtInv; //dg/db, last term is for constant
+        gradient[num_vars_] += (-wtInv); //dg/db, last term is for constant
 
     }
     //And multiply everything by 2sigma^2
-    vcl_for_each(gradient.begin(),gradient.end(),
-                 vcl_bind2nd(vcl_multiplies<double>(),2.0*var_));
+    vcl_transform(gradient.begin(),gradient.end(),gradient.begin(),
+                  vcl_bind2nd(vcl_multiplies<double>(),2.0*var_));
 }
+
 
 
 
