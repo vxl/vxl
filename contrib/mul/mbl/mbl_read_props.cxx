@@ -30,9 +30,10 @@ vcl_string mbl_read_props_type::get_required_property(const vcl_string &prop)
 // Return the contents for a given (optional) property prop.
 // prop is removed from the property list.
 // Returns empty string if prop doesn't exist.
-vcl_string mbl_read_props_type::get_optional_property(const vcl_string &prop)
+vcl_string mbl_read_props_type::get_optional_property(const vcl_string &prop,
+                                                      const vcl_string &def_value /*=""*/)
 {
-  vcl_string result("");
+  vcl_string result(def_value);
   mbl_read_props_type::iterator it = this->find(prop);
   if (it!=this->end()) 
   {

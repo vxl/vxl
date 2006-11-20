@@ -62,10 +62,10 @@ public:
 
   //: Return the contents for a given property prop.
   // prop is removed from the property list.
-  // Returns empty string if prop doesn't exist.
+  // Returns def_value, or empty string if prop doesn't exist.
   // \note This is a fairly trivial function, intended simply as a
   // convenient analogue to get_required_property().
-  vcl_string get_optional_property(const vcl_string &prop);
+  vcl_string get_optional_property(const vcl_string &prop, const vcl_string &def_value = "");
 };
 
 

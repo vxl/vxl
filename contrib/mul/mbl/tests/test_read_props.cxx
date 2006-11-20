@@ -233,6 +233,8 @@ void test_read_props1()
 
     vcl_string val2 = props.get_optional_property("z");
     TEST("Case 14b: missing, return empty string", val2=="", true);
+    vcl_string val3 = props.get_optional_property("z","default");
+    TEST("Case 14c: missing, return default string", val3=="default", true);
   }
 
 
