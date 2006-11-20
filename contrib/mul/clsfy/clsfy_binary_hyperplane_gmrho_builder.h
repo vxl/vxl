@@ -28,7 +28,7 @@
 // (i.e. deterministic annealing), to try and avoid local minima
 
 class clsfy_binary_hyperplane_gmrho_builder  : public clsfy_binary_hyperplane_ls_builder {
-public:
+private:
     //: The classifier weights (weight N is the constant)
     mutable vnl_vector<double> weights_;
 
