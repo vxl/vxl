@@ -96,6 +96,17 @@ namespace clsfy_binary_hyperplane_gmrho_builder_helpers
 //-----------------------------------------------------------------------------------------------
 //------------------------ The builder member functions ------------------------------------------
 //------------------------------------------------------------------------------------------------
+//: Build a linear classifier, with the given data.
+// Return the mean error over the training set.
+// n_classes must be 1.
+double clsfy_binary_hyperplane_gmrho_builder::build(clsfy_classifier_base& classifier,
+                                                    mbl_data_wrapper<vnl_vector<double> >& inputs,
+                                                    unsigned n_classes,
+                                                    const vcl_vector<unsigned>& outputs) const
+{
+    assert (n_classes == 1);
+    return clsfy_binary_hyperplane_gmrho_builder::build(classifier, inputs, outputs);
+}
 
 //: Build a linear hyperplane classifier with the given data.
 // Reduce the influence of well classified points far into their correct region by

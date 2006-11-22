@@ -404,8 +404,9 @@ void test_clsfy_geman_mcclure_build()
         TEST_NEAR("GM cost function gradient is consistent", dg.inf_norm(), 0.0, 1.0E-4);    
     }
     #endif
-        
-    double train_error = builderGM.build(*pClassifier, training_set, labels);
+
+    clsfy_builder_base* pBase = &builderGM;
+    double train_error = pBase->build(*pClassifier, training_set, 1,labels);
     vcl_cout << train_error << vcl_endl;
     TEST_NEAR("Train error on classifier is good enough", train_error, 0.0, 0.15);
     vnl_vector<double > weights = pClassifier->weights();
@@ -426,7 +427,8 @@ void test_clsfy_geman_mcclure_build()
 
 
     vcl_cout<<"Now doing Geman McClure build with automatic sigma scaling..."<<vcl_endl;
-    double train_error2 = builderGM.build(*pClassifier, training_set, labels);
+    
+    double train_error2 = pBase->build(*pClassifier, training_set,1, labels);
     vcl_cout << train_error2 << vcl_endl;
     TEST_NEAR("Train error on classifier is good enough", train_error2, 0.0, 0.05);
     weights = pClassifier->weights();

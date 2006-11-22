@@ -66,6 +66,15 @@ private:
   double build(clsfy_classifier_base &classifier,
                mbl_data_wrapper<vnl_vector<double> > &inputs,
                const vcl_vector<unsigned> &outputs) const;
+  
+  //: Build model from data
+  // Return the mean error over the training set.
+  // For this classifiers, you must nClasses==1 to
+  // indicate a binary classifier
+  virtual double build(clsfy_classifier_base& model,
+                       mbl_data_wrapper<vnl_vector<double> >& inputs,
+                       unsigned nClasses,
+                       const vcl_vector<unsigned> &outputs) const;
 
   //: Version number for I/O
   short version_no() const;
