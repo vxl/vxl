@@ -52,10 +52,6 @@ public:
   bool empty() const;
   
 private:
-  // disabled to prevent accidental pass-by-value
-  rgrl_set_of( rgrl_set_of const& );
-
-private:
   vcl_vector< T > data_;
 };
 
