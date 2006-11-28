@@ -75,7 +75,7 @@ class rgrl_estimator
   virtual
   rgrl_transformation_sptr
   estimate( rgrl_match_set_sptr matches,
-            rgrl_transformation const& cur_transform ) const = 0;
+            rgrl_transformation const& cur_transform ) const;
 
   //: The degrees of freedom in the parameter set.
   unsigned int param_dof() const { assert (dof_); return dof_; }
