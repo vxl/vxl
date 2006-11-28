@@ -55,7 +55,7 @@ class rgrl_est_spline
     { optimize_method_ = optimize_method; }
 
   // Defines type-related functions
-  rgrl_type_macro( rgrl_est_spline, rgrl_estimator );
+  rgrl_type_macro( rgrl_est_spline, rgrl_nonlinear_estimator );
 
  private:
   void point_in_knots( vnl_vector< double > const& point, vnl_vector< double > & spline_pt ) const;

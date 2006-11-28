@@ -55,7 +55,7 @@ public:
   const vcl_type_info& transformation_type() const;
 
   // Defines type-related functions
-  rgrl_type_macro( rgrl_est_reduced_quad2d, rgrl_estimator );
+  rgrl_type_macro( rgrl_est_reduced_quad2d, rgrl_linear_estimator );
 
 private:
   double condition_num_thrd_;

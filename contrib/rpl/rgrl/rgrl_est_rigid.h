@@ -55,7 +55,7 @@ public:
   inline vcl_vector<vcl_vector<double> > const& get_stats() { return this->stats; }
 
   // Defines type-related functions
-  rgrl_type_macro( rgrl_est_rigid, rgrl_estimator );
+  rgrl_type_macro( rgrl_est_rigid, rgrl_nonlinear_estimator );
 
 protected:
   vcl_vector<vcl_vector<double> > stats;

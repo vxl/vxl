@@ -328,7 +328,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // compute inverse
   //
 #if 1
-  vnl_matrix<double> compliment = vnl_orthogonal_complement( p );
+  const vnl_matrix<double> compliment = vnl_orthogonal_complement( p );
  
   vnl_svd<double> svd( vnl_transpose(compliment) * jtj *compliment, 1e-6 );
   if ( svd.rank() < 8 ) {

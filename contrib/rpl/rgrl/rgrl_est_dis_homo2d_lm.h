@@ -44,7 +44,7 @@ public:
   const vcl_type_info& transformation_type() const;
 
   // Defines type-related functions
-  rgrl_type_macro( rgrl_est_dis_homo2d_lm, rgrl_estimator );
+  rgrl_type_macro( rgrl_est_dis_homo2d_lm, rgrl_nonlinear_estimator );
 
   //: change frome_centre
   void set_centres( vnl_vector<double> const& from_centre,
