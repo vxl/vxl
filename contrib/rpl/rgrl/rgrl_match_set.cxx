@@ -13,6 +13,14 @@
 #include <vcl_cassert.h>
 
 rgrl_match_set::
+rgrl_match_set(  )
+  : from_type_( 0 ),
+    to_type_( 0 ),
+    num_constraints_per_match_( 0 )
+{
+}
+
+rgrl_match_set::
 rgrl_match_set( const vcl_type_info& feature_type )
   : from_type_( &feature_type ),
     to_type_( &feature_type ),

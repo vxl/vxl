@@ -50,6 +50,9 @@ class rgrl_match_set
   typedef rgrl_match_set_const_from_iterator  const_from_iterator;
 
  public:
+  //:  construct an empty match set
+  rgrl_match_set( );
+
   //:  construct an empty match set, specifying the feature type
   rgrl_match_set( const vcl_type_info& feature_type );
 
