@@ -18,6 +18,43 @@
 #define LEAVE_FILES_BEHIND 0
 #endif
 
+static void test_gradient(vpdfl_pdf_base& pdf, const vnl_vector<double>& x0)
+{
+  double p0 = pdf(x0);
+  vnl_vector<double> g;
+  double p;
+  pdf.gradient(g,x0,p);
+  TEST_NEAR("gradient produces correct probability",p,p0,1e-6);
+
+  vnl_vector<double> x=x0;
+  double d = 1e-6;
+  for (unsigned i=0;i<x0.size();++i)
+  {
+    x=x0;
+    x[i]+=d;
+    double gi = (pdf(x)-p0)/d;
+    TEST_NEAR("Gradient correct",gi,g[i],1e-6);
+  }
+}
+
+static void test_gradient_logp(vpdfl_pdf_base& pdf, const vnl_vector<double>& x0)
+{
+  double p0 = pdf.log_p(x0);
+  vnl_vector<double> g;
+  double p;
+  pdf.gradient_logp(g,x0);
+
+  vnl_vector<double> x=x0;
+  double d = 1e-6;
+  for (unsigned i=0;i<x0.size();++i)
+  {
+    x=x0;
+    x[i]+=d;
+    double gi = (pdf.log_p(x)-p0)/d;
+    TEST_NEAR("gradient_logp correct",gi,g[i],1e-6);
+  }
+}
+
 void test_axis_gaussian()
 {
   vcl_cout << "*****************************\n"
@@ -36,6 +73,9 @@ void test_axis_gaussian()
 
   vpdfl_axis_gaussian gauss0;
   gauss0.set(mean0,var0);
+
+  test_gradient(gauss0,var0);
+  test_gradient_logp(gauss0,var0);
 
   vcl_cout<<"Prob at zero: "<<gauss0(v0)<<vcl_endl;
 

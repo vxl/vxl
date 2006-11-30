@@ -129,6 +129,27 @@ void vpdfl_axis_gaussian::gradient(vnl_vector<double>& g,
   g*=p;
 }
 
+//: Gradient and value of log(p(x)) at x
+//  Computes gradient df/dx of f(x)=log(p(x)) at x.
+void vpdfl_axis_gaussian::gradient_logp(vnl_vector<double>& g,
+                                   const vnl_vector<double>& x) const
+{
+  unsigned int n = n_dims();
+  assert(x.size() == n);
+
+  if (g.size()!=n) g.set_size(n);
+
+  double* g_data = g.data_block();
+  const double* x_data = x.data_block();
+  const double* m_data = mean().data_block();
+  const double* v_data = variance().data_block();
+
+  for (unsigned int i=0;i<n;++i)
+  {
+    g_data[i]= (m_data[i]-x_data[i])/v_data[i];
+  }
+}
+
 // ====================================================================
 
 vpdfl_sampler_base* vpdfl_axis_gaussian::new_sampler() const

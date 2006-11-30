@@ -67,6 +67,13 @@ class vpdfl_pdf_base
   virtual void gradient(vnl_vector<double>& g,
                         const vnl_vector<double>& x, double& p) const =0;
 
+  //: Gradient and value of log(p(x)) at x
+  //  Computes gradient df/dx of f(x)=log(p(x)) at x.
+  //  Result is vector of same dimensionality as x.
+  //  Default baseclass implementation uses gradient() to compute grad/p
+  virtual void gradient_logp(vnl_vector<double>& g,
+                        const vnl_vector<double>& x) const;
+
   //: Create a sampler object on the heap
   // Caller is responsible for deletion.
   virtual vpdfl_sampler_base* new_sampler()const=0 ;

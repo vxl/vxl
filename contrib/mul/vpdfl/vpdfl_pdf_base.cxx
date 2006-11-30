@@ -121,6 +121,21 @@ double vpdfl_pdf_base::log_prob_thresh(double pass_proportion) const
 #endif
 }
 
+//: Gradient of log(p(x)) at x
+//  Computes gradient df/dx of f(x)=log(p(x)) at x.
+//  Default baseclass implementation uses gradient() to compute grad/p
+void vpdfl_pdf_base::gradient_logp(vnl_vector<double>& g,
+                      const vnl_vector<double>& x) const
+{
+  double p;
+  gradient(g,x,p);
+  if (p==0.0)
+    g.fill(0.0);  // Avoid division by zero.
+  else
+    g/=p;
+}
+
+
 //=======================================================================
 
 bool vpdfl_pdf_base::is_valid_pdf() const

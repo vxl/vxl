@@ -22,6 +22,43 @@
 #endif
 
 //=======================================================================
+static void test_gradient(vpdfl_pdf_base& pdf, const vnl_vector<double>& x0)
+{
+  double p0 = pdf(x0);
+  vnl_vector<double> g;
+  double p;
+  pdf.gradient(g,x0,p);
+  TEST_NEAR("gradient produces correct probability",p,p0,1e-6);
+
+  vnl_vector<double> x=x0;
+  double d = 1e-6;
+  for (unsigned i=0;i<x0.size();++i)
+  {
+    x=x0;
+    x[i]+=d;
+    double gi = (pdf(x)-p0)/d;
+    TEST_NEAR("Gradient correct",gi,g[i],1e-6);
+  }
+}
+
+static void test_gradient_logp(vpdfl_pdf_base& pdf, const vnl_vector<double>& x0)
+{
+  double p0 = pdf.log_p(x0);
+  vnl_vector<double> g;
+  double p;
+  pdf.gradient_logp(g,x0);
+
+  vnl_vector<double> x=x0;
+  double d = 1e-6;
+  for (unsigned i=0;i<x0.size();++i)
+  {
+    x=x0;
+    x[i]+=d;
+    double gi = (pdf.log_p(x)-p0)/d;
+    TEST_NEAR("gradient_logp correct",gi,g[i],1e-6);
+  }
+}
+
 
 //: Generate lots of samples using pdf, build new pdf with builder and compare the two
 void test_gaussian()
@@ -60,6 +97,10 @@ void test_gaussian()
 
   TEST_NEAR("pdf(0)",pdf(v0),7.748596298e-9,1e-15);
 
+  test_gradient(pdf,v0);
+  test_gradient_logp(pdf,v0);
+
+
 // Test builder =======================================
   int n_samples = 10000;
 
@@ -80,6 +121,14 @@ void test_gaussian()
   vcl_cout<<"\nRebuilt PDF: "; vsl_print_summary(vcl_cout, p_pdf_built);
   vcl_cout<<"\n\nPDF sampler: "; vsl_print_summary(vcl_cout, p_sampler);
   vcl_cout<<'\n';
+
+  vpdfl_gaussian& g_pdf1 = static_cast<vpdfl_gaussian&>(*p_pdf_built);
+  vpdfl_gaussian g_pdf2;
+  vnl_vector<double> var2(4);  
+  for (unsigned i=0;i<4;++i) var2[i]=1+i;
+  g_pdf2.set(g_pdf1.mean(),g_pdf1.eigenvecs(),var2);
+  test_gradient(g_pdf2,data[0]);
+  test_gradient_logp(g_pdf2,data[0]);
 
 // Test the IO ================================================
 

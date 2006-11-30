@@ -56,6 +56,12 @@ class vpdfl_axis_gaussian : public vpdfl_pdf_base
                         const vnl_vector<double>& x,
                         double& p) const;
 
+  //: Gradient and value of log(p(x)) at x
+  //  Computes gradient df/dx of f(x)=log(p(x)) at x.
+  //  Result is vector of same dimensionality as x.
+  virtual void gradient_logp(vnl_vector<double>& g,
+                        const vnl_vector<double>& x) const;
+
   //: Create a sampler object on the heap
   // Caller is responsible for deletion.
   virtual vpdfl_sampler_base* new_sampler() const;

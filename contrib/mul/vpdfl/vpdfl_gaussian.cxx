@@ -275,9 +275,9 @@ void vpdfl_gaussian::gradient(vnl_vector<double>& g,
     b_data[i]/=v_data[i];
   }
 
-  p = -1.0 * vcl_exp(log_k() - 0.5*sum);
+  p = vcl_exp(log_k() - 0.5*sum);
 
-  b_*=p;
+  b_*=(-1.0*p);
 
   // Rotate back into x frame
   mbl_matxvec_prod_mv(eigenvecs(),b_,g);
