@@ -492,7 +492,20 @@ rgrl_util_geometric_scaling_factors( rgrl_set_of<rgrl_match_set_sptr> const& cur
   while ( current_match_sets[i]->from_size() == 0 && i<current_match_sets.size() )
     ++i;
   if ( i==current_match_sets.size() )  return false;
-  unsigned int m = current_match_sets[i]->from_begin().from_feature()->location().size();
+
+  // get the dimension
+  const unsigned int from_dim = current_match_sets[i]->from_begin().from_feature()->location().size();
+  const unsigned int mapped_dim = current_match_sets[i]->from_begin().mapped_from_feature()->location().size();
+  
+  if( from_dim != mapped_dim ) {
+
+    // cannot compute scaling factors between two sets of data that have different dimensions
+    factors.set_size(0);
+    return true;  // pretend it is a success
+  }
+
+  // now, start computing the scatter matrix
+  const unsigned int m = from_dim;
 
   // Compute the centers of the from_feature_set and the mapped_feature_set
   //
