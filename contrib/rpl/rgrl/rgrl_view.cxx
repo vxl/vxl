@@ -6,6 +6,8 @@
 // \date   25 Nov 2002
 
 #include <rgrl/rgrl_estimator.h>
+#include <rgrl/rgrl_feature_set.h>
+#include <vcl_vector.h>
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
 
@@ -144,6 +146,16 @@ scale_by( unsigned new_resol, double scaling ) const
                         new_xform_estimate,
                         new_resol, 
                         new_inv_xform_estimate);
+}
+
+//: extract features within current region
+//  feature vector will be cleared before the operation
+bool
+rgrl_view::
+features_in_region( feature_vector& features, rgrl_feature_set const& fea_set ) const
+{
+  features = fea_set.features_in_region( current_region_ );
+  return true;
 }
 
 #if 0

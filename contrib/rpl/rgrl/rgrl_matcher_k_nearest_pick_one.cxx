@@ -35,8 +35,8 @@ compute_matches( rgrl_feature_set const&       from_set,
                  rgrl_transformation const&    current_xform,
                  rgrl_scale const&             /* current_scale */ )
 {
-  typedef vcl_vector<rgrl_feature_sptr> feat_vector;
-  typedef feat_vector::iterator feat_iter;
+  typedef rgrl_view::feature_vector feat_vector;
+  typedef feat_vector::const_iterator feat_iter;
 
   DebugMacro( 2, "Compute matches between features " 
     << from_set.label().name() << "-->" 
@@ -46,8 +46,11 @@ compute_matches( rgrl_feature_set const&       from_set,
     = new rgrl_match_set( from_set.type(), to_set.type(), from_set.label(), to_set.label() );
 
   //  get the features in the current view
-  feat_vector from =
-    from_set.features_in_region( current_view.region() );
+  feat_vector from;
+  if( !current_view.features_in_region( from, from_set ) ) {
+    DebugMacro( 1, "Cannot get features in current region!!!" << vcl_endl );
+    return matches_sptr;
+  }
 
   // reserve size
   matches_sptr->reserve( from.size() );

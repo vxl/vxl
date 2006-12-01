@@ -18,6 +18,9 @@
 #include <rgrl/rgrl_mask_sptr.h>
 
 #include <rgrl/rgrl_view_sptr.h>
+#include <rgrl/rgrl_feature_sptr.h>
+#include <rgrl/rgrl_fwd.h>
+#include <vcl_stlfwd.h>
 
 //: Represents a "view" of the registration problem.
 //
@@ -28,6 +31,8 @@ class rgrl_view
   : public rgrl_object
 {
  public:
+  
+  typedef vcl_vector< rgrl_feature_sptr > feature_vector;
   
   //: ctor
   rgrl_view();
@@ -116,6 +121,12 @@ class rgrl_view
   //:  Return true if the current resolution is the finest level
   bool is_at_finest_resolution() const;
 
+  //: extract features within current region
+  //  feature vector will be cleared before the operation
+  virtual
+  bool
+  features_in_region( feature_vector& features, rgrl_feature_set const& fea_set ) const;
+  
   //:  Return true if the current_region_ reached the global_region_
   virtual 
   bool current_region_converged() const;
@@ -150,8 +161,8 @@ class rgrl_view
 
   rgrl_mask_box                   current_region_;
   rgrl_mask_box                   global_region_; //The estimated overlap region
-                                             //of from_image_roi_ with
-                                             //to_image_roi_
+                                                  //of from_image_roi_ with
+                                                  //to_image_roi_
 
   rgrl_estimator_sptr        xform_estimator_;
   rgrl_transformation_sptr   xform_estimate_;

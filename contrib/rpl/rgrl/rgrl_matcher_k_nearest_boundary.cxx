@@ -32,7 +32,6 @@ compute_matches( rgrl_feature_set const&       from_set,
 {
   typedef rgrl_match_set::from_iterator FIter;
   typedef FIter::to_iterator TIter;
-  typedef vcl_vector<rgrl_feature_sptr >  feature_vector;
   typedef feature_vector::const_iterator fvec_Iter;
 
   //rgrl_matcher_k_nearest_boundary only works on RGRL_TRACE_PT
