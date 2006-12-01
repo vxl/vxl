@@ -206,7 +206,25 @@ operator!=( const rgrl_mask_box& other ) const
 
 vcl_ostream& operator<<(vcl_ostream& os, const rgrl_mask_box& box)
 {
-  return os<<box.x0()<<' '<<box.x1();
+  os<< box.x0().size() << "  ";
+  if( box.x0().size() )
+    os << box.x0()<<"  "<<box.x1();
+  return os;
+}
+
+vcl_istream& operator>>(vcl_istream& is, rgrl_mask_box& box)
+{
+  int m = -1;
+  is >> m;
+  
+  if( m <= 0 ) return is;
+    
+  vnl_vector<double> x0(m), x1(m);
+  
+  is >> x0 >> x1;
+  rgrl_mask_box temp_box( x0, x1 );
+  box = temp_box;
+  return is;
 }
 
 //--------------------------------

@@ -150,6 +150,9 @@ class rgrl_mask_box
 //: An output operator for displaying a mask_box
 vcl_ostream& operator<<(vcl_ostream& os, const rgrl_mask_box& box);
 
+//: An output operator for displaying a mask_box
+vcl_istream& operator>>(vcl_istream& is, rgrl_mask_box& box);
+
 //--------------------------------
 //               Utility functions
 
