@@ -43,6 +43,7 @@ class rgrl_mask_2d_image;
 class rgrl_mask_3d_image;
 class rgrl_mask_sphere;
 class rgrl_mask_box;
+class rgrl_mask_oriented_box;
 class rgrl_match_set;
 class rgrl_matcher;
 class rgrl_matcher_fixed;

@@ -172,7 +172,7 @@ inside( vnl_vector<double> const& pt ) const
 {
   assert( pt.size() == origin_.size() );
  
-  vnl_vector<double> mapped = axes_ * ( pt - origin_ );
+  vnl_vector<double> mapped = vnl_transpose( axes_ ) * ( pt - origin_ );
   
   // len_[i] >=0 is gurranteed in update_bounding_box function
   // 
@@ -243,7 +243,6 @@ update_bounding_box()
   
   vnl_vector<double> xmin( origin_ ), xmax( origin_ );
   vnl_vector<double> corner;
-  vnl_vector<double> mapped_len = axes_ * len_;
   for( unsigned i=0; i<num_corners; ++i ) {
     
     corner = origin_; 
@@ -251,8 +250,11 @@ update_bounding_box()
     for( unsigned j=0; j<dim; ++j ) {
       
       // multiplication using each bit 0/1 
-      corner[j] += ((i>>j)&0x1)?mapped_len[j]:0;
-      
+      if( (i>>j)&0x1 )
+        corner += axes_.get_column(j) * len_[j];
+    }
+
+    for( unsigned j=0; j<dim; ++j ) {
       if( corner[j] < xmin[j] )   xmin[j] = corner[j];
       if( corner[j] > xmax[j] )   xmax[j] = corner[j];
     }
@@ -276,8 +278,6 @@ average_vertices_dist( const rgrl_mask_oriented_box& other ) const
   // use bit pattern to generate all corners
   const unsigned num_corners = 2<<dim;
   vnl_vector<double> corner, other_corner;
-  vnl_vector<double> mapped_len = axes_ * len_;
-  vnl_vector<double> other_mapped_len = other.axes_ * len_;
   for( unsigned i=0; i<num_corners; ++i ) {
     
     corner = origin_; 
@@ -287,8 +287,11 @@ average_vertices_dist( const rgrl_mask_oriented_box& other ) const
     for( unsigned j=0; j<dim; ++j ) {
       
       // multiplication using each bit 0/1 
-      corner[j] += ((i>>j)&0x1)?mapped_len[j]:0;
-      other_corner[j] += ((i>>j)&0x1)?other_mapped_len[j]:0;
+      const bool to_add = ((i>>j)&0x1);
+      if( to_add ) {
+        corner += axes_.get_column(j) * len_[j];
+        other_corner += other.axes_.get_column(j) * other.len_[j];;
+      }
     }
     
     cum_dist += (corner-other_corner).two_norm();
@@ -306,8 +309,10 @@ operator==( const rgrl_mask_oriented_box& other ) const
   vnl_matrix<double> prod = vnl_transpose( this->axes_ ) * other.axes_;
   vnl_matrix<double> eye( origin_.size(), origin_.size() );
   eye.set_identity();
-  if( (prod - eye).fro_norm() > 1e-8 ) 
+  if( (prod - eye).fro_norm() > 1e-4 ) {
+    WarningMacro( "Incompatible axes. oriented boxes cannot be compared. " << vcl_endl );
     return false;
+  }
     
   // now check origin_ and len_
   // 
