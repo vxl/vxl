@@ -137,6 +137,128 @@ update_bounding_box()
   }
 }
 
+//******************** mask using an oriented box ***********************
+
+rgrl_mask_oriented_box::
+rgrl_mask_oriented_box( unsigned dim )
+  : rgrl_mask( dim ),
+    x0_(dim),
+    axes_(dim, dim),
+    len_(dim)
+{
+}
+
+rgrl_mask_oriented_box::
+rgrl_mask_oriented_box( vnl_vector<double> const& x0, 
+                        vnl_matrix<double> const& axes,
+                        vnl_vector<double> const& len )
+  : rgrl_mask( x0.size() ),
+    origin_( x0 ),
+    axes_( axes ),
+    len_( len )
+{
+  assert( x0.size() == len.size() );
+  assert( x0.size() == axes.rows());
+  assert( x0.size() == axes.cols());
+  
+  update_bounding_box();
+}
+
+bool
+rgrl_mask_oriented_box::
+inside( vnl_vector<double> const& pt ) const
+{
+  assert( pt.size() == origin_.size() );
+ 
+  vnl_vector<double> mapped = axes_ * ( pt - origin_ );
+  
+  // len_[i] >=0 is gurranteed in update_bounding_box function
+  // 
+  bool inside = true;
+  for( unsigned i=0; i<origin_.size()&&inside; ++i )
+    inside = mapped[i] >= 0 && mapped[i] <= len_[i];
+  
+  return inside;
+}
+
+void
+rgrl_mask_oriented_box::
+set_x0( vnl_vector<double> const& v )
+{
+  assert( v.size() == origin_.size() || !origin_.size() );
+  origin_ = v;
+  
+  update_bounding_box();
+}
+
+
+void
+rgrl_mask_oriented_box::
+set_len( vnl_vector<double> const& len )
+{
+  assert( len.size() == len_.size() || !len_.size() );
+  len_ = len;
+  
+  update_bounding_box();
+}
+
+void
+rgrl_mask_oriented_box::
+set_axes( vnl_matrix<double> const& axes )
+{
+  // square matrix
+  assert( axes.rows() == axes.cols() );
+
+  axes_ = axes;
+  
+  update_bounding_box();
+}
+
+void
+rgrl_mask_oriented_box::
+update_bounding_box()
+{
+  assert( origin_.size() == len_.size() );
+  assert( origin_.size() == axes_.rows());
+  assert( origin_.size() == axes_.cols());
+
+  const unsigned int dim = origin_.size();
+
+  // Extra step:
+  // make sure len_[i] >=0 
+  // 
+  for( unsigned i=0; i<dim; ++i )
+    if( len_[i] <= 0 ) {
+    
+      len_[i] = -len_[i];
+      // invert the column vector
+      for( unsigned j=0; j<dim; ++j )
+        axes_(j, i) = -axes_(j,i);
+    }
+          
+  // use bit pattern to generate all corners
+  const unsigned num_corners = 2<<dim;
+  
+  vnl_vector<double> xmin( origin_ ), xmax( origin_ );
+  vnl_vector<double> corner;
+  vnl_vector<double> mapped_len = axes_ * len_;
+  for( unsigned i=0; i<num_corners; ++i ) {
+    
+    corner = origin_; 
+    // going through exes
+    for( unsigned j=0; j<dim; ++j ) {
+      
+      // multiplication using each bit 0/1 
+      corner[j] += ((i>>j)&0x1)?mapped_len[j]:0;
+      
+      if( corner[j] < xmin[j] )   xmin[j] = corner[j];
+      if( corner[j] > xmax[j] )   xmax[j] = corner[j];
+    }
+  }
+  
+  x0_ = xmin;
+  x1_ = xmax;
+}
 //******************** mask using a box ***********************
 
 rgrl_mask_box::
@@ -166,8 +288,8 @@ inside( vnl_vector<double> const& pt ) const
   assert( pt.size() == x1_.size() );
 
   bool inside = true;
-  for (unsigned i =0; i<pt.size(); ++i) {
-    inside = inside && (x0_[i] <= pt[i] && pt[i] <= x1_[i]);
+  for (unsigned i =0; i<pt.size()&&inside; ++i) {
+    inside = (x0_[i] <= pt[i] && pt[i] <= x1_[i]);
   }
   return inside;
 }

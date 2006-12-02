@@ -17,6 +17,7 @@
 
 #include <vcl_iosfwd.h>
 #include <vnl/vnl_vector.h>
+#include <vnl/vnl_matrix.h>
 #include <vil/vil_image_view.h>
 
 #include <rgrl/rgrl_object.h>
@@ -145,6 +146,46 @@ class rgrl_mask_box
   // Defines type-related functions
   rgrl_type_macro( rgrl_mask_box, rgrl_mask );
 
+};
+
+//: this is a wrapper on an oriented box
+class rgrl_mask_oriented_box
+  : public rgrl_mask
+{
+ public:
+  //: Null initialization
+  //
+  // Initializes the region to the box from (0,0,...) to (0,0,...)
+  //
+  rgrl_mask_oriented_box( unsigned dim );
+
+  //: Initialize the region to a box from \a x0 to \a x1.
+  rgrl_mask_oriented_box( vnl_vector<double> const& x0, 
+                          vnl_matrix<double> const& axes,
+                          vnl_vector<double> const& len );
+
+  //: True if a point is inside the region
+  bool inside( vnl_vector<double> const& pt ) const;
+
+  //: Set the lower coordinate of the box.
+  void set_x0( vnl_vector<double> const& v );
+
+  //: Set the lengths along each axis
+  void set_len( vnl_vector<double> const& len );
+
+  //: Set the axes
+  void set_axes( vnl_matrix<double> const& axes );
+
+  // Defines type-related functions
+  rgrl_type_macro( rgrl_mask_oriented_box, rgrl_mask );
+
+ private:
+  void update_bounding_box();
+
+ private:
+  vnl_vector<double> origin_;
+  vnl_matrix<double> axes_;
+  vnl_vector<double> len_;
 };
 
 //: An output operator for displaying a mask_box
