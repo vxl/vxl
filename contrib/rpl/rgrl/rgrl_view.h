@@ -74,6 +74,9 @@ class rgrl_view
   rgrl_mask_box const& region() const
   { return current_region_; }
   
+  //:  Access current transformation region in "from" image coords as mask smart ptr
+  rgrl_mask_sptr region_as_sptr() const;
+
   //: set current region in "from" image coords
   void set_region( rgrl_mask_box const& box )
   { current_region_ = box; }

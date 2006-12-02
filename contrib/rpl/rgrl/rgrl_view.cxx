@@ -158,6 +158,13 @@ features_in_region( feature_vector& features, rgrl_feature_set const& fea_set ) 
   return true;
 }
 
+rgrl_mask_sptr 
+rgrl_view::
+region_as_sptr() const
+{
+  return new rgrl_mask_box( current_region_ );
+}
+
 #if 0
 bool
 rgrl_view::
