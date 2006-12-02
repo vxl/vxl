@@ -142,7 +142,7 @@ update_bounding_box()
 rgrl_mask_oriented_box::
 rgrl_mask_oriented_box( unsigned dim )
   : rgrl_mask( dim ),
-    x0_(dim),
+    origin_(dim),
     axes_(dim, dim),
     len_(dim)
 {
@@ -183,7 +183,7 @@ inside( vnl_vector<double> const& pt ) const
 
 void
 rgrl_mask_oriented_box::
-set_x0( vnl_vector<double> const& v )
+set_origin( vnl_vector<double> const& v )
 {
   assert( v.size() == origin_.size() || !origin_.size() );
   origin_ = v;

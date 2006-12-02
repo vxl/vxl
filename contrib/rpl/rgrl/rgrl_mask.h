@@ -160,7 +160,7 @@ class rgrl_mask_oriented_box
   rgrl_mask_oriented_box( unsigned dim );
 
   //: Initialize the region to a box from \a x0 to \a x1.
-  rgrl_mask_oriented_box( vnl_vector<double> const& x0, 
+  rgrl_mask_oriented_box( vnl_vector<double> const& origin, 
                           vnl_matrix<double> const& axes,
                           vnl_vector<double> const& len );
 
@@ -168,13 +168,28 @@ class rgrl_mask_oriented_box
   bool inside( vnl_vector<double> const& pt ) const;
 
   //: Set the lower coordinate of the box.
-  void set_x0( vnl_vector<double> const& v );
+  void set_origin( vnl_vector<double> const& v );
 
   //: Set the lengths along each axis
   void set_len( vnl_vector<double> const& len );
 
   //: Set the axes
   void set_axes( vnl_matrix<double> const& axes );
+
+  //: the lower coordinate of the box.
+  vnl_vector<double> const& 
+  origin() const 
+  { return origin_; }
+
+  //: Set the lengths along each axis
+  vnl_vector<double> const&
+  len() const
+  { return len_; }
+
+  //: Set the axes
+  vnl_matrix<double> const&
+  axes() const
+  { return axes_; }
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_mask_oriented_box, rgrl_mask );
