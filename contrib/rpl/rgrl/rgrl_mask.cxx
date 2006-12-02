@@ -2,7 +2,9 @@
 //:
 // \file
 #include <vcl_cassert.h>
+#include <vcl_limits.h>
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_transpose.h>
 
 rgrl_mask_box
 rgrl_mask::
@@ -259,6 +261,67 @@ update_bounding_box()
   x0_ = xmin;
   x1_ = xmax;
 }
+
+//: get average distance of corresponding vertices between two oriented box
+double 
+rgrl_mask_oriented_box::
+average_vertices_dist( const rgrl_mask_oriented_box& other ) const
+{
+  if( origin_.size() != other.origin_.size() )
+    return vcl_numeric_limits<double>::infinity();
+  
+  const unsigned int dim = origin_.size();
+  double cum_dist = 0.0;
+  
+  // use bit pattern to generate all corners
+  const unsigned num_corners = 2<<dim;
+  vnl_vector<double> corner, other_corner;
+  vnl_vector<double> mapped_len = axes_ * len_;
+  vnl_vector<double> other_mapped_len = other.axes_ * len_;
+  for( unsigned i=0; i<num_corners; ++i ) {
+    
+    corner = origin_; 
+    other_corner = other.origin_;
+    
+    // going through exes
+    for( unsigned j=0; j<dim; ++j ) {
+      
+      // multiplication using each bit 0/1 
+      corner[j] += ((i>>j)&0x1)?mapped_len[j]:0;
+      other_corner[j] += ((i>>j)&0x1)?other_mapped_len[j]:0;
+    }
+    
+    cum_dist += (corner-other_corner).two_norm();
+  }
+  return cum_dist/num_corners;
+}
+
+bool
+rgrl_mask_oriented_box::
+operator==( const rgrl_mask_oriented_box& other ) const
+{
+  // check the axes first 
+  // axes are othogonal matrix
+  // therefore the product should be identity matrix
+  vnl_matrix<double> prod = vnl_transpose( this->axes_ ) * other.axes_;
+  vnl_matrix<double> eye( origin_.size(), origin_.size() );
+  eye.set_identity();
+  if( (prod - eye).fro_norm() > 1e-8 ) 
+    return false;
+    
+  // now check origin_ and len_
+  // 
+  return origin_ == other.origin_  &&
+         len_ == other.len_;
+}
+
+bool
+rgrl_mask_oriented_box::
+operator!=( const rgrl_mask_oriented_box& other ) const
+{
+  return !( *this == other );
+}
+
 //******************** mask using a box ***********************
 
 rgrl_mask_box::

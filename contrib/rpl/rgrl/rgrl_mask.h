@@ -191,6 +191,16 @@ class rgrl_mask_oriented_box
   axes() const
   { return axes_; }
 
+  //: True iff all the components are equal.
+  bool operator==( const rgrl_mask_oriented_box& other ) const;
+
+  //: True iff some of the components are not equal.
+  bool operator!=( const rgrl_mask_oriented_box& other ) const;
+
+  //: get average distance of corresponding vertices between two oriented box
+  double 
+  average_vertices_dist( const rgrl_mask_oriented_box& other ) const;
+
   // Defines type-related functions
   rgrl_type_macro( rgrl_mask_oriented_box, rgrl_mask );
 
