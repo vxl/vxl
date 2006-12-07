@@ -66,6 +66,12 @@ vpgl_rational_camera<T>::
 }
 
 template <class T>
+vpgl_rational_camera<T>* vpgl_rational_camera<T>::clone(void) const
+{
+  return new vpgl_rational_camera<T>(*this);
+}
+
+template <class T>
 void vpgl_rational_camera<T>::
 set_coefficients(vcl_vector<vcl_vector<T> > const& rational_coeffs)
 {
