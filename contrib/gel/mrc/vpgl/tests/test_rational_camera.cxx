@@ -39,11 +39,11 @@ static void test_rational_camera()
   den_v[0]=0.1; den_v[10]=0.05; den_v[17]=0.03; den_v[9]=1.0;
   den_v[15]=1.0; den_v[18]=0.3; den_v[19]=1.0;
   //Scale and offsets
-  double sx = 0.02, ox = 150.0;
-  double sy = 0.008, oy = 100.0;
-  double sz = 0.2, oz = 10.0;
-  double su = 0.001, ou = 500;
-  double sv = 0.002, ov = 200;
+  double sx = 50.0, ox = 150.0;
+  double sy = 125.0, oy = 100.0;
+  double sz = 5.0, oz = 10.0;
+  double su = 1000.0, ou = 500;
+  double sv = 500.0, ov = 200;
   vpgl_rational_camera<double> rcam(neu_u, den_u, neu_v, den_v, 
                                     sx, ox,
                                     sy, oy,
