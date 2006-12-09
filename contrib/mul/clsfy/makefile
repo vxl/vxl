@@ -29,6 +29,7 @@ SOURCES += clsfy_direct_boost.cxx
 SOURCES += clsfy_direct_boost_builder.cxx
 SOURCES += clsfy_mean_square_1d.cxx
 SOURCES += clsfy_mean_square_1d_builder.cxx
+SOURCES += clsfy_binary_hyperplane_gmrho_builder.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

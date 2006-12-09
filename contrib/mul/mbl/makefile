@@ -42,6 +42,8 @@ SOURCES += mbl_test.cxx
 SOURCES += mbl_log.cxx
 SOURCES += mbl_mod_gram_schmidt.cxx
 SOURCES += mbl_linear_interpolator.cxx
+SOURCES += mbl_minimum_spanning_tree.cxx
+SOURCES += mbl_stepwise_regression.cxx
 
 # Additional files to document:
 MANPAGE_SOURCES += mbl_cloneables_factory.h
@@ -67,6 +69,7 @@ MANPAGE_SOURCES += mbl_ar_process.txx
 MANPAGE_SOURCES += mbl_jarque_bera.h
 MANPAGE_SOURCES += mbl_stl_pred.h
 MANPAGE_SOURCES += mbl_chord_3d.h
+MANPAGE_SOURCES += mbl_draw_line.h
 
 MANPAGE_SOURCES += mbl_config.h.in
 
@@ -78,7 +81,7 @@ include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
- SUBDIRS += tests
+ SUBDIRS += examples tests
 endif
 
 # configure stuff:

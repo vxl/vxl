@@ -7,7 +7,7 @@ MANPAGE_SOURCES += vpgl_camera.h
 #SOURCES += vpgl_basic_camera.cxx
 #SOURCES += vpgl_matrix_camera.cxx
 MANPAGE_SOURCES += vpgl_perspective_camera.txx
-#SOURCES += vpgl_rational_camera.cxx
+MANPAGE_SOURCES += vpgl_rational_camera.txx
 MANPAGE_SOURCES += vpgl_calibration_matrix.txx
 MANPAGE_SOURCES += vpgl_fundamental_matrix.txx
 MANPAGE_SOURCES += vpgl_lens_distortion.txx
@@ -23,7 +23,7 @@ MANPAGE_SOURCES += vgl_rotation_3d.h
 #MANPAGE_SOURCES += vpgl_matrix_camera_sptr.h
 #MANPAGE_SOURCES += vpgl_perspective_camera_sptr.h
 
-SUBDIRS += algo
+SUBDIRS += xio algo
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

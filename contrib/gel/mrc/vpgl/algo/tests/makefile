@@ -10,6 +10,7 @@ TESTS += test_fm_compute.cxx
 TESTS += test_lens_warp_mapper.cxx
 TESTS += test_optimize_camera.cxx
 TESTS += test_project.cxx
+TESTS += test_backproject.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

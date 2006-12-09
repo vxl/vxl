@@ -12,9 +12,11 @@ SOURCES += vpgl_fm_compute_reg_ransac.cxx
 MANPAGE_SOURCES += vpgl_list.txx
 SOURCES += vpgl_optimize_camera.cxx
 SOURCES += vpgl_project.cxx
+SOURCES += vpgl_backproject.cxx
 SOURCES += vpgl_vsol_lens_warp.cxx
 MANPAGE_SOURCES += vpgl_lens_warp_mapper.h
 SOURCES += vpgl_construct_cameras.cxx
+SOURCES += vpgl_invmap_cost_function.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
