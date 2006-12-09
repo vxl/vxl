@@ -1,6 +1,7 @@
 #include <clsfy/clsfy_adaboost_sorted_builder.h>
 #include <clsfy/clsfy_adaboost_trainer.h>
 #include <clsfy/clsfy_binary_hyperplane.h>
+#include <clsfy/clsfy_binary_hyperplane_gmrho_builder.h>
 #include <clsfy/clsfy_binary_hyperplane_ls_builder.h>
 #include <clsfy/clsfy_binary_pdf_classifier.h>
 #include <clsfy/clsfy_binary_threshold_1d_builder.h>
