@@ -50,6 +50,7 @@
 #include <mbl/mbl_select_n_from_m.h>
 #include <mbl/mbl_stats_1d.h>
 #include <mbl/mbl_stats_nd.h>
+#include <mbl/mbl_stepwise_regression.h>
 #include <mbl/mbl_stl.h>
 #include <mbl/mbl_stl_pred.h>
 #include <mbl/mbl_stochastic_data_collector.h>
