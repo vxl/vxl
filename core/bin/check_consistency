@@ -598,7 +598,7 @@ foreach $f (@FILES)
 
 # 12. Constant pi written as 3.1415...
   &msg(1, "should maybe use vnl_math::pi instead of $1")
-    if ($f !~ m!\b(v[cuib]l|v3p)/! && $f !~ m!\bcore/vnl/vnl_math\.! &&
+    if ($f !~ m!\b(v[cuibg]l|v3p)/! && $f !~ m!\bcore/vnl/vnl_math\.! &&
         $cpp_file && $file_s =~ m!\b(3\.14159\d*)!);
 
 # 13. Instantiation macro stuff
