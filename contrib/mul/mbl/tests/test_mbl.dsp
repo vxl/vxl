@@ -252,6 +252,9 @@ SOURCE=.\test_gram_schmidt.cxx
 SOURCE=.\test_linear_interpolator.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_stepwise_regression.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

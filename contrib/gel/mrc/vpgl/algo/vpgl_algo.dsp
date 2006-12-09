@@ -129,6 +129,12 @@ SOURCE=.\vpgl_vsol_lens_warp.cxx
 SOURCE=.\vpgl_construct_cameras.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vpgl_backproject.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_invmap_cost_function.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vpgl_list+vgl_h_matrix_2d+double--.cxx
 # End Source File
 # Begin Source File
@@ -175,6 +181,12 @@ SOURCE=.\vpgl_project.h
 # End Source File
 # Begin Source File
 SOURCE=.\vpgl_vsol_lens_warp.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_backproject.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_invmap_cost_function.h
 # End Source File
 # End Group
 # End Target

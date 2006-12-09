@@ -110,6 +110,12 @@ SOURCE=.\Templates/vsl_vector_io+vil_image_view+float--.cxx
 # Begin Source File
 SOURCE=.\Templates/vsl_vector_io+vcl_vector+vil_image_view+float---.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vcl_vector+vil_image_view+byte---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vil_image_view+byte--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -125,8 +131,6 @@ SOURCE=.\vil_io_smart_ptr.h
 # Begin Source File
 SOURCE=.\vil_io_image_view.h
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project

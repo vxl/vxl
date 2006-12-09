@@ -196,6 +196,9 @@ SOURCE=.\clsfy_mean_square_1d.cxx
 # Begin Source File
 SOURCE=.\clsfy_mean_square_1d_builder.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\clsfy_binary_hyperplane_gmrho_builder.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -278,8 +281,9 @@ SOURCE=.\clsfy_mean_square_1d.h
 # Begin Source File
 SOURCE=.\clsfy_mean_square_1d_builder.h
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+# Begin Source File
+SOURCE=.\clsfy_binary_hyperplane_gmrho_builder.h
+# End Source File
 # End Group
 # End Target
 # End Project

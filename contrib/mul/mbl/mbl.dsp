@@ -290,6 +290,12 @@ SOURCE=.\mbl_mod_gram_schmidt.cxx
 # Begin Source File
 SOURCE=.\mbl_linear_interpolator.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\mbl_minimum_spanning_tree.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_stepwise_regression.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx;in"
@@ -508,6 +514,15 @@ SOURCE=.\mbl_mod_gram_schmidt.h
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_linear_interpolator.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_draw_line.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_minimum_spanning_tree.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_stepwise_regression.h
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_config.h.in

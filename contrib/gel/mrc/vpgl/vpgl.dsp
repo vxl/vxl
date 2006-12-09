@@ -146,6 +146,9 @@ SOURCE=.\Templates/vpgl_reg_fundamental_matrix+double-.cxx
 # Begin Source File
 SOURCE=.\Templates/vsl_binary_loader+vpgl_proj_camera+double--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vpgl_rational_camera+double-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
@@ -214,6 +217,12 @@ SOURCE=.\vpgl_poly_radial_distortion.h
 # End Source File
 # Begin Source File
 SOURCE=.\vpgl_reg_fundamental_matrix.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_rational_camera.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_rational_camera.txx
 # End Source File
 # End Group
 # End Target

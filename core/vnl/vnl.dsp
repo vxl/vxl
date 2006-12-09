@@ -708,6 +708,12 @@ SOURCE=.\Templates/vnl_matrix_fixed+double.6.1-.cxx
 SOURCE=.\Templates/vnl_matrix_fixed+double.6.3-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vnl_matrix_fixed+double.4.20-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_vector_fixed+double.20-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vnl_erf.cxx
 # End Source File
 # Begin Source File

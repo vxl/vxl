@@ -165,6 +165,9 @@ SOURCE=.\rrel_affine_est.cxx
 SOURCE=.\rrel_wgted_ran_sam_search.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\rrel_quad_est.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/rrel_util_double~.cxx
 # End Source File
 # Begin Source File
@@ -256,6 +259,9 @@ SOURCE=.\rrel_affine_est.h
 # End Source File
 # Begin Source File
 SOURCE=.\rrel_wgted_ran_sam_search.h
+# End Source File
+# Begin Source File
+SOURCE=.\rrel_quad_est.h
 # End Source File
 # End Group
 # End Target

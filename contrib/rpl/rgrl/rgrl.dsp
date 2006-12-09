@@ -437,6 +437,9 @@ SOURCE=.\rgrl_weighter_indiv_scale.cxx
 # Begin Source File
 SOURCE=.\rgrl_internal_util.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\rgrl_mask_3d_image.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter ""
@@ -796,6 +799,9 @@ SOURCE=.\rgrl_weighter_indiv_scale.h
 # End Source File
 # Begin Source File
 SOURCE=.\rgrl_internal_util.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_mask_3d_image.h
 # End Source File
 # End Group
 # End Target

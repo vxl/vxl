@@ -218,6 +218,9 @@ LINK32=link.exe
 # Begin Source File
 SOURCE=.\find_matches.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\mr_find_matches.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
