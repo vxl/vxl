@@ -10,6 +10,7 @@ SET(vul_test_sources
   test_regexp.cxx
   test_string.cxx
   test_sleep_timer.cxx
+  test_get_time_as_string.cxx
 )
 
 IF (NOT APPLE)

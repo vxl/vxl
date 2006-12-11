@@ -23,6 +23,12 @@
 //#include <vcl_ctime.h> // for struct timezone
 #include <vcl_sys/time.h> // for gettimeofday()
 
+// for vul_get_time_string()
+#include <vcl_ctime.h> 
+#include <vul/vul_string.h>
+//
+
+
 #if !defined(VCL_WIN32) || defined(__CYGWIN__)
 // POSIX
 void vul_get_timestamp(int &secs, int &msecs)
@@ -55,3 +61,22 @@ void vul_get_timestamp(int &secs, int &msecs)
   msecs = real.millitm;
 }
 #endif
+
+
+// Get the present time and date as a string, e.g. "Fri Dec 8 14:54:17 2006"
+vcl_string vul_get_time_as_string()
+{
+  // Get time in seconds since Jan 1 1970
+  vcl_time_t time_secs;
+  vcl_time(&time_secs);   
+
+  // Convert time to struct tm form
+  struct vcl_tm *time;
+  time = vcl_localtime(&time_secs);
+
+  // Get time & date as a string (remove trailing eol)
+  vcl_string timestr = vcl_asctime(time); 
+  vul_string_right_trim(timestr, "\n");
+  return timestr;
+}
+

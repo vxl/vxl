@@ -10,6 +10,7 @@ DECLARE( test_regexp );
 DECLARE( test_string );
 DECLARE( test_sleep_timer );
 DECLARE( test_vul_file );
+DECLARE( test_get_time_as_string );
 
 void
 register_tests()
@@ -24,6 +25,7 @@ register_tests()
   REGISTER( test_string );
   REGISTER( test_sleep_timer );
   REGISTER( test_vul_file );
+  REGISTER( test_get_time_as_string );
 }
 
 DEFINE_MAIN;
