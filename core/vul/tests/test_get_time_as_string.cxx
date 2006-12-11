@@ -6,8 +6,11 @@
 
 void test_get_time_as_string()
 {
-  vcl_string str = vul_get_time_as_string();
-  vcl_cout << "Function returned string: \"" << str << "\"" << vcl_endl;
+  vcl_string str0 = vul_get_time_as_string(vul_asc);
+  vcl_cout << "vul_get_time_as_string(" << vul_asc << "): \"" << str0 << "\"" << vcl_endl;
+
+  vcl_string str1 = vul_get_time_as_string(vul_numeric_msf);
+  vcl_cout << "vul_get_time_as_string(" << vul_numeric_msf << "): \"" << str1 << "\"" << vcl_endl;
 }
 
 
