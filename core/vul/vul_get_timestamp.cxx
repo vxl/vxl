@@ -26,6 +26,8 @@
 // for vul_get_time_string()
 #include <vcl_ctime.h> 
 #include <vul/vul_string.h>
+#include <vcl_sstream.h>
+#include <vcl_iomanip.h>
 //
 
 
@@ -64,8 +66,10 @@ void vul_get_timestamp(int &secs, int &msecs)
 
 
 // Get the present time and date as a string, e.g. "Fri Dec 8 14:54:17 2006"
-vcl_string vul_get_time_as_string()
+vcl_string vul_get_time_as_string(vul_time_style style/*default=vul_asc*/)
 {
+  vcl_string timestr;
+
   // Get time in seconds since Jan 1 1970
   vcl_time_t time_secs;
   vcl_time(&time_secs);   
@@ -74,9 +78,36 @@ vcl_string vul_get_time_as_string()
   struct vcl_tm *time;
   time = vcl_localtime(&time_secs);
 
-  // Get time & date as a string (remove trailing eol)
-  vcl_string timestr = vcl_asctime(time); 
-  vul_string_right_trim(timestr, "\n");
+  switch(style)
+  {
+  case vul_numeric_msf:
+    {
+      // Express as a series of space-separated numbers, most significant first
+      // e.g. yyyy mm dd hh mm ss
+      // NB Month, day start at 1. Hour, minute, second start at 0.
+      // Leading zeros are used for single-digit month,day,hour,min,sec.
+      vcl_ostringstream oss;
+      oss.fill('0');
+      oss << vcl_setw(4) << 1900+time->tm_year << " ";
+      oss << vcl_setw(2) << 1 + time->tm_mon << " ";
+      oss << vcl_setw(2) << time->tm_mday << " ";
+      oss << vcl_setw(2) << time->tm_hour << " ";
+      oss << vcl_setw(2) << time->tm_min << " ";
+      oss << vcl_setw(2) << time->tm_sec;
+      timestr = oss.str();
+    }
+    break;
+
+  default:
+    {
+      // Get local time & date using standard asctime() function, 
+      // Removes the trailing eol that asctime() inserts.
+      timestr = vcl_asctime(time); 
+      vul_string_right_trim(timestr, "\n");
+    }
+    break;
+  }
+
   return timestr;
 }
 
