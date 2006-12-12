@@ -50,6 +50,9 @@ compute_matches( rgrl_feature_set const&       from_set,
   }
 
   // reserve size
+  feat_vector matching_features;
+  matching_features.reserve( 10 );
+
   matches_sptr->reserve( from.size() );
 
   // set up a vector of same from size to indicate which feature shall be used
@@ -68,7 +71,7 @@ compute_matches( rgrl_feature_set const&       from_set,
     if( !validate( mapped, current_view.to_image_roi() ) )
       continue;   // feature is invalid
 
-    feat_vector matching_features; 
+    matching_features.clear();
     to_set.k_nearest_features( matching_features, mapped, k_ );
 
     // prune the matches to satisfy the threshold
