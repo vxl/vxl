@@ -27,7 +27,7 @@ in_vec_2( vcl_vector< rgrl_feature_sptr > const& vec,
 void
 test_feature_set_location_2( )
 {
-  vcl_vector< rgrl_feature_sptr > points;
+  vcl_vector< rgrl_feature_sptr > points, results;
   
   points.push_back( pf( vec2d( 0, 0 ) ) );  // 0
   points.push_back( pf( vec2d( 1, 0 ) ) );  // 1
@@ -53,41 +53,56 @@ test_feature_set_location_2( )
     
     roi.set_x0( vec2d( 0, 0 ) );
     roi.set_x1( vec2d( 4, 3 ) );
+    results.clear();
+    set_sptr->features_in_region( results, roi );
     TEST( "Retrieving in whole region",
-          set_sptr->features_in_region( roi ).size(),
+          results.size(),
           points.size() );
     
     roi.set_x0( vec2d( -0.5, -0.5 ) );
     roi.set_x1( vec2d( 1.5, 1.5 ) );
+    results.clear();
+    set_sptr->features_in_region( results, roi );
     TEST( "In small box",
-          set_sptr->features_in_region( roi ).size(),
+          results.size(),
           3 );
     
     roi.set_x0( vec2d( 0.5, 0.5 ) );
     roi.set_x1( vec2d( 0.9, 0.9 ) );
+    results.clear();
+    set_sptr->features_in_region( results, roi );
     TEST( "In empty box",
-          set_sptr->features_in_region( roi ).size(),
+          results.size(),
           0 );
     
-    
+    results.clear();
+    set_sptr->features_within_distance( results, pf( vec2d( 0, 0 ) ), 1.01 );
     TEST( "Radius delimited, 1",
-          set_sptr->features_within_distance( pf( vec2d( 0, 0 ) ), 1.01 ).size(),
+          results.size(),
           3 );
     
+    results.clear();
+    set_sptr->features_within_distance( results, pf( vec2d( 0, 1 ) ), 1.01 );
     TEST( "Radius delimited, 2",
-          set_sptr->features_within_distance( pf( vec2d( 0, 1 ) ), 1.01 ).size(),
+          results.size(),
           2 );
     
+    results.clear();
+    set_sptr->features_within_distance( results, pf( vec2d( 4, 3 ) ), 1.01 );
     TEST( "Radius delimited, 3",
-          set_sptr->features_within_distance( pf( vec2d( 4, 3 ) ), 1.01 ).size(),
+          results.size(),
           1 );
     
+    results.clear();
+    set_sptr->features_within_distance( results, pf( vec2d( 0.5, 0.5 ) ), 1.01 );
     TEST( "Radius delimited, 4",
-          set_sptr->features_within_distance( pf( vec2d( 0.5, 0.5 ) ), 1.01 ).size(),
+          results.size(),
           3 );
     
+    results.clear();
+    set_sptr->features_within_distance( results, pf( vec2d( 8, 3 ) ), 1.01 );
     TEST( "Radius delimited, no points",
-          set_sptr->features_within_distance( pf( vec2d( 8, 3 ) ), 1.01 ).size(),
+          results.size(),
           0 );
     
     TEST( "Nearest, from far away",
@@ -98,12 +113,16 @@ test_feature_set_location_2( )
           set_sptr->nearest_feature( pf( vec2d( 0.5, 0.6 ) ) ),
           points[2] );
     
+    results.clear();
+    set_sptr->k_nearest_features( results, pf( vec2d( 8, 3 ) ), 2 );
     testlib_test_begin( "Nearest 2, from far away" );
-    testlib_test_perform( in_vec_2( set_sptr->k_nearest_features( pf( vec2d( 8, 3 ) ), 2 ),
+    testlib_test_perform( in_vec_2( results,
                                     points[3], points[4] ) );
     
+    results.clear();
+    set_sptr->k_nearest_features( results, pf( vec2d( 0.6, 0.6 ) ), 2 );
     testlib_test_begin( "Nearest 2, from middle" );
-    testlib_test_perform( in_vec_2( set_sptr->k_nearest_features( pf( vec2d( 0.6, 0.6 ) ), 2 ),
+    testlib_test_perform( in_vec_2( results,
                                     points[2], points[1] ) );
   }
 }
@@ -111,8 +130,8 @@ test_feature_set_location_2( )
 void
 test_feature_set_location_3( )
 {
-  vcl_vector< rgrl_feature_sptr > points;
-  
+  vcl_vector< rgrl_feature_sptr > points, results;
+
   points.push_back( pf( vec3d( 0, 0, 0 ) ) );  // 0
   points.push_back( pf( vec3d( 1, 0, 0 ) ) );  // 1
   points.push_back( pf( vec3d( 0, 1, 0 ) ) );  // 2
@@ -134,41 +153,57 @@ test_feature_set_location_3( )
   
     roi.set_x0( vec3d( 0, 0, 0 ) );
     roi.set_x1( vec3d( 4, 3, 6 ) );
+    results.clear();
+    set_sptr->features_in_region( results, roi );
     TEST( "Retrieving in whole region",
-          set_sptr->features_in_region( roi ).size(),
+          results.size(),
           points.size() );
   
     roi.set_x0( vec3d( -0.5, -0.5, -0.5 ) );
     roi.set_x1( vec3d( 1.5, 1.5, 0.8 ) );
+    results.clear();
+    set_sptr->features_in_region( results, roi );
     TEST( "In small box",
-          set_sptr->features_in_region( roi ).size(),
+         results.size(),
           3 );
   
     roi.set_x0( vec3d( 0.5, 0.5, -0.5 ) );
     roi.set_x1( vec3d( 1.5, 1.5, 0.8 ) );
+    results.clear();
+    set_sptr->features_in_region( results, roi );
     TEST( "In empty box",
-          set_sptr->features_in_region( roi ).size(),
+          results.size(),
           0 );
   
   
+    results.clear();
+    set_sptr->features_within_distance( results, pf( vec3d( 0, 0, 0 ) ), 1.01 );
     TEST( "Radius delimited, 1",
-          set_sptr->features_within_distance( pf( vec3d( 0, 0, 0 ) ), 1.01 ).size(),
+          results.size(),
           3 );
   
+    results.clear();
+    set_sptr->features_within_distance( results, pf( vec3d( 0, 1, 0 ) ), 1.01 );
     TEST( "Radius delimited, 2",
-          set_sptr->features_within_distance( pf( vec3d( 0, 1, 0 ) ), 1.01 ).size(),
+          results.size(),
           3 );
   
+    results.clear();
+    set_sptr->features_within_distance( results, pf( vec3d( 4, 3, 6 ) ), 1.01 );
     TEST( "Radius delimited, 3",
-          set_sptr->features_within_distance( pf( vec3d( 4, 3, 6 ) ), 1.01 ).size(),
+          results.size(),
           1 );
   
+    results.clear();
+    set_sptr->features_within_distance( results, pf( vec3d( 0.5, 0.5, 0.5 ) ), 1.01 );
     TEST( "Radius delimited, 4",
-          set_sptr->features_within_distance( pf( vec3d( 0.5, 0.5, 0.5 ) ), 1.01 ).size(),
+          results.size(),
           4 );
   
+    results.clear();
+    set_sptr->features_within_distance( results, pf( vec3d( 8, 3, 6 ) ), 1.01 );
     TEST( "Radius delimited, no points",
-          set_sptr->features_within_distance( pf( vec3d( 8, 3, 6 ) ), 1.01 ).size(),
+          results.size(),
           0 );
   
     TEST( "Nearest, from far away",
@@ -179,12 +214,16 @@ test_feature_set_location_3( )
           set_sptr->nearest_feature( pf( vec3d( 0.5, 0.6, 0.4 ) ) ),
           points[2] );
   
+    results.clear();
+    set_sptr->k_nearest_features( results, pf( vec3d( 8, 3, 6 ) ), 2 );
     testlib_test_begin( "Nearest 2, from far away" );
-    testlib_test_perform( in_vec_2( set_sptr->k_nearest_features( pf( vec3d( 8, 3, 6 ) ), 2 ),
+    testlib_test_perform( in_vec_2( results,
                                     points[3], points[4] ) );
   
+    results.clear();
+    set_sptr->k_nearest_features( results, pf( vec3d( 0.6, 0.6, 0.4 ) ), 2 );
     testlib_test_begin( "Nearest 2, from middle" );
-    testlib_test_perform( in_vec_2( set_sptr->k_nearest_features( pf( vec3d( 0.6, 0.6, 0.4 ) ), 2 ),
+    testlib_test_perform( in_vec_2( results,
                                     points[2], points[1] ) );
   }
 }
