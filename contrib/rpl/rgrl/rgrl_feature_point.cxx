@@ -115,7 +115,7 @@ double
 rgrl_feature_point::
 transform_scale( rgrl_transformation const& xform ) const
 {
-#if 0 /*old method, rely on scaling factors*/
+#if 1 /*old method, rely on scaling factors*/
   // transform scale
   vnl_vector<double> const& scaling = xform.scaling_factors();
   const unsigned dim = this->location_.size();
