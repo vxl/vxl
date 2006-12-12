@@ -14,6 +14,7 @@
 class rsdl_kd_tree;
 #include <vbl/vbl_smart_ptr.h>
 typedef vbl_smart_ptr<rsdl_kd_tree> rsdl_kd_tree_sptr;
+#include <rsdl/rsdl_point.h>
 
 #include <rgrl/rgrl_feature.h>
 #include <rgrl/rgrl_feature_set.h>
@@ -56,13 +57,13 @@ class rgrl_feature_set_location
 
   ~rgrl_feature_set_location();
 
-  feature_vector
-  features_in_region( rgrl_mask_box const& roi ) const;
+  void
+  features_in_region( feature_vector& results, rgrl_mask_box const& roi ) const;
 
   //:  Return the features in a given circle/sphere.
   //
-  feature_vector
-  features_within_radius( vnl_vector<double> const& center, double radius ) const;
+  void
+  features_within_radius( feature_vector& results, vnl_vector<double> const& center, double radius ) const;
 
   //: Nearest feature based on Euclidean distance
   rgrl_feature_sptr
@@ -70,19 +71,19 @@ class rgrl_feature_set_location
 
   //: Nearest feature based on Euclidean distance
   rgrl_feature_sptr
-  nearest_feature( rgrl_feature_sptr feature ) const;
+  nearest_feature( rgrl_feature_sptr const& feature ) const;
 
   //: Return all features within a given Euclidean distance
-  feature_vector
-  features_within_distance( rgrl_feature_sptr feature, double distance ) const;
+  void
+  features_within_distance( feature_vector& results, rgrl_feature_sptr const& feature, double distance ) const;
 
   //:  Return the k nearest features based on Euclidean distance.
-  feature_vector
-  k_nearest_features( const vnl_vector<double>& feature_loc, unsigned int k ) const;
+  void
+  k_nearest_features( feature_vector& results, const vnl_vector<double>& feature_loc, unsigned int k ) const;
 
   //:  Return the k nearest features based on Euclidean distance.
-  feature_vector
-  k_nearest_features( rgrl_feature_sptr feature, unsigned int k ) const;
+  void
+  k_nearest_features( feature_vector& results, rgrl_feature_sptr const& feature, unsigned int k ) const;
 
   //:  Return the bounding box encloses the feature set
   rgrl_mask_box
@@ -95,6 +96,17 @@ class rgrl_feature_set_location
   // Defines type-related functions
   rgrl_type_macro( rgrl_feature_set_location, rgrl_feature_set );
 
+ protected:
+  inline
+  void clear_temp_storage() const
+  {
+    // do not use clear() here,
+    // because clear() may release the 
+    // storage space, which is not desired
+    temp_points_.resize(0);
+    temp_point_indices_.resize(0);
+  }
+
  private:
   const vcl_type_info* feature_type_;
 
@@ -102,6 +114,10 @@ class rgrl_feature_set_location
 
   // Using kd_tree as the data structure
   rsdl_kd_tree_sptr kd_tree_;
+  
+  // temp storage space
+  mutable vcl_vector<rsdl_point> temp_points_;
+  mutable vcl_vector<int>        temp_point_indices_;
 };
 
 

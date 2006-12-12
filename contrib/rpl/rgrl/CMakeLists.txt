@@ -34,7 +34,7 @@ SET( rgrl_sources
   rgrl_feature_set_location.h          rgrl_feature_set_location.txx
   rgrl_feature_set_bins.h              rgrl_feature_set_bins.txx
   rgrl_feature_set_bins_2d.h           rgrl_feature_set_bins_2d.cxx
-  rgrl_feature_set_location_masked.h   rgrl_feature_set_location_masked.txx
+  rgrl_feature_set_location_masked.h   rgrl_feature_set_location_masked.cxx
 
   rgrl_match_set.h                     rgrl_match_set.cxx            
   rgrl_match_set_sptr.h

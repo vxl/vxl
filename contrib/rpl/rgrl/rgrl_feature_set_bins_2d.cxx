@@ -72,35 +72,28 @@ rgrl_feature_set_bins_2d::
 }
 
 
-rgrl_feature_set_bins_2d::feature_vector
+void
 rgrl_feature_set_bins_2d::
-features_in_region( rgrl_mask_box const& roi ) const
+features_in_region( feature_vector& results, rgrl_mask_box const& roi ) const
 {
-  feature_vector results;
-
   assert( roi.x0().size() == 2 );
 
   bins_2d_->points_in_bounding_box( roi.x0(), roi.x1(), results );
-
-  return results;
 }
 
-rgrl_feature_set_bins_2d::feature_vector
+void
 rgrl_feature_set_bins_2d::
-features_within_radius( vnl_vector<double> const& center, double radius ) const
+features_within_radius( feature_vector& results, vnl_vector<double> const& center, double radius ) const
 {
-  feature_vector results;
-
   bins_2d_->points_within_radius( center, radius, results );
-
-  return results;
 }
 
 rgrl_feature_sptr
 rgrl_feature_set_bins_2d::
-nearest_feature( rgrl_feature_sptr feature ) const
+nearest_feature( rgrl_feature_sptr const& feature ) const
 {
-  feature_vector results = this->k_nearest_features( feature->location(), 1 );
+  feature_vector results;
+  bins_2d_->n_nearest( feature->location(), 1, results );
   assert( results.size() == 1 );
   return results[0];
 }
@@ -110,41 +103,34 @@ rgrl_feature_sptr
 rgrl_feature_set_bins_2d::
 nearest_feature( const vnl_vector<double>& loc ) const
 {
-  feature_vector results = this->k_nearest_features( loc, 1 );
+  feature_vector results;
+  bins_2d_->n_nearest( loc, 1, results );
   assert( results.size() == 1 );
   return results[0];
 }
 
 
-rgrl_feature_set_bins_2d::feature_vector
+void
 rgrl_feature_set_bins_2d::
-features_within_distance( rgrl_feature_sptr feature, double distance ) const
+features_within_distance( feature_vector& results, rgrl_feature_sptr const& feature, double distance ) const
 {
-  feature_vector results;
-
   bins_2d_->points_within_radius( feature->location(), distance, results );
-
-  return results;
 }
 
 //:  Return the k nearest features based on Euclidean distance.
-rgrl_feature_set_bins_2d::feature_vector
+void
 rgrl_feature_set_bins_2d::
-k_nearest_features( rgrl_feature_sptr feature, unsigned int k ) const
+k_nearest_features( feature_vector& results, rgrl_feature_sptr const& feature, unsigned int k ) const
 {
-  return k_nearest_features( feature->location(), k );
+  bins_2d_->n_nearest( feature->location(), k, results );
 }
 
 //:  Return the k nearest features based on Euclidean distance.
-rgrl_feature_set_bins_2d::feature_vector
+void
 rgrl_feature_set_bins_2d::
-k_nearest_features( const vnl_vector<double> & loc, unsigned int k ) const
+k_nearest_features( feature_vector& results, const vnl_vector<double> & loc, unsigned int k ) const
 {
-  feature_vector results;
-
   bins_2d_->n_nearest( loc, k, results );
-
-  return results;
 }
 
 rgrl_mask_box

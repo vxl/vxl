@@ -86,14 +86,14 @@ class rgrl_feature_set
   //:  Return the features in a given ROI.
   //
   virtual
-  feature_vector
-  features_in_region( rgrl_mask_box const& roi ) const = 0;
+  void
+  features_in_region( feature_vector& results, rgrl_mask_box const& roi ) const = 0;
 
   //:  Return the features in a given circle/sphere.
   //
   virtual
-  feature_vector
-  features_within_radius( vnl_vector<double> const& center, double radius ) const = 0;
+  void
+  features_within_radius( feature_vector& results, vnl_vector<double> const& center, double radius ) const = 0;
 
   //: Return the nearest feature to the given location.
   //
@@ -107,25 +107,25 @@ class rgrl_feature_set
   //: Return the nearest feature to the given location.
   virtual
   rgrl_feature_sptr
-  nearest_feature( rgrl_feature_sptr feature ) const = 0;
+  nearest_feature( rgrl_feature_sptr const& feature ) const = 0;
 
   //:  Return all features within a given distance of the given feature, one per segment (if segmented)
   //
   virtual
-  feature_vector
-  features_within_distance( rgrl_feature_sptr feature, double distance ) const = 0;
+  void
+  features_within_distance( feature_vector& results, rgrl_feature_sptr const& feature, double distance ) const = 0;
 
   //:  Return the k nearest features to the given location, one per segment (if segmented)
   //
   virtual
-  feature_vector
-  k_nearest_features( const vnl_vector<double>& feature_loc, unsigned int k ) const = 0;
+  void
+  k_nearest_features( feature_vector& results, const vnl_vector<double>& feature_loc, unsigned int k ) const = 0;
 
   //:  Return the k nearest features, one per segment (if segmented)
   //
   virtual
-  feature_vector
-  k_nearest_features( rgrl_feature_sptr feature, unsigned int k ) const = 0;
+  void
+  k_nearest_features( feature_vector& results, rgrl_feature_sptr const& feature, unsigned int k ) const = 0;
 
   //:  Return the bounding box encloses the feature set
   virtual

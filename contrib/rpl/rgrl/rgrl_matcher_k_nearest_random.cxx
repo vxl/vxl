@@ -68,7 +68,8 @@ compute_matches( rgrl_feature_set const&       from_set,
     if( !validate( mapped, current_view.to_image_roi() ) )
       continue;   // feature is invalid
 
-    feat_vector matching_features = to_set.k_nearest_features( mapped, k_ );
+    feat_vector matching_features; 
+    to_set.k_nearest_features( matching_features, mapped, k_ );
 
     // prune the matches to satisfy the threshold
     //

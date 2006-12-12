@@ -37,13 +37,13 @@ class rgrl_feature_set_bins_2d
 
   ~rgrl_feature_set_bins_2d();
 
-  feature_vector
-  features_in_region( rgrl_mask_box const& roi ) const;
+  void
+  features_in_region( feature_vector& results, rgrl_mask_box const& roi ) const;
 
   //:  Return the features in a given circle/sphere.
   //
-  feature_vector
-  features_within_radius( vnl_vector<double> const& center, double radius ) const;
+  void
+  features_within_radius( feature_vector& results, vnl_vector<double> const& center, double radius ) const;
 
   //: Nearest feature based on Euclidean distance
   rgrl_feature_sptr
@@ -51,19 +51,19 @@ class rgrl_feature_set_bins_2d
 
   //: Nearest feature based on Euclidean distance
   rgrl_feature_sptr
-  nearest_feature( rgrl_feature_sptr feature ) const;
+  nearest_feature( rgrl_feature_sptr const& feature ) const;
 
   //: Return all features within a given Euclidean distance
-  feature_vector
-  features_within_distance( rgrl_feature_sptr feature, double distance ) const;
+  void
+  features_within_distance( feature_vector& results, rgrl_feature_sptr const& feature, double distance ) const;
 
   //:  Return the k nearest features based on Euclidean distance.
-  feature_vector
-  k_nearest_features( const vnl_vector<double>& feature_loc, unsigned int k ) const;
+  void
+  k_nearest_features( feature_vector& results, const vnl_vector<double>& feature_loc, unsigned int k ) const;
 
   //:  Return the k nearest features based on Euclidean distance.
-  feature_vector
-  k_nearest_features( rgrl_feature_sptr feature, unsigned int k ) const;
+  void
+  k_nearest_features( feature_vector& results, rgrl_feature_sptr const& feature, unsigned int k ) const;
 
   //:  Return the bounding box encloses the feature set
   rgrl_mask_box

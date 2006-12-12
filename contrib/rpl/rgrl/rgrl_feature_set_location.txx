@@ -68,12 +68,10 @@ rgrl_feature_set_location<N>::
 
 
 template<unsigned N>
-typename rgrl_feature_set_location<N>::feature_vector
+void
 rgrl_feature_set_location<N>::
-features_in_region( rgrl_mask_box const& roi ) const
+features_in_region( feature_vector& results, rgrl_mask_box const& roi ) const
 {
-  feature_vector results;
-
   assert( roi.x0().size() == N );
 
   // Set the bounding box
@@ -82,47 +80,41 @@ features_in_region( rgrl_mask_box const& roi ) const
   rsdl_bounding_box box(min_point, max_point);
 
   // Extract pts in the bounding box
-  vcl_vector<rsdl_point> points_in_box;
-  vcl_vector<int> point_indices;
-  kd_tree_->points_in_bounding_box( box, points_in_box, point_indices );
+  clear_temp_storage();
+  kd_tree_->points_in_bounding_box( box, temp_points_, temp_point_indices_ );
 
   // transfer the closest_pts to result
   //
-  unsigned int num_pts = point_indices.size();
+  unsigned int num_pts = temp_point_indices_.size();
   for (unsigned int i = 0; i<num_pts; i++ )
-    results.push_back( fea_vec_[point_indices[i]] );
-  
-  return results;
+    results.push_back( fea_vec_[temp_point_indices_[i]] );
 }
 
 template<unsigned N>
-typename rgrl_feature_set_location<N>::feature_vector
+void
 rgrl_feature_set_location<N>::
-features_within_radius( vnl_vector<double> const& center, double radius ) const
+features_within_radius( feature_vector& results, vnl_vector<double> const& center, double radius ) const
 {
-  feature_vector results;
-
   // Extract pts
-  vcl_vector<rsdl_point> points_in_box;
-  vcl_vector<int> point_indices;
-  kd_tree_->points_in_radius(  center, radius, points_in_box, point_indices );
+  clear_temp_storage();
+  kd_tree_->points_in_radius(  center, radius, temp_points_, temp_point_indices_ );
 
   // transfer the closest_pts to result
   //
-  unsigned int num_pts = point_indices.size();
+  unsigned int num_pts = temp_point_indices_.size();
   results.reserve( num_pts );
   for (unsigned int i = 0; i<num_pts; i++ )
-    results.push_back( fea_vec_[point_indices[i]] );
+    results.push_back( fea_vec_[temp_point_indices_[i]] );
 
-  return results;
 }
 
 template<unsigned N>
 rgrl_feature_sptr
 rgrl_feature_set_location<N>::
-nearest_feature( rgrl_feature_sptr feature ) const
+nearest_feature( rgrl_feature_sptr const& feature ) const
 {
-  feature_vector results = this->k_nearest_features( feature->location(), 1 );
+  feature_vector results;
+  this->k_nearest_features( results, feature->location(), 1 );
   assert( results.size() == 1 );
   return results[0];
 }
@@ -133,62 +125,61 @@ rgrl_feature_sptr
 rgrl_feature_set_location<N>::
 nearest_feature( const vnl_vector<double>& loc ) const
 {
-  feature_vector results = this->k_nearest_features( loc, 1 );
+  feature_vector results;
+  this->k_nearest_features( results, loc, 1 );
   assert( results.size() == 1 );
   return results[0];
 }
 
 
 template<unsigned N>
-typename rgrl_feature_set_location<N>::feature_vector
+void
 rgrl_feature_set_location<N>::
-features_within_distance( rgrl_feature_sptr feature, double distance ) const
+features_within_distance( feature_vector& results, rgrl_feature_sptr const& feature, double distance ) const
 {
-  feature_vector results;
-
   rsdl_point query_point(feature->location());
-  vcl_vector<rsdl_point> points;
-  vcl_vector<int> indices;
-  kd_tree_->points_in_radius( query_point, distance, points, indices );
+  clear_temp_storage();
+  kd_tree_->points_in_radius( query_point, distance, temp_points_, temp_point_indices_ );
 
   // transfer the closest_pts to result
   //
-  unsigned int num_pts = indices.size();
+  unsigned int num_pts = temp_point_indices_.size();
   for (unsigned int i = 0; i<num_pts; i++ )
-    results.push_back( fea_vec_[indices[i]] );
-
-  return results;
+    results.push_back( fea_vec_[temp_point_indices_[i]] );
 }
 
 //:  Return the k nearest features based on Euclidean distance.
 template<unsigned N>
-typename rgrl_feature_set_location<N>::feature_vector
+void
 rgrl_feature_set_location<N>::
-k_nearest_features( rgrl_feature_sptr feature, unsigned int k ) const
+k_nearest_features( feature_vector& results, rgrl_feature_sptr const& feature, unsigned int k ) const
 {
-  return k_nearest_features( feature->location(), k );
+  rsdl_point query_point(feature->location());
+  clear_temp_storage();
+  kd_tree_->n_nearest( query_point, k, temp_points_, temp_point_indices_ );
+
+  // transfer the closest_pts to result
+  //
+  unsigned int num_pts = temp_point_indices_.size();
+  for (unsigned int i = 0; i<num_pts; i++ )
+    results.push_back( fea_vec_[temp_point_indices_[i]] );
 }
 
 //:  Return the k nearest features based on Euclidean distance.
 template<unsigned N>
-typename rgrl_feature_set_location<N>::feature_vector
+void
 rgrl_feature_set_location<N>::
-k_nearest_features( const vnl_vector<double> & loc, unsigned int k ) const
+k_nearest_features( feature_vector& results, const vnl_vector<double> & loc, unsigned int k ) const
 {
-  feature_vector results;
-
   rsdl_point query_point(loc);
-  vcl_vector<rsdl_point> closest_points;
-  vcl_vector<int> point_indices;
-  kd_tree_->n_nearest( query_point, k, closest_points, point_indices );
+  clear_temp_storage();
+  kd_tree_->n_nearest( query_point, k, temp_points_, temp_point_indices_ );
 
   // transfer the closest_pts to result
   //
-  unsigned int num_pts = point_indices.size();
+  unsigned int num_pts = temp_point_indices_.size();
   for (unsigned int i = 0; i<num_pts; i++ )
-    results.push_back( fea_vec_[point_indices[i]] );
-
-  return results;
+    results.push_back( fea_vec_[temp_point_indices_[i]] );
 }
 
 template<unsigned N>

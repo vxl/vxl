@@ -156,7 +156,7 @@ bool
 rgrl_view::
 features_in_region( feature_vector& features, rgrl_feature_set const& fea_set ) const
 {
-  features = fea_set.features_in_region( current_region_ );
+  fea_set.features_in_region( features, current_region_ );
   return true;
 }
 

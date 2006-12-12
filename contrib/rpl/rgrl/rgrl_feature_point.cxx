@@ -115,6 +115,7 @@ double
 rgrl_feature_point::
 transform_scale( rgrl_transformation const& xform ) const
 {
+#if 0 /*old method, rely on scaling factors*/
   // transform scale
   vnl_vector<double> const& scaling = xform.scaling_factors();
   const unsigned dim = this->location_.size();
@@ -136,8 +137,36 @@ transform_scale( rgrl_transformation const& xform ) const
     WarningMacro( "This feature has non-zero scale value, but transformation has no scaling factors."
                   << "The scale of transformed features is NOT set." );
   }
-
   return scale;
+
+#else  /*new method, though Jacobian of the transformation*/
+
+  const unsigned dim = this->location_.size();
+
+  // get jacobian
+  vnl_matrix<double> jac;
+  xform.jacobian_wrt_loc( jac, this->location() );
+  assert( jac.cols() == dim );
+
+  // each column in this jac matrix represents the change 
+  // on fixed image coordindate given one change on one of the axes of
+  // the moving image. 
+  // Thus, the magnitude of this column vector represents the scale change 
+  // on this particular axis. 
+  // Take the average of magnitude on all the axes
+  double cumulative_scale_change = 0.0;
+  for( unsigned i=0; i<jac.cols(); ++i ) {
+    
+    double sqr_mag = 0.0;
+    for( unsigned j=0; j<jac.rows(); ++j )
+      sqr_mag += vnl_math_sqr( jac(j,i) );
+    
+    cumulative_scale_change += vcl_sqrt( sqr_mag );
+  }
+  cumulative_scale_change /= jac.cols();
+
+  return cumulative_scale_change * this->scale();
+#endif
 }
 
 //:  Compute the signature weight between two features.
