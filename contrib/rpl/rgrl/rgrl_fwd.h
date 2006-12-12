@@ -27,7 +27,8 @@ class rgrl_feature_face_region;
 class rgrl_feature_landmark;
 class rgrl_feature_point;
 class rgrl_feature_set;
-class rgrl_feature_set_location_kd_tree;
+class rgrl_feature_set_bins2d;
+class rgrl_feature_set_location_masked;
 class rgrl_feature_trace_pt;
 class rgrl_feature_trace_region;
 class rgrl_initializer;
@@ -70,7 +71,7 @@ class rgrl_weighter_m_est;
 class rgrl_weighter_unit;
 
 template<unsigned N> class rgrl_feature_set_location;
-template<unsigned N> class rgrl_feature_set_location_masked;
+template<unsigned N> class rgrl_feature_set_bins;
 
 template<typename T> class rgrl_set_of;
 

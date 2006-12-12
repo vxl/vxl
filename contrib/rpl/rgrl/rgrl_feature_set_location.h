@@ -11,15 +11,13 @@
 //      based on point location alone 
 // \endverbatim
 
-#include <rsdl/rsdl_bins.h>
 class rsdl_kd_tree;
 #include <vbl/vbl_smart_ptr.h>
 typedef vbl_smart_ptr<rsdl_kd_tree> rsdl_kd_tree_sptr;
 
-#include "rgrl_feature.h"
-#include "rgrl_feature_set.h"
-#include "rgrl_mask.h"
-
+#include <rgrl/rgrl_feature.h>
+#include <rgrl/rgrl_feature_set.h>
+#include <rgrl/rgrl_mask.h>
 #include <vcl_memory.h>
 
 //: A set of features grouped only by N-d location.
@@ -54,8 +52,6 @@ class rgrl_feature_set_location
   //: Constructor.
   //  \a bin_size is only effective when \a use_bins is set true.
   rgrl_feature_set_location( feature_vector const& features,
-                             bool use_bins = true,
-                             double bin_size = 10,
                              rgrl_feature_set_label const& label = rgrl_feature_set_label() );
 
   ~rgrl_feature_set_location();
@@ -100,18 +96,11 @@ class rgrl_feature_set_location
   rgrl_type_macro( rgrl_feature_set_location, rgrl_feature_set );
 
  private:
-  typedef rsdl_bins<N,double,rgrl_feature_sptr> bin_type;
-
   const vcl_type_info* feature_type_;
 
   rgrl_mask_box bounding_box_;
 
-  // Using bins as the data structure
-  vcl_auto_ptr< bin_type > bins_;
-  bool use_bins_;
-
   // Using kd_tree as the data structure
-  feature_vector features_;
   rsdl_kd_tree_sptr kd_tree_;
 };
 

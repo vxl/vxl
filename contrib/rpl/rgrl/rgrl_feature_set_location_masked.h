@@ -13,34 +13,52 @@
 //      based on point location alone 
 // \endverbatim
 
-#include "rgrl_feature_set_location.h"
-#include "rgrl_mask.h"
-#include "rgrl_mask_sptr.h"
+#include <rgrl/rgrl_feature_set.h>
+#include <rgrl/rgrl_feature_sptr.h>
+#include <rgrl/rgrl_mask.h>
+#include <rgrl/rgrl_mask_sptr.h>
 
 //: Represents a set of point features, valid in the masked region
 //
-template <unsigned N>
 class rgrl_feature_set_location_masked
-  : public rgrl_feature_set_location<N>
+  : public rgrl_feature_set
 {
  public:
-  typedef typename rgrl_feature_set_location<N>::feature_vector feature_vector;
 
-  rgrl_feature_set_location_masked( feature_vector const& features,
-                                    rgrl_mask_sptr mask,
-                                    bool use_bins = true,
-                                    double bin_size = 10 )
-  : rgrl_feature_set_location<N>(features, use_bins, bin_size), mask_( mask ) {}
+  rgrl_feature_set_location_masked( rgrl_feature_set_sptr const& fea_set,
+                                    rgrl_mask_sptr mask )
+  : fea_set_sptr_( fea_set ), mask_( mask ),
+    rgrl_feature_set( fea_set->all_features(), fea_set->label() )
+  {}
 
   ~rgrl_feature_set_location_masked() {}
-
+  
+  //:  Return all the features
+  //
+  feature_vector const&
+  all_features( ) const
+  { return fea_set_sptr_->all_features(); }
+  
+  
+  //:  Return the bounding box encloses the feature set
+  rgrl_mask_box
+  bounding_box() const
+  { return fea_set_sptr_->bounding_box(); }
+  
+  //:  Return the type of feature
+  //
+  virtual
+  const vcl_type_info&
+  type() const
+  { return fea_set_sptr_->type(); }
+  
   feature_vector
   features_in_region( rgrl_mask_box const& roi ) const
   {
     feature_vector final_results;
-    feature_vector results = rgrl_feature_set_location<N>::features_in_region( roi );
+    feature_vector results = fea_set_sptr_->features_in_region( roi );
     // check if features are in the valid region
-    typedef typename feature_vector::iterator fvec_itr;
+    typedef feature_vector::iterator fvec_itr;
     for ( fvec_itr fitr = results.begin(); fitr != results.end(); ++fitr )
       if ( mask_->inside( (*fitr)->location() ) )
         final_results.push_back( *fitr );
@@ -53,9 +71,9 @@ class rgrl_feature_set_location_masked
   features_within_radius( vnl_vector<double> const& center, double radius ) const
   {
     feature_vector final_results;
-    feature_vector results = rgrl_feature_set_location<N>::features_within_radius( center, radius );
+    feature_vector results = fea_set_sptr_->features_within_radius( center, radius );
     // check if features are in the valid region
-    typedef typename feature_vector::iterator fvec_itr;
+    typedef feature_vector::iterator fvec_itr;
     for ( fvec_itr fitr = results.begin(); fitr != results.end(); ++fitr )
       if ( mask_->inside( (*fitr)->location() ) )
         final_results.push_back( *fitr );
@@ -68,7 +86,7 @@ class rgrl_feature_set_location_masked
   nearest_feature( rgrl_feature_sptr feature ) const
   {
     return mask_->inside(feature->location()) ?
-           rgrl_feature_set_location<N>::nearest_feature( feature ) :
+           fea_set_sptr_->nearest_feature( feature ) :
            (rgrl_feature_sptr)0;
   }
 
@@ -78,7 +96,7 @@ class rgrl_feature_set_location_masked
   nearest_feature( const vnl_vector<double>& loc ) const
   {
     return mask_->inside(loc) ?
-           rgrl_feature_set_location<N>::nearest_feature( loc ) :
+           fea_set_sptr_->nearest_feature( loc ) :
            (rgrl_feature_sptr)0;
   }
 
@@ -88,7 +106,7 @@ class rgrl_feature_set_location_masked
   features_within_distance( rgrl_feature_sptr feature, double distance ) const
   {
     return mask_->inside(feature->location()) ?
-           rgrl_feature_set_location<N>::features_within_distance( feature , distance) :
+           fea_set_sptr_->features_within_distance( feature , distance) :
            feature_vector();
   }
 
@@ -98,7 +116,7 @@ class rgrl_feature_set_location_masked
   {
     feature_vector results;
     return mask_->inside(loc) ?
-           rgrl_feature_set_location<N>::k_nearest_features(loc, k) :
+           fea_set_sptr_->k_nearest_features(loc, k) :
            feature_vector();
   }
 
@@ -108,15 +126,16 @@ class rgrl_feature_set_location_masked
   {
     feature_vector results;
     return mask_->inside(feature->location()) ?
-           rgrl_feature_set_location<N>::k_nearest_features(feature, k) :
+           fea_set_sptr_->k_nearest_features(feature, k) :
            feature_vector();
   }
 
   // Defines type-related functions
-  rgrl_type_macro( rgrl_feature_set_location_masked, rgrl_feature_set_location<N>);
+  rgrl_type_macro( rgrl_feature_set_location_masked, rgrl_feature_set);
 
  private:
-  rgrl_mask_sptr mask_;
+  rgrl_feature_set_sptr  fea_set_sptr_;
+  rgrl_mask_sptr         mask_;
 };
 
 #endif
