@@ -74,9 +74,6 @@ class rgrl_view
   rgrl_mask_box const& region() const
   { return current_region_; }
   
-  //:  Access current transformation region in "from" image coords as mask smart ptr
-  rgrl_mask_sptr region_as_sptr() const;
-
   //: set current region in "from" image coords
   void set_region( rgrl_mask_box const& box )
   { current_region_ = box; }
@@ -124,6 +121,15 @@ class rgrl_view
   //:  Return true if the current resolution is the finest level
   bool is_at_finest_resolution() const;
 
+  //: get number of updates on global region
+  int num_updates_global_region() const
+  { return num_updates_global_region_; }
+  
+  //: set number of updates on global region
+  //  shall be done inside view generator
+  void set_num_updates_global_region(int num)
+  { num_updates_global_region_ = num; }
+
   //: extract features within current region
   //  feature vector will be cleared before the operation
   virtual
@@ -147,6 +153,10 @@ class rgrl_view
   virtual
   rgrl_view_sptr scale_by( unsigned new_resol, double scaling ) const;
 
+  virtual
+  bool
+  inside_current_region( vnl_vector<double> const& loc );
+  
 #if 0
   //: True iff all the components are equal.
   bool operator==( const rgrl_view& other ) const;
@@ -172,6 +182,7 @@ class rgrl_view
   rgrl_transformation_sptr   inverse_estimate_;
   
   unsigned                   current_resolution_;
+  int                        num_updates_global_region_;
 };
 
 

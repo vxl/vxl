@@ -17,7 +17,8 @@ rgrl_view()
     to_image_roi_(0),
     current_region_(0),
     global_region_(0),
-    current_resolution_(0)
+    current_resolution_(0),
+    num_updates_global_region_(0)
 {
 }
 
@@ -37,7 +38,8 @@ rgrl_view( rgrl_mask_sptr          const& from_image_roi,
     xform_estimator_( xform_estimator ),
     xform_estimate_( xform_estimate ),
     inverse_estimate_( inverse_estimate ),
-    current_resolution_( resolution )
+    current_resolution_( resolution ),
+    num_updates_global_region_(0)
 {
   if ( !from_image_roi || !to_image_roi )
   {
@@ -158,11 +160,11 @@ features_in_region( feature_vector& features, rgrl_feature_set const& fea_set ) 
   return true;
 }
 
-rgrl_mask_sptr 
+bool
 rgrl_view::
-region_as_sptr() const
+inside_current_region( vnl_vector<double> const& loc )
 {
-  return new rgrl_mask_box( current_region_ );
+  return current_region_.inside( loc );
 }
 
 #if 0
