@@ -70,6 +70,7 @@
 
 #include <rgrl/rgrl_feature_based_registration.h>
 #include <rgrl/rgrl_feature_set_location_masked.h>
+#include <rgrl/rgrl_feature_set_bins_2d.h>
 #include <rgrl/rgrl_trans_quadratic.h>
 #include <rgrl/rgrl_est_quadratic.h>
 #include <rgrl/rgrl_trans_similarity.h>
@@ -242,10 +243,10 @@ main( int argc, char* argv[] )
   rgrl_mask_sptr mask = new rgrl_mask_2d_image( mask_image );
 
   moving_feature_set =
-    new rgrl_feature_set_location_masked<dimension>(moving_set,
+    new rgrl_feature_set_location_masked( new rgrl_feature_set_bins_2d(moving_set),
                                                     mask);
   fixed_feature_set =
-    new rgrl_feature_set_location_masked<dimension>(fixed_set,
+    new rgrl_feature_set_location_masked( new rgrl_feature_set_bins_2d(fixed_set),
                                                     mask);
   rgrl_mask_sptr moving_image_region = new rgrl_mask_box( moving_feature_set->bounding_box() );
   rgrl_mask_sptr fixed_image_region  = new rgrl_mask_box( fixed_feature_set->bounding_box() );

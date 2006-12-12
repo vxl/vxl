@@ -181,9 +181,9 @@ main( int argc, char* argv[] )
   rgrl_feature_set_sptr fixed_feature_set;
   bool use_bins = true;
   moving_feature_set =
-    new rgrl_feature_set_location<dimension>(moving_feature_points, !use_bins);
+    new rgrl_feature_set_location<dimension>(moving_feature_points );
   fixed_feature_set =
-    new rgrl_feature_set_location<dimension>(fixed_feature_points, !use_bins);
+    new rgrl_feature_set_location<dimension>(fixed_feature_points );
 
   // Transformation estimator
   //

@@ -155,9 +155,9 @@ main( int argc, char* argv[] )
   const unsigned int dimension = 3;
   bool use_bins = true;
   rgrl_feature_set_sptr moving_feature_set =
-    new rgrl_feature_set_location<dimension>(moving_feature_points, !use_bins);
+    new rgrl_feature_set_location<dimension>(moving_feature_points);
   rgrl_feature_set_sptr fixed_feature_set =
-    new rgrl_feature_set_location<dimension>(fixed_feature_points, !use_bins);
+    new rgrl_feature_set_location<dimension>(fixed_feature_points);
   rgrl_mask_box moving_image_roi = moving_feature_set->bounding_box();
   rgrl_mask_box fixed_image_roi = fixed_feature_set->bounding_box();
   // EndCodeSnippet

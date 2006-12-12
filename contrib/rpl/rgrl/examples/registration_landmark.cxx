@@ -49,6 +49,7 @@
 #include <rgrl/rgrl_initializer_ran_sam.h>
 #include <rgrl/rgrl_feature_landmark.h>
 #include <rgrl/rgrl_feature_set_location_masked.h>
+#include <rgrl/rgrl_feature_set_bins.h>
 #include <rgrl/rgrl_matcher_k_nearest.h>
 #include <rgrl/rgrl_match_set.h>
 
@@ -177,10 +178,10 @@ main( int argc, char* argv[] )
   //
   const unsigned int dimension = 2;
   rgrl_feature_set_sptr moving_feature_set =
-    new rgrl_feature_set_location_masked<dimension>(moving_landmark_set,
+    new rgrl_feature_set_location_masked( new  rgrl_feature_set_bins<dimension>(moving_landmark_set),
                                                     mask);
   rgrl_feature_set_sptr fixed_feature_set =
-    new rgrl_feature_set_location_masked<dimension>(fixed_landmark_set,
+    new rgrl_feature_set_location_masked( new  rgrl_feature_set_bins<dimension>(fixed_landmark_set),
                                                     mask);
   rgrl_mask_sptr moving_image_region = new rgrl_mask_box( moving_feature_set->bounding_box() );
   rgrl_mask_sptr fixed_image_region  = new rgrl_mask_box( fixed_feature_set->bounding_box() );
