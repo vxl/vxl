@@ -41,7 +41,11 @@ vpgl_construct_cameras::~vpgl_construct_cameras()
 {
 }
 
-//: to construct the cameras according to the correspondence given
+//: To construct the cameras according to the correspondence given
+//
+// - Computes fundamental matrix F using least squares solution (no RANSAC)
+// - Computes essential matrix E from F and supplied calibration matrix K
+// - Computes the camera pose such that all points are in front of the camera
 bool vpgl_construct_cameras::construct()
 {
     vcl_vector<vgl_homg_point_2d<double> > p0,p1;
