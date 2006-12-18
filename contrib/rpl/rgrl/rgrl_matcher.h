@@ -34,7 +34,8 @@ class rgrl_matcher
                    rgrl_feature_set const&    to_features,
                    rgrl_view const&           current_view,
                    rgrl_transformation const& current_xform,
-                   rgrl_scale const&          current_scale ) = 0;
+                   rgrl_scale const&          current_scale,
+                   rgrl_match_set_sptr const& old_matches = 0 ) = 0;
 
   //: Build the matches with a view (new interface)
   //

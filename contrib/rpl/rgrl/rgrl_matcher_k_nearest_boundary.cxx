@@ -28,7 +28,8 @@ compute_matches( rgrl_feature_set const&       from_set,
                  rgrl_feature_set const&       to_set,
                  rgrl_view const&              current_view,
                  rgrl_transformation const&    current_xform,
-                 rgrl_scale const&             current_scale )
+                 rgrl_scale const&             current_scale,
+                 rgrl_match_set_sptr const&    /*old_matches*/ )
 {
   typedef rgrl_match_set::from_iterator FIter;
   typedef FIter::to_iterator TIter;

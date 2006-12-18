@@ -36,7 +36,8 @@ class rgrl_matcher_k_nearest
                    rgrl_feature_set const&       to_features,
                    rgrl_view const&              current_view,
                    rgrl_transformation const&    current_xform,
-                   rgrl_scale const&             /* current_scale */ );
+                   rgrl_scale const&             /* current_scale */,
+                   rgrl_match_set_sptr const& old_matches = 0 );
 
 
   // Defines type-related functions
@@ -45,6 +46,7 @@ class rgrl_matcher_k_nearest
  protected:
 
   //: validate the mapped feature
+  inline
   bool validate( rgrl_feature_sptr const& mapped, rgrl_mask_sptr const& roi_sptr ) const;
 
   // nodes to be sorted based on distance

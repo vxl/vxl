@@ -43,7 +43,8 @@ compute_matches( rgrl_feature_set const&       from_set,
                  rgrl_feature_set const&       to_set,
                  rgrl_view const&              current_view,
                  rgrl_transformation const&    current_xform,
-                 rgrl_scale const&             /* current_scale */ )
+                 rgrl_scale const&             /* current_scale */,
+                 rgrl_match_set_sptr const&    /*old_matches*/ )
 {
   typedef rgrl_view::feature_vector feat_vector;
   typedef feat_vector::const_iterator feat_iter;
@@ -165,7 +166,7 @@ add_one_flipped_match( rgrl_match_set_sptr&      inv_set,
     inv_set->add_feature_matches_and_weights( from, mapped, matching_tos, sig_wgts );
 }
 
-
+inline
 bool
 rgrl_matcher_k_nearest::
 validate( rgrl_feature_sptr const& mapped, rgrl_mask_sptr const& roi_sptr ) const
