@@ -2,12 +2,6 @@
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-# CM DSP Header file
-# This file is read by the build system of cm, and is used as the top part of
-# a microsoft project dsp header file
-# IF this is in a dsp file, then it is not the header, but has
-# already been used, so do not edit here...
-
 # variables to REPLACE
 # 
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/core" /I "$(VXLROOT)/contrib/oxl" /I "$(VXLROOT)/v3p/jpeg" /I "$(VXLROOT)/v3p/png" /I "$(VXLROOT)/v3p/zlib" /I "$(VXLROOT)/v3p/tiff" /I "$(VXLROOT)/v3p" == include path
@@ -87,7 +81,6 @@ LINK32=link.exe
 # ADD LINK32 /libpath:"$(VXLROOT)/core/vul/$(IntDir)"
 # ADD LINK32 "opengl32.lib" "glu32.lib" "osl.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "mvl.lib" "vgui_mfc.lib" "vgui.lib" "Qv.lib" "vgl.lib" "vil.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vul.lib" "vbl.lib" "vpl.lib" "vcl.lib" /STACK:10000000 
 
-
 !ELSEIF  "$(CFG)" == "glmovie - Win32 Debug"
 
 # PROP BASE Use_MFC 6
@@ -143,20 +136,13 @@ LINK32=link.exe
 # Name "glmovie - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
-
 SOURCE=.\glmovie.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\make_index.cxx
-
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
-

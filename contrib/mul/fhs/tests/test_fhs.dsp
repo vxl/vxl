@@ -2,12 +2,6 @@
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-# CM DSP Header file
-# This file is read by the build system of cm, and is used as the top part of
-# a microsoft project dsp header file
-# IF this is in a dsp file, then it is not the header, but has
-# already been used, so do not edit here...
-
 # variables to REPLACE
 # 
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" == include path
@@ -78,7 +72,6 @@ LINK32=link.exe
 # ADD LINK32 /libpath:"$(VXLROOT)/core/vsl/$(OUTDIR)"
 # ADD LINK32 "fhs.lib" "vimt.lib" "vnl.lib" "vil_algo.lib" "vil.lib" "netlib.lib" "vsl.lib" "vcl.lib" /STACK:10000000
 
-
 !ELSEIF  "$(CFG)" == "test_fhs - Win32 Debug"
 
 # PROP BASE Use_MFC 0
@@ -125,7 +118,7 @@ LINK32=link.exe
 # Name "test_fhs - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\test_driver.cxx
 # End Source File

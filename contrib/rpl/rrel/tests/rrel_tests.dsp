@@ -210,7 +210,7 @@ LINK32=link.exe
 # Name "rrel_test_driver - Win32 RelWithDebInfo"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\similarity_from_matches.cxx
 # End Source File
@@ -258,12 +258,10 @@ SOURCE=.\test_shift2d_est.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\similarity_from_matches.h
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project

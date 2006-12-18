@@ -4,7 +4,7 @@
 # Name "vdtop - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\vpyr_2_pyramid_base.cxx
 # End Source File
@@ -13,7 +13,7 @@ SOURCE=.\vpyr_2_tpyramid_base.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\vpyr_2_pyramid.h
 # End Source File
@@ -59,7 +59,6 @@ SOURCE=.\vpyr_top_tmap.h
 # Begin Source File
 SOURCE=.\vpyr_top_tmap.txx
 # End Source File
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project

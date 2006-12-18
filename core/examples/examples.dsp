@@ -82,7 +82,7 @@ LINK32=link.exe
 # Name "examples - Win32 Release"
 # Name "examples - Win32 Debug"
 # Begin Group "Source Files"
-# PROP Default_Filter "c;cxx"
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\create_image_vil.cxx
 # End Source File

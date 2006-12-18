@@ -78,76 +78,48 @@ LIB32=link.exe -lib
 # Name "container - Win32 Debug"
 
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
-
 SOURCE=.\CoolArray_to_CoolList.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\CoolArray_to_vcl_list.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\CoolArray_to_vcl_vector.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\CoolList_to_CoolArray.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\CoolList_to_vcl_list.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\CoolList_to_vcl_vector.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vcl_list_to_CoolArray.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vcl_list_to_CoolList.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vcl_list_to_vcl_vector.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vcl_vector_to_CoolArray.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vcl_vector_to_CoolList.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vcl_vector_to_vcl_list.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vcl_vector_to_vnl_vector.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vnl_vector_to_vcl_vector.h
-
 # End Source File
 # End Group
 # End Target

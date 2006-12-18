@@ -2,12 +2,6 @@
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-# ITK DSP Header file
-# This file is read by the build system of itk, and is used as the top part of
-# a microsoft project dsp header file
-# IF this is in a dsp file, then it is not the header, but has
-# already been used, so do not edit here...
-
 # variables to REPLACE
 # 
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/tbl" == include path
@@ -97,7 +91,7 @@ LIB32=link.exe -lib
 # Name "vepl2 - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\Templates/vepl2_convert+double-.cxx
 # End Source File
@@ -160,7 +154,7 @@ SOURCE=.\vepl2_y_gradient.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\vepl2_add_random_noise.h
 # End Source File
@@ -221,8 +215,6 @@ SOURCE=.\accessors/vipl_accessors_vil_image_view_base.txx
 # Begin Source File
 SOURCE=.\section/vipl_filterable_section_container_generator_vil_image_view_base.txx
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project

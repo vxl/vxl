@@ -2,7 +2,6 @@
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-
 # variables to REPLACE
 # 
 #  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\v3p" == include path
@@ -95,9 +94,6 @@ LINK32=link.exe
 # ADD LINK32 ws2_32.lib
 # ADD LINK32 /STACK:10000000 
 
-
-
-
 !ELSEIF  "$(CFG)" == "mfc_example - Win32 Debug"
 
 # PROP BASE Use_MFC 6
@@ -154,11 +150,8 @@ LINK32=link.exe
 # ADD LINK32 ws2_32.lib
 # ADD LINK32 /STACK:10000000 
 
-
-
-
-
 !ELSEIF  "$(CFG)" == "mfc_example - Win32 MinSizeRel"
+
 # PROP BASE Use_MFC 6
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "MinSizeRel"
@@ -210,9 +203,6 @@ LINK32=link.exe
 # ADD LINK32 jpeg.lib
 # ADD LINK32 ws2_32.lib
 # ADD LINK32 /STACK:10000000 
-
-
-
 
 !ELSEIF  "$(CFG)" == "mfc_example - Win32 RelWithDebInfo"
 
@@ -270,9 +260,6 @@ LINK32=link.exe
 # ADD LINK32 ws2_32.lib
 # ADD LINK32 /STACK:10000000 
 
-
-
-
 !ENDIF 
 
 # Begin Target
@@ -283,7 +270,7 @@ LINK32=link.exe
 # Name "mfc_example - Win32 RelWithDebInfo"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\MainFrm.cpp
 # End Source File
@@ -304,7 +291,7 @@ SOURCE=.\example_mfcView.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\MainFrm.h
 # End Source File
@@ -321,8 +308,5 @@ SOURCE=.\example_mfcDoc.h
 SOURCE=.\example_mfcView.h
 # End Source File
 # End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
-# End Group
 # End Target
 # End Project
-

@@ -78,66 +78,42 @@ LIB32=link.exe -lib
 # Name "math - Win32 Debug"
 
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
-
 SOURCE=.\CoolMatrix_to_vnl_matrix.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\CoolVector_to_vnl_vector.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\IUE_matrix_to_vnl_matrix.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\IUE_vector_to_vnl_vector.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_array_to_vnl_matrix.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vbl_array_to_vnl_vector.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vnl_matrix_to_CoolMatrix.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vnl_matrix_to_IUE_matrix.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vnl_matrix_to_vbl_array.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vnl_vector_to_CoolVector.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vnl_vector_to_IUE_vector.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vnl_vector_to_vbl_array.h
-
 # End Source File
 # End Group
 # End Target

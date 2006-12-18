@@ -2,12 +2,6 @@
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-# ITK DSP Header file
-# This file is read by the build system of itk, and is used as the top part of
-# a microsoft project dsp header file
-# IF this is in a dsp file, then it is not the header, but has
-# already been used, so do not edit here...
-
 # variables to REPLACE
 # 
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/gel" /I "$(VXLROOT)/contrib/oxl" == include path
@@ -97,98 +91,61 @@ LIB32=link.exe -lib
 # Name "vgel_kl - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx;c"
 # Begin Source File
-
 SOURCE=.\convolve.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\error.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\klt.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\klt_util.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pnmio.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pyramid.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\selectGoodFeatures.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\storeFeatures.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\trackFeatures.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\writeFeatures.c
-
 # End Source File
 # End Group
 # Begin Group "Header Files"
-
-# PROP Default_Filter "h;hpp;hxx;hm;inl"
+# PROP Default_Filter "h;txx"
 # Begin Source File
-
 SOURCE=.\base.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\convolve.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\error.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\klt.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\klt_util.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pnmio.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\pyramid.h
-
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project

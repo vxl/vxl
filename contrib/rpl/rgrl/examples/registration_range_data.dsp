@@ -199,7 +199,7 @@ LINK32=link.exe
 # Name "registration_range_data - Win32 RelWithDebInfo"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\registration_range_data.cxx
 # End Source File

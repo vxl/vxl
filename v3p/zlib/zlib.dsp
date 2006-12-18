@@ -2,12 +2,6 @@
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-# ITK DSP Header file
-# This file is read by the build system of itk, and is used as the top part of
-# a microsoft project dsp header file
-# IF this is in a dsp file, then it is not the header, but has
-# already been used, so do not edit here...
-
 # variables to REPLACE
 # 
 # /I "$(VXLROOT)/vcl/config.win32" == include path
@@ -97,139 +91,85 @@ LIB32=link.exe -lib
 # Name "zlib - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "c"
 # Begin Source File
-
 SOURCE=.\adler32.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\compress.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\crc32.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\deflate.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\gzio.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\infblock.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\infcodes.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\inffast.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\inflate.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\inftrees.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\infutil.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\trees.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\uncompr.c
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\zutil.c
-
 # End Source File
 # End Group
 # Begin Group "Header Files"
-
-# PROP Default_Filter "h;hpp;hxx;hm;inl"
+# PROP Default_Filter "h"
 # Begin Source File
-
 SOURCE=.\deflate.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\infblock.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\infcodes.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\inffast.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\inffixed.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\inftrees.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\infutil.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\trees.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\zconf.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\zlib.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\zutil.h
-
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
-

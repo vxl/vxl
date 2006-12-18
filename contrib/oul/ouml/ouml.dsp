@@ -2,7 +2,6 @@
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-
 # variables to REPLACE
 # 
 #  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\oul" == include path
@@ -62,8 +61,6 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-
-
 !ELSEIF  "$(CFG)" == "ouml - Win32 Debug"
 
 # PROP BASE Use_MFC 0
@@ -88,8 +85,6 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-
-
 
 !ELSEIF  "$(CFG)" == "ouml - Win32 MinSizeRel"
 
@@ -118,8 +113,6 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-
-
 !ELSEIF  "$(CFG)" == "ouml - Win32 RelWithDebInfo"
 
 # PROP BASE Use_MFC 0
@@ -146,8 +139,6 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-
-
 !ENDIF 
 
 # Begin Target
@@ -156,7 +147,6 @@ LIB32=link.exe -lib
 # Name "ouml - Win32 Debug"
 # Name "ouml - Win32 MinSizeRel"
 # Name "ouml - Win32 RelWithDebInfo"
-
 
 # Begin Source File
 SOURCE=.\image_convert.txx
@@ -168,7 +158,7 @@ SOURCE=.\image_ops.txx
 SOURCE=.\io.txx
 # End Source File
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\eigenfaces.cxx
 # End Source File
@@ -183,7 +173,7 @@ SOURCE=.\CardinalSpline.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\eigenfaces.h
 # End Source File
@@ -217,8 +207,6 @@ SOURCE=.\polygon_mesh.h
 # Begin Source File
 SOURCE=.\CardinalSpline.h
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project

@@ -2,7 +2,6 @@
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-
 # variables to REPLACE
 # 
 #  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\oul" == include path
@@ -62,8 +61,6 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-
-
 !ELSEIF  "$(CFG)" == "ouel - Win32 Debug"
 
 # PROP BASE Use_MFC 0
@@ -88,8 +85,6 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-
-
 
 !ELSEIF  "$(CFG)" == "ouel - Win32 MinSizeRel"
 
@@ -118,8 +113,6 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-
-
 !ELSEIF  "$(CFG)" == "ouel - Win32 RelWithDebInfo"
 
 # PROP BASE Use_MFC 0
@@ -146,8 +139,6 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-
-
 !ENDIF 
 
 # Begin Target
@@ -157,21 +148,17 @@ LIB32=link.exe -lib
 # Name "ouel - Win32 MinSizeRel"
 # Name "ouel - Win32 RelWithDebInfo"
 
-
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\kalman_filter.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\kalman_filter.h
 # End Source File
 # End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
-# End Group
 # End Target
 # End Project
-

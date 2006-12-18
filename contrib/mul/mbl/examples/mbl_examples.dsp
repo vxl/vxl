@@ -182,7 +182,7 @@ LINK32=link.exe
 # Name "mbl_examples - Win32 RelWithDebInfo"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\parse_file_example.cxx
 # End Source File

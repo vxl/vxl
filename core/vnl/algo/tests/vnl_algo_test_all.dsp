@@ -83,7 +83,7 @@ LINK32=link.exe
 # Name "vnl_algo_test_all - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter "cxx;c"
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\test_driver.cxx
 # End Source File
@@ -179,7 +179,7 @@ SOURCE=.\test_ldl_cholesky.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter "txx;h"
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\test_util.h
 # End Source File

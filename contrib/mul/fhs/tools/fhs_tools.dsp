@@ -214,7 +214,7 @@ LINK32=link.exe
 # Name "fhs_to_divx - Win32 RelWithDebInfo"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\find_matches.cxx
 # End Source File

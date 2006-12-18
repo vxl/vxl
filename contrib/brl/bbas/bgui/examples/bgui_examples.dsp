@@ -240,7 +240,7 @@ LINK32=link.exe
 # Name "bgui_examples - Win32 RelWithDebInfo"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\basic01_pick_tableau.cxx
 # End Source File

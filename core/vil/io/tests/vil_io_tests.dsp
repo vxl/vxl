@@ -2,7 +2,6 @@
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-
 # variables to REPLACE
 # 
 #  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\v3p\png" /I "$(VXLROOT)\v3p\zlib" /I "$(VXLROOT)\v3p\jpeg" /I "$(VXLROOT)\v3p\tiff" == include path
@@ -207,7 +206,7 @@ LINK32=link.exe
 # Name "vil_io_test_driver - Win32 RelWithDebInfo"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\test_driver.cxx
 # End Source File
@@ -220,8 +219,6 @@ SOURCE=.\test_image_view_io.cxx
 # Begin Source File
 SOURCE=.\test_memory_chunk_io.cxx
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project

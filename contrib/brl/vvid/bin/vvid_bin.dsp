@@ -98,9 +98,6 @@ LINK32=link.exe
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
 
-
-
-
 !ELSEIF  "$(CFG)" == "vidfpl - Win32 Debug"
 
 # PROP BASE Use_MFC 0
@@ -163,9 +160,6 @@ LINK32=link.exe
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
 
-
-
-
 !ELSEIF  "$(CFG)" == "vidfpl - Win32 MinSizeRel"
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -224,9 +218,6 @@ LINK32=link.exe
 # ADD LINK32 Qv.lib
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
-
-
-
 
 !ELSEIF  "$(CFG)" == "vidfpl - Win32 RelWithDebInfo"
 
@@ -298,7 +289,7 @@ LINK32=link.exe
 # Name "vidfpl - Win32 RelWithDebInfo"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\vidfpl.cxx
 # End Source File
@@ -328,7 +319,7 @@ SOURCE=.\vidfpl_vil_menus.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\vidfpl_menus.h
 # End Source File
@@ -342,8 +333,5 @@ SOURCE=.\vidster_menus.h
 SOURCE=.\vidfpl_vil_menus.h
 # End Source File
 # End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
-# End Group
 # End Target
 # End Project
-

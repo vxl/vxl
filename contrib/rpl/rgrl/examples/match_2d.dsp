@@ -199,7 +199,7 @@ LINK32=link.exe
 # Name "match_2d - Win32 RelWithDebInfo"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\match_2d.cxx
 # End Source File

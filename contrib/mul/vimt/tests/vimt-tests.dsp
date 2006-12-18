@@ -246,7 +246,7 @@ LINK32=link.exe
 # Name "vimt_test_driver - Win32 RelWithDebInfo"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\test_driver.cxx
 # End Source File

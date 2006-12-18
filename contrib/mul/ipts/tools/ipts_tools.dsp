@@ -238,7 +238,7 @@ LINK32=link.exe
 # Name "ipts_tools - Win32 RelWithDebInfo"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\find_dog_peaks.cxx
 # End Source File

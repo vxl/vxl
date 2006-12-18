@@ -2,12 +2,6 @@
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-# ITK DSP Header file
-# This file is read by the build system of itk, and is used as the top part of
-# a microsoft project dsp header file
-# IF this is in a dsp file, then it is not the header, but has
-# already been used, so do not edit here...
-
 # variables to REPLACE
 # 
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vcl/config.win32" == include path
@@ -97,478 +91,289 @@ LIB32=link.exe -lib
 # Name "Qv - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
-
 SOURCE=.\QvLib.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvVisitor.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvVrmlFile.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+QvNode~-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+point2D_const~-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+point3D~-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Templates/vcl_vector+vector3D_const~-.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vecutil.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\wrlbuild.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\wrltraverse.cxx
-
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
-
 SOURCE=.\QvAsciiText.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvBasic.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvChildList.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvCone.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvCoordinate3.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvCube.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvCylinder.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvDB.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvDebugError.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvDict.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvDirectionalLight.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvElement.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvExtensions.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvField.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvFieldData.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvFields.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvFontStyle.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvGroup.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvIndexedFaceSet.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvIndexedLineSet.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvInfo.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvInput.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvLOD.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvLists.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvMFColor.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvMFFace.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvMFFloat.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvMFLong.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvMFString.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvMFVec2f.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvMFVec3f.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvMaterial.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvMaterialBinding.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvMatrixTransform.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvNode.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvNodes.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvNormal.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvNormalBinding.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvOrthographicCamera.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvPList.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvPerspectiveCamera.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvPointLight.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvPointSet.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvReadError.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvRotation.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvSFBitMask.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvSFBool.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvSFColor.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvSFEnum.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvSFFloat.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvSFImage.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvSFLong.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvSFMatrix.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvSFRotation.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvSFString.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvSFVec2f.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvSFVec3f.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvScale.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvSeparator.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvShapeHints.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvSphere.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvSpotLight.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvState.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvString.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvSubField.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvSubNode.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvSwitch.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvTexture2.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvTexture2Transform.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvTextureCoordinate2.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvTransform.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvTransformSeparator.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvTranslation.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvUnknownNode.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvVisitor.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvVrmlFile.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvWWWAnchor.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\QvWWWInline.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\Qv_pi.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\color.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\mtl.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vectors.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vecutil.h
-
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
-

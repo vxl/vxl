@@ -4,7 +4,7 @@
 # Name "vdtop - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\vdtop_8_neighborhood_mask.cxx
 # End Source File
@@ -13,7 +13,7 @@ SOURCE=.\vdtop_freeman_code.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\vdtop_4_lower_homotopic_kernel.h
 # End Source File
@@ -92,7 +92,6 @@ SOURCE=.\vdtop_well_composed_lower_leveling_kernel.h
 # Begin Source File
 SOURCE=.\vil_canny_deriche_grad_filter.h
 # End Source File
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project

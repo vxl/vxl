@@ -199,7 +199,7 @@ LINK32=link.exe
 # Name "registration_blackbox - Win32 RelWithDebInfo"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\registration_blackbox.cxx
 # End Source File

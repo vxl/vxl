@@ -2,7 +2,6 @@
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-
 # variables to REPLACE
 # 
 #  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\oxl" /I "$(VXLROOT)\v3p\mpeg2\include" /I "$(VXLROOT)\v3p\mpeg2\include\mpeg2dec" == include path
@@ -94,9 +93,6 @@ LINK32=link.exe
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
 
-
-
-
 !ELSEIF  "$(CFG)" == "jplayer - Win32 Debug"
 
 # PROP BASE Use_MFC 0
@@ -154,10 +150,8 @@ LINK32=link.exe
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
 
-
-
-
 !ELSEIF  "$(CFG)" == "jplayer - Win32 MinSizeRel"
+
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "MinSizeRel"
@@ -210,9 +204,6 @@ LINK32=link.exe
 # ADD LINK32 Qv.lib
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
-
-
-
 
 !ELSEIF  "$(CFG)" == "jplayer - Win32 RelWithDebInfo"
 
@@ -269,9 +260,6 @@ LINK32=link.exe
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
 
-
-
-
 !ENDIF 
 
 # Begin Target
@@ -282,13 +270,10 @@ LINK32=link.exe
 # Name "jplayer - Win32 RelWithDebInfo"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\jplayer.cxx
 # End Source File
 # End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
-# End Group
 # End Target
 # End Project
-

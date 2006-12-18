@@ -2,12 +2,6 @@
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-# CM DSP Header file
-# This file is read by the build system of cm, and is used as the top part of
-# a microsoft project dsp header file
-# IF this is in a dsp file, then it is not the header, but has
-# already been used, so do not edit here...
-
 # variables to REPLACE
 # 
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/oxl" == include path
@@ -87,7 +81,6 @@ LINK32=link.exe
 # ADD LINK32 /libpath:"$(VXLROOT)/core/vul/$(IntDir)"
 # ADD LINK32 "opengl32.lib" "glu32.lib" "osl.lib" "mvl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vgui_mfc.lib" "vgui.lib" "Qv.lib" vidl_vil1.lib "vgl.lib" "vbl.lib" "vil.lib" "jpeg.lib" "png.lib" "zlib.lib" "tiff.lib" "vul.lib" "vpl.lib" "vcl.lib" /STACK:10000000 
 
-
 !ELSEIF  "$(CFG)" == "VPLAYER - Win32 Debug"
 
 # PROP BASE Use_MFC 0
@@ -143,73 +136,46 @@ LINK32=link.exe
 # Name "VPLAYER - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
-
 SOURCE=.\easy2D_loader.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\easy2D_sequencer.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vplayer.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vplayer_file.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vplayer_geometry.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vplayer_video.cxx
-
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
-
 SOURCE=.\easy2D_loader.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\easy2D_sequencer.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vplayer.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vplayer_file.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vplayer_geometry.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\vplayer_video.h
-
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
-

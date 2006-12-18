@@ -78,16 +78,12 @@ LIB32=link.exe -lib
 # Name "geometry - Win32 Debug"
 
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
-
 SOURCE=.\osl_to_vdgl.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\DigitalCurve_to_vdgl.h
-
 # End Source File
 # End Group
 # End Target

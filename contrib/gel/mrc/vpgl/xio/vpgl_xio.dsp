@@ -2,12 +2,6 @@
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-# ITK DSP Header file
-# This file is read by the build system of itk, and is used as the top part of
-# a microsoft project dsp header file
-# IF this is in a dsp file, then it is not the header, but has
-# already been used, so do not edit here...
-
 # variables to REPLACE
 #
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/gel" /I "$(VXLROOT)/contrib/gel/mrc" == include path
@@ -97,13 +91,13 @@ LIB32=link.exe -lib
 # Name "vpgl - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\Templates/vpgl_xio_calibration_matrix+double-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter "h"
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\vpgl_xio_calibration_matrix.h
 # End Source File

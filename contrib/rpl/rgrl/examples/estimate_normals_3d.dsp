@@ -199,7 +199,7 @@ LINK32=link.exe
 # Name "estimate_normals_3d - Win32 RelWithDebInfo"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\estimate_normals_3d.cxx
 # End Source File

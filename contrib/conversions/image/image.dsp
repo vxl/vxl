@@ -78,7 +78,7 @@ LIB32=link.exe -lib
 # Name "image - Win32 Debug"
 
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\Image_to_vil1.h
 # End Source File

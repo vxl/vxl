@@ -2,12 +2,6 @@
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-# ITK DSP Header file
-# This file is read by the build system of itk, and is used as the top part of
-# a microsoft project dsp header file
-# IF this is in a dsp file, then it is not the header, but has
-# already been used, so do not edit here...
-
 # variables to REPLACE
 # 
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" == include path
@@ -97,43 +91,28 @@ LIB32=link.exe -lib
 # Name "testlib - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
-
 SOURCE=.\testlib_main.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\testlib_test.cxx
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\testlib_root_dir.cxx
-
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
-
 SOURCE=.\testlib_register.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\testlib_test.h
-
 # End Source File
 # Begin Source File
-
 SOURCE=.\testlib_root_dir.h
-
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project
-

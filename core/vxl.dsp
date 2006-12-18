@@ -61,7 +61,7 @@ MTL=midl.exe
 # Name "vxl - Win32 Debug"
 
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;in"
 # Begin Source File
 SOURCE=.\vxl_copyright.h
 # End Source File

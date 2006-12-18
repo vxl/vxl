@@ -242,7 +242,7 @@ LINK32=link.exe
 # Name "mul_tools - Win32 RelWithDebInfo"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\concat_3d_images.cxx
 # End Source File

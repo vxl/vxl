@@ -2,12 +2,6 @@
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-# ITK DSP Header file
-# This file is read by the build system of itk, and is used as the top part of
-# a microsoft project dsp header file
-# IF this is in a dsp file, then it is not the header, but has
-# already been used, so do not edit here...
-
 # variables to REPLACE
 # 
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/core" /I "$(VXLROOT)/contrib/mul" == include path
@@ -97,7 +91,7 @@ LIB32=link.exe -lib
 # Name "vimt3d - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\Templates/vimt3d_gaussian_pyramid_builder_3d+byte-.cxx
 # End Source File
@@ -160,6 +154,7 @@ SOURCE=.\vimt3d_vil3d_v3i.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\vimt3d_fwd.h
 # End Source File

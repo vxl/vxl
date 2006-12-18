@@ -85,27 +85,19 @@ LINK32=link.exe
 # Name "c2 - Win32 Debug"
 # Begin Group "Source Files"
 
-# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# PROP Default_Filter "cpp;cxx"
 # Begin Source File
-
 SOURCE=.\carmen_interface.cpp
 # End Source File
 # Begin Source File
-
 SOURCE=.\main.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
-
-# PROP Default_Filter "h;hpp;hxx;hm;inl"
+# PROP Default_Filter "h;txx"
 # Begin Source File
-
 SOURCE=.\carmen_interface.h
 # End Source File
-# End Group
-# Begin Group "Resource Files"
-
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
 # End Target
 # End Project

@@ -2,7 +2,6 @@
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-
 # variables to REPLACE
 # 
 #  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\oul" == include path
@@ -62,8 +61,6 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-
-
 !ELSEIF  "$(CFG)" == "oul - Win32 Debug"
 
 # PROP BASE Use_MFC 0
@@ -88,8 +85,6 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-
-
 
 !ELSEIF  "$(CFG)" == "oul - Win32 MinSizeRel"
 
@@ -118,8 +113,6 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-
-
 !ELSEIF  "$(CFG)" == "oul - Win32 RelWithDebInfo"
 
 # PROP BASE Use_MFC 0
@@ -146,8 +139,6 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-
-
 !ENDIF 
 
 # Begin Target
@@ -158,11 +149,10 @@ LIB32=link.exe -lib
 # Name "oul - Win32 RelWithDebInfo"
 
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h"
 # Begin Source File
 SOURCE=.\oul_copyright.h
 # End Source File
 # End Group
 # End Target
 # End Project
-
