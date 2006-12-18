@@ -42,12 +42,6 @@ rgrl_feature::signature_error_dimension( vcl_type_info const& ) const
   return 0;
 }
 
-void 
-rgrl_feature::set_scale( double /*scale*/ )
-{
-  assert( ! "This rgrl_feature doesn't implement set_scale()" );
-}
-
 vnl_matrix<double> const&
 rgrl_feature::
 error_projector_sqrt() const

@@ -29,21 +29,6 @@ class rgrl_feature_point
   virtual
   void write( vcl_ostream& os ) const;
 
-  vnl_vector<double> const&
-  location() const;
-
-  //: set location
-  virtual
-  void set_location( vnl_vector<double>const& loc );
-
-  //: Provide the scale level at which this feature is detected
-  virtual
-  double scale() const { return scale_; }
-
-  //: Set the scale level at which this feature is detected
-  virtual
-  void set_scale( double scale ) { scale_ = scale; }
-
   vnl_matrix<double> const&
   error_projector() const;
 
@@ -80,10 +65,7 @@ class rgrl_feature_point
   transform_scale( rgrl_transformation const& xform ) const;
 
  protected:
-  vnl_vector<double> location_;
   mutable vnl_matrix<double> err_proj_, err_proj_sqrt_;
-  
-  double             scale_;
 };
 
 #endif // rgrl_feature_point_h_

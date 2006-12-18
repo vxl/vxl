@@ -37,15 +37,6 @@ class rgrl_feature_landmark
   virtual
   void write( vcl_ostream& os ) const;
 
-  //: get location
-  virtual
-  vnl_vector<double> const&
-  location() const;
-
-  //: set location
-  virtual
-  void set_location( vnl_vector<double>const& loc );
-
   vnl_matrix<double> const&
   error_projector() const;
 
@@ -94,7 +85,6 @@ class rgrl_feature_landmark
 
  private:
   // For the center location of the landmark
-  vnl_vector<double> location_;
   vnl_matrix<double> error_proj_;
 
   // For the signature of the landmark

@@ -13,8 +13,7 @@
 rgrl_feature_face_pt ::
 rgrl_feature_face_pt( vnl_vector< double > const& location,
                       vnl_vector< double > const& normal )
-  : location_( location ), normal_( normal ),
-    scale_( 1 ),
+  : rgrl_feature( location ), normal_( normal ),
     subspace_cached_( false )
 {
   normal_.normalize();
@@ -23,23 +22,8 @@ rgrl_feature_face_pt( vnl_vector< double > const& location,
 //  private constructor for transformed face points
 rgrl_feature_face_pt ::
 rgrl_feature_face_pt()
-  : scale_( 1 ), subspace_cached_( false )
+  : subspace_cached_( false )
 {
-}
-
-
-vnl_vector<double> const&
-rgrl_feature_face_pt ::
-location() const
-{
-  return location_;
-}
-
-void 
-rgrl_feature_face_pt::
-set_location( vnl_vector<double> const& loc )
-{
-  location_ = loc;
 }
 
 vnl_matrix<double> const&

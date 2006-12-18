@@ -28,17 +28,16 @@ identity_matrix( unsigned size )
 
 rgrl_feature_point::
 rgrl_feature_point( vnl_vector<double> const& loc )
-  : location_( loc ),
-    scale_( 1 )
+  : rgrl_feature( loc )
 {
 }
 
 
 rgrl_feature_point::
 rgrl_feature_point( unsigned size )
-  : location_( size ),
-    scale_( 1 )
+: rgrl_feature()
 {
+  location_.set_size( size );
 }
 
 
@@ -47,20 +46,6 @@ rgrl_feature_point::
 num_constraints() const
 {
   return location_.size();
-}
-
-vnl_vector<double> const&
-rgrl_feature_point::
-location() const
-{
-  return location_;
-}
-
-void
-rgrl_feature_point::
-set_location( vnl_vector<double> const& loc )
-{
-  location_ = loc;
 }
 
 vnl_matrix<double> const&

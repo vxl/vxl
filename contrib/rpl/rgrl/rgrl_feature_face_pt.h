@@ -31,22 +31,6 @@ class rgrl_feature_face_pt
   void write( vcl_ostream& os ) const;
 
   virtual 
-  vnl_vector<double> const& location() const;
-
-  //: set location
-  virtual
-  void set_location( vnl_vector<double>const& loc );
-
-  //: Provide the scale level at which this feature is detected
-  virtual
-  double 
-  scale() const { return scale_; }
-
-  //: Set the scale level at which this feature is detected
-  virtual
-  void set_scale( double scale ) { scale_ = scale; }
-
-  virtual 
   vnl_matrix<double> const& 
   error_projector() const;
 
@@ -92,10 +76,8 @@ class rgrl_feature_face_pt
   transform_scale( rgrl_transformation const& xform ) const;
 
   //:  The location, the normal, and the error projector.
-  vnl_vector<double> location_;
   vnl_vector<double> normal_;
   mutable vnl_matrix<double> err_proj_, err_proj_sqrt_;
-  double             scale_;
 
  private:
 

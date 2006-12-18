@@ -23,6 +23,18 @@ class rgrl_feature
   : public rgrl_object
 {
  public:
+  
+  //: ctor
+  rgrl_feature()
+  : scale_( 0.0 )
+  { }
+  
+  //: ctor
+  rgrl_feature( vnl_vector<double> const& loc, double scale = 0.0 )
+  : location_( loc ), 
+    scale_( scale )
+  { }
+  
   //:
   virtual ~rgrl_feature() { };
 
@@ -31,21 +43,24 @@ class rgrl_feature
   rgrl_feature_sptr transform( rgrl_transformation const& xform ) const = 0;
 
   //:  Provide the geometric location.
-  virtual
-  vnl_vector<double> const& location() const = 0;
+  vnl_vector<double> const& location() const
+  { return location_; }
 
   //: set location
-  virtual
-  void set_location( vnl_vector<double>const& loc ) = 0;
+  void set_location( vnl_vector<double>const& loc )
+  { location_ = loc; }
 
+  double dim() const
+  { return location_.size(); }
+  
   //: Provide the scale level at which this feature is detected
   //  If no associated scale, return 0
-  virtual
-  double scale() const { return 0.0; }
+  double scale() const 
+  { return scale_; }
 
   //: Set the scale level at which this feature is detected
-  virtual
-  void set_scale( double scale );
+  void set_scale( double scale )
+  { scale_ = scale; }
 
   //: read in feature
   virtual
@@ -139,6 +154,9 @@ class rgrl_feature
   friend rgrl_feature_sptr
          rgrl_feature_reader( vcl_istream& is );
 
+  vnl_vector<double> location_;
+  double             scale_;
+  
  private:
   // disabled
   rgrl_feature& operator=( rgrl_feature const& );

@@ -16,7 +16,7 @@ typedef vcl_vector< vnl_vector<double> > vec_vec_type;
 rgrl_feature_landmark::
 rgrl_feature_landmark( vnl_vector<double> const& loc,
                        vcl_vector< vnl_vector<double> > const& outgoing_directions)
-  : location_( loc ),
+  : rgrl_feature( loc ),
     error_proj_( loc.size(), loc.size(), vnl_matrix_identity ),
     outgoing_directions_( outgoing_directions )
 {
@@ -27,7 +27,6 @@ rgrl_feature_landmark( vnl_vector<double> const& loc,
 rgrl_feature_landmark::
 rgrl_feature_landmark( rgrl_feature_landmark const& other )
   : rgrl_feature(other),
-    location_( other.location_ ),
     error_proj_( other.error_proj_ ),
     outgoing_directions_( other.outgoing_directions_ )
 {
@@ -36,20 +35,6 @@ rgrl_feature_landmark( rgrl_feature_landmark const& other )
 rgrl_feature_landmark::
 rgrl_feature_landmark( )
 {
-}
-
-vnl_vector<double> const&
-rgrl_feature_landmark::
-location() const
-{
-  return location_;
-}
-
-void 
-rgrl_feature_landmark::
-set_location( vnl_vector<double> const& loc )
-{
-  location_ = loc;
 }
 
 vnl_matrix<double> const&
