@@ -59,6 +59,7 @@
 #include <rgrl/rgrl_feature_reader.h>
 #include <rgrl/rgrl_feature_region.h>
 #include <rgrl/rgrl_feature_set.h>
+#include <rgrl/rgrl_feature_set_bins.h>
 #include <rgrl/rgrl_feature_set_bins_2d.h>
 #include <rgrl/rgrl_feature_set_location.h>
 #include <rgrl/rgrl_feature_set_location_masked.h>
