@@ -6,7 +6,7 @@
 # 
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/gel" /I "$(VXLROOT)/contrib/oxl" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL == compiler defines
-# $(VXLROOT)/lib/ == override in output directory
+#  == override in output directory
 # gkll  == name of output library
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104

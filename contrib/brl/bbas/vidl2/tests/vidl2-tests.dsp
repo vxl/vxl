@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="pcbuilder" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="vidl2_tests" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -7,27 +7,27 @@
 #  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bbas" == include path
 #  == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
-# vidl2_test_curve_algs  == name of output library
+# vidl2_tests  == name of output library
 #  /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\  vidl2.lib vil.lib tiff.lib png.lib zlib.lib jpeg.lib vul.lib ws2_32.lib vcl.lib /STACK:10000000  == libraries linked in 
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
-CFG=vidl2_test_curve_algs - Win32 Debug
+CFG=vidl2_tests - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "vidl2_test_curve_algs.mak".
+!MESSAGE NMAKE /f "vidl2_tests.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "vidl2_test_curve_algs.mak" CFG="vidl2_test_curve_algs - Win32 Debug"
+!MESSAGE NMAKE /f "vidl2_tests.mak" CFG="vidl2_tests - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "vidl2_test_curve_algs - Win32 MinSizeRel" (based on "Win32 (x86) Application")
-!MESSAGE "vidl2_test_curve_algs - Win32 Release" (based on "Win32 (x86) Application")
-!MESSAGE "vidl2_test_curve_algs - Win32 RelWithDebInfo" (based on "Win32 (x86) Application")
-!MESSAGE "vidl2_test_curve_algs - Win32 Debug" (based on "Win32 (x86) Application")
+!MESSAGE "vidl2_tests - Win32 MinSizeRel" (based on "Win32 (x86) Application")
+!MESSAGE "vidl2_tests - Win32 Release" (based on "Win32 (x86) Application")
+!MESSAGE "vidl2_tests - Win32 RelWithDebInfo" (based on "Win32 (x86) Application")
+!MESSAGE "vidl2_tests - Win32 Debug" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -38,7 +38,7 @@ CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "vidl2_test_curve_algs - Win32 Release"
+!IF  "$(CFG)" == "vidl2_tests - Win32 Release"
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "Release"
@@ -51,7 +51,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bbas"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vidl2_test_curve_algs_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bbas"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vidl2_tests_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2 -DCMAKE_INTDIR=\"Release\"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -74,7 +74,7 @@ LINK32=link.exe
 # ADD LINK32 ws2_32.lib
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
-!ELSEIF  "$(CFG)" == "vidl2_test_curve_algs - Win32 Debug"
+!ELSEIF  "$(CFG)" == "vidl2_tests - Win32 Debug"
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
 # PROP BASE Output_Dir "Debug"
@@ -87,7 +87,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP   /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
 # ADD CPP /nologo  /D "WIN32"  /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bbas"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vidl2_test_curve_algs_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bbas"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vidl2_tests_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ -DCMAKE_INTDIR=\"Debug\"
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -112,7 +112,7 @@ LINK32=link.exe
 # ADD LINK32 ws2_32.lib
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
-!ELSEIF  "$(CFG)" == "vidl2_test_curve_algs - Win32 MinSizeRel"
+!ELSEIF  "$(CFG)" == "vidl2_tests - Win32 MinSizeRel"
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "MinSizeRel"
@@ -125,7 +125,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bbas"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bbas"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vidl2_test_curve_algs_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bbas"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vidl2_tests_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O1 -DCMAKE_INTDIR=\"MinSizeRel\"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -148,7 +148,7 @@ LINK32=link.exe
 # ADD LINK32 ws2_32.lib
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
-!ELSEIF  "$(CFG)" == "vidl2_test_curve_algs - Win32 RelWithDebInfo"
+!ELSEIF  "$(CFG)" == "vidl2_tests - Win32 RelWithDebInfo"
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "RelWithDebInfo"
@@ -161,7 +161,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bbas"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vidl2_test_curve_algs_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bbas"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "vidl2_tests_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /Zi /O2 -DCMAKE_INTDIR=\"RelWithDebInfo\"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -188,10 +188,10 @@ LINK32=link.exe
 
 # Begin Target
 
-# Name "vidl2_test_curve_algs - Win32 Release"
-# Name "vidl2_test_curve_algs - Win32 Debug"
-# Name "vidl2_test_curve_algs - Win32 MinSizeRel"
-# Name "vidl2_test_curve_algs - Win32 RelWithDebInfo"
+# Name "vidl2_tests - Win32 Release"
+# Name "vidl2_tests - Win32 Debug"
+# Name "vidl2_tests - Win32 MinSizeRel"
+# Name "vidl2_tests - Win32 RelWithDebInfo"
 
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"

@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="pcbuilder" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="bnl_tests" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -141,7 +141,7 @@ LINK32=link.exe
 # Name "bnl_tests - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter "cxx;c"
+# PROP Default_Filter "cxx"
 # End Group
 # End Target
 # End Project

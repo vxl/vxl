@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="pcbuilder" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="rrel_tests" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -7,27 +7,27 @@
 #  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\rpl" == include path
 #  == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
-# rrel_test_driver  == name of output library
+# rrel_tests  == name of output library
 #  /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\  rrel.lib testlib.lib vbl.lib vnl_io.lib vnl_algo.lib vnl.lib netlib.lib vgl_io.lib vsl.lib vgl.lib vcl.lib /STACK:10000000  == libraries linked in
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
-CFG=rrel_test_driver - Win32 Debug
+CFG=rrel_tests - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE
-!MESSAGE NMAKE /f "rrel_test_driver.mak".
+!MESSAGE NMAKE /f "rrel_tests.mak".
 !MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE
-!MESSAGE NMAKE /f "rrel_test_driver.mak" CFG="rrel_test_driver - Win32 Debug"
+!MESSAGE NMAKE /f "rrel_tests.mak" CFG="rrel_tests - Win32 Debug"
 !MESSAGE
 !MESSAGE Possible choices for configuration are:
 !MESSAGE
-!MESSAGE "rrel_test_driver - Win32 MinSizeRel" (based on "Win32 (x86) Application")
-!MESSAGE "rrel_test_driver - Win32 Release" (based on "Win32 (x86) Application")
-!MESSAGE "rrel_test_driver - Win32 RelWithDebInfo" (based on "Win32 (x86) Application")
-!MESSAGE "rrel_test_driver - Win32 Debug" (based on "Win32 (x86) Application")
+!MESSAGE "rrel_tests - Win32 MinSizeRel" (based on "Win32 (x86) Application")
+!MESSAGE "rrel_tests - Win32 Release" (based on "Win32 (x86) Application")
+!MESSAGE "rrel_tests - Win32 RelWithDebInfo" (based on "Win32 (x86) Application")
+!MESSAGE "rrel_tests - Win32 Debug" (based on "Win32 (x86) Application")
 !MESSAGE
 
 # Begin Project
@@ -38,7 +38,7 @@ CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "rrel_test_driver - Win32 Release"
+!IF  "$(CFG)" == "rrel_tests - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -52,7 +52,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\rpl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "rrel_test_driver_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\rpl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "rrel_tests_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2 -DCMAKE_INTDIR=\"Release\"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -78,7 +78,7 @@ LINK32=link.exe
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000
 
-!ELSEIF  "$(CFG)" == "rrel_test_driver - Win32 Debug"
+!ELSEIF  "$(CFG)" == "rrel_tests - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -92,7 +92,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP   /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
 # ADD CPP /nologo  /D "WIN32"  /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\rpl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "rrel_test_driver_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\rpl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "rrel_tests_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ -DCMAKE_INTDIR=\"Debug\"
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -120,7 +120,7 @@ LINK32=link.exe
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000
 
-!ELSEIF  "$(CFG)" == "rrel_test_driver - Win32 MinSizeRel"
+!ELSEIF  "$(CFG)" == "rrel_tests - Win32 MinSizeRel"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -134,7 +134,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\rpl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\rpl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "rrel_test_driver_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\rpl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "rrel_tests_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O1 -DCMAKE_INTDIR=\"MinSizeRel\"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -160,7 +160,7 @@ LINK32=link.exe
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000
 
-!ELSEIF  "$(CFG)" == "rrel_test_driver - Win32 RelWithDebInfo"
+!ELSEIF  "$(CFG)" == "rrel_tests - Win32 RelWithDebInfo"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -174,7 +174,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\rpl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "rrel_test_driver_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\rpl" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "rrel_tests_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /Zi /O2 -DCMAKE_INTDIR=\"RelWithDebInfo\"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -204,10 +204,10 @@ LINK32=link.exe
 
 # Begin Target
 
-# Name "rrel_test_driver - Win32 Release"
-# Name "rrel_test_driver - Win32 Debug"
-# Name "rrel_test_driver - Win32 MinSizeRel"
-# Name "rrel_test_driver - Win32 RelWithDebInfo"
+# Name "rrel_tests - Win32 Release"
+# Name "rrel_tests - Win32 Debug"
+# Name "rrel_tests - Win32 MinSizeRel"
+# Name "rrel_tests - Win32 RelWithDebInfo"
 
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"

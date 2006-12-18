@@ -82,11 +82,11 @@ LINK32=link.exe
 
 # Begin Target
 
-# Name "vdtop - Win32 Release"
-# Name "vdtop - Win32 Debug"
+# Name "vdtop_test_include - Win32 Release"
+# Name "vdtop_test_include - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter "cxx;c"
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File

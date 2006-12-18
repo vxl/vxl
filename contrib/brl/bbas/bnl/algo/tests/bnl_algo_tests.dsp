@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="pcbuilder" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="bnl_algo_tests" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -141,7 +141,7 @@ LINK32=link.exe
 # Name "bnl_algo_tests - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter "cxx;c"
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\test_legendre_polynomial.cxx
 # End Source File

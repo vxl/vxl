@@ -2,12 +2,6 @@
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-# ITK DSP Header file
-# This file is read by the build system of itk, and is used as the top part of
-# a microsoft project dsp header file
-# IF this is in a dsp file, then it is not the header, but has
-# already been used, so do not edit here...
-
 # variables to REPLACE
 # 
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" == include path
@@ -95,7 +89,7 @@ LIB32=link.exe -lib
 # Name "core_test_config - Win32 Release"
 # Name "core_test_config - Win32 Debug"
 # Begin Group "Source Files"
-# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# PROP Default_Filter "cpp"
 # Begin Source File
 SOURCE=.\test_config.cxx
 # End Source File
@@ -110,7 +104,7 @@ SOURCE=.\test_build_info.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter "h"
+# PROP Default_Filter "h;in"
 # Begin Source File
 SOURCE=.\test_build_info.h.in
 # End Source File

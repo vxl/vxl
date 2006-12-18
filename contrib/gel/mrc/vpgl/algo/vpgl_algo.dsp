@@ -87,8 +87,8 @@ LIB32=link.exe -lib
 
 # Begin Target
 
-# Name "vpgl - Win32 Release"
-# Name "vpgl - Win32 Debug"
+# Name "vpgl_algo - Win32 Release"
+# Name "vpgl_algo - Win32 Debug"
 
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"

@@ -6,7 +6,7 @@
 # 
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/gel" /I "$(VXLROOT)/contrib/oxl" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL == compiler defines
-# $(VXLROOT)/lib/ == override in output directory
+#  == override in output directory
 # vgel_kl  == name of output library
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
@@ -91,7 +91,7 @@ LIB32=link.exe -lib
 # Name "vgel_kl - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter "cxx;c"
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\convolve.c
 # End Source File

@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="pcbuilder" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="vvid_bin" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -7,27 +7,27 @@
 #  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\oxl" == include path
 #  == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL == compiler defines
-# vidfpl  == name of output library
+# vvid_bin  == name of output library
 #  /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\  osl.lib mvl.lib oxp.lib vvid.lib vidl_vil1.lib vgui.lib gevd.lib vtol.lib vdgl.lib vsol.lib vgl_algo.lib vo.lib vfw32.lib mpeg2.lib vul.lib vpl.lib vnl_algo.lib vnl.lib netlib.lib vil.lib ws2_32.lib tiff.lib png.lib zlib.lib jpeg.lib vgl.lib vbl.lib opengl32.lib glu32.lib Qv.lib vcl.lib /STACK:10000000  == libraries linked in 
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
-CFG=vidfpl - Win32 Debug
+CFG=vvid_bin - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "vidfpl.mak".
+!MESSAGE NMAKE /f "vvid_bin.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "vidfpl.mak" CFG="vidfpl - Win32 Debug"
+!MESSAGE NMAKE /f "vvid_bin.mak" CFG="vvid_bin - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "vidfpl - Win32 MinSizeRel" (based on "Win32 (x86) Application")
-!MESSAGE "vidfpl - Win32 Release" (based on "Win32 (x86) Application")
-!MESSAGE "vidfpl - Win32 RelWithDebInfo" (based on "Win32 (x86) Application")
-!MESSAGE "vidfpl - Win32 Debug" (based on "Win32 (x86) Application")
+!MESSAGE "vvid_bin - Win32 MinSizeRel" (based on "Win32 (x86) Application")
+!MESSAGE "vvid_bin - Win32 Release" (based on "Win32 (x86) Application")
+!MESSAGE "vvid_bin - Win32 RelWithDebInfo" (based on "Win32 (x86) Application")
+!MESSAGE "vvid_bin - Win32 Debug" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -38,7 +38,7 @@ CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "vidfpl - Win32 Release"
+!IF  "$(CFG)" == "vvid_bin - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -52,7 +52,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\oxl"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vidfpl_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\oxl"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vvid_bin_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2 -DCMAKE_INTDIR=\"Release\"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -98,7 +98,7 @@ LINK32=link.exe
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
 
-!ELSEIF  "$(CFG)" == "vidfpl - Win32 Debug"
+!ELSEIF  "$(CFG)" == "vvid_bin - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -112,7 +112,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP   /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
 # ADD CPP /nologo  /D "WIN32"  /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\oxl"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vidfpl_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\oxl"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vvid_bin_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ -DCMAKE_INTDIR=\"Debug\"
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -160,7 +160,7 @@ LINK32=link.exe
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
 
-!ELSEIF  "$(CFG)" == "vidfpl - Win32 MinSizeRel"
+!ELSEIF  "$(CFG)" == "vvid_bin - Win32 MinSizeRel"
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "MinSizeRel"
@@ -173,7 +173,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\oxl"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\oxl"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vidfpl_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\oxl"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vvid_bin_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O1 -DCMAKE_INTDIR=\"MinSizeRel\"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -219,7 +219,7 @@ LINK32=link.exe
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
 
-!ELSEIF  "$(CFG)" == "vidfpl - Win32 RelWithDebInfo"
+!ELSEIF  "$(CFG)" == "vvid_bin - Win32 RelWithDebInfo"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -233,7 +233,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\oxl"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vidfpl_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\oxl"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_OPENGL /D "vvid_bin_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /Zi /O2 -DCMAKE_INTDIR=\"RelWithDebInfo\"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -283,10 +283,10 @@ LINK32=link.exe
 
 # Begin Target
 
-# Name "vidfpl - Win32 Release"
-# Name "vidfpl - Win32 Debug"
-# Name "vidfpl - Win32 MinSizeRel"
-# Name "vidfpl - Win32 RelWithDebInfo"
+# Name "vvid_bin - Win32 Release"
+# Name "vvid_bin - Win32 Debug"
+# Name "vvid_bin - Win32 MinSizeRel"
+# Name "vvid_bin - Win32 RelWithDebInfo"
 
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"

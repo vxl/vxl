@@ -6,7 +6,7 @@
 #
 # /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/v3p/zlib" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_ZLIB == compiler defines
-# $(VXLROOT)/lib/ == override in output directory
+#  == override in output directory
 # png  == name of output library
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104

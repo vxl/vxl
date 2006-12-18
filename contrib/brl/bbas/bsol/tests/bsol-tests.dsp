@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="pcbuilder" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="bsol_tests" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -7,27 +7,27 @@
 #  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bbas" == include path
 #  == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
-# bsol_test_hough_index  == name of output library
+# bsol_tests  == name of output library
 #  /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\  bsol.lib vdgl.lib vtol.lib vnl.lib vil.lib tiff.lib png.lib zlib.lib jpeg.lib vdgl.lib vsol.lib vul.lib ws2_32.lib vgl_algo.lib vnl_algo.lib vnl.lib netlib.lib vgl.lib vbl.lib vcl.lib /STACK:10000000  == libraries linked in 
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
-CFG=bsol_test_hough_index - Win32 Debug
+CFG=bsol_tests - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "bsol_test_hough_index.mak".
+!MESSAGE NMAKE /f "bsol_tests.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "bsol_test_hough_index.mak" CFG="bsol_test_hough_index - Win32 Debug"
+!MESSAGE NMAKE /f "bsol_tests.mak" CFG="bsol_tests - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "bsol_test_hough_index - Win32 MinSizeRel" (based on "Win32 (x86) Application")
-!MESSAGE "bsol_test_hough_index - Win32 Release" (based on "Win32 (x86) Application")
-!MESSAGE "bsol_test_hough_index - Win32 RelWithDebInfo" (based on "Win32 (x86) Application")
-!MESSAGE "bsol_test_hough_index - Win32 Debug" (based on "Win32 (x86) Application")
+!MESSAGE "bsol_tests - Win32 MinSizeRel" (based on "Win32 (x86) Application")
+!MESSAGE "bsol_tests - Win32 Release" (based on "Win32 (x86) Application")
+!MESSAGE "bsol_tests - Win32 RelWithDebInfo" (based on "Win32 (x86) Application")
+!MESSAGE "bsol_tests - Win32 Debug" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -38,7 +38,7 @@ CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "bsol_test_hough_index - Win32 Release"
+!IF  "$(CFG)" == "bsol_tests - Win32 Release"
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "Release"
@@ -51,7 +51,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bbas"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bsol_test_hough_index_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bbas"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bsol_tests_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2 -DCMAKE_INTDIR=\"Release\"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -85,7 +85,7 @@ LINK32=link.exe
 # ADD LINK32 vbl.lib
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
-!ELSEIF  "$(CFG)" == "bsol_test_hough_index - Win32 Debug"
+!ELSEIF  "$(CFG)" == "bsol_tests - Win32 Debug"
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
 # PROP BASE Output_Dir "Debug"
@@ -98,7 +98,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP   /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
 # ADD CPP /nologo  /D "WIN32"  /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bbas"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bsol_test_hough_index_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bbas"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bsol_tests_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ -DCMAKE_INTDIR=\"Debug\"
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -134,7 +134,7 @@ LINK32=link.exe
 # ADD LINK32 vbl.lib
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
-!ELSEIF  "$(CFG)" == "bsol_test_hough_index - Win32 MinSizeRel"
+!ELSEIF  "$(CFG)" == "bsol_tests - Win32 MinSizeRel"
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "MinSizeRel"
@@ -147,7 +147,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bbas"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bbas"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bsol_test_hough_index_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bbas"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bsol_tests_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O1 -DCMAKE_INTDIR=\"MinSizeRel\"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -181,7 +181,7 @@ LINK32=link.exe
 # ADD LINK32 vbl.lib
 # ADD LINK32 vcl.lib
 # ADD LINK32 /STACK:10000000 
-!ELSEIF  "$(CFG)" == "bsol_test_hough_index - Win32 RelWithDebInfo"
+!ELSEIF  "$(CFG)" == "bsol_tests - Win32 RelWithDebInfo"
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "RelWithDebInfo"
@@ -194,7 +194,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD CPP /nologo  /D "WIN32"  /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bbas"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bsol_test_hough_index_EXPORTS"
+# ADD CPP  /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\core" /I "$(VXLROOT)\vcl" /I "$(VXLROOT)\vcl\config.win32" /I "$(VXLROOT)\core" /I "$(VXLROOT)\contrib\brl" /I "$(VXLROOT)\contrib\gel" /I "$(VXLROOT)\contrib\brl\bbas"   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bsol_tests_EXPORTS"
 # ADD CPP /nologo /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /Zi /O2 -DCMAKE_INTDIR=\"RelWithDebInfo\"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -232,10 +232,10 @@ LINK32=link.exe
 
 # Begin Target
 
-# Name "bsol_test_hough_index - Win32 Release"
-# Name "bsol_test_hough_index - Win32 Debug"
-# Name "bsol_test_hough_index - Win32 MinSizeRel"
-# Name "bsol_test_hough_index - Win32 RelWithDebInfo"
+# Name "bsol_tests - Win32 Release"
+# Name "bsol_tests - Win32 Debug"
+# Name "bsol_tests - Win32 MinSizeRel"
+# Name "bsol_tests - Win32 RelWithDebInfo"
 
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
