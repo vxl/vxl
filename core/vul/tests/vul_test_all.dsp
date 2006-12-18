@@ -106,7 +106,7 @@ LINK32=link.exe
 # Name "vul_test_all - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\test_driver.cxx
 # End Source File
@@ -146,8 +146,9 @@ SOURCE=.\test_vul_file.cxx
 # Begin Source File
 SOURCE=.\test_debug.cxx
 # End Source File
-# End Group
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+# Begin Source File
+SOURCE=.\test_get_time_as_string.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

@@ -97,7 +97,7 @@ LIB32=link.exe -lib
 # Name "rgrl - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\rgrl_converge_status.cxx
 # End Source File
@@ -267,13 +267,73 @@ SOURCE=.\rgrl_weighter_m_est.cxx
 SOURCE=.\rgrl_weighter_unit.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\rgrl_feature_set_location_masked.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_est_homography2d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_trans_homography2d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_est_homo2d_lm.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_evaluator_ssd.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_feature_face_region.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_feature_point_region.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_feature_region.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_feature_trace_region.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_feature_reader.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_initializer_reader.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_est_dis_homo2d_lm.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_trans_rad_dis_homo2d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_trans_couple.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_converge_status_nas.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_matcher_k_nearest_random.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_matcher_k_nearest_pick_one.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_feature_set_bins_2d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_weighter_indiv_scale.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_internal_util.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_mask_3d_image.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/rgrl_feature_set_location+2-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/rgrl_feature_set_location+3-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/rgrl_feature_set_location_masked+2-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/rgrl_set_of+rgrl_match_set_sptr-.cxx
@@ -381,68 +441,14 @@ SOURCE=.\Templates/vbl_smart_ptr+rgrl_invariant_set-.cxx
 SOURCE=.\Templates/rsdl_bins_2d+double.rgrl_feature_sptr-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\rgrl_est_homography2d.cxx
+SOURCE=.\Templates/rgrl_feature_set_bins+2.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\rgrl_trans_homography2d.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\rgrl_est_homo2d_lm.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\rgrl_evaluator_ssd.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\rgrl_feature_face_region.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\rgrl_feature_point_region.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\rgrl_feature_region.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\rgrl_feature_trace_region.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\rgrl_feature_reader.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\rgrl_initializer_reader.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\rgrl_est_dis_homo2d_lm.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\rgrl_trans_rad_dis_homo2d.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\rgrl_trans_couple.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\rgrl_converge_status_nas.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\rgrl_matcher_k_nearest_random.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\rgrl_matcher_k_nearest_pick_one.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\rgrl_feature_set_bins_2d.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\rgrl_weighter_indiv_scale.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\rgrl_internal_util.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\rgrl_mask_3d_image.cxx
+SOURCE=.\Templates/rgrl_feature_set_bins+3.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter ""
+# PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\rgrl_cast.h
 # End Source File
@@ -541,9 +547,6 @@ SOURCE=.\rgrl_feature_set_location.txx
 # End Source File
 # Begin Source File
 SOURCE=.\rgrl_feature_set_location_masked.h
-# End Source File
-# Begin Source File
-SOURCE=.\rgrl_feature_set_location_masked.txx
 # End Source File
 # Begin Source File
 SOURCE=.\rgrl_feature_sptr.h
@@ -802,6 +805,12 @@ SOURCE=.\rgrl_internal_util.h
 # End Source File
 # Begin Source File
 SOURCE=.\rgrl_mask_3d_image.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_feature_set_bins.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_feature_set_bins.txx
 # End Source File
 # End Group
 # End Target
