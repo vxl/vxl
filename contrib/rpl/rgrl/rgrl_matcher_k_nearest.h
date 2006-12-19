@@ -46,7 +46,6 @@ class rgrl_matcher_k_nearest
  protected:
 
   //: validate the mapped feature
-  inline
   bool validate( rgrl_feature_sptr const& mapped, rgrl_mask_sptr const& roi_sptr ) const;
 
   // nodes to be sorted based on distance
