@@ -30,7 +30,7 @@ class rgrl_matcher_k_nearest_adv
   // correspondences with Euclidean distance within the threshold
   // \a dist_thres.
   //
-  rgrl_matcher_k_nearest_adv( unsigned int k, double dist_thres );
+  rgrl_matcher_k_nearest_adv( unsigned int k, double dist_thres, double min_mapped_scale = -1, double thres_reuse_match = -1 );
 
   rgrl_match_set_sptr
   compute_matches( rgrl_feature_set const&       from_features,

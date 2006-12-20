@@ -15,14 +15,14 @@
 
 rgrl_matcher_k_nearest_pick_one::
 rgrl_matcher_k_nearest_pick_one( unsigned int k )
-  : rgrl_matcher_k_nearest( k )
+  : rgrl_matcher_k_nearest_adv( k )
 {
 }
 
 
 rgrl_matcher_k_nearest_pick_one::
-rgrl_matcher_k_nearest_pick_one( unsigned int k, double dist_thres )
-  : rgrl_matcher_k_nearest(k, dist_thres)
+rgrl_matcher_k_nearest_pick_one( unsigned int k, double dist_thres, double min_mapped_scale, double thres_reuse_match )
+  : rgrl_matcher_k_nearest_adv(k, dist_thres, min_mapped_scale, thres_reuse_match)
 {
 }
 
@@ -34,7 +34,7 @@ compute_matches( rgrl_feature_set const&       from_set,
                  rgrl_view const&              current_view,
                  rgrl_transformation const&    current_xform,
                  rgrl_scale const&             /* current_scale */,
-                 rgrl_match_set_sptr const&    /*old_matches*/ )
+                 rgrl_match_set_sptr const&    old_matches )
 {
   typedef rgrl_view::feature_vector feat_vector;
   typedef feat_vector::const_iterator feat_iter;
@@ -43,6 +43,21 @@ compute_matches( rgrl_feature_set const&       from_set,
     << from_set.label().name() << "-->" 
     << to_set.label().name() << vcl_endl; );
 
+  // faster to check a boolean variable
+  const bool allow_reuse_match = ( sqr_thres_for_reuse_match_ > 0) && (prev_xform_) && (old_matches);
+
+  // create a map for from feature and the match iterator
+  //
+  typedef rgrl_match_set::const_from_iterator  from_feature_iterator;
+  vcl_map< rgrl_feature_sptr, from_feature_iterator > feature_sptr_iterator_map;
+  if( allow_reuse_match ) {
+    
+    for( from_feature_iterator i=old_matches->from_begin(); i!=old_matches->from_end(); ++i )
+      feature_sptr_iterator_map[ i.from_feature() ] = i;
+  }
+  
+  // create the new match set
+  //
   rgrl_match_set_sptr matches_sptr 
     = new rgrl_match_set( from_set.type(), to_set.type(), from_set.label(), to_set.label() );
 
@@ -60,6 +75,8 @@ compute_matches( rgrl_feature_set const&       from_set,
   matches_sptr->reserve( from.size() );
 
   //  generate the matches for each feature of this feature type in the current region
+  vnl_vector<double> prev_mapped;
+  int reuse_match_count = 0;
   for ( feat_iter fitr = from.begin(); fitr != from.end(); ++fitr )
   {
     rgrl_feature_sptr mapped = (*fitr)->transform( current_xform );
@@ -67,7 +84,27 @@ compute_matches( rgrl_feature_set const&       from_set,
       continue;   // feature is invalid
 
     matching_features.clear();
-    to_set.k_nearest_features( matching_features, mapped, k_ );
+    
+    if( allow_reuse_match ) {
+      
+      prev_xform_->map_location( (*fitr)->location(), prev_mapped );
+
+      // if the mapping difference is smaller than this threshold  
+      vcl_map< rgrl_feature_sptr, from_feature_iterator >::const_iterator map_itr;
+      if( vnl_vector_ssd( prev_mapped, mapped->location() ) < sqr_thres_for_reuse_match_  && 
+          (map_itr=feature_sptr_iterator_map.find( *fitr )) != feature_sptr_iterator_map.end() ) {
+            
+        // re-use the to features
+        const from_feature_iterator& prev_from_iter = map_itr->second;
+        for( from_feature_iterator::to_iterator titr=prev_from_iter.begin(); titr!=prev_from_iter.end(); ++titr )
+          matching_features.push_back( titr.to_feature() );
+        
+        // increament the count
+        ++reuse_match_count;
+      } else 
+        to_set.k_nearest_features( matching_features, mapped, k_ );
+    } else
+      to_set.k_nearest_features( matching_features, mapped, k_ );
     
     if( debug_flag()>=4 ) {
       
@@ -135,6 +172,11 @@ compute_matches( rgrl_feature_set const&       from_set,
     }
   }
 
+  DebugMacro( 1, "There are " << reuse_match_count << " reuse of previous matches out of " << from.size() << vcl_endl );
+
+  // store xform
+  prev_xform_ = current_view.xform_estimate();
+  
   return matches_sptr;
 }
 
@@ -227,3 +269,27 @@ add_one_flipped_match( rgrl_match_set_sptr&      inv_set,
     inv_set->add_feature_and_match( from, mapped, max_feature, max_weight );
 }
 
+inline
+bool
+rgrl_matcher_k_nearest_pick_one::
+validate( rgrl_feature_sptr const& mapped, rgrl_mask_sptr const& roi_sptr ) const
+{
+  // if the mapped point is not in the image
+  if ( !roi_sptr->inside( mapped->location() ) )
+    return false;
+
+  // Suppose scale=1 is the lowest scale, or the finest resolution
+  // Any mapped scale below 1 cannot find any correspondence
+  // due to the pixel discretization.
+  // In practice, the threshold is a number less than one,
+  // as feature of real scale=0.9 is still likely to be detected.
+
+  // if the scale is too small to be detected on the other image
+  const double scale = mapped->scale();
+  if ( scale!=0 && min_mapped_scale_>0 && scale<min_mapped_scale_ ) {
+    return false;
+  }
+
+  // by default,
+  return true;
+}

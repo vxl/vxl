@@ -45,11 +45,13 @@ rgrl_matcher_k_nearest_adv( unsigned int k )
 
 
 rgrl_matcher_k_nearest_adv::
-rgrl_matcher_k_nearest_adv( unsigned int k, double dist_thres )
+rgrl_matcher_k_nearest_adv( unsigned int k, double dist_thres, double min_mapped_scale, double thres_reuse_match )
   : rgrl_matcher_k_nearest( k, dist_thres ),
-    min_mapped_scale_( -1 ),
-    sqr_thres_for_reuse_match_( -1 )
+    min_mapped_scale_( min_mapped_scale ),
+    sqr_thres_for_reuse_match_( thres_reuse_match )
 {
+  if( sqr_thres_for_reuse_match_ > 0 )
+    sqr_thres_for_reuse_match_ = sqr_thres_for_reuse_match_*sqr_thres_for_reuse_match_;
 }
 
 
@@ -80,6 +82,8 @@ compute_matches( rgrl_feature_set const&       from_set,
       feature_sptr_iterator_map[ i.from_feature() ] = i;
   }
   
+  // create the new match set
+  //
   rgrl_match_set_sptr matches_sptr
     = new rgrl_match_set( from_set.type(), to_set.type(), from_set.label(), to_set.label() );
 
