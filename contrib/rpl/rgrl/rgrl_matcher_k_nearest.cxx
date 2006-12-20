@@ -60,8 +60,9 @@ compute_matches( rgrl_feature_set const&       from_set,
   }
 
   // reserve size
-  feat_vector matching_features;
+  feat_vector matching_features, pruned_set;
   matching_features.reserve( 10 );
+  pruned_set.reserve( 10 );
   
   matches_sptr->reserve( from.size() );
 
@@ -78,7 +79,7 @@ compute_matches( rgrl_feature_set const&       from_set,
     // prune the matches to satisfy the threshold
     //
     if ( thres_ > 0 ) {
-      feat_vector pruned_set;
+      pruned_set.clear();
       for ( feat_iter i = matching_features.begin(); i != matching_features.end(); ++i ) {
         if ( vnl_vector_ssd( (*i)->location(), mapped->location() ) < thres_ ) {
           pruned_set.push_back( *i );
