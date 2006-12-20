@@ -22,10 +22,11 @@ rgrl_matcher::
 compute_matches( rgrl_feature_set const&    from_features,
                  rgrl_feature_set const&    to_features,
                  rgrl_view const&           current_view,
-                 rgrl_scale const&          current_scale )
+                 rgrl_scale const&          current_scale,
+                 rgrl_match_set_sptr const& old_matches )
 {
   return compute_matches( from_features, to_features, current_view,
-                          *current_view.xform_estimate(), current_scale );
+                          *current_view.xform_estimate(), current_scale, old_matches );
 }
 
 rgrl_match_set_sptr
@@ -35,7 +36,8 @@ compute_matches( rgrl_feature_set const&    from_features,
                  rgrl_transformation const& current_xform,
                  rgrl_mask_box const&       from_region,
                  rgrl_mask_box const&       to_region,
-                 rgrl_scale const&          current_scale )
+                 rgrl_scale const&          current_scale,
+                 rgrl_match_set_sptr const& old_matches )
 {
   rgrl_mask_sptr from_roi = new rgrl_mask_box( from_region.x0(), from_region.x1() );
   rgrl_mask_sptr to_roi = new rgrl_mask_box( to_region.x0(), to_region.x1() );
@@ -45,7 +47,8 @@ compute_matches( rgrl_feature_set const&    from_features,
                                to_features,
                                view,
                                current_xform,
-                               current_scale);
+                               current_scale,
+                               old_matches);
 }
 
 void
