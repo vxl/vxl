@@ -27,6 +27,7 @@ SET( vgl_algo_sources
   vgl_h_matrix_2d_optimize_lmq.cxx     vgl_h_matrix_2d_optimize_lmq.h
   vgl_conic_2d_regression.txx          vgl_conic_2d_regression.h
   vgl_fit_conics_2d.txx                vgl_fit_conics_2d.h
+  vgl_fit_plane_3d.txx                 vgl_fit_plane_3d.h
 )
 AUX_SOURCE_DIRECTORY(Templates vgl_algo_sources)
 

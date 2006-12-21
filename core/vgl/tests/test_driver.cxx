@@ -24,6 +24,7 @@ DECLARE( test_sphere );
 DECLARE( test_line_3d_2_points );
 DECLARE( test_line_segment_3d );
 DECLARE( test_orient_box_3d );
+DECLARE( test_fit_plane_3d );
 
 void
 register_tests()
@@ -52,6 +53,7 @@ register_tests()
   REGISTER( test_line_3d_2_points );
   REGISTER( test_line_segment_3d );
   REGISTER( test_orient_box_3d );
+  REGISTER( test_fit_plane_3d );
 }
 
 DEFINE_MAIN;
