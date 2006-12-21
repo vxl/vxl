@@ -14,7 +14,7 @@
 
 rgrl_feature_trace_pt ::
 rgrl_feature_trace_pt()
-  : scale_(1), 
+  : rgrl_feature(),
     subspace_cached_( false ),
     length_( 0 ), radius_( 0 )
 {
@@ -24,10 +24,9 @@ rgrl_feature_trace_pt()
 rgrl_feature_trace_pt::
 rgrl_feature_trace_pt( vnl_vector<double> const& loc,
                        vnl_vector<double> const& tangent )
-  : location_( loc ),
+  : rgrl_feature( loc ),
     tangent_( tangent ),
     error_proj_( loc.size(), loc.size(), vnl_matrix_identity ),
-    scale_( 1 ),
     subspace_cached_(false),
     length_( 0 ), radius_( 0 )
 {
@@ -40,10 +39,9 @@ rgrl_feature_trace_pt( vnl_vector<double> const& loc,
                        vnl_vector<double> const& tangent,
                        double                    length,
                        double                    radius )
-  : location_( loc ),
+  : rgrl_feature( loc ),
     tangent_( tangent ),
     error_proj_( loc.size(), loc.size(), vnl_matrix_identity ),
-    scale_( 1 ),
     subspace_cached_(false),
     length_( length ), radius_( radius )
 {
@@ -59,21 +57,6 @@ num_constraints() const
 {
   return location_.size()-1;
 }
-
-void 
-rgrl_feature_trace_pt::
-set_location( vnl_vector<double> const& loc )
-{
-  location_ = loc;
-}
-
-vnl_vector<double> const&
-rgrl_feature_trace_pt::
-location() const
-{
-  return location_;
-}
-
 
 vnl_vector<double> const&
 rgrl_feature_trace_pt::

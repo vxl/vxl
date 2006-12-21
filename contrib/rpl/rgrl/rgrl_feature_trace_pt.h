@@ -44,22 +44,6 @@ class rgrl_feature_trace_pt
   virtual
   void write( vcl_ostream& os ) const;
 
-  virtual 
-  vnl_vector<double> const&
-  location() const;
-
-  //: set location
-  virtual
-  void set_location( vnl_vector<double>const& loc );
-
-  //: Provide the scale level at which this feature is detected
-  virtual
-  double scale() const { return scale_; }
-
-  //: Set the scale level at which this feature is detected
-  virtual
-  void set_scale( double scale ) { scale_ = scale; }
-
   virtual vnl_vector<double> const&
   tangent() const;
 
@@ -116,11 +100,8 @@ class rgrl_feature_trace_pt
   friend rgrl_feature_sptr
          rgrl_feature_reader( vcl_istream& is );
 
-  vnl_vector<double> location_;
   vnl_vector<double> tangent_;
   vnl_matrix<double> error_proj_;
-  // scale level at which this feture is detected
-  double scale_;
  private:
 
   //: The basis for the subspace of vectors normal to the tangent direction.
