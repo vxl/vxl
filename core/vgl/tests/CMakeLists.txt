@@ -55,7 +55,6 @@ ADD_TEST( vgl_test_sphere                       ${EXECUTABLE_OUTPUT_PATH}/vgl_te
 ADD_TEST( vgl_test_line_3d_2_points             ${EXECUTABLE_OUTPUT_PATH}/vgl_test_all test_line_3d_2_points)
 ADD_TEST( vgl_test_line_segment_3d              ${EXECUTABLE_OUTPUT_PATH}/vgl_test_all test_line_segment_3d)
 ADD_TEST( vgl_test_orient_box_3d                ${EXECUTABLE_OUTPUT_PATH}/vgl_test_all test_orient_box_3d)
-ADD_TEST( vgl_test_fit_plane                    ${EXECUTABLE_OUTPUT_PATH}/vgl_test_all test_fit_plane)
 ADD_TEST( vgl_test_fit_plane_3d                 ${EXECUTABLE_OUTPUT_PATH}/vgl_test_all test_fit_plane_3d)
 
 ADD_EXECUTABLE( vgl_test_include test_include.cxx )
