@@ -25,7 +25,7 @@ inline double vil3d_trilin_interp_raw(double x, double y, double z,
   p1z=int(z);
   normz = z-p1z;
 
-  const T* row11 = data + p1z*zstep+p1y*ystep + p1x;
+  const T* row11 = data + p1z*zstep+p1y*ystep + p1x*xstep;
   const T* row21 = row11 + ystep;
   const T* row12 = row11 + zstep;
   const T* row22 = row21 + zstep;
