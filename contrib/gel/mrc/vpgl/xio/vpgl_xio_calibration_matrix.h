@@ -1,4 +1,4 @@
-// This is contrib/gel/mrc/vpgl/xio/vpgl_xio_calibration_matrix.h
+// This is gel/mrc/vpgl/xio/vpgl_xio_calibration_matrix.h
 #ifndef vpgl_xio_calibration_matrix_h_
 #define vpgl_xio_calibration_matrix_h_
 //:

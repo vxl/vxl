@@ -1,6 +1,6 @@
-// This is mul/mbl/mbl_mod_stepwise_regression.h
-#ifndef mbl_mod_stepwise_regression_h_
-#define mbl_mod_stepwise_regression_h_
+// This is mul/mbl/mbl_stepwise_regression.h
+#ifndef mbl_stepwise_regression_h_
+#define mbl_stepwise_regression_h_
 //:
 // \file
 // \brief Conduct stepwise regression
@@ -12,8 +12,7 @@
 #include <vnl/vnl_matrix.h>
 
 
-//: Perform the stepwise regression algorithm to determine which subset of variables
-//  appear to be significant predictors
+//: Perform the stepwise regression algorithm to determine which subset of variables appear to be significant predictors
 class mbl_stepwise_regression
 {
     //: Forwards or backwards stepwise (add or remove variables)
@@ -21,7 +20,7 @@ class mbl_stepwise_regression
     //: The data matrix of x values (predictor variables)
     // Each training example is a row, each x-variable dimension corresponds to a column
     const vnl_matrix<double>& x_;
-    //: Vector of dependent y values 
+    //: Vector of dependent y values
     const vnl_vector<double>& y_;
     //: number of training examples (i.e. number of rows in x_)
     unsigned num_examples_;
@@ -35,7 +34,7 @@ class mbl_stepwise_regression
     vcl_set<unsigned> basis_ ;
     //: All non-basis variables
     vcl_set<unsigned> basis_complement_ ;
-    //: The regression coefficents + constant (final term)
+    //: The regression coefficients + constant (final term)
     vnl_vector<double> weights_;
 
     //: The residual sum of squares
@@ -50,12 +49,12 @@ class mbl_stepwise_regression
 
 
     //: Add a new variable and return if significant
-    //Only added if it makes a significant reduction in RSS, unless forceAdd is set
-    //Always adds the variable making most difference to RSS
+    // Only added if it makes a significant reduction in RSS, unless forceAdd is set
+    // Always adds the variable making most difference to RSS
     bool add_variable(bool forceAdd=false);
 
     //: Remove a variable that makes no significant difference to RSS
-    //Will remove the one that causes least change to RSS
+    // Will remove the one that causes least change to RSS
     bool remove_variable();
 
     double f_ratio(double rssExtended,double rssBase,unsigned q)
@@ -70,13 +69,12 @@ class mbl_stepwise_regression
     {
         return ((f_ratio(rssExtended,rssBase,1) >fthresh) ? true : false);
     }
-    //: Step forward through basis complement, adding in new significant variables
-    // and removing those that cease to be significant
+    //: Step forward through basis complement, adding in new significant variables and removing those that cease to be significant
     void do_forward_stepwise_regression();
 
     //: Step back and remove all insignificant variables, then try and step forward again
     void do_backward_stepwise_regression();
-        
+
   public:
     //: Constructor, note you must supply the data references
     // These must remain in scope during algorithm execution
@@ -89,27 +87,27 @@ class mbl_stepwise_regression
     void operator()();
 
     //: return the basis variables
-    //  i.e. those determined to be significanly correlated with y in stepwise search 
+    // I.e. those determined to be significanly correlated with y in stepwise search
     const vcl_set<unsigned > basis() const {return basis_;}
 
     //: Set the mode to forwards or backwards
     // Note backwards can take a long compute time in a space of high dimension
     void set_mode(step_mode mode) {mode_ = mode;}
 
-    //: Return the regression coefficents + constant (final term)
+    //: Return the regression coefficients + constant (final term)
     const vnl_vector<double >& weights() const {return weights_;}
-
 };
 
 //:Helper stuff for stepwise regression
 namespace mbl_stepwise_regression_helpers
 {
     //: Do the regression fitting for a given basis instance
-    class lsfit_this_basis {
+    class lsfit_this_basis
+    {
         //: The data matrix of x values (predictor variables)
         // Each training example is a row, each x-variable dimension corresponds to a column
         const vnl_matrix<double>& x_;
-        //: Vector of dependent y values 
+        //: Vector of dependent y values
         const vnl_vector<double>& y_;
         //: x'x
         const vnl_matrix<double>& XtX_;
@@ -142,11 +140,11 @@ namespace mbl_stepwise_regression_helpers
         const vcl_set<unsigned>& basis() const {return basis_;}
 
         //:Try adding variable k to the basis and then fit the extended basis, returning resid sum of squares
-        //Note the basis is not actually updated, only temporarily for the duration of this call
+        // Note the basis is not actually updated, only temporarily for the duration of this call
         double add(unsigned k);
-        
+
         //:Try removing variable k from the basis and then fit the extended basis, returning resid sum of squares
-        //Note the basis is not actually updated, only temporarily for the duration of this call
+        // Note the basis is not actually updated, only temporarily for the duration of this call
         double remove(unsigned k);
 
         //: Fit the current basis
@@ -157,7 +155,4 @@ namespace mbl_stepwise_regression_helpers
     };
 };
 
-
-#endif
-
-
+#endif // mbl_stepwise_regression_h_

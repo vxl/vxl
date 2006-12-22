@@ -1,15 +1,15 @@
-// This is mul/mbl/mbl_mod_gram_schmidt.cxx
-
+// This is mul/mbl/mbl_stepwise_regression.cxx
+#include "mbl_stepwise_regression.h"
 //:
 // \file
 // \brief Conduct stepwise regression
 // \author Martin Roberts
 
-#include "mbl_stepwise_regression.h"
 #include <vcl_algorithm.h>
 #include <vcl_iterator.h>
 #include <vcl_utility.h>
 #include <vcl_cmath.h>
+#include <vcl_cassert.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h> // for vcl_abort()
@@ -29,7 +29,7 @@ mbl_stepwise_regression::mbl_stepwise_regression(const vnl_matrix<double>& x,
 {
     assert(x.rows() == num_examples_);
     //Initialise the extended covariances
-    
+
 #if 0 // The calculation is as follows
     do
     {
@@ -43,11 +43,11 @@ mbl_stepwise_regression::mbl_stepwise_regression(const vnl_matrix<double>& x,
         double y = outputs[inputs.index()] ? 1.0 : -1.0;
         XtY += y * xp;
     } while (inputs.next());
+
 #else// However the following version is faster
 
-
     rss_ = 0.0;
-    for(unsigned irow=0;irow<num_examples_;++irow)
+    for (unsigned irow=0;irow<num_examples_;++irow)
     {
         // XtX += [x, -1]' * [x, -1]
         const double* px=x_[irow];
@@ -65,7 +65,6 @@ mbl_stepwise_regression::mbl_stepwise_regression(const vnl_matrix<double>& x,
         }
         XtY_(num_vars_) += yval * -1.0;
         rss_ += yval * yval;
-
     }
     //Initialise residual sum of squares to total sum of y squares about mean
     double sumY = -XtY_(num_vars_);
@@ -80,14 +79,14 @@ mbl_stepwise_regression::mbl_stepwise_regression(const vnl_matrix<double>& x,
         XtX_(num_vars_,i) = XtX_(i,num_vars_);
     }
     XtX_(num_vars_, num_vars_) = (double) num_examples_;
-    
-#endif
+
+#endif // !0
 }
 
 void mbl_stepwise_regression::operator()()
 {
     using mbl_stepwise_regression_helpers::lsfit_this_basis;
-    if(mode_ == eFORWARDS)
+    if (mode_ == eFORWARDS)
     {
         basis_.clear(); //start from an empty basis
         basis_complement_.clear();
@@ -97,9 +96,9 @@ void mbl_stepwise_regression::operator()()
 
         //First fit a starting minimally sized basis best sum of squares first
         unsigned  min_basis = vcl_min(num_vars_/10,num_examples_/5);
-        if(min_basis<1) min_basis = 1;
+        if (min_basis<1) min_basis = 1;
         bool forceAdd=true;
-        for(unsigned i=0; i<min_basis;i++)
+        for (unsigned i=0; i<min_basis;i++)
         {
             add_variable(forceAdd);
         }
@@ -123,9 +122,8 @@ void mbl_stepwise_regression::operator()()
 
 void mbl_stepwise_regression::do_forward_stepwise_regression()
 {
-    
     bool carryOn=true;
-    while(carryOn)
+    while (carryOn)
     {
         //Now try another addition step followed by one elimination
         bool addedOne = add_variable();
@@ -136,9 +134,8 @@ void mbl_stepwise_regression::do_forward_stepwise_regression()
 
 void mbl_stepwise_regression::do_backward_stepwise_regression()
 {
-    
     bool carryOn=true;
-    while(carryOn)
+    while (carryOn)
     {
         //try to remove all the unwanted variables
         carryOn = remove_variable();
@@ -146,7 +143,6 @@ void mbl_stepwise_regression::do_backward_stepwise_regression()
     //Having removed everything we can check if anything might now come back in that had been removed earlier
     do_forward_stepwise_regression();
 }
-
 
 bool mbl_stepwise_regression::add_variable(bool forceAdd)
 {
@@ -156,9 +152,9 @@ bool mbl_stepwise_regression::add_variable(bool forceAdd)
     //If significant improvement (or forceAdd set) then add the variable
 
     using mbl_stepwise_regression_helpers::lsfit_this_basis;
-    
-    if(basis_complement_.empty()) return false;
-    
+
+    if (basis_complement_.empty()) return false;
+
     lsfit_this_basis fitter(x_,y_,XtX_,XtY_);
     fitter.set_basis(basis_);
     double FratioMax=-1.0;
@@ -167,12 +163,12 @@ bool mbl_stepwise_regression::add_variable(bool forceAdd)
     vcl_set<unsigned>::const_iterator candIter=basis_complement_.begin();
     vcl_set<unsigned>::const_iterator candIterEnd=basis_complement_.end();
     double rssNew=rss_;
-    while(candIter != candIterEnd)
+    while (candIter != candIterEnd)
     {
         unsigned k = *candIter;
         double rssPrime = fitter.add(k);
         double F = f_ratio(rssPrime,rss_,1);
-        if(F>FratioMax)
+        if (F>FratioMax)
         {
             FratioMax= F;
             knew = k;
@@ -180,12 +176,11 @@ bool mbl_stepwise_regression::add_variable(bool forceAdd)
         }
         ++candIter;
     }
-    bool significant=false;
     bool really_added = false;
-    significant = test_significance(rssNew,rss_,FthreshAdd_);
-    if((significant || forceAdd) )
+    bool significant = test_significance(rssNew,rss_,FthreshAdd_);
+    if (significant || forceAdd)
     {
-        if(knew>=0)
+        if (knew>=0)
         {
             vcl_pair<vcl_set<unsigned>::iterator,bool> inserted = basis_.insert(knew);
             really_added = inserted.second;
@@ -193,7 +188,7 @@ bool mbl_stepwise_regression::add_variable(bool forceAdd)
             rss_ = rssNew;
         }
     }
-    return (significant && really_added);
+    return significant && really_added;
 }
 
 bool mbl_stepwise_regression::remove_variable()
@@ -211,21 +206,20 @@ bool mbl_stepwise_regression::remove_variable()
     int knew=-1;
     vcl_set<unsigned>::const_iterator candIter=basis_.begin();
     vcl_set<unsigned>::const_iterator candIterEnd=basis_.end();
-    while(candIter != candIterEnd)
+    while (candIter != candIterEnd)
     {
         unsigned k = *candIter++;
         double rssNew = fitter.remove(k);
         double F = f_ratio(rss_,rssNew,1);
-        if(F < min_Fratio)
+        if (F < min_Fratio)
         {
             min_Fratio = F;
             knew = k;
             rssBest = rssNew;
         }
     }
-    bool significant=false;
-    significant = test_significance(rss_,rssBest,FthreshRemove_);
-    if(!significant)
+    bool significant = test_significance(rss_,rssBest,FthreshRemove_);
+    if (!significant)
     {
         basis_.erase(knew);
         basis_complement_.insert(knew);
@@ -234,11 +228,9 @@ bool mbl_stepwise_regression::remove_variable()
     return !significant;
 }
 
-
 //---------------------------------------------------------------------------
 //------------------------------ Helpers ------------------------------------
 //---------------------------------------------------------------------------
-
 
 double mbl_stepwise_regression_helpers::lsfit_this_basis::add(unsigned k)
 {
@@ -255,6 +247,7 @@ double mbl_stepwise_regression_helpers::lsfit_this_basis::remove(unsigned k)
     basis_.insert(k);
     return rss;
 }
+
 double mbl_stepwise_regression_helpers::lsfit_this_basis::operator()()
 {
     // Find the solution to X w = Y;
@@ -265,19 +258,19 @@ double mbl_stepwise_regression_helpers::lsfit_this_basis::operator()()
     unsigned ndims = basis_.size();
     //Create working copies of mtrices containing just the subset of variables in the basis
     vnl_matrix<double> XtX(1+ndims,1+ndims);
-    
+
     vcl_set<unsigned>::iterator basisVarIter=basis_.begin();
     vcl_set<unsigned>::iterator basisVarIterEnd=basis_.end();
     unsigned i = 0;
     vnl_vector<double> XtY(ndims+1, 0.0);
 
-    while(basisVarIter != basisVarIterEnd)
+    while (basisVarIter != basisVarIterEnd)
     {
         unsigned k1=*basisVarIter++;
         vcl_set<unsigned>::iterator basisVarInnerIter=basis_.begin();
         unsigned j = 0;
         //Set half of off-diagonals
-        while(*basisVarInnerIter < k1) //NB set is ordered
+        while (*basisVarInnerIter < k1) //NB set is ordered
         {
             unsigned k2=*basisVarInnerIter++;
             XtX(i,j) = XtX_(k1,k2);
@@ -289,30 +282,30 @@ double mbl_stepwise_regression_helpers::lsfit_this_basis::operator()()
         ++i;
     }
     XtY(ndims) = XtY_(num_vars_);
-    //Copy the other half by symmettry
-    for(unsigned i=0;i<ndims;++i)
+    //Copy the other half by symmetry
+    for (unsigned i=0;i<ndims;++i)
     {
-        for(unsigned j=0;j<i;++j)
+        for (unsigned j=0;j<i;++j)
         {
             XtX(j,i) = XtX(i,j);
         }
         XtX(ndims,i) = XtX(i,ndims);
     }
-    
+
     XtX(ndims,ndims) = double (num_examples_);
-    
+
     vnl_svd<double> svd(XtX, 1.0e-12); // 1e-12 = zero-tolerance for singular values
     weights_ = svd.solve(XtY);
 
     double rss=0.0;
     //Now compute the residual sum of squares
-    for(unsigned i=0;i<num_examples_;++i)
+    for (unsigned i=0;i<num_examples_;++i)
     {
         const double* pDataRow=x_[i];
         double ypred = 0.0;
         basisVarIter=basis_.begin();
         vnl_vector<double>::iterator weightIter = weights_.begin();
-        while(basisVarIter != basisVarIterEnd)
+        while (basisVarIter != basisVarIterEnd)
         {
             ypred += pDataRow[*basisVarIter++] * (*weightIter++);
         }
@@ -322,4 +315,3 @@ double mbl_stepwise_regression_helpers::lsfit_this_basis::operator()()
     }
     return rss;
 }
-

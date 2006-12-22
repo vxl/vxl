@@ -1,4 +1,4 @@
-// This is core/vgl/xio/vgl_xio_box_3d.txx
+// This is gel/mrc/vpgl/xio/vpgl_xio_calibration_matrix.txx
 #ifndef vpgl_xio_calibration_matrix_txx_
 #define vpgl_xio_calibration_matrix_txx_
 //:
@@ -25,6 +25,6 @@ void x_write(vcl_ostream &os, vpgl_calibration_matrix<T> p)
 }
 
 #define VPGL_XIO_CALIBRATION_MATRIX_INSTANTIATE(T) \
-template void x_write(vcl_ostream &, vpgl_calibration_matrix<T>)
+template void x_write(vcl_ostream &, vpgl_calibration_matrix<T >)
 
 #endif // vpgl_xio_calibration_matrix_txx_
