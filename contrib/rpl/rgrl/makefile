@@ -145,6 +145,7 @@ SOURCES += rgrl_matcher_k_nearest_pick_one.cxx
 SOURCES += rgrl_weighter_indiv_scale.cxx
 SOURCES += rgrl_internal_util.cxx
 SOURCES += rgrl_mask_3d_image.cxx
+SOURCES += rgrl_matcher_k_nearest_adv.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
