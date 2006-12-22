@@ -1,12 +1,12 @@
 #ifndef clsfy_binary_hyperplane_gmrho_builder_h
 #define clsfy_binary_hyperplane_gmrho_builder_h
-
 //:
 // \file
 // \author Martin Roberts
-// \brief Builder for linear 2-state classifier, using a sigmoidal Geman-McClure rho function 
+// \brief Builder for linear 2-state classifier, using a sigmoidal Geman-McClure rho function
 
 #include <vcl_string.h>
+#include <vcl_iosfwd.h> // for std::ostream
 #include <vcl_functional.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
@@ -27,33 +27,33 @@
 //  Several iterations are performed during which sigma is reduced
 // (i.e. deterministic annealing), to try and avoid local minima
 
-class clsfy_binary_hyperplane_gmrho_builder  : public clsfy_binary_hyperplane_ls_builder {
-private:
-    //: The classifier weights (weight N is the constant)
-    mutable vnl_vector<double> weights_;
+class clsfy_binary_hyperplane_gmrho_builder  : public clsfy_binary_hyperplane_ls_builder
+{
+ private:
+  //: The classifier weights (weight N is the constant)
+  mutable vnl_vector<double> weights_;
 
-    //: Number of training examples (data.rows())
-    mutable unsigned num_examples_;
-    //: Number of variables (data.cols())
-    mutable unsigned num_vars_;
-    //: Tolerance for non-linear optimiser convergence
-    mutable double epsilon_;
+  //: Number of training examples (data.rows())
+  mutable unsigned num_examples_;
+  //: Number of variables (data.cols())
+  mutable unsigned num_vars_;
+  //: Tolerance for non-linear optimiser convergence
+  mutable double epsilon_;
 
-    //: should sigma be estimated during the build or a pre-defined value used
-    bool auto_estimate_sigma_;
-    //: use this for sigma if auto_estimate_sigma is true
-    double sigma_preset_;
+  //: should sigma be estimated during the build or a pre-defined value used
+  bool auto_estimate_sigma_;
+  //: use this for sigma if auto_estimate_sigma is true
+  double sigma_preset_;
 
-    //: Estimate the scale (sigma) used in the Geman-McClure function
-    //This is increased by the mis-classification overlap region if any
-    double estimate_sigma(const vnl_matrix<double>& data,
-                          const vnl_vector<double >& y) const;
-    //: Determine the weights for the hyperplane
-    void determine_weights(const vnl_matrix<double>& data,
-                           const vnl_vector<double >& y,
-                           double sigma) const;
-  public:
-
+  //: Estimate the scale (sigma) used in the Geman-McClure function
+  //This is increased by the mis-classification overlap region if any
+  double estimate_sigma(const vnl_matrix<double>& data,
+                        const vnl_vector<double>& y) const;
+  //: Determine the weights for the hyperplane
+  void determine_weights(const vnl_matrix<double>& data,
+                         const vnl_vector<double>& y,
+                         double sigma) const;
+ public:
 
   // Dflt ctor
   clsfy_binary_hyperplane_gmrho_builder():
@@ -66,7 +66,7 @@ private:
   double build(clsfy_classifier_base &classifier,
                mbl_data_wrapper<vnl_vector<double> > &inputs,
                const vcl_vector<unsigned> &outputs) const;
-  
+
   //: Build model from data
   // Return the mean error over the training set.
   // For this classifiers, you must nClasses==1 to
@@ -101,11 +101,4 @@ private:
   virtual void b_read(vsl_b_istream &);
 };
 
-
-#endif // clsfy_binary_hyperplane_gmrho_builder.h_h
-
-
-
-
-
-
+#endif // clsfy_binary_hyperplane_gmrho_builder_h
