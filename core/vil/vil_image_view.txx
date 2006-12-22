@@ -664,7 +664,10 @@ void vil_image_view<T>::fill(T value)
   T* plane = top_left_;
 
   if (is_contiguous())
+  {
     vcl_fill(begin(), end(), value);
+    return;
+  }
 
   if (istep_==1)
   {
