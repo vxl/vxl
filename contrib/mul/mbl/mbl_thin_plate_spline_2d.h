@@ -106,8 +106,9 @@ class mbl_thin_plate_spline_2d
     //  A measure of total amount of non-linear deformation
   double bendingEnergyY() const { return energy_y_; }
 
-  //: if this parameter is set to true, then only global affine part
-  //  of the currently computed transformation is used
+  //:
+  // If this parameter is set to true, then only global affine part
+  // of the currently computed transformation is used
   void set_pure_affine(bool val) { return_pure_affine_ = val; }
 
     //: Version number for I/O
