@@ -13,6 +13,7 @@
 #include <vcl_string.h>
 #include <vcl_algorithm.h>
 #include <vcl_numeric.h>
+#include <vcl_cmath.h>
 #include <clsfy/clsfy_rbf_parzen.h>
 #include <clsfy/clsfy_k_nearest_neighbour.h>
 #include <clsfy/clsfy_binary_hyperplane.h>
@@ -223,7 +224,6 @@ void test_binary_hyperplane()
 
 void test_clsfy_geman_mcclure_build()
 {
-    
     vcl_vector<vpdfl_axis_gaussian_sampler *> generator(2);//
     const unsigned nDims = 2;
     vnl_vector<double> meanPos(nDims), varPos(nDims), meanNeg(nDims), varNeg(nDims),origin(nDims);
@@ -234,15 +234,15 @@ void test_clsfy_geman_mcclure_build()
     basisPos[1].set_size(2);basisPos[1][0] = d;basisPos[1][1] = d;
 
     vcl_vector<vnl_vector<double> > basisNeg(2);
-    double dx =  cos(0.96);double dy =  sin(0.96); //(0.96 is a bit more than 45 degrees in radians)
+    double dx =  vcl_cos(0.96), dy =  vcl_sin(0.96); //(0.96 is a bit more than 45 degrees in radians)
     basisNeg[0].set_size(2);basisNeg[0][0] = -dx;basisNeg[0][1] = dy;
     basisNeg[1].set_size(2);basisNeg[1][0] = dx;basisNeg[1][1] = dy;
-    
+
     vpdfl_axis_gaussian PDF0, PDF1;
 
-    meanPos.fill(0.0); 
+    meanPos.fill(0.0);
     meanPos[0] = -2.75;   meanPos[1] = 2.75;
-    meanNeg.fill(0.0); 
+    meanNeg.fill(0.0);
 
     vnl_vector<double > deltaMeans = meanPos - meanNeg;
     varNeg[0]= 0.75; varNeg[1] = 3.0;
@@ -270,20 +270,20 @@ void test_clsfy_geman_mcclure_build()
     {
         unsigned indicator=0;
         bool outlier=false;
-        if(i%3==0)
+        if (i%3==0)
         {
             indicator=1;
         }
-        if(i<nSamples)
+        if (i<nSamples)
         {
-            if( indicator)
+            if ( indicator)
             {
-                if(i%24==0)
-                { 
+                if (i%24==0)
+                {
                     outlier = true;
                 }
             }
-            else if(i%20 == 0)
+            else if (i%20 == 0)
             {
                 outlier = true;
             }
@@ -292,18 +292,18 @@ void test_clsfy_geman_mcclure_build()
         vcl_vector<vnl_vector<double> >& basis = (indicator ? basisPos : basisNeg);
         vnl_vector<double>& mean=(indicator ? meanPos : meanNeg);
         s = sbase[0]*basis[0] + sbase[1]*basis[1];
-        if(outlier)
+        if (outlier)
         {
-            if(indicator)
+            if (indicator)
             {
                 s += 4.0*deltaMeans; //Shift miles away from the boundary
             }
             else
             {
-                s -= 2.0*deltaMeans;   // Shift inwards away from the boundary  
+                s -= 2.0*deltaMeans;   // Shift inwards away from the boundary
             }
         }
-        if(i<nSamples)
+        if (i<nSamples)
         {
             trainingVectors[i] = mean + s;
             labels[i] = indicator;
@@ -345,14 +345,12 @@ void test_clsfy_geman_mcclure_build()
     //Now run the gmrho build but with sigma forced large so that the GM function approximates
     // to ordinary least square
     clsfy_binary_hyperplane_gmrho_builder builderGM;
-    vcl_cout<<vcl_endl<<"Now training using Geman-McClure builder"<<vcl_endl;
-    vcl_cout << "Error on Training set ";
+    vcl_cout<<vcl_endl<<"Now training using Geman-McClure builder"<<vcl_endl
+            << "Error on Training set ";
     builderGM.set_auto_estimate_sigma(false);
     builderGM.set_sigma_preset(10.0);
 
-
-
-    #if 0
+    #if 0 // commented out
     {
         using namespace clsfy_binary_hyperplane_gmrho_builder_helpers;
         //Now copy from the urggghh data wrapper into a sensible data structure (matrix!)
@@ -365,14 +363,13 @@ void test_clsfy_geman_mcclure_build()
         {
             double* row=data[i++];
             vcl_copy(training_set.current().begin(),training_set.current().end(),row);
-        }while(training_set.next());
+        } while (training_set.next());
 
         Set up category regression values determined by output class
             vnl_vector<double> y(num_examples_,0.0);
         vcl_transform(labels.begin(),labels.end(),
                       y.begin(),
                       category_value(vcl_count(labels.begin(),labels.end(),1u),labels.size()));
-
 
         vnl_vector<double> weights(weightsLS);
 
@@ -389,7 +386,7 @@ void test_clsfy_geman_mcclure_build()
         vnl_vector<double > gradf0(num_vars_+1,0.0);
         vnl_vector<double > gradf1(num_vars_+1,0.0);
         epsilon=1.0E-6;
-        for(unsigned i=0; i<weights.size();i++)
+        for (unsigned i=0; i<weights.size();i++)
         {
             weights = weights0;
             weights[i] += epsilon;
@@ -401,9 +398,9 @@ void test_clsfy_geman_mcclure_build()
         }
         costFn.gradf(weights0,gradf1);
         vnl_vector<double> dg = gradf1-gradf0;
-        TEST_NEAR("GM cost function gradient is consistent", dg.inf_norm(), 0.0, 1.0E-4);    
+        TEST_NEAR("GM cost function gradient is consistent", dg.inf_norm(), 0.0, 1.0E-4);
     }
-    #endif
+    #endif // 0
 
     clsfy_builder_base* pBase = &builderGM;
     double train_error = pBase->build(*pClassifier, training_set, 1,labels);
@@ -413,7 +410,7 @@ void test_clsfy_geman_mcclure_build()
     weights.normalize();
     weightsLS.normalize();
     vnl_vector<double> diff=weightsLS - weights;
-    TEST_NEAR("Hyperplane close to LS Build at high sigma", diff.inf_norm(), 0.0, 0.02);    
+    TEST_NEAR("Hyperplane close to LS Build at high sigma", diff.inf_norm(), 0.0, 0.02);
     vcl_cout << "****************Testing over test set**************\n";
 
     double test_error = clsfy_test_error(*pClassifier, test_set_inputs, testLabels);
@@ -425,16 +422,15 @@ void test_clsfy_geman_mcclure_build()
     builderGM.set_auto_estimate_sigma(true);
     builderGM.set_sigma_preset(1.0);
 
-
     vcl_cout<<"Now doing Geman McClure build with automatic sigma scaling..."<<vcl_endl;
-    
+
     double train_error2 = pBase->build(*pClassifier, training_set,1, labels);
     vcl_cout << train_error2 << vcl_endl;
     TEST_NEAR("Train error on classifier is good enough", train_error2, 0.0, 0.05);
     weights = pClassifier->weights();
     weights.normalize();
     diff=weightsLS - weights;
-    TEST_NEAR("Hyperplane still fairly close to LS Build", diff.inf_norm(), 0.0, 0.25);    
+    TEST_NEAR("Hyperplane still fairly close to LS Build", diff.inf_norm(), 0.0, 0.25);
     vcl_cout << "****************Testing over test set**************\n";
 
     double test_error2 = clsfy_test_error(*pClassifier, test_set_inputs, testLabels);
