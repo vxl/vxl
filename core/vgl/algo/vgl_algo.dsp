@@ -167,6 +167,9 @@ SOURCE=.\Templates/vgl_orient_box_3d+double-.cxx
 SOURCE=.\Templates/vgl_orient_box_3d+float-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vgl_fit_plane_3d+double-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vgl_h_matrix_1d_compute_3point.cxx
 # End Source File
 # Begin Source File
@@ -312,6 +315,12 @@ SOURCE=.\vgl_orient_box_3d.h
 # End Source File
 # Begin Source File
 SOURCE=.\vgl_orient_box_3d.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_fit_plane_3d.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_fit_plane_3d.txx
 # End Source File
 # End Group
 # End Target
