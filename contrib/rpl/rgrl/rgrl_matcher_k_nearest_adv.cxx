@@ -11,23 +11,23 @@
 #include <rgrl/rgrl_match_set.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
-
+#include <vcl_cassert.h>
 
 //-----------------------------------------------
 //: a struct for fast look up of the from feature
 struct feature_sptr_iterator_pair {
-  
+
   typedef rgrl_match_set::const_from_iterator  from_feature_iterator;
   rgrl_feature_sptr                   feature_;
   from_feature_iterator               fea_iterator_;
-  
+
   feature_sptr_iterator_pair()
   { }
-  
+
   feature_sptr_iterator_pair( rgrl_feature_sptr const& fea, from_feature_iterator const& it )
   : feature_( fea), fea_iterator_( it )
   { }
-  
+
   bool operator< ( feature_sptr_iterator_pair const& rhs ) const
   { return this->feature_ < rhs.feature_; }
 
@@ -50,7 +50,7 @@ rgrl_matcher_k_nearest_adv( unsigned int k, double dist_thres, double min_mapped
     min_mapped_scale_( min_mapped_scale ),
     sqr_thres_for_reuse_match_( thres_reuse_match )
 {
-  if( sqr_thres_for_reuse_match_ > 0 )
+  if ( sqr_thres_for_reuse_match_ > 0 )
     sqr_thres_for_reuse_match_ = sqr_thres_for_reuse_match_*sqr_thres_for_reuse_match_;
 }
 
@@ -68,7 +68,7 @@ compute_matches( rgrl_feature_set const&       from_set,
   typedef feat_vector::const_iterator feat_iter;
 
   assert( current_view.xform_estimate().as_pointer() == &current_xform );
-  
+
   // faster to check a boolean variable
   const bool allow_reuse_match = ( sqr_thres_for_reuse_match_ > 0) && (prev_xform_) && (old_matches);
 
@@ -76,12 +76,12 @@ compute_matches( rgrl_feature_set const&       from_set,
   //
   typedef rgrl_match_set::const_from_iterator  from_feature_iterator;
   vcl_map< rgrl_feature_sptr, from_feature_iterator > feature_sptr_iterator_map;
-  if( allow_reuse_match ) {
-    
-    for( from_feature_iterator i=old_matches->from_begin(); i!=old_matches->from_end(); ++i )
+  if ( allow_reuse_match )
+  {
+    for ( from_feature_iterator i=old_matches->from_begin(); i!=old_matches->from_end(); ++i )
       feature_sptr_iterator_map[ i.from_feature() ] = i;
   }
-  
+
   // create the new match set
   //
   rgrl_match_set_sptr matches_sptr
@@ -89,8 +89,8 @@ compute_matches( rgrl_feature_set const&       from_set,
 
   //  get the features in the current view
   feat_vector from;
-  if( !current_view.features_in_region( from, from_set ) ) {
-    DebugMacro( 1, "Cannot get features in current region!!!" << vcl_endl );
+  if ( !current_view.features_in_region( from, from_set ) ) {
+    DebugMacro( 1, "Cannot get features in current region!!!\n");
     return matches_sptr;
   }
 
@@ -98,7 +98,7 @@ compute_matches( rgrl_feature_set const&       from_set,
   feat_vector matching_features, pruned_set;
   matching_features.reserve( 10 );
   pruned_set.reserve( 10 );
-    
+
   matches_sptr->reserve( from.size() );
 
   //  generate the matches for each feature of this feature type in the current region
@@ -111,26 +111,28 @@ compute_matches( rgrl_feature_set const&       from_set,
       continue;   // feature is invalid
 
     matching_features.clear();
-    
-    if( allow_reuse_match ) {
-      
+
+    if ( allow_reuse_match )
+    {
       prev_xform_->map_location( (*fitr)->location(), prev_mapped );
 
-      // if the mapping difference is smaller than this threshold  
+      // if the mapping difference is smaller than this threshold
       vcl_map< rgrl_feature_sptr, from_feature_iterator >::const_iterator map_itr;
-      if( vnl_vector_ssd( prev_mapped, mapped->location() ) < sqr_thres_for_reuse_match_  && 
-          (map_itr=feature_sptr_iterator_map.find( *fitr )) != feature_sptr_iterator_map.end() ) {
-            
+      if ( vnl_vector_ssd( prev_mapped, mapped->location() ) < sqr_thres_for_reuse_match_  &&
+           (map_itr=feature_sptr_iterator_map.find( *fitr )) != feature_sptr_iterator_map.end() )
+      {
         // re-use the to features
         const from_feature_iterator& prev_from_iter = map_itr->second;
-        for( from_feature_iterator::to_iterator titr=prev_from_iter.begin(); titr!=prev_from_iter.end(); ++titr )
+        for ( from_feature_iterator::to_iterator titr=prev_from_iter.begin(); titr!=prev_from_iter.end(); ++titr )
           matching_features.push_back( titr.to_feature() );
-        
+
         // increament the count
         ++reuse_match_count;
-      } else 
+      }
+      else
         to_set.k_nearest_features( matching_features, mapped, k_ );
-    } else
+    }
+    else
       to_set.k_nearest_features( matching_features, mapped, k_ );
 
     // prune the matches to satisfy the threshold
@@ -156,7 +158,7 @@ compute_matches( rgrl_feature_set const&       from_set,
 
   // store xform
   prev_xform_ = current_view.xform_estimate();
-  
+
   return matches_sptr;
 }
 
