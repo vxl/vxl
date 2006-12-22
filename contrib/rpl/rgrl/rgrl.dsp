@@ -324,6 +324,9 @@ SOURCE=.\rgrl_internal_util.cxx
 SOURCE=.\rgrl_mask_3d_image.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\rgrl_matcher_k_nearest_adv.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/rgrl_feature_set_location+2-.cxx
 # End Source File
 # Begin Source File
@@ -805,6 +808,9 @@ SOURCE=.\rgrl_feature_set_bins.h
 # End Source File
 # Begin Source File
 SOURCE=.\rgrl_feature_set_bins.txx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_matcher_k_nearest_adv.h
 # End Source File
 # End Group
 # End Target
