@@ -22,8 +22,6 @@
 #include <vnl/algo/vnl_lbfgs.h>
 
 
-
-
 //: Some helper stuff, like the error function to be minimised
 namespace clsfy_binary_hyperplane_gmrho_builder_helpers
 {
@@ -46,20 +44,19 @@ namespace clsfy_binary_hyperplane_gmrho_builder_helpers
         double alpha_;
         //: 1/(1+var_)^2 - with alpha, ensures continuity of function at hyperplane boundary
         double beta_;
-     public:
+      public:
         //: construct passing in reference to data matrix
         gmrho_sum(const vnl_matrix<double>& x,
                   const vnl_vector<double>& y,double sigma=1);
-        
+
         //: reset the scaling factor
-        void set_sigma(double sigma); 
+        void set_sigma(double sigma);
 
         //:  The main function.  Given the vector of weights parameters vector , compute the value of f(x).
         virtual double f(vnl_vector<double> const& w);
 
         //:  Calculate the gradient of f at parameter vector x.
         virtual void gradf(vnl_vector<double> const& x, vnl_vector<double>& gradient);
-        
     };
 
     //: functor to accumulate gradient contributions for given training example
@@ -80,11 +77,11 @@ namespace clsfy_binary_hyperplane_gmrho_builder_helpers
     {
         const double y0;
         const double y1;
-    public:
+      public:
         category_value(unsigned num_category1,unsigned num_total):
-                y0(-1.0*double(num_total-num_category1)/double(num_total)),
-                y1(double(num_category1)/double(num_total)) {}
-            
+            y0(-1.0*double(num_total-num_category1)/double(num_total)),
+            y1(double(num_category1)/double(num_total)) {}
+
         double operator()(const unsigned& classNum)
         {
             //return classNum ? y1 : y0;
@@ -116,14 +113,14 @@ double clsfy_binary_hyperplane_gmrho_builder::build(clsfy_classifier_base& class
                                                     const vcl_vector<unsigned>& outputs) const
 {
     using clsfy_binary_hyperplane_gmrho_builder_helpers::category_value;
-    
+
     //First let the base class get us a starting solution
     clsfy_binary_hyperplane_ls_builder::build( classifier,inputs,outputs);
     //Extract the data into a matrix
     num_examples_ = inputs.size();
-    if(num_examples_ == 0)
+    if (num_examples_ == 0)
     {
-        vcl_cout<<"WARNING - clsfy_binary_hyperplane_gmrho_builder::build called with no data"<<vcl_endl;
+        vcl_cerr<<"WARNING - clsfy_binary_hyperplane_gmrho_builder::build called with no data\n";
         return 0.0;
     }
 
@@ -136,7 +133,7 @@ double clsfy_binary_hyperplane_gmrho_builder::build(clsfy_classifier_base& class
     {
         double* row=data[i++];
         vcl_copy(inputs.current().begin(),inputs.current().end(),row);
-     }while(inputs.next());
+    } while (inputs.next());
 
     //Set up category regression values determined by output class
     vnl_vector<double> y(num_examples_,0.0);
@@ -147,13 +144,13 @@ double clsfy_binary_hyperplane_gmrho_builder::build(clsfy_classifier_base& class
 
     //Initialise the weights using the standard least squares fit of my base class
     clsfy_binary_hyperplane& hyperplane = dynamic_cast<clsfy_binary_hyperplane &>(classifier);
-    
+
     weights_.update(hyperplane.weights(),0);
     weights_[num_vars_] = hyperplane.bias();
 
     //Estimate the scaling factor used in the Geman-McClure function
     double sigma_scale_target = sigma_preset_;
-    if(auto_estimate_sigma_)
+    if (auto_estimate_sigma_)
         sigma_scale_target=estimate_sigma(data,y);
 
     //To avoid local minima perform deterministic annealing starting from a large initial sigma
@@ -161,27 +158,27 @@ double clsfy_binary_hyperplane_gmrho_builder::build(clsfy_classifier_base& class
     double kappa = 5.0;
     const double alpha_anneal=0.75;
     //Num of iterations to reduce back to 10% on top of required sigma
-    int N = 1+int(log(1.10/kappa)/log(alpha_anneal));
-    if(N<1) N=1;
+    int N = 1+int(vcl_log(1.1/kappa)/vcl_log(alpha_anneal));
+    if (N<1) N=1;
     double sigma_scale = kappa * sigma_scale_target;
 
     epsilon_ = 1.0E-4; //slacken off convergence tolerance during annealing
-    for(int ianneal=0;ianneal<N;++ianneal)
+    for (int ianneal=0;ianneal<N;++ianneal)
     {
         //Then do it at this sigma
         determine_weights(data,y,sigma_scale);
         //and then reduce sigma
         sigma_scale *= alpha_anneal;
     }
-    
+
     epsilon_ = 1.0E-8; //re-impose a more precise convergence criterion
     //Then re-estimate sigma scale and do a final pair of iterations
     //as sigma depends on the mis-classification overlap depth
 
 
-    for(unsigned iter=0;iter<(auto_estimate_sigma_ ? 2 : 1);++iter)
+    for (unsigned iter=0; iter<(auto_estimate_sigma_ ? 2 : 1); ++iter)
     {
-        if(auto_estimate_sigma_)
+        if (auto_estimate_sigma_)
             sigma_scale_target=estimate_sigma(data,y);
         else
             sigma_scale_target = sigma_preset_;
@@ -200,15 +197,15 @@ void clsfy_binary_hyperplane_gmrho_builder::determine_weights(const vnl_matrix<d
                                                               double sigma) const
 {
     //Optimise the weights to fit the data to y
-    
+
     clsfy_binary_hyperplane_gmrho_builder_helpers::gmrho_sum costFn(data,y,sigma);
 
     //minimise using the quasi-Newton lbfgs method
     vnl_lbfgs cgMinimiser(costFn);
-    
+
     cgMinimiser.set_f_tolerance(epsilon_);
     cgMinimiser.set_x_tolerance(epsilon_);
-    
+
     cgMinimiser.minimize(weights_);
 }
 
@@ -218,27 +215,27 @@ double clsfy_binary_hyperplane_gmrho_builder::estimate_sigma(const vnl_matrix<do
     //Sigma is set to root(3) * (1+d), where d is the median distance past zero
     //of the misclassified values
     //The root(3) is because GM function reduces influence after sigma/sqrt(3)
-    
+
     vcl_vector<double > falsePosScores;
     vcl_vector<double > falseNegScores;
 
     double b=weights_[num_vars_]; //constant stored as final variable
-    for(unsigned i=0; i<num_examples_;++i) //Loop over examples (matrix rows)
+    for (unsigned i=0; i<num_examples_;++i) //Loop over examples (matrix rows)
     {
         const double* px=data[i];
         double yval = y[i];
         double ypred = vcl_inner_product(px,px+num_vars_,weights_.begin(),0.0) - b ;
         double e = yval - ypred;
-        if(yval>0.0)
+        if (yval>0.0)
         {
-            if(ypred<0.0)//mis-classified false negative
+            if (ypred<0.0) // mis-classified false negative
             {
                 falseNegScores.push_back(vcl_fabs(ypred));
             }
         }
         else
         {
-            if(ypred>0.0)//mis-classified false negative
+            if (ypred>0.0)//mis-classified false negative
             {
                 falsePosScores.push_back(vcl_fabs(ypred));
             }
@@ -246,14 +243,14 @@ double clsfy_binary_hyperplane_gmrho_builder::estimate_sigma(const vnl_matrix<do
     }
     double sigma=1.0;
     double delta0=0.0;
-    if(!falsePosScores.empty())
+    if (!falsePosScores.empty())
     {
         vcl_vector<double >::iterator medianIter=falsePosScores.begin() + falsePosScores.size()/2;
         vcl_nth_element(falsePosScores.begin(),medianIter,falsePosScores.end());
         delta0 = (*medianIter);
     }
     double delta1=0.0;
-    if(!falseNegScores.empty())
+    if (!falseNegScores.empty())
     {
         vcl_vector<double >::iterator medianIter=falseNegScores.begin() + falseNegScores.size()/2;
         vcl_nth_element(falseNegScores.begin(),medianIter,falseNegScores.end());
@@ -350,7 +347,7 @@ void clsfy_binary_hyperplane_gmrho_builder_helpers::gmrho_sum::set_sigma(double 
     double s=1.0+var_;
     s = s*s;
     alpha_ = var_/s;
-    beta_ = 1.0/s;    
+    beta_ = 1.0/s;
 }
 
 
@@ -360,20 +357,18 @@ double clsfy_binary_hyperplane_gmrho_builder_helpers::gmrho_sum::f(vnl_vector<do
     //Sum the error contributions from each example
     double sum=0.0;
     double b=w[num_vars_]; //constant stored as final variable
-    for(unsigned i=0; i<num_examples_;++i) //Loop over examples (matrix rows)
+    for (unsigned i=0; i<num_examples_;++i) //Loop over examples (matrix rows)
     {
-        
         const double* px=x_[i];
         double pred = vcl_inner_product(px,px+num_vars_,w.begin(),0.0) - b;
         double e =  y_[i] - pred;
         double e2 = e*e;
-        if( ((y_[i] > 0.0) && (e <= 1.0)) ||
-            ((y_[i] < 0.0) && (e >= -1.0)) )
+        if ( ((y_[i] > 0.0) && (e <= 1.0)) ||
+             ((y_[i] < 0.0) && (e >= -1.0)) )
         {
             //In the correctly classified region
             //So use Geman-McClure function
             sum += e2/(e2+var_);
-            
         }
         else
         {
@@ -388,16 +383,13 @@ double clsfy_binary_hyperplane_gmrho_builder_helpers::gmrho_sum::f(vnl_vector<do
 //: Calculate gradient of the error sum function
 void clsfy_binary_hyperplane_gmrho_builder_helpers::gmrho_sum::gradf(vnl_vector<double> const& w,
                                                                      vnl_vector<double>& gradient)
-                                                                     
 {
-   
-    
     using clsfy_binary_hyperplane_gmrho_builder_helpers::gm_grad_accum;
     double sum=0.0;
     double b=w[num_vars_]; //constant stored as final variable
     gradient.fill(0.0);
-    
-    for(unsigned i=0; i<num_examples_;++i) //Loop over examples (matrix rows)
+
+    for (unsigned i=0; i<num_examples_;++i) //Loop over examples (matrix rows)
     {
         const double* px=x_[i];
         double pred = vcl_inner_product(px,px+num_vars_,w.begin(),0.0) - b;
@@ -405,8 +397,8 @@ void clsfy_binary_hyperplane_gmrho_builder_helpers::gmrho_sum::gradf(vnl_vector<
         double e =  y_[i] - pred;
         double e2 = e*e;
         double wt=1.0;
-        if( ((y_[i] > 0.0) && (e <= 1.0)) ||
-            ((y_[i] < 0.0) && (e >= -1.0)) )
+        if ( ((y_[i] > 0.0) && (e <= 1.0)) ||
+             ((y_[i] < 0.0) && (e >= -1.0)) )
         {
             wt = e2 + var_;
         }
@@ -415,16 +407,14 @@ void clsfy_binary_hyperplane_gmrho_builder_helpers::gmrho_sum::gradf(vnl_vector<
             //Freeze weight decay once in misclassification region
             wt = 1.0 + var_;
         }
-            
+
         double wtInv = -e/(wt*wt);
         vcl_for_each(gradient.begin(),gradient.begin()+num_vars_,
                      gm_grad_accum(px,wtInv));
-      
-        gradient[num_vars_] += (-wtInv); //dg/db, last term is for constant
 
+        gradient[num_vars_] += (-wtInv); //dg/db, last term is for constant
     }
     //And multiply everything by 2sigma^2
     vcl_transform(gradient.begin(),gradient.end(),gradient.begin(),
                   vcl_bind2nd(vcl_multiplies<double>(),2.0*var_));
 }
-
