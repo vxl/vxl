@@ -96,8 +96,8 @@ void vgl_fit_plane_3d<T>::add_point(const T x, const T y, const T z)
   vnl_vector<double> s = svd.nullvector();
  
   // re-transform the points back to the real world
-  vnl_matrix<double> N=norm.get_matrix();
-  vnl_matrix<double> N_transp = N.transpose(); 
+  vnl_double_4x4 N=norm.get_matrix();
+  vnl_double_4x4 N_transp = N.transpose(); 
   s = N_transp * s;
 
   double a, b, c, d;
