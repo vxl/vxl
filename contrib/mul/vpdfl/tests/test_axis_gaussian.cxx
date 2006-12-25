@@ -41,7 +41,6 @@ static void test_gradient_logp(vpdfl_pdf_base& pdf, const vnl_vector<double>& x0
 {
   double p0 = pdf.log_p(x0);
   vnl_vector<double> g;
-  double p;
   pdf.gradient_logp(g,x0);
 
   vnl_vector<double> x=x0;

@@ -45,7 +45,6 @@ static void test_gradient_logp(vpdfl_pdf_base& pdf, const vnl_vector<double>& x0
 {
   double p0 = pdf.log_p(x0);
   vnl_vector<double> g;
-  double p;
   pdf.gradient_logp(g,x0);
 
   vnl_vector<double> x=x0;
@@ -124,7 +123,7 @@ void test_gaussian()
 
   vpdfl_gaussian& g_pdf1 = static_cast<vpdfl_gaussian&>(*p_pdf_built);
   vpdfl_gaussian g_pdf2;
-  vnl_vector<double> var2(4);  
+  vnl_vector<double> var2(4);
   for (unsigned i=0;i<4;++i) var2[i]=1+i;
   g_pdf2.set(g_pdf1.mean(),g_pdf1.eigenvecs(),var2);
   test_gradient(g_pdf2,data[0]);
@@ -268,7 +267,6 @@ void test_gaussian()
     }
     vsl_delete_all_loaders();
   }
-
 }
 
 TESTMAIN( test_gaussian );
