@@ -28,7 +28,6 @@ void test_stepwise_regression()
     unsigned num_examples = 1000;
     vnl_matrix<double> data(num_examples,ndims);
     vnl_vector<double > ydata(num_examples);
-    
 
     vcl_vector<vnl_vector<double > > bases(nbases);
     vnl_vector<double >  xmean(ndims);
@@ -36,7 +35,7 @@ void test_stepwise_regression()
     vnl_vector<double> vars(nbases);
     double sigy = 1.0;
     double vary=sigy*sigy;
-    
+
     for (unsigned k=0;k<nbases;++k)
     {
         bases[k].set_size(ndims);
@@ -44,7 +43,7 @@ void test_stepwise_regression()
         sigmas[k] = vcl_sqrt(vars[k]);
     }
     vcl_cout<<"generating bases with "<<nbases<< " bases"<<vcl_endl;
-    for (int j=0;j<ndims;++j)
+    for (unsigned int j=0;j<ndims;++j)
     {
         for (unsigned k=0;k<nbases;++k)
         {
@@ -58,15 +57,15 @@ void test_stepwise_regression()
     }
     vnl_matrix<double> xbasis(ndims,nbases);
     vnl_matrix<double> orthog_basis(ndims,nbases);
-    
-    for(unsigned k=0;k<nbases;++k)
+
+    for (unsigned k=0;k<nbases;++k)
     {
         xbasis.set_column(k,bases[k]);
     }
     mbl_mod_gram_schmidt(xbasis,orthog_basis);
- 
+
     vcl_cout<<"generating data for "<<num_examples<< " examples with "<<ndims<< " dimensions"<<vcl_endl;
-    
+
     unsigned num_signif = 5;
     vcl_vector<unsigned> signifIndices;
     signifIndices.push_back(0);
@@ -81,7 +80,7 @@ void test_stepwise_regression()
     coeffs.push_back(0.5);
     coeffs.push_back(0.4);
     const double mu=100.0;
-    for (int i=0;i<num_examples;++i)
+    for (unsigned int i=0;i<num_examples;++i)
     {
         double* pxdata = data[i];
         vnl_vector_ref<double> xdata(ndims,pxdata);
@@ -93,7 +92,7 @@ void test_stepwise_regression()
         }
 
         // Add a bit of noise
-        for (int j=0;j<ndims;++j)
+        for (unsigned int j=0;j<ndims;++j)
         {
             xdata[j]+=0.1*mz_random.normal64();
         }
@@ -115,29 +114,28 @@ void test_stepwise_regression()
     TEST("Weights and basis set have a consistent size",basis.size()+1 == weights.size(),true);
     TEST("basis set contains all it should",basis.size() >= signifIndices.size(),true);
     TEST("basis set contains at most one spurious variable",basis.size() <= signifIndices.size()+1,true);
-    
+
     vcl_set<unsigned>::iterator failedIter=basis.end();
     vcl_set<unsigned>::iterator seeker=basis.begin();
     vcl_vector<unsigned >::iterator signifIter=signifIndices.begin();
     vcl_vector<unsigned >::iterator signifIterEnd=signifIndices.end();
-    while( signifIter !=  signifIterEnd)
+    while (signifIter !=  signifIterEnd)
     {
         seeker=basis.find(*signifIter);
         vcl_cout<<"Checking for variable "<< *signifIter<<" in basis"<<vcl_endl;
         TEST("Significant variable located",seeker==failedIter,false);
         ++signifIter;
     }
-    
 
     //Now check that the returned weights are the correlation coefficients
     vnl_vector<double > delta(basis.size(),0.0);
     vcl_set<unsigned >::iterator basisIter=basis.begin();
-    for(unsigned k=0;k<delta.size();++k,++basisIter)
+    for (unsigned k=0;k<delta.size();++k,++basisIter)
     {
         //Note the ordering can be different if there is a spurious variable somewhere in the basis
         //So find the position of the basis variable in the coefficient vector
         vcl_vector<unsigned >::iterator seekIter=vcl_find(signifIndices.begin(),signifIndices.end(),*basisIter);
-        if(seekIter != signifIndices.end())
+        if (seekIter != signifIndices.end())
         {
             //If the basis variable is significant
             unsigned kprime=vcl_distance(signifIndices.begin(),seekIter);
