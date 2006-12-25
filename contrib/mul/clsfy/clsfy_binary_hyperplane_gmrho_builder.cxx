@@ -225,7 +225,6 @@ double clsfy_binary_hyperplane_gmrho_builder::estimate_sigma(const vnl_matrix<do
         const double* px=data[i];
         double yval = y[i];
         double ypred = vcl_inner_product(px,px+num_vars_,weights_.begin(),0.0) - b ;
-        double e = yval - ypred;
         if (yval>0.0)
         {
             if (ypred<0.0) // mis-classified false negative
@@ -385,7 +384,6 @@ void clsfy_binary_hyperplane_gmrho_builder_helpers::gmrho_sum::gradf(vnl_vector<
                                                                      vnl_vector<double>& gradient)
 {
     using clsfy_binary_hyperplane_gmrho_builder_helpers::gm_grad_accum;
-    double sum=0.0;
     double b=w[num_vars_]; //constant stored as final variable
     gradient.fill(0.0);
 
