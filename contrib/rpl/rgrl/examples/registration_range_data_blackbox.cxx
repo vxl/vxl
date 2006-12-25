@@ -153,7 +153,6 @@ main( int argc, char* argv[] )
 
   // BeginCodeSnippet
   const unsigned int dimension = 3;
-  bool use_bins = true;
   rgrl_feature_set_sptr moving_feature_set =
     new rgrl_feature_set_location<dimension>(moving_feature_points);
   rgrl_feature_set_sptr fixed_feature_set =

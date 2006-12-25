@@ -177,12 +177,9 @@ main( int argc, char* argv[] )
   read_feature_file( fixed_file_name, fixed_feature_points, 1 );
 
   const unsigned int dimension = 3;
-  rgrl_feature_set_sptr moving_feature_set;
-  rgrl_feature_set_sptr fixed_feature_set;
-  bool use_bins = true;
-  moving_feature_set =
+  rgrl_feature_set_sptr moving_feature_set =
     new rgrl_feature_set_location<dimension>(moving_feature_points );
-  fixed_feature_set =
+  rgrl_feature_set_sptr fixed_feature_set =
     new rgrl_feature_set_location<dimension>(fixed_feature_points );
 
   // Transformation estimator
