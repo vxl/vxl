@@ -233,7 +233,6 @@ main( int argc, char* argv[] )
   read_landmark_file( moving_landmark_file_name, moving_landmark_set );
   read_landmark_file( fixed_landmark_file_name, fixed_landmark_set );
 
-  const unsigned int dimension = 2;
   rgrl_feature_set_sptr moving_feature_set;
   rgrl_feature_set_sptr fixed_feature_set;
 
