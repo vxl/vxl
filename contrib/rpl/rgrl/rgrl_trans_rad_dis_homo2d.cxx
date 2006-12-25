@@ -13,7 +13,8 @@
 #include "rgrl_trans_rad_dis_homo2d.h"
 #include "rgrl_util.h"
 
-// NOTE: the first parameter is always the destination in this file
+// NOTE: the first parameters of all functions in this file
+// are the target/return value, i.e., return value by references
 //
 
 // map homography
