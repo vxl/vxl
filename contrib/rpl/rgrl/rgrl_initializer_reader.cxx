@@ -43,7 +43,7 @@ rgrl_initializer_reader(vcl_istream& istr,
     rgrl_mask_box region(2), global_region(2);
     bool is_global_region_set = false;
     
-    rgrl_transformation_sptr xform = rgrl_trans_reader( istr );
+    rgrl_transformation_sptr xform = rgrl_trans_reader::read( istr );
     if( !istr || !xform ) {
       WarningMacro( "Cannot parse transformation" );
       return;

@@ -130,8 +130,8 @@ read( vcl_istream& is )
   }
 
   // Read forward and backward
-  forward_xform_ = rgrl_trans_reader( is );
-  backward_xform_ = rgrl_trans_reader( is );
+  forward_xform_ = rgrl_trans_reader::read( is );
+  backward_xform_ = rgrl_trans_reader::read( is );
 
   // parent
   return forward_xform_ 

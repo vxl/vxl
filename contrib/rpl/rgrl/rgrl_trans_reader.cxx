@@ -20,34 +20,64 @@
 #include <vcl_string.h>
 #include <vcl_compiler.h>
 
+rgrl_transformation_sptr
+rgrl_trans_reader::
+read( char const* fn )
+{
+  vcl_ifstream ifs( fn, vcl_ios_binary );
+  if( ifs.good() )
+    return read( ifs );
+  else
+    return 0;
+}
+
 #undef READ_THIS_TRANSFORMATION
 #define READ_THIS_TRANSFORMATION(tag, trans) \
-  if ( tag_str.find(tag) == 0 ){ \
+  if ( tag_str.find(tag) == 0 ){    \
     trans* trans_ptr = new trans(); \
-    trans_ptr->read(is); \
-    return trans_ptr; \
+    if( trans_ptr->read(is) )       \
+      return trans_ptr;             \
+    else                            \
+      return 0;                     \
   }
-
 
 //: Read a transformation from input stream
 //  The type of transformation depends on the content of the input stream.
 //  NULL smart ptr is returned if reading fails.
 //  Please check the validity of the return smart ptr
 rgrl_transformation_sptr
-rgrl_trans_reader( vcl_istream& is )
+rgrl_trans_reader::
+read( vcl_istream& is )
 {
   vcl_string tag_str;
   vcl_streampos pos;
 
+  // 1. get to the tag line and save the position
+  //
   // skip any empty lines
   rgrl_util_skip_empty_lines( is );
   // store current reading position
   pos = is.tellg();
   vcl_getline( is, tag_str );
 
+  // 2. try classes stored in the vector
+  //
   // back to the beginning of the tag line
   is.seekg( pos );
 
+  typedef vcl_vector< rgrl_transformation_sptr >::const_iterator iter;
+  for( iter i=xform_candidates_.begin(); i!=xform_candidates_.end(); ++i ) {
+    
+    // make a copy of the transformation
+    rgrl_transformation_sptr candidate = (*i)->clone();
+    if( candidate->read( is) )
+      return candidate;
+
+    // else reset the pos
+    is.seekg( pos );
+  }
+
+  // 3. built-in classes are handled in a different way
   // use the following macro to read in each specific transformation.
   // The first argument is a string to identify the transformation.
   // The second is the corresponding transformation class
@@ -71,17 +101,24 @@ rgrl_trans_reader( vcl_istream& is )
   // default, should never reach here
   vcl_cout<< "WARNING: " << RGRL_HERE << " ( line "
           << __LINE__ << " )\n"
-          << "       " << "Tag " << tag_str
-          << " cannot match with any existing transformations.\n"
+          << "       " << "Tag [" << tag_str
+          << "] cannot match with any existing transformations.\n"
           << "         Try to open istream in BINARY mode!" << vcl_endl;
   return 0;
+}
+
+void
+rgrl_trans_reader::
+add_xform( rgrl_transformation_sptr xform )
+{
+  xform_candidates_.push_back( xform );
 }
 
 //: stream operator for reading transformation
 vcl_istream&
 operator>> (vcl_istream& is, rgrl_transformation_sptr& trans_sptr)
 {
-  trans_sptr = rgrl_trans_reader( is );
+  trans_sptr = rgrl_trans_reader::read( is );
   return is;
 }
 

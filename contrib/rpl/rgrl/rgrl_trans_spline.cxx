@@ -187,7 +187,7 @@ read( vcl_istream& is )
   }
 
   // read global xform
-  xform_ = rgrl_trans_reader( is );
+  xform_ = rgrl_trans_reader::read( is );
 
   // dimension of spline transformation
   int dim;
