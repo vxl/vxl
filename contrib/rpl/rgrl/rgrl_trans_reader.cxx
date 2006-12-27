@@ -24,7 +24,7 @@ rgrl_transformation_sptr
 rgrl_trans_reader::
 read( char const* fn )
 {
-  vcl_ifstream ifs( fn, vcl_ios_binary );
+  vcl_ifstream ifs( fn, vcl_ios_in|vcl_ios_binary );
   if( ifs.good() )
     return read( ifs );
   else
