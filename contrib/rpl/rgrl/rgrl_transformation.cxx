@@ -366,6 +366,7 @@ read( vcl_istream& is )
 
   // reset the stream pos
   is.seekg( pos );
+  return is.good();
 }
 
 
@@ -420,7 +421,7 @@ void
 rgrl_transformation::
 inv_map( const vnl_vector<double>& to,
          bool initialize_next,
-         const vnl_vector<double>& to_delta, // FIXME: unused
+         const vnl_vector<double>& /*to_delta*/, // FIXME: unused
          vnl_vector<double>& from,
          vnl_vector<double>& from_next_est) const
 {
@@ -493,6 +494,18 @@ inv_map( const vnl_vector<double>& to,
   if ( initialize_next ) {
     from_next_est = from;
   }
+}
+
+//:  Inverse map based on the transformation.
+//   This function only exist for certain transformations.
+void
+rgrl_transformation::
+inv_map( const vnl_vector<double>& to,
+         vnl_vector<double>& from ) const
+{
+  const bool initialize_next = false;
+  vnl_vector<double> unused;
+  inv_map( to, initialize_next, unused, from, unused );
 }
 
 //: Return an inverse transformation
