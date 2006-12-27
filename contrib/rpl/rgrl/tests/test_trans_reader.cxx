@@ -22,7 +22,7 @@ MAIN_ARGS( test_trans_reader )
   }
 
   // read transformation
-  rgrl_transformation_sptr trans_sptr = rgrl_trans_reader( is );
+  rgrl_transformation_sptr trans_sptr = rgrl_trans_reader::read( is );
 
   TEST("Check validity of returned transformation", (!trans_sptr), false );
 
