@@ -20,6 +20,9 @@
 #include <vcl_string.h>
 #include <vcl_compiler.h>
 
+// initialize the static variables
+vcl_vector< rgrl_transformation_sptr >  rgrl_trans_reader::xform_candidates_;
+
 rgrl_transformation_sptr
 rgrl_trans_reader::
 read( char const* fn )
