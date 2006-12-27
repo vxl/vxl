@@ -297,7 +297,7 @@ write(vcl_ostream& os ) const
 }
 
 // for input
-void
+bool
 rgrl_trans_homography2d::
 read(vcl_istream& is )
 {
@@ -312,7 +312,7 @@ read(vcl_istream& is )
   // The token should appear at the beginning of line
   if ( str.find( "HOMOGRAPHY2D" ) != 0 ) {
     WarningMacro( "The tag is not HOMOGRAPHY2D. reading is aborted.\n" );
-    vcl_exit(10);
+    return false;
   }
 
   // input global xform
@@ -323,7 +323,7 @@ read(vcl_istream& is )
   }
 
   // parent
-  rgrl_transformation::read( is );
+  return is.good() && rgrl_transformation::read( is );
 }
 
 void
@@ -385,3 +385,10 @@ scale_by( double scale ) const
   return xform;
 }
 
+//: make a clone copy
+rgrl_transformation_sptr 
+rgrl_trans_homography2d::
+clone() const
+{
+  return new rgrl_trans_homography2d( *this );
+}

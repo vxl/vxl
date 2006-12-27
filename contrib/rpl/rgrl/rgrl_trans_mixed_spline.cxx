@@ -1,4 +1,5 @@
 #include "rgrl_trans_mixed_spline.h"
+#include <vcl_cassert.h>
 
 void
 rgrl_trans_mixed_spline::
@@ -33,6 +34,24 @@ map_dir( vnl_vector< double > const& from_loc,
   to_dir = from2 + delta2 - from_loc - delta ;  
 }
 
+//: Compute jacobian w.r.t. location
+void
+rgrl_trans_mixed_spline::
+jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& from_loc ) const
+{
+  assert( !"rgrl_trans_mixed_spline::jacobian_wrt_loc() is not implemented!" );
+}
+
+rgrl_transformation_sptr
+rgrl_trans_mixed_spline::
+scale_by( double scale ) const
+{
+  assert( !"rgrl_trans_mixed_spline::scale_by() is not implemented!" );
+  return 0;
+}
+  
+  
+
 vnl_matrix<double>
 rgrl_trans_mixed_spline::
 transfer_error_covar( vnl_vector<double> const& p ) const
@@ -45,4 +64,12 @@ transfer_error_covar( vnl_vector<double> const& p ) const
   }
 
   return transfer_err_cov;
+}
+
+//: make a clone copy
+rgrl_transformation_sptr 
+rgrl_trans_mixed_spline::
+clone() const
+{
+  return new rgrl_trans_mixed_spline( *this );
 }

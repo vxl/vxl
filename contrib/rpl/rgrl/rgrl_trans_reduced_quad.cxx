@@ -313,7 +313,7 @@ write( vcl_ostream& os ) const
   rgrl_transformation::write( os );
 }
 
-void
+bool
 rgrl_trans_reduced_quad::
 read( vcl_istream& is )
 {
@@ -328,7 +328,7 @@ read( vcl_istream& is )
   // The token should appear at the beginning of line
   if ( str.find( "REDUCED_QUADRATIC" ) != 0 ) {
     WarningMacro( "The tag is not REDUCED_QUADRATIC. reading is aborted.\n" );
-    vcl_exit(10);
+    return false;
   }
 
   // input global xform
@@ -343,7 +343,7 @@ read( vcl_istream& is )
   }
 
   // parent
-  rgrl_transformation::read( is );
+  return is.good() && rgrl_transformation::read( is );
 }
 
 void
@@ -360,4 +360,12 @@ inverse_transform( ) const
 {
   assert ( ! "rgrl_trans_reduced_quad::inverse_transform() is not defined" );
   return 0;
+}
+
+//: make a clone copy
+rgrl_transformation_sptr 
+rgrl_trans_reduced_quad::
+clone() const
+{
+  return new rgrl_trans_reduced_quad( *this );
 }

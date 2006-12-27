@@ -50,10 +50,13 @@ class rgrl_trans_spline
   friend class test_rgrl_trans_spline;
 
   //: for output
-  virtual void write( vcl_ostream& os ) const;
+  void write( vcl_ostream& os ) const;
 
   //: for input
-  virtual void read( vcl_istream& is );
+  bool read( vcl_istream& is );
+
+  //: make a clone copy
+  rgrl_transformation_sptr clone() const;
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_trans_spline, rgrl_transformation);

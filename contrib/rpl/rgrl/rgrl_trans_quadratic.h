@@ -104,8 +104,12 @@ class rgrl_trans_quadratic
   void write(vcl_ostream& os ) const;
 
   // for input
-  void read(vcl_istream& is );
- protected:
+  bool read(vcl_istream& is );
+
+  //: make a clone copy
+  rgrl_transformation_sptr clone() const;
+
+protected:
   void map_loc( vnl_vector<double> const& from,
                 vnl_vector<double>      & to ) const;
 

@@ -102,9 +102,12 @@ class rgrl_trans_similarity
   virtual void write(vcl_ostream& os ) const;
 
   // for input
-  virtual void read(vcl_istream& is );
+  virtual bool read(vcl_istream& is );
 
- protected:
+  //: make a clone copy
+  rgrl_transformation_sptr clone() const;
+
+protected:
   void map_loc( vnl_vector<double> const& from,
                 vnl_vector<double>      & to ) const;
 

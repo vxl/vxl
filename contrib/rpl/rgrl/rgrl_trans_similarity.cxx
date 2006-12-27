@@ -225,7 +225,7 @@ write( vcl_ostream& os ) const
   rgrl_transformation::write( os );
 }
 
-void
+bool
 rgrl_trans_similarity::
 read( vcl_istream& is )
 {
@@ -240,7 +240,7 @@ read( vcl_istream& is )
   // The token should appear at the beginning of line
   if ( str.find( "SIMILARITY" ) != 0 ) {
     WarningMacro( "The tag is not SIMILARITY. reading is aborted.\n" );
-    vcl_exit(10);
+    return false;
   }
 
   // input global xform
@@ -254,5 +254,13 @@ read( vcl_istream& is )
   }
 
   // parent
-  rgrl_transformation::read( is );
+  return is.good() && rgrl_transformation::read( is );
+}
+
+//: make a clone copy
+rgrl_transformation_sptr 
+rgrl_trans_similarity::
+clone() const
+{
+  return new rgrl_trans_similarity( *this );
 }

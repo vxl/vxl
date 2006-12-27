@@ -114,7 +114,7 @@ write( vcl_ostream& os ) const
 }
 
 //: input transformation
-void
+bool
 rgrl_trans_couple::
 read( vcl_istream& is )
 {
@@ -126,7 +126,7 @@ read( vcl_istream& is )
 
   if ( str.find("COUPLE_TRANS") != 0 ) {
     WarningMacro( "The tag is not COUPLE_TRANS. reading is aborted.\n" );
-    vcl_exit(10);
+    return false;
   }
 
   // Read forward and backward
@@ -134,7 +134,10 @@ read( vcl_istream& is )
   backward_xform_ = rgrl_trans_reader( is );
 
   // parent
-  rgrl_transformation::read( is );
+  return forward_xform_ 
+    && backward_xform_
+    && is.good()
+    && rgrl_transformation::read( is );
 }
 
 
@@ -175,4 +178,12 @@ inverse_transform() const
     return new rgrl_trans_couple( backward_xform_, forward_xform_ );
   else
     return 0;
+}
+
+//: make a clone copy
+rgrl_transformation_sptr 
+rgrl_trans_couple::
+clone() const
+{
+  return new rgrl_trans_couple( *this );
 }

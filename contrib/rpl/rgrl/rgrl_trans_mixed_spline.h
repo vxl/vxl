@@ -24,6 +24,15 @@ class rgrl_trans_mixed_spline
   vnl_matrix<double>
   transfer_error_covar( vnl_vector<double> const& p ) const;
 
+  //: Compute jacobian w.r.t. location
+  virtual void jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& from_loc ) const;
+
+  //: make a clone copy
+  rgrl_transformation_sptr clone() const;
+
+  //:  transform the transformation for images of different resolution
+  rgrl_transformation_sptr scale_by( double scale ) const;
+
   // Defines type-related functions
   rgrl_type_macro( rgrl_trans_mixed_spline, rgrl_transformation );
 

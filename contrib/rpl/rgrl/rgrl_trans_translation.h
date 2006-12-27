@@ -73,12 +73,15 @@ class rgrl_trans_translation
   rgrl_type_macro( rgrl_trans_translation, rgrl_transformation );
 
   // for output
-  virtual void write(vcl_ostream& os ) const;
+  void write(vcl_ostream& os ) const;
 
   // for input
-  virtual void read(vcl_istream& is );
+  bool read(vcl_istream& is );
 
- protected:
+  //: make a clone copy
+  rgrl_transformation_sptr clone() const;
+
+protected:
   void map_loc( vnl_vector<double> const& from,
                 vnl_vector<double>      & to ) const;
 

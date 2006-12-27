@@ -82,17 +82,19 @@ class rgrl_trans_couple
   virtual void jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& from_loc ) const;
 
   //:  transform the transformation for images of different resolution
-  virtual rgrl_transformation_sptr scale_by( double scale ) const;
+  rgrl_transformation_sptr scale_by( double scale ) const;
 
   //: output transformation
-  virtual void write( vcl_ostream& os ) const;
+  void write( vcl_ostream& os ) const;
 
   //: input transformation
-  virtual void read( vcl_istream& is );
+  bool read( vcl_istream& is );
+
+  //: make a clone copy
+  rgrl_transformation_sptr clone() const;
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_trans_couple, rgrl_transformation );
-
 
  protected:
 

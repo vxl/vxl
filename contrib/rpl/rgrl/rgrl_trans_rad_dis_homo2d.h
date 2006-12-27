@@ -94,7 +94,10 @@ class rgrl_trans_rad_dis_homo2d
   void write(vcl_ostream& os ) const;
 
   // for input
-  void read(vcl_istream& is );
+  bool read(vcl_istream& is );
+
+  //: make a clone copy
+  rgrl_transformation_sptr clone() const;
 
   // uncenter H matrix
   vnl_matrix_fixed<double, 3, 3>  

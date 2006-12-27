@@ -129,14 +129,14 @@ class rgrl_transformation
   //:  Inverse map based on the transformation.
   //   This function only exist for certain transformations.
   virtual void inv_map( const vnl_vector<double>& to,
-                        vnl_vector<double>& from ) const = 0;
+                        vnl_vector<double>& from ) const;
 
   //: is this an invertible transformation?
   virtual bool is_invertible() const { return false; }
 
   //: Return an inverse transformation
   //  This function only exist for certain transformations.
-  virtual rgrl_transformation_sptr inverse_transform() const = 0;
+  virtual rgrl_transformation_sptr inverse_transform() const;
 
   //: Return the jacobian of the transform
   //  use only as backward compatibility
@@ -152,7 +152,10 @@ class rgrl_transformation
   virtual void write( vcl_ostream& os ) const;
 
   //: input transformation
-  virtual void read( vcl_istream& is );
+  virtual bool read( vcl_istream& is );
+
+  //: make a clone copy
+  virtual rgrl_transformation_sptr clone() const=0;
 
   //: set scaling factors
   //  Unless the transformation is not estimated using estimators in rgrl,

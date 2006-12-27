@@ -300,7 +300,7 @@ write( vcl_ostream& os ) const
 }
 
 //: input transformation
-void
+bool
 rgrl_transformation::
 read( vcl_istream& is )
 {
@@ -309,8 +309,8 @@ read( vcl_istream& is )
 
   // skip any empty lines
   rgrl_util_skip_empty_lines( is );
-  if ( !is )
-    return;   // reach the end of stream
+  if ( !is.good() )
+    return false;   // reach the end of stream
 
   tag_str="";
   pos = is.tellg();
@@ -325,22 +325,22 @@ read( vcl_istream& is )
     // get dimension
     is >> m >> n;
     if ( !is || m<=0 || n<=0 )
-      return;   // cannot get the dimension
+      return false;   // cannot get the dimension
 
     cov.set_size(m, n);
     cov.fill(0.0);
     is >> cov;
 
-    if ( !is )
-      return;  // cannot read the covariance matrix
+    if( !is.good() )
+      return false;  // cannot read the covariance matrix
 
     this->set_covar( cov );
 
     // read in the next tag
     // skip any empty lines
     rgrl_util_skip_empty_lines( is );
-    if ( is.eof() )
-      return;   // reach the end of stream
+    if ( is.eof() || !is.good() )
+      return false;   // reach the end of stream
 
     tag_str="";
     pos = is.tellg();
@@ -356,12 +356,12 @@ read( vcl_istream& is )
     is >> m;
 
     if ( !is || m<=0 )
-      return;  // cannot get dimension
+      return false;  // cannot get dimension
 
     scaling_factors_.set_size( m );
     is >> scaling_factors_;
 
-    return;
+    return is.good();
   }
 
   // reset the stream pos
@@ -494,3 +494,14 @@ inv_map( const vnl_vector<double>& to,
     from_next_est = from;
   }
 }
+
+//: Return an inverse transformation
+//  This function only exist for certain transformations.
+rgrl_transformation_sptr 
+rgrl_transformation::
+inverse_transform() const
+{
+  assert( !"Should never reach rgrl_transformation::inverse_transform()" );
+  return 0;
+}
+

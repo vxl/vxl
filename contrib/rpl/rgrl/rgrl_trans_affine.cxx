@@ -240,7 +240,7 @@ write( vcl_ostream& os ) const
 }
 
 
-void
+bool
 rgrl_trans_affine::
 read( vcl_istream& is )
 {
@@ -252,7 +252,7 @@ read( vcl_istream& is )
 
   if ( str.find("AFFINE") != 0 ) {
     WarningMacro( "The tag is not AFFINE. reading is aborted.\n" );
-    vcl_exit(10);
+    return false;
   }
 
   // input global xform
@@ -266,5 +266,14 @@ read( vcl_istream& is )
   }
 
   // parent
-  rgrl_transformation::read( is );
+  return is.good() && rgrl_transformation::read( is );
 }
+
+//: make a clone copy
+rgrl_transformation_sptr 
+rgrl_trans_affine::
+clone() const
+{
+  return new rgrl_trans_affine( *this );
+}
+

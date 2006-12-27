@@ -383,7 +383,7 @@ write(vcl_ostream& os ) const
 }
 
 // for input
-void
+bool
 rgrl_trans_rad_dis_homo2d::
 read(vcl_istream& is )
 {
@@ -398,7 +398,7 @@ read(vcl_istream& is )
   // The token should appear at the beginning of line
   if ( str.find( "HOMOGRAPHY2D_WITH_RADIAL_DISTORTION" ) != 0 ) {
     WarningMacro( "The tag is not HOMOGRAPHY2D. reading is aborted.\n" );
-    vcl_exit(10);
+    return false;
   }
 
   // input global xform
@@ -409,6 +409,13 @@ read(vcl_istream& is )
   }
 
   // parent
-  rgrl_transformation::read( is );
+  return is.good() && rgrl_transformation::read( is );
 }
 
+//: make a clone copy
+rgrl_transformation_sptr 
+rgrl_trans_rad_dis_homo2d::
+clone() const
+{
+  return new rgrl_trans_rad_dis_homo2d( *this );
+}
