@@ -135,7 +135,7 @@ nearest_feature( const vnl_vector<double>& loc ) const
 template<unsigned N>
 void
 rgrl_feature_set_location<N>::
-features_within_distance( feature_vector& results, rgrl_feature_sptr const& feature, double distance ) const
+features_within_radius( feature_vector& results, rgrl_feature_sptr const& feature, double distance ) const
 {
   rsdl_point query_point(feature->location());
   clear_temp_storage();

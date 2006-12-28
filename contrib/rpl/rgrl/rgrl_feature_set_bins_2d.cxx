@@ -112,7 +112,7 @@ nearest_feature( const vnl_vector<double>& loc ) const
 
 void
 rgrl_feature_set_bins_2d::
-features_within_distance( feature_vector& results, rgrl_feature_sptr const& feature, double distance ) const
+features_within_radius( feature_vector& results, rgrl_feature_sptr const& feature, double distance ) const
 {
   bins_2d_->points_within_radius( feature->location(), distance, results );
 }

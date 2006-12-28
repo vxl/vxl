@@ -64,7 +64,7 @@ class rgrl_feature_set_location_masked
 
   //: Return all features within a given Euclidean distance
   void
-  features_within_distance( feature_vector& results, rgrl_feature_sptr const& feature, double distance ) const;
+  features_within_radius( feature_vector& results, rgrl_feature_sptr const& feature, double distance ) const;
 
   //: Return the k nearest features based on Euclidean distance
   void

@@ -75,10 +75,10 @@ nearest_feature( const vnl_vector<double>& loc ) const
 //
 void
 rgrl_feature_set_location_masked::
-features_within_distance( feature_vector& results, rgrl_feature_sptr const& feature, double distance ) const
+features_within_radius( feature_vector& results, rgrl_feature_sptr const& feature, double distance ) const
 {
   if( mask_->inside(feature->location()) )
-    fea_set_sptr_->features_within_distance(results, feature , distance);
+    fea_set_sptr_->features_within_radius(results, feature , distance);
 }
 
 //: Return the k nearest features based on Euclidean distance

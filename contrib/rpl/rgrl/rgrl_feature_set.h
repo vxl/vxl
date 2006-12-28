@@ -113,7 +113,7 @@ class rgrl_feature_set
   //
   virtual
   void
-  features_within_distance( feature_vector& results, rgrl_feature_sptr const& feature, double distance ) const = 0;
+  features_within_radius( feature_vector& results, rgrl_feature_sptr const& feature, double distance ) const = 0;
 
   //:  Return the k nearest features to the given location, one per segment (if segmented)
   //
