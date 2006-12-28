@@ -76,31 +76,31 @@ test_feature_set_location_2( )
           0 );
     
     results.clear();
-    set_sptr->features_within_distance( results, pf( vec2d( 0, 0 ) ), 1.01 );
+    set_sptr->features_within_radius( results, pf( vec2d( 0, 0 ) ), 1.01 );
     TEST( "Radius delimited, 1",
           results.size(),
           3 );
     
     results.clear();
-    set_sptr->features_within_distance( results, pf( vec2d( 0, 1 ) ), 1.01 );
+    set_sptr->features_within_radius( results, pf( vec2d( 0, 1 ) ), 1.01 );
     TEST( "Radius delimited, 2",
           results.size(),
           2 );
     
     results.clear();
-    set_sptr->features_within_distance( results, pf( vec2d( 4, 3 ) ), 1.01 );
+    set_sptr->features_within_radius( results, pf( vec2d( 4, 3 ) ), 1.01 );
     TEST( "Radius delimited, 3",
           results.size(),
           1 );
     
     results.clear();
-    set_sptr->features_within_distance( results, pf( vec2d( 0.5, 0.5 ) ), 1.01 );
+    set_sptr->features_within_radius( results, pf( vec2d( 0.5, 0.5 ) ), 1.01 );
     TEST( "Radius delimited, 4",
           results.size(),
           3 );
     
     results.clear();
-    set_sptr->features_within_distance( results, pf( vec2d( 8, 3 ) ), 1.01 );
+    set_sptr->features_within_radius( results, pf( vec2d( 8, 3 ) ), 1.01 );
     TEST( "Radius delimited, no points",
           results.size(),
           0 );
@@ -177,31 +177,31 @@ test_feature_set_location_3( )
   
   
     results.clear();
-    set_sptr->features_within_distance( results, pf( vec3d( 0, 0, 0 ) ), 1.01 );
+    set_sptr->features_within_radius( results, pf( vec3d( 0, 0, 0 ) ), 1.01 );
     TEST( "Radius delimited, 1",
           results.size(),
           3 );
   
     results.clear();
-    set_sptr->features_within_distance( results, pf( vec3d( 0, 1, 0 ) ), 1.01 );
+    set_sptr->features_within_radius( results, pf( vec3d( 0, 1, 0 ) ), 1.01 );
     TEST( "Radius delimited, 2",
           results.size(),
           3 );
   
     results.clear();
-    set_sptr->features_within_distance( results, pf( vec3d( 4, 3, 6 ) ), 1.01 );
+    set_sptr->features_within_radius( results, pf( vec3d( 4, 3, 6 ) ), 1.01 );
     TEST( "Radius delimited, 3",
           results.size(),
           1 );
   
     results.clear();
-    set_sptr->features_within_distance( results, pf( vec3d( 0.5, 0.5, 0.5 ) ), 1.01 );
+    set_sptr->features_within_radius( results, pf( vec3d( 0.5, 0.5, 0.5 ) ), 1.01 );
     TEST( "Radius delimited, 4",
           results.size(),
           4 );
   
     results.clear();
-    set_sptr->features_within_distance( results, pf( vec3d( 8, 3, 6 ) ), 1.01 );
+    set_sptr->features_within_radius( results, pf( vec3d( 8, 3, 6 ) ), 1.01 );
     TEST( "Radius delimited, no points",
           results.size(),
           0 );
