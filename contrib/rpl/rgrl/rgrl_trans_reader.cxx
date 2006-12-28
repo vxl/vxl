@@ -17,6 +17,7 @@
 #include <rgrl/rgrl_trans_spline.h>
 #include <rgrl/rgrl_util.h>
 #include <vcl_iostream.h>
+#include <vcl_fstream.h>
 #include <vcl_string.h>
 #include <vcl_compiler.h>
 
