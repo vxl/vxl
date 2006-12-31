@@ -77,8 +77,8 @@ static void test_fit_plane_random()
       double r3 = vcl_rand()/(RAND_MAX+1.0f);
       vgl_homg_point_3d<double> p(r1, r2, r3);
       fit_plane.add_point(p);
-    }
   }
+  
   fit_plane.fit();
   vgl_homg_plane_3d<double> plane = fit_plane.get_plane();
 
