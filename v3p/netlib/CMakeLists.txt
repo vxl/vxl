@@ -327,6 +327,18 @@ SET(V3P_NETLIB_mathews_SOURCES
   mathews/adaquad.c mathews/adaquad.h
   )
 
+SET(V3P_NETLIB_sparse_SOURCES
+     sparse/spallocate.c
+     sparse/spbuild.c	
+     sparse/spfactor.c
+     sparse/spsolve.c
+     sparse/sputils.c
+     sparse/spoutput.c
+                   sparse/spconfig.h
+                   sparse/spdefs.h
+                   sparse/spmatrix.h
+  )
+
 # Collect full source list.
 SET(v3p_netlib_sources
   ${V3P_NETLIB_base_SOURCES}
@@ -344,6 +356,7 @@ SET(v3p_netlib_sources
   ${V3P_NETLIB_toms_SOURCES}
   ${V3P_NETLIB_datapac_SOURCES}
   ${V3P_NETLIB_mathews_SOURCES}
+  ${V3P_NETLIB_sparse_SOURCES}
   )
 
 # Adjust the compiler flags to avoid problems with f2c-generated code.
