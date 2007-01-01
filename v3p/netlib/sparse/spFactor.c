@@ -41,7 +41,7 @@
  *  by Kenneth S. Kundert
  */
 
-#ifndef lint
+#if 0
 static char copyright[] =
     "Sparse1.4: Copyright (c) 1985-2003 by Kenneth S. Kundert";
 static char RCSid[] =
@@ -75,9 +75,10 @@ static char RCSid[] =
 /*
  * Function declarations
  */
-
+#if spCOMPLEX 
 static int  FactorComplexMatrix( MatrixPtr );
 static void CreateInternalVectors( MatrixPtr );
+#endif
 static void CountMarkowitz( MatrixPtr, RealVector, int );
 static void MarkowitzProducts( MatrixPtr, int );
 static ElementPtr SearchForPivot( MatrixPtr, int, int );
