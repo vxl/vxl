@@ -26,11 +26,11 @@ class rgrl_feature
   
   //: ctor
   rgrl_feature()
-  : scale_( 0.0 )
+  : scale_( 1.0 )
   { }
   
   //: ctor
-  rgrl_feature( vnl_vector<double> const& loc, double scale = 0.0 )
+  rgrl_feature( vnl_vector<double> const& loc, double scale = 1.0 )
   : location_( loc ), 
     scale_( scale )
   { }
