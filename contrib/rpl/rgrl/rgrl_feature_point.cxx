@@ -32,6 +32,11 @@ rgrl_feature_point( vnl_vector<double> const& loc )
 {
 }
 
+rgrl_feature_point::
+rgrl_feature_point( vnl_vector<double> const& loc, double scale )
+  : rgrl_feature( loc, scale )
+{
+}
 
 rgrl_feature_point::
 rgrl_feature_point( unsigned size )

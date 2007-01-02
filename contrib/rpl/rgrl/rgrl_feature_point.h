@@ -18,8 +18,11 @@ class rgrl_feature_point
 {
  public:
 
-  //:
+  //:ctor
   rgrl_feature_point( vnl_vector<double> const& loc );
+
+  //:ctor
+  rgrl_feature_point( vnl_vector<double> const& loc, double scale );
 
   //: read in feature
   virtual
