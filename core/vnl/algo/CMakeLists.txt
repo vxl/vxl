@@ -39,6 +39,7 @@ IF(NETLIB_FOUND)
     vnl_scatter_3x3.txx vnl_scatter_3x3.h
     vnl_cholesky.cxx vnl_cholesky.h
     vnl_ldl_cholesky.cxx vnl_ldl_cholesky.h
+    vnl_sparse_lu.cxx vnl_sparse_lu.h
     vnl_real_eigensystem.cxx vnl_real_eigensystem.h
     vnl_complex_eigensystem.cxx vnl_complex_eigensystem.h
     vnl_symmetric_eigensystem.cxx vnl_symmetric_eigensystem.h

@@ -29,6 +29,7 @@ DECLARE( test_svd );
 DECLARE( test_symmetric_eigensystem );
 DECLARE( test_algo );
 DECLARE( test_solve_qp );
+DECLARE( test_sparse_lu );
 
 void
 register_tests()
@@ -61,6 +62,7 @@ register_tests()
   REGISTER( test_symmetric_eigensystem );
   REGISTER( test_algo );
   REGISTER( test_solve_qp );
+  REGISTER( test_sparse_lu );
 }
 
 DEFINE_MAIN;
