@@ -100,8 +100,9 @@ static void ComplexRowColElimination( MatrixPtr, ElementPtr );
 static void UpdateMarkowitzNumbers( MatrixPtr, ElementPtr );
 static int  MatrixIsSingular( MatrixPtr, int );
 static int  ZeroPivot( MatrixPtr, int );
+#if (ANNOTATE == FULL)
 static void WriteStatus( MatrixPtr, int );
-
+#endif
 
 
 

@@ -537,6 +537,9 @@
 /*! The largest possible value of longs. */
 #define  LARGEST_LONG_INTEGER    LONG_MAX
 
+/*! The largest possible value of ints. */
+#define  LARGEST_INTEGER    INT_MAX
+
 
 
 

@@ -184,7 +184,7 @@ spFindElement(
 {
 MatrixPtr  Matrix = (MatrixPtr)eMatrix;
 register ElementPtr  pElement;
-int StartAt, Min = LARGEST_LONG_INTEGER;
+int StartAt, Min = LARGEST_INTEGER;
 #define BorderRight 0	/* Start at left border, move right. */
 #define BorderDown  1	/* Start at top border, move down. */
 #define DiagRight   2	/* Start at diagonal, move right. */
