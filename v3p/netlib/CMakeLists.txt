@@ -328,15 +328,15 @@ SET(V3P_NETLIB_mathews_SOURCES
   )
 
 SET(V3P_NETLIB_sparse_SOURCES
-     sparse/spallocate.c
-     sparse/spbuild.c	
-     sparse/spfactor.c
-     sparse/spsolve.c
-     sparse/sputils.c
-     sparse/spoutput.c
-                   sparse/spconfig.h
-                   sparse/spdefs.h
-                   sparse/spmatrix.h
+     sparse/spAllocate.c
+     sparse/spBuild.c	
+     sparse/spFactor.c
+     sparse/spSolve.c
+     sparse/spUtils.c
+     sparse/spOutput.c
+                   sparse/spConfig.h
+                   sparse/spDefs.h
+                   sparse/spMatrix.h
   )
 
 # Collect full source list.
