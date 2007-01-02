@@ -94,7 +94,9 @@ static void ExchangeColElements( MatrixPtr, int, ElementPtr, int,
 static void ExchangeRowElements( MatrixPtr, int, ElementPtr, int,
 					  ElementPtr, int );
 static void RealRowColElimination( MatrixPtr, ElementPtr );
+#if spCOMPLEX
 static void ComplexRowColElimination( MatrixPtr, ElementPtr );
+#endif
 static void UpdateMarkowitzNumbers( MatrixPtr, ElementPtr );
 static int  MatrixIsSingular( MatrixPtr, int );
 static int  ZeroPivot( MatrixPtr, int );
@@ -227,10 +229,15 @@ RealNumber LargestInCol, FindLargestInCol();
         {   pPivot = Matrix->Diag[Step];
             LargestInCol = FindLargestInCol(pPivot->NextInCol);
             if ((LargestInCol * RelThreshold < ELEMENT_MAG(pPivot)))
-            {   if (Matrix->Complex)
-                    ComplexRowColElimination( Matrix, pPivot );
-                else
-                    RealRowColElimination( Matrix, pPivot );
+            {   
+#if spCOMPLEX
+              if (Matrix->Complex)
+                ComplexRowColElimination( Matrix, pPivot );
+              else
+                RealRowColElimination( Matrix, pPivot );
+#else
+              RealRowColElimination( Matrix, pPivot );
+#endif
             }
             else
             {   Matrix->NeedsOrdering = YES;
@@ -278,13 +285,16 @@ RealNumber LargestInCol, FindLargestInCol();
     {   pPivot = SearchForPivot( Matrix, Step, DiagPivoting );
         if (pPivot == NULL) return MatrixIsSingular( Matrix, Step );
         ExchangeRowsAndCols( Matrix, pPivot, Step );
-
+#if spCOMPLEX
         if (Matrix->Complex)
             ComplexRowColElimination( Matrix, pPivot );
         else
             RealRowColElimination( Matrix, pPivot );
-		if(Matrix->Error>spFATAL)
-			Size = 0;
+#else
+            RealRowColElimination( Matrix, pPivot );
+#endif
+        if(Matrix->Error>spFATAL)
+          Size = 0;
 		
         if (Matrix->Error >= spFATAL) return Matrix->Error;
         UpdateMarkowitzNumbers( Matrix, pPivot );
@@ -2807,14 +2817,13 @@ register  ElementPtr  pLower, pUpper;
  *  Possible errors:
  *  spNO_MEMORY
  */
-
+#if spCOMPLEX
 static void
 ComplexRowColElimination(
     MatrixPtr Matrix,
     register ElementPtr pPivot
 )
 {
-#if spCOMPLEX
 register  ElementPtr  pSub, *ppAbove;
 register  int  Row;
 register  ElementPtr  pLower, pUpper;
@@ -2865,9 +2874,8 @@ register  ElementPtr  pLower, pUpper;
         pUpper = pUpper->NextInRow;
     }
     return;
-#endif /* spCOMPLEX */
 }
-
+#endif /* spCOMPLEX */
 
 
 

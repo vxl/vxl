@@ -43,14 +43,14 @@
  *
  *  Copyright (c) 1985-2003 by Kenneth S. Kundert
  */
-
+#if 0
 #ifndef lint
 static char copyright[] =
     "Sparse1.4: Copyright (c) 1985-2003 by Kenneth S. Kundert";
 static char RCSid[] =
     "@(#)Header";
 #endif
-
+#endif
 
 
 /*
