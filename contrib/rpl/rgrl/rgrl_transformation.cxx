@@ -310,7 +310,7 @@ read( vcl_istream& is )
   // skip any empty lines
   rgrl_util_skip_empty_lines( is );
   if ( !is.good() )
-    return false;   // reach the end of stream
+    return true;   // reach the end of stream
 
   tag_str="";
   pos = is.tellg();
