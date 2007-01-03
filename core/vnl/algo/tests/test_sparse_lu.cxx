@@ -58,7 +58,7 @@ void test_sparse_lu()
   vcl_cout << "transpose solution\n";
   for(unsigned i = 0; i<4; ++i)
 	vcl_cout << "x[" << i << "]= " << x[i] << '\n';
-  TEST_NEAR("transpose solution of mat0 example", x[2], 8, 1.e-03);
+  TEST_NEAR("transpose solution of mat0 example", x[2], 3, 1.e-03);
   //mat5 of sparse test data
   vnl_sparse_matrix<double> Ap(3,3);
   Ap(0,1)=1; Ap(1,2)=1; Ap(2,0)=1;
