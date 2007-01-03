@@ -8,6 +8,7 @@
 
 #include "test_util.h"
 //for debugging purposes
+#if 0
 static void print_sparse(vnl_sparse_matrix<double>& M)
 {
 	typedef vnl_sparse_matrix_pair<double> pair_t;
@@ -21,7 +22,7 @@ static void print_sparse(vnl_sparse_matrix<double>& M)
                  << (*cit).second << '\n';
     }
 }
-
+#endif
 void test_sparse_lu()
 {
   //mat0 of Kenneth S. Kunder's Sparse 1.3a release

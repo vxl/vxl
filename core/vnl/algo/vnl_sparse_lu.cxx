@@ -66,10 +66,10 @@ void vnl_sparse_lu::solve(vnl_vector<double> const& b, vnl_vector<double>* x)
       vcl_cout << "In vnl_sparse_lu::solve(..) - matrix not defined\n";
       return;
     }
-  int n = b.size();
+  unsigned n = b.size();
   assert(n == A_.columns());
   spREAL* rhs = new spREAL[n+1];
-  for(int i = 0; i<n; ++i)
+  for(unsigned i = 0; i<n; ++i)
     rhs[i+1]=b[i];
   if(mode_==verbose || mode_==estimate_condition_verbose)
     {
@@ -103,7 +103,7 @@ void vnl_sparse_lu::solve(vnl_vector<double> const& b, vnl_vector<double>* x)
   
   spSolve(pmatrix_, rhs, rhs);
 
-  for(int i = 0; i<n; ++i)
+  for(unsigned i = 0; i<n; ++i)
     (*x)[i]=rhs[i+1];
 
   delete [] rhs;
@@ -124,10 +124,10 @@ void vnl_sparse_lu::solve_transpose(vnl_vector<double> const& b, vnl_vector<doub
       vcl_cout << "In vnl_sparse_lu::solve(..) - matrix not defined\n";
       return;
     }
-  int n = b.size();
+  unsigned n = b.size();
   assert(n == A_.columns());
   spREAL* rhs = new spREAL[n+1];
-  for(int i = 0; i<n; ++i)
+  for(unsigned i = 0; i<n; ++i)
     rhs[i+1]=b[i];
   int error = 0;
   if(mode_== verbose || mode_== estimate_condition_verbose)
@@ -161,7 +161,7 @@ void vnl_sparse_lu::solve_transpose(vnl_vector<double> const& b, vnl_vector<doub
 
   spSolveTransposed(pmatrix_, rhs, rhs);
 
-  for(int i = 0; i<n; ++i)
+  for(unsigned i = 0; i<n; ++i)
     (*x)[i]=rhs[i+1];
 
   delete [] rhs;

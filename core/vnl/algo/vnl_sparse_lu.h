@@ -56,7 +56,7 @@ class vnl_sparse_lu
  void set_absolute_thresh(double absolute_thresh){absolute_thresh_=absolute_thresh;}
  //: set diagonal pivoting mode, normally 1 which gives priority to diagonal
  //  elements.
- void set_diagonal_pivoting(int diag_pivoting){int diag_pivoting_=diag_pivoting;}
+ void set_diagonal_pivoting(int diag_pivoting){diag_pivoting_=diag_pivoting;}
 
   //: Solve problem M x = b
  vnl_vector<double> solve(vnl_vector<double> const& b);
