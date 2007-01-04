@@ -76,6 +76,7 @@
 #include <rgrl/rgrl_invariant_set_sptr.h>
 #include <rgrl/rgrl_invariant_single_landmark.h>
 #include <rgrl/rgrl_mask.h>
+#include <rgrl/rgrl_mask_oriented_box.h>
 #include <rgrl/rgrl_mask_3d_image.h>
 #include <rgrl/rgrl_match_set.h>
 #include <rgrl/rgrl_matcher.h>

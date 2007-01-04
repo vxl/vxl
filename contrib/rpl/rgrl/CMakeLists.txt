@@ -10,6 +10,7 @@ SET( rgrl_sources
   rgrl_object_sptr.h
 
   rgrl_mask.h                          rgrl_mask.cxx
+  rgrl_mask_oriented_box.h             rgrl_mask_oriented_box.cxx
   rgrl_mask_3d_image.h                 rgrl_mask_3d_image.cxx
   rgrl_mask_sptr.h
 
