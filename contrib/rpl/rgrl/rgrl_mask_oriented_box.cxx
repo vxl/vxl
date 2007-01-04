@@ -11,9 +11,9 @@
 rgrl_mask_oriented_box::
 rgrl_mask_oriented_box( unsigned dim )
   : rgrl_mask( dim ),
-    origin_(dim),
-    axes_(dim, dim),
-    len_(dim)
+    omin_(dim),
+    omax_(dim),
+    axes_(dim, dim)
 {
 }
 
@@ -22,14 +22,32 @@ rgrl_mask_oriented_box( vnl_vector<double> const& x0,
                         vnl_matrix<double> const& axes,
                         vnl_vector<double> const& len )
   : rgrl_mask( x0.size() ),
-    origin_( x0 ),
-    axes_( axes ),
-    len_( len )
+    axes_( axes )
 {
   assert( x0.size() == len.size() );
   assert( x0.size() == axes.rows());
   assert( x0.size() == axes.cols());
-  
+
+  omin_ = vnl_transpose( axes ) * x0;
+  omax_ = omin_;
+  omax_ += len;
+    
+  update_bounding_box();
+}
+
+rgrl_mask_oriented_box::
+rgrl_mask_oriented_box( vnl_vector<double> const& oriented_xmin, 
+                        vnl_vector<double> const& oriented_xmax, 
+                        vnl_matrix<double> const& axes )
+  : rgrl_mask( oriented_xmin.size() ),
+    omin_( oriented_xmin ),
+    omax_( oriented_xmax ),
+    axes_( axes )
+{
+  assert( oriented_xmin.size() == oriented_xmax.size() );
+  assert( oriented_xmin.size() == axes.rows() );
+  assert( oriented_xmin.size() == axes.cols() );
+
   update_bounding_box();
 }
 
@@ -37,36 +55,25 @@ bool
 rgrl_mask_oriented_box::
 inside( vnl_vector<double> const& pt ) const
 {
-  assert( pt.size() == origin_.size() );
+  assert( pt.size() == omin_.size() );
  
-  vnl_vector<double> mapped = vnl_transpose( axes_ ) * ( pt - origin_ );
+  vnl_vector<double> mapped = vnl_transpose( axes_ ) * pt;
   
   // len_[i] >=0 is gurranteed in update_bounding_box function
   // 
   bool inside = true;
-  for( unsigned i=0; i<origin_.size()&&inside; ++i )
-    inside = mapped[i] >= 0 && mapped[i] <= len_[i];
+  for( unsigned i=0; i<omin_.size()&&inside; ++i )
+    inside = mapped[i] >= omin_[i] && mapped[i] <= omax_[i];
   
   return inside;
 }
 
 void
 rgrl_mask_oriented_box::
-set_origin( vnl_vector<double> const& v )
-{
-  assert( v.size() == origin_.size() || !origin_.size() );
-  origin_ = v;
-  
-  update_bounding_box();
-}
-
-
-void
-rgrl_mask_oriented_box::
 set_len( vnl_vector<double> const& len )
 {
-  assert( len.size() == len_.size() || !len_.size() );
-  len_ = len;
+  assert( len.size() == omin_.size() );
+  omax_ = omin_ + len;
   
   update_bounding_box();
 }
@@ -83,23 +90,34 @@ set_axes( vnl_matrix<double> const& axes )
   update_bounding_box();
 }
 
+//: the lower coordinate of the box.
+vnl_vector<double> 
+rgrl_mask_oriented_box::
+origin() const 
+{ 
+  return axes_*omin_; 
+}
+
 void
 rgrl_mask_oriented_box::
 update_bounding_box()
 {
-  assert( origin_.size() == len_.size() );
-  assert( origin_.size() == axes_.rows());
-  assert( origin_.size() == axes_.cols());
+  assert( omin_.size() == omax_.size() );
+  assert( omin_.size() == axes_.rows());
+  assert( omin_.size() == axes_.cols());
 
-  const unsigned int dim = origin_.size();
+  const unsigned int dim = omin_.size();
 
   // Extra step:
   // make sure len_[i] >=0 
   // 
   for( unsigned i=0; i<dim; ++i )
-    if( len_[i] <= 0 ) {
+    if( omin_[i] > omax_[i] ) {
     
-      len_[i] = -len_[i];
+      // swap omin_[i] and omax_[i]
+      double d = omax_[i];
+      omax_[i] = omin_[i];
+      omin_[i] = d;
       // invert the column vector
       for( unsigned j=0; j<dim; ++j )
         axes_(j, i) = -axes_(j,i);
@@ -108,22 +126,24 @@ update_bounding_box()
   // use bit pattern to generate all corners
   const unsigned num_corners = 2<<dim;
   
-  vnl_vector<double> xmin( origin_ ), xmax( origin_ );
-  vnl_vector<double> corner;
-  for( unsigned i=0; i<num_corners; ++i ) {
+  vnl_vector<double> xmin ( axes_*omin_ );
+  vnl_vector<double> xmax ( xmin );
+  vnl_vector<double> oriented_pt, pt;
+  for( unsigned i=1; i<num_corners; ++i ) {
     
-    corner = origin_; 
+    oriented_pt = omin_; 
     // going through exes
     for( unsigned j=0; j<dim; ++j ) {
       
-      // multiplication using each bit 0/1 
+      // selection using each bit 0/1 
       if( (i>>j)&0x1 )
-        corner += axes_.get_column(j) * len_[j];
+        oriented_pt[j] = omax_[j];
     }
 
+    pt = axes_ * oriented_pt;
     for( unsigned j=0; j<dim; ++j ) {
-      if( corner[j] < xmin[j] )   xmin[j] = corner[j];
-      if( corner[j] > xmax[j] )   xmax[j] = corner[j];
+      if( pt[j] < xmin[j] )   xmin[j] = pt[j];
+      if( pt[j] > xmax[j] )   xmax[j] = pt[j];
     }
   }
   
@@ -136,34 +156,34 @@ double
 rgrl_mask_oriented_box::
 average_vertices_dist( const rgrl_mask_oriented_box& other ) const
 {
-  if( origin_.size() != other.origin_.size() )
+  if( omin_.size() != other.omin_.size() )
     return vcl_numeric_limits<double>::infinity();
   
-  const unsigned int dim = origin_.size();
+  const unsigned int dim = omin_.size();
   double cum_dist = 0.0;
   
   // use bit pattern to generate all corners
-  const unsigned num_corners = 2<<dim;
-  vnl_vector<double> corner, other_corner;
-  for( unsigned i=0; i<num_corners; ++i ) {
+  const unsigned num_pts = 2<<dim;
+  vnl_vector<double> pt, other_pt;
+  for( unsigned i=0; i<num_pts; ++i ) {
     
-    corner = origin_; 
-    other_corner = other.origin_;
+    pt = omin_; 
+    other_pt = other.omin_;
     
     // going through exes
     for( unsigned j=0; j<dim; ++j ) {
       
       // multiplication using each bit 0/1 
-      const bool to_add = ((i>>j)&0x1);
-      if( to_add ) {
-        corner += axes_.get_column(j) * len_[j];
-        other_corner += other.axes_.get_column(j) * other.len_[j];;
+      const bool use_max = ((i>>j)&0x1);
+      if( use_max ) {
+        pt[j] = omax_[j];
+        other_pt[j] = other.omax_[j];
       }
     }
     
-    cum_dist += (corner-other_corner).two_norm();
+    cum_dist += (axes_*pt - other.axes()*other_pt).two_norm();
   }
-  return cum_dist/num_corners;
+  return cum_dist/num_pts;
 }
 
 bool
@@ -174,17 +194,17 @@ operator==( const rgrl_mask_oriented_box& other ) const
   // axes are othogonal matrix
   // therefore the product should be identity matrix
   vnl_matrix<double> prod = vnl_transpose( this->axes_ ) * other.axes_;
-  vnl_matrix<double> eye( origin_.size(), origin_.size() );
+  vnl_matrix<double> eye( omin_.size(), omin_.size() );
   eye.set_identity();
   if( (prod - eye).fro_norm() > 1e-4 ) {
     WarningMacro( "Incompatible axes. oriented boxes cannot be compared. " << vcl_endl );
     return false;
   }
     
-  // now check origin_ and len_
+  // now check omin_ and len_
   // 
-  return origin_ == other.origin_  &&
-         len_ == other.len_;
+  return omin_ == other.omin_  &&
+         omax_ == other.omax_;
 }
 
 bool
@@ -194,15 +214,18 @@ operator!=( const rgrl_mask_oriented_box& other ) const
   return !( *this == other );
 }
 
-vcl_ostream& operator<<(vcl_ostream& os, const rgrl_mask_box& box)
+vcl_ostream& operator<<(vcl_ostream& os, const rgrl_mask_oriented_box& box)
 {
-  os<< box.x0().size() << "  ";
-  if( box.x0().size() )
-    os << box.x0()<<"  "<<box.x1();
+  os<< box.oriented_x0().size() << "  ";
+  if( box.oriented_x0().size() ) {
+    
+    os << box.oriented_x0()<<"  "<<box.oriented_x1() << "\n" ;
+    os << box.axes() << vcl_endl;
+  }
   return os;
 }
 
-vcl_istream& operator>>(vcl_istream& is, rgrl_mask_box& box)
+vcl_istream& operator>>(vcl_istream& is, rgrl_mask_oriented_box& box)
 {
   int m = -1;
   is >> m;
@@ -210,9 +233,12 @@ vcl_istream& operator>>(vcl_istream& is, rgrl_mask_box& box)
   if( m <= 0 ) return is;
     
   vnl_vector<double> x0(m), x1(m);
-  
   is >> x0 >> x1;
-  rgrl_mask_box temp_box( x0, x1 );
+  
+  vnl_matrix<double> axes(m, m);
+  is >> axes;  
+  
+  rgrl_mask_oriented_box temp_box( x0, x1, axes );
   box = temp_box;
   return is;
 }
