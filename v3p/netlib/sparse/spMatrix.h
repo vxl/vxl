@@ -306,12 +306,13 @@ spcEXTERN  void       spDeleteRowAndCol( spMatrix, int, int );
 spcEXTERN  void       spDestroy( spMatrix );
 spcEXTERN  int        spElementCount( spMatrix );
 spcEXTERN  spError    spErrorState( spMatrix );
+#if 0 // Remove Borland error
 #ifdef EOF
     spcEXTERN void    spErrorMessage( spMatrix, FILE*, char* );
 #else
 #   define spErrorMessage(a,b,c) spcFUNC_NEEDS_FILE(_spErrorMessage,stdio)
 #endif
-
+#endif // Remove Borland error
 
 spcEXTERN  spError    spFactor( spMatrix );
 /*  Remove file IO due to archaic fopen method which gives warnings in windoz

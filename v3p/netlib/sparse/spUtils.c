@@ -2154,7 +2154,7 @@ RealNumber Reid, Gear;
  *	Name of originator of error message.  If NULL, `sparse' is used.
  *	If zero-length string, no originator is printed.
  */
-
+#if 0 //Remove Borland Error
 void
 spErrorMessage(
     spMatrix eMatrix,
@@ -2209,4 +2209,5 @@ int Row, Col, Error;
     ((MatrixPtr)eMatrix)->Error = spOKAY;
     return;
 }
+#endif //Remove Borland Error
 #endif /* DOCUMENTATION */
