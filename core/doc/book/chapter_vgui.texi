@@ -294,6 +294,19 @@ For example, if a user wants to load and image from a file into a particular
 pane, they would click on the desired pane and then push the load-image menu.
 The menu callback routine would use the last_selected_position method to
 identify the appropriate @code{vgui_image_tableau}.
+
+The grid tableau responds to other events as follows:
+@example
+Modifier   Key                        Result
+            =        Add a column to the grid
+            -        Remove a column from the grid
+ CNTL       =        Add a row to the grid
+ CNTL       -        Remove a row from the grid
+          PAGEUP     Page the grid tablaux forward in the active cell
+          PAGEDOWN   Page the grid tablaux backward in the active cell
+@end example
+@itemize
+@item 
 @subsection The Deck
 @figure
 @image{deck-tableau,,3in}

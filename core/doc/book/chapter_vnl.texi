@@ -429,6 +429,55 @@ into matrix @code{pts}, and a hyperplane fitted using two different methods.
 @anchor{fig:planefit}
 @endcaption
 @endfigure
+@subsection Sparse linear solver
+It is often the case that large linear systems have a sparse
+coeficient matrix, where many of the elements are zero. An algorithm
+for solving such systems is @code{vnl_sparse_lu} based on the c library, Sparse
+1.3a, by Kenneth S. Kundert and Alberto Sangiovanni-Vincentelli. The algorithm solves the linear problem,
+@example
+Ax = b
+@end example
+by chosing a set of pivots for the matrix, @code{A}, and factoring it
+into lower and upper triangular form, i.e., LU decomposition. The
+solution, @code{x}, for a given @code{b}, is found by forward and back
+substitution.  The class @code{vnl_sparse_lu} maintains the factored
+matrix so that solutions for any number of @code{b} (right hand side)
+vectors can be found without repeating the pivoting and factorization
+process. The factored matrix is also used to compute @code{|A|} as
+well as the solution of @code{A^t x = b}. An example of solving a linear
+system using @code{vnl_spare_lu}:
+@example
+#include <vnl/vnl_vector.h>
+#include <vnl/vnl_sparse_matrix.h>
+#include <vnl/algo/vnl_sparse_lu.h>
+vnl_sparse_matrix<double> S(6,6);
+S(0,0)=0.49; S(0,1)=-0.5;
+S(1,0)=-0.5; S(1,1)=0.99; S(1,2)=-0.5;
+S(2,1)=-0.5; S(2,2)= 0.99;
+S(3,3)=0.99; S(3,4)=-0.5;
+S(4,3)=-0.5; S(4,4)=0.99; S(4,5)=-0.5;
+S(5,4)=-0.5; S(5,5)=0.99;
+vnl_vector<double> b(6,0),x6);
+b[2]=0.5; b[3]=0.5
+vnl_sparse_lu linear_solver(S, vnl_sparse_lu::estimate_condition);
+linear_solver.solve(b,&x);
+double det = linear_solver.determinant();
+double rcond = linear_solver.rcond();
+double upbnd = linear_solver.max_error_bound();
+//
+//Results
+//
+// x = @{ 1.1338, 1.11112, 1.06622, 1.06622, 1.11112, 1.1338 @}
+// det = 0.0121548
+// rcond = 0.0375578 (reciprocal of the condition number)
+// upbnd =  5.92331e-015 (upper bound on solution error)
+//
+@end example
+Note that the algorithm does not require that @code{A} is a symmetric
+matrix.  The operation code, @code{estimate_condition}, specifies that
+extra computation is carried out so that the condition number of the matrix and
+expected error can be determined. If these quantities are not needed
+then use the operation codes @code{quiet} or @code{verbose}.
 
 @section Polynomials
 
