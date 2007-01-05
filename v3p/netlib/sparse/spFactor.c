@@ -1726,9 +1726,9 @@ register  int  J;
 register long  MinMarkowitzProduct, *pMarkowitzProduct;
 register  int  I;
 register  ElementPtr  pDiag;
-int  NumberOfTies, Size = Matrix->Size;
-ElementPtr  ChosenPivot;
-RealNumber  Magnitude, Ratio, RatioOfAccepted, LargestInCol;
+int  NumberOfTies=0, Size = Matrix->Size;
+ElementPtr  ChosenPivot=0;
+RealNumber  Magnitude=0, Ratio=0, RatioOfAccepted =0, LargestInCol=0;
 RealNumber  FindBiggestInColExclude();
 
 /* Begin `SearchDiagonal'. */
@@ -1853,10 +1853,11 @@ SearchEntireMatrix(
 {
 register  int  I, Size = Matrix->Size;
 register  ElementPtr  pElement;
-int  NumberOfTies;
-long  Product, MinMarkowitzProduct;
-ElementPtr  ChosenPivot, pLargestElement;
-RealNumber  Magnitude, LargestElementMag, Ratio, RatioOfAccepted, LargestInCol;
+int  NumberOfTies=0;
+long  Product=0, MinMarkowitzProduct=0;
+ElementPtr  ChosenPivot=0, pLargestElement=0;
+RealNumber  Magnitude=0, LargestElementMag=0,
+ Ratio=0, RatioOfAccepted=0, LargestInCol=0;
 RealNumber  FindLargestInCol();
 
 /* Begin `SearchEntireMatrix'. */
