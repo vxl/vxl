@@ -25,8 +25,8 @@ class rgrl_feature_set_location_masked
 
   rgrl_feature_set_location_masked( rgrl_feature_set_sptr const& fea_set,
                                     rgrl_mask_sptr mask )
-  : fea_set_sptr_( fea_set ),
-    rgrl_feature_set( fea_set->all_features(), fea_set->label() ),
+  : rgrl_feature_set( fea_set->all_features(), fea_set->label() ),
+    fea_set_sptr_( fea_set ),
     mask_( mask )
   {}
 
