@@ -24,16 +24,16 @@ static void test_fit_plane_z()
   vgl_homg_plane_3d<double> plane = fit_plane.get_plane();
 
   // test if origin is on the plane
-  double d = vgl_distance_origin (plane); 
+  double d = vgl_distance_origin (plane);
   TEST_NEAR("on the plane", d, 0, 1e-6);
 
-  d = vgl_distance(plane, vgl_homg_point_3d<double> (0, 10, 0)); 
+  d = vgl_distance(plane, vgl_homg_point_3d<double> (0, 10, 0));
   TEST_NEAR("on the plane", d, 0, 1e-6);
 
-  d = vgl_distance(plane, vgl_homg_point_3d<double> (10, 0, 0)); 
+  d = vgl_distance(plane, vgl_homg_point_3d<double> (10, 0, 0));
   TEST_NEAR("on the plane", d, 0, 1e-6);
 
-  d = vgl_distance(plane, vgl_homg_point_3d<double> (10, 10, 0)); 
+  d = vgl_distance(plane, vgl_homg_point_3d<double> (10, 10, 0));
   TEST_NEAR("on the plane", d, 0, 1e-6);
 }
 
@@ -44,13 +44,15 @@ static void test_fit_plane_xyz()
   vcl_vector<vgl_homg_point_3d<double> > points;
   vgl_fit_plane_3d<double> fit_plane;
   double a=1, b=3, c=2, d=-5;
-  
-  for (int x=-5; x<=5; x++) {
-    for (int y=-5; y<=5; y++) {
-      // compute z from the plane formula
-      double z = (-1*d - a*x - b*y)/c;
-      vgl_homg_point_3d<double> p(x, y, z);
-      fit_plane.add_point(p);
+
+  {
+    for (int x=-5; x<=5; x++) {
+      for (int y=-5; y<=5; y++) {
+        // compute z from the plane formula
+        double z = (-1*d - a*x - b*y)/c;
+        vgl_homg_point_3d<double> p(x, y, z);
+        fit_plane.add_point(p);
+      }
     }
   }
   fit_plane.fit();
@@ -60,7 +62,7 @@ static void test_fit_plane_xyz()
   // get a point on the plane and test if it is on it
   double y=11, z=20;
   double x = (-1*d - b*y - c*z)/a;
-  double dist = vgl_distance(plane, vgl_homg_point_3d<double> (x, y, z)); 
+  double dist = vgl_distance(plane, vgl_homg_point_3d<double> (x, y, z));
   TEST_NEAR("on the plane", dist, 0, 1e-6);
 }
 
@@ -70,22 +72,22 @@ static void test_fit_plane_random()
   vcl_cout << "Fit random points to a plane\n";
   vcl_vector<vgl_homg_point_3d<double> > points;
   vgl_fit_plane_3d<double> fit_plane;
-  
+
   for (int x=0; x<20; ++x) {
-      double r1 = vcl_rand()/(RAND_MAX+1.0f);
-      double r2 = vcl_rand()/(RAND_MAX+1.0f);
-      double r3 = vcl_rand()/(RAND_MAX+1.0f);
-      vgl_homg_point_3d<double> p(r1, r2, r3);
-      fit_plane.add_point(p);
+    double r1 = vcl_rand()/(RAND_MAX+1.0f);
+    double r2 = vcl_rand()/(RAND_MAX+1.0f);
+    double r3 = vcl_rand()/(RAND_MAX+1.0f);
+    vgl_homg_point_3d<double> p(r1, r2, r3);
+    fit_plane.add_point(p);
   }
-  
+
   fit_plane.fit();
   vgl_homg_plane_3d<double> plane = fit_plane.get_plane();
 
   vcl_cout << plane;
 }
 
-static void test_fit_plane_3d() 
+static void test_fit_plane_3d()
 {
   test_fit_plane_z();
   test_fit_plane_xyz();
