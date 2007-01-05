@@ -33,16 +33,16 @@ vgui_font_bitmap::vgui_font_bitmap(bitmap_font_type t)
   if ((display_list_base_id_ = glGenLists(256)) == 0)
   {
 #ifdef DEBUG
-    vcl_cerr << __FILE__ ":Failed to create display lists!" << vcl_endl;
+    vcl_cerr << __FILE__ ": Failed to create display lists!\n";
 #endif
     return;
   }
 
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-  switch(t)
+  switch (t)
   {
-  case BITMAP_FONT_8_13:
+   case BITMAP_FONT_8_13:
     for (unsigned int i = 0; i < 256; i++)
     {
       glNewList(display_list_base_id_ + i, GL_COMPILE);
@@ -52,8 +52,8 @@ vgui_font_bitmap::vgui_font_bitmap(bitmap_font_type t)
     break;
 
 #ifdef DEBUG
-  default:
-    vcl_cerr << __FILE__ ":Invalid bitmap_font_type!" << vcl_endl;
+   default:
+    vcl_cerr << __FILE__ ": Invalid bitmap_font_type!\n";
 #endif
   }
 
@@ -71,7 +71,7 @@ void vgui_font_bitmap::draw(const vcl_string& str) const
 {
   for (unsigned int i = 0; i < str.size(); ++i)
   {
-    glBitmap(8, 13, 0.f, 2.f, 10.f, 0.f, bitmaps8x13[str[i]]);
+    glBitmap(8, 13, 0.f, 2.f, 10.f, 0.f, bitmaps8x13[int(str[i])]);
   }
 
 #if 0 // display lists not working
@@ -89,12 +89,13 @@ void vgui_font_bitmap::draw(const vcl_string& str) const
 //-------------------------------------------------------------------------
 namespace
 {
-//-------------------------------------------------------------------------
-// This was generated from the output of calling showfont on the 8x13 font
-// that comes with X.  It had this copyright message:
-//   COPYRIGHT       Public domain font.  Share and enjoy.
-//-------------------------------------------------------------------------
-const GLubyte bitmaps8x13[][13] = {
+ //-------------------------------------------------------------------------
+ // This was generated from the output of calling showfont on the 8x13 font
+ // that comes with X.  It had this copyright message:
+ //   COPYRIGHT       Public domain font.  Share and enjoy.
+ //-------------------------------------------------------------------------
+ const GLubyte bitmaps8x13[][13] =
+ {
    {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
    {0x00, 0x00, 0x00, 0x10, 0x38, 0x7c, 0xfe, 0x7c, 0x38, 0x10, 0x00, 0x00, 0x00},
    {0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x00},
@@ -351,5 +352,5 @@ const GLubyte bitmaps8x13[][13] = {
    {0x3c, 0x42, 0x02, 0x3a, 0x46, 0x42, 0x42, 0x42, 0x00, 0x00, 0x10, 0x08, 0x00},
    {0x40, 0x40, 0x5c, 0x62, 0x42, 0x42, 0x62, 0x5c, 0x40, 0x40, 0x00, 0x00, 0x00},
    {0x3c, 0x42, 0x02, 0x3a, 0x46, 0x42, 0x42, 0x42, 0x00, 0x00, 0x24, 0x24, 0x00}
-};
+ };
 } // namespace anonymous
