@@ -24,6 +24,7 @@ and GUI toolkit. The examples are demonstrated using the mfc implementation of
 @endchapsummary
 
 @section A First Example
+
 A simple example will be useful to illustrate some of the basics of vgui.
 The appearance of an image displayer is shown in Figure 1.
 @figure
@@ -214,7 +215,9 @@ as members in an application class, which provides convenient access.
 
 
 @section Tableaux des Tableaux
+
 @subsection The Grid
+
 In many computer vision applications, it is useful to be able to display
 multiple images in the same window.  The @code{vgui_grid_tableau} is
 designed for this purpose.  The each element of the grid holds a sub-hierarchy
@@ -306,8 +309,10 @@ Modifier   Key                        Result
           PAGEDOWN   Page the grid tablaux backward in the active cell
 @end example
 @itemize
-@item 
+@item
+
 @subsection The Deck
+
 @figure
 @image{deck-tableau,,3in}
 @caption{4}
@@ -366,8 +371,11 @@ int main(int argc, char **argv)
 @end example
 The deck tableau responds to @code{vgui_PAGE_UP} and @code{vgui_PAGE_DOWN}
 events, which advance or backup the deck sequence.
+
 @section Displaying Geometry
+
 @subsection Displaying 2-d Features
+
 @figure
 @image{display-2d-annotated,,3in}
 @caption{5}
@@ -489,7 +497,9 @@ current set is adequate for a wide range of computer vision programming,
 more advanced users will want to create their own @code{vgui_soview}
 subclass to provide convenient display interfaces for their objects, or to
 achieve special viewing capabilities.
+
 @subsection Interactive Drawing of 2-d Features
+
 It is often necessary to create geometric features such as a box to
 define a region of interest for image processing or a line for sampling
 pixels to provide an intensity plot. The following example shows how to
@@ -580,7 +590,9 @@ the currently rubberbandable shapes.
 The rubberband tableau and its drawing client are included together in a
 composite tableau which forms the complete rubberband drawing capability.
 @end itemize
+
 @subsection Rendering 3-d Features
+
 The 3-d display capabilities in vgui are not well-developed.
 Currently one can only display 3-d points and lines. The 3-d viewer
 does provide a ``trackball'' mode of interaction in viewing the 3-d
@@ -592,8 +604,11 @@ geometry. An example of the @code{vgui} 3-d display is shown in Figure
 vgui's 3-d display.
 @endcaption
 @endfigure
+
 @section Menus
+
 @subsection Basic Menus
+
 @code{vgui} supports basic menu capabilities such as menu bars and popup menus
 as illustrated in the following example, @code{vgui/examples/basic05_menubar.cxx}:
 @example
@@ -675,7 +690,9 @@ two arguments define a key-press configuration that will select the
 menu item without clicking on it with the mouse. In this case, the
 function @code{dummy()} is called by pressing the key combination,
 @code{CTRL + 'o'}.
+
 @subsection Pop-up Menus
+
 The appearance of a @code{vgui} pop-up menu is shown in Figure 9.  A pop-up
 menu is launched by pressing the right mouse button over the active application
 window. Typically the role of the pop-up menu is to present operations that are
@@ -797,7 +814,9 @@ This command tells the window to process all events until it is terminated.
 Unlike the previous examples, the window has been constructed in
 advance of the run command.
 @end itemize
+
 @section Dialog Menus
+
 It is often necessary to obtain values for parameters, such as edge
 detection thresholds or scales before applying the operation to an
 image. Also it is frequently necessary to obtain a file path string in
@@ -919,7 +938,7 @@ appearance of the choice sub dialog is shown in Figure 11 a).
 @item @code{mydialog.inline_file("file browser", regexp, file_value)}:
 This file browser dialog element is used extensively in applications.
 The interface is:
-@code{void inline_file(const char* label,vcl_string& regexp,vcl_string& filepath)}
+@code{void inline_file(char const* label,vcl_string& regexp,vcl_string& filepath)}
 
 The argument @code{label} is the displayed name of the dialog slot
 attached to the file browser. The string @code{regexp} defines a
@@ -955,7 +974,9 @@ display geometric objects.
 Dialogs can also contain embedded images or geometric figures.
 @endcaption
 @endfigure
+
 @section Event Processing
+
 @anchor{events}
 As applications become more sophisticated, the programmer will need to be able
 to process events in a manner appropriate to customized interactive tasks.
@@ -974,11 +995,11 @@ The code for this example:
 // when left mouse button is pressed.
 struct example_tableau : public vgui_image_tableau
 @{
-  example_tableau(char const *f) : vgui_image_tableau(f)@{ @}
+  example_tableau(char const* f) : vgui_image_tableau(f)@{ @}
 
   ~example_tableau() @{ @}
 
-  bool handle(const vgui_event &e)
+  bool handle(vgui_event const& e)
   @{
     if (e.type == vgui_BUTTON_DOWN &&
         e.button == vgui_LEFT && e.modifier == 0)
@@ -996,7 +1017,7 @@ struct example_tableau : public vgui_image_tableau
 // Make a smart-pointer constructor for our tableau.
 struct example_tableau_new : public vgui_image_tableau_sptr
 @{
-  example_tableau_new(char const *f) : vgui_image_tableau_sptr(
+  example_tableau_new(char const* f) : vgui_image_tableau_sptr(
     new example_tableau(f)) @{ @}
 @};
 @end cartouche
@@ -1045,7 +1066,7 @@ child of a class is not a sub-class of the smart pointer of the class.
 @code{vgui} has implemented a solution to this problem by creating a
 hierarchy of smart pointers that match the tableau hierarchy.
 
-@item @code{bool handle(const vgui_event &e)}:
+@item @code{bool handle(vgui_event const& e)}:
 The base class for all tableaux, @code{vgui_tableau} defines the
 virtual method, @emph{handle}, which is called as events are passed
 down the tableau hierarchy. The event is initially captured by the
@@ -1076,8 +1097,8 @@ class xxx_tableau;
 typedef vgui_tableau_sptr_t<xxx_tableau> xxx_tableau_sptr;
 @end example
 
-
 @subsection @code{vgui} Events
+
 The general types of events handled by @code{vgui} are:
 @itemize @bullet
 @item drawing
@@ -1125,7 +1146,9 @@ issues a timer post of 100 milliseconds.
 This event is caused by issuing a vgui_adaptor::post_destroy() command.
 The purpose is to allow exit processing to be carried out before the application quits.
 @end itemize
+
 @subsection @code{vgui} Buttons, Keys and Modifiers
+
 The following table defines the @code{vgui} enum symbols for buttons, keys
 and modifiers:
 
@@ -1172,7 +1195,7 @@ When a key press event is dispatched it carries information that
 specifies the key and modifier structure. This code fragment
 illustrates the use of modified keys:
 @example
-bool handle(vgui_event const & e)
+bool handle(vgui_event const& e)
 @{
   vgui_key k = e.key;
   vgui_modifier m = e.modifier;
@@ -1204,12 +1227,14 @@ effect of various modifier combinations.
 
 If one wants to work directly with the actual ascii character pressed, then
 use @code{e.ascii_char}.
+
 @subsection Event Condition
+
 A convenient class, @code{vgui_event_condition} is defined to
 represent the occurrence of a particular event configuration. Its use
 is best illustrated by an example:
 @example
-bool my_tableau::handle(const vgui_event &e)
+bool my_tableau::handle(vgui_event const& e)
 @{
    vgui_event_condition g0(vgui_LEFT, vgui_CTRL, false);
    if (g0(e))
@@ -1224,7 +1249,9 @@ and can be used to filter events passing into a tableau's handle
 method. The event condition class
 provides a compact and tidy way of expressing complex logic on
 modifiers, keys and buttons.
+
 @subsection Mouse Position
+
 An event passes back the position of the mouse when the event
 occurred. As was illustrated in the @code{basic09_mouse_position}
 example. However this position is in the coordinate system of the
@@ -1238,7 +1265,7 @@ The transformation is illustrated by this code fragment:
 @example
 // Get X,Y mouse position to display on status bar
 // in image coordinates
-bool my_image_tableau::handle(const vgui_event &e)
+bool my_image_tableau::handle(vgui_event const& e)
 @{
   if (e.type == vgui_MOTION && button_down == false)
    @{
@@ -1252,10 +1279,14 @@ bool my_image_tableau::handle(const vgui_event &e)
 @}
 @end example
 
+
 @section Building an Application
+
 The essential elements to create a GUI application have been presented.
 In this section, a typical design for a main program and associated GUI management classes will be described.
+
 @subsection The Manager
+
 There is a tendency to pile a lot of menu callbacks and menu
 constructors into the main program.  It is easy and convenient, but
 this approach doesn't stand up to evolution of the program over
@@ -1288,7 +1319,7 @@ class basic_manager : public vgui_wrapper_tableau
   void quit();
   void load_image();
   void init();
-  virtual bool handle(vgui_event const &);
+  virtual bool handle(vgui_event const&);
 
  private:
   basic_manager();
@@ -1313,7 +1344,7 @@ All events are funneled through the same @code{basic_manager} instance.
 The constructor for this class is made private because the only way
 the class should be invoked is through the @code{::instance} method.
 
-@item @code{virtual bool handle(vgui_event const &)}:
+@item @code{virtual bool handle(vgui_event const&)}:
 Since the manager is a sub-class of a @code{vgui_wrapper_tableau} it
 inherits the @code{::handle} method.  This inheritance enables the
 manager to implement its own event processing and then pass unused
@@ -1380,7 +1411,7 @@ With this approach, there is no assumption required about the order of construct
 @example
 @cartouche
 //the event handler
-bool basic_manager::handle(vgui_event const & e)
+bool basic_manager::handle(vgui_event const& e)
 @{
   if (e.key == 'b')
     vgui::out << "I saw a 'b'\n";
@@ -1416,7 +1447,9 @@ the child tableaux react.
 The methods to support menu callbacks are implemented in the manager.
 For example, @code{basic_manager::load_image()} illustrates the use of
 a dialog which pops up when the ``Load Image'' menu is selected.
+
 @subsection The Menus
+
 A menu class is defined to package up the static callback functions required
 in the @code{vgui_menu} assembly.  The @code{basic_menu} class is:
 @example
@@ -1471,7 +1504,9 @@ Note that the menu callback functions are paired with methods on the manager.
 These menus can be exported to other GUI libraries so that the same menu
 functionality can be re-used. However, keep in mind that under Windows special
 measures must be taken to export static items.
+
 @subsection The Main Program
+
 The main program for the basic_manager application is:
 @example
 @cartouche
@@ -1515,7 +1550,9 @@ Several new features have been included in the construction of this window:
 @item horizontal and vertical scroll bars for panning the tableaux below a
 @code{vgui_viewer2D_tableau}.
 @end itemize
+
 @section Summary of @code{vgui} Tableaux
+
 The following is a summary of the tableau defined in @code{vgui}.
 @multitable @columnfractions 0.33 0.67
 
@@ -1578,13 +1615,15 @@ The following is a summary of the tableau defined in @code{vgui}.
 @item @code{wrapper_tableau} @tab A base class tableau which insures only a single child. Useful as a base class for managers.
 
 @end multitable
+
 @section Advanced Topic: Image Display Range
+
 Prior to Jan 2005, image display in @code{vgui_image_tableau} was
 limited to 256 (@code{vxl_byte}) levels per pixel component. Images
 with pixel data types having a larger dynamic range were clamped to
 the range of [0 255]. The @code{vgui_image_tableau} interface now has the method,
 @example
-@cartouche 
+@cartouche
 void set_mapping(vgui_range_map_params_sptr const& rmp)
 @end cartouche
 @end example
@@ -1621,9 +1660,9 @@ The parameters of the mapping are:
 @tab Under panning and zooming operations, it is not necessary to re-map the
 pixel intensities.  The range mapped display can be cached to avoid mapping
 computation by setting @code{cache_mapped_pix_} to @code{true}.
-@end multitable                
+@end multitable
 
-The @code{gamma} function is defined as 
+The @code{gamma} function is defined as
 @example
                           1
         Ig         I     ---
@@ -1641,7 +1680,7 @@ In typical operation, the user will interactively adjust the min max
 values in a loop that displays the mapped image until a satisfactory
 display is produced.  The loop should re-instantiate the parameter block
 on each iteration since the update is triggered by a change in the
-value of the @code{rmp} pointer.  For example, 
+value of the @code{rmp} pointer.  For example,
 @example
 @cartouche
 vgui_image_tableau_sptr itab = vgui_image_tableau_new();
@@ -1655,7 +1694,7 @@ bool invert = false;
 bool use_glPixelMap = true;
 bool cache_buffer = true;
 
-vgui_range_map_params_sptr rmp = 
+vgui_range_map_params_sptr rmp =
    new vgui_range_map_params(min_val,max_val, gamma,
                              invert, use_glPixelMap, cache_buffer);
 //start range mapping

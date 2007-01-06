@@ -34,6 +34,7 @@ Regular expression matching.
 @end deffn
 
 @section Redirecting standard output: @code{vul_redirector}
+
 @cindex vcl_cerr
 @cindex vcl_cout
 @cindex redirecting ostreams
@@ -88,8 +89,8 @@ what to you think @code{put_passthru} does?  What happens if you set
 @code{on = true} on line 6?
 
 
-
 @section Complex output formatting: @code{vul_printf}
+
 @cindex vcl_printf
 @cindex vul_printf
 
@@ -110,6 +111,7 @@ vul_printf(vcl_cerr, "Line %05d, Code %-30s\n", __LINE__, code);
 
 
 @section Reading command-line arguments: @code{vul_arg}
+
 @cindex argc, argv
 @cindex vul_arg
 @cindex command-line arguments, reading
@@ -160,6 +162,7 @@ obligatory, and will be taken as the first unparsed word on the command
 line.
 
 @subsection Help text
+
 The help text supplied with each argument is used to provide a summary of
 options when the special argument @code{-?} is seen.  Running this example
 with the @code{-?} flag produces the output.
@@ -178,6 +181,7 @@ Optional:
 @end smallexample
 
 @subsection Lists of numbers
+
 A very useful specialization also exists to read ranges of numbers.
 Imagine a program called makemovie which operates on a list of frames,
 specified on the command line:
@@ -201,14 +205,15 @@ vcl_copy(a_frame_list().begin(), a_frame_list().end(),
          vcl_ostream_iterator<int>(vcl_cout, " "));
 @end smallexample
 
-
 @subsection More structured argument handling
+
 Of course, it's disgraceful programming practice to throw args around ones
 program higgledy piggledy, so one can collect arguments in objects of type
 @code{vul_arg_list}.
 
 
 @section Timing operations: vul_timer
+
 @cindex time, measuring elapsed
 @cindex vul_timer
 @cindex cpu time
@@ -253,6 +258,7 @@ formatting, for quick testing purposes.  Here's an example
 
 
 @section Reading ASCII files: @code{vul_awk}
+
 @cindex awk
 @cindex perl-like operations: vul_awk
 @cindex file handling: vul_awk
@@ -283,6 +289,7 @@ the above program would print
 @end smallexample
 
 @section Regular expression parsing: @code{vul_reg_exp}
+
 @cindex regular expressions
 @cindex vul_reg_exp
 A regular expression allows a programmer to specify complex patterns that
@@ -325,6 +332,7 @@ not begin with the characters "ab" followed by numbers in the series 1-9.
 
 
 @section Loading files using Internet protocols: @code{vul_url}
+
 @cindex HTTP
 @cindex vul_url
 

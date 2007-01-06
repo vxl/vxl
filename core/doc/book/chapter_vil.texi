@@ -36,6 +36,7 @@ to as vil2.  The original @vxl{a} image library vil1 is deprecated.
 You can read more about the design philosophy in @code{$VXLSRC/core/vil/notes.html}
 
 @section Loading and saving
+
 Let's look at an example of vil in use.  This program makes an image from a
 disk file, copies it into memory, and prints the pixel at
 100,100.
@@ -103,6 +104,7 @@ automatically.
 
 
 @subsection Loading and saving: The threshold program
+
 @cindex threshold example
 @cindex vil_save
 @cindex vil_convert
@@ -149,6 +151,7 @@ you'll have a oddly named image.
 
 
 @section Copying an image
+
 @cindex images, copying
 You should know by now that copying @code{vil_image_view} objects does not
 duplicate the data they point to.  This allows images to be passed into and
@@ -185,6 +188,7 @@ return value is assigned to @var{b}, there is an efficient view copy.
 
 
 @section Image resources
+
 @cindex large images
 @cindex external images
 @cindex vil_image_resource_sptr
@@ -248,7 +252,7 @@ For example, the @code{vil_load()} function works by creating
 a @code{vil_image_resource}, and then calling @code{get_view()}
 for the whole image.
 @example
-vil_image_view_base_sptr vil_load(const char *file)
+vil_image_view_base_sptr vil_load(char const* file)
 @{
   vil_image_resource_sptr data = vil_load_image_resource(file);
   if (!data) return 0;
@@ -260,6 +264,7 @@ To set image pixels, you call the resource's @code{put_view()}.
 
 
 @subsection A rule of thumb.
+
 @quotation
 When developing an image processing algorithm,
 first write your algorithm in terms of a function for @code{vil_image_view<T>}.
@@ -275,6 +280,7 @@ dealing with the arbitrary and complex hassles of image IO.
 
 
 @subsection Using @code{vil_memory_image} to ignore pixel type.
+
 @cindex pixel-type, ignoring
 @cindex vil_memory_image
 @anchor{vil_memory_image}
@@ -318,6 +324,7 @@ void display_view(vil_image_resource_sptr &ir)
 
 
 @section Planes, components and stepping.
+
 @cindex image layout
 @cindex planes
 @cindex components
@@ -477,6 +484,7 @@ a class that wraps a @code{vil1_image}, and exports a @code{vil_image_resource} 
 
 
 @section Frequently Asked Questions
+
 @cindex Frequently Asked Questions
 @cindex FAQ
 
@@ -714,6 +722,7 @@ quirks to make your optimised code slower than the original.
 @section Blocked Images (Advanced Topic)
 
 @subsection Basics
+
 It is possible to encounter images that are much larger than available
 memory. For example, a commercial satellite image can easily exceed several
 gigabytes in size. The situation is even more dire in the case of
@@ -795,7 +804,7 @@ block locations lying outside the full image bounds are undefined.
 Similar methods are defined for inserting blocked data into the image resource.
 @example
 bool put_block(unsigned  block_index_i, unsigned  block_index_j,
-               const vil_image_view_base& view)
+               vil_image_view_base const& view)
 
 bool
 put_blocks(unsigned start_block_i, unsigned end_block_i,
@@ -804,7 +813,7 @@ put_blocks(unsigned start_block_i, unsigned end_block_i,
 @end example
 These methods are used internally to support the virtual
 @example
-put_view(const vil_image_view_base& im, unsigned i0, unsigned j0)
+put_view(vil_image_view_base const& im, unsigned i0, unsigned j0)
 @end example
  method.  Note that current vil file-based resources do not support reading and
 writing on the same open resource. Therefore, a block-oriented image
@@ -813,6 +822,7 @@ retrieved and an output resource where processed blocks are
 inserted.
 
 @subsection The Facade and Cached Resource
+
 Many of the advantages of blocking can be realized even if the
 underlying image resource is not intrinsically blocked. The
 @code{vil_blocked_image_facade} wraps around any image resource and
@@ -844,6 +854,7 @@ discarded to make room for a new block.  Note that the queue does not
 participate in writing blocks to a resource.
 
 @subsection Using Blocked File Formats
+
 A blocking capability of a resource can be determined by examining the
 properties of the resource using the method
 @example
@@ -908,6 +919,7 @@ Image Transmission Format (@code{nitf}) image format provide a
 @section Pyramid Images (Advanced Topic)
 
 @subsection What are Pyramid Images?
+
 As in the previous section on blocked images, the motivation for
 constructing a pyramid image is to manage large images without having
 to keep the entire image in memory. Satellite images can easily exceed
@@ -968,6 +980,7 @@ pyramid is 1/16. The resulting level view is then rendered at a scale factor of
 pixels are being processed instead of 225 million.
 
 @subsection Subsampling the base image
+
 Level images are formed by subsampling the original base image. In
 order to do this subsampling properly, it is necessary to observe the
 limitations imposed by the Nyquist sampling theorem. The sample rate
@@ -1025,6 +1038,7 @@ If the input image is blocked then its native block structure is used.
 Otherwise a default blocking (256 x 256) structure is used.
 
 @subsection Storing the pyramid resource
+
 It is necessary to have a file format that can store the multiple
 images required for the different resolution levels. The most obvious
 approach is to store the images as separate files in a directory.
@@ -1148,7 +1162,7 @@ The following code demonstrates how to define a tagged record extension:
 vil_nitf2_tagged_record_definition::define("HISTOA", "Softcopy History")
   .field("SYSTYPE",    "System Type",                     NITF_STR(20))
   .field("PC",         "Prior Compression",               NITF_STR(12))
-  .field("PE",         "Prior Enhancements", 
+  .field("PE",         "Prior Enhancements",
      NITF_ENUM(4, vil_nitf2_enum_values()
       .value("EH08",   "Enhanced 8bpp")
                     ...
@@ -1187,9 +1201,9 @@ B, P, or R)
 @item Most NITF image data types, including 8-, 16-, 32- and 64-bit
 signed and unsigned integers, single- and double-precision floating
 point numbers, and boolean data are supported. Support for
-complex float data is implemented but not tested. 
+complex float data is implemented but not tested.
 @item Multiple images per file are supported, as are an arbitrary
-number of bands per image. 
+number of bands per image.
 @item Blocked images (NBPR > 1 or MBPC > 1) are supported.
 @item Images with look-up tables (LUTs) will read correctly, but
 client applications must query the image header for the LUT and apply
@@ -1204,8 +1218,7 @@ The following capabilities are not yet implemented:
 @item parsing graphic segments
 @item parsing text segments
 @item bounds checking of numeric field values
-@item additional structured field formatters (e.g., some geocoordinate
-formats) 
+@item additional structured field formatters (e.g., some geocoordinate formats)
 @item other compression schemes (e.g., original JPEG, bi-level
 compression, vector quantization)
 @end itemize
@@ -1214,7 +1227,7 @@ compression, vector quantization)
 
 VIL can be configured to support the reading of JPEG 2000 image files
 as well as NITF 2.1 images that are JPEG 2000 compressed.  This
-section describes how to set up this capability. 
+section describes how to set up this capability.
 
 @subsection Install the library
 
@@ -1227,11 +1240,11 @@ licensing schemes:
 @item a ``free use'' license (even for commercial applications) with
 the restriction that the compression code supports streams of length
 500 MB or less (a moot restriction for VIL, which does not yet support
-file writing); 
+file writing);
 @item a GPL-like ``public use'' license with no limitations on
 reading and writing;
 @item a ``commercial use'' license for commercial applications that
-require the ability to write JPEG 2000 streams longer than 500 MB.  
+require the ability to write JPEG 2000 streams longer than 500 MB.
 @end itemize
 
 The VXL wrappers around this library were developed using version 3.1

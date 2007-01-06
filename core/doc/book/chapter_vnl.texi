@@ -155,6 +155,7 @@ Matrix basics.  A sample of the defined matrix operations.
 
 
 @subsection Efficiency: Fixed-size matrices and vectors.
+
 A C programmer looking at the above examples will immediately grumble about
 the inefficient memory allocation that is being performed.  Let's look into
 the construction of @var{P} in more detail.  One can guess that the line
@@ -366,7 +367,7 @@ The following fragment demonstrates use of the @code{vnl_svd<double>} class
 to find the approximation of a 3x3 matrix @code{F} by the nearest matrix of
 rank 2
 @example
-vnl_double_3x3 rank2_approximate(const vnl_double_3x3& F)
+vnl_double_3x3 rank2_approximate(vnl_double_3x3 const& F)
 @{
   // Compute singular value decomposition of F
   vnl_svd<double> svd (F);
@@ -400,7 +401,8 @@ int main()
   int npts = pts.rows();
   int dim = pts.columns();
   vnl_matrix<double> D(npts, dim+1);
-  for (int i = 0; i < npts; ++i) @{
+  for (int i = 0; i < npts; ++i)
+  @{
     for (int j = 0; j < dim; ++j)
       D(i,j) = pts(i,j);
     D(i,dim) = 1;
@@ -429,9 +431,11 @@ into matrix @code{pts}, and a hyperplane fitted using two different methods.
 @anchor{fig:planefit}
 @endcaption
 @endfigure
+
 @subsection Sparse linear solver
+
 It is often the case that large linear systems have a sparse
-coeficient matrix, where many of the elements are zero. An algorithm
+coefficient matrix, where many of the elements are zero. An algorithm
 for solving such systems is @code{vnl_sparse_lu} based on the c library, Sparse
 1.3a, by Kenneth S. Kundert and Alberto Sangiovanni-Vincentelli. The algorithm solves the linear problem,
 @example
@@ -526,15 +530,16 @@ to print only the real roots, one might use
 
 The implementation is a wrapper for the fortran code in algorithm 493 from
 the ACM Transactions on Mathematical Software.  This is the Jenkins-Traub
-algorithm, described by Numerical Recipes under "Other sure-fire
-techniques" as "practically a standard in black-box polynomial
-rootfinders".  (See M.A. Jenkins, ACM TOMS 1 (1975) pp. 178-189.).
+algorithm, described by Numerical Recipes under "Other sure-fire techniques"
+as "practically a standard in black-box polynomial rootfinders".
+(See M.A. Jenkins, ACM TOMS 1 (1975) pp. 178-189.).
 
 The algorithm fails if poly[0] is zero, so it's often good to try to write
 your problem so that the leading coefficient (i.e. poly[0]) is equal to 1.
 
 
 @section Nonlinear Optimization
+
 It is not uncommon in computer vision research to meet problems for which
 there is no known closed-form solution, and a common class of such problems
 are of the form "find @math{x}, @math{y} and @math{z}, such that the
@@ -617,12 +622,13 @@ or "functors", which are classes which provide a method @code{f(...)} which
 takes a vector of parameters as input, and returns the error.  Such
 functors are derived from @code{vnl_cost_function}:
 @example
-     struct my_rosenbrock_functor : public vnl_cost_function @{
+     struct my_rosenbrock_functor : public vnl_cost_function @{ ... @};
 @end example
 The function is a method in the derived class.  Here's the continuation of
 the declaration of @code{my_rosenbrock_functor}.
 @example
-       double f(vnl_vector<double> const& params) @{
+       double f(vnl_vector<double> const& params)
+       @{
          double x = params[0];
          double y = params[1];
          return vnl_math_sqr(10*(y-x*x)) + vnl_math_sqr(1-x);
@@ -660,7 +666,7 @@ And we can now close the declaration of @code{my_rosenbrock_functor}:
 @c function.  Any data required for the evaluation can be stored in the class
 @c and will be available whenever @code{f} is called.
 @c @example
-@c   double f(const vnl_vector<double>& x, vnl_vector<double>& fx)
+@c   double f(vnl_vector<double> const& x, vnl_vector<double>& fx)
 @c   @{
 @c     fx[0] = 10 * (x[1] - vnl_math_sqr(x[0]));
 @c     fx[1] = 1 - x[0];
@@ -698,7 +704,10 @@ In this case, we need to make a class derived from
 @code{vnl_least_squares_function}.  TODO
 
 @page
+
+
 @section Design issues (Developer Topic)
+
 This section documents some design decisions with which people might
 disagree.  Please let me know how you feel on these issues.  It's also a
 malleable to-do list.  The most important consideration has been to
@@ -706,6 +715,7 @@ provide simple lightweight interfaces that nevertheless allow for maximum
 efficiency and flexibility.
 
 @subsection Computation in constructors
+
 @anchor{sec:computors}
 As noted above, a common model in this package is that the compute objects
 perform computation within the constructors.  While this is slightly
@@ -735,6 +745,7 @@ eigensystems, which combine two objects to produce others.  Such operations
 cannot be methods on just one matrix.
 
 @subsection Fixed-size classes
+
 The classes which provide for fast fixed-size matrices and vectors are
 essential in a system which wants to make claims for efficiency.  In
 addition, a great many uses of these objects @emph{do} know the size in
@@ -743,6 +754,7 @@ well as more self-documenting) than the equivalent referring to a
 @code{vnl_vector} of unknown size.
 
 @subsection Transposing for Fortran
+
 In calling Fortran code, the first difficulty that becomes apparent is that
 Fortran arrays are stored column-wise, while traditional `C' arrays are
 stored row-wise -- a trend that is followed by the @code{vnl_matrix} class.
@@ -840,7 +852,9 @@ class written.
 @c
 @c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
 @section Frequently Asked Questions
+
 @cindex Frequently Asked Questions
 @cindex FAQ
 
@@ -872,7 +886,9 @@ but unfortunately not yet in VXL.
 @end enumerate
 @end table
 
+
 @section Future work
+
 Many of the existing methods are unimplemented, or could benefit from
 optimization.  Users can contribute code to address these deficiencies
 based on the existing examples, and using the conversion hints in

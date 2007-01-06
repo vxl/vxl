@@ -26,6 +26,7 @@ There are plans to extend to DVD with a read-only capability
 @endchapsummary
 
 @section The vidl_movie structure
+
 The main interface class in @code{vidl} is @code{vidl_movie} it contains a
 list of clips.  The class is meant to reflect a movie structure which is
 typically segmented into short independent frame sequences, i.e. clips. The
@@ -58,6 +59,7 @@ Most users will operate in this way in accessing the frames of a movie.  The
 movie or to access a specific frame.
 
 @section The Codec
+
 Access to video file formats is provided through a standardized interface
 called the @emph{codec}, which stands for coder/decoder.  The key tasks of the
 codec are to load, save and probe a video file.  The probe detects if the format
@@ -65,17 +67,18 @@ of a given file corresponds to any of the available codecs.
 
 The codecs are automatically registered at compile time.  There is no need
 to explicitly register codecs as there was in the past.  All codecs that are
-compiled will be registered. 
+compiled will be registered.
 
-It is difficult to find portable codecs that are open source code for the popular 
-video formats.  We are working on an MPEG codec (the current implementation 
-doesn't read the header information) that will work on both unix and windows.  
-Two AVI codecs are also available.  One uses native windows dlls for handling AVI 
+It is difficult to find portable codecs that are open source code for the popular
+video formats.  We are working on an MPEG codec (the current implementation
+doesn't read the header information) that will work on both unix and windows.
+Two AVI codecs are also available.  One uses native windows dlls for handling AVI
 files and compiles in windows.  The other uses the open source avifile library
-and compiles in linux.  Unfortunately, the avifile library also uses the windows 
+and compiles in linux.  Unfortunately, the avifile library also uses the windows
 dlls and therefore is only available on x86 machines.
 
 @section File I/O
+
 As we have already seen the @code{vidl} library supports reading and writing
 video files.  These functions are handled by the class @code{vidl_io}.
 The key methods are illustrated by the following example:
@@ -103,6 +106,7 @@ The key methods are illustrated by the following example:
 @end example
 
 @section Conclusion
+
 The @code{vidl} interface is simple and hides most of the difficult aspects of
 dealing with video files. Getting MPEG to work at least in read mode across
 platforms is an important next step.
