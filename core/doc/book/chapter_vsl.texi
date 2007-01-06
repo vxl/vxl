@@ -10,7 +10,7 @@ for this purpose are @code{vsl_b_write(os,object);} and @code{vsl_b_read(is,obje
 
 The binary IO for the core libraries (vbl, vil, vgl and vnl) is implemented in `clip-on'
 libraries which live in the @code{io} subdirectories of each library (thus the
-declaration of the function @code{vsl_b_write(vsl_b_ostream&,const vnl_vector&);}
+declaration of the function @code{vsl_b_write(vsl_b_ostream&,vnl_vector const&);}
 lives in the file @file{vnl/io/vnl_io_vector.h}.
 
 However, it is recommended that I/O for other libraries be provided by writing
@@ -36,6 +36,7 @@ There is of course a minor exception: large numbers (like integers larger than 4
 saved on a 64-bit platform cannot be read on a 32-bit platform.
 
 @subsection caveats
+
 The code has been designed to work on as many platforms as possible. However if your
 platform uses any of the following, then it will probably not work (as presently coded.)
 @enumerate
@@ -48,37 +49,37 @@ platform uses any of the following, then it will probably not work (as presently
 
 To save an object to a file, simply do the following:
 @example
-vxl_myclass my_object;
-
-// Fill my_object
-
-vsl_b_ofstream bfs("my_object.bvl");
-if (!bfs)
-@{
+  vxl_myclass my_object;
+  
+  // Fill my_object
+  
+  vsl_b_ofstream bfs("my_object.bvl");
+  if (!bfs)
+  @{
     vcl_cerr<<"Failed to open my_object.bvl for output."<<vcl_endl;
-@}
-else
-@{
+  @}
+  else
+  @{
     vsl_b_write(bfs,my_object);
     bfs.close();
-@}
+  @}
 @end example
 
 To load/restore the object from a file:
 
 @example
-vxl_myclass my_new_object;
-
-vsl_b_ifstream bfs("my_object.bvl");
-if (!bfs)
-@{
+  vxl_myclass my_new_object;
+  
+  vsl_b_ifstream bfs("my_object.bvl");
+  if (!bfs)
+  @{
     vcl_cerr<<"Failed to open my_object.bvl for input."<<vcl_endl;
-@}
-else
-@{
+  @}
+  else
+  @{
     vsl_b_read(bfs,my_object);
     bfs.close();
-@}
+  @}
 @end example
 
 It is recommended that the default extension name for your binary files is @code{.bvl}.
@@ -101,35 +102,36 @@ use of binary I/O (see below).
 Or for simplicity we provide the utility functions which would allow you to write:
 
 @example
-#include <vsl/vsl_quick_file.h>
-vxl_myclass my_object,my_new_object;
-
-vsl_quick_file_save("my_object.bvl",my_object);
-vsl_quick_file_load("my_object.bvl",my_new_object);
+  #include <vsl/vsl_quick_file.h>
+  vxl_myclass my_object,my_new_object;
+  
+  vsl_quick_file_save("my_object.bvl",my_object);
+  vsl_quick_file_load("my_object.bvl",my_new_object);
 @end example
 
 
 @subsection Saving multiple objects
+
 One can use exactly the same approach to save a set of objects
 
 @example
-vxl_myclass my_object;
-vxl_my_other_class my_other_object;
-
-// Fill objects
-// ...
-
-vsl_b_ofstream bfs("my_object.bvl");
-if (!bfs)
-@{
+  vxl_myclass my_object;
+  vxl_my_other_class my_other_object;
+  
+  // Fill objects
+  // ...
+  
+  vsl_b_ofstream bfs("my_object.bvl");
+  if (!bfs)
+  @{
     vcl_cerr<<"Failed to open my_object.bvl for output."<<vcl_endl;
-@}
-else
-@{
+  @}
+  else
+  @{
     vsl_b_write(bfs,my_object);
     vsl_b_write(bfs,my_other_object);
     bfs.close();
-@}
+  @}
 @end example
 
 (and similarly for loading them).
@@ -139,7 +141,6 @@ A standard rule for ensuring trouble free I/O is
 Always write the input and output code in tandem - the output should
 precisely mirror the input.
 @end quotation
-
 
 
 @subsection Binary I/O by baseclass pointer
@@ -154,31 +155,30 @@ will work.
 To save an object by baseclass:
 
 @example
-my_derived d;
-
-my_base *b = &d;
-
-vsl_b_ofstream bfs("data.bvl");
-vsl_b_write(bfs,b);
-...
+  my_derived d;
+  
+  my_base *b = &d;
+  
+  vsl_b_ofstream bfs("data.bvl");
+  vsl_b_write(bfs,b);
+  ...
 @end example
 
 To restore an object:
 @example
-// Make application aware of possible classes that it might see in the file
-
-vsl_add_to_binary_loader(my_derived());
-vsl_add_to_binary_loader(my_derived2());
-...
-
-
-my_base *b = 0;
-
-vsl_b_ifstream bfs("data.bvl");
-vsl_b_read(bfs,b);
-// b now points to the correct class which has been created
-// on the heap and filled with the data from bfs
-...
+  // Make application aware of possible classes that it might see in the file
+  
+  vsl_add_to_binary_loader(my_derived());
+  vsl_add_to_binary_loader(my_derived2());
+  ...
+  
+  my_base *b = 0;
+  
+  vsl_b_ifstream bfs("data.bvl");
+  vsl_b_read(bfs,b);
+  // b now points to the correct class which has been created
+  // on the heap and filled with the data from bfs
+  ...
 @end example
 
 Note that the read function will only work if the application has been made
@@ -222,10 +222,10 @@ An example template file, is shown below. It enables saving of a 2d array of "@c
 (a completely made up plain class).
 
 @example
-// file = my_module/hjk/Templates/vbl_array_2d_io+hjk_model~-.cxx
-#include <vbl/io/vbl_io_array_2d.txx>
-#include <hjk/hjk_model.h>
-VBL_IO_ARRAY_2D_INSTANTIATE(hjk_model);
+  // This is my_module/hjk/Templates/vbl_array_2d_io+hjk_model~-.cxx
+  #include <vbl/io/vbl_io_array_2d.txx>
+  #include <hjk/hjk_model.h>
+  VBL_IO_ARRAY_2D_INSTANTIATE(hjk_model);
 @end example
 
 The @code{vbl_io_array_2d.txx} file contains the @code{VBL_IO_ARRAY_2D_INSTANTIATE} macro and the
@@ -235,10 +235,10 @@ Another example template file, allowing the saving of a vector of @code{vgl_poin
 is shown below.
 
 @example
-// file = my_module/hjk/Templates/vsl_vector_io+vgl_point_2d~-.cxx
-#include <vsl/vsl_vector_io.txx>
-#include <vgl/io/vgl_io_point_2d.h>
-VSL_VECTOR_IO_INSTANTIATE(vgl_point_2d<double>);
+  // file = my_module/hjk/Templates/vsl_vector_io+vgl_point_2d~-.cxx
+  #include <vsl/vsl_vector_io.txx>
+  #include <vgl/io/vgl_io_point_2d.h>
+  VSL_VECTOR_IO_INSTANTIATE(vgl_point_2d<double>);
 @end example
 
 The @code{vsl_vector_io.txx} file contains the @code{VSL_VECTOR_IO_INSTANTIATE} macro and the
@@ -247,17 +247,17 @@ The @code{vsl_vector_io.txx} file contains the @code{VSL_VECTOR_IO_INSTANTIATE} 
 You should now be able to load and save templated objects with lines such as:-
 
 @example
-vcl_vector<hjk_model> hjk_model_vec;
-vsl_b_ofstream bfs("hjk_model_vec.bvl");
-if (!bfs)
-@{
+  vcl_vector<hjk_model> hjk_model_vec;
+  vsl_b_ofstream bfs("hjk_model_vec.bvl");
+  if (!bfs)
+  @{
     vcl_cerr<<"Failed to open hjk_model_vec.bvl for output."<<vcl_endl;
-@}
-else
-@{
+  @}
+  else
+  @{
     vsl_b_write(bfs,hjk_model_vec);
     bfs.close();
-@}
+  @}
 @end example
 
 NB, the template instantiation files should be placed in your own libraries (ie here "hjk") to
@@ -273,7 +273,7 @@ If each class implements it's printing (print(os) or print_summary(os))
 in such a way that at the beginning of each new line one inserts an
 indentation using
 @example
-os<<vsl_indent()<<"Rest of stuff.."<<vcl_endl;
+  os<<vsl_indent()<<"Rest of stuff.."<<vcl_endl;
 @end example
 and increases and decreases the current indentation for the stream with
 @code{vsl_indent_inc(os)} and @code{vsl_indent_dec(os)},
@@ -283,15 +283,15 @@ of classes.
 It's use is best described by example:
 
 @example
-vcl_cout<<vsl_indent()<<"No Indent"<<vcl_endl;
-vsl_indent_inc(vcl_cout);
-vcl_cout<<vsl_indent()<<"1 Indent"<<vcl_endl;
-vsl_indent_inc(vcl_cout);
-vcl_cout<<vsl_indent()<<"2 Indent"<<vcl_endl;
-vsl_indent_dec(vcl_cout);
-vcl_cout<<vsl_indent()<<"1 Indent"<<vcl_endl;
-vsl_indent_dec(vcl_cout);
-vcl_cout<<vsl_indent()<<"No Indent"<<vcl_endl;
+  vcl_cout<<vsl_indent()<<"No Indent"<<vcl_endl;
+  vsl_indent_inc(vcl_cout);
+  vcl_cout<<vsl_indent()<<"1 Indent"<<vcl_endl;
+  vsl_indent_inc(vcl_cout);
+  vcl_cout<<vsl_indent()<<"2 Indent"<<vcl_endl;
+  vsl_indent_dec(vcl_cout);
+  vcl_cout<<vsl_indent()<<"1 Indent"<<vcl_endl;
+  vsl_indent_dec(vcl_cout);
+  vcl_cout<<vsl_indent()<<"No Indent"<<vcl_endl;
 @end example
 
 This produces output of the form
@@ -305,47 +305,47 @@ No Indent
 
 Example of use in class output:
 @example
-class Fred
-@{
-public:
-  void print(vcl_ostream& os) const @{ os<<vsl_indent(os)<<"Fred's data"; @}
-@};
-
-vcl_ostream& operator<<(vcl_ostream& os, const Fred& fred)
-@{
-  os<<"Fred: "<<vcl_endl;
-  vsl_indent_inc(os);
-  fred.print(os);
-  vsl_indent_dec(os);
-  return os;
-@}
-
-class Jim
-@{
-private:
-  Fred fred_;
-public:
-  void print(vcl_ostream& os) const
+  class Fred
   @{
-     os<<vsl_indent()<<fred_<<vcl_endl;
-     os<<vsl_indent()<<"Jim's other data";
+   public:
+    void print(vcl_ostream& os) const @{ os<<vsl_indent(os)<<"Fred's data"; @}
+  @};
+  
+  vcl_ostream& operator<<(vcl_ostream& os, Fred const& fred)
+  @{
+    os<<"Fred: "<<vcl_endl;
+    vsl_indent_inc(os);
+    fred.print(os);
+    vsl_indent_dec(os);
+    return os;
   @}
-@};
-
-vcl_ostream& operator<<(vcl_ostream& os, const Jim& jim)
-@{
-  os<<"Jim: "<<vcl_endl;
-  vsl_indent_inc(os);
-  jim.print(os);
-  vsl_indent_dec(os);
-  return os;
-@}
-
-main()
-@{
-  Jim jim;
-  vcl_cout<<jim<<vcl_endl;
-@}
+  
+  class Jim
+  @{
+   private:
+    Fred fred_;
+   public:
+    void print(vcl_ostream& os) const
+    @{
+       os<<vsl_indent()<<fred_<<vcl_endl
+           vsl_indent()<<"Jim's other data";
+    @}
+  @};
+  
+  vcl_ostream& operator<<(vcl_ostream& os, Jim const& jim)
+  @{
+    os<<"Jim: "<<vcl_endl;
+    vsl_indent_inc(os);
+    jim.print(os);
+    vsl_indent_dec(os);
+    return os;
+  @}
+  
+  main()
+  @{
+    Jim jim;
+    vcl_cout<<jim<<vcl_endl;
+  @}
 @end example
 
 This produces output:
@@ -358,7 +358,7 @@ This produces output:
 If Jim were then included as a member of another class, Harry, one could get
 output of the form
 @example
-Harry:
+  Harry:
    Harry's basic data
    jim1:
      Fred's data
@@ -372,6 +372,7 @@ and so forth.  The author humbly suggests that this makes the summaries
 quite readable.
 
 @section Error Detection
+
 IO is often prone to errors beyond the control of the programmer. In
 particular, files can be come corrupted, given to programs that can't read
 a new format, read on platforms that do not support large enough numbers.
