@@ -445,7 +445,7 @@ matrix so that solutions for any number of @code{b} (right hand side)
 vectors can be found without repeating the pivoting and factorization
 process. The factored matrix is also used to compute @code{|A|} as
 well as the solution of @code{A^t x = b}. An example of solving a linear
-system using @code{vnl_spare_lu}:
+system using @code{vnl_sparse_lu}:
 @example
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_sparse_matrix.h>
