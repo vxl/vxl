@@ -25,51 +25,91 @@ static void test_backproject()
   den_v[0]=0.1; den_v[10]=0.05; den_v[17]=0.03; den_v[9]=1.0;
   den_v[15]=1.0; den_v[18]=0.3; den_v[19]=1.0;
   //Scale and offsets
-  double sx = 0.02, ox = 150.0;
-  double sy = 0.008, oy = 100.0;
-  double sz = 0.2, oz = 10.0;
-  double su = 0.001, ou = 500;
-  double sv = 0.002, ov = 200;
+  double sx = 50, ox = 150.0;
+  double sy = 120, oy = 100.0;
+  double sz = 5, oz = 10.0;
+  double su = 1000, ou = 500;
+  double sv = 400, ov = 200;
   vpgl_rational_camera<double> rcam(neu_u, den_u, neu_v, den_v, 
                                     sx, ox, sy, oy, sz, oz,
                                     su, ou, sv, ov);
 
   vnl_double_2 image_point;
-  vnl_double_3 initial_guess, world_point; 
+  vgl_point_2d<double> test_point0, test_point1, test_point2, test_point3;
+  vnl_double_3 initial_guess, world_point;
+  vgl_point_3d<double> p0(150, 100, 10), p1(200, 100, 10), p2(200, 225, 15),
+    p3(183.3333, 141.66667, 11.66667),iguess(150, 100, 10), wp0, wp1, wp2;
+  test_point0 = rcam.project(p0);
+  test_point1 = rcam.project(p1);
+  test_point2 = rcam.project(p2);
+  test_point3 = rcam.project(p3);
+
+
+  vcl_cout << "Projection of( " << p0 << ") is (" 
+           << test_point0 << ")\n";
+  vcl_cout << "Projection of( " << p1 << ") is (" 
+           << test_point1 << ")\n";
+  vcl_cout << "Projection of( " << p2 << ") is (" 
+           << test_point2 << ")\n";
+  vcl_cout << "Projection of( " << p3 << ") is (" 
+           << test_point3 << ")\n";
+
   vnl_double_4 plane;
-  image_point[0]=1276.68;   image_point[1]=397.414; 
-  initial_guess[0]=150.0; initial_guess[1]=100.0; initial_guess[2]=10;
-  plane[0]=0; plane[1]=0; plane[2]=1.0; plane[3]=-15.0;
+  image_point[0]=1250.0;   image_point[1]=332;
+  initial_guess[0]=200.0; initial_guess[1]=150.0; initial_guess[2]=15.0;
+  plane[0]=0; plane[1]=0; plane[2]=1.0; plane[3]=-10.0;
  
-  vcl_cout << "Initial Guess( " << initial_guess << ")\n";
+  vcl_cout << "Initial X-Y Guess( " << initial_guess << ")\n";
 
   bool success = vpgl_backproject::bproj_plane(rcam, image_point, plane,
                                                initial_guess, world_point);
 
-  vcl_cout << "Solution( " << world_point << ")\n";
+  vcl_cout<< "X-Y Solution( "<< world_point <<") success is "<< success<< '\n';
 
-  TEST_NEAR("test simple backprojection", (world_point[0]-200+world_point[1]-225+world_point[2]-15) , 0, 0.01);
+  TEST_NEAR("test simple backprojection x-y plane",
+            vcl_fabs(world_point[0]-p0.x()) +
+            vcl_fabs(world_point[1]-p0.y())+
+            vcl_fabs(world_point[2]-p0.z()) , 0, 0.01);
+
+
+  plane[0]=1.0; plane[1]=0; plane[2]=0.0; plane[3]=-150.0;
+  vcl_cout << "Initial Y-Z Guess( " << initial_guess << ")\n";
+  success = vpgl_backproject::bproj_plane(rcam, image_point, plane,
+                                               initial_guess, world_point);
+  vcl_cout << "Y-Z Solution( " << world_point << ") success is "<< success << '\n';
+
+  TEST_NEAR("test simple backprojection y-z plane",
+            vcl_fabs(world_point[0]-p0.x()) +
+            vcl_fabs(world_point[1]-p0.y())+
+            vcl_fabs(world_point[2]-p0.z()) , 0, 0.01);
+
+  initial_guess[0]=125.0; initial_guess[1]=110.0; initial_guess[2]=8.0;
+  plane[0]=0.0; plane[1]=1.0; plane[2]=0.0; plane[3]=-100.0;
+  vcl_cout << "Initial X-Z Guess( " << initial_guess << ")\n";
+  success = vpgl_backproject::bproj_plane(rcam, image_point, plane,
+                                               initial_guess, world_point);
+  vcl_cout << "X-Z Solution( " << world_point << ") success is " << success << '\n';
+
+  TEST_NEAR("test simple backprojection x-z plane",
+            vcl_fabs(world_point[0]-p0.x()) +
+            vcl_fabs(world_point[1]-p0.y())+
+            vcl_fabs(world_point[2]-p0.z()) , 0, 0.01);
+
   // Test with a plane not oriented on one of the axes
-  
-  vgl_point_2d<double> img_pt_0(1250.0, 365.0), img_pt_1(1047.62, 378.572),
-    img_pt_2(1276.68, 397.414);
-  //A plane through three of the known projection points
-  vgl_point_3d<double> p0(150, 100, 10), p1(200, 100, 10), p2(200, 225, 15),
-    iguess(150, 100, 10), wp0, wp1, wp2;
-  vgl_plane_3d<double> pl3(p0, p1, p2);
-  success = true;
-  success = success && vpgl_backproject::bproj_plane(rcam, img_pt_0, pl3,
-                                                     iguess, wp0);
-  
-  success = success && vpgl_backproject::bproj_plane(rcam, img_pt_1, pl3,
-                                                     p1, wp1);
 
-  success = success && vpgl_backproject::bproj_plane(rcam, img_pt_2, pl3,
-                                                     iguess, wp2);
-  vcl_cout << "solved world point 0( " << wp0 << ") vs (150,100,10)\n";
-  vcl_cout << "solved world point 1( " << wp1 << ") vs (200,100,10)\n";
-  vcl_cout << "solved world point 2( " << wp2 << ") vs (200,225,20)\n";
-  TEST("test projection on Y-Z plane", success, true);
+  vgl_point_2d<double> img_pt(1199.1, 346.589);
+
+  //A plane through three of the known projection points
+  vgl_plane_3d<double> pl3(p0, p1, p2);
+  success = vpgl_backproject::bproj_plane(rcam, img_pt, pl3,
+                                          iguess, wp0);
+  TEST("arbitrary plane backprojection convergence", success, true);
+
+  TEST_NEAR("test backprojection on arbitrary plane",
+            vcl_fabs(wp0.x()-p3.x()) +
+            vcl_fabs(wp0.y()-p3.y())+
+            vcl_fabs(wp0.z()-p3.z()) , 0, 0.01);
+
 }
 
 TESTMAIN(test_backproject);
