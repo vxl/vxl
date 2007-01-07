@@ -1,11 +1,10 @@
 // vil_nitf2: Written by Rob Radtke (rob@) and Harry Voorhees (hlv@) of
 // Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
-
 #include "vil_nitf2_image_subheader.h"
-
+//:
+// \file
 #include "vil_nitf2_data_mask_table.h"
-
 #include "vil_nitf2_field_functor.h"
 #include "vil_nitf2_field_definition.h"
 #include "vil_nitf2_typed_field_formatter.h"
@@ -38,8 +37,8 @@ bool vil_nitf2_image_subheader::read(vil_stream* stream)
 {
   bool success = m_field_sequence.read(*stream);
 
-  if (success) {
-    	
+  if (success)
+  {
     // If this image has a data mask, we need to parse that too
     vcl_string compression_code;
     get_property("IC", compression_code);
@@ -186,15 +185,15 @@ add_shared_field_defs_3(vil_nitf2_field_definitions* defs)
 
     .field("UDOFL", "User Defined Overflow",                 NITF_INT(3), false, 0,
            new vil_nitf2_field_value_greater_than<int>("UDIDL", 0))
- 
+
     .field("UDID", "User Defined Image Data",                NITF_TRES(), false,
            new vil_nitf2_max_field_value_plus_offset_and_threshold("UDIDL", -3), 0)
- 
+
     .field("IXSHDL", "Image Extended Subheader Data Length", NITF_INT(5), false, 0, 0)
 
     .field("IXSOFL", "Image Extended Subheader Overflow",    NITF_INT(3), false, 0,
            new vil_nitf2_field_value_greater_than<int>("IXSHDL", 0))
-  
+
     .field("IXSHD", "Image Extended Subheader Data",         NITF_TRES(), false,
            new vil_nitf2_max_field_value_plus_offset_and_threshold("IXSHDL", -3), 0);
 }
@@ -202,8 +201,9 @@ add_shared_field_defs_3(vil_nitf2_field_definitions* defs)
 void vil_nitf2_image_subheader::add_geo_field_defs(vil_nitf2_field_definitions* defs,
                                                    const vil_nitf2_classification::file_version& version)
 {
-  switch (version) {
-  case vil_nitf2_classification::V_NITF_20:
+  switch (version)
+  {
+    case vil_nitf2_classification::V_NITF_20:
     {
       (*defs)
         .field("ICORDS", "Image Coordinate Representation",
@@ -226,7 +226,7 @@ void vil_nitf2_image_subheader::add_geo_field_defs(vil_nitf2_field_definitions* 
                new vil_nitf2_field_value_one_of<vcl_string>("ICORDS", igeolo_icords));
       break;
     }
-  case vil_nitf2_classification::V_NITF_21:
+    case vil_nitf2_classification::V_NITF_21:
     {
       (*defs)
         .field("ICORDS", "Image Coordinate Representation",
@@ -242,10 +242,10 @@ void vil_nitf2_image_subheader::add_geo_field_defs(vil_nitf2_field_definitions* 
 
         .field("IGEOLO", "Image Geographic Location", NITF_STR_BCSA(60), false, 0,
                new vil_nitf2_field_specified("ICORDS"));
+      break;
     }
-    break;
-  default:
-    assert(0);
+    default:
+      assert(!"unsupported case");
   } // end switch
 }
 
@@ -349,13 +349,13 @@ unsigned vil_nitf2_image_subheader::nplanes() const
   //to potentially try both
   int numBands;
   if (get_property("NBANDS", numBands))
+  {
+    if (numBands > 0 ||
+        get_property("XBANDS", numBands))
     {
-      if (numBands > 0 ||
-          get_property("XBANDS", numBands))
-        {
-          return numBands;
-        }
+      return numBands;
     }
+  }
   return 0;
 }
 
@@ -416,7 +416,7 @@ bool vil_nitf2_image_subheader::get_lut_info(unsigned int i,
       if (m_field_sequence.get_value("LUTDnm", index, currValue)) {
         lut_d[lut_index][el_index] = *((char*)currValue);
       } else {
-        return false; 
+        return false;
       }
     }
   }
@@ -428,7 +428,7 @@ vil_nitf2_field::field_tree* vil_nitf2_image_subheader::get_tree( int i ) const
   vil_nitf2_field::field_tree* t = new vil_nitf2_field::field_tree;
   vcl_stringstream name_stream;
   name_stream << "Image Subheader";
-  if( i > 0 ) name_stream << " #" << i;
+  if ( i > 0 ) name_stream << " #" << i;
   t->columns.push_back( name_stream.str() );
   m_field_sequence.get_tree( t );
   return t;
@@ -439,104 +439,103 @@ void vil_nitf2_image_subheader::add_rpc_definitions()
 {
   vil_nitf2_tagged_record_definition* tr =
     vil_nitf2_tagged_record_definition::find("RPC00B");
-  if(!tr)
-    {
-      vil_nitf2_tagged_record_definition::define("RPC00B", "Rational Polynomial Coefficients Type B" )
-  
-        // These are the "offset and scale" fields that precede the polynomial coefficients
-        .field("SUCCESS",     "Success parameter",  NITF_INT(1))                 // not used, but must read
-        .field("ERR_BIAS",    "ERR_BIAS",           NITF_DBL(7, 2, false), true) // not used, but must read 
-        .field("ERR_RAND",    "ERR_RAND",           NITF_DBL(7, 2, false), true) // not used
-        .field("LINE_OFF",    "Line Offset",        NITF_INT(6))
-        .field("SAMP_OFF",    "Sample Offset",      NITF_INT(5))
-        .field("LAT_OFF",     "Latitude Offset",    NITF_DBL(8, 4, true), false)
-        .field("LON_OFF",     "Longitude offset",   NITF_DBL(9, 4, true), false)
-        .field("HEIGHT_OFF",  "Height Offset",      NITF_INT(5, true))
-        .field("LINE_SCALE",  "Line Scale",         NITF_INT(6))
-        .field("SAMP_SCALE",  "Sample Scale",       NITF_INT(5))
-        .field("LAT_SCALE",   "Latitude Scale",     NITF_DBL(8, 4, true), false)
-        .field("LON_SCALE",   "Longitude Scale",    NITF_DBL(9, 4, true), false)
-        .field("HEIGHT_SCALE", "Height Scale",      NITF_INT(5, true))
+  if (!tr)
+  {
+    vil_nitf2_tagged_record_definition::define("RPC00B", "Rational Polynomial Coefficients Type B" )
 
-        // Now come the 4 sequential groups of (20 each) polynomial coefficients for line number,
-        //   line density, sample number and sample density.
-        // As these values are in <+/->n.nnnnnnE<+/->n (exponential) format, let's just read as
-        //   strings now and convert into doubles later.
-	
-        .repeat(20, vil_nitf2_field_definitions()
-                .field("LNC",        "Line Number Coefficient",    NITF_EXP(6,1))
-                )
-        .repeat(20, vil_nitf2_field_definitions()
-                .field("LDC",        "Line Density Coefficient",   NITF_EXP(6,1))
-                )
-        .repeat(20, vil_nitf2_field_definitions()
-                .field("SNC",        "Sample Number Coefficient",  NITF_EXP(6,1))
-                )
-        .repeat(20, vil_nitf2_field_definitions()
-                .field("SDC",        "Sample Density Coefficient", NITF_EXP(6,1))
-                )
-        .end();  // of RPC TRE
-    }
+    // These are the "offset and scale" fields that precede the polynomial coefficients
+    .field("SUCCESS",     "Success parameter",  NITF_INT(1))                 // not used, but must read
+    .field("ERR_BIAS",    "ERR_BIAS",           NITF_DBL(7, 2, false), true) // not used, but must read
+    .field("ERR_RAND",    "ERR_RAND",           NITF_DBL(7, 2, false), true) // not used
+    .field("LINE_OFF",    "Line Offset",        NITF_INT(6))
+    .field("SAMP_OFF",    "Sample Offset",      NITF_INT(5))
+    .field("LAT_OFF",     "Latitude Offset",    NITF_DBL(8, 4, true), false)
+    .field("LON_OFF",     "Longitude offset",   NITF_DBL(9, 4, true), false)
+    .field("HEIGHT_OFF",  "Height Offset",      NITF_INT(5, true))
+    .field("LINE_SCALE",  "Line Scale",         NITF_INT(6))
+    .field("SAMP_SCALE",  "Sample Scale",       NITF_INT(5))
+    .field("LAT_SCALE",   "Latitude Scale",     NITF_DBL(8, 4, true), false)
+    .field("LON_SCALE",   "Longitude Scale",    NITF_DBL(9, 4, true), false)
+    .field("HEIGHT_SCALE", "Height Scale",      NITF_INT(5, true))
+
+    // Now come the 4 sequential groups of (20 each) polynomial coefficients
+    //   for line number, line density, sample number and sample density.
+    // As these values are in <+/->n.nnnnnnE<+/->n (exponential) format,
+    //   let's just read as strings now and convert into doubles later.
+
+    .repeat(20, vil_nitf2_field_definitions()
+            .field("LNC",        "Line Number Coefficient",    NITF_EXP(6,1))
+           )
+    .repeat(20, vil_nitf2_field_definitions()
+            .field("LDC",        "Line Density Coefficient",   NITF_EXP(6,1))
+           )
+    .repeat(20, vil_nitf2_field_definitions()
+            .field("SNC",        "Sample Number Coefficient",  NITF_EXP(6,1))
+           )
+    .repeat(20, vil_nitf2_field_definitions()
+            .field("SDC",        "Sample Density Coefficient", NITF_EXP(6,1))
+           )
+    .end();  // of RPC TRE
+  }
   tr =vil_nitf2_tagged_record_definition::find("RPC00A");
-  if(!tr)
-    {
-      vil_nitf2_tagged_record_definition::define("RPC00A", "Rational Polynomial Coefficients Type A" )
-  
-        // These are the "offset and scale" fields that precede the polynomial coefficients
-        .field("SUCCESS",     "Success parameter",  NITF_INT(1))                 // not used, but must read
-        .field("ERR_BIAS",    "ERR_BIAS",           NITF_DBL(7, 2, false), true) // not used, but must read 
-        .field("ERR_RAND",    "ERR_RAND",           NITF_DBL(7, 2, false), true) // not used
-        .field("LINE_OFF",    "Line Offset",        NITF_INT(6))
-        .field("SAMP_OFF",    "Sample Offset",      NITF_INT(5))
-        .field("LAT_OFF",     "Latitude Offset",    NITF_DBL(8, 4, true), false)
-        .field("LON_OFF",     "Longitude offset",   NITF_DBL(9, 4, true), false)
-        .field("HEIGHT_OFF",  "Height Offset",      NITF_INT(5, true))
-        .field("LINE_SCALE",  "Line Scale",         NITF_INT(6))
-        .field("SAMP_SCALE",  "Sample Scale",       NITF_INT(5))
-        .field("LAT_SCALE",   "Latitude Scale",     NITF_DBL(8, 4, true), false)
-        .field("LON_SCALE",   "Longitude Scale",    NITF_DBL(9, 4, true), false)
-        .field("HEIGHT_SCALE", "Height Scale",      NITF_INT(5, true))
+  if (!tr)
+  {
+    vil_nitf2_tagged_record_definition::define("RPC00A", "Rational Polynomial Coefficients Type A" )
 
-        // Now come the 4 sequential groups of (20 each) polynomial coefficients for line number,
-        //   line density, sample number and sample density.
-        // As these values are in <+/->n.nnnnnnE<+/->n (exponential) format, let's just read as
-        //   strings now and convert into doubles later.
-	
-        .repeat(20, vil_nitf2_field_definitions()
-                .field("LNC",        "Line Number Coefficient",    NITF_EXP(6,1))
-                )
-        .repeat(20, vil_nitf2_field_definitions()
-                .field("LDC",        "Line Density Coefficient",   NITF_EXP(6,1))
-                )
-        .repeat(20, vil_nitf2_field_definitions()
-                .field("SNC",        "Sample Number Coefficient",  NITF_EXP(6,1))
-                )
-        .repeat(20, vil_nitf2_field_definitions()
-                .field("SDC",        "Sample Density Coefficient", NITF_EXP(6,1))
-                )
-        .end();  // of RPCA TRE
-    }
+    // These are the "offset and scale" fields that precede the polynomial coefficients
+    .field("SUCCESS",     "Success parameter",  NITF_INT(1))                 // not used, but must read
+    .field("ERR_BIAS",    "ERR_BIAS",           NITF_DBL(7, 2, false), true) // not used, but must read
+    .field("ERR_RAND",    "ERR_RAND",           NITF_DBL(7, 2, false), true) // not used
+    .field("LINE_OFF",    "Line Offset",        NITF_INT(6))
+    .field("SAMP_OFF",    "Sample Offset",      NITF_INT(5))
+    .field("LAT_OFF",     "Latitude Offset",    NITF_DBL(8, 4, true), false)
+    .field("LON_OFF",     "Longitude offset",   NITF_DBL(9, 4, true), false)
+    .field("HEIGHT_OFF",  "Height Offset",      NITF_INT(5, true))
+    .field("LINE_SCALE",  "Line Scale",         NITF_INT(6))
+    .field("SAMP_SCALE",  "Sample Scale",       NITF_INT(5))
+    .field("LAT_SCALE",   "Latitude Scale",     NITF_DBL(8, 4, true), false)
+    .field("LON_SCALE",   "Longitude Scale",    NITF_DBL(9, 4, true), false)
+    .field("HEIGHT_SCALE", "Height Scale",      NITF_INT(5, true))
+
+    // Now come the 4 sequential groups of (20 each) polynomial coefficients
+    //   for line number, line density, sample number and sample density.
+    // As these values are in <+/->n.nnnnnnE<+/->n (exponential) format,
+    //   let's just read as strings now and convert into doubles later.
+
+    .repeat(20, vil_nitf2_field_definitions()
+            .field("LNC",        "Line Number Coefficient",    NITF_EXP(6,1))
+           )
+    .repeat(20, vil_nitf2_field_definitions()
+            .field("LDC",        "Line Density Coefficient",   NITF_EXP(6,1))
+           )
+    .repeat(20, vil_nitf2_field_definitions()
+            .field("SNC",        "Sample Number Coefficient",  NITF_EXP(6,1))
+           )
+    .repeat(20, vil_nitf2_field_definitions()
+            .field("SDC",        "Sample Density Coefficient", NITF_EXP(6,1))
+           )
+    .end();  // of RPCA TRE
+  }
 }
 
 // Collect the RPC parameters for the current image. Image corners are reported
 // as a string of geographic coordinates,one for each image corner.
   bool vil_nitf2_image_subheader::
-get_rpc_params( vcl_string& rpc_type, vcl_string& image_id, 
+get_rpc_params( vcl_string& rpc_type, vcl_string& image_id,
                 vcl_string& image_corner_geo_locations,
                 double* rpc_data )
 {
-  
   // Get image ID and location from main header values
   vcl_string iid2 = "";
   bool success = this->get_property("IID2", iid2);
-  if(!success){
+  if (!success) {
     vcl_cout << "IID2 Property failed in vil_nitf2_image_subheader\n";
     return false;
   }
   image_id = iid2.substr(0,39);// trim length to NN characters to match file ID
   vcl_string igeolo = "";
   success = this->get_property("IGEOLO", igeolo);
-  if(!success){
+  if (!success) {
     vcl_cout << "IGEOLO Property failed in vil_nitf2_image_subheader\n";
     return false;
   }
@@ -548,138 +547,136 @@ get_rpc_params( vcl_string& rpc_type, vcl_string& image_id,
   this->get_property("IXSHD", isxhd_tres);
 
   // Check through the TREs to find "RPC"
-  for (tres_itr = isxhd_tres.begin(); tres_itr != isxhd_tres.end(); ++tres_itr) 
+  for (tres_itr = isxhd_tres.begin(); tres_itr != isxhd_tres.end(); ++tres_itr)
+  {
+    vcl_string type = (*tres_itr)->name();
+    if ( type == "RPC00B" || type == "RPC00A") // looking for "RPC..."
     {
-      vcl_string type = (*tres_itr)->name();
-      if ( type == "RPC00B" || type == "RPC00A")// looking for "RPC..."
-        {
-          // set type in return value
-          rpc_type = type;
-	  
-          // get offsets and scales, print a couple to make sure values are correct
-          int line_off;
-          success = (*tres_itr)->get_value("LINE_OFF", line_off);
-          if(!success){
-            vcl_cout << "LINE_OFF Property failed in vil_nitf2_image_subheader\n";
-            return false;
-          }
-          rpc_data[80] = line_off;
+      // set type in return value
+      rpc_type = type;
 
-          int samp_off;
-          success = (*tres_itr)->get_value("SAMP_OFF", samp_off);
-          if(!success){
-            vcl_cout << "SAMP_OFF Property failed in vil_nitf2_image_subheader\n";
-            return false;
-          }
-          rpc_data[81]  = samp_off;
+      // get offsets and scales, print a couple to make sure values are correct
+      int line_off;
+      success = (*tres_itr)->get_value("LINE_OFF", line_off);
+      if (!success) {
+        vcl_cout << "LINE_OFF Property failed in vil_nitf2_image_subheader\n";
+        return false;
+      }
+      rpc_data[80] = line_off;
 
-          double lat_off;
-          success = (*tres_itr)->get_value("LAT_OFF", lat_off);
-          if(!success){
-            vcl_cout << "LAT_OFF Property failed in vil_nitf2_image_subheader\n";
-            return false;
-          }
-          rpc_data[82] = lat_off;
+      int samp_off;
+      success = (*tres_itr)->get_value("SAMP_OFF", samp_off);
+      if (!success) {
+        vcl_cout << "SAMP_OFF Property failed in vil_nitf2_image_subheader\n";
+        return false;
+      }
+      rpc_data[81]  = samp_off;
 
-          double lon_off;
-          success = (*tres_itr)->get_value("LON_OFF", lon_off);
-          if(!success){
-            vcl_cout << "LON_OFF Property failed in vil_nitf2_image_subheader\n";
-            return false;
-          }
-          rpc_data[83] = lon_off;
+      double lat_off;
+      success = (*tres_itr)->get_value("LAT_OFF", lat_off);
+      if (!success) {
+        vcl_cout << "LAT_OFF Property failed in vil_nitf2_image_subheader\n";
+        return false;
+      }
+      rpc_data[82] = lat_off;
 
-          int height_off;
-          success = (*tres_itr)->get_value("HEIGHT_OFF", height_off);
-          if(!success){
-            vcl_cout << "HEIGHT_OFF Property failed in vil_nitf2_image_subheader\n";
-            return false;
-          }
-          rpc_data[84] = height_off;
+      double lon_off;
+      success = (*tres_itr)->get_value("LON_OFF", lon_off);
+      if (!success) {
+        vcl_cout << "LON_OFF Property failed in vil_nitf2_image_subheader\n";
+        return false;
+      }
+      rpc_data[83] = lon_off;
 
-          int line_scale;
-          success = (*tres_itr)->get_value("LINE_SCALE", line_scale);
-          if(!success){
-            vcl_cout << "LINE_SCALE Property failed in vil_nitf2_image_subheader\n";
-            return false;
-          }
-          rpc_data[85] = line_scale;
+      int height_off;
+      success = (*tres_itr)->get_value("HEIGHT_OFF", height_off);
+      if (!success) {
+        vcl_cout << "HEIGHT_OFF Property failed in vil_nitf2_image_subheader\n";
+        return false;
+      }
+      rpc_data[84] = height_off;
 
-          int samp_scale;
-          success = (*tres_itr)->get_value("SAMP_SCALE", samp_scale);
-          if(!success){
-            vcl_cout << "SAMP_SCALE Property failed in vil_nitf2_image_subheader\n";
-            return false;
-          }
-          rpc_data[86] = samp_scale;
+      int line_scale;
+      success = (*tres_itr)->get_value("LINE_SCALE", line_scale);
+      if (!success) {
+        vcl_cout << "LINE_SCALE Property failed in vil_nitf2_image_subheader\n";
+        return false;
+      }
+      rpc_data[85] = line_scale;
 
-          double lat_scale;
-          success = (*tres_itr)->get_value("LAT_SCALE", lat_scale);
-          if(!success){
-            vcl_cout << "LAT_SCALE Property failed in vil_nitf2_image_subheader\n";
-            return false;
-          }
-          rpc_data[87] = lat_scale;
+      int samp_scale;
+      success = (*tres_itr)->get_value("SAMP_SCALE", samp_scale);
+      if (!success) {
+        vcl_cout << "SAMP_SCALE Property failed in vil_nitf2_image_subheader\n";
+        return false;
+      }
+      rpc_data[86] = samp_scale;
 
-          double lon_scale;
-          success = (*tres_itr)->get_value("LON_SCALE", lon_scale);
-          if(!success){
-            vcl_cout << "LON_SCALE Property failed in vil_nitf2_image_subheader\n";
-            return false;
-          }
-          rpc_data[88] = lon_scale;
+      double lat_scale;
+      success = (*tres_itr)->get_value("LAT_SCALE", lat_scale);
+      if (!success) {
+        vcl_cout << "LAT_SCALE Property failed in vil_nitf2_image_subheader\n";
+        return false;
+      }
+      rpc_data[87] = lat_scale;
 
-          int height_scale;
-          success = (*tres_itr)->get_value("HEIGHT_SCALE", height_scale);
-          if(!success){
-            vcl_cout << "HEIGHT_SCALE Property failed in vil_nitf2_image_subheader\n";
-            return false;
-          }
-          rpc_data[89] = height_scale;
+      double lon_scale;
+      success = (*tres_itr)->get_value("LON_SCALE", lon_scale);
+      if (!success) {
+        vcl_cout << "LON_SCALE Property failed in vil_nitf2_image_subheader\n";
+        return false;
+      }
+      rpc_data[88] = lon_scale;
 
-          // finally get the 80 polynomial coefficients  ##################
-          vcl_vector<double> LNC;
-          success = (*tres_itr)->get_values("LNC", LNC);
-          if(!success){
-            vcl_cout << "LNC Property failed in vil_nitf2_image_subheader\n";
-            return false;
-          }
-          for (int i = 0; i < 20; i++) {
-            rpc_data[i] = LNC[i];	  			// copy from vector to regular array.
-          }
-		
-          vcl_vector<double> LDC;
-          success = (*tres_itr)->get_values("LDC", LDC);
-          if(!success){
-            vcl_cout << "LDC Property failed in vil_nitf2_image_subheader\n";
-            return false;
-          }
-          for (int i = 0; i < 20; i++) {
-            rpc_data[i+20] = LDC[i];	  			// copy from vector to regular array.
-          }
+      int height_scale;
+      success = (*tres_itr)->get_value("HEIGHT_SCALE", height_scale);
+      if (!success) {
+        vcl_cout << "HEIGHT_SCALE Property failed in vil_nitf2_image_subheader\n";
+        return false;
+      }
+      rpc_data[89] = height_scale;
 
-          vcl_vector<double> SNC;
-          success = (*tres_itr)->get_values("SNC", SNC);
-          if(!success){
-            vcl_cout << "SNC Property failed in vil_nitf2_image_subheader\n";
-            return false;
-          }
-          for (int i = 0; i < 20; i++) {
-            rpc_data[i+40] = SNC[i];	  			// copy from vector to regular array.
-          }
-	  
-          vcl_vector<double> SDC;
-          success = (*tres_itr)->get_values("SDC", SDC);
-          if(!success){
-            vcl_cout << "SDC Property failed in vil_nitf2_image_subheader\n";
-            return false;
-          }
-          for (int i = 0; i < 20; i++) {
-            rpc_data[i+60] = SDC[i];	  			// copy from vector to regular array.
-          }
-        }
+      // finally get the 80 polynomial coefficients  ##################
+      vcl_vector<double> LNC;
+      success = (*tres_itr)->get_values("LNC", LNC);
+      if (!success) {
+        vcl_cout << "LNC Property failed in vil_nitf2_image_subheader\n";
+        return false;
+      }
+      for (int i = 0; i < 20; i++) {
+        rpc_data[i] = LNC[i];      // copy from vector to regular array.
+      }
+
+      vcl_vector<double> LDC;
+      success = (*tres_itr)->get_values("LDC", LDC);
+      if (!success) {
+        vcl_cout << "LDC Property failed in vil_nitf2_image_subheader\n";
+        return false;
+      }
+      for (int i = 0; i < 20; i++) {
+        rpc_data[i+20] = LDC[i];   // copy from vector to regular array.
+      }
+
+      vcl_vector<double> SNC;
+      success = (*tres_itr)->get_values("SNC", SNC);
+      if (!success) {
+        vcl_cout << "SNC Property failed in vil_nitf2_image_subheader\n";
+        return false;
+      }
+      for (int i = 0; i < 20; i++) {
+        rpc_data[i+40] = SNC[i];   // copy from vector to regular array.
+      }
+
+      vcl_vector<double> SDC;
+      success = (*tres_itr)->get_values("SDC", SDC);
+      if (!success) {
+        vcl_cout << "SDC Property failed in vil_nitf2_image_subheader\n";
+        return false;
+      }
+      for (int i = 0; i < 20; i++) {
+        rpc_data[i+60] = SDC[i];   // copy from vector to regular array.
+      }
     }
+  }
   return true;
 }
-
-
