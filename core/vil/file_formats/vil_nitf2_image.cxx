@@ -305,6 +305,23 @@ vil_nitf2_classification::file_version vil_nitf2_image::file_version() const
   return m_file_header.file_version();
 }
 
+char const * vil_nitf2_image::file_format() const
+{
+vil_nitf2_classification::file_version v = file_version();
+  switch (v)
+    {
+    case vil_nitf2_classification::V_UNKNOWN :
+      return "unknown";
+    case vil_nitf2_classification::V_NITF_10 :
+      return "nitf10";
+    case vil_nitf2_classification::V_NITF_20 :
+      return "nitf20";
+    case vil_nitf2_classification::V_NITF_21 :
+      return "nitf21";
+    default:
+      return "unknown";
+    }
+}
 const vil_nitf2_image_subheader* vil_nitf2_image::current_image_header() const
 {
   assert(m_current_image_index < m_image_headers.size());

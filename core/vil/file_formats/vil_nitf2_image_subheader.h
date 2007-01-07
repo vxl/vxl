@@ -84,7 +84,14 @@ public:
   // I allocate the return value, but you own it after I return it to you
   // so you need to delete it.  
   virtual vil_nitf2_field::field_tree* get_tree( int i = 0 ) const;
-protected:
+
+  //: Get RPC parameters, if present. User provides rpc_data array.
+  bool get_rpc_params( vcl_string& rpc_type,
+                       vcl_string& image_id, 
+                       vcl_string& image_corner_geo_locations,
+                       double* rpc_data );
+					
+  protected:
 
   vil_nitf2_field_sequence m_field_sequence;
   vil_nitf2_data_mask_table* m_data_mask_table;
@@ -99,10 +106,9 @@ private:
   static void add_shared_field_defs_2( vil_nitf2_field_definitions* defs );
   static void add_geo_field_defs( vil_nitf2_field_definitions* defs, const vil_nitf2_classification::file_version& version );
   static void add_shared_field_defs_3( vil_nitf2_field_definitions* defs );
-
+  static void add_rpc_definitions();
   static vil_nitf2_field_definitions* s_field_definitions_21;
   static vil_nitf2_field_definitions* s_field_definitions_20;
-
   // so these static members can be cleaned up when the program is done 
   // using nitf files
   friend void vil_nitf2::cleanup_static_members();

@@ -97,10 +97,9 @@ class vil_nitf2_image : public vil_blocked_image_resource
   //: Number of blocks in image height
   virtual unsigned n_block_j() const;
 
-#if 0
   //: returns "nitf vM.N"
   char const * file_format() const;
-#endif
+
 
   // is the current image JPEG 2000 compressed
   bool is_jpeg_2000_compressed() const;
