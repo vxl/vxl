@@ -17,7 +17,7 @@
 #include "vil_nitf2_data_mask_table.h"
 #include "vil_nitf2_des.h"
 
-#ifdef HAS_J2K
+#if HAS_J2K
 #include "vil_j2k_image.h"
 #endif //HAS_J2K
 
@@ -322,6 +322,7 @@ vil_nitf2_classification::file_version v = file_version();
       return "unknown";
     }
 }
+
 const vil_nitf2_image_subheader* vil_nitf2_image::current_image_header() const
 {
   assert(m_current_image_index < m_image_headers.size());
@@ -471,7 +472,7 @@ vil_image_view_base_sptr vil_nitf2_image::get_copy_view_decimated_j2k(
   }
   assert( is_jpeg_2000_compressed() );
   if ( ! s_decode_jpeg_2000 ) {
-#ifdef HAS_J2K
+#if HAS_J2K
     s_decode_jpeg_2000 = vil_j2k_image::s_decode_jpeg_2000;
 #else //HAS_J2K
     return 0;
