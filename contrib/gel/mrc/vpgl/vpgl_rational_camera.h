@@ -139,8 +139,7 @@ class vpgl_rational_camera : public vpgl_camera<T>
   void set_coefficients(vnl_matrix_fixed<T, 4, 20> const& rational_coeffs)
     {rational_coeffs_ = rational_coeffs;}
   //: set coordinate scale and offsets
-  void set_scale_offsets(vcl_vector<vpgl_scale_offset<T> > const& scale_offsets)
-    {scale_offsets_ = scale_offsets;}
+  void set_scale_offsets(vcl_vector<vpgl_scale_offset<T> > const& scale_offsets);
   //: get the rational polynomial coefficients in a vnl matrix
   vnl_matrix_fixed<T, 4, 20> coefficient_matrix() const
     {return rational_coeffs_;}
@@ -185,6 +184,9 @@ class vpgl_rational_camera : public vpgl_camera<T>
 
   //: Project a world point onto the image
   vgl_point_2d<T> project(vgl_point_3d<T> world_point) const;
+
+  //: print the camera parameters
+  void print(vcl_ostream& s = vcl_cout) const;
 
  protected:
   // utilities

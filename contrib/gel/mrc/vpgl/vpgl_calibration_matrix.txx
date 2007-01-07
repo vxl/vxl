@@ -8,7 +8,6 @@
 
 #include <vgl/io/vgl_io_point_2d.h>
 #include <vgl/xio/vgl_xio_point_2d.h>
-#include <vsl/vsl_basic_xml_element.h>
 #include <vcl_cassert.h>
 
 //--------------------------------------
