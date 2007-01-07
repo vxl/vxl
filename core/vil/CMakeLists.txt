@@ -40,7 +40,9 @@ IF(ECW_FOUND)
      file_formats/vil_j2k_image.h           file_formats/vil_j2k_image.cxx
      file_formats/NCSJPCVilIOStream.h       file_formats/NCSJPCVilIOStream.cxx )
   INCLUDE_DIRECTORIES(${ECW_INCLUDE_DIR})
-  ADD_DEFINITIONS(-DHAS_J2K)
+  SET( HAS_J2K 1 )
+ELSE(ECW_FOUND)
+  SET( HAS_J2K 0 )
 ENDIF(ECW_FOUND)
 
 INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
