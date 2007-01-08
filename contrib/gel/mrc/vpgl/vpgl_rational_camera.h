@@ -45,7 +45,7 @@
 //  normalizations.
 //
 #include <vgl/vgl_fwd.h>
-#include <vcl_iosfwd.h>
+#include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vcl_vector.h>
 #include <vnl/vnl_vector_fixed.h>
