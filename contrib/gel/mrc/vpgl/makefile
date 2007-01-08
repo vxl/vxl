@@ -23,7 +23,7 @@ MANPAGE_SOURCES += vgl_rotation_3d.h
 #MANPAGE_SOURCES += vpgl_matrix_camera_sptr.h
 #MANPAGE_SOURCES += vpgl_perspective_camera_sptr.h
 
-SUBDIRS += xio algo
+SUBDIRS += xio algo file_formats
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
