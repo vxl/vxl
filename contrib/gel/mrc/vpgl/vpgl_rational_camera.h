@@ -44,6 +44,7 @@
 //  class, scale_offset, is defined to process the forward and reverse
 //  normalizations.
 //
+#include <vcl_iostream.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
