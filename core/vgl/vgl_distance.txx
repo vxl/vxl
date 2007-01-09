@@ -13,6 +13,7 @@
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_line_segment_2d.h>
+#include <vgl/vgl_line_segment_3d.h>
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/vgl_homg_line_3d_2_points.h>
 #include <vgl/vgl_plane_3d.h>
@@ -313,6 +314,15 @@ double vgl_distance(vgl_line_segment_2d<T> const& l,
                                      p.x(), p.y());
 }
 
+template <class T>
+double vgl_distance(vgl_line_segment_3d<T> const& l,
+                    vgl_point_3d<T> const& p)
+{
+  return vgl_distance_to_linesegment(l.point1().x(), l.point1().y(), l.point1().z(), 
+                                     l.point2().x(), l.point2().y(), l.point2().z(),
+                                     p.x(), p.y(), p.z());
+}
+
 
 #undef VGL_DISTANCE_INSTANTIATE
 #define VGL_DISTANCE_INSTANTIATE(T) \
@@ -348,7 +358,8 @@ template double vgl_distance(vgl_homg_line_3d_2_points<T >const&,vgl_homg_line_3
 template double vgl_distance(vgl_homg_line_3d_2_points<T >const&,vgl_homg_point_3d<T >const&); \
 template double vgl_distance(vgl_line_3d_2_points<T >const&,vgl_point_3d<T >const&); \
 template double vgl_distance(vgl_homg_point_3d<T > const&,vgl_homg_line_3d_2_points<T > const&); \
-template double vgl_distance(vgl_line_segment_2d<T > const&, vgl_point_2d<T > const&)
+template double vgl_distance(vgl_line_segment_2d<T > const&, vgl_point_2d<T > const&); \
+template double vgl_distance(vgl_line_segment_3d<T > const&, vgl_point_3d<T > const&)
 
 #endif // vgl_distance_txx_
 

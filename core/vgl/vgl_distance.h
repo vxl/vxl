@@ -219,4 +219,18 @@ template <class T> inline
 double vgl_distance(vgl_point_2d<T> const& p,
                     vgl_line_segment_2d<T> const& l) { return vgl_distance(l,p); }
 
+
+//: Closest distance from a point \a p to a line segment \a l in 3D
+// \relates vgl_point_3d
+// \relates vgl_line_segment_3d
+// \sa vgl_distance_to_linesegment()
+// \sa vgl_distance2_to_linesegment()
+template <class T>
+double vgl_distance(vgl_line_segment_3d<T> const& l,
+                    vgl_point_3d<T> const& p);
+template <class T> inline
+double vgl_distance(vgl_point_3d<T> const& p,
+                    vgl_line_segment_3d<T> const& l) { return vgl_distance(l,p); }
+
+
 #endif // vgl_distance_h_
