@@ -183,6 +183,9 @@ SOURCE=.\test_bessel.cxx
 # Begin Source File
 SOURCE=.\test_quaternion.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_rotation_matrix.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
