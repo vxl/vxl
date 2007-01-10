@@ -7,10 +7,9 @@
 #include <vnl/vnl_quaternion.h>
 #include <vnl/vnl_rotation_matrix.h>
 
-
-//: Tolerance between doubles. This was inferred by trial and error. 
+// Tolerance between doubles. This was inferred by trial and error.
 // Could be derived mathematically?
-const double dtol = 16*vcl_numeric_limits<double>::epsilon(); 
+const double dtol = 16*vcl_numeric_limits<double>::epsilon();
 
 
 static void test_operators()
@@ -76,7 +75,6 @@ static void test_random_euler_near_zero()
       errcount++;
       vcl_cout << "ERROR: -quat -> euler == quat -> euler" << euler << ": " << out << vcl_endl;
     }
-
   }
   TEST("1000*Random small euler -> small quaternion angle", errcount, 0);
   vcl_cout << "Average squared error: " << avg_sqr_error << vcl_endl;
@@ -93,13 +91,12 @@ static void test_random_quat_near_zero()
     quat.normalize();
 
     vnl_vector_fixed<double,3> euler = quat.rotation_euler_angles();
-    
+
     if (euler.magnitude() > 0.01)
     {
       errcount++;
       vcl_cout << "ERROR: should be small: " << quat << ": " << euler << vcl_endl;
     }
-
   }
   TEST("1000*Random small quat -> small euler values", errcount, 0);
 }
@@ -138,8 +135,8 @@ static void test_rotation_matrix_and_euler_angles()
 #ifndef NDEBUG
       if (max_err>dtol)
       {
-        vcl_cout << "Warning (a+a): max_err=" << max_err 
-          << "  dtol=" << dtol << vcl_endl;
+        vcl_cout << "Warning (a+a): max_err=" << max_err
+                 << "  dtol=" << dtol << vcl_endl;
       }
 #endif
     }
@@ -160,11 +157,11 @@ static void test_rotation_matrix_and_euler_angles()
       vnl_matrix<double> D = R - M;
       double max_err = D.absolute_value_max();
       this_trial_ok = this_trial_ok && (max_err<=dtol);
-#ifndef NDEBUG      
+#ifndef NDEBUG
       if (max_err>dtol)
       {
-        vcl_cout << "Warning (ea): max_err=" << max_err 
-          << "  dtol=" << dtol << vcl_endl;
+        vcl_cout << "Warning (ea): max_err=" << max_err
+                 << "  dtol=" << dtol << vcl_endl;
       }
 #endif
     }
@@ -208,15 +205,15 @@ static void test_rotations()
   vcl_cout << "q1 -> Euler angles: " << e1 << vcl_endl;
   vnl_quaternion<double> q1_b(e1(0), e1(1), e1(2));
   vcl_cout << "q1 -> Euler angles: " << q1_b << vcl_endl;
-  TEST_NEAR("Euler angles -> q1", 
+  TEST_NEAR("Euler angles -> q1",
     vnl_vector_ssd(q1_b, q1), 0.0, 1e-8);
-  
+
   vcl_cout << "Euler angles -> q1: " << q1_b << vcl_endl;
 
   test_random_round_trip();
   test_random_quat_near_zero();
   test_random_euler_near_zero();
-  
+
   test_rotation_matrix_and_euler_angles();
 }
 

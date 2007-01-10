@@ -2,18 +2,18 @@
 #ifndef vpgl_nitf_rational_camera_h_
 #define vpgl_nitf_rational_camera_h_
 //:
-/// \file
-// \brief: instance a nitf_rational camera from nitf header information.  
+// \file
+// \brief: instance a nitf_rational camera from nitf header information.
 // \author Jim Green
 // \date Dec 2006
 //
-//  Note that there are several alternate "orderings" of the 
-//  polynomial coefficients in the nitf header that apply to different 
-//  versions of nitf images.  These variations were added over time 
+//  Note that there are several alternate "orderings" of the
+//  polynomial coefficients in the nitf header that apply to different
+//  versions of nitf images.  These variations were added over time
 //  by different government agencies but all are in use in some circumstances.
-//  This class defined the ordering for RPC00B which is used for 
+//  This class defined the ordering for RPC00B which is used for
 //  commercial satellite and for imagery taken by military aircraft.
-//  Details of the ordering are contained in the document STDI-0002_V3.doc. 
+//  Details of the ordering are contained in the document STDI-0002_V3.doc.
 //  Additional coefficient permutations can be included by defining other
 //  versions of the set_order_* function.
 //
@@ -29,7 +29,7 @@
 
 class vpgl_nitf_rational_camera : public vpgl_rational_camera<double>
 {
-  public:
+ public:
 
   enum geopt_coord { LAT, LON };
   vpgl_nitf_rational_camera();
@@ -38,7 +38,7 @@ class vpgl_nitf_rational_camera : public vpgl_rational_camera<double>
   vpgl_nitf_rational_camera(vcl_string const& nitf_image_path,
                             bool verbose = false);
 
-  //: Construct from a nitf image  
+  //: Construct from a nitf image
   vpgl_nitf_rational_camera(vil_nitf2_image* nift_image,
                             bool verbose = false);
 
@@ -55,10 +55,10 @@ class vpgl_nitf_rational_camera : public vpgl_rational_camera<double>
  private:
   //internal functions
   // NITF_RATIONAL00B - commercial + airborne
-  void set_order_b(int*); 
+  void set_order_b(int*);
   bool init(vil_nitf2_image* nitf_image, bool verbose);
   // data members
-  vcl_string nitf_rational_type_; 
+  vcl_string nitf_rational_type_;
   vcl_string image_id_;
   vcl_string image_igeolo_;
   //: geo-coordinates of image corners
@@ -68,6 +68,4 @@ class vpgl_nitf_rational_camera : public vpgl_rational_camera<double>
   vnl_double_2 lr_;
 };
 
-#endif		
-// vpgl_nitf_rational_camera_h__
-
+#endif // vpgl_nitf_rational_camera_h_

@@ -1,4 +1,6 @@
 #include "rgrl_trans_mixed_spline.h"
+//:
+// \file
 #include <vcl_cassert.h>
 
 void
@@ -9,7 +11,7 @@ map_loc( vnl_vector< double > const& from,
   vnl_vector< double > temp_to;
   to.set( 0 );
 
-  for( unsigned i = 0; i < trans_splines_.size(); ++i ) {
+  for ( unsigned i = 0; i < trans_splines_.size(); ++i ) {
     trans_splines_[i].map_location( from, temp_to );
     to += temp_to;
   }
@@ -31,7 +33,7 @@ map_dir( vnl_vector< double > const& from_loc,
   //vnl_vector<double> from2 = from_loc + from_dir;
 
   map_loc( from2, delta2 );
-  to_dir = from2 + delta2 - from_loc - delta ;  
+  to_dir = from2 + delta2 - from_loc - delta ;
 }
 
 //: Compute jacobian w.r.t. location
@@ -49,8 +51,7 @@ scale_by( double scale ) const
   assert( !"rgrl_trans_mixed_spline::scale_by() is not implemented!" );
   return 0;
 }
-  
-  
+
 
 vnl_matrix<double>
 rgrl_trans_mixed_spline::
@@ -58,8 +59,8 @@ transfer_error_covar( vnl_vector<double> const& p ) const
 {
   unsigned dim = p.size();
   vnl_matrix<double> transfer_err_cov(dim, dim, 0);
-  
-  for( unsigned i = 0; i < trans_splines_.size(); ++i ) {
+
+  for ( unsigned i = 0; i < trans_splines_.size(); ++i ) {
     transfer_err_cov += trans_splines_[i].transfer_error_covar( p );
   }
 
@@ -67,7 +68,7 @@ transfer_error_covar( vnl_vector<double> const& p ) const
 }
 
 //: make a clone copy
-rgrl_transformation_sptr 
+rgrl_transformation_sptr
 rgrl_trans_mixed_spline::
 clone() const
 {
