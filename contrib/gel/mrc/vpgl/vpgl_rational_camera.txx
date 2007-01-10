@@ -4,12 +4,10 @@
 //:
 // \file
 
-#include <vpgl/vpgl_rational_camera.h>
-#include <vcl_cassert.h>
+#include "vpgl_rational_camera.h"
 #include <vcl_vector.txx>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_plane_3d.h>
 //--------------------------------------
 // Constructors
 //
@@ -159,7 +157,6 @@ vpgl_rational_camera<T>::power_vector(const T x, const T y, const T z) const
   return pv;
 }
 
-
 // Base projection method
 template <class T>
 void vpgl_rational_camera<T>::project(const T x, const T y, const T z,
@@ -188,7 +185,6 @@ vpgl_rational_camera<T>::project(vnl_vector_fixed<T, 3> const& world_point)const
   return image_point;
 }
 
-
 //vgl interface methods
 template <class T>
 vgl_point_2d<T> vpgl_rational_camera<T>::project(vgl_point_3d<T> world_point)const
@@ -208,112 +204,114 @@ void vpgl_rational_camera<T>::print(vcl_ostream& s) const
   vpgl_scale_offset<T> sou = scale_offsets_[U_INDX];
   vpgl_scale_offset<T> sov = scale_offsets_[V_INDX];
 
-  s << "vpgl_rational_camera:\n" 
-    << "------------------------\n";
-  s << "xoff = " << sox.offset() 
-    << "  yoff = " << soy.offset() 
-    << "  zoff = " << soz.offset() << '\n';
-  s << "xscale = " << sox.scale() 
-    << "  yscale = " << soy.scale() 
-    << "  zscale = " << soz.scale() << '\n';
+  s << "vpgl_rational_camera:\n"
+    << "------------------------\n"
+    << "xoff = " << sox.offset()
+    << "  yoff = " << soy.offset()
+    << "  zoff = " << soz.offset() << '\n'
+    << "xscale = " << sox.scale()
+    << "  yscale = " << soy.scale()
+    << "  zscale = " << soz.scale() << '\n'
 
-  s << "uoff = " << sou.offset() 
-    << "  voff = " << sov.offset() << '\n';
-  s << "uscale = " << sou.scale() 
-    << "  vscale = " << sov.scale() << '\n' << '\n';
-  
-  s << "U Numerator \n";
-  s << "[0] " << rational_coeffs_[0][0] 
-    << " [1] " << rational_coeffs_[0][1] 
-    << " [2] " << rational_coeffs_[0][2] 
+    << "uoff = " << sou.offset()
+    << "  voff = " << sov.offset() << '\n'
+    << "uscale = " << sou.scale()
+    << "  vscale = " << sov.scale() << "\n\n"
+
+    << "U Numerator\n"
+    << "[0] " << rational_coeffs_[0][0]
+    << " [1] " << rational_coeffs_[0][1]
+    << " [2] " << rational_coeffs_[0][2]
     << " [3] " << rational_coeffs_[0][3] <<'\n'
-    << "[4] " << rational_coeffs_[0][4] 
-    << " [5] " << rational_coeffs_[0][5] 
-    << " [6] " << rational_coeffs_[0][6] 
+    << "[4] " << rational_coeffs_[0][4]
+    << " [5] " << rational_coeffs_[0][5]
+    << " [6] " << rational_coeffs_[0][6]
     << " [7] " << rational_coeffs_[0][7] <<'\n'
-    << "[8] "  << rational_coeffs_[0][8] 
+    << "[8] "  << rational_coeffs_[0][8]
     << " [9] " << rational_coeffs_[0][9]
-    << " [10] " << rational_coeffs_[0][10] 
+    << " [10] " << rational_coeffs_[0][10]
     << " [11] " << rational_coeffs_[0][11] <<'\n'
-    << "[12] " << rational_coeffs_[0][12] 
-    << " [13] " << rational_coeffs_[0][13] 
-    << " [14] " << rational_coeffs_[0][14] 
+    << "[12] " << rational_coeffs_[0][12]
+    << " [13] " << rational_coeffs_[0][13]
+    << " [14] " << rational_coeffs_[0][14]
     << " [15] "  << rational_coeffs_[0][15] <<'\n'
-    << "[16] " << rational_coeffs_[0][16] 
-    << " [17] " << rational_coeffs_[0][17] 
-    << " [18] " << rational_coeffs_[0][18] 
-    << " [19] " << rational_coeffs_[0][19] <<'\n'<<'\n';
+    << "[16] " << rational_coeffs_[0][16]
+    << " [17] " << rational_coeffs_[0][17]
+    << " [18] " << rational_coeffs_[0][18]
+    << " [19] " << rational_coeffs_[0][19] <<"\n\n"
 
-  s << "U Denominator \n";
-  s << "[0] " << rational_coeffs_[1][0] 
-    << " [1] " << rational_coeffs_[1][1] 
-    << " [2] " << rational_coeffs_[1][2] 
+    << "U Denominator\n"
+    << "[0] " << rational_coeffs_[1][0]
+    << " [1] " << rational_coeffs_[1][1]
+    << " [2] " << rational_coeffs_[1][2]
     << " [3] " << rational_coeffs_[1][3] <<'\n'
-    << "[4] " << rational_coeffs_[1][4] 
-    << " [5] " << rational_coeffs_[1][5] 
-    << " [6] " << rational_coeffs_[1][6] 
+    << "[4] " << rational_coeffs_[1][4]
+    << " [5] " << rational_coeffs_[1][5]
+    << " [6] " << rational_coeffs_[1][6]
     << " [7] " << rational_coeffs_[1][7]  <<'\n'
-    << "[8] " << rational_coeffs_[1][8] 
+    << "[8] " << rational_coeffs_[1][8]
     << " [9] " << rational_coeffs_[1][9]
-    << " [10] " << rational_coeffs_[1][10] 
+    << " [10] " << rational_coeffs_[1][10]
     << " [11] " << rational_coeffs_[1][11] <<'\n'
-    << "[12] " << rational_coeffs_[1][12] 
-    << " [13] " << rational_coeffs_[1][13] 
-    << " [14] " << rational_coeffs_[1][14] 
+    << "[12] " << rational_coeffs_[1][12]
+    << " [13] " << rational_coeffs_[1][13]
+    << " [14] " << rational_coeffs_[1][14]
     << " [15] " << rational_coeffs_[1][15] <<'\n'
-    << "[16] " << rational_coeffs_[1][16] 
+    << "[16] " << rational_coeffs_[1][16]
     << " [17] " << rational_coeffs_[1][17]
-    << " [18] " << rational_coeffs_[1][18] 
-    << " [19] " << rational_coeffs_[1][19] <<'\n'<<'\n';
+    << " [18] " << rational_coeffs_[1][18]
+    << " [19] " << rational_coeffs_[1][19] <<"\n\n"
 
-  s << "V Numerator \n";
-  s << "[0] " << rational_coeffs_[2][0] 
-    << " [1] " << rational_coeffs_[2][1] 
-    << " [2] " << rational_coeffs_[2][2] 
+    << "V Numerator\n"
+    << "[0] " << rational_coeffs_[2][0]
+    << " [1] " << rational_coeffs_[2][1]
+    << " [2] " << rational_coeffs_[2][2]
     << " [3] " << rational_coeffs_[2][3]<<'\n'
-    << "[4] " << rational_coeffs_[2][4] 
-    << " [5] " << rational_coeffs_[2][5] 
-    << " [6] " << rational_coeffs_[2][6] 
+    << "[4] " << rational_coeffs_[2][4]
+    << " [5] " << rational_coeffs_[2][5]
+    << " [6] " << rational_coeffs_[2][6]
     << " [7] " << rational_coeffs_[2][7] <<'\n'
-    << "[8] " << rational_coeffs_[2][8] 
+    << "[8] " << rational_coeffs_[2][8]
     << " [9] " << rational_coeffs_[2][9]
-    << " [10] " << rational_coeffs_[2][10] 
+    << " [10] " << rational_coeffs_[2][10]
     << " [11] " << rational_coeffs_[2][11] <<'\n'
-    << "[12] " << rational_coeffs_[2][12] 
-    << " [13] " << rational_coeffs_[2][13] 
-    << " [14] " << rational_coeffs_[2][14] 
+    << "[12] " << rational_coeffs_[2][12]
+    << " [13] " << rational_coeffs_[2][13]
+    << " [14] " << rational_coeffs_[2][14]
     << " [15] " << rational_coeffs_[2][15]<<'\n'
-    << "[16] " << rational_coeffs_[2][16] 
-    << " [17] " << rational_coeffs_[2][17] 
-    << " [18] " << rational_coeffs_[2][18] 
-    << " [19] " << rational_coeffs_[2][19] <<'\n'<<'\n';
+    << "[16] " << rational_coeffs_[2][16]
+    << " [17] " << rational_coeffs_[2][17]
+    << " [18] " << rational_coeffs_[2][18]
+    << " [19] " << rational_coeffs_[2][19] <<"\n\n"
 
-  s << "V Denominator \n";
-  s << "[0] " << rational_coeffs_[3][0] 
-    << " [1] " << rational_coeffs_[3][1] 
-    << " [2] " << rational_coeffs_[3][2] 
+    << "V Denominator\n"
+    << "[0] " << rational_coeffs_[3][0]
+    << " [1] " << rational_coeffs_[3][1]
+    << " [2] " << rational_coeffs_[3][2]
     << " [3] " << rational_coeffs_[3][3]<<'\n'
-    << "[4] " << rational_coeffs_[3][4] 
-    << " [5] " << rational_coeffs_[3][5] 
-    << " [6] " << rational_coeffs_[3][6] 
+    << "[4] " << rational_coeffs_[3][4]
+    << " [5] " << rational_coeffs_[3][5]
+    << " [6] " << rational_coeffs_[3][6]
     << " [7] " << rational_coeffs_[3][7] <<'\n'
-    << "[8] " << rational_coeffs_[3][8] 
+    << "[8] " << rational_coeffs_[3][8]
     << " [9] " << rational_coeffs_[3][9]
-    << " [10] " << rational_coeffs_[3][10] 
+    << " [10] " << rational_coeffs_[3][10]
     << " [11] " << rational_coeffs_[3][11] <<'\n'
-    << "[12] " << rational_coeffs_[3][12] 
-    << " [13] " << rational_coeffs_[3][13] 
-    << " [14] " << rational_coeffs_[3][14] 
+    << "[12] " << rational_coeffs_[3][12]
+    << " [13] " << rational_coeffs_[3][13]
+    << " [14] " << rational_coeffs_[3][14]
     << " [15] " << rational_coeffs_[3][15]<<'\n'
-    << "[16] " << rational_coeffs_[3][16] 
-    << " [17] " << rational_coeffs_[3][17] 
-    << " [18] " << rational_coeffs_[3][18] 
+    << "[16] " << rational_coeffs_[3][16]
+    << " [17] " << rational_coeffs_[3][17]
+    << " [18] " << rational_coeffs_[3][18]
     << " [19] " << rational_coeffs_[3][19] <<'\n'
     <<"------------------------------------------------\n\n";
 }
+
 //: Write to stream
 template <class T>
-vcl_ostream&  operator<<(vcl_ostream& s, const vpgl_rational_camera<T >& c ){
+vcl_ostream&  operator<<(vcl_ostream& s, const vpgl_rational_camera<T >& c )
+{
   c.print(s);
   return s;
 }
@@ -329,4 +327,3 @@ VCL_VECTOR_INSTANTIATE(soff)
 
 
 #endif // vpgl_rational_camera_txx_
-
