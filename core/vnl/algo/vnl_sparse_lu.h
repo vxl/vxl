@@ -21,14 +21,14 @@
 
 
 //: Linear system solver for Mx = b using LU decomposition of a sparse matrix
-//  encapsulating Sparse 1.3 by Kenneth S. Kundert.
+//  Encapsulating Sparse 1.3 by Kenneth S. Kundert.
 //  The matrix is factored before solution. Any number of b vectors can
-//  be applied after the matrix is factored with out recomputation of the 
+//  be applied after the matrix is factored with out recomputation of the
 //  LU form. It is advised to construct with mode==estimate_condition and
 //  check that rcond()>sqrt(machine precision).  If this is not the case
 //  the solution may be suspect. An upper bound on error is provided.
 //  The solution of M^t x = b is also available.
- 
+
 class vnl_sparse_lu
 {
  public:
@@ -44,31 +44,30 @@ class vnl_sparse_lu
   vnl_sparse_lu(vnl_sparse_matrix<double> const& M, operation mode = quiet);
  ~vnl_sparse_lu() {}
 
- //: set the relative pivot threshold should be between 0 and 1
- // If set to one then pivoting is complete and slow
- // If near zero then roundoff error may be prohibitive but compuation is fast
- // Typical values are between 0.01 and 0.1.
- void set_pivot_thresh(double pivot_thresh){pivot_thresh_=pivot_thresh;}
+  //: set the relative pivot threshold should be between 0 and 1
+  // If set to one then pivoting is complete and slow
+  // If near zero then roundoff error may be prohibitive but compuation is fast
+  // Typical values are between 0.01 and 0.1.
+  void set_pivot_thresh(double pivot_thresh){pivot_thresh_=pivot_thresh;}
 
- //: set the threshold on absolute element magnitude for pivoting
- // should be either zero or significantly smaller than the absolute
- // value of the smallest diagonal element.
- void set_absolute_thresh(double absolute_thresh){absolute_thresh_=absolute_thresh;}
- //: set diagonal pivoting mode, normally 1 which gives priority to diagonal
- //  elements.
- void set_diagonal_pivoting(int diag_pivoting){diag_pivoting_=diag_pivoting;}
-
-  //: Solve problem M x = b
- vnl_vector<double> solve(vnl_vector<double> const& b);
+  //: set the threshold on absolute element magnitude for pivoting
+  // Should be either zero or significantly smaller than the absolute
+  // value of the smallest diagonal element.
+  void set_absolute_thresh(double absolute_thresh){absolute_thresh_=absolute_thresh;}
+  //: set diagonal pivoting mode, normally 1 which gives priority to diagonal elements.
+  void set_diagonal_pivoting(int diag_pivoting){diag_pivoting_=diag_pivoting;}
 
   //: Solve problem M x = b
- void solve(vnl_vector<double> const& b, vnl_vector<double>* x);
+  vnl_vector<double> solve(vnl_vector<double> const& b);
+
+  //: Solve problem M x = b
+  void solve(vnl_vector<double> const& b, vnl_vector<double>* x);
 
   //: Solve problem M^t x = b
- vnl_vector<double> solve_transpose(vnl_vector<double> const& b);
+  vnl_vector<double> solve_transpose(vnl_vector<double> const& b);
 
   //: Solve problem M^t x = b
- void solve_transpose(vnl_vector<double> const& b, vnl_vector<double>* x);
+  void solve_transpose(vnl_vector<double> const& b, vnl_vector<double>* x);
 
   //: Compute determinant
   double determinant();
@@ -79,11 +78,12 @@ class vnl_sparse_lu
   // Not calculated unless operation mode at construction includes estimate_condition.
   double rcond();
 
-  //: An estimate of maximum error in solution. Not calculated unless operation mode at construction includes estimate_condition.
+  //: An estimate of maximum error in solution.
+  // Not calculated unless operation mode at construction includes estimate_condition.
   double max_error_bound();
 
-  //: Return the matrix after pivoting
 #if 0 // not immediately useful but left for future development
+  //: Return the matrix after pivoting
   vnl_sparse_matrix<double> lu_matrix();
 #endif
 
