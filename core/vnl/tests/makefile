@@ -35,6 +35,7 @@ TESTS += test_hungarian_algorithm.cxx
 TESTS += test_integrant.cxx
 TESTS += test_bessel.cxx
 TESTS += test_quaternion.cxx
+TESTS += test_rotation_matrix.cxx
 
 MANPAGE_SOURCES += test_arithmetic_body.h
 
