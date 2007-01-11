@@ -1,29 +1,10 @@
 #ifndef vimt3d_transform_3d_h_
 #define vimt3d_transform_3d_h_
+
 //:
 // \file
-// \brief A 3d transform class
+// \brief A class to define and apply a 3D transformation up to affine.
 // \author Graham Vincent, Tim Cootes
-//
-// A class to define and apply a 3D transform, which can be up to a
-// Euclidean transformation.
-// In order of complexity the transform can be
-// Identity     x->x, y->y, z->z
-// Translation  x->x + tx, y->y + ty, z->z + tz
-// ZoomOnly     x->sx.x + tx, y->sy.y + ty, z->sz.z + tz
-// RigidBody    (Translate + rotation)
-// Euclidean    (Translation + rotation + scale)
-// The transformation can be represented by a 4x4 matrix of
-// homogeneous co-ordinates.
-// \verbatim
-// ( xx xy xz xt )
-// ( yx yy yz yt )
-// ( zx zy zz zt )
-// ( tx ty tz tt )
-// \endverbatim
-// For efficiency the elements are stored explicitly, rather than in a
-// vnl_matrix<double>, to avoid lots of copying of matrices with all the
-// attendant memory allocation.
 
 #include <vsl/vsl_binary_io.h>
 #include <vgl/vgl_point_3d.h>
@@ -35,14 +16,25 @@
 //=======================================================================
 
 //: A class to define and apply a 3D transform.
-// The transform which can be up to a Euclidean transformation.
+// The transform which can be up to an affine transformation.
 // In order of complexity the transform can be
 // - Identity     x->x, y->y, z->z
 // - Translation  x->x + tx, y->y + ty, z->z + tz
 // - ZoomOnly     x->sx.x + tx, y->sy.y + ty, z->sz.z + tz
 // - RigidBody    (Translate + rotation)
-// - Euclidean    (Translation + rotation + scale)
-// - Affine
+// - Similarity   (Translation + rotation + isotropic scaling)
+// - Affine       (Translation + rotation + anisotropic scaling)
+// The transformation can be represented by a 4x4 matrix of
+// homogeneous co-ordinates.
+// \verbatim
+// ( xx xy xz xt )
+// ( yx yy yz yt )
+// ( zx zy zz zt )
+// ( tx ty tz tt )
+// \endverbatim
+// For efficiency the elements are stored explicitly, rather than in a
+// vnl_matrix<double>, to avoid lots of copying of matrices with all the
+// attendant memory allocation.
 class vimt3d_transform_3d
 {
  public:
@@ -152,6 +144,12 @@ class vimt3d_transform_3d
   void set_affine(double s_x, double s_y, double s_z,
                   double r_x, double r_y, double r_z,
                   double t_x, double t_y, double t_z);
+
+  //: Sets to be 3D affine transformation T(x,y,z)=p+x.u+y.v+z.w
+  void set_affine(const vgl_point_3d<double>& p,
+                  const vgl_vector_3d<double>& u,
+                  const vgl_vector_3d<double>& v,
+                  const vgl_vector_3d<double>& w);
 
   //: Returns the coordinates of the origin
   vgl_point_3d<double>  origin() const
@@ -275,6 +273,7 @@ class vimt3d_transform_3d
   void angles(double& phi_x, double& phi_y, double& phi_z) const;
   void setRotMat(double r_x, double r_y, double r_z);
 };
+
 
 //: Calculates the product LR
 // \param L  Transform

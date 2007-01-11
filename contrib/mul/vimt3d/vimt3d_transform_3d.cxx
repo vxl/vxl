@@ -1,8 +1,8 @@
 // This is mul/vimt3d/vimt3d_transform_3d.cxx
-#include "vimt3d_transform_3d.h"
 //:
 // \file
 
+#include "vimt3d_transform_3d.h"
 #include <vcl_cstdlib.h>
 #include <vsl/vsl_indent.h>
 #include <vnl/vnl_vector.h>
@@ -290,7 +290,7 @@ void vimt3d_transform_3d::setRotMat( double r_x, double r_y, double r_z )
 
 //=======================================================================
 
-void vimt3d_transform_3d::set_rigid_body( double r_x, double r_y, double r_z,
+void vimt3d_transform_3d::set_rigid_body(double r_x, double r_y, double r_z,
                                          double t_x, double t_y, double t_z)
 {
   if (r_x==0.0 && r_y==0.0 && r_z==0.0) {
@@ -312,8 +312,8 @@ void vimt3d_transform_3d::set_rigid_body( double r_x, double r_y, double r_z,
 //=======================================================================
 
 void vimt3d_transform_3d::set_similarity(double s,
-                                        double r_x, double r_y, double r_z,
-                                        double t_x, double t_y, double t_z)
+                                         double r_x, double r_y, double r_z,
+                                         double t_x, double t_y, double t_z)
 {
   if (s==1.0)
     set_rigid_body(r_x,r_y,r_z,t_x,t_y,t_z);
@@ -322,6 +322,9 @@ void vimt3d_transform_3d::set_similarity(double s,
     form_=Similarity;
 
     setRotMat(r_x,r_y,r_z);
+
+    // Is this right?
+
     xx_=yy_=zz_=s;
     xt_=t_x;
     yt_=t_y;
@@ -332,7 +335,7 @@ void vimt3d_transform_3d::set_similarity(double s,
 
 //=======================================================================
 
-void vimt3d_transform_3d::set_affine( double s_x, double s_y, double s_z,
+void vimt3d_transform_3d::set_affine(double s_x, double s_y, double s_z,
                                      double r_x, double r_y, double r_z,
                                      double t_x, double t_y, double t_z)
 {
@@ -341,18 +344,61 @@ void vimt3d_transform_3d::set_affine( double s_x, double s_y, double s_z,
   // set rotation matrix as for rigid body
   setRotMat(r_x,r_y,r_z);
 
-  // the take account of scaling
+  // then take account of scaling - is this right?
+
   xx_*=s_x;
-     yy_*=s_y;
-     zz_*=s_z;
+  yy_*=s_y;
+  zz_*=s_z;
 
   xt_=t_x;
-     yt_=t_y;
-     zt_=t_z;
-  tx_=ty_=tz_=0.0; tt_=1.0;
+  yt_=t_y;
+  zt_=t_z;
+  tx_=ty_=tz_=0.0; 
+  tt_=1.0;
+  
   inv_uptodate_=false;
 }
 
+//=======================================================================
+
+void vimt3d_transform_3d::set_affine(const vgl_point_3d<double>& p,
+                                     const vgl_vector_3d<double>& u,
+                                     const vgl_vector_3d<double>& v,
+                                     const vgl_vector_3d<double>& w)
+{
+  form_=Affine;
+
+  // Set rotation matrix from (normalized) column vectors
+
+//   xx_=u.x(); xy_=v.x(); xz_=w.x(); 
+//   yx_=u.y(); yy_=v.y(); yz_=w.y();
+//   zx_=u.z(); zy_=v.z(); zz_=w.z(); 
+
+  //
+  // Assert for orthog here
+  //
+  double su = u.length();
+  double sv = v.length();
+  double sw = w.length();
+  xx_=u.x()/su; xy_=v.x()/sv; xz_=w.x()/sw; 
+  yx_=u.y()/su; yy_=v.y()/sv; yz_=w.y()/sw;
+  zx_=u.z()/su; zy_=v.z()/sv; zz_=w.z()/sw; 
+
+  // Apply scaling
+  xx_*=su;
+  yy_*=sv;
+  zz_*=sw;
+
+  // Set translation (first 3 elements of final column)
+  xt_=p.x();
+  yt_=p.y();
+  zt_=p.z();
+
+  // Set final row with default values (for all transforms up to affine)
+  tx_=0; ty_=0; tz_=0; tt_=1; 
+
+  inv_uptodate_=false;
+}
 
 //=======================================================================
 
