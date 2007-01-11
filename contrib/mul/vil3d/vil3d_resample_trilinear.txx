@@ -2,16 +2,232 @@
 #ifndef vil3d_resample_trilinear_txx_
 #define vil3d_resample_trilinear_txx_
 
+
 //:
 // \file
 // \brief Resample a 3D image by a different factor in each dimension
 // \author Kevin de Souza, Ian Scott
+
 
 #include <vil3d/vil3d_resample_trilinear.h>
 #include <vil3d/vil3d_trilin_interp.h>
 #include <vil/vil_convert.h>
 #include <vil3d/vil3d_plane.h>
 #include <vcl_cassert.h>
+
+
+inline bool vil3d_grid_corner_in_image(double x0, double y0, double z0,
+                                       const vil3d_image_view_base& image)
+{
+  if (x0<0.0) return false;
+  if (x0>image.ni()-1.0) return false;
+  if (y0<0.0) return false;
+  if (y0>image.nj()-1.0) return false;
+  if (z0<0.0) return false;
+  if (z0>image.nk()-1.0) return false;
+  return true;
+}
+
+
+//  Sample grid of points in one image and place in another, using trilinear interpolation.
+//  dest_image(i,j,k,p) is sampled from the src_image at
+//  (x0+i.dx1+j.dx2+k.dx3, y0+i.dy1+j.dy2+k.dy3, z0+i.dz1+j.dz2+k.dz3), 
+//  where i=[0..n1-1], j=[0..n2-1], k=[0..n3-1]
+//  dest_image resized to (n1,n2,n3,src_image.nplanes())
+//  Points outside image return zero.
+template <class S, class T>
+void vil3d_resample_trilinear(const vil3d_image_view<S>& src_image,
+                              vil3d_image_view<T>& dest_image,
+                              double x0, double y0, double z0,
+                              double dx1, double dy1, double dz1,
+                              double dx2, double dy2, double dz2,
+                              double dx3, double dy3, double dz3,
+                              int n1, int n2, int n3)
+{
+  bool all_in_image = 
+    vil3d_grid_corner_in_image(x0,
+                               y0,
+                               z0,
+                               src_image) &&
+    vil3d_grid_corner_in_image(x0 + (n1-1)*dx1,            
+                               y0 + (n1-1)*dy1,
+                               z0 + (n1-1)*dz1, 
+                               src_image) &&
+    vil3d_grid_corner_in_image(x0 + (n2-1)*dx2,            
+                               y0 + (n2-1)*dy2,
+                               z0 + (n2-1)*dz2, 
+                               src_image) &&
+    vil3d_grid_corner_in_image(x0 + (n1-1)*dx1 + (n2-1)*dx2, 
+                               y0 + (n1-1)*dy1 + (n2-1)*dy2,
+                               z0 + (n1-1)*dz1 + (n2-1)*dz2, 
+                               src_image) &&
+    vil3d_grid_corner_in_image(x0 + (n3-1)*dx3,            
+                               y0 + (n3-1)*dy3,
+                               z0 + (n3-1)*dz3, 
+                               src_image) &&
+    vil3d_grid_corner_in_image(x0 + (n1-1)*dx1 + (n3-1)*dx3,            
+                               y0 + (n1-1)*dy1 + (n3-1)*dy3,
+                               z0 + (n1-1)*dz1 + (n3-1)*dz3, 
+                               src_image) &&
+    vil3d_grid_corner_in_image(x0 + (n2-1)*dx2 + (n3-1)*dx3,            
+                               y0 + (n2-1)*dy2 + (n3-1)*dy3,
+                               z0 + (n2-1)*dz2 + (n3-1)*dz3, 
+                               src_image) &&
+    vil3d_grid_corner_in_image(x0 + (n1-1)*dx1 + (n2-1)*dx2 + (n3-1)*dx3,            
+                               y0 + (n1-1)*dy1 + (n2-1)*dy2 + (n3-1)*dy3,
+                               z0 + (n1-1)*dz1 + (n2-1)*dz2 + (n3-1)*dz3, 
+                               src_image);
+                     
+#ifndef NDEBUG
+  // corners
+  vcl_cout<<"src_image= "<<src_image<<vcl_endl
+          <<"x0="<<x0<<vcl_endl
+          <<"y0="<<y0<<vcl_endl
+          <<"z0="<<z0<<vcl_endl
+          <<"x0 + (n1-1)*dx1 + (n2-1)*dx2 + (n3-1)*dx3="
+          <<x0 + (n1-1)*dx1 + (n2-1)*dx2 + (n3-1)*dx3<<vcl_endl
+          <<"y0 + (n1-1)*dy1 + (n2-1)*dy2 + (n3-1)*dy3="
+          <<y0 + (n1-1)*dy1 + (n2-1)*dy2 + (n3-1)*dy3<<vcl_endl
+          <<"z0 + (n1-1)*dz1 + (n2-1)*dz2 + (n3-1)*dz3="
+          <<z0 + (n1-1)*dz1 + (n2-1)*dz2 + (n3-1)*dz3<<vcl_endl;         
+#endif
+
+  const unsigned ni = src_image.ni();
+  const unsigned nj = src_image.nj();
+  const unsigned nk = src_image.nk();
+  const unsigned np = src_image.nplanes();
+  const vcl_ptrdiff_t istep = src_image.istep();
+  const vcl_ptrdiff_t jstep = src_image.jstep();
+  const vcl_ptrdiff_t kstep = src_image.kstep();
+  const vcl_ptrdiff_t pstep = src_image.planestep();
+  const S* plane0 = src_image.origin_ptr();
+
+  dest_image.set_size(n1,n2,n3,np);
+  const vcl_ptrdiff_t d_istep = dest_image.istep();
+  const vcl_ptrdiff_t d_jstep = dest_image.jstep();
+  const vcl_ptrdiff_t d_kstep = dest_image.kstep();
+  const vcl_ptrdiff_t d_pstep = dest_image.planestep();
+  T* d_plane0 = dest_image.origin_ptr();
+
+  double x1=x0;
+  double y1=y0;
+  double z1=z0;
+
+  if (all_in_image)
+  {
+    if (np==1)
+    {
+      double xk=x0, yk=y0, zk=z0;
+      T *slice = d_plane0;
+      for (int k=0; k<n3; ++k, xk+=dx3, yk+=dy3, zk+=dz3, slice+=d_kstep)
+      {
+        double xj=xk, yj=yk, zj=zk;  // Start of k-th slice
+        T *row = slice;
+        for (int j=0; j<n2; ++j, xj+=dx2, yj+=dy2, zj+=dz2, row+=d_jstep)
+        {
+          double x=xj, y=yj, z=zj;  // Start of j-th row
+          T *dpt = row;
+          for (int i=0; i<n1; ++i, x+=dx1, y+=dy1, z+=dz1, dpt+=d_istep)
+            *dpt = (T) vil3d_trilin_interp_raw(x, y, z, plane0, 
+                                               istep, jstep, kstep);
+        }
+      }
+    }
+    else
+    {
+      double xk=x0, yk=y0, zk=z0;
+      T *slice = d_plane0;
+      for (int k=0; k<n3; ++k, xk+=dx3, yk+=dy3, zk+=dz3, slice+=d_kstep)
+      {
+        double xj=xk, yj=yk, zj=zk;  // Start of k-th slice
+        T *row = slice;
+        for (int j=0; j<n2; ++j, xj+=dx2, yj+=dy2, zj+=dz2, row+=d_jstep)
+        {
+          double x=xj, y=yj, z=zj;  // Start of j-th row
+          T *dpt = row;
+          for (int i=0; i<n1; ++i, x+=dx1, y+=dy1, z+=dz1, dpt+=d_istep)
+          {
+            for (unsigned int p=0; p<np; ++p)
+              dpt[p*d_pstep] = (T) vil3d_trilin_interp_raw(x, y, z, 
+                                   plane0+p*pstep, istep, jstep, kstep);
+          }
+        }
+      }
+    }
+  }
+  else
+  {
+    // Use safe interpolation
+    if (np==1)
+    {
+      double xk=x0, yk=y0, zk=z0;
+      T *slice = d_plane0;
+      for (int k=0; k<n3; ++k, xk+=dx3, yk+=dy3, zk+=dz3, slice+=d_kstep)
+      {
+        double xj=xk, yj=yk, zj=zk;  // Start of k-th slice
+        T *row = slice;
+        for (int j=0; j<n2; ++j, xj+=dx2, yj+=dy2, zj+=dz2, row+=d_jstep)
+        {
+          double x=xj, y=yj, z=zj;  // Start of j-th row
+          T *dpt = row;
+          for (int i=0; i<n1; ++i, x+=dx1, y+=dy1, z+=dz1, dpt+=d_istep)
+            *dpt = (T) vil3d_trilin_interp_safe(x, y, z, 
+              plane0, ni, nj, nk, istep, jstep, kstep);
+        }
+      }
+    }
+    else
+    {
+      double xk=x0, yk=y0, zk=z0;
+      T *slice = d_plane0;
+      for (int k=0; k<n3; ++k, xk+=dx3, yk+=dy3, zk+=dz3, slice+=d_kstep)
+      {
+        double xj=xk, yj=yk, zj=zk;  // Start of k-th slice
+        T *row = slice;
+        for (int j=0; j<n2; ++j, xj+=dx2, yj+=dy2, zj+=dz2, row+=d_jstep)
+        {
+          double x=xj, y=yj, z=zj;  // Start of j-th row
+          T *dpt = row;
+          for (int i=0; i<n1; ++i, x+=dx1, y+=dy1, z+=dz1, dpt+=d_istep)
+          {
+            for (unsigned int p=0; p<np; ++p)
+              dpt[p*d_pstep] = (T) vil3d_trilin_interp_safe(x, y, z, 
+                plane0+p*pstep, ni, nj, nk, istep, jstep, kstep);
+          }
+        }
+      }
+    }
+  }
+}
+
+
+//  Resample image to a specified dimensions (n1 * n2 * n3)
+template <class S, class T>
+void vil3d_resample_trilinear(const vil3d_image_view<S>& src_image,
+                              vil3d_image_view<T>& dest_image,
+                              int n1, int n2, int n3)
+{
+  double f= 0.9999999; // so sampler doesn't go off edge of image
+  double x0=0;
+  double y0=0;
+  double z0=0;
+  
+  double dx1=f*(src_image.ni()-1)*1.0/(n1-1);
+  double dy1=0;
+  double dz1=0;
+  
+  double dx2=0;
+  double dy2=f*(src_image.nj()-1)*1.0/(n2-1);
+  double dz2=0;
+  
+  double dx3=0;
+  double dy3=0;
+  double dz3=f*(src_image.nk()-1)*1.0/(n3-1);
+
+  vil3d_resample_trilinear(src_image, dest_image, x0, y0, z0, dx1, dy1, dz1,
+                           dx2, dy2, dz2, dx3, dy3, dz3, n1, n2, n3);
+}
+
 
 // Resample a 3D image by a different factor in each dimension.
 // Note: The upper image boundaries are extended.
@@ -215,7 +431,17 @@ void vil3d_resample_trilinear_scale_2(
 }
 
 
-#define VIL3D_RESAMPLE_TRILINEAR_INSTANTIATE( T ) \
+#define VIL3D_RESAMPLE_TRILINEAR_INSTANTIATE( T, S ) \
+template void vil3d_resample_trilinear(const vil3d_image_view<S>& src_image, \
+                              vil3d_image_view<T>& dest_image, \
+                              double x0, double y0, double z0, \
+                              double dx1, double dy1, double dz1, \
+                              double dx2, double dy2, double dz2, \
+                              double dx3, double dy3, double dz3, \
+                              int n1, int n2, int n3); \
+template void vil3d_resample_trilinear(const vil3d_image_view<S>& src_image, \
+                              vil3d_image_view<T>& dest_image, \
+                              int n1, int n2, int n3); \
 template void vil3d_resample_trilinear(const vil3d_image_view< T >& src_image, \
                                        vil3d_image_view< T >& dst_image, \
                                        const double dx, \
