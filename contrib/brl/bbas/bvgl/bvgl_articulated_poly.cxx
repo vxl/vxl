@@ -2,5 +2,5 @@
 
 bvgl_articulated_poly::bvgl_articulated_poly()
 {
-   # not yet implemented
+   // not yet implemented
 }
