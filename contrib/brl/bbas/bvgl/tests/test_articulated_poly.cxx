@@ -10,7 +10,7 @@
 static void test_articulated_poly()
 {
   vcl_cout << "Not implemented yet\n";
-	TEST("Test articulated poly ", 1==1, true);
+  TEST("Test articulated poly ", 1==1, true);
 }
 
 TESTMAIN( test_articulated_poly );
