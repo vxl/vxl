@@ -246,22 +246,7 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\test_include.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bvgl_test_h_matrix_1d.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvgl_test_h_matrix_2d.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvgl_test_h_matrix_2d_compute_4point.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvgl_test_h_matrix_2d_compute_linear.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvgl_test_h_matrix_3d.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvgl_test_norm_trans_2d.cxx
+SOURCE=.\test_articulated_poly.cxx
 # End Source File
 # End Group
 # End Target
