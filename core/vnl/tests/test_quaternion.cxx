@@ -127,9 +127,9 @@ static void test_rotation_matrix_and_euler_angles()
 
     // Use vnl_rotation_matrix() with axis+angle form
     {
-      vnl_vector<double> axis_ang = axis * ang;
-      vnl_matrix<double> M = vnl_rotation_matrix(axis_ang);
-      vnl_matrix<double> D = R - M;
+      vnl_vector_fixed<double,3> axis_ang = axis * ang;
+      vnl_matrix_fixed<double,3,3> M = vnl_rotation_matrix(axis_ang);
+      vnl_matrix_fixed<double,3,3> D = R - M;
       double max_err = D.absolute_value_max();
       this_trial_ok = this_trial_ok && (max_err<=dtol);
 #ifndef NDEBUG
