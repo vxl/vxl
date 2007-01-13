@@ -93,85 +93,13 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\Templates/bvgl_h_matrix_1d+double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvgl_h_matrix_2d+double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvgl_h_matrix_3d+double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bvgl_norm_trans_2d+double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvgl_h_matrix_1d_compute_optimize1.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvgl_h_matrix_2d_compute.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvgl_h_matrix_2d_compute_linear.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvgl_h_matrix_1d_compute_linear.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvgl_h_matrix_1d_compute_3point.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvgl_h_matrix_1d_compute.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvgl_h_matrix_2d_compute_4point.cxx
+SOURCE=.\bvgl_articulated_poly.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\bvgl_h_matrix_1d.txx
-# End Source File
-# Begin Source File
-SOURCE=.\bvgl_h_matrix_1d_compute_optimize1.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvgl_h_matrix_2d.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvgl_h_matrix_2d.txx
-# End Source File
-# Begin Source File
-SOURCE=.\bvgl_h_matrix_2d_compute.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvgl_h_matrix_2d_compute_linear.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvgl_h_matrix_3d.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvgl_h_matrix_3d.txx
-# End Source File
-# Begin Source File
-SOURCE=.\bvgl_norm_trans_2d.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvgl_norm_trans_2d.txx
-# End Source File
-# Begin Source File
-SOURCE=.\bvgl_h_matrix_1d.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvgl_h_matrix_1d_compute_3point.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvgl_h_matrix_1d_compute.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvgl_h_matrix_2d_compute_4point.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvgl_h_matrix_1d_compute_linear.h
+SOURCE=.\bvgl_articulated_poly.h
 # End Source File
 # End Group
 # End Target
