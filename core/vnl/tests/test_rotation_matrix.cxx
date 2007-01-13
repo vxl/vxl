@@ -124,8 +124,6 @@ static void test_euler_rotations()
     bool this_trial_ok = true;
     double ang = randgen.drand32(-4*vnl_math::pi, 4*vnl_math::pi);
 
-    double cos_ang = vcl_cos(ang);
-    double sin_ang = vcl_sin(ang);
     vnl_vector<double> axis(3); // The magnitude of this vector indicates the angle of rotation
     vnl_matrix_fixed<double,3,3> M; // True answer
 
