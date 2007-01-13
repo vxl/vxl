@@ -9,15 +9,14 @@
 //  J.L. Mundy - January 13, 2007
 //
 //-----------------------------------------------------------------------------
-#include <vcl_vector.h>
 
 //-----------------------------------------------------------------------------
 class bvgl_articulated_poly
 {
  public:
   bvgl_articulated_poly();
-  ~bvgl_articulated_poly(){};
-  
+  ~bvgl_articulated_poly() {}
+
  private:
 };
 
