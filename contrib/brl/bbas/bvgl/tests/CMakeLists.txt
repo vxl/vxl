@@ -4,6 +4,9 @@ ADD_EXECUTABLE(bvgl_test_all
   test_driver.cxx
   test_articulated_poly.cxx
 )
+
 TARGET_LINK_LIBRARIES(bvgl_test_all bvgl vgl vnl testlib)
+ADD_TEST(bvgl_test_articulated_poly  ${EXECUTABLE_OUTPUT_PATH}/bvgl_test_all test_articulated_poly)
 
-
+ADD_EXECUTABLE( bvgl_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( bvgl_test_include bvgl )
