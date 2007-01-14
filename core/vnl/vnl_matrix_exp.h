@@ -12,6 +12,11 @@
 // Many improvements are possible.
 //
 //  \author fsm
+//
+// \verbatim
+//  Modifications:
+//   14-Jan-2007 Peter Vanroose - added vnl_matrix_fixed interface
+// \endvarbatim
 
 #include <vnl/vnl_matrix.h>
 
@@ -24,5 +29,27 @@ bool vnl_matrix_exp(vnl_matrix<T> const &X, vnl_matrix<T> &expX, double max_err)
 // \relates vnl_matrix
 template <class T>
 vnl_matrix<T> vnl_matrix_exp(vnl_matrix<T> const &X);
+
+#include <vnl/vnl_matrix_fixed.h>
+
+//: Compute the exponential of a square nxn matrix - easy form.
+// \relates vnl_matrix_fixed
+template <class T, unsigned int n>
+vnl_matrix_fixed<T,n,n> vnl_matrix_exp(vnl_matrix_fixed<T,n,n> const& X);
+
+//: Compute the exponential of a square 1x1 matrix - fiddly form
+// \relates vnl_matrix_fixed
+template <class T>
+bool vnl_matrix_exp(vnl_matrix_fixed<T,1,1> const &X, vnl_matrix_fixed<T,1,1> &expX, double max_err);
+
+//: Compute the exponential of a square 2x2 matrix - fiddly form
+// \relates vnl_matrix_fixed
+template <class T>
+bool vnl_matrix_exp(vnl_matrix_fixed<T,2,2> const &X, vnl_matrix_fixed<T,2,2> &expX, double max_err);
+
+//: Compute the exponential of a square 3x3 matrix - fiddly form
+// \relates vnl_matrix_fixed
+template <class T>
+bool vnl_matrix_exp(vnl_matrix_fixed<T,3,3> const &X, vnl_matrix_fixed<T,3,3> &expX, double max_err);
 
 #endif // vnl_matrix_exp_h_
