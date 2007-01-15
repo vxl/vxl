@@ -20,7 +20,7 @@ vpgl_construct_cameras::vpgl_construct_cameras()
 vpgl_construct_cameras::vpgl_construct_cameras(
     vcl_vector<vgl_point_2d<double> > p0,
     vcl_vector<vgl_point_2d<double> > p1,
-    vpgl_calibration_matrix<double>* K )
+    const vpgl_calibration_matrix<double>* K )
 {
     points0_=p0;
     points1_=p1;
