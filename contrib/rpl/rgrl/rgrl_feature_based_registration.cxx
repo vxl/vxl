@@ -437,8 +437,17 @@ register_single_feature( rgrl_mask_box            from_image_region,
         bool ret_success;
         vnl_vector<double> scaling;
         ret_success = rgrl_util_geometric_scaling_factors( *match_set, scaling );
-        if( ret_success ) 
+        if( ret_success ) {
           current_xform_estimate_->set_scaling_factors( scaling );
+          if (should_penalize_scaling_) {
+            for ( unsigned ds=0; ds < scaling.size(); ++ds ) {
+              if (scaling[ds] < 1e-5) {
+                DebugMacro(  1," Scaling of dimension "<<ds<<" too high\n");
+                failed = true;
+              }
+            }
+          }
+        }
         else 
           WarningMacro( "cannot compute scaling factors!!!" );
       }
@@ -720,8 +729,17 @@ register_multi_feature( rgrl_mask_box            from_image_region,
         bool ret_success;
         vnl_vector<double> scaling;
         ret_success = rgrl_util_geometric_scaling_factors( current_match_sets_, scaling );
-        if( ret_success ) 
+        if( ret_success ) {
           current_xform_estimate_->set_scaling_factors( scaling );
+          if (should_penalize_scaling_) {
+            for ( unsigned ds=0; ds < scaling.size(); ++ds ) {
+              if (scaling[ds] < 1e-5) {
+                DebugMacro(  1," Scaling of dimension "<<ds<<" too high\n");
+                failed = true;
+              }
+            }
+          }
+        }
         else 
           WarningMacro( "cannot compute scaling factors!!!" );
       }
