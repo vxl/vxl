@@ -385,6 +385,23 @@ vgl_homg_point_3d<T> vgl_closest_point(vgl_homg_line_3d_2_points<T> const& l,
 }
 
 template <class T>
+double vgl_closest_point_t(vgl_line_3d_2_points<T> const& l,
+                           vgl_point_3d<T> const& p)
+{
+  vgl_point_3d<T> const& q = l.point1();
+  vgl_vector_3d<T> v = p-q;
+  // The plane through p and orthogonal to l is a(x-px)+b(y-py)+c(z-pz)=0
+  // where (a,b,c,0) is the direction of l.
+  double a = l.point2().x()-q.x(), b = l.point2().y()-q.y(), 
+         c = l.point2().z()-q.z(), d = a*a+b*b+c*c;
+  // The closest point is then the intersection of this plane with the line l.
+  // This point equals l.point1 + lambda * l.direction, with lambda:
+  double lambda = (a*v.x()+b*v.y()+c*v.z())/d;
+  return lambda;
+}
+
+// NB This function could be written in terms of the preceding function vgl_closest_point_t()
+template <class T>
 vgl_point_3d<T> vgl_closest_point(vgl_line_3d_2_points<T> const& l,
                                   vgl_point_3d<T> const& p)
 {
@@ -399,7 +416,6 @@ vgl_point_3d<T> vgl_closest_point(vgl_line_3d_2_points<T> const& l,
   T lambda = (a*v.x()+b*v.y()+c*v.z())/d; // possible rounding error!
   return vgl_point_3d<T>(q.x()+lambda*a, q.y()+lambda*b, q.z()+lambda*c);
 }
-
 
 //: Return the points of closest approach on 2 3D lines.
 template <class T>
@@ -594,6 +610,7 @@ template vgl_homg_point_3d<T > vgl_closest_point_origin(vgl_homg_plane_3d<T > co
 template vgl_homg_point_3d<T > vgl_closest_point_origin(vgl_homg_line_3d_2_points<T > const& l); \
 template vgl_point_2d<T > vgl_closest_point(vgl_line_2d<T >const&,vgl_point_2d<T >const&); \
 template vgl_point_2d<T > vgl_closest_point(vgl_point_2d<T >const&,vgl_line_2d<T >const&); \
+template double vgl_closest_point_t(vgl_line_3d_2_points<T >const&,vgl_point_3d<T >const&); \
 template vgl_point_3d<T > vgl_closest_point(vgl_line_3d_2_points<T >const&,vgl_point_3d<T >const&); \
 template vgl_homg_point_2d<T > vgl_closest_point(vgl_homg_line_2d<T >const&,vgl_homg_point_2d<T >const&); \
 template vgl_homg_point_2d<T > vgl_closest_point(vgl_homg_point_2d<T >const&,vgl_homg_line_2d<T >const&); \
