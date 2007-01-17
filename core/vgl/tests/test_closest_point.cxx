@@ -170,8 +170,36 @@ static void testLine3DClosestPoint()
   TEST_NEAR("Distance test", vgl_distance(q,l), vcl_sqrt(26.0), 1e-8);
 }
 
+// Similar to test above, but uses parametric value.
+static void test_line_3d_2_points_closest_point_t()
+{
+  vcl_cout << "-------------------------------------------------- \n";
+  vcl_cout << "Testing vgl_closest_point_t(line_3d_2_points): \n";
+  vcl_cout << "-------------------------------------------------- \n";
+
+  vgl_point_3d<double> p, q, r;
+  vgl_line_3d_2_points<double> l;
+  double t;
+
+  // test for coincident
+  p.set(3,4,-1); q.set(-3,-2,5); l.set(p,q);
+  r.set(0,1,2);  // midpt of line
+  t = vgl_closest_point_t(l,r);
+  TEST_NEAR("3D coincident test", t, 0.5, 1e-8);
+
+  // test for non-coincident
+  p.set(0,0,0); q.set(1,0,0); l.set(p,q);
+  r.set(0.5, 2, 3); 
+  t = vgl_closest_point_t(l,r);
+  TEST_NEAR("3D non-coincident test", t, 0.5, 1e-8);
+}
+
 static void testPlane3DClosestPoint()
 {
+  vcl_cout << "-------------------------------------------------- \n";
+  vcl_cout << "Testing vgl_closest_point(vgl_plane_3d): \n";
+  vcl_cout << "-------------------------------------------------- \n";
+
   vgl_point_3d<double> p, q;
   vgl_plane_3d<double> l;
 
@@ -447,6 +475,7 @@ static void test_closest_point()
   testHomgPlane3DClosestPoint();
   testLine2DClosestPoint();
   testLine3DClosestPoint();
+  test_line_3d_2_points_closest_point_t();
   testPlane3DClosestPoint();
   testPoly2DClosestPoint();
   testPoly3DClosestPoint();
