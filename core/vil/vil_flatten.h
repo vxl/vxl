@@ -29,7 +29,10 @@ inline vil_image_view<T> vil_flatten_planes(const vil_image_view<T> &im)
 
   vil_image_view<T> ret(im.ni(), im.nj() * im.nplanes(), 1);
   for (unsigned p=0, n=im.nplanes(); p<n; ++p)
-    vil_copy_reformat(vil_plane(im, p), vil_crop(ret, 0, im.ni(), im.nj()*p, im.nj()) );
+  {
+    vil_image_view<T> tile = vil_crop(ret, 0, im.ni(), im.nj()*p, im.nj());
+    vil_copy_reformat(vil_plane(im, p), tile);
+  }
 
   return ret;
 }
