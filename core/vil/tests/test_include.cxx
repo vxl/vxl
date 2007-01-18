@@ -12,6 +12,7 @@
 #include <vil/vil_file_format.h>
 #include <vil/vil_fill.h>
 #include <vil/vil_flip.h>
+#include <vil/vil_flatten.h>
 #include <vil/vil_fwd.h>
 #include <vil/vil_image_resource_sptr.h>
 #include <vil/vil_image_resource.h>

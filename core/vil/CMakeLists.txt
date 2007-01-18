@@ -164,7 +164,8 @@ SET( vil_sources ${vil_sources}
   vil_new.cxx                           vil_new.h
   vil_print.cxx                         vil_print.h
   vil_warp.h
-
+  vil_flatten.h
+  
   # Bilinear Sampling Operations
   vil_bilin_interp.h
   vil_sample_profile_bilin.txx          vil_sample_profile_bilin.h
