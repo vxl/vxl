@@ -247,7 +247,14 @@ class vimt3d_transform_3d
 #endif
 
   //: Print class to os
+  // This version prints the extracted params.
+  // \sa params()
+  // \sa set()
   void print_summary(vcl_ostream& os) const;
+
+  //: Print class to os
+  // This version prints the actual parameters xx_,xy_,xz_,xt_, yx_,yy_,yz_,yt_, zx_,zy_,zz_,zt_, tx_,ty_,tz_,tt_
+  void print_all(vcl_ostream& os) const;
 
   //: Save class to binary file stream
   void b_write(vsl_b_ostream& bfs) const;

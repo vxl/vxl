@@ -8,6 +8,8 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_math.h>
 
+const double tol=1e-6; 
+
 //=======================================================================
 
 vnl_matrix<double> vimt3d_transform_3d::matrix() const
@@ -33,7 +35,7 @@ void vimt3d_transform_3d::matrix(vnl_matrix<double>& M) const
 }
 
 //=======================================================================
-
+// See also vnl_rotation_matrix(), vgl_rotation_3d, and vnl_quaternion
 void vimt3d_transform_3d::angles(double& phi_x, double& phi_y, double& phi_z) const
 {
   phi_x=vcl_atan2(-yz_,zz_);
@@ -120,13 +122,13 @@ void vimt3d_transform_3d::params(vnl_vector<double>& v) const
       angles(v[0],v[1],v[2]);
       v[3]=xt_; v[4]=yt_; v[5]=zt_;
       break;
-    case (Similarity):
+    case (Similarity): // not sure this is right - kds
       if (v.size()!=7) v.set_size(7);
       v[0]=xx_; // scaling factor
       angles(v[1],v[2],v[3]);
       v[4]=xt_; v[5]=yt_; v[6]=zt_;
       break;
-    case (Affine):
+    case (Affine): // not sure this is right - kds
       if (v.size()!=9) v.set_size(9);
       v[0]=xx_; // scaling factor
       v[1]=yy_; // scaling factor
@@ -176,14 +178,14 @@ void vimt3d_transform_3d::set(const vnl_vector<double>& v, Form form)
       set_rigid_body( v[0],v[1],v[2],
                       v[3],v[4],v[5]);
       break;
-    case (Similarity):
+    case (Similarity): // not sure this is right - kds
       setCheck(7,n,"Similarity");
       set_similarity( v[0],v[1],v[2],
                       v[3],v[4],v[5], v[6]);
       form_ = Similarity;
       inv_uptodate_=false;
       break;
-    case (Affine):
+    case (Affine): // not sure this is right - kds
       setCheck(9,n,"Affine");
       set_affine( v[0],v[1],v[2],
                   v[3],v[4],v[5],
@@ -198,6 +200,41 @@ void vimt3d_transform_3d::set(const vnl_vector<double>& v, Form form)
   }
 }
 
+//=======================================================================
+// See also vnl_rotation_matrix(), vgl_rotation_3d, and vnl_quaternion
+void vimt3d_transform_3d::setRotMat( double r_x, double r_y, double r_z )
+{
+  double sinx=vcl_sin(r_x);
+  double siny=vcl_sin(r_y);
+  double sinz=vcl_sin(r_z);
+  double cosx=vcl_cos(r_x);
+  double cosy=vcl_cos(r_y);
+  double cosz=vcl_cos(r_z);
+
+  // set R_mat = Rx*Ry*Rz
+  xx_ =  cosy*cosz;
+  xy_ = -cosy*sinz;
+  xz_ = -siny;
+  yx_ =  cosx*sinz - sinx*siny*cosz;
+  yy_ =  cosx*cosz + sinx*siny*sinz;
+  yz_ = -sinx*cosy;
+  zx_ =  sinx*sinz + cosx*siny*cosz;
+  zy_ =  sinx*cosz - cosx*siny*sinz;
+  zz_ =  cosx*cosy;
+}
+
+//=======================================================================
+
+void vimt3d_transform_3d::set_origin( const vgl_point_3d<double> & p )
+{
+  xt_=p.x()*tt_;
+  yt_=p.y()*tt_;
+  zt_=p.z()*tt_;
+
+  if (form_ == Identity) form_=Translation;
+
+  inv_uptodate_=false;
+}
 
 //=======================================================================
 
@@ -223,12 +260,16 @@ void vimt3d_transform_3d::set_translation(double t_x, double t_y, double t_z)
   else
   {
     form_=Translation;
-    xx_=yy_=yy_=tt_=1;
-    xy_=xz_=yx_=yz_=zx_,zy_=0;
-    tx_=ty_=tz_=0;
+
+    // Set translation (first 3 elements of final column)
     xt_=t_x;
     yt_=t_y;
     zt_=t_z;
+
+    // Set all other elements to defaults
+    xx_=yy_=yy_=tt_=1;
+    xy_=xz_=yx_=yz_=zx_=zy_=0;
+    tx_=ty_=tz_=0;
   }
 
   inv_uptodate_=false;
@@ -236,56 +277,27 @@ void vimt3d_transform_3d::set_translation(double t_x, double t_y, double t_z)
 
 //=======================================================================
 
-void vimt3d_transform_3d::set_origin( const vgl_point_3d<double> & p )
-{
-  xt_=p.x()*tt_;
-  yt_=p.y()*tt_;
-  zt_=p.z()*tt_;
-
-  if (form_ == Identity) form_=Translation;
-
-  inv_uptodate_=false;
-}
-
-//=======================================================================
-
-void vimt3d_transform_3d::set_zoom_only( double s_x, double s_y, double s_z,
+void vimt3d_transform_3d::set_zoom_only(double s_x, double s_y, double s_z,
                                         double t_x, double t_y, double t_z)
 {
   form_=ZoomOnly;
-  tx_=ty_=tz_=0;
-  xy_=xz_=yx_=yz_=zx_=zy_=0;
+
+  // Set scaling (first 3 diagonal elements)
   xx_=s_x;
   yy_=s_y;
   zz_=s_z;
+
+  // Set translation (first 3 elements of final column)
   xt_=t_x;
   yt_=t_y;
   zt_=t_z;
 
+  // Set all other elements to defaults
+  tx_=ty_=tz_=0;
+  xy_=xz_=yx_=yz_=zx_=zy_=0;
+  tt_=1; 
+
   inv_uptodate_=false;
-}
-
-//=======================================================================
-
-void vimt3d_transform_3d::setRotMat( double r_x, double r_y, double r_z )
-{
-  double sinx=vcl_sin(r_x);
-  double siny=vcl_sin(r_y);
-  double sinz=vcl_sin(r_z);
-  double cosx=vcl_cos(r_x);
-  double cosy=vcl_cos(r_y);
-  double cosz=vcl_cos(r_z);
-
-  // set R_mat = Rx*Ry*Rz
-  xx_ =  cosy*cosz;
-  xy_ = -cosy*sinz;
-  xz_ = -siny;
-  yx_ =  cosx*sinz - sinx*siny*cosz;
-  yy_ =  cosx*cosz + sinx*siny*sinz;
-  yz_ = -sinx*cosy;
-  zx_ =  sinx*sinz + cosx*siny*cosz;
-  zy_ =  sinx*cosz - cosx*siny*sinz;
-  zz_ =  cosx*cosy;
 }
 
 //=======================================================================
@@ -293,17 +305,24 @@ void vimt3d_transform_3d::setRotMat( double r_x, double r_y, double r_z )
 void vimt3d_transform_3d::set_rigid_body(double r_x, double r_y, double r_z,
                                          double t_x, double t_y, double t_z)
 {
-  if (r_x==0.0 && r_y==0.0 && r_z==0.0) {
+  if (r_x==0.0 && r_y==0.0 && r_z==0.0) 
+  {
     set_translation(t_x,t_y,t_z);
   }
   else
   {
     form_=RigidBody;
 
+    // Set rotation matrix
     setRotMat(r_x,r_y,r_z);
+    
+    // Set translation (first 3 elements of final column)
     xt_=t_x;
     yt_=t_y;
     zt_=t_z;
+    
+    // Set all other elements to defaults
+    tx_=0; ty_=0; tz_=0; tt_=1; 
   }
 
   inv_uptodate_=false;
@@ -316,19 +335,28 @@ void vimt3d_transform_3d::set_similarity(double s,
                                          double t_x, double t_y, double t_z)
 {
   if (s==1.0)
+  {
     set_rigid_body(r_x,r_y,r_z,t_x,t_y,t_z);
+  }
   else
   {
     form_=Similarity;
 
+    // Set rotation matrix
     setRotMat(r_x,r_y,r_z);
 
-    // Is this right?
+    // Account for scaling (this actually means that scaling was done BEFORE rotation)
+    xx_*=s;
+    yy_*=s;
+    zz_*=s;
 
-    xx_=yy_=zz_=s;
+    // Set translation (first 3 elements of final column)
     xt_=t_x;
     yt_=t_y;
     zt_=t_z;
+
+    // Set all other elements to defaults
+    tx_=0; ty_=0; tz_=0; tt_=1; 
   }
   inv_uptodate_=false;
 }
@@ -341,20 +369,21 @@ void vimt3d_transform_3d::set_affine(double s_x, double s_y, double s_z,
 {
   form_=Affine;
 
-  // set rotation matrix as for rigid body
+  // Set rotation matrix
   setRotMat(r_x,r_y,r_z);
 
-  // then take account of scaling - is this right?
-
+  // Account for scaling (this actually means that scaling was done BEFORE rotation)
   xx_*=s_x;
   yy_*=s_y;
   zz_*=s_z;
 
+  // Set translation (first 3 elements of final column)
   xt_=t_x;
   yt_=t_y;
   zt_=t_z;
-  tx_=ty_=tz_=0.0; 
-  tt_=1.0;
+  
+  // Set all other elements to defaults
+  tx_=0; ty_=0; tz_=0; tt_=1; 
   
   inv_uptodate_=false;
 }
@@ -368,23 +397,28 @@ void vimt3d_transform_3d::set_affine(const vgl_point_3d<double>& p,
 {
   form_=Affine;
 
+  // Get normalized vectors
+  vgl_vector_3d<double> uh = normalized(u);
+  vgl_vector_3d<double> vh = normalized(v);
+  vgl_vector_3d<double> wh = normalized(w);
+
+  // Test for orthogonality of input vectors
+  assert(vcl_fabs(dot_product(uh,vh))<tol);
+  assert(vcl_fabs(dot_product(vh,wh))<tol);
+  assert(vcl_fabs(dot_product(wh,uh))<tol);
+  
+  // Test for right-handedness of input vectors
+  assert(vcl_fabs((cross_product(uh,vh)-wh).length())<tol);
+
   // Set rotation matrix from (normalized) column vectors
+  xx_=uh.x(); xy_=vh.x(); xz_=wh.x(); 
+  yx_=uh.y(); yy_=vh.y(); yz_=wh.y();
+  zx_=uh.z(); zy_=vh.z(); zz_=wh.z(); 
 
-//   xx_=u.x(); xy_=v.x(); xz_=w.x(); 
-//   yx_=u.y(); yy_=v.y(); yz_=w.y();
-//   zx_=u.z(); zy_=v.z(); zz_=w.z(); 
-
-  //
-  // Assert for orthog here
-  //
+  // Account for scaling (this actually means that scaling was done BEFORE rotation)
   double su = u.length();
   double sv = v.length();
   double sw = w.length();
-  xx_=u.x()/su; xy_=v.x()/sv; xz_=w.x()/sw; 
-  yx_=u.y()/su; yy_=v.y()/sv; yz_=w.y()/sw;
-  zx_=u.z()/su; zy_=v.z()/sv; zz_=w.z()/sw; 
-
-  // Apply scaling
   xx_*=su;
   yy_*=sv;
   zz_*=sw;
@@ -471,7 +505,7 @@ void vimt3d_transform_3d::calcInverse() const
       double det=-xx_*yy_*zz_+xx_*zy_*yz_+yx_*xy_*zz_-yx_*zy_*xz_-zx_*xy_*yz_+zx_*yy_*xz_;
       if (det==0)
       {
-        vcl_cerr<<"mill_transform_3d() : No inverse exists for this affine transform (det==0)\n";
+        vcl_cerr<<"vimt3d_transform_3d() : No inverse exists for this affine transform (det==0)\n";
         vcl_abort();
       }
 
@@ -677,16 +711,18 @@ void vimt3d_transform_3d::print_summary(vcl_ostream& o) const
     {
       vnl_vector<double> p(7);
       params(p);
+      // Not sure this is right - kds
       o << "Similarity\n"
         << vsl_indent()<< "scale factor = " << p(0) << vcl_endl
         << vsl_indent()<< "angles = " << p(1) << ',' << p(2) << ',' << p(3) << '\n'
-        << vsl_indent()<< "translation = (" << p(4) << ',' << p(5) << ',' << p(5) << ")\n";
+        << vsl_indent()<< "translation = (" << p(4) << ',' << p(5) << ',' << p(6) << ")\n";
       break;
     }
     case Affine:
     {
       vnl_vector<double> p(9);
       params(p);
+      // not sure this is right - kds
       o << "Affine\n"
         << vsl_indent()<< "scale factors = " << p(0) << ',' << p(1) << ',' << p(2) << '\n'
         << vsl_indent()<< "angles = " << p(3) << ',' << p(4) << ',' << p(5) << '\n'
@@ -695,6 +731,48 @@ void vimt3d_transform_3d::print_summary(vcl_ostream& o) const
     }
   }
   vsl_indent_dec(o);
+}
+
+//=======================================================================
+// Print class to os
+// This version prints the actual parameters xx_,xy_,xz_,xt_, yx_,yy_,yz_,yt_, zx_,zy_,zz_,zt_, tx_,ty_,tz_,tt_
+void vimt3d_transform_3d::print_all(vcl_ostream& os) const
+{
+  os << vsl_indent() << "Form: ";
+  switch (form_)
+  {
+  case Identity:
+    os << "Identity\n";
+    break;
+
+  case Translation:
+    os << "Translation\n";
+    break;
+
+  case ZoomOnly:
+    os << "ZoomOnly\n";
+    break;
+
+  case RigidBody:
+    os << "RigidBody\n";
+    break;
+
+  case Similarity:
+    os << "Similarity\n";
+    break;
+
+  case Affine:
+    os << "Affine\n";
+    break;
+  }
+
+  os << vsl_indent() << "Matrix:\n";
+  vsl_indent_inc(os);
+  os << vsl_indent() << xx_ << " " << xy_ << " " << xz_ << " " << xt_ << "\n";
+  os << vsl_indent() << yx_ << " " << yy_ << " " << yz_ << " " << yt_ << "\n";
+  os << vsl_indent() << zx_ << " " << zy_ << " " << zz_ << " " << zt_ << "\n";
+  os << vsl_indent() << tx_ << " " << ty_ << " " << tz_ << " " << tt_ << "\n";
+  vsl_indent_dec(os);
 }
 
 //=======================================================================
