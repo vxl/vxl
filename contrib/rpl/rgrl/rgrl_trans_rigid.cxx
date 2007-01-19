@@ -15,8 +15,8 @@ rgrl_trans_rigid( unsigned int dimension )
   : R_( vnl_matrix<double>( dimension, dimension, vnl_matrix_identity ) ),
     trans_( vnl_vector<double>( dimension, 0.0 ) )
 {
-  // only accept 2d or 3d rigid transformation
-  assert (dimension==2 || dimension==3);
+  // only accept 2d or 3d rigid transformation, it can be zero when using a reader to initialize it
+  assert (dimension==0 || dimension==2 || dimension==3);
 }
 
 rgrl_trans_rigid::
