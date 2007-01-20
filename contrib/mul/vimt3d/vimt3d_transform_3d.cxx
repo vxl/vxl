@@ -499,7 +499,7 @@ void vimt3d_transform_3d::calcInverse() const
     zt2_=-(zx2_*xt_ + zy2_*yt_ + zz2_*zt_);
     break;
    case Similarity :
-    case Affine :
+   case Affine :
     {
       // affine inverse (plugged in from symbolic matlab)
       double det=-xx_*yy_*zz_+xx_*zy_*yz_+yx_*xy_*zz_-yx_*zy_*xz_-zx_*xy_*yz_+zx_*yy_*xz_;
