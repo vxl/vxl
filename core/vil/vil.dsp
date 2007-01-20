@@ -1008,6 +1008,9 @@ SOURCE=.\vil_cached_image_resource.h
 SOURCE=.\vil_border.h
 # End Source File
 # Begin Source File
+SOURCE=.\vil_flatten.h
+# End Source File
+# Begin Source File
 SOURCE=.\vil_config.h.in
 # End Source File
 # End Group
