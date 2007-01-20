@@ -1,7 +1,6 @@
+// This is core/vil/vil_flatten.h
 #ifndef vil_flatten_h_
 #define vil_flatten_h_
-
-// This is core/vil/vil_flatten.h
 //:
 // \file
 // \author Ian Scott.
@@ -9,7 +8,6 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_crop.h>
 #include <vil/vil_plane.h>
-
 
 
 //: Rearrange multiple planes into a multiple tiles of a single-plane image.
@@ -37,5 +35,4 @@ inline vil_image_view<T> vil_flatten_planes(const vil_image_view<T> &im)
   return ret;
 }
 
-
-#endif
+#endif // vil_flatten_h_
