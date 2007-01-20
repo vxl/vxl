@@ -1,14 +1,15 @@
 // This is mul/vimt3d/vimt3d_transform_3d.cxx
+#include "vimt3d_transform_3d.h"
 //:
 // \file
 
-#include "vimt3d_transform_3d.h"
+#include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
 #include <vsl/vsl_indent.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_math.h>
 
-const double tol=1e-6; 
+const double tol=1e-6;
 
 //=======================================================================
 
@@ -105,41 +106,41 @@ void vimt3d_transform_3d::params(vnl_vector<double>& v) const
 {
   switch (form_)
   {
-    case (Identity):
-      v.set_size(0);
-      break;
-    case (Translation):
-      if (v.size()!=3) v.set_size(3);
-      v[0]=xt_; v[1]=yt_; v[2]=zt_;
-      break;
-    case (ZoomOnly):
-      if (v.size()!=6) v.set_size(6);
-      v[0]=xx_; v[1]=yy_; v[2]=zz_;
-      v[3]=xt_; v[4]=yt_; v[5]=zt_;
-      break;
-    case (RigidBody):
-      if (v.size()!=6) v.set_size(6);
-      angles(v[0],v[1],v[2]);
-      v[3]=xt_; v[4]=yt_; v[5]=zt_;
-      break;
-    case (Similarity): // not sure this is right - kds
-      if (v.size()!=7) v.set_size(7);
-      v[0]=xx_; // scaling factor
-      angles(v[1],v[2],v[3]);
-      v[4]=xt_; v[5]=yt_; v[6]=zt_;
-      break;
-    case (Affine): // not sure this is right - kds
-      if (v.size()!=9) v.set_size(9);
-      v[0]=xx_; // scaling factor
-      v[1]=yy_; // scaling factor
-      v[2]=zz_; // scaling factor
-      angles(v[3],v[4],v[5]);
-      v[6]=xt_; v[7]=yt_; v[8]=zt_;
-      break;
-    default:
-      vcl_cerr<<"vimt3d_transform_3d::params() Unexpected form: "
-              <<int(form_)<<vcl_endl;
-      vcl_abort();
+   case (Identity):
+    v.set_size(0);
+    break;
+   case (Translation):
+    if (v.size()!=3) v.set_size(3);
+    v[0]=xt_; v[1]=yt_; v[2]=zt_;
+    break;
+   case (ZoomOnly):
+    if (v.size()!=6) v.set_size(6);
+    v[0]=xx_; v[1]=yy_; v[2]=zz_;
+    v[3]=xt_; v[4]=yt_; v[5]=zt_;
+    break;
+   case (RigidBody):
+    if (v.size()!=6) v.set_size(6);
+    angles(v[0],v[1],v[2]);
+    v[3]=xt_; v[4]=yt_; v[5]=zt_;
+    break;
+   case (Similarity): // not sure this is right - kds
+    if (v.size()!=7) v.set_size(7);
+    v[0]=xx_; // scaling factor
+    angles(v[1],v[2],v[3]);
+    v[4]=xt_; v[5]=yt_; v[6]=zt_;
+    break;
+   case (Affine): // not sure this is right - kds
+    if (v.size()!=9) v.set_size(9);
+    v[0]=xx_; // scaling factor
+    v[1]=yy_; // scaling factor
+    v[2]=zz_; // scaling factor
+    angles(v[3],v[4],v[5]);
+    v[6]=xt_; v[7]=yt_; v[8]=zt_;
+    break;
+   default:
+    vcl_cerr << "vimt3d_transform_3d::params() Unexpected form: "
+             << int(form_)<<vcl_endl;
+    vcl_abort();
   }
 }
 
@@ -161,42 +162,42 @@ void vimt3d_transform_3d::set(const vnl_vector<double>& v, Form form)
 
   switch (form)
   {
-    case (Identity):
-      set_identity();
-      break;
-    case (Translation):
-      setCheck(3,n,"Translation");
-      set_translation(v[0],v[1],v[2]);
-      break;
-    case (ZoomOnly):
-      setCheck(6,n,"ZoomOnly");
-      set_zoom_only( v[0],v[1],v[2],
-                     v[3],v[4],v[5]);
-      break;
-    case (RigidBody):
-      setCheck(6,n,"RigidBody");
-      set_rigid_body( v[0],v[1],v[2],
-                      v[3],v[4],v[5]);
-      break;
-    case (Similarity): // not sure this is right - kds
-      setCheck(7,n,"Similarity");
-      set_similarity( v[0],v[1],v[2],
-                      v[3],v[4],v[5], v[6]);
-      form_ = Similarity;
-      inv_uptodate_=false;
-      break;
-    case (Affine): // not sure this is right - kds
-      setCheck(9,n,"Affine");
-      set_affine( v[0],v[1],v[2],
-                  v[3],v[4],v[5],
-                  v[6],v[7],v[8]);
-      form_ = Affine;
-      inv_uptodate_=false;
-      break;
-    default:
-      vcl_cerr<<"vimt3d_transform_3d::set() Unexpected form: "
-              <<int(form)<<vcl_endl;
-      vcl_abort();
+   case (Identity):
+    set_identity();
+    break;
+   case (Translation):
+    setCheck(3,n,"Translation");
+    set_translation(v[0],v[1],v[2]);
+    break;
+   case (ZoomOnly):
+    setCheck(6,n,"ZoomOnly");
+    set_zoom_only( v[0],v[1],v[2],
+                   v[3],v[4],v[5]);
+    break;
+   case (RigidBody):
+    setCheck(6,n,"RigidBody");
+    set_rigid_body( v[0],v[1],v[2],
+                    v[3],v[4],v[5]);
+    break;
+   case (Similarity): // not sure this is right - kds
+    setCheck(7,n,"Similarity");
+    set_similarity( v[0],v[1],v[2],
+                    v[3],v[4],v[5], v[6]);
+    form_ = Similarity;
+    inv_uptodate_=false;
+    break;
+   case (Affine): // not sure this is right - kds
+    setCheck(9,n,"Affine");
+    set_affine( v[0],v[1],v[2],
+                v[3],v[4],v[5],
+                v[6],v[7],v[8]);
+    form_ = Affine;
+    inv_uptodate_=false;
+    break;
+   default:
+    vcl_cerr << "vimt3d_transform_3d::set() Unexpected form: "
+             << int(form)<<vcl_endl;
+    vcl_abort();
   }
 }
 
@@ -295,7 +296,7 @@ void vimt3d_transform_3d::set_zoom_only(double s_x, double s_y, double s_z,
   // Set all other elements to defaults
   tx_=ty_=tz_=0;
   xy_=xz_=yx_=yz_=zx_=zy_=0;
-  tt_=1; 
+  tt_=1;
 
   inv_uptodate_=false;
 }
@@ -305,7 +306,7 @@ void vimt3d_transform_3d::set_zoom_only(double s_x, double s_y, double s_z,
 void vimt3d_transform_3d::set_rigid_body(double r_x, double r_y, double r_z,
                                          double t_x, double t_y, double t_z)
 {
-  if (r_x==0.0 && r_y==0.0 && r_z==0.0) 
+  if (r_x==0.0 && r_y==0.0 && r_z==0.0)
   {
     set_translation(t_x,t_y,t_z);
   }
@@ -315,14 +316,14 @@ void vimt3d_transform_3d::set_rigid_body(double r_x, double r_y, double r_z,
 
     // Set rotation matrix
     setRotMat(r_x,r_y,r_z);
-    
+
     // Set translation (first 3 elements of final column)
     xt_=t_x;
     yt_=t_y;
     zt_=t_z;
-    
+
     // Set all other elements to defaults
-    tx_=0; ty_=0; tz_=0; tt_=1; 
+    tx_=0; ty_=0; tz_=0; tt_=1;
   }
 
   inv_uptodate_=false;
@@ -356,7 +357,7 @@ void vimt3d_transform_3d::set_similarity(double s,
     zt_=t_z;
 
     // Set all other elements to defaults
-    tx_=0; ty_=0; tz_=0; tt_=1; 
+    tx_=0; ty_=0; tz_=0; tt_=1;
   }
   inv_uptodate_=false;
 }
@@ -381,10 +382,10 @@ void vimt3d_transform_3d::set_affine(double s_x, double s_y, double s_z,
   xt_=t_x;
   yt_=t_y;
   zt_=t_z;
-  
+
   // Set all other elements to defaults
-  tx_=0; ty_=0; tz_=0; tt_=1; 
-  
+  tx_=0; ty_=0; tz_=0; tt_=1;
+
   inv_uptodate_=false;
 }
 
@@ -406,14 +407,14 @@ void vimt3d_transform_3d::set_affine(const vgl_point_3d<double>& p,
   assert(vcl_fabs(dot_product(uh,vh))<tol);
   assert(vcl_fabs(dot_product(vh,wh))<tol);
   assert(vcl_fabs(dot_product(wh,uh))<tol);
-  
+
   // Test for right-handedness of input vectors
   assert(vcl_fabs((cross_product(uh,vh)-wh).length())<tol);
 
   // Set rotation matrix from (normalized) column vectors
-  xx_=uh.x(); xy_=vh.x(); xz_=wh.x(); 
+  xx_=uh.x(); xy_=vh.x(); xz_=wh.x();
   yx_=uh.y(); yy_=vh.y(); yz_=wh.y();
-  zx_=uh.z(); zy_=vh.z(); zz_=wh.z(); 
+  zx_=uh.z(); zy_=vh.z(); zz_=wh.z();
 
   // Account for scaling (this actually means that scaling was done BEFORE rotation)
   double su = u.length();
@@ -429,7 +430,7 @@ void vimt3d_transform_3d::set_affine(const vgl_point_3d<double>& p,
   zt_=p.z();
 
   // Set final row with default values (for all transforms up to affine)
-  tx_=0; ty_=0; tz_=0; tt_=1; 
+  tx_=0; ty_=0; tz_=0; tt_=1;
 
   inv_uptodate_=false;
 }
@@ -467,41 +468,40 @@ void vimt3d_transform_3d::calcInverse() const
 
   switch (form_)
   {
-    case Identity :
-      break;
-    case Translation :
-      xt2_=-xt_;
-      yt2_=-yt_;
-      zt2_=-zt_;
-      break;
-    case ZoomOnly :
-      xx2_=1.0/xx_;
-      yy2_=1.0/yy_;
-      zz2_=1.0/zz_;
-      xt2_=-xt_/xx_;
-      yt2_=-yt_/yy_;
-      zt2_=-zt_/zz_;
-      break;
-    case RigidBody :
-      // transpose x,y,z part
-      xx2_=xx_;
-      xy2_=yx_;
-      xz2_=zx_;
-      yx2_=xy_;
-      yy2_=yy_;
-      yz2_=zy_;
-      zx2_=xz_;
-      zy2_=yz_;
-      zz2_=zz_;
-      xt2_=-(xx2_*xt_ + xy2_*yt_ + xz2_*zt_);
-      yt2_=-(yx2_*xt_ + yy2_*yt_ + yz2_*zt_);
-      zt2_=-(zx2_*xt_ + zy2_*yt_ + zz2_*zt_);
-      break;
-    case Similarity :
+   case Identity :
+    break;
+   case Translation :
+    xt2_=-xt_;
+    yt2_=-yt_;
+    zt2_=-zt_;
+    break;
+   case ZoomOnly :
+    xx2_=1.0/xx_;
+    yy2_=1.0/yy_;
+    zz2_=1.0/zz_;
+    xt2_=-xt_/xx_;
+    yt2_=-yt_/yy_;
+    zt2_=-zt_/zz_;
+    break;
+   case RigidBody :
+    // transpose x,y,z part
+    xx2_=xx_;
+    xy2_=yx_;
+    xz2_=zx_;
+    yx2_=xy_;
+    yy2_=yy_;
+    yz2_=zy_;
+    zx2_=xz_;
+    zy2_=yz_;
+    zz2_=zz_;
+    xt2_=-(xx2_*xt_ + xy2_*yt_ + xz2_*zt_);
+    yt2_=-(yx2_*xt_ + yy2_*yt_ + yz2_*zt_);
+    zt2_=-(zx2_*xt_ + zy2_*yt_ + zz2_*zt_);
+    break;
+   case Similarity :
     case Affine :
     {
       // affine inverse (plugged in from symbolic matlab)
-
       double det=-xx_*yy_*zz_+xx_*zy_*yz_+yx_*xy_*zz_-yx_*zy_*xz_-zx_*xy_*yz_+zx_*yy_*xz_;
       if (det==0)
       {
@@ -526,9 +526,9 @@ void vimt3d_transform_3d::calcInverse() const
 
       break;
     }
-    default:
-      vcl_cerr<<"vimt3d_transform_3d::calcInverse() : Unrecognised form: "<<int(form_)<<vcl_endl;
-      vcl_abort();
+   default:
+    vcl_cerr << "vimt3d_transform_3d::calcInverse() : Unrecognised form: " << int(form_) << vcl_endl;
+    vcl_abort();
   }
 
   inv_uptodate_=true;
@@ -666,7 +666,8 @@ bool vimt3d_transform_3d::is_class(vcl_string const& s) const
 {
   return s==is_a();
 }
-#endif 
+#endif
+
 //=======================================================================
 
 void vimt3d_transform_3d::print_summary(vcl_ostream& o) const
@@ -675,11 +676,11 @@ void vimt3d_transform_3d::print_summary(vcl_ostream& o) const
   vsl_indent_inc(o);
   switch (form_)
   {
-    case Identity:
-      o << "Identity";
-      break;
+   case Identity:
+    o << "Identity";
+    break;
 
-    case Translation:
+   case Translation:
     {
       vnl_vector<double> p(3);
       params(p);
@@ -687,7 +688,7 @@ void vimt3d_transform_3d::print_summary(vcl_ostream& o) const
       break;
     }
 
-    case ZoomOnly:
+   case ZoomOnly:
     {
       vnl_vector<double> p(6);
       params(p);
@@ -697,7 +698,7 @@ void vimt3d_transform_3d::print_summary(vcl_ostream& o) const
       break;
     }
 
-    case RigidBody:
+   case RigidBody:
     {
       vnl_vector<double> p(6);
       params(p);
@@ -707,7 +708,7 @@ void vimt3d_transform_3d::print_summary(vcl_ostream& o) const
       break;
     }
 
-    case Similarity:
+   case Similarity:
     {
       vnl_vector<double> p(7);
       params(p);
@@ -718,7 +719,7 @@ void vimt3d_transform_3d::print_summary(vcl_ostream& o) const
         << vsl_indent()<< "translation = (" << p(4) << ',' << p(5) << ',' << p(6) << ")\n";
       break;
     }
-    case Affine:
+   case Affine:
     {
       vnl_vector<double> p(9);
       params(p);
@@ -741,37 +742,37 @@ void vimt3d_transform_3d::print_all(vcl_ostream& os) const
   os << vsl_indent() << "Form: ";
   switch (form_)
   {
-  case Identity:
+   case Identity:
     os << "Identity\n";
     break;
 
-  case Translation:
+   case Translation:
     os << "Translation\n";
     break;
 
-  case ZoomOnly:
+   case ZoomOnly:
     os << "ZoomOnly\n";
     break;
 
-  case RigidBody:
+   case RigidBody:
     os << "RigidBody\n";
     break;
 
-  case Similarity:
+   case Similarity:
     os << "Similarity\n";
     break;
 
-  case Affine:
+   case Affine:
     os << "Affine\n";
     break;
   }
 
   os << vsl_indent() << "Matrix:\n";
   vsl_indent_inc(os);
-  os << vsl_indent() << xx_ << " " << xy_ << " " << xz_ << " " << xt_ << "\n";
-  os << vsl_indent() << yx_ << " " << yy_ << " " << yz_ << " " << yt_ << "\n";
-  os << vsl_indent() << zx_ << " " << zy_ << " " << zz_ << " " << zt_ << "\n";
-  os << vsl_indent() << tx_ << " " << ty_ << " " << tz_ << " " << tt_ << "\n";
+  os << vsl_indent() << xx_ << ' ' << xy_ << ' ' << xz_ << ' ' << xt_ << '\n'
+     << vsl_indent() << yx_ << ' ' << yy_ << ' ' << yz_ << ' ' << yt_ << '\n'
+     << vsl_indent() << zx_ << ' ' << zy_ << ' ' << zz_ << ' ' << zt_ << '\n'
+     << vsl_indent() << tx_ << ' ' << ty_ << ' ' << tz_ << ' ' << tt_ << '\n';
   vsl_indent_dec(os);
 }
 
@@ -794,11 +795,12 @@ void vimt3d_transform_3d::b_read(vsl_b_istream& bfs)
   short version;
   vsl_b_read(bfs,version);
   int f;
-  switch (version) {
-  case 1:
+  switch (version)
+  {
+   case 1:
     vsl_b_read(bfs,f);
     if (f==0) // Old Form enum had "Undefined" as the first value. It is never needed, and so was removed.
-      set_identity(); 
+      set_identity();
     else
     {
       form_=Form(f-1);
@@ -808,14 +810,14 @@ void vimt3d_transform_3d::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,tx_); vsl_b_read(bfs,ty_); vsl_b_read(bfs,tz_); vsl_b_read(bfs,tt_);
     }
     break;
-  case 2:
+   case 2:
     vsl_b_read(bfs,f); form_=Form(f);
     vsl_b_read(bfs,xx_); vsl_b_read(bfs,xy_); vsl_b_read(bfs,xz_); vsl_b_read(bfs,xt_);
     vsl_b_read(bfs,yx_); vsl_b_read(bfs,yy_); vsl_b_read(bfs,yz_); vsl_b_read(bfs,yt_);
     vsl_b_read(bfs,zx_); vsl_b_read(bfs,zy_); vsl_b_read(bfs,zz_); vsl_b_read(bfs,zt_);
     vsl_b_read(bfs,tx_); vsl_b_read(bfs,ty_); vsl_b_read(bfs,tz_); vsl_b_read(bfs,tt_);
     break;
-  default:
+   default:
     vcl_cerr<<"vimt3d_transform_3d::load : Illegal version number "<<version<<'\n';
     vcl_abort();
   }
