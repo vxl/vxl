@@ -197,11 +197,10 @@ static int geostr_to_double(const char* in_string, double* val, vpgl_nitf_ration
 //: converts a latlon in_string to doubles
 static int geostr_to_latlon(const char* str, double* lat, double* lon)
 {
-  int latstrlen=0, lonstrlen=0;
-  latstrlen=geostr_to_double(str,lat,vpgl_nitf_rational_camera::LAT);
+  int latstrlen=geostr_to_double(str,lat,vpgl_nitf_rational_camera::LAT);
   if (latstrlen == 0) return 0;
   str += latstrlen;
-  lonstrlen=geostr_to_double(str,lon,vpgl_nitf_rational_camera::LON);
+  int lonstrlen=geostr_to_double(str,lon,vpgl_nitf_rational_camera::LON);
   if ( lonstrlen == 0) return 0;
 
   return latstrlen+lonstrlen;
