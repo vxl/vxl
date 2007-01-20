@@ -492,6 +492,9 @@ SOURCE=.\Templates/vnl_vector_fixed+double.4-.cxx
 SOURCE=.\Templates/vnl_vector_fixed+double.6-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vnl_vector_fixed+double.9-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vnl_vector_fixed+float.1-.cxx
 # End Source File
 # Begin Source File
