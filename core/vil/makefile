@@ -121,6 +121,7 @@ SOURCES += vil_decimate.cxx
 MANPAGE_SOURCES += vil_rotate.txx
 MANPAGE_SOURCES += vil_nearest_neighbour_interp.h
 MANPAGE_SOURCES += vil_warp.h
+MANPAGE_SOURCES += vil_flatten.h
 
 SOURCES += vil_load.cxx
 SOURCES += vil_save.cxx
