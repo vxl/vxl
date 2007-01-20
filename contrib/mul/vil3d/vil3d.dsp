@@ -174,16 +174,16 @@ SOURCE=.\Templates/vil3d_image_view+sbyte-.cxx
 SOURCE=.\Templates/vil3d_resample_simple+int-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil3d_resample_trilinear+int-.cxx
+SOURCE=.\Templates/vil3d_resample_trilinear+int.int-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil3d_resample_simple+bool-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil3d_resample_trilinear+float-.cxx
+SOURCE=.\Templates/vil3d_resample_trilinear+float.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil3d_resample_trilinear+uint_16-.cxx
+SOURCE=.\Templates/vil3d_resample_trilinear+uint_16.uint_16-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vil3d_memory_image.cxx
