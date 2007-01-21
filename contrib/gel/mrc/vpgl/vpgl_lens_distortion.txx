@@ -17,6 +17,7 @@ vgl_homg_point_2d<T>
 vpgl_lens_distortion<T>::undistort( const vgl_homg_point_2d<T>& point,
                                      const vgl_homg_point_2d<T>* init ) const
 {
+#if 0 // Not yet implemented ...
   vgl_point_2d<T> pt = point;
   vgl_homg_point_2d<T> result = point;
   if (init)
@@ -27,6 +28,10 @@ vpgl_lens_distortion<T>::undistort( const vgl_homg_point_2d<T>& point,
   assert(false);
 
   return result;
+#else
+  assert(!"Not yet implemented");
+  return point;
+#endif
 }
 
 // Code for easy instantiation.
