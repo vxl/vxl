@@ -22,6 +22,7 @@
 class FrameGrabber
 {
  public:
+  virtual ~FrameGrabber() {}
   // returns the current acquired frame
   virtual vil1_memory_image *get_current_frame()=0;
   // acquire a new frame synchronously (ie don't return until completed)
