@@ -16,12 +16,14 @@
 class vil1_warp_mapping
 {
  public:
+  virtual ~vil1_warp_mapping() {}
   virtual void forward_map(double x1, double y1, double* x2, double* y2) const = 0;
   virtual void inverse_map(double x2, double y2, double* x1, double* y1) const = 0;
 };
 
 //: Enum which selects type of interpolation for vil1_warp*
-enum vil1_warp_interpolation_type {
+enum vil1_warp_interpolation_type
+{
   vil1_warp_interpolation_nearest_neighbour,
   vil1_warp_interpolation_bilinear,
   vil1_warp_interpolation_bicubic
@@ -39,7 +41,6 @@ vil1_image vil1_warp(vil1_image const& in, vil1_warp_mapping const& mapper,
 vil1_image vil1_warp(vil1_image const& in, vil1_warp_mapping const& mapper,
                      vil1_warp_interpolation_type i,
                      int out_width = -1, int out_height = -1);
-
 
 //: Templated warper
 template <class PixelType, class Mapper>
