@@ -89,9 +89,14 @@ open(unsigned int num_dma_buffers,
   // find the cameras using classic libdc functions:
   unsigned int err = dc1394_find_cameras(&dccameras,&camnum);
 
+  if (err) {
+    vcl_cerr << "error finding cameras, error code: " << err << vcl_endl;
+    return false;
+  }
+
   // find the camera with matching port and node and delete the rest
   for (unsigned int i=0; i<camnum; ++i) {
-    if(dccameras[i]->port == params.port_ && dccameras[i]->node == params.node_)
+    if (dccameras[i]->port == params.port_ && dccameras[i]->node == params.node_)
       is_->camera_info_ = dccameras[i];
     else
       dc1394_free_camera(dccameras[i]);
@@ -99,9 +104,9 @@ open(unsigned int num_dma_buffers,
   free(dccameras);
 
 
-  if( !is_->camera_info_ || dc1394_update_camera_info(is_->camera_info_) != DC1394_SUCCESS){
+  if ( !is_->camera_info_ || dc1394_update_camera_info(is_->camera_info_) != DC1394_SUCCESS){
     vcl_cerr << "Failed to find camera on port "
-        <<params.port_<<" node "<<params.node_ << ".\n";
+             << params.port_ << " node " << params.node_ << ".\n";
     close();
     return false;
   }
@@ -150,7 +155,7 @@ open(unsigned int num_dma_buffers,
     if (dc1394_video_set_transmission(is_->camera_info_, DC1394_ON) == DC1394_SUCCESS) {
       vcl_cerr << "power turned on\n";
     }
-    else{
+    else {
       vcl_cerr << "unable to power on\n";
       return false;
     }
@@ -175,7 +180,7 @@ close()
     // turn off the camera power
     dc1394switch_t pwr;
     if (dc1394_video_get_transmission(is_->camera_info_, &pwr) == DC1394_SUCCESS &&
-       pwr == DC1394_ON) {
+        pwr == DC1394_ON) {
       dc1394_video_set_transmission(is_->camera_info_, DC1394_OFF);
     }
 
@@ -325,7 +330,7 @@ vidl2_dc1394_istream::current_frame()
 
 
   if (!is_->cur_frame_valid_) {
-    if(is_->cur_frame_)
+    if (is_->cur_frame_)
       is_->cur_frame_->invalidate();
 
     is_->cur_frame_ = new vidl2_shared_frame(dc1394_capture_get_dma_buffer(is_->camera_info_),
