@@ -20,10 +20,21 @@
 // In order of complexity the transform can be
 // - Identity     x->x, y->y, z->z
 // - Translation  x->x + tx, y->y + ty, z->z + tz
-// - ZoomOnly     x->sx.x + tx, y->sy.y + ty, z->sz.z + tz
-// - RigidBody    (Translate + rotation)
-// - Similarity   (Translation + rotation + isotropic scaling)
-// - Affine       (Translation + rotation + anisotropic scaling)
+// - ZoomOnly     (Scaling, followed by translation) x->sx.x + tx, etc.
+// - RigidBody    (Rotation, followed by translation)
+// - Similarity   (Isotropic scaling, followed by rotation, then translation)
+// - Affine 
+//
+// One useful special case of Affine involves anisotropic scaling, followed 
+// by rotation, then translation.
+//
+// The transform types Translation, ZoomOnly, RigidBody and Similarity have
+// a defined order in which scaling, rotation and translation components 
+// are applied, and the components are thus separable.
+// Other transformations (e.g. translation followed by rotation) can be 
+// obtained by composing multiple transforms. The resulting transform will 
+// in general be termed affine.
+//
 // The transformation can be represented by a 4x4 matrix of
 // homogeneous co-ordinates.
 // \verbatim
@@ -42,9 +53,9 @@ class vimt3d_transform_3d
   //: Defines form of transformation
   enum Form {Identity,
              Translation,
-             ZoomOnly,
-             RigidBody,
-             Similarity,
+             ZoomOnly,   //!< Scaling, followed by translation
+             RigidBody,  //!< Rotation, followed by translation
+             Similarity, //!< Isotropic scaling, followed by rotation, then translation
              Affine};
 
   //: Construct as identity transform
@@ -83,7 +94,14 @@ class vimt3d_transform_3d
   //: Sets transform to identity.
   void set_identity();
 
-  //: Sets the transformation to be separable affine.
+  //: Sets the transformation to be a translation.
+  // \param t_x  Translation in x
+  // \param t_y  Translation in y
+  // \param t_z  Translation in z
+  void set_translation(double t_x, double t_y, double t_z);
+
+  //: Sets the transformation to be anisotropic scaling, followed by translation.
+  // The transformation is separable affine.
   // x' = s_x.x + t_x,  y' = s_y.y + t_y,  z' = s_z.z + t_z
   // \param s_x  Scaling in x
   // \param s_y  Scaling in y
@@ -94,32 +112,30 @@ class vimt3d_transform_3d
   void set_zoom_only( double s_x, double s_y, double s_z,
                       double t_x, double t_y, double t_z);
 
-  //: Sets the transformation to be separable affine.
+  //: Sets the transformation to be isotropic scaling, followed by translation.
+  // The transformation is separable affine.
   // x' = s.x + t_x,  y' = s.y + t_y,  z' = s.z + t_z
   // \param s  Scaling in x, y and z
   // \param t_x  Translation in x
   // \param t_y  Translation in y
   // \param t_z  Translation in z
   void set_zoom_only(double s, double t_x, double t_y, double t_z)
-    { set_zoom_only(s,s,s,t_x,t_y,t_z); }
+    { set_zoom_only(s, s, s, t_x, t_y, t_z); }
 
-  //: Sets the transformation to be a translation.
-  // \param t_x  Translation in x
-  // \param t_y  Translation in y
-  // \param t_z  Translation in z
-  void set_translation(double t_x, double t_y, double t_z);
-
-  //: Sets the transformation to rotation then translation.
+  //: Sets the transformation to be rotation, followed by translation.
+  // The transformation is separable affine.
   // \param r_x  Angle of rotation in x
   // \param r_y  Angle of rotation in y
   // \param r_z  Angle of rotation in z
   // \param t_x  Translation in x
   // \param t_y  Translation in y
   // \param t_z  Translation in z
-  void set_rigid_body( double r_x, double r_y, double r_z,
-                       double t_x, double t_y, double t_z);
+  void set_rigid_body(double r_x, double r_y, double r_z,
+                      double t_x, double t_y, double t_z);
 
-  //: Sets the transformation to apply an overall scaling, rotation then translation.
+  //: Sets the transformation to be isotropic scaling, followed by rotation, 
+  // then translation.
+  // The transformation is separable affine.
   // \param s  Scaling factor
   // \param r_x  Angle of rotation in x
   // \param r_y  Angle of rotation in y
@@ -127,11 +143,12 @@ class vimt3d_transform_3d
   // \param t_x  Translation in x
   // \param t_y  Translation in y
   // \param t_z  Translation in z
-  void set_similarity( double s,
-                       double r_x, double r_y, double r_z,
-                       double t_x, double t_y, double t_z);
+  void set_similarity(double s,
+                      double r_x, double r_y, double r_z,
+                      double t_x, double t_y, double t_z);
 
-  //: Sets the transformation to apply scaling, rotation then translation.
+  //: Sets the transformation to be a special case of Affine:
+  // anisotropic scaling, followed by rotation, then translation.
   // \param s_x  Scaling factor in x
   // \param s_y  Scaling factor in y
   // \param s_z  Scaling factor in z
@@ -141,11 +158,22 @@ class vimt3d_transform_3d
   // \param t_x  Translation in x
   // \param t_y  Translation in y
   // \param t_z  Translation in z
+  // \note This creates a special case of Affine. Although this special case
+  // is separable, in general Affine transformations are not separable.
   void set_affine(double s_x, double s_y, double s_z,
                   double r_x, double r_y, double r_z,
                   double t_x, double t_y, double t_z);
 
-  //: Sets to be 3D affine transformation T(x,y,z)=p+x.u+y.v+z.w
+  //: Sets the transformation to be a special case of Affine. 
+  // T(x,y,z) = p +x.u +y.v + z.w
+  // \param p Origin point
+  // \param u Vector to which the x-axis is mapped. The length of \a u indicates scaling in x.
+  // \param v Vector to which the y-axis is mapped. The length of \a v indicates scaling in y.
+  // \param w Vector to which the z-axis is mapped. The length of \a w indicates scaling in z.
+  // \note Currently, the implementation assumes that u,v,w are orthogonal
+  // and form a right-handed system. There are asserts for this condition.
+  // \note This creates a special case of Affine. Although this special case
+  // is separable, in general Affine transformations are not separable.
   void set_affine(const vgl_point_3d<double>& p,
                   const vgl_vector_3d<double>& u,
                   const vgl_vector_3d<double>& v,
@@ -230,7 +258,7 @@ class vimt3d_transform_3d
   // \param R  Transform
   // \return Transform LR = R followed by L
   friend vimt3d_transform_3d operator*(const vimt3d_transform_3d& L,
-                                      const vimt3d_transform_3d& R);
+                                       const vimt3d_transform_3d& R);
 
   //: Version number for I/O
   short version_no() const;
@@ -247,13 +275,13 @@ class vimt3d_transform_3d
 #endif
 
   //: Print class to os
-  // This version prints the extracted params.
+  // This function prints the extracted params.
   // \sa params()
   // \sa set()
   void print_summary(vcl_ostream& os) const;
 
   //: Print class to os
-  // This version prints the actual parameters xx_,xy_,xz_,xt_, yx_,yy_,yz_,yt_, zx_,zy_,zz_,zt_, tx_,ty_,tz_,tt_
+  // This function prints the actual parameters xx_,xy_,xz_,xt_, yx_,yy_,yz_,yt_, zx_,zy_,zz_,zt_, tx_,ty_,tz_,tt_
   void print_all(vcl_ostream& os) const;
 
   //: Save class to binary file stream
@@ -262,10 +290,12 @@ class vimt3d_transform_3d
   //: Load class from binary file stream
   void b_read(vsl_b_istream& bfs);
 
-  //: True if t is the same as this
+  //: True if t is the same as this.
+  // \note All underlying parameters xx_, xy_, etc are required to be equal,
+  // but the declared Form (etc RigidBody) need not be equal.
   bool operator==(const vimt3d_transform_3d&) const;
 
- private:
+private:
 
   double xx_,xy_,xz_,xt_,yx_,yy_,yz_,yt_,zx_, zy_, zz_, zt_, tx_,ty_,tz_,tt_;
   Form form_;

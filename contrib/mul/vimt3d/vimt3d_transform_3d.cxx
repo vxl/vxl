@@ -1,7 +1,10 @@
 // This is mul/vimt3d/vimt3d_transform_3d.cxx
 #include "vimt3d_transform_3d.h"
+
 //:
 // \file
+// \brief A class to define and apply a 3D transformation up to affine.
+// \author Graham Vincent, Tim Cootes
 
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
@@ -347,9 +350,9 @@ void vimt3d_transform_3d::set_similarity(double s,
     setRotMat(r_x,r_y,r_z);
 
     // Account for scaling (this actually means that scaling was done BEFORE rotation)
-    xx_*=s;
-    yy_*=s;
-    zz_*=s;
+    xx_*=s;  xy_*=s;  xz_*=s;
+    yx_*=s;  yy_*=s;  yz_*=s;
+    zx_*=s;  zy_*=s;  zz_*=s;
 
     // Set translation (first 3 elements of final column)
     xt_=t_x;
@@ -374,9 +377,9 @@ void vimt3d_transform_3d::set_affine(double s_x, double s_y, double s_z,
   setRotMat(r_x,r_y,r_z);
 
   // Account for scaling (this actually means that scaling was done BEFORE rotation)
-  xx_*=s_x;
-  yy_*=s_y;
-  zz_*=s_z;
+  xx_*=s_x;  xy_*=s_y;  xz_*=s_z;
+  yx_*=s_x;  yy_*=s_y;  yz_*=s_z;
+  zx_*=s_x;  zy_*=s_y;  zz_*=s_z;
 
   // Set translation (first 3 elements of final column)
   xt_=t_x;
@@ -398,6 +401,7 @@ void vimt3d_transform_3d::set_affine(const vgl_point_3d<double>& p,
 {
   form_=Affine;
 
+#ifndef NDEBUG
   // Get normalized vectors
   vgl_vector_3d<double> uh = normalized(u);
   vgl_vector_3d<double> vh = normalized(v);
@@ -410,19 +414,12 @@ void vimt3d_transform_3d::set_affine(const vgl_point_3d<double>& p,
 
   // Test for right-handedness of input vectors
   assert(vcl_fabs((cross_product(uh,vh)-wh).length())<tol);
+#endif
 
-  // Set rotation matrix from (normalized) column vectors
-  xx_=uh.x(); xy_=vh.x(); xz_=wh.x();
-  yx_=uh.y(); yy_=vh.y(); yz_=wh.y();
-  zx_=uh.z(); zy_=vh.z(); zz_=wh.z();
-
-  // Account for scaling (this actually means that scaling was done BEFORE rotation)
-  double su = u.length();
-  double sv = v.length();
-  double sw = w.length();
-  xx_*=su;
-  yy_*=sv;
-  zz_*=sw;
+  // Set rotation and scaling (this actually means that scaling was done BEFORE rotation)
+  xx_=u.x();  xy_=v.x();  xz_=w.x();
+  yx_=u.y();  yy_=v.y();  yz_=w.y();
+  zx_=u.z();  zy_=v.z();  zz_=w.z();
 
   // Set translation (first 3 elements of final column)
   xt_=p.x();
@@ -596,6 +593,7 @@ vimt3d_transform_3d operator*(const vimt3d_transform_3d& L, const vimt3d_transfo
     T.tt_ = L.tx_*R.xt_ + L.ty_*R.yt_+ L.tz_*R.zt_ + L.tt_*R.tt_;
 
     // now set the type using the type of L and R
+    // not sure this right - kds
     if (R.form() == L.form())
       T.form_ = R.form();
     else
@@ -712,7 +710,7 @@ void vimt3d_transform_3d::print_summary(vcl_ostream& o) const
     {
       vnl_vector<double> p(7);
       params(p);
-      // Not sure this is right - kds
+      // not sure this is right - kds
       o << "Similarity\n"
         << vsl_indent()<< "scale factor = " << p(0) << vcl_endl
         << vsl_indent()<< "angles = " << p(1) << ',' << p(2) << ',' << p(3) << '\n'
@@ -736,7 +734,6 @@ void vimt3d_transform_3d::print_summary(vcl_ostream& o) const
 
 //=======================================================================
 // Print class to os
-// This version prints the actual parameters xx_,xy_,xz_,xt_, yx_,yy_,yz_,yt_, zx_,zy_,zz_,zt_, tx_,ty_,tz_,tt_
 void vimt3d_transform_3d::print_all(vcl_ostream& os) const
 {
   os << vsl_indent() << "Form: ";
