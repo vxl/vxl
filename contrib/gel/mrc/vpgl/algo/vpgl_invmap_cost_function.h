@@ -18,10 +18,16 @@ class vpgl_invmap_cost_function: public vnl_cost_function
                             const vpgl_rational_camera<double>* const rcam);
   ~vpgl_invmap_cost_function(){}
   //: The cost function. x is a vector holding the two plane parameters
-  virtual double f(vnl_vector<double> const& x);
+  double f(vnl_vector<double> const& x);
   //: set the parameter values from the 3-d point
-  void set_params(vnl_vector_fixed<double, 3> const& xyz, vnl_vector<double> &x);
+  void set_params(vnl_vector_fixed<double,3> const& xyz, vnl_vector_fixed<double,2> &x);
+  //: set the parameter values from the 3-d point
+  //  (Deprecated interface)
+  void set_params(vnl_vector_fixed<double,3> const& xyz, vnl_vector<double> &x);
   //: get the 3-d point defined by the parameters (and the plane).
+  void point_3d(vnl_vector_fixed<double,2> const& x, vnl_vector_fixed<double, 3>& xyz);
+  //: get the 3-d point defined by the parameters (and the plane).
+  //  (Deprecated interface)
   void point_3d(vnl_vector<double> const& x, vnl_vector_fixed<double, 3>& xyz);
 
  protected:

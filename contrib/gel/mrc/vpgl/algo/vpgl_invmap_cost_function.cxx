@@ -3,6 +3,7 @@
 // \file
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
+#include <vcl_deprecated.h>
 
 vpgl_invmap_cost_function::
 vpgl_invmap_cost_function(vnl_vector_fixed<double, 2> const& image_point,
@@ -20,6 +21,7 @@ vpgl_invmap_cost_function(vnl_vector_fixed<double, 2> const& image_point,
   if (any<anx && anz<anx)
      pp_ = Y_Z;
 }
+
 //: The main function.
 double vpgl_invmap_cost_function::f(vnl_vector<double> const& x)
 {
@@ -27,7 +29,7 @@ double vpgl_invmap_cost_function::f(vnl_vector<double> const& x)
     return 0;
   // fill out the 3-d point from the parameters
   vnl_vector_fixed<double, 3> p_3d;
-  this->point_3d(x, p_3d);
+  this->point_3d(vnl_vector_fixed<double,2>(x[0],x[1]), p_3d);
 
   // project the current point estimate onto the image
   vnl_vector_fixed<double, 2> p_2d = rcam_ptr_->project(p_3d);
@@ -39,7 +41,7 @@ double vpgl_invmap_cost_function::f(vnl_vector<double> const& x)
 }
 
 void vpgl_invmap_cost_function::
-set_params(vnl_vector_fixed<double, 3> const& xyz, vnl_vector<double> &x)
+set_params(vnl_vector_fixed<double,3> const& xyz, vnl_vector_fixed<double,2> &x)
 {
   switch (pp_)
   {
@@ -70,8 +72,76 @@ set_params(vnl_vector_fixed<double, 3> const& xyz, vnl_vector<double> &x)
 }
 
 void vpgl_invmap_cost_function::
+set_params(vnl_vector_fixed<double, 3> const& xyz, vnl_vector<double> &x)
+{
+  VXL_DEPRECATED("vpgl_invmap_cost_function::set_params(, vnl_vector<double>&)");
+  switch (pp_)
+  {
+    case X_Y:
+    {
+      x[0] = xyz[0];
+      x[1] = xyz[1];
+      break;
+    }
+    case X_Z:
+    {
+      x[0] = xyz[0];
+      x[1] = xyz[2];
+      break;
+    }
+    case Y_Z:
+    {
+      x[0] = xyz[1];
+      x[1] = xyz[2];
+      break;
+    }
+    default:
+    {
+      x[0] = 0; x[1] = 0;
+      vcl_cerr << "Improper prameterization in vpgl_invmap_cost_function\n";
+    }
+  }
+}
+
+void vpgl_invmap_cost_function::
+point_3d(vnl_vector_fixed<double,2> const& x, vnl_vector_fixed<double,3>& xyz)
+{
+  //Switch on plane parameterization
+  switch (pp_)
+  {
+    case X_Y:
+    {
+      xyz[0] = x[0];
+      xyz[1] = x[1];
+      xyz[2] = -(plane_[0]*x[0] + plane_[1]*x[1] + plane_[3])/plane_[2];
+      break;
+    }
+    case X_Z:
+    {
+      xyz[0] = x[0];
+      xyz[2] = x[1];
+      xyz[1] = -(plane_[0]*x[0] + plane_[2]*x[1] + plane_[3])/plane_[1];
+      break;
+    }
+    case Y_Z:
+    {
+      xyz[1] = x[0];
+      xyz[2] = x[1];
+      xyz[0] = -(plane_[1]*x[0] + plane_[2]*x[1] + plane_[3])/plane_[0];
+      break;
+    }
+    default:
+    {
+      xyz[0] = 0; xyz[1] = 0; xyz[2] = 0;
+      vcl_cerr << "Improper prameterization in vpgl_invmap_cost_function\n";
+    }
+  }
+}
+
+void vpgl_invmap_cost_function::
 point_3d(vnl_vector<double> const& x, vnl_vector_fixed<double, 3>& xyz)
 {
+  VXL_DEPRECATED("vpgl_invmap_cost_function::point_3d(vnl_vector<double>,)");
   //Switch on plane parameterization
   switch (pp_)
   {
