@@ -187,6 +187,25 @@ inline void vil3d_math_mean_over_planes(const vil3d_image_view<inT>& src,
       }
 }
 
+//: Calculate the rms of each pixel over all the planes.
+// \relates vil3d_image_view
+template<class inT, class outT, class sumT>
+inline void vil3d_math_rms(const vil3d_image_view<inT>& src,
+                           vil3d_image_view<outT>& dest,
+                           sumT /*dummy*/)
+{
+  dest.set_size(src.ni(), src.nj(), src.nk(), 1);
+  for (unsigned k=0;k<src.nk();++k)
+    for (unsigned j=0;j<src.nj();++j)
+      for (unsigned i=0;i<src.ni();++i)
+      {
+        sumT sum_sqr=0;
+        for (unsigned p=0;p<src.nplanes();++p)
+          sum_sqr += static_cast<sumT>(src(i,j,k,p))*static_cast<sumT>(src(i,j,k,p));
+        dest(i,j,k) = static_cast<outT>(vcl_sqrt(sum_sqr / src.nplanes()));
+      }
+}
+
 
 //: Compute sum of values in plane p
 // \relates vil3d_image_view
