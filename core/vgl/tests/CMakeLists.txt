@@ -28,6 +28,7 @@ ADD_EXECUTABLE( vgl_test_all
   test_line_segment_3d.cxx
   test_orient_box_3d.cxx
   test_fit_plane_3d.cxx
+  test_intersection.cxx
 )
 TARGET_LINK_LIBRARIES( vgl_test_all vgl_algo vgl testlib )
 
@@ -56,6 +57,7 @@ ADD_TEST( vgl_test_line_3d_2_points             ${EXECUTABLE_OUTPUT_PATH}/vgl_te
 ADD_TEST( vgl_test_line_segment_3d              ${EXECUTABLE_OUTPUT_PATH}/vgl_test_all test_line_segment_3d)
 ADD_TEST( vgl_test_orient_box_3d                ${EXECUTABLE_OUTPUT_PATH}/vgl_test_all test_orient_box_3d)
 ADD_TEST( vgl_test_fit_plane_3d                 ${EXECUTABLE_OUTPUT_PATH}/vgl_test_all test_fit_plane_3d)
+ADD_TEST( vgl_test_intersection                 ${EXECUTABLE_OUTPUT_PATH}/vgl_test_all test_intersection)
 
 ADD_EXECUTABLE( vgl_test_include test_include.cxx )
 
