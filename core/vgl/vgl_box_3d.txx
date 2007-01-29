@@ -10,6 +10,7 @@
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
+#include <vcl_deprecated.h>
 
 // Constructors/Destructor---------------------------------------------------
 
@@ -415,6 +416,7 @@ void vgl_box_3d<Type>::empty()
 template <class Type>
 vgl_box_3d<Type> intersect(vgl_box_3d<Type> const& a, vgl_box_3d<Type> const& b)
 {
+  VXL_DEPRECATED( "vgl_box_3d::intersect((vgl_box_3d<Type> const&, vgl_box_3d<Type> const&) -- Please use the method in vgl_intersection.h" );
   Type x0 = vcl_max(a.min_x(), b.min_x());
   Type y0 = vcl_max(a.min_y(), b.min_y());
   Type z0 = vcl_max(a.min_z(), b.min_z());

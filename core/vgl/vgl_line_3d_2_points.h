@@ -8,6 +8,11 @@
 // \file
 // \brief non-homogeneous 3D line, represented by 2 points.
 // \author Peter Vanroose
+//
+// \verbatim
+//  Modifications
+//   Gamze Tunali    01/26/2007: Deprecated intersection(). Moved into vgl_intersection.
+// \endverbatim
 
 #include <vcl_iosfwd.h>
 #include <vcl_cassert.h>

@@ -8,6 +8,8 @@
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vcl_limits.h>
+#include <vcl_deprecated.h>
+
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_distance.h>
 
@@ -35,6 +37,7 @@ template <class Type>
 vgl_point_3d<Type> intersection(vgl_line_3d_2_points<Type> const& l1,
                                 vgl_line_3d_2_points<Type> const& l2)
 {
+  VXL_DEPRECATED( "vgl_line_3d_2_points::intersection(vgl_line_3d_2_points<Type> const&, vgl_line_3d_2_points<Type> const&) -- Please use the method in vgl_intersection.h" );
   assert(concurrent(l1,l2));
   Type a0=l1.point1().x(), a1=l1.point2().x(), a2=l2.point1().x(), a3=l2.point2().x(),
        b0=l1.point1().y(), b1=l1.point2().y(), b2=l2.point1().y(), b3=l2.point2().y(),
@@ -57,6 +60,7 @@ template <class Type>
 vgl_point_3d<Type> intersection(vgl_line_3d_2_points<Type> const& line,
                                 vgl_plane_3d<Type> const& plane)
 {
+  VXL_DEPRECATED( "vgl_line_3d_2_points::intersection(vgl_line_3d_2_points<Type> const&, vgl_plane_3d<Type> const&) -- Please use the method in vgl_intersection.h" );
   vgl_vector_3d<Type> dir = line.direction();
 
   vgl_point_3d<Type> pt;
