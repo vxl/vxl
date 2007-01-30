@@ -1,12 +1,13 @@
-// Some tests for vgl_interection
+// Some tests for vgl_intersection
 // Gamze Tunali, Jan 2007.
 #include <vcl_iostream.h>
 #include <vcl_limits.h>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_plane_3d.h>
+#include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_distance.h>
-#include <vgl/vgl_intersection.h>
+#include <vgl/algo/vgl_intersection.h>
 #include <vgl/vgl_line_3d_2_points.h>
 
 static void test_box_intersection()
@@ -49,6 +50,26 @@ static void test_plane_intersection()
   TEST("intersection(l2,p1) = (inf,0,0)", pt3, vgl_point_3d<double>(inf, 0, 0));
 }
 
+static void test_three_planes()
+{
+  vgl_homg_plane_3d<double> p1(0,0,0,1), p2(0,1,0,0), p3(0,0,1,0), p4(1,1,1,1); // p1 = plane at inf
+  vgl_plane_3d<double> pl1(p1), pl2(p2), pl3(p3), pl4(p4);
+  {
+   vgl_point_3d<double> pi(pl1,pl2,pl3); // intersection
+   TEST("intersection", pi, vgl_point_3d<double>(1,0,0));
+   TEST("ideal", pi.ideal(), true);
+   vgl_point_3d<double> pj = intersection(pl1,pl2,pl3);
+   TEST("intersection", pj, pi);
+  }
+  {
+   vgl_point_3d<double> pi(pl2,pl3,pl4); // intersection
+   TEST("intersection", pi, vgl_point_3d<double>(1,0,0));
+   TEST("is_ideal", is_ideal(pi), false);
+   vgl_point_3d<double> pj = intersection(pl2,pl3,pl4);
+   TEST("intersection", pj, pi);
+  }
+}
+
 void test_intersection()
 {
   vcl_cout << "********************************\n"
@@ -56,6 +77,7 @@ void test_intersection()
            << "********************************\n\n";
   test_box_intersection();
   test_plane_intersection();
+  test_three_planes();
 }
 
 
