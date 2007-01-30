@@ -42,7 +42,6 @@ SET( vgl_sources
   vgl_clip.h                     vgl_clip.txx
   vgl_area.h                     vgl_area.txx
   vgl_convex.h                   vgl_convex.txx
-  vgl_intersection.h             vgl_intersection.txx
 
   vgl_lineseg_test.h             vgl_lineseg_test.txx
   vgl_triangle_test.h            vgl_triangle_test.txx
