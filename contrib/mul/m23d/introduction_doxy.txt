@@ -11,4 +11,22 @@
 * Key classes:
 * - m23d_ortho_rigid_builder: Reconstruct 3D shape of rigid object
 * - m23d_ortho_flexible_builder: Reconstruct 3D shape basis of deformable object
+*
+* Example usage:
+* \verbatim
+*
+* vnl_matrix<double> W;  // Measurements ( rows are 2D shapes, (x1,y1,x2,y2...))
+* // Fill in measurement matrix W
+* ...
+*
+* m23d_ortho_flexible_builder builder;
+* builder.reconstruct(W,n_modes);
+*
+* // Matrix containing mean shape (3 x n_points, each column is one point)
+* vnl_matrix<double> M = builder.mean_shape();
+* // Matrix containing first shape mode (3 x n_points, each column is one point)
+* vnl_matrix<double> S0= builder.shape(0);
+* // etc
+*
+* \endverbatim
 */
