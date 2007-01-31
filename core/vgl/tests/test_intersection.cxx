@@ -52,21 +52,13 @@ static void test_plane_intersection()
 
 static void test_three_planes()
 {
-  vgl_homg_plane_3d<double> p1(0,0,0,1), p2(0,1,0,0), p3(0,0,1,0), p4(1,1,1,1); // p1 = plane at inf
-  vgl_plane_3d<double> pl1(p1), pl2(p2), pl3(p3), pl4(p4);
+  vgl_plane_3d<double> pl4(1,0,0,0), pl5(0,1,0,0), pl6(0,0,1,0);
   {
-   vgl_point_3d<double> pi(pl1,pl2,pl3); // intersection
-   TEST("intersection", pi, vgl_point_3d<double>(1,0,0));
-   TEST("ideal", pi.ideal(), true);
-   vgl_point_3d<double> pj = intersection(pl1,pl2,pl3);
-   TEST("intersection", pj, pi);
-  }
-  {
-   vgl_point_3d<double> pi(pl2,pl3,pl4); // intersection
-   TEST("intersection", pi, vgl_point_3d<double>(1,0,0));
+   vgl_point_3d<double> pi(pl4,pl5,pl6); // intersection
+   TEST("intersection", pi, vgl_point_3d<double>(0,0,0));
    TEST("is_ideal", is_ideal(pi), false);
-   vgl_point_3d<double> pj = intersection(pl2,pl3,pl4);
-   TEST("intersection", pj, pi);
+   vgl_point_3d<double> pj = intersection(pl4,pl5,pl6);
+   TEST("three planes intersecting", pj, pi);
   }
 }
 
