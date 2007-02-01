@@ -21,7 +21,14 @@ class mbl_read_multi_props_type : public vcl_multimap<vcl_string, vcl_string>
   // The matching entry is removed from the property list.
   // \throws mbl_exception_missing_property if \a label doesn't exist.
   // \throws mbl_exception_read_props_parse_error if there are two or more values of \a label.
-vcl_string get_required_property(const vcl_string& label);
+  vcl_string get_required_property(const vcl_string& label);
+
+  //: Return a single value of the given property \a label.
+  // The matching entry is removed from the property list.
+  // returns empty string or \a default_prop if \a label doesn't exist.
+  // \throws mbl_exception_read_props_parse_error if there are two or more values of \a label.
+  vcl_string get_optional_property(const vcl_string& label,
+    const vcl_string& default_prop="");
 
   //: Return a vector of all values for a given property label \a label.
   // All entries of \a label are removed from the property list.

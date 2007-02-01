@@ -271,6 +271,27 @@ vcl_string mbl_read_multi_props_type::get_required_property(const vcl_string& la
   return s;
 }
 
+
+//: Return a single value of the given property \a label.
+// The matching entry is removed from the property list.
+// returns empty string or \a default_prop if \a label doesn't exist.
+// \throws mbl_exception_read_props_parse_error if there are two or more values of \a label.
+vcl_string mbl_read_multi_props_type::get_optional_property(
+  const vcl_string& label, const vcl_string& default_prop /*=""*/)
+{
+  vcl_pair<mbl_read_multi_props_type::iterator, mbl_read_multi_props_type::iterator>
+    its = this->equal_range(label);
+  if (its.first==its.second) return default_prop;
+  else if (vcl_distance(its.first, its.second) > 1)
+    mbl_exception_error(mbl_exception_read_props_parse_error(
+      vcl_string("Property label \"") + label + "\" occurs more than once.") );
+
+  vcl_string s = its.first->second;
+  this->erase(its.first);
+  return s;
+}
+
+
 // Return a vector of all values for a given property label.
 // Throw exception if label doesn't occur at least once.
 void mbl_read_multi_props_type::get_required_properties(
