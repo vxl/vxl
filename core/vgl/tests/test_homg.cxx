@@ -18,7 +18,7 @@
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vgl/algo/vgl_homg_operators_3d.h>
 #include <vnl/vnl_math.h>
-#include <vnl/vnl_vector.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_float_2x2.h>
 #include <vnl/vnl_double_3x3.h>
 
@@ -74,6 +74,14 @@ static void test_homg_point_1d()
   vgl_homg_operators_1d<float>::unitize(p2);
   TEST("unitize()", p2.x(), -1.f);
 
+  vgl_homg_point_1d<double> u(-3,4);
+  vgl_homg_operators_1d<double>::unitize(u);
+  TEST_NEAR("unitize: x", u.x(), -0.6, 1e-12);
+  TEST_NEAR("unitize: w", u.w(), 0.8, 1e-12);
+
+  vnl_vector_fixed<double,2> v = vgl_homg_operators_1d<double>::get_vector(u);
+  TEST_NEAR("get_vector", v.two_norm(), 1.0, 1e-12);
+
   p2.set(4,1);
   r = vgl_homg_operators_1d<float>::dot(p1,p2);
   TEST("dot", r, 27);
@@ -110,7 +118,7 @@ static void test_homg_point_2d()
   TEST_NEAR("unitize: y", u.y(), -0.6, 1e-12);
   TEST_NEAR("unitize: w", u.w(), 0.8, 1e-12);
 
-  vnl_vector<double> v = vgl_homg_operators_2d<double>::get_vector(u);
+  vnl_vector_fixed<double,3> v = vgl_homg_operators_2d<double>::get_vector(u);
   TEST_NEAR("get_vector", v.two_norm(), 1.0, 1e-12);
   double dd[] = { 1,0,0, 0,2,0, 1,1,3};
   vnl_double_3x3 mm(dd);
@@ -228,7 +236,7 @@ static void test_homg_point_3d()
   TEST_NEAR("unitize: z", u.z(), -0.4, 1e-12);
   TEST_NEAR("unitize: w", u.w(),  0.8, 1e-12);
 
-  vnl_vector<double> v = vgl_homg_operators_3d<double>::get_vector(u);
+  vnl_vector_fixed<double,4> v = vgl_homg_operators_3d<double>::get_vector(u);
   TEST_NEAR("get_vector", v.two_norm(), 1.0, 1e-12);
   double dd[] = { 1,0,0,0, 0,2,0,0, 0,0,3,0, 1,1,1,3};
   vnl_double_4x4 mm(dd);
@@ -318,8 +326,9 @@ static void test_homg_line_2d()
   l3.set(3,7,0);
   TEST("equality", (l1 == l3), true);
 
-  vnl_vector<double> v = vgl_homg_operators_2d<double>::get_vector(l2);
-  TEST("get_vector", v, vnl_vector<double>(d,3));
+  vnl_vector_fixed<double,3> v = vgl_homg_operators_2d<double>::get_vector(l2);
+  vnl_vector_fixed<double,3> vtrue = vnl_vector_fixed<double,3>(d);
+  TEST("get_vector", v, vtrue);
   double dd[] = { 1,0,0, 0,2,0, 1,1,3};
   vnl_double_3x3 mm(dd);
   vgl_homg_line_2d<double> l = mm*vgl_homg_line_2d<double>(3,7,1); // homography
@@ -422,8 +431,9 @@ static void test_homg_plane_3d()
   pl3.set(3,7,-1,1);
   TEST("equality", (pl1 == pl3), true);
 
-  vnl_vector<double> v = vgl_homg_operators_3d<double>::get_vector(pl2);
-  TEST("get_vector", v, vnl_vector<double>(d,4));
+  vnl_vector_fixed<double,4> v = vgl_homg_operators_3d<double>::get_vector(pl2);
+  vnl_vector_fixed<double,4> vtrue = vnl_vector_fixed<double,4>(d);
+  TEST("get_vector", v, vtrue);
 
   vgl_vector_3d<double> d1 = pl2.normal();
   vgl_vector_3d<double> d2 = vgl_vector_3d<double>(0,0.6,0.8);

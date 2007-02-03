@@ -6,6 +6,7 @@
 #endif
 //:
 // \file
+// \brief 3D homogeneous functions
 // \author Don Hamilton, Peter Tu
 // \date Feb 16 2000
 //
@@ -13,16 +14,14 @@
 //  Modifications
 //   31-oct-00 Peter Vanroose - implementations fixed, and vgl_homg_line_3d typedef'd
 //   16-Mar-01 Tim Cootes - Tidied up documentation
-//   14-jun-04 Peter Vanroose - implemented conjugate(), unitize(), perp_dist_squared(), midpoint(), planes_to_point()
+//   14-Jun-04 Peter Vanroose - implemented conjugate(), unitize(), perp_dist_squared(), midpoint(), planes_to_point()
+//    3-Feb-07 Peter Vanroose - changed vnl_vector to vnl_vector_fixed
 // \endverbatim
 
 #include <vcl_vector.h>
 #include <vnl/vnl_fwd.h>
+#include <vgl/vgl_fwd.h>
 #include <vgl/vgl_homg_line_3d_2_points.h>
-
-template <class Type> class vgl_homg_point_3d;
-template <class Type> class vgl_homg_line_3d_2_points;
-template <class Type> class vgl_homg_plane_3d;
 
 //: 3D homogeneous operations
 template <class Type>
@@ -31,23 +30,31 @@ class vgl_homg_operators_3d
   typedef vgl_homg_line_3d_2_points<Type> vgl_homg_line_3d;
 
  public:
-
-  // method to get a vnl_vector rep of a homogeneous object
-
-  //: Get vnl_vector rep of a homogeneous object
-  static vnl_vector<Type> get_vector(vgl_homg_point_3d<Type> const& p);
-  //: Get vnl_vector rep of a homogeneous object
-  static vnl_vector<Type> get_vector(vgl_homg_plane_3d<Type> const& p);
+  //: Get a vnl_vector_fixed representation of a homogeneous object
+  static vnl_vector_fixed<Type,4> get_vector(vgl_homg_point_3d<Type> const& p);
+  //: Get a vnl_vector_fixed representation of a homogeneous object
+  static vnl_vector_fixed<Type,4> get_vector(vgl_homg_plane_3d<Type> const& p);
 
   //: Normalize vgl_homg_point_3d<Type> to unit magnitude
   static void unitize(vgl_homg_point_3d<Type>& a);
 
   static double angle_between_oriented_lines(const vgl_homg_line_3d& line1,
                                              const vgl_homg_line_3d& line2);
+
+  //: Return the Euclidean distance between the points
   static Type distance(const vgl_homg_point_3d<Type>& point1,
                        const vgl_homg_point_3d<Type>& point2);
+  //: Return the squared distance between the points
   static Type distance_squared(const vgl_homg_point_3d<Type>& point1,
                                const vgl_homg_point_3d<Type>& point2);
+
+  //: True if the points are closer than Euclidean distance d.
+  static bool is_within_distance(const vgl_homg_point_3d<Type>& p1,
+                                 const vgl_homg_point_3d<Type>& p2, double d)
+  {
+    if (d <= 0) return false;
+    return distance_squared(p1, p2) < d*d;
+  }
 
   //: Get the square of the perpendicular distance to a plane.
   // This is just the homogeneous form of the familiar
@@ -126,14 +133,14 @@ class vgl_homg_operators_3d
   // In this implementation, a least-squares result is calculated when the
   // points are not exactly collinear.
 
-  static double cross_ratio(const vgl_homg_point_3d<Type >& p1,
-                            const vgl_homg_point_3d<Type >& p2,
-                            const vgl_homg_point_3d<Type >& p3,
-                            const vgl_homg_point_3d<Type >& p4);
-  static double cross_ratio(const vgl_homg_plane_3d<Type >& p1,
-                            const vgl_homg_plane_3d<Type >& p2,
-                            const vgl_homg_plane_3d<Type >& p3,
-                            const vgl_homg_plane_3d<Type >& p4);
+  static double cross_ratio(const vgl_homg_point_3d<Type>& p1,
+                            const vgl_homg_point_3d<Type>& p2,
+                            const vgl_homg_point_3d<Type>& p3,
+                            const vgl_homg_point_3d<Type>& p4);
+  static double cross_ratio(const vgl_homg_plane_3d<Type>& p1,
+                            const vgl_homg_plane_3d<Type>& p2,
+                            const vgl_homg_plane_3d<Type>& p3,
+                            const vgl_homg_plane_3d<Type>& p4);
 
   //: Conjugate point of three given collinear points.
   // If cross ratio cr is given (default: -1), the generalized conjugate point
@@ -144,28 +151,28 @@ class vgl_homg_operators_3d
                                            double cr = -1.0);
 
   //: compute most orthogonal vector with SVD
-  static vnl_vector<Type> most_orthogonal_vector_svd(const vcl_vector<vgl_homg_plane_3d<Type> >& planes);
+  static vnl_vector_fixed<Type,4> most_orthogonal_vector_svd(const vcl_vector<vgl_homg_plane_3d<Type> >& planes);
 };
 
 //: Homographic transformation of a 3D point through a 4x4 projective transformation matrix
-template <class T>
-vgl_homg_point_3d<T> operator*(vnl_matrix_fixed<T,4,4> const& m,
-                               vgl_homg_point_3d<T> const& p);
+template <class Type>
+vgl_homg_point_3d<Type> operator*(vnl_matrix_fixed<Type,4,4> const& m,
+                                  vgl_homg_point_3d<Type> const& p);
 
 //: Project a 3D point to 2D through a 3x4 projective transformation matrix
-template <class T>
-vgl_homg_point_2d<T> operator*(vnl_matrix_fixed<T,3,4> const& m,
-                               vgl_homg_point_3d<T> const& p);
+template <class Type>
+vgl_homg_point_2d<Type> operator*(vnl_matrix_fixed<Type,3,4> const& m,
+                                  vgl_homg_point_3d<Type> const& p);
 
 //: Homographic transformation of a 3D plane through a 4x4 projective transformation matrix
-template <class T>
-vgl_homg_plane_3d<T> operator*(vnl_matrix_fixed<T,4,4> const& m,
-                               vgl_homg_plane_3d<T> const& p);
+template <class Type>
+vgl_homg_plane_3d<Type> operator*(vnl_matrix_fixed<Type,4,4> const& m,
+                                  vgl_homg_plane_3d<Type> const& p);
 
 //: Backproject a 2D line through a 4x3 projective transformation matrix
-template <class T>
-vgl_homg_plane_3d<T> operator*(vnl_matrix_fixed<T,4,3> const& m,
-                               vgl_homg_line_2d<T> const& l);
+template <class Type>
+vgl_homg_plane_3d<Type> operator*(vnl_matrix_fixed<Type,4,3> const& m,
+                                  vgl_homg_line_2d<Type> const& l);
 
 #define VGL_HOMG_OPERATORS_3D_INSTANTIATE(T) \
         "Please #include <vgl/algo/vgl_homg_operators_3d.txx>"

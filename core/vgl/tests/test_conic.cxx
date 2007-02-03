@@ -8,7 +8,7 @@
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 #include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_vector.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_math.h>
 
 static inline double sqr(double x) { return x*x; }
@@ -117,8 +117,8 @@ static void test_conic()
   c = vgl_conic<double>(centre, 1,1, 0); // circle, centre (1,2), radius 1, orientation irrelevant.
   vcl_cout << c << '\n';
   TEST("conic is circle", c.real_type(), "real circle");
-  vnl_vector<double> v = vgl_homg_operators_2d<double>::get_vector(c);
-  TEST("get_vector", v.size()==6&&v[0]==1&&v[1]==0&&v[2]==1&&v[3]==-2&&v[4]==-4&&v[5]==4, true);
+  vnl_vector_fixed<double,6> v = vgl_homg_operators_2d<double>::get_vector(c);
+  TEST("get_vector", v[0]==1&&v[1]==0&&v[2]==1&&v[3]==-2&&v[4]==-4&&v[5]==4, true);
   cc = vgl_conic<double>(1,0,1,-2,-4,4); // idem, by equation
   TEST("circle equality", c, cc);
   vgl_homg_point_2d<double> npt(0,2,1);
@@ -172,7 +172,7 @@ static void test_conic()
   // Test ellipse geometry for an ellipse a = 2, b = 1 at 45 degrees
   // centered at (1, 2);
 
-  vcl_cout << "Test ellipse geometry \n";
+  vcl_cout << "Test ellipse geometry\n";
   vgl_conic<double> cg(0.492577, -0.591093, 0.492577, 0.197032, -1.37921, 0.492813);
   double xc, yc, major_axis, minor_axis, angle;
   bool good = cg.ellipse_geometry(xc, yc, major_axis, minor_axis, angle);

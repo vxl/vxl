@@ -11,8 +11,9 @@
 #include <vcl_cmath.h> // for vcl_sqrt(), vcl_acos()
 #include <vcl_cassert.h>
 
-#include <vnl/vnl_matrix.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
+#include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_svd.h>
 
 #include <vgl/vgl_homg_point_3d.h>
@@ -37,11 +38,6 @@ double vgl_homg_operators_3d<Type>::angle_between_oriented_lines(const vgl_homg_
   return vcl_acos(n);
 }
 
-
-//-----------------------------------------------------------------------------
-
-//: Return the squared distance between the points
-//
 template <class Type>
 Type vgl_homg_operators_3d<Type>::distance_squared(const vgl_homg_point_3d<Type>& point1,
                                                    const vgl_homg_point_3d<Type>& point2)
@@ -81,14 +77,11 @@ vgl_homg_point_3d<Type> vgl_homg_operators_3d<Type>::intersect_line_and_plane(
                                   const vgl_homg_line_3d &line,
                                   const vgl_homg_plane_3d<Type>& plane)
 {
-  //
   // use P.(S + lambda D) = 0 to find lambda, and hence a point on the plane.
 
-  // TODO should have methods for DoubleVector from a point
-
-  const vnl_vector<Type> x1 = get_vector(line.point_finite());
-  const vnl_vector<Type> x2 = get_vector(line.point_infinite());
-  const vnl_vector<Type>  p = get_vector(plane);
+  const vnl_vector_fixed<Type,4> x1 = get_vector(line.point_finite());
+  const vnl_vector_fixed<Type,4> x2 = get_vector(line.point_infinite());
+  const vnl_vector_fixed<Type,4>  p = get_vector(plane);
 
   // FIXME: this works for double and smaller, but not complex. it might happen.
 
@@ -104,7 +97,7 @@ vgl_homg_point_3d<Type> vgl_homg_operators_3d<Type>::intersect_line_and_plane(
   numerator *= scale;
   denominator *= scale;
 
-  vnl_vector<Type> r = x1 * Type(denominator) + x2 * Type(numerator);
+  vnl_vector_fixed<Type,4> r = x1 * Type(denominator) + x2 * Type(numerator);
   return vgl_homg_point_3d<Type>(r[0], r[1], r[2], r[3]);
 }
 
@@ -229,12 +222,12 @@ vgl_homg_operators_3d<Type>::planes_to_line(const vgl_homg_plane_3d<Type>& plane
                                             const vgl_homg_plane_3d<Type>& plane2)
 {
   // TODO need equivalent of get_vector
-  vnl_matrix<Type> M(2,4);
+  vnl_matrix_fixed<Type,2,4> M;
   M.set_row(0, get_vector(plane1));
   M.set_row(1, get_vector(plane2));
-  vnl_svd<Type> svd(M);
+  vnl_svd<Type> svd(M.as_ref());
   M = svd.nullspace(2);
-  vnl_vector<Type> r = M.get_column(0);
+  vnl_vector_fixed<Type,4> r = M.get_column(0);
   vgl_homg_point_3d<Type> p1(r[0], r[1], r[2], r[3]);
   r = M.get_column(1);
   vgl_homg_point_3d<Type> p2(r[0], r[1], r[2], r[3]);
@@ -343,9 +336,10 @@ vgl_homg_point_3d<Type>
 vgl_homg_operators_3d<Type>::intersection(const vcl_vector<vgl_homg_plane_3d<Type> >& planes)
 {
   int n = planes.size();
-  vnl_matrix<Type> A(planes.size(), 4);
+  assert(n >= 3);
+  vnl_matrix<Type> A(n, 4);
 
-  for (int i =0; i < n; ++i) {
+  for (int i=0; i<n; ++i) {
     A(i,0) = planes[i].nx();
     A(i,1) = planes[i].ny();
     A(i,2) = planes[i].nz();
@@ -358,31 +352,15 @@ vgl_homg_operators_3d<Type>::intersection(const vcl_vector<vgl_homg_plane_3d<Typ
 
 
 template <class Type>
-vnl_vector<Type> vgl_homg_operators_3d<Type>::get_vector(vgl_homg_point_3d<Type> const& p)
+vnl_vector_fixed<Type,4> vgl_homg_operators_3d<Type>::get_vector(vgl_homg_point_3d<Type> const& p)
 {
-  // make a vnl_vector for the point p
-
-  vnl_vector<Type> v(4);
-  v.put(0,p.x());
-  v.put(1,p.y());
-  v.put(2,p.z());
-  v.put(3,p.w());
-
-  return v;
+  return vnl_vector_fixed<Type,4>(p.x(),p.y(),p.z(),p.w());
 }
 
 template <class Type>
-vnl_vector<Type> vgl_homg_operators_3d<Type>::get_vector(vgl_homg_plane_3d<Type> const& p)
+vnl_vector_fixed<Type,4> vgl_homg_operators_3d<Type>::get_vector(vgl_homg_plane_3d<Type> const& p)
 {
-  // make a vnl_vector for the point p
-
-  vnl_vector<Type> v(4);
-  v.put(0,p.nx());
-  v.put(1,p.ny());
-  v.put(2,p.nz());
-  v.put(3,p.d());
-
-  return v;
+  return vnl_vector_fixed<Type,4>(p.nx(),p.ny(),p.nz(),p.d());
 }
 
 template <class Type>
@@ -424,7 +402,7 @@ vgl_homg_operators_3d<Type>::planes_to_point(const vcl_vector<vgl_homg_plane_3d<
 {
   assert(planes.size() >= 3);
 
-  vnl_vector<Type> mov = most_orthogonal_vector_svd(planes);
+  vnl_vector_fixed<Type,4> mov = most_orthogonal_vector_svd(planes);
   return vgl_homg_point_3d<Type>(mov[0], mov[1], mov[2], mov[3]);
 }
 
@@ -515,14 +493,14 @@ vgl_homg_operators_3d<T>::perp_dist_squared(const vgl_homg_point_3d<T>& point,
 }
 
 template <class T>
-vnl_vector<T>
+vnl_vector_fixed<T,4>
 vgl_homg_operators_3d<T>::most_orthogonal_vector_svd(const vcl_vector<vgl_homg_plane_3d<T> >& planes)
 {
   vnl_matrix<T> D(planes.size(), 4);
 
   typename vcl_vector<vgl_homg_plane_3d<T> >::const_iterator i = planes.begin();
   for (unsigned j = 0; i != planes.end(); ++i,++j)
-    D.set_row(j, get_vector(*i));
+    D.set_row(j, get_vector(*i).as_ref());
 
   vnl_svd<T> svd(D);
   return svd.nullvector();

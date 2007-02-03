@@ -17,7 +17,7 @@
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_homg.h>
 
-#include <vnl/vnl_vector.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_math.h>
@@ -46,8 +46,8 @@ inline static vgl_homg_point_2d<T> cross(const vgl_homg_line_2d<T>& l1,
 }
 
 template <class T>
-inline static double dot(vgl_homg_line_2d<T> const& l,
-                         vgl_homg_point_2d<T> const& p)
+inline static T dot(vgl_homg_line_2d<T> const& l,
+                    vgl_homg_point_2d<T> const& p)
 {
   return l.a()*p.x() + l.b()*p.y() + l.c()*p.w();
 }
@@ -55,37 +55,21 @@ inline static double dot(vgl_homg_line_2d<T> const& l,
 //-----------------------------------------------------------------------------
 
 template <class T>
-vnl_vector<T> vgl_homg_operators_2d<T>::get_vector(vgl_homg_point_2d<T> const& p)
+vnl_vector_fixed<T,3> vgl_homg_operators_2d<T>::get_vector(vgl_homg_point_2d<T> const& p)
 {
-  // make a vnl_vector for the point p
-
-  vnl_vector<T> v(3);
-  v.put(0,p.x());
-  v.put(1,p.y());
-  v.put(2,p.w());
-
-  return v;
+  return vnl_vector_fixed<T,3>(p.x(),p.y(),p.w());
 }
 
 template <class T>
-vnl_vector<T> vgl_homg_operators_2d<T>::get_vector(vgl_homg_line_2d<T> const& l)
+vnl_vector_fixed<T,3> vgl_homg_operators_2d<T>::get_vector(vgl_homg_line_2d<T> const& l)
 {
-  // make a vnl_vector for the line l
-
-  vnl_vector<T> v(3);
-  v.put(0,l.a());
-  v.put(1,l.b());
-  v.put(2,l.c());
-
-  return v;
+  return vnl_vector_fixed<T,3>(l.a(),l.b(),l.c());
 }
 
 template <class T>
-vnl_vector<T> vgl_homg_operators_2d<T>::get_vector(vgl_conic<T> const& c)
+vnl_vector_fixed<T,6> vgl_homg_operators_2d<T>::get_vector(vgl_conic<T> const& c)
 {
-  // make a vnl_vector for the conic c
-
-  vnl_vector<T> v(6);
+  vnl_vector_fixed<T,6> v;
   v.put(0,c.a());
   v.put(1,c.b());
   v.put(2,c.c());
@@ -113,24 +97,28 @@ void vgl_homg_operators_2d<T>::unitize(vgl_homg_point_2d<T>& a)
 
 //  DISTANCE MEASUREMENTS IN EUCLIDEAN COORDINATES
 
-//: Get the square of the 2D distance between the two points.
 template <class T>
-double
+T
+distance(const vgl_homg_point_2d<T>& point1,
+         const vgl_homg_point_2d<T>& point2)
+{
+  return vcl_sqrt(vgl_homg_operators_2d<T>::distance_squared(point1,point2));
+}
+
+template <class T>
+T
 vgl_homg_operators_2d<T>::distance_squared(const vgl_homg_point_2d<T>& p1,
                                            const vgl_homg_point_2d<T>& p2)
 {
-  if (p1 == p2) return 0.0; // quick return if possible
+  if (p1 == p2) return T(0); // quick return if possible
 
   if (p1.w() == 0 || p2.w() == 0) {
     vcl_cerr << "vgl_homg_operators_2d<T>::distance_squared() -- point at infinity\n";
     return vcl_numeric_limits<T>::infinity();
   }
 
-  double scale1 = 1.0/p1.w();
-  double scale2 = 1.0/p2.w();
-
-  return vnl_math_sqr (p1.x() * scale1 - p2.x() * scale2) +
-         vnl_math_sqr (p1.y() * scale1 - p2.y() * scale2);
+  return vnl_math_sqr (p1.x() / p1.w() - p2.x() / p2.w()) +
+         vnl_math_sqr (p1.y() / p1.w() - p2.y() / p2.w());
 }
 
 //: Get the square of the perpendicular distance to a line.
@@ -140,7 +128,7 @@ vgl_homg_operators_2d<T>::distance_squared(const vgl_homg_point_2d<T>& p1,
 // If either the point or the line are at infinity an error message is
 // printed and vgl_homg::infinity is returned.
 template <class T>
-double
+T
 vgl_homg_operators_2d<T>::perp_dist_squared(const vgl_homg_point_2d<T>& point,
                                             const vgl_homg_line_2d<T>& line)
 {
@@ -149,9 +137,9 @@ vgl_homg_operators_2d<T>::perp_dist_squared(const vgl_homg_point_2d<T>& point,
     return vgl_homg<T>::infinity;
   }
 
-  double numerator = vnl_math_sqr (dot(line,point) / point.w());
-  if (numerator == 0) return 0.0; // efficiency
-  double denominator = line.a()*line.a() + line.b()*line.b();
+  T numerator = vnl_math_sqr (dot(line,point) / point.w());
+  if (numerator == 0) return T(0); // efficiency
+  T denominator = line.a()*line.a() + line.b()*line.b();
 
   return numerator / denominator;
 }
@@ -295,7 +283,7 @@ vgl_homg_operators_2d<T>::midpoint(const vgl_homg_point_2d<T>& p1,
 
 // - Kanatani sect 2.2.2.
 template <class T>
-vnl_vector<T>
+vnl_vector_fixed<T,3>
 vgl_homg_operators_2d<T>::most_orthogonal_vector(const vcl_vector<vgl_homg_line_2d<T> >& inpoints)
 {
   vnl_scatter_3x3<T> scatter_matrix;
@@ -304,20 +292,20 @@ vgl_homg_operators_2d<T>::most_orthogonal_vector(const vcl_vector<vgl_homg_line_
        i != inpoints.end(); ++i)
     scatter_matrix.add_outer_product(get_vector(*i));
 
-  return scatter_matrix.minimum_eigenvector().as_ref();
+  return scatter_matrix.minimum_eigenvector();
 }
 
 #include <vnl/algo/vnl_svd.h>
 
 template <class T>
-vnl_vector<T>
+vnl_vector_fixed<T,3>
 vgl_homg_operators_2d<T>::most_orthogonal_vector_svd(const vcl_vector<vgl_homg_line_2d<T> >& lines)
 {
   vnl_matrix<T> D(lines.size(), 3);
 
   typename vcl_vector<vgl_homg_line_2d<T> >::const_iterator i = lines.begin();
   for (unsigned j = 0; i != lines.end(); ++i,++j)
-    D.set_row(j, get_vector(*i));
+    D.set_row(j, get_vector(*i).as_ref());
 
   vnl_svd<T> svd(D);
 #ifdef DEBUG
@@ -341,9 +329,9 @@ vgl_homg_operators_2d<T>::lines_to_point(const vcl_vector<vgl_homg_line_2d<T> >&
   assert(lines.size() >= 2);
 
 #ifdef VGL_HOMG_OPERATORS_2D_LINES_TO_POINT_USE_SVD
-  vnl_vector<T> mov = most_orthogonal_vector_svd(lines);
+  vnl_vector_fixed<T,3> mov = most_orthogonal_vector_svd(lines);
 #else
-  vnl_vector<T> mov = most_orthogonal_vector(lines);
+  vnl_vector_fixed<T,3> mov = most_orthogonal_vector(lines);
 #endif
   return vgl_homg_point_2d<T>(mov[0], mov[1], mov[2]);
 }
@@ -469,8 +457,9 @@ vgl_homg_operators_2d<T>::do_intersect(vgl_conic<T> const& c1,
 {
   if (c1==c2)
   {
-    vcl_cerr << __FILE__ << "Warning: the intersection of two identical conics"
-             << " is not a finite set of points.\nReturning an empty list.\n";
+    vcl_cerr << __FILE__
+             << "Warning: the intersection of two identical conics is not a finite set of points.\n"
+             << "Returning an empty list.\n";
     return vcl_list<vgl_homg_point_2d<T> >();
   }
   T A=c1.a(),B=c1.b(),C=c1.c(),D=c1.d(),E=c1.e(),F=c1.f();
@@ -493,7 +482,7 @@ vgl_homg_operators_2d<T>::do_intersect(vgl_conic<T> const& c1,
   if (ab==0 && ae==0)
     return intersection(c1,vgl_conic<T>(0,0,ac,ad,0,af));
 
-  vnl_vector<T> coef(5,0);
+  vnl_vector_fixed<T,5> coef;
   coef(0) = ac*ac-ab*(b*C-B*c);
   coef(1) = 2*ac*ae-ab*(b*E-B*e)-BD*(a*C+A*c)+2*A*b*C*d+2*a*B*c*D;
   coef(2) = ae*ae-ab*(b*F-B*f)+ad*(c*D-C*d)-BD*(a*E+A*e)+2*a*B*e*D+2*A*b*E*d+2*ac*af;
@@ -810,11 +799,11 @@ vgl_homg_operators_2d<T>::closest_point(vgl_conic<T> const& c,
 
   // And find the intersection point closest to the given location:
   vgl_homg_point_2d<T> p = candidates.front();
-  double dist = vgl_homg<double>::infinity;
+  T dist = vgl_homg<T>::infinity;
   typename vcl_list<vgl_homg_point_2d<T> >::iterator it = candidates.begin();
   for (; it != candidates.end(); ++it) {
     if ((*it).w() == 0) continue;
-    double d = vgl_homg_operators_2d<T>::distance_squared(*it,pt);
+    T d = vgl_homg_operators_2d<T>::distance_squared(*it,pt);
     if (d < dist) { p = (*it); dist = d; }
   }
   return p;

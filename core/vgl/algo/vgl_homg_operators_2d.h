@@ -1,6 +1,6 @@
 // This is core/vgl/algo/vgl_homg_operators_2d.h
-#ifndef vgl_homg_operations_2d_h
-#define vgl_homg_operations_2d_h
+#ifndef vgl_homg_operators_2d_h_
+#define vgl_homg_operators_2d_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
@@ -18,6 +18,7 @@
 //    5-Oct-01 Peter Vanroose - added compute_bounding_box functions
 //   15-May-03 Peter Vanroose - added implementation for closest_point()
 //   22-Jun-03 Peter Vanroose - vcl_list replaced by vcl_vector in lines_to_point
+//    3-Feb-07 Peter Vanroose - changed vnl_vector to vnl_vector_fixed
 // \endverbatim
 
 #include <vcl_list.h>
@@ -30,14 +31,14 @@ template <class T>
 class vgl_homg_operators_2d
 {
  public:
-  //: get a vnl_vector representation of a homogeneous object
-  static vnl_vector<T> get_vector(vgl_homg_point_2d<T> const& p);
+  //: get a vnl_vector_fixed representation of a homogeneous object
+  static vnl_vector_fixed<T,3> get_vector(vgl_homg_point_2d<T> const& p);
 
-  //: get a vnl_vector representation of a homogeneous object
-  static vnl_vector<T> get_vector(vgl_homg_line_2d<T> const& l);
+  //: get a vnl_vector_fixed representation of a homogeneous object
+  static vnl_vector_fixed<T,3> get_vector(vgl_homg_line_2d<T> const& l);
 
-  //: get a vnl_vector representation of a homogeneous object
-  static vnl_vector<T> get_vector(vgl_conic<T> const& c);
+  //: get a vnl_vector_fixed representation of a homogeneous object
+  static vnl_vector_fixed<T,6> get_vector(vgl_conic<T> const& c);
 
   //: Normalize vgl_homg_point_2d<T> to unit magnitude
   static void unitize(vgl_homg_point_2d<T>& a);
@@ -48,8 +49,13 @@ class vgl_homg_operators_2d
   static double abs_angle(const vgl_homg_line_2d<T>& line1,
                           const vgl_homg_line_2d<T>& line2);
 
+  //: Get the 2D distance between the two points.
+  static T distance(const vgl_homg_point_2d<T>& point1,
+                    const vgl_homg_point_2d<T>& point2);
+
   //: Get the square of the 2D distance between the two points.
-  static double distance_squared(const vgl_homg_point_2d<T>& point1, const vgl_homg_point_2d<T>& point2);
+  static T distance_squared(const vgl_homg_point_2d<T>& point1,
+                            const vgl_homg_point_2d<T>& point2);
 
   //: Get the square of the perpendicular distance to a line.
   // This is just the homogeneous form of the familiar
@@ -57,16 +63,17 @@ class vgl_homg_operators_2d
   // \[ d = \frac{(l^\top p)}{p_z\sqrt{l_x^2 + l_y^2}} \]
   // If either the point or the line are at infinity an error message is
   // printed and Homg::infinity is returned.
-  static double perp_dist_squared(const vgl_homg_point_2d<T>& point,
-                                  const vgl_homg_line_2d<T>& line);
-  static double perp_dist_squared(const vgl_homg_line_2d<T>& line,
-                                  const vgl_homg_point_2d<T>& point)
+  static T perp_dist_squared(const vgl_homg_point_2d<T>& point,
+                             const vgl_homg_line_2d<T>& line);
+  static T perp_dist_squared(const vgl_homg_line_2d<T>& line,
+                             const vgl_homg_point_2d<T>& point)
   { return perp_dist_squared(point, line); }
 
   //: True if the points are closer than Euclidean distance d.
   static bool is_within_distance(const vgl_homg_point_2d<T>& p1,
                                  const vgl_homg_point_2d<T>& p2, double d)
   {
+    if (d <= 0) return false;
     return distance_squared(p1, p2) < d*d;
   }
 
@@ -78,9 +85,8 @@ class vgl_homg_operators_2d
                                   const vgl_homg_point_2d<T>& point2);
 
   //: Get the line through two points (the cross-product).
-  // In this case, we assume
-  // that the points are oriented, and ensure the cross is computed with positive point
-  // omegas.
+  // In this case, we assume that the points are oriented,
+  // and ensure the cross is computed with positive point omegas.
   static vgl_homg_line_2d<T> join_oriented(const vgl_homg_point_2d<T>& point1,
                                            const vgl_homg_point_2d<T>& point2);
 
@@ -130,9 +136,10 @@ class vgl_homg_operators_2d
   // In this implementation, a least-squares result is calculated when the
   // points are not exactly collinear.
   //
-
-  static double cross_ratio(const vgl_homg_point_2d<T>& p1, const vgl_homg_point_2d<T>& p2,
-                            const vgl_homg_point_2d<T>& p3, const vgl_homg_point_2d<T>& p4);
+  static double cross_ratio(const vgl_homg_point_2d<T>& p1,
+                            const vgl_homg_point_2d<T>& p2,
+                            const vgl_homg_point_2d<T>& p3,
+                            const vgl_homg_point_2d<T>& p4);
 
   //: Conjugate point of three given collinear points.
   // If cross ratio cr is given (default: -1), the generalized conjugate point
@@ -143,10 +150,10 @@ class vgl_homg_operators_2d
                                         double cr = -1.0);
 
   //: compute most orthogonal vector with vnl_symmetric_eigensystem
-  static vnl_vector<T> most_orthogonal_vector(const vcl_vector<vgl_homg_line_2d<T> >& lines);
+  static vnl_vector_fixed<T,3> most_orthogonal_vector(const vcl_vector<vgl_homg_line_2d<T> >& lines);
 
   //: compute most orthogonal vector with SVD
-  static vnl_vector<T> most_orthogonal_vector_svd(const vcl_vector<vgl_homg_line_2d<T> >& lines);
+  static vnl_vector_fixed<T,3> most_orthogonal_vector_svd(const vcl_vector<vgl_homg_line_2d<T> >& lines);
 
   // coefficient <-> conic matrix conversion -------------------------
   static vgl_conic<T> vgl_conic_from_matrix(vnl_matrix_fixed<T,3,3> const& mat);
@@ -182,7 +189,7 @@ class vgl_homg_operators_2d
                                             vgl_point_2d<T> const& p);
 
   //: Return the shortest squared distance between the conic and the point
-  inline static double distance_squared(vgl_conic<T> const& c,
+  inline static T distance_squared(vgl_conic<T> const& c,
                                         vgl_homg_point_2d<T> const& p) {
     return distance_squared(closest_point(c,p), p);
   }
@@ -208,7 +215,7 @@ template <class T>
 vgl_homg_line_2d<T> operator*(vnl_matrix_fixed<T,3,3> const& m,
                               vgl_homg_line_2d<T> const& p);
 
-#define VGL_HOMG_OPERATORS_1D_INSTANTIATE(T) \
-        "Please #include <vgl/algo/vgl_homg_operators_1d.txx>"
+#define VGL_HOMG_OPERATORS_2D_INSTANTIATE(T) \
+        "Please #include <vgl/algo/vgl_homg_operators_2d.txx>"
 
-#endif // vgl_homg_operations_2d_h
+#endif // vgl_homg_operators_2d_h_
