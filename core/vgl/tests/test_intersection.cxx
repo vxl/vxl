@@ -12,9 +12,9 @@
 
 static void test_box_intersection()
 {
-  vgl_point_3d<double> min1(10,10,10), max1(20,20,20), 
-    min2(40,40,40), max2(50,50,50),
-    min3(45,45,45), max3(55,55,55);
+  vgl_point_3d<double> min1(10,10,10), max1(20,20,20),
+                       min2(40,40,40), max2(50,50,50),
+                       min3(45,45,45), max3(55,55,55);
 
   vgl_box_3d<double> box1(min1, max1);
   vgl_box_3d<double> box2(min2, max2);
@@ -26,9 +26,8 @@ static void test_box_intersection()
 
   //intersection case
   vgl_box_3d<double> i2 = intersect(box2, box3);
-  TEST("intersection(box2, box3) = true", false, i2.is_empty());  
-  TEST("intersection(box2, box3) volume", 125.0, i2.volume()); 
-
+  TEST("intersection(box2, box3) = true", false, i2.is_empty());
+  TEST("intersection(box2, box3) volume", 125.0, i2.volume());
 }
 
 static void test_plane_intersection()
@@ -64,13 +63,12 @@ static void test_three_planes()
 
 void test_intersection()
 {
-  vcl_cout << "********************************\n"
-           << "  Testing vgl_intersection\n"
-           << "********************************\n\n";
+  vcl_cout << "**************************\n"
+           << " Testing vgl_intersection\n"
+           << "**************************\n\n";
   test_box_intersection();
   test_plane_intersection();
   test_three_planes();
 }
-
 
 TESTMAIN(test_intersection);
