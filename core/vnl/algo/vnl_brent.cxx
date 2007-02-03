@@ -10,95 +10,96 @@
 #include <vcl_algorithm.h>
 
 #include <vnl/vnl_math.h>
-#include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_vector.h>
+
+static const int NRITERATIONS = 100;
+static const double GLIMIT = 100.0;
+static const double GOLDEN_RATIO = 1.618033988749894848; // = 0.5*(vcl_sqrt(5)-1);
+static const double COMPL_GOLD   = 0.381966011250105152; // = 0.5*(3-vcl_sqrt(5));
+static const double EPSILON = 1e-10;
+static const double EPSQ = EPSILON * EPSILON;
 
 struct vnl_brent_data
 {
+  vnl_vector<double> vx;
   vnl_cost_function* functor;
-  vnl_vector_fixed<double,1> vx;
-  double tol;
 
   double f(double x) {
     vx[0] = x;
-    return functor->f(vx.as_ref());
+    return functor->f(vx);
   }
 };
 
 vnl_brent::vnl_brent(vnl_cost_function* functor)
 {
-  p = new vnl_brent_data;
-  p->functor = functor;
-  p->tol = 2.0e-4;
+  data_ = new vnl_brent_data;
+  data_->vx = vnl_vector<double>(1U);
+  data_->functor = functor;
+  set_f_tolerance(2e-4);
 }
 
 vnl_brent::~vnl_brent()
 {
-  delete p;
+  delete data_;
 }
 
-static const int ITMAX = 100;
-static const double CGOLD = 0.3819660;
-static const double ZEPS = 1.0e-10;
-
 static
-void SHFT(double* a, double* b, double* c, double d)
+void SHFT(double& a, double& b, double& c, double d)
 {
-  *a = *b;
-  *b = *c;
-  *c = d;
+  a = b;
+  b = c;
+  c = d;
 }
 
 double vnl_brent::minimize_given_bounds(double ax, double bx, double cx,
                                         double tol,
                                         double *xmin)
 {
-  int iter;
-  double a,b,d=0.0,etemp,fu,fv,fw,fx,p1,q,r,tol1,tol2,u,v,w,x,xm;
-  double e=0.0;
-
-  a=(ax < cx ? ax : cx);
-  b=(ax > cx ? ax : cx);
+  double d=0.0,e=0.0,prev_e,fu,fv,fw,fx,p,q,r,tol1,tol2,u,v,w,x,xm;
+  double minac=(ax < cx ? ax : cx);
+  double maxac=(ax > cx ? ax : cx);
   x=w=v=bx;
-  fw=fv=fx=p->f(x);
-  if (verbose_) vcl_cerr << "vnl_brent f("<<x<<") \t= "<<fx <<'\n';
-  for (iter=1;iter<=ITMAX;iter++)
+  fw=fv=fx=data_->f(x);
+  if (verbose_) vcl_cerr << "vnl_brent f("<<x<<")\t= "<<fx <<'\n';
+  for (int iter=0; iter<NRITERATIONS; ++iter)
   {
-    xm=0.5*(a+b);
-    tol1=tol*vcl_fabs(x)+ZEPS;
-    tol2=2.0*(tol1);
-    if (vcl_fabs(x-xm) <= (tol2-0.5*(b-a))) {
+    xm=0.5*(minac+maxac);
+    tol1=tol*vcl_fabs(x)+EPSILON;
+    tol2=2*tol1;
+    if (vcl_fabs(x-xm) <= (tol2-0.5*(maxac-minac))) {
       *xmin=x;
       return fx;
     }
-    if (vcl_fabs(e) > tol1) {
-      r=(x-w)*(fx-fv);
-      q=(x-v)*(fx-fw);
-      p1=(x-v)*q-(x-w)*r;
-      q=2.0*(q-r);
-      if (q > 0.0) p1 = -p1;
-      q=vcl_fabs(q);
-      etemp=e;
-      e=d; // Warning: The variable d has not yet been assigned a value.
-      if (vcl_fabs(p1) >= vcl_fabs(0.5*q*etemp) || p1 <= q*(a-x) || p1 >= q*(b-x))
-        d=CGOLD*(e=(x >= xm ? a-x : b-x));
+    if (vcl_fabs(e) > tol1)
+    {
+      r = (x-w)*(fx-fv);
+      q = (x-v)*(fx-fw);
+      p = (x-v)*q-(x-w)*r;
+      q = 2*(q-r);
+      if (q > 0.0) p *= -1;
+      else         q *= -1;
+      prev_e=e;
+      e=d;
+      if (vcl_fabs(p) >= vcl_fabs(0.5*q*prev_e) || p <= q*(minac-x) || p >= q*(maxac-x))
+        e = (x >= xm ? minac-x : maxac-x), d = COMPL_GOLD*e;
       else {
-        d=p1/q;
+        d=p/q;
         u=x+d;
-        if (u-a < tol2 || b-u < tol2)
+        if (u-minac < tol2 || maxac-u < tol2)
           d=tol1 * vnl_math_sgn(xm-x);
       }
-    } else {
-      d=CGOLD*(e=(x >= xm ? a-x : b-x));
     }
+    else
+      e = (x >= xm ? minac-x : maxac-x), d = COMPL_GOLD*e;
     u=(vcl_fabs(d) >= tol1 ? x+d : x + tol1 * vnl_math_sgn(d));
-    fu= p->f(u);
-    if (verbose_) vcl_cerr << "vnl_brent f("<<u<<") \t= "<<fu <<'\n';
+    fu= data_->f(u);
+    if (verbose_) vcl_cerr << "vnl_brent f("<<u<<")\t= "<<fu <<'\n';
     if (fu <= fx) {
-      if (u >= x) a=x; else b=x;
-      SHFT(&v,&w,&x,u);
-      SHFT(&fv,&fw,&fx,fu);
+      if (u >= x) minac=x; else maxac=x;
+      SHFT(v,w,x,u);
+      SHFT(fv,fw,fx,fu);
     } else {
-      if (u < x) a=u; else b=u;
+      if (u < x) minac=u; else maxac=u;
       if (fu <= fw || w == x) {
         v=w;
         w=u;
@@ -119,52 +120,51 @@ double vnl_brent::minimize_given_bounds_and_1st_f(double ax, double bx,
                                                   double fb, double cx,
                                                   double tol, double *xmin)
 {
-  int iter;
-  double a,b,d=0.0,etemp,fu,fv,fw,fx,p1,q,r,tol1,tol2,u,v,w,x,xm;
-  double e=0.0;
-
-  a=(ax < cx ? ax : cx);
-  b=(ax > cx ? ax : cx);
+  double d=0.0,e=0.0,prev_e,fu,fv,fw,fx,p,q,r,tol1,tol2,u,v,w,x,xm;
+  double minac=(ax < cx ? ax : cx);
+  double maxac=(ax > cx ? ax : cx);
   x=w=v=bx;
   fw=fv=fx=fb;
-  for (iter=1;iter<=ITMAX;iter++)
+  if (verbose_) vcl_cerr << "vnl_brent f("<<x<<")\t= "<<fx <<'\n';
+  for (int iter=0; iter<NRITERATIONS; ++iter)
   {
-    xm=0.5*(a+b);
-    tol1=tol*vcl_fabs(x)+ZEPS;
-    tol2=2.0*(tol1);
-    if (vcl_fabs(x-xm) <= (tol2-0.5*(b-a))) {
+    xm=0.5*(minac+maxac);
+    tol1=tol*vcl_fabs(x)+EPSILON;
+    tol2=2*(tol1);
+    if (vcl_fabs(x-xm) <= (tol2-0.5*(maxac-minac))) {
       *xmin=x;
       return fx;
     }
-    if (vcl_fabs(e) > tol1) {
-      r=(x-w)*(fx-fv);
-      q=(x-v)*(fx-fw);
-      p1=(x-v)*q-(x-w)*r;
-      q=2.0*(q-r);
-      if (q > 0.0) p1 = -p1;
-      q=vcl_fabs(q);
-      etemp=e;
-      e=d; // Warning: The variable d has not yet been assigned a value.
-      if (vcl_fabs(p1) >= vcl_fabs(0.5*q*etemp) || p1 <= q*(a-x) || p1 >= q*(b-x))
-        d=CGOLD*(e=(x >= xm ? a-x : b-x));
+    if (vcl_fabs(e) > tol1)
+    {
+      r = (x-w)*(fx-fv);
+      q = (x-v)*(fx-fw);
+      p = (x-v)*q-(x-w)*r;
+      q = 2*(q-r);
+      if (q > 0.0) p *= -1;
+      else         q *= -1;
+      prev_e=e;
+      e=d;
+      if (vcl_fabs(p) >= vcl_fabs(0.5*q*prev_e) || p <= q*(minac-x) || p >= q*(maxac-x))
+        e = (x >= xm ? minac-x : maxac-x), d = COMPL_GOLD*e;
       else {
-        d=p1/q;
+        d=p/q;
         u=x+d;
-        if (u-a < tol2 || b-u < tol2)
+        if (u-minac < tol2 || maxac-u < tol2)
           d=tol1 * vnl_math_sgn(xm-x);
       }
-    } else {
-      d=CGOLD*(e=(x >= xm ? a-x : b-x));
     }
+    else
+      e = (x >= xm ? minac-x : maxac-x), d = COMPL_GOLD*e;
     u=(vcl_fabs(d) >= tol1 ? x+d : x + tol1 * vnl_math_sgn(d));
-    fu= p->f(u);
-    if (verbose_) vcl_cerr << "vnl_brent f("<<u<<") \t= "<<fu <<'\n';
+    fu= data_->f(u);
+    if (verbose_) vcl_cerr << "vnl_brent f("<<u<<")\t= "<<fu <<'\n';
     if (fu <= fx) {
-      if (u >= x) a=x; else b=x;
-      SHFT(&v,&w,&x,u);
-      SHFT(&fv,&fw,&fx,fu);
+      if (u >= x) minac=x; else maxac=x;
+      SHFT(v,w,x,u);
+      SHFT(fv,fw,fx,fu);
     } else {
-      if (u < x) a=u; else b=u;
+      if (u < x) minac=u; else maxac=u;
       if (fu <= fw || w == x) {
         v=w;
         w=u;
@@ -188,34 +188,33 @@ void vnl_brent::bracket_minimum(double *ax, double *bx, double *cx)
   bracket_minimum(ax,bx,cx,&fa,&fb,&fc);
 }
 
-const double GOLD = 1.618034;
-const double GLIMIT = 100.0;
-const double TINY = 1.0e-20;
-
 void vnl_brent::bracket_minimum(double *ax, double *bx, double *cx,
                                 double *fa, double *fb, double *fc)
 {
   double ulim,u,r,q,fu;
 
-  *fa=p->f(*ax);
-  *fb=p->f(*bx);
+  *fa=data_->f(*ax);
+  *fb=data_->f(*bx);
   if (*fb > *fa) {
     vcl_swap(*ax, *bx);
     vcl_swap(*fa, *fb);
   }
-  *cx=(*bx)+GOLD*(*bx-*ax);
-  *fc=p->f(*cx);
+  *cx=(*bx)+GOLDEN_RATIO*(*bx-*ax);
+  *fc=data_->f(*cx);
   while (*fb > *fc) {
     r=(*bx-*ax)*(*fb-*fc);
     q=(*bx-*cx)*(*fb-*fa);
     double dq = q-r;
-    if (vcl_abs(dq) < TINY)
-      dq = vnl_math_sgn(dq) * TINY;
+    if (dq >= 0 && dq < EPSQ)
+      dq = EPSQ;
+    else if (dq < 0 && dq > -EPSQ)
+      dq = -EPSQ;
 
-    u=(*bx)-((*bx-*cx)*q-(*bx-*ax)*r)/(2.0*dq);
+    u=(*bx)-((*bx-*cx)*q-(*bx-*ax)*r)/(2*dq);
     ulim=(*bx)+GLIMIT*(*cx-*bx);
-    if ((*bx-u)*(u-*cx) > 0.0) {
-      fu=p->f(u);
+    if ((*bx-u)*(u-*cx) > 0.0)
+    {
+      fu=data_->f(u);
       if (fu < *fc) {
         *ax=(*bx);
         *bx=u;
@@ -227,24 +226,26 @@ void vnl_brent::bracket_minimum(double *ax, double *bx, double *cx,
         *fc=fu;
         return;
       }
-      u=(*cx)+GOLD*(*cx-*bx);
-      fu=p->f(u);
-    } else if ((*cx-u)*(u-ulim) > 0.0) {
-      fu=p->f(u);
-      if (fu < *fc) {
-        //SHFT(bx,cx,&u,*cx+GOLD*(*cx-*bx)); awf dumped -- c is useless
-        SHFT(bx,cx,&u,u+GOLD*(u-*cx));
-        SHFT(fb,fc,&fu,p->f(u));
-      }
-    } else if ((u-ulim)*(ulim-*cx) >= 0.0) {
-      u=ulim;
-      fu=p->f(u);
-    } else {
-      u=(*cx)+GOLD*(*cx-*bx);
-      fu=p->f(u);
+      u=(*cx)+GOLDEN_RATIO*(*cx-*bx);
+      fu=data_->f(u);
     }
-    SHFT(ax,bx,cx,u);
-    SHFT(fa,fb,fc,fu);
+    else if ((*cx-u)*(u-ulim) > 0.0) {
+      fu=data_->f(u);
+      if (fu < *fc) {
+        SHFT(*bx,*cx,u,u+GOLDEN_RATIO*(u-*cx));
+        SHFT(*fb,*fc,fu,data_->f(u));
+      }
+    }
+    else if ((u-ulim)*(ulim-*cx) >= 0.0) {
+      u=ulim;
+      fu=data_->f(u);
+    }
+    else {
+      u=(*cx)+GOLDEN_RATIO*(*cx-*bx);
+      fu=data_->f(u);
+    }
+    SHFT(*ax,*bx,*cx,u);
+    SHFT(*fa,*fb,*fc,fu);
   }
 }
 
