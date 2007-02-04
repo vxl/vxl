@@ -1,4 +1,4 @@
-// This is core/vgl/vgl_intersection.txx
+// This is core/vgl/algo/vgl_intersection.txx
 #ifndef vgl_intersection_txx_
 #define vgl_intersection_txx_
 //:
@@ -8,6 +8,7 @@
 #include "vgl_intersection.h"
 #include <vcl_algorithm.h>
 #include <vcl_limits.h>
+#include <vcl_cassert.h>
 
 #include <vgl/algo/vgl_homg_operators_3d.h>
 #include <vgl/vgl_line_3d_2_points.h>
@@ -74,7 +75,7 @@ vgl_point_3d<T> intersection(vgl_line_3d_2_points<T> const& line,
     // If the distance from a line endpoint to the plane is zero, coplanar
     if (vgl_distance(line.point1(), plane)==0.0)
       pt.set(inf,inf,inf);
-    else    
+    else
       pt.set(inf,0,0);
   }
   else
@@ -87,10 +88,9 @@ vgl_point_3d<T> intersection(vgl_line_3d_2_points<T> const& line,
 
     dir *= numer/denom;
     pt = line.point1() + dir;
-  }  
+  }
 
   return pt;
-
 }
 
 //: Return the intersection point of three planes.
@@ -99,7 +99,7 @@ template <class T>
 vgl_point_3d<T> intersection(const vgl_plane_3d<T>& p1,
                              const vgl_plane_3d<T>& p2,
                              const vgl_plane_3d<T>& p3)
-{  
+{
   vgl_point_3d<T> p(p1, p2, p3);
   return p;
 }
@@ -112,14 +112,15 @@ vgl_point_3d<T> intersection(const vcl_vector<vgl_plane_3d<T> >& p)
     planes.push_back(vgl_homg_plane_3d<T> (p[i]));
   }
 
-  return (vgl_homg_operators_3d<T>::intersection(planes));
+  return vgl_homg_operators_3d<T>::intersection(planes);
 }
 
 #undef VGL_INTERSECTION_INSTANTIATE
 #define VGL_INTERSECTION_INSTANTIATE(T) \
-template vgl_box_3d<T> intersect(vgl_box_3d<T> const&, vgl_box_3d<T> const&);\
-template vgl_point_3d<T> intersection(vgl_line_3d_2_points<T> const&,vgl_line_3d_2_points<T> const&);\
-template vgl_point_3d<T> intersection(vgl_line_3d_2_points<T> const&,vgl_plane_3d<T> const&);\
-template vgl_point_3d<T> intersection(const vgl_plane_3d<T>&,const vgl_plane_3d<T>&,const vgl_plane_3d<T>&);\
-template vgl_point_3d<T> intersection(const vcl_vector<vgl_plane_3d<T> >&)
+template vgl_box_3d<T > intersect(vgl_box_3d<T > const&, vgl_box_3d<T > const&);\
+template vgl_point_3d<T > intersection(vgl_line_3d_2_points<T > const&,vgl_line_3d_2_points<T > const&);\
+template vgl_point_3d<T > intersection(vgl_line_3d_2_points<T > const&,vgl_plane_3d<T > const&);\
+template vgl_point_3d<T > intersection(const vgl_plane_3d<T >&,const vgl_plane_3d<T >&,const vgl_plane_3d<T >&);\
+template vgl_point_3d<T > intersection(const vcl_vector<vgl_plane_3d<T > >&)
+
 #endif // vgl_intersection_txx_
