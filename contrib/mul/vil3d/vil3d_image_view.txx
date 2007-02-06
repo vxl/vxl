@@ -17,6 +17,7 @@
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vcl_ostream.h>
+#include <vcl_algorithm.h>
 #include <vil/vil_pixel_format.h>
 
 //=======================================================================
@@ -268,17 +269,25 @@ void vil3d_image_view<T>::set_to_memory(const T* top_left,
 template<class T>
 void vil3d_image_view<T>::fill(T value)
 {
-  T* plane = top_left_;
-  for (unsigned int p=0;p<nplanes_;++p,plane += planestep_)
+  if (is_contiguous())
+    if (value == 0)
+      memset(begin(), 0, this->size_bytes());
+    else
+      vcl_fill(begin(), end(), value);
+  else
   {
-    T* slice = plane;
-    for (unsigned int k=0;k<nk_;++k,slice += kstep_)
+    T* plane = top_left_;
+    for (unsigned int p=0;p<nplanes_;++p,plane += planestep_)
     {
-      T* row = slice;
-      for (unsigned int j=0;j<nj_;++j,row += jstep_)
+      T* slice = plane;
+      for (unsigned int k=0;k<nk_;++k,slice += kstep_)
       {
-        T* p = row;
-        for (unsigned int i=0;i<ni_;++i,p+=istep_) *p = value;
+        T* row = slice;
+        for (unsigned int j=0;j<nj_;++j,row += jstep_)
+        {
+          T* p = row;
+          for (unsigned int i=0;i<ni_;++i,p+=istep_) *p = value;
+        }
       }
     }
   }
