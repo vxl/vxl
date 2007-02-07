@@ -913,7 +913,7 @@ if (!vil_copy_deep(facr, bimgr))
 @end example
 Currently, the @code{tiff} file format and The National
 Image Transmission Format (@code{nitf}) image format provide a
-@code{vil_blocked_image_resource}, however the @code{nitf} format does not yet support writing.
+@code{vil_blocked_image_resource}, however the @code{nitf} format does not yet support writing. (NOTE THAT TIFF ONLY SUPPORTS BLOCK DIMENSIONS THAT ARE MULTIPLES OF 16.)
 
 
 @section Pyramid Images (Advanced Topic)
