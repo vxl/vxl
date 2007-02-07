@@ -107,10 +107,10 @@ class vil_tiff_image : public vil_blocked_image_resource
 
   //Block interface
 
-  //: Block size in columns
+  //: Block size in columns (must be a multiple of 16)
   virtual unsigned size_block_i() const;
 
-  //: Block size in rows
+  //: Block size in rows (must be a multiple of 16)
   virtual unsigned size_block_j() const;
 
   //: Number of blocks in image width
