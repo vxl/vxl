@@ -40,10 +40,11 @@ void vsl_b_read(vsl_b_istream &is, vgl_polygon<T> & p)
     for (unsigned int i=0;i<num_sheets;i++)
     {
       p.new_sheet();
-      int npoints;
+      typedef typename vgl_polygon<T>::sheet_t::size_type size_type;
+      size_type npoints;
       vsl_b_read(is, npoints);
       vgl_point_2d<T> point;
-      for (int j=0;j<npoints;j++)
+      for (size_type j=0;j<npoints;j++)
       {
         vsl_b_read(is, point);
         p.push_back(point);
