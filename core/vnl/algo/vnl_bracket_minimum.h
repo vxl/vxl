@@ -19,11 +19,14 @@
 //: Given initial values a and b, find bracket a<b<c s.t. f(a)>f(b)<f(c)
 //  Final function values at a,b,c stored in fa,fb,fc.
 //
-//  This does the simplest possible thing, taking steps of increasing
-//  size in the downhill direction.  More advanced versions might use
-//  parabolic prediction.
+//  The algorithm takes increasingly large steps in a downhill direction
+//  until it starts going up again.  To speed things up, it also fits
+//  a parabola to the last three points, which it uses to predict the
+//  possible minimum directly ( hopefully automatically choosing a
+//  sensible step size).
+//
 //  Note that there's currently nothing
-//  to stop it if supplied with a monotonic function - it will just continue
+//  to stop it if it is supplied with a monotonic function - it will just continue
 //  forever.
 void vnl_bracket_minimum(vnl_cost_function& f,
                         double& a, double& b, double& c,

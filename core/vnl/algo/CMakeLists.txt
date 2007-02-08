@@ -58,6 +58,7 @@ IF(NETLIB_FOUND)
     vnl_lsqr.cxx vnl_lsqr.h
     vnl_solve_qp.cxx vnl_solve_qp.h
     vnl_bracket_minimum.cxx vnl_bracket_minimum.h
+    vnl_brent_minimizer.cxx vnl_brent_minimizer.h
 
     # equation solvers
     vnl_rpoly_roots.cxx vnl_rpoly_roots.h
