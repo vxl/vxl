@@ -125,14 +125,6 @@ prefixed by '#' in CMake.
 # command is demonstrated in Example 2, in which a library is built,
 # but can also be used for executables.
 
-# Finally, we get to an actual CMake command.
-
-ADD_EXECUTABLE( foobar
-  defines.h
-  foo.cxx foo.h
-  bar.cxx bar.h
-)
-
 # If this executable is using libraries other than vcl, then an
 # INCLUDE_DIRECTORIES is needed so that include files will be found
 # (vcl is automatically included via the top level VXL CMakeLists.txt
@@ -154,6 +146,18 @@ INCLUDE_DIRECTORIES(
 # NO # INCLUDE_DIRECTORIES( $@{vxl_SOURCE_DIR@} )
 # NO # INCLUDE_DIRECTORIES( $@{GEL_INCLUDE_DIR@}/vsol )
 # NO # INCLUDE_DIRECTORIES( $@{vxl_SOURCE_DIR@}/contrib/gel/vsol )
+
+# Finally, we specify an actual executable. With recent versions of
+# CMake (2.x.y), the INCLUDE_DIRECTORIES, ADD_EXECUTABLE,
+# TARGET_LINK_LIBRARIES, and so on, are processed in order, so
+# INCLUDE_DIRECTORIES should come before the ADD_EXECUTABLE, and
+# TARGET_LINK_LIBRARIES should come after.
+
+ADD_EXECUTABLE( foobar
+  defines.h
+  foo.cxx foo.h
+  bar.cxx bar.h
+)
 
 # Indicate which VXL libraries foobar depends on with the
 # TARGET_LINK_LIBRARIES command.  Include each library that is
@@ -188,6 +192,10 @@ TARGET_LINK_LIBRARIES( foobar vnl_algo vul vil vcl )
 # it if it is.
 
 INCLUDE( $@{MODULE_PATH@}/FindZLIB.cmake )
+
+# As in Example 1, we will configure to include VXL header files.
+
+INCLUDE_DIRECTORIES( $@{VXLCORE_INCLUDE_DIR@} )
 
 # For this library the list of source files will be built up with SET
 # commands.  Before CMake 1.4 the SOURCE_FILES command was used for
@@ -224,6 +232,8 @@ AUX_SOURCE_DIRECTORY( Templates vfbl_sources )
 
 IF( ZLIB_FOUND )
   SET( vfbl_sources $@{vfbl_sources@} vfbl_zip.cxx )
+  INCLUDE_DIRECTORIES( $@{ZLIB_INCLUDE_DIR@} )
+  ADD_DEFINITIONS( $@{ZLIB_DEFINITIONS@})
 ENDIF( ZLIB_FOUND )
 
 # The ADD_LIBRARY command configures a new library.  The first
@@ -244,21 +254,17 @@ ADD_LIBRARY( vfbl $@{vfbl_sources@} )
 # files in the CMake CVS snapshot, but not available in the current
 # release of CMake.
 
-# The variable XXX_FOUND is set to "YES" if the package is available
-# and undefined or "NO" if it is not.  If the package is available,
-# XXX_INCLUDE_DIR and XXX_LIBRARIES variables are set, and you must
-# use them in INCLUDE_DIRECTORIES and TARGET_LINK_LIBRARIES commands
-# as shown below.
+# The variable XXX_FOUND is set to "YES" if the package is available and
+# undefined or "NO" if it is not.  If the package is available,
+# XXX_INCLUDE_DIR and XXX_LIBRARIES variables are set, and you must use
+# them in INCLUDE_DIRECTORIES command (above) and TARGET_LINK_LIBRARIES
+# command (below). Note the separation of the INCLUDE_DIRECTORIES from
+# the TARGET_LINK_LIBRARIES because newer releases of CMake process this
+# file in order.
 
 IF( ZLIB_FOUND )
-  INCLUDE_DIRECTORIES( $@{ZLIB_INCLUDE_DIR@} )
-  ADD_DEFINITIONS( $@{ZLIB_DEFINITIONS@})
   TARGET_LINK_LIBRARIES( vfbl $@{ZLIB_LIBRARIES@} )
 ENDIF( ZLIB_FOUND )
-
-# As in Example 1, we will configure to include VXL header files.
-
-INCLUDE_DIRECTORIES( $@{VXLCORE_INCLUDE_DIR@} )
 
 # Just as in Example 1, use the TARGET_LINK_LIBRARIES command to
 # specify each library that is directly used by this library.  CMake
@@ -268,6 +274,9 @@ INCLUDE_DIRECTORIES( $@{VXLCORE_INCLUDE_DIR@} )
 # for example, the vcl in the line below is unnecessary - using vul
 # and vil will ensure that vcl is used.  However, it is still a good
 # practice to specify vcl here is the library directly uses vcl.
+
+# Note that we could have two TARGET_LINK_LIBRARIES to the same
+# executable. This is okay: the dependencies are simply concatenated
 
 TARGET_LINK_LIBRARIES( vfbl vnl_algo vul vil vcl )
 
@@ -357,7 +366,6 @@ IF( VXL_VGUI_FOUND )
   SET( foo_sources $@{foo_sources@}
     foo_gui.cxx foo_gui.h
   )
-  TARGET_LINK_LIBRARIES( foo $@{VXL_VGUI_LIBRARIES@} )
 ENDIF( VXL_VGUI_FOUND )
 
 # If you want to directly use the mpeg2dec library that VXL chose to
@@ -370,6 +378,21 @@ IF( VXL_MPEG2_FOUND )
   SET( foo_sources $@{foo_sources@}
     foo_video.cxx foo_video.h
   )
+ENDIF( VXL_MPEG2_FOUND )
+
+# Now that we know all the source components we'll use, we can actually
+# specify that the executable is to be built.
+
+ADD_EXECUTABLE( foo ${foo_sources} )
+
+# Finally, we need to specify the dependent libraries that are a result
+# of our choices to include or exclude various pieces of code.
+
+IF( VXL_VGUI_FOUND )
+  TARGET_LINK_LIBRARIES( foo $@{VXL_VGUI_LIBRARIES@} )
+ENDIF( VXL_VGUI_FOUND )
+
+IF( VXL_MPEG2_FOUND )
   TARGET_LINK_LIBRARIES( foo $@{VXL_MPEG2_LIBRARIES@} )
 ENDIF( VXL_MPEG2_FOUND )
 
