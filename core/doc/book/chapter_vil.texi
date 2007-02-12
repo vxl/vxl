@@ -569,7 +569,7 @@ void vil_image_view<T>::fill(T value)
   for (unsigned p=0;p<nplanes_;++p)
     for (unsigned j=0;j<nj_;++j)
       for (unsigned i=0;i<ni_;++i)
-        (*this)(i,j,p)= v;
+        (*this)(i,j,p)= value;
 @}
 @end example
 This implementation has the advantage of being simple, and easy to test.
