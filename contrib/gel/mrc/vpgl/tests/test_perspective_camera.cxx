@@ -7,6 +7,9 @@
 #include <vnl/vnl_double_3.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
+#include <vgl/vgl_line_3d_2_points.h>
+
+
 static void test_perspective_camera()
 {
     //Construct the camera
@@ -99,6 +102,32 @@ static void test_perspective_camera()
     P1 = vpgl_align_down( P0, P1 );
     TEST_NEAR( "testing align up/down:", 
       (P2.get_matrix()-P1.get_matrix()).frobenius_norm(), 0.0, .01 );
+  }
+
+  // Test finite backprojection.
+  {
+    vgl_h_matrix_3d<double> P0_R;
+    P0_R.set_identity();
+    P0_R.set_rotation_euler(.1,.4,-1);
+    vpgl_perspective_camera<double> P0;
+    P0.set_rotation_matrix( P0_R );
+    P0.set_camera_center( vgl_point_3d<double>( 1, 1, 1 ) );
+    P0.look_at( vgl_homg_point_3d<double>(0,0,0) );
+
+    bool all_succeeded = true;
+    for( int i = 0; i < 4; i++ ){
+      vgl_point_3d<double> p;
+      if( i == 0 ) p.set(0,0,0);
+      if( i == 1 ) p.set(-1,0,-1);
+      if( i == 2 ) p.set(-1,-1,0);
+      if( i == 3 ) p.set(0,-1,-1);
+      vgl_homg_point_2d<double> ip = P0.project( vgl_homg_point_3d<double>(p) );
+      vgl_line_3d_2_points<double> l =
+        P0.backproject( vgl_point_2d<double>( ip.x()/ip.w(), ip.y()/ip.w() ) );
+      all_succeeded = all_succeeded && parallel( l.point1()-p, l.point2()-p, .001 ) &&
+        !P0.is_behind_camera( vgl_homg_point_3d<double>( l.point2() ) );
+    }
+    TEST( "testing finite backprojection:", all_succeeded, true );
   }
 }
 

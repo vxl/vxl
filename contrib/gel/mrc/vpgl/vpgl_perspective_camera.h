@@ -12,6 +12,7 @@
 //  Modifications
 //   5/08/2005  Ricardo Fabbri  Added binary I/O support
 //   5/08/2005  Ricardo Fabbri  Added == operator
+//   2/8/2007  Thomas Pollard   Added finite backproject method.
 // \endverbatim
 
 
@@ -39,6 +40,11 @@
 //   [ 0 1 ]
 //  \endverbatim
 //
+// \verbatim
+//  Modifications
+//  2/12/2007  Thomas Pollard   Added finite backprojection method.
+// \endverbatim
+//
 //  For adding to this class:
 //
 //  Be sure to call recompute_matrix in your member functions any time you change any of the
@@ -65,6 +71,9 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   virtual vpgl_proj_camera<T>* clone(void) const;
+
+  //: Finite backprojection.
+  vgl_line_3d_2_points<T> backproject( const vgl_point_2d<T>& image_point ) const;
 
   //: Compute the principal axis.
   // i.e. the vector parallel to the image plane pointing towards the front of the camera.

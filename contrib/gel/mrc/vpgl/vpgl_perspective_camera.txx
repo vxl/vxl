@@ -6,6 +6,7 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_line_3d_2_points.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_det.h>
 #include <vnl/algo/vnl_qr.h>
@@ -61,6 +62,30 @@ vpgl_proj_camera<T>* vpgl_perspective_camera<T>::clone(void) const
 {
   return new vpgl_perspective_camera<T>(*this);
 }
+
+
+//------------------------------------
+template <class T>
+vgl_line_3d_2_points<T> vpgl_perspective_camera<T>::backproject(
+  const vgl_point_2d<T>& image_point ) const
+{    
+  // First find a point in front of the camera that projects to "image_point".
+  vnl_vector_fixed<T,4> vnl_wp = svd()->solve(
+    vnl_vector_fixed<T,3>( image_point.x(), image_point.y(), 1.0 ) );
+  vgl_homg_point_3d<T> wp_homg( vnl_wp[0], vnl_wp[1], vnl_wp[2], vnl_wp[3] ); 
+  vgl_point_3d<T> wp;
+  if( !wp_homg.ideal() )
+    wp.set( wp_homg.x()/wp_homg.w(), wp_homg.y()/wp_homg.w(), wp_homg.z()/wp_homg.w() );
+  else
+    wp.set( camera_center_.x()+wp_homg.x(), 
+      camera_center_.y()+wp_homg.y(), camera_center_.z()+wp_homg.z() );
+  if( is_behind_camera( vgl_homg_point_3d<T>( wp ) ) )
+    wp = camera_center_ + ( camera_center_-wp );
+
+  // The ray is then defined by that point and the camera center.
+  return vgl_line_3d_2_points<T>( camera_center_, wp );
+}
+
 
 //-------------------------------------------
 template <class T>
