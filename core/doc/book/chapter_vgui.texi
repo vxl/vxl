@@ -229,6 +229,7 @@ on the command line is shown in Figure 3.
 @example
 @cartouche
 #include <vcl_iostream.h>
+#include <vcl_algorithm.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
@@ -260,7 +261,7 @@ int main(int argc, char **argv)
 
   // Create a window, add the tableau and show it on screen.
   int width = image_tab1->width() + image_tab2->width();
-  int height = image_tab1->height() + image_tab2->height();
+  int height = vcl_max( image_tab1->height(), image_tab2->height() );
   return vgui::run(shell, width, height);
 @}
 @end cartouche
