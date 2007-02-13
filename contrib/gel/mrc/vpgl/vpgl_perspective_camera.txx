@@ -70,7 +70,7 @@ vgl_line_3d_2_points<T> vpgl_perspective_camera<T>::backproject(
   const vgl_point_2d<T>& image_point ) const
 {    
   // First find a point in front of the camera that projects to "image_point".
-  vnl_vector_fixed<T,4> vnl_wp = svd()->solve(
+  vnl_vector_fixed<T,4> vnl_wp = this->svd()->solve(
     vnl_vector_fixed<T,3>( image_point.x(), image_point.y(), 1.0 ) );
   vgl_homg_point_3d<T> wp_homg( vnl_wp[0], vnl_wp[1], vnl_wp[2], vnl_wp[3] ); 
   vgl_point_3d<T> wp;
