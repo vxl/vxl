@@ -6,6 +6,8 @@ effect.  If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
 
+        - vbl_shared_pointer updated to allow base class conversions
+
 ****************************
 VXL 1.7.0	- November 2006
 ****************************
