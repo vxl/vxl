@@ -9,13 +9,27 @@
 // \verbatim
 //  Modifications
 //   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
+//   13 Feb. 2007 Amitha Perera   Change implementation to allow base class conversions.
 // \endverbatim
 
 #include <vcl_compiler.h>
 
 #define vbl_shared_pointer_zero(var) (var) = 0
 
+
+struct vbl_shared_pointer_data
+{
+  int use_count; //!< number of shared_pointers using object.
+  vbl_shared_pointer_data(int u) : use_count(u) { }
+};
+
 //: Non-intrusive smart pointers
+//
+// If your compiler supports member templates, these pointers will
+// also work with base classes and derived classes, so that they work
+// very much like raw pointers. If you do this, make sure your
+// destructors are virtual (as you'd need to do for raw pointers
+// anyway).
 template <class T>
 class vbl_shared_pointer
 {
@@ -23,28 +37,57 @@ class vbl_shared_pointer
   typedef T element_type;
   typedef vbl_shared_pointer<T> self;
 
-  struct data_t
-  {
-    T *pointer;    //!< pointer to object.
-    int use_count; //!< number of shared_pointers using object.
-    data_t(T *p, int u) : pointer(p), use_count(u) { }
-  };
+  typedef vbl_shared_pointer_data data_t;
 
-  vbl_shared_pointer() : data(0) { }
+  vbl_shared_pointer() : pointer(0), count_data(0) { }
 
   explicit
   vbl_shared_pointer(T *p) {
-    if (p)
-      data = new data_t(p, 1);
-    else
-      data = 0;
+    if (p) {
+      pointer = p;
+      count_data = new data_t(1);
+    } else {
+      pointer = 0;
+      count_data = 0;
+    }
   }
 
-  vbl_shared_pointer(self const &that) {
-    data = that.data;
+  vbl_shared_pointer(self const &that)
+    : pointer( that.pointer ),
+      count_data( that.count_data )
+  {
     up_ref();
   }
 
+#if VCL_HAS_MEMBER_TEMPLATES
+  template<class U> friend class vbl_shared_pointer;
+
+  //: Construct using smart pointer to derived class.
+  template <class U>
+  explicit vbl_shared_pointer( vbl_shared_pointer<U> const &that )
+    : pointer( that.pointer ),
+      count_data( that.count_data )
+  {
+    up_ref();
+  }
+
+  template <class U>
+  self &operator=( vbl_shared_pointer<U> const &that) {
+    that.up_ref();
+    down_ref();
+    pointer = that.pointer;
+    count_data = that.count_data;
+    return *this;
+  }
+
+#endif
+
+#if 0
+  // Remove these convenience methods because they conflict with the
+  // base class conversion of the raw pointer. That is, we should be
+  // able to do
+  //    vbl_shared_pointer<base> p = new derived;
+  // but these overloads prevent that.
 #if VCL_HAS_MEMBER_TEMPLATES
   // if T has a constructor T::T(3, "foo") then it's nice
   // to be able to say
@@ -67,17 +110,18 @@ class vbl_shared_pointer
   explicit vbl_shared_pointer(V1 const &v1, V2 const &v2, V3 const &v3, V4 const &v4)
     : data(new data_t(new T(v1, v2, v3, v4), 1)) { }
 #endif
+#endif
 
   self &operator=(self const &that) {
     that.up_ref();
     down_ref();
-    data = that.data;
+    pointer = that.pointer;
+    count_data = that.count_data;
     return *this;
   }
 
   ~vbl_shared_pointer() {
     down_ref();
-    vbl_shared_pointer_zero(data);
   }
 
  private:
@@ -85,11 +129,11 @@ class vbl_shared_pointer
  public:
   // conversion to bool
   operator safe_bool () const
-    { return (data != 0)? VCL_SAFE_BOOL_TRUE : 0; }
+    { return (pointer != 0)? VCL_SAFE_BOOL_TRUE : 0; }
 
   // inverse conversion to bool
   bool operator!() const
-    { return (data != 0)? false : true; }
+    { return (pointer != 0)? false : true; }
 
   // conversion to pointer
 #if !defined VBL_SHARED_POINTER_OF_NON_COMPOUND // Get rid of warning with vbl_shared_pointer<int>
@@ -104,25 +148,26 @@ class vbl_shared_pointer
   T       &operator*() { return *as_pointer(); }
 
   // relational
-  bool operator==(self const &that) const { return data == that.data; }
-  bool operator< (self const &that) const { return data <  that.data; }
+  bool operator==(self const &that) const { return pointer == that.pointer; }
+  bool operator< (self const &that) const { return pointer <  that.pointer; }
 
   // use these if you like, but at your own risk.
   T *as_pointer() const {
-    return data ? data->pointer : 0;
+    return pointer;
   }
   void up_ref() const {
-    if (data)
-      ++ data->use_count;
+    if (count_data)
+      ++ count_data->use_count;
   }
   void down_ref() const {
-    if (data && (-- data->use_count == 0)) {
-      delete data->pointer;
-      delete data;
+    if (count_data && (-- count_data->use_count == 0)) {
+      delete pointer;
+      delete count_data;
     }
   }
  private:
-  data_t *data;
+  T *pointer;    //!< pointer to object.
+  data_t *count_data;
 };
 
 #define VBL_SHARED_POINTER_INSTANTIATE(T) // template class vbl_shared_pointer<T >
