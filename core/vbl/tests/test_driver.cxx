@@ -11,6 +11,7 @@ DECLARE(vbl_test_sparse_array_3d);
 DECLARE(vbl_test_smart_ptr);
 DECLARE(vbl_test_ref_count);
 DECLARE(vbl_test_scoped_ptr);
+DECLARE(vbl_test_shared_pointer);
 
 void
 register_tests()
@@ -26,6 +27,7 @@ register_tests()
   REGISTER(vbl_test_smart_ptr);
   REGISTER(vbl_test_ref_count);
   REGISTER(vbl_test_scoped_ptr);
+  REGISTER(vbl_test_shared_pointer);
 }
 
 DEFINE_MAIN;
