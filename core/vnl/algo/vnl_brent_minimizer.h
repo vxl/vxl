@@ -86,7 +86,7 @@ class vnl_brent_minimizer : public vnl_nonlinear_minimizer
   // and the known value at b (fb=f(b)).
   // The tolerance can be set using prior call to set_x_tolerance(tol).
   // Use f_at_last_minimum() to get function evaluation at the returned minima.
-  double vnl_brent_minimizer::minimize_given_bounds_and_one_f(double ax, double bx, double cx,
+  double minimize_given_bounds_and_one_f(double ax, double bx, double cx,
                                                               double fb);
 
   //: Find the minimum value of f(x) within a<= x <= c.
