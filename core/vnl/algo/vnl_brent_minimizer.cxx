@@ -133,7 +133,7 @@ double vnl_brent_minimizer::minimize_given_bounds(double ax, double bx, double c
   vnl_brent_minimizer_func f(*f_);
   double fb = f(bx);
 
-  minimize_given_bounds_and_one_f(ax,bx,cx,fb);
+  return minimize_given_bounds_and_one_f(ax,bx,cx,fb);
 }
 
 //: Find the minimum value of f(x) within a<= x <= c.
