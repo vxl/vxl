@@ -47,7 +47,7 @@ class vidl2_pixel_iterator_arranged
   }
 
   //: Destructor
-  ~vidl2_pixel_iterator_arranged<AR,FMT>(){}
+  ~vidl2_pixel_iterator_arranged(){}
 
   //: Step to the next pixel
   vidl2_pixel_iterator_arranged<AR,FMT>& next()
