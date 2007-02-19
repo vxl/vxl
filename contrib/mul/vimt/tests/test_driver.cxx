@@ -13,6 +13,7 @@ DECLARE( test_find_troughs );
 DECLARE( test_correlate_2d );
 DECLARE( test_resample_bilin );
 DECLARE( test_image_bounds_and_centre_2d );
+DECLARE( test_v2i );
 
 void
 register_tests()
@@ -30,6 +31,7 @@ register_tests()
   REGISTER( test_correlate_2d );
   REGISTER( test_resample_bilin );
   REGISTER( test_image_bounds_and_centre_2d );
+  REGISTER( test_v2i );
 }
 
 DEFINE_MAIN;

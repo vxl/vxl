@@ -9,12 +9,15 @@
 
 #include <vxl_config.h> // for VXL_BIG_ENDIAN and vxl_byte
 
+#include <vil/vil_exception.h>
 #include <vil/vil_property.h>
+#include <vil/vil_copy.h>
 #include <vil/vil_stream.h>
 #include <vil/vil_stream_fstream.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
 #include <vsl/vsl_binary_io.h>
+#include <vsl/vsl_binary_loader.h>
 #include <vimt/vimt_image_2d_of.h>
 
 // v2i magic number
@@ -33,7 +36,7 @@ private:
 
 
 
-vil_image_resource_sptr vimt_vil_v2i_format::make_input_image(vil_stream* vs) const
+vil_image_resource_sptr vimt_vil_v2i_format::make_input_image(vil_stream* vs)
 {
   // First of all hack an vil_stream to get at the underlying
   // vcl_stream, in order to create a vsl_b_stream
@@ -44,7 +47,7 @@ vil_image_resource_sptr vimt_vil_v2i_format::make_input_image(vil_stream* vs) co
 
     return 0;
   }
-  vsl_b_istream vslstream( static_cast<vimt_vil_fstream *>(vs)->underlying_stream());
+  vsl_b_istream vslstream( &static_cast<vimt_vil_fstream *>(vs)->underlying_stream() );
   if (!vslstream) return 0; // Not even a vsl file.
   unsigned magic;
   vil_streampos start = vs->tell();
@@ -71,29 +74,30 @@ vil_image_resource_sptr vimt_vil_v2i_format::make_input_image(vil_stream* vs) co
   {
 #define macro( F , T ) \
     case  F : \
-    { vimt_image_2d_of< T > im; vsl_b_read(is, im); if (!is) return 0; } \
+    { vimt_image_2d_of< T > im; vsl_b_read(vslstream, im); if (!vslstream) return 0; } \
     break;
-macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
+// Don't include versions for which there is no template instantian of vimt_image_2d_of.
+macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
 //macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
 //macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-//macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
 macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-//macro(VIL_PIXEL_FORMAT_BOOL , bool )
+//macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+macro(VIL_PIXEL_FORMAT_BOOL , bool )
 macro(VIL_PIXEL_FORMAT_FLOAT , float )
-//macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
     default: return 0; // Unknown pixel type - or more likely not a v2i image.
   }
   vs->seek(start);
-  return new vimt_vil_v2i_image(vslstream, f);
+  return new vimt_vil_v2i_image(vs, f);
 }
 
 vil_image_resource_sptr vimt_vil_v2i_format::make_output_image(vil_stream* vs,
                                                                unsigned ni,
                                                                unsigned nj,
                                                                unsigned nplanes,
-                                                               vil_pixel_format format) const
+                                                               vil_pixel_format format)
 {
   // First of all hack an vil_stream to get at the underlying
   // ccl_stream, in order to create a vsl_b_stream
@@ -125,22 +129,22 @@ vimt_vil_v2i_image::vimt_vil_v2i_image(vil_stream* vs):
 {
   vs_->ref();
   vs_->seek(0L);
-  vsl_b_istream vslstream(& static_cast<vimt_vil_fstream &>(vs_).underlying_stream());
+  vsl_b_istream vslstream(& static_cast<vimt_vil_fstream *>(vs_)->underlying_stream());
 
   unsigned magic;
-  vsl_b_read(is, magic);
+  vsl_b_read(vslstream, magic);
   assert(magic == V2I_MAGIC);
 
   short version;
-  vsl_b_read(is, version);
+  vsl_b_read(vslstream, version);
 
   switch (version)
   {
   case 1:
     {
       vimt_image *p_im=0;
-      vsl_b_read(is, p_im);
-      im_ = dynamic_cast<vimt2d_image_2d *>(p_im);
+      vsl_b_read(vslstream, p_im);
+      im_ = dynamic_cast<vimt_image_2d *>(p_im);
       break;
     }
   default:
@@ -157,7 +161,7 @@ vimt_vil_v2i_image::vimt_vil_v2i_image(vil_stream* vs, vil_pixel_format f):
 {
   vs_->ref();
   vs_->seek(0L);
-  vsl_b_istream vslstream(& static_cast<vimt_vil_fstream &>(vs_).underlying_stream());
+  vsl_b_istream vslstream(& static_cast<vimt_vil_fstream *>(vs_)->underlying_stream());
 
   
   switch(f)
@@ -167,17 +171,19 @@ vimt_vil_v2i_image::vimt_vil_v2i_image(vil_stream* vs, vil_pixel_format f):
     im_ = new vimt_image_2d_of< T >(); \
     vsl_b_read(vslstream, *static_cast<vimt_image_2d_of< T >*>(im_)); \
     break;
-macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
+// Don't include versions for which there is no template instantian of vimt_image_2d_of.
+macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
 //macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
 //macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-//macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
 macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-//macro(VIL_PIXEL_FORMAT_BOOL , bool )
+//macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+macro(VIL_PIXEL_FORMAT_BOOL , bool )
 macro(VIL_PIXEL_FORMAT_FLOAT , float )
-//macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
-    default: return 0; // Unknown pixel type - or more likely not a v2i image.
+    default: throw vil_exception_image_io("vimt_vil_v2i_image::vimt_vil_v2i_image",
+      "v2i", "");
   }
 
 
@@ -188,7 +194,7 @@ bool vimt_vil_v2i_image::get_property(char const * key, void * value) const
 {
   const vimt_transform_2d &tr = im_->world2im();
 
-  if (vcl_strcmp(vil_property_voxel_size, key)==0)
+  if (vcl_strcmp(vil_property_pixel_size, key)==0)
   {
     vgl_vector_2d<double> p11 = tr.inverse()(1.0, 1.0) - tr.inverse().origin();
     //Assume no rotation or shearing.
@@ -199,7 +205,7 @@ bool vimt_vil_v2i_image::get_property(char const * key, void * value) const
     return true;
   }
 
-  if (vcl_strcmp(vil3d_property_origin_offset, key)==0)
+  if (vcl_strcmp(vil_property_offset, key)==0)
   {
     vgl_point_2d<double> origin = tr.origin();
     float* array =  static_cast<float*>(value);
@@ -215,21 +221,23 @@ vimt_vil_v2i_image::vimt_vil_v2i_image(vil_stream* vs, unsigned ni, unsigned nj,
                                        unsigned nplanes, vil_pixel_format format):
   vs_(vs), im_(0), dirty_(true)
 {
+  vs_->ref();
   switch (format)
   {
 #define macro( F , T ) \
    case  F : \
     im_ = new vimt_image_2d_of< T > (ni, nj, nplanes); \
     break;
-macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
+// Don't include versions for which there is no template instantian of vimt_image_2d_of.
+macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
 //macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
 //macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-//macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
 macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-//macro(VIL_PIXEL_FORMAT_BOOL , bool )
+//macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+macro(VIL_PIXEL_FORMAT_BOOL , bool )
 macro(VIL_PIXEL_FORMAT_FLOAT , float )
-//macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
    default:
     vcl_cerr << "I/O ERROR: vimt_vil_v2i_image::vimt_vil_v2i_image()\n"
@@ -243,18 +251,17 @@ vimt_vil_v2i_image::~vimt_vil_v2i_image()
 {
   if (dirty_)
   {
-    vs_->seekp(0);
-    vsl_b_ostream vslstream(& static_cast<vimt_vil_fstream &>(vs_).underlying_stream());
-    vsl_b_ostream os(file_);
-
-    vsl_b_write(os, V2I_MAGIC);
+    vs_->seek(0l);
+    vsl_b_ostream vslstream(& static_cast<vimt_vil_fstream *>(vs_)->underlying_stream());
+ 
+    vsl_b_write(vslstream, V2I_MAGIC);
 
     const short version = 1;
-    vsl_b_write(os, version);
+    vsl_b_write(vslstream, version);
 
 
     vimt_image *p_im=im_;
-    vsl_b_write(os, p_im);
+    vsl_b_write(vslstream, p_im);
   }
   //delete vs_;
   vs_->unref();
@@ -300,6 +307,20 @@ void vimt_vil_v2i_image::set_world2im(const vimt_transform_2d & tr)
   dirty_ = true;
 }
 
+//: Set the size of the each pixel in the i,j,k directions.
+void vimt_vil_v2i_image::set_pixel_size(float si, float sj)
+{
+  const vimt_transform_2d &tr = im_->world2im();
+
+// Try to adjust pixel size without modifying rest of transform
+  vgl_vector_2d<double> w11 = tr(1.0, 1.0) - tr.origin();
+
+  vimt_transform_2d zoom;
+  zoom.set_zoom_only (w11.x()/si, w11.y()/sj, 0.0, 0.0);
+
+  im_->set_world2im(tr*zoom);
+}
+
 
 //: Create a read/write view of a copy of this data.
 // Currently not yet implemented.
@@ -321,15 +342,16 @@ vil_image_view_base_sptr vimt_vil_v2i_image::get_copy_view(unsigned i0, unsigned
                           ni, nj, v.nplanes(), \
                           v.istep(), v.jstep(), v.planestep()); \
     return new vil_image_view< T >(vil_copy_deep(w)); }
+// Don't include versions for which there is no template instantian of vimt_image_2d_of.
 macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
 //macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
 //macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-//macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
 macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-//macro(VIL_PIXEL_FORMAT_BOOL , bool )
+//macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+macro(VIL_PIXEL_FORMAT_BOOL , bool )
 macro(VIL_PIXEL_FORMAT_FLOAT , float )
-//macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
    default:
     return 0;
@@ -355,6 +377,7 @@ vil_image_view_base_sptr vimt_vil_v2i_image::get_view(unsigned i0, unsigned ni,
     return new vil_image_view< T >(v.memory_chunk(), &v(i0,j0), \
                                    ni, nj, v.nplanes(), \
                                    v.istep(), v.jstep(), v.planestep()); }
+// Don't include versions for which there is no template instantian of vimt_image_2d_of.
 macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
 //macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
 //macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
@@ -394,10 +417,11 @@ bool vimt_vil_v2i_image::put_view(const vil_image_view_base& vv,
   {
 #define macro( F , T ) \
    case  F : \
-    vil_copy_to_window(static_cast<vil_image_view<T >const&>(vv), \
-                       static_cast<vimt_image_3d_of<T >&>(*im_).image(), i0, j0); \
+    vil_copy_to_window(static_cast<vil_image_view< T >const&>(vv), \
+                       static_cast<vimt_image_2d_of< T >&>(*im_).image(), i0, j0); \
     return true;
 
+// Don't include versions for which there is no template instantian of vimt_image_2d_of.
     macro(VIL_PIXEL_FORMAT_BYTE , vxl_byte )
 //  macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
 //  macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )

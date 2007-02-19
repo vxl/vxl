@@ -1,9 +1,7 @@
 // This is mul/vimt/vimt_vil_v2i.h
 #ifndef vimt_vil_v2i_h_
 #define vimt_vil_v2i_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
+
 //:
 // \file
 // \brief Reader/Writer for v2i format images.
@@ -18,12 +16,19 @@
 // reduce confusion with other vsl data files, and a version number to allow
 // for a change in format.
 
+
 #include <vil/vil_file_format.h>
 #include <vimt/vimt_image_2d.h>
 #include <vcl_iosfwd.h>
 
 
 //: Reader/Writer for v2i format images.
+//
+// To add this plugin to the list of loaders either 
+// \verbatim
+//   vil_file_format::add_file_format(new vimt_vil_v2i_format);
+// \endverbatim
+// or call vimt_add_all_binary_loaders()
 class vimt_vil_v2i_format: public vil_file_format
 {
  public:
@@ -31,7 +36,7 @@ class vimt_vil_v2i_format: public vil_file_format
   //: The destructor must be virtual so that the memory chunk is destroyed.
   virtual ~vimt_vil_v2i_format() {}
 
-  virtual vil_image_resource_sptr make_input_image(vil_stream* vs) const;
+  virtual vil_image_resource_sptr make_input_image(vil_stream* vs);
 
   //: Make a "generic_image" on which put_section may be applied.
   // The file may be opened immediately for writing so that a header can be written.
@@ -39,7 +44,7 @@ class vimt_vil_v2i_format: public vil_file_format
                                                       unsigned ni,
                                                       unsigned nj,
                                                       unsigned nplanes,
-                                                      enum vil_pixel_format) const;
+                                                      enum vil_pixel_format);
 
   //: default filename tag for this image.
   virtual const char * tag() const {return "v2i";}
@@ -52,7 +57,7 @@ class vimt_vil_v2i_image: public vil_image_resource
 {
   friend class vimt_vil_v2i_format;
   //: Pointer to open image file.
-  vil_stream *file_;
+  vil_stream *vs_;
   //: Image cache.
   // Currently the whole image is cached im memory. This should be fixed.
   vimt_image_2d *im_;
@@ -89,8 +94,7 @@ class vimt_vil_v2i_image: public vil_image_resource
   virtual enum vil_pixel_format pixel_format() const;
 
   //: Set the size of the each pixel in the i,j directions.
-  // Return false if underlying image doesn't store pixel sizes.
-  virtual bool set_pixel_size(float i, float j);
+  void set_pixel_size(float i, float j);
   
   //: Get full world to image transform
   const vimt_transform_2d & world2im() const;
