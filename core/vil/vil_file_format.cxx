@@ -155,7 +155,7 @@ void vil_file_format::add_file_format(vil_file_format* ff)
     return;
   }
   l[c] = ff;
-  l[c+1] = ff;
+  l[c+1] = 0;
 }
 
 

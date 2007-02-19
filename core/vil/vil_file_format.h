@@ -33,7 +33,7 @@ class vil_file_format
 
   //: Read a pyramid resource from a list of image files in a directory
   //  ... or from an image file_format that supports multiple images per file.
-virtual vil_pyramid_image_resource_sptr
+  virtual vil_pyramid_image_resource_sptr
     make_input_pyramid_image(char const* directory_or_file)
     {return 0;}
 
@@ -45,11 +45,11 @@ virtual vil_pyramid_image_resource_sptr
   //  resources during the construction of the pyramid. Files are
   //  be removed from the directory after completion.  If temp_dir is 0
   //  then the intermediate resources are created in memory.
-virtual vil_pyramid_image_resource_sptr
-  make_pyramid_image_from_base(char const* filename,
-                               vil_image_resource_sptr const& base_image,
-                               unsigned nlevels,
-                               char const* temp_dir)
+  virtual vil_pyramid_image_resource_sptr
+    make_pyramid_image_from_base(char const* filename,
+                                vil_image_resource_sptr const& base_image,
+                                unsigned nlevels,
+                                char const* temp_dir)
   {return 0;}
 
   //: Make a "generic_image" on which put_section may be applied.
