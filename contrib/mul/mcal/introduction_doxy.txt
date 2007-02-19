@@ -1,0 +1,8 @@
+// The following text is included in the main documentation page by doxygen
+/*! \mainpage mcal: Manchester's Component Analysis Library
+* Provides several classes for computing various linear components of sets
+* of vectors.
+*
+* For instance, mcal_pca performs Principle Component Analysis
+*
+*/
