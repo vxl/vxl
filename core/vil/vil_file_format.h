@@ -80,6 +80,8 @@ virtual vil_pyramid_image_resource_sptr
 
  public:
   static vil_file_format** all();
+  static void add_file_format(vil_file_format* ff);
+
 };
 
 #endif // vil_file_format_h_

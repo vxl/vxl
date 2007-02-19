@@ -104,6 +104,7 @@ char const *guess_file_format(char const* filename)
     macro(rgb, iris);
     macro(viff, viff);
     macro(mit, mit);
+    macro(v2i, v2i);
 #undef macro
     else
       vcl_cerr << __FILE__ ": assuming pnm format for \'" << filename << "\'\n";

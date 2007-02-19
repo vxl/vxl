@@ -36,6 +36,8 @@ class vil_stream_fstream : public vil_stream
  protected:
   ~vil_stream_fstream();
 
+  // There are a (very few) occasions when access to the underlying stream is useful
+  vcl_fstream & underlying_stream() {return f_;}
  private:
   vcl_ios_openmode flags_;
   mutable vcl_fstream f_;

@@ -70,13 +70,13 @@ vil_file_format::~vil_file_format()
 #include <vil/file_formats/vil_j2k_image.h>
 #endif
 
-
+const unsigned MAX_FILE_FORMATS=256;
 //: Local class to hold file format list
 // Clears list on deletion.
 struct vil_file_format_storage
 {
   vil_file_format** l;
-  vil_file_format_storage(): l(new vil_file_format*[256])
+  vil_file_format_storage(): l(new vil_file_format*[MAX_FILE_FORMATS])
   {
     unsigned c=0;
 #if HAS_JPEG
@@ -142,6 +142,21 @@ struct vil_file_format_storage
     l=0;
   }
 };
+
+//: The function will take ownership of ff;
+void vil_file_format::add_file_format(vil_file_format* ff)
+{
+  vil_file_format** l=all();
+  unsigned c=0;
+  while (c<MAX_FILE_FORMATS-1u && l[c]!=0) ++c;
+  if (l[c]!=0)
+  {
+    vcl_cerr << "ERROR vil_file_format::add_file_format Unable to add any more file formats\n";
+    return;
+  }
+  l[c] = ff;
+  l[c+1] = ff;
+}
 
 
 vil_file_format** vil_file_format::all()

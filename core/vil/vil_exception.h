@@ -71,6 +71,45 @@ void vil_exception_warning(T exception)
 
 #endif
 
+#if !VCL_HAS_EXCEPTIONS
+
+  //: Indicates that an image load or save operation failed.
+  // Generally this should be thrown, only after checks on the image type
+  // have been passed by the file format object, and while an
+  // unrecoverable error is detected inside the image_resource constructor,
+  // or similar.
+  class vil_exception_image_io
+  {
+   public:
+    vcl_string function_name, file_type, filename, full_what;
+    vil_exception_image_io(const vcl_string& function,
+      const vcl_string& type, const vcl_string& name):
+      function_name(function), file_type(type), filename(name),
+      full_what("Unrecoverable failure in " + function + " while loading "
+        + name + " using " + type + " loader.") {}
+    const char * what() const {return full_what.c_str();}
+  };
+
+#else
+  //: Indicates that an image load or save operation failed.
+  // Generally this should be thrown, only after checks on the image type
+  // have been passed by the file format object, and while an
+  // unrecoverable error is detected inside the image_resource constructor,
+  // or similar.
+  class vil_exception_image_io : public vcl_runtime_error
+  {
+   public:
+    vcl_string function_name, file_type, filename;
+    vil_exception_image_io(const vcl_string& function,
+      const vcl_string& type, const vcl_string& name):
+      function_name(function), file_type(type), filename(name),
+      vcl_runtime_error("Unrecoverable failure in " + function + 
+        " while loading " + name + " using " + type + " loader.") {}
+    virtual ~vil_exception_image_io() throw() {}
+  };
+
+#endif
+
 
 #endif // vil_exception_h_
 

@@ -69,6 +69,14 @@ vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
                                                vil_pixel_format format,
                                                char const* file_format = 0);
 
+//: Make a new image.
+// \relates vil_image_resource
+vil_image_resource_sptr vil_new_image_resource(char const* filename,
+                                               unsigned ni, unsigned nj,
+                                               unsigned nplanes,
+                                               vil_pixel_format format,
+                                               char const* file_format = 0);
+
 //: Make a new vil_image_resource, writing to file "filename", size ni x nj, copying pixel format etc from "prototype".
 // \relates vil_image_resource
 vil_image_resource_sptr vil_new_image_resource(char const* filename,
