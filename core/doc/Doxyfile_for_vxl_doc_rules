@@ -126,16 +126,16 @@ FULL_PATH_NAMES        = YES
 # only done if one of the specified strings matches the left-hand part of
 # the path. It is allowed to use relative paths in the argument list.
 
-STRIP_FROM_PATH        = $VXLROOT/vcl/ \
-                         $VXLROOT/core/ \
-                         $VXLROOT/v3p/ \
-                         $VXLROOT/contrib/brl/ \
-                         $VXLROOT/contrib/gel/ \
-                         $VXLROOT/contrib/mul/ \
-                         $VXLROOT/contrib/oul/ \
-                         $VXLROOT/contrib/oxl/ \
-                         $VXLROOT/contrib/rpl/ \
-                         $VXLROOT/contrib/tbl/
+STRIP_FROM_PATH        = /home/brendan/vxl/vcl/ \
+                         /home/brendan/vxl/core/ \
+                         /home/brendan/vxl/v3p/ \
+                         /home/brendan/vxl/contrib/brl/ \
+                         /home/brendan/vxl/contrib/gel/ \
+                         /home/brendan/vxl/contrib/mul/ \
+                         /home/brendan/vxl/contrib/oul/ \
+                         /home/brendan/vxl/contrib/oxl/ \
+                         /home/brendan/vxl/contrib/rpl/ \
+                         /home/brendan/vxl/contrib/tbl/
 
 # The INTERNAL_DOCS tag determines if documentation
 # that is typed after a \internal command is included. If the tag is set
@@ -345,8 +345,8 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories
 # with spaces.
 
-INPUT                  = $VXLROOT/core \
-                         $VXLROOT/contrib
+INPUT                  = /home/brendan/vxl/core \
+                         /home/brendan/vxl/contrib
 
 # If the value of the INPUT tag contains directories, you can use the
 # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp
@@ -416,7 +416,7 @@ IMAGE_PATH             =
 # input file. Doxygen will then use the output that the filter program writes
 # to standard output.
 
-INPUT_FILTER           = $VXLROOT/core/doc/vxl_doxy.pl
+INPUT_FILTER           = /home/brendan/vxl/core/doc/vxl_doxy.pl
 
 # If the FILTER_SOURCE_FILES tag is set to YES, the input filter (if set using
 # INPUT_FILTER) will be used to filter the input files when producing source
@@ -797,15 +797,15 @@ SEARCH_INCLUDES        = YES
 # contain include files that are not input files but should be processed by
 # the preprocessor.
 
-INCLUDE_PATH           = $VXLROOT/core \
-                         $VXLROOT/v3p \
-                         $VXLROOT/contrib/oxl \
-                         $VXLROOT/contrib/gel \
-                         $VXLROOT/contrib/mul \
-                         $VXLROOT/contrib/tbl \
-                         $VXLROOT/contrib/rpl \
-                         $VXLROOT/contrib/oul \
-                         $VXLROOT/contrib/brl \
+INCLUDE_PATH           = /home/brendan/vxl/core \
+                         /home/brendan/vxl/v3p \
+                         /home/brendan/vxl/contrib/oxl \
+                         /home/brendan/vxl/contrib/gel \
+                         /home/brendan/vxl/contrib/mul \
+                         /home/brendan/vxl/contrib/tbl \
+                         /home/brendan/vxl/contrib/rpl \
+                         /home/brendan/vxl/contrib/oul \
+                         /home/brendan/vxl/contrib/brl \
                        # $VXLROOT/vcl
 
 # You can use the INCLUDE_FILE_PATTERNS tag to specify one or more wildcard
