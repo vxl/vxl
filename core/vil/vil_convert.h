@@ -546,6 +546,25 @@ inline void vil_convert_stretch_range(const vil_image_view<inP>& src,
         dest(i,j,p) =  b*src(i,j,p) + a;
 }
 
+//: Convert src to float image dest by stretching to range [lo,hi]
+template <class inP>
+inline void vil_convert_stretch_range(const vil_image_view<inP>& src,
+                                      vil_image_view<float>& dest,
+                                      float lo, float hi)
+{
+  inP min_b=0, max_b=0;
+  vil_math_value_range(src,min_b,max_b);
+  float b = 0.0;
+  if (max_b-min_b >0)
+    b = (hi-lo)/static_cast<float>(max_b-min_b);
+  float a = -1.0f*min_b*b + lo;
+  dest.set_size(src.ni(), src.nj(), src.nplanes());
+  for (unsigned p = 0; p < src.nplanes(); ++p)
+    for (unsigned j = 0; j < src.nj(); ++j)
+      for (unsigned i = 0; i < src.ni(); ++i)
+        dest(i,j,p) =  b*src(i,j,p) + a;
+}
+
 
 //: Convert src image<inP> to dest image<double> by stretching input range [src_lo, src_hi] to output range [dest_lo, dest_hi].
 // Inputs < src_lo are mapped to dest_lo, and inputs > src_hi to dest_hi.
@@ -570,6 +589,32 @@ inline void vil_convert_stretch_range_limited(const vil_image_view<inP>& src,
         dest(i,j,p) = s<=src_lo ? dest_lo :
                       s>=src_hi ? dest_hi :
                                   dest_lo + dds*static_cast<double>(s-src_lo);
+      }
+}
+
+//: Convert src image<inP> to dest image<float> by stretching input range [src_lo, src_hi] to output range [dest_lo, dest_hi].
+// Inputs < src_lo are mapped to dest_lo, and inputs > src_hi to dest_hi.
+template <class inP>
+inline void vil_convert_stretch_range_limited(const vil_image_view<inP>& src,
+                                              vil_image_view<float>& dest,
+                                              const inP src_lo,
+                                              const inP src_hi,
+                                              const float dest_lo,
+                                              const float dest_hi)
+{
+  float ddest = dest_hi - dest_lo;
+  float dsrc = static_cast<float>(src_hi - src_lo);
+  float dds = ddest / dsrc;
+
+  dest.set_size(src.ni(), src.nj(), src.nplanes());
+  for (unsigned p = 0; p < src.nplanes(); ++p)
+    for (unsigned j = 0; j < src.nj(); ++j)
+      for (unsigned i = 0; i < src.ni(); ++i)
+      {
+        inP s = src(i,j,p);
+        dest(i,j,p) = s<=src_lo ? dest_lo :
+                      s>=src_hi ? dest_hi :
+                                  dest_lo + dds*static_cast<float>(s-src_lo);
       }
 }
 
