@@ -202,8 +202,12 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
       "v2i", "");
   }
 
-
+  // Fiddle factor - most directly created vsl files have transforms in mm.
+  vimt_transform_2d tr;
+  tr.set_zoom_only(1000.0, 0.0, 0.0);
+  im_->world2im() = im_->world2im() * tr;
   assert(! !vslstream);
+  
 }
 
 bool vimt_vil_v2i_image::get_property(char const * key, void * value) const

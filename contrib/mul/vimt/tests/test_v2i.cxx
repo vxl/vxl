@@ -112,9 +112,15 @@ static void test_v2i()
   TEST("Loaded complicated image has correct pixel values",
     vil_image_view_deep_equality(im6.image(), im7), true);
   TEST("get_property()", ir7->get_property(vil_property_pixel_size, size), true);
-  TEST("vil_property_pixel_size is correct", size[0] == 0.5f &&
-    size[1] == 0.5f, true);
+  TEST("vil_property_pixel_size is correct", size[0] == 0.0005f &&
+    size[1] == 0.0005f, true);
+  vimt_transform_2d tr7 = vimt_load_transform(ir7, 1000.0);
+  vcl_cout << "saved: " << tr6 << vcl_endl;
+  vcl_cout << "loaded: " << tr7 << vcl_endl;
+  TEST("Loaded complicated image has correct transform",
+    (tr6.matrix()- tr7.matrix()).frobenius_norm() < 1e-6 , true);
   
+
   vpl_unlink(fname4.c_str());
 
 }

@@ -25,7 +25,6 @@ vimt_transform_2d vimt_load_transform(const vil_image_resource_sptr& im,
   for(unsigned i=0; i<2;i++)
   {
     pixSize[i]*= unit_scaling;
-    offset[i]*= unit_scaling;
   }
 
   vimt_transform_2d tx;
@@ -73,7 +72,6 @@ vimt_transform_2d vimt_load_transform2(const vil_image_resource_sptr& im,
   for(unsigned i=0; i<2; i++)
   {
     pixSize[i] *= unit_scaling;
-    offset[i] *= unit_scaling;
   }
 
   // Include a reflection through the x-axis.
