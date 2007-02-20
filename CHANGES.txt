@@ -12,6 +12,11 @@ effect.  If you change something in VXL, please document it here.
 VXL 1.7.0	- November 2006
 ****************************
 
+      - intersection methods scattered in vgl are combined into 
+        vgl/algo/vgl_intersection.h. intersect(...) under
+        vgl/vgl_box_3d and intersection(...) under vgl/vgl_line_3d_2_points 
+        are depracted and no longer available.
+
 ****************************
 VXL 1.6.0	- August 2006
 ****************************
