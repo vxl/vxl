@@ -258,12 +258,6 @@ vcl_ostream&  operator<<(vcl_ostream& s, vgl_box_3d<Type> const& p);
 template <class Type>
 vcl_istream&  operator>>(vcl_istream& is,  vgl_box_3d<Type>& p);
 
-//: Return box defining intersection between boxes a and b.
-//  Empty box returned if no intersection.
-// \relates vgl_box_2d
-template <class Type>
-vgl_box_3d<Type> intersect(vgl_box_3d<Type> const& a, vgl_box_3d<Type> const& b);
-
 #define VGL_BOX_3D_INSTANTIATE(T) extern "please include vgl/vgl_box_3d.txx first"
 
 #endif // vgl_box_3d_h
