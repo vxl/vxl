@@ -6,6 +6,7 @@
 #include <mbl/mbl_stl.h>
 #include <vimt/vimt_load_transform.h>
 #include <testlib/testlib_test.h>
+#include <vsl/vsl_quick_file.h>
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
 #include <vil/vil_new.h>
@@ -59,7 +60,8 @@ static void test_v2i()
   vimt_image_2d_of<float> im3(ir3->get_view(), vimt_load_transform(ir3));
   TEST("Loaded complicated image has correct pixel values",
     vil_image_view_deep_equality(im3.image(), im2), true);
-  TEST("Loaded complicated image has correct transform", (im3.world2im().matrix()- tr2.matrix()).frobenius_norm() < 1e-6 , true);
+  TEST("Loaded complicated image has correct transform",
+    (im3.world2im().matrix()- tr2.matrix()).frobenius_norm() < 1e-6 , true);
 
   float size[2];
   TEST("get_property()", ir3->get_property(vil_property_pixel_size, size), true);
@@ -79,8 +81,6 @@ static void test_v2i()
 
     ir4->put_view(im4);
     // Start with one pixel size
-    vimt_transform_2d tr4;
-    tr4.set_zoom_only(2.0, -5.0, -5.0, -5.0);
     dynamic_cast<vimt_vil_v2i_image&>(*ir4).set_pixel_size(0.001f, 0.002f);
     // Save image as ir4 is destroyed.
     
@@ -97,6 +97,25 @@ static void test_v2i()
   
   vpl_unlink(fname3.c_str());
   
+
+  vimt_transform_2d tr6;
+  tr6.set_zoom_only(2.0, -5.0, -5.0);
+  vimt_image_2d_of<float> im6(3,4,6, tr6);
+  mbl_stl_increments(im6.image().begin(), im6.image().end(), -200.0f);
+  
+  vcl_string fname4 = vul_temp_filename() + ".v2i";
+  vsl_quick_file_save(im6, fname4);
+
+  vil_image_resource_sptr ir7 = vil_load_image_resource(fname4.c_str());
+  TEST( "Successfully loaded complicated v2i image",!ir7, false);
+  vil_image_view<float> im7(ir7->get_view());
+  TEST("Loaded complicated image has correct pixel values",
+    vil_image_view_deep_equality(im6.image(), im7), true);
+  TEST("get_property()", ir7->get_property(vil_property_pixel_size, size), true);
+  TEST("vil_property_pixel_size is correct", size[0] == 0.5f &&
+    size[1] == 0.5f, true);
+  
+  vpl_unlink(fname4.c_str());
 
 }
 

@@ -58,18 +58,34 @@ vil_image_resource_sptr vimt_vil_v2i_format::make_input_image(vil_stream* vs)
   // This vsl stream may hav been created with vsl_b_wrte(vimt_image) - with no
   //  v2i magic number. Check if that is true.
   vs->seek(start);
-  int dummy;
-  vsl_b_read(vslstream, dummy);  // vimt_image_2d_of.version
-  vsl_b_read(vslstream, dummy);  // vil_image_view.version
-  vsl_b_read(vslstream, dummy);  // vil_image_view.ni
-  vsl_b_read(vslstream, dummy);  // vil_image_view.nj
-  vsl_b_read(vslstream, dummy);  // vil_image_view.nplanes
-  vsl_b_read(vslstream, dummy);  // vil_image_view.istep
-  vsl_b_read(vslstream, dummy);  // vil_image_view.jstep
-  vsl_b_read(vslstream, dummy);  // vil_image_view.planestep
-  vsl_b_read(vslstream, dummy);  // vil_memory_chunk.version
-  vsl_b_read(vslstream, dummy);  //  chunk.pixel_format
-  vil_pixel_format f = static_cast<vil_pixel_format>(dummy);
+  int v_i;
+  bool v_b;
+  vsl_b_read(vslstream, v_i);  // vimt_image_2d_of.version
+  vsl_b_read(vslstream, v_i);  // vil_image_view.version
+  if (v_i != 1) return 0; // can only handle version 1.
+  vsl_b_read(vslstream, v_i);  // vil_image_view.ni
+  if (v_i == 0) return 0; // can't handle empty images.
+  vsl_b_read(vslstream, v_i);  // vil_image_view.nj
+  if (v_i == 0) return 0; // can't handle empty images.
+  vsl_b_read(vslstream, v_i);  // vil_image_view.nplanes
+  if (v_i == 0) return 0; // can't handle empty images.
+  vsl_b_read(vslstream, v_i);  // vil_image_view.istep
+  vsl_b_read(vslstream, v_i);  // vil_image_view.jstep
+  vsl_b_read(vslstream, v_i);  // vil_image_view.planestep
+  vsl_b_read(vslstream, v_i);  // vil_smart_ptr.version
+  if (v_i != 2) return 0; // can only handle version 2.
+  vsl_b_read(vslstream, v_b);  // vil_smart_ptr.firsttime
+  if (!v_b) return 0; // can't handle multiple images.
+  vsl_b_read(vslstream, v_i);  // vil_smart_ptr.id
+  if (v_i != 1) return 0; // can't handle multiple images.
+  vsl_b_read(vslstream, v_b);  // vil_memory_chunk*.nonnull
+  if (!v_b) return 0; // can't handle empty images.
+  vsl_b_read(vslstream, v_i);  // vil_memory_chunk.version
+  if (v_i != 2) return 0; // can only handle version 2.
+  vsl_b_read(vslstream, v_i);  //  chunk.pixel_format
+
+  vil_pixel_format f = static_cast<vil_pixel_format>(v_i);
+  vs->seek(start);
   switch(f)
   {
 #define macro( F , T ) \
