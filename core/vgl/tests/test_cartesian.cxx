@@ -24,6 +24,7 @@
 //#include <vgl/vgl_polygon_test.h>
 //#include <vgl/vgl_triangle_test.h>
 #include <vgl/vgl_1d_basis.h>
+#include <vgl/algo/vgl_intersection.h>
 
 static void test_vector_2d()
 {
