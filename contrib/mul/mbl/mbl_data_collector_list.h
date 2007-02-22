@@ -17,7 +17,7 @@ class mbl_data_collector_list : public mbl_data_collector<T>
   vcl_vector<T> data_;
   mbl_data_array_wrapper<T> wrapper_;
 
- public:
+public:
   //: Dflt ctor
   mbl_data_collector_list();
 

@@ -17,7 +17,7 @@ template<class T>
 class mbl_file_data_collector : public mbl_data_collector<T>
 {
   //: binary file stream where the data is stored
-  vsl_b_ofstream bfs_;
+  vsl_b_ofstream *bfs_;
 
   //: path to binary data stream
   vcl_string path_;
@@ -28,16 +28,18 @@ class mbl_file_data_collector : public mbl_data_collector<T>
  public:
  
   //: Constructor
-  mbl_file_data_collector(vcl_string& path);
+  mbl_file_data_collector( const vcl_string & path );
 
-#if 0
+//#if 0
   // Copy constructor
   mbl_file_data_collector(const mbl_data_collector_base& c);
+  // Copy constructor
+  mbl_file_data_collector(const mbl_file_data_collector & c);
 
-  // Copy operator
-  mbl_file_data_collector<T>& 
-      operator=( const mbl_data_collector_base& c);
-#endif
+  //: Copy operator
+  //virtual mbl_file_data_collector<T>& operator=( const mbl_data_collector_base& c);
+  virtual mbl_file_data_collector<T>& operator=( const mbl_file_data_collector & c);
+//#endif
 
   //: Destructor
   virtual ~mbl_file_data_collector();
@@ -77,6 +79,7 @@ class mbl_file_data_collector : public mbl_data_collector<T>
 
   //: Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs);
+
 };
 
 #endif // mbl_file_data_collector_h_
