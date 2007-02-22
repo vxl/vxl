@@ -30,7 +30,11 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/vimt ${vimt_sources})
 TARGET_LINK_LIBRARIES(vimt vil vil_algo vil_io vnl vgl vsl)
 
 SUBDIRS(algo)
-SUBDIRS(examples)
+
+IF(BUILD_EXAMPLES)
+  SUBDIRS(examples)
+ENDIF(BUILD_EXAMPLES)
+
 
 IF (BUILD_TESTING)
   SUBDIRS(tests)

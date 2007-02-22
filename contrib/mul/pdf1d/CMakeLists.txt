@@ -47,7 +47,10 @@ INSTALL_TARGETS(/lib pdf1d)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/pdf1d ${pdf1d_sources})
 TARGET_LINK_LIBRARIES( pdf1d mbl vbl vnl_io vnl vsl )
 
-SUBDIRS(tools)
+IF(BUILD_MUL_TOOLS)
+  SUBDIRS(tools)
+ENDIF(BUILD_MUL_TOOLS)
+
 
 IF( BUILD_TESTING)
   SUBDIRS(tests)

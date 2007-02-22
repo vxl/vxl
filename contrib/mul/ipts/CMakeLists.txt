@@ -14,7 +14,10 @@ INSTALL_TARGETS(/lib ipts)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/ipts ${ipts_sources})
 TARGET_LINK_LIBRARIES(ipts vimt_algo vimt mbl vgl vil_algo vil)
 
-SUBDIRS(tools)
+IF(BUILD_MUL_TOOLS)
+  SUBDIRS(tools)
+ENDIF(BUILD_MUL_TOOLS)
+
 
 IF (BUILD_TESTING)
   SUBDIRS(tests)

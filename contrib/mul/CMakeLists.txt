@@ -13,3 +13,9 @@ SUBDIRS(mbl vpdfl pdf1d clsfy vimt ipts vil3d vimt3d mvl2 tools)
 IF (BUILD_UNMAINTAINED_LIBRARIES)
   SUBDIRS(mil mil3d)
 ENDIF (BUILD_UNMAINTAINED_LIBRARIES) 
+
+OPTION(BUILD_MUL_TOOLS "Build the MUL tools?" NO)
+
+IF ( BUILD_MUL_TOOLS )
+  SUBDIRS( tools )
+ENDIF ( BUILD_MUL_TOOLS )
