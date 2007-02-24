@@ -37,27 +37,28 @@ vpgl_fm_compute_ransac::compute(
   // The following block is hacked from similar code in rrel_homography2d_est.
   rrel_fm_problem* estimator = new rrel_fm_problem( pr, pl );
   estimator->verbose = false;
-  double max_outlier_frac = 0.5;
-  double desired_prob_good = 0.99;
-  int max_pops = 1;
   int trace_level = 0;
   rrel_muset_obj* ransac = new rrel_muset_obj((int)vcl_floor(pr.size()*.75));
   estimator->set_prior_scale( 1.0 );
   rrel_ran_sam_search* ransam = new rrel_ran_sam_search;
   ransam->set_trace_level(trace_level);
-  ransam->set_sampling_params( max_outlier_frac, desired_prob_good, max_pops);
-  bool ransac_succeeded = ransam->estimate( estimator, ransac );
 
+  if(!gen_all_)
+    ransam->set_sampling_params( max_outlier_frac_,
+                                 desired_prob_good_, max_pops_);
+  else
+    ransam->set_gen_all_samples();
+
+  bool ransac_succeeded = ransam->estimate( estimator, ransac );
   if ( ransac_succeeded )
   estimator->params_to_fm( ransam->params(), fm );
 
   // Get a list of the outliers.
-  vcl_vector<double> residuals;
   estimator->compute_residuals( ransam->params(), residuals );
 
   outliers = vcl_vector<bool>();
   for ( unsigned i = 0; i < pr.size(); i++ ){
-    if ( residuals[i] > 1 )
+    if ( residuals[i] > outlier_thresh_ )
       outliers.push_back( true );
     else
       outliers.push_back( false );

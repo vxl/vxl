@@ -7,7 +7,9 @@
 // \author Thomas Pollard
 // \date 5/10/05
 //
-
+//  The point correspondences in relation to F are defined by
+//     pl^t[F]pr = 0
+//
 #include <vpgl/vpgl_fundamental_matrix.h>
 
 class vpgl_fm_compute_8_point

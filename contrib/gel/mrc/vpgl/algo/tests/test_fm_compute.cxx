@@ -2,8 +2,10 @@
 #include <vcl_iostream.h>
 
 #include <vpgl/algo/vpgl_fm_compute_8_point.h>
+#include <vpgl/algo/vpgl_fm_compute_2_point.h>
 #include <vpgl/algo/vpgl_fm_compute_ransac.h>
 #include <vpgl/vpgl_reg_fundamental_matrix.h>
+#include <vpgl/vpgl_fundamental_matrix.h>
 #include <vpgl/algo/vpgl_fm_compute_affine_ransac.h>
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_vector_fixed.h>
@@ -103,8 +105,35 @@ static void test_fm_compute()
   vcl_cerr << "\nEstimated fundamental matrix:\n" << fm1est_vnl << '\n';
   vcl_cerr << "\nMVL estimated fundamental_matrix:\n" << fm1est_mvl_vnl << '\n';
   TEST_NEAR( "fm compute 8 point from perfect correspondences with outliers", 
-    (fm1_vnl-fm1est_vnl).frobenius_norm(), 0, 1 );
+             (fm1_vnl-fm1est_vnl).frobenius_norm(), 0, 1 );
 
+  //Part 2a: Test the 2 point algorithm
+  vnl_matrix_fixed<double,3,4> crm, clm;
+  clm[0][0]=1.0; clm[0][1]=0.0; clm[0][2]=0.0; clm[0][3]=0;
+  clm[1][0]=0.0; clm[1][1]=1.0; clm[1][2]=0.0; clm[1][3]=0;
+  clm[2][0]=0.0; clm[2][1]=1.0; clm[2][2]=1.0; clm[2][3]=0;
+  crm[0][0]=1.0; crm[0][1]=0.0; crm[0][2]=0.0; crm[0][3]=2;
+  crm[1][0]=0.0; crm[1][1]=1.0; crm[1][2]=0.0; crm[1][3]=4;
+  crm[2][0]=0.0; crm[2][1]=1.0; crm[2][2]=1.0; crm[2][3]=6;
+  vpgl_proj_camera<double> Ctl(clm), Ctr(crm);  
+  vpgl_fundamental_matrix<double> fm3p( Ctr, Ctl );
+  vnl_matrix<double> mideal = fm3p.get_matrix();
+  vcl_cerr << "Two Point F Matrix Ideal:\n" << mideal; //DEBUG
+  p1r.clear(); p1l.clear();
+  //for( unsigned i = 0; i < p1w.size(); i++ ){
+  for( unsigned i = 0; i < 2; i++ ){
+    p1r.push_back( Ctl.project( p1w[i] ) );
+    p1l.push_back( Ctr.project( p1w[i] ) );
+  }
+  vpgl_fm_compute_2_point fc2(true);
+  vpgl_fundamental_matrix<double> f3lest;
+  fc2.compute( p1r, p1l, f3lest );
+  vnl_matrix<double> m3lin = f3lest.get_matrix();
+  double sc = mideal[0][1]/m3lin[0][1];
+  m3lin*=sc;
+  vcl_cerr << "Two Point F Matrix:\n" << m3lin; //DEBUG
+  TEST_NEAR( "fm two point linear fromm perfect correspondences", 
+             (mideal-m3lin).frobenius_norm(), 0, 1 );
   // PART 3: Test the ransac algorithm with perfect correspondences.
   double random_list2r[12] = { -4, 15, 19, -12, 2, -26, -9, 17, -.5, -26, 11, 7 };
   double random_list2l[12] = { -10, 8, .676, .15, -13, -2, 8, 22, 34, -11, 4, 24 };
@@ -162,7 +191,7 @@ static void test_fm_compute()
   vcl_cerr << "\nTrue fundamental matrix:\n" << fm2_vnl << '\n';
   vcl_cerr << "\nEstimated fundamental matrix:\n" << fm2est_vnl << '\n';
   TEST_NEAR( "fm compute ransac from perfect correspondences", 
-    (fm2_vnl-fm2est_vnl).frobenius_norm(), 0, 1 );
-}
+             (fm2_vnl-fm2est_vnl).frobenius_norm(), 0, 1 );
 
+}
 TESTMAIN(test_fm_compute);

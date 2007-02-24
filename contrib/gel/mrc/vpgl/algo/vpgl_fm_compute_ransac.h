@@ -10,6 +10,9 @@
 // \author Thomas Pollard
 // \date 5/27/05
 //
+//  The point correspondences in relation to F are defined by
+//     pl^t[F]pr = 0
+//
 // Should template this class.
 
 #include <vcl_vector.h>
@@ -22,7 +25,8 @@
 class vpgl_fm_compute_ransac
 {
  public:
-  vpgl_fm_compute_ransac() {}
+  vpgl_fm_compute_ransac():outlier_thresh_(1),max_outlier_frac_(0.5),
+    desired_prob_good_(0.99), max_pops_(1), gen_all_(false){}
 
   //: Compute from two sets of corresponding points.
   // Put the resulting matrix into fm, return true if successful.
@@ -32,8 +36,31 @@ class vpgl_fm_compute_ransac
                 const vcl_vector< vgl_point_2d<double> >& pl,
                 vpgl_fundamental_matrix<double>& fm );
 
-  //: After "compute" this will have true in the indices determined to be outliers.
+  //: The upper bound on the fraction of outlier correspondences
+  void set_max_outlier_frac(const double max_frac){max_outlier_frac_ = max_frac;}
+  //: The probability that a correct correspondence tuple is found
+  void set_desired_prob_good(const double prob_good){desired_prob_good_ = prob_good;}
+  //: the max number of populations in the sample (typically one)
+  void set_max_pops(const int max_pops){max_pops_=max_pops;}
+
+  //: Force the generation of all sample 8 tuples
+  void set_generate_all(const bool gen_all){gen_all_ = gen_all;}
+
+  //: Set the threshold on epipolar distance that determines that a correspondence is an outlier
+  void set_outlier_threshold(const double thresh){outlier_thresh_ = thresh;}
+  
+  //: After "compute" indices will have true set for correspondences that are outliers
   vcl_vector<bool> outliers;
+
+  //: After "compute" this will have point distances from epipolar lines
+  vcl_vector<double> residuals;
+
+ private:
+  double outlier_thresh_;
+  double max_outlier_frac_;
+  double desired_prob_good_;
+  int max_pops_; 
+  bool gen_all_;
 };
 
 

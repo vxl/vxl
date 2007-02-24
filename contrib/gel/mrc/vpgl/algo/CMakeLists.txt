@@ -13,6 +13,7 @@ SET( vpgl_algo_sources
   vpgl_camera_compute.h         vpgl_camera_compute.cxx 
   vpgl_fm_compute_7_point.h     vpgl_fm_compute_7_point.cxx
   vpgl_fm_compute_8_point.h     vpgl_fm_compute_8_point.cxx
+  vpgl_fm_compute_2_point.h     vpgl_fm_compute_2_point.cxx
   vpgl_fm_compute_ransac.h      vpgl_fm_compute_ransac.cxx
   vpgl_fm_compute_reg_ransac.h  vpgl_fm_compute_reg_ransac.cxx
   vpgl_fm_compute_affine_ransac.h  vpgl_fm_compute_affine_ransac.cxx
