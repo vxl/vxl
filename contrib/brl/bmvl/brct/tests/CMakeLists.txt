@@ -39,3 +39,7 @@ ADD_TEST(brct_test_compute_P      ${EXECUTABLE_OUTPUT_PATH}/brct_test_all brct_t
 
 ADD_EXECUTABLE(brct_test_include test_include.cxx)
 TARGET_LINK_LIBRARIES(brct_test_include brct)
+
+
+ADD_EXECUTABLE( generate_S3  generate_s3.cxx )
+TARGET_LINK_LIBRARIES(generate_S3 brct)

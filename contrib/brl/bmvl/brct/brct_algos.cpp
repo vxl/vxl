@@ -40,6 +40,9 @@
 #include <vsol/vsol_point_3d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_polygon_3d.h>
+#include <brct/brct_corr.h>
+#include <brct/brct_corr_sptr.h>
+
 
 #include <vcl_cassert.h>
 
@@ -474,8 +477,8 @@ void brct_algos::write_vrml_header(vcl_ofstream& str)
 {
   str << "#VRML V2.0 utf8\n"
       << "Background {\n"
-      << "  skyColor [ 1 1 1 ]\n"
-      << "  groundColor [ 1 1 1 ]\n"
+      << "  skyColor [ 0 0 0 ]\n"
+      << "  groundColor [ 0 0 0 ]\n"
       << "}\n"
       << "PointLight {\n"
       << "  on FALSE\n"
@@ -508,6 +511,31 @@ void brct_algos::write_vrml_points(vcl_ofstream& str,
   str << "   ]\n  }\n }\n}\n";
 }
 
+void 
+brct_algos::write_vrml_points(vcl_ofstream& str,
+                              vcl_vector<vgl_point_3d<double> > const& pts3d,
+                              vcl_vector<vgl_point_3d<float> > const& color
+                              )
+{
+  str << "Shape {\n"
+      << "  appearance NULL\n"
+      << "    geometry PointSet {\n"
+      << "      color Color{\n"
+      << "       color[\n";
+  int n = color.size();
+  for (int i =0; i<n; i++)
+    str << color[i].x() << ' ' 
+        << color[i].y() << ' ' 
+        << color[i].z() << '\n';
+  str << "   ]\n  }\n"
+      << "      coord Coordinate{\n"
+      << "       point[\n";
+  n = pts3d.size();
+  for (int i =0; i<n; i++)
+    str << -pts3d[i].x() << ' ' << pts3d[i].y() << ' ' << pts3d[i].z() << '\n';
+  str << "   ]\n  }\n }\n}\n";
+}
+
 void brct_algos::write_vrml_box(vcl_ofstream& str, vsol_box_3d_sptr const& box,
                                 const float r, const float g, const float b,
                                 const float transparency)
@@ -534,6 +562,68 @@ void brct_algos::write_vrml_box(vcl_ofstream& str, vsol_box_3d_sptr const& box,
       << "  size " << width << ' ' << height << ' ' <<  depth << '\n'
       <<  "   }\n"
       <<  "  }\n"
+      <<  " ]\n"
+      << "}\n";
+}
+
+void brct_algos::write_vrml_sphere(vcl_ofstream& str, vgl_sphere_3d<double> const& sphere,
+                                const float r, const float g, const float b,
+                                const float transparency)
+{
+  
+  double x0 = sphere.centre().x(), y0 = sphere.centre().y(), z0 = sphere.centre().z();
+  double rad = sphere.radius();
+  str << "Transform {\n"
+      << "translation " << -x0 << ' ' << y0 << ' '
+      << ' ' << z0 << '\n'
+      << "children [\n"
+      << "Shape {\n"
+      << " appearance Appearance{\n"
+      << "   material Material\n"
+      << "    {\n"
+      << "      diffuseColor " << r << ' ' << g << ' ' << b << '\n'
+      << "      transparency " << transparency << '\n'
+      << "    }\n"
+      << "  }\n"
+      << " geometry Sphere\n"
+      <<   "{\n"
+      << "  radius " << rad << '\n'
+      <<  "   }\n"
+      <<  "  }\n"
+      <<  " ]\n"
+      << "}\n";
+}
+void brct_algos::write_vrml_polyline(vcl_ofstream& str,
+                                vcl_vector<vgl_point_3d<double> > const& vts,
+                                const float r,
+                                const float g,
+                                const float b)
+{
+  str << "Transform {\n"
+      << "translation " << 0 << ' ' << 0 << ' '
+      << ' ' << 0 << '\n'
+      << "children [\n"
+      << "Shape {\n"
+      << " appearance Appearance{\n"
+      << "   material Material\n"
+      << "    {\n"
+      << "      diffuseColor " << r << ' ' << g << ' ' << b << '\n'
+      << "      emissiveColor " << r << ' ' << g << ' ' << b << '\n'
+      << "    }\n"
+      << "  }\n"
+      << " geometry IndexedLineSet\n"
+      <<   "{\n"
+      << "      coord Coordinate{\n"
+      << "       point[\n";
+  int n = vts.size();
+  for (int i =0; i<n; i++)
+    str << -vts[i].x() << ' ' << vts[i].y() << ' ' << vts[i].z() << '\n';
+  str << "   ]\n  \n }";
+  str << "   coordIndex [\n";
+  for (int i =0; i<n; i++)
+    str << i << ',';
+  str << -1 << ',';
+  str << "   ]\n  } \n}"
       <<  " ]\n"
       << "}\n";
 }
@@ -1186,6 +1276,74 @@ bool brct_algos::write_corrs(vcl_ofstream& str,
         << ' ' << P.x() << ' ' << P.y() << ' ' << P.z()
         << ' ' << p.x() << ' ' << p.y() << '\n';
   }
+  return true;
+}
+bool brct_algos::write_brct_corrs(vcl_ofstream& str,
+                                  vcl_vector<brct_corr_sptr> const& corrs)
+{
+  unsigned n = corrs.size();
+  if(!n)
+    return false;
+  brct_corr_sptr c0 = corrs[0];
+  int ncams = c0->n_cams();
+  str << "NCAMS:" << ' ' << ncams << '\n'; 
+  str << "NCORRS:" << ' ' << n << '\n'; 
+  for(unsigned i = 0; i<n; ++i)
+    for(int c = 0; c<ncams; ++c)
+      {
+        bool v = corrs[i]->valid(c);
+        if(v){
+        str << "VALID:" << ' ' << 1 << '\n'; 
+        str << "X:" << ' ' << (corrs[i]->match(c)).x() << '\n'; 
+        str << "Y:" << ' ' << (corrs[i]->match(c)).y() << '\n';
+        }else{
+        str << "VALID:" << ' ' << 0 << '\n'; 
+        str << "X:" << ' ' << -1 << '\n'; 
+        str << "Y:" << ' ' << -1 << '\n';
+        }          
+      }
+	return true;
+}
+bool brct_algos::read_brct_corrs(vcl_ifstream& str,
+                                  vcl_vector<brct_corr_sptr>& corrs)
+{
+  corrs.clear();
+  vcl_string temp;
+  str >> temp;
+  if (temp != "NCAMS:")
+    return false;
+  int ncams;
+  str >> ncams;
+  str >> temp;
+  if (temp != "NCORRS:")
+    return false;
+  unsigned ncorrs;
+  str >> ncorrs;
+  for(unsigned i = 0; i<ncorrs; ++i)
+    {
+      brct_corr_sptr bc = new brct_corr(ncams);
+      for(int c = 0; c<ncams; ++c)
+      {
+        str >> temp;
+        if (temp != "VALID:")
+          return false;
+        bool v;
+        str >> v;
+        if(v){
+          str >> temp;
+          if (temp != "X:")
+            return false;
+          double x, y;
+          str >> x;
+          str >> temp;
+          if (temp != "Y:")
+            return false;
+          str >> y;
+          bc->set_match(c, x, y);
+        }
+	  }
+	   corrs.push_back(bc);
+    }
   return true;
 }
 

@@ -29,9 +29,10 @@ class brct_corr : public vbl_ref_count
     : vbl_ref_count(), n_cams_(x.n_cams_){}
   ~brct_corr();
   //:Accessors
+  int n_cams(){return n_cams_;}
   bool valid(const int cam){return valid_[cam];}
   vgl_homg_point_2d<double> match(const int cam){return matches_[cam];}
-
+  
   //:Mutators
   void set_match(const int cam, const double x, const double y);
   //: Utility functions

@@ -16,6 +16,7 @@
 #endif // _MSC_VER > 1000
 #include <vcl_fstream.h>
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_sphere_3d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_line_segment_2d.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
@@ -34,6 +35,7 @@
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <bugl/bugl_gaussian_point_2d.h>
 #include <bugl/bugl_gaussian_point_3d.h>
+#include <brct/brct_corr_sptr.h>
 
 struct brct_error_index
 {
@@ -213,11 +215,24 @@ class brct_algos
   static void write_vrml_trailer(vcl_ofstream& str);
   static void write_vrml_points(vcl_ofstream& str,
                                 vcl_vector<vsol_point_3d_sptr> const& pts3d);
-  static void write_vrml_box(vcl_ofstream& str, vsol_box_3d_sptr const& box,
+  static void write_vrml_points(vcl_ofstream& str,
+                                vcl_vector<vgl_point_3d<double> > const& pts3d,
+                                vcl_vector<vgl_point_3d<float> > const& color
+                                );
+static void write_vrml_polyline(vcl_ofstream& str,
+                                vcl_vector<vgl_point_3d<double> > const& vts,
+                                const float r,
+                                const float g,
+                                const float b);
+ static void write_vrml_box(vcl_ofstream& str, vsol_box_3d_sptr const& box,
                              const float r = 1.0, const float g = 1.0,
                              const float b = 1.0,
                              const float transparency = 0.0);
-
+static void write_vrml_sphere(vcl_ofstream& str,
+                              vgl_sphere_3d<double> const& sphere,
+                              const float r = 1.0, const float g =1.0,
+                              const float b=1.0,
+                              const float transparency = 0);
   static
     bool read_world_points(vcl_ifstream& str,
                            vcl_vector<vgl_point_3d<double> >& world_points);
@@ -268,6 +283,10 @@ static bool
                      vcl_vector<vgl_point_2d<double> >& image_points,
                      vcl_vector<vgl_point_3d<double> >& world_points);
 
+  static bool read_brct_corrs(vcl_ifstream& str,
+                              vcl_vector<brct_corr_sptr>& corrs);
+  static bool write_brct_corrs(vcl_ofstream& str,
+                               vcl_vector<brct_corr_sptr> const& corrs);
   static void write_target_camera(vcl_ofstream& str, vnl_double_3x4 const& P);
 
   static  vil_image_resource_sptr map_image_to_world(vil_image_resource_sptr const& image,
