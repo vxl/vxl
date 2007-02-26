@@ -120,7 +120,25 @@ static void test_conic()
   vnl_vector_fixed<double,6> v = vgl_homg_operators_2d<double>::get_vector(c);
   TEST("get_vector", v[0]==1&&v[1]==0&&v[2]==1&&v[3]==-2&&v[4]==-4&&v[5]==4, true);
   cc = vgl_conic<double>(1,0,1,-2,-4,4); // idem, by equation
+  vcl_cout << "By equation: " << cc << '\n';
   TEST("circle equality", c, cc);
+  double xc, yc, major_axis, minor_axis, angle;
+  bool good = cc.ellipse_geometry(xc, yc, major_axis, minor_axis, angle);
+  TEST("circle geometry", good, true);
+  TEST_NEAR("circle geometry: centre x", xc, 1, 1e-8);
+  TEST_NEAR("circle geometry: centre y", yc, 2, 1e-8);
+  TEST_NEAR("circle geometry: maj axis", major_axis, 1, 1e-8);
+  TEST_NEAR("circle geometry: min axis", minor_axis, 1, 1e-8);
+
+  cc = vgl_conic<double>(-1,0,-1,2,4,-4); // idem, by "opposite" equation
+  vcl_cout << "By 'opposite' equation: " << cc << '\n';
+  TEST("circle equality", c, cc);
+  good = cc.ellipse_geometry(xc, yc, major_axis, minor_axis, angle);
+  TEST("circle geometry", good, true);
+  TEST_NEAR("circle geometry: centre x", xc, 1, 1e-8);
+  TEST_NEAR("circle geometry: centre y", yc, 2, 1e-8);
+  TEST_NEAR("circle geometry: maj axis", major_axis, 1, 1e-8);
+  TEST_NEAR("circle geometry: min axis", minor_axis, 1, 1e-8);
   vgl_homg_point_2d<double> npt(0,2,1);
   TEST("contains", c.contains(npt), true);
   cc = c.dual_conic();
@@ -169,19 +187,37 @@ static void test_conic()
   TEST("centre", c.centre(), centre);
   TEST_NEAR("ellipse equality", cc,c, 1e-6);
 
-  // Test ellipse geometry for an ellipse a = 2, b = 1 at 45 degrees
-  // centered at (1, 2);
+  // Test ellipse geometry for an ellipse with a = 2, b = 1 slanted 45 degrees
+  // and centered at (1, 2)
 
   vcl_cout << "Test ellipse geometry\n";
-  vgl_conic<double> cg(0.492577, -0.591093, 0.492577, 0.197032, -1.37921, 0.492813);
-  double xc, yc, major_axis, minor_axis, angle;
-  bool good = cg.ellipse_geometry(xc, yc, major_axis, minor_axis, angle);
+  cc = vgl_conic<double>(0.492577, -0.591093, 0.492577, 0.197032, -1.37921, 0.492813);
+  good = cc.ellipse_geometry(xc, yc, major_axis, minor_axis, angle);
   vcl_cout << "ellipse(" << xc << ' ' << yc << ' ' << major_axis
            << ' ' << minor_axis << ' ' << angle*180.0/vnl_math::pi << ")\n";
-  double gd = 0.0;
-  if (!good)
-    gd = 1.0;
-  TEST_NEAR("ellipse geometry", gd + (xc-1)*(yc-2)*(major_axis-2)*(minor_axis-1)*(angle-0.785398), 0, 1e-10);
+  TEST("ellipse geometry", good, true);
+  TEST_NEAR("ellipse geometry: centre x", xc, 1, 1e-5);
+  TEST_NEAR("ellipse geometry: centre y", yc, 2, 1e-5);
+  TEST_NEAR("ellipse geometry: maj axis", major_axis, 2, 1e-3);
+  TEST_NEAR("ellipse geometry: min axis", minor_axis, 1, 1e-3);
+  TEST_NEAR("ellipse geometry: angle", angle, 0.785398, 1e-6);
+
+  //End ellipse geometry test
+
+  // Test ellipse geometry for an ellipse with a = 2, b = 1 slanted -45 degrees
+  // and centered at (-1, 2)
+
+  vcl_cout << "Test ellipse geometry\n";
+  cc = vgl_conic<double>(-0.492577, -0.591093, -0.492577, 0.197032, 1.37921, -0.492813);
+  good = cc.ellipse_geometry(xc, yc, major_axis, minor_axis, angle);
+  vcl_cout << "ellipse(" << xc << ' ' << yc << ' ' << major_axis
+           << ' ' << minor_axis << ' ' << angle*180.0/vnl_math::pi << ")\n";
+  TEST("ellipse geometry", good, true);
+  TEST_NEAR("ellipse geometry: centre x", xc, -1, 1e-5);
+  TEST_NEAR("ellipse geometry: centre y", yc, 2, 1e-5);
+  TEST_NEAR("ellipse geometry: maj axis", major_axis, 2, 1e-3);
+  TEST_NEAR("ellipse geometry: min axis", minor_axis, 1, 1e-3);
+  TEST_NEAR("ellipse geometry: angle", angle, -0.785398, 1e-6);
 
   //End ellipse geometry test
 
