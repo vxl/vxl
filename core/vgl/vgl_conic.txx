@@ -12,7 +12,8 @@
 #include <vcl_iostream.h>
 #include <vcl_compiler.h>
 
-static const char *vgl_conic_name[]= {
+static const char *vgl_conic_name[] =
+{
   "invalid conic",
   "real ellipse",
   "real circle",
@@ -195,37 +196,35 @@ bool vgl_conic<T>::is_degenerate() const
 
 //: return a geometric description of the conic if an ellipse
 // The centre of the ellipse is (xc, yc)
-template <class T> 
+template <class T>
 bool vgl_conic<T>::
 ellipse_geometry(double& xc, double& yc, double& major_axis_length,
                  double& minor_axis_length, double& angle_in_radians)
 {
-  if(type_!=real_ellipse)
+  if (type_!=real_ellipse && type_ != real_circle)
     return false;
- 
-  // Cast to double
-  double A = static_cast<double>(a_), B = static_cast<double>(b_),
-    C = static_cast<double>(c_), D = static_cast<double>(d_),
-    E = static_cast<double>(e_), F = static_cast<double>(f_);
 
-  
-  double det = A*(C*F - E*E/4.0) - B*(B*F- D*E/2.0)/4.0 + D*(B*E/2.0-C*D)/4.0;
-  if(det<0)
-    det = -det;
-   double D2 =  A*C - B*B/4.0;
-  xc = (E*B - 2.0*C*D)/(4.0*D2);
-  yc = (D*B - 2.0*A*E)/(4.0*D2);
+  // Cast to double and half the non-diagonal (non-quadratic) entries B, D, E.
+  double A = static_cast<double>(a_), B = static_cast<double>(b_)*0.5,
+         C = static_cast<double>(c_), D = static_cast<double>(d_)*0.5,
+         F = static_cast<double>(f_), E = static_cast<double>(e_)*0.5;
+  if (A < 0)
+    A=-A, B=-B, C=-C, D=-D, E=-E, F=-F;
 
-  double trace,disc, cmaj, cmin;
-  trace = A + C;
-  disc = vcl_sqrt(trace*trace - 4.0*D2);
-  cmaj = (trace+disc)*D2/(2.0*det);
-  cmin = (trace-disc)*D2/(2.0*det);
-  major_axis_length = 1/vcl_sqrt(cmin);  minor_axis_length = 1/vcl_sqrt(cmaj);
-  
+  double det = A*(C*F - E*E) - B*(B*F- D*E) + D*(B*E-C*D);
+  double D2 =  A*C - B*B;
+  xc = (E*B - C*D)/D2;
+  yc = (D*B - A*E)/D2;
+
+  double trace = A + C;
+  double disc = vcl_sqrt(trace*trace - 4.0*D2);
+  double cmaj = (trace+disc)*D2/(2*det); if (cmaj < 0) cmaj = -cmaj;
+  double cmin = (trace-disc)*D2/(2*det); if (cmin < 0) cmin = -cmin;
+  minor_axis_length = 1.0/vcl_sqrt(cmaj>cmin?cmaj:cmin);
+  major_axis_length = 1.0/vcl_sqrt(cmaj>cmin?cmin:cmaj);
+
   //Find the angle that diagonalizes the upper 2x2 sub-matrix
-  double den = C - A;
-  angle_in_radians  = -0.5 * vcl_atan2(B, den);
+  angle_in_radians  = -0.5 * vcl_atan2(2*B, C-A);
   //                  ^
   // and return the negative of this angle
   return true;
@@ -259,7 +258,8 @@ vcl_list<vgl_homg_line_2d<T> > vgl_conic<T>::components() const
   // Both component lines must pass through the centre of this conic
   vgl_homg_point_2d<T> c = centre();
 
-  if (type() == real_parallel_lines) {
+  if (type() == real_parallel_lines)
+  {
     // In this case the centre lies at infinity.
     // Either these lines both intersect the X axis, or both intersect the Y axis:
     if (A!=0 || D!=0) { // X axis: intersections satisfy y=0 && Axx+2Dxw+Fww=0:
@@ -294,7 +294,8 @@ vcl_list<vgl_homg_line_2d<T> > vgl_conic<T>::components() const
 //  (This is an affine property, not a projective one.)
 //  Equivalent to saying that the line at infinity does not touch the conic.
 template <class T>
-bool vgl_conic<T>::is_central() const {
+bool vgl_conic<T>::is_central() const
+{
   return type_ == real_ellipse|| type_ == imaginary_ellipse|| type_ == hyperbola
       || type_ == real_circle || type_ == imaginary_circle
       || type_ == real_intersecting_lines|| type_ == complex_intersecting_lines;
@@ -347,7 +348,8 @@ vgl_homg_point_2d<T> vgl_conic<T>::polar_point(vgl_homg_line_2d<T> const& l) con
 
 //: Write "<vgl_conic aX^2+bXY+cY^2+dXW+eYW+fW^2=0>" to stream
 template <class T>
-vcl_ostream& operator<<(vcl_ostream& s, vgl_conic<T> const& c) {
+vcl_ostream& operator<<(vcl_ostream& s, vgl_conic<T> const& c)
+{
   s << "<vgl_conic ";
   if (c.a() == 1) s << "X^2";
   else if (c.a() == -1) s << "-X^2";
@@ -377,7 +379,8 @@ vcl_ostream& operator<<(vcl_ostream& s, vgl_conic<T> const& c) {
 
 //: Read a b c d e f from stream
 template <class T>
-vcl_istream& operator>>(vcl_istream& is,  vgl_conic<T>& q) {
+vcl_istream& operator>>(vcl_istream& is,  vgl_conic<T>& q)
+{
   T a, b, c, d, e, f; is >> a >> b >> c >> d >> e >> f;
   q.set(a,b,c,d,e,f); return is;
 }
