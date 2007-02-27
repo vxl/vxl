@@ -180,6 +180,12 @@ SOURCE=.\test_ldl_cholesky.cxx
 # Begin Source File
 SOURCE=.\test_sparse_lu.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_bracket_minimum.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_brent_minimizer.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

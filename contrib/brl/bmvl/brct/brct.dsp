@@ -134,6 +134,12 @@ SOURCE=.\Templates/vbl_smart_ptr+brct_plane_corr-.cxx
 # Begin Source File
 SOURCE=.\Templates/vcl_vector+brct_plane_corr_sptr-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+brct_corr-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vcl_vector+brct_corr_sptr-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -172,6 +178,9 @@ SOURCE=.\brct_dense_reconstructor.h
 # End Source File
 # Begin Source File
 SOURCE=.\brct_plane_corr.h
+# End Source File
+# Begin Source File
+SOURCE=.\brct_corr_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\brct_plane_corr_sptr.h

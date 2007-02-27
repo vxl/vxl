@@ -276,6 +276,12 @@ SOURCE=.\vnl_ldl_cholesky.cxx
 SOURCE=.\vnl_sparse_lu.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vnl_bracket_minimum.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_brent_minimizer.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vnl_svd_economy+double-.cxx
 # End Source File
 # Begin Source File
@@ -454,6 +460,15 @@ SOURCE=.\vnl_ldl_cholesky.h
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_sparse_lu.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_bracket_minimum.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_brent_minimizer.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_fit_parabola.h
 # End Source File
 # End Group
 # End Target

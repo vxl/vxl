@@ -114,6 +114,9 @@ SOURCE=.\vimt_image_2d.cxx
 SOURCE=.\vimt_load_transform.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vimt_vil_v2i.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vimt_sample_grid_bilin+byte.double-.cxx
 # End Source File
 # Begin Source File
@@ -295,6 +298,9 @@ SOURCE=.\vimt_sample_grid_bicub.h
 # End Source File
 # Begin Source File
 SOURCE=.\vimt_sample_grid_bicub.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vimt_vil_v2i.h
 # End Source File
 # End Group
 # End Target

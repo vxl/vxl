@@ -292,6 +292,9 @@ SOURCE=.\test_resample_bilin.cxx
 # Begin Source File
 SOURCE=.\test_image_bounds_and_centre_2d.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_v2i.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
