@@ -14,6 +14,7 @@
 // of that function to the vil3d_image_view class.
 
 #include "vil3d_image_view.h"
+#include <vcl_cstring.h> // for std::memset
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vcl_ostream.h>
@@ -271,7 +272,7 @@ void vil3d_image_view<T>::fill(T value)
 {
   if (is_contiguous())
     if (value == 0)
-      memset(begin(), 0, this->size_bytes());
+      vcl_memset(begin(), 0, this->size_bytes());
     else
       vcl_fill(begin(), end(), value);
   else
