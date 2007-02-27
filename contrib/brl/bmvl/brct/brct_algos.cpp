@@ -511,7 +511,7 @@ void brct_algos::write_vrml_points(vcl_ofstream& str,
   str << "   ]\n  }\n }\n}\n";
 }
 
-void 
+void
 brct_algos::write_vrml_points(vcl_ofstream& str,
                               vcl_vector<vgl_point_3d<double> > const& pts3d,
                               vcl_vector<vgl_point_3d<float> > const& color
@@ -524,8 +524,8 @@ brct_algos::write_vrml_points(vcl_ofstream& str,
       << "       color[\n";
   int n = color.size();
   for (int i =0; i<n; i++)
-    str << color[i].x() << ' ' 
-        << color[i].y() << ' ' 
+    str << color[i].x() << ' '
+        << color[i].y() << ' '
         << color[i].z() << '\n';
   str << "   ]\n  }\n"
       << "      coord Coordinate{\n"
@@ -570,7 +570,6 @@ void brct_algos::write_vrml_sphere(vcl_ofstream& str, vgl_sphere_3d<double> cons
                                 const float r, const float g, const float b,
                                 const float transparency)
 {
-  
   double x0 = sphere.centre().x(), y0 = sphere.centre().y(), z0 = sphere.centre().z();
   double rad = sphere.radius();
   str << "Transform {\n"
@@ -593,6 +592,7 @@ void brct_algos::write_vrml_sphere(vcl_ofstream& str, vgl_sphere_3d<double> cons
       <<  " ]\n"
       << "}\n";
 }
+
 void brct_algos::write_vrml_polyline(vcl_ofstream& str,
                                 vcl_vector<vgl_point_3d<double> > const& vts,
                                 const float r,
@@ -618,12 +618,12 @@ void brct_algos::write_vrml_polyline(vcl_ofstream& str,
   int n = vts.size();
   for (int i =0; i<n; i++)
     str << -vts[i].x() << ' ' << vts[i].y() << ' ' << vts[i].z() << '\n';
-  str << "   ]\n  \n }";
-  str << "   coordIndex [\n";
+  str << "   ]\n\n }"
+      << "   coordIndex [\n";
   for (int i =0; i<n; i++)
     str << i << ',';
-  str << -1 << ',';
-  str << "   ]\n  } \n}"
+  str << -1 << ','
+      << "   ]\n  }\n}"
       <<  " ]\n"
       << "}\n";
 }
@@ -1278,34 +1278,36 @@ bool brct_algos::write_corrs(vcl_ofstream& str,
   }
   return true;
 }
+
 bool brct_algos::write_brct_corrs(vcl_ofstream& str,
                                   vcl_vector<brct_corr_sptr> const& corrs)
 {
   unsigned n = corrs.size();
-  if(!n)
+  if (!n)
     return false;
   brct_corr_sptr c0 = corrs[0];
   int ncams = c0->n_cams();
-  str << "NCAMS:" << ' ' << ncams << '\n'; 
-  str << "NCORRS:" << ' ' << n << '\n'; 
-  for(unsigned i = 0; i<n; ++i)
-    for(int c = 0; c<ncams; ++c)
-      {
-        bool v = corrs[i]->valid(c);
-        if(v){
-        str << "VALID:" << ' ' << 1 << '\n'; 
-        str << "X:" << ' ' << (corrs[i]->match(c)).x() << '\n'; 
-        str << "Y:" << ' ' << (corrs[i]->match(c)).y() << '\n';
-        }else{
-        str << "VALID:" << ' ' << 0 << '\n'; 
-        str << "X:" << ' ' << -1 << '\n'; 
-        str << "Y:" << ' ' << -1 << '\n';
-        }          
+  str << "NCAMS:" << ' ' << ncams << '\n'
+      << "NCORRS:" << ' ' << n << '\n';
+  for (unsigned i = 0; i<n; ++i)
+    for (int c = 0; c<ncams; ++c)
+    {
+      bool v = corrs[i]->valid(c);
+      if (v) {
+        str << "VALID:" << ' ' << 1 << '\n'
+            << "X:" << ' ' << (corrs[i]->match(c)).x() << '\n'
+            << "Y:" << ' ' << (corrs[i]->match(c)).y() << '\n';
+      } else {
+        str << "VALID:" << ' ' << 0 << '\n'
+            << "X:" << ' ' << -1 << '\n'
+            << "Y:" << ' ' << -1 << '\n';
       }
-	return true;
+    }
+  return true;
 }
+
 bool brct_algos::read_brct_corrs(vcl_ifstream& str,
-                                  vcl_vector<brct_corr_sptr>& corrs)
+                                 vcl_vector<brct_corr_sptr>& corrs)
 {
   corrs.clear();
   vcl_string temp;
@@ -1319,31 +1321,31 @@ bool brct_algos::read_brct_corrs(vcl_ifstream& str,
     return false;
   unsigned ncorrs;
   str >> ncorrs;
-  for(unsigned i = 0; i<ncorrs; ++i)
+  for (unsigned i = 0; i<ncorrs; ++i)
+  {
+    brct_corr_sptr bc = new brct_corr(ncams);
+    for (int c = 0; c<ncams; ++c)
     {
-      brct_corr_sptr bc = new brct_corr(ncams);
-      for(int c = 0; c<ncams; ++c)
-      {
+      str >> temp;
+      if (temp != "VALID:")
+        return false;
+      bool v;
+      str >> v;
+      if (v) {
         str >> temp;
-        if (temp != "VALID:")
+        if (temp != "X:")
           return false;
-        bool v;
-        str >> v;
-        if(v){
-          str >> temp;
-          if (temp != "X:")
-            return false;
-          double x, y;
-          str >> x;
-          str >> temp;
-          if (temp != "Y:")
-            return false;
-          str >> y;
-          bc->set_match(c, x, y);
-        }
-	  }
-	   corrs.push_back(bc);
+        double x, y;
+        str >> x;
+        str >> temp;
+        if (temp != "Y:")
+          return false;
+        str >> y;
+        bc->set_match(c, x, y);
+      }
     }
+    corrs.push_back(bc);
+  }
   return true;
 }
 
