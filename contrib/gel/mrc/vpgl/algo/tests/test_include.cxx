@@ -1,6 +1,7 @@
 #include <vpgl/algo/vpgl_backproject.h>
 #include <vpgl/algo/vpgl_camera_compute.h>
 #include <vpgl/algo/vpgl_construct_cameras.h>
+#include <vpgl/algo/vpgl_fm_compute_2_point.h>
 #include <vpgl/algo/vpgl_fm_compute_7_point.h>
 #include <vpgl/algo/vpgl_fm_compute_8_point.h>
 #include <vpgl/algo/vpgl_fm_compute_affine_ransac.h>

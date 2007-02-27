@@ -1,3 +1,4 @@
+#include <vimt/vimt_fwd.h>
 
 #include <vimt/algo/vimt_correlate_2d.h>
 #include <vimt/algo/vimt_find_peaks.h>
@@ -15,13 +16,13 @@
 #include <vimt/vimt_image.h>
 #include <vimt/vimt_image_pyramid_builder.h>
 #include <vimt/vimt_image_pyramid.h>
+#include <vimt/vimt_load_transform.h>
 #include <vimt/vimt_resample_bilin.h>
 #include <vimt/vimt_sample_grid_bilin.h>
 #include <vimt/vimt_sample_grid_bicub.h>
 #include <vimt/vimt_sample_profile_bilin.h>
 #include <vimt/vimt_scale_pyramid_builder_2d.h>
 #include <vimt/vimt_transform_2d.h>
-#include <vimt/vimt_load_transform.h>
-#include <vimt/vimt_fwd.h>
+#include <vimt/vimt_vil_v2i.h>
 
 int main() { return 0; }

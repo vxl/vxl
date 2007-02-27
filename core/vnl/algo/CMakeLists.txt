@@ -64,6 +64,7 @@ IF(NETLIB_FOUND)
     vnl_rpoly_roots.cxx vnl_rpoly_roots.h
     vnl_cpoly_roots.cxx vnl_cpoly_roots.h
     vnl_rnpoly_solve.cxx vnl_rnpoly_solve.h
+    vnl_fit_parabola.h
 
     # fft
     vnl_fft.cxx vnl_fft.h
