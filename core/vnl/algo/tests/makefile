@@ -34,6 +34,8 @@ TESTS += test_powell.cxx
 TESTS += test_solve_qp.cxx
 TESTS += test_matrix_update.cxx
 TESTS += test_sparse_lu.cxx
+TESTS += test_bracket_minimum.cxx
+TESTS += test_brent_minimizer.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

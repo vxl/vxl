@@ -13,6 +13,7 @@ SOURCES += vimt_image_pyramid_builder.cxx
 SOURCES += vimt_transform_2d.cxx
 SOURCES += vimt_add_all_binary_loaders.cxx
 SOURCES += vimt_load_transform.cxx
+SOURCES += vimt_vil_v2i.cxx
 MANPAGE_SOURCES += vimt_dog_pyramid_builder_2d.txx
 MANPAGE_SOURCES += vimt_scale_pyramid_builder_2d.txx
 MANPAGE_SOURCES += vimt_gaussian_pyramid_builder_2d.txx

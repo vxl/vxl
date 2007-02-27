@@ -17,6 +17,7 @@ SOURCES += vpgl_vsol_lens_warp.cxx
 MANPAGE_SOURCES += vpgl_lens_warp_mapper.h
 SOURCES += vpgl_construct_cameras.cxx
 SOURCES += vpgl_invmap_cost_function.cxx
+SOURCES += vpgl_fm_compute_2_point.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

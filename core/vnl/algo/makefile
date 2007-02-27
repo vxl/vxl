@@ -53,12 +53,15 @@ SOURCES += vnl_amoeba.cxx
 SOURCES += vnl_powell.cxx
 SOURCES += vnl_brent.cxx
 SOURCES += vnl_lsqr.cxx
+SOURCES += vnl_bracket_minimum.cxx
+SOURCES += vnl_brent_minimizer.cxx
 
 # equation solvers
 SOURCES += vnl_rpoly_roots.cxx
 SOURCES += vnl_cpoly_roots.cxx
 SOURCES += vnl_rnpoly_solve.cxx
 SOURCES += vnl_solve_qp.cxx
+MANPAGE_SOURCES += vnl_fit_parabola.h
 
 # fft
 SOURCES += vnl_fft.cxx

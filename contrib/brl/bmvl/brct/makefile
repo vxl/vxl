@@ -16,6 +16,7 @@ SOURCES += brct_volume_processor.cxx
 SOURCES += brct_volume_processor_params.cxx
 SOURCES += brct_dense_reconstructor.cxx
 SOURCES += brct_plane_corr.cxx
+MANPAGE_SOURCES += brct_corr_sptr.h
 MANPAGE_SOURCES += brct_plane_corr_sptr.h
 
 #######################################
