@@ -51,15 +51,15 @@ static void test_products(const vimt3d_transform_3d& trans1)
 
 
 //=========================================================================
-// Create separate scaling, rotation and translation transforms and compose. 
-// Check that this is consistent with creating the transform directly. 
+// Create separate scaling, rotation and translation transforms and compose.
+// Check that this is consistent with creating the transform directly.
 // NB This test fails for versions of Similarity and Affine transforms for
 // versions of vimt3d_transform_3d.cxx prior to 1.13
 //=========================================================================
 static void test_composition_and_construction(
   vimt3d_transform_3d::Form form)
 {
-  if (form==vimt3d_transform_3d::Identity || 
+  if (form==vimt3d_transform_3d::Identity ||
       form==vimt3d_transform_3d::Translation)
     return;
 
@@ -99,7 +99,7 @@ static void test_composition_and_construction(
     break;
   default:
     vcl_cerr << "test_composition_and_construction() is only intended for "
-      << "forms ZoomOnly, RigidBody, Similarity, Affine" << vcl_endl;
+             << "forms ZoomOnly, RigidBody, Similarity, Affine\n";
     break;
   }
 
@@ -109,17 +109,16 @@ static void test_composition_and_construction(
 #ifndef NDEBUG
   if (!transf_ok)
   {
-    vcl_cout << "Composition: \n";
+    vcl_cout << "Composition:\n";
     A.print_all(vcl_cout);
     vcl_cout << vcl_endl;
 
-    vcl_cout << "Construction: \n";
+    vcl_cout << "Construction:\n";
     B.print_all(vcl_cout);
     vcl_cout << vcl_endl;
-  }    
+  }
 #endif
 }
-
 
 
 //=========================================================================
@@ -164,29 +163,29 @@ static void test_affine_puvw()
   vgl_vector_3d<double> u = A(1,0,0) - p;
   vgl_vector_3d<double> v = A(0,1,0) - p;
   vgl_vector_3d<double> w = A(0,0,1) - p;
-  
+
   // Create an affine transform using p,u,v,w
   vimt3d_transform_3d B;
   B.set_affine(p, u, v, w);
-  
+
   // Test equivalence - NB operator== is not good enough for this test.
   bool transf_ok = (A.matrix()-B.matrix()).absolute_value_max()<1e-8;
   TEST("test_affine_puvw()", transf_ok, true);
 #ifndef NDEBUG
   if (!transf_ok)
   {
-    vcl_cout << "set_affine(sx, sy, sz, rx, ry, rz, tx, ty, tz): \n";
+    vcl_cout << "set_affine(sx, sy, sz, rx, ry, rz, tx, ty, tz):\n";
     A.print_all(vcl_cout);
     vcl_cout << vcl_endl;
 
-    vcl_cout << "set_affine(p, u, v, w): \n";
+    vcl_cout << "set_affine(p, u, v, w):\n";
     B.print_all(vcl_cout);
     vcl_cout << vcl_endl;
 
     vnl_matrix<double> M = A.matrix();
     vnl_matrix<double> N = B.matrix();
     vcl_cout << "Max diff= " << (M-N).absolute_value_max() << vcl_endl;
-  }    
+  }
 #endif
 }
 
