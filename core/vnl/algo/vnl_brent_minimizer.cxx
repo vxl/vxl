@@ -2,7 +2,8 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
-
+//:
+// \file
 #include "vnl_brent_minimizer.h"
 
 #include <vcl_cmath.h>
@@ -23,7 +24,7 @@ class vnl_brent_minimizer_func
 {
   vnl_vector<double> v;
   vnl_cost_function* f;
-public:
+ public:
   vnl_brent_minimizer_func(vnl_cost_function& fn)
     { f=&fn; v.set_size(1); }
 
@@ -116,8 +117,7 @@ double vnl_brent_minimizer::minimize_golden(double a, double b, double c,
     tol = EPS*vcl_fabs(b)+xtol;  // Tolerance to use
     tol2 = 2*tol;                // Twice the tolerance
 
-    vcl_cout<<"Bracket: ("<<a<<","<<b<<","<<c<<") width: "<<c-a<<vcl_endl;
-
+    vcl_cout<<"Bracket: ("<<a<<','<<b<<','<<c<<") width: "<<c-a<<vcl_endl;
   }
 
   f_at_last_minimum_ = fb;
