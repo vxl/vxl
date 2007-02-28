@@ -10,6 +10,7 @@
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_rank.h>
+#include <vnl/vnl_double_3x3.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 
@@ -88,9 +89,9 @@ static void test_fm_compute()
   fmc.compute( p1r, p1l, fm1est );
   vcl_cerr << "Break 2:\n" << fm1est.get_matrix(); //DEBUG
 
-  vnl_matrix_fixed<double,3,3> fm1_vnl = fm1.get_matrix();
+  vnl_double_3x3 fm1_vnl = fm1.get_matrix();
   fm1_vnl/=fm1_vnl(0,0);
-  vnl_matrix_fixed<double,3,3> fm1est_vnl = fm1est.get_matrix();
+  vnl_double_3x3 fm1est_vnl = fm1est.get_matrix();
   fm1est_vnl/=fm1est_vnl(0,0);
 
   vcl_vector< FMatrix* > fm1est_mvl;
@@ -117,7 +118,7 @@ static void test_fm_compute()
   crm[2][0]=0.0; crm[2][1]=1.0; crm[2][2]=1.0; crm[2][3]=6;
   vpgl_proj_camera<double> Ctl(clm), Ctr(crm);  
   vpgl_fundamental_matrix<double> fm3p( Ctr, Ctl );
-  vnl_matrix<double> mideal = fm3p.get_matrix();
+  vnl_double_3x3 mideal = fm3p.get_matrix();
   vcl_cerr << "Two Point F Matrix Ideal:\n" << mideal; //DEBUG
   p1r.clear(); p1l.clear();
   //for( unsigned i = 0; i < p1w.size(); i++ ){
@@ -128,7 +129,7 @@ static void test_fm_compute()
   vpgl_fm_compute_2_point fc2(true);
   vpgl_fundamental_matrix<double> f3lest;
   fc2.compute( p1r, p1l, f3lest );
-  vnl_matrix<double> m3lin = f3lest.get_matrix();
+  vnl_double_3x3 m3lin = f3lest.get_matrix();
   double sc = mideal[0][1]/m3lin[0][1];
   m3lin*=sc;
   vcl_cerr << "Two Point F Matrix:\n" << m3lin; //DEBUG
@@ -183,9 +184,9 @@ static void test_fm_compute()
   vpgl_fundamental_matrix<double> fm2est;
   fmc2.compute( p2r, p2l, fm2est );
 
-  vnl_matrix_fixed<double,3,3> fm2_vnl = fm2.get_matrix();
+  vnl_double_3x3 fm2_vnl = fm2.get_matrix();
   fm2_vnl/=fm2_vnl(0,0);
-  vnl_matrix_fixed<double,3,3> fm2est_vnl = fm2est.get_matrix();
+  vnl_double_3x3 fm2est_vnl = fm2est.get_matrix();
   fm2est_vnl/=fm2est_vnl(0,0);
 
   vcl_cerr << "\nTrue fundamental matrix:\n" << fm2_vnl << '\n';
