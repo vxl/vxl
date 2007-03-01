@@ -31,7 +31,7 @@ ADD_TEST( vbl_test_sparse_array_3d ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_te
 ADD_TEST( vbl_test_smart_ptr       ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_smart_ptr )
 ADD_TEST( vbl_test_ref_count       ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_ref_count )
 ADD_TEST( vbl_test_scoped_ptr      ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_scoped_ptr )
-ADD_TEST( vbl_test_shared_pointer      ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_shared_ointer )
+ADD_TEST( vbl_test_shared_pointer  ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_shared_pointer )
 
 ADD_EXECUTABLE( vbl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vbl_test_include vbl )
