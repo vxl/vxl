@@ -43,6 +43,7 @@ MANPAGE_SOURCES += vgl_cylinder.txx
 # Functions
 MANPAGE_SOURCES += vgl_closest_point.txx
 MANPAGE_SOURCES += vgl_distance.txx
+MANPAGE_SOURCES += vgl_intersection.txx
 MANPAGE_SOURCES += vgl_convex.txx
 MANPAGE_SOURCES += vgl_clip.txx
 MANPAGE_SOURCES += vgl_area.txx
