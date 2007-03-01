@@ -575,6 +575,12 @@ SOURCE=.\vgl_sphere_3d.h
 # Begin Source File
 SOURCE=.\vgl_sphere_3d.txx
 # End Source File
+# Begin Source File
+SOURCE=.\vgl_intersection.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_intersection.txx
+# End Source File
 # End Group
 # End Target
 # End Project
