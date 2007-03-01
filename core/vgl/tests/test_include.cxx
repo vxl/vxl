@@ -20,6 +20,7 @@
 #include <vgl/vgl_homg_point_1d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
+#include <vgl/vgl_intersection.h>
 #include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_line_3d_2_points.h>
 #include <vgl/vgl_line_segment_2d.h>
