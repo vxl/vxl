@@ -1,4 +1,4 @@
-// This is core/vgl/algo/vgl_intersection.txx
+// This is core/vgl/vgl_intersection.txx
 #ifndef vgl_intersection_txx_
 #define vgl_intersection_txx_
 //:
@@ -109,6 +109,6 @@ vgl_point_3d<T> vgl_intersection(const vgl_plane_3d<T>& p1,
 template vgl_box_3d<T > vgl_intersection(vgl_box_3d<T > const&, vgl_box_3d<T > const&);\
 template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_line_3d_2_points<T > const&);\
 template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_plane_3d<T > const&);\
-template vgl_point_3d<T > vgl_intersection(const vgl_plane_3d<T >&,const vgl_plane_3d<T >&,const vgl_plane_3d<T >&);\
+template vgl_point_3d<T > vgl_intersection(const vgl_plane_3d<T >&,const vgl_plane_3d<T >&,const vgl_plane_3d<T >&)
 
 #endif // vgl_intersection_txx_
