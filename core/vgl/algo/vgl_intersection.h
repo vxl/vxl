@@ -1,6 +1,6 @@
 // This is core/vgl/algo/vgl_intersection.h
-#ifndef vgl_intersection_h_
-#define vgl_intersection_h_
+#ifndef vgl_algo_intersection_h_
+#define vgl_algo_intersection_h_
 //:
 // \file
 // \brief Set of intersection functions
@@ -13,6 +13,7 @@
 //
 // \verbatim
 //  Modifications
+//   01 Mar 2007 - Gamze Tunali - split up into vgl/algo and vgl parts
 // \endverbatim
 
 #include <vgl/vgl_fwd.h> // forward declare various vgl classes
@@ -25,4 +26,4 @@ vgl_point_3d<T> vgl_intersection(const vcl_vector<vgl_plane_3d<T> >& p);
 
 #define VGL_INTERSECTION_INSTANTIATE(T) extern "please include vgl/algo/vgl_intersection.txx first"
 
-#endif // vgl_intersection_h_
+#endif // vgl_algo_intersection_h_

@@ -1,6 +1,6 @@
 // This is core/vgl/algo/vgl_intersection.txx
-#ifndef vgl_intersection_txx_
-#define vgl_intersection_txx_
+#ifndef vgl_algo_intersection_txx_
+#define vgl_algo_intersection_txx_
 //:
 // \file
 // \author Gamze Tunali
@@ -33,4 +33,4 @@ vgl_point_3d<T> vgl_intersection(const vcl_vector<vgl_plane_3d<T> >& p)
 #define VGL_INTERSECTION_INSTANTIATE(T) \
 template vgl_point_3d<T > vgl_intersection(const vcl_vector<vgl_plane_3d<T > >&)
 
-#endif // vgl_intersection_txx_
+#endif // vgl_algo_intersection_txx_
