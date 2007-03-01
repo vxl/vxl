@@ -6,7 +6,7 @@ TESTMAIN := test_driver.cxx
 
 SOURCES += vbl_test_classes.cxx
 SOURCES += vbl_test_array_x.cxx
-SOURCES += vbl_test_shared_pointer.cxx
+TESTS += vbl_test_shared_pointer.cxx
 TESTS += vbl_test_array.cxx
 TESTS += vbl_test_bit_array.cxx
 TESTS += vbl_test_sparse_array_2d.cxx
