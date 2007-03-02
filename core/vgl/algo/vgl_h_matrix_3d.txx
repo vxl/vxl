@@ -360,12 +360,23 @@ vgl_h_matrix_3d<T>::get_upper_3x3() const
   //only sensible for affine transformations
   double u = (double)t12_matrix_[3][3];
   assert(vcl_fabs(u)>1e-9);
+  T d = static_cast<T>(u);
   vnl_matrix_fixed<T,4,4> m(0.0);
   for (unsigned r = 0; r<3; r++)
     for (unsigned c = 0; c<3; c++)
-      m[r][c] = t12_matrix_[r][c]/t12_matrix_[3][3];
+      m[r][c] = t12_matrix_[r][c]/d;
   m[3][3]=1.0;
   return vgl_h_matrix_3d<T>(m);
+}
+template <class T>
+vnl_matrix_fixed<T, 3,3> vgl_h_matrix_3d<T>::get_rotation_matrix() const
+{
+  vnl_matrix_fixed<T,3,3> R;
+  vgl_h_matrix_3d<T> m = this->get_upper_3x3();
+  for(unsigned r = 0; r<3; r++)
+    for(unsigned c = 0; c<3; c++)
+      R[r][c] = m.get(r,c);
+  return R;
 }
 
 template <class T>
@@ -375,12 +386,19 @@ vgl_h_matrix_3d<T>::get_translation() const
   //only sensible for affine transformations
   double u = (double)t12_matrix_[3][3];
   assert(vcl_fabs(u)>1e-9);
-  return vgl_homg_point_3d<T>(t12_matrix_[0][3]/t12_matrix_[3][3],
-                              t12_matrix_[1][3]/t12_matrix_[3][3],
-                              t12_matrix_[2][3]/t12_matrix_[3][3]
+  T d = static_cast<T>(u);
+  return vgl_homg_point_3d<T>(t12_matrix_[0][3]/d,
+                              t12_matrix_[1][3]/d,
+                              t12_matrix_[2][3]/d
                               ,(T)1.0);
 }
-
+template <class T>
+vnl_vector_fixed<T, 3>
+vgl_h_matrix_3d<T>::get_translation_vector() const
+{
+  vgl_homg_point_3d<T> p = this->get_translation();
+  return vnl_vector_fixed<T,3>(p.x(), p.y(), p.z());
+}
 //----------------------------------------------------------------------------
 #undef VGL_H_MATRIX_3D_INSTANTIATE
 #define VGL_H_MATRIX_3D_INSTANTIATE(T) \
