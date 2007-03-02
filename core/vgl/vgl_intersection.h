@@ -20,9 +20,10 @@
 
 //: Return true if line intersects box. If so, compute intersection points.
 template <class Type>
-bool vgl_intersection(const vgl_line_2d<Type>& line,
-                      vgl_point_2d<Type>& p0, vgl_point_2d<Type>& p1);
-
+bool vgl_intersection(const vgl_box_2d<Type>& box,
+                      const vgl_line_2d<Type>& line,
+                      vgl_point_2d<Type>& p0,
+                      vgl_point_2d<Type>& p1);
 
 
 //: Return box defining intersection between boxes a and b.

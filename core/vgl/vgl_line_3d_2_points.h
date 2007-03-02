@@ -125,6 +125,20 @@ inline bool coplanar(l const& l1, l const& l2, l const& l3)
          coplanar(l1,p,l3.point1()) && coplanar(l1,p,l3.point2());
 }
 
+//: Return the intersection point of two concurrent lines
+// \relates vgl_line_3d_2_points
+// \deprecated in favour of vgl_intersection.
+// Can be removed after the relase of VXL 1.8
+template <class Type>
+vgl_point_3d<Type> intersection(l const& l1, l const& l2);
+
+//: Return the intersection point of a line and a plane.
+// \relates vgl_line_3d_2_points
+// \deprecated in favour of vgl_intersection.
+// Can be removed after the relase of VXL 1.8
+template <class Type>
+vgl_point_3d<Type> intersection(l const& line, vgl_plane_3d<Type> const& plane);
+
 //: Are three lines concurrent, i.e., do they pass through a common point?
 // \relates vgl_line_3d_2_points
 template <class Type>

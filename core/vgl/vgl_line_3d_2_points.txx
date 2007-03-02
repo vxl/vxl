@@ -12,6 +12,7 @@
 
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_distance.h>
+#include <vgl/vgl_intersection.h>
 
 //***************************************************************************
 // Initialization
@@ -30,6 +31,26 @@ bool vgl_line_3d_2_points<Type>::operator==(vgl_line_3d_2_points<Type> const& ot
   // It suffices to check that the points are collinear:
   return collinear(point1(), point2(), other.point1())
       && collinear(point1(), point2(), other.point2());
+}
+
+//: Return the intersection point of two concurrent lines
+template <class Type>
+vgl_point_3d<Type> intersection(vgl_line_3d_2_points<Type> const& l1,
+                                vgl_line_3d_2_points<Type> const& l2)
+{
+  VXL_DEPRECATED( "vgl_line_3d_2_points::intersection(vgl_line_3d_2_points<Type> const&, vgl_line_3d_2_points<Type> const&) -- Please use the method in vgl_intersection.h" );
+  return vgl_intersection(l1, l2);
+}
+
+//: Return the intersection point of a line and a plane.
+// \relates vgl_line_3d_2_points
+// \relates vgl_plane_3d
+template <class Type>
+vgl_point_3d<Type> intersection(vgl_line_3d_2_points<Type> const& line,
+                                vgl_plane_3d<Type> const& plane)
+{
+  VXL_DEPRECATED( "vgl_line_3d_2_points::intersection(vgl_line_3d_2_points<Type> const&, vgl_plane_3d<Type> const&) -- Please use the method in vgl_intersection.h" );
+  return vgl_intersection(line, plane);
 }
 
 //*****************************************************************************
