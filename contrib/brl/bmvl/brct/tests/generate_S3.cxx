@@ -68,7 +68,7 @@ static double z(const double theta, const double psi, const double phi)
             vcl_sin(theta/2)*vcl_sin(psi)*vcl_sin(phi),
             vcl_sin(theta/2)*vcl_cos(psi));
 }
-
+#if 0
 static void generate_points(vcl_vector<vgl_point_3d<double> >& pts,
                             vcl_vector<vgl_point_3d<float> >& color,
                             const double theta_min,
@@ -100,6 +100,8 @@ static void generate_points(vcl_vector<vgl_point_3d<double> >& pts,
         color.push_back(c);
       }
 }
+
+#endif
 
 static
 void generate_polylines(vcl_vector<vcl_vector<vgl_point_3d<double> > >& polys,
