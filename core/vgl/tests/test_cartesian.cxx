@@ -24,7 +24,7 @@
 //#include <vgl/vgl_polygon_test.h>
 //#include <vgl/vgl_triangle_test.h>
 #include <vgl/vgl_1d_basis.h>
-#include <vgl/algo/vgl_intersection.h>
+#include <vgl/vgl_intersection.h>
 
 static void test_vector_2d()
 {
@@ -391,7 +391,7 @@ static void test_line_3d()
 
   TEST("concurrent", concurrent(l,l2), true);
   TEST("concurrent", coplanar(l,l2), true);
-  p2 = intersection(l,l2);
+  p2 = vgl_intersection(l,l2);
   TEST("intersection", p2, p1-dir*0.5);
 }
 

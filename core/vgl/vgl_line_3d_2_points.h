@@ -131,7 +131,7 @@ template <class Type>
 inline bool concurrent(l const& l1, l const& l2, l const& l3)
 {
   if (!concurrent(l1,l2) || !concurrent(l1,l3) || !concurrent(l2,l3)) return false;
-  return intersection(l1,l2) == intersection(l1,l3);
+  return vgl_intersection(l1,l2) == vgl_intersection(l1,l3);
 }
 
 //+****************************************************************************

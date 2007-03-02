@@ -178,6 +178,7 @@ class vgl_box_2d
   }
 
   //: Return true if line intersects box. If so, compute intersection points.
+  // \deprecated in favour of vgl_intersection()
   bool intersect(const vgl_line_2d<Type>& line,
                  vgl_point_2d<Type>& p0, vgl_point_2d<Type>& p1);
 
@@ -256,6 +257,7 @@ vcl_istream&  operator>>(vcl_istream& is,  vgl_box_2d<Type>& p);
 //: Return box defining intersection between boxes a and b.
 //  Empty box returned if no intersection.
 // \relates vgl_box_2d
+// \deprecated in favour of vgl_intersection
 template <class Type>
 vgl_box_2d<Type> intersect(vgl_box_2d<Type> const& a, vgl_box_2d<Type> const& b);
 

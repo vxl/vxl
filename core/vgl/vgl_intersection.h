@@ -19,6 +19,13 @@
 #include <vgl/vgl_fwd.h> // forward declare various vgl classes
 #include <vcl_vector.h>
 
+//: Return true if line intersects box. If so, compute intersection points.
+template <class Type>
+bool vgl_intersection(const vgl_line_2d<Type>& line,
+                      vgl_point_2d<Type>& p0, vgl_point_2d<Type>& p1);
+
+
+
 //: Return box defining intersection between boxes a and b.
 //  Empty box returned if no intersection.
 // \relates vgl_box_3d
@@ -48,5 +55,6 @@ vgl_point_3d<T> vgl_intersection(const vgl_plane_3d<T>& p1,
 
 
 #define VGL_INTERSECTION_INSTANTIATE(T) extern "please include vgl/vgl_intersection.txx first"
+#define VGL_INTERSECTION_INT_INSTANTIATE(T) extern "please include vgl/vgl_intersection.txx first"
 
 #endif // vgl_intersection_h_

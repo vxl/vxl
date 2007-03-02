@@ -5,12 +5,13 @@
 // \file
 
 #include "vgl_box_2d.h"
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_line_2d.h>
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
+#include <vcl_deprecated.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_line_2d.h>
 
 // Constructors/Destructor---------------------------------------------------
 
@@ -310,6 +311,7 @@ vcl_istream& vgl_box_2d<Type>::read(vcl_istream& s)
 template <class Type>
 vgl_box_2d<Type> intersect(vgl_box_2d<Type> const& a, vgl_box_2d<Type> const& b)
 {
+  VXL_DEPRECATED( "intersect(vgl_box_2d<T>& , vgl_box_2d<T>& " );
   Type x0 = vcl_max(a.min_x(), b.min_x());
   Type y0 = vcl_max(a.min_y(), b.min_y());
   Type x1 = vcl_min(a.max_x(), b.max_x());
@@ -371,14 +373,16 @@ bool vgl_box_2d<Type>::contains(vgl_box_2d<Type> const& b) const
 
 //: compute the intersection of an infinite line with *this box.
 //  p0 and p1 are the intersection points
-static bool vgl_near_zero(double x){return vcl_fabs(x)<1e-08;}
-static bool vgl_near_eq(double x, double y){return vgl_near_zero(x-y);}
+inline bool vgl_near_zero(double x){return vcl_fabs(x)<1e-08;}
+inline bool vgl_near_eq(double x, double y){return vgl_near_zero(x-y);}
 
 template <class Type>
 bool vgl_box_2d<Type>::intersect(const vgl_line_2d<Type>& line,
                                  vgl_point_2d<Type>& p0,
                                  vgl_point_2d<Type>& p1)
 {
+  VXL_DEPRECATED("vgl_box_2d<Type>::intersect(line_2d, point_2d, point_2d)");
+
   double a = line.a(), b = line.b(), c = line.c();
   double xmin=this->min_x(), xmax=this->max_x();
   double ymin=this->min_y(), ymax=this->max_y();
