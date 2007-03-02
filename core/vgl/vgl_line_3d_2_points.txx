@@ -68,6 +68,8 @@ vcl_ostream& operator<<(vcl_ostream &s,
 #undef VGL_LINE_3D_2_POINTS_INSTANTIATE
 #define VGL_LINE_3D_2_POINTS_INSTANTIATE(T) \
 template class vgl_line_3d_2_points<T >;\
-template vcl_ostream& operator<<(vcl_ostream&, vgl_line_3d_2_points<T > const&)
+template vcl_ostream& operator<<(vcl_ostream&, vgl_line_3d_2_points<T > const&);\
+template vgl_point_3d<T > intersection(vgl_line_3d_2_points<T > const& l1, vgl_line_3d_2_points<T > const& l2);\
+template vgl_point_3d<T > intersection(vgl_line_3d_2_points<T > const& , vgl_plane_3d<T > const&)
 
 #endif // vgl_line_3d_2_points_txx_
