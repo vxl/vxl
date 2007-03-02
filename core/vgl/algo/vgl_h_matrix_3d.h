@@ -82,7 +82,7 @@ class vgl_h_matrix_3d
 
   //: corresponds to rotation for Euclidan transformations
   vgl_h_matrix_3d<T> get_upper_3x3() const;
-  vnl_matrix_fixed<T, 3,3> get_rotation_matrix() const;
+  vnl_matrix_fixed<T, 3,3> get_upper_3x3_matrix() const;
 
   //: corresponds to translation for affine transformations
   vgl_homg_point_3d<T> get_translation() const;

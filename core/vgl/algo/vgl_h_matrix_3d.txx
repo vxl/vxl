@@ -369,7 +369,7 @@ vgl_h_matrix_3d<T>::get_upper_3x3() const
   return vgl_h_matrix_3d<T>(m);
 }
 template <class T>
-vnl_matrix_fixed<T, 3,3> vgl_h_matrix_3d<T>::get_rotation_matrix() const
+vnl_matrix_fixed<T, 3,3> vgl_h_matrix_3d<T>::get_upper_3x3_matrix() const
 {
   vnl_matrix_fixed<T,3,3> R;
   vgl_h_matrix_3d<T> m = this->get_upper_3x3();
