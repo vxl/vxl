@@ -47,7 +47,7 @@ vil_image_resource_sptr vimt_vil_v2i_format::make_input_image(vil_stream* vs)
 
     return 0;
   }
-  vsl_b_istream vslstream( &static_cast<vimt_vil_fstream *>(vs)->underlying_stream() );
+  vsl_b_istream vslstream( &reinterpret_cast<vimt_vil_fstream *>(vs)->underlying_stream() );
   if (!vslstream) return 0; // Not even a vsl file.
   unsigned magic;
   vil_streampos start = vs->tell();
@@ -145,7 +145,7 @@ vimt_vil_v2i_image::vimt_vil_v2i_image(vil_stream* vs):
 {
   vs_->ref();
   vs_->seek(0L);
-  vsl_b_istream vslstream(& static_cast<vimt_vil_fstream *>(vs_)->underlying_stream());
+  vsl_b_istream vslstream(& reinterpret_cast<vimt_vil_fstream *>(vs_)->underlying_stream());
 
   unsigned magic;
   vsl_b_read(vslstream, magic);
@@ -177,7 +177,7 @@ vimt_vil_v2i_image::vimt_vil_v2i_image(vil_stream* vs, vil_pixel_format f):
 {
   vs_->ref();
   vs_->seek(0L);
-  vsl_b_istream vslstream(& static_cast<vimt_vil_fstream *>(vs_)->underlying_stream());
+  vsl_b_istream vslstream(& reinterpret_cast<vimt_vil_fstream *>(vs_)->underlying_stream());
 
   
   switch(f)
@@ -272,7 +272,7 @@ vimt_vil_v2i_image::~vimt_vil_v2i_image()
   if (dirty_)
   {
     vs_->seek(0l);
-    vsl_b_ostream vslstream(& static_cast<vimt_vil_fstream *>(vs_)->underlying_stream());
+    vsl_b_ostream vslstream(& reinterpret_cast<vimt_vil_fstream *>(vs_)->underlying_stream());
  
     vsl_b_write(vslstream, V2I_MAGIC);
 
