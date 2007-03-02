@@ -253,8 +253,8 @@ class vgl_box_3d
 // \deprecated in favour of vgl_intersection.
 // Can be removed after the relase of VXL 1.8
 template <class T>
-vgl_box_3d<T> vgl_intersection(vgl_box_3d<T> const& a,
-                               vgl_box_3d<T> const& b);
+vgl_box_3d<T> intersect(vgl_box_3d<T> const& a,
+                        vgl_box_3d<T> const& b);
 
 //: Return box defining intersection between boxes a and b.
 //  Empty box returned if no intersection.
