@@ -6,10 +6,9 @@
 // \brief Set of intersection functions
 // \author Jan 25, 2007 Gamze Tunali
 //
-// This file aims to gather all the intersection methods on vgl classes
-// at one place. Some of the functions moved from their own class
-// files to here or interface methods created for non-homogeneous versions
-// of the ones that are already defined in vgl/algo/vgl_homg_operators_3d
+// This file aims to gather all the intersection methods involving two or more types
+// into one place. You will also find overloads of vgl_intersection in
+// vgl/algo/vgl_intersection, and in some ordinary files (e.g. vgl_box_2d.h)
 //
 // \verbatim
 //  Modifications

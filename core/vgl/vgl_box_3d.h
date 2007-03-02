@@ -247,6 +247,21 @@ class vgl_box_3d
   Type max_pos_[3];
 };
 
+//: Return box defining intersection between boxes a and b.
+//  Empty box returned if no intersection.
+// \relates vgl_box_3d
+// \deprecated in favour of vgl_intersection.
+// Can be removed after the relase of VXL 1.8
+template <class T>
+vgl_box_3d<T> vgl_intersection(vgl_box_3d<T> const& a,
+                               vgl_box_3d<T> const& b);
+
+//: Return box defining intersection between boxes a and b.
+//  Empty box returned if no intersection.
+// \relates vgl_box_3d
+template <class T>
+vgl_box_3d<T> vgl_intersection(vgl_box_3d<T> const& a,
+                               vgl_box_3d<T> const& b);
 
 //: Write box to stream
 // \relates vgl_box_3d

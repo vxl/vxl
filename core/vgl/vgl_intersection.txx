@@ -212,21 +212,7 @@ bool vgl_intersection(const vgl_box_2d<Type>& box,
 
 
 
-template <class T>
-vgl_box_3d<T> vgl_intersection(vgl_box_3d<T> const& a, vgl_box_3d<T> const& b)
-{
-  T x0 = vcl_max(a.min_x(), b.min_x());
-  T y0 = vcl_max(a.min_y(), b.min_y());
-  T z0 = vcl_max(a.min_z(), b.min_z());
-  T x1 = vcl_min(a.max_x(), b.max_x());
-  T y1 = vcl_min(a.max_y(), b.max_y());
-  T z1 = vcl_min(a.max_z(), b.max_z());
 
-  if (x1 >= x0 && y1 >= y0 && z1 >= z0)
-    return vgl_box_3d<T>(x0, y0, z0, x1, y1, z1);
-  else
-    return vgl_box_3d<T>(); // empty box
-}
 
 //: Return the intersection point of two concurrent lines
 template <class T>
@@ -300,7 +286,6 @@ vgl_point_3d<T> vgl_intersection(const vgl_plane_3d<T>& p1,
 
 #undef VGL_INTERSECTION_INSTANTIATE
 #define VGL_INTERSECTION_INSTANTIATE(T) \
-template vgl_box_3d<T > vgl_intersection(vgl_box_3d<T > const&, vgl_box_3d<T > const&);\
 template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_line_3d_2_points<T > const&);\
 template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_plane_3d<T > const&);\
 template vgl_point_3d<T > vgl_intersection(const vgl_plane_3d<T >&,const vgl_plane_3d<T >&,const vgl_plane_3d<T >&);\
@@ -309,7 +294,6 @@ template bool vgl_intersection(const vgl_box_2d<T >&, const vgl_line_2d<T >& lin
 //: Instantiate only functions suitable for integer instantiation.
 #undef VGL_INTERSECTION_INT_INSTANTIATE
 #define VGL_INTERSECTION_INT_INSTANTIATE(T) \
-template vgl_box_3d<T > vgl_intersection(vgl_box_3d<T > const&, vgl_box_3d<T > const&);\
 template bool vgl_intersection(const vgl_box_2d<T >&, const vgl_line_2d<T >& line, vgl_point_2d<T >& p0, vgl_point_2d<T >&)
 
 #endif // vgl_intersection_txx_

@@ -179,6 +179,7 @@ class vgl_box_2d
 
   //: Return true if line intersects box. If so, compute intersection points.
   // \deprecated in favour of vgl_intersection()
+  // Can be removed after the release of VXL 1.8
   bool intersect(const vgl_line_2d<Type>& line,
                  vgl_point_2d<Type>& p0, vgl_point_2d<Type>& p1);
 
@@ -258,22 +259,16 @@ vcl_istream&  operator>>(vcl_istream& is,  vgl_box_2d<Type>& p);
 //  Empty box returned if no intersection.
 // \relates vgl_box_2d
 // \deprecated in favour of vgl_intersection
+// Can be removed after the release of VXL 1.8
 template <class Type>
 vgl_box_2d<Type> intersect(vgl_box_2d<Type> const& a, vgl_box_2d<Type> const& b);
 
-#if 0 // This function is deprecated in favour of vgl_bounding_box_2d constructor
-
-//: Return box which bounds p1 and p2 (ie p1,p2 are any two of the corners).
-//  Alternatively, just use the vgl_box_2d constructor with these two arguments.
-// \deprecated in favour of constructor
+//: Return box defining intersection between boxes a and b.
+//  Empty box returned if no intersection.
 // \relates vgl_box_2d
 template <class Type>
-inline
-vgl_box_2d<Type> vgl_bounding_box_2d(vgl_point_2d<Type> const& p1,
-                                     vgl_point_2d<Type> const& p2)
-{ return vgl_box_2d<Type>(p1,p2); }
+vgl_box_2d<Type> vgl_intersection(vgl_box_2d<Type> const& a, vgl_box_2d<Type> const& b);
 
-#endif
 
 #define VGL_BOX_2D_INSTANTIATE(T) extern "please include vgl/vgl_box_2d.txx first"
 

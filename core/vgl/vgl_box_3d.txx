@@ -413,6 +413,34 @@ void vgl_box_3d<Type>::empty()
   max_pos_[0]=max_pos_[1]=max_pos_[2]=(Type)0;
 }
 
+
+template <class T>
+vgl_box_3d<T> vgl_intersection(vgl_box_3d<T> const& a, vgl_box_3d<T> const& b)
+{
+  T x0 = vcl_max(a.min_x(), b.min_x());
+  T y0 = vcl_max(a.min_y(), b.min_y());
+  T z0 = vcl_max(a.min_z(), b.min_z());
+  T x1 = vcl_min(a.max_x(), b.max_x());
+  T y1 = vcl_min(a.max_y(), b.max_y());
+  T z1 = vcl_min(a.max_z(), b.max_z());
+
+  if (x1 >= x0 && y1 >= y0 && z1 >= z0)
+    return vgl_box_3d<T>(x0, y0, z0, x1, y1, z1);
+  else
+    return vgl_box_3d<T>(); // empty box
+}
+
+
+
+template <class T>
+vgl_box_3d<T> intersect(vgl_box_3d<T> const& a, vgl_box_3d<T> const& b)
+{
+  VXL_DEPRECATED("vgl_box_3d<T> intersect(vgl_box_3d<T>, vgl_box_3d");
+  return vgl_intersection(a, b);
+}
+
+
+
 //: Write box to stream
 template <class Type>
 vcl_ostream&  operator<<(vcl_ostream& s, vgl_box_3d<Type> const& p)
@@ -431,6 +459,9 @@ vcl_istream&  operator>>(vcl_istream& is,  vgl_box_3d<Type>& p)
 #define VGL_BOX_3D_INSTANTIATE(Type) \
 template class vgl_box_3d<Type >;\
 template vcl_ostream& operator<<(vcl_ostream&, vgl_box_3d<Type > const& p);\
-template vcl_istream& operator>>(vcl_istream&, vgl_box_3d<Type >& p)
+template vcl_istream& operator>>(vcl_istream&, vgl_box_3d<Type >& p);\
+template vgl_box_3d<Type > intersect(vgl_box_3d<Type > const& , vgl_box_3d<Type > const& );\
+template vgl_box_3d<Type > vgl_intersection(vgl_box_3d<Type > const& , vgl_box_3d<Type > const& )
+
 
 #endif // vgl_box_3d_txx_

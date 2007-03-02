@@ -309,9 +309,8 @@ vcl_istream& vgl_box_2d<Type>::read(vcl_istream& s)
 }
 
 template <class Type>
-vgl_box_2d<Type> intersect(vgl_box_2d<Type> const& a, vgl_box_2d<Type> const& b)
+vgl_box_2d<Type> vgl_intersection(vgl_box_2d<Type> const& a, vgl_box_2d<Type> const& b)
 {
-  VXL_DEPRECATED( "intersect(vgl_box_2d<T>& , vgl_box_2d<T>& " );
   Type x0 = vcl_max(a.min_x(), b.min_x());
   Type y0 = vcl_max(a.min_y(), b.min_y());
   Type x1 = vcl_min(a.max_x(), b.max_x());
@@ -321,6 +320,13 @@ vgl_box_2d<Type> intersect(vgl_box_2d<Type> const& a, vgl_box_2d<Type> const& b)
     return vgl_box_2d<Type>(x0, x1, y0, y1);
   else
     return vgl_box_2d<Type>(); // empty box
+}
+
+template <class Type>
+vgl_box_2d<Type> intersect(vgl_box_2d<Type> const& a, vgl_box_2d<Type> const& b)
+{
+  VXL_DEPRECATED( "intersect(vgl_box_2d<T>& , vgl_box_2d<T>& " );
+  return vgl_intersection(a, b);
 }
 
 //: Add a point to this box.
@@ -583,6 +589,7 @@ vcl_istream& operator>>(vcl_istream& is, vgl_box_2d<Type>& p) {
 template class vgl_box_2d<Type >;\
 template vcl_istream& operator>>(vcl_istream&, vgl_box_2d<Type >&);\
 template vcl_ostream& operator<<(vcl_ostream&, vgl_box_2d<Type > const&);\
-template vgl_box_2d<Type > intersect(vgl_box_2d<Type > const&, vgl_box_2d<Type > const&)
+template vgl_box_2d<Type > intersect(vgl_box_2d<Type > const&, vgl_box_2d<Type > const&);\
+template vgl_box_2d<Type > vgl_intersection(vgl_box_2d<Type > const&, vgl_box_2d<Type > const&)
 
 #endif // vgl_box_2d_txx_
