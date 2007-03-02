@@ -24,6 +24,6 @@
 template <class T>
 vgl_point_3d<T> vgl_intersection(const vcl_vector<vgl_plane_3d<T> >& p);
 
-#define VGL_INTERSECTION_INSTANTIATE(T) extern "please include vgl/algo/vgl_intersection.txx first"
+#define VGL_ALGO_INTERSECTION_INSTANTIATE(T) extern "please include vgl/algo/vgl_intersection.txx first"
 
 #endif // vgl_algo_intersection_h_

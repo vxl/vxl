@@ -29,8 +29,8 @@ vgl_point_3d<T> vgl_intersection(const vcl_vector<vgl_plane_3d<T> >& p)
   return vgl_homg_operators_3d<T>::intersection(planes);
 }
 
-#undef VGL_INTERSECTION_INSTANTIATE
-#define VGL_INTERSECTION_INSTANTIATE(T) \
+#undef VGL_ALGO_INTERSECTION_INSTANTIATE
+#define VGL_ALGO_INTERSECTION_INSTANTIATE(T) \
 template vgl_point_3d<T > vgl_intersection(const vcl_vector<vgl_plane_3d<T > >&)
 
 #endif // vgl_algo_intersection_txx_
