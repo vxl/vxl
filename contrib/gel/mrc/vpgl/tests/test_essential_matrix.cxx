@@ -13,22 +13,24 @@
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_double_3x3.h>
-static vnl_double_3x3 
+
+static vnl_double_3x3
 skew_symmetric(const double tx, const double ty, const double tz)
 {
   vnl_double_3x3 m;
-  m[0][0] = 0;   m[0][1] = -tz; m[0][2] = ty; 
-  m[1][0] = tz;   m[1][1] = 0; m[1][2] = -tx; 
-  m[2][0] = -ty;   m[2][1] = tx; m[2][2] = 0;
+  m[0][0] =  0;   m[0][1] = -tz;  m[0][2] =  ty;
+  m[1][0] =  tz;  m[1][1] =  0;   m[1][2] = -tx;
+  m[2][0] = -ty;  m[2][1] =  tx;  m[2][2] =  0;
   return m;
 }
+
 //To form an essential matrix from a F matrix
 static vpgl_calibration_matrix<double> actual_K()
 {
-  vnl_double_3x3 K; 
-  K[0][0] = 880;   K[0][1] = 0; K[0][2] = 330; 
-  K[1][0] = 0;   K[1][1] =880 ; K[1][2] = 244; 
-  K[2][0] = 0;   K[2][1] = 0; K[2][2] = 1;
+  vnl_double_3x3 K;
+  K[0][0] = 880;   K[0][1] = 0;    K[0][2] = 330;
+  K[1][0] = 0;     K[1][1] = 880;  K[1][2] = 244;
+  K[2][0] = 0;     K[2][1] = 0;    K[2][2] = 1;
   return vpgl_calibration_matrix<double>(K);
 }
 
@@ -36,19 +38,19 @@ static vpgl_calibration_matrix<double> actual_K()
 static vpgl_essential_matrix<double> actual_e_matrix()
 {
   vnl_double_3x3 m;
-  m[0][0] = 2.95608e-007;   m[0][1] = -2.39486e-005; m[0][2] = 0.00215856; 
-  m[1][0] = 2.41431e-005;   m[1][1] = 6.97368e-007; m[1][2] = -0.0022267; 
-  m[2][0] = -0.00208351;   m[2][1] = 0.0020394; m[2][2] = 0.000597002
-;
-  vnl_double_3x3 K = actual_K().get_matrix(); 
+  m[0][0] =  2.95608e-7;  m[0][1] = -2.39486e-5; m[0][2] =  0.00215856;
+  m[1][0] =  2.41431e-5;  m[1][1] =  6.97368e-7; m[1][2] = -0.0022267;
+  m[2][0] = -0.00208351;  m[2][1] =  0.0020394;  m[2][2] =  0.000597002;
+  vnl_double_3x3 K = actual_K().get_matrix();
   vnl_double_3x3 mE = K.transpose()*m*K;
   return vpgl_essential_matrix<double>(mE);
 }
+
 static void test_essential_matrix()
 {
-   double cx = 10, cy = 0, cz = 0;
-   vnl_double_3x3 T = skew_symmetric(-cx, -cy, -cz);
- // create an essential matrix for translation only
+  double cx = 10, cy = 0, cz = 0;
+  vnl_double_3x3 T = skew_symmetric(-cx, -cy, -cz);
+  // create an essential matrix for translation only
   vpgl_essential_matrix<double> E(T);
   // Test the camera construction
   //Image Point in the left camera (left side of E)
@@ -70,8 +72,7 @@ static void test_essential_matrix()
   vnl_matrix_fixed<double, 3,3> R = Rh.get_upper_3x3_matrix();
   t = -R*cv;
   vpgl_essential_matrix<double> Ei(skew_symmetric(t[0],t[1],t[2])*R);
-  vcl_cout << "\nIdeal Essential Matrix\n" 
-           << Ei << '\n';	
+  vcl_cout << "\nIdeal Essential Matrix\n" << Ei << '\n';
   vpgl_perspective_camera<double> pcl, pcr;
   pcl.set_rotation_matrix(Rh);
   pcl.set_camera_center(c);
@@ -89,7 +90,7 @@ static void test_essential_matrix()
   TEST_NEAR("Extract Left Camera", (rc.x()-1)*(rc.x()-1), 0, 1e-3);
   //test using actual essential matrix
   vpgl_essential_matrix<double> Ea = actual_e_matrix();
-  vcl_cout << "Actual E Matrix \n" << Ea << '\n';
+  vcl_cout << "Actual E Matrix\n" << Ea << '\n';
   vgl_point_2d<double> xal(0.207847,0.2126),  xar(-0.1289,-0.0683432);
   vpgl_perspective_camera<double> palr;//reconstructed actual camera
   success = extract_left_camera<double>(Ea, xal,xar, palr);
