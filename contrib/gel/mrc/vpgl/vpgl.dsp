@@ -143,6 +143,9 @@ SOURCE=.\Templates/vsl_binary_loader+vpgl_proj_camera+double--.cxx
 # Begin Source File
 SOURCE=.\Templates/vpgl_rational_camera+double-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vpgl_essential_matrix+double-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -217,6 +220,12 @@ SOURCE=.\vpgl_rational_camera.h
 # End Source File
 # Begin Source File
 SOURCE=.\vpgl_rational_camera.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_essential_matrix.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_essential_matrix.txx
 # End Source File
 # End Group
 # End Target

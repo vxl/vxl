@@ -122,6 +122,9 @@ SOURCE=.\test_proj_camera.cxx
 # Begin Source File
 SOURCE=.\test_rational_camera.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_essential_matrix.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
