@@ -6,10 +6,9 @@ INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR}/mrc)
 
 SET( vpgl_file_formats_sources
-  vpgl_nitf_rational_camera.h  vpgl_nitf_rational_camera.cxx		
+  vpgl_nitf_rational_camera.h  vpgl_nitf_rational_camera.cxx
 )
 
 ADD_LIBRARY(vpgl_file_formats ${vpgl_file_formats_sources})
 
 TARGET_LINK_LIBRARIES(vpgl_file_formats vpgl vil)
-
