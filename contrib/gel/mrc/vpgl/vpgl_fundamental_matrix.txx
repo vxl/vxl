@@ -176,9 +176,29 @@ void vpgl_fundamental_matrix<T>::set_matrix( const vnl_matrix_fixed<T,3,3>& F )
   cached_svd_ = new vnl_svd<T>( F_ );
 }
 
+//:vpgl_fundamental_matrix stream I/O
+
+template <class T>
+vcl_ostream&  operator<<(vcl_ostream& s, vpgl_fundamental_matrix<T> const& p)
+{
+  s << p.get_matrix();
+  return s;
+}
+
+//: Read vpgl_perspective_camera  from stream
+template <class T>
+vcl_istream&  operator>>(vcl_istream& s, vpgl_fundamental_matrix<T>& p)
+{
+  vnl_matrix_fixed<T, 3, 3> m;
+  s >> m;
+  p.set_matrix(m);
+  return s;
+}
 // Code for easy instantiation.
 #undef vpgl_FUNDAMENTAL_MATRIX_INSTANTIATE
 #define vpgl_FUNDAMENTAL_MATRIX_INSTANTIATE(T) \
-template class vpgl_fundamental_matrix<T >
+template class vpgl_fundamental_matrix<T >; \
+template vcl_ostream& operator<<(vcl_ostream&, const vpgl_fundamental_matrix<T >&); \
+template vcl_istream& operator>>(vcl_istream&, vpgl_fundamental_matrix<T >&)
 
 #endif // vpgl_fundamental_matrix_txx_

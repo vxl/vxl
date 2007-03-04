@@ -8,6 +8,7 @@
 
 #include <vgl/io/vgl_io_point_2d.h>
 #include <vgl/xio/vgl_xio_point_2d.h>
+#include <vnl/algo/vnl_svd.h>
 #include <vcl_cassert.h>
 
 //--------------------------------------
@@ -132,6 +133,30 @@ operator==(vpgl_calibration_matrix<T> const &that) const
     this->x_scale_ == that.x_scale_ && this->y_scale_ == that.y_scale_ &&
     this->skew_ == that.skew_;
 }
+//: Map from image to focal plane. 
+// (Later may need to cache the svd for efficiency)
+template <class T> 
+vgl_point_2d<T> vpgl_calibration_matrix<T>::
+map_to_focal_plane(vgl_point_2d<T> const& p_image)
+{
+  vnl_vector<T> p(3);
+  p[0]=p_image.x();   p[1]=p_image.y();   p[2]=1;
+  vnl_svd<T> svd(this->get_matrix());
+  vnl_matrix<T> Kinv = svd.inverse();
+  vnl_vector<T> pf = Kinv*p;
+  return vgl_point_2d<T>(pf[0]/pf[2], pf[1]/pf[2]);
+}
+template <class T> 
+vgl_point_2d<T> vpgl_calibration_matrix<T>::
+map_to_image(vgl_point_2d<T> const& p_focal_plane)
+{
+  vnl_vector<T> p(3);
+  p[0]=p_focal_plane.x();   p[1]=p_focal_plane.y();   p[2]=1;
+  vnl_matrix_fixed<T,3,3> K = this->get_matrix();
+  vnl_vector<T> pf = K*p;
+  return vgl_point_2d<T>(pf[0]/pf[2], pf[1]/pf[2]);
+}
+
 
 // I/O :------------------------------------------------
 

@@ -231,7 +231,13 @@ vpgl_proj_camera<T> postmultiply( const vpgl_proj_camera<T>& in_camera,
 {
   return postmultiply(in_camera, transform.get_matrix());
 }
-
+//: Linearly intersect two camera rays to form a 3-d point
+template <class T>
+vgl_point_3d<T> triangulate_3d_point(const vpgl_proj_camera<T>& c1,
+                                     const vgl_point_2d<T>& x1,
+                                     const vpgl_proj_camera<T>& c2,
+                                     const vgl_point_2d<T>& x2);
+                                             
 // I/O ---
 
 //: Write vpgl_perspective_camera to stream

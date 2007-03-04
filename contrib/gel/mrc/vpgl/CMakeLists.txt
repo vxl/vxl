@@ -15,6 +15,7 @@ SET( vpgl_sources
   vpgl_affine_camera.h             vpgl_affine_camera.txx
   vpgl_fundamental_matrix.h        vpgl_fundamental_matrix.txx
   vpgl_reg_fundamental_matrix.h    vpgl_reg_fundamental_matrix.txx
+  vpgl_essential_matrix.h          vpgl_essential_matrix.txx
   vpgl_affine_fundamental_matrix.h vpgl_affine_fundamental_matrix.txx
   vpgl_lens_distortion.h           vpgl_lens_distortion.txx
   vpgl_radial_distortion.h         vpgl_radial_distortion.txx

@@ -91,12 +91,21 @@ class vpgl_fundamental_matrix
 
   void set_matrix( const vnl_matrix_fixed<T,3,3>& F );
 
- private:
+ protected:
   //: Internal representation of the fundamental matrix.
   vnl_matrix_fixed<T,3,3> F_;
 
   //: Cached copy of the svd.
   mutable vnl_svd<T>* cached_svd_;
 };
+
+//:vpgl_fundamental_matrix stream I/O
+
+template <class T>
+vcl_ostream&  operator<<(vcl_ostream& s, vpgl_fundamental_matrix<T> const& p);
+
+//: Read vpgl_perspective_camera  from stream
+template <class T>
+vcl_istream&  operator>>(vcl_istream& s, vpgl_fundamental_matrix<T>& p);
 
 #endif // vpgl_fundamental_matrix_h_

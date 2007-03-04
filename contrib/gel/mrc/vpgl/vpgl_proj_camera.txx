@@ -341,6 +341,26 @@ vpgl_proj_camera<T> postmultiply( const vpgl_proj_camera<T>& in_camera,
 }
 
 //--------------------------------
+template <class T>
+vgl_point_3d<T> triangulate_3d_point(const vpgl_proj_camera<T>& c1,
+                                          const vgl_point_2d<T>& x1,
+                                          const vpgl_proj_camera<T>& c2,
+                                          const vgl_point_2d<T>& x2)
+{
+  vnl_matrix_fixed<T,4,4> A;
+  vnl_matrix_fixed<T,3,4> P1 = c1.get_matrix();
+  vnl_matrix_fixed<T,3,4> P2 = c2.get_matrix();
+  for (int i=0; i<4; i++) {
+    A[0][i] = x1.x()*P1[2][i] - P1[0][i];
+    A[1][i] = x1.y()*P1[2][i] - P1[1][i];
+    A[2][i] = x2.x()*P2[2][i] - P2[0][i];
+    A[3][i] = x2.y()*P2[2][i] - P2[1][i];
+  }
+  vnl_svd<T> svd_solver(A);
+  vnl_vector_fixed<T, 4> p = svd_solver.nullvector();
+  vgl_homg_point_3d<T> hp(p[0],p[1],p[2],p[3]);
+  return vgl_point_3d<T>(hp);
+}
 
 
 // Code for easy instantiation.
@@ -354,6 +374,10 @@ template vpgl_proj_camera<T > premultiply( const vpgl_proj_camera<T >& in_camera
                                            const vnl_matrix_fixed<T,3,3>& transform ); \
 template vpgl_proj_camera<T > postmultiply( const vpgl_proj_camera<T >& in_camera, \
                                             const vnl_matrix_fixed<T,4,4>& transform ); \
+template vgl_point_3d<T> triangulate_3d_point(const vpgl_proj_camera<T>& c1, \
+                                          const vgl_point_2d<T>& x1, \
+                                          const vpgl_proj_camera<T>& c2, \
+                                          const vgl_point_2d<T>& x2); \
 template void vsl_add_to_binary_loader(vpgl_proj_camera<T > const& b); \
 template vcl_ostream& operator<<(vcl_ostream&, const vpgl_proj_camera<T >&); \
 template vcl_istream& operator>>(vcl_istream&, vpgl_proj_camera<T >&)

@@ -132,6 +132,19 @@ static void test_proj_camera()
   double X = x1.x(), Y = x1.y(), Z = x1.z();
   Pb.project(X, Y, Z, u, v);
   TEST_NEAR( "base class point projection", y2(0)/u - y2(1)/v, 0.0, 0.001);  
+  // Test ray intersection
+  vnl_matrix_fixed<double,3,4> identity, trans;  
+  identity[0][0]=1; identity[0][1]=0; identity[0][2]=0; identity[0][3] = 0;
+  identity[1][0]=0; identity[1][1]=1; identity[1][2]=0; identity[1][3] = 0;
+  identity[2][0]=0; identity[2][1]=0; identity[2][2]=1; identity[2][3] = 0;
+  trans[0][0]=1; trans[0][1]=0; trans[0][2]=0; trans[0][3] = -10;
+  trans[1][0]=0; trans[1][1]=1; trans[1][2]=0; trans[1][3] = 0;
+  trans[2][0]=0; trans[2][1]=0; trans[2][2]=1; trans[2][3] = 0;
+  vpgl_proj_camera<double> Pi(identity), Pt(trans);
+  vgl_point_3d<double> p3d;
+  vgl_point_2d<double> pi2d(0,0), pt2d(-1,0);
+  p3d = triangulate_3d_point(Pi, pi2d, Pt, pt2d);
+  TEST_NEAR("test triangulate_3d", p3d.z(), 10, 1.0e-6);
 }
 
 

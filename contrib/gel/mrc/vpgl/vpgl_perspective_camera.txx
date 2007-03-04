@@ -38,11 +38,13 @@ vpgl_perspective_camera<T>::vpgl_perspective_camera(
   const vgl_h_matrix_3d<T>& R ) :
   K_( K ), camera_center_( camera_center ), R_( R )
 {
+
   if ( !vpgl_is_rotation( R_ ) ){
     R_.set_identity();
     vcl_cerr << "vpgl_perspective_camera::vpgl_perspective_camera(K,c,R)\n"
              << "  Warning: Supplied rotation matrix is not a true rotation, not using.\n";
   }
+
   recompute_matrix();
 }
 
