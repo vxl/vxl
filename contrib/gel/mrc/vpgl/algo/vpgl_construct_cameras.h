@@ -13,6 +13,10 @@
 // \verbatim
 //  Modifications
 //   9/01/2006  Thomas Pollard  Converted to vpgl, changed image origin to be UL corner.
+//  Modifications
+//   3/04/2007  J.L. Mundy This implementation is now deprecated, use 
+//   camera extraction defined on vpgl_essential_matrix.
+
 // \endverbatim
 
 
@@ -42,6 +46,7 @@ class vpgl_construct_cameras
     ~vpgl_construct_cameras();
 
     //: function to construct cameras
+    // \deprecated in favour of vpgl_essential_matrix public function
     bool construct();
 
     //: returns the projection matrix for the cameras
