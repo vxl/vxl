@@ -18,6 +18,7 @@ MANPAGE_SOURCES += vpgl_reg_fundamental_matrix.txx
 MANPAGE_SOURCES += vpgl_affine_camera.txx
 MANPAGE_SOURCES += vpgl_affine_fundamental_matrix.txx
 MANPAGE_SOURCES += vgl_rotation_3d.h
+MANPAGE_SOURCES += vpgl_essential_matrix.txx
 
 #MANPAGE_SOURCES += vpgl_basic_camera_sptr.h
 #MANPAGE_SOURCES += vpgl_matrix_camera_sptr.h
@@ -36,4 +37,3 @@ endif
 ######################################
 include ${VXLROOT}/config/top-rules.mk
 ######################################
-
