@@ -49,15 +49,13 @@ class vpgl_essential_matrix : public vpgl_fundamental_matrix<T>
                          const vpgl_perspective_camera<T>& cl );
 
   //: Construct from a essential matrix in vnl form.
-  vpgl_essential_matrix( const vnl_matrix_fixed<T,3,3>& E ) : vpgl_fundamental_matrix(E){}
-
+  vpgl_essential_matrix( const vnl_matrix_fixed<T,3,3>& E ) : vpgl_fundamental_matrix<T>(E) {}
 
   //: Copy Constructor
   vpgl_essential_matrix(const vpgl_essential_matrix<T>& other);
 
   //: Assignment
   const vpgl_essential_matrix<T>& operator=( const vpgl_essential_matrix<T>& em );
-
 
   //: Destructor
   virtual ~vpgl_essential_matrix();
