@@ -1,7 +1,5 @@
 #ifndef mcal_single_basis_cost_h
 #define mcal_single_basis_cost_h
-
-
 //:
 // \file
 // \author Tim Cootes
@@ -11,6 +9,7 @@
 #include <vcl_string.h>
 #include <vcl_memory.h>
 #include <vnl/vnl_vector.h>
+#include <vcl_iosfwd.h>
 
 //: Base for objects which compute a cost function for one basis direction.
 // We assume that the component analysis aims to choose a set of orthogonal
@@ -24,9 +23,9 @@
 // data onto the direction of interest (about the origin).  In that case
 // the can_use_variance() should return true, and the cost_from_variance()
 // function implemented.
-class mcal_single_basis_cost {
-private:
-public:
+class mcal_single_basis_cost
+{
+ public:
 
   //: Dflt ctor
   mcal_single_basis_cost();
@@ -78,30 +77,27 @@ public:
   static vcl_auto_ptr<mcal_single_basis_cost> new_single_basis_cost_from_stream(vcl_istream &is);
 };
 
-  //: Allows derived class to be loaded by base-class pointer
-  //  A loader object exists which is invoked by calls
-  //  of the form "vsl_b_read(bfs,base_ptr);".  This loads derived class
-  //  objects from the disk, places them on the heap and
-  //  returns a base class pointer.
-  //  In order to work the loader object requires
-  //  an instance of each derived class that might be
-  //  found.  This function gives the model class to
-  //  the appropriate loader.
+//: Allows derived class to be loaded by base-class pointer
+//  A loader object exists which is invoked by calls
+//  of the form "vsl_b_read(bfs,base_ptr);".  This loads derived class
+//  objects from the disk, places them on the heap and
+//  returns a base class pointer.
+//  In order to work the loader object requires
+//  an instance of each derived class that might be
+//  found.  This function gives the model class to
+//  the appropriate loader.
 void vsl_add_to_binary_loader(const mcal_single_basis_cost& b);
 
-  //: Binary file stream output operator for class reference
+//: Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const mcal_single_basis_cost& b);
 
-  //: Binary file stream input operator for class reference
+//: Binary file stream input operator for class reference
 void vsl_b_read(vsl_b_istream& bfs, mcal_single_basis_cost& b);
 
-  //: Stream output operator for class reference
+//: Stream output operator for class reference
 vcl_ostream& operator<<(vcl_ostream& os,const mcal_single_basis_cost& b);
 
-  //: Stream output operator for class pointer
+//: Stream output operator for class pointer
 vcl_ostream& operator<<(vcl_ostream& os,const mcal_single_basis_cost* b);
 
 #endif // mcal_single_basis_cost_h
-
-
-

@@ -1,6 +1,5 @@
 #ifndef mcal_sparse_basis_cost_h
 #define mcal_sparse_basis_cost_h
-
 //:
 // \file
 // \author Tim Cootes
@@ -10,28 +9,29 @@
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
 #include <mbl/mbl_data_wrapper.h>
+#include <vcl_iosfwd.h>
 
 //: Cost function to promote sparse basis vectors
 //  Cost is log(variance) + alpha sum |e_i|, which encourages concentration
 //  in non-zero elements of the basis vector
-class mcal_sparse_basis_cost : public mcal_single_basis_cost {
-private:
-    //: Weighting for sparseness penalty
+class mcal_sparse_basis_cost : public mcal_single_basis_cost
+{
+ private:
+  //: Weighting for sparseness penalty
   double alpha_;
 
-protected:
-public:
+ public:
 
-    //: Dflt ctor
+  //: Dflt ctor
   mcal_sparse_basis_cost();
 
-    //: Destructor
+  //: Destructor
   virtual ~mcal_sparse_basis_cost();
 
-      //: Weighting for sparseness penalty
+  //: Weighting for sparseness penalty
   double alpha() const { return alpha_; }
 
-    //: Weighting for sparseness penalty
+  //: Weighting for sparseness penalty
   void set_alpha(double a);
 
   //: Returns true since cost can be computed from the variance.
@@ -50,22 +50,22 @@ public:
   virtual double cost_from_variance(const vnl_vector<double>& unit_basis,
                                     double variance);
 
-    //: Version number for I/O
+  //: Version number for I/O
   short version_no() const;
 
-    //: Name of the class
+  //: Name of the class
   virtual vcl_string is_a() const;
 
-    //: Create a copy on the heap and return base class pointer
+  //: Create a copy on the heap and return base class pointer
   virtual  mcal_single_basis_cost*  clone()  const;
 
-    //: Print class to os
+  //: Print class to os
   virtual void print_summary(vcl_ostream& os) const;
 
-    //: Save class to binary file stream
+  //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
 
-    //: Load class from binary file stream
+  //: Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs);
 
   //: Read initialisation settings from a stream.
@@ -77,10 +77,6 @@ public:
   // \endverbatim
   // \throw mbl_exception_parse_error if the parse fails.
   virtual void config_from_stream(vcl_istream & is);
-
 };
 
 #endif // mcal_sparse_basis_cost_h
-
-
-

@@ -1,7 +1,5 @@
 #ifndef mcal_component_analyzer_h
 #define mcal_component_analyzer_h
-
-
 //:
 // \file
 // \author Tim Cootes
@@ -13,13 +11,14 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <mbl/mbl_data_wrapper.h>
+#include <vcl_iosfwd.h>
 
 //: Base for objects which perform some form of linear component analysis.
 // Derived classes (such as mcal_pca) generate linear modes to span
 // the data space so as to optimise certain criteria.
-class mcal_component_analyzer {
-private:
-public:
+class mcal_component_analyzer
+{
+ public:
 
   //: Dflt ctor
   mcal_component_analyzer();
@@ -46,7 +45,7 @@ public:
   virtual void build_about_mean(mbl_data_wrapper<vnl_vector<double> >& data,
                                 const vnl_vector<double>& mean,
                                 vnl_matrix<double>& modes,
-                     vnl_vector<double>& mode_var) =0;
+                                vnl_vector<double>& mode_var) =0;
 
   //: Build mean and modes from data in array data[0..n-1]
   //  Utility function - wraps data and uses build(data,mean,modes)
@@ -82,30 +81,27 @@ public:
   static vcl_auto_ptr<mcal_component_analyzer> new_component_analyzer_from_stream(vcl_istream &is);
 };
 
-  //: Allows derived class to be loaded by base-class pointer
-  //  A loader object exists which is invoked by calls
-  //  of the form "vsl_b_read(bfs,base_ptr);".  This loads derived class
-  //  objects from the disk, places them on the heap and
-  //  returns a base class pointer.
-  //  In order to work the loader object requires
-  //  an instance of each derived class that might be
-  //  found.  This function gives the model class to
-  //  the appropriate loader.
+//: Allows derived class to be loaded by base-class pointer
+//  A loader object exists which is invoked by calls
+//  of the form "vsl_b_read(bfs,base_ptr);".  This loads derived class
+//  objects from the disk, places them on the heap and
+//  returns a base class pointer.
+//  In order to work the loader object requires
+//  an instance of each derived class that might be
+//  found.  This function gives the model class to
+//  the appropriate loader.
 void vsl_add_to_binary_loader(const mcal_component_analyzer& b);
 
-  //: Binary file stream output operator for class reference
+//: Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const mcal_component_analyzer& b);
 
-  //: Binary file stream input operator for class reference
+//: Binary file stream input operator for class reference
 void vsl_b_read(vsl_b_istream& bfs, mcal_component_analyzer& b);
 
-  //: Stream output operator for class reference
+//: Stream output operator for class reference
 vcl_ostream& operator<<(vcl_ostream& os,const mcal_component_analyzer& b);
 
-  //: Stream output operator for class pointer
+//: Stream output operator for class pointer
 vcl_ostream& operator<<(vcl_ostream& os,const mcal_component_analyzer* b);
 
 #endif // mcal_component_analyzer_h
-
-
-
