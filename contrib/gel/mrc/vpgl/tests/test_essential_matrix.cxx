@@ -93,10 +93,10 @@ static void test_essential_matrix()
   vcl_cout << "Actual E Matrix\n" << Ea << '\n';
   vgl_point_2d<double> xal(0.207847,0.2126),  xar(-0.1289,-0.0683432);
   vpgl_perspective_camera<double> palr;//reconstructed actual camera
-  success = extract_left_camera<double>(Ea, xal,xar, palr);
-  vcl_cout << "Actual Left Camera " << palr << '\n';
+  success = extract_left_camera<double>(Ea, xal,xar, palr, 6.25);
+  vcl_cout << "Actual Left Camera\n " << palr << '\n';
   rc = palr.get_camera_center();
-  vgl_point_3d<double> ac(-0.259913,-0.165156,0.951404);
+  vgl_point_3d<double> ac(-1.62446,-1.03223,5.94627);
   TEST_NEAR("Test on actual E matrix", vgl_distance<double>(rc,ac), 0, 1e-3);
 }
 
