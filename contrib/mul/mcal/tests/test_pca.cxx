@@ -1,4 +1,4 @@
-// This is mul/mcal/tests/test_mixture.cxx
+// This is mul/mcal/tests/test_pca.cxx
 //=======================================================================
 //
 //  Copyright: (C) 2007 The University of Manchester
@@ -16,8 +16,9 @@
 #include <vcl_cmath.h>
 #include <vnl/vnl_math.h>
 #include <mbl/mbl_cloneables_factory.h>
-// #include <mcal/mcal_add_all_binary_loaders.h>
-
+#if 0
+#include <mcal/mcal_add_all_binary_loaders.h>
+#endif // 0
 #include <mcal/mcal_pca.h>
 
 //=======================================================================
@@ -125,4 +126,3 @@ void test_pca()
 }
 
 TESTMAIN(test_pca);
-
