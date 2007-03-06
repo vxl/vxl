@@ -68,7 +68,6 @@ double mcal_sparse_basis_cost::cost_from_variance(const vnl_vector<double>& unit
 }
 
 
-
 //=======================================================================
 // Method: is_a
 //=======================================================================
@@ -129,9 +128,9 @@ void mcal_sparse_basis_cost::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,alpha_);
       break;
     default:
-      vcl_cerr << "mcal_sparse_basis_cost::b_read() ";
-      vcl_cerr << "Unexpected version number " << version << vcl_endl;
-      abort();
+      vcl_cerr << "mcal_sparse_basis_cost::b_read()\n"
+               << "Unexpected version number " << version << vcl_endl;
+      vcl_abort();
   }
 }
 
@@ -170,8 +169,4 @@ void mcal_sparse_basis_cost::config_from_stream(vcl_istream & is)
   {
     throw mbl_exception_parse_error(e.what());
   }
-
 }
-
-
-
