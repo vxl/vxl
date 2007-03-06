@@ -641,6 +641,7 @@ foreach $f (@FILES)
     $class =~ s!\,\s*vcl_less\<[^<>]+\>!!g;
     $class =~ s!\,(.*)_sptr\,\1\005compare!!g;
     $class =~ s!(vbl_io_sparse_array)_base\<!$1\<!g;
+    $class =~ s!(vgl_intersection)_box\<!$1\<!g;
     $class =~ s!\005!+-!g; $class =~ tr/<,*>/+.~-/; # \005 is ::
     $class_q = $class; $class_q =~ s!([.+~-])!\\$1!g;
     $class =~ s!unsigned!u!g; $class =~ s!signed!s!g; $class =~ s!longd!long_d!g;
