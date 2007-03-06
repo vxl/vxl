@@ -55,6 +55,6 @@ vgl_point_3d<T> vgl_intersection(const vgl_plane_3d<T>& p1,
 
 
 #define VGL_INTERSECTION_INSTANTIATE(T) extern "please include vgl/vgl_intersection.txx first"
-#define VGL_INTERSECTION_INT_INSTANTIATE(T) extern "please include vgl/vgl_intersection.txx first"
+#define VGL_INTERSECTION_BOX_INSTANTIATE(T) extern "please include vgl/vgl_intersection.txx first"
 
 #endif // vgl_intersection_h_

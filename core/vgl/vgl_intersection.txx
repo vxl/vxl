@@ -292,8 +292,8 @@ template vgl_point_3d<T > vgl_intersection(const vgl_plane_3d<T >&,const vgl_pla
 template bool vgl_intersection(const vgl_box_2d<T >&, const vgl_line_2d<T >& line, vgl_point_2d<T >& p0, vgl_point_2d<T >&)
 
 //: Instantiate only functions suitable for integer instantiation.
-#undef VGL_INTERSECTION_INT_INSTANTIATE
-#define VGL_INTERSECTION_INT_INSTANTIATE(T) \
+#undef VGL_INTERSECTION_BOX_INSTANTIATE
+#define VGL_INTERSECTION_BOX_INSTANTIATE(T) \
 template bool vgl_intersection(const vgl_box_2d<T >&, const vgl_line_2d<T >& line, vgl_point_2d<T >& p0, vgl_point_2d<T >&)
 
 #endif // vgl_intersection_txx_
