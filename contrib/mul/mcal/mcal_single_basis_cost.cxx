@@ -1,4 +1,5 @@
-
+//:
+// \file
 #include "mcal_single_basis_cost.h"
 #include <vcl_cstdlib.h>
 #include <mbl/mbl_data_array_wrapper.h>
@@ -6,9 +7,6 @@
 #include <mbl/mbl_cloneables_factory.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_parse_block.h>
-#include <mbl/mbl_cloneables_factory.h>
-#include <mbl/mbl_parse_block.h>
-#include <mbl/mbl_exception.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 
@@ -61,14 +59,13 @@ vcl_auto_ptr<mcal_single_basis_cost>
   }
   catch (const mbl_exception_no_name_in_factory & e)
   {
-      vcl_cerr<<"ERROR in mcal_single_basis_cost::new_vm_builder_from_stream"<<vcl_endl;
-      vcl_cerr<<"\tRequired vector model builder of "<<name<<" is not in the factory. Further exception details follow:"<<vcl_endl;
-      vcl_cerr<<"\t"<<e.what()<<vcl_endl;
+      vcl_cerr<<"ERROR in mcal_single_basis_cost::new_vm_builder_from_stream\n"
+              <<"\tRequired vector model builder of "<<name<<" is not in the factory. Further exception details follow:\n"
+              <<'\t'<<e.what()<<vcl_endl;
       vcl_abort();
   }
   pvmb->config_from_stream(is);
   return pvmb;
-    
 }
 
 //: Read initialisation settings from a stream.
@@ -76,7 +73,6 @@ vcl_auto_ptr<mcal_single_basis_cost>
 // been specified.
 void mcal_single_basis_cost::config_from_stream(vcl_istream& is)
 {
-
   vcl_string s = mbl_parse_block(is);
   if (s.empty() || s=="{}") return;
 
@@ -86,9 +82,8 @@ void mcal_single_basis_cost::config_from_stream(vcl_istream& is)
 }
 
 
-
 //=======================================================================
-// Associated function: operator<< 
+// Associated function: operator<<
 //=======================================================================
 
 void vsl_b_write(vsl_b_ostream& bfs, const mcal_single_basis_cost& b)
@@ -97,7 +92,7 @@ void vsl_b_write(vsl_b_ostream& bfs, const mcal_single_basis_cost& b)
 }
 
 //=======================================================================
-// Associated function: operator>> 
+// Associated function: operator>>
 //=======================================================================
 
 void vsl_b_read(vsl_b_istream& bfs, mcal_single_basis_cost& b)
@@ -106,7 +101,7 @@ void vsl_b_read(vsl_b_istream& bfs, mcal_single_basis_cost& b)
 }
 
 //=======================================================================
-// Associated function: operator<< 
+// Associated function: operator<<
 //=======================================================================
 
 vcl_ostream& operator<<(vcl_ostream& os,const mcal_single_basis_cost& b)
@@ -119,13 +114,13 @@ vcl_ostream& operator<<(vcl_ostream& os,const mcal_single_basis_cost& b)
 }
 
 //=======================================================================
-// Associated function: operator<< 
+// Associated function: operator<<
 //=======================================================================
 
 vcl_ostream& operator<<(vcl_ostream& os,const mcal_single_basis_cost* b)
 {
-    if (b)  
+    if (b)
     return os << *b;
-    else      
+    else
     return os << "No mcal_single_basis_cost defined.";
 }
