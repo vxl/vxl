@@ -8,7 +8,7 @@
 #include <vsl/vsl_vector_io.h>
 #include <vsol/vsol_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
-
+#include <vgl/algo/vgl_fit_plane_3d.h>
 //***************************************************************************
 // Initialization
 //***************************************************************************
@@ -24,6 +24,13 @@ vsol_polygon_3d::vsol_polygon_3d(vcl_vector<vsol_point_3d_sptr> const& new_verti
   assert(valid_vertices(new_vertices));
 
   storage_=new vcl_vector<vsol_point_3d_sptr>(new_vertices);
+  vcl_vector<vgl_homg_point_3d<double> > pts;
+  for(vcl_vector<vsol_point_3d_sptr>::iterator pit = storage_->begin();
+      pit != storage_->end(); ++pit)
+    pts.push_back(vgl_homg_point_3d<double>((*pit)->x(),(*pit)->y(),(*pit)->z()));
+  vgl_fit_plane_3d<double> fp(pts);
+  fp.fit();
+  plane_ = fp.get_plane();
 }
 
 //---------------------------------------------------------------------------
@@ -37,6 +44,7 @@ vsol_polygon_3d::vsol_polygon_3d(vsol_polygon_3d const& other)
   storage_=new vcl_vector<vsol_point_3d_sptr>(*other.storage_);
   for (unsigned int i=0;i<storage_->size();++i)
     (*storage_)[i]=new vsol_point_3d(*((*other.storage_)[i]));
+  plane_ = other.plane_;
 }
 
 //---------------------------------------------------------------------------
@@ -251,27 +259,18 @@ bool vsol_polygon_3d::in(vsol_point_3d_sptr const& ) const
 
 //---------------------------------------------------------------------------
 //: Return the unit normal vector at point `p'.
-// Require: in(p)
 //---------------------------------------------------------------------------
 vgl_vector_3d<double>
-vsol_polygon_3d::normal_at_point(vsol_point_3d_sptr const& p) const
+vsol_polygon_3d::normal_at_point(vsol_point_3d_sptr const& /*no p needed*/) const
 {
-  // require
-  assert(in(p));
-
-  // Since a polygon is planar, the answer is independent of p:
-  vsol_point_3d_sptr p0=(*storage_)[0];
-  vsol_point_3d_sptr p1=(*storage_)[1];
-  vsol_point_3d_sptr p2=(*storage_)[2];
-
-  vgl_vector_3d<double> v1(p1->x()-p0->x(),
-                           p1->y()-p0->y(),
-                           p1->z()-p0->z());
-  vgl_vector_3d<double> v2(p2->x()-p0->x(),
-                           p2->y()-p0->y(),
-                           p2->z()-p0->z());
-
-  return normalized(cross_product(v1,v2));
+  return plane_.normal();
+}
+//---------------------------------------------------------------------------
+//: Return the unit normal vector 
+//---------------------------------------------------------------------------
+vgl_vector_3d<double> vsol_polygon_3d::normal() const
+{
+  return plane_.normal();
 }
 
 //***************************************************************************

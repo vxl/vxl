@@ -28,6 +28,7 @@
 #include <vcl_iosfwd.h>
 #include <vsl/vsl_binary_io.h>
 #include <vgl/vgl_fwd.h> // vgl_vector_3d
+#include <vgl/vgl_homg_plane_3d.h>
 class vsol_triangle_3d;
 class vsol_rectangle_3d;
 
@@ -162,6 +163,11 @@ class vsol_polygon_3d : public vsol_region_3d
   //---------------------------------------------------------------------------
   virtual vgl_vector_3d<double> normal_at_point(vsol_point_3d_sptr const& p) const;
 
+  //---------------------------------------------------------------------------
+  //: Return the normal vector
+  //---------------------------------------------------------------------------
+  vgl_vector_3d<double> normal() const;
+  
   // ==== Binary IO methods ======
 
   //: Binary save self to stream.
@@ -193,6 +199,7 @@ class vsol_polygon_3d : public vsol_region_3d
   //: Default constructor. Do nothing. Just to enable inheritance.  Protected.
   //---------------------------------------------------------------------------
   vsol_polygon_3d();
+  vgl_homg_plane_3d<double> plane_;
 };
 
 //: Binary save vsol_polygon_3d* to stream.
