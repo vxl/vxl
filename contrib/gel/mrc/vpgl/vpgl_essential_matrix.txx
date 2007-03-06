@@ -44,9 +44,14 @@ vpgl_essential_matrix<T>::
 vpgl_essential_matrix( const vpgl_perspective_camera<T>& cr,
                        const vpgl_perspective_camera<T>& cl )
 {
-  vpgl_proj_camera<T> ppr = static_cast<vpgl_proj_camera<T> >(cr);
-  vpgl_proj_camera<T> ppl = static_cast<vpgl_proj_camera<T> >(cl);
-  this->set_matrix(cr, cl);
+  //copy the cameras
+  vpgl_perspective_camera<T> crc = cr, clc = cl;
+  //set the calibration matrices to identity
+  vpgl_calibration_matrix<T> K;
+  crc.set_calibration(K); clc.set_calibration(K);
+  vpgl_proj_camera<T> ppr = static_cast<vpgl_proj_camera<T> >(crc);
+  vpgl_proj_camera<T> ppl = static_cast<vpgl_proj_camera<T> >(clc);
+  this->set_matrix(crc, clc);
 }
 
 //---------------------------------
