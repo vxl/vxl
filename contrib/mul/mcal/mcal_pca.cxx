@@ -1,3 +1,5 @@
+//:
+// \file
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
 
@@ -165,9 +167,9 @@ void mcal_pca::build_evecs_ns_smaller(mbl_data_wrapper<vnl_vector<double> >& dat
   {
     message_given_before=true;
     vcl_cerr<<"\n"
-              "WARNING - mcal_pca:  The size of the matrix is\n"
-              "  possibly too large for the memory. If the build fails, try\n"
-              "  setting set_use_chunks to true in the mcal_pca.\n"<<vcl_endl;
+            <<"WARNING - mcal_pca:  The size of the matrix is\n"
+            <<"  possibly too large for the memory. If the build fails, try\n"
+            <<"  setting set_use_chunks to true in the mcal_pca.\n\n";
   }
 
 
@@ -195,7 +197,7 @@ void mcal_pca::build_evecs_ns_smaller(mbl_data_wrapper<vnl_vector<double> >& dat
     vcl_vector<int> start(n_chunks),end(n_chunks);
     start[0] = 0;
     end[0] = vnl_math_rnd(chunk_size)-1;
-    for (int i=1;i<n_chunks;i++) 
+    for (int i=1;i<n_chunks;i++)
     {
       start[i] = end[i-1]+1;
       end[i] = vnl_math_rnd((i+1)*chunk_size) -1;
@@ -329,12 +331,12 @@ void mcal_pca::build_evecs_ns_smaller(mbl_data_wrapper<vnl_vector<double> >& dat
 }
 
 //: Support function for chunks
-void mcal_pca::fillDDt(vnl_matrix<double>& DDt, const vnl_matrix<double>& A, 
+void mcal_pca::fillDDt(vnl_matrix<double>& DDt, const vnl_matrix<double>& A,
            int rlo, int rhi, int clo, int chi)
 {
   double **DDt_data = DDt.data_array();
   const double *const*A_data = A.data_array();
-  
+
   for (int r=rlo;r<=rhi;++r)
   {
     double *DDt_row = DDt_data[r];
@@ -361,7 +363,7 @@ void mcal_pca::set_min_modes( const unsigned min )
   min_modes_ = min;
 }
 
-  
+
 //: Current lower limit on number of parameters
 unsigned mcal_pca::min_modes() const
 {
@@ -373,22 +375,22 @@ void mcal_pca::set_max_modes(unsigned max)
   max_modes_ = max;
 }
 
-  
+
 //: Current upper limit on number of parameters
 unsigned mcal_pca::max_modes() const
 {
   return max_modes_;
 }
-  
+
 //: Define proportion of data variance to explain
 void mcal_pca::set_var_prop(double v)
 {
   var_prop_ = v;
 }
-  
+
 //: Current proportion of data variance to explain
 double mcal_pca::var_prop() const
-{  
+{
   return var_prop_;
 }
 
@@ -413,17 +415,17 @@ void mcal_pca::build_about_mean(mbl_data_wrapper<vnl_vector<double> >& data,
 {
   if (data.size()==0)
   {
-    vcl_cerr<<"mcal_pca::build_about_mean() No samples supplied."<<vcl_endl;
-    abort();
+    vcl_cerr<<"mcal_pca::build_about_mean() No samples supplied.\n";
+    vcl_abort();
   }
 
   data.reset();
 
   if (data.current().size()==0)
   {
-    vcl_cerr<<"mcal_pca::build_about_mean() ";
-    vcl_cerr<<"Warning: Samples claim to have zero dimensions."<<vcl_endl;
-    vcl_cerr<<"Constructing empty model."<<vcl_endl;
+    vcl_cerr<<"mcal_pca::build_about_mean()\n"
+            <<"Warning: Samples claim to have zero dimensions.\n"
+            <<"Constructing empty model.\n"
 
     modes.set_size(0,0);
     mode_var.set_size(0);
@@ -435,9 +437,7 @@ void mcal_pca::build_about_mean(mbl_data_wrapper<vnl_vector<double> >& data,
     build_evecs_nd_smaller(data,mean,modes,mode_var);
   else
     build_evecs_ns_smaller(data,mean,modes,mode_var);
-
 }
-
 
 
 //=======================================================================
@@ -445,7 +445,7 @@ void mcal_pca::build_about_mean(mbl_data_wrapper<vnl_vector<double> >& data,
 //=======================================================================
 
 vcl_string  mcal_pca::is_a() const
-{ 
+{
   return vcl_string("mcal_pca");
 }
 
@@ -453,9 +453,9 @@ vcl_string  mcal_pca::is_a() const
 // Method: version_no
 //=======================================================================
 
-short mcal_pca::version_no() const 
-{ 
-  return 1; 
+short mcal_pca::version_no() const
+{
+  return 1;
 }
 
 //=======================================================================
@@ -473,12 +473,12 @@ mcal_component_analyzer* mcal_pca::clone() const
 
 void mcal_pca::print_summary(vcl_ostream& os) const
 {
-  os<<vcl_endl;
-  os<<vsl_indent()<<"min_modes: "<<min_modes_<<vcl_endl;
-  os<<vsl_indent()<<"max_modes: "<<max_modes_<<vcl_endl;
-  os<<vsl_indent()<<"var_prop: "<<var_prop_<<vcl_endl;
-  os<<vsl_indent()<<"max_d_in_memory: "<<max_d_in_memory_<<vcl_endl;
-  os<<vsl_indent()<<"use_chunks: "<<use_chunks_<<vcl_endl;
+  os<<vcl_endl
+    <<vsl_indent()<<"min_modes: "<<min_modes_<<vcl_endl
+    <<vsl_indent()<<"max_modes: "<<max_modes_<<vcl_endl
+    <<vsl_indent()<<"var_prop: "<<var_prop_<<vcl_endl
+    <<vsl_indent()<<"max_d_in_memory: "<<max_d_in_memory_<<vcl_endl
+    <<vsl_indent()<<"use_chunks: "<<use_chunks_<<vcl_endl;
 }
 
 //=======================================================================
@@ -513,9 +513,9 @@ void mcal_pca::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,use_chunks_);
       break;
     default:
-      vcl_cerr << "mcal_pca::b_read() ";
-      vcl_cerr << "Unexpected version number " << version << vcl_endl;
-      abort();
+      vcl_cerr << "mcal_pca::b_read()\n"
+               << "Unexpected version number " << version << vcl_endl;
+      vcl_abort();
   }
 }
 
@@ -593,8 +593,4 @@ void mcal_pca::config_from_stream(vcl_istream & is)
   {
     throw mbl_exception_parse_error(e.what());
   }
-
 }
-
-
-
