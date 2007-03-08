@@ -111,7 +111,7 @@ transform( rgrl_transformation const& xform ) const
   // a vector whose magnitude is the original scale.
   // the after scale is the magnitude of the transformed vector as
 
-  vnl_vector<double> loc(normal_), xformed_loc(location_.size());
+  vnl_vector<double> loc(normal_), xformed_loc(face_ptr->location_.size());
   loc *= scale_;
   loc += location_;
 
