@@ -97,6 +97,14 @@ class rgrl_estimator
   virtual
   const vcl_type_info& transformation_type() const = 0;
 
+  //: Name of transformation estimated by this estimator.
+  //  It is more useful when a transformation/estimator pair 
+  //  is capable of storing/estimating several models,
+  //  usually differing in dof
+  virtual
+  const vcl_string transformation_name() const
+  { return this->transformation_type().name(); }
+
   // Defines type-related functions
   rgrl_type_macro( rgrl_estimator, rgrl_object );
 
