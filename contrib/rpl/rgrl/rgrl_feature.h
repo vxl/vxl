@@ -50,7 +50,7 @@ class rgrl_feature
   void set_location( vnl_vector<double>const& loc )
   { location_ = loc; }
 
-  double dim() const
+  unsigned dim() const
   { return location_.size(); }
   
   //: Provide the scale level at which this feature is detected
