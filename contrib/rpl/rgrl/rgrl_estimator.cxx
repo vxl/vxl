@@ -7,7 +7,6 @@
 #include <rgrl/rgrl_set_of.h>
 #include <rgrl/rgrl_match_set_sptr.h>
 #include <rgrl/rgrl_match_set.h>
-#include <rgrl/rgrl_set_of.h>
 
 rgrl_estimator::
 rgrl_estimator( unsigned int param_dof )
@@ -90,7 +89,7 @@ compute_weighted_centres( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
   // if the weight is too small or zero,
   // that means there is no good match
-  if( sum_wgt < 1e-8 ) {
+  if ( sum_wgt < 1e-8 ) {
     WarningMacro( "Sum of weights is too small for centre computation.\n" );
     return false;
   }
