@@ -218,45 +218,24 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   unsigned int tot_num = 0;
   for ( unsigned ms = 0; ms<matches.size(); ++ms )
     if ( matches[ms] ) { // if pointer is valid
+
       rgrl_match_set const& one_set = *(matches[ms]);
-      for ( FIter fi=one_set.from_begin(); fi!=one_set.from_end(); ++fi ) {
-        tot_num += fi.size() * 2;  // each point provides two constraints
-      }
+      for ( FIter fi=one_set.from_begin(); fi!=one_set.from_end(); ++fi ) 
+        if( fi.size() ) {
+          tot_num += fi.size() * fi.begin().to_feature()->dim();  // each point provides two constraints
+        }
     }
 
   // Determine the weighted centres for computing the more stable
   // covariance matrix of homography parameters
   //
-  vnl_vector<double> from_centre( 2, 0.0 );
-  vnl_vector<double> to_centre( 2, 0.0 );
-  vnl_vector<double> from_pt( 2 );
-  vnl_vector<double> to_pt( 2 );
-  double sum_wgt = 0.0;
-  for ( unsigned ms=0; ms < matches.size(); ++ms ) {
-    rgrl_match_set const& match_set = *matches[ms];
-    for ( FIter fi = match_set.from_begin(); fi != match_set.from_end(); ++fi ) {
-      for ( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {
-        double const wgt = ti.cumulative_weight();
-        from_pt = fi.from_feature()->location();
-        from_pt *= wgt;
-        from_centre += from_pt;
-        to_pt = ti.to_feature()->location();
-        to_pt *= wgt;
-        to_centre   += to_pt;
-        sum_wgt += wgt;
-      }
-    }
-  }
-  // if the weight is too small or zero,
-  // that means there is no good match
-  if( sum_wgt < 1e-10 ) {
+  vnl_vector<double> from_centre;
+  vnl_vector<double> to_centre;
+  if( !compute_weighted_centres( matches, from_centre, to_centre ) )
     return 0;
-  }
-  
-  from_centre /= sum_wgt;
-  to_centre /= sum_wgt;
-  DebugMacro( 3, "From center: " << from_centre
+   DebugMacro( 3, "From center: " << from_centre
                <<"  To center: " << to_centre << vcl_endl );
+
   // make the init homography as a CENTERED one
   {
     // centered H_ = to_matrix * H * from_matrix^-1
@@ -372,15 +351,6 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   return new rgrl_trans_homography2d( init_H, covar, from_centre, to_centre );
 }
 
-
-rgrl_transformation_sptr
-rgrl_est_homo2d_lm::
-estimate( rgrl_match_set_sptr matches,
-          rgrl_transformation const& cur_transform ) const
-{
-  // use base class implementation
-  return rgrl_estimator::estimate( matches, cur_transform );
-}
 
 const vcl_type_info&
 rgrl_est_homo2d_lm::

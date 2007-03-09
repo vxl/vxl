@@ -26,15 +26,8 @@ public:
   estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
             rgrl_transformation const& cur_transform ) const;
 
-  //: Estimates homography transformation
-  //
-  // \sa rgrl_estimator::estimate
-  //
-  // The estimation technique is the normalized DLT (Direct Linear
-  // Transformation) algorithm.
-  rgrl_transformation_sptr
-  estimate( rgrl_match_set_sptr matches,
-            rgrl_transformation const& cur_transform ) const;
+  // import base class estimate function
+  using rgrl_nonlinear_estimator::estimate;
 
   //: Type of transformation estimated by this estimator.
   const vcl_type_info& transformation_type() const;

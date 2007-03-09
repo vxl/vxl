@@ -108,6 +108,14 @@ class rgrl_estimator
   // Defines type-related functions
   rgrl_type_macro( rgrl_estimator, rgrl_object );
 
+ protected:
+  //: Determine the weighted centres of the From and To points
+  //
+  bool
+  compute_weighted_centres( rgrl_set_of<rgrl_match_set_sptr> const& matches,
+                            vnl_vector<double>& from_centre,
+                            vnl_vector<double>& to_centre ) const;
+
  private:
   unsigned int dof_;
 };
