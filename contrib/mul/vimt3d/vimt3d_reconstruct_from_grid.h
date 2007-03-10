@@ -70,9 +70,11 @@ inline void vimt3d_reconstruct_ic_no_checks(double val, double x, double y, doub
   // now add or set the image values
   double new_val = add_data ? data[index]+val : val;
   data[index] = T(new_val);
+#if 0 // doesn't seem to help ...
   // avoid rounding errors with integer type T:
   if (T(new_val + 1e-2) == T(new_val + 1e-1))
     data[index] = T(new_val+1e-2);
+#endif
 
   return;
 }
