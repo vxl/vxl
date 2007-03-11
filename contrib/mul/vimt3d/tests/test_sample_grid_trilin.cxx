@@ -18,20 +18,20 @@ void compare_images(const vimt3d_image_3d_of<vxl_int_32> &image1,
   if (image1.world2im()==image2.world2im())
   {
     different=false;
-    for (unsigned int i=0; i<image1.image().ni(); ++i)
+    for (unsigned int i=0; i<image1.image().ni() && !different; ++i)
     {
-      for (unsigned int j=0; j<image1.image().nj(); ++j)
+      for (unsigned int j=0; j<image1.image().nj() && !different; ++j)
       {
-        for (unsigned int k=0; k<image1.image().nk(); ++k)
+        for (unsigned int k=0; k<image1.image().nk() && !different; ++k)
         {
           double val1=image1.image()(i,j,k);
           double val2=image2.image()(i,j,k);
+          // take care of integer rounding errors (==> val2 rounded down to val1-1)
           if (val1 != val2 && val1 != val2+1)
           {
             different=true;
             vcl_cout << "Value in ["<<i<<','<<j<<','<<k<<"] differs: should be "
                      << val1 << ", is " << val2 << vcl_endl;
-            break;
           }
         }
       }
@@ -40,7 +40,7 @@ void compare_images(const vimt3d_image_3d_of<vxl_int_32> &image1,
   else
     vcl_cout << "world2im() differs\n";
 
-  TEST("Reconstructed image is = original image",different,false);
+  TEST("Reconstructed image equals original image", different, false);
 }
 
 static void test_sample_grid_trilin()
