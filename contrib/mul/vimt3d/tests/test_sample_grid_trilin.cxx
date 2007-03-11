@@ -26,11 +26,11 @@ void compare_images(const vimt3d_image_3d_of<vxl_int_32> &image1,
         {
           double val1=image1.image()(i,j,k);
           double val2=image2.image()(i,j,k);
-          if (val1!=val2)
+          if (val1 != val2 && val1 != val2+1)
           {
             different=true;
-            vcl_cout << "Value in ["<<i<<','<<j<<','<<k<<"] differs: "
-                     << val1 << " != " << val2 << vcl_endl;
+            vcl_cout << "Value in ["<<i<<','<<j<<','<<k<<"] differs: should be "
+                     << val1 << ", is " << val2 << vcl_endl;
             break;
           }
         }
