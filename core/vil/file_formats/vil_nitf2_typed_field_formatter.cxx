@@ -231,8 +231,8 @@ bool vil_nitf2_double_formatter::write_vcl_stream(vcl_ostream& output, const dou
   } else {
     output << vcl_noshowpos;
   }
-  output << vcl_internal << vcl_setfill('0') << vcl_setprecision(precision);
-  output << value;
+  output << vcl_internal << vcl_setfill('0') << vcl_setprecision(precision)
+         << value;
   return !output.fail();
 }
 
@@ -286,17 +286,17 @@ bool vil_nitf2_exponential_formatter::write_vcl_stream(vcl_ostream& output,
 {
   // Can't control the width of exponent (it's 3) so write it to a buffer first
   vcl_ostringstream buffer;
-  buffer << vcl_setw(field_width) << vcl_scientific;
-  buffer << vcl_showpos << vcl_uppercase;
-  buffer << vcl_internal << vcl_setfill('0') << vcl_setprecision(mantissa_width);
-  buffer << value;
+  buffer << vcl_setw(field_width) << vcl_scientific
+         << vcl_showpos << vcl_uppercase
+         << vcl_internal << vcl_setfill('0') << vcl_setprecision(mantissa_width)
+         << value;
   vcl_string buffer_string = buffer.str();
   unsigned int length = buffer_string.length();
   // Write everything up to the exponent sign
   output << buffer_string.substr(0,length-3);
   // Write exponent digits, padding or unpadding them to desired width
   output << vcl_setw(exponent_width) << vcl_setfill('0') 
-    << buffer_string.substr(length-vcl_min(3,exponent_width), vcl_min(3,exponent_width));
+         << buffer_string.substr(length-vcl_min(3,exponent_width), vcl_min(3,exponent_width));
   return !output.fail();
 }
 
@@ -479,10 +479,10 @@ read( vil_nitf2_istream& input,
     error_reading_tre &= !record;
   }
   if (input.tell() != end) { // TO DO: what does end equal at EOF?
-    VIL_NITF2_LOG(log_info) << "\nSeeking to end of TRE sequence field." << vcl_endl;
+    VIL_NITF2_LOG(log_info) << "\nSeeking to end of TRE sequence field.\n";
     input.seek(end);
     if (input.tell() != end) {
-      vcl_cerr << "\nSeek to end of TRE sequence field failed." << vcl_endl;
+      vcl_cerr << "\nSeek to end of TRE sequence field failed.\n";
       error_reading_tre = true;
     }
   }

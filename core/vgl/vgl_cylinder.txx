@@ -21,12 +21,11 @@ bool vgl_cylinder<T>::operator==(vgl_cylinder<T> const& cyl) const
 template <class T>
 vcl_ostream& vgl_cylinder<T>::print(vcl_ostream& s) const
 {
-  
-   return s<< "<vgl_cylinder "
-            << "center=" << center_ << "," 
-            << " radius=" << radius_ << ", lenght =" << length_ 
-            << ", direction=" << orient_ 
-            << ">";
+   return s << "<vgl_cylinder "
+            << "center=" << center_ << ','
+            << " radius=" << radius_ << ", lenght =" << length_
+            << ", direction=" << orient_
+            << '>';
 }
 
 template <class T>

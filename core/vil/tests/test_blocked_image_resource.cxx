@@ -39,11 +39,11 @@ static void test_blocked_image_resource()
                                      ir->pixel_format(),
                                      sbi, sbj,
                                      "tiff");
-    if(bir)
-      {
-        bool put_view_worked = bir->vil_image_resource::put_view(image);
-        TEST("Put view to tiff blocked resource", put_view_worked, true);
-      }
+    if (bir)
+    {
+      bool put_view_worked = bir->vil_image_resource::put_view(image);
+      TEST("Put view to tiff blocked resource", put_view_worked, true);
+    }
     else
       TEST("Put view to tiff blocked resource", false, true);
   }// delete resource by going out of scope
@@ -62,27 +62,31 @@ static void test_blocked_image_resource()
     TEST("Load blocked image resource", success, true);
   }
   else
-    { TEST("Load blocked image resource", true, false); }
+  {
+    TEST("Load blocked image resource", true, false);
+  }
 
   if (bir)
-    {
-      vil_image_view<unsigned short> lview =
+  {
+    vil_image_view<unsigned short> lview =
         bir->get_block(bir->n_block_i()-1, bir->n_block_j()-1);
 #if 0
-      for (unsigned j = 0; j<lview.nj(); ++j)
-        {
-          for (unsigned i = 0; i<lview.ni(); ++i)
-            vcl_cout << lview(i,j) << ' ' ;
-          vcl_cout << '\n';
-        }
+    for (unsigned j = 0; j<lview.nj(); ++j)
+    {
+      for (unsigned i = 0; i<lview.ni(); ++i)
+        vcl_cout << lview(i,j) << ' ' ;
       vcl_cout << '\n';
-#endif
-      //value in upper left corner of last block
-      unsigned last_block_val = ni*(nbj-1)*sbj+(nbi-1)*sbi;
-      TEST("Last Block Value", lview(0,0)==last_block_val, true);
     }
+    vcl_cout << '\n';
+#endif
+    //value in upper left corner of last block
+    unsigned last_block_val = ni*(nbj-1)*sbj+(nbi-1)*sbi;
+    TEST("Last Block Value", lview(0,0)==last_block_val, true);
+  }
   else
+  {
     TEST("Last Block Value", false, true);
+  }
 
   ///////-------- ----- Test Copying Blocks -------------------------///////
   vcl_cout << "Start test for copying blocks\n";
@@ -96,33 +100,34 @@ static void test_blocked_image_resource()
                                      bir->pixel_format(),
                                      bir->size_block_i(), bir->size_block_j(),
                                      "tiff");  //
-    if(bir2){
+    if (bir2)
+    {
       for (unsigned j = 0; j<bir2->n_block_j()&&good_copy; ++j)
         for (unsigned i = 0; i<bir2->n_block_i()&&good_copy; ++i)
-          {
-            vil_image_view_base_sptr blk = bir->get_block(i,j);
-            if (!blk)
-              good_copy = false;
+        {
+          vil_image_view_base_sptr blk = bir->get_block(i,j);
+          if (!blk)
+            good_copy = false;
 #if 0
-            if (blk)
+          if (blk)
+          {
+            vil_image_view<unsigned short> bv = blk;
+            vcl_cout << "Block from resource(" << i << ' ' << j << ")["
+                     <<  bv.ni() << ' ' << bv.nj() <<  "]\n";
+            for (unsigned bj = 0; bj<bv.nj(); ++bj)
+            {
+              for (unsigned bi = 0; bi<bv.ni(); ++bi)
               {
-                vil_image_view<unsigned short> bv = blk;
-                vcl_cout << "Block from resource(" << i << ' ' << j << ")["
-                         <<  bv.ni() << ' ' << bv.nj() <<  "]\n";
-                for (unsigned bj = 0; bj<bv.nj(); ++bj)
-                  {
-                    for (unsigned bi = 0; bi<bv.ni(); ++bi)
-                      {
-                        vcl_cout << bv(bi,bj) << ' ';
-                      }
-                    vcl_cout << '\n';
-                  }
+                vcl_cout << bv(bi,bj) << ' ';
               }
-            vcl_cout << '\n';
-#endif
-            if (!bir2->put_block(i, j, *blk))
-              good_copy = false;
+              vcl_cout << '\n';
+            }
           }
+          vcl_cout << '\n';
+#endif
+          if (!bir2->put_block(i, j, *blk))
+            good_copy = false;
+        }
       TEST("Copy blocks", good_copy, true);
     }
     else
@@ -132,20 +137,22 @@ static void test_blocked_image_resource()
   vcl_cout << "Loading resource from " << path2 << '\n';
   vil_image_resource_sptr bir2 = vil_load_image_resource(path2.c_str());
   if (bir2&&good_copy)
-    {
-      vil_image_view<unsigned short> v = bir->get_view();
-      vil_image_view<unsigned short> v2 = bir2->get_view();
-      for (unsigned i = 0; i<bir->ni(); ++i)
-        for (unsigned j = 0; j<bir->nj(); ++j)
-          {
-            good_copy = good_copy && v(i,j)==v2(i,j);
-            if (v(i,j)!=v2(i,j))
-              vcl_cout << "v(" << i << ' ' << j <<  ") = " << v(i,j)
-                       << "vs. " << v2(i,j) << '\n';
-          }
-    }
+  {
+    vil_image_view<unsigned short> v = bir->get_view();
+    vil_image_view<unsigned short> v2 = bir2->get_view();
+    for (unsigned i = 0; i<bir->ni(); ++i)
+      for (unsigned j = 0; j<bir->nj(); ++j)
+      {
+        good_copy = good_copy && v(i,j)==v2(i,j);
+        if (v(i,j)!=v2(i,j))
+          vcl_cout << "v(" << i << ' ' << j <<  ") = " << v(i,j)
+                   << "vs. " << v2(i,j) << '\n';
+      }
+  }
   else
-      TEST("Copy blocks to resource", false, true);
+  {
+    TEST("Copy blocks to resource", false, true);
+  }
   TEST("Copy blocks to resource", good_copy, true);
   //
   /////////---------------Test the facade -----------------------///////
@@ -153,78 +160,82 @@ static void test_blocked_image_resource()
   vcl_cout << "Start testing the facade\n";
   vil_blocked_image_resource_sptr bif =
     vil_new_blocked_image_facade(ir, sbi, sbj);
-  if(bif){
+  if (bif)
+  {
     vcl_cout << "Blocked Image Parameters\n"
-           << "ni = " << bif->ni() << " nj = " << bif->nj()
-           << " nplanes = "  << bif->nplanes() << '\n'
-           << "size_block_i = " << bif->size_block_i()
-           << "   size_block_j = " << bif->size_block_j()
-           << "   n_block_i = " << bif->n_block_i()
-           << "   n_block_j = " << bif->n_block_j() << '\n';
-  nbi = bif->n_block_i(); nbj = bif->n_block_j();
-  TEST("Test blocking parameters", (nbi==(ni+bif->size_block_i()-1)/sbi)&&
-       (nbj==(nj+bif->size_block_j()-1)/sbj), true);
-  vil_image_view<unsigned short> block = bif->get_block(nbi-1, nbj-1);
-  unsigned slbi = ni-(nbi-1)*sbi, slbj = nj-(nbj-1)*sbj;
-  bool good = true;
-  for (unsigned j = 0; j<slbj; ++j)
+             << "ni = " << bif->ni() << " nj = " << bif->nj()
+             << " nplanes = "  << bif->nplanes() << '\n'
+             << "size_block_i = " << bif->size_block_i()
+             << "   size_block_j = " << bif->size_block_j()
+             << "   n_block_i = " << bif->n_block_i()
+             << "   n_block_j = " << bif->n_block_j() << '\n';
+    nbi = bif->n_block_i(); nbj = bif->n_block_j();
+    TEST("Test blocking parameters", (nbi==(ni+bif->size_block_i()-1)/sbi)&&
+         (nbj==(nj+bif->size_block_j()-1)/sbj), true);
+    vil_image_view<unsigned short> block = bif->get_block(nbi-1, nbj-1);
+    unsigned slbi = ni-(nbi-1)*sbi, slbj = nj-(nbj-1)*sbj;
+    bool good = true;
+    for (unsigned j = 0; j<slbj; ++j)
     {
       for (unsigned i = 0; i<slbi; ++i)
-        {
-          good = good && block(i,j)==image((nbi-1)*sbi+i, (nbj-1)*sbj +j);
-          vcl_cout << block(i,j) << ' ';
-        }
+      {
+        good = good && block(i,j)==image((nbi-1)*sbi+i, (nbj-1)*sbj +j);
+        vcl_cout << block(i,j) << ' ';
+      }
       vcl_cout << '\n';
     }
-  TEST("Test lower right corner block", good, true);
+    TEST("Test lower right corner block", good, true);
   }
-  vcl_cout << "Test copying from one facade to another \n";
+  vcl_cout << "Test copying from one facade to another\n";
   vil_image_view<unsigned short> dest;
   image.set_size(ni,nj);
   unsigned dsbi = 3, dsbj = 7;
   vil_image_resource_sptr dir = vil_new_image_resource_of_view(image);
   vil_blocked_image_resource_sptr dbif =
     vil_new_blocked_image_facade(dir, dsbi, dsbj);
-  if(dbif){
-  vcl_cout << "Destination Blocked Image Parameters\n"
-           << "size_block_i = " << dbif->size_block_i()
-           << "   size_block_j = " << dbif->size_block_j()
-           << "   n_block_i = " << dbif->n_block_i()
-           << "   n_block_j = " << dbif->n_block_j() << '\n';
+  if (dbif)
+  {
+    vcl_cout << "Destination Blocked Image Parameters\n"
+             << "size_block_i = " << dbif->size_block_i()
+             << "   size_block_j = " << dbif->size_block_j()
+             << "   n_block_i = " << dbif->n_block_i()
+             << "   n_block_j = " << dbif->n_block_j() << '\n';
 
-  vil_blocked_image_resource_sptr sbif =
-    vil_new_blocked_image_facade(ir, dsbi, dsbj);
+    vil_blocked_image_resource_sptr sbif =
+      vil_new_blocked_image_facade(ir, dsbi, dsbj);
 
-  if(sbif){
-  for (unsigned bi = 0; bi<dbif->n_block_i(); ++bi)
-    for (unsigned bj = 0; bj<dbif->n_block_j(); ++bj)
-      {
-        vil_image_view_base_sptr v = sbif->get_block(bi, bj);
-        dbif->put_block(bi, bj,*v);
-      }
-  bool valid = true;
-  vil_image_view<unsigned short> out = dbif->get_view();
-  for (unsigned i = 0; i<ni; ++i)
-    for (unsigned j = 0; j<nj; ++j)
-      valid = valid && out(i,j)==image(i,j);
-  TEST("Full destination resource equality", valid , true);
-  }
-  else
-    TEST("Full destination resource equality", false , true);
+    if (sbif) {
+      for (unsigned bi = 0; bi<dbif->n_block_i(); ++bi)
+        for (unsigned bj = 0; bj<dbif->n_block_j(); ++bj)
+        {
+          vil_image_view_base_sptr v = sbif->get_block(bi, bj);
+          dbif->put_block(bi, bj,*v);
+        }
+      bool valid = true;
+      vil_image_view<unsigned short> out = dbif->get_view();
+      for (unsigned i = 0; i<ni; ++i)
+        for (unsigned j = 0; j<nj; ++j)
+          valid = valid && out(i,j)==image(i,j);
+      TEST("Full destination resource equality", valid , true);
+    }
+    else
+    {
+      TEST("Full destination resource equality", false , true);
+    }
   }
   //test vil_new
   vil_blocked_image_resource_sptr flbir = blocked_image_resource(lir);
   vil_blocked_image_resource_sptr fabir = vil_new_blocked_image_facade(ir,sbi, sbj);
-  if(flbir&&fabir)
-    {
-  vil_image_view<unsigned short> flview = flbir->get_block(0,0);
-  vil_image_view<unsigned short> faview = fabir->get_block(0,0);
-  bool valid = true;
-  for (unsigned i = 0; i<sbi; ++i)
-    for (unsigned j = 0; j<sbj; ++j)
-      valid = valid && flview(i,j)==faview(i,j);
-  TEST("vil_new for file and facade", valid , true);
-    }
+  if (flbir&&fabir)
+  {
+    vil_image_view<unsigned short> flview = flbir->get_block(0,0);
+    vil_image_view<unsigned short> faview = fabir->get_block(0,0);
+    bool valid = true;
+    for (unsigned i = 0; i<sbi; ++i)
+      for (unsigned j = 0; j<sbj; ++j)
+        valid = valid && flview(i,j)==faview(i,j);
+    TEST("vil_new for file and facade", valid , true);
+  }
   else
     TEST("vil_new for file and facade", false , true);
 
@@ -236,12 +247,12 @@ static void test_blocked_image_resource()
   //add two blocks
   vil_image_view_base_sptr blk1;
   for (unsigned bi = 0; bi<3; ++bi)
-    {
-      vil_image_view_base_sptr blk = ir->get_view(bi*sbi, sbi, 0, sbj);
-      if (bi==1)
-        blk1 = blk;
-      cache.add_block(bi, 0, blk);
-    }
+  {
+    vil_image_view_base_sptr blk = ir->get_view(bi*sbi, sbi, 0, sbj);
+    if (bi==1)
+      blk1 = blk;
+    cache.add_block(bi, 0, blk);
+  }
   //get block 1
   vil_image_view_base_sptr old_blk;
   bool got_b1 = cache.get_block(1, 0, old_blk);
@@ -268,21 +279,24 @@ static void test_blocked_image_resource()
   sbj = 32;
   vil_blocked_image_resource_sptr cflbir = vil_new_cached_image_resource(bir);
   vil_blocked_image_resource_sptr cfabir = vil_new_cached_image_resource(fabir);
-  if(cflbir&&cfabir){
-  vil_image_view<unsigned short> cflview = cflbir->get_copy_view(0,sbi,0,sbj);
-  vil_image_view<unsigned short> cflblk = cflbir->get_block(0,0);
-  vil_image_view<unsigned short> cfaview = cfabir->get_copy_view(0,sbi,0,sbj);
-  vil_image_view<unsigned short> cfablk = cfabir->get_block(0,0);
+  if (cflbir&&cfabir)
+  {
+    vil_image_view<unsigned short> cflview = cflbir->get_copy_view(0,sbi,0,sbj);
+    vil_image_view<unsigned short> cflblk = cflbir->get_block(0,0);
+    vil_image_view<unsigned short> cfaview = cfabir->get_copy_view(0,sbi,0,sbj);
+    vil_image_view<unsigned short> cfablk = cfabir->get_block(0,0);
 
-bool  valid = true;
-  for (unsigned i = 0; i<sbi; ++i)
-    for (unsigned j = 0; j<sbj; ++j)
-      valid = valid && cflview(i,j)==cfaview(i,j) &&
-        cflview(i,j)==cflblk(i,j) && cflview(i,j)==cfablk(i,j);
-  TEST("Get block from cache", valid , true);
+    bool  valid = true;
+    for (unsigned i = 0; i<sbi; ++i)
+      for (unsigned j = 0; j<sbj; ++j)
+        valid = valid && cflview(i,j)==cfaview(i,j) &&
+          cflview(i,j)==cflblk(i,j) && cflview(i,j)==cfablk(i,j);
+    TEST("Get block from cache", valid , true);
   }
   else
+  {
     TEST("Get block from cache", false , true);
+  }
   //delete file
   vpl_unlink(path.c_str());
   vpl_unlink(path2.c_str());
@@ -292,29 +306,29 @@ bool  valid = true;
   //vcl_string nitf_path = "c:/vxl/vxl/core/vil/tests/file_read_data/ff_nitf_16bit.nitf";
   vil_image_resource_sptr imgr = vil_load_image_resource(nitf_path.c_str());
   if (imgr)
-    {
-      TEST("NITF blocked resource",
-           imgr->get_property(vil_property_size_block_i, &sbi) &&
-           imgr->get_property(vil_property_size_block_j, &sbj),
-           true);
-    }
+  {
+    TEST("NITF blocked resource",
+         imgr->get_property(vil_property_size_block_i, &sbi) &&
+         imgr->get_property(vil_property_size_block_j, &sbj),
+         true);
+  }
   else
-    {
-      TEST("NITF resource ", false, true);
-    }
+  {
+    TEST("NITF resource ", false, true);
+  }
   vil_blocked_image_resource_sptr bimgr = blocked_image_resource(imgr);
   if (bimgr)
-    {
-      vil_image_view<unsigned short> view = bimgr->get_block(0, 0);
-      for (unsigned bi = 0; bi<sbi; ++bi)
-        for (unsigned bj = 0; bj<sbj; ++bj)
-          vcl_cout << "NITF v(" << bi << ' ' << bj << ")=" << view(bi,bj) << '\n';
-      TEST("Test NITF ", view(1,0)==8191&&sbi==2, true);
-    }
+  {
+    vil_image_view<unsigned short> view = bimgr->get_block(0, 0);
+    for (unsigned bi = 0; bi<sbi; ++bi)
+      for (unsigned bj = 0; bj<sbj; ++bj)
+        vcl_cout << "NITF v(" << bi << ' ' << bj << ")=" << view(bi,bj) << '\n';
+    TEST("Test NITF ", view(1,0)==8191&&sbi==2, true);
+  }
   else
-    {
-      TEST("NITF blocked image resource", false, true);
-    }
+  {
+    TEST("NITF blocked image resource", false, true);
+  }
 }
 
 int

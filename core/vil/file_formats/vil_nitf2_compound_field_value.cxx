@@ -15,11 +15,11 @@
 
 vcl_ostream& vil_nitf2_date_time::output(vcl_ostream& os) const
 {
-  os << year << "/"
-     << vcl_setw(2) << vcl_setfill('0') << month << "/"
-     << vcl_setw(2) << vcl_setfill('0') << day << " "
-     << vcl_setw(2) << vcl_setfill('0') << hour << ":"
-     << vcl_setw(2) << vcl_setfill('0') << minute << ":";
+  os << year << '/'
+     << vcl_setw(2) << vcl_setfill('0') << month << '/'
+     << vcl_setw(2) << vcl_setfill('0') << day << ' '
+     << vcl_setw(2) << vcl_setfill('0') << hour << ':'
+     << vcl_setw(2) << vcl_setfill('0') << minute << ':';
   if (second < 10) os << '0';
   if (sec_precision==0) {
     os << int(second);
@@ -46,10 +46,14 @@ bool vil_nitf2_date_time::write(vcl_ostream& output, int field_width) const
          << vcl_setw(2) << vcl_noshowpos << vcl_internal << vcl_setfill('0') << day;
   if (field_width >= 10 && !output.fail()) {
     output << vcl_setw(2) << vcl_noshowpos << vcl_internal << vcl_setfill('0') << hour;
-  } else output << "  ";
+  }
+  else
+    output << "  ";
   if (field_width >= 12 && !output.fail()) {
     output << vcl_setw(2) << vcl_noshowpos << vcl_internal << vcl_setfill('0') << minute;
-  } else output << "  ";
+  }
+  else
+    output << "  ";
   if (field_width < 14 && !output.fail()) {
     // seconds not displayed
     output << "  ";
@@ -59,7 +63,7 @@ bool vil_nitf2_date_time::write(vcl_ostream& output, int field_width) const
   } else if (!output.fail()) {
     // display decimal seconds
     output << vcl_setw(field_width - 12) << vcl_fixed << vcl_noshowpos << vcl_internal
-      << vcl_setfill(' ') << vcl_setprecision(field_width - 15) << second;
+           << vcl_setfill(' ') << vcl_setprecision(field_width - 15) << second;
   }
   // Return whether all output operations were successful
   return !output.fail();
@@ -109,9 +113,9 @@ vcl_ostream& operator << (vcl_ostream& os, const vil_nitf2_date_time& dateTime)
 
 vcl_ostream& vil_nitf2_location_degrees::output(vcl_ostream& os) const
 {
-  os << "(" 
+  os << '(' 
      << vcl_fixed << lat_degrees << ", " 
-     << vcl_fixed << lon_degrees << ")";
+     << vcl_fixed << lon_degrees << ')';
   return os;
 }
 
@@ -158,37 +162,37 @@ vcl_ostream& operator << (vcl_ostream& os, const vil_nitf2_location& loc)
 
 vcl_ostream& vil_nitf2_location_dmsh::output(vcl_ostream& os) const
 {
-  os << "(" 
-     << lat_degrees << ':' << lat_minutes    << ":" 
+  os << '(' 
+     << lat_degrees << ':' << lat_minutes    << ':' 
      << lat_seconds << ':' << lat_hemisphere << ", "
-     << lon_degrees << ':' << lon_minutes    << ":" 
-     << lon_seconds << ':' << lon_hemisphere << ")";
+     << lon_degrees << ':' << lon_minutes    << ':' 
+     << lon_seconds << ':' << lon_hemisphere << ')';
   return os;
 }
 
 bool vil_nitf2_location_dmsh::read(vcl_istream& input, int /* field_width */, bool& out_blank)
 {
-  bool ok, blank;
+  bool blank;
   // Read latitude fields
-  ok = vil_nitf2_integer_formatter(2).read_vcl_stream(input, lat_degrees, blank); 
-       out_blank &= blank;
-  ok &= vil_nitf2_integer_formatter(2).read_vcl_stream(input, lat_minutes, out_blank); 
-        out_blank &= blank;
-  ok &= vil_nitf2_double_formatter(3+sec_precision, sec_precision, false)
-         .read_vcl_stream(input, lat_seconds, out_blank);
-        out_blank &= blank;
-  ok &= vil_nitf2_char_formatter().read_vcl_stream(input, lat_hemisphere, out_blank);
-        out_blank &= blank;
+  bool    ok = vil_nitf2_integer_formatter(2).read_vcl_stream(input, lat_degrees, blank); 
+  if (out_blank) out_blank = blank;
+  if (ok) ok = vil_nitf2_integer_formatter(2).read_vcl_stream(input, lat_minutes, out_blank); 
+  if (out_blank) out_blank = blank;
+  if (ok) ok = vil_nitf2_double_formatter(3+sec_precision, sec_precision, false)
+               .read_vcl_stream(input, lat_seconds, out_blank);
+  if (out_blank) out_blank = blank;
+  if (ok) ok = vil_nitf2_char_formatter().read_vcl_stream(input, lat_hemisphere, out_blank);
+  if (out_blank) out_blank = blank;
   // Read longitude fields (degrees is one digit longer than latitude)
-  ok &= vil_nitf2_integer_formatter(3).read_vcl_stream(input, lon_degrees, out_blank);
-        out_blank &= blank;
-  ok &= vil_nitf2_integer_formatter(2).read_vcl_stream(input, lon_minutes, out_blank);
-        out_blank &= blank;
-  ok &= vil_nitf2_double_formatter(3+sec_precision, sec_precision, false)
-         .read_vcl_stream(input, lon_seconds, out_blank);
-        out_blank &= blank;
-  ok &= vil_nitf2_char_formatter().read_vcl_stream(input,lon_hemisphere, out_blank);
-       out_blank &= blank;
+  if (ok) ok = vil_nitf2_integer_formatter(3).read_vcl_stream(input, lon_degrees, out_blank);
+  if (out_blank) out_blank = blank;
+  if (ok) ok = vil_nitf2_integer_formatter(2).read_vcl_stream(input, lon_minutes, out_blank);
+  if (out_blank) out_blank = blank;
+  if (ok) ok = vil_nitf2_double_formatter(3+sec_precision, sec_precision, false)
+               .read_vcl_stream(input, lon_seconds, out_blank);
+  if (out_blank) out_blank = blank;
+  if (ok) ok = vil_nitf2_char_formatter().read_vcl_stream(input,lon_hemisphere, out_blank);
+  if (out_blank) out_blank = blank;
   return ok && is_valid();
 }
 
