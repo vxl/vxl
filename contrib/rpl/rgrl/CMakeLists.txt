@@ -17,7 +17,7 @@ SET( rgrl_sources
   rgrl_cast.h
   rgrl_set_of.h                        rgrl_set_of.txx
 
-  rgrl_feature.h                       rgrl_feature.cxx              
+  rgrl_feature.h                       rgrl_feature.cxx
   rgrl_feature_sptr.h
   rgrl_feature_point.h                 rgrl_feature_point.cxx
   rgrl_feature_trace_pt.h              rgrl_feature_trace_pt.cxx
@@ -30,17 +30,17 @@ SET( rgrl_sources
   rgrl_feature_face_region.h           rgrl_feature_face_region.cxx
   rgrl_feature_reader.h                rgrl_feature_reader.cxx
 
-  rgrl_feature_set.h                   rgrl_feature_set.cxx          
+  rgrl_feature_set.h                   rgrl_feature_set.cxx
   rgrl_feature_set_sptr.h
   rgrl_feature_set_location.h          rgrl_feature_set_location.txx
   rgrl_feature_set_bins.h              rgrl_feature_set_bins.txx
   rgrl_feature_set_bins_2d.h           rgrl_feature_set_bins_2d.cxx
   rgrl_feature_set_location_masked.h   rgrl_feature_set_location_masked.cxx
 
-  rgrl_match_set.h                     rgrl_match_set.cxx            
+  rgrl_match_set.h                     rgrl_match_set.cxx
   rgrl_match_set_sptr.h
 
-  rgrl_matcher.h                       rgrl_matcher.cxx              
+  rgrl_matcher.h                       rgrl_matcher.cxx
   rgrl_matcher_sptr.h
   rgrl_matcher_fixed.h                 rgrl_matcher_fixed.cxx
   rgrl_matcher_k_nearest.h             rgrl_matcher_k_nearest.cxx
@@ -56,10 +56,10 @@ SET( rgrl_sources
   rgrl_evaluator.h
   rgrl_evaluator_ssd.h                 rgrl_evaluator_ssd.cxx
 
-  rgrl_spline.h                        rgrl_spline.cxx               
+  rgrl_spline.h                        rgrl_spline.cxx
   rgrl_spline_sptr.h
 
-  rgrl_transformation.h                rgrl_transformation.cxx       
+  rgrl_transformation.h                rgrl_transformation.cxx
   rgrl_transformation_sptr.h
   rgrl_trans_translation.h             rgrl_trans_translation.cxx
   rgrl_trans_affine.h                  rgrl_trans_affine.cxx
@@ -74,7 +74,7 @@ SET( rgrl_sources
   rgrl_trans_reader.h                  rgrl_trans_reader.cxx
   rgrl_trans_couple.h                  rgrl_trans_couple.cxx
 
-  rgrl_estimator.h                     rgrl_estimator.cxx            
+  rgrl_estimator.h                     rgrl_estimator.cxx
   rgrl_estimator_sptr.h
   rgrl_est_translation.h               rgrl_est_translation.cxx
   rgrl_est_affine.h                    rgrl_est_affine.cxx
@@ -86,51 +86,51 @@ SET( rgrl_sources
   rgrl_est_homography2d.h              rgrl_est_homography2d.cxx
   rgrl_est_homo2d_lm.h                 rgrl_est_homo2d_lm.cxx
   rgrl_est_dis_homo2d_lm.h             rgrl_est_dis_homo2d_lm.cxx
-  
-  rgrl_est_proj_func.h                 rgrl_est_proj_func.txx       #generic estimator for homogenous projection matrix
+
+  # generic estimator for homogenous projection matrix
+  rgrl_est_proj_func.h                 rgrl_est_proj_func.txx
   rgrl_est_homo2d_proj.h               rgrl_est_homo2d_proj.cxx
-  
-                                     
-  rgrl_scale.h                         rgrl_scale.cxx                
+
+  rgrl_scale.h                         rgrl_scale.cxx
   rgrl_scale_sptr.h
   rgrl_view.h                          rgrl_view.cxx
-  rgrl_scale_estimator.h               rgrl_scale_estimator.cxx      
+  rgrl_scale_estimator.h               rgrl_scale_estimator.cxx
   rgrl_scale_estimator_sptr.h
   rgrl_scale_est_closest.h             rgrl_scale_est_closest.cxx
   rgrl_scale_est_all_weights.h         rgrl_scale_est_all_weights.cxx
   rgrl_scale_est_null.h                rgrl_scale_est_null.cxx
 
-  rgrl_weighter.h                      rgrl_weighter.cxx             
+  rgrl_weighter.h                      rgrl_weighter.cxx
   rgrl_weighter_sptr.h
   rgrl_weighter_m_est.h                rgrl_weighter_m_est.cxx
   rgrl_weighter_indiv_scale.h          rgrl_weighter_indiv_scale.cxx
   rgrl_weighter_unit.h                 rgrl_weighter_unit.cxx
 
-  rgrl_data_manager.h                  rgrl_data_manager.cxx         
+  rgrl_data_manager.h                  rgrl_data_manager.cxx
   rgrl_data_manager_sptr.h
 
-  rgrl_initializer.h                   rgrl_initializer.cxx          
+  rgrl_initializer.h                   rgrl_initializer.cxx
   rgrl_initializer_sptr.h
   rgrl_initializer_prior.h             rgrl_initializer_prior.cxx
   rgrl_initializer_reader.h            rgrl_initializer_reader.cxx
   rgrl_initializer_ran_sam.h           rgrl_initializer_ran_sam.cxx
   rgrl_initializer_inv_indexing.h      rgrl_initializer_inv_indexing.cxx
 
-  rgrl_invariant.h                     rgrl_invariant.cxx            
+  rgrl_invariant.h                     rgrl_invariant.cxx
   rgrl_invariant_sptr.h
-  rgrl_invariant_match.h               rgrl_invariant_match.cxx      
+  rgrl_invariant_match.h               rgrl_invariant_match.cxx
   rgrl_invariant_match_sptr.h
   rgrl_invariant_single_landmark.h     rgrl_invariant_single_landmark.cxx
   rgrl_invariant_set.h
   rgrl_invariant_set_sptr.h
 
-  rgrl_convergence_tester.h            rgrl_convergence_tester.cxx   
+  rgrl_convergence_tester.h            rgrl_convergence_tester.cxx
   rgrl_convergence_tester_sptr.h
   rgrl_convergence_on_median_error.h   rgrl_convergence_on_median_error.cxx
   rgrl_convergence_on_weighted_error.h rgrl_convergence_on_weighted_error.cxx
 
-  rgrl_converge_status_nas.h           rgrl_converge_status_nas.cxx      
-  rgrl_converge_status.h               rgrl_converge_status.cxx      
+  rgrl_converge_status_nas.h           rgrl_converge_status_nas.cxx
+  rgrl_converge_status.h               rgrl_converge_status.cxx
   rgrl_converge_status_sptr.h
 
   rgrl_feature_based_registration.h    rgrl_feature_based_registration.cxx
