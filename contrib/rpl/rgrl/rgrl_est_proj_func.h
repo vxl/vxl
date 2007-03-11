@@ -5,14 +5,14 @@
 // \file
 // \author Gehua Yang
 // \date   March 2007
-// \brief  a generic class to estimate projection matrices using L-M
+// \brief  a generic class to estimate a homogeneous projection matrix using L-M
 
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <rgrl/rgrl_fwd.h>
 #include <rgrl/rgrl_match_set_sptr.h>
 
-template <unsigned int Fdim, unsigned int Tdim>
+template <unsigned int Tdim, unsigned int Fdim>
 class rgrl_est_proj_func
 : public vnl_least_squares_function
 {
@@ -54,18 +54,18 @@ class rgrl_est_proj_func
 
   //: estimate the projective transformation and the associated covariance
   bool
-  projective_estimate( vnl_matrix_fixed<double, Fdim+1, Tdim+1>& proj,
+  projective_estimate( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
                        vnl_matrix<double>& full_covar,
                        vnl_vector_fixed<double, Fdim>& from_centre,
                        vnl_vector_fixed<double, Tdim>& to_centre );
 
   //: convert parameters
   void convert_parameters( vnl_vector<double>& params,
-                           vnl_matrix_fixed<double, Fdim+1, Tdim+1> proj_matrix,
+                           vnl_matrix_fixed<double, Tdim+1, Fdim+1> proj_matrix,
                            vnl_vector_fixed<double, Fdim> const& fc,
                            vnl_vector_fixed<double, Tdim> const& tc );
   //: convert parameters
-  void restored_centered_proj( vnl_matrix_fixed<double, Fdim+1, Tdim+1>& proj_matrix,
+  void restored_centered_proj( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj_matrix,
                                vnl_vector<double> const& params );
 
   //: obj func value
@@ -95,7 +95,7 @@ class rgrl_est_proj_func
 //: a generic class to estimate projection matrices using L-M
 //  including 2D homography, 3D homography, camera matrix
 //
-// template <unsigned int Fdim, unsigned int Tdim>
+// template <unsigned int Tdim, unsigned int Fdim>
 // class rgrl_est_proj_lm
 //   : public rgrl_nonlinear_estimator
 // {

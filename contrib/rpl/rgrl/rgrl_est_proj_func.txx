@@ -5,7 +5,7 @@
 // \file
 // \author Gehua Yang
 // \date   March 2007
-// \brief  a generic class to estimate projection matrices using L-M
+// \brief  a generic class to estimate a homogeneous projection matrix using L-M
 
 #include <rgrl/rgrl_est_proj_func.h>
 #include <rgrl/rgrl_estimator.h>
@@ -15,56 +15,58 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_math.h>
-#include <vnl/vnl_fastops.h>
 #include <vnl/vnl_transpose.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/algo/vnl_svd.h>
 
 #include <vcl_cassert.h>
 
-template <unsigned int Fdim, unsigned int Tdim>
-inline
-void
-map_homo_point( vnl_vector_fixed<double, Tdim+1>& mapped,
-                vnl_matrix_fixed<double, Fdim+1, Tdim+1> const& proj,
-                vnl_vector_fixed<double, Fdim> const& loc )
-{
-  for( unsigned i=0; i<Tdim+1; ++i ) {
+namespace{
 
-    // shift term
-    mapped[i] = proj(i, Fdim);
-
-    for( unsigned j=0; j<Fdim; ++j )
-      mapped[i] += loc[j] * proj(i,j);
-  }
-}
-
-template <unsigned int Fdim, unsigned int Tdim>
-inline
-void
-map_inhomo_point( vnl_vector_fixed<double, Tdim>& mapped,
-                  vnl_matrix_fixed<double, Fdim+1, Tdim+1> const& proj,
+  template <unsigned int Tdim, unsigned int Fdim>
+  inline
+  void
+  map_homo_point( vnl_vector_fixed<double, Tdim+1>& mapped,
+                  vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
                   vnl_vector_fixed<double, Fdim> const& loc )
-{
-  vnl_vector_fixed<double, Tdim+1> tmp;
+  {
+    for( unsigned i=0; i<Tdim+1; ++i ) {
 
-  // map homo point
-  for( unsigned i=0; i<Tdim+1; ++i ) {
+      // shift term
+      mapped[i] = proj(i, Fdim);
 
-    // shift term
-    tmp[i] = proj(i, Fdim);
-
-    for( unsigned j=0; j<Fdim; ++j )
-      tmp[i] += loc[j] * proj(i,j);
+      for( unsigned j=0; j<Fdim; ++j )
+        mapped[i] += loc[j] * proj(i,j);
+    }
   }
 
-  // get inhomo point
-  for( unsigned i=0; i<Tdim; ++i )
-    mapped[i] = tmp[i]/tmp[Tdim];
+  template <unsigned int Tdim, unsigned int Fdim>
+  inline
+  void
+  map_inhomo_point( vnl_vector_fixed<double, Tdim>& mapped,
+                    vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
+                    vnl_vector_fixed<double, Fdim> const& loc )
+  {
+    vnl_vector_fixed<double, Tdim+1> tmp;
+
+    // map homo point
+    for( unsigned i=0; i<Tdim+1; ++i ) {
+
+      // shift term
+      tmp[i] = proj(i, Fdim);
+
+      for( unsigned j=0; j<Fdim; ++j )
+        tmp[i] += loc[j] * proj(i,j);
+    }
+
+    // get inhomo point
+    for( unsigned i=0; i<Tdim; ++i )
+      mapped[i] = tmp[i]/tmp[Tdim];
+  }
 }
 
-template <unsigned int Fdim, unsigned int Tdim>
-rgrl_est_proj_func<Fdim, Tdim>::
+template <unsigned int Tdim, unsigned int Fdim>
+rgrl_est_proj_func<Tdim, Fdim>::
 rgrl_est_proj_func( rgrl_set_of<rgrl_match_set_sptr> const& matches,
                     bool with_grad )
 : vnl_least_squares_function( (Fdim+1)*(Tdim+1)-1,
@@ -81,11 +83,11 @@ rgrl_est_proj_func( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
 
 //: convert parameters
-template <unsigned int Fdim, unsigned int Tdim>
+template <unsigned int Tdim, unsigned int Fdim>
 void
-rgrl_est_proj_func<Fdim, Tdim>::
+rgrl_est_proj_func<Tdim, Fdim>::
 convert_parameters( vnl_vector<double>& params,
-                    vnl_matrix_fixed<double, Fdim+1, Tdim+1>  proj_matrix,
+                    vnl_matrix_fixed<double, Tdim+1, Fdim+1>  proj_matrix,
                     vnl_vector_fixed<double, Fdim> const& fc,
                     vnl_vector_fixed<double, Tdim> const& tc )
 {
@@ -137,13 +139,13 @@ convert_parameters( vnl_vector<double>& params,
 
 
 
-template <unsigned int Fdim, unsigned int Tdim>
+template <unsigned int Tdim, unsigned int Fdim>
 void
-rgrl_est_proj_func<Fdim, Tdim>::
-restored_centered_proj( vnl_matrix_fixed<double, Fdim+1, Tdim+1>& proj_matrix,
+rgrl_est_proj_func<Tdim, Fdim>::
+restored_centered_proj( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj_matrix,
                         vnl_vector<double> const& params )
 {
-  assert( params.size() == (Fdim+1)*(Tdim+1) - 1 );
+  assert( params.size() >= (Fdim+1)*(Tdim+1) - 1 );
   for( unsigned k=0,i=0; i<Tdim+1; ++i )
     for( unsigned j=0; j<Fdim+1; ++j ) {
 
@@ -156,9 +158,9 @@ restored_centered_proj( vnl_matrix_fixed<double, Fdim+1, Tdim+1>& proj_matrix,
     }
 }
 
-template <unsigned int Fdim, unsigned int Tdim>
+template <unsigned int Tdim, unsigned int Fdim>
 void
-rgrl_est_proj_func<Fdim, Tdim>::
+rgrl_est_proj_func<Tdim, Fdim>::
 f(vnl_vector<double> const& x, vnl_vector<double>& fx)
 {
   typedef rgrl_match_set::const_from_iterator FIter;
@@ -169,7 +171,7 @@ f(vnl_vector<double> const& x, vnl_vector<double>& fx)
   unsigned int ind = 0;
 
   // retrieve the projection matrix
-  vnl_matrix_fixed<double, Fdim+1, Tdim+1> proj;
+  vnl_matrix_fixed<double, Tdim+1, Fdim+1> proj;
   restored_centered_proj( proj, x );
 
   for ( unsigned ms = 0; ms<matches_ptr_->size(); ++ms )
@@ -181,7 +183,7 @@ f(vnl_vector<double> const& x, vnl_vector<double>& fx)
         // map from point
         vnl_vector_fixed<double, Fdim> from = fi.from_feature()->location();
         from -= from_centre_;
-        map_inhomo_point<Fdim, Tdim>( mapped, proj, from );
+        map_inhomo_point<Tdim, Fdim>( mapped, proj, from );
 
         for ( TIter ti=fi.begin(); ti!=fi.end(); ++ti ) {
           vnl_vector_fixed<double, Tdim> to = ti.to_feature()->location();
@@ -201,9 +203,9 @@ f(vnl_vector<double> const& x, vnl_vector<double>& fx)
   assert( ind == get_number_of_residuals() );
 }
 
-template <unsigned int Fdim, unsigned int Tdim>
+template <unsigned int Tdim, unsigned int Fdim>
 void
-rgrl_est_proj_func<Fdim, Tdim>::
+rgrl_est_proj_func<Tdim, Fdim>::
 gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
 {
   typedef rgrl_match_set::const_from_iterator FIter;
@@ -225,7 +227,7 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
     jf( i, i*(Fdim+1)+Fdim ) = 1.0;
 
   // retrieve the projection matrix
-  vnl_matrix_fixed<double, Fdim+1, Tdim+1> proj;
+  vnl_matrix_fixed<double, Tdim+1, Fdim+1> proj;
   restored_centered_proj( proj, x );
 
   unsigned int ind = 0;
@@ -238,7 +240,7 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
         // map from point
         vnl_vector_fixed<double, Fdim> from = fi.from_feature()->location();
         from -= from_centre_;
-        map_homo_point<Fdim, Tdim>( homo, proj, from );
+        map_homo_point<Tdim, Fdim>( homo, proj, from );
 
         // linear gradient in homogeneous coordinate
         // skip the ones corresponding to shift
@@ -287,10 +289,10 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
   }
 }
 
-template <unsigned int Fdim, unsigned int Tdim>
+template <unsigned int Tdim, unsigned int Fdim>
 bool
-rgrl_est_proj_func<Fdim, Tdim>::
-projective_estimate( vnl_matrix_fixed<double, Fdim+1, Tdim+1>& proj,
+rgrl_est_proj_func<Tdim, Fdim>::
+projective_estimate( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
                      vnl_matrix<double>& full_covar,
                      vnl_vector_fixed<double, Fdim>& from_centre,
                      vnl_vector_fixed<double, Tdim>& to_centre )
@@ -377,7 +379,7 @@ projective_estimate( vnl_matrix_fixed<double, Fdim+1, Tdim+1>& proj,
 
 
 // // --------------------------------------------------------------------
-// template <unsigned int Fdim, unsigned int Tdim>
+// template <unsigned int Tdim, unsigned int Fdim>
 // rgrl_est_proj_lm::
 // rgrl_est_proj_lm( bool with_grad )
 //   : with_grad_( with_grad )
@@ -389,10 +391,10 @@ projective_estimate( vnl_matrix_fixed<double, Fdim+1, Tdim+1>& proj,
 //   rgrl_nonlinear_estimator::set_rel_thres( 1e-5 );
 // }
 //
-// template <unsigned int Fdim, unsigned int Tdim>
+// template <unsigned int Tdim, unsigned int Fdim>
 // bool
 // rgrl_est_proj_lm::
-// projective_estimate( vnl_matrix_fixed<double, Fdim+1, Tdim+1>& proj,
+// projective_estimate( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
 //                      vnl_matrix<double>& full_covar,
 //                      vnl_vector_fixed<double, Fdim>& from_centre,
 //                      vnl_vector_fixed<double, Tdim>& to_centre,
@@ -495,7 +497,7 @@ projective_estimate( vnl_matrix_fixed<double, Fdim+1, Tdim+1>& proj,
 // }
 
 #undef  RGRL_EST_PROJ_FUNC_INSTANTIATE
-#define RGRL_EST_PROJ_FUNC_INSTANTIATE( fdim, tdim ) \
-  template class rgrl_est_proj_func< fdim, tdim >
+#define RGRL_EST_PROJ_FUNC_INSTANTIATE( tdim, fdim ) \
+  template class rgrl_est_proj_func< tdim, fdim >
 
 #endif //rgrl_est_proj_func_txx_
