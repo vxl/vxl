@@ -17,6 +17,7 @@
 // provides this software "as is" without express or implied warranty.
 
 #include "vnl_error.h"
+#include <vcl_iostream.h>
 #include <vcl_cstdlib.h> // for vcl_abort()
 
 //: Raise exception for invalid index
