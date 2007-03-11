@@ -94,7 +94,8 @@ void vul_sequence_filename_map::parse()
   // Search for trailing index spec -   "img.%03d.pgm,0:1:10" , "ppm/img*;:5:"
   {
     vul_reg_exp re("[,;]([0-9]+)?(:[0-9]+)?:([0-9]+)?$");
-    if (re.find(temp.c_str())) {
+    if (re.find(temp.c_str()))
+    {
       vcl_string match_start = re.match(1);
       vcl_string match_step = re.match(2);
       vcl_string match_end = re.match(3);
@@ -147,7 +148,8 @@ void vul_sequence_filename_map::parse()
   // Image dir and extension both blank :
   //  1 - Look in cwd for basename-compatible files with common image extensions
   //  2 - Look for basename-compatible files in common image dirs with corresponding image extensions
-  if (image_dir_ == "" && image_extension_ == "") {
+  if (image_dir_ == "" && image_extension_ == "")
+  {
     bool found_match = false;
     {
       vul_file_iterator fn("./*");
@@ -165,11 +167,11 @@ void vul_sequence_filename_map::parse()
         glob += "/*";
         vul_file_iterator fn(glob);
         for (;!found_match && bool(fn);++fn)
-            if (filter_dirent(fn(), dir_ext_pairs[i].extension)) {
-              image_dir_ = dir_ext_pairs[i].image_dir;
-              image_extension_ = dir_ext_pairs[i].extension;
-              found_match = true;
-            }
+          if (filter_dirent(fn(), dir_ext_pairs[i].extension)) {
+            image_dir_ = dir_ext_pairs[i].image_dir;
+            image_extension_ = dir_ext_pairs[i].extension;
+            found_match = true;
+          }
       }
     if (!found_match) {
       vcl_cerr << __FILE__ << " : Can't find files matching " << basename_
@@ -182,7 +184,8 @@ void vul_sequence_filename_map::parse()
   //  1 - Look for basename-compatible files in cwd
   //  2 - Look for basename-compatible files in dir corresponding to given image extension
   //  3 - Look for basename-compatible files in common image dirs
-  else if (image_dir_ == "") {
+  else if (image_dir_ == "")
+  {
     bool found_match = false;
     {
       for (vul_file_iterator fn("./*"); !found_match && bool(fn); ++fn)
@@ -225,7 +228,8 @@ void vul_sequence_filename_map::parse()
   // Only extension is blank :
   //  1 - Look in image dir for basename-compatible files with extension corresponding to the image dir
   //  2 - Look in image dir for basename-compatible files with common image extensions
-  else if (image_extension_ == "") {
+  else if (image_extension_ == "")
+  {
     bool found_match = false;
     {
       vcl_string glob(image_dir_ + "*");
@@ -264,7 +268,8 @@ void vul_sequence_filename_map::parse()
 
   // Start and/or end is not specified :
   //   Find all basename-compatible files and set sequence indices accordingly
-  if (indices_.size() == 0) {
+  if (indices_.size() == 0)
+  {
     // See if we need to scan the image directory to get the sequence start/end
     if (start_ == -1 || end_ == -1) {
       int max = -1000000;
