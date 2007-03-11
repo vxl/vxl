@@ -39,10 +39,9 @@ estimate( rgrl_match_set_sptr matches,
 //: Determine the weighted centres of the From and To points
 //
 bool
-rgrl_estimator::
-compute_weighted_centres( rgrl_set_of<rgrl_match_set_sptr> const& matches,
-                          vnl_vector<double>& from_centre,
-                          vnl_vector<double>& to_centre ) const
+rgrl_est_compute_weighted_centres( rgrl_set_of<rgrl_match_set_sptr> const& matches,
+                                   vnl_vector<double>& from_centre,
+                                   vnl_vector<double>& to_centre )
 {
   typedef rgrl_match_set::const_from_iterator FIter;
   typedef FIter::to_iterator TIter;
@@ -89,8 +88,8 @@ compute_weighted_centres( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
   // if the weight is too small or zero,
   // that means there is no good match
-  if ( sum_wgt < 1e-8 ) {
-    WarningMacro( "Sum of weights is too small for centre computation.\n" );
+  if( sum_wgt < 1e-8 ) {
+    vcl_cerr << "Sum of weights is too small for centre computation.\n";
     return false;
   }
 
@@ -98,5 +97,25 @@ compute_weighted_centres( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   to_centre /= sum_wgt;
 
   return true;
+}
+
+unsigned
+rgrl_est_matches_residual_number(rgrl_set_of<rgrl_match_set_sptr> const& matches)
+{
+  // count the number of constraints/residuals
+  typedef rgrl_match_set::const_from_iterator FIter;
+  typedef FIter::to_iterator TIter;
+  unsigned int tot_num = 0;
+  for ( unsigned ms = 0; ms<matches.size(); ++ms )
+    if ( matches[ms] ) { // if pointer is valid
+
+      rgrl_match_set const& one_set = *(matches[ms]);
+      for ( FIter fi=one_set.from_begin(); fi!=one_set.from_end(); ++fi )
+        if( fi.size() ) {
+          tot_num += fi.size() * fi.begin().to_feature()->dim();  // each point provides two constraints
+        }
+    }
+
+  return tot_num;
 }
 

@@ -199,7 +199,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 {
   // get initialization
   vnl_matrix_fixed<double, 3, 3> init_H;
-  
+
   if( !rgrl_internal_util_upgrade_to_homography2D( init_H, cur_transform ) ) {
 
     // use normalized DLT to initialize
@@ -212,26 +212,12 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     init_H = trans.H();
   }
 
-  // count the number of constraints/residuals
-  typedef rgrl_match_set::const_from_iterator FIter;
-  typedef FIter::to_iterator TIter;
-  unsigned int tot_num = 0;
-  for ( unsigned ms = 0; ms<matches.size(); ++ms )
-    if ( matches[ms] ) { // if pointer is valid
-
-      rgrl_match_set const& one_set = *(matches[ms]);
-      for ( FIter fi=one_set.from_begin(); fi!=one_set.from_end(); ++fi ) 
-        if( fi.size() ) {
-          tot_num += fi.size() * fi.begin().to_feature()->dim();  // each point provides two constraints
-        }
-    }
-
   // Determine the weighted centres for computing the more stable
   // covariance matrix of homography parameters
   //
   vnl_vector<double> from_centre;
   vnl_vector<double> to_centre;
-  if( !compute_weighted_centres( matches, from_centre, to_centre ) )
+  if( !rgrl_est_compute_weighted_centres( matches, from_centre, to_centre ) )
     return 0;
    DebugMacro( 3, "From center: " << from_centre
                <<"  To center: " << to_centre << vcl_endl );
@@ -254,8 +240,13 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   vnl_vector<double> p(9);
   H2h( init_H, p );
 
+  // the number of residuals in a vector form
+  const unsigned tot_num = rgrl_est_matches_residual_number(matches);
+
   // construct least square cost function
-  rgrl_homo2d_func homo_func( matches, tot_num, with_grad_ );
+  rgrl_homo2d_func homo_func( matches,
+                              tot_num,
+                              with_grad_ );
   homo_func.set_centres( from_centre, to_centre );
 
   vnl_levenberg_marquardt lm( homo_func );
@@ -264,7 +255,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // we don't need it to be super accurate
   lm.set_f_tolerance( relative_threshold_ );
   lm.set_max_function_evals( max_num_iterations_ );
-  
+
   bool ret;
   if ( with_grad_ )
     ret = lm.minimize_using_gradient(p);
@@ -284,7 +275,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
   // check rank of H
   vnl_double_3x3 tmpH(init_H);
-  if( vcl_abs(vnl_det(tmpH)) < 1e-8 ) 
+  if( vcl_abs(vnl_det(tmpH)) < 1e-8 )
     return 0;
 
 
@@ -308,16 +299,16 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   //
 #if 1
   const vnl_matrix<double> compliment = vnl_orthogonal_complement( p );
- 
+
   vnl_svd<double> svd( vnl_transpose(compliment) * jtj *compliment, 1e-6 );
   if ( svd.rank() < 8 ) {
     WarningMacro( "The covariance of homography ranks less than 8! ");
     return 0;
   }
-  
+
   vnl_matrix<double>covar = compliment * svd.inverse() * compliment.transpose();
-  
-  
+
+
 
 #else
   vnl_svd<double> svd( jtj, 1e-6 );

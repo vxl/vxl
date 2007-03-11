@@ -98,7 +98,7 @@ class rgrl_estimator
   const vcl_type_info& transformation_type() const = 0;
 
   //: Name of transformation estimated by this estimator.
-  //  It is more useful when a transformation/estimator pair 
+  //  It is more useful when a transformation/estimator pair
   //  is capable of storing/estimating several models,
   //  usually differing in dof
   virtual
@@ -111,10 +111,6 @@ class rgrl_estimator
  protected:
   //: Determine the weighted centres of the From and To points
   //
-  bool
-  compute_weighted_centres( rgrl_set_of<rgrl_match_set_sptr> const& matches,
-                            vnl_vector<double>& from_centre,
-                            vnl_vector<double>& to_centre ) const;
 
  private:
   unsigned int dof_;
@@ -220,5 +216,13 @@ class rgrl_nonlinear_estimator
   //: The threshold for relative parameter change before termination
   double relative_threshold_;
 };
+
+bool
+rgrl_est_compute_weighted_centres( rgrl_set_of<rgrl_match_set_sptr> const& matches,
+                                   vnl_vector<double>& from_centre,
+                                   vnl_vector<double>& to_centre );
+unsigned
+rgrl_est_matches_residual_number(rgrl_set_of<rgrl_match_set_sptr> const& matches);
+
 
 #endif // rgrl_estimator_h_
