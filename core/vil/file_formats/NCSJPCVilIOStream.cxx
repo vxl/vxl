@@ -23,12 +23,12 @@ CNCSError CNCSJPCVilIOStream::Open( vil_stream* stream )
 
   *(CNCSError*)this = CNCSJPCIOStream::Open("VIL", false);
 
-  return(*(CNCSError*)this);
+  return *(CNCSError*)this;
 }
 
 CNCSError CNCSJPCVilIOStream::Close()
 {
-  if ( mVilStream ){ 
+  if ( mVilStream ){
     mVilStream->unref();
     mVilStream = 0;
     mHomePos = -1;
@@ -36,7 +36,7 @@ CNCSError CNCSJPCVilIOStream::Close()
 
   *(CNCSError*)this = NCS_SUCCESS;
 
-  return(*(CNCSError*)this);
+  return *(CNCSError*)this;
 }
 
 bool CNCSJPCVilIOStream::Seek()
@@ -53,14 +53,15 @@ bool CNCSJPCVilIOStream::Seek(INT64 offset, Origin origin )
 //NOT USED  static const vil_streampos minVilStreamPos = vcl_numeric_limits< vil_streampos >::min();
 
   INT64 absoluteOffset = mHomePos;
-  switch( origin ){
-    case START: 
+  switch ( origin )
+  {
+    case START:
       absoluteOffset += offset;
       break;
-    case END:   
+    case END:
       absoluteOffset += Size() - 1 - offset;
       break;
-    case CURRENT: 
+    case CURRENT:
       absoluteOffset += Tell() + offset;
       break;
     default:
@@ -93,7 +94,6 @@ INT64 NCS_FASTCALL CNCSJPCVilIOStream::Size()
 }
 
 bool NCS_FASTCALL CNCSJPCVilIOStream::Read(void* buffer, UINT32 count)
-
 {
   vil_streampos bytesRead = mVilStream->read( buffer, count );
   if ( bytesRead != count ){
@@ -104,7 +104,6 @@ bool NCS_FASTCALL CNCSJPCVilIOStream::Read(void* buffer, UINT32 count)
 }
 
 bool NCS_FASTCALL CNCSJPCVilIOStream::Write(void* buffer, UINT32 count)
-
 {
   vil_streampos bytesWritten = mVilStream->write( buffer, count );
   if ( bytesWritten != count ){
