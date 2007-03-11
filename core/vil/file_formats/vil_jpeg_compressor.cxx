@@ -34,7 +34,8 @@ vil_jpeg_compressor::vil_jpeg_compressor(vil_stream *s)
   vil_jpeg_stream_dst_set(&jobj, stream);
 }
 
-bool vil_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const *scanline) {
+bool vil_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const *scanline)
+{
   if (!ready) {
     // rewind the stream
     vil_jpeg_stream_dst_rewind(&jobj, stream);
@@ -44,13 +45,13 @@ bool vil_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const *scanline)
 
     // set colorspace of input image. FIXME.
     switch (jobj.input_components) {
-    case 1:
+     case 1:
       jobj.in_color_space = JCS_GRAYSCALE;
       break;
-    case 3:
+     case 3:
       jobj.in_color_space = JCS_RGB;
       break;
-    default:
+     default:
       vcl_cerr << __FILE__ " : urgh!\n";
       return false;
     }
@@ -84,7 +85,8 @@ bool vil_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const *scanline)
   return true;
 }
 
-vil_jpeg_compressor::~vil_jpeg_compressor() {
+vil_jpeg_compressor::~vil_jpeg_compressor()
+{
   // finish compression if necessary
   if (ready)
     jpeg_finish_compress(&jobj);

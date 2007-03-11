@@ -50,7 +50,7 @@ class vgl_homg_point_1d
   //: comparison
   inline bool operator==(vgl_homg_point_1d<T> const& p) const {
     return this==&p || x()*p.w() == w()*p.x(); }
-  inline bool operator!=(vgl_homg_point_1d<T> const& p)const{return !operator==(p);}
+  inline bool operator!=(vgl_homg_point_1d<T> const& p)const { return !operator==(p); }
 
   // Data Access-------------------------------------------------------------
 
@@ -106,31 +106,27 @@ T operator-(vgl_homg_point_1d<T> const& p1,
 // Note that number + point is not defined!  It's always point + number.
 // \relates vgl_homg_point_1d
 template <class T> inline
-vgl_homg_point_1d<T> operator+(vgl_homg_point_1d<T> const& p, T v) {
-  return vgl_homg_point_1d<T>(p.x()+v*p.w(), p.w());
-}
+vgl_homg_point_1d<T> operator+(vgl_homg_point_1d<T> const& p, T v)
+{ return vgl_homg_point_1d<T>(p.x()+v*p.w(), p.w()); }
 
 //: Adding a number to a 1-D point translates that point.
 // If the point is at infinity, nothing happens.
 // \relates vgl_homg_point_1d
 template <class T> inline
-vgl_homg_point_1d<T>& operator+=(vgl_homg_point_1d<T>& p, T v) {
-  p.set(p.x()+v*p.w(), p.w()); return p;
-}
+vgl_homg_point_1d<T>& operator+=(vgl_homg_point_1d<T>& p, T v)
+{ p.set(p.x()+v*p.w(), p.w()); return p; }
 
 //: Subtracting a number from a point is the same as adding the inverse number
 // \relates vgl_homg_point_1d
 template <class T> inline
-vgl_homg_point_1d<T> operator-(vgl_homg_point_1d<T> const& p, T v) {
-  return p + (-v);
-}
+vgl_homg_point_1d<T> operator-(vgl_homg_point_1d<T> const& p, T v)
+{ return p + (-v); }
 
 //: Subtracting a number from a point is the same as adding the inverse number
 // \relates vgl_homg_point_1d
 template <class T> inline
-vgl_homg_point_1d<T>& operator-=(vgl_homg_point_1d<T>& p, T v) {
-  return p += (-v);
-}
+vgl_homg_point_1d<T>& operator-=(vgl_homg_point_1d<T>& p, T v)
+{ return p += (-v); }
 
 //  +-+-+ homg_point_1d geometry +-+-+
 
@@ -166,16 +162,16 @@ double cross_ratio(vgl_homg_point_1d<T>const& p1, vgl_homg_point_1d<T>const& p2,
 template <class T> inline
 double ratio(vgl_homg_point_1d<T> const& p1,
              vgl_homg_point_1d<T> const& p2,
-             vgl_homg_point_1d<T> const& p3) {
-  return (p3-p1)/(p2-p1);
-}
+             vgl_homg_point_1d<T> const& p3)
+{ return (p3-p1)/(p2-p1); }
 
 //: Are three points collinear?  This is always true.
 // \relates vgl_homg_point_1d
 template <class T> inline
 bool collinear(vgl_homg_point_1d<T> const&,
                vgl_homg_point_1d<T> const&,
-               vgl_homg_point_1d<T> const&) { return true; }
+               vgl_homg_point_1d<T> const&)
+{ return true; }
 
 //: Return the point at a given ratio wrt two other points.
 //  By default, the mid point (ratio=0.5) is returned.
@@ -186,7 +182,8 @@ bool collinear(vgl_homg_point_1d<T> const&,
 template <class T> inline
 vgl_homg_point_1d<T> midpoint(vgl_homg_point_1d<T> const& p1,
                               vgl_homg_point_1d<T> const& p2,
-                              T f = 0.5) { return p1 + f*(p2-p1); }
+                              T f = 0.5)
+{ return p1 + f*(p2-p1); }
 
 //: Return the point at the centre of gravity of two given points.
 // Identical to midpoint(p1,p2).
@@ -194,7 +191,8 @@ vgl_homg_point_1d<T> midpoint(vgl_homg_point_1d<T> const& p1,
 // \relates vgl_homg_point_1d
 template <class T> inline
 vgl_homg_point_1d<T> centre(vgl_homg_point_1d<T> const& p1,
-                            vgl_homg_point_1d<T> const& p2) {
+                            vgl_homg_point_1d<T> const& p2)
+{
   if (p1 == p2) return p1;
   return vgl_homg_point_1d<T> (p1.x()*p2.w() + p2.x()*p1.w(), p1.w()*p2.w()*2);
 }
@@ -203,7 +201,8 @@ vgl_homg_point_1d<T> centre(vgl_homg_point_1d<T> const& p1,
 // There are no rounding errors when T is e.g. int, if all w() are 1.
 // \relates vgl_homg_point_1d
 template <class T> inline
-vgl_homg_point_1d<T> centre(vcl_vector<vgl_homg_point_1d<T> > const& v) {
+vgl_homg_point_1d<T> centre(vcl_vector<vgl_homg_point_1d<T> > const& v)
+{
   int n=v.size();
   assert(n>0); // it is *not* correct to return the point (0,1) when n==0.
   T x = 0;

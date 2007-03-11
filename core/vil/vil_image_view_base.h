@@ -100,8 +100,7 @@ typedef vil_smart_ptr<vil_image_view_base> vil_image_view_base_sptr;
 
 //: Print a 1-line summary of contents
 inline
-vcl_ostream& operator<<(vcl_ostream& s, vil_image_view_base const& im) {
-  im.print(s); return s;
-}
+vcl_ostream& operator<<(vcl_ostream& s, vil_image_view_base const& im)
+{ im.print(s); return s; }
 
 #endif // vil_image_view_base_h_

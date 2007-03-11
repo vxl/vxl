@@ -379,8 +379,8 @@ bool vgl_box_2d<Type>::contains(vgl_box_2d<Type> const& b) const
 
 //: compute the intersection of an infinite line with *this box.
 //  p0 and p1 are the intersection points
-inline bool vgl_near_zero(double x){return vcl_fabs(x)<1e-08;}
-inline bool vgl_near_eq(double x, double y){return vgl_near_zero(x-y);}
+inline bool vgl_near_zero(double x) { return vcl_fabs(x)<1e-08; }
+inline bool vgl_near_eq(double x, double y) { return vgl_near_zero(x-y); }
 
 template <class Type>
 bool vgl_box_2d<Type>::intersect(const vgl_line_2d<Type>& line,
@@ -574,13 +574,15 @@ void vgl_box_2d<Type>::empty()
 
 //: Print to stream
 template <class Type>
-vcl_ostream& operator<<(vcl_ostream& s, vgl_box_2d<Type> const& p) {
+vcl_ostream& operator<<(vcl_ostream& s, vgl_box_2d<Type> const& p)
+{
   return p.print(s);
 }
 
 //: Read from stream
 template <class Type>
-vcl_istream& operator>>(vcl_istream& is, vgl_box_2d<Type>& p) {
+vcl_istream& operator>>(vcl_istream& is, vgl_box_2d<Type>& p)
+{
   return p.read(is);
 }
 

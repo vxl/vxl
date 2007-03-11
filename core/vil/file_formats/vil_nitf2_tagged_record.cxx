@@ -52,14 +52,14 @@ vil_nitf2_string_formatter& vil_nitf2_tagged_record::s_tag_formatter()
 vcl_string vil_nitf2_tagged_record::name() const
 {
   vcl_string cetag;
-  if( m_tag_field->value(cetag) ) return cetag;
-  else return "<Unknown>";
+  if ( m_tag_field->value(cetag) ) return cetag;
+  else                             return "<Unknown>";
 }
 
 vcl_string vil_nitf2_tagged_record::pretty_name() const
 {
-  if( m_definition ) return m_definition->m_pretty_name;
-  else return "<unknown>";
+  if ( m_definition ) return m_definition->m_pretty_name;
+  else                return "<unknown>";
 }
 
 vil_nitf2_tagged_record* vil_nitf2_tagged_record::create(vil_nitf2_istream& input)
@@ -128,58 +128,69 @@ bool vil_nitf2_tagged_record::read(vil_nitf2_istream& input)
   return true;
 }
 
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, int& out_value) const {
-  return m_field_sequence->get_value(tag, out_value); }
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, double& out_value) const {
-  return m_field_sequence->get_value(tag, out_value); }
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, char& out_value) const {
-  return m_field_sequence->get_value(tag, out_value); }
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, void*& out_value) const {
-  return m_field_sequence->get_value(tag, out_value); }
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, vcl_string& out_value) const {
-  return m_field_sequence->get_value(tag, out_value); }
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, vil_nitf2_location*& out_value) const {
-  return m_field_sequence->get_value(tag, out_value); }
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, vil_nitf2_date_time& out_value) const {
-  return m_field_sequence->get_value(tag, out_value); }
+bool vil_nitf2_tagged_record::get_value(vcl_string tag, int& out_value) const
+{ return m_field_sequence->get_value(tag, out_value); }
+
+bool vil_nitf2_tagged_record::get_value(vcl_string tag, double& out_value) const
+{ return m_field_sequence->get_value(tag, out_value); }
+
+bool vil_nitf2_tagged_record::get_value(vcl_string tag, char& out_value) const
+{ return m_field_sequence->get_value(tag, out_value); }
+bool vil_nitf2_tagged_record::get_value(vcl_string tag, void*& out_value) const
+{ return m_field_sequence->get_value(tag, out_value); }
+
+bool vil_nitf2_tagged_record::get_value(vcl_string tag, vcl_string& out_value) const
+{ return m_field_sequence->get_value(tag, out_value); }
+
+bool vil_nitf2_tagged_record::get_value(vcl_string tag, vil_nitf2_location*& out_value) const
+{ return m_field_sequence->get_value(tag, out_value); }
+
+bool vil_nitf2_tagged_record::get_value(vcl_string tag, vil_nitf2_date_time& out_value) const
+{ return m_field_sequence->get_value(tag, out_value); }
+
 #if VXL_HAS_INT_64
 // if not VXL_HAS_INT_64 isn't defined the vil_nitf2_long is the same as just plain 'int'
 // and this function will be a duplicate of that get_value
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, vil_nitf2_long& out_value) const {
-  return m_field_sequence->get_value(tag, out_value); }
+bool vil_nitf2_tagged_record::get_value(vcl_string tag, vil_nitf2_long& out_value) const
+{ return m_field_sequence->get_value(tag, out_value); }
 #endif
 
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, int& out_value) const {
-  return m_field_sequence->get_value(tag, indexes, out_value); }
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, double& out_value) const {
-  return m_field_sequence->get_value(tag, indexes, out_value); }
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, char& out_value) const {
-  return m_field_sequence->get_value(tag, indexes, out_value); }
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, void*& out_value) const {
-  return m_field_sequence->get_value(tag, indexes, out_value); }
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vcl_string& out_value) const {
-  return m_field_sequence->get_value(tag, indexes, out_value); }
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_location*& out_value) const {
-  return m_field_sequence->get_value(tag, indexes, out_value); }
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_date_time& out_value) const {
-  return m_field_sequence->get_value(tag, indexes, out_value); }
+bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, int& out_value) const
+{ return m_field_sequence->get_value(tag, indexes, out_value); }
+
+bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, double& out_value) const
+{ return m_field_sequence->get_value(tag, indexes, out_value); }
+
+bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, char& out_value) const
+{ return m_field_sequence->get_value(tag, indexes, out_value); }
+
+bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, void*& out_value) const
+{ return m_field_sequence->get_value(tag, indexes, out_value); }
+
+bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vcl_string& out_value) const
+{ return m_field_sequence->get_value(tag, indexes, out_value); }
+
+bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_location*& out_value) const
+{ return m_field_sequence->get_value(tag, indexes, out_value); }
+
+bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_date_time& out_value) const
+{ return m_field_sequence->get_value(tag, indexes, out_value); }
+
 #if VXL_HAS_INT_64
 // if not VXL_HAS_INT_64 isn't defined the vil_nitf2_long is the same as just plain 'int'
 // and this function will be a duplicate of that get_value
-bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_long& out_value) const {
-  return m_field_sequence->get_value(tag, indexes, out_value); }
+bool vil_nitf2_tagged_record::get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_long& out_value) const
+{ return m_field_sequence->get_value(tag, indexes, out_value); }
 #endif
 
 // Macro to define both overloads of get_values()
 #define VIL_NITF2_TAGGED_RECORD_GET_VALUES(T) \
 bool vil_nitf2_tagged_record::get_values(vcl_string tag, const vil_nitf2_index_vector& indexes, \
-                                         vcl_vector<T>& out_values, bool clear_out_values) const { \
-  return m_field_sequence->get_values(tag, indexes, out_values, clear_out_values); \
-} \
-bool vil_nitf2_tagged_record::get_values(vcl_string tag, vcl_vector<T>& out_values) const { \
-  return m_field_sequence->get_values(tag, out_values); \
-}
-  
+                                         vcl_vector<T>& out_values, bool clear_out_values) const \
+{ return m_field_sequence->get_values(tag, indexes, out_values, clear_out_values); } \
+bool vil_nitf2_tagged_record::get_values(vcl_string tag, vcl_vector<T>& out_values) const \
+{ return m_field_sequence->get_values(tag, out_values); }
+
 VIL_NITF2_TAGGED_RECORD_GET_VALUES(int);
 VIL_NITF2_TAGGED_RECORD_GET_VALUES(double);
 VIL_NITF2_TAGGED_RECORD_GET_VALUES(char);
@@ -495,10 +506,10 @@ vil_nitf2_field_definition* vil_nitf2_field_sequence::find_field_definition(vcl_
 vil_nitf2_field::field_tree* vil_nitf2_tagged_record::get_tree() const
 {
   //create our tree
-  //we add the field definitions if the TRE was recognized, or we note that we 
+  //we add the field definitions if the TRE was recognized, or we note that we
   //skipped it otherwise
   vil_nitf2_field::field_tree* tr;
-  if( m_field_sequence ) {
+  if ( m_field_sequence ) {
     tr = m_field_sequence->get_tree();
   } else {
     tr = new vil_nitf2_field::field_tree;
@@ -511,7 +522,7 @@ vil_nitf2_field::field_tree* vil_nitf2_tagged_record::get_tree() const
   //add the columns describing the name of the TRE
   tr->columns.push_back( name() );
   tr->columns.push_back( pretty_name() );
-  //add the CEL (length) field to the front 
+  //add the CEL (length) field to the front
   vil_nitf2_field::field_tree* first_child = new vil_nitf2_field::field_tree;
   first_child->columns.push_back( "CEL" );
   first_child->columns.push_back( "Extension Length" );

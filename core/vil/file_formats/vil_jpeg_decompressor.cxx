@@ -68,7 +68,8 @@ vil_jpeg_decompressor::vil_jpeg_decompressor(vil_stream *s)
 }
 
 // read the given scanline, skipping/rewinding as required.
-JSAMPLE const *vil_jpeg_decompressor::read_scanline(unsigned line) {
+JSAMPLE const *vil_jpeg_decompressor::read_scanline(unsigned line)
+{
   // if the client tries to read the same scanline again, it should be free.
   if (valid && line == jobj.output_scanline-1)
     return biffer;
@@ -137,7 +138,8 @@ JSAMPLE const *vil_jpeg_decompressor::read_scanline(unsigned line) {
 }
 
 
-vil_jpeg_decompressor::~vil_jpeg_decompressor() {
+vil_jpeg_decompressor::~vil_jpeg_decompressor()
+{
   // destroy the pool associated with jobj
   (*jobj.mem->free_pool) ((j_common_ptr) &jobj, JPOOL_IMAGE);
 

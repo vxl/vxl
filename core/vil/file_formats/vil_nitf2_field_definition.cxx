@@ -61,11 +61,13 @@ vil_nitf2_field_definition_node* vil_nitf2_field_definition::copy() const
     description);
 }
 
-bool vil_nitf2_field_definition::is_required() const {
+bool vil_nitf2_field_definition::is_required() const
+{
   return condition_functor == 0;
 }
 
-bool vil_nitf2_field_definition::is_variable_width() const {
+bool vil_nitf2_field_definition::is_variable_width() const
+{
   return width_functor != 0;
 }
 

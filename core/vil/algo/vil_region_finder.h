@@ -15,7 +15,8 @@
 //
 // \relates vil_region_finder
 //
-enum vil_region_finder_connectivity {
+enum vil_region_finder_connectivity
+{
   vil_region_finder_4_conn,
   vil_region_finder_8_conn
 };
@@ -46,20 +47,20 @@ class vil_region_finder
   // pixel (i,j).
   //
   // This is a simple flood fill algorithm.
-  // 
+  //
   void
   same_int_region( unsigned i, unsigned j,
                    vcl_vector<unsigned>& ri,
                    vcl_vector<unsigned>& rj );
 
- 
+
   //: Extract the region containing (i,j)
   //
   // This will return the coordinates of all the pixels in the region
   // around (i,j) where the predicate claims true compared with the intensity p
   //
   // This is a simple flood fill algorithm.
-  // 
+  //
   void
   same_int_region( unsigned i, unsigned j, pix_type p,
                    vcl_vector<unsigned>& ri,
@@ -71,7 +72,7 @@ class vil_region_finder
 
   //: boolean mask on the region
   vil_image_view<bool> const&  boolean_region_image() const;
-  
+
  private:
   //:
   // Marks all pixels as unprocessed, and sets the neighbour deltas
@@ -91,7 +92,7 @@ class vil_region_finder
 
   //: The deltas to the neighbours.
   int const (*nbr_delta_)[2];
-  
+
   //: predicate
   predicate_type predi_;
 };

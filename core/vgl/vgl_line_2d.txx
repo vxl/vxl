@@ -95,7 +95,8 @@ vcl_ostream&  operator<<(vcl_ostream& os, vgl_line_2d<Type> const& l)
 
 //: Read in three line parameters from stream
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& s, vgl_line_2d<Type>& line) {
+vcl_istream&  operator>>(vcl_istream& s, vgl_line_2d<Type>& line)
+{
   Type a,b,c;
   s >> a >> b >> c;
   line.set(a,b,c);

@@ -231,7 +231,8 @@ static void test_psfile_combined()
 #endif
 }
 
-static void test_psfile() {
+static void test_psfile()
+{
   test_psfile_grey_portrait();
   test_psfile_colour_portrait();
   test_psfile_geometry_portrait();

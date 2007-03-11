@@ -36,7 +36,8 @@ typedef vil_jpeg_stream_destination_mgr *vil_jpeg_dstptr;
 //  * before any data is actually written.
 STATIC
 void
-vil_jpeg_init_destination (j_compress_ptr cinfo) {
+vil_jpeg_init_destination (j_compress_ptr cinfo)
+{
   vil_jpeg_dstptr dest = (vil_jpeg_dstptr) cinfo->dest; // cast to derived class
 
   // Allocate the output buffer --- it will be released when done with image
@@ -71,7 +72,8 @@ vil_jpeg_init_destination (j_compress_ptr cinfo) {
 //  * Data beyond this point will be regenerated after resumption, so do not
 //  * write it out when emptying the buffer externally.
 jpeg_boolean
-vil_jpeg_empty_output_buffer (j_compress_ptr cinfo) {
+vil_jpeg_empty_output_buffer (j_compress_ptr cinfo)
+{
   vil_jpeg_dstptr dest = (vil_jpeg_dstptr) cinfo->dest; // cast to derived class
 
   if (dest->stream->write(dest->buffer, vil_jpeg_OUTPUT_BUF_SIZE) != (vcl_size_t) vil_jpeg_OUTPUT_BUF_SIZE)
@@ -91,7 +93,8 @@ vil_jpeg_empty_output_buffer (j_compress_ptr cinfo) {
 //  * application must deal with any cleanup that should happen even
 //  * for error exit.
 void
-vil_jpeg_term_destination (j_compress_ptr cinfo) {
+vil_jpeg_term_destination (j_compress_ptr cinfo)
+{
   vil_jpeg_dstptr dest = (vil_jpeg_dstptr) cinfo->dest; // cast to derived class
   vcl_size_t datacount = vil_jpeg_OUTPUT_BUF_SIZE - dest->base.free_in_buffer;
 
@@ -107,7 +110,8 @@ vil_jpeg_term_destination (j_compress_ptr cinfo) {
 //  * The caller must have already opened the stream, and is responsible
 //  * for closing it after finishing compression.
 void
-vil_jpeg_stream_dst_set (j_compress_ptr cinfo, vil_stream *vs) {
+vil_jpeg_stream_dst_set (j_compress_ptr cinfo, vil_stream *vs)
+{
   // The destination object is made permanent so that multiple JPEG images
   // can be written to the same file without re-executing jpeg_stdio_dest.
   // This makes it dangerous to use this manager and a different destination
@@ -132,7 +136,8 @@ vil_jpeg_stream_dst_set (j_compress_ptr cinfo, vil_stream *vs) {
 }
 
 void
-vil_jpeg_stream_dst_rewind(j_compress_ptr cinfo, vil_stream *vs) {
+vil_jpeg_stream_dst_rewind(j_compress_ptr cinfo, vil_stream *vs)
+{
   vil_jpeg_dstptr dst = ( vil_jpeg_dstptr )( cinfo->dest );
   { // verify
     assert(dst != 0);
