@@ -330,6 +330,9 @@ SOURCE=.\rgrl_matcher_k_nearest_adv.cxx
 SOURCE=.\rgrl_mask_oriented_box.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\rgrl_est_homo2d_proj.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/rgrl_feature_set_location+2-.cxx
 # End Source File
 # Begin Source File
@@ -445,6 +448,12 @@ SOURCE=.\Templates/rgrl_feature_set_bins+2.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/rgrl_feature_set_bins+3.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/rgrl_est_proj_func+2.2-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/rgrl_est_proj_func+3.2-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -817,6 +826,15 @@ SOURCE=.\rgrl_matcher_k_nearest_adv.h
 # End Source File
 # Begin Source File
 SOURCE=.\rgrl_mask_oriented_box.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_est_homo2d_proj.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_est_proj_func.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_est_proj_func.txx
 # End Source File
 # End Group
 # End Target
