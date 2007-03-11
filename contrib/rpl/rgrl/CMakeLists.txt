@@ -86,6 +86,10 @@ SET( rgrl_sources
   rgrl_est_homography2d.h              rgrl_est_homography2d.cxx
   rgrl_est_homo2d_lm.h                 rgrl_est_homo2d_lm.cxx
   rgrl_est_dis_homo2d_lm.h             rgrl_est_dis_homo2d_lm.cxx
+  
+  rgrl_est_proj_func.h                 rgrl_est_proj_func.txx       #generic estimator for homogenous projection matrix
+  rgrl_est_homo2d_proj.h               rgrl_est_homo2d_proj.cxx
+  
                                      
   rgrl_scale.h                         rgrl_scale.cxx                
   rgrl_scale_sptr.h
