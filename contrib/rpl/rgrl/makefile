@@ -147,6 +147,8 @@ SOURCES += rgrl_internal_util.cxx
 SOURCES += rgrl_mask_3d_image.cxx
 SOURCES += rgrl_matcher_k_nearest_adv.cxx
 SOURCES += rgrl_mask_oriented_box.cxx
+MANPAGE_SOURCES += rgrl_est_proj_func.txx
+SOURCES += rgrl_est_homo2d_proj.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
