@@ -368,13 +368,14 @@ vgl_h_matrix_3d<T>::get_upper_3x3() const
   m[3][3]=1.0;
   return vgl_h_matrix_3d<T>(m);
 }
+
 template <class T>
 vnl_matrix_fixed<T, 3,3> vgl_h_matrix_3d<T>::get_upper_3x3_matrix() const
 {
   vnl_matrix_fixed<T,3,3> R;
   vgl_h_matrix_3d<T> m = this->get_upper_3x3();
-  for(unsigned r = 0; r<3; r++)
-    for(unsigned c = 0; c<3; c++)
+  for (unsigned r = 0; r<3; r++)
+    for (unsigned c = 0; c<3; c++)
       R[r][c] = m.get(r,c);
   return R;
 }
@@ -392,6 +393,7 @@ vgl_h_matrix_3d<T>::get_translation() const
                               t12_matrix_[2][3]/d
                               ,(T)1.0);
 }
+
 template <class T>
 vnl_vector_fixed<T, 3>
 vgl_h_matrix_3d<T>::get_translation_vector() const
@@ -399,6 +401,7 @@ vgl_h_matrix_3d<T>::get_translation_vector() const
   vgl_homg_point_3d<T> p = this->get_translation();
   return vnl_vector_fixed<T,3>(p.x(), p.y(), p.z());
 }
+
 //----------------------------------------------------------------------------
 #undef VGL_H_MATRIX_3D_INSTANTIATE
 #define VGL_H_MATRIX_3D_INSTANTIATE(T) \

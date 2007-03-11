@@ -168,6 +168,7 @@ bool vnl_matlab_readhdr::read_data(T * const *m) { \
   vnl_c_vector<T >::deallocate(tmp, rows()*cols()); \
   data_read = true; return *this; \
 }
+
 fsm_define_methods(float);
 fsm_define_methods(double);
 fsm_define_methods(vcl_complex<float>);

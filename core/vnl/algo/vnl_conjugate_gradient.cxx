@@ -113,18 +113,22 @@ extern "C" double vnl_conjugate_gradient__valuecomputer_( double *x, void* userd
 {
   return vnl_conjugate_gradient::valuecomputer_(x, userdata);
 }
+
 extern "C" void vnl_conjugate_gradient__gradientcomputer_( double *g, double *x, void* userdata)
 {
   vnl_conjugate_gradient::gradientcomputer_(g,x, userdata);
 }
+
 extern "C" void vnl_conjugate_gradient__valueandgradientcomputer_( double *v, double *g, double *x, void* userdata)
 {
   vnl_conjugate_gradient::valueandgradientcomputer_(v,g,x, userdata);
 }
+
 extern "C" void vnl_conjugate_gradient__preconditioner_( double *out, double *in, void* userdata)
 {
   vnl_conjugate_gradient::preconditioner_(out,in, userdata);
 }
+
 #endif
 
 bool vnl_conjugate_gradient::minimize( vnl_vector<double> &x)

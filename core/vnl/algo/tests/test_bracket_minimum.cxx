@@ -11,6 +11,7 @@ struct bm_square1 : public vnl_cost_function {
     return (2 - x[0]) * (2 - x[0]) + 10;
   }
 };
+
 struct bm_quartic1 : public vnl_cost_function {
   bm_quartic1() : vnl_cost_function(1) {}
 
@@ -28,8 +29,8 @@ void test_bracket_minimum()
 
   vnl_bracket_minimum(f1,a,b,c,fa,fb,fc);
 
-  vcl_cout<<"Bracket: ("<<a<<","<<b<<","<<c<<")"<<vcl_endl;
-  vcl_cout<<"fn: ("<<fa<<","<<fb<<","<<fc<<")"<<vcl_endl;
+  vcl_cout<<"Bracket: ("<<a<<','<<b<<','<<c<<')'<<vcl_endl
+          <<"fn: ("<<fa<<','<<fb<<','<<fc<<')'<<vcl_endl;
 
   TEST("a<b",a<b,true);
   TEST("a<c",a<c,true);
@@ -38,8 +39,8 @@ void test_bracket_minimum()
 
   a = -10; b=-9;
   vnl_bracket_minimum(f1,a,b,c,fa,fb,fc);
-  vcl_cout<<"Bracket: ("<<a<<","<<b<<","<<c<<")"<<vcl_endl;
-  vcl_cout<<"fn: ("<<fa<<","<<fb<<","<<fc<<")"<<vcl_endl;
+  vcl_cout<<"Bracket: ("<<a<<','<<b<<','<<c<<')'<<vcl_endl
+          <<"fn: ("<<fa<<','<<fb<<','<<fc<<')'<<vcl_endl;
 
   TEST("a<b",a<b,true);
   TEST("a<c",a<c,true);
@@ -50,8 +51,8 @@ void test_bracket_minimum()
   a=5; b=6;
   vnl_bracket_minimum(f2,a,b,c,fa,fb,fc);
 
-  vcl_cout<<"Bracket: ("<<a<<","<<b<<","<<c<<")"<<vcl_endl;
-  vcl_cout<<"fn: ("<<fa<<","<<fb<<","<<fc<<")"<<vcl_endl;
+  vcl_cout<<"Bracket: ("<<a<<','<<b<<','<<c<<')'<<vcl_endl
+          <<"fn: ("<<fa<<','<<fb<<','<<fc<<')'<<vcl_endl;
 
   TEST("a<b",a<b,true);
   TEST("a<c",a<c,true);
@@ -60,14 +61,13 @@ void test_bracket_minimum()
 
   a = -10; b=-9;
   vnl_bracket_minimum(f2,a,b,c,fa,fb,fc);
-  vcl_cout<<"Bracket: ("<<a<<","<<b<<","<<c<<")"<<vcl_endl;
-  vcl_cout<<"fn: ("<<fa<<","<<fb<<","<<fc<<")"<<vcl_endl;
+  vcl_cout<<"Bracket: ("<<a<<','<<b<<','<<c<<')'<<vcl_endl
+          <<"fn: ("<<fa<<','<<fb<<','<<fc<<')'<<vcl_endl;
 
   TEST("a<b",a<b,true);
   TEST("a<c",a<c,true);
   TEST("fa>fb",fa>fb,true);
   TEST("fb<fc",fb<fc,true);
-
 }
 
 TESTMAIN(test_bracket_minimum);

@@ -151,7 +151,7 @@ vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
                                 file_format ? file_format : prototype->file_format());
 }
 
-vil_blocked_image_resource_sptr 
+vil_blocked_image_resource_sptr
 vil_new_blocked_image_resource(vil_stream* os, unsigned ni, unsigned nj,
                                unsigned nplanes, vil_pixel_format format,
                                unsigned size_block_i, unsigned size_block_j,
@@ -177,7 +177,7 @@ vil_new_blocked_image_resource(vil_stream* os, unsigned ni, unsigned nj,
   return 0;
 }
 
-vil_blocked_image_resource_sptr 
+vil_blocked_image_resource_sptr
 vil_new_blocked_image_resource(char const* filename, unsigned ni, unsigned nj,
                                unsigned nplanes, vil_pixel_format format,
                                unsigned size_block_i, unsigned size_block_j,
@@ -192,7 +192,8 @@ vil_new_blocked_image_resource(char const* filename, unsigned ni, unsigned nj,
                                         size_block_i, size_block_j,
                                         file_format);
 }
-vil_blocked_image_resource_sptr 
+
+vil_blocked_image_resource_sptr
 vil_new_blocked_image_facade(const vil_image_resource_sptr& src,
                              unsigned size_block_i, unsigned size_block_j)
 {
@@ -200,12 +201,12 @@ vil_new_blocked_image_facade(const vil_image_resource_sptr& src,
 }
 
 
-vil_blocked_image_resource_sptr 
+vil_blocked_image_resource_sptr
 vil_new_cached_image_resource(const vil_blocked_image_resource_sptr& bir,
                               const unsigned cache_size)
 {
   return new vil_cached_image_resource(bir, cache_size);
-}  
+}
 
 vil_pyramid_image_resource_sptr
 vil_new_pyramid_image_resource(char const* file_or_directory,
@@ -228,7 +229,7 @@ vil_new_pyramid_image_resource(char const* file_or_directory,
   return 0;
 }
 
-vil_pyramid_image_resource_sptr 
+vil_pyramid_image_resource_sptr
   vil_new_pyramid_image_from_base(char const* filename,
                                vil_image_resource_sptr const& base_image,
                                unsigned nlevels,
@@ -244,7 +245,7 @@ vil_pyramid_image_resource_sptr
     if (vcl_strcmp(fmt->tag(), file_format) == 0) {
       outimage = fmt->make_pyramid_image_from_base(filename,
                                                    base_image,
-                                                   nlevels,                                               
+                                                   nlevels,
                                                    temp_dir);
       if (!outimage)
         vcl_cerr << "vil_new: Cannot new a pyramid resource to type [" << file_format << "]\n";
@@ -254,8 +255,9 @@ vil_pyramid_image_resource_sptr
   vcl_cerr << "vil_new: Unknown file type [" << file_format << "]\n";
   return 0;
 }
+
 //for now there is only one directory based pyramid format
-vil_pyramid_image_resource_sptr 
+vil_pyramid_image_resource_sptr
   vil_new_pyramid_image_list_from_base(char const* directory,
                                vil_image_resource_sptr const& base_image,
                                unsigned nlevels,
