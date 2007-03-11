@@ -1,3 +1,3 @@
 #include <rgrl/rgrl_est_proj_func.txx>
 
-RGRL_EST_PROJ_FUNC_INSTANTIATE( 3, 2 );
+RGRL_EST_PROJ_FUNC_INSTANTIATE( 2, 3 );
