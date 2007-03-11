@@ -34,6 +34,7 @@
 #include <rgrl/rgrl_mask.h>
 #include <rgrl/rgrl_est_homography2d.h>
 #include <rgrl/rgrl_est_homo2d_lm.h>
+#include <rgrl/rgrl_est_homo2d_proj.h>
 #include <rgrl/rgrl_trans_homography2d.h>
 #include <rgrl/rgrl_trans_rad_dis_homo2d.h>
 #include <rgrl/rgrl_est_dis_homo2d_lm.h>
@@ -1588,7 +1589,7 @@ static  vnl_random random;
     }
   }
 
-  void test_homography2d_lm()
+  void test_homography2d_lm(rgrl_estimator_sptr estimator)
   {
     vnl_matrix<double> H(3,3,0.0), est_H(3,3,0.0);
     vnl_matrix<double> cofact;
@@ -1684,8 +1685,6 @@ static  vnl_random random;
         ms->add_feature_and_match( new rgrl_feature_point(d2_p[i]), 0,
                                    new rgrl_feature_point(d2_q[i]) );
       }
-      rgrl_estimator_sptr estimator = new rgrl_est_homo2d_lm();
-      //estimator->set_debug_flag(5);
 
       {
         vnl_matrix<double> perturbed_H( H );
@@ -1777,7 +1776,7 @@ static  vnl_random random;
   }
 
   void
-  test_homography2d_points_on_circle()
+  test_homography2d_points_on_circle(rgrl_estimator_sptr estimator)
   {
     vnl_matrix<double> H(3,3, vnl_matrix_identity);
     const double tol = 1e-6;
@@ -1824,8 +1823,6 @@ static  vnl_random random;
         ms->add_feature_and_match( new rgrl_feature_point(p[i]), 0,
                                    new rgrl_feature_point(q[i]) );
       }
-      rgrl_estimator_sptr estimator = new rgrl_est_homo2d_lm();
-      // estimator->set_debug_flag(5);
 
       // error STD = 1
       {
@@ -1852,7 +1849,10 @@ static  vnl_random random;
   }
 
   void
-  test_homography2d_points_on_circle_w_noise( double noise_level, double tol_xform, double tol_trans_error )
+  test_homography2d_points_on_circle_w_noise( rgrl_estimator_sptr estimator,
+                                              double noise_level,
+                                              double tol_xform,
+                                              double tol_trans_error )
   {
     vnl_matrix<double> H(3,3, vnl_matrix_identity);
 
@@ -1907,7 +1907,6 @@ static  vnl_random random;
         ms->add_feature_and_match( new rgrl_feature_point(p[i]), 0,
                                    new rgrl_feature_point(q[i]) );
       }
-      rgrl_estimator_sptr estimator = new rgrl_est_homo2d_lm();
 
       // error STD = 3
       {
@@ -2027,9 +2026,26 @@ MAIN( test_estimator )
   test_est_reduced_quad2d();
   test_est_rigid();
   test_homography2d();
-  test_homography2d_lm();
-  test_homography2d_points_on_circle();
-  test_homography2d_points_on_circle_w_noise(0.0, 1e-9, 1e-9);
-  test_homography2d_points_on_circle_w_noise(0.1, 0.1, 0.005);
+
+  {
+    rgrl_estimator_sptr estimator = new rgrl_est_homo2d_lm();
+    estimator->set_debug_flag(5);
+    test_homography2d_lm( estimator );
+
+    test_homography2d_points_on_circle( estimator );
+    test_homography2d_points_on_circle_w_noise(estimator, 0.0, 1e-9, 1e-9);
+    test_homography2d_points_on_circle_w_noise(estimator, 0.1, 0.1, 0.005);
+  }
+
+  {
+    rgrl_estimator_sptr estimator = new rgrl_est_homo2d_proj();
+    //estimator->set_debug_flag(5);
+    test_homography2d_lm( estimator);
+
+    test_homography2d_points_on_circle( estimator );
+    test_homography2d_points_on_circle_w_noise(estimator, 0.0, 1e-9, 1e-9);
+    test_homography2d_points_on_circle_w_noise(estimator, 0.1, 0.1, 0.005);
+  }
+
   SUMMARY();
 }
