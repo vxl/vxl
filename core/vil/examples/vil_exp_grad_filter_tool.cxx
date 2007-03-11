@@ -15,8 +15,8 @@ int main(int argc, char** argv)
 {
   if (argc!=3)
   {
-    vcl_cout<<"vil_exp_grad_filter_tool  src_image x_grad_image\n";
-    vcl_cout<<"Applies exponential gradient filter to src_image, saves to x_grad_image\n";
+    vcl_cout<<"vil_exp_grad_filter_tool  src_image x_grad_image\n"
+            <<"Applies exponential gradient filter to src_image, saves to x_grad_image\n";
     return 0;
   }
 
@@ -38,7 +38,7 @@ int main(int argc, char** argv)
   vil_math_value_range(grad_x,min_v,max_v);
   double s = 255/(max_v-min_v);
   vil_math_scale_and_offset_values(grad_x,s,-s*min_v);
-  vcl_cout<<"Range of result: "<<min_v<<","<<max_v<<vcl_endl;
+  vcl_cout<<"Range of result: "<<min_v<<','<<max_v<<vcl_endl;
 
   vil_image_view<vxl_byte> grad_x_byte;
   vil_convert_cast(grad_x,grad_x_byte);

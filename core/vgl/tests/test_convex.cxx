@@ -6,9 +6,8 @@
 
 static void test_convex()
 {
-  vcl_cout << "Test 2d convex hull\n";
-
-  vcl_cout << "Inputs\n";
+  vcl_cout << "Test 2d convex hull\n\n"
+           << "Inputs\n";
   // Simple triangle
   vcl_vector<vgl_point_2d<double> > pts;
   pts.push_back( vgl_point_2d<double>(0.0, 0.0) );
@@ -32,7 +31,5 @@ static void test_convex()
   TEST("inside", poly.contains( pts[3] ), true );
   TEST("inside", poly.contains( pts[4] ), true );
 }
-
-
 
 TESTMAIN(test_convex);

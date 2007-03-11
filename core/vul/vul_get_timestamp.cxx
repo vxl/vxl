@@ -24,7 +24,7 @@
 #include <vcl_sys/time.h> // for gettimeofday()
 
 // for vul_get_time_string()
-#include <vcl_ctime.h> 
+#include <vcl_ctime.h>
 #include <vul/vul_string.h>
 #include <vcl_sstream.h>
 #include <vcl_iomanip.h>
@@ -72,15 +72,15 @@ vcl_string vul_get_time_as_string(vul_time_style style/*default=vul_asc*/)
 
   // Get time in seconds since Jan 1 1970
   vcl_time_t time_secs;
-  vcl_time(&time_secs);   
+  vcl_time(&time_secs);
 
   // Convert time to struct tm form
   struct vcl_tm *time;
   time = vcl_localtime(&time_secs);
 
-  switch(style)
+  switch (style)
   {
-  case vul_numeric_msf:
+    case vul_numeric_msf:
     {
       // Express as a series of space-separated numbers, most significant first
       // e.g. yyyy mm dd hh mm ss
@@ -88,21 +88,21 @@ vcl_string vul_get_time_as_string(vul_time_style style/*default=vul_asc*/)
       // Leading zeros are used for single-digit month,day,hour,min,sec.
       vcl_ostringstream oss;
       oss.fill('0');
-      oss << vcl_setw(4) << 1900+time->tm_year << " ";
-      oss << vcl_setw(2) << 1 + time->tm_mon << " ";
-      oss << vcl_setw(2) << time->tm_mday << " ";
-      oss << vcl_setw(2) << time->tm_hour << " ";
-      oss << vcl_setw(2) << time->tm_min << " ";
-      oss << vcl_setw(2) << time->tm_sec;
+      oss << vcl_setw(4) << 1900+time->tm_year << ' '
+          << vcl_setw(2) << 1 + time->tm_mon << ' '
+          << vcl_setw(2) << time->tm_mday << ' '
+          << vcl_setw(2) << time->tm_hour << ' '
+          << vcl_setw(2) << time->tm_min << ' '
+          << vcl_setw(2) << time->tm_sec;
       timestr = oss.str();
     }
     break;
 
-  default:
+    default:
     {
-      // Get local time & date using standard asctime() function, 
+      // Get local time & date using standard asctime() function,
       // Removes the trailing eol that asctime() inserts.
-      timestr = vcl_asctime(time); 
+      timestr = vcl_asctime(time);
       vul_string_right_trim(timestr, "\n");
     }
     break;

@@ -71,14 +71,13 @@ void test_algo_quad_envelope_float()
   TEST_NEAR("d[2]",dest2[2],-10.1,1e-6);
   TEST_NEAR("d[3]",dest2[3],-9.3,1e-6);
   TEST_NEAR("d[4]",dest2[4],-10,1e-6);
-
 }
 
 void test_algo_quad_distance_function_float_float()
 {
-  vcl_cout << "********************************************\n"
+  vcl_cout << "*************************************************\n"
            << " Testing vil_quad_distance_function<float,float>\n"
-           << "********************************************\n";
+           << "*************************************************\n";
   vil_image_view<float> src(7,7),dest,pos;
   src.fill(1.0f);
   src(2,4)=-10.0f;
@@ -97,14 +96,13 @@ void test_algo_quad_distance_function_float_float()
   src(1,2)=-10.0f;
   vil_quad_distance_function(src,1,1,dest);
   TEST_NEAR("d(1,2)",dest(1,2),-10,1e-6);
-
 }
 
 void test_algo_quad_distance_function_with_pos_float_float()
 {
-  vcl_cout << "********************************************\n"
+  vcl_cout << "***************************************************************\n"
            << " Testing vil_quad_distance_function<float,float> with position\n"
-           << "********************************************\n";
+           << "***************************************************************\n";
   vil_image_view<float> src(7,7),dest;
   vil_image_view<int> pos;
   src.fill(1.0f);
@@ -124,9 +122,9 @@ void test_algo_quad_distance_function_with_pos_float_float()
   TEST("pos(4,6)=(2,4)",pos(4,6,0)==2 && pos(4,6,1)==4,true);
   TEST_NEAR("d(0,1)",dest(0,1),1,1e-6);
   TEST("pos(0,1)=(0,1)",pos(0,1,0)==0 && pos(0,1,1)==1,true);
-  vcl_cout<<"pos(0,0)=("<<pos(0,0,0)<<","<<pos(0,0,1)<<")"<<vcl_endl;
-  vcl_cout<<"pos(0,1)=("<<pos(0,1,0)<<","<<pos(0,1,1)<<")"<<vcl_endl;
-  vcl_cout<<"pos(0,2)=("<<pos(0,2,0)<<","<<pos(0,2,1)<<")"<<vcl_endl;
+  vcl_cout<<"pos(0,0)=("<<pos(0,0,0)<<','<<pos(0,0,1)<<')'<<vcl_endl
+          <<"pos(0,1)=("<<pos(0,1,0)<<','<<pos(0,1,1)<<')'<<vcl_endl
+          <<"pos(0,2)=("<<pos(0,2,0)<<','<<pos(0,2,1)<<')'<<vcl_endl;
   TEST_NEAR("d(0,2)",dest(0,2),-2,1e-6);
   TEST("pos(0,2)=(2,4)",pos(0,2,0)==2 && pos(0,2,1)==4,true);
 
@@ -136,7 +134,6 @@ void test_algo_quad_distance_function_with_pos_float_float()
   TEST_NEAR("d(1,2)",dest(1,2),-10,1e-6);
   TEST("pos(1,2)=(1,2)",pos(1,2,0)==1 && pos(1,2,1)==2,true);
   TEST("pos(0,2)=(1,2)",pos(0,2,0)==1 && pos(0,2,1)==2,true);
-
 }
 
 MAIN( test_algo_quad_distance_function )

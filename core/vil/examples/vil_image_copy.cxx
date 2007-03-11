@@ -13,8 +13,8 @@ int main(int argc, char** argv)
 {
   if (argc!=3)
   {
-    vcl_cout<<"vil_image_copy  src_image dest_image\n";
-    vcl_cout<<"Loads from file src_image, saves to file dest_image\n";
+    vcl_cout<<"vil_image_copy  src_image dest_image\n"
+            <<"Loads from file src_image, saves to file dest_image\n";
     return 0;
   }
 

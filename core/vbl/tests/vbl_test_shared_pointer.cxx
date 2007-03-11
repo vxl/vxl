@@ -20,8 +20,8 @@ static void test_int()
   pi a(new int(13));
   pi b(new int(24));
 
-  print << "*a = " << *a << vcl_endl;
-  print << "*b = " << *b << vcl_endl;
+  print << "*a = " << *a << vcl_endl
+        << "*b = " << *b << vcl_endl;
 
   for (int i=0; i<10003; ++i) {
     pi tmp = a;
@@ -133,7 +133,6 @@ static void test_derived_class()
     }
     TEST( "  Destruction", derv_class2::cnt, 0 );
   }
-
 }
 
 static void vbl_test_shared_pointer()

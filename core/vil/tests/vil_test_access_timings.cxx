@@ -232,8 +232,8 @@ int main(int argc, char** argv)
   int n_loops = 100;
 
   vcl_cout<<"Times to fill a "<<NI<<" x "<<NJ
-          <<" image of "<<NP<<" planes (in microsecs) [Range= 0.5(max-min)]\n";
-  vcl_cout<<"Images of BYTE\n";
+          <<" image of "<<NP<<" planes (in microsecs) [Range= 0.5(max-min)]\n"
+          <<"Images of BYTE\n";
   for (int i=1;i<=8;++i)
   {
     compute_stats(i,byte_image,n_loops);

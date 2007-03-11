@@ -55,10 +55,10 @@ void vsl_b_read(vsl_b_istream& is, vcl_vector<vcl_vector<bool> >& v)
       }
     }
     break;
-    
+
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_vector<vcl_vector<T> >&) \n";
-    vcl_cerr << "           Unknown version number "<< ver << "\n";
+    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_vector<vcl_vector<T> >&)\n"
+             << "           Unknown version number "<< ver << '\n';
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
@@ -70,24 +70,22 @@ VCL_DEFINE_SPECIALIZATION
 void vsl_print_summary(vcl_ostream& os, const vcl_vector<vcl_vector<bool> >& v)
 {
   unsigned n = v.size();
-  os << "Vector length: " << n << "\n";
+  os << "Vector length: " << n << '\n';
   for (unsigned int i=0; i<n && i<5; i++)
   {
-    os << " " << i << ": ";
+    os << ' ' << i << ": ";
     unsigned m = v[i].size();
-    os << "\tVector length: " << m << "\n";
+    os << "\tVector length: " << m << '\n';
     for (unsigned int j=0; j<m && j<5; j++)
     {
-      os << " " << j << ": ";
+      os << ' ' << j << ": ";
       vsl_print_summary(os, v[i][j]);
     }
     if (m > 5) os << " ... ";
-    os << "\n";
+    os << '\n';
   }
   if (n > 5) os << " ...";
-  os << "\n";
-  
-  os << vcl_endl;
+  os << vcl_endl << vcl_endl;
 }
 
 

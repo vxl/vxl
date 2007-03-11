@@ -242,8 +242,8 @@ int main(int argc, char** argv)
 
   n_pts = 100;
   n_loops = 10000;
-  vcl_cout<<"Times to randomly access image (in nanosecs) [Range= 0.5(max-min)]\n";
-  vcl_cout<<"Images of BYTE\n";
+  vcl_cout<<"Times to randomly access image (in nanosecs) [Range= 0.5(max-min)]\n"
+          <<"Images of BYTE\n";
   for (int i=1;i<=3;++i)
   {
     compute_stats(i,byte_image,&x[0],&y[0],n_pts,n_loops);
@@ -254,8 +254,8 @@ int main(int argc, char** argv)
     compute_stats(i,float_image,&x[0],&y[0],n_pts,n_loops);
   }
 
-  vcl_cout<<"Using Bilinear interpolation.\n";
-  vcl_cout<<"Images of BYTE\n";
+  vcl_cout<<"Using Bilinear interpolation.\n"
+          <<"Images of BYTE\n";
   for (int i=1;i<=3;++i)
   {
     compute_bilin_stats(i,byte_image,n_pts,n_loops);

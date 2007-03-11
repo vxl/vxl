@@ -61,9 +61,9 @@ static void test_point_to_3D_line_segment()
 
 static void test_point_to_line_segment_2d()
 {
-  vcl_cout << "-------------------------------------------------------\n";
-  vcl_cout << "Testing vgl_distance(vgl_line_segment_2d, vgl_point_2d)\n";
-  vcl_cout << "-------------------------------------------------------\n";
+  vcl_cout << "-------------------------------------------------------\n"
+           << "Testing vgl_distance(vgl_line_segment_2d, vgl_point_2d)\n"
+           << "-------------------------------------------------------\n";
   vgl_point_2d<double> p(1, 0);
   vgl_point_2d<double> q(1, 1);
   vgl_line_segment_2d<double> l(p, q);

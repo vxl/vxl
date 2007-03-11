@@ -19,11 +19,11 @@ static void test_contains()
   vnl_double_3 v(1.0, 0,0);
   vnl_quaternion<double> q(v, 3.14159/4);
   vgl_orient_box_3d<double> obox(abox, q);
-  vcl_cout << "oriented box\n " << obox << '\n';
-  vcl_cout << "Corners\n ";
+  vcl_cout << "oriented box\n " << obox << '\n'
+           << "Corners\n";
   vcl_vector<vgl_point_3d<double> > c = obox.corners();
-  for(vcl_vector<vgl_point_3d<double> >::iterator pit = c.begin();
-      pit != c.end(); ++pit)
+  for (vcl_vector<vgl_point_3d<double> >::iterator pit = c.begin();
+       pit != c.end(); ++pit)
     vcl_cout << *pit << '\n';
   vgl_point_3d<double> tp(0.5, 0.4, -0.1);
   bool inside = obox.contains(tp);
@@ -31,19 +31,13 @@ static void test_contains()
   TEST("test oriented box 3d contains predicate",inside&&outside, true);
 }
 
-
-
-
-
 void test_orient_box_3d()
 {
-  vcl_cout << "*****************************\n"
+  vcl_cout << "***************************\n"
            << " Testing vgl_orient_box_3d\n"
-           << "*****************************\n\n";
+           << "***************************\n\n";
 
   test_contains();
-
 }
-
 
 TESTMAIN(test_orient_box_3d);

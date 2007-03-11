@@ -15,8 +15,8 @@ int main(int argc, char** argv)
 {
   if (argc!=4)
   {
-    vcl_cout<<"vil_convolve_tool  src_image kernel_image dest_image\n";
-    vcl_cout<<"Convolves kernel_image with src_image, saves to dest_image\n";
+    vcl_cout<<"vil_convolve_tool  src_image kernel_image dest_image\n"
+            <<"Convolves kernel_image with src_image, saves to dest_image\n";
     return 0;
   }
 
@@ -53,7 +53,7 @@ int main(int argc, char** argv)
   vil_math_value_range(dest_image,min_v,max_v);
   double s = 255/(max_v-min_v);
   vil_math_scale_and_offset_values(dest_image,s,-s*min_v);
-  vcl_cout<<"Range of result: "<<min_v<<","<<max_v<<vcl_endl;
+  vcl_cout<<"Range of result: "<<min_v<<','<<max_v<<vcl_endl;
 
   vil_image_view<vxl_byte> result_image;
   vil_convert_cast(dest_image,result_image);
