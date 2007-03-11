@@ -68,7 +68,8 @@ static double z(const double theta, const double psi, const double phi)
             vcl_sin(theta/2)*vcl_sin(psi)*vcl_sin(phi),
             vcl_sin(theta/2)*vcl_cos(psi));
 }
-#if 0
+
+#if 0 // static function unused
 static void generate_points(vcl_vector<vgl_point_3d<double> >& pts,
                             vcl_vector<vgl_point_3d<float> >& color,
                             const double theta_min,
@@ -100,9 +101,9 @@ static void generate_points(vcl_vector<vgl_point_3d<double> >& pts,
         color.push_back(c);
       }
 }
+#endif // 0
 
-#endif
-
+#if 0 // static function unused
 static
 void generate_polylines(vcl_vector<vcl_vector<vgl_point_3d<double> > >& polys,
                         vcl_vector<vgl_point_3d<float> >& polycolors,
@@ -137,7 +138,9 @@ void generate_polylines(vcl_vector<vcl_vector<vgl_point_3d<double> > >& polys,
       polycolors.push_back(c);
     }
 }
+#endif // 0
 
+#if 0 // static function unused
 static void
 generate_algebra_polylines(vcl_vector<vcl_vector<vgl_point_3d<double> > >& pys,
                            vcl_vector<vgl_point_3d<float> >& polycolors,
@@ -173,6 +176,7 @@ generate_algebra_polylines(vcl_vector<vcl_vector<vgl_point_3d<double> > >& pys,
         pys.push_back(vts);
       }
 }
+#endif // 0
 
 //generate surfaces of constant theta in the group
 static
@@ -257,6 +261,7 @@ void generate_da_polylines(vcl_vector<vcl_vector<vgl_point_3d<double> > >& polys
   }
 }
 
+#if 0 // static function unused
 static void write_points(vcl_ofstream& str,
                          vcl_vector<vgl_point_3d<double> > const& points,
                          vcl_vector<vgl_point_3d<float> > const& color)
@@ -286,6 +291,7 @@ static void write_points(vcl_ofstream& str,
 
   //brct_algos::write_vrml_trailer(str);
 }
+#endif // 0
 
 static void write_spheres(vcl_ofstream& str)
 {
