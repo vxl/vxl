@@ -75,6 +75,7 @@ rgrl_est_proj_func( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   matches_ptr_( &matches ),
   from_centre_(double(0)), to_centre_(double(0)),
   max_num_iterations_(50),
+  index_row_(0), index_col_(0),
   relative_threshold_(1e-8),
   zero_svd_thres_(1e-4)
 {
@@ -124,7 +125,7 @@ convert_parameters( vnl_vector<double>& params,
   proj_matrix /= proj_matrix( index_row_, index_col_ );
 
   // fill in params
-  params.set_size( (Fdim+1)*(Tdim+1) -1 );
+  params.set_size( proj_size_-1 );
   for( unsigned k=0,i=0; i<Tdim+1; ++i )
     for( unsigned j=0; j<Fdim+1; ++j ) {
 
@@ -138,14 +139,63 @@ convert_parameters( vnl_vector<double>& params,
 }
 
 
+template <unsigned int Tdim, unsigned int Fdim>
+void
+rgrl_est_proj_func<Tdim, Fdim>::
+proj_jacobian( vnl_matrix_fixed<double, Tdim, (Fdim+1)*(Tdim+1)-1>& base_jac,
+               vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
+               vnl_vector_fixed<double, Fdim>           const& from ) const
+{
+  vnl_vector_fixed<double, Tdim+1> homo;
+  vnl_matrix_fixed<double, Tdim,   proj_size_>   complete_jac;
+  vnl_matrix_fixed<double, Tdim+1, proj_size_>   jf(0.0);    // grad in homogeneous coordinate
+  vnl_matrix_fixed<double, Tdim,   Tdim+1>       jg(0.0);    // grad of division, [u/w, v/w]^T
+
+  map_homo_point<Tdim, Fdim>( homo, proj, from );
+
+  // 1. linear gradient in homogeneous coordinate
+  // fill jf (linear gradient) with 1.0 on elements corresponding to shift
+  for( unsigned i=0; i<Tdim+1; ++i )
+    jf( i, i*(Fdim+1)+Fdim ) = 1.0;
+
+  // skip the ones corresponding to shift
+  for( unsigned index=0,i=0; i<Tdim+1; ++i,index+=(Fdim+1) )
+    for( unsigned j=0; j<Fdim; ++j ) {
+      jf( i, index+j ) = from[j];
+    }
+
+  // 2. gradient of making division
+  const double homo_last_neg_sqr = -vnl_math_sqr(homo[Tdim]);
+  const double homo_last_div = 1.0/homo[Tdim];
+  for( unsigned i=0; i<Tdim; ++i )
+    jg(i,i) = homo_last_div;
+  for( unsigned i=0; i<Tdim; ++i )
+    jg(i,Tdim) = homo[i] / homo_last_neg_sqr;
+
+  // 3. complete jacobian
+  // since Jab_g(f(p)) = Jac_g * Jac_f
+  complete_jac = jg * jf;
+
+  // 4. remove the element being held as constant 1
+  const unsigned index = (index_row_*(Fdim+1)+index_col_);
+  for( unsigned i=0,j=0; i<proj_size_; ++i )
+    if( i != index ) {
+
+      for( unsigned k=0; k<Tdim; ++k )
+        base_jac(k, j) = complete_jac(k, i);
+
+      ++j;
+    }
+}
 
 template <unsigned int Tdim, unsigned int Fdim>
 void
 rgrl_est_proj_func<Tdim, Fdim>::
 restored_centered_proj( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj_matrix,
-                        vnl_vector<double> const& params )
+                        vnl_vector<double> const& params ) const
 {
-  assert( params.size() >= (Fdim+1)*(Tdim+1) - 1 );
+  assert( params.size() >= proj_size_ - 1 );
+
   for( unsigned k=0,i=0; i<Tdim+1; ++i )
     for( unsigned j=0; j<Fdim+1; ++j ) {
 
@@ -211,20 +261,11 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
   typedef rgrl_match_set::const_from_iterator FIter;
   typedef FIter::to_iterator TIter;
 
-  const unsigned int param_num = (Fdim+1)*(Tdim+1);
   assert( jacobian.rows() == get_number_of_residuals() );
-  assert( jacobian.cols() == param_num-1 );
+  assert( jacobian.cols() == proj_size_-1 );
 
-  vnl_vector_fixed<double, Tdim+1> homo;
   vnl_matrix_fixed<double, Tdim,   Tdim>        error_proj_sqrt;
-  vnl_matrix_fixed<double, Tdim,   param_num-1> base_jac, jac;
-  vnl_matrix_fixed<double, Tdim,   param_num>   complete_jac;
-  vnl_matrix_fixed<double, Tdim+1, param_num>   jf(0.0);    // grad in homogeneous coordinate
-  vnl_matrix_fixed<double, Tdim,   Tdim+1>      jg(0.0); // grad of division, [u/w, v/w]^T
-
-  // fill jf (linear gradient) with 1.0 on elements corresponding to shift
-  for( unsigned i=0; i<Tdim+1; ++i )
-    jf( i, i*(Fdim+1)+Fdim ) = 1.0;
+  vnl_matrix_fixed<double, Tdim,   proj_size_-1> base_jac, jac;
 
   // retrieve the projection matrix
   vnl_matrix_fixed<double, Tdim+1, Fdim+1> proj;
@@ -240,36 +281,9 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
         // map from point
         vnl_vector_fixed<double, Fdim> from = fi.from_feature()->location();
         from -= from_centre_;
-        map_homo_point<Tdim, Fdim>( homo, proj, from );
 
-        // linear gradient in homogeneous coordinate
-        // skip the ones corresponding to shift
-        for( unsigned index=0,i=0; i<Tdim+1; ++i,index+=(Fdim+1) )
-          for( unsigned j=0; j<Fdim; ++j ) {
-            jf( i, index+j ) = from[j];
-          }
-
-        // make division
-        const double homo_last_neg_sqr = -vnl_math_sqr(homo[Tdim]);
-        const double homo_last_div = 1.0/homo[Tdim];
-        for( unsigned i=0; i<Tdim; ++i )
-          jg(i,i) = homo_last_div;
-        for( unsigned i=0; i<Tdim; ++i )
-          jg(i,Tdim) = homo[i] / homo_last_neg_sqr;
-
-        // since Jab_g(f(p)) = Jac_g * Jac_f
-        complete_jac = jg * jf;
-
-        // remove the element being held as constant 1
-        const unsigned index = (index_row_*(Fdim+1)+index_col_);
-        for( unsigned i=0,j=0; i<param_num; ++i )
-          if( i != index ) {
-
-            for( unsigned k=0; k<Tdim; ++k )
-              base_jac(k, j) = complete_jac(k, i);
-
-            ++j;
-          }
+        // jacobian computation
+        proj_jacobian( base_jac, proj, from );
 
         for ( TIter ti=fi.begin(); ti!=fi.end(); ++ti ) {
           //vnl_double_2 to = ti.to_feature()->location();
@@ -281,7 +295,7 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
           // fill in
           for( unsigned i=0; i<Tdim; ++i,++ind ) {
 
-            for( unsigned j=0; j<param_num-1; ++j )
+            for( unsigned j=0; j<proj_size_-1; ++j )
               jacobian(ind,j) = jac(i, j);
           }
         }
@@ -330,23 +344,23 @@ projective_estimate( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
   // compute covariance
   // Jac^\top * Jac is INVERSE of the covariance
   //
-  const unsigned int param_num = (Fdim+1)*(Tdim+1);
-  vnl_matrix<double> jac(get_number_of_residuals(), param_num-1);
+  const unsigned int proj_size_ = (Fdim+1)*(Tdim+1);
+  vnl_matrix<double> jac(get_number_of_residuals(), proj_size_-1);
   this->gradf( p, jac );
   //
 
   // SVD decomposition:
   // Jac = U W V^\top
   vnl_svd<double> svd( jac, zero_svd_thres_ );
-  if ( svd.rank() < param_num-1 ) {
+  if ( svd.rank() < proj_size_-1 ) {
     vcl_cerr <<  "The covariance of projection matrix ranks less than "
-      << param_num-1 << "! " << vcl_endl ;
+      << proj_size_-1 << "! " << vcl_endl ;
     return false;
   }
 
   //invert the W matrix and square it
-  vnl_diag_matrix<double> invW( param_num-1 );
-  for( unsigned i=0; i<param_num-1; ++i )
+  vnl_diag_matrix<double> invW( proj_size_-1 );
+  for( unsigned i=0; i<proj_size_-1; ++i )
     invW[i] = vnl_math_sqr( 1.0/svd.W(i) );
 
   //compute inverse of Jac^\top * Jac
@@ -355,15 +369,15 @@ projective_estimate( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
   // convert the covar to full dof+1 matrix
   // fill in the row and column of the fixed element
   // with 0
-  full_covar.set_size( param_num, param_num );
+  full_covar.set_size( proj_size_, proj_size_ );
   full_covar.fill( 0.0 );
 
   const unsigned int param_index = index_row_*(Fdim+1) + index_col_;
-  for( unsigned i=0,ic=0; i<param_num; ++i ) {
+  for( unsigned i=0,ic=0; i<proj_size_; ++i ) {
 
     if( i==param_index ) continue;
 
-    for( unsigned j=0,jc=0; j<param_num; ++j ) {
+    for( unsigned j=0,jc=0; j<proj_size_; ++j ) {
 
       if( j==param_index ) continue;
       full_covar( i, j ) = covar( ic, jc );
@@ -453,22 +467,22 @@ projective_estimate( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
 //   // compute covariance
 //   // Jac^\top * Jac is INVERSE of the covariance
 //   //
-//   const unsigned int param_num = (Fdim+1)*(Tdim+1);
-//   vnl_matrix<double> jac(tot_num, param_num-1);
+//   const unsigned int proj_size_ = (Fdim+1)*(Tdim+1);
+//   vnl_matrix<double> jac(tot_num, proj_size_-1);
 //   proj_func.gradf( p, jac );
 //   //
 //
 //   // SVD decomposition:
 //   // Jac = U W V^\top
 //   vnl_svd<double> svd( jac, 1e-4 );
-//   if ( svd.rank() < param_num-1 ) {
+//   if ( svd.rank() < proj_size_-1 ) {
 //     WarningMacro( "The covariance of homography ranks less than 8! ");
 //     return 0;
 //   }
 //
 //   //invert the W matrix and square it
-//   vnl_diag_matrix<double> invW( param_num-1 );
-//   for( unsigned i=0; i<param_num-1; ++i )
+//   vnl_diag_matrix<double> invW( proj_size_-1 );
+//   for( unsigned i=0; i<proj_size_-1; ++i )
 //     invW[i] = vnl_math_sqr( 1.0/svd.W(i) );
 //
 //   //compute inverse of Jac^\top * Jac
@@ -477,14 +491,14 @@ projective_estimate( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
 //   // convert the covar to full dof+1 matrix
 //   // fill in the row and column of the fixed element
 //   // with 0
-//   full_covar.set_size( param_num, param_num );
+//   full_covar.set_size( proj_size_, proj_size_ );
 //
 //   const unsigned int param_index = index_row_*(Fdim+1) + index_col_;
-//   for( unsigned i=0,ic=0; i<param_num; ++i ) {
+//   for( unsigned i=0,ic=0; i<proj_size_; ++i ) {
 //
 //     if( i==param_index ) continue;
 //
-//     for( unsigned j=0;jc=0; j<param_num; ++j ) {
+//     for( unsigned j=0;jc=0; j<proj_size_; ++j ) {
 //
 //       if( j==param_index ) continue;
 //       full_covar( i, j ) = covar( ic, jc );

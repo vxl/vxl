@@ -59,15 +59,6 @@ class rgrl_est_proj_func
                        vnl_vector_fixed<double, Fdim>& from_centre,
                        vnl_vector_fixed<double, Tdim>& to_centre );
 
-  //: convert parameters
-  void convert_parameters( vnl_vector<double>& params,
-                           vnl_matrix_fixed<double, Tdim+1, Fdim+1> proj_matrix,
-                           vnl_vector_fixed<double, Fdim> const& fc,
-                           vnl_vector_fixed<double, Tdim> const& tc );
-  //: convert parameters
-  void restored_centered_proj( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj_matrix,
-                               vnl_vector<double> const& params );
-
   //: obj func value
   void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
 
@@ -75,13 +66,30 @@ class rgrl_est_proj_func
   void gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian);
 
  protected:
+
+  //: compute jacobian
+  void
+  proj_jacobian( vnl_matrix_fixed<double, Tdim, (Fdim+1)*(Tdim+1)-1>& base_jac,
+                 vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
+                 vnl_vector_fixed<double, Fdim>           const& from ) const;
+  //: convert parameters
+  void convert_parameters( vnl_vector<double>& params,
+                           vnl_matrix_fixed<double, Tdim+1, Fdim+1> proj_matrix,
+                           vnl_vector_fixed<double, Fdim> const& fc,
+                           vnl_vector_fixed<double, Tdim> const& tc );
+  //: convert parameters
+  void restored_centered_proj( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj_matrix,
+                               vnl_vector<double> const& params ) const;
+
+ protected:
+  static const unsigned int proj_size_ = (Tdim+1)*(Fdim+1);
+
   rgrl_set_of<rgrl_match_set_sptr> const* matches_ptr_;
   vnl_vector_fixed<double, Fdim>          from_centre_;
   vnl_vector_fixed<double, Tdim>          to_centre_;
 
   unsigned int index_row_;
   unsigned int index_col_;
-
   //: specify the maximum number of iterations for this estimator
   int max_num_iterations_;
 
