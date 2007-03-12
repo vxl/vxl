@@ -332,7 +332,7 @@ projective_estimate(  vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
   // SVD decomposition:
   // Jac = U W V^\top
   vnl_svd<double> svd( jac, this->zero_svd_thres_ );
-  if ( svd.rank() < param_num-1 ) {
+  if ( svd.rank() < int(param_num)-1 ) {
     vcl_cerr <<  "The covariance of projection matrix ranks less than "
       << param_num-1 << "! " << vcl_endl ;
     return false;
