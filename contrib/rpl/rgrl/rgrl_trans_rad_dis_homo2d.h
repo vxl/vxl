@@ -12,7 +12,7 @@
 
 //: Represents a 2D homography transformation with radial lens distortion
 //
-//  From image Distortion: 
+//  From image Distortion:
 //    Xu = (1+k1*R^2) Xd
 //  To image Distortion
 //    Yd = (1+k1*R^2) Yu
@@ -40,7 +40,7 @@ class rgrl_trans_rad_dis_homo2d
   //
   //  The  covariance matrix is a zero matrix.
   rgrl_trans_rad_dis_homo2d( vnl_matrix<double> const& H,
-                             double k1_from, 
+                             double k1_from,
                              double k1_to,
                              vnl_vector<double> const& from_centre,
                              vnl_vector<double> const& to_centre );
@@ -56,9 +56,6 @@ class rgrl_trans_rad_dis_homo2d
 
   vnl_matrix<double> transfer_error_covar( vnl_vector<double> const& p  ) const;
 
-  //: The H matrix of the transform
-  vnl_matrix_fixed<double, 3, 3> const& H() const { return H_; }
-
   //: radial distortion term on From image
   double k1_from() const { return k1_from_; }
 
@@ -67,10 +64,10 @@ class rgrl_trans_rad_dis_homo2d
 
   //: From center
   vnl_vector<double> from_centre() const { return from_centre_.as_ref(); }
-  
+
   //: To center
   vnl_vector<double> to_centre() const { return to_centre_.as_ref(); }
-  
+
   //: Inverse map using pseudo-inverse of H_.
   void inv_map( const vnl_vector<double>& to,
                 vnl_vector<double>& from ) const;
@@ -87,6 +84,13 @@ class rgrl_trans_rad_dis_homo2d
   //:  transform the transformation for images of different resolution
   rgrl_transformation_sptr scale_by( double scale ) const;
 
+  //: The H matrix of the transform
+  vnl_matrix_fixed<double, 3, 3> const& H() const { return H_; }
+
+  // uncenter H matrix
+  vnl_matrix_fixed<double, 3, 3>
+  uncenter_H_matrix( ) const;
+
   // Defines type-related functions
   rgrl_type_macro( rgrl_trans_rad_dis_homo2d, rgrl_transformation );
 
@@ -98,10 +102,6 @@ class rgrl_trans_rad_dis_homo2d
 
   //: make a clone copy
   rgrl_transformation_sptr clone() const;
-
-  // uncenter H matrix
-  vnl_matrix_fixed<double, 3, 3>  
-  uncenter_H_matrix( ) const;
 
  protected:
   void map_loc( vnl_vector<double> const& from,

@@ -322,16 +322,16 @@ rgrl_trans_rad_dis_homo2d::
 scale_by( double scale ) const
 {
   vnl_matrix_fixed<double,3,3> new_H( H_ );
-  
+
   // scale
   new_H(0,2) *= scale;
   new_H(1,2) *= scale;
-  
+
   // move the scale on the fixed coordinate,
   // and divide the 3rd row by this scale
-  new_H(2,0) /= scale; 
-  new_H(2,1) /= scale; 
-  
+  new_H(2,0) /= scale;
+  new_H(2,1) /= scale;
+
   // normalize
   new_H /= new_H.fro_norm();
 
@@ -344,14 +344,37 @@ scale_by( double scale ) const
   double k1_from = k1_from_ / sq_scale;
   double k1_to = k1_to_ / sq_scale;
 
-  rgrl_transformation_sptr xform 
-    =  new rgrl_trans_rad_dis_homo2d( new_H.as_ref(), 
+  rgrl_transformation_sptr xform
+    =  new rgrl_trans_rad_dis_homo2d( new_H.as_ref(),
                                       k1_from, k1_to,
-                                      vnl_matrix<double>(), 
+                                      vnl_matrix<double>(),
                                       from.as_ref(), to.as_ref() );
   xform->set_scaling_factors( this->scaling_factors() );
   return xform;
-  
+
+}
+
+vnl_matrix_fixed<double, 3, 3>
+rgrl_trans_rad_dis_homo2d::
+uncenter_H_matrix( ) const
+{
+  vnl_matrix_fixed<double, 3, 3> H;
+
+  // uncenter To image
+  vnl_matrix_fixed<double, 3, 3> to_inv;
+  to_inv.set_identity();
+  to_inv(0,2) = to_centre_[0];
+  to_inv(1,2) = to_centre_[1];
+
+  // uncenter From image
+  vnl_matrix_fixed<double, 3, 3> from_matrix;
+  from_matrix.set_identity();
+  from_matrix(0,2) = -from_centre_[0];
+  from_matrix(1,2) = -from_centre_[1];
+
+  H = to_inv * H_ * from_matrix;
+
+  return H;
 }
 
 rgrl_transformation_sptr
@@ -413,7 +436,7 @@ read(vcl_istream& is )
 }
 
 //: make a clone copy
-rgrl_transformation_sptr 
+rgrl_transformation_sptr
 rgrl_trans_rad_dis_homo2d::
 clone() const
 {
