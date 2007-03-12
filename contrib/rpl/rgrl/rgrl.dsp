@@ -453,7 +453,7 @@ SOURCE=.\Templates/rgrl_feature_set_bins+3.cxx
 SOURCE=.\Templates/rgrl_est_proj_func+2.2-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/rgrl_est_proj_func+3.2-.cxx
+SOURCE=.\Templates/rgrl_est_proj_func+2.3-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
