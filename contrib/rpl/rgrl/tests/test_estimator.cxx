@@ -11,6 +11,7 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_double_3.h>
+#include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_math.h>
 
@@ -35,6 +36,7 @@
 #include <rgrl/rgrl_est_homography2d.h>
 #include <rgrl/rgrl_est_homo2d_lm.h>
 #include <rgrl/rgrl_est_homo2d_proj.h>
+#include <rgrl/rgrl_est_homo2d_proj_rad.h>
 #include <rgrl/rgrl_trans_homography2d.h>
 #include <rgrl/rgrl_trans_rad_dis_homo2d.h>
 #include <rgrl/rgrl_est_dis_homo2d_lm.h>
@@ -1849,6 +1851,94 @@ static  vnl_random random;
   }
 
   void
+  test_homo2d_rad_points_on_circle(rgrl_estimator_sptr estimator,
+                                   vnl_double_2 const& camera_centre)
+  {
+    vnl_double_3x3 H;
+    H.set_identity();
+    const double tol = 1e-6;
+
+    // Test projective transform
+    H(0,2) = -4;
+    H(1,2) = 2;
+    H(2,2) = 1;
+    H(0,0) = 2*vcl_cos(vnl_math::pi/3);
+    //H(1,0) = -H(0,1);
+    H(0,1) = -5; H(1,1) = -1.5;
+    H(2,0) = 0.5; H(2,1) = -2;
+     H /= H.array_two_norm();
+
+    vcl_vector<double> radk( 1, 1e-4 );
+
+    vcl_cout<<"Original H =\n"<< H
+      << "with k: " << radk[0]
+      << " at camera centre " << camera_centre
+      <<vcl_endl;
+
+    vcl_vector< vnl_vector<double> > p, q;
+
+
+    vnl_double_2 pt, mapped, centre_mapped;
+    const double c = 20;
+    bool xform_is_good=true;
+
+    for ( unsigned int num=12; num<100; num+=10 )
+    {
+      //reset points
+      p.clear();
+      q.clear();
+      // create points on a circle
+      for ( unsigned int i=0; i<num; ++i ) {
+        const double angle = double(i)/double(num)*2*vnl_math::pi;
+        pt[0] = c*vcl_cos(angle);
+        pt[1] = c*vcl_sin(angle);
+        p.push_back(pt);
+        // Map point
+        inhomo_map( mapped.as_ref().non_const(), H.as_ref(), pt.as_ref() );
+        centre_mapped = mapped - camera_centre;
+        mapped += radk[0]*centre_mapped.squared_magnitude()*centre_mapped;
+        q.push_back(mapped);
+      }
+
+      // create match set
+      rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id());
+
+      for (unsigned int i=0; i < num; ++i) {
+        ms->add_feature_and_match( new rgrl_feature_point(p[i]), 0,
+                                   new rgrl_feature_point(q[i]) );
+      }
+
+      // error STD = 1
+      {
+        vnl_matrix<double> perturbed_H( H ), est_H;
+        const double err_std = 1;
+        for ( unsigned i=0; i<3; ++i )
+          for ( unsigned j=0; j<3; ++j )
+            perturbed_H( 0, 0 ) += random.drand32()*err_std;
+        rgrl_transformation_sptr init_trans = new rgrl_trans_homography2d( perturbed_H );
+
+        //estimate
+        rgrl_transformation_sptr est = estimator->estimate( ms, *init_trans);
+        rgrl_trans_rad_dis_homo2d* homo_est
+          = rgrl_cast<rgrl_trans_rad_dis_homo2d*>(est.as_pointer());
+        est_H = homo_est->uncenter_H_matrix();
+        est_H /= est_H.array_two_norm();
+        if ( est_H(0,0) < 0 ) est_H *= -1;
+
+        if ( (est_H-H).array_two_norm() > tol) {
+          vcl_cout<<"Incorrect estimated H = "<<est_H<<vcl_endl;
+          xform_is_good = false;
+        }
+        if( vcl_abs(homo_est->k1_to() - radk[0]) > tol ) {
+          vcl_cout << "Incorrect estimated k1 = " << homo_est->k1_to() << vcl_endl;
+          xform_is_good = false;
+        }
+      }
+    }
+    TEST("Estimation of Projective xform with rad distortion", xform_is_good, true);
+  }
+
+  void
   test_homography2d_points_on_circle_w_noise( rgrl_estimator_sptr estimator,
                                               double noise_level,
                                               double tol_xform,
@@ -2027,6 +2117,7 @@ MAIN( test_estimator )
   test_est_rigid();
   test_homography2d();
 
+  // old homography estimator
   {
     rgrl_estimator_sptr estimator = new rgrl_est_homo2d_lm();
     estimator->set_debug_flag(5);
@@ -2037,6 +2128,7 @@ MAIN( test_estimator )
     test_homography2d_points_on_circle_w_noise(estimator, 0.1, 0.1, 0.005);
   }
 
+  // new homography estimator
   {
     rgrl_estimator_sptr estimator = new rgrl_est_homo2d_proj();
     //estimator->set_debug_flag(5);
@@ -2045,6 +2137,35 @@ MAIN( test_estimator )
     test_homography2d_points_on_circle( estimator );
     test_homography2d_points_on_circle_w_noise(estimator, 0.0, 1e-9, 1e-9);
     test_homography2d_points_on_circle_w_noise(estimator, 0.1, 0.1, 0.005);
+  }
+
+  // new homography+radial distortion estimator
+  {
+    vnl_double_2 camera_centre( 0.0, 0.0 );
+    vcl_cout << "using camera centre " << camera_centre << vcl_endl;
+
+    rgrl_est_homo2d_proj_rad* homo2d_rad_est
+      = new rgrl_est_homo2d_proj_rad( camera_centre );
+    homo2d_rad_est->set_rel_thres( 1e-6 );
+    homo2d_rad_est->set_max_num_iter( 5000 );
+    //estimator->set_debug_flag(5);
+
+    rgrl_estimator_sptr estimator = homo2d_rad_est;
+    test_homo2d_rad_points_on_circle( estimator, camera_centre );
+  }
+  // new homography+radial distortion estimator
+  {
+    vnl_double_2 camera_centre( 5.0, 10.0 );
+    vcl_cout << "using camera centre " << camera_centre << vcl_endl;
+
+    rgrl_est_homo2d_proj_rad* homo2d_rad_est
+      = new rgrl_est_homo2d_proj_rad( camera_centre );
+    homo2d_rad_est->set_rel_thres( 1e-6 );
+    homo2d_rad_est->set_max_num_iter( 5000 );
+    //estimator->set_debug_flag(5);
+
+    rgrl_estimator_sptr estimator = homo2d_rad_est;
+    test_homo2d_rad_points_on_circle( estimator, camera_centre );
   }
 
   SUMMARY();
