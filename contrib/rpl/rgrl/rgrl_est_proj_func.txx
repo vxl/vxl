@@ -74,8 +74,8 @@ rgrl_est_proj_func( rgrl_set_of<rgrl_match_set_sptr> const& matches,
                               with_grad ? use_gradient : no_gradient ),
   matches_ptr_( &matches ),
   from_centre_(double(0)), to_centre_(double(0)),
-  max_num_iterations_(50),
   index_row_(0), index_col_(0),
+  max_num_iterations_(50),
   relative_threshold_(1e-8),
   zero_svd_thres_(1e-4)
 {
