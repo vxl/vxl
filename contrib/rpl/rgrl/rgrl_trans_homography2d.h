@@ -40,9 +40,6 @@ class rgrl_trans_homography2d
 
   vnl_matrix<double> transfer_error_covar( vnl_vector<double> const& p  ) const;
 
-  //: The scaling and rotation component of the transform
-  vnl_matrix_fixed<double, 3, 3> H() const;
-
   //: Inverse map using pseudo-inverse of H_.
   void inv_map( const vnl_vector<double>& to,
                 vnl_vector<double>& from ) const;
@@ -80,6 +77,9 @@ class rgrl_trans_homography2d
 
   //: make a clone copy
   rgrl_transformation_sptr clone() const;
+
+  //: The scaling and rotation component of the transform
+  vnl_matrix_fixed<double, 3, 3> H() const;
 
   // uncenter H matrix
   vnl_matrix_fixed<double,3,3> uncenter_H_matrix() const;

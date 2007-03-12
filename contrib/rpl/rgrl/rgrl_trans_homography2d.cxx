@@ -360,33 +360,33 @@ rgrl_trans_homography2d::
 scale_by( double scale ) const
 {
   vnl_matrix_fixed<double,3,3> new_H( H_ );
-  
+
   // scale
   new_H(0,2) *= scale;
   new_H(1,2) *= scale;
-  
+
   // move the scale on the fixed coordinate,
   // and divide the 3rd row by this scale
-  new_H(2,0) /= scale; 
-  new_H(2,1) /= scale; 
-  
+  new_H(2,0) /= scale;
+  new_H(2,1) /= scale;
+
   // normalize
   new_H /= new_H.fro_norm();
-  
+
   // centers
   vnl_vector_fixed<double,2> from = from_centre_ * scale;
   vnl_vector_fixed<double,2> to = to_centre_ * scale;
 
-  rgrl_transformation_sptr xform 
-    =  new rgrl_trans_homography2d( new_H.as_ref(), 
-                                    vnl_matrix<double>(), 
+  rgrl_transformation_sptr xform
+    =  new rgrl_trans_homography2d( new_H.as_ref(),
+                                    vnl_matrix<double>(),
                                     from.as_ref(), to.as_ref() );
   xform->set_scaling_factors( this->scaling_factors() );
   return xform;
 }
 
 //: make a clone copy
-rgrl_transformation_sptr 
+rgrl_transformation_sptr
 rgrl_trans_homography2d::
 clone() const
 {
