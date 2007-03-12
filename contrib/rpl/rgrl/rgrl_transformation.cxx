@@ -15,6 +15,7 @@
 #include <vnl/vnl_cross.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_2.h>
+#include <vnl/algo/vnl_symmetric_eigensystem.h>
 
 rgrl_transformation::
 rgrl_transformation( const vnl_matrix<double>& cov )
@@ -224,6 +225,98 @@ map_intensity( vnl_vector<double> const& /*from*/,
   return intensity;
 }
 
+double
+rgrl_transformation::
+log_det_covar() const 
+{ 
+  return log_det_sym_matrix( covar_ );
+}
+
+double
+rgrl_transformation::
+log_det_sym_matrix( vnl_matrix<double> const& m ) const
+{
+  assert( m.rows() && m.cols() );
+  assert( m.rows() == m.cols() );
+  
+  // when computing the log of determinant,
+  // because determinant is the product of all eigen-values,
+  // and because a log is taken, 
+  // we go around it and do a sum on the log of *each* of the
+  // eigen-values.
+  
+  double result = 0;
+  vnl_symmetric_eigensystem<double> eig(m);
+  for( unsigned i=0; i<m.rows(); ++i )
+    result += vcl_log( eig.get_eigenvalue(i) );
+  return result;
+}
+
+double
+rgrl_transformation::
+log_det_covar_deficient( int rank ) const
+{
+  // first, scan the matrix and eleminate 
+  // rows and columns containing only zeros
+  vcl_vector<unsigned int> zero_indices;
+  for( unsigned i=0; i<covar_.rows(); ++i )
+    if( !covar_(i,i) ) {
+      
+      // scan the whole row
+      bool all_zero=true;
+      for( unsigned j=0; j<covar_.cols()&&all_zero; ++j )
+        if( covar_(i,j) )
+          all_zero=false;
+      
+      if( all_zero )
+        zero_indices.push_back( i );
+    }
+  
+  vnl_matrix<double> m;
+  
+  if( !zero_indices.empty() ) {
+    
+    // put together a new matrix without the rows and 
+    // columns of zeros
+    const unsigned int num = covar_.rows() - zero_indices.size();
+    m.set_size( num, num );
+    for( unsigned i=0,ic=0,iz=0; i<covar_.rows(); ++i ) {
+      
+      if( iz<zero_indices.size() && i == zero_indices[iz] ) {
+        ++iz;
+        continue;
+      }
+      
+      for( unsigned j=0,jc=0,jz=0; j<covar_.cols(); ++j ) {
+        
+        if( jz<zero_indices.size() && j == zero_indices[jz] ) {
+          ++jz;
+          continue;
+        }
+        m( ic, jc ) = covar_( i, j );
+        
+        ++jc;
+      }
+      
+      ++ic;
+    }
+  } else
+    m = covar_;
+    
+  // compute the log of determinant with the largest [rank] eigenvalues
+  const unsigned int num = m.rows();
+  
+  // by default
+  if( rank <= 0 )
+    rank = num;
+    
+  double result = 0;
+  vnl_symmetric_eigensystem<double> eig(m);
+  for( unsigned i=0; i<num && i<rank; ++i )
+    result += vcl_log( eig.get_eigenvalue(num-i) );
+  return result;
+}
+ 
 //:  Parameter covariance matrix
 vnl_matrix<double>
 rgrl_transformation::

@@ -120,6 +120,10 @@ class rgrl_transformation
   //:  Parameter covariance matrix
   vnl_matrix<double> covar() const;
 
+  //: log of determinant of the covariance
+  virtual double
+  log_det_covar() const;
+  
   //:  set parameter covariance matrix
   void set_covar( const vnl_matrix<double>& covar );
 
@@ -186,6 +190,14 @@ class rgrl_transformation
                 vnl_vector<double> const& from_dir,
                 vnl_vector<double>      & to_dir    ) const = 0;
 
+  //: a slightly better way of computing log of determinant
+  double
+  log_det_sym_matrix( vnl_matrix<double> const& m ) const;
+  
+  //: compute the log of determinant of the covariance when the matrix is rank deficient
+  double
+  log_det_covar_deficient( int rank ) const;
+  
  protected:
 
   //: covariance matrix

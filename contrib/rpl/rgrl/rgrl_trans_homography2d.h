@@ -66,6 +66,11 @@ class rgrl_trans_homography2d
   //:  transform the transformation for images of different resolution
   rgrl_transformation_sptr scale_by( double scale ) const;
 
+  //: log of determinant of the covariance
+  virtual double
+  log_det_covar() const
+  { return log_det_covar_deficient( 8 ); }
+
   // Defines type-related functions
   rgrl_type_macro( rgrl_trans_homography2d, rgrl_transformation );
 

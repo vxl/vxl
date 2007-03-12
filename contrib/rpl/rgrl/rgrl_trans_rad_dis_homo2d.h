@@ -91,6 +91,11 @@ class rgrl_trans_rad_dis_homo2d
   vnl_matrix_fixed<double, 3, 3>
   uncenter_H_matrix( ) const;
 
+  //: log of determinant of the covariance
+  virtual double
+  log_det_covar() const
+  { return log_det_covar_deficient( 10 ); }
+
   // Defines type-related functions
   rgrl_type_macro( rgrl_trans_rad_dis_homo2d, rgrl_transformation );
 
