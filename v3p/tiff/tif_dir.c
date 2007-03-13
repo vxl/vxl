@@ -947,20 +947,21 @@ _TIFFVGetField(TIFF* tif, ttag_t tag, va_list ap)
 
                 if( tv->info->field_tag != tag )
                     continue;
-
-                if( fip->field_passcount )
+                
+                if( fip->field_type == TIFF_ASCII )
+                {
+                    *va_arg(ap, void **) = tv->value;
+                    ret_val = 1;
+                    break;
+                }
+                else if(fip->field_passcount )
                 {
                     *va_arg(ap, u_short *) = (u_short) tv->count;
                     *va_arg(ap, void **) = tv->value;
                     ret_val = 1;
                     break;
                 }
-                else if( fip->field_type == TIFF_ASCII )
-                {
-                    *va_arg(ap, void **) = tv->value;
-                    ret_val = 1;
-                    break;
-                }
+                
                 else
                 {
                     printf( "TIFFVGetField ... pass by value not imp.\n" );
