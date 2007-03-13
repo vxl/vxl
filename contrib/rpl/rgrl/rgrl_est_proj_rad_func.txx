@@ -130,7 +130,7 @@ proj_rad_jacobian( vnl_matrix<double>                            & base_jac,
   // 2. gradient w.r.t to mapped location
   vnl_matrix_fixed<double, Tdim, Tdim >  dD_dx;
   vnl_vector_fixed<double, Tdim> mapped;
-  rgrl_est_proj_map_inhomo_point<Tdim, Fdim>( mapped, proj, from-from_centre_ );
+  rgrl_est_proj_map_inhomo_point<Tdim, Fdim>( mapped, proj, from-this->from_centre_ );
 
   vnl_vector_fixed<double, Tdim> centred = mapped-image_centre_;
   const double radial_dist = centred.squared_magnitude();

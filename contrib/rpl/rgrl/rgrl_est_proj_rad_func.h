@@ -55,12 +55,12 @@ class rgrl_est_proj_rad_func
   {
   
     vnl_vector_fixed<double, Tdim> proj_mapped;
-    rgrl_est_proj_map_inhomo_point<Tdim, Fdim>( proj_mapped, proj, from-from_centre_ );
+    rgrl_est_proj_map_inhomo_point<Tdim, Fdim>( proj_mapped, proj, from-this->from_centre_ );
     
     // apply radial distortion
     apply_radial_distortion( mapped, proj_mapped, rad_k );
     
-    mapped += to_centre_;  
+    mapped += this->to_centre_;  
   }
   
 protected:
