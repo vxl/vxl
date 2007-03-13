@@ -62,23 +62,6 @@ bool vil_geotiff_header::gtif_pixelscale(double &scale_x, double &scale_y, doubl
   return false;
 }
 
-/*bool vil_geotiff_header::gtif_pixel_scale(vcl_vector<double> &scale)
-{
-  // read the scale tag 
-  double *data;
-	short count;
-  if (!TIFFGetField(tif_, GTIFF_PIXELSCALE, &count, &data )) {
-    return false;
-    //vcl_cout << count << " " << data[0] << " " << data[1] << " " << data[2] << vcl_endl;
-  }
-
-  for (int i=0; i<count; i++) {
-    scale.push_back(data[i]);
-  }
-
-  return true;
-}*/
-
 bool vil_geotiff_header::gtif_trans_matrix (vnl_matrix<double> &trans_matrix) 
 {
   double *data;
