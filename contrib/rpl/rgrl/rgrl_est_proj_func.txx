@@ -20,48 +20,6 @@
 
 #include <vcl_cassert.h>
 
-namespace
-{
-  template <unsigned int Tdim, unsigned int Fdim>
-  inline
-  void
-  map_homo_point( vnl_vector_fixed<double, Tdim+1>& mapped,
-                  vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
-                  vnl_vector_fixed<double, Fdim> const& loc )
-  {
-    for ( unsigned i=0; i<Tdim+1; ++i ) {
-      // shift term
-      mapped[i] = proj(i, Fdim);
-
-      for ( unsigned j=0; j<Fdim; ++j )
-        mapped[i] += loc[j] * proj(i,j);
-    }
-  }
-
-  template <unsigned int Tdim, unsigned int Fdim>
-  inline
-  void
-  map_inhomo_point( vnl_vector_fixed<double, Tdim>& mapped,
-                    vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
-                    vnl_vector_fixed<double, Fdim> const& loc )
-  {
-    vnl_vector_fixed<double, Tdim+1> tmp;
-
-    // map homo point
-    for ( unsigned i=0; i<Tdim+1; ++i ) {
-      // shift term
-      tmp[i] = proj(i, Fdim);
-
-      for ( unsigned j=0; j<Fdim; ++j )
-        tmp[i] += loc[j] * proj(i,j);
-    }
-
-    // get inhomo point
-    for ( unsigned i=0; i<Tdim; ++i )
-      mapped[i] = tmp[i]/tmp[Tdim];
-  }
-}
-
 template <unsigned int Tdim, unsigned int Fdim>
 rgrl_est_proj_func<Tdim, Fdim>::
 rgrl_est_proj_func( rgrl_set_of<rgrl_match_set_sptr> const& matches,
@@ -130,6 +88,27 @@ convert_parameters( vnl_vector<double>& params,
     }
 }
 
+//: uncenter projection matrix
+template <unsigned int Tdim, unsigned int Fdim>
+vnl_matrix_fixed<double, Tdim+1, Fdim+1>
+rgrl_est_proj_func<Tdim, Fdim>::
+uncentre_proj( vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj ) const
+{
+
+  // make the prejection matrix to centre around from_centre_
+  vnl_matrix_fixed<double, Fdim+1, Fdim+1> from_centre_matrix;
+  from_centre_matrix.set_identity();
+  for ( unsigned i=0; i<Fdim; ++i )
+    from_centre_matrix( i, Fdim ) = - from_centre_[i];
+
+  vnl_matrix_fixed<double, Tdim+1, Tdim+1> to_centre_matrix;
+  to_centre_matrix.set_identity();
+  for ( unsigned i=0; i<Tdim; ++i )
+    to_centre_matrix( i, Tdim ) = to_centre_[i];
+
+  return to_centre_matrix * proj * from_centre_matrix;
+}
+
 template <unsigned int Tdim, unsigned int Fdim>
 void
 rgrl_est_proj_func<Tdim, Fdim>::
@@ -137,12 +116,15 @@ proj_jacobian( vnl_matrix_fixed<double, Tdim, (Fdim+1)*(Tdim+1)-1>& base_jac,
                vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
                vnl_vector_fixed<double, Fdim>           const& from ) const
 {
+  // subtract centre
+  const vnl_vector_fixed<double, Fdim> from_centred = from-from_centre_;
+  
   vnl_vector_fixed<double, Tdim+1> homo;
   vnl_matrix_fixed<double, Tdim,   proj_size_>   complete_jac;
   vnl_matrix_fixed<double, Tdim+1, proj_size_>   jf(0.0);    // grad in homogeneous coordinate
   vnl_matrix_fixed<double, Tdim,   Tdim+1>       jg(0.0);    // grad of division, [u/w, v/w]^T
 
-  map_homo_point<Tdim, Fdim>( homo, proj, from );
+  rgrl_est_proj_map_homo_point<Tdim, Fdim>( homo, proj, from_centred );
 
   // 1. linear gradient in homogeneous coordinate
   // fill jf (linear gradient) with 1.0 on elements corresponding to shift
@@ -152,7 +134,7 @@ proj_jacobian( vnl_matrix_fixed<double, Tdim, (Fdim+1)*(Tdim+1)-1>& base_jac,
   // skip the ones corresponding to shift
   for ( unsigned index=0,i=0; i<Tdim+1; ++i,index+=(Fdim+1) )
     for ( unsigned j=0; j<Fdim; ++j ) {
-      jf( i, index+j ) = from[j];
+      jf( i, index+j ) = from_centred[j];
     }
 
   // 2. gradient of making division
@@ -220,7 +202,7 @@ f(vnl_vector<double> const& x, vnl_vector<double>& fx)
         // map from point
         vnl_vector_fixed<double, Fdim> from = fi.from_feature()->location();
         from -= from_centre_;
-        map_inhomo_point<Tdim, Fdim>( mapped, proj, from );
+        rgrl_est_proj_map_inhomo_point<Tdim, Fdim>( mapped, proj, from );
 
         for ( TIter ti=fi.begin(); ti!=fi.end(); ++ti ) {
           vnl_vector_fixed<double, Tdim> to = ti.to_feature()->location();
@@ -267,7 +249,6 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
       {
         // map from point
         vnl_vector_fixed<double, Fdim> from = fi.from_feature()->location();
-        from -= from_centre_;
 
         // jacobian computation
         proj_jacobian( base_jac, proj, from );

@@ -12,6 +12,48 @@
 #include <rgrl/rgrl_fwd.h>
 #include <rgrl/rgrl_match_set_sptr.h>
 
+//: mapping of homogenous points
+template <unsigned int Tdim, unsigned int Fdim>
+inline
+void
+rgrl_est_proj_map_homo_point( vnl_vector_fixed<double, Tdim+1>& mapped,
+                vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
+                vnl_vector_fixed<double, Fdim> const& loc )
+{
+  for ( unsigned i=0; i<Tdim+1; ++i ) {
+    // shift term
+    mapped[i] = proj(i, Fdim);
+
+    for ( unsigned j=0; j<Fdim; ++j )
+      mapped[i] += loc[j] * proj(i,j);
+  }
+}
+
+//: mapping of inhomogenous points
+template <unsigned int Tdim, unsigned int Fdim>
+inline
+void
+rgrl_est_proj_map_inhomo_point( vnl_vector_fixed<double, Tdim>& mapped,
+                  vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
+                  vnl_vector_fixed<double, Fdim> const& loc )
+{
+  vnl_vector_fixed<double, Tdim+1> tmp;
+
+  // map homo point
+  for ( unsigned i=0; i<Tdim+1; ++i ) {
+    // shift term
+    tmp[i] = proj(i, Fdim);
+
+    for ( unsigned j=0; j<Fdim; ++j )
+      tmp[i] += loc[j] * proj(i,j);
+  }
+
+  // get inhomo point
+  for ( unsigned i=0; i<Tdim; ++i )
+    mapped[i] = tmp[i]/tmp[Tdim];
+}
+
+//:a generic class to estimate a homogeneous projection matrix using L-M
 template <unsigned int Tdim, unsigned int Fdim>
 class rgrl_est_proj_func
 : public vnl_least_squares_function
@@ -21,12 +63,12 @@ class rgrl_est_proj_func
   rgrl_est_proj_func( rgrl_set_of<rgrl_match_set_sptr> const& matches,
                       bool with_grad = true );
 
-  // void set_centres( vnl_vector_fixed<double, Fdim> const& fc,
-  //                   vnl_vector_fixed<double, Tdim> const& tc )
-  // {
-  //   from_centre_ = fc;
-  //   to_centre_ = tc;
-  // }
+   void set_centres( vnl_vector_fixed<double, Fdim> const& fc,
+                     vnl_vector_fixed<double, Tdim> const& tc )
+   {
+     from_centre_ = fc;
+     to_centre_ = tc;
+   }
 
   //: set max number of iterations
   void set_max_num_iter( int max )
@@ -64,6 +106,21 @@ class rgrl_est_proj_func
 
   //: Jacobian
   void gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian);
+
+  //: uncentre projection matrix
+  vnl_matrix_fixed<double, Tdim+1, Fdim+1>
+  uncentre_proj( vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj ) const;
+
+  //: map a location
+  inline
+  void
+  map_loc( vnl_vector_fixed<double, Tdim>& mapped, 
+           vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
+           vnl_vector_fixed<double, Fdim> const& from  ) const
+  {
+    rgrl_est_proj_map_inhomo_point<Tdim, Fdim>( mapped, proj, from-from_centre_ );
+    mapped += to_centre_;  
+  }
 
  protected:
 
