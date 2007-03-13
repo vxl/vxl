@@ -176,7 +176,7 @@ reduced_proj_rad_jacobian( vnl_matrix<double>                            & base_
   dP_dp = dD_dx * dP_dp;
 
   for( unsigned i=0; i<Tdim; ++i )
-    for( unsigned j=0; j<proj_dof; ++j )
+    for( unsigned j=0; j<dP_dp.cols(); ++j )
       base_jac( i, j ) = dP_dp( i, j );
 
   // 3. gradient w.r.t to k
@@ -259,7 +259,7 @@ full_proj_rad_jacobian( vnl_matrix<double>                            & base_jac
   dP_dp = dD_dx * dP_dp;
 
   for( unsigned i=0; i<Tdim; ++i )
-    for( unsigned j=0; j<this->proj_size_; ++j )
+    for( unsigned j=0; j<dP_dp.cols(); ++j )
       base_jac( i, j ) = dP_dp( i, j );
 
   // 3. gradient w.r.t to k
