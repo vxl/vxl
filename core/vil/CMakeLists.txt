@@ -47,12 +47,22 @@ ENDIF(ECW_FOUND)
 
 INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
 IF(TIFF_FOUND)
-  INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
+  INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR}) 
   SET( HAS_TIFF 1 )
   SET( vil_sources ${vil_sources}
     file_formats/vil_tiff.cxx file_formats/vil_tiff.h
     file_formats/vil_tiff_header.cxx file_formats/vil_tiff_header.h
-  )
+  ) 
+  INCLUDE( ${MODULE_PATH}/FindGEOTIFF.cmake)
+  IF(GEOTIFF_FOUND)
+    INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR}) 
+    SET( HAS_GEOTIFF 1 )
+    SET( vil_sources ${vil_sources}
+      file_formats/vil_geotiff_header.cxx file_formats/vil_geotiff_header.h
+    )
+  ELSE(GEOTIFF_FOUND)
+    SET( HAS_GEOTIFF 0 )
+  ENDIF(GEOTIFF_FOUND)	
 ELSE(TIFF_FOUND)
   SET( HAS_TIFF 0 )
 ENDIF(TIFF_FOUND)
@@ -245,7 +255,7 @@ IF(JPEG_FOUND)
   TARGET_LINK_LIBRARIES( vil ${JPEG_LIBRARIES} )
 ENDIF(JPEG_FOUND)
 IF(TIFF_FOUND)
-  TARGET_LINK_LIBRARIES( vil ${TIFF_LIBRARIES} )
+  TARGET_LINK_LIBRARIES( vil ${TIFF_LIBRARIES} ${GEOTIFF_LIBRARIES}) 
 ENDIF(TIFF_FOUND)
 IF(PNG_FOUND)
   TARGET_LINK_LIBRARIES( vil ${PNG_LIBRARIES} )
