@@ -28,7 +28,7 @@ rgrl_est_proj_rad_func<Tdim, Fdim>::
 rgrl_est_proj_rad_func( rgrl_set_of<rgrl_match_set_sptr> const& matches,
                         unsigned int camera_dof,
                         bool with_grad )
-: rgrl_est_proj_func<Tdim, Fdim>( matches ),
+: rgrl_est_proj_func<Tdim, Fdim>( matches, with_grad ),
   camera_dof_(camera_dof),
   image_centre_(double(0))
 {
@@ -40,6 +40,21 @@ rgrl_est_proj_rad_func( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   temp_rad_k_.resize( camera_dof_ );
 }
 
+template <unsigned int Tdim, unsigned int Fdim>
+rgrl_est_proj_rad_func<Tdim, Fdim>::
+rgrl_est_proj_rad_func( unsigned int camera_dof,
+                        bool with_grad )
+: rgrl_est_proj_func<Tdim, Fdim>( with_grad ),
+  camera_dof_(camera_dof),
+  image_centre_(double(0))
+{
+  //modify the dof in vnl_least_squares_function
+  vnl_least_squares_function::init(this->proj_size_-1+camera_dof_,
+                                   this->get_number_of_residuals() );
+
+  // temperary storage space
+  temp_rad_k_.resize( camera_dof_ );
+}
 
 //: convert parameters
 template <unsigned int Tdim, unsigned int Fdim>
@@ -383,9 +398,16 @@ projective_estimate(  vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
                       vnl_vector_fixed<double, Tdim> const& camera_centre)
 {
   // compute weighted centres
-  rgrl_est_compute_weighted_centres( *this->matches_ptr_,
-                                     this->from_centre_.as_ref().non_const(),
-                                     this->to_centre_.as_ref().non_const() );
+  // this function is going to resize the vnl_vector, use temporary ones instead
+  vnl_vector<double> fc, tc;
+  if( !rgrl_est_compute_weighted_centres( *matches_ptr_, fc, tc ) ) {
+  
+	return false;
+  }
+  assert( fc.size() == from_centre.size() );
+  assert( tc.size() == to_centre.size() );
+  from_centre = fc;
+  to_centre = tc;
 
   // convert parameters
   vnl_vector<double> p;

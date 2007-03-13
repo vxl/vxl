@@ -23,6 +23,10 @@ class rgrl_est_proj_rad_func
                           unsigned int camera_dof,
                           bool with_grad = true );
 
+  //: ctor without matches
+  rgrl_est_proj_rad_func( unsigned int camera_dof,
+                          bool with_grad = true );
+
   //: estimate the projective transformation and the associated covariance
   bool
   projective_estimate( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,

@@ -14,12 +14,15 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_transpose.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/algo/vnl_svd.h>
 
 #include <vcl_cassert.h>
 
+const static unsigned int maxval_unsigned = vnl_numeric_traits<unsigned int>::maxval;
+  
 template <unsigned int Tdim, unsigned int Fdim>
 rgrl_est_proj_func<Tdim, Fdim>::
 rgrl_est_proj_func( rgrl_set_of<rgrl_match_set_sptr> const& matches,
@@ -29,9 +32,24 @@ rgrl_est_proj_func( rgrl_set_of<rgrl_match_set_sptr> const& matches,
                               with_grad ? use_gradient : no_gradient ),
   matches_ptr_( &matches ),
   from_centre_(double(0)), to_centre_(double(0)),
-  index_row_(0), index_col_(0),
+  index_row_(maxval_unsigned), index_col_(maxval_unsigned),
   max_num_iterations_(50),
-  relative_threshold_(1e-8),
+  relative_threshold_(1e-7),
+  zero_svd_thres_(1e-4)
+{
+}
+
+template <unsigned int Tdim, unsigned int Fdim>
+rgrl_est_proj_func<Tdim, Fdim>::
+rgrl_est_proj_func( bool with_grad )
+: vnl_least_squares_function( (Fdim+1)*(Tdim+1)-1,
+                              1000 /*artificial number to avoid warning*/,
+                              with_grad ? use_gradient : no_gradient ),
+  matches_ptr_( 0 ),
+  from_centre_(double(0)), to_centre_(double(0)),
+  index_row_(maxval_unsigned), index_col_(maxval_unsigned),
+  max_num_iterations_(50),
+  relative_threshold_(1e-7),
   zero_svd_thres_(1e-4)
 {
 }
@@ -157,7 +175,8 @@ reduced_proj_jacobian( vnl_matrix_fixed<double, Tdim, (Fdim+1)*(Tdim+1)-1>& base
                        vnl_vector_fixed<double, Fdim>           const& from ) const
 {
   vnl_matrix_fixed<double, Tdim,   proj_size_>   complete_jac;
-
+  full_proj_jacobian( complete_jac, proj, from );
+  
   // 4. remove the element being held as constant 1
   const unsigned index = (index_row_*(Fdim+1)+index_col_);
   for ( unsigned i=0,j=0; i<proj_size_; ++i )
@@ -286,10 +305,17 @@ projective_estimate( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
                      vnl_vector_fixed<double, Tdim>& to_centre )
 {
   // compute weighted centres
-  rgrl_est_compute_weighted_centres( *matches_ptr_,
-                                     from_centre_.as_ref().non_const(),
-                                     to_centre_.as_ref().non_const() );
-
+  // this function is going to resize the vnl_vector, use temporary ones instead
+  vnl_vector<double> fc, tc;
+  if( !rgrl_est_compute_weighted_centres( *matches_ptr_, fc, tc ) ) {
+  
+	return false;
+  }
+  assert( fc.size() == from_centre.size() );
+  assert( tc.size() == to_centre.size() );
+  from_centre = fc;
+  to_centre = tc;
+  
   // convert parameters
   vnl_vector<double> p;
   this->convert_parameters( p, proj, from_centre, to_centre );
@@ -308,6 +334,7 @@ projective_estimate( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
     ret = lm.minimize_without_gradient(p);
   if ( !ret ) {
     vcl_cerr <<  "Levenberg-Marquatt failed\n";
+    lm.diagnose_outcome(vcl_cerr);
     return false;
   }
   //lm.diagnose_outcome(vcl_cout);
@@ -416,7 +443,7 @@ projective_estimate( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
 
   vnl_levenberg_marquardt lm( proj_func );
   lm.set_trace( true );
-  lm.set_check_derivatives( 1 );
+  lm.set_check_derivatives( 2 );
   // we don't need it to be super accurate
   lm.set_f_tolerance( relative_threshold_ );
   lm.set_max_function_evals( max_num_iterations_ );

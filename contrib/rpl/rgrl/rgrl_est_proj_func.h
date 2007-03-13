@@ -63,6 +63,9 @@ class rgrl_est_proj_func
   rgrl_est_proj_func( rgrl_set_of<rgrl_match_set_sptr> const& matches,
                       bool with_grad = true );
 
+  //: ctor without matches
+  rgrl_est_proj_func( bool with_grad = true );
+
    void set_centres( vnl_vector_fixed<double, Fdim> const& fc,
                      vnl_vector_fixed<double, Tdim> const& tc )
    {
