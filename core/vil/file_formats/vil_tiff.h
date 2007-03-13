@@ -37,6 +37,11 @@
 #include <vil/file_formats/vil_tiff_header.h>
 #include <tiffio.h>
 
+//#if HAS_GEOTIFF 
+#include <vil/file_formats/vil_geotiff_header.h>
+//#endif
+
+
 //: Loader for tiff files
 class vil_tiff_file_format : public vil_file_format
 {
@@ -105,6 +110,9 @@ class vil_tiff_image : public vil_blocked_image_resource
   //: returns "tiff"
   char const *file_format() const;
 
+  //: are there any geotiff values
+  bool is_GEOTIFF() { return h_->is_GEOTIFF(); }
+
   //Block interface
 
   //: Block size in columns (must be a multiple of 16)
@@ -134,6 +142,11 @@ class vil_tiff_image : public vil_blocked_image_resource
   //  "size_block_i" and "size_block_j" - block dimensions
 
   virtual bool get_property(char const *tag, void *prop = 0) const;
+
+//#if HAS_GEOTIFF
+  //* returns null if the tiff does not include geotiff tags 
+  vil_geotiff_header* get_geotiff_header();
+//#endif
 
   friend class vil_tiff_pyramid_resource;
 

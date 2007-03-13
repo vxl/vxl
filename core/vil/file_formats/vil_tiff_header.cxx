@@ -2,6 +2,8 @@
 #include <vcl_iostream.h>
 #include <vcl_cstdio.h>
 #include <vcl_ctime.h>
+
+#include <vil/file_formats/vil_geotiff_header.h>
 //#define DEBUG
 
 static vcl_string date_and_time()
@@ -189,6 +191,20 @@ bool vil_tiff_header::read_header()
   read_long_tag(tif_, TIFFTAG_TILELENGTH, tile_length, 0);
 
   tile_offsets_valid = false;
+
+  // read the geotiff tags
+  /*vil_geotiff_header geotiff(tif_);
+  vcl_vector<double> scale;
+  geotiff.model_pixel_scale(scale);
+  void *val = 0;
+  int size, length;
+  tagtype_t type;
+  geokey_t key = GTModelTypeGeoKey;
+  geotiff.get_key_value(key, &val, size, length, type);
+  /*if (type == TYPE_SHORT) {
+    short* xxx=0;
+    memcpy(xxx, val, size*length);
+  }*/
 #ifdef DEBUG
   if (tile_width.valid&&tile_length.valid&&samples_per_pixel.valid)
   {
@@ -238,6 +254,21 @@ bool vil_tiff_header::is_tiled() const
 bool vil_tiff_header::is_striped() const
 {
   return rows_per_strip.valid&&rows_per_strip.val>0;
+}
+
+bool vil_tiff_header::is_GEOTIFF() const
+{
+  
+//  int version[3];
+//  int number_of_geokeys;
+  short *data;
+	short count;
+  //GTIFDirectoryInfo(gtif_, version, &number_of_geokeys); 
+  if (TIFFGetField(tif_, 34735 /*TIFFTAG_GEOKEYDIRECTORY*/, &count, &data))
+  //if (number_of_geokeys > 0)
+    return true;
+
+  return false;
 }
 
 unsigned vil_tiff_header::encoded_bytes_per_block() const

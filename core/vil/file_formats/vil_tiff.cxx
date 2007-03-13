@@ -373,7 +373,18 @@ bool vil_tiff_image::get_property(char const * tag, void * value) const
 
   return false;
 }
+//#if HAS_GEOTIFF 
+vil_geotiff_header* vil_tiff_image::get_geotiff_header()
+{
+  vil_geotiff_header* gtif = new vil_geotiff_header(t_);
+  if (gtif->gtif_number_of_keys() == 0) {
+    delete gtif;
+    return 0;
+  }
 
+  return gtif;
+}
+//#endif
 
 vil_pixel_format vil_tiff_image::pixel_format() const
 {

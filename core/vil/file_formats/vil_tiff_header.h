@@ -222,6 +222,8 @@ class vil_tiff_header
   //: is the image striped (one of these must be true or read failed)
   bool is_striped() const;
 
+  bool is_GEOTIFF() const;
+
   bool need_byte_swap()
   { return file_is_big_endian_!=machine_is_big_endian_ &&
            bits_per_sample.val%8 != 0;
