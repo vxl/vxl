@@ -110,10 +110,10 @@ apply_radial_distortion( vnl_vector_fixed<double, Tdim>      & mapped,
 template <unsigned int Tdim, unsigned int Fdim>
 void
 rgrl_est_proj_rad_func<Tdim, Fdim>::
-proj_rad_jacobian( vnl_matrix<double>                            & base_jac,
-                   vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
-                   vcl_vector<double>                       const& rad_k,
-                   vnl_vector_fixed<double, Fdim>           const& from ) const
+reduced_proj_rad_jacobian( vnl_matrix<double>                            & base_jac,
+                           vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
+                           vcl_vector<double>                       const& rad_k,
+                           vnl_vector_fixed<double, Fdim>           const& from ) const
 {
   assert( rad_k.size() == camera_dof_ );
   
@@ -125,7 +125,7 @@ proj_rad_jacobian( vnl_matrix<double>                            & base_jac,
 
   // 1. get projection matrix jacobian
   vnl_matrix_fixed<double, Tdim, (Tdim+1)*(Fdim+1)-1> dP_dp;
-  proj_jacobian( dP_dp, proj, from );
+  reduced_proj_jacobian( dP_dp, proj, from );
 
   // 2. gradient w.r.t to mapped location
   vnl_matrix_fixed<double, Tdim, Tdim >  dD_dx;
@@ -191,6 +191,88 @@ proj_rad_jacobian( vnl_matrix<double>                            & base_jac,
   }
 }
 
+template <unsigned int Tdim, unsigned int Fdim>
+void
+rgrl_est_proj_rad_func<Tdim, Fdim>::
+full_proj_rad_jacobian( vnl_matrix<double>                            & base_jac,
+                        vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
+                        vcl_vector<double>                       const& rad_k,
+                        vnl_vector_fixed<double, Fdim>           const& from ) const
+{
+  assert( rad_k.size() == camera_dof_ );
+  
+  const unsigned param_size = this->proj_size_ + camera_dof_;
+
+  // 0. set size
+  base_jac.set_size( Tdim, param_size );
+
+  // 1. get projection matrix jacobian
+  vnl_matrix_fixed<double, Tdim, (Tdim+1)*(Fdim+1)> dP_dp;
+  full_proj_jacobian( dP_dp, proj, from );
+
+  // 2. gradient w.r.t to mapped location
+  vnl_matrix_fixed<double, Tdim, Tdim >  dD_dx;
+  vnl_vector_fixed<double, Tdim> mapped;
+  rgrl_est_proj_map_inhomo_point<Tdim, Fdim>( mapped, proj, from-this->from_centre_ );
+
+  vnl_vector_fixed<double, Tdim> centred = mapped-image_centre_;
+  const double radial_dist = centred.squared_magnitude();
+
+  // compute radial distortion coefficient
+  double base = 1;
+  double coeff = 0;
+  for( unsigned i=0; i<rad_k.size(); ++i ) {
+
+    base *= radial_dist;
+    coeff += rad_k[i] * base;
+  }
+
+  // two part computation for dD_dx
+  // first part
+  dD_dx.set_identity();
+  dD_dx *= (1+coeff);
+
+  // second part, taking gradient on the squared radial distance
+  base = 1;
+  for( unsigned k=0; k<rad_k.size(); ++k ) {
+
+    //upper triangular
+    for( unsigned i=0; i<Tdim; ++i )
+      for( unsigned j=i; j<Tdim; ++j ) {
+
+        dD_dx( i, j ) += double(2*(k+1))*base*rad_k[k]*centred[i]*centred[j];
+
+      }
+
+    // multiplication is at the end of loop,
+    // because in gradient it is to the power of (k-1), not k
+    base *= radial_dist;
+  }
+
+  // fill in lower triangular
+  for( unsigned i=0; i<Tdim; ++i )
+    for( unsigned j=i; j<Tdim; ++j )
+      dD_dx( j, i ) = dD_dx( i, j );
+
+
+  // 3. fill in base_jac
+  dP_dp = dD_dx * dP_dp;
+
+  for( unsigned i=0; i<Tdim; ++i )
+    for( unsigned j=0; j<this->proj_size_; ++j )
+      base_jac( i, j ) = dP_dp( i, j );
+
+  // 3. gradient w.r.t to k
+  base = 1;
+  for( unsigned k=0; k<camera_dof_; ++k ) {
+
+    const unsigned index = k+this->proj_size_;
+    base *= radial_dist;
+
+    for( unsigned i=0; i<Tdim; ++i )
+      base_jac( i, index ) = centred[i] * base;
+  }
+}
 
 template <unsigned int Tdim, unsigned int Fdim>
 void
@@ -270,7 +352,7 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
         vnl_vector_fixed<double, Fdim> from = fi.from_feature()->location();
 
         // jacobian computation
-        proj_rad_jacobian( base_jac, proj, temp_rad_k_, from );
+        reduced_proj_rad_jacobian( base_jac, proj, temp_rad_k_, from );
 
         for ( TIter ti=fi.begin(); ti!=fi.end(); ++ti ) {
           //vnl_double_2 to = ti.to_feature()->location();

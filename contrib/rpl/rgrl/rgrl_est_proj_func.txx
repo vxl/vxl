@@ -112,15 +112,14 @@ uncentre_proj( vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj ) const
 template <unsigned int Tdim, unsigned int Fdim>
 void
 rgrl_est_proj_func<Tdim, Fdim>::
-proj_jacobian( vnl_matrix_fixed<double, Tdim, (Fdim+1)*(Tdim+1)-1>& base_jac,
-               vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
-               vnl_vector_fixed<double, Fdim>           const& from ) const
+full_proj_jacobian( vnl_matrix_fixed<double, Tdim, (Fdim+1)*(Tdim+1)>& complete_jac,
+                    vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
+                    vnl_vector_fixed<double, Fdim>           const& from ) const
 {
   // subtract centre
   const vnl_vector_fixed<double, Fdim> from_centred = from-from_centre_;
   
   vnl_vector_fixed<double, Tdim+1> homo;
-  vnl_matrix_fixed<double, Tdim,   proj_size_>   complete_jac;
   vnl_matrix_fixed<double, Tdim+1, proj_size_>   jf(0.0);    // grad in homogeneous coordinate
   vnl_matrix_fixed<double, Tdim,   Tdim+1>       jg(0.0);    // grad of division, [u/w, v/w]^T
 
@@ -148,6 +147,16 @@ proj_jacobian( vnl_matrix_fixed<double, Tdim, (Fdim+1)*(Tdim+1)-1>& base_jac,
   // 3. complete jacobian
   // since Jab_g(f(p)) = Jac_g * Jac_f
   complete_jac = jg * jf;
+}
+
+template <unsigned int Tdim, unsigned int Fdim>
+void
+rgrl_est_proj_func<Tdim, Fdim>::
+reduced_proj_jacobian( vnl_matrix_fixed<double, Tdim, (Fdim+1)*(Tdim+1)-1>& base_jac,
+                       vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
+                       vnl_vector_fixed<double, Fdim>           const& from ) const
+{
+  vnl_matrix_fixed<double, Tdim,   proj_size_>   complete_jac;
 
   // 4. remove the element being held as constant 1
   const unsigned index = (index_row_*(Fdim+1)+index_col_);
@@ -249,7 +258,7 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
         vnl_vector_fixed<double, Fdim> from = fi.from_feature()->location();
 
         // jacobian computation
-        proj_jacobian( base_jac, proj, from );
+        reduced_proj_jacobian( base_jac, proj, from );
 
         for ( TIter ti=fi.begin(); ti!=fi.end(); ++ti ) {
           //vnl_double_2 to = ti.to_feature()->location();

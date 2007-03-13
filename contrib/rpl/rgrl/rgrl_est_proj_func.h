@@ -126,9 +126,16 @@ class rgrl_est_proj_func
 
   //: compute jacobian
   void
-  proj_jacobian( vnl_matrix_fixed<double, Tdim, (Fdim+1)*(Tdim+1)-1>& base_jac,
-                 vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
-                 vnl_vector_fixed<double, Fdim>           const& from ) const;
+  reduced_proj_jacobian( vnl_matrix_fixed<double, Tdim, (Fdim+1)*(Tdim+1)-1>& base_jac,
+                         vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
+                         vnl_vector_fixed<double, Fdim>           const& from ) const;
+
+  //: compute jacobian
+  void
+  full_proj_jacobian( vnl_matrix_fixed<double, Tdim, (Fdim+1)*(Tdim+1)>& base_jac,
+                      vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
+                      vnl_vector_fixed<double, Fdim>           const& from ) const;
+
   //: convert parameters
   void convert_parameters( vnl_vector<double>& params,
                            vnl_matrix_fixed<double, Tdim+1, Fdim+1> proj_matrix,

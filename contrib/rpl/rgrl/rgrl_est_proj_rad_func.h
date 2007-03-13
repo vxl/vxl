@@ -67,10 +67,17 @@ protected:
 
   //: compute jacobian
   void
-  proj_rad_jacobian( vnl_matrix<double>                            & base_jac,
-                     vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
-                     vcl_vector<double>                       const& rad_k,
-                     vnl_vector_fixed<double, Fdim>           const& from ) const;
+  reduced_proj_rad_jacobian( vnl_matrix<double>                            & base_jac,
+                             vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
+                             vcl_vector<double>                       const& rad_k,
+                             vnl_vector_fixed<double, Fdim>           const& from ) const;
+
+  //: compute the full jacobian
+  void
+  full_proj_rad_jacobian( vnl_matrix<double>                            & base_jac,
+                          vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
+                          vcl_vector<double>                       const& rad_k,
+                          vnl_vector_fixed<double, Fdim>           const& from ) const;
 
   //: convert parameters
   void
