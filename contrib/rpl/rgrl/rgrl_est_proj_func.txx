@@ -201,12 +201,10 @@ f(vnl_vector<double> const& x, vnl_vector<double>& fx)
       {
         // map from point
         vnl_vector_fixed<double, Fdim> from = fi.from_feature()->location();
-        from -= from_centre_;
-        rgrl_est_proj_map_inhomo_point<Tdim, Fdim>( mapped, proj, from );
+        map_loc( mapped, proj, from );
 
         for ( TIter ti=fi.begin(); ti!=fi.end(); ++ti ) {
           vnl_vector_fixed<double, Tdim> to = ti.to_feature()->location();
-          to -= to_centre_;
           error_proj_sqrt = ti.to_feature()->error_projector_sqrt();
           double const wgt = vcl_sqrt(ti.cumulative_weight());
           vnl_vector_fixed<double, Tdim> diff = error_proj_sqrt * (mapped - to);
