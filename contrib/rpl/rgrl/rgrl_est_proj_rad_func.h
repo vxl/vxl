@@ -11,7 +11,7 @@
 #include <rgrl/rgrl_fwd.h>
 #include <rgrl/rgrl_match_set_sptr.h>
 #include <rgrl/rgrl_est_proj_func.h>
-#include <vcl_stlfwd.h>
+#include <vcl_vector.h>
 
 template <unsigned int Tdim, unsigned int Fdim>
 class rgrl_est_proj_rad_func
@@ -38,13 +38,38 @@ class rgrl_est_proj_rad_func
   //: Jacobian
   void gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian);
 
+  //: set image centre
+  void
+  set_image_centre( vnl_vector_fixed<double, Tdim> const& image_centre )
+  {
+    image_centre_ = image_centre;
+  }
+
+  //: map a location
+  inline
+  void
+  map_loc( vnl_vector_fixed<double, Tdim>& mapped, 
+           vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
+           vcl_vector<double> const& rad_k,
+           vnl_vector_fixed<double, Fdim> const& from  ) const
+  {
+  
+    vnl_vector_fixed<double, Tdim> proj_mapped;
+    rgrl_est_proj_map_inhomo_point<Tdim, Fdim>( proj_mapped, proj, from-from_centre_ );
+    
+    // apply radial distortion
+    apply_radial_distortion( mapped, proj_mapped, rad_k );
+    
+    mapped += to_centre_;  
+  }
+  
 protected:
 
   //: compute jacobian
   void
   proj_rad_jacobian( vnl_matrix<double>                            & base_jac,
                      vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
-                     vnl_vector<double>                       const& params,
+                     vcl_vector<double>                       const& rad_k,
                      vnl_vector_fixed<double, Fdim>           const& from ) const;
 
   //: convert parameters
@@ -59,11 +84,16 @@ protected:
   void
   apply_radial_distortion( vnl_vector_fixed<double, Tdim>      & mapped,
                            vnl_vector_fixed<double, Tdim> const& p,
-                           vnl_vector<double> const& params ) const;
+                           vcl_vector<double> const& rad_k ) const;
 
+  //: transfer parameters into the temp vector
+  void
+  transfer_radial_params_into_temp_storage( vnl_vector<double> const& params ) const;
+  
 protected:
   unsigned int                    camera_dof_;
-  vnl_vector_fixed<double, Tdim>  camera_centre_;
+  vnl_vector_fixed<double, Tdim>  image_centre_;
+  mutable vcl_vector<double>  temp_rad_k_;
 };
 
 #endif //rgrl_est_proj_rad_func_h_

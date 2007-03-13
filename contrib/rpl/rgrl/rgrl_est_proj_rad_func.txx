@@ -30,11 +30,14 @@ rgrl_est_proj_rad_func( rgrl_set_of<rgrl_match_set_sptr> const& matches,
                         bool with_grad )
 : rgrl_est_proj_func<Tdim, Fdim>( matches ),
   camera_dof_(camera_dof),
-  camera_centre_(double(0))
+  image_centre_(double(0))
 {
   //modify the dof in vnl_least_squares_function
   vnl_least_squares_function::init(this->proj_size_-1+camera_dof_,
                                    this->get_number_of_residuals() );
+
+  // temperary storage space
+  temp_rad_k_.resize( camera_dof_ );
 }
 
 
@@ -64,10 +67,21 @@ convert_parameters( vnl_vector<double>& params,
     params[i+proj_params.size()] = rad_dist[i];
 
   // set camera centre
-  camera_centre_ = camera_centre - this->to_centre_;
+  image_centre_ = camera_centre - this->to_centre_;
 
 }
 
+template <unsigned int Tdim, unsigned int Fdim>
+void
+rgrl_est_proj_rad_func<Tdim, Fdim>::
+transfer_radial_params_into_temp_storage( vnl_vector<double> const& params ) const
+{
+  assert( params.size() == this->proj_size_ + camera_dof_ -1 );
+  const unsigned int index_shift = this->proj_size_-1;
+  for( unsigned i=0; i<camera_dof_; ++i )
+    temp_rad_k_[i] = params[index_shift+i];
+}
+  
 //: convert parameters
 template <unsigned int Tdim, unsigned int Fdim>
 inline
@@ -75,20 +89,20 @@ void
 rgrl_est_proj_rad_func<Tdim, Fdim>::
 apply_radial_distortion( vnl_vector_fixed<double, Tdim>      & mapped,
                          vnl_vector_fixed<double, Tdim> const& p,
-                         vnl_vector<double> const& params ) const
+                         vcl_vector<double> const& radk ) const
 {
   const unsigned proj_dof = this->proj_size_-1;
-  assert( params.size() == proj_dof + camera_dof_ );
+  assert( radk.size() == camera_dof_ );
 
-  vnl_vector_fixed<double, Tdim> centred = p-camera_centre_;
+  vnl_vector_fixed<double, Tdim> centred = p-image_centre_;
   const double radial_dist = centred.squared_magnitude();
 
   double base = 1;
   double coeff = 0;
-  for( unsigned i=proj_dof; i<params.size(); ++i ) {
+  for( unsigned i=0; i<radk.size(); ++i ) {
 
     base *= radial_dist;
-    coeff += params[i] * base;
+    coeff += radk[i] * base;
   }
   mapped = p + coeff*centred;
 }
@@ -98,10 +112,11 @@ void
 rgrl_est_proj_rad_func<Tdim, Fdim>::
 proj_rad_jacobian( vnl_matrix<double>                            & base_jac,
                    vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
-                   vnl_vector<double>                       const& params,
+                   vcl_vector<double>                       const& rad_k,
                    vnl_vector_fixed<double, Fdim>           const& from ) const
 {
-
+  assert( rad_k.size() == camera_dof_ );
+  
   const unsigned param_size = this->proj_size_ -1 + camera_dof_;
   const unsigned proj_dof = this->proj_size_ -1;
 
@@ -115,18 +130,18 @@ proj_rad_jacobian( vnl_matrix<double>                            & base_jac,
   // 2. gradient w.r.t to mapped location
   vnl_matrix_fixed<double, Tdim, Tdim >  dD_dx;
   vnl_vector_fixed<double, Tdim> mapped;
-  map_inhomo_point<Tdim, Fdim>( mapped, proj, from );
+  rgrl_est_proj_map_inhomo_point<Tdim, Fdim>( mapped, proj, from-from_centre_ );
 
-  vnl_vector_fixed<double, Tdim> centred = mapped-camera_centre_;
+  vnl_vector_fixed<double, Tdim> centred = mapped-image_centre_;
   const double radial_dist = centred.squared_magnitude();
 
   // compute radial distortion coefficient
   double base = 1;
   double coeff = 0;
-  for( unsigned i=proj_dof; i<params.size(); ++i ) {
+  for( unsigned i=0; i<rad_k.size(); ++i ) {
 
     base *= radial_dist;
-    coeff += params[i] * base;
+    coeff += rad_k[i] * base;
   }
 
   // two part computation for dD_dx
@@ -136,15 +151,13 @@ proj_rad_jacobian( vnl_matrix<double>                            & base_jac,
 
   // second part, taking gradient on the squared radial distance
   base = 1;
-  for( unsigned k=0; k<camera_dof_; ++k ) {
-
-    const unsigned index = k+proj_dof;
+  for( unsigned k=0; k<rad_k.size(); ++k ) {
 
     //upper triangular
     for( unsigned i=0; i<Tdim; ++i )
       for( unsigned j=i; j<Tdim; ++j ) {
 
-        dD_dx( i, j ) += double(2*(k+1))*base*params[index]*centred[i]*centred[j];
+        dD_dx( i, j ) += double(2*(k+1))*base*rad_k[k]*centred[i]*centred[j];
 
       }
 
@@ -178,6 +191,7 @@ proj_rad_jacobian( vnl_matrix<double>                            & base_jac,
   }
 }
 
+
 template <unsigned int Tdim, unsigned int Fdim>
 void
 rgrl_est_proj_rad_func<Tdim, Fdim>::
@@ -194,6 +208,9 @@ f(vnl_vector<double> const& x, vnl_vector<double>& fx)
   vnl_matrix_fixed<double, Tdim+1, Fdim+1> proj;
   restored_centered_proj( proj, x );
 
+  // retrieve the radial distortion parameters
+  transfer_radial_params_into_temp_storage( x );
+
   for ( unsigned ms = 0; ms<this->matches_ptr_->size(); ++ms )
     if ( (*this->matches_ptr_)[ms] != 0 ) { // if pointer is valid
 
@@ -202,13 +219,10 @@ f(vnl_vector<double> const& x, vnl_vector<double>& fx)
 
         // map from point
         vnl_vector_fixed<double, Fdim> from = fi.from_feature()->location();
-        from -= this->from_centre_;
-        map_inhomo_point<Tdim, Fdim>( mapped, proj, from );
-        apply_radial_distortion( distorted, mapped, x );
+        map_loc( distorted, proj, temp_rad_k_, from );
 
         for ( TIter ti=fi.begin(); ti!=fi.end(); ++ti ) {
           vnl_vector_fixed<double, Tdim> to = ti.to_feature()->location();
-          to -= this->to_centre_;
           error_proj_sqrt = ti.to_feature()->error_projector_sqrt();
           double const wgt = vcl_sqrt(ti.cumulative_weight());
           vnl_vector_fixed<double, Tdim> diff = error_proj_sqrt * (distorted - to);
@@ -242,6 +256,9 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
   vnl_matrix_fixed<double, Tdim+1, Fdim+1> proj;
   restored_centered_proj( proj, x );
 
+  // retrieve the radial distortion parameters
+  transfer_radial_params_into_temp_storage( x );
+
   unsigned int ind = 0;
   for ( unsigned ms = 0; ms<this->matches_ptr_->size(); ++ms )
     if ( (*this->matches_ptr_)[ms] ) { // if pointer is valid
@@ -251,10 +268,9 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
 
         // map from point
         vnl_vector_fixed<double, Fdim> from = fi.from_feature()->location();
-        from -= this->from_centre_;
 
         // jacobian computation
-        proj_rad_jacobian( base_jac, proj, x, from );
+        proj_rad_jacobian( base_jac, proj, temp_rad_k_, from );
 
         for ( TIter ti=fi.begin(); ti!=fi.end(); ++ti ) {
           //vnl_double_2 to = ti.to_feature()->location();
