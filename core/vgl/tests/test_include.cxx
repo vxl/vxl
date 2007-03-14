@@ -64,6 +64,7 @@
 #include <vgl/algo/vgl_norm_trans_2d.h>
 #include <vgl/algo/vgl_norm_trans_3d.h>
 #include <vgl/algo/vgl_orient_box_3d.h>
+#include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/algo/vgl_p_matrix.h>
 #include <vgl/algo/vgl_rtree.h>
 

@@ -3,6 +3,10 @@
 
 #include <testlib/testlib_test.h>
 #include <vgl/algo/vgl_rotation_3d.h>
+#include <vgl/vgl_plane_3d.h>
+#include <vgl/vgl_homg_line_3d_2_points.h>
+#include <vgl/vgl_line_3d_2_points.h>
+#include <vgl/vgl_line_segment_3d.h>
 #include <vgl/vgl_distance.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
@@ -72,24 +76,49 @@ void test_application(const vgl_rotation_3d<double>& rot)
 {
   vnl_double_3x3 R = rot.as_matrix();
 
-  vgl_homg_point_3d<double> hpt(100,50,200);
-  vnl_double_3 pt(hpt.x(),hpt.y(),hpt.z());
+  vgl_homg_point_3d<double> hpt(100,50,200,2);
+  vnl_double_3 p(hpt.x()/hpt.w(),hpt.y()/hpt.w(),hpt.z()/hpt.w());
 
   vgl_homg_plane_3d<double> hpl(0,1,0,100);
 
   vgl_homg_point_3d<double> r_hpt = rot*hpt;
-  vnl_double_3 r_pt = R*pt;
+  vnl_double_3 r_p = R*p;
 
   vgl_homg_plane_3d<double> r_hpl = rot*hpl;
 
   double epsilon = 10e-8;
-  TEST_NEAR("Rotated point-plane dist", vgl_distance(hpt,hpl),
+  TEST_NEAR("Rotated point-plane dist (homg)", vgl_distance(hpt,hpl),
             vgl_distance(r_hpt, r_hpl), epsilon);
 
-  double diff = (r_pt - vnl_double_3(r_hpt.x()/r_hpt.w(),
-                                     r_hpt.y()/r_hpt.w(),
-                                     r_hpt.z()/r_hpt.w())).magnitude();
+  double diff = (r_p - vnl_double_3(r_hpt.x()/r_hpt.w(),
+                                    r_hpt.y()/r_hpt.w(),
+                                    r_hpt.z()/r_hpt.w())).magnitude();
   TEST_NEAR("Rotated point", diff, 0.0, epsilon);
+
+  vgl_point_3d<double> pt(-30, 0, 75);
+  vgl_point_3d<double> r_pt = rot*pt;
+
+  vgl_plane_3d<double> pl(0,0,1,50);
+  vgl_plane_3d<double> r_pl = rot*pl;
+  TEST_NEAR("Rotated point-plane dist", vgl_distance(pt,pl),
+            vgl_distance(r_pt, r_pl), epsilon);
+
+  vgl_vector_3d<double> v= vgl_point_3d<double>(hpt) - pt;
+  vgl_vector_3d<double> r_v = rot*v;
+  vgl_vector_3d<double> r_v2 = vgl_point_3d<double>(r_hpt) - r_pt;
+  TEST_NEAR("Rotated vector",(r_v-r_v2).length(), 0.0, epsilon);
+
+  vgl_homg_line_3d_2_points<double> hl(hpt, vgl_homg_point_3d<double>(v.x(),v.y(),v.z(),0));
+  vgl_homg_line_3d_2_points<double> r_hl = rot*hl;
+  //FIX ME  add test
+
+  vgl_line_3d_2_points<double> l(pt, pt+v);
+  vgl_line_3d_2_points<double> r_l = rot*l;
+  //FIX ME  add test
+
+  vgl_line_segment_3d<double> s(pt, pt+v);
+  vgl_line_segment_3d<double> r_s = rot*s;
+  //FIX ME  add test
 
 }
 
@@ -111,6 +140,7 @@ void test_rotation_3d()
   vcl_cout << "testing random rotation: "<< rot_rand.as_quaternion() <<vcl_endl;
   test_conversions(rot_rand);
   test_inverse(rot_rand);
+  test_application(rot_rand);
 }
 
 TESTMAIN(test_rotation_3d);

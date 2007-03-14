@@ -129,17 +129,46 @@ class vgl_rotation_3d
   }
 
   //: Rotate a homogeneous line.
-  vgl_homg_line_3d_2_points<T> operator*( const vgl_homg_line_3d_2_points<T>& l ) const;
+  vgl_homg_line_3d_2_points<T> operator*( const vgl_homg_line_3d_2_points<T>& l ) const
+  {
+    return vgl_homg_line_3d_2_points<T>(this->operator*(l.point_finite()),
+                                        this->operator*(l.point_infinite()));
+  }
+
   //: Rotate a point.
-  vgl_plane_3d<T> operator*( const vgl_point_3d<T>& p ) const;
+  vgl_point_3d<T> operator*( const vgl_point_3d<T>& p ) const
+  {
+    vnl_vector_fixed<T,3> rp = q_.rotate(vnl_vector_fixed<T,3>(p.x(),p.y(),p.z()));
+    return vgl_point_3d<T>(rp[0],rp[1],rp[2]);
+  }
+
   //: Rotate a plane.
-  vgl_plane_3d<T> operator*( const vgl_plane_3d<T>& p ) const;
+  vgl_plane_3d<T> operator*( const vgl_plane_3d<T>& p ) const
+  {
+    vnl_vector_fixed<T,3> rp = q_.rotate(vnl_vector_fixed<T,3>(p.a(),p.b(),p.c()));
+    return vgl_plane_3d<T>(rp[0],rp[1],rp[2],p.d());
+  }
+
   //: Rotate a line.
-  vgl_line_3d_2_points<T> operator*( const vgl_line_3d_2_points<T>& l ) const;
+  vgl_line_3d_2_points<T> operator*( const vgl_line_3d_2_points<T>& l ) const
+  {
+    return vgl_line_3d_2_points<T>(this->operator*(l.point1()),
+                                   this->operator*(l.point2()));
+  }
+
   //: Rotate a line segment.
-  vgl_line_segment_3d<T> operator*( const vgl_line_segment_3d<T>& l ) const;
+  vgl_line_segment_3d<T> operator*( const vgl_line_segment_3d<T>& l ) const
+  {
+    return vgl_line_segment_3d<T>(this->operator*(l.point1()),
+                                  this->operator*(l.point2()));
+  }
+
   //: Rotate a vector.
-  vgl_vector_3d<T> operator*( const vgl_vector_3d<T>& v ) const;
+  vgl_vector_3d<T> operator*( const vgl_vector_3d<T>& v ) const
+  {
+    vnl_vector_fixed<T,3> rv = q_.rotate(vnl_vector_fixed<T,3>(v.x(),v.y(),v.z()));
+    return vgl_vector_3d<T>(rv[0],rv[1],rv[2]);
+  }
 
  protected:
   //: The internal representation of the rotation is a quaternion.
