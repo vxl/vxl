@@ -30,7 +30,8 @@ rgrl_est_proj_rad_func( rgrl_set_of<rgrl_match_set_sptr> const& matches,
                         bool with_grad )
 : rgrl_est_proj_func<Tdim, Fdim>( matches, with_grad ),
   camera_dof_(camera_dof),
-  image_centre_(double(0))
+  image_centre_(double(0)),
+  centre_mag_norm_const_(0)
 {
   //modify the dof in vnl_least_squares_function
   vnl_least_squares_function::init(this->proj_size_-1+camera_dof_,
@@ -46,7 +47,8 @@ rgrl_est_proj_rad_func( unsigned int camera_dof,
                         bool with_grad )
 : rgrl_est_proj_func<Tdim, Fdim>( with_grad ),
   camera_dof_(camera_dof),
-  image_centre_(double(0))
+  image_centre_(double(0)),
+  centre_mag_norm_const_(0)
 {
   //modify the dof in vnl_least_squares_function
   vnl_least_squares_function::init(this->proj_size_-1+camera_dof_,
@@ -82,7 +84,7 @@ convert_parameters( vnl_vector<double>& params,
     params[i+proj_params.size()] = rad_dist[i];
 
   // set camera centre
-  image_centre_ = camera_centre - this->to_centre_;
+  set_image_centre( camera_centre );
 
 }
 
@@ -110,7 +112,7 @@ apply_radial_distortion( vnl_vector_fixed<double, Tdim>      & mapped,
   assert( radk.size() == camera_dof_ );
 
   vnl_vector_fixed<double, Tdim> centred = p-image_centre_;
-  const double radial_dist = centred.squared_magnitude();
+  const double radial_dist = centred.squared_magnitude() / centre_mag_norm_const_;
 
   double base = 1;
   double coeff = 0;
@@ -148,7 +150,7 @@ reduced_proj_rad_jacobian( vnl_matrix<double>                            & base_
   rgrl_est_proj_map_inhomo_point<Tdim, Fdim>( mapped, proj, from-this->from_centre_ );
 
   const vnl_vector_fixed<double, Tdim> centred = mapped-image_centre_;
-  const double radial_dist = centred.squared_magnitude();
+  const double radial_dist = centred.squared_magnitude() / centre_mag_norm_const_;
 
   // compute radial distortion coefficient
   double base = 1;
@@ -231,7 +233,7 @@ full_proj_rad_jacobian( vnl_matrix<double>                            & base_jac
   rgrl_est_proj_map_inhomo_point<Tdim, Fdim>( mapped, proj, from-this->from_centre_ );
 
   const vnl_vector_fixed<double, Tdim> centred = mapped-image_centre_;
-  const double radial_dist = centred.squared_magnitude();
+  const double radial_dist = centred.squared_magnitude() / centre_mag_norm_const_;
 
   // compute radial distortion coefficient
   double base = 1;
@@ -308,7 +310,7 @@ proj_jac_wrt_loc( vnl_matrix_fixed<double, Tdim, Fdim>          & jac_loc,
   rgrl_est_proj_map_inhomo_point<Tdim, Fdim>( mapped, proj, from-this->from_centre_ );
 
   const vnl_vector_fixed<double, Tdim> centred = mapped-image_centre_;
-  const double radial_dist = centred.squared_magnitude();
+  const double radial_dist = centred.squared_magnitude() / centre_mag_norm_const_;
 
   // compute radial distortion coefficient
   double base = 1;

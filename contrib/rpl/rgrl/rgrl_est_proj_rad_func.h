@@ -46,6 +46,7 @@ class rgrl_est_proj_rad_func
   void
   set_image_centre( vnl_vector_fixed<double, Tdim> const& image_centre )
   {
+    centre_mag_norm_const_ = image_centre.squared_magnitude() / 400;
     image_centre_ = image_centre-this->to_centre_;
   }
 
@@ -56,9 +57,15 @@ class rgrl_est_proj_rad_func
                vnl_vector_fixed<double, Tdim> const& image_centre )
   {
     rgrl_est_proj_func<Tdim, Fdim>::set_centres( from_centre, to_centre );
+    centre_mag_norm_const_ = image_centre.squared_magnitude() / 400;
     image_centre_ = image_centre-this->to_centre_;
   }
 
+  //: get centred coordinate normalization constant 
+  double
+  centre_mag_norm_const () const
+  { return centre_mag_norm_const_; }
+  
   //: map a location
   inline
   void
@@ -121,6 +128,7 @@ protected:
 protected:
   unsigned int                    camera_dof_;
   vnl_vector_fixed<double, Tdim>  image_centre_;
+  double                          centre_mag_norm_const_;
   mutable vcl_vector<double>  temp_rad_k_;
 };
 
