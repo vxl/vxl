@@ -1,4 +1,3 @@
-#include <vpgl/vgl_rotation_3d.h>
 #include <vpgl/vpgl_affine_camera.h>
 #include <vpgl/vpgl_affine_fundamental_matrix.h>
 #include <vpgl/vpgl_calibration_matrix.h>
