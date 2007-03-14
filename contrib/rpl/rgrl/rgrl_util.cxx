@@ -959,7 +959,7 @@ rgrl_util_skip_empty_lines( vcl_istream& is )
     vcl_getline( is, str );
 
     non_empty_pos = str.find_first_not_of( white_chars );
-  } while ( is && !is.eof() && (str.empty() || non_empty_pos < 0 ||
+  } while ( is.good() && !is.eof() && (str.empty() || non_empty_pos < 0 ||
             (str[non_empty_pos]=='#') ) );
 
   // back to the beginning of non-empty line
