@@ -123,7 +123,7 @@ contrib/gel vsrl   vsrl_   build contrib/brl/bseg/sdet contrib/gel/vgel contrib/
 contrib/gel gkll   gkll_   build contrib/gel/vgel
 contrib/gel vmal   vmal_   build contrib/gel/vgel contrib/oxl/osl
 contrib/gel jvid   jvid_   build core/vgui core/vidl_vil1
-contrib/gel/mrc vpgl vpgl_ build core/vcsl core/vnl core/vbl
+contrib/gel/mrc vpgl vpgl_ build core/vcsl core/vgl core/vnl core/vbl
 
 package: :pserver:anonymous@vxl.cvs.sourceforge.net:/cvsroot/vxl contrib/rpl RPI libraries
 contrib/rpl rrel   rrel_   build core/vbl core/vgl core/vnl # core/vnl/algo
