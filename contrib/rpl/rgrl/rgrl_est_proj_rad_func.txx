@@ -147,7 +147,7 @@ reduced_proj_rad_jacobian( vnl_matrix<double>                            & base_
   vnl_vector_fixed<double, Tdim> mapped;
   rgrl_est_proj_map_inhomo_point<Tdim, Fdim>( mapped, proj, from-this->from_centre_ );
 
-  vnl_vector_fixed<double, Tdim> centred = mapped-image_centre_;
+  const vnl_vector_fixed<double, Tdim> centred = mapped-image_centre_;
   const double radial_dist = centred.squared_magnitude();
 
   // compute radial distortion coefficient
@@ -230,7 +230,7 @@ full_proj_rad_jacobian( vnl_matrix<double>                            & base_jac
   vnl_vector_fixed<double, Tdim> mapped;
   rgrl_est_proj_map_inhomo_point<Tdim, Fdim>( mapped, proj, from-this->from_centre_ );
 
-  vnl_vector_fixed<double, Tdim> centred = mapped-image_centre_;
+  const vnl_vector_fixed<double, Tdim> centred = mapped-image_centre_;
   const double radial_dist = centred.squared_magnitude();
 
   // compute radial distortion coefficient
@@ -287,6 +287,67 @@ full_proj_rad_jacobian( vnl_matrix<double>                            & base_jac
     for( unsigned i=0; i<Tdim; ++i )
       base_jac( i, index ) = centred[i] * base;
   }
+}
+
+//: compute jacobian w.r.t. location
+template <unsigned int Tdim, unsigned int Fdim>
+void
+rgrl_est_proj_rad_func<Tdim, Fdim>::
+proj_jac_wrt_loc( vnl_matrix_fixed<double, Tdim, Fdim>          & jac_loc,
+                  vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
+                  vcl_vector<double>                       const& rad_k,
+                  vnl_vector_fixed<double, Fdim>           const& from ) const
+{
+  // dP / dx
+  vnl_matrix_fixed<double, Tdim, Fdim> dP_dx;
+  rgrl_est_proj_func<Tdim, Fdim>::proj_jac_wrt_loc( dP_dx, proj, from );
+  
+  // 2. gradient w.r.t to mapped location
+  vnl_matrix_fixed<double, Tdim, Tdim >  dD_dx;
+  vnl_vector_fixed<double, Tdim> mapped;
+  rgrl_est_proj_map_inhomo_point<Tdim, Fdim>( mapped, proj, from-this->from_centre_ );
+
+  const vnl_vector_fixed<double, Tdim> centred = mapped-image_centre_;
+  const double radial_dist = centred.squared_magnitude();
+
+  // compute radial distortion coefficient
+  double base = 1;
+  double coeff = 0;
+  for( unsigned i=0; i<rad_k.size(); ++i ) {
+
+    base *= radial_dist;
+    coeff += rad_k[i] * base;
+  }
+
+  // two part computation for dD_dx
+  // first part
+  dD_dx.set_identity();
+  dD_dx *= (1+coeff);
+
+  // second part, taking gradient on the squared radial distance
+  base = 1;
+  for( unsigned k=0; k<rad_k.size(); ++k ) {
+
+    //upper triangular
+    for( unsigned i=0; i<Tdim; ++i )
+      for( unsigned j=i; j<Tdim; ++j ) {
+
+        dD_dx( i, j ) += double(2*(k+1))*base*rad_k[k]*centred[i]*centred[j];
+
+      }
+
+    // multiplication is at the end of loop,
+    // because in gradient it is to the power of (k-1), not k
+    base *= radial_dist;
+  }
+
+  // fill in lower triangular
+  for( unsigned i=0; i<Tdim; ++i )
+    for( unsigned j=i; j<Tdim; ++j )
+      dD_dx( j, i ) = dD_dx( i, j );
+
+  // final jac
+  jac_loc = dD_dx * dP_dx;  
 }
 
 template <unsigned int Tdim, unsigned int Fdim>
@@ -409,6 +470,8 @@ projective_estimate(  vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
   from_centre = fc;
   to_centre = tc;
 
+  assert( rad_dist.size() == camera_dof_ );
+  
   // convert parameters
   vnl_vector<double> p;
   this->convert_parameters( p, proj, rad_dist, from_centre, to_centre, camera_centre );

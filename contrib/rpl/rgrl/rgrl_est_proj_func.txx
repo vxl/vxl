@@ -190,6 +190,38 @@ reduced_proj_jacobian( vnl_matrix_fixed<double, Tdim, (Fdim+1)*(Tdim+1)-1>& base
 template <unsigned int Tdim, unsigned int Fdim>
 void
 rgrl_est_proj_func<Tdim, Fdim>::
+proj_jac_wrt_loc( vnl_matrix_fixed<double, Tdim, Fdim>& jac_loc,
+                  vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
+                  vnl_vector_fixed<double, Fdim>           const& from ) const
+{
+
+  // 1. linear gradient in homogeneous coordinate
+  // fill jf (linear gradient) with 1.0 on elements corresponding to shift
+  vnl_matrix_fixed<double, Tdim+1, Fdim>   jf;    // grad in homogeneous coordinate
+  for ( unsigned i=0; i<Tdim+1; ++i )
+    for( unsigned j=0; j<Fdim; ++j )
+      jf(i, j) = proj(i, j);
+
+  // 2. gradient of making division
+  vnl_vector_fixed<double, Tdim+1> homo;
+  rgrl_est_proj_map_homo_point<Tdim, Fdim>( homo, proj, from-from_centre_ );
+
+  vnl_matrix_fixed<double, Tdim,   Tdim+1>       jg(0.0);    // grad of division, [u/w, v/w]^T
+  const double homo_last_neg_sqr = -vnl_math_sqr(homo[Tdim]);
+  const double homo_last_div = 1.0/homo[Tdim];
+  for ( unsigned i=0; i<Tdim; ++i )
+    jg(i,i) = homo_last_div;
+  for ( unsigned i=0; i<Tdim; ++i )
+    jg(i,Tdim) = homo[i] / homo_last_neg_sqr;
+
+  // 3. complete jacobian
+  // since Jab_g(f(p)) = Jac_g * Jac_f
+  jac_loc = jg * jf;
+}
+  
+template <unsigned int Tdim, unsigned int Fdim>
+void
+rgrl_est_proj_func<Tdim, Fdim>::
 restored_centered_proj( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj_matrix,
                         vnl_vector<double> const& params ) const
 {
@@ -442,8 +474,8 @@ projective_estimate( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
   proj_func.convert_parameters( p, proj, from_centre, to_centre );
 
   vnl_levenberg_marquardt lm( proj_func );
-  lm.set_trace( true );
-  lm.set_check_derivatives( 2 );
+  //lm.set_trace( true );
+  //lm.set_check_derivatives( 2 );
   // we don't need it to be super accurate
   lm.set_f_tolerance( relative_threshold_ );
   lm.set_max_function_evals( max_num_iterations_ );
@@ -457,7 +489,7 @@ projective_estimate( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
     WarningMacro( "Levenberg-Marquatt failed" );
     return 0;
   }
-  lm.diagnose_outcome(vcl_cout);
+  //lm.diagnose_outcome(vcl_cout);
 
   // convert parameters back into matrix form
   restored_centered_proj( proj, p );

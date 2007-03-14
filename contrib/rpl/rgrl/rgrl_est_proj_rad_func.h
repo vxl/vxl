@@ -46,7 +46,17 @@ class rgrl_est_proj_rad_func
   void
   set_image_centre( vnl_vector_fixed<double, Tdim> const& image_centre )
   {
-    image_centre_ = image_centre;
+    image_centre_ = image_centre-this->to_centre_;
+  }
+
+  //: set from, to, and image centres
+  void
+  set_centres( vnl_vector_fixed<double, Fdim> const& from_centre,
+               vnl_vector_fixed<double, Tdim> const& to_centre,
+               vnl_vector_fixed<double, Tdim> const& image_centre )
+  {
+    rgrl_est_proj_func<Tdim, Fdim>::set_centres( from_centre, to_centre );
+    image_centre_ = image_centre-this->to_centre_;
   }
 
   //: map a location
@@ -82,6 +92,13 @@ protected:
                           vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
                           vcl_vector<double>                       const& rad_k,
                           vnl_vector_fixed<double, Fdim>           const& from ) const;
+
+  //: compute jacobian w.r.t. location
+  void
+  proj_jac_wrt_loc( vnl_matrix_fixed<double, Tdim, Fdim>          & jac_loc,
+                    vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
+                    vcl_vector<double>                       const& rad_k,
+                    vnl_vector_fixed<double, Fdim>           const& from ) const;
 
   //: convert parameters
   void

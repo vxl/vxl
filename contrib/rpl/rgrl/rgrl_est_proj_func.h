@@ -139,6 +139,12 @@ class rgrl_est_proj_func
                       vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
                       vnl_vector_fixed<double, Fdim>           const& from ) const;
 
+  //: compute jacobian w.r.t. location
+  void
+  proj_jac_wrt_loc( vnl_matrix_fixed<double, Tdim, Fdim>          & jac_loc,
+                    vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
+                    vnl_vector_fixed<double, Fdim>           const& from ) const;
+
   //: convert parameters
   void convert_parameters( vnl_vector<double>& params,
                            vnl_matrix_fixed<double, Tdim+1, Fdim+1> proj_matrix,
