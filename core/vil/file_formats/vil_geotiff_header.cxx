@@ -4,6 +4,8 @@
 #include <geotiffio.h>
 #include <geovalues.h>
 
+#include <vnl/vnl_matrix.h>
+
 vil_geotiff_header::vil_geotiff_header(TIFF* tif) : tif_(tif)
 {
   if (tif) {
