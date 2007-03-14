@@ -29,7 +29,7 @@ vsol_polygon_3d::vsol_polygon_3d(vcl_vector<vsol_point_3d_sptr> const& new_verti
       pit != storage_->end(); ++pit)
     pts.push_back(vgl_homg_point_3d<double>((*pit)->x(),(*pit)->y(),(*pit)->z()));
   vgl_fit_plane_3d<double> fp(pts);
-  fp.fit();
+  fp.fit(0.1);
   plane_ = fp.get_plane();
 }
 

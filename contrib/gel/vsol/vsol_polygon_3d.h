@@ -133,6 +133,11 @@ class vsol_polygon_3d : public vsol_region_3d
   virtual double area(void) const; // virtual of vsol_region_3d
 
   //---------------------------------------------------------------------------
+  //: Return the plane where 'this' polygon resides 
+  //---------------------------------------------------------------------------
+  vgl_homg_plane_3d<double> plane(void) const { return plane_; } 
+
+  //---------------------------------------------------------------------------
   //: Is `this' convex ?
   //---------------------------------------------------------------------------
   virtual bool is_convex(void) const;
