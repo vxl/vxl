@@ -463,7 +463,7 @@ projective_estimate(  vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
   // compute weighted centres
   // this function is going to resize the vnl_vector, use temporary ones instead
   vnl_vector<double> fc, tc;
-  if( !rgrl_est_compute_weighted_centres( *matches_ptr_, fc, tc ) ) {
+  if( !rgrl_est_compute_weighted_centres( *(this->matches_ptr_), fc, tc ) ) {
   
 	return false;
   }
