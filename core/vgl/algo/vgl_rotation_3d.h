@@ -125,13 +125,6 @@ class vgl_rotation_3d
     return vgl_rotation_3d<T>( q_*first_rotation.q_ );
   }
 
-  //: Composition of two rotations.
-  vgl_rotation_3d<T>& operator*=( const vgl_rotation_3d<T>& first_rotation )
-  {
-    q_ *= first_rotation.q_;
-    return *this;
-  }
-
   //: Rotate a homogeneous point.
   vgl_homg_point_3d<T> operator*( const vgl_homg_point_3d<T>& p ) const
   {
