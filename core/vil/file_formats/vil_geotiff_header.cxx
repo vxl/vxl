@@ -62,15 +62,16 @@ bool vil_geotiff_header::gtif_pixelscale(double &scale_x, double &scale_y, doubl
   return false;
 }
 
-bool vil_geotiff_header::gtif_trans_matrix (vcl_vector<double> &trans_matrix) 
+bool vil_geotiff_header::gtif_trans_matrix (double* &trans_matrix) 
 {
-  double *data;
+  //double *data;
 	short count;
-  if (TIFFGetField(tif_, GTIFF_TRANSMATRIX, &count, &data )) {
+  if (TIFFGetField(tif_, GTIFF_TRANSMATRIX, &count, &trans_matrix )) {
     assert (count == 16);
-    for (int i=0; i<count; i++) {
-      trans_matrix.push_back(data[i]);
-    }
+    //for (int i=0; i<count; i++) {
+    //  trans_matrix.push_back(data[i]);
+    //}
+    //trans_matrix = data
     return true;
   }
   return false;

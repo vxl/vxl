@@ -26,7 +26,6 @@
 #include <vcl_cmath.h>
 #include <vil/vil_pixel_format.h>
 #include <vil/file_formats/vil_tiff_header.h>
-#include <vnl/vnl_vector.h>
 #include <tiffio.h>
 #include <geotiffio.h>
 
@@ -48,7 +47,7 @@ class vil_geotiff_header
    bool gtif_pixelscale(double &scale_x, double &scale_y, double &scale_z);
 
    //:returns the matrix in an   
-   bool gtif_trans_matrix (vcl_vector<double> &trans_matrix);
+   bool gtif_trans_matrix (double* &trans_matrix);
   
    //: returns the Zone and the Hemisphere (0 for N, 1 for S);
    bool PCS_WGS84_UTM_zone(int &zone, GTIF_HEMISPH &hemisph);
