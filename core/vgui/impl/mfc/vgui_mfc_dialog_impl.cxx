@@ -23,8 +23,7 @@
 #include <winuser.h>
 
 static bool debug = false;
-vcl_string title;
-vcl_string orig_color; // For when color chooser is cancelled.
+//vcl_string orig_color; // For when color chooser is cancelled.
 CString TempsNewClass;
 BEGIN_MESSAGE_MAP(vgui_mfc_dialog_impl, CWnd)
         ON_COMMAND(IDOK,OnOk)
@@ -39,7 +38,6 @@ END_MESSAGE_MAP()
 vgui_mfc_dialog_impl::vgui_mfc_dialog_impl(const char* name)
   : CWnd(),vgui_dialog_impl(name)
 {
-  title = name;
   // Set some default parameters
   count_fbsr = 0;
   count_csr = 0;
@@ -238,7 +236,7 @@ bool vgui_mfc_dialog_impl::ask()
   //width=height=600;
   CreateEx(WS_EX_CONTROLPARENT,
            AfxRegisterWndClass(0,::LoadCursor(NULL, IDC_ARROW),(HBRUSH)(COLOR_WINDOW)),
-           _T(title.c_str()),
+           _T(vgui_dialog_impl::name.c_str()),
            WS_CAPTION|WS_VISIBLE|WS_SYSMENU|WS_POPUP|DS_MODALFRAME,
            100, 100, width, height, NULL, NULL, 0);
   UpdateWindow();
@@ -569,10 +567,19 @@ bool vgui_mfc_dialog_impl::ask()
   // Remove all the created objects from the heap
   for (vcl_vector<CWnd *>::iterator w_iter = awlist.begin();w_iter!=awlist.end();++w_iter)
     delete *w_iter;
+
+  awlist.clear();
+  wlist.clear();
+
+  count_fbsr = 0;
+  count_csr  = 0;
+
   delete accept;
   delete cancel;
-  delete font;
   DestroyWindow();
+  
+  delete font;
+  
   // Enable the parent window
   AfxGetApp()->EnableModeless(TRUE);
   AfxGetApp()->GetMainWnd()->EnableWindow(TRUE);

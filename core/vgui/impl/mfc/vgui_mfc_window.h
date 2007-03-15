@@ -49,11 +49,7 @@ class vgui_mfc_window : public vgui_window
   //: Destructor - delete this vgui_mfc_window.
   ~vgui_mfc_window();
 
-  vgui_menu menubar;
-  void set_menubar(vgui_menu const &m) { menubar = m; }
-
-  vgui_mfc_adaptor   *mfcwin;
-  vgui_mfc_statusbar *statusbar;
+  void set_menubar(vgui_menu const &m);
 
   //: Return the vgui_mfc_adaptor associated with this window.
   vgui_adaptor *get_adaptor();
@@ -80,6 +76,12 @@ class vgui_mfc_window : public vgui_window
   virtual int set_vscrollbar(int pos);
 
   POSITION pos1, pos2, pos3;
+  
+private:
+  vgui_menu			  menubar;
+
+  vgui_mfc_adaptor   *mfcwin;
+  vgui_mfc_statusbar *statusbar;
 };
 
 #endif // vgui_mfc_window_h_

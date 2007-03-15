@@ -9,6 +9,14 @@
 
 //--------------------------------------------------------------------------------
 
+vgui_glut_impl* vgui_glut_impl::instance()
+{
+  static vgui_glut_impl instance_;
+  return &instance_;
+}
+
+//--------------------------------------------------------------------------------
+
 int vgui_glut_impl::count = 0;
 
 vgui_glut_impl::vgui_glut_impl()

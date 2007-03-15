@@ -34,7 +34,8 @@ IMPLEMENT_DYNCREATE(vgui_mfc_adaptor, CView)
 
 //: Constructor.
 vgui_mfc_adaptor::vgui_mfc_adaptor( )
-  : m_pDC(0), m_pDC_aux(0),
+  : m_pDC(0), m_pDC_default_bitmap(0),
+    m_pDC_aux(0), m_pDC_aux_default_bitmap(0),
     win_(0),
     redraw_posted_(true),
     overlay_redraw_posted_(true),
@@ -74,9 +75,29 @@ vgui_mfc_adaptor::~vgui_mfc_adaptor()
 
   // Delete the DC
   if ( m_pDC )
+  {
+    if ( m_pDC_default_bitmap )
+    {
+      HBITMAP hBmp = (HBITMAP)::SelectObject( m_pDC->GetSafeHdc(), m_pDC_default_bitmap );
+      if (hBmp == 0)
+        ::AfxMessageBox("SelectObject with old HBITMAP failed.");
+      else
+        ::DeleteObject(hBmp);
+    }
     delete m_pDC;
+  }
   if ( m_pDC_aux )
+  {
+    if ( m_pDC_aux_default_bitmap )
+    {
+      HBITMAP hBmp = (HBITMAP)::SelectObject( m_pDC_aux->GetSafeHdc(), m_pDC_aux_default_bitmap );
+      if (hBmp == 0)
+        ::AfxMessageBox("SelectObject with old HBITMAP failed.");
+      else
+        ::DeleteObject(hBmp);
+    }
     delete m_pDC_aux;
+  }
 }
 
 BEGIN_MESSAGE_MAP(vgui_mfc_adaptor, CView)
@@ -206,11 +227,8 @@ int vgui_mfc_adaptor::OnCreate(LPCREATESTRUCT lpCreateStruct)
   // TODO: Add your specialized creation code here
 
   if (vgui_mfc_use_bitmap) {
-    HBITMAP obmp = 0;
-    create_bitmap( 1, 1, m_pDC, obmp );
-    DeleteObject( obmp );
-    create_bitmap( 1, 1, m_pDC_aux, obmp );
-    DeleteObject( obmp );
+    create_bitmap( 1, 1, m_pDC, m_pDC_default_bitmap );
+    create_bitmap( 1, 1, m_pDC_aux, m_pDC_aux_default_bitmap );
     set_double_buffering(false);
   } else {
     m_pDC = new CClientDC(this);
@@ -289,7 +307,7 @@ HGLRC vgui_mfc_adaptor::setup_for_gl( CDC* pDC, DWORD dwFlags )
 
 void vgui_mfc_adaptor::create_bitmap( int cx, int cy,
                                       CDC*& pDC,
-                                      HBITMAP& out_old_hbmp )
+                                      HBITMAP& defaultBitmapForDC )
 {
   BITMAPINFOHEADER bih;
   ZeroMemory( &bih, sizeof(bih) );
@@ -318,7 +336,21 @@ void vgui_mfc_adaptor::create_bitmap( int cx, int cy,
     return;
   }
   pDC->SetStretchBltMode(COLORONCOLOR);
-  out_old_hbmp = (HBITMAP)SelectObject( pDC->GetSafeHdc(), hbmp );
+  HBITMAP old_hbmp = (HBITMAP)SelectObject( pDC->GetSafeHdc(), hbmp );
+  if (old_hbmp == 0)
+  {
+    ::AfxMessageBox( "Failed to select bitmap into DC" );
+    return;
+  }
+  
+  if (defaultBitmapForDC == 0)
+    defaultBitmapForDC = old_hbmp;
+  else
+    if( !DeleteObject(old_hbmp) ) // Our object - delete it
+    {
+      ::AfxMessageBox( "Failed to delete old bitmap" );
+      return;
+    }
 }
 
 
@@ -469,13 +501,10 @@ void vgui_mfc_adaptor::OnSize(UINT nType, int cx, int cy)
   {
     // create a new GL bitmap and aux bitmap to match the new window
     // size.
-    HBITMAP obmp = 0;
-    create_bitmap( cx, cy, m_pDC, obmp );
-    DeleteObject( obmp );
+    create_bitmap( cx, cy, m_pDC, m_pDC_default_bitmap );
     m_hRC = setup_for_gl( m_pDC,
                           PFD_DRAW_TO_BITMAP | PFD_SUPPORT_OPENGL );
-    create_bitmap( cx, cy, m_pDC_aux, obmp );
-    DeleteObject( obmp );
+    create_bitmap( cx, cy, m_pDC_aux, m_pDC_aux_default_bitmap );
   }
   dispatch_to_tableau(vgui_RESHAPE);
   post_redraw();
@@ -526,6 +555,10 @@ void mfc_key(UINT nChar, UINT nFlags, int *the_key, int *the_ascii_char)
         *the_ascii_char = vgui_key(0);
         return;
     }
+  }
+  else if (nChar >= VK_F1 && nChar <= VK_F12)
+  {
+    *the_key = *the_ascii_char = vgui_F1 + (nChar - VK_F1);
   }
   else
   {

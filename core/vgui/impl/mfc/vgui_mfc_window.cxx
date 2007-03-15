@@ -45,7 +45,7 @@ void vgui_mfc_window::init_window(char const *title,
     mfcwin = (vgui_mfc_adaptor *)pdoc->GetNextView(pos3);
     mfcwin->set_window( this );
     if (has_menu)
-      vgui_mfc::instance()->utils->set_menu(menubar);
+      set_menubar(menubar);
     statusbar = new vgui_mfc_statusbar();
     CWnd *main_wnd = app->GetMainWnd();
     ((vgui_mfc_mainfrm *)main_wnd)->SetStatusBar(statusbar);
@@ -70,6 +70,7 @@ vgui_mfc_window::vgui_mfc_window(char const *title,
                                  int posy)
   : vgui_window()
   , mfcwin(0)
+  , statusbar(0)
 {
   init_window(title, vgui_menu(), false, width, height, posx, posy);
 }
@@ -80,6 +81,7 @@ vgui_mfc_window::vgui_mfc_window(unsigned width, unsigned height,
                                  char const *title)
   : vgui_window()
   , mfcwin(0)
+  , statusbar(0)
 {
   init_window(title, menubar, true, width, height, 0, 0);
 }
@@ -88,8 +90,18 @@ vgui_mfc_window::vgui_mfc_window(unsigned width, unsigned height,
 vgui_mfc_window::~vgui_mfc_window()
 {
   glFlush();
-  delete mfcwin;
-  mfcwin = 0;
+  /* AKhropov: seems like it's destroyed by MFC itself */
+  //delete mfcwin; 
+  //mfcwin = 0;
+  delete statusbar;
+  statusbar = 0;
+}
+
+//: Set menubar and update main window's actual menu
+void vgui_mfc_window::set_menubar(vgui_menu const &m)
+{
+	menubar = m;
+	vgui_mfc::instance()->utils->set_menu(menubar);
 }
 
 //: Return the vgui_mfc_adaptor associated with this window.

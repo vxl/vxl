@@ -41,8 +41,8 @@ static bool debug = false;
 
 vgui_mfc* vgui_mfc::instance()
 {
-  static vgui_mfc* instance_ = new vgui_mfc;
-  return instance_;
+  static vgui_mfc instance_;
+  return &instance_;
 }
 
 //---------------------------------------------------------------------------------

@@ -60,6 +60,8 @@ class vgui_mfc_adaptor : public CView, public vgui_adaptor, public vgui_adaptor_
 
   //: Device context for this adaptor.
   CDC* m_pDC;
+  
+  HBITMAP m_pDC_default_bitmap;
 
   typedef vgui_adaptor_mixin mixin;
 
@@ -138,7 +140,7 @@ class vgui_mfc_adaptor : public CView, public vgui_adaptor, public vgui_adaptor_
  private:
   void create_bitmap( int cx, int cy,
                       CDC*& out_pDC,
-                      HBITMAP& out_old_hbmp );
+                      HBITMAP& defaultBitmapForDC );
 
   HGLRC setup_for_gl( CDC* pDC, DWORD dwFlags );
 
@@ -146,6 +148,8 @@ class vgui_mfc_adaptor : public CView, public vgui_adaptor, public vgui_adaptor_
   CDC* m_pDC_aux;
   //: True if the aux buffer is a copy of the main GL buffer
   bool aux_dc_valid_;
+  
+  HBITMAP m_pDC_aux_default_bitmap;
 
   //: True while a redraw event has been requested but not implemented.
   bool redraw_posted_;

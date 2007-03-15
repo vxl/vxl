@@ -7,7 +7,7 @@
 
 vgui_tag(glut) {
   vul_trace;
-  new vgui_glut_impl;
+  vgui_glut_impl::instance();
   vul_trace;
   return 0;
 }

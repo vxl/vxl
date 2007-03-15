@@ -23,18 +23,20 @@ vgui_mfc_statusbar::vgui_mfc_statusbar()
   : statusbuf(new vgui_statusbuf(this))
   , out(statusbuf)
 {
-        statusbar = new CStatusBar();
-        statusbar->Create(AfxGetApp()->GetMainWnd());
+  statusbar = new CStatusBar();
+  statusbar->Create(AfxGetApp()->GetMainWnd());
   unsigned x = ID_SEPARATOR;
   statusbar->SetIndicators(&x,1);
   CFrameWnd *fwnd = (CFrameWnd *)AfxGetApp()->GetMainWnd();
   fwnd->ShowControlBar(statusbar,TRUE,FALSE);
   statusbar->UpdateWindow();
-        statusbar->ShowWindow(SW_SHOW);
+  statusbar->ShowWindow(SW_SHOW);
 }
 
 vgui_mfc_statusbar::~vgui_mfc_statusbar()
 {
+  delete statusbar;
+  delete statusbuf;
 }
 
 static int context_id = 1;
@@ -75,15 +77,15 @@ int vgui_mfc_statusbar::write(const char* text, int n)
   else {
     linebuffer.append(text, n);
     if (linebuffer.find('\n')) {
-            statusbar->SetWindowText(linebuffer.c_str());
+      statusbar->SetWindowText(linebuffer.c_str());
       statusbar->SetPaneText(0,linebuffer.c_str());
       linebuffer = "";
     }
   }
   statusbar->UpdateWindow();
-        statusbar->ShowWindow(SW_SHOW);
-        AfxGetApp()->GetMainWnd()->UpdateWindow();
-        AfxGetApp()->GetMainWnd()->ShowWindow(SW_SHOW);
+  statusbar->ShowWindow(SW_SHOW);
+  AfxGetApp()->GetMainWnd()->UpdateWindow();
+  AfxGetApp()->GetMainWnd()->ShowWindow(SW_SHOW);
   update();
   return n;
 }
@@ -91,12 +93,12 @@ int vgui_mfc_statusbar::write(const char* text, int n)
 //: Write given text to the status bar.
 int vgui_mfc_statusbar::write(const char* text)
 {
-        statusbar->SetWindowText(text);
+  statusbar->SetWindowText(text);
   linebuffer = text;
   statusbar->SetPaneText(0,linebuffer.c_str());
-        statusbar->UpdateWindow();
-        statusbar->ShowWindow(SW_SHOW);
+  statusbar->UpdateWindow();
+  statusbar->ShowWindow(SW_SHOW);
   update();
 
-        return 1;
+  return 1;
 }

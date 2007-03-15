@@ -10,6 +10,8 @@
 
 struct vgui_glut_impl : vgui_toolkit
 {
+  static vgui_glut_impl* instance();
+
   vgui_glut_impl();
   ~vgui_glut_impl();
 
