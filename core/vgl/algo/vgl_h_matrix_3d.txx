@@ -8,6 +8,7 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_cmath.h>
+#include <vcl_limits.h>
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h> // for exit()
 #include <vnl/vnl_inverse.h>
@@ -352,6 +353,44 @@ set_rotation_euler(T rz1, T ry, T rz2)
     for (int r = 0; r<3; r++)
       t12_matrix_[r][c]=R[c][r];
 }
+
+
+template <class T>
+bool vgl_h_matrix_3d<T>::is_rotation() const
+{
+  const vnl_matrix_fixed<T,4,4>& H = t12_matrix_;
+  if ( H.get(0,3) == (T)0 &&
+       H.get(1,3) == (T)0 &&
+       H.get(2,3) == (T)0 &&
+       this->is_euclidean() )
+    return true;
+
+  return false;
+}
+
+
+template <class T>
+bool vgl_h_matrix_3d<T>::is_euclidean() const
+{
+  const vnl_matrix_fixed<T,4,4>& H = t12_matrix_;
+  if ( H.get(3,0) == (T)0 &&
+       H.get(3,1) == (T)0 &&
+       H.get(3,2) == (T)0 &&
+       H.get(3,3) == (T)1 )
+  {
+    // use an error tolerance on the orthonormality constraint
+    vnl_matrix_fixed<T, 3,3> R = get_upper_3x3_matrix();
+    R *= R.transpose();
+    R(0,0) -= T(1);
+    R(1,1) -= T(1);
+    R(2,2) -= T(1);
+    double absolute_error = R.absolute_value_max();
+    if ( absolute_error <= 10*vcl_numeric_limits<T>::epsilon() )
+      return true;
+  }
+  return false;
+}
+
 
 template <class T>
 vgl_h_matrix_3d<T> 

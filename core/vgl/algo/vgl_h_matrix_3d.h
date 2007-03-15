@@ -78,6 +78,9 @@ class vgl_h_matrix_3d
   void set_rotation_roll_pitch_yaw(T yaw, T pitch, T roll);
   void set_rotation_euler(T rz1, T ry, T rz2);
 
+  bool is_rotation() const;
+  bool is_euclidean() const;
+
   // ---------- extract components as transformations ----------
 
   //: corresponds to rotation for Euclidan transformations
