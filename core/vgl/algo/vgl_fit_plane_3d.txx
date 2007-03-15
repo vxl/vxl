@@ -38,7 +38,7 @@ void vgl_fit_plane_3d<T>::add_point(const T x, const T y, const T z)
 }
 
  template <class T>
- void vgl_fit_plane_3d<T>::fit()
+ bool vgl_fit_plane_3d<T>::fit(double error_marg)
 {
   // normalize the points
   vgl_norm_trans_3d<double> norm;
@@ -92,6 +92,13 @@ void vgl_fit_plane_3d<T>::add_point(const T x, const T y, const T z)
   coeff_matrix(3, 3) = n;
 
   vnl_svd<double> svd(coeff_matrix);
+  // check if the error_margin is achieved
+  double min = svd.sigma_min();
+  if (min > error_marg) {
+    vcl_cerr << "Error Margin " << error_marg << ">" << min << ". Could not fit the points to a plane" << vcl_endl;
+    return false;
+  }
+
   // null vector gives the solution to the linear equation where b=[0]
   vnl_vector<double> s = svd.nullvector();
  
@@ -106,6 +113,7 @@ void vgl_fit_plane_3d<T>::add_point(const T x, const T y, const T z)
   c = s.get(2);
   d = s.get(3);
   plane_ = vgl_homg_plane_3d<double> (a, b, c, d);
+  return true;
 }
 
 //--------------------------------------------------------------------------

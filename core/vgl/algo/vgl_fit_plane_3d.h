@@ -51,7 +51,7 @@ class vgl_fit_plane_3d
   void clear();
 
   //:fits a plane to the stored points
-  void fit();
+  bool fit(double error_marg);
 
   // Data Access---------------------------------------------------------------
 
