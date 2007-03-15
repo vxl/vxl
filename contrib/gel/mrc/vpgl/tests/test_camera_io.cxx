@@ -107,7 +107,7 @@ static void test_camera_io()
     R.set_identity();
     R.set_rotation_about_axis(axis, theta);
     vcl_cout <<"Rotation Matrix\n" << R << '\n';
-    vpgl_perspective_camera<double> P(K, center, R);
+    vpgl_perspective_camera<double> P(K, center, vgl_rotation_3d<double>(R));
 
     vcl_cout << "Camera " << P;
 

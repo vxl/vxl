@@ -25,8 +25,7 @@ static void test_optimize_camera()
   vpgl_calibration_matrix<double> K(2000.0,vgl_homg_point_2d<double>(512,384));
   vgl_homg_point_3d<double> c(10.0,10.0,10.0);
   vnl_double_3 w = (vnl_math::pi - vcl_asin(vcl_sqrt(2.0/3.0)))/vcl_sqrt(2.0)*vnl_double_3(-1.0,1.0,0.0);
-  vgl_h_matrix_3d<double> R(vnl_rotation_matrix(w),
-                            vnl_double_3(0.0,0.0,0.0));
+  vgl_rotation_3d<double> R(w);
   vpgl_perspective_camera<double> cam(K,c,R);
 
   vcl_vector<vgl_point_2d<double> > image;
@@ -46,15 +45,14 @@ static void test_optimize_camera()
   vnl_double_3 dw = (vnl_double_3(rnd.drand32(), rnd.drand32(), rnd.drand32())-0.5).normalize();
   // select a random rotation angle
   dw *= max_r_err * rnd.drand32();
-  vnl_matrix_fixed<double,3,3> dR(vnl_rotation_matrix(dw));
-  vgl_h_matrix_3d<double> H(vnl_rotation_matrix(dw)*vnl_rotation_matrix(w), vnl_double_3(0.0,0.0,0.0));
+  vgl_rotation_3d<double> dR(dw);
 
   vgl_vector_3d<double> dc(rnd.drand32()-0.5, rnd.drand32()-0.5, rnd.drand32()-0.5);
 
   vcl_cout << "Initial position:" << cam.get_camera_center() << vcl_endl
            << "Initial principal ray:" << cam.principal_axis() << vcl_endl;
 
-  vpgl_perspective_camera<double> err_cam(K,c+max_t_err*dc,H);
+  vpgl_perspective_camera<double> err_cam(K,c+max_t_err*dc,dR*R);
   vcl_cout << "Perturbed position:" << err_cam.get_camera_center() << vcl_endl
            << "Perturbed principal ray:" << err_cam.principal_axis() << vcl_endl;
 

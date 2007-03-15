@@ -127,9 +127,7 @@ bool vpgl_construct_cameras::construct()
       }
       if ( vnl_det<double>( R ) < 0 ) R = -R;
       vnl_vector<double> cc = -R.transpose()*t;
-      vnl_vector_fixed<double,3> zeros(0.0);
-      vgl_h_matrix_3d<double> R_vgl(R,zeros);
-      P2_.set_rotation_matrix( R_vgl );
+      P2_.set_rotation( vgl_rotation_3d<double>(R) );
       P2_.set_camera_center( vgl_point_3d<double>( cc(0), cc(1), cc(2) ) );
       vgl_point_3d<double> p3d = triangulate_3d_point(
         pnorm1, P1_.get_matrix(), pnorm2, P2_.get_matrix() );

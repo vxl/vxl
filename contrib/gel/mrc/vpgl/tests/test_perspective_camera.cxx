@@ -19,8 +19,7 @@ static void test_perspective_camera()
   m[2][0]=0;m[2][1]=0;m[2][2]=1;
 
   vpgl_calibration_matrix<double> K(m);
-  vgl_h_matrix_3d<double> R;
-  R.set_identity();
+  vgl_rotation_3d<double> R; // the identity
   vgl_homg_point_3d<double>center(0,0,-10.0);
   vpgl_perspective_camera<double> P(K, center, R);
   vcl_cout << "Camera " << P;
@@ -83,18 +82,14 @@ static void test_perspective_camera()
 
   // test align up/down
   {
-    vgl_h_matrix_3d<double> P0_R;
-    P0_R.set_identity();
-    P0_R.set_rotation_euler(.1,.4,-1);
+    vgl_rotation_3d<double> P0_R(.1,.4,-1); // euler angles
     vpgl_perspective_camera<double> P0;
-    P0.set_rotation_matrix( P0_R );
+    P0.set_rotation( P0_R );
     P0.set_camera_center( vgl_point_3d<double>( 0, 2, -1 ) );
 
-    vgl_h_matrix_3d<double> P1_R;
-    P1_R.set_identity();
-    P1_R.set_rotation_euler(.2,-.3,.7);
+    vgl_rotation_3d<double> P1_R(.2,-.3,.7); // euler angles
     vpgl_perspective_camera<double> P1;
-    P1.set_rotation_matrix( P1_R );
+    P1.set_rotation( P1_R );
     P1.set_camera_center( vgl_point_3d<double>( 6, -1, 2 ) );
 
     vpgl_perspective_camera<double> P2 = P1;
@@ -106,11 +101,9 @@ static void test_perspective_camera()
 
   // Test finite backprojection.
   {
-    vgl_h_matrix_3d<double> P0_R;
-    P0_R.set_identity();
-    P0_R.set_rotation_euler(.1,.4,-1);
+    vgl_rotation_3d<double> P0_R(.1,.4,-1); // euler angles
     vpgl_perspective_camera<double> P0;
-    P0.set_rotation_matrix( P0_R );
+    P0.set_rotation( P0_R );
     P0.set_camera_center( vgl_point_3d<double>( 1, 1, 1 ) );
     P0.look_at( vgl_homg_point_3d<double>(0,0,0) );
 

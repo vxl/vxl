@@ -74,7 +74,7 @@ static void test_essential_matrix()
   vpgl_essential_matrix<double> Ei(skew_symmetric(t[0],t[1],t[2])*R);
   vcl_cout << "\nIdeal Essential Matrix\n" << Ei << '\n';
   vpgl_perspective_camera<double> pcl, pcr;
-  pcl.set_rotation_matrix(Rh);
+  pcl.set_rotation(vgl_rotation_3d<double>(Rh));
   pcl.set_camera_center(c);
   vcl_cout << "Ideal Left Perspective Camera  " << pcl << '\n';
   vgl_point_3d<double> X(0,0,10);

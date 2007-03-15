@@ -14,8 +14,7 @@ static void test_project()
   m[2][0]=0;m[2][1]=0;m[2][2]=1;
 
   vpgl_calibration_matrix<double> K(m);
-  vgl_h_matrix_3d<double> R;
-  R.set_identity();
+  vgl_rotation_3d<double> R;
   vgl_homg_point_3d<double>center(0,0,-10.0);
   vpgl_perspective_camera<double> P(K, center, R);
   vcl_cout << "Camera " << P << '\n';

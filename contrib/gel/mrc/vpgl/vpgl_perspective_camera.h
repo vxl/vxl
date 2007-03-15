@@ -10,14 +10,16 @@
 //
 // \verbatim
 //  Modifications
-//   5/08/2005  Ricardo Fabbri  Added binary I/O support
-//   5/08/2005  Ricardo Fabbri  Added == operator
-//   2/8/2007  Thomas Pollard   Added finite backproject method.
+//   5/08/2005  Ricardo Fabbri   Added binary I/O support
+//   5/08/2005  Ricardo Fabbri   Added == operator
+//   2/8/2007   Thomas Pollard   Added finite backproject method.
+//   3/16/2007  Matt Leotta      Replaced vgl_h_matrix_3d with vgl_rotation_3d for rotation
 // \endverbatim
 
 
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_fwd.h>
+#include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vcl_iosfwd.h>
 #include <vcl_cassert.h>
@@ -59,8 +61,8 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
 
   //: Main constructor takes all of the camera parameters.
   vpgl_perspective_camera( const vpgl_calibration_matrix<T>& K,
-                            const vgl_point_3d<T>& camera_center,
-                            const vgl_h_matrix_3d<T>& R );
+                           const vgl_point_3d<T>& camera_center,
+                           const vgl_rotation_3d<T>& R );
 
   //: Copy constructor
   vpgl_perspective_camera( const vpgl_perspective_camera& cam );
@@ -85,16 +87,16 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
   //: Setters and getters.
   void set_calibration( const vpgl_calibration_matrix<T>& K );
   void set_camera_center( const vgl_point_3d<T>& camera_center );
-  void set_rotation_matrix( const vgl_h_matrix_3d<T>& R );
+  void set_rotation( const vgl_rotation_3d<T>& R );
   const vpgl_calibration_matrix<T>& get_calibration() const{ return K_; }
   const vgl_point_3d<T>& get_camera_center() const { return camera_center_; }
-  const vgl_h_matrix_3d<T>& get_rotation_matrix() const{ return R_; }
+  const vgl_rotation_3d<T>& get_rotation() const{ return R_; }
 
   //: Rotate the camera about its center such that it looks at the given point
   //  The camera should also be rotated about its principle axis such that
   //  the vertical image direction is closest to \p up in the world
   void look_at(const vgl_homg_point_3d<T>& point,
-               const vgl_vector_3d<double>& up = vgl_vector_3d<double>(0,0,1));
+               const vgl_vector_3d<T>& up = vgl_vector_3d<T>(0,0,1));
 
   // Redefined virtual functions -------------------------------------------
 
@@ -113,7 +115,7 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
   inline bool operator==(vpgl_perspective_camera<T> const &that) const
   { return this == &that ||
     (K_ == that.K_ && this->get_matrix()== that.get_matrix() &&
-     camera_center_ == that.camera_center_ && this->R_.get_matrix() == that.R_.get_matrix()); }
+     camera_center_ == that.camera_center_ && this->R_.as_matrix() == that.R_.as_matrix()); }
 
   // I/O :---------------------
 
@@ -124,7 +126,7 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
   virtual void b_read(vsl_b_istream &is);
 
   //: IO version number
-  short version() const {return 1;}
+  short version() const {return 2;}
 
   //: Print an ascii summary to the stream
   void print_summary(vcl_ostream &os) const { os << *this; }
@@ -149,7 +151,7 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
 
   vpgl_calibration_matrix<T> K_;
   vgl_point_3d<T> camera_center_;
-  vgl_h_matrix_3d<T> R_;
+  vgl_rotation_3d<T> R_;
 };
 
 // External Functions:-------------------------------------------------------------
@@ -166,13 +168,6 @@ vcl_istream&  operator>>(vcl_istream& s, vpgl_perspective_camera<Type>& p)
   return s;
 }
 
-//: Check that the matrix in question is a rotation.  This probably belongs in vgl.
-template <class T>
-bool vpgl_is_rotation( const vgl_h_matrix_3d<T>& H );
-
-//: Check that the matrix in question is Euclidean.  This probably belongs in vgl.
-template <class T>
-bool vpgl_is_euclidean( const vgl_h_matrix_3d<T>& H );
 
 
 //: Decompose camera into parameter blocks.

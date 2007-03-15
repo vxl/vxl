@@ -33,8 +33,7 @@ vpgl_orientation_lsqr::
 void
 vpgl_orientation_lsqr::f(vnl_vector<double> const& x, vnl_vector<double>& fx)
 {
-  vgl_h_matrix_3d<double> R(vnl_rotation_matrix(x), vnl_vector_fixed< double, 3 >(0.0));
-  vpgl_perspective_camera<double> cam(K_,c_,R);
+  vpgl_perspective_camera<double> cam(K_,c_,vgl_rotation_3d<double>(x));
   for (unsigned int i=0; i<world_points_.size(); ++i)
   {
     vgl_homg_point_2d<double> proj = cam(world_points_[i]);
@@ -69,8 +68,7 @@ vpgl_orientation_position_lsqr::f(vnl_vector<double> const& x, vnl_vector<double
 {
   vnl_vector<double> w(x.data_block(),3);
   vgl_homg_point_3d<double> t(x[3], x[4], x[5]);
-  vgl_h_matrix_3d<double> R(vnl_rotation_matrix(w), vnl_vector_fixed< double, 3 >(0.0));
-  vpgl_perspective_camera<double> cam(K_,t,R);
+  vpgl_perspective_camera<double> cam(K_,t,vgl_rotation_3d<double>(w));
   for (unsigned int i=0; i<world_points_.size(); ++i)
   {
     vgl_homg_point_2d<double> proj = cam(world_points_[i]);
@@ -110,25 +108,18 @@ vpgl_optimize_camera::opt_orient(const vpgl_perspective_camera<double>& camera,
 {
   const vpgl_calibration_matrix<double>& K = camera.get_calibration();
   const vgl_point_3d<double>& c = camera.get_camera_center();
-  vnl_matrix<double> R(camera.get_rotation_matrix().get_matrix().extract(3,3));
+  const vgl_rotation_3d<double>& R = camera.get_rotation();
+
 
   // compute the Rodrigues vector from the rotation
-  vnl_vector<double> w(3,0.0);
-  w[0] = R(2,1)-R(1,2);
-  w[1] = R(0,2)-R(2,0);
-  w[2] = R(1,0)-R(0,1);
-  w.normalize();
-  double a = vcl_acos(vcl_sqrt( R(0,0)+R(1,1)+R(2,2)+1.0)/2.0)*2.0;
-  w *=a;
+  vnl_vector<double> w = R.as_rodrigues();
 
   vpgl_orientation_lsqr lsqr_func(K,c,world_points,image_points);
   vnl_levenberg_marquardt lm(lsqr_func);
   lm.set_trace(true);
   lm.minimize(w);
 
-  return vpgl_perspective_camera<double>(K, c,
-              vgl_h_matrix_3d<double>(vnl_rotation_matrix(w),
-                                      vnl_vector_fixed< double, 3 >(0.0)) );
+  return vpgl_perspective_camera<double>(K, c, vgl_rotation_3d<double>(w) );
 }
 
 
@@ -139,17 +130,12 @@ vpgl_optimize_camera::opt_orient_pos(const vpgl_perspective_camera<double>& came
                                      const vcl_vector<vgl_point_2d<double> >& image_points )
 {
   const vpgl_calibration_matrix<double>& K = camera.get_calibration();
-  vnl_matrix<double> R(camera.get_rotation_matrix().get_matrix().extract(3,3));
   vgl_point_3d<double> c = camera.get_camera_center();
+  const vgl_rotation_3d<double>& R = camera.get_rotation();
 
   // compute the Rodrigues vector from the rotation
-  vnl_vector<double> w(3,0.0);
-  w[0] = R(2,1)-R(1,2);
-  w[1] = R(0,2)-R(2,0);
-  w[2] = R(1,0)-R(0,1);
-  w.normalize();
-  double a = vcl_acos(vcl_sqrt( R(0,0)+R(1,1)+R(2,2)+1.0)/2.0)*2.0;
-  w *=a;
+  vnl_vector<double> w = R.as_rodrigues();
+
 
   vpgl_orientation_position_lsqr lsqr_func(K,world_points,image_points);
   vnl_levenberg_marquardt lm(lsqr_func);
@@ -161,7 +147,5 @@ vpgl_optimize_camera::opt_orient_pos(const vpgl_perspective_camera<double>& came
   vnl_vector<double> w_min(params.data_block(),3);
   vgl_homg_point_3d<double> c_min(params[3], params[4], params[5]);
 
-  return vpgl_perspective_camera<double>(K, c_min,
-              vgl_h_matrix_3d<double>(vnl_rotation_matrix(w_min),
-                                      vnl_vector_fixed< double, 3 >(0.0)) );
+  return vpgl_perspective_camera<double>(K, c_min, vgl_rotation_3d<double>(w_min) );
 }

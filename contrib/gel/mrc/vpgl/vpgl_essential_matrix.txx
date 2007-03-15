@@ -127,9 +127,7 @@ bool extract_left_camera(const vpgl_essential_matrix<T>& E,
     if ( vnl_det<T>( R ) < 0 ) R = -R ;
     t*=translation_mag;
     vnl_vector_fixed<T, 3> cc = -R.transpose()*t;
-    vnl_vector_fixed<T, 3> zeros((T)0);
-    vgl_h_matrix_3d<T> R_vgl(R,zeros);
-    p_left.set_rotation_matrix( R_vgl );
+    p_left.set_rotation( vgl_rotation_3d<T>(R) );
     p_left.set_camera_center( vgl_point_3d<T>( cc(0), cc(1), cc(2) ) );
     vpgl_proj_camera<T> ppl =
       static_cast<vpgl_proj_camera<T> >(p_left);
@@ -146,10 +144,7 @@ bool extract_left_camera(const vpgl_essential_matrix<T>& E,
       return false;
     }
   }
-  //The rotation part of the perspective camera should be a rotation
-  //If this assertion fails, there are numerical accuracy problems with
-  //the incoming E matrix.
-  assert(vpgl_is_rotation<double>(p_left.get_rotation_matrix()));
+
   return true;
 }
 
