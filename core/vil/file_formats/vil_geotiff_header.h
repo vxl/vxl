@@ -26,13 +26,12 @@
 #include <vcl_cmath.h>
 #include <vil/vil_pixel_format.h>
 #include <vil/file_formats/vil_tiff_header.h>
-#include <vnl/vnl_matrix.h>
+#include <vnl/vnl_vector.h>
 #include <tiffio.h>
 #include <geotiffio.h>
-//#include <geovalues.h>
 
 
-class vil_geotiff_header// : public vil_tiff_header
+class vil_geotiff_header
 {
  public:
    
@@ -48,16 +47,18 @@ class vil_geotiff_header// : public vil_tiff_header
 
    bool gtif_pixelscale(double &scale_x, double &scale_y, double &scale_z);
 
-   bool gtif_trans_matrix (vnl_matrix<double> &trans_matrix);
-  //: returns the Zone and the Hemisphere (0 for N, 1 for S);
+   //:returns the matrix in an   
+   bool gtif_trans_matrix (vcl_vector<double> &trans_matrix);
+  
+   //: returns the Zone and the Hemisphere (0 for N, 1 for S);
+   bool PCS_WGS84_UTM_zone(int &zone, GTIF_HEMISPH &hemisph);
 
-  bool PCS_WGS84_UTM_zone(int &zone, GTIF_HEMISPH &hemisph);
-  //: <key> : key id
-  // <value>: a single value or an array of values
-  // <size>:  the size of individial key values
-  // <length> : the number of values in the value array
-  // <type>: the type of the key
-  bool get_key_value(geokey_t key, void** value, 
+   //: <key> : key id
+   // <value>: a single value or an array of values
+   // <size>:  the size of individial key values
+   // <length> : the number of values in the value array
+   // <type>: the type of the key
+   bool get_key_value(geokey_t key, void** value, 
                      int& size, int& length, tagtype_t& type);
 
   void print_gtif(){ if (gtif_) GTIFPrint(gtif_, 0, 0); }
@@ -73,6 +74,7 @@ class vil_geotiff_header// : public vil_tiff_header
   // the revision number is key_revision.minor_revision
   unsigned short key_revision_;
   unsigned short minor_revision_;
+
   // the number of keys defined in the rest of the tag
   int number_of_geokeys_;
 
@@ -85,10 +87,6 @@ class vil_geotiff_header// : public vil_tiff_header
   bool gtif_rastertype (rastertype_t&);
   bool geounits (geounits_t&); 
   bool geographic_type(geographic_t&);
-
-  //vcl_vector<double> model_pixel_scale_;
-  //vcl_vector<vcl_vector<double> > model_tiepoints_;
-  //vcl_vector<double> model_transformation_;
 
 };
 

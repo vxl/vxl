@@ -4,8 +4,6 @@
 #include <geotiffio.h>
 #include <geovalues.h>
 
-#include <vnl/vnl_matrix.h>
-
 vil_geotiff_header::vil_geotiff_header(TIFF* tif) : tif_(tif)
 {
   if (tif) {
@@ -64,13 +62,15 @@ bool vil_geotiff_header::gtif_pixelscale(double &scale_x, double &scale_y, doubl
   return false;
 }
 
-bool vil_geotiff_header::gtif_trans_matrix (vnl_matrix<double> &trans_matrix) 
+bool vil_geotiff_header::gtif_trans_matrix (vcl_vector<double> &trans_matrix) 
 {
   double *data;
 	short count;
   if (TIFFGetField(tif_, GTIFF_TRANSMATRIX, &count, &data )) {
     assert (count == 16);
-    trans_matrix = vnl_matrix<double> (data, 4, 4);
+    for (int i=0; i<count; i++) {
+      trans_matrix.push_back(data[i]);
+    }
     return true;
   }
   return false;
