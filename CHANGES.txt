@@ -6,8 +6,21 @@ effect.  If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
 
-        - vbl_shared_pointer updated to allow base class conversions
+      - intersection methods and functions in vgl have been separated from classes,
+        and renamed to vgl_intersection. The new functions can be found in 
+        <vgl/vgl_intersection.h> and <vgl/algo/vgl_intersection.h>. The old
+        intersection methods and functions have been deprecated.
 
+      - vbl_shared_pointer updated to allow base class conversions
+      
+      - Begun to switch vil error reporting to exception-based.
+      
+      - Added support for additional full loader/savers plug-ins to be added
+        manually to the vil loader scheme.
+      
+      - Added an plug-in vil loader to save and load vimt_image_2d natively.
+      
+      
 ****************************
 VXL 1.7.0	- November 2006
 ****************************
@@ -16,6 +29,8 @@ VXL 1.7.0	- November 2006
         vgl/algo/vgl_intersection.h. intersect(...) under
         vgl/vgl_box_3d and intersection(...) under vgl/vgl_line_3d_2_points 
         are depracted and no longer available.
+
+      - Added support for VC++ x64
 
 ****************************
 VXL 1.6.0	- August 2006
