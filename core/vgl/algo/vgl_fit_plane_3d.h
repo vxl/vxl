@@ -29,7 +29,7 @@ class vgl_fit_plane_3d
   // Data Members--------------------------------------------------------------
  protected:
   vcl_vector<vgl_homg_point_3d<T> > points_;
-  vgl_homg_plane_3d<double> plane_;
+  vgl_homg_plane_3d<T> plane_;
 
  public:
 
@@ -51,7 +51,7 @@ class vgl_fit_plane_3d
   void clear();
 
   //:fits a plane to the stored points
-  bool fit(double error_marg);
+  bool fit(const T error_marg);
 
   // Data Access---------------------------------------------------------------
 

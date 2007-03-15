@@ -38,27 +38,27 @@ void vgl_fit_plane_3d<T>::add_point(const T x, const T y, const T z)
 }
 
  template <class T>
- bool vgl_fit_plane_3d<T>::fit(double error_marg)
+ bool vgl_fit_plane_3d<T>::fit(const T error_marg)
 {
   // normalize the points
-  vgl_norm_trans_3d<double> norm;
+  vgl_norm_trans_3d<T> norm;
   if (!norm.compute_from_points(points_)) {
     vcl_cerr << "there is a problem with norm transform" << vcl_endl;
   }
 
   // normalize the points
   for (unsigned i=0; i<points_.size(); i++) {
-    vgl_homg_point_3d<double> p = points_[i];
+    vgl_homg_point_3d<T> p = points_[i];
     points_[i] = norm(p);
   }
 
   // compute the matrix A of Ax=b
-  double A=0, B=0, C=0, D=0, E=0, F=0, G=0, H=0, I=0;
+  T A=0, B=0, C=0, D=0, E=0, F=0, G=0, H=0, I=0;
   unsigned n = points_.size();
   for (unsigned i=0; i<n; i++) {
-    double x = points_[i].x()/points_[i].w();
-    double y = points_[i].y()/points_[i].w();
-    double z = points_[i].z()/points_[i].w();
+    T x = points_[i].x()/points_[i].w();
+    T y = points_[i].y()/points_[i].w();
+    T z = points_[i].z()/points_[i].w();
     A += x;
     B += y;
     C += z;
@@ -70,7 +70,7 @@ void vgl_fit_plane_3d<T>::add_point(const T x, const T y, const T z)
     I += x*z;
   }
 
-  vnl_matrix<double> coeff_matrix(4, 4);
+  vnl_matrix<T> coeff_matrix(4, 4);
   coeff_matrix(0, 0) = D;
   coeff_matrix(0, 1) = G;
   coeff_matrix(0, 2) = I;
@@ -91,28 +91,28 @@ void vgl_fit_plane_3d<T>::add_point(const T x, const T y, const T z)
   coeff_matrix(3, 2) = C;
   coeff_matrix(3, 3) = n;
 
-  vnl_svd<double> svd(coeff_matrix);
+  vnl_svd<T> svd(coeff_matrix);
   // check if the error_margin is achieved
-  double min = svd.sigma_min();
+  T min = svd.sigma_min();
   if (min > error_marg) {
     vcl_cerr << "Error Margin " << error_marg << ">" << min << ". Could not fit the points to a plane" << vcl_endl;
     return false;
   }
 
   // null vector gives the solution to the linear equation where b=[0]
-  vnl_vector<double> s = svd.nullvector();
+  vnl_vector<T> s = svd.nullvector();
  
   // re-transform the points back to the real world
-  vnl_double_4x4 N=norm.get_matrix();
-  vnl_double_4x4 N_transp = N.transpose(); 
+  vnl_matrix_fixed<T,4,4> N=norm.get_matrix();
+  vnl_matrix_fixed<T,4,4> N_transp = N.transpose(); 
   s = N_transp * s;
 
-  double a, b, c, d;
+  T a, b, c, d;
   a = s.get(0);
   b = s.get(1);
   c = s.get(2);
   d = s.get(3);
-  plane_ = vgl_homg_plane_3d<double> (a, b, c, d);
+  plane_ = vgl_homg_plane_3d<T> (a, b, c, d);
   return true;
 }
 
