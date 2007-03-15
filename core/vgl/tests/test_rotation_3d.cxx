@@ -18,7 +18,7 @@ void test_conversions(const vgl_rotation_3d<double>& rot)
 {
   vnl_double_3x3 R = rot.as_matrix();
   vgl_h_matrix_3d<double> H = rot.as_h_matrix_3d();
-  vnl_double_3 rr = rot.as_rodriques();
+  vnl_double_3 rr = rot.as_rodrigues();
   vnl_double_3 er = rot.as_euler_angles();
   vnl_quaternion<double> qr = rot.as_quaternion();
 

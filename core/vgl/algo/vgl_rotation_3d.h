@@ -26,11 +26,15 @@
 #include <vcl_vector.h>
 
 
+
 template <class T>
 class vgl_rotation_3d
 {
  public:
   // Constructors:-------------------------------------
+
+  //: Construct the identity rotation
+  vgl_rotation_3d() : q_(0,0,0,1) {}
 
   //: Construct from a quaternion.
   vgl_rotation_3d( const vnl_quaternion<T>& q ) : q_(q) { q_.normalize(); }
@@ -38,17 +42,17 @@ class vgl_rotation_3d
   //: Construct from Euler angles.
   vgl_rotation_3d( const T& rx, const T& ry, const T& rz ) : q_(rx,ry,rz) {}
 
-  //: Construct from a Rodriques vector.
-  vgl_rotation_3d( const vnl_vector_fixed<T,3>& rvector )
+  //: Construct from a Rodrigues vector.
+  explicit vgl_rotation_3d( const vnl_vector_fixed<T,3>& rvector )
     : q_(rvector/rvector.magnitude(),rvector.magnitude()) {}
 
   //: Construct from a 3x3 rotation matrix
-  vgl_rotation_3d( const vnl_matrix_fixed<T,3,3>& matrix )
+  explicit vgl_rotation_3d( const vnl_matrix_fixed<T,3,3>& matrix )
     : q_(matrix.transpose()) {}
 
   //: Construct from a vgl_h_matrix_3d.
-  vgl_rotation_3d( const vgl_h_matrix_3d<T>& h )
-    : q_(h.get_upper_3x3_matrix().transpose()) {}
+  explicit vgl_rotation_3d( const vgl_h_matrix_3d<T>& h )
+    : q_(h.get_upper_3x3_matrix().transpose()) { assert(h.is_rotation()); }
 
 
   // Conversions:--------------------------------------
@@ -69,10 +73,10 @@ class vgl_rotation_3d
     return q_.rotation_euler_angles();
   }
 
-  //: Output Rodriques vector.
+  //: Output Rodrigues vector.
   //  The direction of this vector is the axis of rotation
   //  The length of this vector is the angle of rotation in radians
-  vnl_vector_fixed<T,3> as_rodriques() const
+  vnl_vector_fixed<T,3> as_rodrigues() const
   {
     return q_.axis()*q_.angle();
   }
@@ -95,8 +99,22 @@ class vgl_rotation_3d
     return vgl_h_matrix_3d<T>(q_.rotation_matrix_transpose_4().transpose());
   }
 
+  //: Returns the axis of rotation (unit vector)
+  vnl_vector_fixed<T,3> axis() const
+  {
+    return q_.axis();
+  }
+
+  //: Returns the magnitude of the angle of rotation 
+  T angle() const
+  {
+    return q_.angle();
+  }
 
   // Operations:----------------------------------------
+
+  //: Make the rotation the identity (i.e. no rotation)
+  void set_identity() { q_[0]=0; q_[1]=0; q_[2]=0; q_[3]=1; }
 
   //: The inverse rotation
   vgl_rotation_3d<T> inverse() const { return vgl_rotation_3d<T>(q_.conjugate()); }
@@ -175,6 +193,15 @@ class vgl_rotation_3d
   vnl_quaternion<T> q_;
 };
 
+
+// External methods for stream I/O
+// ----------------------------------------------------------------
+
+template <class T>
+vcl_ostream& operator<<(vcl_ostream& s, vgl_rotation_3d<T> const& R)
+{
+  return s << R.as_quaternion();
+}
 
 // External methods for more efficient rotation of multiple objects
 // ----------------------------------------------------------------
