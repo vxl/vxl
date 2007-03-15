@@ -20,7 +20,9 @@ static void test_fit_plane_z()
       fit_plane.add_point(p);
     }
   }
-  fit_plane.fit();
+   double tol = 1e-3;
+bool success =   fit_plane.fit(tol);
+TEST("exact fit", success, true);
   vgl_homg_plane_3d<double> plane = fit_plane.get_plane();
 
   // test if origin is on the plane
@@ -55,7 +57,9 @@ static void test_fit_plane_xyz()
       }
     }
   }
-  fit_plane.fit();
+  double tol = 1e-3;
+  bool success = fit_plane.fit(tol);
+  TEST("test fit", success, true);
   vgl_homg_plane_3d<double> plane = fit_plane.get_plane();
 
   // test if origin is on the plane
@@ -80,8 +84,9 @@ static void test_fit_plane_random()
     vgl_homg_point_3d<double> p(r1, r2, r3);
     fit_plane.add_point(p);
   }
-
-  fit_plane.fit();
+ double tol = 1e-3;
+  bool success = fit_plane.fit(tol);
+  TEST("random fit", success, false);
   vgl_homg_plane_3d<double> plane = fit_plane.get_plane();
 
   vcl_cout << plane;
