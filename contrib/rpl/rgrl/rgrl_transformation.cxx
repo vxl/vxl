@@ -304,7 +304,7 @@ log_det_covar_deficient( int rank ) const
     m = covar_;
     
   // compute the log of determinant with the largest [rank] eigenvalues
-  const unsigned int num = m.rows();
+  const int num = m.rows();
   
   // by default
   if( rank <= 0 )
@@ -312,8 +312,8 @@ log_det_covar_deficient( int rank ) const
     
   double result = 0;
   vnl_symmetric_eigensystem<double> eig(m);
-  for( unsigned i=0; i<num && i<rank; ++i )
-    result += vcl_log( eig.get_eigenvalue(num-i) );
+  for( int i=0; i<rank; ++i )
+    result += vcl_log( eig.get_eigenvalue(num-1-i) );
   return result;
 }
  
