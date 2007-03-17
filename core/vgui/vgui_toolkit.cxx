@@ -21,10 +21,8 @@
 
 vcl_vector<vgui_toolkit*> *vgui_toolkit::registry()
 {
-  static vcl_vector<vgui_toolkit*> *the_vector = 0;
-  if (!the_vector)
-    the_vector = new vcl_vector<vgui_toolkit*>;
-  return the_vector;
+  static vcl_vector<vgui_toolkit*> the_vector;
+  return &the_vector;
 }
 
 vgui_toolkit *vgui_toolkit::lookup(char const *name)
