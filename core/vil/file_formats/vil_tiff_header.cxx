@@ -245,6 +245,8 @@ unsigned vil_tiff_header::n_separate_image_planes() const
       return samples_per_pixel.val;
     else if (planar_config.val == PLANARCONFIG_CONTIG)
       return 1;
+    else
+      return 0;
   }
   else
     return 0;
