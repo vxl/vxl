@@ -192,8 +192,9 @@ bool vil_tiff_header::read_header()
 
   tile_offsets_valid = false;
 
+#if 0
   // read the geotiff tags
-  /*vil_geotiff_header geotiff(tif_);
+  vil_geotiff_header geotiff(tif_);
   vcl_vector<double> scale;
   geotiff.model_pixel_scale(scale);
   void *val = 0;
@@ -201,10 +202,11 @@ bool vil_tiff_header::read_header()
   tagtype_t type;
   geokey_t key = GTModelTypeGeoKey;
   geotiff.get_key_value(key, &val, size, length, type);
-  /*if (type == TYPE_SHORT) {
+  if (type == TYPE_SHORT) {
     short* xxx=0;
-    memcpy(xxx, val, size*length);
-  }*/
+    vcl_memcpy(xxx, val, size*length);
+  }
+#endif // 0
 #ifdef DEBUG
   if (tile_width.valid&&tile_length.valid&&samples_per_pixel.valid)
   {
@@ -238,11 +240,14 @@ bool vil_tiff_header::read_header()
 unsigned vil_tiff_header::n_separate_image_planes() const
 {
   if (planar_config.valid&&samples_per_pixel.valid)
+  {
     if (planar_config.val == PLANARCONFIG_SEPARATE)
       return samples_per_pixel.val;
     else if (planar_config.val == PLANARCONFIG_CONTIG)
       return 1;
-  return 0;
+  }
+  else
+    return 0;
 }
 
 bool vil_tiff_header::is_tiled() const
@@ -258,26 +263,26 @@ bool vil_tiff_header::is_striped() const
 
 bool vil_tiff_header::is_GEOTIFF() const
 {
-  
-//  int version[3];
-//  int number_of_geokeys;
+#if 0
+  int version[3];
+  int number_of_geokeys;
+  GTIFDirectoryInfo(gtif_, version, &number_of_geokeys);
+  return number_of_geokeys > 0;
+#else // 0
   short *data;
-	short count;
-  //GTIFDirectoryInfo(gtif_, version, &number_of_geokeys); 
-  if (TIFFGetField(tif_, 34735 /*TIFFTAG_GEOKEYDIRECTORY*/, &count, &data))
-  //if (number_of_geokeys > 0)
-    return true;
-
-  return false;
+  short count;
+  return TIFFGetField(tif_, 34735 /*TIFFTAG_GEOKEYDIRECTORY*/, &count, &data);
+#endif // 0
 }
 
 unsigned vil_tiff_header::encoded_bytes_per_block() const
 {
   if (is_tiled())
     return static_cast<unsigned>(bytes_per_tile());
-  if (is_striped())
+  else if (is_striped())
     return static_cast<unsigned>(bytes_per_strip());
-  return 0;
+  else
+    return 0;
 }
 
 // the number of samples in a scan line
@@ -337,18 +342,19 @@ vxl_uint_16  vil_tiff_header::n_images()
 {
   return TIFFNumberOfDirectories(tif_);
 }
+
 //assemble the information to define the vil_pixel_format
 //return false if the format cannot be handled
 bool vil_tiff_header::compute_pixel_format()
 {
-//also need sample_format.valid but use default (1) for images that don't have it
-if (!(bits_per_sample.valid) || !(samples_per_pixel.valid) ||
-     !(planar_config.valid) || !photometric.valid
+  //also need sample_format.valid but use default (1) for images that don't have it
+  if (!(bits_per_sample.valid) || !(samples_per_pixel.valid) ||
+      !(planar_config.valid) || !photometric.valid
      )
-    {
-      pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
-      return false;
-    }
+  {
+    pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
+    return false;
+  }
 
   vxl_uint_16 b = bits_per_sample.val;
   vxl_uint_16 bbs = bytes_per_sample();
@@ -436,14 +442,15 @@ if (!(bits_per_sample.valid) || !(samples_per_pixel.valid) ||
         return false;
     }
   // Now for regular color images
-  //handle sample formats (unsigned, signed, float, double)
-  //vil normally doesn't directly express these interleaved formats but
-  //pretends the samples are in different planes. 
-  //The current implementation can't handle planar_config ==2, which is
-  //separate color bands.
+  // handle sample formats (unsigned, signed, float, double)
+  // vil normally doesn't directly express these interleaved formats but
+  // pretends the samples are in different planes.
+  // The current implementation can't handle planar_config ==2, which is
+  // separate color bands.
   vxl_uint_16 s = samples_per_pixel.val;
   if (samples_per_pixel.val>1 && photometric.val==2 && planar_config.val == 1 &&
-     sample_format.val == 1)
+      sample_format.val == 1)
+  {
     switch (sample_format.val)
     {
       case 1: //unsigned values
@@ -550,6 +557,7 @@ if (!(bits_per_sample.valid) || !(samples_per_pixel.valid) ||
         pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
         return false;
     }
+  }
   //Separate TIFF transparency mask - not handled
   if (photometric.val==PHOTOMETRIC_MASK)
   {
@@ -693,4 +701,3 @@ vil_tiff_header(TIFF* tif, const unsigned ni, const unsigned nj,
   tile_offsets_valid = false;
   tile_byte_counts_valid = false;
 }
-

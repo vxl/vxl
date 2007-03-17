@@ -1,6 +1,5 @@
 #ifndef rgrl_est_proj_rad_func_txx_
 #define rgrl_est_proj_rad_func_txx_
-
 //:
 // \file
 // \author Gehua Yang
@@ -78,14 +77,13 @@ convert_parameters( vnl_vector<double>& params,
 
   // copy to new params
   params.set_size( proj_params.size() + rad_dist.size() );
-  for( unsigned i=0; i<proj_params.size(); ++i )
+  for ( unsigned i=0; i<proj_params.size(); ++i )
     params[i] = proj_params[i];
-  for( unsigned i=0; i<rad_dist.size(); ++i )
+  for ( unsigned i=0; i<rad_dist.size(); ++i )
     params[i+proj_params.size()] = rad_dist[i];
 
   // set camera centre
   set_image_centre( camera_centre );
-
 }
 
 template <unsigned int Tdim, unsigned int Fdim>
@@ -95,10 +93,10 @@ transfer_radial_params_into_temp_storage( vnl_vector<double> const& params ) con
 {
   assert( params.size() == this->proj_size_ + camera_dof_ -1 );
   const unsigned int index_shift = this->proj_size_-1;
-  for( unsigned i=0; i<camera_dof_; ++i )
+  for ( unsigned i=0; i<camera_dof_; ++i )
     temp_rad_k_[i] = params[index_shift+i];
 }
-  
+
 //: convert parameters
 template <unsigned int Tdim, unsigned int Fdim>
 inline
@@ -116,8 +114,7 @@ apply_radial_distortion( vnl_vector_fixed<double, Tdim>      & mapped,
 
   double base = 1;
   double coeff = 0;
-  for( unsigned i=0; i<radk.size(); ++i ) {
-
+  for ( unsigned i=0; i<radk.size(); ++i ) {
     base *= radial_dist;
     coeff += radk[i] * base;
   }
@@ -133,7 +130,7 @@ reduced_proj_rad_jacobian( vnl_matrix<double>                            & base_
                            vnl_vector_fixed<double, Fdim>           const& from ) const
 {
   assert( rad_k.size() == camera_dof_ );
-  
+
   const unsigned param_size = this->proj_size_ -1 + camera_dof_;
   const unsigned proj_dof = this->proj_size_ -1;
 
@@ -155,8 +152,7 @@ reduced_proj_rad_jacobian( vnl_matrix<double>                            & base_
   // compute radial distortion coefficient
   double base = 1;
   double coeff = 0;
-  for( unsigned i=0; i<rad_k.size(); ++i ) {
-
+  for ( unsigned i=0; i<rad_k.size(); ++i ) {
     base *= radial_dist;
     coeff += rad_k[i] * base;
   }
@@ -168,14 +164,11 @@ reduced_proj_rad_jacobian( vnl_matrix<double>                            & base_
 
   // second part, taking gradient on the squared radial distance
   base = 1;
-  for( unsigned k=0; k<rad_k.size(); ++k ) {
-
+  for ( unsigned k=0; k<rad_k.size(); ++k ) {
     //upper triangular
-    for( unsigned i=0; i<Tdim; ++i )
-      for( unsigned j=i; j<Tdim; ++j ) {
-
+    for ( unsigned i=0; i<Tdim; ++i )
+      for ( unsigned j=i; j<Tdim; ++j ) {
         dD_dx( i, j ) += double(2*(k+1))*base*rad_k[k]*centred[i]*centred[j];
-
       }
 
     // multiplication is at the end of loop,
@@ -184,26 +177,25 @@ reduced_proj_rad_jacobian( vnl_matrix<double>                            & base_
   }
 
   // fill in lower triangular
-  for( unsigned i=0; i<Tdim; ++i )
-    for( unsigned j=i; j<Tdim; ++j )
+  for ( unsigned i=0; i<Tdim; ++i )
+    for ( unsigned j=i; j<Tdim; ++j )
       dD_dx( j, i ) = dD_dx( i, j );
 
 
   // 3. fill in base_jac
   dP_dp = dD_dx * dP_dp;
 
-  for( unsigned i=0; i<Tdim; ++i )
-    for( unsigned j=0; j<dP_dp.cols(); ++j )
+  for ( unsigned i=0; i<Tdim; ++i )
+    for ( unsigned j=0; j<dP_dp.cols(); ++j )
       base_jac( i, j ) = dP_dp( i, j );
 
   // 3. gradient w.r.t to k
   base = 1;
-  for( unsigned k=0; k<camera_dof_; ++k ) {
-
+  for ( unsigned k=0; k<camera_dof_; ++k ) {
     const unsigned index = k+proj_dof;
     base *= radial_dist;
 
-    for( unsigned i=0; i<Tdim; ++i )
+    for ( unsigned i=0; i<Tdim; ++i )
       base_jac( i, index ) = centred[i] * base;
   }
 }
@@ -217,7 +209,7 @@ full_proj_rad_jacobian( vnl_matrix<double>                            & base_jac
                         vnl_vector_fixed<double, Fdim>           const& from ) const
 {
   assert( rad_k.size() == camera_dof_ );
-  
+
   const unsigned param_size = this->proj_size_ + camera_dof_;
 
   // 0. set size
@@ -238,8 +230,7 @@ full_proj_rad_jacobian( vnl_matrix<double>                            & base_jac
   // compute radial distortion coefficient
   double base = 1;
   double coeff = 0;
-  for( unsigned i=0; i<rad_k.size(); ++i ) {
-
+  for ( unsigned i=0; i<rad_k.size(); ++i ) {
     base *= radial_dist;
     coeff += rad_k[i] * base;
   }
@@ -251,14 +242,11 @@ full_proj_rad_jacobian( vnl_matrix<double>                            & base_jac
 
   // second part, taking gradient on the squared radial distance
   base = 1;
-  for( unsigned k=0; k<rad_k.size(); ++k ) {
-
+  for ( unsigned k=0; k<rad_k.size(); ++k ) {
     //upper triangular
-    for( unsigned i=0; i<Tdim; ++i )
-      for( unsigned j=i; j<Tdim; ++j ) {
-
+    for ( unsigned i=0; i<Tdim; ++i )
+      for ( unsigned j=i; j<Tdim; ++j ) {
         dD_dx( i, j ) += double(2*(k+1))*base*rad_k[k]*centred[i]*centred[j];
-
       }
 
     // multiplication is at the end of loop,
@@ -267,26 +255,25 @@ full_proj_rad_jacobian( vnl_matrix<double>                            & base_jac
   }
 
   // fill in lower triangular
-  for( unsigned i=0; i<Tdim; ++i )
-    for( unsigned j=i; j<Tdim; ++j )
+  for ( unsigned i=0; i<Tdim; ++i )
+    for ( unsigned j=i; j<Tdim; ++j )
       dD_dx( j, i ) = dD_dx( i, j );
 
 
   // 3. fill in base_jac
   dP_dp = dD_dx * dP_dp;
 
-  for( unsigned i=0; i<Tdim; ++i )
-    for( unsigned j=0; j<dP_dp.cols(); ++j )
+  for ( unsigned i=0; i<Tdim; ++i )
+    for ( unsigned j=0; j<dP_dp.cols(); ++j )
       base_jac( i, j ) = dP_dp( i, j );
 
   // 3. gradient w.r.t to k
   base = 1;
-  for( unsigned k=0; k<camera_dof_; ++k ) {
-
+  for ( unsigned k=0; k<camera_dof_; ++k ) {
     const unsigned index = k+this->proj_size_;
     base *= radial_dist;
 
-    for( unsigned i=0; i<Tdim; ++i )
+    for ( unsigned i=0; i<Tdim; ++i )
       base_jac( i, index ) = centred[i] * base;
   }
 }
@@ -303,7 +290,7 @@ proj_jac_wrt_loc( vnl_matrix_fixed<double, Tdim, Fdim>          & jac_loc,
   // dP / dx
   vnl_matrix_fixed<double, Tdim, Fdim> dP_dx;
   rgrl_est_proj_func<Tdim, Fdim>::proj_jac_wrt_loc( dP_dx, proj, from );
-  
+
   // 2. gradient w.r.t to mapped location
   vnl_matrix_fixed<double, Tdim, Tdim >  dD_dx;
   vnl_vector_fixed<double, Tdim> mapped;
@@ -315,8 +302,7 @@ proj_jac_wrt_loc( vnl_matrix_fixed<double, Tdim, Fdim>          & jac_loc,
   // compute radial distortion coefficient
   double base = 1;
   double coeff = 0;
-  for( unsigned i=0; i<rad_k.size(); ++i ) {
-
+  for ( unsigned i=0; i<rad_k.size(); ++i ) {
     base *= radial_dist;
     coeff += rad_k[i] * base;
   }
@@ -328,14 +314,11 @@ proj_jac_wrt_loc( vnl_matrix_fixed<double, Tdim, Fdim>          & jac_loc,
 
   // second part, taking gradient on the squared radial distance
   base = 1;
-  for( unsigned k=0; k<rad_k.size(); ++k ) {
-
+  for ( unsigned k=0; k<rad_k.size(); ++k ) {
     //upper triangular
-    for( unsigned i=0; i<Tdim; ++i )
-      for( unsigned j=i; j<Tdim; ++j ) {
-
+    for ( unsigned i=0; i<Tdim; ++i )
+      for ( unsigned j=i; j<Tdim; ++j ) {
         dD_dx( i, j ) += double(2*(k+1))*base*rad_k[k]*centred[i]*centred[j];
-
       }
 
     // multiplication is at the end of loop,
@@ -344,12 +327,12 @@ proj_jac_wrt_loc( vnl_matrix_fixed<double, Tdim, Fdim>          & jac_loc,
   }
 
   // fill in lower triangular
-  for( unsigned i=0; i<Tdim; ++i )
-    for( unsigned j=i; j<Tdim; ++j )
+  for ( unsigned i=0; i<Tdim; ++i )
+    for ( unsigned j=i; j<Tdim; ++j )
       dD_dx( j, i ) = dD_dx( i, j );
 
   // final jac
-  jac_loc = dD_dx * dP_dx;  
+  jac_loc = dD_dx * dP_dx;
 }
 
 template <unsigned int Tdim, unsigned int Fdim>
@@ -372,11 +355,11 @@ f(vnl_vector<double> const& x, vnl_vector<double>& fx)
   transfer_radial_params_into_temp_storage( x );
 
   for ( unsigned ms = 0; ms<this->matches_ptr_->size(); ++ms )
-    if ( (*this->matches_ptr_)[ms] != 0 ) { // if pointer is valid
-
+  {
+    if ( (*this->matches_ptr_)[ms] != 0 ) // if pointer is valid
+    {
       rgrl_match_set const& one_set = *((*this->matches_ptr_)[ms]);
       for ( FIter fi=one_set.from_begin(); fi!=one_set.from_end(); ++fi ) {
-
         // map from point
         vnl_vector_fixed<double, Fdim> from = fi.from_feature()->location();
         map_loc( distorted, proj, temp_rad_k_, from );
@@ -388,10 +371,11 @@ f(vnl_vector<double> const& x, vnl_vector<double>& fx)
           vnl_vector_fixed<double, Tdim> diff = error_proj_sqrt * (distorted - to);
 
           // fill in
-          for( unsigned i=0; i<Tdim; ++i )
+          for ( unsigned i=0; i<Tdim; ++i )
             fx(ind++) = wgt * diff[i];
         }
       }
+    }
   }
 
   // check
@@ -421,11 +405,12 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
 
   unsigned int ind = 0;
   for ( unsigned ms = 0; ms<this->matches_ptr_->size(); ++ms )
-    if ( (*this->matches_ptr_)[ms] ) { // if pointer is valid
-
+  {
+    if ( (*this->matches_ptr_)[ms] ) // if pointer is valid
+    {
       rgrl_match_set const& one_set = *((*this->matches_ptr_)[ms]);
-      for ( FIter fi=one_set.from_begin(); fi!=one_set.from_end(); ++fi ) {
-
+      for ( FIter fi=one_set.from_begin(); fi!=one_set.from_end(); ++fi )
+      {
         // map from point
         vnl_vector_fixed<double, Fdim> from = fi.from_feature()->location();
 
@@ -440,13 +425,13 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
           jac *= wgt;
 
           // fill in
-          for( unsigned i=0; i<Tdim; ++i,++ind ) {
-
-            for( unsigned j=0; j<jac.cols(); ++j )
+          for ( unsigned i=0; i<Tdim; ++i,++ind ) {
+            for ( unsigned j=0; j<jac.cols(); ++j )
               jacobian(ind,j) = jac(i, j);
           }
         }
       }
+    }
   }
 }
 
@@ -463,17 +448,15 @@ projective_estimate(  vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
   // compute weighted centres
   // this function is going to resize the vnl_vector, use temporary ones instead
   vnl_vector<double> fc, tc;
-  if( !rgrl_est_compute_weighted_centres( *(this->matches_ptr_), fc, tc ) ) {
-  
-	return false;
+  if ( !rgrl_est_compute_weighted_centres( *(this->matches_ptr_), fc, tc ) ) {
+    return false;
   }
   assert( fc.size() == from_centre.size() );
   assert( tc.size() == to_centre.size() );
+  assert( rad_dist.size() == camera_dof_ );
   from_centre = fc;
   to_centre = tc;
 
-  assert( rad_dist.size() == camera_dof_ );
-  
   // convert parameters
   vnl_vector<double> p;
   this->convert_parameters( p, proj, rad_dist, from_centre, to_centre, camera_centre );
@@ -491,7 +474,7 @@ projective_estimate(  vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
   else
     ret = lm.minimize_without_gradient(p);
   if ( !ret ) {
-    vcl_cerr <<  "Levenberg-Marquatt failed" << vcl_endl;
+    vcl_cerr <<  "Levenberg-Marquardt failed\n";
     lm.diagnose_outcome(vcl_cerr);
     return false;
   }
@@ -503,7 +486,7 @@ projective_estimate(  vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
 
   // copy distortion parameters
   const unsigned int index_shift = this->proj_size_-1;
-  for( unsigned i=0; i<camera_dof_; ++i )
+  for ( unsigned i=0; i<camera_dof_; ++i )
     rad_dist[i] = p[ i+index_shift ];
 
   // compute covariance
@@ -519,13 +502,13 @@ projective_estimate(  vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
   vnl_svd<double> svd( jac, this->zero_svd_thres_ );
   if ( svd.rank() < int(param_num)-1 ) {
     vcl_cerr <<  "The covariance of projection matrix ranks less than "
-      << param_num-1 << "! " << vcl_endl ;
+             << param_num-1 << "!\n" ;
     return false;
   }
 
   //invert the W matrix and square it
   vnl_diag_matrix<double> invW( param_num-1 );
-  for( unsigned i=0; i<param_num-1; ++i )
+  for ( unsigned i=0; i<param_num-1; ++i )
     invW[i] = vnl_math_sqr( 1.0/svd.W(i) );
 
   //compute inverse of Jac^\top * Jac
@@ -540,19 +523,12 @@ projective_estimate(  vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
   const unsigned int param_index
     = this->index_row_*(Fdim+1)
     + this->index_col_;
-  for( unsigned i=0,ic=0; i<param_num; ++i ) {
-
-    if( i==param_index ) continue;
-
-    for( unsigned j=0,jc=0; j<param_num; ++j ) {
-
-      if( j==param_index ) continue;
+  for ( unsigned i=0,ic=0; i<param_num; ++i,++ic ) {
+    if ( i==param_index ) { --ic; continue; }
+    for ( unsigned j=0,jc=0; j<param_num; ++j,++jc ) {
+      if ( j==param_index ) { --jc; continue; }
       full_covar( i, j ) = covar( ic, jc );
-      ++jc;
     }
-
-    //increment the index count in covar matrix
-    ++ic;
   }
 
   return true;
