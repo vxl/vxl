@@ -2160,7 +2160,7 @@ MAIN( test_estimator )
 
     rgrl_est_homo2d_proj_rad* homo2d_rad_est
       = new rgrl_est_homo2d_proj_rad( camera_centre );
-    homo2d_rad_est->set_rel_thres( 1e-7 );
+    homo2d_rad_est->set_rel_thres( 5e-7 );
     homo2d_rad_est->set_max_num_iter( 5000 );
     //estimator->set_debug_flag(5);
 
