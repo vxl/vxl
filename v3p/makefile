@@ -28,6 +28,10 @@ ifneq (,$(strip $(wildcard $(TIFF_INC_DIR)/../v3p_tag)))
 SUBDIRS += tiff
 endif
 
+ifneq (,$(strip $(wildcard $(GEOTIFF_INC_DIR)/../v3p_tag)))
+SUBDIRS += geotiff
+endif
+
 ifneq (,$(strip $(wildcard $(MPEG2_INC_DIR)/../../v3p_tag)))
 SUBDIRS += mpeg2
 endif
