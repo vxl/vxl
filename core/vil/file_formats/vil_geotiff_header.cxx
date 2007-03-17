@@ -34,7 +34,7 @@ bool vil_geotiff_header::gtif_tiepoints(vcl_vector<vcl_vector<double> > &tiepoin
 
   // the number of values should be K*6
   assert((count % 6) == 0);
-  for (unsigned short i=0, index=0; i<count;) {
+  for (unsigned short i=0; i<count; ) {
     vcl_vector<double> tiepoint(6);
     tiepoint[0] = points[i++];
     tiepoint[1] = points[i++];
