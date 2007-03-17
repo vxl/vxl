@@ -2,11 +2,14 @@
 
 PROJECT( geotiff C )
 
-INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
-IF(TIFF_FOUND)
-  INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR} )
+IF(VXL_FORCE_V3P_TIFF)
+#INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
+#IF(TIFF_FOUND)
+#IF (EXISTS ${TIFF_INCLUDE_DIR}/tiffio.h)
 
-SET( geotiff_sources
+ INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR} )
+
+ SET( geotiff_sources
   cpl_serv.h
   defs.h
   geo_config.h
@@ -20,7 +23,7 @@ SET( geotiff_sources
   geovalues.h
   xtiffio.h
 
-##  source files
+  ##  source files
   cpl_csv.c
   cpl_serv.c
   geo_extra.c
@@ -36,11 +39,13 @@ SET( geotiff_sources
   geo_write.c
   geotiff_proj4.c
   xtiff.c
- 
-)
+ )
 
 
-ADD_LIBRARY( geotiff ${geotiff_sources} )
-INSTALL_TARGETS(/lib geotiff)
-TARGET_LINK_LIBRARIES(geotiff ${TIFF_LIBRARIES})
-ENDIF(TIFF_FOUND)
+ ADD_LIBRARY( geotiff ${geotiff_sources} )
+ INSTALL_TARGETS(/lib geotiff)
+ TARGET_LINK_LIBRARIES(geotiff ${TIFF_LIBRARIES})
+
+#ENDIF (EXISTS ${TIFF_INCLUDE_DIR}/tiffio.h)
+#ENDIF(TIFF_FOUND)
+ENDIF(VXL_FORCE_V3P_TIFF)
