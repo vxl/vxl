@@ -12,7 +12,7 @@
 #include <rgrl/rgrl_fwd.h>
 #include <rgrl/rgrl_match_set_sptr.h>
 
-//: mapping of homogenous points
+//: mapping of homogeneous points
 template <unsigned int Tdim, unsigned int Fdim>
 inline
 void
@@ -29,7 +29,7 @@ rgrl_est_proj_map_homo_point( vnl_vector_fixed<double, Tdim+1>& mapped,
   }
 }
 
-//: mapping of inhomogenous points
+//: mapping of inhomogeneous points
 template <unsigned int Tdim, unsigned int Fdim>
 inline
 void
@@ -117,16 +117,15 @@ class rgrl_est_proj_func
   //: map a location
   inline
   void
-  map_loc( vnl_vector_fixed<double, Tdim>& mapped, 
+  map_loc( vnl_vector_fixed<double, Tdim>& mapped,
            vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
            vnl_vector_fixed<double, Fdim> const& from  ) const
   {
     rgrl_est_proj_map_inhomo_point<Tdim, Fdim>( mapped, proj, from-from_centre_ );
-    mapped += to_centre_;  
+    mapped += to_centre_;
   }
 
  protected:
-
   //: compute jacobian
   void
   reduced_proj_jacobian( vnl_matrix_fixed<double, Tdim, (Fdim+1)*(Tdim+1)-1>& base_jac,
@@ -173,27 +172,28 @@ class rgrl_est_proj_func
   double zero_svd_thres_;
 };
 
+#if 0
 //: a generic class to estimate projection matrices using L-M
-//  including 2D homography, 3D homography, camera matrix
-//
-// template <unsigned int Tdim, unsigned int Fdim>
-// class rgrl_est_proj_lm
-//   : public rgrl_nonlinear_estimator
-// {
-// public:
-//   //: Default constructor
-//   //
-//   rgrl_est_proj_lm( bool with_grad = true );
-//
-//
-//   // Defines type-related functions
-//   rgrl_type_macro( rgrl_est_proj_lm, rgrl_nonlinear_estimator );
-//
-// protected:
-//
-//   bool with_grad_;
-//   //vnl_vector_fixed<double, Fdim> from_camera_centre_;
-//   //vnl_vector_fixed<double, Tdim> to_camera_centre_;
-// };
+//  Includes 2D homography, 3D homography, camera matrix
+
+template <unsigned int Tdim, unsigned int Fdim>
+class rgrl_est_proj_lm
+  : public rgrl_nonlinear_estimator
+{
+ public:
+  //: Default constructor
+  rgrl_est_proj_lm( bool with_grad = true );
+
+
+  // Defines type-related functions
+  rgrl_type_macro( rgrl_est_proj_lm, rgrl_nonlinear_estimator );
+
+ protected:
+
+  bool with_grad_;
+  //vnl_vector_fixed<double, Fdim> from_camera_centre_;
+  //vnl_vector_fixed<double, Tdim> to_camera_centre_;
+};
+#endif // 0
 
 #endif //rgrl_est_proj_func_h_
