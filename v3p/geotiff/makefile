@@ -5,8 +5,6 @@ USE_TIFF := 1
 LIBRARY := geotiff
 VERSION := 1.0
 
-MANPAGE_SOURCES += tiffio.h
-
 MANPAGE_SOURCES += geo_config.h
 MANPAGE_SOURCES += defs.h
 MANPAGE_SOURCES += geo_keyp.h
