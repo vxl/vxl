@@ -172,9 +172,6 @@ SOURCE=.\geotiffio.h
 SOURCE=.\geovalues.h
 # End Source File
 # Begin Source File
-SOURCE=.\tiffio.h
-# End Source File
-# Begin Source File
 SOURCE=.\xtiffio.h
 # End Source File
 # End Group
