@@ -333,6 +333,9 @@ SOURCE=.\rgrl_mask_oriented_box.cxx
 SOURCE=.\rgrl_est_homo2d_proj.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\rgrl_est_homo2d_proj_rad.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/rgrl_feature_set_location+2-.cxx
 # End Source File
 # Begin Source File
@@ -454,6 +457,12 @@ SOURCE=.\Templates/rgrl_est_proj_func+2.2-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/rgrl_est_proj_func+2.3-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/rgrl_est_proj_rad_func+2.2-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/rgrl_est_proj_rad_func+2.3-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -835,6 +844,15 @@ SOURCE=.\rgrl_est_proj_func.h
 # End Source File
 # Begin Source File
 SOURCE=.\rgrl_est_proj_func.txx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_est_homo2d_proj_rad.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_est_proj_rad_func.h
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_est_proj_rad_func.txx
 # End Source File
 # End Group
 # End Target
