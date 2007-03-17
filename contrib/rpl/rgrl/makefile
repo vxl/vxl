@@ -149,6 +149,8 @@ SOURCES += rgrl_matcher_k_nearest_adv.cxx
 SOURCES += rgrl_mask_oriented_box.cxx
 MANPAGE_SOURCES += rgrl_est_proj_func.txx
 SOURCES += rgrl_est_homo2d_proj.cxx
+SOURCES += rgrl_est_homo2d_proj_rad.cxx
+MANPAGE_SOURCES += rgrl_est_proj_rad_func.txx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
