@@ -1,13 +1,13 @@
 //:
 // \file
-#include <rgrl/rgrl_est_homo2d_proj_rad.h>
+#include "rgrl_est_homo2d_proj_rad.h"
+
 #include <rgrl/rgrl_est_homography2d.h>
 #include <rgrl/rgrl_est_proj_rad_func.h>
 #include <rgrl/rgrl_trans_homography2d.h>
 #include <rgrl/rgrl_trans_rad_dis_homo2d.h>
 #include <rgrl/rgrl_match_set.h>
 #include <rgrl/rgrl_internal_util.h>
-
 
 #include <vcl_cassert.h>
 #include <vnl/vnl_double_2.h>
@@ -17,8 +17,8 @@
 rgrl_est_homo2d_proj_rad::
 rgrl_est_homo2d_proj_rad( vnl_vector_fixed<double, 2> const& to_camera_centre,
                           bool with_grad )
-  : with_grad_( with_grad ),
-    to_camera_centre_( to_camera_centre )
+  : to_camera_centre_( to_camera_centre ),
+    with_grad_( with_grad )
 {
   rgrl_estimator::set_param_dof( 9 );  //HACK
 
@@ -42,12 +42,11 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     init_H = trans.uncenter_H_matrix();
     k1_from = trans.k1_from();
     k1_to   = trans.k1_to();
-
   }
-  else {
-
-    if( !rgrl_internal_util_upgrade_to_homography2D( init_H, cur_transform ) ) {
-
+  else
+  {
+    if ( !rgrl_internal_util_upgrade_to_homography2D( init_H, cur_transform ) )
+    {
       // use normalized DLT to initialize
       DebugMacro( 0, "Use normalized DLT to initialize" );
       rgrl_est_homography2d est_homo;
@@ -68,15 +67,13 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   homo_func.set_max_num_iter( max_num_iterations_ );
   homo_func.set_rel_thres( relative_threshold_ );
 
-
   // apply estimation
   vnl_double_2 from_centre, to_centre;
   vnl_matrix<double> covar;
-  if( !homo_func.projective_estimate( init_H, rad_to_k,
-                                      covar,
-                                      from_centre, to_centre,
-                                      to_camera_centre_ ) ) {
-
+  if ( !homo_func.projective_estimate( init_H, rad_to_k,
+                                       covar,
+                                       from_centre, to_centre,
+                                       to_camera_centre_ ) ) {
     WarningMacro( "L-M estimation failed." << vcl_endl );
     return 0;
   }
