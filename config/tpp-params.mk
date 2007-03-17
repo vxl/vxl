@@ -88,6 +88,15 @@ ifeq ($(strip $(HAS_TIFF))-$(strip $(TIFF_LIB_DIR)),1-)
   TIFF_LIBS := -ltiff
 endif
 
+# if no GEOTIFF_LIB_DIR supplied, use the one in v3p.
+ifeq ($(strip $(HAS_GEOTIFF))-$(strip $(GEOTIFF_LIB_DIR)),1-)
+  GEOTIFF_INC_DIR := $(IUEROOT)/v3p/geotiff
+  ifndef CENTRAL_LIBDIR
+    GEOTIFF_LIB_DIR := $(IUEROOT_libbase)/v3p/$(tj_libdir)
+  endif
+  GEOTIFF_LIBS := -lgeotiff
+endif
+
 # if no JPEG_LIB_DIR supplied, use the one in v3p.
 ifeq ($(strip $(HAS_JPEG))-$(strip $(JPEG_LIB_DIR)),1-)
   JPEG_INC_DIR := $(IUEROOT)/v3p/jpeg

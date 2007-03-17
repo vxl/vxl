@@ -166,6 +166,19 @@ ifeq ($(strip $(USE_TIFF)),1)
   endif
 endif
 
+# Select: USE_GEOTIFF
+# Set to 1 to use the GEOTIFF library
+ifeq ($(strip $(USE_GEOTIFF)),1)
+  INCDIRS += $(GEOTIFF_INC_DIR)
+  LIBDIRS += $(GEOTIFF_LIB_DIR)
+  DEFINES += -DHAS_GEOTIFF
+  STDLIBS += -ltiff #$(GEOTIFF_LIBS)
+  USE_JPEG := 1
+  ifndef HAS_GEOTIFF
+    err_CANNOT_BUILD_HERE += "USE_GEOTIFF"
+  endif
+endif
+
 # Select: USE_JPEG
 # Set to 1 to use the JPEG library
 ifeq ($(strip $(USE_JPEG)),1)

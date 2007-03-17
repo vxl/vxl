@@ -66,6 +66,12 @@ ifeq ($(strip $(TRY_TIFF)),1)
   endif
 endif
 
+ifeq ($(strip $(TRY_GEOTIFF)),1)
+  ifeq ($(strip $(HAS_GEOTIFF)),1)
+    USE_GEOTIFF := 1
+  endif
+endif
+
 ifeq ($(strip $(TRY_PNG)),1)
   ifeq ($(strip $(HAS_PNG)),1)
     USE_PNG := 1
