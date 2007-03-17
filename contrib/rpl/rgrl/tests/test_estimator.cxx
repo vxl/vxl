@@ -1698,7 +1698,7 @@ static  vnl_random random;
         est_H /= est_H.array_two_norm();
         if ( est_H(0,0) < 0 ) est_H *= -1;
 
-        vcl_cout<<"Estimated H = "<<est_H<<vcl_endl;
+        vcl_cout<<"Estimated H =\n"<<est_H<<vcl_endl;
         TEST_NEAR("[Fixed error in (0,0)] Estimation of Projective xform", (est_H-H).array_two_norm(), 0.0, tol);
 
         // test on transfer error
@@ -1720,7 +1720,7 @@ static  vnl_random random;
         est_H /= est_H.array_two_norm();
         if ( est_H(0,0) < 0 ) est_H *= -1;
 
-        vcl_cout<<"Estimated H = "<<est_H<<vcl_endl;
+        vcl_cout<<"Estimated H =\n"<<est_H<<vcl_endl;
         TEST_NEAR("[Random error with scale 0.5] Estimation of Projective xform",
                   (est_H-H).array_two_norm(), 0.0, tol);
       }
@@ -1738,7 +1738,7 @@ static  vnl_random random;
         est_H /= est_H.array_two_norm();
         if ( est_H(0,0) < 0 ) est_H *= -1;
 
-        vcl_cout<<"Estimated H = "<<est_H<<vcl_endl;
+        vcl_cout<<"Estimated H =\n"<<est_H<<vcl_endl;
         TEST_NEAR("[Random error with scale 1] Estimation of Projective xform",
                   (est_H-H).array_two_norm(), 0.0, tol);
       }
@@ -1756,7 +1756,7 @@ static  vnl_random random;
         est_H /= est_H.array_two_norm();
         if ( est_H(0,0) < 0 ) est_H *= -1;
 
-        vcl_cout<<"Estimated H = "<<est_H<<vcl_endl;
+        vcl_cout<<"Estimated H =\n"<<est_H<<vcl_endl;
         TEST_NEAR("[Random error with scale 50] Estimation of Projective xform",
                   (est_H-H).array_two_norm(), 0.0, tol);
       }
@@ -1871,9 +1871,9 @@ static  vnl_random random;
     vcl_vector<double> radk( 1, 1e-4 );
 
     vcl_cout<<"Original H =\n"<< H
-      << "with k: " << radk[0]
-      << " at camera centre " << camera_centre
-      <<vcl_endl;
+            << "with k: " << radk[0]
+            << " at camera centre " << camera_centre
+            <<vcl_endl;
 
     vcl_vector< vnl_vector<double> > p, q;
 
@@ -1929,7 +1929,7 @@ static  vnl_random random;
           vcl_cout<<"Incorrect estimated H = "<<est_H<<vcl_endl;
           xform_is_good = false;
         }
-        if( vcl_abs(homo_est->k1_to() - radk[0]) > tol ) {
+        if ( vcl_abs(homo_est->k1_to() - radk[0]) > tol ) {
           vcl_cout << "Incorrect estimated k1 = " << homo_est->k1_to() << vcl_endl;
           xform_is_good = false;
         }
@@ -1968,7 +1968,7 @@ static  vnl_random random;
     bool homography_is_good = true;
     for ( unsigned int num=12; num<200; num+=4 )
     {
-      vcl_cout << "using " << num << " of 200 correspondences.\n";
+      vcl_cout << "using " << num << " out of 200 correspondences.\n";
       //reset points
       p.clear();
       q.clear();
@@ -2108,39 +2108,56 @@ MAIN( test_estimator )
 //  test_est_affine_pt_to_line();
 //  test_similarity_pt_to_pt();
 
+  vcl_cout << "\n=== test_rad_dis_homo2d_lm ===\n";
   test_rad_dis_homo2d_lm();
+  vcl_cout << "\n=== test_est_spline ===\n";
   test_est_spline();
+  vcl_cout << "\n=== test_est_spline_reduce_dof ===\n";
   test_est_spline_reduce_dof();
+  vcl_cout << "\n=== test_est_quadratic ===\n";
   test_est_quadratic();
+  vcl_cout << "\n=== test_est_similarity2d ===\n";
   test_est_similarity2d();
+  vcl_cout << "\n=== test_est_reduced_quad2d ===\n";
   test_est_reduced_quad2d();
+  vcl_cout << "\n=== test_est_rigid ===\n";
   test_est_rigid();
+  vcl_cout << "\n=== test_homography2d ===\n";
   test_homography2d();
 
   // old homography estimator
   {
+    vcl_cout << "\n=== (old) test_homography2d_lm ===\n";
     rgrl_estimator_sptr estimator = new rgrl_est_homo2d_lm();
     estimator->set_debug_flag(5);
     test_homography2d_lm( estimator );
 
+    vcl_cout << "\n=== test_homography2d_points_on_circle ===\n";
     test_homography2d_points_on_circle( estimator );
+    vcl_cout << "\n=== test_homography2d_points_on_circle_w_noise ===\n";
     test_homography2d_points_on_circle_w_noise(estimator, 0.0, 1e-9, 1e-9);
+    vcl_cout << "\n=== test_homography2d_points_on_circle_w_noise ===\n";
     test_homography2d_points_on_circle_w_noise(estimator, 0.1, 0.1, 0.005);
   }
 
   // new homography estimator
   {
+    vcl_cout << "\n=== (new) test_homography2d_lm ===\n";
     rgrl_estimator_sptr estimator = new rgrl_est_homo2d_proj();
     //estimator->set_debug_flag(5);
     test_homography2d_lm( estimator);
 
+    vcl_cout << "\n=== test_homography2d_points_on_circle ===\n";
     test_homography2d_points_on_circle( estimator );
+    vcl_cout << "\n=== test_homography2d_points_on_circle_w_noise ===\n";
     test_homography2d_points_on_circle_w_noise(estimator, 0.0, 1e-9, 1e-9);
+    vcl_cout << "\n=== test_homography2d_points_on_circle_w_noise ===\n";
     test_homography2d_points_on_circle_w_noise(estimator, 0.1, 0.1, 0.005);
   }
 
   // new homography+radial distortion estimator
   {
+    vcl_cout << "\n=== (new) test_homo2d_rad_points_on_circle ===\n";
     vnl_double_2 camera_centre( 0.0, 0.0 );
     vcl_cout << "using camera centre " << camera_centre << vcl_endl;
 
@@ -2155,6 +2172,7 @@ MAIN( test_estimator )
   }
   // new homography+radial distortion estimator
   {
+    vcl_cout << "\n=== (new) test_homo2d_rad_points_on_circle ===\n";
     vnl_double_2 camera_centre( 5.0, 10.0 );
     vcl_cout << "using camera centre " << camera_centre << vcl_endl;
 
