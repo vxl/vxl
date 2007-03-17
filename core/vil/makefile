@@ -73,6 +73,9 @@ USE_TIFF := 1
 SOURCES += file_formats/vil_tiff.cxx
 SOURCES += file_formats/vil_tiff_header.cxx
 endif
+ifeq ($(HAS_GEOTIFF),1)
+SOURCES += file_formats/vil_geotiff_header.cxx
+endif
 
   ################################
   # NITF 2.0 and 2.1 reading code
