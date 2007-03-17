@@ -1,6 +1,5 @@
 #ifndef rgrl_est_homo2d_proj_rad_h_
 #define rgrl_est_homo2d_proj_rad_h_
-
 //:
 // \file
 // \author Gehua Yang
@@ -9,22 +8,17 @@
 #include <rgrl/rgrl_estimator.h>
 #include <vnl/vnl_double_2.h>
 
-//: homography2D transform estimator using the new proj function
-//  defined in rgrl_est_proj_func
-//
+//: homography2D transform estimator using the new proj function defined in rgrl_est_proj_func
 class rgrl_est_homo2d_proj_rad
   : public rgrl_nonlinear_estimator
 {
-public:
+ public:
   //: Default constructor
-  //
   rgrl_est_homo2d_proj_rad( vnl_vector_fixed<double, 2> const& to_camera_centre,
                             bool with_grad = true );
 
   //: Estimates homography transformation
-  //
   // \sa rgrl_estimator::estimate
-  //
   rgrl_transformation_sptr
   estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
             rgrl_transformation const& cur_transform ) const;
@@ -38,10 +32,9 @@ public:
   // Defines type-related functions
   rgrl_type_macro( rgrl_est_homo2d_proj_rad, rgrl_nonlinear_estimator );
 
-private:
-
+ private:
   vnl_double_2 to_camera_centre_;
   bool with_grad_;
 };
 
-#endif
+#endif // rgrl_est_homo2d_proj_rad_h_
