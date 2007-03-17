@@ -8,6 +8,7 @@
 // \verbatim
 //  Modifications
 //   15-AUG-2000 Marko Bacic,Oxford RRG -- Removed legacy ROI
+//   16-FEB-2007 Andrey Khropov -- consistent choice between vil1_image/vil_image_view
 // \endverbatim
 
 
@@ -150,7 +151,10 @@ vil_image_view_base_sptr
 vgui_image_tableau::
 get_image_view() const
 {
-  return vil_renderer_->get_image_resource()->get_view();
+  if (vil_renderer_)
+    return vil_renderer_->get_image_resource()->get_view();
+  else
+    return 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -216,11 +220,7 @@ void
 vgui_image_tableau::
 set_image_view( vil_image_view_base const& I)
 {
-  if ( !vil_renderer_ )
-    vil_renderer_ = new vgui_vil_image_renderer;
-
-  // use the name of the image as the name of the tableau :
-  vil_renderer_->set_image_resource( vil_new_image_resource_of_view( I ) );
+  set_image_resource( vil_new_image_resource_of_view( I ) );
 }
 
 //-----------------------------------------------------------------------------
@@ -234,6 +234,12 @@ set_image_resource( vil_image_resource_sptr const& I)
 
   // use the name of the image as the name of the tableau :
   vil_renderer_->set_image_resource( I );
+
+  if ( renderer_ )
+  {
+    delete renderer_;
+    renderer_ = 0;
+  }
 }
 
 //-----------------------------------------------------------------------------
@@ -247,6 +253,12 @@ set_image( vil1_image const& I)
 
   // use the name of the image as the name of the tableau :
   renderer_->set_image( I );
+
+  if ( vil_renderer_ )
+  {
+    delete vil_renderer_;
+    vil_renderer_ = 0;
+  }
 }
 
 //-----------------------------------------------------------------------------
@@ -268,8 +280,8 @@ void
 vgui_image_tableau::
 reread_image()
 {
-  if ( renderer_ )      renderer_->reread_image();
-  if ( vil_renderer_ )  vil_renderer_->reread_image();
+  if ( renderer_ )           renderer_->reread_image();
+  else if ( vil_renderer_ )  vil_renderer_->reread_image();
 }
 
 //-----------------------------------------------------------------------------
@@ -335,8 +347,8 @@ handle(vgui_event const &e)
       glTranslated(-0.5, -0.5, 0);
     //If rmp_ is not null then the rendering will be mapped according to the
     //specified mapping parameters
-    if ( renderer_ )     renderer_->render(rmp_);
-    if ( vil_renderer_ ) vil_renderer_->render(rmp_);
+    if ( renderer_ )          renderer_->render(rmp_);
+    else if ( vil_renderer_ ) vil_renderer_->render(rmp_);
 
     if (pixels_centered_)
       glTranslated(+0.5, +0.5, 0);
@@ -446,7 +458,7 @@ void vgui_image_tableau::get_popup(const vgui_popup_params& params,
   unsigned int nc = 0;
   if ( renderer_ )
     nc = renderer_->get_image().components();
-  if ( vil_renderer_ )
+  else if ( vil_renderer_ )
     nc = vil_renderer_->get_image_resource()->nplanes();
 
   submenu.add("Range Mapping",new vgui_set_rangemap_command(this,nc));
