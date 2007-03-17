@@ -522,6 +522,9 @@ SOURCE=.\vil_pyramid_image_resource.cxx
 SOURCE=.\vil_image_list.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\file_formats/vil_geotiff_header.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil_rotate+byte.byte-.cxx
 # End Source File
 # Begin Source File
@@ -1009,6 +1012,9 @@ SOURCE=.\vil_border.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_flatten.h
+# End Source File
+# Begin Source File
+SOURCE=.\file_formats/vil_geotiff_header.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_config.h.in
