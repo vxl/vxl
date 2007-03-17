@@ -106,7 +106,6 @@ apply_radial_distortion( vnl_vector_fixed<double, Tdim>      & mapped,
                          vnl_vector_fixed<double, Tdim> const& p,
                          vcl_vector<double> const& radk ) const
 {
-  const unsigned proj_dof = this->proj_size_-1;
   assert( radk.size() == camera_dof_ );
 
   vnl_vector_fixed<double, Tdim> centred = p-image_centre_;
