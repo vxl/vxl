@@ -91,7 +91,7 @@ void
 rgrl_est_proj_rad_func<Tdim, Fdim>::
 transfer_radial_params_into_temp_storage( vnl_vector<double> const& params ) const
 {
-  assert( params.size() == this->proj_size_ + camera_dof_ -1 );
+  assert( params.size() + 1 == this->proj_size_ + camera_dof_ );
   const unsigned int index_shift = this->proj_size_-1;
   for ( unsigned i=0; i<camera_dof_; ++i )
     temp_rad_k_[i] = params[index_shift+i];
@@ -130,8 +130,8 @@ reduced_proj_rad_jacobian( vnl_matrix<double>                            & base_
 {
   assert( rad_k.size() == camera_dof_ );
 
-  const unsigned param_size = this->proj_size_ -1 + camera_dof_;
   const unsigned proj_dof = this->proj_size_ -1;
+  const unsigned param_size = proj_dof + camera_dof_;
 
   // 0. set size
   base_jac.set_size( Tdim, param_size );
@@ -390,7 +390,7 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
   typedef FIter::to_iterator TIter;
 
   assert( jacobian.rows() == this->get_number_of_residuals() );
-  assert( jacobian.cols() == this->proj_size_-1+camera_dof_ );
+  assert( jacobian.cols()+1 == this->proj_size_+camera_dof_ );
 
   vnl_matrix_fixed<double, Tdim,   Tdim>        error_proj_sqrt;
   vnl_matrix<double> base_jac, jac;
@@ -499,7 +499,7 @@ projective_estimate(  vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
   // SVD decomposition:
   // Jac = U W V^\top
   vnl_svd<double> svd( jac, this->zero_svd_thres_ );
-  if ( svd.rank() < int(param_num)-1 ) {
+  if ( svd.rank()+1 < param_num ) {
     vcl_cerr <<  "The covariance of projection matrix ranks less than "
              << param_num-1 << "!\n" ;
     return false;
@@ -507,7 +507,7 @@ projective_estimate(  vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
 
   //invert the W matrix and square it
   vnl_diag_matrix<double> invW( param_num-1 );
-  for ( unsigned i=0; i<param_num-1; ++i )
+  for ( unsigned i=0; i+1<param_num; ++i )
     invW[i] = vnl_math_sqr( 1.0/svd.W(i) );
 
   //compute inverse of Jac^\top * Jac
