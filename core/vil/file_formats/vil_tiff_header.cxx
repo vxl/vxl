@@ -275,7 +275,7 @@ bool vil_tiff_header::is_GEOTIFF() const
 #else // 0
   short *data;
   short count;
-  return TIFFGetField(tif_, 34735 /*TIFFTAG_GEOKEYDIRECTORY*/, &count, &data);
+  return (bool)TIFFGetField(tif_, 34735 /*TIFFTAG_GEOKEYDIRECTORY*/, &count, &data);
 #endif // 0
 }
 #endif
