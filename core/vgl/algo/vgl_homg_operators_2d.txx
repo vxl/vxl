@@ -99,8 +99,8 @@ void vgl_homg_operators_2d<T>::unitize(vgl_homg_point_2d<T>& a)
 
 template <class T>
 T
-distance(const vgl_homg_point_2d<T>& point1,
-         const vgl_homg_point_2d<T>& point2)
+vgl_homg_operators_2d<T>::distance(const vgl_homg_point_2d<T>& point1,
+                                   const vgl_homg_point_2d<T>& point2)
 {
   return vcl_sqrt(vgl_homg_operators_2d<T>::distance_squared(point1,point2));
 }
