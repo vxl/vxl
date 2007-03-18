@@ -3,8 +3,9 @@
 #include <vcl_cstdio.h>
 #include <vcl_ctime.h>
 
+#if HAS_GEOTIFF
 #include <vil/file_formats/vil_geotiff_header.h>
-//#define DEBUG
+#endif
 
 static vcl_string date_and_time()
 {
@@ -263,6 +264,7 @@ bool vil_tiff_header::is_striped() const
   return rows_per_strip.valid&&rows_per_strip.val>0;
 }
 
+#if HAS_GEOTIFF
 bool vil_tiff_header::is_GEOTIFF() const
 {
 #if 0
@@ -276,6 +278,7 @@ bool vil_tiff_header::is_GEOTIFF() const
   return TIFFGetField(tif_, 34735 /*TIFFTAG_GEOKEYDIRECTORY*/, &count, &data);
 #endif // 0
 }
+#endif
 
 unsigned vil_tiff_header::encoded_bytes_per_block() const
 {

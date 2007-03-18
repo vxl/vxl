@@ -16,16 +16,16 @@
 // read (written) to the open tiff file.
 //
 // Notes:
-//   1) The size of each strip can be different and less than the full
+//   -  The size of each strip can be different and less than the full
 //      strip, i.e. bytes_per_line * rows_per_strip, would require.
 //      Perhaps this case should be rejected, but
 //      it has occurred in images that IrfanView and ImageMagick CAN read.
 //      In this case, the buffers are set up with capacity for a full strip.
-//   2) The number of rows in a strip can exceed the image length. The acutal
+//   -  The number of rows in a strip can exceed the image length. The actual
 //      byte count is equal to the number of bytes in the image. In this
 //      case, the block size is truncated to the image_length.
-//   3) The width and height of a tile must be a multiple of 16
-//   4) The current implementation can't handle Planar Configuration =2,
+//   -  The width and height of a tile must be a multiple of 16
+//   -  The current implementation can't handle Planar Configuration =2,
 //      which is RGB in separate color bands.
 //
 // \verbatim
@@ -222,7 +222,9 @@ class vil_tiff_header
   //: is the image striped (one of these must be true or read failed)
   bool is_striped() const;
 
+#if HAS_GEOTIFF
   bool is_GEOTIFF() const;
+#endif
 
   bool need_byte_swap()
   { return file_is_big_endian_!=machine_is_big_endian_ &&

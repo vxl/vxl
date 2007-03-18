@@ -64,7 +64,7 @@ bool vil_tiff_file_format_probe(vil_stream* is)
     return true;
 
   else if ( ((hdr[0]==0x4D && hdr[1]==0x4D) || (hdr[1]==0x49 && hdr[1]==0x49)) &&
-            ((hdr[2]==0x00 && hdr[3]==0x2A) || (hdr[2]==0x2A && hdr[3]==0x00)) ) {
+            ((hdr[2]==0x00 && hdr[3]==0x2A) || (hdr[2]==0x2A && hdr[3]==0x00)) )  {
     vcl_cerr << __FILE__ ": suspicious TIFF header\n";
     return true; // allow it.
   }
@@ -111,9 +111,9 @@ static tsize_t vil_tiff_writeproc(thandle_t h, tdata_t buf, tsize_t n)
 static toff_t vil_tiff_seekproc(thandle_t h, toff_t offset, int whence)
 {
   tif_stream_structures* p = (tif_stream_structures*)h;
-  if      (whence == SEEK_SET) { p->vs->seek(offset); }
-  else if (whence == SEEK_CUR) { p->vs->seek(p->vs->tell() + offset); }
-  else if (whence == SEEK_END) { p->vs->seek(p->filesize + offset); }
+  if      (whence == SEEK_SET) p->vs->seek(offset);
+  else if (whence == SEEK_CUR) p->vs->seek(p->vs->tell() + offset);
+  else if (whence == SEEK_END) p->vs->seek(p->filesize + offset);
   vil_streampos s = p->vs->tell();
   if (s > p->filesize)
     p->filesize = s;
@@ -163,10 +163,10 @@ static TIFF* open_tiff(tif_stream_structures* tss, const char* mode)
                               vil_tiff_sizeproc,
                               vil_tiff_mapfileproc, vil_tiff_unmapfileproc);
 
-  if (!tiff) {
+  if (!tiff)
     return 0;
-  }
-  return tiff;
+  else
+    return tiff;
 }
 
 vil_image_resource_sptr vil_tiff_file_format::make_input_image(vil_stream* is)
@@ -200,15 +200,14 @@ vil_tiff_file_format::make_input_pyramid_image(char const* file)
   if (!in)
     return 0;
   bool open_for_reading = true;
-  if(trace)//find test failure
-    vcl_cerr << "make_input_pyramid_image::opening multi-image tiff pyramid resource \n";
+  if (trace) // find test failure
+    vcl_cerr << "make_input_pyramid_image::opening multi-image tiff pyramid resource\n";
   vil_pyramid_image_resource_sptr pyr =
     new vil_tiff_pyramid_resource(in, open_for_reading);
-  if(trace)//find test failure
-    vcl_cerr << "make_input_pyramid_image::opened multi-image tiff pyramid resource \n";
-    if (pyr->nlevels()<=1)
+  if (pyr->nlevels()<=1)
     return 0;
-  return pyr;
+  else
+    return pyr;
 }
 
 static vcl_string level_filename(vcl_string& directory, vcl_string& filename,
@@ -373,7 +372,7 @@ bool vil_tiff_image::get_property(char const * tag, void * value) const
 
   return false;
 }
-//#if HAS_GEOTIFF 
+#if HAS_GEOTIFF
 vil_geotiff_header* vil_tiff_image::get_geotiff_header()
 {
   vil_geotiff_header* gtif = new vil_geotiff_header(t_);
@@ -384,7 +383,7 @@ vil_geotiff_header* vil_tiff_image::get_geotiff_header()
 
   return gtif;
 }
-//#endif
+#endif
 
 vil_pixel_format vil_tiff_image::pixel_format() const
 {
@@ -409,9 +408,7 @@ char const* vil_tiff_image::file_format() const
 static void tif_swap16(vxl_byte *a, unsigned n)
 {
   for (unsigned i = 0; i < n * 2; i += 2)
-  {
     vcl_swap( a[i+0], a[i+1] );
-  }
 }
 
 static void tif_swap32(vxl_byte *a, unsigned n)
@@ -494,18 +491,18 @@ tiff_maybe_byte_align_data(vil_memory_chunk_sptr in_data,
 }
 
 // don't do anything for float and double (bit shifting isn't allowed)
-template<> vil_memory_chunk_sptr tiff_maybe_byte_align_data<float> (
-                                                                    vil_memory_chunk_sptr in_data,
-                                                                    unsigned /* num_samples */,
-                                                                    unsigned /* in_bits_per_sample */,
-                                                                    unsigned /*bytes per block*/)
+template<> vil_memory_chunk_sptr tiff_maybe_byte_align_data<float>
+           ( vil_memory_chunk_sptr in_data    ,
+             unsigned /* num_samples */       ,
+             unsigned /* in_bits_per_sample */,
+             unsigned /* bytes per block */   )
 { return in_data; }
 
-template<> vil_memory_chunk_sptr tiff_maybe_byte_align_data<double> (
-                                                                     vil_memory_chunk_sptr in_data,
-                                                                     unsigned /* num_samples */,
-                                                                     unsigned /* in_bits_per_sample */,
-                                                                     unsigned/*bytes per block*/)
+template<> vil_memory_chunk_sptr tiff_maybe_byte_align_data<double>
+           ( vil_memory_chunk_sptr in_data    ,
+             unsigned /* num_samples */       ,
+             unsigned /* in_bits_per_sample */,
+             unsigned /* bytes per block */   )
 { return in_data; }
 
 ////////// End of lifted material //////
@@ -1162,35 +1159,30 @@ vil_tiff_pyramid_resource(TIFF* t, bool read)
   while (true)
   {
     vil_tiff_header h(t_);
-    if(trace)
-    {  vcl_cerr << "In vil_tiff_pyramid_resource constructor"
+    if (trace)
+      vcl_cerr << "In vil_tiff_pyramid_resource constructor"
                << " constructed header\n"
-                << "n-levels = " << this->nlevels() << '\n';
-    }
+               << "n-levels = " << this->nlevels() << '\n';
     tiff_pyramid_level* pl = new tiff_pyramid_level(this->nlevels(),
                                                     h.image_width.val,
                                                     h.image_length.val,
                                                     h.nplanes,
                                                     h.pix_fmt);
     levels_.push_back(pl);
-    if(trace)
-    {  vcl_cerr << "In vil_tiff_pyramid_resource constructor"
-                << " constructed level\n";
-    }
+    if (trace)
+      vcl_cerr << "In vil_tiff_pyramid_resource constructor"
+               << " constructed level\n";
     int status = TIFFReadDirectory(t_);
-    if(trace)
-      {  vcl_cerr << "In vil_tiff_pyramid_resource constructor"
-                  << " Read new directory\n";
-      }
-    
+    if (trace)
+      vcl_cerr << "In vil_tiff_pyramid_resource constructor"
+               << " Read new directory\n";
+
     if (!status)
       break;
   }
-    if(trace)
-      {  
-        vcl_cerr       << "In vil_tiff_pyramid_resource constructor"
-                       << " Begin sorting\n";
-      }
+  if (trace)
+    vcl_cerr << "In vil_tiff_pyramid_resource constructor"
+             << " Begin sorting\n";
   //sort the pyramid
   vcl_sort(levels_.begin(), levels_.end(), level_compare);
   //normalize the scales
@@ -1296,5 +1288,3 @@ vil_image_resource_sptr vil_tiff_pyramid_resource::get_resource(const unsigned l
   vil_tiff_header* h = new vil_tiff_header(t_);
   return new vil_tiff_image(t_, h);
 }
-  
-

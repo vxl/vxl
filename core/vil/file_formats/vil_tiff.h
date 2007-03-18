@@ -11,17 +11,16 @@
 //
 //\verbatim
 //  Modifications
-//  3 Oct 2001 Peter Vanroose - Implemented get_property and set_property
-//  5 Jan 2002 Ian Scott      - Converted to vil
-//  9 Dec 2003 Peter Vanroose - Added support for 1-bit pixel (bitmapped) images
-//  21 Dec 2005 J.L. Mundy - Substantial rewrite to handle a more
-//  complete tiff 6.0 standard. Files with tiles can now be read and
-//  written. Only tiled images are considered blocked, i.e. not strips.
-//  Block dimensions must be a multiple of 16, for compatibility with
-//  compression schemes. Tiff files with separate color bands are not handled
+//   3 Oct 2001 Peter Vanroose - Implemented get_property and set_property
+//   5 Jan 2002 Ian Scott      - Converted to vil
+//   9 Dec 2003 Peter Vanroose - Added support for 1-bit pixel (bitmapped) images
+//   21 Dec 2005 J.L. Mundy - Substantial rewrite to handle a more
+//       complete tiff 6.0 standard. Files with tiles can now be read and
+//       written. Only tiled images are considered blocked, i.e. not strips.
+//       Block dimensions must be a multiple of 16, for compatibility with
+//       compression schemes. Tiff files with separate color bands are not handled
 //
-//  KNOWN BUG - 24bit samples for both nplanes = 1 and nplanes = 3
-//
+//   KNOWN BUG - 24bit samples for both nplanes = 1 and nplanes = 3
 //\endverbatim
 
 #include <vcl_string.h>
@@ -37,9 +36,9 @@
 #include <vil/file_formats/vil_tiff_header.h>
 #include <tiffio.h>
 
-//#if HAS_GEOTIFF 
+#if HAS_GEOTIFF
 #include <vil/file_formats/vil_geotiff_header.h>
-//#endif
+#endif
 
 
 //: Loader for tiff files
@@ -110,8 +109,10 @@ class vil_tiff_image : public vil_blocked_image_resource
   //: returns "tiff"
   char const *file_format() const;
 
+#if HAS_GEOTIFF
   //: are there any geotiff values
   bool is_GEOTIFF() { return h_->is_GEOTIFF(); }
+#endif
 
   //Block interface
 
@@ -143,10 +144,10 @@ class vil_tiff_image : public vil_blocked_image_resource
 
   virtual bool get_property(char const *tag, void *prop = 0) const;
 
-//#if HAS_GEOTIFF
-  //* returns null if the tiff does not include geotiff tags 
+#if HAS_GEOTIFF
+  //* returns null if the tiff does not include geotiff tags
   vil_geotiff_header* get_geotiff_header();
-//#endif
+#endif
 
   friend class vil_tiff_pyramid_resource;
 
