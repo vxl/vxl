@@ -98,7 +98,7 @@ class rrel_homography2d_est : public rrel_estimation_problem
  protected:
   vcl_vector< vnl_vector<double> > from_pts_;
   vcl_vector< vnl_vector<double> > to_pts_;
-  int homog_dof_;
+  unsigned int homog_dof_;
   unsigned int min_num_pts_;
 };
 
