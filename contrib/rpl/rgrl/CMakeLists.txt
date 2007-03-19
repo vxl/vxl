@@ -70,6 +70,7 @@ SET( rgrl_sources
   rgrl_trans_quadratic.h               rgrl_trans_quadratic.cxx
   rgrl_trans_reduced_quad.h            rgrl_trans_reduced_quad.cxx
   rgrl_trans_homography2d.h            rgrl_trans_homography2d.cxx
+  rgrl_trans_homo2d_proj_rad.h         rgrl_trans_homo2d_proj_rad.cxx
   rgrl_trans_rad_dis_homo2d.h          rgrl_trans_rad_dis_homo2d.cxx
   rgrl_trans_reader.h                  rgrl_trans_reader.cxx
   rgrl_trans_couple.h                  rgrl_trans_couple.cxx

@@ -14,7 +14,8 @@ class rgrl_est_homo2d_proj_rad
 {
  public:
   //: Default constructor
-  rgrl_est_homo2d_proj_rad( vnl_vector_fixed<double, 2> const& to_camera_centre,
+  rgrl_est_homo2d_proj_rad( unsigned int rad_dof,
+                            vnl_vector_fixed<double, 2> const& to_camera_centre,
                             bool with_grad = true );
 
   //: Estimates homography transformation
@@ -29,11 +30,17 @@ class rgrl_est_homo2d_proj_rad
   //: Type of transformation estimated by this estimator.
   const vcl_type_info& transformation_type() const;
 
+  //: Name of transformation estimated by this estimator.
+  const vcl_string transformation_name() const
+  { return transform_name_; }
+
   // Defines type-related functions
   rgrl_type_macro( rgrl_est_homo2d_proj_rad, rgrl_nonlinear_estimator );
 
  private:
   vnl_double_2 to_camera_centre_;
+  unsigned int                camera_dof_;
+  vcl_string         transform_name_;
   bool with_grad_;
 };
 
