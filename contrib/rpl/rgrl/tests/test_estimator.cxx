@@ -3,6 +3,8 @@
 // \file
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
+#include <vcl_iterator.h>
+#include <vcl_algorithm.h>
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
 
@@ -38,6 +40,7 @@
 #include <rgrl/rgrl_est_homo2d_proj.h>
 #include <rgrl/rgrl_est_homo2d_proj_rad.h>
 #include <rgrl/rgrl_trans_homography2d.h>
+#include <rgrl/rgrl_trans_homo2d_proj_rad.h>
 #include <rgrl/rgrl_trans_rad_dis_homo2d.h>
 #include <rgrl/rgrl_est_dis_homo2d_lm.h>
 #include <rgrl/rgrl_cast.h>
@@ -1790,8 +1793,8 @@ static  vnl_random random;
     H(0,0) = 2*vcl_cos(vnl_math::pi/3);
     //H(1,0) = -H(0,1);
     H(0,1) = -5; H(1,1) = -1.5;
-    H(2,0) = 0.5; H(2,1) = -2;
-     H /= H.array_two_norm();
+    H(2,0) = 0.5; H(2,1) = -3;
+    H /= H.array_two_norm();
 
     vcl_cout<<"Original H =\n"<< H <<vcl_endl;
 
@@ -1799,11 +1802,13 @@ static  vnl_random random;
 
 
     vnl_vector<double> pt(2), mapped(2);
-    const double c = 20;
+    const double c = 10;
     bool xform_is_good=true;
 
-    for ( unsigned int num=12; num<200; num+=4 )
+    for ( unsigned int num=20; num<200; num+=16 )
     {
+      vcl_cout << "num of points = " << num << "   ";
+
       //reset points
       p.clear();
       q.clear();
@@ -1829,10 +1834,10 @@ static  vnl_random random;
       // error STD = 1
       {
         vnl_matrix<double> perturbed_H( H ), est_H;
-        const double err_std = 3;
+        const double err_std = 1e-3;
         for ( unsigned i=0; i<3; ++i )
           for ( unsigned j=0; j<3; ++j )
-            perturbed_H( 0, 0 ) += random.drand32()*err_std;
+            perturbed_H( i, j ) += random.drand32()*err_std;
         rgrl_transformation_sptr init_trans = new rgrl_trans_homography2d( perturbed_H );
 
         //estimate
@@ -1865,7 +1870,7 @@ static  vnl_random random;
     H(0,0) = 2*vcl_cos(vnl_math::pi/3);
     //H(1,0) = -H(0,1);
     H(0,1) = -5; H(1,1) = -1.5;
-    H(2,0) = 0.5; H(2,1) = -2;
+    H(2,0) = 0.5; H(2,1) = -3;
      H /= H.array_two_norm();
 
     vcl_vector<double> radk( 1, 1e-4 );
@@ -1882,8 +1887,10 @@ static  vnl_random random;
     const double c = 20;
     bool xform_is_good=true;
 
-    for ( unsigned int num=12; num<100; num+=10 )
+    for ( unsigned int num=12; num<100; num+=16 )
     {
+      vcl_cout << "num of points = " << num << "   ";
+
       //reset points
       p.clear();
       q.clear();
@@ -1911,17 +1918,17 @@ static  vnl_random random;
       // error STD = 1
       {
         vnl_matrix<double> perturbed_H( H ), est_H;
-        const double err_std = 1;
+        const double err_std = 2e-3;
         for ( unsigned i=0; i<3; ++i )
           for ( unsigned j=0; j<3; ++j )
-            perturbed_H( 0, 0 ) += random.drand32()*err_std;
+            perturbed_H( i, j ) += random.drand32()*err_std;
         rgrl_transformation_sptr init_trans = new rgrl_trans_homography2d( perturbed_H );
 
         //estimate
         rgrl_transformation_sptr est = estimator->estimate( ms, *init_trans);
-        rgrl_trans_rad_dis_homo2d* homo_est
-          = rgrl_cast<rgrl_trans_rad_dis_homo2d*>(est.as_pointer());
-        est_H = homo_est->uncenter_H_matrix();
+        rgrl_trans_homo2d_proj_rad* homo_est
+          = rgrl_cast<rgrl_trans_homo2d_proj_rad*>(est.as_pointer());
+        est_H = homo_est->H();
         est_H /= est_H.array_two_norm();
         if ( est_H(0,0) < 0 ) est_H *= -1;
 
@@ -1929,8 +1936,12 @@ static  vnl_random random;
           vcl_cout<<"Incorrect estimated H = "<<est_H<<vcl_endl;
           xform_is_good = false;
         }
-        if ( vcl_abs(homo_est->k1_to() - radk[0]) > tol ) {
-          vcl_cout << "Incorrect estimated k1 = " << homo_est->k1_to() << vcl_endl;
+        vcl_vector<double> radk_est = homo_est->radial_params();
+        if( radk_est.size() != radk.size() || vcl_abs( radk_est[0] - radk[0]) > tol ) {
+          vcl_cout << "Incorrect estimated k1 = ";
+          vcl_copy( radk_est.begin(), radk_est.end(), vcl_ostream_iterator<double>( vcl_cout, " " ) );
+          vcl_cout << vcl_endl;
+
           xform_is_good = false;
         }
       }
@@ -1966,7 +1977,7 @@ static  vnl_random random;
     const double c = 20;
     bool cov_is_good = true;
     bool homography_is_good = true;
-    for ( unsigned int num=12; num<200; num+=4 )
+    for ( unsigned int num=12; num<200; num+=16 )
     {
       vcl_cout << "using " << num << " out of 200 correspondences.\n";
       //reset points
@@ -2002,10 +2013,10 @@ static  vnl_random random;
       {
         vnl_matrix<double> perturbed_H( H ), est_H;
         vnl_matrix<double> iid_cov(2,2,vnl_matrix_identity);
-        const double err_std = 3;
+        const double err_std = 2e-3;
         for ( unsigned i=0; i<3; ++i )
           for ( unsigned j=0; j<3; ++j )
-            perturbed_H( 0, 0 ) += random.drand32()*err_std;
+            perturbed_H( i, j ) += random.drand32()*err_std;
         rgrl_transformation_sptr init_trans = new rgrl_trans_homography2d( perturbed_H );
 
         // estimate
@@ -2162,7 +2173,7 @@ MAIN( test_estimator )
     vcl_cout << "using camera centre " << camera_centre << vcl_endl;
 
     rgrl_est_homo2d_proj_rad* homo2d_rad_est
-      = new rgrl_est_homo2d_proj_rad( camera_centre );
+      = new rgrl_est_homo2d_proj_rad( 1, camera_centre );
     homo2d_rad_est->set_rel_thres( 1e-6 );
     homo2d_rad_est->set_max_num_iter( 5000 );
     //estimator->set_debug_flag(5);
@@ -2177,8 +2188,8 @@ MAIN( test_estimator )
     vcl_cout << "using camera centre " << camera_centre << vcl_endl;
 
     rgrl_est_homo2d_proj_rad* homo2d_rad_est
-      = new rgrl_est_homo2d_proj_rad( camera_centre );
-    homo2d_rad_est->set_rel_thres( 5e-7 );
+      = new rgrl_est_homo2d_proj_rad( 1, camera_centre );
+    homo2d_rad_est->set_rel_thres( 1e-6 );
     homo2d_rad_est->set_max_num_iter( 5000 );
     //estimator->set_debug_flag(5);
 
