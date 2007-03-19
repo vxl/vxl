@@ -162,12 +162,15 @@ reduced_proj_rad_jacobian( vnl_matrix<double>                            & base_
   dD_dx *= (1+coeff);
 
   // second part, taking gradient on the squared radial distance
-  base = 1;
+  base = 2 / centre_mag_norm_const_;
   for ( unsigned k=0; k<rad_k.size(); ++k ) {
+    
+    const double base_coeff = double(k+1)*base*rad_k[k];
+    
     //upper triangular
     for ( unsigned i=0; i<Tdim; ++i )
       for ( unsigned j=i; j<Tdim; ++j ) {
-        dD_dx( i, j ) += double(2*(k+1))*base*rad_k[k]*centred[i]*centred[j];
+        dD_dx( i, j ) += base_coeff*centred[i]*centred[j];
       }
 
     // multiplication is at the end of loop,
@@ -240,12 +243,15 @@ full_proj_rad_jacobian( vnl_matrix<double>                            & base_jac
   dD_dx *= (1+coeff);
 
   // second part, taking gradient on the squared radial distance
-  base = 1;
+  base = 2 / centre_mag_norm_const_;
   for ( unsigned k=0; k<rad_k.size(); ++k ) {
+    
+    const double base_coeff = double(k+1)*base*rad_k[k];
+    
     //upper triangular
     for ( unsigned i=0; i<Tdim; ++i )
       for ( unsigned j=i; j<Tdim; ++j ) {
-        dD_dx( i, j ) += double(2*(k+1))*base*rad_k[k]*centred[i]*centred[j];
+        dD_dx( i, j ) += base_coeff*centred[i]*centred[j];
       }
 
     // multiplication is at the end of loop,
@@ -312,12 +318,15 @@ proj_jac_wrt_loc( vnl_matrix_fixed<double, Tdim, Fdim>          & jac_loc,
   dD_dx *= (1+coeff);
 
   // second part, taking gradient on the squared radial distance
-  base = 1;
+  base = 2 / centre_mag_norm_const_;
   for ( unsigned k=0; k<rad_k.size(); ++k ) {
+    
+    const double base_coeff = double(k+1)*base*rad_k[k];
+    
     //upper triangular
     for ( unsigned i=0; i<Tdim; ++i )
       for ( unsigned j=i; j<Tdim; ++j ) {
-        dD_dx( i, j ) += double(2*(k+1))*base*rad_k[k]*centred[i]*centred[j];
+        dD_dx( i, j ) += base_coeff*centred[i]*centred[j];
       }
 
     // multiplication is at the end of loop,
@@ -499,7 +508,7 @@ projective_estimate(  vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
   // SVD decomposition:
   // Jac = U W V^\top
   vnl_svd<double> svd( jac, this->zero_svd_thres_ );
-  if ( svd.rank()+1 < param_num ) {
+  if ( svd.rank()+1 < (int)param_num ) {
     vcl_cerr <<  "The covariance of projection matrix ranks less than "
              << param_num-1 << "!\n" ;
     vcl_cerr << "  The singular values are " << svd.W() << vcl_endl;
