@@ -46,8 +46,11 @@ class rgrl_est_proj_rad_func
   void
   set_image_centre( vnl_vector_fixed<double, Tdim> const& image_centre )
   {
-    centre_mag_norm_const_ = image_centre.squared_magnitude() / 400;
-    image_centre_ = image_centre-this->to_centre_;
+    centre_mag_norm_const_
+      = image_centre.squared_magnitude() / 400;
+    if( centre_mag_norm_const_ < 1.0 )
+      centre_mag_norm_const_ = 1.0;
+   image_centre_ = image_centre-this->to_centre_;
   }
 
   //: set from, to, and image centres
@@ -57,33 +60,36 @@ class rgrl_est_proj_rad_func
                vnl_vector_fixed<double, Tdim> const& image_centre )
   {
     rgrl_est_proj_func<Tdim, Fdim>::set_centres( from_centre, to_centre );
-    centre_mag_norm_const_ = image_centre.squared_magnitude() / 400;
+    centre_mag_norm_const_
+      = image_centre.squared_magnitude() / 400;
+    if( centre_mag_norm_const_ < 1.0 )
+      centre_mag_norm_const_ = 1.0;
     image_centre_ = image_centre-this->to_centre_;
   }
 
-  //: get centred coordinate normalization constant 
+  //: get centred coordinate normalization constant
   double
   centre_mag_norm_const () const
   { return centre_mag_norm_const_; }
-  
+
   //: map a location
   inline
   void
-  map_loc( vnl_vector_fixed<double, Tdim>& mapped, 
+  map_loc( vnl_vector_fixed<double, Tdim>& mapped,
            vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
            vcl_vector<double> const& rad_k,
            vnl_vector_fixed<double, Fdim> const& from  ) const
   {
-  
+
     vnl_vector_fixed<double, Tdim> proj_mapped;
     rgrl_est_proj_map_inhomo_point<Tdim, Fdim>( proj_mapped, proj, from-this->from_centre_ );
-    
+
     // apply radial distortion
     apply_radial_distortion( mapped, proj_mapped, rad_k );
-    
-    mapped += this->to_centre_;  
+
+    mapped += this->to_centre_;
   }
-  
+
 protected:
 
   //: compute jacobian
@@ -124,7 +130,7 @@ protected:
   //: transfer parameters into the temp vector
   void
   transfer_radial_params_into_temp_storage( vnl_vector<double> const& params ) const;
-  
+
 protected:
   unsigned int                    camera_dof_;
   vnl_vector_fixed<double, Tdim>  image_centre_;
