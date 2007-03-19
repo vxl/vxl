@@ -35,7 +35,7 @@ rgrl_est_proj_func( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   index_row_(maxval_unsigned), index_col_(maxval_unsigned),
   max_num_iterations_(50),
   relative_threshold_(1e-7),
-  zero_svd_thres_(1e-4)
+  zero_svd_thres_(1e-5)
 {
 }
 
@@ -50,7 +50,7 @@ rgrl_est_proj_func( bool with_grad )
   index_row_(maxval_unsigned), index_col_(maxval_unsigned),
   max_num_iterations_(50),
   relative_threshold_(1e-7),
-  zero_svd_thres_(1e-4)
+  zero_svd_thres_(1e-5)
 {
 }
 
@@ -370,6 +370,7 @@ projective_estimate( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
 
   // convert parameters back into matrix form
   this->restored_centered_proj( proj, p );
+  //vcl_cout << "Final params=" << proj << vcl_endl;
 
   // compute covariance
   // Jac^\top * Jac is INVERSE of the covariance
@@ -385,6 +386,7 @@ projective_estimate( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
   if ( svd.rank()+1 < proj_size_ ) {
     vcl_cerr <<  "The covariance of projection matrix ranks less than "
              << proj_size_-1 << "!\n";
+    vcl_cerr << "  The singular values are " << svd.W() << vcl_endl;
     return false;
   }
 

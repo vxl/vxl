@@ -478,10 +478,10 @@ projective_estimate(  vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
     return false;
   }
   // lm.diagnose_outcome(vcl_cout);
-  // vcl_cout << "Final params=" << p << vcl_endl;
 
   // convert parameters back into matrix form
   this->restored_centered_proj( proj, p );
+  //vcl_cout << "Final params=" << proj << vcl_endl;
 
   // copy distortion parameters
   const unsigned int index_shift = this->proj_size_-1;
@@ -502,6 +502,7 @@ projective_estimate(  vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
   if ( svd.rank()+1 < param_num ) {
     vcl_cerr <<  "The covariance of projection matrix ranks less than "
              << param_num-1 << "!\n" ;
+    vcl_cerr << "  The singular values are " << svd.W() << vcl_endl;
     return false;
   }
 
