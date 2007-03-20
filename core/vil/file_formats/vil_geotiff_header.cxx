@@ -64,14 +64,9 @@ bool vil_geotiff_header::gtif_pixelscale(double &scale_x, double &scale_y, doubl
 
 bool vil_geotiff_header::gtif_trans_matrix (double* &trans_matrix)
 {
-  //double *data;
   short count;
   if (TIFFGetField(tif_, GTIFF_TRANSMATRIX, &count, &trans_matrix )) {
     assert (count == 16);
-    //for (int i=0; i<count; i++) {
-    //  trans_matrix.push_back(data[i]);
-    //}
-    //trans_matrix = data
     return true;
   }
   else
