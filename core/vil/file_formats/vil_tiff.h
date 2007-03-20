@@ -28,6 +28,7 @@
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
 #include <vcl_iosfwd.h>
+#include <vil/vil_config.h>
 #include <vil/vil_file_format.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_memory_chunk.h>
@@ -110,7 +111,7 @@ class vil_tiff_image : public vil_blocked_image_resource
   char const *file_format() const;
 
 #if HAS_GEOTIFF
-  //: are there any geotiff values
+  //: are there any geotiff tags
   bool is_GEOTIFF() { return h_->is_GEOTIFF(); }
 #endif
 
@@ -145,7 +146,7 @@ class vil_tiff_image : public vil_blocked_image_resource
   virtual bool get_property(char const *tag, void *prop = 0) const;
 
 #if HAS_GEOTIFF
-  //* returns null if the tiff does not include geotiff tags
+  //* returns null if the tiff file does not include any geotiff tags
   vil_geotiff_header* get_geotiff_header();
 #endif
 

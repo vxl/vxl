@@ -37,6 +37,7 @@
 #include <vcl_vector.h>
 #include <vxl_config.h>
 #include <vcl_cmath.h>
+#include <vil/vil_config.h>
 #include <vil/vil_pixel_format.h>
 #include <tiffio.h>
 

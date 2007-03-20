@@ -193,21 +193,6 @@ bool vil_tiff_header::read_header()
 
   tile_offsets_valid = false;
 
-#if 0
-  // read the geotiff tags
-  vil_geotiff_header geotiff(tif_);
-  vcl_vector<double> scale;
-  geotiff.model_pixel_scale(scale);
-  void *val = 0;
-  int size, length;
-  tagtype_t type;
-  geokey_t key = GTModelTypeGeoKey;
-  geotiff.get_key_value(key, &val, size, length, type);
-  if (type == TYPE_SHORT) {
-    short* xxx=0;
-    vcl_memcpy(xxx, val, size*length);
-  }
-#endif // 0
 #ifdef DEBUG
   if (tile_width.valid&&tile_length.valid&&samples_per_pixel.valid)
   {
@@ -267,16 +252,9 @@ bool vil_tiff_header::is_striped() const
 #if HAS_GEOTIFF
 bool vil_tiff_header::is_GEOTIFF() const
 {
-#if 0
-  int version[3];
-  int number_of_geokeys;
-  GTIFDirectoryInfo(gtif_, version, &number_of_geokeys);
-  return number_of_geokeys > 0;
-#else // 0
   short *data;
   short count;
   return (bool)TIFFGetField(tif_, 34735 /*TIFFTAG_GEOKEYDIRECTORY*/, &count, &data);
-#endif // 0
 }
 #endif
 
