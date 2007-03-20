@@ -184,15 +184,16 @@ bool vgui_adaptor::dispatch_to_tableau(vgui_event const &e)
   vgui_macro_report_errors;
 
   // if the event is DRAW, DRAW_OVERLAY or RESHAPE
-  // then set the glViewport and clear the OpenGL matrices
+  // then set the glViewport
   if (e.type == vgui_DRAW ||
       e.type == vgui_DRAW_OVERLAY ||
       e.type == vgui_RESHAPE) {
     glViewport(0, 0, get_width(), get_height());
 
-    // set projection matrices.
-    vgui_matrix_state::identity_gl_matrices(); // to identity
   }
+
+  // set projection matrices to identity
+  vgui_matrix_state::identity_gl_matrices();
 
   vgui_macro_report_errors;
 
