@@ -49,8 +49,8 @@ class rgrl_initializer_inv_indexing
   //
   //  \param nn_radius  nearest-neighbors in nn_radius.
   //  \param k   k-nearest neighbor(s)
-  void add_data( vcl_vector<rgrl_invariant_sptr> fixed_set,
-                 vcl_vector<rgrl_invariant_sptr> moving_set,
+  void add_data( vcl_vector<rgrl_invariant_sptr> const& fixed_set,
+                 vcl_vector<rgrl_invariant_sptr> const& moving_set,
                  double nn_radius = 0,
                  unsigned int k_nn = 1 );
 
@@ -62,8 +62,8 @@ class rgrl_initializer_inv_indexing
   //
   //  \param nn_radius nearest-neighbors in nn_radius.
   //  \param k_nn k-nearest-neighbor(s)
-  virtual void add_multiple_data( vcl_vector<rgrl_invariant_sptr> fixed_set,
-                                  vcl_vector<vcl_vector<rgrl_invariant_sptr> > moving_sets,
+  virtual void add_multiple_data( vcl_vector<rgrl_invariant_sptr> const& fixed_set,
+                                  vcl_vector<vcl_vector<rgrl_invariant_sptr> > const& moving_sets,
                                   double nn_radius = 0,
                                   unsigned int k_nn = 1);
 

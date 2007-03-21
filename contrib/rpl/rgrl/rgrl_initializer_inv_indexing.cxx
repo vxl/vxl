@@ -51,8 +51,8 @@ rgrl_initializer_inv_indexing( rgrl_mask_sptr const&     from_image_roi,
 
 void
 rgrl_initializer_inv_indexing::
-add_data( vcl_vector<rgrl_invariant_sptr> fixed_set,
-          vcl_vector<rgrl_invariant_sptr> moving_set,
+add_data( vcl_vector<rgrl_invariant_sptr> const& fixed_set,
+          vcl_vector<rgrl_invariant_sptr> const& moving_set,
           double nn_radius,
           unsigned int k_nn )
 {
@@ -63,8 +63,8 @@ add_data( vcl_vector<rgrl_invariant_sptr> fixed_set,
 
 void
 rgrl_initializer_inv_indexing::
-add_multiple_data( vcl_vector<rgrl_invariant_sptr> fixed_set,
-                   vcl_vector<vcl_vector<rgrl_invariant_sptr> > moving_sets,
+add_multiple_data( vcl_vector<rgrl_invariant_sptr> const& fixed_set,
+                   vcl_vector<vcl_vector<rgrl_invariant_sptr> > const& moving_sets,
                    double nn_radius,
                    unsigned int k_nn )
 {
