@@ -46,11 +46,20 @@ void vimt3d_image_3d::world_bounds(vcl_vector<double>& b_lo,
 //Related Functions
 //: Return bounding box containing image in world co-ords as a box
 vgl_box_3d<double> world_bounding_box(const vimt3d_image_3d& img) 
-{
-          
-    vcl_vector<double> b_lo(3,0.0);
-    vcl_vector<double> b_hi(3,0.0);
-    img.world_bounds(b_lo,b_hi);
-    //Use C-stlye vector interface for corner points, passing address of data as the C-style vector
-    return vgl_box_3d<double>(&(b_lo[0]),&(b_hi[0])); 
+{   
+  vcl_vector<double> b_lo(3,0.0);
+  vcl_vector<double> b_hi(3,0.0);
+  img.world_bounds(b_lo,b_hi);
+  //Use C-style vector interface for corner points, passing address of data as the C-style vector
+  return vgl_box_3d<double>(&(b_lo[0]),&(b_hi[0])); 
 }
+
+// Translate the image so that its centre is at the origin of the world coordinate system.
+void vimt3d_centre_image_at_origin(vimt3d_image_3d& image)
+{
+  vgl_box_3d<double> bbox = world_bounding_box(image);
+  vgl_point_3d<double> c = bbox.centroid();
+  vimt3d_transform_3d& w2i = image.world2im();
+  w2i.set_origin(w2i(c));
+}
+

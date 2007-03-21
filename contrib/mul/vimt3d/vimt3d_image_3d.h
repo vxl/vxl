@@ -69,4 +69,9 @@ class vimt3d_image_3d : public vimt_image
 // as the latter is for a general number of dimensions
 vgl_box_3d<double> world_bounding_box(const vimt3d_image_3d& img);
 
+
+//: Translate the image so that its centre is at the origin of the world coordinate system.
+void vimt3d_centre_image_at_origin(vimt3d_image_3d& image);
+
+
 #endif // vimt3d_image_3d_h_
