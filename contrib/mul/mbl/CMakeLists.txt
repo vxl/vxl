@@ -37,6 +37,7 @@ SET(mbl_sources
   mbl_thin_plate_spline_3d.cxx          mbl_thin_plate_spline_3d.h
   mbl_thin_plate_spline_weights_3d.cxx  mbl_thin_plate_spline_weights_3d.h
   mbl_histogram.cxx                     mbl_histogram.h
+  mbl_wt_histogram.cxx                  mbl_wt_histogram.h
   mbl_clamped_plate_spline_2d.cxx       mbl_clamped_plate_spline_2d.h
   mbl_correspond_points.cxx             mbl_correspond_points.h
 
