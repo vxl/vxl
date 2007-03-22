@@ -290,6 +290,9 @@ SOURCE=.\mbl_minimum_spanning_tree.cxx
 # Begin Source File
 SOURCE=.\mbl_stepwise_regression.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\mbl_wt_histogram.cxx	contrib/mul/mbl/mbl.dsp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx;in"
@@ -520,6 +523,9 @@ SOURCE=.\mbl_stepwise_regression.h
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_config.h.in
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_wt_histogram.h	contrib/mul/mbl/mbl.dsp
 # End Source File
 # End Group
 # End Target

@@ -336,6 +336,9 @@ SOURCE=.\rgrl_est_homo2d_proj.cxx
 SOURCE=.\rgrl_est_homo2d_proj_rad.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\rgrl_trans_homo2d_proj_rad.cxx
+# Begin Source File
+# End Source File
 SOURCE=.\Templates/rgrl_feature_set_location+2-.cxx
 # End Source File
 # Begin Source File
@@ -853,6 +856,9 @@ SOURCE=.\rgrl_est_proj_rad_func.h
 # End Source File
 # Begin Source File
 SOURCE=.\rgrl_est_proj_rad_func.txx
+# End Source File
+# Begin Source File
+SOURCE=.\rgrl_trans_homo2d_proj_rad.h
 # End Source File
 # End Group
 # End Target
