@@ -103,6 +103,7 @@
 #include <rgrl/rgrl_spline.h>
 #include <rgrl/rgrl_trans_affine.h>
 #include <rgrl/rgrl_trans_couple.h>
+#include <rgrl/rgrl_trans_homo2d_proj_rad.h>
 #include <rgrl/rgrl_trans_homography2d.h>
 #include <rgrl/rgrl_trans_mixed_spline.h>
 #include <rgrl/rgrl_trans_quadratic.h>

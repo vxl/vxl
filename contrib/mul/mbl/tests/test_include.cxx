@@ -24,6 +24,8 @@
 #include <mbl/mbl_jarque_bera.h>
 #include <mbl/mbl_k_means.h>
 #include <mbl/mbl_lda.h>
+#include <mbl/mbl_linear_interpolator.h>
+#include <mbl/mbl_log.h>
 #include <mbl/mbl_lru_cache.h>
 #include <mbl/mbl_matrix_products.h>
 #include <mbl/mbl_matxvec.h>
@@ -57,10 +59,9 @@
 #include <mbl/mbl_sum_1d.h>
 #include <mbl/mbl_table.h>
 #include <mbl/mbl_test.h>
-#include <mbl/mbl_log.h>
 #include <mbl/mbl_thin_plate_spline_2d.h>
 #include <mbl/mbl_thin_plate_spline_3d.h>
 #include <mbl/mbl_thin_plate_spline_weights_3d.h>
-#include <mbl/mbl_linear_interpolator.h>
+#include <mbl/mbl_wt_histogram.h>
 
 int main() { return 0; }
