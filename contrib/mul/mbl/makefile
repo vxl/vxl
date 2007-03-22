@@ -44,6 +44,7 @@ SOURCES += mbl_mod_gram_schmidt.cxx
 SOURCES += mbl_linear_interpolator.cxx
 SOURCES += mbl_minimum_spanning_tree.cxx
 SOURCES += mbl_stepwise_regression.cxx
+SOURCES += mbl_wt_histogram.cxx
 
 # Additional files to document:
 MANPAGE_SOURCES += mbl_cloneables_factory.h

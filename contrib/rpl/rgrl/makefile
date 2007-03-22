@@ -151,6 +151,7 @@ MANPAGE_SOURCES += rgrl_est_proj_func.txx
 SOURCES += rgrl_est_homo2d_proj.cxx
 SOURCES += rgrl_est_homo2d_proj_rad.cxx
 MANPAGE_SOURCES += rgrl_est_proj_rad_func.txx
+SOURCES += rgrl_trans_homo2d_proj_rad.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
