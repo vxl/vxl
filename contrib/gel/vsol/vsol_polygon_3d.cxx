@@ -8,7 +8,9 @@
 #include <vsl/vsl_vector_io.h>
 #include <vsol/vsol_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_homg_point_3d.h>
 #include <vgl/algo/vgl_fit_plane_3d.h>
+
 //***************************************************************************
 // Initialization
 //***************************************************************************
@@ -25,8 +27,8 @@ vsol_polygon_3d::vsol_polygon_3d(vcl_vector<vsol_point_3d_sptr> const& new_verti
 
   storage_=new vcl_vector<vsol_point_3d_sptr>(new_vertices);
   vcl_vector<vgl_homg_point_3d<double> > pts;
-  for(vcl_vector<vsol_point_3d_sptr>::iterator pit = storage_->begin();
-      pit != storage_->end(); ++pit)
+  for (vcl_vector<vsol_point_3d_sptr>::iterator pit = storage_->begin();
+       pit != storage_->end(); ++pit)
     pts.push_back(vgl_homg_point_3d<double>((*pit)->x(),(*pit)->y(),(*pit)->z()));
   vgl_fit_plane_3d<double> fp(pts);
   fp.fit(0.1);
@@ -266,7 +268,7 @@ vsol_polygon_3d::normal_at_point(vsol_point_3d_sptr const& /*no p needed*/) cons
   return plane_.normal();
 }
 //---------------------------------------------------------------------------
-//: Return the unit normal vector 
+//: Return the unit normal vector
 //---------------------------------------------------------------------------
 vgl_vector_3d<double> vsol_polygon_3d::normal() const
 {
