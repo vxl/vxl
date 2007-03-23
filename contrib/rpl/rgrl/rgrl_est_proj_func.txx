@@ -78,7 +78,11 @@ convert_parameters( vnl_vector<double>& params,
   for ( unsigned i=0; i<Tdim; ++i )
     to_centre_matrix( i, Tdim ) = -to_centre_[i];
 
+#ifndef VCL_BORLAND
   proj_matrix = to_centre_matrix * proj_matrix * from_centre_matrix;
+#else
+  proj_matrix = vnl_matrix_fixed_mat_mat_mult(to_centre_matrix,vnl_matrix_fixed_mat_mat_mult(proj_matrix,from_centre_matrix));
+#endif
 
   // find out which element in the projection matrix has largest value
   double max_val = 0;
@@ -123,7 +127,11 @@ uncentre_proj( vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj ) const
   for ( unsigned i=0; i<Tdim; ++i )
     to_centre_matrix( i, Tdim ) = to_centre_[i];
 
+#ifndef VCL_BORLAND
   return to_centre_matrix * proj * from_centre_matrix;
+#else
+  return vnl_matrix_fixed_mat_mat_mult(to_centre_matrix,vnl_matrix_fixed_mat_mat_mult(proj,from_centre_matrix));
+#endif
 }
 
 template <unsigned int Tdim, unsigned int Fdim>
@@ -385,8 +393,8 @@ projective_estimate( vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
   vnl_svd<double> svd( jac, zero_svd_thres_ );
   if ( svd.rank()+1 < proj_size_ ) {
     vcl_cerr <<  "The covariance of projection matrix ranks less than "
-             << proj_size_-1 << "!\n";
-    vcl_cerr << "  The singular values are " << svd.W() << vcl_endl;
+             << proj_size_-1 << "!\n"
+             << "  The singular values are " << svd.W() << vcl_endl;
     return false;
   }
 
