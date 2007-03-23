@@ -91,7 +91,7 @@ vgui_mfc_window::~vgui_mfc_window()
 {
   glFlush();
   /* AKhropov: seems like it's destroyed by MFC itself */
-  //delete mfcwin; 
+  //delete mfcwin;
   //mfcwin = 0;
   delete statusbar;
   statusbar = 0;
@@ -100,8 +100,8 @@ vgui_mfc_window::~vgui_mfc_window()
 //: Set menubar and update main window's actual menu
 void vgui_mfc_window::set_menubar(vgui_menu const &m)
 {
-	menubar = m;
-	vgui_mfc::instance()->utils->set_menu(menubar);
+  menubar = m;
+  vgui_mfc::instance()->utils->set_menu(menubar);
 }
 
 //: Return the vgui_mfc_adaptor associated with this window.

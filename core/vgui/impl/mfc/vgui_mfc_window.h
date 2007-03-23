@@ -76,9 +76,9 @@ class vgui_mfc_window : public vgui_window
   virtual int set_vscrollbar(int pos);
 
   POSITION pos1, pos2, pos3;
-  
-private:
-  vgui_menu			  menubar;
+
+ private:
+  vgui_menu          menubar;
 
   vgui_mfc_adaptor   *mfcwin;
   vgui_mfc_statusbar *statusbar;
