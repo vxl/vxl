@@ -64,7 +64,7 @@ class vbl_shared_pointer
 
   //: Construct using smart pointer to derived class.
   template <class U>
-  explicit vbl_shared_pointer( vbl_shared_pointer<U> const &that )
+  vbl_shared_pointer( vbl_shared_pointer<U> const &that )
     : pointer( that.pointer ),
       count_data( that.count_data )
   {
