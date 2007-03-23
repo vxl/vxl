@@ -43,11 +43,13 @@ SET(vidl2_sources
   vidl2_pixel_iterator.h        vidl2_pixel_iterator.cxx      vidl2_pixel_iterator.txx
   vidl2_convert.h               vidl2_convert.cxx
 
-  vidl2_istream.h
+  vidl2_istream.h               vidl2_istream_sptr.h
   vidl2_image_list_istream.h    vidl2_image_list_istream.cxx
-  vidl2_ostream.h
+  vidl2_ostream.h               vidl2_ostream_sptr.h
   vidl2_image_list_ostream.h    vidl2_image_list_ostream.cxx
   vidl2_iidc1394_params.h       vidl2_iidc1394_params.cxx
+
+  vidl2_istream_image_resource.h   vidl2_istream_image_resource.cxx
 )
 
 IF( FFMPEG_FOUND )

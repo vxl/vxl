@@ -50,6 +50,26 @@ class vidl2_istream
   //: Seek to the given frame number
   // \returns true if successful
   virtual bool seek_frame(unsigned int frame_number) = 0;
+
+ private:
+  //: prevent deep copying a stream
+  vidl2_istream(const vidl2_istream& other):ref_count_(0){}
+
+ //-------------------------------------------------------
+ // reference counting
+ public:
+
+  //: Increment reference count
+  void ref() { ref_count_++; }
+
+  //: Decrement reference count
+  void unref() { if (--ref_count_ <= 0) delete this; }
+
+  //: Number of objects referring to this data
+  int ref_count() const { return ref_count_; }
+
+ private:
+  int ref_count_;
 };
 
 #endif // vidl2_istream_h_

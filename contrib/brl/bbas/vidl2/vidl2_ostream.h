@@ -32,6 +32,26 @@ class vidl2_ostream
   //: Write and image to the stream
   // \retval false if the image could not be written
   virtual bool write_frame(const vidl2_frame_sptr& frame) = 0;
+
+   private:
+  //: prevent deep copying a stream
+  vidl2_ostream(const vidl2_ostream& other):ref_count_(0){}
+
+ //-------------------------------------------------------
+ // reference counting
+ public:
+
+  //: Increment reference count
+  void ref() { ref_count_++; }
+
+  //: Decrement reference count
+  void unref() { if (--ref_count_ <= 0) delete this; }
+
+  //: Number of objects referring to this data
+  int ref_count() const { return ref_count_; }
+
+ private:
+  int ref_count_;
 };
 
 #endif // vidl2_ostream_h_
