@@ -69,7 +69,7 @@ static void test_essential_matrix()
   vnl_vector_fixed<double,3> ax(0,1,0), cv(10, 0, 0), t;
   vgl_point_3d<double> c(10,0,0);  //Camera center
   Rh.set_rotation_about_axis(ax, 0.5236); //Rotation matrix
-  vnl_matrix_fixed<double, 3,3> R = Rh.get_upper_3x3_matrix();
+  vnl_double_3x3 R = Rh.get_upper_3x3_matrix();
   t = -R*cv;
   vpgl_essential_matrix<double> Ei(skew_symmetric(t[0],t[1],t[2])*R);
   vcl_cout << "\nIdeal Essential Matrix\n" << Ei << '\n';
@@ -81,7 +81,7 @@ static void test_essential_matrix()
   vgl_point_2d<double> xl = pcl.project(X), xr(0,0);
   vpgl_essential_matrix<double> Er(pcr, pcl);
   vcl_cout << "Essential Matrix with rotation\n" << Er << '\n';
-  vnl_matrix<double> error = Ei.get_matrix()-Er.get_matrix();
+  vnl_double_3x3 error = Ei.get_matrix()-Er.get_matrix();
   TEST_NEAR("Construct essential matrix from cameras", error.frobenius_norm(), 0, 1);
   vpgl_perspective_camera<double> pclr;//reconstructed camera
   success = extract_left_camera<double>(Er, xl,xr, pclr);
