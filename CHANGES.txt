@@ -6,39 +6,38 @@ effect.  If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
 
-      - intersection methods and functions in vgl have been separated from classes,
-        and renamed to vgl_intersection. The new functions can be found in 
+      - intersection methods & functions in vgl have been separated from classes
+        and renamed to vgl_intersection. The new functions can be found in
         <vgl/vgl_intersection.h> and <vgl/algo/vgl_intersection.h>. The old
         intersection methods and functions have been deprecated.
 
       - Begun to switch vil error reporting to exception-based.
-      
+
       - Added support for additional full loader/savers plug-ins to be added
         manually to the vil loader scheme.
-      
+
       - Added an plug-in vil loader to save and load vimt_image_2d natively.
-      
+
 ****************************
 VXL 1.8.0	- March 2007
 ****************************
 
       - vbl_shared_pointer updated to allow base class conversions
-      
-      
-****************************
-VXL 1.7.0	- November 2006
-****************************
 
-      - intersection methods scattered in vgl are combined into 
+*******************************
+VXL 1.7.0	- November 2006
+*******************************
+
+      - intersection methods scattered in vgl are combined into
         vgl/algo/vgl_intersection.h. intersect(...) under
-        vgl/vgl_box_3d and intersection(...) under vgl/vgl_line_3d_2_points 
+        vgl/vgl_box_3d and intersection(...) under vgl/vgl_line_3d_2_points
         are depracted and no longer available.
 
       - Added support for VC++ x64
 
-****************************
+*****************************
 VXL 1.6.0	- August 2006
-****************************
+*****************************
 
       - vnl has been made thread safe, fixing a major weakness with
         vxl
@@ -53,7 +52,7 @@ VXL 1.6.0	- August 2006
       - Add VXL_IMPORT_BUILD_SETTINGS option (default to YES) to allow
         private libraries to have different compiler settings. (Setting
         to NO will permit differences.)
-        
+
       - vsl can now read/write very large matrices and images in low-memory
         situations.
 
@@ -67,18 +66,18 @@ VXL 1.5.0	- April 2006
 
       - VC6 compilers are no longer supported
 
-      - VC7.0 compiler support is deprecated.  VC7.0 will not be
-        supported in vxl 1.6.
+      - VC7.0 compiler support is deprecated.
+        VC7.0 will not be supported in vxl 1.6.
 
       - New (somewhat experimental) support for reading video files
         and receiving input from usb/1394 cameras through DirectShow in
-        Windows systems has been included in contrib/brl/bbas/vidl2.  vidl2
-        also includes support for video-for-linux cameras and 1394 cameras
-        under linux.
+        Windows systems has been included in contrib/brl/bbas/vidl2.
+        vidl2 also includes support for video-for-linux cameras and
+        1394 cameras under linux.
 
       - A new runtime logging facility with almost no overhead has
-        been introduced in contrib/mul/mbl/mbl_log.  It is patterned after
-        Apache's log4j library.
+        been introduced in contrib/mul/mbl/mbl_log.
+        It is patterned after Apache's log4j library.
 
       - vil now optionally supports reading JPEG 2000 compressed
         image files (.jpc and .j2k) as well as JPEG 2000 compressed NITF 2.1
@@ -86,8 +85,8 @@ VXL 1.5.0	- April 2006
 
       - vil now supports pyramid images in two forms - 1)
         multiple pyramid levels in a single directory and 2) the levels are
-        stored in a single tiff file.  This capability is useful for displaying
-        large files.
+        stored in a single tiff file.
+        This capability is useful for displaying large files.
 
       - vil now supports blocked images for large satellite images.
 
@@ -130,7 +129,7 @@ VXL 1.1.0	- May 2004
       - Added AVI file support in Linux to vidl using the avifile library.
 
       - Brought mbl_mz_random into core/vnl/vnl_random.  This random
-        random number generator provides the same sequence on many platforms.
+        number generator provides the same sequence on many platforms.
 
       - Added better DICOM support to vil by wrapping DCMTK.  Added
         DCMTK to v3p.  Clean up DICOM header struct.
