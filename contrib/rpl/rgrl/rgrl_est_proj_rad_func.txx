@@ -163,10 +163,10 @@ reduced_proj_rad_jacobian( vnl_matrix<double>                            & base_
 
   // second part, taking gradient on the squared radial distance
   base = 2 / centre_mag_norm_const_;
-  for ( unsigned k=0; k<rad_k.size(); ++k ) {
-    
+  for ( unsigned k=0; k<rad_k.size(); ++k )
+  {
     const double base_coeff = double(k+1)*base*rad_k[k];
-    
+
     //upper triangular
     for ( unsigned i=0; i<Tdim; ++i )
       for ( unsigned j=i; j<Tdim; ++j ) {
@@ -244,10 +244,10 @@ full_proj_rad_jacobian( vnl_matrix<double>                            & base_jac
 
   // second part, taking gradient on the squared radial distance
   base = 2 / centre_mag_norm_const_;
-  for ( unsigned k=0; k<rad_k.size(); ++k ) {
-    
+  for ( unsigned k=0; k<rad_k.size(); ++k )
+  {
     const double base_coeff = double(k+1)*base*rad_k[k];
-    
+
     //upper triangular
     for ( unsigned i=0; i<Tdim; ++i )
       for ( unsigned j=i; j<Tdim; ++j ) {
@@ -319,10 +319,10 @@ proj_jac_wrt_loc( vnl_matrix_fixed<double, Tdim, Fdim>          & jac_loc,
 
   // second part, taking gradient on the squared radial distance
   base = 2 / centre_mag_norm_const_;
-  for ( unsigned k=0; k<rad_k.size(); ++k ) {
-    
+  for ( unsigned k=0; k<rad_k.size(); ++k )
+  {
     const double base_coeff = double(k+1)*base*rad_k[k];
-    
+
     //upper triangular
     for ( unsigned i=0; i<Tdim; ++i )
       for ( unsigned j=i; j<Tdim; ++j ) {
@@ -508,10 +508,10 @@ projective_estimate(  vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
   // SVD decomposition:
   // Jac = U W V^\top
   vnl_svd<double> svd( jac, this->zero_svd_thres_ );
-  if ( svd.rank()+1 < (int)param_num ) {
+  if ( svd.rank()+1 < param_num ) {
     vcl_cerr <<  "The covariance of projection matrix ranks less than "
-             << param_num-1 << "!\n" ;
-    vcl_cerr << "  The singular values are " << svd.W() << vcl_endl;
+             << param_num-1 << "!\n"
+             << "  The singular values are " << svd.W() << vcl_endl;
     return false;
   }
 
