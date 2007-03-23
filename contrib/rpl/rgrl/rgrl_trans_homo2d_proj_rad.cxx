@@ -15,9 +15,9 @@
 
 rgrl_trans_homo2d_proj_rad::
 rgrl_trans_homo2d_proj_rad()
-  : H_( 0.0 ),
-    rgrl_est_proj_rad_func<2,2>( 0, true ),
-  rad_k_(0)
+  : rgrl_est_proj_rad_func<2,2>( 0, true )
+  , H_( 0.0 )
+  , rad_k_(0)
 {
   const vnl_vector_fixed<double, 2> zeroc( 0, 0 );
   this->set_centres( zeroc, zeroc, zeroc );
@@ -114,8 +114,7 @@ scale_by( double scale ) const
   const double sq_scale = scale*scale;
 
   double base = 1;
-  for( unsigned int i=0; i<radk.size(); ++i ) {
-
+  for ( unsigned int i=0; i<radk.size(); ++i ) {
     base *= sq_scale;
     radk[i] /= base;
   }
@@ -128,7 +127,6 @@ scale_by( double scale ) const
                                        from, to );
   xform->set_scaling_factors( this->scaling_factors() );
   return xform;
-
 }
 
 
@@ -171,17 +169,15 @@ write(vcl_ostream& os ) const
 
   // radial terms
   os << rad_k_.size() << "  ";
-  for( unsigned i=0; i<rad_k_.size(); ++i )
-    os << rad_k_[i] << " ";
-  os << vcl_endl;
+  for ( unsigned i=0; i<rad_k_.size(); ++i )
+    os << rad_k_[i] << ' ';
 
-  os << from_centre_ << "   " << to_centre_ << "\n"
-     << image_centre_ << "   " << centre_mag_norm_const_
+  os << '\n' << from_centre_ << "   " << to_centre_
+     << '\n' << image_centre_ << "   " << centre_mag_norm_const_
      << vcl_endl;
 
   // parent
   rgrl_transformation::write( os );
-
 }
 
 // for input
@@ -207,11 +203,11 @@ read(vcl_istream& is )
   {
     int size = -1;
     is >> size;
-    if( size < 0 || !is.good() )
+    if ( size < 0 || !is.good() )
       return false;
 
     rad_k_.resize( size );
-    for( int i=0; i<size; ++i )
+    for ( int i=0; i<size; ++i )
       is >> rad_k_[i];
 
     // set H_dof_
@@ -244,7 +240,7 @@ radial_params() const
   const double centre_mag_norm = centre_mag_norm_const();
 
   double base = 1;
-  for( unsigned i=0; i<ori_radk.size(); ++i ) {
+  for ( unsigned i=0; i<ori_radk.size(); ++i ) {
     base *= centre_mag_norm;
     ori_radk[i] /= base;
   }
