@@ -37,8 +37,8 @@ ENDIF(JPEG_FOUND)
 INCLUDE( ${MODULE_PATH}/NewCMake/FindECW.cmake )
 IF(ECW_FOUND)
   SET( vil_sources ${vil_sources}
-     file_formats/vil_j2k_image.h           file_formats/vil_j2k_image.cxx
-     file_formats/NCSJPCVilIOStream.h       file_formats/NCSJPCVilIOStream.cxx )
+    file_formats/vil_j2k_image.h           file_formats/vil_j2k_image.cxx
+    file_formats/NCSJPCVilIOStream.h       file_formats/NCSJPCVilIOStream.cxx )
   INCLUDE_DIRECTORIES(${ECW_INCLUDE_DIR})
   SET( HAS_J2K 1 )
 ELSE(ECW_FOUND)
@@ -64,7 +64,7 @@ IF(TIFF_FOUND)
       SET( vil_sources ${vil_sources}
         file_formats/vil_geotiff_header.cxx file_formats/vil_geotiff_header.h
       )
-    ENDIF(GEOTIFF_FOUND)	
+    ENDIF(GEOTIFF_FOUND)
   ENDIF(VXL_FORCE_V3P_TIFF)
 ENDIF(TIFF_FOUND)
 
@@ -220,9 +220,9 @@ SET( vil_sources ${vil_sources}
 
 IF (WIN32 AND VXL_USE_LFS)
 #This is a hack since win32 doesn't have transparent Large File Support.
-   ADD_DEFINITIONS( -DVIL_USE_FSTREAM64 )
-   SET( vil_sources ${vil_sources}
-     vil_stream_fstream64.cxx        vil_stream_fstream64.h )
+  ADD_DEFINITIONS( -DVIL_USE_FSTREAM64 )
+  SET( vil_sources ${vil_sources}
+    vil_stream_fstream64.cxx        vil_stream_fstream64.h )
 ENDIF (WIN32 AND VXL_USE_LFS)
 
 AUX_SOURCE_DIRECTORY(Templates vil_sources)
