@@ -60,6 +60,7 @@ static void test_essential_matrix()
   //This point in 3-d is (0,0,10);
   vpgl_perspective_camera<double> pc;
   bool success = extract_left_camera<double>(E, pl, pr, pc);
+  TEST("test extract_left_camera", success, true);
   vgl_point_3d<double> cen = pc.get_camera_center();
   TEST_NEAR("test translation only between cameras", cen.x(), 1.0, 1e-03);
   //
@@ -85,6 +86,7 @@ static void test_essential_matrix()
   TEST_NEAR("Construct essential matrix from cameras", error.frobenius_norm(), 0, 1);
   vpgl_perspective_camera<double> pclr;//reconstructed camera
   success = extract_left_camera<double>(Er, xl,xr, pclr);
+  TEST("test extract_left_camera", success, true);
   vcl_cout << "Left Camera with Rotation " << pclr << '\n';
   vgl_point_3d<double> rc = pclr.get_camera_center();
   TEST_NEAR("Extract Left Camera", (rc.x()-1)*(rc.x()-1), 0, 1e-3);
@@ -94,7 +96,8 @@ static void test_essential_matrix()
   vgl_point_2d<double> xal(0.207847,0.2126),  xar(-0.1289,-0.0683432);
   vpgl_perspective_camera<double> palr;//reconstructed actual camera
   success = extract_left_camera<double>(Ea, xal,xar, palr, 6.25);
-  vcl_cout << "Actual Left Camera\n " << palr << '\n';
+  TEST("test extract_left_camera", success, true);
+  vcl_cout << "Actual Left Camera\n" << palr << '\n';
   rc = palr.get_camera_center();
   vgl_point_3d<double> ac(-1.62446,-1.03223,5.94627);
   TEST_NEAR("Test on actual E matrix", vgl_distance<double>(rc,ac), 0, 1e-3);
