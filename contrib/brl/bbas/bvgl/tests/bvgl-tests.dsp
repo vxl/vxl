@@ -248,6 +248,9 @@ SOURCE=.\test_include.cxx
 # Begin Source File
 SOURCE=.\test_articulated_poly.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_misc.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
