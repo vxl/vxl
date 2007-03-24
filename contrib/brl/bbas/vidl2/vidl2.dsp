@@ -156,7 +156,16 @@ SOURCE=.\vidl2_v4l_istream.cxx
 SOURCE=.\vidl2_v4l_params.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vidl2_istream_image_resource.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil_smart_ptr+vidl2_frame-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_smart_ptr+vidl2_istream-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_smart_ptr+vidl2_ostream-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -238,6 +247,15 @@ SOURCE=.\vidl2_v4l_istream.h
 # End Source File
 # Begin Source File
 SOURCE=.\vidl2_v4l_params.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_istream_image_resource.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_istream_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_ostream_sptr.h
 # End Source File
 # End Group
 # End Target
