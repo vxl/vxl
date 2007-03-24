@@ -95,11 +95,17 @@ LIB32=link.exe -lib
 # Begin Source File
 SOURCE=.\bvgl_articulated_poly.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bvgl_articulated_poly-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
 SOURCE=.\bvgl_articulated_poly.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvgl_articulated_poly_sptr.h
 # End Source File
 # End Group
 # End Target
