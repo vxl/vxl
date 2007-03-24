@@ -78,7 +78,7 @@ convert_parameters( vnl_vector<double>& params,
   for ( unsigned i=0; i<Tdim; ++i )
     to_centre_matrix( i, Tdim ) = -to_centre_[i];
 
-#ifndef VCL_BORLAND
+#if 1 // alternative didn't help for Borland compiler ...
   proj_matrix = to_centre_matrix * proj_matrix * from_centre_matrix;
 #else
   proj_matrix = vnl_matrix_fixed_mat_mat_mult(to_centre_matrix,vnl_matrix_fixed_mat_mat_mult(proj_matrix,from_centre_matrix));
@@ -127,7 +127,7 @@ uncentre_proj( vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj ) const
   for ( unsigned i=0; i<Tdim; ++i )
     to_centre_matrix( i, Tdim ) = to_centre_[i];
 
-#ifndef VCL_BORLAND
+#if 1 // alternative didn't help for Borland compiler ...
   return to_centre_matrix * proj * from_centre_matrix;
 #else
   return vnl_matrix_fixed_mat_mat_mult(to_centre_matrix,vnl_matrix_fixed_mat_mat_mult(proj,from_centre_matrix));
