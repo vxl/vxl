@@ -212,7 +212,7 @@ static void test_pyramid_image_resource()
     vcl_cout << "Read nlevels = " << nlevels << '\n';
     for (unsigned L = 0; L<nlevels; ++L)
       rpi->print(L);
-	vil_image_view<unsigned short> rv0 = rpi->get_copy_view(0);
+    vil_image_view<unsigned short> rv0 = rpi->get_copy_view(0);
     vcl_cout << "single file pyramid level 0\n";
     for (unsigned j = 0; j<2; ++j)
     {
@@ -221,7 +221,7 @@ static void test_pyramid_image_resource()
 
       vcl_cout << '\n';
     }
-	vil_image_view<unsigned short> rv1 = rpi->get_copy_view(1);
+    vil_image_view<unsigned short> rv1 = rpi->get_copy_view(1);
     vcl_cout << "single file pyramid level 1\n";
     for (unsigned j = 0; j<2; ++j)
     {
@@ -240,17 +240,17 @@ static void test_pyramid_image_resource()
       vcl_cout << '\n';
     }
     TEST("multiimage tiff pyramid read", rv(1,1)==19, true);
-	vil_image_resource_sptr rlev_0= rpi->get_resource(0);
-	vil_tiff_image* tlev_0 = (vil_tiff_image*)rlev_0.ptr();
-	unsigned nimgs = tlev_0->nimages();
-	vil_image_view<unsigned short> vl0 = rlev_0->get_view(1,1,1,1);
-	vcl_cout << "view0(0,0) " << vl0(0,0)<<'\n';
-	vil_image_resource_sptr rlev_1=rpi->get_resource(1);
-	vil_image_view<unsigned short> vl1 = rlev_1->get_view(1,1,1,1);
-	vcl_cout << "view1(0,0) " << vl1(0,0)<<'\n';
-	vil_image_view<unsigned short> vl0a = rlev_0->get_view(1,1,1,1);
-	vcl_cout << "view0a(0,0) " << vl0a(0,0)<<'\n';
-	TEST("get multi-image tiff resource", nimgs==3&&vl0(0,0)==74&&vl1(0,0)==37&&vl0a(0,0)==74, true);
+    vil_image_resource_sptr rlev_0= rpi->get_resource(0);
+    vil_tiff_image* tlev_0 = (vil_tiff_image*)rlev_0.ptr();
+    unsigned nimgs = tlev_0->nimages();
+    vil_image_view<unsigned short> vl0 = rlev_0->get_view(1,1,1,1);
+    vcl_cout << "view0(0,0) " << vl0(0,0)<<'\n';
+    vil_image_resource_sptr rlev_1=rpi->get_resource(1);
+    vil_image_view<unsigned short> vl1 = rlev_1->get_view(1,1,1,1);
+    vcl_cout << "view1(0,0) " << vl1(0,0)<<'\n';
+    vil_image_view<unsigned short> vl0a = rlev_0->get_view(1,1,1,1);
+    vcl_cout << "view0a(0,0) " << vl0a(0,0)<<'\n';
+    TEST("get multi-image tiff resource", nimgs==3&&vl0(0,0)==74&&vl1(0,0)==37&&vl0a(0,0)==74, true);
   }//close input pyramid rpi
   vpl_unlink(file.c_str());
   vcl_string fb = "tiff_pyramid_from_base.tif";
