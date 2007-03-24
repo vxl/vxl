@@ -36,6 +36,18 @@
 // Constants
 char const* vil_tiff_format_tag = "tiff";
 
+static unsigned nimg(TIFF* tif)
+{
+  if (!tif)
+    return 0;
+  TIFFSetDirectory(tif, 0);
+  unsigned int dircount = 0;
+  do {
+    dircount++;
+  } while (TIFFReadDirectory(tif));
+  return dircount;
+}
+
 
 bool vil_tiff_file_format_probe(vil_stream* is)
 {
@@ -187,7 +199,9 @@ vil_image_resource_sptr vil_tiff_file_format::make_input_image(vil_stream* is)
     delete h;
     return 0;
   }
-  return new vil_tiff_image(tss->tif, h);
+  unsigned n = nimg(tss->tif);
+  tif_smart_ptr tif_sptr = new tif_ref_cnt(tss->tif);
+  return new vil_tiff_image(tif_sptr, h, n);
 }
 
 vil_pyramid_image_resource_sptr
@@ -202,8 +216,9 @@ vil_tiff_file_format::make_input_pyramid_image(char const* file)
   bool open_for_reading = true;
   if (trace) // find test failure
     vcl_cerr << "make_input_pyramid_image::opening multi-image tiff pyramid resource\n";
+  tif_smart_ptr tif_sptr = new tif_ref_cnt(in);
   vil_pyramid_image_resource_sptr pyr =
-    new vil_tiff_pyramid_resource(in, open_for_reading);
+    new vil_tiff_pyramid_resource(tif_sptr, open_for_reading);
   if (pyr->nlevels()<=1)
     return 0;
   else
@@ -303,7 +318,8 @@ vil_tiff_file_format::make_blocked_output_image(vil_stream* vs,
     delete h;
     return 0;
   }
-  return new vil_tiff_image(tss->tif, h);
+  tif_smart_ptr tsptr = new tif_ref_cnt(tss->tif);
+  return new vil_tiff_image(tsptr, h);
 }
 
 
@@ -325,7 +341,8 @@ vil_tiff_file_format::make_pyramid_output_image(char const* filename)
   if (!out)
     return 0;
   bool open_for_reading = false;
-  return new vil_tiff_pyramid_resource(out, open_for_reading);
+  tif_smart_ptr tsptr = new tif_ref_cnt(out);
+  return new vil_tiff_pyramid_resource(tsptr, open_for_reading);
 }
 
 char const* vil_tiff_file_format::tag() const
@@ -338,9 +355,10 @@ char const* vil_tiff_file_format::tag() const
 
 /////////////////////////////////////////////////////////////////////////////
 
-vil_tiff_image::vil_tiff_image(TIFF* tif,
-                               vil_tiff_header* th):
-  t_(tif), h_(th)
+
+vil_tiff_image::vil_tiff_image(tif_smart_ptr const& tif_sptr,
+                               vil_tiff_header* th, const unsigned nimages):
+    t_(tif_sptr), h_(th), index_(0), nimages_(nimages)
 {
 }
 
@@ -375,7 +393,7 @@ bool vil_tiff_image::get_property(char const * tag, void * value) const
 #if HAS_GEOTIFF
 vil_geotiff_header* vil_tiff_image::get_geotiff_header()
 {
-  vil_geotiff_header* gtif = new vil_geotiff_header(t_);
+  vil_geotiff_header* gtif = new vil_geotiff_header(t_.tif());
   if (gtif->gtif_number_of_keys() == 0) {
     delete gtif;
     return 0;
@@ -392,8 +410,6 @@ vil_pixel_format vil_tiff_image::pixel_format() const
 
 vil_tiff_image::~vil_tiff_image()
 {
-  if (t_)
-    TIFFClose(t_);
   delete h_;
 }
 
@@ -650,6 +666,21 @@ vil_tiff_image::get_block( unsigned block_index_i,
 {
   //the only two possibilities
   assert(h_->is_tiled()||h_->is_striped());
+  //
+  //If there are multiple images in the file it is 
+  //necessary to set the TIFF directory and file header corresponding to 
+  //this resource according to the index
+  //
+  if(nimages_>1)
+    {
+      if (TIFFSetDirectory(t_.tif(), index_)<=0)
+        return 0;
+      vil_tiff_header* h = new vil_tiff_header(t_.tif());
+      //Cast away const
+      vil_tiff_image* ti = (vil_tiff_image*)this;
+      delete h_;
+      ti->h_=h;
+    }
 
   vil_image_view_base_sptr view = 0;
 
@@ -673,7 +704,7 @@ vil_tiff_image::get_block( unsigned block_index_i,
 
   if (h_->is_tiled())
   {
-    if (TIFFReadEncodedTile(t_, blk_indx, data, (tsize_t) -1)<=0)
+    if (TIFFReadEncodedTile(t_.tif(), blk_indx, data, (tsize_t) -1)<=0)
     {
       delete [] data;
       return view;
@@ -689,7 +720,7 @@ vil_tiff_image::get_block( unsigned block_index_i,
 
   if (h_->is_striped())
   {
-    if (TIFFReadEncodedStrip(t_, blk_indx, data, (tsize_t) -1)<=0)
+    if (TIFFReadEncodedStrip(t_.tif(), blk_indx, data, (tsize_t) -1)<=0)
     {
       delete [] data;
       return view;
@@ -946,10 +977,10 @@ bool vil_tiff_image::write_block_to_file(unsigned bi, unsigned bj,
 {
   unsigned blk_indx = this->block_index(bi, bj);
   if (h_->is_tiled())
-    return TIFFWriteEncodedTile(t_, blk_indx, block_buf,
+    return TIFFWriteEncodedTile(t_.tif(), blk_indx, block_buf,
                                 block_size_bytes)>0;
   if (h_->is_striped())
-    return TIFFWriteEncodedStrip(t_, blk_indx, block_buf,
+    return TIFFWriteEncodedStrip(t_.tif(), blk_indx, block_buf,
                                  block_size_bytes ) > 0;
   return false;
 }
@@ -1149,7 +1180,7 @@ vil_tiff_pyramid_resource::vil_tiff_pyramid_resource()
 }
 
 vil_tiff_pyramid_resource::
-vil_tiff_pyramid_resource(TIFF* t, bool read)
+vil_tiff_pyramid_resource(tif_smart_ptr const& t, bool read)
   : read_(read), t_(t)
 {
   bool trace = false;
@@ -1158,7 +1189,7 @@ vil_tiff_pyramid_resource(TIFF* t, bool read)
   //for reading we need to set up the levels
   while (true)
   {
-    vil_tiff_header h(t_);
+    vil_tiff_header h(t_.tif());
     if (trace)
       vcl_cerr << "In vil_tiff_pyramid_resource constructor"
                << " constructed header\n"
@@ -1172,7 +1203,7 @@ vil_tiff_pyramid_resource(TIFF* t, bool read)
     if (trace)
       vcl_cerr << "In vil_tiff_pyramid_resource constructor"
                << " constructed level\n";
-    int status = TIFFReadDirectory(t_);
+    int status = TIFFReadDirectory(t_.tif());
     if (trace)
       vcl_cerr << "In vil_tiff_pyramid_resource constructor"
                << " Read new directory\n";
@@ -1193,8 +1224,6 @@ vil_tiff_pyramid_resource::~vil_tiff_pyramid_resource()
 {
   for (unsigned L = 0; L<this->nlevels(); ++L)
     delete levels_[L];
-  if (t_)
-    TIFFClose(t_);
 }
 
 //:Get a partial view from the image from a specified pyramid level
@@ -1203,15 +1232,10 @@ vil_tiff_pyramid_resource::get_copy_view(unsigned i0, unsigned n_i,
                                          unsigned j0, unsigned n_j,
                                          unsigned level) const
 {
-  if (level>=this->nlevels())
+  unsigned nl = this->nlevels();
+  if (level>=nl)
     return vil_image_view_base_sptr();
-  // setup the image header for the level
-  unsigned header_index = levels_[level]->header_index_;
-  // The status value should be checked here
-  if (TIFFSetDirectory(t_, header_index)<=0)
-    return 0;
-  vil_tiff_header* h = new vil_tiff_header(t_);
-  vil_tiff_image* resc = new vil_tiff_image(t_, h);
+  vil_image_resource_sptr resc = this->get_resource(level);
   //scale input coordinates to the scale of the level
   float scale = levels_[level]->scale_;
   float fi0 = vcl_floor(scale*i0), fj0 = vcl_floor(scale*j0);
@@ -1223,8 +1247,9 @@ vil_tiff_pyramid_resource::get_copy_view(unsigned i0, unsigned n_i,
   unsigned snj = static_cast<unsigned>(fnj);
   if (snj == 0) snj = 1;//can't have less than one pixel
   vil_image_view_base_sptr view = resc->get_copy_view(si0, sni, sj0, snj);
+#if 0 //DON'T NEED CLEAR?
   resc->clear_TIFF();
-  delete resc;
+#endif
   return view;
 }
 
@@ -1258,33 +1283,38 @@ bool vil_tiff_pyramid_resource::put_resource(vil_image_resource_sptr const& ir)
   unsigned sbi = 0, sbj = 0;
   if (bir) { sbi = bir->size_block_i(); sbj = bir->size_block_j(); }
   // setup the image header for the level
-  vil_tiff_header* h = new vil_tiff_header(t_, ni, nj, nplanes,
+  vil_tiff_header* h = new vil_tiff_header(t_.tif(), ni, nj, nplanes,
                                            fmt, sbi, sbj);
 
   /* We are writing single page of the multipage file */
-  TIFFSetField(t_, TIFFTAG_SUBFILETYPE, FILETYPE_PAGE);
+  TIFFSetField(t_.tif(), TIFFTAG_SUBFILETYPE, FILETYPE_PAGE);
   /* Set the page number */
-  TIFFSetField(t_, TIFFTAG_PAGENUMBER,level, 3);
-  vil_tiff_image* ti = new vil_tiff_image(t_, h);
+  TIFFSetField(t_.tif(), TIFFTAG_PAGENUMBER,level, 3);
+  vil_tiff_image* ti = new vil_tiff_image(t_, h, level);
   vil_image_resource_sptr resc = ti;
   if (!vil_copy_deep(ir, resc))
     return false;
+#if 0 //DON'T NEED CLEAR?
   ti->clear_TIFF();
+#endif 
   tiff_pyramid_level* pl = new tiff_pyramid_level(levels_.size(), ni, nj, nplanes, fmt);
   levels_.push_back(pl);
-  int status = TIFFWriteDirectory(t_);
+  int status = TIFFWriteDirectory(t_.tif());
   return status == 1 ;
 }
 //: returns the pyramid resource at the specified level
-vil_image_resource_sptr vil_tiff_pyramid_resource::get_resource(const unsigned level)
+vil_image_resource_sptr vil_tiff_pyramid_resource::get_resource(const unsigned level) const
 {
-  if (level>=this->nlevels())
+  unsigned nl = this->nlevels();
+  if (level>=nl)
     return 0;
   // setup the image header for the level
   unsigned header_index = levels_[level]->header_index_;
   // The status value should be checked here
-  if (TIFFSetDirectory(t_, header_index)<=0)
+  if (TIFFSetDirectory(t_.tif(), header_index)<=0)
     return 0;
-  vil_tiff_header* h = new vil_tiff_header(t_);
-  return new vil_tiff_image(t_, h);
+  vil_tiff_header* h = new vil_tiff_header(t_.tif());
+  vil_tiff_image* i = new vil_tiff_image(t_, h, nl);
+  i->set_index(header_index);
+  return i;
 }

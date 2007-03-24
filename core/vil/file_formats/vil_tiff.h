@@ -19,7 +19,8 @@
 //       written. Only tiled images are considered blocked, i.e. not strips.
 //       Block dimensions must be a multiple of 16, for compatibility with
 //       compression schemes. Tiff files with separate color bands are not handled
-//
+//   24 Mar 2007 J.L. Mundy - added smart pointer on TIFF handle to support
+//       multiple resources from a single tiff file; required for pyramid
 //   KNOWN BUG - 24bit samples for both nplanes = 1 and nplanes = 3
 //\endverbatim
 
@@ -88,15 +89,65 @@ class vil_tiff_file_format : public vil_file_format
 
 struct tif_stream_structures;
 class vil_tiff_header;
+//Need to create a smartpointer mechanism for the tiff
+//file in order to handle multiple images, e.g. for pyramid
+//resource
+//A reference counting wrapper for the TIFF handle
+struct tif_ref_cnt
+{
+  tif_ref_cnt(TIFF* tif):tif_(tif), cnt_(0){}
+  TIFF* tif(){return tif_;}
+  void ref(){cnt_++;}
+  void unref(){
+    if(--cnt_<=0) 
+      {
+        TIFFClose(tif_);
+        delete this;
+      }
+  }
+  private:
+  TIFF* tif_;
+  unsigned cnt_;
+  };
+//The smart pointer to the tiff handle
+struct tif_smart_ptr
+{
+  tif_smart_ptr(): tptr_(0){}
 
-//: Generic image interface for single image TIFF files
+  tif_smart_ptr(tif_ref_cnt* tptr):tptr_(tptr)
+  { if(tptr_) tptr_->ref();}
+
+  tif_smart_ptr(tif_smart_ptr const& tp)
+  {tptr_ = tp.tptr_; if(tptr_) tptr_->ref();}
+
+  ~tif_smart_ptr()
+  {
+    // the strange order of events in this function is to avoid
+    // heap corruption if unref() causes *this to be deleted.
+    tif_ref_cnt* old_ptr = tptr_;
+    tptr_ = 0;
+    if (old_ptr)
+      old_ptr->unref();
+  }
+  //: Inverse bool
+  bool operator!() const
+    {
+      return (tptr_ != (tif_ref_cnt*)0)? false : true; 
+    }
+
+  //: Convenient get TIFF* for header construction; assumes temporary use
+  TIFF* tif() const {if(tptr_) return tptr_->tif(); return (TIFF*)0;}
+  private:
+  tif_ref_cnt* tptr_;
+};
+//: Generic image interface for image TIFF image files (could have multiple images)
 class vil_tiff_image : public vil_blocked_image_resource
 {
   friend class vil_tiff_file_format;
  public:
 
-  vil_tiff_image(TIFF* tif,
-                 vil_tiff_header* th);
+  vil_tiff_image(tif_smart_ptr const& tif,
+                 vil_tiff_header* th, const unsigned nimages = 1);
 
   ~vil_tiff_image();
 
@@ -152,17 +203,29 @@ class vil_tiff_image : public vil_blocked_image_resource
 
   friend class vil_tiff_pyramid_resource;
 
+  //:indicates the number of images in the tiff file
+  unsigned int nimages() const {return nimages_;}
+
+  //:the image index for multiple image files
+  unsigned int index() const {return index_;}
+  //:point to a particular image in the file
+  void set_index(const unsigned int index)
+    {assert(index<nimages_); index_=index;}
  private:
   //: the TIFF handle to the open resource file
-  TIFF* t_;
+  tif_smart_ptr t_;
 
   //: the TIFF header information
   vil_tiff_header* h_;
-
+  //: the default image header index
+  unsigned int index_;
+  //: number of images in the file
+  unsigned int nimages_;
+#if 0
   //to keep the tiff file open during reuse of multiple tiff resources
   //in a single file otherwise the resource destructor would close the file
   void clear_TIFF() { t_ = 0; }
-
+#endif
   //: the number of samples in a block
   unsigned samples_per_block() const;
 
@@ -270,7 +333,7 @@ struct tiff_pyramid_level
 class vil_tiff_pyramid_resource : public vil_pyramid_image_resource
 {
  public:
-  vil_tiff_pyramid_resource(TIFF* t, bool read = true);
+  vil_tiff_pyramid_resource(tif_smart_ptr const& t, bool read = true);
 
   virtual ~vil_tiff_pyramid_resource();
 
@@ -322,8 +385,8 @@ class vil_tiff_pyramid_resource : public vil_pyramid_image_resource
   // written into the file. Be sure you want to commit to the file.
   bool put_resource(vil_image_resource_sptr const& resc);
 
-  //: returns the pyramid resource at the specified level
-  vil_image_resource_sptr get_resource(const unsigned level);
+  //: returns the image resource at the specified pyramid level
+  vil_image_resource_sptr get_resource(const unsigned level) const;
 
   //: for debug purposes
   void print(const unsigned level)
@@ -342,7 +405,7 @@ class vil_tiff_pyramid_resource : public vil_pyramid_image_resource
   bool read_;
 
   //: the tiff handle
-  TIFF* t_;
+  tif_smart_ptr t_;
 
   //The set of images in the pyramid. levels_[0] is the base image
   vcl_vector<tiff_pyramid_level*> levels_;

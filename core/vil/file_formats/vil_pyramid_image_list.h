@@ -161,7 +161,7 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
   bool add_resource(vil_image_resource_sptr const& image);
 
   //: vitural method for getting a level of the pyramid
-  vil_image_resource_sptr get_resource(const unsigned level)
+  vil_image_resource_sptr get_resource(const unsigned level) const
     {return get_level(level);}
 
   //: Get a level image resource of the pyramid

@@ -104,7 +104,7 @@ class vil_pyramid_image_resource : public vil_image_resource
   virtual bool put_resource(vil_image_resource_sptr const& resc) = 0;
 
   //:get an image resource from the pyramid at the specified level
-  virtual vil_image_resource_sptr get_resource(const unsigned level) = 0;
+  virtual vil_image_resource_sptr get_resource(const unsigned level) const = 0;
 
   //: a utility function to decimate a resource using blocks
   // The new scale is one half the input resource scale
