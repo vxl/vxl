@@ -19,10 +19,10 @@
 
 
 vidl2_istream_image_resource::
-    vidl2_istream_image_resource(const vidl2_istream_sptr& istream, int frame,
+    vidl2_istream_image_resource(const vidl2_istream_sptr& i_stream, int frame,
                                  unsigned int ni, unsigned int nj, unsigned int np,
                                  vil_pixel_format format)
-  : istream_(istream),
+  : istream_(i_stream),
     frame_number_(frame),
     ni_(ni), nj_(nj), np_(np),
     format_(format)
@@ -35,7 +35,7 @@ bool
 vidl2_istream_image_resource::find_image_properties()
 {
   vidl2_frame_sptr frame = istream_->current_frame();
-  if(!frame)
+  if (!frame)
     return false;
 
   vidl2_pixel_format fmt = frame->pixel_format();
@@ -43,7 +43,7 @@ vidl2_istream_image_resource::find_image_properties()
   ni_ = frame->ni();
   nj_ = frame->nj();
   np_ = vidl2_pixel_format_num_channels(fmt);
-  if(bpp / np_ < 16)
+  if (bpp / np_ < 16)
     format_ = VIL_PIXEL_FORMAT_BYTE;
   else
     format_ = VIL_PIXEL_FORMAT_UINT_16;
@@ -53,8 +53,8 @@ vidl2_istream_image_resource::find_image_properties()
 
 
 vidl2_istream_image_resource::
-    vidl2_istream_image_resource(const vidl2_istream_sptr& istream, int frame)
-  : istream_(istream),
+    vidl2_istream_image_resource(const vidl2_istream_sptr& i_stream, int frame)
+  : istream_(i_stream),
     frame_number_(frame)
 {
   assert(istream_);
@@ -64,8 +64,8 @@ vidl2_istream_image_resource::
 
 
 vidl2_istream_image_resource::
-    vidl2_istream_image_resource(const vidl2_istream_sptr& istream)
-  : istream_(istream),
+    vidl2_istream_image_resource(const vidl2_istream_sptr& i_stream)
+  : istream_(i_stream),
     frame_number_(0)
 {
   assert(istream_);
@@ -111,7 +111,6 @@ vidl2_istream_image_resource::pixel_format() const
 bool
 vidl2_istream_image_resource::get_property(char const *key, void * value) const
 {
-
   return false;
 }
 
@@ -120,38 +119,37 @@ vil_image_view_base_sptr
 vidl2_istream_image_resource::get_copy_view(unsigned i0, unsigned ni,
                                             unsigned j0, unsigned nj) const
 {
-  if(!istream_)
+  if (!istream_)
     return NULL;
 
   int curr_frame = istream_->frame_number();
   vidl2_frame_sptr frame = NULL;
-  if(curr_frame == frame_number_)
+  if (curr_frame == frame_number_)
     frame = istream_->current_frame();
-  if(curr_frame + 1 == frame_number_){
-    if(istream_->advance())
+  if (curr_frame + 1 == frame_number_) {
+    if (istream_->advance())
       frame = istream_->current_frame();
   }
-  else{
-    if(istream_->is_seekable() && istream_->seek_frame(frame_number_))
+  else {
+    if (istream_->is_seekable() && istream_->seek_frame(frame_number_))
       frame = istream_->current_frame();
   }
 
-  if(!frame)
+  if (!frame)
     return NULL;
 
   // try the wrap the frame in an image view
   vil_image_view_base_sptr view = vidl2_convert_wrap_in_view(*frame);
 
-
-  if(!view){
+  if (!view) {
     // try to convert the frame data to the expected view
     view = create_empty_view();
     vidl2_convert_to_view(*frame,*view);
   }
-  if(!view)
+  if (!view)
     return NULL;
 
-  if(i0 == 0 && j0 == 0 && ni == view->ni() && nj == view->nj())
+  if (i0 == 0 && j0 == 0 && ni == view->ni() && nj == view->nj())
     return view;
 
   if (i0 + ni > view->ni() || j0 + nj > view->nj()) return NULL;
@@ -192,10 +190,9 @@ bool
 vidl2_istream_image_resource::put_view(const vil_image_view_base &view,
                               unsigned x0, unsigned y0)
 {
-  vcl_cerr << "vidl2_istream_image_resource::put_view not supported" << vcl_endl;
+  vcl_cerr << "vidl2_istream_image_resource::put_view not supported\n";
   return false;
 }
-
 
 
 //: create an empty image of the appropriate type and size
