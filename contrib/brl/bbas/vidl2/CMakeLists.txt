@@ -2,7 +2,6 @@
 
 PROJECT(vidl2)
 
-
 INCLUDE( ${MODULE_PATH}/NewCMake/FindFFMPEG.cmake )
 INCLUDE( ${MODULE_PATH}/NewCMake/FindDC1394.cmake )
 INCLUDE( ${MODULE_PATH}/NewCMake/FindDirectShow.cmake )
@@ -37,28 +36,29 @@ ENDIF(DIRECTSHOW_FOUND)
 
 
 SET(vidl2_sources
-  vidl2_pixel_format.h          vidl2_pixel_format.cxx
-  vidl2_color.h                 vidl2_color.cxx
-  vidl2_frame.h                 vidl2_frame.cxx               vidl2_frame_sptr.h
-  vidl2_pixel_iterator.h        vidl2_pixel_iterator.cxx      vidl2_pixel_iterator.txx
-  vidl2_convert.h               vidl2_convert.cxx
+    vidl2_pixel_format.h           vidl2_pixel_format.cxx
+    vidl2_color.h                  vidl2_color.cxx
+    vidl2_frame.h                  vidl2_frame.cxx           vidl2_frame_sptr.h
+    vidl2_pixel_iterator.h         vidl2_pixel_iterator.cxx
+                                   vidl2_pixel_iterator.txx
+    vidl2_convert.h                vidl2_convert.cxx
 
-  vidl2_istream.h               vidl2_istream_sptr.h
-  vidl2_image_list_istream.h    vidl2_image_list_istream.cxx
-  vidl2_ostream.h               vidl2_ostream_sptr.h
-  vidl2_image_list_ostream.h    vidl2_image_list_ostream.cxx
-  vidl2_iidc1394_params.h       vidl2_iidc1394_params.cxx
+    vidl2_istream.h                vidl2_istream_sptr.h
+    vidl2_image_list_istream.h     vidl2_image_list_istream.cxx
+    vidl2_ostream.h                vidl2_ostream_sptr.h
+    vidl2_image_list_ostream.h     vidl2_image_list_ostream.cxx
+    vidl2_iidc1394_params.h        vidl2_iidc1394_params.cxx
 
-  vidl2_istream_image_resource.h   vidl2_istream_image_resource.cxx
+    vidl2_istream_image_resource.h vidl2_istream_image_resource.cxx
 )
 
 IF( FFMPEG_FOUND )
   SET(vidl2_sources ${vidl2_sources}
-    vidl2_ffmpeg_init.h             vidl2_ffmpeg_init.cxx
-    vidl2_ffmpeg_convert.h          vidl2_ffmpeg_convert.cxx
-    vidl2_ffmpeg_istream.h          vidl2_ffmpeg_istream.cxx
-    vidl2_ffmpeg_ostream.h          vidl2_ffmpeg_ostream.cxx
-    vidl2_ffmpeg_ostream_params.h   vidl2_ffmpeg_ostream_params.cxx
+      vidl2_ffmpeg_init.h             vidl2_ffmpeg_init.cxx
+      vidl2_ffmpeg_convert.h          vidl2_ffmpeg_convert.cxx
+      vidl2_ffmpeg_istream.h          vidl2_ffmpeg_istream.cxx
+      vidl2_ffmpeg_ostream.h          vidl2_ffmpeg_ostream.cxx
+      vidl2_ffmpeg_ostream_params.h   vidl2_ffmpeg_ostream_params.cxx
   )
 ENDIF( FFMPEG_FOUND )
 
@@ -71,15 +71,15 @@ ENDIF( DC1394_FOUND )
 
 IF(DIRECTSHOW_FOUND)
   SET(vidl2_sources ${vidl2_sources}
-    vidl2_exception.h
-    vidl2_dshow.h                      vidl2_dshow.cxx
-    vidl2_dshow_file_istream.h         vidl2_dshow_file_istream.cxx
-    vidl2_dshow_live_istream.h         vidl2_dshow_live_istream.cxx
-    vidl2_dshow_istream_params.h       vidl2_dshow_istream_params.cxx
+      vidl2_exception.h
+      vidl2_dshow.h                      vidl2_dshow.cxx
+      vidl2_dshow_file_istream.h         vidl2_dshow_file_istream.cxx
+      vidl2_dshow_live_istream.h         vidl2_dshow_live_istream.cxx
+      vidl2_dshow_istream_params.h       vidl2_dshow_istream_params.cxx
   )
   IF(DIRECTSHOW_ESF_FOUND)
     SET(vidl2_sources ${vidl2_sources}
-      vidl2_dshow_istream_params_esf.h   vidl2_dshow_istream_params_esf.cxx
+        vidl2_dshow_istream_params_esf.h vidl2_dshow_istream_params_esf.cxx
     )
   ENDIF(DIRECTSHOW_ESF_FOUND)
 ENDIF(DIRECTSHOW_FOUND)
@@ -98,7 +98,7 @@ AUX_SOURCE_DIRECTORY(Templates vidl2_sources)
 
 ADD_LIBRARY(vidl2 ${vidl2_sources})
 INSTALL_TARGETS(/lib vidl2)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/vidl2 ${vidl_sources})
+INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/vidl2 ${vidl2_sources})
 
 TARGET_LINK_LIBRARIES( vidl2 vil vul )
 IF( FFMPEG_FOUND )
