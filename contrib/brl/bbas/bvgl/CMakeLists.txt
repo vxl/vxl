@@ -1,10 +1,11 @@
 # Brown basic geometry library
 # brl/bbas/bvgl/CMakeLists.txt
+
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas)
-INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR}/)
+INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR})
 
 SET(bvgl_sources
-bvgl_articulated_poly.h bvgl_articulated_poly.cxx
+ bvgl_articulated_poly.h bvgl_articulated_poly.cxx bvgl_articulated_poly_sptr.h
 )
 AUX_SOURCE_DIRECTORY(Templates bvgl_sources)
 
