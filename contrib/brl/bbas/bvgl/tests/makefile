@@ -4,6 +4,7 @@ include ${VXLROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 TESTS += test_articulated_poly.cxx
+TESTS += test_misc.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
