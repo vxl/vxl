@@ -12,9 +12,13 @@ MANPAGE_SOURCES += vidl2_pixel_iterator.txx
 SOURCES += vidl2_convert.cxx
 
 MANPAGE_SOURCES += vidl2_istream.h
-SOURCES += vidl2_image_list_istream.cxx
+MANPAGE_SOURCES += vidl2_istream_sptr.h
 MANPAGE_SOURCES += vidl2_ostream.h
+MANPAGE_SOURCES += vidl2_ostream_sptr.h
+SOURCES += vidl2_istream_image_resource.cxx
+SOURCES += vidl2_image_list_istream.cxx
 SOURCES += vidl2_image_list_ostream.cxx
+
 SOURCES += vidl2_iidc1394_params.cxx
 
 SOURCES += vidl2_ffmpeg_init.cxx
