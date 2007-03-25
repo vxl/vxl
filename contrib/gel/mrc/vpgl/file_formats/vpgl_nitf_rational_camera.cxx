@@ -167,7 +167,7 @@ static int geostr_to_double(const char* in_string, double* val, vpgl_nitf_ration
       || *in_string == '.' || *in_string == '\0')
   {
     char* temp= new char[2];
-    in_string=(char*)orig;
+    in_string=orig;
 
     //go past any spaces
     while ((*in_string == ' ') || (*in_string == '\t'))
