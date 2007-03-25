@@ -6,6 +6,7 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_plane_3d.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/algo/vpgl_backproject.h>
 static void test_backproject()
@@ -36,23 +37,19 @@ static void test_backproject()
 
   vnl_double_2 image_point;
   vgl_point_2d<double> test_point0, test_point1, test_point2, test_point3;
-  vnl_double_3 initial_guess, world_point;
-  vgl_point_3d<double> p0(150, 100, 10), p1(200, 100, 10), p2(200, 225, 15),
-    p3(183.3333, 141.66667, 11.66667),iguess(150, 100, 10), wp0, wp1, wp2;
+  vnl_double_3 world_point, initial_guess;
+  vgl_point_3d<double> wp, p0(150, 100, 10), p1(200, 100, 10), p2(200, 225, 15),
+                       p3(183.3333, 141.66667, 11.66667), iguess(150, 100, 10);
   test_point0 = rcam.project(p0);
   test_point1 = rcam.project(p1);
   test_point2 = rcam.project(p2);
   test_point3 = rcam.project(p3);
 
 
-  vcl_cout << "Projection of( " << p0 << ") is (" 
-           << test_point0 << ")\n";
-  vcl_cout << "Projection of( " << p1 << ") is (" 
-           << test_point1 << ")\n";
-  vcl_cout << "Projection of( " << p2 << ") is (" 
-           << test_point2 << ")\n";
-  vcl_cout << "Projection of( " << p3 << ") is (" 
-           << test_point3 << ")\n";
+  vcl_cout << "Projection of( " << p0 << ") is (" << test_point0 << ")\n"
+           << "Projection of( " << p1 << ") is (" << test_point1 << ")\n"
+           << "Projection of( " << p2 << ") is (" << test_point2 << ")\n"
+           << "Projection of( " << p3 << ") is (" << test_point3 << ")\n";
 
   vnl_double_4 plane;
   image_point[0]=1250.0;   image_point[1]=332;
@@ -65,23 +62,16 @@ static void test_backproject()
                                                initial_guess, world_point);
 
   vcl_cout<< "X-Y Solution( "<< world_point <<") success is "<< success<< '\n';
-
-  TEST_NEAR("test simple backprojection x-y plane",
-            vcl_fabs(world_point[0]-p0.x()) +
-            vcl_fabs(world_point[1]-p0.y())+
-            vcl_fabs(world_point[2]-p0.z()) , 0, 0.01);
-
+  wp.set(world_point[0],world_point[1],world_point[2]); 
+  TEST_NEAR("test simple backprojection x-y plane", (wp-p0).length(), 0, 1e-8);
 
   plane[0]=1.0; plane[1]=0; plane[2]=0.0; plane[3]=-150.0;
   vcl_cout << "Initial Y-Z Guess( " << initial_guess << ")\n";
   success = vpgl_backproject::bproj_plane(rcam, image_point, plane,
                                                initial_guess, world_point);
   vcl_cout << "Y-Z Solution( " << world_point << ") success is "<< success << '\n';
-
-  TEST_NEAR("test simple backprojection y-z plane",
-            vcl_fabs(world_point[0]-p0.x()) +
-            vcl_fabs(world_point[1]-p0.y())+
-            vcl_fabs(world_point[2]-p0.z()) , 0, 0.01);
+  wp.set(world_point[0],world_point[1],world_point[2]); 
+  TEST_NEAR("test simple backprojection y-z plane", (wp-p0).length(), 0, 1e-8);
 
   initial_guess[0]=125.0; initial_guess[1]=110.0; initial_guess[2]=8.0;
   plane[0]=0.0; plane[1]=1.0; plane[2]=0.0; plane[3]=-100.0;
@@ -89,11 +79,8 @@ static void test_backproject()
   success = vpgl_backproject::bproj_plane(rcam, image_point, plane,
                                                initial_guess, world_point);
   vcl_cout << "X-Z Solution( " << world_point << ") success is " << success << '\n';
-
-  TEST_NEAR("test simple backprojection x-z plane",
-            vcl_fabs(world_point[0]-p0.x()) +
-            vcl_fabs(world_point[1]-p0.y())+
-            vcl_fabs(world_point[2]-p0.z()) , 0, 0.01);
+  wp.set(world_point[0],world_point[1],world_point[2]); 
+  TEST_NEAR("test simple backprojection x-z plane", (wp-p0).length(), 0, 1e-8);
 
   // Test with a plane not oriented on one of the axes
 
@@ -101,15 +88,9 @@ static void test_backproject()
 
   //A plane through three of the known projection points
   vgl_plane_3d<double> pl3(p0, p1, p2);
-  success = vpgl_backproject::bproj_plane(rcam, img_pt, pl3,
-                                          iguess, wp0);
+  success = vpgl_backproject::bproj_plane(rcam, img_pt, pl3, iguess, wp);
   TEST("arbitrary plane backprojection convergence", success, true);
-
-  TEST_NEAR("test backprojection on arbitrary plane",
-            vcl_fabs(wp0.x()-p3.x()) +
-            vcl_fabs(wp0.y()-p3.y())+
-            vcl_fabs(wp0.z()-p3.z()) , 0, 0.01);
-
+  TEST_NEAR("test backprojection on arbitrary plane", (wp-p3).length(), 0, 0.01);
 }
 
 TESTMAIN(test_backproject);
