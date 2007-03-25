@@ -1,6 +1,5 @@
 //:
 // \file
-#include <vcl_cmath.h>
 #include <vpgl/algo/vpgl_backproject.h>
 #include <vpgl/algo/vpgl_invmap_cost_function.h>
 #include <vgl/vgl_point_2d.h>
@@ -26,7 +25,8 @@ bool vpgl_backproject::bproj_plane(vpgl_rational_camera<double> const& rcam,
   amoeba.minimize(x);
   cf.point_3d(x, world_point);
   vnl_double_2 final_proj = rcam.project(world_point);
-  double err = vcl_sqrt(cf.f(x));
+  double err = (final_proj-image_point).magnitude();
+  // was: double err = vcl_sqrt(cf.f(x));
   if (err>.05) // greater than a 20th of a pixel
     return false;
   return true;
