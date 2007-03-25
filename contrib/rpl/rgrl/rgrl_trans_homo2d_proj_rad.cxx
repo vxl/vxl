@@ -59,9 +59,7 @@ map_loc( vnl_vector<double> const& from,
   // use vnl_double_2 to reduce memory allocation
   vnl_double_2 pt = from;
   vnl_double_2 mapped;
-
-  rgrl_est_proj_rad_func<2,2>::map_loc( mapped, H_, rad_k_, from );
-
+  rgrl_est_proj_rad_func<2,2>::map_loc( mapped, H_, rad_k_, pt );
   to = mapped;
 }
 
