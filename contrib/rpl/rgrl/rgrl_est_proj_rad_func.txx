@@ -351,7 +351,7 @@ f(vnl_vector<double> const& x, vnl_vector<double>& fx)
   typedef rgrl_match_set::const_from_iterator FIter;
   typedef FIter::to_iterator TIter;
 
-  vnl_vector_fixed<double, Tdim> mapped, distorted;
+  vnl_vector_fixed<double, Tdim> distorted;
   vnl_matrix_fixed<double, Tdim,Tdim> error_proj_sqrt;
   unsigned int ind = 0;
 
