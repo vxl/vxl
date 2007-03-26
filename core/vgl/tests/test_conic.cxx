@@ -348,9 +348,13 @@ static void test_conic()
   // Tangent in top is 4x-3y+2w=0, i.e., orthogonal to axis:
   TEST("tangent in top is 4x-3y+2w=0", c.tangent_at(top), vgl_homg_line_2d<double>(4,-3,2));
 
-  npt = vgl_homg_point_2d<double>(-3,5,1);
+  npt = vgl_homg_point_2d<double>(-3,5,1); // this point lies on the symmetry axis
   dst = vgl_homg_operators_2d<double>::distance_squared(c,npt);
   TEST_NEAR("distance point to parabola (outside)", dst, 25, 1e-6);
+  if (dst < 24) // debugging output
+  {
+    vcl_cout << "   c   = " << c << "\n   npt = " << npt << '\n';
+  }
   lines = vgl_homg_operators_2d<double>::tangent_from(c, npt);
   TEST("tangent lines count = 2", lines.size(), 2);
   TEST_NEAR("first tangent line", lines.front(), vgl_homg_line_2d<double>(2.662925678,1.797755319,-1), 1e-6);
@@ -367,6 +371,10 @@ static void test_conic()
   TEST("closest_point to centre", npt, c.centre());
   npt = vgl_homg_operators_2d<double>::closest_point(c, vgl_homg_point_2d<double>(-3,5,1));
   TEST_NEAR("closest point (outside)", npt, top, 1e-6);
+  if (npt.x()/npt.w() < 0.9 || npt.x()/npt.w() > 1.1) // debugging output
+  {
+    vcl_cout << "   top = " << top << "\n   npt = " << npt << '\n';
+  }
 
   l = vgl_homg_line_2d<double>(1,-1,0); // line x=y
   pts = vgl_homg_operators_2d<double>::intersection(c,l);
@@ -379,7 +387,10 @@ static void test_conic()
   pts = vgl_homg_operators_2d<double>::intersection(c,l);
   TEST("intersection count = 2", pts.size(), 2);
   TEST_NEAR("first point is centre", pts.front(), vgl_homg_point_2d<double>(4,-3,0), 1e-6);
-  TEST_NEAR("second point", pts.back(), vgl_homg_point_2d<double>(388,-291,300), 1e-6); // or interchanged
+  TEST_NEAR("second point", pts.back(), vgl_homg_point_2d<double>(388,-291,300), 1e-6);
+  // or interchanged
+  if (pts.front().w() != 0) // debugging output
+    vcl_cout << "   first  point: " << pts.front() << "\n   second point: " << pts.back() << '\n';
 
   // 6. Test imaginary circle
   vcl_cout << "\n\t=== test imaginary circle ===\n";
