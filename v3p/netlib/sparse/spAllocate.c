@@ -46,8 +46,6 @@
 #if 0
 static char copyright[] =
     "Sparse1.4: Copyright (c) 1985-2003 by Kenneth S. Kundert";
-static char RCSid[] =
-    "@(#)Header";
 #endif
 
 
