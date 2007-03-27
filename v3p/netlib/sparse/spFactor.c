@@ -44,8 +44,6 @@
 #if 0
 static char copyright[] =
     "Sparse1.4: Copyright (c) 1985-2003 by Kenneth S. Kundert";
-static char RCSid[] =
-    "@(#)Header";
 #endif
 
 
@@ -83,8 +81,8 @@ static void CountMarkowitz( MatrixPtr, RealVector, int );
 static void MarkowitzProducts( MatrixPtr, int );
 static ElementPtr SearchForPivot( MatrixPtr, int, int );
 static ElementPtr SearchForSingleton( MatrixPtr, int );
-static ElementPtr QuicklySearchDiagonal( MatrixPtr, int );
 static ElementPtr SearchDiagonal( MatrixPtr, int );
+static ElementPtr QuicklySearchDiagonal( MatrixPtr, int );
 static ElementPtr SearchEntireMatrix( MatrixPtr, int );
 static RealNumber FindLargestInCol( ElementPtr );
 static RealNumber FindBiggestInColExclude( MatrixPtr, ElementPtr, int );
@@ -207,8 +205,7 @@ spOrderAndFactor(
 MatrixPtr  Matrix = (MatrixPtr)eMatrix;
 ElementPtr  pPivot;
 int  Step, Size;
-ElementPtr SearchForPivot();
-RealNumber LargestInCol, FindLargestInCol();
+RealNumber LargestInCol;
 
 /* Begin `spOrderAndFactor'. */
     ASSERT_IS_SPARSE( Matrix );
@@ -979,15 +976,6 @@ double fProduct;
     return;
 }
 
-
-
-
-
-
-
-
-
-
 
 /*
  *  SEARCH FOR BEST PIVOT
@@ -1036,10 +1024,6 @@ SearchForPivot(
 )
 {
 register ElementPtr  ChosenPivot;
-ElementPtr  SearchForSingleton();
-ElementPtr  QuicklySearchDiagonal();
-ElementPtr  SearchDiagonal();
-ElementPtr  SearchEntireMatrix();
 
 /* Begin `SearchForPivot'. */
 
@@ -1140,7 +1124,7 @@ register  ElementPtr  ChosenPivot;
 register  int  I;
 register  long  *pMarkowitzProduct;
 int  Singletons;
-RealNumber  PivotMag, FindBiggestInColExclude();
+RealNumber  PivotMag;
 
 /* Begin `SearchForSingleton'. */
 /* Initialize pointer that is to scan through MarkowitzProduct vector. */
@@ -2069,7 +2053,6 @@ RealNumber  Largest, Magnitude;
 
     return Largest;
 }
-
 
 
 
