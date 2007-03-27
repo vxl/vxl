@@ -961,7 +961,7 @@ static  vnl_random random;
         for ( unsigned i=0; i<num_data_pts; ++i ) {
           trans_sptr->map_location( pts[i], map_to );
           double error = (map_to - to_pts[i]).two_norm();
-          if ( error > 1e-5 ) {
+          if ( error > 1e-4 ) {
             vcl_cout << " point (" << pts[i] << ") is transformed to (" << map_to << ")\n"
                      << " true mapping points is (" << to_pts[i] << ')' << vcl_endl;
             test_pass = false;
@@ -979,7 +979,7 @@ static  vnl_random random;
         for ( unsigned i=0; i<dim; ++i )
           true_to[ i ] = from_pt[ i ] + splines[i]->f_x( from_pt );
         double error = ( map_to - true_to ).two_norm() ;
-        if ( error > 1e-5 ) {
+        if ( error > 1e-4 ) {
           test_pass = false;
           vcl_cout << " point (" << from_pt << ") is transformed to (" << map_to << ")\n"
                    << " true mapping points is (" << true_to << ")\n";
@@ -998,7 +998,7 @@ static  vnl_random random;
         for ( unsigned i=0; i<num_data_pts; ++i ) {
           trans_sptr2->map_location( pts[i], map_to );
           double error = (map_to - to_pts[i]).two_norm();
-          if ( error > 1e-5 ) {
+          if ( error > 1e-4 ) {
             vcl_cout << " point (" << pts[i] << ") is transformed to (" << map_to << ")\n"
                      << " true mapping points is (" << to_pts[i] << ')' << vcl_endl;
             test_pass = false;
@@ -1116,7 +1116,7 @@ static  vnl_random random;
       for ( unsigned i=0; i<num_data_pts; ++i ) {
         trans_sptr->map_location( pts[i], map_to );
         double error = (map_to - to_pts[i]).two_norm();
-        if ( error > 1e-5 ) {
+        if ( error > 1e-4 ) {
           test_pass = false;
           vcl_cout << " point (" << pts[i] << ") is transformed to (" << map_to << ")\n"
                    << " true mapping points is (" << to_pts[i] << ')' << vcl_endl;
@@ -1149,7 +1149,7 @@ static  vnl_random random;
       for ( unsigned i=0; i<num_data_pts; ++i ) {
         trans_sptr2->map_location( pts[i], map_to );
         double error = (map_to - to_pts[i]).two_norm();
-        if ( error > 1e-5 ) {
+        if ( error > 1e-4 ) {
           test_pass = false;
           vcl_cout << " point (" << pts[i] << ") is transformed to (" << map_to << ")\n"
                    << " true mapping points is (" << to_pts[i] << ')' << vcl_endl;
