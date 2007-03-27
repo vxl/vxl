@@ -176,7 +176,7 @@ double clsfy_binary_hyperplane_gmrho_builder::build(clsfy_classifier_base& class
     //as sigma depends on the mis-classification overlap depth
 
 
-    for (unsigned iter=0; iter<(auto_estimate_sigma_ ? 2 : 1); ++iter)
+    for (unsigned iter=0; iter<(auto_estimate_sigma_ ? 2u : 1u); ++iter)
     {
         if (auto_estimate_sigma_)
             sigma_scale_target=estimate_sigma(data,y);
