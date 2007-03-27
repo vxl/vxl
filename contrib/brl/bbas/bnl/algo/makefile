@@ -5,6 +5,8 @@ VERSION := 1.0
 
 SOURCES += bnl_legendre_polynomial.cxx
 
+#SUBDIRS += sparse
+
 #######################################
 include ${VXLROOT}/config/top-params.mk
 #######################################

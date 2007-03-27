@@ -37,6 +37,9 @@ SUBDIRS += bsta
 # Brown dynamic programming library
 SUBDIRS += bdpg
 
+# Brown geographic utilities library
+SUBDIRS += bgeo
+
 # Video Library (rewrite)
 SUBDIRS += vidl2
 

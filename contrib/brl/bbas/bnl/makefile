@@ -6,7 +6,7 @@ VERSION := 1.0
 SOURCES += bnl_parabolic_interpolator.cxx
 SOURCES += bnl_quadratic_interpolator.cxx
 
-SUBDIRS += algo
+#SUBDIRS += algo
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
