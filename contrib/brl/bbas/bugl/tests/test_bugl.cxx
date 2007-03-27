@@ -45,6 +45,6 @@ void test_bugl()
   TEST("p3d.x()==5", p3d_ptr->x(), 5.0);
   TEST("p3d.y()==5", p3d_ptr->y(), 5.0);
   TEST("p3d.z()==5", p3d_ptr->z(), 5.0);
-}
+ }
 
 TESTMAIN(test_bugl);

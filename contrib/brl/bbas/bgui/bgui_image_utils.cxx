@@ -133,33 +133,35 @@ void bgui_image_utils::construct_histogram()
       hist_ = bsta_histogram<double>(0.0, 0.0, 1);//invalid hist
       return;
     }
+
   // The number of pixels we are willing to wait for.
   unsigned max_pixels = sample_factor*(hist_.nbins());
   // first check if the image is a pyramid
-  bool pyr;
-  image_->get_property(vil_property_pyramid, &pyr);
+  bool pyr = image_->get_property(vil_property_pyramid, 0);
   //if it is a pyramid then get the lowest resolution level
+  vil_image_resource_sptr image;
   if(pyr)
     {
       //cast to pyramid resource
       vil_pyramid_image_resource_sptr pir = 
         (vil_pyramid_image_resource*)((vil_image_resource*)image_.ptr());
       //highest resolution resource
-      image_ = pir->get_resource(0);
+      image = pir->get_resource(0);
     }
-  unsigned ni = image_->ni(), nj = image_->nj();
+  else
+    image = image_;
+  unsigned ni = image->ni(), nj = image->nj();
   unsigned npix = ni*nj;
   //If there are insufficient pixels use all pixels to create the histogram
   if(npix<max_pixels)
     {
-      this->set_hist_from_view(image_->get_view());
+      this->set_hist_from_view(image->get_view());
       return;
     }
-  
   // create a blocked image resource from image
-  vil_blocked_image_resource_sptr bir = blocked_image_resource(image_);
+  vil_blocked_image_resource_sptr bir = blocked_image_resource(image);
   if(!bir)
-    bir = vil_new_blocked_image_facade(image_);
+    bir = vil_new_blocked_image_facade(image);
   unsigned sbi = bir->size_block_i(), sbj = bir->size_block_j();
   // The number of blocks required to fill the histogram
   unsigned total_num_blocks = static_cast<unsigned>((float)max_pixels/(sbi*sbj));

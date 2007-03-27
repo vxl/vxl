@@ -4,7 +4,13 @@
 #include <bsta/bsta_histogram.h>
 #include <bsta/bsta_joint_histogram.h>
 #include <vcl_iostream.h>
-
+#include <vcl_string.h>
+#include <vcl_cassert.h>
+static int f(const int i)
+{
+	assert(i>=0);
+	return i;
+}
 //: Test bsta histograms
 void test_bsta_histogram()
 {
@@ -56,6 +62,11 @@ void test_bsta_histogram()
   vcl_cout << "Uniform Joint Entropy for " << bins*bins << " bins = " << jent  << " bits.\n";
 
   TEST_NEAR("test joint histogram uniform distribution entropy", jent, 31.0/4, 1e-9);
+ //=================================================
+// Demonstrate the use of assert
+int i1 = 1, i2=-1;
+vcl_cout << f(i1) << '\n';
+vcl_cout << f(i2) << '\n';
 }
 
 TESTMAIN(test_bsta_histogram);

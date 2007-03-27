@@ -35,6 +35,9 @@ SUBDIRS(bsta)
 # Brown dynamic programming library
 SUBDIRS(bdpg)
 
+# Geographic utilities
+SUBDIRS(bgeo)
+
 OPTION( BUILD_CONTRIB_VIDL2 "Build Experimental Video Streaming Library" YES )
 IF(BUILD_CONTRIB_VIDL2)
 # Video Library (rewrite)
