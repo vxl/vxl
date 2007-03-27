@@ -120,8 +120,8 @@ void vil3d_grad_1x3_i(const vil3d_image_view<srcT>& src_im,
         destT * end_d = dest_row + ni1*d_istep;
         *dest_row=0;  // Zero the border
         *end_d = 0;
-        for (;d!=end_d;d+=d_istep,s1+=s_istep,s2+=s_istep)
-          *d = 0.5*(*s2)-0.5*(*s1);
+        for (; d!=end_d; d+=d_istep,s1+=s_istep,s2+=s_istep)
+          *d = 0.5f * (*s2 - *s1);
       }
     }
   }
@@ -154,6 +154,5 @@ void vil3d_grad_1x3_k(const vil3d_image_view<srcT>& src_im,
   vil3d_image_view<destT> grad_kij = vil3d_switch_axes_kij(grad_im);
   vil3d_grad_1x3_i(src_kij,grad_kij);
 }
-
 
 #endif // vil3d_grad_1x3_h_

@@ -55,7 +55,7 @@ void vil3d_smooth_121_i(const vil3d_image_view<srcT>& src_im,
         *dest_row=0;  // Zero the border
         *end_d = 0;
         for (;d!=end_d;d+=d_istep,s+=s_istep)
-          *d = 0.25*s[-s_istep] + 0.5*s[0] + 0.25*s[s_istep];
+          *d = 0.25f*s[-s_istep] + 0.5f*s[0] + 0.25f*s[s_istep];
       }
     }
   }
