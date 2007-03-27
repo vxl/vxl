@@ -111,8 +111,9 @@ bgeo_lvcs::bgeo_lvcs(double orig_lat, double orig_lon, double orig_elev,
                      cs_names cs_name,
                      AngUnits  ang_unit,
                      LenUnits len_unit)
-  : localCSOriginLat_(orig_lat), localCSOriginLon_(orig_lon),
-    localCSOriginElev_(orig_elev), local_cs_name_(cs_name),
+  : local_cs_name_(cs_name),
+    localCSOriginLat_(orig_lat), localCSOriginLon_(orig_lon),
+    localCSOriginElev_(orig_elev),
     geo_angle_unit_(ang_unit), localXYZUnit_(len_unit), lox_(0), loy_(0), theta_(0)
 {
   lat_scale_ = 0;
