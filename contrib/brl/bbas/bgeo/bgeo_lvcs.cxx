@@ -1,12 +1,12 @@
-#include <vcl_string.h>
-#include <vcl_cstring.h>
-#include <bgeo/bgeo_lvcs.h>
-#include <bgeo/bgeo_datum_conversion.h>
-#include <bgeo/bgeo_earth_constants.h>
+#include "bgeo_lvcs.h"
 //:
 // \file
+#include <vcl_string.h>
+#include <vcl_cstring.h>
+#include <bgeo/bgeo_datum_conversion.h>
+#include <bgeo/bgeo_earth_constants.h>
 
-#define SMALL_STEP 1.0e-6// assumed to be in radians
+#define SMALL_STEP 1.0e-6 // assumed to be in radians
 
 char* bgeo_lvcs::cs_name_strings[]  = { "wgs84", "nad27n", "wgs72"};
 
@@ -132,7 +132,7 @@ bgeo_lvcs::bgeo_lvcs(double lat_low, double lon_low,
                      double lat_high, double lon_high,
                      double elev,
                      cs_names cs_name, AngUnits ang_unit, LenUnits elev_unit)
-  :   localCSOriginElev_(elev), local_cs_name_(cs_name),
+  :   local_cs_name_(cs_name), localCSOriginElev_(elev),
       geo_angle_unit_(ang_unit), localXYZUnit_(elev_unit)
 {
   double average_lat = (lat_low + lat_high)/2.0;
