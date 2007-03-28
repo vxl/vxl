@@ -25,24 +25,32 @@ rgrl_feature_set_location( feature_vector const& features,
   rgrl_feature_set( features, label ),
   bounding_box_( N )
 {
-  assert( !features.empty() );
-
   // Determine the extents of the data. (And the type.)
   //
   typedef vnl_vector_fixed<double, N> point_type;
   point_type min;
   point_type max;
-  feature_vector::const_iterator itr = features.begin();
-  //feature_type_ = (*itr)->type_id();
-  feature_type_ = &typeid(*(*itr));
-  min = (*itr)->location();
-  max = min;
-  for ( ; itr != features.end(); ++itr ) {
-    vnl_vector<double> const& loc = (*itr)->location();
-    assert( loc.size() == N );
-    for ( unsigned i=0; i < N; ++i ) {
-      if ( loc[i] < min[i] )    min[i] = loc[i];
-      if ( loc[i] > max[i] )    max[i] = loc[i];
+
+  if( features.empty() ) {
+  
+    min.fill( 0 );
+    max.fill( 0 );
+  
+  } 
+  else {
+
+    feature_vector::const_iterator itr = features.begin();
+    //feature_type_ = (*itr)->type_id();
+    feature_type_ = &typeid(*(*itr));
+    min = (*itr)->location();
+    max = min;
+    for ( ; itr != features.end(); ++itr ) {
+      vnl_vector<double> const& loc = (*itr)->location();
+      assert( loc.size() == N );
+      for ( unsigned i=0; i < N; ++i ) {
+        if ( loc[i] < min[i] )    min[i] = loc[i];
+        if ( loc[i] > max[i] )    max[i] = loc[i];
+      }
     }
   }
   bounding_box_.set_x0( min.as_ref() );
@@ -53,7 +61,7 @@ rgrl_feature_set_location( feature_vector const& features,
   // Use kd_tree
   vcl_vector<rsdl_point> search_pts;
   search_pts.reserve( features.size() );
-  for ( itr = features.begin(); itr != features.end(); ++itr ) {
+  for( feature_vector::const_iterator itr = features.begin(); itr != features.end(); ++itr ) {
     search_pts.push_back( rsdl_point((*itr)->location()) );
   }
   kd_tree_ = new rsdl_kd_tree( search_pts );

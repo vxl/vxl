@@ -29,24 +29,32 @@ rgrl_feature_set_bins( feature_vector const& features,
   rgrl_feature_set( features, label ),
   bounding_box_( N )
 {
-  assert( !features.empty() );
-
   // Determine the extents of the data. (And the type.)
   //
   typedef typename bin_type::point_type point_type;
   point_type min;
   point_type max;
-  feature_vector::const_iterator itr = features.begin();
-  //feature_type_ = (*itr)->type_id();
-  feature_type_ = &typeid(*(*itr));
-  min = (*itr)->location();
-  max = min;
-  for ( ; itr != features.end(); ++itr ) {
-    vnl_vector<double> const& loc = (*itr)->location();
-    assert( loc.size() == N );
-    for ( unsigned i=0; i < N; ++i ) {
-      if ( loc[i] < min[i] )    min[i] = loc[i];
-      if ( loc[i] > max[i] )    max[i] = loc[i];
+
+  if( features.empty() ) {
+  
+    min.fill( 0 );
+    max.fill( bin_size );
+  
+  } 
+  else {
+
+    feature_vector::const_iterator itr = features.begin();
+    //feature_type_ = (*itr)->type_id();
+    feature_type_ = &typeid(*(*itr));
+    min = (*itr)->location();
+    max = min;
+    for ( ; itr != features.end(); ++itr ) {
+	    vnl_vector<double> const& loc = (*itr)->location();
+	    assert( loc.size() == N );
+	    for ( unsigned i=0; i < N; ++i ) {
+	      if ( loc[i] < min[i] )    min[i] = loc[i];
+	      if ( loc[i] > max[i] )    max[i] = loc[i];
+	    }
     }
   }
   bounding_box_.set_x0( min.as_ref() );
@@ -60,7 +68,7 @@ rgrl_feature_set_bins( feature_vector const& features,
   bins_.reset( new bin_type( min, max, bin_sizes ) );
 
   // Add the data
-  for ( itr = features.begin(); itr != features.end(); ++itr ) {
+  for ( feature_vector::const_iterator itr = features.begin(); itr != features.end(); ++itr ) {
     bins_->add_point( (*itr)->location(), *itr );
   }
 }
