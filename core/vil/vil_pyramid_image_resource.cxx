@@ -24,11 +24,9 @@ vil_pyramid_image_resource::vil_pyramid_image_resource()
 vil_pyramid_image_resource::~vil_pyramid_image_resource()
 {}
 
-bool vil_pyramid_image_resource::get_property(char const * tag, void * value) const
+bool vil_pyramid_image_resource::get_property(char const* tag, void* /*value*/) const
 {
-  if (vcl_strcmp(vil_property_pyramid, tag)==0)
-    return true;
-  return false;
+  return vcl_strcmp(vil_property_pyramid, tag)==0;
 }
 
 
