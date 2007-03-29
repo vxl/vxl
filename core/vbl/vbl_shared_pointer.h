@@ -148,6 +148,7 @@ class vbl_shared_pointer
   T       &operator*() { return *as_pointer(); }
 
   // relational
+  bool operator!=(self const &that) const { return pointer != that.pointer; }
   bool operator==(self const &that) const { return pointer == that.pointer; }
   bool operator< (self const &that) const { return pointer <  that.pointer; }
 
