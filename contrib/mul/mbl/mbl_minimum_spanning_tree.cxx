@@ -1,18 +1,19 @@
-#include <mbl/mbl_minimum_spanning_tree.h>
+#include "mbl_minimum_spanning_tree.h"
 //:
 // \file
 #include <vnl/vnl_vector.h>
 #include <vcl_algorithm.h>
 
 //: Select the smallest pair s.t. first is in \param a, second in \param b
-static vcl_pair<int,int> mbl_mst_next_pair(const vnl_matrix<double>& D,
+static vcl_pair<unsigned,unsigned> mbl_mst_next_pair(
+                                           const vnl_matrix<double>& D,
                                            const vcl_vector<unsigned>& a,
                                            const vcl_vector<unsigned>& b)
 {
-  vcl_pair<int,int> p;
+  vcl_pair<unsigned,unsigned> p;
   double min_sim = 9.9e9;
-  for (unsigned i=0;i<a.size();++i)
-    for (unsigned j=0;j<b.size();++j)
+  for (unsigned i=0; i<a.size(); ++i)
+    for (unsigned j=0; j<b.size(); ++j)
     {
       double s = D(a[i],b[j]);
       if (s<min_sim)
@@ -49,7 +50,7 @@ void mbl_minimum_spanning_tree(const vnl_matrix<double>& D,
 
   for (unsigned i=1;i<n;++i)
   {
-    vcl_pair<int,int> p = mbl_mst_next_pair(D,a,b);
+    vcl_pair<unsigned,unsigned> p = mbl_mst_next_pair(D,a,b);
     pairs.push_back(p);
     b.erase(vcl_find(b.begin(),b.end(),p.second));
     a.push_back(p.second);
