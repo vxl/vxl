@@ -120,6 +120,7 @@ void test_image_resource(vcl_string type, vil_pixel_format format, T /*dummy*/)
   TEST("vil_decimate get_view", view1?true:false, true);
   TEST("vil_decimate get_copy_view", dec->get_copy_view(0,dec->ni()/2,0,dec->nj()/2)?true:false, true);
   TEST("vil_decimate get_view sizes", view1.ni() == 5 && view1.nj() == 2, true);
+  vcl_cout << "view1: " << view1(0,1) << ',' << view1(1,1) << ',' << view1(1,0) << '\n';
   TEST("vil_decimate get_view pixels",
        view1(0,1) == T(20) && view1(1,1) == T(10) && view1(1,0) == T(0), true);
 #if 0 // vil_decimate put_view has been disabled because it does't behave as we might expect.
