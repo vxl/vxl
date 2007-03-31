@@ -1,4 +1,4 @@
-// This is gel/mrc/vpgl/vgl_rotation_3d.h
+// This is core/vgl/algo/vgl_rotation_3d.h
 #ifndef vgl_rotation_3d_h_
 #define vgl_rotation_3d_h_
 //:
@@ -7,9 +7,10 @@
 // \author Thomas Pollard
 // \date 03/13/05
 //
-// This is a class for storing and doing conversions with 3d rotation transforms specified
-// by any of the following parameters: quaternions, Euler angles, Rodriques vector, an
-// orthonormal 3x3 matrix (with determinant = 1), or a vgl_h_matrix of proper form.
+// This is a class for storing and doing conversions with 3d rotation transforms
+// specified by any of the following parameters: quaternions, Euler angles,
+// Rodrigues vector, an orthonormal 3x3 matrix (with determinant = 1), or a
+// vgl_h_matrix of proper form.
 //
 // \verbatim
 //  Modifications
@@ -24,8 +25,7 @@
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vcl_vector.h>
-
-
+#include <vcl_iostream.h>
 
 template <class T>
 class vgl_rotation_3d
@@ -105,7 +105,7 @@ class vgl_rotation_3d
     return q_.axis();
   }
 
-  //: Returns the magnitude of the angle of rotation 
+  //: Returns the magnitude of the angle of rotation
   T angle() const
   {
     return q_.angle();
@@ -208,12 +208,11 @@ void vgl_rotate_3d(const vgl_rotation_3d<T>& rot, vcl_vector<vgl_homg_point_3d<T
   for (typename vcl_vector<vgl_homg_point_3d<T> >::iterator itr = pts.begin();
        itr != pts.end();  ++itr)
   {
-     vgl_homg_point_3d<T>& p = *itr;
-     p.set(R[0][0]*p.x()+R[0][1]*p.y()+R[0][2]*p.z(),
-           R[1][0]*p.x()+R[1][1]*p.y()+R[1][2]*p.z(),
-           R[2][0]*p.x()+R[2][1]*p.y()+R[2][2]*p.z(), p.w());
+    vgl_homg_point_3d<T>& p = *itr;
+    p.set(R[0][0]*p.x()+R[0][1]*p.y()+R[0][2]*p.z(),
+          R[1][0]*p.x()+R[1][1]*p.y()+R[1][2]*p.z(),
+          R[2][0]*p.x()+R[2][1]*p.y()+R[2][2]*p.z(), p.w());
   }
 }
-
 
 #endif // vgl_rotation_3d_h_
