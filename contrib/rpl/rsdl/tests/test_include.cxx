@@ -6,5 +6,6 @@
 #include <rsdl/rsdl_kd_tree.h>
 #include <rsdl/rsdl_point.h>
 #include <rsdl/rsdl_bins.h>
+#include <rsdl/rsdl_kd_tree_sptr.h>
 
 int main() { return 0; }

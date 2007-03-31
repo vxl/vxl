@@ -6,6 +6,7 @@ SET(rsdl_sources
  rsdl_bounding_box.cxx rsdl_bounding_box.h
  rsdl_dist.cxx         rsdl_dist.h
  rsdl_kd_tree.cxx      rsdl_kd_tree.h
+                       rsdl_kd_tree_sptr.h
  rsdl_point.cxx        rsdl_point.h
 
  rsdl_bins_2d.txx      rsdl_bins_2d.h
