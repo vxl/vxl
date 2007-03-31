@@ -110,6 +110,18 @@ SOURCE=.\Templates/vsl_vector_io+vcl_vector+vil_image_view+byte---.cxx
 # Begin Source File
 SOURCE=.\Templates/vsl_vector_io+vil_image_view+byte--.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vcl_vector+vcl_vector+vil_image_view+float----.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vcl_vector+vcl_vector+vil_image_view+int----.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vcl_vector+vil_image_view+int---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vil_image_view+int--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
