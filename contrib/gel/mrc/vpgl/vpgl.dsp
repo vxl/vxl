@@ -156,9 +156,6 @@ SOURCE=.\vpgl_perspective_camera.txx
 SOURCE=.\vpgl_perspective_camera.h
 # End Source File
 # Begin Source File
-SOURCE=.\vgl_rotation_3d.h
-# End Source File
-# Begin Source File
 SOURCE=.\vpgl_affine_camera.h
 # End Source File
 # Begin Source File
