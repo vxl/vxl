@@ -12,6 +12,7 @@ SOURCES += rsdl_point.cxx
 MANPAGE_SOURCES += rsdl_bins_2d.txx
 MANPAGE_SOURCES += rsdl_borgefors.txx
 MANPAGE_SOURCES += rsdl_bins.txx
+MANPAGE_SOURCES += rsdl_kd_tree_sptr.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
