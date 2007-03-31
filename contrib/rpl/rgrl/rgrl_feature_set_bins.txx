@@ -35,26 +35,25 @@ rgrl_feature_set_bins( feature_vector const& features,
   point_type min;
   point_type max;
 
-  if( features.empty() ) {
-  
+  if ( features.empty() )
+  {
     min.fill( 0 );
     max.fill( bin_size );
-  
-  } 
-  else {
-
+  }
+  else
+  {
     feature_vector::const_iterator itr = features.begin();
     //feature_type_ = (*itr)->type_id();
     feature_type_ = &typeid(*(*itr));
     min = (*itr)->location();
     max = min;
     for ( ; itr != features.end(); ++itr ) {
-	    vnl_vector<double> const& loc = (*itr)->location();
-	    assert( loc.size() == N );
-	    for ( unsigned i=0; i < N; ++i ) {
-	      if ( loc[i] < min[i] )    min[i] = loc[i];
-	      if ( loc[i] > max[i] )    max[i] = loc[i];
-	    }
+      vnl_vector<double> const& loc = (*itr)->location();
+      assert( loc.size() == N );
+      for ( unsigned i=0; i < N; ++i ) {
+        if ( loc[i] < min[i] )    min[i] = loc[i];
+        if ( loc[i] > max[i] )    max[i] = loc[i];
+      }
     }
   }
   bounding_box_.set_x0( min.as_ref() );
@@ -87,7 +86,6 @@ rgrl_feature_set_bins<N>::
 features_in_region( feature_vector& results, rgrl_mask_box const& roi ) const
 {
   assert( roi.x0().size() == N );
-
   bins_->points_in_bounding_box( roi.x0(), roi.x1(), results );
 }
 
