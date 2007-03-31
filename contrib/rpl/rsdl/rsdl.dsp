@@ -161,6 +161,9 @@ SOURCE=.\rsdl_bins.h
 # Begin Source File
 SOURCE=.\rsdl_bins.txx
 # End Source File
+# Begin Source File
+SOURCE=.\rsdl_kd_tree_sptr.h
+# End Source File
 # End Group
 # End Target
 # End Project
