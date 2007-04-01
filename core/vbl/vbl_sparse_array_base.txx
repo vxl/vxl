@@ -7,23 +7,8 @@
 // \author Ian Scott
 
 #include "vbl_sparse_array_base.h"
-
 #include <vcl_cassert.h>
 #include <vcl_utility.h>
-
-#if 0
-//: DEPRECATED Return contents of (i).  Assertion failure if not yet filled.
-// Use operator () instead.
-template <class T, class Index>
-T const & vbl_sparse_array_base<T, Index>::operator [] (Index i) const
-{
-  Map::const_iterator p = storage_.find(i);
-
-  assert(p != storage_.end());
-
-  return (*p).second;
-}
-#endif
 
 //: Empty the sparse matrix.
 template <class T, class Index>
@@ -31,7 +16,6 @@ void vbl_sparse_array_base<T, Index>::clear()
 {
   storage_.clear();
 }
-
 
 //: Return contents of (i).  Assertion failure if not yet filled.
 template <class T, class Index>
