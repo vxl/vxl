@@ -2,7 +2,6 @@
 
 #include <vul/vul_arg.h>
 #include <vul/vul_awk.h>
-//#include <vul/vul_canonical_path.h> // deprecated
 #include <vul/vul_expand_path.h>
 #include <vul/vul_debug.h>
 #include <vul/vul_file.h>
