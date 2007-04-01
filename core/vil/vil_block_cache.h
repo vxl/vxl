@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \brief A block cache with block population prioitized by age
+// \brief A block cache with block population prioritized by age
 // \author J. L. Mundy
 //
 #include <vcl_iosfwd.h>
@@ -18,7 +18,7 @@
 struct bcell
 {
   bcell(const unsigned bindex_i, const unsigned bindex_j,
-        vil_image_view_base_sptr const& blk):
+        vil_image_view_base_sptr const& blk) :
     bindex_i_(bindex_i), bindex_j_(bindex_j), birthdate_(time_++), blk_(blk)
   {}
 

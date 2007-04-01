@@ -24,7 +24,7 @@
 // These are useful when you have two vil_image_view objects you want
 // to convert between. You can use them in templates where the pixel
 // type is one of the template parameters. These functions
-// may create a shallow copy of the input if the types match too save
+// may create a shallow copy of the input if the types match to save
 // unnecessary work.
 // - vil_convert_cast
 // - vil_convert_round
@@ -69,7 +69,7 @@
 // expression can produce different results between Intel and
 // non-Intel platforms (even in cases where r==g && g==b), probably
 // due to different floating point representations.  This may not be
-// too important, but it worth noting here.  In vil_convert.h we
+// too important, but it is worth noting here.  In vil_convert.h we
 // cannot make the same change without adding computation because
 // vil_convert_rgb_to_grey() lets you pass in the weights.  We'd have
 // to multiply by 10000 to maintain the current API.
