@@ -5,7 +5,7 @@
 // \file
 // \brief provides the class for handling/defining levels of a combinatorial pyramid.
 // \author Jocelyn Marchadier
-// \date 06/05/2004
+// \date 2004-05-06
 //
 // \verbatim
 //  Modifications
@@ -48,7 +48,7 @@ class vpyr_2_pyramid_level : public vmap_ptr_sequence< typename D::base_type >
   typedef typename dart_sequence::pointer dart_pointer ;
 
  public:
-  // --- Dart tyes ---
+  // --- Dart types ---
 
   //: dart_type class.
   typedef D dart_type ;
@@ -58,7 +58,7 @@ class vpyr_2_pyramid_level : public vmap_ptr_sequence< typename D::base_type >
   typedef const dart_type const_dart_reference ;
   //: An iterator iterates on a sequence of darts.
   typedef vpyr_2_pyramid_level_dart_base_iterator<dart_type,dart_type&,dart_type*, dart_sequence_iterator> dart_iterator ;
-  //:
+  //: A const iterator iterates on a sequence of darts.
   typedef vpyr_2_pyramid_level_dart_base_iterator<dart_type,const dart_type&,const dart_type*, const_dart_sequence_iterator>
           const_dart_iterator ;
 
@@ -106,19 +106,19 @@ class vpyr_2_pyramid_level : public vmap_ptr_sequence< typename D::base_type >
     return dart_sequence::empty() ;
   }
 
-  //: Returns the dart of index "arg".
+  //: Returns the dart of index \a arg.
   const_dart_reference dart(vmap_dart_index arg) const
   {
     return dart_type(get_dart_pointer(arg),index()) ;
   }
 
-  //: Returns the dart of index "arg".
+  //: Returns the dart of index \a arg.
   dart_reference dart(vmap_dart_index arg)
   {
     return dart_type(get_dart_pointer(arg),index()) ;
   }
 
-  //: Returns the index of the dart "arg".
+  //: Returns the index of the dart \a arg.
   vmap_dart_index index (const dart_type & arg) const
   {
     return arg.sequence_index();//-(*begin_dart_)->index() ;
