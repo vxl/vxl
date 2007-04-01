@@ -4,7 +4,6 @@ SET( vbl_sources
   vbl_fwd.h
 
   vbl_bool_ostream.cxx        vbl_bool_ostream.h
-  vbl_protection_traits.txx   vbl_protection_traits.h
   vbl_smart_ptr.txx           vbl_smart_ptr.h
                               vbl_shared_pointer.h
                               vbl_scoped_ptr.h
@@ -28,11 +27,6 @@ SET( vbl_sources
 
   vbl_triple.txx              vbl_triple.h
   vbl_quadruple.txx           vbl_quadruple.h
-
-  vbl_basic_optional.h
-  vbl_basic_relation_type.h
-  vbl_basic_relation_where.h
-  vbl_basic_tuple.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vbl_sources)
