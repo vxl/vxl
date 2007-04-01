@@ -860,6 +860,24 @@ SOURCE=.\lapack/single/sgeqpf.c
 # Begin Source File
 SOURCE=.\v3p_netlib_init.c
 # End Source File
+# Begin Source File
+SOURCE=.\sparse/spAllocate.c
+# End Source File
+# Begin Source File
+SOURCE=.\sparse/spBuild.c
+# End Source File
+# Begin Source File
+SOURCE=.\sparse/spFactor.c
+# End Source File
+# Begin Source File
+SOURCE=.\sparse/spOutput.c
+# End Source File
+# Begin Source File
+SOURCE=.\sparse/spSolve.c
+# End Source File
+# Begin Source File
+SOURCE=.\sparse/spUtils.c
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h"

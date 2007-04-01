@@ -167,6 +167,9 @@ SOURCE=.\test_fit_plane_3d.cxx
 # Begin Source File
 SOURCE=.\test_intersection.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_rotation_3d.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
