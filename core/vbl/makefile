@@ -11,7 +11,6 @@ SOURCES += vbl_sort.cxx
 MANPAGE_SOURCES += vbl_sort.txx
 SOURCES += vbl_qsort.cxx
 MANPAGE_SOURCES += vbl_shared_pointer.h
-MANPAGE_SOURCES += vbl_protection_traits.txx
 MANPAGE_SOURCES += vbl_smart_ptr.txx
 
 MANPAGE_SOURCES += vbl_array_1d.txx
@@ -30,14 +29,6 @@ MANPAGE_SOURCES += vbl_bounding_box.txx
 MANPAGE_SOURCES += vbl_triple.txx
 MANPAGE_SOURCES += vbl_quadruple.txx
 
-#MANPAGE_SOURCES += vbl_basic_relation.txx # FIXME - vcl_hash_map does not exist
-MANPAGE_SOURCES += vbl_basic_optional.h
-MANPAGE_SOURCES += vbl_basic_relation_type.h
-MANPAGE_SOURCES += vbl_basic_relation_where.h
-MANPAGE_SOURCES += vbl_basic_tuple.h
-#MANPAGE_SOURCES += vbl_br_default.txx
-#MANPAGE_SOURCES += vbl_br_impl.txx
-#MANPAGE_SOURCES += vbl_hash_map.txx
 MANPAGE_SOURCES += vbl_checked_delete.h
 MANPAGE_SOURCES += vbl_scoped_ptr.h
 
