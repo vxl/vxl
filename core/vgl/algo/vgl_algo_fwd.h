@@ -3,13 +3,18 @@
 #define vgl_algo_fwd_h_
 
 template <class T> class vgl_fit_lines_2d;
+template <class T> class vgl_fit_plane_3d;
 template <class T> class vgl_line_2d_regression;
+template <class T> class vgl_fit_conics_2d;
+template <class T> class vgl_conic_2d_regression;
 template <class T> class vgl_h_matrix_1d;
 template <class T> class vgl_h_matrix_2d;
 template <class T> class vgl_h_matrix_3d;
 template <class T> class vgl_p_matrix;
 template <class T> class vgl_norm_trans_2d;
+template <class T> class vgl_norm_trans_3d;
 template <class T> class vgl_convex_hull_2d;
+template <class Type> class vgl_orient_box_3d;
 class vgl_h_matrix_1d_compute;
 class vgl_h_matrix_1d_compute_3point;
 class vgl_h_matrix_1d_compute_linear;
@@ -18,6 +23,7 @@ typedef vgl_h_matrix_1d_compute_optimize vgl_h_matrix_1d_computeOptimise1;
 class vgl_h_matrix_2d_compute;
 class vgl_h_matrix_2d_compute_4point;
 class vgl_h_matrix_2d_compute_linear;
+template <class T> class vgl_rotation_3d;
 template <class T> class vgl_homg_operators_1d;
 template <class T> class vgl_homg_operators_2d;
 template <class T> class vgl_homg_operators_3d;
