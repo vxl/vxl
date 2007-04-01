@@ -3,6 +3,7 @@
 #define vgl_fwd_h_
 
 template <class T> class vgl_1d_basis;
+template <class T> class vgl_homg;
 template <class T> class vgl_homg_point_1d;
 template <class T> class vgl_homg_point_2d;
 template <class T> class vgl_homg_point_3d;
@@ -21,7 +22,10 @@ template <class T> class vgl_plane_3d;
 template <class T> class vgl_box_2d;
 template <class T> class vgl_box_3d;
 template <class T> class vgl_conic;
+template <class Type> class vgl_conic_segment_2d;
 template <class T> class vgl_polygon;
+template <class Type> class vgl_sphere_3d;
+template <class Type> class vgl_cylinder;
 class vgl_region_scan_iterator;
 template <class T> class vgl_ellipse_scan_iterator;
 template <class T> class vgl_polygon_scan_iterator;
