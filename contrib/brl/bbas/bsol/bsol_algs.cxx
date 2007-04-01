@@ -17,6 +17,7 @@
 #include <vsol/vsol_box_3d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_intersection.h>
 #include <vgl/algo/vgl_convex_hull_2d.h>
 
 // Destructor
@@ -110,7 +111,7 @@ bool bsol_algs::intersection(vsol_box_2d_sptr const & a,
   vgl_point_2d<double> b_min(b->get_min_x(), b->get_min_y());
   vgl_point_2d<double> b_max(b->get_max_x(), b->get_max_y());
   vgl_box_2d<double> vgb(b_min, b_max);
-  vgl_box_2d<double> temp = intersect(vga, vgb);
+  vgl_box_2d<double> temp = vgl_intersection(vga, vgb);
   if (temp.is_empty())
     return false;
   a_int_b = new vsol_box_2d();
