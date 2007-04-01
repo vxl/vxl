@@ -305,6 +305,13 @@ SOURCES += datapac/camsun.c
 SOURCES += mathews/adaquad.c
 SOURCES += mathews/simpson.c
 SOURCES += mathews/trapezod.c
+# V3P_NETLIB_sparse_SOURCES
+SOURCES += sparse/spAllocate.c
+SOURCES += sparse/spBuild.c
+SOURCES += sparse/spFactor.c
+SOURCES += sparse/spOutput.c
+SOURCES += sparse/spSolve.c
+SOURCES += sparse/spUtils.c
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

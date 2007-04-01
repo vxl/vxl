@@ -31,6 +31,7 @@ TESTS += test_line_segment_3d.cxx
 TESTS += test_orient_box_3d.cxx
 TESTS += test_fit_plane_3d.cxx
 TESTS += test_intersection.cxx
+TESTS += test_rotation_3d.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
