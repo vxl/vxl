@@ -258,9 +258,7 @@ foreach $f (@FILES)
     elsif ($j eq "vcl_valarray.h") { $i="vcl_(valarray|slice|slice_array|gslice|gslice_array|mask_array|indirect_array|abs|acos|asin|atan|atan2|cos|cosh|exp|log|log10|pow|sin|sinh|sqrt|tan|tanh)"; }
     elsif ($j eq "vcl_vector.h") { $i="vcl_(vector|swap)"; }
     # VBL
-    elsif ($j eq "vbl/vbl_basic_optional.h") { $i="$i(|_traits)"; }
     elsif ($j eq "vbl/vbl_bounding_box.h") { $i="$i(|_base)"; }
-    elsif ($j eq "vbl/vbl_br_default.h") { $i="$i(|_iter|_wild_iter|_factory)"; }
     elsif ($j eq "vbl/vbl_qsort.h") { $i="$i(|_(double|int|)(a|de)scending|_helper)"; }
     elsif ($j eq "vbl/vbl_sort.h") { $i="($i)_((double|int|)(a|de)scending|helper)"; }
     # VBL-IO
