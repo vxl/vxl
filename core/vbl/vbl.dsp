@@ -231,9 +231,6 @@ SOURCE=.\vbl_big_sparse_array_3d.txx
 SOURCE=.\vbl_bounding_box.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vbl_protection_traits.txx
-# End Source File
-# Begin Source File
 SOURCE=.\vbl_quadruple.txx
 # End Source File
 # Begin Source File
@@ -256,18 +253,6 @@ SOURCE=.\vbl_sparse_array_base.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vbl_triple.txx
-# End Source File
-# Begin Source File
-SOURCE=.\vbl_basic_optional.h
-# End Source File
-# Begin Source File
-SOURCE=.\vbl_basic_relation_type.h
-# End Source File
-# Begin Source File
-SOURCE=.\vbl_basic_relation_where.h
-# End Source File
-# Begin Source File
-SOURCE=.\vbl_basic_tuple.h
 # End Source File
 # Begin Source File
 SOURCE=.\vbl_bit_array_2d.h
@@ -301,9 +286,6 @@ SOURCE=.\vbl_big_sparse_array_3d.h
 # End Source File
 # Begin Source File
 SOURCE=.\vbl_bounding_box.h
-# End Source File
-# Begin Source File
-SOURCE=.\vbl_protection_traits.h
 # End Source File
 # Begin Source File
 SOURCE=.\vbl_quadruple.h
