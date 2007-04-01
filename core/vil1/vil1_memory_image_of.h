@@ -71,9 +71,6 @@ class vil1_memory_image_of : public vil1_memory_image
   explicit
   vil1_memory_image_of(vil1_image const& image);
 
-  // Deprecated - This was used to copy the ROI, which is no longer on image
-  //vil1_memory_image_of(vil1_image const&, bool) {}
-
   //: Construct a w x h image, pixel format is determined from T
   vil1_memory_image_of(int sizex, int sizey);
 
