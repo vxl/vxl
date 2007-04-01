@@ -22,19 +22,17 @@
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_distance.h>
 
-//: compute the intersection of an infinite line with *this box.
-//  p0 and p1 are the intersection points
 inline bool vgl_near_zero(double x){return vcl_fabs(x)<1e-08;}
 inline bool vgl_near_eq(double x, double y){return vgl_near_zero(x-y);}
 
-
+//: compute the intersection of an infinite line with *this box.
+//  p0 and p1 are the intersection points
 template <class Type>
 bool vgl_intersection(const vgl_box_2d<Type>& box,
                       const vgl_line_2d<Type>& line,
                       vgl_point_2d<Type>& p0,
                       vgl_point_2d<Type>& p1)
 {
-  
   double a = line.a(), b = line.b(), c = line.c();
   double xmin=box.min_x(), xmax=box.max_x();
   double ymin=box.min_y(), ymax=box.max_y();
@@ -209,10 +207,6 @@ bool vgl_intersection(const vgl_box_2d<Type>& box,
   }
   return false;
 }
-
-
-
-
 
 //: Return the intersection point of two concurrent lines
 template <class T>
