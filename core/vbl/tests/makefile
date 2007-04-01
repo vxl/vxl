@@ -12,7 +12,6 @@ TESTS += vbl_test_bit_array.cxx
 TESTS += vbl_test_sparse_array_2d.cxx
 TESTS += vbl_test_sparse_array_3d.cxx
 TESTS += vbl_test_smart_ptr.cxx
-#TESTS += vbl_test_basic_relation.cxx # FIXME - vcl_hash_map does not exist
 TESTS += vbl_test_bounding_box.cxx
 TESTS += vbl_test_quadruple.cxx
 TESTS += vbl_test_triple.cxx
