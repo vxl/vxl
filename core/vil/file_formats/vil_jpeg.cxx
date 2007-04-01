@@ -9,6 +9,7 @@
 // \verbatim
 //  Modifications
 //     11 Oct 2002 Ian Scott - converted to vil
+//     30 Mar 2007 Peter Vanroose - replaced deprecated vil_new_image_view_j_i_plane()
 //\endverbatim
 
 #include "vil_jpeg.h"
@@ -211,8 +212,8 @@ bool vil_jpeg_image::put_view(const vil_image_view_base &view,
   }
   else
   {
-    vil_image_view<vxl_byte> line = vil_new_image_view_j_i_plane(
-      view2.ni(), 1, view2.nplanes(), vxl_byte());
+    vil_memory_chunk_sptr chunk = new vil_memory_chunk(view2.ni()*view2.nplanes(), vil_pixel_format_component_format(vil_pixel_format_of(vxl_byte())));
+    vil_image_view<vxl_byte> line = vil_image_view<vxl_byte>(chunk, reinterpret_cast<vxl_byte*>(chunk->data()), view2.ni(), 1, view2.nplanes(), view2.nplanes(), view2.nplanes()*view2.ni(), 1);
     JSAMPLE *scanline = line.top_left_ptr();
 
     for (unsigned int j=0; j<view2.nj(); ++j)

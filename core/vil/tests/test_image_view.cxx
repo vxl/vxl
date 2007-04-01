@@ -306,8 +306,6 @@ static void test_contiguous()
   }
   vil_image_view<float> im2 = vil_new_image_view_plane_i_j(4, 5, 6, float());
   TEST( "vil_new_image_view_plane_i_j is_continuous", im2.is_contiguous(), true );
-  vil_image_view<double> im3 = vil_new_image_view_j_i_plane(4, 5, 6, double());
-  TEST( "vil_new_image_view_i_j_plane is_continuous", im3.is_contiguous(), true);
 }
 
 static void test_image_view_fill()
@@ -368,8 +366,6 @@ static void test_image_view_fill()
   TEST("fill line, expected number of pixels",n_pix, 10);
   TEST("fill line, correct places",n_wrong_pix, 0);
   vil_print_all(vcl_cout , image);
-
-
 }
 
 static void test_complex_image_view()

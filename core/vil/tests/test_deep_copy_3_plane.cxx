@@ -18,9 +18,8 @@ bool equal_image(const vil_image_view< vxl_byte >& im0,
 
 static void test_deep_copy_3_plane()
 {
-  vxl_byte dummy(1);
-
-  vil_image_view< vxl_byte >  rgbrgb_im=vil_new_image_view_j_i_plane (4,4,3, dummy);
+  vil_memory_chunk_sptr chunk = new vil_memory_chunk(4*4*3, vil_pixel_format_component_format(vil_pixel_format_of(vxl_byte())));
+  vil_image_view< vxl_byte >  rgbrgb_im = vil_image_view<vxl_byte>(chunk, reinterpret_cast<vxl_byte*>(chunk->data()), 4, 4, 3, 3, 3*4, 1);
 
   vil_image_view< vxl_byte >  rrggbb_im(4,4,3);
   for (int i=0;i<4;++i)
