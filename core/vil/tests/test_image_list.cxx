@@ -49,11 +49,11 @@ static void test_image_list()
   vcl_string dir = "image_list_dir";
   {
     bool mkdir = vul_file::make_directory(dir.c_str());
-    if(mkdir)
-      vcl_cout << "vul make directory worked " << vcl_endl;
+    if (mkdir)
+      vcl_cout << "vul make directory worked" << vcl_endl;
     TEST("vil_is_directory", vil_image_list::vil_is_directory(dir.c_str()),true);
     int chd = vpl_chdir(dir.c_str());
-    vcl_cout << "return code for chdir " << chd << vcl_endl;
+    vcl_cout << "return code for chdir(" << dir << "): " << chd << vcl_endl;
     good = vil_save_image_resource(ir, "R0.tif", "tiff");
     vcl_cout << "Saved R0"  << vcl_endl;
 #if 0
@@ -63,6 +63,7 @@ static void test_image_list()
     good = good && vil_save_image_resource(ir3, "R2.tif", "tiff");
     vcl_cout << "Saved R2" << vcl_endl;
     chd = vpl_chdir("..");
+    vcl_cout << "return code for chdir(..): " << chd << vcl_endl;
     vil_image_list il(dir.c_str());
     vcl_vector<vil_image_resource_sptr> rescs = il.resources();
     good = good && rescs.size()==2;
@@ -79,12 +80,12 @@ static void test_image_list()
   }//close open resource files
   //Cleanup resource files
   vcl_cout << "Cleaning up directory " << dir << '\n';;
-  int chd = vpl_chdir(dir.c_str());
+  vpl_chdir(dir.c_str());
   vcl_string s =  "*.*";
   for (vul_file_iterator fit = s;fit; ++fit)
     vpl_unlink(fit());
   vcl_cout << "Removing the directory\n";
-  chd = vpl_chdir("..");
+  vpl_chdir("..");
   vpl_rmdir(dir.c_str());
 }
 
