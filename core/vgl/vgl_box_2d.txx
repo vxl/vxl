@@ -9,7 +9,6 @@
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
-#include <vcl_deprecated.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_line_2d.h>
 
@@ -322,13 +321,6 @@ vgl_box_2d<Type> vgl_intersection(vgl_box_2d<Type> const& a, vgl_box_2d<Type> co
     return vgl_box_2d<Type>(); // empty box
 }
 
-template <class Type>
-vgl_box_2d<Type> intersect(vgl_box_2d<Type> const& a, vgl_box_2d<Type> const& b)
-{
-  VXL_DEPRECATED( "intersect(vgl_box_2d<T>& , vgl_box_2d<T>& " );
-  return vgl_intersection(a, b);
-}
-
 //: Add a point to this box.
 // Do this by possibly enlarging the box so that the point just falls within the box.
 // Adding a point to an empty box makes it a size zero box only containing p.
@@ -377,193 +369,6 @@ bool vgl_box_2d<Type>::contains(vgl_box_2d<Type> const& b) const
     contains(b.max_x(), b.max_y());
 }
 
-//: compute the intersection of an infinite line with *this box.
-//  p0 and p1 are the intersection points
-inline bool vgl_near_zero(double x) { return vcl_fabs(x)<1e-08; }
-inline bool vgl_near_eq(double x, double y) { return vgl_near_zero(x-y); }
-
-template <class Type>
-bool vgl_box_2d<Type>::intersect(const vgl_line_2d<Type>& line,
-                                 vgl_point_2d<Type>& p0,
-                                 vgl_point_2d<Type>& p1)
-{
-  VXL_DEPRECATED("vgl_box_2d<Type>::intersect(line_2d, point_2d, point_2d)");
-
-  double a = line.a(), b = line.b(), c = line.c();
-  double xmin=this->min_x(), xmax=this->max_x();
-  double ymin=this->min_y(), ymax=this->max_y();
-
- //Run through the cases
-  //
-  if (vgl_near_zero(a))// The line is y = -c/b
-  {
-    float y0 = static_cast<float>(-c/b);
-    // The box edge is collinear with line?
-    if (vgl_near_eq(ymin,y0))
-    {
-      p0.set(static_cast<Type>(xmin), static_cast<Type>(ymin));
-      p1.set(static_cast<Type>(xmax), static_cast<Type>(ymin));
-      return true;
-    }
-    if (vgl_near_eq(ymax,y0))
-    {
-      p0.set(static_cast<Type>(xmin), static_cast<Type>(ymax));
-      p1.set(static_cast<Type>(xmax), static_cast<Type>(ymax));
-      return true;
-    }
-
-    if ((ymin > y0) || (y0 > ymax)) // The line does not intersect the box
-      return false;
-    else // The line does intersect
-    {
-      p0.set(static_cast<Type>(xmin), static_cast<Type>(y0));
-      p1.set(static_cast<Type>(xmax), static_cast<Type>(y0));
-      return true;
-    }
-  }
-
-  if (vgl_near_zero(b))// The line is x = -c/a
-  {
-    float x0 = static_cast<float>(-c/a);
-    // The box edge is collinar with l?
-    if (vgl_near_eq(xmin,x0))
-    {
-      p0.set(static_cast<Type>(xmin), static_cast<Type>(ymin));
-      p1.set(static_cast<Type>(xmin), static_cast<Type>(ymax));
-      return true;
-    }
-    if (vgl_near_eq(xmax,x0))
-    {
-      p0.set(static_cast<Type>(xmax), static_cast<Type>(ymin));
-      p1.set(static_cast<Type>(xmax), static_cast<Type>(ymax));
-      return true;
-    }
-
-    if ((xmin > x0) || (x0 > xmax)) // The line does not intersect the box
-      return false;
-    else // The line does intersect
-    {
-      p0.set(static_cast<Type>(x0), static_cast<Type>(ymin));
-      p1.set(static_cast<Type>(x0), static_cast<Type>(ymax));
-      return true;
-    }
-  }
-
-  // The normal case with no degeneracies
-
-// There are six possible intersection combinations:
-// \verbatim
-//
-//                C01 /    CY     \ C11
-//                   /     |       \           .
-//       ymax  -----/------|--------\-----
-//            |    /       |         \    |
-//            |   /        |          \   |
-//            |  /         |           \  | \  .
-//            | /          |            \ |  \_ Bounding Box
-//            |/           |             \|
-//            /            |              \    .
-//           /|            |              |\   .
-//           ---------------------------------- CX
-//          \ |            |              /
-//           \|            |             /|
-//            \            |            / |
-//            |\           |           /  |
-//            | \          |          /   |
-//            |  \         |         /    |
-//       xmin  ---\--------|--------/-----   xmax
-//       ymin      \       |       /
-//              C00 \             / C10
-// \endverbatim
-
-  // Intersection with x = xmin
-  float y_xmin_int = static_cast<float>(-(c + a*xmin)/b);
-  bool inside_xmin = (y_xmin_int >= ymin) && (y_xmin_int <= ymax);
-
-  // Intersection with x = xmax
-  float y_xmax_int = static_cast<float>(-(c + a*xmax)/b);
-  bool inside_xmax = (y_xmax_int >= ymin) && (y_xmax_int <= ymax);
-
-  // Intersection with y = ymin
-  float x_ymin_int = static_cast<float>(-(c + b*ymin)/a);
-  bool inside_ymin = (x_ymin_int >= xmin) && (x_ymin_int <= xmax);
-
-  // Intersection with y = ymax
-  float x_ymax_int = static_cast<float>(-(c + b*ymax)/a);
-  bool inside_ymax = (x_ymax_int >= xmin) && (x_ymax_int <= xmax);
-
-  // Case CX
-  if (inside_xmin && inside_xmax &&
-      !(vgl_near_eq(y_xmin_int,ymin) && vgl_near_eq(y_xmax_int,ymax)))
-  {
-    p0.set(static_cast<Type>(xmin), static_cast<Type>(y_xmin_int));
-    p1.set(static_cast<Type>(xmax), static_cast<Type>(y_xmax_int));
-    return true;
-  }
-
-  // Case CY
-  if (inside_ymin && inside_ymax &&
-      !(vgl_near_eq(x_ymin_int,xmin) && vgl_near_eq(x_ymax_int,xmax)))
-  {
-    p0.set(static_cast<Type>(x_ymin_int), static_cast<Type>(ymin));
-    p1.set(static_cast<Type>(x_ymax_int), static_cast<Type>(ymax));
-    return true;
-  }
-
-  // Case C00
-  if (inside_xmin && inside_ymin &&
-      !(inside_xmax && inside_ymax))
-  {
-    p0.set(static_cast<Type>(xmin), static_cast<Type>(y_xmin_int));
-    p1.set(static_cast<Type>(x_ymin_int), static_cast<Type>(ymin));
-    return true;
-  }
-
-  // Case C01
-  if (inside_xmin && inside_ymax &&
-      !(inside_xmax && inside_ymin))
-  {
-    p0.set(static_cast<Type>(xmin), static_cast<Type>(y_xmin_int));
-    p1.set(static_cast<Type>(x_ymax_int), static_cast<Type>(ymax));
-    return true;
-  }
-
-  // Case C10
-  if (inside_ymin && inside_xmax &&
-      !(inside_xmin && inside_ymax))
-  {
-    p0.set(static_cast<Type>(x_ymin_int), static_cast<Type>(ymin));
-    p1.set(static_cast<Type>(xmax), static_cast<Type>(y_xmax_int));
-    return true;
-  }
-
-  // Case C11
-  if (inside_ymax && inside_xmax &&
-      !(inside_xmin && inside_ymin))
-  {
-    p0.set(static_cast<Type>(x_ymax_int), static_cast<Type>(ymax));
-    p1.set(static_cast<Type>(xmax), static_cast<Type>(y_xmax_int));
-    return true;
-  }
-  //Exactly p0ssing through diagonal of BB
-  if (inside_xmin && inside_xmax && inside_ymin && inside_ymax)
-  {
-    if (a>0) // 45 degrees
-    {
-      p0.set(static_cast<Type>(xmin), static_cast<Type>(ymin));
-      p1.set(static_cast<Type>(xmax), static_cast<Type>(ymax));
-      return true;
-    }
-    else // 135 degrees
-    {
-      p0.set(static_cast<Type>(xmin), static_cast<Type>(ymax));
-      p1.set(static_cast<Type>(xmax), static_cast<Type>(ymin));
-      return true;
-    }
-  }
-  return false;
-}
-
 //: Make the box empty
 template <class Type>
 void vgl_box_2d<Type>::empty()
@@ -591,7 +396,6 @@ vcl_istream& operator>>(vcl_istream& is, vgl_box_2d<Type>& p)
 template class vgl_box_2d<Type >;\
 template vcl_istream& operator>>(vcl_istream&, vgl_box_2d<Type >&);\
 template vcl_ostream& operator<<(vcl_ostream&, vgl_box_2d<Type > const&);\
-template vgl_box_2d<Type > intersect(vgl_box_2d<Type > const&, vgl_box_2d<Type > const&);\
 template vgl_box_2d<Type > vgl_intersection(vgl_box_2d<Type > const&, vgl_box_2d<Type > const&)
 
 #endif // vgl_box_2d_txx_

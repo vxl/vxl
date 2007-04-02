@@ -10,7 +10,6 @@
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
-#include <vcl_deprecated.h>
 
 // Constructors/Destructor---------------------------------------------------
 
@@ -195,10 +194,8 @@ void vgl_box_3d<Type>::set_centroid_z(Type cz)
   max_pos_[2]= max_pos_[2] + delta;
 }
 
-
 template <class T>
 inline void set_dim(T& minv, T& maxv, T spread);
-
 
 // All this code is to avoid drift in the centroid.
 VCL_DEFINE_SPECIALIZATION
@@ -217,7 +214,6 @@ inline void set_dim(T& minv, T& maxv, T spread)
   minv = T( (x-spread)*0.5 );
   maxv = minv + spread;
 }
-
 
 template <class Type>
 void vgl_box_3d<Type>::set_width(Type width)
@@ -240,7 +236,6 @@ void vgl_box_3d<Type>::set_depth(Type depth)
   set_dim(min_pos_[2], max_pos_[2], depth);
 }
 
-
 //: Add to width and height, centroid unchanged.
 // Will move each side by \p expand / 2.
 template <class Type>
@@ -260,7 +255,6 @@ void vgl_box_3d<Type>::scale_about_centroid(double s)
   set_dim(min_pos_[0], max_pos_[0], static_cast<Type>(width()*s));
   set_dim(min_pos_[1], max_pos_[1], static_cast<Type>(height()*s));
   set_dim(min_pos_[2], max_pos_[2], static_cast<Type>(depth()*s));
-
 }
 
 //: Scale width, height and depth, keeping scaled position of origin unchanged.
@@ -274,7 +268,6 @@ void vgl_box_3d<Type>::scale_about_origin(double s)
   max_pos_[1] = static_cast<Type>(max_pos_[1] * s);
   max_pos_[2] = static_cast<Type>(max_pos_[2] * s);
 }
-
 
 template <class Type>
 void vgl_box_3d<Type>::set_min_position(Type const min_position[3])
@@ -305,7 +298,6 @@ void vgl_box_3d<Type>::set_min_point(vgl_point_3d<Type> const& min_pt)
   min_pos_[1]=min_pt.y(); if (max_pos_[1]<min_pos_[1]) max_pos_[1]=min_pos_[1];
   min_pos_[2]=min_pt.z(); if (max_pos_[2]<min_pos_[2]) max_pos_[2]=min_pos_[2];
 }
-
 
 template <class Type>
 void vgl_box_3d<Type>::set_max_point(vgl_point_3d<Type> const& max_pt)
@@ -413,7 +405,6 @@ void vgl_box_3d<Type>::empty()
   max_pos_[0]=max_pos_[1]=max_pos_[2]=(Type)0;
 }
 
-
 template <class T>
 vgl_box_3d<T> vgl_intersection(vgl_box_3d<T> const& a, vgl_box_3d<T> const& b)
 {
@@ -429,17 +420,6 @@ vgl_box_3d<T> vgl_intersection(vgl_box_3d<T> const& a, vgl_box_3d<T> const& b)
   else
     return vgl_box_3d<T>(); // empty box
 }
-
-
-
-template <class T>
-vgl_box_3d<T> intersect(vgl_box_3d<T> const& a, vgl_box_3d<T> const& b)
-{
-  VXL_DEPRECATED("vgl_box_3d<T> intersect(vgl_box_3d<T>, vgl_box_3d");
-  return vgl_intersection(a, b);
-}
-
-
 
 //: Write box to stream
 template <class Type>
@@ -460,8 +440,6 @@ vcl_istream&  operator>>(vcl_istream& is,  vgl_box_3d<Type>& p)
 template class vgl_box_3d<Type >;\
 template vcl_ostream& operator<<(vcl_ostream&, vgl_box_3d<Type > const& p);\
 template vcl_istream& operator>>(vcl_istream&, vgl_box_3d<Type >& p);\
-template vgl_box_3d<Type > intersect(vgl_box_3d<Type > const& , vgl_box_3d<Type > const& );\
 template vgl_box_3d<Type > vgl_intersection(vgl_box_3d<Type > const& , vgl_box_3d<Type > const& )
-
 
 #endif // vgl_box_3d_txx_

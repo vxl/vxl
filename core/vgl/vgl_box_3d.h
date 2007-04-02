@@ -24,6 +24,8 @@
 //   Peter Vanroose  15 Oct 2003: Removed deprecated constructors without 5th arg
 //   Peter Vanroose  16 Oct 2003: Corner pts given to constructor may now be in any order
 //   Peter Vanroose  16 Oct 2003: Added intersect(box1,box2)
+//   Gamze Tunali    25 Jan 2007: Moved intersect(box1,box2) to vgl_intersection
+//   Peter Vanroose  30 Mar 2007: Commented out deprecated intersect() function
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -247,14 +249,17 @@ class vgl_box_3d
   Type max_pos_[3];
 };
 
+#if 0 // deprecated
 //: Return box defining intersection between boxes a and b.
 //  Empty box returned if no intersection.
 // \relates vgl_box_3d
 // \deprecated in favour of vgl_intersection.
-// Can be removed after the relase of VXL 1.8
+// Can be removed after the release of VXL 1.8
 template <class T>
 vgl_box_3d<T> intersect(vgl_box_3d<T> const& a,
-                        vgl_box_3d<T> const& b);
+                        vgl_box_3d<T> const& b)
+{ return vgl_intersection(a, b); }
+#endif // 0
 
 //: Return box defining intersection between boxes a and b.
 //  Empty box returned if no intersection.
