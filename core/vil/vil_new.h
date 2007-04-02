@@ -18,8 +18,9 @@
 //
 // \verbatim
 //  Modifications
-//   000216 AWF Initial version.
+//   16 Feb 2000 AWF - Initial version.
 //   25 Sep 2002 Ian Scott - convert to vil.
+//   30 Mar 2007 Peter Vanroose- Removed deprecated vil_new_image_view_j_i_plane
 // \endverbatim
 
 #include <vil/vil_fwd.h>
@@ -27,7 +28,6 @@
 #include <vil/vil_blocked_image_resource.h>
 #include <vil/vil_pyramid_image_resource.h>
 #include <vil/vil_image_view.h>
-#include <vcl_deprecated.h>
 
 //: Make a new image of given format.
 // If the format is not scalar, the number of planes must be 1. When you create
@@ -157,6 +157,7 @@ vil_new_pyramid_image_list_from_base(char const* directory,
                                      char const* filename
                                     );
 
+#if 0 // deprecated
 //: Create a new image view whose plane step is 1.
 //  Pixel data type is the type of the last (dummy) argument.
 //  i_step will be nplanes, j_step will be nplanes x ni.
@@ -170,6 +171,7 @@ vil_image_view<T> vil_new_image_view_j_i_plane(unsigned ni, unsigned nj, unsigne
                                                      vil_pixel_format_component_format(fmt));
   return vil_image_view<T>(chunk, reinterpret_cast<T*>(chunk->data()), ni, nj, nplanes, nplanes, nplanes*ni, 1);
 }
+#endif // 0
 
 //: Create a new image view whose j_step is 1.
 //  Pixel data type is the type of the last (dummy) argument.
