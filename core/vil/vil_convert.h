@@ -14,7 +14,7 @@
 // They are in two basic function types (plus a few helper functions.)
 // Some involve only explicit types and convert
 // a vil_image_view<T> to a vil_image_view<T>,
-// the others take an inknown pixel type, using a
+// the others take an unknown pixel type, using a
 // vil_image_view_base_sptr. The basic conversion
 // operations (e.g. casting, rounding) are available in both types.
 // All of the conversions attempt to find shortcuts, so the output
@@ -34,7 +34,7 @@
 //
 // \par vil_convert with unknown pixel types
 // These functions are useful when taking an image from vil_load
-// of vil_image_resource::get_view(), where you may not know the
+// or vil_image_resource::get_view(), where you may not know the
 // pixel type in advance, but want to force the image into a
 // particular pixel type.
 // - vil_convert_cast
@@ -48,13 +48,13 @@
 // In general these functions expect to take scalar pixel images as
 // inputs. Even though many of these functions could return a known
 // pixel-typed image, they all return a vil_image_view_base_sptr,
-// so that the functions can be strung along
+// so that the functions can be strung along.
 //
 // Note that these vil_convert_..( vil_image_view_base_sptr ) functions
 // are provided as a convenience for users of vil_load and
 // vil_image_resource::get_view(). Their existence should not suggest
 // that it is sensible to use a vil_image_view_base_sptr as storage,
-// nor that it is a good idea to write a functions that
+// nor that it is a good idea to write functions that
 // take or return a vil_image_view_base_sptr. If you need a
 // pixel-type-agnostic image container then use a vil_image_resource_sptr
 //
@@ -77,9 +77,9 @@
 // \verbatim
 //  Modifications
 //   23 Oct.2003 - Peter Vanroose - Added support for 64-bit int pixels
+//   30 Mar.2007 - Peter Vanroose - Commented out deprecated versions of vil_convert_cast & vil_convert_to_grey_using_average
 // \endverbatim
 
-#include <vcl_deprecated.h>
 #include <vcl_cassert.h>
 #include <vcl_limits.h>
 #include <vil/vil_transform.h>
@@ -687,7 +687,7 @@ inline vil_image_view_base_sptr vil_convert_cast(outP /*dummy*/,
   return dest;
 }
 
-
+#if 0 // deprecated
 //: Cast the unknown pixel type to the known one, if possible.
 //
 // Will call the other vil_convert_cast to do the actual
@@ -734,7 +734,7 @@ inline void vil_convert_cast(const vil_image_view_base_sptr& src,
       dest.clear();
   }
 }
-
+#endif // 0
 
 //: Convert an image of any pixel type to another with rounding.
 // This should only be used to convert to scalar
@@ -840,7 +840,7 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
   return dest;
 }
 
-
+#if 0 // deprecated
 //: Create a greyscale image from any image src.
 // This function is designed to be used with vil_load or
 // vil_image_resource::get_view()
@@ -900,7 +900,7 @@ inline vil_image_view<outP> vil_convert_to_grey_using_average(
   }
   return dest;
 }
-
+#endif // 0
 
 //: Create a greyscale image of specified pixel type from any image src.
 // This function is designed to be used with vil_load or
