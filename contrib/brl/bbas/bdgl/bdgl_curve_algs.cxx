@@ -12,6 +12,7 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_intersection.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vsol/vsol_box_2d.h>
 #include <vdgl/vdgl_edgel_chain.h>
@@ -200,7 +201,7 @@ bool bdgl_curve_algs::intersect_bounding_box(vdgl_digital_curve_sptr const& dc,
   vgl_box_2d<double> box(bb->get_min_x(), bb->get_max_x(),
                          bb->get_min_y(), bb->get_max_y());
   vgl_point_2d<double> p0, p1;
-  if (box.intersect(line, p0, p1))
+  if (vgl_intersection(box, line, p0, p1))
     return true;
   return false;
 }
