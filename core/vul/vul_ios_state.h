@@ -48,8 +48,6 @@
 class vul_ios_state_saver
 {
 public:
-    typedef   flags_t;
-
     explicit  vul_ios_state_saver( vcl_ios_base &s )
         : stream_( s ),
         flags_( s.flags() ),
