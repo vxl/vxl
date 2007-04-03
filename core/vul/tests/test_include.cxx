@@ -7,6 +7,7 @@
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 #include <vul/vul_get_timestamp.h>
+#include <vul/vul_ios_state.h>
 #include <vul/vul_printf.h>
 #include <vul/vul_psfile.h>
 #include <vul/vul_redirector.h>

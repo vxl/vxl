@@ -11,6 +11,7 @@ SET(vul_sources
   vul_file.h                  vul_file.cxx
   vul_file_iterator.h         vul_file_iterator.cxx
   vul_get_timestamp.h         vul_get_timestamp.cxx
+  vul_ios_state.h
   vul_printf.h                vul_printf.cxx
   vul_psfile.h                vul_psfile.cxx
   vul_redirector.h            vul_redirector.cxx

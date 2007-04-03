@@ -4,6 +4,7 @@ SET(vul_test_sources
   test_arg.cxx
   test_file_iterator.cxx
   test_vul_file.cxx
+  test_ios_state.cxx
   test_psfile.cxx
   test_sprintf.cxx
   test_temp_filename.cxx
