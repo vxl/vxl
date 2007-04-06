@@ -143,6 +143,9 @@ SOURCE=.\test_debug.cxx
 # Begin Source File
 SOURCE=.\test_get_time_as_string.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_ios_state.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
