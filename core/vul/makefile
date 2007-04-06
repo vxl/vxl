@@ -31,6 +31,7 @@ SOURCES += vul_sequence_filename_map.cxx
 SOURCES += vul_url.cxx
 SOURCES += vul_temp_filename.cxx
 SOURCES += vul_debug.cxx
+MANPAGE_SOURCES += vul_ios_state.h
 
 # debugging
 SOURCES += vul_trace.cxx
