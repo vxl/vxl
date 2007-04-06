@@ -15,6 +15,7 @@ TESTS += test_string.cxx
 TESTS += test_sleep_timer.cxx
 TESTS += test_vul_file.cxx
 TESTS += test_get_time_as_string.cxx
+TESTS += test_ios_state.cxx
 
 MINI_PROG_SOURCES += test_debug.cxx
 MINI_PROG_SOURCES += test_include.cxx
