@@ -221,6 +221,9 @@ SOURCE=.\vul_whereami.h
 # Begin Source File
 SOURCE=.\vul_debug.h
 # End Source File
+# Begin Source File
+SOURCE=.\vul_ios_state.h
+# End Source File
 # End Group
 # End Target
 # End Project
