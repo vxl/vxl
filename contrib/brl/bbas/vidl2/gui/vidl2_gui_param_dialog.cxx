@@ -304,7 +304,11 @@ vidl2_dc1394_istream* vidl2_gui_param_dialog::dc1394_istream()
     vgui_dialog dlg("Select an IIDC 1394 camera");
     vcl_vector<vcl_string> camera_names;
     for (unsigned int i=0; i<options.cameras.size(); ++i){
-      camera_names.push_back(options.cameras[i].vendor + " " + options.cameras[i].model);
+      vcl_stringstream ss;
+      ss << options.cameras[i].vendor << " "
+         << options.cameras[i].model
+         << " (node "<<options.cameras[i].node << ")";
+      camera_names.push_back(ss.str());
     }
     dlg.choice("Camera",camera_names,camera_id);
     if (!dlg.ask())
@@ -361,6 +365,22 @@ vidl2_dc1394_istream* vidl2_gui_param_dialog::dc1394_istream()
         return NULL;
     }
     params.frame_rate_ = m.frame_rates[fr_id];
+  }
+
+  // Select the feature values
+  //-------------------------------------
+  if(!cam.features.empty()){
+    params.features_ = cam.features;
+    vgui_dialog dlg("Set feature values");
+    for(unsigned int i=0; i<params.features_.size(); ++i){
+      vidl2_iidc1394_params::feature_options& f = params.features_[i];
+      vcl_stringstream ss;
+      ss << vidl2_iidc1394_params::feature_string(f.id) << " [" << f.min << " - "<<f.max<<"]";
+      dlg.field(ss.str().c_str(), f.value);
+    }
+
+    if (!dlg.ask())
+      return NULL;
   }
 
   static unsigned int num_dma_buffers = 2;

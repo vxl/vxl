@@ -107,6 +107,40 @@ video_mode_string(video_mode_t m)
 }
 
 
+//: Return string describing the feature
+vcl_string
+vidl2_iidc1394_params::
+feature_string(feature_t f)
+{
+  switch (f)
+  {
+    case FEATURE_BRIGHTNESS:      return "Brightness";
+    case FEATURE_EXPOSURE:        return "Exposure";
+    case FEATURE_SHARPNESS:       return "Sharpness";
+    case FEATURE_WHITE_BALANCE:   return "White Balance";
+    case FEATURE_HUE:             return "Hue";
+    case FEATURE_SATURATION:      return "Saturation";
+    case FEATURE_GAMMA:           return "Gamma";
+    case FEATURE_SHUTTER:         return "Shutter";
+    case FEATURE_GAIN:            return "Gain";
+    case FEATURE_IRIS:            return "Iris";
+    case FEATURE_FOCUS:           return "Focus";
+    case FEATURE_TEMPERATURE:     return "Temperature";
+    case FEATURE_TRIGGER:         return "Trigger";
+    case FEATURE_TRIGGER_DELAY:   return "Trigger Delay";
+    case FEATURE_WHITE_SHADING:   return "White Shading";
+    case FEATURE_FRAME_RATE:      return "Frame Rate";
+    case FEATURE_ZOOM:            return "Zoom";
+    case FEATURE_PAN:             return "Pan";
+    case FEATURE_TILT:            return "Tilt";
+    case FEATURE_OPTICAL_FILTER:  return "Optical Filter";
+    case FEATURE_CAPTURE_SIZE:    return "Capture Size";
+    case FEATURE_CAPTURE_QUALITY: return "Capture Quality";
+  }
+  return "invalid feature";
+}
+
+
 //: Return the format number from the video mode enumeration
 unsigned int
 vidl2_iidc1394_params::

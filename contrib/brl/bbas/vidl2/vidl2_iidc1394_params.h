@@ -90,8 +90,35 @@ struct vidl2_iidc1394_params
                       MODE_FORMAT7_6,
                       MODE_FORMAT7_7 };
 
+  //: Available camera features
+  enum feature_t{ FEATURE_BRIGHTNESS,
+                  FEATURE_EXPOSURE,
+                  FEATURE_SHARPNESS,
+                  FEATURE_WHITE_BALANCE,
+                  FEATURE_HUE,
+                  FEATURE_SATURATION,
+                  FEATURE_GAMMA,
+                  FEATURE_SHUTTER,
+                  FEATURE_GAIN,
+                  FEATURE_IRIS,
+                  FEATURE_FOCUS,
+                  FEATURE_TEMPERATURE,
+                  FEATURE_TRIGGER,
+                  FEATURE_TRIGGER_DELAY,
+                  FEATURE_WHITE_SHADING,
+                  FEATURE_FRAME_RATE,
+                  FEATURE_ZOOM,
+                  FEATURE_PAN,
+                  FEATURE_TILT,
+                  FEATURE_OPTICAL_FILTER,
+                  FEATURE_CAPTURE_SIZE,
+                  FEATURE_CAPTURE_QUALITY};
+
   //: Return string describing the mode
   static vcl_string video_mode_string(video_mode_t m);
+
+  //: Return string describing the feature
+  static vcl_string feature_string(feature_t f);
 
   //: Return the format number from the video mode enumeration
   static unsigned int video_format_val(video_mode_t m);
@@ -112,6 +139,9 @@ struct vidl2_iidc1394_params
   //: Describes the valid options for the parameters
   struct valid_options;
 
+  //: Describes a feature and it's set of options
+  struct feature_options;
+
   //-------------------------------------------------------
 
   //: The node number of the camera (default 0)
@@ -128,6 +158,9 @@ struct vidl2_iidc1394_params
 
   //: The video format and mode (default MODE_640x480_RGB8)
   video_mode_t video_mode_;
+
+  //: The settings of camera features
+  vcl_vector<feature_options> features_;
 
   //-------------------------------------------------------
 
@@ -155,6 +188,50 @@ struct vidl2_iidc1394_params
   { video_mode_ = m; return *this; }
 };
 
+
+//=============================================================================
+
+//: Describes a feature and it's set of options
+struct vidl2_iidc1394_params::feature_options
+{
+  feature_t    id;
+  bool         available;
+  bool         one_push;
+  bool         absolute_capable;
+  bool         readout_capable;
+  bool         on_off_capable;
+  bool         auto_capable;
+  bool         manual_capable;
+  bool         polarity_capable;
+  bool         one_push_active;
+  bool         is_on;
+  bool         auto_active;
+
+// FIXME - add trigger options
+#if 0
+  trigger_modes_t    trigger_modes;
+  trigger_mode_t     trigger_mode;
+  trigger_polarity_t trigger_polarity;
+  trigger_sources_t  trigger_sources;
+  trigger_source_t   trigger_source;
+#endif
+
+  unsigned int       min;
+  unsigned int       max;
+  unsigned int       value;
+  unsigned int       BU_value;
+  unsigned int       RV_value;
+  unsigned int       B_value;
+  unsigned int       R_value;
+  unsigned int       G_value;
+  unsigned int       target_value;
+
+  bool               abs_control;
+  float              abs_value;
+  float              abs_max;
+  float              abs_min;
+};
+
 //=============================================================================
 
 //: This structure holds the set of valid options for parameters
@@ -178,6 +255,7 @@ struct vidl2_iidc1394_params::valid_options
     vcl_string model;
     speed_t speed;
     vcl_vector<valid_mode> modes;
+    vcl_vector<vidl2_iidc1394_params::feature_options> features;
     video_mode_t curr_mode;
     frame_rate_t curr_frame_rate;
   };
