@@ -63,9 +63,9 @@ class vpgl_calibration_matrix
   bool operator==(vpgl_calibration_matrix<T> const &that) const;
 
   //: Maps to and from the focal plane
-  vgl_point_2d<T> map_to_focal_plane(vgl_point_2d<T> const& p_image);
+  vgl_point_2d<T> map_to_focal_plane(vgl_point_2d<T> const& p_image) const;
 
-  vgl_point_2d<T> map_to_image(vgl_point_2d<T> const& p_focal_plane);
+  vgl_point_2d<T> map_to_image(vgl_point_2d<T> const& p_focal_plane) const;
 
   // I/O :---------------------
 

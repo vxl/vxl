@@ -137,7 +137,7 @@ operator==(vpgl_calibration_matrix<T> const &that) const
 // (Later may need to cache the svd for efficiency)
 template <class T> 
 vgl_point_2d<T> vpgl_calibration_matrix<T>::
-map_to_focal_plane(vgl_point_2d<T> const& p_image)
+map_to_focal_plane(vgl_point_2d<T> const& p_image) const
 {
   vnl_vector<T> p(3);
   p[0]=p_image.x();   p[1]=p_image.y();   p[2]=1;
@@ -148,7 +148,7 @@ map_to_focal_plane(vgl_point_2d<T> const& p_image)
 }
 template <class T> 
 vgl_point_2d<T> vpgl_calibration_matrix<T>::
-map_to_image(vgl_point_2d<T> const& p_focal_plane)
+map_to_image(vgl_point_2d<T> const& p_focal_plane) const
 {
   vnl_vector<T> p(3);
   p[0]=p_focal_plane.x();   p[1]=p_focal_plane.y();   p[2]=1;
