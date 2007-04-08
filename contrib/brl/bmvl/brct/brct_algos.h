@@ -36,7 +36,7 @@
 #include <bugl/bugl_gaussian_point_2d.h>
 #include <bugl/bugl_gaussian_point_3d.h>
 #include <brct/brct_corr_sptr.h>
-
+#include <vpgl/vpgl_proj_camera.h>
 struct brct_error_index
 {
   brct_error_index(int i, double error){i_ = i; e_ = error;}
@@ -267,6 +267,12 @@ static bool
                 vcl_vector<vcl_vector<unsigned> > const& faces,
                 const float r, const float g, const float b);
 
+static bool 
+write_ifs(vcl_ofstream& ostr,
+          vcl_vector<vgl_point_3d<double> > const& verts,
+          vcl_vector<vcl_vector<unsigned> > const& faces,
+          const float r, const float g, const float b);
+
   static bool translate_ply2_to_vrml(vcl_ifstream& istr, vcl_ofstream& ostr,
                                      const float r, const float g,
                                      const float b);
@@ -287,6 +293,11 @@ static bool
                               vcl_vector<brct_corr_sptr>& corrs);
   static bool write_brct_corrs(vcl_ofstream& str,
                                vcl_vector<brct_corr_sptr> const& corrs);
+
+  static void reconstruct_corrs(vcl_vector<brct_corr_sptr> const& image_corrs,
+                                vpgl_proj_camera<double> const& cam0,
+                                vpgl_proj_camera<double> const& cam1,
+                                vcl_vector<vgl_point_3d<double> >& world_points);
   static void write_target_camera(vcl_ofstream& str, vnl_double_3x4 const& P);
 
   static  vil_image_resource_sptr map_image_to_world(vil_image_resource_sptr const& image,

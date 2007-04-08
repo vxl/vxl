@@ -4,6 +4,7 @@ INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas)
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg)
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bmvl)
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )
+INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR}/mrc )
 INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${RPL_INCLUDE_DIR} )
 SET(brct_sources
@@ -26,7 +27,7 @@ ADD_LIBRARY(brct ${brct_sources})
 INSTALL_TARGETS(/lib brct)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bmvl/brct ${brct_sources})
 
-TARGET_LINK_LIBRARIES(brct sdet brip rrel vsrl bsol gevd vdgl vsol mvl vil vil1 vgl_algo vgl vnl vbl bdgl bugl)
+TARGET_LINK_LIBRARIES(brct sdet brip rrel vsrl bsol vpgl vpgl_algo gevd vdgl vsol mvl vil vil1 vgl_algo vgl vnl vbl bdgl bugl)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)

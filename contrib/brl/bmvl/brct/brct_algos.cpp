@@ -1349,6 +1349,25 @@ bool brct_algos::read_brct_corrs(vcl_ifstream& str,
   return true;
 }
 
+void brct_algos::reconstruct_corrs(vcl_vector<brct_corr_sptr> const& image_corrs,
+                       vpgl_proj_camera<double> const& cam0,
+                       vpgl_proj_camera<double> const& cam1,
+                       vcl_vector<vgl_point_3d<double> >& world_points)
+{
+  world_points.clear();
+  for(unsigned i = 0; i<image_corrs.size(); ++i)
+    {
+      brct_corr_sptr cr = image_corrs[i];
+      if(cr->n_cams()!=2)
+        continue;
+      vgl_homg_point_2d<double> hp0 = cr->match(0);
+      vgl_homg_point_2d<double> hp1 = cr->match(1);
+      vgl_point_2d<double> x0(hp0), x1(hp1);
+      vgl_point_3d<double> Xw = brct_algos::triangulate_3d_point(x0,cam0.get_matrix(), x1, cam1.get_matrix());
+      world_points.push_back(Xw);
+    }
+}
+
 void brct_algos::write_target_camera(vcl_ofstream& str, vnl_double_3x4 const& P)
 {
   str << "TRANSFORM:\n"
@@ -1639,6 +1658,48 @@ write_ifs_box(vcl_ofstream& ostr,
   return true;
 }
 
+bool brct_algos::
+write_ifs(vcl_ofstream& ostr,
+              vcl_vector<vgl_point_3d<double> > const& verts,
+              vcl_vector<vcl_vector<unsigned> > const& faces,
+              const float r, const float g, const float b)
+{
+  if(!ostr.is_open())
+    return false;
+  ostr << " Shape {\n"
+       << "appearance Appearance {\n"
+       <<"   material Material\n"
+       <<    "{  diffuseColor " << r << ' ' << g << ' ' << b << " }\n"
+       << "}\n"
+       <<   "geometry IndexedFaceSet\n"
+       << "{\n"
+       << "coordIndex [\n";
+  unsigned nf = faces.size();
+  for (unsigned indx = 0; indx<nf; ++indx)
+  {
+    unsigned ni = faces[indx].size();
+    for (unsigned vi =0; vi<ni; ++vi)
+      ostr << faces[indx][vi] << ", ";
+    ostr << -1 ;
+    if (indx<nf-1)
+      ostr << ", ";
+  }
+  ostr << "]\n"
+       <<"coord Coordinate{\n"
+       << "point [\n";
+  unsigned nv = verts.size();
+  for (unsigned ip = 0; ip<nv; ++ip)
+  {
+    ostr << verts[ip].x() << ' ' << verts[ip].y()<< ' ' << verts[ip].z() ;
+    if (ip<nv-1)
+      ostr << ", ";
+  }
+  ostr <<"]}\n"
+       << "}\n"
+       << "}\n";
+  return true;
+}
+
 //extract boxes from merged ply2 file and write as individual indexed face sets
 //in vrml 2.0 format. Assumes the ply2 file contains only rectangular boxes
 bool brct_algos::translate_ply2_to_vrml(vcl_ifstream& istr, vcl_ofstream& ostr,
@@ -1649,26 +1710,8 @@ bool brct_algos::translate_ply2_to_vrml(vcl_ifstream& istr, vcl_ofstream& ostr,
   vcl_vector<vcl_vector<unsigned> > ifs;
   if (!brct_algos::read_world_ply2(istr, pts, polys, ifs))
     return false;
-  unsigned npts = pts.size(), nfaces = ifs.size();
-  if (npts/8 != nfaces/6)
-    return false;
   brct_algos::write_vrml_header(ostr);
-  unsigned fi = 0;
-  for (unsigned ip = 0; ip<npts; ip+=8, fi+=6)
-  {
-    vcl_vector<vgl_point_3d<double> > verts(8);
-    vcl_vector<vcl_vector<unsigned> > faces(6);
-    for (unsigned vi = 0; vi<8; ++vi)
-      verts[vi]=pts[ip+vi];
-    for (unsigned f = 0; f<6; ++f)
-    {
-      vcl_vector<unsigned> index(4);
-      for (unsigned fv=0; fv<4; ++fv)
-        index[fv]=(ifs[fi+f][fv]-ip);
-      faces[f]=index;
-    }
-    if (!brct_algos::write_ifs_box(ostr, verts, faces, r, g, b))
+  if (!brct_algos::write_ifs(ostr, pts, ifs, r, g, b))
       return false;
-  }
   return true;
 }
