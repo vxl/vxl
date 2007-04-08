@@ -151,6 +151,11 @@ void segv_vil_menus::intensity_histogram_callback()
 {
   segv_vil_segmentation_manager::instance()->intensity_histogram();
 }
+// JIM PROJECT POINTS
+void segv_vil_menus::project_points_callback()
+{
+  segv_vil_segmentation_manager::instance()->project_points();
+}
 
 //segv_vil_menus definition
 vgui_menu segv_vil_menus::get_menu()
@@ -177,6 +182,7 @@ vgui_menu segv_vil_menus::get_menu()
   menuview.add("ExpandImage ", expand_image_callback);
   menuview.add("Flip Image (LR)", flip_image_lr_callback);
   menuview.add("Images as Color", display_images_as_color_callback);
+  menuview.add("Project Points RPC", project_points_callback);
   //edit menu entries
 
   menuedit.add("Threshold", threshold_image_callback);

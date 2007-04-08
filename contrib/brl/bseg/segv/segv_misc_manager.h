@@ -1,5 +1,5 @@
-#ifndef segv_vil_segmentation_manager_h_
-#define segv_vil_segmentation_manager_h_
+#ifndef segv_misc_manager_h_
+#define segv_misc_manager_h_
 //--------------------------------------------------------------------------------
 //:
 // \file
@@ -23,6 +23,8 @@
 #include <vtol/vtol_intensity_face_sptr.h>
 #include <vtol/vtol_face_2d_sptr.h>
 #include <vgui/vgui_wrapper_tableau.h>
+#include <vgui/vgui_style.h>
+#include <vgui/vgui_style_sptr.h>
 #include <vgui/vgui_grid_tableau_sptr.h>
 #include <vgui/vgui_range_map_params_sptr.h>
 #include <vgui/vgui_style_sptr.h>
@@ -35,64 +37,39 @@
 
 class vgui_window;
 
-class segv_vil_segmentation_manager : public vgui_wrapper_tableau
+class segv_misc_manager : public vgui_wrapper_tableau
 {
  public:
-  segv_vil_segmentation_manager();
-  ~segv_vil_segmentation_manager();
-  static segv_vil_segmentation_manager *instance();
+  segv_misc_manager();
+  ~segv_misc_manager();
+  static segv_misc_manager *instance();
   void quit();
   void load_image();
   void save_image();
-
+#if 0
   //: visualization
   void set_range_params();
   void inline_viewer();
   void intensity_profile();
   void intensity_histogram();
-  void display_images_as_color();
-
-  //: image transformation
-  void flip_image_lr();
-  void rotate_image();
-  void reduce_image();
-  void expand_image();
-
-  //: image arithmetic
-  void add_images();
-  void subtract_images();
-  void negate_image();
-  //: image processing
-  void entropy();
-  void minfo();
-  void max_trace_scale();
-
-  //: segmentation
-  void threshold_image();
-  void harris_corners();
-  void nonmaximal_suppression();
-  void vd_edges();
-  void fit_lines();
-  void fit_conics();
-  void fit_overlay_conics();
-  void regions();
-
-  // ############### New method to project 3D points ##################
-  void project_points();
-  // ##################################################################
+#endif
   
  //:utilities
   void clear_display();
   void clear_all();
   void init();
+#if 0
   void remove_image();
   void convert_to_grey();
-
+#endif
+  //:debug and development routines
+  void project_on_subm();
+  void project_on_articulation();
   //: access to the window
   vgui_window* get_window(){return win_;}
   void set_window(vgui_window* win){win_=win;}
 
- protected:
+ protected: 
   void draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges, bool verts=false);
   void draw_lines(vcl_vector<vsol_line_2d_sptr> const & line_segs,
                   const vgui_style_sptr& style = NULL);
@@ -100,7 +77,8 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void draw_conics(vcl_vector<vsol_conic_2d_sptr> const & conic_segs,
                   const vgui_style_sptr& style = NULL);
 
-  void draw_polylines(vcl_vector<vsol_polyline_2d_sptr> const & polys);
+  void draw_polylines(vcl_vector<vsol_polyline_2d_sptr> const & polys,
+                      vgui_style_sptr style=(vgui_style*)0);
   void draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions,
                     bool verts=false);
   void draw_points(vcl_vector<vsol_point_2d_sptr> const & points,
@@ -134,8 +112,7 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   vtol_face_2d_sptr foreground_face_;
   vtol_face_2d_sptr background_face_;
   bgui_bargraph_clipon_tableau_sptr bargraph_;
-  static segv_vil_segmentation_manager *instance_;
-
+  static segv_misc_manager *instance_;
 };
 
-#endif // segv_vil_segmentation_manager_h_
+#endif // segv_misc_manager_h_
