@@ -46,8 +46,7 @@ IF(NETLIB_FOUND)
     test_brent_minimizer.cxx
   )
 
-
-  TARGET_LINK_LIBRARIES( vnl_algo_test_all vnl_algo vpl vul testlib ${CMAKE_THREAD_LIBS} )
+  TARGET_LINK_LIBRARIES( vnl_algo_test_all vnl_algo vul testlib ${CMAKE_THREAD_LIBS} )
 
 
   ADD_TEST( vnl_test_algo                     ${EXECUTABLE_OUTPUT_PATH}/vnl_algo_test_all test_algo                    )
