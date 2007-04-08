@@ -9,7 +9,7 @@
 #include <vcl_algorithm.h>
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_map_io.h>
-
+#include <vnl/io/vnl_io_matrix_fixed.h>
 
 //: Constructor
 bmrf_curvel_3d::bmrf_curvel_3d()
@@ -53,8 +53,8 @@ bmrf_curvel_3d::merge(const bmrf_curvel_3d_sptr& other)
   unsigned int num_frames = vcl_max(this->projs_2d_.size(), other->projs_2d_.size());
   vcl_vector<vcl_pair<double,bmrf_node_sptr> > merged_projs_2d_(num_frames);
   unsigned int count = 0;
-  for ( unsigned int f=0; f<num_frames; ++f ){
-
+  for ( unsigned int f=0; f<num_frames; ++f )
+  {
     bmrf_node_sptr n1 = NULL, n2 = NULL;
     if ( f<this->projs_2d_.size() )
       n1 = this->projs_2d_[f].second;
@@ -64,11 +64,11 @@ bmrf_curvel_3d::merge(const bmrf_curvel_3d_sptr& other)
     if ( n1 && n2 )
       return false;
 
-    if ( n1 ){
+    if ( n1 ) {
       merged_projs_2d_[f] = this->projs_2d_[f];
       ++count;
     }
-    else if ( n2 ){
+    else if ( n2 ) {
       merged_projs_2d_[f] = other->projs_2d_[f];
       ++count;
     }
@@ -118,13 +118,13 @@ bmrf_curvel_3d::pos_in_frame(unsigned int frame, vnl_double_2& pos) const
     return false;
   double alpha = projs_2d_[frame].first;
   bmrf_node_sptr node = projs_2d_[frame].second;
-  if ( node && node->epi_seg()){
+  if ( node && node->epi_seg()) {
     pos[0] = node->epi_seg()->x(alpha);
     pos[1] = node->epi_seg()->y(alpha);
     return true;
   }
   vcl_map<unsigned int, vnl_double_2>::const_iterator p_itr = pseudo_points_.find(frame);
-  if ( p_itr != pseudo_points_.end() ){
+  if ( p_itr != pseudo_points_.end() ) {
     pos = p_itr->second;
     return true;
   }
@@ -139,16 +139,16 @@ bmrf_curvel_3d::cross_ratio(unsigned int frame, double& ratio) const
 {
   if ( frame >= projs_2d_.size() || frame < 2 )
     return false;
-    
+
   double s[3];
-  for(unsigned int i=0; i<3; ++i){
+  for (unsigned int i=0; i<3; ++i) {
     double alpha = projs_2d_[frame+i-2].first;
     bmrf_node_sptr node = projs_2d_[frame+i-2].second;
-    if ( node && node->epi_seg()){
+    if ( node && node->epi_seg())
       s[i] = node->epi_seg()->s(alpha);
-    }else
+    else
       return false;
-  }   
+  }
   ratio = s[0]*(s[1]-s[2])/(s[1]*(s[0]-s[2]));
   return true;
 }
@@ -230,7 +230,7 @@ bmrf_curvel_3d::s_avg(unsigned int frame)
   double gamma = this->gamma_avg();
   int count = 0;
   double s_sum = 0.0;
-  for (unsigned int f=0; f<projs_2d_.size(); ++f){
+  for (unsigned int f=0; f<projs_2d_.size(); ++f) {
     if ( (frame == f) || !projs_2d_[f].second)
       continue;
     double s = projs_2d_[f].second->epi_seg()->s(projs_2d_[f].first);
@@ -248,13 +248,14 @@ bmrf_curvel_3d::compute_statistics()
   sum_gamma_ = 0.0;
   sum_sqr_gamma_ = 0.0;
   int base_frame = -1; // map all gamma's to this frame
-  for (unsigned int ind1=0; ind1<projs_2d_.size(); ++ind1){
+  for (unsigned int ind1=0; ind1<projs_2d_.size(); ++ind1)
+  {
     if (!projs_2d_[ind1].second)
       continue;
-    if(base_frame == -1)
+    if (base_frame == -1)
       base_frame = ind1;
     double s1 = projs_2d_[ind1].second->epi_seg()->s(projs_2d_[ind1].first);
-    for (unsigned int ind2=ind1+1; ind2<projs_2d_.size(); ++ind2){
+    for (unsigned int ind2=ind1+1; ind2<projs_2d_.size(); ++ind2) {
       if (!projs_2d_[ind2].second)
         continue;
       double s2 = projs_2d_[ind2].second->epi_seg()->s(projs_2d_[ind2].first);
@@ -271,22 +272,22 @@ void
 bmrf_curvel_3d::show_stats() const
 {
   int base_frame = -1; // map all gamma's to this frame
-  for (unsigned int ind1=0; ind1<projs_2d_.size(); ++ind1){
+  for (unsigned int ind1=0; ind1<projs_2d_.size(); ++ind1)
+  {
     if (!projs_2d_[ind1].second)
       continue;
-    if(base_frame == -1)
+    if (base_frame == -1)
       base_frame = ind1;
     double s1 = projs_2d_[ind1].second->epi_seg()->s(projs_2d_[ind1].first);
-    for (unsigned int ind2=ind1+1; ind2<projs_2d_.size(); ++ind2){
+    for (unsigned int ind2=ind1+1; ind2<projs_2d_.size(); ++ind2) {
       if (!projs_2d_[ind2].second)
         continue;
       double s2 = projs_2d_[ind2].second->epi_seg()->s(projs_2d_[ind2].first);
       double gamma = 1.0 / (((int(ind2) - int(ind1)) / (1.0 - s1/s2)) + double(ind1-base_frame));
-      vcl_cout << " frames " << ind1 << "," << ind2 << " gamma=" << gamma << vcl_endl;
+      vcl_cout << " frames " << ind1 << ',' << ind2 << " gamma=" << gamma << vcl_endl;
     }
   }
 }
-
 
 
 //: Binary save self to stream.
@@ -325,9 +326,9 @@ bmrf_curvel_3d::b_read( vsl_b_istream& is )
     vsl_b_read(is, this->pseudo_points_);
     vsl_b_read(is, this->proj_error_);
     this->stats_valid_ = false;
-    
-    for(unsigned int i=0; i<this->projs_2d_.size(); ++i)
-      if( this->projs_2d_[i].second )
+
+    for (unsigned int i=0; i<this->projs_2d_.size(); ++i)
+      if ( this->projs_2d_[i].second )
         ++num_projections_;
 
     break;
@@ -368,7 +369,7 @@ vsl_b_write(vsl_b_ostream &os, const bmrf_curvel_3d* c)
   if (c==0) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
-  else{
+  else {
     vsl_b_write(os,true); // Indicate non-null pointer stored
     c->b_write(os);
   }
