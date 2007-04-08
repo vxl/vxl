@@ -104,6 +104,12 @@ SOURCE=.\bmvv_cal_manager.cxx
 # Begin Source File
 SOURCE=.\bmvv_cal_menus.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bmvv_f_manager.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bmvv_f_menus.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -118,6 +124,12 @@ SOURCE=.\bmvv_cal_manager.h
 # End Source File
 # Begin Source File
 SOURCE=.\bmvv_cal_menus.h
+# End Source File
+# Begin Source File
+SOURCE=.\bmvv_f_manager.h
+# End Source File
+# Begin Source File
+SOURCE=.\bmvv_f_menus.h
 # End Source File
 # End Group
 # End Target
