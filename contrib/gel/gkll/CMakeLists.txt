@@ -22,4 +22,4 @@ IF(BUILD_OXL)
  TARGET_LINK_LIBRARIES(gkll mvl)
 ENDIF(BUILD_OXL)
 
-TARGET_LINK_LIBRARIES(gkll vgel vtol vidl_vil1 vil1 vbl)
+TARGET_LINK_LIBRARIES(gkll vgel_kl vtol vidl_vil1 vil1 vbl)
