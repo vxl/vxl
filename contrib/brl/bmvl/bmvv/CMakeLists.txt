@@ -39,7 +39,7 @@ IF(HAS_VGUI)
  ENDIF(HAS_XERCES)
 
  #TARGET_LINK_LIBRARIES(bmvv btom) # when compiling bmvv_tomography_manager.cxx
- TARGET_LINK_LIBRARIES(bmvv brct sdet brip bdgl mvl rrel vpgl vpgl_algo vtol vdgl bgui vgui vsol vgl_algo vgl vnl vil vil1)
+ TARGET_LINK_LIBRARIES(bmvv brct sdet brip bdgl mvl vpgl vpgl_algo vtol vdgl bgui vgui vsol vgl_algo vgl vnl vil vil1)
 
  # the main executable
  SUBDIRS(mvbin)
