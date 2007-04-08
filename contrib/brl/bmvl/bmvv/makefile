@@ -9,11 +9,12 @@ DEFINES += -DBUILDING_BMVV_DLL
 #SOURCES += bmvv_tomography_manager.cxx
 SOURCES += bmvv_recon_manager.cxx
 SOURCES += bmvv_cal_manager.cxx
-
 #SOURCES += bmvv_menus.cxx
 #SOURCES += bmvv_tomg_menus.cxx
 SOURCES += bmvv_recon_menus.cxx
 SOURCES += bmvv_cal_menus.cxx
+SOURCES += bmvv_f_manager.cxx
+SOURCES += bmvv_f_menus.cxx
 
 SUBDIRS += mvbin
 
