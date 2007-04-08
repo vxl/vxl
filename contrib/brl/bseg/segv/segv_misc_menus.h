@@ -1,5 +1,5 @@
-#ifndef segv_vil_menus_h_
-#define segv_vil_menus_h_
+#ifndef segv_misc_menus_h_
+#define segv_misc_menus_h_
 //----------------------------------------------------------------------------
 //:
 // \file
