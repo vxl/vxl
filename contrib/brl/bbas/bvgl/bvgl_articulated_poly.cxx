@@ -4,7 +4,10 @@
 #include <vcl_cmath.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_numeric_traits.h>
+#include <vgl/vgl_homg_point_2d.h>
+#include <vgl/vgl_point_2d.h>
 #include <bvgl/bvgl_articulated_poly.h>
+
 //empty constructor
 bvgl_articulated_poly::bvgl_articulated_poly(const unsigned n_joints)
 {
