@@ -110,6 +110,12 @@ SOURCE=.\segv_vil_menus.cxx
 # Begin Source File
 SOURCE=.\segv_vil_segmentation_manager.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\segv_misc_manager.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\segv_misc_menus.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -133,6 +139,12 @@ SOURCE=.\segv_vil_menus.h
 # End Source File
 # Begin Source File
 SOURCE=.\segv_vil_segmentation_manager.h
+# End Source File
+# Begin Source File
+SOURCE=.\segv_misc_manager.h
+# End Source File
+# Begin Source File
+SOURCE=.\segv_misc_menus.h
 # End Source File
 # Begin Source File
 SOURCE=.\dll.h
