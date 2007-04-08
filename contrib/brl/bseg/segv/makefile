@@ -14,6 +14,8 @@ SOURCES += segv_vtol_soview2D.cxx
 SOURCES += segv_menus.cxx
 SOURCES += segv_vil_menus.cxx
 SOURCES += segv_vil_segmentation_manager.cxx
+SOURCES += segv_misc_manager.cxx
+SOURCES += segv_misc_menus.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
