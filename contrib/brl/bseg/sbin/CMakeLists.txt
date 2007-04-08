@@ -21,13 +21,13 @@ IF( HAS_VGUI )
 ENDIF( HAS_VGUI )
 
 ADD_EXECUTABLE (negate negate.cxx)
-TARGET_LINK_LIBRARIES(negate brip)
+TARGET_LINK_LIBRARIES(negate vbl vul vnl vil vcl)
 
 ADD_EXECUTABLE (vil_convert vil_convert.cxx)
-TARGET_LINK_LIBRARIES(vil_convert brip)
+TARGET_LINK_LIBRARIES(vil_convert vbl vul vnl vil vcl)
 
 ADD_EXECUTABLE (generate_tiff_pyramids generate_tiff_pyramids.cxx)
-TARGET_LINK_LIBRARIES(generate_tiff_pyramids brip vpl vil)
+TARGET_LINK_LIBRARIES(generate_tiff_pyramids vpl vul vbl vnl vil)
 
 ADD_EXECUTABLE (generate_tiff_rset generate_tiff_rset.cxx)
-TARGET_LINK_LIBRARIES(generate_tiff_rset brip vpl vil)
+TARGET_LINK_LIBRARIES(generate_tiff_rset vpl vbl vul vil)
