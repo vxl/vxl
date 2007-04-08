@@ -5,6 +5,8 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bmvl )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
+INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
+INCLUDE_DIRECTORIES( ${RPL_INCLUDE_DIR} )
 
 # determines if vgui is built and opengl is available
 INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
@@ -20,6 +22,8 @@ IF(HAS_VGUI)
     #bmvv_tomg_menus.cxx            bmvv_tomg_menus.h
      bmvv_recon_menus.cxx           bmvv_recon_menus.h
      bmvv_cal_menus.cxx             bmvv_cal_menus.h
+     bmvv_f_manager.cxx		    bmvv_f_manager.h
+     bmvv_f_menus.cxx		    bmvv_f_menus.h
     )
 
  ADD_LIBRARY(bmvv ${bmvv_sources})
@@ -35,7 +39,7 @@ IF(HAS_VGUI)
  ENDIF(HAS_XERCES)
 
  #TARGET_LINK_LIBRARIES(bmvv btom) # when compiling bmvv_tomography_manager.cxx
- TARGET_LINK_LIBRARIES(bmvv brct sdet brip bdgl mvl vtol vdgl bgui vgui vsol vgl_algo vgl vnl vil vil1)
+ TARGET_LINK_LIBRARIES(bmvv brct sdet brip bdgl mvl rrel vpgl vpgl_algo vtol vdgl bgui vgui vsol vgl_algo vgl vnl vil vil1)
 
  # the main executable
  SUBDIRS(mvbin)

@@ -14,3 +14,6 @@ TARGET_LINK_LIBRARIES(recon bmvv brct vgui)
 
 ADD_EXECUTABLE (cal cal.cxx)
 TARGET_LINK_LIBRARIES(cal bmvv brct vgui)
+
+ADD_EXECUTABLE (ftool ftool.cxx)
+TARGET_LINK_LIBRARIES(ftool bmvv brct vgui)
