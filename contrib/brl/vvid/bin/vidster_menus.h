@@ -14,7 +14,7 @@
 //   J.L. Mundy October 7, 2002    Initial version.
 // \endverbatim
 //--------------------------------------------------------------------------------
-
+#include <vgui/vgui_menu.h>
 class vidster_menus
 {
  public:

@@ -4,6 +4,7 @@
 #include <vgui/vgui_menu.h>
 #include <vvid/vvid_live_stereo_manager.h>
 
+
 //Static munu callback functions
 
 void vidster_menus::quit_callback()
@@ -50,4 +51,9 @@ vgui_menu vidster_menus::get_menu()
   menubar.add( "Edit", menuedit);
   return menubar;
 }
-
+static void junk()
+{
+	vgui::run();
+	vgui_menu_item item;
+	vgui_menu menubar;
+}
