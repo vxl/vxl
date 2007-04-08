@@ -2,6 +2,7 @@
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
+#include <vgl/vgl_point_3d.h>
 #include <vil3d/algo/vil3d_corners.h>
 #include <vil3d/algo/vil3d_find_peaks.h>
 #include <vil3d/vil3d_print.h>

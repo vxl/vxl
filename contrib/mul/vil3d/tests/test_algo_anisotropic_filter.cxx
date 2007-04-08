@@ -2,6 +2,7 @@
 
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vil3d/algo/vil3d_anisotropic_filter.h>
 #include <vil3d/vil3d_print.h>
 #include <vil3d/vil3d_math.h>
