@@ -1,4 +1,4 @@
-// This is brl/bseg/segv/bmvv_f_manager.cxx
+// This is brl/bmvl/bmvv/bmvv_f_manager.cxx
 #include "bmvv_f_manager.h"
 //:
 // \file
@@ -17,7 +17,6 @@
 #include <vcl_cstdio.h> // sprintf
 #include <vcl_cmath.h> //sin, cos exp
 #include <vcl_fstream.h>
-#include <vgui/vgui_style.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
@@ -114,10 +113,10 @@ bmvv_f_manager *bmvv_f_manager::instance_ = 0;
 bmvv_f_manager *bmvv_f_manager::instance()
 {
   if (!instance_)
-    {
-      instance_ = new bmvv_f_manager();
-      instance_->init();
-    }
+  {
+    instance_ = new bmvv_f_manager();
+    instance_->init();
+  }
   return bmvv_f_manager::instance_;
 }
 
@@ -131,13 +130,13 @@ bmvv_f_manager::bmvv_f_manager():vgui_wrapper_tableau()
 
 bmvv_f_manager::~bmvv_f_manager()
 {
-  for(unsigned v = 0; v<vtabs_.size(); ++v)
-    {
-      bgui_vtol2D_tableau_sptr t = vtabs_[v];
-      vpgl_proj_camera<double>* cam = cam_map_[v];
-      cam_map_[v] = 0;
-      delete cam;
-    }
+  for (unsigned v = 0; v<vtabs_.size(); ++v)
+  {
+    bgui_vtol2D_tableau_sptr t = vtabs_[v];
+    vpgl_proj_camera<double>* cam = cam_map_[v];
+    cam_map_[v] = 0;
+    delete cam;
+  }
 }
 
 //: Set up the tableaux
@@ -167,32 +166,32 @@ range_params(vil_image_resource_sptr const& image)
 
   //Check if the image is blocked
   vil_blocked_image_resource_sptr bir = blocked_image_resource(image);
-  if(bir)
-    { gl_map = true; cache = false;}
+  if (bir)
+  { gl_map = true; cache = false; }
 
   //Check if the image is a pyramid
   bool pyr = image->get_property(vil_property_pyramid, 0);
-  if(pyr)
-    { gl_map = true; cache = false;}
+  if (pyr)
+  { gl_map = true; cache = false; }
   //Get max min parameters
 
   double min=0, max=0;
   unsigned n_components = image->nplanes();
   vgui_range_map_params_sptr rmps;
   if (n_components == 1)
-    {
-      bgui_image_utils iu(image);
-      iu.range(min, max);
-      rmps= new vgui_range_map_params(min, max, gamma, invert,
-                                      gl_map, cache);
-    }
+  {
+    bgui_image_utils iu(image);
+    iu.range(min, max);
+    rmps= new vgui_range_map_params(min, max, gamma, invert,
+                                    gl_map, cache);
+  }
   else if (n_components == 3)
-    {
-      min = 0; max = 255;//for now - ultimately need to compute color histogram
-      rmps = new vgui_range_map_params(min, max, min, max, min, max,
-                                       gamma, gamma, gamma, invert,
-                                       gl_map, cache);
-    }
+  {
+    min = 0; max = 255;//for now - ultimately need to compute color histogram
+    rmps = new vgui_range_map_params(min, max, min, max, min, max,
+                                     gamma, gamma, gamma, invert,
+                                     gl_map, cache);
+  }
   return rmps;
 }
 
@@ -205,10 +204,10 @@ set_selected_grid_image(vil_image_resource_sptr const& image,
   if (!itab)
     this->add_image(image, rmps);
   else
-    {
-      itab->set_image_resource(image);
-      itab->set_mapping(rmps);
-    }
+  {
+    itab->set_image_resource(image);
+    itab->set_mapping(rmps);
+  }
   itab->post_redraw();
 }
 
@@ -240,6 +239,7 @@ add_image(vil_image_resource_sptr const& image,
   grid_->get_last_selected_position(&col, &row);
   this->add_image_at(image, col, row, rmps);
 }
+
 #if 0
 //-----------------------------------------------------------------------------
 //: remove the selected image
@@ -262,6 +262,7 @@ void bmvv_f_manager::convert_to_grey()
   this->add_image(gimg);
 }
 #endif
+
 //: Get the image tableau for the currently selected grid cell
 bgui_image_tableau_sptr bmvv_f_manager::selected_image_tab()
 {
@@ -269,13 +270,13 @@ bgui_image_tableau_sptr bmvv_f_manager::selected_image_tab()
   grid_->get_last_selected_position(&col, &row);
   vgui_tableau_sptr top_tab = grid_->get_tableau_at(col, row);
   if (top_tab)
-    {
-      bgui_image_tableau_sptr itab;
-      itab.vertical_cast(vgui_find_below_by_type_name(top_tab,
-                                                      vcl_string("vgui_image_tableau")));
-      if (itab)
-        return itab;
-    }
+  {
+    bgui_image_tableau_sptr itab;
+    itab.vertical_cast(vgui_find_below_by_type_name(top_tab,
+                                                    vcl_string("vgui_image_tableau")));
+    if (itab)
+      return itab;
+  }
   vcl_cout << "Unable to get bgui_image_tableau at (" << col
            << ", " << row << ")\n";
   return bgui_image_tableau_sptr();
@@ -288,13 +289,13 @@ bmvv_f_manager::vtol2D_tab_at(const unsigned col,
 {
   vgui_tableau_sptr top_tab = grid_->get_tableau_at(col, row);
   if (top_tab)
-    {
-      bgui_vtol2D_tableau_sptr v2D;
-      v2D.vertical_cast(vgui_find_below_by_type_name(top_tab,
-                                                     vcl_string("bgui_vtol2D_tableau")));
-      if (v2D)
-        return v2D;
-    }
+  {
+    bgui_vtol2D_tableau_sptr v2D;
+    v2D.vertical_cast(vgui_find_below_by_type_name(top_tab,
+                                                   vcl_string("bgui_vtol2D_tableau")));
+    if (v2D)
+      return v2D;
+  }
   vcl_cout << "Unable to get bgui_vtol2D_tableau at (" << col
            << ", " << row << ")\n";
   return bgui_vtol2D_tableau_sptr();
@@ -315,13 +316,13 @@ bgui_picker_tableau_sptr bmvv_f_manager::selected_picker_tab()
   grid_->get_last_selected_position(&col, &row);
   vgui_tableau_sptr top_tab = grid_->get_tableau_at(col, row);
   if (top_tab)
-    {
-      bgui_picker_tableau_sptr pick;
-      pick.vertical_cast(vgui_find_below_by_type_name(top_tab,
-                                                      vcl_string("bgui_picker_tableau")));
-      if (pick)
-        return pick;
-    }
+  {
+    bgui_picker_tableau_sptr pick;
+    pick.vertical_cast(vgui_find_below_by_type_name(top_tab,
+                                                    vcl_string("bgui_picker_tableau")));
+    if (pick)
+      return pick;
+  }
   vcl_cout << "Unable to get bgui_picker_tableau at (" << col
            << ", " << row << ")\n";
   return bgui_picker_tableau_sptr();
@@ -347,11 +348,11 @@ vil_image_resource_sptr bmvv_f_manager::image_at(const unsigned col,
   itab.vertical_cast(vgui_find_below_by_type_name(top_tab,
                                                   vcl_string("vgui_image_tableau")));
   if (!itab)
-    {
-      vcl_cout << "Unable to get bgui_image_tableau at (" << col
-               << ", " << row << ")\n";
-      return 0;
-    }
+  {
+    vcl_cout << "Unable to get bgui_image_tableau at (" << col
+             << ", " << row << ")\n";
+    return 0;
+  }
   return itab->get_image_resource();
 }
 
@@ -374,11 +375,11 @@ void bmvv_f_manager::clear_all()
   unsigned ncols = grid_->cols(), nrows = grid_->rows();
   for (unsigned r=0; r<nrows; ++r)
     for (unsigned c=0; c<ncols; ++c)
-      {
-        bgui_vtol2D_tableau_sptr t = this->vtol2D_tab_at(c, r);
-        if (t)
-          t->clear_all();
-      }
+    {
+      bgui_vtol2D_tableau_sptr t = this->vtol2D_tab_at(c, r);
+      if (t)
+        t->clear_all();
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -395,30 +396,30 @@ bmvv_f_manager::draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges,
 #if 0
   vgui_image_tableau_sptr itab = t2D->get_image_tableau();
   if (!itab)
-    {
-      vcl_cout << "In bmvv_f_manager::draw_edges - null image tab\n";
-      return;
-    }
+  {
+    vcl_cout << "In bmvv_f_manager::draw_edges - null image tab\n";
+    return;
+  }
 #endif
   for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
        eit != edges.end(); eit++)
+  {
+    t2D->add_edge(*eit);
+    //optionally display the edge vertices
+    if (verts)
     {
-      t2D->add_edge(*eit);
-      //optionally display the edge vertices
-      if (verts)
-        {
-          if ((*eit)->v1())
-            {
-              vtol_vertex_2d_sptr v1 = (*eit)->v1()->cast_to_vertex_2d();
-              t2D->add_vertex(v1);
-            }
-          if ((*eit)->v2())
-            {
-              vtol_vertex_2d_sptr v2 = (*eit)->v2()->cast_to_vertex_2d();
-              t2D->add_vertex(v2);
-            }
-        }
+      if ((*eit)->v1())
+      {
+        vtol_vertex_2d_sptr v1 = (*eit)->v1()->cast_to_vertex_2d();
+        t2D->add_vertex(v1);
+      }
+      if ((*eit)->v2())
+      {
+        vtol_vertex_2d_sptr v2 = (*eit)->v2()->cast_to_vertex_2d();
+        t2D->add_vertex(v2);
+      }
     }
+  }
   t2D->post_redraw();
 }
 
@@ -437,16 +438,16 @@ draw_polylines(vcl_vector<vsol_polyline_2d_sptr > const& polys,
 #if 0
   vgui_image_tableau_sptr itab = t2D->get_image_tableau();
   if (!itab)
-    {
-      vcl_cout << "In bmvv_f_manager::draw_polylines - null image tab\n";
-      return;
-    }
+  {
+    vcl_cout << "In bmvv_f_manager::draw_polylines - null image tab\n";
+    return;
+  }
 #endif
   for (vcl_vector<vsol_polyline_2d_sptr>::const_iterator pit = polys.begin();
        pit != polys.end(); pit++)
-    {
-      t2D->add_vsol_polyline_2d(*pit, style);
-    }
+  {
+    t2D->add_vsol_polyline_2d(*pit, style);
+  }
 
   t2D->post_redraw();
 }
@@ -465,16 +466,16 @@ draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines,
 #if 0
   vgui_image_tableau_sptr itab = t2D->get_image_tableau();
   if (!itab)
-    {
-      vcl_cout << "In bmvv_f_manager::draw_edges - null image tab\n";
-      return;
-    }
+  {
+    vcl_cout << "In bmvv_f_manager::draw_edges - null image tab\n";
+    return;
+  }
 #endif
   for (vcl_vector<vsol_line_2d_sptr>::const_iterator lit = lines.begin();
        lit != lines.end(); lit++)
-    {
-      t2D->add_vsol_line_2d(*lit,style);
-    }
+  {
+    t2D->add_vsol_line_2d(*lit,style);
+  }
 
   t2D->post_redraw();
 }
@@ -493,16 +494,16 @@ draw_conics(vcl_vector<vsol_conic_2d_sptr > const& conics,
 #if 0
   vgui_image_tableau_sptr itab = t2D->get_image_tableau();
   if (!itab)
-    {
-      vcl_cout << "In bmvv_f_manager::draw_edges - null image tab\n";
-      return;
-    }
+  {
+    vcl_cout << "In bmvv_f_manager::draw_edges - null image tab\n";
+    return;
+  }
 #endif
   for (vcl_vector<vsol_conic_2d_sptr>::const_iterator lit = conics.begin();
        lit != conics.end(); lit++)
-    {
-      t2D->add_vsol_conic_2d(*lit,style);
-    }
+  {
+    t2D->add_vsol_conic_2d(*lit,style);
+  }
   t2D->post_redraw();
 }
 
@@ -519,16 +520,16 @@ draw_points(vcl_vector<vsol_point_2d_sptr> const& points, const vgui_style_sptr&
 #if 0
   vgui_image_tableau_sptr itab = t2D->get_image_tableau();
   if (!itab)
-    {
-      vcl_cout << "In bmvv_f_manager::draw_edges - null image tab\n";
-      return;
-    }
+  {
+    vcl_cout << "In bmvv_f_manager::draw_edges - null image tab\n";
+    return;
+  }
 #endif
   for (vcl_vector<vsol_point_2d_sptr>::const_iterator pit = points.begin();
        pit != points.end(); pit++)
-    {
-      t2D->add_vsol_point_2d(*pit,style);
-    }
+  {
+    t2D->add_vsol_point_2d(*pit,style);
+  }
 
   t2D->post_redraw();
 }
@@ -541,21 +542,21 @@ void bmvv_f_manager::draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions,
     return;
   for (vcl_vector<vtol_intensity_face_sptr>::iterator rit = regions.begin();
        rit != regions.end(); rit++)
+  {
+    vtol_face_2d_sptr f = (*rit)->cast_to_face_2d();
+    t2D->add_face(f);
+    if (verts)
     {
-      vtol_face_2d_sptr f = (*rit)->cast_to_face_2d();
-      t2D->add_face(f);
-      if (verts)
-        {
-          vcl_vector<vtol_vertex_sptr> vts;
-          f->vertices(vts);
-          for (vcl_vector<vtol_vertex_sptr>::iterator vit = vts.begin();
-               vit != vts.end(); vit++)
-            {
-              vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
-              t2D->add_vertex(v);
-            }
-        }
+      vcl_vector<vtol_vertex_sptr> vts;
+      f->vertices(vts);
+      for (vcl_vector<vtol_vertex_sptr>::iterator vit = vts.begin();
+           vit != vts.end(); vit++)
+      {
+        vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
+        t2D->add_vertex(v);
+      }
     }
+  }
   t2D->post_redraw();
 }
 
@@ -582,15 +583,15 @@ void bmvv_f_manager::load_image()
   bool pyrm = false;
   vil_image_resource_sptr image;
   if (vul_file::is_directory(image_filename.c_str()))
+  {
+    vil_pyramid_image_resource_sptr pyr =
+      vil_load_pyramid_resource(image_filename.c_str());
+    if (pyr)
     {
-      vil_pyramid_image_resource_sptr pyr =
-        vil_load_pyramid_resource(image_filename.c_str());
-      if (pyr)
-        {
-          image = pyr.ptr();
-          pyrm = true;
-        }
+      image = pyr.ptr();
+      pyrm = true;
     }
+  }
   if (!image)
     image = vil_load_image_resource(image_filename.c_str());
 
@@ -598,25 +599,25 @@ void bmvv_f_manager::load_image()
     return;
 
   if (greyscale&&!pyrm)
-    {
-      vil_image_view<unsigned char> grey_view =
-        brip_vil_float_ops::convert_to_grey(*image);
-      image = vil_new_image_resource_of_view(grey_view);
-    }
+  {
+    vil_image_view<unsigned char> grey_view =
+      brip_vil_float_ops::convert_to_grey(*image);
+    image = vil_new_image_resource_of_view(grey_view);
+  }
 
   if (sblock&&!pyrm)
-    {
-      vil_blocked_image_resource_sptr bimage = vil_new_blocked_image_facade(image);
-      image = (vil_image_resource*)(vil_new_cached_image_resource(bimage)).ptr();
-    }
+  {
+    vil_blocked_image_resource_sptr bimage = vil_new_blocked_image_facade(image);
+    image = (vil_image_resource*)(vil_new_cached_image_resource(bimage)).ptr();
+  }
 
   vgui_range_map_params_sptr rmps = range_params(image);
 
   if (first_)
-    {
-      this->set_selected_grid_image(image, rmps);
-      first_ = false;
-    }
+  {
+    this->set_selected_grid_image(image, rmps);
+    first_ = false;
+  }
   else
     this->add_image(image, rmps);
 }
@@ -637,30 +638,30 @@ void bmvv_f_manager::save_image()
     return;
   vil_image_resource_sptr img = this->selected_image();
   if (!img)
-    {
-      vcl_cerr << "Null image in bmvv_f_manager::save_image\n";
-      return;
-    }
+  {
+    vcl_cerr << "Null image in bmvv_f_manager::save_image\n";
+    return;
+  }
   vil_image_resource_sptr save_image = img;
   if (byte)
-    {
-      vil_image_view<unsigned char> byte_view = brip_vil_float_ops::convert_to_byte(img);
-      save_image = vil_new_image_resource_of_view(byte_view);
-    }
+  {
+    vil_image_view<unsigned char> byte_view = brip_vil_float_ops::convert_to_byte(img);
+    save_image = vil_new_image_resource_of_view(byte_view);
+  }
   if (size_block>0)
-    {
-      vil_blocked_image_resource_sptr bim =
-        vil_new_blocked_image_resource(image_file.c_str(),
-                                       save_image->ni(), save_image->nj(),
-                                       save_image->nplanes(),
-                                       save_image->pixel_format(),
-                                       size_block, size_block,
-                                       "tiff");
-      vil_image_view_base_sptr view = save_image->get_view();
-      if (view)
-        bim->vil_image_resource::put_view(*view);
-      return;
-    }
+  {
+    vil_blocked_image_resource_sptr bim =
+      vil_new_blocked_image_resource(image_file.c_str(),
+                                     save_image->ni(), save_image->nj(),
+                                     save_image->nplanes(),
+                                     save_image->pixel_format(),
+                                     size_block, size_block,
+                                     "tiff");
+    vil_image_view_base_sptr view = save_image->get_view();
+    if (view)
+      bim->vil_image_resource::put_view(*view);
+    return;
+  }
 
   if (!vil_save_image_resource(save_image, image_file.c_str(), type.c_str()))
     vcl_cerr << "bmvv_f_manager::save_image operation failed\n";
@@ -669,31 +670,31 @@ void bmvv_f_manager::save_image()
 void bmvv_f_manager::set_range_params()
 {
   bgui_image_tableau_sptr itab = this->selected_image_tab();
-  if(!itab)
+  if (!itab)
     return;
   vgui_range_map_params_sptr rmps = itab->map_params();
-  if(!rmps)
-    {
-      vil_image_resource_sptr img = itab->get_image_resource();
-      if(!img)
-        return;
-      rmps = range_params(img);
-      if(!rmps)
-        return;
-    }
+  if (!rmps)
+  {
+    vil_image_resource_sptr img = itab->get_image_resource();
+    if (!img)
+      return;
+    rmps = range_params(img);
+    if (!rmps)
+      return;
+  }
   unsigned nc = rmps->n_components_;
   static double min = static_cast<double>(rmps->min_L_),
-    max = static_cast<double>(rmps->max_L_);
+                max = static_cast<double>(rmps->max_L_);
   static float gamma = rmps->gamma_L_;
   static bool invert = rmps->invert_;
   static bool gl_map = rmps->use_glPixelMap_;
   static bool cache = rmps->cache_mapped_pix_;
-  if(nc==3)
-    {
-      min = static_cast<double>(rmps->min_R_);
-      max = static_cast<double>(rmps->max_R_);
-      gamma = rmps->gamma_R_;
-    }
+  if (nc==3)
+  {
+    min = static_cast<double>(rmps->min_R_);
+    max = static_cast<double>(rmps->max_R_);
+    gamma = rmps->gamma_R_;
+  }
   vgui_dialog range_dlg("Set Range Map Params");
   range_dlg.field("Range min:", min);
   range_dlg.field("Range max:", max);
@@ -703,7 +704,7 @@ void bmvv_f_manager::set_range_params()
   range_dlg.checkbox("Cache Pixels", cache);
   if (!range_dlg.ask())
     return;
-  if(nc==1)
+  if (nc==1)
     rmps= new vgui_range_map_params(min, max, gamma, invert,
                                     gl_map, cache);
   else if (nc == 3)
@@ -725,19 +726,19 @@ void bmvv_f_manager::read_corrs()
     return;
   vcl_ifstream corr_istr(corr_file.c_str());
   corrs_.clear();
-  if(!brct_algos::read_brct_corrs(corr_istr, corrs_))
-    {
-      vcl_cout << "Read Failed\n";
-      return;
-    }
-  for(unsigned i = 0; i< corrs_.size(); ++i)
+  if (!brct_algos::read_brct_corrs(corr_istr, corrs_))
+  {
+    vcl_cout << "Read Failed\n";
+    return;
+  }
+  for (unsigned i = 0; i< corrs_.size(); ++i)
     vcl_cout << "c[" << i << "]:" << *(corrs_[i]) << '\n';
 }
 
 void bmvv_f_manager::save_corrs()
 {
   vcl_cout <<"Saving these corrs\n";
-  for(unsigned i = 0; i< corrs_.size(); ++i)
+  for (unsigned i = 0; i< corrs_.size(); ++i)
     vcl_cout << "c[" << i << "]:" << *(corrs_[i]) << '\n';
   vgui_dialog corr_dlg("Save Correspondences");
   static vcl_string corr_file = "";
@@ -746,12 +747,13 @@ void bmvv_f_manager::save_corrs()
   if (!corr_dlg.ask())
     return;
   vcl_ofstream corr_ostr(corr_file.c_str());
-  if(!brct_algos::write_brct_corrs(corr_ostr, corrs_))
-    {
-      vcl_cout << "Read Failed\n";
-      return;
-    }
+  if (!brct_algos::write_brct_corrs(corr_ostr, corrs_))
+  {
+    vcl_cout << "Read Failed\n";
+    return;
+  }
 }
+
 void bmvv_f_manager::read_f_matrix()
 {
   vgui_dialog f_dlg("Read F Matrix");
@@ -761,7 +763,7 @@ void bmvv_f_manager::read_f_matrix()
   if (!f_dlg.ask())
     return;
   vcl_ifstream f_istr(f_file.c_str());
-  if(!f_istr.is_open()){
+  if (!f_istr.is_open()){
     vcl_cout << "Read Failed\n";
     return;
   }
@@ -779,7 +781,7 @@ void bmvv_f_manager::save_f_matrix()
   if (!f_dlg.ask())
     return;
   vcl_ofstream f_ostr(f_file.c_str());
-  if(!f_ostr.is_open()){
+  if (!f_ostr.is_open()){
     vcl_cout << "Write Failed\n";
     return;
   }
@@ -790,35 +792,35 @@ void bmvv_f_manager::save_f_matrix()
 void bmvv_f_manager::display_corrs()
 {
   unsigned n = corrs_.size();
-  if(!n)
+  if (!n)
     return;
   brct_corr_sptr bc = corrs_[0];
   int ncams = bc->n_cams();
   unsigned cols = grid_->cols();
-  if(cols!=ncams)
+  if (cols!=ncams)
     return;
   //assume left image is in col 0 and right image is in col 1
   bgui_vtol2D_tableau_sptr t0 = this->vtol2D_tab_at(0, 0);
-  if(!t0)
+  if (!t0)
     return;
   bgui_vtol2D_tableau_sptr t1 = this->vtol2D_tab_at(1, 0);
-  if(!t1)
+  if (!t1)
     return;
   vgui_style_sptr st = vgui_style::new_style(0,1,0,3,1);
   //clear the map
   corr_map_.clear();
-  for(unsigned i=0; i<n; ++i)
-    {
-      bc = corrs_[i];
-      vgl_point_2d<double> m0(bc->match(0)), m1(bc->match(1));
-      vsol_point_2d_sptr p0 = new vsol_point_2d(m0);
-      vsol_point_2d_sptr p1 = new vsol_point_2d(m1);
-      bgui_vsol_soview2D_point* sov = t0->add_vsol_point_2d(p0,st);
-      int id = sov->get_id();
-      int n = corrs_.size();
-      corr_map_[id]=n-1;
-      t1->add_vsol_point_2d(p1,st);
-    }
+  for (unsigned i=0; i<n; ++i)
+  {
+    bc = corrs_[i];
+    vgl_point_2d<double> m0(bc->match(0)), m1(bc->match(1));
+    vsol_point_2d_sptr p0 = new vsol_point_2d(m0);
+    vsol_point_2d_sptr p1 = new vsol_point_2d(m1);
+    bgui_vsol_soview2D_point* sov = t0->add_vsol_point_2d(p0,st);
+    int id = sov->get_id();
+    int n = corrs_.size();
+    corr_map_[id]=n-1;
+    t1->add_vsol_point_2d(p1,st);
+  }
   t0->post_redraw();
   t1->post_redraw();
 }
@@ -826,25 +828,25 @@ void bmvv_f_manager::display_corrs()
 void bmvv_f_manager::display_right_epi_lines()
 {
   unsigned n = corrs_.size();
-  if(!n)
+  if (!n)
     return;
   brct_corr_sptr bc = corrs_[0];
   int ncams = bc->n_cams();
   unsigned cols = grid_->cols();
-  if(cols!=ncams)
+  if (cols!=ncams)
     return;
   //assume left image is in col 0 and right image is in col 1
   bgui_vtol2D_tableau_sptr t1 = this->vtol2D_tab_at(1, 0);
-  if(!t1)
+  if (!t1)
     return;
   vgui_style_sptr st =vgui_style::new_style(0,1,0,1,2);
-  for(unsigned i=0; i<n; ++i)
-    {
-      bc = corrs_[i];
-      vgl_homg_point_2d<double> hpl=bc->match(0);
-      vgl_homg_line_2d<double> hl = fm_.r_epipolar_line(hpl);
-      t1->add_infinite_line(hl.a(), hl.b(), hl.c());
-    }
+  for (unsigned i=0; i<n; ++i)
+  {
+    bc = corrs_[i];
+    vgl_homg_point_2d<double> hpl=bc->match(0);
+    vgl_homg_line_2d<double> hl = fm_.r_epipolar_line(hpl);
+    t1->add_infinite_line(hl.a(), hl.b(), hl.c());
+  }
   t1->post_redraw();
 }
 
@@ -854,29 +856,29 @@ void bmvv_f_manager::display_picked_epi_line()
   unsigned row=0, col=0;
   grid_->get_last_selected_position(&col, &row);
   bgui_picker_tableau_sptr picktab = this->selected_picker_tab();
-  if(!picktab)
+  if (!picktab)
     return;
   //get a point
   float x=0, y=0;
   picktab->pick_point(&x, &y);
   vgl_homg_point_2d<double> hp(x,y);
   vgl_homg_line_2d<double> hl;
-  if(col==0)
-    {
-      bgui_vtol2D_tableau_sptr t1 = this->vtol2D_tab_at(1, 0);
-      hl = fm_.r_epipolar_line(hp);      
-      t1->add_infinite_line(hl.a(), hl.b(), hl.c());
-      t1->post_redraw();
-      return;
-    }
-  if(col==1)
-    {
-      bgui_vtol2D_tableau_sptr t0 = this->vtol2D_tab_at(0, 0);
-      hl = fm_.l_epipolar_line(hp);      
-      t0->add_infinite_line(hl.a(), hl.b(), hl.c());
-      t0->post_redraw();
-      return;
-    }
+  if (col==0)
+  {
+    bgui_vtol2D_tableau_sptr t1 = this->vtol2D_tab_at(1, 0);
+    hl = fm_.r_epipolar_line(hp);
+    t1->add_infinite_line(hl.a(), hl.b(), hl.c());
+    t1->post_redraw();
+    return;
+  }
+  if (col==1)
+  {
+    bgui_vtol2D_tableau_sptr t0 = this->vtol2D_tab_at(0, 0);
+    hl = fm_.l_epipolar_line(hp);
+    t0->add_infinite_line(hl.a(), hl.b(), hl.c());
+    t0->post_redraw();
+    return;
+  }
   vcl_cout << "Draw failed\n";
 }
 
@@ -887,15 +889,15 @@ brct_corr_sptr  bmvv_f_manager::get_selected_corr()
   //take the last selected
   int n = ids.size();
   if (!n)
-    {
-      vcl_cout << "Nothing selected\n";
-      return 0;
-    }
+  {
+    vcl_cout << "Nothing selected\n";
+    return 0;
+  }
   unsigned int i = corr_map_[ids[n-1]];
   if (i<corrs_.size())
-    {
-      return corrs_[i];
-    }
+  {
+    return corrs_[i];
+  }
   vcl_cout << "Bogus correspondence\n";
   return 0;
 }
@@ -905,13 +907,13 @@ void bmvv_f_manager::create_correspondence()
   //determine if left or right image
   unsigned row=0, col=0;
   grid_->get_last_selected_position(&col, &row);
-  if(col!=0)
-    {
-      vcl_cout << "Select left pane and retry\n";
-      return;
-    }
+  if (col!=0)
+  {
+    vcl_cout << "Select left pane and retry\n";
+    return;
+  }
   bgui_picker_tableau_sptr picktab = this->selected_picker_tab();
-  if(!picktab)
+  if (!picktab)
     return;
   //get a point
   float x=0, y=0;
@@ -921,30 +923,31 @@ void bmvv_f_manager::create_correspondence()
   corrs_.push_back(bc);
   bgui_vtol2D_tableau_sptr t0 = this->vtol2D_tab_at(0, 0);
   vsol_point_2d_sptr p = new vsol_point_2d(x, y);
-  vgui_style_sptr st = vgui_style::new_style(1,1,0,5,1);	
+  vgui_style_sptr st = vgui_style::new_style(1,1,0,5,1);
   bgui_vsol_soview2D_point* sov = t0->add_vsol_point_2d(p,st);
   int id = sov->get_id();
   int n = corrs_.size();
   corr_map_[id]=n-1;
 }
+
 void bmvv_f_manager::pick_correspondence()
 {
   brct_corr_sptr bc = this->get_selected_corr();
-  if(!bc)
-    {
-      vcl_cout << "No correspondence selected\n";
-      return;
-    }
+  if (!bc)
+  {
+    vcl_cout << "No correspondence selected\n";
+    return;
+  }
   //determine if left or right image
   unsigned row=0, col=0;
   grid_->get_last_selected_position(&col, &row);
-  if(col!=1)
-    {
-      vcl_cout << "Select right pane and retry\n";
-      return;
-    }
+  if (col!=1)
+  {
+    vcl_cout << "Select right pane and retry\n";
+    return;
+  }
   bgui_picker_tableau_sptr picktab = this->selected_picker_tab();
-  if(!picktab)
+  if (!picktab)
     return;
   //get a point
   float x=0, y=0;
@@ -955,24 +958,26 @@ void bmvv_f_manager::pick_correspondence()
   vgui_style_sptr st = vgui_style::new_style(1,1,0,5,1);
   t1->add_vsol_point_2d(p,st);
 }
+
 bool bmvv_f_manager::point_lists(vcl_vector<vgl_point_2d<double> >& lpts,
                                  vcl_vector<vgl_point_2d<double> >& rpts)
 {
   unsigned n = corrs_.size();
-  if(!n)
+  if (!n)
     return false;
   lpts.clear(); rpts.clear();
-  for(unsigned i = 0; i<n; ++i)
-    {
-      brct_corr_sptr bc = corrs_[i];
-      if(!bc->valid(0)||!bc->valid(1))
-        continue;
-      vgl_homg_point_2d<double> m0 = bc->match(0), m1 = bc->match(1);
-      lpts.push_back(vgl_point_2d<double>(m0));
-      rpts.push_back(vgl_point_2d<double>(m1));
-    }
+  for (unsigned i = 0; i<n; ++i)
+  {
+    brct_corr_sptr bc = corrs_[i];
+    if (!bc->valid(0)||!bc->valid(1))
+      continue;
+    vgl_homg_point_2d<double> m0 = bc->match(0), m1 = bc->match(1);
+    lpts.push_back(vgl_point_2d<double>(m0));
+    rpts.push_back(vgl_point_2d<double>(m1));
+  }
   return true;
 }
+
 void bmvv_f_manager::compute_f_matrix()
 {
   vgui_dialog f_dlg("Compute F Matrix");
@@ -984,49 +989,50 @@ void bmvv_f_manager::compute_f_matrix()
     return;
   vcl_vector<vgl_point_2d<double> > lpts, rpts;
   vcl_vector< vgl_homg_point_2d<double> > pir, pil;
-  if(!this->point_lists(lpts, rpts))
+  if (!this->point_lists(lpts, rpts))
+  {
+    vcl_cout << "No corresponding points to compute f matrix\n";
+    return;
+  }
+  if (trans)
+  {
+    for (unsigned i = 0; i<lpts.size(); ++i)
     {
-      vcl_cout << "No corresponding points to compute f matrix\n";
-      return;
+      pir.push_back(vgl_homg_point_2d<double>(rpts[i]));
+      pil.push_back(vgl_homg_point_2d<double>(lpts[i]));
     }
-  if(trans)
+    vpgl_fm_compute_2_point cl2;
+    cl2.compute( pir, pil, fm_);
+  }
+  else
+  {
+    vpgl_fm_compute_ransac fmcr;
+    fmcr.set_generate_all(true);
+    fmcr.set_outlier_threshold(2);
+    fmcr.compute( rpts, lpts, fm_);
+    vnl_matrix_fixed<double,3,3> fm_vnl = fm_.get_matrix();
+    vcl_cout << "\nRansac estimated fundamental matrix:\n" << fm_vnl << '\n';
+    vcl_vector<bool> outliers = fmcr.outliers;
+    vcl_vector<double> res = fmcr.residuals;
+    vcl_cout << "\noutliers\n";
+    for (unsigned i = 0; i<outliers.size(); ++i)
+      vcl_cout << "O[" << i << "]= " << outliers[i]
+               << "  e "<< res[i] <<  '\n';
+    //Form new point sets throwing out outliers
+    for (unsigned i = 0; i<lpts.size(); ++i)
     {
-      for(unsigned i = 0; i<lpts.size(); ++i)
-        {
-          pir.push_back(vgl_homg_point_2d<double>(rpts[i]));
-          pil.push_back(vgl_homg_point_2d<double>(lpts[i]));
-        }
-      vpgl_fm_compute_2_point cl2;
-      cl2.compute( pir, pil, fm_);
-    
-    }else{
-      vpgl_fm_compute_ransac fmcr;
-      fmcr.set_generate_all(true);
-      fmcr.set_outlier_threshold(2);
-      fmcr.compute( rpts, lpts, fm_);
-      vnl_matrix_fixed<double,3,3> fm_vnl = fm_.get_matrix();
-      vcl_cout << "\nRansac estimated fundamental matrix:\n" << fm_vnl << '\n';  
-      vcl_vector<bool> outliers = fmcr.outliers;
-      vcl_vector<double> res = fmcr.residuals;
-      vcl_cout << "\noutliers \n";
-      for(unsigned i = 0; i<outliers.size(); ++i)
-        vcl_cout << "O[" << i << "]= " << outliers[i] 
-                 << "  e "<< res[i] <<  '\n';
-      //Form new point sets throwing out outliers
-      for(unsigned i = 0; i<lpts.size(); ++i)
-        {
-          if(outliers[i])
-            continue;
-          pir.push_back(vgl_homg_point_2d<double>(rpts[i]));
-          pil.push_back(vgl_homg_point_2d<double>(lpts[i]));
-        }
-      if(refine){
-        vpgl_fm_compute_8_point cl;
-        cl.compute( pir, pil, fm_);
-        vnl_matrix_fixed<double,3,3> fl_vnl = fm_.get_matrix();
-        vcl_cerr << "\nLinear refined fundamental matrix:\n" << fl_vnl << '\n';
-      }
+      if (outliers[i])
+        continue;
+      pir.push_back(vgl_homg_point_2d<double>(rpts[i]));
+      pil.push_back(vgl_homg_point_2d<double>(lpts[i]));
     }
+    if (refine){
+      vpgl_fm_compute_8_point cl;
+      cl.compute( pir, pil, fm_);
+      vnl_matrix_fixed<double,3,3> fl_vnl = fm_.get_matrix();
+      vcl_cerr << "\nLinear refined fundamental matrix:\n" << fl_vnl << '\n';
+    }
+  }
   vgl_homg_point_2d<double> er,  el;
   fm_.get_epipoles(er, el);
   vcl_cout << "Right Epipole " << er << '\n';
@@ -1055,8 +1061,9 @@ void bmvv_f_manager::intensity_profile()
     delete ip_dialog;
     return;
   }
-delete ip_dialog;
+  delete ip_dialog;
 }
+
 void bmvv_f_manager::intensity_histogram()
 {
   vil_image_resource_sptr img = selected_image();
@@ -1068,7 +1075,7 @@ void bmvv_f_manager::intensity_histogram()
   bgui_image_utils iu(img);
   bgui_graph_tableau_sptr g = iu.hist_graph();
 
-  if(!g)
+  if (!g)
   { vcl_cout << "In bmvv_f_manager::intensity_histogram()- color images not supported\n";
     return;
   }
@@ -1084,6 +1091,7 @@ void bmvv_f_manager::intensity_histogram()
   }
   delete ip_dialog;
 }
+
 void bmvv_f_manager::load_image_and_cam()
 {
   static bool greyscale = false;
@@ -1102,15 +1110,15 @@ void bmvv_f_manager::load_image_and_cam()
   bool pyrm = false;
   vil_image_resource_sptr image;
   if (vul_file::is_directory(image_file.c_str()))
+  {
+    vil_pyramid_image_resource_sptr pyr =
+      vil_load_pyramid_resource(image_file.c_str());
+    if (pyr)
     {
-      vil_pyramid_image_resource_sptr pyr =
-        vil_load_pyramid_resource(image_file.c_str());
-      if (pyr)
-        {
-          image = pyr.ptr();
-          pyrm = true;
-        }
+      image = pyr.ptr();
+      pyrm = true;
     }
+  }
   if (!image)
     image = vil_load_image_resource(image_file.c_str());
 
@@ -1118,30 +1126,28 @@ void bmvv_f_manager::load_image_and_cam()
     return;
 
   if (greyscale&&!pyrm)
-    {
-      vil_image_view<unsigned char> grey_view =
-        brip_vil_float_ops::convert_to_grey(*image);
-      image = vil_new_image_resource_of_view(grey_view);
-    }
-
-  
+  {
+    vil_image_view<unsigned char> grey_view =
+      brip_vil_float_ops::convert_to_grey(*image);
+    image = vil_new_image_resource_of_view(grey_view);
+  }
 
   vgui_range_map_params_sptr rmps = range_params(image);
 
   if (first_)
-    {
-      this->set_selected_grid_image(image, rmps);
-      first_ = false;
-    }
+  {
+    this->set_selected_grid_image(image, rmps);
+    first_ = false;
+  }
   else
     this->add_image(image, rmps);
-  
+
   vcl_ifstream f_istr(cam_file.c_str());
-  if(!f_istr.is_open()){
+  if (!f_istr.is_open()) {
     vcl_cout << "Camera read failed\n";
     return;
   }
-  
+
   vpgl_proj_camera<double>* cam = new vpgl_proj_camera<double>;
   f_istr >> *cam;
   cam_map_[vtabs_.size()-1]=cam;
@@ -1173,33 +1179,32 @@ void bmvv_f_manager::save_world()
   if (!world_dlg.ask())
     return;
   vcl_ofstream world_ostr(world_file.c_str());
-brct_algos::write_world_points(world_ostr, world_);
-  
+  brct_algos::write_world_points(world_ostr, world_);
 }
 
 void bmvv_f_manager::project_world()
 {
   vgui_style_sptr st = vgui_style::new_style(1,1,0,5,1);
-  for(unsigned v = 0; v<vtabs_.size(); ++v)
+  for (unsigned v = 0; v<vtabs_.size(); ++v)
+  {
+    bgui_vtol2D_tableau_sptr t = vtabs_[v];
+    vpgl_proj_camera<double>* cam = cam_map_[v];
+    t->clear_all();
+    for (unsigned i = 0; i<world_.size(); ++i)
     {
-      bgui_vtol2D_tableau_sptr t = vtabs_[v];
-      vpgl_proj_camera<double>* cam = cam_map_[v];
-      t->clear_all();
-      for(unsigned i = 0; i<world_.size(); ++i)
-        {
-          vgl_point_2d<double> pg = cam->project(world_[i]);
-          vsol_point_2d_sptr ps = new vsol_point_2d(pg);
-          t->add_vsol_point_2d(ps,st);
-        }
+      vgl_point_2d<double> pg = cam->project(world_[i]);
+      vsol_point_2d_sptr ps = new vsol_point_2d(pg);
+      t->add_vsol_point_2d(ps,st);
     }
+  }
 }
 
 void bmvv_f_manager::reconstruct_world()
 {
-  if(cam_map_.size()!=2)
-    {
-      vcl_cout << "Need exactly two cameras to reconstruct world\n";
-      return;
-    }
+  if (cam_map_.size()!=2)
+  {
+    vcl_cout << "Need exactly two cameras to reconstruct world\n";
+    return;
+  }
   brct_algos::reconstruct_corrs(corrs_, *(cam_map_[0]), *(cam_map_[1]), world_);
 }

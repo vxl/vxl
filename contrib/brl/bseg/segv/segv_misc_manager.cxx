@@ -108,10 +108,10 @@ segv_misc_manager *segv_misc_manager::instance_ = 0;
 segv_misc_manager *segv_misc_manager::instance()
 {
   if (!instance_)
-    {
-      instance_ = new segv_misc_manager();
-      instance_->init();
-    }
+  {
+    instance_ = new segv_misc_manager();
+    instance_->init();
+  }
   return segv_misc_manager::instance_;
 }
 
@@ -153,32 +153,32 @@ range_params(vil_image_resource_sptr const& image)
 
   //Check if the image is blocked
   vil_blocked_image_resource_sptr bir = blocked_image_resource(image);
-  if(bir)
-    { gl_map = true; cache = false;}
+  if (bir)
+  { gl_map = true; cache = false; }
 
   //Check if the image is a pyramid
   bool pyr = image->get_property(vil_property_pyramid, 0);
-  if(pyr)
-    { gl_map = true; cache = false;}
+  if (pyr)
+  { gl_map = true; cache = false; }
   //Get max min parameters
 
   double min=0, max=0;
   unsigned n_components = image->nplanes();
   vgui_range_map_params_sptr rmps;
   if (n_components == 1)
-    {
-      bgui_image_utils iu(image);
-      iu.range(min, max);
-      rmps= new vgui_range_map_params(min, max, gamma, invert,
-                                      gl_map, cache);
-    }
+  {
+    bgui_image_utils iu(image);
+    iu.range(min, max);
+    rmps= new vgui_range_map_params(min, max, gamma, invert,
+                                    gl_map, cache);
+  }
   else if (n_components == 3)
-    {
-      min = 0; max = 255;//for now - ultimately need to compute color histogram
-      rmps = new vgui_range_map_params(min, max, min, max, min, max,
-                                       gamma, gamma, gamma, invert,
-                                       gl_map, cache);
-    }
+  {
+    min = 0; max = 255;//for now - ultimately need to compute color histogram
+    rmps = new vgui_range_map_params(min, max, min, max, min, max,
+                                     gamma, gamma, gamma, invert,
+                                     gl_map, cache);
+  }
   return rmps;
 }
 
@@ -191,10 +191,10 @@ set_selected_grid_image(vil_image_resource_sptr const& image,
   if (!itab)
     this->add_image(image, rmps);
   else
-    {
-      itab->set_image_resource(image);
-      itab->set_mapping(rmps);
-    }
+  {
+    itab->set_image_resource(image);
+    itab->set_mapping(rmps);
+  }
   itab->post_redraw();
 }
 
@@ -225,6 +225,7 @@ add_image(vil_image_resource_sptr const& image,
   grid_->get_last_selected_position(&col, &row);
   this->add_image_at(image, col, row, rmps);
 }
+
 #if 0
 //-----------------------------------------------------------------------------
 //: remove the selected image
@@ -247,6 +248,7 @@ void segv_misc_manager::convert_to_grey()
   this->add_image(gimg);
 }
 #endif
+
 //: Get the image tableau for the currently selected grid cell
 bgui_image_tableau_sptr segv_misc_manager::selected_image_tab()
 {
@@ -254,13 +256,13 @@ bgui_image_tableau_sptr segv_misc_manager::selected_image_tab()
   grid_->get_last_selected_position(&col, &row);
   vgui_tableau_sptr top_tab = grid_->get_tableau_at(col, row);
   if (top_tab)
-    {
-      bgui_image_tableau_sptr itab;
-      itab.vertical_cast(vgui_find_below_by_type_name(top_tab,
-                                                      vcl_string("vgui_image_tableau")));
-      if (itab)
-        return itab;
-    }
+  {
+    bgui_image_tableau_sptr itab;
+    itab.vertical_cast(vgui_find_below_by_type_name(top_tab,
+                                                    vcl_string("vgui_image_tableau")));
+    if (itab)
+      return itab;
+  }
   vcl_cout << "Unable to get bgui_image_tableau at (" << col
            << ", " << row << ")\n";
   return bgui_image_tableau_sptr();
@@ -273,13 +275,13 @@ segv_misc_manager::vtol2D_tab_at(const unsigned col,
 {
   vgui_tableau_sptr top_tab = grid_->get_tableau_at(col, row);
   if (top_tab)
-    {
-      bgui_vtol2D_tableau_sptr v2D;
-      v2D.vertical_cast(vgui_find_below_by_type_name(top_tab,
-                                                     vcl_string("bgui_vtol2D_tableau")));
-      if (v2D)
-        return v2D;
-    }
+  {
+    bgui_vtol2D_tableau_sptr v2D;
+    v2D.vertical_cast(vgui_find_below_by_type_name(top_tab,
+                                                   vcl_string("bgui_vtol2D_tableau")));
+    if (v2D)
+      return v2D;
+  }
   vcl_cout << "Unable to get bgui_vtol2D_tableau at (" << col
            << ", " << row << ")\n";
   return bgui_vtol2D_tableau_sptr();
@@ -300,13 +302,13 @@ bgui_picker_tableau_sptr segv_misc_manager::selected_picker_tab()
   grid_->get_last_selected_position(&col, &row);
   vgui_tableau_sptr top_tab = grid_->get_tableau_at(col, row);
   if (top_tab)
-    {
-      bgui_picker_tableau_sptr pick;
-      pick.vertical_cast(vgui_find_below_by_type_name(top_tab,
-                                                      vcl_string("bgui_picker_tableau")));
-      if (pick)
-        return pick;
-    }
+  {
+    bgui_picker_tableau_sptr pick;
+    pick.vertical_cast(vgui_find_below_by_type_name(top_tab,
+                                                    vcl_string("bgui_picker_tableau")));
+    if (pick)
+      return pick;
+  }
   vcl_cout << "Unable to get bgui_picker_tableau at (" << col
            << ", " << row << ")\n";
   return bgui_picker_tableau_sptr();
@@ -332,11 +334,11 @@ vil_image_resource_sptr segv_misc_manager::image_at(const unsigned col,
   itab.vertical_cast(vgui_find_below_by_type_name(top_tab,
                                                   vcl_string("vgui_image_tableau")));
   if (!itab)
-    {
-      vcl_cout << "Unable to get bgui_image_tableau at (" << col
-               << ", " << row << ")\n";
-      return 0;
-    }
+  {
+    vcl_cout << "Unable to get bgui_image_tableau at (" << col
+             << ", " << row << ")\n";
+    return 0;
+  }
   return itab->get_image_resource();
 }
 
@@ -359,11 +361,11 @@ void segv_misc_manager::clear_all()
   unsigned ncols = grid_->cols(), nrows = grid_->rows();
   for (unsigned r=0; r<nrows; ++r)
     for (unsigned c=0; c<ncols; ++c)
-      {
-        bgui_vtol2D_tableau_sptr t = this->vtol2D_tab_at(c, r);
-        if (t)
-          t->clear_all();
-      }
+    {
+      bgui_vtol2D_tableau_sptr t = this->vtol2D_tab_at(c, r);
+      if (t)
+        t->clear_all();
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -380,30 +382,30 @@ segv_misc_manager::draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges,
 #if 0
   vgui_image_tableau_sptr itab = t2D->get_image_tableau();
   if (!itab)
-    {
-      vcl_cout << "In segv_misc_manager::draw_edges - null image tab\n";
-      return;
-    }
+  {
+    vcl_cout << "In segv_misc_manager::draw_edges - null image tab\n";
+    return;
+  }
 #endif
   for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
        eit != edges.end(); eit++)
+  {
+    t2D->add_edge(*eit);
+    //optionally display the edge vertices
+    if (verts)
     {
-      t2D->add_edge(*eit);
-      //optionally display the edge vertices
-      if (verts)
-        {
-          if ((*eit)->v1())
-            {
-              vtol_vertex_2d_sptr v1 = (*eit)->v1()->cast_to_vertex_2d();
-              t2D->add_vertex(v1);
-            }
-          if ((*eit)->v2())
-            {
-              vtol_vertex_2d_sptr v2 = (*eit)->v2()->cast_to_vertex_2d();
-              t2D->add_vertex(v2);
-            }
-        }
+      if ((*eit)->v1())
+      {
+        vtol_vertex_2d_sptr v1 = (*eit)->v1()->cast_to_vertex_2d();
+        t2D->add_vertex(v1);
+      }
+      if ((*eit)->v2())
+      {
+        vtol_vertex_2d_sptr v2 = (*eit)->v2()->cast_to_vertex_2d();
+        t2D->add_vertex(v2);
+      }
     }
+  }
   t2D->post_redraw();
 }
 
@@ -422,16 +424,16 @@ draw_polylines(vcl_vector<vsol_polyline_2d_sptr > const& polys,
 #if 0
   vgui_image_tableau_sptr itab = t2D->get_image_tableau();
   if (!itab)
-    {
-      vcl_cout << "In segv_misc_manager::draw_polylines - null image tab\n";
-      return;
-    }
+  {
+    vcl_cout << "In segv_misc_manager::draw_polylines - null image tab\n";
+    return;
+  }
 #endif
   for (vcl_vector<vsol_polyline_2d_sptr>::const_iterator pit = polys.begin();
        pit != polys.end(); pit++)
-    {
-      t2D->add_vsol_polyline_2d(*pit, style);
-    }
+  {
+    t2D->add_vsol_polyline_2d(*pit, style);
+  }
 
   t2D->post_redraw();
 }
@@ -450,16 +452,16 @@ draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines,
 #if 0
   vgui_image_tableau_sptr itab = t2D->get_image_tableau();
   if (!itab)
-    {
-      vcl_cout << "In segv_misc_manager::draw_edges - null image tab\n";
-      return;
-    }
+  {
+    vcl_cout << "In segv_misc_manager::draw_edges - null image tab\n";
+    return;
+  }
 #endif
   for (vcl_vector<vsol_line_2d_sptr>::const_iterator lit = lines.begin();
        lit != lines.end(); lit++)
-    {
-      t2D->add_vsol_line_2d(*lit,style);
-    }
+  {
+    t2D->add_vsol_line_2d(*lit,style);
+  }
 
   t2D->post_redraw();
 }
@@ -478,16 +480,16 @@ draw_conics(vcl_vector<vsol_conic_2d_sptr > const& conics,
 #if 0
   vgui_image_tableau_sptr itab = t2D->get_image_tableau();
   if (!itab)
-    {
-      vcl_cout << "In segv_misc_manager::draw_edges - null image tab\n";
-      return;
-    }
+  {
+    vcl_cout << "In segv_misc_manager::draw_edges - null image tab\n";
+    return;
+  }
 #endif
   for (vcl_vector<vsol_conic_2d_sptr>::const_iterator lit = conics.begin();
        lit != conics.end(); lit++)
-    {
-      t2D->add_vsol_conic_2d(*lit,style);
-    }
+  {
+    t2D->add_vsol_conic_2d(*lit,style);
+  }
   t2D->post_redraw();
 }
 
@@ -504,16 +506,16 @@ draw_points(vcl_vector<vsol_point_2d_sptr> const& points, const vgui_style_sptr&
 #if 0
   vgui_image_tableau_sptr itab = t2D->get_image_tableau();
   if (!itab)
-    {
-      vcl_cout << "In segv_misc_manager::draw_edges - null image tab\n";
-      return;
-    }
+  {
+    vcl_cout << "In segv_misc_manager::draw_edges - null image tab\n";
+    return;
+  }
 #endif
   for (vcl_vector<vsol_point_2d_sptr>::const_iterator pit = points.begin();
        pit != points.end(); pit++)
-    {
-      t2D->add_vsol_point_2d(*pit,style);
-    }
+  {
+    t2D->add_vsol_point_2d(*pit,style);
+  }
 
   t2D->post_redraw();
 }
@@ -526,21 +528,21 @@ void segv_misc_manager::draw_regions(vcl_vector<vtol_intensity_face_sptr>& regio
     return;
   for (vcl_vector<vtol_intensity_face_sptr>::iterator rit = regions.begin();
        rit != regions.end(); rit++)
+  {
+    vtol_face_2d_sptr f = (*rit)->cast_to_face_2d();
+    t2D->add_face(f);
+    if (verts)
     {
-      vtol_face_2d_sptr f = (*rit)->cast_to_face_2d();
-      t2D->add_face(f);
-      if (verts)
-        {
-          vcl_vector<vtol_vertex_sptr> vts;
-          f->vertices(vts);
-          for (vcl_vector<vtol_vertex_sptr>::iterator vit = vts.begin();
-               vit != vts.end(); vit++)
-            {
-              vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
-              t2D->add_vertex(v);
-            }
-        }
+      vcl_vector<vtol_vertex_sptr> vts;
+      f->vertices(vts);
+      for (vcl_vector<vtol_vertex_sptr>::iterator vit = vts.begin();
+           vit != vts.end(); vit++)
+      {
+        vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
+        t2D->add_vertex(v);
+      }
     }
+  }
   t2D->post_redraw();
 }
 
@@ -567,15 +569,15 @@ void segv_misc_manager::load_image()
   bool pyrm = false;
   vil_image_resource_sptr image;
   if (vul_file::is_directory(image_filename.c_str()))
+  {
+    vil_pyramid_image_resource_sptr pyr =
+      vil_load_pyramid_resource(image_filename.c_str());
+    if (pyr)
     {
-      vil_pyramid_image_resource_sptr pyr =
-        vil_load_pyramid_resource(image_filename.c_str());
-      if (pyr)
-        {
-          image = pyr.ptr();
-          pyrm = true;
-        }
+      image = pyr.ptr();
+      pyrm = true;
     }
+  }
   if (!image)
     image = vil_load_image_resource(image_filename.c_str());
 
@@ -583,25 +585,25 @@ void segv_misc_manager::load_image()
     return;
 
   if (greyscale&&!pyrm)
-    {
-      vil_image_view<unsigned char> grey_view =
-        brip_vil_float_ops::convert_to_grey(*image);
-      image = vil_new_image_resource_of_view(grey_view);
-    }
+  {
+    vil_image_view<unsigned char> grey_view =
+      brip_vil_float_ops::convert_to_grey(*image);
+    image = vil_new_image_resource_of_view(grey_view);
+  }
 
   if (sblock&&!pyrm)
-    {
-      vil_blocked_image_resource_sptr bimage = vil_new_blocked_image_facade(image);
-      image = (vil_image_resource*)(vil_new_cached_image_resource(bimage)).ptr();
-    }
+  {
+    vil_blocked_image_resource_sptr bimage = vil_new_blocked_image_facade(image);
+    image = (vil_image_resource*)(vil_new_cached_image_resource(bimage)).ptr();
+  }
 
   vgui_range_map_params_sptr rmps = range_params(image);
 
   if (first_)
-    {
-      this->set_selected_grid_image(image, rmps);
-      first_ = false;
-    }
+  {
+    this->set_selected_grid_image(image, rmps);
+    first_ = false;
+  }
   else
     this->add_image(image, rmps);
 }
@@ -622,50 +624,51 @@ void segv_misc_manager::save_image()
     return;
   vil_image_resource_sptr img = this->selected_image();
   if (!img)
-    {
-      vcl_cerr << "Null image in segv_misc_manager::save_image\n";
-      return;
-    }
+  {
+    vcl_cerr << "Null image in segv_misc_manager::save_image\n";
+    return;
+  }
   vil_image_resource_sptr save_image = img;
   if (byte)
-    {
-      vil_image_view<unsigned char> byte_view = brip_vil_float_ops::convert_to_byte(img);
-      save_image = vil_new_image_resource_of_view(byte_view);
-    }
+  {
+    vil_image_view<unsigned char> byte_view = brip_vil_float_ops::convert_to_byte(img);
+    save_image = vil_new_image_resource_of_view(byte_view);
+  }
   if (size_block>0)
-    {
-      vil_blocked_image_resource_sptr bim =
-        vil_new_blocked_image_resource(image_file.c_str(),
-                                       save_image->ni(), save_image->nj(),
-                                       save_image->nplanes(),
-                                       save_image->pixel_format(),
-                                       size_block, size_block,
-                                       "tiff");
-      vil_image_view_base_sptr view = save_image->get_view();
-      if (view)
-        bim->vil_image_resource::put_view(*view);
-      return;
-    }
+  {
+    vil_blocked_image_resource_sptr bim =
+      vil_new_blocked_image_resource(image_file.c_str(),
+                                     save_image->ni(), save_image->nj(),
+                                     save_image->nplanes(),
+                                     save_image->pixel_format(),
+                                     size_block, size_block,
+                                     "tiff");
+    vil_image_view_base_sptr view = save_image->get_view();
+    if (view)
+      bim->vil_image_resource::put_view(*view);
+    return;
+  }
 
   if (!vil_save_image_resource(save_image, image_file.c_str(), type.c_str()))
     vcl_cerr << "segv_misc_manager::save_image operation failed\n";
 }
+
 #if 0
 void segv_misc_manager::set_range_params()
 {
   bgui_image_tableau_sptr itab = this->selected_image_tab();
-  if(!itab)
+  if (!itab)
     return;
   vgui_range_map_params_sptr rmps = itab->map_params();
-  if(!rmps)
-    {
-      vil_image_resource_sptr img = itab->get_image_resource();
-      if(!img)
-        return;
-      rmps = range_params(img);
-      if(!rmps)
-        return;
-    }
+  if (!rmps)
+  {
+    vil_image_resource_sptr img = itab->get_image_resource();
+    if (!img)
+      return;
+    rmps = range_params(img);
+    if (!rmps)
+      return;
+  }
   unsigned nc = rmps->n_components_;
   static double min = static_cast<double>(rmps->min_L_),
     max = static_cast<double>(rmps->max_L_);
@@ -673,12 +676,12 @@ void segv_misc_manager::set_range_params()
   static bool invert = rmps->invert_;
   static bool gl_map = rmps->use_glPixelMap_;
   static bool cache = rmps->cache_mapped_pix_;
-  if(nc==3)
-    {
-      min = static_cast<double>(rmps->min_R_);
-      max = static_cast<double>(rmps->max_R_);
-      gamma = rmps->gamma_R_;
-    }
+  if (nc==3)
+  {
+    min = static_cast<double>(rmps->min_R_);
+    max = static_cast<double>(rmps->max_R_);
+    gamma = rmps->gamma_R_;
+  }
   vgui_dialog range_dlg("Set Range Map Params");
   range_dlg.field("Range min:", min);
   range_dlg.field("Range max:", max);
@@ -688,7 +691,7 @@ void segv_misc_manager::set_range_params()
   range_dlg.checkbox("Cache Pixels", cache);
   if (!range_dlg.ask())
     return;
-  if(nc==1)
+  if (nc==1)
     rmps= new vgui_range_map_params(min, max, gamma, invert,
                                     gl_map, cache);
   else if (nc == 3)
@@ -700,29 +703,31 @@ void segv_misc_manager::set_range_params()
   itab->set_mapping(rmps);
 }
 #endif
+
 //: Transform a polyline according to a rotation and scale in the plane.
-static vsol_polyline_2d_sptr 
+static vsol_polyline_2d_sptr
 trans_poly(const double alpha,
            const double theta,
            vsol_polyline_2d_sptr const & base_poly)
-{ 
-  if(!base_poly)
+{
+  if (!base_poly)
     return 0;
   double e = vnl_math::e;
   double scale = vcl_pow(e, alpha);
   vcl_vector<vsol_point_2d_sptr> verts, trans_verts;
-  for(unsigned i=0; i<base_poly->size(); ++i)
-    {
-      vsol_point_2d_sptr bv = base_poly->vertex(i);
-      double x = bv->x(), y = bv->y();
-      double sx = x*scale, sy = y*scale;
-      double rsx = sx*vcl_cos(theta)-sy*vcl_sin(theta);
-      double rsy = sx*vcl_sin(theta)+sy*vcl_cos(theta);
-      vsol_point_2d_sptr tv = new vsol_point_2d(rsx, rsy);
-      trans_verts.push_back(tv);
-    }
+  for (unsigned i=0; i<base_poly->size(); ++i)
+  {
+    vsol_point_2d_sptr bv = base_poly->vertex(i);
+    double x = bv->x(), y = bv->y();
+    double sx = x*scale, sy = y*scale;
+    double rsx = sx*vcl_cos(theta)-sy*vcl_sin(theta);
+    double rsy = sx*vcl_sin(theta)+sy*vcl_cos(theta);
+    vsol_point_2d_sptr tv = new vsol_point_2d(rsx, rsy);
+    trans_verts.push_back(tv);
+  }
   return new vsol_polyline_2d(trans_verts);
 }
+
 //:Generate a specific polyline as 3 sides of a square
 static vsol_polyline_2d_sptr base_poly()
 {
@@ -735,9 +740,10 @@ static vsol_polyline_2d_sptr base_poly()
   verts.push_back(p1);   verts.push_back(p0);
   return new vsol_polyline_2d(verts);
 }
-//:the optimum projection onto a one-dimensional sub-manifold of 
-// rotation and scale. alpha_hat and theta_hat are the parameters of the
-// 1-d sub-manifold, alpha = t*alpha_hat, theta = t*theta_hat.
+
+//:optimum projection onto a one-dimensional sub-manifold of rotation and scale.
+// \a alpha_hat and \a theta_hat are the parameters of the
+// 1-d sub-manifold, \a alpha = t*alpha_hat, \a theta = t*theta_hat.
 static double topt(const double alpha_hat, const double theta_hat,
                    const double alpha, const double theta)
 {
@@ -745,6 +751,7 @@ static double topt(const double alpha_hat, const double theta_hat,
   t /= (alpha_hat*alpha_hat + theta_hat*theta_hat);
   return t;
 }
+
 // Experiment with projecting a shape onto a manifold
 void segv_misc_manager::project_on_subm()
 {
@@ -781,15 +788,16 @@ void segv_misc_manager::project_on_subm()
   tpolys.push_back(popt);
   this->draw_polylines(tpolys,pstyle);
   tpolys.clear();
-  for(double t = 0; t<=tmax; t+=tinc)
-    {
-      alp = t*alpha_hat;
-      thet = t*theta_hat;
-      vsol_polyline_2d_sptr p = trans_poly(alp, thet, base);
-      tpolys.push_back(p);
-    }
+  for (double t = 0; t<=tmax; t+=tinc)
+  {
+    alp = t*alpha_hat;
+    thet = t*theta_hat;
+    vsol_polyline_2d_sptr p = trans_poly(alp, thet, base);
+    tpolys.push_back(p);
+  }
   this->draw_polylines(tpolys);
-}  
+}
+
 void segv_misc_manager::project_on_articulation()
 {
   this->clear_display();
@@ -798,7 +806,7 @@ void segv_misc_manager::project_on_articulation()
   vgui_style_sptr pstyle = vgui_style::new_style(1.0f, 0.5f, 0.1f,
                                                1.0f, 5.0f);
   unsigned njoints = 4;
-  static vcl_vector<double> joint_trans(njoints, 0);  
+  static vcl_vector<double> joint_trans(njoints, 0);
   static double basis_angle = 0.25*vnl_math::pi;
   joint_trans[0] = 0.25*vnl_math::pi;
   joint_trans[1] = 0.25*vnl_math::pi;
@@ -818,19 +826,19 @@ void segv_misc_manager::project_on_articulation()
   vcl_vector<vsol_polyline_2d_sptr> tpolys;
 
   vcl_vector<double> basis(njoints, basis_angle);
-  for(double t = - 2.5; t<=2.5; t+=0.25)
-    {
-      bvgl_articulated_poly_sptr manifold = 
-        new bvgl_articulated_poly(njoints,links);
-      manifold->sub_manifold_transform(t, basis);
-      tpolys.push_back((vsol_polyline_2d*)(manifold.ptr()));
-    }
+  for (double t = - 2.5; t<=2.5; t+=0.25)
+  {
+    bvgl_articulated_poly_sptr manifold =
+      new bvgl_articulated_poly(njoints,links);
+    manifold->sub_manifold_transform(t, basis);
+    tpolys.push_back((vsol_polyline_2d*)(manifold.ptr()));
+  }
   this->draw_polylines(tpolys);
   tpolys.clear();
   tpolys.push_back((vsol_polyline_2d*)(ap.ptr()));
   this->draw_polylines(tpolys, mstyle);
   //get the projection
-  bvgl_articulated_poly_sptr proj = 
+  bvgl_articulated_poly_sptr proj =
     bvgl_articulated_poly::projection(ap, basis);
   tpolys.clear();
   tpolys.push_back((vsol_polyline_2d*)(proj.ptr()));

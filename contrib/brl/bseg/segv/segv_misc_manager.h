@@ -27,7 +27,6 @@
 #include <vgui/vgui_style_sptr.h>
 #include <vgui/vgui_grid_tableau_sptr.h>
 #include <vgui/vgui_range_map_params_sptr.h>
-#include <vgui/vgui_style_sptr.h>
 #include <bgui/bgui_picker_tableau_sptr.h>
 #include <bgui/bgui_vtol2D_tableau_sptr.h>
 #include <bgui/bgui_image_tableau_sptr.h>
@@ -53,7 +52,7 @@ class segv_misc_manager : public vgui_wrapper_tableau
   void intensity_profile();
   void intensity_histogram();
 #endif
-  
+
  //:utilities
   void clear_display();
   void clear_all();
@@ -69,7 +68,7 @@ class segv_misc_manager : public vgui_wrapper_tableau
   vgui_window* get_window(){return win_;}
   void set_window(vgui_window* win){win_=win;}
 
- protected: 
+ protected:
   void draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges, bool verts=false);
   void draw_lines(vcl_vector<vsol_line_2d_sptr> const & line_segs,
                   const vgui_style_sptr& style = NULL);
@@ -86,14 +85,14 @@ class segv_misc_manager : public vgui_wrapper_tableau
 
   void set_selected_grid_image(vil_image_resource_sptr const& image,
                                vgui_range_map_params_sptr const& rmps =0);
-                               
+
   void add_image_at(vil_image_resource_sptr const& image,
                     const unsigned col, const unsigned row,
                     vgui_range_map_params_sptr const& rmps = 0);
-                    
+
   void add_image(vil_image_resource_sptr const& image,
                  vgui_range_map_params_sptr const& rmps =0);
-                 
+
   vil_image_resource_sptr selected_image();
   vil_image_resource_sptr image_at(const unsigned col, const unsigned row);
   bool
