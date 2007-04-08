@@ -1,6 +1,7 @@
 // This is gel/vtol/tests/test_vertex_2d.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_algorithm.h> // vcl_find()
+#include <vnl/vnl_double_2.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vsol/vsol_point_2d.h>
