@@ -37,7 +37,7 @@ SET(vil3d_sources
 AUX_SOURCE_DIRECTORY(Templates vil3d_sources)
 
 ADD_LIBRARY(vil3d ${vil3d_sources})
-TARGET_LINK_LIBRARIES( vil3d vil vsl vcl )
+TARGET_LINK_LIBRARIES( vil3d vil vul vsl vcl )
 
 INSTALL_TARGETS(/lib vil3d)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/vil3d ${vil3d_sources})
