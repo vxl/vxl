@@ -44,9 +44,9 @@ static void test_perspective_camera()
   vgl_h_matrix_3d<double> tr;
   tr.set_identity();
   tr.set_rotation_about_axis(axis, theta);
-  vcl_cout <<"Rotation Matrix \n" << tr << '\n';
-  vpgl_perspective_camera<double> P_rot = 
-    vpgl_perspective_camera<double>::postmultiply(P, tr);  
+  vcl_cout <<"Rotation Matrix\n" << tr << '\n';
+  vpgl_perspective_camera<double> P_rot =
+    vpgl_perspective_camera<double>::postmultiply(P, tr);
   vcl_cout << "P_rot\n" << P_rot << '\n';
 
   // test look_at
@@ -60,22 +60,22 @@ static void test_perspective_camera()
     bool infront = !P.is_behind_camera(target);
     vgl_point_2d<double> tgt(P(target));
     vgl_point_2d<double> abv(P(above));
-    vcl_cout << "target projects to "<< tgt << vcl_endl;
-    vcl_cout << "this point should be above "<< abv << vcl_endl;
+    vcl_cout << "target projects to "<< tgt << vcl_endl
+             << "this point should be above "<< abv << vcl_endl;
     TEST("look_at - in front of camera", infront, true);
     TEST_NEAR("look_at - target projects to prin. pt.", (tgt - K.principal_point()).length(), 0.0, 1e-8);
     // a point above the target should project above in the image (-Y is "up" in the image)
     TEST("look_at - correct direction is up", (tgt.x()-abv.x())<1e-8 && tgt.y()>abv.y(), true );
   }
-  
+
   vgl_homg_point_3d<double> X(10.,0,0);
   vgl_point_2d<double> hur = P_rot.project(X);
   vcl_cout << X << '\n' << hur << '\n';
   TEST_NEAR("test postmultipy with pure rotation", hur.x(), 5340.43, 0.01);
   //shift down 1 unit in z
   tr.set_translation(0.0, 0.0, -1.0);
-  vpgl_perspective_camera<double> P_rott = 
-    vpgl_perspective_camera<double>::postmultiply(P, tr);  
+  vpgl_perspective_camera<double> P_rott =
+    vpgl_perspective_camera<double>::postmultiply(P, tr);
   vgl_point_2d<double> hurt = P_rott.project(X);
   vcl_cout << X << '\n' << hurt << '\n';
   TEST_NEAR("test postmultipy with general Euclidean", hurt.x(),  7843.59, 0.01);
@@ -95,8 +95,8 @@ static void test_perspective_camera()
     vpgl_perspective_camera<double> P2 = P1;
     P1 = vpgl_align_up( P0, P1 );
     P1 = vpgl_align_down( P0, P1 );
-    TEST_NEAR( "testing align up/down:", 
-      (P2.get_matrix()-P1.get_matrix()).frobenius_norm(), 0.0, .01 );
+    TEST_NEAR( "testing align up/down:",
+               (P2.get_matrix()-P1.get_matrix()).frobenius_norm(), 0.0, .01 );
   }
 
   // Test finite backprojection.
@@ -108,17 +108,19 @@ static void test_perspective_camera()
     P0.look_at( vgl_homg_point_3d<double>(0,0,0) );
 
     bool all_succeeded = true;
-    for( int i = 0; i < 4; i++ ){
+    for ( int i = 0; i < 4; ++i )
+    {
       vgl_point_3d<double> p;
-      if( i == 0 ) p.set(0,0,0);
-      if( i == 1 ) p.set(-1,0,-1);
-      if( i == 2 ) p.set(-1,-1,0);
-      if( i == 3 ) p.set(0,-1,-1);
+           if ( i == 0 ) p.set(0,0,0);
+      else if ( i == 1 ) p.set(-1,0,-1);
+      else if ( i == 2 ) p.set(-1,-1,0);
+      else /* i == 3 */  p.set(0,-1,-1);
       vgl_homg_point_2d<double> ip = P0.project( vgl_homg_point_3d<double>(p) );
       vgl_line_3d_2_points<double> l =
         P0.backproject( vgl_point_2d<double>( ip.x()/ip.w(), ip.y()/ip.w() ) );
-      all_succeeded = all_succeeded && parallel( l.point1()-p, l.point2()-p, .001 ) &&
-        !P0.is_behind_camera( vgl_homg_point_3d<double>( l.point2() ) );
+      all_succeeded = all_succeeded &&
+                      parallel( l.point1()-p, l.point2()-p, .001 ) &&
+                      !P0.is_behind_camera( vgl_homg_point_3d<double>( l.point2() ) );
     }
     TEST( "testing finite backprojection:", all_succeeded, true );
   }

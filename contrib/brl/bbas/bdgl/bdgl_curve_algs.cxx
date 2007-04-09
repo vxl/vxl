@@ -150,24 +150,28 @@ bool bdgl_curve_algs::closest_point_near(vdgl_edgel_chain_sptr const& ec,
                                          double & yc)
 {
   int last = ec->size()-1;//last edgel
-  if (index<0||index>last)
-    return false;
   vnl_double_2 p(x, y);
   vnl_double_2 p0, p1, pc;
-  if (index<last)
+
+  if (index<0)
+    return false;
+  else if (index<last)
   {
     p0[0]=(*ec)[index].x();
     p0[1]=(*ec)[index].y();
     p1[0]=(*ec)[index+1].x();
     p1[1]=(*ec)[index+1].y();
   }
-  if (index==last)
+  else if (index==last)
   {
     p0[0]=(*ec)[index-1].x();
     p0[1]=(*ec)[index-1].y();
     p1[0]=(*ec)[index].x();
     p1[1]=(*ec)[index].y();
   }
+  else // index > last
+    return false;
+
   double t = interpolate_segment(p0, p1, p, pc);
   vcl_cout << "At " << p << " t = " << t << '\n';
   xc = pc[0];   yc = pc[1];
