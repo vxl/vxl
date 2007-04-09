@@ -169,6 +169,9 @@ SOURCE=.\recon.cxx
 # Begin Source File
 SOURCE=.\cal.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\ftool.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

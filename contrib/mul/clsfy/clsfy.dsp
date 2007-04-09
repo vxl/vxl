@@ -160,9 +160,6 @@ SOURCE=.\Templates/vsl_vector_io+clsfy_classifier_1d~-.cxx
 SOURCE=.\Templates/vbl_array_2d+clsfy_binary_threshold_1d-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_io_array_2d+clsfy_binary_threshold_1d-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\clsfy_rbf_svm.cxx
 # End Source File
 # Begin Source File
