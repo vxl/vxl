@@ -1,4 +1,6 @@
 #include <segv/segv_menus.h>
+#include <segv/segv_misc_manager.h>
+#include <segv/segv_misc_menus.h>
 #include <segv/segv_segmentation_manager.h>
 #include <segv/segv_vil_menus.h>
 #include <segv/segv_vil_segmentation_manager.h>
