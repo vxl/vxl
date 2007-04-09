@@ -23,11 +23,9 @@
 #include <vcl_algorithm.h>
 #include <vcl_sstream.h>
 #include <vil/vil_stream.h>
-#include <vil/vil_open.h>
 #include <vil/vil_property.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_memory_chunk.h>
-#include <vil/vil_crop.h>
 #include <vil/vil_copy.h>
 #include <vil/vil_image_list.h>
 #include "vil_tiff_header.h"
@@ -671,16 +669,16 @@ vil_tiff_image::get_block( unsigned block_index_i,
   //necessary to set the TIFF directory and file header corresponding to 
   //this resource according to the index
   //
-  if(nimages_>1)
-    {
-      if (TIFFSetDirectory(t_.tif(), index_)<=0)
-        return 0;
-      vil_tiff_header* h = new vil_tiff_header(t_.tif());
-      //Cast away const
-      vil_tiff_image* ti = (vil_tiff_image*)this;
-      delete h_;
-      ti->h_=h;
-    }
+  if (nimages_>1)
+  {
+    if (TIFFSetDirectory(t_.tif(), index_)<=0)
+      return 0;
+    vil_tiff_header* h = new vil_tiff_header(t_.tif());
+    //Cast away const
+    vil_tiff_image* ti = (vil_tiff_image*)this;
+    delete h_;
+    ti->h_=h;
+  }
 
   vil_image_view_base_sptr view = 0;
 

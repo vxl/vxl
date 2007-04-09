@@ -10,7 +10,6 @@
 #include "vgui_wx_adaptor.h"
 #include "vgui_wx_menu.h"
 #include <vgui/vgui_macro.h>
-#include <vgui/vgui_command.h>
 #include <vgui/vgui_popup_params.h>
 
 #include <wx/log.h>
@@ -533,7 +532,7 @@ namespace
     case wxMOUSE_BTN_MIDDLE : return vgui_MIDDLE;
     case wxMOUSE_BTN_RIGHT  : return vgui_RIGHT;
     default:
-      vcl_cerr << "VGUI wx Error: Unknown button identifier." << vcl_endl;
+      vcl_cerr << "VGUI wx Error: Unknown button identifier.\n";
       return vgui_BUTTON_NULL;
     }
   }
@@ -579,7 +578,7 @@ namespace
       else
       {
 #ifdef __WXDEBUG__
-        vcl_cerr << "VGUI wx Error: Unknown key code." << vcl_endl;
+        vcl_cerr << "VGUI wx Error: Unknown key code.\n";
 #endif
         return vgui_KEY_NULL;
       }

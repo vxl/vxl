@@ -3,11 +3,8 @@
 #include <vcl_iostream.h>
 #include <vcl_cstdio.h>
 #include <vcl_string.h>
-#include <vil/vil_stream.h>
-#include <vil/vil_open.h>
 #include <vil/vil_new.h>
 #include <vil/vil_load.h>
-#include <vil/vil_copy.h>
 #include <vil/vil_property.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vil/vil_image_view.h>
@@ -17,7 +14,6 @@
 #include <vil/file_formats/vil_tiff.h>
 #include <vil/vil_image_list.h>
 #include <vul/vul_file.h>
-#include <vul/vul_file_iterator.h>
 #include <vil/file_formats/vil_tiff_header.h>
 #define DEBUG
 

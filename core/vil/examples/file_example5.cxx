@@ -5,9 +5,6 @@
 
 #include <vcl_iostream.h>
 #include <vil/vil_load.h>
-#include <vil/vil_crop.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_print.h>
 
 //: Analyse an image file without reading the pixels.
 int main(int argc, char** argv)
@@ -33,10 +30,10 @@ int main(int argc, char** argv)
 
   vcl_cout << "Loaded " << argv[1] <<vcl_endl;
 
-  vcl_cout<<"Image is:" <<
-    "size: " << data->ni() << 'x' << data->nj() << '\n' <<
-    "planes: " << data->nplanes() << '\n' <<
-    "pixel type: " << data->pixel_format() << vcl_endl;
+  vcl_cout<<"Image is:\n"
+          <<" size: " << data->ni() << 'x' << data->nj() << '\n'
+          <<" planes: " << data->nplanes() << '\n'
+          <<" pixel type: " << data->pixel_format() << vcl_endl;
 
   return 0;
 }

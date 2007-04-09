@@ -6,10 +6,7 @@
 // \date   Feb 2005
 
 #include <vcl_list.h>
-
 #include <vgui/vgui_tableau.h>
-#include <vgui/vgui_button.h>
-
 #include "vgui_slider_tableau_sptr.h"
 
 //: A slider implementation

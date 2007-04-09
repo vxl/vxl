@@ -11,8 +11,6 @@
 #include <vcl_cstring.h> // for std::memcpy()
 #include <vil/vil_stream_fstream.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_crop.h>
-#include <vil/vil_copy.h>
 #include <vil/vil_property.h>
 #include "vil_nitf2_data_mask_table.h"
 #include "vil_nitf2_des.h"

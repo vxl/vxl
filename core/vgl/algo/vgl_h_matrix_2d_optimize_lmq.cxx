@@ -7,7 +7,6 @@
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_inverse.h>
-#include <vnl/vnl_transpose.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vgl/algo/vgl_norm_trans_2d.h>
 

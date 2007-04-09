@@ -4,7 +4,6 @@
 #include <vcl_limits.h>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_distance.h>
 #include <vgl/vgl_line_3d_2_points.h>
 
 static void test_plane_intersection()
@@ -23,7 +22,6 @@ static void test_plane_intersection()
   vgl_line_3d_2_points<double> l3(vgl_point_3d<double>(0,10,0),vgl_point_3d<double>(10,10,-10));
   TEST("O is not on l3",collinear(l3, vgl_point_3d<double>(0,0,0)), false);
   TEST("plane_norm is perpendicular to l3 direction)", dot_product(pl1.normal(), l3.direction()), 0.0);
-
 }
 
 static void test_direction_vector()

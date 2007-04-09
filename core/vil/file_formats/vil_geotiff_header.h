@@ -24,51 +24,49 @@
 #include <vcl_vector.h>
 #include <vxl_config.h>
 #include <vcl_cmath.h>
-#include <vil/vil_pixel_format.h>
 #include <vil/file_formats/vil_tiff_header.h>
 #include <tiffio.h>
 #include <geotiffio.h>
 
-
 class vil_geotiff_header
 {
  public:
-   
-   typedef enum {UNDEF=-1, NORTH=0, SOUTH=1} GTIF_HEMISPH; 
-   vil_geotiff_header(TIFF* tif);
 
-   // destructor frees up gtif
-   virtual ~vil_geotiff_header() { GTIFFree(gtif_); }
+  typedef enum {UNDEF=-1, NORTH=0, SOUTH=1} GTIF_HEMISPH;
+  vil_geotiff_header(TIFF* tif);
 
-   int gtif_number_of_keys() { return number_of_geokeys_; }
+  // destructor frees up gtif
+  virtual ~vil_geotiff_header() { GTIFFree(gtif_); }
 
-   bool gtif_tiepoints(vcl_vector<vcl_vector<double> > &tiepoints);
+  int gtif_number_of_keys() { return number_of_geokeys_; }
 
-   bool gtif_pixelscale(double &scale_x, double &scale_y, double &scale_z);
+  bool gtif_tiepoints(vcl_vector<vcl_vector<double> > &tiepoints);
 
-   //:returns the matrix in an   
-   bool gtif_trans_matrix (double* &trans_matrix);
-  
-   //: returns the Zone and the Hemisphere (0 for N, 1 for S);
-   bool PCS_WGS84_UTM_zone(int &zone, GTIF_HEMISPH &hemisph);
+  bool gtif_pixelscale(double &scale_x, double &scale_y, double &scale_z);
 
-   //: <key> : key id
-   // <value>: a single value or an array of values
-   // <size>:  the size of individial key values
-   // <length> : the number of values in the value array
-   // <type>: the type of the key
-   bool get_key_value(geokey_t key, void** value, 
+  //:returns the matrix in the argument
+  bool gtif_trans_matrix (double* &trans_matrix);
+
+  //: returns the Zone and the Hemisphere (0 for N, 1 for S);
+  bool PCS_WGS84_UTM_zone(int &zone, GTIF_HEMISPH &hemisph);
+
+  //: <key> : key id
+  // <value>: a single value or an array of values
+  // <size>:  the size of individial key values
+  // <length> : the number of values in the value array
+  // <type>: the type of the key
+  bool get_key_value(geokey_t key, void** value,
                      int& size, int& length, tagtype_t& type);
 
   void print_gtif(){ if (gtif_) GTIFPrint(gtif_, 0, 0); }
 
  private:
 
-   TIFF* tif_;
-   GTIF* gtif_;
+  TIFF* tif_;
+  GTIF* gtif_;
 
   // the current version is 1, changes only Tag's key structure is changed
-  unsigned short key_directory_version_;   
+  unsigned short key_directory_version_;
 
   // the revision number is key_revision.minor_revision
   unsigned short key_revision_;
@@ -84,9 +82,8 @@ class vil_geotiff_header
 
   bool gtif_modeltype (modeltype_t& type);
   bool gtif_rastertype (rastertype_t&);
-  bool geounits (geounits_t&); 
+  bool geounits (geounits_t&);
   bool geographic_type(geographic_t&);
-
 };
 
 #endif //vil_geotiff_header_h_

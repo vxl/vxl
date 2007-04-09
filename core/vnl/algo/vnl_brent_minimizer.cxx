@@ -11,7 +11,6 @@
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>
 
-#include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_bracket_minimum.h>
 

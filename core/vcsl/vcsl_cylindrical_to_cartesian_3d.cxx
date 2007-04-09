@@ -2,7 +2,6 @@
 #include "vcsl_cylindrical_to_cartesian_3d.h"
 #include <vcl_cassert.h>
 #include <vcl_cmath.h> // for sqrt(), cos(), sin()
-#include <vcsl/vcsl_spatial.h>
 
 //---------------------------------------------------------------------------
 // Is `this' invertible at time `time'?

@@ -4,7 +4,6 @@
 #include <vnl/vnl_sparse_matrix.h>
 #include <vnl/algo/vnl_sparse_lu.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/vnl_random.h>
 
 #include "test_util.h"
 //for debugging purposes

@@ -8,7 +8,6 @@
 #include <vxl_config.h> // for vxl_byte
 #include <vil/algo/vil_suppress_non_max_edges.h>
 #include <vil/algo/vil_sobel_3x3.h>
-#include <vil/vil_print.h>
 
 static void test_algo_suppress_non_max_edges()
 {

@@ -11,7 +11,6 @@
 #include <vcl_set.h>
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
-#include <vil/vil_stream.h>
 #include <vcl_string.h>
 #include <vcl_istream.h>
 #include <vcl_ostream.h>
@@ -216,9 +215,9 @@ class vil_nitf2_tagged_record
     bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_long& out_value) const;
 #endif //VXL_HAS_INT_64
 
-  // Sets out_value to a flattened list of the values of the array field element 
-  // specified by tag and index. If index is the empty vector, then out_values 
-  // hold all instances of the field. If index partially specifies value instances, 
+  // Sets out_value to a flattened list of the values of the array field element
+  // specified by tag and index. If index is the empty vector, then out_values
+  // hold all instances of the field. If index partially specifies value instances,
   // the out_values hold all instances of the field selected by the partial index.
   // Appends to, instead of clearing, out_values if clear_out_values is false.
   // Returns 0 if such a field is not found or is of the wrong type.

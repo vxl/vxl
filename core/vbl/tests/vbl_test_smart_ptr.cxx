@@ -2,7 +2,6 @@
 #include "vbl_test_classes.h"
 #include <vcl_list.h>
 #include <vcl_iostream.h>
-#include <vbl/vbl_smart_ptr.h>
 
 //----------------------------------------------------------------------
 

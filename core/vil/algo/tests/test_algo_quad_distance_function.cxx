@@ -3,7 +3,6 @@
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/algo/vil_quad_distance_function.h>
-#include <vil/vil_print.h>
 
 void test_algo_quad_envelope_float()
 {

@@ -20,7 +20,6 @@
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_iosfwd.h>
-#include <vbl/vbl_smart_ptr.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_modifier.h>
 #include <vgui/vgui_command_sptr.h>

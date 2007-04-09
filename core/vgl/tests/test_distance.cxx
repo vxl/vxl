@@ -6,7 +6,6 @@
 
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_line_segment_2d.h>
 #include <vgl/vgl_distance.h>
 #include <vcl_cmath.h> // for vcl_sqrt()
