@@ -4,11 +4,11 @@
 // \file
 // \author J.L. Mundy
 
-// include for project points menu option
-#include <vpgl/vpgl_rational_camera.h>
 #if 1 //JLM
 #include <vpgl/file_formats/vpgl_nitf_rational_camera.h>
 #endif
+// include for project points menu option
+#include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/algo/vpgl_fm_compute_ransac.h>
 #include <vpgl/algo/vpgl_fm_compute_8_point.h>
 #include <vpgl/algo/vpgl_fm_compute_2_point.h>
@@ -22,26 +22,16 @@
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
 #include <vul/vul_file.h>
-#include <vnl/vnl_matlab_read.h>
 #include <vnl/vnl_numeric_traits.h>
-#include <vnl/vnl_math.h>
-#include <vbl/vbl_array_2d.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_blocked_image_resource.h>
 #include <vil/vil_pyramid_image_resource.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_new.h>
-#include <vil/vil_copy.h>
-#include <vil/vil_math.h>
-#include <vil/vil_decimate.h>
 #include <vil/vil_property.h>
-#include <vil/vil_flip.h>
-#include <vil/vil_convert.h>
 #include <vil/algo/vil_sobel_1x3.h>
 #include <bgui/bgui_vsol_soview2D.h>
-#include <vdgl/vdgl_digital_curve.h>
-#include <vdgl/vdgl_digital_curve_sptr.h>
 #if 0
 #ifdef HAS_XERCES
 #include <bxml/bxml_vtol_io.h>
@@ -64,8 +54,6 @@
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_style_sptr.h>
 #include <vgui/vgui_style.h>
-#include <vgui/vgui_soview2D.h>
-#include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
@@ -78,18 +66,11 @@
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_conic_2d.h>
-#include <vsol/vsol_curve_2d.h>
-#include <vsol/vsol_curve_2d_sptr.h>
-#include <vsol/vsol_polygon_2d_sptr.h>
-#include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_polyline_2d.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_vertex.h>
 #include <vtol/vtol_edge_2d.h>
-#include <vtol/vtol_one_chain_sptr.h>
-#include <vtol/vtol_one_chain.h>
 #include <vtol/vtol_intensity_face.h>
-#include <bsol/bsol_algs.h>
 #include <brip/brip_vil1_float_ops.h>
 #include <brip/brip_vil_float_ops.h>
 #include <brip/brip_para_cvrg_params.h>
@@ -99,7 +80,6 @@
 #include <sdet/sdet_watershed_region_proc.h>
 #include <sdet/sdet_vehicle_finder_params.h>
 #include <sdet/sdet_vehicle_finder.h>
-#include <bsol/bsol_hough_line_index.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
 #include <strk/strk_region_info_params.h>
@@ -795,7 +775,7 @@ void bmvv_f_manager::display_corrs()
   if (!n)
     return;
   brct_corr_sptr bc = corrs_[0];
-  int ncams = bc->n_cams();
+  unsigned int ncams = bc->n_cams();
   unsigned cols = grid_->cols();
   if (cols!=ncams)
     return;
@@ -831,7 +811,7 @@ void bmvv_f_manager::display_right_epi_lines()
   if (!n)
     return;
   brct_corr_sptr bc = corrs_[0];
-  int ncams = bc->n_cams();
+  unsigned int ncams = bc->n_cams();
   unsigned cols = grid_->cols();
   if (cols!=ncams)
     return;
