@@ -4,18 +4,15 @@
 // \file
 // \author J.L. Mundy
 
-// include for project points menu option
-#include <vpgl/vpgl_rational_camera.h>
 #if 1 //JLM
 #include <vpgl/file_formats/vpgl_nitf_rational_camera.h>
 #endif
+// include for project points menu option
+#include <vpgl/vpgl_rational_camera.h>
 #include <vcl_cstdlib.h> // for vcl_exit()
 #include <vcl_iostream.h>
 #include <vcl_cstdio.h> // sprintf
 #include <vcl_fstream.h>
-#include <vul/vul_file.h>
-#include <vnl/vnl_matlab_read.h>
-#include <vnl/vnl_numeric_traits.h>
 #include <vbl/vbl_array_2d.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_blocked_image_resource.h>
@@ -24,14 +21,10 @@
 #include <vil/vil_save.h>
 #include <vil/vil_new.h>
 #include <vil/vil_copy.h>
-#include <vil/vil_math.h>
-#include <vil/vil_decimate.h>
 #include <vil/vil_property.h>
 #include <vil/vil_flip.h>
 #include <vil/vil_convert.h>
 #include <vil/algo/vil_sobel_1x3.h>
-#include <vdgl/vdgl_digital_curve.h>
-#include <vdgl/vdgl_digital_curve_sptr.h>
 #if 0
 #ifdef HAS_XERCES
 #include <bxml/bxml_vtol_io.h>
@@ -54,8 +47,6 @@
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_style_sptr.h>
 #include <vgui/vgui_style.h>
-#include <vgui/vgui_soview2D.h>
-#include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
@@ -68,17 +59,12 @@
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_conic_2d.h>
-#include <vsol/vsol_curve_2d.h>
-#include <vsol/vsol_curve_2d_sptr.h>
-#include <vsol/vsol_polygon_2d_sptr.h>
-#include <vsol/vsol_polygon_2d.h>
+#include <vsol/vsol_polyline_2d_sptr.h>
+#include <vsol/vsol_polyline_2d.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_vertex.h>
 #include <vtol/vtol_edge_2d.h>
-#include <vtol/vtol_one_chain_sptr.h>
-#include <vtol/vtol_one_chain.h>
 #include <vtol/vtol_intensity_face.h>
-#include <bsol/bsol_algs.h>
 #include <brip/brip_vil1_float_ops.h>
 #include <brip/brip_vil_float_ops.h>
 #include <brip/brip_para_cvrg_params.h>
@@ -88,7 +74,6 @@
 #include <sdet/sdet_watershed_region_proc.h>
 #include <sdet/sdet_vehicle_finder_params.h>
 #include <sdet/sdet_vehicle_finder.h>
-#include <bsol/bsol_hough_line_index.h>
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
 #include <strk/strk_region_info_params.h>
@@ -146,12 +131,12 @@ range_params(vil_image_resource_sptr const& image)
 
   //Check if the image is blocked
   vil_blocked_image_resource_sptr bir = blocked_image_resource(image);
-  if(bir)
+  if (bir)
   { gl_map = true; cache = false;}
 
   //Check if the image is a pyramid
   bool pyr = image->get_property(vil_property_pyramid, 0);
-  if(pyr)
+  if (pyr)
   { gl_map = true; cache = false;}
   //Get max min parameters
 
@@ -159,19 +144,19 @@ range_params(vil_image_resource_sptr const& image)
   unsigned n_components = image->nplanes();
   vgui_range_map_params_sptr rmps;
   if (n_components == 1)
-    {
-      bgui_image_utils iu(image);
-      iu.range(min, max);
-      rmps= new vgui_range_map_params(min, max, gamma, invert,
-                                      gl_map, cache);
-    }
+  {
+    bgui_image_utils iu(image);
+    iu.range(min, max);
+    rmps= new vgui_range_map_params(min, max, gamma, invert,
+                                    gl_map, cache);
+  }
   else if (n_components == 3)
-    {
-      min = 0; max = 255;//for now - ultimately need to compute color histogram
-      rmps = new vgui_range_map_params(min, max, min, max, min, max,
-                                       gamma, gamma, gamma, invert,
-                                       gl_map, cache);
-    }
+  {
+    min = 0; max = 255;//for now - ultimately need to compute color histogram
+    rmps = new vgui_range_map_params(min, max, min, max, min, max,
+                                     gamma, gamma, gamma, invert,
+                                     gl_map, cache);
+  }
   return rmps;
 }
 
@@ -558,11 +543,11 @@ void segv_vil_segmentation_manager::load_image()
   vil_pyramid_image_resource_sptr pyr =
       vil_load_pyramid_resource(image_filename.c_str());
   if (pyr)
-    {
-      image = pyr.ptr();
-      pyrm = true;
-    }
-  
+  {
+    image = pyr.ptr();
+    pyrm = true;
+  }
+
   if (!image)
     image = vil_load_image_resource(image_filename.c_str());
 
@@ -641,18 +626,18 @@ void segv_vil_segmentation_manager::save_image()
 void segv_vil_segmentation_manager::set_range_params()
 {
   bgui_image_tableau_sptr itab = this->selected_image_tab();
-  if(!itab)
+  if (!itab)
     return;
   vgui_range_map_params_sptr rmps = itab->map_params();
-  if(!rmps)
-    {
-      vil_image_resource_sptr img = itab->get_image_resource();
-      if(!img)
-        return;
-      rmps = range_params(img);
-      if(!rmps)
-        return;
-    }
+  if (!rmps)
+  {
+    vil_image_resource_sptr img = itab->get_image_resource();
+    if (!img)
+      return;
+    rmps = range_params(img);
+    if (!rmps)
+      return;
+  }
   unsigned nc = rmps->n_components_;
   static double min = static_cast<double>(rmps->min_L_),
     max = static_cast<double>(rmps->max_L_);
@@ -660,12 +645,12 @@ void segv_vil_segmentation_manager::set_range_params()
   static bool invert = rmps->invert_;
   static bool gl_map = rmps->use_glPixelMap_;
   static bool cache = rmps->cache_mapped_pix_;
-  if(nc==3)
-    {
-      min = static_cast<double>(rmps->min_R_);
-      max = static_cast<double>(rmps->max_R_);
-      gamma = rmps->gamma_R_;
-    }
+  if (nc==3)
+  {
+    min = static_cast<double>(rmps->min_R_);
+    max = static_cast<double>(rmps->max_R_);
+    gamma = rmps->gamma_R_;
+  }
   vgui_dialog range_dlg("Set Range Map Params");
   range_dlg.field("Range min:", min);
   range_dlg.field("Range max:", max);
@@ -675,7 +660,7 @@ void segv_vil_segmentation_manager::set_range_params()
   range_dlg.checkbox("Cache Pixels", cache);
   if (!range_dlg.ask())
     return;
-  if(nc==1)
+  if (nc==1)
     rmps= new vgui_range_map_params(min, max, gamma, invert,
                                     gl_map, cache);
   else if (nc == 3)
@@ -764,7 +749,23 @@ void segv_vil_segmentation_manager::nonmaximal_suppression()
   vbl_array_2d<double> grad_x, grad_y, grad_mag;
   vbl_array_2d<vgl_vector_2d <double> > input_directions;
 
-  vil_convert_cast(img->get_view(), input);
+  // vil_convert_cast(img->get_view(), input);
+  switch ( img->get_view()->pixel_format() )
+  {
+#define macro(F , T) \
+    case F: vil_convert_cast( vil_image_view<T >(img->get_view()), input ); break;
+    macro( VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32 )
+    macro( VIL_PIXEL_FORMAT_INT_32, vxl_int_32 )
+    macro( VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16 )
+    macro( VIL_PIXEL_FORMAT_INT_16, vxl_int_16 )
+    macro( VIL_PIXEL_FORMAT_BYTE, vxl_byte )
+    macro( VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte )
+    macro( VIL_PIXEL_FORMAT_FLOAT, float )
+    macro( VIL_PIXEL_FORMAT_DOUBLE, double )
+    macro( VIL_PIXEL_FORMAT_BOOL, bool )
+    default: img->get_view() = 0;
+#undef macro
+  }
 
   int ni = input.ni();
   int nj = input.nj();
@@ -1057,40 +1058,40 @@ void segv_vil_segmentation_manager::fit_overlay_conics()
 
 void segv_vil_segmentation_manager::project_points()
 {
-  this->clear_display();		// apparently this call is needed?
+  this->clear_display(); // apparently this call is needed?
   vil_image_resource_sptr img = this->selected_image();
   vil_nitf2_image* nitf = 0;
   vcl_string format = img->file_format();
   vcl_string prefix = format.substr(0,4);
-  if(prefix == "nitf")
-    nitf = (vil_nitf2_image*)img.ptr(); 
+  if (prefix == "nitf")
+    nitf = (vil_nitf2_image*)img.ptr();
   else
+  {
+    //Check if the image is a pyramid
+    bool pyr = img->get_property(vil_property_pyramid, 0);
+    if (!pyr)
     {
-      //Check if the image is a pyramid
-      bool pyr = img->get_property(vil_property_pyramid, 0);
-      if(!pyr)
-        {
-          vcl_cout << "Current image is not a NITF image\n";
-          return;
-        }
-      //Get the base image
-      vil_pyramid_image_resource* pimage =
-        (vil_pyramid_image_resource*)img.ptr();
-      vil_image_resource_sptr base = pimage->get_resource(0);
-      format = base->file_format();
-      if(format == "nitf")
-        nitf = (vil_nitf2_image*)base.ptr(); 
-      else
-        {
-          vcl_cout << "Current image is not a NITF image\n";
-          return;
-        }
-    }        
+      vcl_cout << "Current image is not a NITF image\n";
+      return;
+    }
+    //Get the base image
+    vil_pyramid_image_resource* pimage =
+      (vil_pyramid_image_resource*)img.ptr();
+    vil_image_resource_sptr base = pimage->get_resource(0);
+    format = base->file_format();
+    if (format == "nitf")
+      nitf = (vil_nitf2_image*)base.ptr();
+    else
+    {
+      vcl_cout << "Current image is not a NITF image\n";
+      return;
+    }
+  }
   //cast to an nitf2_image
-   
-  static double lat=32.722;		// Lattitude
-  static double lon=-117.15;		// Longitude
-  static double elev=43;		// Elevation
+
+  static double lat=32.722;  // Lattitude
+  static double lon=-117.15; // Longitude
+  static double elev=43;     // Elevation
 
   vgui_dialog lf_dialog("Project Points");
   lf_dialog.field("Lattitude", lat);
@@ -1099,15 +1100,15 @@ void segv_vil_segmentation_manager::project_points()
 
   if (!lf_dialog.ask())
   {
-	vcl_cerr << "In project_points() dialog failed; returning." << vcl_endl;	  
-	return;
+    vcl_cerr << "In project_points() dialog failed; returning.\n";
+    return;
   }
   // calculate point location (x1, y1) for 1st camera
   double u = 0;
   double v = 0;
   vpgl_nitf_rational_camera rpcam(nitf, true);
   rpcam.project(lon, lat, elev, u,  v);
-  vcl_cout << " camera projects to <" << u << ", " << v << ">" << vcl_endl;
+  vcl_cout << " camera projects to <" << u << ", " << v << '>' << vcl_endl;
   vcl_vector<vsol_point_2d_sptr> points;
   vsol_point_2d_sptr p1 = new vsol_point_2d(u, v);
   points.push_back(p1);
@@ -1275,7 +1276,7 @@ void segv_vil_segmentation_manager::intensity_histogram()
   bgui_image_utils iu(img);
   bgui_graph_tableau_sptr g = iu.hist_graph();
 
-  if(!g)
+  if (!g)
   { vcl_cout << "In segv_vil_segmentation_manager::intensity_histogram()- color images not supported\n";
     return;
   }
@@ -1344,6 +1345,7 @@ void segv_vil_segmentation_manager::subtract_images()
   unsigned col = 2, row = 0;
   this->add_image_at(diff,col,row);
 }
+
 void segv_vil_segmentation_manager::negate_image()
 {
     vil_image_resource_sptr img = selected_image();
@@ -1353,9 +1355,10 @@ void segv_vil_segmentation_manager::negate_image()
     return;
   }
   vil_image_resource_sptr neg = brip_vil_float_ops::negate(img);
-  if(neg)
+  if (neg)
     this->add_image(neg);
 }
+
 void segv_vil_segmentation_manager::entropy()
 {
   vgui_dialog entropy_dlg("Entropy of Image");
