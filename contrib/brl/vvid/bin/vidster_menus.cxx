@@ -51,9 +51,10 @@ vgui_menu vidster_menus::get_menu()
   menubar.add( "Edit", menuedit);
   return menubar;
 }
+
 static void junk()
 {
-	vgui::run();
-	vgui_menu_item item;
-	vgui_menu menubar;
+  vgui::run();
+  vgui_menu_item item;
+  vgui_menu menubar;
 }
