@@ -7,13 +7,13 @@
 
 void output_guff(vcl_ostream &os)
 {
-  os << "   " << "*" << 4 << "*\n"
-     << "   " << 1.23456789 << "*" << vcl_endl;
+  os << "   " << '*' << 4 << "*\n"
+     << "   " << 1.23456789 << '*' << vcl_endl;
 }
 
 void test_ios_state()
 {
-  vcl_cout << "******************************\n"
+  vcl_cout << "*****************************\n"
            << " Testing vul_ios_state_saver\n"
            << "*****************************\n";
 
@@ -23,7 +23,7 @@ void test_ios_state()
   {
     vul_ios_state_saver saver(vcl_cout);
     vcl_cout.precision(3);
-    vcl_cout.setf(vcl_ios::fixed|vcl_ios::right);
+    vcl_cout.setf(vcl_ios_fixed|vcl_ios_right);
     vcl_cout.width(15);
     output_guff(vcl_cout);
     vcl_cout << "RESTORED:\n";
@@ -38,7 +38,7 @@ void test_ios_state()
   {
     vul_ios_state_saver saver(ss);
     ss.precision(3);
-    ss.setf(vcl_ios::fixed|vcl_ios::right);
+    ss.setf(vcl_ios_fixed|vcl_ios_right);
     ss.width(15);
     output_guff(ss);
     s2 = ss.str().substr(s1.size());
