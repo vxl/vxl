@@ -7,11 +7,11 @@
 // \date March 2001
 
 #include <vnl/vnl_vector.h>
+#include <vnl/vnl_random.h>
 #include <vcl_vector.h>
 
 class rrel_objective;
 class rrel_estimation_problem;
-class vnl_random;
 
 //: Random sampling search for minimization of a robust objective function.
 //  The code organization follows the design of the rrel
