@@ -28,11 +28,12 @@
 #include <gevd/gevd_noise.h>
 #include <gevd/gevd_float_operators.h>
 #include <gevd/gevd_pixel.h>
+#include <gevd/gevd_bufferxy.h>
 #ifdef DEBUG
 # include <vul/vul_timer.h>
 #endif
 
-const byte TWOPI = 8, FULLPI = 4, HALFPI = 2;
+const unsigned char TWOPI = 8, FULLPI = 4, HALFPI = 2;
 const int DIS[] = { 1, 1, 0,-1,-1,-1, 0, 1, // 8-connected neighbors
                     1, 1, 0,-1,-1,-1, 0, 1, // wrapped by 2PI to
                     1, 1, 0,-1,-1,-1, 0, 1};// avoid modulo operations.
@@ -41,7 +42,7 @@ const int DJS[] = { 0, 1, 1, 1, 0,-1,-1,-1,
                     0, 1, 1, 1, 0,-1,-1,-1};
 const int RDS[] = {0,-1, 1,-2, 2,-3, 3,-4, 4,-5, 5}; // radial search
 
-// const byte DIR0 = 8, DIR1 = 9, DIR2 = 10, DIR3 = 11;
+// const unsigned char DIR0 = 8, DIR1 = 9, DIR2 = 10, DIR3 = 11;
 const int FRAME = 4; // 3 for NMS and extension, 4 for contour
 
 //: Save parameters and create workspace for detecting step profiles.
