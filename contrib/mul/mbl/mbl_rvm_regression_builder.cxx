@@ -8,7 +8,6 @@
 #include <vcl_cmath.h>
 #include <vcl_cstdlib.h> // for vcl_abort()
 #include <vcl_algorithm.h>
-#include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_svd.h>
 #include <mbl/mbl_matxvec.h>
 #include <mbl/mbl_matrix_products.h>

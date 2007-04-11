@@ -15,11 +15,7 @@
 #include "vidl2_ffmpeg_convert.h"
 
 #include <vcl_algorithm.h>
-#include <vul/vul_file_iterator.h>
-#include <vul/vul_file.h>
-#include <vil/vil_load.h>
 #include <vil/vil_new.h>
-#include <vil/vil_image_view.h>
 
 #include <ffmpeg/avcodec.h>
 #include <ffmpeg/avformat.h>
@@ -298,7 +294,7 @@ advance()
 
   // The cached frame is out of date, whether we managed to get a new
   // frame or not.
-  if(is_->cur_frame_)
+  if (is_->cur_frame_)
     is_->cur_frame_->invalidate();
   is_->cur_frame_ = 0;
 
@@ -334,7 +330,8 @@ vidl2_ffmpeg_istream::current_frame()
   AVCodecContext* enc = is_->fmt_cxt_->streams[is_->vid_index_]->codec;
 #endif
   // If we have not already converted this frame, try to convert it
-  if ( !is_->cur_frame_ && is_->frame_->data[0] != 0 ){
+  if ( !is_->cur_frame_ && is_->frame_->data[0] != 0 )
+  {
     int width = enc->width;
     int height = enc->height;
 
@@ -346,10 +343,10 @@ vidl2_ffmpeg_istream::current_frame()
 
     // If the pixel format is not recognized by vidl2 then convert the data into RGB_24
     vidl2_pixel_format fmt = vidl2_pixel_format_from_ffmpeg(enc->pix_fmt);
-    if(fmt == VIDL2_PIXEL_FORMAT_UNKNOWN)
+    if (fmt == VIDL2_PIXEL_FORMAT_UNKNOWN)
     {
       int size = width*height*3;
-      if(!is_->contig_memory_)
+      if (!is_->contig_memory_)
         is_->contig_memory_ = new vil_memory_chunk(size, VIL_PIXEL_FORMAT_BYTE);
       else
         is_->contig_memory_->set_size(size, VIL_PIXEL_FORMAT_BYTE);
@@ -360,13 +357,14 @@ vidl2_ffmpeg_istream::current_frame()
       is_->cur_frame_ = new vidl2_shared_frame(is_->contig_memory_->data(),width,height,
                                                VIDL2_PIXEL_FORMAT_RGB_24);
     }
-    else{
+    else
+    {
       // Test for contiguous memory.  Sometimes FFMPEG uses scanline buffers larger
       // than the image width.  The extra memory is used in optimized decoding routines.
       // This leads to a segmented image buffer, not supported by vidl2. 
       AVPicture test_frame;
       avpicture_fill(&test_frame, is_->frame_->data[0], enc->pix_fmt, width, height);
-      if(test_frame.data[1] == is_->frame_->data[1] &&
+      if (test_frame.data[1] == is_->frame_->data[1] &&
          test_frame.data[2] == is_->frame_->data[2] &&
          test_frame.linesize[0] == is_->frame_->linesize[0] &&
          test_frame.linesize[1] == is_->frame_->linesize[1] &&
@@ -377,7 +375,7 @@ vidl2_ffmpeg_istream::current_frame()
       // Copy the image into contiguous memory.
       else
       {
-        if(!is_->contig_memory_){
+        if (!is_->contig_memory_){
           int size = avpicture_get_size( enc->pix_fmt, width, height );
           is_->contig_memory_ = new vil_memory_chunk(size, VIL_PIXEL_FORMAT_BYTE);
         }
@@ -386,9 +384,7 @@ vidl2_ffmpeg_istream::current_frame()
         // use a shared frame because the vil_memory_chunk is reused for each frame
         is_->cur_frame_ = new vidl2_shared_frame(is_->contig_memory_->data(),width,height,fmt);
       }
-
     }
-
   }
 
   // The MPEG 2 codec has a latency of 1 frame, so the dts of the last

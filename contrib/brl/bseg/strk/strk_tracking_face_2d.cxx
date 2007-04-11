@@ -13,7 +13,6 @@
 #include <bsta/bsta_joint_histogram.h>
 #include <vsol/vsol_point_2d.h>
 #include <vtol/vtol_vertex_2d.h>
-#include <vtol/vtol_edge.h>
 #include <btol/btol_face_algs.h>
 
 

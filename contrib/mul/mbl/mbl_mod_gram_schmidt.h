@@ -9,7 +9,6 @@
 //Note Modified Gram-Schmidt is more numericdally stable than the classical version
 //The partially constructed transformed jth vector is used in the successive projections rather than the untransformed
 
-#include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 
 //=======================================================================

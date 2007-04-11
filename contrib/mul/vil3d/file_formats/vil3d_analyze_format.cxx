@@ -28,7 +28,6 @@
 #include <vil3d/vil3d_property.h>
 #include <vil3d/vil3d_image_resource.h>
 #include <vcl_vector.h>
-#include <vil/vil_open.h>
 #include <vsl/vsl_binary_explicit_io.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>

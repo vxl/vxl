@@ -3,7 +3,6 @@
 #include <vcl_sstream.h>
 
 #include <mbl/mbl_read_props.h>
-#include <mbl/mbl_exception.h>
 
 #include <testlib/testlib_test.h>
 
@@ -206,7 +205,7 @@ void test_read_props1()
   }
   {
     vcl_cout << "\nCase 13: get_required_property()\n";
-    vcl_istringstream ss("{\n  a: a\n  b: b\n \n}");
+    vcl_istringstream ss("{\n  a: a\n  b: b\n\n}");
     mbl_read_props_type props = mbl_read_props( ss );
     mbl_read_props_print(vcl_cout, props);
     vcl_string val1 = props.get_required_property("a");
@@ -225,7 +224,7 @@ void test_read_props1()
   }
   {
     vcl_cout << "\nCase 14: get_optional_property()\n";
-    vcl_istringstream ss("{\n  a: a\n  b: b\n \n}");
+    vcl_istringstream ss("{\n  a: a\n  b: b\n\n}");
     mbl_read_props_type props = mbl_read_props( ss );
     mbl_read_props_print(vcl_cout, props);
     vcl_string val1 = props.get_optional_property("a");

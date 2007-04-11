@@ -16,7 +16,6 @@
 #include <vil/vil_transpose.h>
 #include <vil/vil_math.h>
 #include <vil/vil_pixel_traits.h>
-#include <vnl/vnl_inverse.h>
 #include <vil/algo/vil_convolve_1d.h>
 #include <vil/vil_new.h>
 #include <vsol/vsol_box_2d.h>
@@ -496,30 +495,29 @@ brip_vil_float_ops::difference(vil_image_view<float> const& image_1,
 vil_image_resource_sptr brip_vil_float_ops::negate(vil_image_resource_sptr const& imgr)
 {
   vil_image_resource_sptr outr;
-  if(!imgr)
+  if (!imgr)
     return outr;
   vil_pixel_format fmt = imgr->pixel_format();
   switch (fmt)
-    {
+  {
 #define NEGATE_CASE(FORMAT, T) \
-     case FORMAT: { \
+    case FORMAT: { \
       vil_image_view<T> view = imgr->get_copy_view(); \
       T mxv = vil_pixel_traits<T>::maxval(); \
       vil_math_scale_and_offset_values(view, -1.0, mxv); \
       outr = vil_new_image_resource_of_view(view);  \
       break; \
                   }
-     NEGATE_CASE(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
-     NEGATE_CASE(VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32);
-     NEGATE_CASE(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16);
-     NEGATE_CASE(VIL_PIXEL_FORMAT_INT_16, vxl_int_16);
-     NEGATE_CASE(VIL_PIXEL_FORMAT_FLOAT, float);
-     NEGATE_CASE(VIL_PIXEL_FORMAT_DOUBLE, double);
+    NEGATE_CASE(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
+    NEGATE_CASE(VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32);
+    NEGATE_CASE(VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16);
+    NEGATE_CASE(VIL_PIXEL_FORMAT_INT_16, vxl_int_16);
+    NEGATE_CASE(VIL_PIXEL_FORMAT_FLOAT, float);
+    NEGATE_CASE(VIL_PIXEL_FORMAT_DOUBLE, double);
 #undef NEGATE_CASE
     default:
       vcl_cout << "Unknown image format\n";
-      
-    }
+  }
   return outr;
 }
 

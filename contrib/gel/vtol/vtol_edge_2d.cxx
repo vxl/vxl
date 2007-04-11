@@ -4,7 +4,6 @@
 // \file
 
 #include <vtol/vtol_zero_chain.h>
-#include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_line_2d.h>
 #include <vdgl/vdgl_digital_curve.h>

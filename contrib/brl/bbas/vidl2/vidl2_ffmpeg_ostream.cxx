@@ -16,8 +16,6 @@
 #include "vidl2_convert.h"
 #include <vcl_cstring.h>
 #include <vil/vil_memory_chunk.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_image_view.h>
 #include <ffmpeg/avformat.h>
 
 //-----------------------------------------------------------------------------
@@ -506,7 +504,7 @@ bool
 vidl2_ffmpeg_ostream::
 write_frame(const vidl2_frame_sptr& frame)
 {
-  if(!is_open()){
+  if (!is_open()){
     // resize to the first frame
     params_.size(frame->ni(),frame->nj());
     open();
@@ -536,7 +534,7 @@ write_frame(const vidl2_frame_sptr& frame)
   avcodec_get_frame_defaults( &out_frame );
 
   // The frame is in the correct format to encode directly
-  if( codec->pix_fmt == fmt )
+  if ( codec->pix_fmt == fmt )
   {
     avpicture_fill((AVPicture*)&out_frame, (uint8_t*) frame->data(),
                     fmt, frame->ni(), frame->nj());
@@ -551,9 +549,9 @@ write_frame(const vidl2_frame_sptr& frame)
                                                 new vil_memory_chunk(out_size, VIL_PIXEL_FORMAT_BYTE));
     }
     // try conversion with FFMPEG functions
-    if(!vidl2_ffmpeg_convert(frame, temp_frame)){
+    if (!vidl2_ffmpeg_convert(frame, temp_frame)){
       // try conversion with vidl2 functions
-      if(!vidl2_convert_frame(*frame, *temp_frame)){
+      if (!vidl2_convert_frame(*frame, *temp_frame)){
         vcl_cout << "unable to convert " << frame->pixel_format() << " to "<<target_fmt<<vcl_endl;
         return false;
       }

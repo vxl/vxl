@@ -10,7 +10,6 @@
 #include <mcal/mcal_sparse_basis_cost.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
-#include <vnl/vnl_math.h>
 #include <vcl_vector.h>
 #include <vsl/vsl_binary_io.h>
 #include <mbl/mbl_parse_block.h>

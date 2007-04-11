@@ -4,9 +4,6 @@
 #include <rrel/rrel_estimation_problem.h>
 #include <rrel/rrel_util.h>
 
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_random.h>
-
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
 #include <vcl_vector.h>

@@ -3,7 +3,6 @@
 #include <vcl_vector.h>
 #include <testlib/testlib_test.h>
 #include <bvgl/bvgl_articulated_poly.h>
-#include <vgl/vgl_point_3d.h>
 #include <vcl_iostream.h>
 
 //: Test the articulated poly

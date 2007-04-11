@@ -7,7 +7,6 @@
 #include <testlib/testlib_test.h>
 #include <gevd/gevd_bufferxy.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_memory_image.h>
 #include <vil/vil_new.h>
 
 void

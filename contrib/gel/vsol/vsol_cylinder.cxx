@@ -3,16 +3,15 @@
 // \file
 #include <vgl/io/vgl_io_cylinder.h>
 #include <vgl/vgl_vector_3d.h>
-#include <vnl/vnl_vector.h>
 
 //: Return true iff the point p is inside (or on) this cylinder
-bool vsol_cylinder::contains(vgl_point_3d<double> const& p) 
+bool vsol_cylinder::contains(vgl_point_3d<double> const& p)
 {
   double x= cyl_.center().x() - ((cyl_.length()/2.0) * cyl_.orientation().x());
   double y= cyl_.center().y() - ((cyl_.length()/2.0) * cyl_.orientation().y());
   double z= cyl_.center().z() - ((cyl_.length()/2.0) * cyl_.orientation().z());
   vgl_point_3d<double> bottom_center(x, y, z);
-  
+
   double x2= cyl_.center().x() + ((cyl_.length()/2.0) * cyl_.orientation().x());
   double y2= cyl_.center().y() + ((cyl_.length()/2.0) * cyl_.orientation().y());
   double z2= cyl_.center().z() + ((cyl_.length()/2.0) * cyl_.orientation().z());
@@ -32,7 +31,6 @@ bool vsol_cylinder::contains(vgl_point_3d<double> const& p)
     else
       return true;
   }
-
 }
 
 //----------------------------------------------------------------

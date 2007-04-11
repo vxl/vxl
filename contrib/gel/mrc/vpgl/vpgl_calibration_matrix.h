@@ -18,7 +18,6 @@
 #include <vgl/vgl_fwd.h>
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_matrix_fixed.h>
-#include <vgl/vgl_homg_point_2d.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_iostream.h>
 

@@ -10,7 +10,6 @@
 
 #include "vsrl_region_disparity.h"
 #include <vcl_iostream.h>
-#include <vsrl/vsrl_stereo_dense_matcher.h>
 #include <vtol/vtol_intensity_face.h>
 
 vsrl_region_disparity::vsrl_region_disparity()
@@ -60,27 +59,21 @@ bool vsrl_region_disparity::Execute()
 {
   bool result;
   switch (region_type_)
-    {
-    case INTENSITY_FACE:
-      {
-        vcl_cout << "vsrl_region_disparity::Execute: region type: INTENSITY_FACE\n";
-        result = run_intensity_faces();
-        break;
-      }
-    case DIGITAL_REGION:
-      {
-        vcl_cout << "vsrl_region_disparity::Execute: region type: DIGITAL_REGION\n";
-        result = run_digital_regions();
-        break;
-      }
-    case UNDEFINED:
-    default:
-      {
-        vcl_cerr << "vsrl_region_disparity::Execute: Error: region type is UNDEFINED.\n";
-        result = false;
-        break;
-      }
-    }
+  {
+   case INTENSITY_FACE:
+    vcl_cout << "vsrl_region_disparity::Execute: region type: INTENSITY_FACE\n";
+    result = run_intensity_faces();
+    break;
+   case DIGITAL_REGION:
+    vcl_cout << "vsrl_region_disparity::Execute: region type: DIGITAL_REGION\n";
+    result = run_digital_regions();
+    break;
+   case UNDEFINED:
+   default:
+    vcl_cerr << "vsrl_region_disparity::Execute: Error: region type is UNDEFINED.\n";
+    result = false;
+    break;
+  }
   return result;
 }
 

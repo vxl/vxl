@@ -10,7 +10,6 @@
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_line_2d.h>
 
 // Constructors/Destructor---------------------------------------------------
 

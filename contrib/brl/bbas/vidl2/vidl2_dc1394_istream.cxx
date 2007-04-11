@@ -16,13 +16,9 @@
 #include <vcl_vector.h>
 
 #include <vil/vil_new.h>
-#include <vil/vil_image_view.h>
 
 #include <dc1394/control.h>
 #include <dc1394/utils.h>
-
-#include <vil/vil_convert.h>
-
 
 //--------------------------------------------------------------------------------
 // Anonymous namespace
@@ -224,24 +220,26 @@ open(unsigned int num_dma_buffers,
   else
     is_->camera_info_->framerate = dc1394framerate_t(params.frame_rate_);
 
-  for(unsigned int i=0; i<params.features_.size(); ++i){
+  for (unsigned int i=0; i<params.features_.size(); ++i)
+  {
     dc1394feature_info_t f = vidl2_feature_to_dc1394(params.features_[i]);
-    switch(params.features_[i].id){
-      case vidl2_iidc1394_params::FEATURE_WHITE_BALANCE:
-        if ( dc1394_feature_whitebalance_set_value(is_->camera_info_, f.BU_value, f.RV_value) != DC1394_SUCCESS) {
-          vcl_cerr << "Failed to feature \"White Balance\" to "<< f.BU_value<<", "<<f.RV_value <<"\n";
-          close();
-          return false;
-        }
-        break;
-      default:
-        if ( dc1394_feature_set_value(is_->camera_info_, f.id, f.value) != DC1394_SUCCESS) {
-          vcl_cerr << "Failed to feature \""
-                  << vidl2_iidc1394_params::feature_string(params.features_[i].id)
-                  << "\" to "<< f.value <<"\n";
-          close();
-          return false;
-        }
+    switch (params.features_[i].id)
+    {
+     case vidl2_iidc1394_params::FEATURE_WHITE_BALANCE:
+      if ( dc1394_feature_whitebalance_set_value(is_->camera_info_, f.BU_value, f.RV_value) != DC1394_SUCCESS) {
+        vcl_cerr << "Failed to feature \"White Balance\" to "<< f.BU_value<<", "<<f.RV_value <<'\n';
+        close();
+        return false;
+      }
+      break;
+     default:
+      if ( dc1394_feature_set_value(is_->camera_info_, f.id, f.value) != DC1394_SUCCESS) {
+        vcl_cerr << "Failed to feature \""
+                 << vidl2_iidc1394_params::feature_string(params.features_[i].id)
+                 << "\" to "<< f.value <<'\n';
+        close();
+        return false;
+      }
     }
   }
 
@@ -333,7 +331,7 @@ valid_params(vidl2_iidc1394_params::valid_options& options)
     options.cameras[i].model = dccameras[i]->model;
     options.cameras[i].speed = static_cast<vidl2_iidc1394_params::speed_t>(dccameras[i]->iso_speed);
     dc1394operation_mode_t op_mode;
-    if( dc1394_video_get_operation_mode(dccameras[i], &op_mode) == DC1394_SUCCESS)
+    if ( dc1394_video_get_operation_mode(dccameras[i], &op_mode) == DC1394_SUCCESS)
       options.cameras[i].b_mode = (op_mode == DC1394_OPERATION_MODE_1394B);
     options.cameras[i].curr_mode = static_cast<vidl2_iidc1394_params::video_mode_t>(dccameras[i]->video_mode);
     options.cameras[i].curr_frame_rate = static_cast<vidl2_iidc1394_params::frame_rate_t>(dccameras[i]->framerate);
@@ -359,14 +357,14 @@ valid_params(vidl2_iidc1394_params::valid_options& options)
       }
     }
     dc1394featureset_t features;
-    if(dc1394_get_camera_feature_set(dccameras[i], &features) < 0){
+    if (dc1394_get_camera_feature_set(dccameras[i], &features) < 0){
       vcl_cerr << "Could not find any camera control features\n";
       return false;
     }
     for (unsigned int k= DC1394_FEATURE_MIN, j= 0; k <= DC1394_FEATURE_MAX; k++, j++)  {
       const dc1394feature_info_t& f = features.feature[j];
       int fid = f.id;
-      if(!f.available)
+      if (!f.available)
         continue;
       options.cameras[i].features.push_back(dc1394_feature_to_vidl2(f));
       vcl_cout << "feature: "<< dc1394_feature_desc[fid - DC1394_FEATURE_MIN]<< vcl_endl;
@@ -430,11 +428,11 @@ advance()
   ++is_->vid_index_;
   is_->cur_frame_valid_ = false;
 
-  if(is_->dc1394frame_)
+  if (is_->dc1394frame_)
     dc1394_capture_enqueue(is_->camera_info_, is_->dc1394frame_);
 
   if (dc1394_capture_dequeue(is_->camera_info_, DC1394_CAPTURE_POLICY_WAIT, &(is_->dc1394frame_))!=DC1394_SUCCESS) {
-    fprintf(stderr, "capture failed\n");
+    vcl_cerr << "capture failed\n";
     return false;
   }
   return true;

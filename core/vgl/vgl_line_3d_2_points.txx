@@ -8,9 +8,6 @@
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vcl_limits.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_intersection.h>
 
 //***************************************************************************
 // Initialization

@@ -19,7 +19,6 @@
 #include <vgui/vgui_image_tableau_sptr.h>
 #include <bgui/bgui_image_tableau_sptr.h>
 #include <vgui/vgui_rubberband_tableau_sptr.h>
-#include <vgui/vgui_style_sptr.h>
 #include <vgui/vgui_range_map_params_sptr.h>
 #include <bgui/bgui_vsol2D_tableau_sptr.h>
 #include <vgui/vgui_easy2D_tableau_sptr.h>
@@ -30,9 +29,8 @@
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vidl/vidl_movie_sptr.h>
 #include <vil/vil_image_resource.h>
-#include <vil/vil_pyramid_image_resource.h>
-#include <vil/vil_image_list.h>
 #include <vpro/vpro_vil_video_process_sptr.h>
+
 //: A singleton manager class for playing videos.
 // A vector of images with
 // enclosing image and easy2D tableaux is cached so that computed overlays

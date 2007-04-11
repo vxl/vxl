@@ -5,12 +5,11 @@
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
-#include <vnl/vnl_fwd.h>
-#include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_math.h>
-#include <vgl/vgl_distance.h>
-#include <vpl/vpl.h>
 #include <vnl/vnl_double_3.h>
+#include <vnl/vnl_double_3x3.h>
+#include <vnl/vnl_double_3x4.h>
+#include <vpl/vpl.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_loader.h>
 
@@ -23,7 +22,7 @@ static void test_camera_io()
 
     // Some matrices for testing.
     double random_list2[12] = { 10.6, 1.009, .676, .5, -13, -10, 8, 5, 88, -2, -100, 11 };
-    vnl_matrix_fixed<double,3,4> random_matrix2( random_list2 );
+    vnl_double_3x4 random_matrix2( random_list2 );
 
     vcl_cout << "Matrix:\n" << random_matrix2 << vcl_endl;
 

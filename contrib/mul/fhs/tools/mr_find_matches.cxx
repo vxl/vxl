@@ -20,8 +20,6 @@
 #include <vil/vil_resample_bilin.h>
 #include <mbl/mbl_index_sort.h>
 #include <vnl/vnl_math.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
 #include <fhs/fhs_searcher.h>
 #include <vimt/algo/vimt_normalised_correlation_2d.h>
 #include <mbl/mbl_minimum_spanning_tree.h>
@@ -29,13 +27,13 @@
 
 void print_usage()
 {
-  vcl_cout<<"find_matches -i1 image1.jpg -i2 image2.jpg -Llo 0 Lhi 2"<<vcl_endl;
-  vcl_cout<<"Loads in image1 and image2."<<vcl_endl;
-  vcl_cout<<"Locates a set of interesting features (corners) on levels of image1."<<vcl_endl;
-  vcl_cout<<"Constructs a tree model of their relative positions."<<vcl_endl;
-  vcl_cout<<"Points at level L are linked to the nearest points at level L+1"<<vcl_endl;
-  vcl_cout<<"Uses normalised correllation and this model to locate"<<vcl_endl;
-  vcl_cout<<"equivalent points on the second image."<<vcl_endl;
+  vcl_cout<<"find_matches -i1 image1.jpg -i2 image2.jpg -Llo 0 Lhi 2"<<vcl_endl
+          <<"Loads in image1 and image2."<<vcl_endl
+          <<"Locates a set of interesting features (corners) on levels of image1."<<vcl_endl
+          <<"Constructs a tree model of their relative positions."<<vcl_endl
+          <<"Points at level L are linked to the nearest points at level L+1"<<vcl_endl
+          <<"Uses normalised correllation and this model to locate"<<vcl_endl
+          <<"equivalent points on the second image."<<vcl_endl;
   vul_arg_display_usage_and_exit();
 }
 
@@ -169,6 +167,7 @@ void vimt_resample(const vimt_image_2d_of<float>& src_im, int src_L,
   scale.set_zoom_only(s,s,0.0,0.0);
   dest_im.set_world2im(scale*src_im.world2im());
 }
+
 int main( int argc, char* argv[] )
 {
   vul_arg<vcl_string> image1_path("-i1","Input image 1");

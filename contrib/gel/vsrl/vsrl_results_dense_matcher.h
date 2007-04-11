@@ -7,7 +7,6 @@
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_image.h>
 #include <vsrl/vsrl_dense_matcher.h>
-#include <vsrl/vsrl_image_correlation.h>
 
 //:
 // This class will take a disparity image which is the output

@@ -15,7 +15,6 @@
 #include <vcl_list.h>
 #include <vcl_vector.h>
 #include <vcl_string.h>
-#include <vul/vul_timer.h>
 #include <vpro/vpro_vil_video_process.h>
 
 class vpro_roi_process : public vpro_vil_video_process

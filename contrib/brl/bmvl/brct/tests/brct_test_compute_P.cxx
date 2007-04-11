@@ -8,9 +8,6 @@
 #include <vnl/vnl_double_4.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3x4.h>
-#include <vnl/vnl_double_4x4.h>
-#include <vgl/vgl_homg_point_3d.h>
-#include <vgl/vgl_homg_point_2d.h>
 #include <testlib/testlib_test.h>
 
 static vnl_double_3x3 generate_K()
@@ -31,8 +28,6 @@ static vnl_double_3x4 generate_P(vnl_double_3x3 const & K)
   P[2][0] = -0.96;     P[2][1] = 0.25;     P[2][2] = -0.1;    P[2][3] = 56.28;
   return K*P;
 }
-
-
 
 static void brct_test_compute_P()
 {
@@ -80,7 +75,6 @@ static void brct_test_compute_P()
   }
   vcl_cout << "Original P\n" << P << '\n';
   vcl_cout << "P in real world and image coordinates\n" << 120.82*Pout << '\n';
-
-  }
+}
 
 TESTMAIN(brct_test_compute_P);

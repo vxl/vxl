@@ -6,7 +6,7 @@
 
 #include "vpgl_proj_camera.h"
 #include <vcl_iostream.h>
-#include <vnl/vnl_double_3.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vnl/io/vnl_io_matrix_fixed.h>
 #include <vsl/vsl_binary_loader.h>
 
@@ -102,8 +102,8 @@ vpgl_proj_camera<T>::project(const T x, const T y, const T z, T& u, T& v) const
   if (image_point.ideal(static_cast<T>(1.0e-10)))
   {
     u = 0; v = 0;
-    vcl_cerr << "Warning: projection to ideal image point"
-             << " in vpgl_proj_camera - result not valid\n";
+    vcl_cerr << "Warning: projection to ideal image point in vpgl_proj_camera -"
+             << " result not valid\n";
     return;
   }
   u = image_point.x()/image_point.w();

@@ -13,7 +13,6 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
-#include <vnl/vnl_least_squares_function.h>
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
 #include <vcl_cstdlib.h>  // abort()

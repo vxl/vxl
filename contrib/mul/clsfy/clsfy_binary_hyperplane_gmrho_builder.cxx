@@ -17,7 +17,6 @@
 #include <vcl_algorithm.h>
 #include <vcl_numeric.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/vnl_math.h>
 #include <vnl/vnl_vector_ref.h>
 #include <vnl/algo/vnl_lbfgs.h>
 

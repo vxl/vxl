@@ -8,7 +8,6 @@
 #include <vcl_algorithm.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_inverse.h>
-#include <vnl/vnl_transpose.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vgl/vgl_distance.h>

@@ -11,11 +11,8 @@
 #include <vcl_cassert.h>
 
 #include <vgl/algo/vgl_homg_operators_3d.h>
-#include <vgl/vgl_line_3d_2_points.h>
-#include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_homg_plane_3d.h>
-#include <vgl/vgl_distance.h>
 
 
 template <class T>

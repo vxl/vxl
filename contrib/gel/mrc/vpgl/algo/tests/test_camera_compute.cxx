@@ -3,8 +3,6 @@
 
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_rank.h>
-#include <vgl/vgl_distance.h>
 
 #include <vpgl/algo/vpgl_camera_compute.h>
 #include <vpgl/vpgl_proj_camera.h>

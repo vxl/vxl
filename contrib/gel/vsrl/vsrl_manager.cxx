@@ -36,11 +36,11 @@
 #include <vepl/vepl_gradient_mag.h>
 #include <vepl/vepl_gaussian_convolution.h>
 #include <vepl/vepl_threshold.h>
-#include <vsrl/vsrl_menus.h>
 #include <vsrl/vsrl_point_picker.h>
 #include <vsrl/vsrl_results_dense_matcher.h>
 #include <vsrl/vsrl_3d_output.h>
 #include <vsrl/vsrl_region_disparity.h>
+#include <vsrl/vsrl_image_correlation.h>
 #include <vgel/vgel_multi_view_data.h>
 #include <vgel/vgel_multi_view_data_vertex_sptr.h>
 #include <vgel/vgel_kl.h>

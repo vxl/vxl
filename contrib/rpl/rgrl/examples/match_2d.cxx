@@ -50,8 +50,6 @@
 #include <vbl/vbl_bounding_box.h>
 
 #include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_convert.h>
 
 #include <testlib/testlib_test.h>
 void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx

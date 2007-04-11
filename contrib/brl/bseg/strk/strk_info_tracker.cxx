@@ -6,11 +6,8 @@
 #include <vcl_cstdlib.h> // for rand()
 #include <vul/vul_timer.h>
 #include <vil1/vil1_memory_image_of.h>
-#include <vgl/vgl_polygon.h>
 #include <vsol/vsol_box_2d.h>
-#include <vtol/vtol_edge.h>
 #include <vtol/vtol_vertex_2d.h>
-#include <btol/btol_face_algs.h>
 #include <brip/brip_vil1_float_ops.h>
 #include <bsta/bsta_histogram.h>
 #include <strk/strk_tracking_face_2d.h>
@@ -539,35 +536,36 @@ strk_info_tracker::extract_histograms(strk_tracking_face_2d_sptr const& tf,
   unsigned int nbins = ibins + gbins + cbins;
   vcl_vector<float> out(nbins, 0.0);
   bsta_histogram<float> int_hist(0, 0); 
-  if(first_frame)
+  if (first_frame)
     int_hist= tf->intensity_histogram(image_0_);
   else
     int_hist= tf->intensity_histogram(image_i_);
-  for(unsigned int i = 0; i<ibins; ++i)
+  for (unsigned int i = 0; i<ibins; ++i)
     out[i]=int_hist.p(i);
 
-  if(gradient_info_)
-    { 
-      bsta_histogram<float> grad_hist(0, 0);
-      if(first_frame)
-        grad_hist = tf->gradient_histogram(Ix_0_, Iy_0_);
-      else
-       grad_hist = tf->gradient_histogram(Ix_i_, Iy_i_);
-      for(unsigned int i = 0; i<gbins; ++i)
-        out[i+ibins]=grad_hist.p(i);
-    }
-  if(color_info_)
-    {
-      bsta_histogram<float> color_hist(0,0);
-      if(first_frame)
-       color_hist = tf->color_histogram(hue_0_, sat_0_);
-      else
-       color_hist = tf->color_histogram(hue_i_, sat_i_);
-      for(unsigned int i = 0; i<cbins; ++i)
+  if (gradient_info_)
+  { 
+    bsta_histogram<float> grad_hist(0, 0);
+    if (first_frame)
+      grad_hist = tf->gradient_histogram(Ix_0_, Iy_0_);
+    else
+     grad_hist = tf->gradient_histogram(Ix_i_, Iy_i_);
+    for (unsigned int i = 0; i<gbins; ++i)
+      out[i+ibins]=grad_hist.p(i);
+  }
+  if (color_info_)
+  {
+    bsta_histogram<float> color_hist(0,0);
+    if (first_frame)
+     color_hist = tf->color_histogram(hue_0_, sat_0_);
+    else
+     color_hist = tf->color_histogram(hue_i_, sat_i_);
+    for (unsigned int i = 0; i<cbins; ++i)
       out[i+ibins+gbins]=color_hist.p(i);
   }
   return out;
 }
+
 //: external call to extract histograms during tracking
 vcl_vector<float> 
 strk_info_tracker::histograms()
@@ -580,7 +578,7 @@ strk_info_tracker::histograms()
 vcl_vector<float> 
 strk_info_tracker::capture_histograms(bool first_frame)
 {
-  if(first_frame)
+  if (first_frame)
     return this->extract_histograms(initial_tf_, first_frame);
   return this->extract_histograms(capture_tf_, first_frame);
 }
@@ -589,7 +587,7 @@ void strk_info_tracker::set_capture_face(vtol_face_2d_sptr const& face,
                                          bool first_frame)
 {
   capture_face_ = face;
-  if(first_frame)
+  if (first_frame)
     capture_tf_ = new strk_tracking_face_2d(face, image_0_,
                                             Ix_0_, Iy_0_,
                                             hue_0_, sat_0_,

@@ -2,7 +2,6 @@
 //:
 // \file
 #include <vcl_cassert.h>
-#include <vnl/vnl_math.h>
 
 //************* mask using a binary 3D image ********************
 rgrl_mask_3d_image::
@@ -24,7 +23,7 @@ inside( vnl_vector< double > const& pt ) const
   // As the bounding box is tighter than image dim,
   // check w/ bounding box is sufficient
   //
-  bool in_range = ( x0_[0] <= x ) && ( x <= x1_[0] ) && 
+  bool in_range = ( x0_[0] <= x ) && ( x <= x1_[0] ) &&
                   ( x0_[1] <= y ) && ( y <= x1_[1] ) &&
                   ( x0_[2] <= z ) && ( z <= x1_[2] );
 
@@ -35,7 +34,6 @@ void
 rgrl_mask_3d_image::
 update_bounding_box()
 {
-  
   // reset bounding box
   x0_[0] = double( mask_image_.ni() );
   x0_[1] = double( mask_image_.nj() );
@@ -45,27 +43,24 @@ update_bounding_box()
   x1_[2] = 0.0;
 
   bool non_zero_pixel = false;
-  
-  for( unsigned k=0; k<mask_image_.nk(); ++k )
-    for( unsigned j=0; j<mask_image_.nj(); ++j )
-      for( unsigned i=0; i<mask_image_.ni(); ++i )
-        if( mask_image_(i,j,k) ) {
-          
-          if( x0_[0] > double(i) )        x0_[0] = double(i);
-          if( x0_[1] > double(j) )        x0_[1] = double(j);
-          if( x0_[2] > double(k) )        x0_[2] = double(k);
-          if( x1_[0] < double(i) )        x1_[0] = double(i);
-          if( x1_[1] < double(j) )        x1_[1] = double(j);
-          if( x1_[2] < double(k) )        x1_[2] = double(k);
-    
-          non_zero_pixel = true;      
+
+  for ( unsigned k=0; k<mask_image_.nk(); ++k )
+    for ( unsigned j=0; j<mask_image_.nj(); ++j )
+      for ( unsigned i=0; i<mask_image_.ni(); ++i )
+        if ( mask_image_(i,j,k) ) {
+          if ( x0_[0] > double(i) )        x0_[0] = double(i);
+          if ( x0_[1] > double(j) )        x0_[1] = double(j);
+          if ( x0_[2] > double(k) )        x0_[2] = double(k);
+          if ( x1_[0] < double(i) )        x1_[0] = double(i);
+          if ( x1_[1] < double(j) )        x1_[1] = double(j);
+          if ( x1_[2] < double(k) )        x1_[2] = double(k);
+          non_zero_pixel = true;
         }
-  
+
   // special case: no pixel is true
-  if( !non_zero_pixel ) {
+  if ( !non_zero_pixel ) {
     x0_.fill( 0.0 );
     x1_.fill( 0.0 );
   }
-  
 }
 

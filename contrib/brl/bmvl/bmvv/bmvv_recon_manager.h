@@ -21,7 +21,6 @@
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_grid_tableau_sptr.h>
-#include <vgui/vgui_style_sptr.h>
 #include <bgui/bgui_vtol2D_tableau_sptr.h>
 #include <bgui/bgui_picker_tableau_sptr.h>
 #include <brct/brct_plane_corr_sptr.h>

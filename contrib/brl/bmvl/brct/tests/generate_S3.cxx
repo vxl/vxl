@@ -4,8 +4,6 @@
 #include <vcl_vector.h>
 #include <vcl_fstream.h>
 #include <brct/brct_algos.h>
-#include <vsol/vsol_point_3d.h>
-#include <vsol/vsol_box_3d.h>
 #include <vgl/vgl_sphere_3d.h>
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>

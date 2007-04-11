@@ -6,15 +6,9 @@
 #include <vil1/vil1_load.h>
 #include <vil1/vil1_save.h>
 #include <vnl/vnl_matrix_fixed.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vsol/vsol_box_2d.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_vertex_2d.h>
-#include <vtol/vtol_edge_2d.h>
-#include <vtol/vtol_edge.h>
-#include <vtol/vtol_edge_sptr.h>
 #include <vtol/vtol_one_chain_sptr.h>
 #include <vtol/vtol_one_chain.h>
 #include <vtol/vtol_face_2d.h>

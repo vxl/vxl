@@ -12,7 +12,6 @@
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h> // for exit()
 #include <vnl/vnl_inverse.h>
-#include <vnl/vnl_transpose.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_quaternion.h>

@@ -7,28 +7,23 @@
 // \author Vishal Jain, (vj@lems.brown.edu)
 // \date 08/31/04
 //
-// The first camera is assumed to be identity with supplied calibration matrix.  The
-// second camera's center is unique up to a scale.
+// The first camera is assumed to be identity with supplied calibration matrix. 
+// The second camera's center is unique up to a scale.
 //
 // \verbatim
 //  Modifications
 //   9/01/2006  Thomas Pollard  Converted to vpgl, changed image origin to be UL corner.
-//  Modifications
 //   3/04/2007  J.L. Mundy This implementation is now deprecated, use 
 //   camera extraction defined on vpgl_essential_matrix.
-
 // \endverbatim
-
 
 #include <vcl_iostream.h>
 #include <vgl/vgl_point_2d.h>
 #include <vcl_vector.h>
-#include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vpgl/vpgl_perspective_camera.h>
-
 
 class vpgl_construct_cameras
 {

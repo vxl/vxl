@@ -77,7 +77,6 @@ class gevd_bufferxy;
 #include <vcl_iostream.h>
 #include <vil1/vil1_image.h>
 #include <vil/vil_image_resource.h>
-#include <vil/vil_memory_image.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include "sdet_detector_params.h"

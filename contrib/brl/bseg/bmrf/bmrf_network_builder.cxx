@@ -10,7 +10,6 @@
 #include <vgl/vgl_line_segment_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vsol/vsol_box_2d.h>
-#include <vsol/vsol_point_2d.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator.h>

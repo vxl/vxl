@@ -8,7 +8,7 @@
 
 class vsol_orient_box_3d;
 #include <vbl/vbl_smart_ptr.h>
-#include <vsol/vsol_box_3d.h>
+#include <vsol/vsol_orient_box_3d.h>
 
 typedef vbl_smart_ptr<vsol_orient_box_3d> vsol_orient_box_3d_sptr;
 

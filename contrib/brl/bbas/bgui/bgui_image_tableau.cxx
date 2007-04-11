@@ -9,7 +9,6 @@
 #include <vcl_cstdio.h> // sprintf
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_gl.h>
-#include <vil1/vil1_crop.h>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_rgba.h>
 #include <vgui/vgui.h>
@@ -246,10 +245,11 @@ get_pixel_info_from_image(const int x, const int y,
     vcl_sprintf(msg, "Pixel Not Available");
   }
 }
+
 double bgui_image_tableau::
 get_pixel_value(const unsigned c, const unsigned r)
 {
-  vil_image_resource_sptr rs = this->get_image_resource(); 
+  vil_image_resource_sptr rs = this->get_image_resource();
   if (!rs)
     return 0;
   if (c<0||c>=rs->ni()||r<0||r>=rs->nj())
@@ -266,11 +266,11 @@ get_pixel_value(const unsigned c, const unsigned r)
         return static_cast<double>(v(0,0));
     }
     case  VIL_PIXEL_FORMAT_BYTE: {
-     
+
       vil_image_view<vxl_byte> v = rs->get_view(c,1,r,1);
       if (!v)
         return 0;
-      if(n_p==1)
+      if (n_p==1)
         return static_cast<double>(v(0,0));
       else if (n_p==3)
         return static_cast<double>(v(0,0,0)+v(0,0,1)+v(0,0,2))/3;
@@ -280,7 +280,7 @@ get_pixel_value(const unsigned c, const unsigned r)
       if (!v)
         return 0;
       else
-        if(n_p==1)
+        if (n_p==1)
           return static_cast<double>(v(0,0));
         else if (n_p==3)
           return static_cast<double>(v(0,0,0)+v(0,0,1)+v(0,0,2))/3;
@@ -290,7 +290,7 @@ get_pixel_value(const unsigned c, const unsigned r)
       if (!v)
         return 0;
       else
-        if(n_p==1)
+        if (n_p==1)
           return static_cast<double>(v(0,0));
         else if (n_p==3)
           return static_cast<double>(v(0,0,0)+v(0,0,1)+v(0,0,2))/3;
@@ -300,7 +300,7 @@ get_pixel_value(const unsigned c, const unsigned r)
       if (!v)
         return 0;
       else
-        if(n_p==1)
+        if (n_p==1)
           return static_cast<double>(v(0,0));
         else if (n_p==3)
           return static_cast<double>(v(0,0,0)+v(0,0,1)+v(0,0,2))/3;
@@ -339,7 +339,7 @@ get_pixel_value(const unsigned c, const unsigned r)
 }
 
 void bgui_image_tableau::image_line(const float col_start,
-                                    const float row_start, 
+                                    const float row_start,
                                     const float col_end,
                                     const float row_end,
                                     vcl_vector<double>& line_pos,
@@ -350,7 +350,7 @@ void bgui_image_tableau::image_line(const float col_start,
   // the line length in pixels
   float length = vcl_sqrt((col_end-col_start)*(col_end-col_start) +
                           (row_end-row_start)*(row_end-row_start));
-  if(length == 0)
+  if (length == 0)
     return;
   //initialize the line scan parameters
   float xstep = (col_end-col_start)/length;
@@ -358,23 +358,23 @@ void bgui_image_tableau::image_line(const float col_start,
   float sinc = vcl_sqrt(xstep*xstep + ystep*ystep);
   float spos = 0;
   line_pos.push_back(spos);
-  unsigned c = static_cast<unsigned>(col_start), 
+  unsigned c = static_cast<unsigned>(col_start),
    r = static_cast<unsigned>(row_start);
   vals.push_back(get_pixel_value(c, r));
-  
+
   //extract the pixel values along the line
   float xpos = col_start, ypos = row_start;
   unsigned nsteps = static_cast<unsigned>(length);
-  for(unsigned i = 0; i<nsteps; ++i)
-    {
-      xpos += xstep;
-      ypos += ystep;
-      spos += sinc;
-      c = static_cast<unsigned>(xpos);
-      r = static_cast<unsigned>(ypos);
-      line_pos.push_back(spos);
-      vals.push_back(get_pixel_value(c, r));
-    }
+  for (unsigned i = 0; i<nsteps; ++i)
+  {
+    xpos += xstep;
+    ypos += ystep;
+    spos += sinc;
+    c = static_cast<unsigned>(xpos);
+    r = static_cast<unsigned>(ypos);
+    line_pos.push_back(spos);
+    vals.push_back(get_pixel_value(c, r));
+  }
 }
 
 //--------------------------------------------------------------------------------
@@ -384,15 +384,15 @@ bool bgui_image_tableau::handle(vgui_event const &e)
 {
   static bool button_down = false;
   if (e.type == vgui_DRAW)
-    {
-      base::handle(e);
-      return true;
-    }
+  {
+    base::handle(e);
+    return true;
+  }
 
   if (e.type == vgui_BUTTON_DOWN)
-    {
+  {
     button_down = true;
-    if(handle_motion_)
+    if (handle_motion_)
       vgui::out << ' ' << vcl_endl;
   }
   else if (e.type == vgui_BUTTON_UP)
@@ -401,7 +401,6 @@ bool bgui_image_tableau::handle(vgui_event const &e)
   }
   else if (e.type == vgui_MOTION && handle_motion_&&button_down == false)
   {
-
     // Get X,Y position to display on status bar:
     float pointx, pointy;
     vgui_projection_inspector p_insp;

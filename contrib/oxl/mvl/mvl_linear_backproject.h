@@ -13,8 +13,6 @@
 #include <mvl/HomgPoint3D.h>
 
 #include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
-
 #include <vnl/algo/vnl_svd.h>
 
 // Author: Oli Cooper.

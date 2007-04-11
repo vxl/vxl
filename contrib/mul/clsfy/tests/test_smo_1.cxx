@@ -16,7 +16,6 @@
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <testlib/testlib_test.h>
-#include <vnl/vnl_math.h>
 #include <vnl/vnl_random.h>
 #include <vul/vul_timer.h>
 

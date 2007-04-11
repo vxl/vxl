@@ -9,10 +9,10 @@
 // gradient direction, and the maximum point on this parabola is used
 // to get the sub-pixel location of the edge. The pixel point must qualify
 // for being a maximum, i.e. it should have higher values than the
-// interpolated sub-pixels along the positive and negative gradient 
+// interpolated sub-pixels along the positive and negative gradient
 // direction.
 //
-// Below drawing shows the face numbers at a pixel and  
+// Below drawing shows the face numbers at a pixel and
 // is for author's own reference.
 //
 //       .---->x
@@ -41,7 +41,6 @@
 //
 //-------------------------------------------------------------------------
 #include <vcl_vector.h>
-#include <vil/vil_image_resource.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <sdet/sdet_nonmax_suppression_params.h>
@@ -52,32 +51,32 @@
 
 class sdet_nonmax_suppression : public sdet_nonmax_suppression_params
 {
-public:
+ public:
   //: Constructor from a parameter block, and gradients along x and y directions given as arrays
-  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, 
-                          vbl_array_2d<double> &grad_x, 
+  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp,
+                          vbl_array_2d<double> &grad_x,
                           vbl_array_2d<double> &grad_y);
   //: Constructor from a parameter block, gradient magnitudes given as an array and directions given as component arrays
-  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, 
-                          vbl_array_2d<double> &dir_x, 
+  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp,
+                          vbl_array_2d<double> &dir_x,
                           vbl_array_2d<double> &dir_y,
                           vbl_array_2d<double> &grad_mag);
   //: Constructor from a parameter block, gradient magnitudes given as an array and the search directions
-  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, 
-                          vbl_array_2d<double> &grad_mag, 
+  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp,
+                          vbl_array_2d<double> &grad_mag,
                           vbl_array_2d<vgl_vector_2d <double> > &directions);
   //: Constructor from a parameter block, and gradients along x and y directions given as images
-  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, 
-                          vil_image_view<double> &grad_x, 
+  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp,
+                          vil_image_view<double> &grad_x,
                           vil_image_view<double> &grad_y);
   //: Constructor from a parameter block, gradient magnitudes given as an image and directions given as component image
-  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, 
-                          vil_image_view<double> &dir_x, 
+  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp,
+                          vil_image_view<double> &dir_x,
                           vil_image_view<double> &dir_y,
                           vil_image_view<double> &grad_mag);
   //: Constructor from a parameter block, gradient magnitudes given as an image and the search directions
-  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, 
-                          vil_image_view<double> &grad_mag, 
+  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp,
+                          vil_image_view<double> &grad_mag,
                           vbl_array_2d<vgl_vector_2d <double> > &directions);
   //: Destructor
   ~sdet_nonmax_suppression();
@@ -89,7 +88,7 @@ public:
   void apply();
   void clear();
 
-protected:
+ protected:
   //members
   bool points_valid_;      //process state flag
   vcl_vector<vsol_point_2d_sptr> points_; //output, resulting edge points
@@ -111,7 +110,7 @@ protected:
   double subpixel_s(double *s, double *f);
   // used for 9 points parabola fit
   double subpixel_s(int x, int y, vgl_vector_2d<double> direction);
-  void find_distance_s_and_f_for_point(int x, int y, vgl_homg_line_2d<double> line, 
+  void find_distance_s_and_f_for_point(int x, int y, vgl_homg_line_2d<double> line,
                                        double &d, double &s, vgl_vector_2d<double> direction);
 };
 

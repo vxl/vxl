@@ -5,7 +5,7 @@
 
 #include <vcl_cmath.h> // for std::abs
 #include <vnl/vnl_inverse.h>
-#include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_vector.h>
 #include <vnl/vnl_double_4.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vpgl/vpgl_fundamental_matrix.h>

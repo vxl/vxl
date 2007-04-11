@@ -3,9 +3,6 @@
 #include <vcl_vector.h>
 #include <vcl_cmath.h>
 #include <vpgl/vpgl_rational_camera.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
 
 static void test_rational_camera()
@@ -44,23 +41,22 @@ static void test_rational_camera()
   double sz = 5.0, oz = 10.0;
   double su = 1000.0, ou = 500;
   double sv = 500.0, ov = 200;
-  vpgl_rational_camera<double> rcam(neu_u, den_u, neu_v, den_v, 
+  vpgl_rational_camera<double> rcam(neu_u, den_u, neu_v, den_v,
                                     sx, ox,
                                     sy, oy,
                                     sz, oz,
                                     su, ou,
                                     sv, ov);
   bool good = true;
-  for(unsigned i = 0; i<8; ++i)
-    {
-      rcam.project(act_x[i], act_y[i], act_z[i], u, v);
-      vcl_cout << '(' << act_x[i]<< ' '<< act_y[i]<< ' '<<act_z[i] 
-               << ")-> (" << u << ' ' << v << ")\n";
-      double eu = vcl_fabs(u-act_u[i]), ev = vcl_fabs(v-act_v[i]);
-      vcl_cout << "error = (" << eu << ' ' 
-               << ev << ")\n";
-      good = good && eu<0.01 && ev < 0.01;
-    }
+  for (unsigned i = 0; i<8; ++i)
+  {
+    rcam.project(act_x[i], act_y[i], act_z[i], u, v);
+    vcl_cout << '(' << act_x[i]<< ' '<< act_y[i]<< ' '<<act_z[i]
+             << ")-> (" << u << ' ' << v << ")\n";
+    double eu = vcl_fabs(u-act_u[i]), ev = vcl_fabs(v-act_v[i]);
+    vcl_cout << "error = (" << eu << ' ' << ev << ")\n";
+    good = good && eu<0.01 && ev < 0.01;
+  }
   TEST("test rational camera projection", good, true);
   //Test various constructors
   // Set values on default constructor
@@ -82,14 +78,13 @@ static void test_rational_camera()
   icam.set_offset(vpgl_rational_camera<double>::V_INDX, ov);
   //
   good = true;
-  for(unsigned i = 0; i<8; ++i)
-    {
-      icam.project(act_x[i], act_y[i], act_z[i], u, v);
-      double eu = vcl_fabs(u-act_u[i]), ev = vcl_fabs(v-act_v[i]);
-      vcl_cout << "error = (" << eu << ' ' 
-               << ev << ")\n";
-      good = good && eu<0.01 && ev < 0.01;
-    }
+  for (unsigned i = 0; i<8; ++i)
+  {
+    icam.project(act_x[i], act_y[i], act_z[i], u, v);
+    double eu = vcl_fabs(u-act_u[i]), ev = vcl_fabs(v-act_v[i]);
+    vcl_cout << "error = (" << eu << ' ' << ev << ")\n";
+    good = good && eu<0.01 && ev < 0.01;
+  }
   TEST("test default constructor with member setting", good, true);
   vpgl_scale_offset<double> sox(sx, ox);
   vpgl_scale_offset<double> soy(sy, oy);
@@ -101,49 +96,47 @@ static void test_rational_camera()
   soffs.push_back(sou);   soffs.push_back(sov);
   vpgl_rational_camera<double> rcam1(coeff_array, soffs);
   good = true;
-  for(unsigned i = 0; i<8; ++i)
-    {
-      rcam1.project(act_x[i], act_y[i], act_z[i], u, v);
-      double eu = vcl_fabs(u-act_u[i]), ev = vcl_fabs(v-act_v[i]);
-      vcl_cout << "error = (" << eu << ' ' 
-               << ev << ")\n";
-      good = good && eu<0.01 && ev < 0.01;
-    }
+  for (unsigned i = 0; i<8; ++i)
+  {
+    rcam1.project(act_x[i], act_y[i], act_z[i], u, v);
+    double eu = vcl_fabs(u-act_u[i]), ev = vcl_fabs(v-act_v[i]);
+    vcl_cout << "error = (" << eu << ' ' << ev << ")\n";
+    good = good && eu<0.01 && ev < 0.01;
+  }
   TEST("test constructor with coeff array and vector of vpgl_scale_offset instances", good, true);
-  
+
   vnl_matrix_fixed<double, 4, 20> coeff_matrix;
-  for(unsigned i = 0; i<20; ++i)
-    {
-      coeff_matrix[0][i]=neu_u[i];
-      coeff_matrix[1][i]=den_u[i];
-      coeff_matrix[2][i]=neu_v[i];
-      coeff_matrix[3][i]=den_v[i];
-    }
+  for (unsigned i = 0; i<20; ++i)
+  {
+    coeff_matrix[0][i]=neu_u[i];
+    coeff_matrix[1][i]=den_u[i];
+    coeff_matrix[2][i]=neu_v[i];
+    coeff_matrix[3][i]=den_v[i];
+  }
   vpgl_rational_camera<double> rcam2(coeff_matrix, soffs);
   good = true;
-  for(unsigned i = 0; i<8; ++i)
-    {
-      rcam2.project(act_x[i], act_y[i], act_z[i], u, v);
-      double eu = vcl_fabs(u-act_u[i]), ev = vcl_fabs(v-act_v[i]);
-      vcl_cout << "error = (" << eu << ' ' 
-               << ev << ")\n";
-      good = good && eu<0.01 && ev < 0.01;
-    }
+  for (unsigned i = 0; i<8; ++i)
+  {
+    rcam2.project(act_x[i], act_y[i], act_z[i], u, v);
+    double eu = vcl_fabs(u-act_u[i]), ev = vcl_fabs(v-act_v[i]);
+    vcl_cout << "error = (" << eu << ' ' << ev << ")\n";
+    good = good && eu<0.01 && ev < 0.01;
+  }
   TEST("test constructor with coeff matrix and vector of vpgl_scale_offset instances", good, true);
-  
+
   //test getting the coefficient matrix
   good = true;
   vnl_matrix_fixed<double, 4, 20> cm = rcam1.coefficient_matrix();
-  for(unsigned j=0; j<4; ++j)
-    for(unsigned i=0; i<20; ++i)
+  for (unsigned j=0; j<4; ++j)
+    for (unsigned i=0; i<20; ++i)
       good = good && cm[j][i]==coeff_matrix[j][i];
   TEST("test getting coefficient matrix", good, true);
 
   //test getting the coefficient array
   good = true;
   vcl_vector<vcl_vector<double> > coefficients = rcam1.coefficients();
-  for(unsigned j=0; j<4; ++j)
-    for(unsigned i=0; i<20; ++i)
+  for (unsigned j=0; j<4; ++j)
+    for (unsigned i=0; i<20; ++i)
       good = good && coefficients[j][i]==coeff_matrix[j][i];
   TEST("test getting coefficient array", good, true);
 

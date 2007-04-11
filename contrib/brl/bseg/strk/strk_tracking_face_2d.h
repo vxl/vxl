@@ -19,18 +19,16 @@
 // \verbatim
 //  Modifications
 //   10-sep-2004 Peter Vanroose Added copy ctor with explicit vbl_ref_count init
-//   15-june-2005 Ozge Can Ozcanli Added methods to calculate mutual information 
-//                                 with known pixel correspondences of two faces 
-//   13-july-2005 Ozge Can Ozcanli Added max_intensity_ variable to support images 
+//   15-june-2005 Ozge Can Ozcanli Added methods to calculate mutual information
+//                                 with known pixel correspondences of two faces
+//   13-july-2005 Ozge Can Ozcanli Added max_intensity_ variable to support images
 //                                 with larger range than 8 bits
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
 #include <vbl/vbl_ref_count.h>
-#include <vbl/vbl_array_2d.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vil1/vil1_memory_image_of.h>
-#include <vsol/vsol_line_2d_sptr.h>
 #include <vtol/vtol_intensity_face.h>
 #include <strk/strk_tracking_face_2d_sptr.h>
 #include <bsta/bsta_histogram.h>
@@ -125,7 +123,7 @@ class strk_tracking_face_2d : public vbl_ref_count
                                   vil1_memory_image_of<float> const& Iy,
                                   vil1_memory_image_of<float> const& hue,
                                   vil1_memory_image_of<float> const& sat);
-  
+
   bool compute_mutual_information(vcl_vector <vcl_vector< vgl_point_2d<int> > > region_map,
                                   int base_x, int base_y,
                                   vil1_memory_image_of<float> const& image,
@@ -136,7 +134,7 @@ class strk_tracking_face_2d : public vbl_ref_count
 
   bool compute_only_gradient_mi(vil1_memory_image_of<float> const& Ix,
                                 vil1_memory_image_of<float> const& Iy);
-                                
+
   //: from the face vertices
   void centroid(double& x, double& y) const;
 
@@ -198,14 +196,14 @@ class strk_tracking_face_2d : public vbl_ref_count
                                   vil1_memory_image_of<float> const& Iy);
   void print_color_histograms(vil1_memory_image_of<float> const& hue,
                               vil1_memory_image_of<float> const& sat);
-  bsta_histogram<float> 
-    intensity_histogram(vil1_memory_image_of<float> const& image);  
-  bsta_histogram<float> 
+  bsta_histogram<float>
+    intensity_histogram(vil1_memory_image_of<float> const& image);
+  bsta_histogram<float>
     gradient_histogram(vil1_memory_image_of<float> const& Ix,
-                       vil1_memory_image_of<float> const& Iy);  
-  bsta_histogram<float> 
+                       vil1_memory_image_of<float> const& Iy);
+  bsta_histogram<float>
     color_histogram(vil1_memory_image_of<float> const& hue,
-                    vil1_memory_image_of<float> const& sat);  
+                    vil1_memory_image_of<float> const& sat);
 
  private:
   // local functions
@@ -228,7 +226,7 @@ class strk_tracking_face_2d : public vbl_ref_count
   float
     compute_intensity_mutual_information(vil1_memory_image_of<float> const& image);
 
-  float 
+  float
     compute_intensity_mutual_information(vcl_vector <vcl_vector< vgl_point_2d<int> > > region_map,
                                          int base_x, int base_y,
                                          vil1_memory_image_of<float> const& image);

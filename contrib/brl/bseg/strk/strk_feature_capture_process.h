@@ -15,11 +15,11 @@
 //---------------------------------------------------------------------------
 #include <vcl_fstream.h>
 #include <vcl_string.h>
-#include <vgl/vgl_point_2d.h>
 #include <vtol/vtol_face_2d_sptr.h>
 #include <vpro/vpro_video_process.h>
 #include <strk/strk_info_tracker.h>
 #include <strk/strk_info_tracker_params.h>
+
 class strk_feature_capture_process : public vpro_video_process
 {
  public:

@@ -9,7 +9,7 @@
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h> // for vcl_abort()
-#include <vnl/vnl_math.h>
+#include <vnl/vnl_vector.h>
 
 //=======================================================================
 //: Orthoganalise a basis using modified Gram-Schmidt
@@ -36,7 +36,7 @@ void mbl_mod_gram_schmidt(const vnl_matrix<double>& v,
 
     //Copy into more convenient holding storage as vector of vectors
     //And also initialise output basis to input
-    for(unsigned jcol=0;jcol<N;++jcol)
+    for (unsigned jcol=0;jcol<N;++jcol)
     {
         evecs[jcol] = vbasis[jcol] = v.get_column(jcol);
     }
@@ -57,7 +57,7 @@ void mbl_mod_gram_schmidt(const vnl_matrix<double>& v,
 
     //And copy into column-wise matrix (kth base is the kth column)
     e.set_size(v.rows(),N);
-    for(unsigned jcol=0;jcol<N;++jcol)
+    for (unsigned jcol=0;jcol<N;++jcol)
     {
         e.set_column(jcol,evecs[jcol]);
     }

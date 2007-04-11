@@ -2,9 +2,9 @@
 #include <vcl_iostream.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
+#include <vgl/algo/vgl_rotation_3d.h>
 #include <vpgl/algo/vpgl_optimize_camera.h>
 #include <vnl/vnl_double_3.h>
-#include <vnl/vnl_rotation_matrix.h>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_math.h> // for pi
 

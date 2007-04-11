@@ -5,7 +5,6 @@
 #include <vpgl/vpgl_reg_fundamental_matrix.h>
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_rank.h>
 #include <vgl/vgl_distance.h>
 
 static void test_fundamental_matrix()

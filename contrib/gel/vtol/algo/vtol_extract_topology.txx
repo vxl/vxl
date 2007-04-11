@@ -14,7 +14,6 @@
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_edge_2d_sptr.h>
-#include <vtol/vtol_one_chain.h>
 #include <vtol/vtol_intensity_face.h>
 
 #include <vsol/vsol_curve_2d_sptr.h>
@@ -23,7 +22,6 @@
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator_linear.h>
 #include <vdgl/vdgl_digital_curve.h>
-#include <vdgl/vdgl_digital_region.h>
 
 #ifndef NDEBUG
 #  include <vcl_iostream.h>

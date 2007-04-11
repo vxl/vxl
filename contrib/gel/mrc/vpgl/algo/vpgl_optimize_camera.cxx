@@ -3,11 +3,8 @@
 //:
 // \file
 #include <vnl/vnl_rotation_matrix.h>
-#include <vnl/vnl_quaternion.h>
 #include <vnl/vnl_double_3.h>
-#include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
-#include <vnl/vnl_det.h>
 #include <vcl_cassert.h>
 
 //: Constructor

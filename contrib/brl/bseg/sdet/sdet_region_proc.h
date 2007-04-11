@@ -23,7 +23,6 @@
 #include <vil/vil_image_view.h>
 #include <vsol/vsol_box_2d_sptr.h>
 #include <vtol/vtol_intensity_face_sptr.h>
-#include <vtol/vtol_edge_2d_sptr.h>
 #include <brip/brip_roi_sptr.h>
 #include <sdet/sdet_region_proc_params.h>
 class sdet_detector;

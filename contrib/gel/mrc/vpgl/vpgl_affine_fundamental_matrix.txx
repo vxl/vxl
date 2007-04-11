@@ -5,9 +5,7 @@
 // \file
 
 #include <vnl/vnl_fwd.h>
-#include <vnl/vnl_vector_fixed.h>
 #include <vgl/vgl_fwd.h>
-#include <vnl/vnl_cross_product_matrix.h>
 #include <vcl_iosfwd.h>
 #include <vcl_cassert.h>
 

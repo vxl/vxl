@@ -4,22 +4,19 @@
 // \file
 // \brief A class to store image correspondences
 //
-//
-//
 // \author J.L. Mundy
 // \verbatim
-// Initial version Feb. 2004
-// May 1, 2004
-// modified to make more generic using a correspondence base class - JLM
+//  Initial version Feb. 2004
+//  May 1, 2004
+//  modified to make more generic using a correspondence base class - JLM
 // \endverbatim
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <vbl/vbl_ref_count.h>
 #include <vcl_vector.h>
 #include <vcl_iosfwd.h>
-#include <vgl/vgl_homg_point_2d.h>
 #include <brct/brct_corr.h>
+
 class brct_plane_corr : public brct_corr
 {
  public:

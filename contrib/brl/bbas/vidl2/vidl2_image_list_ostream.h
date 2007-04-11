@@ -13,8 +13,6 @@
 
 #include "vidl2_ostream.h"
 #include <vcl_string.h>
-#include <vil/vil_image_resource_sptr.h>
-
 
 //:A video output stream to a list of images
 class vidl2_image_list_ostream

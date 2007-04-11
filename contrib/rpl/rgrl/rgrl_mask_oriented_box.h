@@ -3,9 +3,9 @@
 //:
 // \file
 // \brief  mask using oriented box (i.e., not-axis-aligned)
-//         After applying the (transpose of) rotation matrix, 
+//         After applying the (transpose of) rotation matrix,
 //         it is defined by min and max two points (similar to rgrl_mask_box)
-// 
+//
 // \author Gehua Yang
 // \date   Jan 2007
 // \verbatim
@@ -15,7 +15,6 @@
 #include <vcl_iosfwd.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
-#include <vil/vil_image_view.h>
 
 #include <rgrl/rgrl_object.h>
 #include <rgrl/rgrl_macros.h>
@@ -33,13 +32,13 @@ class rgrl_mask_oriented_box
   rgrl_mask_oriented_box( unsigned dim );
 
   //: Initialize a box from \a origin with length \a len.
-  rgrl_mask_oriented_box( vnl_vector<double> const& origin, 
+  rgrl_mask_oriented_box( vnl_vector<double> const& origin,
                           vnl_matrix<double> const& axes,
                           vnl_vector<double> const& len );
 
   //: Initialize a box from \a x0 to \a x1 using axes specified in columns of \a axes
-  rgrl_mask_oriented_box( vnl_vector<double> const& oriented_xmin, 
-                          vnl_vector<double> const& oriented_xmax, 
+  rgrl_mask_oriented_box( vnl_vector<double> const& oriented_xmin,
+                          vnl_vector<double> const& oriented_xmax,
                           vnl_matrix<double> const& axes );
 
   //: True if a point is inside the region
@@ -69,7 +68,7 @@ class rgrl_mask_oriented_box
   vnl_vector<double> const&
   oriented_x0() const
   { return omin_; }
-  
+
   //: get the xmin after re-orientation
   vnl_vector<double> const&
   oriented_x1() const
@@ -82,7 +81,7 @@ class rgrl_mask_oriented_box
   bool operator!=( const rgrl_mask_oriented_box& other ) const;
 
   //: get average distance of corresponding vertices between two oriented box
-  double 
+  double
   average_vertices_dist( const rgrl_mask_oriented_box& other ) const;
 
   // Defines type-related functions

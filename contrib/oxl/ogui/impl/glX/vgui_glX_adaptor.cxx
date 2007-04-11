@@ -16,7 +16,6 @@
 
 #include <vgui/vgui_matrix_state.h>
 #include <vgui/vgui_event.h>
-#include <vgui/vgui_tableau_sptr.h>
 
 #include "vgui_glX.h"
 #include "vgui_glX_window.h"
@@ -30,11 +29,13 @@ vgui_glX_adaptor::vgui_glX_adaptor() :
 }
 
 
-vgui_glX_adaptor::~vgui_glX_adaptor() {
+vgui_glX_adaptor::~vgui_glX_adaptor()
+{
 }
 
 
-void vgui_glX_adaptor::make_current() {
+void vgui_glX_adaptor::make_current()
+{
   Display *display = vgui_glX::instance()->display;
   Window win = window->window;
   GLXContext context = window->context;
@@ -42,7 +43,8 @@ void vgui_glX_adaptor::make_current() {
   glXMakeCurrent(display, win, context);
 }
 
-void vgui_glX_adaptor::swap_buffers() {
+void vgui_glX_adaptor::swap_buffers()
+{
   Display *display = vgui_glX::instance()->display;
   Window win = window->window;
 
@@ -50,7 +52,8 @@ void vgui_glX_adaptor::swap_buffers() {
 }
 
 
-void vgui_glX_adaptor::draw() {
+void vgui_glX_adaptor::draw()
+{
   if (debug) vcl_cerr << "vgui_glX_adaptor::draw\n";
 
   make_current();

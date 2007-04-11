@@ -11,7 +11,6 @@
 
 #include <rgrl/rgrl_trans_reader.h>
 #include <rgrl/rgrl_util.h>
-#include <vnl/vnl_math.h>
 
 rgrl_trans_couple::
   rgrl_trans_couple( rgrl_transformation_sptr const& forward, rgrl_transformation_sptr const& backward )
@@ -174,7 +173,7 @@ rgrl_transformation_sptr
 rgrl_trans_couple::
 inverse_transform() const
 {
-  if( backward_xform_ )
+  if ( backward_xform_ )
     return new rgrl_trans_couple( backward_xform_, forward_xform_ );
   else
     return 0;

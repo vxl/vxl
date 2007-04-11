@@ -12,14 +12,11 @@
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 
-#include <vgl/algo/vgl_homg_operators_3d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_line_3d_2_points.h>
 #include <vgl/vgl_box_2d.h>
-#include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_distance.h>
 
 inline bool vgl_near_zero(double x){return vcl_fabs(x)<1e-08;}

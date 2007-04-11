@@ -18,7 +18,6 @@
 #include "bgui_image_tableau_sptr.h"
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_range_map_params_sptr.h>
-#include <vgui/vgui_rubberband_tableau.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
 #include <vil1/vil1_image.h>

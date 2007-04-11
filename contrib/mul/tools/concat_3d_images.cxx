@@ -9,7 +9,6 @@
 #include <vcl_cstring.h>
 #include <vul/vul_file.h>
 #include <vbl/vbl_array_3d.txx>
-#include <vbl/vbl_triple.h>
 #include <vil3d/vil3d_property.h>
 #include <vil3d/vil3d_image_resource.h>
 #include <vil3d/vil3d_image_view.h>
@@ -21,7 +20,7 @@
 
 void usage(char * progname)
 {
-  vcl_cout << "Usage: \n"
+  vcl_cout << "Usage:\n"
            << progname << " [-m margin_width] [-b voxel_value] output image1 image2 - image3 image4 -- image5 ...\n"
            << '\n'
            << "Option: -m number: Set the margin between images - defaults to 0\n"
@@ -272,7 +271,6 @@ int main(int argc, char*argv[])
   default:
     vcl_memset(&pv, 0, sizeof(pv));
     break;
-
   }
 
   vil3d_image_resource_sptr blank =

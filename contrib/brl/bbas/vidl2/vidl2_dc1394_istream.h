@@ -26,7 +26,6 @@
 #include "vidl2_istream.h"
 #include "vidl2_iidc1394_params.h"
 #include <vcl_string.h>
-#include <vil/vil_image_resource_sptr.h>
 
 
 //: A video input stream using libdc1394

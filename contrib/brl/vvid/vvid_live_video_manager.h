@@ -16,7 +16,6 @@
 //-----------------------------------------------------------------------------
 
 #include <vil1/vil1_memory_image_of.h>
-#include <vgui/vgui_viewer2D_tableau_sptr.h>
 #include <vgui/vgui_wrapper_tableau.h>
 #include <bgui/bgui_vtol2D_tableau_sptr.h>
 #include <vvid/cmu_1394_camera.h>

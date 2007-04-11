@@ -30,11 +30,9 @@
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
-#include <vtol/vtol_intensity_face_sptr.h>
 #include <vgui/vgui_wrapper_tableau.h>
 #include <bgui/bgui_image_tableau_sptr.h>
 #include <vgui/vgui_range_map_params_sptr.h>
-#include <vgui/vgui_style_sptr.h>
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_soview2D.h>
 #include <bgui/bgui_vtol2D_tableau_sptr.h>

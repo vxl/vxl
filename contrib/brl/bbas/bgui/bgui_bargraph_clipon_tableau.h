@@ -15,9 +15,9 @@
 //  As specified by the input color vector, with elements
 //  ranging from 0-7;
 #include <vbl/vbl_ref_count.h>
-#include <vgui/vgui_event.h>
 #include <vgui/vgui_soview2D.h>
 #include <vgui/vgui_easy2D_tableau_sptr.h>
+
 class bgui_bargraph_clipon_tableau : public vbl_ref_count
 {
  public:

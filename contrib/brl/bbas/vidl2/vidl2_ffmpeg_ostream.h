@@ -18,7 +18,6 @@
 
 #include "vidl2_ostream.h"
 #include <vcl_string.h>
-#include <vil/vil_image_resource_sptr.h>
 #include "vidl2_ffmpeg_ostream_params.h"
 
 

@@ -1,7 +1,6 @@
 #include <vcl_iostream.h> //vcl_cout
 #include <vcl_string.h>
 #include <dom/DOM_Element.hpp>
-#include <vsol/vsol_point_2d.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <bxml/bxml_vsol_point_2d_input_converter.h>
 #include <bxml/bxml_vtol_vertex_2d_input_converter.h>

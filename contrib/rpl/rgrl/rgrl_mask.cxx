@@ -4,7 +4,6 @@
 #include <vcl_cassert.h>
 #include <vcl_limits.h>
 #include <vnl/vnl_math.h>
-#include <vnl/vnl_transpose.h>
 
 rgrl_mask_box
 rgrl_mask::
@@ -18,7 +17,7 @@ bounding_box() const
 rgrl_mask_2d_image::
 rgrl_mask_2d_image( const vil_image_view<vxl_byte>& in_mask,
                     int org_x, int org_y)
-  : rgrl_mask( 2 ), mask_image_( in_mask ), 
+  : rgrl_mask( 2 ), mask_image_( in_mask ),
     org_x_( org_x ), org_y_( org_y )
 {
   update_bounding_box();
@@ -34,9 +33,9 @@ inside( vnl_vector<double> const& pt ) const
   // As the bounding box is tighter than image dim,
   // check w/ bounding box is sufficient
   //
-  bool in_range = ( x0_[0] <= x ) && ( x <= x1_[0] ) && 
+  bool in_range = ( x0_[0] <= x ) && ( x <= x1_[0] ) &&
                   ( x0_[1] <= y ) && ( y <= x1_[1] );
-  
+
   return in_range && mask_image_( vnl_math_rnd(x), vnl_math_rnd(y) )>0;
 }
 
@@ -51,21 +50,21 @@ update_bounding_box()
   x1_[1] = 0.0;
 
   bool non_zero_pixel = false;
-  
-  for( unsigned j=0; j<mask_image_.nj(); ++j )
-    for( unsigned i=0; i<mask_image_.ni(); ++i )
-      if( mask_image_(i,j) ) {
-        
-        if( x0_[0] > double(i) )        x0_[0] = double(i);
-        if( x0_[1] > double(j) )        x0_[1] = double(j);
-        if( x1_[0] < double(i) )        x1_[0] = double(i);
-        if( x1_[1] < double(j) )        x1_[1] = double(j);
-  
-        non_zero_pixel = true;      
+
+  for ( unsigned j=0; j<mask_image_.nj(); ++j )
+    for ( unsigned i=0; i<mask_image_.ni(); ++i )
+      if ( mask_image_(i,j) ) {
+
+        if ( x0_[0] > double(i) )        x0_[0] = double(i);
+        if ( x0_[1] > double(j) )        x0_[1] = double(j);
+        if ( x1_[0] < double(i) )        x1_[0] = double(i);
+        if ( x1_[1] < double(j) )        x1_[1] = double(j);
+
+        non_zero_pixel = true;
       }
-  
+
   // special case: no pixel is true
-  if( !non_zero_pixel ) {
+  if ( !non_zero_pixel ) {
     x0_.fill( 0.0 );
     x1_.fill( 0.0 );
   }
@@ -83,7 +82,7 @@ rgrl_mask_sphere::
 rgrl_mask_sphere( const vnl_vector<double>& in_center,
                   double in_radius )
   : rgrl_mask( in_center.size() ),
-    center_(in_center), 
+    center_(in_center),
     radius_sqr_(in_radius*in_radius)
 {
   update_bounding_box();
@@ -108,7 +107,7 @@ set_center( vnl_vector<double> const& pt )
 {
   assert( pt.size() == center_.size() );
   center_ = pt;
-  
+
   update_bounding_box();
 }
 
@@ -117,7 +116,7 @@ rgrl_mask_sphere::
 set_radius( double radius )
 {
   radius_sqr_ = radius * radius;
-  
+
   update_bounding_box();
 }
 
@@ -126,14 +125,14 @@ rgrl_mask_sphere::
 update_bounding_box()
 {
   // if ceter or radius not yet set
-  if( !center_.size() || !radius_sqr_ )
+  if ( !center_.size() || !radius_sqr_ )
     return;
- 
+
   const unsigned m = center_.size();
   x0_.set_size( m );
   x1_.set_size( m );
   double r = vcl_sqrt( radius_sqr_ );
-  for( unsigned i=0; i<m; ++i ) {
+  for ( unsigned i=0; i<m; ++i ) {
     x0_[i] = center_[i] - r;
     x1_[i] = center_[i] + r;
   }
@@ -152,11 +151,11 @@ rgrl_mask_box( vnl_vector<double> const& x0, vnl_vector<double> const& x1 )
   : rgrl_mask( x0.size() )
 {
   assert( x0.size() == x1.size() );
-  
+
   //check
-  for( unsigned i=0; i<x0.size(); ++i )
+  for ( unsigned i=0; i<x0.size(); ++i )
     assert( x0[i] <= x1[i] );
-    
+
   x0_ = x0;
   x1_ = x1;
 }
@@ -209,7 +208,7 @@ operator!=( const rgrl_mask_box& other ) const
 vcl_ostream& operator<<(vcl_ostream& os, const rgrl_mask_box& box)
 {
   os<< box.x0().size() << "  ";
-  if( box.x0().size() )
+  if ( box.x0().size() )
     os << box.x0()<<"  "<<box.x1();
   return os;
 }
@@ -218,11 +217,11 @@ vcl_istream& operator>>(vcl_istream& is, rgrl_mask_box& box)
 {
   int m = -1;
   is >> m;
-  
-  if( m <= 0 ) return is;
-    
+
+  if ( m <= 0 ) return is;
+
   vnl_vector<double> x0(m), x1(m);
-  
+
   is >> x0 >> x1;
   rgrl_mask_box temp_box( x0, x1 );
   box = temp_box;

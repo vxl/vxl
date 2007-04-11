@@ -6,7 +6,6 @@
 
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_rank.h>// not used
 #include <vgl/vgl_fwd.h>
 #include <vnl/vnl_cross_product_matrix.h>
 #include <vnl/algo/vnl_matrix_inverse.h>

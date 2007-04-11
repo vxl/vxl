@@ -13,11 +13,10 @@
 #include <osl/osl_vertex.h>
 #include <osl/osl_edge.h>
 
-#include <vsol/vsol_curve_2d.h>
-
 #include <mvl/HomgPoint2D.h>
 
 #include <vcl_vector.h>
+#include <vcl_string.h>
 
 vtol_vertex_2d_sptr convert_vertex_2d(osl_vertex & in);
 

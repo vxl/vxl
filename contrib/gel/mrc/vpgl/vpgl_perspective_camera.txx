@@ -7,13 +7,11 @@
 #include <vcl_iostream.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_line_3d_2_points.h>
-#include <vnl/vnl_math.h>
 #include <vnl/vnl_det.h>
 #include <vnl/algo/vnl_qr.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3.h>
-#include <vnl/vnl_identity_3x3.h>
 #include <vnl/vnl_double_3x4.h>
 #include "vpgl_perspective_camera.h"
 
@@ -70,12 +68,12 @@ vgl_line_3d_2_points<T> vpgl_perspective_camera<T>::backproject(
     vnl_vector_fixed<T,3>( image_point.x(), image_point.y(), 1.0 ) );
   vgl_homg_point_3d<T> wp_homg( vnl_wp[0], vnl_wp[1], vnl_wp[2], vnl_wp[3] ); 
   vgl_point_3d<T> wp;
-  if( !wp_homg.ideal() )
+  if ( !wp_homg.ideal() )
     wp.set( wp_homg.x()/wp_homg.w(), wp_homg.y()/wp_homg.w(), wp_homg.z()/wp_homg.w() );
   else
     wp.set( camera_center_.x()+wp_homg.x(), 
       camera_center_.y()+wp_homg.y(), camera_center_.z()+wp_homg.z() );
-  if( is_behind_camera( vgl_homg_point_3d<T>( wp ) ) )
+  if ( is_behind_camera( vgl_homg_point_3d<T>( wp ) ) )
     wp = camera_center_ + ( camera_center_-wp );
 
   // The ray is then defined by that point and the camera center.
@@ -179,7 +177,6 @@ void vpgl_perspective_camera<T>::recompute_matrix()
    // Then multiply on left to get KR[ I | -C ].
    this->set_matrix(K_.get_matrix()*R_.as_matrix()*Pnew);
 }
-
 
 
 //-------------------------------------------

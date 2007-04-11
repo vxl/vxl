@@ -12,7 +12,6 @@
 #include <vnl/io/vnl_io_matrix.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
-#include <vnl/vnl_cost_function.h>
 #include <clsfy/clsfy_binary_hyperplane_ls_builder.h>
 
 //=======================================================================

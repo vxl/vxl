@@ -4,10 +4,6 @@
 
 #include <mrc/vpgl/algo/vpgl_construct_cameras.h>
 #include <vnl/vnl_fwd.h>
-#include <vnl/vnl_double_3x4.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_double_4.h>
-#include <vnl/vnl_double_3x3.h>
 
 static void test_construct_cameras()
 {

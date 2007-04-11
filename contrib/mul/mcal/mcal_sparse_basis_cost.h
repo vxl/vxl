@@ -8,7 +8,6 @@
 #include <mcal/mcal_single_basis_cost.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
-#include <mbl/mbl_data_wrapper.h>
 #include <vcl_iosfwd.h>
 
 //: Cost function to promote sparse basis vectors

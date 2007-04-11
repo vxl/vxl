@@ -49,14 +49,11 @@
 #include <rgrl/rgrl_convergence_on_weighted_error.h>
 #include <rgrl/rgrl_feature_based_registration.h>
 #include <vul/vul_arg.h>
-#include <vbl/vbl_bounding_box.h>
-
+#include <vil/vil_math.h>
 #include <vil/vil_load.h>
-#include <vil/vil_save.h>
-#include <vil/vil_convert.h>
 #include <vil/algo/vil_gauss_reduce.h>
-
 #include <testlib/testlib_test.h>
+
 void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 
 typedef vxl_byte pixel_type;
@@ -514,7 +511,7 @@ main( int argc, char* argv[] )
     const unsigned ni = from_images[num_stages].ni();
     const unsigned nj = from_images[num_stages].nj();
     box_ptr->set_x1( vnl_double_2( double(ni-1), double(nj-1) ).as_ref() );
-    
+
     // set smart pointer
     rgrl_mask_sptr roi = box_ptr;
     box_ptr = 0;

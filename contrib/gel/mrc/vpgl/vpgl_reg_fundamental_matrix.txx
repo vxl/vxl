@@ -4,14 +4,11 @@
 //:
 // \file
 
+#include "vpgl_reg_fundamental_matrix.h"
 #include <vnl/vnl_fwd.h>
-#include <vnl/vnl_vector_fixed.h>
 #include <vgl/vgl_fwd.h>
-#include <vnl/vnl_cross_product_matrix.h>
 #include <vcl_iosfwd.h>
 #include <vcl_cassert.h>
-
-#include "vpgl_reg_fundamental_matrix.h"
 
 
 //---------------------------------

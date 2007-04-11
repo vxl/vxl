@@ -2,10 +2,8 @@
 // \file
 #include "mcal_single_basis_cost.h"
 #include <vcl_cstdlib.h>
-#include <mbl/mbl_data_array_wrapper.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_cloneables_factory.h>
-#include <mbl/mbl_read_props.h>
 #include <mbl/mbl_parse_block.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>

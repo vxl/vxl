@@ -6,23 +6,17 @@
 
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
-#include <vul/vul_timer.h>
 #include <vil1/vil1_image.h>
-#include <vil1/vil1_save.h>
-#include <vil1/vil1_memory_image_of.h>
+#include <vil/vil_image_list.h>
 #include <vil/vil_image_resource.h>
 #include <vidl/vidl_movie.h>
-#include <vidl/vidl_clip.h>
 #include <vidl/vidl_io.h>
 #include <vidl/vidl_frame.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_error_dialog.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_dialog.h>
-#include <vgui/vgui_utils.h>
 #include <vgui/vgui_shell_tableau.h>
-#include <vgui/vgui_style_sptr.h>
-#include <vgui/vgui_style.h>
 #include <vgui/vgui_range_map_params.h>
 #include <bgui/bgui_image_tableau.h>
 #include <bgui/bgui_vsol2D_tableau.h>
@@ -31,9 +25,6 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_image_tableau.h>
-#include <vgui/vgui_rubberband_tableau.h>
-#include <bgui/bgui_vtol2D_rubberband_client.h>
-#include <vgui/vgui_composite_tableau.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vpro/vpro_vil_video_process.h>

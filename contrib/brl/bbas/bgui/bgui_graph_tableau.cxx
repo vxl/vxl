@@ -8,7 +8,6 @@
 #include <vnl/vnl_math.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_gl.h>
-#include <vgui/vgui_find.h>
 #include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
@@ -58,7 +57,7 @@ float bgui_graph_tableau::map_y_to_display(const float ypos)
 //: find the nearest discrete y value less than or equal to ymin
 static float find_y_origin(const float ymin, const float yinc)
 {
-  if(yinc==0)
+  if (yinc==0)
     return 0;
   float nincs = vcl_floor(ymin/yinc);
   return nincs*yinc;
@@ -110,7 +109,7 @@ void bgui_graph_tableau::compute_scale()
     yinc_ = 1;
   if (xinc_ == 0.0)
     xinc_ = 1;
-  yorigin_ = find_y_origin(ymin_,yinc_); 
+  yorigin_ = find_y_origin(ymin_,yinc_);
 }
 
 void bgui_graph_tableau::update(vcl_vector<double> const& pos,
@@ -161,7 +160,7 @@ void bgui_graph_tableau::draw_tics()
 {
   float xs = xmin_;
   float ys = yorigin_;
-  float tl = tic_length_;  
+  float tl = tic_length_;
   unsigned ix = 0, iy = 0;
   //The bottom of the display
   float y0 = map_y_to_display(yorigin_);
@@ -332,12 +331,12 @@ vgui_dialog* bgui_graph_tableau::popup_graph(vcl_string const& info,
 bool bgui_graph_tableau::handle(const vgui_event& event)
 {
   // Pass events on down to the child tableaux:
-  if(event.type == vgui_DRAW)
-    {
-      vcl_cout << "Graph Handle\n";
-      easy_->handle(event);
-      tt_->handle(event);
-    }
+  if (event.type == vgui_DRAW)
+  {
+    vcl_cout << "Graph Handle\n";
+    easy_->handle(event);
+    tt_->handle(event);
+  }
   return false;
 }
 
