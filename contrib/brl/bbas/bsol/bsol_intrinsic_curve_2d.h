@@ -27,6 +27,7 @@
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
+#include <vsol/vsol_polyline_2d_sptr.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
@@ -79,6 +80,9 @@ class bsol_intrinsic_curve_2d : public vsol_curve_2d
   bsol_intrinsic_curve_2d();
   //: Constructor from a vcl_vector of points
   bsol_intrinsic_curve_2d(const vcl_vector<vsol_point_2d_sptr> &new_vertices);
+  //: Constructor from a vsol_polyline_2d_sptr
+  bsol_intrinsic_curve_2d(const vsol_polyline_2d_sptr poly);
+  
   //: Copy constructor
   bsol_intrinsic_curve_2d(const bsol_intrinsic_curve_2d &other);
   //: Destructor

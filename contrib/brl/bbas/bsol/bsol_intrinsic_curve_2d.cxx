@@ -3,6 +3,7 @@
 //:
 // \file
 #include <vsol/vsol_point_2d.h>
+#include <vsol/vsol_polyline_2d.h>
 #include <vsol/vsol_digital_curve_2d.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
@@ -33,6 +34,16 @@ bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d(const vcl_vector<vsol_point_2d_
   storage_=new vcl_vector<vsol_point_2d_sptr>(new_vertices);
   isOpen_=true;
 }
+
+//: Constructor from a vsol_polyline_2d_sptr
+bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d(const vsol_polyline_2d_sptr poly)
+{
+  storage_ = new vcl_vector<vsol_point_2d_sptr>();
+  for (unsigned i = 0; i < poly->size(); i++) 
+    storage_->push_back(poly->vertex(i));
+  isOpen_=true;
+}
+  
 
 //---------------------------------------------------------------------------
 // Copy constructor
