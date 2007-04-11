@@ -18,8 +18,8 @@
 #include <vil/vil_new.h>
 #include <vil/vil_image_view.h>
 
-#include <dc1394/dc1394_control.h>
-#include <dc1394/dc1394_utils.h>
+#include <dc1394/control.h>
+#include <dc1394/utils.h>
 
 #include <vil/vil_convert.h>
 
@@ -107,8 +107,10 @@ struct vidl2_dc1394_istream::pimpl
   : vid_index_( unsigned(-1) ),
     camera_info_(NULL),
     max_speed_(DC1394_ISO_SPEED_400),
+    b_mode_(false),
     pixel_format_(VIDL2_PIXEL_FORMAT_UNKNOWN),
     cur_frame_(NULL),
+    dc1394frame_(NULL),
     cur_frame_valid_(false)
   {
   }
@@ -119,10 +121,14 @@ struct vidl2_dc1394_istream::pimpl
 
   int max_speed_;
 
+  bool b_mode_;
+
   vidl2_pixel_format pixel_format_;
 
   //: The last successfully decoded frame.
   mutable vidl2_frame_sptr cur_frame_;
+
+  dc1394video_frame_t *dc1394frame_;
 
   bool cur_frame_valid_;
 };
@@ -156,7 +162,9 @@ open(unsigned int num_dma_buffers,
   // Close any currently opened file
   close();
 
+  // FIXME - where is this used in the new API?
   dc1394ring_buffer_policy_t rb_policy = drop_frames? DC1394_RING_BUFFER_LAST: DC1394_RING_BUFFER_NEXT;
+
 
   dc1394camera_t **dccameras=NULL;
   unsigned int camnum=0;
@@ -187,6 +195,12 @@ open(unsigned int num_dma_buffers,
     return false;
   }
 
+  dc1394operation_mode_t op_mode = params.b_mode_ ? DC1394_OPERATION_MODE_1394B : DC1394_OPERATION_MODE_LEGACY;
+  if ( dc1394_video_set_operation_mode(is_->camera_info_, op_mode) != DC1394_SUCCESS){
+    vcl_cerr << "Failed to set camera in b mode\n";
+    close();
+    return false;
+  }
 
   if (dc1394_video_set_iso_speed(is_->camera_info_, dc1394speed_t(params.speed_)) != DC1394_SUCCESS) {
     vcl_cerr << "Failed to set iso channel and speed.\n";
@@ -232,7 +246,7 @@ open(unsigned int num_dma_buffers,
   }
 
 
-  if (dc1394_capture_setup_dma(is_->camera_info_,num_dma_buffers, rb_policy) != DC1394_SUCCESS) {
+  if (dc1394_capture_setup(is_->camera_info_, num_dma_buffers) != DC1394_SUCCESS) {
     vcl_cerr << "Failed to setup DMA capture.\n";
     return false;
   }
@@ -317,6 +331,10 @@ valid_params(vidl2_iidc1394_params::valid_options& options)
     options.cameras[i].port = dccameras[i]->port;
     options.cameras[i].vendor = dccameras[i]->vendor;
     options.cameras[i].model = dccameras[i]->model;
+    options.cameras[i].speed = static_cast<vidl2_iidc1394_params::speed_t>(dccameras[i]->iso_speed);
+    dc1394operation_mode_t op_mode;
+    if( dc1394_video_get_operation_mode(dccameras[i], &op_mode) == DC1394_SUCCESS)
+      options.cameras[i].b_mode = (op_mode == DC1394_OPERATION_MODE_1394B);
     options.cameras[i].curr_mode = static_cast<vidl2_iidc1394_params::video_mode_t>(dccameras[i]->video_mode);
     options.cameras[i].curr_frame_rate = static_cast<vidl2_iidc1394_params::frame_rate_t>(dccameras[i]->framerate);
 
@@ -411,9 +429,12 @@ advance()
 {
   ++is_->vid_index_;
   is_->cur_frame_valid_ = false;
-  dc1394_capture_dma_done_with_buffer(is_->camera_info_);
-  if (dc1394_capture_dma(&is_->camera_info_, 1, DC1394_VIDEO1394_WAIT) != DC1394_SUCCESS) {
-    vcl_cerr << "capture failed\n";
+
+  if(is_->dc1394frame_)
+    dc1394_capture_enqueue(is_->camera_info_, is_->dc1394frame_);
+
+  if (dc1394_capture_dequeue(is_->camera_info_, DC1394_CAPTURE_POLICY_WAIT, &(is_->dc1394frame_))!=DC1394_SUCCESS) {
+    fprintf(stderr, "capture failed\n");
     return false;
   }
   return true;
@@ -444,9 +465,9 @@ vidl2_dc1394_istream::current_frame()
     if (is_->cur_frame_)
       is_->cur_frame_->invalidate();
 
-    is_->cur_frame_ = new vidl2_shared_frame(dc1394_capture_get_dma_buffer(is_->camera_info_),
-                                             dc1394_capture_get_width(is_->camera_info_),
-                                             dc1394_capture_get_height(is_->camera_info_),
+    is_->cur_frame_ = new vidl2_shared_frame(is_->dc1394frame_->image,
+                                             is_->dc1394frame_->size[0],
+                                             is_->dc1394frame_->size[1],
                                              is_->pixel_format_);
 
     is_->cur_frame_valid_ = true;

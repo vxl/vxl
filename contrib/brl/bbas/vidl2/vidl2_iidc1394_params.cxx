@@ -19,6 +19,7 @@ vidl2_iidc1394_params::vidl2_iidc1394_params()
   : node_( 0 ),
     port_( 0 ),
     speed_( ISO_SPEED_400 ),
+    b_mode_(false),
     frame_rate_( FRAMERATE_15 ),
     video_mode_( MODE_640x480_RGB8 )
 {

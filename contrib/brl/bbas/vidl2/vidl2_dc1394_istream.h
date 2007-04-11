@@ -15,10 +15,10 @@
 // if you are also using the ffmpeg streams make sure your libavcodec
 // and libavformat library are compiled without dc1394 support.
 // ffmpeg supplies limited 1394 support through the libdc1394
-// version 1 API.  Linking to both version of libdc1394 will result
+// version 1 API.  Linking to both versions of libdc1394 will result
 // in linking errors.
 //
-// Currently this code works with libdc1394 version 2.0.0-rc3.
+// Currently this code works with libdc1394 version 2.0.0-rc5.
 // The authors note that the libdc1394 API is subject to change in
 // prerelease version.  As a result, the vidl2_dc1394_istream is
 // is subject to change with it.

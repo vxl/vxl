@@ -153,6 +153,9 @@ struct vidl2_iidc1394_params
   //: The data transfer speed (default ISO_SPEED_400)
   speed_t speed_;
 
+  //: Operate the camera in 1394b mode
+  bool b_mode_;
+
   //: The frame rate (default FRAMERATE_15)
   frame_rate_t frame_rate_;
 
@@ -178,6 +181,10 @@ struct vidl2_iidc1394_params
   //: Set the speed
   vidl2_iidc1394_params& speed( speed_t s )
   { speed_ = s; return *this; }
+
+  //: Set b mode
+  vidl2_iidc1394_params& b_mode( bool b )
+  { b_mode_ = b; return *this; }
 
   //: Set the frame rate
   vidl2_iidc1394_params& frame_rate( frame_rate_t r )
@@ -254,6 +261,7 @@ struct vidl2_iidc1394_params::valid_options
     vcl_string vendor;
     vcl_string model;
     speed_t speed;
+    bool b_mode;
     vcl_vector<valid_mode> modes;
     vcl_vector<vidl2_iidc1394_params::feature_options> features;
     video_mode_t curr_mode;

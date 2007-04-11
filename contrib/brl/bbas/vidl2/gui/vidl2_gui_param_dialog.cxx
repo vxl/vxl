@@ -326,6 +326,7 @@ vidl2_dc1394_istream* vidl2_gui_param_dialog::dc1394_istream()
     return NULL;
   }
   static unsigned int mode_id = 0;
+  bool use_1394b = cam.b_mode;
   if (cam.modes.size() > 1){
     vgui_dialog dlg("Select a capture mode");
     vcl_vector<vcl_string> mode_names;
@@ -335,11 +336,15 @@ vidl2_dc1394_istream* vidl2_gui_param_dialog::dc1394_istream()
       mode_names.push_back(vidl2_iidc1394_params::video_mode_string(cam.modes[i].mode));
     }
     dlg.choice("Mode",mode_names,mode_id);
+    dlg.checkbox("1394b",use_1394b);
     if (!dlg.ask())
       return NULL;
   }
   const vidl2_iidc1394_params::valid_options::valid_mode& m = cam.modes[mode_id];
   params.video_mode_ = m.mode;
+  params.b_mode_ = use_1394b;
+  params.speed_ = use_1394b ? vidl2_iidc1394_params::ISO_SPEED_800 : vidl2_iidc1394_params::ISO_SPEED_400;
+
 
   // Select the frame rate
   //-----------------------------------
