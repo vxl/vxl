@@ -523,4 +523,35 @@ inline void vil3d_math_add_image_fraction(vil3d_image_view<aT>& imA, scaleT fa,
   }
 }
 
+//: Truncate each pixel value so it fits into range [min_v,max_v]
+//  If value < min_v value=min_v
+//  If value > max_v value=max_v
+// \relates vil3d_image_view
+template<class T>
+inline void vil3d_math_truncate_range(vil3d_image_view<T>& image, 
+                                      T min_v, T max_v)
+{
+  unsigned ni=image.ni(), nj=image.nj(), nk=image.nk(), np=image.nplanes();
+  vcl_ptrdiff_t istep=image.istep(), jstep=image.jstep(), 
+    kstep=image.kstep(), pstep=image.planestep();
+  T* plane = image.origin_ptr();
+  for (unsigned p=0; p<np; ++p, plane+=pstep)
+  {
+    T* slice = plane;
+    for (unsigned k=0; k<nk; ++k, slice+=kstep)
+    {
+      T* row = slice;
+      for (unsigned j=0; j<nj; ++j, row+=jstep)
+      {
+        T* pixel = row;
+        for (unsigned i=0; i<ni; ++i, pixel+=istep)
+        {
+          if (*pixel<min_v) *pixel=min_v;
+          else if (*pixel>max_v) *pixel=max_v;
+        }
+      }
+    }
+  }
+}
+
 #endif
