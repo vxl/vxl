@@ -92,6 +92,9 @@ bool FMatrixComputeRobust::compute(PairMatchSetCorner& matches, FMatrix *F)
         count = temp_count;
       }
     }
+
+    for (unsigned int k = 0; k < F_temp.size(); k++)
+      delete F_temp[k];
   }
   vcl_cerr << "Final Figures...\n";
   vcl_cerr << "Ds : " << Ds << vcl_endl;

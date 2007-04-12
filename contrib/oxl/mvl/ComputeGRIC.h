@@ -5,6 +5,7 @@
 #include <mvl/FMatrix.h>
 #include <mvl/HMatrix2D.h>
 #include <vcl_vector.h>
+#include <vcl_memory.h>
 
 class ComputeGRIC
 {
@@ -19,8 +20,8 @@ class ComputeGRIC
   bool compute(PairMatchSetCorner* matches);
 
   // Data Access
-  FMatrix* get_F() const { return F_; }
-  HMatrix2D* get_H() const { return H_; }
+  FMatrix* get_F() const { return F_.get(); }
+  HMatrix2D* get_H() const { return H_.get(); }
 
   // Is Degenerate ?
   bool degenerate() { return degenerate_; }
@@ -34,8 +35,8 @@ class ComputeGRIC
 
  protected:
   double std_;
-  FMatrix* F_;
-  HMatrix2D* H_;
+  vcl_auto_ptr<FMatrix> F_;
+  vcl_auto_ptr<HMatrix2D> H_;
   vcl_vector<double> residualsF_;
   vcl_vector<double> residualsH_;
   vcl_vector<bool> inliersF_;

@@ -56,10 +56,10 @@ bool FMatrixCompute::compute (vcl_vector<vgl_homg_point_2d<double> >& points1,
   if (points1.size() != points2.size())
     vcl_cerr << "FMatrixCompute::compute(): Point vectors are not of equal length\n";
   assert(points1.size() <= points2.size());
-  HomgInterestPointSet const* p1 = new HomgInterestPointSet(points1,0);
-  HomgInterestPointSet const* p2 = new HomgInterestPointSet(points2,0);
-  // the two above lines cause a memory leak!
-  PairMatchSetCorner matches(p1, p2);
+  HomgInterestPointSet p1(points1,0);
+  HomgInterestPointSet p2(points2,0);
+
+  PairMatchSetCorner matches(&p1, &p2);
   int count = matches.size();
   vcl_vector<bool> inliers(count, true);
   vcl_vector<int> ind1(count), ind2(count);
@@ -75,10 +75,10 @@ bool FMatrixCompute::compute (vcl_vector<HomgPoint2D>& points1,
   if (points1.size() != points2.size())
     vcl_cerr << "FMatrixCompute::compute(): Point vectors are not of equal length\n";
   assert(points1.size() <= points2.size());
-  HomgInterestPointSet const* p1 = new HomgInterestPointSet(points1,0);
-  HomgInterestPointSet const* p2 = new HomgInterestPointSet(points2,0);
-  // the two above lines cause a memory leak!
-  PairMatchSetCorner matches(p1, p2);
+  HomgInterestPointSet p1(points1,0);
+  HomgInterestPointSet p2(points2,0);
+
+  PairMatchSetCorner matches(&p1, &p2);
   int count = matches.size();
   vcl_vector<bool> inliers(count, true);
   vcl_vector<int> ind1(count), ind2(count);

@@ -86,7 +86,7 @@ bool FMatrixComputeNonLinear::compute_basis(FMatrix* F, vcl_vector<int> basis) {
 // selected options
 bool FMatrixComputeNonLinear::compute(FMatrix* F)
 {
-  FMatrix* F_final = new FMatrix();
+  FMatrix F_final;
   // fm_fmatrix_nagmin
   vcl_cerr << "FMatrixComputeNonLinear: matches = "<< data_size_ <<", using "<< FMatrixComputeNonLinear_nparams <<" parameters \n";
   double so_far = 1e+8;
@@ -133,9 +133,9 @@ bool FMatrixComputeNonLinear::compute(FMatrix* F)
             so_far = lm.get_end_error();
             vcl_cerr << "so_far : " << so_far << vcl_endl;
             norm_F = params_to_fmatrix(f_params);
-            F_final->set(norm_F);
+            F_final = norm_F;
             vgl_homg_point_2d<double> e1, e2;
-            F_final->get_epipoles(e1, e2);
+            F_final.get_epipoles(e1, e2);
             vcl_cerr << "Epipole locations 1 : " << e1 << " 2 : " << e2 << '\n';
           }
         }
@@ -166,14 +166,14 @@ bool FMatrixComputeNonLinear::compute(FMatrix* F)
       for (int l = 0; l < 7; l++)
         vcl_cerr << f_params(l) << vcl_endl;
       norm_F = params_to_fmatrix(f_params);
-      F_final->set(norm_F);
+      F_final = norm_F;
       lm.diagnose_outcome();
       vgl_homg_point_2d<double> e1, e2;
-      F_final->get_epipoles(e1, e2);
+      F_final.get_epipoles(e1, e2);
       vcl_cerr << "Epipole locations 1 : " << e1 << " 2 : " << e2 << '\n';
     }
   }
-  *F = *F_final;
+  *F = F_final;
   return true;
 }
 
@@ -339,9 +339,9 @@ FMatrix FMatrixComputeNonLinear::params_to_fmatrix(const vnl_vector<double>& par
       new_points1[i] = vgl_homg_point_2d<double>(params[i]/grads1 + t1x, params[i]*grads1 + t1y, 1.0);
 //    new_points2[i] = vgl_homg_point_2d<double>(params[i]/grads2 + t2x, params[i]*grads2 + t2y, 1.0);
     }
-    FMatrixCompute7Point* computor = new FMatrixCompute7Point(true, true);
+    FMatrixCompute7Point computor(true, true);
     vcl_vector<FMatrix*> ref;
-    if (!computor->compute(new_points1, basis2_, ref))
+    if (!computor.compute(new_points1, basis2_, ref))
       vcl_cerr << "FMatrixCompute7Point Failure\n";
     double final = 0.0;
     unsigned int num = 0;
@@ -356,7 +356,12 @@ FMatrix FMatrixComputeNonLinear::params_to_fmatrix(const vnl_vector<double>& par
         num = l;
       }
     }
-    return *ref[num];
+    ret = *ref[num];
+
+    for (unsigned int l = 0; l < ref.size(); l++)
+      delete ref[l];
+    
+    return ret;
   }
 }
 

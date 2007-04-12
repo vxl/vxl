@@ -4,6 +4,7 @@
 #include <mvl/HomgInterestPointSet.h>
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
+#include <vcl_memory.h>
 
 ComputeGRIC::ComputeGRIC(double std) : std_(std) {}
 
@@ -15,24 +16,24 @@ bool ComputeGRIC::compute(PairMatchSetCorner* matches) {
   // not violated
   PairMatchSetCorner matches_copy1(*matches);
   PairMatchSetCorner matches_copy2(*matches);
-  FMatrix *F = new FMatrix();
-  HMatrix2D* H = new HMatrix2D();
 
   // Compute the two differing relations using MLE
-  FMatrixComputeRobust* computor1 = new FMatrixComputeMLESAC(true, std_);
-  HMatrix2DComputeRobust* computor2 = new HMatrix2DComputeMLESAC(std_);
-  computor2->compute(matches_copy2, H);
-  residualsH_ = computor2->get_residuals();
-  inliersH_ = computor2->get_inliers();
-  basisH_ = computor2->get_basis();
-  H_ = H;
-  delete computor2;
-  computor1->compute(matches_copy1, F);
+  F_.reset(new FMatrix);
+  vcl_auto_ptr<FMatrixComputeRobust> computor1(new FMatrixComputeMLESAC(true, std_));
+  computor1->compute(matches_copy1, F_.get());
   residualsF_ = computor1->get_residuals();
   inliersF_ = computor1->get_inliers();
   basisF_ = computor1->get_basis();
-  F_ = F;
-  delete computor1;
+  computor1.reset();
+
+  H_.reset(new HMatrix2D);
+  vcl_auto_ptr<HMatrix2DComputeRobust> computor2(new HMatrix2DComputeMLESAC(std_));
+  computor2->compute(matches_copy2, H_.get());
+  residualsH_ = computor2->get_residuals();
+  inliersH_ = computor2->get_inliers();
+  basisH_ = computor2->get_basis();
+  computor2.reset();
+
   vcl_cerr << "Finished calculations" << vcl_endl;
 
   // Compare the GRIC scores of the two different models
