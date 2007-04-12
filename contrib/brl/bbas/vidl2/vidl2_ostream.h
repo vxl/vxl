@@ -19,7 +19,7 @@ class vidl2_ostream
 {
  public:
   //: Constructor
-  vidl2_ostream() {}
+  vidl2_ostream() : ref_count_(0) {}
   //: Destructor
   virtual ~vidl2_ostream() {}
 
