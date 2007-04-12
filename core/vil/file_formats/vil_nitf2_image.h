@@ -177,6 +177,7 @@ class vil_nitf2_image : public vil_blocked_image_resource
   virtual vil_nitf2_field::field_tree* get_tree() const;
 
  protected:
+  virtual vil_image_view_base_sptr get_block_j2k( unsigned int blockIndexX, unsigned int blockIndexY ) const;
   virtual vil_image_view_base_sptr get_copy_view_uncompressed(unsigned i0, unsigned ni,
                                                               unsigned j0, unsigned nj) const;
 

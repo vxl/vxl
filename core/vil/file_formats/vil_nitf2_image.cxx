@@ -605,9 +605,36 @@ vil_image_view_base_sptr get_block_vcl_internal(vil_pixel_format pix_format, vil
   return result;
 }
 
+vil_image_view_base_sptr vil_nitf2_image::get_block_j2k( unsigned int blockIndexX, unsigned int blockIndexY ) const
+{
+  //we calculate the block size and pass this along to get_copy_view() which
+  //will interface with our jpeg200 compressor.  There is one fear here: I remember
+  //reading somewhere that JPEG 2000 compressed NITF files have to use internal blocking
+  //this makes sense because it would be impossible to navigate a file pointer
+  //to a compressed block because we wouldn't know how big each block is.  That's good.
+  //What I'm not sure of though is what does that mean for NBPR and NBPC?  If both of those
+  //are 1 then we are screwed for VERY large images.  We'll be trying to read in the whole
+  //thing at once as a single block.  I need to test this the next time I have access to large
+  //JPEG2000 compressed NITF files.
+  if( ! is_jpeg_2000_compressed() ) return 0;
+  if( blockIndexX >= n_block_i() ) return 0;
+  if( blockIndexY >= n_block_j() ) return 0;
+
+  unsigned int i0 = blockIndexX * size_block_i();
+  unsigned int ni = size_block_i();
+  unsigned int j0 = blockIndexY * size_block_j();
+  unsigned int nj = size_block_j();
+  return get_copy_view( i0, ni, j0, nj );
+}
+
 vil_image_view_base_sptr vil_nitf2_image::get_block(unsigned int block_index_x, unsigned int block_index_y) const
 {
   if (pixel_format() == VIL_PIXEL_FORMAT_UNKNOWN) return 0;
+
+  if( is_jpeg_2000_compressed() ){
+    return get_block_j2k( block_index_x, block_index_y );
+  }
+
   vcl_string image_mode_type;
   if (!current_image_header()->get_property("IMODE", image_mode_type)) return 0;
 
