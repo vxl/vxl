@@ -410,9 +410,7 @@ bool vil_nitf2_image_subheader::get_lut_info(unsigned int i,
     lut_d[lut_index].resize(ne_lut);
     for (int el_index = 0 ; el_index < ne_lut ; el_index++) {
       void* currValue;
-      vil_nitf2_index_vector index(2);
-      index[0]=i;
-      index[1]=lut_index*ne_lut+el_index;
+      vil_nitf2_index_vector index( i, lut_index*ne_lut+el_index );
       if (m_field_sequence.get_value("LUTDnm", index, currValue)) {
         lut_d[lut_index][el_index] = *((char*)currValue);
       } else {
