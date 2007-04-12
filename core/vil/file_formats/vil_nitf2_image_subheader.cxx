@@ -395,7 +395,7 @@ unsigned int vil_nitf2_image_subheader::get_num_blocks_y() const
   return 0;
 }
 
-bool vil_nitf2_image_subheader::get_lut_info(unsigned int i,
+bool vil_nitf2_image_subheader::get_lut_info(unsigned int band,
                                              int& n_luts, int& ne_lut,
                                              vcl_vector< vcl_vector< unsigned char > >& lut_d) const
 {

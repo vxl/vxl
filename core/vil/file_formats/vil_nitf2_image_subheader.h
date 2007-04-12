@@ -77,7 +77,7 @@ class vil_nitf2_image_subheader
   // If n_luts is 3, then this plane will be transformed into 3 planes: R, G and B.
   // lut_d[0] shall map to Red, lut_d[1] shall map to Green, and lut_d[2] shall map
   // to Blue.
-  bool get_lut_info( unsigned int i, int& n_luts, int& ne_lut,
+  bool get_lut_info( unsigned int band, int& n_luts, int& ne_lut,
                      vcl_vector< vcl_vector< unsigned char > >& lut_d ) const;
 
   // I allocate the return value, but you own it after I return it to you
