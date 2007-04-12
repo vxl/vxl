@@ -399,23 +399,23 @@ bool vil_nitf2_image_subheader::get_lut_info(unsigned int i,
                                              int& n_luts, int& ne_lut,
                                              vcl_vector< vcl_vector< unsigned char > >& lut_d) const
 {
-  // TO DO: test this!
-  if (!m_field_sequence.get_value("NLUTS", vil_nitf2_index_vector(i), n_luts) ||
-      !m_field_sequence.get_value("NELUT", vil_nitf2_index_vector(i), ne_lut)) {
+  if (!m_field_sequence.get_value("NLUTS", vil_nitf2_index_vector(band), n_luts) ||
+      !m_field_sequence.get_value("NELUT", vil_nitf2_index_vector(band), ne_lut)) {
     return false;
-  }
+  } 
   lut_d.clear();
   lut_d.resize(n_luts);
+  void* raw_lut_data; 
   for (int lut_index = 0 ; lut_index < n_luts ; lut_index++) {
     lut_d[lut_index].resize(ne_lut);
-    for (int el_index = 0 ; el_index < ne_lut ; el_index++) {
-      void* currValue;
-      vil_nitf2_index_vector index( i, lut_index*ne_lut+el_index );
-      if (m_field_sequence.get_value("LUTDnm", index, currValue)) {
-        lut_d[lut_index][el_index] = *((char*)currValue);
-      } else {
-        return false;
+    //get the lut_index'th lut for the given image band
+    vil_nitf2_index_vector index( band, lut_index );
+    if (m_field_sequence.get_value("LUTDnm", index, raw_lut_data )) {
+      for( int el_index = 0 ; el_index < ne_lut ; el_index++ ) {
+        lut_d[lut_index][el_index] = static_cast<unsigned char*>(raw_lut_data)[el_index];
       }
+    } else {
+      break;
     }
   }
   return true;
