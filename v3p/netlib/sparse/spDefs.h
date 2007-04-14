@@ -15,11 +15,7 @@
  *
  *  Copyright (c) 1985-2003 by Kenneth S. Kundert
  *
- *  $Date$
- *  $Revision$
  */
-
-
 
 
 /*
@@ -70,12 +66,6 @@
 #else /* not lint */
 #define  LINT                           NO
 #endif /* not lint */
-
-
-
-
-
-
 
 /*
  *   MACRO DEFINITIONS
@@ -362,14 +352,10 @@
 }
 
 
-
-
-
-
 /*
  *  ASSERT and ABORT
  *
- *  Macro used to assert that if the code is working correctly, then 
+ *  Macro used to assert that if the code is working correctly, then
  *  a condition must be true.  If not, then execution is terminated
  *  and an error message is issued stating that there is an internal
  *  error and giving the file and line number.  These assertions are
@@ -419,10 +405,6 @@
 #endif
 
 
-
-
-
-
 /*
  *  IMAGINARY VECTORS
  *
@@ -442,10 +424,6 @@
 #define IMAG_RHS_DECL
 #define IMAG_VECT_DECL
 #endif
-
-
-
-
 
 
 /*
@@ -468,14 +446,8 @@ spcEXTERN void abort(void);
 #define CALLOC(ptr,type,number)                         \
 {   int i; ptr = ALLOC(type, number);                   \
     if (ptr != (type *)NULL)                            \
-        for(i=(number)-1;i>=0; i--) ptr[i] = (type) 0;  \
+        for (i=(number)-1;i>=0; i--) ptr[i] = (type) 0;  \
 }
-
-
-
-
-
-
 
 /*
  * Utility Functions
@@ -495,11 +467,6 @@ spcEXTERN void abort(void);
                 (product) = (long)fProduct; \
         } \
         else (product) = (op1)*(op2);
-
-
-
-
-
 
 /*
  *  REAL NUMBER
@@ -508,13 +475,6 @@ spcEXTERN void abort(void);
 /* Begin `RealNumber'. */
 
 typedef  spREAL  RealNumber, *RealVector;
-
-
-
-
-
-
-
 
 /*
  *  COMPLEX NUMBER DATA STRUCTURE
@@ -534,13 +494,6 @@ typedef  struct
 {   RealNumber  Real;
     RealNumber  Imag;
 } ComplexNumber, *ComplexVector;
-
-
-
-
-
-
-
 
 /*
  *  MATRIX ELEMENT DATA STRUCTURE
@@ -603,13 +556,6 @@ struct  MatrixElement
 
 typedef  struct MatrixElement  *ElementPtr;
 typedef  ElementPtr  *ArrayOfElementPtrs;
-
-
-
-
-
-
-
 
 /*
  *  ALLOCATION DATA STRUCTURE
@@ -634,14 +580,6 @@ struct AllocationRecord
 };
 
 typedef  struct  AllocationRecord  *AllocationListPtr;
-
-
-
-
-
-
-
-
 
 /*
  *  FILL-IN LIST DATA STRUCTURE
@@ -668,15 +606,6 @@ struct FillinListNodeStruct
     int         NumberOfFillinsInList;
     struct      FillinListNodeStruct  *Next;
 };
-
-
-
-
-
-
-
-
-
 
 /*
  *  MATRIX FRAME DATA STRUCTURE
@@ -789,7 +718,7 @@ struct FillinListNodeStruct
  *      Flag that indicates the sum of row and column interchange counts
  *      is an odd number.  Used when determining the sign of the determinant.
  *  Partitioned  (BOOLEAN)
- *      This flag indicates that the columns of the matrix have been 
+ *      This flag indicates that the columns of the matrix have been
  *      partitioned into two groups.  Those that will be addressed directly
  *      and those that will be addressed indirectly in spFactor().
  *  PivotsOriginalCol  (int)
@@ -920,8 +849,6 @@ struct  MatrixFrame
     struct FillinListNodeStruct *LastFillinListNode;
 };
 typedef  struct MatrixFrame  *MatrixPtr;
-
-
 
 
 /*

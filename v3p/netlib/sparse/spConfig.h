@@ -25,15 +25,11 @@
  *
  *  Copyright (c) 1985-2003 by Kenneth S. Kundert
  *
- *  $Date$
- *  $Revision$
  */
 
 
 #ifndef spCONFIG_DEFS
 #define spCONFIG_DEFS
-
-
 
 
 #ifdef spINSIDE_SPARSE
@@ -316,12 +312,6 @@
 #define  spSEPARATED_COMPLEX_VECTORS    0
 
 #ifdef spINSIDE_SPARSE
-
-
-
-
-
-
 
 /*
  *  MATRIX CONSTANTS
@@ -449,15 +439,6 @@
  * spPrint() per page width.
  */
 #define  PRINTER_WIDTH  80
-
-
-
-
-
-
-
-
-
 
 #endif /* spINSIDE_SPARSE */
 /*
@@ -505,12 +486,6 @@
 #endif
 
 #ifdef spINSIDE_SPARSE
-
-
-
-
-
-
 
 /*
  *  MACHINE CONSTANTS
@@ -539,11 +514,6 @@
 
 /*! The largest possible value of ints. */
 #define  LARGEST_INTEGER    INT_MAX
-
-
-
-
-
 
 /* ANNOTATION */
 /*!
@@ -562,7 +532,7 @@
 
 /*!
  * A possible value for \a ANNOTATE. Causes annotation to be produce
- * upon unusual occurances only.
+ * upon unusual occurrences only.
  */
 #define  ON_STRANGE_BEHAVIOR    1
 

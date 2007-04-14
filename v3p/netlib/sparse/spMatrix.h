@@ -23,11 +23,7 @@
  *
  *  Copyright (c) 1985-2003 by Kenneth S. Kundert
  *
- *  $Date$
- *  $Revision$
  */
-
-
 
 
 #ifndef  spOKAY
@@ -41,11 +37,6 @@
  */
 
 #include "spConfig.h"
-
-
-
-
-
 
 /*
  *  ERROR KEYWORDS
@@ -104,10 +95,6 @@
 			    */
 
 
-
-
-
-
 /*
  *  KEYWORD DEFINITIONS
  */
@@ -122,7 +109,6 @@
 			 * slower than double precision.  Sparse
 			 * internally refers to spREALs as RealNumbers.
 			 */
-
 
 
 /*
@@ -174,10 +160,6 @@
 				   * preferred.
 				   * \see spPartition()
 				   */
-
-
-
-
 
 /*
  *  MACRO FUNCTION DEFINITIONS
@@ -240,12 +222,6 @@
     *((template).Element3Negated+1) -= imag;    \
     *((template).Element4Negated+1) -= imag;    \
 }
-
-
-
-
-
-
 
 /*
  *   TYPE DEFINITION FOR EXTERNAL MATRIX ELEMENT REFERENCES
@@ -261,10 +237,6 @@ typedef spREAL spElement;
 
 /*! Declares the type of the Sparse error codes. */
 typedef int spError;
-
-
-
-
 
 /* TYPE DEFINITION FOR COMPONENT TEMPLATE */
 /*!
@@ -286,9 +258,6 @@ struct  spTemplate
     spElement	*Element3Negated;
     spElement	*Element4Negated;
 };
-
-
-
 
 
 /*
