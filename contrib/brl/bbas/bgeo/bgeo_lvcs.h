@@ -84,13 +84,13 @@ class bgeo_lvcs : public vbl_ref_count
   void radians_to_dms(double, int& degrees, int& minutes, double& seconds);
 
   // accessors
-  void get_origin(double& lat, double& lon, double& elev);
-  void get_scale(double& lat, double& lon);
-  void get_transform(double& lox, double& loy, double& theta);
+  void get_origin(double& lat, double& lon, double& elev) const;
+  void get_scale(double& lat, double& lon) const;
+  void get_transform(double& lox, double& loy, double& theta) const;
   void set_transform(const double lox, const double loy, const double theta);
-  cs_names get_cs_name();
-  inline LenUnits local_length_unit(){return this->localXYZUnit_;}
-  inline AngUnits geo_angle_unit(){return this->geo_angle_unit_;}
+  cs_names get_cs_name() const;
+  inline LenUnits local_length_unit() const{return this->localXYZUnit_;}
+  inline AngUnits geo_angle_unit() const {return this->geo_angle_unit_;}
   void print(vcl_ostream&) const;
   friend vcl_ostream& operator << (vcl_ostream& os, const bgeo_lvcs& local_coord_sys);
   // INTERNALS-----------------------------------------------------------------
@@ -122,18 +122,18 @@ class bgeo_lvcs : public vbl_ref_count
 };
 
 //: return the scale for lat lon and elevation
-inline void bgeo_lvcs::get_scale(double& lat, double& lon)
+inline void bgeo_lvcs::get_scale(double& lat, double& lon) const
 {
   lat = lat_scale_;
   lon = lon_scale_;
 }
 
 //: return the coordinate system
-inline bgeo_lvcs::cs_names bgeo_lvcs::get_cs_name() { return local_cs_name_;}
+inline bgeo_lvcs::cs_names bgeo_lvcs::get_cs_name() const { return local_cs_name_;} 
 
 
 //: return the origin of the local system
-inline void bgeo_lvcs::get_origin(double& lat, double& lon, double& elev)
+inline void bgeo_lvcs::get_origin(double& lat, double& lon, double& elev) const
 {
   lat = localCSOriginLat_;
   lon = localCSOriginLon_;
@@ -142,7 +142,7 @@ inline void bgeo_lvcs::get_origin(double& lat, double& lon, double& elev)
 
 //------------------------------------------------------------
 //: Return the compass alignment transform.
-inline void bgeo_lvcs::get_transform(double& lox, double& loy, double& theta)
+inline void bgeo_lvcs::get_transform(double& lox, double& loy, double& theta) const
 {
   lox = lox_;
   loy = loy_;
