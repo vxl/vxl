@@ -18,6 +18,9 @@ IF( HAS_VGUI )
 
  ADD_EXECUTABLE (seg_vil seg_vil.cxx)
  TARGET_LINK_LIBRARIES(seg_vil segv vgui)
+
+ ADD_EXECUTABLE (seg_misc seg_misc.cxx)
+ TARGET_LINK_LIBRARIES(seg_misc segv vgui)
 ENDIF( HAS_VGUI )
 
 ADD_EXECUTABLE (negate negate.cxx)
