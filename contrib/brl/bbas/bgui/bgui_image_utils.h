@@ -15,6 +15,7 @@
 #include <vcl_vector.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_resource.h>
+#include <vil/vil_blocked_image_resource_sptr.h>
 #include <bsta/bsta_histogram.h>
 #include <bgui/bgui_graph_tableau.h>
 class bgui_image_utils
