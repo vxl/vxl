@@ -4,6 +4,7 @@ include ${VXLROOT}/core/vgui/config.mk
 
 MINI_PROG_SOURCES += seg.cxx
 MINI_PROG_SOURCES += seg_vil.cxx
+MINI_PROG_SOURCES += seg_misc.cxx
 MINI_PROG_SOURCES += negate.cxx
 MINI_PROG_SOURCES += vil_convert.cxx
 MINI_PROG_SOURCES += generate_tiff_pyramids.cxx
