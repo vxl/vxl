@@ -66,7 +66,7 @@ class vul_ios_state_saver
 
   private:
     vcl_ios_base & stream_;
-    const vcl_ios_base::fmtflags flags_;
+    const vcl_ios_fmtflags flags_;
     const vcl_streamsize precision_;
     const vcl_streamsize width_;
 };
