@@ -641,6 +641,9 @@ SOURCE=.\Templates/vil_smart_ptr+vil_pyramid_image_resource-.cxx
 # Begin Source File
 SOURCE=.\Templates/vil_resample_bilin+double.double-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_resample_bilin+int_32.int_32-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

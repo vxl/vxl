@@ -167,6 +167,9 @@ SOURCE=.\seg.cxx
 SOURCE=.\seg_vil.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\seg_misc.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\negate.cxx
 # End Source File
 # Begin Source File
