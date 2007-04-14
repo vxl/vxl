@@ -15,7 +15,7 @@ static vcl_string date_and_time()
   t_m = vcl_localtime(&clock);
   char tmp[20];
   char datetime[20];
-  vcl_strftime(tmp,sizeof(datetime),"%Y-%m-%e %H:%M:%S",t_m);
+  vcl_strftime(tmp,sizeof(datetime),"%Y-%m-%d %H:%M:%S",t_m);
   // changed from "%c", to make it generic, size=19, and avoid compiler warning
   vcl_sprintf(datetime,"%19s",tmp);
   return vcl_string(datetime);
