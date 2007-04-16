@@ -1,5 +1,6 @@
 #include "mvl_linear_backproject.h"
 #include <vcl_iostream.h>
+#include <vcl_cstdlib.h>
 
 vnl_vector<double> mvl_linear_backproject(
           // camera matrices:
