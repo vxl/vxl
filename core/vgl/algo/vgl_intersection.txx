@@ -6,9 +6,8 @@
 // \author Gamze Tunali
 
 #include "vgl_intersection.h"
-#include <vcl_algorithm.h>
-#include <vcl_limits.h>
-#include <vcl_cassert.h>
+#include <vcl_vector.h>
+// not used? #include <vcl_limits.h>
 
 #include <vgl/algo/vgl_homg_operators_3d.h>
 #include <vgl/vgl_plane_3d.h>

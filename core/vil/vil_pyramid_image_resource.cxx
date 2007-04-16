@@ -7,8 +7,7 @@
 // \file
 #include <vcl_cassert.h>
 #include <vcl_cstring.h>
-#include <vcl_cmath.h>
-#include <vcl_algorithm.h>
+#include <vcl_vector.h>
 #include <vil/vil_property.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_blocked_image_resource.h>
