@@ -8,9 +8,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <sys/signal.h>
-#include <vcl_cstdio.h>
 #include <vcl_cstdlib.h> // for exit()
-#include <vcl_cerrno.h>
 #include <vcl_iostream.h>
 #include <vil/vil_image_view.h>
 #include <unistd.h>

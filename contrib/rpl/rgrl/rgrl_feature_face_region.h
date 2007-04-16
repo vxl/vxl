@@ -8,7 +8,7 @@
 
 #include <rgrl/rgrl_feature_face_pt.h>
 #include <rgrl/rgrl_feature_region.h>
-#include <vcl_vector.h>
+// not used? #include <vcl_vector.h>
 
 class rgrl_feature_face_region : public rgrl_feature_face_pt, public rgrl_feature_region
 {

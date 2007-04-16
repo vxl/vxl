@@ -25,7 +25,7 @@
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
-#include <vcl_map.h>
+// not used? #include <vcl_map.h>
 
 //-------------------------------------------------------------------------
 // Private helpers - declarations.

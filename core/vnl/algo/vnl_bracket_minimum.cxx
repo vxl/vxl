@@ -12,8 +12,7 @@
 #include <vnl/algo/vnl_fit_parabola.h>
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
-#include <vcl_cassert.h>
-#include <vcl_iostream.h>
+// not used? #include <vcl_iostream.h>
 
 static const double GOLDEN_RATIO = 1.618033988749894848; // = 0.5*(vcl_sqrt(5)-1);
 static const double EPS   = 1e-7;  // Loose tolerance
@@ -29,10 +28,8 @@ class vnl_bm_func
 {
   vnl_vector<double> v;
   vnl_cost_function* f;
-public:
-  vnl_bm_func(vnl_cost_function& fn)
-    { f=&fn; v.set_size(1); }
-
+ public:
+  vnl_bm_func(vnl_cost_function& fn) { f=&fn; v.set_size(1); }
   double operator()(double x) { v[0]=x; return f->f(v); }
 };
 

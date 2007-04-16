@@ -7,9 +7,8 @@
 
 #include <vcl_fstream.h>
 #include <vcl_iostream.h>
-#include <vcl_cassert.h>
-#include <vcl_sstream.h>
-#include <vcl_cmath.h>
+// not used? #include <vcl_sstream.h>
+// not used? #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
 #include <vcl_list.h>
 #include <vcl_cstdlib.h> // for exit()
@@ -273,8 +272,8 @@ main( int argc, char* argv[] )
       vcl_cerr << "reading from images failed\n";
       return 1;
     }
-    vcl_cout << "from image size: " << from_image.ni() << ' ' << from_image.nj() << ' ' << from_image.nplanes() << vcl_endl
-
+    vcl_cout << "from image size: " << from_image.ni() << ' ' << from_image.nj()
+             << ' ' << from_image.nplanes() << vcl_endl
              << "reading to images..." << vcl_endl;
     to_image = vil_load( to_files() );
     if ( !to_image ) {

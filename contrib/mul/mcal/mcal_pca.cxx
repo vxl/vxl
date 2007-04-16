@@ -6,7 +6,6 @@
 #include <vsl/vsl_indent.h>
 #include <mcal/mcal_pca.h>
 #include <mbl/mbl_matrix_products.h>
-#include <vcl_cassert.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vcl_cmath.h>
 #include <vnl/vnl_math.h>

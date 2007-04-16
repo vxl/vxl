@@ -5,13 +5,11 @@
 
 #include <vil3d/algo/vil3d_fill_boundary.h>
 #include <vil3d/vil3d_image_view.h>
-#include <vcl_cassert.h>
-#include <vcl_algorithm.h>
 #include <vcl_vector.h>
 #include <vcl_stack.h>
 #include <vil3d/vil3d_convert.h>
 #include <vil3d/algo/vil3d_threshold.h>
-#include <vcl_fstream.h>
+// not used? #include <vcl_fstream.h>
 
 //: Compute a mask where the regions in each slice of a 3D image bounded by contours are set to "on"
 void vil3d_fill_boundary(vil3d_image_view<bool>& bool_image)

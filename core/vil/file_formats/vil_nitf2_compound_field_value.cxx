@@ -4,7 +4,7 @@
 
 #include "vil_nitf2_compound_field_value.h"
 
-#include <vcl_sstream.h>
+// not used? #include <vcl_sstream.h>
 #include <vcl_iomanip.h>
 #include <vcl_string.h>
 

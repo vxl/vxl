@@ -2,7 +2,7 @@
 // Kevin de Souza, Aug 2005.
 
 #include <vcl_iostream.h>
-#include <vcl_limits.h>
+// not used? #include <vcl_limits.h>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_line_segment_3d.h>
 

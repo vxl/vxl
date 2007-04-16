@@ -1,5 +1,5 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+// not used? #include <vcl_iostream.h>
 #include <vbl/vbl_ref_count.h>
 
 class myclass_test1 : public vbl_ref_count
@@ -9,7 +9,7 @@ class myclass_test1 : public vbl_ref_count
 class myclass_test2 : public vbl_ref_count
 {
   int value;
-public:
+ public:
   myclass_test2() : value(4) { }
   myclass_test2( myclass_test2 const& o ) : value(o.value)  {
   }

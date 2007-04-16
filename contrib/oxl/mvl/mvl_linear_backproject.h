@@ -1,11 +1,8 @@
 #ifndef mvl_linear_backproject_h_
 #define mvl_linear_backproject_h_
 
-#include <vcl_cstdio.h>
-#include <vcl_cstdlib.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
-#include <vcl_cassert.h>
+// not used? #include <vcl_iostream.h>
+// not used? #include <vcl_cmath.h>
 #include <vcl_vector.h>
 
 #include <mvl/PMatrix.h>

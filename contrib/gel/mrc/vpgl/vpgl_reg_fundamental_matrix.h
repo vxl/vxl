@@ -16,8 +16,7 @@
 
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_fwd.h>
-#include <vcl_iosfwd.h>
-#include <vcl_cassert.h>
+// not used? #include <vcl_iosfwd.h>
 
 #include "vpgl_fundamental_matrix.h"
 

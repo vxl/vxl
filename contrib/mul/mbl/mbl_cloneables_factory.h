@@ -6,9 +6,8 @@
 // \brief A general factory pattern.
 // \author Ian Scott.
 
-#include <vcl_cassert.h>
 #include <vcl_map.h>
-#include <vcl_utility.h>
+// not used? #include <vcl_utility.h>
 #include <vcl_memory.h>
 #include <vcl_string.h>
 #include <vcl_sstream.h>

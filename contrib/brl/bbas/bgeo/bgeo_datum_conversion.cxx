@@ -1,4 +1,3 @@
-#include <vcl_cstdio.h>
 #include <vcl_cmath.h>
 #include <vnl/vnl_math.h>
 

@@ -9,7 +9,6 @@
 #include <vgl/algo/vgl_conic_2d_regression.h>
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
 
 //--------------------------------------------------------------
 //: Constructor

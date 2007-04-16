@@ -7,7 +7,7 @@
 
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
-#include <vcl_sstream.h>
+// not used? #include <vcl_sstream.h>
 #include <vcl_string.h>
 
 class vil_nitf2_date_time;
@@ -31,7 +31,7 @@ class vil_nitf2_array_field;
 //
 class vil_nitf2_field
 {
-public:
+ public:
   // Return my identifier
   vcl_string tag() const;
 
@@ -60,7 +60,7 @@ public:
   // Description of the field and pointers to the descriptions 
   // of child nodes in the true
   class field_tree {
-  public:
+   public:
     vcl_vector< vcl_string > columns;
     vcl_vector< field_tree* > children;
     ~field_tree();
@@ -69,13 +69,12 @@ public:
   // Returns a field tree, which caller owns
   virtual field_tree* get_tree() const;
 
-protected:
+ protected:
   // Default constructor
   vil_nitf2_field(vil_nitf2_field_definition* definition) : m_definition(definition) {}
 
   // Members
   vil_nitf2_field_definition* m_definition;
-
 };
 
 // Output operator

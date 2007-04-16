@@ -9,7 +9,7 @@
 #include <vgl/vgl_point_2d.h>
 
 #include <vcl_cmath.h>
-#include <vcl_iostream.h>
+// not used? #include <vcl_iostream.h>
 #include <vcl_limits.h>
 
 //: Distort a projected point on the image plane

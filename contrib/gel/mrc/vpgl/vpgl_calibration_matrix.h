@@ -19,7 +19,7 @@
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_iostream.h>
+// not used? #include <vcl_iostream.h>
 
 //:  A class representing the "K" matrix of a perspective camera matrix as described in
 //   Hartley and Zisserman, "Multiple View Geometry".

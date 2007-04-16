@@ -13,7 +13,7 @@
 #include "vidl2_iidc1394_params.h"
 #include "vidl2_pixel_format.h"
 #include "vidl2_frame.h"
-#include <vcl_vector.h>
+// not used? #include <vcl_vector.h>
 
 #include <vil/vil_new.h>
 
@@ -94,7 +94,7 @@ vidl2_feature_to_dc1394(const vidl2_iidc1394_params::feature_options& f_old)
   return f;
 }
 
-};
+}; // anonymous namespace
 
 //--------------------------------------------------------------------------------
 struct vidl2_dc1394_istream::pimpl

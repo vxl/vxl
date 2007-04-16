@@ -1,6 +1,6 @@
 // This is core/vil/algo/tests/test_algo_checker_board.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+// not used? #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/algo/vil_checker_board.h>
 #include <vil/vil_image_view.h>

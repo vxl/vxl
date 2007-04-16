@@ -12,12 +12,11 @@
 // \date 21 Feb 2006
 
 #include "vidl2_istream.h"
-#include <vcl_iostream.h>//for printing to stdout via vcl
-#include <vcl_map.h>//for storage of the devices and if they're being used 
-#include <vcl_fstream.h>//needed to probe for valid devices
-#include <vcl_sstream.h>//to convert from ints to strings
+// not used? #include <vcl_iostream.h>//for printing to stdout via vcl
+// not used? #include <vcl_map.h>//for storage of the devices and if they're being used 
+// not used? #include <vcl_fstream.h>//needed to probe for valid devices
+// not used? #include <vcl_sstream.h>//to convert from ints to strings
 #include <vcl_string.h>//this is for the strings scattered about the place
-#include <vcl_algorithm.h>//this is for 'toupper'
 
 //this is linux specific
 using namespace std;
@@ -40,7 +39,7 @@ extern "C" {
 
 class vidl2_v4l_istream:public vidl2_istream
 {
-public:
+  public:
     //: Constructor
     vidl2_v4l_istream():buf(NULL)
     {
@@ -96,7 +95,7 @@ public:
     //: Seek to the given frame number
     // \returns true if successful
     virtual bool seek_frame(unsigned int frame_number){return false;};
-private:
+  private:
     struct video_capability vc;
     struct video_window vw;
     struct video_picture vp;

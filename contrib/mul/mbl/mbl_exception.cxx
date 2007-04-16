@@ -3,7 +3,7 @@
 // \brief Exceptions thrown by mbl, and a mechanism for turning them off.
 // \author Ian Scott.
 
-#include <vcl_sstream.h>
+// not used? #include <vcl_sstream.h>
 #include <mbl/mbl_exception.h>
 
 
@@ -56,7 +56,6 @@ static vcl_string LotsOfInfo()
 static vcl_string LotsOfInfo()
 {
   return "";
-
 }
 #endif 
 

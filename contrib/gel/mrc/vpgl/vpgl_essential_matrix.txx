@@ -14,7 +14,6 @@
 #include <vnl/algo/vnl_matrix_inverse.h>
 #include <vnl/io/vnl_io_matrix_fixed.h>
 #include <vcl_iosfwd.h>
-#include <vcl_cassert.h>
 #include "vpgl_proj_camera.h"
 
 

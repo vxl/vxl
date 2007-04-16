@@ -15,7 +15,7 @@
 // http://www.linuxtv.org/downloads/video4linux/API/V4L1_API.html
 
 
-#include <vcl_string.h>
+// not used? #include <vcl_string.h>
 #include "vidl2_pixel_format.h"
 #include <linux/videodev.h>
 
@@ -64,7 +64,7 @@ struct vidl2_v4l_params
         contrast_=contrast;
         return *this;
     };
-    
+
     //: whiteness
     vidl2_v4l_params& whiteness(int whiteness){
         whiteness_=whiteness;
@@ -82,7 +82,7 @@ struct vidl2_v4l_params
         pixel_format_=pf;
         return *this;
     };
-    
+
     unsigned int ni_, nj_;
     int brightness_;
     int hue_;

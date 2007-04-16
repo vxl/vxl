@@ -10,7 +10,6 @@
 #include "vidl2_convert.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstring.h>
 #include <vcl_iostream.h>
 
 #include <vil/vil_stream.h>

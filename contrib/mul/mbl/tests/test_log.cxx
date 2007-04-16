@@ -1,6 +1,5 @@
 // This is mul/mbl/tests/test_log.cxx
 #include <vcl_sstream.h>
-#include <vcl_cstdlib.h>
 #include <vcl_fstream.h>
 #include <mbl/mbl_log.h>
 #include <testlib/testlib_test.h>
@@ -37,13 +36,13 @@ void test_log()
     current.log(mbl_logger::INFO) << "Output this whatever" << vcl_endl;
 
   MBL_LOG( WARN, current, "Also this number " << 54 <<
-    " and" << vcl_endl << "multiline message");
+          " and" << vcl_endl << "multiline message");
 // Manual expansion of MBL_LOG macro
 //  if (current.level() >= mbl_logger:: WARN)
 //  {
 //    current.mtstart(mbl_logger:: WARN, __FILE__, __LINE__);
-//    current.mtlog() << "Also this number " << 54 <<
-//    " and" << vcl_endl << "multiline message" << vcl_endl;
+//    current.mtlog() << "Also this number " << 54
+//                    << " and" << vcl_endl << "multiline message" << vcl_endl;
 //    current.mtstop();
 //  }
 

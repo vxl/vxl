@@ -17,7 +17,7 @@
 
 #include <vcl_functional.h>
 #include <vcl_vector.h>
-#include <vcl_iterator.h>
+// not used? #include <vcl_iterator.h>
 #include <vcl_ostream.h>
 
 //: Fill an output sequence with incrementing values.
@@ -88,9 +88,9 @@ template<typename InputIterator,
                                            OutputIterator destBegin,
                                            Predicate pred)
 {
-  while(begin != end)
+  while (begin != end)
   {
-    if(pred(*begin))
+    if (pred(*begin))
     {
       *destBegin++ = *begin; 
     }
@@ -170,7 +170,7 @@ class mbl_stl_index_functor
 template <class Cont>
 class mbl_stl_output_t1
 {
-public:
+ public:
   const Cont &c;
   const char *sep;
   mbl_stl_output_t1(const Cont& c, const char * sep): c(c), sep(sep) {}
@@ -201,7 +201,5 @@ mbl_stl_output_t1<Cont> mbl_stl_output(const Cont &c, const char * sep=" ")
 {
   return mbl_stl_output_t1<Cont>(c, sep);
 }
-
-
 
 #endif // mbl_stl_h_

@@ -4,7 +4,6 @@
 // \author Chuck Stewart
 
 #include <vcl_cmath.h>
-#include <vcl_cassert.h>
 
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_svd.h>
@@ -31,8 +30,8 @@ estimate_weighted( rgrl_match_set const& match_set,
   rgrl_scale_sptr scales = new rgrl_scale;
   double scale;
   vnl_matrix<double> inv_covar;
-  
-  if( compute_geometric_scale( scale, match_set, use_signature_only, penalize_scaling ) )
+
+  if ( compute_geometric_scale( scale, match_set, use_signature_only, penalize_scaling ) )
     scales->set_geometric_scale( scale );
 
   if ( do_signature_scale_ && compute_signature_inv_covar( inv_covar, match_set ) ) {
@@ -46,8 +45,8 @@ estimate_weighted( rgrl_match_set const& match_set,
 bool
 rgrl_scale_est_all_weights::
 compute_geometric_scale( double& return_scale,
-                         rgrl_match_set const& match_set, 
-                         bool use_signature_wgt, 
+                         rgrl_match_set const& match_set,
+                         bool use_signature_wgt,
                          bool penalize_scaling  ) const
 {
   typedef rgrl_match_set::const_from_iterator from_iter;
@@ -86,9 +85,9 @@ compute_geometric_scale( double& return_scale,
   const double epsilon = 1e-16;
   double scale = vcl_sqrt( sum_weighted_error / sum_weights );
   // is finite?
-  if( !vnl_math_isfinite( scale ) )
+  if ( !vnl_math_isfinite( scale ) )
     return false;
-  
+
   return_scale = scaling * vnl_math_max( scale, epsilon );
 
   DebugMacro(1, "  Final geometric scale" << return_scale << vcl_endl );
@@ -108,13 +107,13 @@ compute_signature_inv_covar( vnl_matrix<double>& inv_covar, rgrl_match_set const
   typedef rgrl_match_set::const_from_iterator from_iter;
   typedef from_iter::to_iterator              to_iter;
 
-  if( !match_set.from_size() )  return false;
-    
+  if ( !match_set.from_size() )  return false;
+
   from_iter fitr = match_set.from_begin();
   const unsigned nrows = fitr.from_feature()->signature_error_dimension( match_set.to_feature_type() );
-  
+
   // check on the error vector dimension
-  if( !nrows ) return false;
+  if ( !nrows ) return false;
 
   vnl_matrix<double> weighted_covar( nrows, nrows, 0.0 );
   double sum_weights = 0.0;
@@ -134,7 +133,7 @@ compute_signature_inv_covar( vnl_matrix<double>& inv_covar, rgrl_match_set const
   weighted_covar /= sum_weights;
   vnl_svd<double> svd( weighted_covar );
   svd.zero_out_absolute();
-  
+
   inv_covar = svd.inverse();
   return true;   // pseudo-inverse at this point
 }

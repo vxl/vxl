@@ -10,7 +10,6 @@
 //-----------------------------------------------------------------------------
 
 #include "vnl_lsqr.h"
-#include <vcl_cstdlib.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector_ref.h>

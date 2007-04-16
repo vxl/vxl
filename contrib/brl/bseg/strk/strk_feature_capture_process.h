@@ -13,7 +13,7 @@
 //   J.L. Mundy November 26, 2004    Initial version.
 // \endverbatim
 //---------------------------------------------------------------------------
-#include <vcl_fstream.h>
+// not used? #include <vcl_fstream.h>
 #include <vcl_string.h>
 #include <vtol/vtol_face_2d_sptr.h>
 #include <vpro/vpro_video_process.h>

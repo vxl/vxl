@@ -6,7 +6,6 @@
 // \date   July 2003
 
 #include <vcl_iosfwd.h>
-#include <vcl_cassert.h>
 
 #include <vil/algo/vil_region_finder.h>
 
@@ -17,13 +16,6 @@
 
 #include <vdgl/vdgl_edgel.h>
 #include <vdgl/vdgl_edgel_chain.h>
-
-#ifndef NDEBUG
-#  include <vcl_iostream.h>
-#  define DEBUG( x ) x;
-#else
-#  define DEBUG( x ) /*debugging removed*/ do {} while (false)
-#endif
 
 
 // =============================================================================

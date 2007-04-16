@@ -4,7 +4,6 @@
 // \file
 // \author J.L. Mundy
 
-#include <vcl_cstdlib.h> // for vcl_exit()
 #include <vcl_iostream.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>

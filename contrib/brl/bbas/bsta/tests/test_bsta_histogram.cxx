@@ -4,7 +4,7 @@
 #include <bsta/bsta_histogram.h>
 #include <bsta/bsta_joint_histogram.h>
 #include <vcl_iostream.h>
-#include <vcl_string.h>
+// not used? #include <vcl_string.h>
 
 #ifdef DEBUG
 #include <vcl_cassert.h>

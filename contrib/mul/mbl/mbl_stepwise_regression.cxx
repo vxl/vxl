@@ -8,11 +8,10 @@
 #include <vcl_algorithm.h>
 #include <vcl_iterator.h>
 #include <vcl_utility.h>
-#include <vcl_cmath.h>
+// not used? #include <vcl_cmath.h>
 #include <vcl_cassert.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h> // for vcl_abort()
+// not used? #include <vcl_vector.h>
+// not used? #include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_svd.h>
 #include <mbl/mbl_stl.h>

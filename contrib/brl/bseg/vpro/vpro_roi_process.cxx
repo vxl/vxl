@@ -1,5 +1,5 @@
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
+// not used? #include <vcl_fstream.h>
 #include <vil/vil_new.h>
 #include <vil/vil_image_resource.h>
 #include <vidl/vidl_movie.h>

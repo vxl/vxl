@@ -14,8 +14,10 @@
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
 #include <vcl_sstream.h>
-#include <vcl_cassert.h>
 #include <vcl_utility.h>
+#if 0
+#include <vcl_cassert.h>
+#endif
 
 //-------------------------------------------------------------------------
 // Private helpers.
@@ -89,7 +91,9 @@ namespace
 
     int count = 0, size = 0;
     DSHOW_ERROR_IF_FAILED(asc->GetNumberOfCapabilities(&count, &size));
-    //assert(sizeof(VIDEO_STREAM_CONFIG_CAPS) == size);
+#if 0
+    assert(sizeof(VIDEO_STREAM_CONFIG_CAPS) == size);
+#endif
 
     DSHOW_ERROR_IF_FAILED(asc->GetFormat(&amt));
     vcl_cout << vcl_setw(w1) << "output_format"
@@ -227,7 +231,9 @@ void vidl2_dshow_istream_params::configure_filter(
     DSHOW_ERROR_IF_FAILED(
       am_stream_config->GetNumberOfCapabilities(&count, &size));
     // ***** alignment problem... hack to work around bug in DShow
-    //assert(sizeof(vscc) == size);
+#if 0
+    assert(sizeof(vscc) == size);
+#endif
 
     DSHOW_ERROR_IF_FAILED(am_stream_config->GetStreamCaps(
       output_format_.is_changed ? output_format_.value : 0,

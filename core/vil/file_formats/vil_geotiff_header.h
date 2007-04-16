@@ -20,10 +20,7 @@
 //   <none>
 // \endverbatim
 
-#include <vcl_string.h>
 #include <vcl_vector.h>
-#include <vxl_config.h>
-#include <vcl_cmath.h>
 #include <vil/file_formats/vil_tiff_header.h>
 #include <tiffio.h>
 #include <geotiffio.h>

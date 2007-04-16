@@ -1,5 +1,5 @@
 // This is brl/bseg/strk/strk_io.cxx
-#include <vcl_iostream.h>
+// not used? #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matlab_print2.h>

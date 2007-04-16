@@ -7,7 +7,7 @@
 
 #include <vcl_string.h>
 #include <vcl_iosfwd.h> // for std::ostream
-#include <vcl_functional.h>
+// not used? #include <vcl_functional.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
 #include <vnl/vnl_matrix.h>

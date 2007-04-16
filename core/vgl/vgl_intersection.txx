@@ -7,10 +7,8 @@
 
 #include "vgl_intersection.h"
 
-#include <vcl_algorithm.h>
 #include <vcl_limits.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
 
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_line_2d.h>
@@ -19,8 +17,8 @@
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_distance.h>
 
-inline bool vgl_near_zero(double x){return vcl_fabs(x)<1e-08;}
-inline bool vgl_near_eq(double x, double y){return vgl_near_zero(x-y);}
+inline bool vgl_near_zero(double x) { return x < 1e-8 && x > -1e8; }
+inline bool vgl_near_eq(double x, double y) { return vgl_near_zero(x-y); }
 
 //: compute the intersection of an infinite line with *this box.
 //  p0 and p1 are the intersection points

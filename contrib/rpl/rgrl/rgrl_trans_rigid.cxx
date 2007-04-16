@@ -5,7 +5,6 @@
 // \date   March 2004
 
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_math.h>
 #include <rgrl/rgrl_util.h>
@@ -39,7 +38,7 @@ rgrl_trans_rigid( vnl_matrix<double> const& rot,
 {
   assert ( R_.rows() == R_.cols() );
   assert ( R_.rows() == trans_.size() );
-  if( is_covar_set() ) {
+  if ( is_covar_set() ) {
     assert ( covar_.rows() == covar_.cols() );
     assert ( ( R_.rows() != 2 || covar_.rows() == 3 ) ); // 2d has 3 params (1 angle + 2 displacements)
     assert ( ( R_.rows() != 3 || covar_.rows() == 6 ) ); // 3d has 6 params (3 angles + 3 displacements)
@@ -235,9 +234,9 @@ inverse_transform( ) const
   rgrl_transformation_sptr result = new rgrl_trans_rigid( invR, -invR * t() );
 
   const unsigned m = scaling_factors_.size();
-  if( m > 0 ) {
+  if ( m > 0 ) {
     vnl_vector<double> scaling( m );
-    for( unsigned int i=0; i<m; ++i )
+    for ( unsigned int i=0; i<m; ++i )
       scaling[i] = 1.0 / scaling_factors_[i];
     result->set_scaling_factors( scaling );
   }

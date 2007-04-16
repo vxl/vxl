@@ -1,6 +1,5 @@
 #include "vidfpl_vil_menus.h"
 
-#include <vcl_cstdlib.h> // for vcl_exit()
 #include <vgui/vgui.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_key.h>
@@ -62,6 +61,7 @@ void vidfpl_vil_menus::load_pyramid_video_callback()
 {
   vvid_vil_file_manager::instance()->load_pyramid_video();
 }
+
 void vidfpl_vil_menus::pause_video_callback()
 {
   vvid_vil_file_manager::instance()->pause_video();

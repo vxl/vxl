@@ -13,7 +13,6 @@
 
 #include <vcl_vector.h>
 #include <vil/vil_image_view_base.h>
-#include <vcl_cassert.h>
 #include <vil/vil_smart_ptr.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_resource_sptr.h>

@@ -6,8 +6,6 @@
 // \author Matt Leotta
 //
 
-#include <vcl_iostream.h>
-
 namespace {
 
 //: Recursive template metaprogram to populate the "vidl2_has_iterator" array
@@ -53,15 +51,14 @@ struct vidl2_has_iterator
 vidl2_has_iterator has_iterator;
 
 
-
 //: Recursive template metaprogram to make a pixel_iterator
 template <vidl2_pixel_format pix_type>
 struct make_pixel_iterator
 {
   static inline vidl2_pixel_iterator* apply(const vidl2_frame& frame)
   {
-    if(frame.pixel_format() == pix_type){
-      if(vidl2_pixel_iterator_valid<pix_type>::value)
+    if (frame.pixel_format() == pix_type){
+      if (vidl2_pixel_iterator_valid<pix_type>::value)
         return new vidl2_pixel_iterator_of<pix_type>(frame);
       return NULL;
     }
@@ -79,11 +76,9 @@ struct make_pixel_iterator<VIDL2_PIXEL_FORMAT_UNKNOWN>
   }
 };
 
-
-
 //=============================================================================
 
-};
+}; // anonymous namespace
 
 
 //: Pixel iterator factory

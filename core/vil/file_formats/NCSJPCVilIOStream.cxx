@@ -1,7 +1,6 @@
 #include "NCSJPCVilIOStream.h"
 
 #include <vil/vil_stream.h>
-#include <vcl_cassert.h>
 #include <vcl_limits.h>
 
 #undef max
@@ -70,7 +69,6 @@ bool CNCSJPCVilIOStream::Seek(INT64 offset, Origin origin )
   }
 
   //make sure the offset specifies a valid location in the stream
-  //assert( absoluteOffset > 0 && absoluteOffset <= Size() );
   if ( ! ( absoluteOffset >= 0 && absoluteOffset <= mVilStream->file_size() ) ) {
     *(CNCSError*)this = NCS_FILE_SEEK_ERROR;
   } else {

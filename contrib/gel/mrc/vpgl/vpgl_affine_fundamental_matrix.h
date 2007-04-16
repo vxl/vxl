@@ -17,8 +17,7 @@
 
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_fwd.h>
-#include <vcl_iosfwd.h>
-#include <vcl_cassert.h>
+// not used? #include <vcl_iosfwd.h>
 
 #include "vpgl_fundamental_matrix.h"
 
@@ -26,8 +25,7 @@
 template <class T>
 class vpgl_affine_fundamental_matrix : public vpgl_fundamental_matrix<T>
 {
-
-public:
+ public:
 
   // Constructors:----------------------
 
@@ -37,16 +35,10 @@ public:
   //: Cast up from a regular vpgl_fundamental_matrix.
   vpgl_affine_fundamental_matrix( const vpgl_fundamental_matrix<T>& fm );
 
-
   // Getters and Setters:----------------
 
   //: Form the matrix from its free parameters.
   void set_from_params( T a, T b, T c, T d, T e );
-
-private:
-
-
-
 };
 
 #endif // vpgl_affine_fundamental_matrix_h_

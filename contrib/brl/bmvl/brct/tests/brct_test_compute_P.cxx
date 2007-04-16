@@ -1,8 +1,8 @@
 // This is brl/bmvl/brct/tests/brct_test_compute_P.cxx
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
+// not used? #include <vcl_fstream.h>
 #include <vcl_vector.h>
-#include <vcl_string.h>
+// not used? #include <vcl_string.h>
 #include <brct/brct_algos.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_4.h>

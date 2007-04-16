@@ -1,16 +1,15 @@
 #include <testlib/testlib_test.h>
-#include <vcl_vector.h>
+// not used? #include <vcl_vector.h>
 #include <vcl_iostream.h>
-#include <vxl_config.h> // for vxl_byte
 #include <vil3d/algo/vil3d_quad_distance_function.h>
 #include <vil3d/vil3d_print.h>
 
 
 void test_algo_quad_distance_function_float_float()
 {
-  vcl_cout << "********************************************\n"
+  vcl_cout << "***************************************************\n"
            << " Testing vil3d_quad_distance_function<float,float>\n"
-           << "********************************************\n";
+           << "***************************************************\n";
   vil3d_image_view<float> src(7,7,7),dest;
   src.fill(1.0f);
   src(2,4,4)=-10.0f;
@@ -32,7 +31,6 @@ void test_algo_quad_distance_function_float_float()
   src(1,2,4)=-10.0f;
   vil3d_quad_distance_function(src,1,1,1,dest);
   TEST_NEAR("d(1,2,4)",dest(1,2,4),-10,1e-6);
-
 }
 
 void test_algo_quad_distance_function_with_pos_float_float()
@@ -62,9 +60,9 @@ void test_algo_quad_distance_function_with_pos_float_float()
   TEST("pos(4,6,4)=(2,4,3)",pos(4,6,3,0)==2 && pos(4,6,3,1)==4 && pos(4,6,4,2)==3,true);
   TEST_NEAR("d(0,1,3)",dest(0,1,3),1,1e-6);
   TEST("pos(0,1,3)=(0,1,3)",pos(0,1,3,0)==0 && pos(0,1,3,1)==1 && pos(0,1,3,2)==3,true);
-  vcl_cout<<"pos(0,0,3)=("<<pos(0,0,3,0)<<","<<pos(0,0,3,1)<<","<<pos(0,0,3,2)<<")"<<vcl_endl;
-  vcl_cout<<"pos(0,1,3)=("<<pos(0,1,3,0)<<","<<pos(0,1,3,1)<<","<<pos(0,1,3,2)<<")"<<vcl_endl;
-  vcl_cout<<"pos(0,2,3)=("<<pos(0,2,3,0)<<","<<pos(0,2,3,1)<<","<<pos(0,2,3,2)<<")"<<vcl_endl;
+  vcl_cout<<"pos(0,0,3)=("<<pos(0,0,3,0)<<','<<pos(0,0,3,1)<<','<<pos(0,0,3,2)<<')'<<vcl_endl
+           <"pos(0,1,3)=("<<pos(0,1,3,0)<<','<<pos(0,1,3,1)<<','<<pos(0,1,3,2)<<')'<<vcl_endl
+           <"pos(0,2,3)=("<<pos(0,2,3,0)<<','<<pos(0,2,3,1)<<','<<pos(0,2,3,2)<<')'<<vcl_endl;
   TEST_NEAR("d(0,2,3)",dest(0,2,3),-2,1e-6);
   TEST("pos(0,2,3)=(2,4,3)",pos(0,2,3,0)==2 && pos(0,2,3,1)==4 && pos(0,2,3,2)==3,true);
 
@@ -74,7 +72,6 @@ void test_algo_quad_distance_function_with_pos_float_float()
   TEST_NEAR("d(1,2,3)",dest(1,2,3),-10,1e-6);
   TEST("pos(1,2,3)=(1,2,3)",pos(1,2,3,0)==1 && pos(1,2,3,1)==2 && pos(1,2,3,2)==3,true);
   TEST("pos(0,2,3)=(1,2,3)",pos(0,2,3,0)==1 && pos(0,2,3,1)==2 && pos(0,2,3,2)==3,true);
-
 }
 
 MAIN( test_algo_quad_distance_function )

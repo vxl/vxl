@@ -13,28 +13,29 @@
 //  5/6/2005  Ricardo Fabbri   Added binary I/O
 // \endverbatim
 //
-//   This is the most general camera class based around the 3x4 matrix camera model.
-//   In reality the 3x4 matrix should be rank 3, but this is only checked when an action
-//   needing an SVD decomposition is called, and only gives a warning.
+// This is the most general camera class based around the 3x4 matrix camera model.
+// In reality the 3x4 matrix should be rank 3, but this is only checked when an action
+// needing an SVD decomposition is called, and only gives a warning.
 //
-//   Once the camera is constructed, the camera matrix can only be accessed through
-//   the "get_matrix" and "set_matrix" functions. These are also the only ways for
-//   subclasses to access the matrix, as the automatic SVD handling is done in them.
+// Once the camera is constructed, the camera matrix can only be accessed through
+// the "get_matrix" and "set_matrix" functions. These are also the only ways for
+// subclasses to access the matrix, as the automatic SVD handling is done in them.
 //
-//   Some camera operations require an SVD decomposition of the camera matrix.  When
-//   such a function is first called, an SVD is automatically computed and cached for
-//   all future calls.  When the camera matrix is changed by "set_matrix", the cached SVD
-//   is automatically nulled and will only be recomputed when another function that
-//   needs it is called.  The SVD can be viewed at any time via the "svd" function.
+// Some camera operations require an SVD decomposition of the camera matrix.  When
+// such a function is first called, an SVD is automatically computed and cached for
+// all future calls.  When the camera matrix is changed by "set_matrix", the cached SVD
+// is automatically nulled and will only be recomputed when another function that
+// needs it is called.  The SVD can be viewed at any time via the "svd" function.
 //
-//   Only elementary methods on the camera are included in the class itself.  In addition,
-//   there several external functions at the end of the file for important camera operations
-//   deemed too specialized to be included in the vpgl_proj_camera class itself.  Some
-//   functions lifted from vgl_p_matrix.h.
+// Only elementary methods on the camera are included in the class itself.  In addition,
+// there several external functions at the end of the file for important camera operations
+// deemed too specialized to be included in the vpgl_proj_camera class itself.  Some
+// functions lifted from vgl_p_matrix.h.
 //
-//   NOTE FOR DEVELOPERS:  If you write any member functions that change the
-//   underlying matrix P_ you should call set_matrix to change it, rather than
-//   changing P_ itself.  The automatic SVD caching will be screwed up otherwise.
+// NOTE FOR DEVELOPERS:  If you write any member functions that change the
+// underlying matrix P_ you should call set_matrix to change it, rather than
+// changing P_ itself.  The automatic SVD caching will be screwed up otherwise.
+
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_fwd.h>
 #include <vnl/vnl_matrix_fixed.h>
@@ -49,7 +50,6 @@
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vcl_iosfwd.h>
-#include <vcl_cassert.h>
 #include <vsl/vsl_binary_io.h>
 
 
@@ -237,7 +237,7 @@ vgl_point_3d<T> triangulate_3d_point(const vpgl_proj_camera<T>& c1,
                                      const vgl_point_2d<T>& x1,
                                      const vpgl_proj_camera<T>& c2,
                                      const vgl_point_2d<T>& x2);
-                                             
+
 // I/O ---
 
 //: Write vpgl_perspective_camera to stream

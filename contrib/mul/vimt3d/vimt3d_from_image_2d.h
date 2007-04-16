@@ -10,7 +10,6 @@
 // \file
 // \author Kevin de Souza
 
-#include <vcl_cassert.h>
 #include <vnl/vnl_vector.h>
 #include <vil/vil_image_view.h>
 #include <vil3d/vil3d_image_view.h>
@@ -38,33 +37,33 @@ inline vimt3d_image_3d_of<T> vimt3d_from_image_2d(const vimt_image_2d_of<T>& img
   const vimt_transform_2d& transf2d =  img.world2im();
   vimt_transform_2d::Form form2d = transf2d.form();
   vimt3d_transform_3d transf3d;
-  switch(form2d)
+  switch (form2d)
   {
-  case vimt_transform_2d::Identity:
+   case vimt_transform_2d::Identity:
     transf3d.set_identity(); 
     break;
 
-  case vimt_transform_2d::Translation:
-    {
-      vnl_vector<double> v(2);
-      transf2d.params(v);
-      double tx=v(0), ty=v(1), tz=0.0;
-      transf3d.set_translation(tx, ty, tz);
-    }
+   case vimt_transform_2d::Translation:
+   {
+    vnl_vector<double> v(2);
+    transf2d.params(v);
+    double tx=v(0), ty=v(1), tz=0.0;
+    transf3d.set_translation(tx, ty, tz);
     break;
+   }
 
-  case vimt_transform_2d::ZoomOnly:
-    {
-      vnl_vector<double> v(4);
-      transf2d.params(v);
-      double sx=v(0), sy=v(1), sz=1.0, tx=v(2), ty=v(3), tz=0.0;
-      transf3d.set_zoom_only(sx, sy, sz, tx, ty, tz);
-    }
+   case vimt_transform_2d::ZoomOnly:
+   {
+    vnl_vector<double> v(4);
+    transf2d.params(v);
+    double sx=v(0), sy=v(1), sz=1.0, tx=v(2), ty=v(3), tz=0.0;
+    transf3d.set_zoom_only(sx, sy, sz, tx, ty, tz);
     break;
+   }
 
-  default:
+   default:
     mbl_exception_error(mbl_exception_abort("vimt3d_from_image_2d(): "
-      "Unable to handle transforms"));
+                        "Unable to handle transforms"));
     break;
   }
 

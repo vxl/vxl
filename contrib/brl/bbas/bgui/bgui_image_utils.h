@@ -12,12 +12,12 @@
 //   JLM   Sept. 28, 2006  Initial version.
 // \endverbatim
 
-#include <vcl_vector.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_blocked_image_resource_sptr.h>
 #include <bsta/bsta_histogram.h>
 #include <bgui/bgui_graph_tableau.h>
+
 class bgui_image_utils
 {
  public:
@@ -25,7 +25,7 @@ class bgui_image_utils
   bgui_image_utils(): hist_valid_(false), percent_limit_(0.05),
     n_skip_upper_bins_(0), n_skip_lower_bins_(1),image_(0),
     hist_(bsta_histogram<double>(0.0,0.0,1)){}
-    
+
   bgui_image_utils(vil_image_resource_sptr const& image):
     hist_valid_(false),percent_limit_(0.05), n_skip_upper_bins_(0),
     n_skip_lower_bins_(1), image_(image),
@@ -38,9 +38,9 @@ class bgui_image_utils
   void set_percent_limit(const double limit){percent_limit_ = limit;}
   void range(double& min_value, double& max_value);
   bsta_histogram<double> histogram()
-    {if(!hist_valid_)this->construct_histogram(); return hist_;}
+  { if (!hist_valid_)this->construct_histogram(); return hist_; }
   bgui_graph_tableau_sptr hist_graph();
-private:
+ private:
   //private utilities
   bool init_histogram();
   void set_hist_from_view(vil_image_view_base_sptr const& view);

@@ -1,7 +1,6 @@
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_cstdlib.h>
-#include <vcl_cstdio.h>
 #include <vcl_sstream.h>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>

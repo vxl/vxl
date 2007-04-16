@@ -5,26 +5,26 @@
 #pragma interface
 #endif
 //:
-// \file  
+// \file
 // \brief A cached and blocked representation of the image_resource
 // \author J. L. Mundy
 
-#include <vcl_vector.h>
 #include <vil/vil_blocked_image_resource.h>
 #include <vil/vil_block_cache.h>
+
 class vil_cached_image_resource : public vil_blocked_image_resource
-{ 
+{
  public:
 
-  vil_cached_image_resource(vil_blocked_image_resource_sptr bir, 
-                            const unsigned cache_size): 
+  vil_cached_image_resource(vil_blocked_image_resource_sptr bir,
+                            const unsigned cache_size):
     bir_(bir), cache_(vil_block_cache(cache_size)){}
 
   virtual ~vil_cached_image_resource(){}
 
  inline virtual unsigned nplanes() const
     {return bir_->nplanes();}
- inline virtual unsigned ni() const 
+ inline virtual unsigned ni() const
     {return bir_->ni();}
  inline virtual unsigned nj() const
   {return bir_->nj();}
@@ -50,7 +50,7 @@ class vil_cached_image_resource : public vil_blocked_image_resource
   virtual vil_image_view_base_sptr get_block( unsigned  block_index_i,
                                               unsigned  block_index_j ) const;
 
-  //: put the block into the resource at the indicated location  
+  //: put the block into the resource at the indicated location
   virtual bool put_block(unsigned  block_index_i,
                          unsigned  block_index_j,
                          const vil_image_view_base& view)

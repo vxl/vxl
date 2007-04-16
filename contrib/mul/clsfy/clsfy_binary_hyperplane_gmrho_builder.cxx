@@ -9,7 +9,7 @@
 //=======================================================================
 
 #include <vcl_string.h>
-#include <vcl_iterator.h>
+// not used? #include <vcl_iterator.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_cassert.h>

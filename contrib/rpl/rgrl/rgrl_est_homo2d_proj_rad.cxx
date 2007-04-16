@@ -10,7 +10,6 @@
 #include <rgrl/rgrl_match_set.h>
 #include <rgrl/rgrl_internal_util.h>
 
-#include <vcl_cassert.h>
 #include <vnl/vnl_double_2.h>
 #include <vul/vul_sprintf.h>
 
@@ -48,7 +47,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     rgrl_trans_homo2d_proj_rad const& trans = static_cast<rgrl_trans_homo2d_proj_rad const&>( cur_transform );
     init_H = trans.H();
     const vcl_vector<double> k = trans.radial_params();
-    for( unsigned int i=0; i<k.size()&&i<camera_dof_; ++i )
+    for ( unsigned int i=0; i<k.size()&&i<camera_dof_; ++i )
       radk[i] = k[i];
   }
   else if ( cur_transform.is_type( rgrl_trans_rad_dis_homo2d::type_id() ) )

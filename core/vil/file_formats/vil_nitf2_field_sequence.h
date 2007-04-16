@@ -6,7 +6,7 @@
 #define VIL_NITF2_FIELD_SEQUENCE_H
 
 #include <vcl_map.h>
-#include <vcl_iostream.h>
+// not used? #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
 

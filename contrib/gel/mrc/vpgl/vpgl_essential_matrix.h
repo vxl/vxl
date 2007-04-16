@@ -20,12 +20,10 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_iosfwd.h>
-#include <vcl_cassert.h>
 
 #include "vpgl_perspective_camera.h"
 #include "vpgl_calibration_matrix.h"
 #include "vpgl_fundamental_matrix.h"
-
 
 
 template <class T>

@@ -6,7 +6,7 @@
 
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
+// not used? #include <vcl_cmath.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/algo/vnl_svd.h>
 
@@ -95,8 +95,8 @@ vpgl_affine_camera_compute::compute(
   vnl_matrix<double> AtA = A.transpose()*A;
   vnl_svd<double> svd(AtA);
   if ( svd.rank() < 4 ) {
-    vcl_cerr << "vpgl_affine_camera_compute:compute() cannot compute, input data "
-             << "has insufficient rank.\n";
+    vcl_cerr << "vpgl_affine_camera_compute:compute() cannot compute,\n"
+             << "    input data has insufficient rank.\n";
     return false;
   }
   vnl_matrix<double> S = svd.inverse()*A.transpose();

@@ -13,7 +13,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <vcl_vector.h>
+// not used? #include <vcl_vector.h>
 #include <vcl_iosfwd.h>
 #include <brct/brct_corr.h>
 

@@ -6,7 +6,6 @@
 // \brief Conduct stepwise regression
 // \author Martin Roberts
 
-#include <vcl_vector.h>
 #include <vcl_set.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>

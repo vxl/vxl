@@ -11,7 +11,6 @@
 #include <vnl/algo/vnl_matrix_inverse.h>
 
 #include <vcl_iostream.h>
-#include <vcl_cassert.h>
 
 template <class T>
 vgl_fit_plane_3d<T>::vgl_fit_plane_3d(vcl_vector<vgl_homg_point_3d<T> > points)
@@ -43,7 +42,7 @@ void vgl_fit_plane_3d<T>::add_point(const T x, const T y, const T z)
   // normalize the points
   vgl_norm_trans_3d<T> norm;
   if (!norm.compute_from_points(points_)) {
-    vcl_cerr << "there is a problem with norm transform" << vcl_endl;
+    vcl_cerr << "there is a problem with norm transform\n";
   }
 
   // normalize the points
@@ -95,7 +94,7 @@ void vgl_fit_plane_3d<T>::add_point(const T x, const T y, const T z)
   // check if the error_margin is achieved
   T min = svd.sigma_min();
   if (min > error_marg) {
-    vcl_cerr << "Error Margin " << error_marg << ">" << min << ". Could not fit the points to a plane" << vcl_endl;
+    vcl_cerr << "Error Margin " << error_marg << '>' << min << ". Could not fit the points to a plane\n";
     return false;
   }
 

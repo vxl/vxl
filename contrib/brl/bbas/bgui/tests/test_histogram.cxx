@@ -1,7 +1,5 @@
 // This is brl/bbas/bgui/tests/test_histogram.cxx
 #include <testlib/testlib_test.h>
-#include <vxl_config.h>
-#include <vcl_climits.h> // for CHAR_BIT
 #include <vil/vil_pixel_traits.h>
 #include <vil/vil_load.h>
 #include <vil/vil_image_view.h>

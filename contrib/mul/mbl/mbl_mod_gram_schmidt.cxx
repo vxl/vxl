@@ -2,17 +2,14 @@
 #include "mbl_mod_gram_schmidt.h"
 //:
 // \file
-// \brief Orthoganalise a basis using modified Gram-Schmidt (and normalise)
+// \brief Orthogonalise a basis using modified Gram-Schmidt (and normalise)
 // \author Martin Roberts
 
-#include <vcl_cmath.h>
 #include <vcl_vector.h>
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h> // for vcl_abort()
 #include <vnl/vnl_vector.h>
 
 //=======================================================================
-//: Orthoganalise a basis using modified Gram-Schmidt
+//: Orthogonalise a basis using modified Gram-Schmidt
 // Transform basis {vk} to orthonormal basis {ek} with k in range 1..N
 // for j = 1 to N
 //     ej = vj

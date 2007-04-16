@@ -1,7 +1,6 @@
 //:
 // \file
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h>
 
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_math.h>
@@ -351,7 +350,6 @@ scale_by( double scale ) const
                                       from.as_ref(), to.as_ref() );
   xform->set_scaling_factors( this->scaling_factors() );
   return xform;
-
 }
 
 vnl_matrix_fixed<double, 3, 3>

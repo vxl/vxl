@@ -7,8 +7,6 @@
 #include <rgrl/rgrl_match_set.h>
 #include <rgrl/rgrl_internal_util.h>
 
-
-#include <vcl_cassert.h>
 #include <vnl/vnl_double_2.h>
 
 // --------------------------------------------------------------------
@@ -32,8 +30,8 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // get initialization
   vnl_matrix_fixed<double, 3, 3> init_H;
 
-  if( !rgrl_internal_util_upgrade_to_homography2D( init_H, cur_transform ) ) {
-
+  if ( !rgrl_internal_util_upgrade_to_homography2D( init_H, cur_transform ) )
+  {
     // use normalized DLT to initialize
     DebugMacro( 0, "Use normalized DLT to initialize" );
     rgrl_est_homography2d est_homo;
@@ -53,8 +51,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // apply estimation
   vnl_double_2 from_centre, to_centre;
   vnl_matrix<double> covar;
-  if( !homo_func.projective_estimate( init_H, covar, from_centre, to_centre ) ) {
-
+  if ( !homo_func.projective_estimate( init_H, covar, from_centre, to_centre ) ) {
     WarningMacro( "L-M estimation failed." << vcl_endl );
     return 0;
   }

@@ -4,10 +4,6 @@
 
 #include "vil_nitf2_tagged_record.h"
 
-#include <vcl_cstdio.h>
-#include <vcl_cstdlib.h>
-#include <vcl_cerrno.h>
-
 #include <vcl_sstream.h>
 #include <vcl_iomanip.h>
 #include <vcl_iostream.h>
@@ -402,7 +398,7 @@ bool vil_nitf2_tagged_record::test()
         c_values[2]!="C101" ||
         c_values[3]!="C110" ||
         c_values[4]!="C111") {
-      vcl_cerr << "failed!\n" << vcl_endl;
+      vcl_cerr << "failed!\n\n";
       error = true;
     }
     // Fetch A[1,*]
@@ -413,7 +409,7 @@ bool vil_nitf2_tagged_record::test()
     if (!record->get_values("A", indexes, a_values) ||
         a_values.size() != 1 ||
         a_values[0] != 2) {
-      vcl_cerr << "failed!\n" << vcl_endl;
+      vcl_cerr << "failed!\n\n";
       error = true;
     }
     // Fetch C[1,*]
@@ -424,7 +420,7 @@ bool vil_nitf2_tagged_record::test()
         c_values[2]!="C110" ||
         c_values[3]!="C111")
     {
-      vcl_cerr << "failed!\n" << vcl_endl;
+      vcl_cerr << "failed!\n\n";
     }
   } else {
     vcl_cerr << "Didn't create record!\n";
@@ -435,7 +431,7 @@ bool vil_nitf2_tagged_record::test()
            << *(record->get_field("C"));
   // Clean up test definition and test cleanup
   if (!vil_nitf2_tagged_record_definition::undefine(test_tre_tag)) {
-    vcl_cerr << "Error undefining TRE." << vcl_endl;
+    vcl_cerr << "Error undefining TRE.\n";
     error = true;
   }
   return !error;

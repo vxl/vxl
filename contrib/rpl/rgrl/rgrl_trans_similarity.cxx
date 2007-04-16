@@ -7,7 +7,6 @@
 // \date   Feb 2003
 
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h>
 #include <vnl/algo/vnl_svd.h>
 #include <rgrl/rgrl_util.h>
 
@@ -43,7 +42,7 @@ rgrl_trans_similarity( vnl_matrix<double> const& rot_and_scale,
 {
   assert ( A_.rows() == A_.cols() );
   assert ( A_.rows() == trans_.size() );
-  if( is_covar_set() ) {
+  if ( is_covar_set() ) {
     assert ( covar_.rows() == covar_.cols() );
     assert ( ( A_.rows() != 2 || covar_.rows() == 4 ) ); // 2d has 4 params
     assert ( ( A_.rows() != 3 || covar_.rows() == 7 ) ); // 3d has 7 params
@@ -64,7 +63,7 @@ rgrl_trans_similarity( vnl_matrix<double> const& in_A,
   assert ( A_.rows() == A_.cols() );
   assert ( A_.rows() == trans_.size() );
   assert ( from_centre_.size() == trans_.size() );
-  if( is_covar_set() ) {
+  if ( is_covar_set() ) {
     assert ( covar_.rows() == covar_.cols() );
     assert ( ( A_.rows() != 2 || covar_.rows() == 4 ) ); // 2d has 4 params
     assert ( ( A_.rows() != 3 || covar_.rows() == 7 ) ); // 3d has 7 params
@@ -181,9 +180,9 @@ inverse_transform( ) const
   rgrl_transformation_sptr result =  new rgrl_trans_similarity( invA, -invA * t() );
 
   const unsigned m = scaling_factors_.size();
-  if( m > 0 ) {
+  if ( m > 0 ) {
     vnl_vector<double> scaling( m );
-    for( unsigned int i=0; i<m; ++i )
+    for ( unsigned int i=0; i<m; ++i )
       scaling[i] = 1.0 / scaling_factors_[i];
     result->set_scaling_factors( scaling );
   }

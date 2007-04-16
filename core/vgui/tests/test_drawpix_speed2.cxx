@@ -2,7 +2,6 @@
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
 #include <vcl_cstring.h>
-#include <vcl_cstdlib.h>
 #include <vcl_cmath.h>
 
 #include <vpl/vpl.h>

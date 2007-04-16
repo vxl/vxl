@@ -12,7 +12,6 @@
 #include "vnl_levenberg_marquardt.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
 
 #include <vnl/vnl_vector.h>

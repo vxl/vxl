@@ -5,7 +5,7 @@
 #include "vil_nitf2_field_formatter.h"
 #include "vil_nitf2_field.h"
 
-#include <vcl_iomanip.h>
+// not used? #include <vcl_iomanip.h>
 #include <vcl_iostream.h>
 #include <vcl_cstring.h> // for std::strlen()
 

@@ -9,8 +9,6 @@
 
 #include "vil3d_gen_synthetic.h"
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h> // for vcl_abort()
-#include <vcl_cstring.h> // for vcl_strcmp()
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_new.h>
 #include <vil/vil_pixel_format.h>

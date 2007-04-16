@@ -19,12 +19,12 @@
 
 #include <vil/vil_file_format.h>
 #include <vimt/vimt_image_2d.h>
-#include <vcl_iosfwd.h>
+// not used? #include <vcl_iosfwd.h>
 
 
 //: Reader/Writer for v2i format images.
 //
-// To add this plugin to the list of loaders either 
+// To add this plugin to the list of loaders either
 // \verbatim
 //   vil_file_format::add_file_format(new vimt_vil_v2i_format);
 // \endverbatim
@@ -95,7 +95,7 @@ class vimt_vil_v2i_image: public vil_image_resource
 
   //: Set the size of the each pixel in the i,j directions.
   void set_pixel_size(float i, float j);
-  
+
   //: Get full world to image transform
   const vimt_transform_2d & world2im() const;
 

@@ -11,7 +11,7 @@
 // \brief test mcal_pca
 
 #include <vcl_iostream.h>
-#include <vcl_string.h>
+// not used? #include <vcl_string.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_cmath.h>
 #include <vnl/vnl_math.h>

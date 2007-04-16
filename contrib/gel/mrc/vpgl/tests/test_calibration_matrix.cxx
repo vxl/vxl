@@ -1,5 +1,5 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+// not used? #include <vcl_iostream.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vnl/vnl_fwd.h>
@@ -69,8 +69,6 @@ static void test_calibration_matrix()
   K1.set_y_scale( y_scale );
   TEST_NEAR( "test y_scale setter", 
              K1.get_matrix() == K6.get_matrix(), true, 1e-06);
-
-
 }
 
 TESTMAIN(test_calibration_matrix);

@@ -1,5 +1,5 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+// not used? #include <vcl_iostream.h>
 
 #include <vpgl/vpgl_proj_camera.h>
 #include <vnl/vnl_fwd.h>
@@ -127,13 +127,13 @@ static void test_proj_camera()
 
   // Test basic projection method
   vpgl_proj_camera<double> Pb;
-  Pb.set_matrix( random_matrix );  
+  Pb.set_matrix( random_matrix );
   double u = 0, v = 0;
   double X = x1.x(), Y = x1.y(), Z = x1.z();
   Pb.project(X, Y, Z, u, v);
-  TEST_NEAR( "base class point projection", y2(0)/u - y2(1)/v, 0.0, 0.001);  
+  TEST_NEAR( "base class point projection", y2(0)/u - y2(1)/v, 0.0, 0.001);
   // Test ray intersection
-  vnl_matrix_fixed<double,3,4> identity, trans;  
+  vnl_matrix_fixed<double,3,4> identity, trans;
   identity[0][0]=1; identity[0][1]=0; identity[0][2]=0; identity[0][3] = 0;
   identity[1][0]=0; identity[1][1]=1; identity[1][2]=0; identity[1][3] = 0;
   identity[2][0]=0; identity[2][1]=0; identity[2][2]=1; identity[2][3] = 0;

@@ -51,7 +51,7 @@
 
 #include <vcl_fstream.h>
 #include <vcl_streambuf.h>
-#include <vcl_memory.h>
+// not used? #include <vcl_memory.h>
 #include <vcl_string.h>
 #include <vcl_ostream.h>
 #include <vcl_set.h>
@@ -174,7 +174,7 @@ class mbl_logger
   mbl_logger(): nullstream_(&nullbuf_) {};
   mbl_log_null_streambuf nullbuf_;
   vcl_ostream nullstream_;
-public:  mbl_logger(const char *id): nullstream_(&nullbuf_) {}
+ public:  mbl_logger(const char *id): nullstream_(&nullbuf_) {}
   int level() const { return -1000; }
   vcl_ostream &log(int level) { return nullstream_; }
   vcl_ostream &mtlog() {return nullstream_;}
@@ -308,7 +308,7 @@ class mbl_logger_root
 }; 
 
 #ifdef MBL_LOG_DISABLE_ALL_LOGGING
-# define MBL_LOG(my_level, logger, message) do {} while (0)
+# define MBL_LOG(my_level, logger, message) do {} while (false)
 #else
 # define MBL_LOG(my_level, logger, message) \
   do { mbl_logger &rlogger = logger; \
@@ -316,7 +316,7 @@ class mbl_logger_root
       rlogger.mtstart(mbl_logger:: my_level, __FILE__, __LINE__); \
       rlogger.mtlog() << message << vcl_endl; \
       rlogger.mtstop(); } \
-  } while(0)
+  } while (false)
 #endif
 
 #endif // mbl_log_h

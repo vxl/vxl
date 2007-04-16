@@ -1,7 +1,6 @@
 #include "rgrl_mask_3d_image.h"
 //:
 // \file
-#include <vcl_cassert.h>
 
 //************* mask using a binary 3D image ********************
 rgrl_mask_3d_image::

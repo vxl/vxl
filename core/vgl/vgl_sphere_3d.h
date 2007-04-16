@@ -9,11 +9,8 @@
 // \brief a sphere in 3D nonhomogeneous space
 // \author Ian Scott
 
-#include <vcl_iosfwd.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_plane_3d
 #include <vgl/vgl_point_3d.h>
-#include <vcl_cassert.h>
-#include <vcl_vector.h>
 
 //: Represents a cartesian 3D point
 template <class Type>
@@ -54,7 +51,7 @@ class vgl_sphere_3d
   }
 
   //: Return true iff the point p is inside (or on) this sphere
-  bool contains(vgl_point_3d<Type> const& p) const;    
+  bool contains(vgl_point_3d<Type> const& p) const;
 
   //: Make the sphere empty.
   void set_empty() {c_.set(0,0,0); r_=-1;}
@@ -67,7 +64,6 @@ class vgl_sphere_3d
   //: Calculate the end points of a line clipped by this sphere.
   bool clip(const vgl_line_3d_2_points<Type> & line,
     vgl_point_3d<Type> &p1, vgl_point_3d<Type> &p2) const;
-
 };
 
 #define VGL_SPHERE_3D_INSTANTIATE(T) extern "please include vgl/vgl_sphere_3d.txx first"

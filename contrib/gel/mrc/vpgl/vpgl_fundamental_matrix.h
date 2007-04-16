@@ -20,7 +20,6 @@
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_iosfwd.h>
-#include <vcl_cassert.h>
 
 #include "vpgl_proj_camera.h"
 

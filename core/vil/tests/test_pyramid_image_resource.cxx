@@ -1,7 +1,6 @@
 // This is core/vil/tests/test_pyramid_image_resource.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
-#include <vcl_cstdio.h>
 #include <vcl_string.h>
 #include <vil/vil_new.h>
 #include <vil/vil_load.h>

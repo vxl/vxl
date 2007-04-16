@@ -9,7 +9,7 @@
 // \author J.L. Mundy March 20, 2006
 
 #include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <vcl_iostream.h>
 #include <vil/vil_file_format.h>
 #include <vil/vil_pyramid_image_resource.h>
 
@@ -193,7 +193,8 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
  protected:
   // no default constructor;
   vil_pyramid_image_list();
-  //utility functions
+
+  //    --- utility functions ---
 
   //:normalize the scale factors so that the base image scale = 1.0
   void normalize_scales();
@@ -207,7 +208,8 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
   //:find the nearest level to the image size
   float find_next_level(vil_image_resource_sptr const& image);
 
-  //members
+  //    ---  members ---
+
   vcl_string directory_;
 
   //The set of images in the pyramid. levels_[0] is the base image

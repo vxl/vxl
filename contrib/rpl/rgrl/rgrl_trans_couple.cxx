@@ -7,7 +7,6 @@
 
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h>
 
 #include <rgrl/rgrl_trans_reader.h>
 #include <rgrl/rgrl_util.h>

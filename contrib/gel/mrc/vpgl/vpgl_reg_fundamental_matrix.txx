@@ -7,8 +7,7 @@
 #include "vpgl_reg_fundamental_matrix.h"
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_fwd.h>
-#include <vcl_iosfwd.h>
-#include <vcl_cassert.h>
+// not used? #include <vcl_iosfwd.h>
 
 
 //---------------------------------

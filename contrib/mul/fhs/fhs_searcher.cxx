@@ -4,7 +4,6 @@
 // \brief Use F&H's DP style algorithm to search for global solutions
 
 #include <fhs/fhs_searcher.h>
-#include <vcl_algorithm.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vcl_cstdlib.h> // for std::abort()
@@ -26,7 +25,7 @@ void fhs_searcher::set_tree(const vcl_vector<fhs_arc>& arcs,
 {
   if (!fhs_order_tree_from_root(arcs,arc_,children_,root_node))
   {
-    vcl_cerr<<"fhs_searcher::set_tree() Failed to set up the tree."<<vcl_endl;
+    vcl_cerr<<"fhs_searcher::set_tree() Failed to set up the tree.\n";
     return;
   }
 

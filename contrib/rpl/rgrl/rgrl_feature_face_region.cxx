@@ -2,7 +2,7 @@
 #include "rgrl_feature_face_region.h"
 #include <rgrl/rgrl_transformation.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vcl_iostream.h>
+// not used? #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <rgrl/rgrl_cast.h>
 #include <rgrl/rgrl_util.h>
@@ -101,7 +101,7 @@ transform_region( rgrl_transformation const& xform ) const
   double sum_radii = 0;
 
   double this_radius = this->radius_; // Work-around for Borland C++ 5.
-  for( unsigned int i=0; i+1 < this -> location_ . size(); ++i )
+  for ( unsigned int i=0; i+1 < this -> location_ . size(); ++i )
   {
     point_along_dir = this -> location();
     point_along_dir += this_radius * nullspace . get_column( i );

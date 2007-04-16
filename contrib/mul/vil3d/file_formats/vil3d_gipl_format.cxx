@@ -8,7 +8,6 @@
 // \author Tim Cootes - Manchester
 
 #include "vil3d_gipl_format.h"
-#include <vcl_cstdlib.h> // for vcl_abort()
 #include <vcl_cstring.h> // for vcl_strcmp()
 #include <vil/vil_stream_read.h>
 #include <vil/vil_stream_fstream.h>

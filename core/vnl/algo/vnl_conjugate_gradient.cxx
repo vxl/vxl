@@ -10,7 +10,6 @@
 //-----------------------------------------------------------------------------
 #include "vnl_conjugate_gradient.h"
 
-#include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
 
 #include <vnl/vnl_cost_function.h>

@@ -1,8 +1,6 @@
 #include "rgrl_convergence_on_weighted_error.h"
 //:
 // \file
-#include <vcl_vector.h>
-#include <vcl_cmath.h>
 #include <vcl_cassert.h>
 
 #include <rgrl/rgrl_match_set.h>

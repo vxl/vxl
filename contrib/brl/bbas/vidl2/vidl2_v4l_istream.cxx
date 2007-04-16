@@ -13,7 +13,6 @@
 #include "vidl2_v4l_params.h"
 #include "vidl2_pixel_format.h"
 #include "vidl2_frame.h"
-#include <vcl_cassert.h>
 
 //: Destructor
 vidl2_v4l_istream::~vidl2_v4l_istream()
@@ -36,11 +35,11 @@ bool vidl2_v4l_istream::open(const vcl_string &device_name)
         perror ("VIDIOCGCAP");
         return false;
     }
-    vcl_cout << "name = " << vc.name << vcl_endl;
-    vcl_cout << "type = " << vc.type << vcl_endl;
-    vcl_cout << "channels = " << vc.channels << vcl_endl;
-    vcl_cout << "maxwidth = " << vc.maxwidth << vcl_endl;
-    vcl_cout << "maxheight = " << vc.maxheight << vcl_endl;
+    vcl_cout << "name = " << vc.name << vcl_endl
+             << "type = " << vc.type << vcl_endl
+             << "channels = " << vc.channels << vcl_endl
+             << "maxwidth = " << vc.maxwidth << vcl_endl
+             << "maxheight = " << vc.maxheight << vcl_endl;
 
     if (-1 == ioctl (fd_, VIDIOCGWIN, &vw)) {
         perror ("VIDIOCGWIN");
@@ -84,8 +83,8 @@ bool vidl2_v4l_istream::open(const vcl_string &device_name)
     // serious problems if we can't set the params to the defaults
     if (!sp_ret)
     {
-        vcl_cerr << "Problem in constructor, can't set camera to default\n";
-        vcl_cerr << "Trying to continue anyway ...\n";
+        vcl_cerr << "Problem in constructor, can't set camera to default\n"
+                 << "Trying to continue anyway ...\n";
     }
 
     return sp_ret;
@@ -157,44 +156,44 @@ bool vidl2_v4l_istream::set_params(const vidl2_v4l_params &p)
     if (vp.brightness != p.brightness_)
     {
         success = false;
-        vcl_cerr << "vp.brightness = " << vp.brightness << vcl_endl;
-        vcl_cerr << "p.brightness = " << p.brightness_ << vcl_endl;
+        vcl_cerr << "vp.brightness = " << vp.brightness << vcl_endl
+                 << "p.brightness = " << p.brightness_ << vcl_endl;
     }
     if (vp.hue != p.hue_)
     {
         success = false;
-        vcl_cerr << "vp.hue = " << vp.hue << vcl_endl;
-        vcl_cerr << "p.hue = " << p.hue_ << vcl_endl;
+        vcl_cerr << "vp.hue = " << vp.hue << vcl_endl
+                 << "p.hue = " << p.hue_ << vcl_endl;
     }
     if (vp.colour != p.colour_)
     {
         success = false;
-        vcl_cerr << "vp.colour = " << vp.colour << vcl_endl;
-        vcl_cerr << "p.colour = " << p.colour_ << vcl_endl;
+        vcl_cerr << "vp.colour = " << vp.colour << vcl_endl
+                 << "p.colour = " << p.colour_ << vcl_endl;
     }
     if (vp.contrast != p.contrast_)
     {
         success = false;
-        vcl_cerr << "vp.contrast = " << vp.contrast << vcl_endl;
-        vcl_cerr << "p.contrast = " << p.contrast_ << vcl_endl;
+        vcl_cerr << "vp.contrast = " << vp.contrast << vcl_endl
+                 << "p.contrast = " << p.contrast_ << vcl_endl;
     }
     if (vp.whiteness != p.whiteness_)
     {
         success = false;
-        vcl_cerr << "vp.whiteness = " << vp.whiteness << vcl_endl;
-        vcl_cerr << "p.whiteness = " << p.whiteness_ << vcl_endl;
+        vcl_cerr << "vp.whiteness = " << vp.whiteness << vcl_endl
+                 << "p.whiteness = " << p.whiteness_ << vcl_endl;
     }
     if (vp.depth != p.depth_)
     {
         success = false;
-        vcl_cerr << "vp.depth = " << vp.depth << vcl_endl;
-        vcl_cerr << "p.depth = " << p.depth_ << vcl_endl;
+        vcl_cerr << "vp.depth = " << vp.depth << vcl_endl
+                 << "p.depth = " << p.depth_ << vcl_endl;
     }
     if (vp.palette != vidl2_v4l_params::vidl2pf_to_v4lpf(p.pixel_format_))
     {
         success = false;
-        vcl_cerr << "vp.palette = " << vp.palette << vcl_endl;
-        vcl_cerr << "p.pixel_format = " << p.pixel_format_ << vcl_endl;
+        vcl_cerr << "vp.palette = " << vp.palette << vcl_endl
+                 << "p.pixel_format = " << p.pixel_format_ << vcl_endl;
     }
 
     mm.width = vw.width;

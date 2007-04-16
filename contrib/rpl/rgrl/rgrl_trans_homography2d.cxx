@@ -2,7 +2,6 @@
 //:
 // \file
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h>
 
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_inverse.h>

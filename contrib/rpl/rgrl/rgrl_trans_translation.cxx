@@ -5,7 +5,6 @@
 // \date   Dec 2003
 
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
 #include <rgrl/rgrl_util.h>
 
@@ -23,7 +22,7 @@ rgrl_trans_translation( vnl_vector<double> const& in_trans,
     trans_( in_trans ),
     from_centre_( in_trans.size(), 0.0 )
 {
-  if( is_covar_set() ) {
+  if ( is_covar_set() ) {
     assert ( covar_.rows() == covar_.cols() );
     assert ( covar_.rows() == trans_.size() );
   }
@@ -44,8 +43,8 @@ rgrl_trans_translation( vnl_vector<double> const& in_trans,
   : rgrl_transformation( in_covar ),
     trans_( in_trans + in_to_centre ),
     from_centre_( in_from_centre )
-{ 
-  if( is_covar_set() ) {
+{
+  if ( is_covar_set() ) {
     assert ( covar_.rows() == covar_.cols() );
     assert ( covar_.rows() == trans_.size() );
   }
@@ -120,20 +119,20 @@ inv_map( const vnl_vector<double>& to,
   from = to - trans_ + from_centre_;
 }
 
-rgrl_transformation_sptr 
+rgrl_transformation_sptr
 rgrl_trans_translation::
 inverse_transform( ) const
 {
   rgrl_transformation_sptr result = new rgrl_trans_translation( -t() );
 
   const unsigned m = scaling_factors_.size();
-  if( m > 0 ) {
+  if ( m > 0 ) {
     vnl_vector<double> scaling( m );
-    for( unsigned int i=0; i<m; ++i )
+    for ( unsigned int i=0; i<m; ++i )
       scaling[i] = 1.0 / scaling_factors_[i];
     result->set_scaling_factors( scaling );
   }
-  
+
   return result;
 }
 
@@ -151,7 +150,7 @@ rgrl_transformation_sptr
 rgrl_trans_translation::
 scale_by( double scale ) const
 {
-  rgrl_transformation_sptr xform 
+  rgrl_transformation_sptr xform
     = new rgrl_trans_translation( trans_ * scale,
                                    covar_, from_centre_ * scale,
                                    vnl_vector<double>(from_centre_.size(), 0.0) );
@@ -205,7 +204,7 @@ read( vcl_istream& is )
 }
 
 //: make a clone copy
-rgrl_transformation_sptr 
+rgrl_transformation_sptr
 rgrl_trans_translation::
 clone() const
 {

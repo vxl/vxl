@@ -1,7 +1,6 @@
 #include "rgrl_convergence_tester.h"
 #include <rgrl/rgrl_view.h>
 #include <rgrl/rgrl_converge_status.h>
-#include <vcl_cassert.h>
 
 rgrl_convergence_tester::
 ~rgrl_convergence_tester()
@@ -80,7 +79,7 @@ verify( rgrl_view                        const& /*view*/,
         rgrl_set_of<rgrl_match_set_sptr> const& /*current_match_sets*/,
         rgrl_set_of<rgrl_scale_sptr>     const& /*current_scales*/ )const
 {
-  vcl_cerr << "WARNING: should never call rgrl_convergence_tester::verify()" << vcl_endl;
+  vcl_cerr << "WARNING: should never call rgrl_convergence_tester::verify()\n";
   return new rgrl_converge_status( rgrl_converge_status::converged, rgrl_converge_status::good_and_terminate,
                                    -1.0, 0, -1.0 );
 }

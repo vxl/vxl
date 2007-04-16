@@ -7,17 +7,12 @@
 
 #include "vidl_frame_resource.h"
 
-#include <vcl_cassert.h>
 #include <vcl_cstring.h>
-#include <vcl_iostream.h>
+// not used? #include <vcl_iostream.h>
 
 #include <vil/vil_stream.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_property.h>
-
-#include <vcl_cstdlib.h> // for vcl_exit()
-#include <vxl_config.h>
-
 
 vidl_frame_resource::vidl_frame_resource(const vidl_codec_sptr& codec, int frame)
  : codec_(codec),

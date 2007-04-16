@@ -24,11 +24,9 @@
 //   KNOWN BUG - 24bit samples for both nplanes = 1 and nplanes = 3
 //\endverbatim
 
-#include <vcl_string.h>
 #include <vcl_vector.h>
-#include <vcl_cmath.h>
 #include <vcl_cassert.h>
-#include <vcl_iosfwd.h>
+#include <vcl_iostream.h>
 #include <vil/vil_config.h>
 #include <vil/vil_file_format.h>
 #include <vil/vil_image_resource.h>
@@ -37,7 +35,6 @@
 #include <vil/vil_pyramid_image_resource.h>
 #include <vil/file_formats/vil_tiff_header.h>
 #include <tiffio.h>
-
 #if HAS_GEOTIFF
 #include <vil/file_formats/vil_geotiff_header.h>
 #endif
@@ -99,26 +96,27 @@ struct tif_ref_cnt
   TIFF* tif(){return tif_;}
   void ref(){cnt_++;}
   void unref(){
-    if(--cnt_<=0) 
-      {
-        TIFFClose(tif_);
-        delete this;
-      }
+    if (--cnt_<=0) 
+    {
+      TIFFClose(tif_);
+      delete this;
+    }
   }
-  private:
+ private:
   TIFF* tif_;
   unsigned cnt_;
-  };
+};
+
 //The smart pointer to the tiff handle
 struct tif_smart_ptr
 {
   tif_smart_ptr(): tptr_(0){}
 
   tif_smart_ptr(tif_ref_cnt* tptr):tptr_(tptr)
-  { if(tptr_) tptr_->ref();}
+  { if (tptr_) tptr_->ref(); }
 
   tif_smart_ptr(tif_smart_ptr const& tp)
-  {tptr_ = tp.tptr_; if(tptr_) tptr_->ref();}
+  {tptr_ = tp.tptr_; if (tptr_) tptr_->ref();}
 
   ~tif_smart_ptr()
   {
@@ -131,15 +129,16 @@ struct tif_smart_ptr
   }
   //: Inverse bool
   bool operator!() const
-    {
-      return (tptr_ != (tif_ref_cnt*)0)? false : true; 
-    }
+  {
+    return (tptr_ != (tif_ref_cnt*)0)? false : true; 
+  }
 
   //: Convenient get TIFF* for header construction; assumes temporary use
-  TIFF* tif() const {if(tptr_) return tptr_->tif(); return (TIFF*)0;}
-  private:
+  TIFF* tif() const {if (tptr_) return tptr_->tif(); return (TIFF*)0;}
+ private:
   tif_ref_cnt* tptr_;
 };
+
 //: Generic image interface for image TIFF image files (could have multiple images)
 class vil_tiff_image : public vil_blocked_image_resource
 {
@@ -283,8 +282,8 @@ class vil_tiff_image : public vil_blocked_image_resource
                            unsigned block_size_bytes,
                            vxl_byte* block_buf);
 };//End of single image TIFF resource
-//
-//
+
+
 ///--------- Representation of Pyramid Images by multi-image TIFF -------
 //
 //
@@ -411,8 +410,7 @@ class vil_tiff_pyramid_resource : public vil_pyramid_image_resource
   vcl_vector<tiff_pyramid_level*> levels_;
 };//End of pyramid image
 
-//
-//
+
 //------------------------ Lifted from vil_nitf2_image ------------------------
 //            If this happens again then maybe should elevate to a
 //            utility class -- JLM
@@ -446,7 +444,8 @@ T tiff_get_bits( const T* in_val, unsigned i0, unsigned ni )
     //why the for loop
     for ( int i = 0 ; i < strip_right ; i++ ) temp /= 2;
     //temp = temp >> strip_right;
-  } else if ( strip_right < 0 ){
+  }
+  else if ( strip_right < 0 ){
     //we didn't have enough bits in the first element of the in_val array
     //need to get some from the next element
 

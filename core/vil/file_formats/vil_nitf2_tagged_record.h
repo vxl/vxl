@@ -7,14 +7,13 @@
 
 #include <vcl_list.h>
 #include <vcl_vector.h>
-#include <vcl_map.h>
-#include <vcl_set.h>
+// not used? #include <vcl_map.h>
+// not used? #include <vcl_set.h>
 #include <vcl_iostream.h>
-#include <vcl_sstream.h>
+// not used? #include <vcl_sstream.h>
 #include <vcl_string.h>
-#include <vcl_istream.h>
+// not used? #include <vcl_istream.h>
 #include <vcl_ostream.h>
-#include <vcl_cassert.h>
 
 #include "vil_nitf2_field_functor.h"
 #include "vil_nitf2_field.h"

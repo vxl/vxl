@@ -5,7 +5,6 @@
 // \author Gehua
 
 #include <vcl_iostream.h>
-#include <vxl_config.h> // for vxl_byte
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_image_resource_sptr.h>

@@ -7,7 +7,7 @@
 // \date 10/31/2006
 
 #include <vpgl/vpgl_calibration_matrix.h>
-#include <vcl_string.h>
+// not used? #include <vcl_string.h>
 #include <vcl_iosfwd.h>
 
 //: XML write

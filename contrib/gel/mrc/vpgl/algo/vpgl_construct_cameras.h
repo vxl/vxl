@@ -17,7 +17,7 @@
 //   camera extraction defined on vpgl_essential_matrix.
 // \endverbatim
 
-#include <vcl_iostream.h>
+// not used? #include <vcl_iostream.h>
 #include <vgl/vgl_point_2d.h>
 #include <vcl_vector.h>
 #include <vgl/vgl_point_3d.h>

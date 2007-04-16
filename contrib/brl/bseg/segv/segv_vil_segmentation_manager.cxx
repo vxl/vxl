@@ -9,10 +9,9 @@
 #endif
 // include for project points menu option
 #include <vpgl/vpgl_rational_camera.h>
-#include <vcl_cstdlib.h> // for vcl_exit()
 #include <vcl_iostream.h>
 #include <vcl_cstdio.h> // sprintf
-#include <vcl_fstream.h>
+// not used? #include <vcl_fstream.h>
 #include <vbl/vbl_array_2d.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_blocked_image_resource.h>

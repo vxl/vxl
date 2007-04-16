@@ -16,7 +16,6 @@
 #include <vcl_list.h>
 #include <vcl_vector.h>
 #include <vcl_string.h>
-#include <vcl_cstring.h>
 #ifdef HAS_MPEG2
 # include <vidl_vil1/vidl_vil1_mpegcodec.h>
 void (* vidl_vil1_io::load_mpegcodec_callback)(vidl_vil1_codec*) = 0;

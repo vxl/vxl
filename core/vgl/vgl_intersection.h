@@ -16,7 +16,7 @@
 // \endverbatim
 
 #include <vgl/vgl_fwd.h> // forward declare various vgl classes
-#include <vcl_vector.h>
+// not used? #include <vcl_vector.h>
 
 //: Return true if line intersects box. If so, compute intersection points.
 template <class Type>

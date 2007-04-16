@@ -9,11 +9,9 @@
 #endif
 // include for project points menu option
 #include <vpgl/vpgl_rational_camera.h>
-#include <vcl_cstdlib.h> // for vcl_exit()
 #include <vcl_iostream.h>
-#include <vcl_cstdio.h> // sprintf
 #include <vcl_cmath.h> //sin, cos exp
-#include <vcl_fstream.h>
+// not used? #include <vcl_fstream.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vul/vul_file.h>
 #include <vnl/vnl_numeric_traits.h>

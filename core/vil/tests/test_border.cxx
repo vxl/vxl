@@ -1,8 +1,8 @@
 // This is core/vil/tests/test_border.cxx
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
-#include <vcl_sstream.h>
-#include <vcl_functional.h>
+// not used? #include <vcl_sstream.h>
+// not used? #include <vcl_functional.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_image_view.h>
 #include <vil/vil_border.h>
@@ -52,11 +52,11 @@ static void test_border_constant_hsv()
   TEST_NEAR("respect left border plane 0", accessor(0,10), 41.2, 1e-5);
   TEST_NEAR("respect left border plane 1", accessor(0,10,1), 42.2, 1e-5);
   TEST_NEAR("respect left border plane 2", accessor(0,10,2), 43.2, 1e-5);
-  
+
   TEST_NEAR("respect bottom border plane 0", accessor(50,63,0), 50.1, 1e-5);
   TEST_NEAR("respect bottom border plane 1", accessor(50,63,1), 51.1, 1e-5);
   TEST_NEAR("respect bottom border plane 0", accessor(50,63,2), 52.1, 1e-5);
-  
+
   TEST_NEAR("outside left edge plane 0", accessor(-1,10,0), 13.3, 1e-5);
   TEST_NEAR("outside top edge plane 1", accessor(0,-1,1), 13.3, 1e-5);
   TEST_NEAR("outside bottom edge plane 0", accessor(1,64), 13.3, 1e-5);
@@ -64,7 +64,7 @@ static void test_border_constant_hsv()
   TEST_NEAR("outside top-right edge plane 2", accessor(64,64,2), 13.3, 1e-5);
   TEST_NEAR("outside depth edge front", accessor(5,5,-1), 13.3, 1e-5);
   TEST_NEAR("outside depth edge back", accessor(5,5,3), 13.3, 1e-5);
-  TEST_NEAR("outside everything", accessor(-1,-1,-1), 13.3, 1e-5);  
+  TEST_NEAR("outside everything", accessor(-1,-1,-1), 13.3, 1e-5);
 }
 
 static void test_border_geodesic()
@@ -156,28 +156,28 @@ static void test_border_periodic()
 static void test_border()
 {
   vcl_cout << "******************************************\n"
-           << " Testing vil_border_constant (byte image) \n"
+           << " Testing vil_border_constant (byte image)\n"
            << "******************************************\n";
   test_border_constant_byte();
 
-  vcl_cout << "******************************************\n"
-           << " Testing vil_border_constant (hsv image)  \n"
-           << "******************************************\n";
+  vcl_cout << "*****************************************\n"
+           << " Testing vil_border_constant (hsv image)\n"
+           << "*****************************************\n";
   test_border_constant_hsv();
 
-  vcl_cout << "******************************************\n"
-           << " Testing vil_border_geodesic              \n"
-           << "******************************************\n";
+  vcl_cout << "*****************************\n"
+           << " Testing vil_border_geodesic\n"
+           << "*****************************\n";
   test_border_geodesic();
 
-  vcl_cout << "******************************************\n"
-           << " Testing vil_border_reflect               \n"
-           << "******************************************\n";
+  vcl_cout << "****************************\n"
+           << " Testing vil_border_reflect\n"
+           << "****************************\n";
   test_border_reflect();
 
-  vcl_cout << "******************************************\n"
-           << " Testing vil_border_periodic              \n"
-           << "******************************************\n";
+  vcl_cout << "*****************************\n"
+           << " Testing vil_border_periodic\n"
+           << "*****************************\n";
   test_border_periodic();
 }
 

@@ -1,5 +1,5 @@
 #include <vcl_iostream.h>
-#include <vcl_iomanip.h>
+// not used? #include <vcl_iomanip.h>
 #include <vcl_limits.h>
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_math.h>

@@ -13,7 +13,6 @@
 // \endverbatim
 
 #include <vcl_string.h>
-#include <vcl_cstring.h>
 #include <vidl/vidl_image_list_codec_sptr.h>
 #include <vidl/vidl_codec.h>
 #include <vil/vil_image_resource.h>

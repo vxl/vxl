@@ -3,7 +3,6 @@
 // \author Tim Cootes
 // \brief Example program using F&H method to locate matches on a pair of images
 
-#include <vcl_cassert.h>
 #include <vul/vul_arg.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_gaussian_pyramid_builder_2d.h>
@@ -217,7 +216,7 @@ int main( int argc, char* argv[] )
   int max_L = vcl_min(image_pyr1.hi(),image_pyr2.hi());
   if (level_lo()<0  || level_hi()>max_L  || level_hi()<level_lo())
   {
-    vcl_cerr<<"Levels must be in range [0,"<<max_L<<"], with lo<=hi"<<vcl_endl;
+    vcl_cerr<<"Levels must be in range [0,"<<max_L<<"], with lo<=hi\n";
     return 1;
   }
 

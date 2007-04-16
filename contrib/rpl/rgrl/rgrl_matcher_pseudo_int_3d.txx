@@ -23,8 +23,8 @@ static const double max_response_value = 1.0e30;
 //#define MY_DEBUG
 #if defined ( MY_DEBUG )
 #  include <vcl_iostream.h>
-#  include <vcl_fstream.h>
-#  include <vcl_sstream.h>
+// not used? #  include <vcl_fstream.h>
+// not used? #  include <vcl_sstream.h>
 #  define DBG(x) x
 #else
 #  define DBG(x)

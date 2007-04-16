@@ -8,7 +8,6 @@
 
 #include <vimt3d/vimt3d_image_3d_of.h>
 #include <vnl/vnl_fwd.h>
-#include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
 

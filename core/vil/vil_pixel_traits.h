@@ -27,8 +27,9 @@
 //  (Note, functions used rather than static constants for minimal linking issues)
 // \endverbatim
 //-----------------------------------------------------------------------------
-#include <vcl_climits.h>
+#include <vcl_climits.h> // for UCHAR_MAX
 #include <vcl_cfloat.h>
+
 //: Pixel properties for templates.
 template <class T>
 class vil_pixel_traits;

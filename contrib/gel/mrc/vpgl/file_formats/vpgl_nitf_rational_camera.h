@@ -21,7 +21,7 @@
 //
 #include <vpgl/vpgl_rational_camera.h>
 #include <vcl_string.h>
-#include <vcl_vector.h>
+// not used? #include <vcl_vector.h>
 #include <vnl/vnl_double_2.h>
 #include <vil/file_formats/vil_nitf2_image.h>
 

@@ -14,7 +14,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include <vcl_vector.h>
-#include <vcl_string.h>
+// not used? #include <vcl_string.h>
 #include <vil1/vil1_image.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsrl/vsrl_image_correlation.h>

@@ -11,7 +11,6 @@
 
 #include "vil_image_resource.h"
 #include <vil/vil_image_view_base.h>
-#include <vcl_cassert.h>
 
 //--------------------------------------------------------------------------------
 

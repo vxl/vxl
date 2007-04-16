@@ -2,7 +2,6 @@
 
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
-#include <vcl_cmath.h>
 #include <vcl_cassert.h>
 
 #include "rgrl_match_set.h"
@@ -65,5 +64,4 @@ compute_status( rgrl_converge_status_sptr               prev_status,
   bool good = new_error < tolerance_;
 
   return compute_status_helper( new_error, good, prev_status, prev_view, current_view );
-
 }

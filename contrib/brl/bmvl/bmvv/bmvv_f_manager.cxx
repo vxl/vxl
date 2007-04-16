@@ -12,10 +12,8 @@
 #include <vpgl/algo/vpgl_fm_compute_ransac.h>
 #include <vpgl/algo/vpgl_fm_compute_8_point.h>
 #include <vpgl/algo/vpgl_fm_compute_2_point.h>
-#include <vcl_cstdlib.h> // for vcl_exit()
 #include <vcl_iostream.h>
 #include <vcl_cstdio.h> // sprintf
-#include <vcl_cmath.h> //sin, cos exp
 #include <vcl_fstream.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vgl/vgl_point_2d.h>

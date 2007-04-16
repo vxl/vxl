@@ -13,7 +13,6 @@
 #include <vgl/vgl_fwd.h>
 #include <vgl/algo/vgl_norm_trans_2d.h>
 #include <vcl_iostream.h>
-#include <vcl_cassert.h>
 
 
 //-------------------------------------------

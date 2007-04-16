@@ -1,6 +1,6 @@
 // This is core/vul/tests/test_ios_state.cxx
 #include <vcl_iostream.h>
-#include <vcl_iomanip.h>
+// not used? #include <vcl_iomanip.h>
 #include <testlib/testlib_test.h>
 #include <vul/vul_ios_state.h>
 

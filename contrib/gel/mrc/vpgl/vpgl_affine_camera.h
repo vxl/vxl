@@ -12,8 +12,7 @@
 
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_fwd.h>
-#include <vcl_iosfwd.h>
-#include <vcl_cassert.h>
+// not used? #include <vcl_iosfwd.h>
 
 #include "vpgl_proj_camera.h"
 
@@ -21,8 +20,7 @@
 template <class T>
 class vpgl_affine_camera : public vpgl_proj_camera<T>
 {
-
-public:
+ public:
 
   //: Default constructor creates the canonical affine camera.
   vpgl_affine_camera();
@@ -38,8 +36,6 @@ public:
   //: Set the top two rows.
   void set_rows( const vnl_vector_fixed<T,4>& row1,
                  const vnl_vector_fixed<T,4>& row2 );
-
-
 };
 
 #endif // vpgl_affine_camera_h_

@@ -1,5 +1,5 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+// not used? #include <vcl_iostream.h>
 #include <mbl/mbl_cloneable_ptr.h>
 
 struct some_class
@@ -9,6 +9,7 @@ struct some_class
   ~some_class() { --count; }
   some_class* clone() const { return new some_class; }
 };
+
 int some_class::count = 0;
 
 

@@ -3,7 +3,6 @@
 #pragma implementation
 #endif
 #include <vil/vil_property.h>
-#include <vcl_cstring.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_cached_image_resource.h>
 

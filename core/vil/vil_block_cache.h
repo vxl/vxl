@@ -9,7 +9,7 @@
 // \brief A block cache with block population prioritized by age
 // \author J. L. Mundy
 //
-#include <vcl_iosfwd.h>
+#include <vcl_iostream.h>
 #include <vcl_queue.h>
 #include <vcl_vector.h>
 #include <vil/vil_image_view.h>
@@ -57,7 +57,7 @@ class vil_block_cache
   struct compare
   {
     bool operator()(bcell* const& c1, bcell* const& c2) const
-    {if(c1&&c2)return c1->birthdate_ > c2->birthdate_; else return false;}
+    { if (c1&&c2)return c1->birthdate_ > c2->birthdate_; else return false; }
   };
   //:block queue member
   vcl_priority_queue<compare, vcl_vector<bcell*> > queue_;

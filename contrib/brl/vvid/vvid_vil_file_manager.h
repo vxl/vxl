@@ -13,7 +13,7 @@
 // \endverbatim
 //----------------------------------------------------------------------------
 #include <vcl_vector.h>
-#include <vcl_list.h>
+// not used? #include <vcl_list.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_image_tableau_sptr.h>

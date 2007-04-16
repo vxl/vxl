@@ -4,8 +4,7 @@
 // \author iscott
 // \date  Aug 2005
 
-#include <vcl_sstream.h>
-#include <vcl_cerrno.h>
+// not used? #include <vcl_sstream.h>
 #include <vcl_string.h>
 #include <vcl_fstream.h>
 #include <vcl_ctime.h>
@@ -16,7 +15,7 @@
 #include <mbl/mbl_config.h>
 
 
-//: replace instances of 'from' in 's' with 'to' 
+//: replace instances of 'from' in 's' with 'to'
 static unsigned replace(char from, char to, vcl_string &s)
 {
   unsigned c = 0;
@@ -61,10 +60,10 @@ void mbl_test_save_measurement( const vcl_string &measurement_path, double value
     path = MBL_CONFIG_TEST_SAVE_MEASUREMENT_ROOT;
   if (path.empty()) // Nobody wants the measurements
     return;
-  
+
   vcl_string config = MBL_CONFIG_BUILD_NAME;
   if (config.empty()) config="DEFAULT_CONFIG";
-  
+
   path += '/' + measurement_path + ".txt";
   replace('\\', '/', path); // replace Windows-style "\" with Unix-style "/"
   path = vul_expand_path(path); // removes trailing or repeated "/"
@@ -74,8 +73,5 @@ void mbl_test_save_measurement( const vcl_string &measurement_path, double value
   if (!file)
     vcl_cerr << "ERROR: mbl_test_save_measurement: Unable to open file " << path.c_str() << vcl_endl;
   else
-    file << timestamp() << " " << MBL_CONFIG_BUILD_NAME << " " << value << vcl_endl;
+    file << timestamp() << ' ' << MBL_CONFIG_BUILD_NAME << ' ' << value << vcl_endl;
 }
-
-
-

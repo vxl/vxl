@@ -1,6 +1,6 @@
 // This is brl/bseg/strk/tests/test_tracking_face_2d.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_string.h>
+// not used? #include <vcl_string.h>
 #include <vcl_cstdlib.h> // for rand()
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_load.h>

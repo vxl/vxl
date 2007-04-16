@@ -4,7 +4,7 @@
 
 #include "vgl_conic_segment_2d.h"
 #include <vcl_iostream.h>
-#include <vcl_cmath.h>
+
 // stream operators
 template <class Type>
 vcl_ostream& operator<<(vcl_ostream& s, vgl_conic_segment_2d<Type> const & p)

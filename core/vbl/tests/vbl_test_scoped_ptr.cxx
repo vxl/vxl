@@ -2,7 +2,7 @@
   fsm
 */
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+// not used? #include <vcl_iostream.h>
 #include <vbl/vbl_scoped_ptr.h>
 
 struct some_class
@@ -11,6 +11,7 @@ struct some_class
   some_class() { ++count; }
   ~some_class() { --count; }
 };
+
 int some_class::count = 0;
 
 // This should fail to compile.

@@ -13,7 +13,7 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 #include <vcl_list.h>
-#include <vcl_vector.h>
+// not used? #include <vcl_vector.h>
 #include <vcl_string.h>
 #include <vpro/vpro_video_process.h>
 

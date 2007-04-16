@@ -8,13 +8,12 @@
 //#include "vil_nitf2_field.h"
 class vil_nitf2_field;
 
-#include <vcl_map.h>
-#include <vcl_vector.h>
+// not used? #include <vcl_map.h>
+// not used? #include <vcl_vector.h>
 #include <vcl_string.h>
-#include <vcl_sstream.h>
+// not used? #include <vcl_sstream.h>
 #include <vcl_istream.h>
 #include <vcl_ostream.h>
-#include <vcl_cassert.h>
 
 #include "vil_nitf2.h"
 
@@ -44,7 +43,7 @@ class vil_nitf2_array_field;
 //
 class vil_nitf2_field_formatter
 { 
-public:
+ public:
   // Field types currently supported
 
   vil_nitf2::enum_field_type field_type;

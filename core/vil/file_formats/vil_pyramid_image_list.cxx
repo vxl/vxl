@@ -1,7 +1,6 @@
 #include "vil_pyramid_image_list.h"
 //:
 // \file
-#include <vcl_cstring.h>
 #include <vcl_algorithm.h>
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>

@@ -2,7 +2,7 @@
 //:
 // \file
 #include <vcl_cassert.h>
-#include <vcl_limits.h>
+// not used? #include <vcl_limits.h>
 #include <vnl/vnl_math.h>
 
 rgrl_mask_box

@@ -17,7 +17,6 @@
 //   The main work of loading and saving happens in vil3d_analyze_image
 
 #include "vil3d_analyze_format.h"
-#include <vcl_cstdlib.h> // for vcl_abort()
 #include <vcl_cstring.h> // for vcl_strcmp() and vcl_memset()
 #include <vcl_cstdio.h>  // for vcl_sprintf
 #include <vil/vil_stream_read.h>
@@ -27,9 +26,8 @@
 #include <vil3d/vil3d_copy.h>
 #include <vil3d/vil3d_property.h>
 #include <vil3d/vil3d_image_resource.h>
-#include <vcl_vector.h>
+// not used? #include <vcl_vector.h>
 #include <vsl/vsl_binary_explicit_io.h>
-#include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
 
 // ---- Utility functions for dealing with byte ordering ----
@@ -666,7 +664,7 @@ bool vil3d_analyze_image::put_view(const vil3d_image_view_base& view,
   }
   if (view.ni()!=ni() || view.nj()!=nj() || view.nk()!=nk())
   {
-    vcl_cerr<<"Can only write whole image at once."<<vcl_endl;
+    vcl_cerr<<"Can only write whole image at once.\n";
     return false;
   }
 

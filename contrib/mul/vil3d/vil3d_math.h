@@ -8,7 +8,7 @@
 
 #include <vcl_cassert.h>
 #include <vcl_vector.h>
-#include <vcl_functional.h> // for std::less<T>
+// not used? #include <vcl_functional.h> // for std::less<T>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_plane.h>
 #include <vcl_algorithm.h>
@@ -283,7 +283,6 @@ inline void vil3d_math_sum_squares(sumT& sum, sumT& sum_sq,
 }
 
 
-
 //: Sum of squared differences between two images
 // \relates vil_image_view
 template <class imT, class sumT>
@@ -303,7 +302,6 @@ inline sumT vil3d_math_ssd(const vil3d_image_view<imT>& imA,
         }
   return ssd;
 }
-
 
 
 //: Multiply values in-place in image view by scale and add offset
@@ -349,7 +347,6 @@ inline void vil3d_math_mean_and_variance(sumT& mean, sumT& var,
 }
 
 
-
 //: Mean and variance of elements in plane p of image
 // \relates vil3d_image_view
 template <class imT, class sumT>
@@ -366,7 +363,6 @@ inline sumT vil3d_math_dot_product(const vil3d_image_view<imT>& imA,
           dp += (sumT)imA(i,j,k,p) * (sumT)imB(i,j,k,p);
   return dp;
 }
-
 
 
 //: Compute difference of two images (im_sum = imA-imB)
@@ -485,8 +481,6 @@ inline void vil3d_math_image_product(const vil3d_image_view<aT>& imA,
     }
   }
 }
-
-
 
 
 //: imA = fa*imA + fb*imB  (Useful for moving averages!)

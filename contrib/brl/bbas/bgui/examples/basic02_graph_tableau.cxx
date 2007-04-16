@@ -1,4 +1,4 @@
-#include <vcl_iostream.h>
+// not used? #include <vcl_iostream.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_menu.h>
@@ -22,7 +22,7 @@ static void draw_text()
   vgui_tableau_sptr s = vgui_shell_tableau_new(v);
   vgui_dialog popup("Test Popup");
   popup.inline_tableau(s, 200,200);
-  if(!popup.ask())
+  if (!popup.ask())
     return;
 }
 // Simple menu for launching the popup

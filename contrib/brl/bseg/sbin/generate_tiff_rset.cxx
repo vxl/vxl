@@ -1,8 +1,7 @@
 #include <vcl_string.h>
-#include <vcl_vector.h>
+// not used? #include <vcl_vector.h>
 #include <vcl_cstdlib.h>
-#include <vcl_cstdio.h>
-#include <vcl_sstream.h>
+// not used? #include <vcl_sstream.h>
 #include <vpl/vpl.h>
 #include <vul/vul_file.h>
 #include <vil/vil_load.h>

@@ -9,7 +9,7 @@
 #include <vnl/algo/vnl_svd.h>
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+// not used? #include <vcl_iostream.h>
 
 rgrl_feature_trace_region::
 rgrl_feature_trace_region( vnl_vector<double> const& loc,
@@ -115,7 +115,7 @@ transform_region( rgrl_transformation const& xform ) const
   double sum_radii = 0;
 
   double this_region_radius = this->region_radius_; // Work-around for Borland C++ 5.
-  for( unsigned int i=0; i+1 < this -> location_ . size(); ++i )
+  for ( unsigned int i=0; i+1 < this -> location_ . size(); ++i )
   {
     point_along_dir = this -> location();
     point_along_dir += this_region_radius * nullspace . get_column( i );

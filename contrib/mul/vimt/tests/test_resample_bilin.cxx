@@ -3,7 +3,6 @@
 
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
-#include <vxl_config.h> // for vxl_byte
 
 #include <vil/vil_math.h>
 #include <vil/vil_crop.h>

@@ -14,7 +14,7 @@
 
 #include <vil/vil_stream_core.h>
 #include <vil/vil_stream_url.h>
-#include <vcl_fstream.h>
+// not used? #include <vcl_fstream.h>
 
 vil_stream *vil_open(char const* what, char const* how)
 {

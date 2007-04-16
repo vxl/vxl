@@ -7,8 +7,8 @@
 //
 // \verbatim
 //  Modifications
-//   Chuck Stewart - 8 Nov 2005 - added versions of nearest_feature and k_nearest_feature 
-//      based on point location alone 
+//   Chuck Stewart - 8 Nov 2005 - added versions of nearest_feature and k_nearest_feature
+//      based on point location alone
 // \endverbatim
 
 class rsdl_kd_tree;
@@ -19,7 +19,7 @@ typedef vbl_smart_ptr<rsdl_kd_tree> rsdl_kd_tree_sptr;
 #include <rgrl/rgrl_feature.h>
 #include <rgrl/rgrl_feature_set.h>
 #include <rgrl/rgrl_mask.h>
-#include <vcl_memory.h>
+// not used? #include <vcl_memory.h>
 
 //: A set of features grouped only by N-d location.
 //
@@ -101,7 +101,7 @@ class rgrl_feature_set_location
   void clear_temp_storage() const
   {
     // do not use clear() here,
-    // because clear() may release the 
+    // because clear() may release the
     // storage space, which is not desired
     temp_points_.resize(0);
     temp_point_indices_.resize(0);
@@ -114,7 +114,7 @@ class rgrl_feature_set_location
 
   // Using kd_tree as the data structure
   rsdl_kd_tree_sptr kd_tree_;
-  
+
   // temp storage space
   mutable vcl_vector<rsdl_point> temp_points_;
   mutable vcl_vector<int>        temp_point_indices_;

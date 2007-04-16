@@ -2,7 +2,6 @@
 #include "vidl_vil1_file_sequence.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstring.h>
 #include <vcl_fstream.h>
 
 #include <vul/vul_awk.h>

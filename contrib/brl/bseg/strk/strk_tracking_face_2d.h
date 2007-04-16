@@ -33,7 +33,7 @@
 #include <strk/strk_tracking_face_2d_sptr.h>
 #include <bsta/bsta_histogram.h>
 #include <vgl/vgl_point_2d.h>
-#include <vcl_utility.h>
+// not used? #include <vcl_utility.h>
 //
 //========================TRACKING_FACE_2D==================================
 //

@@ -22,7 +22,6 @@
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vcl_iosfwd.h>
-#include <vcl_cassert.h>
 
 #include "vpgl_proj_camera.h"
 #include "vpgl_calibration_matrix.h"
@@ -167,7 +166,6 @@ vcl_istream&  operator>>(vcl_istream& s, vpgl_perspective_camera<Type>& p)
   //not yet implemented - FIXME
   return s;
 }
-
 
 
 //: Decompose camera into parameter blocks.

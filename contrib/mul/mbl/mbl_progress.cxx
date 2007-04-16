@@ -3,11 +3,9 @@
 #endif
 
 #include "mbl_progress.h"
-#include <vcl_iostream.h>
+// not used? #include <vcl_iostream.h>
 #include <vcl_config_compiler.h>
 #include <vsl/vsl_indent.h>
-
-
 
 
 //=======================================================================

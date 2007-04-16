@@ -4,7 +4,7 @@
 #include <vsol/vsol_polygon_2d.h>
 #include <bsol/bsol_algs.h>
 #include <sdet/sdet_region.h>
-#include <vcl_iostream.h>
+// not used? #include <vcl_iostream.h>
 
 sdet_region::sdet_region()
 {
@@ -51,7 +51,7 @@ vsol_polygon_2d_sptr sdet_region::boundary()
 {
   vsol_polygon_2d_sptr temp;
   if (!boundary_valid_)
-    if(!this->compute_boundary())
+    if (!this->compute_boundary())
       return temp;
   return boundary_;
 }
