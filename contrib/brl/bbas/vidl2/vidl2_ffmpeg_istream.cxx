@@ -14,7 +14,8 @@
 #include "vidl2_frame.h"
 #include "vidl2_ffmpeg_convert.h"
 
-#include <vcl_algorithm.h>
+#include <vcl_string.h>
+#include <vcl_iostream.h>
 #include <vil/vil_new.h>
 
 #include <ffmpeg/avcodec.h>

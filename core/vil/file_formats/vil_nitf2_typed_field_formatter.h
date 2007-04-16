@@ -11,6 +11,7 @@
 #include <vcl_cassert.h>
 #include <vcl_iosfwd.h>
 #include <vcl_string.h>
+#include <vcl_sstream.h>
 
 // All subclasses of NITF field formatter derive from this template
 // The template handles both scalars and vectors of type T.
@@ -162,7 +163,7 @@ class vil_nitf2_long_long_formatter : public vil_nitf2_typed_field_formatter<vil
   vil_nitf2_long_long_formatter(int field_width, bool show_sign = false);
 
   vil_nitf2_field_formatter* copy() const;
-  
+
   // partially overridden read/write methods
   using vil_nitf2_typed_field_formatter<vil_nitf2_long>::read;
   using vil_nitf2_typed_field_formatter<vil_nitf2_long>::write;
@@ -192,13 +193,13 @@ class vil_nitf2_double_formatter : public vil_nitf2_typed_field_formatter<double
   bool show_sign;
 };
 
-// Reads and writes a floating point field in exponential format: sign, digit, 
-// decimal point, mantissa digits, 'E', sign, exponent digits; 
+// Reads and writes a floating point field in exponential format: sign, digit,
+// decimal point, mantissa digits, 'E', sign, exponent digits;
 // e.g., "+3.1416E+00", which has mantissa width 4 and exponent width 2.
 //
 class vil_nitf2_exponential_formatter : public vil_nitf2_typed_field_formatter<double>
 {
-public:
+ public:
   vil_nitf2_exponential_formatter(int mantissa_width, int exponent_width);
 
   vil_nitf2_field_formatter* copy() const;
@@ -295,16 +296,16 @@ class vil_nitf2_enum_values : public vcl_map<vcl_string, vcl_string>
 //
 class vil_nitf2_enum_string_formatter : public vil_nitf2_string_formatter
 {
-public:
+ public:
   // Constructor
   vil_nitf2_enum_string_formatter(int field_width, const vil_nitf2_enum_values&);
 
   vil_nitf2_field_formatter* copy() const;
-   
+
   // Is specified value valid?
   bool is_valid_value(vcl_string value) const;
 
-private:
+ private:
   void validate_value_map();
   vil_nitf2_enum_values value_map;
 };
@@ -318,7 +319,7 @@ class vil_nitf2_date_time_formatter : public vil_nitf2_typed_field_formatter<vil
   vil_nitf2_date_time_formatter(int field_width);
 
   vil_nitf2_field_formatter* copy() const;
-   
+
   // partially overridden read/write methods
   using vil_nitf2_typed_field_formatter<vil_nitf2_date_time>::read;
   using vil_nitf2_typed_field_formatter<vil_nitf2_date_time>::write;
@@ -353,10 +354,10 @@ class vil_nitf2_location_formatter : public vil_nitf2_typed_field_formatter<vil_
 
 // Reads and writes a TRE sequence field
 //
-class vil_nitf2_tagged_record_sequence_formatter : 
+class vil_nitf2_tagged_record_sequence_formatter :
   public vil_nitf2_typed_field_formatter<vil_nitf2_tagged_record_sequence>
 {
-public:
+ public:
   // Constructor
   vil_nitf2_tagged_record_sequence_formatter();
 

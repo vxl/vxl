@@ -1,6 +1,7 @@
 // This is mul/mbl/tests/test_stl.cxx
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
+#include <vcl_iterator.h>
 #include <testlib/testlib_test.h>
 #include <mbl/mbl_stl.h>
 
