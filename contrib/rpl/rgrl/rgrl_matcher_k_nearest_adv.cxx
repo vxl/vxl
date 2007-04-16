@@ -9,8 +9,8 @@
 #include <rgrl/rgrl_transformation.h>
 #include <rgrl/rgrl_view.h>
 #include <rgrl/rgrl_match_set.h>
-#include <vcl_vector.h>
-#include <vcl_algorithm.h>
+// not used? #include <vcl_vector.h>
+#include <vcl_map.h>
 #include <vcl_cassert.h>
 
 //-----------------------------------------------
