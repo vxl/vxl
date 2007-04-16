@@ -12,11 +12,11 @@
 #include "mbl_log.h"
 #include <vcl_cstddef.h>
 #include <vcl_fstream.h>
-#include <vcl_sstream.h>
+#include <vcl_memory.h>
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
-#include <vcl_cctype.h>
+#include <vcl_sstream.h>
 #include <vcl_utility.h>
 #include <vul/vul_string.h>
 #include <mbl/mbl_read_props.h>

@@ -2,6 +2,7 @@
 // \file
 #include <vnl/vnl_numeric_traits.h>
 #include <bdpg/bdpg_array_dynamic_prg.h>
+#include <vcl_iostream.h>
 
 bdpg_array_dynamic_prg::bdpg_array_dynamic_prg(const unsigned rows, const unsigned cols)
 {
