@@ -1,4 +1,5 @@
 #include "frame_grabber_vil.h"
+#include <errno.h>
 
 // Constructor
 // Sets up the framegrabber.
