@@ -26,7 +26,7 @@ class vpgl_fm_compute_ransac
 {
  public:
   vpgl_fm_compute_ransac():outlier_thresh_(1),max_outlier_frac_(0.5),
-    desired_prob_good_(0.99), max_pops_(1), gen_all_(false){}
+    desired_prob_good_(0.99), max_pops_(1), gen_all_(false), trace_level_(0) {}
 
   //: Compute from two sets of corresponding points.
   // Put the resulting matrix into fm, return true if successful.
@@ -48,6 +48,9 @@ class vpgl_fm_compute_ransac
 
   //: Set the threshold on epipolar distance that determines that a correspondence is an outlier
   void set_outlier_threshold(const double thresh){outlier_thresh_ = thresh;}
+
+  //: Set the trace level for debugging
+  void set_trace_level(int trace_level) { trace_level_ = trace_level; }
   
   //: After "compute" indices will have true set for correspondences that are outliers
   vcl_vector<bool> outliers;
@@ -61,6 +64,7 @@ class vpgl_fm_compute_ransac
   double desired_prob_good_;
   int max_pops_; 
   bool gen_all_;
+  int trace_level_;
 };
 
 

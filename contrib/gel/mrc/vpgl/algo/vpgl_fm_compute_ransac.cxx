@@ -37,11 +37,10 @@ vpgl_fm_compute_ransac::compute(
   // The following block is hacked from similar code in rrel_homography2d_est.
   rrel_fm_problem* estimator = new rrel_fm_problem( pr, pl );
   estimator->verbose = false;
-  int trace_level = 0;
   rrel_muset_obj* ransac = new rrel_muset_obj((int)vcl_floor(pr.size()*.75));
   estimator->set_prior_scale( 1.0 );
   rrel_ran_sam_search* ransam = new rrel_ran_sam_search;
-  ransam->set_trace_level(trace_level);
+  ransam->set_trace_level(trace_level_);
 
   if(!gen_all_)
     ransam->set_sampling_params( max_outlier_frac_,
