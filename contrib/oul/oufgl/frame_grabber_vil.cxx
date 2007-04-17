@@ -1,5 +1,6 @@
 #include "frame_grabber_vil.h"
-#include <errno.h>
+#include <vcl_cstdio.h> // for perror()
+#include <vcl_cstdlib.h> // for exit()
 
 // Constructor
 // Sets up the framegrabber.
@@ -12,7 +13,7 @@ FrameGrabberVil::FrameGrabberVil(const string &device_name,
   fd = open(device_name.c_str(), O_RDWR);
   if (fd<0)
   {
-    perror("Couldn't open device");
+    vcl_perror("Couldn't open device");
     vcl_exit(-1);
   }
 
@@ -36,7 +37,7 @@ FrameGrabberVil::FrameGrabberVil(const string &device_name,
     vcl_cout << "Successfully set palette to YUV420P\n";
   else
   {
-    perror("Error setting pallette\n");
+    vcl_perror("Error setting pallette\n");
     vcl_cerr << "Capture may not work\n";
   }
   struct video_window vw;
@@ -58,7 +59,7 @@ FrameGrabberVil::FrameGrabberVil(const string &device_name,
 
   // Query the actual buffers available
   if (ioctl(fd, VIDIOCGMBUF, &vm) < 0) {
-    perror("VIDIOCGMBUF");
+    vcl_perror("VIDIOCGMBUF");
     vcl_exit(-1);
   }
   vcl_cout << "vm.size = " << vm.size << " vm.frames = "
@@ -69,7 +70,7 @@ FrameGrabberVil::FrameGrabberVil(const string &device_name,
   bigbuf=(unsigned char*)mmap(0,vm.size,PROT_READ|PROT_WRITE,MAP_SHARED,fd,0);
 
   if (bigbuf==(unsigned char *)-1) {
-    perror("mmap");
+    vcl_perror("mmap");
     vcl_exit(-1);
   }
 
@@ -90,7 +91,7 @@ FrameGrabberVil::FrameGrabberVil(const string &device_name,
   }
 #if 0
   if (ioctl(fd, VIDIOCMCAPTURE, &mm)<0) {
-    perror("VIDIOCMCAPTURE");
+    vcl_perror("VIDIOCMCAPTURE");
     vcl_exit(-1);
   }
 #endif
@@ -108,7 +109,7 @@ vil_image_view<vxl_byte> *FrameGrabberVil::grab_frame()
   int frame_num = mm.frame;
   mm.frame = (mm.frame+1)%vm.frames;
   if (ioctl(fd, VIDIOCMCAPTURE, &mm)<0) {
-    perror("VIDIOCMCAPTURE");
+    vcl_perror("VIDIOCMCAPTURE");
     vcl_exit(-1);
   }
 
@@ -117,11 +118,11 @@ vil_image_view<vxl_byte> *FrameGrabberVil::grab_frame()
     i = ioctl(fd, VIDIOCSYNC, &frame_num);
     if (i < 0 && errno == EINTR)
     {
-      perror("VIDIOCSYNC problem");
+      vcl_perror("VIDIOCSYNC problem");
       continue;
     }
     if (i < 0) {
-      perror("VIDIOCSYNC");
+      vcl_perror("VIDIOCSYNC");
       // You may want to exit here, because something has gone
       // pretty badly wrong...
     }
