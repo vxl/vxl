@@ -1,13 +1,16 @@
+# brl/bbas/bnl/algo/CMakeLists.txt
+
 SET( bnl_algo_sources
-    bnl_legendre_polynomial.cxx       bnl_legendre_polynomial.h
-   )
+   bnl_legendre_polynomial.cxx      bnl_legendre_polynomial.h
+   bnl_sparse_lm.cxx                bnl_sparse_lm.h
+)
 
 ADD_LIBRARY( bnl_algo ${bnl_algo_sources} )
 INSTALL_TARGETS(/lib bnl_algo)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bnl/algo ${bnl_algo_sources})
-TARGET_LINK_LIBRARIES( bnl_algo vnl )
+TARGET_LINK_LIBRARIES( bnl_algo bnl )
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
-#SUBDIRS(sparse)
+

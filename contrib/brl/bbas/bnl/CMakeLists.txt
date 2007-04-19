@@ -2,8 +2,10 @@
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas)
 
 SET(bnl_sources
-    bnl_parabolic_interpolator.cxx  bnl_parabolic_interpolator.h
-    bnl_quadratic_interpolator.cxx  bnl_quadratic_interpolator.h
+    bnl_parabolic_interpolator.cxx    bnl_parabolic_interpolator.h
+    bnl_quadratic_interpolator.cxx    bnl_quadratic_interpolator.h
+    bnl_crs_index.cxx                 bnl_crs_index.h
+    bnl_sparse_lst_sqr_function.cxx   bnl_sparse_lst_sqr_function.h
    )
 
 ADD_LIBRARY(bnl ${bnl_sources})
@@ -12,7 +14,8 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bnl ${bnl_sources})
 
 TARGET_LINK_LIBRARIES(bnl vnl vnl_algo) 
 
-#SUBDIRS(algo)
+SUBDIRS(algo)
 
-# tests code
-#SUBDIRS(tests)
+IF( BUILD_TESTING )
+  SUBDIRS(tests)
+ENDIF( BUILD_TESTING )
