@@ -1,6 +1,7 @@
 #include "mvl_linear_backproject.h"
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
+#include <vnl/algo/vnl_svd.h>
 
 vnl_vector<double> mvl_linear_backproject(
           // camera matrices:
@@ -53,7 +54,6 @@ vnl_vector<double> mvl_linear_backproject(
     A.set_row(j, row0);
     A.set_row(j+1, row1);
   }
-
 
   if (method == 'e')
   {
