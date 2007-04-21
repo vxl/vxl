@@ -1,4 +1,4 @@
-// This is basic/bnl/algo/bnl_sparse_lm.h
+// This is brl/bbas/bnl/algo/bnl_sparse_lm.h
 #ifndef bnl_sparse_lm_h_
 #define bnl_sparse_lm_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -11,13 +11,12 @@
 // \date   April 14, 2005
 //
 // \verbatim
-// Modifications
+//  Modifications
 // \endverbatim
 //
 
 #include <vcl_iosfwd.h>
 #include <vnl/vnl_vector.h>
-#include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_nonlinear_minimizer.h>
 
@@ -38,7 +37,7 @@ class bnl_sparse_lm : public vnl_nonlinear_minimizer
 
   //: Destructor
   ~bnl_sparse_lm();
-  
+
   //: Minimize the function supplied in the constructor until convergence or failure.
   //  On return, a and b are such that f(a,b) is the lowest value achieved.
   //  Returns true for convergence, false for failure.
@@ -67,9 +66,7 @@ class bnl_sparse_lm : public vnl_nonlinear_minimizer
   bool set_covariance_; // Set if covariance_ holds J'*J
 
   void init(bnl_sparse_lst_sqr_function* f);
-
 };
-
 
 
 #endif // bnl_sparse_lm_h_
