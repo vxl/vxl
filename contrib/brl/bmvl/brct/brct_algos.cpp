@@ -12,6 +12,7 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_double_2x3.h>
+#include <vnl/vnl_double_4.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_new.h>
@@ -889,10 +890,10 @@ void brct_algos:: project(vcl_vector<vgl_point_3d<double> > const& world_points,
   }
 }
 
- //: project world points into an image using a projection matrix
+//: project world points into an image using a projection matrix
 void brct_algos::project(vcl_vector<vgl_point_3d<double> > const& world_points,
-                     vgl_p_matrix<double> const& P,
-                     vcl_vector<vgl_point_2d<double> > & image_points)
+                         vgl_p_matrix<double> const& P,
+                         vcl_vector<vgl_point_2d<double> > & image_points)
 {
   image_points.clear();
   image_points.resize(0);
@@ -1091,12 +1092,12 @@ bool brct_algos::read_world(vcl_ifstream& str,
     return false;
   unsigned npts = world_points.size();
   //see if there are any polygons in the world
- if (str.eof())
+  if (str.eof())
     return true;
   vcl_string temp;
   str >> temp;
   if (temp == "")
-     return true;
+    return true;
   //there are polygons
   if (temp != "NPOLYS:")
     return false;
@@ -1350,22 +1351,22 @@ bool brct_algos::read_brct_corrs(vcl_ifstream& str,
 }
 
 void brct_algos::reconstruct_corrs(vcl_vector<brct_corr_sptr> const& image_corrs,
-                       vpgl_proj_camera<double> const& cam0,
-                       vpgl_proj_camera<double> const& cam1,
-                       vcl_vector<vgl_point_3d<double> >& world_points)
+                                   vpgl_proj_camera<double> const& cam0,
+                                   vpgl_proj_camera<double> const& cam1,
+                                   vcl_vector<vgl_point_3d<double> >& world_points)
 {
   world_points.clear();
-  for(unsigned i = 0; i<image_corrs.size(); ++i)
-    {
-      brct_corr_sptr cr = image_corrs[i];
-      if(cr->n_cams()!=2)
-        continue;
-      vgl_homg_point_2d<double> hp0 = cr->match(0);
-      vgl_homg_point_2d<double> hp1 = cr->match(1);
-      vgl_point_2d<double> x0(hp0), x1(hp1);
-      vgl_point_3d<double> Xw = brct_algos::triangulate_3d_point(x0,cam0.get_matrix(), x1, cam1.get_matrix());
-      world_points.push_back(Xw);
-    }
+  for (unsigned i = 0; i<image_corrs.size(); ++i)
+  {
+    brct_corr_sptr cr = image_corrs[i];
+    if (cr->n_cams()!=2)
+      continue;
+    vgl_homg_point_2d<double> hp0 = cr->match(0);
+    vgl_homg_point_2d<double> hp1 = cr->match(1);
+    vgl_point_2d<double> x0(hp0), x1(hp1);
+    vgl_point_3d<double> Xw = brct_algos::triangulate_3d_point(x0,cam0.get_matrix(), x1, cam1.get_matrix());
+    world_points.push_back(Xw);
+  }
 }
 
 void brct_algos::write_target_camera(vcl_ofstream& str, vnl_double_3x4 const& P)
@@ -1660,11 +1661,11 @@ write_ifs_box(vcl_ofstream& ostr,
 
 bool brct_algos::
 write_ifs(vcl_ofstream& ostr,
-              vcl_vector<vgl_point_3d<double> > const& verts,
-              vcl_vector<vcl_vector<unsigned> > const& faces,
-              const float r, const float g, const float b)
+          vcl_vector<vgl_point_3d<double> > const& verts,
+          vcl_vector<vcl_vector<unsigned> > const& faces,
+          const float r, const float g, const float b)
 {
-  if(!ostr.is_open())
+  if (!ostr.is_open())
     return false;
   ostr << " Shape {\n"
        << "appearance Appearance {\n"
