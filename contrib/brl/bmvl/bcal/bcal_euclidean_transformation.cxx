@@ -1,15 +1,8 @@
-// bcal_euclidean_transformation.cpp: implementation of the bcal_euclidean_transformation class.
-//
 //////////////////////////////////////////////////////////////////////
 
 #include "bcal_euclidean_transformation.h"
-#include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
-
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
 
 bool bcal_euclidean_transformation::is_valid(void) const
 {
