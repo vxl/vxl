@@ -1,4 +1,4 @@
-// This is basic/bnl/bnl_sparse_lst_sqr_function.cxx
+// This is brl/bbas/bnl/bnl_sparse_lst_sqr_function.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
@@ -13,7 +13,7 @@
 #include <vnl/vnl_vector_ref.h>
 
 void bnl_sparse_lst_sqr_function::dim_warning(unsigned int number_of_unknowns,
-                                               unsigned int number_of_residuals)
+                                              unsigned int number_of_residuals)
 {
   if (number_of_unknowns > number_of_residuals)
     vcl_cerr << "bnl_sparse_lst_sqr_function: WARNING: "
@@ -41,17 +41,16 @@ bnl_sparse_lst_sqr_function::bnl_sparse_lst_sqr_function(
    use_gradient_(g == use_gradient)
 {
   unsigned int k = num_params_per_a;
-  for(unsigned int i=1; i<indices_a_.size(); ++i, k+=num_params_per_a) 
+  for (unsigned int i=1; i<indices_a_.size(); ++i, k+=num_params_per_a)
     indices_a_[i] = k;
-  
+
   k = num_params_per_b;
-  for(unsigned int i=1; i<indices_b_.size(); ++i, k+=num_params_per_b)
+  for (unsigned int i=1; i<indices_b_.size(); ++i, k+=num_params_per_b)
     indices_b_[i] = k;
 
   k = num_residuals_per_e;
-  for(unsigned int i=1; i<indices_e_.size(); ++i, k+=num_residuals_per_e)
+  for (unsigned int i=1; i<indices_e_.size(); ++i, k+=num_residuals_per_e)
     indices_e_[i] = k;
-
 }
 
 //: Construct bnl_sparse_lst_sqr_function.
@@ -70,22 +69,22 @@ bnl_sparse_lst_sqr_function::bnl_sparse_lst_sqr_function(
                                  unsigned int num_residuals_per_e,
                                  UseGradient g)
  : failure(false),
-   residual_indices_(xmask), 
+   residual_indices_(xmask),
    indices_a_(num_a+1,0),
    indices_b_(num_b+1,0),
    indices_e_(residual_indices_.num_non_zero()+1,0),
    use_gradient_(g == use_gradient)
 {
   unsigned int k = num_params_per_a;
-  for(unsigned int i=1; i<indices_a_.size(); ++i, k+=num_params_per_a)
+  for (unsigned int i=1; i<indices_a_.size(); ++i, k+=num_params_per_a)
     indices_a_[i] = k;
 
   k = num_params_per_b;
-  for(unsigned int i=1; i<indices_b_.size(); ++i, k+=num_params_per_b)
+  for (unsigned int i=1; i<indices_b_.size(); ++i, k+=num_params_per_b)
     indices_b_[i] = k;
 
   k = num_residuals_per_e;
-  for(unsigned int i=1; i<indices_e_.size(); ++i, k+=num_residuals_per_e)
+  for (unsigned int i=1; i<indices_e_.size(); ++i, k+=num_residuals_per_e)
     indices_e_[i] = k;
 
   dim_warning(num_a*num_params_per_a + num_b*num_params_per_b, k);
@@ -98,7 +97,7 @@ bnl_sparse_lst_sqr_function::bnl_sparse_lst_sqr_function(
 // \param b_sizes is a vector describing the number of parameters for each b_j
 // \param e_sizes is a vector describing the number of parameters for each residual e_ij
 // \param xmask is a mask for residual availability.  residual e_ij exists only if mask[i][j]==true
-// xmask must be a_sizes.size() by b_sizes.size() and contain e_sizes.size() true entries 
+// xmask must be a_sizes.size() by b_sizes.size() and contain e_sizes.size() true entries
 // The optional argument should be no_gradient if the gradf function has not
 // been implemented.  Default is use_gradient.
 bnl_sparse_lst_sqr_function::bnl_sparse_lst_sqr_function(
@@ -108,7 +107,7 @@ bnl_sparse_lst_sqr_function::bnl_sparse_lst_sqr_function(
                                  const vcl_vector<vcl_vector<bool> >& xmask,
                                  UseGradient g)
  : failure(false),
-   residual_indices_(xmask), 
+   residual_indices_(xmask),
    indices_a_(a_sizes.size()+1,0),
    indices_b_(b_sizes.size()+1,0),
    indices_e_(e_sizes.size()+1,0),
@@ -117,14 +116,14 @@ bnl_sparse_lst_sqr_function::bnl_sparse_lst_sqr_function(
   assert(residual_indices_.num_non_zero() == (int)e_sizes.size());
   assert(residual_indices_.num_rows() == (int)a_sizes.size());
   assert(residual_indices_.num_cols() == (int)b_sizes.size());
-  
-  for(unsigned int i=0; i<a_sizes.size(); ++i)
+
+  for (unsigned int i=0; i<a_sizes.size(); ++i)
     indices_a_[i+1] = indices_a_[i]+a_sizes[i];
 
-  for(unsigned int i=0; i<b_sizes.size(); ++i)
+  for (unsigned int i=0; i<b_sizes.size(); ++i)
     indices_b_[i+1] = indices_b_[i]+b_sizes[i];
 
-  for(unsigned int i=0; i<e_sizes.size(); ++i)
+  for (unsigned int i=0; i<e_sizes.size(); ++i)
     indices_e_[i+1] = indices_e_[i]+e_sizes[i];
 
   dim_warning(indices_a_.back() + indices_b_.back(), indices_e_.back());
@@ -139,17 +138,17 @@ bnl_sparse_lst_sqr_function::bnl_sparse_lst_sqr_function(
 //  want to provide a more efficient implementation for your problem.
 void
 bnl_sparse_lst_sqr_function::f(vnl_vector<double> const& a, vnl_vector<double> const& b,
-                                vnl_vector<double>& e)
+                               vnl_vector<double>& e)
 {
   typedef bnl_crs_index::sparse_vector::iterator sv_itr;
-  for(unsigned int i=0; i<number_of_a(); ++i)
+  for (unsigned int i=0; i<number_of_a(); ++i)
   {
-    // This is semi const incorrect - there is no vnl_vector_ref_const 
+    // This is semi const incorrect - there is no vnl_vector_ref_const
     const vnl_vector_ref<double> ai(number_of_params_a(i),
                                     const_cast<double*>(a.data_block())+index_a(i));
 
     bnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
-    for(sv_itr r_itr=row.begin(); r_itr!=row.end(); ++r_itr)
+    for (sv_itr r_itr=row.begin(); r_itr!=row.end(); ++r_itr)
     {
       unsigned int j = r_itr->second;
       unsigned int k = r_itr->first;
@@ -171,18 +170,18 @@ bnl_sparse_lst_sqr_function::f(vnl_vector<double> const& a, vnl_vector<double> c
 //  unless you want to provide a more efficient implementation for your problem.
 void
 bnl_sparse_lst_sqr_function::jac_blocks(vnl_vector<double> const& a, vnl_vector<double> const& b,
-                                         vcl_vector<vnl_matrix<double> >& A,
-                                         vcl_vector<vnl_matrix<double> >& B)
+                                        vcl_vector<vnl_matrix<double> >& A,
+                                        vcl_vector<vnl_matrix<double> >& B)
 {
   typedef bnl_crs_index::sparse_vector::iterator sv_itr;
-  for(unsigned int i=0; i<number_of_a(); ++i)
+  for (unsigned int i=0; i<number_of_a(); ++i)
   {
     // This is semi const incorrect - there is no vnl_vector_ref_const
     const vnl_vector_ref<double> ai(number_of_params_a(i),
                                     const_cast<double*>(a.data_block())+index_a(i));
 
     bnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
-    for(sv_itr r_itr=row.begin(); r_itr!=row.end(); ++r_itr)
+    for (sv_itr r_itr=row.begin(); r_itr!=row.end(); ++r_itr)
     {
       unsigned int j = r_itr->second;
       unsigned int k = r_itr->first;
@@ -206,19 +205,19 @@ bnl_sparse_lst_sqr_function::jac_blocks(vnl_vector<double> const& a, vnl_vector<
 //  unless you want to provide a more efficient implementation for your problem.
 void
 bnl_sparse_lst_sqr_function::fd_jac_blocks(vnl_vector<double> const& a, vnl_vector<double> const& b,
-                                            vcl_vector<vnl_matrix<double> >& A,
-                                            vcl_vector<vnl_matrix<double> >& B,
-                                            double stepsize)
+                                           vcl_vector<vnl_matrix<double> >& A,
+                                           vcl_vector<vnl_matrix<double> >& B,
+                                           double stepsize)
 {
   typedef bnl_crs_index::sparse_vector::iterator sv_itr;
-  for(unsigned int i=0; i<number_of_a(); ++i)
+  for (unsigned int i=0; i<number_of_a(); ++i)
   {
     // This is semi const incorrect - there is no vnl_vector_ref_const
     const vnl_vector_ref<double> ai(number_of_params_a(i),
                                     const_cast<double*>(a.data_block())+index_a(i));
 
     bnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
-    for(sv_itr r_itr=row.begin(); r_itr!=row.end(); ++r_itr)
+    for (sv_itr r_itr=row.begin(); r_itr!=row.end(); ++r_itr)
     {
       unsigned int j = r_itr->second;
       unsigned int k = r_itr->first;
@@ -238,34 +237,32 @@ bnl_sparse_lst_sqr_function::fd_jac_blocks(vnl_vector<double> const& a, vnl_vect
 //  fij has been sized appropriately before the call.
 void
 bnl_sparse_lst_sqr_function::fij(int i, int j, vnl_vector<double> const& ai,
-                                  vnl_vector<double> const& bj, vnl_vector<double>& fij)
+                                 vnl_vector<double> const& bj, vnl_vector<double>& fij)
 {
-  vcl_cerr << "Warning: fij() called but not implemented in derived class"<<vcl_endl;
+  vcl_cerr << "Warning: fij() called but not implemented in derived class\n";
 }
 
 //: Calculate the Jacobian A_ij, given the parameter vectors a_j and b_i.
-void 
+void
 bnl_sparse_lst_sqr_function::jac_Aij(int i, int j, vnl_vector<double> const& ai,
-                                      vnl_vector<double> const& bj, vnl_matrix<double>& Aij)
+                                     vnl_vector<double> const& bj, vnl_matrix<double>& Aij)
 {
-  vcl_cerr << "Warning: jac_Aij() called but not implemented in derived class"<<vcl_endl;
+  vcl_cerr << "Warning: jac_Aij() called but not implemented in derived class\n";
 }
 
 //: Calculate the Jacobian B_ij, given the parameter vectors a_j and b_i.
-void 
+void
 bnl_sparse_lst_sqr_function::jac_Bij(int i, int j, vnl_vector<double> const& ai,
-                                      vnl_vector<double> const& bj, vnl_matrix<double>& Bij)
+                                     vnl_vector<double> const& bj, vnl_matrix<double>& Bij)
 {
-  vcl_cerr << "Warning: jac_Bij() called but not implemented in derived class"<<vcl_endl;
+  vcl_cerr << "Warning: jac_Bij() called but not implemented in derived class\n";
 }
-
-
 
 //: Use this to compute a finite-difference Jacobian A_ij
 void
 bnl_sparse_lst_sqr_function::fd_jac_Aij(int i, int j, vnl_vector<double> const& ai,
-                                         vnl_vector<double> const& bj, vnl_matrix<double>& Aij,
-                                         double stepsize)
+                                        vnl_vector<double> const& bj, vnl_matrix<double>& Aij,
+                                        double stepsize)
 {
   unsigned int dim = ai.size();
   unsigned int n = Aij.rows();
@@ -301,8 +298,8 @@ bnl_sparse_lst_sqr_function::fd_jac_Aij(int i, int j, vnl_vector<double> const& 
 //: Use this to compute a finite-difference Jacobian B_ij
 void
 bnl_sparse_lst_sqr_function::fd_jac_Bij(int i, int j, vnl_vector<double> const& ai,
-                                         vnl_vector<double> const& bj, vnl_matrix<double>& Bij,
-                                         double stepsize)
+                                        vnl_vector<double> const& bj, vnl_matrix<double>& Bij,
+                                        double stepsize)
 {
   unsigned int dim = bj.size();
   unsigned int n = Bij.rows();
@@ -336,9 +333,9 @@ bnl_sparse_lst_sqr_function::fd_jac_Bij(int i, int j, vnl_vector<double> const& 
 
 
 void bnl_sparse_lst_sqr_function::trace(int /* iteration */,
-                                         vcl_vector<vnl_vector<double> > const& /*a*/,
-                                         vcl_vector<vnl_vector<double> > const& /*b*/,
-                                         vcl_vector<vnl_vector<double> > const& /*e**/)
+                                        vcl_vector<vnl_vector<double> > const& /*a*/,
+                                        vcl_vector<vnl_vector<double> > const& /*b*/,
+                                        vcl_vector<vnl_vector<double> > const& /*e**/)
 {
   // This default implementation is empty; overloaded in derived class.
 }

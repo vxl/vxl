@@ -1,4 +1,4 @@
-// This is basic/bnl/bnl_sparse_lst_sqr_function.h
+// This is brl/bbas/bnl/bnl_sparse_lst_sqr_function.h
 #ifndef bnl_sparse_lst_sqr_function_h_
 #define bnl_sparse_lst_sqr_function_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -6,21 +6,20 @@
 #endif
 //:
 // \file
-// \brief Abstract base for sparse least squares functions 
+// \brief Abstract base for sparse least squares functions
 // \author Matt Leotta (Brown)
 // \date   April 13, 2005
 //
 // \verbatim
 //  Modifications
-//    Apr 13, 2005  MJL  - Modified from vnl_least_squares_function
+//   Apr 13, 2005  MJL - Modified from vnl_least_squares_function
 // \endverbatim
 //
-#include <vcl_string.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <bnl/bnl_crs_index.h>
 
-//:  Abstract base for sparse least squares functions.
+//: Abstract base for sparse least squares functions.
 //    bnl_sparse_lst_sqr_function is an abstract base for functions to be minimized
 //    by an optimizer.  To define your own function to be minimized, subclass
 //    from bnl_sparse_lst_sqr_function, and implement the pure virtual f (and
@@ -34,7 +33,7 @@
 //    {b_1, b_2, ... b_n}.  Likewise, the residual vector X is partitioned into
 //    {x_11, x_12, ... x_mn} (not all x_ij are required).  We further assume that
 //    dx_ij/da_k = 0 for all i != k and dx_ij/db_k = 0 for all j != k.  An example
-//    of this is bundle adjustment where each a_i is the paramters for one of m cameras,
+//    of this is bundle adjustment where each a_i is the parameters for one of m cameras,
 //    each b_j is the parameters of a 3D point, and x_ij is the projection error of
 //    the jth point by the ith camera.
 class bnl_sparse_lst_sqr_function
@@ -53,11 +52,11 @@ class bnl_sparse_lst_sqr_function
   // The optional argument should be no_gradient if the gradf function has not
   // been implemented.  Default is use_gradient.
   bnl_sparse_lst_sqr_function(unsigned int num_a,
-                               unsigned int num_params_per_a,
-                               unsigned int num_b,
-                               unsigned int num_params_per_b,
-                               unsigned int num_residuals_per_e,
-                               UseGradient g = use_gradient);
+                              unsigned int num_params_per_a,
+                              unsigned int num_b,
+                              unsigned int num_params_per_b,
+                              unsigned int num_residuals_per_e,
+                              UseGradient g = use_gradient);
 
   //: Construct bnl_sparse_lst_sqr_function.
   // Assumes A consists of \p num_a parameters each of size \p num_params_per_a
@@ -67,27 +66,27 @@ class bnl_sparse_lst_sqr_function
   // The optional argument should be no_gradient if the gradf function has not
   // been implemented.  Default is use_gradient.
   bnl_sparse_lst_sqr_function(unsigned int num_a,
-                               unsigned int num_params_per_a,
-                               unsigned int num_b,
-                               unsigned int num_params_per_b,
-                               const vcl_vector<vcl_vector<bool> >& xmask,
-                               unsigned int num_residuals_per_e,
-                               UseGradient g = use_gradient);
-                     
+                              unsigned int num_params_per_a,
+                              unsigned int num_b,
+                              unsigned int num_params_per_b,
+                              const vcl_vector<vcl_vector<bool> >& xmask,
+                              unsigned int num_residuals_per_e,
+                              UseGradient g = use_gradient);
+
   //: Construct bnl_sparse_lst_sqr_function.
   // This constructor is the most general
   // \param a_sizes is a vector describing the number of parameters for each a_i
   // \param b_sizes is a vector describing the number of parameters for each b_j
   // \param e_sizes is a vector describing the number of parameters for each residual e_ij
   // \param xmask is a mask for residual availability.  residual e_ij exists only if mask[i][j]==true
-  // xmask must be a_sizes.size() by b_sizes.size() and contain e_sizes.size() true entries 
+  // xmask must be a_sizes.size() by b_sizes.size() and contain e_sizes.size() true entries
   // The optional argument should be no_gradient if the gradf function has not
   // been implemented.  Default is use_gradient.
   bnl_sparse_lst_sqr_function(const vcl_vector<unsigned int>& a_sizes,
-                               const vcl_vector<unsigned int>& b_sizes,
-                               const vcl_vector<unsigned int>& e_sizes,
-                               const vcl_vector<vcl_vector<bool> >& xmask,
-                               UseGradient g = use_gradient);
+                              const vcl_vector<unsigned int>& b_sizes,
+                              const vcl_vector<unsigned int>& e_sizes,
+                              const vcl_vector<vcl_vector<bool> >& xmask,
+                              UseGradient g = use_gradient);
 
   virtual ~bnl_sparse_lst_sqr_function() {}
 
@@ -125,7 +124,7 @@ class bnl_sparse_lst_sqr_function
                              vcl_vector<vnl_matrix<double> >& A,
                              vcl_vector<vnl_matrix<double> >& B,
                              double stepsize);
-  
+
   //: Compute the residuals from the ith component of a and the jth component of b.
   //  Given the parameter vectors ai and bj, compute the vector of residuals fij.
   //  fij has been sized appropriately before the call.
@@ -142,13 +141,13 @@ class bnl_sparse_lst_sqr_function
 
   //: Use this to compute a finite-difference Jacobian A_ij
   void fd_jac_Aij(int i, int j, vnl_vector<double> const& ai,
-              vnl_vector<double> const& bj, vnl_matrix<double>& Aij,
-              double stepsize);
-              
+                  vnl_vector<double> const& bj, vnl_matrix<double>& Aij,
+                  double stepsize);
+
   //: Use this to compute a finite-difference Jacobian B_ij
   void fd_jac_Bij(int i, int j, vnl_vector<double> const& ai,
-              vnl_vector<double> const& bj, vnl_matrix<double>& Bij,
-              double stepsize);
+                  vnl_vector<double> const& bj, vnl_matrix<double>& Bij,
+                  double stepsize);
 
   //: Called after each LM iteration to print debugging etc.
   virtual void trace(int iteration,
@@ -161,22 +160,22 @@ class bnl_sparse_lst_sqr_function
 
   //: Return the number of parameters of b_i
   unsigned int number_of_params_b(int j) const { return indices_b_[j+1]-indices_b_[j]; }
-  
+
   //: Return the number of residuals in the kth residual vector.
   unsigned int number_of_residuals(int k) const { return indices_e_[k+1]-indices_e_[k]; }
 
   //: Return the number of residuals for x_ij.
   unsigned int number_of_residuals(int i, int j) const
-    { int k = residual_indices_(i,j);
-      if(k<0) return 0;
-      else return number_of_residuals(k); }
-      
+  { int k = residual_indices_(i,j);
+    if (k<0) return 0;
+    else return number_of_residuals(k); }
+
   //: return the index of aj in a
   unsigned int index_a(int i) const { return indices_a_[i]; }
-  
+
   //: return the index of bj in b
   unsigned int index_b(int j) const { return indices_b_[j]; }
-  
+
   //: return the index of bj in b
   unsigned int index_e(int k) const { return indices_e_[k]; }
 
@@ -191,16 +190,16 @@ class bnl_sparse_lst_sqr_function
 
   //: Return true if the derived class has indicated that gradf has been implemented
   bool has_gradient() const { return use_gradient_; }
-  
+
   //: Return a const reference to the residual indexer
   const bnl_crs_index& residual_indices() const { return residual_indices_; }
 
  protected:
-  bnl_crs_index residual_indices_; 
+  bnl_crs_index residual_indices_;
   vcl_vector<unsigned int> indices_a_;
   vcl_vector<unsigned int> indices_b_;
   vcl_vector<unsigned int> indices_e_;
-  
+
   bool use_gradient_;
 
  private:
