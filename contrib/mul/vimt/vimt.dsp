@@ -210,7 +210,7 @@ SOURCE=.\Templates/vimt_sample_profile_bilin+uint_16.double-.cxx
 SOURCE=.\Templates/vimt_sample_grid_bilin+uint_16.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vimt_image_2d_of+rgb+byte--.cxx
+SOURCE=.\Templates/vimt_image_2d_of+vil_rgb+byte--.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
