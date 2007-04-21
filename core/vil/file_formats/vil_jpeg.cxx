@@ -25,7 +25,6 @@
 
 #include <vil/vil_stream.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_new.h>
 
 //: the file probe, as a C function.
 bool vil_jpeg_file_probe(vil_stream *vs)

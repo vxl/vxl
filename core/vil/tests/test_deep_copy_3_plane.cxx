@@ -1,7 +1,6 @@
 // This is core/vil/tests/test_deep_copy_3_plane.cxx
 #include <testlib/testlib_test.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_new.h>
 
 bool equal_image(const vil_image_view< vxl_byte >& im0,
                  const vil_image_view< vxl_byte >& im1)
