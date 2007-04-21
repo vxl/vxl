@@ -4,6 +4,7 @@ LIBRARY := bnl-algo
 VERSION := 1.0
 
 SOURCES += bnl_legendre_polynomial.cxx
+SOURCES += bnl_sparse_lm.cxx
 
 #SUBDIRS += sparse
 
