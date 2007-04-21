@@ -3,9 +3,8 @@
 #include <vcl_iostream.h>
 #include <vnl/vnl_sparse_matrix.h>
 #include <vnl/algo/vnl_sparse_lu.h>
-#include <vnl/algo/vnl_svd.h>
-
 #include "test_util.h"
+
 //for debugging purposes
 #if 0
 static void print_sparse(vnl_sparse_matrix<double>& M)
