@@ -15,7 +15,6 @@
 #ifdef HAS_AVI
 #include <vidl/vidl_avicodec.h>
 #endif
-#include <vil/vil_new.h>
 #include "vidl_frame_resource.h"
 
 //: Local class to hold the codec list
