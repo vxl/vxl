@@ -11,8 +11,6 @@
 #include <vpgl/vpgl_rational_camera.h>
 #include <vcl_iostream.h>
 #include <vcl_cmath.h> //sin, cos exp
-// not used? #include <vcl_fstream.h>
-#include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vul/vul_file.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>
