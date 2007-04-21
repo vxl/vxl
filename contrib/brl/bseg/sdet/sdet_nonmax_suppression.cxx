@@ -6,9 +6,7 @@
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
 #include <vnl/vnl_matrix.h>
-#include <vnl/algo/vnl_matrix_inverse.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vil/algo/vil_convolve_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vcl_cassert.h>
@@ -49,8 +47,8 @@ sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params&
 
 //: Constructor from a parameter block, gradient magnitudes given as an array and directions given as component arrays
 //
-sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, 
-                                                 vbl_array_2d<double> &dir_x, 
+sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp,
+                                                 vbl_array_2d<double> &dir_x,
                                                  vbl_array_2d<double> &dir_y,
                                                  vbl_array_2d<double> &grad_mag)
   : sdet_nonmax_suppression_params(nsp)
@@ -140,8 +138,8 @@ sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params&
 
 //: Constructor from a parameter block, gradient magnitudes given as an image and directions given as component image
 //
-sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, 
-                                                 vil_image_view<double> &dir_x, 
+sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp,
+                                                 vil_image_view<double> &dir_x,
                                                  vil_image_view<double> &dir_y,
                                                  vil_image_view<double> &grad_mag)
   : sdet_nonmax_suppression_params(nsp)
@@ -435,12 +433,13 @@ double sdet_nonmax_suppression::subpixel_s(int x, int y, vgl_vector_2d<double> d
       index++;
     }
   }
-//  vnl_matrix<double> A_trans = A.transpose();
-//  vnl_matrix<double> temp = vnl_matrix_inverse<double> (A_trans*A);
-//  vnl_matrix<double> temp2 = temp * A_trans;
-//  P = temp2 * B;
+#if 0
+  vnl_matrix<double> A_trans = A.transpose();
+  P = (vnl_matrix_inverse<double>(A_trans*A) * A_trans) * B;
+#else
   vnl_svd<double> svd(A);
   P = svd.solve(B);
+#endif
   double s_star = -P(1,0)/(2*P(0,0));
   return s_star;
 }
