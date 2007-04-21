@@ -7,7 +7,7 @@
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_inverse.h>
-#include <vnl/algo/vnl_svd.h>
+#include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vgl/algo/vgl_norm_trans_2d.h>
 
 //: Construct a vgl_h_matrix_2d_optimize_lmq object.
@@ -16,6 +16,7 @@ vgl_h_matrix_2d_optimize_lmq(vgl_h_matrix_2d<double> const& initial_h)
   : vgl_h_matrix_2d_optimize(initial_h)
 {
 }
+
 //: optimize the normalized projection problem problem
 bool vgl_h_matrix_2d_optimize_lmq::
 optimize_h(vcl_vector<vgl_homg_point_2d<double> > const& points1,
