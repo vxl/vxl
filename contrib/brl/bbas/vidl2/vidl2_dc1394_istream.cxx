@@ -13,9 +13,6 @@
 #include "vidl2_iidc1394_params.h"
 #include "vidl2_pixel_format.h"
 #include "vidl2_frame.h"
-// not used? #include <vcl_vector.h>
-
-#include <vil/vil_new.h>
 
 #include <dc1394/control.h>
 #include <dc1394/utils.h>

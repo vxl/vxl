@@ -16,7 +16,6 @@
 
 #include <vcl_string.h>
 #include <vcl_iostream.h>
-#include <vil/vil_new.h>
 
 #include <ffmpeg/avcodec.h>
 #include <ffmpeg/avformat.h>
