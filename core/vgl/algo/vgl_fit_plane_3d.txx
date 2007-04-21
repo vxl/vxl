@@ -6,10 +6,8 @@
 
 #include "vgl_fit_plane_3d.h"
 #include <vgl/algo/vgl_norm_trans_3d.h>
-
+#include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_matrix.h>
-#include <vnl/algo/vnl_matrix_inverse.h>
-
 #include <vcl_iostream.h>
 
 template <class T>
@@ -100,10 +98,10 @@ void vgl_fit_plane_3d<T>::add_point(const T x, const T y, const T z)
 
   // null vector gives the solution to the linear equation where b=[0]
   vnl_vector<T> s = svd.nullvector();
- 
+
   // re-transform the points back to the real world
   vnl_matrix_fixed<T,4,4> N=norm.get_matrix();
-  vnl_matrix_fixed<T,4,4> N_transp = N.transpose(); 
+  vnl_matrix_fixed<T,4,4> N_transp = N.transpose();
   s = N_transp * s;
 
   T a, b, c, d;
