@@ -10,19 +10,18 @@
 // projectivities from point and line correspondences.
 //
 // \verbatim
-//  Modifications None
+//  Modifications
 // \endverbatim
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_least_squares_function.h>
-#include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 
 // Note that the least squares function is over-parametrized
-// with 9 parameters rather than the minimum 8. See Hartley and Zisserman
-// p. 94.
+// with 9 parameters rather than the minimum 8.
+// See Hartley and Zisserman p. 94.
 class projection_lsqf : public vnl_least_squares_function
 {
   unsigned n_;
@@ -72,7 +71,7 @@ class projection_lsqf : public vnl_least_squares_function
 class vgl_h_matrix_2d_optimize
 {
  public:
-  vgl_h_matrix_2d_optimize(vgl_h_matrix_2d<double> const& initial_h) 
+  vgl_h_matrix_2d_optimize(vgl_h_matrix_2d<double> const& initial_h)
     : verbose_(false), trace_(false), ftol_(1e-9), gtol_(1e-9),
     htol_(1e-9), max_iter_(2000), initial_h_(initial_h){}
 
@@ -111,7 +110,7 @@ class vgl_h_matrix_2d_optimize
     return optimize_p(points1, points2, H);
   }
 
- //: optimize homography from matched lines
+  //: optimize homography from matched lines
   bool optimize(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
                vcl_vector<vgl_homg_line_2d<double> > const& lines2,
                vgl_h_matrix_2d<double>& H)
