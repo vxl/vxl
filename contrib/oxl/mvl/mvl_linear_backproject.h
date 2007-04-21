@@ -10,7 +10,6 @@
 #include <mvl/HomgPoint3D.h>
 
 #include <vnl/vnl_vector.h>
-#include <vnl/algo/vnl_svd.h>
 
 // Author: Oli Cooper.
 // For details see Hartley & Sturm 'Triangulation'

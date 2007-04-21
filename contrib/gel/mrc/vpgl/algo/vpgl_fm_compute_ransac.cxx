@@ -9,7 +9,6 @@
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
-#include <vnl/algo/vnl_svd.h>
 #include <rrel/rrel_ran_sam_search.h>
 #include <rrel/rrel_muset_obj.h>
 
@@ -42,7 +41,7 @@ vpgl_fm_compute_ransac::compute(
   rrel_ran_sam_search* ransam = new rrel_ran_sam_search;
   ransam->set_trace_level(trace_level_);
 
-  if(!gen_all_)
+  if (!gen_all_)
     ransam->set_sampling_params( max_outlier_frac_,
                                  desired_prob_good_, max_pops_);
   else

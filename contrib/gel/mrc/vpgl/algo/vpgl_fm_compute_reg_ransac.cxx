@@ -8,7 +8,6 @@
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
-#include <vnl/algo/vnl_svd.h>
 #include <rrel/rrel_ran_sam_search.h>
 #include <rrel/rrel_muset_obj.h>
 

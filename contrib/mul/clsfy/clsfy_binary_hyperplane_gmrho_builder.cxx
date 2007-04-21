@@ -9,14 +9,12 @@
 //=======================================================================
 
 #include <vcl_string.h>
-// not used? #include <vcl_iterator.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
 #include <vcl_numeric.h>
-#include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_vector_ref.h>
 #include <vnl/algo/vnl_lbfgs.h>
 

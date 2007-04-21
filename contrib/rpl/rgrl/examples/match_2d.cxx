@@ -13,7 +13,6 @@
 #include <vcl_cstdlib.h> // for exit()
 
 #include <vnl/vnl_double_2.h>
-#include <vnl/algo/vnl_svd.h>
 
 #include <rrel/rrel_muset_obj.h>
 #include <rrel/rrel_m_est_obj.h>

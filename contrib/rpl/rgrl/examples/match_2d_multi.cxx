@@ -7,14 +7,11 @@
 
 #include <vcl_fstream.h>
 #include <vcl_iostream.h>
-// not used? #include <vcl_sstream.h>
-// not used? #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
 #include <vcl_list.h>
 #include <vcl_cstdlib.h> // for exit()
 
 #include <vnl/vnl_double_2.h>
-#include <vnl/algo/vnl_svd.h>
 
 #include <rrel/rrel_muset_obj.h>
 #include <rrel/rrel_m_est_obj.h>

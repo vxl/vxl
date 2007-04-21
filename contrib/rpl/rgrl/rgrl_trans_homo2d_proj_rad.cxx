@@ -3,7 +3,6 @@
 // \file
 #include <vcl_cassert.h>
 
-#include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_transpose.h>
 #include <vnl/vnl_double_2.h>
