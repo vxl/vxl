@@ -6,13 +6,8 @@
 // \file
 
 #include "vidl_frame_resource.h"
-
 #include <vcl_cstring.h>
-// not used? #include <vcl_iostream.h>
-
-#include <vil/vil_stream.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_property.h>
+#include <vil/vil_image_view_base.h>
 
 vidl_frame_resource::vidl_frame_resource(const vidl_codec_sptr& codec, int frame)
  : codec_(codec),

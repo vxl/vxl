@@ -12,7 +12,6 @@
 // \endverbatim
 
 #include <rsdl/rsdl_fwd.h>
-#include <rgrl/rgrl_feature.h>
 #include <rgrl/rgrl_feature_set.h>
 #include <rgrl/rgrl_mask.h>
 

@@ -7,8 +7,6 @@
 
 #include <vcl_fstream.h>
 #include <vcl_iostream.h>
-// not used? #include <vcl_sstream.h>
-// not used? #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
 #include <vcl_cstdlib.h> // for exit()
 

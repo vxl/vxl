@@ -19,7 +19,6 @@
 #include "vil3d_analyze_format.h"
 #include <vcl_cstring.h> // for vcl_strcmp() and vcl_memset()
 #include <vcl_cstdio.h>  // for vcl_sprintf
-#include <vil/vil_stream_read.h>
 #include <vil/vil_stream_fstream.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_new.h>
@@ -108,8 +107,7 @@ bool vil3d_analyze_header::write_file(const vcl_string& path) const
 
   if (key.sizeof_hdr != OptionalSize)
   {
-    vcl_cerr << "vil3d_analyze_header::write_file: "
-             << "Header file is not the correct size.";
+    vcl_cerr << "vil3d_analyze_header::write_file: Header file is not the correct size.";
     return false;
   }
   else
@@ -224,8 +222,7 @@ bool vil3d_analyze_header::read_file(const vcl_string& path)
   if (key.sizeof_hdr != ObligatorySize &&
       key.sizeof_hdr != OptionalSize)
   {
-    vcl_cerr << "vil3d_analyze_header::load: "
-             << "Header file is not the correct size.";
+    vcl_cerr << "vil3d_analyze_header::load: Header file is not the correct size.";
     return false;
   }
   else

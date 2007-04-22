@@ -1,12 +1,8 @@
 #include <vcl_string.h>
-// not used? #include <vcl_vector.h>
 #include <vcl_cstdlib.h>
-// not used? #include <vcl_sstream.h>
-#include <vpl/vpl.h>
 #include <vul/vul_file.h>
 #include <vil/vil_load.h>
 #include <vil/vil_image_resource.h>
-#include <vil/vil_pixel_traits.h>
 #include <vil/vil_new.h>
 
 //assumes that the base image is in the dir and the dir is

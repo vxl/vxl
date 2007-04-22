@@ -2,7 +2,6 @@
 // It also tests vimt3d_reconstruct_from_grid
 
 #include <vcl_iostream.h>
-#include <vpl/vpl.h> // vpl_unlink()
 #include <vnl/vnl_vector.h>
 #include <vimt3d/vimt3d_sample_grid_trilin.h>
 #include <vimt3d/vimt3d_reconstruct_from_grid.h>

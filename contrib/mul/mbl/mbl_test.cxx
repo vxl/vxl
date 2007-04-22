@@ -4,12 +4,10 @@
 // \author iscott
 // \date  Aug 2005
 
-// not used? #include <vcl_sstream.h>
 #include <vcl_string.h>
 #include <vcl_fstream.h>
 #include <vcl_ctime.h>
 #include <vcl_cstdlib.h>
-#include <vpl/vpl.h>
 #include <vul/vul_file.h>
 #include <vul/vul_expand_path.h>
 #include <mbl/mbl_config.h>

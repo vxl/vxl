@@ -12,7 +12,7 @@
 #include <pdf1d/pdf1d_gaussian_kernel_pdf.h>
 #include <pdf1d/pdf1d_gaussian_kernel_pdf_builder.h>
 #include <pdf1d/pdf1d_gaussian.h>
-#include <pdf1d/pdf1d_gaussian_builder.h>
+// not used? #include <pdf1d/pdf1d_gaussian_builder.h>
 
 #ifndef LEAVE_FILES_BEHIND
 #define LEAVE_FILES_BEHIND 0

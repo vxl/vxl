@@ -2,7 +2,6 @@
 #include <testlib/testlib_test.h>
 #include <vxl_config.h>
 #include <vgui/vgui_range_map.h>
-#include <vil/vil_pixel_traits.h>
 #include <vbl/vbl_array_1d.h>
 
 static void test_range_map()

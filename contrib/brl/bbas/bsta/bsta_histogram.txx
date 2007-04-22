@@ -7,7 +7,6 @@
 #include <vcl_cassert.h>
 #include <bsta/bsta_gauss.h>
 #include <bsta/bsta_histogram.h>
-#include <vnl/vnl_numeric_traits.h>
 #define LOG2 1.4426950408889634074 // == 1/vcl_log(2.0)
 
 template <class T>

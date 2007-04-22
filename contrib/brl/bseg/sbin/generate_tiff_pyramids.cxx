@@ -7,7 +7,6 @@
 #include <vul/vul_file_iterator.h>
 #include <vil/vil_load.h>
 #include <vil/vil_image_resource.h>
-#include <vil/vil_pixel_traits.h>
 #include <vil/vil_new.h>
 
 static void filenames_from_directory(vcl_string const& dirname,

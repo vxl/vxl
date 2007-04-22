@@ -19,7 +19,6 @@
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
 #include <vul/vul_file.h>
-#include <vnl/vnl_numeric_traits.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_blocked_image_resource.h>
 #include <vil/vil_pyramid_image_resource.h>
@@ -27,7 +26,6 @@
 #include <vil/vil_save.h>
 #include <vil/vil_new.h>
 #include <vil/vil_property.h>
-#include <vil/algo/vil_sobel_1x3.h>
 #include <bgui/bgui_vsol_soview2D.h>
 #if 0
 #ifdef HAS_XERCES

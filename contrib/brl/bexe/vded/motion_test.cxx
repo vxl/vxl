@@ -7,7 +7,6 @@
 #include <vidl/vidl_movie.h>
 #include <vidl/vidl_clip.h>
 #include <vidl/vidl_io.h>
-#include <vidl/vidl_frame.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_math.h>

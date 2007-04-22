@@ -7,8 +7,6 @@
 
 #include <vcl_iosfwd.h>
 
-#include <vil/algo/vil_region_finder.h>
-
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_edge_sptr.h>

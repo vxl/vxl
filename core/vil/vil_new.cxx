@@ -11,7 +11,6 @@
 
 #include <vcl_cstring.h>
 #include <vcl_cassert.h>
-#include <vil/vil_property.h>
 #include <vil/vil_file_format.h>
 #include <vil/vil_stream_fstream.h>
 #include <vil/vil_image_resource.h>

@@ -13,7 +13,6 @@
 #include <vil/vil_load.h>
 #include <vil/vil_copy.h>
 #include <vil/vil_plane.h>
-#include <vil/vil_stream_read.h>
 #include <vil/vil_stream_fstream.h>
 #include <vil/vil_stream_section.h>
 
@@ -142,12 +141,12 @@ bool vgui_font_textured::load_bmf_font(const vcl_string &font_file)
   char format[3];
   if (stream->read(format, 3) != 3)
   {
-    vcl_cerr << __FILE__ ":couldn't read magic number!" << vcl_endl;
+    vcl_cerr << __FILE__ ":couldn't read magic number!\n";
     return false;
   }
   if (vcl_string(format, 3) != "BMF")
   {
-    vcl_cerr << __FILE__ ":not a BMF file!" << vcl_endl;
+    vcl_cerr << __FILE__ ":not a BMF file!\n";
     return false;
   }
 
@@ -155,7 +154,7 @@ bool vgui_font_textured::load_bmf_font(const vcl_string &font_file)
   char font_name[96];
   if (stream->read(font_name, 96) != 96)
   {
-    vcl_cerr << __FILE__ ":couldn't read font name!" << vcl_endl;
+    vcl_cerr << __FILE__ ":couldn't read font name!\n";
     return false;
   }
 
@@ -176,7 +175,7 @@ bool vgui_font_textured::load_bmf_font(const vcl_string &font_file)
   }
   if (sum != 256*4*4) // 256 symbols * 4 floats * 4 bytes
   {
-    vcl_cerr << __FILE__ ":couldn't read symbol info!" << vcl_endl;
+    vcl_cerr << __FILE__ ":couldn't read symbol info!\n";
     return false;
   }
 

@@ -12,7 +12,6 @@
 #include <vcl_iostream.h>
 #include <vcl_cmath.h> //sin, cos exp
 #include <vul/vul_file.h>
-#include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_blocked_image_resource.h>
@@ -21,7 +20,6 @@
 #include <vil/vil_save.h>
 #include <vil/vil_new.h>
 #include <vil/vil_property.h>
-#include <vil/algo/vil_sobel_1x3.h>
 #if 0
 #ifdef HAS_XERCES
 #include <bxml/bxml_vtol_io.h>

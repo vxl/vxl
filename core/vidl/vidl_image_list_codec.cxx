@@ -9,7 +9,6 @@
 #include <vul/vul_sprintf.h>
 
 #include <vidl/vidl_movie.h>
-#include <vidl/vidl_frame.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>

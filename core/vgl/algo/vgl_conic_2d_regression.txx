@@ -10,7 +10,6 @@
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vgl/vgl_distance.h>
-#include <vgl/algo/vgl_norm_trans_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include "vgl_conic_2d_regression.h"
 

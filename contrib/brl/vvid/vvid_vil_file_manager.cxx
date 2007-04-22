@@ -6,12 +6,10 @@
 
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
-#include <vil1/vil1_image.h>
 #include <vil/vil_image_list.h>
 #include <vil/vil_image_resource.h>
 #include <vidl/vidl_movie.h>
 #include <vidl/vidl_io.h>
-#include <vidl/vidl_frame.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_error_dialog.h>
 #include <vgui/vgui_adaptor.h>

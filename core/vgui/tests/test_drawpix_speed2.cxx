@@ -4,8 +4,6 @@
 #include <vcl_cstring.h>
 #include <vcl_cmath.h>
 
-#include <vpl/vpl.h>
-
 #include <vul/vul_timer.h>
 
 #include <vgui/vgui.h>

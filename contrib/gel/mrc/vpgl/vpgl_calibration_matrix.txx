@@ -7,7 +7,6 @@
 #include "vpgl_calibration_matrix.h"
 
 #include <vgl/io/vgl_io_point_2d.h>
-#include <vgl/xio/vgl_xio_point_2d.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vcl_cassert.h>
 
@@ -133,6 +132,7 @@ operator==(vpgl_calibration_matrix<T> const &that) const
     this->x_scale_ == that.x_scale_ && this->y_scale_ == that.y_scale_ &&
     this->skew_ == that.skew_;
 }
+
 //: Map from image to focal plane. 
 // (Later may need to cache the svd for efficiency)
 template <class T> 
@@ -146,6 +146,7 @@ map_to_focal_plane(vgl_point_2d<T> const& p_image) const
   vnl_vector<T> pf = Kinv*p;
   return vgl_point_2d<T>(pf[0]/pf[2], pf[1]/pf[2]);
 }
+
 template <class T> 
 vgl_point_2d<T> vpgl_calibration_matrix<T>::
 map_to_image(vgl_point_2d<T> const& p_focal_plane) const

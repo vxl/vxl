@@ -8,8 +8,6 @@
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_block_binary.h>
 #include <testlib/testlib_test.h>
-#include <vpl/vpl.h>
-
 
 void free_blocks(vcl_vector<void *> &blocks)
 {
@@ -26,7 +24,7 @@ void test_vlarge_block(void * block, vcl_size_t s, T /*dummy*/)
 
   for (vcl_size_t i=0; i<n; ++i)
     numbers[i] = static_cast<T>(vcl_numeric_limits<T>::max() - i) ;
-  
+
   vsl_b_ofstream bfs_out("vsl_vlarge_block_io_test.bvl.tmp");
   TEST("Created vsl_vlarge_block_io_test.bvl.tmp for writing", (!bfs_out), false);
 #if VCL_HAS_EXCEPTIONS
@@ -49,7 +47,7 @@ void test_vlarge_block(void * block, vcl_size_t s, T /*dummy*/)
   catch(...) { TEST ("vsl_block_binary_read didn't throw exception", true, false); }
 #else
   vsl_block_binary_read(bfs_in, numbers, n);
-#endif 
+#endif
   vsl_b_read(bfs_in, sentinel);
   TEST("sentinel matched", sentinel, 0xdeadbeefu);
   TEST("Stream still ok", (!bfs_in), false);
@@ -90,7 +88,6 @@ void test_vlarge_block_io()
       vcl_cout << "ERROR: Unable to allocate any memory" << vcl_endl;
       vcl_exit(3);
     }
-
   }
 
   vcl_cout << "Succeeded allocating " <<(s+1)/(1024*1024)<<"MiB" << vcl_endl;
@@ -102,9 +99,9 @@ void test_vlarge_block_io()
   s *= 1024;
   unsigned max_blocks = vcl_min<vcl_size_t>(1024*1024,
     vcl_numeric_limits<vcl_size_t>::max() / (s/2) );
-  
-  vcl_cout << "Try to allocate up to " << max_blocks << " blocks of " <<
-    s/1024<<"KiB" << vcl_endl;
+
+  vcl_cout << "Try to allocate up to " << max_blocks << " blocks of "
+           << s/1024 << "KiB" << vcl_endl;
   vcl_vector<void *> blocks;
   blocks.reserve(max_blocks+2);
   while (true)
@@ -112,8 +109,8 @@ void test_vlarge_block_io()
     if (blocks.size() >= max_blocks+1)
     {
       vcl_cout << "ERROR: Unable to force out of memory, after allocating\n"
-        "         " << blocks.size() << " blocks of " << 
-        s/1024<<"KiB" << vcl_endl;
+               << "         " << blocks.size() << " blocks of "
+               << s/1024<<"KiB" << vcl_endl;
       free_blocks(blocks);
       vcl_exit(3);
     }
@@ -126,8 +123,8 @@ void test_vlarge_block_io()
     blocks.push_back(block);
   }
 
-  vcl_cout << "Run out of memory after allocating " << blocks.size() <<
-    " blocks of " << s/1024 << " KiB" << vcl_endl; 
+  vcl_cout << "Run out of memory after allocating " << blocks.size()
+           << " blocks of " << s/1024 << " KiB" << vcl_endl;
   if (blocks.empty())
   {
     vcl_cout << "ERROR: Unable to use chosen block size" << vcl_endl;

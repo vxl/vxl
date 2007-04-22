@@ -10,7 +10,6 @@
 #include <vil/vil_save.h>
 #include <vil/vil_math.h>
 #include <vil/vil_new.h>
-#include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vgl/algo/vgl_p_matrix.h>

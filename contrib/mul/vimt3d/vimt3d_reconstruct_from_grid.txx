@@ -4,7 +4,6 @@
 //:
 // \file
 #include "vimt3d_reconstruct_from_grid.h"
-#include <vimt3d/vimt3d_trilin_interp.h>
 #include <vnl/vnl_vector.h>
 
 //: True if p clearly inside the image

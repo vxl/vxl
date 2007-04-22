@@ -15,7 +15,6 @@
 #include <vil/vil_save.h>
 #include <vxl_config.h>
 #include <vidl/vidl_io.h>
-#include <vidl/vidl_frame.h>
 #include <vidl/vidl_movie.h>
 
 // windows does not seem to get the -DHAS_MPEG2 option from CMake

@@ -12,9 +12,7 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 
-#include <vil/vil_stream.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_property.h>
 
 
 vidl2_istream_image_resource::

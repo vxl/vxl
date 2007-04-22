@@ -4,7 +4,6 @@
 #include <vcl_string.h>
 #include <vil/vil_new.h>
 #include <vil/vil_load.h>
-#include <vil/vil_property.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vil/vil_image_view.h>
 #include <vil/vil_pyramid_image_resource.h>

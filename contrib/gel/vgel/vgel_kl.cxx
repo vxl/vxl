@@ -13,7 +13,6 @@
 #include <vtol/vtol_vertex_2d.h>
 #include <vidl_vil1/vidl_vil1_frame.h>
 #include <vidl_vil1/vidl_vil1_movie.h>
-#include <vidl/vidl_frame.h>
 #include <vidl/vidl_movie.h>
 
 #include <vcl_deprecated.h>

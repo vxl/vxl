@@ -3,7 +3,6 @@
 #include <vcl_fstream.h>
 #include <vul/vul_arg.h>
 #include <vidl/vidl_io.h>
-#include <vidl/vidl_frame.h>
 #include <vidl/vidl_movie.h>
 
 //--------------------------------------------------------------------
@@ -22,17 +21,16 @@
 
 int main(int argc, char** argv)
 {
-
   vul_arg<vcl_string> video_file("-video-file", "input video file");
   vul_arg<vcl_string> xml_file("-xml-file", "video description file");
 
   vul_arg_parse(argc, argv);
   vidl_movie_sptr my_movie = vidl_io::load_movie(video_file().c_str());
   if (!my_movie)
-    {
-      vcl_cout << "Failed to load movie\n";
-      return -1;
-    }
+  {
+    vcl_cout << "Failed to load movie\n";
+    return -1;
+  }
 
   vcl_ofstream* s = new vcl_ofstream(xml_file().c_str());
 

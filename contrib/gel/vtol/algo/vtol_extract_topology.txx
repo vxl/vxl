@@ -5,8 +5,6 @@
 #include <vcl_iosfwd.h>
 #include <vcl_cassert.h>
 
-#include <vil/algo/vil_region_finder.h>
-
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/algo/vgl_line_2d_regression.h>

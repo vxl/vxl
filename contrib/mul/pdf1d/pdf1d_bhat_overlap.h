@@ -6,7 +6,7 @@
 // \brief Functions to calculate Bhattacharyya overlap.
 
 #include <pdf1d/pdf1d_pdf.h>
-#include <pdf1d/pdf1d_gaussian.h>
+// not used? #include <pdf1d/pdf1d_gaussian.h>
 
 //: Estimate Bhattacharyya overlap between two pdfs
 //  If use_analytic is true and an analytic form exists, it will be used.

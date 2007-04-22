@@ -2,7 +2,6 @@
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
-#include <vil/vil_property.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>

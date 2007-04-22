@@ -8,7 +8,6 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vgl/vgl_fwd.h>
 #include <vnl/vnl_cross_product_matrix.h>
-#include <vnl/algo/vnl_matrix_inverse.h>
 #include <vnl/io/vnl_io_matrix_fixed.h>
 #include <vcl_iosfwd.h>
 #include <vcl_cassert.h>
