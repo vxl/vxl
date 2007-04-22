@@ -17,8 +17,7 @@
 
 #include "vidl2_frame_sptr.h"
 #include "vidl2_frame.h"
-#include <vil/vil_image_view.h>
-
+#include <vil/vil_image_view_base.h>
 
 
 //: Convert the frame into an image view

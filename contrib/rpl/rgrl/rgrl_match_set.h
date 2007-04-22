@@ -8,7 +8,7 @@
 
 #include <vcl_vector.h>
 
-#include <rgrl/rgrl_feature.h>
+#include <rgrl/rgrl_feature_sptr.h>
 #include <rgrl/rgrl_feature_set.h>
 #include <rgrl/rgrl_object.h>
 #include <rgrl/rgrl_match_set_sptr.h>
@@ -65,19 +65,19 @@ class rgrl_match_set
   //: type of from features
   const vcl_type_info&
   from_type() const { return *from_type_; }
-  
+
   //: type of from features
   const vcl_type_info&
   to_type() const { return *to_type_; }
 
   //: label of from features
   const rgrl_feature_set_label&
-  from_label() const 
+  from_label() const
   { return from_label_; }
-  
+
   //: label of from features
   const rgrl_feature_set_label&
-  to_label() const 
+  to_label() const
   { return to_label_; }
 
   //: The number of "from" features.
@@ -99,10 +99,10 @@ class rgrl_match_set
 
   //: write out a match set
   void write_sorted( vcl_ostream& os ) const;
-  
+
   //: read in a match set
   bool read( vcl_istream& is );
-  
+
   //: Add from feature, the transformed feature, and its matching "to" features.
   //
   void add_feature_and_matches( rgrl_feature_sptr                      from_feature,
@@ -145,8 +145,8 @@ class rgrl_match_set
 
   //: Update only the location of the cached mapped_from_feature using \a trans.
   //
-  // This will remap the location of each from_feature using 
-  // \a trans and store the result in the already existing 
+  // This will remap the location of each from_feature using
+  // \a trans and store the result in the already existing
   // \a mapped_from_feature.
   //
   void
@@ -214,7 +214,7 @@ class rgrl_match_set
   const vcl_type_info* to_type_;
   rgrl_feature_set_label from_label_;
   rgrl_feature_set_label to_label_;
-  
+
   mutable unsigned int num_constraints_per_match_;
   vcl_vector< rgrl_feature_sptr > from_features_;
   vcl_vector< rgrl_feature_sptr > xformed_from_features_;
@@ -222,11 +222,11 @@ class rgrl_match_set
 };
 
 //: stream output
-vcl_ostream& 
+vcl_ostream&
 operator<< ( vcl_ostream& os, rgrl_match_set const& set );
 
 //: stream input
-vcl_istream& 
+vcl_istream&
 operator>> ( vcl_istream& is, rgrl_match_set& set );
 
 class rgrl_match_set_from_iterator
@@ -270,7 +270,7 @@ class rgrl_match_set_from_iterator
  private:
   friend class rgrl_match_set;
   friend class rgrl_match_set_const_from_iterator;
-  
+
   // For use by rgrl_match_set
   rgrl_match_set_from_iterator( rgrl_match_set* ms,
                                 vcl_vector< rgrl_feature_sptr >::size_type ind );
@@ -297,7 +297,7 @@ class rgrl_match_set_const_from_iterator
   //: copy constructor
   //  it is used to convert a from_iterator into const type
   rgrl_match_set_const_from_iterator( rgrl_match_set_from_iterator const& from_iter );
-  
+
   rgrl_match_set_const_from_iterator& operator++();
   rgrl_match_set_const_from_iterator operator++( int );
   rgrl_match_set_const_from_iterator& operator+( int );
@@ -376,7 +376,7 @@ class rgrl_match_set_from_to_iterator
 
   friend class rgrl_match_set_from_iterator;
   friend class rgrl_match_set_const_from_to_iterator;
-  
+
   typedef rgrl_match_set::match_info match_info;
   typedef vcl_vector< match_info >::iterator MatchInfoIter;
   // for use by rgrl_match_set_from_iterator
@@ -400,7 +400,7 @@ class rgrl_match_set_const_from_to_iterator
   //: copy constructor
   //  it is used to convert from_to_iterator to const type
   rgrl_match_set_const_from_to_iterator( rgrl_match_set_from_to_iterator const& to_iter );
-  
+
   //:
   self_type& operator++();
   self_type& operator+(int RHS);

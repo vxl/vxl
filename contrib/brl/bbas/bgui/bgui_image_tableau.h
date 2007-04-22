@@ -19,7 +19,7 @@
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_range_map_params_sptr.h>
 #include <vil/vil_image_resource.h>
-#include <vil/vil_image_view.h>
+#include <vil/vil_image_view_base.h>
 #include <vil1/vil1_image.h>
 
 class bgui_image_tableau : public vgui_image_tableau

@@ -15,7 +15,7 @@
 #include <vgui/vgui_image_tableau.h>
 
 #include <vidl/vidl_io.h>
-#include <vidl/vidl_frame.h>
+#include <vidl/vidl_movie.h>
 
 //static manager instance
 vidl_player_manager *vidl_player_manager::instance_ = 0;

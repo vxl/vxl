@@ -12,7 +12,7 @@
 #include <vcl_iostream.h>
 #include <vcl_queue.h>
 #include <vcl_vector.h>
-#include <vil/vil_image_view.h>
+#include <vil/vil_image_view_base.h>
 
 //container for blocks to maintain a timestamp and mutation state
 struct bcell

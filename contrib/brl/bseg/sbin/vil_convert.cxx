@@ -7,9 +7,8 @@
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_image_resource.h>
-#include <vil/vil_pixel_traits.h>
 #include <vil/vil_new.h>
-#include <vil/vil_image_view.h>
+#include <vil/vil_image_view_base.h>
 
 static void filenames_from_directory(vcl_string const& dirname,
                                      vcl_vector<vcl_string>& filenames)
