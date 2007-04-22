@@ -14,9 +14,10 @@
 #include <vul/vul_file.h>
 #include <vul/vul_sprintf.h>
 #include <vil/vil_file_format.h>
+#include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 
 //: Constructor
@@ -123,9 +124,9 @@ write_frame(const vidl2_frame_sptr& frame)
   ++index_;
   // FIXME this does not account for all data types
   vil_image_view<vxl_byte> image;
-  if(!frame)
+  if (!frame)
     return false;
-  if(!vidl2_convert_to_view(*frame, image, VIDL2_PIXEL_COLOR_RGB))
+  if (!vidl2_convert_to_view(*frame, image, VIDL2_PIXEL_COLOR_RGB))
     return false;
 
   return vil_save(image,
