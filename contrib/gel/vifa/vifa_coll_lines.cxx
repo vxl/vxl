@@ -1,10 +1,9 @@
 // This is gel/vifa/vifa_coll_lines.cxx
+#include "vifa_coll_lines.h"
 #include <vcl_cmath.h>
 #include <vnl/vnl_math.h>
 #include <vsol/vsol_point_2d.h>
 #include <vtol/vtol_face.h>
-#include <vifa/vifa_coll_lines.h>
-
 
 // Static initialization
 int  vifa_coll_lines::serial_num_ = 0;
@@ -14,10 +13,10 @@ vifa_coll_lines::vifa_coll_lines(vtol_edge_2d_sptr  e,
                                  double             endpt_distance,
                                  bool               discard_flag)
 {
-  const vgl_point_2d<double>&  p1 = e->curve()->p0()->get_p();
-  const vgl_point_2d<double>&  p2 = e->curve()->p1()->get_p();
+  vsol_point_2d_sptr p1 = e->curve()->p0();
+  vsol_point_2d_sptr p2 = e->curve()->p1();
 
-  hypothesized_line_ = new imp_line(p1, p2);
+  hypothesized_line_ = new imp_line(p1->get_p(), p2->get_p());
   contributors_.push_back(e);
   projected_length_cutoff_ = vcl_cos(cutoff_angle_deg * vnl_math::pi / 180.0);
   endpt_distance_ = endpt_distance;
@@ -154,18 +153,18 @@ double vifa_coll_lines::spanning_length(vgl_point_2d<double>&  p1,
   for (edge_2d_iterator e = contributors_.begin();
        e != contributors_.end(); ++e)
   {
-    const vgl_point_2d<double>&  v1 = (*e)->curve()->p0()->get_p();
-    const vgl_point_2d<double>&  v2 = (*e)->curve()->p1()->get_p();
+    vsol_point_2d_sptr v1 = (*e)->curve()->p0();
+    vsol_point_2d_sptr v2 = (*e)->curve()->p1();
 
     for (int i = 0; i < 2; i++)
     {
-      const vgl_point_2d<double>&  v = (i == 0) ? v1: v2;
+      vsol_point_2d_sptr v = (i == 0) ? v1 : v2;
       double            x;
       double            y;
 
-      hypothesized_line_->project_2d_pt(v.x(), v.y(), x, y);
+      hypothesized_line_->project_2d_pt(v->x(), v->y(), x, y);
 
-      //vcl_cout << "    ---> " << v.x() << ", " << v.y() <<
+      //vcl_cout << "    ---> " << v->x() << ", " << v->y() <<
       //  " projects to " << x << ", " << y << vcl_endl;
 
       double  d = vcl_sqrt((x * x) + (y * y));
@@ -184,18 +183,18 @@ double vifa_coll_lines::spanning_length(vgl_point_2d<double>&  p1,
   for (edge_2d_iterator e = contributors_.begin();
        e != contributors_.end(); ++e)
   {
-    const vgl_point_2d<double>&  v1 = (*e)->curve()->p0()->get_p();
-    const vgl_point_2d<double>&  v2 = (*e)->curve()->p1()->get_p();
+    vsol_point_2d_sptr v1 = (*e)->curve()->p0();
+    vsol_point_2d_sptr v2 = (*e)->curve()->p1();
 
     for (int i = 0; i < 2; i++)
     {
-      const vgl_point_2d<double>&  v = (i == 0) ? v1: v2;
+      vsol_point_2d_sptr v = (i == 0) ? v1 : v2;
       double            x;
       double            y;
 
-      hypothesized_line_->project_2d_pt(v.x(), v.y(), x, y);
+      hypothesized_line_->project_2d_pt(v->x(), v->y(), x, y);
 
-      //vcl_cout << "    ---> " << v.x() << ", " << v.y() <<
+      //vcl_cout << "    ---> " << v->x() << ", " << v->y() <<
       //  " projects to " << x << ", " << y << vcl_endl;
 
       double  dx = x - max_x;
@@ -256,26 +255,26 @@ double vifa_coll_lines::get_projected_length(const vtol_edge_2d&  e,
                                              double&              v1_dist,
                                              double&              v2_dist)
 {
-  const vgl_point_2d<double>&  v1 = e.curve()->p0()->get_p();
-  const vgl_point_2d<double>&  v2 = e.curve()->p1()->get_p();
+  vsol_point_2d_sptr v1 = e.curve()->p0();
+  vsol_point_2d_sptr v2 = e.curve()->p1();
   double            x1;
   double            y1;
   double            x2;
   double            y2;
 
-  hyp_line.project_2d_pt(v1.x(), v1.y(), x1, y1);
-  hyp_line.project_2d_pt(v2.x(), v2.y(), x2, y2);
+  hyp_line.project_2d_pt(v1->x(), v1->y(), x1, y1);
+  hyp_line.project_2d_pt(v2->x(), v2->y(), x2, y2);
 
   double  dx = x2 - x1;
   double  dy = y2 - y1;
   double  midpt_dist = vcl_sqrt((dx * dx) + (dy * dy));
 
-  dx = x1 - v1.x();
-  dy = y1 - v1.y();
+  dx = x1 - v1->x();
+  dy = y1 - v1->y();
   v1_dist = vcl_sqrt((dx * dx) + (dy * dy));
 
-  dx = x2 - v2.x();
-  dy = y2 - v2.y();
+  dx = x2 - v2->x();
+  dy = y2 - v2->y();
   v2_dist = vcl_sqrt((dx * dx) + (dy * dy));
 
   return midpt_dist;
@@ -284,10 +283,10 @@ double vifa_coll_lines::get_projected_length(const vtol_edge_2d&  e,
 double vifa_coll_lines::get_midpt_dist(const vtol_edge_2d&  e,
                                        const imp_line&      hyp_line)
 {
-  const vgl_point_2d<double>&  v1 = e.curve()->p0()->get_p();
-  const vgl_point_2d<double>&  v2 = e.curve()->p1()->get_p();
-  double            midx = (v1.x() + v2.x()) / 2;
-  double            midy = (v1.y() + v2.y()) / 2;
+  vsol_point_2d_sptr v1 = e.curve()->p0();
+  vsol_point_2d_sptr v2 = e.curve()->p1();
+  double            midx = (v1->x() + v2->x()) / 2;
+  double            midy = (v1->y() + v2->y()) / 2;
   double            mx;
   double            my;
 
@@ -333,13 +332,13 @@ void vifa_coll_lines::fit_line(void)
   for (edge_2d_iterator e = contributors_.begin();
       e != contributors_.end(); ++e)
   {
-    const vgl_point_2d<double>&  v1 = (*e)->curve()->p0()->get_p();
-    const vgl_point_2d<double>&  v2 = (*e)->curve()->p1()->get_p();
+    vsol_point_2d_sptr v1 = (*e)->curve()->p0();
+    vsol_point_2d_sptr v2 = (*e)->curve()->p1();
 
-    x.push_back(v1.x());
-    x.push_back(v2.x());
-    y.push_back(v1.y());
-    y.push_back(v2.y());
+    x.push_back(v1->x());
+    x.push_back(v2->x());
+    y.push_back(v1->y());
+    y.push_back(v2->y());
   }
 
   vifa_coll_lines::lms_fit(x, y, A, B, C);
