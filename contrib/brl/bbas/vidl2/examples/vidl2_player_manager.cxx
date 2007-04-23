@@ -13,7 +13,7 @@
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_image_tableau.h>
-
+#include <vil/vil_image_view.h>
 
 #include <vidl2/vidl2_frame.h>
 #include <vidl2/vidl2_convert.h>
@@ -94,7 +94,7 @@ void vidl2_player_manager::quit()
 void vidl2_player_manager::open_istream()
 {
   vidl2_istream* try_open = vidl2_gui_open_istream_dialog();
-  if(!try_open)
+  if (!try_open)
     return;
 
   delete istream_;
@@ -113,7 +113,6 @@ void vidl2_player_manager::open_istream()
       this->redraw();
     }
   }
-
 }
 
 
@@ -135,7 +134,7 @@ void vidl2_player_manager::close_istream()
 void vidl2_player_manager::open_ostream()
 {
   vidl2_ostream* try_open = vidl2_gui_open_ostream_dialog();
-  if(!try_open)
+  if (!try_open)
     return;
 
   delete ostream_;
@@ -206,7 +205,7 @@ void vidl2_player_manager::redraw()
 
     static vil_image_view<vxl_byte> img;
     vidl2_frame_sptr frame = istream_->current_frame();
-    if(frame && vidl2_convert_to_view(*frame,img,VIDL2_PIXEL_COLOR_RGB))
+    if (frame && vidl2_convert_to_view(*frame,img,VIDL2_PIXEL_COLOR_RGB))
       itab_->set_image_view(img);
     else
       itab_->set_image_resource(NULL);
