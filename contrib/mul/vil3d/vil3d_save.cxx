@@ -112,3 +112,57 @@ bool vil3d_save_image_resource(const vil3d_image_resource_sptr &ir, char const* 
 {
   return vil3d_save_image_resource(ir, filename, vil3d_save_guess_file_format(filename));
 }
+
+//: Send a vil3d_image_view to disk, deducing format from filename
+//  Utility function, allowing definition of voxel widths in header info.
+// \relates vil3d_image_view
+bool vil3d_save(const vil3d_image_view_base & im, 
+                float voxel_width_i,
+                float voxel_width_j,
+                float voxel_width_k,
+                char const* filename)
+{
+  char const* file_format=vil3d_save_guess_file_format(filename);
+  vil3d_image_resource_sptr out =
+    vil3d_new_image_resource(filename, im.ni(), im.nj(), im.nk(),
+                             im.nplanes() * vil_pixel_format_num_components(im.pixel_format()),
+                             im.pixel_format(), file_format);
+  if (!out) {
+    vcl_cerr << __FILE__ ": (vil3d_save) Cannot save to type [" << file_format << "]\n";
+    return false;
+  }
+
+  if (!out->set_voxel_size(voxel_width_i,voxel_width_j,voxel_width_k))
+  {
+    vcl_cerr << __FILE__ ": (vil3d_save) Cannot save voxel sizes."<<vcl_endl;
+    return false;
+  }
+
+  // Use smart copy constructor to convert multi-component images
+  // into multi-plane ones.
+  switch (vil_pixel_format_component_format(im.pixel_format()))
+  {
+  case VIL_PIXEL_FORMAT_BYTE:
+    return out->put_view(vil3d_image_view<vxl_byte>(im),0,0,0);
+  case VIL_PIXEL_FORMAT_UINT_16:
+    return out->put_view(vil3d_image_view<vxl_uint_16>(im),0,0,0);
+  case VIL_PIXEL_FORMAT_INT_16:
+    return out->put_view(vil3d_image_view<vxl_int_16>(im),0,0,0);
+  case VIL_PIXEL_FORMAT_UINT_32:
+    return out->put_view(vil3d_image_view<vxl_uint_32>(im),0,0,0);
+  case VIL_PIXEL_FORMAT_INT_32:
+    return out->put_view(vil3d_image_view<vxl_int_32>(im),0,0,0);
+  case VIL_PIXEL_FORMAT_FLOAT:
+    return out->put_view(vil3d_image_view<float>(im),0,0,0);
+  case VIL_PIXEL_FORMAT_BOOL:
+    return out->put_view(vil3d_image_view<bool>(im),0,0,0);
+  case VIL_PIXEL_FORMAT_SBYTE:
+    return out->put_view(vil3d_image_view<vxl_sbyte>(im),0,0,0);
+  case VIL_PIXEL_FORMAT_DOUBLE:
+    return out->put_view(vil3d_image_view<double>(im),0,0,0);
+  default:
+    // In case any one has an odd pixel format that actually works with this file_format.
+    return out->put_view(im, 0, 0, 0);
+  }
+}
+
