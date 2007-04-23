@@ -44,7 +44,7 @@ class vsol_box_2d : public vsol_box, public vbl_ref_count, public vul_timestamp
   ~vsol_box_2d() {}
 
   // accessors
-
+  bool empty() const { return box_.empty(); }
   double get_min_x() const;
   double get_max_x() const;
 
