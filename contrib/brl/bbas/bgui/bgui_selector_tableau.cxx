@@ -419,7 +419,7 @@ void bgui_selector_tableau::get_popup(const vgui_popup_params& params,
   submenu.add("Toggle Visible", visible_menu);
   submenu.add("Select Active", active_menu);
   submenu.add("Position Active", position_menu);
-
+  add_to_menu(submenu);
   if (params.nested)
   {
     // nested menu style

@@ -11,6 +11,7 @@
 #include <vgui/vgui_gl.h>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_rgba.h>
+#include <vil/vil_image_view.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_projection_inspector.h>
 

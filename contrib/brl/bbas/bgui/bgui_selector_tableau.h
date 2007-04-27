@@ -104,6 +104,9 @@ class bgui_selector_tableau : public vgui_tableau
   //: Returns a vector containing the names of all children (in rendering order)
   const vcl_vector<vcl_string>& child_names() const { return render_order_; }
 
+  //: for subclasses to add additional menus
+  virtual void add_to_menu(vgui_menu& ){}
+
  protected:
   //: Destructor - called by bgui_selector_tableau_sptr.
   virtual ~bgui_selector_tableau();
