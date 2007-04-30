@@ -81,12 +81,6 @@ class vgl_rotation_3d
     return q_.axis()*q_.angle();
   }
 
-  //: Output vgl_h_matrix_3d.
-  vgl_h_matrix_3d<T> as_h_matrix() const
-  {
-    return vgl_h_matrix_3d<T>(this->as_4matrix());
-  }
-
   //: Output the matrix representation of this rotation in 3x3 form.
   vnl_matrix_fixed<T,3,3> as_matrix() const
   {
