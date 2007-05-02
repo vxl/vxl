@@ -244,3 +244,8 @@ double fhs_searcher::best_points(vcl_vector<vgl_point_2d<double> >& pts) const
   return sum_im_[root_node()].image()(p_im.x(),p_im.y());
 }
 
+//: Return final total cost image for root
+const vimt_image_2d_of<float>& fhs_searcher::root_cost_image() const
+{
+  return sum_im_[root_node()];
+}

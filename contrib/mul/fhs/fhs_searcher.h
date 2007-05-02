@@ -85,6 +85,9 @@ public:
   //  Assumes search() has been called first
   //  Returns cost at optimal position
   double best_points(vcl_vector<vgl_point_2d<double> >& pts) const;
+
+  //: Return final total cost image for root
+  const vimt_image_2d_of<float>& root_cost_image() const;
 };
 
 #endif // fhs_searcher_h_
