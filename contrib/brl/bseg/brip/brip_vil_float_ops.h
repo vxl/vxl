@@ -306,6 +306,10 @@ class brip_vil_float_ops
                    brip_roi_sptr const& roi,
                    vil_image_resource_sptr & chip);
 
+  //: compute the average of the image intensity within the specified region
+  static float average_in_box(vil_image_view<float> const& v,
+                              vgl_box_2d<double> const& box);
+
   //: cross-correlate two images at a given sub-pixel location
   static float cross_correlate(vil_image_view<float> const& image1,
                                vil_image_view<float> const& image2,
@@ -461,6 +465,7 @@ static void double_resolution_1d(const float* input, const unsigned n_input,
                        vil_image_view<float> const& S,
                        vil_image_view<vil_rgb<vxl_byte> >& image);
 #endif // 0
+
 
   //: Default constructor is private
   brip_vil_float_ops() {}

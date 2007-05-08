@@ -4,6 +4,8 @@
 
 #include <vcl_fstream.h>
 #include <vcl_complex.h>
+#include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_point_2d.h>
 #include <vul/vul_timer.h>
 #include <vbl/vbl_array_1d.h>
 #include <vbl/vbl_bounding_box.h>
@@ -3106,6 +3108,23 @@ bool brip_vil_float_ops::minfo(const unsigned i_radius,
   }
     return true;
 }
+//compute the average of the image intensity within the specified region
+float brip_vil_float_ops::
+average_in_box(vil_image_view<float> const& v, vgl_box_2d<double> const&  box)
+{
+  vgl_point_2d<double> p0 = box.min_point();
+  unsigned i0 = static_cast<unsigned>(p0.x()), j0 = static_cast<unsigned>(p0.y());
+  vgl_point_2d<double> p1 = box.max_point();
+  unsigned i1 = static_cast<unsigned>(p1.x()), j1 = static_cast<unsigned>(p1.y());
+  float n = 0;
+  float sum = 0;
+  for(unsigned i = i0; i<=i1; ++i)
+    for(unsigned j = j0; j<=j1; ++j, ++n)
+      sum += v(i,j);
+  if(n>0)
+    sum /= n;
+  return sum;
+}
 
 #if 0 //For now remove dependency on vimt. Save for illustration
 bool brip_vil_float_ops::vimt_homography(vil_image_view<float> const& curr_view,
@@ -3149,4 +3168,5 @@ bool brip_vil_float_ops::vimt_homography(vil_image_view<float> const& curr_view,
   output = sample_im.image();
   return true;
 }
+
 #endif // 0
