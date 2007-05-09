@@ -275,27 +275,42 @@ ENDIF (GLUT_FOUND)
 IF (QT_FOUND)
 
   OPTION(VGUI_USE_QT "Should Qt support be compiled into vgui?" YES)
-
+  IF(QT3_INSTALLED AND QT4_INSTALLED)
+	OPTION(VGUI_USE_QT4 "Specify QT version" YES)	
+  else(QT3_INSTALLED AND QT4_INSTALLED)
+	 if(QT4_INSTALLED)
+		  SET(VGUI_USE_QT4 YES)
+	 else(QT4_INSTALLED)
+		 SET(VGUI_USE_QT4 NO)
+	endif(QT4_INSTALLED)
+  endif(QT3_INSTALLED AND QT4_INSTALLED)
   IF(VGUI_USE_QT)
-
-    INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR})
-    ADD_DEFINITIONS(${QT_DEFINITIONS})
+    IF(QT4_INSTALLED AND VGUI_USE_QT4)
+	INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR} ${QT_QT_INCLUDE_DIR} ${QT_QTGUI_INCLUDE_DIR} ${QT_QTCORE_INCLUDE_DIR} 
+		            ${QT_QT3SUPPORT_INCLUDE_DIR} ${QT_QTOPENGL_INCLUDE_DIR})
+        ADD_DEFINITIONS(-DQT3_SUPPORT ${QT_DEFINITIONS} ${QT_USE_QT3SUPPORT} ${QT_USE_QTOPENGL}) 
+	SET(QT_SRCS_DIR impl/qt4)
+    ELSE(QT4_INSTALLED AND VGUI_USE_QT4)
+	INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR})
+	ADD_DEFINITIONS(${QT_DEFINITIONS})
+	SET(QT_SRCS_DIR impl/qt)
+    ENDIF(QT4_INSTALLED AND VGUI_USE_QT4)
 
     SET(vgui_qt_sources
-      impl/qt/vgui_qt.cxx             impl/qt/vgui_qt.h
-      impl/qt/vgui_qt_tag.cxx
-      impl/qt/vgui_qt_window.cxx      impl/qt/vgui_qt_window.h
-      impl/qt/vgui_qt_adaptor.cxx     impl/qt/vgui_qt_adaptor.h
-      impl/qt/vgui_qt_statusbar.cxx   impl/qt/vgui_qt_statusbar.h
-      impl/qt/vgui_qt_dialog_impl.cxx impl/qt/vgui_qt_dialog_impl.h
-      impl/qt/vgui_qt_menu.cxx        impl/qt/vgui_qt_menu.h
+      ${QT_SRCS_DIR}/vgui_qt.cxx             ${QT_SRCS_DIR}/vgui_qt.h
+      ${QT_SRCS_DIR}/vgui_qt_tag.cxx
+      ${QT_SRCS_DIR}/vgui_qt_window.cxx      ${QT_SRCS_DIR}/vgui_qt_window.h
+      ${QT_SRCS_DIR}/vgui_qt_adaptor.cxx     ${QT_SRCS_DIR}/vgui_qt_adaptor.h
+      ${QT_SRCS_DIR}/vgui_qt_statusbar.cxx   ${QT_SRCS_DIR}/vgui_qt_statusbar.h
+      ${QT_SRCS_DIR}/vgui_qt_dialog_impl.cxx ${QT_SRCS_DIR}/vgui_qt_dialog_impl.h
+      ${QT_SRCS_DIR}/vgui_qt_menu.cxx        ${QT_SRCS_DIR}/vgui_qt_menu.h
     )
 
     QT_WRAP_CPP(vgui vgui_qt_moc_files
-      impl/qt/vgui_qt_adaptor.h
-      impl/qt/vgui_qt_dialog_impl.h
-      impl/qt/vgui_qt_menu.h
-      impl/qt/vgui_qt_statusbar.h
+      ${QT_SRCS_DIR}/vgui_qt_adaptor.h
+      ${QT_SRCS_DIR}/vgui_qt_dialog_impl.h
+      ${QT_SRCS_DIR}/vgui_qt_menu.h
+      ${QT_SRCS_DIR}/vgui_qt_statusbar.h
     )
 
     SET( vgui_sources ${vgui_sources} ${vgui_qt_sources} ${vgui_qt_moc_files} )
@@ -469,7 +484,11 @@ TARGET_LINK_LIBRARIES(vgui vnl vil1 vil vgl vpl vbl vul)
 # Dependencies created by the toolkit implementations
 
 IF (VGUI_USE_QT)
-  TARGET_LINK_LIBRARIES(vgui ${QT_LIBRARIES})
+	IF(QT4_INSTALLED AND VGUI_USE_QT4)
+		TARGET_LINK_LIBRARIES(vgui ${QT_QT3SUPPORT_LIBRARY} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTOPENGL_LIBRARY})
+	ELSE(QT4_INSTALLED AND VGUI_USE_QT4)
+		  TARGET_LINK_LIBRARIES(vgui ${QT_LIBRARIES})
+	ENDIF(QT4_INSTALLED AND VGUI_USE_QT4)
 ENDIF (VGUI_USE_QT)
 IF (VGUI_USE_GTK)
   TARGET_LINK_LIBRARIES(vgui ${GTK_LIBRARIES})
