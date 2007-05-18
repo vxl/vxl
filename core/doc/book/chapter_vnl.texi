@@ -437,7 +437,8 @@ into matrix @code{pts}, and a hyperplane fitted using two different methods.
 It is often the case that large linear systems have a sparse
 coefficient matrix, where many of the elements are zero. An algorithm
 for solving such systems is @code{vnl_sparse_lu} based on the c library, Sparse
-1.3a, by Kenneth S. Kundert and Alberto Sangiovanni-Vincentelli. The algorithm solves the linear problem,
+1.3a, by Kenneth S. Kundert and Alberto Sangiovanni-Vincentelli.
+The algorithm solves the linear problem
 @example
 Ax = b
 @end example
@@ -878,7 +879,7 @@ Work the constraints into your cost function, heavily penalising any
 breach in the constraints.
 @item
 Find a mapping T :[your constrained space]->R^n
- and use f(T^-1(x)) as your const function instead of f.
+ and use f(T^-1(x)) as your cost function instead of f.
 @item
 If problem has linear constrains and a simple cost function
 (linear or quadratic) then there is code out there for your problem,
