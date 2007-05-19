@@ -68,6 +68,9 @@ class vgl_h_matrix_3d
   const vnl_matrix_fixed<T,4,4>& get_matrix() const { return t12_matrix_; }
   vgl_h_matrix_3d get_inverse() const;
 
+  void set (unsigned int row_index, unsigned int col_index, const T value)
+    {t12_matrix_[row_index][col_index]=value;}
+
   void set(const T *t_matrix);
   void set(vnl_matrix_fixed<T,4,4> const& t_matrix);
   bool projective_basis(vcl_vector<vgl_homg_point_3d<T> > const & five_points);
