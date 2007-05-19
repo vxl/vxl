@@ -152,6 +152,23 @@ static void test_camera_compute()
     vcl_fabs(pp1.x()-rpp1.x())+vcl_fabs(pp1.y()-rpp1.y());
   TEST_NEAR("Project P1", p1_error, 0.0, 2.0);
 
+  //Re-approximate the camera at the shifted position
+  vpgl_proj_camera<double> s_camera;
+  vgl_point_3d<double> s_center(-115.73, 36.44, 2019);
+  pcc.compute(s_center, s_camera);
+
+  vcl_cout << "Project shifted p1 \n";
+  hpp1 = s_camera(hp1n);
+  vgl_point_2d<double> s_pp1(hpp1);
+  vcl_cout << "Shifted Projective camera " << s_pp1 << '\n';
+
+  rpp1 = rat_cam.project(wp1);
+  vcl_cout << "Rational camera " << rpp1 << '\n';
+
+  double s_p1_error = 
+    vcl_fabs(s_pp1.x()-rpp1.x())+vcl_fabs(s_pp1.y()-rpp1.y());
+  TEST_NEAR("Project Shifted P1", s_p1_error, 0.0, 2.0);
+  
 }
 
 TESTMAIN(test_camera_compute);

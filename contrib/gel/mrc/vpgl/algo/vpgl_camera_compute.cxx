@@ -326,7 +326,12 @@ compute( vgl_point_3d<double> const& world_center,
   Kr[0][0]=uscale;   Kr[0][2]=uoff;
   Kr[1][1]=vscale;   Kr[1][2]=voff;
   Kr[2][2]=1.0;
-  pmatrix = Kr*pmatrix;
+  //Need to offset x0, y0 and z0 as well.
+    vnl_matrix_fixed<double, 4, 4> T;
+    T.fill(0.0);
+    T[0][0]=1.0; T[1][1]=1.0; T[2][2]=1.0; T[3][3]=1.0;
+    T[0][3] = -nx0; T[1][3]= -ny0; T[2][3]=-nz0;
+  pmatrix = Kr*pmatrix*T;
 #if 0
    vcl_cout << "P Matrix \n" << pmatrix << '\n';
 #endif
