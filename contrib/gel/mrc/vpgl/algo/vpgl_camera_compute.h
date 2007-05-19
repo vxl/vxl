@@ -14,12 +14,18 @@
 #include <vnl/vnl_fwd.h>
 #include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/vpgl_affine_camera.h>
-
+#include <vpgl/vpgl_rational_camera.h>
+#include <vgl/algo/vgl_h_matrix_3d.h>
 //: Basic least squares solution for a general projective camera given corresponding world and image points.
 class vpgl_proj_camera_compute
 {
  public:
+  //:default constructor
   vpgl_proj_camera_compute(){};
+
+  //:use this constructor for approximating a rational camera
+  vpgl_proj_camera_compute(vpgl_rational_camera<double> const& rat_cam)
+    {rat_cam_ = rat_cam;}
 
   //: Compute from two sets of corresponding points.
   // Put the resulting camera into camera, return true if successful.
@@ -29,6 +35,17 @@ class vpgl_proj_camera_compute
   bool compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
                 const vcl_vector< vgl_point_3d<double> >& world_pts,
                 vpgl_proj_camera<double>& camera );
+
+  //:Find a projective camera that best approximates the rational camera at the world center (lon (deg), lat (deg), elev (meters) )
+  bool compute(vgl_point_3d<double> const& world_center,
+               vpgl_proj_camera<double>& camera);
+
+  //:An auxillary matrix that transforms (normalizes) world points prior to projection by a projective camera.  (lon, lat, elevation)->[-1, 1]. 
+  vgl_h_matrix_3d<double> norm_trans();
+
+ protected:
+  //:Defined when computing a proj_camera approximation
+  vpgl_rational_camera<double> rat_cam_;
 };
 
 

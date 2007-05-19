@@ -9,15 +9,18 @@
 
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_box_3d.h>
+#include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
 class vpgl_project
 {
  public:
-  ~vpgl_project();
-  static vgl_box_2d<double> project_bounding_box(vpgl_perspective_camera<double>  cam,
-                                                 vgl_box_3d<double> const & box);
 
+    ~vpgl_project();
+    static vgl_box_2d<double> project_bounding_box(vpgl_perspective_camera<double>  cam,
+                                                   vgl_box_3d<double> const & box);
+    static vgl_box_2d<double> project_bounding_box(vpgl_proj_camera<double>  cam,
+                                                   vgl_box_3d<double> const & box);
  private: 
   //: constructor private - static methods only
   vpgl_project();

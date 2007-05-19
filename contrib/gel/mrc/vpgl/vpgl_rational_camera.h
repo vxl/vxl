@@ -154,11 +154,14 @@ class vpgl_rational_camera : public vpgl_camera<T>
   void set_offset(const coor_index coor_index, const T offset)
     {scale_offsets_[coor_index].set_offset(offset);}
   //: get a specific scale value
-  T scale(const coor_index coor_index)
+  T scale(const coor_index coor_index) const
     {return scale_offsets_[coor_index].scale();}
   //: get a specific offset value
-  T offset(const coor_index coor_index)
+  T offset(const coor_index coor_index) const
     {return scale_offsets_[coor_index].offset();}
+  //: get a specific scale_offset
+  vpgl_scale_offset<T> scl_off(const coor_index coor_index) const
+    {return scale_offsets_[coor_index];}
 
         // Often useful for adjusting the camera
 
