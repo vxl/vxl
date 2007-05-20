@@ -14,7 +14,7 @@
 #include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/vpgl_affine_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
-
+#if 0
 static void composite_projection(vpgl_proj_camera<double> const& camera,
                                  const vpgl_scale_offset<double>& sox,
                                  const vpgl_scale_offset<double>& soy,
@@ -29,6 +29,7 @@ static void composite_projection(vpgl_proj_camera<double> const& camera,
   double zn = soz.normalize(z);
   camera.project(xn, yn, zn, u, v);
 }
+#endif
 static void test_camera_compute()
 {
   // PART 1: Test the affine camera computation
