@@ -11,6 +11,7 @@
 //   24.03.2000 JS  Initial Version, adapted from vgui_gtk_window
 //   14.11.2005 Chanop Silpa-Anan  adapted to QT 3.3.5 for X11/Mac
 //   02.05.2007 Christoph_John@gmx.de ported to QT 4.2.2
+//   23.05.2007 Matt Leotta  converted to QT3 compatibility functions to native QT4
 // \endverbatim
 
 #include <vgui/vgui_window.h>
@@ -19,14 +20,14 @@
 #include "vgui_qt_statusbar.h"
 #include "vgui_qt_adaptor.h"
 
-#include <q3mainwindow.h>
+#include <qmainwindow.h>
 #include <qobject.h>
 
 class vgui_gtk_adaptor;
 
 //: QT implementation of vgui_window.
 class vgui_qt_window :
-   public Q3MainWindow,
+   public QMainWindow,
    public vgui_window
 {
  public:
@@ -39,8 +40,8 @@ class vgui_qt_window :
    vgui_statusbar* get_statusbar() { return &statusbar; }
    vgui_adaptor* get_adaptor() { return adaptor; };
 
-   void show() { Q3MainWindow::show(); };
-   void hide() { Q3MainWindow::hide(); };
+   void show() { QMainWindow::show(); };
+   void hide() { QMainWindow::hide(); };
 
  private:
    void setup_widget(int w, int h, const char* title);

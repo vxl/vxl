@@ -1,43 +1,55 @@
 #include "vgui_qt_menu.h"
+#include "vgui_qt_adaptor.h"
 #include <vcl_iostream.h>
-//Added by qt3to4:
-#include <Qt3Support/Q3PopupMenu>
+#include <QMenu>
 
 //---------------------------------------------------------------------------
-vgui_qt_menu::vgui_qt_menu(const vgui_menu& menu)
-: Q3PopupMenu()
+vgui_qt_menu::vgui_qt_menu(const vgui_menu& menu, QWidget * parent )
+  : QMenu(parent)
 {
-   connect(this, SIGNAL(activated(int)), this, SLOT(upon_activated(int)));
+   connect(this, SIGNAL(triggered(QAction*)), this, SLOT(upon_trigger(QAction*)));
 
-   //int i = 1;
-   commands_ = new vgui_command_sptr[menu.size()];
    for (unsigned int i=0; i < menu.size(); ++i)
    {
       if (menu[i].is_separator())
       {
-         insertSeparator();
+         this->addSeparator();
       }
       else if (menu[i].is_command())
       {
-         insertItem(menu[i].name.c_str(), i);
-         commands_[i] = menu[i].cmnd;
+         QAction* action = this->addAction(menu[i].name.c_str());
+         action->setShortcut(vgui_key_to_qt(menu[i].short_cut.key,
+                                            menu[i].short_cut.mod));
+         commands_[action] = menu[i].cmnd;
       }
       else if (menu[i].is_submenu())
       {
          vgui_qt_menu* qm = new vgui_qt_menu(*(menu[i].menu));
-         insertItem(menu[i].name.c_str(), (Q3PopupMenu*)qm, i);
+         qm->setTitle(menu[i].name.c_str());
+         this->addMenu((QMenu*)qm);
       }
    }
 }
 
 
 //---------------------------------------------------------------------------
-void vgui_qt_menu::upon_activated(int id)
+
+
+void vgui_qt_menu::upon_trigger(QAction * action) const
 {
-#ifdef DEBUG
-   vcl_cerr << "upon_activated " << id << vcl_endl;
-#endif
-   vgui_command_sptr c = commands_[id];
-   if(c)
-	c->execute();
+  vcl_map<QAction*, vgui_command_sptr>::const_iterator i = commands_.find(action);
+  if(i != commands_.end() && bool(i->second))
+    i->second->execute();
+}
+
+
+//---------------------------------------------------------------------------
+//: Convert a vgui keypress into a QT key press
+QKeySequence vgui_key_to_qt(vgui_key key, vgui_modifier mod)
+{
+  int keypress = 0;
+  keypress += vgui_qt_adaptor::translate(mod);
+  keypress += vgui_qt_adaptor::translate(key);
+
+  return QKeySequence( keypress );
 }

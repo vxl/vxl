@@ -13,11 +13,16 @@
 //   09.11.2000 JS  Added colour browser
 //   14.11.2005 Chanop Silpa-Anan  adapted to QT 3.3.5 for X11/Mac
 //   02.05.2007 Christoph_John@gmx.de ported to QT 4.2.2
+//   23.05.2007 Matt Leotta  converted to QT3 compatibility functions to native QT4
 // \endverbatim
 
 #include <vgui/internals/vgui_dialog_impl.h>
 #include <qdialog.h>
 #include <qobject.h>
+#include <qgroupbox.h>
+#include <qlineedit.h>
+#include <qstring.h>
+#include <qframe.h>
 
 //: QT implementation of vgui_dialog_impl.
 class vgui_qt_dialog_impl :
@@ -49,16 +54,13 @@ class vgui_qt_dialog_impl :
    bool  ask();
 };
 
-#include <q3hgroupbox.h>
-#include <qlineedit.h>
-#include <qstring.h>
-#include <q3frame.h>
 
-class vgui_qt_filebrowser_impl : public Q3HGroupBox
+
+class vgui_qt_filebrowser_impl : public QGroupBox
 {
    Q_OBJECT
  public:
-   vgui_qt_filebrowser_impl(QWidget* parent, const char*, vcl_string&, vcl_string&);
+   vgui_qt_filebrowser_impl(QWidget* parent, const vcl_string& t, const vcl_string& f, const vcl_string& s);
   ~vgui_qt_filebrowser_impl() {}
 
   vcl_string  file() const { return vcl_string(edit_->text().toLatin1()); }
@@ -67,11 +69,12 @@ class vgui_qt_filebrowser_impl : public Q3HGroupBox
    void get_a_file();
 
  private:
-   vcl_string& filter_;
+   const vcl_string& title_;
+   const vcl_string& filter_;
    QLineEdit*  edit_;
 };
 
-class vgui_qt_colorchooser_impl : public Q3HGroupBox
+class vgui_qt_colorchooser_impl : public QGroupBox
 {
    Q_OBJECT
  public:
@@ -85,7 +88,7 @@ class vgui_qt_colorchooser_impl : public Q3HGroupBox
 
  private:
    vcl_string& value_;
-   Q3Frame*     frame_;
+   QFrame*     frame_;
 };
 
 

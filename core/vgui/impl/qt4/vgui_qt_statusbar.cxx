@@ -1,6 +1,6 @@
 #include "vgui_qt_statusbar.h"
 
-vgui_qt_statusbar::vgui_qt_statusbar(Q3MainWindow *parent)
+vgui_qt_statusbar::vgui_qt_statusbar(QMainWindow *parent)
 :  statusbuf(new vgui_statusbuf(this)),
    out(statusbuf),
    parent_(parent)
@@ -25,7 +25,7 @@ int vgui_qt_statusbar::write(const char* text, int n)
       start_new = true;
     }
     else if (start_new == true){
-      parent_->statusBar()->message(linebuffer.c_str());
+      parent_->statusBar()->showMessage(linebuffer.c_str());
       linebuffer = "";
       linebuffer += text[0];
       start_new = false;
@@ -37,7 +37,7 @@ int vgui_qt_statusbar::write(const char* text, int n)
     linebuffer.append(text, n);
     if (linebuffer.find('\n'))
     {
-      parent_->statusBar()->message(linebuffer.c_str());
+      parent_->statusBar()->showMessage(linebuffer.c_str());
       linebuffer = "";
     }
   }
@@ -48,6 +48,6 @@ int vgui_qt_statusbar::write(const char* text, int n)
 int vgui_qt_statusbar::write(const char* text)
 {
   linebuffer = text;
-  parent_->statusBar()->message(linebuffer.c_str());
+  parent_->statusBar()->showMessage(linebuffer.c_str());
   return 1;
 }

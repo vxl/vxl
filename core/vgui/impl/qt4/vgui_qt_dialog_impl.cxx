@@ -17,21 +17,21 @@
 #include <qvalidator.h>
 #include <qstring.h>
 #include <qcombobox.h>
-#include <q3filedialog.h>
+#include <qfiledialog.h>
 #include <qcolordialog.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3Frame>
-#include <Q3VBoxLayout>
+#include <QHBoxLayout>
+#include <QFrame>
+#include <QVBoxLayout>
 
 static bool is_modal = true;
 void vgui_qt_dialog_impl::modal (bool m) {is_modal=m; }
 
 //-----------------------------------------------------------------------------
 vgui_qt_dialog_impl::vgui_qt_dialog_impl(const char* name)
-:  QDialog(0, name, is_modal), vgui_dialog_impl(name)
+:  QDialog(), vgui_dialog_impl(name)
 {
-   setCaption(name);
+   setWindowTitle(name);
+   setModal(is_modal);
 }
 
 
@@ -42,12 +42,15 @@ bool vgui_qt_dialog_impl::ask()
    bool use_cancel_button =  !cancel_button_text_. empty ();
 
    QPushButton *ok, *cancel;
-   Q3VBoxLayout* total = new Q3VBoxLayout(this, 10, -1, "totallayout");
-   Q3VBoxLayout* layout = new Q3VBoxLayout(total, -1, "vboxlayout");
+   QVBoxLayout* total = new QVBoxLayout;
+   this->setLayout(total);
+   QVBoxLayout* layout = new QVBoxLayout;
+   total->addLayout(layout);
 
    if (use_ok_button || use_cancel_button)
    {
-     Q3HBoxLayout* lower = new Q3HBoxLayout(total, -1, "buttonslayout");
+     QHBoxLayout* lower = new QHBoxLayout;
+     total->addLayout(lower);
      lower->addStretch(1);
 
      if (use_ok_button)
@@ -87,8 +90,9 @@ bool vgui_qt_dialog_impl::ask()
              l.type == bool_elem   ||
              l.type == choice_elem)
          {
-            Q3HBoxLayout* hbox = new Q3HBoxLayout(layout, -1);
-            QLabel* label = new QLabel(widget, l.field->label.c_str(), this);
+            QHBoxLayout* hbox = new QHBoxLayout;
+            layout->addLayout(hbox);
+            QLabel* label = new QLabel(l.field->label.c_str(), this);
             hbox->addWidget(label, 0);
             hbox->addStretch(1);
             hbox->addWidget(widget, 0);
@@ -134,12 +138,12 @@ bool vgui_qt_dialog_impl::ask()
              l.type == string_elem)
          {
             QLineEdit* input = static_cast<QLineEdit*>(l.widget);
-            l.field->update_value(input->text().ascii());
+            l.field->update_value(input->text().toAscii().data());
          }
          else if (l.type == int_elem)
          {
             QSpinBox* input = static_cast<QSpinBox*>(l.widget);
-            l.field->update_value(input->text().ascii());
+            l.field->update_value(input->text().toAscii().data());
          }
          else if (l.type == bool_elem)
          {
@@ -151,7 +155,7 @@ bool vgui_qt_dialog_impl::ask()
          {
             QComboBox* box = static_cast<QComboBox*>(l.widget);
             vgui_int_field *field = static_cast<vgui_int_field*>(l.field);
-            field->var = box->currentItem();
+            field->var = box->currentIndex();
          }
          else if ((l.type == inline_file_bsr) || (l.type == file_bsr))
          {
@@ -182,7 +186,7 @@ void* vgui_qt_dialog_impl::bool_field_widget(const char* txt, bool& v)
 //-----------------------------------------------------------------------------
 void* vgui_qt_dialog_impl::int_field_widget(const char* txt, int& v)
 {
-   QSpinBox* widget = new QSpinBox(-65000, 65000, 1, this);
+   QSpinBox* widget = new QSpinBox(this);
    widget->setValue(v);
    return widget;
 }
@@ -230,11 +234,10 @@ void* vgui_qt_dialog_impl::string_field_widget(const char* txt, vcl_string& v)
 void* vgui_qt_dialog_impl::choice_field_widget(const char* txt, const vcl_vector<vcl_string>& labels, int& v)
 {
    QComboBox* widget = new QComboBox(this);
-   for (vcl_vector<vcl_string>::const_iterator si = labels.begin(); si != labels.end(); ++si)
-   {
-      widget->insertItem((*si).c_str());
-   }
-   widget->setCurrentItem(v);
+   for (unsigned int i=0; i<labels.size(); ++i)
+     widget->insertItem(i, labels[i].c_str());
+
+   widget->setCurrentIndex(v);
    return widget;
 }
 
@@ -242,7 +245,7 @@ void* vgui_qt_dialog_impl::choice_field_widget(const char* txt, const vcl_vector
 //-----------------------------------------------------------------------------
 void* vgui_qt_dialog_impl::text_message_widget(const char* txt)
 {
-   QLabel* widget = new QLabel(txt, this, "text_message");
+   QLabel* widget = new QLabel(txt, this);
    return widget;
 }
 
@@ -289,33 +292,51 @@ void* vgui_qt_dialog_impl::inline_color_chooser_widget(const char * txt,vcl_stri
 
 
 //-----------------------------------------------------------------------------
-vgui_qt_filebrowser_impl::vgui_qt_filebrowser_impl(QWidget* parent, const char* txt, vcl_string& v, vcl_string& s)
-: Q3HGroupBox(txt, parent), filter_(v)
+vgui_qt_filebrowser_impl::vgui_qt_filebrowser_impl(QWidget* parent, const vcl_string& t, const vcl_string& v, const vcl_string& s)
+: QGroupBox(t.c_str(), parent), title_(t), filter_(v)
 {
-   edit_ = new QLineEdit(s.c_str(), this);
-   QPushButton* push = new QPushButton("Browse", this, "go_browse");
-   connect(push, SIGNAL(clicked()), this, SLOT(get_a_file()));
+  edit_ = new QLineEdit(s.c_str());
+  QPushButton* push = new QPushButton("Browse");
+
+  QHBoxLayout *hbox = new QHBoxLayout;
+  hbox->setMargin(2);
+  hbox->addWidget(edit_);
+  hbox->addWidget(push);
+  hbox->addStretch(1);
+  this->setLayout(hbox);
+
+  connect(push, SIGNAL(clicked()), this, SLOT(get_a_file()));
 }
 
 
 //-----------------------------------------------------------------------------
 void vgui_qt_filebrowser_impl::get_a_file()
 {
-   QString r = Q3FileDialog::getSaveFileName(edit_->text(), filter_.c_str());
+   QString r = QFileDialog::getOpenFileName(this, title_.c_str(), edit_->text(), filter_.c_str());
    if (!r.isEmpty()) edit_->setText(r);
 }
 
 
 //-----------------------------------------------------------------------------
 vgui_qt_colorchooser_impl::vgui_qt_colorchooser_impl(QWidget* parent, const char* txt, vcl_string& val)
-: Q3HGroupBox(txt, parent), value_(val)
+: QGroupBox(txt, parent), value_(val)
 {
-   frame_ = new Q3Frame(this, "farm");
-   frame_->setLineWidth(2);
-   frame_->setFrameStyle(Q3Frame::Sunken | Q3Frame::Panel);
-   frame_->setBackgroundColor(QColor(val.c_str()));
-   QPushButton* push = new QPushButton("Pick", this, "go_browse");
-   connect(push, SIGNAL(clicked()), this, SLOT(get_a_color()));
+
+  frame_ = new QFrame;
+  frame_->setFrameStyle(QFrame::Panel | QFrame::Raised);
+  frame_->setMinimumSize( 32, 32 );
+  frame_->setMaximumSize( 32, 32 );
+  frame_->setAutoFillBackground(true);
+  frame_->setPalette(QPalette(QColor("black"),QColor(val.c_str())));
+  QPushButton* pick = new QPushButton("Pick");
+
+  QHBoxLayout *hbox = new QHBoxLayout;
+  hbox->addWidget(frame_);
+  hbox->addWidget(pick);
+  hbox->addStretch(1);
+  this->setLayout(hbox);
+
+  connect(pick, SIGNAL(clicked()), this, SLOT(get_a_color()));
 }
 
 
@@ -323,10 +344,10 @@ vgui_qt_colorchooser_impl::vgui_qt_colorchooser_impl(QWidget* parent, const char
 void vgui_qt_colorchooser_impl::get_a_color()
 {
    QColor c = QColorDialog::getColor(QColor(value_.c_str()));
+   frame_->setPalette(QPalette(c,c));
    if (c.isValid())
    {
-      value_ = c.name().ascii();
-      frame_->setBackgroundColor(c);
+      value_ = c.name().toAscii().data();
    }
 }
 
@@ -335,24 +356,24 @@ void vgui_qt_colorchooser_impl::get_a_color()
 vgui_qt_tableau_impl::vgui_qt_tableau_impl(QWidget* parent,
                                            const vgui_tableau_sptr tab,
                                            unsigned int width, unsigned int height)
-: QWidget(parent, "vgui_qt_inline_gl_main_widget")
+: QWidget(parent)
 {
    this-> setFixedWidth (width);
    this-> setFixedHeight (height);
 
    //Create a frame to store the GL widget
-   Q3Frame* frame = new Q3Frame (this, "vgui_qt_inline_gl_frame");
-   frame->setFrameStyle (Q3Frame::Sunken | Q3Frame::StyledPanel);
-   frame->setLineWidth (2);
+   QFrame* frame = new QFrame (this);
+   frame->setFrameStyle (QFrame::Sunken | QFrame::StyledPanel);
+   frame->setLineWidth (1);
 
    //Create the GL widget and put it in the frame
    vgui_qt_adaptor* adaptor = new vgui_qt_adaptor(frame);
    adaptor-> set_tableau(tab);
 
-   Q3HBoxLayout* hlayout = new Q3HBoxLayout (frame, 2, 2, "vgui_qt_inline_gl_hlayout");
+   QHBoxLayout* hlayout = new QHBoxLayout (frame);
    hlayout->addWidget (adaptor, 1);
 
    //Top level layout
-   Q3VBoxLayout* vlayout = new Q3VBoxLayout (this, 15, 5, "vgui_qt_inline_gl_vlayout");
+   QVBoxLayout* vlayout = new QVBoxLayout (this);
    vlayout->addWidget(frame, 1);
 }

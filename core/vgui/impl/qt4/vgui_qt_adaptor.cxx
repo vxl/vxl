@@ -4,20 +4,19 @@
 #include <vgui/vgui_popup_params.h>
 
 #include <qgl.h>
-//Added by qt3to4:
 #include <QWheelEvent>
 #include <QMouseEvent>
-#include <Q3PopupMenu>
+#include <QMenu>
 #include <QKeyEvent>
 #include <vcl_iostream.h>
 
 using namespace QGL;
 using namespace Qt;
 
-vgui_qt_adaptor::vgui_qt_adaptor(QWidget* parent, const char* name)
+vgui_qt_adaptor::vgui_qt_adaptor(QWidget* parent)
    : QGLWidget(QGLFormat(DoubleBuffer|DepthBuffer|Rgba|AlphaChannel|
                          AccumBuffer|StencilBuffer|NoStereoBuffers|
-                         DirectRendering|HasOverlay), parent, name),
+                         DirectRendering|HasOverlay), parent),
 //    : QGLWidget(parent, name)
      ovl_helper(0),
      use_overlay_helper(true),
@@ -43,7 +42,7 @@ vgui_qt_adaptor::vgui_qt_adaptor(QWidget* parent, const char* name)
      vcl_cerr << "vgui_qt_adaptor: no direct rendering\n";
 
    // Set up idle time
-   idle_timer_ = new QTimer (this, "vgui_qt_adaptor_idle_timer");
+   idle_timer_ = new QTimer (this);
    idle_timer_-> start (0);
    connect (idle_timer_, SIGNAL(timeout()), this, SLOT(idle_slot()));
 }
@@ -146,7 +145,7 @@ void vgui_qt_adaptor::mousePressEvent  (QMouseEvent* e)
       vgui_popup_params params;
       params.x = ev.wx;
       params.y = ev.wy;
-      Q3PopupMenu* pm = new vgui_qt_menu(this->get_total_popup(params));
+      QMenu* pm = new vgui_qt_menu(this->get_total_popup(params),this);
 
       pm->popup(QWidget::mapToGlobal(QPoint(e->x(), e->y())));
 
@@ -206,71 +205,22 @@ void vgui_qt_adaptor::windowActivationChange (bool oldActive)
 vgui_event vgui_qt_adaptor::translate(QMouseEvent* e)
 {
    vgui_event ev;
+   ev. modifier = translate(e->modifiers());
    ev. button = vgui_BUTTON_NULL;
    if (e-> button () & Qt::LeftButton) ev. button = vgui_LEFT;
    if (e-> button () & Qt::RightButton) ev. button = vgui_RIGHT;
    if (e-> button () & Qt::MidButton) ev. button = vgui_MIDDLE;
 
-   int state = vgui_MODIFIER_NULL;
-   if (e-> state () & Qt::ControlModifier) state |= vgui_CTRL;
-   if (e-> state () & Qt::AltModifier) state |= vgui_ALT;
-   if (e-> state () & Qt::ShiftModifier) state |= vgui_SHIFT;
-   ev. modifier = vgui_modifier (state);
    ev. wx = e-> x ();
-   ev. wy = QGLWidget::height () - e-> y ();
+   ev. wy = QGLWidget::height() - e-> y ();
    return ev;
 }
 
 vgui_event vgui_qt_adaptor::translate(QKeyEvent* e)
 {
    vgui_event ev;
-   int state = vgui_MODIFIER_NULL;
-   if (e-> state () & Qt::ControlModifier) state |= vgui_CTRL;
-   if (e-> state () & Qt::AltModifier) state |= vgui_ALT;
-   if (e-> state () & Qt::ShiftModifier) state |= vgui_SHIFT;
-   ev. modifier = vgui_modifier (state);
-
-   vgui_key key = vgui_KEY_NULL;
-
-   switch (e-> key())
-   {
-   case Qt::Key_PageUp:
-     key = vgui_PAGE_UP;
-     break;
-   case Qt::Key_PageDown:
-     key = vgui_PAGE_DOWN;
-     break;
-   case Qt::Key_Home:
-     key = vgui_HOME;
-     break;
-   case Qt::Key_End:
-     key = vgui_END;
-     break;
-   case Qt::Key_Delete:
-     key = vgui_DELETE;
-     break;
-   case Qt::Key_Insert:
-     key = vgui_INSERT;
-     break;
-   case Qt::Key_Up:
-     key = vgui_CURSOR_UP;
-     break;
-   case Qt::Key_Down:
-     key = vgui_CURSOR_DOWN;
-     break;
-   case Qt::Key_Left:
-     key = vgui_CURSOR_LEFT;
-     break;
-   case Qt::Key_Right:
-     key = vgui_CURSOR_RIGHT;
-     break;
-   default:
-     key = vgui_key (e-> ascii ());
-     break;
-   }
-
-   ev. set_key (key);
-   ev. ascii_char = key;
+   ev. modifier = translate(e->modifiers());
+   ev.set_key(translate(Qt::Key(e->key())));
 
    return ev;
 }
@@ -278,12 +228,156 @@ vgui_event vgui_qt_adaptor::translate(QKeyEvent* e)
 vgui_event vgui_qt_adaptor::translate(QWheelEvent* e)
 {
    vgui_event ev;
-   int state = vgui_MODIFIER_NULL;
-   if (e-> state () & ControlButton) state |= vgui_CTRL;
-   if (e-> state () & AltButton) state |= vgui_ALT;
-   if (e-> state () & ShiftButton) state |= vgui_SHIFT;
-   ev. modifier = vgui_modifier (state);
+   ev. modifier = translate(e->modifiers());
    ev. wx = e-> x ();
    ev. wy = QGLWidget::height () - e-> y ();
    return ev;
+}
+
+vgui_key vgui_qt_adaptor::translate(Qt::Key k)
+{
+  switch (k)
+  {
+    case Qt::Key_Escape:
+      return vgui_ESCAPE;
+    case Qt::Key_Tab:
+      return vgui_TAB;
+    case Qt::Key_Return:
+      return vgui_RETURN;
+    case Qt::Key_Enter:
+      return vgui_NEWLINE;
+    case Qt::Key_F1:
+      return vgui_F1;
+    case Qt::Key_F2:
+      return vgui_F2;
+    case Qt::Key_F3:
+      return vgui_F3;
+    case Qt::Key_F4:
+      return vgui_F4;
+    case Qt::Key_F5:
+      return vgui_F5;
+    case Qt::Key_F6:
+      return vgui_F6;
+    case Qt::Key_F7:
+      return vgui_F7;
+    case Qt::Key_F8:
+      return vgui_F8;
+    case Qt::Key_F9:
+      return vgui_F9;
+    case Qt::Key_F10:
+      return vgui_F10;
+    case Qt::Key_F11:
+      return vgui_F11;
+    case Qt::Key_F12:
+      return vgui_F12;
+    case Qt::Key_Left:
+      return vgui_CURSOR_LEFT;
+    case Qt::Key_Up:
+      return vgui_CURSOR_UP;
+    case Qt::Key_Right:
+      return vgui_CURSOR_RIGHT;
+    case Qt::Key_Down:
+      return vgui_CURSOR_DOWN;
+    case Qt::Key_PageUp:
+      return vgui_PAGE_UP;
+    case Qt::Key_PageDown:
+      return vgui_PAGE_DOWN;
+    case Qt::Key_Home:
+      return vgui_HOME;
+    case Qt::Key_End:
+      return vgui_END;
+    case Qt::Key_Delete:
+      return vgui_DELETE;
+    case Qt::Key_Insert:
+      return vgui_INSERT;
+    default:
+      return vgui_key (static_cast<unsigned char>(k));
+  }
+
+  return vgui_KEY_NULL;
+}
+
+vgui_modifier vgui_qt_adaptor::translate(Qt::KeyboardModifiers m)
+{
+  int mod = vgui_MODIFIER_NULL;
+  if(m & Qt::CTRL)   mod |= vgui_CTRL;
+  if(m & Qt::SHIFT)  mod |= vgui_SHIFT;
+  if(m & Qt::META)   mod |= vgui_META;
+  if(m & Qt::ALT)    mod |= vgui_ALT;
+
+  return vgui_modifier(mod);
+}
+
+Qt::Key vgui_qt_adaptor::translate(vgui_key k)
+{
+  switch (k)
+  {
+    case vgui_ESCAPE:
+      return Qt::Key_Escape;
+    case vgui_TAB:
+      return Qt::Key_Tab;
+    case vgui_RETURN:
+      return Qt::Key_Return;
+    case vgui_NEWLINE:
+      return Qt::Key_Enter;
+    case vgui_F1:
+      return Qt::Key_F1;
+    case vgui_F2:
+      return Qt::Key_F2;
+    case vgui_F3:
+      return Qt::Key_F3;
+    case vgui_F4:
+      return Qt::Key_F4;
+    case vgui_F5:
+      return Qt::Key_F5;
+    case vgui_F6:
+      return Qt::Key_F6;
+    case vgui_F7:
+      return Qt::Key_F7;
+    case vgui_F8:
+      return Qt::Key_F8;
+    case vgui_F9:
+      return Qt::Key_F9;
+    case vgui_F10:
+      return Qt::Key_F10;
+    case vgui_F11:
+      return Qt::Key_F11;
+    case vgui_F12:
+      return Qt::Key_F12;
+    case vgui_CURSOR_LEFT:
+      return Qt::Key_Left;
+    case vgui_CURSOR_UP:
+      return Qt::Key_Up;
+    case vgui_CURSOR_RIGHT:
+      return Qt::Key_Right;
+    case vgui_CURSOR_DOWN:
+      return Qt::Key_Down;
+    case vgui_PAGE_UP:
+      return Qt::Key_PageUp;
+    case vgui_PAGE_DOWN:
+      return Qt::Key_PageDown;
+    case vgui_HOME:
+      return Qt::Key_Home;
+    case vgui_END:
+      return Qt::Key_End;
+    case vgui_DELETE:
+      return Qt::Key_Delete;
+    case vgui_INSERT:
+      return Qt::Key_Insert;
+    default:
+      return Qt::Key(k);
+  }
+
+  return Qt::Key_unknown;
+}
+
+Qt::KeyboardModifiers vgui_qt_adaptor::translate(vgui_modifier m)
+{
+  Qt::KeyboardModifiers mod = Qt::NoModifier;
+  if(m & vgui_CTRL)   mod |= Qt::ControlModifier;
+  if(m & vgui_SHIFT)  mod |= Qt::ShiftModifier;
+  if(m & vgui_META)   mod |= Qt::MetaModifier;
+  if(m & vgui_ALT)    mod |= Qt::AltModifier;
+
+  return mod;
 }

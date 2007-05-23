@@ -14,6 +14,7 @@
 //   14.11.2005 Chanop Silpa-Anan  adapted to QT 3.3.5 for X11/Mac
 //   17.05.2006 Rowin Heymans      added mousewheel event handling
 //   02.05.2007 Christoph_John@gmx.de ported to QT 4.2.2
+//   23.05.2007 Matt Leotta  converted to QT3 compatibility functions to native QT4
 // \endverbatim
 //-----------------------------------------------------------------------------
 
@@ -38,7 +39,7 @@ class vgui_qt_adaptor :
 {
    Q_OBJECT
  public:
-   vgui_qt_adaptor(QWidget* parent=0, const char* name=0);
+   vgui_qt_adaptor(QWidget* parent=0);
    ~vgui_qt_adaptor();
 
    void swap_buffers()
@@ -82,6 +83,12 @@ class vgui_qt_adaptor :
    vgui_event translate(QMouseEvent* e);
    vgui_event translate(QKeyEvent* e);
    vgui_event translate(QWheelEvent* e);
+
+   static vgui_key translate(Qt::Key k);
+   static vgui_modifier translate(Qt::KeyboardModifiers m);
+
+   static Qt::Key translate(vgui_key k);
+   static Qt::KeyboardModifiers translate(vgui_modifier m);
 
  private:
    // pointer to overlay emulation data
