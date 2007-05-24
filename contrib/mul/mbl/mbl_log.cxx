@@ -393,7 +393,8 @@ void mbl_logger_root::load_log_config_file(
     vcl_string home2("${HOME}/.mbl_log.properties");
     vcl_string home3("${HOMESHARE}/mbl_log.properties");
     vcl_string home4("${HOMEDRIVE}${HOMEDIR}/mbl_log.properties");
-    vcl_string home5("${USERPROFILE}/mbl_log.properties");
+    vcl_string home5("${HOMEDRIVE}${HOMEPATH}/mbl_log.properties");
+    vcl_string home6("${USERPROFILE}/mbl_log.properties");
     if (vul_string_expand_var(home1))
       config_file.open(home1.c_str());
     if (!config_file.is_open() && vul_string_expand_var(home2))
@@ -404,6 +405,8 @@ void mbl_logger_root::load_log_config_file(
       config_file.open(home4.c_str());
     if (!config_file.is_open() && vul_string_expand_var(home5))
       config_file.open(home5.c_str());
+    if (!config_file.is_open() && vul_string_expand_var(home5))
+      config_file.open(home6.c_str());
   }
   if (!config_file.is_open())
     config_file.open("C:\\mbl_log.properties");
