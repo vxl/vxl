@@ -233,6 +233,15 @@ endif
 endif
 
 ifeq ($(HAS_QGL),1)
+ifeq ($(HAS_QT4),1)
+SOURCES += impl/qt4/vgui_qt.cxx
+SOURCES += impl/qt4/vgui_qt_adaptor.cxx
+SOURCES += impl/qt4/vgui_qt_dialog_impl.cxx
+SOURCES += impl/qt4/vgui_qt_menu.cxx
+SOURCES += impl/qt4/vgui_qt_statusbar.cxx
+SOURCES += impl/qt4/vgui_qt_tag.cxx
+SOURCES += impl/qt4/vgui_qt_window.cxx
+else
 SOURCES += impl/qt/vgui_qt.cxx
 SOURCES += impl/qt/vgui_qt_adaptor.cxx
 SOURCES += impl/qt/vgui_qt_dialog_impl.cxx
@@ -240,6 +249,7 @@ SOURCES += impl/qt/vgui_qt_menu.cxx
 SOURCES += impl/qt/vgui_qt_statusbar.cxx
 SOURCES += impl/qt/vgui_qt_tag.cxx
 SOURCES += impl/qt/vgui_qt_window.cxx
+endif
 
 CPPEXT = cxx
 HPPEXT = h
