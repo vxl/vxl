@@ -193,6 +193,8 @@ class vpgl_rational_camera : public vpgl_camera<T>
   //: print the camera parameters
   void print(vcl_ostream& s = vcl_cout) const;
 
+  bool save(vcl_string cam_path);
+
  protected:
   // utilities
   vnl_vector_fixed<T, 20> power_vector(const T x, const T y, const T z) const;

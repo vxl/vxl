@@ -484,6 +484,81 @@ void vpgl_rational_camera<T>::print(vcl_ostream& s) const
     <<"------------------------------------------------\n\n";
 }
 
+template <class T>
+bool vpgl_rational_camera<T>::save(vcl_string cam_path)
+{
+  vcl_ofstream file_out;
+  file_out.open(cam_path.c_str());
+  if (!file_out.good()) {
+    vcl_cerr << "error: bad filename: " << cam_path << vcl_endl;
+    return false;
+  }
+  file_out.precision(12);
+
+  int map[20];
+  map[0]=19;
+  map[1]=9;
+  map[2]=15;
+  map[3]=18;
+  map[4]=6;
+  map[5]=8;
+  map[6]=14;
+  map[7]=3;
+  map[8]=12;
+  map[9]=17;
+  map[10]=5;
+  map[11]=0;
+  map[12]=4;
+  map[13]=7;
+  map[14]=1;
+  map[15]=10;
+  map[16]=13;
+  map[17]=2;
+  map[18]=11;
+  map[19]=16;
+
+  file_out << "satId = \"????\";\n";
+  file_out << "bandId = \"RGB\";\n";
+  file_out << "SpecId = \"RPC00B\";\n";
+  file_out << "BEGIN_GROUP = IMAGE\n";
+  file_out << "\n\n"; // skip errBias and errRand fields 
+  file_out << "  lineOffset = " << offset(V_INDX) << "\n";
+  file_out << "  sampOffset = " << offset(U_INDX) << "\n";
+  file_out << "  latOffset = " << offset(Y_INDX) << "\n";
+  file_out << "  longOffset = " << offset(X_INDX) << "\n";
+  file_out << "  heightOffset = " << offset(Z_INDX) << "\n";
+  file_out << "  lineScale = " << scale(V_INDX) << "\n";
+  file_out << "  sampScale = " << scale(U_INDX) << "\n";
+  file_out << "  latScale = " << scale(Y_INDX) << "\n";
+  file_out << "  longScale = " << scale(X_INDX) << "\n";
+  file_out << "  heightScale = " << scale(Z_INDX) << "\n";
+  vnl_matrix_fixed<double,4,20> coeffs = this->coefficient_matrix();
+  file_out << "  lineNumCoef = (";
+  for (int i=0; i<20; i++) {
+    file_out << "\n    " << coeffs[NEU_V][map[i]];
+  }
+  file_out << ");\n";
+  file_out << "  lineDenCoef = (";
+  for (int i=0; i<20; i++) {
+    file_out << "\n    " << coeffs[DEN_V][map[i]];
+  }
+  file_out << ");\n";
+  file_out << "  sampNumCoef = (";
+  for (int i=0; i<20; i++) {
+    file_out << "\n    " << coeffs[NEU_U][map[i]];
+  }
+  file_out << ");\n";
+  file_out << "  sampDenCoef = (";
+  for (int i=0; i<20; i++) {
+    file_out << "\n    " << coeffs[DEN_U][map[i]];
+  }
+  file_out << ");\n";
+  file_out << "END_GROUP = IMAGE\n";
+  file_out << "END;\n";
+
+  return true;
+}
+
 //: Write to stream
 template <class T>
 vcl_ostream&  operator<<(vcl_ostream& s, const vpgl_rational_camera<T >& c )
