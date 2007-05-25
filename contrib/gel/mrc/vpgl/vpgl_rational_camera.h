@@ -47,6 +47,7 @@
 #include <vgl/vgl_fwd.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
+#include <vcl_string.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vpgl/vpgl_camera.h>
@@ -124,6 +125,8 @@ class vpgl_rational_camera : public vpgl_camera<T>
                        vcl_vector<vpgl_scale_offset<T> > const& scale_offsets)
     : rational_coeffs_(rational_coeffs), scale_offsets_(scale_offsets) {}
 
+  //: Constructor, create from a camera file given by cam_path
+  vpgl_rational_camera(vcl_string cam_path);
 
   virtual ~vpgl_rational_camera() {}
 
