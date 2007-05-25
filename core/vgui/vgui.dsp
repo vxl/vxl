@@ -513,6 +513,39 @@ SOURCE=.\impl/qt/vgui_qt_menu_mocced.cxx
 SOURCE=.\impl/qt/vgui_qt_statusbar_mocced.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\impl/qt4/vgui_qt.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/qt4/vgui_qt_adaptor.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/qt4/vgui_qt_dialog_impl.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/qt4/vgui_qt_menu.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/qt4/vgui_qt_statusbar.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/qt4/vgui_qt_tag.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/qt4/vgui_qt_window.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/qt4/vgui_qt_adaptor_mocced.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/qt4/vgui_qt_dialog_impl_mocced.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/qt4/vgui_qt_menu_mocced.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\impl/qt4/vgui_qt_statusbar_mocced.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vgui_parent_child_link.cxx
 # End Source File
 # Begin Source File
@@ -934,6 +967,24 @@ SOURCE=.\impl/qt/vgui_qt_statusbar.h
 # End Source File
 # Begin Source File
 SOURCE=.\impl/qt/vgui_qt_window.h
+# End Source File
+# Begin Source File
+SOURCE=.\impl/qt4/vgui_qt.h
+# End Source File
+# Begin Source File
+SOURCE=.\impl/qt4/vgui_qt_adaptor.h
+# End Source File
+# Begin Source File
+SOURCE=.\impl/qt4/vgui_qt_dialog_impl.h
+# End Source File
+# Begin Source File
+SOURCE=.\impl/qt4/vgui_qt_menu.h
+# End Source File
+# Begin Source File
+SOURCE=.\impl/qt4/vgui_qt_statusbar.h
+# End Source File
+# Begin Source File
+SOURCE=.\impl/qt4/vgui_qt_window.h
 # End Source File
 # Begin Source File
 SOURCE=.\vgui_grid_tableau_sptr.h
