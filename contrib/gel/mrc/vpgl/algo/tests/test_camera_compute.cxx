@@ -14,6 +14,9 @@
 #include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/vpgl_affine_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
+#include <vpgl/vpgl_perspective_camera.h>
+#include <vpgl/vpgl_calibration_matrix.h>
+
 #if 0
 static void composite_projection(vpgl_proj_camera<double> const& camera,
                                  const vpgl_scale_offset<double>& sox,
@@ -30,7 +33,7 @@ static void composite_projection(vpgl_proj_camera<double> const& camera,
   camera.project(xn, yn, zn, u, v);
 }
 #endif
-static void test_camera_compute()
+void test_camera_compute_setup()
 {
   // PART 1: Test the affine camera computation
 
@@ -172,4 +175,59 @@ static void test_camera_compute()
   
 }
 
-TESTMAIN(test_camera_compute);
+void test_camera_compute_real(vcl_string dir_base)
+{
+  
+  vcl_string cam_file = "C:\\lems\\vxl-gamze\\vxl\\contrib\\gel\\mrc\\vpgl\\algo\\tests\\data\\06MAR27155829-S2AS-005580823020_01_P001.RPB";
+  vpgl_rational_camera<double> rat_cam(cam_file);
+  vcl_cout << rat_cam;
+
+  double xoff = rat_cam.offset(vpgl_rational_camera<double>::X_INDX);
+  double yoff = rat_cam.offset(vpgl_rational_camera<double>::Y_INDX);
+  double zoff = rat_cam.offset(vpgl_rational_camera<double>::Z_INDX);
+
+  vgl_point_3d<double> center(xoff, yoff, zoff);
+
+  vpgl_proj_camera_compute pcc(rat_cam);
+  vpgl_proj_camera<double> camera;
+  pcc.compute(center, camera);
+  vpgl_perspective_camera<double> p_camera;
+  bool ok = vpgl_perspective_decomposition(camera.get_matrix(), p_camera);
+
+ 
+  if (!ok) 
+    vcl_cout << "Cannot create a perspective camera" << vcl_endl;
+    
+  vcl_cout << "Camera Center " << p_camera.camera_center() << vcl_endl;
+  vcl_cout << "Rotation " << p_camera.get_rotation() << vcl_endl;
+  vcl_cout << "Matrix " << vcl_endl << p_camera.get_matrix()<< vcl_endl;
+  vpgl_calibration_matrix<double> calib = p_camera.get_calibration();
+  vcl_cout << "Calibration Matrix Params" << vcl_endl;
+  vcl_cout << "Calib Matrix=  " << vcl_endl << calib.get_matrix() << vcl_endl;
+  vcl_cout << "Focal Length=  " << calib.focal_length() << vcl_endl;
+  vcl_cout << "Principal Point = " << calib.principal_point() << vcl_endl;
+  vcl_cout << "Skew = " << calib.skew() << vcl_endl;
+  vcl_cout << "X scale = " << calib.x_scale() << vcl_endl;
+  vcl_cout << "Y scale = " << calib.y_scale() << vcl_endl;
+}
+
+int test_camera_compute_main(int argc, char* argv[]) 
+{
+
+  vcl_string dir_base;
+
+  if ( argc >= 2 ) {
+    dir_base = argv[1];
+#ifdef VCL_WIN32
+    dir_base += "\\";
+#else
+    dir_base += "/";
+#endif
+  }
+  test_camera_compute_setup();
+  test_camera_compute_real(dir_base);
+
+  return testlib_test_summary();
+}
+
+//TESTMAIN_ARGS(test_camera_compute);
