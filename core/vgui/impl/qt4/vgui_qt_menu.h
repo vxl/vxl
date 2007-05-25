@@ -1,5 +1,5 @@
-#ifndef VGUI_QT_MENU_H_
-#define VGUI_QT_MENU_H_
+#ifndef vgui_qt_menu_h_
+#define vgui_qt_menu_h_
 //:
 // \file
 // \brief vgui_menu wrapped into a QT popupmenu
@@ -39,9 +39,7 @@ class vgui_qt_menu : public QMenu
   vcl_map<QAction*, vgui_command_sptr> commands_;
 };
 
-
-
 //: Convert a vgui keypress into a QT key press
 QKeySequence vgui_key_to_qt(vgui_key key, vgui_modifier = vgui_MODIFIER_NULL);
 
-#endif // VGUI_QT_MENU_H_
+#endif // vgui_qt_menu_h_

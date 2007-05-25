@@ -1,5 +1,5 @@
-#ifndef VGUI_QT_ADAPTOR_H_
-#define VGUI_QT_ADAPTOR_H_
+#ifndef vgui_qt_adaptor_h_
+#define vgui_qt_adaptor_h_
 
 //:
 // \file
@@ -105,4 +105,4 @@ class vgui_qt_adaptor :
    void windowActivationChange (bool oldActive);
 };
 
-#endif // VGUI_QT_ADAPTOR_H_
+#endif // vgui_qt_adaptor_h_

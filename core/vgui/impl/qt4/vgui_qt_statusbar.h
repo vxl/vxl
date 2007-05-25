@@ -1,6 +1,6 @@
-// This is core/vgui/impl/qt/vgui_qt_statusbar.h
-#ifndef VGUI_QT_STATUSBAR_H_
-#define VGUI_QT_STATUSBAR_H_
+// This is core/vgui/impl/qt4/vgui_qt_statusbar.h
+#ifndef vgui_qt_statusbar_h_
+#define vgui_qt_statusbar_h_
 //:
 // \file
 // \brief Contains class vgui_qt_statusbar
@@ -42,4 +42,4 @@ class vgui_qt_statusbar :
    QMainWindow *parent_;
 };
 
-#endif // VGUI_QT_STATUSBAR_H_
+#endif // vgui_qt_statusbar_h_

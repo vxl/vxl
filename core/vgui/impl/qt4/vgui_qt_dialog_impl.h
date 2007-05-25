@@ -1,6 +1,6 @@
-// This is core/vgui/impl/qt/vgui_qt_dialog_impl.h
-#ifndef VGUI_QT_DIALOG_IMPL_H_
-#define VGUI_QT_DIALOG_IMPL_H_
+// This is core/vgui/impl/qt4/vgui_qt_dialog_impl.h
+#ifndef vgui_qt_dialog_impl_h_
+#define vgui_qt_dialog_impl_h_
 //:
 // \file
 // \brief QT Dialog wrapper
@@ -101,4 +101,4 @@ class vgui_qt_tableau_impl : public QWidget
   ~vgui_qt_tableau_impl() {}
 };
 
-#endif // VGUI_QT_DIALOG_IMPL_H_
+#endif // vgui_qt_dialog_impl_h_

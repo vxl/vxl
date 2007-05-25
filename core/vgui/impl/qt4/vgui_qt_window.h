@@ -1,6 +1,6 @@
-// This is core/vgui/impl/qt/vgui_qt_window.h
-#ifndef VGUI_QT_WINDOW_H_
-#define VGUI_QT_WINDOW_H_
+// This is core/vgui/impl/qt4/vgui_qt_window.h
+#ifndef vgui_qt_window_h_
+#define vgui_qt_window_h_
 //:
 // \file
 // \brief qt windows
@@ -53,4 +53,4 @@ class vgui_qt_window :
    bool use_statusbar;
 };
 
-#endif // VGUI_QT_WINDOW_H_
+#endif // vgui_qt_window_h_

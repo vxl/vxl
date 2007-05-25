@@ -1,5 +1,5 @@
-#ifndef VGUI_QT_H_
-#define VGUI_QT_H_
+#ifndef vgui_qt_h_
+#define vgui_qt_h_
 //:
 // \file
 // \brief QT implementation of vgui_toolkit.
@@ -14,6 +14,7 @@
 //  Modifications
 //   24.03.2000 JS  Initial Version, adapted from vgui_gtk
 //   14.11.2005 Chanop Silpa-Anan  adapted to QT 3.3.5 for X11/Mac
+//   02.05.2007 Christoph_John@gmx.de ported to QT 4.2.2
 // \endverbatim
 //-----------------------------------------------------------------------------
 
@@ -44,4 +45,4 @@ class vgui_qt : public vgui_toolkit
    void      init(int &, char **);
 };
 
-#endif // VGUI_QT_H_
+#endif // vgui_qt_h_
