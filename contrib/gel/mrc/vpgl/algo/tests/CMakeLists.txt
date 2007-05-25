@@ -19,7 +19,7 @@ ADD_TEST( vpgl_algo_test_project            ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_
 ADD_TEST( vpgl_algo_test_optimize_camera    ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_optimize_camera )
 ADD_TEST( vpgl_algo_test_fm_compute         ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_fm_compute )
 ADD_TEST( vpgl_algo_test_lens_warp_mapper   ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_lens_warp_mapper )
-ADD_TEST( vpgl_algo_test_camera_compute     ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_camera_compute )
+ADD_TEST( vpgl_algo_test_camera_compute     ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_camera_compute ${CMAKE_CURRENT_SOURCE_DIR})
 ADD_TEST( vpgl_algo_test_backproject     ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_backproject )
 ADD_EXECUTABLE( vpgl_algo_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vpgl_algo_test_include vpgl_algo )
