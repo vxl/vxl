@@ -1,6 +1,7 @@
 #include "vgui_qt_menu.h"
+//:
+// \file
 #include "vgui_qt_adaptor.h"
-#include <vcl_iostream.h>
 #include <QMenu>
 
 //---------------------------------------------------------------------------
@@ -38,7 +39,7 @@ vgui_qt_menu::vgui_qt_menu(const vgui_menu& menu, QWidget * parent )
 void vgui_qt_menu::upon_trigger(QAction * action) const
 {
   vcl_map<QAction*, vgui_command_sptr>::const_iterator i = commands_.find(action);
-  if(i != commands_.end() && bool(i->second))
+  if (i != commands_.end() && bool(i->second))
     i->second->execute();
 }
 
