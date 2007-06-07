@@ -25,6 +25,7 @@ class segv_vil_menus
   SEGV_VIL_DLL_DATA static void quit_callback();
   SEGV_VIL_DLL_DATA static void load_image_callback();
   SEGV_VIL_DLL_DATA static void save_image_callback();
+  SEGV_VIL_DLL_DATA static void save_camera_callback();
   SEGV_VIL_DLL_DATA static void remove_image_callback();
   SEGV_VIL_DLL_DATA static void convert_to_grey_callback();
   SEGV_VIL_DLL_DATA static void set_range_params_callback();

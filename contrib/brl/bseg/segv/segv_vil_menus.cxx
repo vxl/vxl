@@ -22,6 +22,11 @@ void segv_vil_menus::save_image_callback()
   segv_vil_segmentation_manager::instance()->save_image();
 }
 
+void segv_vil_menus::save_camera_callback()
+{
+  segv_vil_segmentation_manager::instance()->save_nitf_camera();
+}
+
 void segv_vil_menus::remove_image_callback()
 {
   segv_vil_segmentation_manager::instance()->remove_image();
@@ -169,6 +174,7 @@ vgui_menu segv_vil_menus::get_menu()
   menufile.add( "Quit", quit_callback,(vgui_key)'q', vgui_CTRL);
   menufile.add( "Load Image", load_image_callback,(vgui_key)'l', vgui_CTRL);
   menufile.add( "Save Image", save_image_callback);
+  menufile.add( "Save NITF Camera", save_camera_callback);
 
   //view menu entries
   menuview.add("Remove Image", remove_image_callback);

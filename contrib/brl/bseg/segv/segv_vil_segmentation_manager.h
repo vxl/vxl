@@ -44,6 +44,7 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void quit();
   void load_image();
   void save_image();
+  void save_nitf_camera();
 
   //: visualization
   void set_range_params();

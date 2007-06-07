@@ -622,6 +622,32 @@ void segv_vil_segmentation_manager::save_image()
     vcl_cerr << "segv_vil_segmentation_manager::save_image operation failed\n";
 }
 
+void segv_vil_segmentation_manager::save_nitf_camera()
+{
+  vil_image_resource_sptr img = this->selected_image();
+  if (!img)
+  {
+    vcl_cerr << "Null image in segv_vil_segmentation_manager::save_camera\n";
+    return;
+  }
+
+  vil_nitf2_image* nitf = 0;
+  vcl_string format = img->file_format();
+  vcl_string prefix = format.substr(0,4);
+  if (prefix == "nitf") {
+    nitf = (vil_nitf2_image*)img.ptr();
+    vgui_dialog file_dialog("Save NITF Camera");
+    static vcl_string image_file;
+    static vcl_string ext = "rpc";
+    file_dialog.file("Image Filename:", ext, image_file);
+    if (!file_dialog.ask())
+      return;
+    vpgl_nitf_rational_camera rpcam(nitf, true);
+    rpcam.save(image_file);
+  }
+  
+}
+
 void segv_vil_segmentation_manager::set_range_params()
 {
   bgui_image_tableau_sptr itab = this->selected_image_tab();
