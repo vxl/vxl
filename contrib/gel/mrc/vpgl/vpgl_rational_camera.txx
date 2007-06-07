@@ -6,6 +6,7 @@
 
 #include "vpgl_rational_camera.h"
 #include <vcl_vector.txx>
+#include <vcl_fstream.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 //--------------------------------------
