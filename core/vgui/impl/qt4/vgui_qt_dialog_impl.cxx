@@ -1,4 +1,4 @@
-// This is core/vgui/impl/qt/vgui_qt_dialog_impl.cxx
+// This is core/vgui/impl/qt4/vgui_qt_dialog_impl.cxx
 #include "vgui_qt_dialog_impl.h"
 #include "vgui_qt_adaptor.h"
 
