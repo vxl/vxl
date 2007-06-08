@@ -630,6 +630,25 @@ static void test_box_2d()
   ib.set_width(4); ib.set_height(4);
   vcl_cout << ib << ib.centroid() << vcl_endl;
   TEST("Integer box negative centroid drift", ib.centroid_x() == -10 && ib.centroid_y()==-10, true);
+
+
+
+  vgl_point_2d<double> min1(10,10), max1(20,20),
+                       min2(40,40), max2(50,50),
+                       min3(45,45), max3(55,55);
+
+  vgl_box_2d<double> box1(min1, max1);
+  vgl_box_2d<double> box2(min2, max2);
+  vgl_box_2d<double> box3(min3, max3);
+
+  //no intersection case
+  vgl_box_2d<double> i1 = vgl_intersection(box1, box2);
+  TEST("vgl_intersection(box1, box2) = false", true, i1.is_empty());
+
+  //intersection case
+  vgl_box_2d<double> i2 = vgl_intersection(box2, box3);
+  TEST("vgl_intersection(box2, box3) = true", false, i2.is_empty());
+  TEST("vgl_intersection(box2, box3) volume", 25.0, i2.volume());
 }
 
 static void test_box_3d()
@@ -780,6 +799,24 @@ static void test_box_3d()
   TEST("!contains(p3)", b.contains(p3), false);
   TEST("box is empty", b.is_empty(), true);
   TEST("box has no volume", b.volume(), 0.0);
+
+
+  vgl_point_3d<double> min1(10,10,10), max1(20,20,20),
+                       min2(40,40,40), max2(50,50,50),
+                       min3(45,45,45), max3(55,55,55);
+
+  vgl_box_3d<double> box1(min1, max1);
+  vgl_box_3d<double> box2(min2, max2);
+  vgl_box_3d<double> box3(min3, max3);
+
+  //no intersection case
+  vgl_box_3d<double> i1 = vgl_intersection(box1, box2);
+  TEST("vgl_intersection(box1, box2) = false", true, i1.is_empty());
+
+  //intersection case
+  vgl_box_3d<double> i2 = vgl_intersection(box2, box3);
+  TEST("vgl_intersection(box2, box3) = true", false, i2.is_empty());
+  TEST("vgl_intersection(box2, box3) volume", 125.0, i2.volume());
 }
 
 inline bool collinear(vgl_line_2d<int> const& l1,
