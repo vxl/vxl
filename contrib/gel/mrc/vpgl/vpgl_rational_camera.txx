@@ -537,21 +537,29 @@ bool vpgl_rational_camera<T>::save(vcl_string cam_path)
   file_out << "  lineNumCoef = (";
   for (int i=0; i<20; i++) {
     file_out << "\n    " << coeffs[NEU_V][map[i]];
+    if (i < 19)
+      file_out << ",";
   }
   file_out << ");\n";
   file_out << "  lineDenCoef = (";
   for (int i=0; i<20; i++) {
     file_out << "\n    " << coeffs[DEN_V][map[i]];
+    if (i < 19)
+      file_out << ",";
   }
   file_out << ");\n";
   file_out << "  sampNumCoef = (";
   for (int i=0; i<20; i++) {
     file_out << "\n    " << coeffs[NEU_U][map[i]];
+    if (i < 19)
+      file_out << ",";
   }
   file_out << ");\n";
   file_out << "  sampDenCoef = (";
   for (int i=0; i<20; i++) {
     file_out << "\n    " << coeffs[DEN_U][map[i]];
+    if (i < 19)
+      file_out << ",";
   }
   file_out << ");\n";
   file_out << "END_GROUP = IMAGE\n";
