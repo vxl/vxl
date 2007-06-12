@@ -64,8 +64,9 @@ static void test_unistd()
     vcl_cout << "fread return value: " << n << vcl_endl
              << "data[0]: " << data[0] << vcl_endl;
     TEST("fileno/fdopen", data[0], 99);
-    vcl_fclose (fp1);
     vcl_fclose (fp2);
+    if (vcl_feof(fp1)) vcl_fclose (fp1); // Visual Studio 8 seems to link the two FILE ptrs and
+	                                     // aborts if fp2 (and hence fp1) is already closed.
     vpl_unlink ("file");
   }
 
