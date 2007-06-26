@@ -30,10 +30,10 @@ static void test_plane_intersection()
 
 static void test_three_planes()
 {
-  vgl_plane_3d<double> pl4(1,0,0,0), pl5(0,1,0,0), pl6(0,0,1,0);
+  vgl_plane_3d<double> pl4(1,0,0,-3), pl5(0,1,0,8), pl6(0,0,1,-12);
   {
    vgl_point_3d<double> pi(pl4,pl5,pl6); // intersection
-   TEST("intersection", pi, vgl_point_3d<double>(0,0,0));
+   TEST("intersection", pi, vgl_point_3d<double>(3,-8,12));
    TEST("is_ideal", is_ideal(pi), false);
    vgl_point_3d<double> pj = vgl_intersection(pl4,pl5,pl6);
    TEST("three planes intersecting", pj, pi);

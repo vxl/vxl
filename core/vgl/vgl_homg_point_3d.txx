@@ -12,12 +12,12 @@ vgl_homg_point_3d<Type>::vgl_homg_point_3d (vgl_homg_plane_3d<Type> const& l1,
                                             vgl_homg_plane_3d<Type> const& l2,
                                             vgl_homg_plane_3d<Type> const& l3)
 {
-  set( l1.ny()*l2.nz()*l3.d()+l2.ny()*l3.nz()*l1.d()+l3.ny()*l1.nz()*l2.d()
-      -l1.ny()*l3.nz()*l2.d()-l2.ny()*l1.nz()*l3.d()-l3.ny()*l2.nz()*l1.d(),
+  set( -l1.ny()*l2.nz()*l3.d()-l2.ny()*l3.nz()*l1.d()-l3.ny()*l1.nz()*l2.d()
+      +l1.ny()*l3.nz()*l2.d()+l2.ny()*l1.nz()*l3.d()+l3.ny()*l2.nz()*l1.d(),
        l1.nz()*l2.d()*l3.nx()+l2.nz()*l3.d()*l1.nx()+l3.nz()*l1.d()*l2.nx()
       -l1.nz()*l3.d()*l2.nx()-l2.nz()*l1.d()*l3.nx()-l3.nz()*l2.d()*l1.nx(),
-       l1.d()*l2.nx()*l3.ny()+l2.d()*l3.nx()*l1.ny()+l3.d()*l1.nx()*l2.ny()
-      -l1.d()*l3.nx()*l2.ny()-l2.d()*l1.nx()*l3.ny()-l3.d()*l2.nx()*l1.ny(),
+      -l1.d()*l2.nx()*l3.ny()-l2.d()*l3.nx()*l1.ny()-l3.d()*l1.nx()*l2.ny()
+      +l1.d()*l3.nx()*l2.ny()+l2.d()*l1.nx()*l3.ny()+l3.d()*l2.nx()*l1.ny(),
        l1.nx()*l2.ny()*l3.nz()+l2.nx()*l3.ny()*l1.nz()+l3.nx()*l1.ny()*l2.nz()
       -l1.nx()*l3.ny()*l2.nz()-l2.nx()*l1.ny()*l3.nz()-l3.nx()*l2.ny()*l1.nz());
 }
