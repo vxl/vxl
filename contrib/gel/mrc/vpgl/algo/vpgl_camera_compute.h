@@ -12,6 +12,8 @@
 #include <vcl_vector.h>
 #include <vgl/vgl_fwd.h>
 #include <vnl/vnl_fwd.h>
+#include <vpgl/vpgl_calibration_matrix.h>
+#include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/vpgl_affine_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
@@ -60,6 +62,32 @@ class vpgl_affine_camera_compute
   bool compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
                 const vcl_vector< vgl_point_3d<double> >& world_pts,
                 vpgl_affine_camera<double>& camera );
+};
+
+
+//:Various methods for computing a perspective camera
+class vpgl_perspective_camera_compute
+{
+ public:
+  vpgl_perspective_camera_compute(){};
+
+  //: Compute from two sets of corresponding points.
+  // Put the resulting camera into camera, return true if successful.
+  bool compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
+                const vcl_vector< vgl_point_3d<double> >& world_pts,
+                const vpgl_calibration_matrix<double>& K,
+                vpgl_perspective_camera<double>& camera );
+
+  //: Compute from a rational camera
+  // Put the resulting camera into camera, return true if successful.
+  // The approximation volume defines the region of space (lon (deg), lat (deg), elev (meters))
+  //  where the perspective approximation is valid. Norm trans is a pre-multiplication 
+  // of the perspective camera to account for scaling the lon, lat and elevation
+  // to the range [-1, 1]
+  bool compute( vpgl_rational_camera<double> const& rat_cam,
+                vgl_box_3d<double> const& approximation_volume,
+                vpgl_perspective_camera<double>& camera,
+                vgl_h_matrix_3d<double>& norm_trans);
 };
 
 #endif // vpgl_camera_compute_h_

@@ -1,6 +1,8 @@
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
-
+#include <vcl_cstdlib.h> // for rand()
+#include <vil/vil_image_resource.h>
+#include <vil/vil_image_resource_sptr.h>
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_vector_fixed.h>
 
@@ -9,6 +11,8 @@
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_box_3d.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vpgl/algo/vpgl_camera_compute.h>
 #include <vpgl/vpgl_proj_camera.h>
@@ -16,7 +20,7 @@
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
-
+#include <vpgl/vpgl_joe_camera.h>
 #if 0
 static void composite_projection(vpgl_proj_camera<double> const& camera,
                                  const vpgl_scale_offset<double>& sox,
@@ -33,7 +37,7 @@ static void composite_projection(vpgl_proj_camera<double> const& camera,
   camera.project(xn, yn, zn, u, v);
 }
 #endif
-void test_camera_compute_setup()
+static void test_camera_compute_setup()
 {
   // PART 1: Test the affine camera computation
 
@@ -62,29 +66,30 @@ void test_camera_compute_setup()
            << "\nEstimated camera matrix:\n" << C1e.get_matrix() << '\n';
   TEST_NEAR( "vpgl_affine_camera_compute:",
              ( C1.get_matrix()-C1e.get_matrix() ).frobenius_norm(), 0, 1 );
+}
+//an actual rational camera
+vpgl_rational_camera<double> construct_rational_camera()
+{
+  double n_u[20] =  { 3.89528e-006, -7.41303e-008, 1.25847e-005, 0.00205724, 5.38537e-008,
+                      -6.45546e-007, -9.52482e-005, 1.50544e-007, 0.000665835, 1.00827,
+                      -1.58873e-006, -3.85506e-007, 9.73561e-006, -6.13083e-007,
+                      -0.000361219, 0.0238256, 9.65955e-008, -1.94861e-005,
+                      0.0155788, -0.0040918};
 
-  //============== Test projective approximation to rational camera =======
-  // the coefficients
-  double n_u[20] =  { 38790, 2099.25, 2900.55, 2.64833e+006, -218.811, 3245.65,
-                      5.79441e+006 , -1662.86, -1.94933e+006, 8.62956e+008,
-                      -11.1462, -1136.15, -28872.1, 691.187, 1366.12,
-                      -4.85465e+006, -93.2575, -40860.3, 2.36095e+007,
-                      -1.22247e+008};
+  double d_u[20] = { -1.68064e-006, -9.85769e-007, 3.49708e-005, 4.28561e-006, 2.25889e-007,
+                     -1.49309e-007,  -3.56398e-007, 5.07889e-007, -4.95792e-006, 0.00204326,
+                     3.18231e-008,  -8.82645e-008,  -1.68424e-007, 2.79561e-007, -1.87894e-007,
+                     0.000199085,  -1.71801e-007,  -4.7099e-007,  -0.000610182,  1};
 
-  double d_u[20] = { -1.36512, 3.803, -101.798, 44842.5, 0.709332, -8.52022,
-                     3336.12 , 0.254181, -5913.26, 3.06869e+006, 0.198631,
-                     -4.1618, 1450.89 , -5.10025 , -10430.8 , 6.96131e+006, 
-                     3.2923, 3058.19, -4.37677e+006, 1e+009};
+  double n_v[20] = { -1.21292e-006, 7.83222e-006, -6.63094e-005, -0.000224627, -4.85207e-006,
+                     -2.07948e-006,  -1.55515e-005, -3.03478e-007, -6.18288e-005, 0.0318755,
+                     4.11169e-005,  -4.28023e-007,  0.000196132,  1.06738e-005, 0.000307117,
+                     -0.960259,  -9.56042e-007,  2.42754e-005,  -0.0712854,  -0.000395718};
 
-  double n_v[20]={ -572.892, -6095.51, -1297.11, -89466.6, -401.141, 931.828,
-                   -386354, -267.976, 62537.5, -1.45554e+006, -170.631,
-                   1578.18, -809130, -808.989, 637494, -1.09453e+008, 79.3162,
-                   -58735.7, 7.95173e+006, 1e+009};
-
-  double d_v[20]={ -0.459374, 1.27974, -34.2558, 15089.9, 0.238696, -2.86712,
-                   1122.63, 0.085534,  -1989.86, 1.03264e+006, 0.0668408,
-                   -1.40048, 488.235, -1.71628, -3510.04, 2.34254e+006,
-                   1.10788, 1029.11, -1.47282e+006 , 3.36508e+008};
+  double d_v[20] = {1.44065e-005, -2.47213e-006, -8.52173e-006, -1.28085e-005, 4.81707e-006,
+                    1.50614e-006,  -5.23036e-006,  1.4626e-006,  -3.12355e-007, -1.20281e-006,
+                    -3.51175e-005,  -6.15114e-006,  2.89264e-005, 1.55209e-006, 1.07945e-005,
+                    -0.000160384,  -1.15965e-007,  -7.89301e-006,  0.000275139, 1};
 
   vnl_matrix_fixed<double, 4, 20> cmatrix;
   for(unsigned i = 0; i<20; ++i)
@@ -93,122 +98,236 @@ void test_camera_compute_setup()
       cmatrix[2][i]=n_v[i];  cmatrix[3][i]=d_v[i];
     }
   //The scales and offsets
-  vpgl_scale_offset<double> sox(0.0667, -115.725);
-  vpgl_scale_offset<double> soy(0.0183, 36.4349);
-  vpgl_scale_offset<double> soz(1257, 2019);
-  vpgl_scale_offset<double> sou(6936, 6936);
-  vpgl_scale_offset<double> sov(5866, 5866);
+  vpgl_scale_offset<double> sox(0.0347, -71.4049);
+  vpgl_scale_offset<double> soy(0.0219, 41.8216);
+  vpgl_scale_offset<double> soz(501, -30);
+  vpgl_scale_offset<double> sou(4764, 4693);
+  vpgl_scale_offset<double> sov(4221, 3921);
   vcl_vector<vpgl_scale_offset<double> > scale_offsets;
   scale_offsets.push_back(sox);   scale_offsets.push_back(soy);
   scale_offsets.push_back(soz);   scale_offsets.push_back(sou);
   scale_offsets.push_back(sov); 
   //Construct the rational camera
   vpgl_rational_camera<double> rat_cam(cmatrix, scale_offsets);
+  return rat_cam;
+}
+#if 0
+vpgl_rational_camera<double> read_rational_camera()
+{
+  vcl_string path = "c:/mundy/local-software/VXL/rational_camera/06MAR27155829-S2AS-005580823020_01_P001.RPB";
+  vpgl_rational_camera<double> rat_cam(path);
+  return rat_cam;
+}
+#endif
+void test_perspective_compute()
+{
+  vcl_cout << "Test Perspective Compute\n";
+  vnl_vector_fixed<double, 3> rv, trans;
+  for(unsigned i = 0; i<3; ++i)
+    rv[i]=0.9068996774314604; // axis along diagonal, rotation of 90 degrees
+  vgl_rotation_3d<double> rr(rv);
 
-  //Approximate the camera at the center of the volume of view
-  vpgl_proj_camera<double> camera;
-  vgl_point_3d<double> center(-115.725, 36.4349, 2019);
+  trans[0]=10.0;   trans[1]=20.0; trans[2] = 30;
 
-  vpgl_proj_camera_compute pcc(rat_cam);
-  pcc.compute(center, camera);
+  vnl_matrix<double> Y(3, 5);
+  Y[0][0] = 1.1; Y[1][0] = -0.05; Y[2][0] = 0.01;
+  Y[0][1] = 0.02; Y[1][1] = 0.995; Y[2][1] = -0.1;
+  Y[0][2] = -0.01; Y[1][2] = 0.04; Y[2][2] = 1.04;
+  Y[0][3] = 1.15; Y[1][3] = 0.97; Y[2][3] = -0.1;
+  Y[0][4] = 1.01; Y[1][4] = 1.03; Y[2][4] = 0.96;
 
-  //the normalizing scale transformation
-  vgl_h_matrix_3d<double> T = pcc.norm_trans();
-  vcl_cout << "T \n" << T << '\n';
-  //Points to project for testing the approximation
-  vgl_homg_point_3d<double> p0(-115.725, 36.4349, 2019), hp0n;
-  vgl_homg_point_3d<double> p1(-115.73, 36.44, 2019), hp1n;
-  //Note that p1 is about 1/2 mile from p0.
-  //Non-homogenous forms
-  vgl_point_3d<double> wp0(p0), wp1(p1);
-  //Normalize the world coordinates
-  hp0n = T(p0); 
-  hp1n = T(p1); 
-  //3-d points
-  vgl_point_3d<double> p0n(hp0n), p1n(hp1n);
-  vcl_cout << "Normalized p0 " << p0n << '\n';
-  vcl_cout << "Normalized p1 " << p1n << '\n';
-  
-  //Project points
-  vgl_point_2d<double> hpp0, hpp1;
-  vgl_point_2d<double> rpp0,  rpp1;
-  
-  vcl_cout << "Project p0 \n";
-  hpp0 = camera(hp0n);
-  vgl_point_2d<double> pp0(hpp0);
-  vcl_cout << "Projective camera " << pp0 << '\n';
+  vnl_matrix<double> J(4,6);
+  for(unsigned c = 0; c<5; ++c)
+    {
+      for(unsigned r = 0; r<3; ++r)
+        J[r][c]=Y[r][c];
+      J[3][c] = 1.0;
+    }
+  J[0][5] = 0.5;   J[1][5] = 1.0;  J[2][5] = -0.5;  J[3][5] = 1.0; 
 
-  rpp0 = rat_cam.project(wp0);
-  vcl_cout << "Rational camera " << rpp0 << '\n';
-  double p0_error = 
-    vcl_fabs(pp0.x()-rpp0.x())+vcl_fabs(pp0.y()-rpp0.y());
-  TEST_NEAR("Project Origin", p0_error, 0.0, 0.1);
-
-  vcl_cout << "Project p1 \n";
-  hpp1 = camera(hp1n);
-  vgl_point_2d<double> pp1(hpp1);
-  vcl_cout << "Projective camera " << pp1 << '\n';
-
-  rpp1 = rat_cam.project(wp1);
-  vcl_cout << "Rational camera " << rpp1 << '\n';
-
-  double p1_error = 
-    vcl_fabs(pp1.x()-rpp1.x())+vcl_fabs(pp1.y()-rpp1.y());
-  TEST_NEAR("Project P1", p1_error, 0.0, 2.0);
-
-  //Re-approximate the camera at the shifted position
-  vpgl_proj_camera<double> s_camera;
-  vgl_point_3d<double> s_center(-115.73, 36.44, 2019);
-  pcc.compute(s_center, s_camera);
-
-  vcl_cout << "Project shifted p1 \n";
-  hpp1 = s_camera(hp1n);
-  vgl_point_2d<double> s_pp1(hpp1);
-  vcl_cout << "Shifted Projective camera " << s_pp1 << '\n';
-
-  rpp1 = rat_cam.project(wp1);
-  vcl_cout << "Rational camera " << rpp1 << '\n';
-
-  double s_p1_error = 
-    vcl_fabs(s_pp1.x()-rpp1.x())+vcl_fabs(s_pp1.y()-rpp1.y());
-  TEST_NEAR("Project Shifted P1", s_p1_error, 0.0, 2.0);
-  
+ vnl_matrix_fixed<double, 3, 3> pr = rr.as_matrix();
+ vnl_matrix_fixed<double, 3, 4> P;
+ for(unsigned r = 0; r<3; ++r)
+   {
+     for(unsigned c = 0; c<3; ++c)
+       P[r][c] = pr[r][c];
+     P[r][3] = trans[r];
+   }
+ // Project the 3-d points
+ vnl_matrix<double> Z(2, 6);
+ for(unsigned c = 0; c<6; ++c)
+   {
+     vnl_vector_fixed<double, 4> vpr;
+     for(unsigned r = 0; r<4; ++r)
+        vpr[r]=J[r][c];
+     vnl_vector_fixed<double, 3> pvpr = P*vpr;
+     for(unsigned r = 0; r<2; ++r)
+       Z[r][c] = pvpr[r]/pvpr[2];
+   }
+ vcl_cout << "Projected points \n " << Z << '\n';
+ vcl_vector<vgl_point_2d<double> > image_pts;
+ vcl_vector<vgl_point_3d<double> > world_pts;
+ for(unsigned i = 0; i<6; ++i)
+   {
+     vgl_point_2d<double> ip(Z[0][i], Z[1][i]);
+     vgl_point_3d<double> wp(J[0][i], J[1][i], J[2][i]);
+     image_pts.push_back(ip);
+     world_pts.push_back(wp);
+   }
+ vpgl_calibration_matrix<double> K;
+ vpgl_perspective_camera<double> pc;
+ vpgl_perspective_camera_compute pcc;
+ bool good = pcc.compute(image_pts, world_pts, K, pc);
+ vcl_cout << pc << '\n';
+ 
+}
+vcl_vector<vgl_point_3d<double> > world_points()
+{
+  vgl_point_3d<double> p0(-71.4146, 41.8286, 0);
+  vgl_point_3d<double> p1(-71.41, 41.8267, 0);
+  vgl_point_3d<double> p2(-71.4109, 41.8273, 30);
+  vgl_point_3d<double> p3(-71.4125, 41.8255, 0);
+  vgl_point_3d<double> p4(-71.4148, 41.8309, 20);
+  vgl_point_3d<double> p5(-71.4105, 41.8292, 0);
+  vgl_point_3d<double> p6(-71.4103, 41.8251, 100);
+  vgl_point_3d<double> p7(-71.4229,41.8242, 10);
+  vgl_point_3d<double> p8(-71.425, 41.8394, 0);
+  vcl_vector<vgl_point_3d<double> > wp;
+  wp.push_back(p0);   wp.push_back(p1);   wp.push_back(p2);
+  wp.push_back(p3);   wp.push_back(p4);   wp.push_back(p5);
+  wp.push_back(p6);   wp.push_back(p7);
+  return wp;
 }
 
-void test_camera_compute_real(vcl_string dir_base)
+void test_rational_camera_approx()
 {
   
-  vcl_string cam_file = "C:\\lems\\vxl-gamze\\vxl\\contrib\\gel\\mrc\\vpgl\\algo\\tests\\data\\06MAR27155829-S2AS-005580823020_01_P001.RPB";
-  vpgl_rational_camera<double> rat_cam(cam_file);
+  vpgl_rational_camera<double> rat_cam = construct_rational_camera();
+  //  vpgl_rational_camera<double> rat_cam = read_rational_camera();
   vcl_cout << rat_cam;
+  vpgl_scale_offset<double> sox = rat_cam.scl_off(vpgl_rational_camera<double>::X_INDX);
+  vpgl_scale_offset<double> soy = rat_cam.scl_off(vpgl_rational_camera<double>::Y_INDX);
+  vpgl_scale_offset<double> soz = rat_cam.scl_off(vpgl_rational_camera<double>::Z_INDX);
+  vpgl_scale_offset<double> sou = rat_cam.scl_off(vpgl_rational_camera<double>::U_INDX);
+  vpgl_scale_offset<double> sov = rat_cam.scl_off(vpgl_rational_camera<double>::V_INDX);
+  vgl_point_3d<double> pmin(sox.offset()-sox.scale(), soy.offset()-soy.scale(), 
+                            0);
+  vgl_point_3d<double> pmax(sox.offset()+sox.scale(), soy.offset()+soy.scale(), 
+                            soz.scale());
+  vgl_box_3d<double> approx_vol(pmin, pmax);
 
-  double xoff = rat_cam.offset(vpgl_rational_camera<double>::X_INDX);
-  double yoff = rat_cam.offset(vpgl_rational_camera<double>::Y_INDX);
-  double zoff = rat_cam.offset(vpgl_rational_camera<double>::Z_INDX);
+  vpgl_perspective_camera<double> pc;
+  vpgl_perspective_camera_compute pcc;
+  vgl_h_matrix_3d<double> norm_trans;
+  pcc.compute(rat_cam, approx_vol, pc, norm_trans);
+#if 0
+  double xoff = sox.offset(), yoff = soy.offset(), zoff = soz.offset();
+  unsigned ni = static_cast<unsigned>(2*sou.scale());
+  unsigned nj = static_cast<unsigned>(2*sov.scale());
+  //Randomly generate 100 points  
+  vcl_vector<vgl_point_3d<double> > world_pts;
+  unsigned n = 100;
+  double xrange = sox.scale(), yrange = soy.scale(), zrange = soz.scale();
+  //double xrange = 0.005, yrange = 0.005, zrange = 100;
+  unsigned count = 0, ntrials = 0;
+  while(count<n)
+    {
+      ntrials++;
+      double dx = (2.0*xrange)*(vcl_rand()/(RAND_MAX+1.0)) - xrange;
+      double dy = (2.0*yrange)*(vcl_rand()/(RAND_MAX+1.0)) - yrange;
+      double dz = zrange*(vcl_rand()/(RAND_MAX+1.0));
+      //      if(zoff+dz < 0)
+      //continue;
+      vgl_point_3d<double> wp(xoff+dx, yoff+dy, dz);
+      vgl_point_2d<double> ip = rat_cam.project(wp);
+      if(ip.x()<0||ip.x()>ni||ip.y()<0||ip.y()>nj)
+        continue;
+      world_pts.push_back(wp);
+      count++;
+    }
+  vcl_cout << "Ntrials " << ntrials << '\n';
 
-  vgl_point_3d<double> center(xoff, yoff, zoff);
+  //  vcl_vector<vgl_point_3d<double> > world_pts = world_points();
+  vcl_vector<vgl_point_3d<double> > norm_world_pts;
+  vcl_vector<vgl_point_2d<double> > image_pts, norm_image_pts;
+  unsigned N = world_pts.size();
+  for(unsigned i = 0; i<N; ++i)
+    {
+      vgl_point_3d<double> wp = world_pts[i];
+      vgl_point_2d<double> ip = rat_cam.project(wp);
+      image_pts.push_back(ip);
+      vgl_point_2d<double> nip(sou.normalize(ip.x()), sov.normalize(ip.y()));
+      norm_image_pts.push_back(nip);
+      vgl_point_3d<double> nwp(sox.normalize(wp.x()),
+                               soy.normalize(wp.y()),
+                               soz.normalize(wp.z()));
+      norm_world_pts.push_back(nwp);
+    }
+  vnl_matrix_fixed<double, 3, 3> kk;
+  kk.fill(0);
+  kk[0][0]= 1.0;
+  kk[1][1]= 1.0;
+  kk[2][2]=1.0;
 
-  vpgl_proj_camera_compute pcc(rat_cam);
-  vpgl_proj_camera<double> camera;
-  pcc.compute(center, camera);
-  vpgl_perspective_camera<double> p_camera;
-  bool ok = vpgl_perspective_decomposition(camera.get_matrix(), p_camera);
-
- 
-  if (!ok) 
-    vcl_cout << "Cannot create a perspective camera" << vcl_endl;
-    
-  vcl_cout << "Camera Center " << p_camera.camera_center() << vcl_endl;
-  vcl_cout << "Rotation " << p_camera.get_rotation() << vcl_endl;
-  vcl_cout << "Matrix " << vcl_endl << p_camera.get_matrix()<< vcl_endl;
-  vpgl_calibration_matrix<double> calib = p_camera.get_calibration();
-  vcl_cout << "Calibration Matrix Params" << vcl_endl;
-  vcl_cout << "Calib Matrix=  " << vcl_endl << calib.get_matrix() << vcl_endl;
-  vcl_cout << "Focal Length=  " << calib.focal_length() << vcl_endl;
-  vcl_cout << "Principal Point = " << calib.principal_point() << vcl_endl;
-  vcl_cout << "Skew = " << calib.skew() << vcl_endl;
-  vcl_cout << "X scale = " << calib.x_scale() << vcl_endl;
-  vcl_cout << "Y scale = " << calib.y_scale() << vcl_endl;
+  vpgl_calibration_matrix<double> K(kk);
+  vpgl_perspective_camera<double> pc;
+  vpgl_perspective_camera_compute pcc;
+  bool good = pcc.compute(norm_image_pts, norm_world_pts, K, pc);
+  vcl_cout << pc << '\n';
+  //project the points approximated
+  double err_max = 0, err_min = 1e10;
+  vgl_point_3d<double> min_pt, max_pt;
+  for(unsigned i = 0; i<N; ++i)
+    {
+      vgl_point_3d<double> nwp = norm_world_pts[i];
+      double u, v;
+      pc.project(nwp.x(), nwp.y(), nwp.z(), u, v);
+      vgl_point_2d<double> ip = norm_image_pts[i];
+      double error = vcl_sqrt((ip.x()-u)*(ip.x()-u) + (ip.y()-v)*(ip.y()-v));
+      if( error > err_max )
+        {
+          err_max = error;
+          max_pt = world_pts[i];
+        }
+      if(error < err_min)
+        {
+          err_min = error;
+          min_pt = world_pts[i];
+        }
+    }
+  vcl_cout << "Max Error = " << err_max << " at " << max_pt << '\n';
+  vcl_cout << "Min Error = " << err_min << " at " << min_pt << '\n';
+  //form the full camera
+  vpgl_calibration_matrix<double> Kmin = pc.get_calibration();
+  vnl_matrix_fixed<double, 3, 3> kk_min;
+  kk_min = Kmin.get_matrix();
+  kk[0][0]= sou.scale(); kk[0][2]= sou.offset();
+  kk[1][1]= sov.scale(); kk[1][2]= sov.offset();
+  kk *= kk_min;
+  pc.set_calibration(kk);
+  err_max = 0; err_min = 1e08;
+  for(unsigned i = 0; i<N; ++i)
+    {
+      vgl_point_3d<double> nwp = norm_world_pts[i];
+      double U ,V;
+      pc.project(nwp.x(), nwp.y(), nwp.z(), U, V);
+      vgl_point_2d<double> ip = image_pts[i];
+      double error = vcl_sqrt((ip.x()-U)*(ip.x()-U) + (ip.y()-V)*(ip.y()-V));
+      if( error > err_max )
+        {
+          err_max = error;
+          max_pt = world_pts[i];
+        }
+      if(error < err_min)
+        {
+          err_min = error;
+          min_pt = world_pts[i];
+        }
+    }
+  vcl_cout << "Max Error = " << err_max << " at " << max_pt << '\n';
+  vcl_cout << "Min Error = " << err_min << " at " << min_pt << '\n';
+  vcl_cout << "final cam\n" << pc << '\n';
+#endif
 }
 
 int test_camera_compute_main(int argc, char* argv[]) 
@@ -225,7 +344,8 @@ int test_camera_compute_main(int argc, char* argv[])
 #endif
   }
   test_camera_compute_setup();
-  test_camera_compute_real(dir_base);
+  test_perspective_compute();
+  test_rational_camera_approx();
 
   return testlib_test_summary();
 }

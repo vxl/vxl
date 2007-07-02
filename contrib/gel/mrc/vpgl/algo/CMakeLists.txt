@@ -22,12 +22,13 @@ SET( vpgl_algo_sources
   vpgl_list.h                      vpgl_list.txx
   vpgl_invmap_cost_function.h      vpgl_invmap_cost_function.cxx
   vpgl_backproject.h               vpgl_backproject.cxx
+  vpgl_ortho_procrustes.h	   vpgl_ortho_procrustes.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vpgl_algo_sources)
 
 ADD_LIBRARY(vpgl_algo ${vpgl_algo_sources})
-TARGET_LINK_LIBRARIES( vpgl_algo vpgl rrel vgl_algo vsol)
+TARGET_LINK_LIBRARIES( vpgl_algo vpgl rrel vgl_algo vsol vnl)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)

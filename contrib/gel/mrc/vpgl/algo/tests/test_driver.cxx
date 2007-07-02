@@ -9,6 +9,7 @@ DECLARE( test_camera_compute );
 DECLARE( test_construct_cameras );
 DECLARE( test_lens_warp_mapper );
 DECLARE( test_backproject );
+DECLARE( test_ortho_procrustes );
 
 void register_tests()
 {
@@ -20,6 +21,7 @@ void register_tests()
   REGISTER( test_construct_cameras );
   REGISTER( test_lens_warp_mapper );
   REGISTER( test_backproject );
+  REGISTER( test_ortho_procrustes );
 }
 
 DEFINE_MAIN;
