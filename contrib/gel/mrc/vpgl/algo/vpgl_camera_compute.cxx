@@ -532,6 +532,26 @@ compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
   vcl_cout << "depths \n" << depth << '\n';
 #endif
   
+  //Check if depths are all approximately the same (near affine projection)
+  double average_depth = 0;
+  unsigned nd = depth.size();
+  for(unsigned i = 0; i<nd; ++i)
+    average_depth += depth[i];
+  average_depth /= nd;
+  double max_dev = 0;
+  for(unsigned i = 0; i<nd; ++i)
+    {
+      double dev = vcl_fabs(depth[i]-average_depth);
+      if(dev>max_dev)
+        max_dev = dev;
+    }
+  double norm_max_dev = max_dev/average_depth;
+  //if depths are nearly the same make them exactly equal
+  //since variations are not meaningful
+  if(norm_max_dev < 0.01)
+    for(unsigned i = 0; i<nd; ++i)
+      depth[i]=average_depth;
+
   //Set up point sets for ortho Procrustes
   vnl_matrix<double> X(3,N), Y(3,N);
   for(unsigned c = 0; c<N; ++c)
@@ -539,7 +559,7 @@ compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
       vgl_point_2d<double> pi = image_pts[c];
       vgl_point_3d<double> pw = world_pts[c];
       //image points are multiplied by projective scale factor (depth)
-      //      X[0][c] = pi.x()*depth[c]; X[1][c] = pi.y()*depth[c]; X[2][c] = depth[c];
+      X[0][c] = pi.x()*depth[c]; X[1][c] = pi.y()*depth[c]; X[2][c] = depth[c];
       X[0][c] = pi.x(); X[1][c] = pi.y(); X[2][c] = 1.0;
       Y[0][c] = pw.x(); Y[1][c] = pw.y(); Y[2][c] = pw.z();
     }
@@ -579,13 +599,18 @@ compute( vpgl_rational_camera<double> const& rat_cam,
          vpgl_perspective_camera<double>& camera,
          vgl_h_matrix_3d<double>& norm_trans)
 {
-  vpgl_scale_offset<double> sou = rat_cam.scl_off(vpgl_rational_camera<double>::U_INDX);
-  vpgl_scale_offset<double> sov = rat_cam.scl_off(vpgl_rational_camera<double>::V_INDX);
-  vpgl_scale_offset<double> sox = rat_cam.scl_off(vpgl_rational_camera<double>::X_INDX);
-  vpgl_scale_offset<double> soy = rat_cam.scl_off(vpgl_rational_camera<double>::Y_INDX);
-  vpgl_scale_offset<double> soz = rat_cam.scl_off(vpgl_rational_camera<double>::Z_INDX);
-  unsigned ni = static_cast<unsigned>(2*sou.scale());
-  unsigned nj = static_cast<unsigned>(2*sov.scale());
+  vpgl_scale_offset<double> sou = 
+    rat_cam.scl_off(vpgl_rational_camera<double>::U_INDX);
+  vpgl_scale_offset<double> sov = 
+    rat_cam.scl_off(vpgl_rational_camera<double>::V_INDX);
+  vpgl_scale_offset<double> sox = 
+    rat_cam.scl_off(vpgl_rational_camera<double>::X_INDX);
+  vpgl_scale_offset<double> soy = 
+    rat_cam.scl_off(vpgl_rational_camera<double>::Y_INDX);
+  vpgl_scale_offset<double> soz =
+    rat_cam.scl_off(vpgl_rational_camera<double>::Z_INDX);
+  unsigned ni = static_cast<unsigned>(2*sou.scale());//# image columns
+  unsigned nj = static_cast<unsigned>(2*sov.scale());//# image rows 
   norm_trans.set_identity();
   norm_trans.set(0,0,1/sox.scale()); norm_trans.set(1,1,1/soy.scale());
   norm_trans.set(2,2,1/soz.scale()); 
@@ -598,6 +623,8 @@ compute( vpgl_rational_camera<double> const& rat_cam,
   double xmin = minp.x(), ymin = minp.y(), zmin = minp.z();
   double xrange = maxp.x()-xmin, yrange = maxp.y()-ymin,
     zrange = maxp.z()-zmin;
+  if(xrange<0||yrange<0||zrange<0)
+    return false;
   //Randomly generate points  
   unsigned n = 100;
   vcl_vector<vgl_point_3d<double> > world_pts;
@@ -617,6 +644,7 @@ compute( vpgl_rational_camera<double> const& rat_cam,
     }
   vcl_cout << "Ntrials " << ntrials << '\n';
 
+  //Normalize world and image points to the range [-1,1]
   vcl_vector<vgl_point_3d<double> > norm_world_pts;
   vcl_vector<vgl_point_2d<double> > image_pts, norm_image_pts;
   unsigned N = world_pts.size();
@@ -632,12 +660,15 @@ compute( vpgl_rational_camera<double> const& rat_cam,
                                soz.normalize(wp.z()));
       norm_world_pts.push_back(nwp);
     }
+  //Assume identity calibration matrix initially, since image point 
+  //normalization remove any scale and offset from image coordinates
   vnl_matrix_fixed<double, 3, 3> kk;
   kk.fill(0);
   kk[0][0]= 1.0;
   kk[1][1]= 1.0;
   kk[2][2]=1.0;
-
+  //Compute solution for rotation and translation and calibration matrix of 
+  //the perspective camera
   vpgl_calibration_matrix<double> K(kk);
   vpgl_perspective_camera<double> pc;
   vpgl_perspective_camera_compute pcc;
@@ -645,7 +676,7 @@ compute( vpgl_rational_camera<double> const& rat_cam,
   if(!good)
     return false;
   vcl_cout << pc << '\n';
-  //form the full camera
+  //form the full camera by premultiplying by the image normalization
   vpgl_calibration_matrix<double> Kmin = pc.get_calibration();
   vnl_matrix_fixed<double, 3, 3> kk_min;
   kk_min = Kmin.get_matrix();
