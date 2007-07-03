@@ -20,7 +20,7 @@
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
-#include <vpgl/vpgl_joe_camera.h>
+//#include <vpgl/vpgl_joe_camera.h>
 #if 0
 static void composite_projection(vpgl_proj_camera<double> const& camera,
                                  const vpgl_scale_offset<double>& sox,
