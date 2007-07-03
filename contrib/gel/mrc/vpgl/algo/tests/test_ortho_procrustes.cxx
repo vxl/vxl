@@ -20,7 +20,7 @@ static void test_ortho_procrustes()
   for(unsigned i = 0; i<3; ++i)
     rv[i]=0.9068996774314604; // axis along diagonal, rotation of 90 degrees
   vgl_rotation_3d<double> rr(rv);
-
+  vnl_matrix_fixed<double, 3, 3> rrr = rr.as_matrix();
   trans[0]=10.0;   trans[1]=20.0; trans[2] = 30;
 
   vcl_cout << "The ideal rotation\n" << rr << '\n';
@@ -32,7 +32,7 @@ static void test_ortho_procrustes()
       for(unsigned r = 0; r<3; ++r)
         v[r]=Y[r][c];
       
-      vnl_vector_fixed<double, 3> trans_v = rr*v + trans;
+      vnl_vector_fixed<double, 3> trans_v = rrr*v + trans;
       vcl_cout << "|Y|(" << c << ")=" << v.magnitude() << "  |X|(" << c 
                << ")=" << trans_v.magnitude() << '\n';
 
