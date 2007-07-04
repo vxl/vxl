@@ -215,6 +215,7 @@ void test_rational_camera_approx()
   vpgl_perspective_camera_compute pcc;
   vgl_h_matrix_3d<double> norm_trans;
   pcc.compute(rat_cam, approx_vol, pc, norm_trans);
+  vcl_cout << "Test Result \n" << pc << '\n';
 }
 
 int test_camera_compute_main(int argc, char* argv[]) 

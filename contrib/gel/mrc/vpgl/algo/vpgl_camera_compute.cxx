@@ -670,20 +670,19 @@ compute( vpgl_rational_camera<double> const& rat_cam,
   //Compute solution for rotation and translation and calibration matrix of 
   //the perspective camera
   vpgl_calibration_matrix<double> K(kk);
-  vpgl_perspective_camera<double> pc;
   vpgl_perspective_camera_compute pcc;
-  bool good = pcc.compute(norm_image_pts, norm_world_pts, K, pc);
+  bool good = pcc.compute(norm_image_pts, norm_world_pts, K, camera);
   if(!good)
     return false;
-  vcl_cout << pc << '\n';
+  vcl_cout << camera << '\n';
   //form the full camera by premultiplying by the image normalization
-  vpgl_calibration_matrix<double> Kmin = pc.get_calibration();
+  vpgl_calibration_matrix<double> Kmin = camera.get_calibration();
   vnl_matrix_fixed<double, 3, 3> kk_min;
   kk_min = Kmin.get_matrix();
   kk[0][0]= sou.scale(); kk[0][2]= sou.offset();
   kk[1][1]= sov.scale(); kk[1][2]= sov.offset();
   kk *= kk_min;
-  pc.set_calibration(kk);
+  camera.set_calibration(kk);
 
   //project the points approximated
   double err_max = 0, err_min = 1e10;
@@ -692,7 +691,7 @@ compute( vpgl_rational_camera<double> const& rat_cam,
     {
       vgl_point_3d<double> nwp = norm_world_pts[i];
       double U ,V;
-      pc.project(nwp.x(), nwp.y(), nwp.z(), U, V);
+      camera.project(nwp.x(), nwp.y(), nwp.z(), U, V);
       vgl_point_2d<double> ip = image_pts[i];
       double error = vcl_sqrt((ip.x()-U)*(ip.x()-U) + (ip.y()-V)*(ip.y()-V));
       if( error > err_max )
@@ -708,8 +707,8 @@ compute( vpgl_rational_camera<double> const& rat_cam,
     }
   vcl_cout << "Max Error = " << err_max << " at " << max_pt << '\n';
   vcl_cout << "Min Error = " << err_min << " at " << min_pt << '\n';
-  vcl_cout << "final cam\n" << pc << '\n';
-  camera = pc;
+
+  vcl_cout << "final cam\n" << camera << '\n';
   return true;
 }
 
