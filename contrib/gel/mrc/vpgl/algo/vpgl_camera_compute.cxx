@@ -709,6 +709,7 @@ compute( vpgl_rational_camera<double> const& rat_cam,
   vcl_cout << "Max Error = " << err_max << " at " << max_pt << '\n';
   vcl_cout << "Min Error = " << err_min << " at " << min_pt << '\n';
   vcl_cout << "final cam\n" << pc << '\n';
+  camera = pc;
   return true;
 }
 
