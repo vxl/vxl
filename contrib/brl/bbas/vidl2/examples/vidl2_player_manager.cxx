@@ -203,12 +203,23 @@ void vidl2_player_manager::redraw()
     else
       vgui::out << "frame["<< frame_num <<"]\n";
 
-    static vil_image_view<vxl_byte> img;
     vidl2_frame_sptr frame = istream_->current_frame();
-    if (frame && vidl2_convert_to_view(*frame,img,VIDL2_PIXEL_COLOR_RGB))
-      itab_->set_image_view(img);
-    else
+    if(!frame)
       itab_->set_image_resource(NULL);
+    else if(frame->pixel_format() == VIDL2_PIXEL_FORMAT_MONO_16){
+      static vil_image_view<vxl_uint_16> img;
+      if (vidl2_convert_to_view(*frame,img))
+        itab_->set_image_view(img);
+      else
+        itab_->set_image_resource(NULL);
+    }
+    else{
+      static vil_image_view<vxl_byte> img;
+      if (vidl2_convert_to_view(*frame,img,VIDL2_PIXEL_COLOR_RGB))
+        itab_->set_image_view(img);
+      else
+        itab_->set_image_resource(NULL);
+    }
   }
 
   itab_->post_redraw();
