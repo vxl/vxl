@@ -34,6 +34,9 @@
 #include <vsol/vsol_point_3d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_polygon_3d.h>
+#include <vpgl/vpgl_proj_camera.h>
+#include <vpgl/algo/vpgl_camera_compute.h>
+#include <vpgl/algo/vpgl_optimize_camera.h>
 //static live_video_manager instance
 bmvv_cal_manager *bmvv_cal_manager::instance_ = 0;
 //===============================================================
@@ -646,10 +649,12 @@ void bmvv_cal_manager::project_world()
 void bmvv_cal_manager::solve_camera()
 {
   static bool planar = false;
+  static bool deg_planar = false;
   static bool optimize = true;
   static bool restore = false;
   vgui_dialog read_homg_dlg("Solve Camera");
   read_homg_dlg.checkbox("Planar Camera Only? ", planar);
+  read_homg_dlg.checkbox("Mostly Planar Camera? ", deg_planar);
   read_homg_dlg.checkbox("Optimize? ", optimize);
   read_homg_dlg.checkbox("Restore Previous Camera? ", restore);
   if (!read_homg_dlg.ask())
@@ -659,38 +664,67 @@ void bmvv_cal_manager::solve_camera()
     cam_=prev_cam_;
     return;
   }
-  vcl_vector<double> image_y;
-  vcl_vector< vgl_point_2d<double> > zero_Z_image_corr;
-  vcl_vector< vgl_point_3d<double> > zero_Z_pts;
-  vcl_vector< vgl_point_3d<double> > non_zero_Z_pts;
-  unsigned int n = world_.size();
-  for (unsigned i = 0; i<n; i++)
-  {
-    if (!corrs_valid_[i])
-      continue;
-    if (vcl_fabs(world_[i].z()) < 0.01) //planar points
+
+  if(planar || deg_planar){
+    vcl_vector<double> image_y;
+    vcl_vector< vgl_point_2d<double> > zero_Z_image_corr;
+    vcl_vector< vgl_point_3d<double> > zero_Z_pts;
+    vcl_vector< vgl_point_3d<double> > non_zero_Z_pts;
+    unsigned int n = world_.size();
+    for (unsigned i = 0; i<n; i++)
     {
-      zero_Z_pts.push_back(world_[i]);
-      zero_Z_image_corr.push_back(corrs_[i]);
+      if (!corrs_valid_[i])
+        continue;
+      if (vcl_fabs(world_[i].z()) < 0.01) //planar points
+      {
+        zero_Z_pts.push_back(world_[i]);
+        zero_Z_image_corr.push_back(corrs_[i]);
+      }
+      else // non-planar point for camera elevation constraint
+      {
+        image_y.push_back(corrs_[i].y());
+        non_zero_Z_pts.push_back(world_[i]);
+      }
     }
-    else // non-planar point for camera elevation constraint
+    vgl_h_matrix_2d<double> H;
+    if (!brct_algos::homography(zero_Z_pts, zero_Z_image_corr, H, optimize))
     {
-      image_y.push_back(corrs_[i].y());
-      non_zero_Z_pts.push_back(world_[i]);
+      vcl_cout << "Linear SVD solve for homography failed\n";
+      return;
+    }
+    //protect from bad solution by saving old camera
+    prev_cam_ = cam_;
+    if (!planar)
+      cam_= brct_algos::p_from_h(H,image_y, non_zero_Z_pts);
+    else
+      cam_= brct_algos::p_from_h(H);
+  }
+  else{
+    vcl_vector< vgl_homg_point_2d<double> > image_hpts;
+    vcl_vector< vgl_homg_point_3d<double> > world_hpts;
+    unsigned int n = world_.size();
+    for (unsigned i = 0; i<n; i++)
+    {
+      if (!corrs_valid_[i])
+        continue;
+      image_hpts.push_back(vgl_homg_point_2d<double>(corrs_[i]));
+      world_hpts.push_back(vgl_homg_point_3d<double>(world_[i]));
+    }
+    vpgl_proj_camera<double> camera;
+    vpgl_proj_camera_compute().compute(image_hpts,world_hpts,camera);
+    prev_cam_ = cam_;
+    cam_ = vgl_p_matrix<double>(camera.get_matrix());
+    
+    vpgl_perspective_camera<double> p_camera;
+    if(optimize && vpgl_perspective_decomposition(camera.get_matrix(),p_camera)){
+      vcl_vector< vgl_point_2d<double> > image_pts;
+      for (unsigned i = 0; i<image_hpts.size(); i++){
+        image_pts.push_back(image_hpts[i]);
+      }
+      p_camera = vpgl_optimize_camera::opt_orient_pos_cal(p_camera, world_hpts, image_pts);
+      cam_ = vgl_p_matrix<double>(p_camera.get_matrix());
     }
   }
-  vgl_h_matrix_2d<double> H;
-  if (!brct_algos::homography(zero_Z_pts, zero_Z_image_corr, H, optimize))
-  {
-    vcl_cout << "Linear SVD solve for homography failed\n";
-    return;
-  }
-  //protect from bad solution by saving old camera
-  prev_cam_ = cam_;
-  if (!planar)
-    cam_= brct_algos::p_from_h(H,image_y, non_zero_Z_pts);
-  else
-    cam_= brct_algos::p_from_h(H);
 
   if (!btab_)
     return;
