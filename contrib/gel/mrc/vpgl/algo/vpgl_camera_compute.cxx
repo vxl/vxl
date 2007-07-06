@@ -49,10 +49,9 @@ vpgl_proj_camera_compute::compute(
   if ( world_pts.size() < num_correspondences ) num_correspondences = world_pts.size();
   assert( num_correspondences >= 6 );
 
-  // Form the solution matrix. Only use the min configuration to compute the camera,
-  // can extend this later.
-  vnl_matrix<double> S( 11, 12, 0);
-  for ( int i = 0; i < 6; ++i ) {
+  // Form the solution matrix. 
+  vnl_matrix<double> S( 2*num_correspondences, 12, 0);
+  for ( int i = 0; i < num_correspondences; ++i ) {
     S(2*i,0) = -image_pts[i].w()*world_pts[i].x();
     S(2*i,1) = -image_pts[i].w()*world_pts[i].y();
     S(2*i,2) = -image_pts[i].w()*world_pts[i].z();
@@ -61,10 +60,9 @@ vpgl_proj_camera_compute::compute(
     S(2*i,9) = image_pts[i].x()*world_pts[i].y();
     S(2*i,10) = image_pts[i].x()*world_pts[i].z();
     S(2*i,11) = image_pts[i].x()*world_pts[i].w();
-    if ( i == 5 ) break;
     S(2*i+1,4) = -image_pts[i].w()*world_pts[i].x();
     S(2*i+1,5) = -image_pts[i].w()*world_pts[i].y();
-    S(2*i+1,6) = -image_pts[i].w()*world_pts[i].z();      //Project the world points though the rational camera
+    S(2*i+1,6) = -image_pts[i].w()*world_pts[i].z();
 
     S(2*i+1,7) = -image_pts[i].w()*world_pts[i].w();
     S(2*i+1,8) = image_pts[i].y()*world_pts[i].x();
