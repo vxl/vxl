@@ -5,6 +5,10 @@ aren't documented here, unless the bug-fix has a major observable
 effect.  If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
+****************************
+VXL 1.8.0	- March 2007
+****************************
+      - support for qt4 added to vgui
 
       - intersection methods & functions in vgl have been separated from classes
         and renamed to vgl_intersection. The new functions can be found in
