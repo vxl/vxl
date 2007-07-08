@@ -6,7 +6,7 @@ effect.  If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
 ****************************
-VXL 1.8.0	- March 2007
+VXL 1.9.0	- July 2007
 ****************************
       - support for qt4 added to vgui
 
