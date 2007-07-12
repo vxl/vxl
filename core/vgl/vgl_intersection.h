@@ -34,6 +34,13 @@ template <class T>
 vgl_point_3d<T> vgl_intersection(vgl_line_3d_2_points<T> const& l1,
                                  vgl_line_3d_2_points<T> const& l2);
 
+//: Return the intersection point of segments of two concurrent lines
+// \relates vgl_line_segment_3d
+template <class T>
+bool vgl_intersection(vgl_line_segment_3d<T> const& l1,
+                      vgl_line_segment_3d<T> const& l2,
+                      vgl_point_3d<T>& i_pnt);
+
 //: Return the intersection point of a line and a plane.
 // \relates vgl_line_3d_2_points
 // \relates vgl_plane_3d

@@ -20,6 +20,14 @@ template <class T> T vgl_area_signed(vgl_polygon<T> const& poly);
 // \relates vgl_polygon
 template <class T> T vgl_area(vgl_polygon<T> const& poly);
 
+//: The orientation enforced area of a polygon.
+// \note This method assumes that the polygon is simple (i.e. no crossings)
+//  and the correct orientation is 'enforced' on the polygon (i.e. holes are
+//  given negative area) to ensure that the resultant area is correct
+// \sa vgl_area
+// \relates vgl_polygon
+template <class T> T vgl_area_enforce_orientation(vgl_polygon<T> const& poly);
+
 #define VGL_AREA_INSTANTIATE(T) extern "please include vgl/vgl_area.txx instead"
 
 #endif // vgl_area_h_
