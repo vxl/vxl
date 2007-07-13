@@ -45,7 +45,7 @@ template <class T> T vgl_area_enforce_orientation(vgl_polygon<T> const& poly)
   //if a sheet is inside an odd number of other sheets then it's a hole
   for (unsigned t = 0; t < poly.num_sheets(); ++t)
   {
-    const vgl_polygon<T>::sheet_t& test_pgon = poly[t];
+    const typename vgl_polygon<T>::sheet_t & test_pgon= poly[t];
     T t_area = T(0);
 
     //first calculate all t_pgon's area using Green's theorem
@@ -63,7 +63,7 @@ template <class T> T vgl_area_enforce_orientation(vgl_polygon<T> const& poly)
       if(s==t)
         continue;
 
-      vgl_polygon<T>::sheet_t const& pgon = poly[s];
+      typename vgl_polygon<T>::sheet_t const& pgon = poly[s];
       unsigned n = pgon.size();
       bool c = false;
       for (unsigned i = 0, j = n-1; i < n; j = i++)
