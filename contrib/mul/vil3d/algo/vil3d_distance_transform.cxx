@@ -20,7 +20,7 @@
 //  to the nearest original zero region. Positive values are
 //  outside the bounded region and negative values are inside.
 //  The values on the boundary are zero
-void vil3d_signed_distance_transform(vil3d_image_view<float>& image)
+void vil3d_signed_distance_transform(vil3d_image_view<float>& image, float link_distance_i, float link_distance_j, float link_distance_k)
 {
   unsigned ni = image.ni(),nj = image.nj(), nk = image.nk();
   unsigned nplanes = image.nplanes();
@@ -31,7 +31,7 @@ void vil3d_signed_distance_transform(vil3d_image_view<float>& image)
   vil3d_fill_boundary(image2);
 
   // calculate the distance transform as usual
-  vil3d_distance_transform(image);
+  vil3d_distance_transform(image,link_distance_i,link_distance_j,link_distance_k);
 
   // set all voxels in mask to negative values
   vcl_ptrdiff_t istep0 = image.istep();
@@ -78,7 +78,10 @@ template<class T> void print_values(const vil3d_image_view<T> &img)
 //  the mask are negative and those outside are positive
 void vil3d_signed_distance_transform(const vil3d_image_view<bool>& mask,
                    vil3d_image_view<float>& image,
-                   float max_dist)
+                   float max_dist,
+                   float link_distance_i,
+                   float link_distance_j,
+                   float link_distance_k)
 {
   image.set_size(mask.ni(),mask.nj(),mask.nk(),mask.nplanes());
   image.fill(max_dist);
@@ -106,8 +109,8 @@ void vil3d_signed_distance_transform(const vil3d_image_view<bool>& mask,
   }
 
   // find distance transform of image and inverse image and subtract
-  vil3d_distance_transform(image);
-  vil3d_distance_transform(image_inverse);
+  vil3d_distance_transform(image,link_distance_i,link_distance_j,link_distance_k);
+  vil3d_distance_transform(image_inverse,link_distance_i,link_distance_j,link_distance_k);
 
   float *p0 = image.origin_ptr();
   float *p1 = image_inverse.origin_ptr();
@@ -123,10 +126,10 @@ void vil3d_signed_distance_transform(const vil3d_image_view<bool>& mask,
 //  there is background, and zero in the places of interest.
 //  On exit, the values are the 8-connected distance to the
 //  nearest original zero region.
-void vil3d_distance_transform(vil3d_image_view<float>& image)
+void vil3d_distance_transform(vil3d_image_view<float>& image, float link_distance_i, float link_distance_j, float link_distance_k)
 {
   // Low to high pass
-  vil3d_distance_transform_one_way(image);
+  vil3d_distance_transform_one_way(image,link_distance_i,link_distance_j,link_distance_k);
 
   // Flip to achieve high to low pass
   unsigned ni = image.ni(), nj = image.nj(), nk = image.nk();
@@ -134,7 +137,7 @@ void vil3d_distance_transform(vil3d_image_view<float>& image)
                     &image(ni-1,nj-1,nk-1), ni,nj,nk,1,
                     -image.istep(), -image.jstep(), -image.kstep(),
                     image.nplanes());
-  vil3d_distance_transform_one_way(flip_image);
+  vil3d_distance_transform_one_way(flip_image,link_distance_i,link_distance_j,link_distance_k);
 }
 
 //: Compute directed 3D distance function from zeros in original image.
@@ -143,7 +146,7 @@ void vil3d_distance_transform(vil3d_image_view<float>& image)
 //  On exit, the values are the 8-connected distance to the nearest
 //  original zero region above or to the left of current point.
 //  One pass of distance transform, going from low to high i,j,k.
-void vil3d_distance_transform_one_way(vil3d_image_view<float> &image)
+void vil3d_distance_transform_one_way(vil3d_image_view<float>& image, float link_distance_i, float link_distance_j, float link_distance_k)
 {
   assert(image.nplanes()==1);
   unsigned ni = image.ni();
@@ -160,8 +163,13 @@ void vil3d_distance_transform_one_way(vil3d_image_view<float> &image)
 
   float *page0 = image.origin_ptr();
 
-  const float sqrt3 = 1.7320508f;
-  const float sqrt2 = 1.4142135f;
+  const float distance_link_i=link_distance_i;
+  const float distance_link_j=link_distance_j;
+  const float distance_link_k=link_distance_k;
+  const float distance_link_ij=vcl_sqrt(link_distance_i+link_distance_j);
+  const float distance_link_ik=vcl_sqrt(link_distance_i+link_distance_k);
+  const float distance_link_jk=vcl_sqrt(link_distance_j+link_distance_k);
+  const float distance_link_ijk=vcl_sqrt(link_distance_i+link_distance_j+link_distance_k);
 
   // Process the first page
   float *p0 = page0 + istep;
@@ -169,7 +177,7 @@ void vil3d_distance_transform_one_way(vil3d_image_view<float> &image)
   // Process the first row of first page
   for (unsigned i=0;i<=ni2;++i,p0+=istep)
   {
-    *p0 = vcl_min(p0[-istep]+1.0f,*p0);
+    *p0 = vcl_min(p0[-istep]+distance_link_i,*p0);
   }
 
   // Process subsequent rows of first page
@@ -178,23 +186,23 @@ void vil3d_distance_transform_one_way(vil3d_image_view<float> &image)
   for (unsigned j=1;j<nj;++j,row0+=jstep)
   {
     // for first column - special case
-    *row0 = vcl_min(row0[o3]+1.0f,*row0);
-    *row0 = vcl_min(row0[o4]+sqrt2,*row0);
+    *row0 = vcl_min(row0[o3]+distance_link_j,*row0);
+    *row0 = vcl_min(row0[o4]+distance_link_ij,*row0);
 
     // for subsequent columns
     float *p0 = row0+istep;
     for (unsigned i=0;i<ni2;i++,p0+=istep)
     {
-      *p0 = vcl_min(p0[o1]+1.0f ,*p0);  // (-1,0)
-      *p0 = vcl_min(p0[o2]+sqrt2,*p0);  // (-1,-1)
-      *p0 = vcl_min(p0[o3]+1.0f ,*p0);  // (0,-1)
-      *p0 = vcl_min(p0[o4]+sqrt2,*p0);  // (1,-1)
+      *p0 = vcl_min(p0[o1]+distance_link_i ,*p0);  // (-1,0)
+      *p0 = vcl_min(p0[o2]+distance_link_ij,*p0);  // (-1,-1)
+      *p0 = vcl_min(p0[o3]+distance_link_j ,*p0);  // (0,-1)
+      *p0 = vcl_min(p0[o4]+distance_link_ij,*p0);  // (1,-1)
     }
 
     // for last column - special case
-    *p0 = vcl_min(p0[o1]+1.0f ,*p0);  // (-1,0)
-    *p0 = vcl_min(p0[o2]+sqrt2,*p0);  // (-1,-1)
-    *p0 = vcl_min(p0[o3]+1.0f ,*p0);  // (0,-1)
+    *p0 = vcl_min(p0[o1]+distance_link_i ,*p0);  // (-1,0)
+    *p0 = vcl_min(p0[o2]+distance_link_ij,*p0);  // (-1,-1)
+    *p0 = vcl_min(p0[o3]+distance_link_j ,*p0);  // (0,-1)
   }
 
   // process subsequent pages
@@ -204,30 +212,30 @@ void vil3d_distance_transform_one_way(vil3d_image_view<float> &image)
     row0 = page0;
 
     // first row is still special, and this is first column of first row
-    *row0 = vcl_min(row0[o5] +1.0f, *row0);
-    *row0 = vcl_min(row0[o10]+sqrt2,*row0);
-    *row0 = vcl_min(row0[o11]+sqrt3,*row0);
-    *row0 = vcl_min(row0[o12]+sqrt2,*row0);
+    *row0 = vcl_min(row0[o5] +distance_link_k, *row0);
+    *row0 = vcl_min(row0[o10]+distance_link_ik,*row0);
+    *row0 = vcl_min(row0[o11]+distance_link_ijk,*row0);
+    *row0 = vcl_min(row0[o12]+distance_link_jk,*row0);
 
     float *p0 = row0+istep;
     // subsequent columns of first row
     for (unsigned i=0;i<ni2;i++,p0+=istep)
     {
-      *p0 = vcl_min(p0[o1] +1.0f ,*p0);
-      *p0 = vcl_min(p0[o5] +1.0f ,*p0);
-      *p0 = vcl_min(p0[o6] +sqrt2,*p0);
-      *p0 = vcl_min(p0[o10]+sqrt2,*p0);
-      *p0 = vcl_min(p0[o11]+sqrt3,*p0);
-      *p0 = vcl_min(p0[o12]+sqrt2,*p0);
-      *p0 = vcl_min(p0[o13]+sqrt3,*p0);
+      *p0 = vcl_min(p0[o1] +distance_link_i ,*p0);
+      *p0 = vcl_min(p0[o5] +distance_link_k ,*p0);
+      *p0 = vcl_min(p0[o6] +distance_link_ik,*p0);
+      *p0 = vcl_min(p0[o10]+distance_link_ik,*p0);
+      *p0 = vcl_min(p0[o11]+distance_link_ijk,*p0);
+      *p0 = vcl_min(p0[o12]+distance_link_jk,*p0);
+      *p0 = vcl_min(p0[o13]+distance_link_ijk,*p0);
     }
 
     // last column of first row
-    *p0 = vcl_min(p0[o1] +1.0f ,*p0);
-    *p0 = vcl_min(p0[o5] +1.0f ,*p0);
-    *p0 = vcl_min(p0[o6] +sqrt2,*p0);
-    *p0 = vcl_min(p0[o12]+sqrt2,*p0);
-    *p0 = vcl_min(p0[o13]+sqrt3,*p0);
+    *p0 = vcl_min(p0[o1] +distance_link_i ,*p0);
+    *p0 = vcl_min(p0[o5] +distance_link_k ,*p0);
+    *p0 = vcl_min(p0[o6] +distance_link_ik,*p0);
+    *p0 = vcl_min(p0[o12]+distance_link_jk,*p0);
+    *p0 = vcl_min(p0[o13]+distance_link_ijk,*p0);
 
     // process subsequent rows
     row0 += jstep;
@@ -235,80 +243,80 @@ void vil3d_distance_transform_one_way(vil3d_image_view<float> &image)
     for (unsigned j=0;j<nj2;j++,row0+=jstep)
     {
       // again first column is special case
-      *row0 = vcl_min(row0[o3] +1.0f, *row0);
-      *row0 = vcl_min(row0[o4] +sqrt2,*row0);
-      *row0 = vcl_min(row0[o5] +1.0f, *row0);
-      *row0 = vcl_min(row0[o8] +sqrt2,*row0);
-      *row0 = vcl_min(row0[o9] +sqrt3,*row0);
-      *row0 = vcl_min(row0[o10]+sqrt2,*row0);
-      *row0 = vcl_min(row0[o11]+sqrt3,*row0);
-      *row0 = vcl_min(row0[o12]+sqrt2,*row0);
+      *row0 = vcl_min(row0[o3] +distance_link_j, *row0);
+      *row0 = vcl_min(row0[o4] +distance_link_ij,*row0);
+      *row0 = vcl_min(row0[o5] +distance_link_k, *row0);
+      *row0 = vcl_min(row0[o8] +distance_link_jk,*row0);
+      *row0 = vcl_min(row0[o9] +distance_link_ijk,*row0);
+      *row0 = vcl_min(row0[o10]+distance_link_ik,*row0);
+      *row0 = vcl_min(row0[o11]+distance_link_ijk,*row0);
+      *row0 = vcl_min(row0[o12]+distance_link_jk,*row0);
 
       // process subsequent columns
       p0 = row0 + istep;
       for (unsigned i=0;i<ni2;i++,p0+=istep)
       {
-        *p0 = vcl_min(p0[o1] +1.0f, *p0);
-        *p0 = vcl_min(p0[o2] +sqrt2,*p0);
-        *p0 = vcl_min(p0[o3] +1.0f, *p0);
-        *p0 = vcl_min(p0[o4] +sqrt2,*p0);
-        *p0 = vcl_min(p0[o5] +1.0f, *p0);
-        *p0 = vcl_min(p0[o6] +sqrt2,*p0);
-        *p0 = vcl_min(p0[o7] +sqrt3,*p0);
-        *p0 = vcl_min(p0[o8] +sqrt2,*p0);
-        *p0 = vcl_min(p0[o9] +sqrt3,*p0);
-        *p0 = vcl_min(p0[o10]+sqrt2,*p0);
-        *p0 = vcl_min(p0[o11]+sqrt3,*p0);
-        *p0 = vcl_min(p0[o12]+sqrt2,*p0);
-        *p0 = vcl_min(p0[o13]+sqrt3,*p0);
+        *p0 = vcl_min(p0[o1] +distance_link_i, *p0);
+        *p0 = vcl_min(p0[o2] +distance_link_ij,*p0);
+        *p0 = vcl_min(p0[o3] +distance_link_j, *p0);
+        *p0 = vcl_min(p0[o4] +distance_link_ij,*p0);
+        *p0 = vcl_min(p0[o5] +distance_link_k, *p0);
+        *p0 = vcl_min(p0[o6] +distance_link_ik,*p0);
+        *p0 = vcl_min(p0[o7] +distance_link_ijk,*p0);
+        *p0 = vcl_min(p0[o8] +distance_link_jk,*p0);
+        *p0 = vcl_min(p0[o9] +distance_link_ijk,*p0);
+        *p0 = vcl_min(p0[o10]+distance_link_ik,*p0);
+        *p0 = vcl_min(p0[o11]+distance_link_ijk,*p0);
+        *p0 = vcl_min(p0[o12]+distance_link_jk,*p0);
+        *p0 = vcl_min(p0[o13]+distance_link_ijk,*p0);
       }
 
       // last column
-      *p0 = vcl_min(p0[o1] +1.0f, *p0);
-      *p0 = vcl_min(p0[o2] +sqrt2,*p0);
-      *p0 = vcl_min(p0[o3] +1.0f, *p0);
-      *p0 = vcl_min(p0[o5] +1.0f, *p0);
-      *p0 = vcl_min(p0[o6] +sqrt2,*p0);
-      *p0 = vcl_min(p0[o7] +sqrt3,*p0);
-      *p0 = vcl_min(p0[o8] +sqrt2,*p0);
-      *p0 = vcl_min(p0[o12]+sqrt2,*p0);
-      *p0 = vcl_min(p0[o13]+sqrt3,*p0);
+      *p0 = vcl_min(p0[o1] +distance_link_i, *p0);
+      *p0 = vcl_min(p0[o2] +distance_link_ij,*p0);
+      *p0 = vcl_min(p0[o3] +distance_link_j, *p0);
+      *p0 = vcl_min(p0[o5] +distance_link_k, *p0);
+      *p0 = vcl_min(p0[o6] +distance_link_ik,*p0);
+      *p0 = vcl_min(p0[o7] +distance_link_ijk,*p0);
+      *p0 = vcl_min(p0[o8] +distance_link_jk,*p0);
+      *p0 = vcl_min(p0[o12]+distance_link_jk,*p0);
+      *p0 = vcl_min(p0[o13]+distance_link_ijk,*p0);
     }
 
     // process last row
 
     // process fist column of last row
-    *row0 = vcl_min(row0[o3] +1.0f, *row0);
-    *row0 = vcl_min(row0[o4] +sqrt2,*row0);
-    *row0 = vcl_min(row0[o5] +1.0f, *row0);
-    *row0 = vcl_min(row0[o8] +sqrt2,*row0);
-    *row0 = vcl_min(row0[o9] +sqrt3,*row0);
-    *row0 = vcl_min(row0[o10]+sqrt2,*row0);
+    *row0 = vcl_min(row0[o3] +distance_link_j, *row0);
+    *row0 = vcl_min(row0[o4] +distance_link_ij,*row0);
+    *row0 = vcl_min(row0[o5] +distance_link_k, *row0);
+    *row0 = vcl_min(row0[o8] +distance_link_jk,*row0);
+    *row0 = vcl_min(row0[o9] +distance_link_ijk,*row0);
+    *row0 = vcl_min(row0[o10]+distance_link_ik,*row0);
 
     // subsequent columns of last row
     p0 = row0 + istep;
     for (unsigned i=0;i<ni2;i++,p0+=istep)
     {
-      *p0 = vcl_min(p0[o1] +1.0f, *p0);
-      *p0 = vcl_min(p0[o2] +sqrt2,*p0);
-      *p0 = vcl_min(p0[o3] +1.0f, *p0);
-      *p0 = vcl_min(p0[o4] +sqrt2,*p0);
-      *p0 = vcl_min(p0[o5] +1.0f, *p0);
-      *p0 = vcl_min(p0[o6] +sqrt2,*p0);
-      *p0 = vcl_min(p0[o7] +sqrt3,*p0);
-      *p0 = vcl_min(p0[o8] +sqrt2,*p0);
-      *p0 = vcl_min(p0[o9] +sqrt3,*p0);
-      *p0 = vcl_min(p0[o10]+sqrt2,*p0);
+      *p0 = vcl_min(p0[o1] +distance_link_i, *p0);
+      *p0 = vcl_min(p0[o2] +distance_link_ij,*p0);
+      *p0 = vcl_min(p0[o3] +distance_link_j, *p0);
+      *p0 = vcl_min(p0[o4] +distance_link_ij,*p0);
+      *p0 = vcl_min(p0[o5] +distance_link_k, *p0);
+      *p0 = vcl_min(p0[o6] +distance_link_ik,*p0);
+      *p0 = vcl_min(p0[o7] +distance_link_ijk,*p0);
+      *p0 = vcl_min(p0[o8] +distance_link_jk,*p0);
+      *p0 = vcl_min(p0[o9] +distance_link_ijk,*p0);
+      *p0 = vcl_min(p0[o10]+distance_link_ik,*p0);
     }
 
     // last column of last row
-    *p0 = vcl_min(p0[o1] +1.0f, *p0);
-    *p0 = vcl_min(p0[o2] +sqrt2,*p0);
-    *p0 = vcl_min(p0[o3] +1.0f, *p0);
-    *p0 = vcl_min(p0[o5] +1.0f, *p0);
-    *p0 = vcl_min(p0[o6] +sqrt2,*p0);
-    *p0 = vcl_min(p0[o7] +sqrt3,*p0);
-    *p0 = vcl_min(p0[o8] +sqrt2,*p0);
+    *p0 = vcl_min(p0[o1] +distance_link_i, *p0);
+    *p0 = vcl_min(p0[o2] +distance_link_ij,*p0);
+    *p0 = vcl_min(p0[o3] +distance_link_j, *p0);
+    *p0 = vcl_min(p0[o5] +distance_link_k, *p0);
+    *p0 = vcl_min(p0[o6] +distance_link_ik,*p0);
+    *p0 = vcl_min(p0[o7] +distance_link_ijk,*p0);
+    *p0 = vcl_min(p0[o8] +distance_link_jk,*p0);
   }
 }
 
