@@ -1,5 +1,11 @@
-# 3D reconstruction from multiple views library
 # brl/bmvl/brct/CMakeLists.txt
+
+# 3D reconstruction from multiple views library
+
+IF( BUILD_GEL )
+IF( BUILD_OXL )
+IF( BUILD_RPL )
+
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas)
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg)
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bmvl)
@@ -7,6 +13,7 @@ INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR}/mrc )
 INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${RPL_INCLUDE_DIR} )
+
 SET(brct_sources
     brct_algos.h                  brct_algos.cpp
     kalman_filter.h               kalman_filter.cpp
@@ -32,3 +39,7 @@ TARGET_LINK_LIBRARIES(brct sdet brip rrel vsrl bsol vpgl gevd vdgl vsol mvl vil 
 IF(BUILD_TESTING)
   SUBDIRS(tests)
 ENDIF(BUILD_TESTING)
+
+ENDIF( BUILD_RPL )
+ENDIF( BUILD_OXL )
+ENDIF( BUILD_GEL )
