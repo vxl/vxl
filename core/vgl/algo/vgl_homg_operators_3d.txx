@@ -320,15 +320,7 @@ vgl_homg_operators_3d<Type>::intersection(const vgl_homg_plane_3d<Type>& p1,
                                           const vgl_homg_plane_3d<Type>& p2,
                                           const vgl_homg_plane_3d<Type>& p3)
 {
-  return vgl_homg_point_3d<Type>(
-       p1.ny()*p2.nz()*p3.d()+p2.ny()*p3.nz()*p1.d()+p3.ny()*p1.nz()*p2.d()
-      -p1.ny()*p3.nz()*p2.d()-p2.ny()*p1.nz()*p3.d()-p3.ny()*p2.nz()*p1.d(),
-       p1.nz()*p2.d()*p3.nx()+p2.nz()*p3.d()*p1.nx()+p3.nz()*p1.d()*p2.nx()
-      -p1.nz()*p3.d()*p2.nx()-p2.nz()*p1.d()*p3.nx()-p3.nz()*p2.d()*p1.nx(),
-       p1.d()*p2.nx()*p3.ny()+p2.d()*p3.nx()*p1.ny()+p3.d()*p1.nx()*p2.ny()
-      -p1.d()*p3.nx()*p2.ny()-p2.d()*p1.nx()*p3.ny()-p3.d()*p2.nx()*p1.ny(),
-       p1.nx()*p2.ny()*p3.nz()+p2.nx()*p3.ny()*p1.nz()+p3.nx()*p1.ny()*p2.nz()
-      -p1.nx()*p3.ny()*p2.nz()-p2.nx()*p1.ny()*p3.nz()-p3.nx()*p2.ny()*p1.nz());
+  return vgl_homg_point_3d<Type>(p1, p2, p3);
 }
 
 template <class Type>
