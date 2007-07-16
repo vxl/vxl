@@ -1,6 +1,10 @@
 # gel/mrc/vpgl/algo/CMakeLists.txt
 # Photogrammetry Algorithms Library.
 
+# vpgl/algo requires these other sections of contrib
+IF(BUILD_BRL)
+IF(BUILD_RPL)
+
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${RPL_INCLUDE_DIR})
@@ -33,3 +37,6 @@ TARGET_LINK_LIBRARIES( vpgl_algo vpgl rrel vgl_algo vsol vnl)
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
+
+ENDIF(BUILD_RPL)
+ENDIF(BUILD_BRL)
