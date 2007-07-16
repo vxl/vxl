@@ -299,7 +299,7 @@ static void test_homg_point_3d()
   }
   {
    vgl_homg_point_3d<double> pi(pl2,pl3,pl4); // intersection
-   TEST("intersection", pi, vgl_homg_point_3d<double>(1,0,0,1));
+   TEST("intersection", pi, vgl_homg_point_3d<double>(-1,0,0,1));
    TEST("is_ideal", is_ideal(pi), false);
    vgl_homg_point_3d<double> pj = vgl_homg_operators_3d<double>::intersection(pl2,pl3,pl4);
    TEST("intersection", pj, pi);
