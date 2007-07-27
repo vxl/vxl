@@ -124,6 +124,34 @@ void mbl_exception_warning(T exception)
 
 #endif
 
+#if !VCL_HAS_EXCEPTIONS
+
+  //: Indicates a problem whilst parsing a file.
+  class mbl_exception_parse_file_error
+  {
+    vcl_string msg_;
+    vcl_string filename_;
+   public:
+     mbl_exception_parse_file_error(const vcl_string &msg, const vcl_string& filename)
+      : msg_(msg), filename_(filename) {}
+    const char * what() const {return msg_.c_str();}
+    const char * filename() const {return filename_.c_str();}
+  };
+
+#else
+
+  //: Indicates a problem whilst parsing a file.
+  class mbl_exception_parse_file_error: public mbl_exception_parse_error
+  {
+    vcl_string filename_;
+   public:
+     mbl_exception_parse_file_error(const vcl_string &msg, const vcl_string& filename)
+      : mbl_exception_parse_error(msg), filename_(filename) {}
+    const char * filename() const {return filename_.c_str();}
+    virtual ~mbl_exception_parse_file_error() throw() {}
+  };
+
+#endif
 
 #if !VCL_HAS_EXCEPTIONS
 
