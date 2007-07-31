@@ -26,6 +26,7 @@
 #include <vdgl/vdgl_digital_region.h>
 
 #include <vtol/vtol_vertex_2d_sptr.h>
+#include <vtol/vtol_intensity_face.h>
 #include <vtol/vtol_intensity_face_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vtol/vtol_one_chain_sptr.h>
