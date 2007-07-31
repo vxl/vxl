@@ -92,7 +92,7 @@ bool vgl_intersection(const vgl_box_2d<Type>& box,
 
   // The normal case with no degeneracies
 
-// There are six possible intersection combinations:
+//: There are six possible intersection combinations:
 // \verbatim
 //
 //                C01 /    CY     \ C11
@@ -208,20 +208,20 @@ bool vgl_intersection(const vgl_box_2d<Type>& box,
 //: Return the intersection point of two concurrent lines
 template <class T>
 vgl_point_3d<T> vgl_intersection(vgl_line_3d_2_points<T> const& l1,
-                             vgl_line_3d_2_points<T> const& l2)
+                                 vgl_line_3d_2_points<T> const& l2)
 {
   assert(concurrent(l1,l2));
-  T a0=l1.point1().x(), a1=l1.point2().x(), a2=l2.point1().x(), a3=l2.point2().x(),
-       b0=l1.point1().y(), b1=l1.point2().y(), b2=l2.point1().y(), b3=l2.point2().y(),
-       c0=l1.point1().z(), c1=l1.point2().z(), c2=l2.point1().z(), c3=l2.point2().z();
+  T a0=l1.point1().x(),a1=l1.point2().x(),a2=l2.point1().x(),a3=l2.point2().x(),
+    b0=l1.point1().y(),b1=l1.point2().y(),b2=l2.point1().y(),b3=l2.point2().y(),
+    c0=l1.point1().z(),c1=l1.point2().z(),c2=l2.point1().z(),c3=l2.point2().z();
   T t1 = (b3-b2)*(a1-a0)-(a3-a2)*(b1-b0), t2 = (b0-b2)*(a1-a0)-(a0-a2)*(b1-b0);
   if (t1 == 0)
-       t1 = (c3-c2)*(a1-a0)-(a3-a2)*(c1-c0), t2 = (c0-c2)*(a1-a0)-(a0-a2)*(c1-c0);
+    t1 = (c3-c2)*(a1-a0)-(a3-a2)*(c1-c0), t2 = (c0-c2)*(a1-a0)-(a0-a2)*(c1-c0);
   if (t1 == 0)
-       t1 = (c3-c2)*(b1-b0)-(b3-b2)*(c1-c0), t2 = (c0-c2)*(b1-b0)-(b0-b2)*(c1-c0);
+    t1 = (c3-c2)*(b1-b0)-(b3-b2)*(c1-c0), t2 = (c0-c2)*(b1-b0)-(b0-b2)*(c1-c0);
   return vgl_point_3d<T>(((t1-t2)*a2+t2*a3)/t1,
-                            ((t1-t2)*b2+t2*b3)/t1,
-                            ((t1-t2)*c2+t2*c3)/t1);
+                         ((t1-t2)*b2+t2*b3)/t1,
+                         ((t1-t2)*c2+t2*c3)/t1);
 }
 
 //: Return the intersection point of segments of two concurrent lines
@@ -232,14 +232,14 @@ bool vgl_intersection(vgl_line_segment_3d<T> const& l1,
                       vgl_point_3d<T>& i_pnt)
 {
   i_pnt = vgl_intersection(vgl_line_3d_2_points<T>(l1.point1(),l1.point2()),
-          vgl_line_3d_2_points<T>(l2.point1(),l2.point2()));
+                           vgl_line_3d_2_points<T>(l2.point1(),l2.point2()));
 
-  double l1_len = length(l1.point1() - l1.point2());
-	double l1_idist = length(l1.point1() - i_pnt) + length(l1.point2() - i_pnt);
-	double l2_len = length(l2.point1() - l2.point2());
-	double l2_idist = length(l2.point1() - i_pnt) + length(l2.point2() - i_pnt);
+  double l1_len =   length(l1.point1() - l1.point2());
+  double l1_idist = length(l1.point1() - i_pnt) + length(l1.point2() - i_pnt);
+  double l2_len =   length(l2.point1() - l2.point2());
+  double l2_idist = length(l2.point1() - i_pnt) + length(l2.point2() - i_pnt);
 
-	return vgl_near_zero(l1_len - l1_idist) && vgl_near_zero(l2_len - l2_idist);
+  return vgl_near_zero(l1_len - l1_idist) && vgl_near_zero(l2_len - l2_idist);
 }
 
 //: Return the intersection point of a line and a plane.
@@ -247,7 +247,7 @@ bool vgl_intersection(vgl_line_segment_3d<T> const& l1,
 // \relates vgl_plane_3d
 template <class T>
 vgl_point_3d<T> vgl_intersection(vgl_line_3d_2_points<T> const& line,
-                                vgl_plane_3d<T> const& plane)
+                                 vgl_plane_3d<T> const& plane)
 {
   vgl_vector_3d<T> dir = line.direction();
 
@@ -271,9 +271,9 @@ vgl_point_3d<T> vgl_intersection(vgl_line_3d_2_points<T> const& line,
   {
     // Infinite line intersects plane
     double numer = -(plane.a()*line.point1().x() +
-      plane.b()*line.point1().y() +
-      plane.c()*line.point1().z() +
-      plane.d());
+                     plane.b()*line.point1().y() +
+                     plane.c()*line.point1().z() +
+                     plane.d());
 
     dir *= numer/denom;
     pt = line.point1() + dir;
