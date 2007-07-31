@@ -3,9 +3,8 @@
 #define vgl_area_txx_
 
 #include "vgl_area.h"
-
-#include <vcl_vector.h>
-
+//:
+// \file
 #include <vgl/vgl_polygon.h>
 
 template <class T>
@@ -60,7 +59,7 @@ template <class T> T vgl_area_enforce_orientation(vgl_polygon<T> const& poly)
     for (unsigned s = 0; s < poly.num_sheets(); ++s)
     {
       //dont check a sheet against itself
-      if(s==t)
+      if (s==t)
         continue;
 
       typename vgl_polygon<T>::sheet_t const& pgon = poly[s];
@@ -72,12 +71,12 @@ template <class T> T vgl_area_enforce_orientation(vgl_polygon<T> const& poly)
             (x < (pgon[j].x() - pgon[i].x()) * (y - pgon[i].y()) / (pgon[j].y() - pgon[i].y()) + pgon[i].x()))
           c = !c;
 
-      if(c)
+      if (c)
         is_hole = !is_hole;
     }
 
-    //if it's orientated in the wrong direction then reverse it
-    if( (!is_hole && t_area < 0) || (is_hole && t_area > 0))
+    // if it's oriented in the wrong direction then reverse it
+    if ( (!is_hole && t_area < 0) || (is_hole && t_area > 0))
       t_area = -t_area;
 
     area += t_area;
@@ -90,6 +89,6 @@ template <class T> T vgl_area_enforce_orientation(vgl_polygon<T> const& poly)
 #define VGL_AREA_INSTANTIATE(T) \
 template T vgl_area(vgl_polygon<T > const&); \
 template T vgl_area_signed(vgl_polygon<T > const&); \
-template T vgl_area_enforce_orientation(vgl_polygon<T> const&)
+template T vgl_area_enforce_orientation(vgl_polygon<T > const&)
 
 #endif // vgl_area_txx_
