@@ -3,7 +3,8 @@
 #define vpgl_camera_compute_cxx_
 
 #include "vpgl_camera_compute.h"
-
+//:
+// \file
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h> // for rand()
@@ -49,7 +50,7 @@ vpgl_proj_camera_compute::compute(
   if ( world_pts.size() < num_correspondences ) num_correspondences = world_pts.size();
   assert( num_correspondences >= 6 );
 
-  // Form the solution matrix. 
+  // Form the solution matrix.
   vnl_matrix<double> S( 2*num_correspondences, 12, 0);
   for ( int i = 0; i < num_correspondences; ++i ) {
     S(2*i,0) = -image_pts[i].w()*world_pts[i].x();
@@ -117,6 +118,7 @@ vpgl_affine_camera_compute::compute(
   camera.set_rows( x1, x2 );
   return true;
 }
+
 static vcl_vector<double>
 pvector(const double x, const double y, const double z)
 {  vcl_vector<double> pv(20);
@@ -160,6 +162,7 @@ power_vector_dx(const double x, const double y, const double z)
   pv[9]= 1;
   return pv;
 }
+
 static vcl_vector<double>
 power_vector_dy(const double x, const double y, const double z)
 {
@@ -177,6 +180,7 @@ power_vector_dy(const double x, const double y, const double z)
   pv[15]= 1;
   return pv;
 }
+
 static vcl_vector<double>
 power_vector_dz(const double x, const double y, const double z)
 {
@@ -194,11 +198,12 @@ power_vector_dz(const double x, const double y, const double z)
   pv[18]= 1;
   return pv;
 }
+
 //compute the value of the polynomial
 static double pval(vcl_vector<double> const& pv, vcl_vector<double>const& coef)
 {
   double sum = 0;
-  for(unsigned i = 0; i<20; ++i)
+  for (unsigned i = 0; i<20; ++i)
     sum += pv[i]*coef[i];
   return sum;
 }
@@ -211,11 +216,11 @@ compute( vgl_point_3d<double> const& world_center,
 {
   double x0 = world_center.x(), y0 = world_center.y(), z0 = world_center.z();
   //normalized world center
-  double nx0 = 
+  double nx0 =
     rat_cam_.scl_off(vpgl_rational_camera<double>::X_INDX).normalize(x0);
-  double ny0 = 
+  double ny0 =
     rat_cam_.scl_off(vpgl_rational_camera<double>::Y_INDX).normalize(y0);
-  double nz0 = 
+  double nz0 =
     rat_cam_.scl_off(vpgl_rational_camera<double>::Z_INDX).normalize(z0);
 
   // get the rational coefficients
@@ -228,26 +233,26 @@ compute( vgl_point_3d<double> const& world_center,
   // normalize for numerical precision
   double nmax_u = -vnl_numeric_traits<double>::maxval;
   double dmax_u  = nmax_u, nmax_v = nmax_u,dmax_v = nmax_u;
-  for(unsigned i = 0; i<20; ++i)
-    {
-      if(vcl_fabs(neu_u[i])>nmax_u)
-        nmax_u=vcl_fabs(neu_u[i]);
-      if(vcl_fabs(den_u[i])>dmax_u)
-        dmax_u=vcl_fabs(den_u[i]);
-      if(vcl_fabs(neu_v[i])>nmax_v)
-        nmax_v=vcl_fabs(neu_v[i]);
-      if(vcl_fabs(den_v[i])>dmax_v)
-        dmax_v=vcl_fabs(den_v[i]);
-    }
+  for (unsigned i = 0; i<20; ++i)
+  {
+    if (vcl_fabs(neu_u[i])>nmax_u)
+      nmax_u=vcl_fabs(neu_u[i]);
+    if (vcl_fabs(den_u[i])>dmax_u)
+      dmax_u=vcl_fabs(den_u[i]);
+    if (vcl_fabs(neu_v[i])>nmax_v)
+      nmax_v=vcl_fabs(neu_v[i]);
+    if (vcl_fabs(den_v[i])>dmax_v)
+      dmax_v=vcl_fabs(den_v[i]);
+  }
   //Normalize polys so that ratio of neumerator and denominator is unchanged
   double norm_u = nmax_u, norm_v = nmax_v;
-  if(norm_u<dmax_u) norm_u = dmax_u;
-  if(norm_v<dmax_v) norm_v = dmax_v;
-  for(unsigned i = 0; i<20; ++i)
-    {
-      neu_u[i] /= norm_u; den_u[i] /= norm_u;
-      neu_v[i] /= norm_v; den_v[i] /= norm_v;
-    }
+  if (norm_u<dmax_u) norm_u = dmax_u;
+  if (norm_v<dmax_v) norm_v = dmax_v;
+  for (unsigned i = 0; i<20; ++i)
+  {
+    neu_u[i] /= norm_u; den_u[i] /= norm_u;
+    neu_v[i] /= norm_v; den_v[i] /= norm_v;
+  }
 
   // Compute linear approximations to each poly
   //lin_p(x, y, z)=p(0,0,0) + (dp/dx)(x-nx0) + (dp/dy)(y-ny0) + (dp/dz)(z-nz0)
@@ -263,25 +268,21 @@ compute( vgl_point_3d<double> const& world_center,
   vcl_vector<double> pv_dz0 = power_vector_dz(nx0,ny0,nz0);
   double neu_u_dz0 = pval(pv_dz0,neu_u), den_u_dz0 = pval(pv_dz0,den_u);
   double neu_v_dz0 = pval(pv_dz0,neu_v), den_v_dz0 = pval(pv_dz0,den_v);
-  
+
   //Construct the matrix to compute the center of projection
   vnl_matrix<double> C(4,4);
   C[0][0]=neu_u_dx0;   C[0][1]=neu_u_dy0; C[0][2]=neu_u_dz0; C[0][3]=neu_u_0;
   C[1][0]=den_u_dx0;   C[1][1]=den_u_dy0; C[1][2]=den_u_dz0; C[1][3]=den_u_0;
   C[2][0]=neu_v_dx0;   C[2][1]=neu_v_dy0; C[2][2]=neu_v_dz0; C[2][3]=neu_v_0;
   C[3][0]=den_v_dx0;   C[3][1]=den_v_dy0; C[3][2]=den_v_dz0; C[3][3]=den_v_0;
-  
+
   vnl_svd<double> svd(C);
   vnl_vector<double> nv = svd.nullvector();
   //assume not at infinity
   nv/=nv[3];
 #if 1
-  vcl_cout << "Center of projection\n";
-  vcl_cout << nv << '\n';
-
-
-  vcl_cout << "Residual\n";
-  vcl_cout << C*nv << '\n';
+  vcl_cout << "Center of projection\n" << nv << '\n'
+           << "Residual\n" << C*nv << '\n';
 #endif
   //Normalize with respect to the principal plane normal (principal ray)
   double ndu = vcl_sqrt(den_u_dx0*den_u_dx0 + den_u_dy0*den_u_dy0 +
@@ -290,22 +291,21 @@ compute( vgl_point_3d<double> const& world_center,
                         den_v_dz0*den_v_dz0);
 
   // determine if the projection is affine
-  if(ndu/vcl_fabs(den_u_0)<1.0e-10||ndv/vcl_fabs(den_v_0)<1.0e-10)
-    {
-      vcl_cout << "Camera is nearly affine - approximation not implemented!\n";
-      return false;
-    }
+  if (ndu/vcl_fabs(den_u_0)<1.0e-10||ndv/vcl_fabs(den_v_0)<1.0e-10)
+  {
+    vcl_cout << "Camera is nearly affine - approximation not implemented!\n";
+    return false;
+  }
   //Construct M by joined scale factor vector
   vnl_matrix_fixed<double, 3, 3> M;
-  for(unsigned i = 0; i<3; ++i)
-    {
-      M[0][i]=C[0][i]/ndu;
-      M[1][i]=C[2][i]/ndv;
-      M[2][i]=(C[1][i]/ndu + C[3][i]/ndv)/2;
-    }
+  for (unsigned i = 0; i<3; ++i)
+  {
+    M[0][i]=C[0][i]/ndu;
+    M[1][i]=C[2][i]/ndv;
+    M[2][i]=(C[1][i]/ndu + C[3][i]/ndv)/2;
+  }
 #if 1
-  vcl_cout << "M matrix\n";
-  vcl_cout << M << '\n';
+  vcl_cout << "M matrix\n" << M << '\n';
 
   vnl_matrix_fixed<double,3,3> Mf;
   for ( int i = 0; i < 3; i++ )
@@ -321,41 +321,37 @@ compute( vgl_point_3d<double> const& world_center,
       Rf(i,j) = r(2-j,2-i);
     }
   }
-  vcl_cout << "Flipped Rotation \n";
-  vcl_cout << Qf << '\n';
-  vcl_cout << "Flipped Upper Triangular \n";
-  vcl_cout << Rf << '\n';
+  vcl_cout << "Flipped Rotation\n" << Qf << '\n'
+           << "Flipped Upper Triangular\n" << Rf << '\n';
   vnl_qr<double> uqr(M);
   uq = uqr.Q();
   ur = uqr.R();
-  vcl_cout << "UnFlipped Rotation \n";
-  vcl_cout << uq << '\n';
-  vcl_cout << "UnFlipped Upper Triangular \n";
-  vcl_cout << ur << '\n';
-  vcl_cout << "Det uq " << vnl_det<double>(uq) << '\n';
+  vcl_cout << "UnFlipped Rotation\n" << uq << '\n'
+           << "UnFlipped Upper Triangular\n" << ur << '\n'
+           << "Det uq " << vnl_det<double>(uq) << '\n';
   //Normalized denominators
   vnl_vector<double> c1(3), c3(3);
-  for(unsigned i = 0; i<3; ++i){
-	  c1[i]=C[1][i]/ndu;
-	  c3[i]=C[3][i]/ndv;
+  for (unsigned i = 0; i<3; ++i){
+    c1[i]=C[1][i]/ndu;
+    c3[i]=C[3][i]/ndv;
   }
 
 
-vcl_cout << "Denominators \n";
-vcl_cout << "C1 " << c1;
-vcl_cout << "C3 " << c3;
+vcl_cout << "Denominators\n"
+         << "C1 " << c1
+         << "C3 " << c3;
 #endif
   //compute p3 the fourth column of the projection matrix
   vnl_vector_fixed<double, 3> c;
-  for(unsigned i = 0; i<3; ++i)
-	  c[i]=nv[i];
+  for (unsigned i = 0; i<3; ++i)
+    c[i]=nv[i];
   vnl_vector_fixed<double, 3> p3 = -M*c;
   //Form the full projection matrix
   vnl_matrix_fixed<double, 3, 4> pmatrix;
-  for(unsigned r = 0; r<3; ++r)
-    for(unsigned c = 0; c<3; ++c)
+  for (unsigned r = 0; r<3; ++r)
+    for (unsigned c = 0; c<3; ++c)
       pmatrix[r][c] = M[r][c];
-  for(unsigned r = 0; r<3; ++r)
+  for (unsigned r = 0; r<3; ++r)
     pmatrix[r][3] = p3[r];
   //account for the image scale and offsets
   double uscale = rat_cam_.scale(vpgl_rational_camera<double>::U_INDX);
@@ -368,8 +364,7 @@ vcl_cout << "C3 " << c3;
   Kr[1][1]=vscale;   Kr[1][2]=voff;
   Kr[2][2]=1.0;
 #if 1
-  vcl_cout << "Kr \n";
-  vcl_cout << Kr << '\n';
+  vcl_cout << "Kr\n" << Kr << '\n';
   vnl_matrix_fixed<double,3,3> KRf, KR=Kr*uq;
   for ( int i = 0; i < 3; i++ )
     for ( int j = 0; j < 3; j++ )
@@ -384,10 +379,8 @@ vcl_cout << "C3 " << c3;
       krRf(i,j) = krr(2-j,2-i);
     }
   }
-  vcl_cout << "Flipped Rotation (KR) \n";
-  vcl_cout << krQf << '\n';
-  vcl_cout << "Flipped Upper Triangular (KR) \n";
-  vcl_cout << krRf << '\n';
+  vcl_cout << "Flipped Rotation (KR)\n" << krQf << '\n'
+           << "Flipped Upper Triangular (KR)\n" << krRf << '\n';
 
   int r0pos = krRf(0,0) > 0 ? 1 : -1;
   int r1pos = krRf(1,1) > 0 ? 1 : -1;
@@ -401,11 +394,9 @@ vcl_cout << "C3 " << c3;
     }
   }
   K1 = K1/K1(2,2);
-  vcl_cout << "K1 \n";
-  vcl_cout << K1 <<'\n';
-  vcl_cout << "R1 \n";
-  vcl_cout << R1 << '\n';
-  vcl_cout << "Det R1 " << vnl_det<double>(R1) << '\n';
+  vcl_cout << "K1\n" << K1 <<'\n'
+           << "R1\n" << R1 << '\n'
+           << "Det R1 " << vnl_det<double>(R1) << '\n';
 #endif
 
 
@@ -416,11 +407,12 @@ vcl_cout << "C3 " << c3;
     T[0][3] = -nx0; T[1][3]= -ny0; T[2][3]=-nz0;
   pmatrix = Kr*pmatrix*T;
 #if 0
-   vcl_cout << "P Matrix \n" << pmatrix << '\n';
+   vcl_cout << "P Matrix\n" << pmatrix << '\n';
 #endif
   camera.set_matrix(pmatrix);
-  return true;  
+  return true;
 }
+
 //:obtain a scaling transformation to normalize world geographic coordinates
 //The resulting values will be on the range [-1, 1]
 //The transform is valid anywhere the rational camera is valid
@@ -439,7 +431,8 @@ vgl_h_matrix_3d<double> vpgl_proj_camera_compute::norm_trans()
   T.set(2,3, -zoff/zscale);
   return T;
 }
-//Compute the rotation matrix and translation vector for a 
+
+//Compute the rotation matrix and translation vector for a
 //perspective camera given world to image correspondences and
 //the calibration matrix
 bool vpgl_perspective_camera_compute::
@@ -449,75 +442,75 @@ compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
          vpgl_perspective_camera<double>& camera )
 {
   unsigned N = world_pts.size();
-  if(image_pts.size()!=N)
-    {
-      vcl_cout << "Unequal points sets in"
-      << " vpgl_perspective_camera::compute()\n";
-      return false;
-    }
-  if(N<6)
-    {
-      vcl_cout << "Need at least 6 points for"
-      << " vpgl_perspective_camera::compute()\n";
-      return false;
-    }
+  if (image_pts.size()!=N)
+  {
+    vcl_cout << "Unequal points sets in"
+             << " vpgl_perspective_camera_compute::compute()\n";
+    return false;
+  }
+  if (N<6)
+  {
+    vcl_cout << "Need at least 6 points for"
+             << " vpgl_perspective_camera_compute::compute()\n";
+    return false;
+  }
 
   //get the inverse calibration map
   vnl_matrix_fixed<double, 3, 3> km = K.get_matrix();
   vnl_matrix_fixed<double, 3, 3> k_inv = vnl_inverse<double>(km);
 
   //Form the world point matrix
-  
+
   //Solve for the unknown point depths (projective scale factors)
   vnl_matrix<double> wp(4, N);
-  for(unsigned c = 0; c<N; ++c)
-    {
-      vgl_point_3d<double> p = world_pts[c];
-      wp[0][c] = p.x(); wp[1][c] = p.y(); wp[2][c] = p.z();
-      wp[3][c] = 1.0;
-    }
+  for (unsigned c = 0; c<N; ++c)
+  {
+    vgl_point_3d<double> p = world_pts[c];
+    wp[0][c] = p.x(); wp[1][c] = p.y(); wp[2][c] = p.z();
+    wp[3][c] = 1.0;
+  }
 #ifdef CAMERA_DEBUG
   vcl_cout << "World Points\n" << wp << '\n';
 #endif
   vnl_svd<double> svd(wp);
   unsigned rank = svd.rank();
-  if(rank != 4)
-    {
-      vcl_cout << "Insufficient rank for world point"
-      << " matrix in vpgl_perspective_camera::compute()\n";
-      return false;
-    }
+  if (rank != 4)
+  {
+    vcl_cout << "Insufficient rank for world point"
+             << " matrix in vpgl_perspective_camera_compute::compute()\n";
+    return false;
+  }
   //extract the last N-4 columns of V as the null space of wp
   vnl_matrix<double> V = svd.V();
   unsigned nr = V.rows(), nc = V.columns();
   vnl_matrix<double> null_space(nr, nc-4);
-  for(unsigned c = 4; c<nc; ++c)
-    for(unsigned r = 0; r<nr; ++r)
+  for (unsigned c = 4; c<nc; ++c)
+    for (unsigned r = 0; r<nr; ++r)
       null_space[r][c-4] = V[r][c];
 #ifdef CAMERA_DEBUG
-  vcl_cout << "Null Space \n" << null_space << '\n';
+  vcl_cout << "Null Space\n" << null_space << '\n';
 #endif
    //form Kronecker product of the null space (transpose) with K inverse
-  unsigned nrk = 3*(nc-4), nck = 3*nr; 
+  unsigned nrk = 3*(nc-4), nck = 3*nr;
   vnl_matrix<double> v2k(nrk, nck);
-  for(unsigned r = 0; r<(nc-4); ++r)
-    for(unsigned c = 0; c<nr; ++c)
-      for(unsigned rk = 0; rk<3; ++rk)
-        for(unsigned ck = 0; ck<3; ++ck)
+  for (unsigned r = 0; r<(nc-4); ++r)
+    for (unsigned c = 0; c<nr; ++c)
+      for (unsigned rk = 0; rk<3; ++rk)
+        for (unsigned ck = 0; ck<3; ++ck)
           v2k[rk+3*r][ck+3*c] = k_inv[rk][ck]*null_space[c][r];
 #ifdef CAMERA_DEBUG
-  vcl_cout << "V2K \n" << v2k << '\n';
+  vcl_cout << "V2K\n" << v2k << '\n';
 #endif
-  //Stack the image points in homogenous form in a diagonal matrix
+  //Stack the image points in homogeneous form in a diagonal matrix
   vnl_matrix<double> D(3*N, N);
   D.fill(0);
-  for(unsigned c = 0; c<N; ++c)
-    {
-      vgl_point_2d<double> p = image_pts[c];
-      D[3*c][c] = p.x();  D[3*c+1][c] = p.y(); D[3*c+2][c] = 1.0;
-    }
+  for (unsigned c = 0; c<N; ++c)
+  {
+    vgl_point_2d<double> p = image_pts[c];
+    D[3*c][c] = p.x();  D[3*c+1][c] = p.y(); D[3*c+2][c] = 1.0;
+  }
 #ifdef CAMERA_DEBUG
-  vcl_cout << "D \n" << D << '\n';
+  vcl_cout << "D\n" << D << '\n';
 #endif
   //form the singular matrix
   vnl_matrix<double> M = v2k*D;
@@ -527,53 +520,53 @@ compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
   vnl_vector<double> depth = svdm.nullvector();
 
 #ifdef CAMERA_DEBUG
-  vcl_cout << "depths \n" << depth << '\n';
+  vcl_cout << "depths\n" << depth << '\n';
 #endif
-  
+
   //Check if depths are all approximately the same (near affine projection)
   double average_depth = 0;
   unsigned nd = depth.size();
-  for(unsigned i = 0; i<nd; ++i)
+  for (unsigned i = 0; i<nd; ++i)
     average_depth += depth[i];
   average_depth /= nd;
   double max_dev = 0;
-  for(unsigned i = 0; i<nd; ++i)
-    {
-      double dev = vcl_fabs(depth[i]-average_depth);
-      if(dev>max_dev)
-        max_dev = dev;
-    }
+  for (unsigned i = 0; i<nd; ++i)
+  {
+    double dev = vcl_fabs(depth[i]-average_depth);
+    if (dev>max_dev)
+      max_dev = dev;
+  }
   double norm_max_dev = max_dev/average_depth;
   //if depths are nearly the same make them exactly equal
   //since variations are not meaningful
-  if(norm_max_dev < 0.01)
-    for(unsigned i = 0; i<nd; ++i)
+  if (norm_max_dev < 0.01)
+    for (unsigned i = 0; i<nd; ++i)
       depth[i]=average_depth;
 
   //Set up point sets for ortho Procrustes
   vnl_matrix<double> X(3,N), Y(3,N);
-  for(unsigned c = 0; c<N; ++c)
-    {
-      vgl_point_2d<double> pi = image_pts[c];
-      vgl_point_3d<double> pw = world_pts[c];
-      //image points are multiplied by projective scale factor (depth)
-      X[0][c] = pi.x()*depth[c]; X[1][c] = pi.y()*depth[c]; X[2][c] = depth[c];
-      X[0][c] = pi.x(); X[1][c] = pi.y(); X[2][c] = 1.0;
-      Y[0][c] = pw.x(); Y[1][c] = pw.y(); Y[2][c] = pw.z();
-    }
+  for (unsigned c = 0; c<N; ++c)
+  {
+    vgl_point_2d<double> pi = image_pts[c];
+    vgl_point_3d<double> pw = world_pts[c];
+    //image points are multiplied by projective scale factor (depth)
+    X[0][c] = pi.x()*depth[c]; X[1][c] = pi.y()*depth[c]; X[2][c] = depth[c];
+ // X[0][c] = pi.x();          X[1][c] = pi.y();          X[2][c] = 1.0;
+    Y[0][c] = pw.x();          Y[1][c] = pw.y();          Y[2][c] = pw.z();
+  }
 
-  vpgl_ortho_procrustes op(X, Y);  
-  if(!op.compute_ok())
+  vpgl_ortho_procrustes op(X, Y);
+  if (!op.compute_ok())
     return false;
-  
+
   vgl_rotation_3d<double> R = op.R();
   vnl_matrix_fixed<double, 3, 3> rr = R.as_matrix();
 
   vnl_vector_fixed<double, 3> t = op.t();
 #ifdef CAMERA_DEBUG
-  vcl_cout << "translation \n" << t << '\n';
-  vcl_cout << "scale = " << op.s() << '\n';
-  vcl_cout << "residual = " << op.residual_mean_sq_error() << '\n';
+  vcl_cout << "translation\n" << t << '\n'
+           << "scale = " << op.s() << '\n'
+           << "residual = " << op.residual_mean_sq_error() << '\n';
 #endif
 
   vnl_vector_fixed<double, 3> center = -(rr.transpose())*t;
@@ -585,7 +578,7 @@ compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
 
   //perform a final non-linear optimization
   vcl_vector<vgl_homg_point_3d<double> > h_world_pts;
-  for(unsigned i = 0; i<N; ++i)
+  for (unsigned i = 0; i<N; ++i)
     h_world_pts.push_back(vgl_homg_point_3d<double>(world_pts[i]));
   camera = vpgl_optimize_camera::opt_orient_pos_cal(tcam, h_world_pts, image_pts, 0.00005, 20000);
   return true;
@@ -597,21 +590,21 @@ compute( vpgl_rational_camera<double> const& rat_cam,
          vpgl_perspective_camera<double>& camera,
          vgl_h_matrix_3d<double>& norm_trans)
 {
-  vpgl_scale_offset<double> sou = 
+  vpgl_scale_offset<double> sou =
     rat_cam.scl_off(vpgl_rational_camera<double>::U_INDX);
-  vpgl_scale_offset<double> sov = 
+  vpgl_scale_offset<double> sov =
     rat_cam.scl_off(vpgl_rational_camera<double>::V_INDX);
-  vpgl_scale_offset<double> sox = 
+  vpgl_scale_offset<double> sox =
     rat_cam.scl_off(vpgl_rational_camera<double>::X_INDX);
-  vpgl_scale_offset<double> soy = 
+  vpgl_scale_offset<double> soy =
     rat_cam.scl_off(vpgl_rational_camera<double>::Y_INDX);
   vpgl_scale_offset<double> soz =
     rat_cam.scl_off(vpgl_rational_camera<double>::Z_INDX);
   unsigned ni = static_cast<unsigned>(2*sou.scale());//# image columns
-  unsigned nj = static_cast<unsigned>(2*sov.scale());//# image rows 
+  unsigned nj = static_cast<unsigned>(2*sov.scale());//# image rows
   norm_trans.set_identity();
   norm_trans.set(0,0,1/sox.scale()); norm_trans.set(1,1,1/soy.scale());
-  norm_trans.set(2,2,1/soz.scale()); 
+  norm_trans.set(2,2,1/soz.scale());
   norm_trans.set(0,3, -sox.offset()/sox.scale());
   norm_trans.set(1,3, -soy.offset()/soy.scale());
   norm_trans.set(2,3, -soz.offset()/soz.scale());
@@ -621,56 +614,56 @@ compute( vpgl_rational_camera<double> const& rat_cam,
   double xmin = minp.x(), ymin = minp.y(), zmin = minp.z();
   double xrange = maxp.x()-xmin, yrange = maxp.y()-ymin,
     zrange = maxp.z()-zmin;
-  if(xrange<0||yrange<0||zrange<0)
+  if (xrange<0||yrange<0||zrange<0)
     return false;
-  //Randomly generate points  
+  //Randomly generate points
   unsigned n = 100;
   vcl_vector<vgl_point_3d<double> > world_pts;
   unsigned count = 0, ntrials = 0;
-  while(count<n)
-    {
-      ntrials++;
-      double rx = xrange*(vcl_rand()/(RAND_MAX+1.0));
-      double ry = yrange*(vcl_rand()/(RAND_MAX+1.0));
-      double rz = zrange*(vcl_rand()/(RAND_MAX+1.0));
-      vgl_point_3d<double> wp(xmin+rx, ymin+ry, zmin+rz);
-      vgl_point_2d<double> ip = rat_cam.project(wp);
-      if(ip.x()<0||ip.x()>ni||ip.y()<0||ip.y()>nj)
-        continue;
-      world_pts.push_back(wp);
-      count++;
-    }
+  while (count<n)
+  {
+    ntrials++;
+    double rx = xrange*(vcl_rand()/(RAND_MAX+1.0));
+    double ry = yrange*(vcl_rand()/(RAND_MAX+1.0));
+    double rz = zrange*(vcl_rand()/(RAND_MAX+1.0));
+    vgl_point_3d<double> wp(xmin+rx, ymin+ry, zmin+rz);
+    vgl_point_2d<double> ip = rat_cam.project(wp);
+    if (ip.x()<0||ip.x()>ni||ip.y()<0||ip.y()>nj)
+      continue;
+    world_pts.push_back(wp);
+    count++;
+  }
   vcl_cout << "Ntrials " << ntrials << '\n';
 
   //Normalize world and image points to the range [-1,1]
   vcl_vector<vgl_point_3d<double> > norm_world_pts;
   vcl_vector<vgl_point_2d<double> > image_pts, norm_image_pts;
   unsigned N = world_pts.size();
-  for(unsigned i = 0; i<N; ++i)
-    {
-      vgl_point_3d<double> wp = world_pts[i];
-      vgl_point_2d<double> ip = rat_cam.project(wp);
-      image_pts.push_back(ip);
-      vgl_point_2d<double> nip(sou.normalize(ip.x()), sov.normalize(ip.y()));
-      norm_image_pts.push_back(nip);
-      vgl_point_3d<double> nwp(sox.normalize(wp.x()),
-                               soy.normalize(wp.y()),
-                               soz.normalize(wp.z()));
-      norm_world_pts.push_back(nwp);
-    }
-  //Assume identity calibration matrix initially, since image point 
+  for (unsigned i = 0; i<N; ++i)
+  {
+    vgl_point_3d<double> wp = world_pts[i];
+    vgl_point_2d<double> ip = rat_cam.project(wp);
+    image_pts.push_back(ip);
+    vgl_point_2d<double> nip(sou.normalize(ip.x()), sov.normalize(ip.y()));
+    norm_image_pts.push_back(nip);
+    vgl_point_3d<double> nwp(sox.normalize(wp.x()),
+                             soy.normalize(wp.y()),
+                             soz.normalize(wp.z()));
+    norm_world_pts.push_back(nwp);
+  }
+  //Assume identity calibration matrix initially, since image point
   //normalization remove any scale and offset from image coordinates
   vnl_matrix_fixed<double, 3, 3> kk;
   kk.fill(0);
   kk[0][0]= 1.0;
   kk[1][1]= 1.0;
   kk[2][2]=1.0;
-  //Compute solution for rotation and translation and calibration matrix of 
+  //Compute solution for rotation and translation and calibration matrix of
   //the perspective camera
   vpgl_calibration_matrix<double> K(kk);
   vpgl_perspective_camera_compute pcc;
   bool good = pcc.compute(norm_image_pts, norm_world_pts, K, camera);
-  if(!good)
+  if (!good)
     return false;
   vcl_cout << camera << '\n';
   //form the full camera by premultiplying by the image normalization
@@ -685,28 +678,28 @@ compute( vpgl_rational_camera<double> const& rat_cam,
   //project the points approximated
   double err_max = 0, err_min = 1e10;
   vgl_point_3d<double> min_pt, max_pt;
-  for(unsigned i = 0; i<N; ++i)
+  for (unsigned i = 0; i<N; ++i)
+  {
+    vgl_point_3d<double> nwp = norm_world_pts[i];
+    double U ,V;
+    camera.project(nwp.x(), nwp.y(), nwp.z(), U, V);
+    vgl_point_2d<double> ip = image_pts[i];
+    double error = vcl_sqrt((ip.x()-U)*(ip.x()-U) + (ip.y()-V)*(ip.y()-V));
+    if ( error > err_max )
     {
-      vgl_point_3d<double> nwp = norm_world_pts[i];
-      double U ,V;
-      camera.project(nwp.x(), nwp.y(), nwp.z(), U, V);
-      vgl_point_2d<double> ip = image_pts[i];
-      double error = vcl_sqrt((ip.x()-U)*(ip.x()-U) + (ip.y()-V)*(ip.y()-V));
-      if( error > err_max )
-        {
-          err_max = error;
-          max_pt = world_pts[i];
-        }
-      if(error < err_min)
-        {
-          err_min = error;
-          min_pt = world_pts[i];
-        }
+      err_max = error;
+      max_pt = world_pts[i];
     }
-  vcl_cout << "Max Error = " << err_max << " at " << max_pt << '\n';
-  vcl_cout << "Min Error = " << err_min << " at " << min_pt << '\n';
+    if (error < err_min)
+    {
+      err_min = error;
+      min_pt = world_pts[i];
+    }
+  }
+  vcl_cout << "Max Error = " << err_max << " at " << max_pt << '\n'
+           << "Min Error = " << err_min << " at " << min_pt << '\n'
 
-  vcl_cout << "final cam\n" << camera << '\n';
+           << "final cam\n" << camera << '\n';
   return true;
 }
 
