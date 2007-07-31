@@ -269,7 +269,69 @@ void mbl_exception_warning(T exception)
 
 #endif
 
+//:Throw mbl_exception_os_error or one of its derivatives, based on errno.
+// If exceptions are disabled, this behaves like mbl_exception_warning() above.
+void mbl_exception_throw_os_error(const vcl_string& filename,
+                                  const vcl_string& additional_comment="");
 
+
+#if !VCL_HAS_EXCEPTIONS
+
+  //: Indicates a problem reported during an OS call.
+  class mbl_exception_os_error
+  {
+    vcl_string msg_;
+
+  public:
+    //: Reported errno
+    int errno;
+    //: System supplied error message.
+    vcl_string error_message;
+    //: Filename or pathname or other id on which OS call failed.
+    vcl_string filename;
+    //: Optional additional comments.
+    vcl_string additional_comment;
+    mbl_exception_os_error(int err_no, const vcl_string &file_name,
+      const vcl_string &comment="");
+    virtual ~mbl_exception_os_error() throw() {}
+    const char * what() const {return msg_.c_str();}
+  };
+
+#else
+
+  //: Indicates a problem reported during an OS call.
+  class mbl_exception_os_error: public vcl_runtime_error
+  {
+  public:
+    //: Reported errno
+    int err_no;
+    //: System supplied error message.
+    vcl_string error_message;
+    //: Filename or pathname or other id on which OS call failed.
+    vcl_string filename;
+    //: Optional additional comments.
+    vcl_string additional_comment;
+    mbl_exception_os_error(int errnum, const vcl_string &file_name,
+      const vcl_string &comment="");
+    virtual ~mbl_exception_os_error() throw() {}
+  };
+
+#endif
+
+
+#define MACRO( E ) \
+class E : public mbl_exception_os_error{ public: \
+  E (int err_no, const vcl_string &file_name, const vcl_string &comment=""): \
+    mbl_exception_os_error(err_no, file_name, comment) {} }; 
+
+MACRO(mbl_exception_os_no_such_file_or_directory);
+MACRO(mbl_exception_os_permission_denied);
+MACRO(mbl_exception_os_file_exists);
+MACRO(mbl_exception_os_not_a_directory);
+MACRO(mbl_exception_os_is_a_directory);
+MACRO(mbl_exception_os_no_space_left_on_device);
+
+#undef MACRO
 
 #endif // mbl_exception_h_
 
