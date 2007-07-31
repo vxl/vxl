@@ -4,11 +4,7 @@ PROJECT(vgui)
 
 # Default the dashboard builds to "YES" so that
 # we have some clients that try to compile vgui
-IF( DART_ROOT )
-  OPTION( BUILD_VGUI "Build VGUI" "YES" )
-ELSE( DART_ROOT )
-  OPTION( BUILD_VGUI "Build VGUI" "NO" )
-ENDIF( DART_ROOT )
+OPTION( BUILD_VGUI "Build VGUI" ${YES_FOR_DASHBOARD} )
 
 # Flag that determines if we were able to successfully build vgui.
 # Initialize to NO. Change below if yes.
@@ -537,12 +533,12 @@ ENDIF (OPENGL_FOUND)
 IF( NOT CAN_BUILD_VGUI )
   # Dashboard builds will try to build vgui if possible,
   # so don't warn if we can't.
-  IF( NOT DART_ROOT )
+  IF( NOT BUILD_FOR_VXL_DASHBOARD )
     MESSAGE(SEND_ERROR "vgui could not be built.\n"
                        "Make sure the OpenGL libraries "
                        "(GL and GLU) are specified correctly,\n"
                        "or set BUILD_VGUI to OFF." )
-  ENDIF( NOT DART_ROOT )
+  ENDIF( NOT BUILD_FOR_VXL_DASHBOARD )
 ENDIF( NOT CAN_BUILD_VGUI )
 
 ENDIF( BUILD_VGUI )

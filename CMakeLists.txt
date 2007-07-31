@@ -57,14 +57,38 @@ IF (BUILD_CORE_GEOMETRY AND BUILD_CORE_NUMERICS)
   ENDIF (BUILD_CORE_UTILITIES AND BUILD_CORE_SERIALISATION)
 ENDIF (BUILD_CORE_GEOMETRY AND BUILD_CORE_NUMERICS)
 
+# Option to specify whether this is a build for the dashboard
+#  - If Dart (TCL) is being used for the dashboard build, DART_ROOT
+#    will be set.
+#  - If CTest is being used for a dashboard build, set
+#    BUILD_FOR_VXL_DASHBOARD to YES using SET (CTEST_INITIAL_CACHE ...)
+#    in the CTest script.
+IF( DART_ROOT )
+  OPTION( BUILD_FOR_VXL_DASHBOARD "Is this a build for the dashboard?" YES )
+ELSE( DART_ROOT )
+  OPTION( BUILD_FOR_VXL_DASHBOARD "Is this a build for the dashboard?" NO )
+ENDIF( DART_ROOT )
+#
+# We should change the above section to the single line below.  This
+# will mean each dashboard build should set BUILD_FOR_VXL_DASHBOARD to
+# YES in the initial cache.  This eliminates our use of the antiquated
+# DART_ROOT variable.  I will make this change a couple days after
+# warning the maintainers list.
+#
+# OPTION( BUILD_FOR_VXL_DASHBOARD "Is this a build for the dashboard?" NO )
+
+# A variable to default some OPTIONs on ON for the dashboard, but to
+# OFF for regular users.
+IF( BUILD_FOR_VXL_DASHBOARD )
+  SET( YES_FOR_DASHBOARD "YES" )
+ELSE( BUILD_FOR_VXL_DASHBOARD )
+  SET( YES_FOR_DASHBOARD "NO" )
+ENDIF( BUILD_FOR_VXL_DASHBOARD )
+
 # Options to build no longer maintained libraries.
 # It is still useful to have the dashboard check that they are correct,
 # but no-one is likely to work on improving test coverage or fixing memory leaks.
-IF( DART_ROOT )
-  OPTION( BUILD_UNMAINTAINED_LIBRARIES "Build libraries that are no longer actively maintained?" YES )
-ELSE( DART_ROOT )
-  OPTION( BUILD_UNMAINTAINED_LIBRARIES "Build libraries that are no longer actively maintained?" NO )
-ENDIF( DART_ROOT )
+OPTION( BUILD_UNMAINTAINED_LIBRARIES "Build libraries that are no longer actively maintained?" ${YES_FOR_DASHBOARD} )
 
 # Build the core vxl + support libraries
 SUBDIRS(vcl v3p core)
