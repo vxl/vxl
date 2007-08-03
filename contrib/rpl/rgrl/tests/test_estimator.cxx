@@ -2115,8 +2115,8 @@ MAIN( test_estimator )
 {
   START( "various transformation objects" );
 
-//  test_est_affine_pt_to_pt();
-//  test_est_affine_pt_to_line();
+  test_est_affine_pt_to_pt();
+  test_est_affine_pt_to_line();
 //  test_similarity_pt_to_pt();
 
   vcl_cout << "\n=== test_rad_dis_homo2d_lm ===\n";
