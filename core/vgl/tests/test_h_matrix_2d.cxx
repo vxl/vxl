@@ -17,6 +17,7 @@
 #include <vgl/algo/vgl_norm_trans_2d.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_4point.h>
+#include <vgl/algo/vgl_h_matrix_2d_compute_rigid_body.h>
 #include <vgl/algo/vgl_h_matrix_2d_optimize_lmq.h>
 
 static void test_identity_transform()
@@ -297,6 +298,47 @@ static void test_set_transform()
   TEST_NEAR("scale and rotation", sp.y(), 2.0, 1e-06);
   TEST_NEAR("scale, rotation and translation", tp.x()+tp.y(), 6.0, 1e-06);
 }
+static void test_compute_rigid_body()
+{
+    vgl_homg_point_2d<double> ps00(0,0);
+    vgl_homg_point_2d<double> ps01(1,0);
+    vgl_homg_point_2d<double> ps10(0,0);
+    vgl_homg_point_2d<double> ps11(0.707107,0.707107);
+    vcl_vector<vgl_homg_point_2d<double> > points0, points1;
+    points0.push_back(ps00);     points0.push_back(ps01);
+    points1.push_back(ps10);     points1.push_back(ps11);
+    vgl_h_matrix_2d_compute_rigid_body crb;
+    vgl_h_matrix_2d<double> RT = crb.compute(points0, points1);
+    vcl_cout << "Rotation, translation \n" << RT << '\n';
+    vnl_matrix_fixed<double, 3, 3> M = RT.get_matrix();
+    TEST_NEAR("rigid body pure rotation", M[0][0], 0.707107, 1.0e-6);
+    points0.clear();     points1.clear();
+    vgl_homg_point_2d<double> p00(-1,1);
+    vgl_homg_point_2d<double> p01(1,1);
+    vgl_homg_point_2d<double> p02(1,-1);
+    vgl_homg_point_2d<double> p03(-1,-1);
+    vgl_homg_point_2d<double> p04(0,0);
+
+    vgl_homg_point_2d<double> p10(998.862,500.839);
+    vgl_homg_point_2d<double> p11(1000.84,501.138);
+    vgl_homg_point_2d<double> p12(1001.14,499.161);
+    vgl_homg_point_2d<double> p13(999.161,498.862);
+    vgl_homg_point_2d<double> p14(1000, 500);
+
+
+    points0.push_back(p00);  points0.push_back(p01);
+    points0.push_back(p02);  points0.push_back(p03);
+    points0.push_back(p04);  
+
+    points1.push_back(p10);  points1.push_back(p11);
+    points1.push_back(p12);  points1.push_back(p13);
+    points1.push_back(p14);  
+    RT = crb.compute(points0, points1);
+    vcl_cout << "Rotation, translation \n" << RT << '\n';
+     M = RT.get_matrix();
+     //0.149438
+    TEST_NEAR("rigid body rotation and translation", M[0][0], 0.988771, 1.0e-3);
+}
 
 static void test_h_matrix_2d()
 {
@@ -309,6 +351,7 @@ static void test_h_matrix_2d()
   test_compute_linear_lines();
   test_compute_4point();
   test_set_transform();
+  test_compute_rigid_body();
 }
 
 TESTMAIN(test_h_matrix_2d);
