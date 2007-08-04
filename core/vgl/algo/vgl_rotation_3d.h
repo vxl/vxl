@@ -168,12 +168,19 @@ class vgl_rotation_3d
                                   this->operator*(l.point2()));
   }
 
-  //: Rotate a vector.
+  //: Rotate a vgl vector.
   vgl_vector_3d<T> operator*( const vgl_vector_3d<T>& v ) const
   {
     vnl_vector_fixed<T,3> rv = q_.rotate(vnl_vector_fixed<T,3>(v.x(),v.y(),v.z()));
     return vgl_vector_3d<T>(rv[0],rv[1],rv[2]);
   }
+
+  //: Rotate a vnl vector.
+  vnl_vector_fixed<T, 3> operator*( const vnl_vector_fixed<T,3>& v ) const
+  {
+    return q_.rotate(v);
+  }
+
 
  protected:
   //: The internal representation of the rotation is a quaternion.
