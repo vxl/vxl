@@ -17,8 +17,10 @@
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 
+extern "C" {
 #include <ffmpeg/avcodec.h>
 #include <ffmpeg/avformat.h>
+}
 
 //--------------------------------------------------------------------------------
 

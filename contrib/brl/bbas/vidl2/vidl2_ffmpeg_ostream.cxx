@@ -16,7 +16,10 @@
 #include "vidl2_convert.h"
 #include <vcl_cstring.h>
 #include <vil/vil_memory_chunk.h>
+
+extern "C" {
 #include <ffmpeg/avformat.h>
+}
 
 //-----------------------------------------------------------------------------
 
