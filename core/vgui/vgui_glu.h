@@ -5,6 +5,10 @@
 // #include GL/glu.h directly either -- fsm.
 
 #include <vgui/vgui_gl.h>
-#include <GL/glu.h>
+#ifdef __APPLE__
+# include <glu.h>
+#else
+# include <GL/glu.h>
+#endif
 
 #endif // vgui_glu_h
