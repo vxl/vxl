@@ -156,7 +156,7 @@ open(unsigned int num_dma_buffers,
   close();
 
   // FIXME - where is this used in the new API?
-  dc1394ring_buffer_policy_t rb_policy = drop_frames? DC1394_RING_BUFFER_LAST: DC1394_RING_BUFFER_NEXT;
+  //dc1394ring_buffer_policy_t rb_policy = drop_frames? DC1394_RING_BUFFER_LAST: DC1394_RING_BUFFER_NEXT;
 
 
   dc1394camera_t **dccameras=NULL;
@@ -241,7 +241,8 @@ open(unsigned int num_dma_buffers,
   }
 
 
-  if (dc1394_capture_setup(is_->camera_info_, num_dma_buffers) != DC1394_SUCCESS) {
+  if (dc1394_capture_setup(is_->camera_info_, num_dma_buffers,
+                           DC1394_CAPTURE_FLAGS_DEFAULT) != DC1394_SUCCESS) {
     vcl_cerr << "Failed to setup DMA capture.\n";
     return false;
   }
