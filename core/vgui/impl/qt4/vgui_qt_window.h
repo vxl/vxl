@@ -23,7 +23,6 @@
 #include <qmainwindow.h>
 #include <qobject.h>
 
-class vgui_gtk_adaptor;
 
 //: QT implementation of vgui_window.
 class vgui_qt_window :
