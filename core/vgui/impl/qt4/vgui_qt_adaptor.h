@@ -22,14 +22,14 @@
 #include <vgui/internals/vgui_adaptor_mixin.h>
 #include <vgui/internals/vgui_overlay_helper.h>
 
-#include <qgl.h>
-#include <qevent.h>
-#include <qobject.h>
-#include <qtimer.h>
-//Added by qt3to4:
+#include <QGLWidget>
+#include <QEvent>
+#include <QObject>
+#include <QTimer>
 #include <QWheelEvent>
 #include <QMouseEvent>
 #include <QKeyEvent>
+
 
 //: OpenGL canvas in QT as a VGUI adaptor
 class vgui_qt_adaptor :

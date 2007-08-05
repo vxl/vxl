@@ -19,8 +19,8 @@
 #include <vgui/vgui_command.h>
 #include <vcl_map.h>
 
-#include <qmenu.h>
-#include <Qt/qobject.h>
+#include <QMenu>
+#include <QObject>
 
 typedef vbl_smart_ptr<vgui_command> vgui_command_sptr;
 

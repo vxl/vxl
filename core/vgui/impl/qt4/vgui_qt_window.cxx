@@ -7,10 +7,9 @@
 #include "vgui_qt_menu.h"
 #include "vgui_qt_statusbar.h"
 
-#include <qmenubar.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qframe.h>
+#include <QMenuBar>
+#include <QLayout>
+#include <QFrame>
 
 //-----------------------------------------------------------------------------
 void vgui_qt_window::setup_widget(int w, int h, const char* title)

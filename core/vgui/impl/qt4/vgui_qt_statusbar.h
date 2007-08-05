@@ -20,8 +20,7 @@
 #include <vgui/vgui_statusbuf.h>
 #include <vgui/vgui_statusbar.h>
 
-#include <qstatusbar.h>
-#include <qmainwindow.h>
+#include <QMainWindow>
 
 //: QT implementation of vgui_statusbar.
 class vgui_qt_statusbar :

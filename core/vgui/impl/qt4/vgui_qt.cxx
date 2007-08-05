@@ -3,8 +3,8 @@
 #include "vgui_qt_window.h"
 #include "vgui_qt_dialog_impl.h"
 
-#include <qapplication.h>
-#include <qgl.h>
+#include <QApplication>
+#include <QGLFormat>
 
 
 //-----------------------------------------------------------------------------

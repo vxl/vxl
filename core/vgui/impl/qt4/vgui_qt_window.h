@@ -20,8 +20,8 @@
 #include "vgui_qt_statusbar.h"
 #include "vgui_qt_adaptor.h"
 
-#include <qmainwindow.h>
-#include <qobject.h>
+#include <QMainWindow>
+#include <QObject>
 
 
 //: QT implementation of vgui_window.

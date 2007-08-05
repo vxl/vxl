@@ -1,5 +1,8 @@
 #include "vgui_qt_statusbar.h"
 
+
+#include <QStatusBar>
+
 vgui_qt_statusbar::vgui_qt_statusbar(QMainWindow *parent)
 :  statusbuf(new vgui_statusbuf(this)),
    out(statusbuf),

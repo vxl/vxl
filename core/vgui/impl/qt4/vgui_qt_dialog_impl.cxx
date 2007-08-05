@@ -8,17 +8,13 @@
 #include <vgui/internals/vgui_dialog_impl.h>
 #include <vgui/internals/vgui_simple_field.h>
 
-#include <qpushbutton.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qspinbox.h>
-#include <qcheckbox.h>
-#include <qlayout.h>
-#include <qvalidator.h>
-#include <qstring.h>
-#include <qcombobox.h>
-#include <qfiledialog.h>
-#include <qcolordialog.h>
+#include <QPushButton>
+#include <QLabel>
+#include <QSpinBox>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QFileDialog>
+#include <QColorDialog>
 #include <QHBoxLayout>
 #include <QFrame>
 #include <QVBoxLayout>

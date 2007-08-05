@@ -2,7 +2,7 @@
 //:
 // \file
 #include "vgui_qt_adaptor.h"
-#include <QMenu>
+
 
 //---------------------------------------------------------------------------
 vgui_qt_menu::vgui_qt_menu(const vgui_menu& menu, QWidget * parent )
