@@ -11,8 +11,11 @@
 //    Matt Leotta  03/22/05  Adapted from codec by Amitha Perera
 // \endverbatim
 
+extern "C" {
 #include <ffmpeg/avcodec.h>
 #include <ffmpeg/avformat.h>
+}
+
 #include <vidl/vidl_codec.h>
 #include <vil/vil_image_view.h>
 
