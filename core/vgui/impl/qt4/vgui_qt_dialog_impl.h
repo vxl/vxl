@@ -17,15 +17,12 @@
 // \endverbatim
 
 #include <vgui/internals/vgui_dialog_impl.h>
+
 #include <QDialog>
 #include <QObject>
 #include <QGroupBox>
 #include <QLineEdit>
-//#include <qstring.h>
-//#include <qframe.h>
 
-// forward declarations
-//class QLineEdit;
 
 //: QT implementation of vgui_dialog_impl.
 class vgui_qt_dialog_impl :
