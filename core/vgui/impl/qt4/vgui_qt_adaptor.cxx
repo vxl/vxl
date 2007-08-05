@@ -2,22 +2,18 @@
 #include "vgui_qt_menu.h"
 
 #include <vgui/vgui_popup_params.h>
-
-#include <qgl.h>
-#include <QWheelEvent>
-#include <QMouseEvent>
-#include <QMenu>
-#include <QKeyEvent>
 #include <vcl_iostream.h>
+
+#include <QMenu>
 
 using namespace QGL;
 using namespace Qt;
 
 vgui_qt_adaptor::vgui_qt_adaptor(QWidget* parent)
+//Note: enabling overlays with "HasOverlay" causes a seg fault on Mac OS X 10.4
    : QGLWidget(QGLFormat(DoubleBuffer|DepthBuffer|Rgba|AlphaChannel|
                          AccumBuffer|StencilBuffer|NoStereoBuffers|
-                         DirectRendering|HasOverlay), parent),
-//    : QGLWidget(parent, name)
+                         DirectRendering), parent),
      ovl_helper(0),
      use_overlay_helper(true),
      idle_request_posted_(false)
