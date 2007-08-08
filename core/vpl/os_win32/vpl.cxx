@@ -22,13 +22,21 @@ vpl_mkdir( const char *dir, unsigned short /*mode*/ )
 int
 vpl_rmdir( const char *dir )
 {
+#if _MSC_VER >= 1400
+  return _rmdir( dir );
+#else
   return rmdir( dir );
+#endif
 }
 
 int
 vpl_chdir( const char *dir )
 {
+#if _MSC_VER >= 1400
+  return _chdir( dir );
+#else
   return chdir( dir );
+#endif
 }
 
 int
