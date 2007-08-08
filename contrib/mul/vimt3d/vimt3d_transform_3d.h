@@ -291,7 +291,7 @@ class vimt3d_transform_3d
   // but the declared Form (etc RigidBody) need not be equal.
   bool operator==(const vimt3d_transform_3d&) const;
 
- private:
+ protected:
 
   double xx_,xy_,xz_,xt_,yx_,yy_,yz_,yt_,zx_, zy_, zz_, zt_, tx_,ty_,tz_,tt_;
   Form form_;
