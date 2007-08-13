@@ -104,8 +104,7 @@ inline bool coplanar(l const& l1, l const& l2)
 template <class Type>
 inline bool concurrent(l const& l1, l const& l2)
 {
-  vgl_vector_3d<Type> v1=l1.direction(),v2=l2.direction();
-  return coplanar(l1,l2) && v1*v2.length() != v2*v1.length();
+  return coplanar(l1,l2) && !parallel(l1.direction(),l2.direction());
 }
 
 //: Are two points coplanar with a line?
