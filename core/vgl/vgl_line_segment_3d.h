@@ -13,6 +13,7 @@
 // Modifications
 // Peter Vanroose -  9 July 2001 - Inlined constructors
 // Peter Vanroose - 27 June 2001 - Added operator==
+// Kieran O'Mahony - 13 Aug 2007 - Added contains()
 // \endverbatim
 
 #include <vcl_iosfwd.h>
@@ -62,6 +63,13 @@ class vgl_line_segment_3d
   // t<0 for points on the (infinite) line, outside the segment, and closer to point1 than to point2.
   // t>1 for points on the (infinite) line, outside the segment, and closer to point2 than to point1.
   inline vgl_point_3d<Type> point_t(const double t) const { return point1() + t*direction(); }
+  
+  //: Check if point \a p is on the line segment
+  inline bool contains(const vgl_point_3d<Type>& p ) const
+  {
+    double r = (point1_ - point2_).length() - ( (point1_ - p).length() + (point2_ - p).length() );    
+    return r < 1e-8 && r > -1e-8;
+  }
 };
 
 //: Write to stream
