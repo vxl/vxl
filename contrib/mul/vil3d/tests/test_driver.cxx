@@ -29,6 +29,8 @@ DECLARE( test_algo_anisotropic_filter );
 DECLARE( test_algo_smooth_121 );
 DECLARE( test_algo_corners );
 DECLARE( test_algo_quad_distance_function );
+DECLARE( test_algo_distance_transform );
+
 
 void
 register_tests()
@@ -62,6 +64,7 @@ register_tests()
   REGISTER( test_algo_smooth_121 );
   REGISTER( test_algo_corners );
   REGISTER( test_algo_quad_distance_function );
+  REGISTER( test_algo_distance_transform );
 }
 
 DEFINE_MAIN;

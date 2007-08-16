@@ -2,7 +2,7 @@
 // \file
 // \brief Compute distance transform using chamfer distance
 // \author Kola Babalola
-
+  
 #include <vil3d/algo/vil3d_distance_transform.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vcl_cassert.h>
@@ -20,7 +20,7 @@
 //  to the nearest original zero region. Positive values are
 //  outside the bounded region and negative values are inside.
 //  The values on the boundary are zero
-void vil3d_signed_distance_transform(vil3d_image_view<float>& image, float link_distance_i, float link_distance_j, float link_distance_k)
+void vil3d_signed_distance_transform(vil3d_image_view<float>& image, const float distance_link_i, const float distance_link_j, const float distance_link_k)
 {
   unsigned ni = image.ni(),nj = image.nj(), nk = image.nk();
   unsigned nplanes = image.nplanes();
@@ -31,7 +31,7 @@ void vil3d_signed_distance_transform(vil3d_image_view<float>& image, float link_
   vil3d_fill_boundary(image2);
 
   // calculate the distance transform as usual
-  vil3d_distance_transform(image,link_distance_i,link_distance_j,link_distance_k);
+  vil3d_distance_transform(image,distance_link_i,distance_link_j,distance_link_k);
 
   // set all voxels in mask to negative values
   vcl_ptrdiff_t istep0 = image.istep();
@@ -79,9 +79,9 @@ template<class T> void print_values(const vil3d_image_view<T> &img)
 void vil3d_signed_distance_transform(const vil3d_image_view<bool>& mask,
                    vil3d_image_view<float>& image,
                    float max_dist,
-                   float link_distance_i,
-                   float link_distance_j,
-                   float link_distance_k)
+                   const float distance_link_i,
+                   const float distance_link_j,
+                   const float distance_link_k)
 {
   image.set_size(mask.ni(),mask.nj(),mask.nk(),mask.nplanes());
   image.fill(max_dist);
@@ -109,8 +109,8 @@ void vil3d_signed_distance_transform(const vil3d_image_view<bool>& mask,
   }
 
   // find distance transform of image and inverse image and subtract
-  vil3d_distance_transform(image,link_distance_i,link_distance_j,link_distance_k);
-  vil3d_distance_transform(image_inverse,link_distance_i,link_distance_j,link_distance_k);
+  vil3d_distance_transform(image,distance_link_i,distance_link_j,distance_link_k);
+  vil3d_distance_transform(image_inverse,distance_link_i,distance_link_j,distance_link_k);
 
   float *p0 = image.origin_ptr();
   float *p1 = image_inverse.origin_ptr();
@@ -126,10 +126,10 @@ void vil3d_signed_distance_transform(const vil3d_image_view<bool>& mask,
 //  there is background, and zero in the places of interest.
 //  On exit, the values are the 8-connected distance to the
 //  nearest original zero region.
-void vil3d_distance_transform(vil3d_image_view<float>& image, float link_distance_i, float link_distance_j, float link_distance_k)
+void vil3d_distance_transform(vil3d_image_view<float>& image, const float distance_link_i, const float distance_link_j, const float distance_link_k)
 {
   // Low to high pass
-  vil3d_distance_transform_one_way(image,link_distance_i,link_distance_j,link_distance_k);
+  vil3d_distance_transform_one_way(image,distance_link_i,distance_link_j,distance_link_k);
 
   // Flip to achieve high to low pass
   unsigned ni = image.ni(), nj = image.nj(), nk = image.nk();
@@ -137,7 +137,7 @@ void vil3d_distance_transform(vil3d_image_view<float>& image, float link_distanc
                     &image(ni-1,nj-1,nk-1), ni,nj,nk,1,
                     -image.istep(), -image.jstep(), -image.kstep(),
                     image.nplanes());
-  vil3d_distance_transform_one_way(flip_image,link_distance_i,link_distance_j,link_distance_k);
+  vil3d_distance_transform_one_way(flip_image,distance_link_i,distance_link_j,distance_link_k);
 }
 
 //: Compute directed 3D distance function from zeros in original image.
@@ -146,7 +146,7 @@ void vil3d_distance_transform(vil3d_image_view<float>& image, float link_distanc
 //  On exit, the values are the 8-connected distance to the nearest
 //  original zero region above or to the left of current point.
 //  One pass of distance transform, going from low to high i,j,k.
-void vil3d_distance_transform_one_way(vil3d_image_view<float>& image, float link_distance_i, float link_distance_j, float link_distance_k)
+void vil3d_distance_transform_one_way(vil3d_image_view<float>& image, const float distance_link_i, const float distance_link_j, const float distance_link_k)
 {
   assert(image.nplanes()==1);
   unsigned ni = image.ni();
@@ -163,13 +163,10 @@ void vil3d_distance_transform_one_way(vil3d_image_view<float>& image, float link
 
   float *page0 = image.origin_ptr();
 
-  const float distance_link_i=link_distance_i;
-  const float distance_link_j=link_distance_j;
-  const float distance_link_k=link_distance_k;
-  const float distance_link_ij=vcl_sqrt(link_distance_i+link_distance_j);
-  const float distance_link_ik=vcl_sqrt(link_distance_i+link_distance_k);
-  const float distance_link_jk=vcl_sqrt(link_distance_j+link_distance_k);
-  const float distance_link_ijk=vcl_sqrt(link_distance_i+link_distance_j+link_distance_k);
+  const float distance_link_ij=vcl_sqrt(distance_link_i*distance_link_i+distance_link_j*distance_link_j);
+  const float distance_link_ik=vcl_sqrt(distance_link_i*distance_link_i+distance_link_k*distance_link_k);
+  const float distance_link_jk=vcl_sqrt(distance_link_j*distance_link_j+distance_link_k*distance_link_k);
+  const float distance_link_ijk=vcl_sqrt(distance_link_i*distance_link_i+distance_link_j*distance_link_j+distance_link_k*distance_link_k);
 
   // Process the first page
   float *p0 = page0 + istep;
