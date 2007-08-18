@@ -22,6 +22,8 @@
 #include <QObject>
 #include <QGroupBox>
 #include <QLineEdit>
+#include <QSpinBox>
+
 
 
 //: QT implementation of vgui_dialog_impl.
@@ -82,13 +84,22 @@ class vgui_qt_colorchooser_impl : public QGroupBox
   ~vgui_qt_colorchooser_impl() {}
 
   vcl_string  color() const { return value_; }
+  
+ private:
+  void update_color_string();
 
  public slots:
-   void get_a_color();
+  void get_a_color();
+  void change_red(int);
+  void change_green(int);
+  void change_blue(int);
+  void change_alpha(int);
 
  private:
    vcl_string& value_;
+   QColor      color_;
    QFrame*     frame_;
+   QSpinBox   *rbox_, *gbox_, *bbox_, *abox_;
 };
 
 

@@ -3,6 +3,7 @@
 #include "vgui_qt_adaptor.h"
 
 #include <vcl_vector.h>
+#include <vcl_sstream.h>
 #include <vcl_iostream.h>
 
 #include <vgui/internals/vgui_dialog_impl.h>
@@ -323,30 +324,106 @@ vgui_qt_colorchooser_impl::vgui_qt_colorchooser_impl(QWidget* parent, const char
   frame_->setMinimumSize( 32, 32 );
   frame_->setMaximumSize( 32, 32 );
   frame_->setAutoFillBackground(true);
-  frame_->setPalette(QPalette(QColor("black"),QColor(val.c_str())));
+  vcl_stringstream sval(val);
+  float r,g,b,a=1.0;
+  sval >> r >> g >> b;
+  if (sval.good())
+    sval >> a;
+  
+  color_.setRgb(static_cast<int>(255*r),
+                static_cast<int>(255*g),
+                static_cast<int>(255*b),
+                static_cast<int>(255*a));
+  
   QPushButton* pick = new QPushButton("Pick");
+  rbox_ = new QSpinBox;
+  rbox_->setRange(0,255);
+  gbox_ = new QSpinBox;
+  gbox_->setRange(0,255);
+  bbox_ = new QSpinBox;
+  bbox_->setRange(0,255);
+  abox_ = new QSpinBox;
+  abox_->setRange(0,255);
 
+  QGridLayout *grid = new QGridLayout;
   QHBoxLayout *hbox = new QHBoxLayout;
   hbox->addWidget(frame_);
-  hbox->addWidget(pick);
-  hbox->addStretch(1);
-  this->setLayout(hbox);
+  hbox->addWidget(pick);  
+  grid->addLayout(hbox,1,0,1,4);
+  grid->addWidget(new QLabel("R"),0,0);
+  grid->addWidget(rbox_,0,1);
+  grid->addWidget(new QLabel("G"),0,2);  
+  grid->addWidget(gbox_,0,3);
+  grid->addWidget(new QLabel("B"),0,4); 
+  grid->addWidget(bbox_,0,5);
+  grid->addWidget(new QLabel("A"),1,4); 
+  grid->addWidget(abox_,1,5);
+  this->setLayout(grid);
+  
+  update_color_string();
 
   connect(pick, SIGNAL(clicked()), this, SLOT(get_a_color()));
+  connect(rbox_, SIGNAL(valueChanged(int)), this, SLOT(change_red(int)));
+  connect(gbox_, SIGNAL(valueChanged(int)), this, SLOT(change_green(int)));
+  connect(bbox_, SIGNAL(valueChanged(int)), this, SLOT(change_blue(int)));
+  connect(abox_, SIGNAL(valueChanged(int)), this, SLOT(change_alpha(int)));
 }
 
 
 //-----------------------------------------------------------------------------
-void vgui_qt_colorchooser_impl::get_a_color()
+void vgui_qt_colorchooser_impl::update_color_string()
 {
-   QColor c = QColorDialog::getColor(QColor(value_.c_str()));
-   frame_->setPalette(QPalette(c,c));
-   if (c.isValid())
-   {
-      value_ = c.name().toAscii().data();
-   }
+  if(color_.isValid()){   
+    int r,g,b,a;
+    color_.getRgb(&r,&g,&b,&a);
+    vcl_stringstream sval;
+    sval << r/255.0 << " " << g/255.0 << " " << b/255.0 << " " << a/255.0;
+    value_ = sval.str();
+    
+    rbox_->setValue(r);
+    gbox_->setValue(g);
+    bbox_->setValue(b);
+    abox_->setValue(a);
+    
+    frame_->setPalette(QPalette(color_,color_));
+  }
 }
 
+//-----------------------------------------------------------------------------
+void vgui_qt_colorchooser_impl::get_a_color()
+{
+  color_ = QColorDialog::getColor(color_);
+  update_color_string();
+}
+
+
+//-----------------------------------------------------------------------------
+void vgui_qt_colorchooser_impl::change_red(int r)
+{
+  color_.setRed(r);
+  update_color_string();
+}
+
+//-----------------------------------------------------------------------------
+void vgui_qt_colorchooser_impl::change_green(int g)
+{
+  color_.setGreen(g);
+  update_color_string();
+}
+
+//-----------------------------------------------------------------------------
+void vgui_qt_colorchooser_impl::change_blue(int b)
+{
+  color_.setBlue(b);
+  update_color_string();
+}
+
+//-----------------------------------------------------------------------------
+void vgui_qt_colorchooser_impl::change_alpha(int a)
+{
+  color_.setAlpha(a);
+  update_color_string();
+}
 
 //-----------------------------------------------------------------------------
 vgui_qt_tableau_impl::vgui_qt_tableau_impl(QWidget* parent,
