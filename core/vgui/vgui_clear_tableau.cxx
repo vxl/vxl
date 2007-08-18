@@ -122,8 +122,8 @@ void vgui_clear_tableau::config_dialog()
     if (depth_val) mask |= GL_DEPTH_BUFFER_BIT;
     if (accum_val) mask |= GL_ACCUM_BUFFER_BIT;
     if (stencil_val) mask |= GL_STENCIL_BUFFER_BIT;
-
-    color_stm << color;
+    
+    color_stm.str(color);
     color_stm >> colour[0] >> colour[1] >> colour[2];
   }
 }
