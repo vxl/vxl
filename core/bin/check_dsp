@@ -259,7 +259,7 @@ foreach $dir (@DIRS)
     $cmakefile = <CMAKEFILE>;
     close CMAKEFILE;
     $/=$old_v;
-    %names = ();
+    %names = ('MAKECOMMAND','make');
   }
   $moc_files = '';
   $cmakefile =~ s/\n\s*\#[^\n]*//g;
@@ -277,7 +277,12 @@ foreach $dir (@DIRS)
     next if $n =~ m/^[a-z0-9]+_test_include_sources$/;
     next if $n =~ m/^\${/;
     foreach ($l =~ m/\$\{(.*?)\}/g) { print STDOUT "$_ is and undefined variable in $cmakef\n" unless (defined $names{$_}); }
-    while ($l =~ m/\$\{(.*?)\}/) { my $a = $1; my $b = $names{$a}; $l =~ s/\$\{$a\}/$b/g; }
+    while ($l =~ m/\$\{(.*?)\}/) {
+      my $a = $1;
+      my $b = $names{$a};
+      unless (defined $b) { $b=''; print STDERR "$a is an undefined variable in $cmakef\n"; }
+      $l =~ s/\$\{$a\}/$b/g;
+    }
     # %names is a global hash list, first filled in here
     $names{$n} = $l;
 #   $cmakefile =~ s/\$\{$n\}/$l/g;
