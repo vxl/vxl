@@ -1,4 +1,6 @@
 // This is mul/mbl/mbl_parse_sequence.h
+#ifndef mbl_parse_sequence_h_
+#define mbl_parse_sequence_h_
 //:
 // \file
 // \author Ian Scott
@@ -40,7 +42,7 @@ void mbl_parse_sequence(vcl_istream &afs, ITER insert_iter)
       afs.clear();
 
     afs >> vcl_ws >> brace2;
-    if (!afs || brace2 != '}') 
+    if (!afs || brace2 != '}')
     {
       afs.putback(brace2);
       afs.clear(vcl_ios::failbit); // Set a recoverable IO error on stream
@@ -51,9 +53,9 @@ void mbl_parse_sequence(vcl_istream &afs, ITER insert_iter)
   else
   {
     afs.putback(brace1);
-    
+
     vcl_copy(vcl_istream_iterator<unsigned>(afs), vcl_istream_iterator<unsigned>(),
-      insert_iter);
+             insert_iter);
 
     if (afs.fail())
       afs.clear();
@@ -70,5 +72,6 @@ void mbl_parse_sequence(vcl_istream &afs, ITER insert_iter)
     }
     afs.clear(vcl_ios::eofbit);
   }
-
 }
+
+#endif // mbl_parse_sequence_h_
