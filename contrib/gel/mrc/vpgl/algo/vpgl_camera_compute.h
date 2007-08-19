@@ -42,7 +42,7 @@ class vpgl_proj_camera_compute
   bool compute(vgl_point_3d<double> const& world_center,
                vpgl_proj_camera<double>& camera);
 
-  //:An auxillary matrix that transforms (normalizes) world points prior to projection by a projective camera.  (lon, lat, elevation)->[-1, 1]. 
+  //:An auxiliary matrix that transforms (normalizes) world points prior to projection by a projective camera.  (lon, lat, elevation)->[-1, 1]. 
   vgl_h_matrix_3d<double> norm_trans();
 
  protected:
