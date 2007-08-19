@@ -8,13 +8,14 @@
 // \date June 29, 2007
 //
 
-#include <vcl_vector.h>
 #include <vgl/vgl_fwd.h>
 #include <vnl/vnl_fwd.h>
 #include <vgl/algo/vgl_rotation_3d.h>
-//: Solve the ortogonal Procrustes problem by finding a rotation matrix, R,
+
+//: Solve orthogonal Procrustes problem
+// Solve the orthogonal Procrustes problem by finding a rotation matrix, R,
 // and scale factor, s, that minimizes the distance between two pointsets,
-// X and Y, where Y is transformed by R to produce X
+// X and Y, where Y is transformed by R to produce X.
 class vpgl_ortho_procrustes
 {
  public:
@@ -35,7 +36,7 @@ class vpgl_ortho_procrustes
   double residual_mean_sq_error();
 
   //: successful computation
-  bool compute_ok(){return !cannot_compute_;}
+  bool compute_ok() { return !cannot_compute_; }
 
  protected:
   //: No default constructor
@@ -44,22 +45,13 @@ class vpgl_ortho_procrustes
 
   //: members
   bool cannot_compute_;
-
   bool computed_;
-
   vnl_matrix<double> X_;
-
   vnl_matrix<double> Y_;
-  
   vgl_rotation_3d<double> R_;
-
   vnl_vector_fixed<double, 3> t_;
-
   double s_;
-
   double residual_;
 };
-
-
 
 #endif // vpgl_ortho_procrustes_h_
