@@ -42,9 +42,8 @@ static void test_camera_compute_setup()
   for ( unsigned int i = 0; i < world_pts.size(); ++i )
     image_pts.push_back( C1.project( vgl_homg_point_3d<double>(world_pts[i]) ) );
 
-  vpgl_affine_camera_compute acc;
   vpgl_affine_camera<double> C1e;
-  acc.compute( image_pts, world_pts, C1e );
+  vpgl_affine_camera_compute::compute( image_pts, world_pts, C1e );
 
   vcl_cerr << "\nTrue camera matrix:\n" << C1.get_matrix() << '\n'
            << "\nEstimated camera matrix:\n" << C1e.get_matrix() << '\n';
@@ -167,8 +166,8 @@ void test_perspective_compute()
    }
  vpgl_calibration_matrix<double> K;
  vpgl_perspective_camera<double> pc;
- vpgl_perspective_camera_compute pcc;
- bool good = pcc.compute(image_pts, world_pts, K, pc);
+ 
+  bool good = vpgl_perspective_camera_compute::compute(image_pts, world_pts, K, pc);
  vcl_cout << pc << '\n';
  vgl_point_3d<double> c = pc.get_camera_center();
  TEST_NEAR("perspective camera from 6 points exact", c.z(), -14.2265, 0.001);
@@ -193,6 +192,7 @@ vcl_vector<vgl_point_3d<double> > world_points()
 
 void test_rational_camera_approx()
 {
+
   vpgl_rational_camera<double> rat_cam = construct_rational_camera();
   vcl_cout << rat_cam;
   vpgl_scale_offset<double> sox =
@@ -212,10 +212,37 @@ void test_rational_camera_approx()
   vgl_box_3d<double> approx_vol(pmin, pmax);
 
   vpgl_perspective_camera<double> pc;
-  vpgl_perspective_camera_compute pcc;
+  //vpgl_perspective_camera_compute pcc;
+
   vgl_h_matrix_3d<double> norm_trans;
-  pcc.compute(rat_cam, approx_vol, pc, norm_trans);
+#if 0
+  vpgl_perspective_camera_compute::compute(rat_cam, approx_vol, pc, norm_trans);
   vcl_cout << "Test Result \n" << pc << '\n';
+#endif
+
+  //:read a camera from file
+  vcl_string dir = "c:/vxl/vxl/contrib/gel/mrc/vpgl/algo/tests/";
+  vcl_string file = dir + "07JAN27.RPB";
+    
+  vpgl_rational_camera<double> rat_cam2(file);
+  vcl_cout << rat_cam2;
+   vpgl_scale_offset<double> sox2 = rat_cam2.scl_off(vpgl_rational_camera<double>::X_INDX);
+   vpgl_scale_offset<double> soy2 = rat_cam2.scl_off(vpgl_rational_camera<double>::Y_INDX);
+   vpgl_scale_offset<double> soz2 = rat_cam2.scl_off(vpgl_rational_camera<double>::Z_INDX);
+ 
+  vgl_point_3d<double> pmin2(sox2.offset()-sox2.scale(),
+                            soy2.offset()-soy2.scale(), 0);
+  vgl_point_3d<double> pmax2(sox2.offset()+sox2.scale(),
+                             soy2.offset()+soy2.scale(),
+                           soz2.scale()/2);
+  vgl_box_3d<double> approx_vol2(pmin2, pmax2);
+
+  vpgl_perspective_camera<double> pc2;
+  //vpgl_perspective_camera_compute pcc2;
+  vgl_h_matrix_3d<double> norm_trans2;
+  vpgl_perspective_camera_compute::compute(rat_cam2, approx_vol2, pc2, norm_trans2);
+  vcl_cout << "Test Result \n" << pc2 << '\n';
+  
 }
 
 int test_camera_compute_main(int argc, char* argv[]) 
