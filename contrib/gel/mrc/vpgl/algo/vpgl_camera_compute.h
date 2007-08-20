@@ -25,7 +25,7 @@ class vpgl_proj_camera_compute
 
   //: Compute from two sets of corresponding points.
   // Put the resulting camera into camera, return true if successful.
-  static 
+  static
     bool compute( const vcl_vector< vgl_homg_point_2d<double> >& image_pts,
                   const vcl_vector< vgl_homg_point_3d<double> >& world_pts,
                   vpgl_proj_camera<double>& camera );
@@ -39,14 +39,13 @@ class vpgl_proj_camera_compute
                        vpgl_proj_camera<double>& camera);
 
 
-  //:An auxillary matrix that transforms (normalizes) world points prior to projection by a projective camera.  (lon, lat, elevation)->[-1, 1]. 
- static vgl_h_matrix_3d<double> 
+  //:An auxiliary matrix that transforms (normalizes) world points prior to projection by a projective camera.  (lon, lat, elevation)->[-1, 1].
+ static vgl_h_matrix_3d<double>
    norm_trans(vpgl_rational_camera<double> const& rat_cam);
 
  private:
-  //:default constructor
+  //:default constructor (is private)
   vpgl_proj_camera_compute();
-
 };
 
 
@@ -80,7 +79,7 @@ class vpgl_perspective_camera_compute
   //: Compute from a rational camera
   // Put the resulting camera into camera, return true if successful.
   // The approximation volume defines the region of space (lon (deg), lat (deg), elev (meters))
-  //  where the perspective approximation is valid. Norm trans is a pre-multiplication 
+  //  where the perspective approximation is valid. Norm trans is a pre-multiplication
   // of the perspective camera to account for scaling the lon, lat and elevation
   // to the range [-1, 1]
   static bool compute( vpgl_rational_camera<double> const& rat_cam,

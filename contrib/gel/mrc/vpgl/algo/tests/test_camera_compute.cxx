@@ -1,14 +1,8 @@
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
-#include <vcl_cstdlib.h> // for rand()
-#include <vil/vil_image_resource.h>
-#include <vil/vil_image_resource_sptr.h>
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_vector_fixed.h>
-
 #include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_rank.h>
-#include <vgl/vgl_distance.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_point_2d.h>
@@ -50,10 +44,11 @@ static void test_camera_compute_setup()
   TEST_NEAR( "vpgl_affine_camera_compute:",
              ( C1.get_matrix()-C1e.get_matrix() ).frobenius_norm(), 0, 1 );
 }
+
 //a rational camera from a commercial satellite image
 vpgl_rational_camera<double> construct_rational_camera()
 {
-  double n_u[20] =  { 3.89528e-006, -7.41303e-008, 1.25847e-005, 
+  double n_u[20] =  { 3.89528e-006, -7.41303e-008, 1.25847e-005,
                       0.00205724, 5.38537e-008, -6.45546e-007,
                       -9.52482e-005, 1.50544e-007, 0.000665835, 1.00827,
                       -1.58873e-006, -3.85506e-007, 9.73561e-006,
@@ -68,7 +63,7 @@ vpgl_rational_camera<double> construct_rational_camera()
                      -4.7099e-007,  -0.000610182,  1};
 
   double n_v[20] = { -1.21292e-006, 7.83222e-006, -6.63094e-005, -0.000224627,
-                     -4.85207e-006, -2.07948e-006,  -1.55515e-005, 
+                     -4.85207e-006, -2.07948e-006,  -1.55515e-005,
                      -3.03478e-007, -6.18288e-005, 0.0318755, 4.11169e-005,
                      -4.28023e-007,  0.000196132,  1.06738e-005, 0.000307117,
                      -0.960259,  -9.56042e-007,  2.42754e-005,  -0.0712854,
@@ -81,11 +76,11 @@ vpgl_rational_camera<double> construct_rational_camera()
                     -1.15965e-007,  -7.89301e-006,  0.000275139, 1};
 
   vnl_matrix_fixed<double, 4, 20> cmatrix;
-  for(unsigned i = 0; i<20; ++i)
-    {
-      cmatrix[0][i]=n_u[i];  cmatrix[1][i]=d_u[i];
-      cmatrix[2][i]=n_v[i];  cmatrix[3][i]=d_v[i];
-    }
+  for (unsigned i = 0; i<20; ++i)
+  {
+    cmatrix[0][i]=n_u[i];  cmatrix[1][i]=d_u[i];
+    cmatrix[2][i]=n_v[i];  cmatrix[3][i]=d_v[i];
+  }
   //The scales and offsets
   vpgl_scale_offset<double> sox(0.0347, -71.4049);
   vpgl_scale_offset<double> soy(0.0219, 41.8216);
@@ -95,11 +90,12 @@ vpgl_rational_camera<double> construct_rational_camera()
   vcl_vector<vpgl_scale_offset<double> > scale_offsets;
   scale_offsets.push_back(sox);   scale_offsets.push_back(soy);
   scale_offsets.push_back(soz);   scale_offsets.push_back(sou);
-  scale_offsets.push_back(sov); 
+  scale_offsets.push_back(sov);
   //Construct the rational camera
   vpgl_rational_camera<double> rat_cam(cmatrix, scale_offsets);
   return rat_cam;
 }
+
 #if 0
 vpgl_rational_camera<double> read_rational_camera()
 {
@@ -113,7 +109,7 @@ void test_perspective_compute()
 {
   vcl_cout << "Test Perspective Compute\n";
   vnl_vector_fixed<double, 3> rv, trans;
-  for(unsigned i = 0; i<3; ++i)
+  for (unsigned i = 0; i<3; ++i)
     rv[i]=0.9068996774314604; // axis along diagonal, rotation of 90 degrees
   vgl_rotation_3d<double> rr(rv);
 
@@ -127,51 +123,52 @@ void test_perspective_compute()
   Y[0][4] = 1.01; Y[1][4] = 1.03; Y[2][4] = 0.96;
 
   vnl_matrix<double> J(4,6);
-  for(unsigned c = 0; c<5; ++c)
-    {
-      for(unsigned r = 0; r<3; ++r)
-        J[r][c]=Y[r][c];
-      J[3][c] = 1.0;
-    }
-  J[0][5] = 0.5;   J[1][5] = 1.0;  J[2][5] = -0.5;  J[3][5] = 1.0; 
+  for (unsigned c = 0; c<5; ++c)
+  {
+    for (unsigned r = 0; r<3; ++r)
+      J[r][c]=Y[r][c];
+    J[3][c] = 1.0;
+  }
+  J[0][5] = 0.5;   J[1][5] = 1.0;  J[2][5] = -0.5;  J[3][5] = 1.0;
 
  vnl_matrix_fixed<double, 3, 3> pr = rr.as_matrix();
  vnl_matrix_fixed<double, 3, 4> P;
- for(unsigned r = 0; r<3; ++r)
-   {
-     for(unsigned c = 0; c<3; ++c)
-       P[r][c] = pr[r][c];
-     P[r][3] = trans[r];
-   }
+ for (unsigned r = 0; r<3; ++r)
+ {
+   for (unsigned c = 0; c<3; ++c)
+     P[r][c] = pr[r][c];
+   P[r][3] = trans[r];
+ }
  // Project the 3-d points
  vnl_matrix<double> Z(2, 6);
- for(unsigned c = 0; c<6; ++c)
-   {
-     vnl_vector_fixed<double, 4> vpr;
-     for(unsigned r = 0; r<4; ++r)
-        vpr[r]=J[r][c];
-     vnl_vector_fixed<double, 3> pvpr = P*vpr;
-     for(unsigned r = 0; r<2; ++r)
-       Z[r][c] = pvpr[r]/pvpr[2];
-   }
- vcl_cout << "Projected points \n " << Z << '\n';
+ for (unsigned c = 0; c<6; ++c)
+ {
+   vnl_vector_fixed<double, 4> vpr;
+   for (unsigned r = 0; r<4; ++r)
+      vpr[r]=J[r][c];
+   vnl_vector_fixed<double, 3> pvpr = P*vpr;
+   for (unsigned r = 0; r<2; ++r)
+     Z[r][c] = pvpr[r]/pvpr[2];
+ }
+ vcl_cout << "Projected points\n " << Z << '\n';
  vcl_vector<vgl_point_2d<double> > image_pts;
  vcl_vector<vgl_point_3d<double> > world_pts;
- for(unsigned i = 0; i<6; ++i)
-   {
-     vgl_point_2d<double> ip(Z[0][i], Z[1][i]);
-     vgl_point_3d<double> wp(J[0][i], J[1][i], J[2][i]);
-     image_pts.push_back(ip);
-     world_pts.push_back(wp);
-   }
+ for (unsigned i = 0; i<6; ++i)
+ {
+   vgl_point_2d<double> ip(Z[0][i], Z[1][i]);
+   vgl_point_3d<double> wp(J[0][i], J[1][i], J[2][i]);
+   image_pts.push_back(ip);
+   world_pts.push_back(wp);
+ }
  vpgl_calibration_matrix<double> K;
  vpgl_perspective_camera<double> pc;
- 
+
   bool good = vpgl_perspective_camera_compute::compute(image_pts, world_pts, K, pc);
  vcl_cout << pc << '\n';
  vgl_point_3d<double> c = pc.get_camera_center();
  TEST_NEAR("perspective camera from 6 points exact", c.z(), -14.2265, 0.001);
 }
+
 vcl_vector<vgl_point_3d<double> > world_points()
 {
   vgl_point_3d<double> p0(-71.4146, 41.8286, 0);
@@ -192,7 +189,6 @@ vcl_vector<vgl_point_3d<double> > world_points()
 
 void test_rational_camera_approx()
 {
-
   vpgl_rational_camera<double> rat_cam = construct_rational_camera();
   vcl_cout << rat_cam;
   vpgl_scale_offset<double> sox =
@@ -217,19 +213,19 @@ void test_rational_camera_approx()
   vgl_h_matrix_3d<double> norm_trans;
 #if 0
   vpgl_perspective_camera_compute::compute(rat_cam, approx_vol, pc, norm_trans);
-  vcl_cout << "Test Result \n" << pc << '\n';
+  vcl_cout << "Test Result\n" << pc << '\n';
 #endif
 
-  //:read a camera from file
+  // read a camera from file
   vcl_string dir = "c:/vxl/vxl/contrib/gel/mrc/vpgl/algo/tests/";
   vcl_string file = dir + "07JAN27.RPB";
-    
+
   vpgl_rational_camera<double> rat_cam2(file);
   vcl_cout << rat_cam2;
    vpgl_scale_offset<double> sox2 = rat_cam2.scl_off(vpgl_rational_camera<double>::X_INDX);
    vpgl_scale_offset<double> soy2 = rat_cam2.scl_off(vpgl_rational_camera<double>::Y_INDX);
    vpgl_scale_offset<double> soz2 = rat_cam2.scl_off(vpgl_rational_camera<double>::Z_INDX);
- 
+
   vgl_point_3d<double> pmin2(sox2.offset()-sox2.scale(),
                             soy2.offset()-soy2.scale(), 0);
   vgl_point_3d<double> pmax2(sox2.offset()+sox2.scale(),
@@ -241,13 +237,11 @@ void test_rational_camera_approx()
   //vpgl_perspective_camera_compute pcc2;
   vgl_h_matrix_3d<double> norm_trans2;
   vpgl_perspective_camera_compute::compute(rat_cam2, approx_vol2, pc2, norm_trans2);
-  vcl_cout << "Test Result \n" << pc2 << '\n';
-  
+  vcl_cout << "Test Result\n" << pc2 << '\n';
 }
 
-int test_camera_compute_main(int argc, char* argv[]) 
+int test_camera_compute_main(int argc, char* argv[])
 {
-
   vcl_string dir_base;
 
   if ( argc >= 2 ) {
