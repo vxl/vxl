@@ -52,7 +52,7 @@ vpgl_proj_camera_compute::compute(
 
   // Form the solution matrix.
   vnl_matrix<double> S( 2*num_correspondences, 12, 0);
-  for ( int i = 0; i < num_correspondences; ++i ) {
+  for ( unsigned i = 0; i < num_correspondences; ++i ) {
     S(2*i,0) = -image_pts[i].w()*world_pts[i].x();
     S(2*i,1) = -image_pts[i].w()*world_pts[i].y();
     S(2*i,2) = -image_pts[i].w()*world_pts[i].z();
@@ -211,20 +211,21 @@ static double pval(vcl_vector<double> const& pv, vcl_vector<double>const& coef)
 // Find an approximate projective camera that approximates a rational camera
 // at the world center.
 bool vpgl_proj_camera_compute::
-compute( vgl_point_3d<double> const& world_center,
+compute( vpgl_rational_camera<double> const& rat_cam,
+         vgl_point_3d<double> const& world_center,
          vpgl_proj_camera<double>& camera)
 {
   double x0 = world_center.x(), y0 = world_center.y(), z0 = world_center.z();
   //normalized world center
   double nx0 =
-    rat_cam_.scl_off(vpgl_rational_camera<double>::X_INDX).normalize(x0);
+    rat_cam.scl_off(vpgl_rational_camera<double>::X_INDX).normalize(x0);
   double ny0 =
-    rat_cam_.scl_off(vpgl_rational_camera<double>::Y_INDX).normalize(y0);
+    rat_cam.scl_off(vpgl_rational_camera<double>::Y_INDX).normalize(y0);
   double nz0 =
-    rat_cam_.scl_off(vpgl_rational_camera<double>::Z_INDX).normalize(z0);
+    rat_cam.scl_off(vpgl_rational_camera<double>::Z_INDX).normalize(z0);
 
   // get the rational coefficients
-  vcl_vector<vcl_vector<double> > coeffs = rat_cam_.coefficients();
+  vcl_vector<vcl_vector<double> > coeffs = rat_cam.coefficients();
   vcl_vector<double> neu_u = coeffs[0];
   vcl_vector<double> den_u = coeffs[1];
   vcl_vector<double> neu_v = coeffs[2];
@@ -354,10 +355,10 @@ vcl_cout << "Denominators\n"
   for (unsigned r = 0; r<3; ++r)
     pmatrix[r][3] = p3[r];
   //account for the image scale and offsets
-  double uscale = rat_cam_.scale(vpgl_rational_camera<double>::U_INDX);
-  double uoff = rat_cam_.offset(vpgl_rational_camera<double>::U_INDX);
-  double vscale = rat_cam_.scale(vpgl_rational_camera<double>::V_INDX);
-  double voff = rat_cam_.offset(vpgl_rational_camera<double>::V_INDX);
+  double uscale = rat_cam.scale(vpgl_rational_camera<double>::U_INDX);
+  double uoff = rat_cam.offset(vpgl_rational_camera<double>::U_INDX);
+  double vscale = rat_cam.scale(vpgl_rational_camera<double>::V_INDX);
+  double voff = rat_cam.offset(vpgl_rational_camera<double>::V_INDX);
   vnl_matrix_fixed<double, 3, 3> Kr;
   Kr.fill(0.0);
   Kr[0][0]=uscale;   Kr[0][2]=uoff;
@@ -416,14 +417,15 @@ vcl_cout << "Denominators\n"
 //:obtain a scaling transformation to normalize world geographic coordinates
 //The resulting values will be on the range [-1, 1]
 //The transform is valid anywhere the rational camera is valid
-vgl_h_matrix_3d<double> vpgl_proj_camera_compute::norm_trans()
+vgl_h_matrix_3d<double> 
+vpgl_proj_camera_compute::norm_trans(vpgl_rational_camera<double> const& rat_cam)
 {
-  double xscale = rat_cam_.scale(vpgl_rational_camera<double>::X_INDX);
-  double xoff = rat_cam_.offset(vpgl_rational_camera<double>::X_INDX);
-  double yscale = rat_cam_.scale(vpgl_rational_camera<double>::Y_INDX);
-  double yoff = rat_cam_.offset(vpgl_rational_camera<double>::Y_INDX);
-  double zscale = rat_cam_.scale(vpgl_rational_camera<double>::Z_INDX);
-  double zoff = rat_cam_.offset(vpgl_rational_camera<double>::Z_INDX);
+  double xscale = rat_cam.scale(vpgl_rational_camera<double>::X_INDX);
+  double xoff = rat_cam.offset(vpgl_rational_camera<double>::X_INDX);
+  double yscale = rat_cam.scale(vpgl_rational_camera<double>::Y_INDX);
+  double yoff = rat_cam.offset(vpgl_rational_camera<double>::Y_INDX);
+  double zscale = rat_cam.scale(vpgl_rational_camera<double>::Z_INDX);
+  double zoff = rat_cam.offset(vpgl_rational_camera<double>::Z_INDX);
   vgl_h_matrix_3d<double> T;
   T.set_identity();
   T.set(0,0,1/xscale); T.set(1,1,1/yscale); T.set(2,2,1/zscale);
@@ -661,8 +663,10 @@ compute( vpgl_rational_camera<double> const& rat_cam,
   //Compute solution for rotation and translation and calibration matrix of
   //the perspective camera
   vpgl_calibration_matrix<double> K(kk);
-  vpgl_perspective_camera_compute pcc;
-  bool good = pcc.compute(norm_image_pts, norm_world_pts, K, camera);
+  bool good = 
+    vpgl_perspective_camera_compute::compute(norm_image_pts,
+                                                 norm_world_pts,
+                                                 K, camera);
   if (!good)
     return false;
   vcl_cout << camera << '\n';
