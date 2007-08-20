@@ -711,7 +711,7 @@ void bmvv_cal_manager::solve_camera()
       world_hpts.push_back(vgl_homg_point_3d<double>(world_[i]));
     }
     vpgl_proj_camera<double> camera;
-    vpgl_proj_camera_compute().compute(image_hpts,world_hpts,camera);
+    vpgl_proj_camera_compute::compute(image_hpts,world_hpts,camera);
     prev_cam_ = cam_;
     cam_ = vgl_p_matrix<double>(camera.get_matrix());
     
