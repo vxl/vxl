@@ -5,6 +5,7 @@
 #include <vcl_vector.h>
 #include <vcl_sstream.h>
 #include <vcl_iostream.h>
+#include <vcl_limits.h>
 
 #include <vgui/internals/vgui_dialog_impl.h>
 #include <vgui/internals/vgui_simple_field.h>
@@ -184,6 +185,8 @@ void* vgui_qt_dialog_impl::bool_field_widget(const char* txt, bool& v)
 void* vgui_qt_dialog_impl::int_field_widget(const char* txt, int& v)
 {
    QSpinBox* widget = new QSpinBox(this);
+   widget->setRange(-vcl_numeric_limits<int>::max(),
+                     vcl_numeric_limits<int>::max());
    widget->setValue(v);
    return widget;
 }
