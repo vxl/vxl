@@ -19,7 +19,10 @@
 #include <vgl/vgl_fwd.h> // forward declare vgl_plane_3d
 #include <vgl/vgl_vector_3d.h>
 #include <vcl_cassert.h>
+#include <vcl_cmath.h>
 #include <vcl_vector.h>
+
+#include <vgl/vgl_tolerance.h>
 
 //: Represents a cartesian 3D point
 template <class Type>
@@ -261,18 +264,19 @@ bool coplanar(vgl_point_3d<Type> const& p1,
               vgl_point_3d<Type> const& p3,
               vgl_point_3d<Type> const& p4)
 {
-  return (p1.x()*p2.y()-p1.y()*p2.x())*p3.z()
-        +(p3.x()*p1.y()-p3.y()*p1.x())*p2.z()
-        +(p2.x()*p3.y()-p2.y()*p3.x())*p1.z()
-        +(p4.x()*p1.y()-p4.y()*p1.x())*p2.z()
-        +(p2.x()*p4.y()-p2.y()*p4.x())*p1.z()
-        +(p1.x()*p2.y()-p1.y()*p2.x())*p4.z()
-        +(p3.x()*p4.y()-p3.y()*p4.x())*p1.z()
-        +(p1.x()*p3.y()-p1.y()*p3.x())*p4.z()
-        +(p4.x()*p1.y()-p4.y()*p1.x())*p3.z()
-        +(p2.x()*p3.y()-p2.y()*p3.x())*p4.z()
-        +(p4.x()*p2.y()-p4.y()*p2.x())*p3.z()
-        +(p3.x()*p4.y()-p3.y()*p4.x())*p2.z() == 0;
+  Type r = ( (p1.x()*p2.y()-p1.y()*p2.x())*p3.z()
+            +(p3.x()*p1.y()-p3.y()*p1.x())*p2.z()
+            +(p2.x()*p3.y()-p2.y()*p3.x())*p1.z()
+            +(p1.x()*p4.y()-p1.y()*p4.x())*p2.z()
+            +(p4.x()*p2.y()-p4.y()*p2.x())*p1.z()
+            +(p2.x()*p1.y()-p2.y()*p1.x())*p4.z()
+            +(p3.x()*p4.y()-p3.y()*p4.x())*p1.z()
+            +(p1.x()*p3.y()-p1.y()*p3.x())*p4.z()
+            +(p4.x()*p1.y()-p4.y()*p1.x())*p3.z()
+            +(p3.x()*p2.y()-p3.y()*p2.x())*p4.z()
+            +(p2.x()*p4.y()-p2.y()*p4.x())*p3.z()
+            +(p4.x()*p3.y()-p4.y()*p3.x())*p2.z() );
+  return r <= vgl_tolerance<Type>::point_3d_coplanarity && r >= -vgl_tolerance<Type>::point_3d_coplanarity;
 }
 
 #define VGL_POINT_3D_INSTANTIATE(T) extern "please include vgl/vgl_point_3d.txx first"
