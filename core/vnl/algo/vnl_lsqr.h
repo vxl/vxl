@@ -55,6 +55,9 @@ class vnl_lsqr
 
   static void translate_return_code(vcl_ostream& os, int return_code);
 
+  //: Return the residual norm estimate:
+  double get_resid_norm_estimate() const { return resid_norm_estimate_; }
+
   //: Get the return code for the last minimization
   inline int return_code() const { return return_code_; }
 
