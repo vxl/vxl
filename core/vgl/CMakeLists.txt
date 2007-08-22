@@ -3,6 +3,7 @@
 SET( vgl_sources
   # General
   vgl_fwd.h
+  vgl_tolerance.h                vgl_tolerance.txx
   vgl_box_2d.h                   vgl_box_2d.txx
   vgl_box_3d.h                   vgl_box_3d.txx
   vgl_vector_2d.h                vgl_vector_2d.txx
