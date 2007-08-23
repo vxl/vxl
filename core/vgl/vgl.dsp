@@ -359,6 +359,18 @@ SOURCE=.\Templates/vgl_intersection+float-.cxx
 # Begin Source File
 SOURCE=.\Templates/vgl_intersection+int-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_tolerance+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_tolerance+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_tolerance+int-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vgl_tolerance+unsigned-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -589,6 +601,12 @@ SOURCE=.\vgl_intersection.h
 # End Source File
 # Begin Source File
 SOURCE=.\vgl_intersection.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_tolerance.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_tolerance.txx
 # End Source File
 # End Group
 # End Target
