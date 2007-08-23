@@ -6,6 +6,7 @@ VERSION := 1.0
 MANPAGE_SOURCES += vgl_fwd.h
 
 # General
+MANPAGE_SOURCES += vgl_tolerance.txx
 MANPAGE_SOURCES += vgl_box_2d.txx
 MANPAGE_SOURCES += vgl_box_3d.txx
 MANPAGE_SOURCES += vgl_vector_2d.txx
