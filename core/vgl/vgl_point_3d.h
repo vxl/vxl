@@ -19,7 +19,6 @@
 #include <vgl/vgl_fwd.h> // forward declare vgl_plane_3d
 #include <vgl/vgl_vector_3d.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
 #include <vcl_vector.h>
 
 #include <vgl/vgl_tolerance.h>
