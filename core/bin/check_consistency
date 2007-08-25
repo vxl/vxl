@@ -314,7 +314,7 @@ foreach $f (@FILES)
     elsif ($j eq 'vil1/vil1_clamp.h') { $i.='(|_pixel)'; }
     elsif ($j eq 'vil/vil_clamp.h') { $i.='(|_below|_image_resource)'; }
     elsif ($j eq 'vil/vil_color_table.h') { $i='color_value|color_theme'; }
-    elsif ($j =~ m'vil1?/vil1?_colour_space.h') { $i.='_(RGB|HSV)_to_(YIQ|HSV|RGB)'; }
+    elsif ($j =~ m'(vil/algo|vil1)/vil1?_colour_space.h') { $i.='_(RGB|HSV|YUV)_to_(YUV|YIQ|HSV|RGB)'; }
     elsif ($j eq 'vil/vil_config.h') { $i='HAS_[A-Z]+'; }
     elsif ($j eq 'vil/vil_convert.h') { $i.='_((cast|round)(|_pixel)|(rgb|planes)_to_grey|stretch_range|to_[a-z_]+)'; }
     elsif ($j eq 'vil1/vil1_convolve.h') { $i.='_(signal_[12]d|1d_[xy]|separable|boundary_option|trim|[a-z]+_extend)'; }
