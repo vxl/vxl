@@ -11,6 +11,7 @@ TESTS += test_lens_warp_mapper.cxx
 TESTS += test_optimize_camera.cxx
 TESTS += test_project.cxx
 TESTS += test_backproject.cxx
+TESTS += test_ortho_procrustes.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

@@ -38,6 +38,7 @@ TESTS += test_gen_synthetic.cxx
 TESTS += test_algo_corners.cxx
 TESTS += test_algo_quad_distance_function.cxx
 TESTS += test_algo_smooth_121.cxx
+TESTS += test_algo_distance_transform.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

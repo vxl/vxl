@@ -33,6 +33,7 @@ MANPAGE_SOURCES += vgl_fit_conics_2d.txx
 MANPAGE_SOURCES += vgl_fit_plane_3d.txx
 MANPAGE_SOURCES += vgl_intersection.txx
 MANPAGE_SOURCES += vgl_rotation_3d.h
+SOURCES += vgl_h_matrix_2d_compute_rigid_body.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

@@ -48,6 +48,7 @@ TESTS += test_log.cxx
 TESTS += test_gram_schmidt.cxx
 TESTS += test_linear_interpolator.cxx
 TESTS += test_stepwise_regression.cxx
+TESTS += test_parse_sequence.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

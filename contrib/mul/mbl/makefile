@@ -71,6 +71,7 @@ MANPAGE_SOURCES += mbl_jarque_bera.h
 MANPAGE_SOURCES += mbl_stl_pred.h
 MANPAGE_SOURCES += mbl_chord_3d.h
 MANPAGE_SOURCES += mbl_draw_line.h
+MANPAGE_SOURCES += mbl_parse_sequence.h
 
 MANPAGE_SOURCES += mbl_config.h.in
 
