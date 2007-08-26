@@ -193,6 +193,9 @@ SOURCE=.\vgl_h_matrix_2d_compute_linear.cxx
 # Begin Source File
 SOURCE=.\vgl_h_matrix_2d_optimize_lmq.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vgl_h_matrix_2d_compute_rigid_body.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -336,6 +339,9 @@ SOURCE=.\vgl_intersection.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vgl_rotation_3d.h
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_h_matrix_2d_compute_rigid_body.h
 # End Source File
 # End Group
 # End Target

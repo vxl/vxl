@@ -119,6 +119,9 @@ SOURCE=.\test_project.cxx
 # Begin Source File
 SOURCE=.\test_backproject.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_ortho_procrustes.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

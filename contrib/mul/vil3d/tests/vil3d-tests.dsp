@@ -321,6 +321,9 @@ SOURCE=.\test_reflect.cxx
 # Begin Source File
 SOURCE=.\test_gen_synthetic.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_algo_distance_transform.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

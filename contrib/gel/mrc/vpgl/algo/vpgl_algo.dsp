@@ -132,6 +132,9 @@ SOURCE=.\vpgl_invmap_cost_function.cxx
 SOURCE=.\vpgl_fm_compute_2_point.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vpgl_ortho_procrustes.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vpgl_list+vgl_h_matrix_2d+double--.cxx
 # End Source File
 # Begin Source File
@@ -187,6 +190,9 @@ SOURCE=.\vpgl_invmap_cost_function.h
 # End Source File
 # Begin Source File
 SOURCE=.\vpgl_fm_compute_2_point.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_ortho_procrustes.h
 # End Source File
 # End Group
 # End Target

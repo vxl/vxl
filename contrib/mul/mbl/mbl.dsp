@@ -527,6 +527,9 @@ SOURCE=.\mbl_config.h.in
 # Begin Source File
 SOURCE=.\mbl_wt_histogram.h
 # End Source File
+# Begin Source File
+SOURCE=.\mbl_parse_sequence.h
+# End Source File
 # End Group
 # End Target
 # End Project

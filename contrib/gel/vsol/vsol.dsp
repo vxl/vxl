@@ -282,6 +282,9 @@ SOURCE=.\Templates/vbl_smart_ptr+vsol_orient_box_3d-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+vsol_volume_3d-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+vsol_polyline_3d-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vsol_box_2d.cxx
 # End Source File
 # Begin Source File

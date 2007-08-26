@@ -98,6 +98,12 @@ SOURCE=.\bnl_parabolic_interpolator.cxx
 # Begin Source File
 SOURCE=.\bnl_quadratic_interpolator.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bnl_crs_index.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bnl_sparse_lst_sqr_function.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -106,6 +112,12 @@ SOURCE=.\bnl_parabolic_interpolator.h
 # End Source File
 # Begin Source File
 SOURCE=.\bnl_quadratic_interpolator.h
+# End Source File
+# Begin Source File
+SOURCE=.\bnl_crs_index.h
+# End Source File
+# Begin Source File
+SOURCE=.\bnl_sparse_lst_sqr_function.h
 # End Source File
 # End Group
 # End Target

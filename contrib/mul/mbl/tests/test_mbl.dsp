@@ -248,6 +248,9 @@ SOURCE=.\test_linear_interpolator.cxx
 SOURCE=.\test_stepwise_regression.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_parse_sequence.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

@@ -142,6 +142,18 @@ LINK32=link.exe
 
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
+# Begin Source File
+SOURCE=.\test_crs_index.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_driver.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_sparse_lst_sqr_function.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
