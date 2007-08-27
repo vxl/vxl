@@ -19,12 +19,11 @@ extern int subsm_(integer *n, integer *m, integer *nsub, integer *ind, doublerea
 extern int dcsrch_(doublereal *f, doublereal *g, doublereal *stp, doublereal *ftol, doublereal *gtol, doublereal *xtol, doublereal *stpmin, doublereal *stpmax, char *task, integer *isave, doublereal *dsave, ftnlen task_len);
 extern int dcstep_(doublereal *stx, doublereal *fx, doublereal *dx, doublereal *sty, doublereal *fy, doublereal *dy, doublereal *stp, doublereal *fp, doublereal *dp, logical *brackt, doublereal *stpmin, doublereal *stpmax);
 extern int timer_(doublereal *ttime);
-extern doublereal dnrm2_(integer *n, doublereal *x, integer *incx);
 extern doublereal dpmeps_();
-extern int daxpy_(integer *n, doublereal *da, doublereal *dx, integer *incx, doublereal *dy, integer *incy);
-extern int dcopy_(integer *n, doublereal *dx, integer *incx, doublereal *dy, integer *incy);
-extern doublereal ddot_(integer *n, doublereal *dx, integer *incx, doublereal *dy, integer *incy);
-extern int dpofa_(doublereal *a, integer *lda, integer *n, integer *info);
-extern int dscal_(integer *n, doublereal *da, doublereal *dx, integer *incx);
 extern int dtrsl_(doublereal *t, integer *ldt, integer *n, doublereal *b, integer *job, integer *info);
+/*:ref: dcopy_ 14 5 4 7 4 7 4 */
+/*:ref: ddot_ 7 5 4 7 4 7 4 */
+/*:ref: dscal_ 14 4 4 7 7 4 */
+/*:ref: daxpy_ 14 6 4 7 7 4 7 4 */
+/*:ref: dpofa_ 14 4 7 4 4 4 */
 /*:ref: etime_ 6 1 6 */

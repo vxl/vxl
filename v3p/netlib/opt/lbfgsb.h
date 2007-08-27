@@ -364,47 +364,8 @@ extern int v3p_netlib_dcstep_(
 extern int v3p_netlib_timer_(
   v3p_netlib_doublereal *ttime
   );
-extern v3p_netlib_doublereal v3p_netlib_dnrm2_(
-  v3p_netlib_integer *n,
-  v3p_netlib_doublereal *x,
-  v3p_netlib_integer *incx
-  );
 extern v3p_netlib_doublereal v3p_netlib_dpmeps_(
   
-  );
-extern int v3p_netlib_daxpy_(
-  v3p_netlib_integer *n,
-  v3p_netlib_doublereal *da,
-  v3p_netlib_doublereal *dx,
-  v3p_netlib_integer *incx,
-  v3p_netlib_doublereal *dy,
-  v3p_netlib_integer *incy
-  );
-extern int v3p_netlib_dcopy_(
-  v3p_netlib_integer *n,
-  v3p_netlib_doublereal *dx,
-  v3p_netlib_integer *incx,
-  v3p_netlib_doublereal *dy,
-  v3p_netlib_integer *incy
-  );
-extern v3p_netlib_doublereal v3p_netlib_ddot_(
-  v3p_netlib_integer *n,
-  v3p_netlib_doublereal *dx,
-  v3p_netlib_integer *incx,
-  v3p_netlib_doublereal *dy,
-  v3p_netlib_integer *incy
-  );
-extern int v3p_netlib_dpofa_(
-  v3p_netlib_doublereal *a,
-  v3p_netlib_integer *lda,
-  v3p_netlib_integer *n,
-  v3p_netlib_integer *info
-  );
-extern int v3p_netlib_dscal_(
-  v3p_netlib_integer *n,
-  v3p_netlib_doublereal *da,
-  v3p_netlib_doublereal *dx,
-  v3p_netlib_integer *incx
   );
 extern int v3p_netlib_dtrsl_(
   v3p_netlib_doublereal *t,
