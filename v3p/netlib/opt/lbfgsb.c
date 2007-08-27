@@ -53,6 +53,8 @@ static integer c__5 = 5;
 	    doublereal *, doublereal *, doublereal *, integer *, integer *, 
 	    integer *, char *, integer *, char *, logical *, integer *, 
 	    doublereal *, ftnlen, ftnlen);
+    (void)task_len;
+    (void)csave_len;
 
 /*<       character*60     task, csave >*/
 /*<       logical          lsave(4) >*/
@@ -507,6 +509,8 @@ actorization in formt;\002,/,\002   refresh the lbfgs memory and restart the\
     static cilist io___75 = { 0, 6, 0, fmt_1004, 0 };
     static cilist io___76 = { 0, 6, 0, fmt_1007, 0 };
 
+    (void)task_len;
+    (void)csave_len;
 
 /*<       character*60     task, csave >*/
 /*<       logical          lsave(4) >*/
@@ -1910,7 +1914,7 @@ oint \002,1p,2(1x,d11.4))";
 
     /* Local variables */
     integer i__, j;
-    doublereal f1, f2, dt, tj, tl, tu, tj0;
+    doublereal f1, f2, dt, tj, tl=0, tu=0, tj0;
     integer ibp;
     doublereal dtm;
     extern /* Subroutine */ int bmv_(integer *, doublereal *, doublereal *, 
@@ -2837,6 +2841,8 @@ L999:
 
     /* Local variables */
     integer i__;
+
+    (void)task_len;
 
 /*<       character*60     task >*/
 /*<       integer          n, m, info, k, nbd(n) >*/
@@ -3941,6 +3947,8 @@ L30:
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, char *, integer *, doublereal *, 
 	    ftnlen);
+    (void)task_len;
+    (void)csave_len;
 
 /*<       character*60     task, csave >*/
 /*<       logical          boxed, cnstnd >*/
@@ -4475,6 +4483,7 @@ p,2(1x,d10.3))";
     static cilist io___201 = { 0, 6, 0, fmt_2001, 0 };
     static cilist io___202 = { 0, 0, 0, fmt_3001, 0 };
 
+    (void)word_len;
 
 /*<       character*3      word >*/
 /*<    >*/
@@ -4692,6 +4701,8 @@ x,\002-\002,10x,\002-\002)";
     static cilist io___229 = { 0, 0, 0, fmt_9019, 0 };
     static cilist io___230 = { 0, 0, 0, fmt_3008, 0 };
 
+    (void)task_len;
+    (void)word_len;
 
 /*<       character*60     task >*/
 /*<       character*3      word >*/
@@ -5060,7 +5071,7 @@ OX\002)";
     /* Local variables */
     integer i__, j, k, m2;
     doublereal dk;
-    integer js, jy, ibd, col2;
+    integer js, jy, ibd=0, col2;
     doublereal temp1, temp2, alpha;
     extern /* Subroutine */ int dtrsl_(doublereal *, integer *, integer *, 
 	    doublereal *, integer *, integer *);
@@ -5892,8 +5903,8 @@ OX\002)";
 /*     If further progress is not possible, let stp be the best */
 /*     point obtained during the search. */
 /*<    >*/
-    if (brackt && (*stp <= stmin || *stp >= stmax) || brackt && stmax - stmin 
-	    <= *xtol * stmax) {
+    if ((brackt && (*stp <= stmin || *stp >= stmax)) ||
+        (brackt && stmax - stmin <= *xtol * stmax)) {
 	*stp = stx;
     }
 /*     Obtain another function and derivative. */
