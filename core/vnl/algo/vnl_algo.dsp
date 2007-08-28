@@ -282,6 +282,9 @@ SOURCE=.\vnl_bracket_minimum.cxx
 SOURCE=.\vnl_brent_minimizer.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vnl_lbfgsb.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vnl_svd_economy+double-.cxx
 # End Source File
 # Begin Source File
@@ -469,6 +472,9 @@ SOURCE=.\vnl_brent_minimizer.h
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_fit_parabola.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_lbfgsb.h
 # End Source File
 # End Group
 # End Target
