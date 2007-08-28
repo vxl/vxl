@@ -297,6 +297,7 @@ SOURCES += minpack/qrfac.c
 SOURCES += minpack/qrsolv.c
 # V3P_NETLIB_opt_SOURCES
 SOURCES += opt/lbfgs.c
+SOURCES += opt/lbfgsb.c
 # V3P_NETLIB_toms_SOURCES
 SOURCES += toms/rpoly.c
 # V3P_NETLIB_datapac_SOURCES
