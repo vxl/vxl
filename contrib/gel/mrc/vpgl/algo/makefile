@@ -19,6 +19,7 @@ SOURCES += vpgl_construct_cameras.cxx
 SOURCES += vpgl_invmap_cost_function.cxx
 SOURCES += vpgl_fm_compute_2_point.cxx
 SOURCES += vpgl_ortho_procrustes.cxx
+SOURCES += vpgl_bundle_adjust.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
