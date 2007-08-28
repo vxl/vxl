@@ -135,6 +135,9 @@ SOURCE=.\vpgl_fm_compute_2_point.cxx
 SOURCE=.\vpgl_ortho_procrustes.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vpgl_bundle_adjust.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vpgl_list+vgl_h_matrix_2d+double--.cxx
 # End Source File
 # Begin Source File
@@ -193,6 +196,9 @@ SOURCE=.\vpgl_fm_compute_2_point.h
 # End Source File
 # Begin Source File
 SOURCE=.\vpgl_ortho_procrustes.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_bundle_adjust.h
 # End Source File
 # End Group
 # End Target
