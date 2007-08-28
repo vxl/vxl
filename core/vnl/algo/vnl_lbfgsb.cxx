@@ -61,12 +61,15 @@ bool vnl_lbfgsb::minimize(vnl_vector<double>& x)
   char task[61] =
     "START                                                       ";
 
-  // Verbosity level.
+  // Verbosity level inside lbfgs implementation.
   long const iprint = -1;
 
   // Initialize iteration.
   this->num_evaluations_ = 0;
   this->num_iterations_ = 0;
+
+  // TODO: Deal with verbose_, check_derivatives_, trace, xtol,
+  // maxfev, ftol, gtol, epsfcn members of vnl_nonlinear_minimizer.
 
   bool ok = true;
   for(;;)
