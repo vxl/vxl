@@ -15,17 +15,40 @@ extern "C" {
 #endif
 #include "v3p_netlib.h"
 
+#undef abs
+#undef min
+#undef max
+#include <math.h>
+#include <stdio.h>
+#define abs(x) ((x) >= 0 ? (x) : -(x))
+#define min(a,b) ((a) <= (b) ? (a) : (b))
+#define max(a,b) ((a) >= (b) ? (a) : (b))
+
+static void lbfgsb_printf_vec(const char* name,
+                              double const* v,
+                              integer len)
+{
+/*<             write (6,1004) 'G =',(g(i), i = 1, n) >*/
+/*
+  1004 format (/,a4, 1p, 6(1x,d11.4),/,(4x,1p,6(1x,d11.4)))
+*/
+  integer i;
+  printf("%s =", name);
+  for(i = 1; i <= len; ++i)
+    {
+    printf(" %11.4g", v[i]);
+    }
+  printf("\n");
+}
+
 /* Table of constant values */
 
 static doublereal c_b9 = 0.;
 static integer c__1 = 1;
-static integer c__9 = 9;
 static integer c__11 = 11;
-static integer c__3 = 3;
 static doublereal c_b275 = .001;
 static doublereal c_b276 = .9;
 static doublereal c_b277 = .1;
-static integer c__5 = 5;
 
 /* ================    L-BFGS-B (version 2.1)   ========================== */
 /*<    >*/
@@ -366,37 +389,15 @@ static integer c__5 = 5;
 	csave, logical *lsave, integer *isave, doublereal *dsave, ftnlen 
 	task_len, ftnlen csave_len)
 {
-    /* Format strings */
-    static char fmt_1002[] = "(/,\002At iterate\002,i5,4x,\002f= \002,1p,d12\
-.5,4x,\002|proj g|= \002,1p,d12.5)";
-    static char fmt_1003[] = "(2(1x,i4),5x,\002-\002,5x,\002-\002,3x,\002\
--\002,5x,\002-\002,5x,\002-\002,8x,\002-\002,3x,1p,2(1x,d10.3))";
-    static char fmt_1001[] = "(//,\002ITERATION \002,i5)";
-    static char fmt_1005[] = "(/,\002 Singular triangular system detected\
-;\002,/,\002   refresh the lbfgs memory and restart the iteration.\002)";
-    static char fmt_1006[] = "(/,\002 Nonpositive definiteness in Cholesky f\
-actorization in formk;\002,/,\002   refresh the lbfgs memory and restart the\
- iteration.\002)";
-    static char fmt_1008[] = "(/,\002 Bad direction in the line search;\002,\
-/,\002   refresh the lbfgs memory and restart the iteration.\002)";
-    static char fmt_1004[] = "(\002  ys=\002,1p,e10.3,\002  -gs=\002,1p,e10.\
-3,\002 BFGS update SKIPPED\002)";
-    static char fmt_1007[] = "(/,\002 Nonpositive definiteness in Cholesky f\
-actorization in formt;\002,/,\002   refresh the lbfgs memory and restart the\
- iteration.\002)";
-
     /* System generated locals */
     integer ws_dim1, ws_offset, wy_dim1, wy_offset, sy_dim1, sy_offset, 
 	    ss_dim1, ss_offset, yy_dim1, yy_offset, wt_dim1, wt_offset, 
 	    wn_dim1, wn_offset, snd_dim1, snd_offset, i__1;
     doublereal d__1, d__2;
-    olist o__1;
 
     /* Builtin functions */
     integer s_cmp(char *, char *, ftnlen, ftnlen);
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer f_open(olist *), s_wsfe(cilist *), do_fio(integer *, char *, 
-	    ftnlen), e_wsfe();
 
     /* Local variables */
     integer i__, k;
@@ -497,17 +498,6 @@ actorization in formt;\002,/,\002   refresh the lbfgs memory and restart the\
     integer nintol;
     extern /* Subroutine */ int projgr_(integer *, doublereal *, doublereal *,
 	     integer *, doublereal *, doublereal *, doublereal *);
-
-    /* Fortran I/O blocks */
-    static cilist io___62 = { 0, 6, 0, fmt_1002, 0 };
-    static cilist io___63 = { 0, 0, 0, fmt_1003, 0 };
-    static cilist io___64 = { 0, 6, 0, fmt_1001, 0 };
-    static cilist io___66 = { 0, 6, 0, fmt_1005, 0 };
-    static cilist io___68 = { 0, 6, 0, fmt_1006, 0 };
-    static cilist io___69 = { 0, 6, 0, fmt_1005, 0 };
-    static cilist io___71 = { 0, 6, 0, fmt_1008, 0 };
-    static cilist io___75 = { 0, 6, 0, fmt_1004, 0 };
-    static cilist io___76 = { 0, 6, 0, fmt_1007, 0 };
 
     (void)task_len;
     (void)csave_len;
@@ -799,6 +789,7 @@ actorization in formt;\002,/,\002   refresh the lbfgs memory and restart the\
 	if (*iprint >= 1) {
 /*                                open a summary file 'iterate.dat' */
 /*<             open (8, file = 'iterate.dat', status = 'unknown') >*/
+/*
 	    o__1.oerr = 0;
 	    o__1.ounit = 8;
 	    o__1.ofnmlen = 11;
@@ -809,6 +800,7 @@ actorization in formt;\002,/,\002   refresh the lbfgs memory and restart the\
 	    o__1.ofm = 0;
 	    o__1.oblnk = 0;
 	    f_open(&o__1);
+*/
 /*<             itfile = 8 >*/
 	    itfile = 8;
 /*<          endif             >*/
@@ -963,19 +955,20 @@ L111:
 /*<       if (iprint .ge. 1) then >*/
     if (*iprint >= 1) {
 /*<          write (6,1002) iter,f,sbgnrm >*/
-	s_wsfe(&io___62);
-	do_fio(&c__1, (char *)&iter, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&(*f), (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&sbgnrm, (ftnlen)sizeof(doublereal));
-	e_wsfe();
+/*
+ 1002 format
+     +  (/,'At iterate',i5,4x,'f= ',1p,d12.5,4x,'|proj g|= ',1p,d12.5)
+*/
+        printf("At iterate %5ld    f= %12.5g    |proj g|= %12.5g\n",
+               iter, *f, sbgnrm);
 /*<          write (itfile,1003) iter,nfgv,sbgnrm,f >*/
-	io___63.ciunit = itfile;
-	s_wsfe(&io___63);
-	do_fio(&c__1, (char *)&iter, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&nfgv, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&sbgnrm, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&(*f), (ftnlen)sizeof(doublereal));
-	e_wsfe();
+/*
+ 1003 format (2(1x,i4),5x,'-',5x,'-',3x,'-',5x,'-',5x,'-',8x,'-',3x,
+     +        1p,2(1x,d10.3))
+*/
+        fprintf(0,
+                " %4ld %4ld     -     -   -     -     -        -    %10.3g %10.3g\n",
+                iter, nfgv, sbgnrm, *f);
 /*<       endif >*/
     }
 /*<       if (sbgnrm .le. pgtol) then >*/
@@ -992,11 +985,12 @@ L111:
 /*<  222  continue >*/
 L222:
 /*<       if (iprint .ge. 99) write (6,1001) iter + 1 >*/
+/*
+ 1001 format (//,'ITERATION ',i5)
+*/
     if (*iprint >= 99) {
-	s_wsfe(&io___64);
 	i__1 = iter + 1;
-	do_fio(&c__1, (char *)&i__1, (ftnlen)sizeof(integer));
-	e_wsfe();
+        printf("ITERATION %5ld\n", i__1);
     }
 /*<       iword = -1 >*/
     iword = -1;
@@ -1031,9 +1025,14 @@ L222:
     if (info != 0) {
 /*         singular triangular system detected; refresh the lbfgs memory. */
 /*<          if(iprint .ge. 1) write (6, 1005) >*/
+/*
+ 1005 format (/, 
+     +' Singular triangular system detected;',/,
+     +'   refresh the lbfgs memory and restart the iteration.')
+*/
 	if (*iprint >= 1) {
-	    s_wsfe(&io___66);
-	    e_wsfe();
+            printf(" Singular triangular system detected;\n"
+                   "   refresh the lbfgs memory and restart the iteration.\n");
 	}
 /*<          info   = 0 >*/
 	info = 0;
@@ -1099,9 +1098,14 @@ L333:
 /*          nonpositive definiteness in Cholesky factorization; */
 /*          refresh the lbfgs memory and restart the iteration. */
 /*<          if(iprint .ge. 1) write (6, 1006) >*/
+/*
+ 1006 format (/, 
+     +' Nonpositive definiteness in Cholesky factorization in formk;',/,
+     +'   refresh the lbfgs memory and restart the iteration.')
+ */
 	if (*iprint >= 1) {
-	    s_wsfe(&io___68);
-	    e_wsfe();
+            printf(" Nonpositive definiteness in Cholesky factorization in formk;\n"
+                   "   refresh the lbfgs memory and restart the iteration.\n");
 	}
 /*<          info   = 0 >*/
 	info = 0;
@@ -1146,8 +1150,8 @@ L444:
 /*          refresh the lbfgs memory and restart the iteration. */
 /*<          if(iprint .ge. 1) write (6, 1005) >*/
 	if (*iprint >= 1) {
-	    s_wsfe(&io___69);
-	    e_wsfe();
+            printf(" Singular triangular system detected;\n"
+                   "   refresh the lbfgs memory and restart the iteration.\n");
 	}
 /*<          info   = 0 >*/
 	info = 0;
@@ -1234,9 +1238,14 @@ L666:
 	} else {
 /*             refresh the lbfgs memory and restart the iteration. */
 /*<             if(iprint .ge. 1) write (6, 1008) >*/
+/*
+ 1008 format (/,
+     +' Bad direction in the line search;',/,
+     +'   refresh the lbfgs memory and restart the iteration.')
+*/
 	    if (*iprint >= 1) {
-		s_wsfe(&io___71);
-		e_wsfe();
+                printf(" Bad direction in the line search;\n"
+                       "   refresh the lbfgs memory and restart the iteration.\n");
 	    }
 /*<             if (info .eq. 0) nfgv = nfgv - 1 >*/
 	    if (info == 0) {
@@ -1356,11 +1365,12 @@ L777:
 /*<          updatd = .false. >*/
 	updatd = FALSE_;
 /*<          if (iprint .ge. 1) write (6,1004) dr, ddum >*/
+/*
+ 1004 format ('  ys=',1p,e10.3,'  -gs=',1p,e10.3,' BFGS update SKIPPED')
+ */
 	if (*iprint >= 1) {
-	    s_wsfe(&io___75);
-	    do_fio(&c__1, (char *)&dr, (ftnlen)sizeof(doublereal));
-	    do_fio(&c__1, (char *)&ddum, (ftnlen)sizeof(doublereal));
-	    e_wsfe();
+            printf("  ys=%10.3g  -gs=%10.3g BFGS update SKIPPED\n",
+                   dr, ddum);
 	}
 /*<          goto 888 >*/
 	goto L888;
@@ -1392,9 +1402,14 @@ L777:
 /*          nonpositive definiteness in Cholesky factorization; */
 /*          refresh the lbfgs memory and restart the iteration. */
 /*<          if(iprint .ge. 1) write (6, 1007) >*/
+/*
+ 1007 format (/,
+     +' Nonpositive definiteness in Cholesky factorization in formt;',/,
+     +'   refresh the lbfgs memory and restart the iteration.')
+*/
 	if (*iprint >= 1) {
-	    s_wsfe(&io___76);
-	    e_wsfe();
+            printf(" Nonpositive definiteness in Cholesky factorization in formt;\n"
+                   "   refresh the lbfgs memory and restart the iteration.\n");
 	}
 /*<          info = 0 >*/
 	info = 0;
@@ -1528,26 +1543,11 @@ L1000:
 	integer *nbd, doublereal *x, integer *iwhere, integer *iprint, 
 	logical *prjctd, logical *cnstnd, logical *boxed)
 {
-    /* Format strings */
-    static char fmt_1001[] = "(/,\002At X0 \002,i9,\002 variables are exactl\
-y at the bounds\002)";
-
     /* System generated locals */
     integer i__1;
 
-    /* Builtin functions */
-    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	    e_wsle(), s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), 
-	    e_wsfe();
-
     /* Local variables */
     integer i__, nbdd;
-
-    /* Fortran I/O blocks */
-    static cilist io___81 = { 0, 6, 0, 0, 0 };
-    static cilist io___82 = { 0, 6, 0, 0, 0 };
-    static cilist io___83 = { 0, 6, 0, fmt_1001, 0 };
-
 
 /*<       logical          prjctd, cnstnd, boxed >*/
 /*<       integer          n, iprint, nbd(n), iwhere(n) >*/
@@ -1673,25 +1673,17 @@ y at the bounds\002)";
     if (*iprint >= 0) {
 /*<    >*/
 	if (*prjctd) {
-	    s_wsle(&io___81);
-	    do_lio(&c__9, &c__1, "The initial X is infeasible.  Restart with\
- its projection.", (ftnlen)58);
-	    e_wsle();
+            printf("The initial X is infeasible.  Restart with its projection.\n");
 	}
 /*<    >*/
 	if (! (*cnstnd)) {
-	    s_wsle(&io___82);
-	    do_lio(&c__9, &c__1, "This problem is unconstrained.", (ftnlen)30)
-		    ;
-	    e_wsle();
+            printf("This problem is unconstrained.\n");
 	}
 /*<       endif >*/
     }
 /*<       if (iprint .gt. 0) write (6,1001) nbdd >*/
     if (*iprint > 0) {
-	s_wsfe(&io___83);
-	do_fio(&c__1, (char *)&nbdd, (ftnlen)sizeof(integer));
-	e_wsfe();
+        printf("At X0 %9ld variables are exactly at the bounds\n", nbdd);
     }
 /*<  1001 format (/,'At X0 ',i9,' variables are exactly at the bounds')  >*/
 /*<       return >*/
@@ -1887,30 +1879,10 @@ y at the bounds\002)";
 	doublereal *sg, doublereal *yg, integer *iprint, doublereal *sbgnrm, 
 	integer *info, doublereal *epsmch)
 {
-    /* Format strings */
-    static char fmt_3010[] = "(/,\002---------------- CAUCHY entered--------\
------------\002)";
-    static char fmt_1010[] = "(\002Cauchy X =  \002,/,(4x,1p,6(1x,d11.4)))";
-    static char fmt_4011[] = "(/,\002Piece    \002,i3,\002 --f1, f2 at start\
- point \002,1p,2(1x,d11.4))";
-    static char fmt_5010[] = "(\002Distance to the next break point =  \002,\
-1p,d11.4)";
-    static char fmt_6010[] = "(\002Distance to the stationary point =  \002,\
-1p,d11.4)";
-    static char fmt_4010[] = "(\002Piece    \002,i3,\002 --f1, f2 at start p\
-oint \002,1p,2(1x,d11.4))";
-    static char fmt_2010[] = "(/,\002---------------- exit CAUCHY-----------\
------------\002,/)";
-
     /* System generated locals */
     integer wy_dim1, wy_offset, ws_dim1, ws_offset, sy_dim1, sy_offset, 
 	    wt_dim1, wt_offset, i__1, i__2;
     doublereal d__1;
-
-    /* Builtin functions */
-    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	    e_wsle(), s_wsfe(cilist *), e_wsfe(), do_fio(integer *, char *, 
-	    ftnlen);
 
     /* Local variables */
     integer i__, j;
@@ -1942,23 +1914,6 @@ oint \002,1p,2(1x,d11.4))";
 	    integer *);
     integer pointr;
     logical xlower, xupper;
-
-    /* Fortran I/O blocks */
-    static cilist io___88 = { 0, 6, 0, 0, 0 };
-    static cilist io___96 = { 0, 6, 0, fmt_3010, 0 };
-    static cilist io___105 = { 0, 6, 0, fmt_1010, 0 };
-    static cilist io___110 = { 0, 6, 0, 0, 0 };
-    static cilist io___117 = { 0, 6, 0, fmt_4011, 0 };
-    static cilist io___118 = { 0, 6, 0, fmt_5010, 0 };
-    static cilist io___119 = { 0, 6, 0, fmt_6010, 0 };
-    static cilist io___122 = { 0, 6, 0, 0, 0 };
-    static cilist io___127 = { 0, 6, 0, 0, 0 };
-    static cilist io___128 = { 0, 6, 0, 0, 0 };
-    static cilist io___129 = { 0, 6, 0, fmt_4010, 0 };
-    static cilist io___130 = { 0, 6, 0, fmt_6010, 0 };
-    static cilist io___131 = { 0, 6, 0, fmt_1010, 0 };
-    static cilist io___132 = { 0, 6, 0, fmt_2010, 0 };
-
 
 /*<    >*/
 /*<    >*/
@@ -2181,9 +2136,7 @@ oint \002,1p,2(1x,d11.4))";
     if (*sbgnrm <= 0.) {
 /*<          if (iprint .ge. 0) write (6,*) 'Subgnorm = 0.  GCP = X.' >*/
 	if (*iprint >= 0) {
-	    s_wsle(&io___88);
-	    do_lio(&c__9, &c__1, "Subgnorm = 0.  GCP = X.", (ftnlen)23);
-	    e_wsle();
+            printf("Subgnorm = 0.  GCP = X.\n");
 	}
 /*<          call dcopy(n,x,1,xcp,1) >*/
 	dcopy_(n, &x[1], &c__1, &xcp[1], &c__1);
@@ -2206,9 +2159,11 @@ oint \002,1p,2(1x,d11.4))";
 /*<       f1 = zero >*/
     f1 = 0.;
 /*<       if (iprint .ge. 99) write (6,3010) >*/
+/*
+ 3010 format (/,'---------------- CAUCHY entered-------------------')
+ */
     if (*iprint >= 99) {
-	s_wsfe(&io___96);
-	e_wsfe();
+        printf("---------------- CAUCHY entered-------------------\n");
     }
 /*     We set p to zero and build it up as we determine d. */
 /*<       do 20 i = 1, col2 >*/
@@ -2364,13 +2319,12 @@ oint \002,1p,2(1x,d11.4))";
     if (nbreak == 0 && nfree == *n + 1) {
 /*                  is a zero vector, return with the initial xcp as GCP. */
 /*<          if (iprint .gt. 100) write (6,1010) (xcp(i), i = 1, n) >*/
+/*
+ 1010 format ('Cauchy X =  ',/,(4x,1p,6(1x,d11.4)))
+*/
 	if (*iprint > 100) {
-	    s_wsfe(&io___105);
-	    i__1 = *n;
-	    for (i__ = 1; i__ <= i__1; ++i__) {
-		do_fio(&c__1, (char *)&xcp[i__], (ftnlen)sizeof(doublereal));
-	    }
-	    e_wsfe();
+            i__1 = *n;
+            lbfgsb_printf_vec("Cauchy X", xcp, i__1);
 	}
 /*<          return >*/
 	return 0;
@@ -2410,11 +2364,7 @@ oint \002,1p,2(1x,d11.4))";
     *nint = 1;
 /*<    >*/
     if (*iprint >= 99) {
-	s_wsle(&io___110);
-	do_lio(&c__9, &c__1, "There are ", (ftnlen)10);
-	do_lio(&c__3, &c__1, (char *)&nbreak, (ftnlen)sizeof(integer));
-	do_lio(&c__9, &c__1, "  breakpoints ", (ftnlen)14);
-	e_wsle();
+        printf("There are %ld  breakpoints.\n", nbreak);
     }
 /*     If there are no breakpoints, locate the GCP and return. */
 /*<       if (nbreak .eq. 0) goto 888 >*/
@@ -2475,19 +2425,21 @@ L777:
 /*<       if (dt .ne. zero .and. iprint .ge. 100) then >*/
     if (dt != 0. && *iprint >= 100) {
 /*<          write (6,4011) nint,f1,f2 >*/
-	s_wsfe(&io___117);
-	do_fio(&c__1, (char *)&(*nint), (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&f1, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&f2, (ftnlen)sizeof(doublereal));
-	e_wsfe();
+/*
+ 4010 format ('Piece    ',i3,' --f1, f2 at start point ',1p,2(1x,d11.4))
+*/
+        printf("Piece    %3ld --f1, f2 at start point  %11.4g %11.5g\n",
+               *nint, f1, f2);
 /*<          write (6,5010) dt >*/
-	s_wsfe(&io___118);
-	do_fio(&c__1, (char *)&dt, (ftnlen)sizeof(doublereal));
-	e_wsfe();
+/*
+ 5010 format ('Distance to the next break point =  ',1p,d11.4)
+ */
+        printf("Distance to the next break point =  %11.4g", dt);
 /*<          write (6,6010) dtm >*/
-	s_wsfe(&io___119);
-	do_fio(&c__1, (char *)&dtm, (ftnlen)sizeof(doublereal));
-	e_wsfe();
+/*
+ 6010 format ('Distance to the stationary point =  ',1p,d11.4) 
+ */
+        printf("Distance to the stationary point =  %11.4g", dtm);
 /*<       endif	      >*/
     }
 /*     If a minimizer is within this interval, locate the GCP and return. */
@@ -2527,11 +2479,7 @@ L777:
     }
 /*<       if (iprint .ge. 100) write (6,*) 'Variable  ',ibp,'  is fixed.' >*/
     if (*iprint >= 100) {
-	s_wsle(&io___122);
-	do_lio(&c__9, &c__1, "Variable  ", (ftnlen)10);
-	do_lio(&c__3, &c__1, (char *)&ibp, (ftnlen)sizeof(integer));
-	do_lio(&c__9, &c__1, "  is fixed.", (ftnlen)11);
-	e_wsle();
+        printf("Variable  %ld  is fixed.\n", ibp);
     }
 /*<       if (nleft .eq. 0 .and. nbreak .eq. n) then >*/
     if (nleft == 0 && nbreak == *n) {
@@ -2632,22 +2580,20 @@ L888:
 /*<       if (iprint .ge. 99) then >*/
     if (*iprint >= 99) {
 /*<          write (6,*) >*/
-	s_wsle(&io___127);
-	e_wsle();
+        printf("\n");
 /*<          write (6,*) 'GCP found in this segment' >*/
-	s_wsle(&io___128);
-	do_lio(&c__9, &c__1, "GCP found in this segment", (ftnlen)25);
-	e_wsle();
+        printf("GCP found in this segment\n");
 /*<          write (6,4010) nint,f1,f2 >*/
-	s_wsfe(&io___129);
-	do_fio(&c__1, (char *)&(*nint), (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&f1, (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&f2, (ftnlen)sizeof(doublereal));
-	e_wsfe();
+/*
+ 4010 format ('Piece    ',i3,' --f1, f2 at start point ',1p,2(1x,d11.4))
+*/
+        printf("Piece    %3ld --f1, f2 at start point  %11.4g %11.4g\n",
+               *nint, f1, f2);
 /*<          write (6,6010) dtm >*/
-	s_wsfe(&io___130);
-	do_fio(&c__1, (char *)&dtm, (ftnlen)sizeof(doublereal));
-	e_wsfe();
+/*
+ 6010 format ('Distance to the stationary point =  ',1p,d11.4)
+*/
+        printf("Distance to the stationary point =  %11.4g\n", dtm);
 /*<       endif  >*/
     }
 /*<       if (dtm .le. zero) dtm = zero >*/
@@ -2670,17 +2616,15 @@ L999:
     }
 /*<       if (iprint .gt. 100) write (6,1010) (xcp(i),i = 1,n) >*/
     if (*iprint > 100) {
-	s_wsfe(&io___131);
 	i__1 = *n;
-	for (i__ = 1; i__ <= i__1; ++i__) {
-	    do_fio(&c__1, (char *)&xcp[i__], (ftnlen)sizeof(doublereal));
-	}
-	e_wsfe();
+        lbfgsb_printf_vec("Cauchy X", xcp, i__1);
     }
 /*<       if (iprint .ge. 99) write (6,2010) >*/
+/*
+ 2010 format (/,'---------------- exit CAUCHY----------------------',/)
+ */
     if (*iprint >= 99) {
-	s_wsfe(&io___132);
-	e_wsfe();
+        printf("---------------- exit CAUCHY----------------------\n");
     }
 /*<  1010 format ('Cauchy X =  ',/,(4x,1p,6(1x,d11.4))) >*/
 /*<  2010 format (/,'---------------- exit CAUCHY----------------------',/) >*/
@@ -3585,19 +3529,8 @@ L999:
     /* System generated locals */
     integer i__1;
 
-    /* Builtin functions */
-    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	    e_wsle();
-
     /* Local variables */
     integer i__, k, iact;
-
-    /* Fortran I/O blocks */
-    static cilist io___169 = { 0, 6, 0, 0, 0 };
-    static cilist io___170 = { 0, 6, 0, 0, 0 };
-    static cilist io___171 = { 0, 6, 0, 0, 0 };
-    static cilist io___173 = { 0, 6, 0, 0, 0 };
-
 
 /*<    >*/
 /*<       logical wrk, updatd, cnstnd >*/
@@ -3665,12 +3598,7 @@ L999:
 		indx2[*ileave] = k;
 /*< 	  >*/
 		if (*iprint >= 100) {
-		    s_wsle(&io___169);
-		    do_lio(&c__9, &c__1, "Variable ", (ftnlen)9);
-		    do_lio(&c__3, &c__1, (char *)&k, (ftnlen)sizeof(integer));
-		    do_lio(&c__9, &c__1, " leaves the set of free variables", 
-			    (ftnlen)33);
-		    e_wsle();
+                    printf("Variable %ld leaves the set of free variables\n", k);
 		}
 /*<             endif >*/
 	    }
@@ -3690,12 +3618,7 @@ L999:
 		indx2[*nenter] = k;
 /*< 	  >*/
 		if (*iprint >= 100) {
-		    s_wsle(&io___170);
-		    do_lio(&c__9, &c__1, "Variable ", (ftnlen)9);
-		    do_lio(&c__3, &c__1, (char *)&k, (ftnlen)sizeof(integer));
-		    do_lio(&c__9, &c__1, " enters the set of free variables", 
-			    (ftnlen)33);
-		    e_wsle();
+                    printf("Variable %ld enters the set of free variables\n", k);
 		}
 /*<             endif >*/
 	    }
@@ -3704,13 +3627,8 @@ L999:
 	}
 /*<    >*/
 	if (*iprint >= 99) {
-	    s_wsle(&io___171);
-	    i__1 = *n + 1 - *ileave;
-	    do_lio(&c__3, &c__1, (char *)&i__1, (ftnlen)sizeof(integer));
-	    do_lio(&c__9, &c__1, " variables leave; ", (ftnlen)18);
-	    do_lio(&c__3, &c__1, (char *)&(*nenter), (ftnlen)sizeof(integer));
-	    do_lio(&c__9, &c__1, " variables enter", (ftnlen)16);
-	    e_wsle();
+            i__1 = *n + 1 - *ileave;
+            printf("%ld variables leave; %ld variables enter\n", i__1, *nenter);
 	}
 /*<       endif >*/
     }
@@ -3743,12 +3661,8 @@ L999:
     }
 /*<    >*/
     if (*iprint >= 99) {
-	s_wsle(&io___173);
-	do_lio(&c__3, &c__1, (char *)&(*nfree), (ftnlen)sizeof(integer));
-	do_lio(&c__9, &c__1, " variables are free at GCP ", (ftnlen)27);
 	i__1 = *iter + 1;
-	do_lio(&c__3, &c__1, (char *)&i__1, (ftnlen)sizeof(integer));
-	e_wsle();
+        printf("%ld variables are free at GCP %ld\n", *nfree, i__1);
     }
 /*<       return >*/
     return 0;
@@ -4303,46 +4217,7 @@ L556:
 	doublereal *u, doublereal *x, integer *iprint, integer *itfile, 
 	doublereal *epsmch)
 {
-    /* Format strings */
-    static char fmt_7001[] = "(\002RUNNING THE L-BFGS-B CODE\002,/,/,\002   \
-        * * *\002,/,/,\002Machine precision =\002,1p,d10.3)";
-    static char fmt_2001[] = "(\002RUNNING THE L-BFGS-B CODE\002,/,/,\002it \
-   = iteration number\002,/,\002nf    = number of function evaluations\002,/,\
-\002nint  = number of segments explored during the Cauchy search\002,/,\002n\
-act  = number of active bounds at the generalized Cauchy point\002,/,\002sub\
-   = manner in which the subspace minimization terminated:\002,/,\002       \
- con = converged, bnd = a bound was reached\002,/,\002itls  = number of iter\
-ations performed in the line search\002,/,\002stepl = step length used\002,/,\
-\002tstep = norm of the displacement (total step)\002,/,\002projg = norm of \
-the projected gradient\002,/,\002f     = function value\002,/,/,\002        \
-   * * *\002,/,/,\002Machine precision =\002,1p,d10.3)";
-    static char fmt_9001[] = "(/,3x,\002it\002,3x,\002nf\002,2x,\002nint\002\
-,2x,\002nact\002,2x,\002sub\002,2x,\002itls\002,2x,\002stepl\002,4x,\002tstep\
-\002,5x,\002projg\002,8x,\002f\002)";
-    static char fmt_1004[] = "(/,a4,1p,6(1x,d11.4),/,(4x,1p,6(1x,d11.4)))";
-
-    /* System generated locals */
-    integer i__1;
-
-    /* Builtin functions */
-    integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe(), 
-	    s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	    e_wsle();
-
-    /* Local variables */
-    integer i__;
-
-    /* Fortran I/O blocks */
-    static cilist io___186 = { 0, 6, 0, fmt_7001, 0 };
-    static cilist io___187 = { 0, 6, 0, 0, 0 };
-    static cilist io___188 = { 0, 0, 0, fmt_2001, 0 };
-    static cilist io___189 = { 0, 0, 0, 0, 0 };
-    static cilist io___190 = { 0, 0, 0, fmt_9001, 0 };
-    static cilist io___191 = { 0, 6, 0, fmt_1004, 0 };
-    static cilist io___193 = { 0, 6, 0, fmt_1004, 0 };
-    static cilist io___194 = { 0, 6, 0, fmt_1004, 0 };
-
-
+  (void)itfile;
 /*<       integer n, m, iprint, itfile >*/
 /*<       double precision epsmch, x(n), l(n), u(n) >*/
 /*     ************ */
@@ -4374,65 +4249,74 @@ the projected gradient\002,/,\002f     = function value\002,/,/,\002        \
 
     /* Function Body */
     if (*iprint >= 0) {
+/*
+ 7001 format ('RUNNING THE L-BFGS-B CODE',/,/,
+     + '           * * *',/,/,
+     + 'Machine precision =',1p,d10.3)
+*/
 /*<          write (6,7001) epsmch >*/
-	s_wsfe(&io___186);
-	do_fio(&c__1, (char *)&(*epsmch), (ftnlen)sizeof(doublereal));
-	e_wsfe();
+        fprintf(0,
+                "RUNNING THE L-BFGS-B CODE\n"
+                "\n"
+                "           * * *\n"
+                "\n"
+                "Machine precision = %10.3g\n", *epsmch);
 /*<          write (6,*) 'N = ',n,'    M = ',m >*/
-	s_wsle(&io___187);
-	do_lio(&c__9, &c__1, "N = ", (ftnlen)4);
-	do_lio(&c__3, &c__1, (char *)&(*n), (ftnlen)sizeof(integer));
-	do_lio(&c__9, &c__1, "    M = ", (ftnlen)8);
-	do_lio(&c__3, &c__1, (char *)&(*m), (ftnlen)sizeof(integer));
-	e_wsle();
+        fprintf(0, "N = %ld    M = %ld\n", *n, *m);
 /*<          if (iprint .ge. 1) then >*/
 	if (*iprint >= 1) {
 /*<             write (itfile,2001) epsmch >*/
-	    io___188.ciunit = *itfile;
-	    s_wsfe(&io___188);
-	    do_fio(&c__1, (char *)&(*epsmch), (ftnlen)sizeof(doublereal));
-	    e_wsfe();
+/*
+ 2001 format ('RUNNING THE L-BFGS-B CODE',/,/,
+     + 'it    = iteration number',/,
+     + 'nf    = number of function evaluations',/,
+     + 'nint  = number of segments explored during the Cauchy search',/,
+     + 'nact  = number of active bounds at the generalized Cauchy point'
+     + ,/,
+     + 'sub   = manner in which the subspace minimization terminated:'
+     + ,/,'        con = converged, bnd = a bound was reached',/,
+     + 'itls  = number of iterations performed in the line search',/,
+     + 'stepl = step length used',/,
+     + 'tstep = norm of the displacement (total step)',/,
+     + 'projg = norm of the projected gradient',/,
+     + 'f     = function value',/,/,
+     + '           * * *',/,/,
+     + 'Machine precision =',1p,d10.3)
+*/
+            fprintf(0,
+                    "RUNNING THE L-BFGS-B CODE\n"
+                    "\n"
+                    "it    = iteration number\n"
+                    "nf    = number of function evaluations\n"
+                    "nint  = number of segments explored during the Cauchy search\n"
+                    "nact  = number of active bounds at the generalized Cauchy point\n"
+                    "sub   = manner in which the subspace minimization terminated:\n"
+                    "        con = converged, bnd = a bound was reached\n"
+                    "itls  = number of iterations performed in the line search\n"
+                    "stepl = step length used\n"
+                    "tstep = norm of the displacement (total step)\n"
+                    "projg = norm of the projected gradient\n"
+                    "f     = function value\n"
+                    "\n"
+                    "           * * *\n"
+                    "\n"
+                    "Machine precision = %10.3g\n", *epsmch);
 /*<             write (itfile,*)'N = ',n,'    M = ',m >*/
-	    io___189.ciunit = *itfile;
-	    s_wsle(&io___189);
-	    do_lio(&c__9, &c__1, "N = ", (ftnlen)4);
-	    do_lio(&c__3, &c__1, (char *)&(*n), (ftnlen)sizeof(integer));
-	    do_lio(&c__9, &c__1, "    M = ", (ftnlen)8);
-	    do_lio(&c__3, &c__1, (char *)&(*m), (ftnlen)sizeof(integer));
-	    e_wsle();
+            fprintf(0, "N = %ld    M = %ld\n", *n, *m);
 /*< 	    write (itfile,9001) >*/
-	    io___190.ciunit = *itfile;
-	    s_wsfe(&io___190);
-	    e_wsfe();
+/*
+ 9001 format (/,3x,'it',3x,'nf',2x,'nint',2x,'nact',2x,'sub',2x,'itls',
+     +        2x,'stepl',4x,'tstep',5x,'projg',8x,'f')
+*/
+            fprintf(0, "   it   nf  nint  nact  sub  itls  stepl    tstep     projg        f\n");
 /*<             if (iprint .gt. 100) then >*/
 	    if (*iprint > 100) {
 /*<                write (6,1004) 'L =',(l(i),i = 1,n) >*/
-		s_wsfe(&io___191);
-		do_fio(&c__1, "L =", (ftnlen)3);
-		i__1 = *n;
-		for (i__ = 1; i__ <= i__1; ++i__) {
-		    do_fio(&c__1, (char *)&l[i__], (ftnlen)sizeof(doublereal))
-			    ;
-		}
-		e_wsfe();
+                lbfgsb_printf_vec("L", l, *n);
 /*<                write (6,1004) 'X0 =',(x(i),i = 1,n) >*/
-		s_wsfe(&io___193);
-		do_fio(&c__1, "X0 =", (ftnlen)4);
-		i__1 = *n;
-		for (i__ = 1; i__ <= i__1; ++i__) {
-		    do_fio(&c__1, (char *)&x[i__], (ftnlen)sizeof(doublereal))
-			    ;
-		}
-		e_wsfe();
+                lbfgsb_printf_vec("X0", x, *n);
 /*<                write (6,1004) 'U =',(u(i),i = 1,n) >*/
-		s_wsfe(&io___194);
-		do_fio(&c__1, "U =", (ftnlen)3);
-		i__1 = *n;
-		for (i__ = 1; i__ <= i__1; ++i__) {
-		    do_fio(&c__1, (char *)&u[i__], (ftnlen)sizeof(doublereal))
-			    ;
-		}
-		e_wsfe();
+                lbfgsb_printf_vec("U", u, *n);
 /*<             endif  >*/
 	    }
 /*<          endif >*/
@@ -4456,33 +4340,13 @@ the projected gradient\002,/,\002f     = function value\002,/,/,\002        \
 	*word, integer *iword, integer *iback, doublereal *stp, doublereal *
 	xstep, ftnlen word_len)
 {
-    /* Format strings */
-    static char fmt_2001[] = "(/,\002At iterate\002,i5,4x,\002f= \002,1p,d12\
-.5,4x,\002|proj g|= \002,1p,d12.5)";
-    static char fmt_1004[] = "(/,a4,1p,6(1x,d11.4),/,(4x,1p,6(1x,d11.4)))";
-    static char fmt_3001[] = "(2(1x,i4),2(1x,i5),2x,a3,1x,i4,1p,2(2x,d7.1),1\
-p,2(1x,d10.3))";
-
-    /* System generated locals */
-    integer i__1;
-
     /* Builtin functions */
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	    e_wsle(), s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), 
-	    e_wsfe();
 
     /* Local variables */
-    integer i__, imod;
+    integer imod;
 
-    /* Fortran I/O blocks */
-    static cilist io___195 = { 0, 6, 0, 0, 0 };
-    static cilist io___196 = { 0, 6, 0, fmt_2001, 0 };
-    static cilist io___197 = { 0, 6, 0, fmt_1004, 0 };
-    static cilist io___199 = { 0, 6, 0, fmt_1004, 0 };
-    static cilist io___201 = { 0, 6, 0, fmt_2001, 0 };
-    static cilist io___202 = { 0, 0, 0, fmt_3001, 0 };
-
+    (void)itfile;
     (void)word_len;
 
 /*<       character*3      word >*/
@@ -4538,36 +4402,20 @@ p,2(1x,d10.3))";
 /*<       if (iprint .ge. 99) then >*/
     if (*iprint >= 99) {
 /*<          write (6,*) 'LINE SEARCH',iback,' times; norm of step = ',xstep >*/
-	s_wsle(&io___195);
-	do_lio(&c__9, &c__1, "LINE SEARCH", (ftnlen)11);
-	do_lio(&c__3, &c__1, (char *)&(*iback), (ftnlen)sizeof(integer));
-	do_lio(&c__9, &c__1, " times; norm of step = ", (ftnlen)23);
-	do_lio(&c__5, &c__1, (char *)&(*xstep), (ftnlen)sizeof(doublereal));
-	e_wsle();
+        printf("LINE SEARCH %ld times; norm of step = %g\n", *iback, *xstep);
 /*<          write (6,2001) iter,f,sbgnrm >*/
-	s_wsfe(&io___196);
-	do_fio(&c__1, (char *)&(*iter), (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&(*f), (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&(*sbgnrm), (ftnlen)sizeof(doublereal));
-	e_wsfe();
+/*
+ 2001 format
+     +  (/,'At iterate',i5,4x,'f= ',1p,d12.5,4x,'|proj g|= ',1p,d12.5)
+*/
+        printf("At iterate %5ld    f= %12.5g    |proj g|= %12.5g\n",
+               *iter, *f, *sbgnrm);
 /*<          if (iprint .gt. 100) then	 >*/
 	if (*iprint > 100) {
 /*<             write (6,1004) 'X =',(x(i), i = 1, n) >*/
-	    s_wsfe(&io___197);
-	    do_fio(&c__1, "X =", (ftnlen)3);
-	    i__1 = *n;
-	    for (i__ = 1; i__ <= i__1; ++i__) {
-		do_fio(&c__1, (char *)&x[i__], (ftnlen)sizeof(doublereal));
-	    }
-	    e_wsfe();
+            lbfgsb_printf_vec("X", x, *n);
 /*<             write (6,1004) 'G =',(g(i), i = 1, n) >*/
-	    s_wsfe(&io___199);
-	    do_fio(&c__1, "G =", (ftnlen)3);
-	    i__1 = *n;
-	    for (i__ = 1; i__ <= i__1; ++i__) {
-		do_fio(&c__1, (char *)&g[i__], (ftnlen)sizeof(doublereal));
-	    }
-	    e_wsfe();
+            lbfgsb_printf_vec("G", g, *n);
 /*<          endif >*/
 	}
 /*<       else if (iprint .gt. 0) then  >*/
@@ -4576,29 +4424,23 @@ p,2(1x,d10.3))";
 	imod = *iter % *iprint;
 /*<          if (imod .eq. 0) write (6,2001) iter,f,sbgnrm >*/
 	if (imod == 0) {
-	    s_wsfe(&io___201);
-	    do_fio(&c__1, (char *)&(*iter), (ftnlen)sizeof(integer));
-	    do_fio(&c__1, (char *)&(*f), (ftnlen)sizeof(doublereal));
-	    do_fio(&c__1, (char *)&(*sbgnrm), (ftnlen)sizeof(doublereal));
-	    e_wsfe();
+/*
+  2001 format
+  +  (/,'At iterate',i5,4x,'f= ',1p,d12.5,4x,'|proj g|= ',1p,d12.5)
+*/
+            printf("At iterate %5ld    f= %12.5g    |proj g|= %12.5g\n",
+                   *iter, *f, *sbgnrm);
 	}
 /*<       endif >*/
     }
 /*<    >*/
     if (*iprint >= 1) {
-	io___202.ciunit = *itfile;
-	s_wsfe(&io___202);
-	do_fio(&c__1, (char *)&(*iter), (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&(*nfgv), (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&(*nint), (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&(*nact), (ftnlen)sizeof(integer));
-	do_fio(&c__1, word, (ftnlen)3);
-	do_fio(&c__1, (char *)&(*iback), (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&(*stp), (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&(*xstep), (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&(*sbgnrm), (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&(*f), (ftnlen)sizeof(doublereal));
-	e_wsfe();
+/*
+<  3001 format(2(1x,i4),2(1x,i5),2x,a3,1x,i4,1p,2(2x,d7.1),1p,2(1x,d10.3)) >
+*/
+        fprintf(0, " %4ld %4ld %5ld %5ld  %3s %4ld  %7.1g %7.1g<1p> %10.3g %10.3g\n",
+                *iter, *nfgv, *nint, *nact, word, *iback, *stp, *xstep,
+                *sbgnrm, *f);
     }
 /*<  1004 format (/,a4, 1p, 6(1x,d11.4),/,(4x,1p,6(1x,d11.4))) >*/
 /*<  2 >*/
@@ -4618,89 +4460,10 @@ p,2(1x,d10.3))";
 	doublereal *cachyt, doublereal *sbtime, doublereal *lnscht, ftnlen 
 	task_len, ftnlen word_len)
 {
-    /* Format strings */
-    static char fmt_3003[] = "(/,\002           * * *\002,/,/,\002Tit   = to\
-tal number of iterations\002,/,\002Tnf   = total number of function evaluati\
-ons\002,/,\002Tnint = total number of segments explored during\002,\002 Cauc\
-hy searches\002,/,\002Skip  = number of BFGS updates skipped\002,/,\002Nact \
- = number of active bounds at final generalized\002,\002 Cauchy point\002,/\
-,\002Projg = norm of the final projected gradient\002,/,\002F     = final fu\
-nction value\002,/,/,\002           * * *\002)";
-    static char fmt_3004[] = "(/,3x,\002N\002,3x,\002Tit\002,2x,\002Tnf\002,\
-2x,\002Tnint\002,2x,\002Skip\002,2x,\002Nact\002,5x,\002Projg\002,8x,\002\
-F\002)";
-    static char fmt_3005[] = "(i5,2(1x,i4),(1x,i6),(2x,i4),(1x,i5),1p,2(2x,d\
-10.3))";
-    static char fmt_1004[] = "(/,a4,1p,6(1x,d11.4),/,(4x,1p,6(1x,d11.4)))";
-    static char fmt_3009[] = "(/,a60)";
-    static char fmt_9011[] = "(/,\002 Matrix in 1st Cholesky factorization i\
-n formk is not Pos. Def.\002)";
-    static char fmt_9012[] = "(/,\002 Matrix in 2st Cholesky factorization i\
-n formk is not Pos. Def.\002)";
-    static char fmt_9013[] = "(/,\002 Matrix in the Cholesky factorization i\
-n formt is not Pos. Def.\002)";
-    static char fmt_9014[] = "(/,\002 Derivative >= 0, backtracking line sea\
-rch impossible.\002,/,\002   Previous x, f and g restored.\002,/,\002 Possib\
-le causes: 1 error in function or gradient evaluation;\002,/,\002           \
-       2 rounding errors dominate computation.\002)";
-    static char fmt_9015[] = "(/,\002 Warning:  more than 10 function and gr\
-adient\002,/,\002   evaluations in the last line search.  Termination\002,/\
-,\002   may possibly be caused by a bad search direction.\002)";
-    static char fmt_9018[] = "(/,\002 The triangular system is singular.\002)"
-	    ;
-    static char fmt_9019[] = "(/,\002 Line search cannot locate an adequate \
-point after 20 function\002,/,\002  and gradient evaluations.  Previous x, f\
- and g restored.\002,/,\002 Possible causes: 1 error in function or gradient\
- evaluation;\002,/,\002                  2 rounding error dominate computati\
-on.\002)";
-    static char fmt_3007[] = "(/,\002 Cauchy                time\002,1p,e10.\
-3,\002 seconds.\002,/\002 Subspace minimization time\002,1p,e10.3,\002 secon\
-ds.\002,/\002 Line search           time\002,1p,e10.3,\002 seconds.\002)";
-    static char fmt_3008[] = "(/,\002 Total User time\002,1p,e10.3,\002 seco\
-nds.\002,/)";
-    static char fmt_3002[] = "(2(1x,i4),2(1x,i5),2x,a3,1x,i4,1p,2(2x,d7.1),6\
-x,\002-\002,10x,\002-\002)";
-
-    /* System generated locals */
-    integer i__1;
-
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen), s_wsfe(cilist *), e_wsfe(),
-	     do_fio(integer *, char *, ftnlen), s_wsle(cilist *), do_lio(
-	    integer *, integer *, char *, ftnlen), e_wsle();
+    integer s_cmp(char *, char *, ftnlen, ftnlen);
 
-    /* Local variables */
-    integer i__;
-
-    /* Fortran I/O blocks */
-    static cilist io___203 = { 0, 6, 0, fmt_3003, 0 };
-    static cilist io___204 = { 0, 6, 0, fmt_3004, 0 };
-    static cilist io___205 = { 0, 6, 0, fmt_3005, 0 };
-    static cilist io___206 = { 0, 6, 0, fmt_1004, 0 };
-    static cilist io___208 = { 0, 6, 0, 0, 0 };
-    static cilist io___209 = { 0, 6, 0, fmt_3009, 0 };
-    static cilist io___210 = { 0, 6, 0, fmt_9011, 0 };
-    static cilist io___211 = { 0, 6, 0, fmt_9012, 0 };
-    static cilist io___212 = { 0, 6, 0, fmt_9013, 0 };
-    static cilist io___213 = { 0, 6, 0, fmt_9014, 0 };
-    static cilist io___214 = { 0, 6, 0, fmt_9015, 0 };
-    static cilist io___215 = { 0, 6, 0, 0, 0 };
-    static cilist io___216 = { 0, 6, 0, 0, 0 };
-    static cilist io___217 = { 0, 6, 0, fmt_9018, 0 };
-    static cilist io___218 = { 0, 6, 0, fmt_9019, 0 };
-    static cilist io___219 = { 0, 6, 0, fmt_3007, 0 };
-    static cilist io___220 = { 0, 6, 0, fmt_3008, 0 };
-    static cilist io___221 = { 0, 0, 0, fmt_3002, 0 };
-    static cilist io___222 = { 0, 0, 0, fmt_3009, 0 };
-    static cilist io___223 = { 0, 0, 0, fmt_9011, 0 };
-    static cilist io___224 = { 0, 0, 0, fmt_9012, 0 };
-    static cilist io___225 = { 0, 0, 0, fmt_9013, 0 };
-    static cilist io___226 = { 0, 0, 0, fmt_9014, 0 };
-    static cilist io___227 = { 0, 0, 0, fmt_9015, 0 };
-    static cilist io___228 = { 0, 0, 0, fmt_9018, 0 };
-    static cilist io___229 = { 0, 0, 0, fmt_9019, 0 };
-    static cilist io___230 = { 0, 0, 0, fmt_3008, 0 };
-
+    (void)itfile;
     (void)task_len;
     (void)word_len;
 
@@ -4740,40 +4503,53 @@ x,\002-\002,10x,\002-\002)";
 /*<       if (iprint .ge. 0) then >*/
     if (*iprint >= 0) {
 /*<          write (6,3003) >*/
-	s_wsfe(&io___203);
-	e_wsfe();
+/*
+ 3003 format (/,
+     + '           * * *',/,/,
+     + 'Tit   = total number of iterations',/,
+     + 'Tnf   = total number of function evaluations',/,
+     + 'Tnint = total number of segments explored during',
+     +           ' Cauchy searches',/,
+     + 'Skip  = number of BFGS updates skipped',/,
+     + 'Nact  = number of active bounds at final generalized',
+     +          ' Cauchy point',/,
+     + 'Projg = norm of the final projected gradient',/,
+     + 'F     = final function value',/,/,
+     + '           * * *')
+*/
+        printf(
+          "           * * *\n"
+          "\n"
+          "Tit   = total number of iterations\n"
+          "Tnf   = total number of function evaluations\n"
+          "Tnint = total number of segments explored during Cauchy searches\n"
+          "Skip  = number of BFGS updates skipped\n"
+          "Nact  = number of active bounds at final generalized Cauchy point\n"
+          "Projg = norm of the final projected gradient\n"
+          "F     = final function value\n"
+          "\n"
+          "           * * *\n");
 /*<          write (6,3004) >*/
-	s_wsfe(&io___204);
-	e_wsfe();
+/*
+ 3004 format (/,3x,'N',3x,'Tit',2x,'Tnf',2x,'Tnint',2x,
+     +       'Skip',2x,'Nact',5x,'Projg',8x,'F')
+*/
+        printf("   N   Tit  Tnf  Tnint  Skip  Nact     Projg        F\n");
 /*<          write(6,3005) n,iter,nfgv,nintol,nskip,nact,sbgnrm,f >*/
-	s_wsfe(&io___205);
-	do_fio(&c__1, (char *)&(*n), (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&(*iter), (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&(*nfgv), (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&(*nintol), (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&(*nskip), (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&(*nact), (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&(*sbgnrm), (ftnlen)sizeof(doublereal));
-	do_fio(&c__1, (char *)&(*f), (ftnlen)sizeof(doublereal));
-	e_wsfe();
+/*
+ 3005 format (i5,2(1x,i4),(1x,i6),(2x,i4),(1x,i5),1p,2(2x,d10.3))
+*/
+        printf(" %4ld %4ld %4ld %6ld %4ld %5ld  %10.3g  %10.3g\n",
+               *n, *iter, *nfgv, *nintol, *nskip, *nact, *sbgnrm, *f);
 /*<          if (iprint .ge. 100) then >*/
 	if (*iprint >= 100) {
 /*<             write (6,1004) 'X =',(x(i),i = 1,n) >*/
-	    s_wsfe(&io___206);
-	    do_fio(&c__1, "X =", (ftnlen)3);
-	    i__1 = *n;
-	    for (i__ = 1; i__ <= i__1; ++i__) {
-		do_fio(&c__1, (char *)&x[i__], (ftnlen)sizeof(doublereal));
-	    }
-	    e_wsfe();
+            lbfgsb_printf_vec("X", x, *n);
 /*<          endif   >*/
 	}
 /*<          if (iprint .ge. 1) write (6,*) ' F =',f >*/
 	if (*iprint >= 1) {
-	    s_wsle(&io___208);
-	    do_lio(&c__9, &c__1, " F =", (ftnlen)4);
-	    do_lio(&c__5, &c__1, (char *)&(*f), (ftnlen)sizeof(doublereal));
-	    e_wsle();
+            printf("F = %g\n", *f);
 	}
 /*<       endif  >*/
     }
@@ -4782,152 +4558,200 @@ L999:
 /*<       if (iprint .ge. 0) then >*/
     if (*iprint >= 0) {
 /*<          write (6,3009) task >*/
-	s_wsfe(&io___209);
-	do_fio(&c__1, task, (ftnlen)60);
-	e_wsfe();
+        printf("%60s\n", task);
 /*<          if (info .ne. 0) then >*/
 	if (*info != 0) {
 /*<             if (info .eq. -1) write (6,9011) >*/
 	    if (*info == -1) {
-		s_wsfe(&io___210);
-		e_wsfe();
+/*
+ 9011 format (/,
+     +' Matrix in 1st Cholesky factorization in formk is not Pos. Def.')
+*/
+                printf(" Matrix in 1st Cholesky factorization in formk is not Pos. Def.\n");
 	    }
 /*<             if (info .eq. -2) write (6,9012) >*/
 	    if (*info == -2) {
-		s_wsfe(&io___211);
-		e_wsfe();
+/*
+ 9012 format (/,
+     +' Matrix in 2st Cholesky factorization in formk is not Pos. Def.')
+*/
+                printf(" Matrix in 2st Cholesky factorization in formk is not Pos. Def.\n");
 	    }
 /*<             if (info .eq. -3) write (6,9013) >*/
 	    if (*info == -3) {
-		s_wsfe(&io___212);
-		e_wsfe();
+/*
+ 9013 format (/,
+     +' Matrix in the Cholesky factorization in formt is not Pos. Def.')
+*/
+                printf(" Matrix in the Cholesky factorization in formk is not Pos. Def.\n");
 	    }
 /*<             if (info .eq. -4) write (6,9014) >*/
 	    if (*info == -4) {
-		s_wsfe(&io___213);
-		e_wsfe();
+/*
+ 9014 format (/,
+     +' Derivative >= 0, backtracking line search impossible.',/,
+     +'   Previous x, f and g restored.',/,
+     +' Possible causes: 1 error in function or gradient evaluation;',/,
+     +'                  2 rounding errors dominate computation.')
+ */
+                printf(" Derivative >= 0, backtracking line search impossible.\n"
+                       "   Previous x, f and g restored.\n"
+                       " Possible causes: 1 error in function or gradient evaluation;\n"
+                       "                  2 rounding errors dominate computation.\n");
 	    }
 /*<             if (info .eq. -5) write (6,9015) >*/
 	    if (*info == -5) {
-		s_wsfe(&io___214);
-		e_wsfe();
+/*
+ 9015 format (/,
+     +' Warning:  more than 10 function and gradient',/,
+     +'   evaluations in the last line search.  Termination',/,
+     +'   may possibly be caused by a bad search direction.')
+*/
+                printf(" Warning:  more than 10 function and gradient\n"
+                       "   evaluations in the last line search.  Termination\n"
+                       "   may possibly be caused by a bad search direction.");
 	    }
 /*<             if (info .eq. -6) write (6,*)' Input nbd(',k,') is invalid.' >*/
 	    if (*info == -6) {
-		s_wsle(&io___215);
-		do_lio(&c__9, &c__1, " Input nbd(", (ftnlen)11);
-		do_lio(&c__3, &c__1, (char *)&(*k), (ftnlen)sizeof(integer));
-		do_lio(&c__9, &c__1, ") is invalid.", (ftnlen)13);
-		e_wsle();
+                printf(" Input nbd(%ld) is invalid.\n", *k);
 	    }
 /*<    >*/
 	    if (*info == -7) {
-		s_wsle(&io___216);
-		do_lio(&c__9, &c__1, " l(", (ftnlen)3);
-		do_lio(&c__3, &c__1, (char *)&(*k), (ftnlen)sizeof(integer));
-		do_lio(&c__9, &c__1, ") > u(", (ftnlen)6);
-		do_lio(&c__3, &c__1, (char *)&(*k), (ftnlen)sizeof(integer));
-		do_lio(&c__9, &c__1, ").  No feasible solution.", (ftnlen)25);
-		e_wsle();
+                printf(" l(%ld) > u(%ld).  No feasible solution.\n", *k, *k);
 	    }
 /*<             if (info .eq. -8) write (6,9018) >*/
 	    if (*info == -8) {
-		s_wsfe(&io___217);
-		e_wsfe();
+/*
+ 9018 format (/,' The triangular system is singular.')
+*/
+                printf(" The triangular system is singular.\n");
 	    }
 /*<             if (info .eq. -9) write (6,9019) >*/
 	    if (*info == -9) {
-		s_wsfe(&io___218);
-		e_wsfe();
+/*
+ 9019 format (/,
+     +' Line search cannot locate an adequate point after 20 function',/
+     +,'  and gradient evaluations.  Previous x, f and g restored.',/,
+     +' Possible causes: 1 error in function or gradient evaluation;',/,
+     +'                  2 rounding error dominate computation.')
+
+*/
+                printf(" Line search cannot locate an adequate point after 20 function\n"
+                       "  and gradient evaluations.  Previous x, f and g restored.\n"
+                       " Possible causes: 1 error in function or gradient evaluation;\n"
+                       "                  2 rounding error dominate computation.\n");
 	    }
 /*<          endif >*/
 	}
 /*<          if (iprint .ge. 1) write (6,3007) cachyt,sbtime,lnscht >*/
+/*
+ 3007 format (/,' Cauchy                time',1p,e10.3,' seconds.',/ 
+     +        ' Subspace minimization time',1p,e10.3,' seconds.',/
+     +        ' Line search           time',1p,e10.3,' seconds.')
+*/
 	if (*iprint >= 1) {
-	    s_wsfe(&io___219);
-	    do_fio(&c__1, (char *)&(*cachyt), (ftnlen)sizeof(doublereal));
-	    do_fio(&c__1, (char *)&(*sbtime), (ftnlen)sizeof(doublereal));
-	    do_fio(&c__1, (char *)&(*lnscht), (ftnlen)sizeof(doublereal));
-	    e_wsfe();
+            printf(" Cauchy                time %10.3g seconds.\n"
+                   " Subspace minimization time %10.3g seconds.\n"
+                   " Line search           time %10.3g seconds.\n",
+                   *cachyt, *sbtime, *lnscht);
 	}
 /*<          write (6,3008) time >*/
-	s_wsfe(&io___220);
-	do_fio(&c__1, (char *)&(*time), (ftnlen)sizeof(doublereal));
-	e_wsfe();
+/*
+ 3008 format (/,' Total User time',1p,e10.3,' seconds.',/)
+ */
+        printf(" Total User time %10.3g seconds.\n", *time);
 /*<          if (iprint .ge. 1) then >*/
 	if (*iprint >= 1) {
 /*<             if (info .eq. -4 .or. info .eq. -9) then >*/
 	    if (*info == -4 || *info == -9) {
 /*<    >*/
-		io___221.ciunit = *itfile;
-		s_wsfe(&io___221);
-		do_fio(&c__1, (char *)&(*iter), (ftnlen)sizeof(integer));
-		do_fio(&c__1, (char *)&(*nfgv), (ftnlen)sizeof(integer));
-		do_fio(&c__1, (char *)&(*nint), (ftnlen)sizeof(integer));
-		do_fio(&c__1, (char *)&(*nact), (ftnlen)sizeof(integer));
-		do_fio(&c__1, word, (ftnlen)3);
-		do_fio(&c__1, (char *)&(*iback), (ftnlen)sizeof(integer));
-		do_fio(&c__1, (char *)&(*stp), (ftnlen)sizeof(doublereal));
-		do_fio(&c__1, (char *)&(*xstep), (ftnlen)sizeof(doublereal));
-		e_wsfe();
+/*
+ 3002 format(2(1x,i4),2(1x,i5),2x,a3,1x,i4,1p,2(2x,d7.1),6x,'-',10x,'-')
+ */
+                fprintf(0,
+                        " %4ld %4ld %5ld %5ld  %3s %4ld  %7.1g %7.1g      -         -\n",
+                        *iter, *nfgv, *nint, *nact, word, *iback, *stp, *xstep);
 /*<             endif >*/
 	    }
 /*<             write (itfile,3009) task >*/
-	    io___222.ciunit = *itfile;
-	    s_wsfe(&io___222);
-	    do_fio(&c__1, task, (ftnlen)60);
-	    e_wsfe();
+            fprintf(0, "%60s\n", task);
 /*<             if (info .ne. 0) then >*/
 	    if (*info != 0) {
 /*<                if (info .eq. -1) write (itfile,9011) >*/
+/*
+ 9011 format (/,
+     +' Matrix in 1st Cholesky factorization in formk is not Pos. Def.')
+ */
 		if (*info == -1) {
-		    io___223.ciunit = *itfile;
-		    s_wsfe(&io___223);
-		    e_wsfe();
+                    fprintf(0, " Matrix in 1st Cholesky factorization in formk is not Pos. Def.\n");
 		}
 /*<                if (info .eq. -2) write (itfile,9012) >*/
+/*
+ 9012 format (/,
+     +' Matrix in 2st Cholesky factorization in formk is not Pos. Def.')
+ */
 		if (*info == -2) {
-		    io___224.ciunit = *itfile;
-		    s_wsfe(&io___224);
-		    e_wsfe();
+                    fprintf(0, " Matrix in 2st Cholesky factorization in formk is not Pos. Def.\n");
 		}
 /*<                if (info .eq. -3) write (itfile,9013) >*/
+/*
+ 9013 format (/,
+     +' Matrix in the Cholesky factorization in formt is not Pos. Def.')
+ */
 		if (*info == -3) {
-		    io___225.ciunit = *itfile;
-		    s_wsfe(&io___225);
-		    e_wsfe();
+                    fprintf(0, " Matrix in the Cholesky factorization in formk is not Pos. Def.\n");
 		}
 /*<                if (info .eq. -4) write (itfile,9014) >*/
+/*
+ 9014 format (/,
+     +' Derivative >= 0, backtracking line search impossible.',/,
+     +'   Previous x, f and g restored.',/,
+     +' Possible causes: 1 error in function or gradient evaluation;',/,
+     +'                  2 rounding errors dominate computation.')
+ */
 		if (*info == -4) {
-		    io___226.ciunit = *itfile;
-		    s_wsfe(&io___226);
-		    e_wsfe();
+                    fprintf(0, " Derivative >= 0, backtracking line search impossible.\n"
+                            "   Previous x, f and g restored.\n"
+                            " Possible causes: 1 error in function or gradient evaluation;\n"
+                            "                  2 rounding errors dominate computation.\n");
 		}
 /*<                if (info .eq. -5) write (itfile,9015) >*/
+/*
+ 9015 format (/,
+     +' Warning:  more than 10 function and gradient',/,
+     +'   evaluations in the last line search.  Termination',/,
+     +'   may possibly be caused by a bad search direction.')
+ */
 		if (*info == -5) {
-		    io___227.ciunit = *itfile;
-		    s_wsfe(&io___227);
-		    e_wsfe();
+                    fprintf(0, " Warning:  more than 10 function and gradient\n"
+                            "   evaluations in the last line search.  Termination\n"
+                            "   may possibly be caused by a bad search direction.");
 		}
 /*<                if (info .eq. -8) write (itfile,9018) >*/
+/*
+ 9018 format (/,' The triangular system is singular.')
+ */
 		if (*info == -8) {
-		    io___228.ciunit = *itfile;
-		    s_wsfe(&io___228);
-		    e_wsfe();
+                    fprintf(0, " The triangular system is singular.\n");
 		}
 /*<                if (info .eq. -9) write (itfile,9019) >*/
+/*
+ 9019 format (/,
+     +' Line search cannot locate an adequate point after 20 function',/
+     +,'  and gradient evaluations.  Previous x, f and g restored.',/,
+     +' Possible causes: 1 error in function or gradient evaluation;',/,
+     +'                  2 rounding error dominate computation.')
+ */
 		if (*info == -9) {
-		    io___229.ciunit = *itfile;
-		    s_wsfe(&io___229);
-		    e_wsfe();
+                    fprintf(0, " Line search cannot locate an adequate point after 20 function\n"
+                            "  and gradient evaluations.  Previous x, f and g restored.\n"
+                            " Possible causes: 1 error in function or gradient evaluation;\n"
+                            "                  2 rounding error dominate computation.\n");
 		}
 /*<             endif >*/
 	    }
 /*<             write (itfile,3008) time >*/
-	    io___230.ciunit = *itfile;
-	    s_wsfe(&io___230);
-	    do_fio(&c__1, (char *)&(*time), (ftnlen)sizeof(doublereal));
-	    e_wsfe();
+            fprintf(0, " Total User time %10.3g seconds.\n", *time);
 /*<          endif >*/
 	}
 /*<       endif >*/
@@ -5049,24 +4873,9 @@ L999:
 	integer *col, integer *head, integer *iword, doublereal *wv, 
 	doublereal *wn, integer *iprint, integer *info)
 {
-    /* Format strings */
-    static char fmt_1001[] = "(/,\002----------------SUBSM entered----------\
--------\002,/)";
-    static char fmt_1002[] = "(\002ALPHA = \002,f7.5,\002 backtrack to the B\
-OX\002)";
-    static char fmt_1003[] = "(\002Subspace solution X =  \002,/,(4x,1p,6(1x\
-,d11.4)))";
-    static char fmt_1004[] = "(/,\002----------------exit SUBSM ------------\
---------\002,/)";
-
     /* System generated locals */
     integer ws_dim1, ws_offset, wy_dim1, wy_offset, wn_dim1, wn_offset, i__1, 
 	    i__2;
-
-    /* Builtin functions */
-    integer s_wsfe(cilist *), e_wsfe(), do_fio(integer *, char *, ftnlen), 
-	    s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	    e_wsle();
 
     /* Local variables */
     integer i__, j, k, m2;
@@ -5076,14 +4885,6 @@ OX\002)";
     extern /* Subroutine */ int dtrsl_(doublereal *, integer *, integer *, 
 	    doublereal *, integer *, integer *);
     integer pointr;
-
-    /* Fortran I/O blocks */
-    static cilist io___233 = { 0, 6, 0, fmt_1001, 0 };
-    static cilist io___247 = { 0, 6, 0, fmt_1002, 0 };
-    static cilist io___248 = { 0, 6, 0, 0, 0 };
-    static cilist io___249 = { 0, 6, 0, fmt_1003, 0 };
-    static cilist io___250 = { 0, 6, 0, fmt_1004, 0 };
-
 
 /*<    >*/
 /*<    >*/
@@ -5262,9 +5063,11 @@ OX\002)";
 	return 0;
     }
 /*<       if (iprint .ge. 99) write (6,1001) >*/
+/*
+ 1001 format (/,'----------------SUBSM entered-----------------',/)
+ */
     if (*iprint >= 99) {
-	s_wsfe(&io___233);
-	e_wsfe();
+        printf("----------------SUBSM entered-----------------");
     }
 /*     Compute wv = W'Zd. */
 /*<       pointr = head  >*/
@@ -5448,25 +5251,23 @@ OX\002)";
 /*< 	 if (alpha .lt. one) then >*/
 	if (alpha < 1.) {
 /*<             write (6,1002) alpha >*/
-	    s_wsfe(&io___247);
-	    do_fio(&c__1, (char *)&alpha, (ftnlen)sizeof(doublereal));
-	    e_wsfe();
+/*
+ 1002 format ( 'ALPHA = ',f7.5,' backtrack to the BOX')	
+*/
+            printf("ALPHA = %7.5g backtrack to the BOX\n", alpha);
 /*<          else >*/
 	} else {
 /*<             write (6,*) 'SM solution inside the box' >*/
-	    s_wsle(&io___248);
-	    do_lio(&c__9, &c__1, "SM solution inside the box", (ftnlen)26);
-	    e_wsle();
+            printf("SM solution inside the box\n");
 /*< 	 end if	 >*/
 	}
 /*< 	 if (iprint .gt.100) write (6,1003) (x(i),i=1,n) >*/
+/*
+ 1003 format ('Subspace solution X =  ',/,(4x,1p,6(1x,d11.4)))
+ */
 	if (*iprint > 100) {
-	    s_wsfe(&io___249);
 	    i__1 = *n;
-	    for (i__ = 1; i__ <= i__1; ++i__) {
-		do_fio(&c__1, (char *)&x[i__], (ftnlen)sizeof(doublereal));
-	    }
-	    e_wsfe();
+            lbfgsb_printf_vec("Subspace solution X", x, i__1);
 	}
 /*<       endif >*/
     }
@@ -5481,9 +5282,11 @@ OX\002)";
 /*<       endif  >*/
     }
 /*<       if (iprint .ge. 99) write (6,1004) >*/
+/*
+ 1004 format (/,'----------------exit SUBSM --------------------',/)
+ */
     if (*iprint >= 99) {
-	s_wsfe(&io___250);
-	e_wsfe();
+        printf("----------------exit SUBSM --------------------");
     }
 /*<  1001 format (/,'----------------SUBSM entered-----------------',/) >*/
 /*<  1002 format ( 'ALPHA = ',f7.5,' backtrack to the BOX')	 >*/
