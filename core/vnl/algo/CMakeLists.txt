@@ -15,6 +15,7 @@ IF(NETLIB_FOUND)
 # vnl_generalized_eigensystem      rsg_
 # vnl_generalized_schur            dgges_
 # vnl_lbfgs                        lbfgs_ lb3_
+# vnl_lbfgsb                       setulb_
 # vnl_levenberg_marquardt          lmder1_ lmdif_
 # vnl_lsqr                         lsqr_
 # vnl_qr                           cqrdc_ cqrsl_ dqrdc_ dqrsl_ sqrdc_ sqrsl_ zqrdc_ zqrsl_
@@ -52,6 +53,7 @@ IF(NETLIB_FOUND)
     vnl_levenberg_marquardt.cxx vnl_levenberg_marquardt.h
     vnl_conjugate_gradient.cxx vnl_conjugate_gradient.h
     vnl_lbfgs.cxx vnl_lbfgs.h
+    vnl_lbfgsb.cxx vnl_lbfgsb.h
     vnl_amoeba.cxx vnl_amoeba.h
     vnl_powell.cxx vnl_powell.h
     vnl_brent.cxx vnl_brent.h
