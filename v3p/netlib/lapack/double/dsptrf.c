@@ -34,7 +34,7 @@ integer *info, ftnlen uplo_len)
     doublereal c__;
     integer j, k;
     doublereal s, t, r1, r2;
-    integer kc, kk, kp, kx, knc, kpc, npp, imax, jmax;
+    integer kc, kk, kp, kx, knc, kpc=0, npp, imax=0, jmax;
     extern /* Subroutine */ int drot_(integer *, doublereal *, integer *, 
 	    doublereal *, integer *, doublereal *, doublereal *), dspr_(char *
 	    , integer *, doublereal *, doublereal *, integer *, doublereal *, 
@@ -54,7 +54,7 @@ integer *info, ftnlen uplo_len)
     extern integer idamax_(integer *, doublereal *, integer *);
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
     doublereal colmax, rowmax;
-
+    (void)uplo_len;
 
 /*  -- LAPACK routine (version 2.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */

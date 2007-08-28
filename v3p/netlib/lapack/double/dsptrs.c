@@ -49,7 +49,7 @@ static doublereal c_b19 = 1.;
 	    doublereal *, integer *, doublereal *, integer *);
     logical upper;
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
-
+    (void)uplo_len;
 
 /*  -- LAPACK routine (version 2.0) -- */
 /*     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd., */

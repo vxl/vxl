@@ -23,10 +23,11 @@ extern "C" {
     integer i__1, i__2;
 
     /* Local variables */
-    integer i__, j, k, kk, ix, jx, kx, info;
+    integer i__, j, k, kk, ix, jx, kx=0, info;
     doublereal temp;
     extern logical lsame_(char *, char *, ftnlen, ftnlen);
     extern /* Subroutine */ int xerbla_(char *, integer *, ftnlen);
+    (void)uplo_len;
 
 /*     .. Scalar Arguments .. */
 /*<       DOUBLE PRECISION   ALPHA >*/
