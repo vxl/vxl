@@ -49,6 +49,7 @@ SOURCES += vnl_discrete_diff.cxx
 SOURCES += vnl_levenberg_marquardt.cxx
 SOURCES += vnl_conjugate_gradient.cxx
 SOURCES += vnl_lbfgs.cxx
+SOURCES += vnl_lbfgsb.cxx
 SOURCES += vnl_amoeba.cxx
 SOURCES += vnl_powell.cxx
 SOURCES += vnl_brent.cxx
