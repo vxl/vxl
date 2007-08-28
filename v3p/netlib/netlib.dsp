@@ -606,6 +606,9 @@ SOURCE=.\minpack/qrsolv.c
 SOURCE=.\opt/lbfgs.c
 # End Source File
 # Begin Source File
+SOURCE=.\opt/lbfgsb.c
+# End Source File
+# Begin Source File
 SOURCE=.\blas/dgemm.c
 # End Source File
 # Begin Source File
@@ -1351,6 +1354,9 @@ SOURCE=.\linalg/lsqr.h
 # End Source File
 # Begin Source File
 SOURCE=.\opt/lbfgs.h
+# End Source File
+# Begin Source File
+SOURCE=.\opt/lbfgsb.h
 # End Source File
 # Begin Source File
 SOURCE=.\blas/dgemm.h
