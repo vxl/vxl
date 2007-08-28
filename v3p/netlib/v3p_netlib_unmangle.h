@@ -4,16 +4,20 @@
 
 /* Functions */
 
+#undef active_
 #undef adaptquad_
 #undef balanc_
 #undef balbak_
+#undef bmv_
 #undef calcsc_
+#undef cauchy_
 #undef caxpy_
 #undef ccopy_
 #undef cdiv_
 #undef cdotc_
 #undef cg_
 #undef chscdf_
+#undef cmprlb_
 #undef cqrdc_
 #undef cqrsl_
 #undef cscal_
@@ -26,6 +30,8 @@
 #undef dcabs1_
 #undef dchscdf_
 #undef dcopy_
+#undef dcsrch_
+#undef dcstep_
 #undef ddot_
 #undef dgecon_
 #undef dgemm_
@@ -93,6 +99,7 @@
 #undef dormqr_
 #undef dormr2_
 #undef dortqr_
+#undef dpmeps_
 #undef dpmpar_
 #undef dpoco_
 #undef dpodi_
@@ -116,6 +123,7 @@
 #undef dtgsyl_
 #undef dtrmm_
 #undef dtrmv_
+#undef dtrsl_
 #undef dtrsv_
 #undef dvsort_
 #undef dzasum_
@@ -124,8 +132,12 @@
 #undef eltran_
 #undef enorm_
 #undef epslon_
+#undef errclb_
 #undef fd_
 #undef fdjac2_
+#undef formk_
+#undef formt_
+#undef freev_
 #undef fv_
 #undef fvd_
 #undef fxshfr_
@@ -133,6 +145,7 @@
 #undef gpfa3f_
 #undef gpfa5f_
 #undef gpfa_
+#undef hpsolb_
 #undef hqr2_
 #undef hqr_
 #undef idamax_
@@ -149,13 +162,20 @@
 #undef lmder_
 #undef lmdif_
 #undef lmpar_
+#undef lnsrlb_
 #undef lsame_
 #undef lse_
 #undef lsqr_
+#undef mainlb_
+#undef matupd_
 #undef mcsrch_
 #undef mcstep_
 #undef newest_
 #undef nextk_
+#undef prn1lb_
+#undef prn2lb_
+#undef prn3lb_
+#undef projgr_
 #undef pythag_
 #undef qrfac_
 #undef qrsolv_
@@ -184,6 +204,7 @@
 #undef sdot_
 #undef setdgpfa_
 #undef setgpfa_
+#undef setulb_
 #undef sgbmv_
 #undef sgemv_
 #undef sgeqpf_
@@ -241,6 +262,8 @@
 #undef stpsv_
 #undef strmv_
 #undef strsv_
+#undef subsm_
+#undef timer_
 #undef tql1_
 #undef tql2_
 #undef tqlrat_

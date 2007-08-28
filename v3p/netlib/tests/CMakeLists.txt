@@ -4,6 +4,10 @@ IF(BUILD_TESTING)
   ADD_TEST( netlib_test_lbfgs ${EXECUTABLE_OUTPUT_PATH}/netlib_lbfgs_example )
   TARGET_LINK_LIBRARIES(netlib_lbfgs_example v3p_netlib)
   # test
+  ADD_EXECUTABLE( netlib_lbfgsb_example lbfgsb-example1.c )
+  ADD_TEST( netlib_test_lbfgsb ${EXECUTABLE_OUTPUT_PATH}/netlib_lbfgsb_example )
+  TARGET_LINK_LIBRARIES(netlib_lbfgsb_example v3p_netlib)
+  # test
   ADD_EXECUTABLE( netlib_lsqr_test lsqr-test.c )
   ADD_TEST( netlib_test_lsqr ${EXECUTABLE_OUTPUT_PATH}/netlib_lsqr_test )
   TARGET_LINK_LIBRARIES(netlib_lsqr_test v3p_netlib)

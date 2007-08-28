@@ -311,6 +311,7 @@ SET(V3P_NETLIB_minpack_SOURCES
    )
 SET(V3P_NETLIB_opt_SOURCES
      opt/lbfgs.c opt/lbfgs.h
+     opt/lbfgsb.c opt/lbfgsb.h
    )
 SET(V3P_NETLIB_linalg_SOURCES
      linalg/lsqr.c linalg/lsqr.h

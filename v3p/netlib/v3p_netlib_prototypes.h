@@ -222,6 +222,7 @@
 #include "minpack/qrfac.h"
 #include "minpack/qrsolv.h"
 #include "opt/lbfgs.h"
+#include "opt/lbfgsb.h"
 #include "linalg/lsqr.h"
 #include "toms/rpoly.h"
 #include "datapac/camsun.h"
