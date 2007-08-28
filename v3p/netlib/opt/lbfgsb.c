@@ -56,7 +56,7 @@ static doublereal c_b277 = .1;
 	doublereal *l, doublereal *u, integer *nbd, doublereal *f, doublereal 
 	*g, doublereal *factr, doublereal *pgtol, doublereal *wa, integer *
 	iwa, char *task, integer *iprint, char *csave, logical *lsave, 
-	integer *isave, doublereal *dsave, ftnlen task_len, ftnlen csave_len)
+	integer *isave, doublereal *dsave)
 {
     /* System generated locals */
     integer i__1;
@@ -76,8 +76,6 @@ static doublereal c_b277 = .1;
 	    doublereal *, doublereal *, doublereal *, integer *, integer *, 
 	    integer *, char *, integer *, char *, logical *, integer *, 
 	    doublereal *, ftnlen, ftnlen);
-    (void)task_len;
-    (void)csave_len;
 
 /*<       character*60     task, csave >*/
 /*<       logical          lsave(4) >*/
@@ -6148,6 +6146,7 @@ L1000:
 /*<       subroutine timer(ttime) >*/
 /* Subroutine */ int timer_(doublereal *ttime)
 {
+#if 0
     real temp;
     extern doublereal etime_(real *);
     real tarray[2];
@@ -6186,6 +6185,10 @@ L1000:
 /*<       return >*/
     return 0;
 /*<       end >*/
+#else
+    *ttime = 0;
+    return 0;
+#endif
 } /* timer_ */
 
 /* ====================== The end of timer =============================== */
@@ -6194,9 +6197,9 @@ doublereal dpmeps_()
 {
     /* Initialized data */
 
-    static doublereal zero = 0.;
-    static doublereal one = 1.;
-    static doublereal two = 2.;
+    static doublereal zero = 0.; /* constant */
+    static doublereal one = 1.; /* constant */
+    static doublereal two = 2.; /* constant */
 
     /* System generated locals */
     integer i__1;
