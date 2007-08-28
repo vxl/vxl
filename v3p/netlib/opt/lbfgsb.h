@@ -288,62 +288,6 @@ extern int v3p_netlib_matupd_(
   v3p_netlib_doublereal *stp,
   v3p_netlib_doublereal *dtd
   );
-extern int v3p_netlib_prn1lb_(
-  v3p_netlib_integer *n,
-  v3p_netlib_integer *m,
-  v3p_netlib_doublereal *l,
-  v3p_netlib_doublereal *u,
-  v3p_netlib_doublereal *x,
-  v3p_netlib_integer *iprint,
-  v3p_netlib_integer *itfile,
-  v3p_netlib_doublereal *epsmch
-  );
-extern int v3p_netlib_prn2lb_(
-  v3p_netlib_integer *n,
-  v3p_netlib_doublereal *x,
-  v3p_netlib_doublereal *f,
-  v3p_netlib_doublereal *g,
-  v3p_netlib_integer *iprint,
-  v3p_netlib_integer *itfile,
-  v3p_netlib_integer *iter,
-  v3p_netlib_integer *nfgv,
-  v3p_netlib_integer *nact,
-  v3p_netlib_doublereal *sbgnrm,
-  v3p_netlib_integer *nint,
-  char *word,
-  v3p_netlib_integer *iword,
-  v3p_netlib_integer *iback,
-  v3p_netlib_doublereal *stp,
-  v3p_netlib_doublereal *xstep,
-  v3p_netlib_ftnlen word_len
-  );
-extern int v3p_netlib_prn3lb_(
-  v3p_netlib_integer *n,
-  v3p_netlib_doublereal *x,
-  v3p_netlib_doublereal *f,
-  char *task,
-  v3p_netlib_integer *iprint,
-  v3p_netlib_integer *info,
-  v3p_netlib_integer *itfile,
-  v3p_netlib_integer *iter,
-  v3p_netlib_integer *nfgv,
-  v3p_netlib_integer *nintol,
-  v3p_netlib_integer *nskip,
-  v3p_netlib_integer *nact,
-  v3p_netlib_doublereal *sbgnrm,
-  v3p_netlib_doublereal *time,
-  v3p_netlib_integer *nint,
-  char *word,
-  v3p_netlib_integer *iback,
-  v3p_netlib_doublereal *stp,
-  v3p_netlib_doublereal *xstep,
-  v3p_netlib_integer *k,
-  v3p_netlib_doublereal *cachyt,
-  v3p_netlib_doublereal *sbtime,
-  v3p_netlib_doublereal *lnscht,
-  v3p_netlib_ftnlen task_len,
-  v3p_netlib_ftnlen word_len
-  );
 extern int v3p_netlib_projgr_(
   v3p_netlib_integer *n,
   v3p_netlib_doublereal *l,
