@@ -24,6 +24,10 @@ extern "C" {
 #define min(a,b) ((a) <= (b) ? (a) : (b))
 #define max(a,b) ((a) >= (b) ? (a) : (b))
 
+/* Code below must be fixed to pass a real FILE* value to fprintf if
+   this macro is defined.  */
+#undef LBFGSB_ENABLE_ITERATE_FILE
+
 static void lbfgsb_printf_vec(const char* name,
                               double const* v,
                               integer len)
@@ -964,9 +968,11 @@ L111:
  1003 format (2(1x,i4),5x,'-',5x,'-',3x,'-',5x,'-',5x,'-',8x,'-',3x,
      +        1p,2(1x,d10.3))
 */
+#ifdef LBFGSB_ENABLE_ITERATE_FILE
         fprintf(0,
                 " %4ld %4ld     -     -   -     -     -        -    %10.3g %10.3g\n",
                 iter, nfgv, sbgnrm, *f);
+#endif
 /*<       endif >*/
     }
 /*<       if (sbgnrm .le. pgtol) then >*/
@@ -4216,6 +4222,8 @@ L556:
 	doublereal *epsmch)
 {
   (void)itfile;
+  (void)m;
+  (void)epsmch;
 /*<       integer n, m, iprint, itfile >*/
 /*<       double precision epsmch, x(n), l(n), u(n) >*/
 /*     ************ */
@@ -4253,14 +4261,18 @@ L556:
      + 'Machine precision =',1p,d10.3)
 */
 /*<          write (6,7001) epsmch >*/
+#ifdef LBFGSB_ENABLE_ITERATE_FILE
         fprintf(0,
                 "RUNNING THE L-BFGS-B CODE\n"
                 "\n"
                 "           * * *\n"
                 "\n"
                 "Machine precision = %10.3g\n", *epsmch);
+#endif
 /*<          write (6,*) 'N = ',n,'    M = ',m >*/
+#ifdef LBFGSB_ENABLE_ITERATE_FILE
         fprintf(0, "N = %ld    M = %ld\n", *n, *m);
+#endif
 /*<          if (iprint .ge. 1) then >*/
 	if (*iprint >= 1) {
 /*<             write (itfile,2001) epsmch >*/
@@ -4281,6 +4293,7 @@ L556:
      + '           * * *',/,/,
      + 'Machine precision =',1p,d10.3)
 */
+#ifdef LBFGSB_ENABLE_ITERATE_FILE
             fprintf(0,
                     "RUNNING THE L-BFGS-B CODE\n"
                     "\n"
@@ -4299,14 +4312,19 @@ L556:
                     "           * * *\n"
                     "\n"
                     "Machine precision = %10.3g\n", *epsmch);
+#endif
 /*<             write (itfile,*)'N = ',n,'    M = ',m >*/
+#ifdef LBFGSB_ENABLE_ITERATE_FILE
             fprintf(0, "N = %ld    M = %ld\n", *n, *m);
+#endif
 /*< 	    write (itfile,9001) >*/
 /*
  9001 format (/,3x,'it',3x,'nf',2x,'nint',2x,'nact',2x,'sub',2x,'itls',
      +        2x,'stepl',4x,'tstep',5x,'projg',8x,'f')
 */
+#ifdef LBFGSB_ENABLE_ITERATE_FILE
             fprintf(0, "   it   nf  nint  nact  sub  itls  stepl    tstep     projg        f\n");
+#endif
 /*<             if (iprint .gt. 100) then >*/
 	    if (*iprint > 100) {
 /*<                write (6,1004) 'L =',(l(i),i = 1,n) >*/
@@ -4346,6 +4364,10 @@ L556:
 
     (void)itfile;
     (void)word_len;
+    (void)nfgv;
+    (void)nact;
+    (void)nint;
+    (void)stp;
 
 /*<       character*3      word >*/
 /*<    >*/
@@ -4436,9 +4458,11 @@ L556:
 /*
 <  3001 format(2(1x,i4),2(1x,i5),2x,a3,1x,i4,1p,2(2x,d7.1),1p,2(1x,d10.3)) >
 */
+#ifdef LBFGSB_ENABLE_ITERATE_FILE
         fprintf(0, " %4ld %4ld %5ld %5ld  %3s %4ld  %7.1g %7.1g<1p> %10.3g %10.3g\n",
                 *iter, *nfgv, *nint, *nact, word, *iback, *stp, *xstep,
                 *sbgnrm, *f);
+#endif
     }
 /*<  1004 format (/,a4, 1p, 6(1x,d11.4),/,(4x,1p,6(1x,d11.4))) >*/
 /*<  2 >*/
@@ -4464,6 +4488,11 @@ L556:
     (void)itfile;
     (void)task_len;
     (void)word_len;
+    (void)nint;
+    (void)word;
+    (void)iback;
+    (void)stp;
+    (void)xstep;
 
 /*<       character*60     task >*/
 /*<       character*3      word >*/
@@ -4666,13 +4695,17 @@ L999:
 /*
  3002 format(2(1x,i4),2(1x,i5),2x,a3,1x,i4,1p,2(2x,d7.1),6x,'-',10x,'-')
  */
+#ifdef LBFGSB_ENABLE_ITERATE_FILE
                 fprintf(0,
                         " %4ld %4ld %5ld %5ld  %3s %4ld  %7.1g %7.1g      -         -\n",
                         *iter, *nfgv, *nint, *nact, word, *iback, *stp, *xstep);
+#endif
 /*<             endif >*/
 	    }
 /*<             write (itfile,3009) task >*/
+#ifdef LBFGSB_ENABLE_ITERATE_FILE
             fprintf(0, "%60s\n", task);
+#endif
 /*<             if (info .ne. 0) then >*/
 	    if (*info != 0) {
 /*<                if (info .eq. -1) write (itfile,9011) >*/
@@ -4681,7 +4714,9 @@ L999:
      +' Matrix in 1st Cholesky factorization in formk is not Pos. Def.')
  */
 		if (*info == -1) {
+#ifdef LBFGSB_ENABLE_ITERATE_FILE
                     fprintf(0, " Matrix in 1st Cholesky factorization in formk is not Pos. Def.\n");
+#endif
 		}
 /*<                if (info .eq. -2) write (itfile,9012) >*/
 /*
@@ -4689,7 +4724,9 @@ L999:
      +' Matrix in 2st Cholesky factorization in formk is not Pos. Def.')
  */
 		if (*info == -2) {
+#ifdef LBFGSB_ENABLE_ITERATE_FILE
                     fprintf(0, " Matrix in 2st Cholesky factorization in formk is not Pos. Def.\n");
+#endif
 		}
 /*<                if (info .eq. -3) write (itfile,9013) >*/
 /*
@@ -4697,7 +4734,9 @@ L999:
      +' Matrix in the Cholesky factorization in formt is not Pos. Def.')
  */
 		if (*info == -3) {
+#ifdef LBFGSB_ENABLE_ITERATE_FILE
                     fprintf(0, " Matrix in the Cholesky factorization in formk is not Pos. Def.\n");
+#endif
 		}
 /*<                if (info .eq. -4) write (itfile,9014) >*/
 /*
@@ -4708,10 +4747,12 @@ L999:
      +'                  2 rounding errors dominate computation.')
  */
 		if (*info == -4) {
+#ifdef LBFGSB_ENABLE_ITERATE_FILE
                     fprintf(0, " Derivative >= 0, backtracking line search impossible.\n"
                             "   Previous x, f and g restored.\n"
                             " Possible causes: 1 error in function or gradient evaluation;\n"
                             "                  2 rounding errors dominate computation.\n");
+#endif
 		}
 /*<                if (info .eq. -5) write (itfile,9015) >*/
 /*
@@ -4721,16 +4762,20 @@ L999:
      +'   may possibly be caused by a bad search direction.')
  */
 		if (*info == -5) {
+#ifdef LBFGSB_ENABLE_ITERATE_FILE
                     fprintf(0, " Warning:  more than 10 function and gradient\n"
                             "   evaluations in the last line search.  Termination\n"
                             "   may possibly be caused by a bad search direction.");
+#endif
 		}
 /*<                if (info .eq. -8) write (itfile,9018) >*/
 /*
  9018 format (/,' The triangular system is singular.')
  */
 		if (*info == -8) {
+#ifdef LBFGSB_ENABLE_ITERATE_FILE
                     fprintf(0, " The triangular system is singular.\n");
+#endif
 		}
 /*<                if (info .eq. -9) write (itfile,9019) >*/
 /*
@@ -4741,15 +4786,19 @@ L999:
      +'                  2 rounding error dominate computation.')
  */
 		if (*info == -9) {
+#ifdef LBFGSB_ENABLE_ITERATE_FILE
                     fprintf(0, " Line search cannot locate an adequate point after 20 function\n"
                             "  and gradient evaluations.  Previous x, f and g restored.\n"
                             " Possible causes: 1 error in function or gradient evaluation;\n"
                             "                  2 rounding error dominate computation.\n");
+#endif
 		}
 /*<             endif >*/
 	    }
 /*<             write (itfile,3008) time >*/
+#ifdef LBFGSB_ENABLE_ITERATE_FILE
             fprintf(0, " Total User time %10.3g seconds.\n", *time);
+#endif
 /*<          endif >*/
 	}
 /*<       endif >*/
