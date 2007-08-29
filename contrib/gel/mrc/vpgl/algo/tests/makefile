@@ -12,6 +12,7 @@ TESTS += test_optimize_camera.cxx
 TESTS += test_project.cxx
 TESTS += test_backproject.cxx
 TESTS += test_ortho_procrustes.cxx
+TESTS += test_bundle_adjust.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
