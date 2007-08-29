@@ -590,6 +590,10 @@ minimisation.  Requires 1st derivatives.  Considered to be the best
 general optimisation algorithm for functions which are well behaved
 (i.e. locally smooth without too many local minima.)
 
+@item @code{vnl_lbfgsb}: Limited memory BFGS
+bounded minimisation.  Requires 1st derivatives.  Allows simple box
+inequality constraints.
+
 @item @code{vnl_levenberg_marquardt}: The Levenberg-Marquardt algorithm for
 least-squares problems.  This is usually the best method for any function
 which can be expressed as
@@ -853,39 +857,6 @@ class written.
 @c
 @c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-@section Frequently Asked Questions
-
-@cindex Frequently Asked Questions
-@cindex FAQ
-
-@table @asis
-@item Question 1
-
-@quotation
-I would like to do constrained optimisation.
-Can I add constraints to the existing optimisers
-in @file{vnl/algo}?
-@end quotation
-
-Unfortunately, this approach is not likely to solve your problem,
-since constrained optimisation is not in general solved by adding
-constraints to an unconstrained optimiser.
-
-The usual approaches to doing constrained optimisation are:
-@enumerate
-@item
-Work the constraints into your cost function, heavily penalising any
-breach in the constraints.
-@item
-Find a mapping T :[your constrained space]->R^n
- and use f(T^-1(x)) as your cost function instead of f.
-@item
-If problem has linear constrains and a simple cost function
-(linear or quadratic) then there is code out there for your problem,
-but unfortunately not yet in VXL.
-@end enumerate
-@end table
 
 
 @section Future work
