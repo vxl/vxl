@@ -71,7 +71,7 @@ class rsdl_borgefors
   //: resets the data members
   void reset();
   //: returns true if the map contains valid data
-  bool is_valid() {return is_valid_;}
+  bool is_valid() const {return is_valid_;}
 
   //: returns approximated distance to between (x,y) and closest object in the map
   double distance(int x, int y) const;
@@ -87,7 +87,7 @@ class rsdl_borgefors
   int height()const {return  size_y_; }
 
   //: returns origin of the map
-  void origin(int& start_x, int& start_y);
+  void origin(int& start_x, int& start_y) const;
 
   const vbl_array_2d<int>& distance_map() const {return distance_map_; }
   const vbl_array_2d<int>& index_map() const {return index_map_; }
@@ -105,7 +105,8 @@ class rsdl_borgefors
   void chamfer34();
   void forward_chamfer();
   void backward_chamfer();
-  int minimum5(int,int,int,int,int);
+  int minimum4(int,int,int,int) const;
+  int minimum5(int,int,int,int,int) const;
 
  private:
   bool is_valid_;

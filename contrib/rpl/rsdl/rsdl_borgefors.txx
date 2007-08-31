@@ -9,6 +9,11 @@
 
 #include <vcl_cassert.h>
 
+//********************* NOTE *************************
+// The map constructed is only valid 1 pixel inside it.
+// In other words, the 1st row and column and the last 
+// row and column are invalid. 
+//****************************************************
 template <class T>
 rsdl_borgefors<T>::rsdl_borgefors()
 {
@@ -55,8 +60,16 @@ rsdl_borgefors<T>::set(int org_x, int org_y,
   size_x_ = size_x;
   size_y_ = size_y;
 
+  // when the number of elements is large, 
+  // memory allocation and deallocation are too many to aford
+  // count the number first and reserve the size
+  unsigned num=0;
+  for( iterator_type i=begin; i!=end; ++i ) 
+    ++num;
+  
   // store ptrs of the internal objects to the data_
-  for (iterator_type i = begin; i!= end; i++) {
+  data_.reserve( num );
+  for (iterator_type i = begin; i!= end; ++i) {
     data_.push_back(i);
   }
 
@@ -102,8 +115,8 @@ double
 rsdl_borgefors<T>::distance(int x, int y) const
 {
   assert( distance_map_.rows() == index_map_.rows() &&
-          distance_map_.cols() == index_map_.cols() &&
-          in_map(x,y) );
+          distance_map_.cols() == index_map_.cols() );
+  assert( in_map(x,y) );
   return distance_map_[y - org_y_][x - org_x_]/3.0;
 }
 
@@ -122,7 +135,7 @@ rsdl_borgefors<T>::nearest(int x, int y) const
 
 template <class T>
 void
-rsdl_borgefors<T>::origin(int& org_x, int& org_y)
+rsdl_borgefors<T>::origin(int& org_x, int& org_y) const
 {
   org_x = org_x_;
   org_y = org_y_;
@@ -141,8 +154,16 @@ template <class T>
 void
 rsdl_borgefors<T>::initialize(iterator_type  begin, iterator_type end)
 {
+  // when the number of elements is large, 
+  // memory allocation and deallocation are too many to aford
+  // count the number first and reserve the size
+  unsigned num=0;
+  for( iterator_type i=begin; i!=end; ++i ) 
+    ++num;
+  
   // 0. Store ptrs of the internal objects to the data_
-  for (iterator_type i = begin; i!= end; i++) {
+  data_.reserve( num );
+  for (iterator_type i = begin; i!= end; ++i) {
     data_.push_back(i);
   }
 
@@ -159,7 +180,7 @@ rsdl_borgefors<T>::initialize(iterator_type  begin, iterator_type end)
 
   // 2. Mark the data on the maps
   //
-  for (unsigned int i = 0; i < data_.size(); i++) {
+  for (unsigned int i = 0; i < data_.size(); ++i) {
     int x = vnl_math_rnd((*data_[i])[0] - org_x_);
     int y = vnl_math_rnd((*data_[i])[1] - org_y_);
     if ( x>= 0 && x < size_x_ && y>=0 && y < size_y_ )
@@ -184,13 +205,15 @@ rsdl_borgefors<T>::chamfer34()
 {
    forward_chamfer();
    backward_chamfer();
+   
+   // TODO: two corners (0, size_y_-1) and (size_x_-1, 0) are not filled in
 }
 
 //: Determines the minimum of five ints.
 //
 template <class T>
-int
-rsdl_borgefors<T>::minimum5(int a, int b, int c, int d, int e)
+inline int
+rsdl_borgefors<T>::minimum5(int a, int b, int c, int d, int e) const
 {
   if ( a<=b && a<=c && a<=d && a<=e )
     return 1;
@@ -204,18 +227,34 @@ rsdl_borgefors<T>::minimum5(int a, int b, int c, int d, int e)
     return 5;
 }
 
+//: Determines the minimum of four ints.
+//
+template <class T>
+inline int
+rsdl_borgefors<T>::minimum4(int a, int b, int c, int d) const
+{
+  if ( a<=b && a<=c && a<=d )
+    return 1;
+  else if ( b<=c && b<=d )
+    return 2;
+  else if ( c<=d )
+    return 3;
+  else
+    return 4;
+}
+
 //: Performs a forward chamfer convolution on the distance_map_ and update the index_map_ accordingly
 //
 template <class T>
 void
 rsdl_borgefors<T>::forward_chamfer()
 {
-  for (int i=1; i<size_y_-1; i++)
-    for (int j=1; j<size_x_-1; j++)
+  for (int i=1; i<=size_y_-1; ++i)
+    for (int j=1; j<size_x_-1; ++j)
       {
-        int val = minimum5(distance_map_[i-1][j-1]+4,distance_map_[i-1][j]+3,
-                           distance_map_[i-1][j+1]+4, distance_map_[i][j-1]+3,
-                           distance_map_[i][j]);
+        const int val = minimum5(distance_map_[i-1][j-1]+4,distance_map_[i-1][j]+3,
+                                 distance_map_[i-1][j+1]+4, distance_map_[i][j-1]+3,
+                                 distance_map_[i][j]);
         switch (val)
           {
           case 1:
@@ -242,6 +281,36 @@ rsdl_borgefors<T>::forward_chamfer()
             break;
           }
       }
+  
+  // the last column is not filled in yet
+  for (int i=1; i<=size_y_-1; ++i)
+    {
+      const int j = size_x_-1;
+      
+      const int val = minimum4(distance_map_[i-1][j-1]+4,distance_map_[i-1][j]+3,
+                               distance_map_[i][j-1]+3, 
+                               distance_map_[i][j]);
+      switch (val)
+        {
+        case 1:
+          distance_map_[i][j] = distance_map_[i-1][j-1]+4;
+          index_map_[i][j] = index_map_[i-1][j-1];
+          break;
+
+        case 2:
+          distance_map_[i][j] = distance_map_[i-1][j]+3;
+          index_map_[i][j] = index_map_[i-1][j];
+          break;
+
+        case 3:
+          distance_map_[i][j] = distance_map_[i][j-1]+3;
+          index_map_[i][j] = index_map_[i][j-1];
+          break;
+
+        case 4:
+          break;
+        }
+    }
 }
 
 //: Performs a forward chamfer convolution on the distance_map_ and update the index_map_ accordingly
@@ -250,12 +319,12 @@ template <class T>
 void
 rsdl_borgefors<T>::backward_chamfer()
 {
-  for (int i=size_y_-2; i>0; i--)
+  for (int i=size_y_-2; i>=0; i--)
     for (int j=size_x_-2; j>0; j--)
       {
-        int val = minimum5(distance_map_[i][j],distance_map_[i][j+1]+3,
-                           distance_map_[i+1][j-1]+4, distance_map_[i+1][j]+3,
-                           distance_map_[i+1][j+1]+4 );
+        const int val = minimum5(distance_map_[i][j],distance_map_[i][j+1]+3,
+                                 distance_map_[i+1][j-1]+4, distance_map_[i+1][j]+3,
+                                 distance_map_[i+1][j+1]+4 );
         switch (val)
           {
           case 1:
@@ -282,6 +351,36 @@ rsdl_borgefors<T>::backward_chamfer()
             break;
           }
       }
+
+  // the first column is not filled in yet
+  for (int i=size_y_-2; i>=0; i--)
+    {
+      const int j = 0;
+      
+        const int val = minimum4(distance_map_[i][j],distance_map_[i][j+1]+3,
+                                 distance_map_[i+1][j]+3,
+                                 distance_map_[i+1][j+1]+4 );
+        switch (val)
+          {
+          case 1:
+            break;
+
+          case 2:
+            distance_map_[i][j] = distance_map_[i][j+1]+3;
+            index_map_[i][j] = index_map_[i][j+1];
+            break;
+
+          case 3:
+            distance_map_[i][j] = distance_map_[i+1][j]+3;
+            index_map_[i][j] = index_map_[i+1][j];
+            break;
+
+          case 4:
+            distance_map_[i][j] = distance_map_[i+1][j+1]+4;
+            index_map_[i][j] = index_map_[i+1][j+1];
+            break;
+          }
+    }
 }
 
 
