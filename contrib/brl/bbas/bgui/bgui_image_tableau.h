@@ -13,6 +13,7 @@
 //   K.Y.McGaul  06-AUG-2002  Print RGB value on status bar.
 //   Joseph Mundy   DEC-2002  Copied to brl to serve as a basis for extended functions
 //   Peter Vanroose AUG-2004  Moved bgui_roi_tableau_make_roi to separate file
+//   Gamze Tunali   SEP-2007  Added class bgui_image_tableau_vp_sc_snapshot
 // \endverbatim
 
 #include "bgui_image_tableau_sptr.h"
@@ -60,8 +61,8 @@ class bgui_image_tableau : public vgui_image_tableau
   //: set handle_motion true
   void set_handle_motion(){handle_motion_ = true;}
   void unset_handle_motion(){handle_motion_ = false;}
-  bool handle_motion(){return handle_motion_;}
 
+  bool handle_motion(){return handle_motion_;} 
  protected:
   //: Handle all events for this tableau.
   bool handle(vgui_event const &e);
