@@ -312,9 +312,9 @@ n_nearest_impl( point_type const& pt,
   //
   // 
   // The following implementation of N nearest neighbors did 
-  // not consider the situation where after found >=n candidates,
-  // there can still exist a bin further away, but contains points 
-  // close than some of these candidates.
+  // not consider the situation when after finding >=n candidates,
+  // there can still exist a bin further away, but containing points 
+  // closer than some of these point candidates.
   static bool rsdl_bins_bug_warning_s = true;
   if( rsdl_bins_bug_warning_s ) {
     
