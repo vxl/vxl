@@ -65,7 +65,9 @@ class vgl_point_3d
 
   //: Test for equality
   inline bool operator==(const vgl_point_3d<Type> &p) const
-  { return this==&p || (x_==p.x() && y_==p.y() && z_==p.z()); }
+  { return this==&p || (x_>=p.x()-vgl_tolerance<Type>::position && x_<=p.x()+vgl_tolerance<Type>::position &&
+                        y_>=p.y()-vgl_tolerance<Type>::position && y_<=p.y()+vgl_tolerance<Type>::position &&
+                        z_>=p.z()-vgl_tolerance<Type>::position && z_<=p.z()+vgl_tolerance<Type>::position ); }
   inline bool operator!=(vgl_point_3d<Type>const& p)const
   { return !operator==(p); }
 

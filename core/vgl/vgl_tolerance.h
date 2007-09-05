@@ -11,8 +11,11 @@ template <typename T>
 class vgl_tolerance
 {
   public:
-    //! tolerance for judging 4 points to be coplanar
+    //! Tolerance for judging 4 points to be coplanar
     static const T point_3d_coplanarity;
+
+    //! Tolerance for judging positions to be equal
+    static const T position;
 };
 
 #endif
