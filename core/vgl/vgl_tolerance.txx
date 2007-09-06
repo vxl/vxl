@@ -10,7 +10,7 @@
 
 
 template <typename T>
-const T vgl_tolerance<T>::point_3d_coplanarity = (T)vcl_sqrt(vcl_numeric_limits<T>::epsilon());
+const T vgl_tolerance<T>::point_3d_coplanarity = (T)vcl_sqrt(1.0f*vcl_numeric_limits<T>::epsilon());
 
 template <typename T>
 const T vgl_tolerance<T>::position = vcl_numeric_limits<T>::epsilon();
