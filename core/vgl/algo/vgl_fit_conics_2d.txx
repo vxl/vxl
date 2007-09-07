@@ -166,12 +166,12 @@ bool vgl_fit_conics_2d<T>::fit()
       if (reg.get_n_pts()>min_length_)
         while (reg.get_n_pts()>min_length_+1)
         {
-          reg.remove_point(curve_[nf]);
           nf--;
+          reg.remove_point(curve_[nf]);
         }
       else if (nf<cur_len)
       {
-        reg.remove_point(curve_[nf]);
+        reg.add_point(curve_[nf]);
         nf++;
       }
       else
