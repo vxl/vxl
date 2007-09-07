@@ -795,7 +795,10 @@ vgl_homg_operators_2d<T>::closest_point(vgl_conic<T> const& c,
     candidates = intersection(c, conic);
   }
   if (candidates.size() == 0)
+  {
     vcl_cerr << "Warning: vgl_homg_operators_2d<T>::closest_point: no intersection\n";
+    return vgl_homg_point_2d<T>(0,0,0);
+  }
 
   // And find the intersection point closest to the given location:
   vgl_homg_point_2d<T> p = candidates.front();
