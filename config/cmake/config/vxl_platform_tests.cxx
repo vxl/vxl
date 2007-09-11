@@ -1124,3 +1124,50 @@ int main()
 }
 #endif // VXL_APPLE_HAS_INLINE_ISNAND
 
+//-------------------------------------
+
+#ifdef VXL_HAS_MM_MALLOC
+#include <emmintrin.h>
+int main()
+{
+  void* x = _mm_malloc(4*sizeof(float),16);
+  _mm_free(x);
+  return 0;
+}
+#endif
+
+//-------------------------------------
+
+#ifdef VXL_HAS_ALIGNED_MALLOC
+#include <malloc.h>
+int main()
+{
+  void* x = _aligned_malloc(4*sizeof(float),16);
+  _aligned_free(x);
+  return 0;
+}
+#endif
+
+//-------------------------------------
+
+#ifdef VXL_HAS_MINGW_ALIGNED_MALLOC
+#include <malloc.h>
+int main()
+{
+  void* x = __mingw_aligned_malloc(4*sizeof(float),16);
+  __mingw_aligned_free(x);
+  return 0;
+}
+#endif
+
+//-------------------------------------
+
+#ifdef VXL_HAS_POSIX_MEMALIGN
+#include <cstdlib>
+int main()
+{
+  void* x = memalign(16,4*sizeof(float));
+  free(x);
+  return 0;
+}
+#endif
