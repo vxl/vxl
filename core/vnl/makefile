@@ -146,6 +146,9 @@ MANPAGE_SOURCES += vnl_analytic_integrant.h
 MANPAGE_SOURCES += vnl_integrant_fnct.h
 SOURCES += vnl_definite_integral.cxx
 
+# hardware optimisation
+MANPAGE_SOURCES += vnl_sse.h
+
 # algo
 SUBDIRS += algo
 
