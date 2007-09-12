@@ -1140,6 +1140,9 @@ SOURCE=.\vnl_integrant_fnct.h
 SOURCE=.\vnl_bessel.h
 # End Source File
 # Begin Source File
+SOURCE=.\vnl_sse.h
+# End Source File
+# Begin Source File
 SOURCE=.\dll.h
 # End Source File
 # End Group
