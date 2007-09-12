@@ -78,7 +78,7 @@ class vgui_soview2D_point : public vgui_soview2D
   virtual float distance_squared(float x, float y) const;
 
   //: Returns the type of this class ('vgui_soview2D_point').
-  vcl_string type_name() const { return "vgui_soview2D_point"; }
+  virtual vcl_string type_name() const { return "vgui_soview2D_point"; }
 
   //: Returns the centroid of this 2D-point.
   void get_centroid(float* x, float* y) const;
