@@ -4,13 +4,14 @@
 //! \file 
 //  \author Kieran O'Mahony
 //  \date Sep 2007
-//  \brief Support for Streaming SIMD Extenstions to speed up vector arithmetic
+//  \brief Support for Streaming SIMD Extensions to speed up vector arithmetic
 
 #include <vcl_compiler.h> //for macro decisions based on compiler type
 #include <vxl_config.h> // for checking supported integer data types
 #include <vcl_cfloat.h> // for DBL_MAX and FLT_MAX
 
 #include <vnl/vnl_config.h> //is SSE enabled
+#include <vnl/vnl_alloc.h> //is SSE enabled
 
 //some caveats...
 // - Due to the way vnl_matrix is represented in memory cannot guarantee 16-byte alignment,
