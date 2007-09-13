@@ -220,6 +220,7 @@ class vnl_sse<double> {
     
     static VNL_SSE_FORCE_INLINE double dot_product(const double* x, const double* y, unsigned n)
     {
+      double ret;
       __m128d sum;   
       if(n%2) 
       { 
@@ -232,14 +233,15 @@ class vnl_sse<double> {
       for(int i = n-2; i >= 0; i-=2)
         sum = _mm_add_pd(_mm_mul_pd(VNL_SSE_HEAP_LOAD(pd)(x+i), VNL_SSE_HEAP_LOAD(pd)(y+i)),sum);
 
-      // sum will contain 2 accumulated values, need to store them in order to add them together
-      double VNL_SSE_STACK_ALIGNED(16) ret[2] ; 
-      VNL_SSE_STACK_STORE(pd)(ret,sum);
-      return ret[0] + ret[1];
+      // sum will contain 2 accumulated values, need to add them together
+      sum = _mm_add_sd(sum,_mm_unpackhi_pd(sum,_mm_setzero_pd()));
+      _mm_store_sd(&ret,sum);
+      return ret;
     }
     
     static VNL_SSE_FORCE_INLINE double euclid_dist_sq(const double* x, const double* y, unsigned n) 
     {
+      double ret;
       __m128d sum,a;
       
       if(n%2) 
@@ -257,10 +259,10 @@ class vnl_sse<double> {
         sum = _mm_add_pd(_mm_mul_pd(a,a),sum);
       }
 
-      // sum will contain 2 accumulated values, need to store them in order to add them together
-      double VNL_SSE_STACK_ALIGNED(16) ret[2] ; 
-      VNL_SSE_STACK_STORE(pd)(ret,sum);
-      return ret[0] + ret[1];
+      // sum will contain 2 accumulated values, need to add them together
+      sum = _mm_add_sd(sum,_mm_unpackhi_pd(sum,_mm_setzero_pd()));
+      _mm_store_sd(&ret,sum);
+      return ret;
     }
     
     static VNL_SSE_FORCE_INLINE void vector_x_matrix(const double* v, const double* m, double* r, unsigned rows, unsigned cols)
@@ -336,10 +338,10 @@ class vnl_sse<double> {
       // handle the left over columns
       if( c_left ) 
       {
-        double som = 0.0;
+        accum = _mm_setzero_pd();
         for (unsigned int i=0; i<rows; ++i)
-          som += (m+i*cols)[cols-1] * v[i];
-        r[cols-1] = som;
+          accum = _mm_add_sd(_mm_mul_sd(_mm_load_sd(m+i*cols+cols-1),_mm_load_sd(v+i)),accum);
+        _mm_store_sd(r+cols-1, accum);
       }
     }
     
@@ -402,16 +404,17 @@ class vnl_sse<double> {
       // handle the left over rows
       if( r_left ) 
       {
-        double som = 0.0;
+        accum = _mm_setzero_pd();
         const double* p = m+(rows-1)*cols;
         for (unsigned int j=0; j<cols; ++j)
-          som += p[j] * v[j];
-        r[rows-1] = som;
+          accum = _mm_add_sd(_mm_mul_sd(_mm_load_sd(p+j),_mm_load_sd(v+j)),accum);
+        _mm_store_sd(r+rows-1, accum);        
       }
     }
     
     static VNL_SSE_FORCE_INLINE double sum(const double* x, unsigned n) 
     {         
+      double ret;
       // decision logic for odd sized vectors
       __m128d sum = n%2 ? _mm_load_sd(x+--n) : _mm_setzero_pd();              
       
@@ -419,14 +422,15 @@ class vnl_sse<double> {
       for(int i = n-2; i >= 0; i-=2)
         sum = _mm_add_pd(VNL_SSE_HEAP_LOAD(pd)(x+i),sum);
 
-      // sum will contain 2 accumulated values, need to store them in order to add them together
-      double VNL_SSE_STACK_ALIGNED(16) ret[2] ; 
-      VNL_SSE_STACK_STORE(pd)(ret,sum);
-      return ret[0] + ret[1];
+      // sum will contain 2 accumulated values, need to add them together
+      sum = _mm_add_sd(sum,_mm_unpackhi_pd(sum,_mm_setzero_pd()));
+      _mm_store_sd(&ret,sum);
+      return ret;
     }
     
     static VNL_SSE_FORCE_INLINE double max(const double* x, unsigned n)
     {
+      double ret;
       // decision logic for odd sized vectors
       __m128d max = n%2 ? _mm_load_sd(x+--n) : _mm_setzero_pd();
 
@@ -434,28 +438,29 @@ class vnl_sse<double> {
       for (int i=n-2; i>=0; i-=2)
         max = _mm_max_pd(VNL_SSE_HEAP_LOAD(pd)(x+i), max);
 
-      // need to store max to compare it's two values
-      double ret[2];
-      VNL_SSE_HEAP_STORE(pd)(ret,max);
-      return ret[0] > ret[1] ? ret[0] : ret[1];
+      // need to store max's two values
+      max = _mm_max_sd(max,_mm_unpackhi_pd(max,_mm_setzero_pd()));
+      _mm_store_sd(&ret,max);
+      return ret;
     }
     
     static VNL_SSE_FORCE_INLINE double min(const double* x, unsigned n)
     {
+      double ret;
       __m128d min = _mm_set1_pd(DBL_MAX);
 
       // hand last element if odd sized vector
       if(n%2)
-        min = _mm_min_pd(_mm_load_sd(x+--n),min);
+        min = _mm_min_sd(min,_mm_load_sd(x+--n));
 
       //handle two elements at a time, min will contain two min values 
       for (int i=n-2; i>=0; i-=2)
         min = _mm_min_pd(VNL_SSE_HEAP_LOAD(pd)(x+i), min);
 
-      // need to store min to compare it's two values
-      double ret[2];
-      VNL_SSE_HEAP_STORE(pd)(ret,min);
-      return ret[0] < ret[1] ? ret[0] : ret[1];
+      // need to store min's two values
+      min = _mm_min_sd(min,_mm_unpackhi_pd(min,_mm_setzero_pd()));
+      _mm_store_sd(&ret,min);
+      return ret;
     }
 };
 
@@ -482,6 +487,7 @@ class vnl_sse<float> {
     
     static VNL_SSE_FORCE_INLINE float dot_product(const float* x, const float* y, unsigned n)
     { 
+      float ret;
       __m128 sum = _mm_setzero_ps();  
       switch(n % 4) 
       {
@@ -495,14 +501,17 @@ class vnl_sse<float> {
       for(int i = n-4; i >= 0; i-=4)
         sum = _mm_add_ps(_mm_mul_ps(VNL_SSE_HEAP_LOAD(ps)(x+i), VNL_SSE_HEAP_LOAD(ps)(y+i)),sum);
 
-      // sum will contain 4 accumulated values, need to store them in order to add them together
-      float VNL_SSE_STACK_ALIGNED(16) ret[4];
-      VNL_SSE_STACK_STORE(ps)(ret,sum);
-      return ret[0] + ret[1] + ret[2] + ret[3] ;
+      // sum will contain 4 accumulated values, need to add them together    
+      sum = _mm_add_ps(sum,_mm_movehl_ps(_mm_setzero_ps(),sum));
+      sum = _mm_add_ss(sum,_mm_shuffle_ps(sum,sum,_MM_SHUFFLE(3,2,1,1)));
+      
+      _mm_store_ss(&ret,sum);
+      return ret;
     }
     
     static VNL_SSE_FORCE_INLINE float euclid_dist_sq(const float* x, const float* y, unsigned n) 
     {
+      float ret;
       __m128 sum,a;
       sum = a = _mm_setzero_ps();
       switch(n % 4) 
@@ -521,10 +530,12 @@ class vnl_sse<float> {
         sum = _mm_add_ps(_mm_mul_ps(a,a),sum);
       }
 
-      // sum will contain 4 accumulated values, need to store them in order to add them together
-      float VNL_SSE_STACK_ALIGNED(16) ret[4];
-      VNL_SSE_STACK_STORE(ps)(ret,sum);
-      return ret[0] + ret[1] + ret[2] + ret[3];
+      // sum will contain 4 accumulated values, need to add them together      
+      sum = _mm_add_ps(sum,_mm_movehl_ps(_mm_setzero_ps(),sum));
+      sum = _mm_add_ss(sum,_mm_shuffle_ps(sum,sum,_MM_SHUFFLE(3,2,1,1)));
+
+      _mm_store_ss(&ret,sum);
+      return ret;
     }
 
     static VNL_SSE_FORCE_INLINE void vector_x_matrix(const float* v, const float* m, float* r, unsigned rows, unsigned cols)
@@ -536,7 +547,7 @@ class vnl_sse<float> {
       unsigned r_nice = rows - r_left;
       unsigned c_left = cols%4;
       unsigned c_nice = cols - c_left;
-
+      
       //handle 4 matrix columns at a time
       for (unsigned j = 0; j < c_nice; j+=4)
       {
@@ -597,10 +608,10 @@ class vnl_sse<float> {
 
       // handle the left over columns
       for(; c_left > 0; --c_left) {
-        float som = 0.0f;
+        accum = _mm_setzero_ps();
         for (unsigned int i=0; i<rows; ++i)
-          som += (m+i*cols)[cols-c_left] * v[i];
-        r[cols-c_left] = som;
+          accum = _mm_add_ss(_mm_mul_ss(_mm_load_ss(m+i*cols+cols-c_left), _mm_load_ss(v+i)),accum);
+        _mm_store_ss(r+cols-c_left,accum);
       }
     }
     
@@ -697,16 +708,17 @@ class vnl_sse<float> {
 
       // handle the left over rows
       for(; r_left > 0; --r_left) {
-        float som = 0.0f;
+        accum = _mm_setzero_ps();
         const float* p = m+(rows-r_left)*cols; 
         for (unsigned int j=0; j<cols; ++j)
-          som += p[j] * v[j];
-        r[rows-r_left] = som;
+          accum = _mm_add_ss(_mm_mul_ss(_mm_load_ss(p+j), _mm_load_ss(v+j)),accum);
+        _mm_store_ss(r+rows-r_left,accum);
       }
     }
     
     static VNL_SSE_FORCE_INLINE float sum(const float* x, unsigned n) 
     {         
+      float ret;
       __m128 sum = _mm_setzero_ps();              
       switch(n % 4) 
       { // handle vector sizes which aren't divisible by 4
@@ -720,14 +732,16 @@ class vnl_sse<float> {
       for(int i = n-4; i >= 0; i-=4)
         sum = _mm_add_ps(VNL_SSE_HEAP_LOAD(ps)(x+i),sum);
 
-      // sum will contain 4 accumulated values, need to store them in order to add them together
-      float VNL_SSE_STACK_ALIGNED(16) ret[4] ; 
-      VNL_SSE_STACK_STORE(ps)(ret,sum);
-      return ret[0] + ret[1] + ret[2] + ret[3];
+      // sum will contain 4 accumulated values, need to add them together      
+      sum = _mm_add_ps(sum,_mm_movehl_ps(_mm_setzero_ps(),sum));
+      sum = _mm_add_ss(sum,_mm_shuffle_ps(sum,sum,_MM_SHUFFLE(3,2,1,1)));
+      _mm_store_ss(&ret,sum);
+      return ret;
     }
     
     static VNL_SSE_FORCE_INLINE float max(const float* x, unsigned n)
     {
+      float ret;
       __m128 max = _mm_setzero_ps();              
       switch(n % 4) 
       { // handle vector sizes which aren't divisible by 4
@@ -741,22 +755,24 @@ class vnl_sse<float> {
       for(int i = n-4; i >= 0; i-=4)
         max = _mm_max_ps(VNL_SSE_HEAP_LOAD(ps)(x+i), max);
 
-      // need to store max to compare it's four values
-      float ret[4];
-      VNL_SSE_HEAP_STORE(ps)(ret,max);
-      unsigned short p = ret[0] > ret[1] ? 0 : 1, q = ret[2] > ret[3] ? 2 : 3;
-      return ret[p] > ret[q] ? ret[p] : ret[q];
+      // need compare max's four values
+      max = _mm_max_ps(max,_mm_movehl_ps(_mm_setzero_ps(),max));
+      max = _mm_max_ss(max,_mm_shuffle_ps(max,max,_MM_SHUFFLE(3,2,1,1)));
+      _mm_store_ss(&ret,max);   
+      
+      return ret;
     }
     
     static VNL_SSE_FORCE_INLINE float min(const float* x, unsigned n)
     {
+      float ret;
       __m128 min = _mm_set1_ps(FLT_MAX);
       
       switch(n%4)
       { // handle vector sizes which aren't divisible by 4
-        case 3: min = _mm_min_ps(_mm_load_ss(x+--n),min);   
-        case 2: min = _mm_min_ps(_mm_load_ss(x+--n),min);    
-        case 1: min = _mm_min_ps(_mm_load_ss(x+--n),min);
+        case 3: min = _mm_min_ss(min,_mm_load_ss(x+--n));   
+        case 2: min = _mm_min_ss(min,_mm_load_ss(x+--n));    
+        case 1: min = _mm_min_ss(min,_mm_load_ss(x+--n));
         case 0: ;
       }
 
@@ -764,11 +780,13 @@ class vnl_sse<float> {
       for(int i = n-4; i >= 0; i-=4)
         min = _mm_min_ps(VNL_SSE_HEAP_LOAD(ps)(x+i), min);
 
-      // need to store min to compare it's four values
-      float ret[4];
-      VNL_SSE_HEAP_STORE(ps)(ret,min);
-      unsigned short p = ret[0] < ret[1] ? 0 : 1, q = ret[2] < ret[3] ? 2 : 3;
-      return ret[p] < ret[q] ? ret[p] : ret[q];
+
+      // need compare min's four values
+      min = _mm_min_ps(min,_mm_movehl_ps(_mm_setzero_ps(),min));
+      min = _mm_min_ss(min,_mm_shuffle_ps(min,min,_MM_SHUFFLE(3,2,1,1)));
+      _mm_store_ss(&ret,min);   
+      
+      return ret;
     }
 };
 
