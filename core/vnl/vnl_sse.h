@@ -46,15 +46,15 @@
 #if VNL_CONFIG_ENABLE_SSE2 && VXL_HAS_MM_MALLOC
 # define VNL_SSE_ALLOC(n,s,a) _mm_malloc(n*s,a)
 # define VNL_SSE_FREE(v,n,s) _mm_free(v)
-#elif VNL_CONFIG_ENABLE_SSE2 and VXL_HAS_ALIGNED_MALLOC
+#elif VNL_CONFIG_ENABLE_SSE2 && VXL_HAS_ALIGNED_MALLOC
 # include <malloc.h>
 # define VNL_SSE_ALLOC(n,s,a) _aligned_malloc(n*s,a)
 # define VNL_SSE_FREE(v,n,s) _aligned_free(v)
-#elif VNL_CONFIG_ENABLE_SSE2 and VXL_HAS_MINGW_ALIGNED_MALLOC
+#elif VNL_CONFIG_ENABLE_SSE2 && VXL_HAS_MINGW_ALIGNED_MALLOC
 # include <malloc.h>
 # define VNL_SSE_ALLOC(n,s,a) __mingw_aligned_malloc(n*s,a)
 # define VNL_SSE_FREE(v,n,s) __mingw_aligned_free(v)
-#elif VNL_CONFIG_ENABLE_SSE2 and VXL_HAS_POSIX_MEMALIGN
+#elif VNL_CONFIG_ENABLE_SSE2 && VXL_HAS_POSIX_MEMALIGN
 # include <vcl_cstdlib.h>
 # define VNL_SSE_ALLOC(n,s,a) memalign(a,n*s)
 # define VNL_SSE_FREE(v,n,s) free(v)
