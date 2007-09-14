@@ -8,9 +8,14 @@
 
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
+#include <vcl_sstream.h>
 #include <vsl/vsl_indent.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_math.h>
+#include <vul/vul_string.h>
+#include <mbl/mbl_read_props.h>
+#include <mbl/mbl_exception.h>
+#include <mbl/mbl_parse_sequence.h>
 
 const double tol=1e-6;
 
@@ -152,9 +157,10 @@ void vimt3d_transform_3d::params(vnl_vector<double>& v) const
 void vimt3d_transform_3d::setCheck(int n1,int n2,const char* str) const
 {
   if (n1==n2) return;
-  vcl_cerr<<"vimt3d_transform_3d::set() "<<n1<<" parameters required for "
-          <<str<<". Passed "<<n2<<vcl_endl;
-  vcl_abort();
+  vcl_ostringstream ss;
+  ss<<"vimt3d_transform_3d::set() "<<n1<<" parameters required for "
+          <<str<<". Passed "<<n2;
+  throw mbl_exception_abort(ss.str());
 }
 
 //=======================================================================
@@ -198,9 +204,10 @@ void vimt3d_transform_3d::set(const vnl_vector<double>& v, Form form)
     inv_uptodate_=false;
     break;
    default:
-    vcl_cerr << "vimt3d_transform_3d::set() Unexpected form: "
-             << int(form)<<vcl_endl;
-    vcl_abort();
+    vcl_ostringstream ss;
+    ss <<"vimt3d_transform_3d::set() Unexpected form: "
+             << int(form);
+    throw mbl_exception_abort(ss.str());
   }
 }
 
@@ -644,30 +651,6 @@ vimt3d_transform_3d operator*(const vimt3d_transform_3d& L, const vimt3d_transfo
 }
 
 //=======================================================================
-
-short vimt3d_transform_3d::version_no() const
-{
-  return 2;
-}
-
-#if 0 // Not needed since class is not part of a hierarchy.
-//=======================================================================
-
-vcl_string vimt3d_transform_3d::is_a() const
-{
-  return vcl_string("vimt3d_transform_3d");
-}
-
-//=======================================================================
-
-bool vimt3d_transform_3d::is_class(vcl_string const& s) const
-{
-  return s==is_a();
-}
-#endif
-
-//=======================================================================
-
 void vimt3d_transform_3d::print_summary(vcl_ostream& o) const
 {
   o << vsl_indent()<< "Form: ";
@@ -773,11 +756,108 @@ void vimt3d_transform_3d::print_all(vcl_ostream& os) const
   vsl_indent_dec(os);
 }
 
+
+
+//=======================================================================
+void vimt3d_transform_3d::config(vcl_istream& is)
+{
+  mbl_read_props_type props = mbl_read_props_ws(is);
+  vcl_string form = props.get_required_property("form");
+  vul_string_downcase(form);
+
+  bool done=false;
+
+  if (form == "identity")
+  {
+    done=true;
+    form_ = Identity;
+  }
+  else if (form == "translation")
+    form_ = Translation;
+  else if (form == "zoomonly")
+    form_ = ZoomOnly;
+  else if (form == "rigidbody")
+    form_ = RigidBody;
+  else if (form == "similarity")
+    form_ = Similarity;
+  else if (form == "affine")
+    form_ = Affine;
+  else
+    throw mbl_exception_parse_error("Unknown known tranformation: \"" + form + "\"");
+
+  vcl_string vector = props.get_optional_property("vector");
+  if (!vector.empty())
+  {
+    vcl_istringstream ss(vector);
+
+    vcl_vector<double> vec1;
+    mbl_parse_sequence(vcl_cin, vcl_back_inserter(vec1));
+    if (vec1.empty())
+      throw mbl_exception_parse_error("Could not find elements for transformation vector: \""+vector+"\"");
+    vnl_vector<double> vec2(&vec1.front(), vec1.size());
+    try
+    { // translate exception abort into parse error.
+      this->set(vec2, form_);
+    }
+    catch (mbl_exception_abort & e)
+    {
+      throw mbl_exception_parse_error(e.what());
+    }
+    done = true;
+  }
+  if (!done && form_==Translation)
+  {
+    this->set_translation(
+      vul_string_atof(props.get_required_property("t_x")),
+      vul_string_atof(props.get_required_property("t_y")),
+      vul_string_atof(props.get_required_property("t_z")) );
+    done = true;
+  }
+  if (!done && form_==ZoomOnly)
+  {
+    vcl_string s_str = props.get_optional_property("s");
+    if (!s_str.empty())
+      this->set_zoom_only( vul_string_atof(s_str),
+        vul_string_atof(props.get_required_property("t_x")),
+        vul_string_atof(props.get_required_property("t_y")),
+        vul_string_atof(props.get_required_property("t_z")) );
+    else
+      this->set_zoom_only(
+        vul_string_atof(props.get_required_property("s_x")),
+        vul_string_atof(props.get_required_property("s_y")),
+        vul_string_atof(props.get_required_property("s_z")),
+        vul_string_atof(props.get_required_property("t_x")),
+        vul_string_atof(props.get_required_property("t_y")),
+        vul_string_atof(props.get_required_property("t_z")) );
+    done = true;
+  }
+  if (!done && form_==ZoomOnly)
+  {
+    set_rigid_body(
+      vul_string_atof(props.get_required_property("r_x")),
+      vul_string_atof(props.get_required_property("r_y")),
+      vul_string_atof(props.get_required_property("r_z")),
+      vul_string_atof(props.get_required_property("t_x")),
+      vul_string_atof(props.get_required_property("t_y")),
+      vul_string_atof(props.get_required_property("t_z")) );
+    done = true;
+  }
+
+  if (!done) throw mbl_exception_parse_error("Not enough tranformation values specified");
+
+  mbl_read_props_look_for_unused_props(
+    "vimt3d_transform_3d::config", props, mbl_read_props_type());
+  return;
+}
+
+
+
 //=======================================================================
 
 void vimt3d_transform_3d::b_write(vsl_b_ostream& bfs) const
 {
-  vsl_b_write(bfs,version_no());
+  const short version_no = 2;
+  vsl_b_write(bfs,version_no);
   vsl_b_write(bfs,int(form_));
   vsl_b_write(bfs,xx_); vsl_b_write(bfs,xy_); vsl_b_write(bfs,xz_); vsl_b_write(bfs,xt_);
   vsl_b_write(bfs,yx_); vsl_b_write(bfs,yy_); vsl_b_write(bfs,yz_); vsl_b_write(bfs,yt_);

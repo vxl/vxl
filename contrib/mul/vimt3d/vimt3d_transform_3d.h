@@ -256,20 +256,6 @@ class vimt3d_transform_3d
   friend vimt3d_transform_3d operator*(const vimt3d_transform_3d& L,
                                        const vimt3d_transform_3d& R);
 
-  //: Version number for I/O
-  short version_no() const;
-
-#if 0 // This isn't a class tree, so no need for these functions.
-  //: Name of the class
-  virtual vcl_string is_a() const;
-
-  //: True if this is (or is derived from) class named s
-  virtual bool is_class(vcl_string const& s) const;
-
-  //: Create a copy on the heap and return base class pointer
-  virtual vimt3d_transform_3d* clone() const;
-#endif
-
   //: Print class to os
   // This function prints the extracted params.
   // \sa params()
@@ -279,6 +265,24 @@ class vimt3d_transform_3d
   //: Print class to os
   // This function prints the actual parameters xx_,xy_,xz_,xt_, yx_,yy_,yz_,yt_, zx_,zy_,zz_,zt_, tx_,ty_,tz_,tt_
   void print_all(vcl_ostream& os) const;
+
+  //: Set transformation from stream;
+  // You can specify the vector as used in the set() operation.
+  // \verbatim
+  // form: rigidbody
+  // vector: { 0.1 0.1 0.1 2 2 2 }
+  // \endverbatim
+  // or with explicit parameter names from the set_...() methods.
+  // \verbatim
+  // form: rigidbody
+  // r_x: 0.1
+  // r_y: 0.1
+  // r_z: 0.1
+  // t_x: 2
+  // t_y: 2
+  // t_z: 2
+  // \endverbatim
+  void config(vcl_istream& is);
 
   //: Save class to binary file stream
   void b_write(vsl_b_ostream& bfs) const;
