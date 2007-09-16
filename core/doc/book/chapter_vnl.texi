@@ -55,6 +55,13 @@ of Standards and Technology (NIST) provides an excellent search interface
 to this repository in its Guide to Available Mathematical Software (GAMS)
 at @url{http://gams.nist.gov}, both as a decision tree and a text search.
 
+For reasons of modularity (see ``Layering'' in the Introduction Chapter of this
+book) the numerics library is split up into @code{vnl} and @code{vnl-algo}.
+Matrix and polynomial @emph{representations} are in @code{vnl} while anything
+requiring the ``netlib'' software is in @code{vnl-algo}. The Fortran routines
+themselves are implemented outside @code{vxl}, viz. in one of the @code{v3p}
+(``3rd party software'') libraries.
+
 @subsubheading Compliance with the ANSI standard C++ library
 @cindex valarray
 The ANSI standard includes classes
