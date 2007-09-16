@@ -1,6 +1,5 @@
 // This is mul/vimt3d/vimt3d_transform_3d.cxx
 #include "vimt3d_transform_3d.h"
-
 //:
 // \file
 // \brief A class to define and apply a 3D transformation up to affine.
@@ -158,8 +157,8 @@ void vimt3d_transform_3d::setCheck(int n1,int n2,const char* str) const
 {
   if (n1==n2) return;
   vcl_ostringstream ss;
-  ss<<"vimt3d_transform_3d::set() "<<n1<<" parameters required for "
-          <<str<<". Passed "<<n2;
+  ss << "vimt3d_transform_3d::set() " << n1 << " parameters required for "
+     << str << ". Passed " << n2;
   throw mbl_exception_abort(ss.str());
 }
 
@@ -205,8 +204,8 @@ void vimt3d_transform_3d::set(const vnl_vector<double>& v, Form form)
     break;
    default:
     vcl_ostringstream ss;
-    ss <<"vimt3d_transform_3d::set() Unexpected form: "
-             << int(form);
+    ss << "vimt3d_transform_3d::set() Unexpected form: "
+       << int(form);
     throw mbl_exception_abort(ss.str());
   }
 }
@@ -757,7 +756,6 @@ void vimt3d_transform_3d::print_all(vcl_ostream& os) const
 }
 
 
-
 //=======================================================================
 void vimt3d_transform_3d::config(vcl_istream& is)
 {
@@ -783,7 +781,7 @@ void vimt3d_transform_3d::config(vcl_istream& is)
   else if (form == "affine")
     form_ = Affine;
   else
-    throw mbl_exception_parse_error("Unknown known tranformation: \"" + form + "\"");
+    throw mbl_exception_parse_error("Unknown transformation: \"" + form + "\"");
 
   vcl_string vector = props.get_optional_property("vector");
   if (!vector.empty())
@@ -843,13 +841,12 @@ void vimt3d_transform_3d::config(vcl_istream& is)
     done = true;
   }
 
-  if (!done) throw mbl_exception_parse_error("Not enough tranformation values specified");
+  if (!done) throw mbl_exception_parse_error("Not enough transformation values specified");
 
   mbl_read_props_look_for_unused_props(
     "vimt3d_transform_3d::config", props, mbl_read_props_type());
   return;
 }
-
 
 
 //=======================================================================
