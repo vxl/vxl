@@ -23,11 +23,16 @@
 // \verbatim
 // Example:
 // vcl_vector<unsigned> v;
-// mbl_parse_sequence(vcl_cin, vcl_back_inserter(v));
+// mbl_parse_sequence(vcl_cin, vcl_back_inserter(v), unsigned());
 // \endverbatim
-template <class ITER>
-void mbl_parse_sequence(vcl_istream &afs, ITER insert_iter)
+template <class ITER, class T>
+void mbl_parse_sequence(vcl_istream &afs, ITER insert_iter, T dummy)
 {
+  // Can't use iterator_traits<ITER>::value_type to infer T,
+  // because output_iterators may not have a useful value_type
+  // and are defined by the standard to have value_type void,
+  // See http://www.adras.com/Why-no-std-back-insert-iterator-value-type.t2639-153.html
+
   if (!afs) return;
   char brace1, brace2;
   afs >> vcl_ws >> brace1;
@@ -35,8 +40,8 @@ void mbl_parse_sequence(vcl_istream &afs, ITER insert_iter)
 
   if ( brace1 == '{')
   {
-    vcl_copy(vcl_istream_iterator<unsigned>(afs), vcl_istream_iterator<unsigned>(),
-      insert_iter);
+    vcl_copy(vcl_istream_iterator<T>(afs),
+      vcl_istream_iterator<T>(), insert_iter);
 
     if (afs.fail())
       afs.clear();
@@ -54,8 +59,8 @@ void mbl_parse_sequence(vcl_istream &afs, ITER insert_iter)
   {
     afs.putback(brace1);
 
-    vcl_copy(vcl_istream_iterator<unsigned>(afs), vcl_istream_iterator<unsigned>(),
-             insert_iter);
+    vcl_copy(vcl_istream_iterator<T>(afs),
+      vcl_istream_iterator<T>(), insert_iter);
 
     if (afs.fail())
       afs.clear();

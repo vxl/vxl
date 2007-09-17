@@ -21,7 +21,7 @@ void test_parse_sequence()
     vcl_cout << "\nCase 1\n";
     vcl_istringstream ss("{}");
     vcl_vector<unsigned> v;
-    mbl_parse_sequence(ss, vcl_back_inserter(v));
+    mbl_parse_sequence(ss, vcl_back_inserter(v), unsigned());
     vsl_print_summary(vcl_cout, v);
     TEST("Case 1: \"{}\"", v.empty() && !ss.fail(), true);
   }
@@ -30,7 +30,7 @@ void test_parse_sequence()
     vcl_cout << "\nCase 2\n";
     vcl_istringstream ss("{ 5 }");
     vcl_vector<unsigned> v;
-    mbl_parse_sequence(ss, vcl_back_inserter(v));
+    mbl_parse_sequence(ss, vcl_back_inserter(v), unsigned());
     vsl_print_summary(vcl_cout, v);
     TEST("Case 2: \"{ 5 }\"", v.size()==1 && v[0]==5 && !ss.fail(), true);
   }
@@ -39,16 +39,24 @@ void test_parse_sequence()
     vcl_cout << "\nCase 3\n";
     vcl_istringstream ss("{ 1 2 }");
     vcl_vector<unsigned> v;
-    mbl_parse_sequence(ss, vcl_back_inserter(v));
+    mbl_parse_sequence(ss, vcl_back_inserter(v), unsigned());
     vsl_print_summary(vcl_cout, v);
     TEST("Case 3: \"{ 1 2 }\"", v.size()==2 && v[0]==1  && v[1]==2 && !ss.fail(), true);
+  }
+  {
+    vcl_cout << "\nCase 3b\n";
+    vcl_istringstream ss("{ 1.0 2.0 }");
+    vcl_vector<double> v;
+    mbl_parse_sequence(ss, vcl_back_inserter(v), double());
+    vsl_print_summary(vcl_cout, v);
+    TEST("Case 3: \"{ 1.0 2.0 }\"", v.size()==2 && v[0]==1.0  && v[1]==2.0 && !ss.fail(), true);
   }
 
   {
     vcl_cout << "\nCase 4\n";
     vcl_istringstream ss("");
     vcl_vector<unsigned> v;
-    mbl_parse_sequence(ss, vcl_back_inserter(v));
+    mbl_parse_sequence(ss, vcl_back_inserter(v), unsigned());
     vsl_print_summary(vcl_cout, v);
     TEST("Case 4: \"{}\"", v.empty(), true);
   }
@@ -57,7 +65,7 @@ void test_parse_sequence()
     vcl_cout << "\nCase 5\n";
     vcl_istringstream ss(" 5 ");
     vcl_vector<unsigned> v;
-    mbl_parse_sequence(ss, vcl_back_inserter(v));
+    mbl_parse_sequence(ss, vcl_back_inserter(v), unsigned());
     vsl_print_summary(vcl_cout, v);
     TEST("Case 5: \" 0 \"", v.size()==1 && v[0]==5 && !ss.fail(), true);
   }
@@ -66,7 +74,7 @@ void test_parse_sequence()
     vcl_cout << "\nCase 6\n";
     vcl_istringstream ss(" 1 2 ");
     vcl_vector<unsigned> v;
-    mbl_parse_sequence(ss, vcl_back_inserter(v));
+    mbl_parse_sequence(ss, vcl_back_inserter(v), unsigned());
     vsl_print_summary(vcl_cout, v);
     TEST("Case 6: \" 1 2 \"", v.size()==2 && v[0]==1 && v[1]==2 && !ss.fail(), true);
   }
@@ -78,7 +86,7 @@ void test_parse_sequence()
     bool caught = false;
     try
     {
-      mbl_parse_sequence(ss, vcl_back_inserter(v));
+      mbl_parse_sequence(ss, vcl_back_inserter(v), unsigned());
     }
     catch (mbl_exception_parse_error&)
     {
@@ -95,7 +103,24 @@ void test_parse_sequence()
     bool caught = false;
     try
     {
-      mbl_parse_sequence(ss, vcl_back_inserter(v));
+      mbl_parse_sequence(ss, vcl_back_inserter(v), unsigned());
+    }
+    catch (mbl_exception_parse_error&)
+    {
+      caught = true;
+    }
+    vsl_print_summary(vcl_cout, v);
+    TEST("Case 8: \"{ 1 2 \"", ss.fail() && caught, true);
+  }
+
+  {
+    vcl_cout << "\nCase 8\n";
+    vcl_istringstream ss("{ 1 2");
+    vcl_vector<unsigned> v;
+    bool caught = false;
+    try
+    {
+      mbl_parse_sequence(ss, vcl_back_inserter(v), unsigned());
     }
     catch (mbl_exception_parse_error&)
     {
