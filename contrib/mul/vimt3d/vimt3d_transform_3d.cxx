@@ -789,7 +789,7 @@ void vimt3d_transform_3d::config(vcl_istream& is)
     vcl_istringstream ss(vector);
 
     vcl_vector<double> vec1;
-    mbl_parse_sequence(vcl_cin, vcl_back_inserter(vec1));
+    mbl_parse_sequence(ss, vcl_back_inserter(vec1), double());
     if (vec1.empty())
       throw mbl_exception_parse_error("Could not find elements for transformation vector: \""+vector+"\"");
     vnl_vector<double> vec2(&vec1.front(), vec1.size());
@@ -816,28 +816,28 @@ void vimt3d_transform_3d::config(vcl_istream& is)
     vcl_string s_str = props.get_optional_property("s");
     if (!s_str.empty())
       this->set_zoom_only( vul_string_atof(s_str),
-        vul_string_atof(props.get_required_property("t_x")),
-        vul_string_atof(props.get_required_property("t_y")),
-        vul_string_atof(props.get_required_property("t_z")) );
+        vul_string_atof(props.get_optional_property("t_x")),
+        vul_string_atof(props.get_optional_property("t_y")),
+        vul_string_atof(props.get_optional_property("t_z")) );
     else
       this->set_zoom_only(
-        vul_string_atof(props.get_required_property("s_x")),
-        vul_string_atof(props.get_required_property("s_y")),
-        vul_string_atof(props.get_required_property("s_z")),
-        vul_string_atof(props.get_required_property("t_x")),
-        vul_string_atof(props.get_required_property("t_y")),
-        vul_string_atof(props.get_required_property("t_z")) );
+        vul_string_atof(props.get_optional_property("s_x")),
+        vul_string_atof(props.get_optional_property("s_y")),
+        vul_string_atof(props.get_optional_property("s_z")),
+        vul_string_atof(props.get_optional_property("t_x")),
+        vul_string_atof(props.get_optional_property("t_y")),
+        vul_string_atof(props.get_optional_property("t_z")) );
     done = true;
   }
-  if (!done && form_==ZoomOnly)
+  if (!done && form_==RigidBody)
   {
     set_rigid_body(
-      vul_string_atof(props.get_required_property("r_x")),
-      vul_string_atof(props.get_required_property("r_y")),
-      vul_string_atof(props.get_required_property("r_z")),
-      vul_string_atof(props.get_required_property("t_x")),
-      vul_string_atof(props.get_required_property("t_y")),
-      vul_string_atof(props.get_required_property("t_z")) );
+      vul_string_atof(props.get_optional_property("r_x")),
+      vul_string_atof(props.get_optional_property("r_y")),
+      vul_string_atof(props.get_optional_property("r_z")),
+      vul_string_atof(props.get_optional_property("t_x")),
+      vul_string_atof(props.get_optional_property("t_y")),
+      vul_string_atof(props.get_optional_property("t_z")) );
     done = true;
   }
 
