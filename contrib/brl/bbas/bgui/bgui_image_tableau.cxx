@@ -8,64 +8,38 @@
 #include <vcl_cmath.h>
 #include <vcl_cstdio.h> // sprintf
 #include <vgui/vgui_event.h>
-#include <vgui/vgui_gl.h>
+#include <vgui/vgui.h>
 #include <vgui/vgui_projection_inspector.h>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_rgba.h>
 #include <vil/vil_image_view.h>
-#include <vgui/vgui.h>
+
 
 //-----------------------------------------------------------------------------
 //: The constructor takes a snapshot of the current viewport and scissor areas.
 //  The destructor restores that state.
-class bgui_image_tableau_vp_sc_snapshot
-{
- public:
-  GLint vp[4];
-  GLint sc[4];
-  bool sc_was_enabled;
 
-  bgui_image_tableau_vp_sc_snapshot() {
-    glGetIntegerv(GL_VIEWPORT, vp);
-
-    glGetIntegerv(GL_SCISSOR_BOX, sc);
-    sc_was_enabled = glIsEnabled(GL_SCISSOR_TEST) == GL_TRUE;
-  }
-
-  ~bgui_image_tableau_vp_sc_snapshot() {
-    // restore viewport :
-    glViewport(vp[0], vp[1], vp[2], vp[3]);
-
-    // turn off the scissor test, if it wasn't already on, and
-    // restore old scissor settings :
-    if (sc_was_enabled)
-      glEnable(GL_SCISSOR_TEST);
-    else
-      glDisable(GL_SCISSOR_TEST);
-    glScissor(sc[0], sc[1], sc[2], sc[3]);
-  }
-};
 
 //--------------------------------------------------------------------------------
 
 bgui_image_tableau::bgui_image_tableau()
-  { handle_motion_ = true; }
+  { handle_motion_ = true; locked_ = false;}
 
 bgui_image_tableau::bgui_image_tableau(vil_image_resource_sptr const & img,
                                        vgui_range_map_params_sptr const& rmp)
- : base(img, rmp) { handle_motion_ = true; }
+ : base(img, rmp) { handle_motion_ = true; locked_ = false;}
 
 bgui_image_tableau::bgui_image_tableau(vil_image_view_base const & img,
                                        vgui_range_map_params_sptr const& rmp)
- : base(img, rmp) { handle_motion_ = true; }
+ : base(img, rmp) { handle_motion_ = true; locked_ = false;}
 
 bgui_image_tableau::bgui_image_tableau(vil1_image const & img,
                                        vgui_range_map_params_sptr const& rmp)
- : base(img, rmp) { handle_motion_ = true; }
+ : base(img, rmp) { handle_motion_ = true; locked_ = false;}
 
 bgui_image_tableau::bgui_image_tableau(char const *f,
                                        vgui_range_map_params_sptr const& rmp)
- : base(f, rmp) { handle_motion_ = true; }
+ : base(f, rmp) { handle_motion_ = true; locked_ = false;}
 
 //--------------------------------------------------------------------------------
 
@@ -447,7 +421,9 @@ bool bgui_image_tableau::handle(vgui_event const &e)
     bgui_image_tableau_vp_sc_snapshot snap;
 
     // Display on status bar:
-    vgui::out << msg << vcl_endl;
+    if (!locked_) {
+      vgui::out << msg << vcl_endl;
+    }
   }
   return base::handle(e);
 }

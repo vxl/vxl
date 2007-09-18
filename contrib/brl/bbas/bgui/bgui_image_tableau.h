@@ -22,6 +22,36 @@
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view_base.h>
 #include <vil1/vil1_image.h>
+#include <vgui/vgui_gl.h>
+
+class bgui_image_tableau_vp_sc_snapshot
+{
+ public:
+  GLint vp[4];
+  GLint sc[4];
+  bool sc_was_enabled;
+
+  bgui_image_tableau_vp_sc_snapshot() {
+    glGetIntegerv(GL_VIEWPORT, vp);
+	
+	//vcl_cout << "Saving    [" << vp[0] << " " << vp[1] << " " << vp[2] << " " << vp[3] << vcl_endl;
+    glGetIntegerv(GL_SCISSOR_BOX, sc);
+    sc_was_enabled = glIsEnabled(GL_SCISSOR_TEST) == GL_TRUE;
+  }
+
+  ~bgui_image_tableau_vp_sc_snapshot() {
+    // restore viewport :
+    glViewport(vp[0], vp[1], vp[2], vp[3]);
+	//vcl_cout << "restoring [" << vp[0] << " " << vp[1] << " " << vp[2] << " " << vp[3] << vcl_endl;
+    // turn off the scissor test, if it wasn't already on, and
+    // restore old scissor settings :
+    if (sc_was_enabled)
+      glEnable(GL_SCISSOR_TEST);
+    else
+      glDisable(GL_SCISSOR_TEST);
+    glScissor(sc[0], sc[1], sc[2], sc[3]);
+  }
+};
 
 class bgui_image_tableau : public vgui_image_tableau
 {
@@ -63,6 +93,10 @@ class bgui_image_tableau : public vgui_image_tableau
   void unset_handle_motion(){handle_motion_ = false;}
 
   bool handle_motion(){return handle_motion_;} 
+
+  // true means locked, false unlocked
+  void lock_linenum(bool b) { locked_ = b; }
+  
  protected:
   //: Handle all events for this tableau.
   bool handle(vgui_event const &e);
@@ -79,6 +113,8 @@ class bgui_image_tableau : public vgui_image_tableau
                                  vgui_event const &e, char* msg);
   //: If false this tableau stops handling motion
   bool handle_motion_;
+
+  bool locked_;
 };
 
 //: Creates a smart-pointer to a bgui_image_tableau.
