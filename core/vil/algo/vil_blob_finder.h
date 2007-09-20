@@ -22,6 +22,11 @@
 //  case the supplied image (im) will be erased as the blob finder goes
 //  about it's humble task.
 //
+//  Warning: Due to the simplicity of the algorithm, it cannot cope with
+//  nested blobs.  In fact, due to the naive method of deleting found blobs,
+//  any holes in blobs may lead to odd effects.  This algorithm probably needs
+//  re-visiting soon! Thanks to Simon Drouin for pointing this out.
+//
 //  \code
 //  vcl_vector<int> bi,bj;
 //  vil_blob_finder finder(bool_image);
