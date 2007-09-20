@@ -1,0 +1,17 @@
+// The following text is included in the main documentation page by doxygen
+/*! \mainpage mmn: Manchester Markov Network library
+* Classes to represent markov networks (nodes with connections to
+* neighbours).
+* Includes algorithms to find the minimum of assignment problems
+* of the form E = sum f(x(i)) + sum g(x(i),x(j))  where f(x) is
+* a cost for assignment to a particular node, and g(x1,x2) is
+* a pair-wise cost for neighbouring nodes.
+*
+* Where the graph defined by nodes and arcs is a tree structure,
+* (ie acyclic) a variant of dynamic programming can efficiently
+* find the minima.
+*
+* Where the graph has a limited number of closed loops, other
+* fairly efficient algorithms can be used. 
+*
+*/
