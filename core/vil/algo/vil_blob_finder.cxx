@@ -77,6 +77,52 @@ bool vil_blob_finder::next_4con_region(vcl_vector<int>& bi, vcl_vector<int>& bj)
   return false;  // Reached end of image without finding another blob
 }
 
+//: Get pixels of next blob in current image.
+// Uses four connected boundary representation.
+// Return false if no more regions
+bool vil_blob_finder::next_4con_region(vcl_vector<vil_chord>& region)
+{
+  region.resize(0);
+  // Start from current pixel (i_,j_), run over rows until matching pixel found
+  for (; j_<image_.nj(); ++j_,i_=0)
+  {
+    for (; i_<image_.ni(); ++i_)
+    {
+      if (image_(i_,j_))
+      {
+         // Delete blob by flood filling it with false
+        vil_flood_fill4(image_,i_,j_,true,false,region);
+        return true;
+      }
+    }
+  }
+
+  return false;  // Reached end of image without finding another blob
+}
+
+//: Get pixels of next blob in current image.
+// Uses 8 connected boundary representation.
+// Return false if no more regions
+bool vil_blob_finder::next_8con_region(vcl_vector<vil_chord>& region)
+{
+  region.resize(0);
+  // Start from current pixel (i_,j_), run over rows until matching pixel found
+  for (; j_<image_.nj(); ++j_,i_=0)
+  {
+    for (; i_<image_.ni(); ++i_)
+    {
+      if (image_(i_,j_))
+      {
+         // Delete blob by flood filling it with false
+        vil_flood_fill8(image_,i_,j_,true,false,region);
+        return true;
+      }
+    }
+  }
+
+  return false;  // Reached end of image without finding another blob
+}
+
 //: Get longest blob boundary in current image
 //  Assumes image has been initialised, and that next_4con_region not
 //  yet called.  Erases internal image during this call, so any
@@ -147,6 +193,42 @@ void vil_blob_finder::longest_8con_boundary(vcl_vector<int>& bi, vcl_vector<int>
       vcl_swap(bj,tmp_bj);
     }
   }
+}
+
+//: Get largest blob region in current image
+unsigned vil_blob_finder::largest_8con_region(vcl_vector<vil_chord>& region)
+{
+  region.resize(0); 
+  vcl_vector<vil_chord> tmp_region;
+  unsigned max_area=0;
+  while (next_8con_region(tmp_region))
+  {
+    unsigned area = vil_area(tmp_region);
+    if (area>max_area)
+    {
+      vcl_swap(region,tmp_region);
+      max_area=area;
+    }
+  }
+  return max_area;
+}
+
+//: Get largest blob region in current image
+unsigned vil_blob_finder::largest_4con_region(vcl_vector<vil_chord>& region)
+{
+  region.resize(0); 
+  vcl_vector<vil_chord> tmp_region;
+  unsigned max_area=0;
+  while (next_4con_region(tmp_region))
+  {
+    unsigned area = vil_area(tmp_region);
+    if (area>max_area)
+    {
+      vcl_swap(region,tmp_region);
+      max_area=area;
+    }
+  }
+  return max_area;
 }
 
 //: Get number of blobs in given image
