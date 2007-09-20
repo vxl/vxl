@@ -12,8 +12,7 @@
 //  Class to iterate through image, finding boundaries of all regions
 //  (connected true pixels).
 //
-//  Currently only 4-connected regions supported. Sometime 8-connected will
-//  be added.
+// Can deal with both 4-connected and 8-connected regions.
 //
 //  Note that the usual use of the class copies the boolean image input,
 //  then erases the true pixels as it goes through finding the blobs (in
@@ -22,10 +21,9 @@
 //  case the supplied image (im) will be erased as the blob finder goes
 //  about it's humble task.
 //
-//  Warning: Due to the simplicity of the algorithm, it cannot cope with
-//  nested blobs.  In fact, due to the naive method of deleting found blobs,
-//  any holes in blobs may lead to odd effects.  This algorithm probably needs
-//  re-visiting soon! Thanks to Simon Drouin for pointing this out.
+//  Where a blob has holes, only the outside of the blob is located.
+//  The algorithm will locate nested blobs (ie a blob within a hole
+//  inside another blob).
 //
 //  \code
 //  vcl_vector<int> bi,bj;

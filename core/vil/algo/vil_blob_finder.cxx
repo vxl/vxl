@@ -6,6 +6,7 @@
 #include "vil_blob_finder.h"
 #include "vil_trace_4con_boundary.h"
 #include "vil_trace_8con_boundary.h"
+#include "vil_flood_fill.h"
 
 //: Default constructor
 vil_blob_finder::vil_blob_finder()
@@ -66,7 +67,8 @@ bool vil_blob_finder::next_4con_region(vcl_vector<int>& bi, vcl_vector<int>& bj)
       if (image_(i_,j_))
       {
         vil_trace_4con_boundary(bi,bj,image_,i_,j_);
-        delete_blob(image_,bi,bj);
+         // Delete blob by flood filling it with false
+        vil_flood_fill4(image_,bi[0],bj[0],true,false);
         return true;
       }
     }
@@ -119,7 +121,8 @@ bool vil_blob_finder::next_8con_region(vcl_vector<int>& bi, vcl_vector<int>& bj)
       if (image_(i_,j_))
       {
         vil_trace_8con_boundary(bi,bj,image_,i_,j_);
-        delete_blob(image_,bi,bj);
+         // Delete blob by flood filling it with false
+        vil_flood_fill8(image_,bi[0],bj[0],true,false);
         return true;
       }
     }

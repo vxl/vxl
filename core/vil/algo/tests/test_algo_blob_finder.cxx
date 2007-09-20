@@ -10,6 +10,18 @@ static void show_boundary(const vcl_vector<int>& bi,const vcl_vector<int>& bj)
   vcl_cout<<vcl_endl;
 }
 
+static inline void print_binary_image(const vil_image_view<bool>& im)
+{
+  for (unsigned j=0;j<im.nj();++j)
+  {
+    for (unsigned i=0;i<im.ni();++i)
+      if (im(i,j)) vcl_cout<<"X";
+      else         vcl_cout<<".";
+    vcl_cout<<vcl_endl;
+  }
+}
+
+
 static void test_algo_blob_finder()
 {
   vcl_cout<<"=== Testing vil_blob_finder ===\n";
@@ -67,6 +79,19 @@ static void test_algo_blob_finder()
   finder.longest_4con_boundary(bi,bj);
   show_boundary(bi,bj);
   TEST("Length of boundary (Horizontal line)",bi.size(),18);
+
+  vcl_cout<<"Test nested blobs."<<vcl_endl;
+  image.fill(false);
+  vil_crop(image, 3,6, 3,6).fill(true);
+  vil_crop(image, 4,4, 4,4).fill(false);
+  vil_crop(image, 5,2, 5,2).fill(true);
+  finder.set_image(image);
+  print_binary_image(image);
+  TEST("Got a blob",finder.next_4con_region(bi,bj),true);
+  TEST("Length of boundary (Square)",bi.size(),20);
+  TEST("Got internal blob",finder.next_4con_region(bi,bj),true);
+  TEST("Length of boundary (Square)",bi.size(),4);
+
 }
 
 
