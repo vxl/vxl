@@ -139,10 +139,13 @@ bool vnl_conjugate_gradient::minimize( vnl_vector<double> &x)
   double gradient_tolerance = gtol;
   vnl_vector<double> workspace(f_->get_number_of_unknowns()*3);
   long number_of_unknowns = f_->get_number_of_unknowns();
+  long error_code;
 
+  // Compute the initial value.
   start_error_ = valuecomputer_(xp, this);
   num_evaluations_ = 0;
 
+  // Run the conjugate gradient algorithm.
   v3p_netlib_cg_(
        xp,
        &max_norm_of_gradient,
@@ -164,12 +167,29 @@ bool vnl_conjugate_gradient::minimize( vnl_vector<double> &x)
        preconditioner_,
 #endif
        workspace.data_block(),
-       this);
+       this,
+       &error_code);
 
+  // Check for an error condition.
+  if(error_code > 0)
+    {
+    failure_code_ = ERROR_DODGY_INPUT;
+    if(verbose_)
+      {
+      switch (error_code)
+        {
+        case 1: printf("UNABLE TO OBTAIN DESCENT DIRECTION\n"); break;
+        case 2: printf("THE FUNCTION DECREASES WITH NO MINIMUM\n"); break;
+        case 3: printf("PRECONDITIONER NOT POSITIVE DEFINITE\n"); break;
+        }
+      }
+    }
+
+  // Compute the final value.
   end_error_= valuecomputer_(xp, this);
   num_iterations_ = number_of_iterations;
 
-  return true;
+  return (error_code == 0);
 }
 
 
