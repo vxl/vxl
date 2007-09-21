@@ -14,4 +14,14 @@
 * Where the graph has a limited number of closed loops, other
 * fairly efficient algorithms can be used. 
 *
+* The mmn_dp_solver computes minima for graphs which can be
+* reduced to empty sets by repeatedly removing any node with
+* one or two neighbours.  If there are na arcs, and
+* n options per node, it has a complexity of about na*n^3
+* in the worst case (every node depending on two others).
+*
+* The mmn_graph_rep1 stores a representation of the graph
+* optimised for computing the dependancies of the nodes 
+* suitable for solving in a sequential manner.
+*
 */
