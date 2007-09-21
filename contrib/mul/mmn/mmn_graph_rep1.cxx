@@ -142,7 +142,7 @@ unsigned mmn_graph_rep1::remove_pair_deps(vcl_vector<mmn_dependancy>& deps)
       unsigned v1 = node_data_[v0][0].first;
       unsigned arc1 = node_data_[v0][0].second;
       unsigned v2 = node_data_[v0][1].first;
-      unsigned arc2 = node_data_[v0][0].second;
+      unsigned arc2 = node_data_[v0][1].second;
 
       // Find arc between v1-v2, or create one if necessary
       unsigned arc12 = get_arc(v1,v2);

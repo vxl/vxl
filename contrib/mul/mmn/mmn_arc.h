@@ -13,6 +13,10 @@ public:
   mmn_arc() :v1(999999),v2(999999) {};
   mmn_arc(unsigned i1, unsigned i2) : v1(i1),v2(i2) {};
 
+  //: Return smallest node index
+  unsigned min_v() const { return (v1<v2?v1:v2); }
+  //: Return largest node index
+  unsigned max_v() const { return (v1<v2?v2:v1); }
 };
 
 inline bool operator==(const mmn_arc& t1, const mmn_arc& t2)
