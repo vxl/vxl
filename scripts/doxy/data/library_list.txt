@@ -90,6 +90,7 @@ contrib/mul vimt3d vimt3d_ build contrib/mul/vil3d contrib/mul/vimt core/vnl
 contrib/mul mvl2   mvl2_   build core/vil core/vul
 contrib/mul ipts   ipts_   build contrib/mul/vimt contrib/mul/mbl
 contrib/mul fhs    fhs_    build contrib/mul/vimt contrib/mul/mbl
+contrib/mul mmn    mmn_    build contrib/mul/mbl
 
 package: :pserver:anonymous@vxl.cvs.sourceforge.net:/cvsroot/vxl contrib/tbl Image Processing Libraries
 contrib/tbl vepl2  vepl2_  build contrib/tbl/vipl core/vil
