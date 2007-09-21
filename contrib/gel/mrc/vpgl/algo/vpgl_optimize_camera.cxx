@@ -125,6 +125,16 @@ vpgl_orientation_position_calibration_lsqr::f(vnl_vector<double> const& x, vnl_v
   kk.fill(0);
   kk[0][0]=x[6]; kk[0][2]=x[7];
   kk[1][1]=x[8]; kk[1][2]=x[9]; kk[2][2]=1.0;
+
+  // Check that it is a valid calibration matrix.
+  if( !(kk[0][0]>0) || !(kk[1][1]>0) ){
+    for (unsigned int i=0; i<world_points_.size(); ++i){
+      fx[2*i]   = 100000000;
+      fx[2*i+1] = 100000000;
+    }
+    return;
+  }
+
   vpgl_calibration_matrix<double> K(kk);
   vpgl_perspective_camera<double> cam(K, t, R);
   for (unsigned int i=0; i<world_points_.size(); ++i)

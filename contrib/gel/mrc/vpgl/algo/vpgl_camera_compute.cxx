@@ -21,6 +21,9 @@
 #include <vpgl/algo/vpgl_ortho_procrustes.h>
 #include <vpgl/algo/vpgl_optimize_camera.h>
 #include <vgl/vgl_box_3d.h>
+
+#include <bgeo/bgeo_lvcs.h>
+
 //#define CAMERA_DEBUG
 //------------------------------------------
 bool
@@ -707,5 +710,168 @@ compute( vpgl_rational_camera<double> const& rat_cam,
   return true;
 }
 
+
+bool vpgl_perspective_camera_compute::
+compute_local( vpgl_rational_camera<double> const& rat_cam,
+         vgl_box_3d<double> const& approximation_volume,
+         vpgl_perspective_camera<double>& camera,
+         vgl_h_matrix_3d<double>& norm_trans)
+{
+  // Set up the geo converter.
+  double lon_low = approximation_volume.min_x();
+  double lon_high = approximation_volume.max_x();
+  double lat_low = approximation_volume.min_y();
+  double lat_high = approximation_volume.max_y();
+  assert( lat_low < lat_high && lon_low < lon_high );
+  bgeo_lvcs lvcs_converter( lat_low, lon_low, 
+    .5*(approximation_volume.min_z()+approximation_volume.max_z()), bgeo_lvcs::wgs84, bgeo_lvcs::DEG );
+
+  // Get a new local bounding box.
+  double min_lx = 100000000000, min_ly = 100000000000, min_lz = 100000000000;
+  double max_lx = -100000000000, max_ly = -100000000000, max_lz = -100000000000;
+  for( int cx = 0; cx < 2; cx++ ){
+    for( int cy = 0; cy < 2; cy++ ){
+      for( int cz = 0; cz < 2; cz++ ){
+        vgl_point_3d<double> wc( 
+          approximation_volume.min_x()*cx + approximation_volume.max_x()*(1-cx),
+          approximation_volume.min_y()*cy + approximation_volume.max_y()*(1-cy),
+          approximation_volume.min_z()*cz + approximation_volume.max_z()*(1-cz) );
+        double lcx, lcy, lcz;
+        lvcs_converter.global_to_local(
+          wc.x(), wc.y(), wc.z(), bgeo_lvcs::wgs84, lcx, lcy, lcz );
+        vgl_point_3d<double> wc_loc( lcx, lcy, lcz );
+        if( wc_loc.x() < min_lx ) min_lx = wc_loc.x();
+        if( wc_loc.y() < min_ly ) min_ly = wc_loc.y();
+        if( wc_loc.z() < min_lz ) min_lz = wc_loc.z();
+        if( wc_loc.x() > max_lx ) max_lx = wc_loc.x();
+        if( wc_loc.y() > max_ly ) max_ly = wc_loc.y();
+        if( wc_loc.z() > max_lz ) max_lz = wc_loc.z();
+      }
+    }
+  }
+  double dlx = max_lx-min_lx, dly = max_ly-min_ly, dlz = max_lz-min_lz;
+
+  norm_trans.set_identity();
+  norm_trans.set(0,0,2/dlx); norm_trans.set(1,1,2/dly); norm_trans.set(2,2,2/dlz);
+  norm_trans.set(0,3, -1-2*min_lx/dlx );
+  norm_trans.set(1,3, -1-2*min_ly/dly);
+  norm_trans.set(2,3, -1-2*min_lz/dlz);
+
+  vpgl_scale_offset<double> sou =
+    rat_cam.scl_off(vpgl_rational_camera<double>::U_INDX);
+  vpgl_scale_offset<double> sov =
+    rat_cam.scl_off(vpgl_rational_camera<double>::V_INDX);
+  vpgl_scale_offset<double> sox =
+    rat_cam.scl_off(vpgl_rational_camera<double>::X_INDX);
+  vpgl_scale_offset<double> soy =
+    rat_cam.scl_off(vpgl_rational_camera<double>::Y_INDX);
+  vpgl_scale_offset<double> soz =
+    rat_cam.scl_off(vpgl_rational_camera<double>::Z_INDX);
+  unsigned ni = static_cast<unsigned>(2*sou.scale());//# image columns
+  unsigned nj = static_cast<unsigned>(2*sov.scale());//# image rows
+
+
+  vgl_point_3d<double> minp = approximation_volume.min_point();
+  vgl_point_3d<double> maxp = approximation_volume.max_point();
+  double xmin = minp.x(), ymin = minp.y(), zmin = minp.z();
+  double xrange = maxp.x()-xmin, yrange = maxp.y()-ymin,
+    zrange = maxp.z()-zmin;
+  if (xrange<0||yrange<0||zrange<0)
+    return false;
+  //Randomly generate points
+  unsigned n = 100;
+  vcl_vector<vgl_point_3d<double> > world_pts;
+  unsigned count = 0, ntrials = 0;
+  while (count<n)
+  {
+    ntrials++;
+    double rx = xrange*(vcl_rand()/(RAND_MAX+1.0));
+    double ry = yrange*(vcl_rand()/(RAND_MAX+1.0));
+    double rz = zrange*(vcl_rand()/(RAND_MAX+1.0));
+    vgl_point_3d<double> wp(xmin+rx, ymin+ry, zmin+rz);
+
+    vgl_point_2d<double> ip = rat_cam.project(wp);
+    if (ip.x()<0||ip.x()>ni||ip.y()<0||ip.y()>nj)
+      continue;
+    world_pts.push_back(wp);
+    count++;
+  }
+  vcl_cout << "Ntrials " << ntrials << '\n';
+
+  //Normalize world and image points to the range [-1,1]
+  vcl_vector<vgl_point_3d<double> > norm_world_pts;
+  vcl_vector<vgl_point_2d<double> > image_pts, norm_image_pts;
+  unsigned N = world_pts.size();
+  for (unsigned i = 0; i<N; ++i)
+  {
+    vgl_point_3d<double> wp = world_pts[i];
+    vgl_point_2d<double> ip = rat_cam.project(wp);
+    image_pts.push_back(ip);
+    vgl_point_2d<double> nip(sou.normalize(ip.x()), sov.normalize(ip.y()));
+    norm_image_pts.push_back(nip);
+
+    // Convert to local coords.
+    double lcx, lcy, lcz;
+    lvcs_converter.global_to_local(
+      wp.x(), wp.y(), wp.z(), bgeo_lvcs::wgs84, lcx, lcy, lcz );
+    vgl_homg_point_3d<double> wp_loc( lcx, lcy, lcz );
+
+    vgl_homg_point_3d<double> nwp = norm_trans*wp_loc;
+    assert( fabs(nwp.x()) <= 1 && fabs(nwp.y()) <= 1 && fabs(nwp.z()) <= 1 );
+    norm_world_pts.push_back(vgl_point_3d<double>(nwp) );
+  }
+  //Assume identity calibration matrix initially, since image point
+  //normalization remove any scale and offset from image coordinates
+  vnl_matrix_fixed<double, 3, 3> kk;
+  kk.fill(0);
+  kk[0][0]= 1.0;
+  kk[1][1]= 1.0;
+  kk[2][2]=1.0;
+  //Compute solution for rotation and translation and calibration matrix of
+  //the perspective camera
+  vpgl_calibration_matrix<double> K(kk);
+  bool good = 
+    vpgl_perspective_camera_compute::compute(norm_image_pts,
+                                                 norm_world_pts,
+                                                 K, camera);
+  if (!good)
+    return false;
+  vcl_cout << camera << '\n';
+  //form the full camera by premultiplying by the image normalization
+  vpgl_calibration_matrix<double> Kmin = camera.get_calibration();
+  vnl_matrix_fixed<double, 3, 3> kk_min;
+  kk_min = Kmin.get_matrix();
+  kk[0][0]= sou.scale(); kk[0][2]= sou.offset();
+  kk[1][1]= sov.scale(); kk[1][2]= sov.offset();
+  kk *= kk_min;
+  camera.set_calibration(kk);
+
+  //project the points approximated
+  double err_max = 0, err_min = 1e10;
+  vgl_point_3d<double> min_pt, max_pt;
+  for (unsigned i = 0; i<N; ++i)
+  {
+    vgl_point_3d<double> nwp = norm_world_pts[i];
+    double U ,V;
+    camera.project(nwp.x(), nwp.y(), nwp.z(), U, V);
+    vgl_point_2d<double> ip = image_pts[i];
+    double error = vcl_sqrt((ip.x()-U)*(ip.x()-U) + (ip.y()-V)*(ip.y()-V));
+    if ( error > err_max )
+    {
+      err_max = error;
+      max_pt = world_pts[i];
+    }
+    if (error < err_min)
+    {
+      err_min = error;
+      min_pt = world_pts[i];
+    }
+  }
+  vcl_cout << "Max Error = " << err_max << " at " << max_pt << '\n'
+           << "Min Error = " << err_min << " at " << min_pt << '\n'
+
+           << "final cam\n" << camera << '\n';
+  return true;
+}
 
 #endif // vpgl_camera_compute_cxx_

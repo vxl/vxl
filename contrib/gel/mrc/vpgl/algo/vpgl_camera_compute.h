@@ -86,6 +86,13 @@ class vpgl_perspective_camera_compute
                 vgl_box_3d<double> const& approximation_volume,
                 vpgl_perspective_camera<double>& camera,
                 vgl_h_matrix_3d<double>& norm_trans);
+
+  //: Compute from rational camera using a local euclidian coordinate system.
+  static bool compute_local( vpgl_rational_camera<double> const& rat_cam,
+                vgl_box_3d<double> const& approximation_volume,
+                vpgl_perspective_camera<double>& camera,
+                vgl_h_matrix_3d<double>& norm_trans);
+
  private:
   vpgl_perspective_camera_compute();
 };
