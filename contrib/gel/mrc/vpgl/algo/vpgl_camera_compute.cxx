@@ -727,8 +727,7 @@ compute_local( vpgl_rational_camera<double> const& rat_cam,
     .5*(approximation_volume.min_z()+approximation_volume.max_z()), bgeo_lvcs::wgs84, bgeo_lvcs::DEG );
 
   // Get a new local bounding box.
-  double min_lx = 100000000000, min_ly = 100000000000, min_lz = 100000000000;
-  double max_lx = -100000000000, max_ly = -100000000000, max_lz = -100000000000;
+  double min_lx, min_ly, min_lz, max_lx, max_ly, max_lz;
   for( int cx = 0; cx < 2; cx++ ){
     for( int cy = 0; cy < 2; cy++ ){
       for( int cz = 0; cz < 2; cz++ ){
@@ -740,6 +739,12 @@ compute_local( vpgl_rational_camera<double> const& rat_cam,
         lvcs_converter.global_to_local(
           wc.x(), wc.y(), wc.z(), bgeo_lvcs::wgs84, lcx, lcy, lcz );
         vgl_point_3d<double> wc_loc( lcx, lcy, lcz );
+        if( cx == 0 && cy == 0 && cz == 0 ){
+          min_lx = wc_loc.x(); max_lx = wc_loc.x();
+          min_ly = wc_loc.y(); max_ly = wc_loc.y();
+          min_lz = wc_loc.z(); max_lz = wc_loc.z();
+          continue;
+        }
         if( wc_loc.x() < min_lx ) min_lx = wc_loc.x();
         if( wc_loc.y() < min_ly ) min_ly = wc_loc.y();
         if( wc_loc.z() < min_lz ) min_lz = wc_loc.z();
