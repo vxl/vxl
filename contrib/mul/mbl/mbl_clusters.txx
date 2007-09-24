@@ -13,6 +13,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
+#include <vcl_algorithm.h>
 
 //: Default constructor
 template<class T, class D>
@@ -139,14 +140,86 @@ unsigned mbl_clusters<T,D>::nearest_cluster(const T& t, double& d) const
   return best_j;
 }
 
+//: Return indices of clusters which may contain nearest point to t
+//  Searches through all the clusters
+template<class T, class D>
+void mbl_clusters<T,D>::nearest_clusters(const T& t, double& max_d,
+                           vcl_vector<unsigned>& near_c) const
+{
+  assert(p_.size()>0);
+
+  vcl_vector<unsigned> c1;
+  vcl_vector<double> d1;
+
+  double d = D::d(p_[0],t);
+  c1.push_back(0);
+  d1.push_back(d);
+  max_d = d+r_[0];
+
+  // Try each cluster in turn, recording any that might include closest
+  for (unsigned j=1;j<p_.size();++j)
+  {
+    double dj = D::d(t,p_[j]);
+    if (dj-r_[j]<=max_d) 
+    { 
+      c1.push_back(j);
+      d1.push_back(dj);
+      max_d=vcl_min(max_d,dj+r_[j]);
+    }
+  }
+
+  // Pass through the data again to prune out far clusters
+  near_c.resize(0);
+  for (unsigned i=0;i<c1.size();++i)
+  {
+    if (d1[i]-r_[c1[i]]<=max_d) near_c.push_back(c1[i]);
+  }
+}
+
+//: Return indices of clusters which may contain nearest point to t
+//  Searches through clusters listed in c_list.
+//  On input, max_d gives initial limit on distance.
+//  On exit, max_d gives the revised limit on the distance
+template<class T, class D>
+void mbl_clusters<T,D>::nearest_clusters(const T& t, double& max_d,
+                           const vcl_vector<unsigned>& c_list,
+                           vcl_vector<unsigned>& near_c) const
+{
+  assert(p_.size()>0);
+
+  // Storage for first pass
+  vcl_vector<unsigned> c1;
+  vcl_vector<double> d1;
+
+  // Try each cluster in turn, recording any that might include closest
+  for (unsigned k=0;k<c_list.size();++k)
+  {
+    unsigned j=c_list[k];
+    double dj = D::d(t,p_[j]);
+    if (dj-r_[j]<=max_d) 
+    { 
+      c1.push_back(j);
+      d1.push_back(dj);
+      max_d=vcl_min(max_d,dj+r_[j]);
+    }
+  }
+
+  // Pass through the data again to prune out far clusters
+  near_c.resize(0);
+  for (unsigned i=0;i<c1.size();++i)
+  {
+    if (d1[i]-r_[c1[i]]<=max_d) near_c.push_back(c1[i]);
+  }
+}
+
 //: Create a new cluster around point index i
 // Return index of cluster
 template<class T, class D>
-unsigned mbl_clusters<T,D>::create_cluster(unsigned new_i)
+unsigned mbl_clusters<T,D>::create_cluster(unsigned new_i, double r)
 {
   // Create a new cluster using this as a key point
   p_.push_back(data()[new_i]);
-  r_.push_back(0);
+  r_.push_back(r);
   vcl_vector<unsigned> ind(1);
   ind[0]=new_i;
   index_.push_back(ind);
@@ -159,15 +232,16 @@ unsigned mbl_clusters<T,D>::create_cluster(unsigned new_i)
 //  Create new cluster if further than max_r() from any.
 //  Return index of cluster it is assigned to
 template<class T, class D>
-unsigned mbl_clusters<T,D>::add_object(unsigned new_i)
+unsigned mbl_clusters<T,D>::add_object(unsigned new_i, double r)
 {
   assert(new_i<data_->size());
 
   // If initially empty, create one cluster
-  if (p_.size()==0) return create_cluster(new_i);
+  if (p_.size()==0) return create_cluster(new_i,r);
 
   double d;
   unsigned j=nearest_cluster(data()[new_i],d);
+  d+=r;  // Allow for new_i being key point of another cluster, radius r
   if (d<max_r_)
   {
     // Add it to cluster j
@@ -175,11 +249,130 @@ unsigned mbl_clusters<T,D>::add_object(unsigned new_i)
     if (d>r_[j]) r_[j]=d;  // Update max radius of cluster
   }
   else
-    j=create_cluster(new_i);
+    j=create_cluster(new_i,r);
 
   return j;
 }
 
+//: Assign object data()[i] to cluster ci, knowing distance r
+//  r is the distance D::d(data()[i],p()[ci])
+template<class T, class D>
+void mbl_clusters<T,D>::assign_to_cluster(unsigned i, unsigned ci, 
+                                          double r)
+{
+  index_[ci].push_back(i);
+  if (r>r_[ci]) r_[ci]=r;
+}
+
+
+
+  //: Append new object with index i (data()[i]), creating a new cluster
+  //  Return index of resulting cluster, which is initialised with
+  //  given radius.
+  unsigned add_cluster(unsigned i, double r=0.0);
+
+
+//: Finds list of clusters whose keypoint is within d of t
+//  Returns number of such clusters. If >0, then nearest_c
+//  gives index of cluster with centre nearest to t
+template<class T, class D>
+unsigned mbl_clusters<T,D>::clusters_within_d(const T& t, double d,
+                             vcl_vector<unsigned>& c_list,
+                             unsigned& nearest_c,
+                             double& min_d)
+{
+  c_list.resize(0);
+  nearest_c=0;
+  min_d = d+1;
+  for (unsigned i=0;i<p_.size();++i)
+  {
+    double di=D::d(t,p_[i]);
+    if (di<=d)
+    {
+      c_list.push_back(i);
+      if (di<min_d) { nearest_c=i; min_d=di; }
+    }
+  }
+  return c_list.size();
+}
+
+//: Finds list of clusters whose keypoint is within d of t
+//  Returns number of such clusters. If >0, then nearest_c
+//  gives index of cluster with centre nearest to t
+template<class T, class D>
+unsigned mbl_clusters<T,D>::clusters_within_d(const T& t, double d,
+                             const vcl_vector<unsigned>& in_list,
+                             vcl_vector<unsigned>& c_list,
+                             unsigned& nearest_c,
+                             double& min_d)
+{
+  c_list.resize(0);
+  nearest_c=0;
+  min_d = d+1;
+  for (unsigned j=0;j<in_list.size();++j)
+  {
+    unsigned i=in_list[j];
+    double di=D::d(t,p_[i]);
+    if (di<=d)
+    {
+      c_list.push_back(i);
+      if (di<min_d) { nearest_c=i; min_d=di; }
+    }
+  }
+  return c_list.size();
+}
+
+
+//: Finds list of clusters whose keypoint is within max_r() of t
+//  Returns number of such clusters. If >0, then nearest_c
+//  gives index of cluster with centre nearest to t
+template<class T, class D>
+unsigned mbl_clusters<T,D>::clusters_within_max_r(const T& t,
+                             vcl_vector<unsigned>& c_list,
+                             unsigned& nearest_c,
+                             double& min_d)
+{
+  return clusters_within_d(t,max_r(),c_list,nearest_c,min_d);
+}
+
+//: Finds list of clusters whose keypoint is within max_r() of t
+template<class T, class D>
+unsigned mbl_clusters<T,D>::clusters_within_max_r(const T& t,
+                             const vcl_vector<unsigned>& in_list,
+                             vcl_vector<unsigned>& c_list,
+                             unsigned& nearest_c,
+                             double& min_d)
+{
+  return clusters_within_d(t,max_r(),in_list,c_list,nearest_c,min_d);
+}
+
+//: Create list of object indices in listed clusters
+//  Concatenates lists of indices for each cluster in c_list
+template<class T, class D>
+void mbl_clusters<T,D>::in_clusters(const vcl_vector<unsigned>& c_list,
+                   vcl_vector<unsigned>& o_list) const
+{
+  o_list.resize(0);
+  for (unsigned i=0;i<c_list.size();++i)
+  {
+    const vcl_vector<unsigned>& ind = index()[c_list[i]];
+    for (unsigned j=0;j<ind.size();++j) o_list.push_back(ind[j]);
+  }
+}
+
+
+//: Write out list of elements in each cluster
+template<class T, class D>
+void mbl_clusters<T,D>::print_cluster_sets(vcl_ostream& os) const
+{
+  for (unsigned i=0;i<index_.size();++i)
+  {
+    os<<i<<") ";
+    for (unsigned j=0;j<index_[i].size();++j)
+      os<<index_[i][j]<<" ";
+    os<<vcl_endl;
+  }
+}
 
 #define MBL_CLUSTERS_INSTANTIATE(T,D) \
 template class mbl_clusters< T , D >

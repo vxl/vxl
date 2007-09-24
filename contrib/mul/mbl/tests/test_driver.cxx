@@ -42,6 +42,8 @@ DECLARE( test_exception );
 DECLARE( test_gram_schmidt );
 DECLARE( test_linear_interpolator );
 DECLARE( test_stepwise_regression );
+DECLARE( test_clusters );
+DECLARE( test_cluster_tree );
 
 void
 register_tests()
@@ -88,6 +90,8 @@ register_tests()
   REGISTER( test_gram_schmidt );
   REGISTER( test_linear_interpolator );
   REGISTER( test_stepwise_regression );
+  REGISTER( test_clusters );
+  REGISTER( test_cluster_tree );
 }
 
 DEFINE_MAIN;
