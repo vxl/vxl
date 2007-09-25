@@ -95,7 +95,7 @@ class bgui_image_tableau : public vgui_image_tableau
   bool handle_motion(){return handle_motion_;} 
 
   // true means locked, false unlocked
-  void lock_linenum(bool b) { locked_ = b; }
+  void lock_linenum(bool b) { locked_ = b; handle_motion_=!b;}
   
  protected:
   //: Handle all events for this tableau.
