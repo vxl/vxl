@@ -1,5 +1,10 @@
 #ifndef mmn_arc_h_
 #define mmn_arc_h_
+//:
+// \file
+// \brief Representation of topological arc joining two vertices
+// \author Tim Cootes
+
 
 #include <vsl/vsl_binary_io.h>
 #include <vcl_iostream.h>
