@@ -177,6 +177,12 @@ SOURCE=.\Templates/mbl_ar_process+double-.cxx
 SOURCE=.\Templates/vsl_vector_io+mbl_chord_3d-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/mbl_cluster_tree+vnl_vector+double-+dist-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_clusters+vnl_vector+double-+dist-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\mbl_data_collector_base.cxx
 # End Source File
 # Begin Source File
@@ -529,6 +535,21 @@ SOURCE=.\mbl_wt_histogram.h
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_parse_sequence.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_cluster_tree.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_cluster_tree.txx
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_clusters.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_clusters.txx
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_vector_distance.h
 # End Source File
 # End Group
 # End Target

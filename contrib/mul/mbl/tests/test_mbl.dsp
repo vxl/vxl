@@ -251,6 +251,12 @@ SOURCE=.\test_stepwise_regression.cxx
 SOURCE=.\test_parse_sequence.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_cluster_tree.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_clusters.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

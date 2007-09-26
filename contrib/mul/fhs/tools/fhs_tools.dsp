@@ -221,6 +221,9 @@ SOURCE=.\find_matches.cxx
 # Begin Source File
 SOURCE=.\mr_find_matches.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\fhs_match_tree_model.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
