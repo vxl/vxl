@@ -56,6 +56,9 @@ SET(mbl_sources
   mbl_file_data_collector.txx           mbl_file_data_collector.h
   mbl_file_data_wrapper.txx             mbl_file_data_wrapper.h
 
+  mbl_clusters.txx                      mbl_clusters.h
+  mbl_cluster_tree.txx                  mbl_cluster_tree.h
+
   mbl_table.cxx                         mbl_table.h
   mbl_progress.cxx                      mbl_progress.h
   mbl_progress_text.cxx                 mbl_progress_text.h
@@ -79,6 +82,7 @@ SET(mbl_sources
   mbl_stl.h
   mbl_jarque_bera.h
   mbl_stl_pred.h
+  mbl_vector_distance.h
 
   mbl_config.h.in
   mbl_mod_gram_schmidt.cxx             mbl_mod_gram_schmidt.h
