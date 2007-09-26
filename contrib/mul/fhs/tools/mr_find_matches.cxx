@@ -295,8 +295,8 @@ int main( int argc, char* argv[] )
     int i1 = pairs[i].first;
     int i2 = pairs[i].second;
     vgl_vector_2d<double> dp = pts[i2]-pts[i1];
-    double sd_x = vcl_max(vcl_pow(2.0,im_level[i]),0.2*dp.length());
-    double sd_y = vcl_max(vcl_pow(2.0,im_level[i]),0.2*dp.length());
+    double sd_x = vcl_max(vcl_pow(2.0,double(im_level[i])),0.2*dp.length());
+    double sd_y = vcl_max(vcl_pow(2.0,double(im_level[i])),0.2*dp.length());
     arcs[i]=fhs_arc(i1,i2,dp.x(),dp.y(),sd_x*sd_x,sd_y*sd_y);
   }
 
