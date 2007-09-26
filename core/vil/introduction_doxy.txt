@@ -248,8 +248,11 @@ vil_image_view<vxl_byte> filtered_image = vil_transpose(tmp_image2);
 * - vil_math_sum(sum,im,p)     - Sum of elements in plane of view
 * - vil_math_mean              - Mean of elements
 * - vil_math_mean_and_variance - Mean and variance over view
-* - vil_math_rms(image,rms_im) - Compute rms value for each (multiplane) pixel
-*
+* - vil_math_rms(image,rms_im) - Compute root mean of squares for each (multiplane) pixel
+* - vil_math_rss(image,rss_im) - Compute root sum of squares for each (multiplane) pixel
+* - vil_math_sum_sqr(image,ss_im) - Compute sum of squares for each (multiplane) pixel
+* - vil_math_mean_over_planes(im,mean_im)
+
 * Functions to modify images:
 * - vil_math_scale_values(im,s)                    : im(x,y,p) = s*im(x,y,p)
 * - vil_math_scale_and_offset_values(im,s,o)       : im(x,y,p) = s*im(x,y,p)+o

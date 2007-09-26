@@ -69,14 +69,90 @@ static void test_image_view_maths_byte()
   TEST_NEAR("vil_math_image_product : im_ratio(5,7)",
             im_ratio(5,7),float(imA(5,7))/float(imB(5,7)),1e-6);
 
-  vil_image_view<float> im3(5,6,3),im_rms;
-  im3.fill(1.7f);
-  im3(2,3,0)=2.0;
-  im3(2,3,1)=3.0;
-  im3(2,3,2)=4.0;
-  vil_math_rms(im3,im_rms);
-  TEST_NEAR("im_rms(1,1)",im_rms(1,1),1.7,1e-6);
-  TEST_NEAR("im_rms(2,3)",im_rms(2,3),vcl_sqrt(29.0/3.0),1e-6);
+  {
+    vcl_cout<<"=== vil_math_rms (1 plane) ==="<<vcl_endl;
+    vil_image_view<float> im1(5,6,1),im_rms;
+    im1.fill(1.7f);
+    im1(2,3,0)=-2.0;
+    vil_math_rms(im1,im_rms);
+    TEST_NEAR("im_rms(1,1)",im_rms(1,1),1.7,1e-6);
+    TEST_NEAR("im_rms(2,3)",im_rms(2,3),2.0,1e-6);
+
+    vcl_cout<<"=== vil_math_rms (2 planes) ==="<<vcl_endl;
+    vil_image_view<float> im2(5,6,2);
+    im2.fill(1.7f);
+    im2(2,3,0)=2.0;
+    im2(2,3,1)=3.0;
+    vil_math_rms(im2,im_rms);
+    TEST_NEAR("im_rms(1,1)",im_rms(1,1),1.7,1e-6);
+    TEST_NEAR("im_rms(2,3)",im_rms(2,3),vcl_sqrt(13.0/2.0),1e-6);
+
+    vcl_cout<<"=== vil_math_rms (3 planes) ==="<<vcl_endl;
+    vil_image_view<float> im3(5,6,3);
+    im3.fill(1.7f);
+    im3(2,3,0)=2.0;
+    im3(2,3,1)=3.0;
+    im3(2,3,2)=4.0;
+    vil_math_rms(im3,im_rms);
+    TEST_NEAR("im_rms(1,1)",im_rms(1,1),1.7,1e-6);
+    TEST_NEAR("im_rms(2,3)",im_rms(2,3),vcl_sqrt(29.0/3.0),1e-6);
+  }
+
+  {
+    vcl_cout<<"=== vil_math_rss (1 plane) ==="<<vcl_endl;
+    vil_image_view<float> im1(5,6,1),im_rss;
+    im1.fill(1.7f);
+    im1(2,3,0)=-2.0;
+    vil_math_rss(im1,im_rss);
+    TEST_NEAR("im_rss(1,1)",im_rss(1,1),1.7,1e-6);
+    TEST_NEAR("im_rss(2,3)",im_rss(2,3),2.0,1e-6);
+
+    vcl_cout<<"=== vil_math_rss (2 planes) ==="<<vcl_endl;
+    vil_image_view<float> im2(5,6,2);
+    im2.fill(1.5f);
+    im2(2,3,0)=2.0;
+    im2(2,3,1)=3.0;
+    vil_math_rss(im2,im_rss);
+    TEST_NEAR("im_rss(1,1)",im_rss(1,1),vcl_sqrt(4.5),1e-6);
+    TEST_NEAR("im_rss(2,3)",im_rss(2,3),vcl_sqrt(13.0),1e-6);
+
+    vcl_cout<<"=== vil_math_rss (3 planes) ==="<<vcl_endl;
+    vil_image_view<float> im3(5,6,3);
+    im3.fill(1.5f);
+    im3(2,3,0)=2.0;
+    im3(2,3,1)=3.0;
+    im3(2,3,2)=4.0;
+    vil_math_rss(im3,im_rss);
+    TEST_NEAR("im_rss(1,1)",im_rss(1,1),vcl_sqrt(6.75),1e-6);
+    TEST_NEAR("im_rss(2,3)",im_rss(2,3),vcl_sqrt(29.0),1e-6);
+  }
+
+  {
+    vcl_cout<<"=== vil_math_sum_sqr (1 plane) ==="<<vcl_endl;
+    vil_image_view<float> im1(5,6,1),im_ss;
+    im1.fill(2.0f);
+    im1(2,3,0)=3.0f;
+    vil_math_sum_sqr(im1,im_ss);
+    TEST_NEAR("im_ss(1,1)",im_ss(1,1),4.0f,1e-6);
+    TEST_NEAR("im_ss(2,3)",im_ss(2,3),9.0f,1e-6);
+
+    vcl_cout<<"=== vil_math_sum_sqr (2 planes) ==="<<vcl_endl;
+    vil_image_view<float> im2(5,6,2);
+    im2.fill(2.0f);
+    im2(2,3,1)=3.0f;
+    vil_math_sum_sqr(im2,im_ss);
+    TEST_NEAR("im_ss(1,1)",im_ss(1,1),8.0f,1e-6);
+    TEST_NEAR("im_ss(2,3)",im_ss(2,3),13.0f,1e-6);
+
+    vcl_cout<<"=== vil_math_sum_sqr (3 planes) ==="<<vcl_endl;
+    vil_image_view<float> im3(5,6,3);
+    im3.fill(2.0f);
+    im3(2,3,1)=3.0f;
+    im3(2,3,2)=4.0f;
+    vil_math_sum_sqr(im3,im_ss);
+    TEST_NEAR("im_ss(1,1)",im_ss(1,1),12.0f,1e-6);
+    TEST_NEAR("im_ss(2,3)",im_ss(2,3),29.0f,1e-6);
+  }
 
   vil_image_view<float> im_diff;
   vil_math_image_difference(imA,imB,im_diff);

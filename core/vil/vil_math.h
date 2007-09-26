@@ -444,15 +444,130 @@ void vil_math_rms(const vil_image_view<srcT>& src,
   destT* rowB = dest.top_left_ptr();
   for (unsigned j=0;j<nj;++j,rowA += jstepA,rowB += jstepB)
   {
-      const srcT* pixelA = rowA;
-      destT* pixelB = rowB;
-      for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelB+=istepB)
+    const srcT* pixelA = rowA;
+    const srcT* end_pixelA = rowA+ni*istepA;
+    destT* pixelB = rowB;
+
+    if (np==1)
+    {
+      for (;pixelA!=end_pixelA; pixelA+=istepA,pixelB+=istepB)
+        *pixelB = vcl_fabs(destT(*pixelA));
+    }
+    else if (np==2)
+    {
+      for (;pixelA!=end_pixelA; pixelA+=istepA,pixelB+=istepB)
       {
-        destT sum2 = 0;
-        const srcT* p=pixelA;
-        for (unsigned k=0;k<np;++k,p+=pstepA) sum2 += destT(*p)*destT(*p);
-        *pixelB = destT(vcl_sqrt(sum2/np));
+        destT sum2 = destT(*pixelA)*(*pixelA)
+                     + destT(pixelA[pstepA])*(pixelA[pstepA]);
+        *pixelB = destT(vcl_sqrt(sum2/2));
       }
+    }
+    else
+    {
+      for (;pixelA!=end_pixelA; pixelA+=istepA,pixelB+=istepB)
+      {
+        *pixelB = destT(*pixelA)*destT(*pixelA);
+        const srcT* p=pixelA+pstepA;
+        const srcT* end_p=pixelA+np*pstepA;
+        for (;p!=end_p;p+=pstepA) *pixelB += destT(*p)*destT(*p);
+        *pixelB = destT(vcl_sqrt(*pixelB/np));
+      }
+    }
+  }
+}
+
+//: Computes Root Sum of Squares of each pixel over the planes of src image
+// Dest is a single plane image, $dest(i,j) = sqrt(sum_p src(i,j,p)^2)$
+// Differs from RMS by the scaling factor sqrt(nplanes)
+// Summation is performed using type destT
+template<class srcT, class destT>
+inline
+void vil_math_rss(const vil_image_view<srcT>& src,
+                  vil_image_view<destT>& dest)
+{
+  unsigned ni = src.ni(),nj = src.nj(),np = src.nplanes();
+  dest.set_size(ni,nj,1);
+
+  vcl_ptrdiff_t istepA=src.istep(),jstepA=src.jstep(),pstepA = src.planestep();
+  vcl_ptrdiff_t istepB=dest.istep(),jstepB=dest.jstep();
+  const srcT* rowA = src.top_left_ptr();
+  destT* rowB = dest.top_left_ptr();
+  for (unsigned j=0;j<nj;++j,rowA += jstepA,rowB += jstepB)
+  {
+    const srcT* pixelA = rowA;
+    const srcT* end_pixelA = rowA+ni*istepA;
+    destT* pixelB = rowB;
+
+    if (np==1)
+    {
+      for (;pixelA!=end_pixelA; pixelA+=istepA,pixelB+=istepB)
+        *pixelB = vcl_fabs(destT(*pixelA));
+    }
+    else if (np==2)
+    {
+      for (;pixelA!=end_pixelA; pixelA+=istepA,pixelB+=istepB)
+      {
+        destT sum2 = destT(*pixelA)*(*pixelA)
+                     + destT(pixelA[pstepA])*(pixelA[pstepA]);
+        *pixelB = destT(vcl_sqrt(sum2));
+      }
+    }
+    else
+    {
+      for (;pixelA!=end_pixelA; pixelA+=istepA,pixelB+=istepB)
+      {
+        *pixelB = destT(*pixelA)*destT(*pixelA);
+        const srcT* p=pixelA+pstepA;
+        const srcT* end_p=pixelA+np*pstepA;
+        for (;p!=end_p;p+=pstepA) *pixelB += destT(*p)*destT(*p);
+        *pixelB = destT(vcl_sqrt(*pixelB));
+      }
+    }
+  }
+}
+
+
+//: Computes sum of squares of each pixel over the planes of src image
+// Dest is a single plane image, $dest(i,j) = sum_p src(i,j,p)^2$
+// Summation is performed using type destT
+template<class srcT, class destT>
+inline
+void vil_math_sum_sqr(const vil_image_view<srcT>& src,
+                      vil_image_view<destT>& dest)
+{
+  unsigned ni = src.ni(),nj = src.nj(),np = src.nplanes();
+  dest.set_size(ni,nj,1);
+
+  vcl_ptrdiff_t istepA=src.istep(),jstepA=src.jstep(),pstepA = src.planestep();
+  vcl_ptrdiff_t istepB=dest.istep(),jstepB=dest.jstep();
+  const srcT* rowA = src.top_left_ptr();
+  destT* rowB = dest.top_left_ptr();
+  for (unsigned j=0;j<nj;++j,rowA += jstepA,rowB += jstepB)
+  {
+    const srcT* pixelA = rowA;
+    const srcT* end_pixelA = rowA+ni*istepA;
+    destT* pixelB = rowB;
+    if (np==1)
+    {
+      for (;pixelA!=end_pixelA; pixelA+=istepA,pixelB+=istepB)
+        *pixelB = destT(*pixelA)*(*pixelA);
+    }
+    else if (np==2)
+    {
+      for (;pixelA!=end_pixelA; pixelA+=istepA,pixelB+=istepB)
+        *pixelB =   destT(*pixelA)*(*pixelA)
+                  + destT(pixelA[pstepA])*(pixelA[pstepA]);
+    }
+    else
+    {
+      for (;pixelA!=end_pixelA; pixelA+=istepA,pixelB+=istepB)
+      {
+        *pixelB = destT(*pixelA)*destT(*pixelA);
+        const srcT* p=pixelA+pstepA;
+        const srcT* end_p=pixelA+np*pstepA;
+        for (;p!=end_p;p+=pstepA) *pixelB += destT(*p)*destT(*p);
+      }
+    }
   }
 }
 
