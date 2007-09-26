@@ -14,6 +14,8 @@
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
+#include <vsl/vsl_binary_io.h>
+#include <vsl/vsl_vector_io.h>
 
 //: Default constructor
 template<class T, class D>
@@ -45,7 +47,7 @@ void mbl_cluster_tree<T,D>::set_max_r(const vcl_vector<double>& r)
   for (unsigned i=0;i<nL;++i) parent_[i].resize(0);
 
   cluster_[0].set_data(data_);
-  for (unsigned i=1;i<nL;++i) 
+  for (unsigned i=1;i<nL;++i)
     cluster_[i].set_data(cluster_[i-1].p());
 }
 
@@ -222,12 +224,86 @@ void mbl_cluster_tree<T,D>::print_summary(vcl_ostream& os) const
 {
   for (unsigned i=0;i<cluster_.size();++i)
   {
-    os << "Level "<<i<<") r: "<<cluster_[i].max_r();
+    os << "Level "<<i<<") max_r: "<<cluster_[i].max_r();
     os << " n_clusters: "<<cluster_[i].p().size()<<vcl_endl;
   }
 }
 
+template<class T, class D>
+short mbl_cluster_tree<T,D>::version_no() const
+{
+    return 1;
+}
+
+template<class T, class D>
+void mbl_cluster_tree<T,D>::b_write(vsl_b_ostream& bfs) const
+{
+  vsl_b_write(bfs,version_no());
+  vsl_b_write(bfs,data_);
+  vsl_b_write(bfs,parent_);
+  // Write out clusters explicitly to avoid creating another template
+  vsl_b_write(bfs,cluster_.size());
+  for (unsigned L=0;L<cluster_.size();++L)
+    vsl_b_write(bfs,cluster_[L]);
+}
+
+template<class T, class D>
+void mbl_cluster_tree<T,D>::b_read(vsl_b_istream& bfs)
+{
+  short version;
+  vsl_b_read(bfs,version);
+  unsigned nc=0;
+  switch (version)
+  {
+    case 1:
+      vsl_b_read(bfs,data_);
+      vsl_b_read(bfs,parent_);
+      vsl_b_read(bfs,nc);
+      cluster_.resize(nc);
+      for (unsigned L=0;L<nc;++L)
+        vsl_b_read(bfs,cluster_[L]);
+   break;
+
+  default:
+    vcl_cerr << "mbl_cluster_tree<T,D>::b_read() "
+      "Unexpected version number " << version << vcl_endl;
+    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
+  }
+
+  // Connect each cluster to data below
+  cluster_[0].set_data(data_);
+  for (unsigned L=1;L<cluster_.size();++L)
+    cluster_[L].set_data(cluster_[L-1].p());
+}
+
+//: Binary file stream output operator for class reference
+template<class T, class D>
+void vsl_b_write(vsl_b_ostream& bfs, const mbl_cluster_tree<T,D>& c)
+{
+  c.b_write(bfs);
+}
+
+//: Binary file stream input operator for class reference
+template<class T, class D>
+void vsl_b_read(vsl_b_istream& bfs, mbl_cluster_tree<T,D>& c)
+{
+  c.b_read(bfs);
+}
+
+//: Stream output operator for class reference
+template<class T, class D>
+vcl_ostream& operator<<(vcl_ostream& os,const mbl_cluster_tree<T,D>& c)
+{
+  c.print_summary(os);
+  return os;
+}
+
+
 #define MBL_CLUSTER_TREE_INSTANTIATE(T,D) \
-template class mbl_cluster_tree< T , D >
+template class mbl_cluster_tree< T , D >; \
+template void vsl_b_write(vsl_b_ostream& bfs, const mbl_cluster_tree<T,D>& c); \
+template void vsl_b_read(vsl_b_istream& bfs, mbl_cluster_tree<T,D>& c); \
+template vcl_ostream& operator<<(vcl_ostream& os,const mbl_cluster_tree<T,D>& c);
 
 #endif // mbl_cluster_txx_

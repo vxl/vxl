@@ -7,6 +7,7 @@
 
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
+#include <vsl/vsl_fwd.h>
 
 //:  Class to record clusters of data, for faster neighbour finding
 //  Used to record clusters of objects of type T.
@@ -53,8 +54,14 @@ public:
 
   //: Define external data array (pointer retained)
   //  Empty existing clusters, then process every element of data
-  //  to create clusters, by calling add_object() 
+  //  to create clusters, by calling add_object()
   void set_data(const vcl_vector<T>& data);
+
+  //: Define external data array (pointer retained)
+  //  Use carefully! This sets the internal pointer to
+  //  point to data.  Really only to be used after loading
+  //  internals using b_read(bfs).
+  void set_data_ptr(const vcl_vector<T>& data);
 
   //: External list of objects
   const vcl_vector<T>& data() const { return *data_; }
@@ -171,7 +178,36 @@ public:
 
   //: Write out list of elements in each cluster
   void print_cluster_sets(vcl_ostream& os) const;
+
+    //: Version number for I/O
+  short version_no() const;
+
+    //: Print class to os
+  void print_summary(vcl_ostream& os) const;
+
+    //: Save class to binary file stream.
+    //  Warning: Does not save external data - that must
+    //  be recorded separately.
+  void b_write(vsl_b_ostream& bfs) const;
+
+    //: Load class from binary file stream
+    //  Warning: Does not load or link external data - that must
+    //  be recorded separately, then connected using set_data_ptr()
+  void b_read(vsl_b_istream& bfs);
 };
+
+//: Binary file stream output operator for class reference
+template<class T, class D>
+void vsl_b_write(vsl_b_ostream& bfs, const mbl_clusters<T,D>& c);
+
+//: Binary file stream input operator for class reference
+template<class T, class D>
+void vsl_b_read(vsl_b_istream& bfs, mbl_clusters<T,D>& c);
+
+//: Stream output operator for class reference
+template<class T, class D>
+vcl_ostream& operator<<(vcl_ostream& os,const mbl_clusters<T,D>& c);
+
 
 #endif // mbl_clusters_h_
 

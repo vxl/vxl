@@ -3,6 +3,7 @@
 #include <mbl/mbl_cluster_tree.h>
 #include <testlib/testlib_test.h>
 
+#include <mbl/mbl_clusters.txx>
 #include <mbl/mbl_cluster_tree.txx>
 
 //: Distance class
@@ -11,7 +12,8 @@ public:
   static double d(double a, double b) { return (a<b?b-a:a-b); }
 };
 
-// Compile template
+// Compile templates
+MBL_CLUSTERS_INSTANTIATE(double,mbl_scalar_distance);
 MBL_CLUSTER_TREE_INSTANTIATE(double,mbl_scalar_distance);
 
 void test_cluster_tree()

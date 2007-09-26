@@ -14,6 +14,8 @@
 #include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
 #include <vcl_algorithm.h>
+#include <vsl/vsl_binary_io.h>
+#include <vsl/vsl_vector_io.h>
 
 //: Default constructor
 template<class T, class D>
@@ -50,6 +52,15 @@ void mbl_clusters<T,D>::set_data(const vcl_vector<T>& data)
   for (unsigned i=0;i<n;++i)  add_object(i);
 }
 
+//: Define external data array (pointer retained)
+//  Use carefully! This sets the internal pointer to
+//  point to data.  Really only to be used after loading
+//  internals using b_read(bfs).
+template<class T, class D>
+void mbl_clusters<T,D>::set_data_ptr(const vcl_vector<T>& data)
+{
+  data_=&data;
+}
 
 //: Return index of nearest object in data() to t
 //  Nearest object in data() to t is given by data()[nearest(t,d)];
@@ -374,7 +385,80 @@ void mbl_clusters<T,D>::print_cluster_sets(vcl_ostream& os) const
   }
 }
 
+//: Write out list of elements in each cluster
+template<class T, class D>
+void mbl_clusters<T,D>::print_summary(vcl_ostream& os) const
+{
+  os<<" max_r: "<<max_r_<<" n_clusters: "<<p_.size();
+}
+
+template<class T, class D>
+short mbl_clusters<T,D>::version_no() const
+{
+    return 1;
+}
+
+template<class T, class D>
+void mbl_clusters<T,D>::b_write(vsl_b_ostream& bfs) const
+{
+  vsl_b_write(bfs,version_no());
+  vsl_b_write(bfs,p_);
+  vsl_b_write(bfs,r_);
+  vsl_b_write(bfs,max_r_);
+  vsl_b_write(bfs,index_);
+}
+
+template<class T, class D>
+void mbl_clusters<T,D>::b_read(vsl_b_istream& bfs)
+{
+  short version;
+  vsl_b_read(bfs,version);
+  switch (version)
+  {
+    case 1:
+      vsl_b_read(bfs,p_);
+      vsl_b_read(bfs,r_);
+      vsl_b_read(bfs,max_r_);
+      vsl_b_read(bfs,index_);
+    break;
+
+  default:
+    vcl_cerr << "mbl_clusters<T,D>::b_read() "
+      "Unexpected version number " << version << vcl_endl;
+    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    return;
+  }
+
+  data_=0;
+}
+
+//: Binary file stream output operator for class reference
+template<class T, class D>
+void vsl_b_write(vsl_b_ostream& bfs, const mbl_clusters<T,D>& c)
+{
+  c.b_write(bfs);
+}
+
+//: Binary file stream input operator for class reference
+template<class T, class D>
+void vsl_b_read(vsl_b_istream& bfs, mbl_clusters<T,D>& c)
+{
+  c.b_read(bfs);
+}
+
+//: Stream output operator for class reference
+template<class T, class D>
+vcl_ostream& operator<<(vcl_ostream& os,const mbl_clusters<T,D>& c)
+{
+  c.print_summary(os);
+  return os;
+}
+
+
 #define MBL_CLUSTERS_INSTANTIATE(T,D) \
-template class mbl_clusters< T , D >
+template class mbl_clusters< T , D >; \
+template void vsl_b_write(vsl_b_ostream& bfs, const mbl_clusters<T,D>& c); \
+template void vsl_b_read(vsl_b_istream& bfs, mbl_clusters<T,D>& c); \
+template vcl_ostream& operator<<(vcl_ostream& os,const mbl_clusters<T,D>& c);
 
 #endif // mbl_clusters_txx_
