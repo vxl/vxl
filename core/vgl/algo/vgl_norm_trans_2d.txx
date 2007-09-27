@@ -8,6 +8,7 @@
 #include <vgl/vgl_point_2d.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_iostream.h>
+#include <vnl/vnl_math.h>
 
 //--------------------------------------------------------------
 //
@@ -208,14 +209,13 @@ scale_xyroot2(vcl_vector<vgl_homg_point_2d<T> > const& in, T& radius)
     if (in[i].ideal(tol))
       continue;
     vgl_point_2d<T> p(in[i]);
-    vnl_vector_fixed<T, 2> v(p.x(), p.y());
-    magnitude += v.magnitude();
+    magnitude += vnl_math_hypot(p.x(),p.y());
     ++numfinite;
   }
 
   if (numfinite > 0)
   {
-    radius = magnitude / numfinite;
+    radius = magnitude / (numfinite*vnl_math::sqrt2);
     return radius>=tol;
   }
   return false;

@@ -25,6 +25,7 @@
 //                  with the perpendicular line from the origin.
 //   Jun 23, 2003 - Peter Vanroose - added compute_from_points_and_lines()
 //   Jun 17, 2005 - J.L. Mundy - added anisotropic scaling
+//   Sep 27, 2007 - Ricardo Fabbri - isotropic scaling set to sqrt(2) factor 
 // \endverbatim
 
 #include <vnl/vnl_matrix_fixed.h>
