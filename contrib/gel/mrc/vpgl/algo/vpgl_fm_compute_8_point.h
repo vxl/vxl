@@ -10,6 +10,11 @@
 //  The point correspondences in relation to F are defined by
 //     pl^t[F]pr = 0
 //
+// \verbatim
+//  Modifications
+//   9/27/2007  Ricardo Fabbri   Imposed order of 1) rank-enforcement and 2) de-normalization.
+// \endverbatim
+//
 #include <vpgl/vpgl_fundamental_matrix.h>
 
 class vpgl_fm_compute_8_point

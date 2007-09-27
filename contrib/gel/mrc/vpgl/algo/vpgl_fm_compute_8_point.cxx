@@ -72,9 +72,12 @@ vpgl_fm_compute_8_point::compute(
   F_vnl(0,0) = solution(0); F_vnl(0,1) = solution(1); F_vnl(0,2) = solution(2);
   F_vnl(1,0) = solution(3); F_vnl(1,1) = solution(4); F_vnl(1,2) = solution(5);
   F_vnl(2,0) = solution(6); F_vnl(2,1) = solution(7); F_vnl(2,2) = solution(8);
-  if ( precondition_ )
-    fm.set_matrix( plnt.get_matrix().transpose()*F_vnl*prnt.get_matrix() );
-  else
+  if ( precondition_ ) {
+    // As specified in Harley & Zisserman book 2nd ed p282: first rank-enforce *then* denormalize
+    fm.set_matrix( F_vnl ); // constructor enforces rank 2
+    vnl_matrix_fixed<double,3,3> F_vnl_trunc(fm.get_matrix());
+    fm.set_matrix( plnt.get_matrix().transpose()*F_vnl_trunc*prnt.get_matrix() );
+  } else
     fm.set_matrix( F_vnl );
   return true;
 };
