@@ -500,6 +500,9 @@ SOURCE=.\vil_find_plateaus.h
 # Begin Source File
 SOURCE=.\vil_suppress_non_plateau.h
 # End Source File
+# Begin Source File
+SOURCE=.\vil_flood_fill.h
+# End Source File
 # End Group
 # End Target
 # End Project
