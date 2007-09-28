@@ -1020,6 +1020,9 @@ SOURCE=.\vil_flatten.h
 SOURCE=.\file_formats/vil_geotiff_header.h
 # End Source File
 # Begin Source File
+SOURCE=.\vil_chord.h
+# End Source File
+# Begin Source File
 SOURCE=.\vil_config.h.in
 # End Source File
 # End Group
