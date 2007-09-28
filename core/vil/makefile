@@ -13,6 +13,7 @@ INCDIRS += $(RELOBJDIR)/include
 # basic things
 MANPAGE_SOURCES += vil_config.h.in
 MANPAGE_SOURCES += vil_exception.h
+MANPAGE_SOURCES += vil_chord.h
 
 SOURCES += vil_image_resource.cxx
 MANPAGE_SOURCES += vil_image_resource_sptr.h
