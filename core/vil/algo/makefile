@@ -56,6 +56,7 @@ MANPAGE_SOURCES += vil_checker_board.txx
 MANPAGE_SOURCES += vil_quad_distance_function.h
 MANPAGE_SOURCES += vil_find_plateaus.h
 MANPAGE_SOURCES += vil_suppress_non_plateau.h
+MANPAGE_SOURCES += vil_flood_fill.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
