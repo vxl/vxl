@@ -50,6 +50,7 @@ SET( vil_algo_sources
   vil_colour_space.cxx        vil_colour_space.h
   vil_abs_shuffle_distance.txx vil_abs_shuffle_distance.h
   vil_checker_board.txx       vil_checker_board.h
+                              vil_flood_fill.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates vil_algo_sources)
