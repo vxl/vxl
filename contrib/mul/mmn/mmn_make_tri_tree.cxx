@@ -4,6 +4,7 @@
 // \author Tim Cootes
 
 #include <mmn/mmn_make_tri_tree.h>
+#include <vcl_cassert.h>
 
 static void  update_best_arcs(const vnl_matrix<double>& D,
                               const vcl_vector<bool>& node_free,

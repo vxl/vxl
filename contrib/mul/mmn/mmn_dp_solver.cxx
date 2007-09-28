@@ -4,6 +4,7 @@
 // \author Tim Cootes
 
 #include <mmn/mmn_dp_solver.h>
+#include <vcl_cassert.h>
 
   //: Default constructor
 mmn_dp_solver::mmn_dp_solver()
@@ -17,7 +18,7 @@ unsigned mmn_dp_solver::root() const
   return deps_[deps_.size()-1].v1;
 }
 
-//: Define dependancies
+//: Define dependencies
 void mmn_dp_solver::set_dependancies(const vcl_vector<mmn_dependancy>& deps,
                         unsigned n_nodes, unsigned max_n_arcs)
 {
@@ -140,11 +141,11 @@ double mmn_dp_solver::solve(const vcl_vector<vnl_vector<double> >& node_cost,
 
   if (deps_.size()==0)
   {
-    vcl_cerr<<"No dependancies."<<vcl_endl;
+    vcl_cerr<<"No dependencies.\n";
     return 999.99;
   }
 
-  // Process dependancies in given order
+  // Process dependencies in given order
   vcl_vector<mmn_dependancy>::const_iterator dep=deps_.begin();
   for (;dep!=deps_.end();dep++)
   {
@@ -183,6 +184,3 @@ void mmn_dp_solver::backtrace(unsigned root_value,vcl_vector<unsigned>& x)
     }
   }
 }
-
-
-
