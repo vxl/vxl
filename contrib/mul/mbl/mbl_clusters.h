@@ -12,7 +12,7 @@
 //:  Class to record clusters of data, for faster neighbour finding
 //  Used to record clusters of objects of type T.
 //  D::d(T t1, T t2) is a measure of distance between two objects.
-//  It must obey the triangle inequality: 
+//  It must obey the triangle inequality:
 //  D::d(t1,t2)<=D::d(t1,t3)+D::d(t2,t3).
 //
 //  Pointer retained to an external vector of objects.  The class
@@ -25,15 +25,16 @@
 //  to the keypoints, and only consider objects in the clusters
 //  which are sufficiently close.
 template<class T, class D>
-class mbl_clusters {
-private:
+class mbl_clusters
+{
+ private:
   //: Pointer to external list of objects
   const vcl_vector<T>* data_;
 
   //: Cluster key point
   vcl_vector<T> p_;
 
-  //: Maximum radius for any cluster 
+  //: Maximum radius for any cluster
   double max_r_;
 
   //: Indices of objects associated with each cluster
@@ -42,8 +43,7 @@ private:
   //: Furthest distance of a cluster object from key point for cluster
   vcl_vector<double> r_;
 
-
-public:
+ public:
   mbl_clusters();
 
   //: Empty clusters
@@ -66,7 +66,7 @@ public:
   //: External list of objects
   const vcl_vector<T>& data() const { return *data_; }
 
-  //: Maximum radius for any cluster 
+  //: Maximum radius for any cluster
   double max_r() const { return max_r_; }
 
   //: Cluster key points
@@ -81,7 +81,6 @@ public:
   //: Indices of objects associated with each cluster
   const vcl_vector<vcl_vector<unsigned> >& index() const
    { return index_; }
-
 
   //: Set given radius
   void set_r(unsigned i, double r) { r_[i]=r; }
@@ -99,7 +98,7 @@ public:
                    const vcl_vector<unsigned>& c_list) const;
 
   //: Return index of nearest cluster in data() to t
-  //  Finds nearest cluster key point to t 
+  //  Finds nearest cluster key point to t
   //  The distance to the point is d
   unsigned nearest_cluster(const T& t, double& d) const;
 
@@ -113,11 +112,11 @@ public:
   //  On input, max_d gives initial limit on distance.
   //  On exit, max_d gives the revised limit on the distance
   void nearest_clusters(const T& t, double& max_d,
-                           const vcl_vector<unsigned>& c_list,
-                           vcl_vector<unsigned>& near_c) const;
+                        const vcl_vector<unsigned>& c_list,
+                        vcl_vector<unsigned>& near_c) const;
 
   //: Append new object with index i and assign to a cluster
-  //  Assumes that new object data()[i] is available. 
+  //  Assumes that new object data()[i] is available.
   //  Deduce which cluster it belongs to and add it.
   //  Create new cluster if further than max_r() from any.
   //  r is the radius associated with data()[i], which is
@@ -127,11 +126,11 @@ public:
   unsigned add_object(unsigned i, double r=0.0);
 
   //: Create a new cluster around point data()[i]
-  //  Assumes that new object data()[i] is available. 
-  // Return index of cluster
+  //  Assumes that new object data()[i] is available.
+  //  Return index of cluster
   unsigned create_cluster(unsigned i, double r=0.0);
 
-  //: Assign object data()[i] to cluster ci, knowing distance r
+  //: Assign object data()[i] to cluster ci, knowing distance r.
   //  r is the distance D::d(data()[i],p()[ci])
   void assign_to_cluster(unsigned i, unsigned ci, double r);
 
@@ -146,10 +145,10 @@ public:
   //: Finds list of clusters whose keypoint is within max_r of t
   //  Returns number of such clusters. If >0, then nearest_c
   //  gives index of cluster with centre nearest to t
-  unsigned clusters_within_max_r(const T& t, 
-                             vcl_vector<unsigned>& c_list,
-                             unsigned& nearest_c,
-                             double& min_d);
+  unsigned clusters_within_max_r(const T& t,
+                                 vcl_vector<unsigned>& c_list,
+                                 unsigned& nearest_c,
+                                 double& min_d);
 
   //: Finds list of clusters whose keypoint is within d of t
   //  Only considers subset of clusters listed in in_list
@@ -165,7 +164,7 @@ public:
   //  Only considers subset of clusters listed in index
   //  Returns number of such clusters. If >0, then nearest_c
   //  gives index of cluster with centre nearest to t
-  unsigned clusters_within_max_r(const T& t, 
+  unsigned clusters_within_max_r(const T& t,
                              const vcl_vector<unsigned>& in_list,
                              vcl_vector<unsigned>& c_list,
                              unsigned& nearest_c,
@@ -179,20 +178,20 @@ public:
   //: Write out list of elements in each cluster
   void print_cluster_sets(vcl_ostream& os) const;
 
-    //: Version number for I/O
+  //: Version number for I/O
   short version_no() const;
 
-    //: Print class to os
+  //: Print class to os
   void print_summary(vcl_ostream& os) const;
 
-    //: Save class to binary file stream.
-    //  Warning: Does not save external data - that must
-    //  be recorded separately.
+  //: Save class to binary file stream.
+  //  Warning: Does not save external data - that must
+  //  be recorded separately.
   void b_write(vsl_b_ostream& bfs) const;
 
-    //: Load class from binary file stream
-    //  Warning: Does not load or link external data - that must
-    //  be recorded separately, then connected using set_data_ptr()
+  //: Load class from binary file stream
+  //  Warning: Does not load or link external data - that must
+  //  be recorded separately, then connected using set_data_ptr()
   void b_read(vsl_b_istream& bfs);
 };
 
@@ -208,6 +207,4 @@ void vsl_b_read(vsl_b_istream& bfs, mbl_clusters<T,D>& c);
 template<class T, class D>
 vcl_ostream& operator<<(vcl_ostream& os,const mbl_clusters<T,D>& c);
 
-
 #endif // mbl_clusters_h_
-
