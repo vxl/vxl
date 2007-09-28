@@ -420,7 +420,7 @@ vcl_cout << "Denominators\n"
 //:obtain a scaling transformation to normalize world geographic coordinates
 //The resulting values will be on the range [-1, 1]
 //The transform is valid anywhere the rational camera is valid
-vgl_h_matrix_3d<double> 
+vgl_h_matrix_3d<double>
 vpgl_proj_camera_compute::norm_trans(vpgl_rational_camera<double> const& rat_cam)
 {
   double xscale = rat_cam.scale(vpgl_rational_camera<double>::X_INDX);
@@ -666,10 +666,9 @@ compute( vpgl_rational_camera<double> const& rat_cam,
   //Compute solution for rotation and translation and calibration matrix of
   //the perspective camera
   vpgl_calibration_matrix<double> K(kk);
-  bool good = 
-    vpgl_perspective_camera_compute::compute(norm_image_pts,
-                                                 norm_world_pts,
-                                                 K, camera);
+  bool good = vpgl_perspective_camera_compute::compute(norm_image_pts,
+                                                       norm_world_pts,
+                                                       K, camera);
   if (!good)
     return false;
   vcl_cout << camera << '\n';
@@ -723,15 +722,15 @@ compute_local( vpgl_rational_camera<double> const& rat_cam,
   double lat_low = approximation_volume.min_y();
   double lat_high = approximation_volume.max_y();
   assert( lat_low < lat_high && lon_low < lon_high );
-  bgeo_lvcs lvcs_converter( lat_low, lon_low, 
+  bgeo_lvcs lvcs_converter( lat_low, lon_low,
     .5*(approximation_volume.min_z()+approximation_volume.max_z()), bgeo_lvcs::wgs84, bgeo_lvcs::DEG );
 
   // Get a new local bounding box.
   double min_lx, min_ly, min_lz, max_lx, max_ly, max_lz;
-  for( int cx = 0; cx < 2; cx++ ){
-    for( int cy = 0; cy < 2; cy++ ){
-      for( int cz = 0; cz < 2; cz++ ){
-        vgl_point_3d<double> wc( 
+  for ( int cx = 0; cx < 2; cx++ ) {
+    for ( int cy = 0; cy < 2; cy++ ) {
+      for ( int cz = 0; cz < 2; cz++ ) {
+        vgl_point_3d<double> wc(
           approximation_volume.min_x()*cx + approximation_volume.max_x()*(1-cx),
           approximation_volume.min_y()*cy + approximation_volume.max_y()*(1-cy),
           approximation_volume.min_z()*cz + approximation_volume.max_z()*(1-cz) );
@@ -739,18 +738,18 @@ compute_local( vpgl_rational_camera<double> const& rat_cam,
         lvcs_converter.global_to_local(
           wc.x(), wc.y(), wc.z(), bgeo_lvcs::wgs84, lcx, lcy, lcz );
         vgl_point_3d<double> wc_loc( lcx, lcy, lcz );
-        if( cx == 0 && cy == 0 && cz == 0 ){
+        if ( cx == 0 && cy == 0 && cz == 0 ){
           min_lx = wc_loc.x(); max_lx = wc_loc.x();
           min_ly = wc_loc.y(); max_ly = wc_loc.y();
           min_lz = wc_loc.z(); max_lz = wc_loc.z();
           continue;
         }
-        if( wc_loc.x() < min_lx ) min_lx = wc_loc.x();
-        if( wc_loc.y() < min_ly ) min_ly = wc_loc.y();
-        if( wc_loc.z() < min_lz ) min_lz = wc_loc.z();
-        if( wc_loc.x() > max_lx ) max_lx = wc_loc.x();
-        if( wc_loc.y() > max_ly ) max_ly = wc_loc.y();
-        if( wc_loc.z() > max_lz ) max_lz = wc_loc.z();
+        if ( wc_loc.x() < min_lx ) min_lx = wc_loc.x();
+        if ( wc_loc.y() < min_ly ) min_ly = wc_loc.y();
+        if ( wc_loc.z() < min_lz ) min_lz = wc_loc.z();
+        if ( wc_loc.x() > max_lx ) max_lx = wc_loc.x();
+        if ( wc_loc.y() > max_ly ) max_ly = wc_loc.y();
+        if ( wc_loc.z() > max_lz ) max_lz = wc_loc.z();
       }
     }
   }
@@ -822,7 +821,9 @@ compute_local( vpgl_rational_camera<double> const& rat_cam,
     vgl_homg_point_3d<double> wp_loc( lcx, lcy, lcz );
 
     vgl_homg_point_3d<double> nwp = norm_trans*wp_loc;
-    assert( fabs(nwp.x()) <= 1 && fabs(nwp.y()) <= 1 && fabs(nwp.z()) <= 1 );
+    assert(   vcl_fabs(nwp.x()) <= 1
+           && vcl_fabs(nwp.y()) <= 1
+           && vcl_fabs(nwp.z()) <= 1 );
     norm_world_pts.push_back(vgl_point_3d<double>(nwp) );
   }
   //Assume identity calibration matrix initially, since image point
@@ -835,10 +836,9 @@ compute_local( vpgl_rational_camera<double> const& rat_cam,
   //Compute solution for rotation and translation and calibration matrix of
   //the perspective camera
   vpgl_calibration_matrix<double> K(kk);
-  bool good = 
-    vpgl_perspective_camera_compute::compute(norm_image_pts,
-                                                 norm_world_pts,
-                                                 K, camera);
+  bool good = vpgl_perspective_camera_compute::compute(norm_image_pts,
+                                                       norm_world_pts,
+                                                       K, camera);
   if (!good)
     return false;
   vcl_cout << camera << '\n';
