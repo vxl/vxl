@@ -171,25 +171,25 @@ bool vnl_conjugate_gradient::minimize( vnl_vector<double> &x)
        &error_code);
 
   // Check for an error condition.
-  if(error_code > 0)
-    {
+  if (error_code > 0)
+  {
     failure_code_ = ERROR_DODGY_INPUT;
-    if(verbose_)
-      {
+    if (verbose_)
+    {
       switch (error_code)
-        {
-        case 1: printf("UNABLE TO OBTAIN DESCENT DIRECTION\n"); break;
-        case 2: printf("THE FUNCTION DECREASES WITH NO MINIMUM\n"); break;
-        case 3: printf("PRECONDITIONER NOT POSITIVE DEFINITE\n"); break;
-        }
+      {
+        case 1: vcl_cout << "UNABLE TO OBTAIN DESCENT DIRECTION\n"; break;
+        case 2: vcl_cout << "THE FUNCTION DECREASES WITH NO MINIMUM\n"; break;
+        case 3: vcl_cout << "PRECONDITIONER NOT POSITIVE DEFINITE\n"; break;
       }
     }
+  }
 
   // Compute the final value.
   end_error_= valuecomputer_(xp, this);
   num_iterations_ = number_of_iterations;
 
-  return (error_code == 0);
+  return error_code == 0;
 }
 
 
