@@ -5,14 +5,12 @@
 #pragma interface
 #endif
 //:
-//:
 // \file
 // \brief  Record trees of clusters of data, for faster neighbour finding
 // \author Tim Cootes
 
 #include "mbl_cluster_tree.h"
 #include <vcl_iostream.h>
-#include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
@@ -54,7 +52,7 @@ void mbl_cluster_tree<T,D>::set_max_r(const vcl_vector<double>& r)
 
 //: Define external data array (pointer retained)
 //  Empty existing clusters, then process every element of data
-//  to create clusters, by calling add_object() 
+//  to create clusters, by calling add_object()
 template<class T, class D>
 void mbl_cluster_tree<T,D>::set_data(const vcl_vector<T>& data)
 {
@@ -65,7 +63,7 @@ void mbl_cluster_tree<T,D>::set_data(const vcl_vector<T>& data)
   for (unsigned i=0;i<n;++i)  add_object(i);
 }
 
-//: Add an extra element to data() 
+//: Add an extra element to data()
 template<class T, class D>
 void mbl_cluster_tree<T,D>::push_back(const T& t)
 {
@@ -103,7 +101,7 @@ unsigned mbl_cluster_tree<T,D>::nearest(const T& t, double& d) const
 }
 
 //: Append new object with index i and assign to clusters
-//  Assumes that new object data()[i] is available. 
+//  Assumes that new object data()[i] is available.
 //  Deduce which cluster it belongs to and add it.
 //  Create new cluster if further than max_r() from any.
 template<class T, class D>
@@ -151,7 +149,7 @@ void mbl_cluster_tree<T,D>::add_object(unsigned new_i)
 
     if (nc==0)
     {
-      // No clusters at this level can include t, 
+      // No clusters at this level can include t,
       // so create new cluster at levels 0..L
       unsigned cL=cluster_[0].create_cluster(new_i);
       parent_[0][new_i]=cL;
@@ -161,9 +159,9 @@ void mbl_cluster_tree<T,D>::add_object(unsigned new_i)
       for (unsigned L1=1;L1<=L;++L1)
       {
         unsigned cL1=cluster_[L1].create_cluster(cL);
-        if (L1<Lhi) 
+        if (L1<Lhi)
           parent_[L1+1].push_back(0);  // Create space for record of new
-        parent_[L1][cL]=cL1;  
+        parent_[L1][cL]=cL1;
         cL=cL1;  // Record index
       }
 
@@ -171,12 +169,12 @@ void mbl_cluster_tree<T,D>::add_object(unsigned new_i)
       // Assign to nearest cluster in level above (c)
       unsigned c=nearest_c[L+1];
       cluster_[L+1].assign_to_cluster(cL,c,nearest_d[L+1]);
-      parent_[L+1][cL]=c;  // Record parent 
+      parent_[L+1][cL]=c;  // Record parent
 
         // Track back through ancestors of c, updating radii
       for (unsigned L1=L+2;L1<=Lhi;++L1)
       {
-        c = parent_[L1][c];  
+        c = parent_[L1][c];
         double d=D::d(t,cluster_[L1].p()[c]);
         if (d>cluster_[L1].r()[c])
           cluster_[L1].set_r(c,d);
@@ -193,12 +191,11 @@ void mbl_cluster_tree<T,D>::add_object(unsigned new_i)
   for (unsigned L=1;L<=Lhi;++L)
   {
     // Track back through parents of c, updating radii
-    c = parent_[L][c];  
+    c = parent_[L][c];
     double d=D::d(t,cluster_[L].p()[c]);
     if (d>cluster_[L].r()[c])
       cluster_[L].set_r(c,d);
   }
-
 }
 
 //: Print ancestry of every element
@@ -224,8 +221,8 @@ void mbl_cluster_tree<T,D>::print_summary(vcl_ostream& os) const
 {
   for (unsigned i=0;i<cluster_.size();++i)
   {
-    os << "Level "<<i<<") max_r: "<<cluster_[i].max_r();
-    os << " n_clusters: "<<cluster_[i].p().size()<<vcl_endl;
+    os << "Level "<<i<<") max_r: "<<cluster_[i].max_r()
+       << " n_clusters: "<<cluster_[i].p().size()<<vcl_endl;
   }
 }
 
@@ -301,9 +298,9 @@ vcl_ostream& operator<<(vcl_ostream& os,const mbl_cluster_tree<T,D>& c)
 
 
 #define MBL_CLUSTER_TREE_INSTANTIATE(T,D) \
-template class mbl_cluster_tree< T , D >; \
-template void vsl_b_write(vsl_b_ostream& bfs, const mbl_cluster_tree<T,D>& c); \
-template void vsl_b_read(vsl_b_istream& bfs, mbl_cluster_tree<T,D>& c); \
-template vcl_ostream& operator<<(vcl_ostream& os,const mbl_cluster_tree<T,D>& c);
+template class mbl_cluster_tree<T,D >; \
+template void vsl_b_write(vsl_b_ostream& bfs, const mbl_cluster_tree<T,D >& c); \
+template void vsl_b_read(vsl_b_istream& bfs, mbl_cluster_tree<T,D >& c); \
+template vcl_ostream& operator<<(vcl_ostream&os,const mbl_cluster_tree<T,D >& c)
 
 #endif // mbl_cluster_txx_
