@@ -12,7 +12,7 @@ mmn_graph_rep1::mmn_graph_rep1()
 }
 
   //: Build from list of arcs
-void mmn_graph_rep1::build(unsigned n_nodes, 
+void mmn_graph_rep1::build(unsigned n_nodes,
                            const vcl_vector<mmn_arc>& arcs)
 {
   node_data_.resize(n_nodes);
@@ -52,13 +52,13 @@ unsigned mmn_graph_rep1::get_arc(unsigned v1, unsigned v2)
   return a;
 }
 
-/*
+#if 0
 //: Remove record of arc between v1 and v2
 //  Returns false if there isn't one.
 bool mmn_graph_rep1::remove_arc(unsigned v1, unsigned v2)
 {
 }
-*/
+#endif // 0
 
 //: Remove record of arc v1-v2 from v1
 void mmn_graph_rep1::remove_arc_from_node(unsigned v1, unsigned v2)
@@ -74,10 +74,10 @@ void mmn_graph_rep1::remove_arc_from_node(unsigned v1, unsigned v2)
 }
 
 
-//: Remove some of leaves of graph, recording dependancies
+//: Remove some of leaves of graph, recording dependencies
 //  A leaf node is one with only one arc
-//  For each leaf node removed, add one dependancy object to
-//  the deps list.  
+//  For each leaf node removed, add one dependency object to
+//  the deps list.
 //  Returns number of leaves removed.
 unsigned mmn_graph_rep1::remove_leaves(vcl_vector<mmn_dependancy>& deps)
 {
@@ -90,7 +90,7 @@ unsigned mmn_graph_rep1::remove_leaves(vcl_vector<mmn_dependancy>& deps)
       unsigned v2 = node_data_[v1][0].first;
       unsigned arc12 = node_data_[v1][0].second;
 
-      // Record dependancy
+      // Record dependency
       deps.push_back(mmn_dependancy(v1,v2,arc12));
       n_removed++;
 
@@ -107,9 +107,9 @@ unsigned mmn_graph_rep1::remove_leaves(vcl_vector<mmn_dependancy>& deps)
   return n_removed;
 }
 
-//: Remove all of leaves of graph, recording dependancies
+//: Remove all of leaves of graph, recording dependencies
 //  A leaf node is one with only one arc
-//  For each leaf node removed, add one dependancy object to
+//  For each leaf node removed, add one dependency object to
 //  the deps list.  On exit, this graph has no leaves.
 //  Returns number of leaves removed.
 unsigned mmn_graph_rep1::remove_all_leaves(vcl_vector<mmn_dependancy>& deps)
@@ -126,9 +126,9 @@ unsigned mmn_graph_rep1::remove_all_leaves(vcl_vector<mmn_dependancy>& deps)
 }
 
 //: Remove arcs from some of the nodes with two neighbours
-//  Record the pairwise dependancies.
-//  For each node removed, add one dependancy object to
-//  the deps list.  
+//  Record the pairwise dependencies.
+//  For each node removed, add one dependency object to
+//  the deps list.
 //  Returns number of removed.
 unsigned mmn_graph_rep1::remove_pair_deps(vcl_vector<mmn_dependancy>& deps)
 {
@@ -137,7 +137,7 @@ unsigned mmn_graph_rep1::remove_pair_deps(vcl_vector<mmn_dependancy>& deps)
   {
     if (node_data_[v0].size()==2)
     {
-      // v0 has two neighbours, 
+      // v0 has two neighbours,
       // node_data_[v0][0].first and node_data_[v0][1].first
       unsigned v1 = node_data_[v0][0].first;
       unsigned arc1 = node_data_[v0][0].second;
@@ -147,7 +147,7 @@ unsigned mmn_graph_rep1::remove_pair_deps(vcl_vector<mmn_dependancy>& deps)
       // Find arc between v1-v2, or create one if necessary
       unsigned arc12 = get_arc(v1,v2);
 
-      // Record dependancy
+      // Record dependency
       deps.push_back(mmn_dependancy(v0,v1,v2,arc1,arc2,arc12));
       n_removed++;
 
@@ -166,7 +166,7 @@ unsigned mmn_graph_rep1::remove_pair_deps(vcl_vector<mmn_dependancy>& deps)
   return n_removed;
 }
 
-//: Compute list of all single and pairwise dependancies
+//: Compute list of all single and pairwise dependencies
 //  Return true if graph can be fully decomposed in this way
 bool mmn_graph_rep1::compute_dependancies(vcl_vector<mmn_dependancy>& deps)
 {
@@ -175,11 +175,11 @@ bool mmn_graph_rep1::compute_dependancies(vcl_vector<mmn_dependancy>& deps)
   do
   {
     nr1=remove_all_leaves(deps);
-    if (n_arcs_>1) 
+    if (n_arcs_>1)
       nr1+=remove_pair_deps(deps);
   }
   while (nr1>0 && n_arcs_>0);
 
-  return (n_arcs_==0);
+  return n_arcs_==0;
 }
 
