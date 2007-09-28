@@ -33,8 +33,8 @@ class bgui_image_tableau_vp_sc_snapshot
 
   bgui_image_tableau_vp_sc_snapshot() {
     glGetIntegerv(GL_VIEWPORT, vp);
-	
-	//vcl_cout << "Saving    [" << vp[0] << " " << vp[1] << " " << vp[2] << " " << vp[3] << vcl_endl;
+
+    //vcl_cout << "Saving    [" << vp[0] << ' ' << vp[1] << ' ' << vp[2] << ' ' << vp[3] << vcl_endl;
     glGetIntegerv(GL_SCISSOR_BOX, sc);
     sc_was_enabled = glIsEnabled(GL_SCISSOR_TEST) == GL_TRUE;
   }
@@ -42,7 +42,7 @@ class bgui_image_tableau_vp_sc_snapshot
   ~bgui_image_tableau_vp_sc_snapshot() {
     // restore viewport :
     glViewport(vp[0], vp[1], vp[2], vp[3]);
-	//vcl_cout << "restoring [" << vp[0] << " " << vp[1] << " " << vp[2] << " " << vp[3] << vcl_endl;
+    //vcl_cout << "restoring [" << vp[0] << ' ' << vp[1] << ' ' << vp[2] << ' ' << vp[3] << vcl_endl;
     // turn off the scissor test, if it wasn't already on, and
     // restore old scissor settings :
     if (sc_was_enabled)
@@ -79,24 +79,24 @@ class bgui_image_tableau : public vgui_image_tableau
   vil1_image get_image() const;
 
   //: Return the vil_image_resource
-  vil_image_resource_sptr get_image_resource() const ;
+  vil_image_resource_sptr get_image_resource() const;
 
   void image_line(const float col_start,
-                  const float row_start, 
+                  const float row_start,
                   const float col_end,
                   const float row_end,
                   vcl_vector<double>& line_pos,
                   vcl_vector<double>& vals);
 
   //: set handle_motion true
-  void set_handle_motion(){handle_motion_ = true;}
-  void unset_handle_motion(){handle_motion_ = false;}
+  void set_handle_motion() { handle_motion_ = true; }
+  void unset_handle_motion() { handle_motion_ = false; }
 
-  bool handle_motion(){return handle_motion_;} 
+  bool handle_motion() const { return handle_motion_; }
 
   // true means locked, false unlocked
-  void lock_linenum(bool b) { locked_ = b; handle_motion_=!b;}
-  
+  void lock_linenum(bool b) { locked_ = b; handle_motion_=!b; }
+
  protected:
   //: Handle all events for this tableau.
   bool handle(vgui_event const &e);
@@ -111,6 +111,7 @@ class bgui_image_tableau : public vgui_image_tableau
   //: Get pixel info from the image (rather than frame buffer)
   void get_pixel_info_from_image(const int x, const int y,
                                  vgui_event const &e, char* msg);
+
   //: If false this tableau stops handling motion
   bool handle_motion_;
 
@@ -148,7 +149,8 @@ struct bgui_image_tableau_new : public bgui_image_tableau_sptr {
   { }
 
   //:to cast up to a vgui_image_tableau
-  operator vgui_image_tableau_sptr () const { vgui_image_tableau_sptr tt; tt.vertical_cast(*this); return tt; }
+  operator vgui_image_tableau_sptr () const
+  { vgui_image_tableau_sptr tt; tt.vertical_cast(*this); return tt; }
 };
 
 #endif // bgui_image_tableau_h_
