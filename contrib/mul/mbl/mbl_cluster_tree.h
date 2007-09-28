@@ -6,6 +6,7 @@
 // \author Tim Cootes
 
 #include <mbl/mbl_clusters.h>
+#include <vcl_iosfwd.h>
 
 //: Record trees of clusters of data, for fast neighbour finding
 //  Used to record clusters of objects of type T.
@@ -23,15 +24,16 @@
 //  to the keypoints, and only consider objects in the clusters
 //  which are sufficiently close.
 template<class T, class D>
-class mbl_cluster_tree {
-private:
+class mbl_cluster_tree
+{
+ private:
   //: Storage for objects
   vcl_vector<T> data_;
 
   //: Clusters
   vcl_vector<mbl_clusters<T,D> > cluster_;
 
-  //: Indicate which cluster each object assigned to
+  //: Indicate which cluster each object is assigned to.
   //  parent_[0][i] indicates which cluster in cluster_[0] data_[i]
   //  is assigned to.
   //  parent_[j][i] (j>0) indicates which cluster in level above
@@ -41,13 +43,13 @@ private:
   //: Empty clusters
   void empty();
 
-  //: Append new object with index i and assign to clusters
+  //: Append new object with index i and assign to clusters.
   //  Assumes that new object data()[i] is available. 
   //  Deduce which clusters belongs to and add it.
   //  Create new clusters if further than max_r() from any.
   void add_object(unsigned i);
 
-public:
+ public:
   mbl_cluster_tree();
 
   //: Define number of levels and max radius of clusters at each level
@@ -72,18 +74,17 @@ public:
   //: Print ancestry of every element
   void print_tree(vcl_ostream& os) const;
 
-    //: Version number for I/O
+  //: Version number for I/O
   short version_no() const;
 
-    //: Print class to os
+  //: Print class to os
   void print_summary(vcl_ostream& os) const;
 
-    //: Save class to binary file stream.
+  //: Save class to binary file stream.
   void b_write(vsl_b_ostream& bfs) const;
 
-    //: Load class from binary file stream
+  //: Load class from binary file stream
   void b_read(vsl_b_istream& bfs);
-
 };
 
 //: Binary file stream output operator for class reference
@@ -99,4 +100,3 @@ template<class T, class D>
 vcl_ostream& operator<<(vcl_ostream& os,const mbl_cluster_tree<T,D>& c);
 
 #endif // mbl_cluster_tree_h_
-
