@@ -120,6 +120,9 @@ SOURCE=.\test_algo_find_plateaus.cxx
 # Begin Source File
 SOURCE=.\test_algo_suppress_non_plateau.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_algo_flood_fill.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
