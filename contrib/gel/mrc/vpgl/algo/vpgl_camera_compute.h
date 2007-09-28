@@ -18,11 +18,11 @@
 #include <vpgl/vpgl_affine_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
+
 //: Basic least squares solution for a general projective camera given corresponding world and image points.
 class vpgl_proj_camera_compute
 {
  public:
-
   //: Compute from two sets of corresponding points.
   // Put the resulting camera into camera, return true if successful.
   static
@@ -53,8 +53,6 @@ class vpgl_proj_camera_compute
 class vpgl_affine_camera_compute
 {
  public:
-
-
   //: Compute from two sets of corresponding points.
   // Put the resulting camera into camera, return true if successful.
  static bool compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
@@ -72,9 +70,9 @@ class vpgl_perspective_camera_compute
   //: Compute from two sets of corresponding points.
   // Put the resulting camera into camera, return true if successful.
   static bool compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
-                const vcl_vector< vgl_point_3d<double> >& world_pts,
-                const vpgl_calibration_matrix<double>& K,
-                vpgl_perspective_camera<double>& camera );
+                       const vcl_vector< vgl_point_3d<double> >& world_pts,
+                       const vpgl_calibration_matrix<double>& K,
+                       vpgl_perspective_camera<double>& camera );
 
   //: Compute from a rational camera
   // Put the resulting camera into camera, return true if successful.
@@ -83,15 +81,15 @@ class vpgl_perspective_camera_compute
   // of the perspective camera to account for scaling the lon, lat and elevation
   // to the range [-1, 1]
   static bool compute( vpgl_rational_camera<double> const& rat_cam,
-                vgl_box_3d<double> const& approximation_volume,
-                vpgl_perspective_camera<double>& camera,
-                vgl_h_matrix_3d<double>& norm_trans);
+                       vgl_box_3d<double> const& approximation_volume,
+                       vpgl_perspective_camera<double>& camera,
+                       vgl_h_matrix_3d<double>& norm_trans);
 
-  //: Compute from rational camera using a local euclidian coordinate system.
+  //: Compute from rational camera using a local Euclidean coordinate system.
   static bool compute_local( vpgl_rational_camera<double> const& rat_cam,
-                vgl_box_3d<double> const& approximation_volume,
-                vpgl_perspective_camera<double>& camera,
-                vgl_h_matrix_3d<double>& norm_trans);
+                             vgl_box_3d<double> const& approximation_volume,
+                             vpgl_perspective_camera<double>& camera,
+                             vgl_h_matrix_3d<double>& norm_trans);
 
  private:
   vpgl_perspective_camera_compute();
