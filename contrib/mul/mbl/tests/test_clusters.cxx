@@ -1,14 +1,16 @@
 // This is mul/mbl/tests/test_clusters.cxx
-#include <vcl_iostream.h>
-#include <mbl/mbl_clusters.h>
 #include <testlib/testlib_test.h>
-
+//:
+// \file
+#include <mbl/mbl_clusters.h>
 #include <mbl/mbl_clusters.txx>
+#include <vcl_iostream.h>
 
 //: Distance class
-class mbl_scalar_distance {
-public:
-  static double d(double a, double b) { return (a<b?b-a:a-b); }
+class mbl_scalar_distance
+{
+ public:
+  static double d(double a, double b) { return a<b?b-a:a-b; }
 };
 
 // Compile template
@@ -16,9 +18,9 @@ MBL_CLUSTERS_INSTANTIATE(double,mbl_scalar_distance);
 
 void test_clusters()
 {
-  vcl_cout << "*******************\n"
+  vcl_cout << "**********************\n"
            << " Testing mbl_clusters\n"
-           << "*******************\n";
+           << "**********************\n";
 
   mbl_clusters<double,mbl_scalar_distance> clusters;
 
@@ -44,8 +46,6 @@ void test_clusters()
   data.push_back(n+17.3);
   TEST("Cluster for added point correct",
        clusters.add_object(data.size()-1),1+int((n-1)/max_r));
-
-
 }
 
 TESTMAIN(test_clusters);

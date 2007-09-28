@@ -1,15 +1,18 @@
-// This is mul/mbl/tests/test_cluster_trees.cxx
+// This is mul/mbl/tests/test_cluster_tree.cxx
+#include <testlib/testlib_test.h>
+//:
+// \file
 #include <vcl_iostream.h>
 #include <mbl/mbl_cluster_tree.h>
-#include <testlib/testlib_test.h>
 
 #include <mbl/mbl_clusters.txx>
 #include <mbl/mbl_cluster_tree.txx>
 
 //: Distance class
-class mbl_scalar_distance {
-public:
-  static double d(double a, double b) { return (a<b?b-a:a-b); }
+class mbl_scalar_distance
+{
+ public:
+  static double d(double a, double b) { return a<b?b-a:a-b; }
 };
 
 // Compile templates
@@ -34,7 +37,6 @@ void test_cluster_tree()
     vcl_cout<<"L="<<L<<" max_r: "<<max_r[L]<<vcl_endl;
   }
 
-
   clusters.set_max_r(max_r);
 
   vcl_vector<double> data(n);
@@ -58,7 +60,6 @@ void test_cluster_tree()
   TEST_NEAR("  - distance is 0.2",d,0.2,1e-6);
   TEST("Nearest point to 11.2 is 11",clusters.nearest(11.2,d),11);
   TEST_NEAR("  - distance is 0.2",d,0.2,1e-6);
-
 }
 
 TESTMAIN(test_cluster_tree);
