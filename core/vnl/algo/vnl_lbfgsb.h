@@ -20,11 +20,10 @@
 #include <vnl/vnl_nonlinear_minimizer.h>
 #include <vnl/vnl_vector.h>
 
-//: Limited memory Broyden Fletcher Goldfarb Shannon minimization with
-// constraints.  Lower and upper bounds may be specified for the
-// variables to be optimized.  The algorithm miminizes a nonlinear
-// function f(x) of n variables subject to simple bound constraints of
-// l <= x <= u.
+//: Limited memory Broyden Fletcher Goldfarb Shannon minimization with constraints.
+//  Lower and upper bounds may be specified for the variables to be optimized.
+//  The algorithm miminizes a nonlinear function f(x) of n variables
+//  subject to simple bound constraints of l <= x <= u.
 
 class vnl_lbfgsb : public vnl_nonlinear_minimizer
 {
@@ -104,7 +103,7 @@ class vnl_lbfgsb : public vnl_nonlinear_minimizer
   double get_projected_gradient_tolerance() const
     { return this->projected_gradient_tolerance_; }
 
-protected:
+ protected:
 
   vnl_vector<double> lower_bound_;
   vnl_vector<double> upper_bound_;
@@ -113,7 +112,7 @@ protected:
   double convergence_factor_;
   double projected_gradient_tolerance_;
 
-private:
+ private:
   void init_parameters();
   vnl_cost_function* f_;
 };
