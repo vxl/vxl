@@ -6,20 +6,19 @@
 
 #include "vgl_norm_trans_2d.h"
 #include <vgl/vgl_point_2d.h>
-#include <vnl/vnl_vector_fixed.h>
 #include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
 
 //--------------------------------------------------------------
 //
 
-//: Default constructor
+// Default constructor
 template <class T>
 vgl_norm_trans_2d<T>::vgl_norm_trans_2d() : vgl_h_matrix_2d<T>()
 {
 }
 
-//: Copy constructor
+// Copy constructor
 template <class T>
 vgl_norm_trans_2d<T>::vgl_norm_trans_2d(const vgl_norm_trans_2d<T>& M)
 : vgl_h_matrix_2d<T>(M)
@@ -27,14 +26,14 @@ vgl_norm_trans_2d<T>::vgl_norm_trans_2d(const vgl_norm_trans_2d<T>& M)
 }
 
 
-//: Constructor from vcl_istream
+// Constructor from vcl_istream
 template <class T>
 vgl_norm_trans_2d<T>::vgl_norm_trans_2d(vcl_istream& s)
 : vgl_h_matrix_2d<T>(s)
 {
 }
 
-//: Constructor from file
+// Constructor from file
 template <class T>
 vgl_norm_trans_2d<T>::vgl_norm_trans_2d(char const* filename)
 : vgl_h_matrix_2d<T>(filename)
@@ -42,7 +41,7 @@ vgl_norm_trans_2d<T>::vgl_norm_trans_2d(char const* filename)
 }
 
 //--------------------------------------------------------------
-//: Constructor
+// Constructor
 template <class T>
 vgl_norm_trans_2d<T>::vgl_norm_trans_2d(vnl_matrix_fixed<T,3,3> const& M)
 : vgl_h_matrix_2d<T>(M)
@@ -50,14 +49,14 @@ vgl_norm_trans_2d<T>::vgl_norm_trans_2d(vnl_matrix_fixed<T,3,3> const& M)
 }
 
 //--------------------------------------------------------------
-//: Constructor
+// Constructor
 template <class T>
 vgl_norm_trans_2d<T>::vgl_norm_trans_2d(const T* H)
 : vgl_h_matrix_2d<T>(H)
 {
 }
 
-//: Destructor
+// Destructor
 template <class T>
 vgl_norm_trans_2d<T>::~vgl_norm_trans_2d()
 {
@@ -65,12 +64,11 @@ vgl_norm_trans_2d<T>::~vgl_norm_trans_2d()
 
 // == OPERATIONS ==
 //----------------------------------------------------------------
-//  Get the normalizing transform for a set of points
-// 1) Compute the center of gravity and form the normalizing
-//    transformation matrix
-// 2) Transform the point set to a temporary collection
-// 3) Compute the average point radius
-// 4) Complete the normalizing transform
+//: Get the normalizing transform for a set of points
+// - Compute the center of gravity & form the normalizing transformation matrix
+// - Transform the point set to a temporary collection
+// - Compute the average point radius
+// - Complete the normalizing transform
 template <class T>
 bool vgl_norm_trans_2d<T>::
 compute_from_points(vcl_vector<vgl_homg_point_2d<T> > const& points,
@@ -87,11 +85,11 @@ compute_from_points(vcl_vector<vgl_homg_point_2d<T> > const& points,
     vgl_homg_point_2d<T> p((*this)(*pit));
     temp.push_back(p);
   }
-  
-  if (isotropic){
+
+  if (isotropic) {
     T radius = 1;
     //Points might be coincident
-    if(!this->scale_xyroot2(temp, radius))
+    if (!this->scale_xyroot2(temp, radius))
       return false;
     T scale = 1/radius;
     this->t12_matrix_.put(0,0, scale);
@@ -101,7 +99,7 @@ compute_from_points(vcl_vector<vgl_homg_point_2d<T> > const& points,
     return true;
   }
   T sdx = 1, sdy = 1, c = 1, s = 0;
-  if(!this->scale_aniostropic(temp, sdx, sdy, c, s))
+  if (!this->scale_aniostropic(temp, sdx, sdy, c, s))
     return false;
   T scx = 1/sdx, scy = 1/sdy;
   this->t12_matrix_.put(0, 0, c*scx);
@@ -220,6 +218,7 @@ scale_xyroot2(vcl_vector<vgl_homg_point_2d<T> > const& in, T& radius)
   }
   return false;
 }
+
 //------------------------------------------------------------
 // Anisotropic scaling of the point set around the center of gravity.
 // Determines the principal axes and standard deviations along the principal
@@ -247,12 +246,12 @@ scale_aniostropic(vcl_vector<vgl_homg_point_2d<T> > const& in,
     Sxy += (double)x*y;
     Sy2 += (double)y*y;
   }
-  if(!count)
+  if (!count)
     return false;
 
   double t =0.0;
   // Compute the rotation that makes Sxy zero
-  if( Sx2 != Sy2 )
+  if ( Sx2 != Sy2 )
     t = 0.5*vcl_atan( -2.0*Sxy/(Sx2-Sy2) );
 
   double dc = vcl_cos(t),  ds = vcl_sin(t);
@@ -260,13 +259,13 @@ scale_aniostropic(vcl_vector<vgl_homg_point_2d<T> > const& in,
   /* determine the standard deviations in the rotated frame */
   double sddx = vcl_sqrt( (dc*dc*Sx2-2.0*dc*ds*Sxy+ds*ds*Sy2)/count );
   double sddy = vcl_sqrt( (ds*ds*Sx2+2.0*dc*ds*Sxy+dc*dc*Sy2)/count );
-  
+
   //cast back to T
   sdx = static_cast<T>(sddx);
   sdy = static_cast<T>(sddy);
   c = static_cast<T>(dc);
   s = static_cast<T>(ds);
-  return (sdx>tol && sdy >tol);
+  return sdx>tol && sdy >tol;
 }
 
 //----------------------------------------------------------------------------
