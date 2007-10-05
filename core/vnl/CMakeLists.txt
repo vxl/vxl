@@ -7,14 +7,15 @@ OPTION(VNL_CONFIG_LEGACY_METHODS
   "Whether backward-compatibility methods are provided by vnl." OFF)
 OPTION(VNL_CONFIG_THREAD_SAFE
   "Whether thread-safe vnl implementations are used." ON)
+
  
-IF( VXL_HAS_EMMINTRIN_H AND VXL_HAS_SSE2_HARDWARE_SUPPORT )
-  OPTION(VNL_CONFIG_ENABLE_SSE2
-    "Enable Streaming SIMD Extensions 2 optimisations (hardware dependant)." ON)
-ELSE ( VXL_HAS_EMMINTRIN_H AND VXL_HAS_SSE2_HARDWARE_SUPPORT )
+#IF( VXL_HAS_EMMINTRIN_H AND VXL_HAS_SSE2_HARDWARE_SUPPORT )
+#  OPTION(VNL_CONFIG_ENABLE_SSE2
+#    "Enable Streaming SIMD Extensions 2 optimisations (hardware dependant)." ON)
+#ELSE ( VXL_HAS_EMMINTRIN_H AND VXL_HAS_SSE2_HARDWARE_SUPPORT )
   OPTION(VNL_CONFIG_ENABLE_SSE2
     "Enable Streaming SIMD Extensions 2 optimisations (hardware dependant)." OFF)
-ENDIF( VXL_HAS_EMMINTRIN_H AND VXL_HAS_SSE2_HARDWARE_SUPPORT )
+#ENDIF( VXL_HAS_EMMINTRIN_H AND VXL_HAS_SSE2_HARDWARE_SUPPORT )
 
 MARK_AS_ADVANCED(
   VNL_CONFIG_CHECK_BOUNDS
