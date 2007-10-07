@@ -360,6 +360,7 @@ foreach $f (@FILES)
     elsif ($j eq 'vil/algo/vil_convolve_1d.h') { $i='vil_convolve_(1d|edge_1d|boundary_option)'; }
     elsif ($j eq 'vil/algo/vil_find_peaks.h') { $i='vil_(find_peaks_3x3|is_peak_3x3)'; }
     elsif ($j eq 'vil/algo/vil_find_4con_boundary.h') { $i.='(_below|_above)_threshold'; }
+    elsif ($j eq 'vil/algo/vil_flood_fill.h') { $i.='(_row|4|8)'; }
     elsif ($j eq 'vil/algo/vil_histogram.h') { $i.='(|_byte)|VIL_HISTOGRAM_INSTANTIATE'; }
     elsif ($j eq 'vil/algo/vil_exp_filter_1d.h') { $i='vil_exp_filter_(1d|i|j)'; }
     elsif ($j eq 'vil/algo/vil_exp_grad_filter_1d.h') { $i='vil_exp_grad_filter_(1d|i|j)'; }
@@ -466,6 +467,7 @@ foreach $f (@FILES)
     elsif ($j eq 'gevd/gevd_pixel.h') { $i='(byte|char|short|float|ptr)Pixel'; }
     # MBL
     elsif ($j eq 'mbl/mbl_cloneable_ptr.h') { $i.='|MBL_CLONEABLE_PTR_INSTANTIATE'; }
+    elsif ($j eq 'mbl/mbl_cloneables_factory.h') { $i.='|MBL_CLONEABLES_FACTORY_INSTANTIATE'; }
     elsif ($j eq 'mbl/mbl_combination.h') { $i.='(_begin|_next)'; }
     elsif ($j eq 'mbl/mbl_config.h') { $i='MBL_CONFIG_(BUILD_NAME|TEST_SAVE_MEASUREMENT_ROOT)'; }
     elsif ($j eq 'mbl/mbl_exception.h') { $i.='_(error|warning|abort|(read_props_|parse_block_|)parse_error|no_name_in_factory|missing_property|unused_props)'; }
