@@ -90,6 +90,7 @@ SET( vil_sources ${vil_sources}
   # basic things
   vil_memory_chunk.cxx                  vil_memory_chunk.h
   vil_image_view_base.h
+  vil_chord.h
   vil_image_view.h                      vil_image_view.txx
   vil_image_resource.cxx                vil_image_resource.h
                                         vil_image_resource_sptr.h
