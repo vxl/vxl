@@ -287,10 +287,41 @@ static void test_bins_3D()
   }
 }
 
+
+static void test_need_to_check_nbr()
+{
+#if 0 // don't run the test, because this is a known bug.
+  // Verify that if there is a point in a nearby bin that is closer
+  // than the closest in the current bin, we still find it.
+  vcl_cout << "Testing 2D for correct boundary checking\n";
+  typedef rsdl_bins< 2, double, int > bin_type;
+
+  vnl_vector_fixed< double, 2 > min_pt, max_pt, bin_sizes;
+  min_pt[0] = 0.0;   min_pt[1] = 0;
+  max_pt[0] = 10.0;  max_pt[1] = 10;
+  bin_sizes[0] = 1; bin_sizes[1] = 1;
+
+  bin_type bins( min_pt, max_pt, bin_sizes );
+
+  vnl_double_2 a(5.9,4.5), b(4.9,4.5);
+  bins.add_point( a, 1 );
+  bins.add_point( b, 2 );
+
+  vcl_vector<int> vals;
+  bins.n_nearest( vnl_double_2(5.1,4.5), 1, vals );
+  vcl_cout << "Nearest pt value = " << vals[0] << vcl_endl;
+
+  TEST( "Found nearest point", ! vals.empty() && vals[0] == 2, true );
+#endif
+}
+
+
+
 static void test_bins()
 {
   test_bins_2D();
   test_bins_3D();
+  test_need_to_check_nbr();
 }
 
 TESTMAIN(test_bins);
