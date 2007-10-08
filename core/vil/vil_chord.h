@@ -30,7 +30,7 @@ struct vil_chord
 //: Print to stream
 inline vcl_ostream& operator<<(vcl_ostream& os, vil_chord c)
 {
-  os<<"(["<<c.ilo<<","<<c.ihi<<"],"<<c.j<<")";
+  return os<<"(["<<c.ilo<<","<<c.ihi<<"],"<<c.j<<")";
 }
 
 //: Compute area of region defined by (non-overlapping) chords
