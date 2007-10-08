@@ -431,9 +431,9 @@ void vil3d_analyze_header::print_summary(vcl_ostream& os) const
 {
   os<<"vil3d_analyze_header:"<<vcl_endl;
   vsl_indent_inc(os);
-  os<<vsl_indent()<<"Size: "<<dim.dim[1]<<" x "<<dim.dim[2]<<" x "<<dim.dim[3]<<vcl_endl
-    <<vsl_indent()<<"Voxel widths: "<<dim.pixdim[1]<<" x "<<dim.pixdim[2]<<" x "<<dim.pixdim[3]<<vcl_endl
-    <<vsl_indent()<<"Format type: "<<pixel_format()<<" (Code="<<dim.datatype<<')'<<vcl_endl;
+  os<<vsl_indent()<<"Size: "<<dim.dim[1]<<" x "<<dim.dim[2]<<" x "<<dim.dim[3]
+    <<"  Voxel widths: ("<<dim.pixdim[1]<<" x "<<dim.pixdim[2]<<" x "<<dim.pixdim[3]
+    <<") Voxel type: "<<pixel_format()<<" (Code="<<dim.datatype<<')';
   vsl_indent_dec(os);
 }
 
