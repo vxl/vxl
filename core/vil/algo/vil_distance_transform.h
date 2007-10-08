@@ -30,5 +30,14 @@ void vil_distance_transform(const vil_image_view<bool>& mask,
                             vil_image_view<float>& distance_image,
                             float max_dist);
 
+//: Compute distance function from zeros in original image
+//  Image is assumed to be filled with max_dist where there
+//  is background, and zero at the places of interest.
+//  On exit, the values are the 24-connected distance to the
+//  nearest original zero region. (ie considers neighbours in
+//  a +/-2 pixel region around each point).
+//  More accurate than vil_distance_transform(image), but
+//  approximately twice the processing required.
+void vil_distance_transform_r2(vil_image_view<float>& image);
 
 #endif
