@@ -200,6 +200,11 @@ template<class aT, class sumT>
 inline void vil_math_mean_over_planes(const vil_image_view<aT>& src,
                                       vil_image_view<sumT>& dest)
 {
+  if (src.nplanes()==1 && src.is_a()==dest.is_a())
+  {
+    dest.deep_copy(src);
+    return;
+  }
   dest.set_size(src.ni(), src.nj(), 1);
   for (unsigned j=0;j<src.nj();++j)
     for (unsigned i=0;i<src.ni();++i)
