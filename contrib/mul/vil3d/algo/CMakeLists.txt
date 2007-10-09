@@ -22,6 +22,7 @@ SET(vil3d_algo_sources
   vil3d_find_peaks.h
   vil3d_quad_distance_function.h 
   vil3d_smooth_121.h
+  vil3d_abs_shuffle_distance.h vil3d_abs_shuffle_distance.txx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vil3d_algo_sources)

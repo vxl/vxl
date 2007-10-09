@@ -59,6 +59,25 @@ void vil3d_structuring_element::set_to_sphere(double r)
   set(px,py,pz);
 }
 
+//: Set to sphere of radius r, but with non isotropic voxel sizes
+//	Voxel size supplied in sx,sy and sz. r then becomes an absolute radius
+//  Select pixels in disk s.t. x*x+y*y+z*z<=r^r
+void vil3d_structuring_element::set_to_sphere_noniso(double r, double sx, double sy, double sz)
+{
+  vcl_vector<int> px,py,pz;
+  double r2 = r*r;
+	double sx2 = sx*sx;
+	double sy2 = sy*sy;
+	double sz2 = sz*sz;
+  int r0 = int(r+1);
+  for (int k=-r0;k<=r0;++k)
+    for (int j=-r0;j<=r0;++j)
+      for (int i=-r0;i<=r0;++i)
+        if (i*i*sx2+j*j*sy2+k*k*sz2<r2)
+        { px.push_back(i); py.push_back(j); pz.push_back(k); }
+  set(px,py,pz);
+}
+
 //: Set to line along i (ilo,0)..(ihi,0)
 void vil3d_structuring_element::set_to_line_i(int ilo, int ihi)
 {
