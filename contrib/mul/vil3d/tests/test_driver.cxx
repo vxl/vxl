@@ -30,6 +30,7 @@ DECLARE( test_algo_smooth_121 );
 DECLARE( test_algo_corners );
 DECLARE( test_algo_quad_distance_function );
 DECLARE( test_algo_distance_transform );
+DECLARE( test_algo_abs_shuffle_distance );
 
 
 void
@@ -65,6 +66,7 @@ register_tests()
   REGISTER( test_algo_corners );
   REGISTER( test_algo_quad_distance_function );
   REGISTER( test_algo_distance_transform );
+  REGISTER( test_algo_abs_shuffle_distance );
 }
 
 DEFINE_MAIN;

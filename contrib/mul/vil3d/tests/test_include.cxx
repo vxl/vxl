@@ -19,6 +19,7 @@
 #include <vil3d/algo/vil3d_grad_3x3x3.h>
 #include <vil3d/algo/vil3d_quad_distance_function.h>
 #include <vil3d/algo/vil3d_smooth_121.h>
+#include <vil3d/algo/vil3d_abs_shuffle_distance.h>
 #include <vil3d/vil3d_convert.h>
 #include <vil3d/vil3d_copy.h>
 #include <vil3d/vil3d_crop.h>
