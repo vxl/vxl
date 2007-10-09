@@ -25,6 +25,7 @@ MANPAGE_SOURCES += vil3d_corners.txx
 MANPAGE_SOURCES += vil3d_find_peaks.h
 MANPAGE_SOURCES += vil3d_grad_3x3x3.h
 MANPAGE_SOURCES += vil3d_quad_distance_function.h
+MANPAGE_SOURCES += vil3d_abs_shuffle_distance.txx
 MANPAGE_SOURCES += vil3d_smooth_121.h
 
 ################################
