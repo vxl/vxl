@@ -324,6 +324,9 @@ SOURCE=.\test_gen_synthetic.cxx
 # Begin Source File
 SOURCE=.\test_algo_distance_transform.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_algo_abs_shuffle_distance.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

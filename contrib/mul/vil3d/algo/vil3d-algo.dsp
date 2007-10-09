@@ -155,6 +155,12 @@ SOURCE=.\Templates/vil3d_corners+float.float-.cxx
 # Begin Source File
 SOURCE=.\Templates/vil3d_corners+int_16.float-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_abs_shuffle_distance+int.int-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil3d_abs_shuffle_distance+int_16.int_16-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -232,6 +238,12 @@ SOURCE=.\vil3d_quad_distance_function.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil3d_smooth_121.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_abs_shuffle_distance.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_abs_shuffle_distance.txx
 # End Source File
 # End Group
 # End Target
