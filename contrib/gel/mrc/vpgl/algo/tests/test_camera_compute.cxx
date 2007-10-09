@@ -187,7 +187,7 @@ vcl_vector<vgl_point_3d<double> > world_points()
   return wp;
 }
 
-void test_rational_camera_approx()
+void test_rational_camera_approx(vcl_string dir_base)
 {
   vpgl_rational_camera<double> rat_cam = construct_rational_camera();
   vcl_cout << rat_cam;
@@ -217,8 +217,8 @@ void test_rational_camera_approx()
 #endif
 
   // read a camera from file
-  vcl_string dir = "c:/vxl/vxl/contrib/gel/mrc/vpgl/algo/tests/";
-  vcl_string file = dir + "07JAN27.RPB";
+  //vcl_string dir = "c:/lems/vxl/vxl/contrib/gel/mrc/vpgl/algo/tests/";
+  vcl_string file =  "07JAN27.RPB";
 
   vpgl_rational_camera<double> rat_cam2(file);
   vcl_cout << rat_cam2;
@@ -240,7 +240,8 @@ void test_rational_camera_approx()
   vcl_cout << "Test Result\n" << pc2 << '\n';
 }
 
-int test_camera_compute_main(int argc, char* argv[])
+static void test_camera_compute(int argc, char* argv[])
+//MAIN_ARGS(test_camera_compute)
 {
   vcl_string dir_base;
 
@@ -254,9 +255,9 @@ int test_camera_compute_main(int argc, char* argv[])
   }
   test_camera_compute_setup();
   test_perspective_compute();
-  test_rational_camera_approx();
+  test_rational_camera_approx(dir_base);
 
-  return testlib_test_summary();
+  //return testlib_test_summary();
 }
 
-//TESTMAIN_ARGS(test_camera_compute);
+TESTMAIN_ARGS(test_camera_compute)
