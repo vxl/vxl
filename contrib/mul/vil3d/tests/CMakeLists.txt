@@ -68,7 +68,7 @@ ADD_TEST( vil3d_test_algo_smooth_121                  ${EXECUTABLE_OUTPUT_PATH}/
 ADD_TEST( vil3d_test_algo_corners                     ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all  test_algo_corners )
 ADD_TEST( vil3d_test_algo_quad_distance_function      ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all  test_algo_quad_distance_function )
 ADD_TEST( vil3d_test_algo_distance_transform      ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all  test_algo_distance_transform )
-ADD_TEST( vil3d_test_algo_abs_shuffle_distance      ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all  test_algoabs_shuffle_distance )
+ADD_TEST( vil3d_test_algo_abs_shuffle_distance      ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all  test_algo_abs_shuffle_distance )
 
 ADD_EXECUTABLE( vil3d_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vil3d_test_include vil3d_algo vil3d vgl )
