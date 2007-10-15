@@ -10,8 +10,14 @@
 // \verbatim
 // Modifications
 // J.L. Mundy - Dec 27 2004 added range map to control dynamic range of display
+// Gamze Tunali - Oct 15, 2007 added viewport resize check and improved the 
+//                running time by refactoring the code. In the case a buffer is 
+//                used (rmp->use_glPixelMap_ is true), only the viewport area is 
+//                buffered and drawn to speed up till the next viewport resize
 // \endverbatim
 #include <vil/vil_image_resource_sptr.h>
+#include <vil/vil_pyramid_image_resource_sptr.h>
+#include <vil/vil_image_view.h>
 #include <vgui/vgui_range_map_params_sptr.h>
 class vil_image_view_base;
 class vgui_section_buffer;
@@ -47,8 +53,14 @@ class vgui_vil_image_renderer
   //: Create a buffer if necessary 
   void create_buffer(vgui_range_map_params_sptr const& rmp);
 
+  //: Create a buffer with viewport dimensions
+  void create_buffer(vgui_range_map_params_sptr const& rmp, 
+    float x0, float y0, float x1, float y1);
+
   //: draw the pixels to the frame buffer
   void draw_pixels();
+
+  void draw_pixels(float x1, float y1, float x2, float y2);
 
   //: Stores the image data (pixels, dimensions, etc).
   vil_image_resource_sptr the_image_;
@@ -61,6 +73,17 @@ class vgui_vil_image_renderer
 
   //: buffer state variable
   bool valid_buffer_;
+
+  unsigned x0, y0, w, h; // viewport parameters
+  float zx, zy; // zoomx and zoomy values of the viewport
+  void* buf;    // pointer to the top left pixel of the view
+
+  // a pointer to the image resource if it is a pyramid
+  vil_pyramid_image_resource_sptr pyr; 
+
+  // to keep the view between viewport changes, for speed up
+  vil_image_view_base_sptr view;       
+
  public:
   //: Constructor - create an empty image renderer.
   vgui_vil_image_renderer();

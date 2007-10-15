@@ -30,7 +30,6 @@ vgui_vil_image_renderer::
 vgui_vil_image_renderer()
   : buffer_( 0 ), buffer_params_(0), valid_buffer_(false)
 {
-  valid_buffer_ = false;
 }
 
 
@@ -49,8 +48,12 @@ set_image_resource( vil_image_resource_sptr const& image )
   buffer_ = 0;
   valid_buffer_ = false;
   the_image_ = image;
-  if ( the_image_ )
+  if ( the_image_ ) {
     trace << "image : " << the_image_ << vcl_flush;
+    if(the_image_->get_property(vil_property_pyramid))
+      pyr = (vil_pyramid_image_resource*)the_image_.ptr();
+  } else 
+    pyr = 0;
 }
 
 
@@ -71,14 +74,21 @@ reread_image()
   valid_buffer_ = false;
 }
 
+//: creates a buffer for whole image 
 void vgui_vil_image_renderer::
 create_buffer(vgui_range_map_params_sptr const& rmp)
 {
-  delete buffer_;
+  this->create_buffer(rmp, 0, 0, the_image_->ni(), the_image_->nj());
+}
 
-  buffer_ = new vgui_section_buffer( 0, 0,
-                                       the_image_->ni(), the_image_->nj(),
-                                       GL_NONE, GL_NONE );
+//: creates a buffer for a portion of the image
+void vgui_vil_image_renderer::
+create_buffer(vgui_range_map_params_sptr const& rmp, 
+              float x0, float y0, float x1, float y1)
+{
+  delete buffer_;
+  
+  buffer_ = new vgui_section_buffer( x0, y0, x1, y1, GL_NONE, GL_NONE );
   buffer_->apply( the_image_, rmp );
 
   buffer_params_ = rmp;
@@ -91,29 +101,44 @@ draw_pixels()
   buffer_->draw_as_image() || buffer_->draw_as_rectangle();
 }
 
+void vgui_vil_image_renderer::
+draw_pixels(float x1, float y1, float x2, float y2)
+{
+  buffer_->draw_as_image(x1,y1,x2,y2) || buffer_->draw_as_rectangle(x1,y1,x2,y2);
+}
+
 bool vgui_vil_image_renderer::
 render_directly(vgui_range_map_params_sptr const& rmp)
 {
   if (!the_image_||the_image_->nplanes()!=rmp->n_components_)
     return false;
-  //Check if caching is required - useful if direct mapping is slow
-  if (rmp->cache_mapped_pix_&&this->old_range_map_params(rmp))
-  {
-    if (!valid_buffer_)
-      this->create_buffer(rmp);
-    this->draw_pixels();
-    return true;
-  }
-  //Get the viewport parameters
+
+  //Extract the viewport parameters
   unsigned i0=0, j0=0;
   unsigned ni =the_image_->ni(), nj=the_image_->nj();
   float zoomx = 1, zoomy = -1;
   pixel_view(i0, ni, j0, nj, zoomx, zoomy);
-  //Check if the resource is a pyramid image
-  float actual_scale = 1.0f;
-  vil_pyramid_image_resource_sptr pyr;
-  if(the_image_->get_property(vil_property_pyramid))
-    pyr = (vil_pyramid_image_resource*)the_image_.ptr();
+
+  // check if the viewport paramaters changed
+  bool vp_changed = false;
+  if ((x0 != i0) || (y0 != j0) || (ni != w) || (nj != h) || 
+    (zx != zoomx) || (zy != zoomy))  {
+    vp_changed = true;
+    x0 = i0; y0 = j0; w = ni; h = nj;
+    zx = zoomx;  zy = zoomy;
+  }
+
+  if (vp_changed)
+    vcl_cout << "VP changed" << vcl_endl;
+  //Check if caching is required - useful if direct mapping is slow
+  if (rmp->cache_mapped_pix_&&this->old_range_map_params(rmp))
+  {
+    if (!valid_buffer_ || vp_changed) 
+      this->create_buffer(rmp, i0, j0, i0+ni, j0+nj);
+    this->draw_pixels(i0, j0, i0+ni, j0+nj);
+    return true;
+  }
+
   vul_timer t;
   //we are guaranteed that the image and range map are present
   //further we know that pixel type unsigned char or unsigned short
@@ -121,21 +146,33 @@ render_directly(vgui_range_map_params_sptr const& rmp)
   //float values in the range [0,1]. If the map is defined, then OpenGL
   //can read the image pixels directly from the image.
   //(  Current support only for unsigned char and
-  // unsigned short pixel types)
+  //unsigned short pixel types)
+
   vil_pixel_format format = the_image_->pixel_format();
+
+  float actual_scale = 1.0f;
   switch ( format )
   {
    case VIL_PIXEL_FORMAT_BYTE:
     {
+      unsigned sni, snj;
       vgui_range_map<unsigned char> rm(*rmp);
-      vil_image_view<unsigned char> view; 
-      if(!pyr)
-        view = the_image_->get_view(i0, ni, j0, nj);
-      else
-        view = pyr->get_copy_view(i0, ni, j0, nj, zoomx, actual_scale);
-      unsigned sni = view.ni(), snj = view.nj();
-      zoomx/=actual_scale;       zoomy/=actual_scale; 
-      void* buf = view.top_left_ptr();
+    
+      if (vp_changed) {
+        if(!pyr)
+          view = the_image_->get_view(i0, ni, j0, nj);
+        else
+          view = pyr->get_copy_view(i0, ni, j0, nj, zoomx, actual_scale);
+        sni = view->ni();
+        snj = view->nj();
+        zoomx/=actual_scale;       zoomy/=actual_scale; 
+        vil_image_view<unsigned char> v = static_cast <vil_image_view<unsigned char> > (*view);
+        buf = v.top_left_ptr();
+      } else {
+        sni = ni;
+        snj = nj;
+      }
+  
       switch ( the_image_->nplanes() )
       {
        case 1:
@@ -151,7 +188,6 @@ render_directly(vgui_range_map_params_sptr const& rmp)
             vcl_cout << "Directly Byte Luminance Rendered in "
                      << t.real() << "msecs\n";
 #endif
-            valid_buffer_ = false;
             buffer_params_ = rmp;
             return true;
           }
@@ -168,12 +204,12 @@ render_directly(vgui_range_map_params_sptr const& rmp)
                                zoomx, zoomy,
                                GL_RGB, GL_UNSIGNED_BYTE, true,
                                0, &fRmap, &fGmap, &fBmap))
+
           {
 #ifdef RENDER_TIMER
             vcl_cout << "Directly Byte RGB Rendered in "
                      << t.real() << "msecs\n";
 #endif
-            valid_buffer_ = false;
             buffer_params_ = rmp;
             return true;
           }
@@ -196,7 +232,6 @@ render_directly(vgui_range_map_params_sptr const& rmp)
             vcl_cout << "Directly Byte RGBA Rendered in "
                      << t.real() << "msecs\n";
 #endif
-            valid_buffer_ = false;
             buffer_params_ = rmp;
             return true;
           }
@@ -213,14 +248,20 @@ render_directly(vgui_range_map_params_sptr const& rmp)
       if (!fLmap.size())
         return false;
 
-      vil_image_view<unsigned short> view;
-      if(!pyr)
-        view = the_image_->get_view(i0, ni, j0, nj);
-      else
-        view = pyr->get_copy_view(i0, ni, j0, nj, zoomx, actual_scale);
-      unsigned sni = view.ni(), snj = view.nj();
-      zoomx/=actual_scale;       zoomy/=actual_scale; 
-      void* buf = view.top_left_ptr();
+      unsigned sni, snj;
+      if (vp_changed)  {
+        if(!pyr)
+          view = the_image_->get_view(i0, ni, j0, nj);
+        else
+          view = pyr->get_copy_view(i0, ni, j0, nj, zoomx, actual_scale);
+        sni = view->ni(); snj = view->nj();
+        zoomx/=actual_scale;       zoomy/=actual_scale; 
+        vil_image_view<unsigned short> v = static_cast <vil_image_view<unsigned short> > (*view);
+        buf = v.top_left_ptr();
+
+      } else {
+        sni = ni; snj=nj;
+      }
       if (vgui_view_render(buf,  sni, snj,
                            zoomx, zoomy,
                            GL_LUMINANCE, GL_UNSIGNED_SHORT, true, &fLmap))
@@ -229,7 +270,6 @@ render_directly(vgui_range_map_params_sptr const& rmp)
         vcl_cout << "Directly Short Luminance Rendered in "
                  << t.real() << "msecs\n";
 #endif
-        valid_buffer_ = false;
         buffer_params_ = rmp;
         return true;
       }
@@ -242,6 +282,7 @@ render_directly(vgui_range_map_params_sptr const& rmp)
 void vgui_vil_image_renderer::
 render(vgui_range_map_params_sptr const& rmp)
 {
+  vul_timer timer;
   if ( !the_image_ )
     return;
   //If the image can be mapped then there is no point in having a
@@ -249,16 +290,17 @@ render(vgui_range_map_params_sptr const& rmp)
   //using the range map.
   if (rmp&&rmp->use_glPixelMap_&&this->render_directly(rmp))
     return;
-
   //otherwise we have to render a cached section buffer
 
   // Delay sectioning until first render time. This allows the section
   // buffer to decide on a cache format which depends on the current GL
   // rendering context.
-  if (!this->old_range_map_params(rmp)||!valid_buffer_)
-    this->create_buffer(rmp);
+  if (!this->old_range_map_params(rmp)||!valid_buffer_) {
+    this->create_buffer(rmp, 0, 0, the_image_->ni(), the_image_->nj());
+  }
 
   this->draw_pixels();
+  long dif = timer.real();
 }
 
 //: Are the range map params associated with the current buffer out of date?
