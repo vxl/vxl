@@ -67,7 +67,7 @@ class vil_pyramid_image_resource : public vil_image_resource
   //: Put the data in this view back into the base image.
   // Pyramid is readonly.
   // This is essentially (although not formally) a pure virtual function.
-  virtual bool put_view(vil_image_view_base const& im, unsigned i0, unsigned j0)
+  virtual bool put_view(vil_image_view_base const& /*im*/, unsigned /*i0*/, unsigned /*j0*/)
   { return false; }
 
   //: Return a string describing the file format.
