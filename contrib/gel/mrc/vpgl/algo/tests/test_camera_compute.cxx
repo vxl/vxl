@@ -217,7 +217,6 @@ void test_rational_camera_approx(vcl_string dir_base)
 #endif
 
   // read a camera from file
-  //vcl_string dir = "c:/lems/vxl/vxl/contrib/gel/mrc/vpgl/algo/tests/";
   vcl_string file =  "07JAN27.RPB";
 
   vpgl_rational_camera<double> rat_cam2(file);
@@ -234,14 +233,12 @@ void test_rational_camera_approx(vcl_string dir_base)
   vgl_box_3d<double> approx_vol2(pmin2, pmax2);
 
   vpgl_perspective_camera<double> pc2;
-  //vpgl_perspective_camera_compute pcc2;
   vgl_h_matrix_3d<double> norm_trans2;
   vpgl_perspective_camera_compute::compute(rat_cam2, approx_vol2, pc2, norm_trans2);
   vcl_cout << "Test Result\n" << pc2 << '\n';
 }
 
 static void test_camera_compute(int argc, char* argv[])
-//MAIN_ARGS(test_camera_compute)
 {
   vcl_string dir_base;
 
@@ -255,9 +252,10 @@ static void test_camera_compute(int argc, char* argv[])
   }
   test_camera_compute_setup();
   test_perspective_compute();
-  test_rational_camera_approx(dir_base);
 
-  //return testlib_test_summary();
+  // commented out till the new code is created for that test
+  // test_rational_camera_approx(dir_base);
+
 }
 
 TESTMAIN_ARGS(test_camera_compute)
