@@ -405,7 +405,7 @@ void mbl_logger_root::load_log_config_file(
       config_file.open(home4.c_str());
     if (!config_file.is_open() && vul_string_expand_var(home5))
       config_file.open(home5.c_str());
-    if (!config_file.is_open() && vul_string_expand_var(home5))
+    if (!config_file.is_open() && vul_string_expand_var(home6))
       config_file.open(home6.c_str());
   }
   if (!config_file.is_open())
