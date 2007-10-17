@@ -16,7 +16,7 @@ inline bool vimt_grid_corner_in_image(const vgl_point_2d<double>& p,
                                       const vil_image_view_base& image)
 {
   if (p.x()<1) return false;
-  if (p.x()<1) return false;
+  if (p.y()<1) return false;
   if (p.x()+2>image.ni()) return false;
   if (p.y()+2>image.nj()) return false;
   return true;
