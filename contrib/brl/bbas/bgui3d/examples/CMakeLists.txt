@@ -1,0 +1,46 @@
+# brl/bbas/bgui3d/examples/CMakeLists.txt
+
+INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR})
+INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
+IF (HAS_BGUI3D)
+
+ADD_EXECUTABLE(bgui3d_example_basic example_basic.cxx)
+TARGET_LINK_LIBRARIES(bgui3d_example_basic bgui3d)
+
+ADD_EXECUTABLE(bgui3d_example_basic_animate example_basic_animate.cxx)
+TARGET_LINK_LIBRARIES(bgui3d_example_basic_animate bgui3d)
+
+ADD_EXECUTABLE(bgui3d_example_basic_trackball example_basic_trackball.cxx)
+TARGET_LINK_LIBRARIES(bgui3d_example_basic_trackball bgui3d)
+
+ADD_EXECUTABLE(bgui3d_example_project2d example_project2d.cxx)
+TARGET_LINK_LIBRARIES(bgui3d_example_project2d bgui3d)
+
+ADD_EXECUTABLE(bgui3d_example_examiner_animate example_examiner_animate.cxx)
+TARGET_LINK_LIBRARIES(bgui3d_example_examiner_animate bgui3d)
+
+ADD_EXECUTABLE(bgui3d_example_examiner_27balls example_examiner_27balls.cxx)
+TARGET_LINK_LIBRARIES(bgui3d_example_examiner_27balls bgui3d)
+
+ADD_EXECUTABLE(bgui3d_example_examiner_helix example_examiner_helix.cxx)
+TARGET_LINK_LIBRARIES(bgui3d_example_examiner_helix bgui3d)
+
+ADD_EXECUTABLE(bgui3d_example_examiner_file example_examiner_file.cxx)
+TARGET_LINK_LIBRARIES(bgui3d_example_examiner_file bgui3d)
+
+ADD_EXECUTABLE(bgui3d_example_grid_examiner example_grid_examiner.cxx)
+TARGET_LINK_LIBRARIES(bgui3d_example_grid_examiner bgui3d)
+
+ADD_EXECUTABLE(bgui3d_example_point_set example_point_set.cxx)
+TARGET_LINK_LIBRARIES(bgui3d_example_point_set bgui3d)
+
+ADD_EXECUTABLE(bgui3d_example_grid_multiscene example_grid_multiscene.cxx)
+TARGET_LINK_LIBRARIES(bgui3d_example_grid_multiscene bgui3d)
+
+ADD_EXECUTABLE(bgui3d_example_examiner_cylinders example_examiner_cylinders.cxx)
+TARGET_LINK_LIBRARIES(bgui3d_example_examiner_cylinders bgui3d)
+
+ADD_EXECUTABLE(bgui3d_example_interact example_interact.cxx)
+TARGET_LINK_LIBRARIES(bgui3d_example_interact bgui3d vsol vgl)
+
+ENDIF (HAS_BGUI3D)

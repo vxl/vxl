@@ -1,0 +1,14 @@
+// The following text is included in the main documentation page by doxygen
+/*! \mainpage bgui3d : Brown 3D VGUI Extention Library (using Coin3D)
+* This library provides a generic framework for displaying 3D Scene using Coin3d.
+*
+* \section bgui3d_overview Overview
+*
+* The bgui3d library provides a multiplatform viewer for 3D scenes developed with   
+* Coin3d.  All the classes that can be displayed with the viewer are described at  
+* http://doc.coin3d.org/Coin/classes.html.  There are multiple viewers.  The 
+* fullviewer_tableau just allows you to view the scene, while the examiner_tableau
+* allows the user to interact with the scene.  Examples of how to set up and use  
+* the viewers is included in the 'examples' subdirectory.
+*/
+
