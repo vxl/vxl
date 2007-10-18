@@ -84,7 +84,7 @@ create_buffer(vgui_range_map_params_sptr const& rmp)
 //: creates a buffer for a portion of the image
 void vgui_vil_image_renderer::
 create_buffer(vgui_range_map_params_sptr const& rmp, 
-              float x0, float y0, float x1, float y1)
+              unsigned x0, unsigned y0, unsigned x1, unsigned y1)
 {
   delete buffer_;
   
@@ -300,7 +300,6 @@ render(vgui_range_map_params_sptr const& rmp)
   }
 
   this->draw_pixels();
-  long dif = timer.real();
 }
 
 //: Are the range map params associated with the current buffer out of date?

@@ -55,7 +55,7 @@ class vgui_vil_image_renderer
 
   //: Create a buffer with viewport dimensions
   void create_buffer(vgui_range_map_params_sptr const& rmp, 
-    float x0, float y0, float x1, float y1);
+    unsigned x0, unsigned y0, unsigned x1, unsigned y1);
 
   //: draw the pixels to the frame buffer
   void draw_pixels();
