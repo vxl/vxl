@@ -1,0 +1,27 @@
+-Select the Face:
+  1. CTRL + Right Mouse click
+
+-Create a Mesh Polygon
+  1. Select Mesh->Create from the popup menu
+  2. Start picking the vertex points of the polygon
+    a. Use Left Mouse click except the last vertex
+    b. Pick the last vertex with Middle Mouse click
+
+-Extrude:
+  1. Select the face to be extruded
+  2. Select the vertex on the face as a pivot (Left Mouse)
+  3. Choose "Extrude" from pop up menu
+  4. Pick the new position of the selected vertex (Left Mouse)
+ 
+-Divide
+  1. Select the Face
+  2. Choose "Divide" from popup menu
+  3. Select the first point on the edge of the face to be divided
+  4. Select the second point on the other edge of the face to be divided
+
+-Move Polygon (in the master camera direction)
+  1. Select the master camera tableau by selecting "Set Master"
+  2. On the tableau the polygon will move
+   a. Click on the pivot vertex (Right Mouse)
+   b. Select the menu item "Move Face with Selected Vertex"
+   c. Click on the new position of the vertex
