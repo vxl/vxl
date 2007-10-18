@@ -163,7 +163,7 @@ void test_perspective_compute()
  vpgl_calibration_matrix<double> K;
  vpgl_perspective_camera<double> pc;
 
-  bool good = vpgl_perspective_camera_compute::compute(image_pts, world_pts, K, pc);
+ vpgl_perspective_camera_compute::compute(image_pts, world_pts, K, pc);
  vcl_cout << pc << '\n';
  vgl_point_3d<double> c = pc.get_camera_center();
  TEST_NEAR("perspective camera from 6 points exact", c.z(), -14.2265, 0.001);
