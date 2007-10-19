@@ -1,8 +1,8 @@
-// This is contrib/knee_cartilage/cmd/pt_set_correspondence
+// This is contrib/brl/bbas/bmsh3d/examples/bmsh3d_mesh2ply.cxx
 
 //:
 // \file
-// \brief A program to compute morphology of knee cartilage
+// \brief 
 // \date September 11, 2006
 
 
@@ -10,9 +10,8 @@
 #include <vul/vul_timer.h>
 #include <vnl/vnl_file_matrix.h>
 
-#include <dbmsh3d/algo/dbmsh3d_fileio.h>
-#include <dbmsh3d/algo/dbmsh3d_xform.h>
-#include <dbmsh3d/algo/dbmsh3d_mesh_triangulate.h>
+#include <bmsh3d/algo/bmsh3d_fileio.h>
+#include <bmsh3d/algo/bmsh3d_mesh_triangulate.h>
 
 //: 
 int main( int argc, char **argv )
@@ -31,7 +30,7 @@ int main( int argc, char **argv )
   vcl_string output_mesh_file(argv[2]);
   
   // i. Load the meshes
-  dbmsh3d_mesh mesh;
+  bmsh3d_mesh mesh;
 
   vcl_cout << "i. Load input mesh file: \n";
   vul_timer timer;
@@ -39,7 +38,7 @@ int main( int argc, char **argv )
 
   // load the meshes
   vcl_cout << "Loading mesh ...";
-  dbmsh3d_load(&mesh, input_mesh_file.c_str());
+  bmsh3d_load(&mesh, input_mesh_file.c_str());
 
   vcl_cout << "done.\n";
 
@@ -49,11 +48,11 @@ int main( int argc, char **argv )
   
 
   vcl_cout << "Triangulating the mesh before saving...";
-  dbmsh3d_mesh* tri_mesh = generate_tri_mesh(&mesh);
+  bmsh3d_mesh* tri_mesh = generate_tri_mesh(&mesh);
 
   //Save the mesh to ply format
   vcl_cout << "Saving the mesh in PLY format ... \n";
-  dbmsh3d_save_ply(tri_mesh, output_mesh_file.c_str(), false);
+  bmsh3d_save_ply(tri_mesh, output_mesh_file.c_str(), false);
 
   delete tri_mesh;
   vcl_cout << "Done.\n";
