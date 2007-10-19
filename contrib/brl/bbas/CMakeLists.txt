@@ -17,6 +17,9 @@ SUBDIRS(bxml)
 # basic vgui classes
 SUBDIRS(bgui)
 
+# coin3D incorporated vgui classes
+SUBDIRS(bgui3d)
+
 # staged vgl development area
 SUBDIRS(bvgl)
 
@@ -37,6 +40,9 @@ SUBDIRS(bdpg)
 
 # Geographic utilities
 SUBDIRS(bgeo)
+
+#3D mesh library 
+SUBDIRS(bmsh3d)
 
 OPTION( BUILD_CONTRIB_VIDL2 "Build Experimental Video Streaming Library" YES )
 IF(BUILD_CONTRIB_VIDL2)
