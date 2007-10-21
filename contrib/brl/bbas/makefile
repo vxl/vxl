@@ -2,9 +2,6 @@ ifneq (,$(wildcard ${VXLROOT}/v3p/xerces-c-src1_4_0/include/dom/DOM.hpp))
  HAS_XERCES:=1
 endif
 
-# additions to vnl
-SUBDIRS += bnl
-
 # spatial object algorithms
 SUBDIRS += bsol
 
@@ -22,11 +19,17 @@ endif
 # basic vgui classes
 SUBDIRS += bgui
 
+# coin3D incorporated vgui classes
+SUBDIRS += bgui3d
+
 # staged vgl development area
 SUBDIRS += bvgl
 
 # uncertainty geometry library
 SUBDIRS += bugl
+
+# additions to vnl
+SUBDIRS += bnl
 
 # Brown Graph Library
 SUBDIRS += bgrl
@@ -39,6 +42,9 @@ SUBDIRS += bdpg
 
 # Brown geographic utilities library
 SUBDIRS += bgeo
+
+#3D mesh library 
+SUBDIRS += bmsh3d
 
 # Video Library (rewrite)
 SUBDIRS += vidl2
