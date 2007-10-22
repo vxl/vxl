@@ -219,6 +219,8 @@ vgui_section_buffer( unsigned in_x, unsigned in_y,
     y_( in_y ),
     w_( in_w ),
     h_( in_h ),
+    zoomx_(1.0f),
+    zoomy_(1.0f),
     allocw_( w_ ),
     alloch_( h_ ),
     buffer_( 0 ),
@@ -339,6 +341,7 @@ apply( vil_image_resource_sptr const& image_in,
 }
 
 
+
 // ---------------------------------------------------------------------------
 //                                                          apply (vil1 image)
 
@@ -450,3 +453,12 @@ draw_as_image() const
   return draw_as_image( x_, y_, x_+w_, y_+h_ );
 }
 
+bool 
+vgui_section_buffer::draw_viewport_as_image() const
+{
+  //render visible viewport buffer 
+ return vgui_view_render( buffer_,
+                          w_, h_,
+                          zoomx_, zoomy_,
+                          format_, type_ ,false); //no hardware map
+}

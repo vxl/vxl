@@ -61,8 +61,11 @@ class vgui_section_buffer
                        GLenum format_ = GL_NONE,
                        GLenum type_ = GL_NONE );
 
+
   ~vgui_section_buffer();
 
+  void set_zoom(float zoomx, float zoomy)
+    {zoomx_ = zoomx; zoomy_ = zoomy;}
   //: These methods take arguments in original image coordinates and return false on failure.
   // See .cxx file for more details.
 
@@ -85,6 +88,10 @@ class vgui_section_buffer
   //: Convenience method to draw the whole image.
   bool draw_as_image() const;
 
+  //: Draw a precomputed viewport image section using view rendering
+  // supports redrawing only visible section during overlay redraw
+  bool draw_viewport_as_image() const;
+
   //: Convenience method to draw the whole image.
   bool draw_as_rectangle() const;
 
@@ -95,6 +102,8 @@ class vgui_section_buffer
   //: Grab a section from the given resource.
   void apply( vil_image_resource_sptr const&,
               vgui_range_map_params_sptr const& );
+
+
 
   unsigned width () const { return w_; }
   unsigned height() const { return h_; }
@@ -110,7 +119,7 @@ class vgui_section_buffer
   // how big it is and its resolution.
   unsigned x_, y_;          // starting position in original image.
   unsigned w_, h_;          // no of columns and rows (in the section).
-
+  float zoomx_, zoomy_;     // zoom factor when rendering
   // actual width and height allocated.
   // The actual buffer was bigger than the requested one in the old
   // code when images could be rendered as a texture. It's here in

@@ -225,7 +225,7 @@ bool vgui_section_render(void const *pixels,
   assert(pixels);
   assert(x0 <= x1);
   assert(y0 <= y1);
-  //If we
+
   assert(!hardware_map||format != GL_LUMINANCE||fLmap);
   assert(!hardware_map||format != GL_RGB||fRmap&&fGmap&&fBmap);
   assert(!hardware_map||format != GL_RGBA||fRmap&&fGmap&&fBmap&&fAmap);

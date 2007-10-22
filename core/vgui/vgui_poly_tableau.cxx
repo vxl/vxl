@@ -295,7 +295,7 @@ bool vgui_poly_tableau::handle(GLint const vp[4], vgui_event const &e)
         glColor3f(sub[i].outline_color[0],
                   sub[i].outline_color[1],
                   sub[i].outline_color[2]);
-        glLineWidth(1);
+        glLineWidth(3);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         glMatrixMode(GL_MODELVIEW);
