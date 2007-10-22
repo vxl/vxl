@@ -44,6 +44,34 @@ inline void vil3d_exp_filter_i(const vil3d_image_view<srcT>& src_im,
 }
 
 //: Apply exponential filter along each axis of src_im in turn
+//  Symmetric exponential filter of the form exp(c*|i|) applied. 
+//  c=log(ki) along i, log(kj) along j, log(kk) along k.
+//  Uses fast recursive implementation.
+// \relates vil_image_view
+template <class srcT, class destT, class accumT>
+inline void vil3d_exp_filter(const vil3d_image_view<srcT>& src_im,
+                             vil3d_image_view<destT>& dest_im,
+                             accumT ki, accumT kj, accumT kk)
+{
+  // Smooth along i axis
+  vil3d_image_view<destT> smooth_i;
+  vil3d_exp_filter_i(src_im,smooth_i,ki);
+
+  // Smooth along j axis
+  vil3d_image_view<destT> smooth_j;
+  vil3d_exp_filter_i(vil3d_switch_axes_jik(smooth_i),
+                     smooth_j,kj);
+    // Note that smooth_j is nj * ni * nk
+
+  // Smooth along k axis
+  dest_im.set_size(src_im.ni(),src_im.nj(),src_im.nk(),src_im.nplanes());
+  vil3d_image_view<destT> dest_kij = vil3d_switch_axes_kij(dest_im);
+
+  // Use of vil3d_switch_axes_kji ensures axes are nk*ni*nj to match dest_kij
+  vil3d_exp_filter_i(vil3d_switch_axes_kji(smooth_j), dest_kij,kk);
+}
+
+//: Apply exponential filter along each axis of src_im in turn
 //  Symmetric exponential filter of the form exp(c*|i|) applied. c=log(kf)
 //  Uses fast recursive implementation.
 // \relates vil_image_view
@@ -52,22 +80,7 @@ inline void vil3d_exp_filter(const vil3d_image_view<srcT>& src_im,
                              vil3d_image_view<destT>& dest_im,
                              accumT kf)
 {
-  // Smooth along i axis
-  vil3d_image_view<destT> smooth_i;
-  vil3d_exp_filter_i(src_im,smooth_i,kf);
-
-  // Smooth along j axis
-  vil3d_image_view<destT> smooth_j;
-  vil3d_exp_filter_i(vil3d_switch_axes_jik(smooth_i),
-                     smooth_j,kf);
-    // Note that smooth_j is nj * ni * nk
-
-  // Smooth along k axis
-  dest_im.set_size(src_im.ni(),src_im.nj(),src_im.nk(),src_im.nplanes());
-  vil3d_image_view<destT> dest_kij = vil3d_switch_axes_kij(dest_im);
-
-  // Use of vil3d_switch_axes_kji ensures axes are nk*ni*nj to match dest_kij
-  vil3d_exp_filter_i(vil3d_switch_axes_kji(smooth_j), dest_kij,kf);
+  vil3d_exp_filter(src_im,dest_im,kf,kf,kf);
 }
 
 #endif // vil3d_exp_filter_h_
