@@ -83,6 +83,17 @@ vcl_vector<bwm_observer_cam*> bwm_corr::observers()
   return obs;
 }
 
+bool bwm_corr::obs_in(bwm_observer_cam* obs)
+{
+  vcl_map<bwm_observer_cam*, vgl_point_2d<double> >::iterator iter = matches_.begin();
+  while (iter != matches_.end()) {
+    if (obs == iter->first)
+      return true;
+    iter++;
+  }
+  return false;
+}
+
 //external functions
 vcl_ostream& operator<<(vcl_ostream& s, bwm_corr const& c)
 {

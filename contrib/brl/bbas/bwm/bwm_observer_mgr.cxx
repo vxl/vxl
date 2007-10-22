@@ -88,6 +88,16 @@ void bwm_observer_mgr::update_corr(bwm_observer_cam* obs,
   }
 }
 
+//: finds out if that observer involved with any of the correspondences
+bool bwm_observer_mgr::obs_in_corr(bwm_observer_cam *obs)
+{
+  for (unsigned i=0; i<corr_list_.size(); i++) {
+    if (corr_list_[i]->obs_in(obs))
+      return true;
+  }
+  return false;
+}
+
 void bwm_observer_mgr::save_corr(vcl_ostream& s)
 {
   if (corr_list_.size() == 0)
@@ -100,19 +110,28 @@ void bwm_observer_mgr::save_corr(vcl_ostream& s)
       if ((observers_[i]->type_name().compare("bwm_observer_cam_rat") == 0) ||
           (observers_[i]->type_name().compare("bwm_observer_cam_proj") == 0)) {
         bwm_observer_cam* obs = static_cast<bwm_observer_cam *> (observers_[i]);
-        s << "CAM_TAB: " << i << vcl_endl;
-        s << "IMAGE: " << obs->image_tableau()->file_name() << vcl_endl;
-        s << "CAMERA_TYPE: " ;
-        if (observers_[i]->type_name().compare("bwm_observer_cam_rat") == 0)
-          s << "rational" << vcl_endl;
-        else if (observers_[i]->type_name().compare("bwm_observer_cam_proj") == 0)
-          s << "projective" << vcl_endl;
-        s << "CAMERA_PATH: " << obs->camera_path() << vcl_endl << vcl_endl;
-        camera_map[obs] = i;
+
+        // check if that camera is involved with any of the correspondences
+        if (obs_in_corr(obs)) {
+          s << "CAM_TAB: " << i << vcl_endl;
+          s << "IMAGE: " << obs->image_tableau()->file_name() << vcl_endl;
+          s << "CAMERA_TYPE: " ;
+          if (observers_[i]->type_name().compare("bwm_observer_cam_rat") == 0)
+            s << "rational" << vcl_endl;
+          else if (observers_[i]->type_name().compare("bwm_observer_cam_proj") == 0)
+            s << "projective" << vcl_endl;
+          s << "CAMERA_PATH: " << obs->camera_path() << vcl_endl << vcl_endl;
+          camera_map[obs] = i;
+        }
       }
     }
 
     s << "CORRESPONDENCES: " << corr_list_.size() << vcl_endl;
+    s << "CORR_MODE: ";
+    if (corr_mode_ == IMAGE_TO_IMAGE)
+      s << "IMAGE_TO_IMAGE" << vcl_endl;
+    else
+      s << "WORLD_TO_IMAGE" << vcl_endl;
     for(unsigned i=0; i< corr_list_.size(); i++) {
       bwm_corr_sptr corr = corr_list_[i];
       s << "C: " << corr->num_matches() << vcl_endl;

@@ -38,6 +38,7 @@ public:
   { if (corr_mode_ == WORLD_TO_IMAGE) corr_world_pt_ = world_pt;
   else vcl_cerr << "First set correspondence mode to World to Image!!" << vcl_endl;
   }
+  bool obs_in_corr(bwm_observer_cam *obs);
   void save_corr(vcl_ostream& s);
   void update_corr(bwm_observer_cam* obs,vgl_point_2d<double> old_pt,vgl_point_2d<double> new_pt);
   void delete_last_corr();

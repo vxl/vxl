@@ -492,35 +492,45 @@ void bwm_tableau_mgr::load_tableaus()
     } else if (type == "CORRESPONDENCES:") {
       int num, c_num;
       is >> c_num;
-      // read the correspondences
-      for (int i=0; i<c_num; i++) {
-        is >> str;
-        if (str != "C:" ) 
-          vcl_cerr << "wrong corr format" << vcl_endl;
-        else {
-          is >> num;
-          vcl_string tab_name;
-          double X, Y;
-          bwm_corr_sptr corr = new bwm_corr();
-          for (int j=0; j<num; j++) {
-            is >> tab_name;
-            is >> X;
-            is >> Y;
-            vgui_tableau_sptr tab = this->find_tableau(tab_name);
-            if (tab) {
-              vcl_cout << tab->type_name() << vcl_endl;
-              if ((tab->type_name().compare("bwm_tableau_proj_cam") == 0)
-                || (tab->type_name().compare("bwm_tableau_rat_cam") == 0)) {
-                bwm_tableau_cam* tab_cam = static_cast<bwm_tableau_cam*> (tab.as_pointer());
-                bwm_observer_cam* obs = tab_cam->observer();
-                if (obs) {
-                  corr->set_match(obs, X, Y);
-                  obs->add_cross(X, Y, 3);
+
+      vcl_string mode;
+      is >> str;
+      if (str != "CORR_MODE:") {
+        vcl_cerr << "Correspondence mode is missing" << vcl_endl;
+        return;
+      }
+      is >> mode;
+      if (mode == "IMAGE_TO_IMAGE") {
+        // read the correspondences
+        for (int i=0; i<c_num; i++) {
+          is >> str;
+          if (str != "C:" ) 
+            vcl_cerr << "wrong corr format" << vcl_endl;
+          else {
+            is >> num;
+            vcl_string tab_name;
+            double X, Y;
+            bwm_corr_sptr corr = new bwm_corr();
+            for (int j=0; j<num; j++) {
+              is >> tab_name;
+              is >> X;
+              is >> Y;
+              vgui_tableau_sptr tab = this->find_tableau(tab_name);
+              if (tab) {
+                vcl_cout << tab->type_name() << vcl_endl;
+                if ((tab->type_name().compare("bwm_tableau_proj_cam") == 0)
+                  || (tab->type_name().compare("bwm_tableau_rat_cam") == 0)) {
+                  bwm_tableau_cam* tab_cam = static_cast<bwm_tableau_cam*> (tab.as_pointer());
+                  bwm_observer_cam* obs = tab_cam->observer();
+                  if (obs) {
+                    corr->set_match(obs, X, Y);
+                    obs->add_cross(X, Y, 3);
+                  }
                 }
-              }
-            } 
+              } 
+            }
+            bwm_observer_mgr::instance()->set_corr(corr);
           }
-          bwm_observer_mgr::instance()->set_corr(corr);
         }
       }
     } else if (type == "END") 

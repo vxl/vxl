@@ -45,6 +45,7 @@ class bwm_corr : public vbl_ref_count
   bool valid(bwm_observer_cam* obs, const double x, const double y);
   void erase(bwm_observer_cam* obs);
   vcl_vector<bwm_observer_cam*> observers();
+  bool obs_in(bwm_observer_cam* obs);
 
   //:Mutators
   bool update_match(bwm_observer_cam* obs, vgl_point_2d<double> old_pt, vgl_point_2d<double> new_pt);
