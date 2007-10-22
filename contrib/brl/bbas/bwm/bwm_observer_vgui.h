@@ -42,14 +42,11 @@ public:
 
   bool handle(const vgui_event &);
 
-  virtual vcl_string type_name() { return "bwm_observer_vgui"; }
+  virtual vcl_string type_name() const { return "bwm_observer_vgui"; }
 
   void handle_update(vgui_message const& msg, bwm_observable_sptr observable);
 
   void update_all();
-
- // void divide_face(bwm_observable_sptr obs, unsigned face_id, 
-  //  float x1, float y1, float x2, float y2);
 
   void translate(vgl_vector_3d<double> T, bwm_observable_sptr object=0);
 
@@ -74,8 +71,6 @@ public:
 
   void range_map();
 
-  void JIMs_oper();
-
   virtual void proj_poly(vsol_polygon_3d_sptr poly3d, 
                          vsol_polygon_2d_sptr& poly2d) = 0;
 
@@ -86,14 +81,14 @@ public:
 
   void remove_corr_pt();
 
+  void add_cross(float x, float y, float r);
+
 protected:
 
   bgui_image_tableau_sptr img_;
 
   //: the current correspondence point
   vcl_pair<vgl_point_2d<double>, bwm_soview2D_cross * > corr_;
-
-  
 
   //: objects are kept as a triple (bwm_observable *, face_id, vgui_soview2D_polygon*)
   vcl_map<bwm_observable_sptr, vcl_map<unsigned, vgui_soview2D_polygon* > > objects_;

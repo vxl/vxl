@@ -21,6 +21,7 @@ SET(bwm_algo_sources
    bwm_rat_proj_camera.cxx        bwm_rat_proj_camera.h
    bwm_plane_fitting_lsf.cxx      bwm_plane_fitting_lsf.h
    bwm_soview2D_cross.cxx         bwm_soview2D_cross.h
+   bwm_image_processor.cxx        bwm_image_processor.h
 )
 
 

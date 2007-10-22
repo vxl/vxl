@@ -16,7 +16,7 @@ class bwm_observable_textured_mesh : public bwm_observable_mesh
 {
 public:
  
-  vcl_string type_name() {return "bwm_observable_textured_mesh"; }
+  vcl_string type_name() const {return "bwm_observable_textured_mesh"; }
 
   //: constructers
   bwm_observable_textured_mesh() 

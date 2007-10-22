@@ -222,15 +222,6 @@ class bwm_label_wall_command : public vgui_command
   bwm_tableau_cam *tab;
 };
 
-class bwm_JIMs_command : public vgui_command
-{
- public:
-  bwm_JIMs_command(bwm_tableau_cam* t) : tab(t) {}
-  void execute() { tab->JIMs_oper(); }
-
-  bwm_tableau_cam *tab;
-};
-
 class bwm_cam_help_command : public vgui_command
 {
  public:
@@ -289,7 +280,6 @@ void bwm_tableau_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu
   image_submenu.add("Histogram Plot", new bwm_hist_plot_command(this));
   image_submenu.add("Intensity Profile", new bwm_int_profile_command(this));
   image_submenu.add("Range Map", new bwm_range_map_command(this));
-  image_submenu.add("JIMs menu item...", new bwm_JIMs_command(this));
   submenu.add("Image...", image_submenu);
 
   submenu.add( "HELP..." , new bwm_cam_help_command(this), 
@@ -479,17 +469,6 @@ void bwm_tableau_cam::intensity_profile()
 void bwm_tableau_cam::range_map()
 {
   my_observer_->range_map();
-}
-
-void bwm_tableau_cam::JIMs_oper()
-{
-  // if you need to pick a polygon on the tableau: 
-  // (if not delete this picking part)
-  vsol_polygon_2d_sptr poly2d;
-  set_color(1, 0, 0);
-  pick_polygon(poly2d);
-
-  my_observer_->JIMs_oper();
 }
 
 void bwm_tableau_cam::save()

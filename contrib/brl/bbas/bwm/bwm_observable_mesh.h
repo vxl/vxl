@@ -20,7 +20,7 @@ class bwm_observable_mesh : public bwm_observable
 {
 public:
  
-  virtual vcl_string type_name() {return "bwm_observable_mesh"; }
+  virtual vcl_string type_name() const {return "bwm_observable_mesh"; }
 
   //: constructers
   bwm_observable_mesh() 

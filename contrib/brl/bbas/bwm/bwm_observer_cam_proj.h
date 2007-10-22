@@ -34,7 +34,7 @@ public:
 
   virtual ~bwm_observer_cam_proj(){}
 
-  virtual vcl_string type_name() { return "bwm_observer_cam_proj"; }
+  virtual vcl_string type_name() const { return "bwm_observer_cam_proj"; }
 
   void set_camera(vpgl_proj_camera<double> *camera, vcl_string cam_path) 
   { camera_ = camera; bwm_observer_cam::set_camera(camera, cam_path);}

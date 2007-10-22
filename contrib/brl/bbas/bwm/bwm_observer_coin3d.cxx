@@ -1,4 +1,5 @@
 #include "bwm_observer_coin3d.h"
+#include <bwm/algo/bwm_algo.h>
 
 #include <vgl/vgl_homg_plane_3d.h> 
 #include <vgl/vgl_plane_3d.h>
@@ -275,7 +276,7 @@ bool bwm_observer_coin3d::find_intersection_points(int id,
     vsol_polygon_3d_sptr poly3d = obs_picked_->extract_face(id);
 
     double *x_list, *y_list, *z_list;
-    get_vertices_xyz(poly3d, &x_list, &y_list, &z_list);
+    bwm_algo::get_vertices_xyz(poly3d, &x_list, &y_list, &z_list);
     double point1_x, point1_y, point1_z, point2_x, point2_y, point2_z;
 
     int edge_index1 = vgl_closest_point_to_closed_polygon(point1_x, point1_y, point1_z, 

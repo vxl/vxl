@@ -29,7 +29,7 @@ public:
 
   virtual ~bwm_tableau_rat_cam(){}
 
-  virtual vcl_string type_name() { return "bwm_tableau_rat_cam"; }
+  virtual vcl_string type_name() const { return "bwm_tableau_rat_cam"; }
 
   bool handle(const vgui_event &);
 

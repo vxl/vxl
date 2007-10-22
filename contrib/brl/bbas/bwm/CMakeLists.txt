@@ -20,18 +20,19 @@ SET(bwm_sources
                                bwm_tableau_proj2d.h
    bwm_tableau_lidar.cxx       bwm_tableau_lidar.h
    bwm_tableau_text.cxx        bwm_tableau_text.h
+   bwm_tableau_img.cxx         bwm_tableau_img.h
    bwm_tableau_mgr.cxx         bwm_tableau_mgr.h
    bwm_observable.h            bwm_observable_sptr.h
    bwm_observable_mesh.cxx     bwm_observable_mesh.h  bwm_observable_mesh_sptr.h
    bwm_observable_textured_mesh.cxx     bwm_observable_textured_mesh.h bwm_observable_textured_mesh_sptr.h
    bwm_observer.cxx            bwm_observer.h
+   bwm_observer_img.cxx        bwm_observer_img.h
    bwm_observer_vgui.cxx       bwm_observer_vgui.h  
    bwm_observer_cam.cxx        bwm_observer_cam.h
    bwm_observer_cam_proj.cxx   bwm_observer_cam_proj.h
    bwm_observer_cam_rat.cxx    bwm_observer_cam_rat.h
    bwm_observer_coin3d.cxx     bwm_observer_coin3d.h
                                bwm_observer_proj2d.h
-                           #    bwm_observer_proj2d_simple.h
    bwm_observer_lidar.cxx      bwm_observer_lidar.h
    bwm_observer_mgr.cxx        bwm_observer_mgr.h    
    bwm_texture_map_generator.cxx bwm_texture_map_generator.h

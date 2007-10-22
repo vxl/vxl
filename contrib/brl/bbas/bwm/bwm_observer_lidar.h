@@ -37,7 +37,7 @@ public:
 
   virtual ~bwm_observer_lidar() {}
 
-  virtual vcl_string type_name() { return "bwm_observer_lidar"; }
+  virtual vcl_string type_name() const { return "bwm_observer_lidar"; }
   //: Handle all events sent to this tableau.
   // bool handle(const vgui_event& e);
   // {return vgui_easy2D_tableau::handle(e);}

@@ -24,7 +24,7 @@ class bwm_observable : public vgui_observable, public vbl_ref_count
 {
 public:
 
-  virtual vcl_string type_name() {return "bwm_observable"; }
+  virtual vcl_string type_name() const {return "bwm_observable"; }
 
   //: constructors
   bwm_observable() {}

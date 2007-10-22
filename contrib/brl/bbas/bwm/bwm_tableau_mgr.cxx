@@ -1,4 +1,5 @@
 #include "bwm_tableau_mgr.h"
+#include "bwm_tableau_img.h"
 #include "bwm_tableau_cam.h"
 #include "bwm_tableau_proj_cam.h"
 #include "bwm_tableau_rat_cam.h"
@@ -6,6 +7,7 @@
 #include "bwm_tableau_proj2d.h"
 #include "bwm_tableau_lidar.h"
 #include "bwm_observer_mgr.h"
+#include "bwm_observer_img.h"
 #include "bwm_observer_cam_proj.h"
 #include "bwm_observer_cam_rat.h"
 #include "bwm_observer_coin3d.h"
@@ -49,6 +51,25 @@ void bwm_tableau_mgr::add_tableau(vgui_tableau_sptr tab, vcl_string name)
   tableaus_[name] = tab;
 }
 
+void bwm_tableau_mgr::create_img_tableau(vcl_string name, 
+                                         vcl_string& image_path)
+{
+  bgui_image_tableau_sptr img = bgui_image_tableau_new();
+
+  // LOAD IMAGE
+  vgui_range_map_params_sptr params;
+  vil_image_resource_sptr img_res = load_image(image_path, params);
+  img->set_image_resource(img_res, params);
+  img->set_file_name(image_path);
+
+  bwm_observer_img* obs = new bwm_observer_img(img);
+  bwm_tableau_img* t = new bwm_tableau_img(obs);
+  vgui_viewer2D_tableau_sptr viewer = vgui_viewer2D_tableau_new(t);
+  obs->set_viewer(viewer);
+  add_to_grid(viewer);
+  tableaus_[name] = t;
+}
+
 void bwm_tableau_mgr::create_cam_tableau(vcl_string name, 
                                          vcl_string& image_path, 
                                          vcl_string& cam_path, 
@@ -60,6 +81,7 @@ void bwm_tableau_mgr::create_cam_tableau(vcl_string name,
   vgui_range_map_params_sptr params;
   vil_image_resource_sptr img_res = load_image(image_path, params);
   img->set_image_resource(img_res, params);
+  img->set_file_name(image_path);
 
   // LOAD CAMERA
   vpgl_proj_camera<double> *camera_proj=0;
@@ -260,7 +282,6 @@ void bwm_tableau_mgr::create_lidar_tableau(vcl_string name,
   tab->add_child(img);
   bwm_observer_mgr::instance()->add(observer);
   bgui_picker_tableau_sptr picker = bgui_picker_tableau_new(tab);
-//  tab->set_picker_tableau(picker);
   vgui_viewer2D_tableau_new viewer(picker);
   add_to_grid(viewer);
   tableaus_[name] = tab;
@@ -326,6 +347,21 @@ void bwm_tableau_mgr::load_tableaus()
   vcl_string type, name, str;
   while (!is.eof()) {
     is >> type;
+
+    // IMAGE TABLEAU
+    if(type == "IMAGE_TAB:") {
+      is >> name;
+      is >> str;
+      if(str != "IMAGE:")  {
+          vcl_cout << "Bad file parse\n";
+          return;
+      }
+
+      vcl_string image_path;
+      is >> image_path;
+      is >> str;
+      create_img_tableau(name, image_path);
+    }
 
     // CAMERA TABLEAU
     if(type == "CAM_TAB:") {  
@@ -453,13 +489,68 @@ void bwm_tableau_mgr::load_tableaus()
       vcl_string image_path;
       is >> image_path;
       create_lidar_tableau(name, first_ret, second_ret);
+    } else if (type == "CORRESPONDENCES:") {
+      int num, c_num;
+      is >> c_num;
+      // read the correspondences
+      for (int i=0; i<c_num; i++) {
+        is >> str;
+        if (str != "C:" ) 
+          vcl_cerr << "wrong corr format" << vcl_endl;
+        else {
+          is >> num;
+          vcl_string tab_name;
+          double X, Y;
+          bwm_corr_sptr corr = new bwm_corr();
+          for (int j=0; j<num; j++) {
+            is >> tab_name;
+            is >> X;
+            is >> Y;
+            vgui_tableau_sptr tab = this->find_tableau(tab_name);
+            if (tab) {
+              vcl_cout << tab->type_name() << vcl_endl;
+              if ((tab->type_name().compare("bwm_tableau_proj_cam") == 0)
+                || (tab->type_name().compare("bwm_tableau_rat_cam") == 0)) {
+                bwm_tableau_cam* tab_cam = static_cast<bwm_tableau_cam*> (tab.as_pointer());
+                bwm_observer_cam* obs = tab_cam->observer();
+                if (obs) {
+                  corr->set_match(obs, X, Y);
+                  obs->add_cross(X, Y, 3);
+                }
+              }
+            } 
+          }
+          bwm_observer_mgr::instance()->set_corr(corr);
+        }
+      }
     } else if (type == "END") 
       return;
   }
   
 }
-  
- void bwm_tableau_mgr::load_cam_tableau()
+ 
+void bwm_tableau_mgr::load_img_tableau()
+ {
+  vgui_dialog params ("Image Tableau");
+  vcl_string ext, name, img_file, empty="";
+
+  params.field("Tableau Name", name);
+  params.file ("Image...", ext, img_file);
+  if (!params.ask())
+    return;
+
+  if (img_file == "") {
+    vgui_dialog error ("Error");
+    error.message ("Please specify an image file (prefix)." );
+    error.ask();
+    return;
+  }
+
+  create_img_tableau(name, img_file);
+}
+
+
+void bwm_tableau_mgr::load_cam_tableau()
  {
   vgui_dialog params ("Camera Tableau");
   vcl_string ext, name, img_file, cam_file, empty="";

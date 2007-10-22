@@ -1,6 +1,7 @@
 #include "bwm_observer_vgui.h"
 #include "bwm_observer_mgr.h"
 #include "algo/bwm_algo.h"
+#include "algo/bwm_image_processor.h"
 
 #include "bwm_tableau_mgr.h"
 
@@ -45,14 +46,21 @@ bool bwm_observer_vgui::handle(const vgui_event& e)
         }
 
         // draw a cross at that point
-        this->set_line_width(1.);
-        this->set_foreground(0, 0, 1);
-        bwm_soview2D_cross* cross = new bwm_soview2D_cross(x, y, 2);
-        corr_.second = cross;
-        this->add(cross);
+        add_cross(x, y, 2.0);
         return true;
     }
     return vgui_easy2D_tableau::handle(e);
+}
+void bwm_observer_vgui::add_cross(float x, float y, float r)
+{
+  this->set_line_width(1.);
+  this->set_foreground(0, 0, 1);
+  //float wx, wy;
+  //vgui_projection_inspector pi;
+  //pi.image_to_window_coordinates(x, y, wx, wy);
+  bwm_soview2D_cross* cross = new bwm_soview2D_cross(x, y, r);
+  corr_.second = cross;
+  this->add(cross);
 }
 
 void bwm_observer_vgui::handle_update(vgui_message const& msg, 
@@ -86,7 +94,7 @@ void bwm_observer_vgui::handle_update(vgui_message const& msg,
       vsol_polygon_2d_sptr poly_2d;
       proj_poly(obj, poly_2d);
       float *x, *y;
-      this->get_vertices_xy(poly_2d, &x, &y);
+      bwm_algo::get_vertices_xy(poly_2d, &x, &y);
       unsigned nverts = poly_2d->size();
       vcl_vector<vgui_soview2D_circle*> verts;
       this->set_foreground(0,1,0);
@@ -108,7 +116,7 @@ void bwm_observer_vgui::handle_update(vgui_message const& msg,
         vsol_polygon_2d_sptr poly_2d;
         proj_poly(poly, poly_2d);
         float *x, *y;
-        this->get_vertices_xy(poly_2d, &x, &y);
+        bwm_algo::get_vertices_xy(poly_2d, &x, &y);
         vgui_soview2D_polygon* polygon = this->add_polygon(poly_2d->size(), x, y);
         poly_list[face_id] = polygon;
         inner_iter++;
@@ -423,107 +431,18 @@ void bwm_observer_vgui::label_wall()
   obs->label_wall(face_id);
 }
 
-void bwm_observer_vgui::hist_plot()
+void bwm_observer_vgui::hist_plot() 
 {
-  if (!img_)
-  {
-    vcl_cout << "bwm_observer_vgui::intensity_histogram() - no image tableau\n";
-    return;
-  }
-
-  vil_image_resource_sptr res = img_->get_image_resource();
-  if (!res)
-  {
-    vcl_cout << "bwm_observer_vgui::intensity_histogram() - tha tableau does not have an image resource\n";
-    return;
-  }
-
-  bgui_image_utils iu(res);
-  bgui_graph_tableau_sptr g = iu.hist_graph();
-
-  if (!g)
-  { vcl_cout << "In bwm_observer_vgui::intensity_histogram()- color images not supported\n";
-    return;
-  }
-
-  //popup a profile graph
-  char location[100];
-  vcl_sprintf(location, "Intensity Histogram");
-  vgui_dialog* ip_dialog = g->popup_graph(location);
-  if (!ip_dialog->ask())
-  {
-    delete ip_dialog;
-    return;
-  }
-  delete ip_dialog;
+  bwm_image_processor::hist_plot(img_);
 }
 
-void bwm_observer_vgui::intensity_profile(float start_col, float end_col, 
-                                          float start_row, float end_row)
+void bwm_observer_vgui::intensity_profile(float start_col, float start_row,
+                                         float end_col, float end_row)
 {
-  if (img_) {
-   // bgui_image_tableau_sptr itab = bgui_image_tableau_new(img_->get_image_resource());
-    vcl_vector<double> pos, vals;
-    img_->image_line(start_col, start_row, end_col, end_row, pos, vals);
-    bgui_graph_tableau_sptr g = bgui_graph_tableau_new(512, 512);
-    g->update(pos, vals);
-    //popup a profile graph
-    char location[100];
-    vcl_sprintf(location, "scan:(%d, %d)<->(%d, %d)",
-              static_cast<unsigned>(start_col),
-              static_cast<unsigned>(start_row),
-              static_cast<unsigned>(end_col),
-              static_cast<unsigned>(end_row));
-    vgui_dialog* ip_dialog = g->popup_graph(location);
-    if (!ip_dialog->ask()){
-      delete ip_dialog;
-      return;
-    }
-    delete ip_dialog;
-  }
+  bwm_image_processor::intensity_profile(img_, start_col, start_row, end_col, end_row);
 }
-
+ 
 void bwm_observer_vgui::range_map()
 {
-  if(!img_) return;
-  //Allow only grey scale for now
-  if(img_->get_image_resource()->nplanes()!=1)
-    return;
-  static double min = 0, max = 2048;
-  if(img_->get_image_resource()->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
-    max = 255;
-  static double gamma = 1.0;
-  static bool invert = false;
-  bool gl_map = true;
-  bool cache = true;
-  vgui_dialog range_dlg("Set Range Map Params(Grey Scale Only!)");
-  range_dlg.field("Range min:", min);
-  range_dlg.field("Range max:", max);
-  range_dlg.field("Gamma:", gamma);
-  range_dlg.checkbox("Invert:", invert);
-  if (!range_dlg.ask())
-    return;
-
-  vgui_range_map_params_sptr rmps= 
-    new vgui_range_map_params(min, max, gamma, invert, gl_map, cache);
-
-  img_->set_mapping(rmps);
-}
-
-void bwm_observer_vgui::JIMs_oper()
-{
-  if (!img_)
-  {
-    vcl_cout << "bwm_observer_vgui::intensity_histogram() - no image tableau\n";
-    return;
-  }
-
-  vil_image_resource_sptr res = img_->get_image_resource();
-  if (!res)
-  {
-    vcl_cout << "bwm_observer_vgui::intensity_histogram() - tha tableau does not have an image resource\n";
-    return;
-  }
-
-  // PLACE YOUR CODE HERE for IMAGE PROCESSING....
+  bwm_image_processor::range_map(img_);
 }

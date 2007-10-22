@@ -4,6 +4,7 @@ vgui_menu bwm_menu::add_to_menu (vgui_menu& top_menu)
 {
   vgui_menu menu;
   menu.add("Load From File..." , load_tableaus);
+  menu.add("Load Image Tableau...", load_img_tableau);
   menu.add("Load Camera Tableau..." , load_cam_tableau);
   menu.add("Load Coin3D Tableau..." , load_coin3d_tableau);
   menu.add("Load Proj2D Tableau..." , load_proj2d_tableau);

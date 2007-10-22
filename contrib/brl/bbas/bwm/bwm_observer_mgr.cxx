@@ -71,6 +71,12 @@ void bwm_observer_mgr::collect_corr()
     vcl_cerr << "No Correspondence SET yet!!" << vcl_endl;
 }
 
+void bwm_observer_mgr::set_corr(bwm_corr_sptr corr)
+{
+  if (corr->num_matches() > 0)
+    corr_list_.push_back(corr);
+}
+
 void bwm_observer_mgr::update_corr(bwm_observer_cam* obs,
                                    vgl_point_2d<double> old_pt,
                                    vgl_point_2d<double> new_pt)
@@ -87,23 +93,32 @@ void bwm_observer_mgr::save_corr(vcl_ostream& s)
   if (corr_list_.size() == 0)
     vcl_cerr << "No correspondences to save yet! " << vcl_endl;
   else {
-    s << "Cameras:" << vcl_endl;
+    //s << "Cameras:" << vcl_endl;
     // first write down the camera info
     vcl_map<bwm_observer_cam*, unsigned> camera_map; 
     for(unsigned i=0; i< observers_.size(); i++) {
       if ((observers_[i]->type_name().compare("bwm_observer_cam_rat") == 0) ||
           (observers_[i]->type_name().compare("bwm_observer_cam_proj") == 0)) {
         bwm_observer_cam* obs = static_cast<bwm_observer_cam *> (observers_[i]);
-        s << "Camera [" << i << "] : " << obs->camera_path() << vcl_endl;
+        s << "CAM_TAB: " << i << vcl_endl;
+        s << "IMAGE: " << obs->image_tableau()->file_name() << vcl_endl;
+        s << "CAMERA_TYPE: " ;
+        if (observers_[i]->type_name().compare("bwm_observer_cam_rat") == 0)
+          s << "rational" << vcl_endl;
+        else if (observers_[i]->type_name().compare("bwm_observer_cam_proj") == 0)
+          s << "projective" << vcl_endl;
+        s << "CAMERA_PATH: " << obs->camera_path() << vcl_endl << vcl_endl;
         camera_map[obs] = i;
       }
     }
 
+    s << "CORRESPONDENCES: " << corr_list_.size() << vcl_endl;
     for(unsigned i=0; i< corr_list_.size(); i++) {
       bwm_corr_sptr corr = corr_list_[i];
-      s << "\n Correspondence " << i << ":" << vcl_endl;
+      s << "C: " << corr->num_matches() << vcl_endl;
 
       vcl_vector<bwm_observer_cam*> obs = corr->observers();
+      //s << obs.size() << vcl_endl;
       if (corr->mode() == false) { // WORLD TO IMAGE
         s << "WORLD POINT: [" << corr->world_pt().x() << "," << corr->world_pt().y() 
           << "," << corr->world_pt().z() << "]" << vcl_endl;
@@ -113,8 +128,8 @@ void bwm_observer_mgr::save_corr(vcl_ostream& s)
         if (corr->match(obs[j], p))
           s << camera_map[obs[j]] << " " << p.x() << " " << p.y() << vcl_endl;
       }
-      //s << *corr_list_[i] ;
     }
+    s << "END" << vcl_endl;
   }
 }
 

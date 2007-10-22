@@ -48,7 +48,7 @@ public:
 
   bool handle(const vgui_event &);
 
-  virtual vcl_string type_name() { return "bwm_observer_cam"; }
+  virtual vcl_string type_name() const { return "bwm_observer_cam"; }
 
   void set_camera(vpgl_camera<double> *camera, vcl_string cam_path) 
   { camera_ = camera; cam_path_ = cam_path;}

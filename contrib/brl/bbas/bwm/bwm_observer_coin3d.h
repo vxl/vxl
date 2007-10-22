@@ -39,7 +39,7 @@ public:
 
   virtual ~bwm_observer_coin3d() {}
 
-  virtual vcl_string type_name() { return "bwm_observer_coin3d"; }
+  virtual vcl_string type_name() const { return "bwm_observer_coin3d"; }
 
   bool handle(const vgui_event& e); 
 

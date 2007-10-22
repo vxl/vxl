@@ -26,6 +26,8 @@ public:
 
   vgui_grid_tableau_sptr grid() { return grid_; }
 
+  void create_img_tableau(vcl_string name, vcl_string& image_path);
+
   void create_cam_tableau(vcl_string name, vcl_string& image_path, vcl_string& cam_path, 
                                          unsigned camera_type);
 
@@ -40,6 +42,8 @@ public:
   //void setup_scene();
 
   void load_tableaus();
+
+  void load_img_tableau();
 
   void load_cam_tableau();
 

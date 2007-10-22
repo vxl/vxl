@@ -27,7 +27,7 @@ public:
 
   virtual ~bwm_tableau_proj2d(){}
 
-  virtual vcl_string type_name() { return "bwm_tableau_proj2d"; }
+  virtual vcl_string type_name() const { return "bwm_tableau_proj2d"; }
 
  // bool handle(const vgui_event &e) { return bwm_tableau::handle(e); }
 

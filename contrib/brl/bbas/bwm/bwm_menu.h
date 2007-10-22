@@ -16,7 +16,8 @@ public:
   vgui_menu add_to_menu (vgui_menu& menu);
 
   // FILE Menu Items
-  static void load_tableaus()  { bwm_tableau_mgr::instance()->load_tableaus();}
+  static void load_tableaus()  {bwm_tableau_mgr::instance()->load_tableaus();}
+  static void load_img_tableau() {bwm_tableau_mgr::instance()->load_img_tableau();}
   static void load_cam_tableau() {bwm_tableau_mgr::instance()->load_cam_tableau();}
   static void load_coin3d_tableau() {bwm_tableau_mgr::instance()->load_coin3d_tableau();}
   static void load_proj2d_tableau() {bwm_tableau_mgr::instance()->load_proj2d_tableau();}

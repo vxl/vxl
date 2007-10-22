@@ -22,7 +22,7 @@ public:
 
   virtual ~bwm_observer(){}
  
-  virtual vcl_string type_name() { return "bwm_observer"; }
+  virtual vcl_string type_name() const { return "bwm_observer"; }
 
   virtual void update(vgui_message const& msg);
 
@@ -50,9 +50,6 @@ public:
 
 protected:
 
-  void get_vertices_xy(vsol_polygon_2d_sptr poly2d, float **x, float **y);
-
-  void get_vertices_xyz(vsol_polygon_3d_sptr poly3d, double **x, double **y, double **z);
 };
 
 #endif

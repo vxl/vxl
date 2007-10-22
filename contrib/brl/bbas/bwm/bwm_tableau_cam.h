@@ -26,11 +26,13 @@ public:
 
   virtual ~bwm_tableau_cam(){}
 
-  virtual vcl_string type_name() { return "bwm_tableau_cam"; }
+  virtual vcl_string type_name() const { return "bwm_tableau_cam"; }
 
-bool bwm_tableau_cam::handle(const vgui_event& e);
+  bool bwm_tableau_cam::handle(const vgui_event& e);
 
   void set_observer(bwm_observer_cam* obs) { my_observer_ = obs; }
+
+  bwm_observer_cam* observer() const { return this->my_observer_; }
 
   void get_popup(vgui_popup_params const &params, vgui_menu &menu);
 
@@ -101,8 +103,6 @@ bool bwm_tableau_cam::handle(const vgui_event& e);
   void label_roof();
 
   void label_wall();
-
-  void JIMs_oper();
 
   void help_pop();
 

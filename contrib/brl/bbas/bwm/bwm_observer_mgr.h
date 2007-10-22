@@ -33,6 +33,7 @@ public:
 
   // Correspondence methods
   void collect_corr();
+  void set_corr(bwm_corr_sptr corr);
   void save_world_pt_corr(vgl_point_3d<double> world_pt) 
   { if (corr_mode_ == WORLD_TO_IMAGE) corr_world_pt_ = world_pt;
   else vcl_cerr << "First set correspondence mode to World to Image!!" << vcl_endl;

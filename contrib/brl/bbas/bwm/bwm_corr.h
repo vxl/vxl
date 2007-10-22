@@ -39,8 +39,9 @@ class bwm_corr : public vbl_ref_count
   ~bwm_corr() {}
 
   bool match(bwm_observer_cam* obs, vgl_point_2d<double> &pt);
-  bool mode() const {return mode_;}
-  vgl_point_3d<double> world_pt() const {return world_pt_;}
+  bool mode() const { return mode_;}
+  int num_matches() { return matches_.size(); }
+  vgl_point_3d<double> world_pt() const { return world_pt_;}
   bool valid(bwm_observer_cam* obs, const double x, const double y);
   void erase(bwm_observer_cam* obs);
   vcl_vector<bwm_observer_cam*> observers();

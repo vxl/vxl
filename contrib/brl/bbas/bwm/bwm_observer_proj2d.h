@@ -42,7 +42,7 @@ public:
 
   virtual ~bwm_observer_proj2d() {}
 
-  virtual vcl_string type_name() { return "bwm_observer_proj2d"; }
+  virtual vcl_string type_name() const { return "bwm_observer_proj2d"; }
 
   void handle_update(vgui_message const& msg, bwm_observable_sptr observable) 
   { 

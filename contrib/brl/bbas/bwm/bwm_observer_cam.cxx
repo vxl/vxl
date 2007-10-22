@@ -327,7 +327,7 @@ bool bwm_observer_cam::find_intersection_points(vgl_homg_point_2d<double> const 
   vgl_point_3d<double> non_homg_p2(p2);
 
   double *x_list, *y_list, *z_list;
-  get_vertices_xyz(poly3d, &x_list, &y_list, &z_list);
+  bwm_algo::get_vertices_xyz(poly3d, &x_list, &y_list, &z_list);
   
   double dist1 = vgl_distance_to_closed_polygon (x_list, y_list, z_list, poly3d->size(), 
     non_homg_p1.x(), non_homg_p1.y(), non_homg_p1.z());
@@ -513,7 +513,7 @@ bool bwm_observer_cam::find_intersection_point(vgl_homg_point_2d<double> img_poi
   vgl_point_3d<double> p3d(p3d_homg);
 
   double *x_list, *y_list, *z_list;
-  this->get_vertices_xyz(poly3d, &x_list, &y_list, &z_list);
+  bwm_algo::get_vertices_xyz(poly3d, &x_list, &y_list, &z_list);
   
   double dist = vgl_distance_to_closed_polygon(x_list,y_list,z_list,poly3d->size(),p3d.x(),p3d.y(),p3d.z());
 
