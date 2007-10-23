@@ -33,6 +33,8 @@ class vpgl_affine_camera : public vpgl_proj_camera<T>
   // The bottom right entry had better not be 0.
   vpgl_affine_camera( const vnl_matrix_fixed<T,3,4>& camera_matrix );
 
+  virtual vcl_string type_name() const { return "vpgl_affine_camera"; }
+
   //: Set the top two rows.
   void set_rows( const vnl_vector_fixed<T,4>& row1,
                  const vnl_vector_fixed<T,4>& row2 );

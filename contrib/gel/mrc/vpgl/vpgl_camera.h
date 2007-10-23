@@ -26,6 +26,8 @@ class vpgl_camera
   vpgl_camera(){};
   virtual ~vpgl_camera(){};
 
+  virtual vcl_string type_name() const { return "vpgl_camera"; }
+
   //: The generic camera interface. u represents image column, v image row.
   virtual void project(const T x, const T y, const T z, T& u, T& v) const = 0;
 };

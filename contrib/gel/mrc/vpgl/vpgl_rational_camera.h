@@ -130,6 +130,8 @@ class vpgl_rational_camera : public vpgl_camera<T>
 
   virtual ~vpgl_rational_camera() {}
 
+  virtual vcl_string type_name() const { return "vpgl_rational_camera"; }
+
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   virtual vpgl_rational_camera<T>* clone(void) const;

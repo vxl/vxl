@@ -77,6 +77,8 @@ class vpgl_proj_camera : public vpgl_camera<T>
   //: Copy constructor.
   vpgl_proj_camera( const vpgl_proj_camera& cam );
 
+  virtual vcl_string type_name() const { return "vpgl_proj_camera"; }
+
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   virtual vpgl_proj_camera<T>* clone(void) const;

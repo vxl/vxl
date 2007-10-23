@@ -69,6 +69,8 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
   //: Destructor
   virtual ~vpgl_perspective_camera(){}
 
+  virtual vcl_string type_name() const { return "vpgl_perspective_camera"; }
+
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   virtual vpgl_proj_camera<T>* clone(void) const;
