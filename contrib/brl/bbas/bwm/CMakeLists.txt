@@ -29,8 +29,8 @@ SET(bwm_sources
    bwm_observer_img.cxx        bwm_observer_img.h
    bwm_observer_vgui.cxx       bwm_observer_vgui.h  
    bwm_observer_cam.cxx        bwm_observer_cam.h
-   bwm_observer_cam_proj.cxx   bwm_observer_cam_proj.h
-   bwm_observer_cam_rat.cxx    bwm_observer_cam_rat.h
+   bwm_observer_proj_cam.cxx   bwm_observer_proj_cam.h
+   bwm_observer_rat_cam.cxx    bwm_observer_rat_cam.h
    bwm_observer_coin3d.cxx     bwm_observer_coin3d.h
                                bwm_observer_proj2d.h
    bwm_observer_lidar.cxx      bwm_observer_lidar.h

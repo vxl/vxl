@@ -8,8 +8,8 @@
 #include "bwm_tableau_lidar.h"
 #include "bwm_observer_mgr.h"
 #include "bwm_observer_img.h"
-#include "bwm_observer_cam_proj.h"
-#include "bwm_observer_cam_rat.h"
+#include "bwm_observer_proj_cam.h"
+#include "bwm_observer_rat_cam.h"
 #include "bwm_observer_coin3d.h"
 #include "bwm_observer_proj2d.h"
 #include "bwm_observer_lidar.h"
@@ -87,22 +87,22 @@ void bwm_tableau_mgr::create_cam_tableau(vcl_string name,
   vpgl_proj_camera<double> *camera_proj=0;
   vpgl_rational_camera<double> *camera_rat=0;
   bwm_observer_cam* observer = (bwm_observer_cam*)0;
-  bwm_observer_cam_proj* proj_observer = 0;
-  bwm_observer_cam_rat* rat_observer = 0;
+  bwm_observer_proj_cam* proj_observer = 0;
+  bwm_observer_rat_cam* rat_observer = 0;
   bwm_tableau_cam* t = 0;
 
   switch(camera_type) {
   case 0:
     // projective
     camera_proj = (read_projective_camera(cam_path)).clone();
-    proj_observer = new bwm_observer_cam_proj(img, camera_proj, cam_path);
+    proj_observer = new bwm_observer_proj_cam(img, camera_proj, cam_path);
     observer = proj_observer;
     t = new bwm_tableau_proj_cam(proj_observer);
     break;
   case 1:
     // rational
     camera_rat = new vpgl_rational_camera<double>(cam_path);
-    rat_observer = new bwm_observer_cam_rat(img, camera_rat, cam_path);
+    rat_observer = new bwm_observer_rat_cam(img, camera_rat, cam_path);
     observer = rat_observer;
     t = new bwm_tableau_rat_cam(rat_observer);
     break;

@@ -6,7 +6,7 @@
 #include "bwm_observer.h"
 #include "bwm_observer_cam.h"
 #include "bwm_observable.h"
-#include "bwm_observer_cam_rat.h"
+#include "bwm_observer_rat_cam.h"
 #include "bwm_corr.h"
 #include "bwm_corr_sptr.h"
 
@@ -22,7 +22,7 @@ public:
 
   static bwm_observer_cam* BWM_MASTER_OBSERVER;
 
-  vcl_vector<bwm_observer_cam_rat*> observers_cam_rat();
+  vcl_vector<bwm_observer_rat_cam*> observers_rat_cam();
 
   void add(bwm_observer* o){ observers_.push_back(o); }
 

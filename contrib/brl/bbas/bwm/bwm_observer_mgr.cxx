@@ -12,13 +12,13 @@ bwm_observer_mgr* bwm_observer_mgr::instance() {
    
 }
 
-vcl_vector<bwm_observer_cam_rat*> bwm_observer_mgr::observers_cam_rat()
+vcl_vector<bwm_observer_rat_cam*> bwm_observer_mgr::observers_rat_cam()
 {
-  vcl_vector<bwm_observer_cam_rat*> v;
+  vcl_vector<bwm_observer_rat_cam*> v;
 
   for (unsigned i=0; i< observers_.size(); i++) {
-    if (observers_[i]->type_name().compare("bwm_observer_cam_rat") == 0)
-      v.push_back(static_cast<bwm_observer_cam_rat*> (observers_[i]));
+    if (observers_[i]->type_name().compare("bwm_observer_rat_cam") == 0)
+      v.push_back(static_cast<bwm_observer_rat_cam*> (observers_[i]));
   }
 
   return v;
@@ -55,7 +55,7 @@ void bwm_observer_mgr::collect_corr()
     vcl_cerr << "Unknown correspondence mode!" << vcl_endl;
 
   for(unsigned i=0; i< observers_.size(); i++) {
-    if ((observers_[i]->type_name().compare("bwm_observer_cam_rat") == 0) ||
+    if ((observers_[i]->type_name().compare("bwm_observer_rat_cam") == 0) ||
         (observers_[i]->type_name().compare("bwm_observer_cam_proj") == 0)) {
       bwm_observer_cam* obs = static_cast<bwm_observer_cam *> (observers_[i]);
       if (obs->corr_pt(pt)) {
@@ -107,7 +107,7 @@ void bwm_observer_mgr::save_corr(vcl_ostream& s)
     // first write down the camera info
     vcl_map<bwm_observer_cam*, unsigned> camera_map; 
     for(unsigned i=0; i< observers_.size(); i++) {
-      if ((observers_[i]->type_name().compare("bwm_observer_cam_rat") == 0) ||
+      if ((observers_[i]->type_name().compare("bwm_observer_rat_cam") == 0) ||
           (observers_[i]->type_name().compare("bwm_observer_cam_proj") == 0)) {
         bwm_observer_cam* obs = static_cast<bwm_observer_cam *> (observers_[i]);
 
@@ -116,7 +116,7 @@ void bwm_observer_mgr::save_corr(vcl_ostream& s)
           s << "CAM_TAB: " << i << vcl_endl;
           s << "IMAGE: " << obs->image_tableau()->file_name() << vcl_endl;
           s << "CAMERA_TYPE: " ;
-          if (observers_[i]->type_name().compare("bwm_observer_cam_rat") == 0)
+          if (observers_[i]->type_name().compare("bwm_observer_rat_cam") == 0)
             s << "rational" << vcl_endl;
           else if (observers_[i]->type_name().compare("bwm_observer_cam_proj") == 0)
             s << "projective" << vcl_endl;

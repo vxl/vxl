@@ -2,7 +2,7 @@
 #define bwm_tableau_rat_cam_h_
 
 #include "bwm_tableau_cam.h"
-#include "bwm_observer_cam_rat.h"
+#include "bwm_observer_rat_cam.h"
 
 #include <vcl_iostream.h>
 
@@ -20,10 +20,10 @@ class bwm_tableau_rat_cam : public bwm_tableau_cam {
 public:
 //  bwm_tableau_rat_cam(){};
 
-  bwm_tableau_rat_cam(bwm_observer_cam_rat* observer)
+  bwm_tableau_rat_cam(bwm_observer_rat_cam* observer)
     : bwm_tableau_cam(observer), my_observer_(observer) {}
 
-  void set_observer(bwm_observer_cam_rat* observer) { my_observer_ = observer; } 
+  void set_observer(bwm_observer_rat_cam* observer) { my_observer_ = observer; } 
 
 //  bwm_tableau_rat_cam(vcl_string& image_path){}
 
@@ -55,7 +55,7 @@ public:
   
 protected:
 
-  bwm_observer_cam_rat* my_observer_;
+  bwm_observer_rat_cam* my_observer_;
 };
 
 #endif
