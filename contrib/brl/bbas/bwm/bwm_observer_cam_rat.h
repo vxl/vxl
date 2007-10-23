@@ -31,7 +31,7 @@ public:
   bwm_observer_cam_rat(bgui_image_tableau_sptr const& img, 
     vpgl_rational_camera<double> *camera,
     vcl_string cam_path)
-    : bwm_observer_cam(img, camera, cam_path), camera_(camera), lvcs_(0) {}
+    : bwm_observer_cam(img, camera, cam_path), lvcs_(0) { }
 
   // set the initial projection plane to z=0
   bwm_observer_cam_rat(bgui_image_tableau_sptr const& img, const char* n="unnamed")
@@ -79,9 +79,8 @@ public:
   void save_x3d();
 
   void generate_textures();
-protected:
 
-  vpgl_rational_camera<double> *camera_;
+protected:
   bgeo_lvcs* lvcs_;
   vcl_string select_file();
   void set_selected_vertex();

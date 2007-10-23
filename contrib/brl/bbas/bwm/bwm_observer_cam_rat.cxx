@@ -36,13 +36,14 @@ void bwm_observer_cam_rat::camera_center(vgl_homg_point_3d<double> &center)
 
 vgl_vector_3d<double> bwm_observer_cam_rat::camera_direction()
 {
-  
+  vpgl_rational_camera<double>* rat_cam = static_cast<vpgl_rational_camera<double> *> (camera_);
+
   /* Assume that the camera is a satellite camera, and center is at infinity. 
    * Calculate the direction based on intersection points of two planes near the ground */
  
-  double pix_offset_x = camera_->offset(camera_->U_INDX);
-  double pix_offset_y = camera_->offset(camera_->V_INDX);
-  double z_offset = camera_->offset(camera_->Z_INDX);
+  double pix_offset_x = rat_cam->offset(rat_cam->U_INDX);
+  double pix_offset_y = rat_cam->offset(rat_cam->V_INDX);
+  double z_offset = rat_cam->offset(rat_cam->Z_INDX);
 
   // use center point of image
   vgl_point_2d<double>  img_pt(pix_offset_x,pix_offset_y);
@@ -50,25 +51,25 @@ vgl_vector_3d<double> bwm_observer_cam_rat::camera_direction()
   double zval1 = z_offset, zval2 = z_offset + 200;
 
   // initial guess for backprojection - just use center point of image 
-  vgl_point_3d<double> guess(camera_->offset(camera_->X_INDX),
-                             camera_->offset(camera_->Y_INDX),
-                             camera_->offset(camera_->Z_INDX));
+  vgl_point_3d<double> guess(rat_cam->offset(rat_cam->X_INDX),
+                             rat_cam->offset(rat_cam->Y_INDX),
+                             rat_cam->offset(rat_cam->Z_INDX));
   vgl_vector_3d<double> plane_normal(0.0,0.0,1.0);
-  vgl_point_3d<double> plane_point1(camera_->offset(camera_->X_INDX),
-                                      camera_->offset(camera_->Y_INDX),zval1);
-  vgl_point_3d<double> plane_point2(camera_->offset(camera_->X_INDX),
-                                      camera_->offset(camera_->Y_INDX),zval2);
+  vgl_point_3d<double> plane_point1(rat_cam->offset(rat_cam->X_INDX),
+                                      rat_cam->offset(rat_cam->Y_INDX),zval1);
+  vgl_point_3d<double> plane_point2(rat_cam->offset(rat_cam->X_INDX),
+                                      rat_cam->offset(rat_cam->Y_INDX),zval2);
 
   vgl_plane_3d<double> plane1(plane_normal,plane_point1);
   vgl_plane_3d<double> plane2(plane_normal,plane_point2);
 
   vgl_point_3d<double> p1,p2;
 
-  if (!vpgl_backproject::bproj_plane(*camera_, img_pt, plane1, plane_point1, p1)) {
+  if (!vpgl_backproject::bproj_plane(*rat_cam, img_pt, plane1, plane_point1, p1)) {
      vcl_cerr << "Error: vpgl_backproject::broj_plane() failed." << vcl_endl;
   }
   
-  if (!vpgl_backproject::bproj_plane(*camera_, img_pt, plane2, plane_point2, p2)) {
+  if (!vpgl_backproject::bproj_plane(*rat_cam, img_pt, plane2, plane_point2, p2)) {
      vcl_cerr << "Error: vpgl_backproject::broj_plane() failed." << vcl_endl;
   }
  
@@ -135,9 +136,9 @@ void bwm_observer_cam_rat::center_pos()
 bool bwm_observer_cam_rat::shift_camera(double dx, double dy)
 {
   double u_off,v_off;
-
-  camera_->image_offset(u_off,v_off);
-  camera_->set_image_offset(u_off + dx, v_off + dy);
+  vpgl_rational_camera<double>* rat_cam = static_cast<vpgl_rational_camera<double> *> (camera_);
+  rat_cam->image_offset(u_off,v_off);
+  rat_cam->set_image_offset(u_off + dx, v_off + dy);
   
 // take this to the camera tableau  
   /*vcl_map<bwm_observable_sptr, vcl_vector<vgui_soview2D_polygon* > >::iterator objit;
@@ -155,17 +156,17 @@ bool bwm_observer_cam_rat::intersect_ray_and_plane(vgl_homg_point_2d<double> img
                                             vgl_homg_plane_3d<double> plane,
                                             vgl_homg_point_3d<double> &world_point)
 {
-   
+  vpgl_rational_camera<double>* rat_cam = static_cast<vpgl_rational_camera<double> *> (camera_);
   vgl_point_2d<double>  p2d(img_point.x()/img_point.w(),img_point.y()/img_point.w());
   
   // initial guess for backprojection - just use center point of image 
-  vgl_point_3d<double> guess(camera_->offset(camera_->X_INDX),
-                               camera_->offset(camera_->Y_INDX),
-                               camera_->offset(camera_->Z_INDX));
+  vgl_point_3d<double> guess(rat_cam->offset(rat_cam->X_INDX),
+                               rat_cam->offset(rat_cam->Y_INDX),
+                               rat_cam->offset(rat_cam->Z_INDX));
   vgl_plane_3d<double> plane_nonhomg(plane);
   vgl_point_3d<double> p;
 
-  if (!vpgl_backproject::bproj_plane(*camera_, p2d, plane_nonhomg, guess, p)) {
+  if (!vpgl_backproject::bproj_plane(*rat_cam, p2d, plane_nonhomg, guess, p)) {
     vcl_cout << "vpgl_backproject::broj_plane() failed." << vcl_endl;
     return false;
   }
@@ -945,6 +946,7 @@ vcl_string bwm_observer_cam_rat::select_file()
 
 vcl_ostream& bwm_observer_cam_rat::print_camera(vcl_ostream& s)
 {
-  s << *(this->camera_);
+  vpgl_rational_camera<double>* rat_cam = static_cast<vpgl_rational_camera<double> *> (camera_);
+  s << *rat_cam;
   return s;
 }

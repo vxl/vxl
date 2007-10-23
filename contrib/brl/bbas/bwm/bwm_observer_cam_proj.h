@@ -26,7 +26,7 @@ public:
 
   bwm_observer_cam_proj(bgui_image_tableau_sptr const& img, 
     vpgl_proj_camera<double> *camera, vcl_string cam_path)
-    : bwm_observer_cam(img, camera, cam_path), camera_(camera) {}
+    : bwm_observer_cam(img, camera, cam_path) {}
 
   // set the initial projection plane to z=0
   bwm_observer_cam_proj(bgui_image_tableau_sptr const& img, const char* n="unnamed")
@@ -37,23 +37,17 @@ public:
   virtual vcl_string type_name() const { return "bwm_observer_cam_proj"; }
 
   void set_camera(vpgl_proj_camera<double> *camera, vcl_string cam_path) 
-  { camera_ = camera; bwm_observer_cam::set_camera(camera, cam_path);}
+  { bwm_observer_cam::set_camera(camera, cam_path);}
 
-  void camera_center(vgl_homg_point_3d<double> &center) { center = camera_->camera_center(); }
+  void camera_center(vgl_homg_point_3d<double> &center); 
 
   vgl_vector_3d<double> camera_direction(vgl_point_3d<double> origin);
-  //vgl_vector_3d<double> camera_direction_rational(bgeo_lvcs& lvcs);
 
   virtual bool intersect_ray_and_plane(vgl_homg_point_2d<double> img_point,
                                        vgl_homg_plane_3d<double> plane,
                                        vgl_homg_point_3d<double> &world_point);
 
   vcl_ostream& print_camera(vcl_ostream& s);
-
-protected:
-
-  vpgl_proj_camera<double> *camera_;
-
 
 };
 
