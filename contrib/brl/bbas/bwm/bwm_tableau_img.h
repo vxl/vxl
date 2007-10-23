@@ -22,6 +22,8 @@ public:
   bwm_tableau_img(bwm_observer_img* obs) 
     : bgui_picker_tableau(obs), my_observer_(obs) {}
 
+  //: destructor
+  // tableaus are responsible from their observers
   virtual ~bwm_tableau_img() { delete my_observer_; }
 
   virtual vcl_string type_name() const { return "bwm_tableau_img"; }
@@ -73,7 +75,6 @@ public:
 protected:
 
   bwm_observer_img* my_observer_;
-  //bgui_image_tab_sptr img_tab_;
   
 };
 

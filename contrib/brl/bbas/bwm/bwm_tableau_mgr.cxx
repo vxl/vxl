@@ -45,6 +45,10 @@ bwm_tableau_mgr* bwm_tableau_mgr::instance() {
    
 }
 
+bwm_tableau_mgr::~bwm_tableau_mgr()
+{
+}
+
 void bwm_tableau_mgr::add_tableau(vgui_tableau_sptr tab, vcl_string name)
 {
   add_to_grid(tab);
@@ -500,17 +504,35 @@ void bwm_tableau_mgr::load_tableaus()
         return;
       }
       is >> mode;
-      if (mode == "IMAGE_TO_IMAGE") {
+      if ((mode != "IMAGE_TO_IMAGE") && (mode != "WORLD_TO_IMAGE")) {
+        vcl_cerr << "Invalid correspondence mode" << vcl_endl;
+        return;
+      }
         // read the correspondences
         for (int i=0; i<c_num; i++) {
           is >> str;
           if (str != "C:" ) 
-            vcl_cerr << "wrong corr format" << vcl_endl;
+            vcl_cerr << "Invalid correspondence format" << vcl_endl;
           else {
             is >> num;
+            bwm_corr_sptr corr = new bwm_corr();
+            if (mode == "WORLD_TO_IMAGE") {
+              is >> str;
+
+              if (str != "WORLD_POINT:") {
+                vcl_cerr << "wrong corr format" << vcl_endl;
+                return;
+              }
+
+              double wx, wy, wz;
+              is >> wx;
+              is >> wy; 
+              is >> wz;
+              corr->set_mode(false);
+              corr->set_world_pt(vgl_point_3d<double> (wx, wy, wz));
+            }
             vcl_string tab_name;
             double X, Y;
-            bwm_corr_sptr corr = new bwm_corr();
             for (int j=0; j<num; j++) {
               is >> tab_name;
               is >> X;
@@ -531,10 +553,10 @@ void bwm_tableau_mgr::load_tableaus()
             }
             bwm_observer_mgr::instance()->set_corr(corr);
           }
-        }
+        
       }
-    } else if (type == "END") 
-      return;
+      }else if (type == "END") 
+       return;
   }
   
 }

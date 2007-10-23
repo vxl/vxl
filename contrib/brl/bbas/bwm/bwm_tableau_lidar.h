@@ -26,7 +26,9 @@ public:
   bwm_tableau_lidar(bwm_observer_lidar* observer) 
     : bwm_tableau_cam(observer), my_observer_(observer) {}
 
-  virtual ~bwm_tableau_lidar(){}
+  //: destructor
+  // tableaus are responsible from their observers
+  virtual ~bwm_tableau_lidar() { delete my_observer_; }
 
   virtual vcl_string type_name() const { return "bwm_tableau_lidar"; }
 

@@ -139,8 +139,8 @@ void bwm_observer_mgr::save_corr(vcl_ostream& s)
       vcl_vector<bwm_observer_cam*> obs = corr->observers();
       //s << obs.size() << vcl_endl;
       if (corr->mode() == false) { // WORLD TO IMAGE
-        s << "WORLD POINT: [" << corr->world_pt().x() << "," << corr->world_pt().y() 
-          << "," << corr->world_pt().z() << "]" << vcl_endl;
+        s << "WORLD_POINT: " << corr->world_pt().x() << " " << corr->world_pt().y() 
+          << " " << corr->world_pt().z() << vcl_endl;
       }
       for(unsigned j=0; j< obs.size(); j++) {
         vgl_point_2d<double> p;

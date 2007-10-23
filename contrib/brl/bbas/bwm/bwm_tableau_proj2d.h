@@ -25,7 +25,9 @@ public:
 
   bwm_tableau_proj2d(vcl_string& image_path, vpgl_camera<double>& camera) {}
 
-  virtual ~bwm_tableau_proj2d(){}
+  //: destructor
+  // tableaus are responsible from their observers
+  virtual ~bwm_tableau_proj2d() { delete my_observer_; }
 
   virtual vcl_string type_name() const { return "bwm_tableau_proj2d"; }
 

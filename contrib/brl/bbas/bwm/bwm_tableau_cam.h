@@ -24,7 +24,9 @@ public:
 
   bwm_tableau_cam(bwm_observer_cam* obs) : bgui_picker_tableau(obs), my_observer_(obs) {}
 
-  virtual ~bwm_tableau_cam(){}
+  //: destructor
+  // tableaus are responsible from deleting their observers
+  virtual ~bwm_tableau_cam(){ delete my_observer_; }
 
   virtual vcl_string type_name() const { return "bwm_tableau_cam"; }
 

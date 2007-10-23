@@ -16,7 +16,7 @@
 class bwm_tableau_mgr {
 public:
   
-  ~bwm_tableau_mgr(){};
+  ~bwm_tableau_mgr();
 
   static bwm_tableau_mgr* bwm_tableau_mgr::instance();
 

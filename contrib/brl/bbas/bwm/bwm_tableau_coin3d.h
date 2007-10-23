@@ -26,7 +26,7 @@ public:
 
   bwm_tableau_coin3d(vcl_string& image_path, vpgl_camera<double>& camera) {}
 
-  virtual ~bwm_tableau_coin3d(){}
+  virtual ~bwm_tableau_coin3d() { delete my_observer_; }
 
    virtual vcl_string type_name() const { return "bwm_tableau_coin3d"; }
 
