@@ -9,6 +9,7 @@ vgui_menu bwm_menu::add_to_menu (vgui_menu& top_menu)
   menu.add("Load Coin3D Tableau..." , load_coin3d_tableau);
   menu.add("Load Proj2D Tableau..." , load_proj2d_tableau);
   menu.add("Load LIDAR Tableau..." , load_lidar_tableau);
+  menu.add("Remove Selected Tableau..." , remove_tableau);
   menu.add("Exit..." , exit);
   top_menu.add("FILE   ", menu);
 

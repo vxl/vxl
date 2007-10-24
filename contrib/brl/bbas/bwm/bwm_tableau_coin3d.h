@@ -4,6 +4,7 @@
 //#include "bwm_tableau.h"
 #include "bwm_observable.h"
 #include "bwm_observer_coin3d.h"
+#include "bwm_observer_mgr.h"
 
 #include <vcl_iostream.h>
 #include <vcl_string.h>
@@ -26,9 +27,13 @@ public:
 
   bwm_tableau_coin3d(vcl_string& image_path, vpgl_camera<double>& camera) {}
 
-  virtual ~bwm_tableau_coin3d() { delete my_observer_; }
+  virtual ~bwm_tableau_coin3d() { 
+    // first remove the observer from observers list
+    bwm_observer_mgr::instance()->remove(my_observer_);
+//    delete my_observer_; 
+  }
 
-   virtual vcl_string type_name() const { return "bwm_tableau_coin3d"; }
+  virtual vcl_string type_name() const { return "bwm_tableau_coin3d"; }
 
   //bool handle(const vgui_event &e) { return vgui_wrapper_tableau::handle(e); }
 

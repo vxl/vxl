@@ -22,6 +22,7 @@ public:
   static void load_coin3d_tableau() {bwm_tableau_mgr::instance()->load_coin3d_tableau();}
   static void load_proj2d_tableau() {bwm_tableau_mgr::instance()->load_proj2d_tableau();}
   static void load_lidar_tableau() {bwm_tableau_mgr::instance()->load_lidar_tableau();}
+  static void remove_tableau() {bwm_tableau_mgr::instance()->remove_tableau();}
   static void exit() {bwm_tableau_mgr::instance()->exit(); }
 
   // Correspondence Menu Items

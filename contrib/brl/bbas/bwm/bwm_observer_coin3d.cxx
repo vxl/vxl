@@ -67,6 +67,15 @@ obs_picked_(0), divide_mode_(false)
  
 }
  
+bwm_observer_coin3d::~bwm_observer_coin3d() 
+{
+  if (camera_) 
+    delete camera_;
+  if (T_)
+    delete T_;
+
+}
+
 void bwm_observer_coin3d::extrude()
 {
   obs_picked_ = find_selected_obs(face_id);

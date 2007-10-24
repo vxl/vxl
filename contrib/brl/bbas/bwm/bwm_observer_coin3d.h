@@ -37,7 +37,7 @@ public:
 
   bwm_observer_coin3d(vpgl_proj_camera<double> *camera, SoNode* root); 
 
-  virtual ~bwm_observer_coin3d() {}
+  virtual ~bwm_observer_coin3d();
 
   virtual vcl_string type_name() const { return "bwm_observer_coin3d"; }
 

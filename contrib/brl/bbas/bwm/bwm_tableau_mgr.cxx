@@ -16,6 +16,7 @@
 #include "bwm_corr_sptr.h"
 #include "algo/bwm_rat_proj_camera.h"
 
+#include <vgui/vgui_poly_tableau.h>
 #include <bgui/bgui_image_tableau.h>
 #include <vgui/vgui_composite_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
@@ -227,8 +228,10 @@ void bwm_tableau_mgr::create_proj2d_tableau(vcl_string name,
     SoNode* root = coin3d_tab->root();
     root->ref();
     observer = new bwm_observer_proj2d(*camera, root);
-    observer->ref();
-   // if (camera_type == 1) { //rational camera
+   // observer->ref();
+   
+    
+    // if (camera_type == 1) { //rational camera
    //   proj2d_observer_simple->set_trans(rat_proj_cam.norm_trans()); 
    // observer = proj2d_observer_simple;
   } else {
@@ -256,7 +259,7 @@ void bwm_tableau_mgr::create_proj2d_tableau(vcl_string name,
   vgui_composite_tableau_new comp(img, observer);
   vgui_viewer2D_tableau_new viewer(comp);
   add_to_grid(viewer);
-  //tableaus_[name] = tab;
+  tableaus_[name] = comp;
 }
 
 void bwm_tableau_mgr::create_lidar_tableau(vcl_string name, 
@@ -708,6 +711,36 @@ void bwm_tableau_mgr::load_lidar_tableau()
   create_lidar_tableau(name, first_ret, second_ret);
 }
 
+void bwm_tableau_mgr::remove_tableau()
+{
+  unsigned int col, row;
+  grid_->get_last_selected_position(&col, &row);
+  grid_->set_selected(row, col, false);
+  vgui_tableau_sptr tab = grid_->get_tableau_at(col, row);
+  /*vgui_poly_tableau* poly = static_cast<vgui_poly_tableau* > (grid_.as_pointer());
+  vgui_poly_tableau::iterator it = poly->begin();
+  while (it != poly->end()) {
+    vgui_poly_tableau::item t = *it;
+    vgui_parent_child_link link = t.tab;
+    if (tab == link.child()) {
+      grid_->erase(it);
+      grid_->post_redraw();
+      return;
+    }
+    it++;
+  }*/
+
+  vcl_map<vcl_string, vgui_tableau_sptr>::iterator iter = tableaus_.begin();
+  while (iter != tableaus_.end()) {
+    if ((iter->second == tab) || (tab->get_child(0) == iter->second)) {
+      tableaus_.erase(iter);
+      grid_->remove_at(col, row);
+      return;
+    }
+    iter++;
+  }
+  
+}
 
 vcl_string bwm_tableau_mgr::select_file()
 {
@@ -831,13 +864,13 @@ bwm_tableau_mgr::read_projective_camera(vcl_string cam_path){
 // of the grid based on the nymber of current tableaus
 void bwm_tableau_mgr::add_to_grid(vgui_tableau_sptr tab)
 {
-  if (tableaus_.size() == 0)
+   if (tableaus_.size() == 0)
   {
     grid_->add_next(tab);
-    return;
-  }
+    return;  
+   }
 
-  if (tableaus_.size()%2 == 0) {
+  if ((tableaus_.size()%2 == 0) && (grid_->rows()*grid_->cols() == tableaus_.size()))  {
     grid_->add_row();
   }
   grid_->add_next(tab);

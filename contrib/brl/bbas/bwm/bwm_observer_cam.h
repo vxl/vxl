@@ -36,7 +36,7 @@ public:
     : bwm_observer_vgui(img), proj_plane_(vgl_homg_plane_3d<double>(0, 0, 1, 0)), 
     viewer_(0) { }
 
-  virtual ~bwm_observer_cam(){}
+  virtual ~bwm_observer_cam(){ delete camera_;}
 
   bgui_image_tableau_sptr image_tableau() { return img_tab_; }
 

@@ -53,6 +53,8 @@ public:
 
   void load_lidar_tableau();
 
+  void remove_tableau();
+
   void exit() { vgui::quit(); }
 
   //: change the mode of the correspondence
