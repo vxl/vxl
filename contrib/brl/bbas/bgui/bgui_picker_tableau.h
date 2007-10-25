@@ -28,6 +28,7 @@
 #include <vgui/vgui_parent_child_link.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
+#include <vsol/vsol_polyline_2d_sptr.h>
 #include "bgui_picker_tableau_sptr.h"
 
 class bgui_picker_tableau : public vgui_tableau
@@ -59,6 +60,9 @@ class bgui_picker_tableau : public vgui_tableau
   //: Pick a polygon
   void pick_polygon(vsol_polygon_2d_sptr& poly);
 
+  //: pick a polyline (set of connected lines)
+  void pick_polyline(vsol_polyline_2d_sptr& poly);
+
   //: Set drawing style, [0 1.0] for colors
   void set_color(const float red=1.0f, const float green=1.0f,
                  const float blue=1.0f) {r = red; g = green; b = blue;}
@@ -81,7 +85,7 @@ class bgui_picker_tableau : public vgui_tableau
   //: Get next event in the event loop.
   bool next();
   //: List of possible objects to pick.
-  enum object_type {none_enum, point_enum, line_enum, anchor_enum, box_enum, poly_enum};
+  enum object_type {none_enum, point_enum, line_enum, anchor_enum, box_enum, poly_enum, polyline_enum};
   //: Type of object we are picking.
   static object_type obj_type;
 
