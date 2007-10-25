@@ -14,6 +14,7 @@
 #include "bwm_observer_proj2d.h"
 #include "bwm_observer_lidar.h"
 #include "bwm_corr_sptr.h"
+#include "bwm_load_commands.h"
 #include "algo/bwm_rat_proj_camera.h"
 
 #include <vgui/vgui_poly_tableau.h>
@@ -36,6 +37,8 @@
 #include <Inventor/nodes/SoSelection.h>
 
 bwm_tableau_mgr* bwm_tableau_mgr::instance_ = 0;
+vcl_map<vcl_string, vgui_tableau_sptr> bwm_tableau_mgr::tab_types_;
+vcl_map<vcl_string, vcl_string> bwm_tableau_mgr::process_map;
 
 bwm_tableau_mgr* bwm_tableau_mgr::instance() {
   if (!instance_) {
@@ -46,6 +49,13 @@ bwm_tableau_mgr* bwm_tableau_mgr::instance() {
    
 }
 
+bwm_tableau_mgr::bwm_tableau_mgr()
+{
+  grid_ = vgui_grid_tableau_new (); 
+  grid_->set_frames_selectable(true);
+  grid_->set_grid_size_changeable(true);
+}
+
 bwm_tableau_mgr::~bwm_tableau_mgr()
 {
 }
@@ -54,6 +64,59 @@ void bwm_tableau_mgr::add_tableau(vgui_tableau_sptr tab, vcl_string name)
 {
   add_to_grid(tab);
   tableaus_[name] = tab;
+}
+
+void bwm_tableau_mgr::register_tableau(vcl_string type) 
+{
+ // if (type.compare("bwm_tableau_img") == 0) {
+    tab_types_[type] = new vgui_tableau();
+  //} 
+}
+
+void bwm_tableau_mgr::register_process(vcl_string process) 
+{
+  process_map[process] = process;
+  
+}
+
+vgui_command_sptr bwm_tableau_mgr::load_tableau_by_type(vcl_string tableau_type)
+{
+  vgui_command_sptr comm = 0;
+  vcl_map<vcl_string, vgui_tableau_sptr>::iterator iter = tab_types_.find(tableau_type);
+  if (iter != tab_types_.end()) {
+    if (tableau_type.compare("bwm_tableau_img") == 0)
+      comm = new bwm_load_img_command();
+    else if (tableau_type.compare("bwm_tableau_cam") == 0)
+      comm = new bwm_load_cam_command();
+    else if (tableau_type.compare("bwm_tableau_coin3d") == 0)
+      comm = new bwm_load_coin3d_command();
+    else if (tableau_type.compare("bwm_tableau_proj2d") == 0)
+      comm = new bwm_load_proj2d_command();
+    else if (tableau_type.compare("bwm_tableau_lidar") == 0)
+      comm = new bwm_load_lidar_command();
+    else
+      vcl_cerr << "Unknown Tableau Type at bwm_tableau_mgr::load_tableau_by_type" << vcl_endl;
+  }
+  return comm;
+}
+
+vgui_command_sptr bwm_tableau_mgr::load_process(vcl_string name)
+{
+  vcl_map<vcl_string, vcl_string>::iterator iter = process_map.find(name);
+  if (iter != process_map.end()) {
+    if (name == "corr_mode")
+      return new bwm_corr_mode_command();
+    else if (name == "rec_corr")
+      return new bwm_rec_corr_command();
+    else if (name == "save_corr")
+      return new bwm_save_corr_command();
+    else if (name == "del_last_corr")
+      return new bwm_del_last_corr_command();
+    else if (name == "del_all_corr")
+      return new bwm_del_corr_command();
+    return 0;
+  }
+  return 0;
 }
 
 void bwm_tableau_mgr::create_img_tableau(vcl_string name, 
@@ -739,7 +802,7 @@ void bwm_tableau_mgr::remove_tableau()
     }
     iter++;
   }
-  
+  grid_->layout_grid2();
 }
 
 vcl_string bwm_tableau_mgr::select_file()

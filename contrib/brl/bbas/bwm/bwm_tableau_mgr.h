@@ -1,7 +1,7 @@
 #ifndef bwm_tableau_mgr_h_
 #define bwm_tableau_mgr_h_
 
-//#include "bwm_tableau.h"
+#include "bwm_tableau_sptr.h"
 #include "bwm_tableau_cam.h"
 
 #include <vcl_vector.h>
@@ -22,9 +22,10 @@ public:
 
   void add_tableau(vgui_tableau_sptr tab, vcl_string name);
 
-  void set_grid(vgui_grid_tableau_sptr grid) {grid_ = grid; }
-
   vgui_grid_tableau_sptr grid() { return grid_; }
+
+  static void register_tableau(vcl_string type);
+  void register_process(vcl_string process);
 
   void create_img_tableau(vcl_string name, vcl_string& image_path);
 
@@ -40,6 +41,8 @@ public:
   void create_lidar_tableau(vcl_string name, vcl_string first_ret, vcl_string second_ret);
 
   //void setup_scene();
+  vgui_command_sptr load_tableau_by_type(vcl_string tableau_type);
+  vgui_command_sptr load_process(vcl_string name);
 
   void load_tableaus();
 
@@ -65,11 +68,15 @@ public:
   void save_corr();
   void delete_last_corr();
   void delete_corr();
-
+  static vcl_map<vcl_string, vgui_tableau_sptr> tab_types_;
+  static vcl_map<vcl_string, vcl_string> process_map;
 private:
-  bwm_tableau_mgr() {}
+
+  bwm_tableau_mgr();
 
   static bwm_tableau_mgr* instance_;
+
+  //static vcl_map<vcl_string, vgui_tableau_sptr> tab_types_;
 
   //: Tableaus are mapped to their names
   vcl_map<vcl_string, vgui_tableau_sptr> tableaus_;

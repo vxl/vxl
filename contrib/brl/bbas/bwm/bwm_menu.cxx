@@ -1,25 +1,28 @@
 #include "bwm_menu.h"
+#include "bwm_command.h"
 
 vgui_menu bwm_menu::add_to_menu (vgui_menu& top_menu)
 {
-  vgui_menu menu;
-  menu.add("Load From File..." , load_tableaus);
-  menu.add("Load Image Tableau...", load_img_tableau);
-  menu.add("Load Camera Tableau..." , load_cam_tableau);
-  menu.add("Load Coin3D Tableau..." , load_coin3d_tableau);
-  menu.add("Load Proj2D Tableau..." , load_proj2d_tableau);
-  menu.add("Load LIDAR Tableau..." , load_lidar_tableau);
-  menu.add("Remove Selected Tableau..." , remove_tableau);
-  menu.add("Exit..." , exit);
-  top_menu.add("FILE   ", menu);
+  vgui_menu load_menu;
+  load_menu.add("Load From File..." , load_tableaus);
 
+  MENU_LOAD_TABLEAU("Load Image Tableau...", "bwm_tableau_img", load_menu);
+  MENU_LOAD_TABLEAU("Load Camera Tableau...", "bwm_tableau_cam", load_menu);
+  MENU_LOAD_TABLEAU("Load 3D Tableau...", "bwm_tableau_coin3d", load_menu);
+  MENU_LOAD_TABLEAU("Load Proj2D Tableau...", "bwm_tableau_proj2d", load_menu);
+  MENU_LOAD_TABLEAU("Load LIDAR Tableau...", "bwm_tableau_lidar", load_menu);
 
-  vgui_menu edit;
-  edit.add("Correspondence Mode", mode_corr);
-  edit.add("Record Correspondences", rec_corr, vgui_key('r'));
-  edit.add("Save Correspondences", save_corr);
-  edit.add("Delete Last Correspondence", delete_last_corr);
-  edit.add("Delete All", delete_corr);
-  top_menu.add("CORR    ", edit);
+  load_menu.add("Remove Selected Tableau..." , remove_tableau);
+  load_menu.add("Exit..." , exit);
+  top_menu.add("FILE   ", load_menu);
+
+  vgui_menu corr_group_menu;
+  MENU_ADD_PROCESS_NAME("Correspondence Mode", "corr_mode", corr_group_menu);
+  MENU_ADD_PROCESS_NAME("Record Correspondences", "rec_corr", corr_group_menu);
+  MENU_ADD_PROCESS_NAME("Save Correspondences", "save_corr", corr_group_menu);
+  MENU_ADD_PROCESS_NAME("Delete Last Correspondence", "del_last_corr", corr_group_menu);
+  MENU_ADD_PROCESS_NAME("Delete All Correspondences", "del_all_corr", corr_group_menu);
+  top_menu.add("PROCESSES ", corr_group_menu);
+  //MENU_ADD_PROCESS_NAME("CORRESPONDENCE..", "corr", corr, top_menu);
   return top_menu;
 }

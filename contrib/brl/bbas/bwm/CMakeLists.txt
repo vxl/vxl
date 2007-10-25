@@ -12,7 +12,11 @@ INCLUDE_DIRECTORIES( ${VTHREEP_INCLUDE_DIR}/tiff )
 INCLUDE_DIRECTORIES( ${VTHREEP_INCLUDE_DIR}/geotiff ) 
 
 SET(bwm_sources
+   bwm_macros.h
    bwm_menu.cxx                bwm_menu.h
+   bwm_tableau.h               bwm_tableau_sptr.h
+   bwm_command.h
+   bwm_load_commands.h
    bwm_tableau_cam.cxx         bwm_tableau_cam.h
    bwm_tableau_rat_cam.cxx     bwm_tableau_rat_cam.h
    bwm_tableau_proj_cam.cxx    bwm_tableau_proj_cam.h
@@ -25,10 +29,10 @@ SET(bwm_sources
    bwm_observable.h            bwm_observable_sptr.h
    bwm_observable_mesh.cxx     bwm_observable_mesh.h  bwm_observable_mesh_sptr.h
    bwm_observable_textured_mesh.cxx     bwm_observable_textured_mesh.h bwm_observable_textured_mesh_sptr.h
-   bwm_observer.cxx            bwm_observer.h
+   bwm_observer.cxx            bwm_observer.h         
    bwm_observer_img.cxx        bwm_observer_img.h
    bwm_observer_vgui.cxx       bwm_observer_vgui.h  
-   bwm_observer_cam.cxx        bwm_observer_cam.h
+   bwm_observer_cam.cxx        bwm_observer_cam.h     
    bwm_observer_proj_cam.cxx   bwm_observer_proj_cam.h
    bwm_observer_rat_cam.cxx    bwm_observer_rat_cam.h
    bwm_observer_coin3d.cxx     bwm_observer_coin3d.h

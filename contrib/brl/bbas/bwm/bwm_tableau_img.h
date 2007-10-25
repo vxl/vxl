@@ -1,6 +1,7 @@
 #ifndef bwm_tableau_img_h_
 #define bwm_tableau_img_h_
 
+#include "bwm_tableau.h"
 #include "bwm_observer_img.h"
 
 #include <vcl_iostream.h>
@@ -15,7 +16,7 @@
 
 #include <vsol/vsol_polygon_2d_sptr.h>
 
-class bwm_tableau_img : public bgui_picker_tableau {
+class bwm_tableau_img : public bwm_tableau, public bgui_picker_tableau {
 
 public:
 
@@ -33,15 +34,6 @@ public:
   bool handle(const vgui_event& e);
 
   virtual void create_polygon(); 
-
-  //virtual void triangulate_mesh();
-
-
-  //: extrudes the selected face, 
-  //void extrude_face();  
-
-  //: draws a line onto a given face, dividing into two faces
-  //void divide_face();
 
   //************* IMAGE Processing Methods
 

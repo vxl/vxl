@@ -2,9 +2,10 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 
-
 #include <bwm/bwm_tableau_mgr.h>
 #include <bwm/bwm_menu.h>
+#include <bwm/bwm_tableau_img.h>
+#include <bwm/bwm_macros.h>
 
 #include <vcl_iostream.h>
 #include <vgui/vgui.h>
@@ -31,6 +32,8 @@ int main(int argc, char** argv)
   my_argv[argc] = "--mfc-use-gl";
   vgui::init(my_argc, my_argv);
   delete []my_argv;
+
+  REG_TABLEAU("bwm_tableau_img");
 
   // Set up the app_menu
   vgui_menu main_menu;

@@ -7,193 +7,38 @@
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
+#include <vgui/vgui_command.h>
 
-//----------------------------------------------------------------------------
-class bwm_create_poly_command : public vgui_command
-{
- public:
-  bwm_create_poly_command(bwm_tableau_img* t) : tab(t) {}
-  void execute() { tab->create_polygon(); }
-
-  bwm_tableau_img *tab;
-};
-
-/*class bwm_tri_mesh_command : public vgui_command
-{
- public:
-  bwm_tri_mesh_command(bwm_tableau_img* t) : tab(t) {}
-  void execute() { tab->triangulate_mesh(); }
-
-  bwm_tableau_img *tab;
-};
-
-//----------------------------------------------------------------------------
-class bwm_move_vertex_command : public vgui_command
-{
- public:
-  bwm_move_vertex_command(bwm_tableau_img* t) : tab(t) {}
-  void execute() { tab->move_obj_by_vertex(); }
-
-  bwm_tableau_img *tab;
-};
-
-//----------------------------------------------------------------------------
-class bwm_extrude_command : public vgui_command
-{
- public:
-  bwm_extrude_command(bwm_tableau_img* t) : tab(t) {}
-  void execute() { tab->extrude_face(); }
-
-  bwm_tableau_img *tab;
-};
-
-class bwm_divide_command : public vgui_command
-{
- public:
-  bwm_divide_command(bwm_tableau_img* t) : tab(t) {}
-  void execute() { tab->divide_face(); }
-
-  bwm_tableau_img *tab;
-};
-
-class bwm_create_inner_face_command : public vgui_command
-{
- public:
-  bwm_create_inner_face_command(bwm_tableau_img* t) : tab(t) {}
-  void execute() { tab->create_inner_face(); }
-
-  bwm_tableau_img *tab;
-};*/
-
-class bwm_deselect_all_command : public vgui_command
-{
- public:
-  bwm_deselect_all_command(bwm_tableau_img* t) : tab(t) {}
-  void execute() { tab->deselect_all(); }
-
-  bwm_tableau_img *tab;
-};
-
-class bwm_clear_object_command : public vgui_command
-{
- public:
-  bwm_clear_object_command(bwm_tableau_img* t) : tab(t) {}
-  void execute() { tab->clear_poly(); }
-
-  bwm_tableau_img *tab;
-};
-
-class bwm_clear_all_command : public vgui_command
-{
- public:
-  bwm_clear_all_command(bwm_tableau_img* t) : tab(t) {}
-  void execute() { tab->clear_all(); }
-
-  bwm_tableau_img *tab;
-};
-
-/*class bwm_move_corr_command: public vgui_command
-{
-  public:
-  bwm_move_corr_command(bwm_tableau_img* t) : tab(t) {}
-  void execute() { tab->move_corr(); }
-
-  bwm_tableau_img *tab;
-};
-
-class bwm_world_pt_corr_command: public vgui_command
-{
-  public:
-  bwm_world_pt_corr_command(bwm_tableau_img* t) : tab(t) {}
-  void execute() { tab->world_pt_corr(); }
-
-  bwm_tableau_img *tab;
-};*/
-
-class bwm_hist_plot_command : public vgui_command
-{
- public:
-  bwm_hist_plot_command(bwm_tableau_img* t) : tab(t) {}
-  void execute() { tab->hist_plot(); }
-
-  bwm_tableau_img *tab;
-};
-
-class bwm_int_profile_command : public vgui_command
-{
- public:
-  bwm_int_profile_command(bwm_tableau_img* t) : tab(t) {}
-  void execute() { tab->intensity_profile(); }
-
-  bwm_tableau_img *tab;
-};
-
-class bwm_range_map_command : public vgui_command
-{
- public:
-  bwm_range_map_command(bwm_tableau_img* t) : tab(t) {}
-  void execute() { tab->range_map(); }
-
-  bwm_tableau_img *tab;
-};
-
-class bwm_save_command : public vgui_command
-{
- public:
-  bwm_save_command(bwm_tableau_img* t) : tab(t) {}
-  void execute() { tab->save(); }
-
-  bwm_tableau_img *tab;
-};
-
-class bwm_cam_help_command : public vgui_command
-{
- public:
-  bwm_cam_help_command(bwm_tableau_img* t) : tab(t) {}
-  void execute() { tab->help_pop(); }
-
-  bwm_tableau_img *tab;
-};
 
 void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu) {
     
   vgui_menu submenu;
 
   vgui_menu poly_submenu;
-  poly_submenu.add("Create..", new bwm_create_poly_command(this), 
-    vgui_key('p'), vgui_modifier(vgui_SHIFT) );
-  //mesh_submenu.add("Triangulate..", new bwm_tri_mesh_command(this), 
-  //  vgui_key('t'), vgui_modifier(vgui_SHIFT));
+  poly_submenu.add("Create..",
+    new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::create_polygon),
+    vgui_key('p'), 
+    vgui_modifier(vgui_SHIFT) );
   submenu.add( "Polygon..", poly_submenu);
-
-  //submenu.add( "Create Inner Face", new bwm_create_inner_face_command(this));
-  //submenu.add( "Move Face with Selected Vertex", new bwm_move_vertex_command(this), 
-  //  vgui_key('m'), vgui_modifier(vgui_SHIFT));
-  //submenu.add( "Extrude Face", new bwm_extrude_command(this), 
-  //  vgui_key('e'), vgui_modifier(vgui_SHIFT));
-  //submenu.add( "Save All", new bwm_save_command(this), 
-  //  vgui_key('s'), vgui_modifier(vgui_SHIFT));
- // submenu.add( "Divide Face", new bwm_divide_command(this));
   
-  submenu.add( "Deselect All", new bwm_deselect_all_command(this), 
+  submenu.add( "Deselect All", 
+    new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::deselect_all),
     vgui_key('-'));
-  submenu.add( "Delete Object", new bwm_clear_object_command(this), 
+  submenu.add( "Delete Object", 
+    new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::clear_poly), 
     vgui_key('d'), vgui_modifier(vgui_SHIFT));
-  submenu.add( "Delete All", new bwm_clear_all_command(this), 
+  submenu.add( "Delete All", 
+    new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::clear_all),
     vgui_key('a'), vgui_modifier(vgui_SHIFT));
 
-  /*vgui_menu corr_menu;
-  corr_menu.add( "Move (selected)" , new bwm_move_corr_command(this));
-  corr_menu.add( "Save World Point (selected)" , new bwm_world_pt_corr_command(this));
-  submenu.add( "Correspondence", corr_menu);*/
-
   vgui_menu image_submenu;
-  image_submenu.add("Histogram Plot", new bwm_hist_plot_command(this));
-  image_submenu.add("Intensity Profile", new bwm_int_profile_command(this));
-  image_submenu.add("Range Map", new bwm_range_map_command(this));
+  image_submenu.add("Histogram Plot", new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::hist_plot));
+  image_submenu.add("Intensity Profile", new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::intensity_profile));
+  image_submenu.add("Range Map", new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::range_map));
   submenu.add("Image...", image_submenu);
 
-  submenu.add( "HELP..." , new bwm_cam_help_command(this), 
+  submenu.add( "HELP..." , 
+    new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::help_pop), 
     vgui_key('h'),vgui_modifier(vgui_SHIFT));
 
   //add this submenu to the popup menu
@@ -215,46 +60,6 @@ void bwm_tableau_img::create_polygon()
   my_observer_->create_polygon(poly2d);
 }
 
-/*void bwm_tableau_img::move_obj_by_vertex() 
-{
-  float x,y;
-  set_color(1, 0, 0);
-  pick_point(&x, &y);
-  vsol_point_2d_sptr pt = new vsol_point_2d((double)x,(double)y);
-}*/
-
-/*void bwm_tableau_img::extrude_face()
-{
-  float x,y;
-
-  set_color(1, 0, 0);
-  pick_point(&x, &y);
-  vsol_point_2d_sptr pt = new vsol_point_2d((double)x,(double)y);
-  my_observer_->extrude_face(pt);
-
-}
-
-void bwm_tableau_img::divide_face()
-{
-  float x1, y1, x2, y2;
-  unsigned face_id;
-
-  bwm_observable_sptr obj = my_observer_->selected_face(face_id);
-  if (obj) {
-    pick_line(&x1, &y1, &x2, &y2);
-    my_observer_->divide_face(obj, face_id, x1, y1, x2, y2);
-  } else
-    vcl_cerr << "Please first select the face to be divided" << vcl_endl;
-}
-
-void bwm_tableau_img::create_inner_face()
-{
-  vsol_polygon_2d_sptr poly2d;
-  set_color(1, 0, 0);
-  pick_polygon(poly2d);
-  my_observer_->connect_inner_face(poly2d);
-}*/
-
 void bwm_tableau_img::deselect_all()
 {
   my_observer_->deselect_all();
@@ -269,77 +74,6 @@ void bwm_tableau_img::clear_all()
 {
   my_observer_->delete_all();
 }
-
-/*void bwm_tableau_img::move_corr()
-{
-  float x,y;
-  set_color(1, 0, 0);
-  pick_point(&x, &y);
-  vsol_point_2d_sptr pt = new vsol_point_2d((double)x,(double)y);
-  my_observer_->move_corr_point(pt);
-}
-
-void bwm_tableau_img::world_pt_corr()
-{
-  my_observer_->world_pt_corr();
-}
-
-void bwm_tableau_img::select_proj_plane()
-{
-  my_observer_->select_proj_plane();
-}
-
-void bwm_tableau_img::define_proj_plane()
-{
-  // pick the ground truth line
-  float x1, y1, x2, y2;
-  pick_line(&x1, &y1, &x2, &y2);
-  vcl_cout << "(" << x1 << "," << y1 << ")" << "(" << x2 << "," << y2 << ")" << vcl_endl;
-  my_observer_->set_ground_plane(x1, y1, x2, y2);
-}
-
-void bwm_tableau_img::define_xy_proj_plane()
-{
-  static double z = 0;
-  vgui_dialog zval("Define XY plane");
-  zval.field("Elevation (meters)", z);
-  if (!zval.ask())
-    return;
-  vgl_homg_plane_3d<double> plane(0,0,1,-z);
-  my_observer_->set_proj_plane(plane);
-}
-
-void bwm_tableau_img::define_yz_proj_plane()
-{
-  static double x = 0;
-  vgui_dialog xval("Define YZ plane");
-  xval.field("X (meters)", x);
-  if (!xval.ask())
-    return;
-  vgl_homg_plane_3d<double> plane(1,0,0,-x);
-  my_observer_->set_proj_plane(plane);
-}
-
-void bwm_tableau_img::define_xz_proj_plane()
-{
-  static double y= 0;
-  vgui_dialog yval("Define XZ plane");
-  yval.field("Y (meters)", y);
-  if (!yval.ask())
-    return;
-  vgl_homg_plane_3d<double> plane(0,1,0,-y);
-  my_observer_->set_proj_plane(plane);
-}
-
-void bwm_tableau_img::label_roof()
-{
-  my_observer_->label_roof();
-}
-
-void bwm_tableau_img::label_wall()
-{
-  my_observer_->label_wall();
-}*/
 
 void bwm_tableau_img::intensity_profile()
 {
