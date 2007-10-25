@@ -2,11 +2,14 @@
 
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
 
-IF (VGUI_FOUND)
+# determines if vgui is built and opengl is available
+INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
+
+IF (HAS_VGUI)
   # Optionally Build this library 
   OPTION(BUILD_BGUI3D "Build VGUI wrapper for Coin3d" NO)
   INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/UseBGUI3D.cmake )
-ENDIF (VGUI_FOUND)
+ENDIF (HAS_VGUI)
 
 
 # If Coin3d was found and building bgui3d
