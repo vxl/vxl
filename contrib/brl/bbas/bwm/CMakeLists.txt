@@ -14,8 +14,7 @@ INCLUDE_DIRECTORIES( ${VTHREEP_INCLUDE_DIR}/geotiff )
 SET(bwm_sources
    bwm_macros.h
    bwm_menu.cxx                bwm_menu.h
-   bwm_tableau.h               bwm_tableau_sptr.h
-   bwm_command.h
+   bwm_command.h               bwm_command_sptr.h   
    bwm_load_commands.h
    bwm_tableau_cam.cxx         bwm_tableau_cam.h
    bwm_tableau_rat_cam.cxx     bwm_tableau_rat_cam.h

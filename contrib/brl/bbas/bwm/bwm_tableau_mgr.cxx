@@ -14,6 +14,7 @@
 #include "bwm_observer_proj2d.h"
 #include "bwm_observer_lidar.h"
 #include "bwm_corr_sptr.h"
+#include "bwm_command.h"
 #include "bwm_load_commands.h"
 #include "algo/bwm_rat_proj_camera.h"
 
@@ -37,8 +38,8 @@
 #include <Inventor/nodes/SoSelection.h>
 
 bwm_tableau_mgr* bwm_tableau_mgr::instance_ = 0;
-vcl_map<vcl_string, vgui_tableau_sptr> bwm_tableau_mgr::tab_types_;
-vcl_map<vcl_string, vcl_string> bwm_tableau_mgr::process_map;
+vcl_map<vcl_string, bwm_command_sptr> bwm_tableau_mgr::tab_types_;
+vcl_map<vcl_string, bwm_command_sptr> bwm_tableau_mgr::process_map;
 
 bwm_tableau_mgr* bwm_tableau_mgr::instance() {
   if (!instance_) {
@@ -66,55 +67,32 @@ void bwm_tableau_mgr::add_tableau(vgui_tableau_sptr tab, vcl_string name)
   tableaus_[name] = tab;
 }
 
-void bwm_tableau_mgr::register_tableau(vcl_string type) 
-{
- // if (type.compare("bwm_tableau_img") == 0) {
-    tab_types_[type] = new vgui_tableau();
-  //} 
+void bwm_tableau_mgr::register_tableau(bwm_command_sptr tab_comm) 
+{ 
+  tab_types_[tab_comm->name()] = tab_comm; 
 }
 
-void bwm_tableau_mgr::register_process(vcl_string process) 
+void bwm_tableau_mgr::register_process(bwm_command_sptr process) 
 {
-  process_map[process] = process;
+  process_map[process->name()] = process;
   
 }
 
-vgui_command_sptr bwm_tableau_mgr::load_tableau_by_type(vcl_string tableau_type)
+bwm_command_sptr bwm_tableau_mgr::load_tableau_by_type(vcl_string tableau_type)
 {
-  vgui_command_sptr comm = 0;
-  vcl_map<vcl_string, vgui_tableau_sptr>::iterator iter = tab_types_.find(tableau_type);
-  if (iter != tab_types_.end()) {
-    if (tableau_type.compare("bwm_tableau_img") == 0)
-      comm = new bwm_load_img_command();
-    else if (tableau_type.compare("bwm_tableau_cam") == 0)
-      comm = new bwm_load_cam_command();
-    else if (tableau_type.compare("bwm_tableau_coin3d") == 0)
-      comm = new bwm_load_coin3d_command();
-    else if (tableau_type.compare("bwm_tableau_proj2d") == 0)
-      comm = new bwm_load_proj2d_command();
-    else if (tableau_type.compare("bwm_tableau_lidar") == 0)
-      comm = new bwm_load_lidar_command();
-    else
-      vcl_cerr << "Unknown Tableau Type at bwm_tableau_mgr::load_tableau_by_type" << vcl_endl;
-  }
+  bwm_command_sptr comm = 0;
+  vcl_map<vcl_string, bwm_command_sptr>::iterator iter = tab_types_.find(tableau_type);
+  if (iter != tab_types_.end()) 
+    comm = iter->second;
+
   return comm;
 }
 
-vgui_command_sptr bwm_tableau_mgr::load_process(vcl_string name)
+bwm_command_sptr bwm_tableau_mgr::load_process(vcl_string name)
 {
-  vcl_map<vcl_string, vcl_string>::iterator iter = process_map.find(name);
+  vcl_map<vcl_string, bwm_command_sptr>::iterator iter = process_map.find(name);
   if (iter != process_map.end()) {
-    if (name == "corr_mode")
-      return new bwm_corr_mode_command();
-    else if (name == "rec_corr")
-      return new bwm_rec_corr_command();
-    else if (name == "save_corr")
-      return new bwm_save_corr_command();
-    else if (name == "del_last_corr")
-      return new bwm_del_last_corr_command();
-    else if (name == "del_all_corr")
-      return new bwm_del_corr_command();
-    return 0;
+    return iter->second;
   }
   return 0;
 }
@@ -122,6 +100,14 @@ vgui_command_sptr bwm_tableau_mgr::load_process(vcl_string name)
 void bwm_tableau_mgr::create_img_tableau(vcl_string name, 
                                          vcl_string& image_path)
 {
+  // create only if registered
+  bwm_load_img_command comm;
+  vcl_map<vcl_string, bwm_command_sptr>::iterator iter = tab_types_.find(comm.name());
+  if (iter == tab_types_.end()) {
+    vcl_cerr << "Image tableau type is not registered, not creating!" << vcl_endl;
+    return;
+  }
+
   bgui_image_tableau_sptr img = bgui_image_tableau_new();
 
   // LOAD IMAGE
@@ -143,6 +129,14 @@ void bwm_tableau_mgr::create_cam_tableau(vcl_string name,
                                          vcl_string& cam_path, 
                                          unsigned camera_type)
 {
+  // create only if registered
+  bwm_load_cam_command comm;
+  vcl_map<vcl_string, bwm_command_sptr>::iterator iter = tab_types_.find(comm.name());
+  if (iter == tab_types_.end()) {
+    vcl_cerr << "Camera tableau type is not registered, not creating!" << vcl_endl;
+    return;
+  }
+  
   bgui_image_tableau_sptr img = bgui_image_tableau_new();
 
   // LOAD IMAGE
@@ -191,7 +185,14 @@ void bwm_tableau_mgr::create_coin3d_tableau(vcl_string name,
                                             vcl_string& cam_path, 
                                             unsigned camera_type)
 {
-   
+  // create only if registered
+  bwm_load_coin3d_command comm;
+  vcl_map<vcl_string, bwm_command_sptr>::iterator iter = tab_types_.find(comm.name());
+  if (iter == tab_types_.end()) {
+    vcl_cerr << "Coin3d tableau type is not registered, not creating!" << vcl_endl;
+    return;
+  }
+
   vpgl_proj_camera<double> *camera;
   SoSelection* master_root_ = new SoSelection;
   master_root_->ref();
@@ -240,7 +241,14 @@ void bwm_tableau_mgr::create_proj2d_tableau(vcl_string name,
                                             vcl_string camera_path, 
                                             unsigned camera_type)
 {
- 
+  // create only if registered
+  bwm_load_proj2d_command comm;
+  vcl_map<vcl_string, bwm_command_sptr>::iterator iter = tab_types_.find(comm.name());
+  if (iter == tab_types_.end()) {
+    vcl_cerr << "Proj2d tableau type is not registered, not creating!" << vcl_endl;
+    return;
+  }
+
   bwm_observer_proj2d* observer = 0;
   //bwm_observer_proj2d_simple* proj2d_observer_simple = 0;
   bwm_rat_proj_camera rat_proj_cam;
@@ -329,6 +337,13 @@ void bwm_tableau_mgr::create_lidar_tableau(vcl_string name,
                                            vcl_string first_ret,
                                            vcl_string second_ret)
 {
+  // create only if registered
+  bwm_load_lidar_command comm;
+  vcl_map<vcl_string, bwm_command_sptr>::iterator iter = tab_types_.find(comm.name());
+  if (iter == tab_types_.end()) {
+    vcl_cerr << "Lidar tableau type is not registered, not creating!" << vcl_endl;
+    return;
+  }
   float min_val = 20;
   float max_val = 100;
   float gamma = 1.0;

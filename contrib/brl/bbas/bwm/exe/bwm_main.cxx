@@ -5,6 +5,8 @@
 
 #include <bwm/bwm_tableau_mgr.h>
 #include <bwm/bwm_menu.h>
+#include <bwm/bwm_macros.h>
+#include <bwm/bwm_load_commands.h>
 
 #include <vcl_iostream.h>
 #include <vgui/vgui.h>
@@ -32,6 +34,15 @@ int main(int argc, char** argv)
   vgui::init(my_argc, my_argv);
   delete []my_argv;
 
+  REG_TABLEAU(bwm_load_img_command);
+  REG_TABLEAU(bwm_load_cam_command);
+  REG_TABLEAU(bwm_load_coin3d_command);
+
+  REG_PROCESS(bwm_corr_mode_command);
+  REG_PROCESS(bwm_rec_corr_command);
+  REG_PROCESS(bwm_save_corr_command);
+  REG_PROCESS(bwm_del_last_corr_command);
+  REG_PROCESS(bwm_del_corr_command);
   // Set up the app_menu
   vgui_menu main_menu;
   bwm_menu app_menu;
