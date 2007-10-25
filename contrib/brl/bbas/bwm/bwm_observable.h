@@ -24,21 +24,17 @@ class bwm_observable : public vgui_observable, public vbl_ref_count
 {
 public:
 
-  virtual vcl_string type_name() const {return "bwm_observable"; }
-
   //: constructors
   bwm_observable() {}
 
   virtual ~bwm_observable() {}
 
+  virtual vcl_string type_name() const {return "bwm_observable"; }
+
   // removes the object from 3D scene by notifiying the observers of deletion
   virtual void remove()=0;
 
-  //bwm_observable(vsol_polygon_3d_sptr poly){}
- // bwm_observable(vsol_polygon_3d_sptr poly, double dist){}
   void virtual set_object(vsol_polygon_3d_sptr poly3d)=0;
-
-  unsigned get_id() { return id_; }
 
   virtual vgl_box_3d<double> bounding_box()=0;
 
@@ -89,10 +85,6 @@ public:
   virtual void save(const char* filename)=0;
 
 protected:
-
-  void get_id(unsigned id) { id_= id; }
-
-  static unsigned id_;
 
   vgl_vector_3d<double> last_translation_;
   

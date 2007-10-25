@@ -15,11 +15,19 @@ void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu
   vgui_menu submenu;
 
   vgui_menu poly_submenu;
-  poly_submenu.add("Create..",
+  poly_submenu.add("Polygon..",
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::create_polygon),
     vgui_key('p'), 
     vgui_modifier(vgui_SHIFT) );
-  submenu.add( "Polygon..", poly_submenu);
+  poly_submenu.add("PolyLine..",
+    new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::create_polyline),
+    vgui_key('l'), 
+    vgui_modifier(vgui_SHIFT) );
+  poly_submenu.add("Point..",
+    new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::create_polyline),
+    vgui_key('l'), 
+    vgui_modifier(vgui_SHIFT) );
+  submenu.add( "DRAW..", poly_submenu);
   
   submenu.add( "Deselect All", 
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::deselect_all),
@@ -60,6 +68,19 @@ void bwm_tableau_img::create_polygon()
   my_observer_->create_polygon(poly2d);
 }
 
+void bwm_tableau_img::create_polyline()
+{
+  // first lock the bgui_image _tableau
+  my_observer_->image_tableau()->lock_linenum(true);
+  vsol_polyline_2d_sptr poly2d;
+  set_color(1, 0, 0);
+  this->pick_polyline(poly2d);
+
+  my_observer_->image_tableau()->lock_linenum(false);
+
+  // add the polygon to the list
+  my_observer_->create_polyline(poly2d);
+}
 void bwm_tableau_img::deselect_all()
 {
   my_observer_->deselect_all();

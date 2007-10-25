@@ -7,12 +7,28 @@
 
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_polygon_3d.h>
+#include <vsol/vsol_polyline_2d.h>
+#include <vsol/vsol_polyline_3d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
 
-///: returns the vertex (x,y) values of a 2D polygon in seperate x and y arrays 
+//: returns the vertex (x,y) values of a 2D polygon in seperate x and y arrays 
 void bwm_algo::get_vertices_xy(vsol_polygon_2d_sptr poly2d, 
-                                          float **x, float **y)
+                               float **x, float **y)
+{
+  int n = poly2d->size();
+  *x = (float*) malloc(sizeof(float) * n);
+  *y = (float*) malloc(sizeof(float) * n);
+  for (int i=0; i<n; i++) {
+    (*x)[i] = (float) poly2d->vertex(i)->x();
+    (*y)[i] = (float) poly2d->vertex(i)->y();
+   //vcl_cout << "X=" << poly2d->vertex(i)->x() << " Y=" << poly2d->vertex(i)->y() << vcl_endl;
+  }
+}
+
+//: returns the vertex (x,y) values of a 2D polygon in seperate x and y arrays 
+void bwm_algo::get_vertices_xy(vsol_polyline_2d_sptr poly2d, 
+                               float **x, float **y)
 {
   int n = poly2d->size();
   *x = (float*) malloc(sizeof(float) * n);

@@ -2,6 +2,7 @@
 #include <bwm/algo/bwm_algo.h>
 #include <bwm/algo/bwm_image_processor.h>
 #include <vsol/vsol_polygon_2d.h>
+#include <vsol/vsol_polyline_2d.h>
 
 void bwm_observer_img::create_polygon(vsol_polygon_2d_sptr poly2d)
 {
@@ -21,6 +22,24 @@ void bwm_observer_img::create_polygon(vsol_polygon_2d_sptr poly2d)
   vert_list[polygon->get_id()] = verts;
 }
 
+void bwm_observer_img::create_polyline(vsol_polyline_2d_sptr poly2d)
+{
+  float *x, *y;
+  bwm_algo::get_vertices_xy(poly2d, &x, &y);
+  unsigned nverts = poly2d->size();
+
+  vcl_vector<vgui_soview2D_circle*> verts;
+  this->set_foreground(0,1,0);
+  for(unsigned i = 0; i<nverts; ++i) {
+    vgui_soview2D_circle* circle = this->add_circle(x[i],y[i],1.0f);
+    verts.push_back(circle);
+  }
+  this->set_foreground(1,1,0);
+  vgui_soview2D_linestrip* polyline = this->add_linestrip(nverts, x, y);
+  poly_list[polyline->get_id()] = polyline;
+  vert_list[polyline->get_id()] = verts;
+}
+
 void bwm_observer_img::delete_polygon()
 {
   // first get the selected polygon
@@ -37,7 +56,7 @@ void bwm_observer_img::delete_polygon()
 
 void bwm_observer_img::delete_all() 
 {
-  vcl_map<unsigned, vgui_soview2D_polygon*>::iterator it = poly_list.begin();
+  vcl_map<unsigned, vgui_soview2D*>::iterator it = poly_list.begin();
   while (it != poly_list.begin()) {
     delete_polygon(it->second);
     it++;

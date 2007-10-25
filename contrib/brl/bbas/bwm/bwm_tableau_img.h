@@ -34,6 +34,7 @@ public:
   bool handle(const vgui_event& e);
 
   virtual void create_polygon(); 
+  virtual void create_polyline();
 
   //************* IMAGE Processing Methods
 

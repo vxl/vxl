@@ -11,6 +11,8 @@
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
+#include <vsol/vsol_polyline_2d_sptr.h>
+#include <vsol/vsol_polyline_3d_sptr.h>
 
 #include <vpgl/vpgl_proj_camera.h>
 
@@ -18,11 +20,11 @@
 class bwm_algo {
 
 public:
-  static void get_vertices_xy(vsol_polygon_2d_sptr poly2d, 
-    float **x, float **y);
+  static void get_vertices_xy(vsol_polygon_2d_sptr poly2d, float **x, float **y);
 
-  static void get_vertices_xyz(vsol_polygon_3d_sptr poly3d, 
-    double **x, double **y, double **z);
+  static void get_vertices_xy(vsol_polyline_2d_sptr poly2d, float **x, float **y);
+
+  static void get_vertices_xyz(vsol_polygon_3d_sptr poly3d, double **x, double **y, double **z);
 
   static vsol_polygon_3d_sptr move_points_to_plane(vsol_polygon_3d_sptr polygon);
 
