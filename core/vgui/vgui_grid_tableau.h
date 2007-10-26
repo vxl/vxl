@@ -158,6 +158,9 @@ class vgui_grid_tableau : public vgui_poly_tableau
     cond_deselect.enable(v);
   }
 
+  //: Only allow one grid cell to be selected at a time, others are deselected
+  void set_unique_selected(bool u) {unique_selected_ = u;}
+
   //: Use this to emulate the deprecated bitab and tritab:
   void emulate_ntab() {
     set_grid_size_changeable(false);
@@ -222,7 +225,7 @@ class vgui_grid_tableau : public vgui_poly_tableau
   unsigned nb_rows;
   unsigned max_rows;
   unsigned last_selected[2]; // stores col_pos, row_pos of last selected tableau
-
+  bool unique_selected_;
   vgui_tableau_sptr default_tab;
 
   vcl_vector<vgui_tableau_sptr> tabs;

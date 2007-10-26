@@ -43,6 +43,7 @@ void vgui_grid_tableau::init(unsigned initial_cols, unsigned initial_rows)
   INCREMENT_ROWS = 50;
 
   grid_size_changeable = true;
+  unique_selected_ = false;
 
 #ifdef DEBUG
     vcl_cerr << "vgui_grid_tableau::init: initialising grid with "
@@ -569,7 +570,23 @@ void vgui_grid_tableau::select_current(int time)
     set_outline_color(grid_pos(col,row).handle, 1,0,0);
     post_redraw();
   }
+
+  if(unique_selected_){
+    redraw_needed = false;
+    for(unsigned r = 0; r<nb_rows; ++r)
+      for(unsigned c = 0; c<nb_cols; ++c)
+        if(!(c==col&&r==row))
+          if (grid_pos(c,r).time_selected != -1)
+            {
+              grid_pos(c, r).time_selected = -1;
+              set_outline_color(grid_pos(c,r).handle, 1,1,1);
+			  redraw_needed = true;
+            }
+    if(redraw_needed) post_redraw();
+  }
+
 }
+
 
 //------------------------------------------------------------------------------
 //: Mark the current table as deselected by setting the time to -1.
