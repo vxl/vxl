@@ -444,7 +444,7 @@ void bwm_tableau_mgr::load_tableaus()
 
       vcl_string image_path;
       is >> image_path;
-      is >> str;
+      //is >> str;
       create_img_tableau(name, image_path);
     }
 
