@@ -26,9 +26,10 @@ SET(bwm_sources
    bwm_tableau_img.cxx         bwm_tableau_img.h
    bwm_tableau_mgr.cxx         bwm_tableau_mgr.h
    bwm_observable.h            bwm_observable_sptr.h
-   bwm_observable_mesh.cxx     bwm_observable_mesh.h  bwm_observable_mesh_sptr.h
+   bwm_observable_mesh.cxx     bwm_observable_mesh.h       bwm_observable_mesh_sptr.h
    bwm_observable_textured_mesh.cxx     bwm_observable_textured_mesh.h bwm_observable_textured_mesh_sptr.h
-   bwm_observable_polyline.cxx bwm_observable_polyline.h
+   bwm_observable_polyline.cxx bwm_observable_polyline.h   bwm_observable_polyline_sptr.h 
+   bwm_observable_point.cxx    bwm_observable_point.h      bwm_observable_point.h
    bwm_observer.cxx            bwm_observer.h         
    bwm_observer_img.cxx        bwm_observer_img.h
    bwm_observer_vgui.cxx       bwm_observer_vgui.h  

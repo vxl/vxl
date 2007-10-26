@@ -24,7 +24,7 @@ void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu
     vgui_key('l'), 
     vgui_modifier(vgui_SHIFT) );
   poly_submenu.add("Point..",
-    new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::create_polyline),
+    new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::create_point),
     vgui_key('l'), 
     vgui_modifier(vgui_SHIFT) );
   submenu.add( "DRAW..", poly_submenu);
@@ -81,6 +81,16 @@ void bwm_tableau_img::create_polyline()
   // add the polygon to the list
   my_observer_->create_polyline(poly2d);
 }
+
+void bwm_tableau_img::create_point()
+{
+  float x, y;
+
+  set_color(1, 0, 0);
+  this->pick_point(&x, &y);
+  my_observer_->create_point(new vsol_point_2d(x, y));
+}
+
 void bwm_tableau_img::deselect_all()
 {
   my_observer_->deselect_all();
@@ -88,7 +98,7 @@ void bwm_tableau_img::deselect_all()
 
 void bwm_tableau_img::clear_poly()
 {
-  my_observer_->delete_polygon();
+  my_observer_->delete_selected();
 }
 
 void bwm_tableau_img::clear_all()

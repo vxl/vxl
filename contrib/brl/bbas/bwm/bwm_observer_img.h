@@ -47,7 +47,9 @@ public:
 
   void create_polyline(vsol_polyline_2d_sptr);
 
-  void delete_polygon();
+  void create_point(vsol_point_2d_sptr);
+
+  void delete_selected();
 
   void delete_all();
 
@@ -72,7 +74,7 @@ protected:
   vgui_viewer2D_tableau_sptr viewer_;
 
   // polygons are mapped soview ID
-  vcl_map<unsigned, vgui_soview2D*> poly_list;
+  vcl_map<unsigned, vgui_soview2D*> obj_list;
 
   // vector of vertices are mapped soview ID for each polygon
   vcl_map<unsigned, vcl_vector<vgui_soview2D_circle* > > vert_list;
