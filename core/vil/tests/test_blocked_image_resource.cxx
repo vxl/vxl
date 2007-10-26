@@ -297,7 +297,21 @@ static void test_blocked_image_resource()
   {
     TEST("Get block from cache", false , true);
   }
-  //delete file
+  //set sptr's to 0 so the underlying objects are destructed and the
+  //temporary image files are closed.  Otherwise the unlink below will
+  //fail.
+  ir = 0;
+  bir = 0;
+  lir = 0;
+  bir2 = 0;
+  bif = 0;
+  dir = 0;
+  dbif = 0;
+  flbir = 0;
+  fabir = 0;
+  cflbir = 0;
+  cfabir = 0;
+  //delete temporary files
   vpl_unlink(path.c_str());
   vpl_unlink(path2.c_str());
   //
