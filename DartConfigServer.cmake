@@ -58,7 +58,7 @@ SET (EXPECTED_BUILDS "\\
   {grc.ge.com FreeBSD-6.2_gcc-3.3.6_-Wall_-O2_shared} \\
   {grc.ge.com FreeBSD-6.2_gcc-4.0.4_-Wall_-O2_shared} \\
   {grc.ge.com FreeBSD-6.2_gcc-4.1.2_-Wall_-O2_shared} \\
-  {grc.ge.com FreeBSD-6.2_gcc-4.2.1_-Wall_-O2_shared} \\
+  {grc.ge.com FreeBSD-6.2_gcc-4.2.2_-Wall_-O2_shared} \\
   {grc.ge.com Linux-2.4.21_icc-8.1_-w1_-O2_shared} \\
   {grc.ge.com MinGW-3.8_gcc-3.4.4_-Wall_-O2_static} \\
   {grc.ge.com Cygwin_gcc-3.4.4_-Wall_-O2_static} \\
