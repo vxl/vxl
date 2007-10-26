@@ -17,7 +17,7 @@
   bwm_tableau_mgr::instance()->register_tableau(new tab());
 
 #define REG_PROCESS(proc) \
-  bwm_tableau_mgr::instance()->register_process(new proc());
+  bwm_process_mgr::instance()->register_process(new proc());
 
 
 #endif // bwm_macros_h_

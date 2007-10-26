@@ -58,13 +58,11 @@ public:
   //: deselects all the selected objects on the tableau
   void deselect_all();
 
-  //void move_corr();
-
-  //void world_pt_corr();
-
   void save();
 
   void help_pop();
+
+  void jim_process() { my_observer_->jim_obs_process(); }
 
 protected:
 

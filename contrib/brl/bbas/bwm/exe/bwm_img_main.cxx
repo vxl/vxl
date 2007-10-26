@@ -3,10 +3,12 @@
 #include <crtdbg.h>
 
 #include <bwm/bwm_tableau_mgr.h>
+#include <bwm/bwm_process_mgr.h>
 #include <bwm/bwm_menu.h>
 #include <bwm/bwm_tableau_img.h>
 #include <bwm/bwm_macros.h>
 #include <bwm/bwm_load_commands.h>
+#include <bwm/bwm_process_commands.h>
 
 #include <vcl_iostream.h>
 #include <vgui/vgui.h>
@@ -34,7 +36,11 @@ int main(int argc, char** argv)
   vgui::init(my_argc, my_argv);
   delete []my_argv;
 
+  // tableaus
   REG_TABLEAU(bwm_load_img_command);
+
+  // processes
+  REG_PROCESS(bwm_jim_process_command);
 
   // Set up the app_menu
   vgui_menu main_menu;
@@ -50,5 +56,5 @@ int main(int argc, char** argv)
   int result =  vgui::run(shell, 600, 600, menu_holder, "Brown World Modeler" );
   
   delete bwm_tableau_mgr::instance();
-
+  delete bwm_process_mgr::instance();
 }

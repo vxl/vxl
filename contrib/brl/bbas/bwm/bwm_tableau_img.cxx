@@ -1,5 +1,6 @@
 #include "bwm_tableau_img.h"
 #include "bwm_tableau_text.h"
+#include "bwm_command_macros.h"
 
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
@@ -43,6 +44,7 @@ void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu
   image_submenu.add("Histogram Plot", new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::hist_plot));
   image_submenu.add("Intensity Profile", new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::intensity_profile));
   image_submenu.add("Range Map", new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::range_map));
+  MENU_TAB_ADD_PROCESS("JIMs item", "jim's process", image_submenu, this);
   submenu.add("Image...", image_submenu);
 
   submenu.add( "HELP..." , 

@@ -1,5 +1,5 @@
 #include "bwm_menu.h"
-#include "bwm_command.h"
+#include "bwm_command_macros.h"
 
 vgui_menu bwm_menu::add_to_menu (vgui_menu& top_menu)
 {

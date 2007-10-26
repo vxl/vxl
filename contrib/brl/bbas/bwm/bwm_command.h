@@ -17,15 +17,10 @@
 // \endverbatim
 
 #include <vgui/vgui_command.h>
-#include <bwm/bwm_tableau_mgr.h>
+#include <vgui/vgui_tableau_sptr.h>
+#include <vgui/vgui_tableau.h>
 
-// Macros
-#define MENU_LOAD_TABLEAU(name, tableau_type, menu) menu.add( name, \
-  bwm_tableau_mgr::instance()->load_tableau_by_type(tableau_type).as_pointer()) 
-
-#define MENU_ADD_PROCESS_NAME(name, process_name,  menu) menu.add( name, \
-  bwm_tableau_mgr::instance()->load_process(process_name).as_pointer())
-
+#include <vcl_string.h>
 
 //: \brief The command for selecting the active tool from a menu
 class bwm_command : public vgui_command
@@ -37,5 +32,17 @@ class bwm_command : public vgui_command
   void execute() {};
 };
 
+class bwm_tab_process_command : public bwm_command
+{
+ public:
+  bwm_tab_process_command() {}
+  virtual ~bwm_tab_process_command() {}
+  virtual vcl_string name() { return "bwm_tab_process_command"; }
+
+  void set_tableau(vgui_tableau_sptr tab) {tableau_ = tab; }
+
+protected:
+  vgui_tableau_sptr tableau_;
+};
 
 #endif //bwm_command_h_

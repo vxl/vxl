@@ -27,8 +27,6 @@ public:
 
   static void register_tableau(bwm_command_sptr tab_comm);
 
-  void register_process(bwm_command_sptr process);
-
   void create_img_tableau(vcl_string name, vcl_string& image_path);
 
   void create_cam_tableau(vcl_string name, vcl_string& image_path, vcl_string& cam_path, 
@@ -44,8 +42,6 @@ public:
 
   //void setup_scene();
   bwm_command_sptr load_tableau_by_type(vcl_string tableau_type);
-
-  bwm_command_sptr load_process(vcl_string name);
 
   void load_tableaus();
 
@@ -73,7 +69,7 @@ public:
   void delete_corr();
 
   static vcl_map<vcl_string, bwm_command_sptr> tab_types_;
-  static vcl_map<vcl_string, bwm_command_sptr> process_map;
+
 private:
 
   bwm_tableau_mgr();

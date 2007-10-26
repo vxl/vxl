@@ -62,10 +62,7 @@ public:
 
   void range_map();
 
-  //void triangulate_meshes();
-
-  //void move_corr_point(vsol_point_2d_sptr new_pt);
-  //void world_pt_corr();
+  void jim_obs_process(){ vcl_cout << "I am Jim Green's Process!!!!" << vcl_endl; }
 
 protected:
 

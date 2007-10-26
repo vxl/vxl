@@ -15,7 +15,9 @@ SET(bwm_sources
    bwm_macros.h
    bwm_menu.cxx                bwm_menu.h
    bwm_command.h               bwm_command_sptr.h   
+   bwm_command_macros.h
    bwm_load_commands.h
+   bwm_process_commands.h
    bwm_tableau_cam.cxx         bwm_tableau_cam.h
    bwm_tableau_rat_cam.cxx     bwm_tableau_rat_cam.h
    bwm_tableau_proj_cam.cxx    bwm_tableau_proj_cam.h
@@ -25,6 +27,7 @@ SET(bwm_sources
    bwm_tableau_text.cxx        bwm_tableau_text.h
    bwm_tableau_img.cxx         bwm_tableau_img.h
    bwm_tableau_mgr.cxx         bwm_tableau_mgr.h
+   bwm_process_mgr.cxx         bwm_process_mgr.h
    bwm_observable.h            bwm_observable_sptr.h
    bwm_observable_mesh.cxx     bwm_observable_mesh.h       bwm_observable_mesh_sptr.h
    bwm_observable_textured_mesh.cxx     bwm_observable_textured_mesh.h bwm_observable_textured_mesh_sptr.h

@@ -39,7 +39,6 @@
 
 bwm_tableau_mgr* bwm_tableau_mgr::instance_ = 0;
 vcl_map<vcl_string, bwm_command_sptr> bwm_tableau_mgr::tab_types_;
-vcl_map<vcl_string, bwm_command_sptr> bwm_tableau_mgr::process_map;
 
 bwm_tableau_mgr* bwm_tableau_mgr::instance() {
   if (!instance_) {
@@ -72,12 +71,6 @@ void bwm_tableau_mgr::register_tableau(bwm_command_sptr tab_comm)
   tab_types_[tab_comm->name()] = tab_comm; 
 }
 
-void bwm_tableau_mgr::register_process(bwm_command_sptr process) 
-{
-  process_map[process->name()] = process;
-  
-}
-
 bwm_command_sptr bwm_tableau_mgr::load_tableau_by_type(vcl_string tableau_type)
 {
   bwm_command_sptr comm = 0;
@@ -86,15 +79,6 @@ bwm_command_sptr bwm_tableau_mgr::load_tableau_by_type(vcl_string tableau_type)
     comm = iter->second;
 
   return comm;
-}
-
-bwm_command_sptr bwm_tableau_mgr::load_process(vcl_string name)
-{
-  vcl_map<vcl_string, bwm_command_sptr>::iterator iter = process_map.find(name);
-  if (iter != process_map.end()) {
-    return iter->second;
-  }
-  return 0;
 }
 
 void bwm_tableau_mgr::create_img_tableau(vcl_string name, 

@@ -4,6 +4,7 @@
 
 
 #include <bwm/bwm_tableau_mgr.h>
+#include <bwm/bwm_process_mgr.h>
 #include <bwm/bwm_menu.h>
 #include <bwm/bwm_macros.h>
 #include <bwm/bwm_load_commands.h>
