@@ -124,8 +124,14 @@ public:
   void move_corr_point(vsol_point_2d_sptr new_pt);
   void world_pt_corr();
 
-  virtual vcl_ostream& print_camera(vcl_ostream& s) {return s;}
+  void move_to_point(float x, float y);
 
+  void scroll_to_point();
+
+
+
+  virtual vcl_ostream& print_camera(vcl_ostream& s) {return s;}
+  
 protected:
 
   vpgl_camera<double> *camera_;

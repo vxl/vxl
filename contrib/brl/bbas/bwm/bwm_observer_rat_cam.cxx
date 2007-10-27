@@ -18,10 +18,17 @@
 #include <bgeo/bgeo_lvcs.h>
 
 #include <vpgl/algo/vpgl_backproject.h>
+#include <vpgl/algo/vpgl_adjust_rational_trans_onept.h>
 
 #include <vul/vul_file.h>
 
 #include <bmsh3d/bmsh3d_textured_mesh_mc.h>
+
+vpgl_rational_camera<double> bwm_observer_rat_cam::camera()
+{
+  //NEED TO HAVE NAME FOR SAFE CASTING!!! or USE RTTI FIXME JLM
+  return *static_cast<vpgl_rational_camera<double>* >(camera_);
+}
 
 void bwm_observer_rat_cam::camera_center(vgl_homg_point_3d<double> &center)
 {
@@ -949,4 +956,59 @@ vcl_ostream& bwm_observer_rat_cam::print_camera(vcl_ostream& s)
   vpgl_rational_camera<double>* rat_cam = static_cast<vpgl_rational_camera<double> *> (camera_);
   s << *rat_cam;
   return s;
+}
+
+void bwm_observer_rat_cam:: adjust_image_offsets()
+{
+  vcl_vector<bwm_corr_sptr> corrs = 
+    bwm_observer_mgr::instance()->correspondences();
+  if(!corrs.size())
+    return;
+  bwm_corr_sptr corr = corrs[0];
+  vcl_vector<bwm_observer_cam*> obs = corr->observers();
+  vcl_vector<vpgl_rational_camera<double> > rcams;
+  vcl_vector<vgl_point_2d<double> > cpoints;
+  for(vcl_vector<bwm_observer_cam*>::iterator oit = obs.begin();
+      oit != obs.end(); ++oit)
+    {
+        if((*oit)->type_name() != "bwm_observer_rat_cam")
+          continue;
+        bwm_observer_rat_cam* obscr = 
+          static_cast<bwm_observer_rat_cam*>(*oit);
+        rcams.push_back(obscr->camera());
+        vgl_point_2d<double> p;
+        if(corr->match(*oit, p))
+          cpoints.push_back(p);
+  }
+  if(cpoints.size()!=rcams.size())
+    {
+      vcl_cerr << "In bwm_observer_rat_cam::adjust_image_offsets - "
+               << " inconsistent number of points and cameras \n";
+      return;
+    }
+
+  vcl_cout << "Executing adjust image offsets " << '\n';
+  vcl_vector<vgl_vector_2d<double> > cam_trans;
+  vgl_point_3d<double> intersection;
+  if(!vpgl_adjust_rational_trans_onept::adjust(rcams, cpoints, cam_trans,
+                                              intersection))
+    {
+      vcl_cerr << "In bwm_observer_rat_cam::adjust_image_offsets - "
+               << " adjustment failed \n";
+      return;
+    }
+  
+  vgl_homg_plane_3d<double> world_plane(0,0,1,-intersection.z());
+  vcl_vector<vgl_vector_2d<double> >::iterator ti = cam_trans.begin();
+  vcl_vector<bwm_observer_cam*>::iterator oit = obs.begin();
+  for(; oit != obs.end() && ti != cam_trans.end(); ++oit, ++ti)
+    {
+        if((*oit)->type_name() != "bwm_observer_rat_cam")
+          continue;
+        bwm_observer_rat_cam* obscr = 
+          static_cast<bwm_observer_rat_cam*>(*oit);
+        obscr->shift_camera((*ti).x(), (*ti).y());
+        obscr->set_proj_plane(world_plane);
+        obscr->update_all();
+    }
 }

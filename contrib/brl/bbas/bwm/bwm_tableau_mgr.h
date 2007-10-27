@@ -67,6 +67,7 @@ public:
   void save_corr();
   void delete_last_corr();
   void delete_corr();
+  void move_to_corr();
 
   static vcl_map<vcl_string, bwm_command_sptr> tab_types_;
 

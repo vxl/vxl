@@ -26,11 +26,14 @@ public:
   static void exit() {bwm_tableau_mgr::instance()->exit(); }
 
   // Correspondence Menu Items
+#if 0
   static void mode_corr() { bwm_tableau_mgr::instance()->mode_corr(); }
   static void rec_corr() { bwm_tableau_mgr::instance()->rec_corr(); }
   static void save_corr() { bwm_tableau_mgr::instance()->save_corr(); }
   static void delete_last_corr() { bwm_tableau_mgr::instance()->delete_last_corr(); }
   static void delete_corr() { bwm_tableau_mgr::instance()->delete_corr(); }
+  static void move_to_corr() { bwm_tableau_mgr::instance()->move_to_corr(); }
+#endif
 };
 
 #endif

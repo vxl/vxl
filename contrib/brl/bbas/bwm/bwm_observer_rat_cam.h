@@ -44,6 +44,8 @@ public:
   void set_camera(vpgl_rational_camera<double> *camera, vcl_string cam_path) 
   { camera_ = camera; bwm_observer_cam::set_camera(camera, cam_path);} 
 
+  vpgl_rational_camera<double> camera();
+
   virtual bool intersect_ray_and_plane(vgl_homg_point_2d<double> img_point,
                                             vgl_homg_plane_3d<double> plane,
                                             vgl_homg_point_3d<double> &world_point);
@@ -79,7 +81,7 @@ public:
   void save_x3d();
 
   void generate_textures();
-
+  void adjust_image_offsets();
 protected:
   bgeo_lvcs* lvcs_;
   vcl_string select_file();

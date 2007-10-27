@@ -44,6 +44,7 @@ int main(int argc, char** argv)
   REG_PROCESS(bwm_save_corr_command);
   REG_PROCESS(bwm_del_last_corr_command);
   REG_PROCESS(bwm_del_corr_command);
+  REG_PROCESS(bwm_move_to_corr_command);
   // Set up the app_menu
   vgui_menu main_menu;
   bwm_menu app_menu;

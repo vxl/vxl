@@ -50,8 +50,14 @@ public:
   else corr_mode_ = mode;
   }
 
+  void move_to_corr();
+
   void print_observers();
+
+  vcl_vector<bwm_corr_sptr> correspondences()
+    {return corr_list_;}
   
+
 private:
   bwm_observer_mgr() {corr_mode_ = IMAGE_TO_IMAGE;}
 

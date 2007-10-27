@@ -53,7 +53,9 @@ bwm_tableau_mgr::bwm_tableau_mgr()
 {
   grid_ = vgui_grid_tableau_new (); 
   grid_->set_frames_selectable(true);
+  grid_->set_unique_selected(true);
   grid_->set_grid_size_changeable(true);
+
 }
 
 bwm_tableau_mgr::~bwm_tableau_mgr()
@@ -397,6 +399,11 @@ void bwm_tableau_mgr::delete_last_corr()
 void bwm_tableau_mgr::delete_corr() 
 {
   bwm_observer_mgr::instance()->delete_all_corr();
+}
+
+void bwm_tableau_mgr::move_to_corr()
+{
+  bwm_observer_mgr::instance()->move_to_corr();
 }
 
 void bwm_tableau_mgr::load_tableaus()

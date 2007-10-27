@@ -109,6 +109,16 @@ class bwm_adj_cam_offset_command : public vgui_command
   bwm_tableau_rat_cam *tab;
 };
 
+
+class bwm_adjust_image_offsets_command : public vgui_command
+{
+ public:
+  bwm_adjust_image_offsets_command(bwm_tableau_rat_cam* t) : tab(t) {}
+  void execute() { tab->adjust_image_offsets(); }
+
+  bwm_tableau_rat_cam *tab;
+};
+
 class bwm_center_pos_command : public vgui_command
 {
  public:
@@ -125,6 +135,7 @@ void bwm_tableau_rat_cam::get_popup(vgui_popup_params const &params, vgui_menu &
   bwm_tableau_cam::get_popup(params, parent_menu);
  
   parent_menu.add( "Adjust Camera Offset", new bwm_adj_cam_offset_command(this));
+  parent_menu.add( "Adjust Image Offsets", new bwm_adjust_image_offsets_command(this));
   parent_menu.add( "Center to the position", new bwm_center_pos_command(this));
 
   vgui_menu lvcs_submenu;
@@ -213,3 +224,7 @@ void bwm_tableau_rat_cam::save_x3d()
   my_observer_->save_x3d();
 }
 
+void bwm_tableau_rat_cam::adjust_image_offsets()
+{
+  my_observer_->adjust_image_offsets();
+}

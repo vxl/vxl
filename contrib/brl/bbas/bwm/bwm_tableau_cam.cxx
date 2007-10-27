@@ -123,6 +123,7 @@ class bwm_world_pt_corr_command: public vgui_command
   bwm_tableau_cam *tab;
 };
 
+
 class bwm_hist_plot_command : public vgui_command
 {
  public:
@@ -146,6 +147,15 @@ class bwm_range_map_command : public vgui_command
  public:
   bwm_range_map_command(bwm_tableau_cam* t) : tab(t) {}
   void execute() { tab->range_map(); }
+
+  bwm_tableau_cam *tab;
+};
+
+class bwm_scroll_to_point_command : public vgui_command
+{
+ public:
+  bwm_scroll_to_point_command(bwm_tableau_cam* t) : tab(t) {}
+  void execute() { tab->scroll_to_point(); }
 
   bwm_tableau_cam *tab;
 };
@@ -231,11 +241,11 @@ class bwm_cam_help_command : public vgui_command
   bwm_tableau_cam *tab;
 };
 
+
 void bwm_tableau_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu) {
     
   vgui_menu submenu;
   submenu.add( "Set as Master", new bwm_set_master_command(this));
-
   vgui_menu mesh_submenu;
   mesh_submenu.add("Create..", new bwm_create_mesh_command(this), 
     vgui_key('p'), vgui_modifier(vgui_SHIFT) );
@@ -258,10 +268,12 @@ void bwm_tableau_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu
     vgui_key('d'), vgui_modifier(vgui_SHIFT));
   submenu.add( "Delete All", new bwm_clear_all_command(this), 
     vgui_key('a'), vgui_modifier(vgui_SHIFT));
+  submenu.add( "Scroll To Point", new bwm_scroll_to_point_command(this));
 
   vgui_menu corr_menu;
   corr_menu.add( "Move (selected)" , new bwm_move_corr_command(this));
   corr_menu.add( "Save World Point (selected)" , new bwm_world_pt_corr_command(this));
+  
   submenu.add( "Correspondence", corr_menu);
 
   vgui_menu plane_submenu;
@@ -395,6 +407,7 @@ void bwm_tableau_cam::world_pt_corr()
   my_observer_->world_pt_corr();
 }
 
+
 void bwm_tableau_cam::select_proj_plane()
 {
   my_observer_->select_proj_plane();
@@ -474,6 +487,10 @@ void bwm_tableau_cam::range_map()
 void bwm_tableau_cam::save()
 {
   my_observer_->save();
+}
+void bwm_tableau_cam::scroll_to_point()
+{
+  my_observer_->scroll_to_point();
 }
 
 void bwm_tableau_cam::help_pop()

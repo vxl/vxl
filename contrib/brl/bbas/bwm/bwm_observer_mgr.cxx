@@ -179,3 +179,27 @@ void bwm_observer_mgr::print_observers()
     vcl_cout <<  i << " - " << observers_[i]->type_name() << vcl_endl;
   }
 }
+
+void bwm_observer_mgr::move_to_corr()
+{
+  if(!corr_list_.size())
+    {
+      vcl_cerr << " no correspondences to zoom to\n";
+      return;
+    }
+  bwm_corr_sptr corr = corr_list_[0];
+  vcl_vector<bwm_observer_cam*> obs = corr->observers();
+  for(vcl_vector<bwm_observer_cam*>::iterator oit = obs.begin();
+      oit != obs.end(); ++oit)
+    {
+      vcl_cout << "Observer " << (*oit)->name();
+      vgl_point_2d<double> p;
+      //observer has a match so can zoom
+      if(corr->match(*oit, p))
+        {
+          float x = static_cast<float>(p.x());
+          float y = static_cast<float>(p.y());
+          (*oit)->move_to_point(x, y);
+        }
+    }
+}

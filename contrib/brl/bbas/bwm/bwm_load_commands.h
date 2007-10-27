@@ -102,4 +102,14 @@ public:
 
 };
 
-#endif
+
+class bwm_move_to_corr_command: public bwm_command
+{
+public:
+  bwm_move_to_corr_command() {}
+  ~bwm_move_to_corr_command() {}
+  vcl_string name() {return "move_to_corr"; }
+  void execute() { bwm_tableau_mgr::instance()->move_to_corr(); }
+};
+
+#endif //bwm_load_commands_h_

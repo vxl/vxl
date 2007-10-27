@@ -22,6 +22,7 @@ vgui_menu bwm_menu::add_to_menu (vgui_menu& top_menu)
   MENU_ADD_PROCESS_NAME("Save Correspondences", "save_corr", corr_group_menu);
   MENU_ADD_PROCESS_NAME("Delete Last Correspondence", "del_last_corr", corr_group_menu);
   MENU_ADD_PROCESS_NAME("Delete All Correspondences", "del_corr", corr_group_menu);
+  MENU_ADD_PROCESS_NAME("Move to First Correspondence", "move_to_corr", corr_group_menu);
   top_menu.add("PROCESSES ", corr_group_menu);
   return top_menu;
 }

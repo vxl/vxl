@@ -78,6 +78,8 @@ public:
 
   void world_pt_corr();
 
+  void scroll_to_point();
+
   void save();
 
   //------------ Projection Plane related methods
