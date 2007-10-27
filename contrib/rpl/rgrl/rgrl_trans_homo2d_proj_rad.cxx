@@ -30,6 +30,7 @@ rgrl_trans_homo2d_proj_rad( vnl_matrix_fixed<double, 3, 3> const& H,
 {
   const vnl_vector_fixed<double, 2> zeroc( 0, 0 );
   this->set_centres( zeroc, zeroc, image_centre );
+  set_up_rad_k(k);
 }
 
 rgrl_trans_homo2d_proj_rad::
@@ -45,6 +46,21 @@ rgrl_trans_homo2d_proj_rad( vnl_matrix_fixed<double, 3, 3> const& H,
     rad_k_(k)
 {
   this->set_centres( from_centre, to_centre, image_centre );
+  set_up_rad_k( k );
+}
+
+void
+rgrl_trans_homo2d_proj_rad::
+set_up_rad_k(vcl_vector<double> const & rad_k)
+{
+  rad_k_.resize(rad_k.size());
+  const double centre_mag_norm = centre_mag_norm_const();
+
+  double base = 1;
+  for ( unsigned i=0; i<rad_k.size(); ++i ) {
+    base *= centre_mag_norm;
+    rad_k_[i] = rad_k[i] * base;
+  }
 }
 
 void

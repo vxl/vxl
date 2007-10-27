@@ -79,6 +79,8 @@ class rgrl_trans_homo2d_proj_rad
   void map_dir( vnl_vector<double> const& from_loc,
                 vnl_vector<double> const& from_dir,
                 vnl_vector<double>      & to_dir  ) const;
+
+  void set_up_rad_k(vcl_vector<double> const & rad_k);
 };
 
 #endif // rgrl_trans_homo2d_proj_rad_h_
