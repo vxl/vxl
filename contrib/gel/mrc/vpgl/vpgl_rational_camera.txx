@@ -64,6 +64,35 @@ vpgl_rational_camera(vcl_vector<T> const& neu_u,
   scale_offsets_[V_INDX] = vpgl_scale_offset<T>(v_scale, v_off);
 }
 
+//: Constructor from 4 coefficient arrays and 5 scale, offset pairs.
+template <class T>
+vpgl_rational_camera<T>::
+vpgl_rational_camera(const double*  neu_u,
+                     const double* den_u,
+                     const double* neu_v,
+                     const double* den_v,
+                     const T x_scale, const T x_off,
+                     const T y_scale, const T y_off,
+                     const T z_scale, const T z_off,
+                     const T u_scale, const T u_off,
+                     const T v_scale, const T v_off
+                     )
+{
+  for (unsigned i = 0; i<20; ++i)
+    {
+      rational_coeffs_[NEU_U][i] = neu_u[i];
+      rational_coeffs_[DEN_U][i] = den_u[i];
+      rational_coeffs_[NEU_V][i] = neu_v[i];
+      rational_coeffs_[DEN_V][i] = den_v[i];
+    }
+  scale_offsets_.resize(5);
+  scale_offsets_[X_INDX] = vpgl_scale_offset<T>(x_scale, x_off);
+  scale_offsets_[Y_INDX] = vpgl_scale_offset<T>(y_scale, y_off);
+  scale_offsets_[Z_INDX] = vpgl_scale_offset<T>(z_scale, z_off);
+  scale_offsets_[U_INDX] = vpgl_scale_offset<T>(u_scale, u_off);
+  scale_offsets_[V_INDX] = vpgl_scale_offset<T>(v_scale, v_off);
+}
+
 //: read from a file
 template <class T>
 vpgl_rational_camera<T>::vpgl_rational_camera(vcl_string cam_path)

@@ -5,7 +5,6 @@ INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas)
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc)
 
 SET( vpgl_sources
-
   vpgl_camera.h
   vpgl_proj_camera.h               vpgl_proj_camera.txx
   vpgl_calibration_matrix.h        vpgl_calibration_matrix.txx
@@ -19,6 +18,7 @@ SET( vpgl_sources
   vpgl_radial_distortion.h         vpgl_radial_distortion.txx
   vpgl_poly_radial_distortion.h    vpgl_poly_radial_distortion.txx
   vpgl_rational_camera.h           vpgl_rational_camera.txx
+  vpgl_comp_rational_camera.h      vpgl_comp_rational_camera.txx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vpgl_sources)

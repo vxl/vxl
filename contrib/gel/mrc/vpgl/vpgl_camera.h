@@ -17,7 +17,7 @@
 // Modifications:  October 26, 2006 - Moved homogeneous methods to
 // projective camera, since projective geometry may not apply in the
 // most general case, e.g. rational cameras. - JLM
-
+#include <vcl_string.h>
 template<class T>
 class vpgl_camera
 {

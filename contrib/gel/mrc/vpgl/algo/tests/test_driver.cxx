@@ -10,7 +10,11 @@ DECLARE( test_construct_cameras );
 DECLARE( test_lens_warp_mapper );
 DECLARE( test_backproject );
 DECLARE( test_ortho_procrustes );
+DECLARE( test_ray_intersect );
+DECLARE( test_adjust_rational_trans_onept );
+DECLARE( test_rational_geo_adjust );
 DECLARE( test_bundle_adjust );
+
 
 void register_tests()
 {
@@ -23,7 +27,11 @@ void register_tests()
   REGISTER( test_lens_warp_mapper );
   REGISTER( test_backproject );
   REGISTER( test_ortho_procrustes );
+  REGISTER( test_ray_intersect );
+  REGISTER( test_adjust_rational_trans_onept );
+  REGISTER( test_rational_geo_adjust );
   REGISTER( test_bundle_adjust );
+
 }
 
 DEFINE_MAIN;

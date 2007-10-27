@@ -5,7 +5,7 @@
 // \file
 #include <vnl/vnl_cost_function.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vpgl/vpgl_rational_camera.h>
+#include <vpgl/vpgl_camera.h>
 
 class vpgl_invmap_cost_function: public vnl_cost_function
 {
@@ -15,7 +15,7 @@ class vpgl_invmap_cost_function: public vnl_cost_function
   //: Constructor - rcam pointer is not deleted by this class
   vpgl_invmap_cost_function(vnl_vector_fixed<double, 2> const& image_point, 
                             vnl_vector_fixed<double, 4> const& plane,
-                            const vpgl_rational_camera<double>* const rcam);
+                            const vpgl_camera<double>* rcam);
   ~vpgl_invmap_cost_function(){}
   //: The cost function. x is a vector holding the two plane parameters
   double f(vnl_vector<double> const& x);
@@ -36,7 +36,7 @@ class vpgl_invmap_cost_function: public vnl_cost_function
   //: plane coefficients
   vnl_vector_fixed<double, 4> plane_;
   //: rational camera
-  const vpgl_rational_camera<double>* const rcam_ptr_;
+  const vpgl_camera<double>* cam_ptr_;
   //: the well-conditioned parameterization
   plane_param pp_;
 };

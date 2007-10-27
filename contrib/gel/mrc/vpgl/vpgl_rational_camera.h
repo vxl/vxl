@@ -116,6 +116,19 @@ class vpgl_rational_camera : public vpgl_camera<T>
                        const T v_scale, const T v_off
                       );
 
+  //: Constructor from 4 coefficient arrays and 5 scale, offset pairs.
+  vpgl_rational_camera(const double*  neu_u,
+                       const double* den_u,
+                       const double* neu_v,
+                       const double* den_v,
+                       const T x_scale, const T x_off,
+                       const T y_scale, const T y_off,
+                       const T z_scale, const T z_off,
+                       const T u_scale, const T u_off,
+                       const T v_scale, const T v_off
+                      );
+
+
   //: Constructor with everything wrapped up in an array and vector.
   vpgl_rational_camera(vcl_vector<vcl_vector<T> > const& rational_coeffs,
                        vcl_vector<vpgl_scale_offset<T> > const& scale_offsets);
@@ -185,15 +198,15 @@ class vpgl_rational_camera : public vpgl_camera<T>
         // Interface for vnl
 
   //: Project a world point onto the image
-  vnl_vector_fixed<T, 2> project(vnl_vector_fixed<T, 3> const& world_point) const;
+  virtual vnl_vector_fixed<T, 2> project(vnl_vector_fixed<T, 3> const& world_point) const;
 
         // Interface for vgl
 
   //: Project a world point onto the image
-  vgl_point_2d<T> project(vgl_point_3d<T> world_point) const;
+  virtual vgl_point_2d<T> project(vgl_point_3d<T> world_point) const;
 
   //: print the camera parameters
-  void print(vcl_ostream& s = vcl_cout) const;
+  virtual void print(vcl_ostream& s = vcl_cout) const;
 
   bool save(vcl_string cam_path);
 

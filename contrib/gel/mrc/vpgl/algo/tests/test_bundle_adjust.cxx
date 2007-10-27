@@ -76,11 +76,11 @@ static void test_bundle_adjust()
   mask[2][5] = false;
   mask[2][6] = false;
   mask[3][7] = false;
-  mask[3][8] = false;
+  //  mask[3][8] = false; out of bounds - JLM
   mask[4][0] = false;
   mask[4][1] = false;
   mask[4][6] = false;
-  mask[4][8] = false;
+  // mask[4][8] = false; out of bounds - JLM
 
   // create a subset of projections based on the mask
   bnl_crs_index crs(mask);
