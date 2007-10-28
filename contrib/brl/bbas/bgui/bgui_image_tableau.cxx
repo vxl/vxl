@@ -23,23 +23,23 @@
 //--------------------------------------------------------------------------------
 
 bgui_image_tableau::bgui_image_tableau()
-  { handle_motion_ = true; locked_ = false;}
+  { handle_motion_ = true; locked_ = false; show_path_=false;}
 
 bgui_image_tableau::bgui_image_tableau(vil_image_resource_sptr const & img,
                                        vgui_range_map_params_sptr const& rmp)
- : base(img, rmp) { handle_motion_ = true; locked_ = false;}
+ : base(img, rmp) { handle_motion_ = true; locked_ = false; show_path_=false;}
 
 bgui_image_tableau::bgui_image_tableau(vil_image_view_base const & img,
                                        vgui_range_map_params_sptr const& rmp)
- : base(img, rmp) { handle_motion_ = true; locked_ = false;}
+ : base(img, rmp) { handle_motion_ = true; locked_ = false; show_path_=false;}
 
 bgui_image_tableau::bgui_image_tableau(vil1_image const & img,
                                        vgui_range_map_params_sptr const& rmp)
- : base(img, rmp) { handle_motion_ = true; locked_ = false;}
+ : base(img, rmp) { handle_motion_ = true; locked_ = false; show_path_=false;}
 
 bgui_image_tableau::bgui_image_tableau(char const *f,
                                        vgui_range_map_params_sptr const& rmp)
- : base(f, rmp) { handle_motion_ = true; locked_ = false;}
+ : base(f, rmp) { handle_motion_ = true; locked_ = false; show_path_=false;}
 
 //--------------------------------------------------------------------------------
 
@@ -422,7 +422,10 @@ bool bgui_image_tableau::handle(vgui_event const &e)
 
     // Display on status bar:
     if (!locked_) {
-      vgui::out << msg << vcl_endl;
+      if(show_path_)
+        vgui::out << msg << "  " << this->file_name() << vcl_endl;
+      else
+        vgui::out << msg << vcl_endl;
     }
   }
   return base::handle(e);
