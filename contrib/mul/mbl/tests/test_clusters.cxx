@@ -7,14 +7,14 @@
 #include <vcl_iostream.h>
 
 //: Distance class
-class mbl_scalar_distance
+class test_scalar_distance
 {
  public:
   static double d(double a, double b) { return a<b?b-a:a-b; }
 };
 
 // Compile template
-MBL_CLUSTERS_INSTANTIATE(double,mbl_scalar_distance);
+MBL_CLUSTERS_INSTANTIATE(double,test_scalar_distance);
 
 void test_clusters()
 {
@@ -22,7 +22,7 @@ void test_clusters()
            << " Testing mbl_clusters\n"
            << "**********************\n";
 
-  mbl_clusters<double,mbl_scalar_distance> clusters;
+  mbl_clusters<double,test_scalar_distance> clusters;
 
   unsigned n=15;
   double max_r = 5.001;
