@@ -95,7 +95,7 @@ void bwm_tableau_mgr::create_img_tableau(vcl_string name,
   }
 
   bgui_image_tableau_sptr img = bgui_image_tableau_new();
-
+  img->show_image_path(true);
   // LOAD IMAGE
   vgui_range_map_params_sptr params;
   vil_image_resource_sptr img_res = load_image(image_path, params);
@@ -124,7 +124,7 @@ void bwm_tableau_mgr::create_cam_tableau(vcl_string name,
   }
   
   bgui_image_tableau_sptr img = bgui_image_tableau_new();
-
+  img->show_image_path(true);
   // LOAD IMAGE
   vgui_range_map_params_sptr params;
   vil_image_resource_sptr img_res = load_image(image_path, params);
@@ -304,7 +304,7 @@ void bwm_tableau_mgr::create_proj2d_tableau(vcl_string name,
   }*/
 
   bgui_image_tableau_sptr img = bgui_image_tableau_new();
-
+  img->show_image_path(true);
   // LOAD IMAGE
   vgui_range_map_params_sptr params;
   vil_image_resource_sptr img_res = load_image(image_path, params);
@@ -348,6 +348,7 @@ void bwm_tableau_mgr::create_lidar_tableau(vcl_string name,
     res2 = vil_load_image_resource(second_ret.c_str());
 
   bgui_image_tableau_sptr img = bgui_image_tableau_new(res1, params);
+  img->show_image_path(true);
   bwm_observer_lidar* observer = new bwm_observer_lidar(img, res1, res2);
   bwm_tableau_lidar* tab = new bwm_tableau_lidar(observer);
   tab->add_child(img);
