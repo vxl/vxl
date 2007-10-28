@@ -12,6 +12,8 @@
 #include <vcl_iostream.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_shell_tableau.h>
+#include <vgui/vgui_window.h>
+#include <vgui/vgui_adaptor.h>
 
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_composite_tableau.h>
@@ -65,8 +67,13 @@ int main(int argc, char** argv)
   vgui_shell_tableau_new shell(mgr->grid());
 
   // Create a window, add the tableau and show it on screen.
-  int result =  vgui::run(shell, 600, 600, menu_holder, "Brown World Modeler" );
-  
+  //  int result =  vgui::run(shell, 600, 600, menu_holder, "Brown World Modeler" );
+  vgui_window* win = vgui::produce_window(600, 600, menu_holder, "Brown World Modeler");
+  win->get_adaptor()->set_tableau(shell);
+  win->set_statusbar(true);
+  win->set_title("World Modeler - V1.0");
+  win->show();
+  vgui::run();
   delete bwm_tableau_mgr::instance();
 
 }

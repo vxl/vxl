@@ -1007,6 +1007,8 @@ void bwm_observer_rat_cam:: adjust_image_offsets()
           continue;
         bwm_observer_rat_cam* obscr = 
           static_cast<bwm_observer_rat_cam*>(*oit);
+        vcl_cout << "Shifting camera[" << this->camera_path() <<  "]:\n(" 
+                 << (*ti).x() << ' ' << (*ti).y() << ")\n";
         obscr->shift_camera((*ti).x(), (*ti).y());
         obscr->set_proj_plane(world_plane);
         obscr->update_all();
