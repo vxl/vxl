@@ -45,7 +45,7 @@ void bwm_observer_img::create_point(vsol_point_2d_sptr p)
 {
   this->set_foreground(0,1,0);
  
-  vgui_soview2D_circle* point = this->add_circle(p->x(), p->y(), 1.0f);
+  vgui_soview2D_point* point = this->add_point(p->x(), p->y());
   obj_list[point->get_id()] = point;
 }
 
@@ -56,7 +56,8 @@ void bwm_observer_img::delete_selected()
 
   if ((select_list.size() == 1) && 
       ((select_list[0]->type_name().compare("vgui_soview2D_polygon") == 0) ||
-       (select_list[0]->type_name().compare("vgui_soview2D_linestrip") == 0))) {
+       (select_list[0]->type_name().compare("vgui_soview2D_linestrip") == 0) || 
+       (select_list[0]->type_name().compare("vgui_soview2D_point") == 0))) {
 
       // remove the polygon and the vertices
       delete_polygon(select_list[0]);
@@ -69,7 +70,7 @@ void bwm_observer_img::delete_all()
   vcl_map<unsigned, vgui_soview2D*>::iterator it = obj_list.begin();
   while (it != obj_list.end()) {
     delete_polygon(it->second);
-    it++;
+    it = obj_list.begin();
   }
   this->post_redraw();
 }

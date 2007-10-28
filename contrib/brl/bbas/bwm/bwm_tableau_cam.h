@@ -3,6 +3,7 @@
 
 #include "bwm_observable.h"
 #include "bwm_observer_cam.h"
+#include "bwm_tableau_img.h"
 
 #include <vcl_iostream.h>
 #include <vcl_string.h>
@@ -18,11 +19,11 @@
 
 #include <vsol/vsol_polygon_3d_sptr.h>
 
-class bwm_tableau_cam : public bgui_picker_tableau {//public bwm_tableau {
-
+class bwm_tableau_cam : public bwm_tableau_img 
+{
 public:
 
-  bwm_tableau_cam(bwm_observer_cam* obs) : bgui_picker_tableau(obs), my_observer_(obs) {}
+  bwm_tableau_cam(bwm_observer_cam* obs) : bwm_tableau_img(obs), my_observer_(obs) {}
 
   //: destructor
   // tableaus are responsible from deleting their observers
@@ -58,29 +59,13 @@ public:
   //: Draws the hostogram on a graph (if the image is greyscale)
   void hist_plot();
 
-  //: Draws the intensity profile on a selected line(if the image is greyscale)
-  void intensity_profile();
-
-  //: Provides a menu for adjusting the image display range map
-  void range_map();
-
-  //: Select a polygon before you call this method. If it is a multiface 
-  // object, it deletes the object where the selected polygon belongs to
-  void clear_object();
-
-  //: Deletes all the objects created so far
-  void clear_all(); 
-
-  //: deselects all the selected objects on the tableau
-  void deselect_all();
-
   void move_corr();
 
   void world_pt_corr();
 
-  void scroll_to_point();
-
   void save();
+
+  void scroll_to_point();
 
   //------------ Projection Plane related methods
   

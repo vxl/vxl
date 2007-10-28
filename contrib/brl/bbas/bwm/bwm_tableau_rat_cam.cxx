@@ -131,20 +131,22 @@ class bwm_center_pos_command : public vgui_command
 void bwm_tableau_rat_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu) 
 {
     
-  vgui_menu parent_menu;
-  bwm_tableau_cam::get_popup(params, parent_menu);
+  bwm_tableau_cam::get_popup(params, menu);
  
-  parent_menu.add( "Adjust Camera Offset", new bwm_adj_cam_offset_command(this));
-  parent_menu.add( "Adjust Image Offsets", new bwm_adjust_image_offsets_command(this));
-  parent_menu.add( "Center to the position", new bwm_center_pos_command(this));
+  menu.separator();
+  menu.add( "Adjust Camera Offset", new bwm_adj_cam_offset_command(this));
+  menu.add( "Adjust Image Offsets", new bwm_adjust_image_offsets_command(this));
+  menu.add( "Center to the position", new bwm_center_pos_command(this));
 
+  menu.separator();
   vgui_menu lvcs_submenu;
   lvcs_submenu.add( "Load LVCS", new bwm_load_lvcs_command(this));
   lvcs_submenu.add( "Save LVCS", new bwm_save_lvcs_command(this));
   lvcs_submenu.add( "Define LVCS", new bwm_define_lvcs_command(this));
   lvcs_submenu.add( "Convert File to LVCS", new bwm_convert_to_lvcs_command(this));
-  parent_menu.add("LVCS", lvcs_submenu);
+  menu.add("LVCS", lvcs_submenu);
 
+  menu.separator();
   vgui_menu save_submenu;
   save_submenu.add( "Save Selected", new bwm_save_command(this));
   save_submenu.add( "Save All ", new bwm_save_all_command(this));
@@ -152,11 +154,10 @@ void bwm_tableau_rat_cam::get_popup(vgui_popup_params const &params, vgui_menu &
   save_submenu.add( "Save kml ", new bwm_save_kml_command(this));
   save_submenu.add( "Save kml collada ", new bwm_save_kml_collada_command(this));
   save_submenu.add( "Save x3d", new bwm_save_kml_collada_command(this));
-  parent_menu.add("SAVE", save_submenu);
+  menu.add("SAVE", save_submenu);
 
   //add this submenu to the popup menu
-  //menu.separator();
-  menu.add("3D Modeling", parent_menu);
+  //menu.add("Rational Camera Tools", parent_menu);
 }
 
 void bwm_tableau_rat_cam::load_lvcs()

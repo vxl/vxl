@@ -16,7 +16,7 @@ class bwm_create_mesh_command : public vgui_command
 {
  public:
   bwm_create_mesh_command(bwm_tableau_cam* t) : tab(t) {}
-  void execute() { tab->create_polygon_mesh(); /*tab->post_redraw(); */}
+  void execute() { tab->create_polygon_mesh(); }
 
   bwm_tableau_cam *tab;
 };
@@ -25,7 +25,7 @@ class bwm_tri_mesh_command : public vgui_command
 {
  public:
   bwm_tri_mesh_command(bwm_tableau_cam* t) : tab(t) {}
-  void execute() { tab->triangulate_mesh(); /*tab->post_redraw(); */}
+  void execute() { tab->triangulate_mesh(); }
 
   bwm_tableau_cam *tab;
 };
@@ -78,33 +78,6 @@ class bwm_create_inner_face_command : public vgui_command
   bwm_tableau_cam *tab;
 };
 
-class bwm_deselect_all_command : public vgui_command
-{
- public:
-  bwm_deselect_all_command(bwm_tableau_cam* t) : tab(t) {}
-  void execute() { tab->deselect_all(); }
-
-  bwm_tableau_cam *tab;
-};
-
-class bwm_clear_object_command : public vgui_command
-{
- public:
-  bwm_clear_object_command(bwm_tableau_cam* t) : tab(t) {}
-  void execute() { tab->clear_object(); }
-
-  bwm_tableau_cam *tab;
-};
-
-class bwm_clear_all_command : public vgui_command
-{
- public:
-  bwm_clear_all_command(bwm_tableau_cam* t) : tab(t) {}
-  void execute() { tab->clear_all(); }
-
-  bwm_tableau_cam *tab;
-};
-
 class bwm_move_corr_command: public vgui_command
 {
   public:
@@ -119,34 +92,6 @@ class bwm_world_pt_corr_command: public vgui_command
   public:
   bwm_world_pt_corr_command(bwm_tableau_cam* t) : tab(t) {}
   void execute() { tab->world_pt_corr(); }
-
-  bwm_tableau_cam *tab;
-};
-
-
-class bwm_hist_plot_command : public vgui_command
-{
- public:
-  bwm_hist_plot_command(bwm_tableau_cam* t) : tab(t) {}
-  void execute() { tab->hist_plot(); }
-
-  bwm_tableau_cam *tab;
-};
-
-class bwm_int_profile_command : public vgui_command
-{
- public:
-  bwm_int_profile_command(bwm_tableau_cam* t) : tab(t) {}
-  void execute() { tab->intensity_profile(); }
-
-  bwm_tableau_cam *tab;
-};
-
-class bwm_range_map_command : public vgui_command
-{
- public:
-  bwm_range_map_command(bwm_tableau_cam* t) : tab(t) {}
-  void execute() { tab->range_map(); }
 
   bwm_tableau_cam *tab;
 };
@@ -244,62 +189,62 @@ class bwm_cam_help_command : public vgui_command
 
 void bwm_tableau_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu) {
     
-  vgui_menu submenu;
-  submenu.add( "Set as Master", new bwm_set_master_command(this));
+  bwm_tableau_img::get_popup(params, menu);
+
+  menu.add( "Set as Master", new bwm_set_master_command(this));
+  menu.separator();
+
   vgui_menu mesh_submenu;
   mesh_submenu.add("Create..", new bwm_create_mesh_command(this), 
     vgui_key('p'), vgui_modifier(vgui_SHIFT) );
+  mesh_submenu.separator();
   mesh_submenu.add("Triangulate..", new bwm_tri_mesh_command(this), 
     vgui_key('t'), vgui_modifier(vgui_SHIFT));
-  submenu.add( "Mesh..", mesh_submenu);
-
-  submenu.add( "Create Inner Face", new bwm_create_inner_face_command(this));
-  submenu.add( "Move Face with Selected Vertex", new bwm_move_vertex_command(this), 
+  mesh_submenu.separator();
+  mesh_submenu.add( "Create Inner Face", new bwm_create_inner_face_command(this));
+  mesh_submenu.separator();
+  mesh_submenu.add( "Move Face with Selected Vertex", new bwm_move_vertex_command(this), 
     vgui_key('m'), vgui_modifier(vgui_SHIFT));
-  submenu.add( "Extrude Face", new bwm_extrude_command(this), 
+  mesh_submenu.separator();
+  mesh_submenu.add( "Extrude Face", new bwm_extrude_command(this), 
     vgui_key('e'), vgui_modifier(vgui_SHIFT));
-  submenu.add( "Save All", new bwm_save_command(this), 
+  mesh_submenu.separator();
+  mesh_submenu.add( "Divide Face", new bwm_divide_command(this));
+  mesh_submenu.add( "Save All", new bwm_save_command(this), 
     vgui_key('s'), vgui_modifier(vgui_SHIFT));
-  submenu.add( "Divide Face", new bwm_divide_command(this));
-  
-  submenu.add( "Deselect All", new bwm_deselect_all_command(this), 
-    vgui_key('-'));
-  submenu.add( "Delete Object", new bwm_clear_object_command(this), 
-    vgui_key('d'), vgui_modifier(vgui_SHIFT));
-  submenu.add( "Delete All", new bwm_clear_all_command(this), 
-    vgui_key('a'), vgui_modifier(vgui_SHIFT));
-  submenu.add( "Scroll To Point", new bwm_scroll_to_point_command(this));
+  menu.add("MESH", mesh_submenu);
 
+  menu.add( "Scroll To Point", new bwm_scroll_to_point_command(this));
+
+  menu.separator();
   vgui_menu corr_menu;
   corr_menu.add( "Move (selected)" , new bwm_move_corr_command(this));
+  corr_menu.separator();
   corr_menu.add( "Save World Point (selected)" , new bwm_world_pt_corr_command(this));
-  
-  submenu.add( "Correspondence", corr_menu);
+  menu.add( "Correspondence", corr_menu);
 
+  menu.separator();
   vgui_menu plane_submenu;
   plane_submenu.add( "Define XY Projection Plane", new bwm_xy_proj_plane_command(this));
+  plane_submenu.separator();
   plane_submenu.add( "Define YZ Projection Plane", new bwm_yz_proj_plane_command(this));
+  plane_submenu.separator();
   plane_submenu.add( "Define XZ Projection Plane", new bwm_xz_proj_plane_command(this));
+  plane_submenu.separator();
   plane_submenu.add( "Selected Face", new bwm_select_proj_plane_command(this));
-  plane_submenu.add("Projection Plane", plane_submenu);
+  menu.add("Projection Plane", plane_submenu);
 
+  menu.separator();
   vgui_menu label_submenu;
   label_submenu.add( "Label Roof", new bwm_label_roof_command(this));
+  label_submenu.separator();
   label_submenu.add( "Label Wall ", new bwm_label_wall_command(this));
-  submenu.add("Label", label_submenu);
+  menu.add("Label", label_submenu);
 
-  vgui_menu image_submenu;
-  image_submenu.add("Histogram Plot", new bwm_hist_plot_command(this));
-  image_submenu.add("Intensity Profile", new bwm_int_profile_command(this));
-  image_submenu.add("Range Map", new bwm_range_map_command(this));
-  submenu.add("Image...", image_submenu);
-
-  submenu.add( "HELP..." , new bwm_cam_help_command(this), 
-    vgui_key('h'),vgui_modifier(vgui_SHIFT));
-
-  //add this submenu to the popup menu
   menu.separator();
-  menu.add("Modeling Tools", submenu);
+  menu.add( "HELP..." , new bwm_cam_help_command(this), 
+    vgui_key('h'),vgui_modifier(vgui_SHIFT));
+  
 }
 
 void bwm_tableau_cam::create_polygon_mesh()
@@ -379,20 +324,6 @@ void bwm_tableau_cam::create_inner_face()
   my_observer_->connect_inner_face(poly2d);
 }
 
-void bwm_tableau_cam::deselect_all()
-{
-  my_observer_->deselect_all();
-}
-void bwm_tableau_cam::clear_object()
-{
-  my_observer_->delete_object();
-}
-
-void bwm_tableau_cam::clear_all()
-{
-  my_observer_->delete_all();
-}
-
 void bwm_tableau_cam::move_corr()
 {
   float x,y;
@@ -465,25 +396,6 @@ void bwm_tableau_cam::label_wall()
   my_observer_->label_wall();
 }
 
-void bwm_tableau_cam::hist_plot()
-{
-  my_observer_->hist_plot();
-}
-
-void bwm_tableau_cam::intensity_profile()
-{
-  float x1, y1, x2, y2;
-
-  pick_line(&x1, &y1, &x2, &y2);
-  vcl_cout << x1 << "," << y1 << "-->" << x2 << "," << y2 << vcl_endl;
-  my_observer_->intensity_profile(x1, y1, x2, y2);
-}
-
-void bwm_tableau_cam::range_map()
-{
-  my_observer_->range_map();
-}
-
 void bwm_tableau_cam::save()
 {
   my_observer_->save();
@@ -526,9 +438,6 @@ bool bwm_tableau_cam::handle(const vgui_event& e)
     return true;
   } else if ( e.key == '-' && e.modifier == vgui_SHIFT) {
     this->deselect_all();
-    return true;
-  } else if ( e.key == 'd' && e.modifier == vgui_SHIFT) {
-    this->clear_object();
     return true;
   } else if ( e.key == 'a' && e.modifier == vgui_SHIFT) {
     this->clear_all();

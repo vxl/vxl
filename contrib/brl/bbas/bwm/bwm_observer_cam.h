@@ -40,8 +40,6 @@ public:
 
   bgui_image_tableau_sptr image_tableau() { return img_tab_; }
 
-  //void set_camera_path(vcl_string path) { cam_path_ = path; }
-
   vcl_string camera_path() { return cam_path_; }
 
   void set_viewer(vgui_viewer2D_tableau_sptr viewer) { viewer_ = viewer; }

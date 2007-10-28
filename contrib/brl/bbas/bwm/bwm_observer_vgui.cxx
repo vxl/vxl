@@ -431,7 +431,7 @@ void bwm_observer_vgui::label_wall()
   obs->label_wall(face_id);
 }
 
-void bwm_observer_vgui::hist_plot() 
+/*void bwm_observer_vgui::hist_plot() 
 {
   bwm_image_processor::hist_plot(img_);
 }
@@ -446,3 +446,4 @@ void bwm_observer_vgui::range_map()
 {
   bwm_image_processor::range_map(img_);
 }
+*/

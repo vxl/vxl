@@ -35,16 +35,25 @@ int main(int argc, char** argv)
   vgui::init(my_argc, my_argv);
   delete []my_argv;
 
+  // tableau types registering
   REG_TABLEAU(bwm_load_img_command);
   REG_TABLEAU(bwm_load_cam_command);
   REG_TABLEAU(bwm_load_coin3d_command);
 
+  // correspondence processes
   REG_PROCESS(bwm_corr_mode_command);
   REG_PROCESS(bwm_rec_corr_command);
   REG_PROCESS(bwm_save_corr_command);
   REG_PROCESS(bwm_del_last_corr_command);
   REG_PROCESS(bwm_del_corr_command);
+
+  // image processes
+  REG_PROCESS(bwm_histogram_process_command);
+  REG_PROCESS(bwm_intens_profile_process_command);
+  REG_PROCESS(bwm_range_map_process_command);
+
   REG_PROCESS(bwm_move_to_corr_command);
+
   // Set up the app_menu
   vgui_menu main_menu;
   bwm_menu app_menu;

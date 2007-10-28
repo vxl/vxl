@@ -15,8 +15,46 @@ public:
   void execute() 
   { if (tableau_->type_name().compare("bwm_tableau_img") == 0) {
       bwm_tableau_img* tab = static_cast<bwm_tableau_img*> (tableau_.as_pointer());
-      tab->jim_process(); 
+      tab->jim_process();}
   }
+};
+
+class bwm_histogram_process_command: public bwm_tab_process_command
+{
+public:
+  bwm_histogram_process_command() {}
+  ~bwm_histogram_process_command() {}
+  vcl_string name() {return "histogram"; }
+  void execute() 
+  { if (tableau_->type_name().compare("bwm_tableau_img") == 0) {
+      bwm_tableau_img* tab = static_cast<bwm_tableau_img*> (tableau_.as_pointer());
+      tab->hist_plot();}
+  }
+};
+
+class bwm_intens_profile_process_command: public bwm_tab_process_command
+{
+public:
+  bwm_intens_profile_process_command() {}
+  ~bwm_intens_profile_process_command() {}
+  vcl_string name() {return "intensity_profile"; }
+  void execute() 
+  { if (tableau_->type_name().compare("bwm_tableau_img") == 0) {
+      bwm_tableau_img* tab = static_cast<bwm_tableau_img*> (tableau_.as_pointer());
+      tab->intensity_profile();}
+  }
+};
+
+class bwm_range_map_process_command: public bwm_tab_process_command
+{
+public:
+  bwm_range_map_process_command() {}
+  ~bwm_range_map_process_command() {}
+  vcl_string name() {return "range_map"; }
+  void execute() 
+  { if (tableau_->type_name().compare("bwm_tableau_img") == 0) {
+      bwm_tableau_img* tab = static_cast<bwm_tableau_img*> (tableau_.as_pointer());
+      tab->range_map();}
   }
 };
 

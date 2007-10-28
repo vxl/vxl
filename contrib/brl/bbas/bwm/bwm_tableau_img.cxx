@@ -14,46 +14,49 @@
 void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu) {
     
   vgui_menu submenu;
-
-  vgui_menu poly_submenu;
-  poly_submenu.add("Polygon..",
+  submenu.add("Polygon..",
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::create_polygon),
     vgui_key('p'), 
     vgui_modifier(vgui_SHIFT) );
-  poly_submenu.add("PolyLine..",
+  submenu.separator();
+  submenu.add("PolyLine..",
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::create_polyline),
     vgui_key('l'), 
     vgui_modifier(vgui_SHIFT) );
-  poly_submenu.add("Point..",
+  submenu.separator();
+  submenu.add("Point..",
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::create_point),
     vgui_key('l'), 
     vgui_modifier(vgui_SHIFT) );
-  submenu.add( "DRAW..", poly_submenu);
-  
-  submenu.add( "Deselect All", 
+  menu.add( "DRAW..", submenu);
+  menu.separator();
+
+  menu.add( "Deselect All", 
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::deselect_all),
     vgui_key('-'));
-  submenu.add( "Delete Object", 
+  menu.separator();
+  menu.add( "Delete Selected", 
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::clear_poly), 
     vgui_key('d'), vgui_modifier(vgui_SHIFT));
-  submenu.add( "Delete All", 
+  menu.separator();
+  menu.add( "Delete All", 
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::clear_all),
     vgui_key('a'), vgui_modifier(vgui_SHIFT));
+  menu.separator();
+
 
   vgui_menu image_submenu;
-  image_submenu.add("Histogram Plot", new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::hist_plot));
-  image_submenu.add("Intensity Profile", new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::intensity_profile));
-  image_submenu.add("Range Map", new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::range_map));
+  MENU_TAB_ADD_PROCESS("Range Map", "range_map", image_submenu, this);
+  MENU_TAB_ADD_PROCESS("Intensity Profile", "intensity_profile", image_submenu, this);
+  MENU_TAB_ADD_PROCESS("Histogram Plot", "histogram", image_submenu, this);
   MENU_TAB_ADD_PROCESS("JIMs item", "jim's process", image_submenu, this);
-  submenu.add("Image...", image_submenu);
+  menu.add("Image Processing...", image_submenu);
+  menu.separator();
 
-  submenu.add( "HELP..." , 
+  menu.add( "HELP..." , 
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::help_pop), 
     vgui_key('h'),vgui_modifier(vgui_SHIFT));
 
-  //add this submenu to the popup menu
-  //menu.separator();
-  menu.add("Modeling Tools", submenu);
 }
 
 void bwm_tableau_img::create_polygon()

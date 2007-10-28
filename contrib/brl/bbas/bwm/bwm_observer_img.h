@@ -65,6 +65,7 @@ public:
   void jim_obs_process(){ vcl_cout << "I am Jim Green's Process!!!!" << vcl_endl; }
 
 protected:
+  bwm_observer_img();
 
   bgui_image_tableau_sptr img_tab_;
 

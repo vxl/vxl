@@ -2,6 +2,8 @@
 #define bwm_observer_vgui_h
 
 #include "bwm_observer.h"
+#include "bwm_observer_img.h"
+#include "bwm_observable_sptr.h"
 #include "algo/bwm_soview2D_cross.h"
 
 #include <vcl_vector.h>
@@ -25,18 +27,13 @@
 
 //#include <bmsh3d/bmsh3d_vertex.h>
 
-class bwm_observer_vgui : public bwm_observer, public vgui_easy2D_tableau
+class bwm_observer_vgui : public bwm_observer_img, public bwm_observer//, public vgui_easy2D_tableau
 {
 public:
 
-  bwm_observer_vgui() { corr_.second = 0; }
-
   bwm_observer_vgui(bgui_image_tableau_sptr const& img)
-    : vgui_easy2D_tableau(img), img_(img) {corr_.second = 0;}
-
-  // set the initial projection plane to z=0
-  //bwm_observer_vgui(bgui_image_tableau_sptr const& img, const char* n="unnamed")
-   // : vgui_easy2D_tableau(img, n) {}
+    : //vgui_easy2D_tableau(img), img_(img) 
+  bwm_observer_img(img) {corr_.second = 0;}
 
   virtual ~bwm_observer_vgui() {}
 
@@ -64,12 +61,12 @@ public:
 
   void label_wall();
 
-  void hist_plot();
+  //void hist_plot();
 
   void intensity_profile(float start_col, float start_row,
                          float end_col, float end_row);
 
-  void range_map();
+  //void range_map();
 
   virtual void proj_poly(vsol_polygon_3d_sptr poly3d, 
                          vsol_polygon_2d_sptr& poly2d) = 0;
@@ -85,7 +82,8 @@ public:
 
 protected:
 
-  bgui_image_tableau_sptr img_;
+  //bgui_image_tableau_sptr img_;
+  bwm_observer_vgui() { corr_.second = 0; }
 
   //: the current correspondence point
   vcl_pair<vgl_point_2d<double>, bwm_soview2D_cross * > corr_;
