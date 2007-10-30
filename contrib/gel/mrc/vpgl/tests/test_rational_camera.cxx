@@ -4,7 +4,7 @@
 #include <vcl_vector.h>
 #include <vcl_cmath.h>
 #include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_comp_rational_camera.h>
+#include <vpgl/vpgl_comp_rational_camera.txx>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_double_3.h>
 
@@ -213,3 +213,5 @@ static void test_rational_camera()
 }
 
 TESTMAIN(test_rational_camera);
+
+vpgl_COMP_RATIONAL_CAMERA_INSTANTIATE(double);
