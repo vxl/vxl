@@ -110,7 +110,7 @@ public:
   interaction_type_enum interaction_type() const;
 
 
-  SoSceneManager* scene_manager();
+  SoSceneManager* scene_manager() const;
 
 protected:
   //: The root node of the scene graph

@@ -108,10 +108,8 @@ bgui3d_viewer_tableau::set_scene_root(SoNode* scene_root)
   camera->nearDistance = 0.5f;
   camera->farDistance = 1000.0f;
 
-  GLint vp[4];
-  glGetIntegerv(GL_VIEWPORT, vp);
-  SbViewportRegion vpr(vp[2], vp[3]);
-  camera->viewAll(scene_root, vpr);
+  // Set the camera to view the whole scene
+  camera->viewAll(scene_root, get_viewport_region());
 
   // find existing VRML viewpoints in the scene and make cameras
   this->collect_vrml_cameras(scene_root);

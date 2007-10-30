@@ -314,7 +314,7 @@ bgui3d_tableau::set_viewport_region(const SbViewportRegion& region)
 const SbViewportRegion &
 bgui3d_tableau::get_viewport_region() const
 {
-  return scene_manager_->getViewportRegion();
+  return scene_manager()->getViewportRegion();
 }
 
 //: Set the interaction type
@@ -333,15 +333,14 @@ bgui3d_tableau::interaction_type() const
 
 
 SoSceneManager*
-bgui3d_tableau::scene_manager()
+bgui3d_tableau::scene_manager() const
 {
   if(!scene_manager_)
     {
-      scene_manager_ = new SoSceneManager();
-      scene_manager_->getGLRenderAction()->setTransparencyType(SoGLRenderAction::SORTED_OBJECT_BLEND);
+      SoSceneManager*& sm = const_cast<SoSceneManager*&>(scene_manager_);
+      sm = new SoSceneManager();
+      sm->getGLRenderAction()->setTransparencyType(SoGLRenderAction::SORTED_OBJECT_BLEND);
       //BLEND
     }
-    else
-      scene_manager_->deactivate();
   return scene_manager_;
 }
