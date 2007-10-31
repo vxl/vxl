@@ -6,7 +6,7 @@ void bwm_soview2D_cross::draw() const
   vcl_cerr << "bwm_soview2D_cross::draw() line id=" << id << '\n';
 #endif
 
-  glBegin(GL_LINES);
+/*  glBegin(GL_LINES);
   // horizantal lines of cross
   glVertex2f(x-r_,y);
   glVertex2f(x-0.5,y);
@@ -19,4 +19,14 @@ void bwm_soview2D_cross::draw() const
   glVertex2f(x,y+0.5);
   glVertex2f(x,y+r_);
   glEnd();
+*/
+  GLint unpack;
+  glGetIntegerv(GL_UNPACK_ALIGNMENT, &unpack);
+  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+  
+  glRasterPos2d(x, y);
+  glBitmap(16, 16, 8, 8, 0, 0, cross_bmp);
+
+  glPixelStorei(GL_UNPACK_ALIGNMENT, unpack);
+
 }
