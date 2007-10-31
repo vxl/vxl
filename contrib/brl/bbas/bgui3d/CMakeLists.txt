@@ -11,6 +11,9 @@ IF (HAS_VGUI)
   INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/UseBGUI3D.cmake )
 ENDIF (HAS_VGUI)
 
+# Flag that determines if we were able to successfully build bgui3d.
+# Initialize to NO. Change below if yes.
+SET(BGUI3D_FOUND "NO" CACHE INTERNAL "Was bgui3d successfully built?" )
 
 # If Coin3d was found and building bgui3d
 IF (HAS_BGUI3D)
@@ -29,7 +32,7 @@ SET(bgui3d_sources
 )
 
 ADD_LIBRARY(bgui3d  ${bgui3d_sources})
-
+SET(BGUI3D_FOUND "YES" CACHE INTERNAL "Was bgui3d successfully built?" )
 TARGET_LINK_LIBRARIES(bgui3d vgui vpgl vnl vnl_algo)
 
 IF( BUILD_EXAMPLES )
