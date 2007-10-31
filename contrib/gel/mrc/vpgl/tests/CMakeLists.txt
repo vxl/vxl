@@ -9,7 +9,7 @@ ADD_EXECUTABLE( vpgl_test_all
   test_calibration_matrix.cxx
   test_camera_io.cxx
   test_poly_radial_distortion.cxx
-  test_rational_camera.cxx
+##  test_rational_camera.cxx
 )
 
 TARGET_LINK_LIBRARIES( vpgl_test_all vpgl vpl testlib )
