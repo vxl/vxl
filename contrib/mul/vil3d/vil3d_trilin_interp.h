@@ -8,6 +8,8 @@
 
 #include <vcl_cassert.h>
 #include <vcl_cstddef.h>
+#include <vil3d/vil3d_image_view.h>
+
 //: Compute trilinear interpolation at (x,y,z), no bound checks
 //  Image is nx * ny * nz array of T. x,y,z element is data[z*zstep+ystep*y+x*xstep]
 //  No bound checks are done.
@@ -61,11 +63,24 @@ inline double vil3d_trilin_interp_safe(double x, double y, double z, const T* da
   return vil3d_trilin_interp_raw(x,y,z,data,xstep,ystep,zstep);
 }
 
+//: Compute trilinear interpolation at (x,y,z,p), with bound checks
+//  Image is nx * ny * nz array of T. x,y,z element is data[z*zstep+ystep*y+x*xstep]
+//  If (x,y,z) is outside interpolatable image region, zero is returned.
+template<class T>
+inline double vil3d_trilin_interp_safe(const vil3d_image_view<T>& image,
+                                       double x, double y, double z,
+                                       unsigned p=0)
+{
+  return vil3d_trilin_interp_safe(x,y,z,&image(0,0,0,p),
+                                  image.ni(),image.nj(),image.nk(),
+                                  image.istep(),image.jstep(),image.kstep());
+} 
+
 //: Compute trilinear interpolation at (x,y), with bound checks
-//  Image is nx * ny array of Ts. x,y element is data[nx*y+x]
+//  Image is nx * ny * nz array of Ts. x,y element is data[nx*y+x]
 //  If (x,y) is outside interpolatable image region and NDEBUG is not defined
 //  the code will fail an ASSERT.
-//  The safe interpolatable region is [0,nx)*[0,ny).
+//  The safe interpolatable region is [0,nx)*[0,ny)*[0,nz].
 template<class T>
 inline double vil3d_trilin_interp_assert(double x, double y, double z, const T* data,
                      unsigned nx, unsigned ny, unsigned nz,
