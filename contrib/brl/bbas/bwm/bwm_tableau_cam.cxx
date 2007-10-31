@@ -198,6 +198,9 @@ void bwm_tableau_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu
   mesh_submenu.add("Create..", new bwm_create_mesh_command(this), 
     vgui_key('p'), vgui_modifier(vgui_SHIFT) );
   mesh_submenu.separator();
+  mesh_submenu.add("Load from File..", 
+    new vgui_command_simple<bwm_tableau_cam>(this,&bwm_tableau_cam::load_mesh), 
+    vgui_key('p'), vgui_modifier(vgui_SHIFT) );
   mesh_submenu.add("Triangulate..", new bwm_tri_mesh_command(this), 
     vgui_key('t'), vgui_modifier(vgui_SHIFT));
   mesh_submenu.separator();
@@ -396,6 +399,44 @@ void bwm_tableau_cam::label_wall()
   my_observer_->label_wall();
 }
 
+void bwm_tableau_cam::load_mesh()
+{
+  // get the file name for the mesh
+  vcl_string file = select_file();
+
+  // load the mesh from the given file
+  bwm_observable_mesh_sptr obj = new bwm_observable_mesh();
+  bwm_observer_mgr::instance()->attach(obj);
+  obj->load_from(file.data());
+}
+
+void bwm_tableau_cam::load_mesh_multiple()
+{
+  // read txt file
+  vcl_string master_filename = select_file();
+  vcl_ifstream file_inp(master_filename.data());
+  if (!file_inp.good()) {
+    vcl_cerr << "error opening file "<< master_filename <<vcl_endl;
+    return;
+  }
+
+  while(!file_inp.eof()){
+    vcl_ostringstream fullpath;
+    vcl_string mesh_fname;
+    file_inp >> mesh_fname;
+    if (!mesh_fname.empty() && (mesh_fname[0] != '#')) {
+      fullpath << master_filename << "." << mesh_fname;
+      // load the mesh from the given file
+      bwm_observable_mesh_sptr obj = new bwm_observable_mesh();
+      bwm_observer_mgr::instance()->attach(obj);
+      obj->load_from(fullpath.str());
+    }
+  }
+  file_inp.close();
+
+  return;
+}
+
 void bwm_tableau_cam::save()
 {
   my_observer_->save();
@@ -447,4 +488,23 @@ bool bwm_tableau_cam::handle(const vgui_event& e)
     return true;
   }
   return bgui_picker_tableau::handle(e);
+}
+
+// Private Methods
+vcl_string bwm_tableau_cam::select_file()
+{
+  vgui_dialog params ("File Open");
+  vcl_string ext, file, empty="";
+
+  params.file ("Open...", ext, file);  
+  if (!params.ask())
+    return empty;
+
+  if (file == "") {
+    vgui_dialog error ("Error");
+    error.message ("Please specify a input file (prefix)." );
+    error.ask();
+    return empty;
+  }
+  return file;
 }

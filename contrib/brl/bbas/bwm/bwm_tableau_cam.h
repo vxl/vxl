@@ -63,6 +63,11 @@ public:
 
   void world_pt_corr();
 
+  void load_mesh();
+
+  void load_mesh_multiple();
+
+  // saves the observables with their save method specific to th object
   void save();
 
   void scroll_to_point();
@@ -98,6 +103,8 @@ public:
 protected:
 
   bwm_observer_cam* my_observer_;
+
+  vcl_string select_file();
   
 };
 

@@ -115,11 +115,16 @@ public:
   void divide_face(bwm_observable_sptr obs, unsigned face_id, 
     float x1, float y1, float x2, float y2);
 
+  void load_mesh();
+
+  void load_mesh_multiple();
+
   void save();
 
   void triangulate_meshes();
 
   void move_corr_point(vsol_point_2d_sptr new_pt);
+
   void world_pt_corr();
 
   void move_to_point(float x, float y);

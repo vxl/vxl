@@ -97,6 +97,8 @@ public:
 
   bwm_observable_sptr global_to_local(bgeo_lvcs* lvcs, double& min_z);
 
+  void load_from(vcl_string filename);
+
   void save(const char* filename, bgeo_lvcs* lvcs);
 
   void save(const char* filename);

@@ -964,6 +964,18 @@ SoSeparator* bwm_observable_mesh::convert_coin3d(bool b_shape_hints,
   return mesh;
 }
 
+void bwm_observable_mesh::load_from(vcl_string filename)
+{
+
+  if (!bmsh3d_load_ply2(object_,filename.data())) {
+    vcl_cerr << "Error loading mesh from " << filename << vcl_endl;
+    return;
+  }
+
+  // build half-edge structure
+  object_->IFS_to_MHE();
+}
+
 void bwm_observable_mesh::save(const char* filename, bgeo_lvcs* lvcs)
 {
   object_->build_IFS_mesh();
