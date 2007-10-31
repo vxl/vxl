@@ -5,7 +5,7 @@
 # SIMVOLEON_INCLUDE_DIR  - where the SimVoleon include directory can be found
 # SIMVOLEON_LIBRARY      - Linking library
 #
-IF(COIN_FOUND)
+IF(COIN3D_FOUND)
   IF (WIN32)
     IF (CYGWIN)
 
@@ -66,7 +66,7 @@ IF(COIN_FOUND)
 
   ENDIF (WIN32)
 
-ENDIF(COIN_FOUND)
+ENDIF(COIN3D_FOUND)
 
   SET( SIMVOLEON_FOUND "NO" )
   IF(SIMVOLEON_LIBRARY)
