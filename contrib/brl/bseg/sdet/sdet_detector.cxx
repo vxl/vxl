@@ -12,7 +12,8 @@
 #include <gevd/gevd_step.h>
 #include <gevd/gevd_bufferxy.h>
 #include <sdet/sdet_contour.h>
-
+#include <vil/vil_new.h>
+#include <vil/vil_image_view.h>
 //--------------------------------------------------------------------------------
 //
 //: Constructors.
@@ -33,6 +34,7 @@ sdet_detector::sdet_detector(sdet_detector_params& params)
   use_vil_image = true;
   image=0;
   vimage=0;
+  use_roi_ = false;
 }
 
 sdet_detector::sdet_detector(vil1_image img, float smoothSigma, float noiseSigma,
@@ -51,6 +53,7 @@ sdet_detector::sdet_detector(vil1_image img, float smoothSigma, float noiseSigma
   sdet_detector_params::minLength = min_length;
   sdet_detector_params::maxGap = maxgap;
   sdet_detector_params::minJump = min_jump;
+  use_roi_ = false;
 }
 
 sdet_detector::sdet_detector(vil_image_resource_sptr & img, float smoothSigma, float noiseSigma,
@@ -69,6 +72,7 @@ sdet_detector::sdet_detector(vil_image_resource_sptr & img, float smoothSigma, f
   sdet_detector_params::minLength = min_length;
   sdet_detector_params::maxGap = maxgap;
   sdet_detector_params::minJump = min_jump;
+  use_roi_ = false;
 }
 
 
@@ -147,7 +151,12 @@ bool  sdet_detector::DoContour()
                            roi->GetOrigX()+0.5, // of pixel instead of
                            roi->GetOrigY()+0.5); // upper-left corner
 #endif
-  return true;
+   if(!use_roi_)
+     return true;
+   sdet_contour::Translate(*edges, *vertices, // display location at center
+                           roi_.cmin(0), // of pixel instead of
+                           roi_.rmin(0)); // upper-left corner
+   return true;
 }
 
 //--------------------------------------------------------------------------------
@@ -353,15 +362,27 @@ gevd_bufferxy* sdet_detector::GetBufferFromVilImage()
              << " not exactly one component\n";
     return 0;
   }
-
-  int sizey= vimage->nj();
-  int sizex= vimage->ni();
+  vil_image_resource_sptr process_region = vimage;
+  //if an roi is specified then extract view and wrap a resource around it
+  if(use_roi_)
+    {
+      if(roi_.n_regions()!=1)//no roi to process
+        return 0;
+      vil_image_view_base_sptr vb = 
+        vimage->get_view(roi_.cmin(0), roi_.csize(0), roi_.rmin(0), roi_.rsize(0));
+      if(!vb)
+        return 0;
+      process_region = vil_new_image_resource_of_view(*vb);
+    }
+  
+  int sizey= process_region->nj();
+  int sizex= process_region->ni();
 
   image_float_buf = new gevd_bufferxy(sizex, sizey,8*sizeof(float));
 
 
 
-  gevd_bufferxy image_buf(vimage);
+  gevd_bufferxy image_buf(process_region);
 
   if (! gevd_float_operators::BufferToFloat(image_buf, *image_float_buf))
   {
@@ -416,9 +437,42 @@ void sdet_detector::SetImage(vil1_image img)
   image = img;
 }
 
+void sdet_detector::SetImage(vil_image_resource_sptr const& img, brip_roi const& roi)
+{
+  use_vil_image = true;
+  vimage = img;
+  use_roi_ = true;
+  roi_ = roi;
+}
 
 void sdet_detector::SetImage(vil_image_resource_sptr const& img)
 {
   use_vil_image = true;
   vimage = img;
 }
+
+bool sdet_detector::
+get_vdgl_edges(vcl_vector<vdgl_digital_curve_sptr>& vd_edges )
+{
+  vd_edges.clear();
+  if(!edges)
+    return false;
+
+  for(vcl_vector<vtol_edge_2d_sptr >::iterator eit = edges->begin();
+      eit != edges->end(); ++eit)
+    {
+      vtol_edge_2d_sptr & e = *eit;
+      if(!e)
+        continue;
+      vsol_curve_2d_sptr c = e->curve();
+      vdgl_digital_curve* dc = c->cast_to_vdgl_digital_curve();
+      if(!dc)
+        continue;
+      
+      vd_edges.push_back(dc);
+    }
+  if(!vd_edges.size())
+    return false;
+  return true;
+}
+

@@ -79,6 +79,8 @@ class gevd_bufferxy;
 #include <vil/vil_image_resource.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
+#include <vdgl/vdgl_digital_curve_sptr.h>
+#include <brip/brip_roi.h>
 #include "sdet_detector_params.h"
 
 class sdet_detector : public sdet_detector_params
@@ -134,9 +136,12 @@ class sdet_detector : public sdet_detector_params
   vcl_vector<vtol_vertex_2d_sptr> *GetVertices() {return vertices;}
   vcl_vector<vtol_edge_2d_sptr> *GetEdges() {return edges;}
 
+  bool get_vdgl_edges(vcl_vector<vdgl_digital_curve_sptr>& edges );
+
   //:The last type set is used in the execution if both types are valid
   void SetImage(vil1_image img);
   void SetImage(vil_image_resource_sptr const& img);
+  void SetImage(vil_image_resource_sptr const& img, brip_roi const& roi);
 
   void print(vcl_ostream &strm=vcl_cout) const;
 
@@ -145,8 +150,10 @@ class sdet_detector : public sdet_detector_params
 
  protected:
   bool use_vil_image;//there could be both types set on class
+  bool use_roi_;
   vil1_image image;
   vil_image_resource_sptr vimage;
+  brip_roi roi_; //possible roi
   float noise; //!< noise estimation/threshold
 
   gevd_bufferxy *edgel,                      //!< output from DoStep
