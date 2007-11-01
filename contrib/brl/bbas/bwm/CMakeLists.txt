@@ -5,6 +5,9 @@ INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/UseBGUI3D.cmake )
 
 IF(HAS_BGUI3D)
 
+# Set CMake options for using vgui
+INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
+
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
