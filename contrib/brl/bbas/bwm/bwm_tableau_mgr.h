@@ -68,6 +68,7 @@ public:
   void delete_last_corr();
   void delete_corr();
   void move_to_corr();
+  void display_image_path(bool display){display_image_path_=display;}
 
   static vcl_map<vcl_string, bwm_command_sptr> tab_types_;
 
@@ -98,6 +99,7 @@ private:
 
   vcl_vector<vcl_string> coin3d_tableau_names();
 
+  bool display_image_path_;
 };
 
 #endif

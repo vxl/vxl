@@ -5,7 +5,9 @@
 #include <vgui/vgui_range_map_params.h>
 
 #include <bgui/bgui_image_utils.h>
-
+#include <vdgl/vdgl_digital_curve.h>
+#include <sdet/sdet_detector.h>
+#include <brip/brip_roi.h>
 
 void bwm_image_processor::hist_plot(bgui_image_tableau_sptr img)
 {
@@ -93,4 +95,56 @@ void bwm_image_processor::range_map(bgui_image_tableau_sptr img)
     new vgui_range_map_params(min, max, gamma, invert, gl_map, cache);
 
   img->set_mapping(rmps);
+}
+
+bool bwm_image_processor::
+step_edges_vd(bgui_image_tableau_sptr const& img,
+              vsol_box_2d_sptr const& roi,
+              vcl_vector<vdgl_digital_curve_sptr>& edges)
+{
+  if(!img) return false;
+  //Allow only grey scale for now
+  if(img->get_image_resource()->nplanes()!=1)
+    {
+      vcl_cerr << "In bwm_observer_img::step_edges_vd() - step_edges only works on grey level images \n";
+        return false;
+    }
+
+  static bool agr = true;
+  static sdet_detector_params dp;
+  static float nm = 2.0;
+
+  vgui_dialog vd_dialog("Step Edges Params");
+  vd_dialog.field("Gaussian sigma", dp.smooth);
+  vd_dialog.field("Noise Threshold", nm);
+  vd_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
+  vd_dialog.checkbox("Agressive Closure", agr);
+  vd_dialog.checkbox("Compute Junctions", dp.junctionp);
+  if (!vd_dialog.ask())
+    return false;
+  dp.noise_multiplier=nm;
+  if (agr)
+    dp.aggressive_junction_closure=1;
+  else
+    dp.aggressive_junction_closure=0;
+  vil_image_resource_sptr image = img->get_image_resource();
+  if (!image||!image->ni()||!image->nj())
+  {
+    vcl_cerr << "In bwm_observer_img::step_edges_vd() - no image\n";
+    return false;
+  }
+  
+  sdet_detector det(dp);
+  brip_roi broi(image->ni(), image->nj());
+  broi.add_region(roi);
+  
+  det.SetImage(image, broi);
+
+  det.DoContour();
+  if(!det.get_vdgl_edges(edges))
+  {
+    vcl_cerr << "In bwm_observer_img::step_edges_vd() - edge detection failed\n";
+    return false;
+  }
+  return true;
 }

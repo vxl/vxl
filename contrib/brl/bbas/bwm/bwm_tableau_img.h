@@ -33,6 +33,7 @@ public:
 
   bool handle(const vgui_event& e);
 
+  virtual void create_box(); 
   virtual void create_polygon(); 
   virtual void create_polyline();
   virtual void create_point();
@@ -61,6 +62,10 @@ public:
   void save();
 
   void help_pop();
+
+  void toggle_show_image_path();
+
+  void step_edges_vd();
 
   void jim_process() { my_observer_->jim_obs_process(); }
 

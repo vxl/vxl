@@ -17,6 +17,7 @@
 
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_point_3d_sptr.h>
+#include <vsol/vsol_box_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
@@ -43,11 +44,15 @@ public:
 
   virtual vcl_string type_name() const { return "bwm_observer_img"; }
 
+  void create_box(vsol_box_2d_sptr);
+
   void create_polygon(vsol_polygon_2d_sptr);
 
   void create_polyline(vsol_polyline_2d_sptr);
 
   void create_point(vsol_point_2d_sptr);
+
+  bool get_selected_box(vsol_box_2d_sptr & box);
 
   void delete_selected();
 
@@ -62,7 +67,11 @@ public:
 
   void range_map();
 
+  void step_edges_vd();
+
   void jim_obs_process(){ vcl_cout << "I am Jim Green's Process!!!!" << vcl_endl; }
+
+  void toggle_show_image_path();
 
 protected:
   bwm_observer_img();
@@ -70,6 +79,8 @@ protected:
   bgui_image_tableau_sptr img_tab_;
 
   vgui_viewer2D_tableau_sptr viewer_;
+
+  bool show_image_path_;
 
   // polygons are mapped soview ID
   vcl_map<unsigned, vgui_soview2D*> obj_list;

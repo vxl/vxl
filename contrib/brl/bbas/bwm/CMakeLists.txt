@@ -6,6 +6,7 @@ INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/UseBGUI3D.cmake )
 IF(HAS_BGUI3D)
 
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
+INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
 INCLUDE_DIRECTORIES( ${VTHREEP_INCLUDE_DIR}/tiff )
@@ -51,7 +52,7 @@ AUX_SOURCE_DIRECTORY(Templates bwm_sources)
 
 ADD_LIBRARY(bwm ${bwm_sources})
 
-TARGET_LINK_LIBRARIES( bwm bwm_algo bmsh3d bmsh3d_algo bmsh3d_vis vil vbl vgl vgl_algo vnl vsol vpgl vpgl_algo bgui bgeo)
+TARGET_LINK_LIBRARIES( bwm bwm_algo bmsh3d bmsh3d_algo bmsh3d_vis vil vbl vgl vgl_algo vnl bsol sdet vdgl vsol vpgl vpgl_algo bgui bgeo)
 
 SUBDIRS(exe)
 

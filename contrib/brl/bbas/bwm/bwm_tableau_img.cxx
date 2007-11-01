@@ -1,7 +1,6 @@
 #include "bwm_tableau_img.h"
 #include "bwm_tableau_text.h"
 #include "bwm_command_macros.h"
-
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
 
@@ -24,9 +23,17 @@ void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu
     vgui_key('l'), 
     vgui_modifier(vgui_SHIFT) );
   submenu.separator();
+
+ 
+  submenu.add("Box..",
+    new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::create_box),
+    vgui_key('b'), 
+    vgui_modifier(vgui_SHIFT) );
+
+  submenu.separator();
   submenu.add("Point..",
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::create_point),
-    vgui_key('l'), 
+    vgui_key('t'), 
     vgui_modifier(vgui_SHIFT) );
   menu.add( "DRAW..", submenu);
   menu.separator();
@@ -43,12 +50,16 @@ void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::clear_all),
     vgui_key('a'), vgui_modifier(vgui_SHIFT));
   menu.separator();
-
+  menu.add( "Detect Edges", 
+    new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::step_edges_vd),
+    vgui_key('e'), vgui_modifier(vgui_SHIFT));
+  menu.separator();
 
   vgui_menu image_submenu;
   MENU_TAB_ADD_PROCESS("Range Map", "range_map", image_submenu, this);
   MENU_TAB_ADD_PROCESS("Intensity Profile", "intensity_profile", image_submenu, this);
   MENU_TAB_ADD_PROCESS("Histogram Plot", "histogram", image_submenu, this);
+  //MENU_TAB_ADD_PROCESS("Step Edges VD", "step edge process", image_submenu, this);
   MENU_TAB_ADD_PROCESS("JIMs item", "jim's process", image_submenu, this);
   menu.add("Image Processing...", image_submenu);
   menu.separator();
@@ -57,6 +68,28 @@ void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::help_pop), 
     vgui_key('h'),vgui_modifier(vgui_SHIFT));
 
+  menu.add( "Show Path" , 
+    new vgui_command_simple<bwm_tableau_img>(this,
+                                             &bwm_tableau_img::
+                                             toggle_show_image_path), 
+    vgui_key('i'));
+
+}
+
+void bwm_tableau_img::create_box()
+{
+  // first lock the bgui_image _tableau
+  my_observer_->image_tableau()->lock_linenum(true);
+  set_color(1, 0, 0);
+  float x1=0, y1=0, x2=0, y2=0;
+  pick_box(&x1, &y1, &x2, &y2);
+  vsol_box_2d_sptr box2d = new vsol_box_2d();
+  box2d->add_point(x1, y1);
+  box2d->add_point(x2, y2);
+  my_observer_->image_tableau()->lock_linenum(false);
+
+  // add the box to the list
+  my_observer_->create_box(box2d);
 }
 
 void bwm_tableau_img::create_polygon()
@@ -125,6 +158,10 @@ void bwm_tableau_img::range_map()
   my_observer_->range_map();
 }
 
+void bwm_tableau_img::toggle_show_image_path(){
+  my_observer_->toggle_show_image_path();
+}
+
 void bwm_tableau_img::save()
 {
   my_observer_->save();
@@ -141,6 +178,10 @@ void bwm_tableau_img::help_pop()
   popup.inline_tableau(s, 550, 550);
   if (!popup.ask())
     return;
+}
+void bwm_tableau_img::step_edges_vd()
+{
+  my_observer_->step_edges_vd();
 }
 
 bool bwm_tableau_img::handle(const vgui_event& e)

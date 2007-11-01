@@ -28,7 +28,7 @@ SET(bwm_algo_sources
 #ADD_EXECUTABLE( bwm_algo ${bwm_algo_sources} )
 ADD_LIBRARY(bwm_algo ${bwm_algo_sources})
 
-TARGET_LINK_LIBRARIES( bwm_algo bwm bmsh3d bmsh3d_algo bmsh3d_vis vil vbl vgl vgl_algo vnl vsol vpgl vpgl_algo bgui bgeo)
+TARGET_LINK_LIBRARIES( bwm_algo bwm bmsh3d bmsh3d_algo bmsh3d_vis sdet vil vbl vgl vgl_algo vnl vsol vpgl vpgl_algo bgui bgeo)
 
 
 ENDIF(HAS_BGUI3D)
