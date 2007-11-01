@@ -17,7 +17,13 @@ class vbl_ref_count
   vbl_ref_count() : ref_count_(0) { }
   // Copying an object should not copy the ref count.
   vbl_ref_count(vbl_ref_count const&) : ref_count_(0) { }
+
+  vbl_ref_count&
+  operator=(vbl_ref_count const& rhs)
+  { /* should not copy the ref count */ return *this; }
+  
   virtual ~vbl_ref_count() {}
+
   void ref() { ++ref_count_; }
   void unref() { if (--ref_count_ <= 0) delete this; }
   int get_references() const { return ref_count_; }
