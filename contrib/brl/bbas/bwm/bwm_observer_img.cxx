@@ -1,7 +1,11 @@
 #include "bwm_observer_img.h"
 #include <bwm/algo/bwm_algo.h>
 #include <bwm/algo/bwm_image_processor.h>
+
 #include <vgui/vgui_soview2D.h>
+
+#include <bgui/bgui_vsol_soview2D.h>
+
 #include <bsol/bsol_algs.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator.h>
@@ -38,7 +42,7 @@ void bwm_observer_img::create_polygon(vsol_polygon_2d_sptr poly2d)
     verts.push_back(circle);
   }
   this->set_foreground(1,1,0);
-  vgui_soview2D_polygon* polygon = this->add_polygon(nverts, x, y);
+  bgui_vsol_soview2D_polygon* polygon = this->add_vsol_polygon_2d(poly2d);
   obj_list[polygon->get_id()] = polygon;
   vert_list[polygon->get_id()] = verts;
 }
@@ -55,6 +59,7 @@ void bwm_observer_img::create_polyline(vsol_polyline_2d_sptr poly2d)
     vgui_soview2D_circle* circle = this->add_circle(x[i],y[i],1.0f);
     verts.push_back(circle);
   }
+
   this->set_foreground(1,1,0);
   vgui_soview2D_linestrip* polyline = this->add_linestrip(nverts, x, y);
   obj_list[polyline->get_id()] = polyline;
@@ -153,19 +158,6 @@ void bwm_observer_img::toggle_show_image_path()
   img_tab_->show_image_path(show_image_path_);
 }
 
-static void vdgl_curve_to_arrays(vdgl_digital_curve_sptr const& dc,
-                                 float* x, float* y)
-{
-  vdgl_interpolator_sptr itrp = dc->get_interpolator();
-  vdgl_edgel_chain_sptr ech = itrp->get_edgel_chain();
-  unsigned n = ech->size();
-  for(unsigned i = 0; i<n; ++i)
-  {
-	vdgl_edgel e = (*ech)[i];
-	x[i]=e.get_x(); y[i]=e.get_y();
-}
-}
-
 void bwm_observer_img::step_edges_vd()
 {
   vsol_box_2d_sptr box;
@@ -186,12 +178,12 @@ void bwm_observer_img::step_edges_vd()
   for(unsigned i = 0; i<m; ++i)
     {
       vdgl_digital_curve_sptr dc = edges[i];
-      unsigned n = dc->n_pts();
+      bgui_vsol_soview2D_edgel_curve* curve = this->add_edgel_curve(dc);
+      /*unsigned n = dc->n_pts();
       float* x = new float[n], *y = new float[n];
       vdgl_curve_to_arrays(dc, x, y);
-      vgui_soview2D_linestrip* polyline = this->add_linestrip(n, x, y);
-      obj_list[polyline->get_id()] = polyline;
-      delete [] x; delete [] y;
+      vgui_soview2D_linestrip* polyline = this->add_linestrip(n, x, y);*/
+      obj_list[curve->get_id()] = curve;
     }
   this->post_redraw();
 }

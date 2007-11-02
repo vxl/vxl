@@ -4,11 +4,12 @@
 #include <vcl_vector.h>
 #include <vcl_map.h>
 
-#include <vgui/vgui_easy2d_tableau.h>
+//#include <vgui/vgui_easy2d_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_soview2D.h>
 
 #include <bgui/bgui_image_tableau.h>
+#include <bgui/bgui_vsol2D_tableau.h>
 
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
@@ -23,16 +24,12 @@
 #include <vsol/vsol_polyline_2d_sptr.h>
 #include <vsol/vsol_polyline_3d_sptr.h>
 
-class bwm_observer_img : public vgui_easy2D_tableau
+class bwm_observer_img : public bgui_vsol2D_tableau
 {
 public:
 
   bwm_observer_img(bgui_image_tableau_sptr const& img)
-    : vgui_easy2D_tableau(img), img_tab_(img), viewer_(0){  }
-
-  // set the initial projection plane to z=0
- // bwm_observer_img(bgui_image_tableau_sptr const& img, const char* n="unnamed")
- //   : img_tab_(img), viewer_(0) { }
+    : bgui_vsol2D_tableau(img), img_tab_(img), viewer_(0){  }
 
   virtual ~bwm_observer_img(){}
 

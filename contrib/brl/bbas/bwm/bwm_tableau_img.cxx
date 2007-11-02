@@ -59,7 +59,7 @@ void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu
   MENU_TAB_ADD_PROCESS("Range Map", "range_map", image_submenu, this);
   MENU_TAB_ADD_PROCESS("Intensity Profile", "intensity_profile", image_submenu, this);
   MENU_TAB_ADD_PROCESS("Histogram Plot", "histogram", image_submenu, this);
-  //MENU_TAB_ADD_PROCESS("Step Edges VD", "step edge process", image_submenu, this);
+  MENU_TAB_ADD_PROCESS("Step Edges VD", "step_edge", image_submenu, this);
   MENU_TAB_ADD_PROCESS("JIMs item", "jim's process", image_submenu, this);
   menu.add("Image Processing...", image_submenu);
   menu.separator();
