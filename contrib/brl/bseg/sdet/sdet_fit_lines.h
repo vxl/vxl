@@ -40,6 +40,7 @@ class sdet_fit_lines : public sdet_fit_lines_params
   //: Accessors
   void set_edges(vcl_vector<vtol_edge_2d_sptr> const& edges);
   vcl_vector<vsol_line_2d_sptr>& get_line_segs();
+  void get_line_segs(vcl_vector<vsol_line_2d_sptr>& lines){lines=line_segs_;}
  protected:
   //:protected methods
 

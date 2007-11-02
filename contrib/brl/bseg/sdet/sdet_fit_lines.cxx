@@ -70,6 +70,7 @@ bool sdet_fit_lines::fit_lines()
         }
 
       fitter_.fit();
+		
       vcl_vector<vgl_line_segment_2d<double> >& segs = fitter_.get_line_segs();
       for (vcl_vector<vgl_line_segment_2d<double> >::iterator sit=segs.begin();
           sit != segs.end(); sit++)
