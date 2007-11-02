@@ -16,6 +16,7 @@ vgl_fit_lines_2d<T>::vgl_fit_lines_2d(unsigned int min_length, T tol)
 {
   min_length_ = min_length;
   tol_ = tol;
+  verbose_ = false;
 }
 
 // == OPERATIONS ==
@@ -61,8 +62,9 @@ bool vgl_fit_lines_2d<T>::fit()
 {
   if (curve_.size()<min_length_)
   {
-    vcl_cout << "In vgl_fit_lines_2d<T>::fit() - number of points < min_length "
-             << min_length_ << '\n';
+    if(verbose_)
+      vcl_cout << "In vgl_fit_lines_2d<T>::fit() - "
+               << "number of points < min_length " << min_length_ << '\n';
     return false;
   }
   //A helper to hold points and do the linear regression

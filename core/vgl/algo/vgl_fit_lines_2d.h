@@ -30,6 +30,7 @@ class vgl_fit_lines_2d
 {
   // Data Members--------------------------------------------------------------
  protected:
+  bool verbose_;
   vcl_vector<vgl_point_2d<T> > curve_;
   vcl_vector<vgl_line_segment_2d<T> > segs_;
   unsigned int min_length_;
@@ -43,7 +44,7 @@ class vgl_fit_lines_2d
   ~vgl_fit_lines_2d(){};
 
   // Operations----------------------------------------------------------------
-
+  void set_verbose(bool verbose){verbose_ = verbose;}
   //: set parameters
   void set_min_fit_length(unsigned int min_fit_length){min_length_ = min_fit_length;}
   void set_rms_error_tol(T rms_error_tol){tol_ = rms_error_tol;}
