@@ -173,18 +173,36 @@ void bwm_observer_img::step_edges_vd()
       vcl_cerr << "In bwm_observer_img::step_edges_vd() - no edges\n";
       return;
     }
-  unsigned m = edges.size();
-  this->set_foreground(1,0,1);
-  for(unsigned i = 0; i<m; ++i)
+
+  for(vcl_vector<vdgl_digital_curve_sptr>::iterator eit = edges.begin();
+      eit != edges.end(); ++eit)
     {
-      vdgl_digital_curve_sptr dc = edges[i];
-      bgui_vsol_soview2D_edgel_curve* curve = this->add_edgel_curve(dc);
-      /*unsigned n = dc->n_pts();
-      float* x = new float[n], *y = new float[n];
-      vdgl_curve_to_arrays(dc, x, y);
-      vgui_soview2D_linestrip* polyline = this->add_linestrip(n, x, y);*/
+      bgui_vsol_soview2D_edgel_curve* curve = this->add_edgel_curve(*eit);
       obj_list[curve->get_id()] = curve;
     }
   this->post_redraw();
 }
 
+void bwm_observer_img::lines_vd()
+{
+  vsol_box_2d_sptr box;
+  if(!this->get_selected_box(box))
+    {
+      vcl_cerr << "In bwm_observer_img::lines_vd() - no box selected\n";
+      return ;
+    }
+  
+  vcl_vector<vsol_line_2d_sptr> lines;
+  if(!bwm_image_processor::lines_vd(img_tab_, box, lines))
+    {
+      vcl_cerr << "In bwm_observer_img::lines_vd() - no lines\n";
+      return;
+    }
+  for(vcl_vector<vsol_line_2d_sptr>::iterator lit = lines.begin();
+      lit != lines.end(); ++lit)
+    {
+      bgui_vsol_soview2D_line_seg* line = this->add_vsol_line_2d(*lit);
+      obj_list[line->get_id()] = line;
+    }
+  this->post_redraw();
+}

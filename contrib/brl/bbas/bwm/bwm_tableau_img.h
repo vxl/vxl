@@ -67,6 +67,8 @@ public:
 
   void step_edges_vd();
 
+  void lines_vd();
+
   void jim_process() { my_observer_->jim_obs_process(); }
 
 protected:

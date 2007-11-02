@@ -66,6 +66,8 @@ public:
 
   void step_edges_vd();
 
+  void lines_vd();
+
   void jim_obs_process(){ vcl_cout << "I am Jim Green's Process!!!!" << vcl_endl; }
 
   void toggle_show_image_path();

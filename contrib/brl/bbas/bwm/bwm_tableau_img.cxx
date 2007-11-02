@@ -53,6 +53,11 @@ void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu
   menu.add( "Detect Edges", 
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::step_edges_vd),
     vgui_key('e'), vgui_modifier(vgui_SHIFT));
+
+  menu.add( "Detect Lines ", 
+    new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::lines_vd),
+    vgui_key('v'), vgui_modifier(vgui_SHIFT));
+
   menu.separator();
 
   vgui_menu image_submenu;
@@ -182,6 +187,11 @@ void bwm_tableau_img::help_pop()
 void bwm_tableau_img::step_edges_vd()
 {
   my_observer_->step_edges_vd();
+}
+
+void bwm_tableau_img::lines_vd()
+{
+  my_observer_->lines_vd();
 }
 
 bool bwm_tableau_img::handle(const vgui_event& e)
