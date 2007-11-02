@@ -2,7 +2,6 @@
 # contrib/brl/bwm/CMakeLists.txt
 
 INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/UseBGUI3D.cmake )
-
 IF(HAS_BGUI3D)
 
 # Set CMake options for using vgui
@@ -12,8 +11,14 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
-INCLUDE_DIRECTORIES( ${VTHREEP_INCLUDE_DIR}/tiff )
-INCLUDE_DIRECTORIES( ${VTHREEP_INCLUDE_DIR}/geotiff ) 
+
+INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
+IF(TIFF_FOUND)
+  INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
+
+INCLUDE( ${MODULE_PATH}/FindGEOTIFF.cmake)
+IF(GEOTIFF_FOUND)
+  INCLUDE_DIRECTORIES( ${GEOTIFF_INCLUDE_DIR} ) 
 
 SET(bwm_sources
    bwm_macros.h
@@ -55,12 +60,12 @@ AUX_SOURCE_DIRECTORY(Templates bwm_sources)
 
 ADD_LIBRARY(bwm ${bwm_sources})
 
-TARGET_LINK_LIBRARIES( bwm bwm_algo bmsh3d bmsh3d_algo bmsh3d_vis vil vbl vgl vgl_algo vnl bsol sdet vdgl vsol vpgl vpgl_algo bgui bgeo)
+TARGET_LINK_LIBRARIES( bwm bwm_algo bmsh3d bmsh3d_algo bmsh3d_vis vil vbl vgl vgl_algo vnl vsol vpgl vpgl_algo vpgl_file_formats bgui bgeo)
 
 SUBDIRS(exe)
-
 SUBDIRS(algo)
-
 SUBDIRS(tests)
 
+ENDIF(TIFF_FOUND)
+ENDIF(GEOTIFF_FOUND)
 ENDIF(HAS_BGUI3D)
