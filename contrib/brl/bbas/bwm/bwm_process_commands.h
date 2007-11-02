@@ -24,7 +24,7 @@ class bwm_step_edge_process_command: public bwm_tab_process_command
 public:
   bwm_step_edge_process_command() {}
   ~bwm_step_edge_process_command() {}
-  vcl_string name() {return "step edge process"; }
+  vcl_string name() {return "step_edge"; }
   void execute() 
   { if (tableau_->type_name().compare("bwm_tableau_img") == 0) {
       bwm_tableau_img* tab = static_cast<bwm_tableau_img*> (tableau_.as_pointer());
