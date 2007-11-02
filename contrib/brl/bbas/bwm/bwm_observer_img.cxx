@@ -21,12 +21,13 @@
 void bwm_observer_img::create_box(vsol_box_2d_sptr box)
 {
   vsol_polygon_2d_sptr pbox = bsol_algs::poly_from_box(box);
-  float *x, *y;
+  create_polygon(pbox);
+  /*float *x, *y;
   bwm_algo::get_vertices_xy(pbox, &x, &y);
   unsigned nverts = pbox->size();
   this->set_foreground(0,1,0);
-  vgui_soview2D_polygon* polybox_view = this->add_polygon(nverts, x, y);
-  obj_list[polybox_view->get_id()] = polybox_view;
+  bgui_vsol_soview2D_polygon* polybox_view = this->add_vsol_polygon_2d(pbox);
+  obj_list[polybox_view->get_id()] = polybox_view;*/
 }
 
 void bwm_observer_img::create_polygon(vsol_polygon_2d_sptr poly2d)
@@ -60,33 +61,35 @@ void bwm_observer_img::create_polyline(vsol_polyline_2d_sptr poly2d)
     verts.push_back(circle);
   }
 
-  this->set_foreground(1,1,0);
-  vgui_soview2D_linestrip* polyline = this->add_linestrip(nverts, x, y);
+  bgui_vsol_soview2D_polyline* polyline = this->add_vsol_polyline_2d(poly2d);
   obj_list[polyline->get_id()] = polyline;
   vert_list[polyline->get_id()] = verts;
 }
 
 void bwm_observer_img::create_point(vsol_point_2d_sptr p)
 {
-  this->set_foreground(0,1,0);
- 
-  vgui_soview2D_point* point = this->add_point(p->x(), p->y());
+  bgui_vsol_soview2D_point* point = this->add_vsol_point_2d(p);
   obj_list[point->get_id()] = point;
 }
 
 bool bwm_observer_img::get_selected_box(vsol_box_2d_sptr & box)
 {
   vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
+  vcl_vector<vgui_soview*> boxes;
 
-  if ((select_list.size() == 1) && 
-      (select_list[0]->type_name().compare("vgui_soview2D_polygon") == 0))
-    {
-      box = new vsol_box_2d();
-      vgui_soview2D_polygon* p = (vgui_soview2D_polygon*)select_list[0];
-      for(unsigned i =0; i<p->n; ++i)
-        box->add_point((p->x)[i], (p->y)[i]);
-      return true;
+  for (unsigned i=0; i<select_list.size(); i++) {
+    vcl_cout << select_list[i]->type_name();
+    if (select_list[i]->type_name().compare("bgui_vsol_soview2D_polygon") == 0) {
+      boxes.push_back(select_list[i]);
     }
+  }
+
+  if (boxes.size() == 1) {
+    bgui_vsol_soview2D_polygon* p = (bgui_vsol_soview2D_polygon*) boxes[0];
+    vsol_polygon_2d_sptr poly = p->sptr();
+    box = poly->get_bounding_box();
+    return true;
+  }
   return false;
 }
 
