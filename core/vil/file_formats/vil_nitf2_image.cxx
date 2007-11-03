@@ -211,7 +211,14 @@ vil_streampos vil_nitf2_image::get_offset_to_image_data_block_band(
   //////////////////////////////////////////////////
   int bits_per_pixel_per_band;
   current_image_header()->get_property("NBPP", bits_per_pixel_per_band);
+
+#if 0  //Not valid if blocks are partially filled (JLM 11/03/07)
   unsigned int bytes_per_band = ni() * nj() * bits_per_pixel_per_band / 8;
+#endif 
+  // New version
+  unsigned int nbi = n_block_i(), nbj = n_block_j();
+  unsigned int sbi = size_block_i(), sbj = size_block_j();
+  unsigned int bytes_per_band = nbi*nbj*sbi*sbj*bits_per_pixel_per_band/8;
 
   // What we do here depends on whether we have a data_mask_table or not and
   // whether i_mode == "S".  The most complex case is i_mode != "S" and we have
