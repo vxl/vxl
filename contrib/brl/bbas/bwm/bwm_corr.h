@@ -52,8 +52,12 @@ class bwm_corr : public vbl_ref_count
   void set_match(bwm_observer_cam* obs, const double x, const double y);
   void set_mode(const bool mode){mode_ = mode;}
   void set_world_pt(vgl_point_3d<double> const& wp){world_pt_ = wp;}
+
   //: Utility functions
   friend vcl_ostream&  operator<<(vcl_ostream& s, bwm_corr const& c);
+  
+  //: XML write
+  friend void x_write(vcl_ostream &os, bwm_corr& p);
 
  protected:
   

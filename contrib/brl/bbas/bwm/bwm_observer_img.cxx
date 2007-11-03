@@ -3,8 +3,7 @@
 #include <bwm/algo/bwm_image_processor.h>
 
 #include <vgui/vgui_soview2D.h>
-
-#include <bgui/bgui_vsol_soview2D.h>
+#include <vgui/vgui_projection_inspector.h>
 
 #include <bsol/bsol_algs.h>
 #include <vdgl/vdgl_digital_curve.h>
@@ -18,16 +17,36 @@
 #include <vsol/vsol_polyline_2d.h>
 #include <vsol/vsol_digital_curve_2d.h>
 
+bool bwm_observer_img::handle(const vgui_event &e)
+{
+  vgui_projection_inspector pi;
+    
+  if (e.type == vgui_BUTTON_DOWN && e.button == vgui_LEFT && e.modifier == vgui_SHIFT) {
+    bgui_vsol_soview2D_polyline* p=0;
+    if (p = (bgui_vsol_soview2D_polyline*) get_selected_object("bgui_vsol_soview2D_polyline")) {
+    // get the selected polyline
+    //if (p != 0) {
+      // take the position of the first point
+      pi.window_to_image_coordinates(e.wx, e.wy, start_x_, start_y_);
+      moving_poly_ = p;
+      moving_ = true;
+      return true;
+    }
+  } else if (e.type == vgui_MOTION && e.button == vgui_LEFT && 
+    e.modifier == vgui_SHIFT && moving_) {
+    float x, y;
+    pi.window_to_image_coordinates(e.wx, e.wy, x, y);
+    moving_poly_->translate(x-start_x_, y-start_y_);
+    return true;
+  }
+    
+  return bgui_vsol2D_tableau::handle(e);
+}
+
 void bwm_observer_img::create_box(vsol_box_2d_sptr box)
 {
   vsol_polygon_2d_sptr pbox = bsol_algs::poly_from_box(box);
   create_polygon(pbox);
-  /*float *x, *y;
-  bwm_algo::get_vertices_xy(pbox, &x, &y);
-  unsigned nverts = pbox->size();
-  this->set_foreground(0,1,0);
-  bgui_vsol_soview2D_polygon* polybox_view = this->add_vsol_polygon_2d(pbox);
-  obj_list[polybox_view->get_id()] = polybox_view;*/
 }
 
 void bwm_observer_img::create_polygon(vsol_polygon_2d_sptr poly2d)
@@ -74,7 +93,7 @@ void bwm_observer_img::create_point(vsol_point_2d_sptr p)
 
 bool bwm_observer_img::get_selected_box(vsol_box_2d_sptr & box)
 {
-  vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
+  /*vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
   vcl_vector<vgui_soview*> boxes;
 
   for (unsigned i=0; i<select_list.size(); i++) {
@@ -84,13 +103,40 @@ bool bwm_observer_img::get_selected_box(vsol_box_2d_sptr & box)
     }
   }
 
-  if (boxes.size() == 1) {
-    bgui_vsol_soview2D_polygon* p = (bgui_vsol_soview2D_polygon*) boxes[0];
+  if (boxes.size() == 1) {*/
+
+  bgui_vsol_soview2D_polygon* p;
+  if (p = (bgui_vsol_soview2D_polygon*)get_selected_object("bgui_vsol_soview2D_polygon")) {
+  //if (p != 0) {  
     vsol_polygon_2d_sptr poly = p->sptr();
     box = poly->get_bounding_box();
     return true;
   }
+
   return false;
+}
+
+bgui_vsol_soview2D* bwm_observer_img::get_selected_object(vcl_string type)
+{
+
+  vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
+  vcl_vector<bgui_vsol_soview2D*> objs;
+  bgui_vsol_soview2D* obj;
+
+  for (unsigned i=0; i<select_list.size(); i++) {
+    vcl_cout << select_list[i]->type_name();
+    if (select_list[i]->type_name().compare(type) == 0) {//"bgui_vsol_soview2D_polygon") == 0) {
+      objs.push_back((bgui_vsol_soview2D*) select_list[i]);
+    }
+  }
+
+  if (objs.size() == 1) {
+    obj = (bgui_vsol_soview2D*) objs[0];
+    return obj;
+  }
+
+  vcl_cerr << "The number of selected " << type << " is " << objs.size() << ". Please select only one!!!" << vcl_endl;
+  return 0;
 }
 
 void bwm_observer_img::delete_selected()

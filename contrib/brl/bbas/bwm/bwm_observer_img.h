@@ -10,6 +10,7 @@
 
 #include <bgui/bgui_image_tableau.h>
 #include <bgui/bgui_vsol2D_tableau.h>
+#include <bgui/bgui_vsol_soview2D.h>
 
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
@@ -37,7 +38,7 @@ public:
 
   void set_viewer(vgui_viewer2D_tableau_sptr viewer) { viewer_ = viewer; }
 
-  //bool handle(const vgui_event &);
+  bool handle(const vgui_event &);
 
   virtual vcl_string type_name() const { return "bwm_observer_img"; }
 
@@ -87,8 +88,14 @@ protected:
   // vector of vertices are mapped soview ID for each polygon
   vcl_map<unsigned, vcl_vector<vgui_soview2D_circle* > > vert_list;
 
+  float start_x_, start_y_;
+  bgui_vsol_soview2D_polyline* moving_poly_;
+  bool moving_;
+
   void delete_polygon(vgui_soview* obj);
 
+  //bgui_vsol_soview2D_polygon* get_selected_polygon();
+  bgui_vsol_soview2D* get_selected_object(vcl_string type);
 };
 
 #endif

@@ -4,6 +4,7 @@
 #include "bwm_tableau_sptr.h"
 #include "bwm_tableau_cam.h"
 #include "bwm_command_sptr.h"
+#include "io/bwm_io_config_parser.h"
 
 #include <vcl_vector.h>
 
@@ -13,10 +14,12 @@
 #include <vil/vil_image_resource_sptr.h>
 
 #include <vpgl/vpgl_proj_camera.h>
+#include <vpgl/vpgl_rational_camera.h>
 
 class bwm_tableau_mgr {
 public:
-  
+  typedef enum{PROJECTIVE=0, RATIONAL=1} BWM_CAMERA_TYPES;
+
   ~bwm_tableau_mgr();
 
   static bwm_tableau_mgr* bwm_tableau_mgr::instance();
@@ -78,12 +81,12 @@ private:
 
   static bwm_tableau_mgr* instance_;
 
-  //static vcl_map<vcl_string, vgui_tableau_sptr> tab_types_;
-
   //: Tableaus are mapped to their names
   vcl_map<vcl_string, vgui_tableau_sptr> tableaus_;
 
   vgui_grid_tableau_sptr grid_;
+
+  bwm_io_config_parser* parse_config();
 
   vil_image_resource_sptr load_image(vcl_string& filename, vgui_range_map_params_sptr& rmps);
   
@@ -98,6 +101,8 @@ private:
   vgui_tableau_sptr find_tableau(vcl_string name);
 
   vcl_vector<vcl_string> coin3d_tableau_names();
+
+  vpgl_rational_camera<double> * extract_nitf_camera(vil_image_resource_sptr img);
 
   bool display_image_path_;
 };

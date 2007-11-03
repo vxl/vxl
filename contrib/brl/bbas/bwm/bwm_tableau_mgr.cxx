@@ -34,8 +34,10 @@
 #include <vil/vil_property.h>
 
 #include <vul/vul_file.h>
-
+#include <vpgl/file_formats/vpgl_nitf_rational_camera.h>
 #include <Inventor/nodes/SoSelection.h>
+
+#define XML
 
 bwm_tableau_mgr* bwm_tableau_mgr::instance_ = 0;
 vcl_map<vcl_string, bwm_command_sptr> bwm_tableau_mgr::tab_types_;
@@ -139,28 +141,42 @@ void bwm_tableau_mgr::create_cam_tableau(vcl_string name,
   bwm_observer_rat_cam* rat_observer = 0;
   bwm_tableau_cam* t = 0;
 
-  switch(camera_type) {
-  case 0:
-    // projective
-    camera_proj = (read_projective_camera(cam_path)).clone();
-    proj_observer = new bwm_observer_proj_cam(img, camera_proj, cam_path);
-    observer = proj_observer;
-    t = new bwm_tableau_proj_cam(proj_observer);
-    break;
-  case 1:
-    // rational
-    camera_rat = new vpgl_rational_camera<double>(cam_path);
-    rat_observer = new bwm_observer_rat_cam(img, camera_rat, cam_path);
-    observer = rat_observer;
-    t = new bwm_tableau_rat_cam(rat_observer);
-    break;
-  default:
-    vcl_cout << "Error: unknown camera type "<<camera_type<< vcl_endl;
+  // check if the camera path is not empty, if it is NITF, the camera 
+  // info is in the image, not a seperate file
+  if (cam_path.size() == 0) {
+    camera_rat = this->extract_nitf_camera(img_res);
+    if (camera_rat == 0) {
+      vcl_cerr << "Camera is not given, the tableau is not created!" << vcl_endl;
+      return;
+    } else {
+      rat_observer = new bwm_observer_rat_cam(img, camera_rat, cam_path);
+      observer = rat_observer;
+      t = new bwm_tableau_rat_cam(rat_observer);
+    }
+  } else {
+    switch(camera_type) {
+    case 0:
+      // projective
+      camera_proj = (read_projective_camera(cam_path)).clone();
+      proj_observer = new bwm_observer_proj_cam(img, camera_proj, cam_path);
+      observer = proj_observer;
+      t = new bwm_tableau_proj_cam(proj_observer);
+      break;
+    case 1:
+      // rational
+      camera_rat = new vpgl_rational_camera<double>(cam_path);
+      rat_observer = new bwm_observer_rat_cam(img, camera_rat, cam_path);
+      observer = rat_observer;
+      t = new bwm_tableau_rat_cam(rat_observer);
+      break;
+    default:
+      vcl_cout << "Error: unknown camera type "<<camera_type<< vcl_endl;
+    }
   }
 
   // add the observer to the observer pool
   bwm_observer_mgr::instance()->add(observer);
- 
+  observer->set_tab_name(name);
   vgui_viewer2D_tableau_sptr viewer = vgui_viewer2D_tableau_new(t);
   observer->set_viewer(viewer);
   add_to_grid(viewer);
@@ -389,7 +405,7 @@ void bwm_tableau_mgr::save_corr()
 {
   vcl_string fname = select_file();
   vcl_ofstream s(fname.data());
-  bwm_observer_mgr::instance()->save_corr(s);
+  bwm_observer_mgr::instance()->save_corr_XML(s);
 }
 
 void bwm_tableau_mgr::delete_last_corr() 
@@ -409,6 +425,92 @@ void bwm_tableau_mgr::move_to_corr()
 
 void bwm_tableau_mgr::load_tableaus()
 {
+#ifdef XML 
+  bwm_io_config_parser* parser = parse_config();
+  vcl_vector<bwm_io_tab_config* > tableaus =  parser->tableau_config();
+
+  for (unsigned i=0; i<tableaus.size(); i++) {
+    bwm_io_tab_config* t = tableaus[i];
+    if (t->type_name.compare("ImageTableau") == 0) {
+      bwm_io_tab_config_img* img_tab = static_cast<bwm_io_tab_config_img* > (t);
+      vcl_string name = img_tab->name;
+      vcl_string path = img_tab->img_path;
+      create_img_tableau(name, path);
+
+    } else if (t->type_name.compare("CameraTableau") == 0) {
+      bwm_io_tab_config_cam* cam_tab = static_cast<bwm_io_tab_config_cam* > (t);
+      BWM_CAMERA_TYPES cam_type;
+      if (cam_tab->cam_type.compare("projective") == 0) 
+        cam_type = PROJECTIVE;
+      else if (cam_tab->cam_type.compare("rational") == 0) 
+        cam_type = RATIONAL;
+      else {
+        vcl_cerr << "Unknown camera type " << cam_tab->cam_type << "coming from parser!" << vcl_endl;
+        continue;
+      }
+      this->create_cam_tableau(cam_tab->name, cam_tab->img_path, cam_tab->cam_path, cam_type);
+
+    } else if (t->type_name.compare("Coin3DTableau") == 0) {
+      bwm_io_tab_config_coin3d* coin3d_tab = static_cast<bwm_io_tab_config_coin3d* > (t);
+      BWM_CAMERA_TYPES cam_type;
+      if (coin3d_tab->cam_type.compare("projective") ==0) 
+        cam_type = PROJECTIVE;
+      else if (coin3d_tab->cam_type.compare("rational") ==0) 
+        cam_type = RATIONAL;
+      else {
+        vcl_cerr << "Unknown camera type " << coin3d_tab->cam_type << "coming from parser!" << vcl_endl;
+        continue;
+      }
+      this->create_coin3d_tableau(coin3d_tab->name, coin3d_tab->cam_path, cam_type);
+    }
+  }
+
+  vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > corresp = 
+    parser->correspondences();
+  vcl_string mode = parser->corresp_mode();
+
+  if (mode == "WORLD_TO_IMAGE") {
+    // the vector of 3D points should be of equal size to correspondence point sets
+    assert (parser->corresp_world_pts().size() == corresp.size());
+  }
+
+  for (unsigned i=0; i<corresp.size(); i++) {
+    bwm_corr_sptr corr = new bwm_corr();
+    vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > elm = corresp[i];
+
+    if (mode == "WORLD_TO_IMAGE") {
+      corr->set_mode(false);
+      corr->set_world_pt(parser->corresp_world_pts()[i].get_p());
+    } else if (mode == "IMAGE_TO_IMAGE") {
+      corr->set_mode(true);
+    }
+
+    vcl_string tab_name;
+    double X, Y;
+    for (unsigned j=0; j<elm.size(); j++) {
+      tab_name = elm[j].first;
+      X = elm[i].second.x();
+      Y = elm[i].second.y();
+      vgui_tableau_sptr tab = this->find_tableau(tab_name);
+      if (tab) {
+        vcl_cout << tab->type_name() << vcl_endl;
+        if ((tab->type_name().compare("bwm_tableau_proj_cam") == 0) || 
+          (tab->type_name().compare("bwm_tableau_rat_cam") == 0)) {
+          bwm_tableau_cam* tab_cam = static_cast<bwm_tableau_cam*> (tab.as_pointer());
+          bwm_observer_cam* obs = tab_cam->observer();
+          if (obs) {
+            corr->set_match(obs, X, Y);
+            obs->add_cross(X, Y, 3);
+          }
+        }
+      }
+      bwm_observer_mgr::instance()->set_corr(corr);
+    }
+  }
+  delete parser;
+
+#else
+
   vcl_string filename = select_file();
   if (filename.empty())
     {
@@ -631,7 +733,7 @@ void bwm_tableau_mgr::load_tableaus()
       }else if (type == "END") 
        return;
   }
-  
+#endif
 }
  
 void bwm_tableau_mgr::load_img_tableau()
@@ -779,6 +881,30 @@ void bwm_tableau_mgr::load_lidar_tableau()
   }
 
   create_lidar_tableau(name, first_ret, second_ret);
+}
+
+bwm_io_config_parser* bwm_tableau_mgr::parse_config()
+{
+  vcl_string fname = select_file();
+  bwm_io_config_parser* parser = new bwm_io_config_parser();
+  vcl_FILE* xmlFile = vcl_fopen(fname.c_str(), "r");
+  if (!xmlFile){
+    fprintf(stderr, " %s error on opening", fname.c_str() );
+    delete parser;
+    return (0);
+  }
+  if (!parser->parseFile(xmlFile)) {
+    fprintf(stderr,
+      "%s at line %d\n",
+      XML_ErrorString(parser->XML_GetErrorCode()),
+      parser->XML_GetCurrentLineNumber()
+      );
+
+     delete parser;
+     return 0;
+   }
+   vcl_cout << "finished!" << vcl_endl;
+   return parser;
 }
 
 void bwm_tableau_mgr::remove_tableau()
@@ -967,4 +1093,35 @@ vcl_vector<vcl_string> bwm_tableau_mgr::coin3d_tableau_names()
       iter++;
   }
   return names;
+}
+
+vpgl_rational_camera<double> * 
+bwm_tableau_mgr::extract_nitf_camera(vil_image_resource_sptr img)
+{
+  //vil_image_resource_sptr img = this->selected_image();
+  if (!img)
+  {
+    vcl_cerr << "Null image in bwm_tableau_mgr::extract_nitf_camera\n";
+    return 0;
+  }
+
+  vil_nitf2_image* nitf = 0;
+  vcl_string format = img->file_format();
+  vcl_string prefix = format.substr(0,4);
+  if (prefix == "nitf") {
+    nitf = (vil_nitf2_image*)img.ptr();
+    vgui_dialog file_dialog("Save NITF Camera");
+    static vcl_string image_file;
+    static vcl_string ext = "rpc";
+    file_dialog.file("Image Filename:", ext, image_file);
+    if (!file_dialog.ask())
+      return 0;
+    vpgl_nitf_rational_camera* rpcam = new vpgl_nitf_rational_camera(nitf, true);
+    return rpcam;
+    //rpcam.save(image_file);
+  } else {
+    vcl_cout << "The image is not an NITF" << vcl_endl;
+    return 0;
+  }
+  
 }

@@ -60,10 +60,11 @@ AUX_SOURCE_DIRECTORY(Templates bwm_sources)
 
 ADD_LIBRARY(bwm ${bwm_sources})
 
-TARGET_LINK_LIBRARIES( bwm bwm_algo bmsh3d bmsh3d_algo bmsh3d_vis vil vbl vgl vgl_algo vnl vsol vpgl vpgl_algo vpgl_file_formats bgui bgeo)
+TARGET_LINK_LIBRARIES( bwm bwm_algo bwm_io bmsh3d bmsh3d_algo bmsh3d_vis expatpp vil vbl vgl vgl_algo vnl vsol vpgl vpgl_algo vpgl_file_formats bgui bgeo)
 
 SUBDIRS(exe)
 SUBDIRS(algo)
+SUBDIRS(io)
 SUBDIRS(tests)
 
 ENDIF(TIFF_FOUND)

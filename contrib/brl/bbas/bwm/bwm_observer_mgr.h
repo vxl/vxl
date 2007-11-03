@@ -40,6 +40,7 @@ public:
   }
   bool obs_in_corr(bwm_observer_cam *obs);
   void save_corr(vcl_ostream& s);
+  void save_corr_XML(vcl_ostream& s);
   void update_corr(bwm_observer_cam* obs,vgl_point_2d<double> old_pt,vgl_point_2d<double> new_pt);
   void delete_last_corr();
   void delete_all_corr();

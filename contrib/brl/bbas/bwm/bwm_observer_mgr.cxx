@@ -1,5 +1,5 @@
 #include "bwm_observer_mgr.h"
-
+#include <vsl/vsl_basic_xml_element.h>
 
 bwm_observer_cam* bwm_observer_mgr::BWM_MASTER_OBSERVER = 0;
 
@@ -150,6 +150,67 @@ void bwm_observer_mgr::save_corr(vcl_ostream& s)
     }
     s << "END" << vcl_endl;
   }
+}
+void bwm_observer_mgr::save_corr_XML(vcl_ostream& s)
+{
+  if (corr_list_.size() == 0)
+    vcl_cerr << "No correspondences to save yet! " << vcl_endl;
+  else {
+    s << "<BWM_CONFIG>" << vcl_endl;
+	s << "<TABLEAUS>" << vcl_endl;
+    // first write down the camera info
+    vcl_map<bwm_observer_cam*, unsigned> camera_map; 
+    for(unsigned i=0; i< observers_.size(); i++) {
+      if ((observers_[i]->type_name().compare("bwm_observer_rat_cam") == 0) ||
+          (observers_[i]->type_name().compare("bwm_observer_cam_proj") == 0)) {
+        bwm_observer_cam* obs = static_cast<bwm_observer_cam *> (observers_[i]);
+
+        // check if that camera is involved with any of the correspondences
+        if (obs_in_corr(obs)) {
+          vsl_basic_xml_element tab("CameraTableau");
+          tab.add_attribute("name", obs->tab_name());
+          tab.x_write_open(s);
+
+          vsl_basic_xml_element img_path("imagePath");
+          img_path.append_cdata(obs->image_tableau()->file_name());
+          img_path.x_write(s);
+
+          vcl_string type;
+          if (observers_[i]->type_name().compare("bwm_observer_rat_cam") == 0)
+            type = "rational";
+          else if (observers_[i]->type_name().compare("bwm_observer_cam_proj") == 0)
+            type = "projective";
+
+          vsl_basic_xml_element cam_path("cameraPath");
+          cam_path.add_attribute("type", type);
+          cam_path.append_cdata(obs->camera_path());
+          cam_path.x_write(s);
+          camera_map[obs] = i;
+          tab.x_write_close(s);
+        }
+      }
+    }
+    s << "</TABLEAUS>" << vcl_endl;
+
+    // write out the correspondence list
+    vcl_string m = "";
+    if (corr_mode_ == IMAGE_TO_IMAGE)
+      m = "IMAGE_TO_IMAGE";
+    else
+      m = "WORLD_TO_IMAGE";
+    vsl_basic_xml_element xml_element("correspondences");
+    xml_element.add_attribute("mode", m);
+    xml_element.x_write_open(s);
+
+
+    for(unsigned i=0; i< corr_list_.size(); i++) {
+      bwm_corr_sptr corr = corr_list_[i];
+      vcl_cout << corr->num_matches() << vcl_endl;
+      x_write(s, *corr);
+    }
+    xml_element.x_write_close(s);
+  }
+  s << "</BWM_CONFIG>" << vcl_endl;
 }
 
 void bwm_observer_mgr::delete_last_corr()

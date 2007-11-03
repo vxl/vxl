@@ -1,20 +1,6 @@
 #include "bwm_corr.h"
 #include <vcl_iostream.h>
-
-
-/*bwm_corr::bwm_corr(const int n_cams, vgl_point_3d<double> const& wp)
-{
-  n_cams_ = n_cams;
-  matches_.resize(n_cams_);
-  valid_.resize(n_cams_);
-  for(int i = 0; i<n_cams_; i++)
-    {
-      matches_[i]=vgl_homg_point_2d<double>(-1, -1);
-      valid_[i]=false;
-    }
-  mode_=false;
-  world_pt_ = wp;
-}*/
+#include <vsl/vsl_basic_xml_element.h>
 
 
 bool bwm_corr::match(bwm_observer_cam* obs, vgl_point_2d<double> &pt)
@@ -119,4 +105,31 @@ vcl_ostream& operator<<(vcl_ostream& s, bwm_corr const& c)
   else
       s << "WORLD POINT: " << c.world_pt_ << '\n';
   return s;
+}
+
+void x_write(vcl_ostream &os, bwm_corr& c)
+{
+   os << "<correspondence>" << vcl_endl; 
+   if (c.mode() == false) {
+    vsl_basic_xml_element xml_element("corr_world_point");
+    xml_element.add_attribute("X", c.world_pt().x());
+    xml_element.add_attribute("Y", c.world_pt().y());
+    xml_element.add_attribute("Z", c.world_pt().z());
+    xml_element.x_write(os);
+   }
+   
+   vcl_map<bwm_observer_cam*, vgl_point_2d<double> >::const_iterator 
+   iter = c.matches_.begin();
+   int i=0;
+   while (iter != c.matches_.end()) {
+     os << "<corr_elm>" << vcl_endl;
+     os << "<corr_camera_tab>" << iter->first->tab_name() << "</corr_camera_tab>" << vcl_endl;
+     vsl_basic_xml_element xml_element("corr_point");
+     xml_element.add_attribute("X", iter->second.x());
+     xml_element.add_attribute("Y", iter->second.y());
+     xml_element.x_write(os);
+     os << "</corr_elm>" << vcl_endl;
+     iter++;
+   }
+   os << "</correspondence>" << vcl_endl;
 }

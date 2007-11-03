@@ -18,12 +18,12 @@ void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu
     vgui_key('p'), 
     vgui_modifier(vgui_SHIFT) );
   submenu.separator();
+
   submenu.add("PolyLine..",
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::create_polyline),
     vgui_key('l'), 
     vgui_modifier(vgui_SHIFT) );
   submenu.separator();
-
  
   submenu.add("Box..",
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::create_box),
