@@ -28,9 +28,10 @@ vil_nitf2_image_subheader::vil_nitf2_image_subheader(vil_nitf2_classification::f
 
 vil_nitf2_image_subheader::~vil_nitf2_image_subheader()
 {
-  if (m_data_mask_table) delete m_data_mask_table;
+  if (m_data_mask_table) delete m_data_mask_table;//jlm
+  if(vil_nitf2_tagged_record_definition::all_definitions().size()){
   vil_nitf2_tagged_record_definition::undefine("RPC00A");
-  vil_nitf2_tagged_record_definition::undefine("RPC00B");
+  vil_nitf2_tagged_record_definition::undefine("RPC00B");}
 }
 
 bool vil_nitf2_image_subheader::read(vil_stream* stream)
