@@ -29,6 +29,8 @@
 class vgui_range_map_params : public vbl_ref_count
 {
  public:
+  //alpha channel map or projection of 4 bands onto 3 
+  enum {RGBA_m, RGB_m, RGX_m, RBX_m, GBX_m};
   //Mapping parameters
   unsigned n_components_; //!< number of components for pixel data
   long double min_L_;  //!< map domain minimum for luminance data
@@ -44,9 +46,11 @@ class vgui_range_map_params : public vbl_ref_count
   long double min_B_;  //!< map domain minimum for blue channel data
   long double max_B_;  //!< map domain maximum for blue channel data
   float gamma_B_;//!< photometric non-linear gamma correction for blue
-  long double min_A_;  //!< map domain minimum for alpha channel data
-  long double max_A_;  //!< map domain maximum for alpha channel data
-  float gamma_A_;//!< photometric non-linear gamma correction for alpha
+  long double min_X_;  //!< map domain minimum for alpha or infrared channel data
+  long double max_X_;  //!< map domain maximum for alpha or infrared channel data
+  float gamma_X_;//!< photometric non-linear gamma correction for alpha or infrared
+  int band_map_;//mapping for multispectral images
+
   //Hardware mapping parameters
   bool use_glPixelMap_;//!< use OpenGL to map pixels to screen
   bool cache_mapped_pix_;//!< cache mapped pixels
@@ -63,7 +67,7 @@ class vgui_range_map_params : public vbl_ref_count
     min_R_(0),     max_R_(0),     gamma_R_(1.0),
     min_G_(0),     max_G_(0),     gamma_G_(1.0),
     min_B_(0),     max_B_(0),     gamma_B_(1.0),
-    min_A_(0),     max_A_(0),     gamma_A_(1.0),
+    min_X_(0),     max_X_(0),     gamma_X_(1.0), band_map_(0),
     use_glPixelMap_(use_glPixelMap), cache_mapped_pix_(cache_mapped_pix)
   {}
 
@@ -85,23 +89,24 @@ class vgui_range_map_params : public vbl_ref_count
     min_R_(min_R), max_R_(max_R), gamma_R_(gamma_R),
     min_G_(min_G), max_G_(max_G), gamma_G_(gamma_G),
     min_B_(min_B), max_B_(max_B), gamma_B_(gamma_B),
-    min_A_(0),     max_A_(0),     gamma_A_(1.0),
+    min_X_(0),     max_X_(0),     gamma_X_(1.0), band_map_(0),
     use_glPixelMap_(use_glPixelMap), cache_mapped_pix_(cache_mapped_pix)
   {}
 
-  //: RGBA constructor
+  //: RGBX constructor Handles both RGBA and RGBIr(Multi-spectral)
   vgui_range_map_params(const long double min_R,
                         const long double max_R,
                         const long double min_G,
                         const long double max_G,
                         const long double min_B,
                         const long double max_B,
-                        const long double min_A,
-                        const long double max_A,
+                        const long double min_X,
+                        const long double max_X,
                         const float gamma_R = 1.0,
                         const float gamma_G = 1.0,
                         const float gamma_B = 1.0,
-                        const float gamma_A = 1.0,
+                        const float gamma_X = 1.0,
+                        const int band_map = 0,
                         const bool invert = false,
                         const bool use_glPixelMap = false,
                         const bool cache_mapped_pix= false)
@@ -110,7 +115,7 @@ class vgui_range_map_params : public vbl_ref_count
     min_R_(min_R), max_R_(max_R), gamma_R_(gamma_R),
     min_G_(min_G), max_G_(max_G), gamma_G_(gamma_G),
     min_B_(min_B), max_B_(max_B), gamma_B_(gamma_B),
-    min_A_(min_A), max_A_(max_A), gamma_A_(gamma_A),
+    min_X_(min_X), max_X_(max_X), gamma_X_(gamma_X), band_map_(band_map),
     use_glPixelMap_(use_glPixelMap), cache_mapped_pix_(cache_mapped_pix)
   {}
 
@@ -121,7 +126,8 @@ class vgui_range_map_params : public vbl_ref_count
     min_R_(p.min_R_), max_R_(p.max_R_), gamma_R_(p.gamma_R_),
     min_G_(p.min_G_), max_G_(p.max_G_), gamma_G_(p.gamma_G_),
     min_B_(p.min_B_), max_B_(p.max_B_), gamma_B_(p.gamma_B_),
-    min_A_(p.min_A_), max_A_(p.max_A_), gamma_A_(p.gamma_A_),
+    min_X_(p.min_X_), max_X_(p.max_X_), gamma_X_(p.gamma_X_),
+    band_map_(p.band_map_),
     use_glPixelMap_(p.use_glPixelMap_), cache_mapped_pix_(p.cache_mapped_pix_)
   {}
 
@@ -141,10 +147,11 @@ class vgui_range_map_params : public vbl_ref_count
              min_G_==p.min_G_ && max_G_==p.max_G_ && gamma_G_==p.gamma_G_ &&
              min_B_==p.min_B_ && max_B_==p.max_B_ && gamma_B_==p.gamma_B_ &&
              (n_components_ == 3 ||
-              (min_A_==p.min_A_ && max_A_==p.max_A_ && gamma_A_==p.gamma_A_)) &&
-             invert_ == p.invert_ &&
-             use_glPixelMap_ == p.use_glPixelMap_ &&
-             cache_mapped_pix_ == p.cache_mapped_pix_;
+              (min_X_==p.min_X_ && max_X_==p.max_X_ && gamma_X_==p.gamma_X_))&&
+              band_map_==p.band_map_ &&
+              invert_ == p.invert_ &&
+              use_glPixelMap_ == p.use_glPixelMap_ &&
+              cache_mapped_pix_ == p.cache_mapped_pix_;
     else
       return false;
   }
@@ -173,10 +180,11 @@ class vgui_range_map_params : public vbl_ref_count
          << "gammaB " << gamma_B_ << '\n';
 
     if (n_components_ == 4)
-      os << "min A range value " << min_A_ << '\n'
-         << "max A range value " << max_A_ << '\n'
-         << "gammaA " << gamma_A_ << '\n';
-
+      os << "min X range value " << min_X_ << '\n'
+         << "max X range value " << max_X_ << '\n'
+         << "gammaX " << gamma_X_ << '\n'
+         << "band map " << band_map_ << '\n';
+    
     if (invert_)
       os << "invert  true\n";
     else

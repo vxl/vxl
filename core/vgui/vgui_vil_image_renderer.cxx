@@ -124,9 +124,10 @@ create_buffer(vgui_range_map_params_sptr const& rmp,
               float zoomx, float zoomy,
               vil_image_resource_sptr const& ir)
 {
+  delete buffer_;
+  buffer_ = 0;
   if(!rmp||!ir)
     return;
-  delete buffer_;
 
   buffer_ = new vgui_section_buffer( 0, 0,
                                      ir->ni(), ir->nj(),
@@ -151,17 +152,26 @@ render_directly(vgui_range_map_params_sptr const& rmp)
   
   if(!rmp)
     return false;
+  //check if range map params have changed. If so, the buffer is obsolete.
+  if(!old_range_map_params(rmp))
+    valid_buffer_ = false;
+      
+
+  //check consistency of range map and image
   if (!the_image_||the_image_->nplanes()!=rmp->n_components_)
     return false;
+
+  //Use the hardware map instead of a pre-rendered, cached  buffer
   bool hmap = !(rmp->cache_mapped_pix_);
-  //Extract the viewport parameters
-  
+
+  //Extract the viewport parameters (currently displayed image region)
   unsigned i0=0, j0=0;
   unsigned ni =the_image_->ni(), nj=the_image_->nj();
   float zoomx = 1, zoomy = -1;
   pixel_view(i0, ni, j0, nj, zoomx, zoomy);
 
-  // check if the viewport parameters changed
+  // check if the viewport parameters changed from previous render
+  // update parameter history
   bool vp_changed = false;
   if ((x0_ != i0) || (y0_ != j0) || (ni != w_) || (nj != h_) || 
       (zx_ != zoomx) || (zy_ != zoomy))  {
@@ -171,6 +181,8 @@ render_directly(vgui_range_map_params_sptr const& rmp)
   }
 
   //Check if the resource is a pyramid image
+  // if so then the pyramid level with best match to displayed scale is used
+  // to render the screen.  Much faster for large images
   float actual_scale = 1.0f;
   vil_pyramid_image_resource_sptr pyr;
   if(the_image_->get_property(vil_property_pyramid))
@@ -192,7 +204,7 @@ render_directly(vgui_range_map_params_sptr const& rmp)
         vgui_range_map<unsigned char> rm(*rmp);
         switch ( the_image_->nplanes() )
           {
-          case 1:
+          case 1:  // ===== 8 bit grey scale image ======
             {
               vbl_array_1d<float> fLmap = rm.fLmap();
               if (!fLmap.size())
@@ -223,11 +235,11 @@ render_directly(vgui_range_map_params_sptr const& rmp)
                   this->create_buffer(rmp, i0, j0, ni, nj, zx_, zy_);}
               
               if(valid_buffer_&&!hmap)
-                {
+                { // use buffer to render
                   buffer_->draw_viewport_as_image();
                   return true;
                 }
-              else
+              else // use hardware to render
                 if(vbuf_&&vgui_view_render(vbuf_->data(), sni_, snj_,
                                            zx_, zy_, GL_LUMINANCE,
                                            GL_UNSIGNED_BYTE, hmap, &fLmap))
@@ -241,8 +253,9 @@ render_directly(vgui_range_map_params_sptr const& rmp)
                     return true;
                   }
               return false;
-            }
-          case 3:
+            } // end of 8 bit grey scale
+
+          case 3: // ===== 8 bit RGB color image ======
             {
               vbl_array_1d<float> fRmap = rm.fRmap();
               vbl_array_1d<float> fGmap = rm.fGmap();
@@ -251,7 +264,7 @@ render_directly(vgui_range_map_params_sptr const& rmp)
                 return false;
               if(vp_changed||(hmap&&!vbuf_)||(!hmap&&!valid_buffer_)){
                 vil_image_view<vil_rgb<unsigned char> > view; 
-                if(pyr)
+                if(pyr)//pyramid image
                   { 
                     view = 
                       pyr->get_copy_view(i0, ni, j0, nj, zoomx, actual_scale);
@@ -266,20 +279,20 @@ render_directly(vgui_range_map_params_sptr const& rmp)
                         this->create_buffer(rmp, zx_, zy_, ir);
                         valid_buffer_ = true;
                       }
-                  }
+                  }//regular image
                 else if(hmap){
                   view = the_image_->get_view(i0,ni,j0,nj);
                   sni_ = view.ni(); snj_ = view.nj();
                   vbuf_= view.memory_chunk();
-                } else
+                } else //buffer of the visible viewport
                   this->create_buffer(rmp, i0, j0, ni, nj, zx_, zy_);}
               
               if(valid_buffer_&&!hmap)
-                {
+                {// use buffer to render
                   buffer_->draw_viewport_as_image();
                   return true;
                 }
-              else
+              else // use hardware to render
                 if (vbuf_&&vgui_view_render(vbuf_->data(),
                                             sni_, snj_,
                                             zx_, zy_,
@@ -295,7 +308,8 @@ render_directly(vgui_range_map_params_sptr const& rmp)
                     return true;
                   }
               return false;
-            }
+            }// end of 8 bit RGB
+
 #if 0  // Case 4 is currently disabled in anticipation of handling
        // four-band multispectral images, where the display is
        // customized
@@ -333,110 +347,149 @@ render_directly(vgui_range_map_params_sptr const& rmp)
           default:
             return false;
           }
-      }
-    case VIL_PIXEL_FORMAT_UINT_16:
+      }//end of VIL_PIXEL_FORMAT_BYTE
+
+    case VIL_PIXEL_FORMAT_UINT_16: // ===== 16 bit grey scale image ======
       {
         vgui_range_map<unsigned short> rm(*rmp);
-        vbl_array_1d<float> fLmap = rm.fLmap();
-        if (!fLmap.size())
-          return false;
-        if(vp_changed||(hmap&&!vbuf_)||(!hmap&&!valid_buffer_)){
-          vil_image_view<unsigned short> view;
-          if(pyr)
-            { 
-              view = 
-                pyr->get_copy_view(i0, ni, j0, nj, zoomx, actual_scale);
-              sni_ = view.ni(); snj_ = view.nj();
-              zx_/=actual_scale;       zy_/=actual_scale; 
+        switch ( the_image_->nplanes() )
+          {
+          case 1:
+            {
+              vbl_array_1d<float> fLmap = rm.fLmap();
+              if (!fLmap.size())
+                return false;
+              if(vp_changed||(hmap&&!vbuf_)||(!hmap&&!valid_buffer_)){
+                vil_image_view<unsigned short> view;
+                if(pyr)//pyramid image
+                  { 
+                    view = 
+                      pyr->get_copy_view(i0, ni, j0, nj, zoomx, actual_scale);
+                    sni_ = view.ni(); snj_ = view.nj();
+                    zx_/=actual_scale;       zy_/=actual_scale; 
+                    if(hmap)
+                      vbuf_ = view.memory_chunk();
+                    else
+                      {
+                        vil_image_resource_sptr ir = 
+                          vil_new_image_resource_of_view(view);
+                        this->create_buffer(rmp, zx_, zy_, ir);
+                        valid_buffer_ = true;
+                      }
+                  }//regular image
+                else if(hmap){
+                  view = the_image_->get_view(i0,ni,j0,nj);
+                  sni_ = view.ni(); snj_ = view.nj();
+                  vbuf_= view.memory_chunk();
+                } else
+                  this->create_buffer(rmp, i0, j0, ni, nj, zx_, zy_);}
+              
+              if(valid_buffer_&&!hmap)
+                {// render with buffer
+                  buffer_->draw_viewport_as_image();
+                  return true;
+                }
+              else // use hardware
+                if ( vbuf_&&vgui_view_render(vbuf_->data(),
+                                            sni_, snj_,
+                                            zx_, zy_,
+                                            GL_LUMINANCE, GL_UNSIGNED_SHORT,
+                                            hmap, &fLmap))
+
+                  {
+#ifdef RENDER_TIMER
+                    vcl_cout << "ushort Luminance Map Hardware Rendered in "
+                             << t.real() << "msecs\n";
+#endif
+                    valid_buffer_ = false;
+                    buffer_params_ = rmp;
+                    return true;
+                  }
+              return false;
+            }//end of case uint_16, 1 plane
+
+
+            // This case arises for multi-spectral satellite images
+            // The current display approach is to select 3 bands from
+            // 4 to display as RBGA where A =0. (Later use a lookup table)
+          case 4:  // =============== 16 bit RGBX ============
+            {
               if(hmap)
-                vbuf_ = view.memory_chunk();
-              else
-                {
+                return false;//Can't do hardware mapping with 3 band selection 
+              if(vp_changed||!valid_buffer_){
+                vil_image_view<vil_rgba<unsigned short> > view;
+                if(pyr){  //pyramid image         
+                  view = 
+                    pyr->get_copy_view(i0, ni, j0, nj, zoomx, actual_scale);
+                  sni_ = view.ni(); snj_ = view.nj();
+                  zx_/=actual_scale;       zy_/=actual_scale; 
                   vil_image_resource_sptr ir = 
                     vil_new_image_resource_of_view(view);
                   this->create_buffer(rmp, zx_, zy_, ir);
                   valid_buffer_ = true;
+                }else //regualar image
+                  this->create_buffer(rmp, i0, j0, ni, nj, zx_, zy_);}
+              if(valid_buffer_&&!hmap)
+                {
+                  buffer_->draw_viewport_as_image();
+                  return true;
                 }
-            }
-          else if(hmap){
-            view = the_image_->get_view(i0,ni,j0,nj);
-            sni_ = view.ni(); snj_ = view.nj();
-            vbuf_= view.memory_chunk();
-          } else
-            this->create_buffer(rmp, i0, j0, ni, nj, zx_, zy_);}
-              
-        if(valid_buffer_&&!hmap)
-          {
-            buffer_->draw_viewport_as_image();
-            return true;
-          }
-        else
-          if (vbuf_&&vgui_view_render(vbuf_->data(),
-                                      sni_, snj_,
-                                      zx_, zy_,
-                                      GL_LUMINANCE, GL_UNSIGNED_SHORT,
-                                      hmap, &fLmap))
+              return false;
+            }//end of case uint_16, 4 plane
+            return false;
+          }// end of uint_16, switch on planes
+        return false;
+      } // end of uint_16
+        return false; 
+    }//end of switch on format
+  return false;
+} 
 
-            {
-#ifdef RENDER_TIMER
-              vcl_cout << "ushort Luminance Map Hardware Rendered in "
-                       << t.real() << "msecs\n";
-#endif
-              valid_buffer_ = false;
-              buffer_params_ = rmp;
-              return true;
-            }
-      }
-    default:
+  void vgui_vil_image_renderer::
+    render(vgui_range_map_params_sptr const& rmp)
+    {
+      if ( !the_image_ )
+        return;
+      //If the image can be mapped then there is no point in having a
+      //GL buffer.  The image can be directly rendered by the hardware
+      //using the range map.
+      if (rmp&&rmp->use_glPixelMap_&&this->render_directly(rmp))
+        return;
+
+      //otherwise we have to render a cached section buffer
+
+      // Delay sectioning until first render time. This allows the section
+      // buffer to decide on a cache format which depends on the current GL
+      // rendering context.
+      if (!this->old_range_map_params(rmp)||!valid_buffer_)
+        this->create_buffer(rmp);
+
+      this->draw_pixels();
+    }
+
+  //: Are the range map params associated with the current buffer out of date?
+  //  If so we have to refresh the buffer.
+  bool vgui_vil_image_renderer::
+    old_range_map_params(vgui_range_map_params_sptr const& rmp)
+    {
+      //Cases
+
+      //1) Both the current params and the new params are null
+      if (!buffer_params_&&!rmp)
+        return true;
+
+      //2) The current params are null and the new params are not
+      if (!buffer_params_&&rmp)
+        return false;
+
+      //3) The current params are not null and the new params are
+      if (buffer_params_&&!rmp)
+        return false;
+
+      //4) Both current params and the new params are not null.
+      // Are they equal?
+      if (buffer_params_&&rmp)
+        return *buffer_params_==*rmp;
+
       return false;
     }
-}
-
-void vgui_vil_image_renderer::
-render(vgui_range_map_params_sptr const& rmp)
-{
-  if ( !the_image_ )
-    return;
-  //If the image can be mapped then there is no point in having a
-  //GL buffer.  The image can be directly rendered by the hardware
-  //using the range map.
-  if (rmp&&rmp->use_glPixelMap_&&this->render_directly(rmp))
-    return;
-
-  //otherwise we have to render a cached section buffer
-
-  // Delay sectioning until first render time. This allows the section
-  // buffer to decide on a cache format which depends on the current GL
-  // rendering context.
-  if (!this->old_range_map_params(rmp)||!valid_buffer_)
-    this->create_buffer(rmp);
-
-  this->draw_pixels();
-}
-
-//: Are the range map params associated with the current buffer out of date?
-//  If so we have to refresh the buffer.
-bool vgui_vil_image_renderer::
-old_range_map_params(vgui_range_map_params_sptr const& rmp)
-{
-  //Cases
-
-  //1) Both the current params and the new params are null
-  if (!buffer_params_&&!rmp)
-    return true;
-
-  //2) The current params are null and the new params are not
-  if (!buffer_params_&&rmp)
-    return false;
-
-  //3) The current params are not null and the new params are
-  if (buffer_params_&&!rmp)
-    return false;
-
-  //4) Both current params and the new params are not null.
-  // Are they equal?
-  if (buffer_params_&&rmp)
-    return *buffer_params_==*rmp;
-
-  return false;
-}

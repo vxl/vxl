@@ -33,6 +33,7 @@ struct vgui_image_tableau_new;
 class vgui_image_tableau
   : public vgui_tableau
 {
+ protected:
   vcl_string name_;
   bool pixels_centered_;
   vgui_range_map_params_sptr rmp_;

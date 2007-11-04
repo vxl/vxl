@@ -32,7 +32,7 @@ void vgui_range_map<Type>::init()
     init_map_domain(Type(min_B_), Type(max_B_), ratio_B_);
   }
   if (n_components_==4)
-    init_map_domain(Type(min_A_), Type(max_A_), ratio_A_);
+    init_map_domain(Type(min_X_), Type(max_X_), ratio_X_);
 }
 
 //Compute the pixel byte mapping.  Used for types that aren't table mappable

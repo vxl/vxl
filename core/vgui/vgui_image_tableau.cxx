@@ -379,8 +379,8 @@ class vgui_set_rangemap_command : public vgui_command
 
   void execute()
   {
-    vgui_range_map_params_sptr rmp = tab_->map_params();
-
+    vgui_range_map_params_sptr old_rmp = tab_->map_params();
+    vgui_range_map_params_sptr rmp = new vgui_range_map_params(*old_rmp);
     if (!rmp || rmp->n_components_ != nc_) {
       rmp = new vgui_range_map_params(0.0, 1.0);
       rmp->n_components_ = nc_;
@@ -392,38 +392,39 @@ class vgui_set_rangemap_command : public vgui_command
     if (nc_ == 1) {
       ranges[0] = rmp->min_L_;
       ranges[1] = rmp->max_L_;
-      rmp_dialog.field("Luminance Min",ranges[0]);
-      rmp_dialog.field("Luminance Max",ranges[1]);
-      rmp_dialog.field("Luminance Gamma",rmp->gamma_L_);
+      rmp_dialog.field("Luminance Min ",ranges[0]);
+      rmp_dialog.field("Luminance Max ",ranges[1]);
+      rmp_dialog.field("Luminance Gamma ",rmp->gamma_L_);
     }
     if (nc_ == 3 || nc_ == 4) {
       ranges[0] = rmp->min_R_;
       ranges[1] = rmp->max_R_;
-      rmp_dialog.field("R Min",ranges[0]);
-      rmp_dialog.field("R Max",ranges[1]);
-      rmp_dialog.field("R Gamma",rmp->gamma_R_);
+      rmp_dialog.field("R Min ",ranges[0]);
+      rmp_dialog.field("R Max ",ranges[1]);
+      rmp_dialog.field("R Gamma ",rmp->gamma_R_);
       ranges[2] = rmp->min_G_;
       ranges[3] = rmp->max_G_;
-      rmp_dialog.field("G Min",ranges[2]);
-      rmp_dialog.field("G Max",ranges[3]);
-      rmp_dialog.field("G Gamma",rmp->gamma_G_);
+      rmp_dialog.field("G Min ",ranges[2]);
+      rmp_dialog.field("G Max ",ranges[3]);
+      rmp_dialog.field("G Gamma ",rmp->gamma_G_);
       ranges[4] = rmp->min_B_;
       ranges[5] = rmp->max_B_;
-      rmp_dialog.field("B Min",ranges[4]);
-      rmp_dialog.field("B Max",ranges[5]);
-      rmp_dialog.field("B Gamma",rmp->gamma_B_);
+      rmp_dialog.field("B Min ",ranges[4]);
+      rmp_dialog.field("B Max ",ranges[5]);
+      rmp_dialog.field("B Gamma ",rmp->gamma_B_);
     }
     if (nc_==4) {
-      ranges[6] = rmp->min_A_;
-      ranges[7] = rmp->max_A_;
-      rmp_dialog.field("A Min",ranges[6]);
-      rmp_dialog.field("A Max",ranges[7]);
-      rmp_dialog.field("A Gamma",rmp->gamma_A_);
+      ranges[6] = rmp->min_X_;
+      ranges[7] = rmp->max_X_;
+      rmp_dialog.field("X Min ",ranges[6]);
+      rmp_dialog.field("X Max ",ranges[7]);
+      rmp_dialog.field("X Gamma ",rmp->gamma_X_);
     }
+    rmp_dialog.field("Band Map ",rmp->band_map_);
+    rmp_dialog.checkbox("Invert ",rmp->invert_);
 
-    rmp_dialog.checkbox("Invert",rmp->invert_);
-    rmp_dialog.checkbox("Use glPixelMap",rmp->use_glPixelMap_);
-    rmp_dialog.checkbox("Cache Map",rmp->cache_mapped_pix_);
+    rmp_dialog.checkbox("Use glPixelMap ",rmp->use_glPixelMap_);
+    rmp_dialog.checkbox("Cache Map ",rmp->cache_mapped_pix_);
 
     if (!rmp_dialog.ask())
       return;
@@ -436,12 +437,12 @@ class vgui_set_rangemap_command : public vgui_command
     rmp->max_G_ = ranges[3];
     rmp->min_B_ = ranges[4];
     rmp->max_B_ = ranges[5];
-    rmp->min_A_ = ranges[6];
-    rmp->max_A_ = ranges[7];
+    rmp->min_X_ = ranges[6];
+    rmp->max_X_ = ranges[7];
 
+    //Setting the map with a new instance forces redraw
     tab_->set_mapping(rmp);
-    // trigger regeneration of the image with new mapping
-    tab_->reread_image();
+
   }
 
   vgui_image_tableau_sptr tab_;

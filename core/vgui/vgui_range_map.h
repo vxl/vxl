@@ -61,7 +61,8 @@
 //
 //   The current scheme can easily be extended to full color support if the
 //   need arises. The number of maps has to be extended to three
-//   (four with an alpha channel) as well as increasing the number of
+//   (four with an alpha channel or multi-spectras) as well as 
+//   increasing the number of
 //   mapping parameters.
 //
 // \verbatim
@@ -98,8 +99,8 @@ class vgui_range_map : public vgui_range_map_params
   vbl_array_1d<vxl_byte> Gmap(){return this->compute_byte_table(Type(min_G_), Type(max_G_), gamma_G_, ratio_G_);}
   //: Blue Channel map
   vbl_array_1d<vxl_byte> Bmap(){return this->compute_byte_table(Type(min_B_), Type(max_B_), gamma_B_, ratio_B_);}
-  //: Alpha Channel map
-  vbl_array_1d<vxl_byte> Amap(){return this->compute_byte_table(Type(min_A_), Type(max_A_), gamma_A_, ratio_A_);}
+  //: Alpha or Infrared Channel map
+  vbl_array_1d<vxl_byte> Xmap(){return this->compute_byte_table(Type(min_X_), Type(max_X_), gamma_X_, ratio_X_);}
 
   // get the OpenGL hardware range maps (float [0, 1] range)
 
@@ -111,8 +112,8 @@ class vgui_range_map : public vgui_range_map_params
   vbl_array_1d<float> fGmap(){return this->compute_float_table(Type(min_G_), Type(max_G_), gamma_G_, ratio_G_);}
   //: Blue channel hardware map
   vbl_array_1d<float> fBmap(){return this->compute_float_table(Type(min_B_), Type(max_B_), gamma_B_, ratio_B_);}
-  //: Alpha channel hardware map
-  vbl_array_1d<float> fAmap(){return this->compute_float_table(Type(min_A_), Type(max_A_), gamma_A_, ratio_A_);}
+  //: Alpha or Infrared channel hardware map
+  vbl_array_1d<float> fXmap(){return this->compute_float_table(Type(min_X_), Type(max_X_), gamma_X_, ratio_X_);}
 
   //: Luminance computed map
   vxl_byte map_L_pixel(const Type pix) {return this->map_pixel_byte(pix, Type(min_L_), Type(max_L_), gamma_L_, ratio_L_);}
@@ -122,8 +123,8 @@ class vgui_range_map : public vgui_range_map_params
   vxl_byte map_G_pixel(const Type pix) {return this->map_pixel_byte(pix, Type(min_G_), Type(max_G_), gamma_G_, ratio_G_);}
   //: Blue channel computed map
   vxl_byte map_B_pixel(const Type pix) {return this->map_pixel_byte(pix, Type(min_B_), Type(max_B_), gamma_B_, ratio_B_);}
-  //: Alpha channel computed map
-  vxl_byte map_A_pixel(const Type pix) {return this->map_pixel_byte(pix, Type(min_A_), Type(max_A_), gamma_A_, ratio_A_);}
+  //: Alpha or Infrared channel computed map
+  vxl_byte map_X_pixel(const Type pix) {return this->map_pixel_byte(pix, Type(min_X_), Type(max_X_), gamma_X_, ratio_X_);}
 
   //: offset for potentially signed table index. Zero for unsigned, -maxval for signed.
   int offset();
@@ -159,7 +160,7 @@ class vgui_range_map : public vgui_range_map_params
   long double ratio_R_;    //!< scale for computed red channel mapping
   long double ratio_G_;    //!< scale for computed green channel mapping
   long double ratio_B_;    //!< scale for computed blue channel mapping
-  long double ratio_A_;    //!< scale for computed alpha channel mapping
+  long double ratio_X_;    //!< scale for computed alpha or IR channel mapping
 };
 
 #define VGUI_RANGE_MAP_INSTANTIATE(T) extern "please include vgui/vgui_range_map.txx first"

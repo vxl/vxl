@@ -65,109 +65,214 @@ namespace
   {
     bool params_but_not_mappable = false;
     if (rmp&&rmp->n_components_==in.nplanes())
-    {
-      vgui_range_map<InT> rm(*rmp);
-      if (rm.table_mapable())
       {
-        //offset for signed types
-        int O = rm.offset();
-        switch ( in.nplanes() )
-        {
-         case 1: {
-          vbl_array_1d<vxl_byte> Lmap = rm.Lmap();
-          for ( unsigned j=0; j < in.nj(); ++j )
-            for ( unsigned i=0; i < in.ni(); ++i )
-              vgui_pixel_convert( Lmap[(unsigned)(in(i,j)+O)],
-                                  *(out+i+j*hstep) );
-          return true; }
-         case 3: {
-          vbl_array_1d<vxl_byte> Rmap = rm.Rmap();
-          vbl_array_1d<vxl_byte> Gmap = rm.Gmap();
-          vbl_array_1d<vxl_byte> Bmap = rm.Bmap();
-          for ( unsigned j=0; j < in.nj(); ++j )
-            for ( unsigned i=0; i < in.ni(); ++i )
-              vgui_pixel_convert( Rmap[(unsigned)(in(i,j,0)+O)],
-                                  Gmap[(unsigned)(in(i,j,1)+O)],
-                                  Bmap[(unsigned)(in(i,j,2)+O)],
-                                  *(out+i+j*hstep) );
-          return true; }
-         case 4: {
-          vbl_array_1d<vxl_byte> Rmap = rm.Rmap();
-          vbl_array_1d<vxl_byte> Gmap = rm.Gmap();
-          vbl_array_1d<vxl_byte> Bmap = rm.Bmap();
-          vbl_array_1d<vxl_byte> Amap = rm.Amap();
-          for ( unsigned j=0; j < in.nj(); ++j )
-            for ( unsigned i=0; i < in.ni(); ++i )
-              vgui_pixel_convert( Rmap[(unsigned)(in(i,j,0)+O)],
-                                  Gmap[(unsigned)(in(i,j,1)+O)],
-                                  Bmap[(unsigned)(in(i,j,2)+O)],
-                                  Amap[(unsigned)(in(i,j,3)+O)],
-                                  *(out+i+j*hstep) );
-          return true; }
-         default:
-          return false;
-        } // end case
+        vgui_range_map<InT> rm(*rmp);
+        if (rm.table_mapable())
+          {
+            //offset for signed types
+            int O = rm.offset();
+            switch ( in.nplanes() )
+              {
+              case 1: {
+                vbl_array_1d<vxl_byte> Lmap = rm.Lmap();
+                for ( unsigned j=0; j < in.nj(); ++j )
+                  for ( unsigned i=0; i < in.ni(); ++i )
+                    vgui_pixel_convert( Lmap[(unsigned)(in(i,j)+O)],
+                                        *(out+i+j*hstep) );
+                return true; }
+              case 3: {
+                vbl_array_1d<vxl_byte> Rmap = rm.Rmap();
+                vbl_array_1d<vxl_byte> Gmap = rm.Gmap();
+                vbl_array_1d<vxl_byte> Bmap = rm.Bmap();
+                for ( unsigned j=0; j < in.nj(); ++j )
+                  for ( unsigned i=0; i < in.ni(); ++i )
+                    vgui_pixel_convert( Rmap[(unsigned)(in(i,j,0)+O)],
+                                        Gmap[(unsigned)(in(i,j,1)+O)],
+                                        Bmap[(unsigned)(in(i,j,2)+O)],
+                                        *(out+i+j*hstep) );
+                return true; }
+              case 4: {
+                vbl_array_1d<vxl_byte> Rmap = rm.Rmap();
+                vbl_array_1d<vxl_byte> Gmap = rm.Gmap();
+                vbl_array_1d<vxl_byte> Bmap = rm.Bmap();
+                vbl_array_1d<vxl_byte> Xmap = rm.Xmap();
+                if(rm.band_map_==vgui_range_map_params::RGBA_m){
+
+                for ( unsigned j=0; j < in.nj(); ++j )//go here
+                  for ( unsigned i=0; i < in.ni(); ++i )
+                    vgui_pixel_convert( Rmap[(unsigned)(in(i,j,0)+O)],
+                                        Gmap[(unsigned)(in(i,j,1)+O)],
+                                        Bmap[(unsigned)(in(i,j,2)+O)],
+                                        Xmap[(unsigned)(in(i,j,3)+O)],
+                                        *(out+i+j*hstep) );
+                return true; 
+
+                } else 
+                  switch (rm.band_map_){
+                  case vgui_range_map_params::RGB_m :
+                    {
+                      for ( unsigned j=0; j < in.nj(); ++j )
+                        for ( unsigned i=0; i < in.ni(); ++i )
+                          vgui_pixel_convert( Rmap[(unsigned)(in(i,j,0))+O],
+                                              Gmap[(unsigned)(in(i,j,1))+O],
+                                              Bmap[(unsigned)(in(i,j,2))+O],
+                                              Xmap[(unsigned)(0)+O],
+                                              *(out+i+j*hstep) );
+                      return true;
+                    }
+                  case vgui_range_map_params::RGX_m :
+                    {
+                      for ( unsigned j=0; j < in.nj(); ++j )
+                        for ( unsigned i=0; i < in.ni(); ++i )
+                          vgui_pixel_convert( Rmap[(unsigned)(in(i,j,0))+O],
+                                              Gmap[(unsigned)(in(i,j,1))+O],
+                                              Bmap[(unsigned)(in(i,j,3))+O],
+                                              Xmap[(unsigned)(0+O)],
+                                              *(out+i+j*hstep) );
+                      return true;
+                    }
+                  case vgui_range_map_params::RBX_m :
+                    {
+                      for ( unsigned j=0; j < in.nj(); ++j )
+                        for ( unsigned i=0; i < in.ni(); ++i )
+                          vgui_pixel_convert( Rmap[(unsigned)(in(i,j,0))+O],
+                                              Gmap[(unsigned)(in(i,j,2))+O],
+                                              Bmap[(unsigned)(in(i,j,3))+O],
+                                              Xmap[(unsigned)(0+O)],
+                                              *(out+i+j*hstep) );
+                      return true;
+                    }
+                  case vgui_range_map_params::GBX_m :
+                    {
+                      for ( unsigned j=0; j < in.nj(); ++j )
+                        for ( unsigned i=0; i < in.ni(); ++i )
+                          vgui_pixel_convert( Rmap[(unsigned)(in(i,j,1))+O],
+                                              Gmap[(unsigned)(in(i,j,2))+O],
+                                              Bmap[(unsigned)(in(i,j,3))+O],
+                                              Xmap[(unsigned)(0+O)],
+                                              *(out+i+j*hstep) );
+                      return true;
+                    }
+                  default:
+                    return false;
+                  }
+                return false;
+              }
+                return false;
+              }
+          }
+        if (rm.mapable())//have to compute the mapping on the fly,e.g. for float
+          {
+            switch ( in.nplanes() )
+              {
+              case 1:
+                for ( unsigned j=0; j < in.nj(); ++j )
+                  for ( unsigned i=0; i < in.ni(); ++i )
+                    vgui_pixel_convert( rm.map_L_pixel(in(i,j)),
+                                        *(out+i+j*hstep) );
+                return true;
+              case 3:
+                for ( unsigned j=0; j < in.nj(); ++j )
+                  for ( unsigned i=0; i < in.ni(); ++i )
+                    vgui_pixel_convert( rm.map_R_pixel(in(i,j,0)),
+                                        rm.map_G_pixel(in(i,j,1)),
+                                        rm.map_B_pixel(in(i,j,2)),
+                                        *(out+i+j*hstep) );
+                return true;
+              case 4:
+                if(rm.band_map_==vgui_range_map_params::RGBA_m){
+                  for ( unsigned j=0; j < in.nj(); ++j )
+                    for ( unsigned i=0; i < in.ni(); ++i )
+                      vgui_pixel_convert( rm.map_R_pixel(in(i,j,0)),
+                                          rm.map_G_pixel(in(i,j,1)),
+                                          rm.map_B_pixel(in(i,j,2)),
+                                          rm.map_X_pixel(in(i,j,3)),
+                                          *(out+i+j*hstep) );
+                  return true;
+                } else {
+                  switch (rm.band_map_){
+                  case vgui_range_map_params::RGB_m :
+                    {
+                      for ( unsigned j=0; j < in.nj(); ++j )
+                        for ( unsigned i=0; i < in.ni(); ++i )
+                          vgui_pixel_convert( rm.map_R_pixel(in(i,j,0)),
+                                              rm.map_G_pixel(in(i,j,1)),
+                                              rm.map_B_pixel(in(i,j,2)),
+                                              rm.map_X_pixel(0),
+                                              *(out+i+j*hstep) );
+                      break;
+                    }
+                  case vgui_range_map_params::RGX_m :
+                    {
+                      for ( unsigned j=0; j < in.nj(); ++j )
+                        for ( unsigned i=0; i < in.ni(); ++i )
+                          vgui_pixel_convert( rm.map_R_pixel(in(i,j,0)),
+                                              rm.map_G_pixel(in(i,j,1)),
+                                              rm.map_B_pixel(in(i,j,3)),
+                                              rm.map_X_pixel(0),
+                                              *(out+i+j*hstep) );
+                      break;
+                    }
+                  case vgui_range_map_params::RBX_m :
+                    {
+                      for ( unsigned j=0; j < in.nj(); ++j )
+                        for ( unsigned i=0; i < in.ni(); ++i )
+                          vgui_pixel_convert( rm.map_R_pixel(in(i,j,0)),
+                                              rm.map_G_pixel(in(i,j,2)),
+                                              rm.map_B_pixel(in(i,j,3)),
+                                              rm.map_X_pixel(0),
+                                              *(out+i+j*hstep) );
+                      break;
+                    }
+             
+                  case vgui_range_map_params::GBX_m :
+                    {
+                      for ( unsigned j=0; j < in.nj(); ++j )
+                        for ( unsigned i=0; i < in.ni(); ++i )
+                          vgui_pixel_convert( rm.map_R_pixel(in(i,j,1)),
+                                              rm.map_G_pixel(in(i,j,2)),
+                                              rm.map_B_pixel(in(i,j,3)),
+                                              rm.map_X_pixel(0),
+                                              *(out+i+j*hstep) );
+                      break;
+                    }
+                  default:
+                    return false;
+                  }
+                }
+              default:
+                return false;
+              }// end switch
+          }
+        params_but_not_mappable = true;
       }
-      if (rm.mapable())//have to compute the mapping on the fly,e.g. for float
-      {
-        switch ( in.nplanes() )
-        {
-         case 1:
-          for ( unsigned j=0; j < in.nj(); ++j )
-            for ( unsigned i=0; i < in.ni(); ++i )
-              vgui_pixel_convert( rm.map_L_pixel(in(i,j)),
-                                  *(out+i+j*hstep) );
-          return true;
-         case 3:
-          for ( unsigned j=0; j < in.nj(); ++j )
-            for ( unsigned i=0; i < in.ni(); ++i )
-              vgui_pixel_convert( rm.map_R_pixel(in(i,j,0)),
-                                  rm.map_G_pixel(in(i,j,1)),
-                                  rm.map_B_pixel(in(i,j,2)),
-                                  *(out+i+j*hstep) );
-          return true;
-         case 4:
-          for ( unsigned j=0; j < in.nj(); ++j )
-            for ( unsigned i=0; i < in.ni(); ++i )
-              vgui_pixel_convert( rm.map_R_pixel(in(i,j,0)),
-                                  rm.map_G_pixel(in(i,j,1)),
-                                  rm.map_B_pixel(in(i,j,2)),
-                                  rm.map_A_pixel(in(i,j,3)),
-                                  *(out+i+j*hstep) );
-          return true;
-         default:
-          return false;
-        } // end switch
-      }
-      params_but_not_mappable = true;
-    }
 
     //otherwise, just clamp the values as originally done
     if (!rmp||rmp->n_components_!=in.nplanes()||params_but_not_mappable)
-    {
-      switch ( in.nplanes() )
       {
-       case 1:
-        for ( unsigned j=0; j < in.nj(); ++j )
-          for ( unsigned i=0; i < in.ni(); ++i )
-            vgui_pixel_convert( in(i,j), *(out+i+j*hstep) );
-        return true;
-       case 3:
-        for ( unsigned j=0; j < in.nj(); ++j )
-          for ( unsigned i=0; i < in.ni(); ++i )
-            vgui_pixel_convert( in(i,j,0), in(i,j,1), in(i,j,2),
-                                *(out+i+j*hstep) );
-        return true;
-       case 4:
-        for ( unsigned j=0; j < in.nj(); ++j )
-          for ( unsigned i=0; i < in.ni(); ++i )
-            vgui_pixel_convert( in(i,j,0), in(i,j,1), in(i,j,2),
-                                in(i,j,3), *(out+i+j*hstep) );
-        return true;
-       default:
-        return false;
-      } // end case
-    }
+        switch ( in.nplanes() )
+          {
+          case 1:
+            for ( unsigned j=0; j < in.nj(); ++j )
+              for ( unsigned i=0; i < in.ni(); ++i )
+                vgui_pixel_convert( in(i,j), *(out+i+j*hstep) );
+            return true;
+          case 3:
+            for ( unsigned j=0; j < in.nj(); ++j )
+              for ( unsigned i=0; i < in.ni(); ++i )
+                vgui_pixel_convert( in(i,j,0), in(i,j,1), in(i,j,2),
+                                    *(out+i+j*hstep) );
+            return true;
+          case 4:
+            for ( unsigned j=0; j < in.nj(); ++j )
+              for ( unsigned i=0; i < in.ni(); ++i )
+                vgui_pixel_convert( in(i,j,0), in(i,j,1), in(i,j,2),
+                                    in(i,j,3), *(out+i+j*hstep) );
+            return true;
+          default:
+            return false;
+          } // end case
+      }
     return false;
   }
 
@@ -200,13 +305,13 @@ namespace
 } // end anonymous namespace
 
 
-  // ==============================================================================
-  //                                                            VGUI SECTION BUFFER
-  // ==============================================================================
+// ==============================================================================
+//                                                            VGUI SECTION BUFFER
+// ==============================================================================
 
 
-  // ---------------------------------------------------------------------------
-  //                                                                 constructor
+// ---------------------------------------------------------------------------
+//                                                                 constructor
 
 vgui_section_buffer::
 vgui_section_buffer( unsigned in_x, unsigned in_y,
@@ -317,18 +422,18 @@ apply( vil_image_resource_sptr const& image_in,
 
   switch ( component_format ) {
     DoCase( VIL_PIXEL_FORMAT_UINT_32 )
-    DoCase( VIL_PIXEL_FORMAT_INT_32 )
-    DoCase( VIL_PIXEL_FORMAT_UINT_16 )
-    DoCase( VIL_PIXEL_FORMAT_INT_16 )
-    DoCase( VIL_PIXEL_FORMAT_BYTE )
-    DoCase( VIL_PIXEL_FORMAT_SBYTE )
-    DoCase( VIL_PIXEL_FORMAT_FLOAT )
-    DoCase( VIL_PIXEL_FORMAT_DOUBLE )
-    DoCase( VIL_PIXEL_FORMAT_BOOL )
-    default:
-      vcl_cerr << __FILE__ << ": " << __LINE__
-               << ": can't handle image pixel format "
-               << component_format << '\n';
+      DoCase( VIL_PIXEL_FORMAT_INT_32 )
+      DoCase( VIL_PIXEL_FORMAT_UINT_16 )
+      DoCase( VIL_PIXEL_FORMAT_INT_16 )
+      DoCase( VIL_PIXEL_FORMAT_BYTE )
+      DoCase( VIL_PIXEL_FORMAT_SBYTE )
+      DoCase( VIL_PIXEL_FORMAT_FLOAT )
+      DoCase( VIL_PIXEL_FORMAT_DOUBLE )
+      DoCase( VIL_PIXEL_FORMAT_BOOL )
+      default:
+    vcl_cerr << __FILE__ << ": " << __LINE__
+             << ": can't handle image pixel format "
+             << component_format << '\n';
   }
 
 #undef DoCase
@@ -457,8 +562,8 @@ bool
 vgui_section_buffer::draw_viewport_as_image() const
 {
   //render visible viewport buffer 
- return vgui_view_render( buffer_,
-                          w_, h_,
-                          zoomx_, zoomy_,
-                          format_, type_ ,false); //no hardware map
+  return vgui_view_render( buffer_,
+                           w_, h_,
+                           zoomx_, zoomy_,
+                           format_, type_ ,false); //no hardware map
 }
