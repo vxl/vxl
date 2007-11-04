@@ -152,10 +152,11 @@ void bwm_tableau_img::clear_all()
 void bwm_tableau_img::intensity_profile()
 {
   float x1, y1, x2, y2;
-
+  my_observer_->image_tableau()->lock_linenum(true);
   pick_line(&x1, &y1, &x2, &y2);
   vcl_cout << x1 << "," << y1 << "-->" << x2 << "," << y2 << vcl_endl;
   my_observer_->intensity_profile(x1, y1, x2, y2);
+  my_observer_->image_tableau()->lock_linenum(false);
 }
 
 void bwm_tableau_img::range_map()
