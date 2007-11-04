@@ -71,7 +71,7 @@ void bwm_observer_vgui::handle_update(vgui_message const& msg,
   vcl_map<unsigned, vgui_soview2D_polygon* > poly_list;
   if (str->compare("delete") == 0) {
     vcl_map<unsigned, vgui_soview2D_polygon* > p = objects_[observable];
-    vcl_map<unsigned, vcl_vector<vgui_soview2D_circle*> > ov = object_verts_[observable];
+    vcl_map<unsigned, vcl_vector<bwm_soview2D_vertex*> > ov = object_verts_[observable];
     objects_.erase(observable);
     object_verts_.erase(observable);
     for (unsigned i=0; i<p.size(); i++)  {
@@ -85,7 +85,7 @@ void bwm_observer_vgui::handle_update(vgui_message const& msg,
 
     vcl_map<int, vsol_polygon_3d_sptr> faces = observable->extract_faces();
     vcl_map<int, vsol_polygon_3d_sptr>::iterator iter = faces.begin();
-    vcl_map<unsigned, vcl_vector<vgui_soview2D_circle*> >poly_verts;  
+    vcl_map<unsigned, vcl_vector<bwm_soview2D_vertex*> >poly_verts;  
 
     while (iter != faces.end()) {
       // project the new object with the given camera
@@ -96,10 +96,11 @@ void bwm_observer_vgui::handle_update(vgui_message const& msg,
       float *x, *y;
       bwm_algo::get_vertices_xy(poly_2d, &x, &y);
       unsigned nverts = poly_2d->size();
-      vcl_vector<vgui_soview2D_circle*> verts;
+      vcl_vector<bwm_soview2D_vertex*> verts;
       this->set_foreground(0,1,0);
       for(unsigned i = 0; i<nverts; ++i) {
-        vgui_soview2D_circle* sopt = this->add_circle(x[i],y[i],1.0f);
+        bwm_soview2D_vertex* sopt = new bwm_soview2D_vertex(x[i], y[i], 1.0f);
+        this->add(sopt);
         verts.push_back(sopt);
       }
     
@@ -130,7 +131,7 @@ void bwm_observer_vgui::handle_update(vgui_message const& msg,
       object_verts_[observable] = poly_verts;
     } else if ((str->compare("update") == 0) || (str->compare("move") == 0)){
       vcl_map<unsigned, vgui_soview2D_polygon* > p = objects_[observable];
-      vcl_map<unsigned, vcl_vector<vgui_soview2D_circle* > > ov = object_verts_[observable];
+      vcl_map<unsigned, vcl_vector<bwm_soview2D_vertex* > > ov = object_verts_[observable];
 
       vcl_map<unsigned, vgui_soview2D_polygon* >::iterator it =  p.begin();
       while (it != p.end()) {
@@ -138,7 +139,7 @@ void bwm_observer_vgui::handle_update(vgui_message const& msg,
         this->remove(it->second);
 
         // remove the vertices
-        vcl_vector<vgui_soview2D_circle* > vertices = ov[it->first];    
+        vcl_vector<bwm_soview2D_vertex* > vertices = ov[it->first];    
         for(unsigned j = 0; j < vertices.size(); j++)
             this->remove(vertices[j]);
        
@@ -237,13 +238,13 @@ bwm_observable_sptr bwm_observer_vgui::find_object(unsigned soview2D_id, unsigne
 
   // now try the circles, if not found in polygons
   vcl_map<bwm_observable_sptr, 
-    vcl_map<unsigned, vcl_vector<vgui_soview2D_circle* > > >::iterator v_iter = object_verts_.begin();
+    vcl_map<unsigned, vcl_vector<bwm_soview2D_vertex* > > >::iterator v_iter = object_verts_.begin();
     
   while (v_iter != object_verts_.end()) {
-    vcl_map<unsigned, vcl_vector<vgui_soview2D_circle* > > v  = v_iter->second;
-    vcl_map<unsigned, vcl_vector<vgui_soview2D_circle* > >::iterator obs = v.begin();
+    vcl_map<unsigned, vcl_vector<bwm_soview2D_vertex* > > v  = v_iter->second;
+    vcl_map<unsigned, vcl_vector<bwm_soview2D_vertex* > >::iterator obs = v.begin();
     while (obs != v.end()) {
-      vcl_vector<vgui_soview2D_circle* > vertices = obs->second;
+      vcl_vector<bwm_soview2D_vertex* > vertices = obs->second;
       for (unsigned i=0; i < vertices.size(); i++) {
         if (vertices[i]->get_id() == soview2D_id) { 
           face_id = obs->first;
@@ -339,10 +340,10 @@ unsigned bwm_observer_vgui::get_selected_3d_vertex_index(unsigned poly_id)
   if(!found_obj)
     return 0;
 
-  vcl_vector<vgui_soview2D_circle* > verts = 
+  vcl_vector<bwm_soview2D_vertex* > verts = 
     object_verts_[found_obj][found_poly_index];
   unsigned found_vert_index = 0;
-  for(vcl_vector<vgui_soview2D_circle* >::iterator vit = verts.begin();
+  for(vcl_vector<bwm_soview2D_vertex* >::iterator vit = verts.begin();
       vit != verts.end(); ++vit, found_vert_index++)
     if(this->is_selected((*vit)->get_id()))
       return found_vert_index;

@@ -70,8 +70,8 @@ void bwm_observer_cam::move_ground_plane( vgl_homg_plane_3d<double> master_plane
 
   //vcl_cerr << "select_list.size == "<<select_list.size() << "  type_name == " << select_list[0]->type_name() << vcl_endl;
   if ((select_list.size() == 1) && 
-    (select_list[0]->type_name().compare("vgui_soview2D_circle") == 0)) {
-    vgui_soview2D_circle* circle = static_cast<vgui_soview2D_circle*> (select_list[0]);
+    (select_list[0]->type_name().compare("bwm_soview2D_vertex") == 0)) {
+    bwm_soview2D_vertex* circle = static_cast<bwm_soview2D_vertex*> (select_list[0]);
 
     //find the mesh this vertex belongs to
     unsigned int face_id;
@@ -215,8 +215,8 @@ void bwm_observer_cam::world_pt_corr()
   // first get the selected cross
   vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
   if (select_list.size() == 1) {
-    if (select_list[0]->type_name().compare("vgui_soview2D_circle") == 0) {
-      vgui_soview2D_circle* vertex = static_cast<vgui_soview2D_circle*> (select_list[0]);
+    if (select_list[0]->type_name().compare("bwm_soview2D_vertex") == 0) {
+      bwm_soview2D_vertex* vertex = static_cast<bwm_soview2D_vertex*> (select_list[0]);
       vsol_point_2d_sptr vertex_2d = new vsol_point_2d(vertex->x, vertex->y);
       vsol_point_3d_sptr vertex_3d;
       this->backproj_point(vertex_2d, vertex_3d);
@@ -578,18 +578,18 @@ void bwm_observer_cam::extrude_face(vsol_point_2d_sptr pt)
 
   // a polygon should be selected first
   if (select_list.size() == 2) {
-    if (((select_list[0]->type_name().compare("vgui_soview2D_polygon") == 0) && (select_list[1]->type_name().compare("vgui_soview2D_circle") == 0)) ||
-    ((select_list[1]->type_name().compare("vgui_soview2D_polygon") == 0) && (select_list[0]->type_name().compare("vgui_soview2D_circle") == 0)))
+    if (((select_list[0]->type_name().compare("vgui_soview2D_polygon") == 0) && (select_list[1]->type_name().compare("bwm_soview2D_vertex") == 0)) ||
+    ((select_list[1]->type_name().compare("vgui_soview2D_polygon") == 0) && (select_list[0]->type_name().compare("bwm_soview2D_vertex") == 0)))
   {
     vgui_soview2D_polygon* poly;
-    vgui_soview2D_circle* circle;
+    bwm_soview2D_vertex* circle;
 
     if (select_list[0]->type_name().compare("vgui_soview2D_polygon") == 0) {
       poly = static_cast<vgui_soview2D_polygon*> (select_list[0]);
-      circle = static_cast<vgui_soview2D_circle*> (select_list[1]);
+      circle = static_cast<bwm_soview2D_vertex*> (select_list[1]);
     } else {
       poly = static_cast<vgui_soview2D_polygon*> (select_list[1]);
-      circle = static_cast<vgui_soview2D_circle*> (select_list[0]);
+      circle = static_cast<bwm_soview2D_vertex*> (select_list[0]);
     }
     unsigned face_id;
     bwm_observable_sptr obs = this->find_object(poly->get_id(), face_id);
