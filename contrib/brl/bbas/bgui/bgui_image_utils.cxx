@@ -4,6 +4,7 @@
 #include <vil/vil_pixel_traits.h>
 #include <vil/vil_blocked_image_resource.h>
 #include <vil/vil_pyramid_image_resource.h>
+#include <vgui/vgui_range_map_params.h>
 #include <bgui/bgui_image_utils.h>
 
 void bgui_image_utils::range(double& min_value, double& max_value)
@@ -215,4 +216,44 @@ bgui_graph_tableau_sptr bgui_image_utils::hist_graph()
     }
   g->update(trim_pos, trim_counts);
   return g;
+}
+bool bgui_image_utils::default_range_map(vgui_range_map_params_sptr& rmp)
+{
+  if(!image_) return false;
+  //Allow only grey scale for now
+  unsigned nc = image_->nplanes();
+  if(!(nc == 1 || nc == 3 || nc == 4))
+    return false; //all available formats
+  //defaut values
+  double gamma = 1.0;
+  bool invert = false;
+  bool gl_map = true;
+  bool cache = true;
+  static double min = 0, max = 1500; //typical for uint_16
+  if(image_->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
+    max = 255;
+  switch (nc){
+    case 1:
+      {
+        rmp=new vgui_range_map_params(min, max, gamma, invert, gl_map, cache);
+        break;
+      }
+    case 3:
+      {
+        rmp = new vgui_range_map_params(min, max, min,max, min, max,
+                                        gamma , gamma, gamma, invert,
+                                        gl_map, cache);
+        break;
+      }
+    case 4:
+      {
+        int band_map = 1; //map RGB-InfraRed -> RGB
+        rmp = new vgui_range_map_params(min, max, min,max, min, max,
+                                        min, max, gamma , gamma, gamma, gamma,
+                                        band_map, invert, gl_map, cache);
+        break;
+      }
+  }
+  return true;
+
 }

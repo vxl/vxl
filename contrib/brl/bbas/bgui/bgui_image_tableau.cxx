@@ -13,6 +13,7 @@
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_rgba.h>
 #include <vil/vil_image_view.h>
+#include <vgui/vgui_range_map_params.h>
 
 
 //-----------------------------------------------------------------------------
@@ -172,9 +173,52 @@ get_pixel_info_from_image(const int x, const int y,
       else
         vcl_sprintf(msg, "(%d, %d)   (uint16)[ R=%d,G=%d,B=%d]", x, y,
                     v(0,0).R(), v(0,0).G(),v(0,0).B() );
-      return;
     }
-    return; }
+    else if (n_p==4)
+    {
+
+      vil_image_view<vil_rgba<vxl_uint_16> > v = r->get_view(x,1,y,1);
+      if (!v){
+        vcl_sprintf(msg, "Pixel Not Available");
+        return;
+      }else{        
+        int band_map = 0;
+        if(rmp_)
+          band_map = rmp_->band_map_;
+        switch(band_map){
+        case vgui_range_map_params::RGB_m :
+          {
+            vcl_sprintf(msg, "(%d, %d)   (RGB:uint16)[ R=%d,G=%d,B=%d,I=%d]",
+                        x, y, v(0,0).R(), v(0,0).G(),v(0,0).B(),v(0,0).A() );
+            break;
+          }
+        case vgui_range_map_params::RGX_m :
+          {
+            vcl_sprintf(msg, "(%d, %d)   (RGI:uint16)[ R=%d,G=%d,B=%d,I=%d]",
+                        x, y, v(0,0).R(), v(0,0).G(),v(0,0).B(),v(0,0).A() );
+            break;
+          }
+        case vgui_range_map_params::RBX_m :
+          {
+            vcl_sprintf(msg, "(%d, %d)   (RBI:uint16)[ R=%d,G=%d,B=%d,I=%d]",
+                        x, y, v(0,0).R(), v(0,0).G(),v(0,0).B(),v(0,0).A() );
+            break;
+          }
+        case vgui_range_map_params::GBX_m :
+          {
+            vcl_sprintf(msg, "(%d, %d)   (RGI:uint16)[ R=%d,G=%d,B=%d,I=%d]",
+                        x, y, v(0,0).R(), v(0,0).G(),v(0,0).B(),v(0,0).A() );
+            break;
+          }
+        default:
+          {
+            vcl_sprintf(msg, "Pixel Not Available");
+            return;
+          }
+        }
+      }
+    }
+   }
    case  VIL_PIXEL_FORMAT_INT_16: {
     if (n_p==1)
     {
@@ -299,6 +343,8 @@ get_pixel_value(const unsigned c, const unsigned r)
           return static_cast<double>(v(0,0));
         else if (n_p==3)
           return static_cast<double>(v(0,0,0)+v(0,0,1)+v(0,0,2))/3;
+        else if (n_p==4)
+          return static_cast<double>(v(0,0,0)+v(0,0,1)+v(0,0,2)+v(0,0,3))/4;
     }
     case  VIL_PIXEL_FORMAT_INT_16: {
       vil_image_view<vxl_int_16> v = rs->get_view(c,1,r,1);

@@ -17,7 +17,7 @@
 #include <vil/vil_blocked_image_resource_sptr.h>
 #include <bsta/bsta_histogram.h>
 #include <bgui/bgui_graph_tableau.h>
-
+#include <vgui/vgui_range_map_params_sptr.h>
 class bgui_image_utils
 {
  public:
@@ -40,6 +40,10 @@ class bgui_image_utils
   bsta_histogram<double> histogram()
   { if (!hist_valid_)this->construct_histogram(); return hist_; }
   bgui_graph_tableau_sptr hist_graph();
+
+  //: Range map processing - very simple for now
+  bool default_range_map(vgui_range_map_params_sptr& rmp);
+
  private:
   //private utilities
   bool init_histogram();
