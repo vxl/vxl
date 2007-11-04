@@ -8,7 +8,28 @@ INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
 IF (HAS_VGUI)
   # Optionally Build this library 
   OPTION(BUILD_BGUI3D "Build VGUI wrapper for Coin3d" NO)
-  INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/UseBGUI3D.cmake )
+
+  SET (HAS_BGUI3D "NO")
+  IF (BUILD_BGUI3D)
+
+    # Find the Coin3D library
+    INCLUDE( ${BRL_INCLUDE_DIR}/bmods/find_coin.cmake )
+
+    IF (COIN3D_FOUND)
+      INCLUDE_DIRECTORIES( ${COIN3D_INCLUDE_DIR} )
+      SET( HAS_BGUI3D "YES" )
+      ADD_DEFINITIONS( -DHAS_BGUI3D )
+    ENDIF (COIN3D_FOUND)
+
+    # Find the SimVoleon library
+    INCLUDE( ${BRL_INCLUDE_DIR}/bmods/find_SIMVoleon.cmake )
+
+    IF (SIMVOLEON_FOUND)
+      INCLUDE_DIRECTORIES( ${SIMVOLEON_INCLUDE_DIR} )
+    ENDIF (SIMVOLEON_FOUND)
+
+  ENDIF (BUILD_BGUI3D)
+
 ENDIF (HAS_VGUI)
 
 # Flag that determines if we were able to successfully build bgui3d.
@@ -33,7 +54,11 @@ SET(bgui3d_sources
 
 ADD_LIBRARY(bgui3d  ${bgui3d_sources})
 SET(BGUI3D_FOUND "YES" CACHE INTERNAL "Was bgui3d successfully built?" )
-TARGET_LINK_LIBRARIES(bgui3d vgui vpgl vnl vnl_algo)
+TARGET_LINK_LIBRARIES(bgui3d ${COIN3D_LIBRARY} vgui vpgl vnl vnl_algo)
+
+IF (SIMVOLEON_FOUND)
+  TARGET_LINK_LIBRARIES(bgui3d ${SIMVOLEON_LIBRARY})
+ENDIF (SIMVOLEON_FOUND)
 
 IF( BUILD_EXAMPLES )
   SUBDIRS( examples )

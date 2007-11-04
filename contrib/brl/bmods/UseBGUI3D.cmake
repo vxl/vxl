@@ -1,10 +1,10 @@
 # modified by Kongbin to add support for volume rendering
 
 SET (HAS_BGUI3D "NO")
-IF (BUILD_BGUI3D)
+IF (BGUI3D_FOUND)
 
   # Find the Coin3D library
-  INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/find_coin.cmake )
+  INCLUDE( ${BRL_INCLUDE_DIR}/bmods/find_coin.cmake )
   
   IF (COIN3D_FOUND)
     INCLUDE_DIRECTORIES( ${COIN3D_INCLUDE_DIR} )
@@ -14,11 +14,20 @@ IF (BUILD_BGUI3D)
   ENDIF (COIN3D_FOUND)
 
   # Find the SimVoleon library
-  INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/find_SIMVoleon.cmake )
+  INCLUDE( ${BRL_INCLUDE_DIR}/bmods/find_SIMVoleon.cmake )
 
   IF (SIMVOLEON_FOUND)
     INCLUDE_DIRECTORIES( ${SIMVOLEON_INCLUDE_DIR} )
     LINK_LIBRARIES ( ${SIMVOLEON_LIBRARY} )
   ENDIF (SIMVOLEON_FOUND)
 
-ENDIF (BUILD_BGUI3D)
+ENDIF (BGUI3D_FOUND)
+
+# This case is for using BGUI3D in an external project
+IF (VXL_BGUI3D_FOUND)
+
+  INCLUDE_DIRECTORIES( ${VXL_BGUI3D_INCLUDE_DIR} )
+  ADD_DEFINITIONS( -DHAS_BGUI3D )
+  SET( HAS_BGUI3D "YES" )
+
+ENDIF (VXL_BGUI3D_FOUND)
