@@ -11,44 +11,45 @@
 #include <sdet/sdet_fit_lines.h>
 #include <brip/brip_roi.h>
 #include <vtol/vtol_edge_2d_sptr.h>
+
 void bwm_image_processor::hist_plot(bgui_image_tableau_sptr img)
 {
   if (!img)
-  {
-    vcl_cout << "intensity_histogram() - no image tableau\n";
-    return;
-  }
+    {
+      vcl_cout << "intensity_histogram() - no image tableau\n";
+      return;
+    }
 
   vil_image_resource_sptr res = img->get_image_resource();
   if (!res)
-  {
-    vcl_cout << "intensity_histogram() - the tableau does not have an image resource\n";
-    return;
-  }
+    {
+      vcl_cout << "intensity_histogram() - the tableau does not have an image resource\n";
+      return;
+    }
 
   bgui_image_utils iu(res);
   bgui_graph_tableau_sptr g = iu.hist_graph();
 
   if (!g)
-  { vcl_cout << "In intensity_histogram()- color images not supported\n";
+    { vcl_cout << "In intensity_histogram()- color images not supported\n";
     return;
-  }
+    }
 
   //popup a profile graph
   char location[100];
   vcl_sprintf(location, "Intensity Histogram");
   vgui_dialog* ip_dialog = g->popup_graph(location);
   if (!ip_dialog->ask())
-  {
-    delete ip_dialog;
-    return;
-  }
+    {
+      delete ip_dialog;
+      return;
+    }
   delete ip_dialog;
 }
 
 void bwm_image_processor::intensity_profile(bgui_image_tableau_sptr img,
-                                          float start_col, float end_col, 
-                                          float start_row, float end_row)
+                                            float start_col, float end_col, 
+                                            float start_row, float end_row)
 {
   if (img) {
     vcl_vector<double> pos, vals;
@@ -59,10 +60,10 @@ void bwm_image_processor::intensity_profile(bgui_image_tableau_sptr img,
     //popup a profile graph
     char location[100];
     vcl_sprintf(location, "scan:(%d, %d)<->(%d, %d)",
-              static_cast<unsigned>(start_col),
-              static_cast<unsigned>(start_row),
-              static_cast<unsigned>(end_col),
-              static_cast<unsigned>(end_row));
+                static_cast<unsigned>(start_col),
+                static_cast<unsigned>(start_row),
+                static_cast<unsigned>(end_col),
+                static_cast<unsigned>(end_row));
     vgui_dialog* ip_dialog = g->popup_graph(location);
     if (!ip_dialog->ask()){
       delete ip_dialog;
@@ -72,31 +73,80 @@ void bwm_image_processor::intensity_profile(bgui_image_tableau_sptr img,
   }
 }
 
+
 void bwm_image_processor::range_map(bgui_image_tableau_sptr img)
 {
-  if(!img) return;
-  //Allow only grey scale for now
-  if(img->get_image_resource()->nplanes()!=1)
-    return;
-  static double min = 0, max = 2048;
-  if(img->get_image_resource()->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
-    max = 255;
-  static double gamma = 1.0;
-  static bool invert = false;
-  bool gl_map = true;
-  bool cache = true;
-  vgui_dialog range_dlg("Set Range Map Params(Grey Scale Only!)");
-  range_dlg.field("Range min:", min);
-  range_dlg.field("Range max:", max);
-  range_dlg.field("Gamma:", gamma);
-  range_dlg.checkbox("Invert:", invert);
-  if (!range_dlg.ask())
-    return;
+  vgui_range_map_params_sptr rmp = img->map_params();
+  if(!rmp)
+    {
+      bgui_image_utils biu(img->get_image_resource());
+      biu.default_range_map(rmp);
+      return;
+    }
+  vgui_range_map_params_sptr new_rmp = new vgui_range_map_params(*rmp);
+  unsigned nc = rmp->n_components_;
+  // use this array because vgui_dialog does not support long double fields
+  double ranges[8];
+  int choice=new_rmp->band_map_;
+  vgui_dialog rmp_dialog("Set Range Mapping Parameters");
+  if (nc == 1) {
+    ranges[0] = new_rmp->min_L_;
+    ranges[1] = new_rmp->max_L_;
+    rmp_dialog.field("Luminance Min ",ranges[0]);
+    rmp_dialog.field("Luminance Max ",ranges[1]);
+    rmp_dialog.field("Luminance Gamma ",new_rmp->gamma_L_);
+  }
+  if (nc == 3 || nc == 4) {
+    ranges[0] = new_rmp->min_R_;
+    ranges[1] = new_rmp->max_R_;
+    rmp_dialog.field("R Min ",ranges[0]);
+    rmp_dialog.field("R Max ",ranges[1]);
+    rmp_dialog.field("R Gamma ",new_rmp->gamma_R_);
+    ranges[2] = new_rmp->min_G_;
+    ranges[3] = new_rmp->max_G_;
+    rmp_dialog.field("G Min ",ranges[2]);
+    rmp_dialog.field("G Max ",ranges[3]);
+    rmp_dialog.field("G Gamma ",new_rmp->gamma_G_);
+    ranges[4] = new_rmp->min_B_;
+    ranges[5] = new_rmp->max_B_;
+    rmp_dialog.field("B Min ",ranges[4]);
+    rmp_dialog.field("B Max ",ranges[5]);
+    rmp_dialog.field("B Gamma ",new_rmp->gamma_B_);
+  }
+  if (nc==4) {
+    vcl_vector<vcl_string> choices;
+    choices.push_back("RGBA");
+    choices.push_back("RGB");
+    choices.push_back("RGI");
+    choices.push_back("RBI");
+    choices.push_back("GBI");
+    rmp_dialog.choice("Band Map", choices, choice);
+    ranges[6] = new_rmp->min_X_;
+    ranges[7] = new_rmp->max_X_;
+    rmp_dialog.field("X Min ",ranges[6]);
+    rmp_dialog.field("X Max ",ranges[7]);
+    rmp_dialog.field("X Gamma ",new_rmp->gamma_X_);
+  }
+  rmp_dialog.checkbox("Invert ",new_rmp->invert_);
 
-  vgui_range_map_params_sptr rmps= 
-    new vgui_range_map_params(min, max, gamma, invert, gl_map, cache);
+  rmp_dialog.checkbox("Use glPixelMap ",new_rmp->use_glPixelMap_);
+  rmp_dialog.checkbox("Cache Map ",new_rmp->cache_mapped_pix_);
 
-  img->set_mapping(rmps);
+  if (!rmp_dialog.ask())
+    return;
+  new_rmp->band_map_ = choice;
+  new_rmp->min_L_ = ranges[0];
+  new_rmp->max_L_ = ranges[1];
+  new_rmp->min_R_ = ranges[0];
+  new_rmp->max_R_ = ranges[1];
+  new_rmp->min_G_ = ranges[2];
+  new_rmp->max_G_ = ranges[3];
+  new_rmp->min_B_ = ranges[4];
+  new_rmp->max_B_ = ranges[5];
+  new_rmp->min_X_ = ranges[6];
+  new_rmp->max_X_ = ranges[7];
+
+  img->set_mapping(new_rmp);
 }
 
 bool bwm_image_processor::
@@ -109,7 +159,7 @@ step_edges_vd(bgui_image_tableau_sptr const& img,
   if(img->get_image_resource()->nplanes()!=1)
     {
       vcl_cerr << "In bwm_observer_img::step_edges_vd() - step_edges only works on grey level images \n";
-        return false;
+      return false;
     }
 
   static bool agr = true;
@@ -131,10 +181,10 @@ step_edges_vd(bgui_image_tableau_sptr const& img,
     dp.aggressive_junction_closure=0;
   vil_image_resource_sptr image = img->get_image_resource();
   if (!image||!image->ni()||!image->nj())
-  {
-    vcl_cerr << "In bwm_observer_img::step_edges_vd() - no image\n";
-    return false;
-  }
+    {
+      vcl_cerr << "In bwm_observer_img::step_edges_vd() - no image\n";
+      return false;
+    }
   
   sdet_detector det(dp);
   brip_roi broi(image->ni(), image->nj());
@@ -144,10 +194,10 @@ step_edges_vd(bgui_image_tableau_sptr const& img,
 
   det.DoContour();
   if(!det.get_vdgl_edges(edges))
-  {
-    vcl_cerr << "In bwm_observer_img::step_edges_vd() - edge detection failed\n";
-    return false;
-  }
+    {
+      vcl_cerr << "In bwm_observer_img::step_edges_vd() - edge detection failed\n";
+      return false;
+    }
   return true;
 }
 
@@ -161,7 +211,7 @@ bool bwm_image_processor::lines_vd(bgui_image_tableau_sptr const& img,
     {
       vcl_cerr << "In bwm_observer_img::lines_vd() - detect"
                << " lines only works on grey level images \n";
-        return false;
+      return false;
     }
 
   static sdet_detector_params dp;
@@ -191,10 +241,10 @@ bool bwm_image_processor::lines_vd(bgui_image_tableau_sptr const& img,
 
   vil_image_resource_sptr image = img->get_image_resource();
   if (!image||!image->ni()||!image->nj())
-  {
-    vcl_cerr << "In bwm_image_processor::lines_vd() - no image\n";
-    return false;
-  }
+    {
+      vcl_cerr << "In bwm_image_processor::lines_vd() - no image\n";
+      return false;
+    }
   brip_roi broi(image->ni(), image->nj());
   broi.add_region(roi);
 
@@ -204,10 +254,10 @@ bool bwm_image_processor::lines_vd(bgui_image_tableau_sptr const& img,
 
   vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
   if (!edges)
-  {
-    vcl_cout << "bwm_image_processor::lines_vd() - no edges to fit lines\n";
-    return false;
-  }
+    {
+      vcl_cout << "bwm_image_processor::lines_vd() - no edges to fit lines\n";
+      return false;
+    }
   sdet_fit_lines fl(flp);
   fl.set_edges(*edges);
   if(!fl.fit_lines())

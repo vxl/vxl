@@ -17,9 +17,11 @@
 #include "bwm_command.h"
 #include "bwm_load_commands.h"
 #include "algo/bwm_rat_proj_camera.h"
+#include "algo/bwm_image_processor.h"
 
 #include <vgui/vgui_poly_tableau.h>
 #include <bgui/bgui_image_tableau.h>
+#include <bgui/bgui_image_utils.h>
 #include <vgui/vgui_composite_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_range_map_params.h>
@@ -960,11 +962,6 @@ vil_image_resource_sptr bwm_tableau_mgr::load_image(vcl_string& filename,
                                                     vgui_range_map_params_sptr& rmps)
 {
   vil_image_resource_sptr res;
-  float gamma = 1.0;
-  bool invert = false;
-  bool gl_map = false;
-  bool cache = true;
-  double min = 0, max = 255; //for now - ultimately need to compute color histogram
 
     // if filename is a directory, assume pyramid image
   if (vul_file::is_directory(filename)) {
@@ -973,8 +970,7 @@ vil_image_resource_sptr bwm_tableau_mgr::load_image(vcl_string& filename,
     vil_pyramid_image_resource_sptr pyr = vil_load_pyramid_resource(filename.c_str());
 
     if (pyr) {
-      cache = false;
-      gl_map = true;
+
       res = pyr.ptr();
     }
     else {
@@ -985,12 +981,8 @@ vil_image_resource_sptr bwm_tableau_mgr::load_image(vcl_string& filename,
   else {
     res = vil_load_image_resource(filename.c_str());
   }
-
-  /*rmps = new vgui_range_map_params(min, max, min, max, min, max,
-    gamma, gamma, gamma, invert,
-    gl_map, cache);*/
-
-  rmps = range_params(res);
+  bgui_image_utils biu(res);
+  biu.default_range_map(rmps);
 
   return res;
 }

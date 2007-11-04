@@ -3,6 +3,7 @@
 
 #include <bgui/bgui_image_tableau.h>
 #include <vcl_vector.h>
+#include <vgui/vgui_range_map_params_sptr.h>
 #include <vsol/vsol_box_2d_sptr.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
@@ -13,6 +14,7 @@ public:
   static void intensity_profile(bgui_image_tableau_sptr img,
                                 float start_col, float end_col, 
                                 float start_row, float end_row);
+
 
   static void range_map(bgui_image_tableau_sptr img);
 
