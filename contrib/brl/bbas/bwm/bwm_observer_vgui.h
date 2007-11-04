@@ -5,6 +5,7 @@
 #include "bwm_observer_img.h"
 #include "bwm_observable_sptr.h"
 #include "algo/bwm_soview2D_cross.h"
+#include "algo/bwm_soview2D_vertex.h"
 
 #include <vcl_vector.h>
 #include <vcl_utility.h>
@@ -24,8 +25,6 @@
 #include <vsol/vsol_line_2d_sptr.h>
 
 #include <vpgl/vpgl_camera.h>
-
-//#include <bmsh3d/bmsh3d_vertex.h>
 
 class bwm_observer_vgui : public bwm_observer_img, public bwm_observer//, public vgui_easy2D_tableau
 {

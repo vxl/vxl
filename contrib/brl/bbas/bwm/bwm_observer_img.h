@@ -90,7 +90,8 @@ protected:
 
   float start_x_, start_y_;
   bgui_vsol_soview2D_polyline* moving_poly_;
-  bool moving_;
+
+  bool moving_vertex_, moving_polygon_;
 
   void delete_polygon(vgui_soview* obj);
 

@@ -1,15 +1,10 @@
 # contrib/brl/bbas/bwm/io/CMakeLists.txt
 
-INCLUDE_DIRECTORIES( ${VTHREEP_INCLUDE_DIR}/expatpp )
+INCLUDE_DIRECTORIES (${BRL_INCLUDE_DIR}/b3p/expatpp )
 
 SET(bwm_io_sources
    bwm_io_config_parser.cxx bwm_io_config_parser.h
 )
-
-#IF( BUILD_EXAMPLES )
-#  SUBDIRS( examples )
-#ENDIF( BUILD_EXAMPLES )
-
 
 ADD_LIBRARY(bwm_io ${bwm_io_sources})
 

@@ -20,24 +20,48 @@
 bool bwm_observer_img::handle(const vgui_event &e)
 {
   vgui_projection_inspector pi;
-    
+  
   if (e.type == vgui_BUTTON_DOWN && e.button == vgui_LEFT && e.modifier == vgui_SHIFT) {
     bgui_vsol_soview2D_polyline* p=0;
-    if (p = (bgui_vsol_soview2D_polyline*) get_selected_object("bgui_vsol_soview2D_polyline")) {
+    vgui_soview2D_circle* c = 0;
     // get the selected polyline
-    //if (p != 0) {
+    if (p = (bgui_vsol_soview2D_polyline*) get_selected_object("bgui_vsol_soview2D_polyline")) {
       // take the position of the first point
       pi.window_to_image_coordinates(e.wx, e.wy, start_x_, start_y_);
       moving_poly_ = p;
-      moving_ = true;
+      moving_polygon_ = true;
+      moving_vertex_ = false;
+      return true;
+    } else if (c = (vgui_soview2D_circle*) get_selected_object("vgui_soview2D_circle")) {
+      pi.window_to_image_coordinates(e.wx, e.wy, start_x_, start_y_);
+      moving_vertex_ = true;
+      moving_polygon_ = true;
       return true;
     }
   } else if (e.type == vgui_MOTION && e.button == vgui_LEFT && 
-    e.modifier == vgui_SHIFT && moving_) {
+    e.modifier == vgui_SHIFT && moving_polygon_) {
     float x, y;
     pi.window_to_image_coordinates(e.wx, e.wy, x, y);
+    float x_diff = x-start_x_;
+    float y_diff = y-start_y_;
     moving_poly_->translate(x-start_x_, y-start_y_);
+    // move all the vertices with polyline
+    vcl_vector<vgui_soview2D_circle*> vertices = vert_list[moving_poly_->get_id()];
+    for (unsigned i=0; i<vertices.size(); i++) {
+      vgui_soview2D_circle* v = vertices[i];
+      v->translate(x_diff, y_diff);
+    }
+    start_x_ = x;
+    start_y_ = y;
+    post_redraw();
     return true;
+  } else if (e.type == vgui_MOTION && e.button == vgui_LEFT && 
+    e.modifier == vgui_SHIFT && moving_vertex_) {
+    float x, y;
+    pi.window_to_image_coordinates(e.wx, e.wy, x, y);
+    float x_diff = x-start_x_;
+    float y_diff = y-start_y_;
+    // find the polyline including this vertex
   }
     
   return bgui_vsol2D_tableau::handle(e);
