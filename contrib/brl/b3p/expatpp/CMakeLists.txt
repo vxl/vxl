@@ -1,5 +1,7 @@
 #This is contrib/brl/bbas/expatpp
 
+OPTION(BUILD_EXPAT "Build expatpp XML parser" NO)
+IF (BUILD_BGUI3D)
 IF (WIN32)
   ADD_DEFINITIONS( -DXML_STATIC )
   ADD_DEFINITIONS( -DCOMPILED_FROM_DSP )
@@ -31,4 +33,4 @@ ELSE (APPLE)
   TARGET_LINK_LIBRARIES(expatpp )
 ENDIF (APPLE)
 
-#SUBDIRS( SimpleTest )
+ENDIF (BUILD_BGUI3D)
