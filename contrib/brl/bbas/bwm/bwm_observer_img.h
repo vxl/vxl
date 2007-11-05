@@ -7,7 +7,6 @@
 #include <bwm/algo/bwm_soview2D_vertex.h>
 
 #include <vgui/vgui_viewer2D_tableau.h>
-#include <vgui/vgui_soview2D.h>
 
 #include <bgui/bgui_image_tableau.h>
 #include <bgui/bgui_vsol2D_tableau.h>
@@ -85,13 +84,13 @@ protected:
   bool show_image_path_;
 
   // polygons are mapped soview ID
-  vcl_map<unsigned, vgui_soview2D*> obj_list;
+  vcl_map<unsigned, bgui_vsol_soview2D*> obj_list;
 
   // vector of vertices are mapped soview ID for each polygon
   vcl_map<unsigned, vcl_vector<bwm_soview2D_vertex* > > vert_list;
 
   float start_x_, start_y_;
-  bgui_vsol_soview2D_polyline* moving_p_;
+  bgui_vsol_soview2D* moving_p_;
   bwm_soview2D_vertex* moving_v_;
   bool moving_vertex_, moving_polygon_;
 

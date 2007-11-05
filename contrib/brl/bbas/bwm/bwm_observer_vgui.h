@@ -87,10 +87,10 @@ protected:
   //: the current correspondence point
   vcl_pair<vgl_point_2d<double>, bwm_soview2D_cross * > corr_;
 
-  //: objects are kept as a triple (bwm_observable *, face_id, vgui_soview2D_polygon*)
-  vcl_map<bwm_observable_sptr, vcl_map<unsigned, vgui_soview2D_polygon* > > objects_;
+  //: objects are kept as a triple (bwm_observable *, face_id, bgui_vsol_soview2D_polygon*)
+  vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D_polygon* > > objects_;
 
-  //: vertices are kept as a triple (bwm_observable *, face_id, vector<vgui_soview2D_circle*> )
+  //: vertices are kept as a triple (bwm_observable *, face_id, vector<bwm_soview2D_vertex*> )
   vcl_map<bwm_observable_sptr, vcl_map<unsigned, vcl_vector<bwm_soview2D_vertex* > > > object_verts_;
 
   bwm_observable_sptr find_object(unsigned soview2d_id, unsigned &face_id);

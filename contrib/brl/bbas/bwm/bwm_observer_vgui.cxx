@@ -20,13 +20,13 @@
 #include <vsol/vsol_polygon_3d.h>
 
 #include <vgui/vgui_projection_inspector.h>
-#include <vgui/vgui_soview2D.h>
 #include <vgui/vgui_message.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_range_map_params.h>
 
 #include <bgui/bgui_image_utils.h>
 #include <bgui/bgui_image_tableau.h>
+#include <bgui/bgui_vsol_soview2D.h>
 
 bool bwm_observer_vgui::handle(const vgui_event& e)
 {
@@ -68,9 +68,9 @@ void bwm_observer_vgui::handle_update(vgui_message const& msg,
 {
   const vcl_string* str = static_cast<const vcl_string*> (msg.data);
 
-  vcl_map<unsigned, vgui_soview2D_polygon* > poly_list;
+  vcl_map<unsigned, bgui_vsol_soview2D_polygon* > poly_list;
   if (str->compare("delete") == 0) {
-    vcl_map<unsigned, vgui_soview2D_polygon* > p = objects_[observable];
+    vcl_map<unsigned, bgui_vsol_soview2D_polygon* > p = objects_[observable];
     vcl_map<unsigned, vcl_vector<bwm_soview2D_vertex*> > ov = object_verts_[observable];
     objects_.erase(observable);
     object_verts_.erase(observable);
@@ -97,7 +97,7 @@ void bwm_observer_vgui::handle_update(vgui_message const& msg,
       bwm_algo::get_vertices_xy(poly_2d, &x, &y);
 
       this->set_foreground(1,1,0);
-      vgui_soview2D_polygon* polygon = this->add_polygon(nverts, x, y);
+      bgui_vsol_soview2D_polygon* polygon = this->add_vsol_polygon_2d(poly_2d);
       poly_list[face_id] = polygon;
 
       proj_poly(obj, poly_2d);
@@ -120,7 +120,7 @@ void bwm_observer_vgui::handle_update(vgui_message const& msg,
         proj_poly(poly, poly_2d);
         float *x, *y;
         bwm_algo::get_vertices_xy(poly_2d, &x, &y);
-        vgui_soview2D_polygon* polygon = this->add_polygon(poly_2d->size(), x, y);
+        bgui_vsol_soview2D_polygon* polygon = this->add_vsol_polygon_2d(poly_2d);
         poly_list[face_id] = polygon;
         inner_iter++;
       }
@@ -132,10 +132,10 @@ void bwm_observer_vgui::handle_update(vgui_message const& msg,
       objects_[observable] = poly_list;
       object_verts_[observable] = poly_verts;
     } else if ((str->compare("update") == 0) || (str->compare("move") == 0)){
-      vcl_map<unsigned, vgui_soview2D_polygon* > p = objects_[observable];
+      vcl_map<unsigned, bgui_vsol_soview2D_polygon* > p = objects_[observable];
       vcl_map<unsigned, vcl_vector<bwm_soview2D_vertex* > > ov = object_verts_[observable];
 
-      vcl_map<unsigned, vgui_soview2D_polygon* >::iterator it =  p.begin();
+      vcl_map<unsigned, bgui_vsol_soview2D_polygon* >::iterator it =  p.begin();
       while (it != p.end()) {
         // remove the polygon
         this->remove(it->second);
@@ -161,7 +161,7 @@ void bwm_observer_vgui::handle_update(vgui_message const& msg,
 void bwm_observer_vgui::update_all()
 {
   vcl_map<bwm_observable_sptr, 
-    vcl_map<unsigned, vgui_soview2D_polygon* > >::iterator iter = objects_.begin(); 
+    vcl_map<unsigned, bgui_vsol_soview2D_polygon* > >::iterator iter = objects_.begin(); 
 
   while (iter != objects_.end()) {
     bwm_observable_sptr obs = iter->first;
@@ -181,7 +181,7 @@ void bwm_observer_vgui::delete_object()
   vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
 
   if ((select_list.size() == 1) && 
-    (select_list[0]->type_name().compare("vgui_soview2D_polygon") == 0)) {
+    (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0)) {
       unsigned face_id;
       bwm_observable_sptr obj = find_object(select_list[0]->get_id(), face_id);
       obj->remove();    
@@ -192,7 +192,7 @@ void bwm_observer_vgui::delete_object()
 void bwm_observer_vgui::delete_all()
 {
   vcl_map<bwm_observable_sptr, 
-    vcl_map<unsigned, vgui_soview2D_polygon* > >::iterator iter;
+    vcl_map<unsigned, bgui_vsol_soview2D_polygon* > >::iterator iter;
     
   while (objects_.size() > 0) { 
     iter = objects_.begin();
@@ -223,11 +223,11 @@ bwm_observable_sptr bwm_observer_vgui::find_object(unsigned soview2D_id, unsigne
 {
 
   vcl_map<bwm_observable_sptr, 
-    vcl_map<unsigned, vgui_soview2D_polygon* > >::iterator iter = objects_.begin();
+    vcl_map<unsigned, bgui_vsol_soview2D_polygon* > >::iterator iter = objects_.begin();
     
   while (iter != objects_.end()) {
-    vcl_map<unsigned, vgui_soview2D_polygon*> v  = iter->second;
-    vcl_map<unsigned, vgui_soview2D_polygon*>::iterator obs = v.begin();
+    vcl_map<unsigned, bgui_vsol_soview2D_polygon*> v  = iter->second;
+    vcl_map<unsigned, bgui_vsol_soview2D_polygon*>::iterator obs = v.begin();
     while (obs != v.end()) {
       if (obs->second->get_id() == soview2D_id) { 
         face_id = obs->first;
@@ -265,7 +265,7 @@ void bwm_observer_vgui::translate(vgl_vector_3d<double> T,
                                   bwm_observable_sptr object)
 {
   vcl_map<bwm_observable_sptr, 
-    vcl_map<unsigned, vgui_soview2D_polygon* > >::iterator iter = objects_.begin();
+    vcl_map<unsigned, bgui_vsol_soview2D_polygon* > >::iterator iter = objects_.begin();
     
   while (iter != objects_.end()) {
     bwm_observable_sptr obs = iter->first;
@@ -284,7 +284,7 @@ void bwm_observer_vgui::connect_inner_face(vsol_polygon_2d_sptr poly2d)
   vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
 
   // a polygon should be selected first
-  if ((select_list.size() == 1) && (select_list[0]->type_name().compare("vgui_soview2D_polygon") == 0)) {
+  if ((select_list.size() == 1) && (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0)) {
     unsigned face_id;
     bwm_observable_sptr obs = this->find_object(select_list[0]->get_id(), face_id);
 
@@ -300,7 +300,7 @@ void bwm_observer_vgui::create_interior()
   vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
 
   // a polygon should be selected first
-  if ((select_list.size() == 1) && (select_list[0]->type_name().compare("vgui_soview2D_polygon") == 0)) {
+  if ((select_list.size() == 1) && (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0)) {
     unsigned face_id;
     bwm_observable_sptr obs = this->find_object(select_list[0]->get_id(), face_id);
     obs->create_interior();
@@ -314,8 +314,8 @@ bwm_observable_sptr bwm_observer_vgui::selected_face(unsigned& face_id)
 
   // a polygon should be selected first
   if ((select_list.size() == 1) && 
-    (select_list[0]->type_name().compare("vgui_soview2D_polygon") == 0)) {
-    vgui_soview2D_polygon* polygon = static_cast<vgui_soview2D_polygon*> (select_list[0]);
+    (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0)) {
+    bgui_vsol_soview2D_polygon* polygon = static_cast<bgui_vsol_soview2D_polygon*> (select_list[0]);
     bwm_observable_sptr obs = find_object(polygon->get_id(), face_id);
     return obs;
   }
@@ -326,12 +326,12 @@ unsigned bwm_observer_vgui::get_selected_3d_vertex_index(unsigned poly_id)
 {
   bwm_observable_sptr found_obj = 0;
   unsigned found_poly_index = 0;
-  for(vcl_map<bwm_observable_sptr, vcl_map<unsigned, vgui_soview2D_polygon* > >::iterator 
+  for(vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D_polygon* > >::iterator 
     oit = objects_.begin(); 
     oit != objects_.end(); ++oit) {
       unsigned pindex = 0;
-      vcl_map<unsigned, vgui_soview2D_polygon* > polys = oit->second;
-      for(vcl_map<unsigned, vgui_soview2D_polygon* >::iterator pit = polys.begin();
+      vcl_map<unsigned, bgui_vsol_soview2D_polygon* > polys = oit->second;
+      for(vcl_map<unsigned, bgui_vsol_soview2D_polygon* >::iterator pit = polys.begin();
           pit != polys.end(); ++pit, ++pindex)
         if(pit->second && pit->second->get_id() == poly_id) {
             found_obj = oit->first;
@@ -364,7 +364,7 @@ vsol_point_3d_sptr bwm_observer_vgui::selected_vertex()
     bool found = false;
     for(vcl_vector<vgui_soview*>::iterator sit = select_list.begin();
       sit != select_list.end(); ++sit,++list_index)
-      if((*sit)->type_name()!= "vgui_soview2D_polygon")
+      if((*sit)->type_name()!= "bgui_vsol_soview2D_polygon")
           continue;
       else {
         found = true;
@@ -379,7 +379,7 @@ vsol_point_3d_sptr bwm_observer_vgui::selected_vertex()
     unsigned id = select_list[list_index]->get_id();          
     //Here we get the first polygon, no matter how many are selected
 
-    vgui_soview2D_polygon* polygon = static_cast<vgui_soview2D_polygon *> (select_list[list_index]);
+    bgui_vsol_soview2D_polygon* polygon = static_cast<bgui_vsol_soview2D_polygon *> (select_list[list_index]);
  
     if(!polygon) {
       vcl_cout << "Is a face selected?\n";

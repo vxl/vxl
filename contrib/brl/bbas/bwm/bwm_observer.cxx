@@ -2,7 +2,6 @@
 #include "bwm_observable.h"
 
 #include <vgui/vgui_message.h>
-//#include <vgui/vgui_soview2D.h>
 
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>

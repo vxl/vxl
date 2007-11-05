@@ -26,7 +26,7 @@
 #include <vsol/vsol_polygon_3d.h>
 
 #include <vgui/vgui_projection_inspector.h>
-#include <vgui/vgui_soview2D.h>
+//#include <vgui/vgui_soview2D.h>
 #include <vgui/vgui_message.h>
 #include <vgui/vgui_dialog.h>
 
@@ -52,8 +52,8 @@ void bwm_observer_cam::select_proj_plane()
   vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
 
   if ((select_list.size() == 1) && 
-    (select_list[0]->type_name().compare("vgui_soview2D_polygon") == 0)) {
-    vgui_soview2D_polygon* polygon = static_cast<vgui_soview2D_polygon*> (select_list[0]);
+    (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0)) {
+    bgui_vsol_soview2D_polygon* polygon = static_cast<bgui_vsol_soview2D_polygon*> (select_list[0]);
     unsigned face_id;
     bwm_observable_sptr obs = find_object(polygon->get_id(), face_id);
     vgl_homg_plane_3d<double> plane = obs->get_plane(face_id);
@@ -181,7 +181,7 @@ void bwm_observer_cam::proj_poly(vsol_polygon_3d_sptr poly3d,
 
 void bwm_observer_cam::triangulate_meshes()
 {
-  vcl_map<bwm_observable_sptr, vcl_map<unsigned, vgui_soview2D_polygon*> >::iterator it;
+  vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D_polygon*> >::iterator it;
   int obj_count = 0;
   for (it = objects_.begin(); it != objects_.end(); it++, obj_count++) {
     vcl_printf("triangulating mesh %d\n", obj_count);
@@ -282,7 +282,7 @@ bool bwm_observer_cam::handle(const vgui_event &e)
         bool found = false;
         for(vcl_vector<vgui_soview*>::iterator sit = select_list.begin();
             sit!= select_list.end(); ++sit,++list_index)
-          if((*sit)->type_name()!="vgui_soview2D_polygon")
+          if((*sit)->type_name()!="bgui_vsol_soview2D_polygon")
             continue;
           else{
             found = true;
@@ -290,7 +290,7 @@ bool bwm_observer_cam::handle(const vgui_event &e)
           }
         if(!found) return true;
         unsigned id = select_list[list_index]->get_id();
-        vgui_soview2D_polygon* polygon = static_cast<vgui_soview2D_polygon *> (select_list[0]);
+        bgui_vsol_soview2D_polygon* polygon = static_cast<bgui_vsol_soview2D_polygon *> (select_list[0]);
         //deselect the polygon since we have it 
         this->deselect(id);
         vsol_polygon_3d_sptr poly3d;
@@ -423,7 +423,7 @@ bool bwm_observer_cam::intersect(bwm_observable_sptr obj, unsigned face_id,
 // then returns the points in point1 and point2
 bool bwm_observer_cam::intersect(float x1, float y1, float x2, float y2)
 {
-  vcl_map<bwm_observable_sptr, vcl_map<unsigned, vgui_soview2D_polygon* > >::iterator itr = objects_.begin();
+  vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D_polygon* > >::iterator itr = objects_.begin();
   vcl_vector<bwm_observable_sptr> intersecting_obs;
   vgl_homg_point_2d<double> image_point1(x1, y1);
   vgl_homg_point_2d<double> image_point2(x2, y2);
@@ -578,17 +578,17 @@ void bwm_observer_cam::extrude_face(vsol_point_2d_sptr pt)
 
   // a polygon should be selected first
   if (select_list.size() == 2) {
-    if (((select_list[0]->type_name().compare("vgui_soview2D_polygon") == 0) && (select_list[1]->type_name().compare("bwm_soview2D_vertex") == 0)) ||
-    ((select_list[1]->type_name().compare("vgui_soview2D_polygon") == 0) && (select_list[0]->type_name().compare("bwm_soview2D_vertex") == 0)))
+    if (((select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0) && (select_list[1]->type_name().compare("bwm_soview2D_vertex") == 0)) ||
+    ((select_list[1]->type_name().compare("bgui_vsol_soview2D_polygon") == 0) && (select_list[0]->type_name().compare("bwm_soview2D_vertex") == 0)))
   {
-    vgui_soview2D_polygon* poly;
+    bgui_vsol_soview2D_polygon* poly;
     bwm_soview2D_vertex* circle;
 
-    if (select_list[0]->type_name().compare("vgui_soview2D_polygon") == 0) {
-      poly = static_cast<vgui_soview2D_polygon*> (select_list[0]);
+    if (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0) {
+      poly = static_cast<bgui_vsol_soview2D_polygon*> (select_list[0]);
       circle = static_cast<bwm_soview2D_vertex*> (select_list[1]);
     } else {
-      poly = static_cast<vgui_soview2D_polygon*> (select_list[1]);
+      poly = static_cast<bgui_vsol_soview2D_polygon*> (select_list[1]);
       circle = static_cast<bwm_soview2D_vertex*> (select_list[0]);
     }
     unsigned face_id;
@@ -653,7 +653,7 @@ void bwm_observer_cam::divide_face(bwm_observable_sptr obs, unsigned face_id,
  // vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
 
   // a polygon should be selected first
-  //if ((select_list.size() == 1) && (select_list[0]->type_name().compare("vgui_soview2D_polygon") == 0)) {
+  //if ((select_list.size() == 1) && (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0)) {
   //  unsigned face_id;
  //   bwm_observable* obs = this->find_object(select_list[0]->get_id(), face_id);
     intersect(obs, face_id, x1, y1, x2, y2);
@@ -786,7 +786,7 @@ void bwm_observer_cam::save()
     return;
   }
 
-  vcl_map<bwm_observable_sptr, vcl_map<unsigned, vgui_soview2D_polygon* > >::iterator it = objects_.begin();
+  vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D_polygon* > >::iterator it = objects_.begin();
   while (it != objects_.end()) {
     bwm_observable_sptr o = it->first;
     o->save(file.data());

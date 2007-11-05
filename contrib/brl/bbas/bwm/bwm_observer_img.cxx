@@ -2,7 +2,7 @@
 #include <bwm/algo/bwm_algo.h>
 #include <bwm/algo/bwm_image_processor.h>
 
-#include <vgui/vgui_soview2D.h>
+//#include <vgui/vgui_soview2D.h>
 #include <vgui/vgui_projection_inspector.h>
 
 #include <bsol/bsol_algs.h>
@@ -21,11 +21,16 @@ bool bwm_observer_img::handle(const vgui_event &e)
 {
   vgui_projection_inspector pi;
   
-  if (e.type == vgui_BUTTON_DOWN && e.button == vgui_MIDDLE && e.modifier == vgui_SHIFT) {
-    bgui_vsol_soview2D_polyline* p=0;
+  if (e.type == vgui_BUTTON_DOWN && 
+    e.button == vgui_MIDDLE && 
+    e.modifier == vgui_SHIFT) {
+
+    bgui_vsol_soview2D* p=0;
     bwm_soview2D_vertex* v = 0;
-    // get the selected polyline
-    if (p = (bgui_vsol_soview2D_polyline*) get_selected_object("bgui_vsol_soview2D_polyline")) {
+
+    // get the selected polyline or polygon
+    if ((p = get_selected_object("bgui_vsol_soview2D_polygon")) ||
+      (p =  get_selected_object("bgui_vsol_soview2D_polyline"))) {
       // take the position of the first point
       pi.window_to_image_coordinates(e.wx, e.wy, start_x_, start_y_);
       moving_p_ = p;
@@ -35,11 +40,9 @@ bool bwm_observer_img::handle(const vgui_event &e)
     } else if (v = (bwm_soview2D_vertex*) get_selected_object("bwm_soview2D_vertex")) {
       pi.window_to_image_coordinates(e.wx, e.wy, start_x_, start_y_);
       moving_v_ = v;
-      if (v->obj()->type_name() == "bgui_vsol_soview2D_polyline") {
-        moving_p_ = (bgui_vsol_soview2D_polyline*) v->obj();
-        moving_vertex_ = true;
-        moving_polygon_ = false;
-      }
+      moving_p_ = v->obj();
+      moving_vertex_ = true;
+      moving_polygon_ = false;
       return true;
     }
   } else if (e.type == vgui_MOTION && e.button == vgui_MIDDLE && 
@@ -49,7 +52,8 @@ bool bwm_observer_img::handle(const vgui_event &e)
     float x_diff = x-start_x_;
     float y_diff = y-start_y_;
     moving_p_->translate(x_diff, y_diff);
-    // move all the vertices with polyline
+
+    // move all the vertices of the polyline or polygon
     vcl_vector<bwm_soview2D_vertex*> vertices = vert_list[moving_p_->get_id()];
     for (unsigned i=0; i<vertices.size(); i++) {
       bwm_soview2D_vertex* v = vertices[i];
@@ -59,6 +63,7 @@ bool bwm_observer_img::handle(const vgui_event &e)
     start_y_ = y;
     post_redraw();
     return true;
+
   } else if (e.type == vgui_MOTION && e.button == vgui_MIDDLE && 
     e.modifier == vgui_SHIFT && moving_vertex_) {
     float x, y;
@@ -68,8 +73,18 @@ bool bwm_observer_img::handle(const vgui_event &e)
     // find the polyline including this vertex
     unsigned i = moving_v_->vertex_indx();
     moving_v_->translate(x_diff, y_diff);
-    moving_p_->sptr()->vertex(i)->set_x( moving_p_->sptr()->vertex(i)->x() + x_diff );
-    moving_p_->sptr()->vertex(i)->set_y( moving_p_->sptr()->vertex(i)->y() + y_diff );
+    if (moving_p_->type_name().compare("bgui_vsol_soview2D_polygon") == 0) {
+      bgui_vsol_soview2D_polygon* polygon = (bgui_vsol_soview2D_polygon*) moving_p_;
+      polygon->sptr()->vertex(i)->set_x( polygon->sptr()->vertex(i)->x() + x_diff );
+      polygon->sptr()->vertex(i)->set_y( polygon->sptr()->vertex(i)->y() + y_diff );
+    } else if (moving_p_->type_name().compare("bgui_vsol_soview2D_polyline") == 0) {
+      bgui_vsol_soview2D_polyline* polyline = (bgui_vsol_soview2D_polyline*) moving_p_;
+      polyline->sptr()->vertex(i)->set_x( polyline->sptr()->vertex(i)->x() + x_diff );
+      polyline->sptr()->vertex(i)->set_y( polyline->sptr()->vertex(i)->y() + y_diff );
+    } else {
+      vcl_cerr << moving_p_->type_name() << " is NOT movable!!!!" << vcl_endl;
+    }
+
     start_x_ = x;
     start_y_ = y;
     post_redraw();
@@ -188,7 +203,7 @@ void bwm_observer_img::delete_selected()
 
 void bwm_observer_img::delete_all() 
 {
-  vcl_map<unsigned, vgui_soview2D*>::iterator it = obj_list.begin();
+  vcl_map<unsigned, bgui_vsol_soview2D*>::iterator it = obj_list.begin();
   while (it != obj_list.end()) {
     delete_polygon(it->second);
     it = obj_list.begin();

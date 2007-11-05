@@ -148,7 +148,7 @@ bool bwm_observer_rat_cam::shift_camera(double dx, double dy)
   rat_cam->set_image_offset(u_off + dx, v_off + dy);
   
 // take this to the camera tableau  
-  /*vcl_map<bwm_observable_sptr, vcl_vector<vgui_soview2D_polygon* > >::iterator objit;
+  /*vcl_map<bwm_observable_sptr, vcl_vector<bgui_vsol_soview2D_polygon* > >::iterator objit;
   for (objit = objects_.begin(); objit != objects_.end(); objit++) {
     vgui_message msg;
     msg.from = objit->first;
@@ -267,7 +267,7 @@ void bwm_observer_rat_cam::save_selected()
     return;
   }
   // TODO: check if object is selected 
-  vcl_map<bwm_observable_sptr, vcl_map<unsigned, vgui_soview2D_polygon* > >::iterator it = objects_.begin();
+  vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D_polygon* > >::iterator it = objects_.begin();
   while (it != objects_.end()) {
     bwm_observable_sptr o = it->first;
     if (use_lvcs){
@@ -307,7 +307,7 @@ void bwm_observer_rat_cam::save_all()
   }
 
   int mesh_idx = 0;
-  vcl_map<bwm_observable_sptr, vcl_map<unsigned, vgui_soview2D_polygon* > >::iterator it = objects_.begin();
+  vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D_polygon* > >::iterator it = objects_.begin();
   while (it != objects_.end()) {
     vcl_ostringstream meshname;
     vcl_ostringstream fullpath;
@@ -360,7 +360,7 @@ void bwm_observer_rat_cam::save_gml()
   vcl_fprintf (fp, "<gml:description>%s</gml:description>\n",model_name.c_str());
   vcl_fprintf (fp, "<gml:name>%s</gml:name>\n",model_name.c_str());
 
-  vcl_map<bwm_observable_sptr, vcl_map<unsigned, vgui_soview2D_polygon* > >::iterator it;
+  vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D_polygon* > >::iterator it;
   int obj_count = 0;
   for (it = objects_.begin(); it != objects_.end(); it++, obj_count++) {
     bwm_observable_sptr obj = it->first;
@@ -416,7 +416,7 @@ void bwm_observer_rat_cam::save_kml()
   
   vcl_fprintf (fp, "    <MultiGeometry>\n");
 
-  vcl_map<bwm_observable_sptr, vcl_map<unsigned, vgui_soview2D_polygon* > >::iterator it;
+  vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D_polygon* > >::iterator it;
   int obj_count = 0;
   for (it = objects_.begin(); it != objects_.end(); it++, obj_count++) {
     bwm_observable_sptr obj = it->first;
@@ -463,7 +463,7 @@ void bwm_observer_rat_cam::save_x3d()
   vcl_fprintf(fp, "#VRML V2.0 utf8\n");
   vcl_fprintf(fp, "PROFILE Immersive\n\n");
 
-  vcl_map<bwm_observable_sptr, vcl_map<unsigned, vgui_soview2D_polygon*> >::iterator it;
+  vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D_polygon*> >::iterator it;
   int obj_count = 0;
   for (it = objects_.begin(); it != objects_.end(); it++, obj_count++) {
     bwm_observable_sptr obj = it->first;
@@ -499,7 +499,7 @@ void bwm_observer_rat_cam::save_kml_collada()
 
   // guess at ground height = lowest vertex
   double minz = 1e6;
-  vcl_map<bwm_observable_sptr, vcl_map<unsigned, vgui_soview2D_polygon* > >::iterator it;
+  vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D_polygon* > >::iterator it;
  // vcl_map<int, dbmsh3d_vertex*>::iterator vit;
   for (it = objects_.begin(); it != objects_.end(); it++) {
     bwm_observable_sptr obj = it->first;
@@ -862,7 +862,7 @@ void bwm_observer_rat_cam::generate_textures()
   bwm_texture_map_generator tex_generator;
 
   // each object independantly for now.
-  vcl_map<bwm_observable_sptr, vcl_map<unsigned, vgui_soview2D_polygon* > >::iterator it;
+  vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D_polygon* > >::iterator it;
   int mesh_idx = 0;
   for (it = objects_.begin(); it != objects_.end(); it++, mesh_idx++) {
     bwm_observable_sptr o = it->first;
