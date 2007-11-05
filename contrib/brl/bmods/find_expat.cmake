@@ -1,0 +1,12 @@
+IF (WIN32)
+  SET (HAS_EXPAT "YES")
+ELSE (WIN32)
+ FIND_LIBRARY(EXPAT_LIBRARY_PATH expat_config.h
+    ${vxl_SOURCE_DIR}/contrib/brl/b3p/expatpp/lib
+  )
+
+  SET (HAS_EXPAT "NO")
+  IF (EXPAT_LIBRARY_PATH)
+    SET (HAS_EXPAT "YES")
+  ENDIF (EXPAT_LIBRARY_PATH)
+ENDIF(WIN32)
