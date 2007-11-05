@@ -4,6 +4,8 @@
 INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/UseBGUI3D.cmake )
 IF(HAS_BGUI3D)
 
+IF(BUILD_EXPAT) 
+MESSAGE("YEEEEE")
 # Set CMake options for using vgui
 INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
 
@@ -70,4 +72,5 @@ SUBDIRS(tests)
 
 ENDIF(TIFF_FOUND)
 ENDIF(GEOTIFF_FOUND)
+ENDIF(BUILD_EXPAT) 
 ENDIF(HAS_BGUI3D)
