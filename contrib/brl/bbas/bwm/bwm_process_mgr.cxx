@@ -41,7 +41,6 @@ bwm_command_sptr bwm_process_mgr::load_tab_process(vcl_string name,
   vcl_map<vcl_string, bwm_command_sptr>::iterator iter = process_map.find(name);
   if (iter != process_map.end()) {
     bwm_command_sptr c = iter->second;
-    //if (c->name().compare("bwm_tab_process_command") == 0) {
     if (dynamic_cast<bwm_tab_process_command* > (c.as_pointer())) {
       bwm_tab_process_command *comm = static_cast<bwm_tab_process_command* > (c.as_pointer());
       comm->set_tableau(tab);

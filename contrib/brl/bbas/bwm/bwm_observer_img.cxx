@@ -21,49 +21,65 @@ bool bwm_observer_img::handle(const vgui_event &e)
 {
   vgui_projection_inspector pi;
   
-  if (e.type == vgui_BUTTON_DOWN && e.button == vgui_LEFT && e.modifier == vgui_SHIFT) {
+  if (e.type == vgui_BUTTON_DOWN && e.button == vgui_MIDDLE && e.modifier == vgui_SHIFT) {
     bgui_vsol_soview2D_polyline* p=0;
-    vgui_soview2D_circle* c = 0;
+    bwm_soview2D_vertex* v = 0;
     // get the selected polyline
     if (p = (bgui_vsol_soview2D_polyline*) get_selected_object("bgui_vsol_soview2D_polyline")) {
       // take the position of the first point
       pi.window_to_image_coordinates(e.wx, e.wy, start_x_, start_y_);
-      moving_poly_ = p;
+      moving_p_ = p;
       moving_polygon_ = true;
       moving_vertex_ = false;
       return true;
-    } else if (c = (vgui_soview2D_circle*) get_selected_object("vgui_soview2D_circle")) {
+    } else if (v = (bwm_soview2D_vertex*) get_selected_object("bwm_soview2D_vertex")) {
       pi.window_to_image_coordinates(e.wx, e.wy, start_x_, start_y_);
-      moving_vertex_ = true;
-      moving_polygon_ = true;
+      moving_v_ = v;
+      if (v->obj()->type_name() == "bgui_vsol_soview2D_polyline") {
+        moving_p_ = (bgui_vsol_soview2D_polyline*) v->obj();
+        moving_vertex_ = true;
+        moving_polygon_ = false;
+      }
       return true;
     }
-  } else if (e.type == vgui_MOTION && e.button == vgui_LEFT && 
+  } else if (e.type == vgui_MOTION && e.button == vgui_MIDDLE && 
     e.modifier == vgui_SHIFT && moving_polygon_) {
     float x, y;
     pi.window_to_image_coordinates(e.wx, e.wy, x, y);
     float x_diff = x-start_x_;
     float y_diff = y-start_y_;
-    moving_poly_->translate(x-start_x_, y-start_y_);
+    moving_p_->translate(x_diff, y_diff);
     // move all the vertices with polyline
-    vcl_vector<vgui_soview2D_circle*> vertices = vert_list[moving_poly_->get_id()];
+    vcl_vector<bwm_soview2D_vertex*> vertices = vert_list[moving_p_->get_id()];
     for (unsigned i=0; i<vertices.size(); i++) {
-      vgui_soview2D_circle* v = vertices[i];
+      bwm_soview2D_vertex* v = vertices[i];
       v->translate(x_diff, y_diff);
     }
     start_x_ = x;
     start_y_ = y;
     post_redraw();
     return true;
-  } else if (e.type == vgui_MOTION && e.button == vgui_LEFT && 
+  } else if (e.type == vgui_MOTION && e.button == vgui_MIDDLE && 
     e.modifier == vgui_SHIFT && moving_vertex_) {
     float x, y;
     pi.window_to_image_coordinates(e.wx, e.wy, x, y);
     float x_diff = x-start_x_;
     float y_diff = y-start_y_;
     // find the polyline including this vertex
+    unsigned i = moving_v_->vertex_indx();
+    moving_v_->translate(x_diff, y_diff);
+    moving_p_->sptr()->vertex(i)->set_x( moving_p_->sptr()->vertex(i)->x() + x_diff );
+    moving_p_->sptr()->vertex(i)->set_y( moving_p_->sptr()->vertex(i)->y() + y_diff );
+    start_x_ = x;
+    start_y_ = y;
+    post_redraw();
+    return true;
+  } else if (e.type == vgui_BUTTON_UP && e.button == vgui_MIDDLE && e.modifier == vgui_SHIFT) {
+    this->deselect_all();
+    moving_vertex_ = false;
+    moving_polygon_ = false;
+    return true;
   }
-    
   return bgui_vsol2D_tableau::handle(e);
 }
 
@@ -79,15 +95,17 @@ void bwm_observer_img::create_polygon(vsol_polygon_2d_sptr poly2d)
   bwm_algo::get_vertices_xy(poly2d, &x, &y);
   unsigned nverts = poly2d->size();
 
-  vcl_vector<vgui_soview2D_circle*> verts;
-  this->set_foreground(0,1,0);
-  for(unsigned i = 0; i<nverts; ++i) {
-    vgui_soview2D_circle* circle = this->add_circle(x[i],y[i],1.0f);
-    verts.push_back(circle);
-  }
   this->set_foreground(1,1,0);
   bgui_vsol_soview2D_polygon* polygon = this->add_vsol_polygon_2d(poly2d);
   obj_list[polygon->get_id()] = polygon;
+
+  vcl_vector<bwm_soview2D_vertex*> verts;
+  this->set_foreground(0,1,0);
+  for(unsigned i = 0; i<nverts; ++i) {
+    bwm_soview2D_vertex* vertex = new bwm_soview2D_vertex(x[i],y[i],2.0f, polygon, i);
+    this->add(vertex);
+    verts.push_back(vertex);
+  }
   vert_list[polygon->get_id()] = verts;
 }
 
@@ -96,16 +114,16 @@ void bwm_observer_img::create_polyline(vsol_polyline_2d_sptr poly2d)
   float *x, *y;
   bwm_algo::get_vertices_xy(poly2d, &x, &y);
   unsigned nverts = poly2d->size();
+   bgui_vsol_soview2D_polyline* polyline = this->add_vsol_polyline_2d(poly2d);
+  obj_list[polyline->get_id()] = polyline;
 
-  vcl_vector<vgui_soview2D_circle*> verts;
+  vcl_vector<bwm_soview2D_vertex*> verts;
   this->set_foreground(0,1,0);
   for(unsigned i = 0; i<nverts; ++i) {
-    vgui_soview2D_circle* circle = this->add_circle(x[i],y[i],1.0f);
-    verts.push_back(circle);
+    bwm_soview2D_vertex* vertex = new bwm_soview2D_vertex(x[i],y[i],1.0f, polyline, i);
+    this->add(vertex);
+    verts.push_back(vertex);
   }
-
-  bgui_vsol_soview2D_polyline* polyline = this->add_vsol_polyline_2d(poly2d);
-  obj_list[polyline->get_id()] = polyline;
   vert_list[polyline->get_id()] = verts;
 }
 
@@ -117,21 +135,9 @@ void bwm_observer_img::create_point(vsol_point_2d_sptr p)
 
 bool bwm_observer_img::get_selected_box(vsol_box_2d_sptr & box)
 {
-  /*vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
-  vcl_vector<vgui_soview*> boxes;
-
-  for (unsigned i=0; i<select_list.size(); i++) {
-    vcl_cout << select_list[i]->type_name();
-    if (select_list[i]->type_name().compare("bgui_vsol_soview2D_polygon") == 0) {
-      boxes.push_back(select_list[i]);
-    }
-  }
-
-  if (boxes.size() == 1) {*/
 
   bgui_vsol_soview2D_polygon* p;
   if (p = (bgui_vsol_soview2D_polygon*)get_selected_object("bgui_vsol_soview2D_polygon")) {
-  //if (p != 0) {  
     vsol_polygon_2d_sptr poly = p->sptr();
     box = poly->get_bounding_box();
     return true;
@@ -149,7 +155,7 @@ bgui_vsol_soview2D* bwm_observer_img::get_selected_object(vcl_string type)
 
   for (unsigned i=0; i<select_list.size(); i++) {
     vcl_cout << select_list[i]->type_name();
-    if (select_list[i]->type_name().compare(type) == 0) {//"bgui_vsol_soview2D_polygon") == 0) {
+    if (select_list[i]->type_name().compare(type) == 0) {
       objs.push_back((bgui_vsol_soview2D*) select_list[i]);
     }
   }
@@ -159,7 +165,8 @@ bgui_vsol_soview2D* bwm_observer_img::get_selected_object(vcl_string type)
     return obj;
   }
 
-  vcl_cerr << "The number of selected " << type << " is " << objs.size() << ". Please select only one!!!" << vcl_endl;
+  vcl_cerr << "The number of selected " << type << " is " << 
+    objs.size() << ". Please select only one!!!" << vcl_endl;
   return 0;
 }
 
@@ -169,9 +176,9 @@ void bwm_observer_img::delete_selected()
   vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
 
   if ((select_list.size() == 1) && 
-      ((select_list[0]->type_name().compare("vgui_soview2D_polygon") == 0) ||
-       (select_list[0]->type_name().compare("vgui_soview2D_linestrip") == 0) || 
-       (select_list[0]->type_name().compare("vgui_soview2D_point") == 0))) {
+      ((select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0) ||
+       (select_list[0]->type_name().compare("bgui_vsol_soview2D_polyline") == 0) || 
+       (select_list[0]->type_name().compare("bgui_vsol_soview2D_point") == 0))) {
 
       // remove the polygon and the vertices
       delete_polygon(select_list[0]);
@@ -197,7 +204,7 @@ void bwm_observer_img::delete_polygon(vgui_soview* obj)
   obj_list.erase(poly_id);
 
   // remove the vertices
-  vcl_vector<vgui_soview2D_circle*>  v = vert_list[poly_id];
+  vcl_vector<bwm_soview2D_vertex*>  v = vert_list[poly_id];
   for (unsigned i=0; i<v.size(); i++) {
     this->remove(v[i]);    
   }

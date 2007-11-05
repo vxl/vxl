@@ -4,7 +4,8 @@
 #include <vcl_vector.h>
 #include <vcl_map.h>
 
-//#include <vgui/vgui_easy2d_tableau.h>
+#include <bwm/algo/bwm_soview2D_vertex.h>
+
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_soview2D.h>
 
@@ -74,6 +75,7 @@ public:
   void toggle_show_image_path();
 
 protected:
+
   bwm_observer_img();
 
   bgui_image_tableau_sptr img_tab_;
@@ -86,16 +88,15 @@ protected:
   vcl_map<unsigned, vgui_soview2D*> obj_list;
 
   // vector of vertices are mapped soview ID for each polygon
-  vcl_map<unsigned, vcl_vector<vgui_soview2D_circle* > > vert_list;
+  vcl_map<unsigned, vcl_vector<bwm_soview2D_vertex* > > vert_list;
 
   float start_x_, start_y_;
-  bgui_vsol_soview2D_polyline* moving_poly_;
-
+  bgui_vsol_soview2D_polyline* moving_p_;
+  bwm_soview2D_vertex* moving_v_;
   bool moving_vertex_, moving_polygon_;
 
   void delete_polygon(vgui_soview* obj);
 
-  //bgui_vsol_soview2D_polygon* get_selected_polygon();
   bgui_vsol_soview2D* get_selected_object(vcl_string type);
 };
 

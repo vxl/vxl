@@ -92,22 +92,24 @@ void bwm_observer_vgui::handle_update(vgui_message const& msg,
       int face_id = iter->first;
       vsol_polygon_3d_sptr obj = iter->second;
       vsol_polygon_2d_sptr poly_2d;
-      proj_poly(obj, poly_2d);
+      unsigned nverts = poly_2d->size();
       float *x, *y;
       bwm_algo::get_vertices_xy(poly_2d, &x, &y);
-      unsigned nverts = poly_2d->size();
+
+      this->set_foreground(1,1,0);
+      vgui_soview2D_polygon* polygon = this->add_polygon(nverts, x, y);
+      poly_list[face_id] = polygon;
+
+      proj_poly(obj, poly_2d);
       vcl_vector<bwm_soview2D_vertex*> verts;
       this->set_foreground(0,1,0);
       for(unsigned i = 0; i<nverts; ++i) {
-        bwm_soview2D_vertex* sopt = new bwm_soview2D_vertex(x[i], y[i], 1.0f);
+        bwm_soview2D_vertex* sopt = new bwm_soview2D_vertex(x[i], y[i], 2.0f, polygon, i);
         this->add(sopt);
         verts.push_back(sopt);
       }
     
       poly_verts[face_id] = verts;
-      this->set_foreground(1,1,0);
-      vgui_soview2D_polygon* polygon = this->add_polygon(nverts, x, y);
-      poly_list[face_id] = polygon;
 
       // get the inner faces connected to this face
       vcl_map<int, vsol_polygon_3d_sptr> inner_faces = observable->extract_inner_faces(face_id);
