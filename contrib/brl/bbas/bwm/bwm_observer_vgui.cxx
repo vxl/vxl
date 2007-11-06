@@ -49,7 +49,7 @@ bool bwm_observer_vgui::handle(const vgui_event& e)
         add_cross(x, y, 2.0);
         return true;
     }
-    return vgui_easy2D_tableau::handle(e);
+    return base::handle(e);
 }
 void bwm_observer_vgui::add_cross(float x, float y, float r)
 {

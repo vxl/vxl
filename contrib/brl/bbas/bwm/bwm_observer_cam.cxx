@@ -325,7 +325,7 @@ bool bwm_observer_cam::handle(const vgui_event &e)
     } */
     //////////////////////////////////////////////////////////////////////
 
-    return bwm_observer_vgui::handle(e);
+    return base::handle(e);
 }
 
 //********************** Protected Methods

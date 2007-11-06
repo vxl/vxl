@@ -30,9 +30,10 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer//, public
 {
 public:
 
+  typedef bwm_observer_img base;
+
   bwm_observer_vgui(bgui_image_tableau_sptr const& img)
-    : //vgui_easy2D_tableau(img), img_(img) 
-  bwm_observer_img(img) {corr_.second = 0;}
+    : bwm_observer_img(img) {corr_.second = 0;}
 
   virtual ~bwm_observer_vgui() {}
 
@@ -81,7 +82,6 @@ public:
 
 protected:
 
-  //bgui_image_tableau_sptr img_;
   bwm_observer_vgui() { corr_.second = 0; }
 
   //: the current correspondence point
