@@ -116,7 +116,7 @@ namespace
                           vgui_pixel_convert( Rmap[(unsigned)(in(i,j,0))+O],
                                               Gmap[(unsigned)(in(i,j,1))+O],
                                               Bmap[(unsigned)(in(i,j,2))+O],
-                                              Xmap[(unsigned)(0)+O],
+                                              Xmap[(unsigned)(rmp->max_X_)],
                                               *(out+i+j*hstep) );
                       return true;
                     }
@@ -127,7 +127,7 @@ namespace
                           vgui_pixel_convert( Rmap[(unsigned)(in(i,j,0))+O],
                                               Gmap[(unsigned)(in(i,j,1))+O],
                                               Bmap[(unsigned)(in(i,j,3))+O],
-                                              Xmap[(unsigned)(0+O)],
+                                              Xmap[(unsigned)(rmp->max_X_)],
                                               *(out+i+j*hstep) );
                       return true;
                     }
@@ -138,7 +138,7 @@ namespace
                           vgui_pixel_convert( Rmap[(unsigned)(in(i,j,0))+O],
                                               Gmap[(unsigned)(in(i,j,2))+O],
                                               Bmap[(unsigned)(in(i,j,3))+O],
-                                              Xmap[(unsigned)(0+O)],
+                                              Xmap[(unsigned)(rmp->max_X_)],
                                               *(out+i+j*hstep) );
                       return true;
                     }
@@ -149,7 +149,7 @@ namespace
                           vgui_pixel_convert( Rmap[(unsigned)(in(i,j,1))+O],
                                               Gmap[(unsigned)(in(i,j,2))+O],
                                               Bmap[(unsigned)(in(i,j,3))+O],
-                                              Xmap[(unsigned)(0+O)],
+                                              Xmap[(unsigned)(rmp->max_X_)],
                                               *(out+i+j*hstep) );
                       return true;
                     }
