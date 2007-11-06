@@ -103,8 +103,6 @@ public:
 protected:
 
   bwm_observer_cam* my_observer_;
-
-  vcl_string select_file();
   
 };
 

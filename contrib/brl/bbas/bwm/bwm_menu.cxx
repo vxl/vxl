@@ -16,13 +16,12 @@ vgui_menu bwm_menu::add_to_menu (vgui_menu& top_menu)
   load_menu.add("Exit..." , exit);
   top_menu.add("FILE   ", load_menu);
 
-  vgui_menu corr_group_menu;
-  MENU_ADD_PROCESS_NAME("Correspondence Mode", "corr_mode", corr_group_menu);
-  MENU_ADD_PROCESS_NAME("Record Correspondences", "rec_corr", corr_group_menu);
-  MENU_ADD_PROCESS_NAME("Save Correspondences", "save_corr", corr_group_menu);
-  MENU_ADD_PROCESS_NAME("Delete Last Correspondence", "del_last_corr", corr_group_menu);
-  MENU_ADD_PROCESS_NAME("Delete All Correspondences", "del_corr", corr_group_menu);
-  MENU_ADD_PROCESS_NAME("Move to First Correspondence", "move_to_corr", corr_group_menu);
-  top_menu.add("PROCESSES ", corr_group_menu);
+  vgui_menu process_menu;
+
+  vgui_menu corr_menu;
+  MENU_MENU_ADD_PROCESS("correspondence", corr_menu);
+  process_menu.add("Correspondences",corr_menu);
+  
+  top_menu.add("PROCESSES ", process_menu);
   return top_menu;
 }

@@ -17,6 +17,7 @@
 #include <vpgl/vpgl_rational_camera.h>
 
 class bwm_tableau_mgr {
+
 public:
   typedef enum{PROJECTIVE=0, RATIONAL=1} BWM_CAMERA_TYPES;
 
@@ -62,15 +63,6 @@ public:
 
   void exit() { vgui::quit(); }
 
-  //: change the mode of the correspondence
-  void mode_corr();
-  //: record the current correspondences into memory
-  void rec_corr();
-  //: save the current correspondences into a file
-  void save_corr();
-  void delete_last_corr();
-  void delete_corr();
-  void move_to_corr();
   void display_image_path(bool display){display_image_path_=display;}
 
   static vcl_map<vcl_string, bwm_command_sptr> tab_types_;
@@ -91,8 +83,6 @@ private:
   vil_image_resource_sptr load_image(vcl_string& filename, vgui_range_map_params_sptr& rmps);
   
   vgui_range_map_params_sptr range_params(vil_image_resource_sptr const& image);
-
-  vcl_string bwm_tableau_mgr::select_file();
   
   void add_to_grid(vgui_tableau_sptr tab);
 

@@ -23,6 +23,7 @@ SET(bwm_algo_sources
    bwm_soview2D_cross.cxx         bwm_soview2D_cross.h
                                   bwm_soview2D_vertex.h
    bwm_image_processor.cxx        bwm_image_processor.h
+   bwm_utils.cxx                  bwm_utils.h
 )
 
 

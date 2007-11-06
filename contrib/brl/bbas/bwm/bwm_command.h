@@ -19,6 +19,7 @@
 #include <vgui/vgui_command.h>
 #include <vgui/vgui_tableau_sptr.h>
 #include <vgui/vgui_tableau.h>
+#include <vgui/vgui_menu.h>
 
 #include <vcl_string.h>
 
@@ -43,6 +44,19 @@ class bwm_tab_process_command : public bwm_command
 
 protected:
   vgui_tableau_sptr tableau_;
+};
+
+class bwm_menu_process_command : public bwm_command
+{
+ public:
+  bwm_menu_process_command() {}
+  virtual ~bwm_menu_process_command() {}
+  virtual vcl_string name() { return "bwm_tab_process_command"; }
+
+  virtual void set_menu(vgui_menu& menu) {menu_ = menu; }
+
+protected:
+  vgui_menu menu_;
 };
 
 #endif //bwm_command_h_

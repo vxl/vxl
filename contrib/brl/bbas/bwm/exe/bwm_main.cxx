@@ -44,11 +44,7 @@ int main(int argc, char** argv)
   REG_TABLEAU(bwm_load_coin3d_command);
 
   // correspondence processes
-  REG_PROCESS(bwm_corr_mode_command);
-  REG_PROCESS(bwm_rec_corr_command);
-  REG_PROCESS(bwm_save_corr_command);
-  REG_PROCESS(bwm_del_last_corr_command);
-  REG_PROCESS(bwm_del_corr_command);
+  REG_PROCESS(bwm_corresp_process_command);
 
   // image processes
   REG_PROCESS(bwm_histogram_process_command);
@@ -56,8 +52,6 @@ int main(int argc, char** argv)
   REG_PROCESS(bwm_range_map_process_command);
   REG_PROCESS(bwm_step_edge_process_command);
   REG_PROCESS(bwm_jim_process_command);
-
-  REG_PROCESS(bwm_move_to_corr_command);
 
   // Set up the app_menu
   vgui_menu main_menu;

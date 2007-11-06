@@ -30,5 +30,7 @@
 #define MENU_TAB_ADD_PROCESS(name, process_name, menu, tab) menu.add(name, \
   bwm_process_mgr::instance()->load_tab_process(process_name, tab).as_pointer())
 
+#define MENU_MENU_ADD_PROCESS(process_name, menu) \
+  bwm_process_mgr::instance()->load_menu_process(process_name, menu).as_pointer()
 
 #endif //bwm_command_h_

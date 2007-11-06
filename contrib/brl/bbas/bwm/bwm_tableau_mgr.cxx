@@ -18,6 +18,7 @@
 #include "bwm_load_commands.h"
 #include "algo/bwm_rat_proj_camera.h"
 #include "algo/bwm_image_processor.h"
+#include "algo/bwm_utils.h"
 
 #include <vgui/vgui_poly_tableau.h>
 #include <bgui/bgui_image_tableau.h>
@@ -375,54 +376,6 @@ void bwm_tableau_mgr::create_lidar_tableau(vcl_string name,
   vgui_viewer2D_tableau_new viewer(picker);
   add_to_grid(viewer);
   tableaus_[name] = tab;
-}
-
-// change the mode of the correspondence
-void bwm_tableau_mgr::mode_corr()
-{
-  vgui_dialog params ("Correspondence Mode");
-  vcl_string empty="";
-  vcl_vector<vcl_string> modes;
-  int mode = bwm_observer_mgr::instance()->corr_mode();
-  
-  modes.push_back("Image to Image");
-  modes.push_back("World to Image");  
-    
-  vcl_string name;
-  params.choice("Correspondence Mode", modes, mode); 
-  if (!params.ask())
-    return;
-
-  bwm_observer_mgr::instance()->set_corr_mode(static_cast<bwm_observer_mgr::BWM_CORR_MODE> (mode));
-}
-
-// record the current correspondences into memory
-void bwm_tableau_mgr::rec_corr()
-{
-  bwm_observer_mgr::instance()->collect_corr();
-}
-
-//: save the current correspondences into a file
-void bwm_tableau_mgr::save_corr()
-{
-  vcl_string fname = select_file();
-  vcl_ofstream s(fname.data());
-  bwm_observer_mgr::instance()->save_corr_XML(s);
-}
-
-void bwm_tableau_mgr::delete_last_corr() 
-{
-  bwm_observer_mgr::instance()->delete_last_corr();
-}
-
-void bwm_tableau_mgr::delete_corr() 
-{
-  bwm_observer_mgr::instance()->delete_all_corr();
-}
-
-void bwm_tableau_mgr::move_to_corr()
-{
-  bwm_observer_mgr::instance()->move_to_corr();
 }
 
 void bwm_tableau_mgr::load_tableaus()
@@ -887,7 +840,7 @@ void bwm_tableau_mgr::load_lidar_tableau()
 
 bwm_io_config_parser* bwm_tableau_mgr::parse_config()
 {
-  vcl_string fname = select_file();
+  vcl_string fname = bwm_utils::select_file();
   bwm_io_config_parser* parser = new bwm_io_config_parser();
   vcl_FILE* xmlFile = vcl_fopen(fname.c_str(), "r");
   if (!xmlFile){
@@ -940,23 +893,6 @@ void bwm_tableau_mgr::remove_tableau()
   grid_->layout_grid2();
 }
 
-vcl_string bwm_tableau_mgr::select_file()
-{
-  vgui_dialog params ("File Open");
-  vcl_string ext, file, empty="";
-
-  params.file ("Open...", ext, file);  
-  if (!params.ask())
-    return empty;
-
-  if (file == "") {
-    vgui_dialog error ("Error");
-    error.message ("Please specify a input file (prefix)." );
-    error.ask();
-    return empty;
-  }
-  return file;
-}
 
 vil_image_resource_sptr bwm_tableau_mgr::load_image(vcl_string& filename, 
                                                     vgui_range_map_params_sptr& rmps)

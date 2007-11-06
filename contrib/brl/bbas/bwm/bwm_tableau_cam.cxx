@@ -3,6 +3,7 @@
 #include "bwm_observer_mgr.h"
 #include "bwm_observable_mesh.h"
 #include "bwm_tableau_text.h"
+#include "algo/bwm_utils.h"
 
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
@@ -254,6 +255,7 @@ void bwm_tableau_cam::create_polygon_mesh()
 {
   // first lock the bgui_image _tableau
   my_observer_->image_tableau()->lock_linenum(true);
+  bwm_observer_mgr::instance()->stop_corr();
   vsol_polygon_2d_sptr poly2d;
   set_color(1, 0, 0);
   pick_polygon(poly2d);
@@ -311,6 +313,7 @@ void bwm_tableau_cam::divide_face()
   float x1, y1, x2, y2;
   unsigned face_id;
 
+  bwm_observer_mgr::instance()->stop_corr();
   bwm_observable_sptr obj = my_observer_->selected_face(face_id);
   if (obj) {
     pick_line(&x1, &y1, &x2, &y2);
@@ -321,6 +324,7 @@ void bwm_tableau_cam::divide_face()
 
 void bwm_tableau_cam::create_inner_face()
 {
+  bwm_observer_mgr::instance()->stop_corr();
   vsol_polygon_2d_sptr poly2d;
   set_color(1, 0, 0);
   pick_polygon(poly2d);
@@ -349,6 +353,7 @@ void bwm_tableau_cam::select_proj_plane()
 
 void bwm_tableau_cam::define_proj_plane()
 {
+  bwm_observer_mgr::instance()->stop_corr();
   // pick the ground truth line
   float x1, y1, x2, y2;
   pick_line(&x1, &y1, &x2, &y2);
@@ -402,7 +407,7 @@ void bwm_tableau_cam::label_wall()
 void bwm_tableau_cam::load_mesh()
 {
   // get the file name for the mesh
-  vcl_string file = select_file();
+  vcl_string file = bwm_utils::select_file();
 
   // load the mesh from the given file
   bwm_observable_mesh_sptr obj = new bwm_observable_mesh();
@@ -413,7 +418,7 @@ void bwm_tableau_cam::load_mesh()
 void bwm_tableau_cam::load_mesh_multiple()
 {
   // read txt file
-  vcl_string master_filename = select_file();
+  vcl_string master_filename = bwm_utils::select_file();
   vcl_ifstream file_inp(master_filename.data());
   if (!file_inp.good()) {
     vcl_cerr << "error opening file "<< master_filename <<vcl_endl;
@@ -491,20 +496,4 @@ bool bwm_tableau_cam::handle(const vgui_event& e)
 }
 
 // Private Methods
-vcl_string bwm_tableau_cam::select_file()
-{
-  vgui_dialog params ("File Open");
-  vcl_string ext, file, empty="";
 
-  params.file ("Open...", ext, file);  
-  if (!params.ask())
-    return empty;
-
-  if (file == "") {
-    vgui_dialog error ("Error");
-    error.message ("Please specify a input file (prefix)." );
-    error.ask();
-    return empty;
-  }
-  return file;
-}

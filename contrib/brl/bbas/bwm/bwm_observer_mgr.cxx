@@ -1,5 +1,10 @@
 #include "bwm_observer_mgr.h"
+#include "algo/bwm_utils.h"
+
 #include <vsl/vsl_basic_xml_element.h>
+#include <vgui/vgui_dialog.h>
+
+#include <vcl_iostream.h>
 
 bwm_observer_cam* bwm_observer_mgr::BWM_MASTER_OBSERVER = 0;
 
@@ -37,9 +42,25 @@ void bwm_observer_mgr::remove(bwm_observer* observer)
       observers_.erase(observers_.begin()+i);
 }
 
+void bwm_observer_mgr::set_corr_mode()
+{
+  vgui_dialog params ("Correspondence Mode");
+  vcl_string empty="";
+  vcl_vector<vcl_string> modes;
+  int mode = bwm_observer_mgr::instance()->corr_mode();
+  
+  modes.push_back("Image to Image");
+  modes.push_back("World to Image");  
+    
+  vcl_string name;
+  params.choice("Correspondence Mode", modes, mode); 
+  if (!params.ask())
+    return;
+  corr_mode_ = static_cast<bwm_observer_mgr::BWM_CORR_MODE> (mode);
+}
+
 void bwm_observer_mgr::collect_corr()
 {
-  //vcl_vector<vcl_pair vgl_homg_point_2d<double> > corr_pts;
   bwm_corr_sptr corr = new bwm_corr();
   bool found = false;
   vgl_point_2d<double> pt;
@@ -103,6 +124,10 @@ void bwm_observer_mgr::save_corr(vcl_ostream& s)
   if (corr_list_.size() == 0)
     vcl_cerr << "No correspondences to save yet! " << vcl_endl;
   else {
+
+    vcl_string fname = bwm_utils::select_file();
+    vcl_ofstream s(fname.data());
+  
     //s << "Cameras:" << vcl_endl;
     // first write down the camera info
     vcl_map<bwm_observer_cam*, unsigned> camera_map; 
@@ -151,11 +176,14 @@ void bwm_observer_mgr::save_corr(vcl_ostream& s)
     s << "END" << vcl_endl;
   }
 }
-void bwm_observer_mgr::save_corr_XML(vcl_ostream& s)
+void bwm_observer_mgr::save_corr_XML()
 {
   if (corr_list_.size() == 0)
     vcl_cerr << "No correspondences to save yet! " << vcl_endl;
   else {
+    vcl_string fname = bwm_utils::select_file();
+    vcl_ofstream s(fname.data());
+
     s << "<BWM_CONFIG>" << vcl_endl;
 	s << "<TABLEAUS>" << vcl_endl;
     // first write down the camera info
@@ -209,8 +237,8 @@ void bwm_observer_mgr::save_corr_XML(vcl_ostream& s)
       x_write(s, *corr);
     }
     xml_element.x_write_close(s);
+    s << "</BWM_CONFIG>" << vcl_endl;
   }
-  s << "</BWM_CONFIG>" << vcl_endl;
 }
 
 void bwm_observer_mgr::delete_last_corr()

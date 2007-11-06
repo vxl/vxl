@@ -34,7 +34,8 @@ bool bwm_observer_vgui::handle(const vgui_event& e)
     vgui_projection_inspector pi;
     if (e.type == vgui_BUTTON_DOWN && 
         e.button == vgui_LEFT && 
-        e.modifier == vgui_SHIFT)
+        e.modifier == vgui_SHIFT && 
+        bwm_observer_mgr::instance()->in_corr_picking())
     {
         float x,y;
         pi.window_to_image_coordinates(e.wx, e.wy, x, y);

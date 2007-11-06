@@ -49,3 +49,18 @@ bwm_command_sptr bwm_process_mgr::load_tab_process(vcl_string name,
   }
   return 0;
 }
+
+bwm_command_sptr bwm_process_mgr::load_menu_process(vcl_string name, 
+                                                       vgui_menu& menu)
+{
+  vcl_map<vcl_string, bwm_command_sptr>::iterator iter = process_map.find(name);
+  if (iter != process_map.end()) {
+    bwm_command_sptr c = iter->second;
+    if (dynamic_cast<bwm_menu_process_command* > (c.as_pointer())) {
+      bwm_menu_process_command *comm = static_cast<bwm_menu_process_command* > (c.as_pointer());
+      comm->set_menu(menu);
+      return comm;
+    }
+  }
+  return 0;
+}

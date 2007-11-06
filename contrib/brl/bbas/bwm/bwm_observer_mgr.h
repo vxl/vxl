@@ -40,18 +40,19 @@ public:
   }
   bool obs_in_corr(bwm_observer_cam *obs);
   void save_corr(vcl_ostream& s);
-  void save_corr_XML(vcl_ostream& s);
+  void save_corr_XML();
   void update_corr(bwm_observer_cam* obs,vgl_point_2d<double> old_pt,vgl_point_2d<double> new_pt);
   void delete_last_corr();
   void delete_all_corr();
-
   BWM_CORR_MODE corr_mode() { return corr_mode_; }
-  void set_corr_mode(BWM_CORR_MODE mode) 
-  { if (mode > 1) vcl_cerr << "Invalid Corr. Mode" << vcl_endl; 
-  else corr_mode_ = mode;
-  }
-
+  void set_corr_mode();
   void move_to_corr();
+
+  //: picking up corr points are controlled by starting and stopping it
+  void start_corr() { start_corr_ = true; }
+  void stop_corr() { start_corr_ = false; }
+  //: returns true if the correspondence picking started by the main corr menu
+  bool in_corr_picking() { return start_corr_; }
 
   void print_observers();
 
@@ -60,12 +61,13 @@ public:
   
 
 private:
-  bwm_observer_mgr() {corr_mode_ = IMAGE_TO_IMAGE;}
+  bwm_observer_mgr() : start_corr_(false) {corr_mode_ = IMAGE_TO_IMAGE;}
 
   static bwm_observer_mgr* instance_;
   
   vcl_vector<bwm_observer* > observers_;
 
+  bool start_corr_;
   BWM_CORR_MODE corr_mode_;
   vcl_vector<bwm_corr_sptr> corr_list_;
   vgl_point_3d<double> corr_world_pt_;

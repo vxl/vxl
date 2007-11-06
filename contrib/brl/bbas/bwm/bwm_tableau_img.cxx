@@ -1,6 +1,8 @@
 #include "bwm_tableau_img.h"
 #include "bwm_tableau_text.h"
 #include "bwm_command_macros.h"
+#include "bwm_observer_mgr.h"
+
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
 
@@ -100,6 +102,7 @@ void bwm_tableau_img::create_box()
 void bwm_tableau_img::create_polygon()
 {
   // first lock the bgui_image _tableau
+  bwm_observer_mgr::instance()->stop_corr();
   my_observer_->image_tableau()->lock_linenum(true);
   vsol_polygon_2d_sptr poly2d;
   set_color(1, 0, 0);
@@ -115,6 +118,8 @@ void bwm_tableau_img::create_polyline()
 {
   // first lock the bgui_image _tableau
   my_observer_->image_tableau()->lock_linenum(true);
+  bwm_observer_mgr::instance()->stop_corr();
+
   vsol_polyline_2d_sptr poly2d;
   set_color(1, 0, 0);
   this->pick_polyline(poly2d);
