@@ -20,7 +20,6 @@
 //   K.Y.McGaul - 23-MAR-2001 - Initial version.
 //   J. Mundy - Jan 9, 2005 - Added anchored pick point
 //   K. Kang - May 9, 2005 - Added pick box
-//   J. Green - 01 Oct 2007 - Added pick point set + some extra comments
 // \endverbatim
 
 #include <vgui/vgui_tableau.h>
@@ -29,10 +28,9 @@
 #include <vgui/vgui_parent_child_link.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
-#include <vsol/vsol_polyline_2d.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
 #include "bgui_picker_tableau_sptr.h"
- 
+
 class bgui_picker_tableau : public vgui_tableau
 {
  public:
@@ -52,6 +50,8 @@ class bgui_picker_tableau : public vgui_tableau
   //: Gets a user selected box specified by corner points)
   void pick_box(float* x1, float* y1, float *x2, float* y2);
 
+  //: Gets a user selected polygon 
+
   //: Pick a point with an anchored line indicator
   void anchored_pick_point(const float anch_x,
                            const float anch_y,
@@ -63,22 +63,20 @@ class bgui_picker_tableau : public vgui_tableau
   //: pick a polyline (set of connected lines)
   void pick_polyline(vsol_polyline_2d_sptr& poly);
 
-    //: Pick a point_set
-  bool pick_point_set(vcl_vector< vsol_point_2d_sptr >& ps_list, int max);
+  bool pick_point_set(vcl_vector< vsol_point_2d_sptr >& ps_list, unsigned max);
 
   //: Set drawing style, [0 1.0] for colors
   void set_color(const float red=1.0f, const float green=1.0f,
                  const float blue=1.0f) {r = red; g = green; b = blue;}
-		 
   void set_line_width(const float width=2.0f){w = width;}
 
   //: Handles all events for this tableau.
   bool handle(const vgui_event&);
 
-protected:
+ protected:
   vgui_parent_child_link child_tab;
- 
-private:
+
+ private:
   //: Draw a line to help the user pick it.
   void draw_line();
   void draw_anchor_line();
@@ -88,10 +86,10 @@ private:
 
   //: Get next event in the event loop.
   bool next();
-
   //: List of possible objects to pick.
-  enum object_type {none_enum, point_enum, line_enum, anchor_enum, box_enum,
-  			poly_enum, point_set_enum, polyline_enum};
+  enum object_type {none_enum, point_enum, line_enum, anchor_enum, box_enum, 
+    poly_enum, point_set_enum, polyline_enum};
+
   //: Type of object we are picking.
   static object_type obj_type;
 
@@ -104,13 +102,12 @@ private:
   //: Anchor point coordinates
   float anchor_x, anchor_y;
 
-  //: For polygon or point_set
+  //: For polygon
   bool active;
-  vgui_event_condition gesture0;	// left mouse click
-  vgui_event_condition gesture1;	// middle mouse click
-  vgui_event_condition gesture2;	// END key
+  vgui_event_condition gesture0;
+  vgui_event_condition gesture1;
+  vgui_event_condition gesture2;  
 
-  // for polygon
   vcl_vector< vsol_point_2d_sptr > point_list;
 
   // for point_set
@@ -121,13 +118,10 @@ private:
 
   //: Style values
   float r, g, b, w;
-
   //: Whether this is the first (start) or second (end) point being selected.
   bool FIRSTPOINT;
-
   //: Coordinates for point:
   float pointx, pointy;
-
   //: True if picked by left mouse button, else false.
   bool point_ret;
 
