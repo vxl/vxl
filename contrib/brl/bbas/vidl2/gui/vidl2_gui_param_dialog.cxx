@@ -376,15 +376,7 @@ vidl2_dc1394_istream* vidl2_gui_param_dialog::dc1394_istream()
   //-------------------------------------
   if(!cam.features.empty()){
     params.features_ = cam.features;
-    vgui_dialog dlg("Set feature values");
-    for(unsigned int i=0; i<params.features_.size(); ++i){
-      vidl2_iidc1394_params::feature_options& f = params.features_[i];
-      vcl_stringstream ss;
-      ss << vidl2_iidc1394_params::feature_string(f.id) << " [" << f.min << " - "<<f.max<<"]";
-      dlg.field(ss.str().c_str(), f.value);
-    }
-
-    if (!dlg.ask())
+    if(!update_iidc1394_params(params.features_))
       return NULL;
   }
 
@@ -414,3 +406,129 @@ vidl2_dc1394_istream* vidl2_gui_param_dialog::dc1394_istream()
 #endif // HAS_DC1394
 }
 
+
+//-----------------------------------------------------------------------------
+//: Use a vgui dialog to update iidc1394 camera parameters
+//-----------------------------------------------------------------------------
+bool vidl2_gui_param_dialog::update_iidc1394_params(vcl_vector<vidl2_iidc1394_params::
+                                                               feature_options>& features)
+{
+  vgui_dialog dlg("Set feature values");
+  vcl_vector<unsigned> choices(features.size(),0);
+  for(unsigned int i=0; i<features.size(); ++i){
+    vidl2_iidc1394_params::feature_options& f = features[i];
+    vcl_stringstream ss;
+
+    int off_idx = -1;
+    int man_idx = -1;
+    int auto_idx = -1;
+    int one_push_idx = -1;
+    int abs_idx = -1;
+    vcl_vector<vcl_string> modes;
+    if(f.on_off_capable)   { off_idx = modes.size(); modes.push_back("Off"); }
+    if(f.manual_capable)   { man_idx = modes.size(); modes.push_back("Manual"); }
+    if(f.auto_capable)    { auto_idx = modes.size(); modes.push_back("Automatic"); }
+    if(f.one_push)    { one_push_idx = modes.size(); modes.push_back("One Push"); }
+    if(f.absolute_capable) { abs_idx = modes.size(); modes.push_back("Absolute"); }
+
+    if(f.auto_active && auto_idx >= 0)
+      choices[i] = auto_idx;
+    else if(!f.is_on && off_idx >=0)
+      choices[i] = off_idx;
+    else if(f.abs_control && abs_idx >= 0)
+      choices[i] = abs_idx;
+    else if(man_idx >= 0)
+      choices[i] = man_idx;
+
+    ss << vidl2_iidc1394_params::feature_string(f.id);
+
+    if( f.id == vidl2_iidc1394_params::FEATURE_WHITE_BALANCE ){
+      if(modes.empty()){
+        dlg.message(ss.str().c_str());
+        ss.str("");
+        ss << "Blue Value (U) [" << f.min << " - "<<f.max<<"] : " << f.BU_value;
+        dlg.message(ss.str().c_str());
+        ss.str("");
+        ss << " Red Value (V) [" << f.min << " - "<<f.max<<"] : " << f.RV_value;
+        dlg.message(ss.str().c_str());
+      }
+      else{
+        dlg.choice(ss.str().c_str(), modes, choices[i]);
+
+        ss.str("");
+        ss << "Blue Value (U) [" << f.min << " - "<<f.max<<"]";
+        dlg.field(ss.str().c_str(), f.BU_value);
+
+        ss.str("");
+        ss << " Red Value (V) [" << f.min << " - "<<f.max<<"]";
+        dlg.field(ss.str().c_str(), f.RV_value);
+
+      }
+    }
+    else{
+
+      if(modes.empty()){
+        dlg.message(ss.str().c_str());
+        ss.str("");
+        ss << "Value [" << f.min << " - "<<f.max<<"] : " << f.value;
+        dlg.message(ss.str().c_str());
+      }
+      else{
+
+        dlg.choice(ss.str().c_str(), modes, choices[i]);
+
+        ss.str("");
+        ss << "Value [" << f.min << " - "<<f.max<<"]";
+        dlg.field(ss.str().c_str(), f.value);
+        if(f.absolute_capable){
+          ss.str("");
+          ss << "Absolute Value [" << f.abs_min << " - "<<f.abs_max<<"]";
+          dlg.field(ss.str().c_str(), f.abs_value);
+        }
+      }
+    }
+  }
+
+  if(!dlg.ask())
+    return false;
+
+  for(unsigned int i=0; i<features.size(); ++i){
+    vidl2_iidc1394_params::feature_options& f = features[i];
+
+    enum mode_t {OFF, MAN, AUTO, ONE_PUSH, ABS};
+    vcl_vector<unsigned> modes;
+    if(f.on_off_capable) modes.push_back(OFF);
+    if(f.manual_capable) modes.push_back(MAN);
+    if(f.auto_capable) modes.push_back(AUTO);
+    if(f.one_push) modes.push_back(ONE_PUSH);
+    if(f.absolute_capable) modes.push_back(ABS);
+
+    f.is_on = true;
+    f.auto_active = false;
+    f.one_push_active = false;
+    f.abs_control = false;
+
+    if(!modes.empty()){
+      switch(modes[choices[i]]){
+        case OFF:
+          f.is_on = false;
+          break;
+        case MAN:
+          break;
+        case AUTO:
+          f.auto_active = true;
+          break;
+        case ONE_PUSH:
+          f.one_push_active = true;
+          break;
+        case ABS:
+          f.abs_control = true;
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
+  return true;
+}

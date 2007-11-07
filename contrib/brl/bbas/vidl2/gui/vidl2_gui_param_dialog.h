@@ -15,8 +15,11 @@
 //----------------------------------------------------------------------------
 
 
+#include <vcl_vector.h>
+#include <vidl2/vidl2_iidc1394_params.h>
 #include <vidl2/vidl2_istream.h>
 #include <vidl2/vidl2_ostream.h>
+
 
 // forward declarations
 class vidl2_image_list_istream;
@@ -54,6 +57,9 @@ struct vidl2_gui_param_dialog
 
   //: Use vgui dialogs to open a dc1394 istream
   static vidl2_dc1394_istream* dc1394_istream();
+
+  static bool update_iidc1394_params(vcl_vector<vidl2_iidc1394_params::
+                                                feature_options>& features);
 };
 
 

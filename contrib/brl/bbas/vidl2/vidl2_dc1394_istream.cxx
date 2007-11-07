@@ -220,18 +220,65 @@ open(unsigned int num_dma_buffers,
   for (unsigned int i=0; i<params.features_.size(); ++i)
   {
     dc1394feature_info_t f = vidl2_feature_to_dc1394(params.features_[i]);
+    // Enable/Disable a feature
+    if ( dc1394_feature_set_power(is_->camera_info_, f.id, f.is_on?DC1394_ON:DC1394_OFF) != DC1394_SUCCESS) {
+      vcl_cerr << "Failed to "<< (f.is_on?"enable":"disable") <<" feature \""
+                << vidl2_iidc1394_params::feature_string(params.features_[i].id)
+                << '\n';
+      return false;
+    }
+
+    // Set the feature mode
+    vcl_string mode_name = "Manual";
+    dc1394feature_mode_t old_mode, mode = DC1394_FEATURE_MODE_MANUAL;
+    if(f.auto_active){
+      mode = DC1394_FEATURE_MODE_AUTO;
+      mode_name = "Automatic";
+    }
+    if(f.one_push_active){
+      mode = DC1394_FEATURE_MODE_ONE_PUSH_AUTO;
+      mode_name = "One Push";
+    }
+    if ( dc1394_feature_get_mode(is_->camera_info_, f.id, &old_mode) == DC1394_SUCCESS &&
+         old_mode != mode ) {
+      if ( dc1394_feature_set_mode(is_->camera_info_, f.id, mode) != DC1394_SUCCESS) {
+        vcl_cerr << "Failed to set mode of feature \""
+                  << vidl2_iidc1394_params::feature_string(params.features_[i].id)
+                  << "\" to " << mode_name << '\n';
+        return false;
+      }
+    }
+
+
+    // Set the reature value(s)
     switch (params.features_[i].id)
     {
      case vidl2_iidc1394_params::FEATURE_WHITE_BALANCE:
       if ( dc1394_feature_whitebalance_set_value(is_->camera_info_, f.BU_value, f.RV_value) != DC1394_SUCCESS) {
-        vcl_cerr << "Failed to feature \"White Balance\" to "<< f.BU_value<<", "<<f.RV_value <<'\n';
+        vcl_cerr << "Failed to set feature \"White Balance\" to "<< f.BU_value<<", "<<f.RV_value <<'\n';
         close();
         return false;
       }
       break;
-     default:
-      if ( dc1394_feature_set_value(is_->camera_info_, f.id, f.value) != DC1394_SUCCESS) {
-        vcl_cerr << "Failed to feature \""
+    case vidl2_iidc1394_params::FEATURE_TEMPERATURE:
+      if ( dc1394_feature_temperature_set_value(is_->camera_info_, f.target_value) != DC1394_SUCCESS) {
+        vcl_cerr << "Failed to set feature \"Temperature\" to "<< f.target_value<<'\n';
+        close();
+        return false;
+      }
+      break;
+    default:
+      if ( f.abs_control ){
+        if ( dc1394_feature_set_absolute_value(is_->camera_info_, f.id, f.abs_value) != DC1394_SUCCESS) {
+          vcl_cerr << "Failed to set feature \""
+                  << vidl2_iidc1394_params::feature_string(params.features_[i].id)
+                  << "\" to absolute value "<< f.value <<'\n';
+          close();
+          return false;
+        }
+      }
+      else if ( dc1394_feature_set_value(is_->camera_info_, f.id, f.value) != DC1394_SUCCESS) {
+        vcl_cerr << "Failed to set feature \""
                  << vidl2_iidc1394_params::feature_string(params.features_[i].id)
                  << "\" to "<< f.value <<'\n';
         close();
