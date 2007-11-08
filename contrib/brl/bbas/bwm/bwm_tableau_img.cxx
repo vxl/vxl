@@ -33,25 +33,34 @@ void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu
     vgui_modifier(vgui_SHIFT) );
 
   submenu.separator();
+
+  submenu.add("Pointset..",
+              new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::create_pointset));
+
+  submenu.separator();
   submenu.add("Point..",
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::create_point),
     vgui_key('t'), 
     vgui_modifier(vgui_SHIFT) );
-  menu.add( "DRAW..", submenu);
+  menu.add( "CREATE 2D ", submenu);
   menu.separator();
 
-  menu.add( "Deselect All", 
+  vgui_menu selmenu;
+  selmenu.add( "Deselect All", 
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::deselect_all),
     vgui_key('-'));
-  menu.separator();
-  menu.add( "Delete Selected", 
+  selmenu.separator();
+  selmenu.add( "Delete Selected", 
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::clear_poly), 
     vgui_key('d'), vgui_modifier(vgui_SHIFT));
-  menu.separator();
-  menu.add( "Delete All", 
+  selmenu.separator();
+  selmenu.add( "Delete All", 
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::clear_all),
     vgui_key('a'), vgui_modifier(vgui_SHIFT));
-  menu.separator();
+
+  menu.add( "SELECT/DELETE ", selmenu);
+
+#if 0
   menu.add( "Detect Edges", 
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::step_edges_vd),
     vgui_key('e'), vgui_modifier(vgui_SHIFT));
@@ -59,7 +68,7 @@ void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu
   menu.add( "Detect Lines ", 
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::lines_vd),
     vgui_key('v'), vgui_modifier(vgui_SHIFT));
-
+#endif
   menu.separator();
 
   vgui_menu image_submenu;
@@ -67,14 +76,14 @@ void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu
   MENU_TAB_ADD_PROCESS("Intensity Profile", "intensity_profile", image_submenu, this);
   MENU_TAB_ADD_PROCESS("Histogram Plot", "histogram", image_submenu, this);
   MENU_TAB_ADD_PROCESS("Step Edges VD", "step_edge", image_submenu, this);
-  MENU_TAB_ADD_PROCESS("JIMs item", "jim's process", image_submenu, this);
-  menu.add("Image Processing...", image_submenu);
+  MENU_TAB_ADD_PROCESS("Detect Lines", "detect_lines", image_submenu, this);
+  menu.add("IMAGE ", image_submenu);
   menu.separator();
-
+#if 0
   menu.add( "HELP..." , 
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::help_pop), 
     vgui_key('h'),vgui_modifier(vgui_SHIFT));
-
+#endif
   menu.add( "Show Path" , 
     new vgui_command_simple<bwm_tableau_img>(this,
                                              &bwm_tableau_img::
@@ -82,6 +91,7 @@ void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu
     vgui_key('i'));
 
 }
+
 
 void bwm_tableau_img::create_box()
 {
@@ -137,6 +147,16 @@ void bwm_tableau_img::create_point()
   set_color(1, 0, 0);
   this->pick_point(&x, &y);
   my_observer_->create_point(new vsol_point_2d(x, y));
+}
+
+void bwm_tableau_img::create_pointset()
+{
+  vcl_vector<vsol_point_2d_sptr> pts;
+  bool picked = this->pick_point_set(pts, 10);
+  for(vcl_vector<vsol_point_2d_sptr>::iterator pit = pts.begin();
+      pit != pts.end(); ++pit)
+    my_observer_->create_point(*pit);
+  this->post_redraw();
 }
 
 void bwm_tableau_img::deselect_all()

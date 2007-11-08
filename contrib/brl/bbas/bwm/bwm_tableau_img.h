@@ -37,6 +37,7 @@ public:
   virtual void create_polygon(); 
   virtual void create_polyline();
   virtual void create_point();
+  virtual void create_pointset();
 
   //************* IMAGE Processing Methods
 

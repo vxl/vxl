@@ -30,6 +30,18 @@ public:
       tab->step_edges_vd();}
 };
 
+class bwm_detect_lines_process_command: public bwm_tab_process_command
+{
+public:
+  bwm_detect_lines_process_command() {}
+  ~bwm_detect_lines_process_command() {}
+  vcl_string name() {return "detect_lines"; }
+  void execute() 
+  {   bwm_tableau_img* tab = static_cast<bwm_tableau_img*> (tableau_.as_pointer());
+      tab->lines_vd();}
+};
+
+
 class bwm_histogram_process_command: public bwm_tab_process_command
 {
 public:

@@ -51,7 +51,8 @@ int main(int argc, char** argv)
   REG_PROCESS(bwm_intens_profile_process_command);
   REG_PROCESS(bwm_range_map_process_command);
   REG_PROCESS(bwm_step_edge_process_command);
-  REG_PROCESS(bwm_jim_process_command);
+  REG_PROCESS(bwm_detect_lines_process_command);
+
 
   // Set up the app_menu
   vgui_menu main_menu;

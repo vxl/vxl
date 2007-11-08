@@ -192,11 +192,11 @@ void bwm_tableau_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu
     
   bwm_tableau_img::get_popup(params, menu);
 
-  menu.add( "Set as Master", new bwm_set_master_command(this));
-  menu.separator();
 
   vgui_menu mesh_submenu;
-  mesh_submenu.add("Create..", new bwm_create_mesh_command(this), 
+  mesh_submenu.add( "Set as Master", new bwm_set_master_command(this));
+  mesh_submenu.separator();
+  mesh_submenu.add("Mesh Poly", new bwm_create_mesh_command(this), 
     vgui_key('p'), vgui_modifier(vgui_SHIFT) );
   mesh_submenu.separator();
   mesh_submenu.add("Load from File..", 
@@ -216,7 +216,7 @@ void bwm_tableau_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu
   mesh_submenu.add( "Divide Face", new bwm_divide_command(this));
   mesh_submenu.add( "Save All", new bwm_save_command(this), 
     vgui_key('s'), vgui_modifier(vgui_SHIFT));
-  menu.add("MESH", mesh_submenu);
+  menu.add("CREATE 3D", mesh_submenu);
 
   menu.add( "Scroll To Point", new bwm_scroll_to_point_command(this));
 
@@ -238,6 +238,7 @@ void bwm_tableau_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu
   plane_submenu.add( "Selected Face", new bwm_select_proj_plane_command(this));
   menu.add("Projection Plane", plane_submenu);
 
+#if 0
   menu.separator();
   vgui_menu label_submenu;
   label_submenu.add( "Label Roof", new bwm_label_roof_command(this));
@@ -248,7 +249,7 @@ void bwm_tableau_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu
   menu.separator();
   menu.add( "HELP..." , new bwm_cam_help_command(this), 
     vgui_key('h'),vgui_modifier(vgui_SHIFT));
-  
+#endif  
 }
 
 void bwm_tableau_cam::create_polygon_mesh()
