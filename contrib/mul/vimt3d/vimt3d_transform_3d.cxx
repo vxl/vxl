@@ -46,23 +46,39 @@ void vimt3d_transform_3d::matrix(vnl_matrix<double>& M) const
 // See also vnl_rotation_matrix(), vgl_rotation_3d, and vnl_quaternion
 void vimt3d_transform_3d::angles(double& phi_x, double& phi_y, double& phi_z) const
 {
+  //nb in affine case will probablay have to store s_x, s_y, s_z etc somewhere else!
+  //also won't work properly in rigid body case either!
+  
   phi_x=vcl_atan2(-yz_,zz_);
-  phi_y=vcl_atan2(-xz_*vcl_cos(phi_x),zz_);
-  phi_z=vcl_atan2(-xy_,xx_);
-
+  phi_y= vcl_atan2(-xz_*vcl_cos(phi_x),zz_);
+  phi_z=vcl_atan2(-xy_,xx_); 
+  
+  // nb the equation for phi_z doesn't work in affine case
+  // because sy and sx aren't necessarily the same
+    
+  // calc scaling factor
+  // ie assuming similarity transform here
+  // assume s is always positive 
+  // to recover original angle  
+  double s= vcl_fabs( xz_/ (-1*vcl_sin(phi_y) ) );
+  //vcl_cout<<"s= "<<s<<vcl_endl;
+  
   // the angles may be wrong by +-vnl_math::pi - we can
   // only tell by checking against the signs
   // of the original entries in the rotation matrix
-  if (vcl_fabs(vcl_sin(phi_y) + xz_) > 1e-6)
-  if (phi_y > 0)
-    phi_y=phi_y - vnl_math::pi;
-  else
-    phi_y=phi_y + vnl_math::pi;
-
+  if (vcl_fabs(vcl_sin(phi_y)*s + xz_) > 1e-6) 
+  {
+    if (phi_y > 0)
+      phi_y=phi_y - vnl_math::pi;
+    else
+      phi_y=phi_y + vnl_math::pi;
+    //phi_y*=-1;
+  }
+  
   const double cos_y = vcl_cos(phi_y);
-
-  if (vcl_fabs(vcl_sin(phi_x)*cos_y + yz_) > 1e-6 ||
-      vcl_fabs(vcl_cos(phi_x)*cos_y - zz_) > 1e-6)
+  
+  if (vcl_fabs(vcl_sin(phi_x)*cos_y*s + yz_) > 1e-6 ||
+      vcl_fabs(vcl_cos(phi_x)*cos_y*s - zz_) > 1e-6)
   {
     if (phi_x > 0)
       phi_x=phi_x - vnl_math::pi;
@@ -70,8 +86,8 @@ void vimt3d_transform_3d::angles(double& phi_x, double& phi_y, double& phi_z) co
       phi_x=phi_x + vnl_math::pi;
   }
 
-  if (vcl_fabs(vcl_cos(phi_z)*cos_y - xx_) > 1e-6 ||
-      vcl_fabs(vcl_sin(phi_z)*cos_y + xy_) > 1e-6)
+  if (vcl_fabs(vcl_cos(phi_z)*cos_y*s - xx_) > 1e-6 ||
+      vcl_fabs(vcl_sin(phi_z)*cos_y*s + xy_) > 1e-6)
   {
     if (phi_z > 0)
       phi_z=phi_z - vnl_math::pi;
@@ -79,9 +95,9 @@ void vimt3d_transform_3d::angles(double& phi_x, double& phi_y, double& phi_z) co
       phi_z=phi_z + vnl_math::pi;
   }
 
-      // now compress the angles towards zero as much as possible
-      // (we can add +-vnl_math::pi to each angle without changing
-      // the rotation matrix)
+  // now compress the angles towards zero as much as possible
+  // (we can add +-vnl_math::pi to each angle and negate phi_y without changing
+  // the rotation matrix)
   int count = 0;
   if (vcl_fabs(phi_x) > vnl_math::pi/2) ++count;
   if (vcl_fabs(phi_y) > vnl_math::pi/2) ++count;
@@ -105,6 +121,9 @@ void vimt3d_transform_3d::angles(double& phi_x, double& phi_y, double& phi_z) co
     else
       phi_z=phi_z + vnl_math::pi;
   }
+  
+
+   
 }
 
 //=======================================================================
@@ -131,17 +150,23 @@ void vimt3d_transform_3d::params(vnl_vector<double>& v) const
     v[3]=xt_; v[4]=yt_; v[5]=zt_;
     break;
    case (Similarity): // not sure this is right - kds
+                      // I think it's fixed now -dac
     if (v.size()!=7) v.set_size(7);
-    v[0]=xx_; // scaling factor
     angles(v[1],v[2],v[3]);
+    // compute scaling factor
+    v[0]= xx_/ ( vcl_cos( v[2] ) *vcl_cos( v[3] ) ); 
     v[4]=xt_; v[5]=yt_; v[6]=zt_;
     break;
-   case (Affine): // not sure this is right - kds
+   case (Affine):     // not sure this is right - kds
+                      // I'm sure it's not correct -dac
     if (v.size()!=9) v.set_size(9);
-    v[0]=xx_; // scaling factor
-    v[1]=yy_; // scaling factor
-    v[2]=zz_; // scaling factor
+    // computation of angles doesn't work unless
+    // sx, sy, sz are all the same!
     angles(v[3],v[4],v[5]);
+    // try to compute scaling factors
+    v[0]= xx_/ ( vcl_cos( v[4] ) *vcl_cos( v[5] ) ); 
+    v[1]= yz_/( -1*vcl_sin(v[3])*vcl_cos(v[4]) );
+    v[2]= zz_/( vcl_cos(v[3])*vcl_cos(v[4]) );
     v[6]=xt_; v[7]=yt_; v[8]=zt_;
     break;
    default:
@@ -187,7 +212,7 @@ void vimt3d_transform_3d::set(const vnl_vector<double>& v, Form form)
     set_rigid_body( v[0],v[1],v[2],
                     v[3],v[4],v[5]);
     break;
-   case (Similarity): // not sure this is right - kds
+   case (Similarity): 
     setCheck(7,n,"Similarity");
     set_similarity( v[0],v[1],v[2],
                     v[3],v[4],v[5], v[6]);
@@ -195,6 +220,9 @@ void vimt3d_transform_3d::set(const vnl_vector<double>& v, Form form)
     inv_uptodate_=false;
     break;
    case (Affine): // not sure this is right - kds
+                  // it works unless you call params()
+                  // later which gives the wrong answer
+                  // in affine case -dac
     setCheck(9,n,"Affine");
     set_affine( v[0],v[1],v[2],
                 v[3],v[4],v[5],
@@ -354,6 +382,16 @@ void vimt3d_transform_3d::set_similarity(double s,
 
     // Set rotation matrix
     setRotMat(r_x,r_y,r_z);
+    
+    // debug test 
+    //double r_x1, r_y1, r_z1;
+    //angles( r_x1, r_y1, r_z1 );
+    //vcl_cout<<"r_x= "<<r_x<<vcl_endl;
+    //vcl_cout<<"r_x1= "<<r_x1<<vcl_endl;
+    //vcl_cout<<"r_y= "<<r_y<<vcl_endl;
+    //vcl_cout<<"r_y1= "<<r_y1<<vcl_endl;
+    //vcl_cout<<"r_z= "<<r_z<<vcl_endl;
+    //vcl_cout<<"r_z1= "<<r_z1<<vcl_endl;
 
     // Account for scaling (this actually means that scaling was done BEFORE rotation)
     xx_*=s;  xy_*=s;  xz_*=s;
@@ -693,6 +731,9 @@ void vimt3d_transform_3d::print_summary(vcl_ostream& o) const
       vnl_vector<double> p(7);
       params(p);
       // not sure this is right - kds
+      // returns euler angles of rotation
+      // which might not be same as rotations specified by set command
+      // cos euler angles not unique 
       o << "Similarity\n"
         << vsl_indent()<< "scale factor = " << p(0) << vcl_endl
         << vsl_indent()<< "angles = " << p(1) << ',' << p(2) << ',' << p(3) << '\n'
@@ -704,6 +745,8 @@ void vimt3d_transform_3d::print_summary(vcl_ostream& o) const
       vnl_vector<double> p(9);
       params(p);
       // not sure this is right - kds
+      // params(p) call is broken for affine 
+      // only works if sx=sy=sz in set command
       o << "Affine\n"
         << vsl_indent()<< "scale factors = " << p(0) << ',' << p(1) << ',' << p(2) << '\n'
         << vsl_indent()<< "angles = " << p(3) << ',' << p(4) << ',' << p(5) << '\n'
