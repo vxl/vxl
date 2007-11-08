@@ -30,7 +30,8 @@
 //
 // \verbatim
 //  Modifications
-//   <none>
+//   November 8, 2007 - Added the case of four planes that is necessary to
+//                      read and write satellite multispectral image data - JLM
 // \endverbatim
 
 #include <vcl_string.h>

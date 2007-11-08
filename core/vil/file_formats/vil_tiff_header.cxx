@@ -452,7 +452,7 @@ bool vil_tiff_header::compute_pixel_format()
                 return false;
               default:
                 pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
-                return true;
+                return false;
             }
           case 16:
             pix_fmt = VIL_PIXEL_FORMAT_UINT_16;
@@ -463,7 +463,7 @@ bool vil_tiff_header::compute_pixel_format()
                 return true;
               case 4:
                 nplanes = 4;
-                return false;
+                return true;
               default:
                 pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
                 return false;
@@ -508,7 +508,7 @@ bool vil_tiff_header::compute_pixel_format()
                     return true;
                   case 4:
                     nplanes = 4;
-                    return false;
+                    return true;
                   default:
                     pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
                     return false;
@@ -620,6 +620,7 @@ bool vil_tiff_header::set_header(unsigned ni, unsigned nj, unsigned nplns,
       photometric.val = 1;
       break;
     case 3:
+    case 4:
       photometric.val = 2;
       break;
     default:
@@ -676,7 +677,14 @@ vil_tiff_header(TIFF* tif, const unsigned ni, const unsigned nj,
   write_short_tag(tif_,TIFFTAG_SAMPLEFORMAT, sample_format);
   write_long_tag(tif_, TIFFTAG_TILEWIDTH, tile_width);
   write_long_tag(tif_, TIFFTAG_TILELENGTH, tile_length);
-
+#if 0  //may not be needed to handle four planes, seems to work ok without it
+  if(nplanes == 4) 
+    {
+      extra_samples.val = 1;
+      extra_samples.valid = true;
+      write_short_tag(tif_,TIFFTAG_EXTRASAMPLES, extra_samples);
+    }
+#endif
   //initialize other flags to false
   color_map_valid = false;
   grey_response_curve_valid = false;
