@@ -26,6 +26,7 @@ DECLARE( test_blocked_image_resource );
 DECLARE( test_pyramid_image_resource );
 DECLARE( test_image_list );
 DECLARE( test_border );
+DECLARE( test_4_plane_tiff );
 
 void
 register_tests()
@@ -56,6 +57,7 @@ register_tests()
   REGISTER( test_pyramid_image_resource );
   REGISTER( test_image_list );
   REGISTER( test_border );
+  REGISTER( test_4_plane_tiff );
 }
 
 DEFINE_MAIN;
