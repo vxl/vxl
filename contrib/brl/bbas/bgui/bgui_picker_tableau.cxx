@@ -17,7 +17,7 @@
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_polyline_2d.h>
-
+//#define BGUI_DEBUG
 bgui_picker_tableau::object_type bgui_picker_tableau::obj_type = none_enum;
 
 //========================================================================
@@ -368,7 +368,6 @@ bool bgui_picker_tableau::handle(const vgui_event& e)
   // ---- Object type is polygon ----
   if ((obj_type == poly_enum) || (obj_type == polyline_enum))
     {
-      //vcl_cout << "bgui_picker_tableau: " << e << vcl_endl;
       if(active && e.type == vgui_OVERLAY_DRAW ) {
         glLineWidth(w);
         glColor3f(r,g,b);
@@ -421,6 +420,45 @@ bool bgui_picker_tableau::handle(const vgui_event& e)
         }
       }
   }
+ // ---- Object type is point_set_enum ----
+  //  -- similar to polygon except that we don't need to draw anything between points --
+  if (obj_type == point_set_enum)
+    {
+      float ix, iy;
+      vgui_projection_inspector().window_to_image_coordinates(e.wx,
+                                                              e.wy,
+                                                              ix, iy);
+
+		// gesture0 = left mouse click, just add point to list
+        if( gesture0(e) ) {
+          point_set_list.push_back(vsol_point_2d_sptr( new vsol_point_2d( ix, iy )));
+#if BGUI_DEBUG
+		  vcl_cout << "Left click returned " << ix << ",  " << iy  << vcl_endl;
+		  vcl_cout.flush();
+#endif
+        }
+
+		// gesture1 = shift left mouse click or gesture2 = END key press
+        if( gesture1(e)||gesture2(e) ) {
+
+		  // if middle mouse, add point to list and end, if END key just end
+		  if(gesture1(e)) {
+            point_set_list.push_back( vsol_point_2d_sptr( new vsol_point_2d( ix, iy )));
+#if BGUI_DEBUG
+		    vcl_cout << "Shift left returned " << ix << ",  " << iy << vcl_endl;
+		    vcl_cout.flush();
+#endif
+		  }
+		  
+		  // either way, end of picking
+          active = false;
+          picking_completed = true;
+#if BGUI_DEBUG
+		  vcl_cout << "Detected either middle or END key" << vcl_endl;
+		  vcl_cout.flush();
+#endif
+        }
+      }
   return true;
 }
 //========================================================================
