@@ -61,7 +61,7 @@ public:
   
 
 private:
-  bwm_observer_mgr() : start_corr_(false) {corr_mode_ = IMAGE_TO_IMAGE;}
+  bwm_observer_mgr() : start_corr_(true) {corr_mode_ = IMAGE_TO_IMAGE;}
 
   static bwm_observer_mgr* instance_;
   
