@@ -3,7 +3,11 @@
 
 PROJECT( brl )
 
-SET( BRL_INCLUDE_DIR ${brl_SOURCE_DIR} CACHE STATIC "Brown University package include files" )
+# In contrib/brl there is sometimes an "extra" level in the directory structure
+# (.../contrib/brl/{bbas,bseg,bmvl}/foo/foo.h)
+# Setting BRL_INCLUDE_DIR in this way allows #include <foo/foo.h> without
+# having to know the internal directory structure.
+SET( BRL_INCLUDE_DIR "${brl_SOURCE_DIR};${brl_SOURCE_DIR}/bbas;${brl_SOURCE_DIR}/bseg;${brl_SOURCE_DIR}/bmvl" CACHE STATIC "Brown University package include files" )
 SET( BRL_INSTALL_INCLUDE_DIR 
   ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/brl 
   CACHE INTERNAL "Brown University package include files"
