@@ -29,6 +29,10 @@ INCLUDE( ${vxl_SOURCE_DIR}/config/cmake/config/vxl_utils.cmake )
 CONFIGURE_FILE( ${VXL_CMAKE_DIR}/UseVXL.cmake
                 ${vxl_BINARY_DIR}/UseVXL.cmake COPYONLY )
 
+# Copy CTestCustom.cmake to top of build tree
+CONFIGURE_FILE( ${VXL_CMAKE_DIR}/CTestCustom.cmake
+  ${vxl_BINARY_DIR}/CTestCustom.cmake COPYONLY )
+
 # Location of VXL's FindXXX.cmake CMake modules.
 # This is identical to VXL_CMAKE_DIR.  Perhaps we should eliminate MODULE_PATH?
 SET( MODULE_PATH ${vxl_SOURCE_DIR}/config/cmake/Modules CACHE STATIC "VXL module path" )
