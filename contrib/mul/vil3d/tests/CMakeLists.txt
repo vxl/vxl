@@ -34,6 +34,8 @@ ADD_EXECUTABLE( vil3d_test_all
   test_algo_quad_distance_function.cxx
   test_algo_distance_transform.cxx
   test_algo_abs_shuffle_distance.cxx
+  test_algo_make_distance_filter.cxx
+  test_algo_exp_distance_transform.cxx
 )
 
 TARGET_LINK_LIBRARIES( vil3d_test_all vil3d_algo vil3d vil vpl vul testlib vcl )
@@ -69,6 +71,8 @@ ADD_TEST( vil3d_test_algo_corners                     ${EXECUTABLE_OUTPUT_PATH}/
 ADD_TEST( vil3d_test_algo_quad_distance_function      ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all  test_algo_quad_distance_function )
 ADD_TEST( vil3d_test_algo_distance_transform      ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all  test_algo_distance_transform )
 ADD_TEST( vil3d_test_algo_abs_shuffle_distance      ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all  test_algo_abs_shuffle_distance )
+ADD_TEST( vil3d_test_algo_make_distance_filter      ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all  test_algo_make_distance_filter )
+ADD_TEST( vil3d_test_algo_exp_distance_transform      ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all  test_algo_exp_distance_transform )
 
 ADD_EXECUTABLE( vil3d_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vil3d_test_include vil3d_algo vil3d vgl )
