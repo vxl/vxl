@@ -20,8 +20,6 @@
 
 #include <vpgl/vpgl_camera.h>
 
-//#include <bmsh3d/dbmsh3d_vertex.h>
-
 class bwm_observer_cam : public bwm_observer_vgui
 {
 public:
@@ -46,7 +44,7 @@ public:
 
   void set_viewer(vgui_viewer2D_tableau_sptr viewer) { viewer_ = viewer; }
 
-  bool handle(const vgui_event &);
+  bool handle(const vgui_event &e) { return base::handle(e); }
 
   virtual vcl_string type_name() const { return "bwm_observer_cam"; }
 
