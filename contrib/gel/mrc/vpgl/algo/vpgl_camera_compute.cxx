@@ -546,7 +546,7 @@ compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
   //since variations are not meaningful
   if (norm_max_dev < 0.01)
     for (unsigned i = 0; i<nd; ++i)
-      depth[i]=fabs(average_depth);
+      depth[i]=vcl_fabs(average_depth);
 
   //Set up point sets for ortho Procrustes
   vnl_matrix<double> X(3,N), Y(3,N);
