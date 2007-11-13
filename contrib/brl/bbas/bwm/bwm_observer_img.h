@@ -38,6 +38,10 @@ public:
 
   void set_viewer(vgui_viewer2D_tableau_sptr viewer) { viewer_ = viewer; }
 
+  virtual void set_tab_name(vcl_string name) { tab_name_.assign(name); }
+
+  vcl_string tab_name() { return tab_name_; }
+
   bool handle(const vgui_event &);
 
   virtual vcl_string type_name() const { return "bwm_observer_img"; }
@@ -97,6 +101,8 @@ protected:
   void delete_polygon(vgui_soview* obj);
 
   bgui_vsol_soview2D* get_selected_object(vcl_string type);
+
+  vcl_string tab_name_;
 };
 
 #endif
