@@ -25,8 +25,9 @@ class bwm_observer_rat_cam : public bwm_observer_cam
 {
 public:
 
+  typedef bwm_observer_cam base;
+
   bwm_observer_rat_cam() { lvcs_ =0; }
-    //: proj_plane_(vgl_homg_plane_3d<double>(0, 0, 1, 0)) {}
 
   bwm_observer_rat_cam(bgui_image_tableau_sptr const& img, 
     vpgl_rational_camera<double> *camera,
@@ -40,6 +41,8 @@ public:
   virtual ~bwm_observer_rat_cam(){};
 
   virtual vcl_string type_name() const { return "bwm_observer_rat_cam"; }
+
+  bool handle(const vgui_event &e) { return base::handle(e); }
 
   void set_camera(vpgl_rational_camera<double> *camera, vcl_string cam_path) 
   { camera_ = camera; bwm_observer_cam::set_camera(camera, cam_path);} 
