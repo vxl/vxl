@@ -14,6 +14,8 @@
 
 void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu) {
     
+  menu.clear();
+
   vgui_menu submenu;
   submenu.add("Polygon..",
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::create_polygon),
