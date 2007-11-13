@@ -157,9 +157,19 @@ static  vnl_random random;
         y(i) = to[i][dim] - to_centre[dim];
         W(i,i) = wgt[i];
       }
-      vnl_svd<double> svd( X.transpose() * W * X );
+//       vnl_svd<double> svd( X.transpose() * W * X );
+//       vnl_matrix<double> c = svd.inverse();
+//       vnl_vector<double> p = c * X.transpose() * W * y;
+      vnl_matrix<double> t1 = X.transpose() * W;
+      vnl_matrix<double> t2 = t1 * X;
+      vcl_cout << "t2 =\n" << t2 << "\nXt * W * X=\n" << (X.transpose() * W * X) << vcl_endl;
+      vnl_svd<double> svd( t2 );
       vnl_matrix<double> c = svd.inverse();
-      vnl_vector<double> p = c * X.transpose() * W * y;
+      vnl_matrix<double> t3 = c * X.transpose();
+      vnl_matrix<double> t4 = t3 * W;
+      vnl_vector<double> p = t4 * y;
+      vcl_cout << "p="<<p<<vcl_endl;
+      vcl_cout << "c*Xt*W*y="<<(c * X.transpose() * W * y)<<vcl_endl;
       for ( unsigned i=0; i < m; ++i ) {
         A(dim,i) = p[i];
       }
