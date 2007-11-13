@@ -24,10 +24,6 @@ public:
  
   virtual vcl_string type_name() const { return "bwm_observer"; }
 
-  virtual void set_tab_name(vcl_string name) { tab_name_.assign(name); }
-
-  vcl_string tab_name() { return tab_name_; }
-
   virtual void update(vgui_message const& msg);
 
   virtual void handle_update(vgui_message const& msg, 
@@ -53,7 +49,6 @@ public:
   virtual void delete_all()=0;
 
 protected:
-  vcl_string tab_name_;
 
 };
 
