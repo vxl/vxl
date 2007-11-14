@@ -79,6 +79,14 @@ bwm_io_config_parser::startElement(const char* name, const char** atts)
       vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
       if (strcmp(atts[i], "name") == 0)
         convert(atts[i+1], name_);
+      else if (strcmp(atts[i], "status") == 0) {
+        vcl_string status;
+        convert(atts[i+1], status);
+        if (status.compare("active") == 0)
+          status_ = true;
+        else
+          status_ = false;
+      }
     }
   } else if (strcmp(name,"cameraPath")== 0) {
     for (int i=0; atts[i]; i+=2) {
@@ -124,19 +132,19 @@ bwm_io_config_parser::endElement(const char* name)
    }
 
    if (strcmp(name, "ImageTableau") == 0) {
-     bwm_io_tab_config_img* img = new bwm_io_tab_config_img(name, name_, image_path_);
+     bwm_io_tab_config_img* img = new bwm_io_tab_config_img(name, name_, status_, image_path_);
      tableaus_.push_back(img);
      init_params();
    } else if (strcmp(name, "CameraTableau") == 0) {
-     bwm_io_tab_config_cam* cam = new bwm_io_tab_config_cam(name, name_, image_path_, camera_path_, camera_type_);
+     bwm_io_tab_config_cam* cam = new bwm_io_tab_config_cam(name, name_, status_, image_path_, camera_path_, camera_type_);
      tableaus_.push_back(cam);
      init_params();
    } else if (strcmp(name, "Coin3DTableau") == 0) {
-     bwm_io_tab_config_coin3d* coin3d = new bwm_io_tab_config_coin3d(name, name_, camera_path_, camera_type_);
+     bwm_io_tab_config_coin3d* coin3d = new bwm_io_tab_config_coin3d(name, name_, status_, camera_path_, camera_type_);
      tableaus_.push_back(coin3d);
      init_params();
    } else if (strcmp(name, "Proj2DTableau") == 0) {
-     bwm_io_tab_config_proj2d* proj2d = new bwm_io_tab_config_proj2d(name, name_, proj2d_type_, camera_path_, camera_type_, coin3d_name_);
+     bwm_io_tab_config_proj2d* proj2d = new bwm_io_tab_config_proj2d(name, name_, status_, proj2d_type_, camera_path_, camera_type_, coin3d_name_);
    } else if (strcmp(name, "corr_elm") == 0) {
      corresp_elm_.push_back(vcl_pair<vcl_string, vsol_point_2d> (corr_cam_tab_, vsol_point_2d(X_,Y_)));
      corr_cam_tab_ = "";
