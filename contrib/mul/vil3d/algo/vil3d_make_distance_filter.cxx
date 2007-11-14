@@ -42,7 +42,7 @@ void vil3d_make_distance_filter_r1(
           pi.push_back(i);
           pj.push_back(j);
           pk.push_back(k);
-          d.push_back(vcl_sqrt(i*i*wi2+j*j*wj2+k*k*wk2));
+          d.push_back(vcl_sqrt(double(i*i*wi2+j*j*wj2+k*k*wk2)));
         }
     }
   }
@@ -68,7 +68,7 @@ static bool vil3d_make_voxel_block(int r,
         pi.push_back(i);
         pj.push_back(j);
         pk.push_back(k);
-        d.push_back(vcl_sqrt(i*i+j*j+k*k));
+        d.push_back(vcl_sqrt(double(i*i+j*j+k*k)));
       }
     }
   }
