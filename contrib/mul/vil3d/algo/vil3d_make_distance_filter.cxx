@@ -49,7 +49,7 @@ void vil3d_make_distance_filter_r1(
   se.set(pi,pj,pk);
 }
 
-static bool vil3d_make_voxel_block(int r, 
+static void vil3d_make_voxel_block(int r, 
                               vcl_vector<int>& pi,
                               vcl_vector<int>& pj,
                               vcl_vector<int>& pk,
