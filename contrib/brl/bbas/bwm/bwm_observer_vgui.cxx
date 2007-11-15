@@ -93,6 +93,7 @@ void bwm_observer_vgui::handle_update(vgui_message const& msg,
       int face_id = iter->first;
       vsol_polygon_3d_sptr obj = iter->second;
       vsol_polygon_2d_sptr poly_2d;
+      proj_poly(obj, poly_2d);
       unsigned nverts = poly_2d->size();
       float *x, *y;
       bwm_algo::get_vertices_xy(poly_2d, &x, &y);
