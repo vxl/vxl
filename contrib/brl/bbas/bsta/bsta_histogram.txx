@@ -263,7 +263,7 @@ T bsta_histogram<T>::value_with_area_below(const T area_fraction) const
   {
     sum += counts_[i];
     if (sum>=area_fraction*area_)
-      return (i+1)*delta_;
+      return (i+1)*delta_+min_;
   }
   return 0;
 }
@@ -283,9 +283,9 @@ T  bsta_histogram<T>::value_with_area_above(const T area_fraction) const
   {
     sum += counts_[i];
     if (sum>area_fraction*area_)
-      return (i+1)*delta_;
+      return (i+1)*delta_+min_;
   }
-return 0;
+  return 0;
 }
 
 template <class T>
