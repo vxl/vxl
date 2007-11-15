@@ -132,8 +132,8 @@ static  vnl_random random;
     covar.assert_size( m*(m+1), m*(m+1) );
 
     // Compute centres
-    vnl_vector<double> from_centre( m );
-    vnl_vector<double> to_centre( m );
+    vnl_vector<double> from_centre( m, 0.0 );
+    vnl_vector<double> to_centre( m, 0.0 );
     double sum_wgt = 0.0;
     for ( unsigned i=0; i < n; ++i ) {
       from_centre += from[i];
@@ -474,8 +474,8 @@ static  vnl_random random;
     vnl_matrix<double> W( n, n, 0.0 );
 
     // Compute centres
-    vnl_vector<double> from_centre( m );
-    vnl_vector<double> to_centre( m );
+    vnl_vector<double> from_centre( m, 0.0 );
+    vnl_vector<double> to_centre( m, 0.0 );
     double sum_wgt = 0.0;
     for ( unsigned i=0; i < n; ++i ) {
       from_centre += from[i];
