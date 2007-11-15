@@ -100,32 +100,32 @@ void bgui_picker_tableau::pick_box(float* x1, float* y1, float *x2, float* y2)
 void bgui_picker_tableau::draw_line()
 {
   if (!FIRSTPOINT)  // there is no point in drawing till we have a first point
-    {
-      glLineWidth(w);
-      glColor3f(r,g,b);
+  {
+    glLineWidth(w);
+    glColor3f(r,g,b);
 
-      glBegin(GL_LINES);
-      glVertex2f(pointx1, pointy1);
-      glVertex2f(pointx2, pointy2);
-      glEnd();
-    }
+    glBegin(GL_LINES);
+    glVertex2f(pointx1, pointy1);
+    glVertex2f(pointx2, pointy2);
+    glEnd();
+  }
 }
 
 //: Draw a box to help the user pick it.
 void bgui_picker_tableau::draw_box()
 {
   if (!FIRSTPOINT)  // there is no point in drawing till we have a first point
-    {
-      glLineWidth(w);
-      glColor3f(r,g,b);
+  {
+    glLineWidth(w);
+    glColor3f(r,g,b);
 
-      glBegin(GL_LINE_LOOP);
-      glVertex2f(pointx1, pointy1);
-      glVertex2f(pointx2, pointy1);
-      glVertex2f(pointx2, pointy2);
-      glVertex2f(pointx1, pointy2);
-      glEnd();
-    }
+    glBegin(GL_LINE_LOOP);
+    glVertex2f(pointx1, pointy1);
+    glVertex2f(pointx2, pointy1);
+    glVertex2f(pointx2, pointy2);
+    glVertex2f(pointx1, pointy2);
+    glEnd();
+  }
 }
 
 
@@ -169,7 +169,7 @@ void bgui_picker_tableau::pick_line(float* x1, float* y1, float* x2, float* y2)
 
 //========================================================================
 //: Gets a user selected point (x, y)
-//  This function grabs the event loop and will not return until a 
+//  This function grabs the event loop and will not return until a
 //  mouse button down event occurs.
 void bgui_picker_tableau::anchored_pick_point(const float anch_x,
                                               const float anch_y,
@@ -201,9 +201,9 @@ void bgui_picker_tableau::pick_polygon(vsol_polygon_2d_sptr& poly)
   // Grab event loop until picking is completed:
   while (picking_completed == false)
     next();
-  if(point_list.size() >=3)
+  if (point_list.size() >=3)
     poly =  new vsol_polygon_2d( point_list );
-  obj_type = none_enum;   
+  obj_type = none_enum;
 }
 
 void bgui_picker_tableau::pick_polyline(vsol_polyline_2d_sptr& poly)
@@ -216,14 +216,14 @@ void bgui_picker_tableau::pick_polyline(vsol_polyline_2d_sptr& poly)
   // Grab event loop until picking is completed:
   while (picking_completed == false)
     next();
-  if(point_list.size() >=2)
+  if (point_list.size() >=2)
     poly =  new vsol_polyline_2d( point_list );
-  obj_type = none_enum;   
+  obj_type = none_enum;
 }
 
 //========================================================================
 // add max as argument to this method
-bool bgui_picker_tableau::pick_point_set(vcl_vector< vsol_point_2d_sptr >& ps_list, 
+bool bgui_picker_tableau::pick_point_set(vcl_vector< vsol_point_2d_sptr >& ps_list,
                                          unsigned max)
 {
   obj_type = point_set_enum;
@@ -235,28 +235,28 @@ bool bgui_picker_tableau::pick_point_set(vcl_vector< vsol_point_2d_sptr >& ps_li
   ps_list.clear();
 
   // Grab event loop until picking is completed:
-  while (picking_completed == false) {
-      next();
-  }
+  while (picking_completed == false)
+     next();
 
-  if(point_set_list.size() <= max)
+  if (point_set_list.size() <= max)
   {
-	  // copy points into return vector ps_list
-	  ps_list.clear();
-	  for (unsigned i=0; i < point_set_list.size(); i++)
-			  ps_list.push_back(point_set_list[i]);
-	  obj_type = none_enum;
-	  return true;
+    // copy points into return vector ps_list
+    ps_list.clear();
+    for (unsigned i=0; i < point_set_list.size(); i++)
+      ps_list.push_back(point_set_list[i]);
+    obj_type = none_enum;
+    return true;
   }
-  else 			// too many points picked?
+  else       // too many points picked?
   {
-	  ps_list.clear();					// error, return empty list
-	  vcl_cout << "Error, " << point_set_list.size() 
-	  		   << " points picked (more than " << max << ")!!  Try again." << vcl_endl;
-	  vcl_cout.flush();
-      return false;
+    ps_list.clear();          // error, return empty list
+    vcl_cout << "Error, " << point_set_list.size()
+             << " points picked (more than " << max << ")!!  Try again.\n";
+    vcl_cout.flush();
+    return false;
   }
 }
+
 //========================================================================
 //: Handles all events for this tableau.
 //  We grab events in this way rather than using a vgui_event_server because
@@ -276,191 +276,195 @@ bool bgui_picker_tableau::handle(const vgui_event& e)
 
   //---- Object type is point -----
   if (obj_type == point_enum)
+  {
+    if (e.type == vgui_BUTTON_DOWN)
     {
-      if (e.type == vgui_BUTTON_DOWN)
-        {
-          vgui_projection_inspector p_insp;
-          p_insp.window_to_image_coordinates(e.wx, e.wy, pointx, pointy);
+      vgui_projection_inspector p_insp;
+      p_insp.window_to_image_coordinates(e.wx, e.wy, pointx, pointy);
 
-          if (e.button != vgui_LEFT)
-            point_ret= false;
-          picking_completed = true;
-        }
-      return true;
+      if (e.button != vgui_LEFT)
+        point_ret= false;
+      picking_completed = true;
     }
+    return true;
+  }
   // ---- Object type is line ----
   if (obj_type == line_enum)
+  {
+    if (e.type == vgui_DRAW_OVERLAY)
+      draw_line();
+    else if (e.type == vgui_MOTION)
     {
-      if (e.type == vgui_DRAW_OVERLAY)
-        draw_line();
-      else if (e.type == vgui_MOTION)
-        {
-          vgui_projection_inspector p_insp;
-          if(!FIRSTPOINT)
-            p_insp.window_to_image_coordinates(e.wx, e.wy, pointx2, pointy2);
-          else
-            p_insp.window_to_image_coordinates(e.wx, e.wy, pointx1, pointy1);
-          post_overlay_redraw();
-        }
-      else if (e.type == vgui_BUTTON_UP)
-        {
-          if (FIRSTPOINT)
-            {
-              vgui_projection_inspector p_insp;
-              p_insp.window_to_image_coordinates(e.wx,e.wy, pointx1,pointy1);
-              pointx2 = pointx1;
-              pointy2 = pointy1;
-              FIRSTPOINT=false;
-            }
-          else
-            {
-              picking_completed = true;
-            }
-        }
-      return true;
+      vgui_projection_inspector p_insp;
+      if (!FIRSTPOINT)
+        p_insp.window_to_image_coordinates(e.wx, e.wy, pointx2, pointy2);
+      else
+        p_insp.window_to_image_coordinates(e.wx, e.wy, pointx1, pointy1);
+      post_overlay_redraw();
     }
+    else if (e.type == vgui_BUTTON_UP)
+    {
+      if (FIRSTPOINT)
+      {
+        vgui_projection_inspector p_insp;
+        p_insp.window_to_image_coordinates(e.wx,e.wy, pointx1,pointy1);
+        pointx2 = pointx1;
+        pointy2 = pointy1;
+        FIRSTPOINT=false;
+      }
+      else
+      {
+        picking_completed = true;
+      }
+    }
+    return true;
+  }
 
   // ---- Object type is box ----
   if (obj_type == box_enum)
+  {
+    if (e.type == vgui_DRAW_OVERLAY)
+      draw_box();
+    else if (e.type == vgui_MOTION)
     {
-      if (e.type == vgui_DRAW_OVERLAY)
-        draw_box();
-      else if (e.type == vgui_MOTION)
-        {
-          vgui_projection_inspector p_insp;
-          p_insp.window_to_image_coordinates(e.wx, e.wy, pointx2, pointy2);
-          post_overlay_redraw();
-        }
-      else if (e.type == vgui_BUTTON_DOWN)
-        {
-          if (FIRSTPOINT)
-            {
-              vgui_projection_inspector p_insp;
-              p_insp.window_to_image_coordinates(e.wx,e.wy, pointx1,pointy1);
-              pointx2 = pointx1;
-              pointy2 = pointy1;
-              FIRSTPOINT=false;
-            }
-          else
-            {
-              picking_completed = true;
-            }
-        }
-      return true;
+      vgui_projection_inspector p_insp;
+      p_insp.window_to_image_coordinates(e.wx, e.wy, pointx2, pointy2);
+      post_overlay_redraw();
     }
+    else if (e.type == vgui_BUTTON_DOWN)
+    {
+      if (FIRSTPOINT)
+      {
+        vgui_projection_inspector p_insp;
+        p_insp.window_to_image_coordinates(e.wx,e.wy, pointx1,pointy1);
+        pointx2 = pointx1;
+        pointy2 = pointy1;
+        FIRSTPOINT=false;
+      }
+      else
+      {
+        picking_completed = true;
+      }
+    }
+    return true;
+  }
 
   // ---- Object type is anchor line ----
   if (obj_type == anchor_enum)
+  {
+    if (e.type == vgui_DRAW_OVERLAY)
+      draw_anchor_line();
+    else if (e.type == vgui_MOTION)
     {
-      if (e.type == vgui_DRAW_OVERLAY)
-        draw_anchor_line();
-      else if (e.type == vgui_MOTION)
-        {
-          vgui_projection_inspector p_insp;
-          p_insp.window_to_image_coordinates(e.wx, e.wy, pointx1, pointy1);
-          post_overlay_redraw();
-        }
-      else if (e.type == vgui_BUTTON_UP)
-        picking_completed = true;
-      return true;
+      vgui_projection_inspector p_insp;
+      p_insp.window_to_image_coordinates(e.wx, e.wy, pointx1, pointy1);
+      post_overlay_redraw();
     }
+    else if (e.type == vgui_BUTTON_UP)
+      picking_completed = true;
+    return true;
+  }
 
   // ---- Object type is polygon ----
   if ((obj_type == poly_enum) || (obj_type == polyline_enum))
+  {
+    if (active && e.type == vgui_OVERLAY_DRAW )
     {
-      if(active && e.type == vgui_OVERLAY_DRAW ) {
-        glLineWidth(w);
-        glColor3f(r,g,b);
+      glLineWidth(w);
+      glColor3f(r,g,b);
 
-        if (obj_type == poly_enum) {    
-          glBegin(GL_LINE_LOOP);
-          for (unsigned i=0; i<point_list.size(); ++i)
-            glVertex2f(point_list[i]->x(), point_list[i]->y() );
-          glVertex2f(last_x,last_y);
+      if (obj_type == poly_enum)
+      {
+        glBegin(GL_LINE_LOOP);
+        for (unsigned i=0; i<point_list.size(); ++i)
+          glVertex2f(point_list[i]->x(), point_list[i]->y() );
+        glVertex2f(last_x,last_y);
+        glEnd();
+        return true;
+      }
+      else if (obj_type == polyline_enum)
+      {
+        unsigned n = point_list.size();
+        for (unsigned i=1; i<n; ++i){
+          glBegin(GL_LINES);
+          glVertex2f(point_list[i-1]->x(), point_list[i-1]->y());
+          glVertex2f(point_list[i]->x(), point_list[i]->y());
           glEnd();
-          return true;
+        }
+        if (n > 0) {
+          glBegin(GL_LINES);
+          glVertex2f(last_x,last_y);
+          glVertex2f(point_list[n-1]->x(), point_list[n-1]->y());
+          glEnd();
+        }
+        return true;
+      }
+    }
 
-        } else if (obj_type == polyline_enum) { 
-          unsigned n = point_list.size();
-          for (unsigned i=1; i<n; ++i){
-            glBegin(GL_LINES);
-            glVertex2f(point_list[i-1]->x(), point_list[i-1]->y());
-            glVertex2f(point_list[i]->x(), point_list[i]->y());
-            glEnd();
-          }
-          if (n > 0) {
-            glBegin(GL_LINES);
-            glVertex2f(last_x,last_y);
-            glVertex2f(point_list[n-1]->x(), point_list[n-1]->y());
-            glEnd();
-          }
-          return true;
-        }
+    float ix, iy;
+
+    vgui_projection_inspector pi;
+    pi.window_to_image_coordinates(e.wx,e.wy,ix, iy);
+
+    if (active) {
+      if (e.type == vgui_MOTION) {
+        last_x = ix; last_y = iy;
+        post_overlay_redraw();
       }
-  
-      float ix, iy;
-      
-      vgui_projection_inspector pi;
-      pi.window_to_image_coordinates(e.wx,e.wy,ix, iy);
-       
-      if(active) {
-        if (e.type == vgui_MOTION) {
-          last_x = ix; last_y = iy;
-          post_overlay_redraw();
-        }  
-        else if( gesture0(e) ) {
-          point_list.push_back(vsol_point_2d_sptr( new vsol_point_2d( ix , iy )));
-          last_x = ix; last_y = iy;
-        }
-        else if( gesture1(e)||gesture2(e) ) {
-          if(gesture1(e))
-            point_list.push_back( vsol_point_2d_sptr( new vsol_point_2d( ix , iy ) ) );
-          active = false;
-          picking_completed = true;
-        }
+      else if ( gesture0(e) ) {
+        point_list.push_back(vsol_point_2d_sptr( new vsol_point_2d( ix , iy )));
+        last_x = ix; last_y = iy;
       }
+      else if ( gesture1(e) || gesture2(e) ) {
+        if (gesture1(e))
+          point_list.push_back( vsol_point_2d_sptr( new vsol_point_2d(ix,iy) ));
+        active = false;
+        picking_completed = true;
+      }
+    }
   }
- // ---- Object type is point_set_enum ----
+  // ---- Object type is point_set_enum ----
   //  -- similar to polygon except that we don't need to draw anything between points --
   if (obj_type == point_set_enum)
+  {
+    float ix, iy;
+    vgui_projection_inspector().window_to_image_coordinates(e.wx,
+                                                            e.wy,
+                                                            ix, iy);
+
+    // gesture0 = left mouse click, just add point to list
+    if ( gesture0(e) ) {
+      point_set_list.push_back(vsol_point_2d_sptr( new vsol_point_2d(ix,iy) ));
+#if BGUI_DEBUG
+      vcl_cout << "Left click returned " << ix << ",  " << iy  << vcl_endl;
+      vcl_cout.flush();
+#endif
+    }
+
+    // gesture1 = shift left mouse click or gesture2 = END key press
+    if ( gesture1(e)||gesture2(e) )
     {
-      float ix, iy;
-      vgui_projection_inspector().window_to_image_coordinates(e.wx,
-                                                              e.wy,
-                                                              ix, iy);
-
-		// gesture0 = left mouse click, just add point to list
-        if( gesture0(e) ) {
-          point_set_list.push_back(vsol_point_2d_sptr( new vsol_point_2d( ix, iy )));
+      // if middle mouse, add point to list and end, if END key just end
+      if (gesture1(e)) {
+        point_set_list.push_back(vsol_point_2d_sptr(new vsol_point_2d(ix,iy)));
 #if BGUI_DEBUG
-		  vcl_cout << "Left click returned " << ix << ",  " << iy  << vcl_endl;
-		  vcl_cout.flush();
+        vcl_cout << "Shift left returned " << ix << ",  " << iy << vcl_endl;
+        vcl_cout.flush();
 #endif
-        }
-
-		// gesture1 = shift left mouse click or gesture2 = END key press
-        if( gesture1(e)||gesture2(e) ) {
-
-		  // if middle mouse, add point to list and end, if END key just end
-		  if(gesture1(e)) {
-            point_set_list.push_back( vsol_point_2d_sptr( new vsol_point_2d( ix, iy )));
-#if BGUI_DEBUG
-		    vcl_cout << "Shift left returned " << ix << ",  " << iy << vcl_endl;
-		    vcl_cout.flush();
-#endif
-		  }
-		  
-		  // either way, end of picking
-          active = false;
-          picking_completed = true;
-#if BGUI_DEBUG
-		  vcl_cout << "Detected either middle or END key" << vcl_endl;
-		  vcl_cout.flush();
-#endif
-        }
       }
+
+      // either way, end of picking
+      active = false;
+      picking_completed = true;
+#if BGUI_DEBUG
+      vcl_cout << "Detected either middle or END key\n";
+      vcl_cout.flush();
+#endif
+    }
+  }
   return true;
 }
+
 //========================================================================
 //: Get next event in event loop
 bool bgui_picker_tableau::next()
