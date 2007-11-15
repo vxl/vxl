@@ -86,7 +86,7 @@ include ${VXLROOT}/config/top-params.mk
 #######################################
 
 ifndef NOTEST
- SUBDIRS += examples tests
+ SUBDIRS += tools examples tests
 endif
 
 # configure stuff:
