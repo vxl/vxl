@@ -115,11 +115,8 @@ void bwm_image_processor::range_map(bgui_image_tableau_sptr img)
   }
   if (nc==4) {
     vcl_vector<vcl_string> choices;
-    choices.push_back("RGBA");
-    choices.push_back("RGB");
-    choices.push_back("RGI");
-    choices.push_back("RBI");
-    choices.push_back("GBI");
+    for(unsigned c = 0; c<vgui_range_map_params::END_m; ++c)
+    choices.push_back(vgui_range_map_params::bmap[c]);
     rmp_dialog.choice("Band Map", choices, choice);
     ranges[6] = new_rmp->min_X_;
     ranges[7] = new_rmp->max_X_;
@@ -162,23 +159,19 @@ step_edges_vd(bgui_image_tableau_sptr const& img,
       return false;
     }
 
-  static bool agr = true;
   static sdet_detector_params dp;
   static float nm = 2.0;
 
   vgui_dialog vd_dialog("Step Edges Params");
   vd_dialog.field("Gaussian sigma", dp.smooth);
   vd_dialog.field("Noise Threshold", nm);
-  vd_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
-  vd_dialog.checkbox("Agressive Closure", agr);
-  vd_dialog.checkbox("Compute Junctions", dp.junctionp);
+
   if (!vd_dialog.ask())
     return false;
+
   dp.noise_multiplier=nm;
-  if (agr)
-    dp.aggressive_junction_closure=1;
-  else
-    dp.aggressive_junction_closure=0;
+  dp.aggressive_junction_closure=1;
+  dp.borderp = false;
   vil_image_resource_sptr image = img->get_image_resource();
   if (!image||!image->ni()||!image->nj())
     {
@@ -215,7 +208,6 @@ bool bwm_image_processor::lines_vd(bgui_image_tableau_sptr const& img,
     }
 
   static sdet_detector_params dp;
-  static bool agr = true;
   static float nm = 2.0;
 
   static sdet_fit_lines_params flp;
@@ -223,19 +215,13 @@ bool bwm_image_processor::lines_vd(bgui_image_tableau_sptr const& img,
   vgui_dialog lf_dialog("Detect Lines");
   lf_dialog.field("Gaussian sigma", dp.smooth);
   lf_dialog.field("Noise Threshold", nm);
-  lf_dialog.checkbox("Automatic Threshold", dp.automatic_threshold);
-  lf_dialog.checkbox("Agressive Closure", agr);
-  lf_dialog.checkbox("Compute Junctions", dp.junctionp);
   lf_dialog.field("Min Fit Length", flp.min_fit_length_);
   lf_dialog.field("RMS Distance", flp.rms_distance_);
 
   if (!lf_dialog.ask())
     return false;
   dp.noise_multiplier=nm;
-  if (agr)
-    dp.aggressive_junction_closure=1;
-  else
-    dp.aggressive_junction_closure=0;
+  dp.aggressive_junction_closure=1;
   dp.borderp = false;
   sdet_detector det(dp);
 
