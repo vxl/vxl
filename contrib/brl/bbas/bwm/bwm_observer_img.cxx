@@ -180,7 +180,7 @@ bgui_vsol_soview2D* bwm_observer_img::get_selected_object(vcl_string type)
     return obj;
   }
 
-  vcl_cerr << "The number of selected " << type << " is " << 
+  vcl_cerr << vcl_endl << "The number of selected " << type << " is " << 
     objs.size() << ". Please select only one!!!" << vcl_endl;
   return 0;
 }

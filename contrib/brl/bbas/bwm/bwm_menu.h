@@ -16,24 +16,11 @@ public:
   vgui_menu add_to_menu (vgui_menu& menu);
 
   // FILE Menu Items
+  static void create_site()  {bwm_tableau_mgr::instance()->create_site();}
   static void load_tableaus()  {bwm_tableau_mgr::instance()->load_tableaus();}
-  /*static void load_img_tableau() {bwm_tableau_mgr::instance()->load_img_tableau();}
-  static void load_cam_tableau() {bwm_tableau_mgr::instance()->load_cam_tableau();}
-  static void load_coin3d_tableau() {bwm_tableau_mgr::instance()->load_coin3d_tableau();}
-  static void load_proj2d_tableau() {bwm_tableau_mgr::instance()->load_proj2d_tableau();}
-  static void load_lidar_tableau() {bwm_tableau_mgr::instance()->load_lidar_tableau();}*/
   static void remove_tableau() {bwm_tableau_mgr::instance()->remove_tableau();}
   static void exit() {bwm_tableau_mgr::instance()->exit(); }
 
-  // Correspondence Menu Items
-#if 0
-  static void mode_corr() { bwm_tableau_mgr::instance()->mode_corr(); }
-  static void rec_corr() { bwm_tableau_mgr::instance()->rec_corr(); }
-  static void save_corr() { bwm_tableau_mgr::instance()->save_corr(); }
-  static void delete_last_corr() { bwm_tableau_mgr::instance()->delete_last_corr(); }
-  static void delete_corr() { bwm_tableau_mgr::instance()->delete_corr(); }
-  static void move_to_corr() { bwm_tableau_mgr::instance()->move_to_corr(); }
-#endif
 };
 
 #endif
