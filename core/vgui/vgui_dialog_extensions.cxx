@@ -29,6 +29,7 @@ vgui_dialog_extensions::vgui_dialog_extensions(const char* name)
 vgui_dialog_extensions::~vgui_dialog_extensions()
 {
   delete impl;
+  impl = 0;//so base class doesn't crash
 }
 
 bool vgui_dialog_extensions::ask()

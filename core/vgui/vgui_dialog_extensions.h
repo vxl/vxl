@@ -58,7 +58,7 @@ class vgui_dialog_extensions: public vgui_dialog
 
   //: Constructor - takes the title of the dialog box.
   vgui_dialog_extensions(const char* name);
- ~vgui_dialog_extensions();
+ virtual ~vgui_dialog_extensions();
 
   //: directory browsers
   void dir (const char* label, vcl_string& regexp, vcl_string& dirpath);

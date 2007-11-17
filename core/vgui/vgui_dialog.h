@@ -54,7 +54,7 @@ class vgui_dialog
 
   //: Constructor - takes the title of the dialog box.
   vgui_dialog(const char* name);
- ~vgui_dialog();
+ virtual ~vgui_dialog();
 
   void checkbox(const char*, bool&);
 

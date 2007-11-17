@@ -25,12 +25,16 @@
 // \endverbatim
 #include <vbl/vbl_ref_count.h>
 #include <vcl_iostream.h>
+#include <vcl_vector.h>
+#include <vcl_string.h>
 
 class vgui_range_map_params : public vbl_ref_count
 {
  public:
   //alpha channel map or projection of 4 bands onto 3 
-  enum {RGBA_m, RGB_m, RGX_m, RBX_m, GBX_m};
+  enum {RGBA_m, RGB_m, XRG_m, RXB_m, RGX_m, END_m};
+  //string representation of map index
+  static vcl_vector<vcl_string> bmap;
   //Mapping parameters
   unsigned n_components_; //!< number of components for pixel data
   long double min_L_;  //!< map domain minimum for luminance data
@@ -183,7 +187,7 @@ class vgui_range_map_params : public vbl_ref_count
       os << "min X range value " << min_X_ << '\n'
          << "max X range value " << max_X_ << '\n'
          << "gammaX " << gamma_X_ << '\n'
-         << "band map " << band_map_ << '\n';
+         << "band map " << bmap[band_map_] << '\n';
     
     if (invert_)
       os << "invert  true\n";
@@ -199,6 +203,8 @@ class vgui_range_map_params : public vbl_ref_count
     else
       os << "cache_mapped_pix  false\n";
   }
+  private:
+
 };
 
 #include <vgui/vgui_range_map_params_sptr.h>

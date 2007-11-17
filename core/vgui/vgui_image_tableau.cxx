@@ -388,6 +388,7 @@ class vgui_set_rangemap_command : public vgui_command
 
     // use this array because vgui_dialog does not support long double fields
     double ranges[8];
+    int choice = rmp->band_map_;
     vgui_dialog rmp_dialog("Set Range Mapping Parameters");
     if (nc_ == 1) {
       ranges[0] = rmp->min_L_;
@@ -419,8 +420,12 @@ class vgui_set_rangemap_command : public vgui_command
       rmp_dialog.field("X Min ",ranges[6]);
       rmp_dialog.field("X Max ",ranges[7]);
       rmp_dialog.field("X Gamma ",rmp->gamma_X_);
+      vcl_vector<vcl_string> choices;
+      for(unsigned c = 0; c<vgui_range_map_params::END_m; ++c)
+        choices.push_back(vgui_range_map_params::bmap[c]);
+      rmp_dialog.choice("Band Map", choices, choice);
     }
-    rmp_dialog.field("Band Map ",rmp->band_map_);
+
     rmp_dialog.checkbox("Invert ",rmp->invert_);
 
     rmp_dialog.checkbox("Use glPixelMap ",rmp->use_glPixelMap_);
@@ -429,6 +434,7 @@ class vgui_set_rangemap_command : public vgui_command
     if (!rmp_dialog.ask())
       return;
 
+    rmp->band_map_ = choice;
     rmp->min_L_ = ranges[0];
     rmp->max_L_ = ranges[1];
     rmp->min_R_ = ranges[0];

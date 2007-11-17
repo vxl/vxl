@@ -51,12 +51,13 @@ namespace
   // These two helper functions are used in the apply() methods. See
   // the comments in apply(vil_image_view_base).
 
+  // This is a helper routine for vgui_section_buffer::apply()
+  //
   // Converts the section of \a in marked by (x,y)-(x+w-1,y+h-1) into
   // the output GL buffer \a out.
   //
-  // This handles multi-plane images with scalar-valued pixels.
+  // Also handles multi-plane images with scalar-valued pixels.
   //
-  // This is a helper routine for vgui_section_buffer::apply()
   template <class InT, class OutT>
   bool
   convert_buffer( vil_image_view<InT> const& in,
@@ -120,34 +121,34 @@ namespace
                                               *(out+i+j*hstep) );
                       return true;
                     }
+                  case vgui_range_map_params::XRG_m :
+                    {
+                      for ( unsigned j=0; j < in.nj(); ++j )
+                        for ( unsigned i=0; i < in.ni(); ++i )
+                          vgui_pixel_convert( Rmap[(unsigned)(in(i,j,3))+O],
+                                              Gmap[(unsigned)(in(i,j,0))+O],
+                                              Bmap[(unsigned)(in(i,j,1))+O],
+                                              Xmap[(unsigned)(rmp->max_X_)],
+                                              *(out+i+j*hstep) );
+                      return true;
+                    }
+                  case vgui_range_map_params::RXB_m :
+                    {
+                      for ( unsigned j=0; j < in.nj(); ++j )
+                        for ( unsigned i=0; i < in.ni(); ++i )
+                          vgui_pixel_convert( Rmap[(unsigned)(in(i,j,1))+O],
+                                              Gmap[(unsigned)(in(i,j,3))+O],
+                                              Bmap[(unsigned)(in(i,j,2))+O],
+                                              Xmap[(unsigned)(rmp->max_X_)],
+                                              *(out+i+j*hstep) );
+                      return true;
+                    }
                   case vgui_range_map_params::RGX_m :
                     {
                       for ( unsigned j=0; j < in.nj(); ++j )
                         for ( unsigned i=0; i < in.ni(); ++i )
                           vgui_pixel_convert( Rmap[(unsigned)(in(i,j,0))+O],
                                               Gmap[(unsigned)(in(i,j,1))+O],
-                                              Bmap[(unsigned)(in(i,j,3))+O],
-                                              Xmap[(unsigned)(rmp->max_X_)],
-                                              *(out+i+j*hstep) );
-                      return true;
-                    }
-                  case vgui_range_map_params::RBX_m :
-                    {
-                      for ( unsigned j=0; j < in.nj(); ++j )
-                        for ( unsigned i=0; i < in.ni(); ++i )
-                          vgui_pixel_convert( Rmap[(unsigned)(in(i,j,0))+O],
-                                              Gmap[(unsigned)(in(i,j,2))+O],
-                                              Bmap[(unsigned)(in(i,j,3))+O],
-                                              Xmap[(unsigned)(rmp->max_X_)],
-                                              *(out+i+j*hstep) );
-                      return true;
-                    }
-                  case vgui_range_map_params::GBX_m :
-                    {
-                      for ( unsigned j=0; j < in.nj(); ++j )
-                        for ( unsigned i=0; i < in.ni(); ++i )
-                          vgui_pixel_convert( Rmap[(unsigned)(in(i,j,1))+O],
-                                              Gmap[(unsigned)(in(i,j,2))+O],
                                               Bmap[(unsigned)(in(i,j,3))+O],
                                               Xmap[(unsigned)(rmp->max_X_)],
                                               *(out+i+j*hstep) );
@@ -202,35 +203,35 @@ namespace
                                               *(out+i+j*hstep) );
                       break;
                     }
+                  case vgui_range_map_params::XRG_m :
+                    {
+                      for ( unsigned j=0; j < in.nj(); ++j )
+                        for ( unsigned i=0; i < in.ni(); ++i )
+                          vgui_pixel_convert( rm.map_R_pixel(in(i,j,3)),
+                                              rm.map_G_pixel(in(i,j,1)),
+                                              rm.map_B_pixel(in(i,j,2)),
+                                              rm.map_X_pixel(0),
+                                              *(out+i+j*hstep) );
+                      break;
+                    }
+                  case vgui_range_map_params::RXB_m :
+                    {
+                      for ( unsigned j=0; j < in.nj(); ++j )
+                        for ( unsigned i=0; i < in.ni(); ++i )
+                          vgui_pixel_convert( rm.map_R_pixel(in(i,j,1)),
+                                              rm.map_G_pixel(in(i,j,3)),
+                                              rm.map_B_pixel(in(i,j,2)),
+                                              rm.map_X_pixel(0),
+                                              *(out+i+j*hstep) );
+                      break;
+                    }
+             
                   case vgui_range_map_params::RGX_m :
                     {
                       for ( unsigned j=0; j < in.nj(); ++j )
                         for ( unsigned i=0; i < in.ni(); ++i )
                           vgui_pixel_convert( rm.map_R_pixel(in(i,j,0)),
                                               rm.map_G_pixel(in(i,j,1)),
-                                              rm.map_B_pixel(in(i,j,3)),
-                                              rm.map_X_pixel(0),
-                                              *(out+i+j*hstep) );
-                      break;
-                    }
-                  case vgui_range_map_params::RBX_m :
-                    {
-                      for ( unsigned j=0; j < in.nj(); ++j )
-                        for ( unsigned i=0; i < in.ni(); ++i )
-                          vgui_pixel_convert( rm.map_R_pixel(in(i,j,0)),
-                                              rm.map_G_pixel(in(i,j,2)),
-                                              rm.map_B_pixel(in(i,j,3)),
-                                              rm.map_X_pixel(0),
-                                              *(out+i+j*hstep) );
-                      break;
-                    }
-             
-                  case vgui_range_map_params::GBX_m :
-                    {
-                      for ( unsigned j=0; j < in.nj(); ++j )
-                        for ( unsigned i=0; i < in.ni(); ++i )
-                          vgui_pixel_convert( rm.map_R_pixel(in(i,j,1)),
-                                              rm.map_G_pixel(in(i,j,2)),
                                               rm.map_B_pixel(in(i,j,3)),
                                               rm.map_X_pixel(0),
                                               *(out+i+j*hstep) );
