@@ -192,19 +192,19 @@ get_pixel_info_from_image(const int x, const int y,
                         x, y, v(0,0).R(), v(0,0).G(),v(0,0).B(),v(0,0).A() );
             break;
           }
+        case vgui_range_map_params::XRG_m :
+          {
+            vcl_sprintf(msg, "(%d, %d)   (IRG:uint16)[ R=%d,G=%d,B=%d,I=%d]",
+                        x, y, v(0,0).R(), v(0,0).G(),v(0,0).B(),v(0,0).A() );
+            break;
+          }
+        case vgui_range_map_params::RXB_m :
+          {
+            vcl_sprintf(msg, "(%d, %d)   (RIB:uint16)[ R=%d,G=%d,B=%d,I=%d]",
+                        x, y, v(0,0).R(), v(0,0).G(),v(0,0).B(),v(0,0).A() );
+            break;
+          }
         case vgui_range_map_params::RGX_m :
-          {
-            vcl_sprintf(msg, "(%d, %d)   (RGI:uint16)[ R=%d,G=%d,B=%d,I=%d]",
-                        x, y, v(0,0).R(), v(0,0).G(),v(0,0).B(),v(0,0).A() );
-            break;
-          }
-        case vgui_range_map_params::RBX_m :
-          {
-            vcl_sprintf(msg, "(%d, %d)   (RBI:uint16)[ R=%d,G=%d,B=%d,I=%d]",
-                        x, y, v(0,0).R(), v(0,0).G(),v(0,0).B(),v(0,0).A() );
-            break;
-          }
-        case vgui_range_map_params::GBX_m :
           {
             vcl_sprintf(msg, "(%d, %d)   (RGI:uint16)[ R=%d,G=%d,B=%d,I=%d]",
                         x, y, v(0,0).R(), v(0,0).G(),v(0,0).B(),v(0,0).A() );
