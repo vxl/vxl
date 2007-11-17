@@ -141,7 +141,7 @@ class vgui_dialog_impl
   enum element_type {bool_elem, int_elem, long_elem, float_elem,
                      double_elem, string_elem, choice_elem, text_msg,
                      file_bsr, color_csr,inline_file_bsr,inline_color_csr,
-                     inline_tabl, unknown};
+                     inline_tabl, dir_bsr, line_br, unknown};
 
   //: Data associated with each field in the dialog box.
   //  The representation of a dialog box in vgui is simply as a list

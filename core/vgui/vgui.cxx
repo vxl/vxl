@@ -22,6 +22,7 @@
 #include <vgui/vgui_toolkit.h>
 #include <vgui/internals/vgui_accelerate.h>
 #include <vgui/internals/vgui_dialog_impl.h>
+#include <vgui/internals/vgui_dialog_extensions_impl.h>
 
 // static data
 vgui_toolkit *vgui::instance_ = 0;
@@ -250,6 +251,17 @@ vgui_dialog_impl *vgui::produce_dialog(vcl_string const &name)
   }
 }
 
+//----------------------------------------------------------------------------
+//: Produce dialog box.
+vgui_dialog_extensions_impl *vgui::produce_extension_dialog(vcl_string const &name)
+{
+  if (instance_)
+    return instance_->produce_dialog_extension(name.c_str());
+  else {
+    vgui_macro_warning << "no toolkit selected\n";
+    return 0;
+  }
+}
 //----------------------------------------------------------------------------
 //: Quit application.
 void vgui::quit()

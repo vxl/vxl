@@ -16,6 +16,7 @@
 //   15-AUG-2000 Marko Bacic, Oxford RRG    -- Implemented run_one_event.
 //   29-AUG-2001 K.Y.McGaul - Added destructor to remove Purify mem leak.
 //   23-DEC-2002 J.L. Mundy - Set window on adaptor for convenient access
+//   16-NOV-2007 Gamze Tunali - added produce_dialog_extension()
 // \endverbatim
 
 #include <vcl_vector.h>
@@ -51,6 +52,8 @@ class vgui_mfc : public vgui_toolkit
                                       const char* title="vgui mfc popup");
 
   virtual vgui_dialog_impl* produce_dialog(const char* name);
+
+  virtual vgui_dialog_extensions_impl* produce_dialog_extension(const char* name);
 
   vgui_mfc_utils *utils;
  protected:

@@ -145,7 +145,9 @@ SET(vgui_sources
 
   # dialog classes
   vgui_dialog.cxx                    vgui_dialog.h
+  vgui_dialog_extensions.cxx         vgui_dialog_extensions.h
   internals/vgui_dialog_impl.cxx     internals/vgui_dialog_impl.h
+  internals/vgui_dialog_extensions_impl.cxx     internals/vgui_dialog_extensions_impl.h
   internals/vgui_dialog_field.h
   internals/vgui_simple_field.h      internals/vgui_simple_field.cxx
   internals/vgui_string_field.h
@@ -335,6 +337,7 @@ IF (MFC_FOUND)
       impl/mfc/vgui_mfc_app.cxx         impl/mfc/vgui_mfc_app.h
       impl/mfc/vgui_mfc_app_init.cxx    impl/mfc/vgui_mfc_app_init.h
       impl/mfc/vgui_mfc_dialog_impl.cxx impl/mfc/vgui_mfc_dialog_impl.h
+      impl/mfc/vgui_mfc_dialog_extensions_impl.cxx impl/mfc/vgui_mfc_dialog_extensions_impl.h
       impl/mfc/vgui_mfc_doc.cxx         impl/mfc/vgui_mfc_doc.h
       impl/mfc/vgui_mfc_mainfrm.cxx     impl/mfc/vgui_mfc_mainfrm.h
       impl/mfc/vgui_mfc_statusbar.cxx   impl/mfc/vgui_mfc_statusbar.h
@@ -342,6 +345,7 @@ IF (MFC_FOUND)
       impl/mfc/vgui_mfc_utils.cxx       impl/mfc/vgui_mfc_utils.h
       impl/mfc/vgui_mfc_view.cxx        impl/mfc/vgui_mfc_view.h
       impl/mfc/vgui_mfc_window.cxx      impl/mfc/vgui_mfc_window.h
+      impl/mfc/vgui_dir_dialog.cxx      impl/mfc/vgui_dir_dialog.h
     )
 
     SET( vgui_sources ${vgui_sources} ${vgui_mfc_sources} )
@@ -476,6 +480,11 @@ SET( VGUI_FOUND "YES" CACHE INTERNAL "Was vgui successfully built?" )
 
 # Dependencies on other vxl libraries
 TARGET_LINK_LIBRARIES(vgui vnl vil1 vil vgl vpl vbl vul)
+
+#imagehlp.dll is needed for directory browsing (vgui_dir_dialog)
+IF(MFC_FOUND)
+  TARGET_LINK_LIBRARIES(vgui imagehlp)
+ENDIF(MFC_FOUND)
 
 # Dependencies created by the toolkit implementations
 

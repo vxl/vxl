@@ -12,6 +12,7 @@
 //  Modifications
 //   K.Y.McGaul  29-AUG-2001  Add destructor to remove Purify mem leak.
 //                            Tidy up indentation and documentation.
+//   16-NOV-2007 Gamze Tunali - added produce_dialog_extension()
 // \endverbatim
 //-----------------------------------------------------------------------------
 #include "vgui_mfc.h"
@@ -19,6 +20,7 @@
 #include <vgui/vgui_adaptor.h>
 #include "vgui_mfc_window.h"
 #include "vgui_mfc_dialog_impl.h"
+#include "vgui_mfc_dialog_extensions_impl.h"
 #include "vgui_mfc_utils.h"
 
 #define VC_EXTRALEAN  // Exclude rarely-used stuff from Windows headers
@@ -180,5 +182,13 @@ vgui_window* vgui_mfc::produce_window(int width, int height,
 vgui_dialog_impl* vgui_mfc::produce_dialog(const char* name)
 {
   return new vgui_mfc_dialog_impl(name);
+  return 0;
+}
+
+//--------------------------------------------------------------------------------
+//: Virtual function from vgui - creates a new dialog box.
+vgui_dialog_extensions_impl* vgui_mfc::produce_dialog_extension(const char* name)
+{
+  return new vgui_mfc_dialog_extensions_impl(name);
   return 0;
 }

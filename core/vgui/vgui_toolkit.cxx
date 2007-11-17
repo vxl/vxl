@@ -87,6 +87,12 @@ vgui_dialog_impl *vgui_toolkit::produce_dialog(char const*)
   return 0;
 }
 
+vgui_dialog_extensions_impl *vgui_toolkit::produce_dialog_extension(char const*)
+{
+  vgui_macro_warning << "no implementation of produce_dialog supplied\n";
+  return 0;
+}
+
 void vgui_toolkit::quit()
 {
   vgui_macro_warning << "vgui_toolkit::quit() called.\n"

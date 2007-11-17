@@ -16,6 +16,7 @@
 //   26 Oct 1999  fsm. various changes to facilitate the port of old impl code.
 //   30-AUG-2000  Marko Bacic, Oxford RRG -- Added flags to support MFC accel.
 //   26-APR-2002  K.Y.McGaul - Added some doxygen style comments.
+//   16-NOV_2007  Gamze Tunali - Added a new type of dialog called dialog_extensions
 // \endverbatim
 
 #include "dll.h"
@@ -27,6 +28,7 @@ class vgui_adaptor;
 class vgui_event;
 class vgui_menu;
 class vgui_dialog_impl;
+class vgui_dialog_extensions_impl;
 class vgui_tableau;
 class vgui_toolkit;
 struct vgui_tableau_sptr;
@@ -108,6 +110,9 @@ class vgui
                                      vcl_string const &title ="");
   //: Produce dialog box.
   static vgui_dialog_impl* produce_dialog(vcl_string const &name);
+
+  //: Produce dialog box.
+  static vgui_dialog_extensions_impl* produce_extension_dialog(vcl_string const &name);
 
   // Convenience methods
   //--------------------

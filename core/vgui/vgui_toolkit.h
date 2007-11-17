@@ -20,6 +20,7 @@ class vgui_adaptor;
 class vgui_event;
 class vgui_menu;
 class vgui_dialog_impl;
+class vgui_dialog_extensions_impl;
 class vgui_tableau;
 struct vgui_tableau_sptr;
 
@@ -45,6 +46,8 @@ class vgui_toolkit
                                       char const *title);
 
   virtual vgui_dialog_impl* produce_dialog(char const *name);
+
+  virtual vgui_dialog_extensions_impl* produce_dialog_extension(char const *name);
 
   virtual void run() = 0;
   virtual void run_one_event();

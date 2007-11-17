@@ -113,6 +113,7 @@ class vgui_dialog
   bool ask();
 
  protected:
+  vgui_dialog() {}
   vgui_dialog_impl* impl;
 };
 
