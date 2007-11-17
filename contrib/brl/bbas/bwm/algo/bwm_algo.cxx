@@ -12,6 +12,10 @@
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
 
+#include <vpgl/file_formats/vpgl_nitf_rational_camera.h>
+
+#include <vil/vil_load.h>
+
 //: returns the vertex (x,y) values of a 2D polygon in seperate x and y arrays 
 void bwm_algo::get_vertices_xy(vsol_polygon_2d_sptr poly2d, 
                                float **x, float **y)
@@ -145,4 +149,36 @@ vgl_point_3d<double> bwm_algo::fit_sphere_to_corner(vgl_point_3d<double> P1, vgl
   vgl_homg_point_3d<double> Q = vgl_homg_operators_3d<double>::intersection(plane1, plane2, plane3);
   
   return (vgl_point_3d<double> (Q.x()/Q.w(), Q.y()/Q.w(), Q.z()/Q.w()));
+}
+
+vpgl_rational_camera<double> * 
+bwm_algo::extract_nitf_camera(vil_image_resource_sptr img)
+{
+
+  if (!img)
+  {
+    vcl_cerr << "Null image in bwm_tableau_mgr::extract_nitf_camera\n";
+    return 0;
+  }
+
+  vil_nitf2_image* nitf = 0;
+  vcl_string format = img->file_format();
+  vcl_string prefix = format.substr(0,4);
+  if (prefix == "nitf") {
+    nitf = (vil_nitf2_image*)img.ptr();
+    vpgl_nitf_rational_camera* rpcam = new vpgl_nitf_rational_camera(nitf, true);
+    return rpcam;
+  } else {
+    vcl_cout << "The image is not an NITF" << vcl_endl;
+    return 0;
+  }
+  
+}
+
+vpgl_rational_camera<double> * 
+bwm_algo::extract_nitf_camera(vcl_string img_path)
+{
+  vil_image_resource_sptr img_res = vil_load_image_resource(img_path.c_str());
+  //vil_image_resource_sptr img_res = load_image(img_path, params);
+  return extract_nitf_camera(img_res);
 }

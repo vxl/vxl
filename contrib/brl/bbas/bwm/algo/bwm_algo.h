@@ -15,7 +15,9 @@
 #include <vsol/vsol_polyline_3d_sptr.h>
 
 #include <vpgl/vpgl_proj_camera.h>
+#include <vpgl/vpgl_rational_camera.h>
 
+#include <vil/vil_image_resource_sptr.h>
 
 class bwm_algo {
 
@@ -43,6 +45,9 @@ public:
                                     vgl_point_3d<double>& l1, vgl_point_3d<double>& l2,
                                     vgl_point_3d<double>& point2,
                                     vgl_point_3d<double>& l3, vgl_point_3d<double>& l4);
+
+  static vpgl_rational_camera<double>* extract_nitf_camera(vil_image_resource_sptr img);
+  static vpgl_rational_camera<double>* extract_nitf_camera(vcl_string img_path);
 };
 
 #endif
