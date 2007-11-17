@@ -30,6 +30,7 @@
 #include <vgui/vgui_message.h>
 #include <vgui/vgui_dialog.h>
 
+//#define CAM_DEBUG   
 
 void bwm_observer_cam::set_ground_plane(double x1, double y1, double x2, double y2)
 {
@@ -457,7 +458,8 @@ bool bwm_observer_cam::find_intersection_point(vgl_homg_point_2d<double> img_poi
   vgl_homg_plane_3d<double> poly_plane = poly3d->plane(); //find_plane(poly3d);
   vgl_homg_point_3d<double> p3d_homg;
   
-  intersect_ray_and_plane(img_point,poly_plane,p3d_homg);
+  if(!intersect_ray_and_plane(img_point,poly_plane,p3d_homg))
+    return false;
 
   if (is_ideal(p3d_homg)) {
     vcl_cout << "intersection point is ideal!" <<vcl_endl;
@@ -495,7 +497,15 @@ bool bwm_observer_cam::find_intersection_point(vgl_homg_point_2d<double> img_poi
   }
 }
 */
-
+//
+// The input point, pt, is supplied by the caller. The routine
+// expects that the user has selected a face and a vertex on the face.
+// A plane is constructed that is perpendicular to the face to be extruded,
+// and passing through one of the edges of the face. The 3-d location of 
+// the picked point is determined by projecting it onto the perpendicular
+// plane. The face is extruded to this position along the normal of 
+// the selected face.
+//
 void bwm_observer_cam::extrude_face(vsol_point_2d_sptr pt)
 {
   // first get the selected objects
@@ -525,11 +535,12 @@ void bwm_observer_cam::extrude_face(vsol_point_2d_sptr pt)
 
     vsol_polygon_3d_sptr face = obs->extract_face(face_id);
 
-    // find the backprojection of the picked point to compute the distance
+    // find the backprojection of the selected vertex 
     vsol_point_3d_sptr v3d;
     backproj_point(picked_v, v3d, face->plane());
-
-    // find the index of the selected vertex
+    
+    // find the index of the selected vertex, by searching for the 
+    // closest 3-d vertex to the backprojected 2-d vertex
     double min_dist = 1e23;
     unsigned index = -1;
     for (unsigned i=0; i<face->size(); i++) {
@@ -545,24 +556,61 @@ void bwm_observer_cam::extrude_face(vsol_point_2d_sptr pt)
     }
 
     // define a new plane, to backproject the extrusion point
+    // get the next vertex index on the selected face
     unsigned next_index = (index == face->size()-1) ? 0 : index+1;
-    vgl_homg_plane_3d<double> plane(vgl_homg_point_3d<double>(face->vertex(index)->get_p()), 
-      vgl_homg_point_3d<double> (face->vertex(next_index)->get_p()),
-      vgl_homg_point_3d<double>(face->vertex(index)->get_p().x()+face->normal().x(), 
-      face->vertex(index)->get_p().y()+face->normal().y(),
-      face->vertex(index)->get_p().z()+face->normal().z()));
-
+    // selected vertex
+    vgl_homg_point_3d<double> p0(face->vertex(index)->get_p());
+    // next vertex
+    vgl_homg_point_3d<double> p1(face->vertex(next_index)->get_p());
+    // a point above p0 along normal
+    vgl_homg_point_3d<double> p2(face->vertex(index)->get_p().x() +
+                                 face->normal().x(), 
+                                 face->vertex(index)->get_p().y() +
+                                 face->normal().y(),
+                                 face->vertex(index)->get_p().z() +
+                                 face->normal().z());
+    vgl_homg_plane_3d<double> plane(p0, p1, p2);
+#ifdef CAM_DEBUG    
+    vcl_cout << "projection plane normal " << plane.normal() << '\n';
+#endif
     vsol_point_3d_sptr pt3d;
     backproj_point(pt, pt3d, plane);
+    if(!pt3d)
+      {
+        vcl_cout << "Target point did not project successfully "
+                 <<"to building surface. Try again.\n";
+        return;
+      }
+          
+#ifdef CAM_DEBUG
+    vcl_cout << "The back-projected point ("
+             << pt3d->x() << ' ' << pt3d->y() << ' ' << pt3d->z() << ")\n";
+#endif
 
+
+    // the face normal vector
     vgl_vector_3d<double> n1 = face->normal();
+#ifdef CAM_DEBUG   
+    vcl_cout << "extrusion face normal " << n1 << '\n';
+#endif
+    // the vector pointing from the selected vertex to the 3-d target point
     vgl_vector_3d<double> n2 = pt3d->get_p() - v3d->get_p();
     double a = angle(n1, n2);
     double ninety_deg = vnl_math::pi/2.0;
+    
+#ifdef CAM_DEBUG   
+    vcl_cout << "angle " << a*180/vnl_math::pi << '\n';
+#endif
 
+    //magnitude of the distance from the selected vertex to the target point
     double dist = (face->vertex(index)->get_p() - pt3d->get_p()).length();
     if (a > ninety_deg)
       dist *= -1;
+    //OK but what if the target point does not lie exactly on the 
+    //vector from the selected vertex to the ground. We should only
+    //consider that the z coordinate of the selected point is important.
+    //This method should be modified, perhaps define a "visible side"
+    //construction plane. 
 
     obs->extrude(face_id, dist);
   } 
@@ -599,11 +647,15 @@ void bwm_observer_cam::backproj_point(vsol_point_2d_sptr p2d,
   vgl_homg_point_2d<double> image_point(p2d->x(), p2d->y());
   //vcl_cout << " Before projection---> x=" << p->x() << "  y=" << p->y() << vcl_endl;
 
-  intersect_ray_and_plane(image_point,proj_plane,world_point);
-  double x = world_point.x()/world_point.w();
-  double y = world_point.y()/world_point.w();
-  double z = world_point.z()/world_point.w();  
-  p3d = new vsol_point_3d (x, y, z);
+  if(intersect_ray_and_plane(image_point,proj_plane,world_point))
+    {
+      double x = world_point.x()/world_point.w();
+      double y = world_point.y()/world_point.w();
+      double z = world_point.z()/world_point.w();  
+      p3d = new vsol_point_3d (x, y, z);
+    }
+  else
+    p3d = 0;
 }
 
 void bwm_observer_cam::backproj_poly(vsol_polygon_2d_sptr poly2d, 

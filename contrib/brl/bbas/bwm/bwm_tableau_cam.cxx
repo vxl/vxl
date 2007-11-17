@@ -260,7 +260,11 @@ void bwm_tableau_cam::create_polygon_mesh()
   vsol_polygon_2d_sptr poly2d;
   set_color(1, 0, 0);
   pick_polygon(poly2d);
-
+  if(! poly2d){
+	  vcl_cerr << "In bwm_tableau_cam::create_polygon_mesh -"
+		  << " pick_polygon failed \n";
+	  return ;
+  }
   vsol_polygon_3d_sptr poly3d;
   my_observer_->backproj_poly(poly2d, poly3d);
   bwm_observable_mesh_sptr my_polygon = new bwm_observable_mesh();

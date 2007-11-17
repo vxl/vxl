@@ -595,11 +595,13 @@ void bwm_tableau_mgr::load_tableaus()
  
 void bwm_tableau_mgr::load_img_tableau()
  {
-  vgui_dialog params ("Image Tableau");
-  vcl_string ext, name, img_file, empty="";
-
-  params.field("Tableau Name", name);
-  params.file("Image...", ext, img_file);
+   vgui_dialog_extensions params ("Image Tableau");
+   vcl_string ext, name, img_file, empty="";
+   params.field("Tableau Name", name);
+   params.line_break();
+   params.dir("Image...", ext, img_file);
+   params.line_break();
+   params.set_modal(true);
   if (!params.ask())
     return;
 
@@ -809,6 +811,7 @@ void bwm_tableau_mgr::remove_tableau()
 }
 
 
+
 vil_image_resource_sptr bwm_tableau_mgr::load_image(vcl_string& filename, 
                                                     vgui_range_map_params_sptr& rmps)
 {
@@ -833,8 +836,10 @@ vil_image_resource_sptr bwm_tableau_mgr::load_image(vcl_string& filename,
     res = vil_load_image_resource(filename.c_str());
   }
   bgui_image_utils biu(res);
+#if 0
   biu.default_range_map(rmps);
-
+#endif
+  biu.range_map_from_hist(1.0, false, true, true,rmps);
   return res;
 }
 

@@ -271,11 +271,15 @@ void bwm_observer_vgui::translate(vgl_vector_3d<double> T,
     
   while (iter != objects_.end()) {
     bwm_observable_sptr obs = iter->first;
-    if ((obs != 0) && (obs == object)) {
+    if(obs==0) continue;
+    if(object==0){
       obs->translate(T);
-      return;
-    } else
+      continue;
+    }
+    else if(obs == object){
       obs->translate(T);
+    return;
+    }
     iter++;
   }
 }
