@@ -10,7 +10,8 @@
 
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui.h>
-
+#include <vgui/vgui_dialog.h>
+#include <vgui/vgui_dialog_extensions.h>
 #include <vil/vil_image_resource_sptr.h>
 
 #include <vpgl/vpgl_proj_camera.h>
@@ -30,6 +31,8 @@ public:
   vgui_grid_tableau_sptr grid() { return grid_; }
 
   static void register_tableau(bwm_command_sptr tab_comm);
+
+  void create_site();
 
   void create_img_tableau(vcl_string name, vcl_string& image_path);
 
@@ -92,7 +95,19 @@ private:
 
   vcl_vector<vcl_string> coin3d_tableau_names();
 
-  vpgl_rational_camera<double> * extract_nitf_camera(vil_image_resource_sptr img);
+  //vpgl_rational_camera<double> * extract_nitf_camera(vil_image_resource_sptr img);
+
+  //vpgl_rational_camera<double> * extract_nitf_camera(vcl_string img_path);
+
+  void create_site_dialog(vgui_dialog_extensions &site_dialog,
+                               vcl_string &site_name, 
+                               vcl_string &site_dir, 
+                               vcl_vector<vcl_string> &files,
+                               bool* pyr_v, bool* act_v,
+                               vcl_vector<vcl_string> &pyr_levels,
+                               vcl_vector<vcl_string> &objs,
+                               int *choices,
+                               double &lat, double &lon, double &elev);
 
   bool display_image_path_;
 };

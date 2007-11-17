@@ -16,20 +16,22 @@
 #include "bwm_corr_sptr.h"
 #include "bwm_command.h"
 #include "bwm_load_commands.h"
+#include "algo/bwm_algo.h"
 #include "algo/bwm_rat_proj_camera.h"
 #include "algo/bwm_image_processor.h"
 #include "algo/bwm_utils.h"
+//#include "algo/bwm_site.h"
+//#include "algo/bwm_site_creation_process.h"
 
 #include <vgui/vgui_poly_tableau.h>
-#include <bgui/bgui_image_tableau.h>
-#include <bgui/bgui_image_utils.h>
+
 #include <vgui/vgui_composite_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_range_map_params.h>
-#include <vgui/vgui_dialog.h>
-#include <bgui/bgui_image_utils.h>
 
 #include <bgui3d/bgui3d.h>
+#include <bgui/bgui_image_tableau.h>
+#include <bgui/bgui_image_utils.h>
 
 #include <vil/vil_load.h>
 #include <vil/vil_blocked_image_resource.h>
@@ -37,10 +39,7 @@
 #include <vil/vil_property.h>
 
 #include <vul/vul_file.h>
-#include <vpgl/file_formats/vpgl_nitf_rational_camera.h>
 #include <Inventor/nodes/SoSelection.h>
-
-#define XML
 
 bwm_tableau_mgr* bwm_tableau_mgr::instance_ = 0;
 vcl_map<vcl_string, bwm_command_sptr> bwm_tableau_mgr::tab_types_;
@@ -88,6 +87,126 @@ bwm_command_sptr bwm_tableau_mgr::load_tableau_by_type(vcl_string tableau_type)
   return comm;
 }
 
+void bwm_tableau_mgr::create_site_dialog(vgui_dialog_extensions &site_dialog,
+                               vcl_string &site_name, 
+                               vcl_string &site_dir, 
+                               vcl_vector<vcl_string> &files,
+                               bool* pyr_v, bool* act_v, 
+                               vcl_vector<vcl_string> &pyr_levels,
+                               vcl_vector<vcl_string> &objs,
+                               int* choices,
+                               double &lat, double &lon, double &elev)
+                    
+{
+  vcl_string ext;
+  site_dialog.field("SITE NAME:", site_name);
+  site_dialog.line_break();
+  site_dialog.dir("DIRECTORY:", ext, site_dir);
+  site_dialog.line_break();
+  site_dialog.line_break();
+  site_dialog.set_modal(true);
+
+  // add a bunch of images
+  site_dialog.message("Please Choose the Images for this site:");
+  site_dialog.line_break();
+  for (unsigned i=0; i<files.size(); i++) {
+    site_dialog.dir("Image Path:", ext, files[i]);
+    site_dialog.checkbox("Pyramid:", pyr_v[i]);
+    site_dialog.field("Levels:", pyr_levels[i]);
+    site_dialog.checkbox("Active:", act_v[i]);
+    site_dialog.line_break();
+  }
+
+  site_dialog.line_break();
+  site_dialog.line_break();
+  site_dialog.message("Please Choose the objects to add to the site:");
+  site_dialog.line_break();
+
+  for (unsigned i=0; i<objs.size(); i++) {
+    site_dialog.file("Enter input object:", ext, objs[i]);
+    site_dialog.choice("Type:", "mesh", "vsol", choices[i]);
+    site_dialog.line_break();
+  }
+
+  site_dialog.line_break();
+  site_dialog.message("Enter the LVCS origin for this site:");
+  site_dialog.line_break();
+  site_dialog.field("Lat:", lat);
+  site_dialog.field("Lon:", lon);
+  site_dialog.field("Elev:", elev);
+  site_dialog.set_ok_button("CREATE");
+}
+
+//: create a dialog box to create site to add images, objects, etc..
+void bwm_tableau_mgr::create_site()
+{
+  vgui_dialog_extensions site_dialog("World Model Site Creation");
+
+  vcl_string site_name, site_dir;
+
+  int num_images = 5;
+  vcl_vector<vcl_string> files(num_images);
+  bool pyr[5] = {false, false, false, false, false};
+  bool act[5] = {false, false, false, false, false};
+  vcl_vector<vcl_string> levels(num_images);
+
+  int num_objs = 3;
+  vcl_vector<vcl_string> objs(num_objs);
+  int choices[3] = {0, 0, 0};
+  double lat=0.0, lon=0.0, elev=0.0;
+
+  create_site_dialog(site_dialog, site_name, site_dir, files, pyr, 
+    act, levels, objs, choices, lat, lon, elev);
+ 
+  if (!site_dialog.ask()) {
+    return;
+  } else {
+    // collect the paramaters
+    vcl_cout << "name:" << site_name << vcl_endl;
+    vcl_cout << "dir:" << site_dir << vcl_endl;
+
+    // make sure site name is filled
+    while (site_name.size() == 0) {
+      vgui_dialog error ("Error");
+      error.message ("Please enter a valid SITE NAME!            " );
+      error.ask();
+      if (site_dialog.ask() == false) 
+        return;
+    }
+
+    // make sure site directory is filled and valid
+     while ((site_dir.size() == 0) || !vul_file::is_directory(site_dir)) {
+      vgui_dialog error ("Error");
+      error.message ("Please enter a valid SITE DIRECTORY!            " );
+      error.ask();
+      if (site_dialog.ask() == false) 
+        return;
+    }
+  }
+      
+  vcl_vector<bool> pyramid;
+  vcl_vector<bool> active;
+  for (unsigned j=0; j<files.size(); j++) {
+     pyramid.push_back(pyr[j]);
+     active.push_back(act[j]);
+  }
+
+  vcl_vector<vcl_pair<vcl_string, vcl_string> > objects;
+  for (unsigned obj=0; obj=objs.size(); obj++) {
+    vcl_pair<vcl_string, vcl_string> pair(objs[obj], choices[obj] == 0 ? "mesh":"vsol");
+    objects.push_back(pair);
+  }
+
+//  bwm_site site(site_name, site_dir, files, pyramid, active, 
+ //   levels, objects, vsol_point_3d(lat, lon, elev));
+
+  //bwm_site_creation_process(site, NULL);
+  // collect the images and check the validity
+  
+  
+  // process the input fields
+}
+
 void bwm_tableau_mgr::create_img_tableau(vcl_string name, 
                                          vcl_string& image_path)
 {
@@ -110,6 +229,7 @@ void bwm_tableau_mgr::create_img_tableau(vcl_string name,
   bwm_observer_img* obs = new bwm_observer_img(img);
   bwm_tableau_img* t = new bwm_tableau_img(obs);
   vgui_viewer2D_tableau_sptr viewer = vgui_viewer2D_tableau_new(t);
+  obs->set_tab_name(name);
   obs->set_viewer(viewer);
   add_to_grid(viewer);
   tableaus_[name] = t;
@@ -147,7 +267,7 @@ void bwm_tableau_mgr::create_cam_tableau(vcl_string name,
   // check if the camera path is not empty, if it is NITF, the camera 
   // info is in the image, not a seperate file
   if (cam_path.size() == 0) {
-    camera_rat = this->extract_nitf_camera(img_res);
+    camera_rat = bwm_algo::extract_nitf_camera(img_res);
     if (camera_rat == 0) {
       vcl_cerr << "Camera is not given, the tableau is not created!" << vcl_endl;
       return;
@@ -293,7 +413,7 @@ void bwm_tableau_mgr::create_proj2d_tableau(vcl_string name,
       error.ask();
       return;
     } 
-    vcl_cout << tab->type_name() << vcl_endl;
+   
     if (tab->type_name().compare("bwm_tableau_coin3d") != 0) {
       vgui_dialog error ("Error");
       error.message ("Proj2D Simple Tableau needs a corresponding Coin3D tableau!" );
@@ -380,315 +500,97 @@ void bwm_tableau_mgr::create_lidar_tableau(vcl_string name,
 
 void bwm_tableau_mgr::load_tableaus()
 {
-#ifdef XML 
   bwm_io_config_parser* parser = parse_config();
-  vcl_vector<bwm_io_tab_config* > tableaus =  parser->tableau_config();
+  if (parser) {
+    vcl_vector<bwm_io_tab_config* > tableaus =  parser->tableau_config();
 
-  for (unsigned i=0; i<tableaus.size(); i++) {
-    bwm_io_tab_config* t = tableaus[i];
-    if (t->type_name.compare("ImageTableau") == 0) {
-      bwm_io_tab_config_img* img_tab = static_cast<bwm_io_tab_config_img* > (t);
-      vcl_string name = img_tab->name;
-      vcl_string path = img_tab->img_path;
-      create_img_tableau(name, path);
+    for (unsigned i=0; i<tableaus.size(); i++) {
+      bwm_io_tab_config* t = tableaus[i];
+      if (t->type_name.compare("ImageTableau") == 0) {
+        bwm_io_tab_config_img* img_tab = static_cast<bwm_io_tab_config_img* > (t);
+        bool active = img_tab->status;
+        if (active) {
+          vcl_string name = img_tab->name;
+          vcl_string path = img_tab->img_path;
+          create_img_tableau(name, path);
+        }
 
-    } else if (t->type_name.compare("CameraTableau") == 0) {
-      bwm_io_tab_config_cam* cam_tab = static_cast<bwm_io_tab_config_cam* > (t);
-      BWM_CAMERA_TYPES cam_type;
-      if (cam_tab->cam_type.compare("projective") == 0) 
-        cam_type = PROJECTIVE;
-      else if (cam_tab->cam_type.compare("rational") == 0) 
-        cam_type = RATIONAL;
-      else {
-        vcl_cerr << "Unknown camera type " << cam_tab->cam_type << "coming from parser!" << vcl_endl;
-        continue;
-      }
-      this->create_cam_tableau(cam_tab->name, cam_tab->img_path, cam_tab->cam_path, cam_type);
-
-    } else if (t->type_name.compare("Coin3DTableau") == 0) {
-      bwm_io_tab_config_coin3d* coin3d_tab = static_cast<bwm_io_tab_config_coin3d* > (t);
-      BWM_CAMERA_TYPES cam_type;
-      if (coin3d_tab->cam_type.compare("projective") ==0) 
-        cam_type = PROJECTIVE;
-      else if (coin3d_tab->cam_type.compare("rational") ==0) 
-        cam_type = RATIONAL;
-      else {
-        vcl_cerr << "Unknown camera type " << coin3d_tab->cam_type << "coming from parser!" << vcl_endl;
-        continue;
-      }
-      this->create_coin3d_tableau(coin3d_tab->name, coin3d_tab->cam_path, cam_type);
-    }
-  }
-
-  vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > corresp = 
-    parser->correspondences();
-  vcl_string mode = parser->corresp_mode();
-
-  if (mode == "WORLD_TO_IMAGE") {
-    // the vector of 3D points should be of equal size to correspondence point sets
-    assert (parser->corresp_world_pts().size() == corresp.size());
-  }
-
-  for (unsigned i=0; i<corresp.size(); i++) {
-    bwm_corr_sptr corr = new bwm_corr();
-    vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > elm = corresp[i];
-
-    if (mode == "WORLD_TO_IMAGE") {
-      corr->set_mode(false);
-      corr->set_world_pt(parser->corresp_world_pts()[i].get_p());
-    } else if (mode == "IMAGE_TO_IMAGE") {
-      corr->set_mode(true);
-    }
-
-    vcl_string tab_name;
-    double X, Y;
-    for (unsigned j=0; j<elm.size(); j++) {
-      tab_name = elm[j].first;
-      X = elm[i].second.x();
-      Y = elm[i].second.y();
-      vgui_tableau_sptr tab = this->find_tableau(tab_name);
-      if (tab) {
-        vcl_cout << tab->type_name() << vcl_endl;
-        if ((tab->type_name().compare("bwm_tableau_proj_cam") == 0) || 
-          (tab->type_name().compare("bwm_tableau_rat_cam") == 0)) {
-          bwm_tableau_cam* tab_cam = static_cast<bwm_tableau_cam*> (tab.as_pointer());
-          bwm_observer_cam* obs = tab_cam->observer();
-          if (obs) {
-            corr->set_match(obs, X, Y);
-            obs->add_cross(X, Y, 3);
+      } else if (t->type_name.compare("CameraTableau") == 0) {
+        bwm_io_tab_config_cam* cam_tab = static_cast<bwm_io_tab_config_cam* > (t);
+        bool active = cam_tab->status;
+        if (active) {
+          BWM_CAMERA_TYPES cam_type;
+          if (cam_tab->cam_type.compare("projective") == 0) 
+            cam_type = PROJECTIVE;
+          else if (cam_tab->cam_type.compare("rational") == 0) 
+            cam_type = RATIONAL;
+          else {
+            vcl_cerr << "Unknown camera type " << cam_tab->cam_type << "coming from parser!" << vcl_endl;
+            continue;
           }
+          this->create_cam_tableau(cam_tab->name, cam_tab->img_path, cam_tab->cam_path, cam_type);
+        }
+      } else if (t->type_name.compare("Coin3DTableau") == 0) {
+        bwm_io_tab_config_coin3d* coin3d_tab = static_cast<bwm_io_tab_config_coin3d* > (t);
+        bool active = coin3d_tab->status;
+        if (active) {
+          BWM_CAMERA_TYPES cam_type;
+          if (coin3d_tab->cam_type.compare("projective") ==0) 
+            cam_type = PROJECTIVE;
+          else if (coin3d_tab->cam_type.compare("rational") ==0) 
+            cam_type = RATIONAL;
+          else {
+            vcl_cerr << "Unknown camera type " << coin3d_tab->cam_type << "coming from parser!" << vcl_endl;
+            continue;
+          }
+          this->create_coin3d_tableau(coin3d_tab->name, coin3d_tab->cam_path, cam_type);
         }
       }
-      bwm_observer_mgr::instance()->set_corr(corr);
-    }
-  }
-  delete parser;
-
-#else
-
-  vcl_string filename = select_file();
-  if (filename.empty())
-    {
-      vcl_cout << "Bad filename\n";
-      return;
-    }
-  vcl_ifstream is(filename.data());
-  if(!is.is_open())  {
-      vcl_cout << "Can't open file\n";
-      return;
     }
 
-  vcl_string type, name, str;
-  while (!is.eof()) {
-    is >> type;
+    vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > corresp = 
+      parser->correspondences();
+    vcl_string mode = parser->corresp_mode();
 
-    // IMAGE TABLEAU
-    if(type == "IMAGE_TAB:") {
-      is >> name;
-      is >> str;
-      if(str != "IMAGE:")  {
-          vcl_cout << "Bad file parse\n";
-          return;
-      }
-
-      vcl_string image_path;
-      is >> image_path;
-      //is >> str;
-      create_img_tableau(name, image_path);
+    if (mode == "WORLD_TO_IMAGE") {
+      // the vector of 3D points should be of equal size to correspondence point sets
+      assert (parser->corresp_world_pts().size() == corresp.size());
     }
 
-    // CAMERA TABLEAU
-    if(type == "CAM_TAB:") {  
-      is >> name;
-      is >> str;
-      if(str != "IMAGE:")  {
-          vcl_cout << "Bad file parse\n";
-          return;
+    for (unsigned i=0; i<corresp.size(); i++) {
+      bwm_corr_sptr corr = new bwm_corr();
+      vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > elm = corresp[i];
+
+      if (mode == "WORLD_TO_IMAGE") {
+        corr->set_mode(false);
+        corr->set_world_pt(parser->corresp_world_pts()[i].get_p());
+      } else if (mode == "IMAGE_TO_IMAGE") {
+        corr->set_mode(true);
       }
 
-      vcl_string image_path;
-      is >> image_path;
-      is >> str;
-      if(str != "CAMERA_TYPE:") {
-          vcl_cout << "Bad file parse\n";
-          return;
-      }
-
-      vcl_string camera_type;
-      is >> camera_type;
-      is >> str;
-      if(str != "CAMERA_PATH:") {
-          vcl_cout << "Bad file parse\n";
-          return;
-      }
-
-      vcl_string camera_path;
-      is >> camera_path;
-      int cam_type;
-      if (camera_type == "projective")
-        cam_type = 0;
-      if (camera_type == "rational")
-        cam_type = 1;
-      create_cam_tableau(name, image_path, camera_path, cam_type);
-
-    // COIN3D Tableau
-    } else if (type == "COIN3D_TAB:") {
-      is >> name;
-      is >> str;
-      if(str != "CAMERA_TYPE:") {
-          vcl_cout << "Bad file parse\n";
-          return;
-      }
-
-      vcl_string camera_type;
-      is >> camera_type;
-      is >> str;
-      if(str != "CAMERA_PATH:") {
-          vcl_cout << "Bad file parse\n";
-          return;
-      }
-
-      vcl_string camera_path;
-      is >> camera_path;
-      int cam_type;
-      if (camera_type == "projective")
-        cam_type = 0;
-      if (camera_type == "rational")
-        cam_type = 1;
-      create_coin3d_tableau(name, camera_path, cam_type);
-
-    // PROJ2D TABLEAU
-    } else if (type == "PROJ2D_TAB:") {
-      is >> name;
-      is >> str;
-      if(str != "TYPE:") {
-          vcl_cout << "Bad file parse\n";
-          return;
-      }
-
-      vcl_string type;
-      is >> type;
-
-      vcl_string coin3d_name = "";
-      if (type == "simple") { 
-          is >> str;
-          if (str != "COIN3D:") {
-            vcl_cout << "Bad file parse\n";
-            return;
-          }
-          is >> coin3d_name;
-      }
-
-      is >> str;
-      if(str != "IMAGE:") {
-        vcl_cout << "Bad file parse\n";
-        return;
-      }
-      vcl_string image_path;
-      is >> image_path;
-      is >> str;
-      if(str != "CAMERA_TYPE:") {
-        vcl_cout << "Bad file parse\n";
-        return;
-      }
-      vcl_string camera_type;
-      is >> camera_type;
-      is >> str;
-      if(str != "CAMERA_PATH:") {
-        vcl_cout << "Bad file parse\n";
-        return;
-      }
-      vcl_string camera_path;
-      is >> camera_path;
-      int cam_type;
-      if (camera_type == "projective")
-        cam_type = 0;
-      if (camera_type == "rational")
-        cam_type = 1;
-      create_proj2d_tableau(name, type, coin3d_name, image_path, camera_path, cam_type);
-    } else if (type == "LIDAR_TAB:") {
-      is >> name;
-      is >> str;
-      if(str != "FIRST RESPONSE IMAGE:") {
-        vcl_cout << "Bad file parse\n";
-        return;
-      } 
-      vcl_string first_ret = str;
-      is >> str;
-      if(str != "SECOND RESPONSE IMAGE:") {
-        vcl_cout << "Bad file parse\n";
-        return;
-      } 
-      vcl_string second_ret = str;
-      vcl_string image_path;
-      is >> image_path;
-      create_lidar_tableau(name, first_ret, second_ret);
-    } else if (type == "CORRESPONDENCES:") {
-      int num, c_num;
-      is >> c_num;
-
-      vcl_string mode;
-      is >> str;
-      if (str != "CORR_MODE:") {
-        vcl_cerr << "Correspondence mode is missing" << vcl_endl;
-        return;
-      }
-      is >> mode;
-      if ((mode != "IMAGE_TO_IMAGE") && (mode != "WORLD_TO_IMAGE")) {
-        vcl_cerr << "Invalid correspondence mode" << vcl_endl;
-        return;
-      }
-        // read the correspondences
-        for (int i=0; i<c_num; i++) {
-          is >> str;
-          if (str != "C:" ) 
-            vcl_cerr << "Invalid correspondence format" << vcl_endl;
-          else {
-            is >> num;
-            bwm_corr_sptr corr = new bwm_corr();
-            if (mode == "WORLD_TO_IMAGE") {
-              is >> str;
-
-              if (str != "WORLD_POINT:") {
-                vcl_cerr << "wrong corr format" << vcl_endl;
-                return;
-              }
-
-              double wx, wy, wz;
-              is >> wx;
-              is >> wy; 
-              is >> wz;
-              corr->set_mode(false);
-              corr->set_world_pt(vgl_point_3d<double> (wx, wy, wz));
+      vcl_string tab_name;
+      double X, Y;
+      for (unsigned j=0; j<elm.size(); j++) {
+        tab_name = elm[j].first;
+        X = elm[i].second.x();
+        Y = elm[i].second.y();
+        vgui_tableau_sptr tab = this->find_tableau(tab_name);
+        if (tab) {
+          if ((tab->type_name().compare("bwm_tableau_proj_cam") == 0) || 
+            (tab->type_name().compare("bwm_tableau_rat_cam") == 0)) {
+            bwm_tableau_cam* tab_cam = static_cast<bwm_tableau_cam*> (tab.as_pointer());
+            bwm_observer_cam* obs = tab_cam->observer();
+            if (obs) {
+              corr->set_match(obs, X, Y);
+              obs->add_cross(X, Y, 3);
             }
-            vcl_string tab_name;
-            double X, Y;
-            for (int j=0; j<num; j++) {
-              is >> tab_name;
-              is >> X;
-              is >> Y;
-              vgui_tableau_sptr tab = this->find_tableau(tab_name);
-              if (tab) {
-                vcl_cout << tab->type_name() << vcl_endl;
-                if ((tab->type_name().compare("bwm_tableau_proj_cam") == 0)
-                  || (tab->type_name().compare("bwm_tableau_rat_cam") == 0)) {
-                  bwm_tableau_cam* tab_cam = static_cast<bwm_tableau_cam*> (tab.as_pointer());
-                  bwm_observer_cam* obs = tab_cam->observer();
-                  if (obs) {
-                    corr->set_match(obs, X, Y);
-                    obs->add_cross(X, Y, 3);
-                  }
-                }
-              } 
-            }
-            bwm_observer_mgr::instance()->set_corr(corr);
           }
-        
+        }
+        bwm_observer_mgr::instance()->set_corr(corr);
       }
-      }else if (type == "END") 
-       return;
+    }
+    delete parser;
   }
-#endif
 }
  
 void bwm_tableau_mgr::load_img_tableau()
@@ -697,7 +599,7 @@ void bwm_tableau_mgr::load_img_tableau()
   vcl_string ext, name, img_file, empty="";
 
   params.field("Tableau Name", name);
-  params.file ("Image...", ext, img_file);
+  params.file("Image...", ext, img_file);
   if (!params.ask())
     return;
 
@@ -714,7 +616,7 @@ void bwm_tableau_mgr::load_img_tableau()
 
 void bwm_tableau_mgr::load_cam_tableau()
  {
-  vgui_dialog params ("Camera Tableau");
+  vgui_dialog_extensions params ("Camera Tableau");
   vcl_string ext, name, img_file, cam_file, empty="";
   vcl_vector<vcl_string> camera_types;
   int camera_type = 0;
@@ -723,9 +625,13 @@ void bwm_tableau_mgr::load_cam_tableau()
   camera_types.push_back("projective");
   camera_types.push_back("rational");
   params.field("Tableau Name", name);
-  params.file ("Image...", ext, img_file);  
+  params.line_break();
+  params.dir("Image...", ext, img_file);  
+  params.line_break();
   params.choice("Camera Type", camera_types, camera_type);
-  params.file ("Camera...", ext, cam_file);  
+  params.line_break();
+  params.file("Camera...", ext, cam_file);  
+  params.line_break();
   if (!params.ask())
     return;
 
@@ -769,7 +675,7 @@ void bwm_tableau_mgr::load_coin3d_tableau()
 
 void bwm_tableau_mgr::load_proj2d_tableau()
 {
-  vgui_dialog params ("Project2D Tableau");
+  vgui_dialog_extensions params ("Project2D Tableau");
   vcl_string ext, img_file, cam_file, empty="";
   vcl_vector<vcl_string> camera_types;
   vcl_vector<vcl_string> tableau_types;
@@ -784,10 +690,15 @@ void bwm_tableau_mgr::load_proj2d_tableau()
   camera_types.push_back("rational");  
   
   params.field("Name..", name);
+  params.line_break();
   params.choice("Tableau Type", tableau_types, tableau_type);
-  params.file ("Image...", ext, img_file);  
+  params.line_break();
+  params.dir("Image...", ext, img_file);
+  params.line_break();
   params.choice("Camera Type", camera_types, camera_type);
+  params.line_break();
   params.file ("Camera...", ext, cam_file);  
+  params.line_break();
   if (!params.ask())
     return;
 
@@ -841,6 +752,10 @@ void bwm_tableau_mgr::load_lidar_tableau()
 bwm_io_config_parser* bwm_tableau_mgr::parse_config()
 {
   vcl_string fname = bwm_utils::select_file();
+
+  if (fname.size() == 0)
+    return 0;
+
   bwm_io_config_parser* parser = new bwm_io_config_parser();
   vcl_FILE* xmlFile = vcl_fopen(fname.c_str(), "r");
   if (!xmlFile){
@@ -1023,33 +938,4 @@ vcl_vector<vcl_string> bwm_tableau_mgr::coin3d_tableau_names()
   return names;
 }
 
-vpgl_rational_camera<double> * 
-bwm_tableau_mgr::extract_nitf_camera(vil_image_resource_sptr img)
-{
-  //vil_image_resource_sptr img = this->selected_image();
-  if (!img)
-  {
-    vcl_cerr << "Null image in bwm_tableau_mgr::extract_nitf_camera\n";
-    return 0;
-  }
 
-  vil_nitf2_image* nitf = 0;
-  vcl_string format = img->file_format();
-  vcl_string prefix = format.substr(0,4);
-  if (prefix == "nitf") {
-    nitf = (vil_nitf2_image*)img.ptr();
-    vgui_dialog file_dialog("Save NITF Camera");
-    static vcl_string image_file;
-    static vcl_string ext = "rpc";
-    file_dialog.file("Image Filename:", ext, image_file);
-    if (!file_dialog.ask())
-      return 0;
-    vpgl_nitf_rational_camera* rpcam = new vpgl_nitf_rational_camera(nitf, true);
-    return rpcam;
-    //rpcam.save(image_file);
-  } else {
-    vcl_cout << "The image is not an NITF" << vcl_endl;
-    return 0;
-  }
-  
-}
