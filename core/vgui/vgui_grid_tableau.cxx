@@ -3,13 +3,6 @@
 //:
 // \file
 // \brief   See vgui_grid_tableau.h for a description of this file.
-// \author  K.Y.McGaul
-// \date    20-JAN-2000
-//
-// \verbatim
-//  Modifications
-//   20-JAN-2000 K.Y.McGaul - Initial version.
-// \endverbatim
 
 #include <vcl_iostream.h>
 #include <vgui/vgui_macro.h>
@@ -66,7 +59,9 @@ void vgui_grid_tableau::init(unsigned initial_cols, unsigned initial_rows)
   }
 }
 
+//------------------------------------------------------------------------------
 //: Makes a bitab.
+//------------------------------------------------------------------------------
 vgui_grid_tableau::vgui_grid_tableau(vgui_tableau_sptr const& l, vgui_tableau_sptr const& r)
 {
   init(2, 1);
@@ -74,7 +69,9 @@ vgui_grid_tableau::vgui_grid_tableau(vgui_tableau_sptr const& l, vgui_tableau_sp
   add_next(r);
 }
 
+//------------------------------------------------------------------------------
 //: Makes a tritab.
+//------------------------------------------------------------------------------
 vgui_grid_tableau::vgui_grid_tableau(vgui_tableau_sptr const& l, vgui_tableau_sptr const& m, vgui_tableau_sptr const& r)
 {
   init(3, 1);
@@ -85,7 +82,7 @@ vgui_grid_tableau::vgui_grid_tableau(vgui_tableau_sptr const& l, vgui_tableau_sp
 
 //------------------------------------------------------------------------------
 //: Given the column number, returns the x coord for that column.
-//   Note col_pos is numbered from 0.
+//  Note col_pos is numbered from 0.
 //------------------------------------------------------------------------------
 float vgui_grid_tableau::get_x(unsigned col_pos)
 {
@@ -100,9 +97,9 @@ float vgui_grid_tableau::get_x(unsigned col_pos)
 
 //------------------------------------------------------------------------------
 //: Given the row number, returns the y coord for that row.
-//   Note row_pos is numbered from 0.
-//   Note that poly_tableau coord system starts in the bottom left and we want
-//   rows to be numbered from the top down.
+//  Note row_pos is numbered from 0.
+//  Note that poly_tableau coord system starts in the bottom left and we want
+//  rows to be numbered from the top down.
 //------------------------------------------------------------------------------
 float vgui_grid_tableau::get_y(unsigned row_pos)
 {
@@ -127,8 +124,8 @@ float vgui_grid_tableau::get_h() { return 1.0/nb_rows; }
 
 //------------------------------------------------------------------------------
 //: Adds the default tableau to the given space in the grid (but not to the vcl_list of tableaux).
-//   Note, it is assumed that the given grid position is empty or uninitialized so
-//   nothing is removed from the grid position before the default is added.
+//  Note, it is assumed that the given grid position is empty or uninitialized
+//  so nothing is removed from the grid position before the default is added.
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::add_default(unsigned col_pos, unsigned row_pos)
 {
@@ -144,8 +141,8 @@ void vgui_grid_tableau::add_default(unsigned col_pos, unsigned row_pos)
 
 //------------------------------------------------------------------------------
 //: Adds a tableau to the next free space in the grid and to the end of the vcl_list of tableaux.
-//   If there are no free spaces and the grid size is changeable then it adds a
-//   new column to the RHS of the grid and adds the new tableau to the top of it.
+//  If there are no free spaces and the grid size is changeable then it adds a
+//  new column to the RHS of the grid and adds the new tableau to the top of it.
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::add_next(vgui_tableau_sptr const& tab)
 {
@@ -196,8 +193,8 @@ void vgui_grid_tableau::add_next(vgui_tableau_sptr const& tab)
 }
 
 //------------------------------------------------------------------------------
-//:  Add (or replace the tableau at the given position with) the given tableau.
-//   Adds the given tableau to the end of the vcl_list of tableaux.
+//: Add (or replace the tableau at the given position with) the given tableau.
+//  Adds the given tableau to the end of the vcl_list of tableaux.
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::add_at(vgui_tableau_sptr const& tab, unsigned col_pos, unsigned row_pos)
 {
@@ -231,9 +228,8 @@ void vgui_grid_tableau::add_at(vgui_tableau_sptr const& tab, unsigned col_pos, u
 }
 
 //------------------------------------------------------------------------------
-//:
-//  Removes the tableau at the given grid coordinates from the display
-//  and from the vcl_list of tableau.  It is replaced in the grid by the default tableau.
+//: Removes the tableau at the given grid coordinates from the display and from the vcl_list of tableau.
+//  It is replaced in the grid by the default tableau.
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::remove_at(unsigned col_pos, unsigned row_pos)
 {
@@ -283,8 +279,8 @@ vgui_tableau_sptr vgui_grid_tableau::get_tableau_at(unsigned col_pos, unsigned r
 
 //------------------------------------------------------------------------------
 //: Returns the active tableau, this is the tableau with the mouse in.
-//   Note that there is only one active tableau, while there may be many
-//   selected tableaux.
+//  Note that there is only one active tableau, while there may be many
+//  selected tableaux.
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::get_active_position(unsigned* col_pos, unsigned* row_pos)
 {
@@ -322,7 +318,9 @@ void vgui_grid_tableau::get_last_selected_position(
   *row_pos = last_selected[1];
 }
 
+//------------------------------------------------------------------------------
 //: Select a certain tableau
+//------------------------------------------------------------------------------
 void vgui_grid_tableau::set_selected(int r, int c, bool onoff)
 {
   int time = onoff ? 1000 : -1;
@@ -336,10 +334,10 @@ void vgui_grid_tableau::set_selected(int r, int c, bool onoff)
 
 //------------------------------------------------------------------------------
 //: Gets the positions and times of selection of the selected tableaux.
-//   The number of selected tableau is returned.  Their positions are returned
-//   in the vcl_vectors passed in as parameters.
-//   Note, a tableau is selected if it has been clicked on by the left mouse
-//   button.  It can be deselected by clicking with the middle mouse button.
+//  The number of selected tableau is returned.  Their positions are returned
+//  in the vcl_vectors passed in as parameters.
+//  Note, a tableau is selected if it has been clicked on by the left mouse
+//  button.  It can be deselected by clicking with the middle mouse button.
 //------------------------------------------------------------------------------
 int vgui_grid_tableau::get_selected_positions(vcl_vector<int>* col_pos,
 vcl_vector<int>* row_pos, vcl_vector<int>* times)
@@ -363,8 +361,8 @@ vcl_vector<int>* row_pos, vcl_vector<int>* times)
 
 //------------------------------------------------------------------------------
 //: Redraw the grid of tableaux keeping each tableau in its current row and column.
-//   If for example a new column had been added, using this would redraw the
-//   grid with that column empty.
+//  If for example a new column had been added, using this would redraw the
+//  grid with that column empty.
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::layout_grid()
 {
@@ -553,7 +551,7 @@ void vgui_grid_tableau::page_down()
 
 //------------------------------------------------------------------------------
 //: Make the current tableau selected by saving the current time.
-//   Set the outline color to red.
+//  Set the outline color to red.
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::select_current(int time)
 {
@@ -571,26 +569,25 @@ void vgui_grid_tableau::select_current(int time)
     post_redraw();
   }
 
-  if(unique_selected_){
+  if (unique_selected_)
+  {
     redraw_needed = false;
-    for(unsigned r = 0; r<nb_rows; ++r)
-      for(unsigned c = 0; c<nb_cols; ++c)
-        if(!(c==col&&r==row))
+    for (unsigned r = 0; r<nb_rows; ++r)
+      for (unsigned c = 0; c<nb_cols; ++c)
+        if (!(c==col&&r==row))
           if (grid_pos(c,r).time_selected != -1)
-            {
-              grid_pos(c, r).time_selected = -1;
-              set_outline_color(grid_pos(c,r).handle, 1,1,1);
-			  redraw_needed = true;
-            }
-    if(redraw_needed) post_redraw();
+          {
+            grid_pos(c, r).time_selected = -1;
+            set_outline_color(grid_pos(c,r).handle, 1,1,1);
+            redraw_needed = true;
+          }
+    if (redraw_needed) post_redraw();
   }
-
 }
-
 
 //------------------------------------------------------------------------------
 //: Mark the current table as deselected by setting the time to -1.
-//   Set the outline color to white.
+//  Set the outline color to white.
 //------------------------------------------------------------------------------
 void vgui_grid_tableau::deselect_current()
 {
@@ -606,7 +603,7 @@ void vgui_grid_tableau::deselect_current()
 
 //------------------------------------------------------------------------------
 //: Handle any events matching the {vgui_event_condition}s.
-// All other events go to the base class.
+//  All other events go to the base class.
 //------------------------------------------------------------------------------
 bool vgui_grid_tableau::handle(const vgui_event &e)
 {
