@@ -16,7 +16,6 @@
 #include <vgl/vgl_closest_point.h> 
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_box_2d.h>
 
 #include <vil/vil_image_resource.h>
 
@@ -25,7 +24,7 @@
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_polygon_3d.h>
 
-#include <vgui/vgui_projection_inspector.h>
+
 //#include <vgui/vgui_soview2D.h>
 #include <vgui/vgui_message.h>
 #include <vgui/vgui_dialog.h>
@@ -228,20 +227,7 @@ void bwm_observer_cam::world_pt_corr()
   vcl_cerr << "Please select only one object" << vcl_endl;
 }
 
-void bwm_observer_cam::move_to_point(float x, float y)
-{
-  if(viewer_)
-    {
-      float sx = viewer_->token.scaleX, sy = viewer_->token.scaleY;
-      vcl_cout << "sx = " << sx << "  sy = " << sy << '\n';
-      vgui_projection_inspector p_insp;
-      vgl_box_2d<double> bb(p_insp.x1, p_insp.x2, p_insp.y1, p_insp.y2);
-      viewer_->token.offsetX = (bb.width()/2.0 - x)*sx;
-      viewer_->token.offsetY = (bb.height()/2.0 - y)*sy;
-      vcl_cout << "bb " << bb << '\n';
-      viewer_->post_redraw();
-    }
-}
+
 void bwm_observer_cam::scroll_to_point()
 {
   static int ix = 0, iy = 0;

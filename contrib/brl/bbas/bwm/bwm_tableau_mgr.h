@@ -69,7 +69,8 @@ public:
   void display_image_path(bool display){display_image_path_=display;}
 
   static vcl_map<vcl_string, bwm_command_sptr> tab_types_;
-
+  
+    
 private:
 
   bwm_tableau_mgr();
@@ -88,6 +89,8 @@ private:
   vgui_range_map_params_sptr range_params(vil_image_resource_sptr const& image);
   
   void add_to_grid(vgui_tableau_sptr tab);
+
+  void add_to_grid(vgui_tableau_sptr tab, unsigned& col, unsigned& row);
 
   vpgl_proj_camera<double> read_projective_camera(vcl_string cam_path);
 

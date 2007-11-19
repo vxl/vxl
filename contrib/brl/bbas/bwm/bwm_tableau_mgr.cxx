@@ -231,7 +231,9 @@ void bwm_tableau_mgr::create_img_tableau(vcl_string name,
   vgui_viewer2D_tableau_sptr viewer = vgui_viewer2D_tableau_new(t);
   obs->set_tab_name(name);
   obs->set_viewer(viewer);
-  add_to_grid(viewer);
+  unsigned row = 0, col = 0;
+  add_to_grid(viewer, col, row);
+  obs->set_grid_location(col, row);
   tableaus_[name] = t;
 }
 
@@ -301,8 +303,12 @@ void bwm_tableau_mgr::create_cam_tableau(vcl_string name,
   bwm_observer_mgr::instance()->add(observer);
   observer->set_tab_name(name);
   vgui_viewer2D_tableau_sptr viewer = vgui_viewer2D_tableau_new(t);
+
   observer->set_viewer(viewer);
-  add_to_grid(viewer);
+  unsigned row = 0, col = 0;
+  add_to_grid(viewer, col, row);
+  observer->set_grid_location(col, row);
+
   tableaus_[name] = t;
 }
 
@@ -494,7 +500,9 @@ void bwm_tableau_mgr::create_lidar_tableau(vcl_string name,
   bwm_observer_mgr::instance()->add(observer);
   bgui_picker_tableau_sptr picker = bgui_picker_tableau_new(tab);
   vgui_viewer2D_tableau_new viewer(picker);
-  add_to_grid(viewer);
+  unsigned col = 0, row = 0;
+  add_to_grid(viewer, col, row);
+  observer->set_grid_location(col, row);
   tableaus_[name] = tab;
 }
 
@@ -572,8 +580,8 @@ void bwm_tableau_mgr::load_tableaus()
       double X, Y;
       for (unsigned j=0; j<elm.size(); j++) {
         tab_name = elm[j].first;
-        X = elm[i].second.x();
-        Y = elm[i].second.y();
+        X = elm[j].second.x();
+        Y = elm[j].second.y();
         vgui_tableau_sptr tab = this->find_tableau(tab_name);
         if (tab) {
           if ((tab->type_name().compare("bwm_tableau_proj_cam") == 0) || 
@@ -906,18 +914,25 @@ bwm_tableau_mgr::read_projective_camera(vcl_string cam_path){
 
 //: manages creating new tableaus on the grid, decides on the layout 
 // of the grid based on the nymber of current tableaus
-void bwm_tableau_mgr::add_to_grid(vgui_tableau_sptr tab)
+void bwm_tableau_mgr::add_to_grid(vgui_tableau_sptr tab, unsigned& col,
+                                  unsigned& row)
 {
    if (tableaus_.size() == 0)
   {
-    grid_->add_next(tab);
+    grid_->add_next(tab, col, row);
     return;  
    }
 
   if ((tableaus_.size()%2 == 0) && (grid_->rows()*grid_->cols() == tableaus_.size()))  {
     grid_->add_row();
   }
-  grid_->add_next(tab);
+  grid_->add_next(tab, col, row);
+}
+
+void bwm_tableau_mgr::add_to_grid(vgui_tableau_sptr tab)
+{
+  unsigned row = 0, col=0;
+  this->add_to_grid(tab, col, row);
 }
 
 vgui_tableau_sptr bwm_tableau_mgr::find_tableau(vcl_string name)

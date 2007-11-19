@@ -30,7 +30,7 @@ class bwm_observer_img : public bgui_vsol2D_tableau
 public:
 
   bwm_observer_img(bgui_image_tableau_sptr const& img)
-    : bgui_vsol2D_tableau(img), img_tab_(img), viewer_(0){  }
+    : bgui_vsol2D_tableau(img), img_tab_(img), viewer_(0),row_(0), col_(0) {  }
 
   virtual ~bwm_observer_img(){}
 
@@ -75,7 +75,15 @@ public:
 
   void jim_obs_process(){ vcl_cout << "I am Jim Green's Process!!!!" << vcl_endl; }
 
+  void move_to_point(float x, float y);
+
+  void zoom_to_fit();
+
   void toggle_show_image_path();
+
+  void set_grid_location(unsigned col, unsigned row){col_=col; row_ = row;}
+  unsigned row(){return row_;}
+  unsigned col(){return col_;}
 
 protected:
 
@@ -103,6 +111,10 @@ protected:
   bgui_vsol_soview2D* get_selected_object(vcl_string type);
 
   vcl_string tab_name_;
+
+  unsigned row_; //location of observer in grid
+  unsigned col_;
+
 };
 
 #endif

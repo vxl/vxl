@@ -273,7 +273,8 @@ void bwm_observer_mgr::move_to_corr()
 {
   if(!corr_list_.size())
     {
-      vcl_cerr << " no correspondences to zoom to\n";
+      vcl_cerr << "In bwm_observer_mgr::move_to_corr()- "
+               << "no correspondences to zoom to\n";
       return;
     }
   bwm_corr_sptr corr = corr_list_[0];
@@ -281,7 +282,6 @@ void bwm_observer_mgr::move_to_corr()
   for(vcl_vector<bwm_observer_cam*>::iterator oit = obs.begin();
       oit != obs.end(); ++oit)
     {
-      vcl_cout << "Observer " << (*oit)->name();
       vgl_point_2d<double> p;
       //observer has a match so can zoom
       if(corr->match(*oit, p))

@@ -1,10 +1,12 @@
 #include "bwm_observer_img.h"
 #include <bwm/algo/bwm_algo.h>
 #include <bwm/algo/bwm_image_processor.h>
-
-//#include <vgui/vgui_soview2D.h>
+#include <bwm/bwm_tableau_mgr.h>
+#include <vcl_cmath.h>
+#include <bgui/bgui_image_tableau.h>
+#include <vgui/vgui_section_render.h>
 #include <vgui/vgui_projection_inspector.h>
-
+#include <vgl/vgl_box_2d.h>
 #include <bsol/bsol_algs.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator.h>
@@ -300,4 +302,104 @@ void bwm_observer_img::lines_vd()
       obj_list[line->get_id()] = line;
     }
   this->post_redraw();
+}
+//
+//: (x, y) is the target point to be positioned at the center 
+//  of the grid cell containing this observer
+//
+void bwm_observer_img::move_to_point(float x, float y)
+{
+  if(viewer_)
+    {
+      //Get the current viewer state (scale and offset)
+      float sx = viewer_->token.scaleX, sy = viewer_->token.scaleY;
+      float tx = viewer_->token.offsetX, ty = viewer_->token.offsetY;
+
+      //The position of this observer in the grid
+      unsigned r = this->row(), c = this->col();
+
+      //The grid tableau
+      vgui_grid_tableau_sptr grid = bwm_tableau_mgr::instance()->grid();
+      if(!grid)
+        return;
+
+      //The bounds of the grid cell containing this observer
+      float xorig , yorig, xmax, ymax;
+      grid->cell_bounding_box(c, r, xorig , yorig, xmax, ymax);
+    
+      // target image point in window coordinates
+      float wx = sx*(x + tx/sx) + xorig;
+      float wy = (ymax-yorig - sy*(y + ty/sy))+ yorig;
+
+      // cell center in window coordinates
+      float twx = (xorig + xmax)/2;
+      float twy = (yorig + ymax)/2;
+
+      // The required translation to position in the centern
+      float transx = twx-wx;
+      float transy = twy-wy;
+
+
+      viewer_->token.offsetX += transx;
+      viewer_->token.offsetY -= transy;
+      viewer_->post_redraw();
+
+#if 0 // debug printouts
+      vcl_cout << "\n\n====--=====\n";
+      vcl_cout << "sx = " << sx << "  sy = " << sy << '\n';
+      vcl_cout << "tx = " << tx << "  ty = " << ty << '\n';
+      vcl_cout << "r = " << r << "  c = " << c << '\n';
+      vcl_cout << "target point (" << x << ' ' << y << ")\n";
+      vcl_cout << "target point in window coords (" << wx << ' ' << wy << ")\n";
+      vcl_cout << "cell center in window coords (" 
+               << twx << ' ' << twy << ")\n";
+      vcl_cout << "required tx = " << transx 
+               << "  required ty = " << transy << '\n';
+      vcl_cout << vcl_flush;
+#endif
+    }
+}
+void bwm_observer_img::zoom_to_fit()
+{
+  if(!viewer_ || !img_tab_)
+    return;
+
+  // the image size
+  unsigned ni = img_tab_->get_image_resource()->ni();
+  unsigned nj = img_tab_->get_image_resource()->nj();
+
+  // current viewer scale
+  float sx = viewer_->token.scaleX, sy = vcl_fabs(viewer_->token.scaleY);
+
+  // the window size
+  vgui_projection_inspector p_insp;
+  vgl_box_2d<float> bb(p_insp.x1, p_insp.x2, p_insp.y1, p_insp.y2);
+  float w = bb.width()*sx;
+  float h = bb.height()*sy;
+  // the requred scale to fit the image in the window
+  float required_scale_x = w/ni;
+  float required_scale_y = h/nj;
+  float r = required_scale_x;
+  if(r>required_scale_y)
+    r = required_scale_y;
+
+  // the center of the image
+  float cx = ni/2, cy = nj/2;
+
+  // set the scale on the viewer
+  viewer_->token.scaleX = r;
+  viewer_->token.scaleY = -r;
+
+  // position so the image is centered
+  viewer_->token.offsetX = w/2.0-cx*r;
+  viewer_->token.offsetY = h/2.0+cy*r;
+  
+  viewer_->post_redraw();
+
+#if 0 //debug printouts
+  vcl_cout << "sx = " << sx << "  sy = " << sy << '\n';
+  vcl_cout << "bb.w " << w << " bb.h " << h << '\n';
+  vcl_cout << "required scale = " << r << "  c(" << cx << ' ' 
+           << cy << ")\n";
+#endif
 }

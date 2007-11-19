@@ -66,6 +66,8 @@ public:
 
   void toggle_show_image_path();
 
+  void zoom_to_fit();
+
   void step_edges_vd();
 
   void lines_vd();
