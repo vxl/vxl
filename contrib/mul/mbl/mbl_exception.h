@@ -133,7 +133,7 @@ void mbl_exception_warning(T exception)
     vcl_string filename_;
    public:
      mbl_exception_parse_file_error(const vcl_string &msg, const vcl_string& filename)
-      : msg_(msg), filename_(filename) {}
+      : msg_(msg+" "+filename), filename_(filename) {}
     const char * what() const {return msg_.c_str();}
     const char * filename() const {return filename_.c_str();}
   };
@@ -146,7 +146,7 @@ void mbl_exception_warning(T exception)
     vcl_string filename_;
    public:
      mbl_exception_parse_file_error(const vcl_string &msg, const vcl_string& filename)
-      : mbl_exception_parse_error(msg), filename_(filename) {}
+      : mbl_exception_parse_error(msg+" "+filename), filename_(filename) {}
     const char * filename() const {return filename_.c_str();}
     virtual ~mbl_exception_parse_file_error() throw() {}
   };
