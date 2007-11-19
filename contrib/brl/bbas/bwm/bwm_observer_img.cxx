@@ -1,10 +1,12 @@
 #include "bwm_observer_img.h"
 #include <bwm/algo/bwm_algo.h>
 #include <bwm/algo/bwm_image_processor.h>
+
 #include <bwm/bwm_tableau_mgr.h>
 #include <vcl_cmath.h>
 #include <bgui/bgui_image_tableau.h>
 #include <vgui/vgui_section_render.h>
+
 #include <vgui/vgui_projection_inspector.h>
 #include <vgl/vgl_box_2d.h>
 #include <bsol/bsol_algs.h>
@@ -19,6 +21,11 @@
 #include <vsol/vsol_polyline_2d.h>
 #include <vsol/vsol_digital_curve_2d.h>
 
+#define VERTEX_TYPE "bwm_soview2D_vertex"
+#define POLYLINE_TYPE "bgui_vsol_soview2D_polyline"
+#define POLYGON_TYPE "bgui_vsol_soview2D_polygon"
+#define POINT_TYPE "bgui_vsol_soview2D_point"
+
 bool bwm_observer_img::handle(const vgui_event &e)
 {
   vgui_projection_inspector pi;
@@ -31,15 +38,15 @@ bool bwm_observer_img::handle(const vgui_event &e)
     bwm_soview2D_vertex* v = 0;
 
     // get the selected polyline or polygon
-    if ((p = get_selected_object("bgui_vsol_soview2D_polygon")) ||
-      (p =  get_selected_object("bgui_vsol_soview2D_polyline"))) {
+    if ((p = (bgui_vsol_soview2D*) get_selected_object(POLYGON_TYPE)) ||
+      (p = (bgui_vsol_soview2D*) get_selected_object(POLYLINE_TYPE))) {
       // take the position of the first point
       pi.window_to_image_coordinates(e.wx, e.wy, start_x_, start_y_);
       moving_p_ = p;
       moving_polygon_ = true;
       moving_vertex_ = false;
       return true;
-    } else if (v = (bwm_soview2D_vertex*) get_selected_object("bwm_soview2D_vertex")) {
+    } else if (v = (bwm_soview2D_vertex*) get_selected_object(VERTEX_TYPE)) {
       pi.window_to_image_coordinates(e.wx, e.wy, start_x_, start_y_);
       moving_v_ = v;
       moving_p_ = v->obj();
@@ -75,11 +82,11 @@ bool bwm_observer_img::handle(const vgui_event &e)
     // find the polyline including this vertex
     unsigned i = moving_v_->vertex_indx();
     moving_v_->translate(x_diff, y_diff);
-    if (moving_p_->type_name().compare("bgui_vsol_soview2D_polygon") == 0) {
+    if (moving_p_->type_name().compare(POLYGON_TYPE) == 0) {
       bgui_vsol_soview2D_polygon* polygon = (bgui_vsol_soview2D_polygon*) moving_p_;
       polygon->sptr()->vertex(i)->set_x( polygon->sptr()->vertex(i)->x() + x_diff );
       polygon->sptr()->vertex(i)->set_y( polygon->sptr()->vertex(i)->y() + y_diff );
-    } else if (moving_p_->type_name().compare("bgui_vsol_soview2D_polyline") == 0) {
+    } else if (moving_p_->type_name().compare(POLYLINE_TYPE) == 0) {
       bgui_vsol_soview2D_polyline* polyline = (bgui_vsol_soview2D_polyline*) moving_p_;
       polyline->sptr()->vertex(i)->set_x( polyline->sptr()->vertex(i)->x() + x_diff );
       polyline->sptr()->vertex(i)->set_y( polyline->sptr()->vertex(i)->y() + y_diff );
@@ -154,7 +161,7 @@ bool bwm_observer_img::get_selected_box(vsol_box_2d_sptr & box)
 {
 
   bgui_vsol_soview2D_polygon* p;
-  if (p = (bgui_vsol_soview2D_polygon*)get_selected_object("bgui_vsol_soview2D_polygon")) {
+  if (p = (bgui_vsol_soview2D_polygon*)get_selected_object(POLYGON_TYPE)) {
     vsol_polygon_2d_sptr poly = p->sptr();
     box = poly->get_bounding_box();
     return true;
@@ -163,22 +170,22 @@ bool bwm_observer_img::get_selected_box(vsol_box_2d_sptr & box)
   return false;
 }
 
-bgui_vsol_soview2D* bwm_observer_img::get_selected_object(vcl_string type)
+vgui_soview2D* bwm_observer_img::get_selected_object(vcl_string type)
 {
 
   vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
-  vcl_vector<bgui_vsol_soview2D*> objs;
-  bgui_vsol_soview2D* obj;
+  vcl_vector<vgui_soview2D*> objs;
+  vgui_soview2D* obj;
 
   for (unsigned i=0; i<select_list.size(); i++) {
     vcl_cout << select_list[i]->type_name();
     if (select_list[i]->type_name().compare(type) == 0) {
-      objs.push_back((bgui_vsol_soview2D*) select_list[i]);
+      objs.push_back((vgui_soview2D*) select_list[i]);
     }
   }
 
   if (objs.size() == 1) {
-    obj = (bgui_vsol_soview2D*) objs[0];
+    obj = (vgui_soview2D*) objs[0];
     return obj;
   }
 
@@ -193,13 +200,13 @@ void bwm_observer_img::delete_selected()
   vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
 
   if ((select_list.size() == 1) && 
-      ((select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0) ||
-       (select_list[0]->type_name().compare("bgui_vsol_soview2D_polyline") == 0) || 
-       (select_list[0]->type_name().compare("bgui_vsol_soview2D_point") == 0))) {
+      ((select_list[0]->type_name().compare(POLYGON_TYPE) == 0) ||
+       (select_list[0]->type_name().compare(POLYLINE_TYPE) == 0))) {
 
       // remove the polygon and the vertices
       delete_polygon(select_list[0]);
-  }
+  } else if (select_list[0]->type_name().compare(VERTEX_TYPE) == 0)
+    delete_vertex(select_list[0]);
   this->post_redraw();
 }
 
@@ -227,6 +234,71 @@ void bwm_observer_img::delete_polygon(vgui_soview* obj)
   }
   vert_list.erase(poly_id);
   this->post_redraw();
+}
+
+void bwm_observer_img::delete_vertex(vgui_soview* vertex)
+{
+  bwm_soview2D_vertex* v = static_cast<bwm_soview2D_vertex*> (vertex);
+  
+  if (v) {
+    bgui_vsol_soview2D* obj = v->obj();
+    unsigned i = v->vertex_indx();
+
+    // remove the vertex from the object
+    if (obj->type_name().compare(POLYGON_TYPE) == 0) {
+      bgui_vsol_soview2D_polygon* polygon = static_cast<bgui_vsol_soview2D_polygon*> (obj);
+      vsol_polygon_2d_sptr poly2d = polygon->sptr();
+      if (poly2d->size() == 3) {
+        vcl_cerr << "Cannot delete a vertex from a triangle" << vcl_endl;
+        return;
+      }
+
+      if (i >= poly2d->size()) {
+        vcl_cerr << "The index is invalid [" << i << " of " << poly2d->size() << vcl_endl;
+        return;
+      }
+
+      vcl_vector<vsol_point_2d_sptr> new_vertices;
+      for (unsigned k=0; k < poly2d->size(); k++) {
+        if (k != i) // exclude the vertex to be deleted
+          new_vertices.push_back(poly2d->vertex(k));
+      }
+
+      // delete the object
+      delete_polygon(obj);
+
+      // draw the new one
+      vsol_polygon_2d_sptr new_poly = new vsol_polygon_2d(new_vertices);
+      create_polygon(new_poly);
+    }
+
+    else if (obj->type_name().compare(POLYLINE_TYPE) == 0) {
+      bgui_vsol_soview2D_polyline* polyline = static_cast<bgui_vsol_soview2D_polyline*> (obj);
+      vsol_polyline_2d_sptr poly2d = polyline->sptr();
+      if (poly2d->size() == 2) {
+        vcl_cerr << "Cannot delete a vertex from a polyline with 2 vertices" << vcl_endl;
+        return;
+      }
+
+      if (i >= poly2d->size()) {
+        vcl_cerr << "The index is invalid [" << i << " of " << poly2d->size() << vcl_endl;
+        return;
+      }
+
+      vcl_vector<vsol_point_2d_sptr> new_vertices;
+      for (unsigned k=0; k < poly2d->size(); k++) {
+        if (k != i) // exclude the vertex to be deleted
+          new_vertices.push_back(poly2d->vertex(k));
+      }
+
+      // delete the object
+      delete_polygon(obj);
+
+      // draw the new one
+      vsol_polyline_2d_sptr new_poly = new vsol_polyline_2d(new_vertices);
+      create_polyline(new_poly);
+    }
+  }
 }
 
 void bwm_observer_img::save()
