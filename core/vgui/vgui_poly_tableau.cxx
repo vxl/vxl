@@ -34,37 +34,6 @@
 #include <vgui/vgui_popup_params.h>
 
 //-----------------------------------------------------------------------------
-//: The constructor takes a snapshot of the current viewport and scissor areas.
-//  The destructor restores that state.
-class vgui_poly_tableau_vp_sc_snapshot
-{
- public:
-  GLint vp[4];
-  GLint sc[4];
-  bool sc_was_enabled;
-
-  vgui_poly_tableau_vp_sc_snapshot() {
-    glGetIntegerv(GL_VIEWPORT, vp);
-
-    glGetIntegerv(GL_SCISSOR_BOX, sc);
-    sc_was_enabled = glIsEnabled(GL_SCISSOR_TEST) == GL_TRUE;
-  }
-
-  ~vgui_poly_tableau_vp_sc_snapshot() {
-    // restore viewport :
-    glViewport(vp[0], vp[1], vp[2], vp[3]);
-
-    // turn off the scissor test, if it wasn't already on, and
-    // restore old scissor settings :
-    if (sc_was_enabled)
-      glEnable(GL_SCISSOR_TEST);
-    else
-      glDisable(GL_SCISSOR_TEST);
-    glScissor(sc[0], sc[1], sc[2], sc[3]);
-  }
-};
-
-//-----------------------------------------------------------------------------
 vgui_poly_tableau::item::item(vgui_tableau* p, vgui_tableau_sptr const&c,
                               float x_, float y_, float w_, float h_,
                               int id_)
@@ -96,12 +65,11 @@ bool vgui_poly_tableau::item::inside(GLint const vp[4],int vx, int vy) const
 {
   float rx = float(vx-vp[0])/vp[2];
   float ry = float(vy-vp[1])/vp[3];
-
   bool ans = (x<=rx && rx<x+w) && (y<=ry && ry<y+h);
-#ifdef DEBUG
+  #ifdef DEBUG
   if (ans)
     vcl_cerr << "Point "<< vx << ' '<< vy <<" inside sub-window: "<< id << '\n';
-#endif
+  #endif
   return ans;
 }
 
@@ -212,7 +180,7 @@ int vgui_poly_tableau::add(vgui_tableau_sptr const& t, float x, float y,
   assert(counter < 1000000); // a million. FIXME.
   item it(this, t, x, y, w, h, ++counter) ;
   sub.push_back(it);
-#ifdef DEBUG
+#ifdef DEBUG 
   vcl_cerr << "id = " << sub.back().id << '\n'
            << "x  = " << sub.back().x << '\n'
            << "y  = " << sub.back().y << '\n'

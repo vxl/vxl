@@ -139,12 +139,14 @@ void vgui_grid_tableau::add_default(unsigned col_pos, unsigned row_pos)
   }
 }
 
+
 //------------------------------------------------------------------------------
 //: Adds a tableau to the next free space in the grid and to the end of the vcl_list of tableaux.
 //  If there are no free spaces and the grid size is changeable then it adds a
 //  new column to the RHS of the grid and adds the new tableau to the top of it.
 //------------------------------------------------------------------------------
-void vgui_grid_tableau::add_next(vgui_tableau_sptr const& tab)
+void vgui_grid_tableau::add_next(vgui_tableau_sptr const& tab, unsigned& col,
+                                 unsigned& row)
 {
   tabs.push_back(tab);
 
@@ -162,6 +164,7 @@ void vgui_grid_tableau::add_next(vgui_tableau_sptr const& tab)
 #ifdef DEBUG
          vcl_cerr << "vgui_grid_tableau::add_next: adding tableau to col = "<< i <<", row = "<< j << '\n';
 #endif
+         row = j; col = i;
          return;
        }
     }
@@ -189,7 +192,14 @@ void vgui_grid_tableau::add_next(vgui_tableau_sptr const& tab)
 #ifdef DEBUG
     vcl_cerr << "vgui_grid_tableau::add_next: adding tableau to col = "<< col_pos <<", row = "<< row_pos << '\n';
 #endif
+    row = row_pos; col = col_pos;
   }
+}
+
+void vgui_grid_tableau::add_next(vgui_tableau_sptr const& tab)
+{
+  unsigned row=0, col = 0;
+  if(!row&&!col)this->add_next(tab, col, row);//suppress warnings
 }
 
 //------------------------------------------------------------------------------
@@ -275,6 +285,26 @@ vgui_tableau_sptr vgui_grid_tableau::get_tableau_at(unsigned col_pos, unsigned r
   else vgui_macro_warning << "Only default tableau at (" << col_pos << ", " << row_pos << ").\n";
 #endif
   return vgui_tableau_sptr();
+}
+
+//------------------------------------------------------------------------------
+//:  Returns the bounds of the grid cell in screen coordinates
+//   at the specified col and row. The computation is based on dividing 
+//   the entire viewport by the number of row and columns
+//------------------------------------------------------------------------------
+bool vgui_grid_tableau::cell_bounding_box(unsigned col, unsigned row,
+                                          float& xmin, float& ymin,
+                                          float& xmax, float& ymax)
+{
+  if(col>=nb_cols || row>=nb_rows)
+    return false;
+  vgui_poly_tableau_vp_sc_snapshot snap;
+  float x0 = snap.vp[0], y0 = snap.vp[1];
+  float w  = snap.vp[2],  h = snap.vp[3];
+  float dx = w/nb_cols, dy = h/nb_rows;
+  xmin = x0 + col*dx; ymin = y0 + row*dy;
+  xmax = xmin + dx; ymax = ymin + dy;
+  return true;
 }
 
 //------------------------------------------------------------------------------

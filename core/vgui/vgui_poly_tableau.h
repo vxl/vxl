@@ -42,6 +42,39 @@
 // knowing the viewport, because a LEAVE/ENTER pair have to be sent to the old
 // and new child and the viewport must be set correctly before dispatching these
 // events.
+
+//-----------------------------------------------------------------------------
+//: Viewport helper class
+//  The constructor takes a snapshot of the current viewport and scissor areas.
+//  The destructor restores that state.
+class vgui_poly_tableau_vp_sc_snapshot
+{
+ public:
+  GLint vp[4];
+  GLint sc[4];
+  bool sc_was_enabled;
+
+  vgui_poly_tableau_vp_sc_snapshot() {
+    glGetIntegerv(GL_VIEWPORT, vp);
+
+    glGetIntegerv(GL_SCISSOR_BOX, sc);
+    sc_was_enabled = glIsEnabled(GL_SCISSOR_TEST) == GL_TRUE;
+  }
+
+  ~vgui_poly_tableau_vp_sc_snapshot() {
+    // restore viewport :
+    glViewport(vp[0], vp[1], vp[2], vp[3]);
+
+    // turn off the scissor test, if it wasn't already on, and
+    // restore old scissor settings :
+    if (sc_was_enabled)
+      glEnable(GL_SCISSOR_TEST);
+    else
+      glDisable(GL_SCISSOR_TEST);
+    glScissor(sc[0], sc[1], sc[2], sc[3]);
+  }
+};
+
 class vgui_poly_tableau : public vgui_tableau
 {
  public:

@@ -17,7 +17,7 @@
 
 #include <vcl_vector.h>
 #include <vbl/vbl_array_2d.h>
-
+#include <vbl/vbl_bounding_box.h>
 #include "vgui_grid_tableau_sptr.h"
 #include <vgui/vgui_poly_tableau.h>
 #include <vgui/vgui_event_condition.h>
@@ -105,6 +105,9 @@ class vgui_grid_tableau : public vgui_poly_tableau
 
   //: Adds a tableau to the next free space in the grid and the list of tableaux
   void add_next(vgui_tableau_sptr const& tab);
+
+  //: Adds a tableau to the next free space and returns the grid location
+  void add_next(vgui_tableau_sptr const& tab, unsigned& col, unsigned& row);
 
   //: Add (or replace the tableau at the given position with) the given tableau.
   void add_at(vgui_tableau_sptr const& tab, unsigned col_pos, unsigned row_pos);
@@ -195,6 +198,10 @@ class vgui_grid_tableau : public vgui_poly_tableau
 
   //: Handle any events matching the {vgui_event_condition}s.
   bool handle(const vgui_event&);
+
+  //: Window coordinates of the cell bounding box at col, row
+  bool cell_bounding_box(unsigned col, unsigned row,
+                         float& xmin, float& ymin, float& xmax, float& ymax);
 
  protected:
   //: Destructor - called by vgui_grid_tableau_sptr.

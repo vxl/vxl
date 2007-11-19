@@ -365,6 +365,7 @@ render_directly(vgui_range_map_params_sptr const& rmp)
                   { 
                     view = 
                       pyr->get_copy_view(i0, ni, j0, nj, zoomx, actual_scale);
+					if(!view) return false;
                     sni_ = view.ni(); snj_ = view.nj();
                     zx_/=actual_scale;       zy_/=actual_scale; 
                     if(hmap)
