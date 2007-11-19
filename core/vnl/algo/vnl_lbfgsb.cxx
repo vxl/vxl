@@ -106,15 +106,16 @@ bool vnl_lbfgsb::minimize(vnl_vector<double>& x)
       }
     else if(vcl_strncmp("NEW_X", task, 5) == 0)
       {
-      // Iteration.
+      // dsave[12] = the infinity norm of the projected gradient
+      this->inf_norm_projected_gradient_ = dsave[12];
+
+      // Iteration.a
       if(this->report_iter())
         {
         this->failure_code_ = FAILED_USER_REQUEST;
         ok = false;
         break;
         }
-
-      // dsave[12] = the infinity norm of the projected gradient
       }
     else if(vcl_strncmp("ERROR", task, 5) == 0)
       {
