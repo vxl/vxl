@@ -56,6 +56,10 @@ void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::clear_poly), 
     vgui_key('d'), vgui_modifier(vgui_SHIFT));
   selmenu.separator();
+  selmenu.add( "Empty the Box", 
+    new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::clear_box), 
+    vgui_key('b'), vgui_modifier(vgui_SHIFT));
+  selmenu.separator();
   selmenu.add( "Delete All", 
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::clear_all),
     vgui_key('a'), vgui_modifier(vgui_SHIFT));
@@ -79,6 +83,10 @@ void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu
   MENU_TAB_ADD_PROCESS("Histogram Plot", "histogram", image_submenu, this);
   MENU_TAB_ADD_PROCESS("Step Edges VD", "step_edge", image_submenu, this);
   MENU_TAB_ADD_PROCESS("Detect Lines", "detect_lines", image_submenu, this);
+  image_submenu.add( "Recover the edges", 
+    new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::recover_edges), 
+    vgui_key('b'), vgui_modifier(vgui_SHIFT));
+
   menu.add("IMAGE ", image_submenu);
   menu.separator();
 #if 0
@@ -174,6 +182,11 @@ void bwm_tableau_img::clear_poly()
   my_observer_->delete_selected();
 }
 
+void bwm_tableau_img::clear_box()
+{
+  my_observer_->clear_box();
+}
+
 void bwm_tableau_img::clear_all()
 {
   my_observer_->delete_all();
@@ -228,6 +241,11 @@ void bwm_tableau_img::step_edges_vd()
 void bwm_tableau_img::lines_vd()
 {
   my_observer_->lines_vd();
+}
+
+void bwm_tableau_img::recover_edges()
+{
+  my_observer_->recover_edges();
 }
 
 bool bwm_tableau_img::handle(const vgui_event& e)

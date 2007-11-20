@@ -54,7 +54,10 @@ public:
 
   void create_point(vsol_point_2d_sptr);
 
-  bool get_selected_box(vsol_box_2d_sptr & box);
+  bool get_selected_box(bgui_vsol_soview2D_polygon* &box);
+
+  //: clears the edges inside a selected box
+  void clear_box();
 
   void delete_selected();
 
@@ -72,6 +75,8 @@ public:
   void step_edges_vd();
 
   void lines_vd();
+
+  void recover_edges(); 
 
   void jim_obs_process(){ vcl_cout << "I am Jim Green's Process!!!!" << vcl_endl; }
 
@@ -101,14 +106,18 @@ protected:
   // vector of vertices are mapped soview ID for each polygon
   vcl_map<unsigned, vcl_vector<bwm_soview2D_vertex* > > vert_list;
 
+  // vector of edges map to their own box
+  vcl_map<unsigned, vcl_vector<bgui_vsol_soview2D* > > edges_list;
+
   float start_x_, start_y_;
   bgui_vsol_soview2D* moving_p_;
   bwm_soview2D_vertex* moving_v_;
   bool moving_vertex_, moving_polygon_;
 
   void delete_polygon(vgui_soview* obj);
+  void delete_vertex(vgui_soview* vertex);
 
-  bgui_vsol_soview2D* get_selected_object(vcl_string type);
+  vgui_soview2D* get_selected_object(vcl_string type);
 
   vcl_string tab_name_;
 

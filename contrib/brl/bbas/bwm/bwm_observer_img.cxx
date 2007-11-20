@@ -157,13 +157,18 @@ void bwm_observer_img::create_point(vsol_point_2d_sptr p)
   obj_list[point->get_id()] = point;
 }
 
-bool bwm_observer_img::get_selected_box(vsol_box_2d_sptr & box)
+bool bwm_observer_img::get_selected_box(bgui_vsol_soview2D_polygon* &box)
 {
 
   bgui_vsol_soview2D_polygon* p;
   if (p = (bgui_vsol_soview2D_polygon*)get_selected_object(POLYGON_TYPE)) {
-    vsol_polygon_2d_sptr poly = p->sptr();
-    box = poly->get_bounding_box();
+    /*if (p->sptr()->size() != 4) {
+      vcl_cerr << "Selected polygon is not a box" << vcl_endl;
+      return false;
+    }*/
+    //vsol_polygon_2d_sptr poly = p->sptr();
+    //box = poly->get_bounding_box();
+    box = p;
     return true;
   }
 
@@ -301,6 +306,44 @@ void bwm_observer_img::delete_vertex(vgui_soview* vertex)
   }
 }
 
+void bwm_observer_img::clear_box()
+{
+  // get the selected box
+  bgui_vsol_soview2D_polygon* p = 0;
+  if(!this->get_selected_box(p))
+    {
+      vcl_cerr << "In bwm_observer_img::clear_box() - no box selected\n";
+      return ;
+    }
+  
+  vcl_vector<bgui_vsol_soview2D* > edges;
+  edges = edges_list[p->get_id()];
+  for (unsigned i=0; i<edges.size(); i++) {
+    this->remove(edges[i]);
+  }
+  
+  this->post_redraw();
+  // do not delete the information about deleted edges, we may want to bring them back
+}
+
+void bwm_observer_img::recover_edges() 
+{
+  // get the selected box
+  bgui_vsol_soview2D_polygon* p = 0;
+  if(!this->get_selected_box(p))
+    {
+      vcl_cerr << "In bwm_observer_img::clear_box() - no box selected\n";
+      return ;
+    }
+  
+  vcl_vector<bgui_vsol_soview2D* > edges;
+  edges = edges_list[p->get_id()];
+  for (unsigned i=0; i<edges.size(); i++) {
+    this->add(edges[i]);
+  }
+  post_redraw();
+}
+
 void bwm_observer_img::save()
 {
 }
@@ -329,50 +372,62 @@ void bwm_observer_img::toggle_show_image_path()
 
 void bwm_observer_img::step_edges_vd()
 {
-  vsol_box_2d_sptr box;
-  if(!this->get_selected_box(box))
+  bgui_vsol_soview2D_polygon* p = 0;  
+  if(!this->get_selected_box(p))
     {
       vcl_cerr << "In bwm_observer_img::step_edges_vd() - no box selected\n";
       return ;
     }
   
   vcl_vector<vdgl_digital_curve_sptr> edges;
+  vsol_polygon_2d_sptr poly = p->sptr();
+  vsol_box_2d_sptr box = poly->get_bounding_box();
   if(!bwm_image_processor::step_edges_vd(img_tab_, box, edges))
     {
       vcl_cerr << "In bwm_observer_img::step_edges_vd() - no edges\n";
       return;
     }
 
+  vcl_vector<bgui_vsol_soview2D*> line_vec;
   for(vcl_vector<vdgl_digital_curve_sptr>::iterator eit = edges.begin();
       eit != edges.end(); ++eit)
     {
       bgui_vsol_soview2D_edgel_curve* curve = this->add_edgel_curve(*eit);
-      obj_list[curve->get_id()] = curve;
+      //obj_list[curve->get_id()] = curve;
+      line_vec.push_back(curve);
     }
+  edges_list[p->get_id()] = line_vec;
   this->post_redraw();
 }
 
 void bwm_observer_img::lines_vd()
 {
-  vsol_box_2d_sptr box;
-  if(!this->get_selected_box(box))
+  bgui_vsol_soview2D_polygon* p = 0;
+  if(!this->get_selected_box(p))
     {
       vcl_cerr << "In bwm_observer_img::lines_vd() - no box selected\n";
       return ;
     }
   
   vcl_vector<vsol_line_2d_sptr> lines;
+  vsol_polygon_2d_sptr poly = p->sptr();
+  vsol_box_2d_sptr box = poly->get_bounding_box();
   if(!bwm_image_processor::lines_vd(img_tab_, box, lines))
     {
       vcl_cerr << "In bwm_observer_img::lines_vd() - no lines\n";
       return;
     }
+
+  vcl_vector<bgui_vsol_soview2D*> line_vec;
   for(vcl_vector<vsol_line_2d_sptr>::iterator lit = lines.begin();
       lit != lines.end(); ++lit)
     {
       bgui_vsol_soview2D_line_seg* line = this->add_vsol_line_2d(*lit);
-      obj_list[line->get_id()] = line;
+      // Gamze -- do not add the lines one by one create a vector and map it to the box
+      //obj_list[line->get_id()] = line;
+      line_vec.push_back(line);
     }
+  edges_list[p->get_id()] = line_vec;
   this->post_redraw();
 }
 //

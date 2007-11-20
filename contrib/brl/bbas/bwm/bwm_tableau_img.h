@@ -54,6 +54,9 @@ public:
   // object, it deletes the object where the selected polygon belongs to
   void clear_poly();
 
+  //: clears the edges inside a box
+  void clear_box();
+
   //: Deletes all the objects created so far
   void clear_all(); 
 
@@ -71,6 +74,8 @@ public:
   void step_edges_vd();
 
   void lines_vd();
+
+  void recover_edges();
 
   void jim_process() { my_observer_->jim_obs_process(); }
 
