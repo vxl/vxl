@@ -3,8 +3,8 @@
 // \file
 #include <vcl_string.h>
 #include <vcl_cstring.h>
-#include <bgeo/bgeo_datum_conversion.h>
-#include <bgeo/bgeo_earth_constants.h>
+#include <vpgl/bgeo/bgeo_datum_conversion.h>
+#include <vpgl/bgeo/bgeo_earth_constants.h>
 
 #define SMALL_STEP 1.0e-6 // assumed to be in radians
 
