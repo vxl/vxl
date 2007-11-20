@@ -22,7 +22,7 @@
 #include <vpgl/algo/vpgl_optimize_camera.h>
 #include <vgl/vgl_box_3d.h>
 
-#include <bgeo/bgeo_lvcs.h>
+#include <vpgl/bgeo/bgeo_lvcs.h>
 
 //#define CAMERA_DEBUG
 //------------------------------------------
