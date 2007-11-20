@@ -212,11 +212,20 @@ class vnl_sse<double> {
       
       //load, multiply and store two doubles at a time
       //loop unroll to handle 4
-      for(int i = n-4; i >= 0; i-=4)
-      {        
-        VNL_SSE_HEAP_STORE(pd)(r+i,_mm_mul_pd(VNL_SSE_HEAP_LOAD(pd)(x+i),VNL_SSE_HEAP_LOAD(pd)(y+i)));
-        VNL_SSE_HEAP_STORE(pd)(r+i+2,_mm_mul_pd(VNL_SSE_HEAP_LOAD(pd)(x+i+2),VNL_SSE_HEAP_LOAD(pd)(y+i+2)));
-      }
+      if (vcl_ptrdiff_t(x)%16 || vcl_ptrdiff_t(y)%16  || vcl_ptrdiff_t(r)%16)
+            // unaligned case
+        for(int i = n-4; i >= 0; i-=4) 
+        {        
+          _mm_storeu_pd(r+i,_mm_mul_pd(_mm_loadu_pd(x+i),_mm_loadu_pd(y+i)));
+          _mm_storeu_pd(r+i+2,_mm_mul_pd(_mm_loadu_pd(x+i+2),_mm_loadu_pd(y+i+2)));
+        }
+      else  // aligned case
+        for(int i = n-4; i >= 0; i-=4)
+        {        
+          VNL_SSE_HEAP_STORE(pd)(r+i,_mm_mul_pd(VNL_SSE_HEAP_LOAD(pd)(x+i),VNL_SSE_HEAP_LOAD(pd)(y+i)));
+          VNL_SSE_HEAP_STORE(pd)(r+i+2,_mm_mul_pd(VNL_SSE_HEAP_LOAD(pd)(x+i+2),VNL_SSE_HEAP_LOAD(pd)(y+i+2)));
+        }
+
     }
     
     static VNL_SSE_FORCE_INLINE double dot_product(const double* x, const double* y, unsigned n)
@@ -231,8 +240,13 @@ class vnl_sse<double> {
       else
         sum = _mm_setzero_pd();  
       
-      for(int i = n-2; i >= 0; i-=2)
-        sum = _mm_add_pd(_mm_mul_pd(VNL_SSE_HEAP_LOAD(pd)(x+i), VNL_SSE_HEAP_LOAD(pd)(y+i)),sum);
+      if (vcl_ptrdiff_t(x)%16 || vcl_ptrdiff_t(y)%16)
+           // unaligned case
+        for(int i = n-2; i >= 0; i-=2)
+          sum = _mm_add_pd(_mm_mul_pd(_mm_loadu_pd(x+i), _mm_loadu_pd(y+i)),sum);
+      else // aligned case
+        for(int i = n-2; i >= 0; i-=2)
+          sum = _mm_add_pd(_mm_mul_pd(VNL_SSE_HEAP_LOAD(pd)(x+i), VNL_SSE_HEAP_LOAD(pd)(y+i)),sum);
 
       // sum will contain 2 accumulated values, need to add them together
       sum = _mm_add_sd(sum,_mm_unpackhi_pd(sum,_mm_setzero_pd()));
@@ -254,13 +268,14 @@ class vnl_sse<double> {
       else
         sum = _mm_setzero_pd();        
       
-      if (vcl_ptrdiff_t(x)%16 || vcl_ptrdiff_t(y)%16) // unaligned case
+      if (vcl_ptrdiff_t(x)%16 || vcl_ptrdiff_t(y)%16)
+           // unaligned case
         for ( int i = n-2; i >= 0; i-=2 )
         {        
           a = _mm_sub_pd(_mm_loadu_pd(x+i),_mm_loadu_pd(y+i));        
           sum = _mm_add_pd(_mm_mul_pd(a,a),sum);
         }
-      else              // aligned case
+      else // aligned case
         for ( int i = n-2; i >= 0; i-=2 )
         {        
           a = _mm_sub_pd(VNL_SSE_HEAP_LOAD(pd)(x+i),VNL_SSE_HEAP_LOAD(pd)(y+i));        
@@ -367,7 +382,7 @@ class vnl_sse<double> {
       for (unsigned i = 0; i < r_nice; i+=2)
       {
 
-        //handle 4 matrix columns at a time
+        //handle 2 matrix columns at a time
         accum = _mm_setzero_pd();
         const double *r1 = m+i*cols, *r2 = m+(i+1)*cols;
         unsigned j = 0;
@@ -402,14 +417,8 @@ class vnl_sse<double> {
         }
         // handle the left over columns
         if(c_left)
-        {
-          __m128d  vec, mat, mul;
-          vec = _mm_load1_pd(v+j);
-          mat = _mm_set_pd(*(r2+j),*(r1+j));
-          mul = _mm_mul_pd(vec, mat);
-          accum = _mm_add_pd(mul, accum);
-//          accum = _mm_add_pd(_mm_mul_pd(_mm_load1_pd(v+j),_mm_set_pd(*(r1+j),*(r2+j))), accum);   
-	}
+          accum = _mm_add_pd(_mm_mul_pd(_mm_load1_pd(v+j),_mm_set_pd(*(r2+j),*(r1+j))), accum);   
+
         //store the 2 values of the result vector
         //use stream to avoid polluting the cache
         _mm_stream_pd(r+i,accum);
@@ -671,7 +680,7 @@ class vnl_sse<float> {
           
           //unpack into xy and zw parts
           // i.e mxy1 = (m00, m10, m01, m11)
-          //     mxy1 = (m02, m12, m03, m13)
+          //     mzw1 = (m02, m12, m03, m13)
           mxy1 = _mm_unpacklo_ps(mr1,mr2);
           mzw1 = _mm_unpackhi_ps(mr1,mr2);
           
