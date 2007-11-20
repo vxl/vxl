@@ -4,7 +4,7 @@ SET (HAS_BGUI3D "NO")
 IF (BGUI3D_FOUND)
 
   # Find the Coin3D library
-  INCLUDE( ${BRL_INCLUDE_DIR}/bmods/find_coin.cmake )
+  INCLUDE( ${brl_SOURCE_DIR}/bmods/find_coin.cmake )
   
   IF (COIN3D_FOUND)
     INCLUDE_DIRECTORIES( ${COIN3D_INCLUDE_DIR} )
@@ -14,14 +14,14 @@ IF (BGUI3D_FOUND)
   ENDIF (COIN3D_FOUND)
 
   # Find the SimVoleon library
-  INCLUDE( ${BRL_INCLUDE_DIR}/bmods/find_SIMVoleon.cmake )
+  INCLUDE( ${brl_SOURCE_DIR}/bmods/find_SIMVoleon.cmake )
 
   IF (SIMVOLEON_FOUND)
     INCLUDE_DIRECTORIES( ${SIMVOLEON_INCLUDE_DIR} )
     LINK_LIBRARIES ( ${SIMVOLEON_LIBRARY} )
   ENDIF (SIMVOLEON_FOUND)
 
-  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
+  INCLUDE_DIRECTORIES( ${brl_SOURCE_DIR}/bbas )
 
 ENDIF (BGUI3D_FOUND)
 
