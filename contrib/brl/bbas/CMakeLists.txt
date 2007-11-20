@@ -38,9 +38,6 @@ SUBDIRS(bsta)
 # Brown dynamic programming library
 SUBDIRS(bdpg)
 
-# Geographic utilities
-SUBDIRS(bgeo)
-
 #3D mesh library 
 SUBDIRS(bmsh3d)
 
