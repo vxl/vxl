@@ -254,11 +254,18 @@ class vnl_sse<double> {
       else
         sum = _mm_setzero_pd();        
       
-      for ( int i = n-2; i >= 0; i-=2 )
-      {        
-        a = _mm_sub_pd(VNL_SSE_HEAP_LOAD(pd)(x+i),VNL_SSE_HEAP_LOAD(pd)(y+i));        
-        sum = _mm_add_pd(_mm_mul_pd(a,a),sum);
-      }
+      if (vcl_ptrdiff_t(x)%16 || vcl_ptrdiff_t(y)%16) // unaligned case
+        for ( int i = n-2; i >= 0; i-=2 )
+        {        
+          a = _mm_sub_pd(_mm_loadu_pd(x+i),_mm_loadu_pd(y+i));        
+          sum = _mm_add_pd(_mm_mul_pd(a,a),sum);
+        }
+      else              // aligned case
+        for ( int i = n-2; i >= 0; i-=2 )
+        {        
+          a = _mm_sub_pd(VNL_SSE_HEAP_LOAD(pd)(x+i),VNL_SSE_HEAP_LOAD(pd)(y+i));        
+          sum = _mm_add_pd(_mm_mul_pd(a,a),sum);
+        }
 
       // sum will contain 2 accumulated values, need to add them together
       sum = _mm_add_sd(sum,_mm_unpackhi_pd(sum,_mm_setzero_pd()));
@@ -395,8 +402,14 @@ class vnl_sse<double> {
         }
         // handle the left over columns
         if(c_left)
-          accum = _mm_add_pd(_mm_mul_pd(_mm_load1_pd(v+j),_mm_set_pd(*(r1+j),*(r2+j))), accum);   
-
+        {
+          __m128d  vec, mat, mul;
+          vec = _mm_load1_pd(v+j);
+          mat = _mm_set_pd(*(r2+j),*(r1+j));
+          mul = _mm_mul_pd(vec, mat);
+          accum = _mm_add_pd(mul, accum);
+//          accum = _mm_add_pd(_mm_mul_pd(_mm_load1_pd(v+j),_mm_set_pd(*(r1+j),*(r2+j))), accum);   
+	}
         //store the 2 values of the result vector
         //use stream to avoid polluting the cache
         _mm_stream_pd(r+i,accum);
@@ -677,10 +690,18 @@ class vnl_sse<float> {
           // y = (v1,v1,v1,v1) * (m01,m11,m21,m31)
           // z = (v2,v2,v2,v2) * (m02,m12,m22,m32)
           // w = (v3,v3,v3,v3) * (m03,m13,m23,m33)
-          x = _mm_mul_ps(x,_mm_movelh_ps(mxy1,mxy2));
-          y = _mm_mul_ps(y,_mm_movehl_ps(mxy1,mxy2));
-          z = _mm_mul_ps(z,_mm_movelh_ps(mzw1,mzw2));
-          w = _mm_mul_ps(w,_mm_movehl_ps(mzw1,mzw2));
+          __m128 mx = _mm_movelh_ps(mxy1,mxy2);
+          x = _mm_mul_ps(x, mx);
+          __m128 my = _mm_movehl_ps(mxy2,mxy1);
+          y = _mm_mul_ps(y, my);
+          __m128 mz = _mm_movelh_ps(mzw1,mzw2);
+          z = _mm_mul_ps(z, mz);
+          __m128 mw = _mm_movehl_ps(mzw2,mzw1);
+          w = _mm_mul_ps(w,mw);
+//          x = _mm_mul_ps(x,_mm_movelh_ps(mxy1,mxy2));
+//          y = _mm_mul_ps(y,_mm_movehl_ps(mxy1,mxy2));
+ //         z = _mm_mul_ps(z,_mm_movelh_ps(mzw1,mzw2));
+//          w = _mm_mul_ps(w,_mm_movehl_ps(mzw1,mzw2));
 
           //now sum the four results
           accum = _mm_add_ps(x,accum);
@@ -697,9 +718,9 @@ class vnl_sse<float> {
         // handle the left over columns
         switch(c_left)
         {
-          case 3: accum = _mm_add_ps(_mm_mul_ps(_mm_load1_ps(v+j),_mm_set_ps(*(r1+j),*(r2+j),*(r3+j),*(r4+j))), accum); j++;
-          case 2: accum = _mm_add_ps(_mm_mul_ps(_mm_load1_ps(v+j),_mm_set_ps(*(r1+j),*(r2+j),*(r3+j),*(r4+j))), accum); j++;
-          case 1: accum = _mm_add_ps(_mm_mul_ps(_mm_load1_ps(v+j),_mm_set_ps(*(r1+j),*(r2+j),*(r3+j),*(r4+j))), accum); 
+          case 3: accum = _mm_add_ps(_mm_mul_ps(_mm_load1_ps(v+j),_mm_set_ps(*(r4+j),*(r3+j),*(r2+j),*(r1+j))), accum); j++;
+          case 2: accum = _mm_add_ps(_mm_mul_ps(_mm_load1_ps(v+j),_mm_set_ps(*(r4+j),*(r3+j),*(r2+j),*(r1+j))), accum); j++;
+          case 1: accum = _mm_add_ps(_mm_mul_ps(_mm_load1_ps(v+j),_mm_set_ps(*(r4+j),*(r3+j),*(r2+j),*(r1+j))), accum); 
           case 0: ;
         }
         //store the 4 values of the result vector
