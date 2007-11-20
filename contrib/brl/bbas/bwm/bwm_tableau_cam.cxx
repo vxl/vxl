@@ -88,6 +88,15 @@ class bwm_move_corr_command: public vgui_command
   bwm_tableau_cam *tab;
 };
 
+class bwm_set_corr_to_vertex_command: public vgui_command
+{
+  public:
+  bwm_set_corr_to_vertex_command(bwm_tableau_cam* t) : tab(t) {}
+  void execute() { tab->set_corr_to_vertex(); }
+
+  bwm_tableau_cam *tab;
+};
+
 class bwm_world_pt_corr_command: public vgui_command
 {
   public:
@@ -224,6 +233,9 @@ void bwm_tableau_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu
   vgui_menu corr_menu;
   corr_menu.add( "Move (selected)" , new bwm_move_corr_command(this));
   corr_menu.separator();
+  corr_menu.add( "Set Corr to Selected Vertex" ,
+                 new bwm_set_corr_to_vertex_command(this));
+  corr_menu.separator();
   corr_menu.add( "Save World Point (selected)" , new bwm_world_pt_corr_command(this));
   menu.add( "Correspondence", corr_menu);
 
@@ -343,6 +355,11 @@ void bwm_tableau_cam::move_corr()
   pick_point(&x, &y);
   vsol_point_2d_sptr pt = new vsol_point_2d((double)x,(double)y);
   my_observer_->move_corr_point(pt);
+}
+
+void bwm_tableau_cam::set_corr_to_vertex()
+{
+  my_observer_->set_corr_to_vertex();
 }
 
 void bwm_tableau_cam::world_pt_corr()

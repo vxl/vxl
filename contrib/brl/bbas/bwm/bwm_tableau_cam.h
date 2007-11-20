@@ -61,6 +61,8 @@ public:
 
   void move_corr();
 
+  void set_corr_to_vertex();
+
   void world_pt_corr();
 
   void load_mesh();

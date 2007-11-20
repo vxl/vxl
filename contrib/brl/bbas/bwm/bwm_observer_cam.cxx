@@ -210,6 +210,23 @@ void bwm_observer_cam::move_corr_point(vsol_point_2d_sptr new_pt)
     }
   }
 }
+
+void bwm_observer_cam::set_corr_to_vertex()
+{
+  // get the currently selected vertex
+  bwm_soview2D_vertex* sov = 
+    (bwm_soview2D_vertex*)bwm_observer_img::get_selected_object("bwm_soview2D_vertex");
+  // extract the location
+  if(!sov) 
+    {
+      vcl_cerr << "In bwm_observer_cam::set_corr_to_vertex() -"
+               << " no vertex selected\n";
+        return;
+    }
+  bwm_observer_vgui::update_corr_pt(sov->x, sov->y);
+  bwm_observer_img::post_redraw();
+}
+
 void bwm_observer_cam::world_pt_corr()
 {
   // first get the selected cross

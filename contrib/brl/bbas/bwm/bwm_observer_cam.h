@@ -127,8 +127,9 @@ public:
 
   void move_corr_point(vsol_point_2d_sptr new_pt);
 
-  void world_pt_corr();
+  void set_corr_to_vertex();
 
+  void world_pt_corr();
 
   void scroll_to_point();
 
