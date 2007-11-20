@@ -388,6 +388,9 @@ void bwm_observer_img::step_edges_vd()
       return;
     }
 
+  // first cleaan up the box, if there is anything in it
+  clear_box();
+
   vcl_vector<bgui_vsol_soview2D*> line_vec;
   for(vcl_vector<vdgl_digital_curve_sptr>::iterator eit = edges.begin();
       eit != edges.end(); ++eit)
@@ -417,6 +420,9 @@ void bwm_observer_img::lines_vd()
       vcl_cerr << "In bwm_observer_img::lines_vd() - no lines\n";
       return;
     }
+
+  // first cleaan up the box, if there is anything in it
+  clear_box();
 
   vcl_vector<bgui_vsol_soview2D*> line_vec;
   for(vcl_vector<vsol_line_2d_sptr>::iterator lit = lines.begin();
