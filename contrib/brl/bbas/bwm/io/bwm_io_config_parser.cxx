@@ -118,7 +118,7 @@ bwm_io_config_parser::startElement(const char* name, const char** atts)
       else if (strcmp(atts[i], "Z") == 0)
         convert(atts[i+1], Z_);
     }
-  }
+  } 
 }
 
 

@@ -1,6 +1,8 @@
 #ifndef bwm_io_config_parser_h_
 #define bwm_io_config_parser_h_
 
+#include "bwm_io_structs.h"
+
 #include <expatpp/expatpplib.h>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
@@ -11,52 +13,6 @@
 
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
-
-class bwm_io_tab_config 
-{
-public:
-  bwm_io_tab_config(vcl_string type, vcl_string tab_name, bool active_or_not)
-    : type_name(type), name(tab_name), status(active_or_not) {}
-  vcl_string name;
-  vcl_string type_name;
-  bool status;
-};
-
-struct bwm_io_tab_config_img : public bwm_io_tab_config {
-  bwm_io_tab_config_img(vcl_string type, vcl_string name, bool status, vcl_string path) 
-    : bwm_io_tab_config(type, name, status), img_path(path) {}
-  vcl_string img_path;
-};
-
-  
-struct bwm_io_tab_config_cam : public bwm_io_tab_config {
-  bwm_io_tab_config_cam(vcl_string type, vcl_string name, bool status, 
-    vcl_string i_path, vcl_string c_path, vcl_string c_type) 
-    : bwm_io_tab_config(type, name, status), img_path(i_path), 
-    cam_path(c_path), cam_type(c_type) {}
-  vcl_string img_path;
-  vcl_string cam_path;
-  vcl_string cam_type; 
-};
-
-struct bwm_io_tab_config_coin3d: public bwm_io_tab_config {
-  bwm_io_tab_config_coin3d(vcl_string type, vcl_string name, bool status, 
-    vcl_string c_path, vcl_string c_type) 
-    : bwm_io_tab_config(type, name, status), cam_path(c_path), cam_type(c_type) {}
-  vcl_string cam_path;
-  vcl_string cam_type; 
-};
-
-struct bwm_io_tab_config_proj2d: public bwm_io_tab_config {
-  bwm_io_tab_config_proj2d(vcl_string type, vcl_string name, bool status, 
-    vcl_string p_type, vcl_string c_path, vcl_string c_type, vcl_string coin3d) 
-    : bwm_io_tab_config(type, name, status), proj2d_type(p_type), cam_path(c_path), 
-    cam_type(c_type), coin3d_tab_name(coin3d) {}
-  vcl_string cam_path;
-  vcl_string cam_type; 
-  vcl_string proj2d_type;
-  vcl_string coin3d_tab_name;
-};
 
 class bwm_io_config_parser : public expatpp {
 public:
@@ -91,6 +47,8 @@ private:
   vcl_string camera_type_;
   vcl_string proj2d_type_;
   vcl_string coin3d_name_;
+  vcl_string object_path_;
+  vcl_string object_type_;
 
   // correspondence related parameters
   vcl_string corr_mode_;
