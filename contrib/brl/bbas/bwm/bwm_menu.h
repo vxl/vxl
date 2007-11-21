@@ -17,6 +17,7 @@ public:
 
   // FILE Menu Items
   static void create_site()  {bwm_tableau_mgr::instance()->create_site();}
+  static void edit_site()  {bwm_tableau_mgr::instance()->edit_site();}
   static void load_tableaus()  {bwm_tableau_mgr::instance()->load_tableaus();}
   static void remove_tableau() {bwm_tableau_mgr::instance()->remove_tableau();}
   static void exit() {bwm_tableau_mgr::instance()->exit(); }

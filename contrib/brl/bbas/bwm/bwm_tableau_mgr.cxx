@@ -16,12 +16,13 @@
 #include "bwm_corr_sptr.h"
 #include "bwm_command.h"
 #include "bwm_load_commands.h"
+#include "bwm_site.h"
 #include "algo/bwm_algo.h"
 #include "algo/bwm_rat_proj_camera.h"
 #include "algo/bwm_image_processor.h"
 #include "algo/bwm_utils.h"
-//#include "algo/bwm_site.h"
-//#include "algo/bwm_site_creation_process.h"
+
+//#include "process/bwm_site_process.h"
 
 #include <vgui/vgui_poly_tableau.h>
 
@@ -41,8 +42,12 @@
 #include <vul/vul_file.h>
 #include <Inventor/nodes/SoSelection.h>
 
+
+
 bwm_tableau_mgr* bwm_tableau_mgr::instance_ = 0;
 vcl_map<vcl_string, bwm_command_sptr> bwm_tableau_mgr::tab_types_;
+
+class CDialog;
 
 bwm_tableau_mgr* bwm_tableau_mgr::instance() {
   if (!instance_) {
@@ -60,10 +65,12 @@ bwm_tableau_mgr::bwm_tableau_mgr()
   grid_->set_unique_selected(true);
   grid_->set_grid_size_changeable(true);
   display_image_path_ = false;
+  site_create_process_ = new bwm_site_process();
 }
 
 bwm_tableau_mgr::~bwm_tableau_mgr()
 {
+  delete site_create_process_;
 }
 
 void bwm_tableau_mgr::add_tableau(vgui_tableau_sptr tab, vcl_string name)
@@ -192,19 +199,117 @@ void bwm_tableau_mgr::create_site()
   }
 
   vcl_vector<vcl_pair<vcl_string, vcl_string> > objects;
-  for (unsigned obj=0; obj=objs.size(); obj++) {
+  for (unsigned obj=0; obj<objs.size(); obj++) {
     vcl_pair<vcl_string, vcl_string> pair(objs[obj], choices[obj] == 0 ? "mesh":"vsol");
     objects.push_back(pair);
   }
 
-//  bwm_site site(site_name, site_dir, files, pyramid, active, 
- //   levels, objects, vsol_point_3d(lat, lon, elev));
+  bwm_site* site = new bwm_site(site_name, site_dir, files, pyramid, active, 
+    levels, objects, vsol_point_3d(lat, lon, elev));
 
-  //bwm_site_creation_process(site, NULL);
-  // collect the images and check the validity
+  site_create_process_->set_site(site);
+  site_create_process_->StartBackgroundTask();
+}
+
+//: create a dialog box to create site to add images, objects, etc..
+void bwm_tableau_mgr::edit_site()
+{
+  bwm_io_config_parser* parser = 0;
+  parser = parse_config();
+  if (parser == 0) {
+    vcl_cerr << "Site File is not a valid XML site!" << vcl_endl;
+    return;
+  }
+
+  vgui_dialog_extensions site_edit_dialog("Edit World Model Site");
+
+ // vcl_string site_name, site_dir;
+
+  // new creation vars
+  int num_images = 3;
+  vcl_vector<vcl_string> files(num_images);
+  bool pyr[3] = {false, false, false};
+  bool act[3] = {false, false, false};
+  vcl_vector<vcl_string> levels(num_images);
+
+  int num_objs = 3;
+  vcl_vector<vcl_string> objs(num_objs);
+  int choices[3] = {0, 0, 0};
+  double lat=0.0, lon=0.0, elev=0.0;
+
+  // previosly created obj vars
+  bool act_old[30];
+  bool remove[30];
+  vcl_vector<vcl_string> cam;
+
+  // first place the existing tableaus on the dialog
+  vcl_vector<bwm_io_tab_config* > tableaus =  parser->tableau_config();  
+  cam.resize(tableaus.size());
+  if (tableaus.size() > 0) {
+    site_edit_dialog.message("Existing Images:");
+    site_edit_dialog.line_break();
+  }
+
+  for (unsigned i=0; i<tableaus.size(); i++) {
+    bwm_io_tab_config* t = tableaus[i];
+    if (t->type_name.compare("ImageTableau") == 0) {
+      bwm_io_tab_config_img* img_tab = static_cast<bwm_io_tab_config_img* > (t);
+      bool active = img_tab->status;
+      vcl_string name = img_tab->name;
+      vcl_string path = img_tab->img_path;
+      site_edit_dialog.field("Image:", path);
+      remove[i] = false;
+      site_edit_dialog.checkbox("Remove", remove[i]);
+      act_old[i] = active;
+      site_edit_dialog.checkbox("Active", act_old[i]);
+      vcl_string ext = "*.RPG";
+      site_edit_dialog.file("Add Camera:", ext, cam[i]);
+      site_edit_dialog.line_break();
+
+    } else if (t->type_name.compare("CameraTableau") == 0) {
+      bwm_io_tab_config_cam* cam_tab = static_cast<bwm_io_tab_config_cam* > (t);
+      bool active = cam_tab->status;
+      site_edit_dialog.field("Image:", cam_tab->img_path);
+      remove[i] = false;
+      site_edit_dialog.checkbox("Remove", remove[i]);
+      act_old[i] = active;
+      site_edit_dialog.checkbox("Active", act_old[i]);
+      site_edit_dialog.line_break();
+    }
+  }
+
+  // add a bunch of images
+  site_edit_dialog.message("Add new images to this site:");
+  site_edit_dialog.line_break();
+  for (unsigned i=0; i<files.size(); i++) {
+    vcl_string ext;
+    site_edit_dialog.dir("Image Path:", ext, files[i]);
+    site_edit_dialog.checkbox("Pyramid:", pyr[i]);
+    site_edit_dialog.field("Levels:", levels[i]);
+    site_edit_dialog.checkbox("Active:", act[i]);
+    site_edit_dialog.line_break();
+  }
+
+  site_edit_dialog.line_break();
+
+  // put the existing objects
+
+  // create new objects
+
+  // lvcs
+  site_edit_dialog.line_break();
+  site_edit_dialog.message("LVCS origin for this site:");
+  site_edit_dialog.line_break();
+  site_edit_dialog.field("Lat:", lat);
+  site_edit_dialog.field("Lon:", lon);
+  site_edit_dialog.field("Elev:", elev);
+
+  site_edit_dialog.line_break();
+  site_edit_dialog.set_ok_button("Edit");
+  if (!site_edit_dialog.ask()) {
+    return;
+  }
   
-  
-  // process the input fields
 }
 
 void bwm_tableau_mgr::create_img_tableau(vcl_string name, 

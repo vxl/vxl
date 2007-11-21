@@ -1,10 +1,16 @@
 #ifndef bwm_tableau_mgr_h_
 #define bwm_tableau_mgr_h_
 
+#if _MSC_VER > 1000
+#pragma once
+#endif // _MSC_VER > 1000
+
+#include "dll.h"
 #include "bwm_tableau_sptr.h"
 #include "bwm_tableau_cam.h"
 #include "bwm_command_sptr.h"
 #include "io/bwm_io_config_parser.h"
+#include "process/bwm_site_process.h"
 
 #include <vcl_vector.h>
 
@@ -33,6 +39,8 @@ public:
   static void register_tableau(bwm_command_sptr tab_comm);
 
   void create_site();
+
+  void edit_site();
 
   void create_img_tableau(vcl_string name, vcl_string& image_path);
 
@@ -113,6 +121,8 @@ private:
                                double &lat, double &lon, double &elev);
 
   bool display_image_path_;
+
+  bwm_site_process* site_create_process_;
 };
 
 #endif
