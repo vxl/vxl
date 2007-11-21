@@ -2,7 +2,7 @@
 // \file
 #include <vcl_vector.h>
 #include <testlib/testlib_test.h>
-#include <bgeo/bgeo_lvcs.h>
+#include <vpgl/bgeo/bgeo_lvcs.h>
 #include <vgl/vgl_point_3d.h>
 #include <vcl_fstream.h>
 static bool read_geo_points(vcl_ifstream& str,
