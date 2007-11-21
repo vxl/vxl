@@ -21,18 +21,6 @@ IF(TIFF_FOUND)
 INCLUDE( ${MODULE_PATH}/FindGEOTIFF.cmake)
 IF(GEOTIFF_FOUND)
   INCLUDE_DIRECTORIES( ${GEOTIFF_INCLUDE_DIR} ) 
-  
-IF(NOT MINGW)
-    # MFC is not available in MinGW.
-    # This should be fixed in FindMFC.cmake and then this IF can be removed
-    INCLUDE(${CMAKE_ROOT}/Modules/FindMFC.cmake)
-  ENDIF(NOT MINGW)
-    
-IF (MFC_FOUND)
-  # add stuff to use MFC in this executable
-  ADD_DEFINITIONS( "-D_AFXDLL" )
-  SET(CMAKE_MFC_FLAG 2)
-ENDIF (MFC_FOUND)
 
   
 SET(bwm_sources
@@ -70,16 +58,32 @@ SET(bwm_sources
    bwm_observer_mgr.cxx        bwm_observer_mgr.h    
    bwm_texture_map_generator.cxx bwm_texture_map_generator.h
    bwm_corr.cxx                bwm_corr.h       bwm_corr_sptr.h
-   process/bwm_process.cxx      process/bwm_process.h
-   process/bwm_site_process.cxx      process/bwm_site_process.h
-	
 )
+
+IF(NOT MINGW)
+  # MFC is not available in MinGW.
+  # This should be fixed in FindMFC.cmake and then this IF can be removed
+  INCLUDE(${CMAKE_ROOT}/Modules/FindMFC.cmake)
+ENDIF(NOT MINGW)
+    
+IF (MFC_FOUND)
+  # add stuff to use MFC in this executable
+  ADD_DEFINITIONS( "-D_AFXDLL" )
+  SET(CMAKE_MFC_FLAG 2)
+
+
+SET(bwm_sources ${bwm_sources}
+   process/bwm_process.cxx           process/bwm_process.h
+   process/bwm_site_process.cxx      process/bwm_site_process.h	
+)
+
+ENDIF (MFC_FOUND)
 
 AUX_SOURCE_DIRECTORY(Templates bwm_sources)
 
 ADD_LIBRARY(bwm ${bwm_sources})
 
-TARGET_LINK_LIBRARIES( bwm bwm_algo bwm_io bwm_process bmsh3d bmsh3d_algo bmsh3d_vis expatpp vil vbl vgl vgl_algo vnl vsol vpgl vpgl_algo vpgl_file_formats bgui bgeo)
+TARGET_LINK_LIBRARIES( bwm bwm_algo bwm_io bmsh3d bmsh3d_algo bmsh3d_vis expatpp vil vbl vgl vgl_algo vnl vsol vpgl vpgl_algo vpgl_file_formats bgui bgeo)
 
 SUBDIRS(exe)
 SUBDIRS(algo)
