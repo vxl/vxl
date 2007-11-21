@@ -32,6 +32,7 @@ ADD_EXECUTABLE( vnl_test_all
   test_vector.cxx
   test_gamma.cxx
   test_random.cxx
+  test_alignment.cxx
   test_arithmetic.cxx  test_arithmetic_body.h
   test_hungarian_algorithm.cxx
   test_integrant.cxx
@@ -76,6 +77,7 @@ ADD_TEST( vnl_test_fastops              ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all t
 ADD_TEST( vnl_test_vector               ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_vector               )
 ADD_TEST( vnl_test_gamma                ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_gamma                )
 ADD_TEST( vnl_test_arithmetic           ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_arithmetic           )
+ADD_TEST( vnl_test_alignment            ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_alignment            )
 ADD_TEST( vnl_test_hungarian_algorithm  ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_hungarian_algorithm  )
 ADD_TEST( vnl_test_integrant            ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_integrant            )
 ADD_TEST( vnl_test_bessel               ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_bessel               )
