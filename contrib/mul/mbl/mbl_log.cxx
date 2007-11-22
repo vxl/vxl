@@ -382,6 +382,8 @@ void mbl_logger_root::load_log_config_file(
   const vcl_map<vcl_string, vcl_ostream *> &stream_names)
 {
 #ifndef MBL_LOG_DISABLE_ALL_LOGGING
+  // Make sure this list of mbl_log.properties locations code
+  // stays in sync with mul/contrib/tools/print_mbl_log_properties.cxx
   vcl_ifstream config_file("mbl_log.properties");
   if (!config_file.is_open())
     config_file.open("~/mbl_log.properties");
