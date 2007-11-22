@@ -84,7 +84,12 @@ public:
   void save_x3d();
 
   void generate_textures();
-  void adjust_image_offsets();
+
+  //
+  // given that there exists at least one world_to_image correspondence
+  // in the site align the camera of this observer to that world point
+  //
+  void adjust_camera_to_world_pt();
 protected:
   bgeo_lvcs* lvcs_;
   vcl_string select_file();

@@ -146,6 +146,15 @@ public:
   void execute() { bwm_observer_mgr::instance()->move_to_corr(); }
 };
 
+class bwm_adjust_camera_offsets_command: public vgui_command
+{
+public:
+  bwm_adjust_camera_offsets_command() {}
+  ~bwm_adjust_camera_offsets_command() {}
+  vcl_string name() {return "adjust_camera_offsets"; }
+  void execute() { bwm_observer_mgr::instance()->adjust_camera_offsets(); }
+};
+
 class bwm_corresp_process_command: public bwm_menu_process_command {
 public:
   bwm_corresp_process_command() {}
@@ -160,6 +169,8 @@ public:
     menu.add("Delete Last Correspondence", new bwm_del_last_corr_command());
     menu.add("Delete All Correspondences", new bwm_del_corr_command());
     menu.add("Move to First Correspondence", new bwm_move_to_corr_command());
+    menu.add("Adjust Cameras (One Corr.)",
+             new bwm_adjust_camera_offsets_command());
   }
   void execute() {}
 };

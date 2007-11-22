@@ -100,6 +100,15 @@ class bwm_save_x3d_command : public vgui_command
   bwm_tableau_rat_cam *tab;
 };
 
+class bwm_adjust_camera_to_world_pt_command : public vgui_command
+{
+ public:
+  bwm_adjust_camera_to_world_pt_command(bwm_tableau_rat_cam* t) : tab(t) {}
+  void execute() { tab->adjust_camera_to_world_pt(); }
+
+  bwm_tableau_rat_cam *tab;
+};
+
 class bwm_adj_cam_offset_command : public vgui_command
 {
  public:
@@ -109,15 +118,6 @@ class bwm_adj_cam_offset_command : public vgui_command
   bwm_tableau_rat_cam *tab;
 };
 
-
-class bwm_adjust_image_offsets_command : public vgui_command
-{
- public:
-  bwm_adjust_image_offsets_command(bwm_tableau_rat_cam* t) : tab(t) {}
-  void execute() { tab->adjust_image_offsets(); }
-
-  bwm_tableau_rat_cam *tab;
-};
 
 class bwm_center_pos_command : public vgui_command
 {
@@ -135,7 +135,7 @@ void bwm_tableau_rat_cam::get_popup(vgui_popup_params const &params, vgui_menu &
  
   menu.separator();
   menu.add( "Adjust Camera To LVCS", new bwm_adj_cam_offset_command(this));
-  menu.add( "Register Images From One Corr", new bwm_adjust_image_offsets_command(this));
+  menu.add( "Register Image to World Pt", new bwm_adjust_camera_to_world_pt_command(this));
   menu.add( "Center to the position", new bwm_center_pos_command(this));
 
   menu.separator();
@@ -190,6 +190,11 @@ void bwm_tableau_rat_cam::adjust_camera_offset()
   my_observer_->adjust_camera_offset(img_point);
 }
 
+void bwm_tableau_rat_cam::adjust_camera_to_world_pt()
+{
+  my_observer_->adjust_camera_to_world_pt();
+}
+
 void bwm_tableau_rat_cam::center_pos()
 {
   my_observer_->center_pos();
@@ -225,7 +230,4 @@ void bwm_tableau_rat_cam::save_x3d()
   my_observer_->save_x3d();
 }
 
-void bwm_tableau_rat_cam::adjust_image_offsets()
-{
-  my_observer_->adjust_image_offsets();
-}
+

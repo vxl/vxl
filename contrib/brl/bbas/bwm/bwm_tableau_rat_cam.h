@@ -36,7 +36,7 @@ public:
   void get_popup(vgui_popup_params const &params, vgui_menu &menu);
 
   void adjust_camera_offset();
-  void adjust_image_offsets();
+  void adjust_camera_to_world_pt();
   void center_pos();
 
   //******************** LVCS Menu

@@ -31,15 +31,15 @@ bool bwm_observer_img::handle(const vgui_event &e)
   vgui_projection_inspector pi;
   
   if (e.type == vgui_BUTTON_DOWN && 
-    e.button == vgui_MIDDLE && 
-    e.modifier == vgui_SHIFT) {
+      e.button == vgui_MIDDLE && 
+      e.modifier == vgui_SHIFT) {
 
     bgui_vsol_soview2D* p=0;
     bwm_soview2D_vertex* v = 0;
 
     // get the selected polyline or polygon
     if ((p = (bgui_vsol_soview2D*) get_selected_object(POLYGON_TYPE)) ||
-      (p = (bgui_vsol_soview2D*) get_selected_object(POLYLINE_TYPE))) {
+        (p = (bgui_vsol_soview2D*) get_selected_object(POLYLINE_TYPE))) {
       // take the position of the first point
       pi.window_to_image_coordinates(e.wx, e.wy, start_x_, start_y_);
       moving_p_ = p;
@@ -55,7 +55,7 @@ bool bwm_observer_img::handle(const vgui_event &e)
       return true;
     }
   } else if (e.type == vgui_MOTION && e.button == vgui_MIDDLE && 
-    e.modifier == vgui_SHIFT && moving_polygon_) {
+             e.modifier == vgui_SHIFT && moving_polygon_) {
     float x, y;
     pi.window_to_image_coordinates(e.wx, e.wy, x, y);
     float x_diff = x-start_x_;
@@ -74,7 +74,7 @@ bool bwm_observer_img::handle(const vgui_event &e)
     return true;
 
   } else if (e.type == vgui_MOTION && e.button == vgui_MIDDLE && 
-    e.modifier == vgui_SHIFT && moving_vertex_) {
+             e.modifier == vgui_SHIFT && moving_vertex_) {
     float x, y;
     pi.window_to_image_coordinates(e.wx, e.wy, x, y);
     float x_diff = x-start_x_;
@@ -138,7 +138,7 @@ void bwm_observer_img::create_polyline(vsol_polyline_2d_sptr poly2d)
   float *x, *y;
   bwm_algo::get_vertices_xy(poly2d, &x, &y);
   unsigned nverts = poly2d->size();
-   bgui_vsol_soview2D_polyline* polyline = this->add_vsol_polyline_2d(poly2d);
+  bgui_vsol_soview2D_polyline* polyline = this->add_vsol_polyline_2d(poly2d);
   obj_list[polyline->get_id()] = polyline;
 
   vcl_vector<bwm_soview2D_vertex*> verts;
@@ -165,7 +165,7 @@ bool bwm_observer_img::get_selected_box(bgui_vsol_soview2D_polygon* &box)
     /*if (p->sptr()->size() != 4) {
       vcl_cerr << "Selected polygon is not a box" << vcl_endl;
       return false;
-    }*/
+      }*/
     //vsol_polygon_2d_sptr poly = p->sptr();
     //box = poly->get_bounding_box();
     box = p;
@@ -208,8 +208,8 @@ void bwm_observer_img::delete_selected()
       ((select_list[0]->type_name().compare(POLYGON_TYPE) == 0) ||
        (select_list[0]->type_name().compare(POLYLINE_TYPE) == 0))) {
 
-      // remove the polygon and the vertices
-      delete_polygon(select_list[0]);
+    // remove the polygon and the vertices
+    delete_polygon(select_list[0]);
   } else if (select_list[0]->type_name().compare(VERTEX_TYPE) == 0)
     delete_vertex(select_list[0]);
   this->post_redraw();
@@ -504,11 +504,27 @@ void bwm_observer_img::zoom_to_fit()
   // current viewer scale
   float sx = viewer_->token.scaleX, sy = vcl_fabs(viewer_->token.scaleY);
 
+#if 0
   // the window size
   vgui_projection_inspector p_insp;
   vgl_box_2d<float> bb(p_insp.x1, p_insp.x2, p_insp.y1, p_insp.y2);
   float w = bb.width()*sx;
   float h = bb.height()*sy;
+#endif
+  //The grid tableau
+  vgui_grid_tableau_sptr grid = bwm_tableau_mgr::instance()->grid();
+  if(!grid)
+    return;
+
+  //The position of this observer in the grid
+  unsigned ro = this->row(), cl = this->col();
+
+  //The bounds of the grid cell containing this observer
+  float xorig , yorig, xmax, ymax;
+  grid->cell_bounding_box(cl, ro, xorig , yorig, xmax, ymax);
+
+  float w = xmax-xorig, h = ymax-yorig;
+
   // the requred scale to fit the image in the window
   float required_scale_x = w/ni;
   float required_scale_y = h/nj;
@@ -521,11 +537,11 @@ void bwm_observer_img::zoom_to_fit()
 
   // set the scale on the viewer
   viewer_->token.scaleX = r;
-  viewer_->token.scaleY = -r;
+  viewer_->token.scaleY = r;
 
   // position so the image is centered
   viewer_->token.offsetX = w/2.0-cx*r;
-  viewer_->token.offsetY = h/2.0+cy*r;
+  viewer_->token.offsetY = h/2.0-cy*r;
   
   viewer_->post_redraw();
 

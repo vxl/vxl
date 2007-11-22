@@ -34,10 +34,7 @@ public:
   // Correspondence methods
   void collect_corr();
   void set_corr(bwm_corr_sptr corr);
-  void save_world_pt_corr(vgl_point_3d<double> world_pt) 
-  { if (corr_mode_ == WORLD_TO_IMAGE) corr_world_pt_ = world_pt;
-  else vcl_cerr << "First set correspondence mode to World to Image!!" << vcl_endl;
-  }
+  void set_world_pt(vgl_point_3d<double> world_pt);
   bool obs_in_corr(bwm_observer_cam *obs);
   void save_corr(vcl_ostream& s);
   void save_corr_XML();
@@ -46,6 +43,7 @@ public:
   void delete_all_corr();
   BWM_CORR_MODE corr_mode() { return corr_mode_; }
   void set_corr_mode();
+  void set_corr_mode(BWM_CORR_MODE mode){corr_mode_ = mode;}
   void move_to_corr();
 
   //: picking up corr points are controlled by starting and stopping it
@@ -59,9 +57,13 @@ public:
   vcl_vector<bwm_corr_sptr> correspondences()
     {return corr_list_;}
   
+  //: Given a set of image-to-image correpondences
+  //  solve for the 3-d world point and adjust the cameras
+  void adjust_camera_offsets();
 
 private:
-  bwm_observer_mgr() : start_corr_(true) {corr_mode_ = IMAGE_TO_IMAGE;}
+  bwm_observer_mgr() : start_corr_(true), world_point_valid_(false) 
+    {corr_mode_ = IMAGE_TO_IMAGE;}
 
   static bwm_observer_mgr* instance_;
   
@@ -69,6 +71,7 @@ private:
 
   bool start_corr_;
   BWM_CORR_MODE corr_mode_;
+  bool world_point_valid_;
   vcl_vector<bwm_corr_sptr> corr_list_;
   vgl_point_3d<double> corr_world_pt_;
 };

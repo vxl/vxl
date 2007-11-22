@@ -54,8 +54,7 @@ bool bwm_observer_vgui::handle(const vgui_event& e)
 }
 void bwm_observer_vgui::add_cross(float x, float y, float r)
 {
-  this->set_line_width(2.);
-  this->set_foreground(1, 1, 0);
+  this->set_foreground(1.0, 1.0, 0.0);
   //float wx, wy;
   //vgui_projection_inspector pi;
   //pi.image_to_window_coordinates(x, y, wx, wy);

@@ -237,7 +237,7 @@ void bwm_observer_cam::world_pt_corr()
       vsol_point_2d_sptr vertex_2d = new vsol_point_2d(vertex->x, vertex->y);
       vsol_point_3d_sptr vertex_3d;
       this->backproj_point(vertex_2d, vertex_3d);
-      bwm_observer_mgr::instance()->save_world_pt_corr(vertex_3d->get_p());
+      bwm_observer_mgr::instance()->set_world_pt(vertex_3d->get_p());
     } else
       vcl_cerr << "Please select a vertex only (circle) " << vcl_endl;
   }

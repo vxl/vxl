@@ -18,7 +18,7 @@
 #include <bgeo/bgeo_lvcs.h>
 
 #include <vpgl/algo/vpgl_backproject.h>
-#include <vpgl/algo/vpgl_adjust_rational_trans_onept.h>
+
 
 #include <vul/vul_file.h>
 
@@ -127,14 +127,17 @@ void bwm_observer_rat_cam::center_pos()
   proj_point(world_pt, image_pt);
 
 
-  vgui_projection_inspector p_insp;
+
   float x, y; // viewport coordinates
   x = image_pt.x();
   y = image_pt.y();
-
+#if 0
+  vgui_projection_inspector p_insp;
   vgl_box_2d<double> bb(p_insp.x1, p_insp.x2, p_insp.y1, p_insp.y2);
   viewer_->token.offsetX = (bb.width()/2.0 - x);
   viewer_->token.offsetY = (bb.height()/2.0 - y);
+#endif
+  bwm_observer_img::move_to_point(x, y);
   this->add_circle(x, y, 2);
   viewer_->post_redraw();
 
@@ -958,61 +961,57 @@ vcl_ostream& bwm_observer_rat_cam::print_camera(vcl_ostream& s)
   return s;
 }
 
-void bwm_observer_rat_cam:: adjust_image_offsets()
+
+// If the correspondence mode is world_to_image
+// and there is at least one existing correspondence
+// that has a world point defined then shift the current image
+// to align its correspondence with the world point.
+void bwm_observer_rat_cam::adjust_camera_to_world_pt()
 {
   vcl_vector<bwm_corr_sptr> corrs = 
     bwm_observer_mgr::instance()->correspondences();
   if(!corrs.size())
-    return;
-  bwm_corr_sptr corr = corrs[0];
-  vcl_vector<bwm_observer_cam*> obs = corr->observers();
-  vcl_vector<vpgl_rational_camera<double> > rcams;
-  vcl_vector<vgl_point_2d<double> > cpoints;
-  for(vcl_vector<bwm_observer_cam*>::iterator oit = obs.begin();
-      oit != obs.end(); ++oit)
     {
-        if((*oit)->type_name() != "bwm_observer_rat_cam")
-          continue;
-        bwm_observer_rat_cam* obscr = 
-          static_cast<bwm_observer_rat_cam*>(*oit);
-        rcams.push_back(obscr->camera());
-        vgl_point_2d<double> p;
-        if(corr->match(*oit, p))
-          cpoints.push_back(p);
-  }
-  if(cpoints.size()!=rcams.size())
-    {
-      vcl_cerr << "In bwm_observer_rat_cam::adjust_image_offsets - "
-               << " inconsistent number of points and cameras \n";
-      return;
+      vcl_cerr << "In bwm_observer_rat_cam::adjust_camera_to_world_pt() - "
+               << "no correspondences to use for alignment\n";
+     return;
     }
 
-  vcl_cout << "Executing adjust image offsets " << '\n';
-  vcl_vector<vgl_vector_2d<double> > cam_trans;
-  vgl_point_3d<double> intersection;
-  if(!vpgl_adjust_rational_trans_onept::adjust(rcams, cpoints, cam_trans,
-                                              intersection))
+  //Find the world to image correspondence for this observer_cam
+  bwm_corr_sptr corr;
+  bwm_observer_cam* this_obs = (bwm_observer_cam*)this;
+  for(vcl_vector<bwm_corr_sptr>::iterator cit = corrs.begin();
+      cit != corrs.end(); ++cit)
+    if((*cit)->obs_in(this_obs))
+      corr = *cit;
+
+  // get the world point to use for alignment
+  if(!corr||corr->mode())
     {
-      vcl_cerr << "In bwm_observer_rat_cam::adjust_image_offsets - "
-               << " adjustment failed \n";
-      return;
+      vcl_cerr << "In bwm_observer_rat_cam::adjust_camera_to_world_pt() - "
+               << "corr is null or correspondence is not world_to_image\n";
+     return;
     }
-  
-  vgl_homg_plane_3d<double> world_plane(0,0,1,-intersection.z());
-  vcl_vector<vgl_vector_2d<double> >::iterator ti = cam_trans.begin();
-  vcl_vector<bwm_observer_cam*>::iterator oit = obs.begin();
-  for(; oit != obs.end() && ti != cam_trans.end(); ++oit, ++ti)
+
+  vgl_point_3d<double> pt_3d = corr->world_pt();
+
+  // get the corresponding 2-d point
+  vgl_point_2d<double> corr_point_2d;  
+  if( !(corr->match(this_obs, corr_point_2d)) )
     {
-        if((*oit)->type_name() != "bwm_observer_rat_cam")
-          continue;
-        bwm_observer_rat_cam* obscr = 
-          static_cast<bwm_observer_rat_cam*>(*oit);
-        vcl_cout << "Shifting camera[" << this->camera_path() <<  "]:\n(" 
-                 << (*ti).x() << ' ' << (*ti).y() << "):\n point_3d("
-                 << intersection.x() << ' ' << intersection.y()
-                 << intersection.z() << ")\n";
-        obscr->shift_camera((*ti).x(), (*ti).y());
-        obscr->set_proj_plane(world_plane);
-        obscr->update_all();
+      vcl_cerr << "In bwm_observer_rat_cam::adjust_camera_to_world_pt() - "
+               << "no world_to_image coorrespondence match set\n";
+     return;
     }
+  // now all that has to be done is to project pt_3d and adjust the camera   
+  vpgl_rational_camera<double> rcam = this->camera();
+  vgl_point_2d<double> proj_point_2d = rcam.project(pt_3d);
+
+  double tx = corr_point_2d.x()-proj_point_2d.x();
+  double ty = corr_point_2d.y()-proj_point_2d.y();
+  this->shift_camera(tx, ty);
+  vcl_cout << "Shifting camera[" << this->camera_path() <<  "]:\n(" 
+           << tx << ' ' << ty << "):\n point_3d("
+           << pt_3d.x() << ' ' << pt_3d.y()
+           << ' ' << pt_3d.z() << ")\n";  
 }

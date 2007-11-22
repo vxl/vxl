@@ -1,6 +1,6 @@
 #include "bwm_observer_mgr.h"
 #include "algo/bwm_utils.h"
-
+#include <vpgl/algo/vpgl_adjust_rational_trans_onept.h>
 #include <vsl/vsl_basic_xml_element.h>
 #include <vgui/vgui_dialog.h>
 
@@ -41,7 +41,16 @@ void bwm_observer_mgr::remove(bwm_observer* observer)
     if (observers_[i] == observer)
       observers_.erase(observers_.begin()+i);
 }
-
+//Set a world point to be used in correspondences from world to image
+void bwm_observer_mgr::set_world_pt(vgl_point_3d<double> world_pt)
+{ 
+  corr_world_pt_ = world_pt;
+  world_point_valid_ = true;
+}
+//Set the correspodence mode which is either image_to_image or world_to_image
+//The world_to_image mode is only possible if there is a world point available
+//The existence of a valid world point is defined by the flag 
+// world_point_valid_
 void bwm_observer_mgr::set_corr_mode()
 {
   vgui_dialog params ("Correspondence Mode");
@@ -56,7 +65,16 @@ void bwm_observer_mgr::set_corr_mode()
   params.choice("Correspondence Mode", modes, mode); 
   if (!params.ask())
     return;
-  corr_mode_ = static_cast<bwm_observer_mgr::BWM_CORR_MODE> (mode);
+  if(mode ==bwm_observer_mgr::WORLD_TO_IMAGE)
+    if(world_point_valid_){
+      corr_mode_ =  bwm_observer_mgr::WORLD_TO_IMAGE;
+        return;
+      }else{
+        vcl_cout << "In bwm_observer_mgr::set_corr_mode() -"
+                 << " can't use WORLD_TO_IMAGE mode since the 3-d world "
+                 << " point is not defined\n";}
+
+  corr_mode_ = bwm_observer_mgr::IMAGE_TO_IMAGE;
 }
 
 void bwm_observer_mgr::collect_corr()
@@ -166,6 +184,8 @@ void bwm_observer_mgr::save_corr(vcl_ostream& s)
       if (corr->mode() == false) { // WORLD TO IMAGE
         s << "WORLD_POINT: " << corr->world_pt().x() << " " << corr->world_pt().y() 
           << " " << corr->world_pt().z() << vcl_endl;
+        //sets the same pt each time FIXME -JLM
+        this->set_world_pt(corr->world_pt());
       }
       for(unsigned j=0; j< obs.size(); j++) {
         vgl_point_2d<double> p;
@@ -274,7 +294,7 @@ void bwm_observer_mgr::move_to_corr()
   if(!corr_list_.size())
     {
       vcl_cerr << "In bwm_observer_mgr::move_to_corr()- "
-               << "no correspondences to zoom to\n";
+               << "no correspondences to move to\n";
       return;
     }
   bwm_corr_sptr corr = corr_list_[0];
@@ -291,4 +311,80 @@ void bwm_observer_mgr::move_to_corr()
           (*oit)->move_to_point(x, y);
         }
     }
+}
+
+void bwm_observer_mgr::adjust_camera_offsets()
+{
+  if(!corr_list_.size())
+    return;
+  bwm_corr_sptr corr = corr_list_[0];
+  vcl_vector<bwm_observer_cam*> obs = corr->observers();
+  vcl_vector<vpgl_rational_camera<double> > rcams;
+  vcl_vector<vgl_point_2d<double> > cpoints;
+  for(vcl_vector<bwm_observer_cam*>::iterator oit = obs.begin();
+      oit != obs.end(); ++oit)
+    {
+        if((*oit)->type_name() != "bwm_observer_rat_cam")
+          continue;
+        bwm_observer_rat_cam* obscr = 
+          static_cast<bwm_observer_rat_cam*>(*oit);
+        rcams.push_back(obscr->camera());
+        vgl_point_2d<double> p;
+        if(corr->match(*oit, p))
+          cpoints.push_back(p);
+  }
+  if(cpoints.size()!=rcams.size())
+    {
+      vcl_cerr << "In bwm_observer_rat_cam::adjust_image_offsets - "
+               << " inconsistent number of points and cameras \n";
+      return;
+    }
+
+  vcl_cout << "Executing adjust image offsets " << '\n';
+  vcl_vector<vgl_vector_2d<double> > cam_trans;
+  vgl_point_3d<double> intersection;
+  if(!vpgl_adjust_rational_trans_onept::adjust(rcams, cpoints, cam_trans,
+                                              intersection))
+    {
+      vcl_cerr << "In bwm_observer_rat_cam::adjust_image_offsets - "
+               << " adjustment failed \n";
+      return;
+    }
+  
+  vgl_homg_plane_3d<double> world_plane(0,0,1,-intersection.z());
+  vcl_vector<vgl_vector_2d<double> >::iterator ti = cam_trans.begin();
+  vcl_vector<bwm_observer_cam*>::iterator oit = obs.begin();
+  for(; oit != obs.end() && ti != cam_trans.end(); ++oit, ++ti)
+    {
+        if((*oit)->type_name() != "bwm_observer_rat_cam")
+          continue;
+        bwm_observer_rat_cam* obsrc = 
+          static_cast<bwm_observer_rat_cam*>(*oit);
+        vcl_cout << "Shifting camera[" << obsrc->camera_path() <<  "]:\n(" 
+                 << (*ti).x() << ' ' << (*ti).y() << "):\n point_3d("
+                 << intersection.x() << ' ' << intersection.y()
+                 << ' ' << intersection.z() << ")\n";
+        obsrc->shift_camera((*ti).x(), (*ti).y());
+        //here is where we would set the terrain plane an maybe not
+        //do anything to the projection plane of each observer.
+        //but this approach works for now.
+        obsrc->set_proj_plane(world_plane);
+        obsrc->update_all();
+    }
+  
+  //
+  // now that the 3-d intersection is available, the correspondence mode 
+  // should be changed to "world_to_image." The mode should only be 
+  // chanaged back to "image_to_image" if a new image is added to the 
+  // site and the intersection point is re-computed
+  //
+  for(vcl_vector<bwm_corr_sptr>::iterator cit = corr_list_.begin();
+      cit != corr_list_.end(); ++cit)
+    {
+      (*cit)->set_mode(false);//mode is set to world_to_image
+      (*cit)->set_world_pt(intersection);
+    }
+
+  this->set_world_pt(intersection);
+  this->set_corr_mode(bwm_observer_mgr::WORLD_TO_IMAGE);
 }
