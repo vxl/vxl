@@ -173,7 +173,8 @@ blocked_decimate(vil_blocked_image_resource_sptr const& brsc,
           for (unsigned bi = 0; bi<nbi; ++bi)
             {
               buf[0][bi] = vil_convert_cast(float(),brsc->get_block(bi,bj));
-              if (bj+2<=nbj)//make sure there are enough block rows
+              //if (bj+2<=nbj)//make sure there are enough block rows
+			  if (bj+1<nbj)//make sure there are enough block rows
                 buf[1][bi] = vil_convert_cast(float(),brsc->get_block(bi,bj+1));
               else
                 buf[1][bi]=buf[0][bi];//otherwise just copy the upper block

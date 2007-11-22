@@ -39,7 +39,7 @@ class vil_cached_image_resource : public vil_blocked_image_resource
     {return bir_->n_block_i();}
   //: Number of blocks in image height
  inline virtual unsigned n_block_j() const
-    {return bir_->n_block_i();}
+    {return bir_->n_block_j();}
 
  inline virtual enum vil_pixel_format pixel_format() const
     {return bir_->pixel_format();}

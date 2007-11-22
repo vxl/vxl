@@ -8,6 +8,7 @@
 #include <vil/vil_stream_fstream.h>
 #include <vil/vil_image_list.h>
 #include <vil/vil_blocked_image_facade.h>
+#include <vil/vil_cached_image_resource.h>
 #include <vil/vil_new.h>
 #include <vil/vil_load.h>
 #include <vil/vil_copy.h>
@@ -156,7 +157,13 @@ vil_pyramid_image_list::vil_pyramid_image_list(vcl_vector<vil_image_resource_spt
   for (vcl_vector<vil_image_resource_sptr>::const_iterator rit = images.begin();
        rit != images.end(); ++rit)
   {
-    pyramid_level* level = new pyramid_level(*rit);
+    //if the resource is blocked use a cached access
+    vil_blocked_image_resource_sptr brsc = blocked_image_resource(*rit);
+    if (!brsc)
+      brsc = new vil_blocked_image_facade(*rit);
+    vil_cached_image_resource* cimr = new vil_cached_image_resource(brsc, 100);
+    vil_image_resource_sptr ir = (vil_image_resource*)cimr;
+    pyramid_level* level = new pyramid_level(ir);
     levels_.push_back(level);
   }
   //sort on image width
@@ -299,10 +306,15 @@ vil_pyramid_image_list::get_copy_view(unsigned i0, unsigned n_i,
                                       unsigned level) const
 {
   if (level>=this->nlevels())
-    return 0;
+    {
+      vcl_cerr << "pyramid_image_list::get_copy_view(.) level = " 
+               << level << " max level = "
+               << this->nlevels() -1 << '\n';
+      return 0;
+    }
   pyramid_level* pl = levels_[level];
   float actual_scale = pl->scale_;
-  //jlm
+
   float fi0 = actual_scale*i0, fni = actual_scale*n_i, fj0 = actual_scale*j0, fnj = actual_scale*n_j;
   //transform image coordinates by actual scale
   unsigned si0 = static_cast<unsigned>(fi0);
@@ -311,7 +323,17 @@ vil_pyramid_image_list::get_copy_view(unsigned i0, unsigned n_i,
   unsigned sj0 = static_cast<unsigned>(fj0);
   unsigned snj = static_cast<unsigned>(fnj);
   if (snj == 0) snj = 1;//can't have less than one pixel
-  return pl->image_->get_copy_view(si0, sni, sj0, snj);
+  vil_image_view_base_sptr v = pl->image_->get_copy_view(si0, sni, sj0, snj);
+  if(!v)
+    {
+      vcl_cerr << "pyramid_image_list::get_copy_view(.) level = " 
+               << level << "(i0,j0):(" 
+               << i0 << ' ' << j0 << ") (ni, nj):(" 
+               << n_i << ' ' << n_j << ")\n";
+      vcl_cerr << "Get copy view from level image failed\n";
+      return 0;
+    }
+  return v;
 }
 
 //:return a view with image scale that is closest to scale.
