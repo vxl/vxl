@@ -2,6 +2,7 @@
 #define bwm_io_config_parser_h_
 
 #include "bwm_io_structs.h"
+#include "bwm_site_sptr.h"
 
 #include <expatpp/expatpplib.h>
 #include <vcl_iostream.h>
@@ -18,11 +19,10 @@ class bwm_io_config_parser : public expatpp {
 public:
   
   bwm_io_config_parser(void);
+  // parser should not delete the site, it is used afterwards
   ~bwm_io_config_parser(void){};
-  vcl_vector<bwm_io_tab_config* > tableau_config() { return tableaus_; }
-  vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > correspondences() { return corresp_; }
-  vcl_string corresp_mode() {return corr_mode_; }
-  vcl_vector<vsol_point_3d> corresp_world_pts() {return corresp_world_pts_; }
+
+  bwm_site_sptr site() { return site_; }
 
 private:
   virtual void startElement(const XML_Char* name, const XML_Char** atts);
@@ -39,7 +39,9 @@ private:
   vcl_string cdata;
   vcl_string last_tag;
 
-  vcl_vector<bwm_io_tab_config* > tableaus_;
+  bwm_site_sptr site_;
+
+  // intermediate variables to keep values during parsing
   vcl_string name_;
   bool status_;
   vcl_string image_path_;
@@ -49,13 +51,11 @@ private:
   vcl_string coin3d_name_;
   vcl_string object_path_;
   vcl_string object_type_;
+  double lat_, lon_, elev_;
 
   // correspondence related parameters
-  vcl_string corr_mode_;
   vcl_string corr_cam_tab_;
   double X_, Y_, Z_;
-  vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > corresp_;
-  vcl_vector<vsol_point_3d> corresp_world_pts_;
   vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > corresp_elm_;
 
   void trim_string(vcl_string& s);

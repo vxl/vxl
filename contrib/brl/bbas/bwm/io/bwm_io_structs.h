@@ -3,6 +3,22 @@
 
 #include <vcl_string.h>
 
+// XML Tags
+#define SITE_TAG "BWM_SITE"
+#define CAMERA_TABLEAU_TAG "CameraTableau"
+#define IMAGE_TABLEAU_TAG "ImageTableau"
+#define COIN3D_TABLEAU_TAG "Coin3DTableau"
+#define PROJ2D_TABLEAU_TAG "Proj2DTableau"
+#define IMAGE_PATH_TAG "imagePath"
+#define CAMERA_PATH_TAG "cameraPath"
+#define OBJECT_TAG "object"
+#define LVCS_TAG "lvcs"
+
+// Correlation Tags
+#define CORR_CAMERA_TAG "corr_camera_tab"
+
+#define OBJECT_TAG "object"
+
 class bwm_io_tab_config 
 {
 public:
