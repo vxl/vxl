@@ -154,7 +154,7 @@ void bwm_tableau_mgr::create_site()
   int num_images = 5;
   vcl_vector<vcl_string> files(num_images);
   bool pyr[5] = {false, false, false, false, false};
-  bool act[5] = {false, false, false, false, false};
+  bool act[5] = {true, true, true, true, true};
   vcl_vector<vcl_string> levels(num_images);
 
   int num_objs = 3;
@@ -677,6 +677,8 @@ void bwm_tableau_mgr::load_tableaus()
       if (mode == "WORLD_TO_IMAGE") {
         corr->set_mode(false);
         corr->set_world_pt(parser->corresp_world_pts()[i].get_p());
+        //sets the same pt each time FIXME -JLM
+        bwm_observer_mgr::instance()->set_world_pt(corr->world_pt());
       } else if (mode == "IMAGE_TO_IMAGE") {
         corr->set_mode(true);
       }
@@ -699,8 +701,8 @@ void bwm_tableau_mgr::load_tableaus()
             }
           }
         }
-        bwm_observer_mgr::instance()->set_corr(corr);
       }
+      bwm_observer_mgr::instance()->set_corr(corr);
     }
     delete parser;
   }

@@ -201,10 +201,14 @@ void bwm_observer_cam::move_corr_point(vsol_point_2d_sptr new_pt)
   if (select_list.size() == 1) {
     if (select_list[0]->type_name().compare("bwm_soview2D_cross") == 0) {
     bwm_soview2D_cross* cross = static_cast<bwm_soview2D_cross*> (select_list[0]);
-    vgl_point_2d<double> old_pt(cross->x, cross->y);
+    //The old way moved the cross and left the corr position unchanged
+#if 0
     update_corr_pt(new_pt->x(), new_pt->y());
     this->post_redraw();
-
+#endif
+	vgl_point_2d<double> old_pt(cross->x, cross->y);
+    //Change both the corr position and cross display
+    bwm_observer_vgui::set_corr(new_pt->x(), new_pt->y());
     // notify the observer mgr about the change
     bwm_observer_mgr::instance()->update_corr(this, old_pt, new_pt->get_p());
     }
@@ -223,7 +227,7 @@ void bwm_observer_cam::set_corr_to_vertex()
                << " no vertex selected\n";
         return;
     }
-  bwm_observer_vgui::update_corr_pt(sov->x, sov->y);
+  bwm_observer_vgui::set_corr(sov->x, sov->y);
   bwm_observer_img::post_redraw();
 }
 

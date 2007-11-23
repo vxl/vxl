@@ -968,6 +968,7 @@ vcl_ostream& bwm_observer_rat_cam::print_camera(vcl_ostream& s)
 // to align its correspondence with the world point.
 void bwm_observer_rat_cam::adjust_camera_to_world_pt()
 {
+#if 0
   vcl_vector<bwm_corr_sptr> corrs = 
     bwm_observer_mgr::instance()->correspondences();
   if(!corrs.size())
@@ -992,23 +993,25 @@ void bwm_observer_rat_cam::adjust_camera_to_world_pt()
                << "corr is null or correspondence is not world_to_image\n";
      return;
     }
-
-  vgl_point_3d<double> pt_3d = corr->world_pt();
-
-  // get the corresponding 2-d point
-  vgl_point_2d<double> corr_point_2d;  
-  if( !(corr->match(this_obs, corr_point_2d)) )
+#endif
+  vgl_point_3d<double> pt_3d;
+  if(!bwm_observer_mgr::instance()->world_pt(pt_3d))
     {
       vcl_cerr << "In bwm_observer_rat_cam::adjust_camera_to_world_pt() - "
-               << "no world_to_image coorrespondence match set\n";
+               << "no world point defined\n";
      return;
     }
+
+  // get the corresponding 2-d point
+  float x=0, y=0;
+  this->corr_image_pt(x, y);
+
   // now all that has to be done is to project pt_3d and adjust the camera   
   vpgl_rational_camera<double> rcam = this->camera();
   vgl_point_2d<double> proj_point_2d = rcam.project(pt_3d);
 
-  double tx = corr_point_2d.x()-proj_point_2d.x();
-  double ty = corr_point_2d.y()-proj_point_2d.y();
+  double tx = x-proj_point_2d.x();
+  double ty = y-proj_point_2d.y();
   this->shift_camera(tx, ty);
   vcl_cout << "Shifting camera[" << this->camera_path() <<  "]:\n(" 
            << tx << ' ' << ty << "):\n point_3d("

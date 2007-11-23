@@ -39,15 +39,7 @@ bool bwm_observer_vgui::handle(const vgui_event& e)
     {
         float x,y;
         pi.window_to_image_coordinates(e.wx, e.wy, x, y);
-        corr_.first = vgl_homg_point_2d<double> (x, y);
-
-        // delete the previous correlation point if valid
-        if (corr_.second) {
-          this->remove(corr_.second);
-        }
-
-        // draw a cross at that point
-        add_cross(x, y, 2.0);
+        this->set_corr(x, y);
         return true;
     }
     return base::handle(e);
@@ -61,8 +53,14 @@ void bwm_observer_vgui::add_cross(float x, float y, float r)
   bwm_soview2D_cross* cross = new bwm_soview2D_cross(x, y, r);
   corr_.second = cross;
   this->add(cross);
+  this->post_redraw();
 }
 
+void bwm_observer_vgui::corr_image_pt(float& x, float& y)
+{
+  vgl_point_2d<double> pt = corr_.first;
+  x = pt.x(); y = pt.y();
+}
 void bwm_observer_vgui::handle_update(vgui_message const& msg, 
                                   bwm_observable_sptr observable) 
 {
@@ -203,11 +201,18 @@ void bwm_observer_vgui::delete_all()
   objects_.clear();
 }
 
-void bwm_observer_vgui::update_corr_pt(float x, float y)
+
+void bwm_observer_vgui::set_corr(float x, float y)
 {
-  float cur_x = corr_.second->x;
-  float cur_y = corr_.second->y;
-  corr_.second->translate(x-cur_x, y-cur_y);
+  corr_.first = vgl_homg_point_2d<double> (x, y);
+  
+  // delete the previous correlation point if valid
+  if (corr_.second) {
+    this->remove(corr_.second);
+  }
+
+  // draw a cross at that point
+  add_cross(x, y, 2.0);
 }
 
 void bwm_observer_vgui::remove_corr_pt()

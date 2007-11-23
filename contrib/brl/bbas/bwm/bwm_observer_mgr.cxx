@@ -61,8 +61,14 @@ void bwm_observer_mgr::set_corr_mode()
   modes.push_back("Image to Image");
   modes.push_back("World to Image");  
     
+  vcl_vector<vcl_string> n_corrs;
+  int n = bwm_observer_mgr::instance()->n_corrs();
+  n_corrs.push_back("Single Correspondence ");
+  n_corrs.push_back("Multiple Correspondence ");
+  
   vcl_string name;
   params.choice("Correspondence Mode", modes, mode); 
+  params.choice("Number of Correspondences ", n_corrs, n); 
   if (!params.ask())
     return;
   if(mode ==bwm_observer_mgr::WORLD_TO_IMAGE)
@@ -105,9 +111,17 @@ void bwm_observer_mgr::collect_corr()
   }
   
   if (found)
-    corr_list_.push_back(corr);
-  else
-    vcl_cerr << "No Correspondence SET yet!!" << vcl_endl;
+    if(n_corrs_==MULTIPLE_CORRS){
+      corr_list_.push_back(corr);
+      return;
+    }
+    else if(n_corrs_==SINGLE_PT_CORR) // in this case there can be only one
+      {
+        corr_list_.clear();
+        corr_list_.push_back(corr);
+        return;
+      }
+  vcl_cerr << "No Correspondence SET yet!!" << vcl_endl;
 }
 
 void bwm_observer_mgr::set_corr(bwm_corr_sptr corr)
@@ -184,8 +198,6 @@ void bwm_observer_mgr::save_corr(vcl_ostream& s)
       if (corr->mode() == false) { // WORLD TO IMAGE
         s << "WORLD_POINT: " << corr->world_pt().x() << " " << corr->world_pt().y() 
           << " " << corr->world_pt().z() << vcl_endl;
-        //sets the same pt each time FIXME -JLM
-        this->set_world_pt(corr->world_pt());
       }
       for(unsigned j=0; j< obs.size(); j++) {
         vgl_point_2d<double> p;

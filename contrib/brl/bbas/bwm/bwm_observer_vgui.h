@@ -74,10 +74,16 @@ public:
   virtual void backproj_poly(vsol_polygon_2d_sptr poly2d, 
                              vsol_polygon_3d_sptr& poly3d) = 0;
 
-  void update_corr_pt(float x, float y);
+  //: move the correspondence location and replace the cross soview 
+  void set_corr(float x, float y);
 
+  //: the current location of the correspondence point
+  void corr_image_pt(float& x, float& y);
+
+  //: remove the cross soview and set its pointer to null
   void remove_corr_pt();
 
+  //: display a cross soview at the specified location
   void add_cross(float x, float y, float r);
 
 protected:

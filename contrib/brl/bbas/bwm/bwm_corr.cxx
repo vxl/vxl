@@ -1,4 +1,5 @@
 #include "bwm_corr.h"
+#include <vgl/vgl_distance.h>
 #include <vcl_iostream.h>
 #include <vsl/vsl_basic_xml_element.h>
 
@@ -16,6 +17,14 @@ bool bwm_corr::match(bwm_observer_cam* obs, vgl_point_2d<double> &pt)
   vcl_cerr << "Correspondent point is not found for this observer" << vcl_endl;
   return false;
 }
+//need to use a tolerance to check equality of points
+static bool 
+point_equal(vgl_point_2d<double> const & a, vgl_point_2d<double> const & b)
+{
+  double tol = 0.001;
+  double d = vgl_distance<double>(a, b);
+  return d<tol;
+}
 
 bool bwm_corr::update_match(bwm_observer_cam* obs, vgl_point_2d<double> old_pt, vgl_point_2d<double> new_pt)
 {
@@ -24,7 +33,7 @@ bool bwm_corr::update_match(bwm_observer_cam* obs, vgl_point_2d<double> old_pt, 
 
   if (iter != matches_.end()) {
     vgl_point_2d<double> pt(iter->second);
-    if (pt == old_pt) {
+    if (point_equal(pt,old_pt)) {
       iter->second = vgl_point_2d<double> (new_pt);
       return true;
     }

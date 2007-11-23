@@ -15,6 +15,7 @@ class bwm_observer_mgr
 {
 public:
   typedef enum {IMAGE_TO_IMAGE, WORLD_TO_IMAGE} BWM_CORR_MODE;
+  typedef enum {SINGLE_PT_CORR, MULTIPLE_CORRS} BWM_N_CORRS;
 
   static bwm_observer_mgr* instance();
 
@@ -35,6 +36,9 @@ public:
   void collect_corr();
   void set_corr(bwm_corr_sptr corr);
   void set_world_pt(vgl_point_3d<double> world_pt);
+  bool world_pt(vgl_point_3d<double>& world_pt)
+    {if(!world_point_valid_) return false; world_pt = corr_world_pt_; 
+    return true;}
   bool obs_in_corr(bwm_observer_cam *obs);
   void save_corr(vcl_ostream& s);
   void save_corr_XML();
@@ -42,8 +46,10 @@ public:
   void delete_last_corr();
   void delete_all_corr();
   BWM_CORR_MODE corr_mode() { return corr_mode_; }
+  BWM_N_CORRS n_corrs() { return n_corrs_; }
   void set_corr_mode();
   void set_corr_mode(BWM_CORR_MODE mode){corr_mode_ = mode;}
+  void set_n_corrs(BWM_N_CORRS n){n_corrs_ = n;}
   void move_to_corr();
 
   //: picking up corr points are controlled by starting and stopping it
@@ -63,7 +69,10 @@ public:
 
 private:
   bwm_observer_mgr() : start_corr_(true), world_point_valid_(false) 
-    {corr_mode_ = IMAGE_TO_IMAGE;}
+    {
+      corr_mode_ = IMAGE_TO_IMAGE;
+      n_corrs_ = SINGLE_PT_CORR;
+    }
 
   static bwm_observer_mgr* instance_;
   
@@ -71,6 +80,7 @@ private:
 
   bool start_corr_;
   BWM_CORR_MODE corr_mode_;
+  BWM_N_CORRS n_corrs_;
   bool world_point_valid_;
   vcl_vector<bwm_corr_sptr> corr_list_;
   vgl_point_3d<double> corr_world_pt_;
