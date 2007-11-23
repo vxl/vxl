@@ -66,6 +66,8 @@ SET (EXPECTED_BUILDS "\\
   {grc.ge.com Win2k_msvc-7.1_Debug} \\
   {imorphics WinXP_msvc-7.1_Debug} \\
   {imorphics WinXP_msvc-7.1_Release} \\
+  {imorphics Linux-2.6.22_gcc-4.1.2_­debug} \\
+  {imorphics Linux-2.6.22_gcc-4.1.2_­release} \\
   {lems.brown.edu Linux-2.6_gcc-4.1.2_-Wall} \\
   {lems.brown.edu Linux-2.6.18_gcc-4.1.2} \\
   {lems.brown.edu Win32-vs71 } \\
