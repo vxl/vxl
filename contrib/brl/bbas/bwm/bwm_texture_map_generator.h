@@ -12,7 +12,7 @@
 #include <vcl_vector.h>
 #include <vcl_string.h>
 
-#include <bgeo/bgeo_lvcs.h>
+#include <vpgl/bgeo/bgeo_lvcs.h>
 
 class bwm_texture_map_generator
 {

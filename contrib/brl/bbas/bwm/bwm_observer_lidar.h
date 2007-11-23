@@ -20,7 +20,7 @@
 #include <vsol/vsol_point_3d_sptr.h>
 
 #include <vnl/vnl_matrix.h>
-#include <bgeo/bgeo_lvcs.h>
+#include <vpgl/bgeo/bgeo_lvcs.h>
 #include <vil/vil_image_view.h>
 #include <vil/file_formats/vil_geotiff_header.h>
 

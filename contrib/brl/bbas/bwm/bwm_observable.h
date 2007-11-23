@@ -16,7 +16,7 @@
 
 #include <vsol/vsol_polygon_3d_sptr.h>
 
-#include <bgeo/bgeo_lvcs.h>
+#include <vpgl/bgeo/bgeo_lvcs.h>
 
 class SoSeparator;
 

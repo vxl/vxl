@@ -30,7 +30,6 @@ SET(bwm_sources
    bwm_command_macros.h
    bwm_load_commands.h
    bwm_process_commands.h
-   bwm_site.cxx                bwm_site.h
    bwm_tableau_cam.cxx         bwm_tableau_cam.h
    bwm_tableau_rat_cam.cxx     bwm_tableau_rat_cam.h
    bwm_tableau_proj_cam.cxx    bwm_tableau_proj_cam.h

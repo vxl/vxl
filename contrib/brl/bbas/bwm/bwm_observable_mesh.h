@@ -16,22 +16,27 @@
 
 typedef enum {RoofSurface, WallSurface, None} BWM_FACE_LABEL;
 
+
 class bwm_observable_mesh : public bwm_observable
 {
 public:
+
+  typedef enum {BWM_MESH_IMAGE_PROCESSING, BWM_MESH_FEATURE, BWM_MESH_TERRAIN } BWM_MESH_TYPES;
  
   virtual vcl_string type_name() const {return "bwm_observable_mesh"; }
 
-  //: constructers
-  bwm_observable_mesh() 
-    : object_(0)/*, base_(0)*/ {}
-
-  bwm_observable_mesh(bmsh3d_mesh_mc* object) 
-    : object_(object) {}
+  //: constructors
+  bwm_observable_mesh()  : object_(0){}
+  bwm_observable_mesh(bmsh3d_mesh_mc* object)  : object_(object) {}
   bwm_observable_mesh(vsol_polygon_3d_sptr poly);
   bwm_observable_mesh(vsol_polygon_3d_sptr poly, double dist);
 
+  //: destructor
   virtual ~bwm_observable_mesh();
+
+  void set_mesh_type(BWM_MESH_TYPES type) { mesh_type_ = type; }
+
+  BWM_MESH_TYPES mesh_type() { return mesh_type_; }
 
   void remove();
 
@@ -113,6 +118,8 @@ private:
   //vcl_map<unsigned, vcl_pair<unsigned, unsigned> > inner_ids_;
 
   vcl_map<unsigned, BWM_FACE_LABEL> labels_;
+
+  BWM_MESH_TYPES mesh_type_;
 
   void create_mesh_HE(vsol_polygon_3d_sptr polygon, double dist, vcl_map<int, vsol_polygon_3d_sptr> inner_faces);
 

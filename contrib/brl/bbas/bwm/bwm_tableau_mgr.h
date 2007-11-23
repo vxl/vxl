@@ -5,7 +5,6 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "dll.h"
 #include "bwm_tableau_sptr.h"
 #include "bwm_tableau_cam.h"
 #include "bwm_command_sptr.h"
@@ -26,7 +25,8 @@
 class bwm_tableau_mgr {
 
 public:
-  typedef enum{PROJECTIVE=0, RATIONAL=1} BWM_CAMERA_TYPES;
+  typedef enum {PROJECTIVE=0, RATIONAL=1} BWM_CAMERA_TYPES;
+  typedef enum {MESH_FEATURE, MESH_IMAGE_PROCESS, MESH_TERRAIN, VSOL, OBJ_UNDEF} BWM_OBJECT_TYPES;
 
   ~bwm_tableau_mgr();
 
@@ -90,6 +90,11 @@ private:
 
   vgui_grid_tableau_sptr grid_;
 
+  // object files are mapped to the file paths
+  vcl_map<vcl_string, vcl_vector<vcl_string> > site_objs_;
+
+  vcl_vector<vcl_string> object_types_;
+
   bwm_io_config_parser* parse_config();
 
   vil_image_resource_sptr load_image(vcl_string& filename, vgui_range_map_params_sptr& rmps);
@@ -105,10 +110,6 @@ private:
   vgui_tableau_sptr find_tableau(vcl_string name);
 
   vcl_vector<vcl_string> coin3d_tableau_names();
-
-  //vpgl_rational_camera<double> * extract_nitf_camera(vil_image_resource_sptr img);
-
-  //vpgl_rational_camera<double> * extract_nitf_camera(vcl_string img_path);
 
   void create_site_dialog(vgui_dialog_extensions &site_dialog,
                                vcl_string &site_name, 

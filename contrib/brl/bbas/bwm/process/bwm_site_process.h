@@ -9,24 +9,25 @@
 #pragma once
 #endif // _MSC_VER > 1000*/
 
-//#include "StdAfx.h"
 #include "bwm_process.h"
-#include "bwm/bwm_site.h"
+#include "bwm/io/bwm_site_sptr.h"
+#include <vul/vul_timer.h>
 
 class bwm_site_process : public bwm_process {
 
 public:
-  bwm_site_process() : bwm_process() { site_ = 0;}
-  ~bwm_site_process() { if (site_) delete site_; }
+  bwm_site_process() : bwm_process() { site_ = 0; timer_.mark();}
+  ~bwm_site_process() {}
 
-  void set_site(bwm_site* site) { site_ = site; }
+  void set_site(bwm_site_sptr site) { site_ = site; }
 
   // overridable
   void RunBackgroundTask();
 
 private:
-  bwm_site* site_;
-
+  bwm_site_sptr site_;
+  static double version_num;
+  vul_timer timer_;
 };
 
 #endif

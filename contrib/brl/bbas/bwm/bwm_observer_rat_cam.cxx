@@ -15,7 +15,7 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_projection_inspector.h>
 
-#include <bgeo/bgeo_lvcs.h>
+#include <vpgl/bgeo/bgeo_lvcs.h>
 
 #include <vpgl/algo/vpgl_backproject.h>
 

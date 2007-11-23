@@ -20,7 +20,7 @@
 #include <bmsh3d/bmsh3d_textured_face_mc.h>
 #include <bmsh3d/bmsh3d_vertex.h>
 
-#include <bgeo/bgeo_lvcs.h>
+#include <vpgl/bgeo/bgeo_lvcs.h>
 
 
 

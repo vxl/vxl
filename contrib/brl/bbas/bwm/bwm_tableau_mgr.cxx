@@ -16,13 +16,12 @@
 #include "bwm_corr_sptr.h"
 #include "bwm_command.h"
 #include "bwm_load_commands.h"
-#include "bwm_site.h"
+#include "io/bwm_site_sptr.h"
+#include "io/bwm_site.h"
 #include "algo/bwm_algo.h"
 #include "algo/bwm_rat_proj_camera.h"
 #include "algo/bwm_image_processor.h"
 #include "algo/bwm_utils.h"
-
-//#include "process/bwm_site_process.h"
 
 #include <vgui/vgui_poly_tableau.h>
 
@@ -66,6 +65,11 @@ bwm_tableau_mgr::bwm_tableau_mgr()
   grid_->set_grid_size_changeable(true);
   display_image_path_ = false;
   site_create_process_ = new bwm_site_process();
+  object_types_.resize(OBJ_UNDEF);
+  object_types_[MESH_FEATURE] = "Mesh-feature";
+  object_types_[MESH_IMAGE_PROCESS] = "Mesh-image_processing";
+  object_types_[MESH_TERRAIN] = "Mesh-terrain";
+  object_types_[VSOL] = "vsol";
 }
 
 bwm_tableau_mgr::~bwm_tableau_mgr()
@@ -118,9 +122,9 @@ void bwm_tableau_mgr::create_site_dialog(vgui_dialog_extensions &site_dialog,
   site_dialog.line_break();
   for (unsigned i=0; i<files.size(); i++) {
     site_dialog.dir("Image Path:", ext, files[i]);
-    site_dialog.checkbox("Pyramid:", pyr_v[i]);
+    site_dialog.checkbox("Do Pyramid?", pyr_v[i]);
     site_dialog.field("Levels:", pyr_levels[i]);
-    site_dialog.checkbox("Active:", act_v[i]);
+    site_dialog.checkbox("Is Active?", act_v[i]);
     site_dialog.line_break();
   }
 
@@ -129,9 +133,10 @@ void bwm_tableau_mgr::create_site_dialog(vgui_dialog_extensions &site_dialog,
   site_dialog.message("Please Choose the objects to add to the site:");
   site_dialog.line_break();
 
+  vcl_vector<vcl_string> obj_types(4);
   for (unsigned i=0; i<objs.size(); i++) {
     site_dialog.file("Enter input object:", ext, objs[i]);
-    site_dialog.choice("Type:", "mesh", "vsol", choices[i]);
+    site_dialog.choice("Type:", object_types_, choices[i]);
     site_dialog.line_break();
   }
 
@@ -200,12 +205,12 @@ void bwm_tableau_mgr::create_site()
 
   vcl_vector<vcl_pair<vcl_string, vcl_string> > objects;
   for (unsigned obj=0; obj<objs.size(); obj++) {
-    vcl_pair<vcl_string, vcl_string> pair(objs[obj], choices[obj] == 0 ? "mesh":"vsol");
+    vcl_pair<vcl_string, vcl_string> pair(objs[obj], object_types_[choices[obj]]);
     objects.push_back(pair);
   }
 
-  bwm_site* site = new bwm_site(site_name, site_dir, files, pyramid, active, 
-    levels, objects, vsol_point_3d(lat, lon, elev));
+  bwm_site_sptr site = new bwm_site(site_name, site_dir, files, pyramid, active, 
+    levels, objects, new vsol_point_3d(lat, lon, elev));
 
   site_create_process_->set_site(site);
   site_create_process_->StartBackgroundTask();
@@ -222,6 +227,7 @@ void bwm_tableau_mgr::edit_site()
   }
 
   vgui_dialog_extensions site_edit_dialog("Edit World Model Site");
+  bwm_site_sptr site = parser->site();
 
  // vcl_string site_name, site_dir;
 
@@ -239,67 +245,94 @@ void bwm_tableau_mgr::edit_site()
 
   // previosly created obj vars
   bool act_old[30];
-  bool remove[30];
+  bool tab_remove[30];
   vcl_vector<vcl_string> cam;
 
   // first place the existing tableaus on the dialog
-  vcl_vector<bwm_io_tab_config* > tableaus =  parser->tableau_config();  
+  vcl_vector<bwm_io_tab_config* > tableaus; 
+  site->tableaus(tableaus);  
   cam.resize(tableaus.size());
   if (tableaus.size() > 0) {
-    site_edit_dialog.message("Existing Images:");
+    site_edit_dialog.message("EXISTING IMAGES:");
     site_edit_dialog.line_break();
   }
 
   for (unsigned i=0; i<tableaus.size(); i++) {
     bwm_io_tab_config* t = tableaus[i];
-    if (t->type_name.compare("ImageTableau") == 0) {
+    if (t->type_name.compare(IMAGE_TABLEAU_TAG) == 0) {
       bwm_io_tab_config_img* img_tab = static_cast<bwm_io_tab_config_img* > (t);
       bool active = img_tab->status;
       vcl_string name = img_tab->name;
       vcl_string path = img_tab->img_path;
-      site_edit_dialog.field("Image:", path);
-      remove[i] = false;
-      site_edit_dialog.checkbox("Remove", remove[i]);
+      site_edit_dialog.message((" -- "+path).c_str());
+      tab_remove[i] = false;
+      site_edit_dialog.checkbox("Remove", tab_remove[i]);
       act_old[i] = active;
       site_edit_dialog.checkbox("Active", act_old[i]);
       vcl_string ext = "*.RPG";
       site_edit_dialog.file("Add Camera:", ext, cam[i]);
       site_edit_dialog.line_break();
 
-    } else if (t->type_name.compare("CameraTableau") == 0) {
+    } else if (t->type_name.compare(CAMERA_TABLEAU_TAG) == 0) {
       bwm_io_tab_config_cam* cam_tab = static_cast<bwm_io_tab_config_cam* > (t);
       bool active = cam_tab->status;
-      site_edit_dialog.field("Image:", cam_tab->img_path);
-      remove[i] = false;
-      site_edit_dialog.checkbox("Remove", remove[i]);
+      site_edit_dialog.message((" -- "+cam_tab->img_path).c_str());
+      tab_remove[i] = false;
+      site_edit_dialog.checkbox("Remove ", tab_remove[i]);
       act_old[i] = active;
-      site_edit_dialog.checkbox("Active", act_old[i]);
+      site_edit_dialog.checkbox("Active ", act_old[i]);
       site_edit_dialog.line_break();
     }
   }
 
   // add a bunch of images
-  site_edit_dialog.message("Add new images to this site:");
+  site_edit_dialog.message("ADD NEW:");
   site_edit_dialog.line_break();
   for (unsigned i=0; i<files.size(); i++) {
     vcl_string ext;
     site_edit_dialog.dir("Image Path:", ext, files[i]);
-    site_edit_dialog.checkbox("Pyramid:", pyr[i]);
+    site_edit_dialog.checkbox("Do Pyramid?", pyr[i]);
     site_edit_dialog.field("Levels:", levels[i]);
-    site_edit_dialog.checkbox("Active:", act[i]);
+    site_edit_dialog.checkbox("Is Active?", act[i]);
     site_edit_dialog.line_break();
   }
 
   site_edit_dialog.line_break();
 
   // put the existing objects
+  vcl_vector<vcl_pair<vcl_string, vcl_string> > object_paths;
+  bool obj_remove[30];
+  parser->site()->objects(object_paths);
+
+  site_edit_dialog.message("EXISTING OBJECTS:");
+  site_edit_dialog.line_break();
+  for(unsigned i=0; i<object_paths.size(); i++) {
+    site_edit_dialog.message((" -- " + object_paths[i].first).c_str());
+    vcl_string object_type = object_paths[i].second;
+    site_edit_dialog.message(("Type: " + object_type).c_str());
+    obj_remove[i] = false;
+    site_edit_dialog.checkbox("Remove ", obj_remove[i]);
+    site_edit_dialog.line_break();
+  }
 
   // create new objects
+  site_edit_dialog.message("ADD OBJECTS:");
+  site_edit_dialog.line_break();
+  vcl_string ext;
+  for (unsigned i=0; i<objs.size(); i++) {
+    site_edit_dialog.file("Object:", ext, objs[i]);
+    site_edit_dialog.choice("Type:", object_types_, choices[i]);
+    site_edit_dialog.line_break();
+  }
 
   // lvcs
   site_edit_dialog.line_break();
   site_edit_dialog.message("LVCS origin for this site:");
   site_edit_dialog.line_break();
+  
+  lat = parser->site()->lvcs_->x();
+  lon = parser->site()->lvcs_->y();
+  elev = parser->site()->lvcs_->z();
   site_edit_dialog.field("Lat:", lat);
   site_edit_dialog.field("Lon:", lon);
   site_edit_dialog.field("Elev:", elev);
@@ -308,12 +341,53 @@ void bwm_tableau_mgr::edit_site()
   site_edit_dialog.set_ok_button("Edit");
   if (!site_edit_dialog.ask()) {
     return;
+  } else {
+    // create a removal list for the tableaus that are marked for removal
+    vcl_vector<unsigned> removal;
+    for (unsigned t=0; t<tableaus.size(); t++) {
+      tableaus[t]->status = act_old[t];
+      if (tab_remove[t]) 
+        removal.push_back(t);
+    }
+    site->remove_ = removal;
+
+    // delete objects that are marked for removal
+    vcl_vector<vcl_pair<vcl_string, vcl_string> > undeleted_objs;
+    bool deleted = false;
+    for (unsigned i=0; i<object_paths.size(); i++) {
+      if (!obj_remove[i]) {
+        undeleted_objs.push_back(object_paths[i]);
+      } else 
+        deleted = true;
+ 
+    }
+    if (deleted) {
+      site->objects_.clear();
+      site->objects_ = undeleted_objs;
+    }
+
+    // create an updated site
+    vcl_vector<bool> pyramid;
+    vcl_vector<bool> active;
+    for (unsigned j=0; j<files.size(); j++) {
+       pyramid.push_back(pyr[j]);
+       active.push_back(act[j]);
+    }
+
+    vcl_vector<vcl_pair<vcl_string, vcl_string> > objects;
+    for (unsigned obj=0; obj<objs.size(); obj++) {
+
+      vcl_pair<vcl_string, vcl_string> pair(objs[obj], object_types_[choices[obj]]);
+      objects.push_back(pair);
+    }
+   site->add(files, pyramid, active, levels, objects, new vsol_point_3d(lat, lon, elev));
+   site_create_process_->set_site(site);
+   site_create_process_->StartBackgroundTask();
   }
-  
 }
 
 void bwm_tableau_mgr::create_img_tableau(vcl_string name, 
-                                         vcl_string& image_path)
+                                        vcl_string& image_path)
 {
   // create only if registered
   bwm_load_img_command comm;
@@ -615,7 +689,8 @@ void bwm_tableau_mgr::load_tableaus()
 {
   bwm_io_config_parser* parser = parse_config();
   if (parser) {
-    vcl_vector<bwm_io_tab_config* > tableaus =  parser->tableau_config();
+    vcl_vector<bwm_io_tab_config* > tableaus;
+    parser->site()->tableaus(tableaus);
 
     for (unsigned i=0; i<tableaus.size(); i++) {
       bwm_io_tab_config* t = tableaus[i];
@@ -661,13 +736,13 @@ void bwm_tableau_mgr::load_tableaus()
       }
     }
 
-    vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > corresp = 
-      parser->correspondences();
-    vcl_string mode = parser->corresp_mode();
+    vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > corresp; 
+    parser->site()->correspondences(corresp);
+    vcl_string mode = parser->site()->corresp_mode();
 
     if (mode == "WORLD_TO_IMAGE") {
       // the vector of 3D points should be of equal size to correspondence point sets
-      assert (parser->corresp_world_pts().size() == corresp.size());
+      assert (parser->site()->corresp_world_pts().size() == corresp.size());
     }
 
     for (unsigned i=0; i<corresp.size(); i++) {
@@ -676,7 +751,7 @@ void bwm_tableau_mgr::load_tableaus()
 
       if (mode == "WORLD_TO_IMAGE") {
         corr->set_mode(false);
-        corr->set_world_pt(parser->corresp_world_pts()[i].get_p());
+        corr->set_world_pt(parser->site()->corresp_world_pts()[i].get_p());
         //sets the same pt each time FIXME -JLM
         bwm_observer_mgr::instance()->set_world_pt(corr->world_pt());
       } else if (mode == "IMAGE_TO_IMAGE") {

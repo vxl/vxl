@@ -17,9 +17,8 @@
 
 #include <vpgl/vpgl_rational_camera.h>
 
-#include <bgeo/bgeo_lvcs.h>
+#include <vpgl/bgeo/bgeo_lvcs.h>
 
-//#include <bmsh3d/bmsh3d_vertex.h>
 
 class bwm_observer_rat_cam : public bwm_observer_cam
 {
