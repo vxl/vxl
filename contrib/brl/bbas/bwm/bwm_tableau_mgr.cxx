@@ -64,6 +64,8 @@ bwm_tableau_mgr::bwm_tableau_mgr()
   grid_->set_unique_selected(true);
   grid_->set_grid_size_changeable(true);
   display_image_path_ = false;
+  row_added_ = false;
+
   site_create_process_ = new bwm_site_process();
   object_types_.resize(OBJ_UNDEF);
   object_types_[MESH_FEATURE] = "Mesh-feature";
@@ -1095,7 +1097,7 @@ bwm_tableau_mgr::read_projective_camera(vcl_string cam_path){
 }
 
 //: manages creating new tableaus on the grid, decides on the layout 
-// of the grid based on the nymber of current tableaus
+// of the grid based on the number of current tableaus
 void bwm_tableau_mgr::add_to_grid(vgui_tableau_sptr tab, unsigned& col,
                                   unsigned& row)
 {
@@ -1105,8 +1107,15 @@ void bwm_tableau_mgr::add_to_grid(vgui_tableau_sptr tab, unsigned& col,
     return;  
    }
 
+  // it alternatively adds rows and colums, to equally divide the grid
   if ((tableaus_.size()%2 == 0) && (grid_->rows()*grid_->cols() == tableaus_.size()))  {
-    grid_->add_row();
+    if (row_added_) {
+      grid_->add_column();
+      row_added_ = false;
+    } else {
+      grid_->add_row();
+      row_added_ = true;
+    }
   }
   grid_->add_next(tab, col, row);
 }

@@ -95,6 +95,10 @@ private:
 
   vcl_vector<vcl_string> object_types_;
 
+  //: bool to keep the add rows and columns to the grid, 
+  // it alternately adds rows and columns
+  bool row_added_;
+
   bwm_io_config_parser* parse_config();
 
   vil_image_resource_sptr load_image(vcl_string& filename, vgui_range_map_params_sptr& rmps);
