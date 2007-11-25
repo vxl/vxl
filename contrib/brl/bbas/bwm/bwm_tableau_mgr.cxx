@@ -733,7 +733,7 @@ void bwm_tableau_mgr::load_site()
     // get the lvcs
     vsol_point_3d_sptr lvcs = site->lvcs_;
     // if LVCS is not set, do not use it
-    if (*lvcs == vsol_point_3d(0, 0, 0))
+    if (!lvcs||*lvcs == vsol_point_3d(0, 0, 0))
       lvcs = 0;
   
     // create the active tableaus 
