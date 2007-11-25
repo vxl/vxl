@@ -138,6 +138,25 @@ class brip_vil_float_ops
                                  vil_image_view<float>& vx,
                                  vil_image_view<float>& vy);
 
+  //: computes velocity of a region(view) using Lucas Kanade
+  static 
+    void lucas_kanade_motion_on_view(vil_image_view<float> const& curr_frame,
+                                     vil_image_view<float> const& prev_frame,
+                                     const double thresh,
+                                     float& vx,
+                                     float& vy);
+
+  //: computes velocity of a region(view) using correlation
+  static void
+    velocity_by_correlation(vil_image_view<float> const& curr_image,
+                            vil_image_view<float> const& prev_region,
+                            const unsigned start_i, const unsigned end_i,
+                            const unsigned start_j, const unsigned end_j,
+                            const unsigned zero_i, const unsigned zero_j,
+                            float& vx,
+                            float& vy);
+
+
   //: computes optical flow using Horn & Schunck's method
   static int Horn_SchunckMotion(vil_image_view<float> const & current_frame,
                                 vil_image_view<float> const& previous_frame,
@@ -148,6 +167,7 @@ class brip_vil_float_ops
 
   //: fills a border of width w on left and right of image with value
   static void fill_x_border(vil_image_view<float>& image, unsigned w, float value);
+
 
   //: fills a border of width h on top and bottom of image with value
   static void fill_y_border(vil_image_view<float>& image, unsigned h, float value);
