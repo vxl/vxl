@@ -24,6 +24,8 @@
 #include <vsol/vsol_polygon_3d_sptr.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
 #include <vsol/vsol_polyline_3d_sptr.h>
+#include <vsol/vsol_digital_curve_2d_sptr.h>
+#include <vsol/vsol_line_2d_sptr.h>
 
 class bwm_observer_img : public bgui_vsol2D_tableau
 {
@@ -35,7 +37,7 @@ public:
     moving_v_(0), moving_vertex_(false), moving_polygon_(false),
     row_(0), col_(0) {  }
 
-  virtual ~bwm_observer_img(){}
+  virtual ~bwm_observer_img();
 
   bgui_image_tableau_sptr image_tableau() { return img_tab_; }
 
@@ -81,6 +83,8 @@ public:
 
   void recover_edges(); 
 
+  void recover_lines(); 
+
   void jim_obs_process(){ vcl_cout << "I am Jim Green's Process!!!!" << vcl_endl; }
 
   void move_to_point(float x, float y);
@@ -92,6 +96,9 @@ public:
   void set_grid_location(unsigned col, unsigned row){col_=col; row_ = row;}
   unsigned row(){return row_;}
   unsigned col(){return col_;}
+
+  vcl_vector<vsol_digital_curve_2d_sptr> edges(unsigned id)
+    {return edge_list[id];}
 
 protected:
 
@@ -109,8 +116,11 @@ protected:
   // vector of vertices are mapped soview ID for each polygon
   vcl_map<unsigned, vcl_vector<bwm_soview2D_vertex* > > vert_list;
 
-  // vector of edges map to their own box
-  vcl_map<unsigned, vcl_vector<bgui_vsol_soview2D* > > edges_list;
+
+  // maps for box segmentations
+  vcl_map<unsigned, vcl_vector<vsol_digital_curve_2d_sptr > > edge_list;
+  vcl_map<unsigned, vcl_vector<vsol_line_2d_sptr > > line_list;
+  vcl_map<unsigned, vcl_vector<bgui_vsol_soview2D*> > seg_views;
 
   float start_x_, start_y_;
   bgui_vsol_soview2D* moving_p_;

@@ -53,6 +53,8 @@ public:
   void set_camera(vpgl_camera<double> *camera, vcl_string cam_path) 
   { camera_ = camera; cam_path_ = cam_path;}
 
+  vpgl_camera<double> * camera(){return camera_;}
+
   void set_proj_plane(vgl_homg_plane_3d<double> proj_plane) 
   { proj_plane_ = proj_plane; }
 

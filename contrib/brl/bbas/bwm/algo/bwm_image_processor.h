@@ -6,6 +6,7 @@
 #include <vgui/vgui_range_map_params_sptr.h>
 #include <vsol/vsol_box_2d_sptr.h>
 #include <vsol/vsol_line_2d_sptr.h>
+#include <vsol/vsol_digital_curve_2d_sptr.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 class bwm_image_processor {
 public:
@@ -18,9 +19,15 @@ public:
 
   static void range_map(bgui_image_tableau_sptr img);
 
+#if 0
   static bool step_edges_vd(bgui_image_tableau_sptr const& img,
                             vsol_box_2d_sptr const& roi,
                             vcl_vector<vdgl_digital_curve_sptr>& edges);
+
+#endif
+  static bool step_edges_vd(bgui_image_tableau_sptr const& img,
+                            vsol_box_2d_sptr const& roi,
+                            vcl_vector<vsol_digital_curve_2d_sptr>& edges);
 
   static bool lines_vd(bgui_image_tableau_sptr const& img,
                        vsol_box_2d_sptr const& roi,

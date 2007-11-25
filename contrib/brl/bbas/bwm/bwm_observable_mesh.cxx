@@ -1019,7 +1019,8 @@ void bwm_observable_mesh::save(const char* filename)
     comment = "";
     vcl_cerr << "Mesh type is invalid" << vcl_endl;
   }
-
+#if 0  //JLM
   bmsh3d_save_ply(mesh2, filename, true, comment);
+#endif
   return;
 }

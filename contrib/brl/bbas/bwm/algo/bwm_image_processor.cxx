@@ -149,21 +149,13 @@ void bwm_image_processor::range_map(bgui_image_tableau_sptr img)
 bool bwm_image_processor::
 step_edges_vd(bgui_image_tableau_sptr const& img,
               vsol_box_2d_sptr const& roi,
-              vcl_vector<vdgl_digital_curve_sptr>& edges)
+              vcl_vector<vsol_digital_curve_2d_sptr>& edges)
 {
   if(!img) return false;
-  //Allow only grey scale for now
-  if(img->get_image_resource()->nplanes()!=1)
-    {
-      vcl_cerr << "In bwm_observer_img::step_edges_vd() - step_edges only works on grey level images \n";
-      return false;
-    }
-
   static sdet_detector_params dp;
   static float nm = 2.0;
-
   vgui_dialog vd_dialog("Step Edges Params");
-  vd_dialog.field("Gaussian sigma", dp.smooth);
+  vd_dialog.field("Gaussian sigma (vd)", dp.smooth);
   vd_dialog.field("Noise Threshold", nm);
 
   if (!vd_dialog.ask())
@@ -178,7 +170,6 @@ step_edges_vd(bgui_image_tableau_sptr const& img,
       vcl_cerr << "In bwm_observer_img::step_edges_vd() - no image\n";
       return false;
     }
-  
   sdet_detector det(dp);
   brip_roi broi(image->ni(), image->nj());
   broi.add_region(roi);
@@ -186,7 +177,7 @@ step_edges_vd(bgui_image_tableau_sptr const& img,
   det.SetImage(image, broi);
 
   det.DoContour();
-  if(!det.get_vdgl_edges(edges))
+  if(!det.get_vsol_edges(edges))
     {
       vcl_cerr << "In bwm_observer_img::step_edges_vd() - edge detection failed\n";
       return false;
@@ -199,13 +190,6 @@ bool bwm_image_processor::lines_vd(bgui_image_tableau_sptr const& img,
                                    vcl_vector<vsol_line_2d_sptr>& lines)
 {
   if(!img) return false;
-  //Allow only grey scale for now
-  if(img->get_image_resource()->nplanes()!=1)
-    {
-      vcl_cerr << "In bwm_observer_img::lines_vd() - detect"
-               << " lines only works on grey level images \n";
-      return false;
-    }
 
   static sdet_detector_params dp;
   static float nm = 2.0;

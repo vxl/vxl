@@ -77,6 +77,8 @@ public:
 
   void recover_edges();
 
+  void recover_lines();
+
   void jim_process() { my_observer_->jim_obs_process(); }
 
 protected:

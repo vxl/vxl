@@ -2,19 +2,23 @@
 #include "bwm_observable_textured_mesh.h"
 #include "bwm_observable_textured_mesh_sptr.h"
 #include "bwm_texture_map_generator.h"
-
+#include "reg/bwm_reg_utils.h"
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_box_2d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_polygon_3d.h>
-
+#include <vsol/vsol_digital_curve_2d.h>
+#include <vsol/vsol_digital_curve_3d.h>
+#include <vdgl/vdgl_digital_curve.h>
 #include <vgui/vgui_message.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_projection_inspector.h>
+#include <vgui/vgui_style.h>
 
+#include <bgui/bgui_vsol_soview2D.h>
 #include <vpgl/bgeo/bgeo_lvcs.h>
 
 #include <vpgl/algo/vpgl_backproject.h>
@@ -1017,4 +1021,82 @@ void bwm_observer_rat_cam::adjust_camera_to_world_pt()
            << tx << ' ' << ty << "):\n point_3d("
            << pt_3d.x() << ' ' << pt_3d.y()
            << ' ' << pt_3d.z() << ")\n";  
+}
+// Just a temporary experiment to understand how edges behave across image
+// resolution and sensor modality. Not to be used in production
+void bwm_observer_rat_cam::project_edges_from_master()
+{
+  bwm_observer_cam* mobs = bwm_observer_mgr::BWM_MASTER_OBSERVER;
+  if(!mobs)
+    {
+      vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
+               << " no master selected\n";
+      return;
+    }
+  // First determine if the master has a selected box
+  bgui_vsol_soview2D_polygon* box = 0;
+  bool selected = 
+    mobs->get_selected_box(box);
+  if(!selected)
+    {
+      vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
+               << " no box selected\n";
+      return;
+    }
+  vcl_vector<vsol_digital_curve_2d_sptr>& edges_2d =
+    mobs->edges(box->get_id());
+  if(!edges_2d.size())
+    {
+      vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
+               << " no edges in box\n";
+      return;
+    }
+
+  vpgl_camera<double>* mcam  =   mobs->camera();
+  if(!mcam)
+    {
+      vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
+               << " master camera null\n";
+      return;
+    }
+  
+vpgl_rational_camera<double> master_cam = 
+  *static_cast<vpgl_rational_camera<double>* >(mcam);
+ vgl_homg_plane_3d<double> hpl= mobs->get_proj_plane();
+ vgl_plane_3d<double> master_plane(hpl);
+ vgl_point_3d<double> wpt;
+ if(!bwm_observer_mgr::instance()->world_pt(wpt))
+    {
+      vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
+               << " no world point to use as an initial guess\n";
+      return;
+    }
+ vcl_vector<vsol_digital_curve_3d_sptr> edges_3d;
+ if(! bwm_reg_utils::back_project_edges(edges_2d, master_cam, master_plane,
+                                        wpt, edges_3d))
+    {
+      vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
+               << " back-projection of edges failed\n";
+      return;
+    }
+ //now project forward onto this image
+  if(!camera_)
+    {
+      vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
+               << " rational camera null\n";
+      return;
+    }
+ 
+  vpgl_rational_camera<double> my_cam = 
+    *static_cast<vpgl_rational_camera<double>* >(camera_);
+  vcl_vector<vsol_digital_curve_2d_sptr> transfered_curves;
+  bwm_reg_utils::project_edges(edges_3d, my_cam,transfered_curves);
+
+
+  vgui_style_sptr pstyle = vgui_style::new_style(0.1f, 0.8f, 0.1f, 1.0f, 3.0f);
+  vcl_vector<vsol_digital_curve_2d_sptr>::iterator cit = 
+    transfered_curves.begin();
+  for(; cit != transfered_curves.end(); ++cit)
+    this->add_digital_curve(*cit, pstyle);
+  this->post_redraw();
 }

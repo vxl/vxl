@@ -20,6 +20,7 @@
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_polyline_2d.h>
 #include <vsol/vsol_digital_curve_2d.h>
+#include <vsol/vsol_line_2d.h>
 
 #define VERTEX_TYPE "bwm_soview2D_vertex"
 #define POLYLINE_TYPE "bgui_vsol_soview2D_polyline"
@@ -105,6 +106,21 @@ bool bwm_observer_img::handle(const vgui_event &e)
     return true;
   }
   return bgui_vsol2D_tableau::handle(e);
+}
+
+//eliminate the segmentation soviews
+bwm_observer_img::~bwm_observer_img()
+{
+    vcl_map<unsigned, vcl_vector<bgui_vsol_soview2D* > >::iterator mit =
+      seg_views.begin();
+    for(; mit!=seg_views.end();++mit)
+      {
+        vcl_vector<bgui_vsol_soview2D* > soviews = (*mit).second;
+        for (unsigned i=0; i<soviews.size(); i++) {
+            this->remove(soviews[i]);
+          }
+      }
+    seg_views.clear();
 }
 
 void bwm_observer_img::create_box(vsol_box_2d_sptr box)
@@ -208,6 +224,25 @@ void bwm_observer_img::delete_selected()
       ((select_list[0]->type_name().compare(POLYGON_TYPE) == 0) ||
        (select_list[0]->type_name().compare(POLYLINE_TYPE) == 0))) {
 
+    //first check to see if this is an image processing box
+    
+    vcl_map<unsigned, vcl_vector<bgui_vsol_soview2D* > >::iterator mit =
+      seg_views.begin();
+    vcl_map<unsigned, vcl_vector<bgui_vsol_soview2D* > >::iterator to_remove =
+      seg_views.end();
+    for(; mit!=seg_views.end();++mit)
+      if(select_list[0]->get_id()==(*mit).first)
+        {
+          vcl_vector<bgui_vsol_soview2D* > edges = (*mit).second;
+
+          for (unsigned i=0; i<edges.size(); i++) {
+            this->remove(edges[i]);
+          }
+          to_remove = mit;
+        }
+    if(to_remove != seg_views.end())
+      seg_views.erase(to_remove);
+          
     // remove the polygon and the vertices
     delete_polygon(select_list[0]);
   } else if (select_list[0]->type_name().compare(VERTEX_TYPE) == 0)
@@ -316,10 +351,9 @@ void bwm_observer_img::clear_box()
       return ;
     }
   
-  vcl_vector<bgui_vsol_soview2D* > edges;
-  edges = edges_list[p->get_id()];
-  for (unsigned i=0; i<edges.size(); i++) {
-    this->remove(edges[i]);
+  vcl_vector<bgui_vsol_soview2D* > soviews = seg_views[p->get_id()];
+  for (unsigned i=0; i<soviews.size(); i++) {
+    this->remove(soviews[i]);
   }
   
   this->post_redraw();
@@ -336,12 +370,41 @@ void bwm_observer_img::recover_edges()
       return ;
     }
   
-  vcl_vector<bgui_vsol_soview2D* > edges;
-  edges = edges_list[p->get_id()];
+  vcl_vector<vsol_digital_curve_2d_sptr > edges;
+  edges = edge_list[p->get_id()];
+  vcl_vector<bgui_vsol_soview2D*> soviews;
   for (unsigned i=0; i<edges.size(); i++) {
-    this->add(edges[i]);
+    bgui_vsol_soview2D_digital_curve* curve 
+      = this->add_digital_curve(edges[i]);
+    soviews.push_back(curve);
   }
+  seg_views[p->get_id()] = soviews;
   post_redraw();
+
+}
+
+void bwm_observer_img::recover_lines() 
+{
+
+  // get the selected box
+  bgui_vsol_soview2D_polygon* p = 0;
+  if(!this->get_selected_box(p))
+    {
+      vcl_cerr << "In bwm_observer_img::clear_box() - no box selected\n";
+      return ;
+    }
+  
+  vcl_vector<vsol_line_2d_sptr> lines;
+  lines = line_list[p->get_id()];
+  vcl_vector<bgui_vsol_soview2D*> soviews;
+  for (unsigned i=0; i<lines.size(); i++) {
+    bgui_vsol_soview2D_line_seg* line 
+      = this->add_vsol_line_2d(lines[i]);
+    soviews.push_back(line);
+  }
+  seg_views[p->get_id()] = soviews;
+  post_redraw();
+
 }
 
 void bwm_observer_img::save()
@@ -372,6 +435,7 @@ void bwm_observer_img::toggle_show_image_path()
 
 void bwm_observer_img::step_edges_vd()
 {
+
   bgui_vsol_soview2D_polygon* p = 0;  
   if(!this->get_selected_box(p))
     {
@@ -379,7 +443,7 @@ void bwm_observer_img::step_edges_vd()
       return ;
     }
   
-  vcl_vector<vdgl_digital_curve_sptr> edges;
+  vcl_vector<vsol_digital_curve_2d_sptr> edges;
   vsol_polygon_2d_sptr poly = p->sptr();
   vsol_box_2d_sptr box = poly->get_bounding_box();
   if(!bwm_image_processor::step_edges_vd(img_tab_, box, edges))
@@ -391,20 +455,21 @@ void bwm_observer_img::step_edges_vd()
   // first cleaan up the box, if there is anything in it
   clear_box();
 
-  vcl_vector<bgui_vsol_soview2D*> line_vec;
-  for(vcl_vector<vdgl_digital_curve_sptr>::iterator eit = edges.begin();
-      eit != edges.end(); ++eit)
-    {
-      bgui_vsol_soview2D_edgel_curve* curve = this->add_edgel_curve(*eit);
-      //obj_list[curve->get_id()] = curve;
-      line_vec.push_back(curve);
-    }
-  edges_list[p->get_id()] = line_vec;
+  vcl_vector<bgui_vsol_soview2D*> soviews;
+  for(vcl_vector<vsol_digital_curve_2d_sptr>::iterator eit = edges.begin();
+      eit != edges.end(); ++eit){
+    bgui_vsol_soview2D_digital_curve* curve = this->add_digital_curve(*eit);
+    soviews.push_back(curve);
+  }
+  edge_list[p->get_id()] = edges;
+  seg_views[p->get_id()] = soviews;
   this->post_redraw();
+
 }
 
 void bwm_observer_img::lines_vd()
 {
+
   bgui_vsol_soview2D_polygon* p = 0;
   if(!this->get_selected_box(p))
     {
@@ -424,17 +489,20 @@ void bwm_observer_img::lines_vd()
   // first cleaan up the box, if there is anything in it
   clear_box();
 
-  vcl_vector<bgui_vsol_soview2D*> line_vec;
+
+  vcl_vector<bgui_vsol_soview2D*> soviews;
   for(vcl_vector<vsol_line_2d_sptr>::iterator lit = lines.begin();
       lit != lines.end(); ++lit)
     {
       bgui_vsol_soview2D_line_seg* line = this->add_vsol_line_2d(*lit);
       // Gamze -- do not add the lines one by one create a vector and map it to the box
-      //obj_list[line->get_id()] = line;
-      line_vec.push_back(line);
+      soviews.push_back(line);
     }
-  edges_list[p->get_id()] = line_vec;
+  line_list[p->get_id()] = lines;
+  seg_views[p->get_id()] = soviews;
+
   this->post_redraw();
+
 }
 //
 //: (x, y) is the target point to be positioned at the center 

@@ -90,6 +90,15 @@ public:
   // in the site align the camera of this observer to that world point
   //
   void adjust_camera_to_world_pt();
+
+  //
+  // project edges from the master to this image using the
+  // master's projection plane to transfer. Just a temporary experiment
+  // to understand how edges behave across image resolution and sensor 
+  // modality. **Not to be used in production**
+  //
+  void project_edges_from_master();
+
 protected:
   bgeo_lvcs* lvcs_;
   vcl_string select_file();

@@ -118,6 +118,14 @@ class bwm_adj_cam_offset_command : public vgui_command
   bwm_tableau_rat_cam *tab;
 };
 
+class bwm_proj_edges_from_master_command : public vgui_command
+{
+ public:
+  bwm_proj_edges_from_master_command(bwm_tableau_rat_cam* t) : tab(t) {}
+  void execute() { tab->project_edges_from_master(); }
+
+  bwm_tableau_rat_cam *tab;
+};
 
 class bwm_center_pos_command : public vgui_command
 {
@@ -136,6 +144,7 @@ void bwm_tableau_rat_cam::get_popup(vgui_popup_params const &params, vgui_menu &
   menu.separator();
   menu.add( "Adjust Camera To LVCS", new bwm_adj_cam_offset_command(this));
   menu.add( "Register Image to World Pt", new bwm_adjust_camera_to_world_pt_command(this));
+  menu.add( "Transfer Edges from Master", new bwm_proj_edges_from_master_command(this));
   menu.add( "Center to the position", new bwm_center_pos_command(this));
 
   menu.separator();
@@ -231,3 +240,7 @@ void bwm_tableau_rat_cam::save_x3d()
 }
 
 
+void bwm_tableau_rat_cam::project_edges_from_master()
+{
+  my_observer_->project_edges_from_master();
+}

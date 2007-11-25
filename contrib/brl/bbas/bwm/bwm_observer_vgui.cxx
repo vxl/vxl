@@ -102,8 +102,9 @@ void bwm_observer_vgui::handle_update(vgui_message const& msg,
       proj_poly(obj, poly_2d);
       vcl_vector<bwm_soview2D_vertex*> verts;
       this->set_foreground(0,1,0);
+      //JLM Changed vertex size
       for(unsigned i = 0; i<nverts; ++i) {
-        bwm_soview2D_vertex* sopt = new bwm_soview2D_vertex(x[i], y[i], 2.0f, polygon, i);
+        bwm_soview2D_vertex* sopt = new bwm_soview2D_vertex(x[i], y[i], 1.0f, polygon, i);
         this->add(sopt);
         verts.push_back(sopt);
       }

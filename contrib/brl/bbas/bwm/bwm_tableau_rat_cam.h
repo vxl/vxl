@@ -52,7 +52,8 @@ public:
   void save_kml();
   void save_kml_collada();
   void save_x3d();
-  
+  //****************** Misc   
+  void project_edges_from_master();
 protected:
 
   bwm_observer_rat_cam* my_observer_;
