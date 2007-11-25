@@ -79,6 +79,7 @@ class gevd_bufferxy;
 #include <vil/vil_image_resource.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
+#include <vsol/vsol_digital_curve_2d.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <brip/brip_roi.h>
 #include "sdet_detector_params.h"
@@ -138,6 +139,7 @@ class sdet_detector : public sdet_detector_params
 
   bool get_vdgl_edges(vcl_vector<vdgl_digital_curve_sptr>& edges );
 
+  bool get_vsol_edges(vcl_vector<vsol_digital_curve_2d_sptr>& edges );
   //:The last type set is used in the execution if both types are valid
   void SetImage(vil1_image img);
   void SetImage(vil_image_resource_sptr const& img);

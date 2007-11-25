@@ -14,6 +14,11 @@
 #include <sdet/sdet_contour.h>
 #include <vil/vil_new.h>
 #include <vil/vil_image_view.h>
+#include <brip/brip_vil_float_ops.h>
+#include <vdgl/vdgl_digital_curve.h>
+#include <vdgl/vdgl_edgel_chain.h>
+#include <vdgl/vdgl_interpolator.h>
+#include <vsol/vsol_point_2d.h>
 //--------------------------------------------------------------------------------
 //
 //: Constructors.
@@ -154,8 +159,8 @@ bool  sdet_detector::DoContour()
    if(!use_roi_)
      return true;
    sdet_contour::Translate(*edges, *vertices, // display location at center
-                           roi_.cmin(0), // of pixel instead of
-                           roi_.rmin(0)); // upper-left corner
+                           static_cast<float>(roi_.cmin(0)), // of pixel instead of
+                           static_cast<float>(roi_.rmin(0))); // upper-left corner
    return true;
 }
 
@@ -356,13 +361,9 @@ gevd_bufferxy* sdet_detector::GetBufferFromVilImage()
     vcl_cout << "In sdet_detector::GetBufferFromVilImage() - no image\n";
     return 0;
   }
-  if (vimage->nplanes()!=1)
-  {
-    vcl_cout << "In sdet_detector::GetBufferFromImage() -"
-             << " not exactly one component\n";
-    return 0;
-  }
+
   vil_image_resource_sptr process_region = vimage;
+
   //if an roi is specified then extract view and wrap a resource around it
   if(use_roi_)
     {
@@ -374,6 +375,13 @@ gevd_bufferxy* sdet_detector::GetBufferFromVilImage()
         return 0;
       process_region = vil_new_image_resource_of_view(*vb);
     }
+
+  if (vimage->nplanes()!=1)
+  {
+    vil_image_view<unsigned short> sview 
+      = brip_vil_float_ops::convert_to_short(process_region);
+    process_region = vil_new_image_resource_of_view(sview);
+  }
   
   int sizey= process_region->nj();
   int sizex= process_region->ni();
@@ -476,3 +484,30 @@ get_vdgl_edges(vcl_vector<vdgl_digital_curve_sptr>& vd_edges )
   return true;
 }
 
+bool 
+sdet_detector::get_vsol_edges(vcl_vector<vsol_digital_curve_2d_sptr>& edges )
+{
+  vcl_vector<vdgl_digital_curve_sptr> vd_edges;
+  if(!this->get_vdgl_edges(vd_edges))
+    return false;
+  edges.clear();
+  for(vcl_vector<vdgl_digital_curve_sptr>::iterator eit = vd_edges.begin();
+      eit != vd_edges.end(); ++eit)
+    {
+        //get the edgel chain
+      vdgl_interpolator_sptr itrp = (*eit)->get_interpolator();
+      vdgl_edgel_chain_sptr ech = itrp->get_edgel_chain();
+      unsigned int n = ech->size();
+      // convert to vsol_digital curve
+      vsol_digital_curve_2d_sptr vsdc = new vsol_digital_curve_2d();
+      for (unsigned int i=0; i<n;i++)
+        {
+          vdgl_edgel ed = (*ech)[i];
+          double x = ed.get_x(), y = ed.get_y();
+          vsdc->add_vertex(new vsol_point_2d(x, y));
+        }
+          
+     edges.push_back(vsdc);
+    }
+  return true;
+}
