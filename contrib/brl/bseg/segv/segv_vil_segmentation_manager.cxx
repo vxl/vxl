@@ -131,32 +131,21 @@ range_params(vil_image_resource_sptr const& image)
   //Check if the image is blocked
   vil_blocked_image_resource_sptr bir = blocked_image_resource(image);
   if (bir)
-  { gl_map = true; cache = false;}
+  { gl_map = true; cache = true;}
 
   //Check if the image is a pyramid
   bool pyr = image->get_property(vil_property_pyramid, 0);
   if (pyr)
-  { gl_map = true; cache = false;}
-  //Get max min parameters
+  { gl_map = true; cache = true;}
+  
+  bgui_image_utils iu(image);
+  iu.set_percent_limit(0.005);
 
-  double min=0, max=0;
-  unsigned n_components = image->nplanes();
   vgui_range_map_params_sptr rmps;
-  if (n_components == 1)
-  {
-    bgui_image_utils iu(image);
-    iu.range(min, max);
-    rmps= new vgui_range_map_params(min, max, gamma, invert,
-                                    gl_map, cache);
-  }
-  else if (n_components == 3)
-  {
-    min = 0; max = 255;//for now - ultimately need to compute color histogram
-    rmps = new vgui_range_map_params(min, max, min, max, min, max,
-                                     gamma, gamma, gamma, invert,
-                                     gl_map, cache);
-  }
-  return rmps;
+  if(iu.range_map_from_hist(gamma, invert, gl_map, cache, rmps))
+    return rmps;
+
+  return 0;
 }
 
 //: set the image at the currently selected grid cell
@@ -1104,7 +1093,7 @@ void segv_vil_segmentation_manager::project_points()
       (vil_pyramid_image_resource*)img.ptr();
     vil_image_resource_sptr base = pimage->get_resource(0);
     format = base->file_format();
-    if (format == "nitf")
+    if (format == "nitf" || format =="nitf20" )
       nitf = (vil_nitf2_image*)base.ptr();
     else
     {
