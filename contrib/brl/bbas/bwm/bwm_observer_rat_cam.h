@@ -26,7 +26,7 @@ public:
 
   typedef bwm_observer_cam base;
 
-  bwm_observer_rat_cam() { lvcs_ =0; }
+  bwm_observer_rat_cam() { lvcs_=0; }
 
   bwm_observer_rat_cam(bgui_image_tableau_sptr const& img, 
     vpgl_rational_camera<double> *camera,
@@ -68,6 +68,7 @@ public:
   void adjust_camera_offset(vsol_point_2d_sptr img_point);
   void center_pos();
   void print_selected_vertex();
+  void set_lvcs(double lat, double lon, double elev) {lvcs_ = new bgeo_lvcs(lat, lon, elev); }
   void set_lvcs_at_selected_vertex();
   void save_lvcs();
   void convert_file_to_lvcs();

@@ -55,8 +55,9 @@ bwm_io_config_parser ::cdataHandler(vcl_string name, vcl_string data)
     corr_cam_tab_.assign(data);
   } else if (name.compare(OBJECT_TAG) == 0 ) {
     object_path_.assign(data);
+  } else if (name.compare(SITE_HOME_TAG) == 0) {
+    site_->path_.assign(data);
   }
-  
    cdata = ""; 
 }
 
@@ -77,8 +78,8 @@ bwm_io_config_parser::startElement(const char* name, const char** atts)
       vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
       if (strcmp(atts[i], "name") == 0)
         convert(atts[i+1], site_->name_);
-      else if (strcmp(atts[i], "path") == 0)
-        convert(atts[i+1], site_->path_);
+      /*else if (strcmp(atts[i], "path") == 0)
+        convert(atts[i+1], site_->path_);*/
     }
   }
   else if ((strcmp(name,IMAGE_TABLEAU_TAG)== 0) ||

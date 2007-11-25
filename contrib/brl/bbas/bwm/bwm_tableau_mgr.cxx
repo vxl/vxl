@@ -6,6 +6,8 @@
 #include "bwm_tableau_coin3d.h"
 #include "bwm_tableau_proj2d.h"
 #include "bwm_tableau_lidar.h"
+#include "bwm_observable_mesh_sptr.h"
+#include "bwm_observable_mesh.h"
 #include "bwm_observer_mgr.h"
 #include "bwm_observer_img.h"
 #include "bwm_observer_proj_cam.h"
@@ -15,6 +17,7 @@
 #include "bwm_observer_lidar.h"
 #include "bwm_corr_sptr.h"
 #include "bwm_command.h"
+#include "bwm_def.h"
 #include "bwm_load_commands.h"
 #include "io/bwm_site_sptr.h"
 #include "io/bwm_site.h"
@@ -39,14 +42,11 @@
 #include <vil/vil_property.h>
 
 #include <vul/vul_file.h>
+#include <vul/vul_string.h>
 #include <Inventor/nodes/SoSelection.h>
-
-
 
 bwm_tableau_mgr* bwm_tableau_mgr::instance_ = 0;
 vcl_map<vcl_string, bwm_command_sptr> bwm_tableau_mgr::tab_types_;
-
-class CDialog;
 
 bwm_tableau_mgr* bwm_tableau_mgr::instance() {
   if (!instance_) {
@@ -68,10 +68,10 @@ bwm_tableau_mgr::bwm_tableau_mgr()
 
   site_create_process_ = new bwm_site_process();
   object_types_.resize(OBJ_UNDEF);
-  object_types_[MESH_FEATURE] = "Mesh-feature";
-  object_types_[MESH_IMAGE_PROCESS] = "Mesh-image_processing";
-  object_types_[MESH_TERRAIN] = "Mesh-terrain";
-  object_types_[VSOL] = "vsol";
+  object_types_[MESH_FEATURE] = BWM_MESH_FEATURE_STR;
+  object_types_[MESH_IMAGE_PROCESSING] = BWM_MESH_IMAGE_PROCESSING_STR;
+  object_types_[MESH_TERRAIN] = BWM_MESH_TERRAIN_STR;
+  object_types_[VSOL] = BWM_OBJ_VSOL_STR;
 }
 
 bwm_tableau_mgr::~bwm_tableau_mgr()
@@ -130,8 +130,8 @@ void bwm_tableau_mgr::create_site_dialog(vgui_dialog_extensions &site_dialog,
     site_dialog.line_break();
   }
 
-  site_dialog.line_break();
-  site_dialog.line_break();
+  //site_dialog.line_break();
+  //site_dialog.line_break();
   site_dialog.message("Please Choose the objects to add to the site:");
   site_dialog.line_break();
 
@@ -142,7 +142,7 @@ void bwm_tableau_mgr::create_site_dialog(vgui_dialog_extensions &site_dialog,
     site_dialog.line_break();
   }
 
-  site_dialog.line_break();
+  //site_dialog.line_break();
   site_dialog.message("Enter the LVCS origin for this site:");
   site_dialog.line_break();
   site_dialog.field("Lat:", lat);
@@ -162,7 +162,7 @@ void bwm_tableau_mgr::create_site()
   vcl_vector<vcl_string> files(num_images);
   bool pyr[5] = {false, false, false, false, false};
   bool act[5] = {true, true, true, true, true};
-  vcl_vector<vcl_string> levels(num_images);
+  vcl_vector<vcl_string> levels(num_images, "7");
 
   int num_objs = 3;
   vcl_vector<vcl_string> objs(num_objs);
@@ -196,6 +196,28 @@ void bwm_tableau_mgr::create_site()
       if (site_dialog.ask() == false) 
         return;
     }
+
+     // check if the levels are numbers
+     bool not_int = true;
+     while (not_int) {
+       not_int = false;
+       for (unsigned i=0; i<levels.size(); i++) {
+         int l = vul_string_atoi(levels[i].c_str());
+         if (l == 0) {
+           not_int = true;
+           break;
+         }
+       }
+       if (not_int) {
+        vgui_dialog error ("Error");
+        error.message ("Please enter an integer level value!            " );
+        error.ask();
+        if (site_dialog.ask() == false) 
+          return;
+       } else {
+         not_int = false;
+       }
+     }
   }
       
   vcl_vector<bool> pyramid;
@@ -237,8 +259,8 @@ void bwm_tableau_mgr::edit_site()
   int num_images = 3;
   vcl_vector<vcl_string> files(num_images);
   bool pyr[3] = {false, false, false};
-  bool act[3] = {false, false, false};
-  vcl_vector<vcl_string> levels(num_images);
+  bool act[3] = {true, true, true};
+  vcl_vector<vcl_string> levels(num_images, "7");
 
   int num_objs = 3;
   vcl_vector<vcl_string> objs(num_objs);
@@ -257,33 +279,33 @@ void bwm_tableau_mgr::edit_site()
   if (tableaus.size() > 0) {
     site_edit_dialog.message("EXISTING IMAGES:");
     site_edit_dialog.line_break();
-  }
 
-  for (unsigned i=0; i<tableaus.size(); i++) {
-    bwm_io_tab_config* t = tableaus[i];
-    if (t->type_name.compare(IMAGE_TABLEAU_TAG) == 0) {
-      bwm_io_tab_config_img* img_tab = static_cast<bwm_io_tab_config_img* > (t);
-      bool active = img_tab->status;
-      vcl_string name = img_tab->name;
-      vcl_string path = img_tab->img_path;
-      site_edit_dialog.message((" -- "+path).c_str());
-      tab_remove[i] = false;
-      site_edit_dialog.checkbox("Remove", tab_remove[i]);
-      act_old[i] = active;
-      site_edit_dialog.checkbox("Active", act_old[i]);
-      vcl_string ext = "*.RPG";
-      site_edit_dialog.file("Add Camera:", ext, cam[i]);
-      site_edit_dialog.line_break();
+    for (unsigned i=0; i<tableaus.size(); i++) {
+      bwm_io_tab_config* t = tableaus[i];
+      if (t->type_name.compare(IMAGE_TABLEAU_TAG) == 0) {
+        bwm_io_tab_config_img* img_tab = static_cast<bwm_io_tab_config_img* > (t);
+        bool active = img_tab->status;
+        vcl_string name = img_tab->name;
+        vcl_string path = img_tab->img_path;
+        site_edit_dialog.message((" -- "+path).c_str());
+        tab_remove[i] = false;
+        site_edit_dialog.checkbox("Remove", tab_remove[i]);
+        act_old[i] = active;
+        site_edit_dialog.checkbox("Active", act_old[i]);
+        vcl_string ext = "*.RPG";
+        site_edit_dialog.file("Add Camera:", ext, cam[i]);
+        site_edit_dialog.line_break();
 
-    } else if (t->type_name.compare(CAMERA_TABLEAU_TAG) == 0) {
-      bwm_io_tab_config_cam* cam_tab = static_cast<bwm_io_tab_config_cam* > (t);
-      bool active = cam_tab->status;
-      site_edit_dialog.message((" -- "+cam_tab->img_path).c_str());
-      tab_remove[i] = false;
-      site_edit_dialog.checkbox("Remove ", tab_remove[i]);
-      act_old[i] = active;
-      site_edit_dialog.checkbox("Active ", act_old[i]);
-      site_edit_dialog.line_break();
+      } else if (t->type_name.compare(CAMERA_TABLEAU_TAG) == 0) {
+        bwm_io_tab_config_cam* cam_tab = static_cast<bwm_io_tab_config_cam* > (t);
+        bool active = cam_tab->status;
+        site_edit_dialog.message((" -- "+cam_tab->img_path).c_str());
+        tab_remove[i] = false;
+        site_edit_dialog.checkbox("Remove ", tab_remove[i]);
+        act_old[i] = active;
+        site_edit_dialog.checkbox("Active ", act_old[i]);
+        site_edit_dialog.line_break();
+      }
     }
   }
 
@@ -306,17 +328,19 @@ void bwm_tableau_mgr::edit_site()
   bool obj_remove[30];
   parser->site()->objects(object_paths);
 
-  site_edit_dialog.message("EXISTING OBJECTS:");
-  site_edit_dialog.line_break();
-  for(unsigned i=0; i<object_paths.size(); i++) {
-    site_edit_dialog.message((" -- " + object_paths[i].first).c_str());
-    vcl_string object_type = object_paths[i].second;
-    site_edit_dialog.message(("Type: " + object_type).c_str());
-    obj_remove[i] = false;
-    site_edit_dialog.checkbox("Remove ", obj_remove[i]);
+  if (object_paths.size() > 0) {
+    site_edit_dialog.message("EXISTING OBJECTS:");
     site_edit_dialog.line_break();
-  }
 
+    for(unsigned i=0; i<object_paths.size(); i++) {
+      site_edit_dialog.message((" -- " + object_paths[i].first).c_str());
+      vcl_string object_type = object_paths[i].second;
+      site_edit_dialog.message(("Type: " + object_type).c_str());
+      obj_remove[i] = false;
+      site_edit_dialog.checkbox("Remove ", obj_remove[i]);
+      site_edit_dialog.line_break();
+    }
+  }
   // create new objects
   site_edit_dialog.message("ADD OBJECTS:");
   site_edit_dialog.line_break();
@@ -344,6 +368,8 @@ void bwm_tableau_mgr::edit_site()
   if (!site_edit_dialog.ask()) {
     return;
   } else {
+    // check if the level values are integer
+
     // create a removal list for the tableaus that are marked for removal
     vcl_vector<unsigned> removal;
     for (unsigned t=0; t<tableaus.size(); t++) {
@@ -421,7 +447,9 @@ void bwm_tableau_mgr::create_img_tableau(vcl_string name,
 void bwm_tableau_mgr::create_cam_tableau(vcl_string name, 
                                          vcl_string& image_path, 
                                          vcl_string& cam_path, 
-                                         unsigned camera_type)
+                                         unsigned camera_type,
+                                         vsol_point_3d_sptr lvcs)
+                                         
 {
   // create only if registered
   bwm_load_cam_command comm;
@@ -472,6 +500,12 @@ void bwm_tableau_mgr::create_cam_tableau(vcl_string name,
       // rational
       camera_rat = new vpgl_rational_camera<double>(cam_path);
       rat_observer = new bwm_observer_rat_cam(img, camera_rat, cam_path);
+      if (lvcs) {
+        double lat = lvcs->x();
+        double lon = lvcs->y();
+        double elev = lvcs->z();
+        rat_observer->set_lvcs(lat, lon, elev);
+      }
       observer = rat_observer;
       t = new bwm_tableau_rat_cam(rat_observer);
       break;
@@ -687,13 +721,22 @@ void bwm_tableau_mgr::create_lidar_tableau(vcl_string name,
   tableaus_[name] = tab;
 }
 
-void bwm_tableau_mgr::load_tableaus()
+void bwm_tableau_mgr::load_site()
 {
   bwm_io_config_parser* parser = parse_config();
+  
   if (parser) {
+    bwm_site_sptr site = parser->site();
     vcl_vector<bwm_io_tab_config* > tableaus;
-    parser->site()->tableaus(tableaus);
+    site->tableaus(tableaus);
 
+    // get the lvcs
+    vsol_point_3d_sptr lvcs = site->lvcs_;
+    // if LVCS is not set, do not use it
+    if (*lvcs == vsol_point_3d(0, 0, 0))
+      lvcs = 0;
+  
+    // create the active tableaus 
     for (unsigned i=0; i<tableaus.size(); i++) {
       bwm_io_tab_config* t = tableaus[i];
       if (t->type_name.compare("ImageTableau") == 0) {
@@ -703,7 +746,8 @@ void bwm_tableau_mgr::load_tableaus()
           vcl_string name = img_tab->name;
           vcl_string path = img_tab->img_path;
           create_img_tableau(name, path);
-        }
+        } else
+          inactive_tableaus_.push_back(img_tab);
 
       } else if (t->type_name.compare("CameraTableau") == 0) {
         bwm_io_tab_config_cam* cam_tab = static_cast<bwm_io_tab_config_cam* > (t);
@@ -718,8 +762,10 @@ void bwm_tableau_mgr::load_tableaus()
             vcl_cerr << "Unknown camera type " << cam_tab->cam_type << "coming from parser!" << vcl_endl;
             continue;
           }
-          this->create_cam_tableau(cam_tab->name, cam_tab->img_path, cam_tab->cam_path, cam_type);
-        }
+          this->create_cam_tableau(cam_tab->name, cam_tab->img_path, cam_tab->cam_path, cam_type, lvcs);
+        } else 
+          inactive_tableaus_.push_back(cam_tab);
+
       } else if (t->type_name.compare("Coin3DTableau") == 0) {
         bwm_io_tab_config_coin3d* coin3d_tab = static_cast<bwm_io_tab_config_coin3d* > (t);
         bool active = coin3d_tab->status;
@@ -734,10 +780,12 @@ void bwm_tableau_mgr::load_tableaus()
             continue;
           }
           this->create_coin3d_tableau(coin3d_tab->name, coin3d_tab->cam_path, cam_type);
-        }
+        } else 
+          inactive_tableaus_.push_back(coin3d_tab);
       }
     }
 
+    // create the correspondences
     vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > corresp; 
     parser->site()->correspondences(corresp);
     vcl_string mode = parser->site()->corresp_mode();
@@ -781,10 +829,85 @@ void bwm_tableau_mgr::load_tableaus()
       }
       bwm_observer_mgr::instance()->set_corr(corr);
     }
+
+    // create the objects
+    vcl_vector<vcl_pair<vcl_string, vcl_string> > objs;
+    site->objects(objs);
+    for (unsigned i=0; i<objs.size(); i++) {
+      vcl_string path = objs[i].first;
+      vcl_string type = objs[i].second;
+      if (path.size() > 0) {
+        if (!vul_file::exists(path))
+          vcl_cerr << "ERROR: The object file \"" << path << "\" could not be found!" << vcl_endl;
+
+        if (type.compare(object_types_[VSOL]) == 0) {
+          // will be implemented later!!!
+        } else {
+          // comes here if it is a mesh
+          bwm_observable_mesh_sptr mesh = new bwm_observable_mesh();
+          mesh->load_from(path);
+          if (type.compare(object_types_[MESH_FEATURE]) == 0)
+            mesh->set_mesh_type(bwm_observable_mesh::BWM_MESH_FEATURE);
+          else if (type.compare(object_types_[MESH_IMAGE_PROCESSING]) == 0)
+            mesh->set_mesh_type(bwm_observable_mesh::BWM_MESH_IMAGE_PROCESSING);
+          else if (type.compare(object_types_[MESH_TERRAIN]) == 0)
+            mesh->set_mesh_type(bwm_observable_mesh::BWM_MESH_TERRAIN );
+          bwm_observer_mgr::instance()->attach(mesh);
+        }
+      }
+    }
     delete parser;
   }
 }
  
+//: saves the site to an XML file
+void bwm_tableau_mgr::save_site() 
+{
+  // get the tableaus
+  bwm_site_sptr site;
+  vcl_map<vcl_string, vgui_tableau_sptr>::iterator it = tableaus_.begin();
+  while (it != tableaus_.end())  {
+    vgui_tableau_sptr tab = it->second;
+    vcl_string name = it->first;
+    if (tab->type_name().compare("bwm_tableau_image")) {
+      bwm_tableau_img* img_tab = static_cast<bwm_tableau_img*> (tab.as_pointer());
+      vcl_string img_path = img_tab->file_name();
+      bwm_io_tab_config_img *t = new bwm_io_tab_config_img(IMAGE_TABLEAU_TAG, name, "active", img_path);
+      site->tableaus_.push_back(t);
+    } else if (tab->type_name().compare("bwm_tableau_rat_cam")) {
+      bwm_tableau_cam* cam_tab = static_cast<bwm_tableau_cam*> (tab.as_pointer());
+      vcl_string img_path = cam_tab->observer()->file_name();
+       vcl_string cam_path = cam_tab->observer()->camera_path();
+      bwm_io_tab_config_cam *t = new bwm_io_tab_config_cam(CAMERA_TABLEAU_TAG, 
+        name, "active", img_path, cam_path, "rational");
+      site->tableaus_.push_back(t);
+    } else if (tab->type_name().compare("bwm_tableau_proj_cam")) {
+      bwm_tableau_cam* cam_tab = static_cast<bwm_tableau_cam*> (tab.as_pointer());
+      vcl_string img_path = cam_tab->observer()->file_name();
+       vcl_string cam_path = cam_tab->observer()->camera_path();
+      bwm_io_tab_config_cam *t = new bwm_io_tab_config_cam(CAMERA_TABLEAU_TAG, 
+        name, "active", img_path, cam_path, "projective");
+      site->tableaus_.push_back(t);
+    } 
+  }
+  // add the inactive tableaus
+  for (unsigned i=0; i<inactive_tableaus_.size(); i++) {
+    site->tableaus_.push_back(inactive_tableaus_[i]);
+  }
+
+  // add the objects
+  // ask one camera tableau to save its objects
+  it = tableaus_.begin();
+  while (it != tableaus_.end())  {
+    vgui_tableau_sptr tab = it->second;
+    vcl_string name = it->first;
+    if (tab->type_name().compare("bwm_tableau_camera")) {
+      bwm_tableau_cam* cam_tab = static_cast<bwm_tableau_cam*> (tab.as_pointer());
+      cam_tab->save();
+    }
+  }
+}
+
 void bwm_tableau_mgr::load_img_tableau()
  {
    vgui_dialog_extensions params ("Image Tableau");

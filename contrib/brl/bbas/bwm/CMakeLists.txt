@@ -25,6 +25,7 @@ IF(GEOTIFF_FOUND)
   
 SET(bwm_sources
    bwm_macros.h
+   bwm_def.h
    bwm_menu.cxx                bwm_menu.h
    bwm_command.h               bwm_command_sptr.h   
    bwm_command_macros.h

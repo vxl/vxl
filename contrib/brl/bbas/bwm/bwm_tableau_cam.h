@@ -69,8 +69,12 @@ public:
 
   void load_mesh_multiple();
 
-  // saves the observables with their save method specific to th object
+  // save methods
+  // saves the observables with their save method specific to the object
   void save();
+  void save_all();
+  void save(vcl_string path);
+  void save_all(vcl_string path);
 
   void scroll_to_point();
 

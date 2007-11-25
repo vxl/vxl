@@ -24,8 +24,6 @@
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_polygon_3d.h>
 
-
-//#include <vgui/vgui_soview2D.h>
 #include <vgui/vgui_message.h>
 #include <vgui/vgui_dialog.h>
 
@@ -752,6 +750,25 @@ bool bwm_observer_cam::intersect_ray_and_box(vgl_box_3d<double> box,
   }
 }
 
+void bwm_observer_cam::save(vcl_string path)
+{
+  // first get the selected objects
+  vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
+
+  // a polygon should be selected first
+  if (select_list.size() == 1) {
+    if (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0) {
+      bgui_vsol_soview2D_polygon* poly;
+      poly = static_cast<bgui_vsol_soview2D_polygon*> (select_list[0]);
+      
+      unsigned face_id;
+      bwm_observable_sptr obs = this->find_object(poly->get_id(), face_id);
+      if (obs)
+        obs->save(path.c_str(), 0); // LVCS?? gamze
+    }
+  }
+}
+
 void bwm_observer_cam::save()
 {
   vgui_dialog params("File Save");
@@ -770,11 +787,43 @@ void bwm_observer_cam::save()
     return;
   }
 
+  save(file);
+}
+
+void bwm_observer_cam::save_all()
+{
+  vgui_dialog params("File Save");
+  vcl_string ext, file, empty="";
+
+  params.file ("Save...", ext, file);  
+  bool use_lvcs = false;
+  //params.checkbox("use lvcs",use_lvcs);
+  if (!params.ask())
+    return;
+
+  if (file == "") {
+    vgui_dialog error ("Error");
+    error.message ("Please specify a filename (prefix)." );
+    error.ask();
+    return;
+  }
+  
+  save_all(file);
+}
+
+void bwm_observer_cam::save_all(vcl_string path)
+{
   vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D_polygon* > >::iterator it = objects_.begin();
+  unsigned i = 0;
   while (it != objects_.end()) {
     bwm_observable_sptr o = it->first;
-    o->save(file.data());
 
+    vcl_stringstream strm;
+    strm << vcl_fixed << i;
+    vcl_string str(strm.str());
+
+    vcl_string obj_path = path + "_o" + str;
+    o->save(obj_path.c_str());
     it++;
   }
 }

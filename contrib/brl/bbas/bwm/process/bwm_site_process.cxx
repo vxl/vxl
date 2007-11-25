@@ -60,8 +60,9 @@ void bwm_site_process::RunBackgroundTask()
         }
         if (system(NULL)) {
           printf ("Deleting the image from the site...\n");
-          vcl_string command = "rd /q /s " + img_path;
-          system(command.data());
+          vcl_string command = "rd /q /s \"" + img_path + "\"";
+          if (system(command.data()) != 0)
+            vcl_cerr << "An error occured while removing the folder" << vcl_endl;
         }
       }
       delete site_->tableaus_[idx];
@@ -76,7 +77,9 @@ void bwm_site_process::RunBackgroundTask()
       site_->tableaus_.erase(it);
       it = site_->tableaus_.begin();
     }
-    it++;
+    else {
+      it++;
+    } 
   }
   site_->remove_.clear();
 
@@ -102,7 +105,7 @@ void bwm_site_process::RunBackgroundTask()
             img_path = img;
 
             // find the image under this folder to be able to compute nitf camera from
-            cam_img_file = img + "//" + base + "_0.nitf";
+            cam_img_file = img + "\\" + base + "_0.nitf";
             if (!vul_file::exists(cam_img_file))
               vcl_cout << "The image file [" << cam_img_file << "] cannot be found!" << vcl_endl;
           } 
@@ -120,16 +123,18 @@ void bwm_site_process::RunBackgroundTask()
             //2. copy the image
             if (system(NULL)) {
               printf ("Copying the image to the site...\n");
-              vcl_string command = "copy "+ img + " " + img_path;
-              system(command.data());
+              vcl_string command = "copy \""+ img + "\" \"" + img_path + "\"";
+              vcl_cout << "[" << command << "]" << vcl_endl;
+              system(command.c_str());
             }
             
             // 4. create the pyramid            
             printf ("Checking if processor is available...");
             if (system(NULL)) {
               printf ("Executing pyramid creation...\n");
-              vcl_string command = "C:\\lems\\vxl\\build\\contrib\\brl\\bseg\\sbin\\release\\generate_tiff_rset.exe "+
-                new_site + " " + ext.substr(1, ext.size()-1) + " " + levels[i];
+              vcl_string exe = "C:\\lems\\vxl\\build\\contrib\\brl\\bseg\\sbin\\release\\generate_tiff_rset.exe";
+              vcl_string command =  exe + " \"" + new_site + "\" " + ext.substr(1, ext.size()-1) + " " + levels[i];
+              vcl_cout << "[" << command << "]" << vcl_endl;
               system(command.data());
               // set the image path to the directory where pyramid resides
               img_path = new_site;

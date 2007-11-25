@@ -26,7 +26,7 @@ class bwm_tableau_mgr {
 
 public:
   typedef enum {PROJECTIVE=0, RATIONAL=1} BWM_CAMERA_TYPES;
-  typedef enum {MESH_FEATURE, MESH_IMAGE_PROCESS, MESH_TERRAIN, VSOL, OBJ_UNDEF} BWM_OBJECT_TYPES;
+  typedef enum {MESH_FEATURE, MESH_IMAGE_PROCESSING, MESH_TERRAIN, VSOL, OBJ_UNDEF} BWM_OBJECT_TYPES;
 
   ~bwm_tableau_mgr();
 
@@ -42,10 +42,14 @@ public:
 
   void edit_site();
 
+  void load_site();
+
+  void save_site();
+
   void create_img_tableau(vcl_string name, vcl_string& image_path);
 
   void create_cam_tableau(vcl_string name, vcl_string& image_path, vcl_string& cam_path, 
-                                         unsigned camera_type);
+                          unsigned camera_type, vsol_point_3d_sptr lvcs = 0);
 
   void create_coin3d_tableau(vcl_string name, vcl_string& cam_path, unsigned camera_type);
 
@@ -57,8 +61,6 @@ public:
 
   //void setup_scene();
   bwm_command_sptr load_tableau_by_type(vcl_string tableau_type);
-
-  void load_tableaus();
 
   void load_img_tableau();
 
@@ -87,6 +89,7 @@ private:
 
   //: Tableaus are mapped to their names
   vcl_map<vcl_string, vgui_tableau_sptr> tableaus_;
+  vcl_vector<bwm_io_tab_config*> inactive_tableaus_;
 
   vgui_grid_tableau_sptr grid_;
 

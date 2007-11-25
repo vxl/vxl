@@ -142,6 +142,15 @@ class bwm_save_command : public vgui_command
   bwm_tableau_cam *tab;
 };
 
+class bwm_save_all_command : public vgui_command
+{
+ public:
+  bwm_save_all_command(bwm_tableau_cam* t) : tab(t) {}
+  void execute() { tab->save_all(); }
+
+  bwm_tableau_cam *tab;
+};
+
 class bwm_xy_proj_plane_command : public vgui_command
 {
  public:
@@ -223,8 +232,8 @@ void bwm_tableau_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu
     vgui_key('e'), vgui_modifier(vgui_SHIFT));
   mesh_submenu.separator();
   mesh_submenu.add( "Divide Face", new bwm_divide_command(this));
-  mesh_submenu.add( "Save All", new bwm_save_command(this), 
-    vgui_key('s'), vgui_modifier(vgui_SHIFT));
+  mesh_submenu.add( "Save Selected", new bwm_save_command(this));
+  mesh_submenu.add( "Save All", new bwm_save_all_command(this));
   menu.add("CREATE 3D", mesh_submenu);
 
   menu.add( "Scroll To Point", new bwm_scroll_to_point_command(this));
@@ -468,6 +477,22 @@ void bwm_tableau_cam::save()
 {
   my_observer_->save();
 }
+
+void bwm_tableau_cam::save(vcl_string path)
+{
+  my_observer_->save(path);
+}
+
+void bwm_tableau_cam::save_all()
+{
+  my_observer_->save();
+}
+
+void bwm_tableau_cam::save_all(vcl_string path)
+{
+  my_observer_->save();
+}
+
 void bwm_tableau_cam::scroll_to_point()
 {
   my_observer_->scroll_to_point();

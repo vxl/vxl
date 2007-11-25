@@ -5,6 +5,7 @@
 
 // XML Tags
 #define SITE_TAG "BWM_SITE"
+#define SITE_HOME_TAG "home"
 #define CAMERA_TABLEAU_TAG "CameraTableau"
 #define IMAGE_TABLEAU_TAG "ImageTableau"
 #define COIN3D_TABLEAU_TAG "Coin3DTableau"

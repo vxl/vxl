@@ -1,4 +1,5 @@
 #include "bwm_observable_mesh.h"
+#include "bwm_def.h"
 #include "algo/bwm_algo.h"
 
 #include <vcl_iostream.h>
@@ -1007,6 +1008,18 @@ void bwm_observable_mesh::save(const char* filename)
   bmsh3d_mesh* mesh2 = object_->clone();
 
   mesh2->build_IFS_mesh();
-  bmsh3d_save_ply2(mesh2, filename);
+  vcl_string comment;
+  if (this->mesh_type_ == BWM_MESH_FEATURE)
+    comment = BWM_MESH_FEATURE_STR;
+  else if (this->mesh_type_ == BWM_MESH_IMAGE_PROCESSING)
+    comment = BWM_MESH_IMAGE_PROCESSING_STR;
+  else if (this->mesh_type_ == BWM_MESH_TERRAIN)
+    comment = BWM_MESH_TERRAIN_STR;
+  else {
+    comment = "";
+    vcl_cerr << "Mesh type is invalid" << vcl_endl;
+  }
+
+  bmsh3d_save_ply(mesh2, filename, true, comment);
   return;
 }

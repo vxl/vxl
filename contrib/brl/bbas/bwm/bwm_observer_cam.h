@@ -122,6 +122,9 @@ public:
   void load_mesh_multiple();
 
   void save();
+  void save(vcl_string path);
+  void save_all();
+  void save_all(vcl_string path);
 
   void triangulate_meshes();
 

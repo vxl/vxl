@@ -33,12 +33,11 @@ void bwm_site::add(vcl_vector<vcl_string> images,
 void bwm_site::x_write(vcl_ostream& s) 
 {
   
-  
   vsl_basic_xml_element site(SITE_TAG);
   site.add_attribute("name", name_);
-  site.add_attribute("path", path_);
   site.x_write_open(s);
 
+  s << "<home>" << path_ << "</home>" << vcl_endl;
   s << "<TABLEAUS>" << vcl_endl;
   for (unsigned i=0; i<tableaus_.size(); i++) {
     bwm_io_tab_config* t = tableaus_[i];
