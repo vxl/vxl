@@ -94,7 +94,7 @@ b_watertight_(mesh.b_watertight_)
     face_it++;
   }
 #else // 0
-  vcl_assert(!"NYI");
+  assert(!"NYI");
 #endif // 0
 }
 
