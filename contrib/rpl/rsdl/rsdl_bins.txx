@@ -306,19 +306,32 @@ n_nearest_impl( point_type const& pt,
                 vcl_vector< value_type >& values,
                 vcl_vector< point_type >* points ) const
 {
-  //
-  //
   // !!!!!!!!! BUG Notice !!!!!!!!!!
   //
-  // 
-  // The following implementation of N nearest neighbors did 
-  // not consider the situation when after finding >=n candidates,
-  // there can still exist a bin further away, but containing points 
-  // closer than some of these point candidates.
-  static bool rsdl_bins_bug_warning_s = true;
+  // The following implementation of N nearest neighbors did
+  // not consider the situation where after found >=n candidates,
+  // there can still exist a bin further away, but contains points
+  // close than some of these candidates.
+  //
+  // !!!!!!! FIX Notice !!!!!!!
+  //
+
+  // Let N be the dimension of the space, and s be the bin size
+  // (length of one side).  Then the length of the diagonal of a bin
+  // is
+  //   d = sqrt(N*s*s) = s*sqrt(N)
+  // Now, if we grow an N-dimensional region in all directions by k
+  // bins, the farthest possible distance between the given point and
+  // its nearest neighbor in this region will be d' = (k+1) * d.  To
+  // make sure we include all bins that may contain a point closer
+  // than this, we will additionally increase our region by f
+  // number of bins in all dimensions, where
+  //  f = ceil ((d' - (k * s)) / s)
+  // There might be more optimal solution to this fix.
+
+  static bool rsdl_bins_bug_warning_s = false;
   if( rsdl_bins_bug_warning_s ) {
-    
-    vcl_cerr << "Warning: results from current rsdl_bins<N,C,V>::n_nearest_impl" 
+    vcl_cerr << "Warning: results from current rsdl_bins<N,C,V>::n_nearest_impl"
       << "may be inaccurate.  Please contact developers for details. " << vcl_endl;
     rsdl_bins_bug_warning_s = false;
   }
@@ -345,6 +358,21 @@ n_nearest_impl( point_type const& pt,
   do {
     found += scan_bdy( bin_lo, bin_hi, cur, 0, indices );
     if ( found >= n ) {
+      // We found the requested number of points, now make sure to
+      // include all bins that might contain points that are closer
+      // than the ones we found so far as described in the FIX notes
+      // above.
+      unsigned k = (bin_hi[0] - bin_lo[0]) / 2;
+      // find number of bins needed to expand the region
+      unsigned f = unsigned( vcl_ceil( double(k+1) * vcl_sqrt(double(N)) - double(k) ) );
+      for (unsigned j=0; j<f; ++j) {
+        for (unsigned i=0; i<N; ++i) {
+          // increase the region one bin at a time
+          --bin_lo[i];
+          ++bin_hi[i];
+        }
+        found += scan_bdy( bin_lo, bin_hi, cur, 0, indices );
+      }
       still_looking = false;
     } else {
       bool some_dimension_in_bounds = false;

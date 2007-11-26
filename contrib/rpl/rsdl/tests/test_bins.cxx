@@ -290,7 +290,6 @@ static void test_bins_3D()
 
 static void test_need_to_check_nbr()
 {
-#if 0 // don't run the test, because this is a known bug.
   // Verify that if there is a point in a nearby bin that is closer
   // than the closest in the current bin, we still find it.
   vcl_cout << "Testing 2D for correct boundary checking\n";
@@ -312,7 +311,6 @@ static void test_need_to_check_nbr()
   vcl_cout << "Nearest pt value = " << vals[0] << vcl_endl;
 
   TEST( "Found nearest point", ! vals.empty() && vals[0] == 2, true );
-#endif
 }
 
 
