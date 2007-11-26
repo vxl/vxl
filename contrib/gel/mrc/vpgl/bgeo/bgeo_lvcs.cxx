@@ -8,7 +8,7 @@
 
 #define SMALL_STEP 1.0e-6 // assumed to be in radians
 
-char* bgeo_lvcs::cs_name_strings[]  = { "wgs84", "nad27n", "wgs72"};
+const char* bgeo_lvcs::cs_name_strings[]  = { "wgs84", "nad27n", "wgs72"};
 
 bgeo_lvcs::cs_names bgeo_lvcs::str_to_enum(const char* s)
 {

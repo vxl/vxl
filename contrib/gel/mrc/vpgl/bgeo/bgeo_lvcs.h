@@ -33,7 +33,7 @@ class bgeo_lvcs : public vbl_ref_count
   enum LenUnits {FEET, METERS};
   enum AngUnits {RADIANS, DEG};
   enum cs_names { wgs84 =0, nad27n, wgs72, NumNames};
-  GEO_DLL_DATA static char* cs_name_strings[];
+  GEO_DLL_DATA static const char* cs_name_strings[];
   static bgeo_lvcs::cs_names str_to_enum(const char*);
   // Constructors/Initializers/Destructors-------------------------------------
   bgeo_lvcs(double orig_lat=0,    //!< latitude of LVCS orig in radians.
@@ -129,7 +129,8 @@ inline void bgeo_lvcs::get_scale(double& lat, double& lon) const
 }
 
 //: return the coordinate system
-inline bgeo_lvcs::cs_names bgeo_lvcs::get_cs_name() const { return local_cs_name_;} 
+inline bgeo_lvcs::cs_names bgeo_lvcs::get_cs_name() const
+{ return local_cs_name_; }
 
 
 //: return the origin of the local system
@@ -152,7 +153,7 @@ inline void bgeo_lvcs::get_transform(double& lox, double& loy, double& theta) co
 //------------------------------------------------------------
 //: Set the compass alignment transform.
 inline void bgeo_lvcs::set_transform(const double lox, const double loy,
-                                const double theta)
+                                     const double theta)
 {
   lox_ = lox;
   loy_ = loy;
