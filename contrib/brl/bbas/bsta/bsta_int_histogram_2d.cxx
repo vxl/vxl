@@ -100,16 +100,14 @@ void bsta_int_histogram_2d::profile_histogram( bsta_int_histogram_1d &phist,
                                                bsta_int_histogram_1d &phist_x,
                                                bsta_int_histogram_1d &phist_y )
 {
-  int xxx = 0;
-
   // Calculate slope and increments along diagonal
   float slope = static_cast<float>(nbins_y_)/static_cast<float>(nbins_x_);
   float inverse_slope = 1.0f/slope;
+#if 0 // unused variables ?!
   float diag_lgth = vcl_sqrt(1.0f + (inverse_slope*inverse_slope));
-
   float deltay = inverse_slope/diag_lgth;
   float deltax = 1.0f/diag_lgth;
-
+#endif
   // find intercepts of slopes and calculate box that must be examined
   float dxintcpt = vcl_sqrt(1 + (slope*slope));
   float dyintcpt = vcl_sqrt(1 + (inverse_slope*inverse_slope));
@@ -185,7 +183,6 @@ void bsta_int_histogram_2d::profile_histogram( bsta_int_histogram_1d &phist,
   if (peak_height == 0) return success;                // exit if peak is zero
   long int limit = static_cast<long int>(peak_height * edge_pct);    // Value to reach to determine edge
 
-  float normal_slope = 1.0f/newslope;
   float diag_lgth = vcl_sqrt(1.0f + (newslope*newslope));
   float delta_x = 1.0f / diag_lgth;
   float delta_y = newslope / diag_lgth;
