@@ -1,4 +1,6 @@
 #include "bwm_observer_rat_cam.h"
+//:
+// \file
 #include "bwm_observable_textured_mesh.h"
 #include "bwm_observable_textured_mesh_sptr.h"
 #include "bwm_texture_map_generator.h"
@@ -23,7 +25,6 @@
 
 #include <vpgl/algo/vpgl_backproject.h>
 
-
 #include <vul/vul_file.h>
 
 #include <bmsh3d/bmsh3d_textured_mesh_mc.h>
@@ -36,22 +37,22 @@ vpgl_rational_camera<double> bwm_observer_rat_cam::camera()
 
 void bwm_observer_rat_cam::camera_center(vgl_homg_point_3d<double> &center)
 {
-  // Dan says this is not right
-  /*center.set(camera_->offset(camera_->X_INDX),
-                 camera_->offset(camera_->Y_INDX),
-                 camera_->offset(camera_->Z_INDX));*/
+#if 0 // Dan says this is not right
+  center.set(camera_->offset(camera_->X_INDX),
+             camera_->offset(camera_->Y_INDX),
+             camera_->offset(camera_->Z_INDX));
+#endif // 0
   vgl_vector_3d<double> v = camera_direction();
   center.set(v.x(), v.y(), v.z(), 0);
-
 }
 
 vgl_vector_3d<double> bwm_observer_rat_cam::camera_direction()
 {
   vpgl_rational_camera<double>* rat_cam = static_cast<vpgl_rational_camera<double> *> (camera_);
 
-  /* Assume that the camera is a satellite camera, and center is at infinity. 
-   * Calculate the direction based on intersection points of two planes near the ground */
- 
+  // Assume that the camera is a satellite camera, and center is at infinity.
+  // Calculate the direction based on intersection points of two planes near the ground
+
   double pix_offset_x = rat_cam->offset(rat_cam->U_INDX);
   double pix_offset_y = rat_cam->offset(rat_cam->V_INDX);
   double z_offset = rat_cam->offset(rat_cam->Z_INDX);
@@ -61,7 +62,7 @@ vgl_vector_3d<double> bwm_observer_rat_cam::camera_direction()
 
   double zval1 = z_offset, zval2 = z_offset + 200;
 
-  // initial guess for backprojection - just use center point of image 
+  // initial guess for backprojection - just use center point of image
   vgl_point_3d<double> guess(rat_cam->offset(rat_cam->X_INDX),
                              rat_cam->offset(rat_cam->Y_INDX),
                              rat_cam->offset(rat_cam->Z_INDX));
@@ -77,13 +78,13 @@ vgl_vector_3d<double> bwm_observer_rat_cam::camera_direction()
   vgl_point_3d<double> p1,p2;
 
   if (!vpgl_backproject::bproj_plane(*rat_cam, img_pt, plane1, plane_point1, p1)) {
-     vcl_cerr << "Error: vpgl_backproject::broj_plane() failed." << vcl_endl;
+     vcl_cerr << "Error: vpgl_backproject::broj_plane() failed.\n";
   }
-  
+
   if (!vpgl_backproject::bproj_plane(*rat_cam, img_pt, plane2, plane_point2, p2)) {
-     vcl_cerr << "Error: vpgl_backproject::broj_plane() failed." << vcl_endl;
+     vcl_cerr << "Error: vpgl_backproject::broj_plane() failed.\n";
   }
- 
+
   // convert p1 and p2 to lvcs
   double x,y,z;
   lvcs_->global_to_local(p1.x(),p1.y(),p1.z(),bgeo_lvcs::wgs84,x,y,z,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
@@ -103,19 +104,19 @@ void bwm_observer_rat_cam::center_pos()
   double lat=41.830939, lon=-71.394178, elev=0;
 
   if (viewer_ == 0) {
-    vcl_cerr << "viewer2D tableau is not found in the parents" << vcl_endl;
+    vcl_cerr << "viewer2D tableau is not found in the parents\n";
     return;
   }
 
-  float zoom_factor = viewer_->zoom_factor; 
+  float zoom_factor = viewer_->zoom_factor;
 
-  params.field ("Latitude..", lat); 
+  params.field ("Latitude..", lat);
   params.field ("Longitude..", lon);
   params.field ("Elevation..", elev);
   params.field ("Zoom Factor..", zoom_factor);
   if (!params.ask())
     return;
- 
+
   // check the the valid range..
   if ((lat < -180.0) || (lat > 180.0) || (lon < -180.0) || (lon > 180.0)) {
     vgui_dialog error ("Error");
@@ -130,8 +131,6 @@ void bwm_observer_rat_cam::center_pos()
   // find the image point corresponds to this (lat, lon, elev);
   proj_point(world_pt, image_pt);
 
-
-
   float x, y; // viewport coordinates
   x = image_pt.x();
   y = image_pt.y();
@@ -144,7 +143,6 @@ void bwm_observer_rat_cam::center_pos()
   bwm_observer_img::move_to_point(x, y);
   this->add_circle(x, y, 2);
   viewer_->post_redraw();
-
 }
 
 bool bwm_observer_rat_cam::shift_camera(double dx, double dy)
@@ -153,16 +151,16 @@ bool bwm_observer_rat_cam::shift_camera(double dx, double dy)
   vpgl_rational_camera<double>* rat_cam = static_cast<vpgl_rational_camera<double> *> (camera_);
   rat_cam->image_offset(u_off,v_off);
   rat_cam->set_image_offset(u_off + dx, v_off + dy);
-  
-// take this to the camera tableau  
-  /*vcl_map<bwm_observable_sptr, vcl_vector<bgui_vsol_soview2D_polygon* > >::iterator objit;
+
+#if 0 // take this to the camera tableau
+  vcl_map<bwm_observable_sptr, vcl_vector<bgui_vsol_soview2D_polygon* > >::iterator objit;
   for (objit = objects_.begin(); objit != objects_.end(); objit++) {
     vgui_message msg;
     msg.from = objit->first;
     msg.data = new vcl_string("update");
     update(msg);
-  }*/
-
+  }
+#endif // 0
   return true;
 }
 
@@ -172,8 +170,8 @@ bool bwm_observer_rat_cam::intersect_ray_and_plane(vgl_homg_point_2d<double> img
 {
   vpgl_rational_camera<double>* rat_cam = static_cast<vpgl_rational_camera<double> *> (camera_);
   vgl_point_2d<double>  p2d(img_point.x()/img_point.w(),img_point.y()/img_point.w());
-  
-  // initial guess for backprojection - just use center point of image 
+
+  // initial guess for backprojection - just use center point of image
   vgl_point_3d<double> guess(rat_cam->offset(rat_cam->X_INDX),
                                rat_cam->offset(rat_cam->Y_INDX),
                                rat_cam->offset(rat_cam->Z_INDX));
@@ -181,7 +179,7 @@ bool bwm_observer_rat_cam::intersect_ray_and_plane(vgl_homg_point_2d<double> img
   vgl_point_3d<double> p;
 
   if (!vpgl_backproject::bproj_plane(*rat_cam, p2d, plane_nonhomg, guess, p)) {
-    vcl_cout << "vpgl_backproject::broj_plane() failed." << vcl_endl;
+    vcl_cout << "vpgl_backproject::broj_plane() failed.\n";
     return false;
   }
 
@@ -190,20 +188,19 @@ bool bwm_observer_rat_cam::intersect_ray_and_plane(vgl_homg_point_2d<double> img
 }
 
 
-
 void bwm_observer_rat_cam::set_lvcs_at_selected_vertex()
 {
   vsol_point_3d_sptr sv = selected_vertex();
-  if(!sv)
+  if (!sv)
     return;
   lvcs_ = new bgeo_lvcs(sv->y(),sv->x(),sv->z(),
                         bgeo_lvcs::wgs84,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
-  vcl_cout << "defining lvcs with origin = <" << sv->x() << ", "<< 
-    sv->y() <<", "<< sv->z() << ">" <<vcl_endl;
+  vcl_cout << "defining lvcs with origin = <" << sv->x() << ", "<<
+    sv->y() <<", "<< sv->z() << '>' <<vcl_endl;
 }
 
-//: Define a local vertical coordinate system by choosing a single point as
-// the origin.  Elevation is set to the height of the current projection plane. 
+//: Define a local vertical coordinate system by choosing a single point as the origin.
+//  Elevation is set to the height of the current projection plane.
 void bwm_observer_rat_cam::define_lvcs(float x1, float y1)
 {
   vsol_point_2d_sptr img_point = new vsol_point_2d(x1,y1);
@@ -222,9 +219,10 @@ void bwm_observer_rat_cam::define_lvcs(float x1, float y1)
   // note constructor takes lat, long (as opposed to long, lat) so switch x and y
   lvcs_ = new bgeo_lvcs(origin_poly3d->vertex(0)->y(),origin_poly3d->vertex(0)->x(),origin_poly3d->vertex(0)->z(),
                         bgeo_lvcs::wgs84,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
-  vcl_cout << "defining lvcs with origin = <" << origin_poly3d->vertex(0)->x() << 
-    ", "<<origin_poly3d->vertex(0)->y() <<", "<<origin_poly3d->vertex(0)->z() <<
-    ">" << vcl_endl;
+  vcl_cout << "defining lvcs with origin = <"
+           << origin_poly3d->vertex(0)->x() << ", "
+           << origin_poly3d->vertex(0)->y() << ", "
+           << origin_poly3d->vertex(0)->z() << '>' << vcl_endl;
 }
 
 void bwm_observer_rat_cam::adjust_camera_offset(vsol_point_2d_sptr img_point)
@@ -237,7 +235,7 @@ void bwm_observer_rat_cam::adjust_camera_offset(vsol_point_2d_sptr img_point)
 
   // get projection of lvcs origin
   double lat,lon,elev;
-  lvcs_->local_to_global(0, 0, 0,bgeo_lvcs::wgs84, lon ,lat ,elev, 
+  lvcs_->local_to_global(0, 0, 0,bgeo_lvcs::wgs84, lon ,lat ,elev,
     bgeo_lvcs::DEG,bgeo_lvcs::METERS);
   vgl_point_3d<double> world_pt(lon,lat,elev);
   vgl_point_2d<double> image_pt;
@@ -246,13 +244,12 @@ void bwm_observer_rat_cam::adjust_camera_offset(vsol_point_2d_sptr img_point)
   // shift camera translation to line up points
   if (shift_camera(img_point->x() - image_pt.x(),
     img_point->y() - image_pt.y())) {
-    vcl_cout << "shifted right camera offset by [" << 
-      img_point->x() - image_pt.x() <<", " << 
+    vcl_cout << "shifted right camera offset by [" <<
+      img_point->x() - image_pt.x() <<", " <<
       image_pt.y() - image_pt.y() <<"]\n";
   }else {
     vcl_cerr << " error shifting camera offset\n";
   }
-
 }
 
 void bwm_observer_rat_cam::save_selected()
@@ -260,7 +257,7 @@ void bwm_observer_rat_cam::save_selected()
   vgui_dialog params("File Save");
   vcl_string ext, file, empty="";
 
-  params.file ("Save...", ext, file);  
+  params.file ("Save...", ext, file);
   bool use_lvcs = false;
   params.checkbox("use lvcs",use_lvcs);
 
@@ -273,7 +270,7 @@ void bwm_observer_rat_cam::save_selected()
     error.ask();
     return;
   }
-  // TODO: check if object is selected 
+  // TODO: check if object is selected
   vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D_polygon* > >::iterator it = objects_.begin();
   while (it != objects_.end()) {
     bwm_observable_sptr o = it->first;
@@ -292,7 +289,7 @@ void bwm_observer_rat_cam::save_all()
   vcl_string ext, list_name, empty="";
   bool use_lvcs = false;
 
-  params.file ("Filename...", ext, list_name); 
+  params.file ("Filename...", ext, list_name);
   params.checkbox("Use LVCS", use_lvcs);
 
   if (!params.ask())
@@ -319,13 +316,13 @@ void bwm_observer_rat_cam::save_all()
     vcl_ostringstream meshname;
     vcl_ostringstream fullpath;
     meshname << "obj" << mesh_idx <<".ply2";
-    fullpath << directory_name << "/" << meshname.str();
+    fullpath << directory_name << '/' << meshname.str();
 
     list_out << meshname.str() << vcl_endl;
     bwm_observable_sptr o = it->first;
     if (use_lvcs) {
       o->save(fullpath.str().data(),lvcs_);
-    }else{
+    } else {
       o->save(fullpath.str().data());
     }
     it++;
@@ -358,9 +355,8 @@ void bwm_observer_rat_cam::save_gml()
   FILE* fp;
   if ((fp = vcl_fopen(gml_filename.c_str(), "w")) == NULL) {
     vcl_fprintf (stderr, "Can't open xml file %s to write.\n", gml_filename.c_str());
-    return; 
+    return;
   }
-
 
   vcl_fprintf (fp, "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>\n");
   vcl_fprintf (fp, "<CityModel xmlns=\"http://www.citygml.org/citygml/1/0/0\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.citygml.org/citygml/1/0/0 http://www.citygml.org/citygml/1/0/0/CityGML.xsd\">\n");
@@ -375,7 +371,7 @@ void bwm_observer_rat_cam::save_gml()
       bwm_observable_textured_mesh* tm_obj = static_cast<bwm_observable_textured_mesh*>(obj.as_pointer());
       tm_obj->save_gml(fp, obj_count, lvcs_);
       vcl_fprintf (fp, "   </Building>");
-      vcl_fprintf (fp, "  </cityObjectMember>");   
+      vcl_fprintf (fp, "  </cityObjectMember>");
     }
   }
   vcl_fprintf (fp, " </CityModel>");
@@ -384,7 +380,6 @@ void bwm_observer_rat_cam::save_gml()
 
 void bwm_observer_rat_cam::save_kml()
 {
-
   vgui_dialog params("File Save");
   vcl_string ext, kml_filename, empty="";
   vcl_string model_name;
@@ -409,7 +404,7 @@ void bwm_observer_rat_cam::save_kml()
   FILE* fp;
   if ((fp = vcl_fopen(kml_filename.c_str(), "w")) == NULL) {
     vcl_fprintf (stderr, "Can't open xml file %s to write.\n", kml_filename.c_str());
-    return; 
+    return;
   }
 
   vcl_fprintf (fp, "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
@@ -420,7 +415,7 @@ void bwm_observer_rat_cam::save_kml()
   vcl_fprintf (fp, "  <Placemark>\n");
   vcl_fprintf (fp, "    <name>%s</name>\n",model_name.c_str());
   vcl_fprintf (fp, "    <visibility>1</visibility>\n");
-  
+
   vcl_fprintf (fp, "    <MultiGeometry>\n");
 
   vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D_polygon* > >::iterator it;
@@ -432,7 +427,7 @@ void bwm_observer_rat_cam::save_kml()
       tm_obj->save_kml(fp, obj_count, lvcs_, ground_height, x_offset, y_offset);
     }
   }
-   
+
   vcl_fprintf(fp, "    </MultiGeometry>\n");
   vcl_fprintf(fp, "  </Placemark>\n");
   vcl_fprintf(fp, "</Document>\n");
@@ -463,10 +458,9 @@ void bwm_observer_rat_cam::save_x3d()
   FILE* fp;
   if ((fp = vcl_fopen(x3d_filename.c_str(), "w")) == NULL) {
     vcl_fprintf (stderr, "Can't open x3d file %s to write.\n", x3d_filename.c_str());
-    return; 
+    return;
   }
 
-  
   vcl_fprintf(fp, "#VRML V2.0 utf8\n");
   vcl_fprintf(fp, "PROFILE Immersive\n\n");
 
@@ -543,7 +537,7 @@ void bwm_observer_rat_cam::save_kml_collada()
   FILE* dae_fp;
   if ((dae_fp = vcl_fopen(dae_fname.str().data(), "w")) == NULL) {
     vcl_fprintf (stderr, "Can't open .dae file %s to write.\n", dae_fname.str().data());
-    return; 
+    return;
   }
 
   vcl_vector<vcl_string> image_names;
@@ -563,19 +557,21 @@ void bwm_observer_rat_cam::save_kml_collada()
 
   int nobjects = 0;
   unsigned min_faces = 3;
-  
-  for (it = objects_.begin(); it != objects_.end(); it++) {
+
+  for (it = objects_.begin(); it != objects_.end(); it++)
+  {
     bwm_observable_sptr obj = it->first;
-    if ( obj->num_faces() <  min_faces) 
+    if ( obj->num_faces() <  min_faces)
       // single mesh face is probably ground plane, which we do not want to render
       continue;
 
     // check if object is texture mapped
-    if (obj->type_name().compare("bwm_observable_textured_mesh") == 0) {
+    if (obj->type_name().compare("bwm_observable_textured_mesh") == 0)
+    {
       bwm_observable_textured_mesh* mesh = static_cast<bwm_observable_textured_mesh*>(obj.as_pointer());
       vcl_string image_fname = vul_file::strip_directory(mesh->tex_map_uri()); // assume all faces have same texmap img
       vcl_string image_name = vul_file::strip_extension(image_fname);
-    
+
       vcl_ostringstream image_path;
       image_path << "../images/" << image_fname;
 
@@ -593,7 +589,7 @@ void bwm_observer_rat_cam::save_kml_collada()
 
       vcl_ostringstream surface_id;
       surface_id << objname.str() << "_surface";
-     
+
       vcl_ostringstream image_sampler_id;
       image_sampler_id << objname.str() << "_sampler";
 
@@ -605,7 +601,6 @@ void bwm_observer_rat_cam::save_kml_collada()
 
       vcl_ostringstream geometry_position_array_id;
       geometry_position_array_id << objname.str() <<"_geometry_position_array";
-
 
       vcl_ostringstream geometry_uv_id;
       geometry_uv_id << objname.str() << "_geometry_uv";
@@ -663,7 +658,8 @@ void bwm_observer_rat_cam::save_kml_collada()
   vcl_fprintf(dae_fp,"  </library_materials>\n");
 
   vcl_fprintf(dae_fp,"  <library_effects>\n");
-  for (int i=0; i<nobjects; i++) {
+  for (int i=0; i<nobjects; i++)
+  {
     vcl_fprintf(dae_fp,"    <effect id=\"%s\" name=\"%s\">\n",effect_ids[i].c_str(),effect_ids[i].c_str());
     vcl_fprintf(dae_fp,"      <profile_COMMON>\n");
     vcl_fprintf(dae_fp,"        <newparam sid=\"%s\">\n",surface_ids[i].c_str());
@@ -709,10 +705,10 @@ void bwm_observer_rat_cam::save_kml_collada()
   }
   vcl_fprintf(dae_fp,"  </library_effects>\n");
 
-
   vcl_fprintf(dae_fp,"  <library_geometries>\n");
   int idx = 0;
-  for (it = objects_.begin(); it != objects_.end(); it++) {
+  for (it = objects_.begin(); it != objects_.end(); it++)
+  {
     bwm_observable_sptr obj = it->first;
     // assume object is texture mapped
     //dbmsh3d_textured_mesh_mc* mesh = (dbmsh3d_textured_mesh_mc*)obj->get_object();
@@ -720,25 +716,25 @@ void bwm_observer_rat_cam::save_kml_collada()
       // single mesh face is probably ground plane, which we do not want to render
       continue;
     }
-    
+
     if (obj->type_name().compare("bwm_observable_textured_mesh") == 0) {
       bwm_observable_textured_mesh* tm_obj = static_cast<bwm_observable_textured_mesh*>(obj.as_pointer());
       tm_obj->save_kml_collada(dae_fp, lvcs_, geometry_ids[idx],
                                                     geometry_position_ids[idx],
                                                     geometry_position_array_ids[idx],
                                                     geometry_uv_ids[idx],
-                                                    geometry_uv_array_ids[idx], 
-                                                    geometry_vertex_ids[idx], 
+                                                    geometry_uv_array_ids[idx],
+                                                    geometry_vertex_ids[idx],
                                                     material_names[idx]);
     }
-    
+
     vcl_fprintf(dae_fp,"</p>\n");
     vcl_fprintf(dae_fp,"      </triangles>\n");
     vcl_fprintf(dae_fp,"    </mesh>\n");
     vcl_fprintf(dae_fp,"  </geometry>\n");
     idx++;
   }
-    
+
   vcl_fprintf(dae_fp,"</library_geometries>\n");
   vcl_fprintf(dae_fp,"<library_nodes>\n");
   for (int i=0; i<nobjects; i++) {
@@ -775,7 +771,7 @@ void bwm_observer_rat_cam::save_kml_collada()
   vcl_fprintf(dae_fp,"</scene>\n");
   vcl_fprintf(dae_fp,"</COLLADA>\n");
 
-  fclose(dae_fp);
+  vcl_fclose(dae_fp);
 
   vcl_ostringstream textures_fname;
   textures_fname << kmz_dir << "/textures.txt";
@@ -783,9 +779,9 @@ void bwm_observer_rat_cam::save_kml_collada()
   FILE* tex_fp;
   if ((tex_fp = vcl_fopen(textures_fname.str().data(), "w")) == NULL) {
     vcl_fprintf (stderr, "Can't open .dae file %s to write.\n", textures_fname.str().data());
-    return; 
+    return;
   }
-  
+
   for (int i=0; i<nobjects; i++) {
     vcl_fprintf(tex_fp,"<%s> <%s>\n",image_fnames[i].c_str(),image_fnames[i].c_str());
   }
@@ -796,7 +792,7 @@ void bwm_observer_rat_cam::save_kml_collada()
   FILE* kml_fp;
   if ((kml_fp = vcl_fopen(kml_fname.str().data(), "w")) == NULL) {
     vcl_fprintf (stderr, "Can't open .kml file %s to write.\n", kml_fname.str().data());
-    return; 
+    return;
   }
 
   vcl_fprintf(kml_fp,"<?xml version='1.0' encoding='UTF-8'?>\n");
@@ -868,21 +864,20 @@ void bwm_observer_rat_cam::generate_textures()
 
   bwm_texture_map_generator tex_generator;
 
-  // each object independantly for now.
+  // each object independently for now.
   vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D_polygon* > >::iterator it;
   int mesh_idx = 0;
   for (it = objects_.begin(); it != objects_.end(); it++, mesh_idx++) {
     bwm_observable_sptr o = it->first;
     if (o->type_name().compare("bwm_observable_textured_mesh") == 0) {
       vcl_ostringstream tex_fullpath;
-      tex_fullpath << tex_filename << "." << mesh_idx << ".jpg";
+      tex_fullpath << tex_filename << '.' << mesh_idx << ".jpg";
       bwm_observable_textured_mesh* obj = static_cast<bwm_observable_textured_mesh*> (o.as_pointer());
       tex_generator.generate_texture_map(obj, tex_fullpath.str(), *lvcs_);
     }
   }
   return;
 }
-
 
 
 void bwm_observer_rat_cam::save_lvcs()
@@ -893,7 +888,7 @@ void bwm_observer_rat_cam::save_lvcs()
   double lat,lon,elev;
   lvcs_->get_origin(lat,lon,elev);
   os.precision(12);
-  os << lat << " "<< lon << " " << elev << vcl_endl;
+  os << lat << ' '<< lon << ' ' << elev << vcl_endl;
 
   return;
 }
@@ -917,7 +912,7 @@ void bwm_observer_rat_cam::load_lvcs()
 void bwm_observer_rat_cam::convert_file_to_lvcs()
 {
   if (!lvcs_) {
-    vcl_cerr << "error: lvcs is not defined!"<<vcl_endl;
+    vcl_cerr << "error: lvcs is not defined!\n";
     return;
   }
   // expects simple text file with each line being of the form "lat lon z"
@@ -925,7 +920,7 @@ void bwm_observer_rat_cam::convert_file_to_lvcs()
   vcl_string filename_out = filename_in + ".lvcs";
   vcl_ifstream is(filename_in.data());
   vcl_ofstream os(filename_out.data());
-  
+
   double lat,lon,elev;
   double x,y,z;
 
@@ -934,7 +929,7 @@ void bwm_observer_rat_cam::convert_file_to_lvcs()
     is >> lon;
     is >> elev;
     lvcs_->global_to_local(lon,lat,elev,bgeo_lvcs::wgs84,x,y,z,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
-    os << x <<" "<<y<<" "<<z<<vcl_endl;
+    os << x <<' '<<y<<' '<<z<<vcl_endl;
   }
 
   return;
@@ -945,7 +940,7 @@ vcl_string bwm_observer_rat_cam::select_file()
   vgui_dialog params ("File Open");
   vcl_string ext, file, empty="";
 
-  params.file ("Open...", ext, file);  
+  params.file ("Open...", ext, file);
   if (!params.ask())
     return empty;
 
@@ -973,130 +968,130 @@ vcl_ostream& bwm_observer_rat_cam::print_camera(vcl_ostream& s)
 void bwm_observer_rat_cam::adjust_camera_to_world_pt()
 {
 #if 0
-  vcl_vector<bwm_corr_sptr> corrs = 
+  vcl_vector<bwm_corr_sptr> corrs =
     bwm_observer_mgr::instance()->correspondences();
-  if(!corrs.size())
-    {
-      vcl_cerr << "In bwm_observer_rat_cam::adjust_camera_to_world_pt() - "
-               << "no correspondences to use for alignment\n";
-     return;
-    }
+  if (!corrs.size())
+  {
+    vcl_cerr << "In bwm_observer_rat_cam::adjust_camera_to_world_pt() -"
+             << " no correspondences to use for alignment\n";
+   return;
+  }
 
   //Find the world to image correspondence for this observer_cam
   bwm_corr_sptr corr;
   bwm_observer_cam* this_obs = (bwm_observer_cam*)this;
-  for(vcl_vector<bwm_corr_sptr>::iterator cit = corrs.begin();
-      cit != corrs.end(); ++cit)
-    if((*cit)->obs_in(this_obs))
+  for (vcl_vector<bwm_corr_sptr>::iterator cit = corrs.begin();
+       cit != corrs.end(); ++cit)
+    if ((*cit)->obs_in(this_obs))
       corr = *cit;
 
   // get the world point to use for alignment
-  if(!corr||corr->mode())
-    {
-      vcl_cerr << "In bwm_observer_rat_cam::adjust_camera_to_world_pt() - "
-               << "corr is null or correspondence is not world_to_image\n";
-     return;
-    }
+  if (!corr||corr->mode())
+  {
+    vcl_cerr << "In bwm_observer_rat_cam::adjust_camera_to_world_pt() -"
+             << " corr is null or correspondence is not world_to_image\n";
+   return;
+  }
 #endif
   vgl_point_3d<double> pt_3d;
-  if(!bwm_observer_mgr::instance()->world_pt(pt_3d))
-    {
-      vcl_cerr << "In bwm_observer_rat_cam::adjust_camera_to_world_pt() - "
-               << "no world point defined\n";
-     return;
-    }
+  if (!bwm_observer_mgr::instance()->world_pt(pt_3d))
+  {
+    vcl_cerr << "In bwm_observer_rat_cam::adjust_camera_to_world_pt() -"
+             << " no world point defined\n";
+    return;
+  }
 
   // get the corresponding 2-d point
   float x=0, y=0;
   this->corr_image_pt(x, y);
 
-  // now all that has to be done is to project pt_3d and adjust the camera   
+  // now all that has to be done is to project pt_3d and adjust the camera
   vpgl_rational_camera<double> rcam = this->camera();
   vgl_point_2d<double> proj_point_2d = rcam.project(pt_3d);
 
   double tx = x-proj_point_2d.x();
   double ty = y-proj_point_2d.y();
   this->shift_camera(tx, ty);
-  vcl_cout << "Shifting camera[" << this->camera_path() <<  "]:\n(" 
+  vcl_cout << "Shifting camera[" << this->camera_path() <<  "]:\n("
            << tx << ' ' << ty << "):\n point_3d("
            << pt_3d.x() << ' ' << pt_3d.y()
-           << ' ' << pt_3d.z() << ")\n";  
+           << ' ' << pt_3d.z() << ")\n";
 }
+
 // Just a temporary experiment to understand how edges behave across image
 // resolution and sensor modality. Not to be used in production
 void bwm_observer_rat_cam::project_edges_from_master()
 {
   bwm_observer_cam* mobs = bwm_observer_mgr::BWM_MASTER_OBSERVER;
-  if(!mobs)
-    {
-      vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
-               << " no master selected\n";
-      return;
-    }
+  if (!mobs)
+  {
+    vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
+             << " no master selected\n";
+    return;
+  }
   // First determine if the master has a selected box
   bgui_vsol_soview2D_polygon* box = 0;
-  bool selected = 
+  bool selected =
     mobs->get_selected_box(box);
-  if(!selected)
-    {
-      vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
-               << " no box selected\n";
-      return;
-    }
+  if (!selected)
+  {
+    vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
+             << " no box selected\n";
+    return;
+  }
   vcl_vector<vsol_digital_curve_2d_sptr>& edges_2d =
     mobs->edges(box->get_id());
-  if(!edges_2d.size())
-    {
-      vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
-               << " no edges in box\n";
-      return;
-    }
+  if (!edges_2d.size())
+  {
+    vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
+             << " no edges in box\n";
+    return;
+  }
 
   vpgl_camera<double>* mcam  =   mobs->camera();
-  if(!mcam)
-    {
-      vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
-               << " master camera null\n";
-      return;
-    }
-  
-vpgl_rational_camera<double> master_cam = 
-  *static_cast<vpgl_rational_camera<double>* >(mcam);
- vgl_homg_plane_3d<double> hpl= mobs->get_proj_plane();
- vgl_plane_3d<double> master_plane(hpl);
- vgl_point_3d<double> wpt;
- if(!bwm_observer_mgr::instance()->world_pt(wpt))
-    {
-      vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
-               << " no world point to use as an initial guess\n";
-      return;
-    }
- vcl_vector<vsol_digital_curve_3d_sptr> edges_3d;
- if(! bwm_reg_utils::back_project_edges(edges_2d, master_cam, master_plane,
-                                        wpt, edges_3d))
-    {
-      vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
-               << " back-projection of edges failed\n";
-      return;
-    }
- //now project forward onto this image
-  if(!camera_)
-    {
-      vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
-               << " rational camera null\n";
-      return;
-    }
- 
-  vpgl_rational_camera<double> my_cam = 
+  if (!mcam)
+  {
+    vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
+             << " master camera null\n";
+    return;
+  }
+
+  vpgl_rational_camera<double> master_cam =
+    *static_cast<vpgl_rational_camera<double>* >(mcam);
+  vgl_homg_plane_3d<double> hpl= mobs->get_proj_plane();
+  vgl_plane_3d<double> master_plane(hpl);
+  vgl_point_3d<double> wpt;
+  if (!bwm_observer_mgr::instance()->world_pt(wpt))
+  {
+    vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
+             << " no world point to use as an initial guess\n";
+    return;
+  }
+  vcl_vector<vsol_digital_curve_3d_sptr> edges_3d;
+  if (! bwm_reg_utils::back_project_edges(edges_2d, master_cam, master_plane,
+                                          wpt, edges_3d))
+  {
+    vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
+             << " back-projection of edges failed\n";
+    return;
+  }
+  //now project forward onto this image
+  if (!camera_)
+  {
+    vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
+             << " rational camera null\n";
+    return;
+  }
+
+  vpgl_rational_camera<double> my_cam =
     *static_cast<vpgl_rational_camera<double>* >(camera_);
   vcl_vector<vsol_digital_curve_2d_sptr> transfered_curves;
   bwm_reg_utils::project_edges(edges_3d, my_cam,transfered_curves);
 
-
   vgui_style_sptr pstyle = vgui_style::new_style(0.1f, 0.8f, 0.1f, 1.0f, 3.0f);
-  vcl_vector<vsol_digital_curve_2d_sptr>::iterator cit = 
+  vcl_vector<vsol_digital_curve_2d_sptr>::iterator cit =
     transfered_curves.begin();
-  for(; cit != transfered_curves.end(); ++cit)
+  for (; cit != transfered_curves.end(); ++cit)
     this->add_digital_curve(*cit, pstyle);
   this->post_redraw();
 }

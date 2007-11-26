@@ -1,4 +1,6 @@
 #include "bwm_tableau_mgr.h"
+//:
+// \file
 #include "bwm_tableau_img.h"
 #include "bwm_tableau_cam.h"
 #include "bwm_tableau_proj_cam.h"
@@ -41,6 +43,7 @@
 #include <vil/vil_pyramid_image_resource.h>
 #include <vil/vil_property.h>
 
+#include <vcl_cassert.h>
 #include <vul/vul_file.h>
 #include <vul/vul_string.h>
 #include <Inventor/nodes/SoSelection.h>
@@ -48,18 +51,18 @@
 bwm_tableau_mgr* bwm_tableau_mgr::instance_ = 0;
 vcl_map<vcl_string, bwm_command_sptr> bwm_tableau_mgr::tab_types_;
 
-bwm_tableau_mgr* bwm_tableau_mgr::instance() {
+bwm_tableau_mgr* bwm_tableau_mgr::instance()
+{
   if (!instance_) {
     instance_ = new bwm_tableau_mgr();
     bgui3d_init();
   }
   return bwm_tableau_mgr::instance_;
-   
 }
 
 bwm_tableau_mgr::bwm_tableau_mgr()
 {
-  grid_ = vgui_grid_tableau_new (); 
+  grid_ = vgui_grid_tableau_new ();
   grid_->set_frames_selectable(true);
   grid_->set_unique_selected(true);
   grid_->set_grid_size_changeable(true);
@@ -85,31 +88,30 @@ void bwm_tableau_mgr::add_tableau(vgui_tableau_sptr tab, vcl_string name)
   tableaus_[name] = tab;
 }
 
-void bwm_tableau_mgr::register_tableau(bwm_command_sptr tab_comm) 
-{ 
-  tab_types_[tab_comm->name()] = tab_comm; 
+void bwm_tableau_mgr::register_tableau(bwm_command_sptr tab_comm)
+{
+  tab_types_[tab_comm->name()] = tab_comm;
 }
 
 bwm_command_sptr bwm_tableau_mgr::load_tableau_by_type(vcl_string tableau_type)
 {
   bwm_command_sptr comm = 0;
   vcl_map<vcl_string, bwm_command_sptr>::iterator iter = tab_types_.find(tableau_type);
-  if (iter != tab_types_.end()) 
+  if (iter != tab_types_.end())
     comm = iter->second;
 
   return comm;
 }
 
 void bwm_tableau_mgr::create_site_dialog(vgui_dialog_extensions &site_dialog,
-                               vcl_string &site_name, 
-                               vcl_string &site_dir, 
+                               vcl_string &site_name,
+                               vcl_string &site_dir,
                                vcl_vector<vcl_string> &files,
-                               bool* pyr_v, bool* act_v, 
+                               bool* pyr_v, bool* act_v,
                                vcl_vector<vcl_string> &pyr_levels,
                                vcl_vector<vcl_string> &objs,
                                int* choices,
                                double &lat, double &lon, double &elev)
-                    
 {
   vcl_string ext;
   site_dialog.field("SITE NAME:", site_name);
@@ -169,22 +171,22 @@ void bwm_tableau_mgr::create_site()
   int choices[3] = {0, 0, 0};
   double lat=0.0, lon=0.0, elev=0.0;
 
-  create_site_dialog(site_dialog, site_name, site_dir, files, pyr, 
+  create_site_dialog(site_dialog, site_name, site_dir, files, pyr,
     act, levels, objs, choices, lat, lon, elev);
- 
+
   if (!site_dialog.ask()) {
     return;
   } else {
     // collect the paramaters
-    vcl_cout << "name:" << site_name << vcl_endl;
-    vcl_cout << "dir:" << site_dir << vcl_endl;
+    vcl_cout << "name:" << site_name << vcl_endl
+             << "dir:" << site_dir << vcl_endl;
 
     // make sure site name is filled
     while (site_name.size() == 0) {
       vgui_dialog error ("Error");
       error.message ("Please enter a valid SITE NAME!            " );
       error.ask();
-      if (site_dialog.ask() == false) 
+      if (site_dialog.ask() == false)
         return;
     }
 
@@ -193,7 +195,7 @@ void bwm_tableau_mgr::create_site()
       vgui_dialog error ("Error");
       error.message ("Please enter a valid SITE DIRECTORY!            " );
       error.ask();
-      if (site_dialog.ask() == false) 
+      if (site_dialog.ask() == false)
         return;
     }
 
@@ -212,14 +214,14 @@ void bwm_tableau_mgr::create_site()
         vgui_dialog error ("Error");
         error.message ("Please enter an integer level value!            " );
         error.ask();
-        if (site_dialog.ask() == false) 
+        if (site_dialog.ask() == false)
           return;
        } else {
          not_int = false;
        }
      }
   }
-      
+
   vcl_vector<bool> pyramid;
   vcl_vector<bool> active;
   for (unsigned j=0; j<files.size(); j++) {
@@ -233,8 +235,8 @@ void bwm_tableau_mgr::create_site()
     objects.push_back(pair);
   }
 
-  bwm_site_sptr site = new bwm_site(site_name, site_dir, files, pyramid, active, 
-    levels, objects, new vsol_point_3d(lat, lon, elev));
+  bwm_site_sptr site = new bwm_site(site_name, site_dir, files, pyramid, active,
+                                    levels, objects, new vsol_point_3d(lat, lon, elev));
 
   site_create_process_->set_site(site);
   site_create_process_->StartBackgroundTask();
@@ -272,17 +274,19 @@ void bwm_tableau_mgr::edit_site()
   bool tab_remove[30];
   vcl_vector<vcl_string> cam;
 
-  // first place the existing tableaus on the dialog
-  vcl_vector<bwm_io_tab_config* > tableaus; 
-  site->tableaus(tableaus);  
+  // first place the existing tableaux on the dialog
+  vcl_vector<bwm_io_tab_config* > tableaus;
+  site->tableaus(tableaus);
   cam.resize(tableaus.size());
   if (tableaus.size() > 0) {
     site_edit_dialog.message("EXISTING IMAGES:");
     site_edit_dialog.line_break();
 
-    for (unsigned i=0; i<tableaus.size(); i++) {
+    for (unsigned i=0; i<tableaus.size(); i++)
+    {
       bwm_io_tab_config* t = tableaus[i];
-      if (t->type_name.compare(IMAGE_TABLEAU_TAG) == 0) {
+      if (t->type_name.compare(IMAGE_TABLEAU_TAG) == 0)
+      {
         bwm_io_tab_config_img* img_tab = static_cast<bwm_io_tab_config_img* > (t);
         bool active = img_tab->status;
         vcl_string name = img_tab->name;
@@ -295,8 +299,9 @@ void bwm_tableau_mgr::edit_site()
         vcl_string ext = "*.RPG";
         site_edit_dialog.file("Add Camera:", ext, cam[i]);
         site_edit_dialog.line_break();
-
-      } else if (t->type_name.compare(CAMERA_TABLEAU_TAG) == 0) {
+      }
+      else if (t->type_name.compare(CAMERA_TABLEAU_TAG) == 0)
+      {
         bwm_io_tab_config_cam* cam_tab = static_cast<bwm_io_tab_config_cam* > (t);
         bool active = cam_tab->status;
         site_edit_dialog.message((" -- "+cam_tab->img_path).c_str());
@@ -332,7 +337,7 @@ void bwm_tableau_mgr::edit_site()
     site_edit_dialog.message("EXISTING OBJECTS:");
     site_edit_dialog.line_break();
 
-    for(unsigned i=0; i<object_paths.size(); i++) {
+    for (unsigned i=0; i<object_paths.size(); i++) {
       site_edit_dialog.message((" -- " + object_paths[i].first).c_str());
       vcl_string object_type = object_paths[i].second;
       site_edit_dialog.message(("Type: " + object_type).c_str());
@@ -355,7 +360,7 @@ void bwm_tableau_mgr::edit_site()
   site_edit_dialog.line_break();
   site_edit_dialog.message("LVCS origin for this site:");
   site_edit_dialog.line_break();
-  
+
   lat = parser->site()->lvcs_->x();
   lon = parser->site()->lvcs_->y();
   elev = parser->site()->lvcs_->z();
@@ -370,11 +375,11 @@ void bwm_tableau_mgr::edit_site()
   } else {
     // check if the level values are integer
 
-    // create a removal list for the tableaus that are marked for removal
+    // create a removal list for the tableaux that are marked for removal
     vcl_vector<unsigned> removal;
     for (unsigned t=0; t<tableaus.size(); t++) {
       tableaus[t]->status = act_old[t];
-      if (tab_remove[t]) 
+      if (tab_remove[t])
         removal.push_back(t);
     }
     site->remove_ = removal;
@@ -385,9 +390,8 @@ void bwm_tableau_mgr::edit_site()
     for (unsigned i=0; i<object_paths.size(); i++) {
       if (!obj_remove[i]) {
         undeleted_objs.push_back(object_paths[i]);
-      } else 
+      } else
         deleted = true;
- 
     }
     if (deleted) {
       site->objects_.clear();
@@ -404,7 +408,6 @@ void bwm_tableau_mgr::edit_site()
 
     vcl_vector<vcl_pair<vcl_string, vcl_string> > objects;
     for (unsigned obj=0; obj<objs.size(); obj++) {
-
       vcl_pair<vcl_string, vcl_string> pair(objs[obj], object_types_[choices[obj]]);
       objects.push_back(pair);
     }
@@ -414,14 +417,14 @@ void bwm_tableau_mgr::edit_site()
   }
 }
 
-void bwm_tableau_mgr::create_img_tableau(vcl_string name, 
-                                        vcl_string& image_path)
+void bwm_tableau_mgr::create_img_tableau(vcl_string name,
+                                         vcl_string& image_path)
 {
   // create only if registered
   bwm_load_img_command comm;
   vcl_map<vcl_string, bwm_command_sptr>::iterator iter = tab_types_.find(comm.name());
   if (iter == tab_types_.end()) {
-    vcl_cerr << "Image tableau type is not registered, not creating!" << vcl_endl;
+    vcl_cerr << "Image tableau type is not registered, not creating!\n";
     return;
   }
 
@@ -444,21 +447,20 @@ void bwm_tableau_mgr::create_img_tableau(vcl_string name,
   tableaus_[name] = t;
 }
 
-void bwm_tableau_mgr::create_cam_tableau(vcl_string name, 
-                                         vcl_string& image_path, 
-                                         vcl_string& cam_path, 
+void bwm_tableau_mgr::create_cam_tableau(vcl_string name,
+                                         vcl_string& image_path,
+                                         vcl_string& cam_path,
                                          unsigned camera_type,
                                          vsol_point_3d_sptr lvcs)
-                                         
 {
   // create only if registered
   bwm_load_cam_command comm;
   vcl_map<vcl_string, bwm_command_sptr>::iterator iter = tab_types_.find(comm.name());
   if (iter == tab_types_.end()) {
-    vcl_cerr << "Camera tableau type is not registered, not creating!" << vcl_endl;
+    vcl_cerr << "Camera tableau type is not registered, not creating!\n";
     return;
   }
-  
+
   bgui_image_tableau_sptr img = bgui_image_tableau_new();
   img->show_image_path(display_image_path_);
   // LOAD IMAGE
@@ -475,28 +477,32 @@ void bwm_tableau_mgr::create_cam_tableau(vcl_string name,
   bwm_observer_rat_cam* rat_observer = 0;
   bwm_tableau_cam* t = 0;
 
-  // check if the camera path is not empty, if it is NITF, the camera 
+  // check if the camera path is not empty, if it is NITF, the camera
   // info is in the image, not a seperate file
-  if (cam_path.size() == 0) {
+  if (cam_path.size() == 0)
+  {
     camera_rat = bwm_algo::extract_nitf_camera(img_res);
     if (camera_rat == 0) {
-      vcl_cerr << "Camera is not given, the tableau is not created!" << vcl_endl;
+      vcl_cerr << "Camera is not given, the tableau is not created!\n";
       return;
     } else {
       rat_observer = new bwm_observer_rat_cam(img, camera_rat, cam_path);
       observer = rat_observer;
       t = new bwm_tableau_rat_cam(rat_observer);
     }
-  } else {
-    switch(camera_type) {
-    case 0:
+  }
+  else
+  {
+    switch (camera_type)
+    {
+     case 0:
       // projective
       camera_proj = (read_projective_camera(cam_path)).clone();
       proj_observer = new bwm_observer_proj_cam(img, camera_proj, cam_path);
       observer = proj_observer;
       t = new bwm_tableau_proj_cam(proj_observer);
       break;
-    case 1:
+     case 1:
       // rational
       camera_rat = new vpgl_rational_camera<double>(cam_path);
       rat_observer = new bwm_observer_rat_cam(img, camera_rat, cam_path);
@@ -509,7 +515,7 @@ void bwm_tableau_mgr::create_cam_tableau(vcl_string name,
       observer = rat_observer;
       t = new bwm_tableau_rat_cam(rat_observer);
       break;
-    default:
+     default:
       vcl_cout << "Error: unknown camera type "<<camera_type<< vcl_endl;
     }
   }
@@ -527,15 +533,15 @@ void bwm_tableau_mgr::create_cam_tableau(vcl_string name,
   tableaus_[name] = t;
 }
 
-void bwm_tableau_mgr::create_coin3d_tableau(vcl_string name, 
-                                            vcl_string& cam_path, 
+void bwm_tableau_mgr::create_coin3d_tableau(vcl_string name,
+                                            vcl_string& cam_path,
                                             unsigned camera_type)
 {
   // create only if registered
   bwm_load_coin3d_command comm;
   vcl_map<vcl_string, bwm_command_sptr>::iterator iter = tab_types_.find(comm.name());
   if (iter == tab_types_.end()) {
-    vcl_cerr << "Coin3d tableau type is not registered, not creating!" << vcl_endl;
+    vcl_cerr << "Coin3d tableau type is not registered, not creating!\n";
     return;
   }
 
@@ -544,13 +550,14 @@ void bwm_tableau_mgr::create_coin3d_tableau(vcl_string name,
   master_root_->ref();
   bwm_observer_coin3d* observer = 0;
 
-  switch(camera_type) {
-  case 0:
-    // projective 
+  switch (camera_type)
+  {
+   case 0:
+    // projective
     camera = read_projective_camera(cam_path).clone();
     observer = new bwm_observer_coin3d(camera, master_root_);
     break;
-  case 1:
+   case 1:
     // rational
     vpgl_rational_camera<double> rat_cam;
     rat_cam = vpgl_rational_camera<double>(cam_path);
@@ -580,18 +587,18 @@ void bwm_tableau_mgr::create_coin3d_tableau(vcl_string name,
   tableaus_[name] = t;
 }
 
-void bwm_tableau_mgr::create_proj2d_tableau(vcl_string name, 
-                                            vcl_string type, 
-                                            vcl_string coin3d_name, 
-                                            vcl_string image_path, 
-                                            vcl_string camera_path, 
+void bwm_tableau_mgr::create_proj2d_tableau(vcl_string name,
+                                            vcl_string type,
+                                            vcl_string coin3d_name,
+                                            vcl_string image_path,
+                                            vcl_string camera_path,
                                             unsigned camera_type)
 {
   // create only if registered
   bwm_load_proj2d_command comm;
   vcl_map<vcl_string, bwm_command_sptr>::iterator iter = tab_types_.find(comm.name());
   if (iter == tab_types_.end()) {
-    vcl_cerr << "Proj2d tableau type is not registered, not creating!" << vcl_endl;
+    vcl_cerr << "Proj2d tableau type is not registered, not creating!\n";
     return;
   }
 
@@ -601,13 +608,14 @@ void bwm_tableau_mgr::create_proj2d_tableau(vcl_string name,
 
   // LOAD CAMERA
   vpgl_proj_camera<double> *camera;
-  switch(camera_type) {
-  case 0:
+  switch (camera_type)
+  {
+   case 0:
     // projective
-    
+
     camera = read_projective_camera(camera_path).clone();
     break;
-  case 1:
+   case 1:
     vpgl_rational_camera<double> rat_cam;
     rat_cam = vpgl_rational_camera<double>(camera_path);
     vcl_cout << rat_cam << vcl_endl;
@@ -618,7 +626,7 @@ void bwm_tableau_mgr::create_proj2d_tableau(vcl_string name,
     pcam = rat_proj_cam.get_persp_cam();
     //vcl_cout << pcam1 << vcl_endl;
     camera = vpgl_proj_camera<double> (pcam).clone();
-    
+
     break;
   //default:
   //  vcl_cout << "Error: unknown camera type "<<camera_type<< vcl_endl;
@@ -626,42 +634,45 @@ void bwm_tableau_mgr::create_proj2d_tableau(vcl_string name,
 
   // to be able to create a simple proj2d tableau, we need a coin3d tableau's
   // scene graph root
-  if (type.compare("simple")==0) {
+  if (type.compare("simple")==0)
+  {
     vgui_tableau_sptr tab = this->find_tableau(coin3d_name);
     if (tab == 0) {
       vgui_dialog error ("Error");
       error.message ("Proj2D Simple Tableau needs a corresponding Coin3D tableau name!" );
       error.ask();
       return;
-    } 
-   
+    }
+
     if (tab->type_name().compare("bwm_tableau_coin3d") != 0) {
       vgui_dialog error ("Error");
       error.message ("Proj2D Simple Tableau needs a corresponding Coin3D tableau!" );
       error.ask();
       return;
-    } 
+    }
     bwm_tableau_coin3d* coin3d_tab = static_cast<bwm_tableau_coin3d*> (tab.as_pointer());
     SoNode* root = coin3d_tab->root();
     root->ref();
     observer = new bwm_observer_proj2d(*camera, root);
    // observer->ref();
-   
-    
-    // if (camera_type == 1) { //rational camera
-   //   proj2d_observer_simple->set_trans(rat_proj_cam.norm_trans()); 
-   // observer = proj2d_observer_simple;
-  } else {
-   // observer = new bwm_observer_proj2d(camera);
-    //if (camera_type == 1) { //rational camera
-    //  proj2d_observer->set_trans(rat_proj_cam.norm_trans()); 
-    //observer = proj2d_observer;
 
+   // if (camera_type == 1) //rational camera
+   //   proj2d_observer_simple->set_trans(rat_proj_cam.norm_trans());
+   // observer = proj2d_observer_simple;
+  }
+  else
+  {
+   // observer = new bwm_observer_proj2d(camera);
+   // if (camera_type == 1) //rational camera
+   //   proj2d_observer->set_trans(rat_proj_cam.norm_trans());
+   // observer = proj2d_observer;
   }
 
-  /*if (camera_type == 1) { //rational camera
-    observer->set_trans(rat_proj_cam.norm_trans()); 
-  }*/
+#if 0
+  if (camera_type == 1) { //rational camera
+    observer->set_trans(rat_proj_cam.norm_trans());
+  }
+#endif // 0
 
   bgui_image_tableau_sptr img = bgui_image_tableau_new();
   img->show_image_path(display_image_path_);
@@ -679,7 +690,7 @@ void bwm_tableau_mgr::create_proj2d_tableau(vcl_string name,
   tableaus_[name] = comp;
 }
 
-void bwm_tableau_mgr::create_lidar_tableau(vcl_string name, 
+void bwm_tableau_mgr::create_lidar_tableau(vcl_string name,
                                            vcl_string first_ret,
                                            vcl_string second_ret)
 {
@@ -687,7 +698,7 @@ void bwm_tableau_mgr::create_lidar_tableau(vcl_string name,
   bwm_load_lidar_command comm;
   vcl_map<vcl_string, bwm_command_sptr>::iterator iter = tab_types_.find(comm.name());
   if (iter == tab_types_.end()) {
-    vcl_cerr << "Lidar tableau type is not registered, not creating!" << vcl_endl;
+    vcl_cerr << "Lidar tableau type is not registered, not creating!\n";
     return;
   }
   float min_val = 20;
@@ -704,7 +715,7 @@ void bwm_tableau_mgr::create_lidar_tableau(vcl_string name,
 
   // second return may not be given, then we set it to NULL
   vil_image_resource_sptr res2 = 0;
-  if (second_ret.size() > 0) 
+  if (second_ret.size() > 0)
     res2 = vil_load_image_resource(second_ret.c_str());
 
   bgui_image_tableau_sptr img = bgui_image_tableau_new(res1, params);
@@ -724,8 +735,9 @@ void bwm_tableau_mgr::create_lidar_tableau(vcl_string name,
 void bwm_tableau_mgr::load_site()
 {
   bwm_io_config_parser* parser = parse_config();
-  
-  if (parser) {
+
+  if (parser)
+  {
     bwm_site_sptr site = parser->site();
     vcl_vector<bwm_io_tab_config* > tableaus;
     site->tableaus(tableaus);
@@ -735,9 +747,10 @@ void bwm_tableau_mgr::load_site()
     // if LVCS is not set, do not use it
     if (!lvcs||*lvcs == vsol_point_3d(0, 0, 0))
       lvcs = 0;
-  
-    // create the active tableaus 
-    for (unsigned i=0; i<tableaus.size(); i++) {
+
+    // create the active tableaux
+    for (unsigned i=0; i<tableaus.size(); i++)
+    {
       bwm_io_tab_config* t = tableaus[i];
       if (t->type_name.compare("ImageTableau") == 0) {
         bwm_io_tab_config_img* img_tab = static_cast<bwm_io_tab_config_img* > (t);
@@ -748,45 +761,44 @@ void bwm_tableau_mgr::load_site()
           create_img_tableau(name, path);
         } else
           inactive_tableaus_.push_back(img_tab);
-
-      } else if (t->type_name.compare("CameraTableau") == 0) {
+      }
+      else if (t->type_name.compare("CameraTableau") == 0) {
         bwm_io_tab_config_cam* cam_tab = static_cast<bwm_io_tab_config_cam* > (t);
         bool active = cam_tab->status;
         if (active) {
           BWM_CAMERA_TYPES cam_type;
-          if (cam_tab->cam_type.compare("projective") == 0) 
+          if (cam_tab->cam_type.compare("projective") == 0)
             cam_type = PROJECTIVE;
-          else if (cam_tab->cam_type.compare("rational") == 0) 
+          else if (cam_tab->cam_type.compare("rational") == 0)
             cam_type = RATIONAL;
           else {
-            vcl_cerr << "Unknown camera type " << cam_tab->cam_type << "coming from parser!" << vcl_endl;
+            vcl_cerr << "Unknown camera type " << cam_tab->cam_type << "coming from parser!\n";
             continue;
           }
           this->create_cam_tableau(cam_tab->name, cam_tab->img_path, cam_tab->cam_path, cam_type, lvcs);
-        } else 
+        } else
           inactive_tableaus_.push_back(cam_tab);
-
       } else if (t->type_name.compare("Coin3DTableau") == 0) {
         bwm_io_tab_config_coin3d* coin3d_tab = static_cast<bwm_io_tab_config_coin3d* > (t);
         bool active = coin3d_tab->status;
         if (active) {
           BWM_CAMERA_TYPES cam_type;
-          if (coin3d_tab->cam_type.compare("projective") ==0) 
+          if (coin3d_tab->cam_type.compare("projective") ==0)
             cam_type = PROJECTIVE;
-          else if (coin3d_tab->cam_type.compare("rational") ==0) 
+          else if (coin3d_tab->cam_type.compare("rational") ==0)
             cam_type = RATIONAL;
           else {
-            vcl_cerr << "Unknown camera type " << coin3d_tab->cam_type << "coming from parser!" << vcl_endl;
+            vcl_cerr << "Unknown camera type " << coin3d_tab->cam_type << "coming from parser!\n";
             continue;
           }
           this->create_coin3d_tableau(coin3d_tab->name, coin3d_tab->cam_path, cam_type);
-        } else 
+        } else
           inactive_tableaus_.push_back(coin3d_tab);
       }
     }
 
     // create the correspondences
-    vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > corresp; 
+    vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > corresp;
     parser->site()->correspondences(corresp);
     vcl_string mode = parser->site()->corresp_mode();
 
@@ -795,7 +807,8 @@ void bwm_tableau_mgr::load_site()
       assert (parser->site()->corresp_world_pts().size() == corresp.size());
     }
 
-    for (unsigned i=0; i<corresp.size(); i++) {
+    for (unsigned i=0; i<corresp.size(); i++)
+    {
       bwm_corr_sptr corr = new bwm_corr();
       vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > elm = corresp[i];
 
@@ -816,7 +829,7 @@ void bwm_tableau_mgr::load_site()
         Y = elm[j].second.y();
         vgui_tableau_sptr tab = this->find_tableau(tab_name);
         if (tab) {
-          if ((tab->type_name().compare("bwm_tableau_proj_cam") == 0) || 
+          if ((tab->type_name().compare("bwm_tableau_proj_cam") == 0) ||
             (tab->type_name().compare("bwm_tableau_rat_cam") == 0)) {
             bwm_tableau_cam* tab_cam = static_cast<bwm_tableau_cam*> (tab.as_pointer());
             bwm_observer_cam* obs = tab_cam->observer();
@@ -833,7 +846,8 @@ void bwm_tableau_mgr::load_site()
     // create the objects
     vcl_vector<vcl_pair<vcl_string, vcl_string> > objs;
     site->objects(objs);
-    for (unsigned i=0; i<objs.size(); i++) {
+    for (unsigned i=0; i<objs.size(); i++)
+    {
       vcl_string path = objs[i].first;
       vcl_string type = objs[i].second;
       if (path.size() > 0) {
@@ -859,14 +873,15 @@ void bwm_tableau_mgr::load_site()
     delete parser;
   }
 }
- 
+
 //: saves the site to an XML file
-void bwm_tableau_mgr::save_site() 
+void bwm_tableau_mgr::save_site()
 {
-  // get the tableaus
+  // get the tableaux
   bwm_site_sptr site;
   vcl_map<vcl_string, vgui_tableau_sptr>::iterator it = tableaus_.begin();
-  while (it != tableaus_.end())  {
+  while (it != tableaus_.end())
+  {
     vgui_tableau_sptr tab = it->second;
     vcl_string name = it->first;
     if (tab->type_name().compare("bwm_tableau_image")) {
@@ -878,19 +893,19 @@ void bwm_tableau_mgr::save_site()
       bwm_tableau_cam* cam_tab = static_cast<bwm_tableau_cam*> (tab.as_pointer());
       vcl_string img_path = cam_tab->observer()->file_name();
        vcl_string cam_path = cam_tab->observer()->camera_path();
-      bwm_io_tab_config_cam *t = new bwm_io_tab_config_cam(CAMERA_TABLEAU_TAG, 
+      bwm_io_tab_config_cam *t = new bwm_io_tab_config_cam(CAMERA_TABLEAU_TAG,
         name, "active", img_path, cam_path, "rational");
       site->tableaus_.push_back(t);
     } else if (tab->type_name().compare("bwm_tableau_proj_cam")) {
       bwm_tableau_cam* cam_tab = static_cast<bwm_tableau_cam*> (tab.as_pointer());
       vcl_string img_path = cam_tab->observer()->file_name();
        vcl_string cam_path = cam_tab->observer()->camera_path();
-      bwm_io_tab_config_cam *t = new bwm_io_tab_config_cam(CAMERA_TABLEAU_TAG, 
+      bwm_io_tab_config_cam *t = new bwm_io_tab_config_cam(CAMERA_TABLEAU_TAG,
         name, "active", img_path, cam_path, "projective");
       site->tableaus_.push_back(t);
-    } 
+    }
   }
-  // add the inactive tableaus
+  // add the inactive tableaux
   for (unsigned i=0; i<inactive_tableaus_.size(); i++) {
     site->tableaus_.push_back(inactive_tableaus_[i]);
   }
@@ -898,7 +913,7 @@ void bwm_tableau_mgr::save_site()
   // add the objects
   // ask one camera tableau to save its objects
   it = tableaus_.begin();
-  while (it != tableaus_.end())  {
+  while (it != tableaus_.end()) {
     vgui_tableau_sptr tab = it->second;
     vcl_string name = it->first;
     if (tab->type_name().compare("bwm_tableau_camera")) {
@@ -909,14 +924,14 @@ void bwm_tableau_mgr::save_site()
 }
 
 void bwm_tableau_mgr::load_img_tableau()
- {
-   vgui_dialog_extensions params ("Image Tableau");
-   vcl_string ext, name, img_file, empty="";
-   params.field("Tableau Name", name);
-   params.line_break();
-   params.dir("Image...", ext, img_file);
-   params.line_break();
-   params.set_modal(true);
+{
+  vgui_dialog_extensions params ("Image Tableau");
+  vcl_string ext, name, img_file, empty="";
+  params.field("Tableau Name", name);
+  params.line_break();
+  params.dir("Image...", ext, img_file);
+  params.line_break();
+  params.set_modal(true);
   if (!params.ask())
     return;
 
@@ -932,7 +947,7 @@ void bwm_tableau_mgr::load_img_tableau()
 
 
 void bwm_tableau_mgr::load_cam_tableau()
- {
+{
   vgui_dialog_extensions params ("Camera Tableau");
   vcl_string ext, name, img_file, cam_file, empty="";
   vcl_vector<vcl_string> camera_types;
@@ -943,11 +958,11 @@ void bwm_tableau_mgr::load_cam_tableau()
   camera_types.push_back("rational");
   params.field("Tableau Name", name);
   params.line_break();
-  params.dir("Image...", ext, img_file);  
+  params.dir("Image...", ext, img_file);
   params.line_break();
   params.choice("Camera Type", camera_types, camera_type);
   params.line_break();
-  params.file("Camera...", ext, cam_file);  
+  params.file("Camera...", ext, cam_file);
   params.line_break();
   if (!params.ask())
     return;
@@ -960,8 +975,8 @@ void bwm_tableau_mgr::load_cam_tableau()
   }
 
   create_cam_tableau(name, img_file, cam_file, camera_type);
- }
-    
+}
+
 void bwm_tableau_mgr::load_coin3d_tableau()
 {
   vgui_dialog params ("Coin3D Tableau");
@@ -971,12 +986,12 @@ void bwm_tableau_mgr::load_coin3d_tableau()
   //vpgl_camera<double> *camera = (vpgl_camera<double>*)0;
 
   camera_types.push_back("projective");
-  camera_types.push_back("rational");  
-    
+  camera_types.push_back("rational");
+
   vcl_string name;
   params.field("Tableau Name", name);
   params.choice("Camera Type", camera_types, camera_type);
-  params.file ("Camera...", ext, cam_file);  
+  params.file ("Camera...", ext, cam_file);
   if (!params.ask())
     return;
 
@@ -986,7 +1001,7 @@ void bwm_tableau_mgr::load_coin3d_tableau()
     error.ask();
     return;
   }
-  create_coin3d_tableau(name, cam_file, camera_type); 
+  create_coin3d_tableau(name, cam_file, camera_type);
 }
 
 
@@ -1002,10 +1017,10 @@ void bwm_tableau_mgr::load_proj2d_tableau()
 
   tableau_types.push_back("simple");
   tableau_types.push_back("self");
-  
+
   camera_types.push_back("projective");
-  camera_types.push_back("rational");  
-  
+  camera_types.push_back("rational");
+
   params.field("Name..", name);
   params.line_break();
   params.choice("Tableau Type", tableau_types, tableau_type);
@@ -1014,7 +1029,7 @@ void bwm_tableau_mgr::load_proj2d_tableau()
   params.line_break();
   params.choice("Camera Type", camera_types, camera_type);
   params.line_break();
-  params.file ("Camera...", ext, cam_file);  
+  params.file ("Camera...", ext, cam_file);
   params.line_break();
   if (!params.ask())
     return;
@@ -1076,22 +1091,19 @@ bwm_io_config_parser* bwm_tableau_mgr::parse_config()
   bwm_io_config_parser* parser = new bwm_io_config_parser();
   vcl_FILE* xmlFile = vcl_fopen(fname.c_str(), "r");
   if (!xmlFile){
-    fprintf(stderr, " %s error on opening", fname.c_str() );
+    vcl_cerr << fname.c_str() << " error on opening\n";
     delete parser;
-    return (0);
+    return 0;
   }
   if (!parser->parseFile(xmlFile)) {
-    fprintf(stderr,
-      "%s at line %d\n",
-      XML_ErrorString(parser->XML_GetErrorCode()),
-      parser->XML_GetCurrentLineNumber()
-      );
+    vcl_cerr << XML_ErrorString(parser->XML_GetErrorCode()) << " at line "
+             << parser->XML_GetCurrentLineNumber() << vcl_endl;
 
-     delete parser;
-     return 0;
-   }
-   vcl_cout << "finished!" << vcl_endl;
-   return parser;
+    delete parser;
+    return 0;
+  }
+  vcl_cout << "finished!" << vcl_endl;
+  return parser;
 }
 
 void bwm_tableau_mgr::remove_tableau()
@@ -1100,7 +1112,8 @@ void bwm_tableau_mgr::remove_tableau()
   grid_->get_last_selected_position(&col, &row);
   grid_->set_selected(row, col, false);
   vgui_tableau_sptr tab = grid_->get_tableau_at(col, row);
-  /*vgui_poly_tableau* poly = static_cast<vgui_poly_tableau* > (grid_.as_pointer());
+#if 0 // commented out
+  vgui_poly_tableau* poly = static_cast<vgui_poly_tableau* > (grid_.as_pointer());
   vgui_poly_tableau::iterator it = poly->begin();
   while (it != poly->end()) {
     vgui_poly_tableau::item t = *it;
@@ -1111,7 +1124,8 @@ void bwm_tableau_mgr::remove_tableau()
       return;
     }
     it++;
-  }*/
+  }
+#endif // 0
 
   vcl_map<vcl_string, vgui_tableau_sptr>::iterator iter = tableaus_.begin();
   while (iter != tableaus_.end()) {
@@ -1126,27 +1140,25 @@ void bwm_tableau_mgr::remove_tableau()
 }
 
 
-
-vil_image_resource_sptr bwm_tableau_mgr::load_image(vcl_string& filename, 
+vil_image_resource_sptr bwm_tableau_mgr::load_image(vcl_string& filename,
                                                     vgui_range_map_params_sptr& rmps)
 {
   vil_image_resource_sptr res;
 
     // if filename is a directory, assume pyramid image
-  if (vul_file::is_directory(filename)) {
-
+  if (vul_file::is_directory(filename))
+  {
     // if filename is a directory, assume pyramid image  if (vul_file::is_directory(filename)) {
     vil_pyramid_image_resource_sptr pyr = vil_load_pyramid_resource(filename.c_str());
 
     if (pyr) {
-
       res = pyr.ptr();
     }
     else {
       vcl_cerr << "error loading image pyramid "<< filename << vcl_endl;
       return 0;
     }
-  } 
+  }
   else {
     res = vil_load_image_resource(filename.c_str());
   }
@@ -1169,7 +1181,7 @@ range_params(vil_image_resource_sptr const& image)
 
   //Check if the image is blocked
   vil_blocked_image_resource_sptr bir = blocked_image_resource(image);
-  if (bir){ 
+  if (bir){
     gl_map = true;
     //cache = true;
     vcl_cout << "image is blocked.\n";
@@ -1180,7 +1192,7 @@ range_params(vil_image_resource_sptr const& image)
   //Check if the image is a pyramid
   bool pyr = image->get_property(vil_property_pyramid, 0);
   if (pyr){
-    gl_map = true; 
+    gl_map = true;
     //cache = true;
     vcl_cout << "image is a pyramid.\n";
   }else {
@@ -1209,29 +1221,29 @@ range_params(vil_image_resource_sptr const& image)
 }
 
 vpgl_proj_camera<double>
-bwm_tableau_mgr::read_projective_camera(vcl_string cam_path){
-
+bwm_tableau_mgr::read_projective_camera(vcl_string cam_path)
+{
   vcl_ifstream cam_stream(cam_path.data());
   vpgl_proj_camera<double> cam;
   cam_stream >> cam;
   //vcl_cout << cam << vcl_endl;
-  
+
   return cam;
 }
 
-//: manages creating new tableaus on the grid, decides on the layout 
-// of the grid based on the number of current tableaus
+//: manages creating new tableaux on the grid.
+// Decides on the layout of the grid based on the number of current tableaux.
 void bwm_tableau_mgr::add_to_grid(vgui_tableau_sptr tab, unsigned& col,
                                   unsigned& row)
 {
    if (tableaus_.size() == 0)
   {
     grid_->add_next(tab, col, row);
-    return;  
+    return;
    }
 
   // it alternatively adds rows and colums, to equally divide the grid
-  if ((tableaus_.size()%2 == 0) && (grid_->rows()*grid_->cols() == tableaus_.size()))  {
+  if ((tableaus_.size()%2 == 0) && (grid_->rows()*grid_->cols() == tableaus_.size())) {
     if (row_added_) {
       grid_->add_column();
       row_added_ = false;
@@ -1260,7 +1272,6 @@ vgui_tableau_sptr bwm_tableau_mgr::find_tableau(vcl_string name)
 
 vcl_vector<vcl_string> bwm_tableau_mgr::coin3d_tableau_names()
 {
-  
   vcl_map<vcl_string, vgui_tableau_sptr>::iterator iter = tableaus_.begin();
   vcl_vector<vcl_string> names(0);
 
@@ -1271,5 +1282,3 @@ vcl_vector<vcl_string> bwm_tableau_mgr::coin3d_tableau_names()
   }
   return names;
 }
-
-
