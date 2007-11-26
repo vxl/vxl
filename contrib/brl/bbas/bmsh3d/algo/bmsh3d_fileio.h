@@ -106,7 +106,7 @@ bool bmsh3d_load(bmsh3d_mesh* M, const char* file, const char* format = "DEFAULT
 //: save a mesh to a .ply file 
 // ascii_mode = true : save an ascii PLY file
 // ascii_mode = false : save a binary PLY file
-bool bmsh3d_save_ply (bmsh3d_mesh* M, const char* file, bool ascii_mode = true);
+bool bmsh3d_save_ply (bmsh3d_mesh* M, const char* file, bool ascii_mode = true, vcl_string comment="");
 
 //: load a .ply file (ascii or binary)
 bool bmsh3d_load_ply (bmsh3d_mesh* M, const char* file);

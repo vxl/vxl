@@ -238,7 +238,7 @@ int bmsh3d_fileio_face_cb_(p_ply_argument argument)
 // ----------------------------------------------------------------------------
 //: save mesh to a .ply file
 // This implementation uses LITTLE_ENDIAN and uses '\n' for new line
-bool bmsh3d_save_ply (bmsh3d_mesh* M, const char* file, bool ascii_mode)
+bool bmsh3d_save_ply (bmsh3d_mesh* M, const char* file, bool ascii_mode, vcl_string comment)
 {
   // determine storage mode
   e_ply_storage_mode storage_mode = (ascii_mode) ? PLY_ASCII : PLY_LITTLE_ENDIAN;
@@ -261,7 +261,10 @@ bool bmsh3d_save_ply (bmsh3d_mesh* M, const char* file, bool ascii_mode)
   ply_add_list_property(oply, "vertex_indices", PLY_UCHAR, PLY_INT);
 
   // comment
-  ply_add_comment(oply, "created by bmsh3d_save_ply");
+  if (comment.size() == 0)
+    ply_add_comment(oply, "created by bmsh3d_save_ply");
+  else 
+    ply_add_comment(oply, comment.c_str());
 
   // object info
   ply_add_obj_info(oply, "an bmsh3d_mesh object");
