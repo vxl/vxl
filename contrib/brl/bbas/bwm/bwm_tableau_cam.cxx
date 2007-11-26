@@ -81,7 +81,7 @@ class bwm_create_inner_face_command : public vgui_command
 
 class bwm_move_corr_command: public vgui_command
 {
-  public:
+ public:
   bwm_move_corr_command(bwm_tableau_cam* t) : tab(t) {}
   void execute() { tab->move_corr(); }
 
@@ -90,7 +90,7 @@ class bwm_move_corr_command: public vgui_command
 
 class bwm_set_corr_to_vertex_command: public vgui_command
 {
-  public:
+ public:
   bwm_set_corr_to_vertex_command(bwm_tableau_cam* t) : tab(t) {}
   void execute() { tab->set_corr_to_vertex(); }
 
@@ -99,7 +99,7 @@ class bwm_set_corr_to_vertex_command: public vgui_command
 
 class bwm_world_pt_corr_command: public vgui_command
 {
-  public:
+ public:
   bwm_world_pt_corr_command(bwm_tableau_cam* t) : tab(t) {}
   void execute() { tab->world_pt_corr(); }
 
@@ -206,29 +206,29 @@ class bwm_cam_help_command : public vgui_command
 };
 
 
-void bwm_tableau_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu) {
-    
+void bwm_tableau_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu)
+{
   bwm_tableau_img::get_popup(params, menu);
 
 
   vgui_menu mesh_submenu;
   mesh_submenu.add( "Set as Master", new bwm_set_master_command(this));
   mesh_submenu.separator();
-  mesh_submenu.add("Mesh Poly", new bwm_create_mesh_command(this), 
+  mesh_submenu.add("Mesh Poly", new bwm_create_mesh_command(this),
     vgui_key('p'), vgui_modifier(vgui_SHIFT) );
   mesh_submenu.separator();
-  mesh_submenu.add("Load from File..", 
-    new vgui_command_simple<bwm_tableau_cam>(this,&bwm_tableau_cam::load_mesh), 
+  mesh_submenu.add("Load from File..",
+    new vgui_command_simple<bwm_tableau_cam>(this,&bwm_tableau_cam::load_mesh),
     vgui_key('p'), vgui_modifier(vgui_SHIFT) );
-  mesh_submenu.add("Triangulate..", new bwm_tri_mesh_command(this), 
+  mesh_submenu.add("Triangulate..", new bwm_tri_mesh_command(this),
     vgui_key('t'), vgui_modifier(vgui_SHIFT));
   mesh_submenu.separator();
   mesh_submenu.add( "Create Inner Face", new bwm_create_inner_face_command(this));
   mesh_submenu.separator();
-  mesh_submenu.add( "Move Face with Selected Vertex", new bwm_move_vertex_command(this), 
+  mesh_submenu.add( "Move Face with Selected Vertex", new bwm_move_vertex_command(this),
     vgui_key('m'), vgui_modifier(vgui_SHIFT));
   mesh_submenu.separator();
-  mesh_submenu.add( "Extrude Face", new bwm_extrude_command(this), 
+  mesh_submenu.add( "Extrude Face", new bwm_extrude_command(this),
     vgui_key('e'), vgui_modifier(vgui_SHIFT));
   mesh_submenu.separator();
   mesh_submenu.add( "Divide Face", new bwm_divide_command(this));
@@ -268,9 +268,9 @@ void bwm_tableau_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu
   menu.add("Label", label_submenu);
 
   menu.separator();
-  menu.add( "HELP..." , new bwm_cam_help_command(this), 
+  menu.add( "HELP..." , new bwm_cam_help_command(this),
     vgui_key('h'),vgui_modifier(vgui_SHIFT));
-#endif  
+#endif
 }
 
 void bwm_tableau_cam::create_polygon_mesh()
@@ -281,10 +281,10 @@ void bwm_tableau_cam::create_polygon_mesh()
   vsol_polygon_2d_sptr poly2d;
   set_color(1, 0, 0);
   pick_polygon(poly2d);
-  if(! poly2d){
-	  vcl_cerr << "In bwm_tableau_cam::create_polygon_mesh -"
-		  << " pick_polygon failed \n";
-	  return ;
+  if (! poly2d){
+    vcl_cerr << "In bwm_tableau_cam::create_polygon_mesh -"
+             << " pick_polygon failed\n";
+    return ;
   }
   vsol_polygon_3d_sptr poly3d;
   my_observer_->backproj_poly(poly2d, poly3d);
@@ -304,15 +304,15 @@ void bwm_tableau_cam::set_master()
   bwm_observer_mgr::BWM_MASTER_OBSERVER = this->my_observer_;
 }
 
-void bwm_tableau_cam::move_obj_by_vertex() {
-
+void bwm_tableau_cam::move_obj_by_vertex()
+{
   // first check if master tableau is set
   bwm_observer_cam* mt = bwm_observer_mgr::BWM_MASTER_OBSERVER;
   if (mt == 0) {
-    vcl_cerr << "Master Tableau is not selected, please select one different than the current one!" << vcl_endl;
+    vcl_cerr << "Master Tableau is not selected, please select one different than the current one!\n";
     return;
   } else if (mt == this->my_observer_) {
-    vcl_cerr << "Please select a tableau different than the current one!" << vcl_endl;
+    vcl_cerr << "Please select a tableau different than the current one!\n";
     return;
   }
 
@@ -331,7 +331,6 @@ void bwm_tableau_cam::extrude_face()
   pick_point(&x, &y);
   vsol_point_2d_sptr pt = new vsol_point_2d((double)x,(double)y);
   my_observer_->extrude_face(pt);
-
 }
 
 void bwm_tableau_cam::divide_face()
@@ -344,8 +343,9 @@ void bwm_tableau_cam::divide_face()
   if (obj) {
     pick_line(&x1, &y1, &x2, &y2);
     my_observer_->divide_face(obj, face_id, x1, y1, x2, y2);
-  } else
-    vcl_cerr << "Please first select the face to be divided" << vcl_endl;
+  }
+  else
+    vcl_cerr << "Please first select the face to be divided\n";
 }
 
 void bwm_tableau_cam::create_inner_face()
@@ -388,7 +388,7 @@ void bwm_tableau_cam::define_proj_plane()
   // pick the ground truth line
   float x1, y1, x2, y2;
   pick_line(&x1, &y1, &x2, &y2);
-  vcl_cout << "(" << x1 << "," << y1 << ")" << "(" << x2 << "," << y2 << ")" << vcl_endl;
+  vcl_cout << '(' << x1 << ',' << y1 << ')' << '(' << x2 << ',' << y2 << ')' << vcl_endl;
   my_observer_->set_ground_plane(x1, y1, x2, y2);
 }
 
@@ -456,12 +456,12 @@ void bwm_tableau_cam::load_mesh_multiple()
     return;
   }
 
-  while(!file_inp.eof()){
+  while (!file_inp.eof()) {
     vcl_ostringstream fullpath;
     vcl_string mesh_fname;
     file_inp >> mesh_fname;
     if (!mesh_fname.empty() && (mesh_fname[0] != '#')) {
-      fullpath << master_filename << "." << mesh_fname;
+      fullpath << master_filename << '.' << mesh_fname;
       // load the mesh from the given file
       bwm_observable_mesh_sptr obj = new bwm_observable_mesh();
       bwm_observer_mgr::instance()->attach(obj);
@@ -501,7 +501,7 @@ void bwm_tableau_cam::scroll_to_point()
 void bwm_tableau_cam::help_pop()
 {
   bwm_tableau_text* text = new bwm_tableau_text(500, 500);
-  
+
   text->set_text("C:\\lems\\lemsvxlsrc\\lemsvxlsrc\\contrib\\bwm\\doc\\doc\\HELP_cam.txt");
   vgui_tableau_sptr v = vgui_viewer2D_tableau_new(text);
   vgui_tableau_sptr s = vgui_shell_tableau_new(v);

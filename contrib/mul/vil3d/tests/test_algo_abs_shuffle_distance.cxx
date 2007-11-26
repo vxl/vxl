@@ -9,20 +9,20 @@ static void asd_fill_image(vil3d_image_view<int>& image)
 {
   for (unsigned j=0;j<image.nj();++j)
     for (unsigned i=0;i<image.ni();++i)
-			for (unsigned k=0;k<image.nk();++k)
-				image(i,j,k)= int(i);
+      for (unsigned k=0;k<image.nk();++k)
+        image(i,j,k)= int(i);
 }
 
 static void test_algo_abs_shuffle_distance()
 {
-  vcl_cout << "***********************************\n"
+  vcl_cout << "************************************\n"
            << " Testing vil3d_abs_shuffle_distance\n"
-           << "***********************************\n";
+           << "************************************\n";
 
-	unsigned Nx=50;
-	unsigned Ny=45;
-	unsigned Nz=55;
-	vil3d_image_view<int> image0(Nx,Ny,Nz);
+  unsigned Nx=50;
+  unsigned Ny=45;
+  unsigned Nz=55;
+  vil3d_image_view<int> image0(Nx,Ny,Nz);
 
   vil3d_structuring_element se;
   se.set_to_sphere(1.5);
@@ -52,7 +52,6 @@ static void test_algo_abs_shuffle_distance()
   vcl_cout<<"Structuring element: "<<se<<vcl_endl;
   TEST_NEAR("Shuffle dist to self, 2 pixel displacement",
             vil3d_abs_shuffle_distance(sub_im1,sub_im3,se,false),0.0,1e-6);
-
 }
 
 TESTMAIN(test_algo_abs_shuffle_distance);

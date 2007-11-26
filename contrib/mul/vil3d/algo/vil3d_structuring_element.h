@@ -51,7 +51,7 @@ class vil3d_structuring_element
   //  Select pixels in disk s.t. x*x+y*y+z*z<=r^r
   void set_to_sphere(double r);
 
-	//: Set to sphere of radius r, but with non isotropic voxel sizes
+  //: Set to sphere of radius r, but with non isotropic voxel sizes
   //  Select pixels in disk s.t. x*x+y*y+z*z<=r^r
   void set_to_sphere_noniso(double r, double sx, double sy, double sz);
 

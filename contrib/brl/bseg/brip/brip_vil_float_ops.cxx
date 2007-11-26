@@ -41,7 +41,7 @@ static float cross_corr(double area, double si1, double si2,
     return -1.f;
   double neu = si1i2 - area*u1*u2;
   double sd1 = vcl_sqrt(vcl_fabs(si1i1-area*u1*u1)),
-	  sd2 = vcl_sqrt(vcl_fabs(si2i2-area*u2*u2));
+         sd2 = vcl_sqrt(vcl_fabs(si2i2-area*u2*u2));
   if (!neu)
     return 0.f;
   if (!sd1||!sd2)
@@ -524,7 +524,7 @@ vil_image_resource_sptr brip_vil_float_ops::negate(vil_image_resource_sptr const
   vil_image_resource_sptr outr;
   if (!imgr)
     return outr;
-  
+
   vil_pixel_format fmt = imgr->pixel_format();
   switch (fmt)
   {
@@ -939,6 +939,7 @@ brip_vil_float_ops::Lucas_KanadeMotion(vil_image_view<float> & current_frame,
   vcl_cout << "\nCompute Lucas-Kanade in " << t.real() << " msecs.\n";
 #endif
 }
+
 //: computes Lucas-Kanade optical flow on the complete input views
 void brip_vil_float_ops::
 lucas_kanade_motion_on_view(vil_image_view<float> const& curr_frame,
@@ -954,7 +955,7 @@ lucas_kanade_motion_on_view(vil_image_view<float> const& curr_frame,
   grad_y.set_size(w,h);
   //compute the gradient vector and the time derivative
   brip_vil_float_ops::gradient_3x3(curr_frame, grad_x, grad_y);
-  vil_image_view<float> diff = 
+  vil_image_view<float> diff =
     brip_vil_float_ops::difference(prev_frame, curr_frame);
 
   //sum the motion terms over the view
@@ -978,18 +979,19 @@ lucas_kanade_motion_on_view(vil_image_view<float> const& curr_frame,
   float dif = vcl_sqrt(dsum);
   float motion_factor = vcl_fabs(det*dif);
   if (motion_factor<thresh)
-    {
-      vx = 0.0f;
-      vy = 0.0f;
-      return;
-    }
+  {
+    vx = 0.0f;
+    vy = 0.0f;
+    return;
+  }
   //solve for the motion vector
   vx = (IyIy*IxIt-IxIy*IyIt)/det;
   vy = (-IxIy*IxIt + IxIx*IyIt)/det;
 }
+
 //------------------------------------------------------------------------
 // Assume that curr mtch region is larger than prev_region by the required
-// search ranges. Step through the search and output the shift that 
+// search ranges. Step through the search and output the shift that
 // maximizes the correlation. zero_i and zero_j indicate the curr_image
 // pixel location corresponding to no velocity between frames
 void brip_vil_float_ops::
@@ -1006,37 +1008,38 @@ velocity_by_correlation(vil_image_view<float> const& curr_image,
   float vx0 = static_cast<float>(zero_i);
   float vy0 = static_cast<float>(zero_j);
   float area = static_cast<float>(ni*nj);
-  vx = 0; vy = 0; 
+  vx = 0; vy = 0;
   unsigned max_i = start_i, max_j = start_j;
-  for(unsigned j = start_j; j<=end_j; ++j)
-    for(unsigned i = start_i; i<=end_i; ++i)
+  for (unsigned j = start_j; j<=end_j; ++j)
+    for (unsigned i = start_i; i<=end_i; ++i)
+    {
+      float si1 = 0, si2 = 0, si1i1 = 0, si2i2 = 0, si1i2 = 0;
+      //sum over the region
+      for (unsigned r = 0; r<nj; ++r)
+        for (unsigned c = 0; c<ni; ++c)
+        {
+          float I1 = prev_region(c, r);
+          float I2 = curr_image(i+c, j+r);
+          si1 += I1; si2 += I2;
+          si1i1 += I1*I1;
+          si2i2 += I2*I2;
+          si1i2 += I1*I2;
+        }
+      float corr = cross_corr(area, si1, si2, si1i1, si2i2,si1i2, 1.0f);
+      if (corr>corr_max)
       {
-        float si1 = 0, si2 = 0, si1i1 = 0, si2i2 = 0, si1i2 = 0; 
-        //sum over the region
-        for(unsigned r = 0; r<nj; ++r)
-          for(unsigned c = 0; c<ni; ++c)
-            {
-              float I1 = prev_region(c, r);
-              float I2 = curr_image(i+c, j+r);
-              si1 += I1; si2 += I2;
-              si1i1 += I1*I1;
-              si2i2 += I2*I2;
-              si1i2 += I1*I2;
-            }
-        float corr = cross_corr(area, si1, si2, si1i1, si2i2,si1i2, 1.0f);
-        if(corr>corr_max)
-          {
-            corr_max = corr;
-            max_i = i; max_j = j; 
-          }
-        float di = i-vx0, dj = j-vy0;
-        //vcl_cout <<  di << '\t' << dj << '\t' << corr << '\n';
+        corr_max = corr;
+        max_i = i; max_j = j;
       }
+      float di = i-vx0, dj = j-vy0;
+      //vcl_cout <<  di << '\t' << dj << '\t' << corr << '\n';
+    }
   // the velocity is given by the max indices relative to the zero location
   vx = static_cast<float>(max_i)- vx0;
   vy = static_cast<float>(max_j) - vy0;
- // vcl_cout << "(" << vx << ' ' << vy << "): " << corr_max << '\n';
+ // vcl_cout << '(' << vx << ' ' << vy << "): " << corr_max << '\n';
 }
+
 //---------------------------------------------------------------------
 // Horn-Schunk method for calc. motion vectors:  Solve for the motion vectors
 // iteratively using a cost function with two terms (RHS of optical flow eqn
@@ -1416,13 +1419,13 @@ brip_vil_float_ops::convert_to_short(vil_image_resource_sptr const& image)
     short_image.set_size(width, height);
     for (unsigned y = 0; y<height; y++)
       for (unsigned x = 0; x<width; x++)
-        {
-          unsigned short v = 0;
-          for(unsigned p = 0; p<4; ++p)
-            v += mband_image(x, y, p);
-          v/=4;
-          short_image(x,y) = v;
-        }
+      {
+        unsigned short v = 0;
+        for (unsigned p = 0; p<4; ++p)
+          v += mband_image(x, y, p);
+        v/=4;
+        short_image(x,y) = v;
+      }
     return short_image;
   }
   //If we get here then the input is not a type we handle so return a null view
@@ -3228,6 +3231,7 @@ bool brip_vil_float_ops::minfo(const unsigned i_radius,
   }
     return true;
 }
+
 //compute the average of the image intensity within the specified region
 float brip_vil_float_ops::
 average_in_box(vil_image_view<float> const& v, vgl_box_2d<double> const&  box)
@@ -3238,10 +3242,10 @@ average_in_box(vil_image_view<float> const& v, vgl_box_2d<double> const&  box)
   unsigned i1 = static_cast<unsigned>(p1.x()), j1 = static_cast<unsigned>(p1.y());
   float n = 0;
   float sum = 0;
-  for(unsigned i = i0; i<=i1; ++i)
-    for(unsigned j = j0; j<=j1; ++j, ++n)
+  for (unsigned i = i0; i<=i1; ++i)
+    for (unsigned j = j0; j<=j1; ++j, ++n)
       sum += v(i,j);
-  if(n>0)
+  if (n>0)
     sum /= n;
   return sum;
 }

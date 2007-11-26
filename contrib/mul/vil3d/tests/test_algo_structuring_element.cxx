@@ -30,7 +30,7 @@ static void test_algo_structuring_element()
   se.set_to_sphere(1.1);
   TEST("Number of elements in sphere",se.p_i().size(),7);
 
-	se.set_to_sphere_noniso(1.6,1.0,1.5,1.0);
+  se.set_to_sphere_noniso(1.6,1.0,1.5,1.0);
   TEST("Number of elements in non-iso (1x1.5x1) sphere",se.p_i().size(),11);
 
   se.set_to_sphere_noniso(1.9,1.0,1.5,1.0);

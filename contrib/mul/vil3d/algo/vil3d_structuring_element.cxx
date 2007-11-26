@@ -60,15 +60,15 @@ void vil3d_structuring_element::set_to_sphere(double r)
 }
 
 //: Set to sphere of radius r, but with non isotropic voxel sizes
-//	Voxel size supplied in sx,sy and sz. r then becomes an absolute radius
+//  Voxel size supplied in sx,sy and sz. r then becomes an absolute radius
 //  Select pixels in disk s.t. x*x+y*y+z*z<=r^r
 void vil3d_structuring_element::set_to_sphere_noniso(double r, double sx, double sy, double sz)
 {
   vcl_vector<int> px,py,pz;
   double r2 = r*r;
-	double sx2 = sx*sx;
-	double sy2 = sy*sy;
-	double sz2 = sz*sz;
+  double sx2 = sx*sx;
+  double sy2 = sy*sy;
+  double sz2 = sz*sz;
   int r0 = int(r+1);
   for (int k=-r0;k<=r0;++k)
     for (int j=-r0;j<=r0;++j)
