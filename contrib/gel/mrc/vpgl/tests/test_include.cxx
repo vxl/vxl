@@ -2,6 +2,7 @@
 #include <vpgl/vpgl_affine_fundamental_matrix.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vpgl/vpgl_camera.h>
+#include <vpgl/vpgl_comp_rational_camera.h>
 #include <vpgl/vpgl_essential_matrix.h>
 #include <vpgl/vpgl_fundamental_matrix.h>
 #include <vpgl/vpgl_lens_distortion.h>

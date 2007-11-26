@@ -5,6 +5,8 @@
 #include <mbl/mbl_clamped_plate_spline_2d.h>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <mbl/mbl_cloneables_factory.h>
+#include <mbl/mbl_cluster_tree.h>
+#include <mbl/mbl_clusters.h>
 #include <mbl/mbl_combination.h>
 #include <mbl/mbl_correspond_points.h>
 #include <mbl/mbl_data_array_ptr_wrapper.h>
@@ -32,6 +34,7 @@
 #include <mbl/mbl_minimum_spanning_tree.h>
 #include <mbl/mbl_mod_gram_schmidt.h>
 #include <mbl/mbl_parse_block.h>
+#include <mbl/mbl_parse_sequence.h>
 #include <mbl/mbl_print.h>
 #include <mbl/mbl_priority_bounded_queue.h>
 #include <mbl/mbl_progress.h>
@@ -62,6 +65,7 @@
 #include <mbl/mbl_thin_plate_spline_2d.h>
 #include <mbl/mbl_thin_plate_spline_3d.h>
 #include <mbl/mbl_thin_plate_spline_weights_3d.h>
+#include <mbl/mbl_vector_distance.h>
 #include <mbl/mbl_wt_histogram.h>
 
 int main() { return 0; }

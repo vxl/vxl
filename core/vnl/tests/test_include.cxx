@@ -101,6 +101,7 @@
 #include <vnl/vnl_scalar_join_iterator.h>
 #include <vnl/vnl_sparse_matrix.h>
 #include <vnl/vnl_sparse_matrix_linear_system.h>
+#include <vnl/vnl_sse.h>
 #include <vnl/vnl_sym_matrix.h>
 #include <vnl/vnl_tag.h>
 #include <vnl/vnl_trace.h>

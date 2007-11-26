@@ -7,6 +7,7 @@
 #include <sdet/sdet_fit_conics_params.h>
 #include <sdet/sdet_fit_lines.h>
 #include <sdet/sdet_fit_lines_params.h>
+#include <sdet/sdet_gauss_fit.h>
 #include <sdet/sdet_grid_finder.h>
 #include <sdet/sdet_grid_finder_params.h>
 #include <sdet/sdet_harris_detector.h>

@@ -22,6 +22,7 @@
 #include <vil/algo/vil_find_peaks.h>
 #include <vil/algo/vil_find_plateaus.h>
 #include <vil/algo/vil_fft.h>
+#include <vil/algo/vil_flood_fill.h>
 #include <vil/algo/vil_gauss_filter.h>
 #include <vil/algo/vil_gauss_reduce.h>
 #include <vil/algo/vil_greyscale_closing.h>

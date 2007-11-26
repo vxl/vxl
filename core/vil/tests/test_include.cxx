@@ -2,6 +2,7 @@
 #include <vil/vil_bilin_interp.h>
 #include <vil/vil_block_cache.h>
 #include <vil/vil_border.h>
+#include <vil/vil_chord.h>
 #include <vil/vil_clamp.h>
 #include <vil/vil_color_table.h>
 #include <vil/vil_convert.h>

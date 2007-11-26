@@ -22,6 +22,7 @@
 #include <vnl/algo/vnl_generalized_eigensystem.h>
 #include <vnl/algo/vnl_generalized_schur.h>
 #include <vnl/algo/vnl_lbfgs.h>
+#include <vnl/algo/vnl_lbfgsb.h>
 #include <vnl/algo/vnl_ldl_cholesky.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/algo/vnl_lsqr.h>

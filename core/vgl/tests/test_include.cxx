@@ -56,6 +56,7 @@
 #include <vgl/algo/vgl_h_matrix_2d_compute.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_4point.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
+#include <vgl/algo/vgl_h_matrix_2d_compute_rigid_body.h>
 #include <vgl/algo/vgl_h_matrix_2d_optimize.h>
 #include <vgl/algo/vgl_h_matrix_2d_optimize_lmq.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
@@ -67,5 +68,6 @@
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/algo/vgl_p_matrix.h>
 #include <vgl/algo/vgl_rtree.h>
+#include <vgl/vgl_tolerance.h>
 
 int main() { return 0; }
