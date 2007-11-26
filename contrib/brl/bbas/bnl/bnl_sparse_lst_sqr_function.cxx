@@ -335,7 +335,7 @@ bnl_sparse_lst_sqr_function::fd_jac_Bij(int i, int j, vnl_vector<double> const& 
 void bnl_sparse_lst_sqr_function::trace(int /* iteration */,
                                         vcl_vector<vnl_vector<double> > const& /*a*/,
                                         vcl_vector<vnl_vector<double> > const& /*b*/,
-                                        vcl_vector<vnl_vector<double> > const& /*e**/)
+                                        vcl_vector<vnl_vector<double> > const& /*e*/)
 {
   // This default implementation is empty; overloaded in derived class.
 }

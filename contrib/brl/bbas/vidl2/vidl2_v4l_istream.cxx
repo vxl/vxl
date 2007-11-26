@@ -231,8 +231,8 @@ bool vidl2_v4l_istream::advance()
         }
         if (i < 0) {
             perror("VIDIOCSYNC");
-            /* You may want to exit here, because something has gone
-               pretty badly wrong... */
+            // You may want to exit here, because something has gone
+            // pretty badly wrong...
             return false;
         }
         break;
