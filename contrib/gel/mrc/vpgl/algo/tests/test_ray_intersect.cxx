@@ -1,17 +1,9 @@
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
-#include <vnl/vnl_double_2.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_double_4.h>
 #include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_distance.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/algo/vpgl_ray_intersect.h>
-
-
 
 static void test_ray_intersect()
 {
@@ -43,14 +35,14 @@ static void test_ray_intersect()
       5.09931e-005 , 2.74573e-007 , -4.63648e-006 , 0.000667711,
       1.2639e-007 , -2.19341e-005 , 0.000132914 , 1};
   //Scale and offsets
-  
+
   double sx1 = 0.1039, ox1 = 44.3542 ;
   double sy1 = 0.1129, oy1 = 33.1855;
   double sz1 = 501, oz1 = 32;
   double su1 = 13834, ou1 = 13792;
   double sv1 = 15787, ov1 = 15430;
 
-  vpgl_rational_camera<double> rcam1(neu_u1, den_u1, neu_v1, den_v1, 
+  vpgl_rational_camera<double> rcam1(neu_u1, den_u1, neu_v1, den_v1,
                                      sx1, ox1, sy1, oy1, sz1, oz1,
                                      su1, ou1, sv1, ov1);
 
@@ -80,7 +72,7 @@ static void test_ray_intersect()
      1.38401e-008 , 0.000194293 , -0.000127965 , -6.45576e-006,
      0.00020888 , -4.60266e-006 , 3.66616e-006 , 0.000356873,
      -1.88117e-006 , -9.17403e-005 , 0.000404611 , 1};
-  
+
   //Scale and offsets
   double sx2 = 0.0902, ox2 =44.2278 ;
   double sy2 = 0.1011, oy2 =33.25 ;
@@ -89,7 +81,7 @@ static void test_ray_intersect()
   //  double su2 = 13800, ou2 = 13759+251;
   double sv2 = 18330, ov2 = 18284;
   //double sv2 = 18330, ov2 = 18284-535;
-  vpgl_rational_camera<double> rcam2(neu_u2, den_u2, neu_v2, den_v2, 
+  vpgl_rational_camera<double> rcam2(neu_u2, den_u2, neu_v2, den_v2,
                                      sx2, ox2, sy2, oy2, sz2, oz2,
                                      su2, ou2, sv2, ov2);
   //project a point from the center of the valid region of camera 1
@@ -97,8 +89,8 @@ static void test_ray_intersect()
   vgl_point_3d<double> p3d(44.255196,33.284970 , 32);
   p1 = rcam1.project(p3d);
   p2 = rcam2.project(p3d);
-  vcl_cout << "Projected point from rcam 1 " << p1 << '\n';
-  vcl_cout << "Projected point from rcam 2 " << p2 << '\n';
+  vcl_cout << "Projected point from rcam 1 " << p1 << '\n'
+           << "Projected point from rcam 2 " << p2 << '\n';
   vcl_vector<vpgl_camera<double>* > cams(2);
   cams[0]= (vpgl_camera<double>*)(&rcam1);
   cams[1]= (vpgl_camera<double>*)(&rcam2);
@@ -106,11 +98,12 @@ static void test_ray_intersect()
   image_pts.push_back(p1);   image_pts.push_back(p2);
   vpgl_ray_intersect ri(2);
   vgl_point_3d<double> intersection;
-  vgl_point_3d<double> initial_point(44.3542,33.1855 ,32);	
-  bool success = ri.intersect(cams, image_pts, initial_point, intersection);
+  vgl_point_3d<double> initial_point(44.3542,33.1855 ,32);
+  /*bool success =*/ ri.intersect(cams, image_pts, initial_point, intersection);
   vcl_cout << "Result " << intersection << '\n';
   TEST_NEAR("test ray_intersection", vcl_fabs(44.2552-intersection.x())+
             vcl_fabs(33.285-intersection.y())+
             vcl_fabs(32.001-intersection.z()),0 , 0.001);
 }
+
 TESTMAIN(test_ray_intersect);
