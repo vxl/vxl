@@ -273,7 +273,7 @@ void bmsh3d_mesh::sort_V_incident_Es ()
     bmsh3d_vertex* V = (*vit).second;
 
     vcl_vector<bmsh3d_edge*> edges;
-    int count = 0;
+    unsigned int count = 0;
     bmsh3d_ptr_node* cur = (bmsh3d_ptr_node*) V->E_list();
     for (; cur != NULL; cur = cur->next()) {
       bmsh3d_edge* E = (bmsh3d_edge*) cur->ptr();
@@ -296,23 +296,18 @@ bool bmsh3d_mesh::valid_conn ()
 {
   bool result = bmsh3d_ifs_mesh::valid_conn ();
   if (result == false)
-    return false;
+    return result;
 
   // go through each linkElm and validate the halfedge list and incident faces
   vcl_map<int, bmsh3d_edge*>::iterator lit = edgemap_.begin();
   for (; lit != edgemap_.end(); lit++) {
     bmsh3d_edge* edge = (*lit).second;
 
-    int count = 0;
     bmsh3d_halfedge* he = edge->halfedge();
-    do {
-      // End of Remove of comment lines
-      count++;
-      he = he->pair();
-    }
+    do { he = he->pair(); }
     while (he != edge->halfedge() && he != NULL );
   }
 
-  return result;
+  return result; // true
 }
 #endif // 0
