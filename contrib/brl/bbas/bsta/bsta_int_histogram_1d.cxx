@@ -3,8 +3,7 @@
 //:
 // \file
 
-// for gausian parzan window filter
-#include <bsta/bsta_gauss.h>
+#include <bsta/bsta_gauss.h> // for gausian parzan window filter
 
 // constructor
 bsta_int_histogram_1d::bsta_int_histogram_1d(unsigned int bins) // const??
@@ -168,8 +167,10 @@ bool bsta_int_histogram_1d::find_peaks( float perct, int &n_peaks, vcl_vector<un
 
   // Set up some indices for algorithm
   bool direction = true;        // true = look for peak, false = look for valley
+#if 0 // unused variables ?!
   bool past_p_thresh = false;      // is delta from last valley large enough for new peak?
   bool past_v_thresh = false;      // is delta from last peak large enough for new valley?
+#endif // 0
   long int last_p_val = 0;        // height of last peak
   unsigned int last_p_index = 0;    // index of last peak
   long int last_v_val = 0;        // height of last valley
