@@ -131,42 +131,42 @@ void test_perspective_compute()
   }
   J[0][5] = 0.5;   J[1][5] = 1.0;  J[2][5] = -0.5;  J[3][5] = 1.0;
 
- vnl_matrix_fixed<double, 3, 3> pr = rr.as_matrix();
- vnl_matrix_fixed<double, 3, 4> P;
- for (unsigned r = 0; r<3; ++r)
- {
-   for (unsigned c = 0; c<3; ++c)
-     P[r][c] = pr[r][c];
-   P[r][3] = trans[r];
- }
- // Project the 3-d points
- vnl_matrix<double> Z(2, 6);
- for (unsigned c = 0; c<6; ++c)
- {
-   vnl_vector_fixed<double, 4> vpr;
-   for (unsigned r = 0; r<4; ++r)
-      vpr[r]=J[r][c];
-   vnl_vector_fixed<double, 3> pvpr = P*vpr;
-   for (unsigned r = 0; r<2; ++r)
-     Z[r][c] = pvpr[r]/pvpr[2];
- }
- vcl_cout << "Projected points\n " << Z << '\n';
- vcl_vector<vgl_point_2d<double> > image_pts;
- vcl_vector<vgl_point_3d<double> > world_pts;
- for (unsigned i = 0; i<6; ++i)
- {
-   vgl_point_2d<double> ip(Z[0][i], Z[1][i]);
-   vgl_point_3d<double> wp(J[0][i], J[1][i], J[2][i]);
-   image_pts.push_back(ip);
-   world_pts.push_back(wp);
- }
- vpgl_calibration_matrix<double> K;
- vpgl_perspective_camera<double> pc;
+  vnl_matrix_fixed<double, 3, 3> pr = rr.as_matrix();
+  vnl_matrix_fixed<double, 3, 4> P;
+  for (unsigned r = 0; r<3; ++r)
+  {
+    for (unsigned c = 0; c<3; ++c)
+      P[r][c] = pr[r][c];
+    P[r][3] = trans[r];
+  }
+  // Project the 3-d points
+  vnl_matrix<double> Z(2, 6);
+  for (unsigned c = 0; c<6; ++c)
+  {
+    vnl_vector_fixed<double, 4> vpr;
+    for (unsigned r = 0; r<4; ++r)
+       vpr[r]=J[r][c];
+    vnl_vector_fixed<double, 3> pvpr = P*vpr;
+    for (unsigned r = 0; r<2; ++r)
+      Z[r][c] = pvpr[r]/pvpr[2];
+  }
+  vcl_cout << "Projected points\n " << Z << '\n';
+  vcl_vector<vgl_point_2d<double> > image_pts;
+  vcl_vector<vgl_point_3d<double> > world_pts;
+  for (unsigned i = 0; i<6; ++i)
+  {
+    vgl_point_2d<double> ip(Z[0][i], Z[1][i]);
+    vgl_point_3d<double> wp(J[0][i], J[1][i], J[2][i]);
+    image_pts.push_back(ip);
+    world_pts.push_back(wp);
+  }
+  vpgl_calibration_matrix<double> K;
+  vpgl_perspective_camera<double> pc;
 
- vpgl_perspective_camera_compute::compute(image_pts, world_pts, K, pc);
- vcl_cout << pc << '\n';
- vgl_point_3d<double> c = pc.get_camera_center();
- TEST_NEAR("perspective camera from 6 points exact", c.z(), -14.2265, 0.001);
+  vpgl_perspective_camera_compute::compute(image_pts, world_pts, K, pc);
+  vcl_cout << pc << '\n';
+  vgl_point_3d<double> cc = pc.get_camera_center();
+  TEST_NEAR("perspective camera from 6 points exact", cc.z(), -14.2265, 0.001);
 }
 
 vcl_vector<vgl_point_3d<double> > world_points()
@@ -253,9 +253,9 @@ static void test_camera_compute(int argc, char* argv[])
   test_camera_compute_setup();
   test_perspective_compute();
 
-  // commented out till the new code is created for that test
-  // test_rational_camera_approx(dir_base);
-
+#if 0 // commented out till the new code is created for that test
+  test_rational_camera_approx(dir_base);
+#endif
 }
 
 TESTMAIN_ARGS(test_camera_compute)
