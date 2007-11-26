@@ -10,7 +10,7 @@
 #endif // _MSC_VER > 1000*/
 
 #include "bwm_process.h"
-#include "bwm/io/bwm_site_sptr.h"
+#include "bwm/bwm_site_sptr.h"
 #include <vul/vul_timer.h>
 
 class bwm_site_process : public bwm_process {

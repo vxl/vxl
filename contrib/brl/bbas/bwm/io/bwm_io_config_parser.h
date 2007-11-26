@@ -2,7 +2,7 @@
 #define bwm_io_config_parser_h_
 
 #include "bwm_io_structs.h"
-#include "bwm_site_sptr.h"
+#include "bwm/bwm_site_sptr.h"
 
 #include <expatpp/expatpplib.h>
 #include <vcl_iostream.h>
@@ -23,6 +23,10 @@ public:
   ~bwm_io_config_parser(void){};
 
   bwm_site_sptr site() { return site_; }
+
+  vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > correspondences() { return corresp_; }
+  vcl_string corresp_mode() {return corr_mode_; }
+  vcl_vector<vsol_point_3d> corresp_world_pts() {return corresp_world_pts_; }
 
 private:
   virtual void startElement(const XML_Char* name, const XML_Char** atts);
@@ -54,9 +58,13 @@ private:
   double lat_, lon_, elev_;
 
   // correspondence related parameters
+  vcl_string corr_mode_;
   vcl_string corr_cam_tab_;
   double X_, Y_, Z_;
+  vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > corresp_;
+  vcl_vector<vsol_point_3d> corresp_world_pts_;
   vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > corresp_elm_;
+
 
   void trim_string(vcl_string& s);
 };

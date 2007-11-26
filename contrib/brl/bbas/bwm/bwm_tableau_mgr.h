@@ -51,26 +51,11 @@ public:
   void create_cam_tableau(vcl_string name, vcl_string& image_path, vcl_string& cam_path, 
                           unsigned camera_type, vsol_point_3d_sptr lvcs = 0);
 
-  void create_coin3d_tableau(vcl_string name, vcl_string& cam_path, unsigned camera_type);
-
-  void create_proj2d_tableau(vcl_string name,  vcl_string type, 
-                             vcl_string coin3d_name, vcl_string image_path, 
-                             vcl_string camera_path, unsigned camera_type);
-
-  void create_lidar_tableau(vcl_string name, vcl_string first_ret, vcl_string second_ret);
-
-  //void setup_scene();
   bwm_command_sptr load_tableau_by_type(vcl_string tableau_type);
 
   void load_img_tableau();
 
   void load_cam_tableau();
-
-  void load_coin3d_tableau();
-
-  void load_proj2d_tableau();
-
-  void load_lidar_tableau();
 
   void remove_tableau();
 
@@ -116,7 +101,7 @@ private:
 
   vgui_tableau_sptr find_tableau(vcl_string name);
 
-  vcl_vector<vcl_string> coin3d_tableau_names();
+  //vcl_vector<vcl_string> coin3d_tableau_names();
 
   void create_site_dialog(vgui_dialog_extensions &site_dialog,
                                vcl_string &site_name, 

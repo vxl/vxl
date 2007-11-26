@@ -5,11 +5,9 @@ INCLUDE_DIRECTORIES (${BRL_INCLUDE_DIR}/b3p/expatpp )
 
 SET(bwm_io_sources
    bwm_io_config_parser.cxx    bwm_io_config_parser.h
-   bwm_site.cxx                bwm_site.h               bwm_site_sptr.h
    bwm_io_structs.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates bwm_io_sources)
 
 ADD_LIBRARY(bwm_io ${bwm_io_sources})
 

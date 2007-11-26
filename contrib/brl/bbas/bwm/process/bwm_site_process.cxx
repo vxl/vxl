@@ -4,7 +4,7 @@
 
 #include "bwm_site_process.h"
 #include "bwm/algo/bwm_algo.h"
-#include "bwm/io/bwm_site.h"
+#include "bwm/bwm_site.h"
 #include "bwm/io/bwm_io_structs.h"
 
 #include <vul/vul_file.h>

@@ -7,6 +7,7 @@ vgui_menu bwm_menu::add_to_menu (vgui_menu& top_menu)
   load_menu.add("Create Site", create_site);
   load_menu.add("Edit Site", edit_site);
   load_menu.add("Load Site..." , load_site);
+  load_menu.add("Save Site..." , save_site);
 
   MENU_LOAD_TABLEAU("Load Image Tableau...", "bwm_tableau_img", load_menu);
   MENU_LOAD_TABLEAU("Load Camera Tableau...", "bwm_tableau_cam", load_menu);

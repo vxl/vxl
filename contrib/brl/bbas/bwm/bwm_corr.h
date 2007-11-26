@@ -57,7 +57,7 @@ class bwm_corr : public vbl_ref_count
   friend vcl_ostream&  operator<<(vcl_ostream& s, bwm_corr const& c);
   
   //: XML write
-  friend void x_write(vcl_ostream &os, bwm_corr& p);
+  void x_write(vcl_ostream &os);
 
  protected:
   

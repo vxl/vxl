@@ -2,7 +2,7 @@
   Parses the configuration file for bwm tool.
 */
 #include "bwm_io_config_parser.h"
-#include "bwm_site.h"
+#include "bwm/bwm_site.h"
 
 #include <vcl_cstdio.h>
 #include <vcl_cassert.h>
@@ -175,9 +175,9 @@ bwm_io_config_parser::endElement(const char* name)
      corresp_elm_.push_back(vcl_pair<vcl_string, vsol_point_2d> (corr_cam_tab_, vsol_point_2d(X_,Y_)));
      corr_cam_tab_ = "";
    } else if (strcmp(name, "corr_world_point") == 0) {
-     site_->corresp_world_pts_.push_back(vsol_point_3d(X_, Y_, Z_));
+     corresp_world_pts_.push_back(vsol_point_3d(X_, Y_, Z_));
    } else if (strcmp(name, "correspondence") == 0) {
-     site_->corresp_.push_back(corresp_elm_);
+     corresp_.push_back(corresp_elm_);
      corresp_elm_.clear();
    } else if (strcmp(name, OBJECT_TAG) == 0) {
      vcl_pair<vcl_string, vcl_string> object(object_path_, object_type_);

@@ -281,7 +281,7 @@ void bwm_observer_mgr::save_corr_XML()
     for (unsigned i=0; i< corr_list_.size(); i++) {
       bwm_corr_sptr corr = corr_list_[i];
       vcl_cout << corr->num_matches() << vcl_endl;
-      x_write(s, *corr);
+      corr->x_write(s);
     }
     xml_element.x_write_close(s);
     s << "</BWM_CONFIG>" << vcl_endl;

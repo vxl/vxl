@@ -24,7 +24,7 @@ public:
 
 };
 
-class bwm_load_coin3d_command: public bwm_command
+/*class bwm_load_coin3d_command: public bwm_command
 {
 public:
   bwm_load_coin3d_command() {}
@@ -53,6 +53,6 @@ public:
   void execute() { bwm_tableau_mgr::instance()->load_lidar_tableau(); }
 
 };
-
+*/
 
 #endif //bwm_load_commands_h_

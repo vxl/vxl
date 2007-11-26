@@ -41,7 +41,6 @@ int main(int argc, char** argv)
   // tableau types registering
   REG_TABLEAU(bwm_load_img_command);
   REG_TABLEAU(bwm_load_cam_command);
-  REG_TABLEAU(bwm_load_coin3d_command);
 
   // correspondence processes
   REG_PROCESS(bwm_corresp_process_command);

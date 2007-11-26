@@ -10,6 +10,7 @@
 #include "bwm_corr.h"
 #include "bwm_corr_sptr.h"
 
+#include <vsol/vsol_point_3d.h>
 
 class bwm_observer_mgr
 {
@@ -36,9 +37,11 @@ public:
   void collect_corr();
   void set_corr(bwm_corr_sptr corr);
   void set_world_pt(vgl_point_3d<double> world_pt);
-  bool world_pt(vgl_point_3d<double>& world_pt)
+
+  bool world_pt(vgl_point_3d<double> world_pt)
     {if(!world_point_valid_) return false; world_pt = corr_world_pt_; 
     return true;}
+
   bool obs_in_corr(bwm_observer_cam *obs);
   void save_corr(vcl_ostream& s);
   void save_corr_XML();

@@ -116,21 +116,21 @@ vcl_ostream& operator<<(vcl_ostream& s, bwm_corr const& c)
   return s;
 }
 
-void x_write(vcl_ostream &os, bwm_corr& c)
+void bwm_corr::x_write(vcl_ostream &os)
 {
    os << "<correspondence>" << vcl_endl; 
-   if (c.mode() == false) {
+   if (mode() == false) {
     vsl_basic_xml_element xml_element("corr_world_point");
-    xml_element.add_attribute("X", c.world_pt().x());
-    xml_element.add_attribute("Y", c.world_pt().y());
-    xml_element.add_attribute("Z", c.world_pt().z());
+    xml_element.add_attribute("X", world_pt().x());
+    xml_element.add_attribute("Y", world_pt().y());
+    xml_element.add_attribute("Z", world_pt().z());
     xml_element.x_write(os);
    }
    
    vcl_map<bwm_observer_cam*, vgl_point_2d<double> >::const_iterator 
-   iter = c.matches_.begin();
+   iter = matches_.begin();
    int i=0;
-   while (iter != c.matches_.end()) {
+   while (iter != matches_.end()) {
      os << "<corr_elm>" << vcl_endl;
      os << "<corr_camera_tab>" << iter->first->tab_name() << "</corr_camera_tab>" << vcl_endl;
      vsl_basic_xml_element xml_element("corr_point");
