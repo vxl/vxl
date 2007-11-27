@@ -2,7 +2,7 @@
 
 IF(BUILD_EXPAT)
 INCLUDE_DIRECTORIES (${BRL_INCLUDE_DIR}/b3p/expatpp )
-
+#MESSAGE(${BRL_INCLUDE_DIR}/b3p/expatpp )
 SET(bwm_io_sources
    bwm_io_config_parser.cxx    bwm_io_config_parser.h
    bwm_io_structs.h

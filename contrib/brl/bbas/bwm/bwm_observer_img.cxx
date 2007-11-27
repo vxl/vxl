@@ -351,23 +351,28 @@ void bwm_observer_img::clear_box()
 {
   // get the selected box
   bgui_vsol_soview2D_polygon* p = 0;
-  if (!this->get_selected_box(p))
-  {
-    vcl_cerr << "In bwm_observer_img::clear_box() - no box selected\n";
-    return ;
-  }
 
-  vcl_vector<bgui_vsol_soview2D* > soviews = seg_views[p->get_id()];
+  if(!this->get_selected_box(p))
+    {
+      vcl_cerr << "In bwm_observer_img::clear_box() - no box selected\n";
+      return ;
+    }
+  
+  vcl_vector<bgui_vsol_soview2D* >& soviews = seg_views[p->get_id()];
   for (unsigned i=0; i<soviews.size(); i++) {
     this->remove(soviews[i]);
   }
 
+  soviews.clear();
+  seg_views[p->get_id()] = soviews;
   this->post_redraw();
   // do not delete the information about deleted edges, we may want to bring them back
 }
 
 void bwm_observer_img::recover_edges()
 {
+  //make sure the box is actually empty
+  this->clear_box();
   // get the selected box
   bgui_vsol_soview2D_polygon* p = 0;
   if (!this->get_selected_box(p))
@@ -390,6 +395,10 @@ void bwm_observer_img::recover_edges()
 
 void bwm_observer_img::recover_lines()
 {
+
+  //make sure the box is actually empty
+  this->clear_box();
+
   // get the selected box
   bgui_vsol_soview2D_polygon* p = 0;
   if (!this->get_selected_box(p))

@@ -247,6 +247,9 @@ void bwm_tableau_img::lines_vd()
 
 void bwm_tableau_img::recover_edges()
 {
+
+  my_observer_->recover_edges();
+
 }
 
 void bwm_tableau_img::recover_lines()

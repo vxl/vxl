@@ -68,7 +68,7 @@ int main(int argc, char** argv)
   vgui_window* win = vgui::produce_window(600, 600, menu_holder, "World Modeler");
   win->get_adaptor()->set_tableau(shell);
   win->set_statusbar(true);
-  win->set_title("World Modeler - V1.2");
+  win->set_title("CROSSCUT V1.2");
   win->show();
   vgui::run();
   delete bwm_tableau_mgr::instance();
