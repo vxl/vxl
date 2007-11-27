@@ -1,5 +1,5 @@
-//---------------------------------------------------------------------
-// This is brcv/shp/dbmsh3d/bmsh3d_fileio.cxx 
+// This is brl/bbas/bmsh3d/algo/bmsh3d_fileio.cxx
+#include "bmsh3d_fileio.h"
 //:
 // \file
 // \brief 3D mesh file I/O
@@ -16,20 +16,15 @@
 //-------------------------------------------------------------------------
 
 #include <vcl_cstdio.h>
-#include <vcl_cstdlib.h>
+#include <vcl_cassert.h>
 #include <vcl_fstream.h>
 #include <vcl_string.h>
 #include <vcl_cstring.h>
-#include <vcl_algorithm.h>
 #include <vcl_iostream.h>
 #include <vul/vul_printf.h>
 #include <vul/vul_file.h>
 #include <vul/vul_string.h>
 #include <vgl/vgl_point_3d.h>
-
-#include <vnl/vnl_numeric_traits.h>
-
-#include "bmsh3d_fileio.h"
 
 //#include <rply/rply.h>
 
@@ -44,7 +39,7 @@ bool bmsh3d_load_xyz (bmsh3d_pt_set* pointset, const char* file)
   FILE* fp;
   if ((fp = vcl_fopen (file, "r")) == NULL) {
     ///vul_printf (vcl_cerr, "  can't open input .XYZ file %s\n", file);
-    return false; 
+    return false;
   }
   assert (pointset->vertexmap().size() == 0);
 
@@ -61,10 +56,10 @@ bool bmsh3d_load_xyz (bmsh3d_pt_set* pointset, const char* file)
   }
   while (ret != EOF);
 
-  vul_printf (vcl_cerr, "  %d points loaded from %s.\n", 
+  vul_printf (vcl_cerr, "  %d points loaded from %s.\n",
                pointset->vertexmap().size(), file);
 
-  fclose (fp);
+  vcl_fclose (fp);
   return true;
 }
 
@@ -73,11 +68,11 @@ bool bmsh3d_save_xyz (bmsh3d_pt_set* pointset, const char* file)
   FILE* fp;
   if ((fp = vcl_fopen (file, "w")) == NULL) {
     ///vul_printf (vcl_cerr, "  can't open output .XYZ file %s\n", file);
-    return false; 
+    return false;
   }
-  vul_printf (vcl_cerr, "  saving %s : %d points ...\n", 
+  vul_printf (vcl_cerr, "  saving %s : %d points ...\n",
                file, pointset->vertexmap().size());
-  
+
   vcl_map<int, bmsh3d_vertex*>::iterator it = pointset->vertexmap().begin();
   for (; it != pointset->vertexmap().end(); it++) {
     bmsh3d_vertex* v = (*it).second;
@@ -94,13 +89,13 @@ bool bmsh3d_load_xyz (vcl_vector<vgl_point_3d<double> >& pts, const char* file)
   FILE* fp;
   if ((fp = vcl_fopen (file, "r")) == NULL) {
     ///vul_printf (vcl_cerr, "  can't open input .XYZ file %s\n", file);
-    return false; 
+    return false;
   }
   assert (pts.size() == 0);
 
   //Read in (x, y, z) points.
   int ret;
-  vgl_point_3d<double> P;  
+  vgl_point_3d<double> P;
   do {
     double x, y, z;
     ret = vcl_fscanf (fp, "%lf %lf %lf\n", &x, &y, &z);
@@ -113,7 +108,7 @@ bool bmsh3d_load_xyz (vcl_vector<vgl_point_3d<double> >& pts, const char* file)
 
   vul_printf (vcl_cerr, "  %d points loaded from %s.\n", pts.size(), file);
 
-  fclose (fp);
+  vcl_fclose (fp);
   return true;
 }
 
@@ -122,17 +117,17 @@ bool bmsh3d_save_xyz (vcl_vector<vgl_point_3d<double> >& pts, const char* file)
   vcl_FILE* fp;
   if ((fp = vcl_fopen (file, "w")) == NULL) {
     ///vul_printf (vcl_cerr, "  can't open output .XYZ file %s\n", file);
-    return false; 
+    return false;
   }
   vul_printf (vcl_cerr, "  saving %s : %d points ...\n", file, pts.size());
-  
+
   vcl_vector<vgl_point_3d<double> >::iterator it = pts.begin();
   for (; it != pts.end(); it++) {
     vgl_point_3d<double> P = (*it);
     vcl_fprintf (fp, "%.16f %.16f %.16f\n", P.x(), P.y(), P.z());
   }
 
-  fclose (fp);
+  vcl_fclose (fp);
   vul_printf (vcl_cerr, "  done.\n");
   return true;
 }
@@ -142,14 +137,14 @@ bool bmsh3d_load_xyz (vcl_vector<vcl_pair<int, vgl_point_3d<double> > >& idpts, 
   FILE* fp;
   if ((fp = vcl_fopen (file, "r")) == NULL) {
     ///vul_printf (vcl_cerr, "  can't open input .XYZ file %s\n", file);
-    return false; 
+    return false;
   }
   assert (idpts.size() == 0);
 
   //Read in (x, y, z) points.
   int ret;
   int id = 0;
-  vgl_point_3d<double> P;  
+  vgl_point_3d<double> P;
   do {
     double x, y, z;
     ret = vcl_fscanf (fp, "%lf %lf %lf\n", &x, &y, &z);
@@ -163,25 +158,26 @@ bool bmsh3d_load_xyz (vcl_vector<vcl_pair<int, vgl_point_3d<double> > >& idpts, 
 
   vul_printf (vcl_cerr, "  %d points loaded from %s.\n", idpts.size(), file);
 
-  fclose (fp);
+  vcl_fclose (fp);
   return true;
 }
+
 bool bmsh3d_save_xyz (vcl_vector<vcl_pair<int, vgl_point_3d<double> > >& idpts, const char* file)
 {
   vcl_FILE* fp;
   if ((fp = vcl_fopen (file, "w")) == NULL) {
     ///vul_printf (vcl_cerr, "  can't open output .XYZ file %s\n", file);
-    return false; 
+    return false;
   }
   vul_printf (vcl_cerr, "  saving %s : %d points ...\n", file, idpts.size());
-  
+
   vcl_vector<vcl_pair<int, vgl_point_3d<double> > >::iterator it = idpts.begin();
   for (; it != idpts.end(); it++) {
     vgl_point_3d<double> P = (*it).second;
     vcl_fprintf (fp, "%.16f %.16f %.16f\n", P.x(), P.y(), P.z());
   }
 
-  fclose (fp);
+  vcl_fclose (fp);
   vul_printf (vcl_cerr, "  done.\n");
   return true;
 }
@@ -193,7 +189,7 @@ bool bmsh3d_load_xyzn1 (vcl_vector<vcl_pair<vgl_point_3d<double>, vgl_vector_3d<
   FILE* fp;
   if ((fp = vcl_fopen (file, "r")) == NULL) {
     ///vul_printf (vcl_cerr, "  can't open input .XYZN1 file %s\n", file);
-    return false; 
+    return false;
   }
   assert (ori_pts.size() == 0);
 
@@ -203,8 +199,8 @@ bool bmsh3d_load_xyzn1 (vcl_vector<vcl_pair<vgl_point_3d<double>, vgl_vector_3d<
 
   //Read in (x, y, z) points.
   int ret;
-  vgl_point_3d<double> P;  
-  vgl_vector_3d<double> N;  
+  vgl_point_3d<double> P;
+  vgl_vector_3d<double> N;
   do {
     double x, y, z, nx, ny, nz;
     //w is the local feature size, not used.
@@ -219,10 +215,10 @@ bool bmsh3d_load_xyzn1 (vcl_vector<vcl_pair<vgl_point_3d<double>, vgl_vector_3d<
 
   assert (ori_pts.size() == num_pts);
 
-  vul_printf (vcl_cerr, "  %d oriented points loaded from %s.\n", 
+  vul_printf (vcl_cerr, "  %d oriented points loaded from %s.\n",
               ori_pts.size(), file);
 
-  fclose (fp);
+  vcl_fclose (fp);
   return true;
 }
 
@@ -232,11 +228,11 @@ bool bmsh3d_save_xyzn1 (vcl_vector<vcl_pair<vgl_point_3d<double>, vgl_vector_3d<
   vcl_FILE* fp;
   if ((fp = vcl_fopen (file, "w")) == NULL) {
     ///vul_printf (vcl_cerr, "  can't open output .XYZNW file %s\n", file);
-    return false; 
+    return false;
   }
-  vul_printf (vcl_cerr, "  saving %s : %d oriented points ...\n", 
+  vul_printf (vcl_cerr, "  saving %s : %d oriented points ...\n",
               file, ori_pts.size());
-  
+
   //# of points.
   vcl_fprintf (fp, "%d\n", ori_pts.size());
 
@@ -244,11 +240,11 @@ bool bmsh3d_save_xyzn1 (vcl_vector<vcl_pair<vgl_point_3d<double>, vgl_vector_3d<
   for (; it != ori_pts.end(); it++) {
     vgl_point_3d<double> P = (*it).first;
     vgl_vector_3d<double> N = (*it).second;
-    vcl_fprintf (fp, "%.16f %.16f %.16f %.16f %.16f %.16f\n", 
+    vcl_fprintf (fp, "%.16f %.16f %.16f %.16f %.16f %.16f\n",
                  P.x(), P.y(), P.z(), N.x(), N.y(), N.z());
   }
 
-  fclose (fp);
+  vcl_fclose (fp);
   vul_printf (vcl_cerr, "  done.\n");
   return true;
 }
@@ -260,14 +256,14 @@ bool bmsh3d_load_xyznw (vcl_vector<vcl_pair<vgl_point_3d<double>, vgl_vector_3d<
   FILE* fp;
   if ((fp = vcl_fopen (file, "r")) == NULL) {
     ///vul_printf (vcl_cerr, "  can't open input .XYZNW file %s\n", file);
-    return false; 
+    return false;
   }
   assert (ori_pts.size() == 0);
 
   //Read in (x, y, z) points.
   int ret;
-  vgl_point_3d<double> P;  
-  vgl_vector_3d<double> N;  
+  vgl_point_3d<double> P;
+  vgl_vector_3d<double> N;
   do {
     double x, y, z, nx, ny, nz, w;
     //w is the local feature size, not used.
@@ -280,10 +276,10 @@ bool bmsh3d_load_xyznw (vcl_vector<vcl_pair<vgl_point_3d<double>, vgl_vector_3d<
   }
   while (ret != EOF);
 
-  vul_printf (vcl_cerr, "  %d oriented points loaded from %s.\n", 
+  vul_printf (vcl_cerr, "  %d oriented points loaded from %s.\n",
               ori_pts.size(), file);
 
-  fclose (fp);
+  vcl_fclose (fp);
   return true;
 }
 
@@ -293,21 +289,21 @@ bool bmsh3d_save_xyznw_vector (vcl_vector<vcl_pair<vgl_point_3d<double>, vgl_vec
   vcl_FILE* fp;
   if ((fp = vcl_fopen (file, "w")) == NULL) {
     ///vul_printf (vcl_cerr, "  can't open output .XYZNW file %s\n", file);
-    return false; 
+    return false;
   }
-  vul_printf (vcl_cerr, "  saving %s : %d oriented points ...\n", 
+  vul_printf (vcl_cerr, "  saving %s : %d oriented points ...\n",
                file, oriented_points.size());
-  
+
   vcl_vector<vcl_pair<vgl_point_3d<double>, vgl_vector_3d<double> > >::iterator it = oriented_points.begin();
   for (; it != oriented_points.end(); it++) {
     vgl_point_3d<double> P = (*it).first;
     vgl_vector_3d<double> N = (*it).second;
     double w = 1.0;
-    vcl_fprintf (fp, "%.16f %.16f %.16f %.16f %.16f %.16f %lf\n", 
+    vcl_fprintf (fp, "%.16f %.16f %.16f %.16f %.16f %.16f %lf\n",
                  P.x(), P.y(), P.z(), N.x(), N.y(), N.z(), w);
   }
 
-  fclose (fp);
+  vcl_fclose (fp);
   vul_printf (vcl_cerr, "  done.\n");
   return true;
 }
@@ -319,7 +315,7 @@ bool bmsh3d_load_p3d (bmsh3d_pt_set* pointset, const char* file)
   FILE* fp;
   if ((fp = vcl_fopen (file, "r")) == NULL) {
     ///vul_printf (vcl_cerr, "  can't open input .P3D file %s\n", file);
-    return false; 
+    return false;
   }
 
   assert (pointset->vertexmap().size() == 0); ///clear();
@@ -330,7 +326,7 @@ bool bmsh3d_load_p3d (bmsh3d_pt_set* pointset, const char* file)
   unsigned int numGenes;
   vcl_fscanf (fp, "%u\n", &numGenes);
 
-  vul_printf (vcl_cerr, "  loading %s : %d points ...\n", 
+  vul_printf (vcl_cerr, "  loading %s : %d points ...\n",
                file, numGenes);
 
   for (unsigned int i=0; i<numGenes; i++) {
@@ -342,7 +338,7 @@ bool bmsh3d_load_p3d (bmsh3d_pt_set* pointset, const char* file)
     pointset->_add_vertex (v);
   }
 
-  fclose (fp);
+  vcl_fclose (fp);
   vul_printf (vcl_cerr, "  done.\n");
   return true;
 }
@@ -352,21 +348,21 @@ bool bmsh3d_save_p3d (bmsh3d_pt_set* pointset, const char* file)
   vcl_FILE* fp;
   if ((fp = vcl_fopen (file, "w")) == NULL) {
     ///vul_printf (vcl_cerr, "  can't open output .P3D file %s\n", file);
-    return false; 
+    return false;
   }
-  vul_printf (vcl_cerr, "  saving %s : %d points ...\n", 
+  vul_printf (vcl_cerr, "  saving %s : %d points ...\n",
                file, pointset->vertexmap().size());
 
   vcl_fprintf (fp, "%d\n", 3);
   vcl_fprintf (fp, "%u\n", pointset->vertexmap().size());
-  
+
   vcl_map<int, bmsh3d_vertex*>::iterator it = pointset->vertexmap().begin();
   for (; it != pointset->vertexmap().end(); it++) {
     bmsh3d_vertex* v = (*it).second;
     vcl_fprintf (fp, "%.16f %.16f %.16f\n", v->pt().x(), v->pt().y(), v->pt().z());
   }
 
-  fclose (fp);
+  vcl_fclose (fp);
   vul_printf (vcl_cerr, "  done.\n");
   return true;
 }
@@ -376,7 +372,7 @@ bool bmsh3d_load_p3d (vcl_vector<vgl_point_3d<double> >& pts, const char* file)
   FILE* fp;
   if ((fp = vcl_fopen (file, "r")) == NULL) {
     ///vul_printf (vcl_cerr, "  can't open input .P3D file %s\n", file);
-    return false; 
+    return false;
   }
 
   assert (pts.size() == 0);
@@ -397,7 +393,7 @@ bool bmsh3d_load_p3d (vcl_vector<vgl_point_3d<double> >& pts, const char* file)
     pts[i] = P;
   }
 
-  fclose (fp);
+  vcl_fclose (fp);
   vul_printf (vcl_cerr, "  done.\n");
   return true;
 }
@@ -407,20 +403,20 @@ bool bmsh3d_save_p3d (vcl_vector<vgl_point_3d<double> >& pts, const char* file)
   vcl_FILE* fp;
   if ((fp = vcl_fopen (file, "w")) == NULL) {
     ///vul_printf (vcl_cerr, "  can't open output .P3D file %s\n", file);
-    return false; 
+    return false;
   }
   vul_printf (vcl_cerr, "  saving %s : %d points ...\n", file, pts.size());
 
   vcl_fprintf (fp, "%d\n", 3);
   vcl_fprintf (fp, "%u\n", pts.size());
-  
+
   vcl_vector<vgl_point_3d<double> >::iterator it = pts.begin();
   for (; it != pts.end(); it++) {
     vgl_point_3d<double> P = (*it);
     vcl_fprintf (fp, "%.16f %.16f %.16f\n", P.x(), P.y(), P.z());
   }
 
-  fclose (fp);
+  vcl_fclose (fp);
   vul_printf (vcl_cerr, "  done.\n");
   return true;
 }
@@ -431,7 +427,7 @@ bool bmsh3d_load_p3d (vcl_vector<vcl_pair<int, vgl_point_3d<double> > >& idpts,
   FILE* fp;
   if ((fp = vcl_fopen (file, "r")) == NULL) {
     ///vul_printf (vcl_cerr, "  can't open input .P3D file %s\n", file);
-    return false; 
+    return false;
   }
 
   assert (idpts.size() == 0);
@@ -453,7 +449,7 @@ bool bmsh3d_load_p3d (vcl_vector<vcl_pair<int, vgl_point_3d<double> > >& idpts,
     idpts.push_back (vcl_pair<int, vgl_point_3d<double> > (i, P));
   }
 
-  fclose (fp);
+  vcl_fclose (fp);
   vul_printf (vcl_cerr, "  done.\n");
   return true;
 }
@@ -463,20 +459,20 @@ bool bmsh3d_save_p3d (vcl_vector<vcl_pair<int, vgl_point_3d<double> > >& idpts, 
   vcl_FILE* fp;
   if ((fp = vcl_fopen (file, "w")) == NULL) {
     ///vul_printf (vcl_cerr, "  can't open output .P3D file %s\n", file);
-    return false; 
+    return false;
   }
   vul_printf (vcl_cerr, "  saving %s : %d points ...\n", file, idpts.size());
 
   vcl_fprintf (fp, "%d\n", 3);
   vcl_fprintf (fp, "%u\n", idpts.size());
-  
+
   vcl_vector<vcl_pair<int, vgl_point_3d<double> > >::iterator it = idpts.begin();
   for (; it != idpts.end(); it++) {
     vgl_point_3d<double> P = (*it).second;
     vcl_fprintf (fp, "%.16f %.16f %.16f\n", P.x(), P.y(), P.z());
   }
 
-  fclose (fp);
+  vcl_fclose (fp);
   vul_printf (vcl_cerr, "  done.\n");
   return true;
 }
@@ -487,9 +483,9 @@ bool bmsh3d_save_p3d (vcl_vector<vcl_pair<int, vgl_point_3d<double> > >& idpts, 
 int read_num_genes_sphere_from_file (const char* pcFile_P3D)
 {
   FILE* fp;
-  if ((fp = fopen (pcFile_P3D, "r")) == NULL) {
+  if ((fp = vcl_fopen (pcFile_P3D, "r")) == NULL) {
     ///vul_printf (vcl_cerr, "  can't open input .P3D file %s\n", pcFile_P3D);
-    return false; 
+    return false;
   }
 
   int dim;
@@ -497,7 +493,7 @@ int read_num_genes_sphere_from_file (const char* pcFile_P3D)
   assert (dim==3);
   int numGenes;
   vcl_fscanf (fp, "%d\n", &numGenes);
-  fclose (fp);
+  vcl_fclose (fp);
 
   vul_printf (vcl_cerr, "  reading data from %s: %d original genes.\n", pcFile_P3D, numGenes);
   return numGenes;
@@ -505,7 +501,6 @@ int read_num_genes_sphere_from_file (const char* pcFile_P3D)
 
 bool dbsk3d_load_con (bmsh3d_pt_set* geneset, const char* pcFile_CON, double z)
 {
-
 #define MAX_LEN 1024
 
   double x, y;
@@ -519,7 +514,7 @@ bool dbsk3d_load_con (bmsh3d_pt_set* geneset, const char* pcFile_CON, double z)
     return false;
   }
 
-  //: need to release the memory!!
+  // need to release the memory!!
   geneset->vertexmap().clear();
 
   //2)Read in file header.
@@ -527,7 +522,7 @@ bool dbsk3d_load_con (bmsh3d_pt_set* geneset, const char* pcFile_CON, double z)
   fp.getline (buffer,MAX_LEN); //OPEN/CLOSE
   fp >> nPoints;
   vcl_cout << "Number of Points from Contour:" << nPoints << vcl_endl;
-  
+
   //3)Read in 'nPoints' of lines of data.
   for (int i=0; i<nPoints; i++) {
     fp >> x >> y;
@@ -535,7 +530,7 @@ bool dbsk3d_load_con (bmsh3d_pt_set* geneset, const char* pcFile_CON, double z)
     ///v->set_id (i);
     ///assert (x > -100000);
     v->get_pt().set (x, y, z);
-  
+
     geneset->_add_vertex (v);
   }
 
@@ -553,7 +548,7 @@ bool save_unmeshed_p3d (bmsh3d_mesh* M, const char* file)
   FILE* fp;
   if ((fp = vcl_fopen (file, "w")) == NULL) {
     ///vul_printf (vcl_cerr, "  can't open output .P3D file %s\n", file);
-    return false; 
+    return false;
   }
   unsigned int num = M->count_unmeshed_pts();
   if (num == 0)
@@ -562,7 +557,7 @@ bool save_unmeshed_p3d (bmsh3d_mesh* M, const char* file)
   vul_printf (vcl_cerr, "  saving unmeshed %u points to %s...\n", num, file);
   vcl_fprintf (fp, "%d\n", 3);
   vcl_fprintf (fp, "%u\n", num);
-  
+
   vcl_map<int, bmsh3d_vertex*>::iterator it = M->vertexmap().begin();
   unsigned int count=0;
   for (; it != M->vertexmap().end(); it++) {
@@ -574,28 +569,28 @@ bool save_unmeshed_p3d (bmsh3d_mesh* M, const char* file)
   }
 
   assert (count == num);
-  fclose (fp);
+  vcl_fclose (fp);
   return true;
 }
 
-bool bmsh3d_load_ply2 (vcl_vector<vgl_point_3d<double> >& pts, 
-                        vcl_vector<vcl_vector<int> >* faces, 
+bool bmsh3d_load_ply2 (vcl_vector<vgl_point_3d<double> >& pts,
+                        vcl_vector<vcl_vector<int> >* faces,
                         const char* file)
 {
   assert (0);
   return true;
 }
 
-bool bmsh3d_save_ply2 (const vcl_vector<vgl_point_3d<double> >& pts, 
-                        const vcl_vector<vcl_vector<int> >& faces, 
+bool bmsh3d_save_ply2 (const vcl_vector<vgl_point_3d<double> >& pts,
+                        const vcl_vector<vcl_vector<int> >& faces,
                         const char* file)
 {
   FILE* fp;
   if ((fp = vcl_fopen(file, "w")) == NULL) {
     ///vul_printf (vcl_cerr, "  can't open PLY2 file %s to write.\n", file);
-    return false; 
+    return false;
   }
-  vul_printf (vcl_cerr, "  saving %s : \n\t%d points, %d faces ...\n", 
+  vul_printf (vcl_cerr, "  saving %s :\n\t%d points, %d faces ...\n",
               file, pts.size(), faces.size());
 
   vcl_fprintf (fp, "%d\n", pts.size());
@@ -623,12 +618,13 @@ bool bmsh3d_save_ply2 (const vcl_vector<vgl_point_3d<double> >& pts,
 
 
 // ===================== GENERIC ==================================
+
 //: Load a mesh files (only PLY and PLY2 are currently supported)
 bool bmsh3d_load (bmsh3d_mesh* M, const char* file, const char* format)
 {
   vcl_string file_format(format);
   file_format = "." + file_format;
-  
+
   // if no type is given, determine it using file extension
   if (file_format == ".DEFAULT")
   {
@@ -637,7 +633,7 @@ bool bmsh3d_load (bmsh3d_mesh* M, const char* file, const char* format)
     ///file_format = vul_file::extension(file);
   }
 
-  vcl_cout << "format = " << file_format << "\n";
+  vcl_cout << "format = " << file_format << '\n';
   // call appropriate load functions to load the M
   if (file_format == ".PLY")
   {
@@ -660,9 +656,9 @@ bool bmsh3d_save_ply2 (bmsh3d_mesh* M, const char* file)
   FILE* fp;
   if ((fp = vcl_fopen(file, "w")) == NULL) {
     ///vul_printf (vcl_cerr, "  can't open PLY2 file %s to write.\n", file);
-    return false; 
+    return false;
   }
-  vul_printf (vcl_cerr, "  saving %s : \n\t%d points, %d faces ...\n", 
+  vul_printf (vcl_cerr, "  saving %s :\n\t%d points, %d faces ...\n",
                file, M->vertexmap().size(), M->facemap().size());
 
   vcl_fprintf (fp, "%d\n", M->vertexmap().size());
@@ -692,7 +688,6 @@ bool bmsh3d_save_ply2 (bmsh3d_mesh* M, const char* file)
       vcl_fprintf (fp, "%d ", V->vid());
     }
     vcl_fprintf (fp, "\n");
-
   }
   vcl_fclose (fp);
   vul_printf (vcl_cerr, "  done.\n");
@@ -708,14 +703,14 @@ bool bmsh3d_load_ply2 (bmsh3d_mesh* M, const char* file)
 
   if ((fp = vcl_fopen(file, "r")) == NULL) {
     ///vul_printf (vcl_cerr, "  can't open input PLY2 file %s.\n", file);
-    return false; 
+    return false;
   }
 
   int vertex_N, face_N;
   vcl_fscanf (fp, "%d\n", &vertex_N);
   vcl_fscanf (fp, "%d\n", &face_N);
 
-  vul_printf (vcl_cerr, "  loading %s : \n\t%d points, %d faces ...\n", 
+  vul_printf (vcl_cerr, "  loading %s :\n\t%d points, %d faces ...\n",
                file, vertex_N, face_N);
 
   double p[3];
@@ -762,12 +757,12 @@ bool bmsh3d_load_ply2_v (bmsh3d_mesh* M, const char* file)
 
   if ((fp = vcl_fopen(file, "r")) == NULL) {
     ///vul_printf (vcl_cerr, "  can't open input PLY2 file %s.\n", file);
-    return false; 
+    return false;
   }
   int vertex_N, face_N;
   vcl_fscanf (fp, "%d\n", &vertex_N);
   vcl_fscanf (fp, "%d\n", &face_N);
-  vul_printf (vcl_cerr, "  bmsh3d_load_ply2_v() %s: \n\t%d points, %d faces ...\n", 
+  vul_printf (vcl_cerr, "  bmsh3d_load_ply2_v() %s:\n\t%d points, %d faces ...\n",
               file, vertex_N, face_N);
 
   double p[3];
@@ -781,7 +776,7 @@ bool bmsh3d_load_ply2_v (bmsh3d_mesh* M, const char* file)
     M->_add_vertex (V);
   }
 
-  vcl_fclose (fp);  
+  vcl_fclose (fp);
   vul_printf (vcl_cerr, "  %d vertices loaded.\n", vertex_N);
   return true;
 }
@@ -794,14 +789,14 @@ bool bmsh3d_load_ply2_f (bmsh3d_mesh* M, const char* file)
 
   if ((fp = vcl_fopen(file, "r")) == NULL) {
     ///vul_printf (vcl_cerr, "  can't open input PLY2 file %s.\n", file);
-    return false; 
+    return false;
   }
 
   int vertex_N, face_N;
   vcl_fscanf (fp, "%d\n", &vertex_N);
   vcl_fscanf (fp, "%d\n", &face_N);
 
-  vul_printf (vcl_cerr, "  bmsh3d_load_ply2_f (%s): \n", file);
+  vul_printf (vcl_cerr, "  bmsh3d_load_ply2_f (%s):\n", file);
   vul_printf (vcl_cerr, "\tSkip %d points and load %d faces ...\n", vertex_N, face_N);
 
   assert (M->vertexmap().size() == vertex_N);
@@ -841,7 +836,7 @@ bool bmsh3d_load_ply2_f (bmsh3d_mesh* M, const char* file)
   return true;
 }
 
-void setup_IFS_M_label_Fs_vids (bmsh3d_mesh* M, const int label, 
+void setup_IFS_M_label_Fs_vids (bmsh3d_mesh* M, const int label,
                                 vcl_vector<bmsh3d_vertex*>& vertices,
                                 vcl_vector<bmsh3d_face*>& faces)
 {
@@ -881,7 +876,7 @@ bool bmsh3d_save_label_faces_ply2 (bmsh3d_mesh* M, const int label, const char* 
   FILE* fp;
   if ((fp = vcl_fopen(file, "w")) == NULL) {
     ///vul_printf (vcl_cerr, "  can't open PLY2 file %s to write.\n", file);
-    return false;  
+    return false;
   }
 
   //Go through all labelled faces & set vid for each incident vertex.
@@ -889,7 +884,7 @@ bool bmsh3d_save_label_faces_ply2 (bmsh3d_mesh* M, const int label, const char* 
   vcl_vector<bmsh3d_face*> faces;
   setup_IFS_M_label_Fs_vids (M, label, vertices, faces);
 
-  vul_printf (vcl_cerr, "  saving %s : \n\t%d points, %d faces ...\n", 
+  vul_printf (vcl_cerr, "  saving %s :\n\t%d points, %d faces ...\n",
               file, vertices.size(), faces.size());
 
   vcl_fprintf (fp, "%d\n", vertices.size());
@@ -918,7 +913,6 @@ bool bmsh3d_save_label_faces_ply2 (bmsh3d_mesh* M, const int label, const char* 
       vcl_fprintf (fp, "%d ", V->vid());
     }
     vcl_fprintf (fp, "\n");
-
   }
   vcl_fclose (fp);
   vul_printf (vcl_cerr, "  done.\n");
@@ -933,7 +927,7 @@ bool bmsh3d_load_m (bmsh3d_mesh* M, const char* file)
   vcl_FILE* fp;
   if ((fp = vcl_fopen(file, "r")) == NULL) {
     ///vul_printf (vcl_cerr, "  can't open input .M file %s.\n", file);
-    return false; 
+    return false;
   }
 
   //Read in mesh vertices.
@@ -946,9 +940,9 @@ bool bmsh3d_load_m (bmsh3d_mesh* M, const char* file)
     ret = vcl_fscanf (fp, "%s", type);
     if (ret == EOF)
       break;
-    
+
     if (vcl_strcmp (type, "Vertex")==0) {
-      vcl_fscanf (fp, "%d %lf %lf %lf {rgb=(%lf %lf %lf)}\n", 
+      vcl_fscanf (fp, "%d %lf %lf %lf {rgb=(%lf %lf %lf)}\n",
                   &id, &x, &y, &z, &r, &g, &b);
 
       bmsh3d_vertex* V = M->_new_vertex ();
@@ -983,9 +977,9 @@ bool bmsh3d_save_m (bmsh3d_mesh* M, const char* file)
   vcl_FILE* fp;
   if ((fp = vcl_fopen(file, "w")) == NULL) {
     ///vul_printf (vcl_cerr, "  can't open .M file %s to write.\n", file);
-    return false; 
+    return false;
   }
-  vul_printf (vcl_cerr, "  saving %s : \n\t%d points, %d faces ...\n", 
+  vul_printf (vcl_cerr, "  saving %s :\n\t%d points, %d faces ...\n",
                file, M->vertexmap().size(), M->facemap().size());
 
   vcl_fprintf (fp, "%d\n", M->vertexmap().size());
@@ -1011,7 +1005,6 @@ bool bmsh3d_save_m (bmsh3d_mesh* M, const char* file)
       vcl_fprintf (fp, "%d ", V->id());
     }
     vcl_fprintf (fp, "\n");
-
   }
   vcl_fclose (fp);
   vul_printf (vcl_cerr, "  done.\n");
@@ -1020,21 +1013,20 @@ bool bmsh3d_save_m (bmsh3d_mesh* M, const char* file)
 }
 
 //: For the input "abc\def\prefix-ghi-jkl-mno.txt"
-//  return the file suffix ".txt"
+//  Return the file suffix ".txt"
 vcl_string get_suffix (const vcl_string& filename)
 {
-  int start,end;
-  start=filename.find_last_of ('.');
-  end=filename.find_last_of ('\0');
-  if(start == end)
+  int startf=filename.find_last_of ('.');
+  int endf=filename.find_last_of ('\0');
+  if (startf == endf)
     return "\0";
-  return filename.substr (start, end);
+  return filename.substr (startf, endf);
 }
 
 //################### LIST FILE ###############################
 
 bool bmsh3d_read_list_file (const char* file,
-                             vcl_vector<vcl_string>& data_files, 
+                             vcl_vector<vcl_string>& data_files,
                              vcl_vector<vcl_string>& align_files)
 {
   vcl_string filename (file);
@@ -1047,7 +1039,7 @@ bool bmsh3d_read_list_file (const char* file,
   in.open (filename.c_str());
   if (in == false) {
     vul_printf (vcl_cerr, "Can't open listfile %s\n", filename.c_str());
-    return false; 
+    return false;
   }
 
   //Read in each line of dataset in the list file.
@@ -1068,20 +1060,20 @@ bool bmsh3d_read_list_file (const char* file,
   }
 
   in.close();
-  vul_printf (vcl_cerr, "\t%d files (%d alignment files) read from %s.\n", 
+  vul_printf (vcl_cerr, "\t%d files (%d alignment files) read from %s.\n",
               data_files.size(), align_files.size(), filename.c_str());
   return true;
-}    
+}
 
-bool bmsh3d_save_list_file (const vcl_string& list_file, 
-                             const vcl_vector<vcl_string>& data_files, 
+bool bmsh3d_save_list_file (const vcl_string& list_file,
+                             const vcl_vector<vcl_string>& data_files,
                              const vcl_vector<vcl_string>& align_files)
 {
   vul_printf (vcl_cerr, "  Saving list file %s.\n", list_file.c_str());
   vcl_FILE* fp;
   assert (data_files.size() == align_files.size());
   if ((fp = vcl_fopen (list_file.c_str(), "w")) == NULL) {
-    vul_printf (vcl_cerr, "Can't open output txt file %s\n", list_file);
+    vcl_cerr << "Can't open output txt file " << list_file << '\n';
     return false;
   }
   for (unsigned int i=0; i<data_files.size(); i++) {
@@ -1091,13 +1083,13 @@ bool bmsh3d_save_list_file (const vcl_string& list_file,
   return true;
 }
 
-bool bmsh3d_save_list_view_run_file (const vcl_string& list_view_run, 
+bool bmsh3d_save_list_view_run_file (const vcl_string& list_view_run,
                                       const vcl_string& list_file)
 {
   vul_printf (vcl_cerr, "  Saving list view run file %s.\n", list_file.c_str());
   vcl_FILE* fp;
   if ((fp = vcl_fopen (list_view_run.c_str(), "w")) == NULL) {
-    vul_printf (vcl_cerr, "Can't open output txt file %s\n", list_file);
+    vcl_cerr << "Can't open output txt file " << list_file << '\n';
     return false;
   }
   vcl_fprintf (fp, "dbmsh3dappw -list %s\n", list_file.c_str());
@@ -1112,62 +1104,63 @@ bool bmsh3d_save_xml (bmsh3d_mesh* mesh, const char* file)
   FILE* fp;
   if ((fp = vcl_fopen(file, "w")) == NULL) {
     vcl_fprintf (stderr, "Can't open xml file %s to write.\n", file);
-    return false; 
+    return false;
   }
-  vcl_fprintf (stderr, "Saving %s : \n\t%d points, %d faces ...\n", 
-               file, mesh->vertexmap().size(), mesh->facemap().size());
+  vcl_fprintf (stderr, "Saving %s :\n\t%d points, %d faces ...\n",
+  file, mesh->vertexmap().size(), mesh->facemap().size());
 
-      vcl_fprintf (fp, "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>");
+  vcl_fprintf (fp, "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>");
 
-      vcl_fprintf (fp, "\n");
-      vcl_fprintf (fp, "<CityModel xmlns=\"http://www.citygml.org/citygml/1/0/0\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.citygml.org/citygml/1/0/0 http://www.citygml.org/citygml/1/0/0/CityGML.xsd\">");
+  vcl_fprintf (fp, "\n");
+  vcl_fprintf (fp, "<CityModel xmlns=\"http://www.citygml.org/citygml/1/0/0\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.citygml.org/citygml/1/0/0 http://www.citygml.org/citygml/1/0/0/CityGML.xsd\">");
 
-      vcl_fprintf (fp, "\n");
-      vcl_fprintf (fp, "<gml:description>CityModel description</gml:description>");
-      vcl_fprintf (fp, "<gml:name>CityModel name</gml:name>");
+  vcl_fprintf (fp, "\n");
+  vcl_fprintf (fp, "<gml:description>CityModel description</gml:description>");
+  vcl_fprintf (fp, "<gml:name>CityModel name</gml:name>");
 
-      vcl_fprintf (fp, "\n");
-      vcl_fprintf (fp, "<cityObjectMember>");
+  vcl_fprintf (fp, "\n");
+  vcl_fprintf (fp, "<cityObjectMember>");
   //  <Building gml:id="GEB_TH_IFC_Building_Variant_GEB_0">");
 
-      vcl_fprintf (fp, "\n");
-      vcl_fprintf (fp, "<Building>");
+  vcl_fprintf (fp, "\n");
+  vcl_fprintf (fp, "<Building>");
 
-      vcl_fprintf (fp, "\n");
-      vcl_fprintf (fp, "<gml:description>Building Description</gml:description>");
-      vcl_fprintf (fp, " <gml:name>Building Name</gml:name>");
-      vcl_fprintf (fp, "<consistsOfBuildingPart>");
- //       <BuildingPart gml:id="GEB_TH_IFC_Building_Variant_GEB_TEIL_1">
-       vcl_fprintf (fp, "<BuildingPart>");
-       vcl_fprintf (fp, " <gml:description>BuildingPart Description</gml:description>");
-       vcl_fprintf (fp, "<gml:name>BuildingPart Name</gml:name>");
- 
+  vcl_fprintf (fp, "\n");
+  vcl_fprintf (fp, "<gml:description>Building Description</gml:description>");
+  vcl_fprintf (fp, " <gml:name>Building Name</gml:name>");
+  vcl_fprintf (fp, "<consistsOfBuildingPart>");
+  //       <BuildingPart gml:id="GEB_TH_IFC_Building_Variant_GEB_TEIL_1">
+  vcl_fprintf (fp, "<BuildingPart>");
+  vcl_fprintf (fp, " <gml:description>BuildingPart Description</gml:description>");
+  vcl_fprintf (fp, "<gml:name>BuildingPart Name</gml:name>");
+
   vcl_map<int, bmsh3d_face*>::iterator fit = mesh->facemap().begin();
-  for (; fit != mesh->facemap().end(); fit++) {
+  for (; fit != mesh->facemap().end(); fit++)
+  {
     bmsh3d_face* face = (*fit).second;
-      vcl_fprintf (fp, "\n");
+    vcl_fprintf (fp, "\n");
 
-       vcl_fprintf (fp, "<boundedBy>");
-       vcl_fprintf (fp, "<WallSurface>");
-       vcl_fprintf (fp, "<lod4MultiSurface><gml:MultiSurface>");
-      vcl_fprintf (fp, "\n");
+    vcl_fprintf (fp, "<boundedBy>");
+    vcl_fprintf (fp, "<WallSurface>");
+    vcl_fprintf (fp, "<lod4MultiSurface><gml:MultiSurface>");
+    vcl_fprintf (fp, "\n");
 
     vcl_fprintf (fp, "<gml:surfaceMember>");
-    
-    vcl_fprintf (fp, "<TexturedSurface orientation=\"+\">");
-                  
-    vcl_fprintf (fp, "<gml:baseSurface>");
-                    
-    vcl_fprintf (fp, "<gml:Polygon>");
-                      
-    vcl_fprintf (fp, "<gml:exterior>");
-                        
-    vcl_fprintf (fp, "<gml:LinearRing>");
-             vcl_fprintf (fp, "\n");
-                   
-     for (unsigned j=0; j<face->vertices().size(); j++) {
 
-      bmsh3d_vertex* v = face->vertices(j);  
+    vcl_fprintf (fp, "<TexturedSurface orientation=\"+\">");
+
+    vcl_fprintf (fp, "<gml:baseSurface>");
+
+    vcl_fprintf (fp, "<gml:Polygon>");
+
+    vcl_fprintf (fp, "<gml:exterior>");
+
+    vcl_fprintf (fp, "<gml:LinearRing>");
+    vcl_fprintf (fp, "\n");
+
+    for (unsigned j=0; j<face->vertices().size(); j++)
+    {
+      bmsh3d_vertex* v = face->vertices(j);
       vcl_fprintf (fp, "\n");
       vcl_fprintf (fp, "<gml:pos srsDimension=\"3\">");
       vgl_point_3d<double > pt = v->pt();
@@ -1176,43 +1169,41 @@ bool bmsh3d_save_xml (bmsh3d_mesh* mesh, const char* file)
       vcl_fprintf (fp, "%.16f ", v->pt().z());
       vcl_fprintf (fp, "</gml:pos>");
       vcl_fprintf (fp, "\n");
-      }
-//Now print the first vertex again to close the polygon
-   bmsh3d_vertex* v = face->vertices(0);  
-   vcl_fprintf (fp, "\n");
-   vcl_fprintf (fp, "<gml:pos srsDimension=\"3\">");
-   vgl_point_3d<double > pt = v->pt();  
-   vcl_fprintf (fp, "%.16f ", v->pt().x());
-   vcl_fprintf (fp, "%.16f ", v->pt().y());
-   vcl_fprintf (fp, "%.16f ", v->pt().z());
-   vcl_fprintf (fp, "</gml:pos>");
-   vcl_fprintf (fp, "\n");
-
-   vcl_fprintf (fp, "</gml:LinearRing>");
-                      
-    vcl_fprintf (fp, "</gml:exterior>");
-                    
-    vcl_fprintf (fp, "</gml:Polygon>");
-                  
-    vcl_fprintf (fp, "</gml:baseSurface>");
-                
-    vcl_fprintf (fp, "</TexturedSurface>");
-      vcl_fprintf (fp, "\n");
-
-              
-    vcl_fprintf (fp, "</gml:surfaceMember>");
-
-   vcl_fprintf (fp, "</gml:MultiSurface></lod4MultiSurface>");
-  vcl_fprintf (fp, "     </WallSurface>");
-  vcl_fprintf (fp, "  </boundedBy>");         
-
+    }
+    //Now print the first vertex again to close the polygon
+    bmsh3d_vertex* v = face->vertices(0);
+    vcl_fprintf (fp, "\n");
+    vcl_fprintf (fp, "<gml:pos srsDimension=\"3\">");
+    vgl_point_3d<double > pt = v->pt();
+    vcl_fprintf (fp, "%.16f ", v->pt().x());
+    vcl_fprintf (fp, "%.16f ", v->pt().y());
+    vcl_fprintf (fp, "%.16f ", v->pt().z());
+    vcl_fprintf (fp, "</gml:pos>");
     vcl_fprintf (fp, "\n");
 
+    vcl_fprintf (fp, "</gml:LinearRing>");
+
+    vcl_fprintf (fp, "</gml:exterior>");
+
+    vcl_fprintf (fp, "</gml:Polygon>");
+
+    vcl_fprintf (fp, "</gml:baseSurface>");
+
+    vcl_fprintf (fp, "</TexturedSurface>");
+    vcl_fprintf (fp, "\n");
+
+
+    vcl_fprintf (fp, "</gml:surfaceMember>");
+
+    vcl_fprintf (fp, "</gml:MultiSurface></lod4MultiSurface>");
+    vcl_fprintf (fp, "     </WallSurface>");
+    vcl_fprintf (fp, "  </boundedBy>");
+    vcl_fprintf (fp, "\n");
   }
   vcl_fprintf (fp, "       </BuildingPart>");
   vcl_fprintf (fp, "     </consistsOfBuildingPart>");
   vcl_fprintf (fp, "   </Building>");
-  vcl_fprintf (fp, "  </cityObjectMember>");       
+  vcl_fprintf (fp, "  </cityObjectMember>");
   vcl_fprintf (fp, " </CityModel>");
 
   vcl_fclose (fp);
@@ -1220,6 +1211,3 @@ bool bmsh3d_save_xml (bmsh3d_mesh* mesh, const char* file)
 
   return true;
 }
-
-
-
