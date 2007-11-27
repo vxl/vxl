@@ -194,7 +194,7 @@ bool bmsh3d_load_xyzn1 (vcl_vector<vcl_pair<vgl_point_3d<double>, vgl_vector_3d<
   assert (ori_pts.size() == 0);
 
   //Read in # points
-  int num_pts;
+  unsigned int num_pts;
   vcl_fscanf (fp, "%d\n", &num_pts);
 
   //Read in (x, y, z) points.
@@ -706,15 +706,15 @@ bool bmsh3d_load_ply2 (bmsh3d_mesh* M, const char* file)
     return false;
   }
 
-  int vertex_N, face_N;
+  unsigned int vertex_N, face_N;
   vcl_fscanf (fp, "%d\n", &vertex_N);
   vcl_fscanf (fp, "%d\n", &face_N);
 
   vul_printf (vcl_cerr, "  loading %s :\n\t%d points, %d faces ...\n",
-               file, vertex_N, face_N);
+              file, vertex_N, face_N);
 
   double p[3];
-  for (int i=0; i<vertex_N; i++) {
+  for (unsigned int i=0; i<vertex_N; ++i) {
     bmsh3d_vertex* point = M->_new_vertex ();
 
     vcl_fscanf (fp, "%lf ", &p[0]);
@@ -726,7 +726,7 @@ bool bmsh3d_load_ply2 (bmsh3d_mesh* M, const char* file)
     M->_add_vertex (point);
   }
 
-  for (int i=0; i<face_N; i++){
+  for (unsigned int i=0; i<face_N; ++i) {
     bmsh3d_face* F = M->_new_face ();
 
     int num_pt_per_face;
@@ -759,14 +759,14 @@ bool bmsh3d_load_ply2_v (bmsh3d_mesh* M, const char* file)
     ///vul_printf (vcl_cerr, "  can't open input PLY2 file %s.\n", file);
     return false;
   }
-  int vertex_N, face_N;
+  unsigned int vertex_N, face_N;
   vcl_fscanf (fp, "%d\n", &vertex_N);
   vcl_fscanf (fp, "%d\n", &face_N);
   vul_printf (vcl_cerr, "  bmsh3d_load_ply2_v() %s:\n\t%d points, %d faces ...\n",
               file, vertex_N, face_N);
 
   double p[3];
-  for (int i=0; i<vertex_N; i++) {
+  for (unsigned int i=0; i<vertex_N; ++i) {
     bmsh3d_vertex* V = M->_new_vertex ();
     vcl_fscanf (fp, "%lf ", &p[0]);
     vcl_fscanf (fp, "%lf ", &p[1]);
@@ -792,7 +792,7 @@ bool bmsh3d_load_ply2_f (bmsh3d_mesh* M, const char* file)
     return false;
   }
 
-  int vertex_N, face_N;
+  unsigned int vertex_N, face_N;
   vcl_fscanf (fp, "%d\n", &vertex_N);
   vcl_fscanf (fp, "%d\n", &face_N);
 
@@ -801,7 +801,7 @@ bool bmsh3d_load_ply2_f (bmsh3d_mesh* M, const char* file)
 
   assert (M->vertexmap().size() == vertex_N);
   double p[3];
-  for (int i=0; i<vertex_N; i++) {
+  for (unsigned int i=0; i<vertex_N; ++i) {
     bmsh3d_vertex* V = M->vertexmap(i);
     vcl_fscanf (fp, "%lf ", &p[0]);
     vcl_fscanf (fp, "%lf ", &p[1]);
@@ -814,7 +814,7 @@ bool bmsh3d_load_ply2_f (bmsh3d_mesh* M, const char* file)
   }
 
   assert (M->facemap().size() == 0);
-  for (int i=0; i<face_N; i++){
+  for (unsigned int i=0; i<face_N; i++){
     bmsh3d_face* F = M->_new_face ();
 
     int num_pt_per_face;
@@ -892,7 +892,7 @@ bool bmsh3d_save_label_faces_ply2 (bmsh3d_mesh* M, const int label, const char* 
 
   for (unsigned int i=0; i<vertices.size(); i++) {
     bmsh3d_vertex* V = vertices[i];
-    assert (V->vid() == i);
+    assert (V->vid() == (int)i);
 
     vcl_fprintf (fp, "%.16f ", V->pt().x());
     vcl_fprintf (fp, "%.16f ", V->pt().y());
@@ -1043,8 +1043,6 @@ bool bmsh3d_read_list_file (const char* file,
   }
 
   //Read in each line of dataset in the list file.
-  int file_count = 0;
-  int af_count = 0;
   while (in) {
     linestr.clear();
     vcl_getline (in, linestr);
