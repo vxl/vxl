@@ -649,7 +649,7 @@ void bwm_tableau_mgr::create_img_tableau(vcl_string name,
   vgui_range_map_params_sptr params;
   vil_image_resource_sptr img_res = load_image(image_path, params);
   if (!img_res) {
-    show_error("There is a problem with loading the image resource!");
+    show_error("Image [" + image_path + "] NOT found");
     return;
   }
 
@@ -688,7 +688,7 @@ void bwm_tableau_mgr::create_cam_tableau(vcl_string name,
   vil_image_resource_sptr img_res = load_image(image_path, params);
 
   if (!img_res) {
-     show_error("There is a problem creating the image resource!");
+     show_error("Image [" + image_path + "] is NOT found");
      return;
   }
 
@@ -707,15 +707,8 @@ void bwm_tableau_mgr::create_cam_tableau(vcl_string name,
   // info is in the image, not a seperate file
   if (cam_path.size() == 0)
   {
-    camera_rat = bwm_algo::extract_nitf_camera(img_res);
-    if (camera_rat == 0) {
-      vcl_cerr << "Camera is not given, the tableau is not created!\n";
-      return;
-    } else {
-      rat_observer = new bwm_observer_rat_cam(img, camera_rat, cam_path);
-      observer = rat_observer;
-      t = new bwm_tableau_rat_cam(rat_observer);
-    }
+    show_error("Camera tableaus need a valid camera path!");
+    return;
   }
   else
   {
@@ -728,7 +721,11 @@ void bwm_tableau_mgr::create_cam_tableau(vcl_string name,
       t = new bwm_tableau_proj_cam(proj_observer);
       break;
      case RATIONAL:
-      camera_rat = new vpgl_rational_camera<double>(cam_path);
+      camera_rat = read_rational_camera<double>(cam_path);
+      if (!camera_rat) {
+        show_error("[" + cam_path + "] is not a valid rational camera path");
+        return;
+      }
       rat_observer = new bwm_observer_rat_cam(img, camera_rat, cam_path);
       if (lvcs) {
         double lat = lvcs->x();
