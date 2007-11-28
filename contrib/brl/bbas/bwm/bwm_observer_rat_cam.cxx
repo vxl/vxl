@@ -4,6 +4,7 @@
 #include "bwm_observable_textured_mesh.h"
 #include "bwm_observable_textured_mesh_sptr.h"
 #include "bwm_texture_map_generator.h"
+#include "bwm_world.h"
 #include "reg/bwm_reg_utils.h"
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_box_2d.h>
@@ -994,7 +995,7 @@ void bwm_observer_rat_cam::adjust_camera_to_world_pt()
   }
 #endif
   vgl_point_3d<double> pt_3d;
-  if (!bwm_observer_mgr::instance()->world_pt(pt_3d))
+  if (!bwm_world::instance()->world_pt(pt_3d))
   {
     vcl_cerr << "In bwm_observer_rat_cam::adjust_camera_to_world_pt() -"
              << " no world point defined\n";
@@ -1061,7 +1062,7 @@ void bwm_observer_rat_cam::project_edges_from_master()
   vgl_homg_plane_3d<double> hpl= mobs->get_proj_plane();
   vgl_plane_3d<double> master_plane(hpl);
   vgl_point_3d<double> wpt;
-  if (!bwm_observer_mgr::instance()->world_pt(wpt))
+  if (!bwm_world::instance()->world_pt(wpt))
   {
     vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
              << " no world point to use as an initial guess\n";

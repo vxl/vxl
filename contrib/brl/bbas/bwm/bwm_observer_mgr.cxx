@@ -2,6 +2,7 @@
 //:
 // \file
 #include "algo/bwm_utils.h"
+#include "bwm_world.h"
 #include <vpgl/algo/vpgl_adjust_rational_trans_onept.h>
 #include <vsl/vsl_basic_xml_element.h>
 #include <vgui/vgui_dialog.h>
@@ -43,14 +44,14 @@ void bwm_observer_mgr::remove(bwm_observer* observer)
     if (observers_[i] == observer)
       observers_.erase(observers_.begin()+i);
 }
-
+#if 0
 //Set a world point to be used in correspondences from world to image
 void bwm_observer_mgr::set_world_pt(vgl_point_3d<double> world_pt)
 {
   corr_world_pt_ = world_pt;
   world_point_valid_ = true;
 }
-
+#endif
 //Set the correspodence mode which is either image_to_image or world_to_image
 //The world_to_image mode is only possible if there is a world point available
 //The existence of a valid world point is defined by the flag
@@ -76,7 +77,7 @@ void bwm_observer_mgr::set_corr_mode()
   if (!params.ask())
     return;
   if (mode ==bwm_observer_mgr::WORLD_TO_IMAGE)
-    if (world_point_valid_){
+	  if (bwm_world::instance()->world_pt_valid()){
       corr_mode_ =  bwm_observer_mgr::WORLD_TO_IMAGE;
       return;
     } else {
@@ -98,8 +99,15 @@ void bwm_observer_mgr::collect_corr()
   if (corr_mode_ == IMAGE_TO_IMAGE)
     corr->set_mode(true);
   else if (corr_mode_ == WORLD_TO_IMAGE) {
+    vgl_point_3d<double> wpt;
+	if(!bwm_world::instance()->world_pt(wpt))
+	{
+		vcl_cerr << " In bwm_observer_mgr::collect_corr() -"
+		         << " Can't do world to image, world pt invalid\n";
+		return;
+	}
     corr->set_mode(false);
-    corr->set_world_pt(corr_world_pt_);
+    corr->set_world_pt(wpt);
   }
   else
     vcl_cerr << "Unknown correspondence mode!" << vcl_endl;
@@ -412,6 +420,6 @@ void bwm_observer_mgr::adjust_camera_offsets()
     (*cit)->set_world_pt(intersection);
   }
 
-  this->set_world_pt(intersection);
+  bwm_world::instance()->set_world_pt(intersection);
   this->set_corr_mode(bwm_observer_mgr::WORLD_TO_IMAGE);
 }

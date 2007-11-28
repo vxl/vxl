@@ -484,8 +484,12 @@ void bwm_tableau_mgr::load_site()
         corr->set_mode(false);
         corr->set_world_pt(parser->corresp_world_pts()[i].get_p());
         //sets the same pt each time FIXME -JLM
-        bwm_observer_mgr::instance()->set_world_pt(corr->world_pt());
+        bwm_world::instance()->set_world_pt(corr->world_pt());
+        bwm_observer_mgr::instance()->
+          set_corr_mode(bwm_observer_mgr::WORLD_TO_IMAGE);
       } else if (mode == "IMAGE_TO_IMAGE") {
+        bwm_observer_mgr::instance()->
+          set_corr_mode(bwm_observer_mgr::IMAGE_TO_IMAGE);
         corr->set_mode(true);
       }
 

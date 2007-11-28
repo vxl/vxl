@@ -6,6 +6,7 @@
 #include "algo/bwm_algo.h"
 #include "algo/bwm_plane_fitting_lsf.h"
 #include "bwm_tableau_mgr.h"
+#include "bwm_world.h"
 
 #include <vcl_iostream.h>
 
@@ -239,7 +240,7 @@ void bwm_observer_cam::world_pt_corr()
       vsol_point_2d_sptr vertex_2d = new vsol_point_2d(vertex->x, vertex->y);
       vsol_point_3d_sptr vertex_3d;
       this->backproj_point(vertex_2d, vertex_3d);
-      bwm_observer_mgr::instance()->set_world_pt(vertex_3d->get_p());
+      bwm_world::instance()->set_world_pt(vertex_3d->get_p());
     }
     else
       vcl_cerr << "Please select a vertex only (circle)\n";
