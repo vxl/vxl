@@ -356,9 +356,12 @@ void bwm_tableau_mgr::edit_site()
   site_edit_dialog.message("LVCS origin for this site:");
   site_edit_dialog.line_break();
 
-  lat = parser->site()->lvcs_->x();
-  lon = parser->site()->lvcs_->y();
-  elev = parser->site()->lvcs_->z();
+  lat = lon = elev = 0.0;
+  if (parser->site()->lvcs_) {
+    lat = parser->site()->lvcs_->x();
+    lon = parser->site()->lvcs_->y();
+    elev = parser->site()->lvcs_->z();
+  }
   site_edit_dialog.field("Lat:", lat);
   site_edit_dialog.field("Lon:", lon);
   site_edit_dialog.field("Elev:", elev);
