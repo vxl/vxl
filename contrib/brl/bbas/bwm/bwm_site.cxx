@@ -79,11 +79,13 @@ void bwm_site::x_write(vcl_ostream& s)
   s << "</TABLEAUS>" << vcl_endl;
 
   // add the LVCS
-  vsl_basic_xml_element lvcs(LVCS_TAG);
-  lvcs.add_attribute("lat", lvcs_->x());
-  lvcs.add_attribute("lon", lvcs_->y());
-  lvcs.add_attribute("elev", lvcs_->z());
-  lvcs.x_write(s);
+  if (lvcs_) {
+    vsl_basic_xml_element lvcs(LVCS_TAG);
+    lvcs.add_attribute("lat", lvcs_->x());
+    lvcs.add_attribute("lon", lvcs_->y());
+    lvcs.add_attribute("elev", lvcs_->z());
+    lvcs.x_write(s);
+  }
 
   // add the object files
   s << "<objects>" << vcl_endl;
@@ -98,16 +100,18 @@ void bwm_site::x_write(vcl_ostream& s)
   s << "</objects>" << vcl_endl;
 
   // write out the correspondence list
-  vsl_basic_xml_element xml_element("correspondences");
-  xml_element.add_attribute("mode", corr_mode_);
-  xml_element.x_write_open(s);
+  if (this->corresp_.size() > 0) {
+    vsl_basic_xml_element xml_element("correspondences");
+    xml_element.add_attribute("mode", corr_mode_);
+    xml_element.x_write_open(s);
 
-  for(unsigned i=0; i< this->corresp_.size(); i++) {
-    bwm_corr_sptr corr = corresp_[i];
-    vcl_cout << corr->num_matches() << vcl_endl;
-    corr->x_write(s);
+    for(unsigned i=0; i< this->corresp_.size(); i++) {
+      bwm_corr_sptr corr = corresp_[i];
+      vcl_cout << corr->num_matches() << vcl_endl;
+      corr->x_write(s);
+    }
+    xml_element.x_write_close(s);
   }
-  xml_element.x_write_close(s);
 
   site.x_write_close(s);
 }

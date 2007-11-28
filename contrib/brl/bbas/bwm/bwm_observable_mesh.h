@@ -26,10 +26,10 @@ public:
   virtual vcl_string type_name() const {return "bwm_observable_mesh"; }
 
   //: constructors
-  bwm_observable_mesh()  : object_(0){}
-  bwm_observable_mesh(bmsh3d_mesh_mc* object)  : object_(object) {}
+  bwm_observable_mesh();
+  bwm_observable_mesh(BWM_MESH_TYPES type);
+  bwm_observable_mesh(bmsh3d_mesh_mc* object);
   bwm_observable_mesh(vsol_polygon_3d_sptr poly);
-  bwm_observable_mesh(vsol_polygon_3d_sptr poly, double dist);
 
   //: destructor
   virtual ~bwm_observable_mesh();

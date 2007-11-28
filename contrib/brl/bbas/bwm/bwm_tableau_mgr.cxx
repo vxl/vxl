@@ -12,6 +12,7 @@
 #include "bwm_observer_proj_cam.h"
 #include "bwm_observer_rat_cam.h"
 #include "bwm_corr_sptr.h"
+#include "bwm_world.h"
 #include "bwm_command.h"
 #include "bwm_def.h"
 #include "bwm_load_commands.h"
@@ -411,121 +412,6 @@ void bwm_tableau_mgr::edit_site()
   }
 }
 
-void bwm_tableau_mgr::create_img_tableau(vcl_string name,
-                                         vcl_string& image_path)
-{
-  // create only if registered
-  bwm_load_img_command comm;
-  vcl_map<vcl_string, bwm_command_sptr>::iterator iter = tab_types_.find(comm.name());
-  if (iter == tab_types_.end()) {
-    vcl_cerr << "Image tableau type is not registered, not creating!\n";
-    return;
-  }
-
-  bgui_image_tableau_sptr img = bgui_image_tableau_new();
-  img->show_image_path(display_image_path_);
-  // LOAD IMAGE
-  vgui_range_map_params_sptr params;
-  vil_image_resource_sptr img_res = load_image(image_path, params);
-  img->set_image_resource(img_res, params);
-  img->set_file_name(image_path);
-
-  bwm_observer_img* obs = new bwm_observer_img(img);
-  bwm_tableau_img* t = new bwm_tableau_img(obs);
-  vgui_viewer2D_tableau_sptr viewer = vgui_viewer2D_tableau_new(t);
-  obs->set_tab_name(name);
-  obs->set_viewer(viewer);
-  unsigned row = 0, col = 0;
-  add_to_grid(viewer, col, row);
-  obs->set_grid_location(col, row);
-  tableaus_[name] = t;
-}
-
-void bwm_tableau_mgr::create_cam_tableau(vcl_string name,
-                                         vcl_string& image_path,
-                                         vcl_string& cam_path,
-                                         unsigned camera_type,
-                                         vsol_point_3d_sptr lvcs)
-{
-  // create only if registered
-  bwm_load_cam_command comm;
-  vcl_map<vcl_string, bwm_command_sptr>::iterator iter = tab_types_.find(comm.name());
-  if (iter == tab_types_.end()) {
-    vcl_cerr << "Camera tableau type is not registered, not creating!\n";
-    return;
-  }
-
-  bgui_image_tableau_sptr img = bgui_image_tableau_new();
-  img->show_image_path(display_image_path_);
-  // LOAD IMAGE
-  vgui_range_map_params_sptr params;
-  vil_image_resource_sptr img_res = load_image(image_path, params);
-  img->set_image_resource(img_res, params);
-  img->set_file_name(image_path);
-
-  // LOAD CAMERA
-  vpgl_proj_camera<double> *camera_proj=0;
-  vpgl_rational_camera<double> *camera_rat=0;
-  bwm_observer_cam* observer = (bwm_observer_cam*)0;
-  bwm_observer_proj_cam* proj_observer = 0;
-  bwm_observer_rat_cam* rat_observer = 0;
-  bwm_tableau_cam* t = 0;
-
-  // check if the camera path is not empty, if it is NITF, the camera
-  // info is in the image, not a seperate file
-  if (cam_path.size() == 0)
-  {
-    camera_rat = bwm_algo::extract_nitf_camera(img_res);
-    if (camera_rat == 0) {
-      vcl_cerr << "Camera is not given, the tableau is not created!\n";
-      return;
-    } else {
-      rat_observer = new bwm_observer_rat_cam(img, camera_rat, cam_path);
-      observer = rat_observer;
-      t = new bwm_tableau_rat_cam(rat_observer);
-    }
-  }
-  else
-  {
-    switch (camera_type)
-    {
-     case 0:
-      // projective
-      camera_proj = (read_projective_camera(cam_path)).clone();
-      proj_observer = new bwm_observer_proj_cam(img, camera_proj, cam_path);
-      observer = proj_observer;
-      t = new bwm_tableau_proj_cam(proj_observer);
-      break;
-     case 1:
-      // rational
-      camera_rat = new vpgl_rational_camera<double>(cam_path);
-      rat_observer = new bwm_observer_rat_cam(img, camera_rat, cam_path);
-      if (lvcs) {
-        double lat = lvcs->x();
-        double lon = lvcs->y();
-        double elev = lvcs->z();
-        rat_observer->set_lvcs(lat, lon, elev);
-      }
-      observer = rat_observer;
-      t = new bwm_tableau_rat_cam(rat_observer);
-      break;
-     default:
-      vcl_cout << "Error: unknown camera type "<<camera_type<< vcl_endl;
-    }
-  }
-
-  // add the observer to the observer pool
-  bwm_observer_mgr::instance()->add(observer);
-  observer->set_tab_name(name);
-  vgui_viewer2D_tableau_sptr viewer = vgui_viewer2D_tableau_new(t);
-
-  observer->set_viewer(viewer);
-  unsigned row = 0, col = 0;
-  add_to_grid(viewer, col, row);
-  observer->set_grid_location(col, row);
-
-  tableaus_[name] = t;
-}
 
 void bwm_tableau_mgr::load_site()
 {
@@ -573,23 +459,7 @@ void bwm_tableau_mgr::load_site()
           this->create_cam_tableau(cam_tab->name, cam_tab->img_path, cam_tab->cam_path, cam_type, lvcs);
         } else
           inactive_tableaus_.push_back(cam_tab);
-      }/* else if (t->type_name.compare("Coin3DTableau") == 0) {
-        bwm_io_tab_config_coin3d* coin3d_tab = static_cast<bwm_io_tab_config_coin3d* > (t);
-        bool active = coin3d_tab->status;
-        if (active) {
-          BWM_CAMERA_TYPES cam_type;
-          if (coin3d_tab->cam_type.compare("projective") ==0)
-            cam_type = PROJECTIVE;
-          else if (coin3d_tab->cam_type.compare("rational") ==0)
-            cam_type = RATIONAL;
-          else {
-            vcl_cerr << "Unknown camera type " << coin3d_tab->cam_type << "coming from parser!\n";
-            continue;
-          }
-          this->create_coin3d_tableau(coin3d_tab->name, coin3d_tab->cam_path, cam_type);
-        } else
-          inactive_tableaus_.push_back(coin3d_tab);
-      }*/
+      }
     }
 
     // create the correspondences
@@ -654,6 +524,7 @@ void bwm_tableau_mgr::load_site()
         } else {
           // comes here if it is a mesh
           bwm_observable_mesh_sptr mesh = new bwm_observable_mesh();
+          bwm_observer_mgr::instance()->attach(mesh);
           mesh->load_from(path);
           if (type.compare(object_types_[MESH_FEATURE]) == 0)
             mesh->set_mesh_type(bwm_observable_mesh::BWM_MESH_FEATURE);
@@ -677,7 +548,9 @@ void bwm_tableau_mgr::save_site()
 
   vcl_string site_name, site_dir, ext;
   d.field("Site name:", site_name);
+  d.line_break();
   d.dir("Site dir:", ext, site_dir);
+  d.line_break();
   if (!d.ask())
     return;
 
@@ -686,7 +559,7 @@ void bwm_tableau_mgr::save_site()
     return;
   }
 
-  vcl_string site_path = site_dir + "//" + site_name + ".xml";
+  vcl_string site_path = site_dir + "\\" + site_name + ".xml";
   vcl_ofstream s(site_path.data());
 
   bwm_site_sptr site = new bwm_site();
@@ -700,26 +573,27 @@ void bwm_tableau_mgr::save_site()
   {
     vgui_tableau_sptr tab = it->second;
     vcl_string name = it->first;
-    if (tab->type_name().compare("bwm_tableau_image")) {
+    if (tab->type_name().compare("bwm_tableau_image") == 0) {
       bwm_tableau_img* img_tab = static_cast<bwm_tableau_img*> (tab.as_pointer());
-      vcl_string img_path = img_tab->file_name();
+      vcl_string img_path = img_tab->img_path();
       bwm_io_tab_config_img *t = new bwm_io_tab_config_img(IMAGE_TABLEAU_TAG, name, "active", img_path);
       site->tableaus_.push_back(t);
-    } else if (tab->type_name().compare("bwm_tableau_rat_cam")) {
+    } else if (tab->type_name().compare("bwm_tableau_rat_cam") == 0) {
       bwm_tableau_cam* cam_tab = static_cast<bwm_tableau_cam*> (tab.as_pointer());
-      vcl_string img_path = cam_tab->observer()->file_name();
+      vcl_string img_path = cam_tab->img_path();
        vcl_string cam_path = cam_tab->observer()->camera_path();
       bwm_io_tab_config_cam *t = new bwm_io_tab_config_cam(CAMERA_TABLEAU_TAG,
         name, "active", img_path, cam_path, "rational");
       site->tableaus_.push_back(t);
-    } else if (tab->type_name().compare("bwm_tableau_proj_cam")) {
+    } else if (tab->type_name().compare("bwm_tableau_proj_cam") == 0) {
       bwm_tableau_cam* cam_tab = static_cast<bwm_tableau_cam*> (tab.as_pointer());
-      vcl_string img_path = cam_tab->observer()->file_name();
+      vcl_string img_path = cam_tab->img_path();
        vcl_string cam_path = cam_tab->observer()->camera_path();
       bwm_io_tab_config_cam *t = new bwm_io_tab_config_cam(CAMERA_TABLEAU_TAG,
         name, "active", img_path, cam_path, "projective");
       site->tableaus_.push_back(t);
     }
+    it++;
   }
   // add the inactive tableaux
   for (unsigned i=0; i<inactive_tableaus_.size(); i++) {
@@ -739,21 +613,147 @@ void bwm_tableau_mgr::save_site()
 
   // add the objects
   // ask one camera tableau to save its objects
-  it = tableaus_.begin();
-  while (it != tableaus_.end()) {
-    vgui_tableau_sptr tab = it->second;
-    vcl_string name = it->first;
-    if (tab->type_name().compare("bwm_tableau_rat_cam")) {
-      bwm_tableau_rat_cam* cam_tab = static_cast<bwm_tableau_rat_cam*> (tab.as_pointer());
-      cam_tab->save();
-    } else if (tab->type_name().compare("bwm_tableau_rat_cam")) {
-      bwm_tableau_proj_cam* cam_tab = static_cast<bwm_tableau_proj_cam*> (tab.as_pointer());
-      cam_tab->save();
-    }
+  vcl_vector<bwm_observable_sptr> objs = bwm_world::instance()->objects();
+  vcl_string obj_path = site_dir + "\\objects\\";
+  vul_file::make_directory(obj_path);
+  for (unsigned i=0; i<objs.size(); i++) {
+    vcl_stringstream strm;
+    strm << vcl_fixed << i;
+    vcl_string str(strm.str());
+    vcl_string fname = obj_path + "mesh_" + str + ".ply";
+    objs[i]->save(fname.c_str());
+    site->objects_.push_back(vcl_pair<vcl_string, vcl_string>(fname, object_types_[MESH_FEATURE]));
   }
 
   site->x_write(s);
 }
+
+void bwm_tableau_mgr::create_img_tableau(vcl_string name,
+                                         vcl_string& image_path)
+{
+  // create only if registered
+  bwm_load_img_command comm;
+  vcl_map<vcl_string, bwm_command_sptr>::iterator iter = tab_types_.find(comm.name());
+  if (iter == tab_types_.end()) {
+    vcl_cerr << "Image tableau type is not registered, not creating!\n";
+    return;
+  }
+
+  bgui_image_tableau_sptr img = bgui_image_tableau_new();
+  img->show_image_path(display_image_path_);
+
+  // LOAD IMAGE
+  vgui_range_map_params_sptr params;
+  vil_image_resource_sptr img_res = load_image(image_path, params);
+  if (!img_res) {
+    show_error("There is a problem with loading the image resource!");
+    return;
+  }
+
+  img->set_image_resource(img_res, params);
+  img->set_file_name(image_path);
+
+  bwm_observer_img* obs = new bwm_observer_img(img);
+  bwm_tableau_img* t = new bwm_tableau_img(obs);
+  vgui_viewer2D_tableau_sptr viewer = vgui_viewer2D_tableau_new(t);
+  obs->set_tab_name(name);
+  obs->set_viewer(viewer);
+  unsigned row = 0, col = 0;
+  add_to_grid(viewer, col, row);
+  obs->set_grid_location(col, row);
+  tableaus_[name] = t;
+}
+
+void bwm_tableau_mgr::create_cam_tableau(vcl_string name,
+                                         vcl_string& image_path,
+                                         vcl_string& cam_path,
+                                         BWM_CAMERA_TYPES camera_type,
+                                         vsol_point_3d_sptr lvcs)
+{
+  // create only if registered
+  bwm_load_cam_command comm;
+  vcl_map<vcl_string, bwm_command_sptr>::iterator iter = tab_types_.find(comm.name());
+  if (iter == tab_types_.end()) {
+    show_error("Camera tableau type "+ comm.name() +" is not registered, not creating!");;
+    return;
+  }
+
+  bgui_image_tableau_sptr img = bgui_image_tableau_new();
+  img->show_image_path(display_image_path_);
+  // LOAD IMAGE
+  vgui_range_map_params_sptr params;
+  vil_image_resource_sptr img_res = load_image(image_path, params);
+
+  if (!img_res) {
+     show_error("There is a problem creating the image resource!");
+     return;
+  }
+
+  img->set_image_resource(img_res, params);
+  img->set_file_name(image_path);
+
+  // LOAD CAMERA
+  vpgl_proj_camera<double> *camera_proj=0;
+  vpgl_rational_camera<double> *camera_rat=0;
+  bwm_observer_cam* observer = (bwm_observer_cam*)0;
+  bwm_observer_proj_cam* proj_observer = 0;
+  bwm_observer_rat_cam* rat_observer = 0;
+  bwm_tableau_cam* t = 0;
+
+  // check if the camera path is not empty, if it is NITF, the camera
+  // info is in the image, not a seperate file
+  if (cam_path.size() == 0)
+  {
+    camera_rat = bwm_algo::extract_nitf_camera(img_res);
+    if (camera_rat == 0) {
+      vcl_cerr << "Camera is not given, the tableau is not created!\n";
+      return;
+    } else {
+      rat_observer = new bwm_observer_rat_cam(img, camera_rat, cam_path);
+      observer = rat_observer;
+      t = new bwm_tableau_rat_cam(rat_observer);
+    }
+  }
+  else
+  {
+    switch (camera_type)
+    {
+     case PROJECTIVE:
+      camera_proj = (read_projective_camera(cam_path)).clone();
+      proj_observer = new bwm_observer_proj_cam(img, camera_proj, cam_path);
+      observer = proj_observer;
+      t = new bwm_tableau_proj_cam(proj_observer);
+      break;
+     case RATIONAL:
+      camera_rat = new vpgl_rational_camera<double>(cam_path);
+      rat_observer = new bwm_observer_rat_cam(img, camera_rat, cam_path);
+      if (lvcs) {
+        double lat = lvcs->x();
+        double lon = lvcs->y();
+        double elev = lvcs->z();
+        rat_observer->set_lvcs(lat, lon, elev);
+      }
+      observer = rat_observer;
+      t = new bwm_tableau_rat_cam(rat_observer);
+      break;
+     default:
+      vcl_cout << "Error: unknown camera type "<<camera_type<< vcl_endl;
+    }
+  }
+
+  // add the observer to the observer pool
+  bwm_observer_mgr::instance()->add(observer);
+  observer->set_tab_name(name);
+  vgui_viewer2D_tableau_sptr viewer = vgui_viewer2D_tableau_new(t);
+
+  observer->set_viewer(viewer);
+  unsigned row = 0, col = 0;
+  add_to_grid(viewer, col, row);
+  observer->set_grid_location(col, row);
+
+  tableaus_[name] = t;
+}
+
 
 void bwm_tableau_mgr::load_img_tableau()
 {
@@ -768,9 +768,7 @@ void bwm_tableau_mgr::load_img_tableau()
     return;
 
   if (img_file == "") {
-    vgui_dialog error ("Error");
-    error.message ("Please specify an image file (prefix)." );
-    error.ask();
+    show_error("Please specify an image file (prefix).");
     return;
   }
 
@@ -782,17 +780,14 @@ void bwm_tableau_mgr::load_cam_tableau()
 {
   vgui_dialog_extensions params ("Camera Tableau");
   vcl_string ext, name, img_file, cam_file, empty="";
-  vcl_vector<vcl_string> camera_types;
   int camera_type = 0;
   vpgl_camera<double> *camera = (vpgl_camera<double>*)0;
 
-  camera_types.push_back("rational");
-  camera_types.push_back("projective");
   params.field("Tableau Name", name);
   params.line_break();
   params.dir("Image...", ext, img_file);
   params.line_break();
-  params.choice("Camera Type", camera_types, camera_type);
+  params.choice("Camera Type", "rational", "projective", camera_type);
   params.line_break();
   params.file("Camera...", ext, cam_file);
   params.line_break();
@@ -806,7 +801,7 @@ void bwm_tableau_mgr::load_cam_tableau()
     return;
   }
 
-  create_cam_tableau(name, img_file, cam_file, camera_type);
+  create_cam_tableau(name, img_file, cam_file, (BWM_CAMERA_TYPES) camera_type);
 
  }
 
@@ -841,20 +836,6 @@ void bwm_tableau_mgr::remove_tableau()
   grid_->get_last_selected_position(&col, &row);
   grid_->set_selected(row, col, false);
   vgui_tableau_sptr tab = grid_->get_tableau_at(col, row);
-#if 0 // commented out
-  vgui_poly_tableau* poly = static_cast<vgui_poly_tableau* > (grid_.as_pointer());
-  vgui_poly_tableau::iterator it = poly->begin();
-  while (it != poly->end()) {
-    vgui_poly_tableau::item t = *it;
-    vgui_parent_child_link link = t.tab;
-    if (tab == link.child()) {
-      grid_->erase(it);
-      grid_->post_redraw();
-      return;
-    }
-    it++;
-  }
-#endif // 0
 
   vcl_map<vcl_string, vgui_tableau_sptr>::iterator iter = tableaus_.begin();
   while (iter != tableaus_.end()) {
@@ -997,4 +978,11 @@ vgui_tableau_sptr bwm_tableau_mgr::find_tableau(vcl_string name)
     return iter->second;
   }
   return 0;
+}
+
+void bwm_tableau_mgr::show_error(vcl_string msg)
+{
+  vgui_dialog err("ERROR occured");
+  err.message(msg.c_str());
+  err.ask();
 }

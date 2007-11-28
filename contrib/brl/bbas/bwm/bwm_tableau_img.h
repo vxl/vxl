@@ -33,6 +33,8 @@ public:
 
   bool handle(const vgui_event& e);
 
+  vcl_string img_path() { return my_observer_->image_tableau()->file_name(); }
+
   virtual void create_box(); 
   virtual void create_polygon(); 
   virtual void create_polyline();

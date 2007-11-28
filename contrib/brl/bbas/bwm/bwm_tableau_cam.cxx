@@ -289,9 +289,8 @@ void bwm_tableau_cam::create_polygon_mesh()
   }
   vsol_polygon_3d_sptr poly3d;
   my_observer_->backproj_poly(poly2d, poly3d);
-  bwm_observable_mesh_sptr my_polygon = new bwm_observable_mesh();
+  bwm_observable_mesh_sptr my_polygon = new bwm_observable_mesh(bwm_observable_mesh::BWM_MESH_FEATURE);
   bwm_observer_mgr::instance()->attach(my_polygon);
-  bwm_world::instance()->add(my_polygon);
   my_polygon->set_object(poly3d);
   my_observer_->image_tableau()->lock_linenum(false);
 }

@@ -25,7 +25,7 @@
 class bwm_tableau_mgr {
 
 public:
-  typedef enum {PROJECTIVE=0, RATIONAL=1} BWM_CAMERA_TYPES;
+  typedef enum {RATIONAL=0, PROJECTIVE=1} BWM_CAMERA_TYPES;
   typedef enum {MESH_FEATURE, MESH_IMAGE_PROCESSING, MESH_TERRAIN, VSOL, OBJ_UNDEF} BWM_OBJECT_TYPES;
 
   ~bwm_tableau_mgr();
@@ -49,7 +49,7 @@ public:
   void create_img_tableau(vcl_string name, vcl_string& image_path);
 
   void create_cam_tableau(vcl_string name, vcl_string& image_path, vcl_string& cam_path, 
-                          unsigned camera_type, vsol_point_3d_sptr lvcs = 0);
+                          BWM_CAMERA_TYPES camera_type, vsol_point_3d_sptr lvcs = 0);
 
   bwm_command_sptr load_tableau_by_type(vcl_string tableau_type);
 
@@ -87,6 +87,10 @@ private:
   // it alternately adds rows and columns
   bool row_added_;
 
+  bool display_image_path_;
+
+  bwm_site_process* site_create_process_;
+
   bwm_io_config_parser* parse_config();
 
   vil_image_resource_sptr load_image(vcl_string& filename, vgui_range_map_params_sptr& rmps);
@@ -113,9 +117,7 @@ private:
                                int *choices,
                                double &lat, double &lon, double &elev);
 
-  bool display_image_path_;
-
-  bwm_site_process* site_create_process_;
+  void show_error(vcl_string);
 };
 
 #endif

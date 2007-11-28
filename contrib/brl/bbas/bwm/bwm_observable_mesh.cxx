@@ -1,4 +1,5 @@
 #include "bwm_observable_mesh.h"
+#include "bwm_world.h"
 //:
 // \file
 #include "bwm_def.h"
@@ -20,19 +21,33 @@
 #include <bmsh3d/algo/bmsh3d_fileio.h>
 #include <bmsh3d/algo/bmsh3d_mesh_triangulate.h>
 
+bwm_observable_mesh::bwm_observable_mesh() 
+: object_(0) 
+{
+  bwm_world::instance()->add(this);
+}
+
+bwm_observable_mesh::bwm_observable_mesh(BWM_MESH_TYPES type)  
+: object_(0), mesh_type_(type) 
+{
+  bwm_world::instance()->add(this);
+}
+  
+bwm_observable_mesh::bwm_observable_mesh(bmsh3d_mesh_mc* object)  
+: object_(object) 
+{
+  bwm_world::instance()->add(this);
+}
+
 bwm_observable_mesh::bwm_observable_mesh(vsol_polygon_3d_sptr poly)
 {
   // create a single face mesh
   object_ = new bmsh3d_mesh_mc;
   bmsh3d_face_mc* face = create_face(poly);
   object_->_add_face (face);
-  notify_observers("new");
-}
-
-bwm_observable_mesh::bwm_observable_mesh(vsol_polygon_3d_sptr poly, double dist)
-{
-  object_ = new bmsh3d_mesh_mc;
-  //object_->build_IFS_mesh();
+  object_->orient_face_normals();
+  // add yourself to The World
+  bwm_world::instance()->add(this);
   notify_observers("new");
 }
 
@@ -57,6 +72,8 @@ void bwm_observable_mesh::remove()
   for (unsigned i=0; i<observers.size(); i++) {
     detach(observers[i]);
   }
+  // remove the object from world
+  bwm_world::instance()->remove(this);
 }
 
 void bwm_observable_mesh::notify_observers(vcl_string message_type)
@@ -164,18 +181,22 @@ void bwm_observable_mesh::extrude(int face_id, double dist)
   //this->print_faces();
 }
 
- void bwm_observable_mesh::set_object(bmsh3d_mesh_mc* obj)
- {
+void bwm_observable_mesh::set_object(bmsh3d_mesh_mc* obj)
+{
+  if (!object_)
+    object_ = new bmsh3d_mesh_mc;
   object_ = obj;
+  object_->orient_face_normals();
   notify_observers("new");
  }
 
 void bwm_observable_mesh::set_object(vsol_polygon_3d_sptr poly, double dist)
 {
-  object_ = new bmsh3d_mesh_mc;
+  if (!object_)
+    object_ = new bmsh3d_mesh_mc;
   vcl_map<int, vsol_polygon_3d_sptr> inner_faces;
   create_mesh_HE(poly, dist, inner_faces);
-
+  object_->orient_face_normals();
   notify_observers("new");
 }
 
@@ -186,7 +207,7 @@ void bwm_observable_mesh::set_object(vsol_polygon_3d_sptr poly)
   object_ = new bmsh3d_mesh_mc;
   bmsh3d_face_mc* face = create_face(poly);
   object_->_add_face (face);
-
+  object_->orient_face_normals();
   notify_observers("new");
 }
 
@@ -194,6 +215,7 @@ void bwm_observable_mesh::replace(bmsh3d_mesh_mc* obj)
 {
   delete object_;
   object_ = obj;
+  object_->orient_face_normals();
   notify_observers("new");
 }
 
@@ -218,7 +240,6 @@ vsol_polygon_3d_sptr bwm_observable_mesh::extract_face(bmsh3d_face_mc* face,
     //vcl_cout << "vertex " << vertex->id() << " between " <<
     //  cur_he->edge()->id() << " and " << next_he->edge()->id() << vcl_endl;
     vgl_point_3d<double> p = vertex->get_pt();
-    //vcl_cout << i++ << ' ' << p << vcl_endl;
     v_list.push_back(new vsol_point_3d (p.x(), p.y(), p.z()));
     cur_he = (bmsh3d_halfedge*) cur_he->next();
   } while (cur_he != face->halfedge());
@@ -227,7 +248,8 @@ vsol_polygon_3d_sptr bwm_observable_mesh::extract_face(bmsh3d_face_mc* face,
   return poly3d;
 }
 
-vcl_map<int, vsol_polygon_3d_sptr> bwm_observable_mesh::extract_inner_faces(bmsh3d_face_mc* face)
+vcl_map<int, vsol_polygon_3d_sptr> 
+bwm_observable_mesh::extract_inner_faces(bmsh3d_face_mc* face)
 {
   // now, add the inner polygons
   vcl_map<int, bmsh3d_halfedge*> set_he = face->get_mc_halfedges();
@@ -254,7 +276,8 @@ vcl_map<int, vsol_polygon_3d_sptr> bwm_observable_mesh::extract_inner_faces(bmsh
   return polygons;
 }
 
-vcl_map<int, vsol_polygon_3d_sptr> bwm_observable_mesh::extract_inner_faces(int face_id)
+vcl_map<int, vsol_polygon_3d_sptr> 
+bwm_observable_mesh::extract_inner_faces(int face_id)
 {
   bmsh3d_face_mc* face = (bmsh3d_face_mc*)object_->facemap(face_id);
   vcl_map<int, vsol_polygon_3d_sptr> polys;
@@ -289,16 +312,23 @@ vcl_map<int, vsol_polygon_3d_sptr> bwm_observable_mesh::extract_faces()
 
 void bwm_observable_mesh::create_interior()
 {
-  bmsh3d_mesh_mc* interior = object_->clone();
-  double l = object_->edgemap(0)->length();
-  shrink_mesh(interior, 0);//l/10.);
-  //merge_mesh(object_, interior);
-  object_=interior;
-  this->notify_observers("update");
+  if (object_) {
+    bmsh3d_mesh_mc* interior = object_->clone();
+    double l = object_->edgemap(0)->length();
+    shrink_mesh(interior, 0);//l/10.);
+    //merge_mesh(object_, interior);
+    object_=interior;
+    this->notify_observers("update");
+  }
 }
 
 void bwm_observable_mesh::move(vsol_polygon_3d_sptr poly)
 {
+  if (!object_) {
+    vcl_cerr << "mesh object id null" << vcl_endl;
+    return; 
+  }
+
   if (object_->facemap().size() == 1) {
     vcl_map<int, bmsh3d_face*>::iterator it = object_->facemap().begin();
     bmsh3d_face_mc* face = (bmsh3d_face_mc*) (*it).second;
@@ -436,6 +466,7 @@ void bwm_observable_mesh::divide_face(unsigned face_id,
   bmsh3d_face_mc *f1, *f2;
   mesh_break_face(object_, face, edge1, edge2, v1, v2, f1, f2);
   int num_faces = object_->face_id_counter();
+  object_->orient_face_normals();
   notify_observers("update");
 }
 
@@ -816,8 +847,6 @@ bmsh3d_face_mc* bwm_observable_mesh::extrude_face(bmsh3d_mesh_mc* M, bmsh3d_face
 
 vgl_homg_plane_3d<double> bwm_observable_mesh::get_plane(unsigned face_id)
 {
-  //vsol_polygon_3d_sptr polygon = this->extract_face(face_id);
-
   bmsh3d_face* face = object_->facemap(face_id);
 
   vcl_vector<vsol_point_3d_sptr> points;
@@ -933,6 +962,7 @@ void bwm_observable_mesh::triangulate()
   bmsh3d_mesh_mc* tri_mesh_mc = new bmsh3d_mesh_mc(tri_mesh);
   delete object_;
   object_ = tri_mesh_mc;
+  object_->orient_face_normals();
   //delete tri_mesh;
   notify_observers("update");
 }
@@ -971,13 +1001,19 @@ SoSeparator* bwm_observable_mesh::convert_coin3d(bool b_shape_hints,
 
 void bwm_observable_mesh::load_from(vcl_string filename)
 {
-  if (!bmsh3d_load_ply2(object_,filename.data())) {
+  if (object_)
+    delete object_;
+
+  object_ = new bmsh3d_mesh_mc();
+  if (!bmsh3d_load_ply(object_,filename.data())) {
     vcl_cerr << "Error loading mesh from " << filename << vcl_endl;
     return;
   }
 
   // build half-edge structure
   object_->IFS_to_MHE();
+  object_->orient_face_normals();
+  notify_observers("new");
 }
 
 void bwm_observable_mesh::save(const char* filename, bgeo_lvcs* lvcs)
@@ -1023,8 +1059,7 @@ void bwm_observable_mesh::save(const char* filename)
     comment = "";
     vcl_cerr << "Mesh type is invalid\n";
   }
-#if 0  //JLM
+
   bmsh3d_save_ply(mesh2, filename, true, comment);
-#endif
   return;
 }
