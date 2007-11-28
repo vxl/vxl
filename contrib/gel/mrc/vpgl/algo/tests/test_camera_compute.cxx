@@ -219,11 +219,11 @@ void test_rational_camera_approx(vcl_string dir_base)
   // read a camera from file
   vcl_string file =  "07JAN27.RPB";
 
-  vpgl_rational_camera<double> rat_cam2(file);
-  vcl_cout << rat_cam2;
-   vpgl_scale_offset<double> sox2 = rat_cam2.scl_off(vpgl_rational_camera<double>::X_INDX);
-   vpgl_scale_offset<double> soy2 = rat_cam2.scl_off(vpgl_rational_camera<double>::Y_INDX);
-   vpgl_scale_offset<double> soz2 = rat_cam2.scl_off(vpgl_rational_camera<double>::Z_INDX);
+  vpgl_rational_camera<double> *rat_cam2 = read_rational_camera<double>(file);
+  vcl_cout << *rat_cam2;
+   vpgl_scale_offset<double> sox2 = rat_cam2->scl_off(vpgl_rational_camera<double>::X_INDX);
+   vpgl_scale_offset<double> soy2 = rat_cam2->scl_off(vpgl_rational_camera<double>::Y_INDX);
+   vpgl_scale_offset<double> soz2 = rat_cam2->scl_off(vpgl_rational_camera<double>::Z_INDX);
 
   vgl_point_3d<double> pmin2(sox2.offset()-sox2.scale(),
                             soy2.offset()-soy2.scale(), 0);
@@ -234,7 +234,7 @@ void test_rational_camera_approx(vcl_string dir_base)
 
   vpgl_perspective_camera<double> pc2;
   vgl_h_matrix_3d<double> norm_trans2;
-  vpgl_perspective_camera_compute::compute(rat_cam2, approx_vol2, pc2, norm_trans2);
+  vpgl_perspective_camera_compute::compute(*rat_cam2, approx_vol2, pc2, norm_trans2);
   vcl_cout << "Test Result\n" << pc2 << '\n';
 }
 
