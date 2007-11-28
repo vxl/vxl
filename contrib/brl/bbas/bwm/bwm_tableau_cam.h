@@ -76,7 +76,6 @@ public:
   void save(vcl_string path);
   void save_all(vcl_string path);
 
-  void scroll_to_point();
 
   //------------ Projection Plane related methods
   

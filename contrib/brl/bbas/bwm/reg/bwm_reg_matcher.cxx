@@ -3,75 +3,93 @@
 // \file
 #include <vnl/vnl_numeric_traits.h>
 #include <vcl_cmath.h>
+#include <vnl/vnl_numeric_traits.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_digital_curve_2d.h>
 
 bwm_reg_matcher::
-bwm_reg_matcher(unsigned model_cols, unsigned model_rows,
-                vcl_vector<vsol_digital_curve_2d_sptr> const& model_edges,
+bwm_reg_matcher(vcl_vector<vsol_digital_curve_2d_sptr> const& model_edges,
                 unsigned search_cols, unsigned search_rows,
                 vcl_vector<vsol_digital_curve_2d_sptr> const& search_edges
-               ) : model_cols_(model_cols), model_rows_(model_rows),
-                   model_edges_(model_edges), search_cols_(search_cols),
-                   search_rows_(search_rows), search_edges_(search_edges),
-                   champh_(bwm_reg_edge_champher(search_cols, search_rows,
-                                                 search_edges))
+                ) :  search_cols_(search_cols), search_rows_(search_rows),
+                     search_edges_(search_edges),
+                     champh_(bwm_reg_edge_champher(search_cols, search_rows,
+                                                   search_edges))
 {
+  //get the bounds on the model edges
+  double dcmin = vnl_numeric_traits<double>::maxval, dcmax = 0;
+  double drmin = dcmin, drmax = 0;
+  vcl_vector<vsol_digital_curve_2d_sptr>::const_iterator cit = 
+    model_edges.begin();
+  for(; cit != model_edges.end(); ++cit)
+    for(unsigned i = 0; i<(*cit)->size(); ++i)
+      {
+        vsol_point_2d_sptr p = (*cit)->point(i);
+        double c = p->x(), r = p->y();
+        if(c<dcmin) dcmin = c;
+        if(c>dcmax) dcmax = c;
+        if(r<drmin) drmin = r;
+        if(r>drmax) drmax = r;
+      }
+  cit = model_edges.begin();
+  for(; cit != model_edges.end(); ++cit)
+    {
+      vsol_digital_curve_2d_sptr dc = new vsol_digital_curve_2d();
+      for(unsigned i = 0; i<(*cit)->size(); ++i)
+        {
+          vsol_point_2d_sptr p = (*cit)->point(i);
+          double c = p->x(), r = p->y();
+          dc->add_vertex(new vsol_point_2d(c-dcmin, r-drmin));
+        }
+      model_edges_.push_back(dc);
+    }
+  model_cols_ = static_cast<unsigned>(dcmax-dcmin);
+  model_rows_ = static_cast<unsigned>(drmax-drmin);
 }
 
 // find the distance between the model and the search champher
 // at the given search column and search row
-double bwm_reg_matcher::total_distance(unsigned scol, unsigned srow)
+double bwm_reg_matcher::total_distance(unsigned tc, unsigned tr)
 {
   double d = 0;
-  vcl_vector<vsol_digital_curve_2d_sptr>::iterator cit =
-    search_edges_.begin();
-  for (; cit != search_edges_.end(); ++cit)
-    for (unsigned i = 0; i<(*cit)->size(); ++i)
-    {
-      vsol_point_2d_sptr p = (*cit)->point(i);
-      double c = p->x(), r = p->y();
-      if (c<0||r<0) continue;
-      if (c>search_cols_-1||r>search_rows_-1) continue;
-      unsigned ic = static_cast<unsigned>(vcl_floor(c)),
-      ir = static_cast<unsigned>(vcl_floor(r));
-      d += champh_.distance(ic, ir);
-    }
+  vcl_vector<vsol_digital_curve_2d_sptr>::iterator cit = 
+    model_edges_.begin();
+  for(; cit != model_edges_.end(); ++cit)
+    for(unsigned i = 0; i<(*cit)->size(); ++i)
+      {
+        vsol_point_2d_sptr p = (*cit)->point(i);
+        double c = p->x(), r = p->y();
+        if(c<0||r<0) continue;
+        if(c>search_cols_-1||r>search_rows_-1) continue;
+        unsigned ic = static_cast<unsigned>(vcl_floor(c)),
+          ir = static_cast<unsigned>(vcl_floor(r));
+        d += champh_.distance(ic+tc, ir+tr);
+      }
   return d;
 }
 
 //the simplest possible matcher, brute force
-bool bwm_reg_matcher::match(unsigned initial_col, unsigned initial_row,
-                            unsigned radius,
-                            unsigned& search_col, unsigned& search_row
-                           )
+
+bool bwm_reg_matcher::match(unsigned& tcol, unsigned& trow)
 {
-  //Check conditions
-  if (2*radius +1 >search_rows_ || 2*radius + 1 > search_cols_)
+  tcol = 0; trow = 0;
+  if(model_cols_>search_cols_||model_rows_>search_rows_)
     return false;
-
-  unsigned r0 = initial_row;
-  if (r0<radius)
-    r0 = radius;
-  if (r0>search_rows_-1-radius)
-    r0 = search_rows_-1-radius;
-
-  unsigned c0 = initial_col;
-  if (c0<radius)
-    c0 = radius;
-  if (c0>search_cols_-1-radius)
-    c0 = search_cols_-1-radius;
+  unsigned n_row = search_rows_-model_rows_;
+  unsigned n_col = search_cols_-model_cols_;
   double min_distance = vnl_numeric_traits<double>::maxval;
-  for (unsigned row = r0-radius; row<= r0+radius; ++row)
-    for (unsigned col = c0-radius; col<= c0+radius; ++col)
-    {
-      double d = total_distance(col, row);
-      if (d < min_distance)
+
+  for(unsigned tr = 0; tr<=n_row; ++tr)
+    for(unsigned tc = 0; tc<=n_col; ++tc)
       {
-        min_distance = d;
-        search_col = col;
-        search_row = row;
+        double d = total_distance(tc, tr);
+        if(d < min_distance)
+          {
+            min_distance = d;
+            tcol = tc;
+            trow = tr;
+          }
       }
-    }
+  
   return true;
 }

@@ -73,6 +73,8 @@ public:
 
   void zoom_to_fit();
 
+  void scroll_to_point();
+
   void step_edges_vd();
 
   void lines_vd();

@@ -107,14 +107,6 @@ class bwm_world_pt_corr_command: public vgui_command
   bwm_tableau_cam *tab;
 };
 
-class bwm_scroll_to_point_command : public vgui_command
-{
- public:
-  bwm_scroll_to_point_command(bwm_tableau_cam* t) : tab(t) {}
-  void execute() { tab->scroll_to_point(); }
-
-  bwm_tableau_cam *tab;
-};
 
 class bwm_define_proj_plane_command : public vgui_command
 {
@@ -236,8 +228,6 @@ void bwm_tableau_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu
   mesh_submenu.add( "Save Selected", new bwm_save_command(this));
   mesh_submenu.add( "Save All", new bwm_save_all_command(this));
   menu.add("CREATE 3D", mesh_submenu);
-
-  menu.add( "Scroll To Point", new bwm_scroll_to_point_command(this));
 
   menu.separator();
   vgui_menu corr_menu;
@@ -494,10 +484,6 @@ void bwm_tableau_cam::save_all(vcl_string path)
   my_observer_->save();
 }
 
-void bwm_tableau_cam::scroll_to_point()
-{
-  my_observer_->scroll_to_point();
-}
 
 void bwm_tableau_cam::help_pop()
 {

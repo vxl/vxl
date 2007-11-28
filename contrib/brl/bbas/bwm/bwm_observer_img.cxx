@@ -517,6 +517,16 @@ void bwm_observer_img::lines_vd()
 //
 void bwm_observer_img::move_to_point(float x, float y)
 {
+  // the image size
+  unsigned ni = img_tab_->get_image_resource()->ni();
+  unsigned nj = img_tab_->get_image_resource()->nj();
+  if(x<0 || x>=ni || y<0 || y>=nj)
+    vcl_cerr << "In bwm_observer_img::move_to_point(.) - "
+             << "requested point outside of image bounds\n";
+  if(x<0) x=0;
+  if(x>=ni) x = ni-1;
+  if(y<0) y=0;
+  if(y>=nj) y = nj-1;
   if (viewer_)
   {
     //Get the current viewer state (scale and offset)
@@ -626,4 +636,16 @@ void bwm_observer_img::zoom_to_fit()
            << "required scale = " << r << "  c(" << cx << ' '
            << cy << ")\n";
 #endif
+}
+
+void bwm_observer_img::scroll_to_point()
+{
+  static int ix = 0, iy = 0;
+  vgui_dialog zoom("Move to Image Position");
+  zoom.field ("image col", ix);
+  zoom.field ("image row", iy);
+  if (!zoom.ask())
+    return;
+  float x = static_cast<float>(ix), y = static_cast<float>(iy);
+  this->move_to_point(x,y);
 }

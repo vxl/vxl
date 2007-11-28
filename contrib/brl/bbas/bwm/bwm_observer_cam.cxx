@@ -248,17 +248,6 @@ void bwm_observer_cam::world_pt_corr()
 }
 
 
-void bwm_observer_cam::scroll_to_point()
-{
-  static int ix = 0, iy = 0;
-  vgui_dialog zoom("Zoom to Point");
-  zoom.field ("xpos", ix);
-  zoom.field ("ypos", iy);
-  if (!zoom.ask())
-    return;
-  float x = static_cast<float>(ix), y = static_cast<float>(iy);
-  this->move_to_point(x,y);
-}
 
 //********************** Protected Methods
 

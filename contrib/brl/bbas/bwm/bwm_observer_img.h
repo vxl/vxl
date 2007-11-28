@@ -87,9 +87,14 @@ public:
 
   void jim_obs_process(){ vcl_cout << "I am Jim Green's Process!!!!" << vcl_endl; }
 
+  //:moves to a specified position
   void move_to_point(float x, float y);
 
+  //: zoom out the image to fit the grid cell
   void zoom_to_fit();
+
+  //: for menu operation, calls move_to_point
+  void scroll_to_point();
 
   void toggle_show_image_path();
 

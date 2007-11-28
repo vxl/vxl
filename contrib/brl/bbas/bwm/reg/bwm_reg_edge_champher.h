@@ -41,24 +41,24 @@ class bwm_reg_edge_champher
   //
   inline float distance(unsigned col, unsigned row) {
     // ncols_ = number of columns; nrows_ = number of rows
-    if ( (col<ncols_) && (row<nrows_) )
-        return (float) distance_[row][col];
+    if ( (col<ncols_-1) && (row<nrows_-1) )
+        return (float) distance_[row+1][col+1];
     else
         return vnl_numeric_traits<float>::maxval;
     }
 
   inline vsol_digital_curve_2d_sptr image_edge(unsigned col, unsigned row) {
     // ncols_ = number of columns; nrows_ = number of rows
-    if ( (col<ncols_) && (row<nrows_) )
-        return edges_[row][col];
+    if ( (col<ncols_-1) && (row<nrows_-1) )
+        return edges_[row+1][col+1];
     else
         return 0;
     }
 
   inline unsigned sample_index(unsigned col, unsigned row) {
     // ncols_ = number of columns; nrows_ = number of rows
-    if (  (col<ncols_) && (row<nrows_) )
-        return sample_index_[row][col];
+    if (  (col<ncols_-1) && (row<nrows_-1) )
+        return sample_index_[row+1][col+1];
     else
         return 0;
     }
@@ -82,7 +82,7 @@ class bwm_reg_edge_champher
 
  private:
 
-//the dimensions of the champher array
+//the dimensions of the champher array, 2 greater than the actual space
   unsigned ncols_,nrows_; 
 
   // The distance image

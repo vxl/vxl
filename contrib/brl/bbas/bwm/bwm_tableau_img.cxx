@@ -103,6 +103,10 @@ void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu
     new vgui_command_simple<bwm_tableau_img>(this,
                                              &bwm_tableau_img::
                                              zoom_to_fit));
+  menu.add( "Scroll to Image Location" ,
+    new vgui_command_simple<bwm_tableau_img>(this,
+                                             &bwm_tableau_img::
+                                             scroll_to_point));
 }
 
 
@@ -215,6 +219,11 @@ void bwm_tableau_img::toggle_show_image_path()
 void bwm_tableau_img::zoom_to_fit()
 {
   my_observer_->zoom_to_fit();
+}
+
+void bwm_tableau_img::scroll_to_point()
+{
+  my_observer_->scroll_to_point();
 }
 
 void bwm_tableau_img::save()

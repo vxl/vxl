@@ -26,31 +26,31 @@ class bwm_reg_matcher
 
   // Constructors/Initializers/Destructors-------------------------------------
 
-  bwm_reg_matcher(unsigned model_cols, unsigned model_rows,
-                  vcl_vector<vsol_digital_curve_2d_sptr> const& model_edges,
+  bwm_reg_matcher(vcl_vector<vsol_digital_curve_2d_sptr> const& model_edges,
                   unsigned search_cols, unsigned search_rows,
                   vcl_vector<vsol_digital_curve_2d_sptr> const& search_edges
                   );
   ~bwm_reg_matcher(){}
 
-  bool match(unsigned initial_col, unsigned initial_row, unsigned radius,
-             unsigned& search_col, unsigned& search_row
-             );
+  //: Scan over entire search region, return the 
+  //  offset from the upper left of the search region
+  //  with the best match
+  bool match(unsigned& tcol, unsigned& trow);
 
  protected:
   // INTERNALS-----------------------------------------------------------------
-  double total_distance(unsigned scol, unsigned srow);
+  double total_distance(unsigned tc, unsigned tr);
 
   // Data Members--------------------------------------------------------------
 
  private:
 
-  //the dimensions of the model array
-  unsigned model_cols_, model_rows_; 
-
   //the dimensions of the search array
   unsigned search_cols_, search_rows_; 
 
+  //the offset bounds of the model edges (min values are 0)
+  unsigned model_cols_;
+  unsigned model_rows_;
   // the model edges
   vcl_vector<vsol_digital_curve_2d_sptr> model_edges_;  
 

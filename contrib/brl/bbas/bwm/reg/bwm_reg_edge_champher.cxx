@@ -15,15 +15,17 @@ bwm_reg_edge_champher::
 bwm_reg_edge_champher(unsigned ncols, unsigned nrows,
                       vcl_vector<vsol_digital_curve_2d_sptr> const& edges)
 {
-  ncols_ = ncols;
-  nrows_ = nrows;
+  ncols_ = ncols+2;
+  nrows_ = nrows+2;
   //note the max value of unsigned char is -1
   distance_ = vbl_array_2d<unsigned char>(nrows_, ncols_, (unsigned char)-1 );
   edges_ = vbl_array_2d<vsol_digital_curve_2d_sptr>(nrows_, ncols_, 0);
+  sample_index_ = vbl_array_2d<unsigned>(nrows_, ncols_, 0);
   // Extract the edgel data and write to the distance and orientation images
   this->initialize_arrays(edges);
   // Do the Chamfer 3-4 filtering
   this->chamfer_34();
+  vcl_cout.precision(3);
 }
 
 
@@ -51,12 +53,12 @@ initialize_arrays(vcl_vector<vsol_digital_curve_2d_sptr> const& edges)
         vsol_point_2d_sptr p = (*cit)->point(i);
         double c = p->x(), r = p->y();
         if(c<0||r<0) continue;
-        if(c>ncols_-1||r>nrows_-1) continue;
+        if(c>ncols_-2||r>nrows_-2) continue;
         unsigned ic = static_cast<unsigned>(vcl_floor(c)),
           ir = static_cast<unsigned>(vcl_floor(r));
-        distance_[ir][ic] = 0;
-        sample_index_[ir][ic] = i;
-        edges_[ir][ic] = *cit;
+        distance_[ir+1][ic+1] = 0;
+        sample_index_[ir+1][ic+1] = i;
+        edges_[ir+1][ic+1] = *cit;
       }
 }
 
@@ -190,7 +192,7 @@ void bwm_reg_edge_champher::compute_real_distances()
 {
   unsigned row, col;
 
-  for (col=0;col<ncols_;col++)
-    for (row=0;row<nrows_;row++)
+  for (col=1;col<ncols_-1;col++)
+    for (row=1;row<nrows_-1;row++)
       distance_[row][col] = (unsigned char) distance_[row][col] / 3;
 }

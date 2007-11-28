@@ -136,9 +136,6 @@ public:
 
   void world_pt_corr();
 
-  void scroll_to_point();
-
-
 
   virtual vcl_ostream& print_camera(vcl_ostream& s) {return s;}
   
