@@ -416,7 +416,7 @@ void bmsh3d_mesh_mc::orient_face_normals()
   vcl_map<int, bmsh3d_face* > fmap = facemap();
   vcl_map<int, bmsh3d_face* >::iterator face_it = fmap.begin();
   double maxz=-1e26;
-  int maxz_face_id;
+  int maxz_face_id=0;
   while (face_it != fmap.end()) {
     bmsh3d_face_mc* face = (bmsh3d_face_mc*) face_it->second;
     vgl_point_3d<double> center = face->compute_center_pt();
