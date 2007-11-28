@@ -93,182 +93,6 @@ vpgl_rational_camera(const double*  neu_u,
   scale_offsets_[V_INDX] = vpgl_scale_offset<T>(v_scale, v_off);
 }
 
-//: read from a file
-template <class T>
-vpgl_rational_camera<T>::vpgl_rational_camera(vcl_string cam_path)
-{
-  vcl_ifstream file_inp;
-  file_inp.open(cam_path.c_str());
-  if (!file_inp.good()) {
-    vcl_cout << "error: bad filename: " << cam_path << vcl_endl;
-    return;
-  }
-
-  vcl_vector<T> neu_u;
-  vcl_vector<T> den_u;
-  vcl_vector<T> neu_v;
-  vcl_vector<T> den_v;
-  T x_scale,x_off,y_scale,y_off,z_scale,z_off,u_scale,u_off,v_scale,v_off;
-
-  vcl_string input;
-  char bulk[100];
-
-  while(!file_inp.eof()){
-    file_inp >> input;
-
-    if (input=="sampScale") {
-      file_inp >> input;
-      file_inp >> u_scale;
-    }
-    if (input=="sampOffset") {
-      file_inp >> input;
-      file_inp >> u_off;
-    }
-
-    if (input=="lineScale") {
-      file_inp >> input;
-      file_inp >> v_scale;
-    }
-    if (input=="lineOffset") {
-      file_inp >> input;
-      file_inp >> v_off;
-    }
-
-    if (input=="longScale") {
-      file_inp >> input;
-      file_inp >> x_scale;
-    }
-    if (input=="longOffset") {
-      file_inp >> input;
-      file_inp >> x_off;
-    }
-
-    if (input=="latScale") {
-      file_inp >> input;
-      file_inp >> y_scale;
-    }
-    if (input=="latOffset") {
-      file_inp >> input;
-      file_inp >> y_off;
-    }
-
-    if (input=="heightScale") {
-      file_inp >> input;
-      file_inp >> z_scale;
-    }
-    if (input=="heightOffset") {
-      file_inp >> input;
-      file_inp >> z_off;
-    }
-
-    T temp_dbl;
-    if (input=="lineNumCoef") {
-      file_inp >> input;
-      file_inp >> input;
-      for (int i=0; i<20; i++) {
-        file_inp >> temp_dbl;
-        neu_v.push_back(temp_dbl);
-        file_inp.getline(bulk,200);
-      }
-    }
-
-    if (input=="lineDenCoef") {
-      file_inp >> input;
-      file_inp >> input;
-      for (int i=0; i<20; i++) {
-        file_inp >> temp_dbl;
-        den_v.push_back(temp_dbl);
-        file_inp.getline(bulk,200);
-      }
-    }
-
-    if (input=="sampNumCoef") {
-      file_inp >> input;
-      file_inp >> input;
-      for (int i=0; i<20; i++) {
-        file_inp >> temp_dbl;
-        neu_u.push_back(temp_dbl);
-        file_inp.getline(bulk,200);
-      }
-    }
-
-    if (input=="sampDenCoef") {
-      file_inp >> input;
-      file_inp >> input;
-      for (int i=0; i<20; i++) {
-        file_inp >> temp_dbl;
-        den_u.push_back(temp_dbl);
-        file_inp.getline(bulk,200);
-      }
-    }
-
-  }
-  file_inp.close();
-
-  int map[20];
-  map[0]=19;
-  map[1]=9;
-  map[2]=15;
-  map[3]=18;
-  map[4]=6;
-  map[5]=8;
-  map[6]=14;
-  map[7]=3;
-  map[8]=12;
-  map[9]=17;
-  map[10]=5;
-  map[11]=0;
-  map[12]=4;
-  map[13]=7;
-  map[14]=1;
-  map[15]=10;
-  map[16]=13;
-  map[17]=2;
-  map[18]=11;
-  map[19]=16;
-
-  T temp_vector[20];
-
-  for (int j=0; j<20; j++) {
-    temp_vector[j] = neu_u[j];
-  }
-  for (int j=0; j<20; j++) {
-    neu_u[map[j]] = temp_vector[j];
-  }
-  for (int j=0; j<20; j++) {
-    temp_vector[j] = den_u[j];
-  }
-  for (int j=0; j<20; j++) {
-    den_u[map[j]] = temp_vector[j];
-  }
-  for (int j=0; j<20; j++) {
-    temp_vector[j] = neu_v[j];
-  }
-  for (int j=0; j<20; j++) {
-    neu_v[map[j]] = temp_vector[j];
-  }
-  for (int j=0; j<20; j++) {
-    temp_vector[j] = den_v[j];
-  }
-  for (int j=0; j<20; j++) {
-    den_v[map[j]] = temp_vector[j];
-  }
-
-  for (unsigned i = 0; i<20; ++i)
-    {
-      rational_coeffs_[NEU_U][i] = neu_u[i];
-      rational_coeffs_[DEN_U][i] = den_u[i];
-      rational_coeffs_[NEU_V][i] = neu_v[i];
-      rational_coeffs_[DEN_V][i] = den_v[i];
-    }
-  scale_offsets_.resize(5);
-  scale_offsets_[X_INDX] = vpgl_scale_offset<T>(x_scale, x_off);
-  scale_offsets_[Y_INDX] = vpgl_scale_offset<T>(y_scale, y_off);
-  scale_offsets_[Z_INDX] = vpgl_scale_offset<T>(z_scale, z_off);
-  scale_offsets_[U_INDX] = vpgl_scale_offset<T>(u_scale, u_off);
-  scale_offsets_[V_INDX] = vpgl_scale_offset<T>(v_scale, v_off);
-}
-
 template <class T>
 vpgl_rational_camera<T>* vpgl_rational_camera<T>::clone(void) const
 {
@@ -605,6 +429,188 @@ vcl_ostream&  operator<<(vcl_ostream& s, const vpgl_rational_camera<T >& c )
   return s;
 }
 
+//: read from a file
+template <class T>
+vpgl_rational_camera<T>* read_rational_camera(vcl_string cam_path)
+{
+  vcl_ifstream file_inp;
+  file_inp.open(cam_path.c_str());
+  if (!file_inp.good()) {
+    vcl_cout << "error: bad filename: " << cam_path << vcl_endl;
+    return 0;
+  }
+
+  vcl_vector<T> neu_u;
+  vcl_vector<T> den_u;
+  vcl_vector<T> neu_v;
+  vcl_vector<T> den_v;
+  T x_scale,x_off,y_scale,y_off,z_scale,z_off,u_scale,u_off,v_scale,v_off;
+
+  vcl_string input;
+  char bulk[100];
+
+  while(!file_inp.eof()){
+    file_inp >> input;
+
+    if (input=="sampScale") {
+      file_inp >> input;
+      file_inp >> u_scale;
+    }
+    if (input=="sampOffset") {
+      file_inp >> input;
+      file_inp >> u_off;
+    }
+
+    if (input=="lineScale") {
+      file_inp >> input;
+      file_inp >> v_scale;
+    }
+    if (input=="lineOffset") {
+      file_inp >> input;
+      file_inp >> v_off;
+    }
+
+    if (input=="longScale") {
+      file_inp >> input;
+      file_inp >> x_scale;
+    }
+    if (input=="longOffset") {
+      file_inp >> input;
+      file_inp >> x_off;
+    }
+
+    if (input=="latScale") {
+      file_inp >> input;
+      file_inp >> y_scale;
+    }
+    if (input=="latOffset") {
+      file_inp >> input;
+      file_inp >> y_off;
+    }
+
+    if (input=="heightScale") {
+      file_inp >> input;
+      file_inp >> z_scale;
+    }
+    if (input=="heightOffset") {
+      file_inp >> input;
+      file_inp >> z_off;
+    }
+
+    T temp_dbl;
+    if (input=="lineNumCoef") {
+      file_inp >> input;
+      file_inp >> input;
+      for (int i=0; i<20; i++) {
+        file_inp >> temp_dbl;
+        neu_v.push_back(temp_dbl);
+        file_inp.getline(bulk,200);
+      }
+    }
+
+    if (input=="lineDenCoef") {
+      file_inp >> input;
+      file_inp >> input;
+      for (int i=0; i<20; i++) {
+        file_inp >> temp_dbl;
+        den_v.push_back(temp_dbl);
+        file_inp.getline(bulk,200);
+      }
+    }
+
+    if (input=="sampNumCoef") {
+      file_inp >> input;
+      file_inp >> input;
+      for (int i=0; i<20; i++) {
+        file_inp >> temp_dbl;
+        neu_u.push_back(temp_dbl);
+        file_inp.getline(bulk,200);
+      }
+    }
+
+    if (input=="sampDenCoef") {
+      file_inp >> input;
+      file_inp >> input;
+      for (int i=0; i<20; i++) {
+        file_inp >> temp_dbl;
+        den_u.push_back(temp_dbl);
+        file_inp.getline(bulk,200);
+      }
+    }
+
+  }
+  file_inp.close();
+
+  int map[20];
+  map[0]=19;
+  map[1]=9;
+  map[2]=15;
+  map[3]=18;
+  map[4]=6;
+  map[5]=8;
+  map[6]=14;
+  map[7]=3;
+  map[8]=12;
+  map[9]=17;
+  map[10]=5;
+  map[11]=0;
+  map[12]=4;
+  map[13]=7;
+  map[14]=1;
+  map[15]=10;
+  map[16]=13;
+  map[17]=2;
+  map[18]=11;
+  map[19]=16;
+
+  if ((neu_u.size() != 20) || (den_u.size() != 20)) {
+    vcl_cerr << "the file [" << cam_path << "] is not a valid rational camera file" << vcl_endl;
+    return 0;
+    }
+
+  T temp_vector[20];
+  for (int j=0; j<20; j++) {
+    temp_vector[j] = neu_u[j];
+  }
+  for (int j=0; j<20; j++) {
+    neu_u[map[j]] = temp_vector[j];
+  }
+  for (int j=0; j<20; j++) {
+    temp_vector[j] = den_u[j];
+  }
+  for (int j=0; j<20; j++) {
+    den_u[map[j]] = temp_vector[j];
+  }
+  for (int j=0; j<20; j++) {
+    temp_vector[j] = neu_v[j];
+  }
+  for (int j=0; j<20; j++) {
+    neu_v[map[j]] = temp_vector[j];
+  }
+  for (int j=0; j<20; j++) {
+    temp_vector[j] = den_v[j];
+  }
+  for (int j=0; j<20; j++) {
+    den_v[map[j]] = temp_vector[j];
+  }
+
+  vpgl_rational_camera<T>* cam = new vpgl_rational_camera<T>(neu_u, den_u, neu_v, den_v,
+  x_scale, x_off, y_scale, y_off, z_scale, z_off,u_scale, u_off, v_scale, v_off);
+  return cam;
+  /*for (unsigned i = 0; i<20; ++i)
+    {
+      rational_coeffs_[NEU_U][i] = neu_u[i];
+      rational_coeffs_[DEN_U][i] = den_u[i];
+      rational_coeffs_[NEU_V][i] = neu_v[i];
+      rational_coeffs_[DEN_V][i] = den_v[i];
+    }
+  scale_offsets_.resize(5);
+  scale_offsets_[X_INDX] = vpgl_scale_offset<T>(x_scale, x_off);
+  scale_offsets_[Y_INDX] = vpgl_scale_offset<T>(y_scale, y_off);
+  scale_offsets_[Z_INDX] = vpgl_scale_offset<T>(z_scale, z_off);
+  scale_offsets_[U_INDX] = vpgl_scale_offset<T>(u_scale, u_off);
+  scale_offsets_[V_INDX] = vpgl_scale_offset<T>(v_scale, v_off);*/
+}
 
 // Code for easy instantiation.
 #undef vpgl_RATIONAL_CAMERA_INSTANTIATE
@@ -612,6 +618,7 @@ vcl_ostream&  operator<<(vcl_ostream& s, const vpgl_rational_camera<T >& c )
 template class vpgl_scale_offset<T >; \
 template class vpgl_rational_camera<T >; \
 template vcl_ostream& operator<<(vcl_ostream&, const vpgl_rational_camera<T >&); \
+template vpgl_rational_camera<T > * read_rational_camera(vcl_string); \
 typedef vpgl_scale_offset<T > soff; \
 VCL_VECTOR_INSTANTIATE(soff)
 

@@ -138,9 +138,6 @@ class vpgl_rational_camera : public vpgl_camera<T>
                        vcl_vector<vpgl_scale_offset<T> > const& scale_offsets)
     : rational_coeffs_(rational_coeffs), scale_offsets_(scale_offsets) {}
 
-  //: Constructor, create from a camera file given by cam_path
-  vpgl_rational_camera(vcl_string cam_path);
-
   virtual ~vpgl_rational_camera() {}
 
   virtual vcl_string type_name() const { return "vpgl_rational_camera"; }
@@ -227,6 +224,11 @@ vcl_ostream& operator<<(vcl_ostream& s, const vpgl_rational_camera<T>& p);
 // \relates vpgl_rational_camera
 template <class T>
 vcl_istream& operator>>(vcl_istream& is, vpgl_rational_camera<T>& p);
+
+//: Creates a rational camera from a file
+// \relates vpgl_rational_camera
+template <class T> 
+vpgl_rational_camera<T>* read_rational_camera(vcl_string cam_path);
 
 #define VPGL_RATIONAL_CAMERA_INSTANTIATE(T) extern "please include vgl/vpgl_rational_camera.txx first"
 
