@@ -321,6 +321,9 @@ bool bgui_image_utils::range_map_from_hist(float gamma, bool invert,
                                            vgui_range_map_params_sptr& rmp)
 {
   rmp = 0;
+  if (!image_) 
+    return false;
+
   unsigned np = image_->nplanes();
   vcl_vector<double> min(np, 0.0), max(np, 0.0);
 
