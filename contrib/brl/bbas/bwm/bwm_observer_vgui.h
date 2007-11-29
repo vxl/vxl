@@ -26,14 +26,14 @@
 
 #include <vpgl/vpgl_camera.h>
 
-class bwm_observer_vgui : public bwm_observer_img, public bwm_observer//, public vgui_easy2D_tableau
+class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
 {
 public:
 
   typedef bwm_observer_img base;
 
   bwm_observer_vgui(bgui_image_tableau_sptr const& img)
-    : bwm_observer_img(img) {corr_.second = 0;}
+    : bwm_observer_img(img), moving_face_(0) {corr_.second = 0;}
 
   virtual ~bwm_observer_vgui() {}
 
@@ -98,6 +98,8 @@ protected:
 
   //: vertices are kept as a triple (bwm_observable *, face_id, vector<bwm_soview2D_vertex*> )
   vcl_map<bwm_observable_sptr, vcl_map<unsigned, vcl_vector<bwm_soview2D_vertex* > > > object_verts_;
+
+  bwm_observable_sptr moving_face_;
 
   bwm_observable_sptr find_object(unsigned soview2d_id, unsigned &face_id);
 

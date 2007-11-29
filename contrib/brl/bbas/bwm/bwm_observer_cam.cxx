@@ -24,10 +24,78 @@
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_polygon_3d.h>
 
-//#include <vgui/vgui_message.h>
 #include <vgui/vgui_dialog.h>
+#include <vgui/vgui_projection_inspector.h>
 
-//#define CAM_DEBUG
+bool bwm_observer_cam::handle(const vgui_event &e) 
+{ 
+  // handle movements for meshes
+  vgui_projection_inspector pi;
+  if (e.type == vgui_BUTTON_DOWN && e.button == vgui_MIDDLE && e.modifier == vgui_SHIFT) {
+    // first get the selected polygon
+      
+    vcl_vector<vgui_soview*> select_list = this->get_selected_soviews(); 
+    if ((select_list.size() == 1) &&
+        (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0)) {
+         unsigned face_id;
+         bwm_observable_sptr obj = find_object(select_list[0]->get_id(), face_id);
+         if (obj) {
+           // it is OK to move faces but not meshes with more than one face
+           if (obj->num_faces() == 1) {
+             moving_p_ = (bgui_vsol_soview2D*) select_list[0];
+             moving_face_ = obj;
+             pi.window_to_image_coordinates(e.wx, e.wy, start_x_, start_y_);
+             moving_polygon_ = true;
+             moving_vertex_ = false;
+           }
+         }
+      }
+      return true;
+    } else if (e.type == vgui_MOTION && e.button == vgui_MIDDLE && 
+      e.modifier == vgui_SHIFT && moving_polygon_) {
+        float x, y;
+        pi.window_to_image_coordinates(e.wx, e.wy, x, y);
+        float x_diff = x-start_x_;
+        float y_diff = y-start_y_;
+        moving_p_->translate(x_diff, y_diff);
+        
+        // move all the vertices of the face
+        vcl_vector<bwm_soview2D_vertex* > vertices = object_verts_[moving_face_][0];
+        for (unsigned i=0; i<vertices.size(); i++) {
+          bwm_soview2D_vertex* v = vertices[i];
+          v->translate(x_diff, y_diff);
+        }
+        // move it in 3d
+        if (moving_p_->type_name().compare("bgui_vsol_soview2D_polygon") == 0) {
+          bgui_vsol_soview2D_polygon* polygon = (bgui_vsol_soview2D_polygon*) moving_p_;
+          vsol_polygon_2d_sptr poly2d = polygon->sptr();
+          vsol_polygon_3d_sptr poly3d;
+          this->backproj_poly(poly2d, poly3d);
+          moving_face_->set_object(poly3d);
+        }
+
+        start_x_ = x;
+        start_y_ = y;
+        post_redraw();
+        return true;
+    }
+  if (e.type == vgui_BUTTON_UP && e.button == vgui_MIDDLE && e.modifier == vgui_SHIFT &&
+    moving_face_) {
+    this->deselect_all();
+    moving_vertex_ = false;
+    moving_polygon_ = false;
+   /* if (moving_p_->type_name().compare("bgui_vsol_soview2D_polygon") == 0) {
+      bgui_vsol_soview2D_polygon* polygon = (bgui_vsol_soview2D_polygon*) moving_p_;
+      vsol_polygon_2d_sptr poly2d = polygon->sptr();
+      vsol_polygon_3d_sptr poly3d;
+      this->backproj_poly(poly2d, poly3d);
+      moving_face_->set_object(poly3d);
+    }*/
+    return true;
+  }
+
+  return base::handle(e); 
+}
 
 void bwm_observer_cam::set_ground_plane(double x1, double y1, double x2, double y2)
 {

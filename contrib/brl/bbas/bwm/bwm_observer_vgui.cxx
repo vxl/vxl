@@ -26,19 +26,20 @@
 
 bool bwm_observer_vgui::handle(const vgui_event& e)
 {
-    // handle mouse clicks for correspondences
-    vgui_projection_inspector pi;
-    if (e.type == vgui_BUTTON_DOWN &&
-        e.button == vgui_LEFT &&
-        e.modifier == vgui_SHIFT &&
-        bwm_observer_mgr::instance()->in_corr_picking())
-    {
-        float x,y;
-        pi.window_to_image_coordinates(e.wx, e.wy, x, y);
-        this->set_corr(x, y);
-        return true;
-    }
-    return base::handle(e);
+  // handle mouse clicks for correspondences
+  vgui_projection_inspector pi;
+  if (e.type == vgui_BUTTON_DOWN &&
+      e.button == vgui_LEFT &&
+      e.modifier == vgui_SHIFT &&
+      bwm_observer_mgr::instance()->in_corr_picking())
+  {
+      float x,y;
+      pi.window_to_image_coordinates(e.wx, e.wy, x, y);
+      this->set_corr(x, y);
+      return true;
+  }
+
+  return base::handle(e);
 }
 
 void bwm_observer_vgui::add_cross(float x, float y, float r)

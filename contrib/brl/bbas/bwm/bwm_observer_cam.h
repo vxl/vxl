@@ -46,7 +46,7 @@ public:
   //tableau_img has the viewer - JLM
     void set_viewer(vgui_viewer2D_tableau_sptr viewer) { viewer_ = viewer; }
 #endif
-  bool handle(const vgui_event &e) { return base::handle(e); }
+  bool handle(const vgui_event &e);
 
   virtual vcl_string type_name() const { return "bwm_observer_cam"; }
 

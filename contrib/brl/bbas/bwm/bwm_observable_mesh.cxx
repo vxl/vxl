@@ -183,32 +183,53 @@ void bwm_observable_mesh::extrude(int face_id, double dist)
 
 void bwm_observable_mesh::set_object(bmsh3d_mesh_mc* obj)
 {
-  if (!object_)
-    object_ = new bmsh3d_mesh_mc;
+  vcl_string msg = "";
+  if (object_ == 0) 
+    msg = "new";
+  else {
+    msg = "update";
+    delete object_;
+  }
+
   object_ = obj;
   object_->orient_face_normals();
-  notify_observers("new");
+  notify_observers(msg);
  }
 
 void bwm_observable_mesh::set_object(vsol_polygon_3d_sptr poly, double dist)
 {
-  if (!object_)
-    object_ = new bmsh3d_mesh_mc;
+  vcl_string msg = "";
+  if (object_ == 0) 
+    msg = "new";
+  else {
+    msg = "update";
+    delete object_;
+  }
+
+  object_ = new bmsh3d_mesh_mc;
   vcl_map<int, vsol_polygon_3d_sptr> inner_faces;
   create_mesh_HE(poly, dist, inner_faces);
   object_->orient_face_normals();
-  notify_observers("new");
+  notify_observers(msg);
 }
 
 void bwm_observable_mesh::set_object(vsol_polygon_3d_sptr poly)
 {
   if (!poly || poly->size()==0)
     return;
+
+  vcl_string msg = "";
+  if (object_ == 0) 
+    msg = "new";
+  else {
+    msg = "update";
+    delete object_;
+  }
   object_ = new bmsh3d_mesh_mc;
   bmsh3d_face_mc* face = create_face(poly);
   object_->_add_face (face);
   object_->orient_face_normals();
-  notify_observers("new");
+  notify_observers(msg);
 }
 
 void bwm_observable_mesh::replace(bmsh3d_mesh_mc* obj)
