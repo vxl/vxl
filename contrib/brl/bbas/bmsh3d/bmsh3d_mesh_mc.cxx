@@ -77,6 +77,13 @@ bmsh3d_mesh_mc::bmsh3d_mesh_mc(bmsh3d_mesh* mesh) : bmsh3d_mesh()
   }
 }
 
+bmsh3d_mesh_mc::~bmsh3d_mesh_mc()
+{
+  vcl_map<int, bmsh3d_face_mc*>::iterator it = set_face_.begin();
+  while (it != set_face_.end()) {
+    delete it->second;
+  }
+}
 
 bmsh3d_mesh_mc* bmsh3d_mesh_mc::clone() const
 {

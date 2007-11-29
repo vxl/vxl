@@ -32,6 +32,8 @@ public:
 
   bmsh3d_mesh_mc(bmsh3d_mesh*);
 
+  virtual ~bmsh3d_mesh_mc();
+
   //: new/delete function of the class hierarchy
   virtual bmsh3d_face_mc* _new_face () { 
     return new bmsh3d_face_mc (face_id_counter_++);
