@@ -77,12 +77,12 @@ void bwm_observer_mgr::set_corr_mode()
   if (!params.ask())
     return;
   if (mode ==bwm_observer_mgr::WORLD_TO_IMAGE)
-	  if (bwm_world::instance()->world_pt_valid()){
+    if (bwm_world::instance()->world_pt_valid()) {
       corr_mode_ =  bwm_observer_mgr::WORLD_TO_IMAGE;
       return;
     } else {
-      vcl_cout << "In bwm_observer_mgr::set_corr_mode() -"
-               << " can't use WORLD_TO_IMAGE mode since the 3-d world "
+      vcl_cout << "In bwm_observer_mgr::set_corr_mode() -\n"
+               << " can't use WORLD_TO_IMAGE mode since the 3-d world"
                << " point is not defined\n";
     }
 
@@ -100,17 +100,17 @@ void bwm_observer_mgr::collect_corr()
     corr->set_mode(true);
   else if (corr_mode_ == WORLD_TO_IMAGE) {
     vgl_point_3d<double> wpt;
-	if(!bwm_world::instance()->world_pt(wpt))
-	{
-		vcl_cerr << " In bwm_observer_mgr::collect_corr() -"
-		         << " Can't do world to image, world pt invalid\n";
-		return;
-	}
+    if (!bwm_world::instance()->world_pt(wpt))
+    {
+      vcl_cerr << " In bwm_observer_mgr::collect_corr() -"
+               << " Can't do world to image, world pt invalid\n";
+      return;
+    }
     corr->set_mode(false);
     corr->set_world_pt(wpt);
   }
   else
-    vcl_cerr << "Unknown correspondence mode!" << vcl_endl;
+    vcl_cerr << "Unknown correspondence mode!\n";
 
   for (unsigned i=0; i< observers_.size(); i++) {
     if ((observers_[i]->type_name().compare("bwm_observer_rat_cam") == 0) ||
@@ -136,7 +136,7 @@ void bwm_observer_mgr::collect_corr()
       return;
     }
   }
-  vcl_cerr << "No Correspondence SET yet!!" << vcl_endl;
+  vcl_cerr << "No Correspondence SET yet!!\n";
 }
 
 void bwm_observer_mgr::set_corr(bwm_corr_sptr corr)
@@ -169,7 +169,7 @@ bool bwm_observer_mgr::obs_in_corr(bwm_observer_cam *obs)
 void bwm_observer_mgr::save_corr(vcl_ostream& s)
 {
   if (corr_list_.size() == 0)
-    vcl_cerr << "No correspondences to save yet! " << vcl_endl;
+    vcl_cerr << "No correspondences to save yet!\n";
   else {
 
     vcl_string fname = bwm_utils::select_file();
@@ -230,7 +230,7 @@ void bwm_observer_mgr::save_corr(vcl_ostream& s)
 void bwm_observer_mgr::save_corr_XML()
 {
   if (corr_list_.size() == 0)
-    vcl_cerr << "No correspondences to save yet! " << vcl_endl;
+    vcl_cerr << "No correspondences to save yet!\n";
   else
   {
     vcl_string fname = bwm_utils::select_file();
@@ -375,7 +375,7 @@ void bwm_observer_mgr::adjust_camera_offsets()
     return;
   }
 
-  vcl_cout << "Executing adjust image offsets " << '\n';
+  vcl_cout << "Executing adjust image offsets\n";
   vcl_vector<vgl_vector_2d<double> > cam_trans;
   vgl_point_3d<double> intersection;
   if (!vpgl_adjust_rational_trans_onept::adjust(rcams, cpoints, cam_trans,
