@@ -110,6 +110,8 @@ bwm_io_config_parser::startElement(const char* name, const char** atts)
       vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
       if (strcmp(atts[i], "mode") == 0)
         convert(atts[i+1], corr_mode_);
+      else if (strcmp(atts[i], "type") == 0)
+        convert(atts[i+1], corr_type_);
     }
   } else if (strcmp(name, "corr_point") == 0) {
     for (int i=0; atts[i]; i+=2) {

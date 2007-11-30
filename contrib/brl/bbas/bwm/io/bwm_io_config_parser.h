@@ -26,6 +26,7 @@ public:
 
   vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > correspondences() { return corresp_; }
   vcl_string corresp_mode() {return corr_mode_; }
+  vcl_string corresp_type() {return corr_type_; }
   vcl_vector<vsol_point_3d> corresp_world_pts() {return corresp_world_pts_; }
 
 private:
@@ -59,6 +60,7 @@ private:
 
   // correspondence related parameters
   vcl_string corr_mode_;
+  vcl_string corr_type_;
   vcl_string corr_cam_tab_;
   double X_, Y_, Z_;
   vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > corresp_;
