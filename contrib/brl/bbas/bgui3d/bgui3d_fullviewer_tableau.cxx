@@ -101,27 +101,47 @@ class bgui3d_import_command : public vgui_command
     static vcl_string file_name = "";
     static vcl_string ext = "iv";
     import_dlg.file("File:", ext, file_name);
+    static bool overwrite = false;
+    import_dlg.checkbox("Overwrite existing scene", overwrite);
     if( !import_dlg.ask())
       return;
 
     // read the file
     SoNode* new_scene = bgui3d_import_file(file_name);
+    new_scene->ref();
 
-    // get the old scene_root
-    SoNode* old_scene = bgui3d_fullviewer_tab->user_scene_root();
-    SoSeparator* scene_root = NULL;
-    
-    // if the old scene_root was not a separator make it one
-    if(old_scene && SoSeparator::getClassTypeId() == old_scene->getTypeId())
-      scene_root = (SoSeparator*)old_scene;
-    else{
-      scene_root = new SoSeparator;
-      scene_root->addChild(old_scene);
-      bgui3d_fullviewer_tab->set_scene_root(scene_root);
+    if(overwrite){
+      //bgui3d_fullviewer_tab->set_scene_root(new_scene);
+
+      // get the old scene_root
+      SoNode* old_scene = bgui3d_fullviewer_tab->user_scene_root();
+      SoSeparator* scene_root = NULL;
+
+      if(old_scene && SoSeparator::getClassTypeId() == old_scene->getTypeId()){
+        scene_root = (SoSeparator*)old_scene;
+        scene_root->removeAllChildren();
+        scene_root->addChild(new_scene);
+      }
+
     }
-    // add the new scene
-    scene_root->addChild(new_scene);
+    // add the new scene to the existing one
+    else{
+      // get the old scene_root
+      SoNode* old_scene = bgui3d_fullviewer_tab->user_scene_root();
+      SoSeparator* scene_root = NULL;
 
+      // if the old scene_root was not a separator make it one
+      if(old_scene && SoSeparator::getClassTypeId() == old_scene->getTypeId())
+        scene_root = (SoSeparator*)old_scene;
+      else{
+        scene_root = new SoSeparator;
+        scene_root->addChild(old_scene);
+        bgui3d_fullviewer_tab->set_scene_root(scene_root);
+      }
+      // add the new scene
+      scene_root->addChild(new_scene);
+    }
+    new_scene->unref();
   }
 
   bgui3d_fullviewer_tableau *bgui3d_fullviewer_tab;
