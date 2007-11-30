@@ -103,6 +103,7 @@ void bwm_site::x_write(vcl_ostream& s)
   if (this->corresp_.size() > 0) {
     vsl_basic_xml_element xml_element("correspondences");
     xml_element.add_attribute("mode", corr_mode_);
+    xml_element.add_attribute("type", corr_type_);
     xml_element.x_write_open(s);
 
     for(unsigned i=0; i< this->corresp_.size(); i++) {

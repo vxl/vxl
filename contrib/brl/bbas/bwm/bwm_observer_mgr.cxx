@@ -87,6 +87,8 @@ void bwm_observer_mgr::set_corr_mode()
     }
 
   corr_mode_ = bwm_observer_mgr::IMAGE_TO_IMAGE;
+
+  n_corrs_ = (BWM_N_CORRS) n;
 }
 
 void bwm_observer_mgr::collect_corr()
@@ -283,6 +285,13 @@ void bwm_observer_mgr::save_corr_XML()
       m = "WORLD_TO_IMAGE";
     vsl_basic_xml_element xml_element("correspondences");
     xml_element.add_attribute("mode", m);
+
+    vcl_string n = "";
+    if (n_corrs_==MULTIPLE_CORRS) 
+      n = "MULTIPLE";
+    else 
+      n = "SINGLE";
+    xml_element.add_attribute("type", n);
     xml_element.x_write_open(s);
 
 

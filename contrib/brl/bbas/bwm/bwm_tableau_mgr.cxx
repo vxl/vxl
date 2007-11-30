@@ -431,6 +431,8 @@ void bwm_tableau_mgr::load_site()
     // if LVCS is not set, do not use it
     if (!lvcs||*lvcs == vsol_point_3d(0, 0, 0))
       lvcs = 0;
+   /* else   ASK JOE?? 
+      bwm_world::instance()->set_world_pt(lvcs->get_p());*/
 
     // create the active tableaux
     for (unsigned i=0; i<tableaus.size(); i++)
@@ -469,11 +471,27 @@ void bwm_tableau_mgr::load_site()
     vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > corresp; 
     corresp = parser->correspondences();
     vcl_string mode = parser->corresp_mode();
-
+    vcl_string type = parser->corresp_type();
    /* if (mode == "WORLD_TO_IMAGE") {
       // the vector of 3D points should be of equal size to correspondence point sets
       assert (parser->corresp_world_pts().size() == corresp.size());
     }*/
+
+    if (type.compare("MULTIPLE") == 0)
+      bwm_observer_mgr::instance()->set_n_corrs(bwm_observer_mgr::MULTIPLE_CORRS);
+    else if (type.compare("SINGLE") == 0)
+      bwm_observer_mgr::instance()->set_n_corrs(bwm_observer_mgr::SINGLE_PT_CORR);
+    else 
+      vcl_cerr << "ERROR: Undefined Correspondence type=" << type << vcl_endl;
+
+    if (mode == "WORLD_TO_IMAGE") {
+      if (corresp.size() > 0) {
+        bwm_world::instance()->set_world_pt(parser->corresp_world_pts()[0].get_p());
+      }
+      bwm_observer_mgr::instance()->set_corr_mode(bwm_observer_mgr::WORLD_TO_IMAGE);
+    } else if (mode == "IMAGE_TO_IMAGE") {
+      bwm_observer_mgr::instance()->set_corr_mode(bwm_observer_mgr::IMAGE_TO_IMAGE);
+    }
 
     for (unsigned i=0; i<corresp.size(); i++)
     {
@@ -484,12 +502,8 @@ void bwm_tableau_mgr::load_site()
         corr->set_mode(false);
         corr->set_world_pt(parser->corresp_world_pts()[i].get_p());
         //sets the same pt each time FIXME -JLM
-        bwm_world::instance()->set_world_pt(corr->world_pt());
-        bwm_observer_mgr::instance()->
-          set_corr_mode(bwm_observer_mgr::WORLD_TO_IMAGE);
+        //bwm_world::instance()->set_world_pt(corr->world_pt());
       } else if (mode == "IMAGE_TO_IMAGE") {
-        bwm_observer_mgr::instance()->
-          set_corr_mode(bwm_observer_mgr::IMAGE_TO_IMAGE);
         corr->set_mode(true);
       }
 
@@ -621,12 +635,17 @@ void bwm_tableau_mgr::save_site()
    // site->corresp_world_pts_.push_back(obs_mgr->corr_world_pts());
   }
 
+  if (obs_mgr->n_corrs() == bwm_observer_mgr::MULTIPLE_CORRS)
+    site->corr_type_ = "MULTIPLE";
+  else 
+    site->corr_type_ = "SINGLE";
+
   site->corresp_ = bwm_observer_mgr::instance()->correspondences();
 
   // add the objects
   // ask one camera tableau to save its objects
   vcl_vector<bwm_observable_sptr> objs = bwm_world::instance()->objects();
-  vcl_string obj_path = site_dir + "\\objects\\";
+  vcl_string obj_path = site_dir + "\\" + site_name + "_objects\\";
   vul_file::make_directory(obj_path);
   for (unsigned i=0; i<objs.size(); i++) {
     if (objs[i]) {

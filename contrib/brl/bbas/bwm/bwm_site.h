@@ -70,6 +70,8 @@ public:
   vcl_vector<bwm_corr_sptr> corresp_;
   //vcl_vector<vsol_point_3d_sptr> corresp_world_pts_;
   vcl_string corr_mode_;
+  vcl_string corr_type_;
+
 };
 
 
