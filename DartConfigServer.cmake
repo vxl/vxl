@@ -67,6 +67,6 @@ SET (EXPECTED_BUILDS "\\
   {imorphics Win_msvc} \\
   {imorphics Linux_gcc} \\
   {lems.brown.edu Linux-2.6_gcc-4.1.2_-Wall} \\
-  {lems.brown.edu Linux-2.6.18_gcc-4.1.2} \\
+  {lems.brown.edu Linux-2.6.18_gcc-4.1.3} \\
   {lems.brown.edu Win32-vs71 } \\
 ")
