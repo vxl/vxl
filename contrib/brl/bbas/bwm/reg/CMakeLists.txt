@@ -6,6 +6,7 @@ SET(bwm_reg_sources
    bwm_reg_utils.cxx              bwm_reg_utils.h
    bwm_reg_edge_champher.cxx      bwm_reg_edge_champher.h
    bwm_reg_matcher.cxx            bwm_reg_matcher.h
+   bwm_reg_processor.cxx          bwm_reg_processor.h
 )
 
 ADD_LIBRARY(bwm_reg ${bwm_reg_sources})

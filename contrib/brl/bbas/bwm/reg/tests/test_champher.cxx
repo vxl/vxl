@@ -17,7 +17,7 @@ void test_champher()
   vsol_digital_curve_2d_sptr modelc = new vsol_digital_curve_2d(verts0);  
   vcl_vector<vsol_digital_curve_2d_sptr> model;
   model.push_back(modelc);
-  bwm_reg_edge_champher ch(8, 8, model);
+  bwm_reg_edge_champher ch(0, 0, 8, 8, model);
   vcl_cout.precision(3);
   for(unsigned r = 0; r<8; ++r)
     {
@@ -36,7 +36,7 @@ void test_champher()
   vsol_digital_curve_2d_sptr searchc = new vsol_digital_curve_2d(verts1);  
   vcl_vector<vsol_digital_curve_2d_sptr> search;
   search.push_back(searchc);
-  bwm_reg_edge_champher ch1(10, 10, search);
+  bwm_reg_edge_champher ch1(0, 0, 10, 10, search);
   for(unsigned r = 0; r<10; ++r)
     {
       for(unsigned c = 0; c<10; ++c)

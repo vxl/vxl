@@ -32,7 +32,8 @@ class bwm_reg_edge_champher
 
   // Constructors/Initializers/Destructors-------------------------------------
 
-  bwm_reg_edge_champher(unsigned ncols, unsigned nrows,
+  bwm_reg_edge_champher(unsigned col_off, unsigned row_off,
+                        unsigned ncols, unsigned nrows,
                         vcl_vector<vsol_digital_curve_2d_sptr> const& edges);
   ~bwm_reg_edge_champher();
 
@@ -41,14 +42,17 @@ class bwm_reg_edge_champher
   //
   inline float distance(unsigned col, unsigned row) {
     // ncols_ = number of columns; nrows_ = number of rows
+    col-=col_off_; row-=row_off_;
     if ( (col<ncols_-1) && (row<nrows_-1) )
         return (float) distance_[row+1][col+1];
-    else
-        return vnl_numeric_traits<float>::maxval;
+	else{
+		vcl_cout << "failed at(" << col+col_off_ << ' ' << row+row_off_ << '\n';
+		return vnl_numeric_traits<float>::maxval;}
     }
 
   inline vsol_digital_curve_2d_sptr image_edge(unsigned col, unsigned row) {
     // ncols_ = number of columns; nrows_ = number of rows
+    col-=col_off_; row-=row_off_;
     if ( (col<ncols_-1) && (row<nrows_-1) )
         return edges_[row+1][col+1];
     else
@@ -57,6 +61,7 @@ class bwm_reg_edge_champher
 
   inline unsigned sample_index(unsigned col, unsigned row) {
     // ncols_ = number of columns; nrows_ = number of rows
+    col-=col_off_; row-=row_off_;
     if (  (col<ncols_-1) && (row<nrows_-1) )
         return sample_index_[row+1][col+1];
     else
@@ -68,6 +73,8 @@ class bwm_reg_edge_champher
   // Utility Methods-----------------------------------------------------------
   void distance_with_edge_masked(unsigned col, unsigned row, vsol_digital_curve_2d_sptr& e);
 
+  // Debug Methods------------------------------------------------------------
+  void print_distance();
  protected:
   // INTERNALS-----------------------------------------------------------------
   void initialize_arrays(vcl_vector<vsol_digital_curve_2d_sptr> const& edges);
@@ -82,8 +89,11 @@ class bwm_reg_edge_champher
 
  private:
 
-//the dimensions of the champher array, 2 greater than the actual space
+  //the dimensions of the champher array, 2 greater than the actual space
   unsigned ncols_,nrows_; 
+
+  //the offset to the original image coordinate system
+  unsigned col_off_, row_off_;
 
   // The distance image
   vbl_array_2d<unsigned char> distance_;

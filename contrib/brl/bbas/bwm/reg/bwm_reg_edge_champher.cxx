@@ -12,11 +12,15 @@
 
 //:  Constructor
 bwm_reg_edge_champher::
-bwm_reg_edge_champher(unsigned ncols, unsigned nrows,
+bwm_reg_edge_champher(unsigned col_off, unsigned row_off,
+                      unsigned ncols, unsigned nrows,
                       vcl_vector<vsol_digital_curve_2d_sptr> const& edges)
 {
+
   ncols_ = ncols+2;
   nrows_ = nrows+2;
+  col_off_ = col_off;
+  row_off_ = row_off;
   //note the max value of unsigned char is -1
   distance_ = vbl_array_2d<unsigned char>(nrows_, ncols_, (unsigned char)-1 );
   edges_ = vbl_array_2d<vsol_digital_curve_2d_sptr>(nrows_, ncols_, 0);
@@ -25,15 +29,28 @@ bwm_reg_edge_champher(unsigned ncols, unsigned nrows,
   this->initialize_arrays(edges);
   // Do the Chamfer 3-4 filtering
   this->chamfer_34();
-  vcl_cout.precision(3);
 }
-
 
 //: Destructor
 bwm_reg_edge_champher::~bwm_reg_edge_champher()
 {
 }
 
+void bwm_reg_edge_champher::print_distance()
+{
+  for(unsigned r = 1; r<nrows_-2; ++r)
+  { 
+    for(unsigned c =1 ; c<ncols_-2;++c)
+      {
+        unsigned v = static_cast<unsigned>(distance_[r][c]);
+        if(v>0)
+          vcl_cout << 1 ;
+        else
+          vcl_cout << 0 ;
+      }
+    vcl_cout << '\n';
+  }
+}
 
 //-----------------------------------------------------------------------------
 //
@@ -52,6 +69,7 @@ initialize_arrays(vcl_vector<vsol_digital_curve_2d_sptr> const& edges)
       {
         vsol_point_2d_sptr p = (*cit)->point(i);
         double c = p->x(), r = p->y();
+        c -= col_off_; r -= row_off_;
         if(c<0||r<0) continue;
         if(c>ncols_-2||r>nrows_-2) continue;
         unsigned ic = static_cast<unsigned>(vcl_floor(c)),

@@ -27,10 +27,10 @@ void test_matcher()
   vcl_vector<vsol_digital_curve_2d_sptr> search;
  search.push_back(searchc);
 
-  bwm_reg_matcher matcher(model, 12, 12, search);
+  bwm_reg_matcher matcher(model, 0, 0, 12, 12, search);
   
-  unsigned mcol = 0, mrow = 0;
-  bool success = matcher.match(mcol, mrow);
+  int mcol = 0, mrow = 0;
+  bool success = matcher.match(mcol, mrow, 1e8);
   TEST("Match test ", mcol, 5);
 
 }
