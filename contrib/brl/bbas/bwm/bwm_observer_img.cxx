@@ -24,11 +24,6 @@
 #include <vsol/vsol_digital_curve_2d.h>
 #include <vsol/vsol_line_2d.h>
 
-#define VERTEX_TYPE "bwm_soview2D_vertex"
-#define POLYLINE_TYPE "bgui_vsol_soview2D_polyline"
-#define POLYGON_TYPE "bgui_vsol_soview2D_polygon"
-#define POINT_TYPE "bgui_vsol_soview2D_point"
-
 bool bwm_observer_img::handle(const vgui_event &e)
 {
   vgui_projection_inspector pi;
@@ -110,7 +105,7 @@ bool bwm_observer_img::handle(const vgui_event &e)
     moving_polygon_ = false;
     return true;
   }
-  return bgui_vsol2D_tableau::handle(e);
+  return base::handle(e);
 }
 
 //eliminate the segmentation soviews
@@ -165,7 +160,7 @@ void bwm_observer_img::create_polyline(vsol_polyline_2d_sptr poly2d)
   vcl_vector<bwm_soview2D_vertex*> verts;
   this->set_foreground(0,1,0);
   for (unsigned i = 0; i<nverts; ++i) {
-    bwm_soview2D_vertex* vertex = new bwm_soview2D_vertex(x[i],y[i],1.0f, polyline, i);
+    bwm_soview2D_vertex* vertex = new bwm_soview2D_vertex(x[i],y[i],2.0f, polyline, i);
     this->add(vertex);
     verts.push_back(vertex);
   }
@@ -224,6 +219,9 @@ void bwm_observer_img::delete_selected()
 {
   // first get the selected polygon
   vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
+
+  if (select_list.size() == 0) 
+    return;
 
   if ((select_list.size() == 1) &&
       ((select_list[0]->type_name().compare(POLYGON_TYPE) == 0) ||

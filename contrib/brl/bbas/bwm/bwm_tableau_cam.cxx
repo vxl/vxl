@@ -144,6 +144,24 @@ class bwm_save_all_command : public vgui_command
   bwm_tableau_cam *tab;
 };
 
+class bwm_delete_command : public vgui_command
+{
+ public:
+  bwm_delete_command(bwm_tableau_cam* t) : tab(t) {}
+  void execute() { tab->delete_object(); }
+
+  bwm_tableau_cam *tab;
+};
+
+class bwm_delete_all_command : public vgui_command
+{
+ public:
+  bwm_delete_all_command(bwm_tableau_cam* t) : tab(t) {}
+  void execute() { tab->delete_all(); }
+
+  bwm_tableau_cam *tab;
+};
+
 class bwm_xy_proj_plane_command : public vgui_command
 {
  public:
@@ -207,12 +225,13 @@ void bwm_tableau_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu
   vgui_menu mesh_submenu;
   mesh_submenu.add( "Set as Master", new bwm_set_master_command(this));
   mesh_submenu.separator();
-  mesh_submenu.add("Mesh Poly", new bwm_create_mesh_command(this),
+  mesh_submenu.add("Create Mesh Polygon", new bwm_create_mesh_command(this),
     vgui_key('p'), vgui_modifier(vgui_SHIFT) );
-  mesh_submenu.separator();
-  mesh_submenu.add("Load from File..",
+  
+  mesh_submenu.add("Load Mesh from File..",
     new vgui_command_simple<bwm_tableau_cam>(this,&bwm_tableau_cam::load_mesh),
     vgui_key('p'), vgui_modifier(vgui_SHIFT) );
+  mesh_submenu.separator();
   mesh_submenu.add("Triangulate..", new bwm_tri_mesh_command(this),
     vgui_key('t'), vgui_modifier(vgui_SHIFT));
   mesh_submenu.separator();
@@ -225,9 +244,18 @@ void bwm_tableau_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu
     vgui_key('e'), vgui_modifier(vgui_SHIFT));
   mesh_submenu.separator();
   mesh_submenu.add( "Divide Face", new bwm_divide_command(this));
-  mesh_submenu.add( "Save Selected", new bwm_save_command(this));
-  mesh_submenu.add( "Save All", new bwm_save_all_command(this));
-  menu.add("CREATE 3D", mesh_submenu);
+  mesh_submenu.separator();
+
+  vgui_menu del_menu;
+  del_menu.add( "Delete Selected", new bwm_delete_command(this));
+  del_menu.separator();
+  del_menu.add( "Delete All", new bwm_delete_all_command(this));
+  del_menu.separator();
+  del_menu.add( "Save Selected", new bwm_save_command(this));
+  del_menu.separator();
+  del_menu.add( "Save All", new bwm_save_all_command(this));
+  mesh_submenu.add("SAVE/DELETE", del_menu);
+  menu.add("3D OBJECTS", mesh_submenu);
 
   menu.separator();
   vgui_menu corr_menu;
@@ -280,6 +308,7 @@ void bwm_tableau_cam::create_polygon_mesh()
   vsol_polygon_3d_sptr poly3d;
   my_observer_->backproj_poly(poly2d, poly3d);
   bwm_observable_mesh_sptr my_polygon = new bwm_observable_mesh(bwm_observable_mesh::BWM_MESH_FEATURE);
+  bwm_world::instance()->add(my_polygon);
   bwm_observer_mgr::instance()->attach(my_polygon);
   my_polygon->set_object(poly3d);
   my_observer_->image_tableau()->lock_linenum(false);
@@ -462,6 +491,16 @@ void bwm_tableau_cam::load_mesh_multiple()
   file_inp.close();
 
   return;
+}
+
+void bwm_tableau_cam::delete_object()
+{
+  my_observer_->delete_object();
+}
+
+void bwm_tableau_cam::delete_all()
+{
+  my_observer_->delete_all();
 }
 
 void bwm_tableau_cam::save()

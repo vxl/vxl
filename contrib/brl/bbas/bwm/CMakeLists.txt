@@ -79,7 +79,7 @@ SET(bwm_sources ${bwm_sources}
    process/bwm_site_process.cxx      process/bwm_site_process.h	
 )
 
-ENDIF (MFC_FOUND)
+
 
 AUX_SOURCE_DIRECTORY(Templates bwm_sources)
 
@@ -96,7 +96,7 @@ SUBDIRS(tests)
 #SUBDIRS(cgi)
 #SUBDIRS(process)
 
-ENDIF(MFC_FOUND)
+ENDIF (MFC_FOUND)
 ENDIF(GEOTIFF_FOUND)
 ENDIF(TIFF_FOUND)
 ENDIF(BUILD_EXPAT) 

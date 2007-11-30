@@ -523,23 +523,28 @@ void bwm_tableau_mgr::load_site()
       vcl_string path = objs[i].first;
       vcl_string type = objs[i].second;
       if (path.size() > 0) {
-        if (!vul_file::exists(path))
+        if (!vul_file::exists(path)) 
           vcl_cerr << "ERROR: The object file \"" << path << "\" could not be found!" << vcl_endl;
-
-        if (type.compare(object_types_[VSOL]) == 0) {
-          // will be implemented later!!!
-        } else {
-          // comes here if it is a mesh
-          bwm_observable_mesh_sptr mesh = new bwm_observable_mesh();
-          bwm_observer_mgr::instance()->attach(mesh);
-          mesh->load_from(path);
-          if (type.compare(object_types_[MESH_FEATURE]) == 0)
-            mesh->set_mesh_type(bwm_observable_mesh::BWM_MESH_FEATURE);
-          else if (type.compare(object_types_[MESH_IMAGE_PROCESSING]) == 0)
-            mesh->set_mesh_type(bwm_observable_mesh::BWM_MESH_IMAGE_PROCESSING);
-          else if (type.compare(object_types_[MESH_TERRAIN]) == 0)
-            mesh->set_mesh_type(bwm_observable_mesh::BWM_MESH_TERRAIN );
-          bwm_observer_mgr::instance()->attach(mesh);
+        else {
+          if (type.compare(object_types_[VSOL]) == 0) {
+            // will be implemented later!!!
+          } else {
+            // comes here if it is a mesh
+            bwm_observable_mesh_sptr mesh = new bwm_observable_mesh();
+            mesh->load_from(path);
+            if (mesh) {
+              bwm_observable_mesh_sptr obj = new bwm_observable_mesh();
+              bwm_observer_mgr::instance()->attach(obj);
+              if (type.compare(object_types_[MESH_FEATURE]) == 0)
+                obj->set_mesh_type(bwm_observable_mesh::BWM_MESH_FEATURE);
+              else if (type.compare(object_types_[MESH_IMAGE_PROCESSING]) == 0)
+                obj->set_mesh_type(bwm_observable_mesh::BWM_MESH_IMAGE_PROCESSING);
+              else if (type.compare(object_types_[MESH_TERRAIN]) == 0)
+                obj->set_mesh_type(bwm_observable_mesh::BWM_MESH_TERRAIN );
+              obj->set_object(mesh->get_object()->clone());
+              bwm_world::instance()->add(obj);
+            }
+          }
         }
       }
     }
@@ -624,12 +629,14 @@ void bwm_tableau_mgr::save_site()
   vcl_string obj_path = site_dir + "\\objects\\";
   vul_file::make_directory(obj_path);
   for (unsigned i=0; i<objs.size(); i++) {
-    vcl_stringstream strm;
-    strm << vcl_fixed << i;
-    vcl_string str(strm.str());
-    vcl_string fname = obj_path + "mesh_" + str + ".ply";
-    objs[i]->save(fname.c_str());
-    site->objects_.push_back(vcl_pair<vcl_string, vcl_string>(fname, object_types_[MESH_FEATURE]));
+    if (objs[i]) {
+      vcl_stringstream strm;
+      strm << vcl_fixed << i;
+      vcl_string str(strm.str());
+      vcl_string fname = obj_path + "mesh_" + str + ".ply";
+      objs[i]->save(fname.c_str());
+      site->objects_.push_back(vcl_pair<vcl_string, vcl_string>(fname, object_types_[MESH_FEATURE]));
+    }
   }
 
   site->x_write(s);

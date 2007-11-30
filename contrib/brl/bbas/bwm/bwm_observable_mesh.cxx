@@ -24,19 +24,19 @@
 bwm_observable_mesh::bwm_observable_mesh() 
 : object_(0) 
 {
-  bwm_world::instance()->add(this);
+  //bwm_world::instance()->add(this);
 }
 
 bwm_observable_mesh::bwm_observable_mesh(BWM_MESH_TYPES type)  
 : object_(0), mesh_type_(type) 
 {
-  bwm_world::instance()->add(this);
+  //bwm_world::instance()->add(this);
 }
   
 bwm_observable_mesh::bwm_observable_mesh(bmsh3d_mesh_mc* object)  
 : object_(object) 
 {
-  bwm_world::instance()->add(this);
+  //bwm_world::instance()->add(this);
 }
 
 bwm_observable_mesh::bwm_observable_mesh(vsol_polygon_3d_sptr poly)
@@ -47,7 +47,7 @@ bwm_observable_mesh::bwm_observable_mesh(vsol_polygon_3d_sptr poly)
   object_->_add_face (face);
   object_->orient_face_normals();
   // add yourself to The World
-  bwm_world::instance()->add(this);
+  //bwm_world::instance()->add(this);
   notify_observers("new");
 }
 
@@ -66,14 +66,17 @@ bwm_observable_mesh::~bwm_observable_mesh()
 
 void bwm_observable_mesh::remove()
 {
-  notify_observers("delete");
+  if (object_) {
+    notify_observers("delete");
+  }
+
   vcl_vector<vgui_observer*> observers;
   get_observers(observers);
   for (unsigned i=0; i<observers.size(); i++) {
     detach(observers[i]);
   }
   // remove the object from world
-  bwm_world::instance()->remove(this);
+  //bwm_world::instance()->remove(this);
 }
 
 void bwm_observable_mesh::notify_observers(vcl_string message_type)
@@ -228,16 +231,21 @@ void bwm_observable_mesh::set_object(vsol_polygon_3d_sptr poly)
   object_ = new bmsh3d_mesh_mc;
   bmsh3d_face_mc* face = create_face(poly);
   object_->_add_face (face);
-  object_->orient_face_normals();
+  //object_->orient_face_normals();
   notify_observers(msg);
 }
 
 void bwm_observable_mesh::replace(bmsh3d_mesh_mc* obj)
 {
-  delete object_;
+  vcl_string msg="";
+  if (object_) {
+    delete object_;
+    msg = "update";
+  } else
+    msg = "new";
   object_ = obj;
-  object_->orient_face_normals();
-  notify_observers("new");
+  //object_->orient_face_normals();
+  notify_observers(msg);
 }
 
 //: Returns a list of polygons.
@@ -1022,8 +1030,12 @@ SoSeparator* bwm_observable_mesh::convert_coin3d(bool b_shape_hints,
 
 void bwm_observable_mesh::load_from(vcl_string filename)
 {
-  if (object_)
+
+  vcl_string msg = "new";
+  if (object_) {
     delete object_;
+    msg = "update";
+  }
 
   object_ = new bmsh3d_mesh_mc();
   if (!bmsh3d_load_ply(object_,filename.data())) {
@@ -1034,7 +1046,7 @@ void bwm_observable_mesh::load_from(vcl_string filename)
   // build half-edge structure
   object_->IFS_to_MHE();
   object_->orient_face_normals();
-  notify_observers("new");
+  notify_observers(msg);
 }
 
 void bwm_observable_mesh::save(const char* filename, bgeo_lvcs* lvcs)
@@ -1065,7 +1077,7 @@ void bwm_observable_mesh::save(const char* filename, bgeo_lvcs* lvcs)
 
 void bwm_observable_mesh::save(const char* filename)
 {
-  object_->build_IFS_mesh();
+  //object_->build_IFS_mesh();
   bmsh3d_mesh* mesh2 = object_->clone();
 
   mesh2->build_IFS_mesh();

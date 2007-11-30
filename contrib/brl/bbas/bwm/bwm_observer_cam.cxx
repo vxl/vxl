@@ -28,31 +28,48 @@
 #include <vgui/vgui_projection_inspector.h>
 
 bool bwm_observer_cam::handle(const vgui_event &e) 
-{ 
+{
   // handle movements for meshes
   vgui_projection_inspector pi;
-  if (e.type == vgui_BUTTON_DOWN && e.button == vgui_MIDDLE && e.modifier == vgui_SHIFT) {
+  if (e.type == vgui_BUTTON_DOWN && e.button == vgui_MIDDLE && 
+    e.modifier == vgui_SHIFT) {
     // first get the selected polygon
-      
     vcl_vector<vgui_soview*> select_list = this->get_selected_soviews(); 
-    if ((select_list.size() == 1) &&
-        (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0)) {
-         unsigned face_id;
-         bwm_observable_sptr obj = find_object(select_list[0]->get_id(), face_id);
-         if (obj) {
-           // it is OK to move faces but not meshes with more than one face
-           if (obj->num_faces() == 1) {
-             moving_p_ = (bgui_vsol_soview2D*) select_list[0];
-             moving_face_ = obj;
-             pi.window_to_image_coordinates(e.wx, e.wy, start_x_, start_y_);
-             moving_polygon_ = true;
-             moving_vertex_ = false;
+    if (select_list.size() == 1) {
+        if (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0) {
+           unsigned face_id;
+           bwm_observable_sptr obj = find_object(select_list[0]->get_id(), face_id);
+           if (obj) {
+             // it is OK to move faces but not meshes with more than one face
+             if (obj && obj->num_faces() == 1) {
+               moving_p_ = (bgui_vsol_soview2D*) select_list[0];
+               moving_face_ = obj;
+               pi.window_to_image_coordinates(e.wx, e.wy, start_x_, start_y_);
+               moving_polygon_ = true;
+               moving_vertex_ = false;
+               return true;
+             }
            }
-         }
-      }
-      return true;
-    } else if (e.type == vgui_MOTION && e.button == vgui_MIDDLE && 
-      e.modifier == vgui_SHIFT && moving_polygon_) {
+        }
+        else if (select_list[0]->type_name().compare("bwm_soview2D_vertex") == 0) {
+          pi.window_to_image_coordinates(e.wx, e.wy, start_x_, start_y_);
+          bwm_soview2D_vertex* v = (bwm_soview2D_vertex*) select_list[0];
+          bgui_vsol_soview2D* poly = v->obj();
+          unsigned face_id;
+          bwm_observable_sptr obj = find_object(poly->get_id(), face_id);
+          if ( obj && obj->num_faces() == 1) {
+            moving_v_ = v;
+            // since there is only one face we can choose the only one
+            moving_p_ = poly;
+            moving_face_ = obj;
+            moving_vertex_ = true;
+            moving_polygon_ = false;
+            return true;
+          }
+        }
+    }
+  } else if (e.type == vgui_MOTION && e.button == vgui_MIDDLE && 
+      e.modifier == vgui_SHIFT && !moving_vertex_ && moving_face_) {
         float x, y;
         pi.window_to_image_coordinates(e.wx, e.wy, x, y);
         float x_diff = x-start_x_;
@@ -78,24 +95,47 @@ bool bwm_observer_cam::handle(const vgui_event &e)
         start_y_ = y;
         post_redraw();
         return true;
-    }
-  if (e.type == vgui_BUTTON_UP && e.button == vgui_MIDDLE && e.modifier == vgui_SHIFT &&
-    moving_face_) {
+  }
+
+  else if (e.type == vgui_BUTTON_UP && e.button == vgui_MIDDLE && 
+    e.modifier == vgui_SHIFT && moving_face_) {
     this->deselect_all();
+    moving_face_ = 0;
     moving_vertex_ = false;
     moving_polygon_ = false;
-   /* if (moving_p_->type_name().compare("bgui_vsol_soview2D_polygon") == 0) {
+    return true;
+  }
+
+  else if (e.type == vgui_MOTION && e.button == vgui_MIDDLE &&
+         e.modifier == vgui_SHIFT && moving_vertex_ && moving_face_) {
+    float x, y;
+    pi.window_to_image_coordinates(e.wx, e.wy, x, y);
+    float x_diff = x-start_x_;
+    float y_diff = y-start_y_;
+    // find the polygon including this vertex
+    unsigned i = moving_v_->vertex_indx();
+    moving_v_->translate(x_diff, y_diff);
+    if (moving_p_->type_name().compare(POLYGON_TYPE) == 0) {
       bgui_vsol_soview2D_polygon* polygon = (bgui_vsol_soview2D_polygon*) moving_p_;
+      polygon->sptr()->vertex(i)->set_x( polygon->sptr()->vertex(i)->x() + x_diff );
+      polygon->sptr()->vertex(i)->set_y( polygon->sptr()->vertex(i)->y() + y_diff );
+      // translate the 3D vertex too
       vsol_polygon_2d_sptr poly2d = polygon->sptr();
       vsol_polygon_3d_sptr poly3d;
       this->backproj_poly(poly2d, poly3d);
       moving_face_->set_object(poly3d);
-    }*/
+    } else {
+      vcl_cerr << moving_p_->type_name() << " is NOT movable!!!!\n";
+    }
+
+    start_x_ = x;
+    start_y_ = y;
+    post_redraw();
     return true;
   }
-
   return base::handle(e); 
 }
+
 
 void bwm_observer_cam::set_ground_plane(double x1, double y1, double x2, double y2)
 {
@@ -630,12 +670,16 @@ void bwm_observer_cam::extrude_face(vsol_point_2d_sptr pt)
     // next vertex
     vgl_homg_point_3d<double> p1(face->vertex(next_index)->get_p());
     // a point above p0 along normal
+    vcl_cout << "Face Normal-->" << face->normal() << vcl_endl;
     vgl_homg_point_3d<double> p2(face->vertex(index)->get_p().x() +
                                  face->normal().x(),
                                  face->vertex(index)->get_p().y() +
                                  face->normal().y(),
                                  face->vertex(index)->get_p().z() +
                                  face->normal().z());
+    vcl_cout << "p0-->" << p0 << vcl_endl;
+    vcl_cout << "p1-->" << p1 << vcl_endl;
+    vcl_cout << "p2-->" << p2 << vcl_endl;
     vgl_homg_plane_3d<double> plane(p0, p1, p2);
 #ifdef CAM_DEBUG
     vcl_cout << "projection plane normal " << plane.normal() << '\n';

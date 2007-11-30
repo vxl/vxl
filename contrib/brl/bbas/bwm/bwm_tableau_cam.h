@@ -76,7 +76,11 @@ public:
   void save(vcl_string path);
   void save_all(vcl_string path);
 
+  //: deletes the selected object
+  void delete_object();
 
+  //: deletes all 3D objects
+  void delete_all();
   //------------ Projection Plane related methods
   
   //: selects an existing polygon as the projection plane

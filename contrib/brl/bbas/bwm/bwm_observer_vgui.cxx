@@ -2,6 +2,7 @@
 //:
 // \file
 #include "bwm_observer_mgr.h"
+#include "bwm_world.h"
 #include "algo/bwm_algo.h"
 #include "algo/bwm_image_processor.h"
 
@@ -102,7 +103,7 @@ void bwm_observer_vgui::handle_update(vgui_message const& msg,
       this->set_foreground(0,1,0);
       //JLM Changed vertex size
       for (unsigned i = 0; i<nverts; ++i) {
-        bwm_soview2D_vertex* sopt = new bwm_soview2D_vertex(x[i], y[i], 1.0f, polygon, i);
+        bwm_soview2D_vertex* sopt = new bwm_soview2D_vertex(x[i], y[i], 2.0f, polygon, i);
         this->add(sopt);
         verts.push_back(sopt);
       }
@@ -182,7 +183,10 @@ void bwm_observer_vgui::delete_object()
     (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0)) {
       unsigned face_id;
       bwm_observable_sptr obj = find_object(select_list[0]->get_id(), face_id);
-      obj->remove();
+      if (obj) {
+        bwm_world::instance()->remove(obj);
+        obj->remove();
+      }
   }
 }
 
@@ -195,7 +199,11 @@ void bwm_observer_vgui::delete_all()
   while (objects_.size() > 0) {
     iter = objects_.begin();
     bwm_observable_sptr obj = iter->first;
-    obj->remove();
+    if (obj) {
+      bwm_world::instance()->remove(obj);
+      obj->remove();
+    }
+
   }
   objects_.clear();
 }
@@ -295,10 +303,11 @@ void bwm_observer_vgui::connect_inner_face(vsol_polygon_2d_sptr poly2d)
   if ((select_list.size() == 1) && (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0)) {
     unsigned face_id;
     bwm_observable_sptr obs = this->find_object(select_list[0]->get_id(), face_id);
-
-    vsol_polygon_3d_sptr poly3d;
-    backproj_poly(poly2d, poly3d);
-    obs->attach_inner_face(face_id, poly3d);
+    if (obs) {
+      vsol_polygon_3d_sptr poly3d;
+      backproj_poly(poly2d, poly3d);
+      obs->attach_inner_face(face_id, poly3d);
+    }
   }
 }
 
@@ -311,7 +320,8 @@ void bwm_observer_vgui::create_interior()
   if ((select_list.size() == 1) && (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0)) {
     unsigned face_id;
     bwm_observable_sptr obs = this->find_object(select_list[0]->get_id(), face_id);
-    obs->create_interior();
+    if (obs)
+      obs->create_interior();
   }
 }
 

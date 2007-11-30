@@ -44,8 +44,6 @@ void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::create_point),
     vgui_key('t'),
     vgui_modifier(vgui_SHIFT) );
-  menu.add( "CREATE 2D ", submenu);
-  menu.separator();
 
   vgui_menu selmenu;
   selmenu.add( "Deselect All",
@@ -59,13 +57,14 @@ void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu
   selmenu.add( "Empty the Box",
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::clear_box),
     vgui_key('b'), vgui_modifier(vgui_SHIFT));
-  selmenu.separator();
+  
   selmenu.add( "Delete All",
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::clear_all),
     vgui_key('a'), vgui_modifier(vgui_SHIFT));
-
-  menu.add( "SELECT/DELETE ", selmenu);
-
+  selmenu.separator();
+  submenu.add( "DESELECT/DELETE ", selmenu);
+  menu.add( "2D OBJECTS", submenu);
+  menu.separator();
 #if 0
   menu.add( "Detect Edges",
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::step_edges_vd),
@@ -75,7 +74,6 @@ void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::lines_vd),
     vgui_key('v'), vgui_modifier(vgui_SHIFT));
 #endif
-  menu.separator();
 
   vgui_menu image_submenu;
   MENU_TAB_ADD_PROCESS("Range Map", "range_map", image_submenu, this);

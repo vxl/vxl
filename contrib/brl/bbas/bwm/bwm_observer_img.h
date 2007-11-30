@@ -27,9 +27,16 @@
 #include <vsol/vsol_digital_curve_2d_sptr.h>
 #include <vsol/vsol_line_2d_sptr.h>
 
+#define VERTEX_TYPE "bwm_soview2D_vertex"
+#define POLYLINE_TYPE "bgui_vsol_soview2D_polyline"
+#define POLYGON_TYPE "bgui_vsol_soview2D_polygon"
+#define POINT_TYPE "bgui_vsol_soview2D_point"
+
 class bwm_observer_img : public bgui_vsol2D_tableau
 {
 public:
+
+  typedef bgui_vsol2D_tableau base;
 
   bwm_observer_img(bgui_image_tableau_sptr const& img)
     : bgui_vsol2D_tableau(img), img_tab_(img), viewer_(0), 
