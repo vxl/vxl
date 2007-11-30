@@ -71,8 +71,8 @@ class vgui_qt_filebrowser_impl : public QGroupBox
    void get_a_file();
 
  private:
-   const vcl_string& title_;
-   const vcl_string& filter_;
+   vcl_string title_;
+   vcl_string filter_;
    QLineEdit*  edit_;
 };
 
