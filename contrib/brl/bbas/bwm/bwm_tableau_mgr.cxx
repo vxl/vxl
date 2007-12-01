@@ -431,8 +431,12 @@ void bwm_tableau_mgr::load_site()
     // if LVCS is not set, do not use it
     if (!lvcs||*lvcs == vsol_point_3d(0, 0, 0))
       lvcs = 0;
-   /* else   ASK JOE?? 
-      bwm_world::instance()->set_world_pt(lvcs->get_p());*/
+    else {
+      double lat = lvcs->x();
+      double lon = lvcs->y();
+      double elev = lvcs->z();
+      bwm_world::instance()->set_lvcs(lat, lon, elev);
+    }
 
     // create the active tableaux
     for (unsigned i=0; i<tableaus.size(); i++)
@@ -757,17 +761,12 @@ void bwm_tableau_mgr::create_cam_tableau(vcl_string name,
         return;
       }
       rat_observer = new bwm_observer_rat_cam(img, camera_rat, cam_path);
-      if (lvcs) {
-        double lat = lvcs->x();
-        double lon = lvcs->y();
-        double elev = lvcs->z();
-        rat_observer->set_lvcs(lat, lon, elev);
-      }
       observer = rat_observer;
       t = new bwm_tableau_rat_cam(rat_observer);
       break;
      default:
       vcl_cout << "Error: unknown camera type "<<camera_type<< vcl_endl;
+      return;
     }
   }
 
@@ -780,7 +779,6 @@ void bwm_tableau_mgr::create_cam_tableau(vcl_string name,
   unsigned row = 0, col = 0;
   add_to_grid(viewer, col, row);
   observer->set_grid_location(col, row);
-
   tableaus_[name] = t;
 }
 

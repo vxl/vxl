@@ -2,6 +2,8 @@
 #define bwm_menu_h_ 
 
 #include "bwm_tableau_mgr.h"
+#include "bwm_world.h"
+
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_dialog.h>
 
@@ -21,6 +23,11 @@ public:
   static void load_site()  {bwm_tableau_mgr::instance()->load_site();}
   static void save_site() { bwm_tableau_mgr::instance()->save_site();}
   static void remove_tableau() {bwm_tableau_mgr::instance()->remove_tableau();}
+  static void save_ply() { bwm_world::instance()->save_ply(); }
+  static void save_gml() { bwm_world::instance()->save_gml(); }
+  static void save_kml() { bwm_world::instance()->save_kml(); }
+  static void save_kml_collada() { bwm_world::instance()->save_kml_collada(); }
+  static void save_x3d() { bwm_world::instance()->save_x3d(); }
   static void exit() {bwm_tableau_mgr::instance()->exit(); }
 
 };

@@ -17,14 +17,21 @@ vgui_menu bwm_menu::add_to_menu (vgui_menu& top_menu)
 
   load_menu.add("Remove Selected Tableau..." , remove_tableau);
   load_menu.add("Exit..." , exit);
-  top_menu.add("FILE   ", load_menu);
+  top_menu.add("SITE   ", load_menu);
 
-  vgui_menu process_menu;
+  vgui_menu file_menu;
+  file_menu.add("Save (ply)", save_ply);
+  file_menu.add("Save (gml)", save_gml);
+  file_menu.add("Save (kml)", save_kml);
+  file_menu.add("Save (kml collada)", save_kml_collada);
+  file_menu.add("Save (x3d)", save_x3d);
+  top_menu.add("FILE   ", file_menu);
 
   vgui_menu corr_menu;
+  vgui_menu process_menu;
   MENU_MENU_ADD_PROCESS("correspondence", corr_menu);
   process_menu.add("Correspondences",corr_menu);
-  
   top_menu.add("PROCESSES ", process_menu);
+
   return top_menu;
 }

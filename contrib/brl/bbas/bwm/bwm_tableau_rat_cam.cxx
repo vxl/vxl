@@ -55,7 +55,7 @@ class bwm_save_command : public vgui_command
   bwm_tableau_rat_cam *tab;
 };
 
-class bwm_save_all_command : public vgui_command
+/*class bwm_save_all_command : public vgui_command
 {
  public:
   bwm_save_all_command(bwm_tableau_rat_cam* t) : tab(t) {}
@@ -98,7 +98,7 @@ class bwm_save_x3d_command : public vgui_command
   void execute() { tab->save_x3d(); }
 
   bwm_tableau_rat_cam *tab;
-};
+};*/
 
 class bwm_adjust_camera_to_world_pt_command : public vgui_command
 {
@@ -149,27 +149,27 @@ void bwm_tableau_rat_cam::get_popup(vgui_popup_params const &params, vgui_menu &
 
   menu.separator();
   vgui_menu lvcs_submenu;
-  lvcs_submenu.add( "Load LVCS", new bwm_load_lvcs_command(this));
-  lvcs_submenu.add( "Save LVCS", new bwm_save_lvcs_command(this));
+  //lvcs_submenu.add( "Load LVCS", new bwm_load_lvcs_command(this));
+  //lvcs_submenu.add( "Save LVCS", new bwm_save_lvcs_command(this));
   lvcs_submenu.add( "Define LVCS", new bwm_define_lvcs_command(this));
-  lvcs_submenu.add( "Convert File to LVCS", new bwm_convert_to_lvcs_command(this));
+  //lvcs_submenu.add( "Convert File to LVCS", new bwm_convert_to_lvcs_command(this));
   menu.add("LVCS", lvcs_submenu);
 
   menu.separator();
   vgui_menu save_submenu;
-  save_submenu.add( "Save Selected", new bwm_save_command(this));
-  save_submenu.add( "Save All ", new bwm_save_all_command(this));
+  save_submenu.add( "Save Selected (ply)", new bwm_save_command(this));
+  /*save_submenu.add( "Save All ", new bwm_save_all_command(this));
   save_submenu.add( "Save gml ", new bwm_save_gml_command(this));
   save_submenu.add( "Save kml ", new bwm_save_kml_command(this));
   save_submenu.add( "Save kml collada ", new bwm_save_kml_collada_command(this));
-  save_submenu.add( "Save x3d", new bwm_save_kml_collada_command(this));
+  save_submenu.add( "Save x3d", new bwm_save_kml_collada_command(this));*/
   menu.add("SAVE", save_submenu);
 
   //add this submenu to the popup menu
   //menu.add("Rational Camera Tools", parent_menu);
 }
 
-void bwm_tableau_rat_cam::load_lvcs()
+/*void bwm_tableau_rat_cam::load_lvcs()
 {
   my_observer_->load_lvcs();
 }
@@ -177,12 +177,12 @@ void bwm_tableau_rat_cam::load_lvcs()
 void bwm_tableau_rat_cam::save_lvcs()
 {
   my_observer_->save_lvcs();
-}
+}*/
 
-void bwm_tableau_rat_cam::convert_file_to_lvcs()
+/*void bwm_tableau_rat_cam::convert_file_to_lvcs()
 {
   my_observer_->convert_file_to_lvcs();
-}
+}*/
 
 void bwm_tableau_rat_cam::define_lvcs()
 {
@@ -214,7 +214,7 @@ void bwm_tableau_rat_cam::save()
   my_observer_->save();
 }
 
-void bwm_tableau_rat_cam::save_all()
+/*void bwm_tableau_rat_cam::save_all()
 {
   my_observer_->save_all();
 }
@@ -238,7 +238,7 @@ void bwm_tableau_rat_cam::save_x3d()
 {
   my_observer_->save_x3d();
 }
-
+*/
 
 void bwm_tableau_rat_cam::project_edges_from_master()
 {

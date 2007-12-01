@@ -40,6 +40,8 @@ public:
   bool handle(const vgui_event &);
 
   virtual vcl_string type_name() const { return "bwm_observer_vgui"; }
+  
+  void add_new_obj(bwm_observable_sptr observable);
 
   void handle_update(vgui_message const& msg, bwm_observable_sptr observable);
 

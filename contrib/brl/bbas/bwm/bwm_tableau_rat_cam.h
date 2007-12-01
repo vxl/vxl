@@ -47,11 +47,11 @@ public:
 
   //********************* Save Menu
   void save();
-  void save_all();
+ /* void save_all();
   void save_gml();
   void save_kml();
   void save_kml_collada();
-  void save_x3d();
+  void save_x3d();*/
   //****************** Misc   
   void project_edges_from_master();
 protected:

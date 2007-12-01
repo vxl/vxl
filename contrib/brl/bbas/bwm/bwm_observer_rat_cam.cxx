@@ -88,10 +88,13 @@ vgl_vector_3d<double> bwm_observer_rat_cam::camera_direction()
 
   // convert p1 and p2 to lvcs
   double x,y,z;
-  lvcs_->global_to_local(p1.x(),p1.y(),p1.z(),bgeo_lvcs::wgs84,x,y,z,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
-  p1.set(x,y,z);
-  lvcs_->global_to_local(p2.x(),p2.y(),p2.z(),bgeo_lvcs::wgs84,x,y,z,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
-  p2.set(x,y,z);
+  bgeo_lvcs lvcs;
+  if (bwm_world::instance()->get_lvcs(lvcs)) {
+    lvcs.global_to_local(p1.x(),p1.y(),p1.z(),bgeo_lvcs::wgs84,x,y,z,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+    p1.set(x,y,z);
+    lvcs.global_to_local(p2.x(),p2.y(),p2.z(),bgeo_lvcs::wgs84,x,y,z,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+    p2.set(x,y,z);
+  }
 
   // find vector defined by p1 and p2
   vgl_vector_3d<double> direction(p2.x() - p1.x(), p2.y() - p1.y(), p2.z() - p1.z());
@@ -194,8 +197,8 @@ void bwm_observer_rat_cam::set_lvcs_at_selected_vertex()
   vsol_point_3d_sptr sv = selected_vertex();
   if (!sv)
     return;
-  lvcs_ = new bgeo_lvcs(sv->y(),sv->x(),sv->z(),
-                        bgeo_lvcs::wgs84,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+  bgeo_lvcs lvcs(sv->y(),sv->x(),sv->z(), bgeo_lvcs::wgs84,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+  bwm_world::instance()->set_lvcs(lvcs);
   vcl_cout << "defining lvcs with origin = <" << sv->x() << ", "<<
     sv->y() <<", "<< sv->z() << '>' <<vcl_endl;
 }
@@ -218,38 +221,43 @@ void bwm_observer_rat_cam::define_lvcs(float x1, float y1)
   backproj_poly(origin_poly2d,origin_poly3d);
 
   // note constructor takes lat, long (as opposed to long, lat) so switch x and y
-  lvcs_ = new bgeo_lvcs(origin_poly3d->vertex(0)->y(),origin_poly3d->vertex(0)->x(),origin_poly3d->vertex(0)->z(),
+  bgeo_lvcs lvcs(origin_poly3d->vertex(0)->y(),origin_poly3d->vertex(0)->x(),origin_poly3d->vertex(0)->z(),
                         bgeo_lvcs::wgs84,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
   vcl_cout << "defining lvcs with origin = <"
            << origin_poly3d->vertex(0)->x() << ", "
            << origin_poly3d->vertex(0)->y() << ", "
            << origin_poly3d->vertex(0)->z() << '>' << vcl_endl;
+  bwm_world::instance()->set_lvcs(lvcs);
 }
 
 void bwm_observer_rat_cam::adjust_camera_offset(vsol_point_2d_sptr img_point)
 {
   // make sure lvcs is defined
-  if (!lvcs_) {
+  /*if (!lvcs_) {
     vcl_cerr << "error: no lvcs defined!\n";
     return;
-  }
+  }*/
 
-  // get projection of lvcs origin
-  double lat,lon,elev;
-  lvcs_->local_to_global(0, 0, 0,bgeo_lvcs::wgs84, lon ,lat ,elev,
-    bgeo_lvcs::DEG,bgeo_lvcs::METERS);
-  vgl_point_3d<double> world_pt(lon,lat,elev);
-  vgl_point_2d<double> image_pt;
-  proj_point(world_pt,image_pt);
+  bgeo_lvcs lvcs;
+  if (bwm_world::instance()->get_lvcs(lvcs)) {
 
-  // shift camera translation to line up points
-  if (shift_camera(img_point->x() - image_pt.x(),
-    img_point->y() - image_pt.y())) {
-    vcl_cout << "shifted right camera offset by [" <<
-      img_point->x() - image_pt.x() <<", " <<
-      image_pt.y() - image_pt.y() <<"]\n";
-  }else {
-    vcl_cerr << " error shifting camera offset\n";
+    // get projection of lvcs origin
+    double lat,lon,elev;
+    lvcs.local_to_global(0, 0, 0,bgeo_lvcs::wgs84, lon ,lat ,elev,
+      bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+    vgl_point_3d<double> world_pt(lon,lat,elev);
+    vgl_point_2d<double> image_pt;
+    proj_point(world_pt,image_pt);
+
+    // shift camera translation to line up points
+    if (shift_camera(img_point->x() - image_pt.x(),
+      img_point->y() - image_pt.y())) {
+      vcl_cout << "shifted right camera offset by [" <<
+        img_point->x() - image_pt.x() <<", " <<
+        image_pt.y() - image_pt.y() <<"]\n";
+    }else {
+      vcl_cerr << " error shifting camera offset\n";
+    }
   }
 }
 
@@ -271,20 +279,17 @@ void bwm_observer_rat_cam::save_selected()
     error.ask();
     return;
   }
-  // TODO: check if object is selected
-  vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D_polygon* > >::iterator it = objects_.begin();
-  while (it != objects_.end()) {
-    bwm_observable_sptr o = it->first;
-    if (use_lvcs){
-      o->save(file.data(),lvcs_);
-    }else {
-      o->save(file.data());
-    }
-    it++;
+
+  bgeo_lvcs lvcs;
+  if (bwm_world::instance()->get_lvcs(lvcs)) {
+    unsigned face_id;
+    bwm_observable_sptr obj = selected_face(face_id);
+    if (obj) 
+     obj->save(file.data(),&lvcs);
   }
 }
 
-void bwm_observer_rat_cam::save_all()
+/*void bwm_observer_rat_cam::save_all()
 {
   vgui_dialog params("File Save");
   vcl_string ext, list_name, empty="";
@@ -879,9 +884,9 @@ void bwm_observer_rat_cam::generate_textures()
   }
   return;
 }
+*/
 
-
-void bwm_observer_rat_cam::save_lvcs()
+/*void bwm_observer_rat_cam::save_lvcs()
 {
   vcl_string filename = select_file();
   // just save origin for now
@@ -908,9 +913,9 @@ void bwm_observer_rat_cam::load_lvcs()
   vcl_cout << "loaded lvcs with origin "<<lat<<", "<<lon<<", "<<elev<<vcl_endl;
 
   return;
-}
+}*/
 
-void bwm_observer_rat_cam::convert_file_to_lvcs()
+/*void bwm_observer_rat_cam::convert_file_to_lvcs()
 {
   if (!lvcs_) {
     vcl_cerr << "error: lvcs is not defined!\n";
@@ -930,11 +935,11 @@ void bwm_observer_rat_cam::convert_file_to_lvcs()
     is >> lon;
     is >> elev;
     lvcs_->global_to_local(lon,lat,elev,bgeo_lvcs::wgs84,x,y,z,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
-    os << x <<' '<<y<<' '<<z<<vcl_endl;
+    os << x <<' '<< y <<' '<<z<<vcl_endl;
   }
 
   return;
-}
+}*/
 
 vcl_string bwm_observer_rat_cam::select_file()
 {

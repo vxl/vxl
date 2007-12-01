@@ -32,6 +32,25 @@ vcl_vector<bwm_observer_rat_cam*> bwm_observer_mgr::observers_rat_cam()
   return v;
 }
 
+void bwm_observer_mgr::add(bwm_observer* o)
+{ 
+  observers_.push_back(o); 
+ 
+  // make the connection between this observer and the available observables
+  vcl_vector<bwm_observable_sptr> objects = bwm_world::instance()->objects();
+  //vgui_message msg;
+  //msg.data = "new"
+  for (unsigned i=0; i<objects.size(); i++) {
+    bwm_observable_sptr obj = objects[i];
+    if (!obj)
+      vcl_cerr << "ERROR: world has an invalid (NULL) object!" << vcl_endl;
+    else {
+      obj->attach(o);
+      o->add_new_obj(obj);
+    }
+  }
+}
+
 void bwm_observer_mgr::attach(bwm_observable_sptr obs)
 {
   for (unsigned i=0; i<observers_.size(); i++)
@@ -44,6 +63,33 @@ void bwm_observer_mgr::remove(bwm_observer* observer)
     if (observers_[i] == observer)
       observers_.erase(observers_.begin()+i);
 }
+
+bool bwm_observer_mgr::comp_avg_camera_center(vgl_point_3d<double> &cam_center)
+{
+  unsigned num = 0;
+  double x=0, y=0, z=0;
+  vgl_homg_point_3d<double> c;
+
+  // go through the camera observers and compute a camera center
+  for (unsigned i=0; i<observers_.size(); i++) {
+    if (observers_[i]->type_name().compare("bwm_observer_rat_cam") == 0) {
+      bwm_observer_rat_cam* obs = static_cast<bwm_observer_rat_cam*> (observers_[i]);
+      obs->camera_center(c);
+      vgl_point_3d<double> temp(c);
+      x += temp.x();
+      y += temp.y();
+      z += temp.z();
+      num++;
+    }
+  }
+
+  if (num == 0)
+    return false;
+
+  cam_center.set(x/num, y/num, z/num);
+  return true;
+}
+
 #if 0
 //Set a world point to be used in correspondences from world to image
 void bwm_observer_mgr::set_world_pt(vgl_point_3d<double> world_pt)

@@ -61,6 +61,61 @@ void bwm_observer_vgui::corr_image_pt(float& x, float& y)
   x = pt.x(); y = pt.y();
 }
 
+void bwm_observer_vgui::add_new_obj(bwm_observable_sptr observable)
+{
+  if (observable) {
+    vcl_map<unsigned, bgui_vsol_soview2D_polygon* > poly_list;
+
+    vcl_map<int, vsol_polygon_3d_sptr> faces = observable->extract_faces();
+    vcl_map<int, vsol_polygon_3d_sptr>::iterator iter = faces.begin();
+    vcl_map<unsigned, vcl_vector<bwm_soview2D_vertex*> >poly_verts;
+
+    while (iter != faces.end()) {
+      // project the new object with the given camera
+      int face_id = iter->first;
+      vsol_polygon_3d_sptr obj = iter->second;
+      vsol_polygon_2d_sptr poly_2d;
+      proj_poly(obj, poly_2d);
+      unsigned nverts = poly_2d->size();
+      float *x, *y;
+      bwm_algo::get_vertices_xy(poly_2d, &x, &y);
+
+      this->set_foreground(1,1,0);
+      bgui_vsol_soview2D_polygon* polygon = this->add_vsol_polygon_2d(poly_2d);
+      poly_list[face_id] = polygon;
+
+      proj_poly(obj, poly_2d);
+      vcl_vector<bwm_soview2D_vertex*> verts;
+      this->set_foreground(0,1,0);
+      //JLM Changed vertex size
+      for (unsigned i = 0; i<nverts; ++i) {
+        bwm_soview2D_vertex* sopt = new bwm_soview2D_vertex(x[i], y[i], 2.0f, polygon, i);
+        this->add(sopt);
+        verts.push_back(sopt);
+      }
+
+      poly_verts[face_id] = verts;
+
+      // get the inner faces connected to this face
+      vcl_map<int, vsol_polygon_3d_sptr> inner_faces = observable->extract_inner_faces(face_id);
+      vcl_map<int, vsol_polygon_3d_sptr>::iterator inner_iter= inner_faces.begin();
+      while (inner_iter != inner_faces.end()) {
+        vsol_polygon_3d_sptr poly = inner_iter->second;
+        vsol_polygon_2d_sptr poly_2d;
+        proj_poly(poly, poly_2d);
+        float *x, *y;
+        bwm_algo::get_vertices_xy(poly_2d, &x, &y);
+        bgui_vsol_soview2D_polygon* polygon = this->add_vsol_polygon_2d(poly_2d);
+        poly_list[face_id] = polygon;
+        inner_iter++;
+      }
+      iter++;
+    }
+
+    objects_[observable] = poly_list;
+    object_verts_[observable] = poly_verts;
+  }
+}
 void bwm_observer_vgui::handle_update(vgui_message const& msg,
                                       bwm_observable_sptr observable)
 {

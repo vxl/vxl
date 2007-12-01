@@ -5,6 +5,7 @@
 
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_plane_3d.h>
+#include <vpgl/bgeo/bgeo_lvcs.h>
 
 class bwm_world {
 public:
@@ -41,9 +42,25 @@ public:
   //are consistent - leave for now
   void set_world_plane(vgl_plane_3d<double> const& plane) { world_plane_ = plane; }
 
+  bool lvcs_valid(){return lvcs_valid_;}
+
+  void set_lvcs(double lat, double lon, double elev);
+
+  void set_lvcs(bgeo_lvcs &lvcs) { lvcs_ = lvcs; lvcs_valid_ = true; }
+
+  //: returns true if it can figure out a value, false otherwise
+  bool get_lvcs(bgeo_lvcs &lvcs);
+
+  //*********** Save methods
+  void save_ply();
+  void save_gml();
+  void save_kml();
+  void save_kml_collada();
+  void save_x3d();
+
 protected:
   //: default constructor - not accessable since world is a singleton
-  bwm_world(): world_pt_valid_(false){} 
+  bwm_world(): world_pt_valid_(false), lvcs_valid_(false) {} 
 
   //: the singleton world instance
   static bwm_world* instance_;
@@ -60,6 +77,11 @@ protected:
 
   //: The set of objects in the world such as mesh and vsol
   vcl_vector<bwm_observable_sptr> objects_;
+
+  bgeo_lvcs lvcs_;
+
+  bool lvcs_valid_;
+
 };
 
 #endif

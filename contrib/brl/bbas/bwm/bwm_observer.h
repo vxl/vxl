@@ -29,6 +29,8 @@ public:
   virtual void handle_update(vgui_message const& msg, 
     bwm_observable_sptr observable)=0; 
 
+  virtual void add_new_obj(bwm_observable_sptr observable){}
+
   //virtual void update_all()=0;
 
   //: Translates the 3D objects by vector T

@@ -26,12 +26,14 @@ public:
 
   vcl_vector<bwm_observer_rat_cam*> observers_rat_cam();
 
-  void add(bwm_observer* o){ observers_.push_back(o); }
+  void add(bwm_observer* o);
 
   void remove(bwm_observer* observer);
 
   //: attach the observable to all observers
   void attach(bwm_observable_sptr obs);
+
+  bool comp_avg_camera_center(vgl_point_3d<double> &cam_center);
 
   // Correspondence methods
   void collect_corr();
