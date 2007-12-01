@@ -151,7 +151,7 @@ void vgui_mfc_dialog_extensions_impl::OnBrowseDir(UINT uID)
   int which = uID-ID_BROWSE_DIRS;
   ASSERT(which>=0 && which<100);
   vcl_cerr<<"Directory browser loading...";
-  vgui_dir_dialog dir_dialog(NULL,"All Files (*.*)|*.*||Executable files (*.exe;*.dll)|*.exe;*.dll", this);
+  vgui_dir_dialog dir_dialog(NULL,"All Files |*.*|", this);
   if (dir_dialog.DoModal() == IDOK) {
     CString s(dir_dialog.GetPath());
     s.TrimRight('\\');

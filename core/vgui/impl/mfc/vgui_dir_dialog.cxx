@@ -621,9 +621,9 @@ vgui_dir_dialog::vgui_dir_dialog(LPCTSTR initial, LPCTSTR filter, CWnd* pParentW
     // Note: m_strFilter is a member variable so it doesn't disappear because
     // it is used later internally by the file open dialog (via m_ofn.lpstrFilter).
     if (filter != NULL)
-        m_strFilter = CString(_T("Show Folders Only|.|")) + filter;
+      m_strFilter = filter + CString(_T("Show Folders Only|.||"));
     else
-        m_strFilter = _T("Show Folders Only|.|All Files (*.*)|*.*||");
+        m_strFilter = _T("All Files (*.*)|*.*||Show Folders Only|.|");
     m_strFilter.Replace('|', '\0');
     m_ofn.lpstrFilter = m_strFilter;
 
