@@ -31,7 +31,7 @@ class bwm_reg_edge_champher
  public:
 
   // Constructors/Initializers/Destructors-------------------------------------
-
+  bwm_reg_edge_champher();
   bwm_reg_edge_champher(unsigned col_off, unsigned row_off,
                         unsigned ncols, unsigned nrows,
                         vcl_vector<vsol_digital_curve_2d_sptr> const& edges);
@@ -40,6 +40,8 @@ class bwm_reg_edge_champher
   // Data Access---------------------------------------------------------------
 
   //
+  //: the champher distance at the specified image col and row
+  // (col, row) are in image coordinates, not champher array coordinates
   inline float distance(unsigned col, unsigned row) {
     // ncols_ = number of columns; nrows_ = number of rows
     col-=col_off_; row-=row_off_;
@@ -50,6 +52,9 @@ class bwm_reg_edge_champher
 		return vnl_numeric_traits<float>::maxval;}
     }
 
+  //
+  //: the digital curve that contributed a point at (col, row)
+  //
   inline vsol_digital_curve_2d_sptr image_edge(unsigned col, unsigned row) {
     // ncols_ = number of columns; nrows_ = number of rows
     col-=col_off_; row-=row_off_;
@@ -59,6 +64,9 @@ class bwm_reg_edge_champher
         return 0;
     }
 
+  //
+  //: the index of the vertex of the digital curve inserted at (col, row)
+  //
   inline unsigned sample_index(unsigned col, unsigned row) {
     // ncols_ = number of columns; nrows_ = number of rows
     col-=col_off_; row-=row_off_;
@@ -71,7 +79,6 @@ class bwm_reg_edge_champher
   // Data Control--------------------------------------------------------------
 
   // Utility Methods-----------------------------------------------------------
-  void distance_with_edge_masked(unsigned col, unsigned row, vsol_digital_curve_2d_sptr& e);
 
   // Debug Methods------------------------------------------------------------
   void print_distance();
@@ -89,19 +96,19 @@ class bwm_reg_edge_champher
 
  private:
 
-  //the dimensions of the champher array, 2 greater than the actual space
+  //:the dimensions of the champher array, 2 greater than the image region
   unsigned ncols_,nrows_; 
 
-  //the offset to the original image coordinate system
+  //:the origin of the champher region in the original image coordinate system
   unsigned col_off_, row_off_;
 
-  // The distance image
+  //: The distance image
   vbl_array_2d<unsigned char> distance_;
 
-  // Pointers to the nearest edgel curve for each pixel;
+  //: Pointers to the edgel curve at a champher cell (null if no curve)
   vbl_array_2d<vsol_digital_curve_2d_sptr> edges_;
 
-  // The sample index of the edgel curve at a given cell
+  //: The sample index of the edgel curve at a given cell
   vbl_array_2d<unsigned> sample_index_;
 
 };

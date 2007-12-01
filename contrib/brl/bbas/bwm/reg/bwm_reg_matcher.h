@@ -5,12 +5,17 @@
 //:
 // \file
 // \author J.L. Mundy
-// \brief Find a match between sets of edgel chains
+// \brief Find a match between sets of digital curves
 //
 // \verbatim
-//   November 26, 2007
+// Inputs: 1) two sets of digitial curves, model and search.
+//            the goal is to find the translation that matches the model
+//            curves with the search curves
+//         2) the search image origin of the region enclosing the search curves
+//         3) The number of search cols and rows to scan
+//
 // Modifications
-//  None
+// Original November 26, 2007
 // \endverbatim
 //
 //-----------------------------------------------------------------------------

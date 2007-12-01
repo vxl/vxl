@@ -10,24 +10,47 @@
 //
 //--------------------------------------------------------------
 
-//:  Constructor
+//:  Constructors
+//default 
+bwm_reg_edge_champher::bwm_reg_edge_champher()
+{
+  ncols_ = 0;
+  nrows_ = 0;
+  col_off_ = 0;
+  row_off_ = 0;
+  distance_ = vbl_array_2d<unsigned char>(0,0,0);
+  edges_ = vbl_array_2d<vsol_digital_curve_2d_sptr>(0, 0, 0);
+  sample_index_ = vbl_array_2d<unsigned>(0, 0, 0);
+}
+
 bwm_reg_edge_champher::
 bwm_reg_edge_champher(unsigned col_off, unsigned row_off,
                       unsigned ncols, unsigned nrows,
                       vcl_vector<vsol_digital_curve_2d_sptr> const& edges)
 {
-
+  // need a boarder of 1 pixel around the edge of the champher array
   ncols_ = ncols+2;
   nrows_ = nrows+2;
+
+  // the origin of the champher array (starting at 1,1) in image coordinates
   col_off_ = col_off;
   row_off_ = row_off;
+
   //note the max value of unsigned char is -1
   distance_ = vbl_array_2d<unsigned char>(nrows_, ncols_, (unsigned char)-1 );
+
+  //pointers to the digital curves, initially null
   edges_ = vbl_array_2d<vsol_digital_curve_2d_sptr>(nrows_, ncols_, 0);
+
+  //The index of the curve vertex inserted at a given cell
   sample_index_ = vbl_array_2d<unsigned>(nrows_, ncols_, 0);
-  // Extract the edgel data and write to the distance and orientation images
+
+  // Extract the vertex data and write to the arrays
   this->initialize_arrays(edges);
-  // Do the Chamfer 3-4 filtering
+
+  // Do the Chamfer 3-4 filtering which sets distance to the nearest vertex
+  // at each cell of the champer array. The active part of the
+  // array is (1,1)<->(m-2, n-2).
   this->chamfer_34();
 }
 
@@ -36,6 +59,7 @@ bwm_reg_edge_champher::~bwm_reg_edge_champher()
 {
 }
 
+//: For debugging purposes
 void bwm_reg_edge_champher::print_distance()
 {
   for(unsigned r = 1; r<nrows_-2; ++r)
@@ -54,15 +78,14 @@ void bwm_reg_edge_champher::print_distance()
 
 //-----------------------------------------------------------------------------
 //
-//: Copies the edges into the array and sets the distance at each edge 
-//  location to 0
-
+//: Copies the edges into the array and sets the distance at each digital
+//  curve vertex location to 0 
+//  (note: maybe should include points on the line joining vertices)
+//
 //-----------------------------------------------------------------------------
 void bwm_reg_edge_champher::
 initialize_arrays(vcl_vector<vsol_digital_curve_2d_sptr> const& edges)
 {
-  //step through each digital curve and set the distance to zero at each
-  //vertex location
   vcl_vector<vsol_digital_curve_2d_sptr>::const_iterator cit = edges.begin();
   for(; cit != edges.end(); ++cit)
     for(unsigned i = 0; i<(*cit)->size(); ++i)
@@ -83,8 +106,7 @@ initialize_arrays(vcl_vector<vsol_digital_curve_2d_sptr> const& edges)
 //:
 //-----------------------------------------------------------------------------
 //
-// Performs 3-4 Chamfer filtering on the distance_ image, and carries with
-// it information about the orientations.
+// Performs 3-4 Chamfer filtering on the distance_ image, 
 //
 //-----------------------------------------------------------------------------
 void bwm_reg_edge_champher::chamfer_34()
@@ -116,7 +138,10 @@ minimum_5(unsigned a, unsigned b, unsigned c, unsigned d, unsigned e)
 
 //-----------------------------------------------------------------------------
 //
-//: Performs a forward chamfer convolution on the distance_ and _edge images
+//: Performs a forward chamfer convolution on the distance_,  edge_
+//  and sample_index_ arrays. That is, distance_[row][col]) is with respect 
+//  to a particular digital curve vertex and that curve and its index 
+//  are propagated to the cell at (col, row)
 //
 //-----------------------------------------------------------------------------
 void bwm_reg_edge_champher::forward_chamfer()
@@ -135,21 +160,23 @@ void bwm_reg_edge_champher::forward_chamfer()
           case 1:
             distance_[col][row] = distance_[col-1][row-1]+4;
             edges_[col][row] = edges_[col-1][row-1];
+            sample_index_[col][row] = sample_index_[col-1][row-1];
             break;
 
           case 2:
             distance_[col][row] = distance_[col-1][row]+3;
             edges_[col][row] = edges_[col-1][row];
+            sample_index_[col][row] = sample_index_[col-1][row-1];
             break;
 
           case 3:
             distance_[col][row] = distance_[col-1][row+1]+4;
-            edges_[col][row] = edges_[col-1][row+1];
+            sample_index_[col][row] = sample_index_[col-1][row+1];
             break;
 
           case 4:
             distance_[col][row] = distance_[col][row-1]+3;
-            edges_[col][row] = edges_[col][row-1];
+            sample_index_[col][row] = sample_index_[col][row-1];
             break;
 
           case 5:
@@ -160,7 +187,8 @@ void bwm_reg_edge_champher::forward_chamfer()
 
 //-----------------------------------------------------------------------------
 //
-//: Performs a backward chamfer convolution on the distance_ and edges_ images
+//: Performs a backward chamfer propagation on the distance_, edges_ and 
+//  sample_index_ arrays
 //
 //-----------------------------------------------------------------------------
 void bwm_reg_edge_champher::backward_chamfer()
@@ -180,21 +208,22 @@ void bwm_reg_edge_champher::backward_chamfer()
           case 2:
             distance_[col][row] = distance_[col][row+1]+3;
             edges_[col][row] = edges_[col][row+1];
+            sample_index_[col][row] = sample_index_[col][row+1];
             break;
 
           case 3:
             distance_[col][row] = distance_[col+1][row-1]+4;
-            edges_[col][row] = edges_[col+1][row-1];
+            sample_index_[col][row] = sample_index_[col+1][row-1];
             break;
 
           case 4:
             distance_[col][row] = distance_[col+1][row]+3;
-            edges_[col][row] = edges_[col+1][row];
+            sample_index_[col][row] = sample_index_[col+1][row];
             break;
 
           case 5:
             distance_[col][row] = distance_[col+1][row+1]+4;
-            edges_[col][row] = edges_[col+1][row+1];
+            sample_index_[col][row] = sample_index_[col+1][row+1];
             break;
           }
       }
