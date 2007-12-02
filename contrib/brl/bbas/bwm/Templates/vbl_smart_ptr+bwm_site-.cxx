@@ -1,6 +1,7 @@
 #include <bwm/bwm_site.h>
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_box_3d.h>
+#include <vsol/vsol_point_2d.h>
 #include <vgui/vgui_range_map_params.h>
 #include <vgui/vgui_style.h>
 #include <vsol/vsol_polygon_2d.h>
