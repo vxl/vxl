@@ -1,7 +1,6 @@
-// This is /bwm/menu/bwm_tool_command.h
+// This is brl/bbas/bwm/bwm_command.h
 #ifndef bwm_command_h_
 #define bwm_command_h_
-
 //:
 // \file
 // \brief This file defines vgui_command classes for bwm
@@ -42,7 +41,7 @@ class bwm_tab_process_command : public bwm_command
 
   void set_tableau(vgui_tableau_sptr tab) {tableau_ = tab; }
 
-protected:
+ protected:
   vgui_tableau_sptr tableau_;
 };
 
@@ -55,7 +54,7 @@ class bwm_menu_process_command : public bwm_command
 
   virtual void set_menu(vgui_menu& menu) {menu_ = menu; }
 
-protected:
+ protected:
   vgui_menu menu_;
 };
 
