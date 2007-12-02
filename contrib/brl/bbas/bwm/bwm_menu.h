@@ -1,5 +1,5 @@
 #ifndef bwm_menu_h_
-#define bwm_menu_h_ 
+#define bwm_menu_h_
 
 #include "bwm_tableau_mgr.h"
 #include "bwm_world.h"
@@ -9,7 +9,7 @@
 
 class bwm_menu
 {
-public:
+ public:
 
   bwm_menu() {}
 
@@ -29,7 +29,6 @@ public:
   static void save_kml_collada() { bwm_world::instance()->save_kml_collada(); }
   static void save_x3d() { bwm_world::instance()->save_x3d(); }
   static void exit() {bwm_tableau_mgr::instance()->exit(); }
-
 };
 
 #endif

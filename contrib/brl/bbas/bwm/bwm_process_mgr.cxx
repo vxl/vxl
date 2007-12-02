@@ -4,12 +4,12 @@ bwm_process_mgr* bwm_process_mgr::instance_ = 0;
 
 vcl_map<vcl_string, bwm_command_sptr> bwm_process_mgr::process_map;
 
-bwm_process_mgr* bwm_process_mgr::instance() {
+bwm_process_mgr* bwm_process_mgr::instance()
+{
   if (!instance_) {
     instance_ = new bwm_process_mgr();
   }
   return bwm_process_mgr::instance_;
-   
 }
 
 bwm_process_mgr::bwm_process_mgr()
@@ -20,10 +20,9 @@ bwm_process_mgr::~bwm_process_mgr()
 {
 }
 
-void bwm_process_mgr::register_process(bwm_command_sptr process) 
+void bwm_process_mgr::register_process(bwm_command_sptr process)
 {
   process_map[process->name()] = process;
-  
 }
 
 bwm_command_sptr bwm_process_mgr::load_process(vcl_string name)
@@ -35,8 +34,8 @@ bwm_command_sptr bwm_process_mgr::load_process(vcl_string name)
   return 0;
 }
 
-bwm_command_sptr bwm_process_mgr::load_tab_process(vcl_string name, 
-                                                       vgui_tableau_sptr tab)
+bwm_command_sptr bwm_process_mgr::load_tab_process(vcl_string name,
+                                                   vgui_tableau_sptr tab)
 {
   vcl_map<vcl_string, bwm_command_sptr>::iterator iter = process_map.find(name);
   if (iter != process_map.end()) {
@@ -50,8 +49,8 @@ bwm_command_sptr bwm_process_mgr::load_tab_process(vcl_string name,
   return 0;
 }
 
-bwm_command_sptr bwm_process_mgr::load_menu_process(vcl_string name, 
-                                                       vgui_menu& menu)
+bwm_command_sptr bwm_process_mgr::load_menu_process(vcl_string name,
+                                                    vgui_menu& menu)
 {
   vcl_map<vcl_string, bwm_command_sptr>::iterator iter = process_map.find(name);
   if (iter != process_map.end()) {
