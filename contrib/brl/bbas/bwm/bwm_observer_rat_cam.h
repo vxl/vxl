@@ -3,32 +3,29 @@
 
 #include "bwm_observer_cam.h"
 
-#include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 
-#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_homg_plane_3d.h>
 
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_point_3d_sptr.h>
-#include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
 
 #include <vpgl/vpgl_rational_camera.h>
 
 #include <vpgl/bgeo/bgeo_lvcs.h>
 
-
 class bwm_observer_rat_cam : public bwm_observer_cam
 {
-public:
+ public:
 
   typedef bwm_observer_cam base;
 
   bwm_observer_rat_cam() {}
 
-  bwm_observer_rat_cam(bgui_image_tableau_sptr const& img, 
+  bwm_observer_rat_cam(bgui_image_tableau_sptr const& img,
     vpgl_rational_camera<double> *camera,
     vcl_string cam_path)
     : bwm_observer_cam(img, camera, cam_path) { }
@@ -43,19 +40,18 @@ public:
 
   bool handle(const vgui_event &e) { return base::handle(e); }
 
-  void set_camera(vpgl_rational_camera<double> *camera, vcl_string cam_path) 
-  { camera_ = camera; bwm_observer_cam::set_camera(camera, cam_path);} 
+  void set_camera(vpgl_rational_camera<double> *camera, vcl_string cam_path)
+  { camera_ = camera; bwm_observer_cam::set_camera(camera, cam_path);}
 
   vpgl_rational_camera<double> camera();
 
   virtual bool intersect_ray_and_plane(vgl_homg_point_2d<double> img_point,
-                                            vgl_homg_plane_3d<double> plane,
-                                            vgl_homg_point_3d<double> &world_point);
+                                       vgl_homg_plane_3d<double> plane,
+                                       vgl_homg_point_3d<double> &world_point);
 
-  bool find_intersection_point(vgl_homg_point_2d<double> img_point, 
-                               vsol_polygon_3d_sptr poly3d, 
+  bool find_intersection_point(vgl_homg_point_2d<double> img_point,
+                               vsol_polygon_3d_sptr poly3d,
                                vgl_point_3d<double>& point3d);
-
 
   void camera_center(vgl_homg_point_3d<double> &center);
 
@@ -94,16 +90,15 @@ public:
   //
   // project edges from the master to this image using the
   // master's projection plane to transfer. Just a temporary experiment
-  // to understand how edges behave across image resolution and sensor 
+  // to understand how edges behave across image resolution and sensor
   // modality. **Not to be used in production**
   //
   void project_edges_from_master();
 
-protected:
+ protected:
   //bgeo_lvcs* lvcs_;
   vcl_string select_file();
   void set_selected_vertex();
 };
 
 #endif
-
