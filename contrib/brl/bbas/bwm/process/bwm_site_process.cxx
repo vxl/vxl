@@ -10,6 +10,7 @@
 #include <vul/vul_file.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vgui/vgui_dialog_extensions.h>
+#include <vgui/vgui_error_dialog.h>
 
 double bwm_site_process::version_num = 0;
 
@@ -19,6 +20,28 @@ template<typename T> vcl_string toString(const T& t)
 
   strm << vcl_fixed << t;
   vcl_string str(strm.str());
+  return str;
+}
+
+vcl_string escape_space(vcl_string str)
+{
+  vcl_string s = "";
+  for (unsigned i=0; i<str.size(); i++) {
+   if (str[i] == ' ')
+     s += "^ ";
+   else if (str[i] == '\\')
+     s += "\\";
+   else
+     s += str[i];
+  } 
+  return s;
+}
+
+vcl_string make_quoted(vcl_string str)
+{
+  unsigned idx = str.find_first_of("\\", 0);
+  str.insert(idx, "\"");
+  str.append("\"");
   return str;
 }
 
@@ -35,6 +58,13 @@ void bwm_site_process::RunBackgroundTask()
   site_->objects(obj_paths);
   vcl_string site_dir = site_->path_;
   vcl_string site_name = site_->name_;
+  vcl_string pyr_exe = site_->pyr_exe_path_;
+
+  // check if pyramid exe is valid
+  if (!vul_file::exists(pyr_exe)) {
+    vgui_error_dialog("Pyramid exacutable path is not valid");
+    return;
+  }
 
   // delete the folders that are not in the site anymore
   for (unsigned i=0; i<site_->remove_.size(); i++) {
@@ -106,8 +136,11 @@ void bwm_site_process::RunBackgroundTask()
 
             // find the image under this folder to be able to compute nitf camera from
             cam_img_file = img + "\\" + base + "_0.nitf";
-            if (!vul_file::exists(cam_img_file))
+            if (!vul_file::exists(cam_img_file)) {
               vcl_cout << "The image file [" << cam_img_file << "] cannot be found!" << vcl_endl;
+              continue;
+            }
+
           } 
         }
 
@@ -132,8 +165,8 @@ void bwm_site_process::RunBackgroundTask()
             printf ("Checking if processor is available...");
             if (system(NULL)) {
               printf ("Executing pyramid creation...\n");
-              vcl_string exe = "C:\\lems\\vxl\\build\\contrib\\brl\\bseg\\sbin\\release\\generate_tiff_rset.exe";
-              vcl_string command =  exe + " \"" + new_site + "\" " + ext.substr(1, ext.size()-1) + " " + levels[i];
+              pyr_exe = make_quoted(pyr_exe);
+              vcl_string command =  pyr_exe + " \"" + new_site + "\" " + ext.substr(1, ext.size()-1) + " " + levels[i];
               vcl_cout << "[" << command << "]" << vcl_endl;
               system(command.data());
               // set the image path to the directory where pyramid resides
@@ -169,8 +202,6 @@ void bwm_site_process::RunBackgroundTask()
   vcl_string site_xml = site_dir + "\\" + site_name + "_v" + toString(time) + ".xml";
   vcl_ofstream s(site_xml.data());
   site_->x_write(s);
-  vgui_dialog done("SITE CREATION PROCESS");
-  done.message(("............SITE \"" + site_name + "\" IS READY TO USE............").c_str());
-  done.ask();
+  vgui_error_dialog(("........SITE \"" + site_name + "\" IS READY TO USE.........").c_str());
   return;
 }

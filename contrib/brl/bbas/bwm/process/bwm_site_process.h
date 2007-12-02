@@ -19,7 +19,7 @@ public:
   bwm_site_process() : bwm_process() { site_ = 0; timer_.mark();}
   ~bwm_site_process() {}
 
-  void set_site(bwm_site_sptr site) { site_ = site; }
+  void set_site(bwm_site_sptr site) { site_ = site;}
 
   // overridable
   void RunBackgroundTask();
