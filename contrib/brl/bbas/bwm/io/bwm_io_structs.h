@@ -6,19 +6,26 @@
 // XML Tags
 #define SITE_TAG "BWM_SITE"
 #define SITE_HOME_TAG "home"
+#define PYRAMID_EXE_TAG "PyramidExePath"
+#define TABLEAUS_TAG "Tableaus"
 #define CAMERA_TABLEAU_TAG "CameraTableau"
 #define IMAGE_TABLEAU_TAG "ImageTableau"
 #define COIN3D_TABLEAU_TAG "Coin3DTableau"
 #define PROJ2D_TABLEAU_TAG "Proj2DTableau"
 #define IMAGE_PATH_TAG "imagePath"
 #define CAMERA_PATH_TAG "cameraPath"
-#define OBJECT_TAG "object"
+#define OBJECTS_TAG "Objects"
+#define OBJECT_TAG "Object"
 #define LVCS_TAG "lvcs"
 
-// Correlation Tags
+// Correspondence Tags
+#define CORRESPONDENCES_TAG "Correspondences"
+#define CORRESP_TAG "Correspondence"
+#define CORRESP_ELM_TAG "corr_elm"
+#define CORRESP_PT_TAG "corr_point"
+#define CORRESP_WORLD_PT_TAG "corr_world_point"
 #define CORR_CAMERA_TAG "corr_camera_tab"
 
-#define OBJECT_TAG "object"
 
 class bwm_io_tab_config 
 {

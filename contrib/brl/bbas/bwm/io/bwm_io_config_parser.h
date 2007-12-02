@@ -36,7 +36,6 @@ private:
 
   void handleAtts(const XML_Char** atts);
   void cdataHandler(vcl_string name, vcl_string data);
-  void WriteIndent();
   void init_params();
 
   //Data

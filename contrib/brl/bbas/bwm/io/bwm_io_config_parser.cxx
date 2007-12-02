@@ -37,12 +37,6 @@ void bwm_io_config_parser::init_params()
 }
 
 void 
-bwm_io_config_parser ::WriteIndent()
-{
-//for (int i = 0; i < mDepth; i++)
-//  putchar('\t');
-}
-void 
 bwm_io_config_parser ::cdataHandler(vcl_string name, vcl_string data)
 {
   // clean up the empty chars before and after the file paths
@@ -57,6 +51,8 @@ bwm_io_config_parser ::cdataHandler(vcl_string name, vcl_string data)
     object_path_.assign(data);
   } else if (name.compare(SITE_HOME_TAG) == 0) {
     site_->path_.assign(data);
+  } else if (name.compare(PYRAMID_EXE_TAG) == 0) {
+    site_->pyr_exe_path_.assign(data);
   }
    cdata = ""; 
 }
@@ -78,8 +74,6 @@ bwm_io_config_parser::startElement(const char* name, const char** atts)
       vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
       if (strcmp(atts[i], "name") == 0)
         convert(atts[i+1], site_->name_);
-      /*else if (strcmp(atts[i], "path") == 0)
-        convert(atts[i+1], site_->path_);*/
     }
   }
   else if ((strcmp(name,IMAGE_TABLEAU_TAG)== 0) ||
@@ -105,7 +99,7 @@ bwm_io_config_parser::startElement(const char* name, const char** atts)
       if (strcmp(atts[i], "type") == 0)
         convert(atts[i+1], camera_type_);
     }
-  } else if (strcmp(name, "correspondences") == 0) {
+  } else if (strcmp(name, CORRESPONDENCES_TAG) == 0) {
     for (int i=0; atts[i]; i+=2) {
       vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
       if (strcmp(atts[i], "mode") == 0)
@@ -113,7 +107,7 @@ bwm_io_config_parser::startElement(const char* name, const char** atts)
       else if (strcmp(atts[i], "type") == 0)
         convert(atts[i+1], corr_type_);
     }
-  } else if (strcmp(name, "corr_point") == 0) {
+  } else if (strcmp(name, CORRESP_PT_TAG) == 0) {
     for (int i=0; atts[i]; i+=2) {
       vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
       if (strcmp(atts[i], "X") == 0)
@@ -121,7 +115,7 @@ bwm_io_config_parser::startElement(const char* name, const char** atts)
       else if (strcmp(atts[i], "Y") == 0)
         convert(atts[i+1], Y_);
     }
-  } else if (strcmp(name, "corr_world_point") == 0) {
+  } else if (strcmp(name, CORRESP_WORLD_PT_TAG) == 0) {
     for (int i=0; atts[i]; i+=2) {
       vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
       if (strcmp(atts[i], "X") == 0)
@@ -173,12 +167,12 @@ bwm_io_config_parser::endElement(const char* name)
      init_params();
    } else if (strcmp(name, PROJ2D_TABLEAU_TAG) == 0) {
      bwm_io_tab_config_proj2d* proj2d = new bwm_io_tab_config_proj2d(name, name_, status_, proj2d_type_, camera_path_, camera_type_, coin3d_name_);
-   } else if (strcmp(name, "corr_elm") == 0) {
+   } else if (strcmp(name, CORRESP_ELM_TAG) == 0) {
      corresp_elm_.push_back(vcl_pair<vcl_string, vsol_point_2d> (corr_cam_tab_, vsol_point_2d(X_,Y_)));
      corr_cam_tab_ = "";
-   } else if (strcmp(name, "corr_world_point") == 0) {
+   } else if (strcmp(name, CORRESP_WORLD_PT_TAG) == 0) {
      corresp_world_pts_.push_back(vsol_point_3d(X_, Y_, Z_));
-   } else if (strcmp(name, "correspondence") == 0) {
+   } else if (strcmp(name, CORRESP_TAG) == 0) {
      corresp_.push_back(corresp_elm_);
      corresp_elm_.clear();
    } else if (strcmp(name, OBJECT_TAG) == 0) {
@@ -186,7 +180,7 @@ bwm_io_config_parser::endElement(const char* name)
      site_->objects_.push_back(object);
    } else if (strcmp(name, LVCS_TAG) == 0) {
      site_->lvcs_ = new vsol_point_3d(lat_, lon_, elev_);
-   }
+   }  
 }
 
 void bwm_io_config_parser::charData(const XML_Char* s, int len)
