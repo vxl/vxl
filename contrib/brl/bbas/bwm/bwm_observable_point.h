@@ -21,12 +21,11 @@
 #include <vcl_string.h>
 
 #include <vsol/vsol_point_3d_sptr.h>
-#include <vsol/vsol_point_3d_sptr.h>
 #include <vsol/vsol_point_3d.h>
 
 class bwm_observable_point : public bwm_observable
 {
-public:
+ public:
   bwm_observable_point() : object_(0) {}
   ~bwm_observable_point() {}
 
@@ -38,7 +37,7 @@ public:
 
   bwm_observable_point(bwm_observable_point& p) { object_ = new vsol_point_3d(p.object_->get_p()); }
 
-private:
+ private:
   vsol_point_3d_sptr object_;
 };
 
