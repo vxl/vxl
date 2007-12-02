@@ -39,8 +39,16 @@ void bwm_site::x_write(vcl_ostream& s)
   site.add_attribute("name", name_);
   site.x_write_open(s);
 
-  s << "<home>" << path_ << "</home>" << vcl_endl;
-  s << "<TABLEAUS>" << vcl_endl;
+  vsl_basic_xml_element site_dir(SITE_HOME_TAG);
+  site_dir.append_cdata(path_);
+  site_dir.x_write(s);
+
+  vsl_basic_xml_element pyr_path(PYRAMID_EXE_TAG);
+  pyr_path.append_cdata(pyr_exe_path_);
+  pyr_path.x_write(s);
+
+  vsl_basic_xml_element tableaus(TABLEAUS_TAG);
+  tableaus.x_write_open(s);
   for (unsigned i=0; i<tableaus_.size(); i++) {
     bwm_io_tab_config* t = tableaus_[i];
 
@@ -76,7 +84,7 @@ void bwm_site::x_write(vcl_ostream& s)
       tab.x_write_close(s);
     }
   }
-  s << "</TABLEAUS>" << vcl_endl;
+  tableaus.x_write_close(s);
 
   // add the LVCS
   if (lvcs_) {
@@ -88,7 +96,8 @@ void bwm_site::x_write(vcl_ostream& s)
   }
 
   // add the object files
-  s << "<objects>" << vcl_endl;
+  vsl_basic_xml_element objects(OBJECTS_TAG);
+  objects.x_write_open(s);
   for (unsigned i=0; i<objects_.size(); i++) {
     if (objects_[i].first.size() > 0) {
       vsl_basic_xml_element obj(OBJECT_TAG);
@@ -97,11 +106,11 @@ void bwm_site::x_write(vcl_ostream& s)
       obj.x_write(s);
     }
   }
-  s << "</objects>" << vcl_endl;
+  objects.x_write_close(s);
 
   // write out the correspondence list
   if (this->corresp_.size() > 0) {
-    vsl_basic_xml_element xml_element("correspondences");
+    vsl_basic_xml_element xml_element(CORRESP_TAG);
     xml_element.add_attribute("mode", corr_mode_);
     xml_element.add_attribute("type", corr_type_);
     xml_element.x_write_open(s);

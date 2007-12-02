@@ -49,6 +49,7 @@ public:
   // input parameters that come from the site creation dialog
   vcl_string name_;
   vcl_string path_;
+  vcl_string pyr_exe_path_;
   vcl_vector<vcl_string> image_paths_;
   vcl_vector<bool> pyr_;
   vcl_vector<bool> act_;

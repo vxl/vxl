@@ -195,7 +195,7 @@ void bwm_observable_mesh::set_object(bmsh3d_mesh_mc* obj)
   }
 
   object_ = obj;
-  object_->orient_face_normals();
+  //object_->orient_face_normals();
   notify_observers(msg);
  }
 
@@ -212,7 +212,7 @@ void bwm_observable_mesh::set_object(vsol_polygon_3d_sptr poly, double dist)
   object_ = new bmsh3d_mesh_mc;
   vcl_map<int, vsol_polygon_3d_sptr> inner_faces;
   create_mesh_HE(poly, dist, inner_faces);
-  object_->orient_face_normals();
+  //object_->orient_face_normals();
   notify_observers(msg);
 }
 

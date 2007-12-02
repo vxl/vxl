@@ -101,6 +101,7 @@ bwm_command_sptr bwm_tableau_mgr::load_tableau_by_type(vcl_string tableau_type)
 void bwm_tableau_mgr::create_site_dialog(vgui_dialog_extensions &site_dialog,
                                vcl_string &site_name,
                                vcl_string &site_dir,
+                               vcl_string &pyr_exe_dir, 
                                vcl_vector<vcl_string> &files,
                                bool* pyr_v, bool* act_v,
                                vcl_vector<vcl_string> &pyr_levels,
@@ -112,6 +113,8 @@ void bwm_tableau_mgr::create_site_dialog(vgui_dialog_extensions &site_dialog,
   site_dialog.field("SITE NAME:", site_name);
   site_dialog.line_break();
   site_dialog.dir("DIRECTORY:", ext, site_dir);
+  site_dialog.line_break();
+  site_dialog.dir("Pyramid exe path:", ext, pyr_exe_dir);
   site_dialog.line_break();
   site_dialog.line_break();
   site_dialog.set_modal(true);
@@ -153,7 +156,7 @@ void bwm_tableau_mgr::create_site()
 {
   vgui_dialog_extensions site_dialog("World Model Site Creation");
 
-  vcl_string site_name, site_dir;
+  vcl_string site_name, site_dir, pyr_exe_path;
 
   int num_images = 5;
   vcl_vector<vcl_string> files(num_images);
@@ -166,7 +169,7 @@ void bwm_tableau_mgr::create_site()
   int choices[3] = {0, 0, 0};
   double lat=0.0, lon=0.0, elev=0.0;
 
-  create_site_dialog(site_dialog, site_name, site_dir, files, pyr,
+  create_site_dialog(site_dialog, site_name, site_dir, pyr_exe_path, files, pyr,
     act, levels, objs, choices, lat, lon, elev);
 
   if (!site_dialog.ask()) {
@@ -232,6 +235,9 @@ void bwm_tableau_mgr::create_site()
 
   bwm_site_sptr site = new bwm_site(site_name, site_dir, files, pyramid, active,
                                     levels, objects, new vsol_point_3d(lat, lon, elev));
+
+  // temporarily setting the exe path, will find a better solution later - Gamze
+  site->pyr_exe_path_ = pyr_exe_path;
 
   site_create_process_->set_site(site);
   site_create_process_->StartBackgroundTask();
@@ -474,6 +480,7 @@ void bwm_tableau_mgr::load_site()
     // create the correspondences
     vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > corresp; 
     corresp = parser->correspondences();
+    if (corresp.size() > 0) {
     vcl_string mode = parser->corresp_mode();
     vcl_string type = parser->corresp_type();
    /* if (mode == "WORLD_TO_IMAGE") {
@@ -532,7 +539,7 @@ void bwm_tableau_mgr::load_site()
       }
       bwm_observer_mgr::instance()->set_corr(corr);
     }
-
+    }
     // create the objects
     vcl_vector<vcl_pair<vcl_string, vcl_string> > objs;
     site->objects(objs);

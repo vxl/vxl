@@ -110,6 +110,7 @@ private:
   void create_site_dialog(vgui_dialog_extensions &site_dialog,
                                vcl_string &site_name, 
                                vcl_string &site_dir, 
+                               vcl_string &pyr_exe_dir, 
                                vcl_vector<vcl_string> &files,
                                bool* pyr_v, bool* act_v,
                                vcl_vector<vcl_string> &pyr_levels,

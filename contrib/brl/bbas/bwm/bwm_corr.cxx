@@ -1,4 +1,5 @@
 #include "bwm_corr.h"
+#include "io/bwm_io_structs.h"
 #include <vgl/vgl_distance.h>
 #include <vcl_iostream.h>
 #include <vsl/vsl_basic_xml_element.h>
@@ -118,9 +119,11 @@ vcl_ostream& operator<<(vcl_ostream& s, bwm_corr const& c)
 
 void bwm_corr::x_write(vcl_ostream &os)
 {
-   os << "<correspondence>" << vcl_endl; 
+   vsl_basic_xml_element corr(CORRESPONDENCES_TAG);
+   corr.x_write_open(os);
+
    if (mode() == false) {
-    vsl_basic_xml_element xml_element("corr_world_point");
+    vsl_basic_xml_element xml_element(CORRESP_PT_TAG);
     xml_element.add_attribute("X", world_pt().x());
     xml_element.add_attribute("Y", world_pt().y());
     xml_element.add_attribute("Z", world_pt().z());
@@ -131,14 +134,19 @@ void bwm_corr::x_write(vcl_ostream &os)
    iter = matches_.begin();
    int i=0;
    while (iter != matches_.end()) {
-     os << "<corr_elm>" << vcl_endl;
-     os << "<corr_camera_tab>" << iter->first->tab_name() << "</corr_camera_tab>" << vcl_endl;
-     vsl_basic_xml_element xml_element("corr_point");
+     vsl_basic_xml_element corr_elm(CORRESP_ELM_TAG);
+     corr_elm.x_write_open(os);
+
+     vsl_basic_xml_element corr_tab(CORR_CAMERA_TAG); 
+     corr_tab.append_cdata(iter->first->tab_name());
+     corr_tab.x_write(os);
+ 
+     vsl_basic_xml_element xml_element(CORRESP_PT_TAG);
      xml_element.add_attribute("X", iter->second.x());
      xml_element.add_attribute("Y", iter->second.y());
      xml_element.x_write(os);
-     os << "</corr_elm>" << vcl_endl;
+     corr_elm.x_write_close(os);
      iter++;
    }
-   os << "</correspondence>" << vcl_endl;
+   corr.x_write_close(os);
 }
