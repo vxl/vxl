@@ -1,9 +1,9 @@
 #include "bwm_tableau_rat_cam.h"
 #include <vsol/vsol_point_2d.h>
 
-bool bwm_tableau_rat_cam::handle(const vgui_event &e) 
-{ 
-  return bwm_tableau_cam::handle(e); 
+bool bwm_tableau_rat_cam::handle(const vgui_event &e)
+{
+  return bwm_tableau_cam::handle(e);
 }
 
 //----------------------------------------------------------------------------
@@ -55,7 +55,8 @@ class bwm_save_command : public vgui_command
   bwm_tableau_rat_cam *tab;
 };
 
-/*class bwm_save_all_command : public vgui_command
+#if 0
+class bwm_save_all_command : public vgui_command
 {
  public:
   bwm_save_all_command(bwm_tableau_rat_cam* t) : tab(t) {}
@@ -63,7 +64,9 @@ class bwm_save_command : public vgui_command
 
   bwm_tableau_rat_cam *tab;
 };
+#endif // 0
 
+#if 0
 class bwm_save_gml_command : public vgui_command
 {
  public:
@@ -72,7 +75,9 @@ class bwm_save_gml_command : public vgui_command
 
   bwm_tableau_rat_cam *tab;
 };
+#endif // 0
 
+#if 0
 class bwm_save_kml_command : public vgui_command
 {
  public:
@@ -81,7 +86,9 @@ class bwm_save_kml_command : public vgui_command
 
   bwm_tableau_rat_cam *tab;
 };
+#endif // 0
 
+#if 0
 class bwm_save_kml_collada_command : public vgui_command
 {
  public:
@@ -98,7 +105,8 @@ class bwm_save_x3d_command : public vgui_command
   void execute() { tab->save_x3d(); }
 
   bwm_tableau_rat_cam *tab;
-};*/
+};
+#endif // 0
 
 class bwm_adjust_camera_to_world_pt_command : public vgui_command
 {
@@ -136,11 +144,10 @@ class bwm_center_pos_command : public vgui_command
   bwm_tableau_rat_cam *tab;
 };
 
-void bwm_tableau_rat_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu) 
+void bwm_tableau_rat_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu)
 {
-    
   bwm_tableau_cam::get_popup(params, menu);
- 
+
   menu.separator();
   menu.add( "Adjust Camera To LVCS", new bwm_adj_cam_offset_command(this));
   menu.add( "Register Image to World Pt", new bwm_adjust_camera_to_world_pt_command(this));
@@ -158,31 +165,39 @@ void bwm_tableau_rat_cam::get_popup(vgui_popup_params const &params, vgui_menu &
   menu.separator();
   vgui_menu save_submenu;
   save_submenu.add( "Save Selected (ply)", new bwm_save_command(this));
-  /*save_submenu.add( "Save All ", new bwm_save_all_command(this));
+#if 0
+  save_submenu.add( "Save All ", new bwm_save_all_command(this));
   save_submenu.add( "Save gml ", new bwm_save_gml_command(this));
   save_submenu.add( "Save kml ", new bwm_save_kml_command(this));
   save_submenu.add( "Save kml collada ", new bwm_save_kml_collada_command(this));
-  save_submenu.add( "Save x3d", new bwm_save_kml_collada_command(this));*/
+  save_submenu.add( "Save x3d", new bwm_save_kml_collada_command(this));
+#endif // 0
   menu.add("SAVE", save_submenu);
 
   //add this submenu to the popup menu
   //menu.add("Rational Camera Tools", parent_menu);
 }
 
-/*void bwm_tableau_rat_cam::load_lvcs()
+#if 0
+void bwm_tableau_rat_cam::load_lvcs()
 {
   my_observer_->load_lvcs();
 }
+#endif // 0
 
+#if 0
 void bwm_tableau_rat_cam::save_lvcs()
 {
   my_observer_->save_lvcs();
-}*/
+}
+#endif // 0
 
-/*void bwm_tableau_rat_cam::convert_file_to_lvcs()
+#if 0
+void bwm_tableau_rat_cam::convert_file_to_lvcs()
 {
   my_observer_->convert_file_to_lvcs();
-}*/
+}
+#endif // 0
 
 void bwm_tableau_rat_cam::define_lvcs()
 {
@@ -209,36 +224,45 @@ void bwm_tableau_rat_cam::center_pos()
   my_observer_->center_pos();
 }
 
-void bwm_tableau_rat_cam::save() 
+void bwm_tableau_rat_cam::save()
 {
   my_observer_->save();
 }
 
-/*void bwm_tableau_rat_cam::save_all()
+#if 0
+void bwm_tableau_rat_cam::save_all()
 {
   my_observer_->save_all();
 }
+#endif // 0
 
+#if 0
 void bwm_tableau_rat_cam::save_gml()
 {
   my_observer_->save_gml();
 }
+#endif // 0
 
+#if 0
 void bwm_tableau_rat_cam::save_kml()
 {
   my_observer_->save_kml();
 }
+#endif // 0
 
+#if 0
 void bwm_tableau_rat_cam::save_kml_collada()
 {
   my_observer_->save_kml_collada();
 }
+#endif // 0
 
+#if 0
 void bwm_tableau_rat_cam::save_x3d()
 {
   my_observer_->save_x3d();
 }
-*/
+#endif // 0
 
 void bwm_tableau_rat_cam::project_edges_from_master()
 {

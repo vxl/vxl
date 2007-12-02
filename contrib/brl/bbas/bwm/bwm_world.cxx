@@ -13,8 +13,9 @@
 
 bwm_world* bwm_world::instance_ = 0;
 
-bwm_world* bwm_world::instance() {
-  if (!instance_) 
+bwm_world* bwm_world::instance()
+{
+  if (!instance_)
     instance_ = new bwm_world();
   return bwm_world::instance_;
 }
@@ -22,7 +23,7 @@ bwm_world* bwm_world::instance() {
 
 void  bwm_world::set_world_pt(vgl_point_3d<double> const& pt)
 {
-  world_pt_ = pt; 
+  world_pt_ = pt;
   vgl_vector_3d<double> normal(0, 0, 1);//z axis
   world_plane_ = vgl_plane_3d<double>(normal, pt);
   world_pt_valid_ = true;
@@ -43,14 +44,14 @@ bool bwm_world::remove(bwm_observable_sptr obj)
   return true;
 }
 
-void bwm_world::set_lvcs(double lat, double lon, double elev) 
+void bwm_world::set_lvcs(double lat, double lon, double elev)
 {
   // clean up the olde one, if any
-  lvcs_ = bgeo_lvcs(lat, lon, elev); 
+  lvcs_ = bgeo_lvcs(lat, lon, elev);
   lvcs_valid_ = true;
 }
 
-bool bwm_world::get_lvcs(bgeo_lvcs &lvcs) 
+bool bwm_world::get_lvcs(bgeo_lvcs &lvcs)
 {
   vgl_point_3d<double> center;
 
@@ -85,7 +86,8 @@ bool bwm_world::get_lvcs(bgeo_lvcs &lvcs)
   return true;
 }
 
-/*void bwm_world::save_all()
+#if 0
+void bwm_world::save_all()
 {
   if (objects_.size() == 0) {
     vgui_dialog error ("Error");
@@ -132,8 +134,8 @@ bool bwm_world::get_lvcs(bgeo_lvcs &lvcs)
         bwm_file_io::save_x3d(objects_[i], path+".x3d");
     }
   }
- 
-}*/
+}
+#endif // 0
 
 void bwm_world::save_ply()  // how about use lvcs??
 {
@@ -178,10 +180,12 @@ void bwm_world::save_ply()  // how about use lvcs??
 
 void bwm_world::save_gml()
 {
-  /*if (!lvcs_) {
+#if 0
+  if (!lvcs_) {
     vcl_cerr << "Error: lvcs not defined.\n";
     return;
-  }*/
+  }
+#endif // 0
 
   vgui_dialog params("File Save (.gml) ");
   vcl_string ext, gml_filename, empty="";
@@ -211,7 +215,7 @@ void bwm_world::save_gml()
 
   int obj_count = 0;
   for (unsigned idx=0; idx<objects_.size(); idx++) {
-    bwm_observable_sptr obj = objects_[idx]; 
+    bwm_observable_sptr obj = objects_[idx];
     if (obj->type_name().compare("bwm_observable_textured_mesh") == 0) {
       bwm_observable_textured_mesh* tm_obj = static_cast<bwm_observable_textured_mesh*>(obj.as_pointer());
       tm_obj->save_gml(fp, obj_count, &lvcs_);
@@ -270,7 +274,7 @@ void bwm_world::save_kml()
   vcl_fprintf (fp, "    <MultiGeometry>\n");
 
   for (unsigned idx=0; idx<objects_.size(); idx++) {
-    bwm_observable_sptr obj = objects_[idx]; 
+    bwm_observable_sptr obj = objects_[idx];
     if (obj->type_name().compare("bwm_observable_textured_mesh") == 0) {
       bwm_observable_textured_mesh* tm_obj = static_cast<bwm_observable_textured_mesh*>(obj.as_pointer());
       tm_obj->save_kml(fp, idx, &lvcs, ground_height, x_offset, y_offset);
@@ -315,7 +319,7 @@ void bwm_world::save_x3d()
   vcl_fprintf(fp, "PROFILE Immersive\n\n");
 
   for (unsigned idx=0; idx<objects_.size(); idx++) {
-    bwm_observable_sptr obj = objects_[idx]; 
+    bwm_observable_sptr obj = objects_[idx];
     if (obj->type_name().compare("bwm_observable_textured_mesh") == 0) {
       bwm_observable_textured_mesh* tm_obj = static_cast<bwm_observable_textured_mesh*> (obj.as_pointer());
       tm_obj->save_x3d(fp, &lvcs);
@@ -350,7 +354,7 @@ void bwm_world::save_kml_collada()
   // guess at ground height = lowest vertex
   double minz = 1e6;
   for (unsigned idx=0; idx<objects_.size(); idx++) {
-    bwm_observable_sptr obj = objects_[idx]; 
+    bwm_observable_sptr obj = objects_[idx];
     obj->global_to_local(&lvcs, minz);
   }
 
@@ -406,7 +410,7 @@ void bwm_world::save_kml_collada()
   unsigned min_faces = 3;
 
   for (unsigned idx=0; idx<objects_.size(); idx++) {
-    bwm_observable_sptr obj = objects_[idx]; 
+    bwm_observable_sptr obj = objects_[idx];
     if ( obj->num_faces() <  min_faces)
       // single mesh face is probably ground plane, which we do not want to render
       continue;
@@ -552,9 +556,9 @@ void bwm_world::save_kml_collada()
   vcl_fprintf(dae_fp,"  </library_effects>\n");
 
   vcl_fprintf(dae_fp,"  <library_geometries>\n");
- 
+
   for (unsigned idx=0; idx<objects_.size(); idx++) {
-    bwm_observable_sptr obj = objects_[idx]; 
+    bwm_observable_sptr obj = objects_[idx];
     // assume object is texture mapped
     //dbmsh3d_textured_mesh_mc* mesh = (dbmsh3d_textured_mesh_mc*)obj->get_object();
     if (obj->num_faces() < min_faces) {

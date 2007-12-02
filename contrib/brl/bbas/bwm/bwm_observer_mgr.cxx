@@ -38,8 +38,10 @@ void bwm_observer_mgr::add(bwm_observer* o)
  
   // make the connection between this observer and the available observables
   vcl_vector<bwm_observable_sptr> objects = bwm_world::instance()->objects();
-  //vgui_message msg;
-  //msg.data = "new"
+#if 0
+  vgui_message msg;
+  msg.data = "new";
+#endif
   for (unsigned i=0; i<objects.size(); i++) {
     bwm_observable_sptr obj = objects[i];
     if (!obj)
@@ -218,12 +220,14 @@ void bwm_observer_mgr::save_corr(vcl_ostream& s)
 {
   if (corr_list_.size() == 0)
     vcl_cerr << "No correspondences to save yet!\n";
-  else {
-
+  else
+  {
     vcl_string fname = bwm_utils::select_file();
     vcl_ofstream s(fname.data());
 
-    //s << "Cameras:" << vcl_endl;
+#if 0
+    s << "Cameras:" << vcl_endl;
+#endif
     // first write down the camera info
     vcl_map<bwm_observer_cam*, unsigned> camera_map;
     for (unsigned i=0; i< observers_.size(); i++)
@@ -260,7 +264,9 @@ void bwm_observer_mgr::save_corr(vcl_ostream& s)
       s << "C: " << corr->num_matches() << vcl_endl;
 
       vcl_vector<bwm_observer_cam*> obs = corr->observers();
-      //s << obs.size() << vcl_endl;
+#if 0
+      s << obs.size() << vcl_endl;
+#endif
       if (corr->mode() == false) { // WORLD TO IMAGE
         s << "WORLD_POINT: " << corr->world_pt().x() << ' ' << corr->world_pt().y()
           << ' ' << corr->world_pt().z() << vcl_endl;
@@ -383,8 +389,8 @@ void bwm_observer_mgr::move_to_corr()
 {
   if (!corr_list_.size())
   {
-    vcl_cerr << "In bwm_observer_mgr::move_to_corr()- "
-             << "no correspondences to move to\n";
+    vcl_cerr << "In bwm_observer_mgr::move_to_corr() -"
+             << " no correspondences to move to\n";
     return;
   }
   bwm_corr_sptr corr = corr_list_[0];
@@ -455,9 +461,9 @@ void bwm_observer_mgr::adjust_camera_offsets()
              << intersection.x() << ' ' << intersection.y()
              << ' ' << intersection.z() << ")\n";
     obsrc->shift_camera((*ti).x(), (*ti).y());
-    //here is where we would set the terrain plane an maybe not
-    //do anything to the projection plane of each observer.
-    //but this approach works for now.
+    // here is where we would set the terrain plane an maybe not
+    // do anything to the projection plane of each observer.
+    // but this approach works for now.
     obsrc->set_proj_plane(world_plane);
     obsrc->update_all();
   }
@@ -471,7 +477,7 @@ void bwm_observer_mgr::adjust_camera_offsets()
   for (vcl_vector<bwm_corr_sptr>::iterator cit = corr_list_.begin();
        cit != corr_list_.end(); ++cit)
   {
-    (*cit)->set_mode(false);//mode is set to world_to_image
+    (*cit)->set_mode(false); //mode is set to world_to_image
     (*cit)->set_world_pt(intersection);
   }
 

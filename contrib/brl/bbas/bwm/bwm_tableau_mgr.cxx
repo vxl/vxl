@@ -101,7 +101,7 @@ bwm_command_sptr bwm_tableau_mgr::load_tableau_by_type(vcl_string tableau_type)
 void bwm_tableau_mgr::create_site_dialog(vgui_dialog_extensions &site_dialog,
                                vcl_string &site_name,
                                vcl_string &site_dir,
-                               vcl_string &pyr_exe_dir, 
+                               vcl_string &pyr_exe_dir,
                                vcl_vector<vcl_string> &files,
                                bool* pyr_v, bool* act_v,
                                vcl_vector<vcl_string> &pyr_levels,
@@ -301,8 +301,10 @@ void bwm_tableau_mgr::edit_site()
         site_edit_dialog.checkbox("Remove", tab_remove[i]);
         act_old[i] = active;
         site_edit_dialog.checkbox("Active", act_old[i]);
-        /*vcl_string ext = "*.RPG";
-        site_edit_dialog.file("Add Camera:", ext, cam[i]);*/
+#if 0
+        vcl_string ext = "*.RPG";
+        site_edit_dialog.file("Add Camera:", ext, cam[i]);
+#endif // 0
         site_edit_dialog.line_break();
       }
       else if (t->type_name.compare(CAMERA_TABLEAU_TAG) == 0)
@@ -485,21 +487,23 @@ void bwm_tableau_mgr::load_site()
     }
 
     // create the correspondences
-    vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > corresp; 
+    vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > corresp;
     corresp = parser->correspondences();
     if (corresp.size() > 0) {
     vcl_string mode = parser->corresp_mode();
     vcl_string type = parser->corresp_type();
-   /* if (mode == "WORLD_TO_IMAGE") {
+#if 0
+    if (mode == "WORLD_TO_IMAGE") {
       // the vector of 3D points should be of equal size to correspondence point sets
       assert (parser->corresp_world_pts().size() == corresp.size());
-    }*/
+    }
+#endif // 0
 
     if (type.compare("MULTIPLE") == 0)
       bwm_observer_mgr::instance()->set_n_corrs(bwm_observer_mgr::MULTIPLE_CORRS);
     else if (type.compare("SINGLE") == 0)
       bwm_observer_mgr::instance()->set_n_corrs(bwm_observer_mgr::SINGLE_PT_CORR);
-    else 
+    else
       vcl_cerr << "ERROR: Undefined Correspondence type=" << type << vcl_endl;
 
     if (mode == "WORLD_TO_IMAGE") {
@@ -555,7 +559,7 @@ void bwm_tableau_mgr::load_site()
       vcl_string path = objs[i].first;
       vcl_string type = objs[i].second;
       if (path.size() > 0) {
-        if (!vul_file::exists(path)) 
+        if (!vul_file::exists(path))
           vcl_cerr << "ERROR: The object file \"" << path << "\" could not be found!" << vcl_endl;
         else {
           if (type.compare(object_types_[VSOL]) == 0) {
@@ -589,9 +593,10 @@ void bwm_tableau_mgr::save_site()
 {
   bwm_site_sptr site = new bwm_site();
 
-  if ((this->site_name_.size() > 0) && 
-    (this->site_dir_.size() > 0) && 
-    (vul_file::exists(this->site_dir_))) {
+  if ((this->site_name_.size() > 0) &&
+      (this->site_dir_.size() > 0) &&
+      (vul_file::exists(this->site_dir_)))
+  {
     vgui_dialog_extensions d("Saving the Site");
     d.message(("Saving the site " + site_name_).c_str());
     d.message(("under: " + site_dir_).c_str());
@@ -602,7 +607,9 @@ void bwm_tableau_mgr::save_site()
     site->name_ = this->site_name_;
     site->path_ = this->site_dir_;
     site->pyr_exe_path_ = this->pyr_exe_;
-  } else {
+  }
+  else
+  {
     // ask the path for saving the site
     vcl_string site_name, site_dir, pyr_exe, ext;
     vgui_dialog_extensions d("Save the Site!");
@@ -621,7 +628,6 @@ void bwm_tableau_mgr::save_site()
       return;
     }
 
-    
     site->name_ = this->site_name_ = site_name;
     site->path_ = this->site_dir_ = site_dir;
     site->pyr_exe_path_ = this->pyr_exe_;
@@ -678,7 +684,7 @@ void bwm_tableau_mgr::save_site()
 
   if (obs_mgr->n_corrs() == bwm_observer_mgr::MULTIPLE_CORRS)
     site->corr_type_ = "MULTIPLE";
-  else 
+  else
     site->corr_type_ = "SINGLE";
 
   site->corresp_ = bwm_observer_mgr::instance()->correspondences();
@@ -867,8 +873,7 @@ void bwm_tableau_mgr::load_cam_tableau()
   }
 
   create_cam_tableau(name, img_file, cam_file, (BWM_CAMERA_TYPES) camera_type);
-
- }
+}
 
 bwm_io_config_parser* bwm_tableau_mgr::parse_config()
 {

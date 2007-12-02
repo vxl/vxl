@@ -232,15 +232,16 @@ void bwm_observer_rat_cam::define_lvcs(float x1, float y1)
 
 void bwm_observer_rat_cam::adjust_camera_offset(vsol_point_2d_sptr img_point)
 {
-  // make sure lvcs is defined
-  /*if (!lvcs_) {
+#if 0 // make sure lvcs is defined
+  if (!lvcs_) {
     vcl_cerr << "error: no lvcs defined!\n";
     return;
-  }*/
+  }
+#endif // 0
 
   bgeo_lvcs lvcs;
-  if (bwm_world::instance()->get_lvcs(lvcs)) {
-
+  if (bwm_world::instance()->get_lvcs(lvcs))
+  {
     // get projection of lvcs origin
     double lat,lon,elev;
     lvcs.local_to_global(0, 0, 0,bgeo_lvcs::wgs84, lon ,lat ,elev,
@@ -284,12 +285,13 @@ void bwm_observer_rat_cam::save_selected()
   if (bwm_world::instance()->get_lvcs(lvcs)) {
     unsigned face_id;
     bwm_observable_sptr obj = selected_face(face_id);
-    if (obj) 
+    if (obj)
      obj->save(file.data(),&lvcs);
   }
 }
 
-/*void bwm_observer_rat_cam::save_all()
+#if 0
+void bwm_observer_rat_cam::save_all()
 {
   vgui_dialog params("File Save");
   vcl_string ext, list_name, empty="";
@@ -335,7 +337,9 @@ void bwm_observer_rat_cam::save_selected()
     mesh_idx++;
   }
 }
+#endif // 0
 
+#if 0
 void bwm_observer_rat_cam::save_gml()
 {
   if (!lvcs_) {
@@ -383,7 +387,9 @@ void bwm_observer_rat_cam::save_gml()
   vcl_fprintf (fp, " </CityModel>");
   vcl_fclose (fp);
 }
+#endif // 0
 
+#if 0
 void bwm_observer_rat_cam::save_kml()
 {
   vgui_dialog params("File Save");
@@ -441,7 +447,9 @@ void bwm_observer_rat_cam::save_kml()
 
   vcl_fclose (fp);
 }
+#endif // 0
 
+#if 0
 void bwm_observer_rat_cam::save_x3d()
 {
   if (lvcs_ != 0) {
@@ -490,8 +498,9 @@ void bwm_observer_rat_cam::save_x3d()
   vcl_fclose(fp);
   return;
 }
+#endif // 0
 
-
+#if 0
 void bwm_observer_rat_cam::save_kml_collada()
 {
   if (!lvcs_) {
@@ -854,7 +863,9 @@ void bwm_observer_rat_cam::save_kml_collada()
   vcl_fprintf(kml_fp,"</kml>\n");
   vcl_fclose(kml_fp);
 }
+#endif // 0
 
+#if 0
 void bwm_observer_rat_cam::generate_textures()
 {
   if (!lvcs_) {
@@ -884,9 +895,10 @@ void bwm_observer_rat_cam::generate_textures()
   }
   return;
 }
-*/
+#endif // 0
 
-/*void bwm_observer_rat_cam::save_lvcs()
+#if 0
+void bwm_observer_rat_cam::save_lvcs()
 {
   vcl_string filename = select_file();
   // just save origin for now
@@ -913,9 +925,11 @@ void bwm_observer_rat_cam::load_lvcs()
   vcl_cout << "loaded lvcs with origin "<<lat<<", "<<lon<<", "<<elev<<vcl_endl;
 
   return;
-}*/
+}
+#endif // 0
 
-/*void bwm_observer_rat_cam::convert_file_to_lvcs()
+#if 0
+void bwm_observer_rat_cam::convert_file_to_lvcs()
 {
   if (!lvcs_) {
     vcl_cerr << "error: lvcs is not defined!\n";
@@ -939,7 +953,8 @@ void bwm_observer_rat_cam::load_lvcs()
   }
 
   return;
-}*/
+}
+#endif // 0
 
 vcl_string bwm_observer_rat_cam::select_file()
 {
