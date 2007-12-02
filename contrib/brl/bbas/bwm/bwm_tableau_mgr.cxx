@@ -274,6 +274,10 @@ void bwm_tableau_mgr::edit_site()
   bool act_old[30];
   bool tab_remove[30];
   vcl_vector<vcl_string> cam;
+  vcl_string ext;
+
+  site_edit_dialog.dir("Pyramid Exe Path:", ext, site->pyr_exe_path_);
+  site_edit_dialog.line_break();
 
   // first place the existing tableaux on the dialog
   vcl_vector<bwm_io_tab_config* > tableaus;
@@ -297,8 +301,8 @@ void bwm_tableau_mgr::edit_site()
         site_edit_dialog.checkbox("Remove", tab_remove[i]);
         act_old[i] = active;
         site_edit_dialog.checkbox("Active", act_old[i]);
-        vcl_string ext = "*.RPG";
-        site_edit_dialog.file("Add Camera:", ext, cam[i]);
+        /*vcl_string ext = "*.RPG";
+        site_edit_dialog.file("Add Camera:", ext, cam[i]);*/
         site_edit_dialog.line_break();
       }
       else if (t->type_name.compare(CAMERA_TABLEAU_TAG) == 0)
@@ -350,7 +354,6 @@ void bwm_tableau_mgr::edit_site()
   // create new objects
   site_edit_dialog.message("ADD OBJECTS:");
   site_edit_dialog.line_break();
-  vcl_string ext;
   for (unsigned i=0; i<objs.size(); i++) {
     site_edit_dialog.file("Object:", ext, objs[i]);
     site_edit_dialog.choice("Type:", object_types_, choices[i]);
@@ -583,11 +586,12 @@ void bwm_tableau_mgr::save_site()
   // ask the path for saving the site
   vgui_dialog_extensions d("Save the Site!");
 
-  vcl_string site_name, site_dir, ext;
+  vcl_string site_name, site_dir, pyr_exe, ext;
   d.field("Site name:", site_name);
   d.line_break();
   d.dir("Site dir:", ext, site_dir);
   d.line_break();
+  d.file("Pyramid exe path:" , ext, pyr_exe);
   if (!d.ask())
     return;
 
@@ -602,7 +606,7 @@ void bwm_tableau_mgr::save_site()
   bwm_site_sptr site = new bwm_site();
   site->name_ = site_name;
   site->path_ = site_dir;
-
+  site->pyr_exe_path_ = pyr_exe;
  
   // get the tableaux
   vcl_map<vcl_string, vgui_tableau_sptr>::iterator it = tableaus_.begin();
