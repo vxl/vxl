@@ -1,18 +1,19 @@
 #ifndef bwm_observer_cam_rat_h_
 #define bwm_observer_cam_rat_h_
+//:
+// \file
 
 #include "bwm_observer_cam.h"
 
-#include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 
-#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_homg_plane_3d.h>
 
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_point_3d_sptr.h>
-#include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
 
 #include <vpgl/vpgl_rational_camera.h>
@@ -23,12 +24,12 @@
 
 class bwm_observer_cam_rat : public bwm_observer_cam
 {
-public:
+ public:
 
   bwm_observer_cam_rat() { lvcs_ =0; }
     //: proj_plane_(vgl_homg_plane_3d<double>(0, 0, 1, 0)) {}
 
-  bwm_observer_cam_rat(bgui_image_tableau_sptr const& img, 
+  bwm_observer_cam_rat(bgui_image_tableau_sptr const& img,
     vpgl_rational_camera<double> *camera,
     vcl_string cam_path)
     : bwm_observer_cam(img, camera, cam_path), lvcs_(0) { }
@@ -41,17 +42,16 @@ public:
 
   virtual vcl_string type_name() const { return "bwm_observer_cam_rat"; }
 
-  void set_camera(vpgl_rational_camera<double> *camera, vcl_string cam_path) 
-  { camera_ = camera; bwm_observer_cam::set_camera(camera, cam_path);} 
+  void set_camera(vpgl_rational_camera<double> *camera, vcl_string cam_path)
+  { camera_ = camera; bwm_observer_cam::set_camera(camera, cam_path);}
 
   virtual bool intersect_ray_and_plane(vgl_homg_point_2d<double> img_point,
-                                            vgl_homg_plane_3d<double> plane,
-                                            vgl_homg_point_3d<double> &world_point);
+                                       vgl_homg_plane_3d<double> plane,
+                                       vgl_homg_point_3d<double> &world_point);
 
-  bool find_intersection_point(vgl_homg_point_2d<double> img_point, 
-                               vsol_polygon_3d_sptr poly3d, 
+  bool find_intersection_point(vgl_homg_point_2d<double> img_point,
+                               vsol_polygon_3d_sptr poly3d,
                                vgl_point_3d<double>& point3d);
-
 
   void camera_center(vgl_homg_point_3d<double> &center);
 
@@ -80,11 +80,10 @@ public:
 
   void generate_textures();
 
-protected:
+ protected:
   bgeo_lvcs* lvcs_;
   vcl_string select_file();
   void set_selected_vertex();
 };
 
 #endif
-

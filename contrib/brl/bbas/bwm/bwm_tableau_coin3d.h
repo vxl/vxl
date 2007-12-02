@@ -1,14 +1,14 @@
 #ifndef bwm_tableau_coin3d_h_
 #define bwm_tableau_coin3d_h_
+//:
+// \file
 
 //#include "bwm_tableau.h"
 #include "bwm_observable.h"
 #include "bwm_observer_coin3d.h"
 #include "bwm_observer_mgr.h"
 
-#include <vcl_iostream.h>
 #include <vcl_string.h>
-#include <vcl_list.h>
 
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_event.h>
@@ -18,19 +18,17 @@
 
 #include <vpgl/vpgl_camera.h>
 
-#include <vsol/vsol_polygon_3d_sptr.h>
-
-class bwm_tableau_coin3d : public vgui_wrapper_tableau {
-
-public:
+class bwm_tableau_coin3d : public vgui_wrapper_tableau
+{
+ public:
   bwm_tableau_coin3d() {}
 
   bwm_tableau_coin3d(vcl_string& image_path, vpgl_camera<double>& camera) {}
 
-  virtual ~bwm_tableau_coin3d() { 
+  virtual ~bwm_tableau_coin3d() {
     // first remove the observer from observers list
     bwm_observer_mgr::instance()->remove(my_observer_);
-//    delete my_observer_; 
+//    delete my_observer_;
   }
 
   virtual vcl_string type_name() const { return "bwm_tableau_coin3d"; }
@@ -39,34 +37,33 @@ public:
 
   void set_observer(bwm_observer_coin3d* obs) { my_observer_ = obs; }
 
-  void get_popup(vgui_popup_params const &params, vgui_menu &menu); 
+  void get_popup(vgui_popup_params const &params, vgui_menu &menu);
 
-  //: moves the object, by moving the selected vertex to the specified 
-  // point on the tableau
+  //: moves the object, by moving the selected vertex to the specified point on the tableau
   void move();
 
-  //: extrudes the selected face, 
-  void extrude_face();  
+  //: extrudes the selected face,
+  void extrude_face();
 
   //: draws a line onto a given face, dividing into two faces
   void divide_face();
 
   void create_inner_face();
 
-  //: Select a polygon before you call this method. If it is a multiface 
-  // object, it deletes the object where the selected polygon belongs to
+  //: Select a polygon before you call this method.
+  // If it is a multiface object, it deletes the object where the selected
+  // polygon belongs to.
   void clear_object();
 
   //: Deletes all the objects created so far
-  void clear_all(); 
+  void clear_all();
 
   void help_pop();
 
   SoNode* root() { return my_observer_->root(); }
-protected:
 
+ protected:
   bwm_observer_coin3d* my_observer_;
-  
 };
 
 #endif

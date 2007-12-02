@@ -1,12 +1,16 @@
 #include "bwm_observer_lidar.h"
+//:
+// \file
+
+#include <vcl_cassert.h>
+
 #include "bwm_observer_vgui.h"
 #include "bwm_tableau_mgr.h"
 #include "algo/bwm_utm_lat_lon.h"
 #include "algo/bwm_lidar_algo.h"
 #include "algo/bwm_algo.h"
 
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
+#include <vil/vil_image_resource.h>
 #include <vil/file_formats/vil_tiff.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_inverse.h>
@@ -15,8 +19,9 @@
 
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_viewer2D_tableau.h>
+
 bwm_observer_lidar::bwm_observer_lidar(bgui_image_tableau_sptr const& img,
-                                       vil_image_resource_sptr res1, 
+                                       vil_image_resource_sptr res1,
                                        vil_image_resource_sptr res2)
 :bwm_observer_cam(img), first_ret_(res1), second_ret_(res2)
 {
@@ -25,11 +30,11 @@ bwm_observer_lidar::bwm_observer_lidar(bgui_image_tableau_sptr const& img,
 
   // the file should be a geotiff
   vcl_cout << "FORMAT=" << first_ret_->file_format();
-  if (strcmp(first_ret_->file_format(), "tiff") != 0) 
+  if (vcl_strcmp(first_ret_->file_format(), "tiff") != 0)
     return;
 
   vil_tiff_image* tiff_img = static_cast<vil_tiff_image*> (first_ret_.as_pointer());
-  
+
   // check if the tiff file is geotiff
   if (!tiff_img->is_GEOTIFF()) {
     return;
@@ -39,7 +44,7 @@ bwm_observer_lidar::bwm_observer_lidar(bgui_image_tableau_sptr const& img,
   int utm_zone;
   vil_geotiff_header::GTIF_HEMISPH h;
 
-  // convert given tiepoint to world coordinates (lat, long) 
+  // convert given tiepoint to world coordinates (lat, long)
   // based on the model defined in GEOTIFF
 
   // is this a PCS_WGS84_UTM?
@@ -62,11 +67,11 @@ bwm_observer_lidar::bwm_observer_lidar(bgui_image_tableau_sptr const& img,
       double X = tiepoint[3];
       double Y = tiepoint[4];
       double Z = tiepoint[5];
-      
+
       //double lat1, lon1, elev1;
       utm.transform(utm_zone, X, Y, Z, lat, lon, elev, south_flag );
-      
-      scale_ = 1; 
+
+      scale_ = 1;
       // now, we have a mapping (I,J,K)->(X,Y,Z)
     }
 
@@ -75,7 +80,7 @@ bwm_observer_lidar::bwm_observer_lidar(bgui_image_tableau_sptr const& img,
     // if there is a transormation matrix in GEOTIFF, use that
     set_trans_matrix(gtif, tiepoints);
 
-    //use one of the tiepoints to create an LVCS for starter, user may change it 
+    //use one of the tiepoints to create an LVCS for starter, user may change it
     //later by defining a new LVCS origin
     lvcs_ = new bgeo_lvcs(lat, lon, elev);//, bgeo_lvcs::wgs84);
 
@@ -105,8 +110,9 @@ void bwm_observer_lidar::set_trans_matrix(vil_geotiff_header* gtif,
      vcl_cout << "Transfer matrix is given, using that...." << vcl_endl;
      trans_matrix_.copy_in(trans_matrix_values);
      vcl_cout << trans_matrix_ << vcl_endl;
-  } else if (gtif->gtif_pixelscale(sx1, sy1, sz1)) {
-
+  }
+  else if (gtif->gtif_pixelscale(sx1, sy1, sz1))
+  {
     // use tiepoints and sclae values to create a transformation matrix
     // for now use the first tiepoint if there are more than one
     assert (tiepoints.size() > 0);
@@ -120,17 +126,17 @@ void bwm_observer_lidar::set_trans_matrix(vil_geotiff_header* gtif,
     double Z = tiepoint[5];
 
     // Define a transformation matrix as follows:
-    // 
-    //      |-                         -| 
-    //      |   Sx    0.0   0.0   Tx    | 
+    //
+    //      |-                         -|
+    //      |   Sx    0.0   0.0   Tx    |
     //      |                           |      Tx = X - I*Sx
     //      |   0.0  -Sy    0.0   Ty    |      Ty = Y + J*Sy
     //      |                           |      Tz = Z - K*Sz
-    //      |   0.0   0.0   Sz    Tz    | 
-    //      |                           | 
-    //      |   0.0   0.0   0.0   1.0   | 
-    //      |-                         -| 
-    
+    //      |   0.0   0.0   Sz    Tz    |
+    //      |                           |
+    //      |   0.0   0.0   0.0   1.0   |
+    //      |-                         -|
+
     sx = scale_; sy=scale_; sz=scale_;
     double Tx = X - I*sx;
     double Ty = Y + J*sy;
@@ -147,13 +153,15 @@ void bwm_observer_lidar::set_trans_matrix(vil_geotiff_header* gtif,
     m[2][3] = Tz;
     trans_matrix_ = m;
     vcl_cout << trans_matrix_ << vcl_endl;
-  } else {
+  }
+  else {
     vcl_cerr << "Transform matrix cannot be formed.. " << vcl_endl;
   }
 //#endif
 }
+
 //: transforms a given 3d world point to image plane
-void bwm_observer_lidar::proj_point(vsol_point_3d_sptr p3d, 
+void bwm_observer_lidar::proj_point(vsol_point_3d_sptr p3d,
                                      vsol_point_2d_sptr& p2d)
 {
   vnl_vector<double> v(4), res(4);
@@ -172,12 +180,12 @@ void bwm_observer_lidar::proj_point(vsol_point_3d_sptr p3d,
   //vcl_cout << trans_matrix_ << vcl_endl;
   vnl_matrix<double> trans_matrix_inv = vnl_inverse(trans_matrix_);
   res = trans_matrix_inv*v;
-  //vcl_cout << res[0] << " " << res[1] << vcl_endl;
+  //vcl_cout << res[0] << ' ' << res[1] << vcl_endl;
   p2d = new vsol_point_2d (res[0], res[1]);
 }
-   
+
 //: transforms a given 3d world point to image plane
-void bwm_observer_lidar::backproj_point(vsol_point_2d_sptr p2d, 
+void bwm_observer_lidar::backproj_point(vsol_point_2d_sptr p2d,
                                          vsol_point_3d_sptr &p3d)
 {
   vnl_vector<double> v(4), res(4);
@@ -188,17 +196,17 @@ void bwm_observer_lidar::backproj_point(vsol_point_2d_sptr p2d,
 
   //vcl_cout << "Northing=" << v[0] << " Easting=" << v[1];
 
-  //find the UTM values 
+  //find the UTM values
   bwm_utm_lat_lon utm;
   double lat, lon, elev;
 
-  utm.transform(38, v[0], v[1], v[2], lat, lon, elev); 
+  utm.transform(38, v[0], v[1], v[2], lat, lon, elev);
 
   p3d = new vsol_point_3d (lon, lat, elev);
   p3d->set_z(img_view_(p2d->x(), p2d->y()));
-
 }
-void bwm_observer_lidar::proj_poly(vsol_polygon_3d_sptr poly3d, 
+
+void bwm_observer_lidar::proj_poly(vsol_polygon_3d_sptr poly3d,
                                     vsol_polygon_2d_sptr& poly2d)
 {
   vcl_vector<vsol_point_2d_sptr> vertices;
@@ -216,21 +224,21 @@ void bwm_observer_lidar::proj_poly(vsol_polygon_3d_sptr poly3d,
   poly2d = new vsol_polygon_2d (vertices);
 }
 
-void bwm_observer_lidar::backproj_poly(vsol_polygon_2d_sptr poly2d, 
+void bwm_observer_lidar::backproj_poly(vsol_polygon_2d_sptr poly2d,
                                         vsol_polygon_3d_sptr& poly3d)
 {
   vcl_vector<vsol_point_3d_sptr> vertices;
   for (unsigned i=0; i<poly2d->size(); i++) {
     vsol_point_2d_sptr p2d = poly2d->vertex(i);
-   
+
     // transfer the point to geographic coord
     vsol_point_3d_sptr p3d;
-    //vcl_cout << vcl_endl << "-----------------------" << vcl_endl 
+    //vcl_cout << vcl_endl << "-----------------------" << vcl_endl
     //  << *p2d << vcl_endl;
     backproj_point(p2d, p3d);
     //vcl_cout << *p3d << vcl_endl;
     //set the elevation from the pixel intensity
-    
+
     p3d->set_z(img_view_(p2d->x(), p2d->y()));
 
     // now find a 3d coordinates by bgeo_lvcs
@@ -260,8 +268,8 @@ void bwm_observer_lidar::set_ground_plane(unsigned int x1, unsigned int y1, unsi
     float i1 = view(x1,y1);
     float i2 = view(x2,y2);
     ground_elev_ = (i1 + i2) / 2.;
-  } else 
-    vcl_cout << "bwm_observer_lidar::set_ground_plane() -- Pixel Format [" << 
+  } else
+    vcl_cout << "bwm_observer_lidar::set_ground_plane() -- Pixel Format [" <<
     pf << "] is not supported yet" << vcl_cout;
 }
 
@@ -281,10 +289,10 @@ void bwm_observer_lidar::img_to_wgs(const unsigned i, const unsigned j,
   v[1] = tiepoints[0][4] - j;
   v[2] = 0;
   v[3] = 1;
-  //find the UTM values 
+  //find the UTM values
   bwm_utm_lat_lon utm;
   double elev;
-  utm.transform(38, v[0], v[1], v[2], lat, lon, elev); 
+  utm.transform(38, v[0], v[1], v[2], lat, lon, elev);
 }
 
 bool bwm_observer_lidar::get_point_cloud(const float x1, const float y1,
@@ -292,79 +300,79 @@ bool bwm_observer_lidar::get_point_cloud(const float x1, const float y1,
                                           bgeo_lvcs& lvcs,
                                           vcl_vector<vsol_point_3d_sptr>& points)
 {
-  if(!img_view_)
+  if (!img_view_)
     return false;
   unsigned ni = img_view_.ni(), nj = img_view_.nj();
-  if(x1<0||x2<0||y1<0||y2<0||x1>=ni||x2>=ni||y1>=nj||y2>=nj)
+  if (x1<0||x2<0||y1<0||y2<0||x1>=ni||x2>=ni||y1>=nj||y2>=nj)
     return false;
   points.clear();
   unsigned ix1 = static_cast<unsigned>(x1);
   unsigned ix2 = static_cast<unsigned>(x2);
-  if(x2<x1)
-    {
-      ix1 = static_cast<unsigned>(x2);
-      ix2 = static_cast<unsigned>(x1);
-    }
-  unsigned iy1 = static_cast<unsigned>(y1);
-  unsigned iy2 = static_cast<unsigned>(y2);
-  if(y2<y1)    
-    {
-      iy1 = static_cast<unsigned>(y2);
-      iy2 = static_cast<unsigned>(y1);
-    }
-  double lon, lat;
-  //define the lvcs in the middle of the box
-  unsigned im = (ix2+ix1)/2, jm = (iy2+iy1)/2;
-  this->img_to_wgs(im, jm, lon, lat);
-  double elev = img_view_(im, jm);
-  lvcs = bgeo_lvcs(lat, lon, elev);
-  for(unsigned j = iy1; j<=iy2; ++j)
-    for(unsigned i = ix1; i<=ix2; ++i)
-      {
-        this->img_to_wgs(i, j, lon, lat);
-        elev = img_view_(i, j);
-        double lx, ly, lz;
-        lvcs.global_to_local(lon, lat, elev, bgeo_lvcs::wgs84,
-                             lx, ly, lz, bgeo_lvcs::DEG,bgeo_lvcs::METERS);
-        vsol_point_3d_sptr p = new vsol_point_3d(lx, ly, lz);
-        points.push_back(p);
-      }
-  return true;
-}
-
-bool bwm_observer_lidar::save_meshed_point_cloud(const float x1, const float y1, const float x2, const float y2, vcl_string file)
-{
-
-  vcl_ofstream os(file.c_str());  
-  if(!os.is_open())
-  {
-    vcl_cout << "Bad file path\n";
-    return false;
-  }
-
-  vcl_vector<vsol_point_3d_sptr> points;
-  //observer_left_->get_point_cloud(x1, y1, x2, y2, lvcs, points);
-
-  //vil_image_view<float> img_view = (vil_image_view<float>)observer_left_->get_image_tableau()->get_image_view();
-  //vil_image_resource_sptr img_res = observer_left_->get_image_tableau()->get_image_resource();
-
-  if(!img_view_)
-    return false;
-
-  unsigned ni = img_view_.ni(), nj = img_view_.nj();
-  if(x1<0||x2<0||y1<0||y2<0||x1>=ni||x2>=ni||y1>=nj||y2>=nj)
-    return false;
-
-  unsigned ix1 = static_cast<unsigned>(x1);
-  unsigned ix2 = static_cast<unsigned>(x2);
-  if(x2<x1)
+  if (x2<x1)
   {
     ix1 = static_cast<unsigned>(x2);
     ix2 = static_cast<unsigned>(x1);
   }
   unsigned iy1 = static_cast<unsigned>(y1);
   unsigned iy2 = static_cast<unsigned>(y2);
-  if(y2<y1)    
+  if (y2<y1)
+  {
+    iy1 = static_cast<unsigned>(y2);
+    iy2 = static_cast<unsigned>(y1);
+  }
+  double lon, lat;
+  //define the lvcs in the middle of the box
+  unsigned im = (ix2+ix1)/2, jm = (iy2+iy1)/2;
+  this->img_to_wgs(im, jm, lon, lat);
+  double elev = img_view_(im, jm);
+  lvcs = bgeo_lvcs(lat, lon, elev);
+  for (unsigned j = iy1; j<=iy2; ++j)
+    for (unsigned i = ix1; i<=ix2; ++i)
+    {
+      this->img_to_wgs(i, j, lon, lat);
+      elev = img_view_(i, j);
+      double lx, ly, lz;
+      lvcs.global_to_local(lon, lat, elev, bgeo_lvcs::wgs84,
+                           lx, ly, lz, bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+      vsol_point_3d_sptr p = new vsol_point_3d(lx, ly, lz);
+      points.push_back(p);
+    }
+  return true;
+}
+
+bool bwm_observer_lidar::save_meshed_point_cloud(const float x1, const float y1, const float x2, const float y2, vcl_string file)
+{
+  vcl_ofstream os(file.c_str());
+  if (!os.is_open())
+  {
+    vcl_cout << "Bad file path\n";
+    return false;
+  }
+
+  vcl_vector<vsol_point_3d_sptr> points;
+#if 0
+  observer_left_->get_point_cloud(x1, y1, x2, y2, lvcs, points);
+  vil_image_view<float> img_view = (vil_image_view<float>)observer_left_->get_image_tableau()->get_image_view();
+  vil_image_resource_sptr img_res = observer_left_->get_image_tableau()->get_image_resource();
+#endif
+
+  if (!img_view_)
+    return false;
+
+  unsigned ni = img_view_.ni(), nj = img_view_.nj();
+  if (x1<0||x2<0||y1<0||y2<0||x1>=ni||x2>=ni||y1>=nj||y2>=nj)
+    return false;
+
+  unsigned ix1 = static_cast<unsigned>(x1);
+  unsigned ix2 = static_cast<unsigned>(x2);
+  if (x2<x1)
+  {
+    ix1 = static_cast<unsigned>(x2);
+    ix2 = static_cast<unsigned>(x1);
+  }
+  unsigned iy1 = static_cast<unsigned>(y1);
+  unsigned iy2 = static_cast<unsigned>(y2);
+  if (y2<y1)
   {
     iy1 = static_cast<unsigned>(y2);
     iy2 = static_cast<unsigned>(y1);
@@ -378,8 +386,8 @@ bool bwm_observer_lidar::save_meshed_point_cloud(const float x1, const float y1,
 
   vcl_vector<vgl_point_3d<double> > vertices;
 
-  for(unsigned j = iy1; j<=iy2; ++j) {
-    for(unsigned i = ix1; i<=ix2; ++i) {
+  for (unsigned j = iy1; j<=iy2; ++j) {
+    for (unsigned i = ix1; i<=ix2; ++i) {
       this->img_to_wgs(i, j, lon, lat);
       float elev = img_view_(i, j);
       vgl_point_3d<double> p(lon,lat,elev);
@@ -407,16 +415,16 @@ bool bwm_observer_lidar::save_meshed_point_cloud(const float x1, const float y1,
 
   unsigned nverts = vertices.size();
   unsigned nfaces = faces.size();
-  os << nverts << vcl_endl;
-  os << nfaces << vcl_endl;
-  os.precision(12);
+  os << nverts << vcl_endl
+     << nfaces << vcl_endl
+    .precision(12);
   for (unsigned i=0; i < nverts; ++i) {
     vgl_point_3d<double> vert = vertices[i];
-    os << vert.x() << " " << vert.y() << " " << vert.z() << vcl_endl;
+    os << vert.x() << ' ' << vert.y() << ' ' << vert.z() << vcl_endl;
   }
   for (unsigned i=0; i < nfaces; ++i) {
     vgl_point_3d<int> face = faces[i];
-    os << "3 " << face.x() << " " << face.y() << " " << face.z() << vcl_endl;
+    os << "3 " << face.x() << ' ' << face.y() << ' ' << face.z() << vcl_endl;
   }
 
   return true;
@@ -424,7 +432,6 @@ bool bwm_observer_lidar::save_meshed_point_cloud(const float x1, const float y1,
 
 void bwm_observer_lidar::label_lidar(lidar_labeling_params params)
 {
-  
   if (!second_ret_) {
     vgui_dialog error ("Error");
     error.message ("Second Return is not set, cannot do labeling!" );

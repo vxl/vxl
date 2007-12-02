@@ -1,5 +1,7 @@
 #ifndef bwm_tableau_mgr_h_
 #define bwm_tableau_mgr_h_
+//:
+// \file
 
 #if _MSC_VER > 1000
 #pragma once
@@ -22,9 +24,9 @@
 #include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
 
-class bwm_tableau_mgr {
-
-public:
+class bwm_tableau_mgr
+{
+ public:
   typedef enum {RATIONAL=0, PROJECTIVE=1} BWM_CAMERA_TYPES;
   typedef enum {MESH_FEATURE, MESH_IMAGE_PROCESSING, MESH_TERRAIN, VSOL, OBJ_UNDEF} BWM_OBJECT_TYPES;
 
@@ -48,7 +50,7 @@ public:
 
   void create_img_tableau(vcl_string name, vcl_string& image_path);
 
-  void create_cam_tableau(vcl_string name, vcl_string& image_path, vcl_string& cam_path, 
+  void create_cam_tableau(vcl_string name, vcl_string& image_path, vcl_string& cam_path,
                           BWM_CAMERA_TYPES camera_type, vsol_point_3d_sptr lvcs = 0);
 
   bwm_command_sptr load_tableau_by_type(vcl_string tableau_type);
@@ -64,15 +66,14 @@ public:
   void display_image_path(bool display){display_image_path_=display;}
 
   static vcl_map<vcl_string, bwm_command_sptr> tab_types_;
-  
-    
-private:
+
+ private:
 
   bwm_tableau_mgr();
 
   static bwm_tableau_mgr* instance_;
 
-  //: Tableaus are mapped to their names
+  //: Tableaux are mapped to their names
   vcl_map<vcl_string, vgui_tableau_sptr> tableaus_;
   vcl_vector<bwm_io_tab_config*> inactive_tableaus_;
 
@@ -83,8 +84,8 @@ private:
 
   vcl_vector<vcl_string> object_types_;
 
-  //: bool to keep the add rows and columns to the grid, 
-  // it alternately adds rows and columns
+  //: bool to keep the add rows and columns to the grid.
+  // It alternately adds rows and columns
   bool row_added_;
 
   bool display_image_path_;
@@ -95,9 +96,9 @@ private:
   bwm_io_config_parser* parse_config();
 
   vil_image_resource_sptr load_image(vcl_string& filename, vgui_range_map_params_sptr& rmps);
-  
+
   vgui_range_map_params_sptr range_params(vil_image_resource_sptr const& image);
-  
+
   void add_to_grid(vgui_tableau_sptr tab);
 
   void add_to_grid(vgui_tableau_sptr tab, unsigned& col, unsigned& row);
@@ -105,13 +106,13 @@ private:
   vpgl_proj_camera<double> read_projective_camera(vcl_string cam_path);
 
   vgui_tableau_sptr find_tableau(vcl_string name);
-
-  //vcl_vector<vcl_string> coin3d_tableau_names();
-
+#if 0
+  vcl_vector<vcl_string> coin3d_tableau_names();
+#endif
   void create_site_dialog(vgui_dialog_extensions &site_dialog,
-                               vcl_string &site_name, 
-                               vcl_string &site_dir, 
-                               vcl_string &pyr_exe_dir, 
+                               vcl_string &site_name,
+                               vcl_string &site_dir,
+                               vcl_string &pyr_exe_dir,
                                vcl_vector<vcl_string> &files,
                                bool* pyr_v, bool* act_v,
                                vcl_vector<vcl_string> &pyr_levels,
@@ -120,9 +121,8 @@ private:
                                double &lat, double &lon, double &elev);
 
   void show_error(vcl_string);
-  
-  vul_timer timer_;
 
+  vul_timer timer_;
 };
 
 #endif

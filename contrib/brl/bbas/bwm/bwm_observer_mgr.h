@@ -1,7 +1,10 @@
 #ifndef bwm_observer_mgr_h_
 #define bwm_observer_mgr_h_
+//:
+// \file
 
 #include <vcl_vector.h>
+#include <vcl_iosfwd.h>
 
 #include "bwm_observer.h"
 #include "bwm_observer_cam.h"
@@ -10,11 +13,9 @@
 #include "bwm_corr.h"
 #include "bwm_corr_sptr.h"
 
-#include <vsol/vsol_point_3d.h>
-
 class bwm_observer_mgr
 {
-public:
+ public:
   typedef enum {IMAGE_TO_IMAGE, WORLD_TO_IMAGE} BWM_CORR_MODE;
   typedef enum {SINGLE_PT_CORR, MULTIPLE_CORRS} BWM_N_CORRS;
 
@@ -61,20 +62,19 @@ public:
 
   vcl_vector<bwm_corr_sptr> correspondences()
     {return corr_list_;}
-  
-  //: Given a set of image-to-image correpondences
-  //  solve for the 3-d world point and adjust the cameras
+
+  //: Given a set of image-to-image correpondences, solve for the 3-d world point and adjust the cameras
   void adjust_camera_offsets();
 
-private:
+ private:
   bwm_observer_mgr() : start_corr_(false)
-    {
-      corr_mode_ = IMAGE_TO_IMAGE;
-      n_corrs_ = SINGLE_PT_CORR;
-    }
+  {
+    corr_mode_ = IMAGE_TO_IMAGE;
+    n_corrs_ = SINGLE_PT_CORR;
+  }
 
   static bwm_observer_mgr* instance_;
-  
+
   vcl_vector<bwm_observer* > observers_;
 
   bool start_corr_;

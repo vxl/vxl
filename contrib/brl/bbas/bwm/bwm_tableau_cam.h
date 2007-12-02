@@ -1,13 +1,13 @@
 #ifndef bwm_tableau_cam_h_
 #define bwm_tableau_cam_h_
+//:
+// \file
 
 #include "bwm_observable.h"
 #include "bwm_observer_cam.h"
 #include "bwm_tableau_img.h"
 
-#include <vcl_iostream.h>
 #include <vcl_string.h>
-#include <vcl_list.h>
 
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_event.h>
@@ -17,16 +17,14 @@
 
 #include <vpgl/vpgl_camera.h>
 
-#include <vsol/vsol_polygon_3d_sptr.h>
-
-class bwm_tableau_cam : public bwm_tableau_img 
+class bwm_tableau_cam : public bwm_tableau_img
 {
-public:
+ public:
 
   bwm_tableau_cam(bwm_observer_cam* obs) : bwm_tableau_img(obs), my_observer_(obs) {}
 
   //: destructor
-  // tableaus are responsible from deleting their observers
+  // Tableaux are responsible for deleting their observers
   virtual ~bwm_tableau_cam(){ delete my_observer_; }
 
   virtual vcl_string type_name() const { return "bwm_tableau_cam"; }
@@ -39,19 +37,18 @@ public:
 
   void get_popup(vgui_popup_params const &params, vgui_menu &menu);
 
-  virtual void create_polygon_mesh(); 
+  virtual void create_polygon_mesh();
 
   virtual void triangulate_mesh();
 
-  // sets this tableau as the master for camera direction 
+  // sets this tableau as the master for camera direction
   void set_master();
 
-  //: moves the object, by moving the selected vertex to the specified 
-  // point on the tableau
+  //: moves the object, by moving the selected vertex to the specified point on the tableau
   void move_obj_by_vertex();
 
-  //: extrudes the selected face, 
-  void extrude_face();  
+  //: extrudes the selected face,
+  void extrude_face();
 
   //: draws a line onto a given face, dividing into two faces
   void divide_face();
@@ -69,8 +66,9 @@ public:
 
   void load_mesh_multiple();
 
-  // save methods
-  // saves the observables with their save method specific to the object
+  //------------ save methods
+
+  //: saves the observables with their save method specific to the object
   void save();
   void save_all();
   void save(vcl_string path);
@@ -81,8 +79,9 @@ public:
 
   //: deletes all 3D objects
   void delete_all();
+
   //------------ Projection Plane related methods
-  
+
   //: selects an existing polygon as the projection plane
   void select_proj_plane();
 
@@ -102,18 +101,12 @@ public:
   void create_inner_face();
 
   void create_interior();
-
   void label_roof();
-
   void label_wall();
-
   void help_pop();
 
-protected:
-
+ protected:
   bwm_observer_cam* my_observer_;
-  
 };
 
 #endif
-

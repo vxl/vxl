@@ -1,5 +1,7 @@
 #ifndef bwm_observable_mesh_h_
 #define bwm_observable_mesh_h_
+//:
+// \file
 
 #include "bwm_observable.h"
 #include "bwm_observable_sptr.h"
@@ -8,21 +10,18 @@
 #include <vgui/vgui_message.h>
 #include <vsol/vsol_polygon_3d.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
-#include <vsol/vsol_polygon_2d.h>
-#include <vsol/vsol_polygon_2d_sptr.h>
 
 #include <bmsh3d/bmsh3d_mesh_mc.h>
 #include <bmsh3d/bmsh3d_face_mc.h>
 
 typedef enum {RoofSurface, WallSurface, None} BWM_FACE_LABEL;
 
-
 class bwm_observable_mesh : public bwm_observable
 {
-public:
+ public:
 
   typedef enum {BWM_MESH_IMAGE_PROCESSING, BWM_MESH_FEATURE, BWM_MESH_TERRAIN } BWM_MESH_TYPES;
- 
+
   virtual vcl_string type_name() const {return "bwm_observable_mesh"; }
 
   //: constructors
@@ -41,7 +40,7 @@ public:
   void remove();
 
   vgl_box_3d<double> bounding_box();
-  
+
   unsigned num_faces() { return object_->facemap().size(); }
   unsigned num_edges() { return object_->edgemap().size(); }
   unsigned num_vertices() { return object_->vertexmap().size(); }
@@ -69,7 +68,7 @@ public:
 
   vcl_map<int, vsol_polygon_3d_sptr> extract_faces();
 
-  vsol_polygon_3d_sptr extract_face(bmsh3d_face_mc* face, 
+  vsol_polygon_3d_sptr extract_face(bmsh3d_face_mc* face,
                                     vcl_vector<bmsh3d_vertex*> &vertices);
 
   vsol_polygon_3d_sptr extract_face(unsigned i);
@@ -79,13 +78,13 @@ public:
   vcl_map<int, vsol_polygon_3d_sptr> extract_inner_faces(int face_id);
 
   void divide_face(unsigned face_id, vgl_point_3d<double> l1, vgl_point_3d<double> l2,
-    vgl_point_3d<double> p1, vgl_point_3d<double> l3, 
+    vgl_point_3d<double> p1, vgl_point_3d<double> l3,
     vgl_point_3d<double> l4, vgl_point_3d<double> p2);
 
   bool is_poly_in(unsigned id, unsigned& index);
 
   void label_roof(unsigned face_id){ labels_[face_id] = RoofSurface; }
-  
+
   void label_wall(unsigned face_id){ labels_[face_id] = WallSurface; }
 
   BWM_FACE_LABEL get_face_label(unsigned face_id);
@@ -108,7 +107,7 @@ public:
 
   void save(const char* filename);
 
-private:
+ private:
 
   bmsh3d_mesh_mc* object_;
 
@@ -137,6 +136,5 @@ private:
 
   void print_faces();
 };
-
 
 #endif

@@ -1,5 +1,7 @@
 #ifndef bwm_observer_vgui_h
 #define bwm_observer_vgui_h
+//:
+// \file
 
 #include "bwm_observer.h"
 #include "bwm_observer_img.h"
@@ -14,11 +16,7 @@
 #include <bgui/bgui_image_tableau.h>
 
 #include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_homg_plane_3d.h>
-#include <vgl/vgl_homg_point_2d.h>
 
-#include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
@@ -28,7 +26,7 @@
 
 class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
 {
-public:
+ public:
 
   typedef bwm_observer_img base;
 
@@ -40,7 +38,7 @@ public:
   bool handle(const vgui_event &);
 
   virtual vcl_string type_name() const { return "bwm_observer_vgui"; }
-  
+
   void add_new_obj(bwm_observable_sptr observable);
 
   void handle_update(vgui_message const& msg, bwm_observable_sptr observable);
@@ -70,13 +68,13 @@ public:
 
   //void range_map();
 
-  virtual void proj_poly(vsol_polygon_3d_sptr poly3d, 
+  virtual void proj_poly(vsol_polygon_3d_sptr poly3d,
                          vsol_polygon_2d_sptr& poly2d) = 0;
 
-  virtual void backproj_poly(vsol_polygon_2d_sptr poly2d, 
+  virtual void backproj_poly(vsol_polygon_2d_sptr poly2d,
                              vsol_polygon_3d_sptr& poly3d) = 0;
 
-  //: move the correspondence location and replace the cross soview 
+  //: move the correspondence location and replace the cross soview
   void set_corr(float x, float y);
 
   //: the current location of the correspondence point
@@ -88,7 +86,7 @@ public:
   //: display a cross soview at the specified location
   void add_cross(float x, float y, float r);
 
-protected:
+ protected:
 
   bwm_observer_vgui() { corr_.second = 0; }
 
@@ -110,8 +108,6 @@ protected:
   vsol_point_3d_sptr selected_vertex();
 
   void print_selected_vertex();
-
 };
 
 #endif
-

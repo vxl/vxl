@@ -1,6 +1,9 @@
 #ifndef bwm_observer_img_h_
 #define bwm_observer_img_h_
+//:
+// \file
 
+#include <vcl_iostream.h>
 #include <vcl_vector.h>
 #include <vcl_map.h>
 
@@ -12,18 +15,11 @@
 #include <bgui/bgui_vsol2D_tableau.h>
 #include <bgui/bgui_vsol_soview2D.h>
 
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_homg_plane_3d.h>
-#include <vgl/vgl_homg_point_2d.h>
-
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vsol/vsol_box_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
-#include <vsol/vsol_polygon_3d_sptr.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
-#include <vsol/vsol_polyline_3d_sptr.h>
 #include <vsol/vsol_digital_curve_2d_sptr.h>
 #include <vsol/vsol_line_2d_sptr.h>
 
@@ -34,12 +30,12 @@
 
 class bwm_observer_img : public bgui_vsol2D_tableau
 {
-public:
+ public:
 
   typedef bgui_vsol2D_tableau base;
 
   bwm_observer_img(bgui_image_tableau_sptr const& img)
-    : bgui_vsol2D_tableau(img), img_tab_(img), viewer_(0), 
+    : bgui_vsol2D_tableau(img), img_tab_(img), viewer_(0),
     show_image_path_(false), start_x_(0), start_y_(0), moving_p_(0),
     moving_v_(0), moving_vertex_(false), moving_polygon_(false),
     row_(0), col_(0) {  }
@@ -88,9 +84,9 @@ public:
 
   void lines_vd();
 
-  void recover_edges(); 
+  void recover_edges();
 
-  void recover_lines(); 
+  void recover_lines();
 
   void jim_obs_process(){ vcl_cout << "I am Jim Green's Process!!!!" << vcl_endl; }
 
@@ -112,7 +108,7 @@ public:
   vcl_vector<vsol_digital_curve_2d_sptr> edges(unsigned id)
     {return edge_list[id];}
 
-protected:
+ protected:
 
   bwm_observer_img();
 
@@ -127,7 +123,6 @@ protected:
 
   // vector of vertices are mapped soview ID for each polygon
   vcl_map<unsigned, vcl_vector<bwm_soview2D_vertex* > > vert_list;
-
 
   // maps for box segmentations
   vcl_map<unsigned, vcl_vector<vsol_digital_curve_2d_sptr > > edge_list;
@@ -148,7 +143,6 @@ protected:
 
   unsigned row_; //location of observer in grid
   unsigned col_;
-
 };
 
 #endif

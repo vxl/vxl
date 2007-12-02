@@ -1,5 +1,7 @@
 #ifndef bwm_observable_h_
 #define bwm_observable_h_
+//:
+// \file
 
 #include <vbl/vbl_ref_count.h>
 
@@ -22,9 +24,9 @@ class SoSeparator;
 
 class bwm_observable : public vgui_observable, public vbl_ref_count
 {
-public:
+ public:
 
-  //: constructors
+  // constructor
   bwm_observable() {}
 
   virtual ~bwm_observable() {}
@@ -56,15 +58,14 @@ public:
 
   virtual vcl_map<int, vsol_polygon_3d_sptr> extract_inner_faces(int face_id)=0;
 
-  virtual void divide_face(unsigned face_id, 
+  virtual void divide_face(unsigned face_id,
     vgl_point_3d<double> l1, vgl_point_3d<double> l2,
-    vgl_point_3d<double> p1, vgl_point_3d<double> l3, 
+    vgl_point_3d<double> p1, vgl_point_3d<double> l3,
     vgl_point_3d<double> l4, vgl_point_3d<double> p2)=0;
 
   virtual void move_normal_dir(double dist)=0;
   virtual void move_extr_face(double dist)=0;
   virtual int find_closest_face(vgl_point_3d<double> point)=0;
-
 
   virtual void attach_inner_face(unsigned face_id, vsol_polygon_3d_sptr poly)=0;
 
@@ -73,7 +74,7 @@ public:
   vgl_vector_3d<double> last_translation() { return last_translation_;}
 
   virtual void label_roof(unsigned face_id)=0;
-  
+
   virtual void label_wall(unsigned face_id)=0;
 
   virtual SoSeparator* convert_coin3d(bool b_shape_hints, float transp, int colorcode)=0;
@@ -84,10 +85,9 @@ public:
 
   virtual void save(const char* filename)=0;
 
-protected:
+ protected:
 
   vgl_vector_3d<double> last_translation_;
-  
 };
 
 #endif
