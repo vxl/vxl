@@ -435,6 +435,10 @@ void bwm_tableau_mgr::load_site()
     vcl_vector<bwm_io_tab_config* > tableaus;
     site->tableaus(tableaus);
 
+    site_name_ = site->name_;
+    site_dir_ = site->path_;
+    pyr_exe_ = site->pyr_exe_path_;
+
     // get the lvcs
     vsol_point_3d_sptr lvcs = site->lvcs_;
     // if LVCS is not set, do not use it
@@ -583,31 +587,53 @@ void bwm_tableau_mgr::load_site()
 //: saves the site to an XML file
 void bwm_tableau_mgr::save_site()
 {
-  // ask the path for saving the site
-  vgui_dialog_extensions d("Save the Site!");
+  bwm_site_sptr site = new bwm_site();
 
-  vcl_string site_name, site_dir, pyr_exe, ext;
-  d.field("Site name:", site_name);
-  d.line_break();
-  d.dir("Site dir:", ext, site_dir);
-  d.line_break();
-  d.file("Pyramid exe path:" , ext, pyr_exe);
-  if (!d.ask())
-    return;
+  if ((this->site_name_.size() > 0) && 
+    (this->site_dir_.size() > 0) && 
+    (vul_file::exists(this->site_dir_))) {
+    vgui_dialog_extensions d("Saving the Site");
+    d.message(("Saving the site " + site_name_).c_str());
+    d.message(("under: " + site_dir_).c_str());
+    d.line_break();
+    if (!d.ask()) {
+      return;
+    }
+    site->name_ = this->site_name_;
+    site->path_ = this->site_dir_;
+    site->pyr_exe_path_ = this->pyr_exe_;
+  } else {
+    // ask the path for saving the site
+    vcl_string site_name, site_dir, pyr_exe, ext;
+    vgui_dialog_extensions d("Save the Site!");
+    d.field("Site name:", site_name);
+    d.line_break();
+    d.dir("Site dir:", ext, site_dir);
+    d.line_break();
+    //d.file("Pyramid exe path:" , ext, pyr_exe);
+    //d.line_break();
+    d.line_break();
+    if (!d.ask())
+      return;
 
-  if (!vul_file::is_directory(site_dir)) {
-    vcl_cerr << "Please enter a directory for the site" << vcl_endl;
-    return;
+    if (!vul_file::is_directory(site_dir)) {
+      vcl_cerr << "Please enter a directory for the site" << vcl_endl;
+      return;
+    }
+
+    
+    site->name_ = this->site_name_ = site_name;
+    site->path_ = this->site_dir_ = site_dir;
+    site->pyr_exe_path_ = this->pyr_exe_;
   }
 
-  vcl_string site_path = site_dir + "\\" + site_name + ".xml";
+  long time = timer_.real();
+  vcl_stringstream strm;
+  strm << vcl_fixed << time;
+  vcl_string str(strm.str());
+  vcl_string site_path = site_dir_ + "\\" + site_name_ + "_v" + str + ".xml";
   vcl_ofstream s(site_path.data());
 
-  bwm_site_sptr site = new bwm_site();
-  site->name_ = site_name;
-  site->path_ = site_dir;
-  site->pyr_exe_path_ = pyr_exe;
- 
   // get the tableaux
   vcl_map<vcl_string, vgui_tableau_sptr>::iterator it = tableaus_.begin();
   while (it != tableaus_.end())
@@ -660,7 +686,7 @@ void bwm_tableau_mgr::save_site()
   // add the objects
   // ask one camera tableau to save its objects
   vcl_vector<bwm_observable_sptr> objs = bwm_world::instance()->objects();
-  vcl_string obj_path = site_dir + "\\" + site_name + "_objects\\";
+  vcl_string obj_path = site_dir_ + "\\" + site_name_ + "_objects\\";
   vul_file::make_directory(obj_path);
   for (unsigned i=0; i<objs.size(); i++) {
     if (objs[i]) {

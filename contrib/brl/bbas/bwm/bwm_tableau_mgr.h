@@ -90,6 +90,7 @@ private:
   bool display_image_path_;
 
   bwm_site_process* site_create_process_;
+  vcl_string site_name_, site_dir_, pyr_exe_ ;
 
   bwm_io_config_parser* parse_config();
 
@@ -119,6 +120,9 @@ private:
                                double &lat, double &lon, double &elev);
 
   void show_error(vcl_string);
+  
+  vul_timer timer_;
+
 };
 
 #endif
