@@ -432,8 +432,7 @@ bool vil_tiff_header::compute_pixel_format()
   // The current implementation can't handle planar_config ==2, which is
   // separate color bands.
   vxl_uint_16 s = samples_per_pixel.val;
-  if (samples_per_pixel.val>1 && photometric.val==2 && planar_config.val == 1 &&
-      sample_format.val == 1)
+  if (samples_per_pixel.val>1 && photometric.val==2 && planar_config.val == 1 )
   {
     switch (sample_format.val)
     {
@@ -534,8 +533,9 @@ bool vil_tiff_header::compute_pixel_format()
         return false;
 
       case 3: // do floating point color images make sense?
-        pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
-        return false;
+        pix_fmt = VIL_PIXEL_FORMAT_FLOAT; // DEC changed from vil_pixel_format_unknown
+        nplanes = s; // DEC
+        return true; // DEC changed from false
       case 4: //undefined format
       default:
         pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
