@@ -97,10 +97,12 @@ void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu
     new vgui_command_simple<bwm_tableau_img>(this,
                                              &bwm_tableau_img::
                                              toggle_show_image_path));
+  menu.separator();
   menu.add( "Zoom to Fit" ,
     new vgui_command_simple<bwm_tableau_img>(this,
                                              &bwm_tableau_img::
                                              zoom_to_fit));
+  menu.separator();
   menu.add( "Scroll to Image Location" ,
     new vgui_command_simple<bwm_tableau_img>(this,
                                              &bwm_tableau_img::

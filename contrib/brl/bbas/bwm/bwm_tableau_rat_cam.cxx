@@ -150,8 +150,11 @@ void bwm_tableau_rat_cam::get_popup(vgui_popup_params const &params, vgui_menu &
 
   menu.separator();
   menu.add( "Adjust Camera To LVCS", new bwm_adj_cam_offset_command(this));
+  menu.separator();
   menu.add( "Register Image to World Pt", new bwm_adjust_camera_to_world_pt_command(this));
+  menu.separator();
   menu.add( "Transfer Edges from Master", new bwm_proj_edges_from_master_command(this));
+  menu.separator();
   menu.add( "Center to the position", new bwm_center_pos_command(this));
 
   menu.separator();

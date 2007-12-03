@@ -227,10 +227,11 @@ void bwm_tableau_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu
   mesh_submenu.separator();
   mesh_submenu.add("Create Mesh Polygon", new bwm_create_mesh_command(this),
     vgui_key('p'), vgui_modifier(vgui_SHIFT) );
-  
+#if 0
   mesh_submenu.add("Load Mesh from File..",
     new vgui_command_simple<bwm_tableau_cam>(this,&bwm_tableau_cam::load_mesh),
     vgui_key('p'), vgui_modifier(vgui_SHIFT) );
+#endif
   mesh_submenu.separator();
   mesh_submenu.add("Triangulate..", new bwm_tri_mesh_command(this),
     vgui_key('t'), vgui_modifier(vgui_SHIFT));
