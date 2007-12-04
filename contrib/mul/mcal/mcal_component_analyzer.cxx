@@ -81,15 +81,15 @@ vcl_string  mcal_component_analyzer::is_a() const
 
 //: Create a concrete mcal_component_analyzer object, from a text specification.
 vcl_auto_ptr<mcal_component_analyzer>
-  mcal_component_analyzer::new_component_analyzer_from_stream(vcl_istream &is)
+  mcal_component_analyzer::create_from_stream(vcl_istream &is)
 {
   vcl_string name;
   is >> name;
 
-  vcl_auto_ptr<mcal_component_analyzer> pvmb;
+  vcl_auto_ptr<mcal_component_analyzer> mca;
   try
   {
-    pvmb = mbl_cloneables_factory<mcal_component_analyzer>::get_clone(name);
+    mca = mbl_cloneables_factory<mcal_component_analyzer>::get_clone(name);
   }
   catch (const mbl_exception_no_name_in_factory & e)
   {
@@ -98,8 +98,8 @@ vcl_auto_ptr<mcal_component_analyzer>
               <<'\t'<<e.what()<<vcl_endl;
       vcl_abort();
   }
-  pvmb->config_from_stream(is);
-  return pvmb;
+  mca->config_from_stream(is);
+  return mca;
 }
 
 //: Read initialisation settings from a stream.

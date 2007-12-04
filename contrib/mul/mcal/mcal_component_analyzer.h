@@ -78,7 +78,7 @@ class mcal_component_analyzer
   virtual void config_from_stream(vcl_istream &);
 
   //: Create a concrete mcal_component_analyzer object, from a text specification.
-  static vcl_auto_ptr<mcal_component_analyzer> new_component_analyzer_from_stream(vcl_istream &is);
+  static vcl_auto_ptr<mcal_component_analyzer> create_from_stream(vcl_istream &is);
 };
 
 //: Allows derived class to be loaded by base-class pointer

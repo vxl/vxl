@@ -16,9 +16,7 @@
 #include <vcl_cmath.h>
 #include <vnl/vnl_math.h>
 #include <mbl/mbl_cloneables_factory.h>
-#if 0
-#include <mcal/mcal_add_all_binary_loaders.h>
-#endif // 0
+#include <mcal/mcal_add_all_loaders.h>
 #include <mcal/mcal_pca.h>
 
 //=======================================================================
@@ -108,7 +106,7 @@ void test_pca()
           "}\n");
 
     vcl_auto_ptr<mcal_component_analyzer>
-            ca = mcal_component_analyzer::new_component_analyzer_from_stream(ss);
+            ca = mcal_component_analyzer::create_from_stream(ss);
 
     TEST("Correct component analyzer",ca->is_a(),"mcal_pca");
     if (ca->is_a()=="mcal_pca")

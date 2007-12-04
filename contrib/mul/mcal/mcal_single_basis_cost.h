@@ -74,7 +74,7 @@ class mcal_single_basis_cost
   virtual void config_from_stream(vcl_istream &);
 
   //: Create a concrete mcal_single_basis_cost object, from a text specification.
-  static vcl_auto_ptr<mcal_single_basis_cost> new_single_basis_cost_from_stream(vcl_istream &is);
+  static vcl_auto_ptr<mcal_single_basis_cost> create_from_stream(vcl_istream &is);
 };
 
 //: Allows derived class to be loaded by base-class pointer

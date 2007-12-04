@@ -45,7 +45,7 @@ vcl_string  mcal_single_basis_cost::is_a() const
 
 //: Create a concrete mcal_single_basis_cost object, from a text specification.
 vcl_auto_ptr<mcal_single_basis_cost>
-  mcal_single_basis_cost::new_single_basis_cost_from_stream(vcl_istream &is)
+  mcal_single_basis_cost::create_from_stream(vcl_istream &is)
 {
   vcl_string name;
   is >> name;
