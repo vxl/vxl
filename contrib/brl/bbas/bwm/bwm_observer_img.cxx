@@ -215,6 +215,21 @@ vgui_soview2D* bwm_observer_img::get_selected_object(vcl_string type)
   return 0;
 }
 
+vcl_vector<vgui_soview2D*> bwm_observer_img::get_selected_objects(vcl_string type)
+{
+  vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
+  vcl_vector<vgui_soview2D*> objs;
+
+  for (unsigned i=0; i<select_list.size(); i++) {
+    vcl_cout << select_list[i]->type_name();
+    if (select_list[i]->type_name().compare(type) == 0) {
+      objs.push_back((vgui_soview2D*) select_list[i]);
+    }
+  }
+  vcl_cout << "Number of selected objects of type " << type << " = " << objs.size();
+  return objs;
+}
+
 void bwm_observer_img::delete_selected()
 {
   // first get the selected polygon

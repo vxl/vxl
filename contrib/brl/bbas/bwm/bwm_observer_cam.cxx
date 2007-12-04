@@ -34,6 +34,7 @@ bool bwm_observer_cam::handle(const vgui_event &e)
   if (e.type == vgui_BUTTON_DOWN && e.button == vgui_MIDDLE && 
     e.modifier == vgui_SHIFT) {
     // first get the selected polygon
+
     vcl_vector<vgui_soview*> select_list = this->get_selected_soviews(); 
     if (select_list.size() == 1) {
         if (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0) {
@@ -616,74 +617,114 @@ void bwm_observer_cam::connect_inner_face(bwm_observable* obj,
 void bwm_observer_cam::extrude_face(vsol_point_2d_sptr pt)
 {
   // first get the selected objects
-  vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
+  //vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
+  bgui_vsol_soview2D_polygon* poly = (bgui_vsol_soview2D_polygon*) this->get_selected_object(POLYGON_TYPE);
+  if (!poly) {
+    vcl_cerr << "Please select a face (only one) to extrude!" << vcl_endl;
+    return;
+  }
 
-  // a polygon should be selected first
-  if (select_list.size() == 2) {
-    if (((select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0) && (select_list[1]->type_name().compare("bwm_soview2D_vertex") == 0)) ||
-    ((select_list[1]->type_name().compare("bgui_vsol_soview2D_polygon") == 0) && (select_list[0]->type_name().compare("bwm_soview2D_vertex") == 0)))
-  {
-    bgui_vsol_soview2D_polygon* poly;
-    bwm_soview2D_vertex* circle;
+  // get selected vertex pair
+  vcl_vector<vgui_soview2D*> vertices = this->get_selected_objects(VERTEX_TYPE);
+  if (vertices.size()  != 2) {
+    vcl_cerr << "Please select 2 vertices on the face to extrude!" << vcl_endl;
+    return;
+  }
 
-    if (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0) {
-      poly = static_cast<bgui_vsol_soview2D_polygon*> (select_list[0]);
-      circle = static_cast<bwm_soview2D_vertex*> (select_list[1]);
-    } else {
-      poly = static_cast<bgui_vsol_soview2D_polygon*> (select_list[1]);
-      circle = static_cast<bwm_soview2D_vertex*> (select_list[0]);
-    }
+  bwm_soview2D_vertex *v1, *v2;
+  v1 = static_cast<bwm_soview2D_vertex*> (vertices[0]);
+  v2 = static_cast<bwm_soview2D_vertex*> (vertices[1]);
+ 
+  // make sure that these vertices belong to the face
+  //if ((v1->obj() == poly) && (v2->obj() == poly))
     unsigned face_id;
     bwm_observable_sptr obs = this->find_object(poly->get_id(), face_id);
 
-    float x, y;
-    circle->get_centroid(&x, &y);
-    vsol_point_2d_sptr picked_v = new vsol_point_2d(x,y);
-
+    float x1, y1, x2, y2;
+    v1->get_centroid(&x1, &y1);
+    v2->get_centroid(&x2, &y2);
+    vsol_point_2d_sptr picked_v1 = new vsol_point_2d(x1,y1);
+    vsol_point_2d_sptr picked_v2 = new vsol_point_2d(x2,y2);
     vsol_polygon_3d_sptr face = obs->extract_face(face_id);
-
+    vsol_polygon_2d_sptr face2d;
     // find the backprojection of the selected vertex
-    vsol_point_3d_sptr v3d;
-    backproj_point(picked_v, v3d, face->plane());
+   /* vsol_point_3d_sptr v3d1, v3d2;
+    backproj_point(picked_v1, v3d1, face->plane());
+    backproj_point(picked_v2, v3d2, face->plane());*/
+    proj_poly(face, face2d);
 
-    // find the index of the selected vertex, by searching for the
+    // find the index of the selected vertices, by searching for the
     // closest 3-d vertex to the backprojected 2-d vertex
-    double min_dist = 1e23;
-    unsigned index = -1;
-    for (unsigned i=0; i<face->size(); i++) {
-      double dist = (face->vertex(i)->get_p() - v3d->get_p()).length();
-      if (dist < min_dist) {
-        min_dist = dist;
-        index = i;
+    double min_dist1 = 1e23, min_dist2 = 1e23;
+    unsigned index1 = -1, index2 = -1;
+    vcl_cout << vcl_endl << "-- Selected v1=" << picked_v1->get_p() << vcl_endl; 
+    vcl_cout <<  "-- Selected v2=" << picked_v2->get_p() << vcl_endl; 
+    for (unsigned i=0; i<face2d->size(); i++) {
+      vgl_point_2d<double> pt = face2d->vertex(i)->get_p();
+      
+
+      double dist1 = (pt - picked_v1->get_p()).length();
+      double dist2 = (pt - picked_v2->get_p()).length();
+      vcl_cout << i << "-- Vertex" << pt << " dist=" << dist1 << vcl_endl;
+      vcl_cout << i << "-- Vertex" << pt << " dist=" << dist2 << vcl_endl;
+      if (dist1 < min_dist1) {
+        min_dist1 = dist1;
+        index1 = i;
+      }
+      if (dist2 < min_dist2) {
+        min_dist2 = dist2;
+        index2 = i;
       }
     }
-    if (index == -1) {
-      vcl_cerr << "Select a vertex on the face to be extruded\n";
+    if ((index1 == -1) || (index2 == -1)) {
+      vcl_cerr << "The vertices (one or both) cannot be found on the face\n";
       return;
     }
 
-    // define a new plane, to backproject the extrusion point
-    // get the next vertex index on the selected face
-    unsigned next_index = (index == face->size()-1) ? 0 : index+1;
-    // selected vertex
-    vgl_homg_point_3d<double> p0(face->vertex(index)->get_p());
-    // next vertex
-    vgl_homg_point_3d<double> p1(face->vertex(next_index)->get_p());
+    // see if the vertices are adjecent
+    /*unsigned index = (index1 < index2) ? index1 : index2;
+    unsigned next_index = (index == face->size()-1) ? 0 : index+1;*/
+    if (index1 == index2) {
+      vcl_cerr << "the edge vertices are the same vertex, something terribly wrong!" << vcl_endl;
+      return;
+    }
+    else if (index1 < index2) {
+      unsigned next_index = (index1 == 0) ? face->size()-1 : index1+1;
+      if (next_index != index2) {
+        vcl_cerr << "backprojected vertices are not adjacent" << vcl_endl;
+        return;
+      }
+    } else {
+      unsigned next_index = (index2 == 0) ? face->size()-1 : index2+1;
+      if (next_index != index1) {
+        vcl_cerr << "backprojected vertices are not adjacent" << vcl_endl;
+        return;
+      }
+    }
+
+    // selected vertices
+    vgl_homg_point_3d<double> p0(face->vertex(index1)->get_p());
+    vgl_homg_point_3d<double> p1(face->vertex(index2)->get_p());
+
     // a point above p0 along normal
     vcl_cout << "Face Normal-->" << face->normal() << vcl_endl;
-    vgl_homg_point_3d<double> p2(face->vertex(index)->get_p().x() +
+    /*vgl_homg_point_3d<double> p2(face->vertex(index1)->get_p().x() +
                                  face->normal().x(),
-                                 face->vertex(index)->get_p().y() +
+                                 face->vertex(index1)->get_p().y() +
                                  face->normal().y(),
-                                 face->vertex(index)->get_p().z() +
-                                 face->normal().z());
+                                 face->vertex(index1)->get_p().z() +
+                                 face->normal().z());*/
+    vgl_homg_point_3d<double> p2(face->vertex(index1)->get_p().x(), 
+      face->vertex(index1)->get_p().y(),
+      face->vertex(index1)->get_p().z()+1);
+
     vcl_cout << "p0-->" << p0 << vcl_endl;
     vcl_cout << "p1-->" << p1 << vcl_endl;
     vcl_cout << "p2-->" << p2 << vcl_endl;
-    vgl_homg_plane_3d<double> plane(p0, p1, p2);
-#ifdef CAM_DEBUG
+    vgl_homg_plane_3d<double> plane(p0, p2, p1);
+  #ifdef CAM_DEBUG
     vcl_cout << "projection plane normal " << plane.normal() << '\n';
-#endif
+  #endif
     vsol_point_3d_sptr pt3d;
     backproj_point(pt, pt3d, plane);
     if (!pt3d)
@@ -693,40 +734,41 @@ void bwm_observer_cam::extrude_face(vsol_point_2d_sptr pt)
       return;
     }
 
-#ifdef CAM_DEBUG
+  #ifdef CAM_DEBUG
     vcl_cout << "The back-projected point ("
              << pt3d->x() << ' ' << pt3d->y() << ' ' << pt3d->z() << ")\n";
-#endif
+  #endif
+
+    // use the z value of the backprojected point
 
 
-    // the face normal vector
-    vgl_vector_3d<double> n1 = face->normal();
-#ifdef CAM_DEBUG
-    vcl_cout << "extrusion face normal " << n1 << '\n';
-#endif
-    // the vector pointing from the selected vertex to the 3-d target point
-    vgl_vector_3d<double> n2 = pt3d->get_p() - v3d->get_p();
-    double a = angle(n1, n2);
-    double ninety_deg = vnl_math::pi/2.0;
+    /*
+      // the face normal vector
+      vgl_vector_3d<double> n1 = face->normal();
+  #ifdef CAM_DEBUG
+      vcl_cout << "extrusion face normal " << n1 << '\n';
+  #endif
+      // the vector pointing from the selected vertex to the 3-d target point
+      vgl_vector_3d<double> n2 = pt3d->get_p() - v3d->get_p();
+      double a = angle(n1, n2);
+      double ninety_deg = vnl_math::pi/2.0;
 
-#ifdef CAM_DEBUG
-    vcl_cout << "angle " << a*180/vnl_math::pi << '\n';
-#endif
+  #ifdef CAM_DEBUG
+      vcl_cout << "angle " << a*180/vnl_math::pi << '\n';
+  #endif
 
     //magnitude of the distance from the selected vertex to the target point
     double dist = (face->vertex(index)->get_p() - pt3d->get_p()).length();
     if (a > ninety_deg)
-      dist *= -1;
+      dist *= -1;*/
     //OK but what if the target point does not lie exactly on the
     //vector from the selected vertex to the ground. We should only
     //consider that the z coordinate of the selected point is important.
     //This method should be modified, perhaps define a "visible side"
     //construction plane.
 
-    obs->extrude(face_id, dist);
-  }
-  } else
-    vcl_cerr << "Please select only one face to extrude!\n";
+    obs->extrude(face_id, pt3d->z());
+  
 }
 
 void bwm_observer_cam::divide_face(bwm_observable_sptr obs, unsigned face_id,

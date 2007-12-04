@@ -8,6 +8,7 @@
 #include "bwm/io/bwm_io_structs.h"
 
 #include <vul/vul_file.h>
+#include <vil/vil_image_list.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vgui/vgui_dialog_extensions.h>
 #include <vgui/vgui_error_dialog.h>
@@ -138,8 +139,19 @@ void bwm_site_process::RunBackgroundTask()
             img_path = img;
 
             // find the image under this folder to be able to compute nitf camera from
-            cam_img_file = img + "\\" + base + "_0.nitf";
-            if (!vul_file::exists(cam_img_file)) {
+            vil_image_list list(img.c_str());
+            vcl_vector<vcl_string> f_list = list.files();
+            bool found = false;
+            for (unsigned f=0; f<f_list.size(); f++) {
+              if (f_list[f].find_last_of("_0.") != vcl_string::npos) {
+                cam_img_file = f_list[f];
+                found = true;
+                break;
+              }
+            }
+            //cam_img_file = img + "\\" + base + "_0.nitf";
+            //if (!vul_file::exists(cam_img_file)) {
+            if (!found) {
               vcl_cout << "The image file [" << cam_img_file << "] cannot be found!" << vcl_endl;
               continue;
             }
@@ -192,9 +204,11 @@ void bwm_site_process::RunBackgroundTask()
               base, act[i], img_path, cam_path, "rational"); 
           site_->tableaus_.push_back(cam_tab);  
         } else {
-          bwm_io_tab_config_img* img_tab = new bwm_io_tab_config_img(IMAGE_TABLEAU_TAG,
+          /*bwm_io_tab_config_img* img_tab = new bwm_io_tab_config_img(IMAGE_TABLEAU_TAG,
            base, act[i], img_path);
-          site_->tableaus_.push_back(img_tab); 
+          site_->tableaus_.push_back(img_tab); */
+          // do not create a tableu for now
+          vcl_cerr <<  vcl_endl << "NITF camera is not successfully created, not creating the tableau!" << vcl_endl;
         }    
       }
     }

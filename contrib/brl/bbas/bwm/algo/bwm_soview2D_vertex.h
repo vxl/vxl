@@ -16,8 +16,6 @@ class bwm_soview2D_vertex : public vgui_soview2D_circle
 
   virtual vcl_string type_name() const { return "bwm_soview2D_vertex"; }
 
-  //void draw() const;
-
   bgui_vsol_soview2D* obj() { return obj_; }
   int vertex_indx() { return v_index_; }
 

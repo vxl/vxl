@@ -199,7 +199,7 @@ void bwm_observable_mesh::set_object(bmsh3d_mesh_mc* obj)
   notify_observers(msg);
  }
 
-void bwm_observable_mesh::set_object(vsol_polygon_3d_sptr poly, double dist)
+void bwm_observable_mesh::set_object(vsol_polygon_3d_sptr poly, double z)
 {
   vcl_string msg = "";
   if (object_ == 0) 
@@ -211,7 +211,7 @@ void bwm_observable_mesh::set_object(vsol_polygon_3d_sptr poly, double dist)
 
   object_ = new bmsh3d_mesh_mc;
   vcl_map<int, vsol_polygon_3d_sptr> inner_faces;
-  create_mesh_HE(poly, dist, inner_faces);
+  create_mesh_HE(poly, z, inner_faces);
   //object_->orient_face_normals();
   notify_observers(msg);
 }
@@ -396,7 +396,7 @@ void bwm_observable_mesh::move_normal_dir(double dist)
   }
 }
 
-void bwm_observable_mesh::move_extr_face(double dist)
+void bwm_observable_mesh::move_extr_face(double z)
 {
   if (current_extr_face) {
     vcl_vector<bmsh3d_vertex*> vertices;
@@ -407,11 +407,14 @@ void bwm_observable_mesh::move_extr_face(double dist)
       bmsh3d_vertex* v = vertices[i];
       //vgl_vector_3d<double> normal = current_extr_face->compute_normal(edge, v);
       vsol_point_3d_sptr p = polygon->vertex(i);
-      vgl_vector_3d<double> normal = polygon->normal_at_point(p);
+      //vgl_vector_3d<double> normal = polygon->normal_at_point(p);
 
-      v->set_pt (vgl_point_3d<double> (v->get_pt().x() + dist*normal.x() ,
+      /*v->set_pt (vgl_point_3d<double> (v->get_pt().x() + dist*normal.x() ,
             v->get_pt().y() + dist*normal.y(),
-            v->get_pt().z() + dist*normal.z()));
+            v->get_pt().z() + dist*normal.z()));*/
+      v->set_pt (vgl_point_3d<double> (v->get_pt().x(), v->get_pt().y(), z));
+      //just use the z value as the new height
+
       //vcl_cout << "new v=" << v->get_pt() << vcl_endl;
     }
     // FIX THIS , uncomment
@@ -619,9 +622,10 @@ void bwm_observable_mesh::create_mesh_HE(vsol_polygon_3d_sptr polygon,
 #endif
     vgl_vector_3d<double> normal = polygon->normal();
     double fact = dist;
-    v->set_pt (vgl_point_3d<double> (polygon->vertex(i)->x() + fact*normal.x() ,
+    /*v->set_pt (vgl_point_3d<double> (polygon->vertex(i)->x() + fact*normal.x() ,
       polygon->vertex(i)->y() + fact*normal.y(),
-      polygon->vertex(i)->z() + fact*normal.z()));
+      polygon->vertex(i)->z() + fact*normal.z()));*/
+    v->set_pt (vgl_point_3d<double> (polygon->vertex(i)->x(),polygon->vertex(i)->y(),dist));
     object_->_add_vertex (v);
     v_list[n+i] = v;
   }
