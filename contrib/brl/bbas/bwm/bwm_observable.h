@@ -17,7 +17,7 @@
 #include <vgui/vgui_observable.h>
 
 #include <vsol/vsol_polygon_3d_sptr.h>
-
+#include <vsol/vsol_point_3d_sptr.h>
 #include <vpgl/bgeo/bgeo_lvcs.h>
 
 class SoSeparator;
@@ -46,6 +46,8 @@ class bwm_observable : public vgui_observable, public vbl_ref_count
 
   virtual bwm_observable_sptr transform(vgl_h_matrix_3d<double> T_)=0;
 
+  virtual void send_update()=0;
+
   virtual void extrude(int face_id)=0;
 
   virtual void extrude(int face_id, double dist)=0;
@@ -55,6 +57,8 @@ class bwm_observable : public vgui_observable, public vbl_ref_count
   virtual vgl_homg_plane_3d<double> get_plane(unsigned face_id)=0;
 
   virtual vcl_map<int, vsol_polygon_3d_sptr> extract_faces()=0;
+
+  virtual vcl_vector<vsol_point_3d_sptr> extract_vertices()=0;
 
   virtual vcl_map<int, vsol_polygon_3d_sptr> extract_inner_faces(int face_id)=0;
 

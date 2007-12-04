@@ -44,8 +44,13 @@ class bwm_observable_mesh : public bwm_observable
   unsigned num_faces() { return object_->facemap().size(); }
   unsigned num_edges() { return object_->edgemap().size(); }
   unsigned num_vertices() { return object_->vertexmap().size(); }
+
   void translate(vgl_vector_3d<double> T);
+
   bwm_observable_sptr transform(vgl_h_matrix_3d<double> T_);
+
+  void send_update();
+
   void extrude(int face_id);
 
   void extrude(int face_id, double dist);
@@ -72,6 +77,8 @@ class bwm_observable_mesh : public bwm_observable
                                     vcl_vector<bmsh3d_vertex*> &vertices);
 
   vsol_polygon_3d_sptr extract_face(unsigned i);
+
+  vcl_vector<vsol_point_3d_sptr> extract_vertices();
 
   vcl_map<int, vsol_polygon_3d_sptr> extract_inner_faces(bmsh3d_face_mc* face);
 

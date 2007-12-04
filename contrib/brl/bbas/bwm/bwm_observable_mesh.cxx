@@ -102,6 +102,12 @@ BWM_FACE_LABEL bwm_observable_mesh::get_face_label(unsigned face_id)
   return None;
 }
 
+void bwm_observable_mesh::send_update() 
+{
+  if (object_)
+    notify_observers("update");
+}
+
 void bwm_observable_mesh::translate(vgl_vector_3d<double> T)
 {
   vcl_map<int, bmsh3d_vertex*> v_map = object_->vertexmap();
@@ -337,6 +343,21 @@ vcl_map<int, vsol_polygon_3d_sptr> bwm_observable_mesh::extract_faces()
     faces[face->id()] = poly;
   }
   return faces;
+}
+
+vcl_vector<vsol_point_3d_sptr> bwm_observable_mesh::extract_vertices()
+{
+  vcl_vector<vsol_point_3d_sptr> vertices;
+  if (object_) {
+    vcl_map<int, bmsh3d_vertex*>::iterator it = object_->vertexmap().begin();
+    for (; it != object_->vertexmap().end(); it++) {
+      bmsh3d_vertex* V = (bmsh3d_vertex*) (*it).second;
+      vsol_point_3d_sptr pt = new vsol_point_3d(V->pt().x(),V->pt().y(),V->pt().z());
+      vertices.push_back(pt);
+      it++;
+    }
+  }
+  return vertices;
 }
 
 void bwm_observable_mesh::create_interior()
