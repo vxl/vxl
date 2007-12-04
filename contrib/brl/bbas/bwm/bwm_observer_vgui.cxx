@@ -129,7 +129,7 @@ void bwm_observer_vgui::handle_update(vgui_message const& msg,
     for (unsigned i=0; i<p.size(); i++)  {
       if (p[i]) {
         this->remove(p[i]);
-        delete p[i];
+        //delete p[i];
       }
     }
 
@@ -137,7 +137,7 @@ void bwm_observer_vgui::handle_update(vgui_message const& msg,
     for (unsigned i=0; i<ov.size(); i++)  {
       if (ov[i]) {
         this->remove(ov[i]);
-        delete ov[i];
+        //delete ov[i];
       }
     }
   } else {
