@@ -71,6 +71,9 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
   virtual void proj_poly(vsol_polygon_3d_sptr poly3d,
                          vsol_polygon_2d_sptr& poly2d) = 0;
 
+  virtual void proj_point(vgl_point_3d<double> world_pt,
+                          vgl_point_2d<double> &image_pt) = 0;
+
   virtual void backproj_poly(vsol_polygon_2d_sptr poly2d,
                              vsol_polygon_3d_sptr& poly3d) = 0;
 
@@ -97,7 +100,8 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
   vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D_polygon* > > objects_;
 
   //: vertices are kept as a triple (bwm_observable *, face_id, vector<bwm_soview2D_vertex*> )
-  vcl_map<bwm_observable_sptr, vcl_map<unsigned, vcl_vector<bwm_soview2D_vertex* > > > object_verts_;
+  //vcl_map<bwm_observable_sptr, vcl_map<unsigned, vcl_vector<bwm_soview2D_vertex* > > > object_verts_;
+  vcl_map<bwm_observable_sptr, vcl_vector<bwm_soview2D_vertex* > > object_verts_;
 
   bwm_observable_sptr moving_face_;
 

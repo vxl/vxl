@@ -42,14 +42,15 @@ bool bwm_observer_cam::handle(const vgui_event &e)
            bwm_observable_sptr obj = find_object(select_list[0]->get_id(), face_id);
            if (obj) {
              // it is OK to move faces but not meshes with more than one face
-             if (obj && obj->num_faces() == 1) {
+             if (obj->num_faces() == 1) {
                moving_p_ = (bgui_vsol_soview2D*) select_list[0];
                moving_face_ = obj;
                pi.window_to_image_coordinates(e.wx, e.wy, start_x_, start_y_);
                moving_polygon_ = true;
                moving_vertex_ = false;
-               return true;
-             }
+             } 
+             this->deselect_all();
+             return true;
            }
         }
         else if (select_list[0]->type_name().compare("bwm_soview2D_vertex") == 0) {
@@ -58,13 +59,16 @@ bool bwm_observer_cam::handle(const vgui_event &e)
           bgui_vsol_soview2D* poly = v->obj();
           unsigned face_id;
           bwm_observable_sptr obj = find_object(poly->get_id(), face_id);
-          if ( obj && obj->num_faces() == 1) {
-            moving_v_ = v;
-            // since there is only one face we can choose the only one
-            moving_p_ = poly;
-            moving_face_ = obj;
-            moving_vertex_ = true;
-            moving_polygon_ = false;
+          if (obj) {
+            if (obj->num_faces() == 1) {
+              moving_v_ = v;
+              // since there is only one face we can choose the only one
+              moving_p_ = poly;
+              moving_face_ = obj;
+              moving_vertex_ = true;
+              moving_polygon_ = false;
+            }
+            this->deselect_all();
             return true;
           }
         }
@@ -78,7 +82,7 @@ bool bwm_observer_cam::handle(const vgui_event &e)
         moving_p_->translate(x_diff, y_diff);
         
         // move all the vertices of the face
-        vcl_vector<bwm_soview2D_vertex* > vertices = object_verts_[moving_face_][0];
+        vcl_vector<bwm_soview2D_vertex* > vertices = object_verts_[moving_face_];
         for (unsigned i=0; i<vertices.size(); i++) {
           bwm_soview2D_vertex* v = vertices[i];
           v->translate(x_diff, y_diff);
@@ -114,7 +118,9 @@ bool bwm_observer_cam::handle(const vgui_event &e)
     float x_diff = x-start_x_;
     float y_diff = y-start_y_;
     // find the polygon including this vertex
-    unsigned i = moving_v_->vertex_indx();
+    unsigned i = find_index_of_v(moving_v_, (bgui_vsol_soview2D_polygon*)moving_p_);
+    if (i == -1)
+      return true;
     moving_v_->translate(x_diff, y_diff);
     if (moving_p_->type_name().compare(POLYGON_TYPE) == 0) {
       bgui_vsol_soview2D_polygon* polygon = (bgui_vsol_soview2D_polygon*) moving_p_;
@@ -647,10 +653,8 @@ void bwm_observer_cam::extrude_face(vsol_point_2d_sptr pt)
     vsol_point_2d_sptr picked_v2 = new vsol_point_2d(x2,y2);
     vsol_polygon_3d_sptr face = obs->extract_face(face_id);
     vsol_polygon_2d_sptr face2d;
+
     // find the backprojection of the selected vertex
-   /* vsol_point_3d_sptr v3d1, v3d2;
-    backproj_point(picked_v1, v3d1, face->plane());
-    backproj_point(picked_v2, v3d2, face->plane());*/
     proj_poly(face, face2d);
 
     // find the index of the selected vertices, by searching for the
@@ -972,4 +976,24 @@ void bwm_observer_cam::save_all(vcl_string path)
     o->save(obj_path.c_str());
     it++;
   }
+}
+
+unsigned bwm_observer_cam::find_index_of_v(bwm_soview2D_vertex* vertex, 
+                                           bgui_vsol_soview2D_polygon* polygon)
+{
+  vsol_polygon_2d_sptr poly = polygon->sptr();
+  double min_dist = 1e23;
+  unsigned index = -1;
+  for (unsigned i=0; i<poly->size(); i++) {
+    float x, y;
+    vertex->get_centroid(&x, &y);
+    vgl_point_2d<double> v(x,y);
+    double dist = (v - poly->vertex(i)->get_p()).length();
+      
+    if (dist < min_dist) {
+      min_dist = dist;
+      index = i;
+    }
+  }
+  return index;
 }

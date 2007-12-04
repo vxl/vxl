@@ -175,6 +175,8 @@ class bwm_observer_cam : public bwm_observer_vgui
                                 vgl_point_3d<double>& point2,
                                 vgl_point_3d<double>& l3,
                                 vgl_point_3d<double>& l4);
+
+  unsigned find_index_of_v(bwm_soview2D_vertex* vertex, bgui_vsol_soview2D_polygon* polygon);
 };
 
 #endif
