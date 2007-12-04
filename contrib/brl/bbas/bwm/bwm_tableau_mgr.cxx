@@ -524,7 +524,10 @@ void bwm_tableau_mgr::load_site()
 
     if (mode == "WORLD_TO_IMAGE") {
       if (corresp.size() > 0) {
-        bwm_world::instance()->set_world_pt(site->corresp_world_pts_[0].get_p());
+        if (site->corresp_world_pts_.size() > 0)
+          bwm_world::instance()->set_world_pt(site->corresp_world_pts_[0].get_p());
+        else
+          vcl_cerr << "There is something wrong, the more is W-to-I but there is no world point" << vcl_endl;
       }
       bwm_observer_mgr::instance()->set_corr_mode(bwm_observer_mgr::WORLD_TO_IMAGE);
     } else if (mode == "IMAGE_TO_IMAGE") {

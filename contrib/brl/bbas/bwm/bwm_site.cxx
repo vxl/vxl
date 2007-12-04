@@ -132,7 +132,7 @@ void bwm_site::x_write(vcl_ostream& s)
       corr.x_write_open(s);
 
      if (corr_mode_.compare("WORLD_TO_IMAGE") == 0) {
-      vsl_basic_xml_element xml_element(CORRESP_PT_TAG);
+      vsl_basic_xml_element xml_element(CORRESP_WORLD_PT_TAG);
       xml_element.add_attribute("X", corresp_world_pts_[i].x());
       xml_element.add_attribute("Y", corresp_world_pts_[i].y());
       xml_element.add_attribute("Z", corresp_world_pts_[i].z());
