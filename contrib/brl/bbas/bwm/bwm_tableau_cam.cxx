@@ -255,7 +255,7 @@ void bwm_tableau_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu
   del_menu.add( "Save Selected", new bwm_save_command(this));
   del_menu.separator();
   del_menu.add( "Save All", new bwm_save_all_command(this));
-  mesh_submenu.add("SAVE/DELETE", del_menu);
+  mesh_submenu.add("Save/Delete", del_menu);
   menu.add("3D OBJECTS", mesh_submenu);
 
   menu.separator();
@@ -287,9 +287,9 @@ void bwm_tableau_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu
   label_submenu.add( "Label Wall ", new bwm_label_wall_command(this));
   menu.add("Label", label_submenu);
 
-  menu.separator();
-  menu.add( "HELP..." , new bwm_cam_help_command(this),
-    vgui_key('h'),vgui_modifier(vgui_SHIFT));
+  //menu.separator();
+  /*menu.add( "HELP..." , new bwm_cam_help_command(this),
+    vgui_key('h'),vgui_modifier(vgui_SHIFT));*/
 #endif
 }
 

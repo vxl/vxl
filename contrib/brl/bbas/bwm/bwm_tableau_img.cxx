@@ -46,10 +46,6 @@ void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu
     vgui_modifier(vgui_SHIFT) );
 
   vgui_menu selmenu;
-  selmenu.add( "Deselect All",
-    new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::deselect_all),
-    vgui_key('-'));
-  selmenu.separator();
   selmenu.add( "Delete Selected",
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::clear_poly),
     vgui_key('d'), vgui_modifier(vgui_SHIFT));
@@ -57,12 +53,12 @@ void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu
   selmenu.add( "Empty the Box",
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::clear_box),
     vgui_key('b'), vgui_modifier(vgui_SHIFT));
-  
+  selmenu.separator();
   selmenu.add( "Delete All",
     new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::clear_all),
     vgui_key('a'), vgui_modifier(vgui_SHIFT));
   selmenu.separator();
-  submenu.add( "DESELECT/DELETE ", selmenu);
+  submenu.add( "Delete ", selmenu);
   menu.add( "2D OBJECTS", submenu);
   menu.separator();
 #if 0
@@ -107,6 +103,11 @@ void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu
     new vgui_command_simple<bwm_tableau_img>(this,
                                              &bwm_tableau_img::
                                              scroll_to_point));
+  menu.separator();
+  menu.add( "Deselect All Objects",
+    new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::deselect_all),
+    vgui_key('-'));
+  menu.separator();
 }
 
 

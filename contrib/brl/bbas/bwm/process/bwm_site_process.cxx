@@ -12,6 +12,7 @@
 #include <vpgl/vpgl_rational_camera.h>
 #include <vgui/vgui_dialog_extensions.h>
 #include <vgui/vgui_error_dialog.h>
+#include <vsol/vsol_point_2d.h>
 
 double bwm_site_process::version_num = 0;
 

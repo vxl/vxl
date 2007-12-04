@@ -420,9 +420,25 @@ void bwm_tableau_mgr::edit_site()
       vcl_pair<vcl_string, vcl_string> pair(objs[obj], object_types_[choices[obj]]);
       objects.push_back(pair);
     }
-   site->add(files, pyramid, active, levels, objects, new vsol_point_3d(lat, lon, elev));
-   site_create_process_->set_site(site);
-   site_create_process_->StartBackgroundTask();
+    
+  /*vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > corr = parser->correspondences();
+  for (unsigned i=0; i<corr.size(); i++) {
+    bwm_corr_sptr c = new bwm_corr();
+    if (parser->corresp_mode().compare("IMAGE_TO_IMAGE") == 0)
+      c->set_mode(true);
+    else {
+      c->set_mode(false);
+      c->set_world_point(parser->corresp_world_pts()[i]);
+    }
+  }
+   site->corresp_mode = parser->corresp_mode();
+   site->corr_type_ = parser->corresp_type();
+    // vcl_vector<vsol_point_3d> corresp_world_pts() {return corresp_world_pts_; }*/
+
+    
+    site->add(files, pyramid, active, levels, objects, new vsol_point_3d(lat, lon, elev));
+    site_create_process_->set_site(site);
+    site_create_process_->StartBackgroundTask();
   }
 }
 
@@ -488,14 +504,14 @@ void bwm_tableau_mgr::load_site()
 
     // create the correspondences
     vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > corresp;
-    corresp = parser->correspondences();
+    corresp = site->corresp_;
     if (corresp.size() > 0) {
-    vcl_string mode = parser->corresp_mode();
-    vcl_string type = parser->corresp_type();
+      vcl_string mode = site->corr_mode_;
+      vcl_string type = site->corr_type_;
 #if 0
     if (mode == "WORLD_TO_IMAGE") {
       // the vector of 3D points should be of equal size to correspondence point sets
-      assert (parser->corresp_world_pts().size() == corresp.size());
+     // assert (parser->corresp_world_pts().size() == corresp.size());
     }
 #endif // 0
 
@@ -508,7 +524,7 @@ void bwm_tableau_mgr::load_site()
 
     if (mode == "WORLD_TO_IMAGE") {
       if (corresp.size() > 0) {
-        bwm_world::instance()->set_world_pt(parser->corresp_world_pts()[0].get_p());
+        bwm_world::instance()->set_world_pt(site->corresp_world_pts_[0].get_p());
       }
       bwm_observer_mgr::instance()->set_corr_mode(bwm_observer_mgr::WORLD_TO_IMAGE);
     } else if (mode == "IMAGE_TO_IMAGE") {
@@ -522,7 +538,7 @@ void bwm_tableau_mgr::load_site()
 
       if (mode == "WORLD_TO_IMAGE") {
         corr->set_mode(false);
-        corr->set_world_pt(parser->corresp_world_pts()[i].get_p());
+        corr->set_world_pt(site->corresp_world_pts_[i].get_p());
         //sets the same pt each time FIXME -JLM
         //bwm_world::instance()->set_world_pt(corr->world_pt());
       } else if (mode == "IMAGE_TO_IMAGE") {
@@ -679,7 +695,6 @@ void bwm_tableau_mgr::save_site()
     site->corr_mode_ = "IMAGE_TO_IMAGE";
   else {
     site->corr_mode_ = "WORLD_TO_IMAGE";
-   // site->corresp_world_pts_.push_back(obs_mgr->corr_world_pts());
   }
 
   if (obs_mgr->n_corrs() == bwm_observer_mgr::MULTIPLE_CORRS)
@@ -687,7 +702,11 @@ void bwm_tableau_mgr::save_site()
   else
     site->corr_type_ = "SINGLE";
 
-  site->corresp_ = bwm_observer_mgr::instance()->correspondences();
+  vcl_vector<bwm_corr_sptr> c_list = bwm_observer_mgr::instance()->correspondences();
+  for (unsigned i=0; i<c_list.size(); i++){
+    site->corresp_.push_back(c_list[i]->match_list());
+    site->corresp_world_pts_.push_back(c_list[i]->world_pt());
+  }
 
   // add the objects
   // ask one camera tableau to save its objects

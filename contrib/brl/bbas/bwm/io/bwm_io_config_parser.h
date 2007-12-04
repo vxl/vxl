@@ -24,10 +24,10 @@ public:
 
   bwm_site_sptr site() { return site_; }
 
-  vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > correspondences() { return corresp_; }
+ /* vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > correspondences() { return corresp_; }
   vcl_string corresp_mode() {return corr_mode_; }
   vcl_string corresp_type() {return corr_type_; }
-  vcl_vector<vsol_point_3d> corresp_world_pts() {return corresp_world_pts_; }
+  vcl_vector<vsol_point_3d> corresp_world_pts() {return corresp_world_pts_; }*/
 
 private:
   virtual void startElement(const XML_Char* name, const XML_Char** atts);
@@ -58,12 +58,12 @@ private:
   double lat_, lon_, elev_;
 
   // correspondence related parameters
-  vcl_string corr_mode_;
-  vcl_string corr_type_;
+  //vcl_string corr_mode_;
+  //vcl_string corr_type_;
   vcl_string corr_cam_tab_;
   double X_, Y_, Z_;
-  vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > corresp_;
-  vcl_vector<vsol_point_3d> corresp_world_pts_;
+  /*vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > corresp_;
+  vcl_vector<vsol_point_3d> corresp_world_pts_;*/
   vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > corresp_elm_;
 
 

@@ -3,7 +3,9 @@
 // \file
 #include "bwm_corr.h"
 
+#include <vcl_utility.h>
 #include <vsl/vsl_basic_xml_element.h>
+#include <vsol/vsol_point_2d.h>
 
 //: destructor
 bwm_site::~bwm_site()
@@ -114,15 +116,47 @@ void bwm_site::x_write(vcl_ostream& s)
   // write out the correspondence list
   if (this->corresp_.size() > 0)
   {
-    vsl_basic_xml_element xml_element(CORRESP_TAG);
+    vsl_basic_xml_element xml_element(CORRESPONDENCES_TAG);
     xml_element.add_attribute("mode", corr_mode_);
     xml_element.add_attribute("type", corr_type_);
     xml_element.x_write_open(s);
 
+    if (corr_mode_.compare("WORLD_TO_IMAGE") == 0) 
+      assert(corresp_.size() == corresp_world_pts_.size());
+
     for (unsigned i=0; i< this->corresp_.size(); i++) {
-      bwm_corr_sptr corr = corresp_[i];
+      /*bwm_corr_sptr corr = corresp_[i];
       vcl_cout << corr->num_matches() << vcl_endl;
-      corr->x_write(s);
+      corr->x_write(s);*/
+      vsl_basic_xml_element corr(CORRESP_TAG);
+      corr.x_write_open(s);
+
+     if (corr_mode_.compare("WORLD_TO_IMAGE") == 0) {
+      vsl_basic_xml_element xml_element(CORRESP_PT_TAG);
+      xml_element.add_attribute("X", corresp_world_pts_[i].x());
+      xml_element.add_attribute("Y", corresp_world_pts_[i].y());
+      xml_element.add_attribute("Z", corresp_world_pts_[i].z());
+      xml_element.x_write(s);
+     }
+
+     vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > c_list = corresp_[i];
+    // int i=0;
+     for (unsigned c=0; c<c_list.size(); c++) {
+       vsl_basic_xml_element corr_elm(CORRESP_ELM_TAG);
+       corr_elm.x_write_open(s);
+
+       vcl_pair<vcl_string, vsol_point_2d> pair = c_list[c];
+       vsl_basic_xml_element corr_tab(CORR_CAMERA_TAG);
+       corr_tab.append_cdata(pair.first);
+       corr_tab.x_write(s);
+
+       vsl_basic_xml_element xml_element(CORRESP_PT_TAG);
+       xml_element.add_attribute("X", pair.second.x());
+       xml_element.add_attribute("Y", pair.second.y());
+       xml_element.x_write(s);
+       corr_elm.x_write_close(s);
+     }
+     corr.x_write_close(s);
     }
     xml_element.x_write_close(s);
   }

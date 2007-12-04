@@ -5,7 +5,7 @@
 #include <vgl/vgl_distance.h>
 #include <vcl_iostream.h>
 #include <vsl/vsl_basic_xml_element.h>
-
+#include <vsol/vsol_point_2d.h>
 
 bool bwm_corr::match(bwm_observer_cam* obs, vgl_point_2d<double> &pt)
 {
@@ -151,4 +151,19 @@ void bwm_corr::x_write(vcl_ostream &os)
      iter++;
    }
    corr.x_write_close(os);
+}
+
+vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > bwm_corr::match_list()
+{
+  vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > list;
+  vcl_map<bwm_observer_cam*, vgl_point_2d<double> >::iterator iter = matches_.begin();
+  int i=0;
+  while (iter != matches_.end()) {
+   vcl_pair<vcl_string, vsol_point_2d> pair;
+   pair.first = iter->first->tab_name();
+   pair.second = vsol_point_2d(iter->second.x(), iter->second.y());
+   list.push_back(pair);
+   iter++;
+ }
+  return list;
 }
