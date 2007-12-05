@@ -1,13 +1,20 @@
 #ifndef bwm_image_proc_h_
 #define bwm_image_proc_h_
 
-#include <bgui/bgui_image_tableau.h>
 #include <vcl_vector.h>
+
+#include <vgl/vgl_polygon.h>
+
+#include <bgui/bgui_image_tableau.h>
 #include <vgui/vgui_range_map_params_sptr.h>
+
 #include <vsol/vsol_box_2d_sptr.h>
 #include <vsol/vsol_line_2d_sptr.h>
+#include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_digital_curve_2d_sptr.h>
+
 #include <vdgl/vdgl_digital_curve_sptr.h>
+
 class bwm_image_processor {
 public:
   static void hist_plot(bgui_image_tableau_sptr img);
@@ -32,6 +39,8 @@ public:
   static bool lines_vd(bgui_image_tableau_sptr const& img,
                        vsol_box_2d_sptr const& roi,
                        vcl_vector<vsol_line_2d_sptr>& edges);
+
+  static vgl_polygon<double> scan_regions(vcl_vector<vsol_polygon_2d_sptr> polys);
 };
 
 #endif

@@ -12,6 +12,11 @@
 #include <brip/brip_roi.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 
+#include <vgl/algo/vgl_convex_hull_2d.h>
+
+#include <vsol/vsol_point_2d.h>
+#include <vsol/vsol_polygon_2d.h>
+
 void bwm_image_processor::hist_plot(bgui_image_tableau_sptr img)
 {
   if (!img)
@@ -237,4 +242,18 @@ bool bwm_image_processor::lines_vd(bgui_image_tableau_sptr const& img,
     }
   fl.get_line_segs(lines);
   return true;
+}
+
+vgl_polygon<double> bwm_image_processor::scan_regions(vcl_vector<vsol_polygon_2d_sptr> polys)
+{
+  vcl_vector< vgl_point_2d<double> > points;
+  for (unsigned i=0; i<polys.size(); i++) {
+    vsol_polygon_2d_sptr polygon = polys[i];
+    for (unsigned j=0; j<polygon->size(); j++) {
+      vsol_point_2d_sptr v = polygon->vertex(j);
+      points.push_back(v->get_p());
+    }
+  }
+  vgl_convex_hull_2d<double> convex_hull(points);
+  return (convex_hull.hull());
 }
