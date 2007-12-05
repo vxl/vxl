@@ -373,6 +373,9 @@ class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
   //: Set j-th column to v
   void set_column(unsigned j, vnl_vector<T> const& v);
 
+  //: Set j-th column to v
+  void set_column(unsigned j, vnl_vector_fixed<T,num_rows> const& v);
+
   //: Set columns to those in M, starting at starting_column
   void set_columns(unsigned starting_column, vnl_matrix<T> const& M);
 
@@ -385,16 +388,19 @@ class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
   //: Set the i-th row
   void set_row   (unsigned i, vnl_vector<T> const&);
 
+  //: Set the i-th row
+  void set_row   (unsigned i, vnl_vector_fixed<T,num_cols> const&);
+
   //: Extract a sub-matrix of size r x c, starting at (top,left)
   //  Thus it contains elements  [top,top+r-1][left,left+c-1]
   vnl_matrix<T> extract (unsigned r,  unsigned c,
                          unsigned top=0, unsigned left=0) const;
 
   //: Get a vector equal to the given row
-  vnl_vector<T> get_row   (unsigned row) const;
+  vnl_vector_fixed<T,num_cols> get_row   (unsigned row) const;
 
   //: Get a vector equal to the given column
-  vnl_vector<T> get_column(unsigned col) const;
+  vnl_vector_fixed<T,num_rows> get_column(unsigned col) const;
 
   //: Get n rows beginning at rowstart
   vnl_matrix<T> get_n_rows   (unsigned rowstart, unsigned n) const;

@@ -365,14 +365,14 @@ vnl_matrix_fixed<T,nrows,ncols>::get_n_columns (unsigned column, unsigned n) con
 
 //: Create a vector out of row[row_index].
 template<class T, unsigned nrows, unsigned ncols>
-vnl_vector<T> vnl_matrix_fixed<T,nrows,ncols>::get_row(unsigned row_index) const
+vnl_vector_fixed<T,ncols> vnl_matrix_fixed<T,nrows,ncols>::get_row(unsigned row_index) const
 {
 #ifdef ERROR_CHECKING
   if (row_index >= nrows)
     vnl_error_matrix_row_index ("get_row", row_index);
 #endif
 
-  vnl_vector<T> v(ncols);
+  vnl_vector_fixed<T,ncols> v;
   for (unsigned int j = 0; j < ncols; j++)    // For each element in row
     v[j] = this->data_[row_index][j];
   return v;
@@ -380,14 +380,14 @@ vnl_vector<T> vnl_matrix_fixed<T,nrows,ncols>::get_row(unsigned row_index) const
 
 //: Create a vector out of column[column_index].
 template<class T, unsigned nrows, unsigned ncols>
-vnl_vector<T> vnl_matrix_fixed<T,nrows,ncols>::get_column(unsigned column_index) const
+vnl_vector_fixed<T,nrows> vnl_matrix_fixed<T,nrows,ncols>::get_column(unsigned column_index) const
 {
 #ifdef ERROR_CHECKING
   if (column_index >= ncols)
     vnl_error_matrix_col_index ("get_column", column_index);
 #endif
 
-  vnl_vector<T> v(nrows);
+  vnl_vector_fixed<T,nrows> v;
   for (unsigned int j = 0; j < nrows; j++)
     v[j] = this->data_[j][column_index];
   return v;
@@ -406,6 +406,13 @@ vnl_matrix_fixed<T,nrows,ncols>::set_row(unsigned row_index, T const *v)
 template<class T, unsigned nrows, unsigned ncols>
 void
 vnl_matrix_fixed<T,nrows,ncols>::set_row(unsigned row_index, vnl_vector<T> const &v)
+{
+  set_row(row_index,v.data_block());
+}
+
+template<class T, unsigned nrows, unsigned ncols>
+void
+vnl_matrix_fixed<T,nrows,ncols>::set_row(unsigned row_index, vnl_vector_fixed<T,ncols> const &v)
 {
   set_row(row_index,v.data_block());
 }
@@ -431,6 +438,13 @@ vnl_matrix_fixed<T,nrows,ncols>::set_column(unsigned column_index, T const *v)
 template<class T, unsigned nrows, unsigned ncols>
 void
 vnl_matrix_fixed<T,nrows,ncols>::set_column(unsigned column_index, vnl_vector<T> const &v)
+{
+  set_column(column_index,v.data_block());
+}
+
+template<class T, unsigned nrows, unsigned ncols>
+void
+vnl_matrix_fixed<T,nrows,ncols>::set_column(unsigned column_index, vnl_vector_fixed<T,nrows> const &v)
 {
   set_column(column_index,v.data_block());
 }
