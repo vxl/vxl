@@ -5,6 +5,8 @@
 #include "bwm_observable_mesh.h"
 #include "algo/bwm_algo.h"
 #include "algo/bwm_plane_fitting_lsf.h"
+#include "algo/bwm_image_processor.h"
+
 #include "bwm_tableau_mgr.h"
 #include "bwm_world.h"
 
@@ -18,6 +20,8 @@
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_plane_3d.h>
+#include <vgl/vgl_polygon.h>
+#include <vgl/algo/vgl_convex_hull_2d.h>
 
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
@@ -996,4 +1000,45 @@ unsigned bwm_observer_cam::find_index_of_v(bwm_soview2D_vertex* vertex,
     }
   }
   return index;
+}
+
+void bwm_observer_cam::scan_regions()
+{
+  // get the selected objects
+  vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
+
+  for (unsigned s=0; s<select_list.size();s++) {
+    if (select_list[s]->type_name().compare("bgui_vsol_soview2D_polygon") == 0) {
+      bgui_vsol_soview2D_polygon* poly;
+      poly = static_cast<bgui_vsol_soview2D_polygon*> (select_list[s]);
+  
+      vcl_vector<vgl_polygon<double> > polygons;
+      unsigned face_id;
+      vgl_polygon<double> polygon;
+      bwm_observable_sptr obs = this->find_object(poly->get_id(), face_id);
+      if (obs) {
+        vcl_vector<bwm_soview2D_vertex*> vertices = object_verts_[obs];
+        if (obs->num_faces() == 1) {
+           for (unsigned i=0; i<vertices.size(); i++) {
+             float x, y;
+             vertices[i]->get_centroid(&x, &y);
+             polygon.push_back(x,y);
+           }
+        } else {
+          vcl_vector<vgl_point_2d<double> > points;
+          for (unsigned i=0; i<vertices.size(); i++) {
+             float x, y;
+             vertices[i]->get_centroid(&x, &y);
+             vgl_point_2d<double> p(x,y);
+             points.push_back(p);
+          }
+          vgl_convex_hull_2d<double> convex_hull(points);
+          polygon = convex_hull.hull();
+        }
+        polygons.push_back(polygon);
+      }
+       
+      bwm_image_processor::scan_regions(polygons);
+    }
+  }
 }

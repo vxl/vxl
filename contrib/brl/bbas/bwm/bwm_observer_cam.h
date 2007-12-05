@@ -121,6 +121,8 @@ class bwm_observer_cam : public bwm_observer_vgui
   void divide_face(bwm_observable_sptr obs, unsigned face_id,
     float x1, float y1, float x2, float y2);
 
+  void scan_regions();
+
   void load_mesh();
 
   void load_mesh_multiple();

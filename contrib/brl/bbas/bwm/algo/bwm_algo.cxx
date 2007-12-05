@@ -31,6 +31,20 @@ void bwm_algo::get_vertices_xy(vsol_polygon_2d_sptr poly2d,
 }
 
 //: returns the vertex (x,y) values of a 2D polygon in seperate x and y arrays 
+void bwm_algo::get_vertices_xy(vsol_polygon_2d_sptr poly2d, 
+                               double **x, double **y)
+{
+  int n = poly2d->size();
+  *x = (double*) malloc(sizeof(double) * n);
+  *y = (double*) malloc(sizeof(double) * n);
+  for (int i=0; i<n; i++) {
+    (*x)[i] = (double) poly2d->vertex(i)->x();
+    (*y)[i] = (double) poly2d->vertex(i)->y();
+   //vcl_cout << "X=" << poly2d->vertex(i)->x() << " Y=" << poly2d->vertex(i)->y() << vcl_endl;
+  }
+}
+
+//: returns the vertex (x,y) values of a 2D polygon in seperate x and y arrays 
 void bwm_algo::get_vertices_xy(vsol_polyline_2d_sptr poly2d, 
                                float **x, float **y)
 {

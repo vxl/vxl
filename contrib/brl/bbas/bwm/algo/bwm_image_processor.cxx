@@ -12,8 +12,6 @@
 #include <brip/brip_roi.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 
-#include <vgl/algo/vgl_convex_hull_2d.h>
-
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_polygon_2d.h>
 
@@ -246,15 +244,6 @@ bool bwm_image_processor::lines_vd(bgui_image_tableau_sptr const& img,
 
 vgl_polygon<double> bwm_image_processor::scan_regions(vcl_vector<vgl_polygon<double> > const& regions)
 {
-  vcl_vector< vgl_point_2d<double> > points;
-  for (unsigned i=0; i<regions.size(); i++) {
-    vgl_polygon<double> polygon = regions[i];
-    for (unsigned j=0; j<polygon.num_sheets(); j++) {
-      vcl_vector<vgl_point_2d<double> > sheet = polygon[j];
-      for (unsigned k=0; k<sheet.size(); k++) 
-        points.push_back(sheet[k]);
-    }
-  }
-  vgl_convex_hull_2d<double> convex_hull(points);
-  return (convex_hull.hull());
+  vgl_polygon<double> p;
+  return p;
 }

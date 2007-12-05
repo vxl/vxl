@@ -71,6 +71,15 @@ class bwm_divide_command : public vgui_command
   bwm_tableau_cam *tab;
 };
 
+class bwm_scan_regions_command : public vgui_command
+{
+ public:
+  bwm_scan_regions_command(bwm_tableau_cam* t) : tab(t) {}
+  void execute() { tab->scan_regions(); }
+
+  bwm_tableau_cam *tab;
+};
+
 class bwm_create_inner_face_command : public vgui_command
 {
  public:
@@ -245,6 +254,8 @@ void bwm_tableau_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu
     vgui_key('e'), vgui_modifier(vgui_SHIFT));
   mesh_submenu.separator();
   mesh_submenu.add( "Divide Face", new bwm_divide_command(this));
+  mesh_submenu.separator();
+  mesh_submenu.add("Scan Regions", new bwm_scan_regions_command(this));
   mesh_submenu.separator();
 
   vgui_menu del_menu;
@@ -524,6 +535,10 @@ void bwm_tableau_cam::save_all(vcl_string path)
   my_observer_->save();
 }
 
+void bwm_tableau_cam::scan_regions()
+{
+  my_observer_->scan_regions();
+}
 
 void bwm_tableau_cam::help_pop()
 {

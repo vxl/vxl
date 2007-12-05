@@ -24,6 +24,8 @@ class bwm_algo {
 public:
   static void get_vertices_xy(vsol_polygon_2d_sptr poly2d, float **x, float **y);
 
+  static void get_vertices_xy(vsol_polygon_2d_sptr poly2d, double **x, double **y);
+
   static void get_vertices_xy(vsol_polyline_2d_sptr poly2d, float **x, float **y);
 
   static void get_vertices_xyz(vsol_polygon_3d_sptr poly3d, double **x, double **y, double **z);
