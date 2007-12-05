@@ -226,10 +226,10 @@ vgl_homg_operators_3d<Type>::planes_to_line(const vgl_homg_plane_3d<Type>& plane
   M.set_row(0, get_vector(plane1));
   M.set_row(1, get_vector(plane2));
   vnl_svd<Type> svd(M.as_ref());
-  M = svd.nullspace(2);
-  vnl_vector_fixed<Type,4> r = M.get_column(0);
+  vnl_matrix<Type> ns = svd.nullspace(2);
+  vnl_vector_fixed<Type,4> r = ns.get_column(0);
   vgl_homg_point_3d<Type> p1(r[0], r[1], r[2], r[3]);
-  r = M.get_column(1);
+  r = ns.get_column(1);
   vgl_homg_point_3d<Type> p2(r[0], r[1], r[2], r[3]);
   return vgl_homg_line_3d(p1, p2);
 }
