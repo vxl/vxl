@@ -244,14 +244,15 @@ bool bwm_image_processor::lines_vd(bgui_image_tableau_sptr const& img,
   return true;
 }
 
-vgl_polygon<double> bwm_image_processor::scan_regions(vcl_vector<vsol_polygon_2d_sptr> polys)
+vgl_polygon<double> bwm_image_processor::scan_regions(vcl_vector<vgl_polygon<double> > const& regions)
 {
   vcl_vector< vgl_point_2d<double> > points;
-  for (unsigned i=0; i<polys.size(); i++) {
-    vsol_polygon_2d_sptr polygon = polys[i];
-    for (unsigned j=0; j<polygon->size(); j++) {
-      vsol_point_2d_sptr v = polygon->vertex(j);
-      points.push_back(v->get_p());
+  for (unsigned i=0; i<regions.size(); i++) {
+    vgl_polygon<double> polygon = regions[i];
+    for (unsigned j=0; j<polygon.num_sheets(); j++) {
+      vcl_vector<vgl_point_2d<double> > sheet = polygon[j];
+      for (unsigned k=0; k<sheet.size(); k++) 
+        points.push_back(sheet[k]);
     }
   }
   vgl_convex_hull_2d<double> convex_hull(points);

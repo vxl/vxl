@@ -40,7 +40,7 @@ public:
                        vsol_box_2d_sptr const& roi,
                        vcl_vector<vsol_line_2d_sptr>& edges);
 
-  static vgl_polygon<double> scan_regions(vcl_vector<vsol_polygon_2d_sptr> polys);
+  static vgl_polygon<double> scan_regions(vcl_vector<vgl_polygon<double> > const& regions);
 };
 
 #endif
