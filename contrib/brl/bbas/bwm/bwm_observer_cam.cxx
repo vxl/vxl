@@ -1075,3 +1075,13 @@ void bwm_observer_cam::make_object_selectable(bwm_observable_sptr obj, bool stat
     v->set_selectable(status);
   }
 }
+
+//: if true, makes all the objects selectable, otherwise unselectable
+void bwm_observer_cam::set_selection(bool status)
+{
+  vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D_polygon* > >::iterator it = objects_.begin();
+  while (it != objects_.end()) {
+    make_object_selectable(it->first, status);
+    it++;
+  }
+}

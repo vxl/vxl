@@ -348,11 +348,12 @@ void bwm_tableau_cam::move_obj_by_vertex()
     return;
   }
 
-  //my_observer_->set_obj_selectable(false);
+  my_observer_->set_selection(false);
   float x,y;
   set_color(1, 0, 0);
   pick_point(&x, &y);
   vsol_point_2d_sptr pt = new vsol_point_2d((double)x,(double)y);
+  my_observer_->set_selection(true);
   my_observer_->move_ground_plane(mt->get_proj_plane(), pt);
 }
 

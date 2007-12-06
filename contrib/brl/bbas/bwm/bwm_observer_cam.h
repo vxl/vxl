@@ -69,6 +69,9 @@ class bwm_observer_cam : public bwm_observer_vgui
 
   void set_ground_plane(double x1, double y1, double x2, double y2);
 
+  //: if true, makes all the objects selectable, otherwise unselectable
+  void set_selection(bool status);
+
   void backproj_point(vsol_point_2d_sptr p2d, vsol_point_3d_sptr& p3d);
 
   void backproj_point(vsol_point_2d_sptr p2d,
