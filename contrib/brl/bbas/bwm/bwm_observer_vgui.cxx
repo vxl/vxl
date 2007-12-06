@@ -25,6 +25,23 @@
 #include <bgui/bgui_image_tableau.h>
 #include <bgui/bgui_vsol_soview2D.h>
 
+bwm_observer_vgui::bwm_observer_vgui(bgui_image_tableau_sptr const& img)
+    : bwm_observer_img(img), moving_face_(0) 
+{
+  corr_.second = 0;
+  mesh_style_= vgui_style::new_style();
+  mesh_style_->rgba[0] = 1.0f; 
+  mesh_style_->rgba[1] = 0.6f; 
+  mesh_style_->rgba[2] = 0.0f; 
+  mesh_style_->line_width = 3.0;
+
+  vertex_style_ = vgui_style::new_style();
+  vertex_style_->rgba[0] = 0.0f; 
+  vertex_style_->rgba[1] = 1.0f; 
+  vertex_style_->rgba[2] = 0.0f; 
+  vertex_style_->line_width = 3.0;
+}
+
 bool bwm_observer_vgui::handle(const vgui_event& e)
 {
   // handle mouse clicks for correspondences
@@ -45,7 +62,7 @@ bool bwm_observer_vgui::handle(const vgui_event& e)
 
 void bwm_observer_vgui::add_cross(float x, float y, float r)
 {
-  this->set_foreground(1.0, 1.0, 0.0);
+ // this->set_foreground(1.0, 1.0, 0.0);
   //float wx, wy;
   //vgui_projection_inspector pi;
   //pi.image_to_window_coordinates(x, y, wx, wy);
@@ -77,9 +94,10 @@ void bwm_observer_vgui::add_new_obj(bwm_observable_sptr observable)
       vsol_polygon_3d_sptr obj = iter->second;
       vsol_polygon_2d_sptr poly_2d;
       proj_poly(obj, poly_2d);
+      poly_2d = shrink_face(poly_2d);
 
-      this->set_foreground(1,1,0);
-      bgui_vsol_soview2D_polygon* polygon = this->add_vsol_polygon_2d(poly_2d);
+      //this->set_foreground(mesh_style_->rgba[0], mesh_style_->rgba[1], mesh_style_->rgba[2]);
+      bgui_vsol_soview2D_polygon* polygon = this->add_vsol_polygon_2d(poly_2d, mesh_style_);
       poly_list[face_id] = polygon;
 
       proj_poly(obj, poly_2d);
@@ -91,6 +109,7 @@ void bwm_observer_vgui::add_new_obj(bwm_observable_sptr observable)
         vsol_polygon_3d_sptr poly = inner_iter->second;
         vsol_polygon_2d_sptr poly_2d;
         proj_poly(poly, poly_2d);
+        poly_2d = shrink_face(poly_2d);
         bgui_vsol_soview2D_polygon* polygon = this->add_vsol_polygon_2d(poly_2d);
         poly_list[face_id] = polygon;
         inner_iter++;
@@ -98,14 +117,15 @@ void bwm_observer_vgui::add_new_obj(bwm_observable_sptr observable)
       iter++;
     }
     // add the vertices of the mesh
-    this->set_foreground(0,1,0);
+    //this->set_foreground(0,1,0);
     vcl_vector<bwm_soview2D_vertex*> verts;
     for(unsigned i=0; i<vertices.size(); i++) {
       vsol_point_3d_sptr v = vertices[i];
       vgl_point_2d<double> v2d;
       proj_point(v->get_p(), v2d);
-      bwm_soview2D_vertex* sopt = new bwm_soview2D_vertex(v2d.x(), v2d.y(), 2.0f, 0, i);
+      bwm_soview2D_vertex* sopt = new bwm_soview2D_vertex(v2d.x(), v2d.y(), 1.0f, 0, i);
       this->add(sopt);
+      sopt->set_style(vertex_style_);
       verts.push_back(sopt);
     }
 
@@ -155,9 +175,11 @@ void bwm_observer_vgui::handle_update(vgui_message const& msg,
       vsol_polygon_3d_sptr obj = iter->second;
       vsol_polygon_2d_sptr poly_2d;
       proj_poly(obj, poly_2d);
-
-      this->set_foreground(1,1,0);
-      bgui_vsol_soview2D_polygon* polygon = this->add_vsol_polygon_2d(poly_2d);
+      poly_2d = shrink_face(poly_2d);
+      
+      //this->set_foreground(mesh_style_->rgba[0], mesh_style_->rgba[1], mesh_style_->rgba[2]);
+      bgui_vsol_soview2D_polygon* polygon = this->add_vsol_polygon_2d(poly_2d,mesh_style_);
+      //polygon->set_style(mesh_style_);
       poly_list[face_id] = polygon;
 
       proj_poly(obj, poly_2d);
@@ -169,6 +191,7 @@ void bwm_observer_vgui::handle_update(vgui_message const& msg,
         vsol_polygon_3d_sptr poly = inner_iter->second;
         vsol_polygon_2d_sptr poly_2d;
         proj_poly(poly, poly_2d);
+        poly_2d = shrink_face(poly_2d);
         bgui_vsol_soview2D_polygon* polygon = this->add_vsol_polygon_2d(poly_2d);
         poly_list[face_id] = polygon;
         inner_iter++;
@@ -176,16 +199,17 @@ void bwm_observer_vgui::handle_update(vgui_message const& msg,
       iter++;
     }
     // add the vertices of the mesh
-    this->set_foreground(0,1,0);
+    //this->set_foreground(0,1,0);
     
     for(unsigned i=0; i<vertices.size(); i++) {
       vsol_point_3d_sptr v = vertices[i];
       vgl_point_2d<double> v2d;
       proj_point(v->get_p(), v2d);
-      // right now it is always adding thr first face, er only need it while moving the face, 
-      // FIX for the secon phase -- Gamze
-      bwm_soview2D_vertex* sopt = new bwm_soview2D_vertex(v2d.x(), v2d.y(), 2.0f, poly_list[0], i);
+      // right now it is always adding the first face, er only need it while moving the face, 
+      // FIX for the second phase -- Gamze
+      bwm_soview2D_vertex* sopt = new bwm_soview2D_vertex(v2d.x(), v2d.y(), 1.0f, poly_list[0], i);
       this->add(sopt);
+      sopt->set_style(vertex_style_);
       poly_verts.push_back(sopt);
     }
 
@@ -512,24 +536,20 @@ void bwm_observer_vgui::label_wall()
   obs->label_wall(face_id);
 }
 
-#if 0 // commented out
-void bwm_observer_vgui::hist_plot()
+//: makes the polygon a little smaller to prevent the face edges overlapping
+vsol_polygon_2d_sptr bwm_observer_vgui::shrink_face(vsol_polygon_2d_sptr poly)
 {
-  bwm_image_processor::hist_plot(img_);
+  double ratio = 0.98;
+  vcl_vector<vsol_point_2d_sptr> new_points;
+  vgl_point_2d<double> center = poly->centroid()->get_p();
+  for (unsigned i=0; i<poly->size(); i++) {
+    vsol_point_2d_sptr p = poly->vertex(i);
+    vgl_point_2d<double> old_v = p->get_p();
+    double x = old_v.x();
+    double y = old_v.y();
+    vgl_point_2d<double> new_v((x - center.x())*ratio+center.x(), (y - center.y())*ratio+center.y());
+    new_points.push_back(new vsol_point_2d(new_v));
+  }
+  vsol_polygon_2d_sptr new_polygon = new vsol_polygon_2d(new_points);
+  return new_polygon;
 }
-#endif // 0
-
-#if 0 // commented out
-void bwm_observer_vgui::intensity_profile(float start_col, float start_row,
-                                          float end_col, float end_row)
-{
-  bwm_image_processor::intensity_profile(img_, start_col, start_row, end_col, end_row);
-}
-#endif // 0
-
-#if 0 // commented out
-void bwm_observer_vgui::range_map()
-{
-  bwm_image_processor::range_map(img_);
-}
-#endif // 0
