@@ -35,6 +35,8 @@ bool bwm_observer_cam::handle(const vgui_event &e)
 {
   // handle movements for meshes
   vgui_projection_inspector pi;
+  float x, y;
+  pi.window_to_image_coordinates(e.wx, e.wy, x, y);
   if (e.type == vgui_BUTTON_DOWN && e.button == vgui_MIDDLE && 
     e.modifier == vgui_SHIFT) {
     // first get the selected polygon
@@ -49,7 +51,8 @@ bool bwm_observer_cam::handle(const vgui_event &e)
              if (obj->num_faces() == 1) {
                moving_p_ = (bgui_vsol_soview2D*) select_list[0];
                moving_face_ = obj;
-               pi.window_to_image_coordinates(e.wx, e.wy, start_x_, start_y_);
+               start_x_ = x;
+               start_y_ = y;
                moving_polygon_ = true;
                moving_vertex_ = false;
              } 
@@ -58,7 +61,8 @@ bool bwm_observer_cam::handle(const vgui_event &e)
            }
         }
         else if (select_list[0]->type_name().compare("bwm_soview2D_vertex") == 0) {
-          pi.window_to_image_coordinates(e.wx, e.wy, start_x_, start_y_);
+          start_x_ = x;
+          start_y_ = y;
           bwm_soview2D_vertex* v = (bwm_soview2D_vertex*) select_list[0];
           bgui_vsol_soview2D* poly = v->obj();
           unsigned face_id;
@@ -79,8 +83,6 @@ bool bwm_observer_cam::handle(const vgui_event &e)
     }
   } else if (e.type == vgui_MOTION && e.button == vgui_MIDDLE && 
       e.modifier == vgui_SHIFT && !moving_vertex_ && moving_face_) {
-        float x, y;
-        pi.window_to_image_coordinates(e.wx, e.wy, x, y);
         float x_diff = x-start_x_;
         float y_diff = y-start_y_;
         moving_p_->translate(x_diff, y_diff);
@@ -91,57 +93,70 @@ bool bwm_observer_cam::handle(const vgui_event &e)
           bwm_soview2D_vertex* v = vertices[i];
           v->translate(x_diff, y_diff);
         }
-        // move it in 3d
-        if (moving_p_->type_name().compare("bgui_vsol_soview2D_polygon") == 0) {
-          bgui_vsol_soview2D_polygon* polygon = (bgui_vsol_soview2D_polygon*) moving_p_;
-          vsol_polygon_2d_sptr poly2d = polygon->sptr();
-          vsol_polygon_3d_sptr poly3d;
-          this->backproj_poly(poly2d, poly3d);
-          moving_face_->set_object(poly3d);
-        }
 
         start_x_ = x;
         start_y_ = y;
         post_redraw();
         return true;
   }
-
+  else if (e.type == vgui_MOTION && e.button == vgui_MIDDLE &&
+         e.modifier == vgui_SHIFT && moving_vertex_ && moving_face_) {
+    float x_diff = x-start_x_;
+    float y_diff = y-start_y_;
+    // find the polygon including this vertex
+    if (moving_p_->type_name().compare(POLYGON_TYPE) == 0) {
+      bgui_vsol_soview2D_polygon* polygon = (bgui_vsol_soview2D_polygon*) moving_p_;
+      unsigned i = find_index_of_v(moving_v_, (bgui_vsol_soview2D_polygon*)moving_p_);
+      if (i == -1)
+        return true;
+      moving_v_->translate(x_diff, y_diff);
+      polygon->sptr()->vertex(i)->set_x(polygon->sptr()->vertex(i)->x() + x_diff );
+      polygon->sptr()->vertex(i)->set_y(polygon->sptr()->vertex(i)->y() + y_diff );
+    } else {
+      vcl_cerr << moving_p_->type_name() << " is NOT movable!!!!\n";
+    }
+    
+    start_x_ = x;
+    start_y_ = y;
+    post_redraw();
+    return true;
+  }
   else if (e.type == vgui_BUTTON_UP && e.button == vgui_MIDDLE && 
     e.modifier == vgui_SHIFT && moving_face_) {
+    if (moving_p_->type_name().compare("bgui_vsol_soview2D_polygon") == 0) {
+      bgui_vsol_soview2D_polygon* polygon = (bgui_vsol_soview2D_polygon*) moving_p_;
+      vsol_polygon_2d_sptr poly2d = polygon->sptr();
+      vsol_polygon_3d_sptr poly3d;
+      this->backproj_poly(poly2d, poly3d);
+      moving_face_->set_object(poly3d);
+    }
     this->deselect_all();
     moving_face_ = 0;
     moving_vertex_ = false;
     moving_polygon_ = false;
     return true;
-  }
+  } else if (e.type == vgui_BUTTON_UP && e.button == vgui_MIDDLE && 
+    e.modifier == vgui_SHIFT && moving_vertex_) {
 
-  else if (e.type == vgui_MOTION && e.button == vgui_MIDDLE &&
-         e.modifier == vgui_SHIFT && moving_vertex_ && moving_face_) {
-    float x, y;
-    pi.window_to_image_coordinates(e.wx, e.wy, x, y);
-    float x_diff = x-start_x_;
-    float y_diff = y-start_y_;
-    // find the polygon including this vertex
     unsigned i = find_index_of_v(moving_v_, (bgui_vsol_soview2D_polygon*)moving_p_);
     if (i == -1)
       return true;
-    moving_v_->translate(x_diff, y_diff);
     if (moving_p_->type_name().compare(POLYGON_TYPE) == 0) {
       bgui_vsol_soview2D_polygon* polygon = (bgui_vsol_soview2D_polygon*) moving_p_;
-      polygon->sptr()->vertex(i)->set_x( polygon->sptr()->vertex(i)->x() + x_diff );
-      polygon->sptr()->vertex(i)->set_y( polygon->sptr()->vertex(i)->y() + y_diff );
-      // translate the 3D vertex too
+      bwm_soview2D_vertex* vertex;
+      float x, y;
+      vertex->get_centroid(&x,&y);
+      polygon->sptr()->vertex(i)->set_x(x);
+      polygon->sptr()->vertex(i)->set_y(y);
       vsol_polygon_2d_sptr poly2d = polygon->sptr();
       vsol_polygon_3d_sptr poly3d;
       this->backproj_poly(poly2d, poly3d);
       moving_face_->set_object(poly3d);
-    } else {
-      vcl_cerr << moving_p_->type_name() << " is NOT movable!!!!\n";
     }
-
-    start_x_ = x;
-    start_y_ = y;
-    post_redraw();
+    this->deselect_all();
+    moving_face_ = 0;
+    moving_vertex_ = false;
+    moving_polygon_ = false;
     return true;
   }
   return base::handle(e); 
