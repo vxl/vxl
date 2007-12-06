@@ -28,6 +28,12 @@ class mcal_general_ca : public mcal_component_analyzer
   //: Object to evaluate component of cost associated with each basis vector
   mbl_cloneable_ptr<mcal_single_basis_cost> basis_cost_;
 
+  //: Maximum number of passes during optimisation
+  unsigned max_passes_;
+
+  //: Threshold on angular movement, used to terminate optimisation
+  double move_thresh_;
+
   //: Optimise the mode vectors so as to minimise the cost function
   double optimise_mode_pair(vnl_vector<double>& proj1,
                                 vnl_vector<double>& proj2,
@@ -51,6 +57,8 @@ class mcal_general_ca : public mcal_component_analyzer
                            vnl_matrix<double>& modes,
                            vcl_vector<vnl_vector<double> >& proj);
 
+  //: Set parameters to default values
+  void set_defaults();
  public:
 
     //: Dflt ctor
@@ -58,6 +66,10 @@ class mcal_general_ca : public mcal_component_analyzer
 
     //: Destructor
   virtual ~mcal_general_ca();
+
+   //: Initialise, taking clones of supplied objects
+  void set(const mcal_component_analyzer& initial_ca,
+           const mcal_single_basis_cost& basis_cost);
 
   //: Object to perform initial component analysis (usually PCA)
   mcal_component_analyzer& initial_ca() { return initial_ca_; }
@@ -95,11 +107,10 @@ class mcal_general_ca : public mcal_component_analyzer
   // Parameters:
   // \verbatim
   // {
-  //   min_modes: 0 max_modes: 99 var_prop: 0.99
-  //   // Maximum number of doubles to store in memory at once
-  //   max_d_in_memory: 1e8
-  //   // Indicate how to build from large amounts of data
-  //   use_chunks: false
+  //   initial_ca: mcal_pca { ... }
+  //   basis_cost: mcal_sparse_basis_cost { alpha: 0.1 }
+  //   max_passes: 50
+  //   move_thresh: 0.0001
   // }
   // \endverbatim
   // \throw mbl_exception_parse_error if the parse fails.

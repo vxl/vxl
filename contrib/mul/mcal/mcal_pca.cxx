@@ -541,32 +541,32 @@ void mcal_pca::config_from_stream(vcl_istream & is)
   {
     int m_min =0,m_max=999;
     double m_props=0.05;
-    if (!props["min_modes"].empty())
+    if (props.find("min_modes")!=props.end())
     {
       m_min=vul_string_atoi(props["min_modes"]);
+      props.erase("min_modes");
     }
-    props.erase("min_modes");
 
-    if (!props["max_modes"].empty())
+    if (props.find("max_modes")!=props.end())
     {
       m_max=vul_string_atoi(props["max_modes"]);
+      props.erase("max_modes");
     }
-    props.erase("max_modes");
 
-    if (!props["var_prop"].empty())
+    if (props.find("var_prop")!=props.end())
     {
       m_props=vul_string_atof(props["var_prop"]);
+      props.erase("var_prop");
     }
-    props.erase("var_prop");
 
     set_mode_choice(m_min,m_max,m_props);
   }
 
-  if (!props["max_d_in_memory"].empty())
+  if (props.find("max_d_in_memory")!=props.end())
   {
     max_d_in_memory_=vul_string_atof(props["max_d_in_memory"]);
+    props.erase("max_d_in_memory");
   }
-  props.erase("max_d_in_memory");
 
 
   {

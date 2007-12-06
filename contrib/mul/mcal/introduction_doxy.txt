@@ -5,4 +5,11 @@
 *
 * For instance, mcal_pca performs Principle Component Analysis
 *
+* The mcal_general_ca generates a set of orthogonal axes so as to
+* minimise some cost function based on the axes and the projection
+* onto them, encoded in classes derived from mcal_single_basis_cost.
+*
+* One can perform a version of Sparse PCA by plugging a
+* mcal_sparse_basis_cost object into the mcal_general_ca.
+*
 */
