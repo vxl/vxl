@@ -143,7 +143,7 @@ bool bwm_observer_cam::handle(const vgui_event &e)
       return true;
     if (moving_p_->type_name().compare(POLYGON_TYPE) == 0) {
       bgui_vsol_soview2D_polygon* polygon = (bgui_vsol_soview2D_polygon*) moving_p_;
-      bwm_soview2D_vertex* vertex;
+      bwm_soview2D_vertex* vertex = moving_v_;
       float x, y;
       vertex->get_centroid(&x,&y);
       polygon->sptr()->vertex(i)->set_x(x);

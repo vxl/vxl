@@ -118,7 +118,6 @@ void bwm_site_process::RunBackgroundTask()
   }
   site_->remove_.clear();
 
-
   // create the new site items
   for (unsigned i=0; i<files.size(); i++) {
     vcl_string img = files[i];

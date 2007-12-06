@@ -15,6 +15,7 @@
 #include <vbl/vbl_ref_count.h>
 
 #include <vsol/vsol_point_3d.h>
+#include <vpgl/vpgl_rational_camera.h>
 
 class bwm_site : public vbl_ref_count
 {

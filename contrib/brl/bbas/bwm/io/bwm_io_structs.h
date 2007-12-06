@@ -46,7 +46,7 @@ struct bwm_io_tab_config_img : public bwm_io_tab_config {
   
 struct bwm_io_tab_config_cam : public bwm_io_tab_config {
   bwm_io_tab_config_cam(vcl_string type, vcl_string name, bool status, 
-    vcl_string i_path, vcl_string c_path, vcl_string c_type) 
+    vcl_string i_path, vcl_string c_path, vcl_string c_type, bool adj=false) 
     : bwm_io_tab_config(type, name, status), img_path(i_path), 
     cam_path(c_path), cam_type(c_type) {}
   vcl_string img_path;

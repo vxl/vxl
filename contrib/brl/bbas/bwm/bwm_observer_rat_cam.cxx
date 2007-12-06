@@ -155,6 +155,7 @@ bool bwm_observer_rat_cam::shift_camera(double dx, double dy)
   vpgl_rational_camera<double>* rat_cam = static_cast<vpgl_rational_camera<double> *> (camera_);
   rat_cam->image_offset(u_off,v_off);
   rat_cam->set_image_offset(u_off + dx, v_off + dy);
+  cam_adjusted_ = true;
 
 #if 0 // take this to the camera tableau
   vcl_map<bwm_observable_sptr, vcl_vector<bgui_vsol_soview2D_polygon* > >::iterator objit;
