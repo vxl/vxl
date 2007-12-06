@@ -468,6 +468,12 @@ void bwm_observer_mgr::adjust_camera_offsets()
     obsrc->update_all();
   }
 
+  //send the objects in the world the fact that they need to redisplay
+  vcl_vector<bwm_observable_sptr> objs = bwm_world::instance()->objects();
+  for(vcl_vector<bwm_observable_sptr>::iterator oit = objs.begin();
+      oit != objs.end(); ++oit)
+    (*oit)->send_update();
+
   //
   // now that the 3-d intersection is available, the correspondence mode
   // should be changed to "world_to_image." The mode should only be

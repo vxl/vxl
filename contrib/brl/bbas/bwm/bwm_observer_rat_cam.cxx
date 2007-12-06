@@ -1037,6 +1037,13 @@ void bwm_observer_rat_cam::adjust_camera_to_world_pt()
            << tx << ' ' << ty << "):\n point_3d("
            << pt_3d.x() << ' ' << pt_3d.y()
            << ' ' << pt_3d.z() << ")\n";
+
+  //send the objects in the world the fact that they need to redisplay
+  vcl_vector<bwm_observable_sptr> objs = bwm_world::instance()->objects();
+  for(vcl_vector<bwm_observable_sptr>::iterator oit = objs.begin();
+      oit != objs.end(); ++oit)
+    (*oit)->send_update();
+  this->post_redraw();
 }
 
 // Just a temporary experiment to understand how edges behave across image
