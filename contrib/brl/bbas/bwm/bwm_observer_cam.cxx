@@ -185,7 +185,6 @@ void bwm_observer_cam::move_ground_plane( vgl_homg_plane_3d<double> master_plane
   // first get the selected vertex
   vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
 
-  //vcl_cerr << "select_list.size == "<<select_list.size() << "  type_name == " << select_list[0]->type_name() << vcl_endl;
   if ((select_list.size() == 1) &&
     (select_list[0]->type_name().compare("bwm_soview2D_vertex") == 0)) {
     bwm_soview2D_vertex* circle = static_cast<bwm_soview2D_vertex*> (select_list[0]);
@@ -194,6 +193,7 @@ void bwm_observer_cam::move_ground_plane( vgl_homg_plane_3d<double> master_plane
     unsigned int face_id;
     bwm_observable_sptr obs = find_object(circle->get_id(), face_id);
 
+    make_object_selectable(obs, false);
     float x, y;
     circle->get_centroid(&x, &y);
     vsol_point_2d_sptr old_pt = new vsol_point_2d(x,y);
@@ -1040,5 +1040,23 @@ void bwm_observer_cam::scan_regions()
        
       bwm_image_processor::scan_regions(polygons);
     }
+  }
+}
+
+void bwm_observer_cam::make_object_selectable(bwm_observable_sptr obj, bool status)
+{
+  // find the soview objects belong to this object
+  vcl_map<unsigned, bgui_vsol_soview2D_polygon* > faces = objects_[obj];
+  vcl_vector<bwm_soview2D_vertex* > vertices = object_verts_[obj];
+
+  vcl_map<unsigned, bgui_vsol_soview2D_polygon* >::iterator it = faces.begin();
+  while (it != faces.end()) {
+    it->second->set_selectable(status);
+    it++;
+  }
+
+  for (unsigned i=0; i<vertices.size(); i++) {
+    bwm_soview2D_vertex* v = vertices[i];
+    v->set_selectable(status);
   }
 }

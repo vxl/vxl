@@ -72,6 +72,52 @@ bwm_tableau_mgr::bwm_tableau_mgr()
   object_types_[VSOL] = BWM_OBJ_VSOL_STR;
 }
 
+void bwm_tableau_mgr::init_env()
+{
+  if (tableaus_.size() == 0)
+    return;
+
+  grid_->set_frames_selectable(true);
+  grid_->set_unique_selected(true);
+  grid_->set_grid_size_changeable(true);
+  display_image_path_ = false;
+  row_added_ = false;
+
+  // delete the active tableaus
+  tableaus_.clear();
+
+  // delete the inactive tableaus
+  for (unsigned i=0; i<inactive_tableaus_.size(); i++)
+    delete inactive_tableaus_[i];
+  inactive_tableaus_.clear();
+
+  // clear the objects
+  site_objs_.clear();
+
+  if (site_create_process_) {
+    delete (site_create_process_);
+    this->site_create_process_ = new bwm_site_process();
+  }
+    
+  site_name_="";
+  site_dir_="";
+  pyr_exe_="";
+  
+  bwm_observer_mgr::instance()->clear();
+  bwm_world::instance()->clear();
+
+  timer_.mark();
+
+  int rows = grid_->rows();
+  int cols = grid_->cols();
+  for (unsigned row=0; row<rows; row++)
+    grid_->remove_row();
+  for (unsigned col=0; col<cols; col++)
+    grid_->remove_column();
+ 
+  grid_->remove_at(0,0);
+}
+
 bwm_tableau_mgr::~bwm_tableau_mgr()
 {
   delete site_create_process_;
@@ -445,10 +491,12 @@ void bwm_tableau_mgr::edit_site()
 
 void bwm_tableau_mgr::load_site()
 {
+  init_env();
   bwm_io_config_parser* parser = parse_config();
 
   if (parser)
   {
+   
     bwm_site_sptr site = parser->site();
     vcl_vector<bwm_io_tab_config* > tableaus;
     site->tableaus(tableaus);
@@ -604,6 +652,7 @@ void bwm_tableau_mgr::load_site()
       }
     }
     delete parser;
+    grid_->post_redraw();
   }
 }
 

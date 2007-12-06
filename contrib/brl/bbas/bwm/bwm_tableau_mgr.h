@@ -71,6 +71,9 @@ class bwm_tableau_mgr
 
   bwm_tableau_mgr();
 
+  //: initialize the environment to load a new site
+  void init_env();
+
   static bwm_tableau_mgr* instance_;
 
   //: Tableaux are mapped to their names

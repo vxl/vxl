@@ -164,7 +164,7 @@ public:
     menu_ = menu; 
     menu.add("Start Correspondences", new bwm_start_corr_command());
     menu.add("Correspondence Mode", new bwm_corr_mode_command());
-    menu.add("Record Correspondences", new bwm_rec_corr_command());
+    menu.add("Record Correspondence", new bwm_rec_corr_command());
     menu.add("Save Correspondences", new bwm_save_corr_command());
     menu.add("Delete Last Correspondence", new bwm_del_last_corr_command());
     menu.add("Delete All Correspondences", new bwm_del_corr_command());

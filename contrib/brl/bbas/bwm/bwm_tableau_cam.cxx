@@ -348,6 +348,7 @@ void bwm_tableau_cam::move_obj_by_vertex()
     return;
   }
 
+  //my_observer_->set_obj_selectable(false);
   float x,y;
   set_color(1, 0, 0);
   pick_point(&x, &y);

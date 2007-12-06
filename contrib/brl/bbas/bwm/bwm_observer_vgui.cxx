@@ -94,7 +94,8 @@ void bwm_observer_vgui::add_new_obj(bwm_observable_sptr observable)
       vsol_polygon_3d_sptr obj = iter->second;
       vsol_polygon_2d_sptr poly_2d;
       proj_poly(obj, poly_2d);
-      poly_2d = shrink_face(poly_2d);
+      if (faces.size() > 1)
+        poly_2d = shrink_face(poly_2d);
 
       //this->set_foreground(mesh_style_->rgba[0], mesh_style_->rgba[1], mesh_style_->rgba[2]);
       bgui_vsol_soview2D_polygon* polygon = this->add_vsol_polygon_2d(poly_2d, mesh_style_);
@@ -109,7 +110,9 @@ void bwm_observer_vgui::add_new_obj(bwm_observable_sptr observable)
         vsol_polygon_3d_sptr poly = inner_iter->second;
         vsol_polygon_2d_sptr poly_2d;
         proj_poly(poly, poly_2d);
-        poly_2d = shrink_face(poly_2d);
+
+        if (faces.size() > 1)
+          poly_2d = shrink_face(poly_2d);
         bgui_vsol_soview2D_polygon* polygon = this->add_vsol_polygon_2d(poly_2d);
         poly_list[face_id] = polygon;
         inner_iter++;
@@ -539,7 +542,7 @@ void bwm_observer_vgui::label_wall()
 //: makes the polygon a little smaller to prevent the face edges overlapping
 vsol_polygon_2d_sptr bwm_observer_vgui::shrink_face(vsol_polygon_2d_sptr poly)
 {
-  double ratio = 0.98;
+  double ratio = 0.95;
   vcl_vector<vsol_point_2d_sptr> new_points;
   vgl_point_2d<double> center = poly->centroid()->get_p();
   for (unsigned i=0; i<poly->size(); i++) {

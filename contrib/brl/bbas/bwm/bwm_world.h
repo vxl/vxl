@@ -60,6 +60,9 @@ class bwm_world
   void save_kml_collada();
   void save_x3d();
 
+  // cleans up the world of objects
+  void clear();
+
  protected:
   //: default constructor - not accessible since world is a singleton
   bwm_world(): world_pt_valid_(false), lvcs_valid_(false) {}

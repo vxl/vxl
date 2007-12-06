@@ -20,6 +20,14 @@ bwm_observer_mgr* bwm_observer_mgr::instance()
   return bwm_observer_mgr::instance_;
 }
 
+void bwm_observer_mgr::clear()
+{
+  corr_mode_ = IMAGE_TO_IMAGE;
+  n_corrs_ = SINGLE_PT_CORR;
+  start_corr_ = false;
+  corr_list_.clear();
+}
+
 vcl_vector<bwm_observer_rat_cam*> bwm_observer_mgr::observers_rat_cam()
 {
   vcl_vector<bwm_observer_rat_cam*> v;
@@ -431,7 +439,7 @@ void bwm_observer_mgr::adjust_camera_offsets()
   }
   if (cpoints.size()!=rcams.size())
   {
-    vcl_cerr << "In bwm_observer_rat_cam::adjust_image_offsets - "
+    vcl_cerr << "In bwm_observer_mgr::adjust_image_offsets - "
              << " inconsistent number of points and cameras\n";
     return;
   }

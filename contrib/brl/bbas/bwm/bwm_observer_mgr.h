@@ -25,6 +25,9 @@ class bwm_observer_mgr
 
   static bwm_observer_cam* BWM_MASTER_OBSERVER;
 
+  //: cleans up the correspondences and initializes the system for a new site
+  void clear();
+
   vcl_vector<bwm_observer_rat_cam*> observers_rat_cam();
 
   void add(bwm_observer* o);
