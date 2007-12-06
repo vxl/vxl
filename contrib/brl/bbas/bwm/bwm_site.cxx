@@ -12,7 +12,8 @@ bwm_site::~bwm_site()
 {
   // delete the tableau structures
   for (unsigned i=0; i<tableaus_.size(); i++) {
-    delete tableaus_[i];
+    if (tableaus_[i])
+      delete tableaus_[i];
   }
 }
 

@@ -40,7 +40,6 @@ bool bwm_observer_cam::handle(const vgui_event &e)
   if (e.type == vgui_BUTTON_DOWN && e.button == vgui_MIDDLE && 
     e.modifier == vgui_SHIFT) {
     // first get the selected polygon
-
     vcl_vector<vgui_soview*> select_list = this->get_selected_soviews(); 
     if (select_list.size() == 1) {
         if (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0) {
@@ -121,8 +120,7 @@ bool bwm_observer_cam::handle(const vgui_event &e)
     post_redraw();
     return true;
   }
-  else if (e.type == vgui_BUTTON_UP && e.button == vgui_MIDDLE && 
-    e.modifier == vgui_SHIFT && moving_face_) {
+  else if (e.type == vgui_BUTTON_UP && e.button == vgui_MIDDLE && !moving_vertex_ && moving_face_) {
     if (moving_p_->type_name().compare("bgui_vsol_soview2D_polygon") == 0) {
       bgui_vsol_soview2D_polygon* polygon = (bgui_vsol_soview2D_polygon*) moving_p_;
       vsol_polygon_2d_sptr poly2d = polygon->sptr();
@@ -135,9 +133,7 @@ bool bwm_observer_cam::handle(const vgui_event &e)
     moving_vertex_ = false;
     moving_polygon_ = false;
     return true;
-  } else if (e.type == vgui_BUTTON_UP && e.button == vgui_MIDDLE && 
-    e.modifier == vgui_SHIFT && moving_vertex_) {
-
+  } else if (e.type == vgui_BUTTON_UP && e.button == vgui_MIDDLE &&  moving_vertex_ && moving_face_) {
     unsigned i = find_index_of_v(moving_v_, (bgui_vsol_soview2D_polygon*)moving_p_);
     if (i == -1)
       return true;
