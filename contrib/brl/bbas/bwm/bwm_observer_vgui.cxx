@@ -30,8 +30,8 @@ bwm_observer_vgui::bwm_observer_vgui(bgui_image_tableau_sptr const& img)
 {
   corr_.second = 0;
   mesh_style_= vgui_style::new_style();
-  mesh_style_->rgba[0] = 1.0f; 
-  mesh_style_->rgba[1] = 0.6f; 
+  mesh_style_->rgba[0] = 0.75f; 
+  mesh_style_->rgba[1] = 0.75f; 
   mesh_style_->rgba[2] = 0.0f; 
   mesh_style_->line_width = 3.0;
 
