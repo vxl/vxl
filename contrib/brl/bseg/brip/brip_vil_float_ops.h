@@ -330,6 +330,11 @@ class brip_vil_float_ops
   static float average_in_box(vil_image_view<float> const& v,
                               vgl_box_2d<double> const& box);
 
+  //: scan a polygon and return the pixel values as well as max min
+  static vcl_vector<float> scan_region(vil_image_resource_sptr img,
+                                       vgl_polygon<double> poly,
+                                       float& min,
+                                       float& max);
   //: cross-correlate two images at a given sub-pixel location
   static float cross_correlate(vil_image_view<float> const& image1,
                                vil_image_view<float> const& image2,
