@@ -44,6 +44,7 @@ IF(NETLIB_FOUND)
     test_sparse_lu.cxx
     test_bracket_minimum.cxx
     test_brent_minimizer.cxx
+    test_sparse_lm.cxx
   )
 
   TARGET_LINK_LIBRARIES( vnl_algo_test_all vnl_algo vul testlib ${CMAKE_THREAD_LIBS} )
@@ -77,6 +78,7 @@ IF(NETLIB_FOUND)
   ADD_TEST( vnl_test_sparse_lu                ${EXECUTABLE_OUTPUT_PATH}/vnl_algo_test_all test_sparse_lu               )
   ADD_TEST( vnl_test_bracket_minimum          ${EXECUTABLE_OUTPUT_PATH}/vnl_algo_test_all test_bracket_minimum         )
   ADD_TEST( vnl_test_brent_minimizer          ${EXECUTABLE_OUTPUT_PATH}/vnl_algo_test_all test_brent_minimizer         )
+  ADD_TEST( vnl_test_sparse_lm                ${EXECUTABLE_OUTPUT_PATH}/vnl_algo_test_all test_sparse_lm               )
 
   IF ( SITE MATCHES "isbe.man.ac.uk" )
     # For some reason my box (linux-gcc-3.2) has a problem with the optimisation

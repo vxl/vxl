@@ -38,6 +38,7 @@
 #include <vnl/algo/vnl_scatter_3x3.h>
 #include <vnl/algo/vnl_simpson_integral.h>
 #include <vnl/algo/vnl_solve_qp.h>
+#include <vnl/algo/vnl_sparse_lm.h>
 #include <vnl/algo/vnl_sparse_lu.h>
 #include <vnl/algo/vnl_sparse_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_svd.h>

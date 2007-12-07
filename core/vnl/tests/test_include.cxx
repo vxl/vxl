@@ -13,6 +13,7 @@
 #include <vnl/vnl_complex_traits.h>
 #include <vnl/vnl_copy.h>
 #include <vnl/vnl_cross.h>
+#include <vnl/vnl_crs_index.h>
 #include <vnl/vnl_cost_function.h>
 #include <vnl/vnl_cross_product_matrix.h>
 #include <vnl/vnl_definite_integral.h>
@@ -99,6 +100,7 @@
 #include <vnl/vnl_rotation_matrix.h>
 #include <vnl/vnl_sample.h>
 #include <vnl/vnl_scalar_join_iterator.h>
+#include <vnl/vnl_sparse_lst_sqr_function.h>
 #include <vnl/vnl_sparse_matrix.h>
 #include <vnl/vnl_sparse_matrix_linear_system.h>
 #include <vnl/vnl_sse.h>
@@ -111,6 +113,7 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_vector_ref.h>
 #include <vnl/vnl_vector_fixed_ref.h>
+
 
 // Put vnl_config.h at the end, to verify that none of the above implicitly depend on it
 #include <vnl/vnl_config.h>

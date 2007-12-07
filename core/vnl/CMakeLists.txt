@@ -163,6 +163,7 @@ SET( vnl_sources
   vnl_cost_function.cxx               vnl_cost_function.h
   vnl_least_squares_function.cxx      vnl_least_squares_function.h
   vnl_least_squares_cost_function.cxx vnl_least_squares_cost_function.h
+  vnl_sparse_lst_sqr_function.cxx     vnl_sparse_lst_sqr_function.h
   vnl_nonlinear_minimizer.cxx         vnl_nonlinear_minimizer.h
 
   vnl_hungarian_algorithm.cxx         vnl_hungarian_algorithm.h
@@ -175,6 +176,9 @@ SET( vnl_sources
   vnl_rotation_matrix.cxx      vnl_rotation_matrix.h
   vnl_cross_product_matrix.h
   vnl_identity_3x3.h
+
+  # indexing of sparse structures
+  vnl_crs_index.cxx            vnl_crs_index.h
 
   # Special functions
   vnl_bessel.cxx               vnl_bessel.h

@@ -51,6 +51,7 @@ IF(NETLIB_FOUND)
     # optimisation
     vnl_discrete_diff.cxx vnl_discrete_diff.h
     vnl_levenberg_marquardt.cxx vnl_levenberg_marquardt.h
+    vnl_sparse_lm.cxx           vnl_sparse_lm.h
     vnl_conjugate_gradient.cxx vnl_conjugate_gradient.h
     vnl_lbfgs.cxx vnl_lbfgs.h
     vnl_lbfgsb.cxx vnl_lbfgsb.h

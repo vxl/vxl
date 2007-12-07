@@ -37,6 +37,8 @@ ADD_EXECUTABLE( vnl_test_all
   test_hungarian_algorithm.cxx
   test_integrant.cxx
   test_bessel.cxx
+  test_crs_index.cxx
+  test_sparse_lst_sqr_function.cxx
 )
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
@@ -82,6 +84,8 @@ ADD_TEST( vnl_test_hungarian_algorithm  ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all t
 ADD_TEST( vnl_test_integrant            ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_integrant            )
 ADD_TEST( vnl_test_bessel               ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_bessel               )
 ADD_TEST( vnl_test_quaternion           ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_quaternion           )
+ADD_TEST( vnl_test_crs_index            ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_crs_index            )
+ADD_TEST( vnl_test_sparse_lst_sqr_func  ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_sparse_lst_sqr_func  )
 
 ADD_EXECUTABLE(vnl_test_include test_include.cxx)
 TARGET_LINK_LIBRARIES(vnl_test_include vnl)
