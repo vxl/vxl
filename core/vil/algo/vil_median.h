@@ -19,7 +19,6 @@ inline T vil_sorted_value(const T* im, const vcl_ptrdiff_t* offset, Iter values,
 {
   Iter v = values;
   for (unsigned i=0;i<n;++i,++v) *v=im[offset[i]];
-//  vcl_sort(values,values+n);
   vcl_nth_element(values, values+r, values+n);
   return values[r];
 }
@@ -42,7 +41,6 @@ inline T vil_sorted_value(const vil_image_view<T>& image, unsigned plane,
     if (i<image.ni() && j<image.nj())
       values.push_back(image(i,j,plane));
   }
-//  vcl_sort(values.begin(),values.end());
   vcl_nth_element(values.begin(),values.begin()+unsigned(r*(values.size()-1)),
     values.end());
   return values[unsigned(r*(values.size()-1))];
