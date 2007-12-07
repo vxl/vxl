@@ -1,6 +1,7 @@
 #include "bwm_tableau_text.h"
 
 #include <vcl_iostream.h>
+#include <vcl_fstream.h>
 
 void bwm_tableau_text::set_text(vcl_string filename)
 {
