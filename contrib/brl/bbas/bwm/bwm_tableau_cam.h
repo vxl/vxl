@@ -109,6 +109,8 @@ class bwm_tableau_cam : public bwm_tableau_img
 
  protected:
   bwm_observer_cam* my_observer_;
+  bool show_vertices_;
+  //void bwm_vertex_toggle(const void* boolref);
 };
 
 #endif

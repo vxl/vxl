@@ -30,13 +30,12 @@ class bwm_observer_cam : public bwm_observer_vgui
 
   bwm_observer_cam(bgui_image_tableau_sptr const& img, vpgl_camera<double> *camera, vcl_string cam_path)
     : bwm_observer_vgui(img), proj_plane_(vgl_homg_plane_3d<double>(0, 0, 1, 0)),
-    camera_(camera), img_tab_(img), viewer_(0), cam_path_(cam_path), cam_adjusted_(false)
-  {  }
+    camera_(camera), img_tab_(img), viewer_(0), cam_path_(cam_path), cam_adjusted_(false) {}
 
   // set the initial projection plane to z=0
   bwm_observer_cam(bgui_image_tableau_sptr const& img, const char* n="unnamed")
     : bwm_observer_vgui(img), proj_plane_(vgl_homg_plane_3d<double>(0, 0, 1, 0)),
-    viewer_(0) { }
+    viewer_(0) {}
 
   virtual ~bwm_observer_cam(){ delete camera_;}
 

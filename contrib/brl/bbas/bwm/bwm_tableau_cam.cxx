@@ -225,6 +225,17 @@ class bwm_cam_help_command : public vgui_command
   bwm_tableau_cam *tab;
 };
 
+//: Use in menus to toggle a parameter
+class bwm_vertex_toggle_command : public vgui_command
+{
+ public:
+  bwm_vertex_toggle_command(bwm_tableau_cam* t, const void* boolref) : 
+       tab(t), bref((bool*) boolref) {}
+  void execute() { *bref = !(*bref); tab->observer()->show_vertices(*bref); }
+
+  bwm_tableau_cam *tab;
+  bool* bref;
+};
 
 void bwm_tableau_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu)
 {
@@ -234,6 +245,10 @@ void bwm_tableau_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu
   vgui_menu mesh_submenu;
   mesh_submenu.add( "Set as Master", new bwm_set_master_command(this));
   mesh_submenu.separator();
+
+  vcl_string on = "[x] ", off = "[ ] ";
+  mesh_submenu.add( ((show_vertices_)?on:off)+"show vertices", new bwm_vertex_toggle_command(this, &show_vertices_));
+
   mesh_submenu.add("Create Mesh Polygon", new bwm_create_mesh_command(this),
     vgui_key('p'), vgui_modifier(vgui_SHIFT) );
 #if 0

@@ -39,9 +39,15 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
 
   virtual vcl_string type_name() const { return "bwm_observer_vgui"; }
 
+  void draw_mesh(bwm_observable_sptr observable, 
+            vcl_map<unsigned, bgui_vsol_soview2D_polygon* > &poly_list,
+            vcl_vector<bwm_soview2D_vertex*> &vertx_list);
+
   void add_new_obj(bwm_observable_sptr observable);
 
   void handle_update(vgui_message const& msg, bwm_observable_sptr observable);
+
+  void show_vertices(bool);
 
   void update_all();
 
@@ -87,10 +93,11 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
 
  protected:
 
-  bwm_observer_vgui() { corr_.second = 0;}
+  bwm_observer_vgui() { corr_.second = 0; show_vertices_ = true; }
 
   vgui_style_sptr mesh_style_;
   vgui_style_sptr vertex_style_;
+  bool show_vertices_;
 
   //: the current correspondence point
   vcl_pair<vgl_point_2d<double>, bwm_soview2D_cross * > corr_;
