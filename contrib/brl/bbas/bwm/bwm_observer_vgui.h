@@ -39,10 +39,6 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
 
   virtual vcl_string type_name() const { return "bwm_observer_vgui"; }
 
-  void draw_mesh(bwm_observable_sptr observable, 
-            vcl_map<unsigned, bgui_vsol_soview2D_polygon* > &poly_list,
-            vcl_vector<bwm_soview2D_vertex*> &vertx_list);
-
   void add_new_obj(bwm_observable_sptr observable);
 
   void handle_update(vgui_message const& msg, bwm_observable_sptr observable);
@@ -107,6 +103,7 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
 
   //: vertices are kept as a pair (bwm_observable *, vector<bwm_soview2D_vertex*> )
   vcl_map<bwm_observable_sptr, vcl_vector<bwm_soview2D_vertex* > > object_verts_;
+  vcl_map<bwm_observable_sptr, vcl_vector<vsol_point_2d_sptr> > object_verts_xy_;
 
   bwm_observable_sptr moving_face_;
 
@@ -120,6 +117,12 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
 
   //: makes the polygon a little smaller to prevent the face edges overlapping
   vsol_polygon_2d_sptr shrink_face(vsol_polygon_2d_sptr poly);
+
+  void draw_mesh(bwm_observable_sptr observable, 
+            vcl_map<unsigned, bgui_vsol_soview2D_polygon* > &poly_list,
+            vcl_vector<bwm_soview2D_vertex*> &vertx_list, 
+            vcl_vector<vsol_point_2d_sptr> &vertx_xy_list);
+
 };
 
 #endif

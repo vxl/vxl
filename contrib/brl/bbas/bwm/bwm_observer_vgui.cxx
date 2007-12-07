@@ -83,16 +83,20 @@ void bwm_observer_vgui::show_vertices(bool show)
     show_vertices_ = show;
     if (show) {
       // put the vertices on the tableau
-      vcl_map<bwm_observable_sptr, vcl_vector<bwm_soview2D_vertex* > >::iterator it = object_verts_.begin();
-      while (it != object_verts_.end()) {
-        vcl_vector<bwm_soview2D_vertex* > vertices = it->second;
+      vcl_map<bwm_observable_sptr, vcl_vector<vsol_point_2d_sptr> >::iterator it = object_verts_xy_.begin();
+      vcl_vector<bwm_soview2D_vertex*> new_vertex_list;
+      while (it != object_verts_xy_.end()) {
+        vcl_vector<vsol_point_2d_sptr> vertices = it->second;
         for (unsigned i=0; i<vertices.size(); i++) {
-          bwm_soview2D_vertex* v = vertices[i];
+          bwm_soview2D_vertex* v = new bwm_soview2D_vertex(vertices[i]->x(), vertices[i]->y(), 1.0, 0, i);
           this->add(v);
           v->set_style(vertex_style_);
+          new_vertex_list.push_back(v);
         }
+        object_verts_[it->first] = new_vertex_list;
         it++;
       }
+      
     } else {
       // remove the vertices from the tableau
       vcl_map<bwm_observable_sptr, vcl_vector<bwm_soview2D_vertex* > >::iterator it = object_verts_.begin();
@@ -111,7 +115,8 @@ void bwm_observer_vgui::show_vertices(bool show)
 
 void bwm_observer_vgui::draw_mesh(bwm_observable_sptr observable, 
                                   vcl_map<unsigned, bgui_vsol_soview2D_polygon* > &poly_list,
-                                  vcl_vector<bwm_soview2D_vertex*> &vertx_list)
+                                  vcl_vector<bwm_soview2D_vertex*> &vertx_list,
+                                  vcl_vector<vsol_point_2d_sptr> &vertx_xy_list)
 
 {
   if (observable) {
@@ -156,12 +161,14 @@ void bwm_observer_vgui::draw_mesh(bwm_observable_sptr observable,
       vsol_point_3d_sptr v = vertices[i];
       vgl_point_2d<double> v2d;
       proj_point(v->get_p(), v2d);
-      bwm_soview2D_vertex* sopt = new bwm_soview2D_vertex(v2d.x(), v2d.y(), 1.0f, 0, i);
+      vertx_xy_list.push_back(new vsol_point_2d(v2d.x(), v2d.y()));
+      
       if (show_vertices_) {
+        bwm_soview2D_vertex* sopt = new bwm_soview2D_vertex(v2d.x(), v2d.y(), 1.0f, 0, i);
         this->add(sopt);
         sopt->set_style(vertex_style_);
+        vertx_list.push_back(sopt);
       }
-      vertx_list.push_back(sopt);
     }
   }
 }
@@ -170,12 +177,13 @@ void bwm_observer_vgui::add_new_obj(bwm_observable_sptr observable)
 {  
   vcl_map<unsigned, bgui_vsol_soview2D_polygon* > poly_list;
   vcl_vector<bwm_soview2D_vertex*> vertx_list;
-
-  draw_mesh(observable, poly_list, vertx_list);
+  vcl_vector<vsol_point_2d_sptr> vertx_list_xy;
+  draw_mesh(observable, poly_list, vertx_list, vertx_list_xy);
 
   if (poly_list.size() > 0) {
     objects_[observable] = poly_list;
     object_verts_[observable] = vertx_list;
+    object_verts_xy_[observable] = vertx_list_xy;
   }
 }
 void bwm_observer_vgui::handle_update(vgui_message const& msg,
@@ -187,10 +195,14 @@ void bwm_observer_vgui::handle_update(vgui_message const& msg,
   if (str->compare("delete") == 0) {
     vcl_map<unsigned, bgui_vsol_soview2D_polygon* > p = objects_[observable];
     vcl_vector<bwm_soview2D_vertex*> ov = object_verts_[observable];
+    //vcl_vector<vsol_point_2d_sptr> xy = object_verts_xy_[observable];
+    //xy.clear();
+
     objects_.erase(observable);
     object_verts_.erase(observable);
+    object_verts_xy_.erase(observable);
 
-    // delete the polygons
+    // delete the polygons from the tableau
     for (unsigned i=0; i<p.size(); i++)  {
       if (p[i]) {
         this->remove(p[i]);
@@ -198,7 +210,7 @@ void bwm_observer_vgui::handle_update(vgui_message const& msg,
       }
     }
 
-    //delete the vertices
+    //delete the vertices from the tableau
     for (unsigned i=0; i<ov.size(); i++)  {
       if (ov[i]) {
         this->remove(ov[i]);
@@ -209,11 +221,14 @@ void bwm_observer_vgui::handle_update(vgui_message const& msg,
         
     vcl_map<unsigned, bgui_vsol_soview2D_polygon* > poly_list;
     vcl_vector<bwm_soview2D_vertex*> poly_verts;
-    draw_mesh(observable, poly_list, poly_verts);
+    vcl_vector<vsol_point_2d_sptr> poly_verts_xy;
+
+    draw_mesh(observable, poly_list, poly_verts, poly_verts_xy);
 
     if (str->compare("new") == 0) {
       objects_[observable] = poly_list;
       object_verts_[observable] = poly_verts;
+      object_verts_xy_[observable] = poly_verts_xy;
     } else if ((str->compare("update") == 0) || (str->compare("move") == 0)){
       vcl_map<unsigned, bgui_vsol_soview2D_polygon* > p = objects_[observable];
       vcl_vector<bwm_soview2D_vertex* > ov = object_verts_[observable];
@@ -232,6 +247,7 @@ void bwm_observer_vgui::handle_update(vgui_message const& msg,
       }
       objects_[observable] = poly_list;
       object_verts_[observable] = poly_verts;
+      object_verts_xy_[observable] = poly_verts_xy;
     }
   }
 
