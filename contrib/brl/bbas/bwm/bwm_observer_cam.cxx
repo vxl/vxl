@@ -792,16 +792,8 @@ void bwm_observer_cam::extrude_face(vsol_point_2d_sptr pt)
 
 void bwm_observer_cam::divide_face(bwm_observable_sptr obs, unsigned face_id,
                                    float x1, float y1, float x2, float y2)
-{
-  // first get the selected objects
- // vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
-
-  // a polygon should be selected first
-  //if ((select_list.size() == 1) && (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0)) {
-  //  unsigned face_id;
- //   bwm_observable* obs = this->find_object(select_list[0]->get_id(), face_id);
-    intersect(obs, face_id, x1, y1, x2, y2);
- // }
+{  
+  intersect(obs, face_id, x1, y1, x2, y2);
 }
 
 void bwm_observer_cam::backproj_point(vsol_point_2d_sptr p2d, vsol_point_3d_sptr& p3d)

@@ -476,6 +476,8 @@ void bwm_observable_mesh::divide_face(unsigned face_id,
   //         << "l2=" << l2 << vcl_endl
   //         << "l3=" << l3 << vcl_endl
   //         << "l4=" << l4 << vcl_endl;
+  double min_d1=1e23, min_d2=1e23;
+  unsigned min_index1=0, min_index2=0;
   for (unsigned i=0; i<halfedges.size(); i++) {
     bmsh3d_halfedge* he = (bmsh3d_halfedge*) halfedges[i];
     bmsh3d_edge* edge = he->edge();
@@ -494,10 +496,15 @@ void bwm_observable_mesh::divide_face(unsigned face_id,
    double d4 = vgl_distance(vgl_homg_point_3d<double>(l4), line);
 
    // we are checking if the points l1, l2, l3 or l4 are on the line
-   if (d1 < 0.1 && d2 < 0.1)
-     edge1 = edge;
-   if (d3 < 0.1 && d4 < 0.1)
-     edge2 = edge;
+   if ((d1+d2) < min_d1) {
+      min_d1 = d1+d2;
+      min_index1 = i;
+   }
+
+   if ((d3+d4) < min_d2) {
+      min_d2 = d3+d4;
+      min_index2 = i;
+   }
 
 #if 0 // commented out
     if (collinear(line, vgl_homg_point_3d<double>(l1)) &&
@@ -509,6 +516,11 @@ void bwm_observable_mesh::divide_face(unsigned face_id,
         edge2 = edge;
 #endif // 0
   }
+  bmsh3d_halfedge* he1 = (bmsh3d_halfedge*) halfedges[min_index1];
+  edge1 = he1->edge();
+
+  bmsh3d_halfedge* he2 = (bmsh3d_halfedge*) halfedges[min_index2];
+  edge2 = he2->edge();
 
   if (edge1 == 0 || edge2 == 0) {
     vcl_cerr << "bwm_observable_mesh::divide_face -- edges are not found in polygon\n";
