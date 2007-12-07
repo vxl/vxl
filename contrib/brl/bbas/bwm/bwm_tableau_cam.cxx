@@ -248,7 +248,7 @@ void bwm_tableau_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu
 
   vcl_string on = "[x] ", off = "[ ] ";
   mesh_submenu.add( ((show_vertices_)?on:off)+"show vertices", new bwm_vertex_toggle_command(this, &show_vertices_));
-
+  mesh_submenu.separator();
   mesh_submenu.add("Create Mesh Polygon", new bwm_create_mesh_command(this),
     vgui_key('p'), vgui_modifier(vgui_SHIFT) );
 #if 0
