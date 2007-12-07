@@ -5,7 +5,7 @@
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector_ref.h>
-#include <bnl/algo/bnl_sparse_lm.h>
+#include <vnl/algo/vnl_sparse_lm.h>
 
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
@@ -19,7 +19,7 @@ vpgl_bundle_adj_lsqr::
                        const vcl_vector<vgl_point_2d<double> >& image_points,
                        const vcl_vector<vcl_vector<bool> >& mask,
                        bool use_confidence_weights)
- : bnl_sparse_lst_sqr_function(K.size(),6,mask[0].size(),3,mask,2,use_gradient),
+ : vnl_sparse_lst_sqr_function(K.size(),6,mask[0].size(),3,mask,2,use_gradient),
    K_(K),
    image_points_(image_points),
    use_covars_(false),
@@ -39,7 +39,7 @@ vpgl_bundle_adj_lsqr(const vcl_vector<vpgl_calibration_matrix<double> >& K,
                      const vcl_vector<vnl_matrix<double> >& inv_covars,
                      const vcl_vector<vcl_vector<bool> >& mask,
                      bool use_confidence_weights)
- : bnl_sparse_lst_sqr_function(K.size(),6,mask[0].size(),3,mask,2,use_gradient),
+ : vnl_sparse_lst_sqr_function(K.size(),6,mask[0].size(),3,mask,2,use_gradient),
    K_(K),
    image_points_(image_points),
    use_covars_(true),
@@ -85,13 +85,13 @@ vpgl_bundle_adj_lsqr::f(vnl_vector<double> const& a,
                         vnl_vector<double> const& b,
                         vnl_vector<double>& e)
 {
-  typedef bnl_crs_index::sparse_vector::iterator sv_itr;
+  typedef vnl_crs_index::sparse_vector::iterator sv_itr;
   for (unsigned int i=0; i<number_of_a(); ++i)
   {
     //: Construct the ith camera
     vpgl_perspective_camera<double> Pi = param_to_cam(i,a);
 
-    bnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
+    vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
     for (sv_itr r_itr=row.begin(); r_itr!=row.end(); ++r_itr)
     {
       unsigned int j = r_itr->second;
@@ -147,13 +147,13 @@ vpgl_bundle_adj_lsqr::jac_blocks(vnl_vector<double> const& a, vnl_vector<double>
                                   vcl_vector<vnl_matrix<double> >& B)
 {
   const double stepsize = 0.001;
-  typedef bnl_crs_index::sparse_vector::iterator sv_itr;
+  typedef vnl_crs_index::sparse_vector::iterator sv_itr;
   for (unsigned int i=0; i<number_of_a(); ++i)
   {
     //: Construct the ith camera
     vnl_double_3x4 Pi = param_to_cam(i,a).get_matrix();
 
-    bnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
+    vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
     for (sv_itr r_itr=row.begin(); r_itr!=row.end(); ++r_itr)
     {
       unsigned int j = r_itr->second;
@@ -183,7 +183,7 @@ vpgl_bundle_adj_lsqr::jac_blocks(vnl_vector<double> const& a, vnl_vector<double>
 
       double h = 1.0 / (tplus - tminus);
 
-      bnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
+      vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
       for (sv_itr r_itr=row.begin(); r_itr!=row.end(); ++r_itr)
       {
         unsigned int j = r_itr->second;
@@ -305,7 +305,7 @@ vpgl_bundle_adjust::optimize(vcl_vector<vpgl_perspective_camera<double> >& camer
 
   // do the bundle adjustment
   vpgl_bundle_adj_lsqr ba_func(K,image_points,mask);
-  bnl_sparse_lm lm(ba_func);
+  vnl_sparse_lm lm(ba_func);
   lm.set_trace(true);
   lm.set_verbose(true);
   if (!lm.minimize(a,b))

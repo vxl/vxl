@@ -1,7 +1,6 @@
 # gel/mrc/vpgl/CMakeLists.txt
 # Photogrametry Library.
 
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas)
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc)
 
 SET( vpgl_sources

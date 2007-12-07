@@ -7,14 +7,14 @@
 // \author Matt Leotta
 // \date 4/18/05
 
-#include <bnl/bnl_sparse_lst_sqr_function.h>
+#include <vnl/vnl_sparse_lst_sqr_function.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vnl/vnl_vector.h>
 #include <vcl_vector.h>
 
 
 //: Computes the residuals for bundle adjustment given that the cameras share a fixed internal calibration
-class vpgl_bundle_adj_lsqr : public bnl_sparse_lst_sqr_function
+class vpgl_bundle_adj_lsqr : public vnl_sparse_lst_sqr_function
 {
  public:
   //: Constructor

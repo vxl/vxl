@@ -83,7 +83,7 @@ static void test_bundle_adjust()
   // mask[4][8] = false; out of bounds - JLM
 
   // create a subset of projections based on the mask
-  bnl_crs_index crs(mask);
+  vnl_crs_index crs(mask);
   vcl_vector<vgl_point_2d<double> > subset_image_points(crs.num_non_zero());
   for(int i=0; i<crs.num_rows(); ++i){
     for(int j=0; j<crs.num_cols(); ++j){
