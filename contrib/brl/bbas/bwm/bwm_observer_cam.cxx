@@ -1009,15 +1009,13 @@ void bwm_observer_cam::scan_regions()
 {
   // get the selected objects
   vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
-
+  vcl_vector<vgl_polygon<double> > polygons;
   for (unsigned s=0; s<select_list.size();s++) {
     if (select_list[s]->type_name().compare("bgui_vsol_soview2D_polygon") == 0) {
       bgui_vsol_soview2D_polygon* poly;
       poly = static_cast<bgui_vsol_soview2D_polygon*> (select_list[s]);
-  
-      vcl_vector<vgl_polygon<double> > polygons;
       unsigned face_id;
-      vgl_polygon<double> polygon;
+      vgl_polygon<double> polygon(1);
       bwm_observable_sptr obs = this->find_object(poly->get_id(), face_id);
       if (obs) {
         vcl_vector<bwm_soview2D_vertex*> vertices = object_verts_[obs];
@@ -1040,10 +1038,9 @@ void bwm_observer_cam::scan_regions()
         }
         polygons.push_back(polygon);
       }
-       
-      bwm_image_processor::scan_regions(polygons);
     }
   }
+  bwm_image_processor::scan_regions(img_tab_, polygons);
 }
 
 void bwm_observer_cam::make_object_selectable(bwm_observable_sptr obj, bool status)

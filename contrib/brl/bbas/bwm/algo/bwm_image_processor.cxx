@@ -1,20 +1,21 @@
 #include "bwm_image_processor.h"
 
 #include <vcl_cstdio.h>
-
+#include <vcl_cassert.h>
 #include <vgui/vgui_range_map_params.h>
-
+#include <bgui/bgui_graph_tableau.h>
+#include <bsta/bsta_histogram.h>
 #include <bgui/bgui_image_utils.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <sdet/sdet_detector.h>
 #include <sdet/sdet_fit_lines_params.h>
 #include <sdet/sdet_fit_lines.h>
 #include <brip/brip_roi.h>
+#include <brip/brip_vil_float_ops.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_polygon_2d.h>
-
 void bwm_image_processor::hist_plot(bgui_image_tableau_sptr img)
 {
   if (!img)
@@ -242,8 +243,79 @@ bool bwm_image_processor::lines_vd(bgui_image_tableau_sptr const& img,
   return true;
 }
 
-vgl_polygon<double> bwm_image_processor::scan_regions(vcl_vector<vgl_polygon<double> > const& regions)
+void bwm_image_processor::
+scan_regions(  bgui_image_tableau_sptr const& img,
+               vcl_vector<vgl_polygon<double> > const& regions)
 {
-  vgl_polygon<double> p;
-  return p;
+  vil_image_resource_sptr image = img->get_image_resource();
+  if (!image||!image->ni()||!image->nj())
+    {
+      vcl_cerr << "In bwm_image_processor::scan_regions() - no image\n";
+      return ;
+    }
+
+  unsigned n_regions = regions.size();
+  if(!n_regions) 
+    {
+      vcl_cerr << "In bwm_image_processor::scan_regions() - "
+               << " no regions to scan\n";
+      return;
+    }
+  
+  vcl_vector<vcl_vector<float > > temp(n_regions);
+  float gmin, gmax;
+  for(unsigned r = 0; r< n_regions; ++r)
+    {
+      float min,  max;
+      vcl_vector<float> v = 
+        brip_vil_float_ops::scan_region(image, regions[r], min, max);
+      temp[r]=v;
+      if(r == 0) { gmin = min; gmax = max;}
+      else
+        { if(min<gmin) gmin = min; if(max>gmax) gmax = max;}
+  }
+
+  //make sure the lower bound is a multiple of 10
+  unsigned maxbins = 1000, nbins;
+  float min_ten = 10.0f*static_cast<int>(gmin/10);
+  //make sure the upper bound is a multiple of 10
+  float max_ten = 10.0f*static_cast<int>((gmax + 10.0f)/10.0f);
+  assert(max_ten>=min_ten);
+  unsigned range = static_cast<unsigned>(max_ten-min_ten);
+  if(!range) max_ten +=10;
+  if(range<maxbins)
+    nbins = range;
+  else nbins = maxbins;
+  double delta_2 = range/(2.0*nbins);
+  vcl_vector<vcl_vector<double > > pos(n_regions);
+  vcl_vector<vcl_vector<double > > vls(n_regions);
+  for(unsigned r = 0; r< regions.size(); ++r)
+    {
+      
+      bsta_histogram<double> h(min_ten, max_ten, nbins);
+      for(unsigned i = 0; i<temp[r].size(); ++i)
+        h.upcount(temp[r][i], 1.0);
+
+      vcl_vector<double> val = h.value_array();
+      //subtract off the bin mid-value
+
+      for(vcl_vector<double>::iterator vit = val.begin();
+          vit != val.end(); ++vit)
+        (*vit)-=delta_2;
+      vcl_vector<double> count = h.count_array();
+      pos[r]=val;
+      vls[r]=count;
+    }
+  bgui_graph_tableau_sptr g = bgui_graph_tableau_new(512, 512);  
+  g->update(pos, vls);
+
+  char location[100];
+  vcl_sprintf(location, "Region Data");
+  vgui_dialog* ip_dialog = g->popup_graph(location);
+  if (!ip_dialog->ask())
+    {
+      delete ip_dialog;
+      return;
+    }
+  delete ip_dialog;
 }
