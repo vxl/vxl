@@ -86,14 +86,22 @@ void bwm_observer_vgui::show_vertices(bool show)
       vcl_map<bwm_observable_sptr, vcl_vector<vsol_point_2d_sptr> >::iterator it = object_verts_xy_.begin();
       vcl_vector<bwm_soview2D_vertex*> new_vertex_list;
       while (it != object_verts_xy_.end()) {
+        bwm_observable_sptr obs = it->first;
+
+        vcl_map<unsigned, bgui_vsol_soview2D_polygon* > faces = objects_[obs];
+        // get the first face of the object
+        if (faces.size() == 0) return ;
+        vcl_map<unsigned, bgui_vsol_soview2D_polygon* >::iterator face_it = faces.begin();
+        bgui_vsol_soview2D_polygon* poly = face_it->second;
+
         vcl_vector<vsol_point_2d_sptr> vertices = it->second;
         for (unsigned i=0; i<vertices.size(); i++) {
-          bwm_soview2D_vertex* v = new bwm_soview2D_vertex(vertices[i]->x(), vertices[i]->y(), 1.0, 0, i);
+          bwm_soview2D_vertex* v = new bwm_soview2D_vertex(vertices[i]->x(), vertices[i]->y(), 1.0, poly, i);
           this->add(v);
           v->set_style(vertex_style_);
           new_vertex_list.push_back(v);
         }
-        object_verts_[it->first] = new_vertex_list;
+        object_verts_[obs] = new_vertex_list;
         it++;
       }
       
@@ -133,7 +141,6 @@ void bwm_observer_vgui::draw_mesh(bwm_observable_sptr observable,
       if (faces.size() > 1)
         poly_2d = shrink_face(poly_2d);
 
-      //this->set_foreground(mesh_style_->rgba[0], mesh_style_->rgba[1], mesh_style_->rgba[2]);
       bgui_vsol_soview2D_polygon* polygon = this->add_vsol_polygon_2d(poly_2d, mesh_style_);
       poly_list[face_id] = polygon;
 
@@ -164,7 +171,13 @@ void bwm_observer_vgui::draw_mesh(bwm_observable_sptr observable,
       vertx_xy_list.push_back(new vsol_point_2d(v2d.x(), v2d.y()));
       
       if (show_vertices_) {
-        bwm_soview2D_vertex* sopt = new bwm_soview2D_vertex(v2d.x(), v2d.y(), 1.0f, 0, i);
+        if (poly_list.size() == 0) 
+          return ;
+
+        vcl_map<unsigned, bgui_vsol_soview2D_polygon* >::iterator face_it = poly_list.begin();
+        bgui_vsol_soview2D_polygon* poly = face_it->second;
+
+        bwm_soview2D_vertex* sopt = new bwm_soview2D_vertex(v2d.x(), v2d.y(), 1.0f, poly, i);
         this->add(sopt);
         sopt->set_style(vertex_style_);
         vertx_list.push_back(sopt);
