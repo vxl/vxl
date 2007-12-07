@@ -1,6 +1,6 @@
 # brl/bbas/bdpg/tests/CMakeLists.txt
 
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas)
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
 
 ADD_EXECUTABLE(bdpg_test_all test_driver.cxx test_array_dynamic_prg.cxx)
 

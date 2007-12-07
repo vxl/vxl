@@ -1,7 +1,7 @@
 # This is /db3p/expatpp
 
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/expatpp/expat/lib )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/expatpp/src_pp )
+INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/expatpp/expat/lib )
+INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/expatpp/src_pp )
 #define COMPILED_FROM_DSP
 
 SET(test_sources

@@ -1,6 +1,6 @@
 # library for tomography
 # brl/bmvl/btom/CMakeLists.txt
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bmvl )
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )
 
 SET(btom_sources

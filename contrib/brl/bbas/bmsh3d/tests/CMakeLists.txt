@@ -1,6 +1,6 @@
 # brl/bbas/bmsh3d/tests/CMakeLists.txt
 
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
+INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 
 ADD_EXECUTABLE( bmsh3d_test_all
       test_driver.cxx

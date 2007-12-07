@@ -1,6 +1,6 @@
 # This is contrib/brl/bseg/bmrf/tests/CMakeLists.txt
 
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg )
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
 
 ADD_EXECUTABLE ( bmrf_test_all
   test_driver.cxx

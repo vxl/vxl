@@ -1,7 +1,7 @@
 # This is brcv/shp/dbmsh3d/algo/CMakeLists.txt
 # Brown 3D Mesh Algorithm Library
 
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
+INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 
 INCLUDE_DIRECTORIES( ${VTHREEP_INCLUDE_DIR}/rply )
 #INCLUDE_DIRECTORIES( ${lems_SOURCE_DIR}/brcv/shp )

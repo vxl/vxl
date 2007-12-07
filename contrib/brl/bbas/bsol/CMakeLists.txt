@@ -1,6 +1,6 @@
 # Additional functions to support vsol
 # brl/bbas/bsol/CMakeLists.txt
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )
 
 SET(bsol_sources

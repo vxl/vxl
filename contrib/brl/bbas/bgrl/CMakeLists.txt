@@ -1,6 +1,6 @@
 # Brown Graph Library
 # brl/bbas/bgrl/CMakeLists.txt
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
 
 SET(bgrl_sources
     bgrl_vertex.cxx          bgrl_vertex.h           bgrl_vertex_sptr.h

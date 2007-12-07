@@ -1,6 +1,6 @@
 # This brl/bbas/bugl/tests/CMakeLists.txt
 
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
 
 ADD_EXECUTABLE ( bugl_test_all
   test_driver.cxx

@@ -1,5 +1,5 @@
 # brl/bbas/bnl/CMakeLists.txt
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas)
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
 
 SET(bnl_sources
     bnl_parabolic_interpolator.cxx    bnl_parabolic_interpolator.h

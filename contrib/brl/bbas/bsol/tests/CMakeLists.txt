@@ -1,7 +1,7 @@
 # brl/bbas/bsol/tests/CMakeLists.txt
 
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas)
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
 
 ADD_EXECUTABLE( bsol_test_all test_hough_index.cxx )
 TARGET_LINK_LIBRARIES(bsol_test_all bsol vsol testlib )

@@ -1,7 +1,7 @@
 # brl/bbas/bgui/tests/CMakeLists.txt
 
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas)
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
 
 ADD_EXECUTABLE(bgui_test_all
   test_driver.cxx

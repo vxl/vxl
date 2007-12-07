@@ -1,5 +1,5 @@
 # brl/bexe/vded/CMakeLists.txt
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg)
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
 
 
 ADD_EXECUTABLE (motion_test motion_test.cxx)

@@ -2,7 +2,7 @@
 # Command-line programs for meshes
 # 
 
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
+INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 
 ADD_EXECUTABLE(bmsh3d_example_mesh2ply bmsh3d_mesh2ply.cxx)
 TARGET_LINK_LIBRARIES( bmsh3d_example_mesh2ply bmsh3d_algo vul )

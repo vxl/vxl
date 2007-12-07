@@ -1,6 +1,6 @@
 # brl/bbas/bugl/CMakeLists.txt
 # writen by Kongbin Kang for creating a brown uncertainty geometry library.
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas)
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
 
 SET(bugl_sources
     bugl_uncertainty_point_2d.h

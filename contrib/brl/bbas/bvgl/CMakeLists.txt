@@ -1,7 +1,7 @@
 # Brown basic geometry library
 # brl/bbas/bvgl/CMakeLists.txt
 
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas)
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR})
 
 SET(bvgl_sources

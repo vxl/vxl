@@ -1,7 +1,7 @@
 # brl/bbas/bgui3d/examples/CMakeLists.txt
 
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR})
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
+INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 IF (HAS_BGUI3D)
 
 ADD_EXECUTABLE(bgui3d_example_basic example_basic.cxx)
