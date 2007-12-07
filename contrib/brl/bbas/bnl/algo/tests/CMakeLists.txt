@@ -6,14 +6,12 @@ ADD_EXECUTABLE ( bnl_algo_test_all
    test_driver.cxx
 
    # The tests
-   test_sparse_lm.cxx
    test_legendre_polynomial.cxx
 )
 
 TARGET_LINK_LIBRARIES( bnl_algo_test_all bnl_algo testlib )
 
 
-ADD_TEST( bnl_algo_test_sparse_lm     bnl_algo_test_all test_sparse_lm)
 ADD_TEST( bnl_algo_test_legendre      bnl_algo_test_all test_legendre_polynomial)
 
 

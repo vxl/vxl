@@ -2,7 +2,6 @@
 
 SET( bnl_algo_sources
    bnl_legendre_polynomial.cxx      bnl_legendre_polynomial.h
-   bnl_sparse_lm.cxx                bnl_sparse_lm.h
 )
 
 ADD_LIBRARY( bnl_algo ${bnl_algo_sources} )

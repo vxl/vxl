@@ -3,9 +3,7 @@ INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
 
 SET(bnl_sources
     bnl_parabolic_interpolator.cxx    bnl_parabolic_interpolator.h
-    bnl_quadratic_interpolator.cxx    bnl_quadratic_interpolator.h
-    bnl_crs_index.cxx                 bnl_crs_index.h
-    bnl_sparse_lst_sqr_function.cxx   bnl_sparse_lst_sqr_function.h
+    bnl_quadratic_interpolator.cxx    bnl_quadratic_interpolator.h   
    )
 
 ADD_LIBRARY(bnl ${bnl_sources})
