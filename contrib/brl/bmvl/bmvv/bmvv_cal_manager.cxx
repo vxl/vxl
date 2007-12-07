@@ -646,6 +646,33 @@ void bmvv_cal_manager::project_world()
   this->draw_correspondences();
 }
 
+namespace {
+//: function to roughly flip the camera around a set of points when
+//  when the points are behind the camera.  Optimization is need after
+//  this operation.
+void flip_camera(vpgl_perspective_camera<double> &camera,
+                 const vcl_vector< vgl_homg_point_3d<double> >& world_hpts)
+{
+  vgl_vector_3d<double> centroid(0.0, 0.0, 0.0);
+  unsigned int num_behind = 0;
+  for (unsigned i = 0; i<world_hpts.size(); ++i){
+    if(camera.is_behind_camera(world_hpts[i])){
+      vgl_point_3d<double> p(world_hpts[i]);
+      centroid += vgl_vector_3d<double>(p.x(),p.y(),p.z());
+      ++num_behind;
+    }
+  }
+  centroid /= num_behind;
+  
+  vgl_point_3d<double> C = camera.get_camera_center();
+  vcl_cout << "initial center: "<< C<<vcl_endl;
+  C += 2*(vgl_point_3d<double>(centroid.x(),centroid.y(),centroid.z())-C);
+  camera.set_camera_center(C);
+  vcl_cout << "new center: " <<C<<vcl_endl;
+}
+  
+};
+
 void bmvv_cal_manager::solve_camera()
 {
   static bool planar = false;
@@ -718,8 +745,15 @@ void bmvv_cal_manager::solve_camera()
     vpgl_perspective_camera<double> p_camera;
     if(optimize && vpgl_perspective_decomposition(camera.get_matrix(),p_camera)){
       vcl_vector< vgl_point_2d<double> > image_pts;
+      unsigned int num_behind = 0;
       for (unsigned i = 0; i<image_hpts.size(); i++){
+        if(p_camera.is_behind_camera(world_hpts[i]))
+          ++num_behind;
         image_pts.push_back(image_hpts[i]);
+      }
+      if(num_behind > world_hpts.size()/2){
+        vcl_cout << "Majority of points behind camera, flipping" << vcl_endl;
+        flip_camera(p_camera, world_hpts);
       }
       p_camera = vpgl_optimize_camera::opt_orient_pos_cal(p_camera, world_hpts, image_pts);
       cam_ = vgl_p_matrix<double>(p_camera.get_matrix());
