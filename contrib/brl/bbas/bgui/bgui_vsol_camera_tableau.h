@@ -28,8 +28,8 @@
 #include <vgui/vgui_style_sptr.h>
 #include <vgui/vgui_image_tableau_sptr.h>
 #include <vgui/vgui_easy2D_tableau.h>
-#include <bgui/bgui_vsol_camera_tableau_sptr.h>
 
+#include "bgui_vsol_camera_tableau_sptr.h"
 class bgui_vsol_soview2D_point;
 class bgui_vsol_soview2D_line_seg;
 class bgui_vsol_soview2D_polygon;
@@ -51,8 +51,8 @@ class bgui_vsol_camera_tableau : public vgui_easy2D_tableau
   virtual bool handle(vgui_event const &);
 
   //:the projection camera
-  void set_camera(vgl_p_matrix<double> const& camera){camera_=camera;}
-  vgl_p_matrix<double> get_camera(){return camera_;}
+  void set_camera(vgl_p_matrix<double> const& camera) { camera_=camera; }
+  vgl_p_matrix<double> get_camera() { return camera_; }
 
   //: display for projected vsol_point_3d
   bgui_vsol_soview2D_point*
@@ -89,8 +89,8 @@ class bgui_vsol_camera_tableau : public vgui_easy2D_tableau
   void clear_all();
 
   //: Methods for getting mapped objects
-  void enable_highlight(){highlight_ = true;}
-  void disable_highlight(){highlight_ = false;}
+  void enable_highlight() { highlight_ = true; }
+  void disable_highlight() { highlight_ = false; }
 
   //: Methods for changing the default style of displayable objects
 

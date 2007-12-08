@@ -7,8 +7,8 @@
 // \brief   A tableau to produce a bar graph
 //  The graph is plotted on an easy2D tableau
 //  which this tableau points to not inherits from
-// 
-//  Thus the bar graph is a "clip on" to an existing 
+//
+//  Thus the bar graph is a "clip on" to an existing
 //  tableau hierarchy that must include something
 //  with "easy2D" power.
 //  The bars can have up to eight different colors
@@ -21,7 +21,7 @@
 class bgui_bargraph_clipon_tableau : public vbl_ref_count
 {
  public:
-  //: Constructor 
+  //: Constructor
   bgui_bargraph_clipon_tableau(vgui_easy2D_tableau_sptr const& easy);
   //: Destructor.
   ~bgui_bargraph_clipon_tableau();
@@ -29,7 +29,7 @@ class bgui_bargraph_clipon_tableau : public vbl_ref_count
   void set_color_vector(vcl_vector<unsigned char> const& colors);
 
   //: Update the data vector.  Defaults determine size of plot from window
-  void update(vcl_vector<float> const& bars, const bool fixed = false, 
+  void update(vcl_vector<float> const& bars, const bool fixed = false,
               const float scale=1.0);
 
   //: Return the name of this tableau.
@@ -49,6 +49,7 @@ class bgui_bargraph_clipon_tableau : public vbl_ref_count
   vgui_easy2D_tableau_sptr easy_;
   vcl_vector<vgui_soview2D_lineseg*> bar_plot_;
 };
-#include <bgui/bgui_bargraph_clipon_tableau_sptr.h>
+
+#include "bgui_bargraph_clipon_tableau_sptr.h"
 
 #endif // bgui_bargraph_clipon_tableau_h_

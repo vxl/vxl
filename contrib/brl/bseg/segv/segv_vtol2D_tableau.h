@@ -22,7 +22,8 @@
 #include <vgui/vgui_tableau_sptr.h>
 #include <vgui/vgui_image_tableau_sptr.h>
 #include <vgui/vgui_easy2D_tableau.h>
-#include <segv/segv_vtol2D_tableau_sptr.h>
+
+#include "segv_vtol2D_tableau_sptr.h"
 
 class segv_vtol_soview2D_vertex;
 class segv_vtol_soview2D_edge;

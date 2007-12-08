@@ -20,7 +20,8 @@
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_soview2D.h>
 #include <vgui/vgui_easy2D_tableau_sptr.h>
-#include <bgui/bgui_histogram_tableau_sptr.h>
+
+#include "bgui_histogram_tableau_sptr.h"
 
 class bgui_histogram_tableau : public vgui_tableau
 {

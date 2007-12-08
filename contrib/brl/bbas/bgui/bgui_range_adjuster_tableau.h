@@ -15,7 +15,8 @@
 #include <vgui/vgui_range_map_params_sptr.h>
 #include <bsta/bsta_histogram.h>
 #include <bgui/bgui_image_tableau.h>
-#include <bgui/bgui_range_adjuster_tableau_sptr.h>
+
+#include "bgui_range_adjuster_tableau_sptr.h"
 
 class bgui_range_adjuster_tableau : public vgui_easy2D_tableau
 {
@@ -56,7 +57,7 @@ class bgui_range_adjuster_tableau : public vgui_easy2D_tableau
   double upper_range_limit(const double frac);
 
   //: Use OpenGL Hardware mapping
-  void set_hardware(bool hardware ){hardware_=hardware;}
+  void set_hardware(bool hardware) { hardware_=hardware; }
 
   //: Handles all events for this tableau.
   virtual bool handle(const vgui_event&);

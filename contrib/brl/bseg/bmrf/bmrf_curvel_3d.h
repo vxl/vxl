@@ -11,7 +11,6 @@
 //  Modifications
 // \endverbatim
 
-#include <bmrf/bmrf_curvel_3d_sptr.h>
 #include <bmrf/bmrf_node_sptr.h>
 #include <bugl/bugl_gaussian_point_3d.h>
 #include <vgl/vgl_point_3d.h>
@@ -22,6 +21,8 @@
 #include <vcl_vector.h>
 #include <vcl_map.h>
 #include <vcl_utility.h>
+
+#include "bmrf_curvel_3d_sptr.h"
 
 //: An uncertain 3D curve element
 class bmrf_curvel_3d : public bugl_gaussian_point_3d<double>, public vbl_ref_count
@@ -101,7 +102,7 @@ class bmrf_curvel_3d : public bugl_gaussian_point_3d<double>, public vbl_ref_cou
 
   //: Print an ascii summary to the stream
   void print_summary(vcl_ostream &os) const;
-  
+
  protected:
   //: Compute the gamma statistics on the current projections
   void compute_statistics();

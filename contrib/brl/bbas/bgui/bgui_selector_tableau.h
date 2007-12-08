@@ -14,10 +14,11 @@
 #include <vcl_vector.h>
 #include <vcl_map.h>
 
-#include <bgui/bgui_selector_tableau_sptr.h>
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_parent_child_link.h>
 class vgui_event;
+
+#include "bgui_selector_tableau_sptr.h"
 
 //: Tableau that allows the selection of one active child but displays all children
 //

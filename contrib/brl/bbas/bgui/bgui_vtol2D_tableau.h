@@ -39,7 +39,8 @@
 #include <vgui/vgui_image_tableau_sptr.h>
 #include <bgui/bgui_vsol2D_tableau.h>
 #include <bgui/bgui_vsol2D_tableau_sptr.h>
-#include <bgui/bgui_vtol2D_tableau_sptr.h>
+
+#include "bgui_vtol2D_tableau_sptr.h"
 
 class bgui_vtol_soview2D_vertex;
 class bgui_vtol_soview2D_edge;
@@ -95,8 +96,8 @@ class bgui_vtol2D_tableau : public bgui_vsol2D_tableau
   void clear_all();
 
   //: Methods for getting mapped objects
-  //void enable_highlight(){highlight_ = true;}
-  //void disable_highlight(){highlight_ = false;}
+  //void enable_highlight() { highlight_ = true; }
+  //void disable_highlight() { highlight_ = false; }
   vtol_edge_2d_sptr get_mapped_edge(const int id);
   vtol_face_2d_sptr get_mapped_face(const int id);
 
@@ -109,8 +110,8 @@ class bgui_vtol2D_tableau : public bgui_vsol2D_tableau
   void set_face_style(const vgui_style_sptr& style);
 
   //: Access to temporary cached object, useful for new rubberbanded objects
-  void set_temp(vtol_topology_object_sptr const& to){temp_=to;}
-  vtol_topology_object_sptr get_temp(){return temp_;}
+  void set_temp(vtol_topology_object_sptr const& to) { temp_=to; }
+  vtol_topology_object_sptr get_temp() { return temp_; }
  protected:
   vgui_style_sptr vertex_style_;
   vgui_style_sptr edge_style_;

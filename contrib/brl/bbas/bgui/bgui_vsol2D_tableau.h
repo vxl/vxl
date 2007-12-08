@@ -39,7 +39,8 @@
 #include <vgui/vgui_image_tableau_sptr.h>
 #include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_style_sptr.h>
-#include <bgui/bgui_vsol2D_tableau_sptr.h>
+
+#include "bgui_vsol2D_tableau_sptr.h"
 
 class bgui_vsol_soview2D_point;
 class bgui_vsol_soview2D_line_seg;
@@ -99,7 +100,7 @@ class bgui_vsol2D_tableau : public vgui_easy2D_tableau
   bgui_vsol_soview2D_digital_curve*
     add_dotted_digital_curve(vsol_digital_curve_2d_sptr const& dc,
                              const vgui_style_sptr& style = NULL);
-                             
+
   //: display for vdgl_digital_curve
   bgui_vsol_soview2D_edgel_curve*
     add_edgel_curve(vdgl_digital_curve_sptr const& dc,

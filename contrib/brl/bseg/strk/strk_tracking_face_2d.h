@@ -30,10 +30,11 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vtol/vtol_intensity_face.h>
-#include <strk/strk_tracking_face_2d_sptr.h>
 #include <bsta/bsta_histogram.h>
 #include <vgl/vgl_point_2d.h>
-// not used? #include <vcl_utility.h>
+
+#include "strk_tracking_face_2d_sptr.h"
+
 //
 //========================TRACKING_FACE_2D==================================
 //
@@ -75,10 +76,10 @@ class strk_tracking_face_2d : public vbl_ref_count
   float grad_mutual_info() const { return gradient_dir_mi_; }
   float color_mutual_info() const { return color_mi_; }
   float total_info() const { return total_info_; }
-  vnl_matrix_fixed<double, 3, 3>& trans(){return trans_;}
+  vnl_matrix_fixed<double, 3, 3>& trans() { return trans_; }
   //:mutators
-  void set_min_gradient(const float min_gradient){min_gradient_=min_gradient;}
-  void set_parzen_sigma(const float parzen_sigma){parzen_sigma_=parzen_sigma;}
+  void set_min_gradient(float min_gradient) { min_gradient_=min_gradient; }
+  void set_parzen_sigma(float parzen_sigma) { parzen_sigma_=parzen_sigma; }
   void set_Ix(int i, float Ix) { Ix_[i] = Ix; }
   void set_Iy(int i, float Iy) { Iy_[i] = Iy; }
   void set_hue(int i, float Ix) { hue_[i] = Ix; }
@@ -86,10 +87,10 @@ class strk_tracking_face_2d : public vbl_ref_count
   void set_int_mutual_info(float mi);
   void set_grad_mutual_info(float mi);
   void set_color_mutual_info(float mi);
-  void set_max_intensity(const float max_intensity){max_intensity_=max_intensity;}
+  void set_max_intensity(float max_intensity) { max_intensity_=max_intensity; }
   //:controls
-  void set_renyi_joint_entropy(){renyi_joint_entropy_=true;}
-  void unset_renyi_joint_entropy(){renyi_joint_entropy_=false;}
+  void set_renyi_joint_entropy() { renyi_joint_entropy_=true; }
+  void unset_renyi_joint_entropy() { renyi_joint_entropy_=false; }
   //:histogram properties
   void set_intensity_hist_bins(const unsigned int n_bins)
     {intensity_hist_bins_=n_bins;}
@@ -102,22 +103,22 @@ class strk_tracking_face_2d : public vbl_ref_count
   unsigned int color_hist_bins() const { return color_hist_bins_; }
 
   //: internal entropies for debugging purposes
-  float model_intensity_entropy(){return model_intensity_entropy_;}
-  float intensity_entropy(){return intensity_entropy_;}
-  float intensity_joint_entropy(){return intensity_joint_entropy_;}
+  float model_intensity_entropy() const { return model_intensity_entropy_; }
+  float intensity_entropy() const { return intensity_entropy_; }
+  float intensity_joint_entropy() const { return intensity_joint_entropy_; }
 
-  float model_gradient_entropy(){return model_gradient_dir_entropy_;}
-  float gradient_entropy(){return gradient_dir_entropy_;}
-  float gradient_joint_entropy(){return gradient_joint_entropy_;}
+  float model_gradient_entropy() const { return model_gradient_dir_entropy_; }
+  float gradient_entropy() const { return gradient_dir_entropy_; }
+  float gradient_joint_entropy() const { return gradient_joint_entropy_; }
 
-  float model_color_entropy(){return model_color_entropy_;}
-  float color_entropy(){return color_entropy_;}
-  float color_joint_entropy(){return color_joint_entropy_;}
+  float model_color_entropy() const { return model_color_entropy_; }
+  float color_entropy() const { return color_entropy_; }
+  float color_joint_entropy() const { return color_joint_entropy_; }
 
-  float intensity_info_diff(){return intensity_info_diff_;}
-  float color_info_diff(){return color_info_diff_;}
+  float intensity_info_diff() const { return intensity_info_diff_; }
+  float color_info_diff() const { return color_info_diff_; }
   float total_info_diff();
-  //: utilities
+  //     -----------   utilities   ----------------
   bool compute_mutual_information(vil1_memory_image_of<float> const& image,
                                   vil1_memory_image_of<float> const& Ix,
                                   vil1_memory_image_of<float> const& Iy,

@@ -17,9 +17,9 @@
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_io.h>
 #include <bmrf/bmrf_node_sptr.h>
-#include <bmrf/bmrf_arc_sptr.h>
 #include <bmrf/bmrf_gamma_func_sptr.h>
 
+#include "bmrf_arc_sptr.h"
 
 //: Directed arc from one node to another
 class bmrf_arc : public vbl_ref_count

@@ -20,10 +20,10 @@
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_io.h>
 #include <bmrf/bmrf_arc_sptr.h>
-#include <bmrf/bmrf_node_sptr.h>
 #include <bmrf/bmrf_epi_seg_sptr.h>
 #include <bmrf/bmrf_gamma_func_sptr.h>
 
+#include "bmrf_node_sptr.h"
 
 //: A Markov Random Field (MRF) node
 class bmrf_node : public vbl_ref_count

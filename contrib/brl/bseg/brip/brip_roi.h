@@ -80,6 +80,6 @@ class brip_roi : public vbl_ref_count
 
 vcl_ostream&  operator<<(vcl_ostream& s, brip_roi const& r);
 
-#include <brip/brip_roi_sptr.h>
+#include "brip_roi_sptr.h"
 
 #endif // brip_roi_h_

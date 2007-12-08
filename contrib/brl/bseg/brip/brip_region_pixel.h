@@ -16,7 +16,8 @@
 #include <vcl_iosfwd.h>
 #include <vbl/vbl_ref_count.h>
 #include <vgl/vgl_point_2d.h>
-#include <brip/brip_region_pixel_sptr.h>
+
+#include "brip_region_pixel_sptr.h"
 
 class brip_region_pixel : public vbl_ref_count
 {

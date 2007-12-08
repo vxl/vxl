@@ -16,8 +16,9 @@
 #include <vgui/vgui_image_tableau_sptr.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vvid/vvid_live_video_tableau.h>
-#include <vvid/vvid_live_video_tableau_sptr.h>
 #include <vvid/cmu_1394_camera.h>
+
+#include "vvid_live_video_tableau_sptr.h"
 
 class vvid_live_video_tableau : public vgui_image_tableau
 {
@@ -35,10 +36,10 @@ class vvid_live_video_tableau : public vgui_image_tableau
   cmu_1394_camera_params get_camera_params() { return (cmu_1394_camera_params)cam_; }
   bool video_capabilities(int format, int mode, int frame_rate) { return cam_.m_videoFlags[format][mode][frame_rate]; }
 
-  int get_current() { return cam_.get_current(); }
+  int get_current() const { return cam_.get_current(); }
   void set_current(int current) { cam_.set_current(current); }
-  vcl_string current_capability_desc() { return cam_.current_capability_desc(); }
-  vcl_vector<vcl_string> get_capability_descriptions() { return cam_.get_capability_descriptions(); }
+  vcl_string current_capability_desc() const { return cam_.current_capability_desc(); }
+  vcl_vector<vcl_string> get_capability_descriptions() const { return cam_.get_capability_descriptions(); }
 
   //:live video processing
   bool attach_live_video();

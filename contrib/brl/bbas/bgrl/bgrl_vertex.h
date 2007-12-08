@@ -7,7 +7,7 @@
 // \author Matt Leotta, (mleotta@lems.brown.edu)
 // \date 3/17/04
 //
-// The vertex contains sets of incoming and outgoing 
+// The vertex contains sets of incoming and outgoing
 // edges to other vertices in the graph
 //
 // \verbatim
@@ -17,8 +17,9 @@
 #include <vcl_set.h>
 #include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_ref_count.h>
-#include <bgrl/bgrl_vertex_sptr.h>
 #include <bgrl/bgrl_edge_sptr.h>
+
+#include "bgrl_vertex_sptr.h"
 
 // forward declare the edge
 class bgrl_edge;
@@ -46,15 +47,15 @@ class bgrl_vertex : public vbl_ref_count
   //: Returns an iterator to the end of the list of outgoing edges
   edge_iterator end();
 
-  //: Returns the total number of edges at this vertex 
+  //: Returns the total number of edges at this vertex
   int degree() const { return this->in_degree() + this->out_degree(); }
 
-  //: Returns the number of incoming edges to this vertex 
+  //: Returns the number of incoming edges to this vertex
   unsigned int in_degree() const { return in_edges_.size(); }
 
-  //: Returns the number of outgoing edges to this vertex 
+  //: Returns the number of outgoing edges to this vertex
   unsigned int out_degree() const { return out_edges_.size(); }
-  
+
   //: Return a platform independent string identifying the class
   virtual vcl_string is_a() const;
 
@@ -81,7 +82,7 @@ class bgrl_vertex : public vbl_ref_count
   bgrl_edge_sptr add_edge_to( const bgrl_vertex_sptr& vertex,
                               const bgrl_edge_sptr& model_edge );
 
-  //: Remove the outgoing edge to \p vertex 
+  //: Remove the outgoing edge to \p vertex
   // \retval true if the edge was removed successfully
   // \retval false if the edge was not found
   bool remove_edge_to(const bgrl_vertex_sptr& vertex);

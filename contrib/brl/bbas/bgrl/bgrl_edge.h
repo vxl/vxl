@@ -16,9 +16,9 @@
 
 #include <vbl/vbl_ref_count.h>
 #include <bgrl/bgrl_vertex_sptr.h>
-#include <bgrl/bgrl_edge_sptr.h>
 #include <vsl/vsl_binary_io.h>
 
+#include "bgrl_edge_sptr.h"
 
 //: Directed edge from one vertex to another
 class bgrl_edge : public vbl_ref_count
