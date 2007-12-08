@@ -14,7 +14,7 @@
 //
 //-----------------------------------------------------------------------------
 #include <vcl_iosfwd.h>
-#include <sdet/sdet_region_sptr.h>
+#include "sdet_region_sptr.h"
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vdgl/vdgl_digital_region.h>
 

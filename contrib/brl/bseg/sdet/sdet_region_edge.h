@@ -45,7 +45,7 @@
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vbl/vbl_ref_count.h>
 #include <vcl_stlfwd.h> // for vcl_vector
-#include <sdet/sdet_region_edge_sptr.h>
+#include "sdet_region_edge_sptr.h"
 
 class sdet_region_edge : public vbl_ref_count
 {
