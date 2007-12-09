@@ -17,7 +17,7 @@ bool bwm_corr::match(bwm_observer_cam* obs, vgl_point_2d<double> &pt)
     return true;
   }
 
-  vcl_cerr << "Correspondent point is not found for this observer" << vcl_endl;
+  vcl_cerr << "Correspondent point is not found for this observer\n";
   return false;
 }
 //need to use a tolerance to check equality of points

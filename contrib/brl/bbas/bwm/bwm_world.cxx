@@ -698,7 +698,7 @@ void bwm_world::save_kml_collada()
   vcl_fclose(kml_fp);
 }
 
-void bwm_world::clear() 
+void bwm_world::clear()
 {
   world_pt_valid_ = false;
   lvcs_valid_ = false;
