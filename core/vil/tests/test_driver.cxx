@@ -27,6 +27,7 @@ DECLARE( test_pyramid_image_resource );
 DECLARE( test_image_list );
 DECLARE( test_border );
 DECLARE( test_4_plane_tiff );
+DECLARE( test_math_median );
 
 void
 register_tests()
@@ -58,6 +59,7 @@ register_tests()
   REGISTER( test_image_list );
   REGISTER( test_border );
   REGISTER( test_4_plane_tiff );
+  REGISTER( test_math_median );
 }
 
 DEFINE_MAIN;

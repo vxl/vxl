@@ -5,8 +5,11 @@ aren't documented here, unless the bug-fix has a major observable
 effect.  If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
+      - vil_math_median implemented for vxl_byte images using fast histogram
+        method.
+
       - Added a sparse least squares function with sparse Levenberg Marquardt
-         optimizer to vnl 
+         optimizer to vnl
 
       - changed the interface of vnl_matrix_fixed get_row and get_column
         to return a vnl_vector_fixed

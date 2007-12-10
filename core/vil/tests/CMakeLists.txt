@@ -39,6 +39,7 @@ ADD_EXECUTABLE( vil_test_all
 
   # Math
   test_math_value_range.cxx
+  test_math_median.cxx
 )
 
 TARGET_LINK_LIBRARIES( vil_test_all vil vpl vul testlib vcl )
@@ -75,6 +76,7 @@ ADD_TEST( vil_test_resample_bicub           ${EXECUTABLE_OUTPUT_PATH}/vil_test_a
 
 # Math
 ADD_TEST( vil_test_math_value_range         ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_math_value_range)
+ADD_TEST( vil_test_math_median              ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_math_median)
 
 # Blocked images
 ADD_TEST( vil_test_blocked_image_resource   ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_blocked_image_resource ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)

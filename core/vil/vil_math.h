@@ -261,6 +261,30 @@ inline void vil_math_mean(sumT& mean, const vil_image_view<imT>& im, unsigned p)
   mean/=(im.ni()*im.nj());
 }
 
+// helper function for reporting an error without cluttering the
+// header with unnecessary includes.
+void vil_math_median_unimplemented();
+
+//: Median of elements in plane p of an image.
+//
+// For integral types, if the the median is half way between two
+// values, the result will be the floor of the average.
+//
+// \relates vil_image_view
+template<class imT>
+inline void vil_math_median(imT& median, const vil_image_view<imT>& im, unsigned p)
+{
+  vil_math_median_unimplemented();
+}
+// median is unimplemented in the general case (for now).
+
+// Purposefully not documented via doxygen; let the general template's
+// documentation be the documentation.
+VCL_DEFINE_SPECIALIZATION
+void vil_math_median(vxl_byte& median, const vil_image_view<vxl_byte>& im, unsigned p);
+
+
+
 //: Sum of squares of elements in plane p of image
 // \relates vil_image_view
 template<class imT, class sumT>

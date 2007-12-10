@@ -164,7 +164,7 @@ SET( vil_sources ${vil_sources}
   vil_transpose.cxx                     vil_transpose.h
   vil_flip.cxx                          vil_flip.h
   vil_plane.cxx                         vil_plane.h
-  vil_math.h
+  vil_math.cxx                          vil_math.h
   vil_view_as.h
   vil_convert.h
   vil_fill.h
