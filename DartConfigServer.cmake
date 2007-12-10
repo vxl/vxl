@@ -61,7 +61,6 @@ SET (EXPECTED_BUILDS "\\
   {grc.ge.com FreeBSD-6.2_gcc-4.2.2_-Wall_-O2_shared} \\
   {grc.ge.com Linux-2.4.21_icc-8.1_-w1_-O2_shared} \\
   {grc.ge.com MinGW-3.8_gcc-3.4.4_-Wall_-O2_static} \\
-  {grc.ge.com Cygwin_gcc-3.4.4_-Wall_-O2_static} \\
   {grc.ge.com Win2k_bcc-5.5.1_Release} \\
   {grc.ge.com Win2k_msvc-7.1_Debug} \\
   {imorphics Win_msvc} \\
