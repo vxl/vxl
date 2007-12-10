@@ -44,8 +44,7 @@ void test_pca1(unsigned nd, unsigned ns)
   v3.normalize();
 
   vcl_vector<vnl_vector<double> > data(ns);
-  double sum0=0,sum1=0;
-  for (unsigned i=0;i<ns;++i)
+  for (unsigned i=0; i<ns; ++i)
   {
     double A = i*(2.0*vnl_math::pi/ns);
     // Third term introduces small "noise"
