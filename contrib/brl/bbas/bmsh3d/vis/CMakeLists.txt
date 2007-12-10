@@ -1,11 +1,9 @@
 # 3D application
 # contrib/dbmsh3d/vis/CMakeLists.txt
 
-INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/UseBGUI3D.cmake )
+INCLUDE( ${MODULE_PATH}/UseBGUI3D.cmake )
 
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
-#INCLUDE_DIRECTORIES( ${lems_SOURCE_DIR}/basic )
-#INCLUDE_DIRECTORIES( ${lems_SOURCE_DIR}/brcv/shp )
 
 IF (HAS_BGUI3D)
 

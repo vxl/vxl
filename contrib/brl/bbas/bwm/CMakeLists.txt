@@ -1,7 +1,7 @@
 # world modeling application
 # contrib/brl/bwm/CMakeLists.txt
 
-INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/UseBGUI3D.cmake )
+INCLUDE( ${MODULE_PATH}/UseBGUI3D.cmake )
 IF(HAS_BGUI3D)
 
 IF(BUILD_EXPAT) 
