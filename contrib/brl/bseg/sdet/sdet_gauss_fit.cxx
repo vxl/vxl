@@ -55,7 +55,6 @@ void sdet_adjust_lsqr::f( vnl_vector<double> const& unknowns,
   // set the parameters of the 2-d gaussain from "unknowns" and
   //   calculate the pixel point predictions using these values
 
-  double pi = vnl_math::pi;
   vnl_vector<double> fit_value(num_pixels_); // the gaussian predictions of image intensity
   vnl_vector<double> sum(num_pixels_); // the sum of gaussians from all peaks
   // zero out all sums
@@ -248,7 +247,7 @@ vnl_vector<double> sdet_gauss_fit::adjust( vcl_vector<vgl_point_3d<double> > img
   if (!init(img_pts, peak, plane, ux, uy, sxx, syy, sxy, ps_list, n_peaks, xmin, ymin))
   {
     outfile << "ERROR!! sdet_gauss_fit::adjust(), Cannot init()" << vcl_endl;
-    vcl_cerr << "ERROR!! sdet_gauss_fit::adjust(), Cannot init()" << vcl_endl;
+    vcl_cerr << "ERROR!! sdet_gauss_fit::adjust(), Cannot init()\n";
   }
 
   for (int i=0; i < n_peaks; i++)
@@ -368,7 +367,7 @@ vnl_vector<double> sdet_gauss_fit::calculate_ellipse( vnl_vector<double> result,
   // First check to be sure n_peaks agrees with the length of result
   vnl_vector<double> params(3*n_peaks);
 
-  double pi = vnl_math::pi;
+  const double pi = vnl_math::pi;
   double theta = 0.0;                  // angle from x axis to ellipse major axis
   double a = 0.0;                      // ellipse major axis std deviation
   double b = 0.0;                      // ellipse minor axis std deviation
