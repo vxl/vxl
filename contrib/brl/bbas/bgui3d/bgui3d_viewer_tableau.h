@@ -1,7 +1,6 @@
-// This is basic/bgui3d/bgui3d_viewer_tableau.h
+// This is brl/bbas/bgui3d/bgui3d_viewer_tableau.h
 #ifndef bgui3d_viewer_tableau_h_
 #define bgui3d_viewer_tableau_h_
-  
 //:
 // \file
 // \brief  Abstract base tableau for 3D viewers
@@ -12,13 +11,7 @@
 //  Modifications
 // \endverbatim
 
-//: if you switch these two, you get error!! why??
-
-///template class vnl_matrix_fixed<double,3,4>;
-
 #include "bgui3d_tableau.h"
-#include <vnl/vnl_double_3x4.h>
-
 
 // forward declarations
 class SoCamera;
@@ -29,22 +22,18 @@ class SoPerspectiveCamera;
 class SoSwitch;
 class SoText2;
 
-//#include <Inventor/nodes/SoPerspectiveCamera.h>
-//#include <Inventor/nodes/SoOrthographicCamera.h>
-///#include <Inventor/nodes/SoDirectionalLight.h>
-
 
 //:  Abstract base tableau for 3D viewers
 class bgui3d_viewer_tableau : public bgui3d_tableau
 {
-protected:
+ protected:
   //: Constructor
   bgui3d_viewer_tableau(SoNode * scene_root = NULL);
 
   //: Destructor
   virtual ~bgui3d_viewer_tableau();
 
-public:
+ public:
   //: Handle vgui events
   virtual bool handle(const vgui_event& event) = 0;
 
@@ -53,7 +42,7 @@ public:
 
   //: Set the scene root
   virtual void set_scene_root(SoNode* scene_root);
-  
+
   //: Return the root node in the users portion of the scene graph
   SoNode* user_scene_root() const { return user_scene_root_; }
 
@@ -65,14 +54,14 @@ public:
   virtual bool set_camera(const vpgl_proj_camera<double>& camera);
 
   //: Get the scene camera
-  // creates a vpgl camera (either perspective or affine) from the active SoCamera
+  // Creates a vpgl camera (either perspective or affine) from the active SoCamera
   virtual vcl_auto_ptr<vpgl_proj_camera<double> > camera() const;
 
   //: Set the camera viewing the scene
   virtual void set_camera(SoCamera *camera);
 
   //: Select the active camera by index
-  // a negative index selects the first user scene camera
+  // A negative index selects the first user scene camera
   void select_camera(int camera_index);
 
   //: Return the camera viewing the scene
@@ -112,12 +101,9 @@ public:
 
   //-------------Text Methods-------------------
   //: set the text
-  void setText( const vcl_string& string ); 
+  void setText( const vcl_string& string );
 
-
-
-
-protected:
+ protected:
   //: Find the parent nodes in the scene graph
   vcl_vector<SoGroup*> get_parents_of_node(SoNode * node);
 
@@ -132,10 +118,10 @@ protected:
   vcl_vector<SoCamera*> find_cameras(SoNode* root) const;
 
   //: Find the VRML viewpoint nodes in the scenegraph and make camera
-  // the cameras are added to the camera group (outside the user scene)
+  // The cameras are added to the camera group (outside the user scene)
   void collect_vrml_cameras(SoNode* root) const;
 
-protected:
+ protected:
 
   //: The subgraph provided by the user
   SoNode* user_scene_root_;
@@ -144,15 +130,12 @@ protected:
 
   SoCamera* scene_camera_;
   SoNode* stored_camera_;
-  
+
   camera_type_enum camera_type_;
 
   SoDirectionalLight * headlight_;
 
   SoText2* _text;
-
 };
-
-
 
 #endif // bgui3d_viewer_tableau_h_
