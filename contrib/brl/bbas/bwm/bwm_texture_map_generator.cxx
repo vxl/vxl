@@ -2,15 +2,12 @@
 //#include "bwm_observer.h"
 //#include "bwm_observable_mesh.h"
 
-#include <vil1/vil1_image.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_copy.h>
 #include <vil/vil_crop.h>
 #include <vil/vil_save.h>
 #include <vsol/vsol_box_2d.h>
-#include <vsol/vsol_polygon_3d.h>
-#include <vsol/vsol_polygon_2d.h>
 
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_point_2d.h>
@@ -23,20 +20,18 @@
 #include <vpgl/bgeo/bgeo_lvcs.h>
 
 
-
-bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr obj, 
-                                                     vcl_string texture_filename, 
+bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr obj,
+                                                     vcl_string texture_filename,
                                                      bgeo_lvcs lvcs)
 {
-
   if (observers_.size() == 0) {
     vcl_cerr << "Error: Cannot create texture map, zero observers!\n";
     return false;
   }
-  
+
 
   // find best observer for each mesh face
-  
+
   //vcl_vector<vil_image_view_base_sptr> img_orig_view;
   vcl_vector<vgl_point_2d<int> > img_sizes;
   vcl_vector<vsol_box_2d> bounding_box;
@@ -49,8 +44,6 @@ bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr ob
     vsol_box_2d box;
     bounding_box.push_back(box);
   }
-  
- 
 
   bmsh3d_textured_mesh_mc* mesh = new bmsh3d_textured_mesh_mc(obj->get_object());
   // delete old object here?
@@ -93,8 +86,8 @@ bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr ob
     int best_observer_idx = -1;
     double best_observer_score = 0.0;
 
-    for (unsigned obs_idx = 0; obs_idx < observers_.size(); obs_idx++) {
-      
+    for (unsigned obs_idx = 0; obs_idx < observers_.size(); obs_idx++)
+    {
       // test each vertex for visibility, assume face visibility is AND of all tests
       bool is_visible = true;
       for (unsigned j=0; j < face_vertices.size(); j++){
@@ -109,16 +102,17 @@ bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr ob
       //
       // TODO: check if face is occluded
       //
-      if (is_visible) {
+      if (is_visible)
+      {
         // compute normal in lvcs coordinates!
         vgl_vector_3d<double> face_normal = compute_face_normal_lvcs(tex_face,lvcs);
 
         vgl_vector_3d<double> face_normal_global = compute_normal_ifs(face_vertices);
         vgl_vector_3d<double> face_normal_phe = tex_face->compute_normal();
 
-        //vcl_cout << "face normal local = " << face_normal << vcl_endl;
-        //vcl_cout << "face normal phe =    " << face_normal_phe << vcl_endl;
-        //vcl_cout << "face normal global = "<< face_normal_global << vcl_endl << vcl_endl;
+        //vcl_cout << "face normal local = " << face_normal << vcl_endl
+        //         << "face normal phe =    " << face_normal_phe << vcl_endl
+        //         << "face normal global = "<< face_normal_global << vcl_endl << vcl_endl;
 
 
         face_normal = face_normal / face_normal.length(); // not gauranteed to be normalized
@@ -133,7 +127,7 @@ bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr ob
         }
       }
     }
-    
+
     if (best_observer_score > 0) {
       for (unsigned j=0; j < face_vertices.size(); j++){
         bmsh3d_vertex* face_vert = (bmsh3d_vertex*)face_vertices[j];
@@ -147,7 +141,6 @@ bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr ob
       // use -1 to indicate face not visible from any observer
       best_face_observer_idx[tex_face->id()] = -1;
     }
-
   } // for each face
 
   // determine crop region for each observers image
@@ -187,9 +180,9 @@ bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr ob
   }
   tex_width = x_offsets.back();
 
-  // now loop through each face's tex coords and normalize 
-  for (fit = mesh->facemap().begin(); fit != mesh->facemap().end(); fit++) {
-
+  // now loop through each face's tex coords and normalize
+  for (fit = mesh->facemap().begin(); fit != mesh->facemap().end(); fit++)
+  {
     bmsh3d_textured_face_mc* tex_face = (bmsh3d_textured_face_mc*)fit->second;
     vcl_vector<bmsh3d_vertex*> face_vertices = tex_face->vertices();
     int best_obs = best_face_observer_idx[tex_face->id()];
@@ -217,7 +210,7 @@ bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr ob
 
   // crop out bounding box from original images and copy to the texture image
   //vil_image_view_base_sptr tex_map_view = vil_crop(img_orig,bounding_box.get_min_x(),bounding_box.width(),bounding_box.get_min_y(),bounding_box.height());
- 
+
   vil_image_view<vxl_byte> tex_map_view(tex_width,tex_height,3);
   for (unsigned obs_idx = 0; obs_idx < observers_.size(); obs_idx++) {
     if ( (crop_sizes[obs_idx].x() > 0) && (crop_sizes[obs_idx].y() > 0) ) {
@@ -235,18 +228,18 @@ bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr ob
 
 
       vil_image_view<vxl_byte> cropped_view = img_orig_cropped->get_view();
-      vcl_cout << "cropped_view nplanes = "<<cropped_view.nplanes()<<vcl_endl;
-      vcl_cout << "tex_map_view nplanes = "<<tex_map_view.nplanes()<<vcl_endl;
+      vcl_cout << "cropped_view nplanes = "<<cropped_view.nplanes()<<vcl_endl
+               << "tex_map_view nplanes = "<<tex_map_view.nplanes()<<vcl_endl;
       vil_copy_to_window(cropped_view,tex_map_view,x_offsets[obs_idx],0);
     }
   }
   vil_save(tex_map_view,texture_filename.c_str());
-  
+
   return true;
 }
 
-vgl_vector_3d<double> bwm_texture_map_generator::compute_face_normal_lvcs(bmsh3d_face* face, bgeo_lvcs lvcs) {
-
+vgl_vector_3d<double> bwm_texture_map_generator::compute_face_normal_lvcs(bmsh3d_face* face, bgeo_lvcs lvcs)
+{
   vgl_vector_3d<double> normal;
 
   vcl_vector<bmsh3d_vertex*> verts = face->vertices();
