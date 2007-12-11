@@ -1,17 +1,14 @@
-//: 040312 
-//  Ming: General 3D Utilities
-
 #ifndef bmsh3d_utils_h_
 #define bmsh3d_utils_h_
+//:
+// \file
+// \author Ming-Ching Chang
+// \date 040312
+//  Ming: General 3D Utilities
 
-#include <vcl_cstdio.h>
-#include <vcl_climits.h>
-#include <vcl_cfloat.h>
-#include <vcl_cmath.h>
-#include <vcl_string.h>
-
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_box_3d.h>
+//#include <vcl_climits.h>
+//#include <vcl_cfloat.h>
+#include <vcl_sstream.h>
 
 #include "bmsh3d_fuzzy_boolean.h"
 
@@ -31,32 +28,29 @@
 //: visualization element: contains one void* pointer to the visualization object
 class vispt_elm
 {
-protected:
+ protected:
   // pointer to the visualization object
   void* vis_pointer_;
 
-public:
-  //: ====== Constructor/Destructor ======
-  vispt_elm()  { 
-    vis_pointer_ = NULL; 
-  }
-  virtual ~vispt_elm() { } 
-  
-  //: ====== Data access functions ======
-  void set_vis_pointer (const void* pointer) { 
-    vis_pointer_ = (void*) pointer; 
-  }
-  const void* vis_pointer() const { 
-    return vis_pointer_; 
-  }
+  // ====== Constructor/Destructor ======
 
-  //: Ming: don't make this function virtual. It eats up 4 bytes of mem for each derived object!
-  virtual void getInfo (vcl_ostringstream& ostrm) {  }
+ public:
+  vispt_elm()  { vis_pointer_ = NULL; }
+  virtual ~vispt_elm() {}
+
+  // ====== Data access functions ======
+
+  void set_vis_pointer (const void* pointer) { vis_pointer_ = (void*) pointer; }
+  const void* vis_pointer() const { return vis_pointer_; }
+
+  //: Ming: don't make this function pure virtual. It eats up 4 bytes of mem for each derived object!
+  virtual void getInfo (vcl_ostringstream& ostrm) {}
 };
 
 //##########################################################
 //Color code to visualize several mesh objects.
-typedef enum {
+typedef enum
+{
   COLOR_NOT_SPECIFIED = 0,
   COLOR_BLACK         = 1,
   COLOR_RED           = 2,
