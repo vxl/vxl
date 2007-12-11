@@ -304,6 +304,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 /* Borland compiler provides a "poly" function in math.h.  This
    conflicts with the variable name used below.  Move the symbol out
@@ -3548,12 +3549,7 @@ void exactinit()
 /*                                                                           */
 /*****************************************************************************/
 
-int fast_expansion_sum_zeroelim(elen, e, flen, f, h)  /* h cannot be e or f. */
-int elen;
-REAL *e;
-int flen;
-REAL *f;
-REAL *h;
+int fast_expansion_sum_zeroelim(int elen, REAL *e, int flen, REAL *f, REAL *h)  /* h cannot be e or f. */
 {
   REAL Q;
   INEXACT REAL Qnew;
@@ -3637,11 +3633,7 @@ REAL *h;
 /*                                                                           */
 /*****************************************************************************/
 
-int scale_expansion_zeroelim(elen, e, b, h)   /* e and h cannot be the same. */
-int elen;
-REAL *e;
-REAL b;
-REAL *h;
+int scale_expansion_zeroelim(int elen, REAL *e, REAL b, REAL *h)   /* e and h cannot be the same. */
 {
   INEXACT REAL Q, sum;
   REAL hh;
@@ -3688,9 +3680,7 @@ REAL *h;
 /*                                                                           */
 /*****************************************************************************/
 
-REAL estimate(elen, e)
-int elen;
-REAL *e;
+REAL estimate(int elen, REAL *e)
 {
   REAL Q;
   int eindex;
