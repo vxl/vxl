@@ -298,7 +298,7 @@ bool bmsh3d_vertex::m2_is_on_bnd (bmsh3d_halfedge* inputHE) const
 double bmsh3d_vertex::m2_sum_theta () const
 {
   vcl_vector<bmsh3d_halfedge*> ordered_halfedges;
-  bmsh3d_halfedge* last_he = m2_get_ordered_HEs (ordered_halfedges);
+  m2_get_ordered_HEs(ordered_halfedges);
   double sum_theta = 0;
 
   //loop through each adjacent face face_j.
@@ -312,7 +312,7 @@ double bmsh3d_vertex::m2_sum_theta () const
 }
 
 bmsh3d_edge* E_sharing_2V (const bmsh3d_vertex* V1,
-                            const bmsh3d_vertex* V2)
+                           const bmsh3d_vertex* V2)
 {
   for (bmsh3d_ptr_node* cur = V1->E_list(); cur != NULL; cur = cur->next()) {
     bmsh3d_edge* E = (bmsh3d_edge*) cur->ptr();
