@@ -403,7 +403,6 @@ render_directly(vgui_range_map_params_sptr const& rmp)
           return false;
         }//end of case uint_16, 1 plane
 
-
         // This case arises for multi-spectral satellite images
         // The current display approach is to select 3 bands from
         // 4 to display as RBGA where A =0. (Later use a lookup table)
@@ -430,13 +429,15 @@ render_directly(vgui_range_map_params_sptr const& rmp)
           }
           return false;
         }//end of case uint_16, 4 plane
-        return false;
+        default:
+          return false;
       }// end of uint_16, switch on planes
-      return false;
+      return false; // this statement is never reached
     } // end of uint_16
-    return false;
+    default:
+      return false;
   }//end of switch on format
-  return false;
+  return false; // this statement is never reached
 }
 
 void vgui_vil_image_renderer::
