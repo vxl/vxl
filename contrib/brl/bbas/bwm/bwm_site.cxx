@@ -4,6 +4,7 @@
 #include "bwm_corr.h"
 
 #include <vcl_utility.h>
+#include <vcl_cassert.h>
 #include <vsl/vsl_basic_xml_element.h>
 #include <vsol/vsol_point_2d.h>
 
@@ -122,7 +123,7 @@ void bwm_site::x_write(vcl_ostream& s)
     xml_element.add_attribute("type", corr_type_);
     xml_element.x_write_open(s);
 
-    if (corr_mode_.compare("WORLD_TO_IMAGE") == 0) 
+    if (corr_mode_.compare("WORLD_TO_IMAGE") == 0)
       assert(corresp_.size() == corresp_world_pts_.size());
 
     for (unsigned i=0; i< this->corresp_.size(); i++) {

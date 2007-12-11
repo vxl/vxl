@@ -1,11 +1,10 @@
+// This is brl/bbas/bmsh3d/bmsh3d_vertex.h
+//---------------------------------------------------------------------
 #ifndef _bmsh3d_vertex_h_
 #define _bmsh3d_vertex_h_
-//---------------------------------------------------------------------
-// This is brl/bbas/bmsh3d/bmsh3d_vertex.h
 //:
 // \file
 // \brief Basic 3d point sample on a mesh
-//
 //
 // \author
 //  MingChing Chang  April 22, 2005
@@ -19,8 +18,8 @@
 
 #include <vcl_set.h>
 #include <vcl_string.h>
+#include <vcl_cassert.h>
 #include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_box_3d.h>
 
 #include "bmsh3d_ptr_list.h"
 #include "bmsh3d_utils.h"
@@ -44,7 +43,8 @@ class bmsh3d_halfedge;
 class bmsh3d_face;
 
 //: Typology of a mesh vertex.
-typedef enum {
+typedef enum
+{
   BOGUS_VTOPO_TYPE          = 0,
   VTOPO_ISOLATED            = 1,
   VTOPO_EDGE_ONLY           = 2,
@@ -57,7 +57,7 @@ typedef enum {
 
 class bmsh3d_vertex : public vispt_elm
 {
-protected:
+ protected:
   int   id_;
 
   vgl_point_3d<double> pt_;
@@ -66,7 +66,7 @@ protected:
   bmsh3d_ptr_node* E_list_;
 
   //: link list to incident mesh faces for intermediate processing.
-  bmsh3d_ptr_node* F_list_;   
+  bmsh3d_ptr_node* F_list_;
 
   //: To optimize C++ class object size, this variable is used for:
   //    - i_visited_: the visited flag for mesh hypergraph traversal.
@@ -83,7 +83,7 @@ protected:
   //: This variable is used in shocks.
   char flow_type_;
 
-public:
+ public:
   //###### Constructor/Destructor ######
   bmsh3d_vertex (int id) {
     E_list_ = NULL;
@@ -106,7 +106,7 @@ public:
     //can not delete a vertex with any incident edge
     assert (E_list_ == NULL);
   }
-  
+
   //###### Data access functions ######
   const vgl_point_3d<double>& pt() const {
     return  pt_;
@@ -155,10 +155,10 @@ public:
     i_value_ = v;
   }
   int vid() const {
-    return i_value_; 
+    return i_value_;
   }
-  void set_vid (int vid) { 
-    i_value_ = vid; 
+  void set_vid (int vid) {
+    i_value_ = vid;
   }
 
   const bool is_visited () const {
@@ -174,7 +174,7 @@ public:
   void set_i_visited (const int traverse_value) {
     i_value_ = traverse_value;
   }
-  
+
   const bool is_valid() const {
     return i_value_ != 0;
   }
@@ -199,7 +199,7 @@ public:
   virtual vcl_string is_a() const
   {return "bmsh3d_vertex"; }
 
-  //###### Handle the incident edges ######   
+  //###### Handle the incident edges ######
   unsigned int get_incident_Es (vcl_set<void*>& incident_Es) const {
     return get_all_ptrs (E_list_, incident_Es);
   }
@@ -250,8 +250,8 @@ public:
 
   bmsh3d_halfedge* m2_get_next_bnd_HE (const bmsh3d_halfedge* inputHE) const;
 
-  //: return true if it is on the boundary of the mesh
-  //  start tracing from input_he to see if the loop back to input_he
+  //: return true if it is on the boundary of the mesh.
+  //  Start tracing from input_he to see if the loop back to input_he
   bool m2_is_on_bnd (bmsh3d_halfedge* inputHE) const;
 
   //: return the sum_theta at this vertex
@@ -270,6 +270,4 @@ bool is_F_V_incidence (bmsh3d_vertex* V, const bmsh3d_vertex* V1, const bmsh3d_v
 
 bmsh3d_edge* V_find_other_E (const bmsh3d_vertex* V, const bmsh3d_edge* inputE);
 
-
-#endif
-
+#endif // _bmsh3d_vertex_h_

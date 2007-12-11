@@ -1,18 +1,21 @@
-//: 070510  A simple implementation of link list of NULL pointers.
-//  Ming-Ching Chang
+//:
+// \file
+// \brief 070510  A simple implementation of link list of NULL pointers.
+// \author Ming-Ching Chang
 
 #ifndef bmsh3d_ptr_list_h_
 #define bmsh3d_ptr_list_h_
 
 #include <vcl_set.h>
+#include <vcl_cassert.h>
 
 class bmsh3d_ptr_node
 {
-protected:
+ protected:
   void* ptr_;
   bmsh3d_ptr_node* next_;
 
-public:
+ public:
   //====== Constructor/Destructor ======
   bmsh3d_ptr_node () {
     ptr_ = NULL;
@@ -88,7 +91,7 @@ inline bool is_in_ptr_list (const bmsh3d_ptr_node* head, const void* input)
     if (cur->ptr() == input)
       return true;
   }
-  return false;  
+  return false;
 }
 
 inline void _add_to_ptr_list_head (bmsh3d_ptr_node*& head, bmsh3d_ptr_node* cur)
@@ -132,7 +135,7 @@ inline bool del_ptr (bmsh3d_ptr_node*& head, const void* input)
   }
 
   bmsh3d_ptr_node* prev = head;
-  bmsh3d_ptr_node* cur = prev->next();  
+  bmsh3d_ptr_node* cur = prev->next();
   while (cur != NULL) {
     if (cur->ptr() == input) { //found, delete cur
       prev->set_next (cur->next());
@@ -142,7 +145,7 @@ inline bool del_ptr (bmsh3d_ptr_node*& head, const void* input)
     prev = cur;
     cur = cur->next();
   }
-  return false;  
+  return false;
 }
 
 #endif

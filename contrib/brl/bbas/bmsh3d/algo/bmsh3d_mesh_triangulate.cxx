@@ -1,14 +1,17 @@
-//: Sep 25, 2005 
-//  MingChing Chang
+//:
+// \file
+// \date Sep 25, 2005
+// \author MingChing Chang
 
 #include "bmsh3d_mesh_tri.h"
 #include "bmsh3d_mesh_triangulate.h"
+#include <vcl_cassert.h>
 
 //: Triangulate the input mesh face F into a set of triangular faces.
-//  The mesh face can be any contour/polygon without holes. 
+//  The mesh face can be any contour/polygon without holes.
 //  Return true if success.
-//  Results: 
-//    tri_faces: a vector of triangular faces specified in their 
+//  Results:
+//    tri_faces: a vector of triangular faces specified in their
 //               ids of the original face F, e.g.,
 //               f0: (v0, v1, v2), f1: (v0, v1, v2), ..., etc.
 //
@@ -25,7 +28,7 @@ bool bmsh3d_triangulate_face (const bmsh3d_face* F, vcl_vector<vcl_vector<int> >
   }
   else { //Face in MHE
     F->get_ordered_Vs (vertices);
-  }  
+  }
   assert (vertices.size() > 3);
 
   //Project the 3d coord of each vertex onto a reference plane
@@ -109,7 +112,7 @@ bmsh3d_mesh* generate_tri_mesh (bmsh3d_mesh* M)
   vcl_map<int, bmsh3d_face*>::iterator it = M->facemap().begin();
   for (; it != M->facemap().end(); it++) {
     bmsh3d_face* F = (*it).second;
-    
+
     //If the input face is already a triangle, make a new triangular face.
     vcl_vector<bmsh3d_vertex*> vertices;
     F->get_ordered_Vs (vertices);
@@ -131,9 +134,9 @@ bmsh3d_mesh* generate_tri_mesh (bmsh3d_mesh* M)
       //triangulate the polygonal face F
       vcl_vector<vcl_vector<int> > tri_faces;
       bmsh3d_triangulate_face (F, tri_faces);
-     
+
       //For each resulting triangle, add a new face.
-      for (unsigned int i=0; i<tri_faces.size(); i++) {   
+      for (unsigned int i=0; i<tri_faces.size(); i++) {
         bmsh3d_face* newF = triM->_new_face ();
 
         bmsh3d_vertex* V0 = triM->vertexmap (tri_faces[i][0]);
@@ -150,6 +153,3 @@ bmsh3d_mesh* generate_tri_mesh (bmsh3d_mesh* M)
 
   return triM;
 }
-
-
-

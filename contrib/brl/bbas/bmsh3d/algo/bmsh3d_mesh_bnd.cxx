@@ -1,9 +1,9 @@
+// This is brl/bbas/bmsh3d/algo/bmsh3d_mesh_bnd.cxx
 //---------------------------------------------------------------------
-// This is brcv/shp/bmsh3d/bmsh3d_mesh_bnd.cxx
+#include "bmsh3d_mesh_bnd.h"
 //:
 // \file
 // \brief Mesh boundary tracing.
-//
 //
 // \author
 //  MingChing Chang  Dec 14, 2006
@@ -15,9 +15,9 @@
 //
 //-------------------------------------------------------------------------
 
+#include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vul/vul_printf.h>
-#include <bmsh3d/algo/bmsh3d_mesh_bnd.h>
 
 bool bmsh3d_bnd_chain::is_V_incident_via_HE (const bmsh3d_vertex* V)
 {
@@ -39,7 +39,7 @@ void bmsh3d_bnd_chain::trace_polyline (vcl_vector<vgl_point_3d<double> >& polyli
   assert (HE_list_.size() != 0);
   bmsh3d_halfedge* HE0 = HE_list (0);
 
-  if (HE_list_.size() == 1) { 
+  if (HE_list_.size() == 1) {
     //The case of only one boundary edge.
     polyline_vertices.push_back (HE0->edge()->sV()->pt());
     polyline_vertices.push_back (HE0->edge()->eV()->pt());
@@ -103,7 +103,7 @@ void bmsh3d_bnd_chain_set::detect_bnd_chains ()
       continue;
     F->set_visited (true);
 
-    TRIFACE_TYPE topo_type = F->tri_get_topo_type(); 
+    TRIFACE_TYPE topo_type = F->tri_get_topo_type();
 
     switch (topo_type) {
     case TRIFACE_111: //Todo
@@ -115,7 +115,7 @@ void bmsh3d_bnd_chain_set::detect_bnd_chains ()
       bmsh3d_bnd_chain* BC = _new_bnd_chain ();
       chainset_.push_back (BC);
       bmsh3d_halfedge* startHE = F->find_bnd_HE ();
-      BC->trace_bnd_chain (startHE);      
+      BC->trace_bnd_chain (startHE);
     }
     break;
     case TRIFACE_222: //Skip

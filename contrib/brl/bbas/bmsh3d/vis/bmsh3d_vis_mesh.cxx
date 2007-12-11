@@ -1,9 +1,12 @@
-//: This is lemsvxlsrc/brcv/shp/bmsh3d/vis/bmsh3d_vis_mesh.cxx
-//  MingChing Chang
-//  May 03, 2005.
+// This is brl/bbas/bmsh3d/vis/bmsh3d_vis_mesh.cxx
+#include "bmsh3d_vis_mesh.h"
+//:
+// \file
+// \author Ming-Ching Chang
+// \date May 03, 2005.
 
-#include <vcl_cmath.h>
 #include <vcl_iostream.h>
+#include <vcl_cassert.h>
 #include <vul/vul_printf.h>
 
 #include <bmsh3d/pro/bmsh3d_cmdpara.h>
@@ -12,7 +15,6 @@
 #include "bmsh3d_vis_vertex.h"
 #include "bmsh3d_vis_edge.h"
 #include "bmsh3d_vis_face.h"
-#include "bmsh3d_vis_mesh.h"
 
 #include <Inventor/nodes/SoBaseColor.h>
 #include <Inventor/nodes/SoGroup.h>
@@ -39,7 +41,7 @@ int _count_faces_indices (const vcl_vector<vcl_vector<int> >& faces)
   return total;
 }
 
-void draw_ifs_geom (SoGroup* root, 
+void draw_ifs_geom (SoGroup* root,
                     const vcl_vector<vgl_point_3d<double> >& pts,
                     const vcl_vector<vcl_vector<int> >& faces)
 {
@@ -51,18 +53,18 @@ void draw_ifs_geom (SoGroup* root,
     xyz[i][1] = (float) pts[i].y();
     xyz[i][2] = (float) pts[i].z();
   }
- 
+
   //Assign faces
   SoVertexProperty* vp = new SoVertexProperty;
   unsigned int n_ind = _count_faces_indices (faces);
   int* ind = new int [n_ind];
-  unsigned int k = 0;  
+  unsigned int k = 0;
   for (unsigned int i=0; i<faces.size(); i++) {
     assert (faces[i].size() > 2);
     for (unsigned int j=0; j<faces[i].size(); j++) {
       ind[k] = faces[i][j];
       k++;
-    }    
+    }
     ind[k] = -1; //Add the final '-1'
     k++;
   }
@@ -108,7 +110,7 @@ SoSeparator* draw_ifs (const vcl_vector<vgl_point_3d<double> >& pts,
                        const vcl_vector<vcl_vector<int> >& faces,
                        const int colorcode,
                        const bool b_shape_hints, const float transp)
-{  
+{
   SoSeparator* root = new SoSeparator;
 
   //Assign Material for search and change interactively...
@@ -157,7 +159,7 @@ SoSeparator* draw_ifs (const vcl_vector<vgl_point_3d<double> >& pts,
                             const vcl_vector<vcl_vector<int> >& faces,
                             const SbColor& color,
                             const bool b_shape_hints, const float transp)
-{  
+{
   SoSeparator* root = new SoSeparator;
 
   //Assign Material for search and change interactively...
@@ -287,10 +289,10 @@ void _draw_M_ifs_geom (bmsh3d_mesh* M, SoVertexProperty* vp, int n_ind, int* ind
     xyz[i][2] = (float) v->pt().z();
     v->set_vid (i);
   }
- 
+
   //Assign faces
   unsigned int k = 0;
-  
+
   vcl_map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
   for (; fit != M->facemap().end(); fit++) {
     bmsh3d_face* F = (*fit).second;
@@ -328,10 +330,10 @@ void _draw_M_mhe_geom (bmsh3d_mesh* M, SoVertexProperty* vp, int n_ind, int* ind
     xyz[i][2] = (float) v->pt().z();
     v->set_vid (i);
   }
- 
+
   //Assign faces
   unsigned int k = 0;
-  
+
   vcl_map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
   for (; fit != M->facemap().end(); fit++) {
     bmsh3d_face* F = (*fit).second;
@@ -459,10 +461,10 @@ void _draw_M_visited_ifs_geom (bmsh3d_mesh* M, SoVertexProperty* vp, int* ind)
     xyz[i][2] = (float) v->pt().z();
     v->set_vid (i);
   }
- 
+
   //Assign faces
   unsigned int k = 0;
-  
+
   vcl_map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
   for (; fit != M->facemap().end(); fit++) {
     bmsh3d_face* F = (*fit).second;
@@ -556,8 +558,8 @@ SoSeparator* draw_M_ifs_visited (bmsh3d_mesh* M, const int colorcode,
 #define NON_1RING_COLOR     SbColor(0.0f, 0.7f, 0.0f) //Green
 
 //: option 1: draw non-manifold-1-ring ones in RED.
-//  option 2: draw non-1-ring vertices in BLUE. 
-//  option 3: draw both. 
+//  option 2: draw non-1-ring vertices in BLUE.
+//  option 3: draw both.
 SoSeparator* draw_M_topo_vertices (bmsh3d_mesh* M, const int option,
                                    const float size, const bool user_defined_class)
 {
@@ -567,9 +569,10 @@ SoSeparator* draw_M_topo_vertices (bmsh3d_mesh* M, const int option,
   SoSeparator* root = new SoSeparator;
 
   vcl_map<int, bmsh3d_vertex*>::iterator it = M->vertexmap().begin();
-  for (; it != M->vertexmap().end(); it++) {
+  for (; it != M->vertexmap().end(); it++)
+  {
     bmsh3d_vertex* V = (*it).second;
-    VTOPO_TYPE type = V->detect_vtopo_type ();   
+    VTOPO_TYPE type = V->detect_vtopo_type ();
     if ((option==1 || option==3) && type == VTOPO_NON_MANIFOLD_1RING) {
       n_non_m_1ring_v++;
       if (user_defined_class)
@@ -594,11 +597,11 @@ SoSeparator* draw_M_topo_vertices (bmsh3d_mesh* M, const int option,
 // ##################################################################
 
 //
-SoSeparator* draw_M_edges_idv (bmsh3d_mesh* M, const SbColor& color, 
+SoSeparator* draw_M_edges_idv (bmsh3d_mesh* M, const SbColor& color,
                                const float width, const bool user_defined_class)
 {
   SoSeparator* root = new SoSeparator;
-  
+
   //color
   SoBaseColor *basecolor = new SoBaseColor;
   basecolor->rgb = color;
@@ -632,7 +635,7 @@ SoSeparator* draw_M_edges_idv (bmsh3d_mesh* M, const SbColor& color,
 SoSeparator* draw_M_edges (bmsh3d_mesh* M, const SbColor& color, const float width)
 {
   SoSeparator* root = new SoSeparator;
-  
+
   //color
   SoBaseColor *basecolor = new SoBaseColor;
   basecolor->rgb = color;
@@ -644,7 +647,6 @@ SoSeparator* draw_M_edges (bmsh3d_mesh* M, const SbColor& color, const float wid
   ds->lineWidth.setValue (width);
   root->addChild(ds);
 
-  
   if (M->is_MHE())
     draw_M_mhe_edges_geom (root, M);
   else
@@ -708,7 +710,7 @@ void draw_M_ifs_edges_geom (SoSeparator* root, bmsh3d_mesh* M)
     //Go through each implicit incident E and draw it.
     for (int j=0; j<int(F->vertices().size()); j++) {
       int k = (j+1) % F->vertices().size();
-      bmsh3d_vertex* sV = F->vertices(j); 
+      bmsh3d_vertex* sV = F->vertices(j);
       bmsh3d_vertex* eV = F->vertices(k);
       vgl_point_3d<double> Ps = sV->pt();
       vgl_point_3d<double> Pe = eV->pt();
@@ -770,7 +772,7 @@ SoSeparator* draw_M_bndcurve (bmsh3d_mesh* M, const int colorcode, const float w
   return root;
 }
 
-SoSeparator* draw_M_faces_idv (bmsh3d_mesh* M, 
+SoSeparator* draw_M_faces_idv (bmsh3d_mesh* M,
                                const bool b_shape_hints, const float trans,
                                const int colorcode, const bool user_defined_class)
 {
@@ -778,7 +780,7 @@ SoSeparator* draw_M_faces_idv (bmsh3d_mesh* M,
 
   SoMaterial* material = new SoMaterial;
   material->setName (SbName("boundary_mesh_material"));
-  
+
   if (colorcode != 0) //if the color is non-black, assign it
     material->diffuseColor = color_from_code (colorcode);
   material->transparency = trans;
@@ -815,7 +817,7 @@ SoSeparator* draw_M_faces_idv (bmsh3d_mesh* M,
   return root;
 }
 
-SoSeparator* draw_M_color (bmsh3d_mesh* M, 
+SoSeparator* draw_M_color (bmsh3d_mesh* M,
                            const bool b_shape_hints, const float trans,
                            const vcl_vector<SbColor>& color_set,
                            const bool user_defined_class)
@@ -824,7 +826,7 @@ SoSeparator* draw_M_color (bmsh3d_mesh* M,
 
   SoMaterial* material = new SoMaterial;
   material->setName (SbName("boundary_mesh_material"));
-  
+
   //Put the SoShapeHints, http://doc.coin3d.org/Coin/classSoShapeHints.html
   if (b_shape_hints) {
     SoShapeHints* hints = new SoShapeHints();
@@ -870,10 +872,11 @@ SoSeparator* draw_M_bnd_faces_cost_col (bmsh3d_mesh* M, const bool draw_idv,
   hints->vertexOrdering = SoShapeHints::COUNTERCLOCKWISE;
   root->addChild (hints);
 
-  unsigned int n_acute = 0;  
+  unsigned int n_acute = 0;
   unsigned int n_obtuse = 0;
 
-  if (showid == false) {
+  if (!showid)
+  {
     //draw all obtuse triangles in a batch.
     vcl_map<int, bmsh3d_face*>::iterator it = M->facemap().begin();
     for (; it != M->facemap().end(); it++) {
@@ -904,7 +907,8 @@ SoSeparator* draw_M_bnd_faces_cost_col (bmsh3d_mesh* M, const bool draw_idv,
     }
     root->addChild (draw_M_ifs_visited (M, COLOR_LIGHTGRAY, false, transp));
   }
-  else {
+  else
+  {
     //id text color
     SoBaseColor* idbasecolor = new SoBaseColor;
     idbasecolor->rgb = FACE_ID_COLOR;
@@ -925,12 +929,12 @@ SoSeparator* draw_M_bnd_faces_cost_col (bmsh3d_mesh* M, const bool draw_idv,
       }
     }
   }
-  vul_printf (vcl_cerr, "\t%u acute, %u obtuse faces drawn (totally %u).\n", 
+  vul_printf (vcl_cerr, "\t%u acute, %u obtuse faces drawn (totally %u).\n",
                n_acute, n_obtuse, M->facemap().size());
   return root;
 }
 
-SoSeparator* draw_M_bnd_faces_topo_col (bmsh3d_mesh* M, const bool draw_idv, 
+SoSeparator* draw_M_bnd_faces_topo_col (bmsh3d_mesh* M, const bool draw_idv,
                                         const bool showid, const float transp,
                                         const bool user_defined_class)
 {
@@ -945,63 +949,40 @@ SoSeparator* draw_M_bnd_faces_topo_col (bmsh3d_mesh* M, const bool draw_idv,
   SoShapeHints* hints = new SoShapeHints();
   hints->vertexOrdering = SoShapeHints::COUNTERCLOCKWISE;
   root->addChild (hints);
-  
+
   //id text color
   SoBaseColor* idbasecolor = new SoBaseColor;
   idbasecolor->rgb = FACE_ID_COLOR;
 
-  unsigned int n_111=0, n_112=0, n_122=0, n_222=0; 
+  unsigned int n_111=0, n_112=0, n_122=0, n_222=0;
   unsigned int n_113=0, n_133=0, n_333=0;
-  unsigned int n_123=0, n_223=0, n_233=0, n_e4p=0, n_error=0; 
+  unsigned int n_123=0, n_223=0, n_233=0, n_e4p=0, n_error=0;
 
   VIS_COLOR_CODE colorcode;
   SbColor color;
 
   vcl_map<int, bmsh3d_face*>::iterator it = M->facemap().begin();
-  for (; it != M->facemap().end(); it++) {
+  for (; it != M->facemap().end(); it++)
+  {
     bmsh3d_face* F = (*it).second;
     TRIFACE_TYPE type = F->tri_get_topo_type();
 
     //Determine color according to its topological type.
     colorcode = get_M_face_topo_color (type);
-    switch (type) {
-    case TRIFACE_111:
-      n_111++;
-    break;
-    case TRIFACE_112: 
-      n_112++;
-    break;
-    case TRIFACE_122:
-      n_122++;
-    break;
-    case TRIFACE_222:
-      n_222++;
-    break;
-    case TRIFACE_113P:
-      n_113++;
-    break;
-    case TRIFACE_13P3P:
-      n_133++;
-    break;
-    case TRIFACE_3P3P3P:
-      n_333++;
-    break;    
-    case TRIFACE_123P:
-      n_123++;
-    break;
-    case TRIFACE_223P:
-      n_223++;
-    break;
-    case TRIFACE_23P3P:
-      n_233++;
-    break;
-    case TRIFACE_E4P:
-      n_e4p++;
-    break;
-    default:
-      assert (0);
-      n_error++;
-    break;
+    switch (type)
+    {
+     case TRIFACE_111:    n_111++; break;
+     case TRIFACE_112:    n_112++; break;
+     case TRIFACE_122:    n_122++; break;
+     case TRIFACE_222:    n_222++; break;
+     case TRIFACE_113P:   n_113++; break;
+     case TRIFACE_13P3P:  n_133++; break;
+     case TRIFACE_3P3P3P: n_333++; break;
+     case TRIFACE_123P:   n_123++; break;
+     case TRIFACE_223P:   n_223++; break;
+     case TRIFACE_23P3P:  n_233++; break;
+     case TRIFACE_E4P:    n_e4p++; break;
+     default: assert(0);  n_error++; break;
     }
 
     //Skip drawing individual 222 triangles
@@ -1017,8 +998,8 @@ SoSeparator* draw_M_bnd_faces_topo_col (bmsh3d_mesh* M, const bool draw_idv,
         root->addChild (draw_F_with_id (F, color, idbasecolor, transp, user_defined_class));
     }
   }
-  
-  //draw all 2-2-2 triangles in a batch.  
+
+  //draw all 2-2-2 triangles in a batch.
   if (draw_idv == false) {
     colorcode = get_M_face_topo_color (TRIFACE_222);
     root->addChild (draw_M_ifs_visited (M, colorcode, false, transp));
@@ -1032,7 +1013,7 @@ SoSeparator* draw_M_bnd_faces_topo_col (bmsh3d_mesh* M, const bool draw_idv,
   vul_printf (vcl_cerr, "\t  %u (113) PINK + %u (133) RED + %u (333) DARKRED.\n", n_133, n_133, n_333);
 
   vul_printf (vcl_cerr, "\t%u near ridge faces:\n", n_123+n_223+n_233);
-  vul_printf (vcl_cerr, "\t  %u (123) CYAN + %u (223) BLUE + %u (233) GREEN.\n", n_123, n_223, n_233);  
+  vul_printf (vcl_cerr, "\t  %u (123) CYAN + %u (223) BLUE + %u (233) GREEN.\n", n_123, n_223, n_233);
 
   vul_printf (vcl_cerr, "\t%u isolated (111) YELLOW.\n", n_111);
   vul_printf (vcl_cerr, "\t%u degenerate polygon (e4+) GRAY.\n", n_e4p);
@@ -1043,31 +1024,20 @@ SoSeparator* draw_M_bnd_faces_topo_col (bmsh3d_mesh* M, const bool draw_idv,
 
 VIS_COLOR_CODE get_M_face_topo_color (const TRIFACE_TYPE type)
 {
-  switch (type) {
-  case TRIFACE_111:
-    return COLOR_YELLOW;
-  case TRIFACE_112: 
-    return COLOR_DARKGREEN;
-  case TRIFACE_122:
-    return COLOR_DARKBLUE;
-  case TRIFACE_222:
-    return COLOR_GRAY;
-  case TRIFACE_113P:
-    return COLOR_PINK;
-  case TRIFACE_13P3P:
-    return COLOR_RED;
-  case TRIFACE_3P3P3P:
-    return COLOR_DARKRED;
-  case TRIFACE_123P:
-    return COLOR_CYAN;
-  case TRIFACE_223P:
-    return COLOR_BLUE;
-  case TRIFACE_23P3P:
-    return COLOR_GREEN;
-  case TRIFACE_E4P:
-    return COLOR_DARKGRAY;
-  default:
-    return COLOR_GOLD;
+  switch (type)
+  {
+   case TRIFACE_111:    return COLOR_YELLOW;
+   case TRIFACE_112:    return COLOR_DARKGREEN;
+   case TRIFACE_122:    return COLOR_DARKBLUE;
+   case TRIFACE_222:    return COLOR_GRAY;
+   case TRIFACE_113P:   return COLOR_PINK;
+   case TRIFACE_13P3P:  return COLOR_RED;
+   case TRIFACE_3P3P3P: return COLOR_DARKRED;
+   case TRIFACE_123P:   return COLOR_CYAN;
+   case TRIFACE_223P:   return COLOR_BLUE;
+   case TRIFACE_23P3P:  return COLOR_GREEN;
+   case TRIFACE_E4P:    return COLOR_DARKGRAY;
+   default:             return COLOR_GOLD;
   }
 }
 
@@ -1078,7 +1048,6 @@ static int timer_num_counter = 0;
 //: for each timer event, turn on one more SoSwitch.
 static void timerCallback (void *data, SoSensor* sensor)
 {
-
   //Animation parameters.
   //-n2: Delay time before animation starts: def. 100 (around 3 secs).
   int N_DELAY = bmsh3d_cmd_n2();
@@ -1089,9 +1058,9 @@ static void timerCallback (void *data, SoSensor* sensor)
   if (N_RESET_ITER == 1)
     N_RESET_ITER = 100;
 
-  SoSeparator* animRoot = (SoSeparator*) data;  
+  SoSeparator* animRoot = (SoSeparator*) data;
   // animRoot.numChildren = total iterations.
-  int total_iters = animRoot->getNumChildren(); 
+  int total_iters = animRoot->getNumChildren();
 
   int counter = timer_num_counter - N_DELAY;
 
@@ -1114,11 +1083,10 @@ static void timerCallback (void *data, SoSensor* sensor)
     }
     timer_num_counter = 0;
   }
-
 }
 
 SoSeparator* draw_M_bnd_faces_anim (bmsh3d_mesh* M, const int nF_batch)
-{  
+{
   vul_printf (vcl_cerr, "  draw_M_bnd_faces_anim().\n", nF_batch);
   SoSeparator* root = new SoSeparator;
 
@@ -1132,13 +1100,13 @@ SoSeparator* draw_M_bnd_faces_anim (bmsh3d_mesh* M, const int nF_batch)
 
   SoSeparator* animRoot = new SoSeparator;
   root->addChild (animRoot);
-    
+
   unsigned int frame = 0;
   vcl_vector<bmsh3d_face*> faces;
   vcl_map<int, bmsh3d_face*>::iterator it = M->facemap().begin();
   for (unsigned int i=0; it != M->facemap().end(); it++, i++) {
     bmsh3d_face* F = (*it).second;
-    faces.push_back (F);    
+    faces.push_back (F);
 
     if (i % nF_batch == nF_batch-1) {
       draw_faces_in_switch (animRoot, faces);
@@ -1162,7 +1130,7 @@ SoSeparator* draw_M_bnd_faces_anim (bmsh3d_mesh* M, const int nF_batch)
 void draw_faces_in_switch (SoSeparator* root, const vcl_vector<bmsh3d_face*>& faces)
 {
   SoSwitch* sw = new SoSwitch;
-  sw->whichChild = SO_SWITCH_NONE;  
+  sw->whichChild = SO_SWITCH_NONE;
   root->addChild (sw);
 
   //Prepare the set of all vertices for the input faces.
@@ -1175,7 +1143,7 @@ void draw_faces_in_switch (SoSeparator* root, const vcl_vector<bmsh3d_face*>& fa
       vertex_set.insert (vs[j]);
   }
 
-  //Put all points into a vector.  
+  //Put all points into a vector.
   vcl_vector<vgl_point_3d<double> > ifs_pts;
   vcl_set<bmsh3d_vertex*>::iterator vit = vertex_set.begin();
   for (unsigned int i=0; vit != vertex_set.end(); vit++, i++) {
@@ -1188,7 +1156,7 @@ void draw_faces_in_switch (SoSeparator* root, const vcl_vector<bmsh3d_face*>& fa
   //Put all faces into the IFS.
   vcl_vector<vcl_vector<int> > ifs_faces;
   for (unsigned int i=0; i<faces.size(); i++) {
-    bmsh3d_face* F = faces[i];  
+    bmsh3d_face* F = faces[i];
     vcl_vector<bmsh3d_vertex*> vs;
     F->get_ordered_Vs (vs);
     vcl_vector<int> face_vids;
@@ -1201,10 +1169,3 @@ void draw_faces_in_switch (SoSeparator* root, const vcl_vector<bmsh3d_face*>& fa
   ifs_pts.clear();
   ifs_faces.clear();
 }
-
-
-
-
-
-
-

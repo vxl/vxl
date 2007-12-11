@@ -1,11 +1,10 @@
+// This is brl/bbas/bmsh3d/bmsh3d_halfedge.h
+//---------------------------------------------------------------------
 #ifndef _bmsh3d_halfedge_h_
 #define _bmsh3d_halfedge_h_
-//---------------------------------------------------------------------
-// This is brl/bbas/bmsh3d/bmsh3d_halfedge.h
 //:
 // \file
 // \brief Basic 3d halfedge on a mesh
-//
 //
 // \author
 //  MingChing Chang  May 30, 2005
@@ -17,10 +16,10 @@
 //
 //-------------------------------------------------------------------------
 
-#include <vcl_vector.h>
-
 #include "bmsh3d_utils.h"
 #include "bmsh3d_vertex.h"
+
+#include <vcl_cassert.h>
 
 //#######################################################
 //     The Modified Half-Edge Data Structure
@@ -32,7 +31,7 @@ class bmsh3d_face;
 //: the pointer to two ending vertex are in the bmsh3d_edge class.
 class bmsh3d_halfedge
 {
-protected:
+ protected:
   //: For manifold-mesh, the pair's pair is itself
   //  For non-manifold mesh, the pairs form a circular list
   bmsh3d_halfedge*  pair_;
@@ -45,7 +44,7 @@ protected:
   //: pointer to the bmsh3d_edge
   bmsh3d_edge* edge_;
 
-public:
+ public:
   //###### Constructor/Destructor ######
   bmsh3d_halfedge (bmsh3d_halfedge* pair, bmsh3d_halfedge* next,
                     bmsh3d_edge* edge, bmsh3d_face* face)
@@ -68,14 +67,14 @@ public:
     //: make sure that its pair_ is properly disconnected!
     assert (pair_ == NULL);
 
-    //: don't need to worry about the next_ here
+    //  don't need to worry about the next_ here
     //  assume the topological consistency is handled
     //  when a face is deleted!
 
     //: make sure that no empty halfedge exists
     assert (face_ != NULL);
 
-    //: make sure that it is already disconnected from the edge
+    //  make sure that it is already disconnected from the edge
     //  You should use bmsh3d::remove_face() and
     //  bmsh3d::remove_edge() to ensure topological consistency.
     assert (edge_ == NULL);
@@ -110,10 +109,10 @@ public:
     edge_ = edge;
   }
 
-  //: returns the starting vertex for this halfedge based on the direction 
+  //: returns the starting vertex for this halfedge based on the direction
   bmsh3d_vertex* s_vertex() const;
 
-  //: returns the ending vertex for this halfedge based on the direction 
+  //: returns the ending vertex for this halfedge based on the direction
   bmsh3d_vertex* e_vertex() const;
 
   //: brute-force search for the previous halfedge pair

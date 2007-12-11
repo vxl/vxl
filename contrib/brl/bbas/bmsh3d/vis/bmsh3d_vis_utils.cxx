@@ -1,11 +1,14 @@
-//: This is lemsvxlsrc/brcv/shp/bmsh3d/vis/bmsh3d_vis_utility.cxx
-//  MingChing Chang
-//  May 03, 2005.
+// This is brl/bbas/bmsh3d/vis/bmsh3d_vis_utils.cxx
+#include "bmsh3d_vis_utils.h"
+//:
+// \file
+// \author MingChing Chang
+// \date May 03, 2005.
 
 #include <vcl_vector.h>
+#include <vcl_cassert.h>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_math.h>
-#include <bmsh3d/vis/bmsh3d_vis_utils.h>
 
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/nodes/SoBaseColor.h>
@@ -13,7 +16,7 @@
 #include <Inventor/nodes/SoCoordinate3.h>
 #include <Inventor/nodes/SoMaterial.h>
 #include <Inventor/nodes/SoVertexProperty.h>
-#include <Inventor/nodes/SoIndexedFaceSet.h> 
+#include <Inventor/nodes/SoIndexedFaceSet.h>
 #include <Inventor/nodes/SoIndexedLineSet.h>
 #include <Inventor/nodes/SoShapeHints.h>
 #include <Inventor/nodes/SoText2.h>
@@ -23,7 +26,7 @@
 #include <Inventor/nodes/SoPointSet.h>
 #include <Inventor/nodes/SoCube.h>
 #include <Inventor/nodes/SoSphere.h>
-#include <Inventor/nodes/SoCylinder.h> 
+#include <Inventor/nodes/SoCylinder.h>
 #include <Inventor/nodes/SoLineSet.h>
 #include <Inventor/nodes/SoFaceSet.h>
 #include <Inventor/nodes/SoDirectionalLight.h>
@@ -33,58 +36,33 @@
 
 SbColor color_from_code (const int colorcode)
 {
-  switch (colorcode) {
-  case COLOR_NOT_SPECIFIED:
-    return SbColor (0.5f, 0.5f, 0.5f);
-  case COLOR_BLACK:
-    return SbColor (0.0f, 0.0f, 0.0f);
-  case COLOR_RED:
-    return SbColor (1.0f, 0.0f, 0.0f);
-  case COLOR_GREEN:
-    return SbColor (0.0f, 1.0f, 0.0f);
-  case COLOR_BLUE:
-    return SbColor (0.0f, 0.0f, 1.0f);
-  case COLOR_YELLOW:
-    return SbColor (1.0f, 1.0f, 0.0f);
-  case COLOR_CYAN:
-    return SbColor (0.0f, 1.0f, 1.0f);
-  case COLOR_PINK:
-    return SbColor (1.0f, 0.0f, 1.0f);
-  case COLOR_GRAY:
-    return SbColor (0.6f, 0.6f, 0.6f);
-  case COLOR_DARKGRAY:
-    return SbColor (0.4f, 0.4f, 0.4f);
-  case COLOR_DARKRED:
-    return SbColor (0.5f, 0.0f, 0.0f);
-  case COLOR_DARKGREEN:
-    return SbColor (0.0f, 0.5f, 0.0f);
-  case COLOR_DARKBLUE:
-    return SbColor (0.0f, 0.0f, 0.5f);
-  case COLOR_DARKYELLOW:
-    return SbColor (0.5f, 0.5f, 0.0f);
-  case COLOR_DARKCYAN:
-    return SbColor (0.0f, 0.5f, 0.5f);
-  case COLOR_PURPLE:
-    return SbColor (0.5f, 0.0f, 0.5f);
-  case COLOR_WHITE:
-    return SbColor (1.0f, 1.0f, 1.0f);
-  case COLOR_LIGHTGRAY:
-    return SbColor (0.6f, 0.6f, 0.6f);
-  case COLOR_GRAYBLUE:
-    return SbColor (0.5f, 0.5f, 1.0f);
-  case COLOR_LIGHTGREEN:
-    return SbColor (0.5f, 1.0f, 0.5f);
-  case COLOR_ORANGE:
-    return SbColor (1.0f, 0.7f, 0.0f);
-  case COLOR_GOLD:
-    return SbColor (0.8f, 0.7f, 0.2f);
-  case COLOR_SILVER:
-    return SbColor (0.8f, 0.8f, 0.8f);
-  case COLOR_RANDOM:
-    return get_next_rand_color ();
-  default:
-    assert (0);
-    return SbColor (0.0f, 0.0f, 0.0f);
+  switch (colorcode)
+  {
+   case COLOR_NOT_SPECIFIED:return SbColor(0.5f, 0.5f, 0.5f);
+   case COLOR_BLACK:     return SbColor(0.0f, 0.0f, 0.0f);
+   case COLOR_RED:       return SbColor(1.0f, 0.0f, 0.0f);
+   case COLOR_GREEN:     return SbColor(0.0f, 1.0f, 0.0f);
+   case COLOR_BLUE:      return SbColor(0.0f, 0.0f, 1.0f);
+   case COLOR_YELLOW:    return SbColor(1.0f, 1.0f, 0.0f);
+   case COLOR_CYAN:      return SbColor(0.0f, 1.0f, 1.0f);
+   case COLOR_PINK:      return SbColor(1.0f, 0.0f, 1.0f);
+   case COLOR_GRAY:      return SbColor(0.6f, 0.6f, 0.6f);
+   case COLOR_DARKGRAY:  return SbColor(0.4f, 0.4f, 0.4f);
+   case COLOR_DARKRED:   return SbColor(0.5f, 0.0f, 0.0f);
+   case COLOR_DARKGREEN: return SbColor(0.0f, 0.5f, 0.0f);
+   case COLOR_DARKBLUE:  return SbColor(0.0f, 0.0f, 0.5f);
+   case COLOR_DARKYELLOW:return SbColor(0.5f, 0.5f, 0.0f);
+   case COLOR_DARKCYAN:  return SbColor(0.0f, 0.5f, 0.5f);
+   case COLOR_PURPLE:    return SbColor(0.5f, 0.0f, 0.5f);
+   case COLOR_WHITE:     return SbColor(1.0f, 1.0f, 1.0f);
+   case COLOR_LIGHTGRAY: return SbColor(0.6f, 0.6f, 0.6f);
+   case COLOR_GRAYBLUE:  return SbColor(0.5f, 0.5f, 1.0f);
+   case COLOR_LIGHTGREEN:return SbColor(0.5f, 1.0f, 0.5f);
+   case COLOR_ORANGE:    return SbColor(1.0f, 0.7f, 0.0f);
+   case COLOR_GOLD:      return SbColor(0.8f, 0.7f, 0.2f);
+   case COLOR_SILVER:    return SbColor(0.8f, 0.8f, 0.8f);
+   case COLOR_RANDOM:    return get_next_rand_color();
+   default: assert(0);   return SbColor(0.0f, 0.0f, 0.0f);
   }
 
   return SbColor (0.0f, 0.0f, 0.0f);
@@ -100,8 +78,8 @@ SoGroup* getParent (SoNode* node, SoNode* root)
   sa.apply(root);
   SoPath * p = sa.getPath();
   ///assert(p && "not found");
-  if (p->getLength() < 2) { 
-    return NULL; 
+  if (p->getLength() < 2) {
+    return NULL;
   } // no parent
   return (SoGroup *) p->getNodeFromTail(1);
 }
@@ -156,7 +134,7 @@ SbColor get_color_tone (float cvalue)
   return color;
 }
 
-void generate_color_table (unsigned long seed, unsigned int size, 
+void generate_color_table (unsigned long seed, unsigned int size,
                            vcl_vector<SbColor>& color_table)
 {
   color_table.clear();
@@ -173,11 +151,11 @@ void generate_color_table (unsigned long seed, unsigned int size,
 
 // #######################################################
 
-SoSeparator* draw_cube_geom (const float x, const float y, const float z, 
+SoSeparator* draw_cube_geom (const float x, const float y, const float z,
                              const float size)
 {
   SoSeparator* root = new SoSeparator;
-  
+
   SoTranslation* trans = new SoTranslation;
   trans->translation.setValue (SbVec3f(x, y, z));
   root->addChild (trans);
@@ -196,11 +174,11 @@ SoSeparator* draw_cube_geom (const vgl_point_3d<double> pt, const float size)
   return draw_cube_geom ((float)pt.x(), (float)pt.y(), (float)pt.z(), size);
 }
 
-SoSeparator* draw_cube (const float x, const float y, const float z, 
+SoSeparator* draw_cube (const float x, const float y, const float z,
                         const float size, const SbColor& color)
 {
   SoSeparator* root = new SoSeparator;
-  
+
   //color
   SoBaseColor *basecolor = new SoBaseColor;
   basecolor->rgb = color;
@@ -225,7 +203,7 @@ SoSeparator* draw_cube (const vgl_point_3d<double> pt,
   return draw_cube ((float)pt.x(), (float)pt.y(), (float)pt.z(), size, color);
 }
 
-SoSeparator* draw_sphere_geom (const float x, const float y, const float z, 
+SoSeparator* draw_sphere_geom (const float x, const float y, const float z,
                                const float radius)
 {
   SoSeparator* root = new SoSeparator;
@@ -238,7 +216,7 @@ SoSeparator* draw_sphere_geom (const float x, const float y, const float z,
   sphere->radius = radius;
   root->addChild (sphere);
 
-  return root; 
+  return root;
 }
 
 SoSeparator* draw_sphere_geom (const vgl_point_3d<double> pt, const float radius)
@@ -246,7 +224,7 @@ SoSeparator* draw_sphere_geom (const vgl_point_3d<double> pt, const float radius
   return draw_sphere_geom ((float)pt.x(), (float)pt.y(), (float)pt.z(), radius);
 }
 
-SoSeparator* draw_sphere (const float x, const float y, const float z, 
+SoSeparator* draw_sphere (const float x, const float y, const float z,
                           const float radius, const SbColor& color)
 {
   SoSeparator* root = new SoSeparator;
@@ -263,7 +241,7 @@ SoSeparator* draw_sphere (const float x, const float y, const float z,
   sphere->radius = radius;
   root->addChild (sphere);
 
-  return root; 
+  return root;
 }
 
 SoSeparator* draw_sphere (const vgl_point_3d<double> pt,
@@ -273,17 +251,15 @@ SoSeparator* draw_sphere (const vgl_point_3d<double> pt,
 }
 
 
-
-//: draw a cylinder, given the radius, the coordinates of the start and end 
-// points of the centerline
+//: draw a cylinder, given the radius, the coordinates of the start and end points of the centerline
 SoSeparator* draw_cylinder(float x1, float y1, float z1,
                            float x2, float y2, float z2,
-                           float radius, 
+                           float radius,
                            const SbColor& color,
                            float transparency)
 {
   SoSeparator* root = new SoSeparator;
-  
+
   ////color
   //SoBaseColor *basecolor = new SoBaseColor;
   //basecolor->rgb = color;
@@ -315,8 +291,8 @@ SoSeparator* draw_cylinder(float x1, float y1, float z1,
 
   SoCylinder* cylinder = new SoCylinder();
   cylinder->radius = radius;
-  cylinder->height = vcl_sqrt(vnl_math_sqr(x2-x1) + 
-    vnl_math_sqr(y2-y1) + 
+  cylinder->height = vcl_sqrt(vnl_math_sqr(x2-x1) +
+    vnl_math_sqr(y2-y1) +
     vnl_math_sqr(z2-z1));
 
   root->addChild(cylinder);
@@ -325,12 +301,12 @@ SoSeparator* draw_cylinder(float x1, float y1, float z1,
 
 SoSeparator* draw_cylinder(const vgl_point_3d<double>& centerline_start,
                            const vgl_point_3d<double>& centerline_end,
-                           float radius, 
+                           float radius,
                            const SbColor& color,
                            float transparency)
 {
   return draw_cylinder((float)centerline_start.x(), (float)centerline_start.y(),
-    (float)centerline_start.z(), (float)centerline_end.x(), 
+    (float)centerline_start.z(), (float)centerline_end.x(),
     (float)centerline_end.y(), (float)centerline_end.z(),
     radius,
     color,
@@ -338,14 +314,14 @@ SoSeparator* draw_cylinder(const vgl_point_3d<double>& centerline_start,
 }
 
 
-
-//: Important: 
-//  Should use the draw_geometry to draw group of things for 
+//:
+// Important:
+//  Should use the draw_geometry to draw group of things for
 //  better performance.
 
-SoSeparator* draw_polyline (vcl_vector<vgl_point_3d<double> >& vertices, 
+SoSeparator* draw_polyline (vcl_vector<vgl_point_3d<double> >& vertices,
                             const float& width, const SbColor& color)
-{   
+{
   SoSeparator* root = new SoSeparator;
 
   SoBaseColor *basecolor = new SoBaseColor;
@@ -363,7 +339,7 @@ SoSeparator* draw_polyline (vcl_vector<vgl_point_3d<double> >& vertices,
 }
 
 void draw_polyline_geom (SoGroup *root, vcl_vector<vgl_point_3d<double> >& vertices)
-{  
+{
   unsigned int nVertices = vertices.size();
   SbVec3f* verts = new SbVec3f[nVertices];
 
@@ -379,12 +355,12 @@ void draw_polyline_geom (SoGroup *root, vcl_vector<vgl_point_3d<double> >& verti
   SoLineSet* lineSet = new SoLineSet;
   lineSet->numVertices.set1Value (0, nVertices);
   root->addChild (lineSet);
-  
+
   delete[] verts;
 }
 
 // draws a polyline with the specified color and drawstyle
-SoSeparator* draw_polyline (const float** vertices, const unsigned int nVertices, 
+SoSeparator* draw_polyline (const float** vertices, const unsigned int nVertices,
                             const SbColor& color, const SoDrawStyle* drawStyle)
 {
   SoSeparator* root = new SoSeparator;
@@ -395,11 +371,11 @@ SoSeparator* draw_polyline (const float** vertices, const unsigned int nVertices
 
   //Line width
   root->addChild ((SoDrawStyle*) drawStyle);
-  
+
   SbVec3f* verts = new SbVec3f[nVertices];
   for (unsigned int i=0; i<nVertices; i++)
     verts[i] = SbVec3f( vertices[i][0], vertices[i][1], vertices[i][2] );
-  
+
   draw_polyline_geom (root, verts, nVertices);
 
   delete[] verts;
@@ -431,14 +407,15 @@ void draw_filled_polygon_geom (SoGroup* root, const vcl_vector<bmsh3d_vertex*>& 
   delete[] verts;
 }
 
-//: Ming: We have two options to draw the IndexedFaceSet.
+//:
+//  Ming: We have two options to draw the IndexedFaceSet.
 //  Option 1: make the emissiveColor the same as diffuseColor
 //            The sheet will look continuously.
 //  Option 2: make the emissiveCOlor half value of diffuseColor (color/2)
 //            to show indivial sheet elements.
 // draws a polygon with the specified color, drawstyle and transparency
 
-SoSeparator* draw_filled_polygon (SbVec3f* vertices, const unsigned int nVertices, 
+SoSeparator* draw_filled_polygon (SbVec3f* vertices, const unsigned int nVertices,
                                   const SbColor& color, const float fTransparency)
 {
   SoSeparator* root = new SoSeparator;
@@ -455,7 +432,7 @@ SoSeparator* draw_filled_polygon (SbVec3f* vertices, const unsigned int nVertice
   return root;
 }
 
-SoSeparator* draw_filled_polygon (float** vertices, const unsigned int nVertices, 
+SoSeparator* draw_filled_polygon (float** vertices, const unsigned int nVertices,
                                   const SbColor& color, const float fTransparency)
 {
   SoSeparator* root = new SoSeparator;
@@ -504,7 +481,7 @@ SoSeparator* draw_line_set (const vcl_vector<vcl_pair<vgl_point_3d<double>, vgl_
 }
 
 //: draw the whole set of lines in a single SoIndexedLineSet.
-void draw_line_set_geom (SoSeparator* root, 
+void draw_line_set_geom (SoSeparator* root,
         const vcl_vector<vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > >& lines)
 {
   unsigned int nVertices = lines.size() * 2;
@@ -540,16 +517,16 @@ void draw_line_set_geom (SoSeparator* root,
   root->addChild (indexedLineSet);
 }
 
-void draw_triangle_geom (SoGroup* root, 
-                             const vgl_point_3d<double>& Pt1, 
-                             const vgl_point_3d<double>& Pt2, 
+void draw_triangle_geom (SoGroup* root,
+                             const vgl_point_3d<double>& Pt1,
+                             const vgl_point_3d<double>& Pt2,
                              const vgl_point_3d<double>& Pt3)
 {
   SoCoordinate3* coords = new SoCoordinate3;
   coords->point.set1Value( 0, SbVec3f( (float)Pt1.x(), (float)Pt1.y(), (float)Pt1.z()) );
   coords->point.set1Value( 1, SbVec3f( (float)Pt2.x(), (float)Pt2.y(), (float)Pt2.z()) );
   coords->point.set1Value( 2, SbVec3f( (float)Pt3.x(), (float)Pt3.y(), (float)Pt3.z()) );
-  root->addChild(coords);  
+  root->addChild(coords);
 
   SoFaceSet* faceSet = new SoFaceSet;
   faceSet->numVertices.set1Value(0,3);
@@ -557,16 +534,16 @@ void draw_triangle_geom (SoGroup* root,
 }
 
 // draws a single triangle with no special properties
-void draw_triangle_geom (SoGroup *root, 
+void draw_triangle_geom (SoGroup *root,
                          const float x1, const float y1, const float z1,
-                         const float x2, const float y2, const float z2, 
-                         const float x3, const float y3, const float z3) 
+                         const float x2, const float y2, const float z2,
+                         const float x3, const float y3, const float z3)
 {
   SoCoordinate3* coords = new SoCoordinate3;
   coords->point.set1Value(0,SbVec3f(x1,y1,z1));
   coords->point.set1Value(1,SbVec3f(x2,y2,z2));
   coords->point.set1Value(2,SbVec3f(x3,y3,z3));
-  root->addChild(coords);  
+  root->addChild(coords);
 
   SoFaceSet* faceSet = new SoFaceSet;
   faceSet->numVertices.set1Value(0,3);
@@ -574,7 +551,7 @@ void draw_triangle_geom (SoGroup *root,
 }
 
 // draws a line with the specified color and drawstyle
-SoSeparator* draw_line (const float x1, const float y1, const float z1, 
+SoSeparator* draw_line (const float x1, const float y1, const float z1,
                         const float x2, const float y2, const float z2,
                         const SbColor& color, const SoDrawStyle* drawStyle)
 {
@@ -588,7 +565,7 @@ SoSeparator* draw_line (const float x1, const float y1, const float z1,
   if (drawStyle)
     root->addChild ((SoDrawStyle*) drawStyle);
 
-  draw_line_geom (root, x1, y1, z1, x2, y2, z2);  
+  draw_line_geom (root, x1, y1, z1, x2, y2, z2);
   return root;
 }
 
@@ -596,13 +573,13 @@ SoSeparator* draw_line (const float x1, const float y1, const float z1,
 SoSeparator* draw_line (const vgl_point_3d<double>& pt1, const vgl_point_3d<double>& pt2,
                         const SbColor& color, const SoDrawStyle* drawStyle)
 {
-   return draw_line ((float)pt1.x(), (float)pt1.y(), (float)pt1.z(), 
+   return draw_line ((float)pt1.x(), (float)pt1.y(), (float)pt1.z(),
                      (float)pt2.x(), (float)pt2.y(), (float)pt2.z(), color, drawStyle);
 }
 
 // draws a single line with no special properties
-void draw_line_geom (SoGroup* root, 
-                         const float x1, const float y1, const float z1, 
+void draw_line_geom (SoGroup* root,
+                         const float x1, const float y1, const float z1,
                          const float x2, const float y2, const float z2)
 {
   SoCoordinate3* coord = new SoCoordinate3;
@@ -617,11 +594,11 @@ void draw_line_geom (SoGroup* root,
 
 void draw_line_geom (SoGroup* root, const vgl_point_3d<double>& pt1, const vgl_point_3d<double>& pt2)
 {
-  draw_line_geom (root, (float)pt1.x(), (float)pt1.y(), (float)pt1.z(), 
+  draw_line_geom (root, (float)pt1.x(), (float)pt1.y(), (float)pt1.z(),
     (float)pt2.x(), (float)pt2.y(), (float)pt2.z());
 }
 
-SoSeparator* draw_text2d (const char* text, 
+SoSeparator* draw_text2d (const char* text,
                           const float x, const float y, const float z)
 {
   SoSeparator* root = new SoSeparator;
@@ -629,13 +606,13 @@ SoSeparator* draw_text2d (const char* text,
   SoTransform *instrTransf = new SoTransform;
   instrTransf->translation.setValue (x, y, z);
   root->addChild(instrTransf);
-  
+
   draw_text2d_geom (root, text);
 
   return root;
 }
 
-SoSeparator* draw_box (const double& min_x, const double& min_y, const double& min_z, 
+SoSeparator* draw_box (const double& min_x, const double& min_y, const double& min_z,
                        const double& max_x, const double& max_y, const double& max_z,
                        const float& width, const SbColor& color)
 {
@@ -652,35 +629,34 @@ SoSeparator* draw_box (const double& min_x, const double& min_y, const double& m
 
   //side parallel to X
   draw_line_geom (root, min_x, min_y, min_z, max_x, min_y, min_z);
-  draw_line_geom (root, min_x, min_y, max_z, max_x, min_y, max_z);  
+  draw_line_geom (root, min_x, min_y, max_z, max_x, min_y, max_z);
   draw_line_geom (root, min_x, max_y, min_z, max_x, max_y, min_z);
   draw_line_geom (root, min_x, max_y, max_z, max_x, max_y, max_z);
 
   //side parallel to Y
   draw_line_geom (root, min_x, min_y, min_z, min_x, max_y, min_z);
-  draw_line_geom (root, min_x, min_y, max_z, min_x, max_y, max_z);  
+  draw_line_geom (root, min_x, min_y, max_z, min_x, max_y, max_z);
   draw_line_geom (root, max_x, min_y, min_z, max_x, max_y, min_z);
   draw_line_geom (root, max_x, min_y, max_z, max_x, max_y, max_z);
 
   //side parallel to Z
   draw_line_geom (root, min_x, min_y, min_z, min_x, min_y, max_z);
-  draw_line_geom (root, min_x, max_y, min_z, min_x, max_y, max_z);  
+  draw_line_geom (root, min_x, max_y, min_z, min_x, max_y, max_z);
   draw_line_geom (root, max_x, min_y, min_z, max_x, min_y, max_z);
   draw_line_geom (root, max_x, max_y, min_z, max_x, max_y, max_z);
 
   return root;
-
 }
 
 SoSeparator* draw_box (const vgl_box_3d<double>& box,
                        const float& width, const SbColor& color)
 {
-  return draw_box (box.min_x(), box.min_y(), box.min_z(), 
-                   box.max_x(), box.max_y(), box.max_z(), 
+  return draw_box (box.min_x(), box.min_y(), box.min_z(),
+                   box.max_x(), box.max_y(), box.max_z(),
                    width, color);
 }
 
-SoSeparator* draw_text2d (const char* text, 
+SoSeparator* draw_text2d (const char* text,
                           const float x, const float y, const float z,
                           const SoBaseColor* basecolor)
 {
@@ -689,7 +665,7 @@ SoSeparator* draw_text2d (const char* text,
   SoTransform *instrTransf = new SoTransform;
   instrTransf->translation.setValue (x, y, z);
   root->addChild(instrTransf);
-  
+
   //basecolor
   root->addChild ((SoBaseColor*) basecolor);
 
@@ -773,11 +749,11 @@ void draw_point_test (SoSeparator* root)
 void draw_text_test (SoSeparator* root)
 {
   SoText2 * text = new SoText2;
-  
+
   const char * str[] = {
-  "Yo Yo Yo. 2D Text is working!",
-  "LEMS Brown University",
-  "1 2 3 4 5 6 7 8 9 10.",
+    "Yo Yo Yo. 2D Text is working!",
+    "LEMS Brown University",
+    "1 2 3 4 5 6 7 8 9 10.",
   };
 
   text->string.setValues(0, sizeof(str) / sizeof(char *), str);
@@ -904,9 +880,11 @@ void draw_indexed_line_test (SoSeparator* root)
   const SbVec3f CubeMax   = SbVec3f( 1.0,  1.0,  1.0);
 
   ////////////////////////////////////////////////////////////
-  //
+
+  //:
+  // \verbatim
   //  Create an array of points at the vertices of the cube.
-  // 
+  //
   //                             y
   //                             ^
   //                  2          |                 3
@@ -930,10 +908,11 @@ void draw_indexed_line_test (SoSeparator* root)
   //            |/                           |/
   //            .----------------------------.
   //          4                                5
+  // \endverbatim
 
   const int numCubeVerts = 8;
   static float cubeVerts[numCubeVerts][3] =
-    {
+  {
     { CubeMin[0],  CubeMin[1],  CubeMax[2] },  // vert  0
     { CubeMax[0],  CubeMin[1],  CubeMax[2] },  // vert  1
     { CubeMin[0],  CubeMax[1],  CubeMax[2] },  // vert  2
@@ -943,7 +922,7 @@ void draw_indexed_line_test (SoSeparator* root)
     { CubeMax[0],  CubeMin[1],  CubeMin[2] },  // vert  5
     { CubeMin[0],  CubeMax[1],  CubeMin[2] },  // vert  6
     { CubeMax[0],  CubeMax[1],  CubeMin[2] }   // vert  7
-    };
+  };
 
 
   ////////////////////////////////////////////////////////////
@@ -960,7 +939,7 @@ void draw_indexed_line_test (SoSeparator* root)
 
   const int numEdgeIndexes = 36;
   static int32_t cubeIndex[numEdgeIndexes] =
-    {
+  {
     0, 1, -1,              // -1 terminates the edge.
     2, 3, -1,
     0, 2, -1,
@@ -975,7 +954,7 @@ void draw_indexed_line_test (SoSeparator* root)
     1, 5, -1,
     2, 6, -1,
     3, 7, -1,
-    };
+  };
 
   SoIndexedLineSet *vertIndex = new SoIndexedLineSet();
   vertIndex->coordIndex.setValues(0, numEdgeIndexes, cubeIndex);
@@ -991,6 +970,3 @@ void draw_primitives_test (SoSeparator* root)
 }
 
 #endif
-
-
-

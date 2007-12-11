@@ -1,9 +1,9 @@
-//---------------------------------------------------------------------
 // This is brl/bbas/bmsh3d/bmsh3d_edge.cxx
+//---------------------------------------------------------------------
+#include "bmsh3d_edge.h"
 //:
 // \file
 // \brief Basic 3d edge
-//
 //
 // \author
 //  MingChing Chang  Apr 22, 2005
@@ -16,26 +16,24 @@
 //-------------------------------------------------------------------------
 
 #include <vcl_sstream.h>
+#include <vcl_cassert.h>
 
 #include <vgl/vgl_distance.h>
 
-#include "bmsh3d_edge.h"
 #include "bmsh3d_face.h"
 
 //###############################################################
 //###### Constructor/Destructor ######
 //###############################################################
 
-bmsh3d_edge::~bmsh3d_edge () 
-{ 
+bmsh3d_edge::~bmsh3d_edge ()
+{
   //when destruct this edge, also destruct all associated halfedges
-  if (halfedge_ == NULL) {
-  }  
-  else if (halfedge_->pair() == NULL) {
-    //if it has only one halfedge)
+  if (halfedge_ && halfedge_->pair() == NULL) {
+    //if it has only one halfedge
     delete halfedge_;
   }
-  else { //delete all associated halfedges pairs
+  else if (halfedge_) { //delete all associated halfedges pairs
     bmsh3d_halfedge* cur_he = halfedge_->pair();
     while (cur_he != halfedge_) {
       bmsh3d_halfedge* todel = cur_he;
@@ -54,11 +52,10 @@ bmsh3d_edge::~bmsh3d_edge ()
       vertices_[1]->del_incident_E (this);
 }
 
-//: clones this edge, vertex and edge ids set to -1, 
-// set them to their real values later
+//: clones this edge, vertex and edge ids set to -1, set them to their real values later
 bmsh3d_edge* bmsh3d_edge::clone()
 {
-  //: the starting and ending vertices
+  // the starting and ending vertices
   bmsh3d_vertex* s = vertices_[0];
   bmsh3d_vertex* e = vertices_[1];
 
@@ -66,26 +63,26 @@ bmsh3d_edge* bmsh3d_edge::clone()
     s->get_pt().z(), -1);
   bmsh3d_vertex* new_e = new bmsh3d_vertex(e->get_pt().x(), e->get_pt().y(),
     e->get_pt().z(), -1);
-  
+
   bmsh3d_edge* new_edge = new bmsh3d_edge(new_s, new_e, -1);
-  return new_edge; 
+  return new_edge;
 }
 
 //###############################################################
 //###### Connectivity query functions ######
 //###############################################################
 
-unsigned int bmsh3d_edge::n_incident_Fs () const 
+unsigned int bmsh3d_edge::n_incident_Fs () const
 {
-  //: if there's no associated halfedge 
+  // if there's no associated halfedge
   if (halfedge_ == NULL)
     return 0;
 
-  //: if there's only one associated halfedge (no loop)
+  // if there's only one associated halfedge (no loop)
   if (halfedge_->pair() == NULL)
     return 1;
 
-  //: the last case, the associated halfedges form a circular list
+  // the last case, the associated halfedges form a circular list
   unsigned int count = 0;
   bmsh3d_halfedge* HE = halfedge_;
   do {
@@ -98,7 +95,7 @@ unsigned int bmsh3d_edge::n_incident_Fs () const
 }
 
 bool bmsh3d_edge::is_F_incident (bmsh3d_face* F) const
-{ 
+{
   if (halfedge_ == NULL) {
     return false;
   }
@@ -144,7 +141,7 @@ bmsh3d_halfedge* bmsh3d_edge::get_HE_of_F (bmsh3d_face* F) const
 
 void bmsh3d_edge::get_incident_Fs (vcl_vector<bmsh3d_face*>& incident_faces) const
 {
-  //If there's no associated halfedge 
+  //If there's no associated halfedge
   if (halfedge_ == NULL) {
     return;
   }
@@ -208,7 +205,8 @@ bmsh3d_face* bmsh3d_edge::incident_F_given_V (bmsh3d_vertex* incident_V) const
   return NULL;
 }
 
-//: If E is 2-incident to one sheet
+//:
+//  If E is 2-incident to one sheet
 //  (internal to only one sheet), return the sheet.
 //  Else, return NULL.
 bmsh3d_face* bmsh3d_edge::is_2_incident_to_one_S () const
@@ -259,7 +257,8 @@ bmsh3d_face* bmsh3d_edge::other_2_manifold_F (bmsh3d_face* inputF) const
   return NULL;
 }
 
-//: given a tau, return the extrinsic coordinate
+//:
+//  given a tau, return the extrinsic coordinate
 //  A --- p --- B
 //  p = A + AP / AB;
 vgl_point_3d<double> bmsh3d_edge::_point_from_tau (const double tau) const
@@ -281,7 +280,7 @@ vgl_point_3d<double> bmsh3d_edge::mid_pt() const
 
 const double bmsh3d_edge::length () const
 {
-  //: assume that sV and eV is bmsh3d_vertex
+  // assume that sV and eV is bmsh3d_vertex
   bmsh3d_vertex* sv = sV();
   bmsh3d_vertex* ev = eV();
   return vgl_distance (sv->pt(), ev->pt());
@@ -291,18 +290,18 @@ const double bmsh3d_edge::length () const
 //###### Connectivity Modification Functions ######
 //###############################################################
 
-void bmsh3d_edge::_connect_HE_to_end (bmsh3d_halfedge* inputHE) 
-{  
+void bmsh3d_edge::_connect_HE_to_end (bmsh3d_halfedge* inputHE)
+{
   //Note that the link list is circular, but not necessarily geometrically ordered!
   if (halfedge_ == NULL) { //1)
     halfedge_ = inputHE;
     return;
-  }  
+  }
   else if (halfedge_->pair() == NULL) { //2)
     halfedge_->set_pair (inputHE);
     inputHE->set_pair (halfedge_);
     return;
-  }  
+  }
   else { //3) The general circular list case
     //Since the order of the halfedges is not important
     //Just insert it to the 2nd
@@ -314,7 +313,7 @@ void bmsh3d_edge::_connect_HE_to_end (bmsh3d_halfedge* inputHE)
 
 //: delete one of the halfedge of this edge.
 //  also fix the circular list of halfedge::pair_'s
-void bmsh3d_edge::_disconnect_HE (bmsh3d_halfedge* inputHE) 
+void bmsh3d_edge::_disconnect_HE (bmsh3d_halfedge* inputHE)
 {
   //first set its edge pointer to NULL (disconnect)
   inputHE->set_edge (NULL);
@@ -400,7 +399,7 @@ bmsh3d_face* bmsh3d_edge::m2_other_face (bmsh3d_face* inputF)
 //###### Other functions ######
 //###############################################################
 
-void bmsh3d_edge::getInfo (vcl_ostringstream& ostrm) 
+void bmsh3d_edge::getInfo (vcl_ostringstream& ostrm)
 {
   char s[1024];
 
@@ -408,10 +407,10 @@ void bmsh3d_edge::getInfo (vcl_ostringstream& ostrm)
   vcl_sprintf (s, "bmsh3d_edge id: %d (vertices [%d] - [%d])\n", id_,
                vertices_[0]->id(), vertices_[1]->id()); ostrm<<s;
 
-  //: the incident faces via halfedges
+  // the incident faces via halfedges
   int n_halfedges = n_incident_Fs ();
   vcl_sprintf (s, " %d HEs: ", n_halfedges); ostrm<<s;
-  
+
   if (halfedge_ == NULL) {
     vcl_sprintf (s, "NONE "); ostrm<<s;
   }
@@ -419,7 +418,7 @@ void bmsh3d_edge::getInfo (vcl_ostringstream& ostrm)
     vcl_sprintf (s, "%d ", halfedge_->face()->id()); ostrm<<s;
   }
   else {
-    //: the last case, the associated halfedges form a circular list
+    // the last case, the associated halfedges form a circular list
     bmsh3d_halfedge* HE = halfedge_;
     do {
       vcl_sprintf (s, "%d ", HE->face()->id()); ostrm<<s;
