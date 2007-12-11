@@ -1,9 +1,10 @@
-// This is basic/bgui3d/bgui3d_project2d_tableau.cxx
-  
+// This is brl/bbas/bgui3d/bgui3d_project2d_tableau.cxx
+#include "bgui3d_project2d_tableau.h"
 //:
 // \file
 
 #include <vcl_iostream.h>
+#include <vcl_cassert.h>
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>
 #include <vgui/vgui_menu.h>
@@ -15,11 +16,10 @@
 #include <vgl/algo/vgl_rotation_3d.h>
 
 #include <vpgl/vpgl_perspective_camera.h>
-#include "bgui3d_project2d_tableau.h"
 #include "bgui3d_algo.h"
 
 #include <Inventor/actions/SoGetBoundingBoxAction.h>
-#include <Inventor/SbLinear.h> 
+#include <Inventor/SbLinear.h>
 
 
 //: Constructor - don't use this, use bgui3d_project2d_tableau_new.
@@ -55,7 +55,8 @@ bgui3d_project2d_tableau::set_camera(const vpgl_proj_camera<double>& cam)
   vnl_double_3 t; // camera translation
 
   // Code for affine camera
-  if( camera[2][0] == 0 && camera[2][1] ==  0 && camera[2][2] == 0 ){
+  if ( camera[2][0] == 0 && camera[2][1] ==  0 && camera[2][2] == 0 )
+  {
     vnl_double_3x4 ncamera = camera;
     ncamera /= ncamera[2][3];
 
@@ -67,19 +68,19 @@ bgui3d_project2d_tableau::set_camera(const vpgl_proj_camera<double>& cam)
     K.fill( 0.0 );
     vnl_double_3 r1, r2, r3, a1;
     r2[0] = ncamera[1][0]; r2[1] = ncamera[1][1]; r2[2] = ncamera[1][2];
-    K[1][1] = sqrt( r2[0]*r2[0]+r2[1]*r2[1]+r2[2]*r2[2] );
-    r2 /= sqrt( r2[0]*r2[0]+r2[1]*r2[1]+r2[2]*r2[2] );
+    K[1][1] = vcl_sqrt( r2[0]*r2[0]+r2[1]*r2[1]+r2[2]*r2[2] );
+    r2 /= vcl_sqrt( r2[0]*r2[0]+r2[1]*r2[1]+r2[2]*r2[2] );
     a1[0] = ncamera[0][0]; a1[1] = ncamera[0][1]; a1[2] = ncamera[0][2];
     r3 = vnl_cross_3d( a1, r2 );
-    r3 /= sqrt( r3[0]*r3[0]+r3[1]*r3[1]+r3[2]*r3[2] );
+    r3 /= vcl_sqrt( r3[0]*r3[0]+r3[1]*r3[1]+r3[2]*r3[2] );
     r1 = vnl_cross_3d( r2, r3 );
     K[0][0] = a1[0]*r1[0] + a1[1]*r1[1] + a1[2]*r1[2];
-    if( K[0][0] < 0 ){
+    if ( K[0][0] < 0 ) {
       K[0][0] *= -1;
       r1 *= -1;
     }
     K[0][1] = a1[0]*r2[0] + a1[1]*r2[1] + a1[2]*r2[2];
-    if( K[1][1] < 0 ){
+    if ( K[1][1] < 0 ) {
       K[1][1] *= -1;
       r2 *= -1;
       K[0][1] *= -1;
@@ -108,10 +109,10 @@ bgui3d_project2d_tableau::set_camera(const vpgl_proj_camera<double>& cam)
   else{
     // make the camera right-handed
     vnl_double_3x4 cam = camera;
-    if(vnl_det(vnl_double_3x3(cam.extract(3,3))) < 0)
+    if (vnl_det(vnl_double_3x3(cam.extract(3,3))) < 0)
       cam *= -1.0;
-    if(!bgui3d_decompose_camera(cam, K, R, t)){
-      vcl_cerr << "decomposition error\n" << vcl_endl;
+    if (!bgui3d_decompose_camera(cam, K, R, t)){
+      vcl_cerr << "decomposition error\n\n";
       return false;
     }
   }
@@ -155,7 +156,7 @@ bgui3d_project2d_tableau::camera() const
   vgl_rotation_3d<double> R(mm.extract(3,3).transpose());
   vgl_point_3d<double> t(-mm[3][0], -mm[3][1], -mm[3][2]);
   t = R.inverse()*t;
-  if(camera_z_[2][2] != 0){
+  if (camera_z_[2][2] != 0){
     vpgl_calibration_matrix<double> K(camera_z_.extract(3,3));
     return vcl_auto_ptr<vpgl_proj_camera<double> >
         ( new vpgl_perspective_camera<double>(K,t,R) );
@@ -196,10 +197,10 @@ bgui3d_project2d_tableau::handle(const vgui_event& e)
     glGetDoublev(GL_PROJECTION_MATRIX, P);
     glGetDoublev(GL_MODELVIEW_MATRIX, M);
 
-    if(this->setup_projection()){
+    if (this->setup_projection()) {
       glMatrixMode(GL_MODELVIEW);
       glLoadIdentity();
-      if(draw_headlight_)
+      if (draw_headlight_)
         draw_headlight();
       else
         glDisable(GL_LIGHT0);
@@ -241,8 +242,8 @@ bgui3d_project2d_tableau::setup_projection()
   SbXfBox3f xbox = sbba.getXfBoundingBox();
   SbMatrix mat;
   mat.makeIdentity();
-  for(int i=0; i<4; ++i)
-    for(int j=0; j<4; ++j)
+  for (int i=0; i<4; ++i)
+    for (int j=0; j<4; ++j)
       mat[i][j] = float(model_matrix_[4*i+j]);
   xbox.transform(mat);
   mat = xbox.getTransform();
@@ -283,7 +284,7 @@ bgui3d_project2d_tableau::setup_projection()
 //: A vgui command used to toggle animation
 class bgui3d_headlight_command : public vgui_command
 {
-  public:
+ public:
   bgui3d_headlight_command(bgui3d_project2d_tableau* tab) : bgui3d_project2d_tab(tab) {}
   void execute()
   {
@@ -298,13 +299,12 @@ class bgui3d_headlight_command : public vgui_command
 //: Builds a popup menu
 void bgui3d_project2d_tableau::get_popup(const vgui_popup_params& params,
                                          vgui_menu &menu)
-{  
+{
   vcl_string headlight_item;
-  if( this->is_headlight() )
+  if ( this->is_headlight() )
     headlight_item = "Disable Headlight";
   else
     headlight_item = "Enable Headlight";
 
   menu.add(headlight_item, new bgui3d_headlight_command(this));
-
 }
