@@ -4,7 +4,7 @@
 // \brief Program using F&H method to locate matches on a pair of images given tree on one
 
 // Example parameter file:
-/*
+#if 0
   image1_path: HandImages/Hand_1.jpg
   image2_path: HandImages/Hand_9.jpg
   points_path: hand_b.pts
@@ -15,14 +15,14 @@
   L_hi: 2
   half_width: 7
   response_scale: 0.5
-*/
+#endif // 0
 
 #include <vul/vul_arg.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_gaussian_pyramid_builder_2d.h>
 #include <vimt/vimt_image_pyramid.h>
 #include <vimt/vimt_crop.h>
-#include <mbl/mbl_parse_block.h>
+//#include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
 #include <vil/vil_load.h>
 #include <vul/vul_string.h>
@@ -40,19 +40,18 @@
 
 void print_usage()
 {
-  vcl_cout<<"fhs_match_tree_model -p param_file"<<vcl_endl
-          <<"Loads in parameter file, which defines images,"<<vcl_endl
-          <<"points, the arcs defining a tree and related details."<<vcl_endl
-          <<"Constructs a tree model from the first image."<<vcl_endl
-          <<"Uses normalised correllation and this model to locate"<<vcl_endl
+  vcl_cout<<"fhs_match_tree_model -p param_file\n"
+          <<"Loads in parameter file, which defines images,\n"
+          <<"points, the arcs defining a tree and related details.\n"
+          <<"Constructs a tree model from the first image.\n"
+          <<"Uses normalised correllation and this model to locate\n"
           <<"equivalent points on the second image."<<vcl_endl;
   vul_arg_display_usage_and_exit();
 }
 
 class fhs_model_params
 {
-  public:
-
+ public:
   vcl_string image1_path;
   vcl_string image2_path;
   vcl_string points_path;
@@ -81,39 +80,39 @@ bool parse_param_file(const vcl_string& param_path,
 
   if (props.find("image1_path")!=props.end())
     params.image1_path = props["image1_path"];
-  else {vcl_cerr<<"No image1_path: specified."<<vcl_endl; return false; }
+  else {vcl_cerr<<"No image1_path: specified.\n"; return false; }
 
   if (props.find("image2_path")!=props.end())
     params.image2_path = props["image2_path"];
-  else {vcl_cerr<<"No image2_path: specified."<<vcl_endl; return false; }
+  else {vcl_cerr<<"No image2_path: specified.\n"; return false; }
 
   if (props.find("output_image1_path")!=props.end())
     params.output_image1_path = props["output_image1_path"];
-  else {vcl_cerr<<"No output_image1_path: specified."<<vcl_endl; return false; }
+  else {vcl_cerr<<"No output_image1_path: specified.\n"; return false; }
 
   if (props.find("output_image2_path")!=props.end())
     params.output_image2_path = props["output_image2_path"];
-  else {vcl_cerr<<"No output_image2_path: specified."<<vcl_endl; return false; }
+  else {vcl_cerr<<"No output_image2_path: specified.\n"; return false; }
 
   if (props.find("points_path")!=props.end())
     params.points_path = props["points_path"];
-  else {vcl_cerr<<"No points_path: specified."<<vcl_endl; return false; }
+  else {vcl_cerr<<"No points_path: specified.\n"; return false; }
 
   if (props.find("arcs_path")!=props.end())
     params.arcs_path = props["arcs_path"];
-  else {vcl_cerr<<"No arcs2_path: specified."<<vcl_endl; return false; }
+  else {vcl_cerr<<"No arcs2_path: specified.\n"; return false; }
 
   if (props.find("L_lo")!=props.end())
     params.L_lo = vul_string_atoi(props["L_lo"]);
-  else {vcl_cerr<<"No L_lo: specified."<<vcl_endl; return false; }
+  else {vcl_cerr<<"No L_lo: specified.\n"; return false; }
 
   if (props.find("half_width")!=props.end())
     params.half_width = vul_string_atoi(props["half_width"]);
-  else {vcl_cerr<<"No half_width: specified."<<vcl_endl; return false; }
+  else {vcl_cerr<<"No half_width: specified.\n"; return false; }
 
   if (props.find("L_hi")!=props.end())
     params.L_hi = vul_string_atoi(props["L_hi"]);
-  else {vcl_cerr<<"No L_hi: specified."<<vcl_endl; return false; }
+  else {vcl_cerr<<"No L_hi: specified.\n"; return false; }
 
   params.response_scale=0.1;
   if (props.find("response_scale")!=props.end())
@@ -180,7 +179,7 @@ bool fhs_load_points(const vcl_string& path,
     }
     else
     {
-      vcl_cerr<<"Unexpected label: <"<<label<<">"<<vcl_endl;
+      vcl_cerr<<"Unexpected label: <"<<label<<">\n";
       return false;
     }
     ifs>>label;
@@ -341,7 +340,7 @@ int main( int argc, char* argv[] )
   int max_L = vcl_min(image_pyr1.hi(),image_pyr2.hi());
   if (params.L_lo<0  || params.L_lo>max_L  || params.L_hi<params.L_lo)
   {
-    vcl_cerr<<"Levels must be in range [0,"<<max_L<<"], with lo<=hi"<<vcl_endl;
+    vcl_cerr<<"Levels must be in range [0,"<<max_L<<"], with lo<=hi\n";
     return 2;
   }
 

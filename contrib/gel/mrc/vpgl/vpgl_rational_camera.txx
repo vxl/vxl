@@ -50,12 +50,12 @@ vpgl_rational_camera(vcl_vector<T> const& neu_u,
                      )
 {
   for (unsigned i = 0; i<20; ++i)
-    {
-      rational_coeffs_[NEU_U][i] = neu_u[i];
-      rational_coeffs_[DEN_U][i] = den_u[i];
-      rational_coeffs_[NEU_V][i] = neu_v[i];
-      rational_coeffs_[DEN_V][i] = den_v[i];
-    }
+  {
+    rational_coeffs_[NEU_U][i] = neu_u[i];
+    rational_coeffs_[DEN_U][i] = den_u[i];
+    rational_coeffs_[NEU_V][i] = neu_v[i];
+    rational_coeffs_[DEN_V][i] = den_v[i];
+  }
   scale_offsets_.resize(5);
   scale_offsets_[X_INDX] = vpgl_scale_offset<T>(x_scale, x_off);
   scale_offsets_[Y_INDX] = vpgl_scale_offset<T>(y_scale, y_off);
@@ -79,12 +79,12 @@ vpgl_rational_camera(const double*  neu_u,
                      )
 {
   for (unsigned i = 0; i<20; ++i)
-    {
-      rational_coeffs_[NEU_U][i] = neu_u[i];
-      rational_coeffs_[DEN_U][i] = den_u[i];
-      rational_coeffs_[NEU_V][i] = neu_v[i];
-      rational_coeffs_[DEN_V][i] = den_v[i];
-    }
+  {
+    rational_coeffs_[NEU_U][i] = neu_u[i];
+    rational_coeffs_[DEN_U][i] = den_u[i];
+    rational_coeffs_[NEU_V][i] = neu_v[i];
+    rational_coeffs_[DEN_V][i] = den_v[i];
+  }
   scale_offsets_.resize(5);
   scale_offsets_[X_INDX] = vpgl_scale_offset<T>(x_scale, x_off);
   scale_offsets_[Y_INDX] = vpgl_scale_offset<T>(y_scale, y_off);
@@ -120,11 +120,11 @@ vcl_vector<vcl_vector<T> > vpgl_rational_camera<T>::coefficients() const
 {
   vcl_vector<vcl_vector<T> > result(4);
   for (unsigned j = 0; j<4; ++j)
-    {
-      result[j].resize(20);
-      for (unsigned i = 0; i<20; ++i)
-        result[j][i]=rational_coeffs_[j][i];
-    }
+  {
+    result[j].resize(20);
+    for (unsigned i = 0; i<20; ++i)
+      result[j][i]=rational_coeffs_[j][i];
+  }
   return result;
 }
 
@@ -371,52 +371,49 @@ bool vpgl_rational_camera<T>::save(vcl_string cam_path)
   map[18]=11;
   map[19]=16;
 
-  file_out << "satId = \"????\";\n";
-  file_out << "bandId = \"RGB\";\n";
-  file_out << "SpecId = \"RPC00B\";\n";
-  file_out << "BEGIN_GROUP = IMAGE\n";
-  file_out << "\n\n"; // skip errBias and errRand fields 
-  file_out << "  lineOffset = " << offset(V_INDX) << "\n";
-  file_out << "  sampOffset = " << offset(U_INDX) << "\n";
-  file_out << "  latOffset = " << offset(Y_INDX) << "\n";
-  file_out << "  longOffset = " << offset(X_INDX) << "\n";
-  file_out << "  heightOffset = " << offset(Z_INDX) << "\n";
-  file_out << "  lineScale = " << scale(V_INDX) << "\n";
-  file_out << "  sampScale = " << scale(U_INDX) << "\n";
-  file_out << "  latScale = " << scale(Y_INDX) << "\n";
-  file_out << "  longScale = " << scale(X_INDX) << "\n";
-  file_out << "  heightScale = " << scale(Z_INDX) << "\n";
+  file_out << "satId = \"????\";\n"
+           << "bandId = \"RGB\";\n"
+           << "SpecId = \"RPC00B\";\n"
+           << "BEGIN_GROUP = IMAGE\n"
+           << "\n\n"  // skip errBias and errRand fields
+           << "  lineOffset = " << offset(V_INDX) << '\n'
+           << "  sampOffset = " << offset(U_INDX) << '\n'
+           << "  latOffset = " << offset(Y_INDX) << '\n'
+           << "  longOffset = " << offset(X_INDX) << '\n'
+           << "  heightOffset = " << offset(Z_INDX) << '\n'
+           << "  lineScale = " << scale(V_INDX) << '\n'
+           << "  sampScale = " << scale(U_INDX) << '\n'
+           << "  latScale = " << scale(Y_INDX) << '\n'
+           << "  longScale = " << scale(X_INDX) << '\n'
+           << "  heightScale = " << scale(Z_INDX) << '\n';
   vnl_matrix_fixed<double,4,20> coeffs = this->coefficient_matrix();
   file_out << "  lineNumCoef = (";
   for (int i=0; i<20; i++) {
     file_out << "\n    " << coeffs[NEU_V][map[i]];
     if (i < 19)
-      file_out << ",";
+      file_out << ',';
   }
-  file_out << ");\n";
-  file_out << "  lineDenCoef = (";
+  file_out << ");\n  lineDenCoef = (";
   for (int i=0; i<20; i++) {
     file_out << "\n    " << coeffs[DEN_V][map[i]];
     if (i < 19)
-      file_out << ",";
+      file_out << ',';
   }
-  file_out << ");\n";
-  file_out << "  sampNumCoef = (";
+  file_out << ");\n  sampNumCoef = (";
   for (int i=0; i<20; i++) {
     file_out << "\n    " << coeffs[NEU_U][map[i]];
     if (i < 19)
-      file_out << ",";
+      file_out << ',';
   }
-  file_out << ");\n";
-  file_out << "  sampDenCoef = (";
+  file_out << ");\n  sampDenCoef = (";
   for (int i=0; i<20; i++) {
     file_out << "\n    " << coeffs[DEN_U][map[i]];
     if (i < 19)
-      file_out << ",";
+      file_out << ',';
   }
-  file_out << ");\n";
-  file_out << "END_GROUP = IMAGE\n";
-  file_out << "END;\n";
+  file_out << ");\n"
+           << "END_GROUP = IMAGE\n"
+           << "END;\n";
 
   return true;
 }
@@ -449,7 +446,7 @@ vpgl_rational_camera<T>* read_rational_camera(vcl_string cam_path)
   vcl_string input;
   char bulk[100];
 
-  while(!file_inp.eof()){
+  while (!file_inp.eof()){
     file_inp >> input;
 
     if (input=="sampScale") {
@@ -537,7 +534,6 @@ vpgl_rational_camera<T>* read_rational_camera(vcl_string cam_path)
         file_inp.getline(bulk,200);
       }
     }
-
   }
   file_inp.close();
 
@@ -564,7 +560,7 @@ vpgl_rational_camera<T>* read_rational_camera(vcl_string cam_path)
   map[19]=16;
 
   if ((neu_u.size() != 20) || (den_u.size() != 20)) {
-    vcl_cerr << "the file [" << cam_path << "] is not a valid rational camera file" << vcl_endl;
+    vcl_cerr << "the file [" << cam_path << "] is not a valid rational camera file\n";
     return 0;
     }
 
@@ -597,19 +593,21 @@ vpgl_rational_camera<T>* read_rational_camera(vcl_string cam_path)
   vpgl_rational_camera<T>* cam = new vpgl_rational_camera<T>(neu_u, den_u, neu_v, den_v,
   x_scale, x_off, y_scale, y_off, z_scale, z_off,u_scale, u_off, v_scale, v_off);
   return cam;
-  /*for (unsigned i = 0; i<20; ++i)
-    {
-      rational_coeffs_[NEU_U][i] = neu_u[i];
-      rational_coeffs_[DEN_U][i] = den_u[i];
-      rational_coeffs_[NEU_V][i] = neu_v[i];
-      rational_coeffs_[DEN_V][i] = den_v[i];
-    }
+#if 0
+  for (unsigned i = 0; i<20; ++i)
+  {
+    rational_coeffs_[NEU_U][i] = neu_u[i];
+    rational_coeffs_[DEN_U][i] = den_u[i];
+    rational_coeffs_[NEU_V][i] = neu_v[i];
+    rational_coeffs_[DEN_V][i] = den_v[i];
+  }
   scale_offsets_.resize(5);
   scale_offsets_[X_INDX] = vpgl_scale_offset<T>(x_scale, x_off);
   scale_offsets_[Y_INDX] = vpgl_scale_offset<T>(y_scale, y_off);
   scale_offsets_[Z_INDX] = vpgl_scale_offset<T>(z_scale, z_off);
   scale_offsets_[U_INDX] = vpgl_scale_offset<T>(u_scale, u_off);
-  scale_offsets_[V_INDX] = vpgl_scale_offset<T>(v_scale, v_off);*/
+  scale_offsets_[V_INDX] = vpgl_scale_offset<T>(v_scale, v_off);
+#endif // 0
 }
 
 // Code for easy instantiation.

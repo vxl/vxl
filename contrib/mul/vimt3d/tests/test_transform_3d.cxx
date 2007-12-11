@@ -227,29 +227,29 @@ static void test_transform_3d()
   vcl_cout<<"\n== Testing Similarity ==\n";
   trans0.set_similarity(0.51,2,3,4,0.2,1,-4);
   test_the_transform(trans0);
-  
+
   vcl_cout<<"\n== Testing Similarity Parameters ==\n";
   double s= 0.51;
   double r_x= 2.0, r_y=0.1, r_z=4.0;
   double t_x= 0.2, t_y=1.0, t_z=-4.0;
-  vcl_cout<<"original parameters:-"<<vcl_endl;
-  vcl_cout<<"s= "<<s<<vcl_endl;
-  vcl_cout<<"r_x= "<<r_x<<vcl_endl;
-  vcl_cout<<"r_y= "<<r_y<<vcl_endl;
-  vcl_cout<<"r_z= "<<r_z<<vcl_endl;
-  vcl_cout<<"t_x= "<<t_x<<vcl_endl;
-  vcl_cout<<"t_y= "<<t_y<<vcl_endl;
-  vcl_cout<<"t_z= "<<t_z<<vcl_endl;
+  vcl_cout<<"original parameters:-\n"
+          <<"s= "<<s<<vcl_endl
+          <<"r_x= "<<r_x<<vcl_endl
+          <<"r_y= "<<r_y<<vcl_endl
+          <<"r_z= "<<r_z<<vcl_endl
+          <<"t_x= "<<t_x<<vcl_endl
+          <<"t_y= "<<t_y<<vcl_endl
+          <<"t_z= "<<t_z<<vcl_endl;
   trans0.set_similarity( s, r_x, r_y, r_z, t_x, t_y, t_z);
   vnl_vector<double> trans0_vec;
   trans0.params( trans0_vec );
   vcl_cout<<"trans0_vec= "<<trans0_vec<<vcl_endl;
   vimt3d_transform_3d trans0_test;
   trans0_test.set( trans0_vec, trans0.form() );
-  vcl_cout<<"trans0= "<<trans0<<vcl_endl;
-  vcl_cout<<"trans0_test= "<<trans0_test<<vcl_endl;
+  vcl_cout<<"trans0= "<<trans0<<vcl_endl
+          <<"trans0_test= "<<trans0_test<<vcl_endl;
   //TEST("Similarity Params", trans0_test== trans0, true);
-  
+
   // check transforms agree when applied to basis vectors
   vgl_point_3d<double> vec_x(1,0,0);
   vgl_point_3d<double> vec_x0= trans0( vec_x );
@@ -257,28 +257,28 @@ static void test_transform_3d()
   vgl_point_3d<double> vec_x0_test= trans0_test( vec_x );
   vcl_cout<<"vec_x0_test= "<<vec_x0_test<<vcl_endl;
   TEST("Test x basis vec", (vec_x0- vec_x0_test).length()< 1e-6, true);
-  
+
   vgl_point_3d<double> vec_y(0,1,0);
   vgl_point_3d<double> vec_y0= trans0( vec_y );
   vcl_cout<<"vec_y0= "<<vec_y0<<vcl_endl;
   vgl_point_3d<double> vec_y0_test= trans0_test( vec_y );
   vcl_cout<<"vec_y0_test= "<<vec_y0_test<<vcl_endl;
   TEST("Test y basis vec", (vec_y0- vec_y0_test).length()< 1e-6, true);
-  
+
   vgl_point_3d<double> vec_z(0,0,1);
   vgl_point_3d<double> vec_z0= trans0( vec_z );
   vcl_cout<<"vec_z0= "<<vec_z0<<vcl_endl;
   vgl_point_3d<double> vec_z0_test= trans0_test( vec_z );
   vcl_cout<<"vec_z0_test= "<<vec_z0_test<<vcl_endl;
   TEST("Test z basis vec", (vec_z0- vec_z0_test).length()< 1e-6, true);
-  
+
 
   vcl_cout<<"\n== Testing Affine ==\n";
   trans0.set_affine(0.2,-0.3,4,2,1,4,5,0.1,-0.21);
   test_the_transform(trans0);
   test_affine_puvw();
 
-  /*
+#if 0
   vcl_cout<<"\n== Testing Affine Parameters ==\n";
   trans0.set_affine(0.2,-0.3,4,2,1,4,5,0.1,-0.21);
   vcl_cout<<"trans0= "<<trans0<<vcl_endl;
@@ -287,11 +287,11 @@ static void test_transform_3d()
   vcl_cout<<"trans0_affine_vec= "<<trans0_affine_vec<<vcl_endl;
   vimt3d_transform_3d trans0_affine_test;
   trans0_affine_test.set( trans0_affine_vec, trans0.form() );
-  vcl_cout<<"trans0= "<<trans0<<vcl_endl;
-  vcl_cout<<"trans0_affine_test= "<<trans0_affine_test<<vcl_endl;
+  vcl_cout<<"trans0= "<<trans0<<vcl_endl
+          <<"trans0_affine_test= "<<trans0_affine_test<<vcl_endl;
   //TEST("Similarity Params", trans0_test== trans0, true);
   vcl_abort();
-  */
+#endif // 0
 
   // -------- Test the binary I/O --------
 

@@ -4,8 +4,6 @@
 #include "bwm_tableau_cam.h"
 #include "bwm_observer_rat_cam.h"
 
-#include <vcl_iostream.h>
-
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_event.h>
@@ -15,15 +13,15 @@
 
 #include <vpgl/vpgl_rational_camera.h>
 
-class bwm_tableau_rat_cam : public bwm_tableau_cam {
-
-public:
+class bwm_tableau_rat_cam : public bwm_tableau_cam
+{
+ public:
 //  bwm_tableau_rat_cam(){};
 
   bwm_tableau_rat_cam(bwm_observer_rat_cam* observer)
     : bwm_tableau_cam(observer), my_observer_(observer) {}
 
-  void set_observer(bwm_observer_rat_cam* observer) { my_observer_ = observer; } 
+  void set_observer(bwm_observer_rat_cam* observer) { my_observer_ = observer; }
 
 //  bwm_tableau_rat_cam(vcl_string& image_path){}
 
@@ -40,22 +38,27 @@ public:
   void center_pos();
 
   //******************** LVCS Menu
+
   void load_lvcs();
   void save_lvcs();
   void define_lvcs();
   void convert_file_to_lvcs();
 
   //********************* Save Menu
+
   void save();
- /* void save_all();
+#if 0
+  void save_all();
   void save_gml();
   void save_kml();
   void save_kml_collada();
-  void save_x3d();*/
-  //****************** Misc   
-  void project_edges_from_master();
-protected:
+  void save_x3d();
+#endif // 0
 
+  //****************** Misc
+
+  void project_edges_from_master();
+ protected:
   bwm_observer_rat_cam* my_observer_;
 };
 

@@ -38,7 +38,6 @@
 #include <vil/vil_pyramid_image_resource.h>
 #include <vil/vil_property.h>
 
-#include <vcl_cassert.h>
 #include <vul/vul_file.h>
 #include <vul/vul_string.h>
 #include <Inventor/nodes/SoSelection.h>
@@ -83,10 +82,10 @@ void bwm_tableau_mgr::init_env()
   display_image_path_ = false;
   row_added_ = false;
 
-  // delete the active tableaus
+  // delete the active tableaux
   tableaus_.clear();
 
-  // delete the inactive tableaus
+  // delete the inactive tableaux
   for (unsigned i=0; i<inactive_tableaus_.size(); i++)
     delete inactive_tableaus_[i];
   inactive_tableaus_.clear();
@@ -95,14 +94,14 @@ void bwm_tableau_mgr::init_env()
   site_objs_.clear();
 
   if (site_create_process_) {
-    delete (site_create_process_);
+    delete site_create_process_;
     this->site_create_process_ = new bwm_site_process();
   }
-    
+
   site_name_="";
   site_dir_="";
   pyr_exe_="";
-  
+
   bwm_observer_mgr::instance()->clear();
   bwm_world::instance()->clear();
 
@@ -114,7 +113,7 @@ void bwm_tableau_mgr::init_env()
     grid_->remove_row();
   for (unsigned col=0; col<cols; col++)
     grid_->remove_column();
- 
+
   grid_->remove_at(0,0);
 }
 
@@ -295,7 +294,7 @@ void bwm_tableau_mgr::edit_site()
   bwm_io_config_parser* parser = 0;
   parser = parse_config();
   if (parser == 0) {
-    vcl_cerr << "Site File is not a valid XML site!" << vcl_endl;
+    vcl_cerr << "Site File is not a valid XML site!\n";
     return;
   }
 
@@ -466,8 +465,8 @@ void bwm_tableau_mgr::edit_site()
       vcl_pair<vcl_string, vcl_string> pair(objs[obj], object_types_[choices[obj]]);
       objects.push_back(pair);
     }
-    
-  /*vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > corr = parser->correspondences();
+#if 0
+  vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > corr = parser->correspondences();
   for (unsigned i=0; i<corr.size(); i++) {
     bwm_corr_sptr c = new bwm_corr();
     if (parser->corresp_mode().compare("IMAGE_TO_IMAGE") == 0)
@@ -477,11 +476,11 @@ void bwm_tableau_mgr::edit_site()
       c->set_world_point(parser->corresp_world_pts()[i]);
     }
   }
-   site->corresp_mode = parser->corresp_mode();
-   site->corr_type_ = parser->corresp_type();
-    // vcl_vector<vsol_point_3d> corresp_world_pts() {return corresp_world_pts_; }*/
+  site->corresp_mode = parser->corresp_mode();
+  site->corr_type_ = parser->corresp_type();
+  // vcl_vector<vsol_point_3d> corresp_world_pts() {return corresp_world_pts_; }
+#endif // 0
 
-    
     site->add(files, pyramid, active, levels, objects, new vsol_point_3d(lat, lon, elev));
     site_create_process_->set_site(site);
     site_create_process_->StartBackgroundTask();
@@ -574,7 +573,7 @@ void bwm_tableau_mgr::load_site()
         if (site->corresp_world_pts_.size() > 0)
           bwm_world::instance()->set_world_pt(site->corresp_world_pts_[0].get_p());
         else
-          vcl_cerr << "There is something wrong, the more is W-to-I but there is no world point" << vcl_endl;
+          vcl_cerr << "There is something wrong, the more is W-to-I but there is no world point\n";
       }
       bwm_observer_mgr::instance()->set_corr_mode(bwm_observer_mgr::WORLD_TO_IMAGE);
     } else if (mode == "IMAGE_TO_IMAGE") {
@@ -624,9 +623,10 @@ void bwm_tableau_mgr::load_site()
     {
       vcl_string path = objs[i].first;
       vcl_string type = objs[i].second;
-      if (path.size() > 0) {
+      if (path.size() > 0)
+      {
         if (!vul_file::exists(path))
-          vcl_cerr << "ERROR: The object file \"" << path << "\" could not be found!" << vcl_endl;
+          vcl_cerr << "ERROR: The object file \"" << path << "\" could not be found!\n";
         else {
           if (type.compare(object_types_[VSOL]) == 0) {
             // will be implemented later!!!
@@ -691,7 +691,7 @@ void bwm_tableau_mgr::save_site()
       return;
 
     if (!vul_file::is_directory(site_dir)) {
-      vcl_cerr << "Please enter a directory for the site" << vcl_endl;
+      vcl_cerr << "Please enter a directory for the site\n";
       return;
     }
 
@@ -718,7 +718,9 @@ void bwm_tableau_mgr::save_site()
       vcl_string img_path = img_tab->img_path();
       bwm_io_tab_config_img *t = new bwm_io_tab_config_img(IMAGE_TABLEAU_TAG, name, "active", img_path);
       site->tableaus_.push_back(t);
-    } else if (tab->type_name().compare("bwm_tableau_rat_cam") == 0) {
+    }
+    else if (tab->type_name().compare("bwm_tableau_rat_cam") == 0)
+    {
       bwm_tableau_rat_cam* cam_tab = static_cast<bwm_tableau_rat_cam*> (tab.as_pointer());
       vcl_string img_path = cam_tab->img_path();
       vcl_string cam_path = cam_tab->observer()->camera_path();
@@ -730,7 +732,7 @@ void bwm_tableau_mgr::save_site()
         int pos = new_cam_path.find("_v", 0);
         if (pos != vcl_string::npos) {
           new_cam_path.erase(pos, new_cam_path.length()-1);
-        } 
+        }
         vcl_stringstream strm;
         strm << vcl_fixed << timer_.real();
         vcl_string str(strm.str());
@@ -742,7 +744,8 @@ void bwm_tableau_mgr::save_site()
         t = new bwm_io_tab_config_cam(CAMERA_TABLEAU_TAG, name, "active", img_path, cam_path, "rational");
       }
       site->tableaus_.push_back(t);
-    } else if (tab->type_name().compare("bwm_tableau_proj_cam") == 0) {
+    }
+    else if (tab->type_name().compare("bwm_tableau_proj_cam") == 0) {
       bwm_tableau_cam* cam_tab = static_cast<bwm_tableau_cam*> (tab.as_pointer());
       vcl_string img_path = cam_tab->img_path();
        vcl_string cam_path = cam_tab->observer()->camera_path();
@@ -1093,7 +1096,9 @@ bwm_tableau_mgr::read_projective_camera(vcl_string cam_path)
   vcl_ifstream cam_stream(cam_path.data());
   vpgl_proj_camera<double> cam;
   cam_stream >> cam;
-  //vcl_cout << cam << vcl_endl;
+#ifdef DEBUG
+  vcl_cout << cam << vcl_endl;
+#endif
 
   return cam;
 }

@@ -1,6 +1,5 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_shell_tableau.h>
-#include <vcl_cmath.h>
 
 #include <bgui3d/bgui3d_examiner_tableau.h>
 #include <bgui3d/bgui3d.h>
@@ -26,9 +25,9 @@ void buildScene(SoGroup *root)
   SoPerspectiveCamera *myCamera = new SoPerspectiveCamera;
   root->addChild(myCamera);
 
-  int num = 5;  
-  float fnum = (float)num; 
-  
+  int num = 5;
+  float fnum = (float)num;
+
   SoSeparator* sep = new SoSeparator;
   root->addChild( sep );
   SoCoordinate3* coords = new SoCoordinate3;
@@ -37,16 +36,15 @@ void buildScene(SoGroup *root)
   SoLineSet* face = new SoLineSet;
   sep->addChild( coords );
   sep->addChild( face );
-   
+
 
   // 27 BALLS EXAMPLE
-  for(int x = 0; x<num; ++x)
+  for (int x = 0; x<num; ++x)
   {
-    for(int y =0; y<num; ++y)
+    for (int y =0; y<num; ++y)
     {
-      for(int z = 0; z<num; ++z)
+      for (int z = 0; z<num; ++z)
       {
-       
         SoSeparator* sep = new SoSeparator;
         root->addChild(sep);
         SoSphere* cyl = new SoSphere;
@@ -58,16 +56,14 @@ void buildScene(SoGroup *root)
         sep->addChild(myMaterial);
         sep->addChild(trans);
         sep->addChild(cyl);
-
       }
     }
   }
-  
-  SoHandleBoxDragger* dragger = new SoHandleBoxDragger;  
+
+  SoHandleBoxDragger* dragger = new SoHandleBoxDragger;
   sep->addChild( dragger );
 
-  myCamera->viewAll(root, SbViewportRegion() ); 
-
+  myCamera->viewAll(root, SbViewportRegion() );
 }
 
 
@@ -84,22 +80,22 @@ int main(int argc, char** argv)
   root->ref();
   buildScene(root);
 
-  
-    /*SoSeparator * group = new SoSeparator;
+#if 0
+  SoSeparator * group = new SoSeparator;
 
-    SoTranslation * trans = new SoTranslation;
-    group->addChild(trans);
-    trans->translation.setValue(0, 0, 0.0f);
+  SoTranslation * trans = new SoTranslation;
+  group->addChild(trans);
+  trans->translation.setValue(0, 0, 0.0f);
 
-    SoRotationXYZ * rotate = new SoRotationXYZ;
-    group->addChild(rotate);
-    rotate->axis = SoRotationXYZ::Z;
-    rotate->angle = 1 * M_PI / 180.0f;
+  SoRotationXYZ * rotate = new SoRotationXYZ;
+  group->addChild(rotate);
+  rotate->axis = SoRotationXYZ::Z;
+  rotate->angle = 1 * M_PI / 180.0f;
 
-    group->addChild(new SoTranslate1Dragger);
-    
-    root->addChild (group);*/
+  group->addChild(new SoTranslate1Dragger);
 
+  root->addChild (group);
+#endif // 0
 
   // wrap the scene graph in a bgui3d tableau
   bgui3d_examiner_tableau_new tab3d(root);
