@@ -44,7 +44,6 @@ void test_trivial_ca1(unsigned nd, unsigned ns)
   v3.normalize();
 
   vcl_vector<vnl_vector<double> > data(ns);
-  double sum0=0,sum1=0;
   for (unsigned i=0;i<ns;++i)
   {
     double A = i*(2.0*vnl_math::pi/ns);
@@ -62,14 +61,13 @@ void test_trivial_ca1(unsigned nd, unsigned ns)
   TEST("N modes",evals.size(),nd);
 
   TEST_NEAR("Error on Mean",(m-mean).rms(),0,1e-6);
-
 }
 
 void test_trivial_ca()
 {
-  vcl_cout << "***********************\n"
+  vcl_cout << "*************************\n"
            << " Testing mcal_trivial_ca\n"
-           << "***********************\n";
+           << "*************************\n";
 
   vsl_add_to_binary_loader(mcal_trivial_ca());
 
