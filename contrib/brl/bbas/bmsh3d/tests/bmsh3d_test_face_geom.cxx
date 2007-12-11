@@ -1,16 +1,14 @@
-//: This is vxl/brl/bbas/bmsh3d/tests/bmsh3d_test_face_geom.cxx
-//  Ming-Ching Chang  Nov 28, 2006.
+// This is brl/bbas/bmsh3d/tests/bmsh3d_test_face_geom.cxx
+#include <testlib/testlib_test.h>
+//:
+// \file
+// \author Ming-Ching Chang
+// \date Nov 28, 2006.
 //  To debug in Visual studio, put argument
 //  all D:\Projects\vxl\brl\bbas\bmsh3d\tests\data
 
-
-#include <vcl_cstdio.h>
-#include <vcl_cstdlib.h>
-#include <vcl_string.h>
-#include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
 
-#include <testlib/testlib_test.h>
 #include <bmsh3d/bmsh3d_mesh.h>
 
 
@@ -43,7 +41,7 @@ MAIN (bmsh3d_test_face_geom)
 
   bmsh3d_edge* e02 = M->_new_edge (v[0], v[2]);
   M->add_edge_incidence (e02);
-  
+
   bmsh3d_face* f0 = M->_new_face ();
   f0->connect_E_to_end (e01);
   f0->connect_E_to_end (e12);

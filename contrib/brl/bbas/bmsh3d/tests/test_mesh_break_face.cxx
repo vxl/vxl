@@ -1,18 +1,14 @@
-//: This is lemsvxl/brl/bbas/bmsh3d/tests/test_mesh_break_face.cxx
-//  Ming-Ching Chang  Nov 28, 2006.
+// This is brl/bbas/bmsh3d/tests/test_mesh_break_face.cxx
+#include <testlib/testlib_test.h>
+//:
+// \file
+// \author Ming-Ching Chang
+// \date Nov 28, 2006.
 //  To debug in Visual studio, put argument
 //  all D:\Projects\BrownEyes\lemsvxlsrc\brcv\shp\bmsh3d\tests\data
 
-
-#include <vcl_cstdio.h>
-#include <vcl_cstdlib.h>
-#include <vcl_string.h>
-#include <vcl_cassert.h>
-
-#include <testlib/testlib_test.h>
 #include <bmsh3d/bmsh3d_mesh.h>
 #include <bmsh3d/bmsh3d_mesh_mc.h>
-
 
 MAIN (test_mesh_break_face)
 {
@@ -48,7 +44,7 @@ MAIN (test_mesh_break_face)
 
   bmsh3d_edge* e03 = M->_new_edge (v0, v3);
   M->add_edge_incidence (e03);
-  
+
   bmsh3d_face* f0 = M->_new_face ();
   f0->connect_E_to_end (e01);
   f0->connect_E_to_end (e12);
@@ -112,13 +108,13 @@ MAIN (test_mesh_break_face)
   bmsh3d_vertex* v4 = M->_new_vertex ();
   v4->get_pt().set (1, 1, 0);
   M->_add_vertex (v4);
-  
+
   bmsh3d_vertex* v5 = M->_new_vertex ();
   v5->get_pt().set (1, 0, 0);
   M->_add_vertex (v5);
 //  bmsh3d_face* F1;
 //   bmsh3d_face* F2;
-   //: Ming: does not compile. check it.
+   //  Ming: does not compile. check it.
   ///mesh_break_face (M, f0, e12, e03, v4, v5, F1, F2);
 
 
