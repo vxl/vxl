@@ -12,11 +12,12 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vpgl/vpgl_rational_camera.h>
-#include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
-//: The 3-d offset and scale parameters of rational cameras typically 
-// must be adjusted to compensate for errors in geographic alignment. 
+
+//:
+// The 3-d offset and scale parameters of rational cameras typically
+// must be adjusted to compensate for errors in geographic alignment.
 // This algorithm adjusts these parameters to give the smallest
 // projection error. That is, the error between the true image location
 // and the projected 3-d world point corresponding to that location.
@@ -30,7 +31,7 @@ class vpgl_adjust_lsqr : public vnl_least_squares_function
                    vcl_vector<vgl_point_2d<double> > const& img_pts,
                    vcl_vector<vgl_point_3d<double> > const& geo_pts,
                    unsigned num_unknowns, unsigned num_residuals);
-  
+
   //: Destructor
   virtual ~vpgl_adjust_lsqr() {}
 
@@ -46,9 +47,9 @@ class vpgl_adjust_lsqr : public vnl_least_squares_function
 
  protected:
   unsigned num_corrs_;
-  vpgl_rational_camera<double> rcam_; 
-  vcl_vector<vgl_point_2d<double> > img_pts_; 
-  vcl_vector<vgl_point_3d<double> > geo_pts_; 
+  vpgl_rational_camera<double> rcam_;
+  vcl_vector<vgl_point_2d<double> > img_pts_;
+  vcl_vector<vgl_point_3d<double> > geo_pts_;
 };
 
 class vpgl_rational_geo_adjust
@@ -63,7 +64,6 @@ class vpgl_rational_geo_adjust
  protected:
  vpgl_rational_geo_adjust();
 };
-
 
 
 #endif // vpgl_rational_geo_adjust_h_

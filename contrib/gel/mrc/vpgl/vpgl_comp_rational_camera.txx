@@ -3,10 +3,8 @@
 #define vpgl_comp_rational_camera_txx_
 //:
 // \file
-
 #include "vpgl_comp_rational_camera.h"
-#include <vcl_cmath.h> 
-#include <vcl_cstdlib.h>
+#include <vcl_cmath.h>
 #include <vcl_vector.txx>
 #include <vcl_fstream.h>
 #include <vgl/vgl_point_2d.h>
@@ -46,8 +44,7 @@ vpgl_comp_rational_camera(const T tu, const T tv,
   matrix_[2][0] = (T)0;   matrix_[2][1] = (T)0;   matrix_[2][2] = (T)1;
 }
 
-//: Constructor from translation rotation only
-// first rotate then translate
+//: Constructor from translation rotation only first rotate then translate
 template <class T>
 vpgl_comp_rational_camera<T>::
 vpgl_comp_rational_camera(const T tu, const T tv, const T angle_in_radians,
@@ -74,7 +71,6 @@ vpgl_comp_rational_camera(const T tu, const T tv, const T angle_in_radians,
 template <class T>
 vpgl_comp_rational_camera<T>::vpgl_comp_rational_camera(vcl_string cam_path)
 {
-
   vpgl_rational_camera<T> rcam(cam_path);
 
   vcl_ifstream file_inp;
@@ -86,22 +82,22 @@ vpgl_comp_rational_camera<T>::vpgl_comp_rational_camera(vcl_string cam_path)
   vnl_matrix_fixed<T, 3,3> M;
   vcl_string input;
   bool good = false;
-  while(!file_inp.eof()&&!good){
+  while (!file_inp.eof()&&!good) {
     file_inp >> input;
     if (input=="affine_matrix")
-      {
-        file_inp >> M;
-        good = true;
-      }
-  }
-  if(!good)
     {
-      vcl_cout << "error: not a composite rational camera file\n";
-      return;
+      file_inp >> M;
+      good = true;
     }
+  }
+  if  (!good)
+  {
+    vcl_cout << "error: not a composite rational camera file\n";
+    return;
+  }
   *this = vpgl_comp_rational_camera<T>(M, rcam);
 }
-        
+
 template <class T>
 vpgl_comp_rational_camera<T>* vpgl_comp_rational_camera<T>::clone(void) const
 {
@@ -123,6 +119,7 @@ void vpgl_comp_rational_camera<T>::project(const T x, const T y, const T z,
   u = pt[0];
   v = pt[1];
 }
+
 //vnl interface methods
 template <class T>
 vnl_vector_fixed<T, 2>
@@ -292,68 +289,65 @@ bool vpgl_comp_rational_camera<T>::save(vcl_string cam_path)
   map[18]=11;
   map[19]=16;
 
-  file_out << "satId = \"????\";\n";
-  file_out << "bandId = \"RGB\";\n";
-  file_out << "SpecId = \"RPC00B\";\n";
-  file_out << "BEGIN_GROUP = IMAGE\n";
-  file_out << "\n\n"; // skip errBias and errRand fields 
-  file_out << "  lineOffset = " << offset(V_INDX) << "\n";
-  file_out << "  sampOffset = " << offset(U_INDX) << "\n";
-  file_out << "  latOffset = " << offset(Y_INDX) << "\n";
-  file_out << "  longOffset = " << offset(X_INDX) << "\n";
-  file_out << "  heightOffset = " << offset(Z_INDX) << "\n";
-  file_out << "  lineScale = " << scale(V_INDX) << "\n";
-  file_out << "  sampScale = " << scale(U_INDX) << "\n";
-  file_out << "  latScale = " << scale(Y_INDX) << "\n";
-  file_out << "  longScale = " << scale(X_INDX) << "\n";
-  file_out << "  heightScale = " << scale(Z_INDX) << "\n";
+  file_out << "satId = \"????\";\n"
+           << "bandId = \"RGB\";\n"
+           << "SpecId = \"RPC00B\";\n"
+           << "BEGIN_GROUP = IMAGE\n"
+           << "\n\n"  // skip errBias and errRand fields
+           << "  lineOffset = " << offset(V_INDX) << '\n'
+           << "  sampOffset = " << offset(U_INDX) << '\n'
+           << "  latOffset = " << offset(Y_INDX) << '\n'
+           << "  longOffset = " << offset(X_INDX) << '\n'
+           << "  heightOffset = " << offset(Z_INDX) << '\n'
+           << "  lineScale = " << scale(V_INDX) << '\n'
+           << "  sampScale = " << scale(U_INDX) << '\n'
+           << "  latScale = " << scale(Y_INDX) << '\n'
+           << "  longScale = " << scale(X_INDX) << '\n'
+           << "  heightScale = " << scale(Z_INDX) << '\n';
   vnl_matrix_fixed<double,4,20> coeffs = this->coefficient_matrix();
   file_out << "  lineNumCoef = (";
   for (int i=0; i<20; i++) {
     file_out << "\n    " << coeffs[NEU_V][map[i]];
     if (i < 19)
-      file_out << ",";
+      file_out << ',';
   }
-  file_out << ");\n";
-  file_out << "  lineDenCoef = (";
+  file_out << ");\n  lineDenCoef = (";
   for (int i=0; i<20; i++) {
     file_out << "\n    " << coeffs[DEN_V][map[i]];
     if (i < 19)
-      file_out << ",";
+      file_out << ',';
   }
-  file_out << ");\n";
-  file_out << "  sampNumCoef = (";
+  file_out << ");\n  sampNumCoef = (";
   for (int i=0; i<20; i++) {
     file_out << "\n    " << coeffs[NEU_U][map[i]];
     if (i < 19)
-      file_out << ",";
+      file_out << ',';
   }
-  file_out << ");\n";
-  file_out << "  sampDenCoef = (";
+  file_out << ");\n  sampDenCoef = (";
   for (int i=0; i<20; i++) {
     file_out << "\n    " << coeffs[DEN_U][map[i]];
     if (i < 19)
-      file_out << ",";
+      file_out << ',';
   }
-  file_out << ");\n";
-  file_out << "END_GROUP = IMAGE\n";
-  file_out << "END;\n";
+  file_out << ");\n"
+           << "END_GROUP = IMAGE\n"
+           << "END;\n"
 
-  file_out << "affine_matrix\n";
-  file_out << matrix_;
+           << "affine_matrix\n"
+           << matrix_;
   return true;
 }
 
 
 template <class T>
-void 
+void
 vpgl_comp_rational_camera<T>::set_transform(vnl_matrix_fixed<T, 3,3> const& M)
 {
   matrix_ = M;
 }
 
 template <class T>
-void 
+void
 vpgl_comp_rational_camera<T>::set_translation(const T tu, const T tv)
 {
   matrix_[0][2]=tu;
@@ -361,7 +355,7 @@ vpgl_comp_rational_camera<T>::set_translation(const T tu, const T tv)
 }
 
 template <class T>
-void 
+void
 vpgl_comp_rational_camera<T>::set_trans_rotation(const T tu, const T tv,
                                                  const T angle_in_radians)
 {
@@ -371,8 +365,9 @@ vpgl_comp_rational_camera<T>::set_trans_rotation(const T tu, const T tv,
   matrix_[0][0] = ct; matrix_[0][1] = -st; matrix_[0][2] = tu;
   matrix_[1][0] = st; matrix_[1][1] = ct;  matrix_[1][2] = tv;
 }
+
 template <class T>
-void 
+void
 vpgl_comp_rational_camera<T>::set_all(const T tu, const T tv,
                                       const T angle_in_radians,
                                       const T su, const T sv)
@@ -383,11 +378,13 @@ vpgl_comp_rational_camera<T>::set_all(const T tu, const T tv,
   matrix_[0][0] = ct*su; matrix_[0][1] = -st*sv; matrix_[0][2] = tu;
   matrix_[1][0] = st*su; matrix_[1][1] = ct*sv;  matrix_[1][2] = tv;
 }
+
 template <class T>
 vnl_matrix_fixed<T, 3,3> vpgl_comp_rational_camera<T>::transform()
 {
   return matrix_;
 }
+
 template <class T>
 void vpgl_comp_rational_camera<T>::translation(T& tu, T& tv)
 {
@@ -402,16 +399,16 @@ T vpgl_comp_rational_camera<T>::rotation_in_radians()
   double x = static_cast<double>(matrix_[0][0]);
   double angle = vcl_atan2(y, x);
   return static_cast<T>(angle);
-} 
+}
 
 //: note that scale factors are not negative
 template <class T>
 void vpgl_comp_rational_camera<T>::image_scale(T& su, T& sv)
 {
   double su_sq = static_cast<double>(matrix_[0][0]*matrix_[0][0] +
-                                     matrix_[1][0]*matrix_[1][0]); 
+                                     matrix_[1][0]*matrix_[1][0]);
   double sv_sq = static_cast<double>(matrix_[0][1]*matrix_[0][1] +
-                                     matrix_[1][1]*matrix_[1][1]); 
+                                     matrix_[1][1]*matrix_[1][1]);
   double sud = vcl_sqrt(su_sq);
   double svd = vcl_sqrt(sv_sq);
   su = static_cast<T>(sud);
@@ -431,7 +428,7 @@ vcl_ostream&  operator<<(vcl_ostream& s, const vpgl_comp_rational_camera<T >& c 
 #undef vpgl_COMP_RATIONAL_CAMERA_INSTANTIATE
 #define vpgl_COMP_RATIONAL_CAMERA_INSTANTIATE(T) \
 template class vpgl_comp_rational_camera<T >; \
-template vcl_ostream& operator<<(vcl_ostream&, const vpgl_comp_rational_camera<T >&) 
+template vcl_ostream& operator<<(vcl_ostream&, const vpgl_comp_rational_camera<T >&)
 
 
 #endif // vpgl_comp_rational_camera_txx_

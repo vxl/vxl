@@ -1,11 +1,10 @@
+// This is brl/bbas/bmsh3d/bmsh3d_edge.h
 #ifndef bmsh3d_edge_h_
 #define bmsh3d_edge_h_
 //---------------------------------------------------------------------
-// This is brl/bbas/bmsh3d/bmsh3d_edge.h
 //:
 // \file
 // \brief Basic 3d edge on a mesh
-//
 //
 // \author
 //  MingChing Chang  June 13, 2005
@@ -35,11 +34,10 @@
 
 class bmsh3d_face;
 
-//: A manifold edge element (or link)
-//  has pointer to one of the half edges
+//: A manifold edge element (or link) has pointer to one of the half edges
 class bmsh3d_edge : public vispt_elm
 {
-protected:
+ protected:
   //: pointer to one of the halfedges associated with it.
   //  The halfedges form a circular list.
   //  Note that we don't need to use type 'he_halfedge' here!
@@ -55,9 +53,9 @@ protected:
   //    - b_visited_:
   int      i_visited_;
 
-public:
+ public:
   //###### Constructor/Destructor ######
-  bmsh3d_edge (bmsh3d_vertex* sv, bmsh3d_vertex* ev, int id) 
+  bmsh3d_edge (bmsh3d_vertex* sv, bmsh3d_vertex* ev, int id)
   {
     id_           = id;
     halfedge_     = NULL;
@@ -103,7 +101,7 @@ public:
   void set_i_visited (const int traverse_value) {
     i_visited_ = traverse_value;
   }
-  
+
   const bool is_valid() const {
     return i_visited_ != 0;
   }
@@ -130,7 +128,7 @@ public:
   bmsh3d_vertex* other_V (const bmsh3d_vertex* V) const {
     if (vertices_[0] == V)
       return vertices_[1];
-    
+
     if (vertices_[1] == V)
       return vertices_[0];
 
@@ -150,7 +148,7 @@ public:
     return false;
   }
   const bool is_self_loop () const {
-    return (vertices_[0] == vertices_[1]);
+    return vertices_[0] == vertices_[1];
   }
 
   unsigned int n_incident_Fs () const;
@@ -173,7 +171,7 @@ public:
   vgl_point_3d<double> _point_from_tau (const double tau) const;
 
   //: mid-point of this link
-  vgl_point_3d<double> mid_pt() const; 
+  vgl_point_3d<double> mid_pt() const;
 
   //: length of this link.
   const double length() const;
@@ -187,8 +185,7 @@ public:
 
   void _connect_HE_to_end (bmsh3d_halfedge* inputHE);
 
-  //: Disconnect one of the halfedge of this edge
-  //  and fix the circular list of halfedge pairs.
+  //: Disconnect one of the halfedge of this edge and fix the circular list of halfedge pairs.
   void _disconnect_HE (bmsh3d_halfedge* inputHE);
 
   //: disconnect all incident faces and return the vector of all such faces.
@@ -225,9 +222,9 @@ inline bmsh3d_vertex* Es_sharing_V (const bmsh3d_edge* E1, const bmsh3d_edge* E2
 }
 
 //: Return the first found vertex that is incident to both E1 and E2.
-//: Also determine if E1 and E2 are in a loop of two edges.
+//  Also determine if E1 and E2 are in a loop of two edges.
 inline bmsh3d_vertex* Es_sharing_V_check (const bmsh3d_edge* E1, const bmsh3d_edge* E2,
-                                           bool& loop)
+                                          bool& loop)
 {
   bmsh3d_vertex* V1 = NULL;
   bmsh3d_vertex* V2 = NULL;
@@ -243,7 +240,7 @@ inline bmsh3d_vertex* Es_sharing_V_check (const bmsh3d_edge* E1, const bmsh3d_ed
     return V1;
   else if (V2)
     return V2;
-  else 
+  else
     return NULL;
 }
 

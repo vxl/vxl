@@ -1,6 +1,6 @@
-/// \file
-// \brief  creates a directory browsing dialog, it allows to choose both
-//         directories and files
+//:
+// \file
+// \brief  creates a directory browsing dialog, it allows to choose both directories and files
 // \author Gamze Tunali, LEMS, Brown University
 // \date   16 Nov 2007
 //
@@ -49,7 +49,7 @@
 //
 // CDirDialog::CDirDialog(LPCTSTR lpstrInitialDir = NULL,
 //                        LPCTSTR lpszFilter = NULL, CWnd* pParentWnd = NULL);
-// 
+//
 //      lpstrInitialDir
 //          The initial directory.  If NULL then the current directory is used.
 //          See lpstrInitialDir in the Win32 documentation for OPENFILENAME for more info.
@@ -60,7 +60,7 @@
 //          Note that an extra entry is always added that allows the user to hide the
 //          display of all files.  If NULL is used (the default) then only the
 //          "no files" entry and an "all files" entry are provided.
-//    
+//
 //      pParentWnd
 //          A pointer to the dialog parent window.
 //
@@ -76,7 +76,7 @@
 // Example:
 //
 //      // Called when the Browse button is clicked in CMyDialog
-//      void CMyDialog::OnBrowseDir() 
+//      void CMyDialog::OnBrowseDir()
 //      {
 //          if (!UpdateData(TRUE))          // Update current value of m_dir from control
 //              return;
@@ -100,7 +100,7 @@
 // The following changes are made to the controls in the standard file open dialog:
 //
 // The "Open" button is hidden and replaced with another button (IDC_OPEN).
-// The normal edit control (edt1) where the file name is entered is hidden and replaced 
+// The normal edit control (edt1) where the file name is entered is hidden and replaced
 // by a "subclassed" edit control (IDC_DIR) of class CDirEdit (derived from CEdit).
 // By hiding and replacing these controls we can manipulate the behaviour
 // of the dialog in ways not provided for in any other way.  For example, by changing
@@ -214,8 +214,8 @@ void CDlgWnd::OnOpen()
                 pEdit->SetFocus();
                 return;
             }
-            else if (len >= 2 && ss[0] == '\\' && ss[1] == '\\' && 
-                     ( (ss2 = strchr((const char *)ss+2, '\\')) == NULL || strchr(ss2+1, '\\') == NULL) )
+            else if (len >= 2 && ss[0] == '\\' && ss[1] == '\\' &&
+                     ( (ss2 = vcl_strchr((const char *)ss+2, '\\')) == NULL || vcl_strchr(ss2+1, '\\') == NULL) )
             {
                 AfxMessageBox(ss + _T("\nThis is not a valid folder."));
                 pEdit->SetFocus();
@@ -236,19 +236,19 @@ void CDlgWnd::OnOpen()
                     {
                         switch (GetDriveType(rootdir))
                         {
-                        case DRIVE_CDROM:
+                          case DRIVE_CDROM:
                             AfxMessageBox(_T("You cannot create this folder\n"
                                           "as the CD ROM medium is read-only."));
                             break;
-                        case DRIVE_REMOVABLE:
+                          case DRIVE_REMOVABLE:
                             AfxMessageBox(_T("You cannot create this folder.\n"
                                           "The medium may be write-protected."));
                             break;
-                        case DRIVE_REMOTE:
+                          case DRIVE_REMOTE:
                             AfxMessageBox(_T("You do not have permission to create\n"
                                           "this folder on the network."));
                             break;
-                        default:
+                          default:
                             AfxMessageBox(_T("You do not have permission\n"
                                           "to create this folder."));
                             break;
@@ -334,7 +334,7 @@ BEGIN_MESSAGE_MAP(CDirEdit, CEdit)
     ON_WM_GETDLGCODE()
 END_MESSAGE_MAP()
 
-void CDirEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags) 
+void CDirEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
     CDlgWnd *pp;                           // Parent = the dialog itself
     VERIFY(pp = (CDlgWnd *)GetParent());
@@ -363,15 +363,15 @@ void CDirEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
         int len = ss.GetLength();
 
         // Remove trailing backslash unless root directory or network root
-        if (strcmp(ss,"\\") != 0 && strcmp(ss,"\\\\") != 0 && strcmp((const char *)ss+1,":\\") != 0 &&
+        if (vcl_strcmp(ss,"\\") != 0 && vcl_strcmp(ss,"\\\\") != 0 && vcl_strcmp((const char *)ss+1,":\\") != 0 &&
             len > 0 && ss[len-1] == '\\' )
         {
             ss = ss.Left(--len);
         }
 
-        if (len == 0 || 
+        if (len == 0 ||
             len == 1 && ss[0] == '\\' ||
-            len >= 2 && ss[0] == '\\' && ss[1] == '\\' && strchr((const char *)ss+2, '\\') == NULL ||
+            len >= 2 && ss[0] == '\\' && ss[1] == '\\' && vcl_strchr((const char *)ss+2, '\\') == NULL ||
             len == 2 && ss[1] == ':' ||
             len == 3 && ss[1] == ':' && ss[2] == '\\' )
         {
@@ -403,19 +403,19 @@ void CDirEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
                         {
                             switch (GetDriveType(rootdir))
                             {
-                            case DRIVE_CDROM:
+                              case DRIVE_CDROM:
                                 AfxMessageBox(_T("You cannot create this folder\n"
                                               "as the CD ROM medium is read-only."));
                                 break;
-                            case DRIVE_REMOVABLE:
+                              case DRIVE_REMOVABLE:
                                 AfxMessageBox(_T("You cannot create this folder.\n"
                                               "The medium may be write-protected."));
                                 break;
-                            case DRIVE_REMOTE:
+                              case DRIVE_REMOTE:
                                 AfxMessageBox(_T("You do not have permission to create\n"
                                               "this folder on the network."));
                                 break;
-                            default:
+                              default:
                                 AfxMessageBox(_T("You do not have permission or\n"
                                               "otherwise cannot create this folder."));
                                 break;
@@ -510,7 +510,7 @@ void CDirEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
                 for (ii = 0; ii < strMatch.GetLength(); ++ii)
                 {
                     // Don't change if it contains spaces or lowercase letters
-                    if (isspace(strMatch[ii]) || islower(strMatch[ii]))
+                    if (vcl_isspace(strMatch[ii]) || vcl_islower(strMatch[ii]))
                         break;
                 }
 
@@ -538,7 +538,7 @@ void CDirEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
                 {
                     // The user used different case to that of the corresponding character in
                     // the matched directory so change the matched name to be the user's case.
-                    if (isupper(ss[ss.GetLength()-1]))
+                    if (vcl_isupper(ss[ss.GetLength()-1]))
                         strMatch.MakeUpper();
                     else
                         strMatch.MakeLower();
@@ -559,7 +559,7 @@ void CDirEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
     }
 }
 
-void CDirEdit::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
+void CDirEdit::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
     CEdit::OnKeyDown(nChar, nRepCnt, nFlags);
 
@@ -604,7 +604,7 @@ void CDirEdit::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
     SetFocus();                         // Make sure caret stays in this edit control
 }
 
-UINT CDirEdit::OnGetDlgCode() 
+UINT CDirEdit::OnGetDlgCode()
 {
     // Get all keys so that we see CR
     return CEdit::OnGetDlgCode() | DLGC_WANTALLKEYS;
@@ -613,7 +613,7 @@ UINT CDirEdit::OnGetDlgCode()
 
 // class vgui_dir_dialog
 vgui_dir_dialog::vgui_dir_dialog(LPCTSTR initial, LPCTSTR filter, CWnd* pParentWnd)
-    : CFileDialog(TRUE, NULL, NULL, 
+    : CFileDialog(TRUE, NULL, NULL,
                   OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST,
                   NULL, pParentWnd),
       m_strPath(initial)
@@ -632,7 +632,6 @@ vgui_dir_dialog::vgui_dir_dialog(LPCTSTR initial, LPCTSTR filter, CWnd* pParentW
     m_ofn.lpstrTitle = _T("Select Folder");
 
     m_ofn.lStructSize = OPENFILENAME_SIZE_VERSION_400;
-
 }
 
 void vgui_dir_dialog::OnInitDone()
@@ -641,10 +640,10 @@ void vgui_dir_dialog::OnInitDone()
     CWnd *pp;                           // Parent = the dialog window itself
     VERIFY(pp = GetParent());
 
-    
+
     ASSERT(pp->GetDlgItem(stc3) != NULL);
     pp->GetDlgItem(stc3)->SetWindowText(_T("Folder:"));
- 
+
     // Create a new CDlgWnd so we can catch dialog control notifications
     VERIFY(m_DlgWnd.SubclassWindow(pp->m_hWnd));
 
@@ -733,23 +732,23 @@ void vgui_dir_dialog::OnFolderChange()
     m_Edit.SetFocus();
 }
 
-BOOL vgui_dir_dialog::OnFileNameOK() 
-{ 
-  CWnd *pp; // Parent window = the dialog itself 
-  VERIFY(pp = GetParent()); 
-  ASSERT(::IsWindow(pp->m_hWnd)); 
+BOOL vgui_dir_dialog::OnFileNameOK()
+{
+    CWnd *pp; // Parent window = the dialog itself
+    VERIFY(pp = GetParent());
+    ASSERT(::IsWindow(pp->m_hWnd));
 
-  ASSERT(pp->GetDlgItem(IDC_DIR) != NULL); 
+    ASSERT(pp->GetDlgItem(IDC_DIR) != NULL);
 
-  m_strPath = GetPathName(); 
-  int len = m_strPath.GetLength(); 
+    m_strPath = GetPathName();
+    int len = m_strPath.GetLength();
 
-  pp->GetDlgItem(IDC_DIR)->SetWindowText(m_strPath); 
-  m_Edit.SetSel(len, len); 
+    pp->GetDlgItem(IDC_DIR)->SetWindowText(m_strPath);
+    m_Edit.SetSel(len, len);
 
-  CFileDialog::OnFolderChange(); 
+    CFileDialog::OnFolderChange();
 
-  m_Edit.SetFocus(); 
+    m_Edit.SetFocus();
 
-  return TRUE; 
-} 
+    return TRUE;
+}

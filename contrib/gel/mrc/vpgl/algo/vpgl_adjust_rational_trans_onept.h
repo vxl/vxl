@@ -16,9 +16,11 @@
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
-//: The image offsets of rational cameras typically must be adjusted to 
-// compensate for errors in geographic alignment. This algorithm finds 
-// a set of minium translations that registers the input set of images. 
+
+//:
+// The image offsets of rational cameras typically must be adjusted to
+// compensate for errors in geographic alignment. This algorithm finds
+// a set of minium translations that registers the input set of images.
 // After registration, the images have geographically corresponding rational
 // cameras. That is, a visible 3-d point will project into its corresponding
 // image location in all the images.
@@ -29,7 +31,7 @@ class vpgl_z_search_lsqr : public vnl_least_squares_function
   //: Constructor
   vpgl_z_search_lsqr(vcl_vector<vpgl_rational_camera<double> > const& cams,
                      vcl_vector<vgl_point_2d<double> > const& image_pts,
-                     vgl_point_3d<double> const& initial_pt);  
+                     vgl_point_3d<double> const& initial_pt);
   //: Destructor
   virtual ~vpgl_z_search_lsqr() {}
 
@@ -44,7 +46,7 @@ class vpgl_z_search_lsqr : public vnl_least_squares_function
   vpgl_z_search_lsqr();//not valid
   vgl_point_3d<double> initial_pt_;
   vcl_vector<vpgl_rational_camera<double> > cameras_; //cameras
-  vcl_vector<vgl_point_2d<double> > image_pts_; //image points 
+  vcl_vector<vgl_point_2d<double> > image_pts_; //image points
   double xm_, ym_;
 };
 
@@ -59,12 +61,11 @@ class vpgl_adjust_rational_trans_onept
                      vcl_vector<vgl_point_2d<double> > const& corrs,
                      vcl_vector<vgl_vector_2d<double> >& cam_translations,
                      vgl_point_3d<double>& intersection);
-  
+
  protected:
 
   vpgl_adjust_rational_trans_onept();
 };
-
 
 
 #endif // vpgl_adjust_rational_trans_onept_h_
