@@ -1,20 +1,15 @@
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
-#include <vnl/vnl_double_2.h>
-#include <vnl/vnl_double_3.h>
-#include <vnl/vnl_double_4.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_distance.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/algo/vpgl_adjust_rational_trans_onept.h>
 
 static void test_adjust_rational_trans_onept()
 {
-
-  vcl_string dir = "c:/vxl/vxl/contrib/gel/mrc/vpgl/algo/tests/";
+  vcl_string dir = "C:/vxl/vxl/contrib/gel/mrc/vpgl/algo/tests/";
 
   double neu_u1[20] =
     { 8.96224e-005,  5.01302e-005,  -7.67889e-006,  -0.010342,
@@ -41,14 +36,14 @@ static void test_adjust_rational_trans_onept()
       -0.000178701,  -2.26873e-007,  1.61618e-006,  -0.00102174,
       -2.21943e-008,  5.21377e-005,  0.000211917, 1};
   //Scale and offsets
-  
+
   double sx1 = 0.117798, ox1 =44.2834  ;
   double sy1 = 0.114598, oy1 = 33.2609;
   double sz1 = 526.733, oz1 = 36.9502;
   double su1 = 14106 , ou1 = 13785;
   double sv1 = 15402 , ov1 = 15216;
 
-  vpgl_rational_camera<double> rcam1(neu_u1, den_u1, neu_v1, den_v1, 
+  vpgl_rational_camera<double> rcam1(neu_u1, den_u1, neu_v1, den_v1,
                                      sx1, ox1, sy1, oy1, sz1, oz1,
                                      su1, ou1, sv1, ov1);
 
@@ -72,23 +67,23 @@ static void test_adjust_rational_trans_onept()
       -6.37659e-008,  -4.99594e-006,  0.0227909, -0.00222785};
   double den_v2[20] =
     { 5.17035e-008,  1.79981e-007,  -1.70495e-008,  -2.0714e-006,
-      3.631e-006,  -9.81742e-008,  1.38937e-005,  0, 
+      3.631e-006,  -9.81742e-008,  1.38937e-005,  0,
       -5.91773e-007,  -0.000137415,  0.000102628,  -3.96336e-006,
       -2.34085e-006,  6.79756e-008,  -3.48424e-006,  0.000686196,
       0,  -2.33034e-006,  0.000124036, 1};
   //Scale and offsets
-  
+
   double sx2 = 0.103798, ox2 = 44.3544 ;
   double sy2 = 0.113098, oy2 = 33.3433;
   double sz2 = 498.875, oz2 = 37.6053;
   double su2 = 13827 , ou2 = 13793;
   double sv2 = 15657 , ov2 = 15296;
 
-  vpgl_rational_camera<double> rcam2(neu_u2, den_u2, neu_v2, den_v2, 
+  vpgl_rational_camera<double> rcam2(neu_u2, den_u2, neu_v2, den_v2,
                                      sx2, ox2, sy2, oy2, sz2, oz2,
                                      su2, ou2, sv2, ov2);
 
-  //single image corrspondence to correct cameras
+  //single image correspondence to correct cameras
   vgl_point_2d<double> p1(25479.9, 409.113), p2(17528.2, 14638);
 
   vcl_vector<vgl_point_2d<double> > corrs;
@@ -103,9 +98,9 @@ static void test_adjust_rational_trans_onept()
   bool good  = vpgl_adjust_rational_trans_onept::adjust(cams, corrs, cam_trans,
                                                         intersection);
   vcl_cout << "3-d intersection point " << intersection <<'\n';
-  for(unsigned i = 0; i<2; ++i)
+  for (unsigned i = 0; i<2; ++i)
     vcl_cout << "T[" << i << "] " << cam_trans[i] << '\n';
-  
+
   double elevation = 34.5121;
   vgl_point_2d<double> ap0(1.14572,1.67109);
   vgl_point_2d<double> ap1(-1.31294,-1.66164);
@@ -120,21 +115,21 @@ static void test_adjust_rational_trans_onept()
   //    near the correspondence point.
   //    This test will prove that the sense of the camera translations
   //    are correct
-  // 2) Find the camera translations by intentionally adjusting the 
-  //    camera image offsets and determing the adjustment. Should 
+  // 2) Find the camera translations by intentionally adjusting the
+  //    camera image offsets and determining the adjustment. Should
   //    agree.
   double u01, v01, u02, v02;
   cams[0].image_offset(u01, v01);
   cams[1].image_offset(u02, v02);
   cams[0].set_image_offset(u01+10, v01+15);
   cams[1].set_image_offset(u02-10, v02-15);
-  
+
   good  = vpgl_adjust_rational_trans_onept::adjust(cams, corrs, cam_trans,
                                                         intersection);
   vcl_cout << "3-d intersection point " << intersection <<'\n';
-  for(unsigned i = 0; i<2; ++i)
+  for (unsigned i = 0; i<2; ++i)
     vcl_cout << "T[" << i << "] " << cam_trans[i] << '\n';
-  
+
   cams[0].image_offset(u01, v01);
   cams[1].image_offset(u02, v02);
   cams[0].set_image_offset(u01+cam_trans[0].x(), v01+cam_trans[0].y());
@@ -144,4 +139,5 @@ static void test_adjust_rational_trans_onept()
   d = vgl_distance<double>(corrs[0], q0) + vgl_distance<double>(corrs[1], q1);
   TEST_NEAR("test shifted cams, reprojection", d, 0, 0.1);
 }
+
 TESTMAIN(test_adjust_rational_trans_onept);
