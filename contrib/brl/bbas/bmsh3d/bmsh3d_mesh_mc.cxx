@@ -318,7 +318,6 @@ void merge_mesh (bmsh3d_mesh_mc* M1, bmsh3d_mesh_mc* M2)
 {
   unsigned v_num = M1->vertexmap().size();
   unsigned e_num = M1->edgemap().size();
-  unsigned f_num = M1->facemap().size();
 
   // merge the vertices
   vcl_map<int, bmsh3d_vertex* > vertices = M2->vertexmap();
