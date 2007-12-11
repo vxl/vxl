@@ -7,7 +7,7 @@
 //                            Niskayuna, NY 12309
 //                            All Rights Reserved
 //              Reproduction rights limited as described below.
-//                               
+//
 //      Permission to use, copy, modify, distribute, and sell this software
 //      and its documentation for any purpose is hereby granted without fee,
 //      provided that (i) the above copyright notice and this permission
@@ -17,7 +17,7 @@
 //      the specific, prior written permission of GE CRD, and (iii) any
 //      modifications are clearly marked and summarized in a change history
 //      log.
-//       
+//
 //      THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND,
 //      EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
 //      WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
@@ -33,61 +33,51 @@
 
 #ifndef bwm_utm_lat_lon_h
 #define bwm_utm_lat_lon_h
-
-//=========================== Basics ====================================
-//
-// .NAME    utm_lat_lon
-// .HEADER GeneralUtility Package
-// .LIBRARY Basics
-// .INCLUDE    Basics/utm_lat_lon.h
-// .FILE    utm_lat_lon.h
-// .FILE    utm_lat_lon.C
-//
-// .SECTION Description
+//:
+// \file
 //  A rip-off of the IUE utm_geodedic and geodetic_utm transform classes
 //   which allows the GeoPt to support a constructor in UTM coordinates.
 //  The constructor defaults to WGS-84, but there are accessors to
 //  set the major and minor axes of other spheroids, e.g. nad-27.
-//  
+//
 //  The latitude and longitude values are expressed in degrees, with
-//  negative values representing South and West respectively. 
-//  The UTM zone is 1 between 180 degrees and 174 degrees West 
+//  negative values representing South and West respectively.
+//  The UTM zone is 1 between 180 degrees and 174 degrees West
 //  longitude and increases by one every six degrees from West to East.
 //  The UTM zone ranges from 10 on the West Coast of the US to 19 on the
 //  East Coast.  If the latitude is negative, i.e., below the equator,
 //  then the south_flag should be set to true.  I am not sure what the
 //  utm_central_meridian variable is for, maybe for the polar caps.
+//
 // Adapted by:     J. L. Mundy
-// Date:            May 8, 1999
+// \date            May 8, 1999
 //
 //======================================================================
 
-#include <vcl_iostream.h>
-
-class bwm_utm_lat_lon {
-public:
+class bwm_utm_lat_lon
+{
+ public:
   bwm_utm_lat_lon();
   bwm_utm_lat_lon (const bwm_utm_lat_lon &t);
   ~bwm_utm_lat_lon();
-  void SetSpheroidA(double a){_a = a;}
-  void SetSpheroidB(double b){_b = b;}
+  void SetSpheroidA(double a) { a_ = a; }
+  void SetSpheroidB(double b) { b_ = b; }
   //UTM to LatLon
   void transform(int utm_zone, double x, double y, double z,
-         double& lat, double& lon , double& elev,
-         bool south_flag = false, 
-         double utm_central_meridian = 0);
+                 double& lat, double& lon , double& elev,
+                 bool south_flag = false,
+                 double utm_central_meridian = 0);
 
   void transform(int utm_zone, double x, double y,
-         double& lat, double& lon,
-         bool south_flag = false, 
-         double utm_central_meridian = 0);
+                 double& lat, double& lon,
+                 bool south_flag = false,
+                 double utm_central_meridian = 0);
   //: LatLon to UTM
   void transform(double lat, double lon,
-         double& x, double& y, int& utm_zone);
-    
+                 double& x, double& y, int& utm_zone);
 
-private:
-  double _a, _b;
+ private:
+  double a_, b_;
 };
 
 #endif
