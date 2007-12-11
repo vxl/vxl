@@ -13,7 +13,6 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl_cmath.h>
-#include <vcl_algorithm.h>
 
 #define BMSH3D_FINE_EPSILON     5E-15
 #define BMSH3D_MID_EPSILON      5E-10
@@ -22,13 +21,13 @@
 //: the mid-epsilon equality test, use absolute test.
 inline bool bmsh3d_eq (const double& a, const double& b, const double& epsilon)
 {
-  return vcl_fabs (a-b) < epsilon;
+  return vcl_fabs(a-b) < epsilon;
 }
 
 //: the mid-epsilon equality test, use absolute test.
 inline bool bmsh3d_eq_m (const double& a, const double& b)
 {
-  return vcl_fabs (a-b) < BMSH3D_MID_EPSILON;
+  return vcl_fabs(a-b) < BMSH3D_MID_EPSILON;
 }
 
 inline bool bmsh3d_leq_m (const double& a, const double& b)
@@ -39,7 +38,7 @@ inline bool bmsh3d_leq_m (const double& a, const double& b)
 //: the coarse-epsilon equality test, use absolute test.
 inline bool bmsh3d_eq_c (const double& a, const double& b)
 {
-  return vcl_fabs (a-b) < BMSH3D_COARSE_EPSILON;
+  return vcl_fabs(a-b) < BMSH3D_COARSE_EPSILON;
 }
 
 #endif

@@ -1,4 +1,4 @@
-// This is brl/bbas/bmsh3d_triangle.h
+// This is brl/bbas/bmsh3d/bmsh3d_triangle.h
 #ifndef _bmsh3d_triangle_h_
 #define _bmsh3d_triangle_h_
 //:
@@ -13,8 +13,6 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_cmath.h>
-#include <vcl_algorithm.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_distance.h>
 #include "bmsh3d_dist.h"
@@ -22,39 +20,36 @@
 
 //: return true for acute triangle or obtuse triangle.
 //  the right triangle is treated as non-acute triangle.
-inline bool bmsh3d_is_tri_non_acute (const vgl_point_3d<double>& v0,
-                                   const vgl_point_3d<double>& v1,
-                                   const vgl_point_3d<double>& v2)
+inline bool bmsh3d_is_tri_non_acute(const vgl_point_3d<double>& v0,
+                                    const vgl_point_3d<double>& v1,
+                                    const vgl_point_3d<double>& v2)
 {
   double dasq = bmsh3d_sqdist_3d (v0, v1);
   double dbsq = bmsh3d_sqdist_3d (v1, v2);
   double dcsq = bmsh3d_sqdist_3d (v0, v2);
 
-  if (bmsh3d_leq_m (dasq + dbsq, dcsq) ||
-      bmsh3d_leq_m (dbsq + dcsq, dasq) ||
-      bmsh3d_leq_m (dasq + dcsq, dbsq))
-    return true;
-  else
-    return false;
+  return bmsh3d_leq_m(dasq + dbsq, dcsq) ||
+         bmsh3d_leq_m(dbsq + dcsq, dasq) ||
+         bmsh3d_leq_m(dasq + dcsq, dbsq);
 }
 
-inline bool bmsh3d_footpt_on_line (const vgl_point_3d<double>& P, 
-                                  const vgl_point_3d<double>& A, 
+inline bool bmsh3d_footpt_on_line(const vgl_point_3d<double>& P,
+                                  const vgl_point_3d<double>& A,
                                   const vgl_point_3d<double>& B)
 {
   vgl_vector_3d<double> AP = P-A;
   vgl_vector_3d<double> AB = B-A;
   double l = vgl_distance (A, B);
   double t = dot_product (AP, AB) / l;
-  
+
   if (0<=t && t<=l)
     return true;
   else
     return false;
 }
 
-inline bool bmsh3d_footpt_on_line (const vgl_point_3d<double>& P, 
-                                  const vgl_point_3d<double>& A, 
+inline bool bmsh3d_footpt_on_line(const vgl_point_3d<double>& P,
+                                  const vgl_point_3d<double>& A,
                                   const vgl_point_3d<double>& B,
                                   double& t, double& l)
 {
@@ -62,7 +57,7 @@ inline bool bmsh3d_footpt_on_line (const vgl_point_3d<double>& P,
   vgl_vector_3d<double> AB = B-A;
   l = vgl_distance (A, B);
   t = dot_product (AP, AB) / l;
-  
+
   if (0<=t && t<=l)
     return true;
   else
