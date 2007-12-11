@@ -1,11 +1,10 @@
+// This is brl/bbas/bmsh3d/bmsh3d_pt_set.h
+//---------------------------------------------------------------------
 #ifndef bmsh3d_pt_set_h_
 #define bmsh3d_pt_set_h_
-//---------------------------------------------------------------------
-// This is brl/bbas/bmsh3d/bmsh3d_pt_set.h
 //:
 // \file
 // \brief 3d point set
-//
 //
 // \author
 //  MingChing Chang  Feb 10, 2005
@@ -16,7 +15,6 @@
 // \endverbatim
 //
 //-------------------------------------------------------------------------
-#include <vcl_cassert.h>
 
 #include <vcl_map.h>
 #include <vcl_utility.h>
@@ -25,7 +23,7 @@
 
 class bmsh3d_pt_set
 {
-protected:
+ protected:
   //: The modified-halfedg mesh vertex data structure.
   vcl_map<int, bmsh3d_vertex*> vertexmap_;
 
@@ -36,7 +34,7 @@ protected:
 
   bool b_free_objects_in_destructor_;
 
-public:
+ public:
   //###### Constructor/Destructor ######
   bmsh3d_pt_set () {
     b_free_objects_in_destructor_ = true;
@@ -47,12 +45,13 @@ public:
     vertex_id_counter_ = 0;
   }
 
-  //: if you get free memory error, check if use 
+  //:
+  //  if you get free memory error, check if use
   //  pointset->_new_vertex() instead of using 'new bmsh3d_vertex' in the code
   //  for each object
-  virtual void clear () {    
+  virtual void clear () {
     vertex_id_counter_ = 0;
-    if (b_free_objects_in_destructor_) { //Skip already released objects.    
+    if (b_free_objects_in_destructor_) { //Skip already released objects.
       vcl_map<int, bmsh3d_vertex*>::iterator it = vertexmap_.begin();
       for (; it != vertexmap_.end(); it++)
         _del_vertex ((*it).second);
@@ -66,8 +65,8 @@ public:
 
   //###### Data access functions ######
 
-  unsigned int num_vertices() const { 
-    return this->vertexmap_.size(); 
+  unsigned int num_vertices() const {
+    return this->vertexmap_.size();
   }
 
   vcl_map<int, bmsh3d_vertex*>& vertexmap() {
@@ -91,7 +90,7 @@ public:
   }
   void set_free_objects_in_destructor (const bool b) {
     b_free_objects_in_destructor_ = b;
-  }  
+  }
 
   bool contains_V (const int vid) {
     vcl_map<int, bmsh3d_vertex*>::iterator it = vertexmap_.find (vid);
@@ -99,6 +98,7 @@ public:
   }
 
   //###### Connectivity Modification Functions ######
+
   //: new/delete function of the class hierarchy
   virtual bmsh3d_vertex* _new_vertex () {
     return new bmsh3d_vertex (vertex_id_counter_++);
@@ -119,13 +119,14 @@ public:
   void reset_vertices_ids ();
 
   //###### Vertex traversal functions ######
+
   //: initialize vertex traversal
-  void reset_vertex_traversal() { 
-    this->vertex_traversal_pos_ = this->vertexmap_.begin(); 
+  void reset_vertex_traversal() {
+    this->vertex_traversal_pos_ = this->vertexmap_.begin();
   }
 
   //: get the next vertex. Return false if no more vertex left on the list
-  bool next_vertex(bmsh3d_vertex* &v) { 
+  bool next_vertex(bmsh3d_vertex* &v) {
     if (this->vertex_traversal_pos_ == this->vertexmap_.end()) return false;
     v = this->vertex_traversal_pos_->second;
     ++ this->vertex_traversal_pos_;
@@ -150,7 +151,7 @@ public:
 
 void clone_ptset (bmsh3d_pt_set* targetPS, bmsh3d_pt_set* inputPS);
 
-bool detect_bounding_box (bmsh3d_pt_set* pt_set, vgl_box_3d<double>& bounding_box); 
+bool detect_bounding_box (bmsh3d_pt_set* pt_set, vgl_box_3d<double>& bounding_box);
 
 bool detect_geom_center (bmsh3d_pt_set* pt_set, vgl_point_3d<double>& C);
 
@@ -159,18 +160,18 @@ bmsh3d_pt_set* clone_pt_set_3d (bmsh3d_pt_set* PS);
 void remove_duplicate_points (bmsh3d_pt_set* pt_set);
 
 //: Other processing functions
-void translate_points (bmsh3d_pt_set* pt_set, 
+void translate_points (bmsh3d_pt_set* pt_set,
                        const float tx, const float ty, const float tz);
 
-void rotate_points (bmsh3d_pt_set* pt_set, 
+void rotate_points (bmsh3d_pt_set* pt_set,
                     const float rx, const float ry, const float rz);
 
 void scale_points (bmsh3d_pt_set* pt_set, const float scale);
 
 void perturb_points (bmsh3d_pt_set* pt_set, const float pert);
 
-void crop_points (bmsh3d_pt_set* pt_set, 
-                  const float minX, const float minY, const float minZ, 
+void crop_points (bmsh3d_pt_set* pt_set,
+                  const float minX, const float minY, const float minZ,
                   const float maxX, const float maxY, const float maxZ);
 
 void shift_points_to_first_octant (bmsh3d_pt_set* pt_set);
