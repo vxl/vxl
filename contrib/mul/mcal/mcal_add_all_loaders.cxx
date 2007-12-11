@@ -1,4 +1,7 @@
-#include <mcal/mcal_add_all_loaders.h>
+#include "mcal_add_all_loaders.h"
+//:
+// \file
+
 #include <mbl/mbl_cloneables_factory.h>
 #include <mcal/mcal_pca.h>
 #include <mcal/mcal_general_ca.h>
@@ -17,5 +20,4 @@ void mcal_add_all_loaders()
 
   mbl_cloneables_factory<mcal_single_basis_cost>::add(mcal_sparse_basis_cost());
   vsl_add_to_binary_loader(mcal_sparse_basis_cost());
-
 }
