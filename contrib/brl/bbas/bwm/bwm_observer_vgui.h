@@ -21,7 +21,6 @@
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
-#include <vsol/vsol_line_2d_sptr.h>
 
 #include <vpgl/vpgl_camera.h>
 
@@ -118,11 +117,10 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
   //: makes the polygon a little smaller to prevent the face edges overlapping
   vsol_polygon_2d_sptr shrink_face(vsol_polygon_2d_sptr poly);
 
-  void draw_mesh(bwm_observable_sptr observable, 
-            vcl_map<unsigned, bgui_vsol_soview2D_polygon* > &poly_list,
-            vcl_vector<bwm_soview2D_vertex*> &vertx_list, 
-            vcl_vector<vsol_point_2d_sptr> &vertx_xy_list);
-
+  void draw_mesh(bwm_observable_sptr observable,
+                 vcl_map<unsigned, bgui_vsol_soview2D_polygon* > &poly_list,
+                 vcl_vector<bwm_soview2D_vertex*> &vertx_list,
+                 vcl_vector<vsol_point_2d_sptr> &vertx_xy_list);
 };
 
 #endif
