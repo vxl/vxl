@@ -13,7 +13,8 @@
 #include <vcl_iostream.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_cmath.h>
-#include <vnl/vnl_math.h>
+#include <vnl/vnl_matrix.h>
+#include <vnl/vnl_vector.h>
 #include <vnl/vnl_random.h>
 #include <mbl/mbl_cloneables_factory.h>
 #include <mcal/mcal_add_all_loaders.h>
@@ -73,14 +74,13 @@ void test_general_ca_nd(unsigned nd, unsigned ns)
 
 void test_general_ca()
 {
-  vcl_cout << "***********************\n"
+  vcl_cout << "*************************\n"
            << " Testing mcal_general_ca\n"
-           << "***********************\n";
+           << "*************************\n";
 
   vsl_add_to_binary_loader(mcal_general_ca());
 
   // Generate gaussian data at angle A to x axis
-  unsigned nd = 2;
   unsigned ns = 50;
   double A = 0.3;
   double sinA=vcl_sin(A),cosA=vcl_cos(A);
@@ -103,10 +103,10 @@ void test_general_ca()
   ca.build_from_array(&data[0],ns,mean,modes,mode_var);
 
   TEST("Number of modes",mode_var.size(),2);
-  vcl_cout<<"Mode var[0]="<<mode_var[0]<<vcl_endl;
-  vcl_cout<<"Mode var[1]="<<mode_var[1]<<vcl_endl;
+  vcl_cout<<"Mode var[0]="<<mode_var[0]<<vcl_endl
+          <<"Mode var[1]="<<mode_var[1]<<vcl_endl
 
-  vcl_cout<<"Modes: "<<modes<<vcl_endl;
+          <<"Modes: "<<modes<<vcl_endl;
 
   // Compare with PCA
   mcal_pca pca;
