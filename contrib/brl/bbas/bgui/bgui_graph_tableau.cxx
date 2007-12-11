@@ -157,26 +157,26 @@ void bgui_graph_tableau::update(vcl_vector<float> const& pos,
 }
 // all plots have to have the same number of positions and values
 void bgui_graph_tableau::update(vcl_vector<vcl_vector<double> > const& pos,
-            vcl_vector<vcl_vector<double> >const & vals)
+                                vcl_vector<vcl_vector<double> >const & vals)
 {
   n_plots_ = pos.size();
-  if(!n_plots_)
+  if (!n_plots_)
     return;
-  n_ = pos[0].size();  
+  n_ = pos[0].size();
   mpos_ = pos; mvals_=vals;
   double xmin, ymin, xmax, ymax;
   xmin = vnl_numeric_traits<double>::maxval;
   xmax = -xmin;
   ymin = xmin;
   ymax = xmax;
-  for(unsigned p = 0; p<n_plots_; ++p)
-    for(unsigned i = 0; i<n_; ++i)
-      {
-        xmin = vnl_math_min(xmin, pos[p][i]);
-        xmax = vnl_math_max(xmax, pos[p][i]);
-        ymin = vnl_math_min(ymin, vals[p][i]);
-        ymax = vnl_math_max(ymax, vals[p][i]);
-      }
+  for (unsigned p = 0; p<n_plots_; ++p)
+    for (unsigned i = 0; i<n_; ++i)
+    {
+      xmin = vnl_math_min(xmin, pos[p][i]);
+      xmax = vnl_math_max(xmax, pos[p][i]);
+      ymin = vnl_math_min(ymin, vals[p][i]);
+      ymax = vnl_math_max(ymax, vals[p][i]);
+    }
   xmin_ = static_cast<float>(xmin);
   xmax_ = static_cast<float>(xmax);
   ymin_ = static_cast<float>(ymin);
@@ -265,7 +265,7 @@ void bgui_graph_tableau::draw_graph()
   vcl_vector<float> x(n_), y(n_);
   if (m_plot_.size())
   {
-    for(unsigned i =0; i<m_plot_.size(); ++i)
+    for (unsigned i =0; i<m_plot_.size(); ++i)
       easy_->remove(m_plot_[i]);
     m_plot_.clear();
     tt_->clear();
@@ -299,27 +299,27 @@ void bgui_graph_tableau::draw_multi_graph()
     return;
   if (m_plot_.size())
   {
-    for(unsigned i =0; i<m_plot_.size(); ++i)
+    for (unsigned i =0; i<m_plot_.size(); ++i)
       easy_->remove(m_plot_[i]);
     m_plot_.clear();
     tt_->clear();
   }
-  for(unsigned p = 0; p<n_plots_; ++p)
+  for (unsigned p = 0; p<n_plots_; ++p)
+  {
+    vcl_vector<float> x(n_), y(n_);
+    for (unsigned i = 0; i<n_; ++i)
     {
-	  vcl_vector<float> x(n_), y(n_);
-      for (unsigned i = 0; i<n_; ++i)
-        {
-          x[i]=map_x_to_display(static_cast<float>(mpos_[p][i]));
-          y[i]=map_y_to_display(static_cast<float>(mvals_[p][i]));
-        }
-      unsigned c = p%7;
-      easy_->set_foreground(r[c], g[c], b[c]);
-      vgui_soview2D_linestrip* ls = easy_->add_linestrip(n_, &x[0], &y[0]);
-      ls->set_selectable(false);
-      m_plot_.push_back(ls);
+      x[i]=map_x_to_display(static_cast<float>(mpos_[p][i]));
+      y[i]=map_y_to_display(static_cast<float>(mvals_[p][i]));
     }
+    unsigned c = p%7;
+    easy_->set_foreground(r[c], g[c], b[c]);
+    vgui_soview2D_linestrip* ls = easy_->add_linestrip(n_, &x[0], &y[0]);
+    ls->set_selectable(false);
+    m_plot_.push_back(ls);
+  }
   draw_tics();
- this->post_redraw();
+  this->post_redraw();
 }
 
 //remove display items and delete the soviews
@@ -345,10 +345,9 @@ void bgui_graph_tableau::rem()
       easy_->remove(*cit);
       //delete *cit;
     }
-  for(unsigned i = 0; i< m_plot_.size(); ++i)
+  for (unsigned i = 0; i< m_plot_.size(); ++i)
     easy_->remove(m_plot_[i]);
   m_plot_.clear();
-
 }
 
 //Delete graph point data
