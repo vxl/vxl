@@ -1,12 +1,11 @@
-
-//#include <stdio.h>
 #include <vcl_cstdio.h>
+
+#include <vnl/vnl_math.h> // for pi_over_2
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_window.h>
 #include <vgui/vgui_adaptor.h>
-#include <vcl_cmath.h>
 
 #include <bgui3d/bgui3d_tableau.h>
 #include <bgui3d/bgui3d_examiner_tableau.h>
@@ -31,11 +30,7 @@
 #include <Inventor/nodes/SoNormalBinding.h>
 #include <Inventor/nodes/SoFaceSet.h>
 
-///#include <Inventor/fields/SoMFLong.h>
-  
 
-
-static const float pi=3.14159f;
 #define WINDOW_SIZE 600
 #define NUM_VERTICES 100000
 
@@ -64,17 +59,17 @@ void addSphere(SoGroup *root)
 void addSampleViewingPlanes(SoGroup *root)
 {
   SoSeparator *sep = new SoSeparator;
-  
+
   //Add material
   SoMaterial *myMaterial = new SoMaterial;
   myMaterial->diffuseColor.setValue(1.0f, 1.0f, 0.0f);
   sep->addChild(myMaterial);
-  
+
   //forming vertices, norms, face vertex numbers
   static float vertices[NUM_PLANES*4][3];
   int numvertices[NUM_PLANES];
   static float norms[NUM_PLANES][3];
-  for(int i=0; i < NUM_PLANES; i++)
+  for (int i=0; i < NUM_PLANES; i++)
   {
     int index = i * 4;
     int z_coord = i * PLANE_DIST;
@@ -86,11 +81,11 @@ void addSampleViewingPlanes(SoGroup *root)
     vertices[index+1][0] = 0;
     vertices[index+1][1] = PLANE_DIM;
     vertices[index+1][2] = z_coord;
-        
+
     vertices[index+2][0] = PLANE_DIM;
     vertices[index+2][1] = PLANE_DIM;
     vertices[index+2][2] = z_coord;
-        
+
     vertices[index+3][0] = PLANE_DIM;
     vertices[index+3][1] = 0;
     vertices[index+3][2] = z_coord;
@@ -152,20 +147,20 @@ void addPointSet(SoGroup *root)
   int pos_pixel_num = 0;
   static float neg_vertices[NUM_VERTICES][3];
   int neg_pixel_num = 0;
-  for(int k=0; k<m_d; k++)
+  for (int k=0; k<m_d; k++)
   {
-    for(int j=0; j<m_h; j++)
+    for (int j=0; j<m_h; j++)
     {
-      for(int i=0; i<m_w; i++)
+      for (int i=0; i<m_w; i++)
       {
-        if(data[k][j][i] > 0)
+        if (data[k][j][i] > 0)
         {
           pos_vertices[pos_pixel_num][0] = i;
           pos_vertices[pos_pixel_num][1] = j;
           pos_vertices[pos_pixel_num][2] = k;
           pos_pixel_num++;
         }
-        else if(data[k][j][i] < 0)
+        else if (data[k][j][i] < 0)
         {
           neg_vertices[neg_pixel_num][0] = i;
           neg_vertices[neg_pixel_num][1] = j;
@@ -174,7 +169,7 @@ void addPointSet(SoGroup *root)
         }
       }
     }
-  } 
+  }
   //Add coordinates from formed vertices
   SoCoordinate3 *myCoords_pos = new SoCoordinate3;
   myCoords_pos->point.setValues(0, pos_pixel_num, pos_vertices);
@@ -218,7 +213,7 @@ void addPlaneBoundaries(SoGroup *root)
   static float vertices[NUM_PLANES*5][3];
   int numvertices[NUM_PLANES];
   static float norms[NUM_PLANES][3];
-  for(int i=0; i < NUM_PLANES; i++)
+  for (int i=0; i < NUM_PLANES; i++)
   {
     int index = i * 5;
     int z_coord = i * PLANE_DIST;
@@ -230,11 +225,11 @@ void addPlaneBoundaries(SoGroup *root)
     vertices[index+1][0] = 0;
     vertices[index+1][1] = PLANE_DIM;
     vertices[index+1][2] = z_coord;
-        
+
     vertices[index+2][0] = PLANE_DIM;
     vertices[index+2][1] = PLANE_DIM;
     vertices[index+2][2] = z_coord;
-        
+
     vertices[index+3][0] = PLANE_DIM;
     vertices[index+3][1] = 0;
     vertices[index+3][2] = z_coord;
@@ -331,7 +326,7 @@ void buildScene(SoGroup *root)
   myCamera->nearDistance = 0.5f;
   myCamera->farDistance = 400.0f;
   myCamera->focalDistance = 300.0f;
-  myCamera->heightAngle = pi/2;
+  myCamera->heightAngle = float(vnl_math::pi_over_2);
   root->addChild(myCamera);
 
   //Add light
@@ -353,20 +348,20 @@ void read_raw_data_file()
   vcl_printf("width: %d\nheight: %d\ndepth: %d\n", m_w, m_h, m_d);
   vcl_fclose(fp);
   data = (int ***)malloc(sizeof(int)*m_d);
-  for(int k = 0; k < m_d; k++)
+  for (int k = 0; k < m_d; k++)
     data[k] = (int **)malloc(sizeof(int)*m_h);
 
-  for(int k = 0; k < m_d; k++){
-    for(int j = 0; j < m_h; j++){
+  for (int k = 0; k < m_d; k++){
+    for (int j = 0; j < m_h; j++){
       data[k][j] = (int *)malloc(sizeof(int)*m_w);}}
 
   int x;
   fp = vcl_fopen("E:\\MyDocs\\Temp\\filter_x=2.txt", "r");
-  for(int k = 0; k < m_d; k++)
+  for (int k = 0; k < m_d; k++)
   {
-    for(int j = 0; j < m_h; j++)
+    for (int j = 0; j < m_h; j++)
     {
-      for(int i = 0; i < m_w; i++){
+      for (int i = 0; i < m_w; i++) {
         vcl_fscanf(fp, "%d", &x);
         data[k][j][i] = x;
       }

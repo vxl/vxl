@@ -3,14 +3,14 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_composite_tableau.h>
-#include <vcl_cmath.h>
 
 #include <bgui3d/bgui3d.h>
 #include <bgui3d/bgui3d_project2d_tableau.h>
 
+#include <vnl/vnl_math.h> // for pi_over_4
 #include <vnl/vnl_double_3x4.h>
 #include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_rotation_matrix.h> 
+#include <vnl/vnl_rotation_matrix.h>
 
 #include <vil/vil_image_resource_sptr.h>
 #include <vil/vil_image_view.h>
@@ -21,7 +21,7 @@
 #include <Inventor/nodes/SoMaterial.h>
 #include <Inventor/nodes/SoTransform.h>
 
-#include <Inventor/nodes/SoMaterialBinding.h> 
+#include <Inventor/nodes/SoMaterialBinding.h>
 #include <Inventor/nodes/SoIndexedLineSet.h>
 #include <Inventor/nodes/SoVertexProperty.h>
 #include <bgui3d/bgui3d_examiner_tableau.h>
@@ -72,7 +72,6 @@ void buildScene(SoGroup *root)
     group->addChild(new SoCone);
     root->addChild(group);
   }
- 
 }
 
 
@@ -81,8 +80,8 @@ vil_image_resource_sptr
 make_image()
 {
   vil_image_view<vxl_byte> image(400, 400, 3);
-  for(int i=0; i<400; ++i){
-    for(int j=0; j<400; ++j){
+  for (int i=0; i<400; ++i) {
+    for (int j=0; j<400; ++j) {
       image(i,j,0) = ((i+j)%2)*255;
       image(i,j,1) = ((i/2+j/2)%2)*255;
       image(i,j,2) = ((i/4+j/4)%2)*255;
@@ -98,22 +97,22 @@ vnl_double_3x4 make_camera()
   // The calibration matrix
   vnl_double_3x3 K;
   K[0][0] = 2000.0;  K[0][1] = 0.0;      K[0][2] = 200.0;
-  K[1][0] = 0.0;     K[1][1] = 2000.0;   K[1][2] = 200.0; 
+  K[1][0] = 0.0;     K[1][1] = 2000.0;   K[1][2] = 200.0;
   K[2][0] = 0.0;     K[2][1] = 0.0;      K[2][2] = 1.0;
-  
+
   // The rotation about the x axis
-  double angle = 3.1415926/4.0;
+  double angle = vnl_math::pi_over_4;
   vnl_double_3x3 R = vnl_rotation_matrix(angle*(vnl_double_3(1.0, 0.0, 0.0).normalize()));
 
   // The translation
   vnl_double_3 t(0.0, 10.0, 10.0);
-  
+
   R = R.transpose();
 
   vnl_double_3x4 C;
   C.update(R);
   C.set_column(3, -R*t);
-  vcl_cout << "Camera = \n" <<K*C << vcl_endl;
+  vcl_cout << "Camera =\n" <<K*C << vcl_endl;
 
   return K*C;
 }
@@ -133,10 +132,10 @@ int main(int argc, char** argv)
   buildScene(root);
 
   vnl_double_3x4 camera = make_camera();
-  
+
   // wrap the scene graph in a bgui3d tableau
   //bgui3d_project2d_tableau_new tab3d(camera, root);
-  
+
   bgui3d_project2d_tableau_sptr proj_tab = bgui3d_project2d_tableau_new(camera,root);
   bgui3d_examiner_tableau_sptr exam_tab = bgui3d_examiner_tableau_new(root);
   exam_tab->set_camera(camera);
@@ -145,7 +144,6 @@ int main(int argc, char** argv)
   vgui_deck_tableau_sptr tab3d = vgui_deck_tableau_new();
   tab3d->add(exam_tab);
   tab3d->add(proj_tab);
-
 
   root->unref();
 
