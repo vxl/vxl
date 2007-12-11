@@ -1,9 +1,9 @@
-//---------------------------------------------------------------------
 // This is brl/bbas/bmsh3d/bmsh3d_pt_set.cxx
+//---------------------------------------------------------------------
+#include "bmsh3d_pt_set.h"
 //:
 // \file
 // \brief Basic 3d point sample
-//
 //
 // \author
 //  MingChing Chang  Feb 10, 2005
@@ -16,9 +16,9 @@
 //-------------------------------------------------------------------------
 
 #include <vcl_iostream.h>
+#include <vcl_cassert.h>
 #include <vnl/vnl_random.h>
 #include <vul/vul_printf.h>
-#include "bmsh3d_pt_set.h"
 
 void bmsh3d_pt_set::reset_vertices_ids ()
 {
@@ -69,10 +69,10 @@ void clone_ptset (bmsh3d_pt_set* targetPS, bmsh3d_pt_set* inputPS)
 
 //: Compute the bounding box of all pointset_[].
 bool detect_bounding_box (bmsh3d_pt_set* pt_set, vgl_box_3d<double>& bbox)
-{ 
+{
   if (pt_set->vertexmap().size() == 0)
     return false;
-  vul_printf (vcl_cerr, "  detect_bounding_box(): %u boundary points.\n", 
+  vul_printf (vcl_cerr, "  detect_bounding_box(): %u boundary points.\n",
               pt_set->vertexmap().size());
   bbox.empty();
   vcl_map<int, bmsh3d_vertex*>::iterator it = pt_set->vertexmap().begin();
@@ -81,7 +81,7 @@ bool detect_bounding_box (bmsh3d_pt_set* pt_set, vgl_box_3d<double>& bbox)
     bbox.add (V->pt());
   }
   vul_printf (vcl_cerr, "    (%lf, %lf, %lf) - (%lf, %lf, %lf).\n",
-              bbox.min_x(), bbox.min_y(), bbox.min_z(), 
+              bbox.min_x(), bbox.min_y(), bbox.min_z(),
               bbox.max_x(), bbox.max_y(), bbox.max_z());
   return !bbox.is_empty();
 }
@@ -114,7 +114,7 @@ bool detect_geom_center (bmsh3d_pt_set* pt_set, vgl_point_3d<double>& C)
 
 // #####################################################################
 
-bmsh3d_pt_set* clone_pt_set_3d (bmsh3d_pt_set* PS) 
+bmsh3d_pt_set* clone_pt_set_3d (bmsh3d_pt_set* PS)
 {
   bmsh3d_pt_set* newPS = new bmsh3d_pt_set ();
   //Clone all elements of PS.
@@ -133,13 +133,13 @@ bmsh3d_pt_set* clone_pt_set_3d (bmsh3d_pt_set* PS)
 
 
 //: Run a brute-force check for duplicate points.
-//: If found, remove them.
+//  If found, remove them.
 void remove_duplicate_points (bmsh3d_pt_set* pt_set)
 {
   vul_printf (vcl_cerr, "\nremove_duplicate_points(): total input %d points.\n", pt_set->vertexmap().size());
   vcl_cout<< "  Finding duplicates: ";
 
-  //: index to be deleted 
+  // index to be deleted
   vcl_vector<int> idToBeDeleted;
 
   vcl_map<int, bmsh3d_vertex*>::iterator it1 = pt_set->vertexmap().begin();
@@ -147,7 +147,7 @@ void remove_duplicate_points (bmsh3d_pt_set* pt_set)
   end--;
   for (; it1 != end; it1++) {
     bmsh3d_vertex* v1 = (*it1).second;
-    
+
     vcl_map<int, bmsh3d_vertex*>::iterator it2 = it1;
     it2++;
     for (; it2 != pt_set->vertexmap().end(); it2++) {
@@ -158,14 +158,13 @@ void remove_duplicate_points (bmsh3d_pt_set* pt_set)
           v1->pt().z() == v2->pt().z()) {
         //found
         idToBeDeleted.push_back (v1->id());
-        vcl_cout<< v1->id() << " ";
+        vcl_cout<< v1->id() << ' ';
         break; //break j loop. go to the next i.
       }
-
     }
   }
 
-  //: perform delection
+  // perform delection
   vcl_cout<< "\n\tDeleting "<< idToBeDeleted.size() <<" duplicates...\n";
   for (unsigned int i=0; i<idToBeDeleted.size(); i++) {
     int id = idToBeDeleted[i];
@@ -174,8 +173,7 @@ void remove_duplicate_points (bmsh3d_pt_set* pt_set)
     pt_set->vertexmap().erase (it);
   }
   idToBeDeleted.clear();
-  vcl_cout<< "\tRemaining # of points: "<< pt_set->vertexmap().size() << "\n";
-
+  vcl_cout<< "\tRemaining # of points: "<< pt_set->vertexmap().size() << vcl_endl;
 }
 
 
@@ -183,7 +181,7 @@ void translate_points (bmsh3d_pt_set* pt_set,
                        const float tx, const float ty, const float tz)
 {
   vgl_vector_3d<double> trans (tx, ty, tz);
-  
+
   vcl_map<int, bmsh3d_vertex*>::iterator it = pt_set->vertexmap().begin();
   for (; it != pt_set->vertexmap().end(); it++) {
     bmsh3d_vertex* v = (*it).second;
@@ -205,20 +203,20 @@ void rotate_points (bmsh3d_pt_set* pt_set,
     double x, y, z;
 
     //1)Rotation about X
-    y =  y0*cos(rx) + z0*sin(rx);
-    z = -y0*sin(rx) + z0*cos(rx);
+    y =  y0*vcl_cos(rx) + z0*vcl_sin(rx);
+    z = -y0*vcl_sin(rx) + z0*vcl_cos(rx);
     y0=y;
     z0=z;
 
     //2)Rotation about Y
-    x =  x0*cos(ry) - z0*sin(ry);
-    z =  x0*sin(ry) + z0*cos(ry);
+    x =  x0*vcl_cos(ry) - z0*vcl_sin(ry);
+    z =  x0*vcl_sin(ry) + z0*vcl_cos(ry);
     x0=x;
     z0=z;
 
     //3)Rotation about Z
-    x =  x0*cos(rz) + y0*sin(rz);
-    y = -x0*sin(rz) + y0*cos(rz);
+    x =  x0*vcl_cos(rz) + y0*vcl_sin(rz);
+    y = -x0*vcl_sin(rz) + y0*vcl_cos(rz);
 
     v->get_pt().set (x, y, z);
   }
@@ -226,7 +224,7 @@ void rotate_points (bmsh3d_pt_set* pt_set,
 
 void scale_points (bmsh3d_pt_set* pt_set, const float scale)
 {
-  //: Just multiply the coords (x, y, z) with fScale.
+  // Just multiply the coords (x, y, z) with fScale.
   vcl_map<int, bmsh3d_vertex*>::iterator it = pt_set->vertexmap().begin();
   for (; it != pt_set->vertexmap().end(); it++) {
     bmsh3d_vertex* v = (*it).second;
@@ -239,7 +237,6 @@ void scale_points (bmsh3d_pt_set* pt_set, const float scale)
 
 void perturb_points (bmsh3d_pt_set* pt_set, const float max_perturb)
 {
-  
   vcl_map<int, bmsh3d_vertex*>::iterator it = pt_set->vertexmap().begin();
   for (unsigned int i=0; it != pt_set->vertexmap().end(); it++, i++) {
     bmsh3d_vertex* v = (*it).second;
@@ -261,16 +258,16 @@ void perturb_points (bmsh3d_pt_set* pt_set, const float max_perturb)
 }
 
 void crop_points (bmsh3d_pt_set* pt_set,
-                  const float minX, const float minY, const float minZ, 
+                  const float minX, const float minY, const float minZ,
                   const float maxX, const float maxY, const float maxZ)
 {
-  //: index to be deleted 
+  // index to be deleted
   vcl_vector<int> idToBeDeleted;
 
   vgl_box_3d<double> bbox;
   detect_bounding_box (pt_set, bbox);
 
-  vul_printf (vcl_cerr, "\n Bounding Box: \n");
+  vul_printf (vcl_cerr, "\n Bounding Box:\n");
   vul_printf (vcl_cerr, "     (minX, maxX) = (%lf, %lf)\n", bbox.min_x(), bbox.max_x());
   vul_printf (vcl_cerr, "     (minY, maxY) = (%lf, %lf)\n", bbox.min_y(), bbox.max_y());
   vul_printf (vcl_cerr, "     (minZ, maxZ) = (%lf, %lf)\n", bbox.min_z(), bbox.max_z());
@@ -310,7 +307,7 @@ void shift_points_to_first_octant (bmsh3d_pt_set* pt_set)
   double shiftZ = bbox.min_point().z();
   const vgl_vector_3d<double> shift (shiftX, shiftY, shiftZ);
 
-  //: 2)Move the box onto the first octant.
+  // 2)Move the box onto the first octant.
   vcl_map<int, bmsh3d_vertex*>::iterator it = pt_set->vertexmap().begin();
   for (; it != pt_set->vertexmap().end(); it++) {
     bmsh3d_vertex* v = (*it).second;
@@ -321,7 +318,7 @@ void shift_points_to_first_octant (bmsh3d_pt_set* pt_set)
 //: Sub-sample the point cloud to be the specified # of points.
 void subsample_points (bmsh3d_pt_set* pt_set, const unsigned int subsam_pts)
 {
-  vul_printf (vcl_cerr, "  subsample_points(): %d to %d points.\n", 
+  vul_printf (vcl_cerr, "  subsample_points(): %d to %d points.\n",
                pt_set->vertexmap().size(), subsam_pts);
 
   vnl_random rand;
