@@ -1,7 +1,6 @@
- // This is basic/bgui3d/bgui3d_examiner_tableau.h
+ // This is brl/bbas/bgui3d/bgui3d_examiner_tableau.h
 #ifndef bgui3d_examiner_tableau_h_
 #define bgui3d_examiner_tableau_h_
-
 //:
 // \file
 // \brief  Examiner viewer tableau for 3D scenes
@@ -14,7 +13,7 @@
 
 #include "bgui3d_fullviewer_tableau.h"
 #include "bgui3d_examiner_tableau_sptr.h"
-#include <Inventor/SbLinear.h> 
+#include <Inventor/SbLinear.h>
 #include <Inventor/nodes/SoText2.h>
 #include <Inventor/nodes/SoSwitch.h>
 
@@ -23,33 +22,36 @@ class SbRotation;
 class SoTimerSensor;
 class SoCone;
 
-enum Process {
-SPIN=0,
-DRAG,
-PAN,
-ZOOM,
-IDLE,
-SEEK
+enum Process
+{
+  SPIN=0,
+  DRAG,
+  PAN,
+  ZOOM,
+  IDLE,
+  SEEK
 };
 
 struct Log
 {
-int size;
-SbVec2f pos1;
-SbVec2f pos2;
-SbVec2f pos3;
+  int size;
+  SbVec2f pos1;
+  SbVec2f pos2;
+  SbVec2f pos3;
 };
 
 //:  Examiner viewer tableau for 3D scenes
 class bgui3d_examiner_tableau : public bgui3d_fullviewer_tableau
 {
-public:
-  enum SeekDistance {
+ public:
+  enum SeekDistance
+  {
     SEEK_FAR,
     SEEK_HALF,
     SEEK_NEAR,
     SEEK_ZERO
-    };
+  };
+
   //: Constructor
   bgui3d_examiner_tableau(SoNode * scene_root = NULL);
 
@@ -102,10 +104,8 @@ public:
 
   //void seeksensorCB(void * data, SoSensor * s);
 
-
-protected:
-
-  // these are made protected (instead of private) so that child classes 
+ protected:
+  // these are made protected (instead of private) so that child classes
   // can access them
   vgui_button last_down_button_;
   SbVec2f last_pos_;
@@ -121,28 +121,24 @@ protected:
   //: Determine the scale of the scene
   void find_scale();
 
-private:
+ private:
   SbSphereSheetProjector* spin_projector_;
   int spin_sample_counter_;
   SbRotation spin_increment_;
   Log log_;
-  SeekDistance seek_distance_; 
+  SeekDistance seek_distance_;
   SoTimerSensor* _seekSensor;
 
   // The scale of the scene
   float scale_;
 
   bool axis_visible_;
-  
-  
-public:
+
+ public:
   SbRotation _fromRot;
   SbRotation _toRot;
   SbVec3f _fromPos;
   SbVec3f _toPos;
-
-
-
 };
 
 
@@ -151,10 +147,8 @@ struct bgui3d_examiner_tableau_new : public bgui3d_examiner_tableau_sptr
 {
   typedef bgui3d_examiner_tableau_sptr base;
   bgui3d_examiner_tableau_new(SoNode* scene_root = NULL)
-   : base(new bgui3d_examiner_tableau(scene_root)) { }
+   : base(new bgui3d_examiner_tableau(scene_root)) {}
 };
-
-
 
 
 #endif // bgui3d_examiner_tableau_h_

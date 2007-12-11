@@ -1,11 +1,12 @@
-//: This is lemsvxlsrc/brcv/shp/bmsh3d/vis/bmsh3d_vis_mesh.cxx
-//  MingChing Chang
-//  May 03, 2005.
+// This is brl/bbas/bmsh3d/vis/bmsh3d_vis_face.cxx
+#include "bmsh3d_mesh.h"
+//:
+// \file
+// \author Ming-Ching Chang
+// \date May 03, 2005.
 
 #include <vcl_iostream.h>
 #include <vul/vul_printf.h>
-
-#include <bmsh3d/bmsh3d_mesh.h>
 
 #include <bmsh3d/vis/bmsh3d_vis_backpt.h>
 #include <bmsh3d/vis/bmsh3d_vis_face.h>
@@ -28,7 +29,7 @@ SoCoordinate3* _draw_F_ifs_geom (SoGroup* group, const bmsh3d_face* F)
     return NULL;
 
   SoCoordinate3* coords = new SoCoordinate3;
-  SbVec3f* verts = new SbVec3f[nVertices];  
+  SbVec3f* verts = new SbVec3f[nVertices];
   // Put each vertex position into a coordinate array.
   // Skip the vertex if it is too close to any other vertex.
   unsigned int count = 0;
@@ -63,7 +64,7 @@ SoCoordinate3* _draw_F_mhe_geom (SoGroup* group, const bmsh3d_face* F)
     return NULL;
 
   SoCoordinate3* coords = new SoCoordinate3;
-  SbVec3f* verts = new SbVec3f[nVertices];  
+  SbVec3f* verts = new SbVec3f[nVertices];
   // Put each vertex position into a coordinate array.
   // Skip the vertex if it is too close to any other vertex.
   unsigned int count = 0;
@@ -90,9 +91,9 @@ SoCoordinate3* _draw_F_mhe_geom (SoGroup* group, const bmsh3d_face* F)
 //: Check if the vertex is too close to any previous vertex.
 //  return true if no duplicate.
 bool _check_duplicate (SbVec3f* verts, unsigned int count, const vgl_point_3d<double>& pt)
-{ 
+{
   for (unsigned int k=0; k<count; k++) {
-    if (bmsh3d_vis_too_close (verts[k][0], verts[k][1], verts[k][2], 
+    if (bmsh3d_vis_too_close (verts[k][0], verts[k][1], verts[k][2],
                                (float) pt.x(), (float) pt.y(), (float) pt.z()))
       return false;
   }
@@ -155,7 +156,7 @@ SoSeparator* draw_F (const bmsh3d_face* F,
   return root;
 }
 
-SoSeparator* draw_F_with_id (const bmsh3d_face* F, const SbColor& color, 
+SoSeparator* draw_F_with_id (const bmsh3d_face* F, const SbColor& color,
                              const SoBaseColor* idbasecolor,
                              const float transp,
                              const bool user_defined_class)
@@ -202,8 +203,3 @@ SoSeparator* draw_F_with_id (const bmsh3d_face* F,
 
   return root;
 }
-
-
-
-
-

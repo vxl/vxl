@@ -1,8 +1,6 @@
-//: This is lemsvxlsrc/brcv/shp/bmsh3d/vis/bmsh3d_vis_mesh.cxx
+//: This is brl/bbas/bmsh3d/vis/bmsh3d_vis_edge.cxx
 //  MingChing Chang
 //  May 03, 2005.
-
-#include <vcl_cstdio.h>
 
 #include <bmsh3d/bmsh3d_vertex.h>
 
@@ -20,7 +18,7 @@
 #include <Inventor/nodes/SoCoordinate3.h>
 
 // ###################################################################
-  
+
 void draw_edge_geom (SoSeparator* root, const bmsh3d_edge* E,
                      const bool user_defined_class)
 {
@@ -53,7 +51,7 @@ SoSeparator* draw_edge (bmsh3d_edge* E, const SbColor& color, const float width,
   SoBaseColor *basecolor = new SoBaseColor;
   basecolor->rgb = color;
   root->addChild (basecolor);
-  
+
   //Line width
   SoDrawStyle* drawStyle = new SoDrawStyle;
   drawStyle->lineWidth.setValue (width);
@@ -62,12 +60,3 @@ SoSeparator* draw_edge (bmsh3d_edge* E, const SbColor& color, const float width,
   draw_edge_geom (root, E, user_defined_class);
   return root;
 }
-
-
-
-
-
-
-
-
-

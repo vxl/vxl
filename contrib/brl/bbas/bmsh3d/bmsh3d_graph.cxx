@@ -1,9 +1,9 @@
+// This is brl/bbas/bmsh3d/bmsh3d_graph.cxx
 //---------------------------------------------------------------------
-// This is brcv/shp/dbmsh3d/dbmsh3d_hypermesh.cxx
+#include "dbmsh3d_graph.h"
 //:
 // \file
 // \brief Graph
-//
 //
 // \author
 //  MingChing Chang  July 05, 2005
@@ -17,8 +17,6 @@
 
 #include <vcl_iostream.h>
 #include <vul/vul_printf.h>
-
-#include <dbmsh3d/dbmsh3d_graph.h>
 
 //###############################################################
 //    GRAPH
@@ -36,14 +34,14 @@ bool dbmsh3d_graph::brute_force_validation ()
   vcl_map<int, dbmsh3d_edge*>::iterator SC_it = edgemap_.begin();
   for (; SC_it != edgemap_.end(); SC_it++) {
     dbmsh3d_edge* SCurve = (*SC_it).second;
-    
+
     if (SCurve->type() == dbmsh3d_edge::SC_TYPE_A13_AXIAL &&
         SCurve->is_self_loop()) {
-      vul_printf (vcl_cerr, "\tA13 scaffold curve (%d: %d-%d) has self-loop\n", 
+      vul_printf (vcl_cerr, "\tA13 scaffold curve (%d: %d-%d) has self-loop\n",
                    SCurve->id(),
                    SCurve->S_Vertex()->id(),
                    SCurve->E_Vertex()->id());
-      result = false;       
+      result = false;
     }
   }
 #endif
@@ -60,8 +58,8 @@ void remove_graph_loops (dbmsh3d_graph* G)
   vul_printf (vcl_cerr, "remove_graph_loops():\n");
   unsigned int count = 0;
   vcl_map<int, dbmsh3d_edge*>::iterator it = G->edgemap().begin();
-  while (it != G->edgemap().end()) { 
-    dbmsh3d_edge* E = (*it).second;    
+  while (it != G->edgemap().end()) {
+    dbmsh3d_edge* E = (*it).second;
     if (E->is_self_loop()) {
       vul_printf (vcl_cerr, "\tremoving graph edge %d.\n", E->id());
       vcl_map<int, dbmsh3d_edge*>::iterator tmp = it;
@@ -93,6 +91,3 @@ void clone_graph (dbmsh3d_graph* targetG, dbmsh3d_graph* inputG)
   }
   targetG->set_edge_id_counter (inputG->edge_id_counter());
 }
-
-
-

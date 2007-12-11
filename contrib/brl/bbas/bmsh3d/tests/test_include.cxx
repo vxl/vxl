@@ -1,5 +1,6 @@
-//This is lemsvxl/brcv/shp/bmsh3d/tests/test_include.cxx
-//  Ming-Ching Chang  Aug 16, 2005
+// This is brl/bbas/bmsh3d/tests/test_include.cxx
+
+// \author Ming-Ching Chang  Aug 16, 2005
 
 #include <bmsh3d/bmsh3d_utils.h>
 
@@ -14,8 +15,4 @@
 
 #include <bmsh3d/algo/bmsh3d_fileio.h>
 
-
-int main()
-{
-return 0;
-}
+int main() { return 0; }

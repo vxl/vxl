@@ -1,13 +1,12 @@
-// This is basic/bgui3d/bgui3d_algo.cxx
+// This is brl/bbas/bgui3d/bgui3d_algo.cxx
+#include "bgui3d_algo.h"
 //:
 // \file
 
-#include "bgui3d_algo.h"
 #include <vnl/algo/vnl_qr.h>
 
-
 //: decompose the camera into internal and external params
-bool 
+bool
 bgui3d_decompose_camera( const vnl_double_3x4& camera,
                                vnl_double_3x3& internal,
                                vnl_double_3x3& rotation,

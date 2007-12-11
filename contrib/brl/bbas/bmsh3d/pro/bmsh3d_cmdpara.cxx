@@ -1,12 +1,16 @@
-//: This is lemsvxlsrc/brcv/shp/bmsh3d/vis/bmsh3d_cmdpara.h
-//  Creation: Feb 12, 2007   Ming-Ching Chang
+// This is brl/bbas/bmsh3d/pro/bmsh3d_cmdpara.cxx
+#include "bmsh3d_cmdpara.h"
+//:
+// \file
+// \author Ming-Ching Chang
+// \date Feb 12, 2007
 
 #include <bmsh3d/bmsh3d_utils.h>
-#include <bmsh3d/pro/bmsh3d_cmdpara.h>
 
 //#####################################################################
+
 //: bmsh3d_cmdproc command-line arguments.
-//     Type     Variable     Flag      Help text        Default  
+//     Type     Variable     Flag      Help text        Default
 
 //Mesh File I/O
 vul_arg<char const*>  bmsh3d_cmd_p3d_file ("-p3d", "Point cloud file (.p3d)");
@@ -174,6 +178,7 @@ vul_arg<char const*>  bmsh3d_cmd_gen_box ("-genbox", "Generate a box shape");
 vul_arg<char const*>  bmsh3d_cmd_gen_rand_box ("-grbox", "Generate random points -n in a box");
 
 //#####################################################################
+
 //: bmsh3d_cmdproc process parameters.
 vcl_string            bmsh3d_app_window_title = "LEMS 3D Mesh App";
 
@@ -181,7 +186,3 @@ vcl_string            bmsh3d_app_window_title = "LEMS 3D Mesh App";
 bool                  bmsh3d_pro_contiune = false;
 
 //#####################################################################
-
-
-
-

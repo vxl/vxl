@@ -1,11 +1,10 @@
+// This is brl/bbas/bmsh3d/bmsh3d_graph.h
+//---------------------------------------------------------------------
 #ifndef dbmsh3d_graph_h_
 #define dbmsh3d_graph_h_
-//---------------------------------------------------------------------
-// This is brcv/shp/dbmsh3d/dbmsh3d_graph.h
 //:
 // \file
 // \brief Graph
-//
 //
 // \author
 //  MingChing Chang  July 05, 2005
@@ -28,11 +27,11 @@
 
 class dbmsh3d_graph : public dbmsh3d_pt_set
 {
-protected:
+ protected:
   vcl_map<int, dbmsh3d_edge*> edgemap_;
   int   edge_id_counter_;
 
-public:
+ public:
   //###### Constructor/Destructor ######
   dbmsh3d_graph () : dbmsh3d_pt_set () {
     edge_id_counter_ = 0;
@@ -44,7 +43,7 @@ public:
       _del_edge ((*it).second);
     }
     edgemap_.clear ();
-    
+
     if (b_free_objects_in_destructor_) {
       vcl_map<int, dbmsh3d_vertex*>::iterator it = vertexmap_.begin();
       for (; it != vertexmap_.end(); it++)
@@ -79,7 +78,7 @@ public:
   }
 
   //###### Connectivity Modification Functions ######
-  
+
   virtual void _del_vertex (dbmsh3d_vertex* V) {
     delete V;
   }
@@ -118,13 +117,13 @@ public:
   }
 
   //: Create and add the new edge to the mesh
-  dbmsh3d_edge* add_new_edge (dbmsh3d_vertex* V1, dbmsh3d_vertex* V2) {    
+  dbmsh3d_edge* add_new_edge (dbmsh3d_vertex* V1, dbmsh3d_vertex* V2) {
     dbmsh3d_edge* E = _new_edge (V1, V2);
     add_edge_incidence (E);
     return E;
   }
 
-  //: vidx==0: Start Vertex, vidx==1: End Vertex, 
+  //: vidx==0: Start Vertex, vidx==1: End Vertex,
   void _connect_edge_vertex (dbmsh3d_edge* E, const unsigned int vidx, dbmsh3d_vertex* V) {
     E->set_vertex (vidx, V);
     V->add_incident_E (E);
@@ -132,7 +131,7 @@ public:
 
   void _disconnect_edge_vertex (dbmsh3d_edge* E, const unsigned int vidx) {
     E->vertices(vidx)->del_incident_E (E);
-    E->set_vertex (vidx, NULL);    
+    E->set_vertex (vidx, NULL);
   }
   void _disconnect_vertex_edge (dbmsh3d_vertex* V, dbmsh3d_edge* E) {
     if (V == E->sV())
@@ -170,7 +169,7 @@ public:
     remove_vertex (V);
   }
 
-  void remove_edge (dbmsh3d_edge* E) {    
+  void remove_edge (dbmsh3d_edge* E) {
     //The edge can be deleted only when there's no incident faces (or halfedges).
     assert (E->n_incident_Fs() == 0);
     //Disconnect E from the two vertices
@@ -188,8 +187,7 @@ public:
     remove_edge (E);
   }
 
-  //: if the vertex is isolated, it will be removed,
-  //  else, it is connected to some edge and will be kept.
+  //: if the vertex is isolated, it will be removed, else, it is connected to some edge and will be kept.
   bool try_remove_vertex (dbmsh3d_vertex* V) {
     if (V->has_incident_Es() == false) {
       remove_vertex (V->id());
@@ -230,4 +228,3 @@ void remove_graph_loops (dbmsh3d_graph* G);
 void clone_graph (dbmsh3d_graph* targetG, dbmsh3d_graph* inputG);
 
 #endif
-

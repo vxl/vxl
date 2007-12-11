@@ -1,11 +1,10 @@
+// This is brl/bbas/bmsh3d/algo/bmsh3d_mesh_bnd.h
+//---------------------------------------------------------------------
 #ifndef _bmsh3d_mesh_bnd_h_
 #define _bmsh3d_mesh_bnd_h_
-//---------------------------------------------------------------------
-// This is brcv/shp/bmsh3d/bmsh3d_mesh_bnd.h
 //:
 // \file
 // \brief mesh boundary tracing
-//
 //
 // \author
 //  MingChing Chang  Dec 14, 2006
@@ -16,16 +15,15 @@
 // \endverbatim
 //
 //-------------------------------------------------------------------------
-#include <vcl_cassert.h>
 
 #include <bmsh3d/bmsh3d_mesh.h>
 
 class bmsh3d_bnd_chain
 {
-protected:
+ protected:
   vcl_vector<bmsh3d_halfedge*> HE_list_;
 
-public:
+ public:
   //=========== Constructor & Destructor ===========
   bmsh3d_bnd_chain () {
   }
@@ -36,7 +34,7 @@ public:
   //=========== Data Accessing ===========
   vcl_vector<bmsh3d_halfedge*>& HE_list() {
     return HE_list_;
-  }  
+  }
   bmsh3d_halfedge* HE_list (unsigned int i) const {
     return HE_list_[i];
   }
@@ -56,11 +54,11 @@ public:
 
 class bmsh3d_bnd_chain_set
 {
-protected:
+ protected:
   bmsh3d_mesh*     mesh_;
   vcl_vector<bmsh3d_bnd_chain*> chainset_;
 
-public:
+ public:
   //=========== Constructor & Destructor ===========
   bmsh3d_bnd_chain_set (bmsh3d_mesh* mesh) {
     mesh_ = mesh;

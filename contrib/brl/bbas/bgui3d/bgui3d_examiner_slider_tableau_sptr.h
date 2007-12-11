@@ -1,4 +1,4 @@
-// This is basic/bgui3d/bgui3d_examiner_slide_tableau_sptr.h
+// This is brl/bbas/bgui3d/bgui3d_examiner_slider_tableau_sptr.h
 #ifndef bgui3d_examiner_slider_tableau_sptr_h_
 #define bgui3d_examiner_slider_tableau_sptr_h_
 //:
@@ -14,4 +14,4 @@ class bgui3d_examiner_slider_tableau;
 typedef vgui_tableau_sptr_t<bgui3d_examiner_slider_tableau,
                             bgui3d_examiner_tableau_sptr> bgui3d_examiner_slider_tableau_sptr;
 
-#endif // bgui3d_examiner_slide_tableau_sptr_h_
+#endif // bgui3d_examiner_slider_tableau_sptr_h_

@@ -1,8 +1,10 @@
-//: This is lemsvxlsrc/brcv/shp/bmsh3d/vis/bmsh3d_cmdpara.h
-//  Creation: Feb 12, 2007   Ming-Ching Chang
-
+// This is brl/bbas/bmsh3d/pro/bmsh3d_cmdpara.h
 #ifndef _bmsh3d_cmdpara_h_
 #define _bmsh3d_cmdpara_h_
+//:
+// \file
+// \author Ming-Ching Chang
+// \date Feb 12, 2007
 
 #include <vul/vul_arg.h>
 
@@ -14,6 +16,7 @@
 #define PRO_RESULT_FAIL             3
 
 //#####################################################################
+
 //: bmsh3d_cmdproc command-line arguments.
 
 //Mesh File I/O
@@ -172,10 +175,9 @@ extern vul_arg<char const*>   bmsh3d_cmd_gen_rand_box;
 
 
 //#####################################################################
+
 //: bmsh3d_cmdproc process parameters.
 extern vcl_string             bmsh3d_app_window_title;
 extern bool                   bmsh3d_pro_contiune;
-#endif
 
-
-
+#endif // _bmsh3d_cmdpara_h_

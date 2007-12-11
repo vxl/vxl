@@ -1,4 +1,4 @@
-// This is basic/bgui3d/bgui3d_algo.h
+// This is brl/bbas/bgui3d/bgui3d_algo.h
 #ifndef bgui3d_algo_h_
 #define bgui3d_algo_h_
 //:
