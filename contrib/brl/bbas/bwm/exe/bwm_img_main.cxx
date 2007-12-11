@@ -1,5 +1,5 @@
 #define _CRTDBG_MAP_ALLOC
-#include <stdlib.h>
+//#include <vcl_cstdlib.h>
 #include <crtdbg.h>
 
 #include <bwm/bwm_tableau_mgr.h>
@@ -10,7 +10,6 @@
 #include <bwm/bwm_load_commands.h>
 #include <bwm/bwm_process_commands.h>
 
-#include <vcl_iostream.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_shell_tableau.h>
 
@@ -20,11 +19,10 @@
 
 int main(int argc, char** argv)
 {
-
   _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 
   // initialize vgui
-  // Ming: force option "--mfc-use-gl" to use gl 
+  // Ming: force option "--mfc-use-gl" to use gl
   //       so that it is MUCH faster if running on a
   //       computer with nice graphic card.
   //vgui::init(argc, argv);
@@ -36,7 +34,7 @@ int main(int argc, char** argv)
   vgui::init(my_argc, my_argv);
   delete []my_argv;
 
-  // tableaus
+  // tableaux
   REG_TABLEAU(bwm_load_img_command);
 
   // processes
@@ -44,12 +42,12 @@ int main(int argc, char** argv)
   REG_PROCESS(bwm_intens_profile_process_command);
   REG_PROCESS(bwm_range_map_process_command);
   REG_PROCESS(bwm_jim_process_command);
-  
+
   // Set up the app_menu
   vgui_menu main_menu;
   bwm_menu app_menu;
   vgui_menu menu_holder = app_menu.add_to_menu(main_menu);
-  
+
   bwm_tableau_mgr* mgr =  bwm_tableau_mgr::instance();
 
   // Put the grid into a shell tableau at the top the hierarchy
@@ -57,7 +55,7 @@ int main(int argc, char** argv)
 
   // Create a window, add the tableau and show it on screen.
   int result =  vgui::run(shell, 600, 600, menu_holder, "Brown World Modeler" );
-  
+
   delete bwm_tableau_mgr::instance();
   delete bwm_process_mgr::instance();
 }

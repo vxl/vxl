@@ -2,12 +2,11 @@
 #include <vgui/vgui_shell_tableau.h>
 #include <vcl_cmath.h>
 #include <vnl/vnl_math.h>
-#include <vcl_iostream.h>
 #include <vgl/vgl_vector_3d.h>
 
 #include <bgui3d/bgui3d_examiner_tableau.h>
 #include <bgui3d/bgui3d.h>
-  
+
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/nodes/SoSphere.h>
 #include <Inventor/nodes/SoMaterial.h>
@@ -89,9 +88,8 @@ void buildScene(SoGroup *root)
   addCylinder(root, vgl_vector_3d<double>(-1.0, 1.0, 1.0));
   addCylinder(root, vgl_vector_3d<double>( 1.0,-1.0, 1.0));
   addCylinder(root, vgl_vector_3d<double>( 1.0, 1.0,-1.0));
-  
-  myCamera->viewAll(root, SbViewportRegion() ); 
 
+  myCamera->viewAll(root, SbViewportRegion() );
 }
 
 
