@@ -40,6 +40,7 @@
 //static live_video_manager instance
 bmvv_cal_manager *bmvv_cal_manager::instance_ = 0;
 //===============================================================
+
 //: The singleton pattern - only one instance of the manager can occur
 //==============================================================
 bmvv_cal_manager *bmvv_cal_manager::instance()
@@ -72,7 +73,7 @@ bmvv_cal_manager::~bmvv_cal_manager()
 
 //======================================================================
 //: set up the tableaux at each grid cell
-//  the vtol2D_tableaux have been initialized in the constructor
+//  The vtol2D_tableaux have been initialized in the constructor
 //======================================================================
 void bmvv_cal_manager::init()
 {
@@ -87,7 +88,7 @@ void bmvv_cal_manager::init()
 
 //=========================================================================
 //: make an event handler
-// note that we have to get an adaptor and set the tableau to receive events
+// Note that we have to get an adaptor and set the tableau to receive events
 // this handler does nothing but is a place holder for future event processing
 // For now, just pass the events down to the child tableaux
 //=========================================================================
@@ -399,10 +400,11 @@ void bmvv_cal_manager::save_camera()
     vcl_cout << "Bad camera file\n";
     return;
   }
-  if (!target){
-  cam_ostr << cam_;
-  cam_ostr.close();
-  return;}
+  if (!target) {
+    cam_ostr << cam_;
+    cam_ostr.close();
+    return;
+  }
   brct_algos::write_target_camera(cam_ostr, cam_.get_matrix());
 }
 
@@ -646,32 +648,32 @@ void bmvv_cal_manager::project_world()
   this->draw_correspondences();
 }
 
-namespace {
-//: function to roughly flip the camera around a set of points when
-//  when the points are behind the camera.  Optimization is need after
-//  this operation.
+namespace
+{
+//: function to roughly flip the camera around a set of points when the points are behind the camera.
+//   Optimization is needed after this operation.
 void flip_camera(vpgl_perspective_camera<double> &camera,
                  const vcl_vector< vgl_homg_point_3d<double> >& world_hpts)
 {
   vgl_vector_3d<double> centroid(0.0, 0.0, 0.0);
   unsigned int num_behind = 0;
   for (unsigned i = 0; i<world_hpts.size(); ++i){
-    if(camera.is_behind_camera(world_hpts[i])){
+    if (camera.is_behind_camera(world_hpts[i])){
       vgl_point_3d<double> p(world_hpts[i]);
       centroid += vgl_vector_3d<double>(p.x(),p.y(),p.z());
       ++num_behind;
     }
   }
   centroid /= num_behind;
-  
+
   vgl_point_3d<double> C = camera.get_camera_center();
   vcl_cout << "initial center: "<< C<<vcl_endl;
   C += 2*(vgl_point_3d<double>(centroid.x(),centroid.y(),centroid.z())-C);
   camera.set_camera_center(C);
   vcl_cout << "new center: " <<C<<vcl_endl;
 }
-  
-};
+
+}; // namespace
 
 void bmvv_cal_manager::solve_camera()
 {
@@ -692,7 +694,8 @@ void bmvv_cal_manager::solve_camera()
     return;
   }
 
-  if(planar || deg_planar){
+  if (planar || deg_planar)
+  {
     vcl_vector<double> image_y;
     vcl_vector< vgl_point_2d<double> > zero_Z_image_corr;
     vcl_vector< vgl_point_3d<double> > zero_Z_pts;
@@ -726,7 +729,8 @@ void bmvv_cal_manager::solve_camera()
     else
       cam_= brct_algos::p_from_h(H);
   }
-  else{
+  else
+  {
     vcl_vector< vgl_homg_point_2d<double> > image_hpts;
     vcl_vector< vgl_homg_point_3d<double> > world_hpts;
     unsigned int n = world_.size();
@@ -741,17 +745,17 @@ void bmvv_cal_manager::solve_camera()
     vpgl_proj_camera_compute::compute(image_hpts,world_hpts,camera);
     prev_cam_ = cam_;
     cam_ = vgl_p_matrix<double>(camera.get_matrix());
-    
+
     vpgl_perspective_camera<double> p_camera;
-    if(optimize && vpgl_perspective_decomposition(camera.get_matrix(),p_camera)){
+    if (optimize && vpgl_perspective_decomposition(camera.get_matrix(),p_camera)){
       vcl_vector< vgl_point_2d<double> > image_pts;
       unsigned int num_behind = 0;
       for (unsigned i = 0; i<image_hpts.size(); i++){
-        if(p_camera.is_behind_camera(world_hpts[i]))
+        if (p_camera.is_behind_camera(world_hpts[i]))
           ++num_behind;
         image_pts.push_back(image_hpts[i]);
       }
-      if(num_behind > world_hpts.size()/2){
+      if (num_behind > world_hpts.size()/2){
         vcl_cout << "Majority of points behind camera, flipping" << vcl_endl;
         flip_camera(p_camera, world_hpts);
       }
