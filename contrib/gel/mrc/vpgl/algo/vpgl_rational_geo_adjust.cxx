@@ -1,15 +1,17 @@
-#include <vcl_cmath.h> 
-#include <vcl_cstdlib.h>
+#include "vpgl_rational_geo_adjust.h"
+//:
+// \file
+
+#include <vcl_cmath.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_point_2d.h>
-#include <vgl/algo/vgl_h_matrix_2d_compute_rigid_body.h>
-#include <vnl/vnl_numeric_traits.h>
+//#include <vnl/vnl_numeric_traits.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vpgl/algo/vpgl_backproject.h>
 #include <vpgl/algo/vpgl_ray_intersect.h>
-#include <vpgl/algo/vpgl_rational_geo_adjust.h>
 #define ADJUST_DEBUG
+
 vpgl_adjust_lsqr::
 vpgl_adjust_lsqr(vpgl_rational_camera<double>  const& rcam,
                  vcl_vector<vgl_point_2d<double> > const& img_pts,
@@ -36,9 +38,9 @@ void vpgl_adjust_lsqr::f( const vnl_vector<double>& unknowns,
   rcam_.set_scale(vpgl_rational_camera<double>::Z_INDX, unknowns[4]);
   rcam_.set_offset(vpgl_rational_camera<double>::Z_INDX, unknowns[5]);
 
-  vcl_cout << "x(" << unknowns[0] << ' ' << unknowns[1] << ")\n";
-  vcl_cout << "y(" << unknowns[2] << ' ' << unknowns[3] << ")\n";
-  vcl_cout << "z(" << unknowns[4] << ' ' << unknowns[5] << ")\n";
+  vcl_cout << "x(" << unknowns[0] << ' ' << unknowns[1] << ")\n"
+           << "y(" << unknowns[2] << ' ' << unknowns[3] << ")\n"
+           << "z(" << unknowns[4] << ' ' << unknowns[5] << ")\n";
 #endif
   rcam_.set_offset(vpgl_rational_camera<double>::X_INDX, unknowns[0]);
   rcam_.set_offset(vpgl_rational_camera<double>::Y_INDX, unknowns[1]);
@@ -46,22 +48,23 @@ void vpgl_adjust_lsqr::f( const vnl_vector<double>& unknowns,
 
   // project the geo points using the camera
   unsigned ir = 0;
-  for(unsigned i = 0; i<num_corrs_; ++i)
-    {
-      vgl_point_2d<double> pp = rcam_.project(geo_pts_[i]);
-      vgl_point_2d<double> c = img_pts_[i];
-      projection_error[ir++] = (pp.x()-c.x())*(pp.x()-c.x());
-      projection_error[ir++] = (pp.y()-c.y())*(pp.y()-c.y());
+  for (unsigned i = 0; i<num_corrs_; ++i)
+  {
+    vgl_point_2d<double> pp = rcam_.project(geo_pts_[i]);
+    vgl_point_2d<double> c = img_pts_[i];
+    projection_error[ir++] = (pp.x()-c.x())*(pp.x()-c.x());
+    projection_error[ir++] = (pp.y()-c.y())*(pp.y()-c.y());
 
 #if 0
-      projection_error[ir++] = vcl_fabs(pp.x()-c.x());
-      projection_error[ir++] = vcl_fabs(pp.y()-c.y());
+    projection_error[ir++] = vcl_fabs(pp.x()-c.x());
+    projection_error[ir++] = vcl_fabs(pp.y()-c.y());
 
-      vcl_cout << "perror[" << i << "](" << projection_error[ir-2] << ' ' 
-               << projection_error[ir-1] << ")\n";
+    vcl_cout << "perror[" << i << "](" << projection_error[ir-2] << ' '
+             << projection_error[ir-1] << ")\n";
 #endif
-    }
+  }
 }
+
 //This method works by projecting the image points onto a plane that is
 //at the average elevation of the 3-d points. zoff is set to this value.
 //xoff and yoff are adjusted to remove the average translation between
@@ -77,7 +80,7 @@ static bool initial_offsets(vpgl_rational_camera<double> const& initial_rcam,
   unsigned npts = img_pts.size();
   //get the average elevation
   zoff = 0;
-  for(unsigned i = 0; i<npts; ++i)
+  for (unsigned i = 0; i<npts; ++i)
     zoff += geo_pts[i].z();
   zoff /= npts;
   //construct a x-y plane with this elevation
@@ -90,16 +93,16 @@ static bool initial_offsets(vpgl_rational_camera<double> const& initial_rcam,
 
   double xshift = 0, yshift = 0;
   //backproject the image points onto this plane
-  for(unsigned i = 0; i<npts; ++i)
-    {
-      vgl_point_3d<double> bp_pt;
-      if(!vpgl_backproject::bproj_plane(initial_rcam,
-                                        img_pts[i], pl,
-                                        initial_pt, bp_pt))
-        return false;
-      xshift += geo_pts[i].x()- bp_pt.x();
-      yshift += geo_pts[i].y()- bp_pt.y();
-    }
+  for (unsigned i = 0; i<npts; ++i)
+  {
+    vgl_point_3d<double> bp_pt;
+    if (!vpgl_backproject::bproj_plane(initial_rcam,
+                                       img_pts[i], pl,
+                                       initial_pt, bp_pt))
+      return false;
+    xshift += geo_pts[i].x()- bp_pt.x();
+    yshift += geo_pts[i].y()- bp_pt.y();
+  }
   xoff = xo + xshift/npts;
   yoff = yo + yshift/npts;
   return true;
@@ -113,10 +116,9 @@ adjust(vpgl_rational_camera<double> const& initial_rcam,
        vcl_vector<vgl_point_3d<double> > geo_pts,
        vpgl_rational_camera<double> & adj_rcam)
 {
-  
   //Get initial offsets by backprojection
   double xoff=0, yoff=0, zoff=0;
-  if(!initial_offsets(initial_rcam, img_pts, geo_pts, xoff, yoff, zoff))
+  if (!initial_offsets(initial_rcam, img_pts, geo_pts, xoff, yoff, zoff))
     return false;
   unsigned num_corrs = img_pts.size();
   unsigned num_unknowns = 3;
@@ -131,14 +133,14 @@ adjust(vpgl_rational_camera<double> const& initial_rcam,
   levmarq.set_verbose(true);
   levmarq.set_trace(true);
 #endif
-#if 0 
+#if 0
   // Set the x-tolerance.  When the length of the steps taken in X (variables)
   // are no longer than this, the minimization terminates.
   levmarq.set_x_tolerance(1e-5);
 
   // Set the epsilon-function.  This is the step length for FD Jacobian.
   levmarq.set_epsilon_function(1.0);
- 
+
   // Set the f-tolerance.  When the successive RMS errors are less than this,
   // minimization terminates.
   levmarq.set_f_tolerance(1e-10);
@@ -178,14 +180,14 @@ adjust(vpgl_rational_camera<double> const& initial_rcam,
   adj_rcam.set_offset(vpgl_rational_camera<double>::Z_INDX, unknowns[2]);
 
 #ifdef ADJUST_DEBUG
-  for(unsigned i = 0; i<num_corrs; ++i)
-    {
-      vgl_point_2d<double> pp = adj_rcam.project(geo_pts[i]);
-      vgl_point_2d<double> c = img_pts[i];
-      double d = vgl_distance<double>(c, pp);
-      vcl_cout << "p[" << i << "]->(" << pp.x() << ' ' << pp.y() << ")\n";
-      vcl_cout << "c(" << c.x() << ' ' << c.y() << "): " << d << '\n';
-    }
+  for (unsigned i = 0; i<num_corrs; ++i)
+  {
+    vgl_point_2d<double> pp = adj_rcam.project(geo_pts[i]);
+    vgl_point_2d<double> c = img_pts[i];
+    double d = vgl_distance<double>(c, pp);
+    vcl_cout << "p[" << i << "]->(" << pp.x() << ' ' << pp.y() << ")\n"
+             << "c(" << c.x() << ' ' << c.y() << "): " << d << '\n';
+  }
 #endif
   // Return success
   return true;
