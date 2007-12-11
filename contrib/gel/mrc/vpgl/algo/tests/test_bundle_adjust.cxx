@@ -1,17 +1,14 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vpgl/algo/vpgl_bundle_adjust.h>
-#include <vnl/vnl_double_3.h>
+#include <vnl/vnl_crs_index.h>
 #include <vnl/vnl_random.h>
-
-
 
 static void test_bundle_adjust()
 {
   const double max_p_err = 1.0; // maximum image error to introduce (pixels)
-  
+
   vcl_vector<vgl_point_3d<double> > world;
   // The world points are the 8 corners of a unit cube
   world.push_back(vgl_point_3d<double>(0.0, 0.0, 0.0));
@@ -35,13 +32,13 @@ static void test_bundle_adjust()
   cameras.push_back(vpgl_perspective_camera<double>(K,vgl_homg_point_3d<double>(5.0, 0.0, 0.0),I));
 
   // point all cameras to look at the origin
-  for(unsigned int i=0; i<cameras.size(); ++i)
+  for (unsigned int i=0; i<cameras.size(); ++i)
     cameras[i].look_at(vgl_homg_point_3d<double>(0.0, 0.0, 0.0));
 
   // project all points in all images
   vcl_vector<vgl_point_2d<double> > image_points;
-  for(unsigned int i=0; i<cameras.size(); ++i){
-    for(unsigned int j=0; j<world.size(); ++j){
+  for (unsigned int i=0; i<cameras.size(); ++i){
+    for (unsigned int j=0; j<world.size(); ++j){
       image_points.push_back(cameras[i](vgl_homg_point_3d<double>(world[j])));
     }
   }
@@ -49,7 +46,7 @@ static void test_bundle_adjust()
   vnl_random rnd;
   // project each point adding uniform noise in a [-max_p_err/2, max_p_err/2] pixel window
   vcl_vector<vgl_point_2d<double> > noisy_image_points(image_points);
-  for(unsigned int i=0; i<noisy_image_points.size(); ++i){
+  for (unsigned int i=0; i<noisy_image_points.size(); ++i){
     vgl_vector_2d<double> noise(rnd.drand32()-0.5, rnd.drand32()-0.5);
     noisy_image_points[i] += max_p_err * noise;
   }
@@ -64,7 +61,6 @@ static void test_bundle_adjust()
 
   // make the mask (using all the points)
   vcl_vector<vcl_vector<bool> > mask(cameras.size(), vcl_vector<bool>(world.size(),true) );
-
 
   // remove several correspondences
   mask[0][1] = false;
@@ -85,25 +81,20 @@ static void test_bundle_adjust()
   // create a subset of projections based on the mask
   vnl_crs_index crs(mask);
   vcl_vector<vgl_point_2d<double> > subset_image_points(crs.num_non_zero());
-  for(int i=0; i<crs.num_rows(); ++i){
-    for(int j=0; j<crs.num_cols(); ++j){
+  for (int i=0; i<crs.num_rows(); ++i){
+    for (int j=0; j<crs.num_cols(); ++j){
       int k = crs(i,j);
-      if(k >= 0)
+      if (k >= 0)
         subset_image_points[k] = noisy_image_points[i*crs.num_cols() + j];
     }
   }
 
-
   // make some correspondences incorrect
   subset_image_points[crs(0,3)] = subset_image_points[crs(0,4)];
-  
-  
 
   vpgl_bundle_adjust::optimize(unknown_cameras, unknown_world, subset_image_points, mask);
-  
+
   vpgl_bundle_adjust::write_vrml("test_bundle2.wrl",unknown_cameras,unknown_world);
-
 }
-
 
 TESTMAIN(test_bundle_adjust);
