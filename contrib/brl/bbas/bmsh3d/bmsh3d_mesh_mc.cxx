@@ -63,7 +63,9 @@ bmsh3d_mesh_mc::bmsh3d_mesh_mc(bmsh3d_mesh* mesh) : bmsh3d_mesh()
     // clone the half edges
     do {
       bmsh3d_edge* E = HE->edge();
-      //vcl_cout << E->id() << vcl_endl;
+#ifdef DEBUG
+      vcl_cout << E->id() << vcl_endl;
+#endif
       bmsh3d_edge* new_edge = this->edgemap(E->id());
       bmsh3d_halfedge* new_he = new bmsh3d_halfedge(new_edge, new_face);
       new_face->connect_E_to_end(new_he->edge());
@@ -103,12 +105,17 @@ bmsh3d_mesh_mc* bmsh3d_mesh_mc::clone() const
   while (edge_it != edgemap.end()) {
     // create new edges
     bmsh3d_edge* E = edge_it->second;
-    //vcl_cout << "old E id=" << E->id() << vcl_endl;
+#ifdef DEBUG
+    vcl_cout << "old E id=" << E->id() << vcl_endl;
+#endif
     bmsh3d_edge* new_edge = /*mesh->_new_edge*/new bmsh3d_edge(mesh->vertexmap(E->sV()->id()),
                                     mesh->vertexmap(E->eV()->id()), edge_it->first);
-    //vcl_cout << "  new edge id=" << new_edge->id() << vcl_endl;
-    //vcl_cout << " v1=" << ((bmsh3d_vertex*)new_edge->sV())->get_pt() <<
-    //  " v2=" << ((bmsh3d_vertex*)new_edge->eV())->get_pt() << vcl_endl;
+#ifdef DEBUG
+    vcl_cout << "  new edge id=" << new_edge->id() << vcl_endl
+             << " v1=" << ((bmsh3d_vertex*)new_edge->sV())->get_pt()
+             << " v2=" << ((bmsh3d_vertex*)new_edge->eV())->get_pt()
+             << vcl_endl;
+#endif
     mesh->add_edge_incidence (new_edge);
     edge_it++;
   }
@@ -118,7 +125,9 @@ bmsh3d_mesh_mc* bmsh3d_mesh_mc::clone() const
   vcl_map<int, bmsh3d_face* >::iterator face_it = fmap.begin();
   while (face_it != fmap.end()) {
     bmsh3d_face_mc* face = (bmsh3d_face_mc*) face_it->second;
-    //vcl_cout << "old face id=" << face->id() << vcl_endl;
+#ifdef DEBUG
+    vcl_cout << "old face id=" << face->id() << vcl_endl;
+#endif
     face->_sort_HEs_circular();
     face->_ifs_clear_vertices ();
     bmsh3d_face_mc* f = mesh->_new_face();
@@ -128,7 +137,9 @@ bmsh3d_mesh_mc* bmsh3d_mesh_mc::clone() const
     // clone the half edges
     do {
       bmsh3d_edge* E = HE->edge();
-      //vcl_cout << E->id() << vcl_endl;
+#ifdef DEBUG
+      vcl_cout << E->id() << vcl_endl;
+#endif
       bmsh3d_halfedge* new_he = new bmsh3d_halfedge(mesh->edgemap(E->id()), f);
       f->connect_E_to_end(new_he->edge());
       HE = HE->next();
@@ -168,7 +179,7 @@ void mesh_break_face (bmsh3d_mesh_mc* M, bmsh3d_face_mc* F,
   F->_sort_HEs_circular();
   F->_ifs_clear_vertices ();
 
-  unsigned E1_index, E2_index;
+  unsigned E1_index = 0, E2_index = 0;
   vcl_vector<bmsh3d_edge*> inc_edges;
   F->get_incident_Es (inc_edges);
 
@@ -259,7 +270,9 @@ void mesh_break_face (bmsh3d_mesh_mc* M, bmsh3d_face_mc* F,
   face1->_sort_HEs_circular();
   face1->_ifs_clear_vertices ();
   face1->getInfo(oss);
-  //vcl_cout << oss.str().c_str();
+#ifdef DEBUG
+  vcl_cout << oss.str().c_str();
+#endif
 
 
   //connect all incident edges of F2, including E12
@@ -287,7 +300,9 @@ void mesh_break_face (bmsh3d_mesh_mc* M, bmsh3d_face_mc* F,
   face2->_sort_HEs_circular();
   face2->_ifs_clear_vertices ();
   face2->getInfo(oss);
-  //vcl_cout << oss.str().c_str();
+#ifdef DEBUG
+  vcl_cout << oss.str().c_str();
+#endif
 
   for (unsigned f=0; f<incident_faces1.size(); f++) {
     // add the new edges
@@ -296,8 +311,10 @@ void mesh_break_face (bmsh3d_mesh_mc* M, bmsh3d_face_mc* F,
     _connect_F_E_end (face, newE1e);
     face->_sort_HEs_circular();
     face->_ifs_clear_vertices ();
-    //face->getInfo(oss);
-    //vcl_cout << oss.str().c_str();
+#ifdef DEBUG
+    face->getInfo(oss);
+    vcl_cout << oss.str().c_str();
+#endif
   }
 
   for (unsigned f=0; f<incident_faces2.size(); f++) {
@@ -372,7 +389,9 @@ void merge_mesh (bmsh3d_mesh_mc* M1, bmsh3d_mesh_mc* M2)
         it++;
       }
     }
-    //vcl_cout << "new_face id =" << f->id() << vcl_endl;
+#ifdef DEBUG
+    vcl_cout << "new_face id =" << f->id() << vcl_endl;
+#endif
     face_it++;
   }
 }
@@ -382,7 +401,7 @@ bmsh3d_face* copy_inner_face(vcl_vector<bmsh3d_edge*> incident_edges,
 {
   bmsh3d_face* inner_face = new bmsh3d_face();
 
-  bmsh3d_vertex* prev_v = 0, *v_first, *v;
+  bmsh3d_vertex *prev_v = 0, *v_first = 0, *v;
   for (unsigned i=0; i<incident_edges.size()-1; i++) {
     bmsh3d_edge* edge = incident_edges[i];
     bmsh3d_vertex* s = edge->sV();
@@ -397,7 +416,9 @@ bmsh3d_face* copy_inner_face(vcl_vector<bmsh3d_edge*> incident_edges,
      v = mesh->_new_vertex ();
      v->set_pt(e->get_pt());
      //mesh->_add_vertex(v);
-     //vcl_cout << prev_v << " to " << v << vcl_endl;
+#ifdef DEBUG
+     vcl_cout << prev_v << " to " << v << vcl_endl;
+#endif
      bmsh3d_edge* new_edge = new  bmsh3d_edge(prev_v, v, 100);
      bmsh3d_halfedge *he = new bmsh3d_halfedge (new_edge, inner_face);
      prev_v = v;
@@ -405,7 +426,9 @@ bmsh3d_face* copy_inner_face(vcl_vector<bmsh3d_edge*> incident_edges,
    }
 
   // add the last halfedge
-  //vcl_cout << prev_v << " to " << v_first << vcl_endl;
+#ifdef DEBUG
+  vcl_cout << prev_v << " to " << v_first << vcl_endl;
+#endif
   bmsh3d_edge* new_edge = new  bmsh3d_edge(prev_v, v_first, 100);
   bmsh3d_halfedge *he = new bmsh3d_halfedge (new_edge, inner_face);
   inner_face->_connect_HE_to_end(he);
@@ -434,7 +457,6 @@ void bmsh3d_mesh_mc::orient_face_normals()
   face->_sort_HEs_circular();
   face->_ifs_clear_vertices ();
   bmsh3d_halfedge* he = face->halfedge();
-  bmsh3d_edge* edge = he->edge();
   vgl_vector_3d<double> normal = face->compute_normal();
   normal /= normal.length();
   vgl_vector_3d<double> z(0, 0, 1);
@@ -448,7 +470,9 @@ void bmsh3d_mesh_mc::orient_face_normals()
   // visit all the other faces and fix their normal
   vcl_list<bmsh3d_face_mc*> face_stack;
   do {
-    //vcl_cout << "Face ID=" << face->id() << vcl_endl;
+#ifdef DEBUG
+    vcl_cout << "Face ID=" << face->id() << vcl_endl;
+#endif
     vcl_vector<bmsh3d_face*> inc_faces;
 
     vcl_vector<bmsh3d_edge*> inc_edges;
@@ -468,7 +492,9 @@ void bmsh3d_mesh_mc::orient_face_normals()
           bmsh3d_halfedge* h2 = inc_he->next();
           if (h1->s_vertex() == h2->s_vertex()) {
             inc_face->_reverse_HE_chain();
-            //vcl_cout << "changing face direction" << inc_face->id() << vcl_endl;
+#ifdef DEBUG
+            vcl_cout << "changing face direction" << inc_face->id() << vcl_endl;
+#endif
           }
           inc_face->set_visited(true);
           face_stack.push_back(inc_face);
@@ -489,7 +515,9 @@ void bmsh3d_mesh_mc::orient_face_normals()
     bmsh3d_face_mc* face = (bmsh3d_face_mc*) face_it->second;
     vgl_vector_3d<double> normal = face->compute_normal();
     normal /= normal.length();
-    //vcl_cout << "Face " << face->id() << " N=" << normal << vcl_endl;
+#ifdef DEBUG
+    vcl_cout << "Face " << face->id() << " N=" << normal << vcl_endl;
+#endif
     face_it++;
   }
 }
