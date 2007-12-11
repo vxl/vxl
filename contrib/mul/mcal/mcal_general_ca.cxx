@@ -10,7 +10,6 @@
 #include <mcal/mcal_general_ca.h>
 #include <mbl/mbl_matxvec.h>
 #include <vcl_cmath.h>
-#include <vnl/vnl_math.h>
 #include <vcl_vector.h>
 #include <vsl/vsl_binary_io.h>
 #include <mbl/mbl_parse_block.h>
@@ -39,7 +38,7 @@ void mcal_general_ca::set(const mcal_component_analyzer& initial_ca,
 void mcal_general_ca::set_defaults()
 {
   max_passes_ = 50;
-  move_thresh_=1e-4; 
+  move_thresh_=1e-4;
 }
 
 //=======================================================================
@@ -50,20 +49,21 @@ mcal_general_ca::~mcal_general_ca()
 {
 }
 
-class mcal_pair_cost1 : public vnl_cost_function {
-private:
+class mcal_pair_cost1 : public vnl_cost_function
+{
+ private:
   const vnl_vector<double>& proj1_;
   const vnl_vector<double>& proj2_;
   const vnl_vector<double>& mode1_;
   const vnl_vector<double>& mode2_;
   mcal_single_basis_cost& cost_;
   vnl_vector<double> p1,p2,m1,m2;
-public:
+ public:
   mcal_pair_cost1(const vnl_vector<double>& proj1,
                   const vnl_vector<double>& proj2,
                   const vnl_vector<double>& mode1,
                   const vnl_vector<double>& mode2,
-                  mcal_single_basis_cost& cost) 
+                  mcal_single_basis_cost& cost)
   : vnl_cost_function(1), proj1_(proj1),proj2_(proj2),mode1_(mode1),mode2_(mode2),cost_(cost) {}
 
   double f(const vnl_vector<double>& x);
@@ -87,18 +87,19 @@ double mcal_pair_cost1::f(const vnl_vector<double>& x)
 }
 
 //: Cost, assuming it can be evaluated from variance of projection
-class mcal_pair_cost2 : public vnl_cost_function {
-private:
+class mcal_pair_cost2 : public vnl_cost_function
+{
+ private:
   vnl_matrix<double> S_;
   const vnl_vector<double>& mode1_;
   const vnl_vector<double>& mode2_;
   mcal_single_basis_cost& cost_;
   vnl_vector<double> m1,m2;
-public:
+ public:
   mcal_pair_cost2(const vnl_matrix<double>& S,
                   const vnl_vector<double>& mode1,
                   const vnl_vector<double>& mode2,
-                  mcal_single_basis_cost& cost) 
+                  mcal_single_basis_cost& cost)
   : vnl_cost_function(1), S_(S),
     mode1_(mode1),mode2_(mode2),cost_(cost) {}
 
@@ -106,21 +107,20 @@ public:
                   const vnl_vector<double>& proj2,
                   const vnl_vector<double>& mode1,
                   const vnl_vector<double>& mode2,
-                  mcal_single_basis_cost& cost); 
+                  mcal_single_basis_cost& cost);
 
   double f(const vnl_vector<double>& x);
 
   void covar(const vnl_vector<double>& p1,
              const vnl_vector<double>& p2,
              vnl_matrix<double>& S);
-
 };
 
 mcal_pair_cost2::mcal_pair_cost2(const vnl_vector<double>& proj1,
                   const vnl_vector<double>& proj2,
                   const vnl_vector<double>& mode1,
                   const vnl_vector<double>& mode2,
-                  mcal_single_basis_cost& cost) 
+                  mcal_single_basis_cost& cost)
   : vnl_cost_function(1),mode1_(mode1),mode2_(mode2),cost_(cost)
 {
   covar(proj1,proj2,S_);
@@ -140,7 +140,7 @@ double mcal_pair_cost2::f(const vnl_vector<double>& x)
   vnl_matrix<double> R(2,2);
   R(0,0)=cosA;  R(0,1) = sinA;
   R(1,0)=-sinA; R(1,1) = cosA;
-  
+
   vnl_matrix<double> SA = R*S_*R.transpose();
 
   double c1 = cost_.cost_from_variance(m1,SA(0,0));
@@ -273,7 +273,7 @@ void mcal_general_ca::optimise_about_mean(mbl_data_wrapper<vnl_vector<double> >&
   // Compute the variances on each mode
   compute_projections(data,mean,modes,proj);
   mode_var.set_size(n_modes);
-  for (unsigned j=0;j<n_modes;++j) 
+  for (unsigned j=0;j<n_modes;++j)
     mode_var[j]=proj[j].squared_magnitude()/n_egs;
 }
 
@@ -346,7 +346,7 @@ mcal_component_analyzer* mcal_general_ca::clone() const
 void mcal_general_ca::print_summary(vcl_ostream& os) const
 {
   vsl_indent_inc(os);
-  os<<"{"<<vcl_endl
+  os<<"{\n"
     <<vsl_indent()<<"initial_ca: "<<initial_ca_<<vcl_endl
     <<vsl_indent()<<"basis_cost: "<<basis_cost_<<vcl_endl
     <<vsl_indent()<<"} ";
