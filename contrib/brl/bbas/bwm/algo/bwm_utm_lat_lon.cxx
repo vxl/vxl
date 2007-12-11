@@ -16,35 +16,35 @@
 #define D2R     1.745329251994328e-2
 #define MAX_VAL  4
 
-/*******************************************************************************
-NAME UNIVERSAL TRANSVERSE MERCATOR - GEODETIC
-
-PURPOSE: Transforms UTM (x, y, z) to geodetic (phi, lambda, h).
-                x,y,z values must be in meters, and (phi, lambda, h) will
-        be returned in radians.
-
-NOTE: UTM coordinate system has both zone and central_meridian slots.
-                If zone is defined (i.e. zone <> 0), then zone is used.
-        Otherwise, central_meridian is used.
-
-        When dealing with Northern Hemisphere, is_southern_hemisphere
-        slot must be 0, and phi must be positive or equal to 0.
-        When dealing with Southern Hemisphere, is_southern_hemisphere
-        slot must be 1, and phi must be negative or equal to 0.
-
-ALGORITHM REFERENCES
-
-1. Snyder, John P., "Map Projections--A Working Manual", U.S. Geological
-    Survey Professional Paper 1395 (Supersedes USGS Bulletin 1532), United
-    State Government Printing Office, Washington D.C., 1987.
-
-2. Snyder, John P. and Voxland, Philip M., "An Album of Map Projections",
-    U.S. Geological Survey Professional Paper 1453 , United State Government
-    Printing Office, Washington D.C., 1989.
-
-3. Code adapted from "USGS General Cartographic Transformation Package -
-      C code (GCTPC).
-*******************************************************************************/
+// *****************************************************************************
+// NAME UNIVERSAL TRANSVERSE MERCATOR - GEODETIC
+//
+// PURPOSE: Transforms UTM (x, y, z) to geodetic (phi, lambda, h).
+//                 x,y,z values must be in meters, and (phi, lambda, h) will
+//         be returned in radians.
+//
+// NOTE: UTM coordinate system has both zone and central_meridian slots.
+//                 If zone is defined (i.e. zone <> 0), then zone is used.
+//         Otherwise, central_meridian is used.
+//
+//         When dealing with Northern Hemisphere, is_southern_hemisphere
+//         slot must be 0, and phi must be positive or equal to 0.
+//         When dealing with Southern Hemisphere, is_southern_hemisphere
+//         slot must be 1, and phi must be negative or equal to 0.
+//
+// ALGORITHM REFERENCES
+//
+// 1. Snyder, John P., "Map Projections--A Working Manual", U.S. Geological
+//     Survey Professional Paper 1395 (Supersedes USGS Bulletin 1532), United
+//     State Government Printing Office, Washington D.C., 1987.
+//
+// 2. Snyder, John P. and Voxland, Philip M., "An Album of Map Projections",
+//     U.S. Geological Survey Professional Paper 1453 , United State Government
+//     Printing Office, Washington D.C., 1989.
+//
+// 3. Code adapted from "USGS General Cartographic Transformation Package -
+//       C code (GCTPC).
+// *****************************************************************************
 static double scale_factor2;
 static double es2, esp2;
 static double ml02;
@@ -53,96 +53,68 @@ static double false_northing2 ;
 static int ind2;
 static double e02,e12,e22,e32;
 
-/* Function to return the sign of an argument
-  ------------------------------------------*/
-static inline int sign(double x) { if (x < 0.0) return(-1); else return(1);}
+// Function to return the sign of an argument
+// ------------------------------------------
+static inline int sign(double x) { return (x < 0.0) ? -1 : 1;}
 
-static inline double sqr(double x) { return (x*x); }
-/* Function to adjust a longitude angle to range from -180 to 180 radians
-   added if statments
-  -----------------------------------------------------------------------*/
+static inline double sqr(double x) { return x*x; }
+// Function to adjust a longitude angle to range from -180 to 180 radians
+// added if statements
+// ----------------------------------------------------------------------
 static double adjust_lon2(double x) // Angle in radians
 {
-long count = 0;
-for(;;)
+  for (long count = 0; count <= MAX_VAL; ++count)
   {
-  if (vnl_math_abs(x)<=vnl_math::pi)
-     break;
-  else
-
-    if (long(vnl_math_abs(x / (vnl_math::pi))) < 2)
-     x = x-(sign(x) * 2*vnl_math::pi);
-  else
-  if (long(vnl_math_abs(x / (2*vnl_math::pi))) < vcl_numeric_limits<long>::max())
-     {
-     x = x-long((x /(2*vnl_math::pi))*2*vnl_math::pi);
-     }
-  else
-  if (((long) vnl_math_abs(x / (vcl_numeric_limits<long>::max() * 2*vnl_math::pi))) < vcl_numeric_limits<long>::max())
-     {
-     x = x-(((long)(x / (vcl_numeric_limits<long>::max() * 2*vnl_math::pi))) * (2*vnl_math::pi * vcl_numeric_limits<long>::max()));
-     }
-  else
-  if (((long) vnl_math_abs(x / (DBLLONG * 2*vnl_math::pi))) < vcl_numeric_limits<long>::max())
-     {
-     x = x-(((long)(x / (DBLLONG * 2*vnl_math::pi))) * (2*vnl_math::pi * DBLLONG));
-     }
-  else
-     x = x-(sign(x) *2*vnl_math::pi);
-  count++;
-  if (count > MAX_VAL)
-     break;
+    if (vnl_math_abs(x)<=vnl_math::pi)
+      break;
+    else if (long(vnl_math_abs(x / (vnl_math::pi))) < 2)
+      x -= (sign(x) * 2*vnl_math::pi);
+    else if (long(vnl_math_abs(x / (2*vnl_math::pi))) < vcl_numeric_limits<long>::max())
+      x -= long((x /(2*vnl_math::pi))*2*vnl_math::pi);
+    else if (((long) vnl_math_abs(x / (vcl_numeric_limits<long>::max() * 2*vnl_math::pi))) < vcl_numeric_limits<long>::max())
+      x -= (((long)(x / (vcl_numeric_limits<long>::max() * 2*vnl_math::pi))) * (2*vnl_math::pi * vcl_numeric_limits<long>::max()));
+    else if (((long) vnl_math_abs(x / (DBLLONG * 2*vnl_math::pi))) < vcl_numeric_limits<long>::max())
+      x -= (((long)(x / (DBLLONG * 2*vnl_math::pi))) * (2*vnl_math::pi * DBLLONG));
+    else
+      x -= (sign(x) *2*vnl_math::pi);
   }
 
-return(x);
+  return x;
 }
 
 static double adjust_lat2(double x) // Angle in radians
 {
-long count = 0;
-for(;;)
+  for (long count = 0; count <= MAX_VAL; ++count)
   {
-  if (vnl_math_abs(x)<=vnl_math::pi_over_2)
-     break;
-  else
- if (((long) vnl_math_abs(x / vnl_math::pi_over_2)) < 2)
-     x = x-(sign(x) * vnl_math::pi);
-  else
-  if (((long) vnl_math_abs(x / vnl_math::pi)) < vcl_numeric_limits<long>::max())
-     {
-     x = x-(((long)(x / vnl_math::pi))*vnl_math::pi);
-     }
-  else
-  if (((long) vnl_math_abs(x / (vcl_numeric_limits<long>::max() * vnl_math::pi))) < vcl_numeric_limits<long>::max())
-     {
-     x = x-(((long)(x / (vcl_numeric_limits<long>::max() * vnl_math::pi))) * (vnl_math::pi * vcl_numeric_limits<long>::max()));
-     }
-  else
-  if (((long) vnl_math_abs(x / (DBLLONG * vnl_math::pi))) < vcl_numeric_limits<long>::max())
-     {
-     x = x-(((long)(x / (DBLLONG * vnl_math::pi))) * (vnl_math::pi * DBLLONG));
-     }
-  else
-     x = x-(sign(x) *vnl_math::pi);
-  count++;
-  if (count > MAX_VAL)
-     break;
+    if (vnl_math_abs(x)<=vnl_math::pi_over_2)
+      break;
+    else if (((long) vnl_math_abs(x / vnl_math::pi_over_2)) < 2)
+      x -= (sign(x) * vnl_math::pi);
+    else if (((long) vnl_math_abs(x / vnl_math::pi)) < vcl_numeric_limits<long>::max())
+      x -= (((long)(x / vnl_math::pi))*vnl_math::pi);
+    else if (((long) vnl_math_abs(x / (vcl_numeric_limits<long>::max() * vnl_math::pi))) < vcl_numeric_limits<long>::max())
+      x -= (((long)(x / (vcl_numeric_limits<long>::max() * vnl_math::pi))) * (vnl_math::pi * vcl_numeric_limits<long>::max()));
+    else if (((long) vnl_math_abs(x / (DBLLONG * vnl_math::pi))) < vcl_numeric_limits<long>::max())
+      x -= (((long)(x / (DBLLONG * vnl_math::pi))) * (vnl_math::pi * DBLLONG));
+    else
+      x -= (sign(x) *vnl_math::pi);
   }
 
-return(x);
+  return x;
 }
 
-/* Function computes the value of M which is the distance along a meridian
-   from the Equator to latitude phi.
-------------------------------------------------*/
+// Function computes the value of M which is the distance along a meridian
+// from the Equator to latitude phi.
+// ---------------------------------------------
 static inline double mlfn2(double e0, double e1, double e2, double e3, double phi)
 {
-                return(e0*phi-e1*sin(2.0*phi)+e2*sin(4.0*phi)-e3*sin(6.0*phi));}
+  return e0*phi-e1*vcl_sin(2.0*phi)+e2*vcl_sin(4.0*phi)-e3*vcl_sin(6.0*phi);
+}
 
-/* Initialization function of UTM transform
--------------------------------------------------*/
-static void UTM_init2(double lat_center2, double r_major, double e, int south_flag){
-
+// Initialization function of UTM transform
+// ----------------------------------------
+static void UTM_init2(double lat_center2, double r_major, double e, int south_flag)
+{
   scale_factor2 = 0.9996;
 
   es2 = (double) e * (double) e;
@@ -169,11 +141,11 @@ static void UTM_init2(double lat_center2, double r_major, double e, int south_fl
 // Construct a transform with the given coordinate systems.
 
 bwm_utm_lat_lon::bwm_utm_lat_lon()
-  :   _a(6378137), _b(6356752.3142) //WGS-84 by default
+  :   a_(6378137), b_(6356752.3142) //WGS-84 by default
 {}
 
 bwm_utm_lat_lon::bwm_utm_lat_lon(const bwm_utm_lat_lon& t)
-  :    _a(t._a), _b(t._b)
+  :    a_(t.a_), b_(t.b_)
 {}
 
 bwm_utm_lat_lon::~bwm_utm_lat_lon()
@@ -186,9 +158,7 @@ void bwm_utm_lat_lon::transform(int utm_zone, double x, double y, double z,
                double utm_central_meridian)
 {
   //double D2R = vnl_math::pi/180.0;
-  double a = _a;
-  double b = _b;
-  double e = sqrt((sqr(a) - sqr(b))/sqr(a));
+  double e = vcl_sqrt((sqr(a_) - sqr(b_))/sqr(a_));
 
   if (utm_zone != 0)
     utm_central_meridian = (6 * utm_zone) - 183;
@@ -198,7 +168,7 @@ void bwm_utm_lat_lon::transform(int utm_zone, double x, double y, double z,
 
   double lambda, phi;
 
-  UTM_init2(lat_center2, a, e, south_flag);
+  UTM_init2(lat_center2, a_, e, south_flag);
 
   double con,temp_phi;    // temporary angles
   double delta_phi;    // difference between longitudes
@@ -206,72 +176,70 @@ void bwm_utm_lat_lon::transform(int utm_zone, double x, double y, double z,
   double sin_phi, cos_phi, tan_phi;    // sin cos and tangent values
   double c, cs, t, ts, n, r, d, ds;    // temporary variables
   double f, h, g, temp;    // temporary variables
-  long max_iter = 6;    // maximun number of iterations, I
-                    // changed from 6 to 20
+  long max_iter = 6;    // maximum number of iterations, I changed from 6 to 20
 
   if (ind2 != 0)
-    {
-      f = exp(x/(a * scale_factor2));
-      g = .5 * (f - 1/f);
-      temp = lat_center2 + y/(a * scale_factor2);
-      h = cos(temp);
-      con = sqrt((1.0 - h * h)/(1.0 + g * g));
-      if (vnl_math_abs(con) > 1.0)
+  {
+    f = vcl_exp(x/(a_ * scale_factor2));
+    g = .5 * (f - 1/f);
+    temp = lat_center2 + y/(a_ * scale_factor2);
+    h = vcl_cos(temp);
+    con = vcl_sqrt((1.0 - h * h)/(1.0 + g * g));
+    if (vnl_math_abs(con) > 1.0)
     {
       if (con > 1.0)
-        phi = asin(1.0);
+        phi = vcl_asin(1.0);
       else
-        phi = asin(-1.0);
+        phi = vcl_asin(-1.0);
     }
-      else
-    phi = asin(con);
+    else
+      phi = vcl_asin(con);
 
-      if (temp < 0)
-    phi = -phi;
-      if ((g == 0) && (h == 0))
+    if (temp < 0)
+      phi = -phi;
+    if ((g == 0) && (h == 0))
     {
       lambda = lon_center2;
     }
-      else
+    else
     {
-      lambda = adjust_lon2(atan2(g,h) + lon_center2);
+      lambda = adjust_lon2(vcl_atan2(g,h) + lon_center2);
     }
-    }
+  }
   else
-    {
-      x = x - false_easting2;
-      y = y - false_northing2;
+  {
+    x -= false_easting2;
+    y -= false_northing2;
 
-      con = (ml02 + y / scale_factor2) / a;
-      temp_phi = con;
-      for (i=0;;i++)
+    con = (ml02 + y / scale_factor2) / a_;
+    temp_phi = con;
+    for (i=0;;i++)
     {
       delta_phi =
-        ((con + e12 * sin(2.0*temp_phi) - e22 * sin(4.0*temp_phi) + e32 *
-          sin(6.0*temp_phi)) / e02) - temp_phi;
-      /*
-      delta_phi =
-        ((con + e12 * sin(2.0*phi) - e22 * sin(4.0*phi)) / e02) - phi;
-        */
+        ((con + e12 * vcl_sin(2.0*temp_phi) - e22 * vcl_sin(4.0*temp_phi) + e32 *
+          vcl_sin(6.0*temp_phi)) / e02) - temp_phi;
+#if 0
+      delta_phi = ((con + e12 * vcl_sin(2.0*phi) - e22 * vcl_sin(4.0*phi)) / e02) - phi;
+#endif
       temp_phi += delta_phi;
 
-      if(vnl_math_abs(delta_phi)<1E-6) break;
+      if (vnl_math_abs(delta_phi)<1E-6) break;
 
       if (i >= max_iter)
         vcl_cout << "Transform failed to converge" << vcl_endl;
     }
 
-      if (vnl_math_abs(temp_phi) < vnl_math::pi_over_2)
+    if (vnl_math_abs(temp_phi) < vnl_math::pi_over_2)
     {
-      sin_phi = sin(temp_phi);
-      cos_phi = cos(temp_phi);
-      tan_phi = tan(temp_phi);
+      sin_phi = vcl_sin(temp_phi);
+      cos_phi = vcl_cos(temp_phi);
+      tan_phi = vcl_tan(temp_phi);
       c = esp2 * sqr(cos_phi);
       cs = sqr(c);
       t = sqr(tan_phi);
       ts = sqr(t);
       con = 1.0 - es2 * sqr(sin_phi);
-      n = a / sqrt(con);
+      n = a_ / vcl_sqrt(con);
       r = n * (1.0 - es2) / con;
       d = x / (n * scale_factor2);
       ds = sqr(d);
@@ -288,41 +256,36 @@ void bwm_utm_lat_lon::transform(int utm_zone, double x, double y, double z,
                            3.0 * cs + 8.0 * esp2 +
                            24.0 * ts))) / cos_phi));
     }
-      else
+    else
     {
       phi = vnl_math::pi_over_2 * sign(y);
       lambda = lon_center2;
     }
-    }
+  }
 
   lat = phi/D2R; lon = lambda/D2R, elev = z;
 }
+
 void bwm_utm_lat_lon::transform(int utm_zone, double x, double y,
-               double& lat, double& lon,
-               bool south_flag,
-               double utm_central_meridian)
+                                double& lat, double& lon,
+                                bool south_flag,
+                                double utm_central_meridian)
 {
   double elev;
   this->transform(utm_zone, x, y, 0.0,
-          lat, lon, elev,
-          south_flag, utm_central_meridian);
-  if(elev) {}
+                  lat, lon, elev,
+                  south_flag, utm_central_meridian);
+  if (elev) { /* TODO */ }
 }
 
-
-
-
 void bwm_utm_lat_lon::transform(double lat, double lon,
-                double& x, double& y, int& utm_zone)
+                                double& x, double& y, int& utm_zone)
 {
- // double D2R = vnl_math::pi/180.0;
+  // double D2R = vnl_math::pi/180.0;
   utm_zone = int((lon+180)/6.0) + 1;
-  double a = _a;
-  double b = _b;
-  double e = sqrt((sqr(a) - sqr(b))/sqr(a));
-/* This value must eventually set by user. lon_zone stands for
-  longitudinal zone, and it must be between 1 and 60.
-*/
+  double e = vcl_sqrt(1.0 - b_*b_/(a_*a_));
+  // This value must eventually set by user. lon_zone stands for
+  // longitudinal zone, and it must be between 1 and 60.
   int south_flag;
   double utm_central_meridian = 0;
 
@@ -336,40 +299,35 @@ void bwm_utm_lat_lon::transform(double lat, double lon,
   double phi = adjust_lat2(lat*D2R);
   double lambda = adjust_lon2(lon*D2R);
 
-  UTM_init2(lat_center, a, e, south_flag);
+  UTM_init2(lat_center, a_, e, south_flag);
 
-  double delta_lon;
-  double sin_phi, cos_phi;
-  double al, als;
   //  double bl = -1000000.0;
-  double c, t, tq;
-  double con,n,ml;
 
-  delta_lon = adjust_lon2(lambda - lon_center);
-  
-  sin_phi = sin(phi);
-  cos_phi = cos(phi);
+  double delta_lon = adjust_lon2(lambda - lon_center);
 
-  al = cos_phi * delta_lon;
-  als = sqr(al);
-  c = esp2 * sqr(cos_phi);
-  tq = tan(phi);
-  t = sqr(tq);
-  con = 1.0 - es2 * sqr(sin_phi);
-  n = a / sqrt(con);
-  ml = a * mlfn2(e02, e12, e22, e32, phi);
-  
-  x = scale_factor2 * n * al * (1.0 + (als / 6.0) * 
+  double sin_phi = vcl_sin(phi);
+  double cos_phi = vcl_cos(phi);
+
+  double al = cos_phi * delta_lon;
+  double als = sqr(al);
+  double c = esp2 * sqr(cos_phi);
+  double tq = vcl_tan(phi);
+  double t = sqr(tq);
+  double con = 1.0 - es2 * sqr(sin_phi);
+  double n = a_ / vcl_sqrt(con);
+  double ml = a_ * mlfn2(e02, e12, e22, e32, phi);
+
+  x = scale_factor2 * n * al * (1.0 + (als / 6.0) *
                 (1.0 - t + c + (als / 20.0) *
                  (5.0 - (18.0 * t) + sqr(t) + (72.0 * c) - (58.0 * esp2)))) + false_easting2;
-  
+
   y = scale_factor2 * (ml - ml02 + n * tq * (als * (0.5 + (als / 24.0) *
                             (5.0 - t + (9.0 * c)
                              + (4.0 * sqr(c))
                              + (als / 30.0) *
                              (61.0 - (58.0 * t) +
                               sqr(t) +
-                              (600.0 * c) - 
+                              (600.0 * c) -
                               330.0 * esp2))))) +
     false_northing2;
 }
