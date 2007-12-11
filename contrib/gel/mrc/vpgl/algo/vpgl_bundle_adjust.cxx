@@ -3,7 +3,6 @@
 //:
 // \file
 
-#include <vnl/vnl_math.h>
 #include <vnl/vnl_vector_ref.h>
 #include <vnl/algo/vnl_sparse_lm.h>
 
@@ -52,19 +51,19 @@ vpgl_bundle_adj_lsqr(const vcl_vector<vpgl_calibration_matrix<double> >& K,
   for (unsigned i=0; i<inv_covars.size(); ++i)
   {
     const vnl_matrix<double>& S = inv_covars[i];
-    if (S(0,0) > 0.0){
+    if (S(0,0) > 0.0) {
       U(0,0) = vcl_sqrt(S(0,0));
       U(0,1) = S(0,1)/U(0,0);
       double U11 = S(1,1)-S(0,1)*S(0,1)/S(0,0);
       U(1,1) = (U11>0.0)?vcl_sqrt(U11):0.0;
     }
-    else if (S(1,1) > 0.0){
+    else if (S(1,1) > 0.0) {
       assert(S(0,1) == 0.0);
       U(0,0) = 0.0;
       U(0,1) = 0.0;
       U(1,1) = vcl_sqrt(S(1,1));
     }
-    else{
+    else {
       vcl_cout << "warning: not positive definite"<<vcl_endl;
       U.fill(0.0);
     }
@@ -343,8 +342,7 @@ vpgl_bundle_adjust::write_vrml(const vcl_string& filename,
         << "  position    "<< ctr.x() << ' ' << ctr.y() << ' ' << ctr.z() << '\n'
         << "  orientation "<< R.axis() << ' '<< R.angle() << '\n'
         << "  fieldOfView "<< fov << '\n'
-        << "  description \"Camera" << i << "\"\n"
-        << "}\n";
+        << "  description \"Camera" << i << "\"\n}\n";
   }
 
   os << "Shape {\n  appearance NULL\n    geometry PointSet {\n"
