@@ -64,10 +64,6 @@ void test_signed_distance_transform()
 
     vil3d_signed_distance_transform(mask,image,1000.0,li,lj,lk);
 
-    double li2=li*li;
-    double lj2=lj*lj;
-    double lk2=lk*lk;
-
     // The signed distance transform returns
     // -1.0 *  the 26 connected distance to the non-mask pixels inside the mask
     // 1.0 *  the 26 connected distance to the mask pixels outside the mask
