@@ -1,11 +1,10 @@
+// This is brl/bbas/bmsh3d/bmsh3d_face.h
+//---------------------------------------------------------------------
 #ifndef bmsh3d_face_h_
 #define bmsh3d_face_h_
-//---------------------------------------------------------------------
-// This is brl/bbas/bmsh3d/bmsh3d_face.h
 //:
 // \file
 // \brief Basic 3d face on a mesh
-//
 //
 // \author
 //  MingChing Chang  April 22, 2005
@@ -18,29 +17,28 @@
 //-------------------------------------------------------------------------
 
 #include <vcl_vector.h>
+#include <vcl_cassert.h>
 #include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_distance.h>
 #include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_homg_plane_3d.h>
-#include <vgl/algo/vgl_fit_plane_3d.h>
+//#include <vgl/algo/vgl_fit_plane_3d.h>
 
 #include "bmsh3d_utils.h"
 #include "bmsh3d_vertex.h"
 #include "bmsh3d_edge.h"
 
 //Color code to visualize several mesh objects.
-typedef enum {
-  BOGUS_TRIFACE       = 0,  
-  TRIFACE_111         = 1,  
-  TRIFACE_112         = 2,  
-  TRIFACE_113P        = 3,  
-  TRIFACE_122         = 4,  
-  TRIFACE_123P        = 5,  
-  TRIFACE_13P3P       = 6,  
-  TRIFACE_222         = 7,  
-  TRIFACE_223P        = 8,  
-  TRIFACE_23P3P       = 9,  
+typedef enum
+{
+  BOGUS_TRIFACE       = 0,
+  TRIFACE_111         = 1,
+  TRIFACE_112         = 2,
+  TRIFACE_113P        = 3,
+  TRIFACE_122         = 4,
+  TRIFACE_123P        = 5,
+  TRIFACE_13P3P       = 6,
+  TRIFACE_222         = 7,
+  TRIFACE_223P        = 8,
+  TRIFACE_23P3P       = 9,
   TRIFACE_3P3P3P      = 10,
   TRIFACE_E4P         = 11,
 } TRIFACE_TYPE;
@@ -49,7 +47,7 @@ class bmsh3d_mesh;
 
 class bmsh3d_face : public vispt_elm
 {
-protected:
+ protected:
   //: Pointer to the IFS vertices of this face.
   vcl_vector<bmsh3d_vertex*> vertices_;
 
@@ -57,13 +55,14 @@ protected:
 
   int   id_;
 
-  //: This variable is used for
-  //    - i_visited_ flag for mesh traversal.
-  //    - a flag in gdt propagation.
-  //    - storing the sheet id.
+  //:
+  // This variable is used for
+  //   - i_visited_ flag for mesh traversal.
+  //   - a flag in gdt propagation.
+  //   - storing the sheet id.
   int  i_value_;
 
-public:
+ public:
   //###### Constructor/Destructor ######
   bmsh3d_face () {
     halfedge_ = NULL;
@@ -83,12 +82,13 @@ public:
 
   virtual ~bmsh3d_face () {
     vertices_.clear();
-    //: make sure that all halfedges are deleted before the destructor.
+    //  make sure that all halfedges are deleted before the destructor.
     //  You should use bmsh3d_mesh::delete_face to delete a face.
     assert (halfedge_ == NULL);
   }
 
   //###### Data access functions ######
+
   const bmsh3d_vertex* vertices (const unsigned int i) const {
     return vertices_[i];
   }
@@ -131,7 +131,7 @@ public:
 
   //: just use the i_value_ as a boolean flag
   bool b_visited () const {
-    return (i_value_ != 0);
+    return i_value_ != 0;
   }
   void set_visited (bool b) {
     if (b == false)
@@ -147,7 +147,8 @@ public:
     i_value_ = sid;
   }
 
-  //###### Connectivity Query via Halfedges ######  
+  //###### Connectivity Query via Halfedges ######
+
   void get_incident_HEs (vcl_vector<bmsh3d_halfedge*>& incident_HEs) const;
   void get_incident_Es (vcl_vector<bmsh3d_edge*>& incident_Es) const;
   const unsigned int n_incident_Es () const;
@@ -157,23 +158,19 @@ public:
   bool is_V_incident_via_HE (const bmsh3d_vertex* inputV) const;
   bmsh3d_vertex* get_next_V_via_HE (const bmsh3d_vertex* inputV) const;
 
-  //: Given a vertex V and an edge of this face incident to V,
-  //  find the other edge of this face incident to V.
-  bmsh3d_edge* find_other_E (const bmsh3d_vertex* inputV, 
-                              const bmsh3d_edge* inputE) const;
+  //: Given a vertex V and an edge of this face incident to V, find the other edge of this face incident to V.
+  bmsh3d_edge* find_other_E (const bmsh3d_vertex* inputV,
+                             const bmsh3d_edge* inputE) const;
 
-  //: Given a vertex V and a halfedge of this face incident to V,
-  //  find the other halfedge of this face incident to V.
+  //: Given a vertex V and a halfedge of this face incident to V, find the other halfedge of this face incident to V.
   bmsh3d_halfedge* find_other_HE (const bmsh3d_vertex* inputV,
                                    const bmsh3d_halfedge* inputHE) const;
 
-  //: Given a vertex V and an edge of this face incident to V,
-  //  find the next edge (following the circular halfedge list) of this face incident to V.
-  bmsh3d_edge* find_next_E (const bmsh3d_vertex* inputV, 
-                              const bmsh3d_edge* inputE) const;
+  //: Given a vertex V and an edge of this face incident to V, find the next edge (following the circular halfedge list) of this face incident to V.
+  bmsh3d_edge* find_next_E (const bmsh3d_vertex* inputV,
+                            const bmsh3d_edge* inputE) const;
 
-  //: Given a vertex V and a halfedge of this face incident to V,
-  //  find the next halfedge (following the circular halfedge list) of this face incident to V.
+  //: Given a vertex V and a halfedge of this face incident to V, find the next halfedge (following the circular halfedge list) of this face incident to V.
   bmsh3d_halfedge* find_next_HE (const bmsh3d_vertex* inputV,
                                   const bmsh3d_halfedge* inputHE) const;
 
@@ -183,12 +180,12 @@ public:
   bool all_Vs_incident (vcl_vector<bmsh3d_vertex*>& vertices) const;
 
   void get_ordered_Vs (vcl_vector<bmsh3d_vertex*>& vertices) const;
-    void _get_ordered_Vs_MHE (vcl_vector<bmsh3d_vertex*>& vertices) const;
-    void _get_ordered_Vs_IFS (vcl_vector<bmsh3d_vertex*>& vertices) const;
-  
+  void _get_ordered_Vs_MHE (vcl_vector<bmsh3d_vertex*>& vertices) const;
+  void _get_ordered_Vs_IFS (vcl_vector<bmsh3d_vertex*>& vertices) const;
+
   void get_ordered_V_ids (vcl_vector<int>& vids) const;
-    void _get_ordered_V_ids_MHE (vcl_vector<int>& vids) const;
-    void _get_ordered_V_ids_IFS (vcl_vector<int>& vids) const;
+  void _get_ordered_V_ids_MHE (vcl_vector<int>& vids) const;
+  void _get_ordered_V_ids_IFS (vcl_vector<int>& vids) const;
 
   //###### Handle local list of incident vertices ######
   void _ifs_add_vertex (bmsh3d_vertex* V) {
@@ -220,7 +217,7 @@ public:
     return NULL;
   }
   //: track incident vertices and reset ifs_face::vertices_[]
-  void _ifs_track_ordered_vertices ();  
+  void _ifs_track_ordered_vertices ();
 
   void _ifs_assign_Vs_vid_by_id () {
     for (unsigned int i=0; i<vertices_.size(); i++) {
@@ -236,6 +233,7 @@ public:
   bool _ifs_outside_box (const vgl_box_3d<double>& box) const;
 
   //###### Geometry Query Functions ######
+
   bool is_inside_box (const vgl_box_3d<double>& box) const;
   bool is_outside_box (const vgl_box_3d<double>& box) const;
   vgl_point_3d<double> compute_center_pt () const;
@@ -243,13 +241,13 @@ public:
   vgl_vector_3d<double> compute_normal ();
 
   //###### Connectivity Modification Functions ######
-  
+
   //: Connect a halfedge to this mesh face.
   void _connect_HE_to_end (bmsh3d_halfedge* inputHE);
   //: Remove the input halfedge from the face's halfedge list.
   bool _remove_HE (bmsh3d_halfedge* inputHE);
   //: Create a halfedge and connect a mesh face and an edge.
-  void connect_E_to_end (bmsh3d_edge* E);  
+  void connect_E_to_end (bmsh3d_edge* E);
   //: Disconnect a face and an edge (delete the halfedge).
   void disconnect_E (bmsh3d_halfedge* HE);
 
@@ -258,14 +256,15 @@ public:
 
   //: disconnect all associated halfedges from their edges and delete them.
   virtual void _discon_all_incident_Es ();
-  
+
   //: reverse the orientation of chain of halfedges of this face.
   void _reverse_HE_chain ();
 
   void set_orientation (bmsh3d_halfedge* new_start_he,
                         bmsh3d_vertex*   new_next_v);
-  
+
   //###### Other functions ######
+
   virtual void getInfo (vcl_ostringstream& ostrm);
 
   //###### For triangular face only ######
@@ -286,7 +285,6 @@ public:
   //: given v1, v2, find v3
   bmsh3d_vertex* t_3rd_vertex (const bmsh3d_vertex* V1, const bmsh3d_vertex* V2) const;
   bmsh3d_vertex* t_vertex_against_edge (const bmsh3d_edge* inputE) const;
-
 };
 
 //###### Additional Functions ######
@@ -301,10 +299,9 @@ void _delete_HE_chain (bmsh3d_halfedge* & he_head);
 void _delete_HE_chain (bmsh3d_halfedge* & he_head,
                        vcl_vector<bmsh3d_edge*>& incident_edge_list);
 
-//: Given the face, current halfedge, and current eV,
-//  find the next halfedge given in the vector<>.
-bmsh3d_halfedge* _find_next_halfedge (bmsh3d_halfedge* HE, 
-                                       bmsh3d_vertex* eV, 
+//: Given the face, current halfedge, and current eV, find the next halfedge given in the vector<>.
+bmsh3d_halfedge* _find_next_halfedge (bmsh3d_halfedge* HE,
+                                       bmsh3d_vertex* eV,
                                        vcl_vector<bmsh3d_halfedge*>& inc_hes);
 
 //: Assume the mesh face is planar and compute a 2D planar coordinate for it.
@@ -318,7 +315,7 @@ void get_2d_polygon (const vcl_vector<bmsh3d_vertex*>& vertices,
 
 //: Return the projected point in the local 2D (x,y) coord.
 vgl_point_2d<double> get_2d_proj_pt (vgl_point_3d<double> P, const vgl_point_3d<double>& A,
-                                     const vgl_vector_3d<double>& AX, 
+                                     const vgl_vector_3d<double>& AX,
                                      const vgl_vector_3d<double>& AY);
 
 vgl_point_3d<double> compute_cen (const vcl_vector<bmsh3d_vertex*>& vertices);
@@ -327,7 +324,7 @@ vgl_vector_3d<double> compute_normal_ifs (const vcl_vector<bmsh3d_vertex*>& vert
 
 //: Compute face normal using the given edge and starting node.
 vgl_vector_3d<double> compute_normal (const vgl_point_3d<double>& C,
-                                      const bmsh3d_edge* E, 
+                                      const bmsh3d_edge* E,
                                       const bmsh3d_vertex* Es);
 
 //: Return true if vertices is a polygon or obtuse triangle.
@@ -369,6 +366,4 @@ inline double m2t_compute_angle_lr (const double& c, const double& l, const doub
   return vcl_acos ( (l*l + r*r - c*c)/(l*r*2) );
 }
 
-
 #endif
-
