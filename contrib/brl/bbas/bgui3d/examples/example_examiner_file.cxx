@@ -1,6 +1,5 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_shell_tableau.h>
-#include <vcl_cmath.h>
 
 #include <bgui3d/bgui3d_file_io.h>
 #include <bgui3d/bgui3d_examiner_tableau.h>
@@ -14,8 +13,8 @@
 
 int main(int argc, char** argv)
 {
-  if(argc <2){
-    vcl_cout << "Please specify the path to scene file (IV or VRML)" << vcl_endl;
+  if (argc <2) {
+    vcl_cerr << "Please specify the path to scene file (IV or VRML)\n";
     return -1;
   }
   vcl_string filename(argv[1]);
@@ -28,7 +27,7 @@ int main(int argc, char** argv)
   // read the file into a scene graph
   SoNode* root = bgui3d_import_file(filename);
   root->ref();
-  
+
   // wrap the scenegraph in an examiner tableau
   bgui3d_examiner_tableau_new tab3d(root);
   root->unref();
