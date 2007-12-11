@@ -1,15 +1,14 @@
-// This is basic/bgui3d/bgui3d_viewer_tableau.cxx
-    
+// This is brl/bbas/bgui3d/bgui3d_viewer_tableau.cxx
+#include "bgui3d_viewer_tableau.h"
 //:
 // \file
 
 #include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <vcl_cassert.h>
 #include <vcl_cmath.h>
-#include "bgui3d_viewer_tableau.h"
 #include "bgui3d_algo.h"
 #include <vgui/vgui_gl.h>
-#include <vnl/vnl_vector.h>
+#include <vnl/vnl_quaternion.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3x4.h>
 #include <vnl/vnl_double_3.h>
@@ -29,7 +28,6 @@
 #include <Inventor/VRMLnodes/SoVRMLViewpoint.h>
 #include <Inventor/SoSceneManager.h>
 
-#include <Inventor/nodes/SoPerspectiveCamera.h>
 #include <Inventor/nodes/SoDirectionalLight.h>
 #include <Inventor/actions/SoSearchAction.h>
 #include <Inventor/nodekits/SoBaseKit.h>
@@ -40,16 +38,15 @@
 #include <Inventor/nodes/SoTranslation.h>
 #include <Inventor/sensors/SoAlarmSensor.h>
 
-//: Constructor 
+//: Constructor
 bgui3d_viewer_tableau::bgui3d_viewer_tableau(SoNode * scene_root)
- : bgui3d_tableau(NULL), 
+ : bgui3d_tableau(NULL),
    user_scene_root_(NULL),
    camera_group_(NULL),
    scene_camera_(NULL),
    stored_camera_(NULL),
    headlight_(NULL)
 {
-
   this->set_scene_root(scene_root);
 }
 
@@ -57,17 +54,17 @@ bgui3d_viewer_tableau::bgui3d_viewer_tableau(SoNode * scene_root)
 //: Destructor
 bgui3d_viewer_tableau::~bgui3d_viewer_tableau()
 {
-  if(scene_camera_)
+  if (scene_camera_)
     scene_camera_->unref();
-  if(headlight_)
+  if (headlight_)
     headlight_->unref();
 }
 
 
-void 
+void
 bgui3d_viewer_tableau::set_scene_root(SoNode* scene_root)
 {
-  if (!scene_root) 
+  if (!scene_root)
     bgui3d_tableau::set_scene_root(scene_root);
 
   user_scene_root_ = scene_root;
@@ -79,7 +76,7 @@ bgui3d_viewer_tableau::set_scene_root(SoNode* scene_root)
   // Create a headlight if one does not exist
   // By inserting this before any scenegraph camera, the
   // light will always be pointing in the correct direction.
-  if(!headlight_){
+  if (!headlight_){
     headlight_ = new SoDirectionalLight;
     headlight_->direction.setValue(1, -1, -10);
     headlight_->setName("headlight");
@@ -91,8 +88,8 @@ bgui3d_viewer_tableau::set_scene_root(SoNode* scene_root)
   SoTranslation* trans = new SoTranslation;
   trans->translation = SbVec3f(-.98f,.93f,0);
   super_root->addChild( trans );
-  
-  _text = new SoText2; 
+
+  _text = new SoText2;
   _text->string.deleteValues(0, -1); //empty the string
   super_root->addChild( _text );
 
@@ -116,7 +113,7 @@ bgui3d_viewer_tableau::set_scene_root(SoNode* scene_root)
 
   // find and used the first user scene camera (if it exists)
   vcl_vector<SoCamera*> user_cams = find_cameras(user_scene_root_);
-  if(!user_cams.empty()){
+  if (!user_cams.empty()){
     camera_group_->whichChild.setValue(-1);
     this->set_camera(user_cams[0]);
   }
@@ -124,7 +121,7 @@ bgui3d_viewer_tableau::set_scene_root(SoNode* scene_root)
     // if not, use the first examiner camera
     assert(camera_group_->getChildren()->getLength() > 0);
 
-    if(camera_group_->whichChild.getValue() < 0)
+    if (camera_group_->whichChild.getValue() < 0)
       camera_group_->whichChild.setValue(0);
     int cam_idx = camera_group_->whichChild.getValue();
 
@@ -137,7 +134,7 @@ bgui3d_viewer_tableau::set_scene_root(SoNode* scene_root)
 
   bgui3d_tableau::set_scene_root(super_root);
 
-  save_home_position(); 
+  save_home_position();
 }
 
 
@@ -148,7 +145,7 @@ bgui3d_viewer_tableau::set_scene_root(SoNode* scene_root)
 void
 bgui3d_viewer_tableau::set_camera(SoCamera *camera)
 {
-  if(scene_camera_){
+  if (scene_camera_){
     scene_camera_->unref();
   }
 
@@ -157,12 +154,11 @@ bgui3d_viewer_tableau::set_camera(SoCamera *camera)
   if (scene_camera_) {
     scene_camera_->ref();
     SoType cam_type = scene_camera_->getTypeId();
-    if( cam_type == SoOrthographicCamera::getClassTypeId() )
+    if ( cam_type == SoOrthographicCamera::getClassTypeId() )
       camera_type_ = ORTHOGONAL;
     else
       camera_type_ = PERSPECTIVE;
   }
-
 }
 
 
@@ -180,9 +176,9 @@ bgui3d_viewer_tableau::set_camera(const vpgl_proj_camera<double>& camera)
   vnl_double_3 t;
 
   vnl_double_3x4 cam = camera.get_matrix();
-  if(vnl_det(vnl_double_3x3(cam.extract(3,3))) < 0)
+  if (vnl_det(vnl_double_3x3(cam.extract(3,3))) < 0)
     cam *= -1.0;
-  if( bgui3d_decompose_camera(cam, K, R, t) ){
+  if ( bgui3d_decompose_camera(cam, K, R, t) ){
     new_cam->aspectRatio = K[0][2]/K[1][2];
     new_cam->heightAngle = 2.0*vcl_atan(K[1][2]/K[1][1]);
 
@@ -205,10 +201,9 @@ bgui3d_viewer_tableau::set_camera(const vpgl_proj_camera<double>& camera)
 
     new_cam->nearDistance = 1.0f;
     new_cam->farDistance = 1000.0f;
-
   }
 
-  if( user_scene_root_ ){
+  if ( user_scene_root_ ){
     camera_group_->addChild(new_cam);
     int num_cameras = camera_group_->getChildren()->getLength();
     this->select_camera(num_cameras -1);
@@ -223,12 +218,12 @@ bgui3d_viewer_tableau::set_camera(const vpgl_proj_camera<double>& camera)
 }
 
 
-//: Get the scene camera
-// creates a vpgl camera (either perspective or affine) from the active SoCamera
+//: Get the scene camera.
+// Creates a vpgl camera (either perspective or affine) from the active SoCamera
 vcl_auto_ptr<vpgl_proj_camera<double> >
 bgui3d_viewer_tableau::camera() const
 {
-  if(!scene_camera_)
+  if (!scene_camera_)
     return vcl_auto_ptr<vpgl_proj_camera<double> >(NULL);
 
   const SbVec3f& t_vec = scene_camera_->position.getValue();
@@ -246,44 +241,42 @@ bgui3d_viewer_tableau::camera() const
   unsigned width = vp[2];
   unsigned height = vp[3];
 
-  switch(camera_type_){
-    case PERSPECTIVE:
-    {
-      SoPerspectiveCamera* cam = (SoPerspectiveCamera*)scene_camera_;
-      double f = 1.0/(vcl_tan(cam->heightAngle.getValue()/2.0));
-      double sx = 1.0, sy = 1.0;
-      if(width < height)
-        sy = double(width)/height;
-      else
-        sx = double(height)/width;
-      vgl_point_2d<double> p(0, 0);
-      vpgl_calibration_matrix<double> K(f,p,sx,sy);
-      vgl_point_3d<double> c(t[0],t[1],t[2]);
-      return vcl_auto_ptr<vpgl_proj_camera<double> >
-          ( new vpgl_perspective_camera<double>(K,c,R) );
+  switch (camera_type_)
+  {
+   case PERSPECTIVE: {
+    SoPerspectiveCamera* cam = (SoPerspectiveCamera*)scene_camera_;
+    double f = 1.0/(vcl_tan(cam->heightAngle.getValue()/2.0));
+    double sx = 1.0, sy = 1.0;
+    if (width < height)
+      sy = double(width)/height;
+    else
+      sx = double(height)/width;
+    vgl_point_2d<double> p(0, 0);
+    vpgl_calibration_matrix<double> K(f,p,sx,sy);
+    vgl_point_3d<double> c(t[0],t[1],t[2]);
+    return vcl_auto_ptr<vpgl_proj_camera<double> >
+           ( new vpgl_perspective_camera<double>(K,c,R) );
     }
-    case ORTHOGONAL:
-    {
-      SoOrthographicCamera* cam = (SoOrthographicCamera*)scene_camera_;
-      //double h = cam->height.getValue();
-      vcl_cerr << "WARNING: not implemented yet" <<vcl_endl;
-      return vcl_auto_ptr<vpgl_proj_camera<double> >
-          ( NULL );
+   case ORTHOGONAL: {
+    SoOrthographicCamera* cam = (SoOrthographicCamera*)scene_camera_;
+    //double h = cam->height.getValue();
+    vcl_cerr << "WARNING: not implemented yet\n";
+    return vcl_auto_ptr<vpgl_proj_camera<double> >(NULL);
     }
   }
-  return vcl_auto_ptr<vpgl_proj_camera<double> > (NULL);
+  return vcl_auto_ptr<vpgl_proj_camera<double> >(NULL);
 }
 
 
-//: Select the active camera by index
-// a negative index selects the first user scene camera
+//: Select the active camera by index.
+// A negative index selects the first user scene camera
 void
 bgui3d_viewer_tableau::select_camera(int camera_index)
 {
   int num_cameras = camera_group_->getChildren()->getLength();
 
-  if(camera_index >= 0 && camera_index < num_cameras){
-    if(camera_index != camera_group_->whichChild.getValue()){
+  if (camera_index >= 0 && camera_index < num_cameras){
+    if (camera_index != camera_group_->whichChild.getValue()){
       camera_group_->whichChild.setValue(camera_index);
       SoChildList* list = camera_group_->getChildren();
       this->set_camera((SoCamera*)(*list)[camera_index]);
@@ -291,7 +284,7 @@ bgui3d_viewer_tableau::select_camera(int camera_index)
   }
   else{
     vcl_vector<SoCamera*> user_cams = find_cameras(user_scene_root_);
-    if(!user_cams.empty()){
+    if (!user_cams.empty()){
       camera_group_->whichChild.setValue(-1);
       this->set_camera(user_cams[0]);
     }
@@ -315,14 +308,14 @@ bgui3d_viewer_tableau::set_camera_type(camera_type_enum type)
   SoType ptype = SoPerspectiveCamera::getClassTypeId();
   SoType otype = SoOrthographicCamera::getClassTypeId();
   SoCamera* newCamera;
-  if( camera_type_ != type )
+  if ( camera_type_ != type )
   {
-    if( camera_type_ == PERSPECTIVE && type == ORTHOGONAL )
+    if ( camera_type_ == PERSPECTIVE && type == ORTHOGONAL )
     {
       newCamera = (SoCamera *)otype.createInstance();
       convertPerspective2Ortho((SoPerspectiveCamera*)scene_camera_, (SoOrthographicCamera*)newCamera);
     }
-    else //if( camera_type_ == ORTHOGONAL && type == PERSPECTIVE )
+    else //if ( camera_type_ == ORTHOGONAL && type == PERSPECTIVE )
     {
       newCamera = (SoCamera *)ptype.createInstance();
       convertOrtho2Perspective((SoOrthographicCamera*)scene_camera_, (SoPerspectiveCamera*)newCamera);
@@ -330,7 +323,7 @@ bgui3d_viewer_tableau::set_camera_type(camera_type_enum type)
 
     newCamera->ref();
     vcl_vector<SoGroup *> cameraparents = get_parents_of_node(this->scene_camera_);
-    for(vcl_vector<SoGroup *>::iterator cp = cameraparents.begin(); cp != cameraparents.end(); ++cp)
+    for (vcl_vector<SoGroup *>::iterator cp = cameraparents.begin(); cp != cameraparents.end(); ++cp)
     {
       (*cp)->replaceChild((*cp)->findChild(this->scene_camera_), newCamera);
     }
@@ -339,9 +332,7 @@ bgui3d_viewer_tableau::set_camera_type(camera_type_enum type)
 
     camera_group_->whichChild.setValue(camera_group_->findChild(this->scene_camera_));
     newCamera->unref();
-
   }
-
 }
 
 
@@ -349,7 +340,6 @@ bgui3d_viewer_tableau::set_camera_type(camera_type_enum type)
 bgui3d_viewer_tableau::camera_type_enum
 bgui3d_viewer_tableau::camera_type() const
 {
-  
   return camera_type_;
 }
 
@@ -358,11 +348,10 @@ bgui3d_viewer_tableau::camera_type() const
 void
 bgui3d_viewer_tableau::toggle_camera_type()
 {
-  if(camera_type_ == ORTHOGONAL)
+  if (camera_type_ == ORTHOGONAL)
     set_camera_type(PERSPECTIVE);
   else
     set_camera_type(ORTHOGONAL);
-
 }
 
 
@@ -388,7 +377,7 @@ bgui3d_viewer_tableau::save_home_position()
   assert(t.isDerivedFrom(SoNode::getClassTypeId()));
   assert(t.canCreateInstance());
 
-  if (this->stored_camera_) 
+  if (this->stored_camera_)
     this->stored_camera_->unref();
 
   this->stored_camera_ = (SoNode *)t.createInstance();
@@ -403,7 +392,7 @@ bgui3d_viewer_tableau::reset_to_home_position()
 {
   if (! this->scene_camera_) { return; } // probably a scene-less viewer
   if (! this->stored_camera_) { return; }
-  
+
   SoType t = this->scene_camera_->getTypeId();
   SoType s = this->stored_camera_->getTypeId();
 
@@ -427,11 +416,10 @@ bgui3d_viewer_tableau::reset_to_home_position()
   }
   // otherwise, cameras have changed in ways we don't understand since
   // the last saveHomePosition() invokation, and so we're just going
-  // to ignore the reset request 
+  // to ignore the reset request
 }
- 
-//-------------------------------------------------
 
+//-------------------------------------------------
 
 //-------------Headlight Methods-------------------
 
@@ -460,9 +448,7 @@ bgui3d_viewer_tableau::headlight() const
 
 //-------------------------------------------------
 
-
 //-------------Text2 Methods-------------------
-
 
 static void setTextCallback( void *data, SoSensor *sensor )
 {
@@ -471,23 +457,14 @@ static void setTextCallback( void *data, SoSensor *sensor )
 
 void bgui3d_viewer_tableau::setText( const vcl_string& string )
 {
-  int numStrings = _text->string.getNum(); 
-  _text->string.set1Value( numStrings, string.c_str() ); 
+  int numStrings = _text->string.getNum();
+  _text->string.set1Value( numStrings, string.c_str() );
   SoAlarmSensor* alarm = new SoAlarmSensor( setTextCallback, _text );
   alarm->setTimeFromNow( 7.0 );
   alarm->schedule();
 }
 
-
 //---------------------------------------------------
-
-
-
-
-
-
-
-
 
 //: convert camera to perspective
 void
@@ -505,7 +482,7 @@ bgui3d_viewer_tableau::convertOrtho2Perspective(const SoOrthographicCamera * in,
 
   // focalDistance==0.0f happens for empty scenes.
   if (focaldist != 0.0f) {
-    out->heightAngle = 2.0f * (float)atan(in->height.getValue() / 2.0 / focaldist);
+    out->heightAngle = 2.0f * (float)vcl_atan(in->height.getValue() / 2.0 / focaldist);
   }
   else {
     // 45?is the default value of this field in SoPerspectiveCamera.
@@ -528,7 +505,7 @@ bgui3d_viewer_tableau::convertPerspective2Ortho(const SoPerspectiveCamera * in,
 
   float focaldist = in->focalDistance.getValue();
 
-  out->height = 2.0f * focaldist * (float)tan(in->heightAngle.getValue() / 2.0);
+  out->height = 2.0f * focaldist * (float)vcl_tan(in->heightAngle.getValue() / 2.0);
 }
 
 void
@@ -581,7 +558,7 @@ bgui3d_viewer_tableau::set_clipping_planes()
 
   if ( scene_camera_->isOfType(SoPerspectiveCamera::getClassTypeId())) {
     // Disallow negative and small near clipping plane distance.
-    
+
     float nearlimit; // the smallest value allowed for nearval
     //if (this->autoclipstrategy == SoWinViewer::CONSTANT_NEAR_PLANE) {
       //nearlimit = this->autoclipvalue;
@@ -599,12 +576,12 @@ bgui3d_viewer_tableau::set_clipping_planes()
 
       GLint depthbits[1];
       glGetIntegerv(GL_DEPTH_BITS, depthbits);
-      
-      int use_bits = (int) (float(depthbits[0]) * (0.4f)); 
-      float r = (float) pow(2.0, (double) use_bits);
+
+      int use_bits = (int) (float(depthbits[0]) * (0.4f));
+      float r = (float) vcl_pow(2.0, (double) use_bits);
       nearlimit = farval / r;
     //}
-    
+
     if (nearlimit >= farval) {
       // (The "5000" magic constant was found by fiddling around a bit
       // on an OpenGL implementation with a 16-bit depth-buffer
@@ -613,22 +590,24 @@ bgui3d_viewer_tableau::set_clipping_planes()
       // single-model one.)
       nearlimit = farval / 5000.0f;
     }
-    
+
     // adjust the near plane if the the value is too small.
     if (nearval < nearlimit) {
       nearval = nearlimit;
     }
-    
-    /*if (this->autoclipcb) {
+
+#if 0
+    if (this->autoclipcb) {
       SbVec2f nearfar;
       nearfar[0] = nearval;
       nearfar[1] = farval;
-      
+
       nearfar = this->autoclipcb(this->autoclipuserdata, nearfar);
-      
+
       nearval = nearfar[0];
-      farval = nearfar[1]; 
-    }*/
+      farval = nearfar[1];
+    }
+#endif // 0
   }
   // Some slack around the bounding box, in case the scene fits
   // exactly inside it. This is done to minimize the chance of
@@ -643,7 +622,7 @@ bgui3d_viewer_tableau::set_clipping_planes()
   // modify the frustum.
   if (scene_camera_->getTypeId().getName() == "FrustumCamera") {
     nearval = scene_camera_->nearDistance.getValue();
-    farval = farval * (1.0f + SLACK); 
+    farval *= (1.0f + SLACK);
     if (farval <= nearval) {
       // nothing is visible, so just set farval to som value > nearval.
       farval = nearval + 10.0f;
@@ -654,8 +633,6 @@ bgui3d_viewer_tableau::set_clipping_planes()
     scene_camera_->nearDistance = nearval * (1.0f - SLACK);
     scene_camera_->farDistance = farval * (1.0f + SLACK);
   }
-
-
 }
 
 
@@ -677,7 +654,7 @@ bgui3d_viewer_tableau::get_parents_of_node(SoNode * node)
   vcl_vector<SoGroup*> parents;
   for (int i = 0; i < pl.getLength(); ++i) {
     SoFullPath * p = (SoFullPath*) pl[i];
-    if(p->getLength() > 0)
+    if (p->getLength() > 0)
       parents.push_back((SoGroup*)p->getNodeFromTail(1));
   }
   SoBaseKit::setSearchingChildren(oldsearch);
@@ -712,8 +689,8 @@ bgui3d_viewer_tableau::find_cameras(SoNode* root) const
 }
 
 
-//: Find the VRML viewpoint nodes in the scenegraph and make camera
-// the cameras are added to the camera group (outside the user scene)
+//: Find the VRML viewpoint nodes in the scenegraph and make camera.
+// The cameras are added to the camera group (outside the user scene)
 void bgui3d_viewer_tableau::collect_vrml_cameras(SoNode* root) const
 {
   assert(camera_group_);
