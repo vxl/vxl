@@ -3,22 +3,23 @@
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_resource_sptr.h>
 #include <vil/vil_image_view.h>
-
 #include <vil/algo/vil_histogram.h>
 
-void bwm_lidar_algo::label_lidar(vil_image_view<float> first_ret, 
-                                 vil_image_view<float> last_ret, 
+#include <vcl_cmath.h> // std::ceil()
+
+void bwm_lidar_algo::label_lidar(vil_image_view<float> first_ret,
+                                 vil_image_view<float> last_ret,
                                  lidar_labeling_params& params,
                                  vil_image_view<vxl_byte> &labeled)
 {
-  // Parameters: should these be passed in to function or taken from user input?
- /* double gnd_thresh = 1.0;         // maximum ground height
+#if 0 // Parameters: should these be passed in to function or taken from user input?
+  double gnd_thresh = 1.0;         // maximum ground height
   double bld_diff_thresh = 0.5;    // maximum first/last return diff for building
   double min_bld_height = 2.5;     // minimum building height
   double min_bld_area = 35;        // minimum building area (in pixels)
   double max_veg_height = 10.0;    // anything above will automatically be labeled building
   double veg_diff_thresh = 0.75;   // minimum first/last return difference for vegitation
-*/
+#endif // *
   int GND_PLANE = 2; //blue
   int VEG_PLANE = 1; // green
   int BLD_PLANE = 0; // red
@@ -37,7 +38,7 @@ void bwm_lidar_algo::label_lidar(vil_image_view<float> first_ret,
     vcl_cerr << "error, segmented image must have 3 planes (rgb)\n";
     return;
   }
-  
+
   double min_elev = last_ret(0,0);
   double max_elev = first_ret(0,0);
 
@@ -60,7 +61,7 @@ void bwm_lidar_algo::label_lidar(vil_image_view<float> first_ret,
   // assume ground is horizontal and most common height value
   vcl_vector<double> histo;
   double bin_size = 0.5; // 0.5 meters per bin
-  int nbins = (int)ceil((max_elev - min_elev)/bin_size);
+  int nbins = (int)vcl_ceil((max_elev - min_elev)/bin_size);
   vil_histogram(last_ret, histo, min_elev, max_elev, nbins);
   double max_count = 0;
   double gnd_val = 0;
@@ -77,26 +78,26 @@ void bwm_lidar_algo::label_lidar(vil_image_view<float> first_ret,
       double diff = first_ret(i,j) - last_ret(i,j);
       labeled(i,j,BLD_PLANE) = 0;
       labeled(i,j,VEG_PLANE) = 0;
-      if (last_ret(i,j) <= gnd_val + params.gnd_thresh_) 
+      if (last_ret(i,j) <= gnd_val + params.gnd_thresh_)
         labeled(i,j,GND_PLANE) = 255;
       else {
         labeled(i,j,GND_PLANE) = 0;
         if (diff > params.veg_diff_thresh_)
           labeled(i,j,VEG_PLANE) = 255;
-        if ( ((diff < params.bld_diff_thresh_) && (first_ret(i,j) > gnd_val + params.min_bld_height_)) || 
+        if ( ((diff < params.bld_diff_thresh_) && (first_ret(i,j) > gnd_val + params.min_bld_height_)) ||
              (first_ret(i,j) > gnd_val + params.max_veg_height_) ) {
              labeled(i,j,BLD_PLANE) = 255;
         }
       }
     }
   }
- 
+
   // TODO: clean up with some morphology- MATLAB code:
 
 //veg = imdilate(imerode(veg0,ones(3)),ones(3));
 //
 //
-//% erode to try and disconect thin patches of trees 
+//% erode to try and disconect thin patches of trees
 //bld0 = imerode(bld0,ones(3));
 //
 //labeled = bwlabel(bld0);
@@ -113,7 +114,7 @@ void bwm_lidar_algo::label_lidar(vil_image_view<float> first_ret,
 //bld = bld2;
 //
 //
-//% dilate vegitation mask, dont overtake buldings 
+//% dilate vegitation mask, dont overtake buldings
 //veg = imdilate(veg,ones(3)) & ~bld;
 //
 //% swallow up any small unclassified points with ground
@@ -123,7 +124,5 @@ void bwm_lidar_algo::label_lidar(vil_image_view<float> first_ret,
 //veg = veg | ~(bld | gnd);
 
 
-
   return;
 }
-
