@@ -16,7 +16,6 @@
 #include <bgui/bgui_vsol_soview2D.h>
 
 #include <vsol/vsol_point_2d_sptr.h>
-#include <vsol/vsol_point_3d_sptr.h>
 #include <vsol/vsol_box_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
@@ -88,7 +87,7 @@ class bwm_observer_img : public bgui_vsol2D_tableau
 
   void recover_lines();
 
-  void jim_obs_process(){ vcl_cout << "I am Jim Green's Process!!!!" << vcl_endl; }
+  void jim_obs_process() { vcl_cout << "I am Jim Green's Process!!!!" << vcl_endl; }
 
   //:moves to a specified position
   void move_to_point(float x, float y);
