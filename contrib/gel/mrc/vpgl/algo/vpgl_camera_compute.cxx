@@ -726,7 +726,7 @@ compute_local( vpgl_rational_camera<double> const& rat_cam,
     .5*(approximation_volume.min_z()+approximation_volume.max_z()), bgeo_lvcs::wgs84, bgeo_lvcs::DEG );
 
   // Get a new local bounding box.
-  double min_lx, min_ly, min_lz, max_lx, max_ly, max_lz;
+  double min_lx=1e99, min_ly=1e99, min_lz=1e99, max_lx=0, max_ly=0, max_lz=0;
   for ( int cx = 0; cx < 2; cx++ ) {
     for ( int cy = 0; cy < 2; cy++ ) {
       for ( int cz = 0; cz < 2; cz++ ) {
