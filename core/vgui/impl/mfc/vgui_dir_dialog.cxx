@@ -146,6 +146,10 @@
 #include <imagehlp.h>       // For ::MakeSureDirectoryPathExists()
 
 #include "vgui_dir_dialog.h"      // Our own header file
+#include <vcl_cstring.h>
+#include <vcl_cctype.h>
+
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
