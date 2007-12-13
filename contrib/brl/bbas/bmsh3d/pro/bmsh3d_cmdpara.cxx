@@ -5,6 +5,7 @@
 // \author Ming-Ching Chang
 // \date Feb 12, 2007
 
+#include <vcl_limits.h>
 #include <bmsh3d/bmsh3d_utils.h>
 
 //#####################################################################
@@ -122,12 +123,12 @@ vul_arg<float>        bmsh3d_cmd_rx ("-rx", "Rotation in X", 0.0f);
 vul_arg<float>        bmsh3d_cmd_ry ("-ry", "Rotation in Y", 0.0f);
 vul_arg<float>        bmsh3d_cmd_rz ("-rz", "Rotation in Z", 0.0f);
 vul_arg<float>        bmsh3d_cmd_scale ("-scale", "Scaling factor", 1.0f);
-vul_arg<float>        bmsh3d_cmd_minx ("-minx", "Min X", FLT_MAX);
-vul_arg<float>        bmsh3d_cmd_miny ("-miny", "Min Y", FLT_MAX);
-vul_arg<float>        bmsh3d_cmd_minz ("-minz", "Min Z", FLT_MAX);
-vul_arg<float>        bmsh3d_cmd_maxx ("-maxx", "Max X", FLT_MIN);
-vul_arg<float>        bmsh3d_cmd_maxy ("-maxy", "Max Y", FLT_MIN);
-vul_arg<float>        bmsh3d_cmd_maxz ("-maxz", "Max Z", FLT_MIN);
+vul_arg<float>        bmsh3d_cmd_minx ("-minx", "Min X", vcl_numeric_limits<float>::max());
+vul_arg<float>        bmsh3d_cmd_miny ("-miny", "Min Y", vcl_numeric_limits<float>::max());
+vul_arg<float>        bmsh3d_cmd_minz ("-minz", "Min Z", vcl_numeric_limits<float>::max());
+vul_arg<float>        bmsh3d_cmd_maxx ("-maxx", "Max X", vcl_numeric_limits<float>::min());
+vul_arg<float>        bmsh3d_cmd_maxy ("-maxy", "Max Y", vcl_numeric_limits<float>::min());
+vul_arg<float>        bmsh3d_cmd_maxz ("-maxz", "Max Z", vcl_numeric_limits<float>::min());
 vul_arg<int>          bmsh3d_cmd_n ("-n", "An integer number", -1);
 vul_arg<int>          bmsh3d_cmd_n1 ("-n1", "n1", 1);
 vul_arg<int>          bmsh3d_cmd_n2 ("-n2", "n2", 1);
