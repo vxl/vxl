@@ -8,6 +8,7 @@
 //  all D:\Projects\vxl\brl\bbas\bmsh3d\tests\data
 
 #include <vnl/vnl_math.h>
+#include <vgl/vgl_distance.h>
 
 #include <bmsh3d/bmsh3d_mesh.h>
 

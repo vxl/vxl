@@ -18,6 +18,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_random.h>
+#include <vgl/vgl_box_3d.h>
 #include <vul/vul_printf.h>
 
 void bmsh3d_pt_set::reset_vertices_ids ()

@@ -17,6 +17,7 @@
 
 #include <vcl_sstream.h>
 #include <vcl_cassert.h>
+#include <vcl_cstdio.h>
 
 #include <vgl/vgl_distance.h>
 

@@ -20,6 +20,8 @@
 #include <vcl_queue.h>
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_distance.h>
 #include <vul/vul_printf.h>
 
 #include "bmsh3d_he_mesh.h"

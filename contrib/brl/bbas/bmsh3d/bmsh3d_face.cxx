@@ -17,7 +17,9 @@
 
 #include <vcl_cassert.h>
 #include <vcl_sstream.h>
+#include <vcl_cstdio.h>
 #include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_distance.h>
 
 #include "bmsh3d_triangle.h"
 #include "bmsh3d_mesh.h"
