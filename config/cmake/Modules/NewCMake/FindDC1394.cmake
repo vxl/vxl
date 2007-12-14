@@ -5,7 +5,7 @@
 # DC1394_LIBRARIES, the libraries to link against to use DC1394.
 # DC1394_FOUND, If false, do not try to use DC1394.
 #
-# Currently this code works with libdc1394 version 2.0.0-rc7.
+# Currently this code works with libdc1394 version 2.0.0-rc9.
 
 
 FIND_PATH( DC1394_INCLUDE_DIR dc1394/control.h
