@@ -417,6 +417,54 @@ n_nearest_impl( point_type const& pt,
     mid = distances.end();
   }
 
+#define support_points_outside_boundaries 0
+#if support_points_outside_boundaries
+
+  // Check if any of the distances are greater than the dimensions of
+  // the region that was searched.  This would cover points that are
+  // located ouside min-max boundaries.  If a point is located outside
+  // bin region, it would be placed into a bin on the boundary of the
+  // region. As a result of this projection the distance information
+  // would be lost and we have to search area that includes the
+  // point's real location.
+
+  // get the longest distance between a given point and points that were found
+  double longest_distance = vcl_sqrt(double((mid-1)->dist_));
+
+  // find dimension of the region that has been searched
+  double r = ((bin_hi[0] - bin_lo[0]) / 2) * bin_size_[0];
+
+  // check if we have a point outside this searched region
+  if (longest_distance > r) {
+    unsigned reg_incr = unsigned(vcl_ceil(longest_distance / bin_size_[0] - (bin_hi[0] - bin_lo[0])/2));
+    for (unsigned j=0; j<reg_incr; ++j) {
+      for (unsigned i=0; i<N; ++i) {
+        // increase the region one bin at a time
+        --bin_lo[i];
+        ++bin_hi[i];
+      }
+      found += scan_bdy( bin_lo, bin_hi, cur, 0, indices );
+    }
+    // repeat above steps 2 and 3 here to compute distances again
+    distances.clear();
+    for ( ind_iter bi = indices.begin(); bi != indices.end(); ++bi ) {
+      bin_type const& bin = bins_[*bi];
+      for ( entry_iter ei = bin.begin(); ei != bin.end(); ++ei ) {
+        distances.push_back( point_dist_entry( pt, &(*ei) ) );
+      }
+    }
+    // sort points by their distance
+    if ( distances.size() > n ) {
+      mid = distances.begin() + n;
+      vcl_partial_sort( distances.begin(), mid, distances.end() );
+    }
+    else {
+      mid = distances.end();
+    }
+  }
+
+#endif  // end of support points outside region boundaries logic
+
   for ( point_dist_iter i = distances.begin(); i != mid; ++i ) {
     values.push_back( i->entry_->value_ );
     if ( points ) {
