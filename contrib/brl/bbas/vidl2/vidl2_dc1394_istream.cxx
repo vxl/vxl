@@ -26,17 +26,20 @@ dc1394_feature_to_vidl2(const dc1394feature_info_t& f_old)
 {
   vidl2_iidc1394_params::feature_options f;
   f.id = static_cast<vidl2_iidc1394_params::feature_t>(f_old.id - DC1394_FEATURE_MIN);
+  f.active_mode = static_cast<vidl2_iidc1394_params::feature_mode_t>
+                    (f_old.current_mode - DC1394_FEATURE_MODE_MIN);
+
+  for(unsigned int i=0; i<f_old.modes.num; ++i){
+    f.available_modes.push_back(static_cast<vidl2_iidc1394_params::feature_mode_t>
+                                  (f_old.modes.modes[i] - DC1394_FEATURE_MODE_MIN) );
+  }
+
   f.available = f_old.available;
-  f.one_push = f_old.one_push;
   f.absolute_capable = f_old.absolute_capable;
   f.readout_capable = f_old.readout_capable;
   f.on_off_capable = f_old.on_off_capable;
-  f.auto_capable = f_old.auto_capable;
-  f.manual_capable = f_old.manual_capable;
   f.polarity_capable = f_old.polarity_capable;
-  f.one_push_active = f_old.one_push_active;
   f.is_on = f_old.is_on;
-  f.auto_active = f_old.auto_active;
 
   f.min = f_old.min;
   f.max = f_old.max;
@@ -61,17 +64,20 @@ vidl2_feature_to_dc1394(const vidl2_iidc1394_params::feature_options& f_old)
 {
   dc1394feature_info_t f;
   f.id = static_cast<dc1394feature_t>(f_old.id + DC1394_FEATURE_MIN);
+  f.current_mode = static_cast<dc1394feature_mode_t>
+                    (f_old.active_mode + DC1394_FEATURE_MODE_MIN);
+
+  for(unsigned int i=0; i<f_old.available_modes.size(); ++i){
+    f.modes.modes[i] = static_cast<dc1394feature_mode_t>
+                        (f_old.available_modes[i] + DC1394_FEATURE_MODE_MIN);
+  }
+
   f.available = f_old.available?DC1394_TRUE:DC1394_FALSE;
-  f.one_push = f_old.one_push?DC1394_TRUE:DC1394_FALSE;
   f.absolute_capable = f_old.absolute_capable?DC1394_TRUE:DC1394_FALSE;
   f.readout_capable = f_old.readout_capable?DC1394_TRUE:DC1394_FALSE;
   f.on_off_capable = f_old.on_off_capable?DC1394_TRUE:DC1394_FALSE;
-  f.auto_capable = f_old.auto_capable?DC1394_TRUE:DC1394_FALSE;
-  f.manual_capable = f_old.manual_capable?DC1394_TRUE:DC1394_FALSE;
   f.polarity_capable = f_old.polarity_capable?DC1394_TRUE:DC1394_FALSE;
-  f.one_push_active = f_old.one_push_active?DC1394_ON:DC1394_OFF;
   f.is_on = f_old.is_on?DC1394_ON:DC1394_OFF;
-  f.auto_active = f_old.auto_active?DC1394_TRUE:DC1394_FALSE;
 
   f.min = f_old.min;
   f.max = f_old.max;
@@ -98,6 +104,7 @@ struct vidl2_dc1394_istream::pimpl
 {
   pimpl()
   : vid_index_( unsigned(-1) ),
+    dc1394_data_(NULL),
     camera_info_(NULL),
     max_speed_(DC1394_ISO_SPEED_400),
     b_mode_(false),
@@ -109,6 +116,8 @@ struct vidl2_dc1394_istream::pimpl
   }
 
   unsigned int vid_index_;
+
+  dc1394_t * dc1394_data_;
 
   dc1394camera_t* camera_info_;
 
@@ -134,6 +143,7 @@ vidl2_dc1394_istream::
 vidl2_dc1394_istream()
   : is_( new vidl2_dc1394_istream::pimpl )
 {
+  is_->dc1394_data_ = dc1394_new();
 }
 
 
@@ -142,6 +152,7 @@ vidl2_dc1394_istream::
 ~vidl2_dc1394_istream()
 {
   close();
+  dc1394_free(is_->dc1394_data_);
   delete is_;
 }
 
@@ -159,34 +170,13 @@ open(unsigned int num_dma_buffers,
   //dc1394ring_buffer_policy_t rb_policy = drop_frames? DC1394_RING_BUFFER_LAST: DC1394_RING_BUFFER_NEXT;
 
 
-  dc1394camera_t **dccameras=NULL;
-  unsigned int camnum=0;
 
-  // find the cameras using classic libdc functions:
-  unsigned int err = dc1394_find_cameras(&dccameras,&camnum);
-
-  if (err) {
-    vcl_cerr << "error finding cameras, error code: " << err << vcl_endl;
+  is_->camera_info_ = dc1394_camera_new (is_->dc1394_data_, params.guid_);
+  if(!is_->camera_info_){
+    vcl_cerr << "Warning, failed to initialize camera with guid " << vcl_hex << params.guid_ << vcl_endl;
     return false;
   }
 
-  vcl_cout << "opening port "<< params.port_ <<" node "<<params.node_<<vcl_endl;
-  // find the camera with matching port and node and delete the rest
-  for (unsigned int i=0; i<camnum; ++i) {
-    if (dccameras[i]->port == (int)params.port_ && dccameras[i]->node == params.node_)
-      is_->camera_info_ = dccameras[i];
-    else
-      dc1394_free_camera(dccameras[i]);
-  }
-  free(dccameras);
-
-
-  if ( !is_->camera_info_ || dc1394_update_camera_info(is_->camera_info_) != DC1394_SUCCESS){
-    vcl_cerr << "Failed to find camera on port "
-             << params.port_ << " node " << params.node_ << ".\n";
-    close();
-    return false;
-  }
 
   dc1394operation_mode_t op_mode = params.b_mode_ ? DC1394_OPERATION_MODE_1394B : DC1394_OPERATION_MODE_LEGACY;
   if ( dc1394_video_set_operation_mode(is_->camera_info_, op_mode) != DC1394_SUCCESS){
@@ -206,16 +196,14 @@ open(unsigned int num_dma_buffers,
     close();
     return false;
   }
-  else
-    is_->camera_info_->video_mode = dc1394video_mode_t(params.video_mode_);
 
   if (dc1394_video_set_framerate(is_->camera_info_, dc1394framerate_t(params.frame_rate_)) != DC1394_SUCCESS) {
     vcl_cerr << "Failed to set frame rate.\n";
     close();
     return false;
   }
-  else
-    is_->camera_info_->framerate = dc1394framerate_t(params.frame_rate_);
+  //else
+  //  is_->camera_info_->framerate = dc1394framerate_t(params.frame_rate_);
 
   for (unsigned int i=0; i<params.features_.size(); ++i)
   {
@@ -229,22 +217,13 @@ open(unsigned int num_dma_buffers,
     }
 
     // Set the feature mode
-    vcl_string mode_name = "Manual";
-    dc1394feature_mode_t old_mode, mode = DC1394_FEATURE_MODE_MANUAL;
-    if(f.auto_active){
-      mode = DC1394_FEATURE_MODE_AUTO;
-      mode_name = "Automatic";
-    }
-    if(f.one_push_active){
-      mode = DC1394_FEATURE_MODE_ONE_PUSH_AUTO;
-      mode_name = "One Push";
-    }
+    dc1394feature_mode_t old_mode;
     if ( dc1394_feature_get_mode(is_->camera_info_, f.id, &old_mode) == DC1394_SUCCESS &&
-         old_mode != mode ) {
-      if ( dc1394_feature_set_mode(is_->camera_info_, f.id, mode) != DC1394_SUCCESS) {
+         old_mode != f.current_mode ) {
+      if ( dc1394_feature_set_mode(is_->camera_info_, f.id, f.current_mode) != DC1394_SUCCESS) {
         vcl_cerr << "Failed to set mode of feature \""
                   << vidl2_iidc1394_params::feature_string(params.features_[i].id)
-                  << "\" to " << mode_name << '\n';
+                  << "\" to " << vidl2_iidc1394_params::feature_mode_string(params.features_[i].active_mode) << '\n';
         return false;
       }
     }
@@ -295,8 +274,7 @@ open(unsigned int num_dma_buffers,
   }
 
 
-  vidl2_iidc1394_params::video_mode_t vm = (vidl2_iidc1394_params::video_mode_t)is_->camera_info_->video_mode;
-  is_->pixel_format_ = vidl2_iidc1394_params::pixel_format(vm);
+  is_->pixel_format_ = vidl2_iidc1394_params::pixel_format(params.video_mode_);
 
 
   // turn on the camera power
@@ -339,7 +317,7 @@ close()
     }
 
     dc1394_capture_stop(is_->camera_info_);
-    dc1394_free_camera(is_->camera_info_);
+    dc1394_camera_free(is_->camera_info_);
     is_->camera_info_ = NULL;
   }
   is_->vid_index_ = unsigned(-1);
@@ -351,39 +329,63 @@ bool
 vidl2_dc1394_istream::
 valid_params(vidl2_iidc1394_params::valid_options& options)
 {
-  dc1394camera_t **dccameras=NULL;
-  unsigned int camnum=0;
+  dc1394_t * d = dc1394_new();
+  dc1394camera_list_t * list;
 
-  // find the cameras using classic libdc functions:
-  unsigned int err = dc1394_find_cameras(&dccameras,&camnum);
+  // enumerate the cameras
+  dc1394error_t err = dc1394_camera_enumerate(d, &list);
 
-  if (err == DC1394_NO_CAMERA) {
-    options.cameras.clear();
-    return true;
-  }
-  else if (err) {
-    vcl_cerr << "error finding cameras, error code: " << err << vcl_endl;
+  if (err) {
+    vcl_cerr << "error finding cameras: "
+             << dc1394_error_get_string(err) << vcl_endl;
+    dc1394_camera_free_list (list);
+    dc1394_free(d);
     return false;
   }
 
-  options.cameras.resize(camnum);
+  // No cameras found
+  if (list->num == 0) {
+    options.cameras.clear();
+    dc1394_camera_free_list (list);
+    dc1394_free(d);
+    return true;
+  }
+
+  options.cameras.resize(list->num);
 
   // create a list of cameras
-  for (unsigned int i=0; i<camnum; ++i) {
-    options.cameras[i].node = dccameras[i]->node;
-    options.cameras[i].port = dccameras[i]->port;
-    options.cameras[i].vendor = dccameras[i]->vendor;
-    options.cameras[i].model = dccameras[i]->model;
-    options.cameras[i].speed = static_cast<vidl2_iidc1394_params::speed_t>(dccameras[i]->iso_speed);
+  for (unsigned int i=0; i<list->num; ++i) {
+    dc1394camera_t *camera = dc1394_camera_new (d, list->ids[i].guid);
+    if(!camera){
+      vcl_cerr << "Warning, failed to initialize camera with guid " << vcl_hex << list->ids[i].guid << vcl_endl;
+      continue;
+    }
+
+    options.cameras[i].guid = camera->guid;
+    options.cameras[i].vendor = camera->vendor;
+    options.cameras[i].model = camera->model;
+
+    dc1394video_mode_t video_mode;
+    if( dc1394_video_get_mode(camera,&video_mode) == DC1394_SUCCESS )
+      options.cameras[i].curr_mode = static_cast<vidl2_iidc1394_params::video_mode_t>(video_mode);
+
+    dc1394framerate_t framerate;
+    if( dc1394_video_get_framerate(camera,&framerate) == DC1394_SUCCESS )
+      options.cameras[i].curr_frame_rate = static_cast<vidl2_iidc1394_params::frame_rate_t>(framerate);
+
     dc1394operation_mode_t op_mode;
-    if ( dc1394_video_get_operation_mode(dccameras[i], &op_mode) == DC1394_SUCCESS)
+    if ( dc1394_video_get_operation_mode(camera, &op_mode) == DC1394_SUCCESS)
       options.cameras[i].b_mode = (op_mode == DC1394_OPERATION_MODE_1394B);
-    options.cameras[i].curr_mode = static_cast<vidl2_iidc1394_params::video_mode_t>(dccameras[i]->video_mode);
-    options.cameras[i].curr_frame_rate = static_cast<vidl2_iidc1394_params::frame_rate_t>(dccameras[i]->framerate);
+
+    dc1394speed_t iso_speed;
+    if ( dc1394_video_get_iso_speed(camera, &iso_speed) == DC1394_SUCCESS)
+      options.cameras[i].speed = static_cast<vidl2_iidc1394_params::speed_t>(iso_speed);
 
     dc1394video_modes_t modes;
-    if ( dc1394_video_get_supported_modes(dccameras[i], &modes ) <0 ) {
+    if ( dc1394_video_get_supported_modes(camera, &modes ) <0 ) {
       vcl_cerr << "Could not find any supported video modes\n";
+      dc1394_camera_free_list (list);
+      dc1394_free(d);
       return false;
     }
     //const vidl2_iidc1394_params::valid_options::valid_modes& m =
@@ -395,35 +397,34 @@ valid_params(vidl2_iidc1394_params::valid_options& options)
       if (format > 5)
         continue;
       dc1394framerates_t framerates;
-      dc1394_video_get_supported_framerates(dccameras[i], modes.modes[j], &framerates);
+      dc1394_video_get_supported_framerates(camera, modes.modes[j], &framerates);
       options.cameras[i].modes[j].frame_rates.resize(framerates.num);
       for (unsigned int k=0; k<framerates.num; ++k) {
         options.cameras[i].modes[j].frame_rates[k] = (vidl2_iidc1394_params::frame_rate_t)framerates.framerates[k];
       }
     }
     dc1394featureset_t features;
-    if (dc1394_get_camera_feature_set(dccameras[i], &features) < 0){
+    if (dc1394_feature_get_all(camera, &features) < 0){
       vcl_cerr << "Could not find any camera control features\n";
+      dc1394_camera_free_list (list);
+      dc1394_free(d);
       return false;
     }
     for (unsigned int k= DC1394_FEATURE_MIN, j= 0; k <= DC1394_FEATURE_MAX; k++, j++)  {
       const dc1394feature_info_t& f = features.feature[j];
-      int fid = f.id;
       if (!f.available)
         continue;
       options.cameras[i].features.push_back(dc1394_feature_to_vidl2(f));
-      vcl_cout << "feature: "<< dc1394_feature_desc[fid - DC1394_FEATURE_MIN]<< vcl_endl;
+      vcl_cout << "feature: "<< dc1394_feature_get_string(f.id) << vcl_endl;
     }
-    dc1394_print_feature_set(&features);
+    dc1394_feature_print_all(&features, stdout);
+
+    dc1394_camera_free(camera);
   }
 
-  if (camnum > 0) {
-    // free the cameras
-    for (unsigned int i=0; i<camnum; ++i)
-      dc1394_free_camera(dccameras[i]);
 
-    free(dccameras);
-  }
+  dc1394_camera_free_list (list);
+  dc1394_free(d);
 
   return true;
 }

@@ -16,8 +16,7 @@
 
 
 vidl2_iidc1394_params::vidl2_iidc1394_params()
-  : node_( 0 ),
-    port_( 0 ),
+  : guid_( 0 ),
     speed_( ISO_SPEED_400 ),
     b_mode_(false),
     frame_rate_( FRAMERATE_15 ),
@@ -139,6 +138,21 @@ feature_string(feature_t f)
     case FEATURE_CAPTURE_QUALITY: return "Capture Quality";
   }
   return "invalid feature";
+}
+
+
+//: Return string describing the feature mode
+vcl_string
+vidl2_iidc1394_params::
+feature_mode_string(feature_mode_t fm)
+{
+  switch (fm)
+  {
+    case FEATURE_MODE_MANUAL:         return "Manual";
+    case FEATURE_MODE_AUTO:           return "Automatic";
+    case FEATURE_MODE_ONE_PUSH_AUTO:  return "One Push";
+  }
+  return "invalid feature mode";
 }
 
 

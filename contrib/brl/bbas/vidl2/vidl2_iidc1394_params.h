@@ -114,11 +114,19 @@ struct vidl2_iidc1394_params
                   FEATURE_CAPTURE_SIZE,
                   FEATURE_CAPTURE_QUALITY};
 
+  //: Available feature control modes
+  enum feature_mode_t{ FEATURE_MODE_MANUAL,
+                       FEATURE_MODE_AUTO,
+                       FEATURE_MODE_ONE_PUSH_AUTO};
+
   //: Return string describing the mode
   static vcl_string video_mode_string(video_mode_t m);
 
   //: Return string describing the feature
   static vcl_string feature_string(feature_t f);
+
+  //: Return string describing the feature mode
+  static vcl_string feature_mode_string(feature_mode_t fm);
 
   //: Return the format number from the video mode enumeration
   static unsigned int video_format_val(video_mode_t m);
@@ -144,11 +152,8 @@ struct vidl2_iidc1394_params
 
   //-------------------------------------------------------
 
-  //: The node number of the camera (default 0)
-  int node_;
-
-  //: The port number of the camera (default 0)
-  unsigned int port_;
+  //: The global unique identifier of the camera (default 0)
+  vxl_uint_64 guid_;
 
   //: The data transfer speed (default ISO_SPEED_400)
   speed_t speed_;
@@ -170,13 +175,9 @@ struct vidl2_iidc1394_params
   //: Construct to default values
   vidl2_iidc1394_params();
 
-  //: Set the node
-  vidl2_iidc1394_params& node( int n )
-  { node_ = n; return *this; }
-
-  //: Set the port
-  vidl2_iidc1394_params& port( unsigned int p )
-  { port_ = p; return *this; }
+  //: Set the guid
+  vidl2_iidc1394_params& guid( vxl_uint_64 guid )
+  { guid_ = guid; return *this; }
 
   //: Set the speed
   vidl2_iidc1394_params& speed( speed_t s )
@@ -201,18 +202,16 @@ struct vidl2_iidc1394_params
 //: Describes a feature and it's set of options
 struct vidl2_iidc1394_params::feature_options
 {
-  feature_t    id;
-  bool         available;
-  bool         one_push;
-  bool         absolute_capable;
-  bool         readout_capable;
-  bool         on_off_capable;
-  bool         auto_capable;
-  bool         manual_capable;
-  bool         polarity_capable;
-  bool         one_push_active;
-  bool         is_on;
-  bool         auto_active;
+  feature_t       id;
+  bool            available;
+  bool            absolute_capable;
+  bool            readout_capable;
+  bool            on_off_capable;
+  bool            polarity_capable;
+  bool            is_on;
+  feature_mode_t  active_mode;
+
+  vcl_vector<feature_mode_t>  available_modes;
 
 // FIXME - add trigger options
 #if 0
@@ -256,8 +255,7 @@ struct vidl2_iidc1394_params::valid_options
   //: A valid camera and its options
   struct camera
   {
-    int node;
-    unsigned int port;
+    vxl_uint_64 guid; // global unique identifier
     vcl_string vendor;
     vcl_string model;
     speed_t speed;

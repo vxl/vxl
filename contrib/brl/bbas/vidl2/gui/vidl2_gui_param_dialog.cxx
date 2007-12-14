@@ -278,7 +278,7 @@ vidl2_dc1394_istream* vidl2_gui_param_dialog::dc1394_istream()
   for (unsigned int i=0; i<options.cameras.size(); ++i){
     const vidl2_iidc1394_params::valid_options::camera& cam = options.cameras[i];
     vcl_cout << "Camera "<<i<<": "<< cam.vendor << " : " << cam.model
-             << " : node "<< cam.node <<" : port "<<cam.port<< '\n';
+             << " : guid "<< vcl_hex << cam.guid << '\n';
     for (unsigned int j=0; j<cam.modes.size(); ++j){
       const vidl2_iidc1394_params::valid_options::valid_mode& m = cam.modes[j];
       vcl_cout << "\tmode "<<j<<" : "
@@ -307,7 +307,7 @@ vidl2_dc1394_istream* vidl2_gui_param_dialog::dc1394_istream()
       vcl_stringstream ss;
       ss << options.cameras[i].vendor << " "
          << options.cameras[i].model
-         << " (node "<<options.cameras[i].node << ")";
+         << " (guid "<< vcl_hex << options.cameras[i].guid << ")";
       camera_names.push_back(ss.str());
     }
     dlg.choice("Camera",camera_names,camera_id);
@@ -315,8 +315,7 @@ vidl2_dc1394_istream* vidl2_gui_param_dialog::dc1394_istream()
       return NULL;
   }
   const vidl2_iidc1394_params::valid_options::camera& cam = options.cameras[camera_id];
-  params.node_ = cam.node;
-  params.port_ = cam.port;
+  params.guid_ = cam.guid;
 
   // Select the mode
   //-----------------------------------
@@ -380,7 +379,7 @@ vidl2_dc1394_istream* vidl2_gui_param_dialog::dc1394_istream()
       return NULL;
   }
 
-  static unsigned int num_dma_buffers = 2;
+  static unsigned int num_dma_buffers = 3;
   static bool drop_frames = false;
   {
     vgui_dialog dlg("Enter DMA Options");
@@ -419,26 +418,12 @@ bool vidl2_gui_param_dialog::update_iidc1394_params(vcl_vector<vidl2_iidc1394_pa
     vidl2_iidc1394_params::feature_options& f = features[i];
     vcl_stringstream ss;
 
-    int off_idx = -1;
-    int man_idx = -1;
-    int auto_idx = -1;
-    int one_push_idx = -1;
-    int abs_idx = -1;
     vcl_vector<vcl_string> modes;
-    if(f.on_off_capable)   { off_idx = modes.size(); modes.push_back("Off"); }
-    if(f.manual_capable)   { man_idx = modes.size(); modes.push_back("Manual"); }
-    if(f.auto_capable)    { auto_idx = modes.size(); modes.push_back("Automatic"); }
-    if(f.one_push)    { one_push_idx = modes.size(); modes.push_back("One Push"); }
-    if(f.absolute_capable) { abs_idx = modes.size(); modes.push_back("Absolute"); }
-
-    if(f.auto_active && auto_idx >= 0)
-      choices[i] = auto_idx;
-    else if(!f.is_on && off_idx >=0)
-      choices[i] = off_idx;
-    else if(f.abs_control && abs_idx >= 0)
-      choices[i] = abs_idx;
-    else if(man_idx >= 0)
-      choices[i] = man_idx;
+    for(unsigned int j=0; j<f.available_modes.size(); ++j){
+      modes.push_back(vidl2_iidc1394_params::feature_mode_string(f.available_modes[j]));
+      if(f.active_mode == f.available_modes[j])
+        choices[i] = j;
+    }
 
     ss << vidl2_iidc1394_params::feature_string(f.id);
 
@@ -494,41 +479,16 @@ bool vidl2_gui_param_dialog::update_iidc1394_params(vcl_vector<vidl2_iidc1394_pa
 
   for(unsigned int i=0; i<features.size(); ++i){
     vidl2_iidc1394_params::feature_options& f = features[i];
+    if(f.available_modes.empty())
+      continue;
 
-    enum mode_t {OFF, MAN, AUTO, ONE_PUSH, ABS};
-    vcl_vector<unsigned> modes;
-    if(f.on_off_capable) modes.push_back(OFF);
-    if(f.manual_capable) modes.push_back(MAN);
-    if(f.auto_capable) modes.push_back(AUTO);
-    if(f.one_push) modes.push_back(ONE_PUSH);
-    if(f.absolute_capable) modes.push_back(ABS);
-
-    f.is_on = true;
-    f.auto_active = false;
-    f.one_push_active = false;
-    f.abs_control = false;
-
-    if(!modes.empty()){
-      switch(modes[choices[i]]){
-        case OFF:
-          f.is_on = false;
-          break;
-        case MAN:
-          break;
-        case AUTO:
-          f.auto_active = true;
-          break;
-        case ONE_PUSH:
-          f.one_push_active = true;
-          break;
-        case ABS:
-          f.abs_control = true;
-          break;
-        default:
-          break;
-      }
+    vcl_vector<vidl2_iidc1394_params::feature_mode_t> modes;
+    for(unsigned int j=0; j<f.available_modes.size(); ++j){
+      modes.push_back(static_cast<vidl2_iidc1394_params::feature_mode_t>
+                       (f.available_modes[j]) );
     }
-  }
+    f.active_mode = modes[choices[i]];
 
+  }
   return true;
 }

@@ -18,7 +18,7 @@
 // version 1 API.  Linking to both versions of libdc1394 will result
 // in linking errors.
 //
-// Currently this code works with libdc1394 version 2.0.0-rc7.
+// Currently this code works with libdc1394 version 2.0.0-rc9.
 // The authors note that the libdc1394 API is subject to change in
 // prerelease version.  As a result, the vidl2_dc1394_istream is
 // is subject to change with it.
