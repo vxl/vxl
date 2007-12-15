@@ -7,19 +7,19 @@
 
 #include <vil3d/algo/vil3d_structuring_element.h>
 #include <vil3d/vil3d_image_view.h>
-
+#include <vcl_cassert.h>
 
 //: Return max(im[0],max_i (f[i]*im[offset[i]]))
 //  Thus compare current voxel with weighted versions of n offset,
-//  voxels, returning the largest value.  
+//  voxels, returning the largest value.
 //  Assumes bound checking has already been done
 template <class T>
-inline T vil3d_max_product_filter(const T* im, 
-                                  const vcl_ptrdiff_t* offset, 
+inline T vil3d_max_product_filter(const T* im,
+                                  const vcl_ptrdiff_t* offset,
                                   const double* f, unsigned n)
 {
   T max_v = im[0];
-  for (unsigned i=0;i<n;++i) 
+  for (unsigned i=0;i<n;++i)
   {
     T v = T(f[i]*im[offset[i]]);
     if (v>max_v) max_v=v;
@@ -57,9 +57,9 @@ inline T vil3d_max_product_filter(const vil3d_image_view<T>& image,
 //: Preforms raster scan through image, comparing each voxel with nbours
 // Runs through every voxel in raster order.  Each voxel is compared
 // with weighted versions of offset voxels, and is replaced with the
-// maximum value.  
+// maximum value.
 //
-// Replace each voxel with 
+// Replace each voxel with
 // max(im(i,j,k),max_a (f[a]*im(i+p_i[a],j+p_j[a],k+p_k[a],plane))
 //
 // If a suitable combination of se and f is chosen,
@@ -113,7 +113,7 @@ void vil3d_max_product_filter(vil3d_image_view<T>& image,
     for (int j=jlo;j<=jhi;++j)
     {
        // first i require bound checks
-       for (int i=0;i<ilo;++i) 
+       for (int i=0;i<ilo;++i)
          image(i,j,k)=vil3d_max_product_filter(image,se,f,i,j,k);
 
        T* im = &image(ilo,j,k);
@@ -123,7 +123,7 @@ void vil3d_max_product_filter(vil3d_image_view<T>& image,
          *im=vil3d_max_product_filter(im,o_data,f_data,n);
 
        // Last i require bound checks
-       for (int i=ihi+1;i<ni;++i) 
+       for (int i=ihi+1;i<ni;++i)
          image(i,j,k)=vil3d_max_product_filter(image,se,f,i,j,k);
     }
     // Last j require bound checks
