@@ -8,16 +8,14 @@
 //
 // Cut-n-paste and modify from vil1_image_renderer.
 // \verbatim
-// Modifications
-// J.L. Mundy - Dec 27 2004 added range map to control dynamic range of display
+//  Modifications
+//   J.L. Mundy - Dec 27 2004 added range map to control dynamic range of display
 // \endverbatim
 #include <vil/vil_image_resource_sptr.h>
 #include <vil/vil_memory_chunk.h>
 #include <vgui/vgui_range_map_params_sptr.h>
 
 class vgui_section_buffer;
-
-//#include "internals/vgui_generic_vil_image_view.h"
 
 //: OpenGL utility to render a vil_image_view.
 //
@@ -35,22 +33,22 @@ class vgui_section_buffer;
 //  describe the x,y-locations of the rendered pixels. It is currently
 //  undefined where the centre of a pixel is placed.
 //
-//  Note that the class keeps a vil_image_resource (as given) 
+//  Note that the class keeps a vil_image_resource (as given)
 //  The image is rendered by extracting appropriate views from the resource
-//  There are different modes of rendering based on flags set on the 
+//  There are different modes of rendering based on flags set on the
 //  vgui_range_map_params range mapping class. The states are:
 
-//  1) rmp == null - a buffer is created for the entire image and 
+//  1) rmp == null - a buffer is created for the entire image and
 //     the buffer supplies glPixels to the display. Range map tables
 //     are used where appropriate. No pyramid image support
 //
 //  2) rmp->use_glPixelMap && rmp->cache_mapped_pix
-//     pyramid images are handled properly and 
+//     pyramid images are handled properly and
 //     the range maps are used to generate the scaled pyramid view buffer.
-//     gl hardware maps are not used. gl pixels are generated 
+//     gl hardware maps are not used. gl pixels are generated
 //     in software using the maps. Rendering is limited to the current
 //     viewport. The buffer is updated only if the viewport changes
-//     
+//
 //  3) rmp->use_glPixelMap && !rmp->cache_mapped_pix
 //     pyramid images are handled properly and
 //     the range maps are loaded into gl hardware for rendering.
@@ -68,7 +66,7 @@ class vgui_vil_image_renderer
   // but the glPixelMap is still somewhat faster JLM (on a DELL precision)
   bool render_directly(vgui_range_map_params_sptr const& mp);
 
-  //: Create a buffer if necessary 
+  //: Create a buffer if necessary
   void create_buffer(vgui_range_map_params_sptr const& rmp);
 
   //: Create a buffer with viewport dimensions
@@ -76,15 +74,13 @@ class vgui_vil_image_renderer
                      unsigned x0, unsigned y0, unsigned x1, unsigned y1,
                      float zoomx, float zoomy);
 
-  //: Create a buffer from specified resource
-  //  corresponding to a pyramid zoom level
+  //: Create a buffer from specified resource corresponding to a pyramid zoom level
   void create_buffer(vgui_range_map_params_sptr const& rmp,
                      float zoomx, float zoomy,
                      vil_image_resource_sptr const& ir);
 
   //: draw the pixels to the frame buffer
   void draw_pixels();
-
 
   //: Stores the image data (pixels, dimensions, etc).
   vil_image_resource_sptr the_image_;
@@ -98,13 +94,12 @@ class vgui_vil_image_renderer
   //: buffer state variable
   bool valid_buffer_;
 
-  //: a cache when rendering using the gl hardware map  
+  //: a cache when rendering using the gl hardware map
   vil_memory_chunk_sptr vbuf_;
 
   unsigned x0_, y0_, w_, h_; // viewport parameters
   float zx_, zy_;            // zoomx and zoomy values of the viewport
   unsigned sni_, snj_;       //size of the pyramid view
-
 
  public:
   //: Constructor - create an empty image renderer.

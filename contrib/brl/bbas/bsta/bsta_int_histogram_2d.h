@@ -1,7 +1,6 @@
 // This is brl/bbas/bsta/bsta_int_histogram_2d.h
 #ifndef bsta_int_histogram_2d_h_
 #define bsta_int_histogram_2d_h_
-
 //-----------------------------------------------------------------------------
 //:
 // \file
@@ -71,14 +70,13 @@ class bsta_int_histogram_2d
   //: Smooth the 2D histogram with a Parzen window of sigma
   void parzen(const float sigma);
 
-  //: Form a "profile" histogram along the diagonal with max value normal to
-  //  diagonal in buckets
+  //: Form a "profile" histogram along the diagonal with max value normal to diagonal in buckets
   void profile_histogram( bsta_int_histogram_1d &phist,
                           bsta_int_histogram_1d &phist_x,
                           bsta_int_histogram_1d &phist_y );
 
-  //: Find where peak drops to X% along normal on either front or rear edge of
-  //  diagonal slope.  Here the "front" is the top edge, "rear" is the bottom edge
+  //: Find where peak drops to X% along normal on either front or rear edge of diagonal slope.
+  //  Here the "front" is the top edge, "rear" is the bottom edge
   bool find_edge( unsigned int peak_y, unsigned int peak_x,
                   float newslope, float edgepct,
                   unsigned int &edge_x, unsigned int &edge_y,

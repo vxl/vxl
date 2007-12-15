@@ -199,7 +199,7 @@ void vgui_grid_tableau::add_next(vgui_tableau_sptr const& tab, unsigned& col,
 void vgui_grid_tableau::add_next(vgui_tableau_sptr const& tab)
 {
   unsigned row=0, col = 0;
-  if(!row&&!col)this->add_next(tab, col, row);//suppress warnings
+  if (!row&&!col)this->add_next(tab, col, row);//suppress warnings
 }
 
 //------------------------------------------------------------------------------
@@ -288,15 +288,14 @@ vgui_tableau_sptr vgui_grid_tableau::get_tableau_at(unsigned col_pos, unsigned r
 }
 
 //------------------------------------------------------------------------------
-//:  Returns the bounds of the grid cell in screen coordinates
-//   at the specified col and row. The computation is based on dividing 
-//   the entire viewport by the number of row and columns
+//:  Returns the bounds of the grid cell in screen coordinates at the specified col and row.
+//   The computation is based on dividing the entire viewport by the number of row and columns.
 //------------------------------------------------------------------------------
 bool vgui_grid_tableau::cell_bounding_box(unsigned col, unsigned row,
                                           float& xmin, float& ymin,
                                           float& xmax, float& ymax)
 {
-  if(col>=nb_cols || row>=nb_rows)
+  if (col>=nb_cols || row>=nb_rows)
     return false;
   vgui_poly_tableau_vp_sc_snapshot snap;
   float x0 = snap.vp[0], y0 = snap.vp[1];

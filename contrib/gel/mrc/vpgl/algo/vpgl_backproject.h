@@ -29,7 +29,7 @@ class vpgl_backproject
                           vnl_double_3 const& initial_guess,
                           vnl_double_3& world_point);
 
-  // vgl interface
+       // === vgl interface ===
 
   //:Backproject an image point onto a plane, start with initial_guess
   static bool bproj_plane(const vpgl_camera<double>*  cam,
@@ -38,9 +38,9 @@ class vpgl_backproject
                           vgl_point_3d<double> const& initial_guess,
                           vgl_point_3d<double>& world_point);
 
-  //: concrete rational camera interfaces
+            // +++ concrete rational camera interfaces +++
 
-       // vnl interface
+       // === vnl interface ===
 
   //:Backproject an image point onto a plane, start with initial_guess
   static bool bproj_plane(vpgl_rational_camera<double> const& rcam,
@@ -49,7 +49,7 @@ class vpgl_backproject
                           vnl_double_3 const& initial_guess,
                           vnl_double_3& world_point);
 
-       // vgl interface
+       // ==== vgl interface ===
 
   //:Backproject an image point onto a plane, start with initial_guess
   static bool bproj_plane(vpgl_rational_camera<double> const& rcam,

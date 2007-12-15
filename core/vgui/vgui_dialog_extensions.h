@@ -6,18 +6,17 @@
 #endif
 //:
 // \file
-// \author Gamze Tunali, LEMS, Brown University 
+// \author Gamze Tunali, LEMS, Brown University
 // \date   16 Nov 2007
-// \brief  an extension to the vgui_dialog class. vgui_dialog_extensions has two
-//         new elements: directory browser and line break. 
+// \brief  an extension to the vgui_dialog class.
+//
+//  vgui_dialog_extensions has two new elements: directory browser and line break.
 //
 // \verbatim
 //  Modifications
-//
 // \endverbatim
 
 #include <vcl_string.h>
-#include <vcl_vector.h>
 #include <vgui/vgui_dialog.h>
 
 class vgui_dialog_extensions_impl;
@@ -64,7 +63,7 @@ class vgui_dialog_extensions: public vgui_dialog
   void dir (const char* label, vcl_string& regexp, vcl_string& dirpath);
 
   bool ask();
- 
+
   void line_break();
 
  protected:
