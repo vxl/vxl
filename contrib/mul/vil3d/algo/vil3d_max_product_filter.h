@@ -97,23 +97,24 @@ void vil3d_max_product_filter(vil3d_image_view<T>& image,
   int khi = nk-1-se.max_k();
 
   // Process first z slices using bound checking
-  for (int k=0;k<klo;++k)
+  for (unsigned int k=0;int(k)<klo;++k)
   {
-    for (int j=0;j<nj;++j)
-      for (int i=0;i<ni;++i)
+    for (unsigned int j=0;j<nj;++j)
+      for (unsigned int i=0;i<ni;++i)
         image(i,j,k)=vil3d_max_product_filter(image,se,f,i,j,k);
   }
   // Process middle z slices (still require i, j checks)
   for (int k=klo;k<=khi;++k)
   {
     // First j require bound checks
-    for (int j=0;j<jlo;++j)
-      for (int i=0;i<ni;++i)
+    for (unsigned int j=0;int(j)<jlo;++j)
+      for (unsigned int i=0;i<ni;++i)
         image(i,j,k)=vil3d_max_product_filter(image,se,f,i,j,k);
+
     for (int j=jlo;j<=jhi;++j)
     {
        // first i require bound checks
-       for (int i=0;i<ilo;++i)
+       for (unsigned int i=0;int(i)<ilo;++i)
          image(i,j,k)=vil3d_max_product_filter(image,se,f,i,j,k);
 
        T* im = &image(ilo,j,k);
@@ -123,19 +124,19 @@ void vil3d_max_product_filter(vil3d_image_view<T>& image,
          *im=vil3d_max_product_filter(im,o_data,f_data,n);
 
        // Last i require bound checks
-       for (int i=ihi+1;i<ni;++i)
+       for (unsigned int i=ihi+1;i<ni;++i)
          image(i,j,k)=vil3d_max_product_filter(image,se,f,i,j,k);
     }
     // Last j require bound checks
-    for (int j=jhi+1;j<nj;++j)
-      for (int i=0;i<ni;++i)
+    for (unsigned int j=jhi+1;j<nj;++j)
+      for (unsigned int i=0;i<ni;++i)
         image(i,j,k)=vil3d_max_product_filter(image,se,f,i,j,k);
   }
   // process final z slices using bound checking
-  for (int k=khi+1;k<nk;++k)
+  for (unsigned int k=khi+1;k<nk;++k)
   {
-    for (int j=0;j<nj;++j)
-      for (int i=0;i<ni;++i)
+    for (unsigned int j=0;j<nj;++j)
+      for (unsigned int i=0;i<ni;++i)
         image(i,j,k)=vil3d_max_product_filter(image,se,f,i,j,k);
   }
 }
