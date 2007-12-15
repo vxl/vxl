@@ -1,4 +1,4 @@
-// This is core/vgui/impl/mfc/vgui_mfc_dialog_impl.h
+// This is core/vgui/impl/mfc/vgui_mfc_dialog_extensions_impl.h
 #ifndef vgui_mfc_dialog_extensions_impl_h_
 #define vgui_mfc_dialog_extensions_impl_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -6,16 +6,13 @@
 #endif
 //:
 // \file
-// \author Gamze Tunali, LEMS, Brown University 
+// \author Gamze Tunali, LEMS, Brown University
 // \date   16 Nov 2007
-// \brief  MFC implementation of vgui_dialog_extensions 
-//         
+// \brief  MFC implementation of vgui_dialog_extensions
 //
 // \verbatim
 //  Modifications
-//
 // \endverbatim
-
 
 class CFont;
 
@@ -89,4 +86,4 @@ class vgui_mfc_dialog_extensions_impl : public CWnd,public vgui_dialog_extension
   CFont* font;
 };
 
-#endif // vgui_mfc_dialog_impl_h_
+#endif // vgui_mfc_dialog_extensions_impl_h_
