@@ -9,7 +9,6 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vnl/io/vnl_io_matrix.h>
-#include <vcl_string.h>
 
 //=======================================================================
 
