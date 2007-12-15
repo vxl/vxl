@@ -10,7 +10,7 @@
 #include <mmn/mmn_arc.h>
 #include <mmn/mmn_dependancy.h>
 #include <vcl_vector.h>
-#include <vcl_utility.h>  // For vcl_pair
+//#include <vcl_utility.h>  // For vcl_pair
 
 double mmn_solve(const vcl_vector<vnl_vector<double> >& node_cost,
                  const vcl_vector<vnl_matrix<double> >& pair_cost,
