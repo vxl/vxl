@@ -15,10 +15,12 @@
 #include <Inventor/nodes/SoTranslation.h>
 #include <Inventor/nodes/SoDrawStyle.h>
 
+#include <vcl_cstdio.h> // std::sprintf()
+
 SoSeparator* draw_vertex_geom_SoPoint (const bmsh3d_vertex* V)
 {
   SoSeparator* root = new SoSeparator;
-    
+
   SoCoordinate3 * coord3 = new SoCoordinate3;
   coord3->point.set1Value (0, V->pt().x(), V->pt().y(), V->pt().z());
 
@@ -31,17 +33,17 @@ SoSeparator* draw_vertex_geom_SoPoint (const bmsh3d_vertex* V)
 
 SoSeparator* draw_vertex_geom_vispt_SoPoint (const bmsh3d_vertex* V)
 {
-  SoSeparator* root = new SoSeparator;    
+  SoSeparator* root = new SoSeparator;
   SoCoordinate3 * coord3 = new SoCoordinate3;
   coord3->point.set1Value (0, V->pt().x(), V->pt().y(), V->pt().z());
 
   bmsh3dvis_vertex_SoPointSet* pointSet = new bmsh3dvis_vertex_SoPointSet (V);
   root->addChild (coord3);
-  root->addChild (pointSet);  
+  root->addChild (pointSet);
   return root;
 }
 
-SoSeparator* draw_vertex_vispt_SoPoint (const bmsh3d_vertex* V,                                             
+SoSeparator* draw_vertex_vispt_SoPoint (const bmsh3d_vertex* V,
                                         const SbColor& color, const float size)
 {
   SoSeparator* root = new SoSeparator;
@@ -65,7 +67,7 @@ SoSeparator* draw_vertex_vispt_SoPoint (const bmsh3d_vertex* V,
   return root;
 }
 
-SoSeparator* draw_vertex_geom_SoCube (const bmsh3d_vertex* V, 
+SoSeparator* draw_vertex_geom_SoCube (const bmsh3d_vertex* V,
                                       const float size)
 {
   SoSeparator* root = new SoSeparator;
@@ -80,7 +82,7 @@ SoSeparator* draw_vertex_geom_SoCube (const bmsh3d_vertex* V,
   return root;
 }
 
-SoSeparator* draw_vertex_geom_vispt_SoCube (const bmsh3d_vertex* V, 
+SoSeparator* draw_vertex_geom_vispt_SoCube (const bmsh3d_vertex* V,
                                             const float size)
 {
   SoSeparator* root = new SoSeparator;
@@ -95,7 +97,7 @@ SoSeparator* draw_vertex_geom_vispt_SoCube (const bmsh3d_vertex* V,
   return root;
 }
 
-SoSeparator* draw_vertex_SoCube (const bmsh3d_vertex* V, 
+SoSeparator* draw_vertex_SoCube (const bmsh3d_vertex* V,
                                  const SbColor& color, const float size)
 {
   SoSeparator* root = new SoSeparator;
@@ -104,8 +106,8 @@ SoSeparator* draw_vertex_SoCube (const bmsh3d_vertex* V,
   root->addChild (basecolor);
 
   SoTranslation* trans = new SoTranslation;
-  trans->translation.setValue (V->pt().x(), 
-                               V->pt().y(), 
+  trans->translation.setValue (V->pt().x(),
+                               V->pt().y(),
                                V->pt().z());
 
   SoCube* cube = new SoCube;
@@ -117,11 +119,11 @@ SoSeparator* draw_vertex_SoCube (const bmsh3d_vertex* V,
   return root;
 }
 
-SoSeparator* draw_vertex_vispt_SoCube (const bmsh3d_vertex* V, 
+SoSeparator* draw_vertex_vispt_SoCube (const bmsh3d_vertex* V,
                                        const SbColor& color, const float size,
                                        const bool show_id)
 {
-  SoSeparator* root = new SoSeparator;  
+  SoSeparator* root = new SoSeparator;
   SoBaseColor* basecolor = new SoBaseColor;
   basecolor->rgb = color;
   root->addChild (basecolor);
@@ -135,7 +137,7 @@ SoSeparator* draw_vertex_vispt_SoCube (const bmsh3d_vertex* V,
   cube->depth = size;
   root->addChild (trans);
   root->addChild (cube);
-  
+
   if (show_id) {
     char buf[64];
     vcl_sprintf (buf, "%d", V->id());
@@ -144,8 +146,3 @@ SoSeparator* draw_vertex_vispt_SoCube (const bmsh3d_vertex* V,
 
   return root;
 }
-
-
-
-
-
