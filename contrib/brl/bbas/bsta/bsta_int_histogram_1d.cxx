@@ -4,6 +4,7 @@
 // \file
 
 #include <bsta/bsta_gauss.h> // for gausian parzan window filter
+#include <vcl_iostream.h>
 
 // constructor
 bsta_int_histogram_1d::bsta_int_histogram_1d(unsigned int bins) // const??
