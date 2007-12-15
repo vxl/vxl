@@ -1,6 +1,7 @@
-// bgui3d.cxx
-
 #include "bgui3d.h"
+//:
+// \file
+
 #include <Inventor/SoDB.h>
 #include <Inventor/SoInteraction.h>
 #include <Inventor/nodekits/SoNodeKit.h>

@@ -1,13 +1,14 @@
 #ifndef bwm_rat_proj_camera_h_
 #define bwm_rat_proj_camera_h_
-
+//:
+// \file
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/algo/vpgl_camera_compute.h>
 
 class bwm_rat_proj_camera
 {
-public:
+ public:
   bwm_rat_proj_camera(){}
 
   bwm_rat_proj_camera(vpgl_rational_camera<double>& rat_cam);
@@ -31,8 +32,8 @@ public:
   vgl_h_matrix_3d<double> norm_trans() { return t_; }
 
   void shift_camera(vgl_point_3d<double> center);
-  
-private:
+
+ private:
   vpgl_rational_camera<double> rat_cam_;
   vpgl_perspective_camera<double> persp_cam_;
   vgl_h_matrix_3d<double> t_;

@@ -1,3 +1,5 @@
+//:
+// \file
 #ifndef mcal_add_all_loaders_h_
 #define mcal_add_all_loaders_h_
 

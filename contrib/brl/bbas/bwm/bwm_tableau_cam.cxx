@@ -1,4 +1,6 @@
 #include "bwm_tableau_cam.h"
+//:
+// \file
 #include "bwm_tableau_mgr.h"
 #include "bwm_observer_mgr.h"
 #include "bwm_observable_mesh.h"
@@ -7,7 +9,8 @@
 #include "algo/bwm_utils.h"
 
 #include <vsol/vsol_point_2d.h>
-#include <vsol/vsol_line_2d.h>
+#include <vsol/vsol_polygon_2d_sptr.h>
+#include <vsol/vsol_polygon_3d_sptr.h>
 
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_viewer2D_tableau.h>
