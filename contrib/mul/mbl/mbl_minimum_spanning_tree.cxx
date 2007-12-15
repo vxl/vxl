@@ -1,7 +1,7 @@
 #include "mbl_minimum_spanning_tree.h"
 //:
 // \file
-#include <vnl/vnl_vector.h>
+#include <vnl/vnl_matrix.h>
 #include <vcl_algorithm.h>
 
 //: Select the smallest pair s.t. first is in \param a, second in \param b
