@@ -6,6 +6,7 @@
 // \date May 03, 2005.
 
 #include <vcl_iostream.h>
+#include <vcl_cstdio.h>
 #include <vul/vul_printf.h>
 
 #include <bmsh3d/bmsh3d_mesh.h>
