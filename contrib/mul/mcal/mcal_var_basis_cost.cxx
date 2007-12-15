@@ -12,7 +12,6 @@
 #include <vsl/vsl_binary_io.h>
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
-#include <vul/vul_string.h>
 #include <mbl/mbl_exception.h>
 
 //=======================================================================
