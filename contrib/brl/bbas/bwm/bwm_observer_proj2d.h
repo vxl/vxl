@@ -10,7 +10,6 @@
 #include <vgui/vgui_easy2D_tableau_sptr.h>
 #include <vgui/vgui_easy2D_tableau.h>
 
-#include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 
 #include <vpgl/vpgl_camera.h>

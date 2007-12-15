@@ -10,7 +10,6 @@
 #include <vgl/vgl_homg_plane_3d.h>
 
 #include <vsol/vsol_point_2d_sptr.h>
-#include <vsol/vsol_point_3d_sptr.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
 
 #include <vpgl/vpgl_rational_camera.h>

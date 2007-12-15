@@ -9,10 +9,8 @@
 #include <vcl_map.h>
 #include <vcl_vector.h>
 
-#include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 
-#include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_homg_plane_3d.h>
 
@@ -57,7 +55,7 @@ class bwm_observer_coin3d : public bwm_observer, public bgui3d_examiner_tableau
 
   void divide();
 
-  void connect_inner_face(vsol_polygon_2d_sptr poly){};
+  void connect_inner_face(vsol_polygon_2d_sptr poly) {}
 
   void create_inner_face(){}
 

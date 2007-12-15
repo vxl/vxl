@@ -12,9 +12,7 @@
 #include <vgui/vgui_easy2D_tableau_sptr.h>
 #include <vgui/vgui_easy2D_tableau.h>
 
-#include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
-#include <vsol/vsol_polygon_3d.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
 
 #include <vsol/vsol_point_2d_sptr.h>
@@ -65,12 +63,12 @@ class bwm_observer_lidar: public bwm_observer_cam
 
   //: Special case of backprojecting onto the projection plane
   void backproj_poly(vsol_polygon_2d_sptr poly2d,
-    vsol_polygon_3d_sptr& poly3d);
+                     vsol_polygon_3d_sptr& poly3d);
 
   void proj_poly(vsol_polygon_3d_sptr poly3d,
-    vsol_polygon_2d_sptr& poly2d);
+                 vsol_polygon_2d_sptr& poly2d);
 
-  void backproj_point(vsol_point_2d_sptr p2d,  vsol_point_3d_sptr &p3d);
+  void backproj_point(vsol_point_2d_sptr p2d, vsol_point_3d_sptr &p3d);
 
   void set_lvcs(double lat, double lon, double elev);
 
@@ -79,14 +77,14 @@ class bwm_observer_lidar: public bwm_observer_cam
   float ground_elev() { return ground_elev_; }
 
   bool get_point_cloud(const float x1, const float y1,
-    const float x2, const float y2,
-    bgeo_lvcs& lvcs, vcl_vector<vsol_point_3d_sptr>& points);
+                       const float x2, const float y2,
+                       bgeo_lvcs& lvcs, vcl_vector<vsol_point_3d_sptr>& points);
 
   bool save_meshed_point_cloud(const float x1, const float y1,
-    const float x2, const float y2, vcl_string file);
+                               const float x2, const float y2, vcl_string file);
 
   void get_img_to_wgs(const unsigned i, const unsigned j,
-    double& lon, double& lat, double& elev);
+                      double& lon, double& lat, double& elev);
 
   void label_lidar(lidar_labeling_params params);
 

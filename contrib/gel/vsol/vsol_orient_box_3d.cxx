@@ -1,14 +1,15 @@
 // This is gel/vsol/vsol_orient_box_3d.cxx
-#include <vbl/io/vbl_io_bounding_box.h>
 #include "vsol_orient_box_3d.h"
-#include <vsol/vsol_point_3d.h>
-#include <vsol/vsol_box_3d.h>
 //:
 // \file
+
+#include <vsol/vsol_point_3d.h>
+#include <vsol/vsol_box_3d.h>
 #include <vcl_cassert.h>
 
 vsol_orient_box_3d::vsol_orient_box_3d(vgl_orient_box_3d<double> const& orient_box) 
-:orient_box_(orient_box) {
+ : orient_box_(orient_box)
+{
   //create a bounding box from the 8 corner points of the oriented box
   vcl_vector<vgl_point_3d<double> > corners = orient_box_.corners();
   assert (corners.size() == 8);
