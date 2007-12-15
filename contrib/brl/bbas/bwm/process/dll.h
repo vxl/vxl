@@ -1,5 +1,5 @@
-#ifndef vgui_DLLDATA_H
-#define vgui_DLLDATA_H
+#ifndef bwm_process_DLLDATA_H
+#define bwm_process_DLLDATA_H
 #define vgui_DLLDATA 
 
 #include <vcl_compiler.h>
@@ -14,4 +14,4 @@
 #endif // BUILD_DLL
 #endif // VCL_WIN32 && !BUILDING_VGUI_DLL
 
-#endif // vgui_DLLDATA_H
+#endif // bwm_process_DLLDATA_H
