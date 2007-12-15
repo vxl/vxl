@@ -1,4 +1,4 @@
-// This is basic/bgui3d/bgui3d_translate_event.h
+// This is brl/bbas/bgui3d/bgui3d_translate_event.h
 #ifndef bgui3d_translate_event_h_
 #define bgui3d_translate_event_h_
 //:

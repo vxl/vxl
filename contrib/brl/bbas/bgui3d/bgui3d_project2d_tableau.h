@@ -1,7 +1,6 @@
-// This is basic/bgui3d/bgui3d_project2d_tableau.h
+// This is brl/bbas/bgui3d/bgui3d_project2d_tableau.h
 #ifndef bgui3d_project2d_tableau_h_
 #define bgui3d_project2d_tableau_h_
-  
 //:
 // \file
 // \brief  A tableau that projects a 3D scene into a 2D image
@@ -15,8 +14,6 @@
 #include "bgui3d_project2d_tableau_sptr.h"
 #include "bgui3d_tableau.h"
 #include <vnl/vnl_double_3x4.h>
-#include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_double_3.h>
 
 
 //: Tableau that projects a Coin3D scene graph into an image plane
@@ -24,7 +21,7 @@
 //  The image plane is specified by 3x4 camera matrix
 class bgui3d_project2d_tableau : public bgui3d_tableau
 {
-public:
+ public:
   //: Constructor - don't use this, use bgui3d_project2d_tableau_new.
   bgui3d_project2d_tableau(const vpgl_proj_camera<double>& camera,
                            SoNode* scene_root = NULL);
@@ -55,12 +52,11 @@ public:
   //: Builds a popup menu
   virtual void get_popup(const vgui_popup_params&, vgui_menu &m);
 
-protected:
+ protected:
   //: setup the OpenGL projection matrix
   virtual bool setup_projection();
 
-private:
-
+ private:
   //: The canonical camera looking down the -z axis
   vnl_double_3x4 camera_z_;
 
@@ -69,9 +65,7 @@ private:
 
   //: Flag for drawing a headlight
   bool draw_headlight_;
-
 };
-
 
 
 //: Create a smart pointer to a bgui3d_project2d_tableau tableau.

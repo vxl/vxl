@@ -1,7 +1,6 @@
-// This is basic/bgui3d/bgui3d_tableau.h
+// This is brl/bbas/bgui3d/bgui3d_tableau.h
 #ifndef bgui3d_tableau_h_
 #define bgui3d_tableau_h_
-  
 //:
 // \file
 // \brief  Basic tableau that wraps Coin3D into VGUI
@@ -27,7 +26,7 @@ class SbViewportRegion;
 //:  Tableau that wraps Coin3D into VGUI.
 class bgui3d_tableau : public vgui_tableau
 {
-public:
+ public:
   //: Constructor - don't use this, use bgui3d_tableau_new.
   bgui3d_tableau(SoNode* scene_root = NULL);
 
@@ -112,7 +111,7 @@ public:
 
   SoSceneManager* scene_manager() const;
 
-protected:
+ protected:
   //: The root node of the scene graph
   SoNode* scene_root_;
   SoNode* overlay_scene_root_;
@@ -122,10 +121,6 @@ protected:
   SoSceneManager* overlay_scene_manager_;
   bool idle_enabled_;
   interaction_type_enum interaction_type_;
-
-private:
-
-
 };
 
 

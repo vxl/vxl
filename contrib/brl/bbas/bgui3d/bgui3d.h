@@ -1,7 +1,6 @@
-// This is basic/bgui3d/bgui3d.h
+// This is brl/bbas/bgui3d/bgui3d.h
 #ifndef bgui3d_h_
 #define bgui3d_h_
-
 //:
 // \file
 // \brief  Initialize Coin3d for bgui3d
@@ -11,10 +10,6 @@
 // \verbatim
 //  Modifications
 // \endverbatim
-
-///#include <Inventor/SoDB.h>
-///#include <Inventor/SoInteraction.h>
-///#include <Inventor/nodekits/SoNodeKit.h>
 
 class SoDB;
 class SoNodeKit;

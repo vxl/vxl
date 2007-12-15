@@ -1,11 +1,9 @@
-// This is basic/bgui3d/bgui3d_project2d_tableau_sptr.h
+// This is brl/bbas/bgui3d/bgui3d_project2d_tableau_sptr.h
 #ifndef bgui3d_project2d_tableau_sptr_h_
 #define bgui3d_project2d_tableau_sptr_h_
 //:
 // \file
 // \brief  Smart-pointer to a bgui3d_project2d_tableau.
-//
-// This is a generated file.
 
 #include <vgui/vgui_tableau_sptr.h>
 #include "bgui3d_tableau_sptr.h"

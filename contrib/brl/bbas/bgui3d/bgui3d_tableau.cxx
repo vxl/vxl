@@ -1,10 +1,8 @@
-// This is basic/bgui3d/bgui3d_tableau.cxx
-  
+// This is brl/bbas/bgui3d/bgui3d_tableau.cxx
+#include "bgui3d_tableau.h"
 //:
 // \file
 
-#include <vcl_iostream.h>
-#include "bgui3d_tableau.h"
 #include "bgui3d_translate_event.h"
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_macro.h>
@@ -50,17 +48,17 @@ bgui3d_tableau::~bgui3d_tableau()
 {
   this->disable_idle();
 
-  if(scene_root_)
+  if (scene_root_)
     scene_root_->unref();
-  if(overlay_scene_root_)
+  if (overlay_scene_root_)
     overlay_scene_root_->unref();
 
   //: Ming: no need to release memory of the SoSceneManager* scene_manager_
-  ///if(scene_manager_)
+  ///if (scene_manager_)
   ///  delete scene_manager_;
 
   //: Ming: no need to release memory of the SoSceneManager* overlay_scene_manager_
-  ///if(overlay_scene_manager_)
+  ///if (overlay_scene_manager_)
   ///  delete overlay_scene_manager_;
 }
 
@@ -77,7 +75,6 @@ bgui3d_tableau::setup_opengl() const
 
   glLineWidth( 1.0 );
   glPointSize( 1.0 );
-
 }
 
 
@@ -85,11 +82,11 @@ bgui3d_tableau::setup_opengl() const
 bool
 bgui3d_tableau::render()
 {
-  if(!scene_manager_)
+  if (!scene_manager_)
     return false;
-  
+
   glPushAttrib(GL_ALL_ATTRIB_BITS);
-  
+
   // Set up OpenGL for Rendering
   this->setup_opengl();
 
@@ -99,10 +96,10 @@ bgui3d_tableau::render()
   SbViewportRegion vguiViewport;
   vguiViewport.setViewportPixels(vp[0], vp[1], vp[2], vp[3]);
 
-  if( !(scene_manager_->getViewportRegion() == vguiViewport) ){
+  if ( !(scene_manager_->getViewportRegion() == vguiViewport) ) {
     scene_manager_->setViewportRegion(vguiViewport);
   }
-  
+
   // Reinitialize to account for changes in the OpenGL context
   scene_manager_->reinitialize();
 
@@ -110,7 +107,7 @@ bgui3d_tableau::render()
   scene_manager_->render(scene_manager_->getGLRenderAction(), false, false);
 
   glPopAttrib();
-  
+
   return true;
 }
 
@@ -119,21 +116,21 @@ bgui3d_tableau::render()
 bool
 bgui3d_tableau::render_overlay()
 {
-  if(!overlay_scene_manager_)
+  if (!overlay_scene_manager_)
     return false;
-    
+
   glPushAttrib(GL_ALL_ATTRIB_BITS);
 
   // Set up OpenGL for Rendering
   this->setup_opengl();
-  
+
   // Update the scene manager if the viewport has changed
   GLint vp[4];
   glGetIntegerv(GL_VIEWPORT, vp);
   SbViewportRegion vguiViewport;
   vguiViewport.setViewportPixels(vp[0], vp[1], vp[2], vp[3]);
 
-  if( !(overlay_scene_manager_->getViewportRegion() == vguiViewport) ){
+  if ( !(overlay_scene_manager_->getViewportRegion() == vguiViewport) ) {
     overlay_scene_manager_->setViewportRegion(vguiViewport);
   }
 
@@ -152,7 +149,6 @@ bgui3d_tableau::render_overlay()
 //: Handle vgui events
 bool bgui3d_tableau::handle(const vgui_event& e)
 {
-  
   // Handle draw events
   if ( e.type == vgui_DRAW )
     return this->render();
@@ -160,32 +156,32 @@ bool bgui3d_tableau::handle(const vgui_event& e)
   if ( e.type == vgui_DRAW_OVERLAY )
     return this->render_overlay();
 
-  if(!scene_manager_)
+  if (!scene_manager_)
     return false;
-  
+
   // Attempt to convert all unhandled events to SoEvents
   // and pass the SoEvents to the scene graph for handling
   SoDB::getSensorManager()->processDelayQueue(TRUE);
   SoDB::getSensorManager()->processTimerQueue();
-  if( interaction_type_ == SCENEGRAPH )
+  if ( interaction_type_ == SCENEGRAPH )
   {
     bool handled = false;
     SoEvent* event = bgui3d_translate_event(e);
     if (event) {
       handled = scene_manager_->processEvent(event) > 0;
-      if(handled)
+      if (handled)
         return true;
     }
   }
-  request_render();  
-  
+  request_render();
+
   return vgui_tableau::handle(e);
 }
 
 
 bool
 bgui3d_tableau::idle()
-{  
+{
   SoDB::getSensorManager()->processTimerQueue();
   SoDB::getSensorManager()->processDelayQueue(TRUE);
   return idle_enabled_;
@@ -193,7 +189,7 @@ bgui3d_tableau::idle()
 
 
 //: Enable handling of idle events
-void 
+void
 bgui3d_tableau::enable_idle()
 {
   idle_enabled_ = true;
@@ -202,7 +198,7 @@ bgui3d_tableau::enable_idle()
 
 
 //: Disable handling of idle events
-void 
+void
 bgui3d_tableau::disable_idle()
 {
   idle_enabled_ = false;
@@ -210,7 +206,7 @@ bgui3d_tableau::disable_idle()
 
 
 //: Returns true if idle event handling is enabled
-bool 
+bool
 bgui3d_tableau::is_idle_enabled()
 {
   return idle_enabled_;
@@ -237,14 +233,14 @@ bgui3d_tableau::request_render_overlay()
 void
 bgui3d_tableau::set_scene_root(SoNode* scene_root)
 {
-  if(scene_root_)
+  if (scene_root_)
     scene_root_->unref();
   scene_root_ = scene_root;
-  if(scene_root_)
+  if (scene_root_)
     scene_root_->ref();
 
-  if(scene_root_){
-    if(!scene_manager_)
+  if (scene_root_) {
+    if (!scene_manager_)
     {
       scene_manager_ = new SoSceneManager();
       scene_manager_->getGLRenderAction()->setTransparencyType(SoGLRenderAction::SORTED_OBJECT_BLEND);
@@ -264,14 +260,14 @@ bgui3d_tableau::set_scene_root(SoNode* scene_root)
 void
 bgui3d_tableau::set_overlay_scene_root(SoNode* scene_root)
 {
-  if(overlay_scene_root_)
+  if (overlay_scene_root_)
     overlay_scene_root_->unref();
   overlay_scene_root_ = scene_root;
-  if(overlay_scene_root_)
+  if (overlay_scene_root_)
     overlay_scene_root_->ref();
 
-  if(overlay_scene_root_){
-    if(!overlay_scene_manager_)
+  if (overlay_scene_root_) {
+    if (!overlay_scene_manager_)
       overlay_scene_manager_ = new SoSceneManager();
     else
       overlay_scene_manager_->deactivate();
@@ -308,7 +304,6 @@ bgui3d_tableau::set_viewport_region(const SbViewportRegion& region)
 
   scene_manager_->setViewportRegion(region);
   overlay_scene_manager_->setViewportRegion(region);
-  
 }
 
 const SbViewportRegion &
@@ -335,12 +330,12 @@ bgui3d_tableau::interaction_type() const
 SoSceneManager*
 bgui3d_tableau::scene_manager() const
 {
-  if(!scene_manager_)
-    {
-      SoSceneManager*& sm = const_cast<SoSceneManager*&>(scene_manager_);
-      sm = new SoSceneManager();
-      sm->getGLRenderAction()->setTransparencyType(SoGLRenderAction::SORTED_OBJECT_BLEND);
-      //BLEND
-    }
+  if (!scene_manager_)
+  {
+    SoSceneManager*& sm = const_cast<SoSceneManager*&>(scene_manager_);
+    sm = new SoSceneManager();
+    sm->getGLRenderAction()->setTransparencyType(SoGLRenderAction::SORTED_OBJECT_BLEND);
+    //BLEND
+  }
   return scene_manager_;
 }
