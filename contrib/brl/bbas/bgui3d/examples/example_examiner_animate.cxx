@@ -1,6 +1,5 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_shell_tableau.h>
-#include <vcl_cmath.h>
 
 #include <bgui3d/bgui3d_examiner_tableau.h>
 #include <bgui3d/bgui3d.h>

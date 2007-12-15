@@ -8,13 +8,10 @@
 
 #include <vsl/vsl_indent.h>
 #include <mcal/mcal_trivial_ca.h>
-#include <vcl_cmath.h>
-#include <vnl/vnl_math.h>
-#include <vcl_vector.h>
+#include <vnl/vnl_vector.h>
 #include <vsl/vsl_binary_io.h>
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
-#include <vul/vul_string.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_stats_nd.h>
 
@@ -40,9 +37,9 @@ mcal_trivial_ca::~mcal_trivial_ca()
 //  Model is x = mean + modes*b,  where b is a vector of weights on each mode.
 //  mode_var[i] gives the variance of the data projected onto that mode.
 void mcal_trivial_ca::build_about_mean(mbl_data_wrapper<vnl_vector<double> >& data,
-                                const vnl_vector<double>& mean,
-                                vnl_matrix<double>& modes,
-                                vnl_vector<double>& mode_var)
+                                       const vnl_vector<double>& mean,
+                                       vnl_matrix<double>& modes,
+                                       vnl_vector<double>& mode_var)
 {
   if (data.size()==0)
   {
@@ -73,14 +70,14 @@ void mcal_trivial_ca::build_about_mean(mbl_data_wrapper<vnl_vector<double> >& da
   // Count non-zero variance elements
   unsigned nc = 0;
   unsigned n = stats.sumSq().size();
-  for (unsigned i=0;i<n;++i) 
+  for (unsigned i=0;i<n;++i)
     if (stats.sumSq()[i]>0) nc++;
-  
+
   modes.set_size(n,nc);
   modes.fill(0.0);
   mode_var.set_size(nc);
   unsigned k=0;
-  for (unsigned i=0;i<n;++i) 
+  for (unsigned i=0;i<n;++i)
   {
     if (stats.sumSq()[i]>0)
     {
@@ -88,7 +85,7 @@ void mcal_trivial_ca::build_about_mean(mbl_data_wrapper<vnl_vector<double> >& da
       mode_var[k]=stats.sumSq()[i]/stats.n_obs();
       ++k;
     }
-  }  
+  }
 }
 
 

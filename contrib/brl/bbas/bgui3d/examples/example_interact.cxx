@@ -1,6 +1,7 @@
+#include <vcl_iostream.h>
+
 #include <vgui/vgui.h>
 #include <vgui/vgui_shell_tableau.h>
-#include <vcl_cmath.h>
 
 #include <bgui3d/bgui3d_examiner_tableau.h>
 #include <bgui3d/bgui3d.h>
@@ -22,14 +23,13 @@
 #include <Inventor/draggers/SoDragPointDragger.h>
 
 
-// Print instructions on stdout.
+// Print instructions on std::cout.
 void show_instructions (void)
 {
-  (void)fprintf(stdout, "\nThis example program shows off the dragpoint dragger.\n");
-  (void)fprintf(stdout, "\nQuick instructions:\n\n");
-  (void)fprintf(stdout, "  - Use left mouse botton to rotate, mid mouse button to pan.\n");
-  (void)fprintf(stdout, "  - Pick and drag plane or stick with CTRL + left mouse button.\n");
-  (void)fprintf(stdout, "\n");
+  vcl_cout << "\nThis example program shows off the dragpoint dragger.\n"
+           << "\nQuick instructions:\n\n"
+           << "  - Use left mouse botton to rotate, mid mouse button to pan.\n"
+           << "  - Pick and drag plane or stick with CTRL + left mouse button.\n\n";
 }
 
 // Construct a transparent sphere with position controlled by the
@@ -93,8 +93,8 @@ int main(int argc, char** argv)
 
   //###################################################################
 
-  //Run the specified cmd-line process with visualization in GUI Window.  
-  //force option "--mfc-use-gl" to use gl in initializing vgui.    
+  //Run the specified cmd-line process with visualization in GUI Window.
+  //force option "--mfc-use-gl" to use gl in initializing vgui.
   vcl_cout << "Starting bgui3d window...\n";
   int my_argc = argc+1;
   char** my_argv = new char*[argc+1];
@@ -103,7 +103,7 @@ int main(int argc, char** argv)
   my_argv[argc] = "--mfc-use-gl";
   vgui::init (my_argc, my_argv);
   delete []my_argv;
-  
+
   //Wrap the scene graph in an examiner tableau
   bgui3d_examiner_tableau_new tab3d (root);
   root->unref ();
@@ -111,6 +111,6 @@ int main(int argc, char** argv)
   vgui_shell_tableau_new shell (tab3d);
   //Create a window, add the tableau and show it on screen.
   int result = vgui::run (shell, 800, 600);
-  
+
   return result;
 }

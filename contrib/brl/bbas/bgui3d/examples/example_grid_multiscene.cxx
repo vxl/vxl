@@ -1,7 +1,6 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
-#include <vcl_cmath.h>
 
 #include <bgui3d/bgui3d_examiner_tableau.h>
 #include <bgui3d/bgui3d.h>
@@ -30,13 +29,13 @@ int main(int argc, char** argv)
   // create the scene graph root
   SoSeparator *root1 = new SoSeparator;
   root1->ref();
-  
+
   SoSeparator *root2 = new SoSeparator;
   root2->ref();
 
   root1->addChild( camera );
   root2->addChild( camera );
-  
+
   SoCone* cone = new SoCone;
   root1->addChild( cone );
 
