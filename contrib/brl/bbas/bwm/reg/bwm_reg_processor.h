@@ -1,6 +1,5 @@
 #ifndef bwm_reg_processor_h_
 #define bwm_reg_processor_h_
-
 //-----------------------------------------------------------------------------
 //:
 // \file
@@ -26,7 +25,6 @@
 #include <vpgl/bgeo/bgeo_lvcs.h>
 #include <vil/vil_image_resource_sptr.h>
 #include <brip/brip_roi.h>
-#include <vpgl/vpgl_rational_camera.h>
 
 class bwm_reg_processor
 {
@@ -51,7 +49,7 @@ bwm_reg_processor(vil_image_resource_sptr const& model_image,
              double proj_error,
              double distance_threshold,
              int& tcol, int& trow);
-                    
+
     // protected:
   // INTERNALS-----------------------------------------------------------------
  protected:
