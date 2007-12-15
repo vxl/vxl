@@ -7,15 +7,9 @@
 // \author Gamze Tunali, LEMS, Brown University
 // \date   16 Nov 2007
 // \brief  See vgui_dialog_extensions_impl.h for a description of this file
-//
 
 #include "vgui_dialog_extensions_impl.h"
-#include <vcl_iostream.h>
-#include <vcl_cassert.h>
-//#include <vgui/internals/vgui_simple_field.h>
-//#include <vgui/internals/vgui_string_field.h>
 #include <vgui/internals/vgui_file_field.h>
-//#include <vgui/vgui_tableau_sptr.h>
 
 vgui_dialog_extensions_impl::vgui_dialog_extensions_impl(const char* n)
   : vgui_dialog_impl(n)

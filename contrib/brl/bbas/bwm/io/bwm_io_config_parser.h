@@ -5,31 +5,29 @@
 #include "bwm/bwm_site_sptr.h"
 
 #include <expatpp/expatpplib.h>
-#include <vcl_iostream.h>
 #include <vcl_string.h>
-#include <vcl_cstdio.h>
-#include <vcl_cassert.h>
 #include <vcl_vector.h>
 #include <vcl_utility.h>
 
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
 
-class bwm_io_config_parser : public expatpp {
-public:
-  
+class bwm_io_config_parser : public expatpp
+{
+ public:
   bwm_io_config_parser(void);
   // parser should not delete the site, it is used afterwards
-  ~bwm_io_config_parser(void){};
+  ~bwm_io_config_parser(void) {}
 
   bwm_site_sptr site() { return site_; }
-
- /* vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > correspondences() { return corresp_; }
+#if 0
+  vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > correspondences() { return corresp_; }
   vcl_string corresp_mode() {return corr_mode_; }
   vcl_string corresp_type() {return corr_type_; }
-  vcl_vector<vsol_point_3d> corresp_world_pts() {return corresp_world_pts_; }*/
+  vcl_vector<vsol_point_3d> corresp_world_pts() {return corresp_world_pts_; }
+#endif
 
-private:
+ private:
   virtual void startElement(const XML_Char* name, const XML_Char** atts);
   virtual void endElement(const XML_Char* name);
   virtual void charData(const XML_Char* s, int len);
@@ -62,10 +60,11 @@ private:
   //vcl_string corr_type_;
   vcl_string corr_cam_tab_;
   double X_, Y_, Z_;
-  /*vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > corresp_;
-  vcl_vector<vsol_point_3d> corresp_world_pts_;*/
+#if 0
+  vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > corresp_;
+  vcl_vector<vsol_point_3d> corresp_world_pts_;
+#endif
   vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > corresp_elm_;
-
 
   void trim_string(vcl_string& s);
 };

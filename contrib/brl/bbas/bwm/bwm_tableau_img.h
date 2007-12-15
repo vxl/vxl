@@ -6,9 +6,7 @@
 #include "bwm_tableau.h"
 #include "bwm_observer_img.h"
 
-#include <vcl_iostream.h>
 #include <vcl_string.h>
-#include <vcl_list.h>
 
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_event.h>
