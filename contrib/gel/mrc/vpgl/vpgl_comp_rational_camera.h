@@ -3,22 +3,21 @@
 #define vpgl_comp_rational_camera_h_
 //:
 // \file
-// \brief A composite rational camera model 
+// \brief A composite rational camera model
 // \author Joseph Mundy
 // \date August 4, 2007
-//  
+//
 // Rational camera models often have positioning
 // errors that can be corrected by a rigid body transformation
-// of the image coordinate system. There also exist anamorphic image 
+// of the image coordinate system. There also exist anamorphic image
 // formats that require anisotropic scaling of the image coordinates.
-// In order to support these image transformations, the rational camera 
-// class is augmented by a five-parameter affine transformation 
-// that includes: translation(2 dof); rotation(1 dof); 
+// In order to support these image transformations, the rational camera
+// class is augmented by a five-parameter affine transformation
+// that includes: translation(2 dof); rotation(1 dof);
 // and scale in u and v (2 dof).
 //
 #include <vgl/vgl_fwd.h>
 #include <vcl_iostream.h>
-#include <vcl_vector.h>
 #include <vcl_string.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
@@ -46,8 +45,8 @@ class vpgl_comp_rational_camera : public vpgl_rational_camera<T>
   vpgl_comp_rational_camera(const T tu, const T tv, const T angle_in_radians,
                             vpgl_rational_camera<T> const& rcam);
 
-  //: Constructor with all transform parameters (scale,then rotate,then trans) 
-  // note, scale factors are non-negative
+  //: Constructor with all transform parameters (scale,then rotate,then trans)
+  // Note, scale factors are non-negative
   vpgl_comp_rational_camera(const T tu, const T tv, const T angle_in_radians,
                             const T su, const T sv,
                             vpgl_rational_camera<T> const& rcam);
@@ -78,7 +77,7 @@ class vpgl_comp_rational_camera : public vpgl_rational_camera<T>
   //: image translation
   void translation(T& tu, T& tv);
   //: angle in radians
-  T rotation_in_radians(); 
+  T rotation_in_radians();
   //: image scale (note, scale factors are non-negative)
   void image_scale(T& su, T& sv);
 
