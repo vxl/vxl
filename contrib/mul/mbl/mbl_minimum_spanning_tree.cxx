@@ -2,6 +2,7 @@
 //:
 // \file
 #include <vnl/vnl_matrix.h>
+#include <vnl/vnl_vector.h> // for vnl_matrix<double>::get_row()
 #include <vcl_algorithm.h>
 
 //: Select the smallest pair s.t. first is in \param a, second in \param b
