@@ -79,19 +79,20 @@ template<class T, class D>
 unsigned mbl_cluster_tree<T,D>::nearest(const T& t, double& d) const
 {
   assert(data().size()>0);
+  assert(cluster_.size()>0);
 
   if (cluster_.size()==1) return cluster_[0].nearest(t,d);
 
   // Perform hierarchical search
   // Find possible clusters at top level
-  int L=cluster_.size()-1;
+  unsigned L=cluster_.size()-1;
   vcl_vector<unsigned> near_c0, near_c1;
   double max_d;
   cluster_[L].nearest_clusters(t,max_d,near_c1);
 
   cluster_[L].in_clusters(near_c1,near_c0);  // Find objects in next L
   L--;
-  while (L>0)
+  while (L!=0)
   {
     cluster_[L].nearest_clusters(t,max_d,near_c0,near_c1);
     cluster_[L].in_clusters(near_c1,near_c0);   // Find objects in next L
@@ -136,12 +137,13 @@ void mbl_cluster_tree<T,D>::add_object(unsigned new_i)
     return;
   }
 
-  for (int L=Lhi-1;L>=0;--L)
+  for (unsigned L0=Lhi;L0!=0;--L0)
   {
+    unsigned L = L0 - 1;
     vcl_vector<unsigned> c_list1=c_list0;
 
      // Generate list of elements in each cluster to process at next level
-    cluster_[L+1].in_clusters(c_list1,c_list0);
+    cluster_[L0].in_clusters(c_list1,c_list0);
 
     // Find clusters at level L which could contain t
     unsigned nc=cluster_[L].clusters_within_max_r(t,c_list0,c_list1,
@@ -167,12 +169,12 @@ void mbl_cluster_tree<T,D>::add_object(unsigned new_i)
 
       // cL is cluster containing new object at level L
       // Assign to nearest cluster in level above (c)
-      unsigned c=nearest_c[L+1];
-      cluster_[L+1].assign_to_cluster(cL,c,nearest_d[L+1]);
-      parent_[L+1][cL]=c;  // Record parent
+      unsigned c=nearest_c[L0];
+      cluster_[L0].assign_to_cluster(cL,c,nearest_d[L0]);
+      parent_[L0][cL]=c;  // Record parent
 
         // Track back through ancestors of c, updating radii
-      for (unsigned L1=L+2;L1<=Lhi;++L1)
+      for (unsigned L1=L0+1;L1<=Lhi;++L1)
       {
         c = parent_[L1][c];
         double d=D::d(t,cluster_[L1].p()[c]);
