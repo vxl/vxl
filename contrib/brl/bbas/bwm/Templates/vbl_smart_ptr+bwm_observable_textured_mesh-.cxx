@@ -1,4 +1,4 @@
-#include <bwm/bwm_observable.h>
+#include <bwm/bwm_observable_textured_mesh.h>
 #include <vbl/vbl_smart_ptr.txx>
 
-VBL_SMART_PTR_INSTANTIATE(bwm_observable);
+VBL_SMART_PTR_INSTANTIATE(bwm_observable_textured_mesh);
