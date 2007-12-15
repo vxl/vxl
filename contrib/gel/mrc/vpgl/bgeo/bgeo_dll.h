@@ -1,4 +1,4 @@
-// This is brl/bbas/bgeo/bgeo_dll.h
+// This is gel/mrc/vpgl/bgeo/bgeo_dll.h
 #ifndef geo_dll_h_
 #define geo_dll_h_
 
