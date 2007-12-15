@@ -1,5 +1,5 @@
 // This is brl/bbas/bmsh3d/vis/bmsh3d_vis_face.cxx
-#include "bmsh3d_mesh.h"
+#include "bmsh3d_vis_face.h"
 //:
 // \file
 // \author Ming-Ching Chang
@@ -8,8 +8,8 @@
 #include <vcl_iostream.h>
 #include <vul/vul_printf.h>
 
+#include <bmsh3d/bmsh3d_mesh.h>
 #include <bmsh3d/vis/bmsh3d_vis_backpt.h>
-#include <bmsh3d/vis/bmsh3d_vis_face.h>
 #include <bmsh3d/vis/bmsh3d_vis_utils.h>
 
 #include <Inventor/nodes/SoSeparator.h>
