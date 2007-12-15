@@ -17,7 +17,6 @@
 
 #include <vcl_vector.h>
 #include <vbl/vbl_array_2d.h>
-#include <vbl/vbl_bounding_box.h>
 #include "vgui_grid_tableau_sptr.h"
 #include <vgui/vgui_poly_tableau.h>
 #include <vgui/vgui_event_condition.h>
