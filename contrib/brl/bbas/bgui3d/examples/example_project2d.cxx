@@ -8,6 +8,7 @@
 #include <bgui3d/bgui3d_project2d_tableau.h>
 
 #include <vnl/vnl_math.h> // for pi_over_4
+#include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x4.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_rotation_matrix.h>
