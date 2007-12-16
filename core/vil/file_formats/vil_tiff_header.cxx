@@ -247,7 +247,7 @@ bool vil_tiff_header::is_tiled() const
 
 bool vil_tiff_header::is_striped() const
 {
-  return rows_per_strip.valid&&rows_per_strip.val>0;
+  return rows_per_strip.valid && rows_per_strip.val > 0;
 }
 
 #if HAS_GEOTIFF
@@ -255,7 +255,7 @@ bool vil_tiff_header::is_GEOTIFF() const
 {
   short *data;
   short count;
-  return TIFFGetField(tif_, 34735 /*TIFFTAG_GEOKEYDIRECTORY*/, &count, &data);
+  return (bool)TIFFGetField(tif_, 34735 /*TIFFTAG_GEOKEYDIRECTORY*/, &count, &data);
 }
 #endif
 
@@ -352,7 +352,7 @@ bool vil_tiff_header::compute_pixel_format()
       case 1: //unsigned values
         if (b==1){
           pix_fmt = VIL_PIXEL_FORMAT_BOOL;
-        return true;}
+          return true;}
         else
           switch (bbs)
           {
@@ -385,7 +385,7 @@ bool vil_tiff_header::compute_pixel_format()
           default: //other bit sizes don't make sense
             pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
             return false;
-          }
+        }
       case 3: // floating point
         switch (bbs)
         {
@@ -678,12 +678,12 @@ vil_tiff_header(TIFF* tif, const unsigned ni, const unsigned nj,
   write_long_tag(tif_, TIFFTAG_TILEWIDTH, tile_width);
   write_long_tag(tif_, TIFFTAG_TILELENGTH, tile_length);
 #if 0  //may not be needed to handle four planes, seems to work ok without it
-  if(nplanes == 4) 
-    {
-      extra_samples.val = 1;
-      extra_samples.valid = true;
-      write_short_tag(tif_,TIFFTAG_EXTRASAMPLES, extra_samples);
-    }
+  if (nplanes == 4)
+  {
+    extra_samples.val = 1;
+    extra_samples.valid = true;
+    write_short_tag(tif_,TIFFTAG_EXTRASAMPLES, extra_samples);
+  }
 #endif
   //initialize other flags to false
   color_map_valid = false;
