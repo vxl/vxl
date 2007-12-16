@@ -28,6 +28,7 @@
 //  1 June 2002 - Peter Vanroose - added totient(), decompose(), is_unit(), order(), log(), exp().
 //  4 June 2002 - Peter Vanroose - renamed class and file name
 //  8 June 2002 - Peter Vanroose - added vnl_finite_int_poly<N,M>
+//  16 Dec 2007 - Peter Vanroose - more efficient implementation of Ntothe()
 // \endverbatim
 
 #include <vcl_iostream.h>
@@ -283,12 +284,16 @@ inline vnl_finite_int<N> operator+ (vnl_finite_int<N> const& r1, vnl_finite_int<
   vnl_finite_int<N> result(r1); return result += r2;
 }
 
+//: Returns the sum of two finite int numbers.
+// \relates vnl_finite_int
 template <int N>
 inline vnl_finite_int<N> operator+ (vnl_finite_int<N> const& r1, int r2)
 {
   vnl_finite_int<N> result(r1); return result += r2;
 }
 
+//: Returns the sum of two finite int numbers.
+// \relates vnl_finite_int
 template <int N>
 inline vnl_finite_int<N> operator+ (int r2, vnl_finite_int<N> const& r1)
 {
@@ -303,12 +308,16 @@ inline vnl_finite_int<N> operator- (vnl_finite_int<N> const& r1, vnl_finite_int<
   vnl_finite_int<N> result(r1); return result -= r2;
 }
 
+//: Returns the difference of two finite int numbers.
+// \relates vnl_finite_int
 template <int N>
 inline vnl_finite_int<N> operator- (vnl_finite_int<N> const& r1, int r2)
 {
   vnl_finite_int<N> result(r1); return result -= r2;
 }
 
+//: Returns the difference of two finite int numbers.
+// \relates vnl_finite_int
 template <int N>
 inline vnl_finite_int<N> operator- (int r2, vnl_finite_int<N> const& r1)
 {
@@ -323,12 +332,16 @@ inline vnl_finite_int<N> operator* (vnl_finite_int<N> const& r1, vnl_finite_int<
   vnl_finite_int<N> result(r1); return result *= r2;
 }
 
+//: Returns the product of two finite int numbers.
+// \relates vnl_finite_int
 template <int N>
 inline vnl_finite_int<N> operator* (vnl_finite_int<N> const& r1, int r2)
 {
   vnl_finite_int<N> result(r1); return result *= r2;
 }
 
+//: Returns the product of two finite int numbers.
+// \relates vnl_finite_int
 template <int N>
 inline vnl_finite_int<N> operator* (int r2, vnl_finite_int<N> const& r1)
 {
@@ -344,20 +357,29 @@ inline vnl_finite_int<N> operator/(vnl_finite_int<N> const& r1, vnl_finite_int<N
   assert(r2.is_unit()); return r1 == 0 ? vnl_finite_int<N>(0) : r1*r2.reciproc();
 }
 
+//: Returns the quotient of two finite int numbers.
+// \relates vnl_finite_int
 template <int N>
 inline vnl_finite_int<N> operator/ (vnl_finite_int<N> const& r1, int r2)
 {
   vnl_finite_int<N> result(r1); return result /= r2;
 }
 
+//: Returns the quotient of two finite int numbers.
+// \relates vnl_finite_int
 template <int N>
 inline vnl_finite_int<N> operator/ (int r1, vnl_finite_int<N> const& r2)
 {
   vnl_finite_int<N> result(r1); return result /= r2;
 }
 
+//:
+// \relates vnl_finite_int
 template <int N>
 inline bool operator== (int  r1, vnl_finite_int<N> const& r2) { return r2==r1; }
+
+//:
+// \relates vnl_finite_int
 template <int N>
 inline bool operator!= (int  r1, vnl_finite_int<N> const& r2) { return r2!=r1; }
 
@@ -365,10 +387,19 @@ inline bool operator!= (int  r1, vnl_finite_int<N> const& r2) { return r2!=r1; }
 // \relates vnl_finite_int
 template <int N>
 inline vnl_finite_int<N> vnl_math_squared_magnitude(vnl_finite_int<N> const& x) { return x*x; }
+
+//:
+// \relates vnl_finite_int
 template <int N>
 inline vnl_finite_int<N> vnl_math_sqr(vnl_finite_int<N> const& x) { return x*x; }
+
+//:
+// \relates vnl_finite_int
 template <int N>
 inline bool vnl_math_isnan(vnl_finite_int<N> const& ){return false;}
+
+//:
+// \relates vnl_finite_int
 template <int N>
 inline bool vnl_math_isfinite(vnl_finite_int<N> const& x){return true;}
 
@@ -395,7 +426,7 @@ class vnl_finite_int_poly
   vcl_vector<Scalar> val_; //!< M-tuple (or degree M-1 polynomial) representing this
 
   // This essentially implements std::pow(int,int) which is not always available
-  static unsigned int Ntothe(unsigned int m) { return m==0?1:N*Ntothe(m-1); }
+  static unsigned int Ntothe(unsigned int m) { return m==0?1:Ntothe(m/2)*Ntothe((m+1)/2); }
  public:
   //: The number of different finite_int polynomials of this type
   static unsigned int cardinality() { return Ntothe(M); }
@@ -569,6 +600,9 @@ inline vnl_finite_int_poly<N,M> operator* (vnl_finite_int_poly<N,M> const& r1, v
   vnl_finite_int_poly<N,M> result(r1); return result *= r2;
 }
 
+//: Returns a scalar multiple of a finite int polynomial.
+// \relates vnl_finite_int
+// \relates vnl_finite_int_poly
 template <int N, int M>
 inline vnl_finite_int_poly<N,M> operator* (vnl_finite_int<N> const& r2, vnl_finite_int_poly<N,M> const& r1)
 {
