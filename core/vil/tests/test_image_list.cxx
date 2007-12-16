@@ -73,8 +73,9 @@ static void test_image_list()
     TEST("size()", rescs.size(), 2);
     if (rescs.size() == 2 && rescs[0])
     {
-      vcl_cout << "Succefully read the resource list\n";
+      vcl_cout << "Successfully read the resource list\n";
       TEST("ni()", rescs[0]->ni(), 73);
+      vcl_cout << "ni() = " << rescs[0]->ni() << '\n';
     }
     else
       vcl_cout << "The resource list is corrupt\n";
