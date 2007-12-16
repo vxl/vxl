@@ -425,8 +425,8 @@ class vnl_finite_int_poly
 
   vcl_vector<Scalar> val_; //!< M-tuple (or degree M-1 polynomial) representing this
 
-  // This essentially implements std::pow(int,int) which is not always available
-  static unsigned int Ntothe(unsigned int m) { return m==0?1:Ntothe(m/2)*Ntothe((m+1)/2); }
+  // This essentially implements std::pow(N,int) which is not always available
+  static unsigned int Ntothe(unsigned int m) { return m==0?1:m==1?N:Ntothe(m/2)*Ntothe((m+1)/2); }
  public:
   //: The number of different finite_int polynomials of this type
   static unsigned int cardinality() { return Ntothe(M); }
