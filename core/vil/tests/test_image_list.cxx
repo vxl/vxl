@@ -48,33 +48,36 @@ static void test_image_list()
   {
     bool mkdir = vul_file::make_directory(dir.c_str());
     if (mkdir)
-      vcl_cout << "vul make directory worked" << vcl_endl;
-    TEST("vil_is_directory", vil_image_list::vil_is_directory(dir.c_str()),true);
+      vcl_cout << "vul make directory worked\n";
+    else
+      vcl_cout << "vul make directory failed\n";
+    TEST("vil_is_directory",vil_image_list::vil_is_directory(dir.c_str()),true);
     int chd = vpl_chdir(dir.c_str());
     vcl_cout << "return code for chdir(" << dir << "): " << chd << vcl_endl;
     good = vil_save_image_resource(ir, "R0.tif", "tiff");
-    vcl_cout << "Saved R0"  << vcl_endl;
+    TEST("vil_save_image_resource R0", good, true);
+    vcl_cout << "Saved R0\n";
 #if 0
-    good = good && vil_save_image_resource(ir2, "R1.tif", "tiff");
-    vcl_cout << "Saved R1" << vcl_endl;
+    good = vil_save_image_resource(ir2, "R1.tif", "tiff");
+    TEST("vil_save_image_resource R1", good, true);
+    vcl_cout << "Saved R1\n";
 #endif
-    good = good && vil_save_image_resource(ir3, "R2.tif", "tiff");
-    vcl_cout << "Saved R2" << vcl_endl;
+    good = vil_save_image_resource(ir3, "R2.tif", "tiff");
+    TEST("vil_save_image_resource R2", good, true);
+    vcl_cout << "Saved R2\n";
     chd = vpl_chdir("..");
     vcl_cout << "return code for chdir(..): " << chd << vcl_endl;
     vil_image_list il(dir.c_str());
     vcl_vector<vil_image_resource_sptr> rescs = il.resources();
-    good = good && rescs.size()==2;
     vcl_cout << "Size = " << rescs.size() << vcl_endl;
-    if (good&&rescs[0])
+    TEST("size()", rescs.size(), 2);
+    if (rescs.size() == 2 && rescs[0])
     {
       vcl_cout << "Succefully read the resource list\n";
-      unsigned ni0 = rescs[0]->ni();
-      good = good && ni0 == 73;
+      TEST("ni()", rescs[0]->ni(), 73);
     }
     else
       vcl_cout << "The resource list is corrupt\n";
-    TEST("image_list read resources", good, true);
   }//close open resource files
   //Cleanup resource files
   vcl_cout << "Cleaning up directory " << dir << '\n';;
