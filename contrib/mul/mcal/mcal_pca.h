@@ -19,7 +19,7 @@ class mcal_pca : public mcal_component_analyzer
  private:
     //: Define how many modes to use
   double var_prop_;
-  int min_modes_,max_modes_;
+  unsigned int min_modes_,max_modes_;
 
   //: Return the number of modes to retain
   unsigned choose_n_modes(const vnl_vector<double>& evals);
