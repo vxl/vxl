@@ -53,16 +53,16 @@ SET (EXPECTED_BUILDS "\\
   {cs.rpi.edu FreeBSD-4.9-gcc-3.3-static} \\
   {cs.rpi.edu FreeBSD-gcc-3.4} \\
   {cs.rpi.edu FreeBSD-fresh-gcc-3.4.2} \\
-  {grc.ge.com FreeBSD-6.2_gcc-3.4.6_-Wall_profile_static} \\
-  {grc.ge.com FreeBSD-6.2_gcc-3.2.3_-Wall_-O2_shared} \\
-  {grc.ge.com FreeBSD-6.2_gcc-3.3.6_-Wall_-O2_shared} \\
-  {grc.ge.com FreeBSD-6.2_gcc-4.0.4_-Wall_-O2_shared} \\
-  {grc.ge.com FreeBSD-6.2_gcc-4.1.2_-Wall_-O2_shared} \\
-  {grc.ge.com FreeBSD-6.2_gcc-4.2.2_-Wall_-O2_shared} \\
-  {grc.ge.com Linux-2.4.21_icc-8.1_-w1_-O2_shared} \\
-  {grc.ge.com MinGW-3.8_gcc-3.4.4_-Wall_-O2_static} \\
-  {grc.ge.com Win2k_bcc-5.5.1_Release} \\
-  {grc.ge.com Win2k_msvc-7.1_Debug} \\
+  {GE FreeBSD-6.2_gcc-3.4.6_profile_static} \\
+  {GE FreeBSD-6.2_gcc-3.2.3_-O2_shared} \\
+  {GE FreeBSD-6.2_gcc-3.3.6_-O2_shared} \\
+  {GE FreeBSD-6.2_gcc-4.0.4_-O2_shared} \\
+  {GE FreeBSD-6.2_gcc-4.1.2_-O2_shared} \\
+  {GE FreeBSD-6.2_gcc-4.2.2_-O2_shared} \\
+  {GE Linux-2.4.21_icc-8.1_-O2_shared} \\
+  {GE MinGW-3.8_gcc-3.4.4_-O2_static} \\
+  {GE Win2k_bcc-5.5.1_Release} \\
+  {GE Win2k_msvc-7.1_Debug} \\
   {imorphics Win_msvc} \\
   {imorphics Linux_gcc} \\
   {lems.brown.edu Linux-2.6_gcc-4.1.3_-Wall} \\
