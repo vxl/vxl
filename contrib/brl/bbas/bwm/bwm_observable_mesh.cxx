@@ -13,6 +13,7 @@
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_homg_line_3d_2_points.h>
 #include <vgl/algo/vgl_fit_plane_3d.h>
+#include <vgl/vgl_distance.h>
 
 #include <vsol/vsol_point_3d.h>
 

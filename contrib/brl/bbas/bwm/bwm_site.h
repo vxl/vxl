@@ -14,6 +14,7 @@
 
 #include <vbl/vbl_ref_count.h>
 
+#include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
 #include <vpgl/vpgl_rational_camera.h>
 

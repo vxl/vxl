@@ -1,6 +1,6 @@
-#define _CRTDBG_MAP_ALLOC
-//#include <vcl_cstdlib.h>
-#include <crtdbg.h>
+//#define _CRTDBG_MAP_ALLOC
+#include <vcl_cstdlib.h>
+//#include <crtdbg.h>
 
 #include <bwm/bwm_tableau_mgr.h>
 #include <bwm/bwm_process_mgr.h>
@@ -19,7 +19,7 @@
 
 int main(int argc, char** argv)
 {
-  _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+  //  _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 
   // initialize vgui
   // Ming: force option "--mfc-use-gl" to use gl

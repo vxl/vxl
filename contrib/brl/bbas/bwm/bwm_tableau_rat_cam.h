@@ -58,7 +58,8 @@ class bwm_tableau_rat_cam : public bwm_tableau_cam
   //****************** Misc
 
   void project_edges_from_master();
- protected:
+  void register_search_to_master();
+protected:
   bwm_observer_rat_cam* my_observer_;
 };
 

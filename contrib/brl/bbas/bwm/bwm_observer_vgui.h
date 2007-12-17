@@ -80,6 +80,10 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
   //: the current location of the correspondence point
   void corr_image_pt(float& x, float& y);
 
+  //: the current location of the correspondence point, if corr is valid
+  bool corr_image_pt(vgl_point_2d<double>& pt);
+
+
   //: remove the cross soview and set its pointer to null
   void remove_corr_pt();
 
@@ -93,7 +97,7 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
   vgui_style_sptr mesh_style_;
   vgui_style_sptr vertex_style_;
   bool show_vertices_;
-
+  bool corr_valid_;
   //: the current correspondence point
   vcl_pair<vgl_point_2d<double>, bwm_soview2D_cross * > corr_;
 

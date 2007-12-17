@@ -1,6 +1,7 @@
 #include "bwm_observable_textured_mesh.h"
 
 #include <vul/vul_file.h>
+#include <vcl_cstdio.h>
 
 void bwm_observable_textured_mesh::save_gml(FILE* fp, int obj_count, bgeo_lvcs* lvcs)
 {

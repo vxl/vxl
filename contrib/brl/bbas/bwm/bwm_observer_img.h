@@ -107,6 +107,9 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   vcl_vector<vsol_digital_curve_2d_sptr> edges(unsigned id)
     {return edge_list[id];}
 
+  void display_reg_seg(vcl_vector<vsol_digital_curve_2d_sptr> const& search_edges,
+                    vcl_vector<vsol_digital_curve_2d_sptr> const& model_edges); 
+  void clear_reg_segmentation();
  protected:
 
   bwm_observer_img();
@@ -127,6 +130,8 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   vcl_map<unsigned, vcl_vector<vsol_digital_curve_2d_sptr > > edge_list;
   vcl_map<unsigned, vcl_vector<vsol_line_2d_sptr > > line_list;
   vcl_map<unsigned, vcl_vector<bgui_vsol_soview2D*> > seg_views;
+  // storage for registration edge views
+  vcl_vector<bgui_vsol_soview2D*> reg_seg_views_;
 
   float start_x_, start_y_;
   bgui_vsol_soview2D* moving_p_;

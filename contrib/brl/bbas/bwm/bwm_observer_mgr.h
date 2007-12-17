@@ -25,6 +25,10 @@ class bwm_observer_mgr
 
   static bwm_observer_cam* BWM_MASTER_OBSERVER;
 
+  static bwm_observer_cam* BWM_EO_OBSERVER;
+
+  static bwm_observer_cam* BWM_OTHER_MODE_OBSERVER;
+
   //: cleans up the correspondences and initializes the system for a new site
   void clear();
 
@@ -43,6 +47,8 @@ class bwm_observer_mgr
   void collect_corr();
   void set_corr(bwm_corr_sptr corr);
   bool obs_in_corr(bwm_observer_cam *obs);
+  //implement me!
+  bool match(bwm_observer_cam *obs, vgl_point_2d<double> pt);
   void save_corr(vcl_ostream& s);
   void save_corr_XML();
   void update_corr(bwm_observer_cam* obs,vgl_point_2d<double> old_pt,vgl_point_2d<double> new_pt);

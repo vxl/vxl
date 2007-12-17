@@ -7,6 +7,7 @@
 
 #include <vcl_sstream.h>
 #include <vcl_iostream.h>
+#include <vcl_cstdio.h>
 
 // --------------
 // --- PARSER ---

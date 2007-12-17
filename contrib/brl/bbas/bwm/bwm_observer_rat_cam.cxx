@@ -6,6 +6,7 @@
 #include "bwm_texture_map_generator.h"
 #include "bwm_world.h"
 #include "reg/bwm_reg_utils.h"
+#include "reg/bwm_reg_processor.h"
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_box_2d.h>
 #include <vsol/vsol_point_2d.h>
@@ -1123,4 +1124,117 @@ void bwm_observer_rat_cam::project_edges_from_master()
   for (; cit != transfered_curves.end(); ++cit)
     this->add_digital_curve(*cit, pstyle);
   this->post_redraw();
+}
+
+// A method to register a search image to the master image
+// prototype only
+void bwm_observer_rat_cam::register_search_to_master()
+{
+  bwm_observer_cam* eo_obs = bwm_observer_mgr::BWM_EO_OBSERVER;
+  if (!eo_obs)
+  {
+    vcl_cout << "In bwm_observer_rat_cam::register_search_to_master() -"
+             << " no eo observer selected\n";
+    return;
+  }
+  vil_image_resource_sptr eo_image = 
+    eo_obs->image_tableau()->get_image_resource();
+  if(!eo_image)
+  {
+    vcl_cout << "In bwm_observer_rat_cam::register_search_master() -"
+             << " eo observer image null\n";
+    return;
+  }
+  vpgl_camera<double>* eoc  =   eo_obs->camera();
+  if (!eoc)
+  {
+    vcl_cout << "In bwm_observer_rat_cam::register_search_to_master() -"
+             << " eo observer camera null\n";
+    return;
+  }
+  vpgl_rational_camera<double> eo_cam =
+    *static_cast<vpgl_rational_camera<double>* >(eoc);
+
+  bwm_observer_cam* other_mode_obs = bwm_observer_mgr::BWM_OTHER_MODE_OBSERVER;
+  if (!other_mode_obs)
+  {
+    vcl_cout << "In bwm_observer_rat_cam::register_search_to_master() -"
+             << " no other observer selected\n";
+    return;
+  }
+  vil_image_resource_sptr other_mode_image = 
+    other_mode_obs->image_tableau()->get_image_resource();
+  if(!other_mode_image)
+  {
+    vcl_cout << "In bwm_observer_rat_cam::register_search_to_master() -"
+             << " other_observer image null\n";
+    return;
+  }
+  vpgl_camera<double>* other_mode_c  =  other_mode_obs->camera();
+  if (!other_mode_c)
+  {
+    vcl_cout << "In bwm_observer_rat_cam::register_search_to_master() -"
+             << " other_observer camera null\n";
+    return;
+  }
+
+  vpgl_rational_camera<double> other_mode_cam =
+    *static_cast<vpgl_rational_camera<double>* >(other_mode_c);
+
+
+  vgl_point_3d<double> wpt;
+  if (!bwm_world::instance()->world_pt(wpt))
+  {
+    vcl_cout << "In bwm_observer_rat_cam::register_search_to_master() -"
+             << " no world point to use as an initial guess\n";
+    return;
+  }
+  vgl_plane_3d<double> world_plane = bwm_world::instance()->world_plane();
+
+  vpgl_rational_camera<double> search_cam =
+    *static_cast<vpgl_rational_camera<double>* >(camera_);
+  vil_image_resource_sptr search_image = 
+    this->image_tableau()->get_image_resource();
+  
+  bwm_reg_processor brp(eo_image, eo_cam, other_mode_image, other_mode_cam,
+                        wpt, world_plane,  search_image, search_cam); 
+
+  vgui_dialog reg_params("Automatic Registration");
+  static double radius = 20.0;
+  static double perr = 20.0;
+  static double dist_threshold = 1.0;
+  static double angle_threshold = 0.5;
+  static double min_probability = 0.998;
+  static float model_noise_threshold = 2.0f;
+  static float search_noise_threshold = 2.0f;
+  static bool show_edges = true;
+  reg_params.field ("World Point Neighborhood Radius (meters)", radius);
+  reg_params.field ("Expected Projection Error (meters)", perr);
+  reg_params.field ("Distance threshold (pixels)", dist_threshold);
+  reg_params.field ("Angle threshold (radians)", angle_threshold);
+  reg_params.field ("Minimum Cumulative Probability ", min_probability);
+  reg_params.field ("Model Detector threshold ", model_noise_threshold);
+  reg_params.field ("Search Detector threshold ", search_noise_threshold);
+  reg_params.checkbox("Show Edges?", show_edges);
+  if (!reg_params.ask())
+    return;
+  int tcol=0, trow=0;
+  if(!brp.match(radius, perr, dist_threshold, angle_threshold,
+                min_probability,
+                model_noise_threshold,
+                search_noise_threshold,
+                tcol, trow))
+  {
+    vcl_cout << "In bwm_observer_rat_cam::register_search_to_master() -"
+             << " registration failed\n";
+    //   return;
+  }
+
+  if(show_edges){
+    vcl_vector<vsol_digital_curve_2d_sptr> search_edges = brp.search_curves();
+    vcl_vector<vsol_digital_curve_2d_sptr> trans_model_edges
+      = brp.trans_model_curves();
+    this->display_reg_seg(search_edges, trans_model_edges);
+  }
+  //  this->shift_camera(tcol, trow);
 }

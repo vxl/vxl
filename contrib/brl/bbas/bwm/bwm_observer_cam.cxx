@@ -11,6 +11,7 @@
 #include "bwm_world.h"
 
 #include <vcl_iostream.h>
+#include <vcl_cstdio.h>
 
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>

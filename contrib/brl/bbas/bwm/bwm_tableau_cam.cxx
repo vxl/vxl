@@ -46,6 +46,26 @@ class bwm_set_master_command : public vgui_command
 };
 
 //----------------------------------------------------------------------------
+class bwm_set_eo_command : public vgui_command
+{
+ public:
+  bwm_set_eo_command(bwm_tableau_cam* t) : tab(t) {}
+  void execute() { tab->set_eo(); }
+
+  bwm_tableau_cam *tab;
+};
+
+//----------------------------------------------------------------------------
+class bwm_set_other_mode_command : public vgui_command
+{
+ public:
+  bwm_set_other_mode_command(bwm_tableau_cam* t) : tab(t) {}
+  void execute() { tab->set_other_mode(); }
+
+  bwm_tableau_cam *tab;
+};
+
+//----------------------------------------------------------------------------
 class bwm_move_vertex_command : public vgui_command
 {
  public:
@@ -248,6 +268,10 @@ void bwm_tableau_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu
   vgui_menu mesh_submenu;
   mesh_submenu.add( "Set as Master", new bwm_set_master_command(this));
   mesh_submenu.separator();
+  mesh_submenu.add( "Set as EO", new bwm_set_eo_command(this));
+  mesh_submenu.separator();
+  mesh_submenu.add( "Set as Other Mode", new bwm_set_other_mode_command(this));
+  mesh_submenu.separator();
 
   vcl_string on = "[x] ", off = "[ ] ";
   mesh_submenu.add( ((show_vertices_)?on:off)+"show vertices", new bwm_vertex_toggle_command(this, &show_vertices_));
@@ -352,6 +376,15 @@ void bwm_tableau_cam::triangulate_mesh()
 void bwm_tableau_cam::set_master()
 {
   bwm_observer_mgr::BWM_MASTER_OBSERVER = this->my_observer_;
+}
+  //: set the observer as per the image type
+void bwm_tableau_cam::set_eo()
+{
+  bwm_observer_mgr::BWM_EO_OBSERVER = this->my_observer_;
+}
+void bwm_tableau_cam::set_other_mode()
+{
+  bwm_observer_mgr::BWM_OTHER_MODE_OBSERVER = this->my_observer_;
 }
 
 void bwm_tableau_cam::move_obj_by_vertex()

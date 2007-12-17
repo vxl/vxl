@@ -28,7 +28,7 @@
 #define SHRINK_MESH 1
 
 bwm_observer_vgui::bwm_observer_vgui(bgui_image_tableau_sptr const& img)
-    : bwm_observer_img(img), moving_face_(0) 
+  : bwm_observer_img(img), moving_face_(0), corr_valid_(false) 
 {
   corr_.second = 0;
   mesh_style_= vgui_style::new_style();
@@ -76,6 +76,20 @@ void bwm_observer_vgui::corr_image_pt(float& x, float& y)
   x = pt.x(); y = pt.y();
 }
 
+//: the current location of the correspondence point, if corr is valid
+bool bwm_observer_vgui::corr_image_pt(vgl_point_2d<double>& pt)
+{
+  if(corr_valid_){
+    pt = corr_.first;
+    return true;
+  }
+  else
+    { 
+      pt.set(-1, -1);
+    return false;
+    }
+}
+
 void bwm_observer_vgui::show_vertices(bool show)
 {
   // do nothing if the status is the same
@@ -96,7 +110,7 @@ void bwm_observer_vgui::show_vertices(bool show)
 
         vcl_vector<vsol_point_2d_sptr> vertices = it->second;
         for (unsigned i=0; i<vertices.size(); i++) {
-          bwm_soview2D_vertex* v = new bwm_soview2D_vertex(vertices[i]->x(), vertices[i]->y(), 1.0, poly, i);
+          bwm_soview2D_vertex* v = new bwm_soview2D_vertex(vertices[i]->x(), vertices[i]->y(), 0.5f, poly, i);
           this->add(v);
           v->set_style(vertex_style_);
           new_vertex_list.push_back(v);
@@ -177,7 +191,7 @@ void bwm_observer_vgui::draw_mesh(bwm_observable_sptr observable,
         vcl_map<unsigned, bgui_vsol_soview2D_polygon* >::iterator face_it = poly_list.begin();
         bgui_vsol_soview2D_polygon* poly = face_it->second;
 
-        bwm_soview2D_vertex* sopt = new bwm_soview2D_vertex(v2d.x(), v2d.y(), 1.0f, poly, i);
+        bwm_soview2D_vertex* sopt = new bwm_soview2D_vertex(v2d.x(), v2d.y(), 0.5f, poly, i);
         this->add(sopt);
         sopt->set_style(vertex_style_);
         vertx_list.push_back(sopt);
@@ -333,6 +347,7 @@ void bwm_observer_vgui::set_corr(float x, float y)
 
   // draw a cross at that point
   add_cross(x, y, 2.0);
+  corr_valid_ = true;
 }
 
 void bwm_observer_vgui::remove_corr_pt()
@@ -341,6 +356,7 @@ void bwm_observer_vgui::remove_corr_pt()
     this->remove(corr_.second);
     corr_.second = 0;
   }
+  corr_valid_ = false;
 }
 
 

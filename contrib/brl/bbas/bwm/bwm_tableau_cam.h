@@ -44,6 +44,10 @@ class bwm_tableau_cam : public bwm_tableau_img
   // sets this tableau as the master for camera direction
   void set_master();
 
+  //: set the observer as per the image type
+  void set_eo();
+  void set_other_mode();
+
   //: moves the object, by moving the selected vertex to the specified point on the tableau
   void move_obj_by_vertex();
 

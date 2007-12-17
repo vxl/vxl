@@ -121,6 +121,7 @@ bwm_observer_img::~bwm_observer_img()
     }
   }
   seg_views.clear();
+  this->clear_reg_segmentation();
 }
 
 void bwm_observer_img::create_box(vsol_box_2d_sptr box)
@@ -142,7 +143,7 @@ void bwm_observer_img::create_polygon(vsol_polygon_2d_sptr poly2d)
   vcl_vector<bwm_soview2D_vertex*> verts;
   this->set_foreground(0,1,0);
   for (unsigned i = 0; i<nverts; ++i) {
-    bwm_soview2D_vertex* vertex = new bwm_soview2D_vertex(x[i],y[i],2.0f, polygon, i);
+    bwm_soview2D_vertex* vertex = new bwm_soview2D_vertex(x[i],y[i],0.5f, polygon, i);
     this->add(vertex);
     verts.push_back(vertex);
   }
@@ -160,7 +161,7 @@ void bwm_observer_img::create_polyline(vsol_polyline_2d_sptr poly2d)
   vcl_vector<bwm_soview2D_vertex*> verts;
   this->set_foreground(0,1,0);
   for (unsigned i = 0; i<nverts; ++i) {
-    bwm_soview2D_vertex* vertex = new bwm_soview2D_vertex(x[i],y[i],2.0f, polyline, i);
+    bwm_soview2D_vertex* vertex = new bwm_soview2D_vertex(x[i],y[i],0.5f, polyline, i);
     this->add(vertex);
     verts.push_back(vertex);
   }
@@ -430,6 +431,37 @@ void bwm_observer_img::recover_lines()
   }
   seg_views[p->get_id()] = soviews;
   post_redraw();
+}
+// display edges for experimental registration
+void bwm_observer_img::
+display_reg_seg(vcl_vector<vsol_digital_curve_2d_sptr> const& search_edges, 
+                vcl_vector<vsol_digital_curve_2d_sptr> const& model_edges)
+{
+  this->clear_reg_segmentation();
+  vgui_style_sptr mstyle = 
+    vgui_style::new_style(0.1f, 0.8f, 0.1f, 1.0f, 3.0f);
+  vgui_style_sptr sstyle = 
+    vgui_style::new_style(0.8f, 0.1f, 0.8f, 1.0f, 3.0f);
+
+  vcl_vector<vsol_digital_curve_2d_sptr>::const_iterator cit =
+    search_edges.begin();
+  for (; cit != search_edges.end(); ++cit)
+    reg_seg_views_.push_back(this->add_digital_curve(*cit, sstyle));
+
+  cit = model_edges.begin();
+  for (; cit != model_edges.end(); ++cit)
+   reg_seg_views_.push_back(this->add_digital_curve(*cit, mstyle));
+
+  this->post_redraw();
+}
+
+// clear the edges displayed for the experimental registration tasks
+void bwm_observer_img::clear_reg_segmentation()
+{
+  for(vcl_vector<bgui_vsol_soview2D* >::iterator sit = reg_seg_views_.begin();
+      sit != reg_seg_views_.end(); ++sit)
+    this->remove(*sit);
+  reg_seg_views_.clear();
 }
 
 void bwm_observer_img::save()

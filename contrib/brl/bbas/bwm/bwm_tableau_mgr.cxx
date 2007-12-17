@@ -22,9 +22,9 @@
 #include "algo/bwm_rat_proj_camera.h"
 #include "algo/bwm_image_processor.h"
 #include "algo/bwm_utils.h"
-
+#include <vcl_cstdio.h>
 #include <vgui/vgui_poly_tableau.h>
-
+#include <vsol/vsol_point_2d.h>
 #include <vgui/vgui_composite_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_range_map_params.h>

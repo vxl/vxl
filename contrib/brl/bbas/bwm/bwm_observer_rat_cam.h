@@ -94,6 +94,9 @@ class bwm_observer_rat_cam : public bwm_observer_cam
   //
   void project_edges_from_master();
 
+  // project edges from the master to a target search image and register
+  void register_search_to_master();
+
  protected:
   //bgeo_lvcs* lvcs_;
   vcl_string select_file();
