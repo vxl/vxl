@@ -211,6 +211,23 @@ void bsta_histogram<T>::parzen(const T sigma)
   for (unsigned int i=0; i<nbins_; i++)
     counts_[i]=(T)out[i];
 }
+//The first non-zero bin starting at index = 0
+template <class T>
+unsigned bsta_histogram<T>::low_bin()
+{
+  unsigned lowbin=0; 
+  for (; lowbin<nbins_&&counts_[lowbin]==0; ++lowbin);
+  return lowbin;
+}
+
+//The first non-zero bin starting at index = nbins-1
+template <class T>
+unsigned bsta_histogram<T>::high_bin()
+{
+  unsigned highbin=nbins_-1;
+  for (; highbin>0&&counts_[highbin]==0; --highbin);
+  return highbin;
+}
 
 // Fraction of area less than value
 template <class T>

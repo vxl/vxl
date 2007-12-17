@@ -6,17 +6,8 @@
 #include <bsta/bsta_int_histogram_1d.h>
 #include <bsta/bsta_int_histogram_2d.h>
 #include <vcl_iostream.h>
-// not used? #include <vcl_string.h>
 
-#ifdef DEBUG
-#include <vcl_cassert.h>
 
-static int f(int i)
-{
-  assert(i>=0);
-  return i;
-}
-#endif
 
 static void test_int_hist()
 {
@@ -90,12 +81,7 @@ void test_bsta_histogram()
   TEST_NEAR("test joint histogram uniform distribution entropy", jent, 31.0/4, 1e-9);
   test_int_hist();
  //=================================================
-#ifdef DEBUG
-  // Demonstrate the use of assert
-  int i1 = 1, i2=-1;
-  vcl_cout << f(i1) << '\n'
-           << f(i2) << '\n';
-#endif
+
 }
 
 TESTMAIN(test_bsta_histogram);

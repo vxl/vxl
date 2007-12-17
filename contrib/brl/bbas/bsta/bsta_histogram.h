@@ -41,6 +41,9 @@ template <class T> class bsta_histogram
   T min() const {return min_;}
   T max() const {return max_;}
 
+  //: bin interval
+  T delta() const {return delta_;}
+
   //: The value range for a bin
   void value_range(const unsigned int bin, T& vmin, T& vmax)
     {assert(bin<nbins_); vmin = bin*delta_+min_; vmax = (bin+1)*delta_+min_;}
@@ -74,7 +77,12 @@ template <class T> class bsta_histogram
   //: Variance of distribution between bin indices
   T variance(const unsigned int lowbin, const unsigned int highbin) const;
 
-  
+  //: First non-zero bin from below  
+  unsigned low_bin();
+
+  //: First non-zero bin from above
+  unsigned high_bin();
+
   //: Fraction of area less than val
   T fraction_below(const T value) const;
 
@@ -98,7 +106,7 @@ template <class T> class bsta_histogram
 
   //: set the count for a given bin
   void set_count(const unsigned bin, const T count)
-    {if(bin>0&&bin<nbins_) counts_[bin]=count;}
+    {if(bin<nbins_) counts_[bin]=count;}
     
   //: array of bin values
   vcl_vector<T> value_array(){vcl_vector<T> v(nbins_);
