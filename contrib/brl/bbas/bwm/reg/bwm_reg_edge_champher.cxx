@@ -3,6 +3,9 @@
 // \file
 #include <vcl_cmath.h>
 #include <vsol/vsol_point_2d.h>
+#include <bsol/bsol_algs.h>
+#include "bwm_reg_edge_champher.h"
+
 
 //--------------------------------------------------------------
 //
@@ -73,6 +76,7 @@ void bwm_reg_edge_champher::print_distance()
     }
     vcl_cout << '\n';
   }
+  vcl_cout << vcl_flush;
 }
 
 //-----------------------------------------------------------------------------
@@ -149,30 +153,39 @@ void bwm_reg_edge_champher::forward_chamfer()
                   distance_[col][row]);
       switch (val)
       {
-        case 1:
-          distance_[col][row] = distance_[col-1][row-1]+4;
-          edges_[col][row] = edges_[col-1][row-1];
-          sample_index_[col][row] = sample_index_[col-1][row-1];
-          break;
+        val =
+          minimum_5(distance_[col-1][row-1]+4,distance_[col-1][row]+3,
+                    distance_[col-1][row+1]+4,distance_[col][row-1]+3,
+                    distance_[col][row]);
+        switch (val)
+          {
+          case 1:
+            distance_[col][row] = distance_[col-1][row-1]+4;
+            edges_[col][row] = edges_[col-1][row-1];
+            sample_index_[col][row] = sample_index_[col-1][row-1];
+            break;
 
-        case 2:
-          distance_[col][row] = distance_[col-1][row]+3;
-          edges_[col][row] = edges_[col-1][row];
-          sample_index_[col][row] = sample_index_[col-1][row-1];
-          break;
+          case 2:
+            distance_[col][row] = distance_[col-1][row]+3;
+            edges_[col][row] = edges_[col-1][row];
+            sample_index_[col][row] = sample_index_[col-1][row];
+            break;
 
-        case 3:
-          distance_[col][row] = distance_[col-1][row+1]+4;
-          sample_index_[col][row] = sample_index_[col-1][row+1];
-          break;
+          case 3:
+            distance_[col][row] = distance_[col-1][row+1]+4;
+            edges_[col][row] = edges_[col-1][row+1];
+            sample_index_[col][row] = sample_index_[col-1][row+1];
+            break;
 
-        case 4:
-          distance_[col][row] = distance_[col][row-1]+3;
-          sample_index_[col][row] = sample_index_[col][row-1];
-          break;
+          case 4:
+            distance_[col][row] = distance_[col][row-1]+3;
+            edges_[col][row] = edges_[col][row-1];
+            sample_index_[col][row] = sample_index_[col][row-1];
+            break;
 
-        case 5:
-          break;
+          case 5:
+            break;
+          }
       }
     }
 }
@@ -192,29 +205,37 @@ void bwm_reg_edge_champher::backward_chamfer()
                       distance_[col+1][row]+3,distance_[col+1][row+1]+4 );
       switch (val)
       {
-        case 1:
-          break;
+        val = minimum_5(distance_[col][row],distance_[col][row+1]+3,distance_[col+1][row-1]+4,
+                        distance_[col+1][row]+3,distance_[col+1][row+1]+4 );
+        switch (val)
+          {
+          case 1:
+            break;
 
-        case 2:
-          distance_[col][row] = distance_[col][row+1]+3;
-          edges_[col][row] = edges_[col][row+1];
-          sample_index_[col][row] = sample_index_[col][row+1];
-          break;
+          case 2:
+            distance_[col][row] = distance_[col][row+1]+3;
+            edges_[col][row] = edges_[col][row+1];
+            sample_index_[col][row] = sample_index_[col][row+1];
+            break;
 
-        case 3:
-          distance_[col][row] = distance_[col+1][row-1]+4;
-          sample_index_[col][row] = sample_index_[col+1][row-1];
-          break;
+          case 3:
+            distance_[col][row] = distance_[col+1][row-1]+4;
+            edges_[col][row] = edges_[col+1][row-1];
+            sample_index_[col][row] = sample_index_[col+1][row-1];
+            break;
 
-        case 4:
-          distance_[col][row] = distance_[col+1][row]+3;
-          sample_index_[col][row] = sample_index_[col+1][row];
-          break;
+          case 4:
+            distance_[col][row] = distance_[col+1][row]+3;
+            edges_[col][row] = edges_[col+1][row];
+            sample_index_[col][row] = sample_index_[col+1][row];
+            break;
 
-        case 5:
-          distance_[col][row] = distance_[col+1][row+1]+4;
-          sample_index_[col][row] = sample_index_[col+1][row+1];
-          break;
+          case 5:
+            distance_[col][row] = distance_[col+1][row+1]+4;
+            edges_[col][row] = edges_[col+1][row+1];
+            sample_index_[col][row] = sample_index_[col+1][row+1];
+            break;
+          }
       }
     }
 }
@@ -231,4 +252,29 @@ void bwm_reg_edge_champher::compute_real_distances()
   for (col=1;col<ncols_-1;col++)
     for (row=1;row<nrows_-1;row++)
       distance_[row][col] = (unsigned char) distance_[row][col] / 3;
+}
+
+
+bool bwm_reg_edge_champher::match_tangent(unsigned col, unsigned row,
+                                          double dx, double dy,
+                                          double angle_tolerance)
+{
+  //get the curve responsible for the nearest distance
+  vsol_digital_curve_2d_sptr i_edge = this->image_edge(col, row);
+  //get the sample on the curve responsible
+  unsigned i_index = this->sample_index(col, row);
+  //compute the indexed curve tangent
+  double idx=0, idy=0;
+  bsol_algs::tangent(i_edge, i_index, idx, idy);
+  //compute the dot product of the tangents
+  double dot = idx*dx + idy*dy;
+  double i_mag = vcl_sqrt(idx*idx +idy*idy);
+  double mag = vcl_sqrt(dx*dx +dy*dy);
+  dot /= i_mag; dot /= mag;
+  //compute the angle between the tangents
+  double angle = vcl_acos(dot);
+  //determine match
+  if(vcl_fabs(angle)> angle_tolerance)
+    return false;
+  return true;
 }

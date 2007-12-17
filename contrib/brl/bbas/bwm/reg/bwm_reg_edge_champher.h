@@ -75,6 +75,10 @@ class bwm_reg_edge_champher
       return 0;
   }
 
+  //: does the input direction match the tangent direction of the stored curve
+  bool match_tangent(unsigned col, unsigned row, double dx, double dy,
+                     double angle_tolerance = 0.5235); //30degrees
+
   // Debug Methods------------------------------------------------------------
   void print_distance();
 
@@ -86,7 +90,6 @@ class bwm_reg_edge_champher
   void forward_chamfer();
   void backward_chamfer();
   void compute_real_distances();
-
   // Data Members--------------------------------------------------------------
 
  private:
