@@ -389,6 +389,45 @@ get_pixel_value(const unsigned c, const unsigned r)
     }
 }
 
+//: get the pixel value as color
+vcl_vector<double> bgui_image_tableau::get_color_pixel_value(const unsigned c, const unsigned r)
+{
+  vil_image_resource_sptr rs = this->get_image_resource();
+  if (!rs)
+    return vcl_vector<double>(0);
+  if (c<0||c>=rs->ni()||r<0||r>=rs->nj())
+    return vcl_vector<double>(0);
+  unsigned n_p = rs->nplanes();
+  vcl_vector<double> val(n_p, 0.0);
+  if(n_p==1)
+    {
+      val[0]=this->get_pixel_value(c, r);
+      return val;
+    }
+  vil_pixel_format type = rs->pixel_format();
+  switch (type )
+    {
+    case  VIL_PIXEL_FORMAT_BYTE: {
+
+      vil_image_view<vxl_byte> v = rs->get_view(c,1,r,1);
+      if (!v)
+        return val;
+      for(unsigned p = 0; p<n_p; ++p)
+        val[p]=static_cast<double>(v(0,0,p));
+      return val;
+    }
+    case  VIL_PIXEL_FORMAT_UINT_16: {
+      vil_image_view<vxl_uint_16> v = rs->get_view(c,1,r,1);
+      if (!v)
+        return val;
+      for(unsigned p = 0; p<n_p; ++p)
+        val[p]=static_cast<double>(v(0,0,p));
+      return val;
+    }
+    default:
+      return val;
+    }
+}
 void bgui_image_tableau::image_line(const float col_start,
                                     const float row_start,
                                     const float col_end,
@@ -427,6 +466,52 @@ void bgui_image_tableau::image_line(const float col_start,
     vals.push_back(get_pixel_value(c, r));
   }
 }
+  //: Extract a line of pixel values return color if available
+void bgui_image_tableau::image_line(const float col_start,
+                  const float row_start,
+                  const float col_end,
+                  const float row_end,
+                  vcl_vector<double>& line_pos,
+                  vcl_vector<vcl_vector<double> >& vals)
+{
+  line_pos.clear();vals.clear();
+  //Get the image data
+  // the line length in pixels
+  float length = vcl_sqrt((col_end-col_start)*(col_end-col_start) +
+                          (row_end-row_start)*(row_end-row_start));
+  if (length == 0)
+    return;
+  //initialize the line scan parameters
+  float xstep = (col_end-col_start)/length;
+  float ystep = (row_end-row_start)/length;
+  float sinc = vcl_sqrt(xstep*xstep + ystep*ystep);
+  float spos = 0;
+  line_pos.push_back(spos);
+  unsigned c = static_cast<unsigned>(col_start),
+   r = static_cast<unsigned>(row_start);
+  vcl_vector<double> cv = get_color_pixel_value(c, r);
+  unsigned n_bands = cv.size();
+  vals.resize(n_bands);
+  for(unsigned i = 0; i<n_bands; ++i)
+    vals[i].push_back(cv[i]);
+
+  //extract the pixel values along the line
+  float xpos = col_start, ypos = row_start;
+  unsigned nsteps = static_cast<unsigned>(length);
+  for (unsigned i = 0; i<nsteps; ++i)
+  {
+    xpos += xstep;
+    ypos += ystep;
+    spos += sinc;
+    c = static_cast<unsigned>(xpos);
+    r = static_cast<unsigned>(ypos);
+    line_pos.push_back(spos);
+    cv = get_color_pixel_value(c, r);
+    for(unsigned i = 0; i<n_bands; ++i)
+      vals[i].push_back(cv[i]);
+  }
+}
+
 
 //--------------------------------------------------------------------------------
 //:

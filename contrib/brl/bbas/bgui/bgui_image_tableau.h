@@ -81,12 +81,21 @@ class bgui_image_tableau : public vgui_image_tableau
   //: Return the vil_image_resource
   vil_image_resource_sptr get_image_resource() const;
 
+  //: Extract a line of pixel values (force to grey scale)
   void image_line(const float col_start,
                   const float row_start,
                   const float col_end,
                   const float row_end,
                   vcl_vector<double>& line_pos,
                   vcl_vector<double>& vals);
+
+  //: Extract a line of pixel values return color if available
+  void image_line(const float col_start,
+                  const float row_start,
+                  const float col_end,
+                  const float row_end,
+                  vcl_vector<double>& line_pos,
+                  vcl_vector<vcl_vector<double> >& vals);
 
   //: set handle_motion true
   void set_handle_motion() { handle_motion_ = true; }
@@ -103,6 +112,9 @@ class bgui_image_tableau : public vgui_image_tableau
 
   //: get the pixel value as a double. RGB converted to grey.
   double get_pixel_value(const unsigned c, const unsigned r);
+
+//: get the pixel value as color
+  vcl_vector<double> get_color_pixel_value(const unsigned c, const unsigned r);
 
   //: Get pixel info from the frame buffer)
   void get_pixel_info_from_frame_buffer(const int x, const int y,

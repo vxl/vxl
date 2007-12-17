@@ -62,7 +62,7 @@ class bgui_image_utils
   void set_data_by_random_blocks(const unsigned total_num_blocks,
                                  vil_blocked_image_resource_sptr const& bir,
                                  double fraction = 1.0);
-  void construct_histogram();
+  bool construct_histogram();
   double compute_lower_bound(unsigned plane = 0);
   double compute_upper_bound(unsigned plane = 0);
   //members
