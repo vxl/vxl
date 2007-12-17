@@ -8,6 +8,7 @@
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_polygon_3d.h>
 #include <vsol/vsol_polyline_2d.h>
+#include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
 
 #include <vpgl/file_formats/vpgl_nitf_rational_camera.h>

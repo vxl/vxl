@@ -37,7 +37,7 @@ void bwm_image_processor::hist_plot(bgui_image_tableau_sptr img)
   bgui_graph_tableau_sptr g = iu.hist_graph();
 
   if (!g)
-  { vcl_cout << "In intensity_histogram()- color images not supported\n";
+    { vcl_cout << "In intensity_histogram()- histogram failed\n";
     return;
   }
 
@@ -54,15 +54,25 @@ void bwm_image_processor::hist_plot(bgui_image_tableau_sptr img)
 }
 
 void bwm_image_processor::intensity_profile(bgui_image_tableau_sptr img,
-                                            float start_col, float end_col,
-                                            float start_row, float end_row)
+                                            float start_col, float start_row, 
+                                            float end_col, float end_row)
 {
   if (img) {
+    unsigned n_p = img->get_image_resource()->nplanes();
+    bgui_graph_tableau_sptr g = bgui_graph_tableau_new(512, 512);
+    if(n_p==1){
     vcl_vector<double> pos, vals;
     img->image_line(start_col, start_row, end_col, end_row, pos, vals);
-    bgui_graph_tableau_sptr g = bgui_graph_tableau_new(512, 512);
     g->update(pos, vals);
-
+    }
+    else if( n_p ==3 || n_p == 4)
+      {  
+        vcl_vector<double> pos;
+        vcl_vector<vcl_vector<double> > vals;
+        img->image_line(start_col, start_row, end_col, end_row, pos, vals);
+        vcl_vector<vcl_vector<double> > mpos(n_p, pos);
+        g->update(mpos, vals);
+      }
     //popup a profile graph
     char location[100];
     vcl_sprintf(location, "scan:(%d, %d)<->(%d, %d)",

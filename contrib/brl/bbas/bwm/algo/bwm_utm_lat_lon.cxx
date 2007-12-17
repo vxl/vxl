@@ -8,7 +8,7 @@
 
 // A @class{IUE_UTM_geodetic_transform} is one that relates UTM coordinates to a geodetic lat_long coordinate_system (phi, lambda, h) using a reference spheroid to define the shape of the earth (or other celestial object). where in the geodetic lat_long coordinate system, coordinates phi and lambda are the values of latitude and longitude, respectively.
 #include "bwm_utm_lat_lon.h"
-
+#include <vcl_iostream.h>
 #include <vcl_limits.h>
 #include <vnl/vnl_math.h>
 #define DBLLONG 4.61168601e18
