@@ -99,7 +99,6 @@ bool bwm_reg_matcher::match(int& tcol, int& trow, double distance_threshold,
   tcol = 0; trow = 0;
   if (model_cols_>search_cols_||model_rows_>search_rows_)
     return false;
-  champh_.print_distance();
   int tcol_start = search_col_origin_ - model_col_origin_;
   int tcol_end = tcol_start + search_cols_ - model_cols_;
   int trow_start = search_row_origin_ - model_row_origin_;
@@ -147,6 +146,7 @@ bool bwm_reg_matcher::match(int& tcol, int& trow, double distance_threshold,
 
 bool bwm_reg_matcher::
 close_edges(double filter_distance, double angle_threshold,
+            unsigned min_curve_length,
             vcl_vector<vsol_digital_curve_2d_sptr>& close_edges)
 {
   close_edges.clear();
@@ -168,7 +168,7 @@ close_edges(double filter_distance, double angle_threshold,
         if(dir_match&&dc<=filter_distance)
           filtered_points.push_back(p);
       }
-    if(filtered_points.size()>=10)
+    if(filtered_points.size()>=min_curve_length)
       close_edges.push_back(new vsol_digital_curve_2d(filtered_points));
   }
   if(!close_edges.size())

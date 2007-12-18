@@ -79,6 +79,23 @@ void bwm_reg_edge_champher::print_distance()
   vcl_cout << vcl_flush;
 }
 
+void bwm_reg_edge_champher::print_full_distance()
+{
+  for (unsigned r = 1; r<nrows_-2; ++r)
+  {
+    for (unsigned c =1 ; c<ncols_-2;++c)
+    {
+      unsigned v = static_cast<unsigned>(distance_[r][c]);
+      if (v>0)
+        vcl_cout << v ;
+      else
+        vcl_cout << 0 ;
+    }
+    vcl_cout << '\n';
+  }
+  vcl_cout << vcl_flush;
+}
+
 //-----------------------------------------------------------------------------
 //: Copies the edges into the array and sets the distance at each digital curve vertex location to 0.
 //  (note: maybe should include points on the line joining vertices)
@@ -151,12 +168,6 @@ void bwm_reg_edge_champher::forward_chamfer()
         minimum_5(distance_[col-1][row-1]+4,distance_[col-1][row]+3,
                   distance_[col-1][row+1]+4,distance_[col][row-1]+3,
                   distance_[col][row]);
-      switch (val)
-      {
-        val =
-          minimum_5(distance_[col-1][row-1]+4,distance_[col-1][row]+3,
-                    distance_[col-1][row+1]+4,distance_[col][row-1]+3,
-                    distance_[col][row]);
         switch (val)
           {
           case 1:
@@ -186,7 +197,6 @@ void bwm_reg_edge_champher::forward_chamfer()
           case 5:
             break;
           }
-      }
     }
 }
 
@@ -201,12 +211,9 @@ void bwm_reg_edge_champher::backward_chamfer()
   for (row=ncols_-2;row>0;row--)
     for (col=nrows_-2;col>0;col--)
     {
-      val = minimum_5(distance_[col][row],distance_[col][row+1]+3,distance_[col+1][row-1]+4,
-                      distance_[col+1][row]+3,distance_[col+1][row+1]+4 );
-      switch (val)
-      {
-        val = minimum_5(distance_[col][row],distance_[col][row+1]+3,distance_[col+1][row-1]+4,
-                        distance_[col+1][row]+3,distance_[col+1][row+1]+4 );
+        val = minimum_5(distance_[col][row], distance_[col][row+1]+3,
+                        distance_[col+1][row-1]+4, distance_[col+1][row]+3,
+                        distance_[col+1][row+1]+4 );
         switch (val)
           {
           case 1:
@@ -236,7 +243,6 @@ void bwm_reg_edge_champher::backward_chamfer()
             sample_index_[col][row] = sample_index_[col+1][row+1];
             break;
           }
-      }
     }
 }
 

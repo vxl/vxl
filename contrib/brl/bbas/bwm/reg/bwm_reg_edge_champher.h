@@ -81,7 +81,7 @@ class bwm_reg_edge_champher
 
   // Debug Methods------------------------------------------------------------
   void print_distance();
-
+  void print_full_distance();
  protected:
   // INTERNALS-----------------------------------------------------------------
   void initialize_arrays(vcl_vector<vsol_digital_curve_2d_sptr> const& edges);

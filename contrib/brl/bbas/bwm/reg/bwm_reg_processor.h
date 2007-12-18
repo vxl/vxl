@@ -74,14 +74,15 @@ class bwm_reg_processor
   //                  edges lying inside the distance threshold
   // model_noise_threshold - the edge detection signal threshold for model
   // search_noise_threshold - the edge detection signal threshold for search
-  bool match(double model_radius,
-             double proj_error,
-             double distance_threshold,
-             double angle_threshold,
-             double min_probability,
-             float model_noise_threshold,
-             float search_noise_threshold,
-             int& tcol, int& trow);
+bool match(double radius,
+           double proj_error,
+           double distance_threshold,
+           double angle_threshold,
+           unsigned min_curve_length,
+           double min_probability,
+           float model_noise_threshold,
+           float search_noise_threshold,
+           int& tcol, int& trow);
 
   vcl_vector<vsol_digital_curve_2d_sptr> search_curves();
     
@@ -99,8 +100,10 @@ class bwm_reg_processor
               double proj_error,
               double filter_distance,
               double angle_threshold,
+              unsigned min_curve_length,
               float model_noise_threshold,
               float other_noise_threshold);
+
   bool match_edges(int& tcol, int& trow);
 
   // Data Members--------------------------------------------------------------
@@ -108,6 +111,7 @@ class bwm_reg_processor
  private:
   double distance_threshold_;
   double angle_threshold_;
+  unsigned min_curve_length_;
   double min_probability_;
   vpgl_rational_camera<double> model_cam_;
   vpgl_rational_camera<double> search_cam_;

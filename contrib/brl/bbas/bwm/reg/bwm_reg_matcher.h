@@ -51,6 +51,7 @@ class bwm_reg_matcher
   //: Filter out model edges whose samples  don't lie within the 
   //  specified distance of some search edge point
   bool close_edges(double filter_distance, double angle_threshold,
+                   unsigned min_curve_length,
                    vcl_vector<vsol_digital_curve_2d_sptr>& close_edges);
 
   //: Debug 

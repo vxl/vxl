@@ -23,6 +23,7 @@ bwm_reg_processor(vil_image_resource_sptr const& model_image,
 {
   distance_threshold_ = vnl_numeric_traits<double>::maxval;
   angle_threshold_ = vnl_numeric_traits<double>::maxval;
+  min_curve_length_ = vnl_numeric_traits<unsigned>::maxval;
   min_probability_ = 1.0;
   model_image_ = new bwm_reg_image(model_image, model_cam,
                                    world_point, world_plane);
@@ -87,6 +88,7 @@ bool bwm_reg_processor::filter(double model_radius,
                                double proj_error,
                                double filter_distance,
                                double angle_threshold,
+                               unsigned min_curve_length,
                                float model_noise_threshold,
                                float other_noise_threshold)
 {
@@ -131,7 +133,8 @@ bool bwm_reg_processor::filter(double model_radius,
                      roi.csize(0), roi.rsize(0),
                      other_edges);
   vcl_vector<vsol_digital_curve_2d_sptr> close_edges;
-  if(!rm.close_edges(filter_distance, angle_threshold, close_edges)){
+  if(!rm.close_edges(filter_distance, angle_threshold, min_curve_length,
+                     close_edges)){
     vcl_cerr << "In bwm_reg_processor::filter - no close edges\n";
     return false;
   }
@@ -174,6 +177,7 @@ bool bwm_reg_processor::match(double radius,
                               double proj_error,
                               double distance_threshold,
                               double angle_threshold,
+                              unsigned min_curve_length,
                               double min_probability,
                               float model_noise_threshold,
                               float search_noise_threshold,
@@ -182,9 +186,11 @@ bool bwm_reg_processor::match(double radius,
   distance_threshold_ = distance_threshold;
   min_probability_ = min_probability;
   angle_threshold_ = angle_threshold;
+  min_curve_length_ = min_curve_length;
   if(other_mode_image_)
     if(!this->filter(radius, proj_error, distance_threshold_,
                      angle_threshold_,
+                     min_curve_length_,
                      model_noise_threshold,
                      search_noise_threshold))
       return false;
