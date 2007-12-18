@@ -123,6 +123,10 @@ class vil3d_gipl_image: public vil3d_image_resource
   //: Pixel Format.
   virtual enum vil_pixel_format pixel_format() const;
 
+  //: Set the size of the each voxel in the i,j,k directions.
+  // You can get the voxel sizes via get_properties().
+  // \return false if underlying image doesn't store pixel sizes.
+  virtual bool set_voxel_size(float/*i*/,float/*j*/,float/*k*/);
 
   //: Create a read/write view of a copy of this data.
   // This function will always return a

@@ -488,7 +488,7 @@ vil3d_image_resource_sptr vil3d_analyze_format::make_output_image(const char* fi
       format != VIL_PIXEL_FORMAT_INT_32 )
   {
     vcl_cerr << "vil3d_analyze_format::make_output_image() WARNING\n"
-             << "  Unable to deal with file format : " << format << vcl_endl;
+             << "  Unable to deal with pixel format : " << format << vcl_endl;
     return 0;
   }
 

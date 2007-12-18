@@ -4,6 +4,7 @@ ADD_EXECUTABLE( vil3d_test_all
   test_driver.cxx
 
   test_file_format_read.cxx
+  test_save_load_image.cxx
   test_gen_synthetic.cxx
   test_image_view.cxx
   test_image_resource.cxx
@@ -41,6 +42,7 @@ ADD_EXECUTABLE( vil3d_test_all
 TARGET_LINK_LIBRARIES( vil3d_test_all vil3d_algo vil3d vil vpl vul testlib vcl )
 
 ADD_TEST( vil3d_test_file_format_read         ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all test_file_format_read ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data )
+ADD_TEST( vil3d_test_save_load_image          ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all test_save_load_image )
 ADD_TEST( vil3d_test_gen_synthetic            ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all test_gen_synthetic)
 ADD_TEST( vil3d_test_image_view               ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all test_image_view )
 ADD_TEST( vil3d_test_math                     ${EXECUTABLE_OUTPUT_PATH}/vil3d_test_all test_math )

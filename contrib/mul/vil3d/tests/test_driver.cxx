@@ -1,6 +1,7 @@
 #include <testlib/testlib_register.h>
 
 DECLARE( test_file_format_read );
+DECLARE( test_save_load_image );
 DECLARE( test_gen_synthetic );
 DECLARE( test_image_view );
 DECLARE( test_math );
@@ -39,6 +40,7 @@ void
 register_tests()
 {
   REGISTER( test_file_format_read );
+  REGISTER( test_save_load_image );
   REGISTER( test_gen_synthetic );
   REGISTER( test_image_resource );
   REGISTER( test_image_view );

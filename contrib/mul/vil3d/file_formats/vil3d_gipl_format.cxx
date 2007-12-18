@@ -620,6 +620,22 @@ bool vil3d_gipl_image::write_header(void)
   return true;
 }
 
+
+//: Set the size of the each voxel in the i,j,k directions.
+// You can get the voxel sizes via get_properties().
+//
+bool vil3d_gipl_image::set_voxel_size(float i,float j,float k)
+{
+  
+  vox_width1_=i;
+  vox_width2_=j;
+  vox_width3_=k;
+
+  write_header();
+
+  return true;
+}
+
 //: Set the contents of the volume.
 bool vil3d_gipl_image::put_view(const vil3d_image_view_base& view,
                 unsigned i0=0, unsigned j0=0, unsigned k0=0)
