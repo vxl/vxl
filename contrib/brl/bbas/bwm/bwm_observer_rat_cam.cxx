@@ -1200,6 +1200,7 @@ void bwm_observer_rat_cam::register_search_to_master()
                         wpt, world_plane,  search_image, search_cam); 
 
   vgui_dialog reg_params("Automatic Registration");
+  unsigned min_curve_length = 10;
   static double radius = 20.0;
   static double perr = 20.0;
   static double dist_threshold = 1.0;
@@ -1220,6 +1221,7 @@ void bwm_observer_rat_cam::register_search_to_master()
     return;
   int tcol=0, trow=0;
   if(!brp.match(radius, perr, dist_threshold, angle_threshold,
+                min_curve_length,
                 min_probability,
                 model_noise_threshold,
                 search_noise_threshold,
