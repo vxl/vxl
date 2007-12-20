@@ -51,7 +51,7 @@ static double vnl_gamma_series(double a, double x)
     return sum*vcl_exp(-x+a*vcl_log(x)-vnl_log_gamma(a));
   }
   else if (x < 0.0)
-    assert(!"vnl_gamma_series : x less than 0");
+    assert(!"vnl_gamma_series - x less than 0");
 
   return 0.0;
 }
@@ -89,7 +89,7 @@ static double vnl_gamma_cont_frac(double a, double x)
 double vnl_gamma_p(double a, double x)
 {
   if (x < 0.0 || a <= 0.0)
-    assert(!"vnl_gamma_p : Invalid arguments.");
+    assert(!"vnl_gamma_p - Invalid arguments.");
 
   if (x < a+1.0)
     return vnl_gamma_series(a,x); // Use series representation
@@ -100,7 +100,7 @@ double vnl_gamma_p(double a, double x)
 double vnl_gamma_q(double a, double x)
 {
   if (x < 0.0 || a <= 0.0)
-    assert(!"vnl_gamma_q : Invalid arguments.");
+    assert(!"vnl_gamma_q - Invalid arguments.");
 
   if (x < a+1.0)
     return 1.0-vnl_gamma_series(a,x); // Use series representation
