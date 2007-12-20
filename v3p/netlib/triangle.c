@@ -1195,7 +1195,7 @@ static int minus1mod3[3] = {2, 0, 1};
 
 #ifndef TRILIBRARY
 
-void syntax()
+void syntax(void)
 {
 #ifdef CDT_ONLY
 #ifdef REDUCED
@@ -1266,7 +1266,7 @@ void syntax()
 
 #ifndef TRILIBRARY
 
-void info()
+void info(void)
 {
   printf("Triangle\n");
   printf("A Two-Dimensional Quality Mesh Generator and Delaunay Triangulator.\n");
@@ -2982,7 +2982,7 @@ void dummyinit(int trianglewords,
 /*                                                                           */
 /*****************************************************************************/
 
-void initializepointpool()
+void initializepointpool(void)
 {
   int pointsize;
 
@@ -3013,7 +3013,7 @@ void initializepointpool()
 /*                                                                           */
 /*****************************************************************************/
 
-void initializetrisegpools()
+void initializetrisegpools(void)
 {
   int trisize;
 
@@ -3085,7 +3085,7 @@ void triangledealloc(triangle *dyingtriangle)
 /*                                                                           */
 /*****************************************************************************/
 
-triangle *triangletraverse()
+triangle *triangletraverse(void)
 {
   triangle *newtriangle;
 
@@ -3119,7 +3119,7 @@ void shelledealloc(shelle *dyingshelle)
 /*                                                                           */
 /*****************************************************************************/
 
-shelle *shelletraverse()
+shelle *shelletraverse(void)
 {
   shelle *newshelle;
 
@@ -3152,7 +3152,7 @@ void pointdealloc(point dyingpoint)
 /*                                                                           */
 /*****************************************************************************/
 
-point pointtraverse()
+point pointtraverse(void)
 {
   point newpoint;
 
@@ -3192,7 +3192,7 @@ void badsegmentdealloc(struct edge *dyingseg)
 
 #ifndef CDT_ONLY
 
-struct edge *badsegmenttraverse()
+struct edge *badsegmenttraverse(void)
 {
   struct edge *newseg;
 
@@ -3250,7 +3250,7 @@ point getpoint(int number)
 /*                                                                           */
 /*****************************************************************************/
 
-void triangledeinit()
+void triangledeinit(void)
 {
   pooldeinit(&triangles);
   free(dummytribase);
@@ -3481,7 +3481,7 @@ void makeshelle(struct edge *newedge)
 /*                                                                           */
 /*****************************************************************************/
 
-void exactinit()
+void exactinit(void)
 {
   REAL half;
   REAL check, lastcheck;
@@ -4438,7 +4438,7 @@ REAL incircle(point pa,
 /*                                                                           */
 /*****************************************************************************/
 
-void triangleinit()
+void triangleinit(void)
 {
   points.maxitems = triangles.maxitems = shelles.maxitems = viri.maxitems =
     badsegments.maxitems = badtriangles.maxitems = splaynodes.maxitems = 0l;
@@ -4482,7 +4482,7 @@ unsigned long randomnation(unsigned int choices)
 
 #ifndef REDUCED
 
-void checkmesh()
+void checkmesh(void)
 {
   struct triedge triangleloop;
   struct triedge oppotri, oppooppotri;
@@ -4572,7 +4572,7 @@ void checkmesh()
 
 #ifndef REDUCED
 
-void checkdelaunay()
+void checkdelaunay(void)
 {
   struct triedge triangleloop;
   struct triedge oppotri;
@@ -4705,7 +4705,7 @@ void enqueuebadtri(struct triedge *instri,
 
 #ifndef CDT_ONLY
 
-struct badface *dequeuebadtri()
+struct badface *dequeuebadtri(void)
 {
   struct badface *result;
   int queuenumber;
@@ -4947,7 +4947,7 @@ void testtriangle(struct triedge *testtri)
 /*                                                                           */
 /*****************************************************************************/
 
-void makepointmap()
+void makepointmap(void)
 {
   struct triedge triangleloop;
   point triorg;
@@ -7064,7 +7064,7 @@ long removeghosts(struct triedge *startghost)
 /*                                                                           */
 /*****************************************************************************/
 
-long divconqdelaunay()
+long divconqdelaunay(void)
 {
   point *sortarray;
   struct triedge hullleft, hullright;
@@ -7146,7 +7146,7 @@ long divconqdelaunay()
 
 #ifndef REDUCED
 
-void boundingbox()
+void boundingbox(void)
 {
   struct triedge inftri;          /* Handle for the triangular bounding box. */
   REAL width;
@@ -7208,7 +7208,7 @@ void boundingbox()
 
 #ifndef REDUCED
 
-long removebox()
+long removebox(void)
 {
   struct triedge deadtri;
   struct triedge searchedge;
@@ -7298,7 +7298,7 @@ long removebox()
 
 #ifndef REDUCED
 
-long incrementaldelaunay()
+long incrementaldelaunay(void)
 {
   struct triedge starttri;
   point pointloop;
@@ -7778,7 +7778,7 @@ struct splaynode *frontlocate(struct splaynode *splayroot,
 
 #ifndef REDUCED
 
-long sweeplinedelaunay()
+long sweeplinedelaunay(void)
 {
   struct event **eventheap;
   struct event *events;
@@ -7992,7 +7992,7 @@ long sweeplinedelaunay()
 /*                                                                           */
 /*****************************************************************************/
 
-long delaunay()
+long delaunay(void)
 {
   eextras = 0;
   initializetrisegpools();
@@ -9208,7 +9208,7 @@ void insertsegment(point endpoint1,
 /*                                                                           */
 /*****************************************************************************/
 
-void markhull()
+void markhull(void)
 {
   struct triedge hulltri;
   struct triedge nexttri;
@@ -9391,7 +9391,7 @@ int formskeleton(FILE *polyfile
 /*                                                                           */
 /*****************************************************************************/
 
-void infecthull()
+void infecthull(void)
 {
   struct triedge hulltri;
   struct triedge nexttri;
@@ -9464,7 +9464,7 @@ void infecthull()
 /*                                                                           */
 /*****************************************************************************/
 
-void plague()
+void plague(void)
 {
   struct triedge testtri;
   struct triedge neighbor;
@@ -9952,7 +9952,7 @@ void carveholes(REAL *holelist,
 
 #ifndef CDT_ONLY
 
-void tallyencs()
+void tallyencs(void)
 {
   struct edge edgeloop;
 
@@ -9976,7 +9976,7 @@ void tallyencs()
 
 #ifndef CDT_ONLY
 
-void precisionerror()
+void precisionerror(void)
 {
   printf("Try increasing the area criterion and/or reducing the minimum\n");
   printf("  allowable angle so that tiny triangles are not created.\n");
@@ -10145,7 +10145,7 @@ void repairencs(int flaws)
 
 #ifndef CDT_ONLY
 
-void tallyfaces()
+void tallyfaces(void)
 {
   struct triedge triangleloop;
 
@@ -10350,7 +10350,7 @@ void splittriangle(struct badface *badtri)
 
 #ifndef CDT_ONLY
 
-void enforcequality()
+void enforcequality(void)
 {
   int i;
 
@@ -10440,7 +10440,7 @@ void enforcequality()
 /*                                                                           */
 /*****************************************************************************/
 
-void highorder()
+void highorder(void)
 {
   struct triedge triangleloop, trisym;
   struct edge checkmark;
@@ -11115,7 +11115,7 @@ void writenodes(char *nodefilename,
 /*                                                                           */
 /*****************************************************************************/
 
-void numbernodes()
+void numbernodes(void)
 {
   point pointloop;
   int pointnumber;
@@ -11919,7 +11919,7 @@ void writeoff(char *offfilename,
 /*                                                                           */
 /*****************************************************************************/
 
-void quality_statistics()
+void quality_statistics(void)
 {
   struct triedge triangleloop;
   point p[3];
@@ -12107,7 +12107,7 @@ void quality_statistics()
 /*                                                                           */
 /*****************************************************************************/
 
-void statistics()
+void statistics(void)
 {
   printf("\nStatistics:\n\n");
   printf("  Input points: %d\n", inpoints);
