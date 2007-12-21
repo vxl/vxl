@@ -40,11 +40,11 @@ SUBDIRS += bsta
 # Brown dynamic programming library
 SUBDIRS += bdpg
 
-# Brown geographic utilities library
-SUBDIRS += bgeo
-
 #3D mesh library 
 SUBDIRS += bmsh3d
+
+#3D modeling library
+SUBDIRS += bwm
 
 # Video Library (rewrite)
 SUBDIRS += vidl2
