@@ -21,7 +21,7 @@
 /* ----------------------------------------------------------------------
  * Make sure we get our integer types right
  * ---------------------------------------------------------------------- */
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__BORLANDC__)
 /* We are in 2006, and some compilers still fail to define C99 types! */
 typedef __int8 t_ply_int8;
 typedef __int16 t_ply_int16;
