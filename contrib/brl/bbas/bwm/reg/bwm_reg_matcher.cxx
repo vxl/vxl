@@ -168,8 +168,37 @@ close_edges(double filter_distance, double angle_threshold,
         if(dir_match&&dc<=filter_distance)
           filtered_points.push_back(p);
       }
-    if(filtered_points.size()>=min_curve_length)
-      close_edges.push_back(new vsol_digital_curve_2d(filtered_points));
+    unsigned n = filtered_points.size();
+    if(n>=min_curve_length){
+      //do not allow gaps between samples that are larger than
+      //a multiple of the filter distance. A model curve could meander closer
+      //and further away from the other mode target curve
+      double gap_factor = 5.0;//The multiple of filter distance
+      double gap = gap_factor*filter_distance;//the allowed gap
+      vsol_point_2d_sptr p0 = filtered_points[0];
+      vcl_vector<vsol_point_2d_sptr> temp;
+      unsigned len = 1;
+      for(unsigned j = 1; j<n; ++j)
+        {
+          vsol_point_2d_sptr p1 = filtered_points[j];
+          double dx = p1->x()-p0->x(), dy = p1->y()-p0->y();
+          double ds = vcl_sqrt(dx*dx + dy*dy);
+          temp.push_back(p0);
+          p0 = p1;
+          len++;
+          //if a gap occurs, then output the accumulated curve
+          //and clear the accumulator
+          if(ds>gap && len>=min_curve_length){
+            close_edges.push_back(new vsol_digital_curve_2d(temp));
+            len = 1;
+            temp.clear();
+            temp.push_back(p0);
+          }
+        }
+      //clean up any residual curve that hasn't exceeded the gap
+      if(len>=min_curve_length)
+        close_edges.push_back(new vsol_digital_curve_2d(temp));
+    }
   }
   if(!close_edges.size())
     return false;
