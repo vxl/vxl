@@ -7,6 +7,7 @@
 // \brief   intended to be general graph tableau
 // \verbatim
 // modified extensively by J.L. Mundy June 3, 2006
+// Added multiple plots December 1, 2007 - JLM
 // \endverbatim
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_dialog.h>
@@ -31,7 +32,8 @@ class bgui_graph_tableau : public  vgui_tableau
   //: Single plot
   void update(vcl_vector<double> const& pos, vcl_vector<double> const & vals);
   void update(vcl_vector<float> const& pos, vcl_vector<float> const & vals);
-  //: multiple plots
+  //: multiple plots. The current implementation requires pos to contain the same horizontal axis values. 
+  // Future plans are to have this class handle multiple position ranges
   void update(vcl_vector<vcl_vector<double> > const& pos,
               vcl_vector<vcl_vector<double> >const & vals);
   //: Clear the data

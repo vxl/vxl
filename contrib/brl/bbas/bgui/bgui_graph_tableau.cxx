@@ -155,7 +155,10 @@ void bgui_graph_tableau::update(vcl_vector<float> const& pos,
   compute_scale();
   draw_graph();
 }
-// all plots have to have the same number of positions and values
+// In the current implementation, 
+// all plots have to have the same number of positions and values.
+// The vector position input is for future development where this
+// class takes care of the multiple position case - JLM
 void bgui_graph_tableau::update(vcl_vector<vcl_vector<double> > const& pos,
                                 vcl_vector<vcl_vector<double> >const & vals)
 {
@@ -291,7 +294,7 @@ void bgui_graph_tableau::draw_graph()
 //Draw the multiple plots including the axes and tic marks
 void bgui_graph_tableau::draw_multi_graph()
 {
-  //graph colors more than 7 plots repeat colors
+  //graph colors, where more than 7 plots repeat colors
   float r[7]={1,0,0,1,0,1,1};
   float g[7]={0,1,0,0,1,1,1};
   float b[7]={0,0,1,1,1,0,1};
