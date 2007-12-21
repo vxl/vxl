@@ -113,7 +113,7 @@ class vnl_finite_int
   //: Return the Euler totient function, i.e., the number of units of this ring
   //  This number also equals the periodicity of the exponent: every unit,
   //  when raised to this power, yields 1.
-  static inline unsigned int totient() {
+  static unsigned int totient() {
     static unsigned int t_ = 0; // cached value
     if (t_ != 0) return t_;
     vcl_vector<unsigned int> d = decompose();
@@ -129,7 +129,7 @@ class vnl_finite_int
 
   //: Multiplicative inverse.
   //  Uses exp() and log() for efficient computation, unless log() is not defined.
-  inline Base reciproc() const {
+  Base reciproc() const {
     assert(is_unit());
     if (val_==1) return *this;
     Base z = smallest_generator();
@@ -185,7 +185,7 @@ class vnl_finite_int
   inline unsigned int additive_order() const { if (val_ == 0) return 1; return N/gcd(val_); }
 
   //: The multiplicative order of x is the smallest r (>0) such that x^r == 1.
-  inline unsigned int multiplicative_order() const {
+  unsigned int multiplicative_order() const {
     if (mo_ != 0) return mo_;
     if (gcd(val_) != 1) return -1; // should actually return infinity
     Base y = val_;
@@ -224,7 +224,7 @@ class vnl_finite_int
   }
 
   //: Return the smallest nonnegative exponent r for which x=g^r, where g is the smallest generator.
-  inline unsigned int log() const {
+  unsigned int log() const {
     if (is_zero_divisor()) return -1; // should actually return minus infinity
     if (lp1_ != 0) return lp1_-1;
     Base z = smallest_generator();
@@ -446,7 +446,7 @@ class vnl_finite_int_poly
   inline unsigned int deg() const { return val_.size() - 1; }
 
   //: Effective degree of this polynomial; equals -1 when this polynomial is 0.
-  inline int degree() const { for (int i=deg(); i>=0; --i) if (val_[i]!=0) return i; return -1; }
+  int degree() const { for (int i=deg(); i>=0; --i) if (val_[i]!=0) return i; return -1; }
 
   //: Access to individual coefficients
   inline Scalar operator[](unsigned int i) const { assert(i<M); return i<=deg() ? val_[i] : Scalar(0); }
@@ -456,7 +456,7 @@ class vnl_finite_int_poly
   inline Base& operator=(Scalar const& n) { val_ = vcl_vector<Scalar>(1); val_[0] = n; return *this; }
 
   //: Comparison of finite int polys.
-  inline bool operator==(Base const& x) const {
+  bool operator==(Base const& x) const {
     for (unsigned int i=0; i<=deg(); ++i)
       if (val_[i] != x[i]) return false;
     for (unsigned int i=deg()+1; i<=x.deg(); ++i)
@@ -464,7 +464,7 @@ class vnl_finite_int_poly
     return true;
   }
   inline bool operator!=(Base const& x) const { return !operator==(x); }
-  inline bool operator==(Scalar const& x) const {
+  bool operator==(Scalar const& x) const {
     if (x!=val_[0]) return false;
     for (unsigned int i=1; i<=deg(); ++i) if (val_[i] != 0) return false;
     return true;
@@ -472,21 +472,21 @@ class vnl_finite_int_poly
   inline bool operator!=(Scalar const& x) const { return !operator==(x); }
 
   //: Unary minus - returns the additive inverse
-  inline Base operator-() const { vcl_vector<Scalar> p = val_; for (unsigned int i=0; i<p.size(); ++i) p[i]=-p[i]; return p; }
+  Base operator-() const { vcl_vector<Scalar> p = val_; for (unsigned int i=0; i<p.size(); ++i) p[i]=-p[i]; return p; }
   //: Unary plus - returns the current polynomial
   inline Base operator+() const { return *this; }
   //: Unary not - returns true if finite int poly is equal to zero.
-  inline bool operator!() const { for (unsigned int i=0; i<=deg(); ++i) if (val_[i] != 0) return false; return true; }
+  bool operator!() const { for (unsigned int i=0; i<=deg(); ++i) if (val_[i] != 0) return false; return true; }
 
   //: Plus&assign: replace lhs by lhs + rhs
-  inline Base& operator+=(Base const& r) {
+  Base& operator+=(Base const& r) {
     for (unsigned int i=0; i<=r.deg(); ++i)
       if (i<=deg()) val_[i] += r[i];
       else          val_.push_back(r[i]);
     return *this;
   }
   //: Minus&assign: replace lhs by lhs - rhs
-  inline Base& operator-=(Base const& r) {
+  Base& operator-=(Base const& r) {
     for (unsigned int i=0; i<=r.deg(); ++i)
       if (i<=deg()) val_[i] -= r[i];
       else          val_.push_back(-r[i]);
@@ -494,10 +494,10 @@ class vnl_finite_int_poly
   }
 
   //: Scalar multiple of this
-  inline Base& operator*=(Scalar const& n) { for (unsigned int i=0; i<=deg(); ++i) val_[i] *= n; return *this; }
+  Base& operator*=(Scalar const& n) { for (unsigned int i=0; i<=deg(); ++i) val_[i] *= n; return *this; }
 
   //: The additive order of x is the smallest positive r such that r*x == 0.
-  inline unsigned int additive_order() const {
+  unsigned int additive_order() const {
     unsigned int r = N;
     for (unsigned int i=0; i<=deg(); ++i)
       if (val_[i] != 0) r=Scalar::gcd(val_[i],r);
@@ -524,7 +524,7 @@ class vnl_finite_int_poly
   }
 
   //: Multiply&assign: replace lhs by lhs * rhs, modulo the "modulo" polynomial
-  inline Base& operator*=(Base const& r) {
+  Base& operator*=(Base const& r) {
     Base x = *this; *this = r; *this *= x[0];
     while (val_.size() < M) val_.push_back(0);
     for (int i=1; i<=x.degree(); ++i)
@@ -565,7 +565,7 @@ class vnl_finite_int_poly
 
  private:
   //: Add x to the i-th degree coefficient of val_, possibly reducing modulo the "modulo" poly.
-  inline void add_modulo_poly(unsigned int m, Scalar const& x)
+  void add_modulo_poly(unsigned int m, Scalar const& x)
   {
     if (m < M) val_[m] += x;
     else {
