@@ -16,6 +16,7 @@
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_box_3d.h>
 #include <vsol/vsol_polygon_2d.h>
+#include <vsol/vsol_digital_curve_2d.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_intersection.h>
 #include <vgl/algo/vgl_convex_hull_2d.h>
@@ -382,6 +383,40 @@ bool bsol_algs::homography(vsol_box_2d_sptr const& b,
     return false;
   Hb = Hp->get_bounding_box();
   return true;
+}
+
+void bsol_algs::tangent(vsol_digital_curve_2d_sptr const& dc, unsigned index,
+                        double& dx, double& dy)
+{
+  dx = 0; dy = 0;
+  if(!dc)
+    return;
+  unsigned n = dc->size();
+  //cases
+  if(index>=n)
+    return;
+  if(index == 0)// first point on curve
+    {
+      vsol_point_2d_sptr p_n0 = dc->point(0);
+      vsol_point_2d_sptr p_n1 = dc->point(1);
+      dx = p_n1->x()-p_n0->x();
+      dy = p_n1->y()-p_n0->y();
+      return;
+    }
+  
+  if(index == n-1)// last point on curve
+    {
+      vsol_point_2d_sptr p_n1 = dc->point(n-1);
+      vsol_point_2d_sptr p_n2 = dc->point(n-2);
+      dx = p_n1->x()-p_n2->x();
+      dy = p_n1->y()-p_n2->y();
+      return;
+    }
+  //the normal case
+  vsol_point_2d_sptr p_m1 = dc->point(index-1);
+  vsol_point_2d_sptr p_p1 = dc->point(index+1);
+  dx = p_p1->x()-p_m1->x();
+  dy = p_p1->y()-p_m1->y();
 }
 
 void bsol_algs::print(vsol_box_2d_sptr const& b)
