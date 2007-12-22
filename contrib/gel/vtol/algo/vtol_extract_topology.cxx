@@ -5,8 +5,6 @@
 // \author Amitha Perera
 // \date   July 2003
 
-#include <vcl_iosfwd.h>
-
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_edge_sptr.h>
