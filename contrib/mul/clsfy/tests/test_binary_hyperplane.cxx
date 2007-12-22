@@ -12,7 +12,6 @@
 #include <vcl_ios.h>
 #include <vcl_string.h>
 #include <vcl_algorithm.h>
-#include <vcl_numeric.h>
 #include <vcl_cmath.h>
 #include <clsfy/clsfy_rbf_parzen.h>
 #include <clsfy/clsfy_k_nearest_neighbour.h>
@@ -96,7 +95,7 @@ void test_binary_hyperplane()
   clsfy_k_nearest_neighbour knn;
   knn.set(trainingVectors, labels);
   knn.set_k(3);
-  vcl_cout << vcl_endl << "KNN output\n" << vcl_setprecision(4);
+  vcl_cout << "\nKNN output\n" << vcl_setprecision(4);
   for (x(0) = 2; x(0) >= -2 ; x(0) -= 0.25)
   {
     for (x(1) = -2; x(1) <= 2 ; x(1) += 0.25)
