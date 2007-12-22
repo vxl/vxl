@@ -34,13 +34,16 @@ IF (HAS_VGUI)
   vsrl_menus.h vsrl_menus.cxx
  )
  IF (BUILD_TBL)
-  INCLUDE_DIRECTORIES(${TBL_INCLUDE_DIR})
-  IF (BUILD_BRL)
+ IF (BUILD_BRL)
+ IF (BUILD_RPL)
+   INCLUDE_DIRECTORIES(${TBL_INCLUDE_DIR})
    INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg)
+   INCLUDE_DIRECTORIES(${RPL_INCLUDE_DIR}) # rsdl is in rpl
    SET(vsrl_sources ${vsrl_sources}
     vsrl_manager.cxx              vsrl_manager.h
    )
-  ENDIF (BUILD_BRL)
+ ENDIF (BUILD_RPL)
+ ENDIF (BUILD_BRL)
  ENDIF (BUILD_TBL)
 ENDIF (HAS_VGUI)
 
@@ -58,14 +61,15 @@ IF (HAS_VGUI)
  IF (BUILD_TBL)
   TARGET_LINK_LIBRARIES(vsrl vepl)
  ENDIF (BUILD_TBL)
+ IF (BUILD_RPL)
+  TARGET_LINK_LIBRARIES(vsrl rsdl)
+ ENDIF (BUILD_RPL)
 ENDIF (HAS_VGUI)
 
-TARGET_LINK_LIBRARIES(vsrl vtol vdgl vgl vil1 vnl vgel rsdl)
+TARGET_LINK_LIBRARIES(vsrl vtol vdgl vgl vil1 vnl vgel)
 
-# vgel uses mvl from oxl:
+# vgel uses mvl from oxl
 INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR})
-# rsdl is in rpl:
-INCLUDE_DIRECTORIES(${RPL_INCLUDE_DIR})
 
 IF (BUILD_EXAMPLES)
   SUBDIRS(examples)
