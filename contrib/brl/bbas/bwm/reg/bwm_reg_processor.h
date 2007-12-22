@@ -18,12 +18,11 @@
 // The matcher is the classic approach where a set of step edges is computed
 // for a model and then projected via a 3-d plane onto a search image. Only
 // edges that are within a tolerance on orientation are considered to be
-// eligble for a match. The test for a match is based on a histogram of 
+// eligble for a match. The test for a match is based on a histogram of
 // distances between eligible edges in the model and the search segmentations.
 // There is a minimum acceptable cumulative probabiity of edges lying within
 // the distance threshold, to produce a successful match.
 #include <vcl_vector.h>
-#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vsol/vsol_digital_curve_2d.h>
@@ -32,7 +31,6 @@
 #include <vpgl/bgeo/bgeo_lvcs.h>
 #include <vil/vil_image_resource_sptr.h>
 #include <brip/brip_roi.h>
-#include <vpgl/vpgl_rational_camera.h>
 #include "bwm_reg_image_sptr.h"
 
 class bwm_reg_processor
@@ -52,7 +50,7 @@ class bwm_reg_processor
                   );
   // Constructor for other mode as well as model
   // The model image (EO) is applied to the other_mode_image
-  // The model edges that are successful are kept for 
+  // The model edges that are successful are kept for
   // matching against the search image
   bwm_reg_processor(vil_image_resource_sptr const& model_image,
                     vpgl_rational_camera<double> const& model_cam,
@@ -63,14 +61,14 @@ class bwm_reg_processor
                     vil_image_resource_sptr const& search_image,
                     vpgl_rational_camera<double> const& search_cam
                     );
-  ~bwm_reg_processor(){}
+  ~bwm_reg_processor() {}
 
-  //: Registers the world point in the search image
+  //: Registers the world point in the search image.
   // model radius - the 1/2 width of the image processing region in meters
   // proj_error - the expected error in sensor positioning
   // distance_threshold - the maximum alignment error allowed
-  // angle_threshold - the maxium orientation error for an edge  match
-  // min_probabiliy - the minimum acceptable cumulative probability of 
+  // angle_threshold - the maximum orientation error for an edge  match
+  // min_probabiliy - the minimum acceptable cumulative probability of
   //                  edges lying inside the distance threshold
   // model_noise_threshold - the edge detection signal threshold for model
   // search_noise_threshold - the edge detection signal threshold for search
@@ -85,10 +83,10 @@ bool match(double radius,
            int& tcol, int& trow);
 
   vcl_vector<vsol_digital_curve_2d_sptr> search_curves();
-    
+
   vcl_vector<vsol_digital_curve_2d_sptr> trans_model_curves()
-    {return trans_model_edges_;}
-   
+  { return trans_model_edges_; }
+
     // protected:
   // INTERNALS-----------------------------------------------------------------
  protected:
