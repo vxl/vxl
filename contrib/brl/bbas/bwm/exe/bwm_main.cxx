@@ -1,6 +1,4 @@
 //#define _CRTDBG_MAP_ALLOC
-#include <vcl_cstdlib.h>
-//#include <crtdbg.h>
 
 #include <bwm/bwm_tableau_mgr.h>
 #include <bwm/bwm_process_mgr.h>
