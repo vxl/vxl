@@ -1,6 +1,5 @@
 #ifndef mmn_dp_solver_h_
 #define mmn_dp_solver_h_
-
 //:
 // \file
 // \brief Find choice of values at each node which minimises Markov problem
@@ -21,7 +20,7 @@
 //  optimisations.
 class mmn_dp_solver
 {
-private:
+ private:
   //: Workspace for incremental costs of each node
   vcl_vector<vnl_vector<double> > nc_;
 
@@ -31,28 +30,28 @@ private:
   //: index1[i][j] = optimal choice for i if other node is j
   vcl_vector<vcl_vector<unsigned> > index1_;
 
-  // index2[i](j,k) = optimal choice of i if two other nodes are (j,k)
+  //: index2[i](j,k) = optimal choice of i if two other nodes are (j,k)
   vcl_vector<vnl_matrix<int> > index2_;
 
-  //: Dependancies
+  //: Dependencies
   vcl_vector<mmn_dependancy> deps_;
 
   void process_dep1(const mmn_dependancy& dep);
   void process_dep2(const mmn_dependancy& dep);
-public:
+ public:
   //: Default constructor
   mmn_dp_solver();
 
   //: Index of root node
   unsigned root() const;
 
-  //: Define dependancies
+  //: Define dependencies
   void set_dependancies(const vcl_vector<mmn_dependancy>& deps,
                         unsigned n_nodes, unsigned max_n_arcs);
 
   //: Find values for each node with minimise the total cost
   //  \param node_cost: node_cost[i][j] is cost of selecting value j for node i
-  //  \param pair_cost: pair_cost[a](i,j) is cost of selecting values (i,j) for nodes at end of arc a.  
+  //  \param pair_cost: pair_cost[a](i,j) is cost of selecting values (i,j) for nodes at end of arc a.
   //  \param x: On exit, x[i] gives choice for node i
   // NOTE: If arc a connects nodes v1,v2, the associated pair_cost is ordered
   // with the node with the lowest index being the first parameter.  Thus if
@@ -69,7 +68,6 @@ public:
 
   //: root_cost()[i] is cost of selecting value i for the root node
   const vnl_vector<double>& root_cost() const { return nc_[root()]; }
-
 };
 
 #endif // mmn_dp_solver_h_
