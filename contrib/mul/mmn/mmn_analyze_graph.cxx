@@ -1,16 +1,16 @@
 //:
 // \file
-// \brief Analyze a graph to deduce the dependancy order.
+// \brief Analyze a graph to deduce the dependency order.
 // \author Tim Cootes
 
 #include <mmn/mmn_analyze_graph.h>
-#includ  <mmn/mmn_graph_rep1.h>
+#include <mmn/mmn_graph_rep1.h>
 
-//: Given a graph with n.size() nodes and arc.size() arcs, deduce dependancies
-//  If returns true, then dep is an ordered list of dependancies
+//: Given a graph with n.size() nodes and arc.size() arcs, deduce dependencies
+//  If returns true, then dep is an ordered list of dependencies
 //  allowing us solve a minimisation problem one node at a time.
 //  If it returns false, then the graph cannot be decomposed into
-//  a sequence of single or pairwise dependancies.
+//  a sequence of single or pairwise dependencies.
 //  If dep[i].n_dep==1 for all i, then the graph is a tree, and
 //  reversing the order of dep gives a means of traversing from the
 //  root to the leaves.  The original order gives a method of 
