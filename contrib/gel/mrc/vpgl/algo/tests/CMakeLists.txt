@@ -10,6 +10,7 @@ ADD_EXECUTABLE( vpgl_algo_test_all
   test_camera_compute.cxx
   test_lens_warp_mapper.cxx
   test_backproject.cxx
+  test_ray.cxx
   test_ortho_procrustes.cxx
   test_ray_intersect.cxx
   test_adjust_rational_trans_onept.cxx
@@ -31,6 +32,7 @@ ADD_TEST( vpgl_algo_test_ray_intersect     ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_t
 ADD_TEST( vpgl_algo_test_adjust_rational_trans_onept   ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_adjust_rational_trans_onept )
 ADD_TEST( vpgl_algo_test_rational_geo_adjust   ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_rational_geo_adjust )
 ADD_TEST( vpgl_algo_test_backproject        ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_backproject )
+ADD_TEST( vpgl_algo_test_ray      ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_ray )
 ADD_TEST( vpgl_algo_test_ortho_procrustes   ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_ortho_procrustes )
 ADD_TEST( vpgl_algo_test_bundle_adjust      ${EXECUTABLE_OUTPUT_PATH}/vpgl_algo_test_all test_bundle_adjust )
 

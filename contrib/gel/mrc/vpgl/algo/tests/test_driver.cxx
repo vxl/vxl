@@ -9,6 +9,7 @@ DECLARE( test_camera_compute );
 DECLARE( test_construct_cameras );
 DECLARE( test_lens_warp_mapper );
 DECLARE( test_backproject );
+DECLARE( test_ray );
 DECLARE( test_ortho_procrustes );
 DECLARE( test_ray_intersect );
 DECLARE( test_adjust_rational_trans_onept );
@@ -26,6 +27,7 @@ void register_tests()
   REGISTER( test_construct_cameras );
   REGISTER( test_lens_warp_mapper );
   REGISTER( test_backproject );
+  REGISTER( test_ray );
   REGISTER( test_ortho_procrustes );
   REGISTER( test_ray_intersect );
   REGISTER( test_adjust_rational_trans_onept );

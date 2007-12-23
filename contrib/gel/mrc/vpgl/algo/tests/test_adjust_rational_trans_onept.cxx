@@ -9,7 +9,6 @@
 
 static void test_adjust_rational_trans_onept()
 {
-  vcl_string dir = "C:/vxl/vxl/contrib/gel/mrc/vpgl/algo/tests/";
 
   double neu_u1[20] =
     { 8.96224e-005,  5.01302e-005,  -7.67889e-006,  -0.010342,
