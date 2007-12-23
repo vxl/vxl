@@ -11,7 +11,7 @@
 #include <vnl/vnl_math.h>
 
 #include <vgl/vgl_closest_point.h>
-#include <vgl/vgl_homg_line_3d_2_points.h>
+#include <vgl/vgl_line_3d_2_points.h>
 #include <vgl/algo/vgl_fit_plane_3d.h>
 #include <vgl/vgl_distance.h>
 
@@ -132,7 +132,7 @@ bwm_observable_sptr bwm_observable_mesh::transform(vgl_h_matrix_3d<double> T_)
   for (unsigned i=0; i<vertices.size(); i++) {
     bmsh3d_vertex* v = vertices[i];
     vgl_point_3d<double> p = v->get_pt();
-    vgl_point_3d<double> tp = T_(vgl_homg_point_3d<double>(p));
+    vgl_homg_point_3d<double> tp = T_(vgl_homg_point_3d<double>(p));
     v->set_pt (tp);
   }
   return new bwm_observable_mesh(M_copy);
@@ -487,17 +487,17 @@ void bwm_observable_mesh::divide_face(unsigned face_id,
     bmsh3d_edge* edge = he->edge();
     bmsh3d_vertex* s = (bmsh3d_vertex*) edge->sV();
     bmsh3d_vertex* e = (bmsh3d_vertex*) edge->eV();
-    vgl_homg_point_3d<double> sp(s->get_pt());
-    vgl_homg_point_3d<double> ep(e->get_pt());
+    vgl_point_3d<double> sp(s->get_pt());
+    vgl_point_3d<double> ep(e->get_pt());
 
 
-    vgl_homg_line_3d_2_points<double> line(sp, ep);
+    vgl_line_3d_2_points<double> line(sp, ep);
     //vcl_cout << "edge" << edge->id() << " s=" << s->get_pt() << "e =" << e->get_pt() << vcl_endl;
 
-   double d1 = vgl_distance(vgl_homg_point_3d<double>(l1), line);
-   double d2 = vgl_distance(vgl_homg_point_3d<double>(l2), line);
-   double d3 = vgl_distance(vgl_homg_point_3d<double>(l3), line);
-   double d4 = vgl_distance(vgl_homg_point_3d<double>(l4), line);
+   double d1 = vgl_distance(vgl_point_3d<double>(l1), line);
+   double d2 = vgl_distance(vgl_point_3d<double>(l2), line);
+   double d3 = vgl_distance(vgl_point_3d<double>(l3), line);
+   double d4 = vgl_distance(vgl_point_3d<double>(l4), line);
 
    // we are checking if the points l1, l2, l3 or l4 are on the line
    if ((d1+d2) < min_d1) {
@@ -511,12 +511,12 @@ void bwm_observable_mesh::divide_face(unsigned face_id,
    }
 
 #if 0 // commented out
-    if (collinear(line, vgl_homg_point_3d<double>(l1)) &&
-      collinear(line, vgl_homg_point_3d<double>(l2)))
+    if (collinear(line, vgl_point_3d<double>(l1)) &&
+      collinear(line, vgl_point_3d<double>(l2)))
         edge1 = edge;
 
-    if (collinear(line, vgl_homg_point_3d<double>(l3)) &&
-      collinear(line, vgl_homg_point_3d<double>(l4)))
+    if (collinear(line, vgl_point_3d<double>(l3)) &&
+      collinear(line, vgl_point_3d<double>(l4)))
         edge2 = edge;
 #endif // 0
   }
@@ -621,8 +621,8 @@ int bwm_observable_mesh::find_closest_face(vgl_point_3d<double> point)
 
   for (; it != object_->facemap().end(); it++) {
     bmsh3d_face_mc* face = (bmsh3d_face_mc*) (*it).second;
-    vgl_homg_plane_3d<double> plane = get_plane(face->id());
-    double d = vgl_distance(vgl_homg_point_3d<double> (point), plane);
+    vgl_plane_3d<double> plane = get_plane(face->id());
+    double d = vgl_distance(vgl_point_3d<double> (point), plane);
     if (d < dmin) {
       dmin = d;
       index = face->id();
@@ -924,7 +924,7 @@ bmsh3d_face_mc* bwm_observable_mesh::extrude_face(bmsh3d_mesh_mc* M, bmsh3d_face
   return new_face;
 }
 
-vgl_homg_plane_3d<double> bwm_observable_mesh::get_plane(unsigned face_id)
+vgl_plane_3d<double> bwm_observable_mesh::get_plane(unsigned face_id)
 {
   bmsh3d_face* face = object_->facemap(face_id);
 
@@ -936,7 +936,7 @@ vgl_homg_plane_3d<double> bwm_observable_mesh::get_plane(unsigned face_id)
     fitter.add_point(hp);
   }
 
-  vgl_homg_plane_3d<double> plane;
+  vgl_plane_3d<double> plane;
 #if 0
   if (face->vertices().size()==0)
     return plane;
@@ -968,15 +968,15 @@ void bwm_observable_mesh::move_points_to_plane(bmsh3d_face_mc* face)
  bmsh3d_face* temp = object_->facemap(face->id());
   if (temp->vertices().size()==0)
     return;
-  vgl_homg_plane_3d<double> plane = get_plane(face->id());
+  vgl_plane_3d<double> plane = get_plane(face->id());
 
   // find the closest point on the plane and replace it for each point
   vcl_vector<vsol_point_3d_sptr> points;
   for (unsigned i=0; i<face->vertices().size(); i++) {
     bmsh3d_vertex* v = (bmsh3d_vertex*) face->vertices(i);
-    vgl_homg_point_3d<double> hp(v->get_pt().x(), v->get_pt().y(), v->get_pt().z());
-    vgl_homg_point_3d<double> p = vgl_closest_point(plane, hp);
-    v->set_pt (vgl_point_3d<double> (p.x()/p.w(), p.y()/p.w(), p.z()/p.w()));
+    vgl_point_3d<double> hp(v->get_pt().x(), v->get_pt().y(), v->get_pt().z());
+    vgl_point_3d<double> p = vgl_closest_point(plane, hp);
+    v->set_pt (vgl_point_3d<double> (p.x(), p.y(), p.z()));
   }
 }
 
@@ -989,7 +989,7 @@ void bwm_observable_mesh::shrink_mesh(bmsh3d_mesh_mc* mesh, double r)
   vcl_map<int, bmsh3d_vertex* >::iterator v_it = vertices.begin();
   while (v_it != vertices.end()) {
     bmsh3d_vertex* vertex = (bmsh3d_vertex*) v_it->second;
-    vgl_homg_point_3d<double> p(vertex->get_pt());
+    vgl_point_3d<double> p(vertex->get_pt());
     vcl_cout << "old vertex->" << p << vcl_endl;
     // find the faces incident to this vertex
     vcl_set<bmsh3d_face*> inc_faces;

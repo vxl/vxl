@@ -5,9 +5,6 @@
 
 #include <vcl_iosfwd.h>
 
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_homg_point_3d.h>
-#include <vgl/vgl_homg_plane_3d.h>
 
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
@@ -44,15 +41,15 @@ class bwm_observer_rat_cam : public bwm_observer_cam
 
   vpgl_rational_camera<double> camera();
 
-  virtual bool intersect_ray_and_plane(vgl_homg_point_2d<double> img_point,
-                                       vgl_homg_plane_3d<double> plane,
-                                       vgl_homg_point_3d<double> &world_point);
+  virtual bool intersect_ray_and_plane(vgl_point_2d<double> img_point,
+                                       vgl_plane_3d<double> plane,
+                                       vgl_point_3d<double> &world_point);
 
-  bool find_intersection_point(vgl_homg_point_2d<double> img_point,
+  bool find_intersection_point(vgl_point_2d<double> img_point,
                                vsol_polygon_3d_sptr poly3d,
                                vgl_point_3d<double>& point3d);
 
-  void camera_center(vgl_homg_point_3d<double> &center);
+  void camera_center(vgl_point_3d<double> &center);
 
   //vgl_vector_3d<double> camera_direction(vgl_point_3d<double> origin);
   vgl_vector_3d<double> camera_direction();

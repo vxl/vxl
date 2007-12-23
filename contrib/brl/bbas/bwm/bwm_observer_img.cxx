@@ -103,6 +103,7 @@ bool bwm_observer_img::handle(const vgui_event &e)
     this->deselect_all();
     moving_vertex_ = false;
     moving_polygon_ = false;
+    in_jog_mode_ = false;
     return true;
   }
   return base::handle(e);

@@ -32,7 +32,9 @@ class bwm_observer_mgr
   //: cleans up the correspondences and initializes the system for a new site
   void clear();
 
+  vcl_vector<bwm_observer_cam*> observers_cam();
   vcl_vector<bwm_observer_rat_cam*> observers_rat_cam();
+  
 
   void add(bwm_observer* o);
 

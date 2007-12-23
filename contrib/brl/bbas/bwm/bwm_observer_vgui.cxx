@@ -594,3 +594,13 @@ vsol_polygon_2d_sptr bwm_observer_vgui::shrink_face(vsol_polygon_2d_sptr poly)
   vsol_polygon_2d_sptr new_polygon = new vsol_polygon_2d(new_points);
   return new_polygon;
 }
+//: only is implemented for a single polygonal face
+void bwm_observer_vgui::select_object(bwm_observable_sptr const& obj)
+{
+  vcl_map<unsigned, bgui_vsol_soview2D_polygon* > pmap = objects_[obj];
+  if(pmap.size()!=1)
+    return;
+  bgui_vsol_soview2D_polygon* sov = (*pmap.begin()).second;
+  unsigned id = sov->get_id();
+  this->select(id);
+}

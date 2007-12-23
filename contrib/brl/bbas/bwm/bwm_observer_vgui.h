@@ -58,6 +58,9 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
 
   bwm_observable_sptr selected_face(unsigned& face_id);
 
+  //:select a given observable
+  void select_object(bwm_observable_sptr const& obj);
+
   void label_roof();
 
   void label_wall();

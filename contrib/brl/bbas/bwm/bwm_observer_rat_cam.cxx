@@ -7,7 +7,6 @@
 #include "bwm_world.h"
 #include "reg/bwm_reg_utils.h"
 #include "reg/bwm_reg_processor.h"
-#include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_box_2d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
@@ -37,7 +36,7 @@ vpgl_rational_camera<double> bwm_observer_rat_cam::camera()
   return *static_cast<vpgl_rational_camera<double>* >(camera_);
 }
 
-void bwm_observer_rat_cam::camera_center(vgl_homg_point_3d<double> &center)
+void bwm_observer_rat_cam::camera_center(vgl_point_3d<double> &center)
 {
 #if 0 // Dan says this is not right
   center.set(camera_->offset(camera_->X_INDX),
@@ -45,7 +44,7 @@ void bwm_observer_rat_cam::camera_center(vgl_homg_point_3d<double> &center)
              camera_->offset(camera_->Z_INDX));
 #endif // 0
   vgl_vector_3d<double> v = camera_direction();
-  center.set(v.x(), v.y(), v.z(), 0);
+  center.set(v.x(), v.y(), v.z());
 }
 
 vgl_vector_3d<double> bwm_observer_rat_cam::camera_direction()
@@ -170,12 +169,12 @@ bool bwm_observer_rat_cam::shift_camera(double dx, double dy)
   return true;
 }
 
-bool bwm_observer_rat_cam::intersect_ray_and_plane(vgl_homg_point_2d<double> img_point,
-                                            vgl_homg_plane_3d<double> plane,
-                                            vgl_homg_point_3d<double> &world_point)
+bool bwm_observer_rat_cam::intersect_ray_and_plane(vgl_point_2d<double> img_point,
+                                            vgl_plane_3d<double> plane,
+                                            vgl_point_3d<double> &world_point)
 {
   vpgl_rational_camera<double>* rat_cam = static_cast<vpgl_rational_camera<double> *> (camera_);
-  vgl_point_2d<double>  p2d(img_point.x()/img_point.w(),img_point.y()/img_point.w());
+  vgl_point_2d<double>  p2d(img_point.x(),img_point.y());
 
   // initial guess for backprojection - just use center point of image
   vgl_point_3d<double> guess(rat_cam->offset(rat_cam->X_INDX),
@@ -1088,7 +1087,7 @@ void bwm_observer_rat_cam::project_edges_from_master()
 
   vpgl_rational_camera<double> master_cam =
     *static_cast<vpgl_rational_camera<double>* >(mcam);
-  vgl_homg_plane_3d<double> hpl= mobs->get_proj_plane();
+  vgl_plane_3d<double> hpl= mobs->get_proj_plane();
   vgl_plane_3d<double> master_plane(hpl);
   vgl_point_3d<double> wpt;
   if (!bwm_world::instance()->world_pt(wpt))

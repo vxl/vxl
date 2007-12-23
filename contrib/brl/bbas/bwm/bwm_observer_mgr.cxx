@@ -30,6 +30,18 @@ void bwm_observer_mgr::clear()
   corr_list_.clear();
 }
 
+vcl_vector<bwm_observer_cam*> bwm_observer_mgr::observers_cam()
+{
+  vcl_vector<bwm_observer_cam*> v;
+  for (unsigned i=0; i< observers_.size(); i++) {
+    if (observers_[i]->type_name().compare("bwm_observer_cam") == 0)
+      v.push_back(static_cast<bwm_observer_cam*> (observers_[i]));
+    if (observers_[i]->type_name().compare("bwm_observer_rat_cam") == 0)
+      v.push_back(static_cast<bwm_observer_cam*> (observers_[i]));
+  }
+  return v;
+}
+
 vcl_vector<bwm_observer_rat_cam*> bwm_observer_mgr::observers_rat_cam()
 {
   vcl_vector<bwm_observer_rat_cam*> v;
@@ -80,7 +92,7 @@ bool bwm_observer_mgr::comp_avg_camera_center(vgl_point_3d<double> &cam_center)
 {
   unsigned num = 0;
   double x=0, y=0, z=0;
-  vgl_homg_point_3d<double> c;
+  vgl_point_3d<double> c;
 
   // go through the camera observers and compute a camera center
   for (unsigned i=0; i<observers_.size(); i++) {
@@ -457,7 +469,7 @@ void bwm_observer_mgr::adjust_camera_offsets()
     return;
   }
 
-  vgl_homg_plane_3d<double> world_plane(0,0,1,-intersection.z());
+  vgl_plane_3d<double> world_plane(0,0,1,-intersection.z());
   vcl_vector<vgl_vector_2d<double> >::iterator ti = cam_trans.begin();
   vcl_vector<bwm_observer_cam*>::iterator oit = obs.begin();
   for (; oit != obs.end() && ti != cam_trans.end(); ++oit, ++ti)

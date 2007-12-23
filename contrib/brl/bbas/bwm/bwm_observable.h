@@ -54,7 +54,7 @@ class bwm_observable : public vgui_observable, public vbl_ref_count
 
   virtual vsol_polygon_3d_sptr extract_face(unsigned i)=0;
 
-  virtual vgl_homg_plane_3d<double> get_plane(unsigned face_id)=0;
+  virtual vgl_plane_3d<double> get_plane(unsigned face_id)=0;
 
   virtual vcl_map<int, vsol_polygon_3d_sptr> extract_faces()=0;
 

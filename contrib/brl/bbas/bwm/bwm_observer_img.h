@@ -37,7 +37,7 @@ class bwm_observer_img : public bgui_vsol2D_tableau
     : bgui_vsol2D_tableau(img), img_tab_(img), viewer_(0),
     show_image_path_(false), start_x_(0), start_y_(0), moving_p_(0),
     moving_v_(0), moving_vertex_(false), moving_polygon_(false),
-    row_(0), col_(0) {  }
+    in_jog_mode_(false), row_(0), col_(0) {  }
 
   virtual ~bwm_observer_img();
 
@@ -137,7 +137,7 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   bgui_vsol_soview2D* moving_p_;
   bwm_soview2D_vertex* moving_v_;
   bool moving_vertex_, moving_polygon_;
-
+  bool in_jog_mode_;
   void delete_polygon(vgui_soview* obj);
   void delete_vertex(vgui_soview* vertex);
 

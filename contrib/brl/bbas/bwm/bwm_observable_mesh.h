@@ -96,7 +96,7 @@ class bwm_observable_mesh : public bwm_observable
 
   BWM_FACE_LABEL get_face_label(unsigned face_id);
 
-  vgl_homg_plane_3d<double> get_plane(unsigned face_id);
+  vgl_plane_3d<double> get_plane(unsigned face_id);
 
   int find_closest_face(vgl_point_3d<double> point);
 
