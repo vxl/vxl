@@ -29,7 +29,7 @@ int main(int argc, char** argv)
   vcl_cout << " Has MPEG\n";
   vidl_io::register_codec(new vidl_mpegcodec);
 #endif
-#if defined(VCL_WIN32)
+#if defined(VCL_WIN32) && ! defined(VCL_BORLAND)
 vcl_cout << '\n'<< "Max number of open files has been reset from " << _getmaxstdio();
 _setmaxstdio(2048);
 #endif
