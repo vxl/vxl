@@ -12,6 +12,8 @@ INCLUDE_DIRECTORIES( ${RPL_INCLUDE_DIR} )
 INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
 
 IF(HAS_VGUI)
+IF(BUILD_RPL) # bmvv_f_manager.cxx needs rpl/rrel
+
  # sources that depend on xerces and vgui  being present
  SET(bmvv_sources
     #bmvv_multiview_manager.cxx     bmvv_multiview_manager.h
@@ -44,4 +46,5 @@ IF(HAS_VGUI)
  # the main executable
  SUBDIRS(mvbin)
 
+ENDIF(BUILD_RPL)
 ENDIF(HAS_VGUI)
