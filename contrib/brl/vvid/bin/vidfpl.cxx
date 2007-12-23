@@ -30,7 +30,7 @@ int main(int argc, char** argv)
   vidl_vil1_io::register_codec(new vidl_vil1_mpegcodec);
 #endif
 
-#if defined(VCL_WIN32)
+#if defined(VCL_WIN32) && ! defined(VCL_BORLAND)
 vcl_cout << '\n'<< "Max number of open files has been reset from " << _getmaxstdio();
 _setmaxstdio(2048);
 #endif
