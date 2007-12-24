@@ -344,12 +344,15 @@ SET( vcl_sources
 
 ADD_LIBRARY(vcl ${vcl_sources})
 
-IF(WIN32)
-  IF(NOT CYGWIN)
-    ADD_DEFINITIONS( -DBUILDING_VCL_DLL )
-    INCLUDE_DIRECTORIES( config.win32 )
-  ENDIF(NOT CYGWIN)
-ENDIF(WIN32)
+# CMake can automatically figure out the compiler characteristics on
+# Windows too.  No need to do manual config.
+
+# IF(WIN32)
+#   IF(NOT CYGWIN)
+#     ADD_DEFINITIONS( -DBUILDING_VCL_DLL )
+#     INCLUDE_DIRECTORIES( config.win32 )
+#   ENDIF(NOT CYGWIN)
+# ENDIF(WIN32)
 
 IF(UNIX)
   TARGET_LINK_LIBRARIES( vcl m )
