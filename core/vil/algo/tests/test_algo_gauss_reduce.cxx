@@ -422,6 +422,45 @@ static void test_algo_gauss_reduce_121_float(unsigned nx, unsigned ny)
   vcl_cout<<"Value at (1,1):"<<float(test2(1,1))<<'\n';
 }
 
+static void test_algo_gauss_reduce_121_byte_multiplane(unsigned nx, unsigned ny, unsigned np)
+{
+  vcl_cout << "*******************************************************\n"
+           << " Testing vil_algo_gauss_reduce_121 (byte) (nx="<<nx
+           <<", ny="<<ny<<", np="<<np<<")\n"
+           << "*******************************************************\n";
+
+#define TEST_BODY                                                       \
+  for (unsigned int j=0;j<image0.nj();++j)                              \
+    for (unsigned int i=0;i<image0.ni();++i)                            \
+      for( unsigned p = 0; p < np; ++p )                                \
+        image0(i,j,p) = i+j*10+5*p;                                     \
+                                                                        \
+  vil_gauss_reduce_121(image0, reduced_x);                              \
+                                                                        \
+  print_out(image0,"reduced_x",reduced_x);                              \
+                                                                        \
+  for( unsigned p = 0; p < np; ++p ) {                                  \
+    vcl_cout << "Test plane " << p << "\n";                             \
+    TEST("First element",reduced_x(0,1,p),image0(0,2,p));               \
+    TEST("Next element",reduced_x(1,1,p),image0(2,2,p));                \
+    unsigned Lx = (nx+1)/2;                                             \
+    unsigned Ly = (ny+1)/2;                                             \
+    TEST("Last element in x",reduced_x(Lx-1,1,p),image0(2*(Lx-1),2,p)); \
+    TEST("Last element in y",reduced_x(1,Ly-1,p),image0(2,2*(Ly-1),p)); \
+  } // end macro TEST_BODY
+
+
+  {
+    vcl_cout << "Src planar, dest planar\n";
+    vil_image_view<vxl_byte> image0;
+    image0.set_size(nx,ny,np);
+    vil_image_view<vxl_byte> reduced_x;
+    reduced_x.set_size((nx+1)/2,(ny+1)/2,np);
+    TEST_BODY
+  }
+}
+
+
 static void test_algo_gauss_reduce_2_3_float(unsigned nx, unsigned ny)
 {
   vcl_cout << "********************************************************\n"
@@ -510,6 +549,10 @@ static void test_algo_gauss_reduce()
   test_algo_gauss_reduce_121_int_32(7,7);
   test_algo_gauss_reduce_121_float(6,6);
   test_algo_gauss_reduce_121_float(7,7);
+
+  test_algo_gauss_reduce_121_byte_multiplane(6,6,4);
+  test_algo_gauss_reduce_121_byte_multiplane(7,7,4);
+  test_algo_gauss_reduce_121_byte_multiplane(6,6,2);
 
   test_algo_gauss_reduce_byte_2d();
 
