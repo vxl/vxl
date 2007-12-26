@@ -110,7 +110,7 @@ void vil_gauss_reduce_121(const vil_image_view<T>& src_im,
     vil_gauss_reduce_121_1plane(src_im.top_left_ptr() + i*src_im.planestep(),
                                 ni, nj,
                                 src_im.istep(),src_im.jstep(),
-                                dest_im.top_left_ptr() + i*dst_im.planestep(),
+                                dest_im.top_left_ptr() + i*dest_im.planestep(),
                                 dest_im.istep(), dest_im.jstep());
   }
 }
