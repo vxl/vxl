@@ -38,6 +38,8 @@ vcl_vector<bwm_observer_cam*> bwm_observer_mgr::observers_cam()
       v.push_back(static_cast<bwm_observer_cam*> (observers_[i]));
     if (observers_[i]->type_name().compare("bwm_observer_rat_cam") == 0)
       v.push_back(static_cast<bwm_observer_cam*> (observers_[i]));
+    if (observers_[i]->type_name().compare("bwm_observer_cam_proj") == 0)
+      v.push_back(static_cast<bwm_observer_cam*> (observers_[i]));
   }
   return v;
 }
@@ -164,7 +166,6 @@ void bwm_observer_mgr::set_corr_mode()
 void bwm_observer_mgr::collect_corr()
 {
   bwm_corr_sptr corr = new bwm_corr();
-  bool found = false;
   vgl_point_2d<double> pt;
 
   // set mode
@@ -184,14 +185,13 @@ void bwm_observer_mgr::collect_corr()
   else
     vcl_cerr << "Unknown correspondence mode!\n";
 
-  for (unsigned i=0; i< observers_.size(); i++) {
-    if ((observers_[i]->type_name().compare("bwm_observer_rat_cam") == 0) ||
-        (observers_[i]->type_name().compare("bwm_observer_cam_proj") == 0)) {
-      bwm_observer_cam* obs = static_cast<bwm_observer_cam *> (observers_[i]);
-      if (obs->corr_pt(pt)) {
-        corr->set_match(obs, pt.x(), pt.y());
-        found = true;
-      }
+  bool found = false;
+  vcl_vector<bwm_observer_cam*> obs_cam = this->observers_cam();
+  for (unsigned i=0; i< obs_cam.size()&&!found; i++) {
+    bwm_observer_cam* obs = obs_cam[i];
+    if (obs->corr_pt(pt)) {
+      corr->set_match(obs, pt.x(), pt.y());
+      found = true;
     }
   }
 
