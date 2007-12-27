@@ -16,7 +16,7 @@
 #include <vnl/vnl_complex_traits.h>
 #include <vnl/algo/vnl_netlib.h> // dqrdc_(), dqrsl_()
 
-// use C++ overloading to call the right linpack routine from the template code :
+// use C++ overloading to call the right linpack routine from the template code:
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define macro(p, T) \
 inline void vnl_linpack_qrdc(vnl_netlib_qrdc_proto(T)) \
@@ -245,10 +245,10 @@ vnl_vector<T> vnl_qr<T>::QtB(const vnl_vector<T>& b) const
 }
 
 template <class T>
-vnl_matrix<T> vnl_qr<T>::inverse () const
+vnl_matrix<T> vnl_qr<T>::inverse() const
 {
-  int r = qrdc_out_.columns(), c = qrdc_out_.rows();
-  assert(r == c && r > 0);
+  int r = qrdc_out_.columns();
+  assert(r > 0 && r == qrdc_out_.rows());
   vnl_matrix<T> inv(r,r);
 
   // Use solve() to compute the inverse matrix, using (00..010..00) as rhs
@@ -264,10 +264,10 @@ vnl_matrix<T> vnl_qr<T>::inverse () const
 }
 
 template <class T>
-vnl_matrix<T> vnl_qr<T>::tinverse () const
+vnl_matrix<T> vnl_qr<T>::tinverse() const
 {
-  int r = qrdc_out_.columns(), c = qrdc_out_.rows();
-  assert(r == c && r > 0);
+  int r = qrdc_out_.columns();
+  assert(r > 0 && r == qrdc_out_.rows());
   vnl_matrix<T> tinv(r,r);
 
   // Use solve() to compute the inverse matrix, using (00..010..00) as rhs
@@ -285,9 +285,9 @@ vnl_matrix<T> vnl_qr<T>::tinverse () const
 template <class T>
 vnl_matrix<T> vnl_qr<T>::solve(vnl_matrix<T> const& rhs) const
 {
-  int r = qrdc_out_.columns(), c = qrdc_out_.rows(); // column-major storage
-  int m = rhs.rows(), n = rhs.columns();
-  assert(m==r);
+  assert(rhs.rows() == qrdc_out_.columns()); // column-major storage
+  int c = qrdc_out_.rows();
+  int n = rhs.columns();
   vnl_matrix<T> result(c,n);
 
   for (int i=0; i<n; ++i)
@@ -299,7 +299,7 @@ vnl_matrix<T> vnl_qr<T>::solve(vnl_matrix<T> const& rhs) const
   return result;
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 #define VNL_QR_INSTANTIATE(T) \
  template class vnl_qr<T >; \
