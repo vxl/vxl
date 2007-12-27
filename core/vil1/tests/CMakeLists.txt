@@ -27,7 +27,7 @@ ADD_TEST( vil1_test_load              ${EXECUTABLE_OUTPUT_PATH}/vil1_test_all te
 ADD_TEST( vil1_test_load_gen          ${EXECUTABLE_OUTPUT_PATH}/vil1_test_all test_load_gen )
 ADD_TEST( vil1_test_memory_image      ${EXECUTABLE_OUTPUT_PATH}/vil1_test_all test_memory_image )
 ADD_TEST( vil1_test_memory_image_of   ${EXECUTABLE_OUTPUT_PATH}/vil1_test_all test_memory_image_of )
-ADD_TEST( vil1_test_save_load_image   ${EXECUTABLE_OUTPUT_PATH}/vil1_test_all test_save_load_image )
+#ADD_TEST( vil1_test_save_load_image   ${EXECUTABLE_OUTPUT_PATH}/vil1_test_all test_save_load_image )
 ADD_TEST( vil1_test_write_endian      ${EXECUTABLE_OUTPUT_PATH}/vil1_test_all test_write_endian )
 ADD_TEST( vil1_test_colour_space      ${EXECUTABLE_OUTPUT_PATH}/vil1_test_all test_colour_space )
 ADD_TEST( vil1_test_copy              ${EXECUTABLE_OUTPUT_PATH}/vil1_test_all test_copy ${CMAKE_CURRENT_SOURCE_DIR}/square.pgm )
