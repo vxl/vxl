@@ -71,11 +71,21 @@ static void test_image_list()
     vcl_vector<vil_image_resource_sptr> rescs = il.resources();
     vcl_cout << "Size = " << rescs.size() << vcl_endl;
     TEST("size()", rescs.size(), 2);
-    if (rescs.size() == 2 && rescs[0])
+    if (rescs.size() == 2 && rescs[0] && rescs[1])
     {
-      vcl_cout << "Successfully read the resource list\n";
-      TEST("ni()", rescs[0]->ni(), 73);
-      vcl_cout << "ni() = " << rescs[0]->ni() << '\n';
+      vcl_cout << "Successfully read the resource list\n"
+               << "0->ni() = " << rescs[0]->ni() << '\n'
+               << "1->ni() = " << rescs[1]->ni() << '\n';
+      if (rescs[0]->ni() == 73) // no guarantee that files are returned in order
+      {
+        TEST("ni()", rescs[0]->ni(), 73);
+        TEST("ni()", rescs[1]->ni(), 18);
+      }
+      else
+      {
+        TEST("ni()", rescs[0]->ni(), 18);
+        TEST("ni()", rescs[1]->ni(), 73);
+      }
     }
     else
       vcl_cout << "The resource list is corrupt\n";
