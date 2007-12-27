@@ -161,11 +161,8 @@ double vnl_ldl_cholesky::xt_m_x(const vnl_vector<double>& x) const
 void vnl_ldl_cholesky::solve(vnl_vector<double> const& b,
                              vnl_vector<double>* xp) const
 {
-  unsigned n = d_.size();
-  assert(b.size() == n);
-
+  assert(b.size() == d_.size());
   *xp = b;
-
   inplace_solve(xp->data_block());
 }
 
