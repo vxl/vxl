@@ -48,8 +48,8 @@ IF (WIN32)
 
     IF (COIN3D_LIBRARY)
       ADD_DEFINITIONS ( -DCOIN_NOT_DLL )
-    ELSE (COIN3D_LIBRARY)
-      SET (COIN3D_LIBRARY coin2d CACHE STRING "Coin3D Library (Debug) - Open Inventor API")
+    #ELSE (COIN3D_LIBRARY)
+    #  SET (COIN3D_LIBRARY coin2d CACHE STRING "Coin3D Library (Debug) - Open Inventor API")
     ENDIF (COIN3D_LIBRARY)
 
   ENDIF (CYGWIN)
