@@ -247,13 +247,13 @@ vnl_vector<T> vnl_qr<T>::QtB(const vnl_vector<T>& b) const
 template <class T>
 vnl_matrix<T> vnl_qr<T>::inverse() const
 {
-  int r = qrdc_out_.columns();
+  unsigned int r = qrdc_out_.columns();
   assert(r > 0 && r == qrdc_out_.rows());
   vnl_matrix<T> inv(r,r);
 
   // Use solve() to compute the inverse matrix, using (00..010..00) as rhs
   vnl_vector<T> rhs(r,T(0));
-  for (int i=0; i<r; ++i)
+  for (unsigned int i=0; i<r; ++i)
   {
     rhs(i) = T(1);
     vnl_vector<T> col = this->solve(rhs); // returns i-th column of inverse
@@ -266,13 +266,13 @@ vnl_matrix<T> vnl_qr<T>::inverse() const
 template <class T>
 vnl_matrix<T> vnl_qr<T>::tinverse() const
 {
-  int r = qrdc_out_.columns();
+  unsigned int r = qrdc_out_.columns();
   assert(r > 0 && r == qrdc_out_.rows());
   vnl_matrix<T> tinv(r,r);
 
   // Use solve() to compute the inverse matrix, using (00..010..00) as rhs
   vnl_vector<T> rhs(r,T(0));
-  for (int i=0; i<r; ++i)
+  for (unsigned int i=0; i<r; ++i)
   {
     rhs(i) = T(1);
     vnl_vector<T> col = this->solve(rhs); // returns i-th column of inverse
