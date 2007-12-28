@@ -94,6 +94,8 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
   void add_cross(float x, float y, float r);
 
  protected:
+  //allows children to take some action if a correspondence is set
+  virtual void correspondence_action(){};
 
   bwm_observer_vgui() { corr_.second = 0; show_vertices_ = true; }
 

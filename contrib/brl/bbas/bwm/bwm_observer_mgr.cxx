@@ -40,6 +40,8 @@ vcl_vector<bwm_observer_cam*> bwm_observer_mgr::observers_cam()
       v.push_back(static_cast<bwm_observer_cam*> (observers_[i]));
     if (observers_[i]->type_name().compare("bwm_observer_cam_proj") == 0)
       v.push_back(static_cast<bwm_observer_cam*> (observers_[i]));
+    if (observers_[i]->type_name().compare("bwm_observer_video") == 0)
+      v.push_back(static_cast<bwm_observer_cam*> (observers_[i]));
   }
   return v;
 }

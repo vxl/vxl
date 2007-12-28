@@ -23,7 +23,7 @@
 
 #include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
-
+class bwm_observer_video;
 class bwm_tableau_mgr
 {
  public:
@@ -48,10 +48,18 @@ class bwm_tableau_mgr
 
   void save_site();
 
+  void load_video_site();
+
+  void save_video_site();
+
   void create_img_tableau(vcl_string name, vcl_string& image_path);
 
   void create_cam_tableau(vcl_string name, vcl_string& image_path, vcl_string& cam_path,
                           BWM_CAMERA_TYPES camera_type, vsol_point_3d_sptr lvcs = 0);
+
+  bwm_observer_video* create_video_tableau(vcl_string name,
+                                           vcl_string& frame_glob,
+                                           vcl_string& camera_glob);
 
   bwm_command_sptr load_tableau_by_type(vcl_string tableau_type);
 
@@ -59,9 +67,11 @@ class bwm_tableau_mgr
 
   void load_cam_tableau();
 
+  void load_video_tableau();
+
   void remove_tableau();
 
-  void exit() { vgui::quit(); }
+  void exit();
 
   void display_image_path(bool display){display_image_path_=display;}
 

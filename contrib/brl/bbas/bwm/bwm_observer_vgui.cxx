@@ -56,6 +56,7 @@ bool bwm_observer_vgui::handle(const vgui_event& e)
       float x,y;
       pi.window_to_image_coordinates(e.wx, e.wy, x, y);
       this->set_corr(x, y);
+      this->correspondence_action();
       return true;
   }
 
@@ -341,8 +342,9 @@ void bwm_observer_vgui::set_corr(float x, float y)
   corr_.first = vgl_homg_point_2d<double> (x, y);
 
   // delete the previous correlation point if valid
-  if (corr_.second) {
+  if (corr_valid_&&corr_.second) {
     this->remove(corr_.second);
+	corr_.second=0;
   }
 
   // draw a cross at that point

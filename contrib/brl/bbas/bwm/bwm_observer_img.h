@@ -110,6 +110,8 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   void display_reg_seg(vcl_vector<vsol_digital_curve_2d_sptr> const& search_edges,
                     vcl_vector<vsol_digital_curve_2d_sptr> const& model_edges); 
   void clear_reg_segmentation();
+
+  vcl_string image_path(){return img_tab_->file_name();}
  protected:
 
   bwm_observer_img();

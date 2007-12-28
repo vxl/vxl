@@ -43,6 +43,8 @@ class bwm_observer_cam : public bwm_observer_vgui
 
   vcl_string camera_path() { return cam_path_; }
 
+  void set_camera_path(vcl_string const& cam_path) {cam_path_=cam_path;}
+
   bool handle(const vgui_event &e);
 
   virtual vcl_string type_name() const { return "bwm_observer_cam"; }

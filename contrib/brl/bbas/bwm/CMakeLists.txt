@@ -42,6 +42,7 @@ SET(bwm_sources
 #   bwm_tableau_lidar.cxx       bwm_tableau_lidar.h
    bwm_tableau_text.cxx        bwm_tableau_text.h
    bwm_tableau_img.cxx         bwm_tableau_img.h
+    bwm_tableau_video.cxx     bwm_tableau_video.h
    bwm_tableau_mgr.cxx         bwm_tableau_mgr.h
    bwm_process_mgr.cxx         bwm_process_mgr.h
    bwm_observable.h            bwm_observable_sptr.h
@@ -58,6 +59,7 @@ SET(bwm_sources
 #   bwm_observer_coin3d.cxx     bwm_observer_coin3d.h
                                bwm_observer_proj2d.h
 #   bwm_observer_lidar.cxx      bwm_observer_lidar.h
+    bwm_observer_video.cxx     bwm_observer_video.h
    bwm_observer_mgr.cxx        bwm_observer_mgr.h    
    bwm_texture_map_generator.cxx bwm_texture_map_generator.h
    bwm_corr.cxx                bwm_corr.h       bwm_corr_sptr.h
@@ -86,12 +88,13 @@ AUX_SOURCE_DIRECTORY(Templates bwm_sources)
 
 ADD_LIBRARY(bwm ${bwm_sources})
 
-TARGET_LINK_LIBRARIES( bwm bwm_reg bwm_algo bwm_io bmsh3d bmsh3d_algo bmsh3d_vis expatpp vil vbl vgl vgl_algo vnl vsol vpgl vpgl_algo vpgl_file_formats bgui bgeo)
+TARGET_LINK_LIBRARIES( bwm bwm_video bwm_reg bwm_algo bwm_io bmsh3d bmsh3d_algo bmsh3d_vis expatpp vil vbl vgl vgl_algo vnl vsol vpgl vpgl_algo vpgl_file_formats bgui bgeo)
 
 SUBDIRS(exe)
 SUBDIRS(algo)
 SUBDIRS(io)
 SUBDIRS(reg)
+SUBDIRS(video)
 SUBDIRS(tests)
 #SUBDIRS(freeCGI)
 #SUBDIRS(cgi)

@@ -88,6 +88,17 @@ public:
 
 };
 
+
+class bwm_stop_corr_command: public vgui_command
+{
+public:
+  bwm_stop_corr_command() {}
+  ~bwm_stop_corr_command() {}
+  vcl_string name() {return "stop_corr"; }
+  void execute() { bwm_observer_mgr::instance()->stop_corr(); }
+
+};
+
 class bwm_corr_mode_command: public vgui_command
 {
 public:
@@ -163,6 +174,7 @@ public:
   void set_menu(vgui_menu& menu) {
     menu_ = menu; 
     menu.add("Start Correspondences", new bwm_start_corr_command());
+    menu.add("Stop Correspondences", new bwm_stop_corr_command());
     menu.add("Correspondence Mode", new bwm_corr_mode_command());
     menu.add("Record Correspondence", new bwm_rec_corr_command());
     menu.add("Save Correspondences", new bwm_save_corr_command());
