@@ -49,9 +49,6 @@ SET (BUILD_MONITORS "\\
 
 SET (PROJECT_URL http://vxl.sourceforge.net/)
 SET (EXPECTED_BUILDS "\\
-  {cs.rpi.edu FreeBSD-4.9-gcc-3.3} \\
-  {cs.rpi.edu FreeBSD-4.9-gcc-3.3-static} \\
-  {cs.rpi.edu FreeBSD-gcc-3.4} \\
   {cs.rpi.edu FreeBSD-fresh-gcc-3.4.2} \\
   {GE FreeBSD-6.2_gcc-3.4.6_profile_static} \\
   {GE FreeBSD-6.2_gcc-3.2.3_-O2_shared} \\
@@ -67,5 +64,4 @@ SET (EXPECTED_BUILDS "\\
   {imorphics.com Linux-2.6.22_gcc-4.1.2_RelWithDebInfo} \\
   {lems.brown.edu Linux-2.6_gcc-4.1.3_-Wall} \\
   {lems.brown.edu Linux-2.6.18_gcc-4.1.2} \\
-  {lems.brown.edu Win32-vs71 } \\
 ")
