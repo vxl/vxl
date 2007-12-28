@@ -11,16 +11,17 @@
 #include <vgui/vgui_dialog.h>
 
 
+#include <vidl2/vidl2_config.h>
 #include <vidl2/vidl2_image_list_istream.h>
 #include <vidl2/vidl2_image_list_ostream.h>
 
-#ifdef HAS_FFMPEG
+#if VIDL2_HAS_FFMPEG
 #include <vidl2/vidl2_ffmpeg_istream.h>
 #include <vidl2/vidl2_ffmpeg_ostream.h>
 #include <vidl2/vidl2_ffmpeg_ostream_params.h>
 #endif
 
-#ifdef HAS_DC1394
+#if VIDL2_HAS_DC1394
 #include <vidl2/vidl2_dc1394_istream.h>
 #endif
 
@@ -36,10 +37,10 @@ vidl2_istream* vidl2_gui_open_istream_dialog()
   vcl_vector<vcl_string> choices;
   vcl_vector<int> choice_codes;
   choices.push_back( "Image List" ); choice_codes.push_back(IMAGE_LIST);
-#ifdef HAS_FFMPEG
+#if VIDL2_HAS_FFMPEG
   choices.push_back( "FFMPEG" ); choice_codes.push_back(FFMPEG);
 #endif
-#ifdef HAS_DC1394
+#if VIDL2_HAS_DC1394
   choices.push_back( "dc1394" ); choice_codes.push_back(DC1394);
 #endif
 
@@ -52,11 +53,11 @@ vidl2_istream* vidl2_gui_open_istream_dialog()
   switch(choice_codes[idx]){
     case IMAGE_LIST:
       return vidl2_gui_param_dialog::image_list_istream();
-#ifdef HAS_FFMPEG
+#if VIDL2_HAS_FFMPEG
     case FFMPEG:
       return vidl2_gui_param_dialog::ffmpeg_istream();
 #endif
-#ifdef HAS_DC1394
+#if VIDL2_HAS_DC1394
     case DC1394:
       return vidl2_gui_param_dialog::dc1394_istream();
 #endif
@@ -78,7 +79,7 @@ vidl2_ostream* vidl2_gui_open_ostream_dialog()
   vcl_vector<vcl_string> choices;
   vcl_vector<int> choice_codes;
   choices.push_back( "Image List" ); choice_codes.push_back(IMAGE_LIST);
-#ifdef HAS_FFMPEG
+#if VIDL2_HAS_FFMPEG
   choices.push_back( "FFMPEG" ); choice_codes.push_back(FFMPEG);
 #endif
 
@@ -91,7 +92,7 @@ vidl2_ostream* vidl2_gui_open_ostream_dialog()
   switch(choice_codes[idx]){
     case IMAGE_LIST:
       return vidl2_gui_param_dialog::image_list_ostream();
-#ifdef HAS_FFMPEG
+#if VIDL2_HAS_FFMPEG
     case FFMPEG:
       return vidl2_gui_param_dialog::ffmpeg_ostream();
 #endif
@@ -181,7 +182,7 @@ vidl2_image_list_ostream* vidl2_gui_param_dialog::image_list_ostream()
 //-----------------------------------------------------------------------------
 vidl2_ffmpeg_istream* vidl2_gui_param_dialog::ffmpeg_istream()
 {
-#ifdef HAS_FFMPEG
+#if VIDL2_HAS_FFMPEG
   vgui_dialog dlg("Open FFMPEG Input Stream");
   static vcl_string image_filename = "";
   static vcl_string ext = "*";
@@ -198,10 +199,10 @@ vidl2_ffmpeg_istream* vidl2_gui_param_dialog::ffmpeg_istream()
   }
   return i_stream;
 
-#else // HAS_FFMPEG
+#else // VIDL2_HAS_FFMPEG
   vgui_error_dialog("FFMPEG support not compiled in");
   return NULL;
-#endif // HAS_FFMPEG
+#endif // VIDL2_HAS_FFMPEG
 }
 
 
@@ -210,7 +211,7 @@ vidl2_ffmpeg_istream* vidl2_gui_param_dialog::ffmpeg_istream()
 //-----------------------------------------------------------------------------
 vidl2_ffmpeg_ostream* vidl2_gui_param_dialog::ffmpeg_ostream()
 {
-#ifdef HAS_FFMPEG
+#if VIDL2_HAS_FFMPEG
   vgui_dialog dlg("Open FFMPEG Output Stream");
   static vcl_string file = "";
   static vcl_string ext = "avi";
@@ -248,10 +249,10 @@ vidl2_ffmpeg_ostream* vidl2_gui_param_dialog::ffmpeg_ostream()
   }
   return o_stream;
 
-#else // HAS_FFMPEG
+#else // VIDL2_HAS_FFMPEG
   vgui_error_dialog("FFMPEG support not compiled in");
   return NULL;
-#endif // HAS_FFMPEG
+#endif // VIDL2_HAS_FFMPEG
 }
 
 
@@ -261,7 +262,7 @@ vidl2_ffmpeg_ostream* vidl2_gui_param_dialog::ffmpeg_ostream()
 //-----------------------------------------------------------------------------
 vidl2_dc1394_istream* vidl2_gui_param_dialog::dc1394_istream()
 {
-#ifdef HAS_DC1394
+#if VIDL2_HAS_DC1394
   vgui_dialog dlg("Open dc1394 Input Stream");
 
   //: Probe cameras for valid options
@@ -399,10 +400,10 @@ vidl2_dc1394_istream* vidl2_gui_param_dialog::dc1394_istream()
   return i_stream;
 
 
-#else // HAS_DC1394
+#else // VIDL2_HAS_DC1394
   vgui_error_dialog("dc1394 support not compiled in");
   return NULL;
-#endif // HAS_DC1394
+#endif // VIDL2_HAS_DC1394
 }
 
 

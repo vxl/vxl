@@ -1,0 +1,57 @@
+#ifndef vidl2_config_h_
+#define vidl2_config_h_
+
+// If the suffix of this file in ".in", this is the source file used
+// to generate the actual configuration file.  To examine the actual
+// configuration of the library, look at the vidl2_config.h file in
+// the _build_ tree.
+
+#cmakedefine FFMPEG_FOUND
+#ifdef FFMPEG_FOUND
+#define VIDL2_HAS_FFMPEG 1
+#else
+#define VIDL2_HAS_FFMPEG 0
+#endif
+#undef FFMPEG_FOUND
+
+#cmakedefine DIRECTSHOW_FOUND
+#ifdef DIRECTSHOW_FOUND
+#define VIDL2_HAS_DSHOW 1
+#else
+#define VIDL2_HAS_DSHOW 0
+#endif
+#undef DIRECTSHOW_FOUND
+
+#cmakedefine DIRECTSHOW_FOUND
+#ifdef DIRECTSHOW_FOUND
+#define VIDL2_HAS_DSHOW 1
+#else
+#define VIDL2_HAS_DSHOW 0
+#endif
+#undef DIRECTSHOW_FOUND
+
+#cmakedefine DIRECTSHOW_ESF_FOUND
+#ifdef DIRECTSHOW_ESF_FOUND
+#define VIDL2_HAS_DSHOW_ESF 1
+#else
+#define VIDL2_HAS_DSHOW_ESF 0
+#endif
+#undef DIRECTSHOW_ESF_FOUND
+
+#cmakedefine DC1394_FOUND
+#ifdef DC1394_FOUND
+#define VIDL2_HAS_DC1394 1
+#else
+#define VIDL2_HAS_DC1394 0
+#endif
+#undef DC1394_FOUND
+
+#cmakedefine VIDEODEV_FOUND
+#ifdef VIDEODEV_FOUND
+#define VIDL2_HAS_VIDEODEV 1
+#else
+#define VIDL2_HAS_VIDEODEV 0
+#endif
+#undef VIDEODEV_FOUND
+
+#endif // vidl2_config_h_

@@ -2,11 +2,12 @@
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
 #include <vil/vil_image_view.h>
+#include <vidl2/vidl2_config.h>
 #include <vidl2/vidl2_convert.h>
 #include <vul/vul_timer.h>
 #include <vcl_cstring.h> // for vcl_memcpy
 
-#ifdef HAS_FFMPEG
+#if VIDL2_HAS_FFMPEG
 #include <vidl2/vidl2_ffmpeg_convert.h>
 #endif
 
@@ -110,7 +111,7 @@ static void test_convert()
     time = timer.all()/10000.0f;
     vcl_cout << "memcpy time = " << time << vcl_endl;
 
-#ifdef HAS_FFMPEG
+#if VIDL2_HAS_FFMPEG
     vidl2_frame_sptr frame2 = new vidl2_memory_chunk_frame(image);
     if (!vidl2_ffmpeg_convert(frame, frame2))
       vcl_cerr << "FFMPEG unable to make conversion\n";

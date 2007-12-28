@@ -5,17 +5,19 @@ PROJECT(vidl2)
 INCLUDE( ${MODULE_PATH}/NewCMake/FindFFMPEG.cmake )
 INCLUDE( ${MODULE_PATH}/NewCMake/FindDC1394.cmake )
 INCLUDE( ${MODULE_PATH}/NewCMake/FindDirectShow.cmake )
+FIND_FILE (VIDEODEV_FOUND videodev.h /usr/include/linux/)
+
+CONFIGURE_FILE( ${vidl2_SOURCE_DIR}/vidl2_config.h.in
+                ${vidl2_BINARY_DIR}/vidl2_config.h )
 
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
 
 IF( FFMPEG_FOUND )
   INCLUDE_DIRECTORIES(${FFMPEG_INCLUDE_DIR})
-  ADD_DEFINITIONS(-DHAS_FFMPEG)
 ENDIF( FFMPEG_FOUND )
 
 IF(DIRECTSHOW_FOUND)
   INCLUDE_DIRECTORIES(${DIRECTSHOW_INCLUDE_DIR})
-  ADD_DEFINITIONS(-DHAS_DSHOW)
 
   # For Euresys Multicam Driver's DirectShow source filter.
   # - should I put this in a Module of it's own?
@@ -30,7 +32,6 @@ IF(DIRECTSHOW_FOUND)
 
   IF(DIRECTSHOW_ESF_FOUND)
     INCLUDE_DIRECTORIES(${DIRECTSHOW_ESF_INCLUDE_DIR})
-    ADD_DEFINITIONS(-DHAS_DSHOW_ESF)
   ENDIF(DIRECTSHOW_ESF_FOUND)
 ENDIF(DIRECTSHOW_FOUND)
 
@@ -63,7 +64,6 @@ IF( FFMPEG_FOUND )
 ENDIF( FFMPEG_FOUND )
 
 IF( DC1394_FOUND )
-  ADD_DEFINITIONS(-DHAS_DC1394)
   SET(vidl2_sources ${vidl2_sources}
     vidl2_dc1394_istream.h          vidl2_dc1394_istream.cxx
   )
@@ -84,7 +84,6 @@ IF(DIRECTSHOW_FOUND)
   ENDIF(DIRECTSHOW_ESF_FOUND)
 ENDIF(DIRECTSHOW_FOUND)
 
-FIND_FILE (VIDEODEV_FOUND videodev.h /usr/include/linux/)
 IF(VIDEODEV_FOUND)
    SET(vidl2_sources ${vidl2_sources}
        vidl2_v4l_params.h vidl2_v4l_params.cxx

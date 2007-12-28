@@ -8,6 +8,7 @@
 //
 //=========================================================================
 
+#include <vidl2/vidl2_config.h>
 #include <vidl2/vidl2_dshow_live_istream.h>
 #include <vidl2/vidl2_dshow.h>
 #include <vcl_cassert.h>
@@ -418,7 +419,7 @@ inline void vidl2_dshow_live_istream<ParamsObject>::stop(void)
 #include <vidl2/vidl2_dshow_istream_params.h>
 template class vidl2_dshow_live_istream<vidl2_dshow_istream_params>;
 
-#ifdef HAS_DSHOW_ESF
+#if VIDL2_HAS_DSHOW_ESF
   #include <vidl2/vidl2_dshow_istream_params_esf.h>
   template class vidl2_dshow_live_istream<vidl2_dshow_istream_params_esf>;
 #endif // HAS_EURESYS_ESF

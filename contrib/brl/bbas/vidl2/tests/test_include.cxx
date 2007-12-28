@@ -1,3 +1,4 @@
+#include <vidl2/vidl2_config.h>
 #include <vidl2/vidl2_color.h>
 #include <vidl2/vidl2_convert.h>
 #include <vidl2/vidl2_exception.h>
@@ -13,22 +14,22 @@
 #include <vidl2/vidl2_ostream_sptr.h>
 #include <vidl2/vidl2_image_list_ostream.h>
 #include <vidl2/vidl2_iidc1394_params.h>
-#ifdef HAS_FFMPEG
+#if VIDL2_HAS_FFMPEG
 #include <vidl2/vidl2_ffmpeg_init.h>
 #include <vidl2/vidl2_ffmpeg_istream.h>
 #include <vidl2/vidl2_ffmpeg_ostream.h>
 #include <vidl2/vidl2_ffmpeg_ostream_params.h>
 #include <vidl2/vidl2_ffmpeg_convert.h>
 #endif
-#ifdef HAS_DC1394
+#if VIDL2_HAS_DC1394
 #include <vidl2/vidl2_dc1394_istream.h>
 #endif
-#ifdef HAS_DIRECTSHOW
+#if VIDL2_HAS_DIRECTSHOW
 #include <vidl2/vidl2_dshow.h>
 #include <vidl2/vidl2_dshow_file_istream.h>
 #include <vidl2/vidl2_dshow_live_istream.h>
 #include <vidl2/vidl2_dshow_istream_params.h>
-#ifdef HAS_DIRECTSHOW_ESF
+#if VIDL2_HAS_DIRECTSHOW_ESF
 #include <vidl2/vidl2_dshow_istream_params_esf.h>
 #endif // HAS_DIRECTSHOW_ESF
 #endif // HAS_DIRECTSHOW
