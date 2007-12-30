@@ -98,7 +98,11 @@ class vgui_displaybase_tableau : public vgui_tableau
 
   // add soview
   virtual void add(vgui_soview*);
-  virtual void remove(vgui_soview*);
+
+  // remove soview (deletes the soview and sets the pointer to null)
+  virtual void remove(vgui_soview*&);
+
+  // removes all soviews from the display and deletes them
   virtual void clear();
 
   // grouping

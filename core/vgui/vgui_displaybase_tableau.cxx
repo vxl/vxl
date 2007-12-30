@@ -83,7 +83,7 @@ void vgui_displaybase_tableau::add(vgui_soview* object)
   }
 }
 
-void vgui_displaybase_tableau::remove(vgui_soview* object)
+void vgui_displaybase_tableau::remove(vgui_soview*& object)
 {
   if (object->get_id() == highlighted)
   {
@@ -110,6 +110,7 @@ void vgui_displaybase_tableau::remove(vgui_soview* object)
       if ( it->second.objects.size() == 0 )  {
         groupings.erase( it );
       }
+      delete object;
       break; //found obj, stop iterating
     }
   }
