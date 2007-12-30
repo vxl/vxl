@@ -909,10 +909,14 @@ create_video_tableau(vcl_string name, vcl_string& frame_glob,
   obs->set_camera_path(camera_glob);
   bwm_observer_mgr::instance()->add(obs);
   bool open = obs->open_video_stream(frame_glob);
-  if(camera_glob!="")
-    open = open && obs->open_camera_stream(frame_glob);
-  if(open) obs->display_current_frame();
-  
+
+  if(camera_glob!=""){
+    open = open && obs->open_camera_stream(camera_glob);
+    if(open)obs->toggle_world_pt_display();
+  }
+
+  if(open) 
+    obs->display_current_frame();
   unsigned row = 0, col = 0;
   add_to_grid(viewer, col, row);
   obs->set_grid_location(col, row);

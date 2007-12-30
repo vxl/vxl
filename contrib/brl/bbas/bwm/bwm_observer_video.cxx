@@ -403,6 +403,22 @@ void bwm_observer_video::display_video_corr(bwm_video_corr_sptr const& corr,
   vgui_displaylist2D_tableau::add(cross);
   this->post_redraw();
 }  
+void bwm_observer_video::
+display_projected_3d_point(bwm_video_corr_sptr const& corr)
+{
+  {
+    vgui_soview2D_point* pview = world_pt_map_[corr->id()];
+    if(pview) this->remove(pview);
+    vgl_point_3d<double> world_pt = corr->world_pt();
+    vpgl_perspective_camera<double>* cam = cam_istr_->current_camera();
+      vgl_point_2d<double> image_pt = cam->project(world_pt);
+
+      pview = new vgui_soview2D_point(image_pt.x(), image_pt.y());
+      pview->set_style(POINT_3D_STYLE);
+      vgui_displaylist2D_tableau::add(pview);
+      world_pt_map_[corr->id()]=pview;
+    }
+}
 //display the current set of accepted video correspondences for the current
 //frame
 void bwm_observer_video::display_video_corrs(unsigned frame_index)
@@ -445,6 +461,10 @@ void bwm_observer_video::display_corr_track()
     this->display_video_corr(c, nframe, PREV_STYLE);
     if(nframe!=cur_frame)
       this->display_video_corr(c, cur_frame, CORR_STYLE);
+
+    if(cam_istr_&&c->world_pt_valid()&&display_world_pts_)
+      this->display_projected_3d_point(c);
+
     }
 }
 
@@ -465,6 +485,7 @@ void bwm_observer_video::clear_video_corrs_display()
 {
   this->clear();
   this->clear_display_map();
+  this->world_pt_map_.clear();
 }
 
 vcl_vector<bwm_video_corr_sptr> bwm_observer_video::corrs()

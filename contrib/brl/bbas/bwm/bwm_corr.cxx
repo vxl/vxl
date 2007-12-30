@@ -45,18 +45,6 @@ bool bwm_corr::update_match(bwm_observer_cam* obs, vgl_point_2d<double> old_pt, 
   return false;
 }
 
-//: checks if the given observer, 2D point pair is available
-bool bwm_corr::valid(bwm_observer_cam* obs, double x, double y)
-{
-  vcl_map<bwm_observer_cam*, vgl_point_2d<double> >::iterator iter = matches_.begin();
-
-  iter = matches_.find(obs);
-  if (iter != matches_.end()) {
-    return true;
-  }
-  return false;
-}
-
 void bwm_corr::set_match(bwm_observer_cam* obs, const double x, const double y)
 {
   vgl_point_2d<double> pt(x, y);

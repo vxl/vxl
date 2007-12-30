@@ -135,7 +135,12 @@ void bwm_tableau_img::create_polygon()
   vsol_polygon_2d_sptr poly2d;
   set_color(1, 0, 0);
   pick_polygon(poly2d);
-
+  if(!poly2d)
+  {
+	  vcl_cerr << "In bwm_tableau_img::create_polygon() -" 
+		          " picking failed\n";
+	  return;
+  }
   my_observer_->image_tableau()->lock_linenum(false);
 
   // add the polygon to the list
@@ -151,6 +156,12 @@ void bwm_tableau_img::create_polyline()
   vsol_polyline_2d_sptr poly2d;
   set_color(1, 0, 0);
   this->pick_polyline(poly2d);
+  if(!poly2d)
+  {
+	  vcl_cerr << "In bwm_tableau_img::create_polyline() -" 
+		          " picking failed\n";
+	  return;
+  }
 
   my_observer_->image_tableau()->lock_linenum(false);
 

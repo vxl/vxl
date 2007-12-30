@@ -122,6 +122,15 @@ class bwm_clear_video_corrs_display_command : public vgui_command
   bwm_tableau_video *tab;
 };
 
+class bwm_toggle_world_pt_display_command : public vgui_command
+{
+ public:
+  bwm_toggle_world_pt_display_command(bwm_tableau_video* t) : tab(t) {}
+  void execute() { tab->toggle_world_pt_display(); }
+
+  bwm_tableau_video *tab;
+};
+
 void bwm_tableau_video::get_popup(vgui_popup_params const &params, vgui_menu &menu)
 {
   bwm_tableau_cam::get_popup(params, menu);
@@ -148,6 +157,8 @@ void bwm_tableau_video::get_popup(vgui_popup_params const &params, vgui_menu &me
                      new bwm_display_current_video_corrs_command(this));
   video_corr_submenu.add( "Clear Corr Display",
                      new bwm_clear_video_corrs_display_command(this));
+  video_corr_submenu.add( "Toggle World Point Display",
+                     new bwm_toggle_world_pt_display_command(this));
 
   menu.add("Video Corr", video_corr_submenu);
 }
@@ -221,3 +232,7 @@ void bwm_tableau_video::clear_video_corrs_display()
   my_observer_->clear_video_corrs_display();
 }
 
+void bwm_tableau_video::toggle_world_pt_display()
+{
+  my_observer_->toggle_world_pt_display();
+}

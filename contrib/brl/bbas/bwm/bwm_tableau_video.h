@@ -35,6 +35,7 @@ class bwm_tableau_video : public bwm_tableau_cam
   void display_video_corrs();
   void display_current_video_corrs();
   void clear_video_corrs_display();
+  void toggle_world_pt_display();
 protected:
   bwm_observer_video* my_observer_;
 };

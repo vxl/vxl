@@ -97,6 +97,21 @@ bwm_video_site_io::startElement(const char* name, const char** atts)
   else if (vcl_strcmp(name, CORRESP_TAG) == 0) {
     corr_ = new bwm_video_corr();
   }
+  else if (vcl_strcmp(name, CORRESP_WORLD_PT_TAG) == 0) {
+    double X = 0, Y = 0, Z = 0;
+    bool success = true;
+      if(vcl_strcmp(atts[0], "X") == 0)
+        convert(atts[1], X);
+      else success = false;
+      if (vcl_strcmp(atts[2], "Y") == 0)
+        convert(atts[3], Y);
+      else success = false;
+      if (vcl_strcmp(atts[4], "Z") == 0)
+        convert(atts[5], Z);
+      else success = false;
+      if(success)
+        corr_->set_world_pt(vgl_point_3d<double>(X, Y, Z));
+  }
   else if (vcl_strcmp(name, CORR_ELE) == 0) {
     unsigned frame=0;
     double u = 0, v = 0;
@@ -194,24 +209,7 @@ void bwm_video_site_io::x_write(vcl_string const& xml_path)
   corrs.x_write_open(os);
   vcl_vector<bwm_video_corr_sptr >::iterator cit = corrs_.begin();
   for(; cit != corrs_.end(); ++cit)
-    {
-      vsl_basic_xml_element corr(CORRESP_TAG);
-      corr.x_write_open(os);
-      unsigned min = (*cit)->min_frame();
-      unsigned max = (*cit)->max_frame();
-      for(unsigned i = min; i<=max; ++i)
-        {
-          vgl_point_2d<double> pt;
-          if(!(*cit)->match(i, pt))
-            continue;
-          vsl_basic_xml_element ce(CORR_ELE);
-          ce.add_attribute("fr", static_cast<int>(i));
-          ce.add_attribute("u", pt.x());
-          ce.add_attribute("v", pt.y());
-          ce.x_write(os);
-        }
-      corr.x_write_close(os);
-    }
+    (*cit)->x_write(os);
   corrs.x_write_close(os);
   vsite.x_write_close(os);
 }

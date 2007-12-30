@@ -17,6 +17,7 @@
 #include <vcl_map.h>
 #include <vbl/vbl_ref_count.h>
 #include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
 #include "dll.h"
 class bwm_observer_video;
 
@@ -29,12 +30,12 @@ class bwm_video_corr : public vbl_ref_count
   // Constructors/Initializers/Destructors-------------------------------------
 
   //: Constructor - default
-  bwm_video_corr(): observer_(0), id_(unique_id_++){}
+  bwm_video_corr(): observer_(0), world_pt_valid_(false), id_(unique_id_++){}
 
   //: Constructor - from data
   bwm_video_corr(bwm_observer_video* obs, unsigned frame_index,
                  vgl_point_2d<double> const& pt): observer_(obs),
-    id_(unique_id_++)
+    world_pt_valid_(false), id_(unique_id_++)
     {matches_[frame_index]=pt;}
 
 
@@ -75,6 +76,17 @@ class bwm_video_corr : public vbl_ref_count
 
  //: the frame closest to the specified frame where there is a match
  bool nearest_frame(unsigned frame, unsigned& near_frame);
+
+ //: methods that apply if a 3-d world point is defined
+ //: access
+ void set_world_pt(vgl_point_3d<double> const& world_pt)
+   {world_pt_ = world_pt; world_pt_valid_ = true;}
+
+  vgl_point_3d<double> world_pt() const { return world_pt_;}
+                    
+  bool world_pt_valid() {return world_pt_valid_;}
+
+  void x_write(vcl_ostream &os);
  protected:
 
   // INTERNALS-----------------------------------------------------------------
@@ -85,6 +97,8 @@ class bwm_video_corr : public vbl_ref_count
  BWM_VIDEO_DLL_DATA static unsigned unique_id_;
   bwm_observer_video* observer_;
   vcl_map<unsigned, vgl_point_2d<double> > matches_;//match in each frame
+  bool world_pt_valid_;
+  vgl_point_3d<double> world_pt_;
 };
-
+#include <bwm/video/bwm_video_corr_sptr.h>
 #endif

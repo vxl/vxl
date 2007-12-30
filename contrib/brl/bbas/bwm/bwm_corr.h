@@ -29,10 +29,6 @@ class bwm_corr : public vbl_ref_count
 {
  public:
    bwm_corr() { mode_= true; }
-  //: image to image correspondence
-  //bwm_corr(const int n_cams);
-  //: image to world correspondence
-  //bwm_corr(const int n_cams, vgl_point_3d<double> const& wp);
   
    bwm_corr(bwm_corr const& x) : vbl_ref_count() {}
 
@@ -42,7 +38,6 @@ class bwm_corr : public vbl_ref_count
   bool mode() const { return mode_;}
   int num_matches() { return matches_.size(); }
   vgl_point_3d<double> world_pt() const { return world_pt_;}
-  bool valid(bwm_observer_cam* obs, const double x, const double y);
   void erase(bwm_observer_cam* obs);
   vcl_vector<bwm_observer_cam*> observers();
   bool obs_in(bwm_observer_cam* obs);
