@@ -15,6 +15,7 @@ DECLARE( test_ray_intersect );
 DECLARE( test_adjust_rational_trans_onept );
 DECLARE( test_rational_geo_adjust );
 DECLARE( test_bundle_adjust );
+DECLARE( test_interpolate );
 
 
 void register_tests()
@@ -33,6 +34,7 @@ void register_tests()
   REGISTER( test_adjust_rational_trans_onept );
   REGISTER( test_rational_geo_adjust );
   REGISTER( test_bundle_adjust );
+  REGISTER( test_interpolate );
 
 }
 

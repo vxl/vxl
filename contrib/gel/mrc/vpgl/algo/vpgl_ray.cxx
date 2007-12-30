@@ -6,30 +6,7 @@
 #include <vgl/vgl_plane_3d.h>
 #include <vnl/algo/vnl_amoeba.h>
 #include "vpgl_ray.h"
-static bool bproj(const vpgl_camera<double>* cam,
-                  vnl_double_2 const& image_point,
-                  vnl_double_4 const& plane,
-                  vnl_double_3 const& initial_guess,
-                  vnl_double_3& world_point)
-{
-  vpgl_invmap_cost_function cf(image_point, plane, cam);
-  vnl_double_2 x1(0.0, 0.0);
-
-  cf.set_params(initial_guess, x1);
-  vnl_amoeba amoeba(cf);
-  amoeba.set_max_iterations(1000);
-  vnl_vector<double> x(&x1[0], 2);
-  amoeba.minimize(x);
-  cf.point_3d(x, world_point);
-  double u=0, v=0, X=world_point[0], Y=world_point[1], Z=world_point[2];
-  cam->project(X, Y, Z, u, v);
-   vnl_double_2 final_proj;
-   final_proj[0]=u; final_proj[1]=v;
-  double err = (final_proj-image_point).magnitude();
-  if (err>.05) // greater than a 20th of a pixel
-    return false;
-  return true;
-}
+#include "vpgl_backproject.h"
 
 bool vpgl_ray::ray(const vpgl_camera<double>* cam,
                    vnl_double_3 const& point_3d,
@@ -46,7 +23,8 @@ bool vpgl_ray::ray(const vpgl_camera<double>* cam,
   //backproject onto the shifted plane
   vnl_double_3 shifted_point;
 
-  if(!bproj(cam, image_point, plane, point_3d, shifted_point))
+  if(!vpgl_backproject::bproj_plane(cam, image_point, plane, point_3d,
+                                    shifted_point))
     return false;
   //The ray direction is just the difference
   r = shifted_point - point_3d;

@@ -30,12 +30,13 @@ SET( vpgl_algo_sources
   vpgl_adjust_rational_trans_onept.h vpgl_adjust_rational_trans_onept.cxx
   vpgl_rational_geo_adjust.h        vpgl_rational_geo_adjust.cxx
   vpgl_bundle_adjust.h             vpgl_bundle_adjust.cxx
+  vpgl_interpolate.h                 vpgl_interpolate.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vpgl_algo_sources)
 
 ADD_LIBRARY(vpgl_algo ${vpgl_algo_sources})
-TARGET_LINK_LIBRARIES( vpgl_algo vpgl rrel vgl_algo vsol vnl bgeo )
+TARGET_LINK_LIBRARIES( vpgl_algo vpgl rrel vgl_algo vsol vnl_algo vnl bgeo )
 
 
 IF( BUILD_TESTING )

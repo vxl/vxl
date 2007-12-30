@@ -1,6 +1,6 @@
 // This is gel/mrc/vpgl/algo/vpgl_ray.h
-#ifndef vpgl_backproject_h_
-#define vpgl_backproject_h_
+#ifndef vpgl_ray_h_
+#define vpgl_ray_h_
 //:
 // \file
 // \brief Methods for computing the camera ray direction at a given 3-d point
