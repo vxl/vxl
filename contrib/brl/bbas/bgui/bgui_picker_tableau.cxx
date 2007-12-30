@@ -365,7 +365,7 @@ bool bgui_picker_tableau::handle(const vgui_event& e)
     return true;
   }
 
-  // ---- Object type is polygon ----
+  // ---- Object type is polygon or polyline ----
   if ((obj_type == poly_enum) || (obj_type == polyline_enum))
   {
     if (active && e.type == vgui_OVERLAY_DRAW )
