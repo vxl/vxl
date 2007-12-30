@@ -21,15 +21,13 @@
 
 static void test_video_bundle_adjust()
 {
-  vcl_string corr_path = "c:/images/CapitolSite/capitol_32_corrs_camera.xml";
+  vcl_string corr_path = "";
+#if 0
+  corr_path = "c:/images/CapitolSite/capitol_32_corrs_camera.xml";
+#endif
   bwm_video_site_io vio;
   if(!vio.open(corr_path))
     return;
-#if 0
-  vcl_string name = vio.name();
-  vcl_string vpath = vio.video_path();
-  vcl_string cpath = vio.camera_path();
-#endif
   vcl_vector<bwm_video_corr_sptr> corrs = vio.corrs();
 
   if(!corrs.size())
