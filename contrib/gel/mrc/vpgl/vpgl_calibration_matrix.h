@@ -58,8 +58,10 @@ class vpgl_calibration_matrix
   T y_scale() const { return y_scale_; };
   T skew() const { return skew_; };
 
-  //: Equality test
+  //: Equality tests
   bool operator==(vpgl_calibration_matrix<T> const &that) const;
+  bool operator!=(vpgl_calibration_matrix<T> const &that) const
+    {return !(*this==that);}
 
   //: Maps to and from the focal plane
   vgl_point_2d<T> map_to_focal_plane(vgl_point_2d<T> const& p_image) const;
