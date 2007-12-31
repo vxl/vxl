@@ -29,8 +29,9 @@ void test_matcher()
   bwm_reg_matcher matcher(model, 0, 0, 12, 12, search);
 
   int mcol = 0, mrow = 0;
-  bool success = matcher.match(mcol, mrow, 1e8);
-  TEST("Match test ", mcol, 5);
+  double distance_threshold = 0.0, angle_tol = 0.01, min_probability = 0.8;
+  bool success = matcher.match(mcol, mrow, distance_threshold, angle_tol, min_probability);
+  TEST("Match test ", mcol, 1);
 }
 
 TESTMAIN(test_matcher);
