@@ -6,6 +6,7 @@ ADD_EXECUTABLE( bwm_video_test_all
 		test_cam_iostream.cxx
 		test_video_site_io.cxx
 		test_video_bundle_adjust.cxx
+		test_video_corr_processor.cxx
               )
 
 TARGET_LINK_LIBRARIES(bwm_video_test_all bwm_video bwm bwm_algo vpgl_algo vpgl testlib)

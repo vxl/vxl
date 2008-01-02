@@ -8,7 +8,7 @@
 //
 // \verbatim
 //  Modifications
-//   Original December 26, 2006
+//   Original December 26, 2007
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -86,6 +86,7 @@ class bwm_video_corr : public vbl_ref_count
                     
   bool world_pt_valid() {return world_pt_valid_;}
 
+  //: Write the correspondence as xml
   void x_write(vcl_ostream &os);
  protected:
 

@@ -25,6 +25,10 @@ static void test_video_bundle_adjust()
 #if 0
   corr_path = "c:/images/CapitolSite/capitol_32_corrs_camera.xml";
 #endif
+#if 1
+  // corr_path = "c:/images/CapitolSite/capitol_32_corrs_interp_camera_wpts_refined.xml";
+ corr_path = "c:/images/CapitolSite/capitol_32_corrs_full_computed_camera_wpts_refined_corrs.xml";
+#endif
   bwm_video_site_io vio;
   if(!vio.open(corr_path))
     return;
@@ -126,8 +130,18 @@ static void test_video_bundle_adjust()
       vgl_point_3d<double> pt = unknown_world[w];
       corrs[w]->set_world_pt(pt);
     }
-  vcl_string test_path = "c:/images/CapitolSite/test.xml";
+  vcl_string test_path = "";
+#if 0
+  vcl_string test_path = "c:/images/CapitolSite/capitol_32_corrs_camera_wpts.xml";
+#endif
+
+#if 1
+ test_path = "c:/images/CapitolSite/capitol_32_corrs_full_computed_camera_wpts_refined_corrs.xml";
+#endif
+
   vio.x_write(test_path);
+
+#if 0
   // fill in the missing rows by interpolation
   vcl_vector<vpgl_perspective_camera<double> > solved_cameras(ncameras);
 
@@ -197,7 +211,7 @@ static void test_video_bundle_adjust()
     vcl_cout << "C[" << c << "]("<< R << '|' << p.x() << ' ' << p.y() << ' '
              << p.z() <<  ")\n"; 
   }
-
+#endif
   // create the camera output stream
     vcl_string dir = "cam_dir";
     vcl_cout << "Made camera stream directory "<< dir << '\n';
@@ -206,7 +220,7 @@ static void test_video_bundle_adjust()
     bool open = cam_ostr.is_open();
     if(!open) return;
     for(unsigned c = 0; c<ncameras; ++c)
-      open = open && cam_ostr.write_camera(&solved_cameras[c]);
+      open = open && cam_ostr.write_camera(&cunknown_cameras[c]);
     if(!open) vcl_cout << "output camera stream failed\n";
   //	vpl_unlink(dir.c_str());
 }
