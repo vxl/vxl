@@ -288,103 +288,102 @@ static inline int irnd(T x)
 template <class T>
 bool vgl_polygon_scan_iterator<T>::next( )
 {
-  // Find next segment on current scan line
-  if ( curcrossedge < numcrossedges )
-  {
-    fxl = crossedges[curcrossedge].x;
-    fxr = crossedges[curcrossedge+1].x;
-    if (boundp)
-      // left end of span with boundary
-      xl = (int)vcl_floor( crossedges[curcrossedge].x - vgl_polygon_scan_iterator_offset);
-    else
-      // left end of span without boundary
-      xl = (int)vcl_ceil( crossedges[curcrossedge].x - vgl_polygon_scan_iterator_offset);
-
-    if ( have_window && xl < irnd(win.min_x()) )
+  do {
+    // Find next segment on current scan line
+    while ( curcrossedge < numcrossedges )
     {
-      fxl = win.min_x();
-      xl = irnd(fxl);
+      fxl = crossedges[curcrossedge].x;
+      fxr = crossedges[curcrossedge+1].x;
+      if (boundp)
+        // left end of span with boundary
+        xl = (int)vcl_floor( crossedges[curcrossedge].x - vgl_polygon_scan_iterator_offset);
+      else
+        // left end of span without boundary
+        xl = (int)vcl_ceil( crossedges[curcrossedge].x - vgl_polygon_scan_iterator_offset);
+
+      if ( have_window && xl < irnd(win.min_x()) )
+      {
+        fxl = win.min_x();
+        xl = irnd(fxl);
+      }
+
+      if ( boundp )
+        //right end of span with boundary
+        xr = (int)vcl_ceil( crossedges[curcrossedge+1].x - vgl_polygon_scan_iterator_offset);
+      else
+        // right end of span without boundary
+        xr = (int)vcl_floor( crossedges[curcrossedge+1].x - vgl_polygon_scan_iterator_offset);
+
+      if ( have_window && xr >= irnd(win.max_x()) )
+      {
+        fxr = win.max_x() -1;
+        xr =  irnd(fxr);
+      }
+
+      // adjust the x coord so that it is the intersection of
+      // the edge with the scan line one above current
+      crossedges[curcrossedge].x += crossedges[curcrossedge].dx;
+      crossedges[curcrossedge+1].x += crossedges[curcrossedge+1].dx;
+      curcrossedge+=2;
+      if ( xl <= xr )
+        return true;
     }
 
-    if ( boundp )
-      //right end of span with boundary
-      xr = (int)vcl_ceil( crossedges[curcrossedge+1].x - vgl_polygon_scan_iterator_offset);
+    // All segments on current scan line have been exhausted.  Start
+    // processing next scan line.
+    vertind curvert, prevvert, nextvert;
+    if ( y > y1 )
+      return false;
     else
-      // right end of span without boundary
-      xr = (int)vcl_floor( crossedges[curcrossedge+1].x - vgl_polygon_scan_iterator_offset);
-
-    if ( have_window && xr >= irnd(win.max_x()) )
     {
-      fxr = win.max_x() -1;
-      xr =  irnd(fxr);
-    }
+      // Current scan line is not the last one.
+      bool not_last = true;
 
-    // adjust the x coord so that it is the intersection of
-    // the edge with the scan line one above current
-    crossedges[curcrossedge].x += crossedges[curcrossedge].dx;
-    crossedges[curcrossedge+1].x += crossedges[curcrossedge+1].dx;
-    curcrossedge+=2;
-    if (! ( xl <= xr ) )
-      return next();
-    else
-      return true;
-  }
-
-  // All segments on current scan line have been exhausted.  Start
-  // processing next scan line.
-  vertind curvert, prevvert, nextvert;
-  if ( y <= y1 )
-  {
-    // Current scan line is not the last one.
-    bool not_last = true;
-
-    // If boundary included and processing first or last scan line
-    // floating point scan line must be taken as a min/max y coordinate
-    // of the polygon. Otherwise these scan lines are not included because
-    // of the earlier rounding (ceil/floor).
-    if ( boundp ) {
-      if ( y == y0 )
-        fy = vcl_floor(get_y( yverts[ 0 ] ));
-      else if ( y == y1 ) {
-        fy = vcl_ceil(get_y( yverts[ numverts - 1 ] ));
-        not_last = false;
+      // If boundary included and processing first or last scan line
+      // floating point scan line must be taken as a min/max y coordinate
+      // of the polygon. Otherwise these scan lines are not included because
+      // of the earlier rounding (ceil/floor).
+      if ( boundp ) {
+        if ( y == y0 )
+          fy = vcl_floor(get_y( yverts[ 0 ] ));
+        else if ( y == y1 ) {
+          fy = vcl_ceil(get_y( yverts[ numverts - 1 ] ));
+          not_last = false;
+        }
+        else
+          fy = T(y);
       }
       else
         fy = T(y);
+
+      for (; k<numverts && get_y(yverts[k]) <= fy+vgl_polygon_scan_iterator_offset && not_last; k++)
+      {
+        curvert = yverts[ k ];
+
+        // insert or delete edges (curvert, nextvert) and (prevvert, curvert)
+        // from crossedges list if they cross scanline y
+        get_prev_vert( curvert, prevvert );
+
+        if ( get_y( prevvert ) <= fy-vgl_polygon_scan_iterator_offset)  // old edge, remove from active list
+          delete_edge( prevvert );
+        else if ( get_y( prevvert ) > fy+vgl_polygon_scan_iterator_offset)  // new edge, add to active list
+          insert_edge( prevvert );
+
+        get_next_vert( curvert, nextvert );
+
+        if ( get_y( nextvert ) <= fy-vgl_polygon_scan_iterator_offset)  // old edge, remove from active list
+          delete_edge( curvert );
+        else if ( get_y( nextvert ) > fy+vgl_polygon_scan_iterator_offset)  // new edge, add to active list
+          insert_edge( curvert );
+      }
+
+      // sort edges crossing scan line by their intersection with scan line
+      local_qsort(crossedges, numcrossedges);
+
+      curcrossedge = 0; // Process the next set of horizontal spans
+      y++;
     }
-    else
-      fy = T(y);
-
-    for (; k<numverts && get_y(yverts[k]) <= fy+vgl_polygon_scan_iterator_offset && not_last; k++)
-    {
-      curvert = yverts[ k ];
-
-      // insert or delete edges (curvert, nextvert) and (prevvert, curvert)
-      // from crossedges list if they cross scanline y
-      get_prev_vert( curvert, prevvert );
-
-      if ( get_y( prevvert ) <= fy-vgl_polygon_scan_iterator_offset)  // old edge, remove from active list
-        delete_edge( prevvert );
-      else if ( get_y( prevvert ) > fy+vgl_polygon_scan_iterator_offset)  // new edge, add to active list
-        insert_edge( prevvert );
-
-      get_next_vert( curvert, nextvert );
-
-      if ( get_y( nextvert ) <= fy-vgl_polygon_scan_iterator_offset)  // old edge, remove from active list
-        delete_edge( curvert );
-      else if ( get_y( nextvert ) > fy+vgl_polygon_scan_iterator_offset)  // new edge, add to active list
-        insert_edge( curvert );
-    }
-
-    // sort edges crossing scan line by their intersection with scan line
-    local_qsort(crossedges, numcrossedges);
-
-    curcrossedge = 0; // Process the next set of horizontal spans
-    y++;
-    return next();
-  }
-  else
-    return false;
+  } while ( true );
 }
 
 //===============================================================
