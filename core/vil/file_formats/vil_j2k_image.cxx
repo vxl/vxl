@@ -160,12 +160,29 @@ enum vil_pixel_format vil_j2k_image::pixel_format() const
   return convertType( mFileResource->GetFileInfo()->eCellType );
 }
 
-vil_image_view_base_sptr vil_j2k_image::get_copy_view_decimated(unsigned sample0,
-                                                                unsigned num_samples,
-                                                                unsigned line0,
-                                                                unsigned numLines,
-                                                                double i_factor,
-                                                                double j_factor) const
+vil_image_view_base_sptr 
+vil_j2k_image::get_copy_view_decimated(unsigned sample0,
+                                       unsigned num_samples,
+                                       unsigned line0,
+                                       unsigned numLines,
+                                       double i_factor,
+                                       double j_factor) const
+{
+  return get_copy_view_decimated_by_size(sample0,
+                                         num_samples,
+                                         line0,
+                                         numLines,
+                                         (unsigned int)(((double)num_samples)/i_factor),
+                                         (unsigned int)(((double)numLines)/j_factor));
+}
+
+vil_image_view_base_sptr 
+vil_j2k_image::get_copy_view_decimated_by_size(unsigned sample0,
+                                               unsigned num_samples,
+                                               unsigned line0,
+                                               unsigned numLines,
+                                               unsigned int output_width,
+                                               unsigned int output_height) const
 {
   if ( !( mFileResource ) ||
       !( ( sample0 + num_samples - 1 ) < ni() &&
@@ -184,8 +201,6 @@ vil_image_view_base_sptr vil_j2k_image::get_copy_view_decimated(unsigned sample0
   //(or would take too long to download in the remote case).
   //We don't want infinite hangs or application crashes.
   unsigned int maxDim = mRemoteFile ? mMaxRemoteDimension : mMaxLocalDimension;
-  unsigned int output_width  = (unsigned int) ( ((double)num_samples)/i_factor );
-  unsigned int output_height = (unsigned int) ( ((double)numLines)/j_factor );
   if ( output_width > maxDim || output_height > maxDim ){
     unsigned int biggestDim = vcl_max( output_width, output_height );
     double zoomFactor = ((double)maxDim) / ((double)biggestDim);
@@ -260,7 +275,6 @@ vil_image_view_base_sptr vil_j2k_image::get_copy_view_decimated(unsigned sample0
   return view;
 }
 
-
 vil_image_view_base_sptr vil_j2k_image::get_copy_view(unsigned sample0,
                                                       unsigned num_samples,
                                                       unsigned line0,
@@ -291,6 +305,19 @@ vil_image_view_base_sptr vil_j2k_image::s_decode_jpeg_2000( vil_stream* vs,
 {
   vil_j2k_image* j2k_image = new vil_j2k_image(vs);
   vil_image_view_base_sptr view = j2k_image->get_copy_view_decimated(i0, ni, j0, nj, i_factor, j_factor);
+  delete j2k_image;
+  return view;
+}
+
+vil_image_view_base_sptr 
+vil_j2k_image::s_decode_jpeg_2000_by_size( vil_stream* vs,
+                                           unsigned i0, unsigned ni,
+                                           unsigned j0, unsigned nj,
+                                           unsigned int output_width, 
+                                           unsigned int output_height )
+{
+  vil_j2k_image* j2k_image = new vil_j2k_image(vs);
+  vil_image_view_base_sptr view = j2k_image->get_copy_view_decimated_by_size(i0, ni, j0, nj, output_width, output_height);
   delete j2k_image;
   return view;
 }

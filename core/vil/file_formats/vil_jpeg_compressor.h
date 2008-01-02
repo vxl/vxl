@@ -29,8 +29,12 @@ class vil_jpeg_compressor
 
   bool write_scanline(unsigned line, JSAMPLE const *);
 
+  void set_quality(int quality);
+  int get_quality();
+
  private:
   bool ready;
+  int quality;
 };
 
 #endif // vil_jpeg_compressor_h_

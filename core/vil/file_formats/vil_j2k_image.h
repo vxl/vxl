@@ -89,6 +89,12 @@ class vil_j2k_image : public vil_image_resource
   virtual vil_image_view_base_sptr get_copy_view_decimated(unsigned i0, unsigned ni,
                                                            unsigned j0, unsigned nj,
                                                            double i_factor, double j_factor) const;
+  virtual vil_image_view_base_sptr 
+  get_copy_view_decimated_by_size(unsigned i0, unsigned ni,
+                                  unsigned j0, unsigned nj,
+                                  unsigned int output_width, 
+                                  unsigned int output_height) const;
+
 
   vil_image_view_base_sptr  get_copy_view () const
   { return get_copy_view( 0, ni(), 0, nj() ); }
@@ -118,6 +124,12 @@ class vil_j2k_image : public vil_image_resource
                                                       unsigned i0, unsigned ni,
                                                       unsigned j0, unsigned nj,
                                                       double i_factor, double j_factor );
+  static vil_image_view_base_sptr 
+  s_decode_jpeg_2000_by_size( vil_stream* vs,
+                              unsigned i0, unsigned ni,
+                              unsigned j0, unsigned nj,
+                              unsigned int output_width, 
+                              unsigned int output_height );
 
  protected:
   CNCSFile* mFileResource;
