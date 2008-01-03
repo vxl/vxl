@@ -462,7 +462,7 @@ close()
 
     if ( os_->file_opened_ ) {
       av_write_trailer( os_->fmt_cxt_ );
-#if LIBAVFORMAT_BUILD <= 5200
+#if LIBAVFORMAT_BUILD <= ((52<<16)+(0<<8)+0)
       url_fclose( &os_->fmt_cxt_->pb );
 #else
       url_fclose( os_->fmt_cxt_->pb );
