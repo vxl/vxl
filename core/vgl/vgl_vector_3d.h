@@ -71,6 +71,10 @@ class vgl_vector_3d
 
   //: Return the squared length of this vector.
   inline T sqr_length() const { return x()*x()+y()*y()+z()*z(); }
+
+
+  //: One-parameter family of unit vectors that are orthogonal to *this, v(s).
+  vgl_vector_3d<T> orthogonal_vectors(double s);// 0<=s<1, v(0)==v(1)
 };
 
 #define v vgl_vector_3d<T>
@@ -192,6 +196,7 @@ template <class T> inline v&     normalize(v& a) { double l=a.length(); return l
 //  If a is zero length, return (0,0).
 // \relates vgl_vector_3d
 template <class T> inline v      normalized(v const& a) { double l=a.length(); return l?a/l:a; }
+
 
 #undef v
 

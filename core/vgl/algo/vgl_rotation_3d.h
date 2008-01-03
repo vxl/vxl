@@ -20,6 +20,8 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_quaternion.h>
+#include <vnl/vnl_cross.h>
+#include <vcl_cmath.h>
 #include <vgl/vgl_fwd.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_homg_point_3d.h>
@@ -54,7 +56,28 @@ class vgl_rotation_3d
   explicit vgl_rotation_3d( const vgl_h_matrix_3d<T>& h )
     : q_(h.get_upper_3x3_matrix().transpose()) { assert(h.is_rotation()); }
 
+  //: Construct to rotate vector a to vector b
+  explicit vgl_rotation_3d(const vnl_vector_fixed<T,3>& a,
+                           const vnl_vector_fixed<T,3>& b)
+    {
+      vnl_vector_fixed<T,3>  ua = a/a.magnitude(),ub = b/b.magnitude();
+      vnl_vector_fixed<T,3> c  = vnl_cross_3d(a, b);
+      double cmag = static_cast<double>(c.magnitude());
+      if(cmag>1.0) cmag = 1.0;
+      T angle = static_cast<T>(vcl_asin(cmag));
+      q_ = vnl_quaternion<T>(c, angle);
+    }
 
+  //: Construct to rotate vector a to vector b
+  explicit vgl_rotation_3d(const vgl_vector_3d<T>& a,
+                           const vgl_vector_3d<T>& b)
+    {
+      vnl_vector_fixed<T,3> na(a.x(), a.y(), a.z());
+      vnl_vector_fixed<T,3> nb(b.x(), b.y(), b.z());
+      *this = vgl_rotation_3d<T>(na, nb);
+    }
+
+                           
   // Conversions:--------------------------------------
 
   //: Output unit quaternion.

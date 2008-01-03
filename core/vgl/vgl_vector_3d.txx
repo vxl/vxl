@@ -5,6 +5,7 @@
 // \file
 
 #include "vgl_vector_3d.h"
+#include "vgl_tolerance.h"
 
 #include <vcl_cmath.h> // sqrt() , acos()
 #include <vcl_iostream.h>
@@ -13,6 +14,40 @@ template <class T>
 double vgl_vector_3d<T>::length() const
 {
   return vcl_sqrt( 0.0+sqr_length() );
+}
+
+//: The one-parameter family of unit vectors that are orthogonal to *this, v(s).
+// The parameterization is such that 0<=s<1, v(0)==v(1)
+template <class T>
+vgl_vector_3d<T> vgl_vector_3d<T>::orthogonal_vectors(double s)
+{
+  //enforce parameter range
+  if(s<0.0) s=0.0;
+  if(s>1.0) s = 1.0;
+  double tol = static_cast<double>(vgl_tolerance<T>::position);
+  double nx = static_cast<double>(x_), ny = static_cast<double>(y_);
+  double nz =  static_cast<double>(z_);
+  double mnz = vcl_fabs(nz);
+  double two_pi = 2*3.14159265358979323846;
+  double co = vcl_cos(two_pi*s), si = vcl_sin(two_pi*s);
+  //General case
+  if(mnz>tol)
+    {
+      double co = vcl_cos(two_pi*s), si = vcl_sin(two_pi*s);
+      double rx = nx/nz, ry = ny/nz;
+      double q = co*rx +si*ry;
+      double a = 1.0/vcl_sqrt(1+q*q);
+      T vx = static_cast<T>(a*co), vy = static_cast<T>(a*si);
+      T vz = -static_cast<T>(rx*vx + ry*vy);
+      return vgl_vector_3d<T>(vx, vy, vz);
+    }
+
+  //Degenerate case, nz ~ 0
+  double r = nx/ny;
+  double a = 1/vcl_sqrt(1+co*co*r*r);
+  T vx = static_cast<T>(a*co), vz = static_cast<T>(a*si);
+  T vy = -static_cast<T>(a*co*r);
+  return vgl_vector_3d<T>(vx, vy, vz);
 }
 
 template<class T>

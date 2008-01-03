@@ -134,6 +134,49 @@ static void test_vector_3d()
   TEST("!orthogonal", orthogonal(v,v1,0.1), false); // even not with tolorance
   TEST("orthogonal", orthogonal(v,cross_product(v1,v)), true);
   TEST("orthogonal", orthogonal(v1,cross_product(v1,v)), true);
+  vgl_vector_3d<double> n0(0.0, 0.0, 1.0), n1(0.0, 0.707107, 0.707107);
+  vgl_vector_3d<double> n2(0.707107, 0.707107, 0.0);
+  vgl_vector_3d<double> or[4];
+  or[0] = n0.orthogonal_vectors(0.0);
+  or[1] = n0.orthogonal_vectors(0.25);
+  or[2] = n0.orthogonal_vectors(0.5);
+  or[3] = n0.orthogonal_vectors(0.75);
+  double check = 0.0;
+  for(unsigned i = 0; i<4; ++i)
+  {
+    double d = dot_product<double>(n0, or[i]);
+	  check += d*d;
+    d = dot_product<double>(or[i], or[i])-1.0;
+    check += d*d;
+  }
+  TEST_NEAR("orthogonal vectors case I", check, 0.0, 1e-8);
+  check = 0.0;
+  or[0] = n1.orthogonal_vectors(0.0);
+  or[1] = n1.orthogonal_vectors(0.25);
+  or[2] = n1.orthogonal_vectors(0.5);
+  or[3] = n1.orthogonal_vectors(0.75);
+  for(unsigned i = 0; i<4; ++i)
+  {
+    double d = dot_product<double>(n1, or[i]);
+	  check += d*d;
+    d = dot_product<double>(or[i], or[i])-1.0;
+    check += d*d;
+  }
+  TEST_NEAR("orthogonal vectors case II", check, 0.0, 1e-8);
+  check = 0.0;
+  or[0] = n2.orthogonal_vectors(0.0);
+  or[1] = n2.orthogonal_vectors(0.25);
+  or[2] = n2.orthogonal_vectors(0.5);
+  or[3] = n2.orthogonal_vectors(0.75);
+  for(unsigned i = 0; i<4; ++i)
+  {
+    double d = dot_product<double>(n2, or[i]);
+	  check += d*d;
+    d = dot_product<double>(or[i], or[i])-1.0;
+    check += d*d;
+  }
+  TEST_NEAR("orthogonal vectors case III", check, 0.0, 1e-8);
+
 }
 
 static void test_point_2d()

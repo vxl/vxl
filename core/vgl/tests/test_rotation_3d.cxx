@@ -134,6 +134,17 @@ void test_rotation_3d()
   test_conversions(rot_rand);
   test_inverse(rot_rand);
   test_application(rot_rand);
+  //test constructor from two vectors
+  vnl_double_3 a(0.707107, 0.707107, 0.0), b(0.0, 0.0, 1.0);
+  vgl_rotation_3d<double> r_ab(a, b);
+  vnl_double_3 a_to_b = r_ab*a;
+  double error = (b - a_to_b).magnitude();
+  TEST_NEAR("constructor from two vnl vectors", error, 0.0, 1e-6);
+  vgl_vector_3d<double> ag(0.707107, 0.707107, 0.0), bg(0.0, 0.0, 1.0);
+  vgl_rotation_3d<double> r_abg(a, b);
+  vgl_vector_3d<double> a_to_bg = r_abg*ag;
+  error = (bg - a_to_bg).length();
+  TEST_NEAR("constructor from two vnl vectors", error, 0.0, 1e-6);
 }
 
 TESTMAIN(test_rotation_3d);
