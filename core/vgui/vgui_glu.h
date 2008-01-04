@@ -6,7 +6,7 @@
 
 #include <vgui/vgui_gl.h>
 #ifdef __APPLE__
-# include <glu.h>
+# include <OpenGL/glu.h>
 #else
 # include <GL/glu.h>
 #endif
