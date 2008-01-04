@@ -1,0 +1,43 @@
+!! VXL Teleconference.
+
+!Attending
+Matt Leotta and Gamze Tunali @ Brown
+Fred Wheeler @ GE
+Amitha Perera, Ruddy Collins, Matt Turek @ Kitware
+Ian Scott @ Imorphics
+
+! Threads
+
+Brief description of three approaches
+1: Locks and threads. These are the low level threading approaches. They are not composable - which precludes spreading them liberally thoughout VXL. boost/threads was used as the basis for the design in the C++09 standard.
+2: TBB / OpenMP. These split for loops into tasks running each task on a thread pool. TBB is designed for C++ and can handle multiple tasks at multiple levels of the code hiearchy - unlike OpenMP. This ommission precludes OpenMP from being used liberally thoughout VXL.
+3: CSP / MPI. Message passing approaches. No threads share writable memory, or other contensious resources. Has the best academic pedigree, although CSP has stagnated for a while.
+
+
+Ian wants to bring in boost threads into vcl in anticipation of the c++09 standard. Then  use a version of TBB which sits on top of that. Imorphics is interested in running programs efficiently on multi-core chips. We need to move from running n programs on a single server to running one program with n tasks/threads, in order to reduce our program's running time and to avoid being limited by the memory IO bottleneck. Our program structure will remain largely sequential - in particualr due to the use of fundamentally sequential non-linear optimisation algorithms. Initially at least, we can only think of a few VXL functions that we would like to multi-task. Most the the parallelism would happen in out private code.
+
+Amitha and Matt L. independently want to build a program based on strategies of algorithm blocks to do video processing. CSP approaches are attractive here, such that each block is independent and by having large independent blocks that communicate over CSP.
+
+
+
+! Other VXL mods.
+
+*Bring all bits of boost that look like the TR1 or C++09 into vcl.
+*Bring in other bits of boost into v3p as might usefully be used by core.
+*Get rid of horrible workarounds for VC6 and BCC
+*vnl_name -> namespaces
+*Import contrib/libs to core.
+*Branch VXL2.0 for some all of this stuff.
+
+! VXL Book.
+People are interested. No action.
+
+! Action Points
+
+Amitha will look into bringing boost threads into vcl.
+Ian will look into what other bits of TR1 and C++0x we should import into vcl.
+Matt Leotta will look into importing the smart pointers from TR1.
+Matt Leotta and Amitha will discuss high-level CSP.
+We'll leave TBB until someone has more experience.
+
+Thanks to Amitha for organising this meeting and to Fred for hosting it.
