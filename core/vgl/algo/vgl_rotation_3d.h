@@ -26,6 +26,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
+#include <vgl/vgl_tolerance.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 
@@ -64,6 +65,8 @@ class vgl_rotation_3d
       vnl_vector_fixed<T,3> c  = vnl_cross_3d(a, b);
       double cmag = static_cast<double>(c.magnitude());
       if(cmag>1.0) cmag = 1.0;
+      if(cmag<vgl_tolerance<double>::position){
+        q_ = vnl_quaternion<T>(0, 0, 0, 1); return;}
       T angle = static_cast<T>(vcl_asin(cmag));
       q_ = vnl_quaternion<T>(c/cmag, angle);
     }
