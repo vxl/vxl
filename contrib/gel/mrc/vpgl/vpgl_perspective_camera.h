@@ -79,7 +79,7 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
   vgl_line_3d_2_points<T> backproject( const vgl_point_2d<T>& image_point ) const;
 
   //: Compute the principal axis.
-  // i.e. the vector parallel to the image plane pointing towards the front of the camera.
+  // i.e. the vector perpendicular to the image plane pointing towards the front of the camera.
   vgl_vector_3d<T> principal_axis() const;
 
   //: Determine whether the given point lies in front of the principal plane.
