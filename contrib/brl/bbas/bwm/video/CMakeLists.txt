@@ -9,12 +9,13 @@ SET(bwm_video_sources
    bwm_video_site_io.cxx            bwm_video_site_io.h
                                     bwm_video_site_io_defs.h
    bwm_video_corr_processor.cxx     bwm_video_corr_processor.h
+   bwm_video_registration.cxx       bwm_video_registration.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates bwm_video_sources)
 ADD_LIBRARY(bwm_video ${bwm_video_sources})
 
-TARGET_LINK_LIBRARIES( bwm_video vidl2 brip sdet vil vbl vgl vgl_algo vnl_algo vnl bsta vsol vpgl vpgl_algo bgeo)
+TARGET_LINK_LIBRARIES( bwm_video vidl2 brip sdet vil vbl vgl vgl_algo vnl_algo vnl bsta bsol vsol vpgl vpgl_algo bgeo)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)
