@@ -12,8 +12,9 @@ homography_to_camera(vpgl_proj_camera<double> const& cam,
   vgl_vector_3d<double> n = plane.normal();
   double mag = n.length();
   double drg = -plane.d()/(mag*mag);
-  // find the rotation needed to align the normal with the z axis
-  vgl_vector_3d<double> z(0, 0, 1.0);
+  // find the rotation needed to align the normal with the negative z axis
+  // i.e. the opposite sense of the camera principal ray
+  vgl_vector_3d<double> z(0, 0, -1.0);
   vgl_rotation_3d<double> R(n, z);
   // invert to transform the camera
   vgl_rotation_3d<double> Rinv = R.inverse();
