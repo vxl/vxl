@@ -24,7 +24,7 @@ static void test_camera_homographies()
   vgl_h_matrix_2d<double> Ht =vpgl_camera_homographies::homography_to_camera(pc, pl);
   
   TEST_NEAR("test plane to image",Ht.get(2,2), 3.0, 0.001);
-  vgl_plane_3d<double> p2(-0.707107,0, -0.707107,+1.414);
+  vgl_plane_3d<double> p2(0.707107,0, 0.707107,-1.414);
   vgl_h_matrix_2d<double> Ht2 =
     vpgl_camera_homographies::homography_to_camera(pc, p2);
   vgl_homg_point_2d<double> pt1(-1.414, 0,1), pt2(-4,0,1), pt3(0,0,1);
@@ -48,8 +48,7 @@ static void test_camera_homographies()
             ptp4.x(), -1.414, 0.001);
 // An  set of data corresponding to an actual image sequence
   //World plane derived from 3 world points
- // vgl_plane_3d<double> world_plane(-0.0585478, +0.685533, +0.725683, -10.9752);
-  vgl_plane_3d<double> world_plane(+0.0585478, -0.685533, -0.725683, +10.9752);
+  vgl_plane_3d<double> world_plane(-0.0585478, +0.685533, +0.725683, -10.9752);
   vgl_point_3d<double> w0(34.89, -9.92, 27.31);
   vgl_point_3d<double> w1(48.92, -1.46, 20.45);
   vgl_point_3d<double> w2(48.5, -16.03, 34.18);
@@ -68,14 +67,7 @@ static void test_camera_homographies()
   vgl_point_2d<double> proj_w0 = pact.project(w0);
   vgl_point_2d<double> proj_w1 = pact.project(w1);
   vgl_point_2d<double> proj_w2 = pact.project(w2);
-  bool behind = 
-    pact.is_behind_camera(vgl_homg_point_3d<double>(w0.x(), w0.y(), w0.z()));
-  vgl_vector_3d<double> principal_ray = pact.principal_axis();
-  vgl_vector_3d<double> plane_normal(+0.0585478, -0.685533, -0.725683);
-  double dp = dot_product(principal_ray, plane_normal);
-
-
-
+  
   vgl_h_matrix_2d<double> Hact = 
     vpgl_camera_homographies::homography_from_camera(pact, world_plane);
   

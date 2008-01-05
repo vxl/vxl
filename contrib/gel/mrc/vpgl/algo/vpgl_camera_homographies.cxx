@@ -11,15 +11,14 @@ homography_to_camera(vpgl_proj_camera<double> const& cam,
   // get the translation that moves the plane to intersect with the origin
   vgl_vector_3d<double> n = plane.normal();
   double mag = n.length();
-  double drg = -plane.d()/(mag*mag);
-  // find the rotation needed to align the normal with the negative z axis
-  // i.e. the opposite sense of the camera principal ray
-  vgl_vector_3d<double> z(0, 0, -1.0);
+  double trans = -plane.d()/(mag*mag);//translate the plane to the origin
+  // find the rotation needed to align the normal with the positive z axis
+  vgl_vector_3d<double> z(0, 0, 1.0);
   vgl_rotation_3d<double> R(n, z);
   // invert to transform the camera
   vgl_rotation_3d<double> Rinv = R.inverse();
   vgl_h_matrix_3d<double> Tr = Rinv.as_h_matrix_3d();
-  Tr.set_translation(drg*n.x(), drg*n.y(), drg*n.z());
+  Tr.set_translation(trans*n.x(), trans*n.y(), trans*n.z());
   // postmultipy the camera by the inverse
   vpgl_proj_camera<double> tcam = postmultiply(cam, Tr);
   // extract the homography (columns 0, 1, and 3)
