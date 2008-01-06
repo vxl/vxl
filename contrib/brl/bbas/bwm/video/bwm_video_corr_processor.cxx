@@ -788,3 +788,29 @@ print_frame_alignment_quality(unsigned start_frame, unsigned end_frame)
         vcl_cout << "]\n";
       }
 }
+void bwm_video_corr_processor::close()
+{
+  if(video_istr_)
+    video_istr_->close();
+  video_istr_ = 0;
+
+  if(cam_istr_)
+    cam_istr_->close();
+  cam_istr_ = 0;
+
+  if(cam_ostr_)
+    cam_ostr_->close();
+  cam_ostr_ = 0;
+
+  site_name_ = "";
+  video_path_ = "";
+  camera_path_ = "";
+
+  corrs_.clear();
+  cameras_.clear();
+  world_pts_.clear();
+  corr_windows_a_.clear();
+  corr_windows_b_.clear();
+  frame_index_a_ = static_cast<unsigned>(-1);
+  frame_index_b_ = static_cast<unsigned>(-1);
+}

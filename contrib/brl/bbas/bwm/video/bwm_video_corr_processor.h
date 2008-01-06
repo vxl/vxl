@@ -88,10 +88,17 @@ class bwm_video_corr_processor
   ~bwm_video_corr_processor() {}
 
   //: Accessors 
+  void set_site_name(vcl_string const& site_name) {site_name_=site_name;}
+  void set_video_path(vcl_string const& video_path) {video_path_=video_path;}
+  void set_camera_path(vcl_string const& cam_path) {camera_path_=cam_path;}
+
   void set_verbose(bool verbose){verbose_ = verbose;}
   void set_correspondences(vcl_vector<bwm_video_corr_sptr> const& corrs);
   vcl_vector<bwm_video_corr_sptr> correspondences(){return corrs_;}
 
+  vcl_string site_name() {return site_name_;}
+  vcl_string video_path() {return video_path_;}
+  vcl_string camera_path() {return camera_path_;}
   //: Data input Methods
   bool open_video_site(vcl_string const& site_path, bool cameras_exist = true);
   bool open_video_stream(vcl_string const& video_path);
@@ -128,6 +135,7 @@ class bwm_video_corr_processor
   //              2) Correspondences are defined for each frame
   bool refine_world_pts_and_cameras();
 
+  void close(); //close all streams and clear data
   void print_frame_alignment_quality(unsigned start_frame, unsigned end_frame);
  protected:
 
