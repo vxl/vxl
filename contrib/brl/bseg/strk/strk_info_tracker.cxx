@@ -9,7 +9,7 @@
 #include <vsol/vsol_box_2d.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <brip/brip_vil1_float_ops.h>
-#include <bsta/bsta_histogram.h>
+#include <bbas/bsta/bsta_histogram.h>
 #include <strk/strk_tracking_face_2d.h>
 
 //Gives a sort on mutual information decreasing order

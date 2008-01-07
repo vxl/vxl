@@ -10,10 +10,10 @@
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
-#include <bsta/bsta_joint_histogram.h>
+#include <bbas/bsta/bsta_joint_histogram.h>
 #include <vsol/vsol_point_2d.h>
 #include <vtol/vtol_vertex_2d.h>
-#include <btol/btol_face_algs.h>
+#include <bbas/btol/btol_face_algs.h>
 
 
 //#define DEBUG

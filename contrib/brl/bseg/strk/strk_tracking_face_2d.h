@@ -30,7 +30,7 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vtol/vtol_intensity_face.h>
-#include <bsta/bsta_histogram.h>
+#include <bbas/bsta/bsta_histogram.h>
 #include <vgl/vgl_point_2d.h>
 
 #include "strk_tracking_face_2d_sptr.h"
