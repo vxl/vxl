@@ -11,7 +11,7 @@
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
-#include <bsol/bsol_algs.h>
+#include <bbas/bsol/bsol_algs.h>
 #include <sdet/sdet_harris_detector.h>
 #include <brip/brip_vil1_float_ops.h>
 #include <brct/brct_algos.h>

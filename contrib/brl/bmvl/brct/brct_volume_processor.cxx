@@ -3,7 +3,7 @@
 #include <vsol/vsol_box_3d.h>
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vsol/vsol_point_3d.h>
-#include <bsol/bsol_algs.h>
+#include <bbas/bsol/bsol_algs.h>
 #include <brct/brct_algos.h>
 
 brct_volume_processor::brct_volume_processor(brct_volume_processor_params const& vp)

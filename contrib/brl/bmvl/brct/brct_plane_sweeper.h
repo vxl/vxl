@@ -37,8 +37,9 @@
 #include <vsol/vsol_box_2d_sptr.h>
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vsol/vsol_point_2d_sptr.h>
-#include <bsol/bsol_point_index_2d.h>
+#include <bbas/bsol/bsol_point_index_2d.h>
 #include <brct/brct_plane_sweeper_params.h>
+
 class brct_plane_sweeper : public brct_plane_sweeper_params
 {
  public:
