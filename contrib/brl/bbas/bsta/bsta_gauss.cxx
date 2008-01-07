@@ -1,7 +1,7 @@
+#include "bsta_gauss.h"
 //:
 // \file
 #include <vcl_cmath.h> // for exp()
-#include <bsta/bsta_gauss.h>
 
 double bsta_gauss::bsta_gaussian(const double x, const double sigma)
 {

@@ -1,8 +1,9 @@
 // This is gel/vifa/vifa_parallel_params.cxx
+#include "vifa_parallel_params.h"
+//:
+// \file
 
 #include <vcl_iostream.h>
-#include <vifa/vifa_parallel_params.h>
-
 
 vifa_parallel_params::
 vifa_parallel_params(float  angle_min,

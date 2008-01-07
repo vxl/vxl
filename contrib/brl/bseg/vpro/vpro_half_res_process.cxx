@@ -1,12 +1,13 @@
+#include "vpro_half_res_process.h"
+//:
+// \file
 #include <vcl_iostream.h>
-// not used? #include <vcl_fstream.h>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vidl_vil1/vidl_vil1_movie.h>
 #include <vidl_vil1/vidl_vil1_clip.h>
 #include <vidl_vil1/vidl_vil1_io.h>
 #include <brip/brip_vil1_float_ops.h>
-#include <vpro/vpro_half_res_process.h>
 
 vpro_half_res_process::vpro_half_res_process(vcl_string const& video_file)
 {
@@ -29,11 +30,11 @@ bool vpro_half_res_process::execute()
   this->clear_input();
   if (img.components()==1)
   {
-    vil1_memory_image_of<float> fimg = 
+    vil1_memory_image_of<float> fimg =
       brip_vil1_float_ops::convert_to_float(img);
-    vil1_memory_image_of<float> half = 
+    vil1_memory_image_of<float> half =
       brip_vil1_float_ops::half_resolution(fimg);
-    vil1_memory_image_of<unsigned char> chalf = 
+    vil1_memory_image_of<unsigned char> chalf =
       brip_vil1_float_ops::convert_to_byte(half);
     out_frames_.push_back(chalf);
     return true;
@@ -41,7 +42,7 @@ bool vpro_half_res_process::execute()
   if (img.components()==3)
   {
     vil1_memory_image_of<vil1_rgb<unsigned char> > cimg(img);
-    vil1_memory_image_of<vil1_rgb<unsigned char> > cimg_half = 
+    vil1_memory_image_of<vil1_rgb<unsigned char> > cimg_half =
     brip_vil1_float_ops::half_resolution(cimg);
     out_frames_.push_back(cimg_half);
     return true;

@@ -1,7 +1,7 @@
+#include "cmu_1394_camera.h"
 //:
 // \file
 #include <vpro/vpro_capture_process.h>
-#include <vvid/cmu_1394_camera.h>
 
 cmu_1394_camera::cmu_1394_camera()
   : cmu_1394_camera_params()
@@ -114,22 +114,22 @@ void cmu_1394_camera::validate_default_configuration()
 {
   int n = format_.size();
   if (!n)
-    {
-      vcl_cout << "In cmu_1394_camera::validate_configuration() -"
-               << " no capabilities (shouldn't happen)\n";
-      return;
-    }
+  {
+    vcl_cout << "In cmu_1394_camera::validate_configuration() -"
+             << " no capabilities (shouldn't happen)\n";
+    return;
+  }
   bool valid = false;
   for (int i = 0; i<n&&!valid; i++)
+  {
+    if (video_format_==format_[i]&&
+        video_mode_ == mode_[i]&&
+        frame_rate_ == rate_[i])
     {
-      if (video_format_==format_[i]&&
-          video_mode_ == mode_[i]&&
-          frame_rate_ == rate_[i])
-        {
-          current_ = i;
-          valid = true;
-        }
+      current_ = i;
+      valid = true;
     }
+  }
   if (valid)
     return;
   if (current_<0)
@@ -138,40 +138,40 @@ void cmu_1394_camera::validate_default_configuration()
 
 void cmu_1394_camera::update_settings()
 {
-   if (!camera_present_)
-     return;
-   this->update_video_configuration();
-   cmu_1394_camera_params::constrain();
+  if (!camera_present_)
+    return;
+  this->update_video_configuration();
+  cmu_1394_camera_params::constrain();
   //Shutter control
   if (!auto_exposure_)
-    {
-      C1394Camera::m_controlAutoExposure.TurnOn(false);
-      C1394Camera::m_controlShutter.TurnOn(true);
-    }
+  {
+    C1394Camera::m_controlAutoExposure.TurnOn(false);
+    C1394Camera::m_controlShutter.TurnOn(true);
+  }
   else
-    {
-      C1394Camera::m_controlAutoExposure.TurnOn(true);
-      C1394Camera::m_controlShutter.TurnOn(false);
-    }
+  {
+    C1394Camera::m_controlAutoExposure.TurnOn(true);
+    C1394Camera::m_controlShutter.TurnOn(false);
+  }
   if (!autowhitebalance_)
-   {
-      C1394Camera::m_controlWhiteBalance.SetAutoMode(false);
-      C1394Camera::SetWhiteBalance(whitebalanceU_, whitebalanceV_);
-   }
+  {
+    C1394Camera::m_controlWhiteBalance.SetAutoMode(false);
+    C1394Camera::SetWhiteBalance(whitebalanceU_, whitebalanceV_);
+  }
   else
   {
     C1394Camera::m_controlWhiteBalance.SetAutoMode(true);
   }
   if (onepushWBbalance_)
-    {
-        C1394Camera::m_controlWhiteBalance.SetAutoMode(false);      
-        C1394Camera::m_controlWhiteBalance.SetOnePush();
-    }
-   if (!auto_gain_)
-    {
-      C1394Camera::m_controlGain.SetAutoMode(false);
-      C1394Camera::m_controlGain.TurnOn(true);
-    }
+  {
+    C1394Camera::m_controlWhiteBalance.SetAutoMode(false);
+    C1394Camera::m_controlWhiteBalance.SetOnePush();
+  }
+  if (!auto_gain_)
+  {
+    C1394Camera::m_controlGain.SetAutoMode(false);
+    C1394Camera::m_controlGain.TurnOn(true);
+  }
   C1394Camera::SetVideoFormat(video_format_);
   C1394Camera::SetVideoMode(video_mode_);
   C1394Camera::SetVideoFrameRate(frame_rate_);
@@ -181,9 +181,6 @@ void cmu_1394_camera::update_settings()
     C1394Camera::SetAutoExposure(exposure_);
   if (!auto_gain_)
     C1394Camera::SetGain(gain_);
-
-
-
 }
 
 //-----------------------------------------------------------------
@@ -199,16 +196,16 @@ void cmu_1394_camera::init_capabilities()
     for (int j = 0; j<6; j++)
       for (int k = 0; k<6; k++)
         if ((*this).m_videoFlags[i][j][k])
-          {
-            vcl_string temp = this->video_configuration(i,j);
-            temp += " Fr/Sec(";
-            temp += this->frame_rate(k);
-            temp += ")";
-            capability_desc_.push_back(temp);
-            format_.push_back(i);
-            mode_.push_back(j);
-            rate_.push_back(k);
-          }
+        {
+          vcl_string temp = this->video_configuration(i,j);
+          temp += " Fr/Sec(";
+          temp += this->frame_rate(k);
+          temp += ")";
+          capability_desc_.push_back(temp);
+          format_.push_back(i);
+          mode_.push_back(j);
+          rate_.push_back(k);
+        }
 }
 
 //-----------------------------------------------------------------
@@ -276,19 +273,19 @@ bool cmu_1394_camera::start()
  if (!running_)
  {
    if (capture_)
+   {
+     if (C1394Camera::StartImageCapture())
      {
-       if (C1394Camera::StartImageCapture())
-       {
-         vcl_cout<< "In cmu_1394_camera::start() - Problem Starting Capture\n";
-         return false;
-       }
+       vcl_cout<< "In cmu_1394_camera::start() - Problem Starting Capture\n";
+       return false;
      }
+   }
    else
     if (C1394Camera::StartImageAcquisition())
-       {
-         vcl_cout<< "In cmu_1394_camera::start() - Problem Starting Aquisition\n";
-         return false;
-       }
+    {
+      vcl_cout<< "In cmu_1394_camera::start() - Problem Starting Aquisition\n";
+      return false;
+    }
    if (this->get_frame())
      image_valid_ = true;
    running_ = true;
@@ -300,16 +297,16 @@ bool cmu_1394_camera::start()
 void cmu_1394_camera::stop()
 {
   if (!camera_present_)
-    {
-      vcl_cout << "In cmu_1394_camera::stop() -- no camera link\n";
-      return;
-    }
+  {
+    vcl_cout << "In cmu_1394_camera::stop() -- no camera link\n";
+    return;
+  }
 
   if (!running_)
-    {
-      vcl_cout << "In cmu_1394_camera::stop() -- already stopped\n";
-      return;
-    }
+  {
+    vcl_cout << "In cmu_1394_camera::stop() -- already stopped\n";
+    return;
+  }
   if (capture_)
     C1394Camera::StopImageCapture();
   else
@@ -321,20 +318,20 @@ void cmu_1394_camera::stop()
 bool cmu_1394_camera::get_frame()
 {
   if (!camera_present_)
-    {
-      vcl_cout << "In cmu_1394_camera::get_frame() -- no camera link\n";
-      return false;
-    }
-    if (running_)
-      {
-        if (capture_)
-          C1394Camera::CaptureImage();
-        else
-          C1394Camera::AcquireImage();
-        return true;
-      }
+  {
+    vcl_cout << "In cmu_1394_camera::get_frame() -- no camera link\n";
+    return false;
+  }
+  if (running_)
+  {
+    if (capture_)
+      C1394Camera::CaptureImage();
     else
-      return false;
+      C1394Camera::AcquireImage();
+    return true;
+  }
+  else
+    return false;
 }
 
 void cmu_1394_camera::start_capture(vcl_string const & video_file_name)
@@ -346,7 +343,6 @@ void cmu_1394_camera::start_capture(vcl_string const & video_file_name)
 bool
 cmu_1394_camera::get_monochrome_image(vil1_memory_image_of<unsigned char>& im,
                                       int pixel_sample_interval, bool reread)
-
 {
   int xsize = C1394Camera::m_width/pixel_sample_interval,
       ysize = C1394Camera::m_height/pixel_sample_interval;
@@ -356,27 +352,27 @@ cmu_1394_camera::get_monochrome_image(vil1_memory_image_of<unsigned char>& im,
     image_valid_ = get_frame();
 
   if (image_valid_&&running_)
+  {
+    im.resize(xsize, ysize);
+    unsigned char *p;
+    int size = C1394Camera::m_width*C1394Camera::m_height;
+    p = im.get_buffer();
+    int offset = 0, yoffset, ooffset, oyoffset =0;
+    for (int y=0, oy=0; y<C1394Camera::m_height;
+         y+=pixel_sample_interval, oy++)
     {
-      im.resize(xsize, ysize);
-      unsigned char *p;
-      int size = C1394Camera::m_width*C1394Camera::m_height;
-      p = im.get_buffer();
-      int offset = 0, yoffset, ooffset, oyoffset =0;
-      for (int y=0, oy=0; y<C1394Camera::m_height;
-          y+=pixel_sample_interval, oy++)
-        {
-          yoffset = C1394Camera::m_width*y;
-          oyoffset = xsize*oy;
-          for (int x = 0, ox=0; x<C1394Camera::m_width;
-              x+=pixel_sample_interval, ox++)
-            {
-              offset = x+yoffset;
-              ooffset = ox+ oyoffset;
-              *(p + ooffset) = *(C1394Camera::m_pData + offset);
-            }
-        }
-      return true;
+      yoffset = C1394Camera::m_width*y;
+      oyoffset = xsize*oy;
+      for (int x = 0, ox=0; x<C1394Camera::m_width;
+           x+=pixel_sample_interval, ox++)
+      {
+        offset = x+yoffset;
+        ooffset = ox+ oyoffset;
+        *(p + ooffset) = *(C1394Camera::m_pData + offset);
+      }
     }
+    return true;
+  }
   else {
     vcl_cout << " cmu_1394_camera:get_monocrome_image -> couldn't get frame\n";
     return false;
@@ -395,20 +391,21 @@ get_rgb_image(vil1_memory_image_of< vil1_rgb<unsigned char> >& im,
   if (reread||!image_valid_)
     image_valid_ = get_frame();
 
-  if (image_valid_&&running_){
+  if (image_valid_&&running_)
+  {
     temp.resize(C1394Camera::m_width, C1394Camera::m_height);
     C1394Camera::getRGB((unsigned char*)temp.get_buffer());
     //cache the frame for live video capture
     if (file_capture_)
-       {
-        vp_->clear_input();
-        vp_->add_input_image(temp);
-        if (!vp_->execute())
-          {
-            vcl_cout << "In cmu_1394_camera::get_rbg_image(..) - capture failed\n";
-            file_capture_ = false;
-         }
-     }
+    {
+      vp_->clear_input();
+      vp_->add_input_image(temp);
+      if (!vp_->execute())
+      {
+        vcl_cout << "In cmu_1394_camera::get_rbg_image(..) - capture failed\n";
+        file_capture_ = false;
+      }
+    }
     im.resize(xsize, ysize);
     for (int y=0, yi=0; y<C1394Camera::m_height; y+=pixel_sample_interval, yi++)
         for (int x=0, xi=0; x<C1394Camera::m_width;  x+=pixel_sample_interval, xi++)

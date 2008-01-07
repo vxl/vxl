@@ -1,11 +1,13 @@
 // This is brl/bseg/vpro/vpro_line_fit_process.cxx
+#include "vpro_line_fit_process.h"
+//:
+// \file
 #include <vcl_iostream.h>
 #include <vul/vul_timer.h>
+#include <vsol/vsol_line_2d.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vtol/vtol_edge_2d.h>
 #include <sdet/sdet_fit_lines.h>
-#include <vpro/vpro_line_fit_process.h>
-#include <vsol/vsol_line_2d.h>
 
 vpro_line_fit_process::vpro_line_fit_process(sdet_fit_lines_params & flp)
   : sdet_fit_lines_params(flp)

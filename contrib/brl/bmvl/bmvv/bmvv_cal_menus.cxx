@@ -1,8 +1,10 @@
+#include "bmvv_cal_menus.h"
+//:
+// \file
 #include <vgui/vgui.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_menu.h>
 #include <bmvv/bmvv_cal_manager.h>
-#include <bmvv/bmvv_cal_menus.h>
 
 //Static munu callback functions
 
@@ -186,9 +188,9 @@ vgui_menu bmvv_cal_menus::get_menu()
   menuview.add("Map Image to World", map_image_to_world_callback);
 
   //edit menu entries
-  
+
 //debug menus entries
-  
+
 //Calibration menu
 
   menucal.add("Set Identity Camera",set_identity_camera_callback);

@@ -1,3 +1,4 @@
+#include "mcal_general_ca.h"
 //:
 // \file
 // \author Tim Cootes
@@ -7,7 +8,6 @@
 #include <vcl_string.h>
 
 #include <vsl/vsl_indent.h>
-#include <mcal/mcal_general_ca.h>
 #include <mbl/mbl_matxvec.h>
 #include <vcl_cmath.h>
 #include <vcl_vector.h>

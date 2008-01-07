@@ -1,3 +1,5 @@
+#include "bgui_image_utils.h"
+
 #include <vcl_cstdlib.h> // for rand()
 #include <vcl_cmath.h> // for ceil()
 #include <vil/vil_new.h>
@@ -6,7 +8,6 @@
 #include <vil/vil_blocked_image_resource.h>
 #include <vil/vil_pyramid_image_resource.h>
 #include <vgui/vgui_range_map_params.h>
-#include <bgui/bgui_image_utils.h>
 #include <vul/vul_timer.h>
 #include <vnl/vnl_numeric_traits.h>
 

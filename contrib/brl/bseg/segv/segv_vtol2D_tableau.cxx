@@ -1,5 +1,7 @@
-#include <segv/segv_vtol_soview2D.h>
-#include <segv/segv_vtol2D_tableau.h>
+#include "segv_vtol2D_tableau.h"
+//:
+// \file
+#include "segv_vtol_soview2D.h"
 
 segv_vtol2D_tableau::segv_vtol2D_tableau(const char* n):
   vgui_easy2D_tableau(n){}

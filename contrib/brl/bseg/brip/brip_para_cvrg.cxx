@@ -1,11 +1,12 @@
+#include "brip_para_cvrg.h"
 //:
 // \file
+
 #include <vul/vul_timer.h>
 #include <vcl_cstdlib.h>
 #include <vcl_cmath.h>
-#include <brip/brip_vil1_float_ops.h>
-#include <brip/brip_para_cvrg.h>
 #include <vcl_cassert.h>
+#include "brip_vil1_float_ops.h"
 
 //-----------------------------------------------------------------------
 //: Variable Initialization

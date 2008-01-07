@@ -1,7 +1,7 @@
+#include "bdpg_node.h"
 //:
 // \file
-#include <vcl_cmath.h> //for exp
-#include <bdpg/bdpg_node.h>
+#include <vcl_cmath.h> //for exp() & log()
 #include <vnl/vnl_numeric_traits.h>
 
 bdpg_node::bdpg_node() :

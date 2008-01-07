@@ -1,3 +1,4 @@
+#include "mcal_var_basis_cost.h"
 //:
 // \file
 // \author Tim Cootes
@@ -5,10 +6,8 @@
 
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
-
-#include <vsl/vsl_indent.h>
-#include <mcal/mcal_var_basis_cost.h>
 #include <vcl_cmath.h>
+
 #include <vsl/vsl_binary_io.h>
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>

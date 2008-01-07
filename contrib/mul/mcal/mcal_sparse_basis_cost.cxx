@@ -1,3 +1,4 @@
+#include "mcal_sparse_basis_cost.h"
 //:
 // \file
 // \author Tim Cootes
@@ -5,15 +6,13 @@
 
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
+#include <vcl_cmath.h>
 
 #include <vsl/vsl_indent.h>
-#include <mcal/mcal_sparse_basis_cost.h>
-#include <vcl_cmath.h>
-// not used? #include <vcl_vector.h>
 #include <vsl/vsl_binary_io.h>
+#include <vul/vul_string.h>
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
-#include <vul/vul_string.h>
 #include <mbl/mbl_exception.h>
 
 //=======================================================================

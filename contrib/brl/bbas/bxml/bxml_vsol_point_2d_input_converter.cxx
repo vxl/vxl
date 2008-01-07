@@ -1,10 +1,9 @@
+#include "bxml_vsol_point_2d_input_converter.h"
 //:
 // \file
 #include <vcl_iostream.h> //cout
 #include <dom/DOM_Element.hpp>
 #include <vsol/vsol_point_2d.h>
-#include <bxml/bxml_vsol_point_2d_input_converter.h>
-
 
 bxml_vsol_point_2d_input_converter::bxml_vsol_point_2d_input_converter()
 {

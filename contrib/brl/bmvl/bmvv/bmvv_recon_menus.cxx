@@ -1,8 +1,10 @@
+#include "bmvv_recon_menus.h"
+//:
+// \file
 #include <vgui/vgui.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_menu.h>
 #include <bmvv/bmvv_recon_manager.h>
-#include <bmvv/bmvv_recon_menus.h>
 
 //Static munu callback functions
 
@@ -273,9 +275,9 @@ vgui_menu bmvv_recon_menus::get_menu()
   //debug menus entries
   menudebug.add("Image Projection", project_image_callback);
   menudebug.add("Overlapping Projections", overlapping_projections_callback);
-  menudebug.add("Overlapping Projections at Z", 
+  menudebug.add("Overlapping Projections at Z",
                 overlapping_projections_z_callback);
-  menudebug.add("Overlapping Harris Projections at Z", 
+  menudebug.add("Overlapping Harris Projections at Z",
                 overlapping_harris_proj_z_callback);
   menudebug.add("CrossCorrelate On Plane", cross_correlate_plane_callback);
   menudebug.add("CrossCorrelate At Z", cross_correlate_z_callback);

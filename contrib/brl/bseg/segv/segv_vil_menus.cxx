@@ -1,8 +1,10 @@
+#include "segv_vil_menus.h"
+//:
+// \file
 #include <vgui/vgui.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_menu.h>
-#include <segv/segv_vil_segmentation_manager.h>
-#include <segv/segv_vil_menus.h>
+#include "segv_vil_segmentation_manager.h"
 
 //Static munu callback functions
 
@@ -122,6 +124,7 @@ void segv_vil_menus::subtract_images_callback()
 {
   segv_vil_segmentation_manager::instance()->subtract_images();
 }
+
 void segv_vil_menus::negate_image_callback()
 {
   segv_vil_segmentation_manager::instance()->negate_image();
@@ -156,6 +159,7 @@ void segv_vil_menus::intensity_histogram_callback()
 {
   segv_vil_segmentation_manager::instance()->intensity_histogram();
 }
+
 // JIM PROJECT POINTS
 void segv_vil_menus::project_points_callback()
 {

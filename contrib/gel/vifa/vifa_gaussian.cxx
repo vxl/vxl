@@ -1,5 +1,7 @@
+#include "vifa_gaussian.h"
+//:
+// \file
 #include <vcl_cmath.h>
-#include <vifa/vifa_gaussian.h>
 
 float vifa_gaussian::pdf(float  x)
 {

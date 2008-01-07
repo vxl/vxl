@@ -1,5 +1,6 @@
 // This is brl/bbas/vidl2/vidl2_dshow_live_istream.cxx
 //=========================================================================
+#include "vidl2_dshow_live_istream.h"
 //:
 // \file
 // \brief  DirectShow live video input stream support.
@@ -9,7 +10,6 @@
 //=========================================================================
 
 #include <vidl2/vidl2_config.h>
-#include <vidl2/vidl2_dshow_live_istream.h>
 #include <vidl2/vidl2_dshow.h>
 #include <vcl_cassert.h>
 #include <vcl_cstring.h> // for memcpy

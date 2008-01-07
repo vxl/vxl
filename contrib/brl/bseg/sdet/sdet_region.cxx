@@ -1,10 +1,11 @@
+#include "sdet_region.h"
+//:
+// \file
 #include <vgl/vgl_point_2d.h>
 #include <vgl/algo/vgl_convex_hull_2d.h>
 #include <vdgl/vdgl_digital_region.h>
 #include <vsol/vsol_polygon_2d.h>
-#include <bsol/bsol_algs.h>
-#include <sdet/sdet_region.h>
-// not used? #include <vcl_iostream.h>
+#include <bbas/bsol/bsol_algs.h>
 
 sdet_region::sdet_region()
 {

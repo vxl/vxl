@@ -1,11 +1,13 @@
 // This is brl/bseg/strk/strk_corr_tracker_process.cxx
+#include "strk_corr_tracker_process.h"
+//:
+// \file
 #include <vcl_iostream.h>
 #include <vtol/vtol_topology_object.h>
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_face_2d.h>
 #include <vil1/vil1_memory_image_of.h>
-#include <strk/strk_tracker.h>
-#include <strk/strk_corr_tracker_process.h>
+#include "strk_tracker.h"
 
 strk_corr_tracker_process::strk_corr_tracker_process(strk_tracker_params & tp)
  : tracker_(tp)

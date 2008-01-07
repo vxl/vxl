@@ -1,19 +1,19 @@
+#include "mcal_pca.h"
 //:
 // \file
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
+#include <vcl_vector.h>
+#include <vcl_cmath.h>
 
 #include <vsl/vsl_indent.h>
-#include <mcal/mcal_pca.h>
-#include <mbl/mbl_matrix_products.h>
-#include <vnl/algo/vnl_symmetric_eigensystem.h>
-#include <vcl_cmath.h>
-#include <vnl/vnl_math.h>
-#include <vcl_vector.h>
 #include <vsl/vsl_binary_io.h>
+#include <vnl/algo/vnl_symmetric_eigensystem.h>
+#include <vnl/vnl_math.h>
+#include <vul/vul_string.h>
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
-#include <vul/vul_string.h>
+#include <mbl/mbl_matrix_products.h>
 #include <mbl/mbl_exception.h>
 
 //=======================================================================

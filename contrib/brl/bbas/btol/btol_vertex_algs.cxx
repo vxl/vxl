@@ -1,13 +1,12 @@
+#include "btol_vertex_algs.h"
 //:
 // \file
 #include <vcl_cmath.h> // for fabs()
 #include <vcl_algorithm.h>
-#include <btol/btol_vertex_algs.h>
-#include <btol/btol_edge_algs.h>
+#include "btol_edge_algs.h"
 #include <vtol/vtol_vertex.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_edge_sptr.h>
-
 
 //: Destructor
 btol_vertex_algs::~btol_vertex_algs()
@@ -17,7 +16,7 @@ btol_vertex_algs::~btol_vertex_algs()
 //:
 //-----------------------------------------------------------------------------
 // Replaces va by vb on all the edges connected to va.
-// The result is that vb has the union of the sets of 
+// The result is that vb has the union of the sets of
 // edges incident on va and vb as superiors.
 //-----------------------------------------------------------------------------
 bool btol_vertex_algs::merge_superiors(vtol_vertex_sptr& va,

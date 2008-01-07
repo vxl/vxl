@@ -1,10 +1,12 @@
-#include <vcl_iostream.h> //vcl_cout
+#include "bxml_vtol_zero_chain_2d_input_converter.h"
+//:
+// \file
+#include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <dom/DOM_Element.hpp>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_zero_chain.h>
-#include <bxml/bxml_vtol_vertex_2d_input_converter.h>
-#include <bxml/bxml_vtol_zero_chain_2d_input_converter.h>
+#include "bxml_vtol_vertex_2d_input_converter.h"
 
 bxml_vtol_zero_chain_2d_input_converter::bxml_vtol_zero_chain_2d_input_converter()
 {

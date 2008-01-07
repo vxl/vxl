@@ -1,12 +1,12 @@
 #ifndef bsta_joint_histogram_txx_
 #define bsta_joint_histogram_txx_
 
+#include "bsta_joint_histogram.h"
+
 #include <vcl_cmath.h> // for log()
 #include <vcl_iostream.h>
-#include <bsta/bsta_gauss.h>
-#include <bsta/bsta_joint_histogram.h>
-
-#define LOG2 1.4426950408889634074 // == 1/vcl_log(2.0)
+#include "bsta_gauss.h"
+#include <vnl/vnl_math.h> // for log2e == 1/vcl_log(2.0)
 
 template <class T>
 bsta_joint_histogram<T>::bsta_joint_histogram(const T range,
@@ -93,7 +93,7 @@ T bsta_joint_histogram<T>::entropy() const
       if (pij>min_prob_)
         ent -= pij*T(vcl_log(pij));
     }
-  ent *= (T)LOG2;
+  ent *= (T)vnl_math::log2e;
   return ent;
 }
 
@@ -108,7 +108,7 @@ T bsta_joint_histogram<T>::renyi_entropy() const
       sum += pij*pij;
     }
   if (sum>min_prob_)
-    ent = - T(vcl_log(sum))*(T)LOG2;
+    ent = - T(vcl_log(sum))*(T)vnl_math::log2e;
   return ent;
 }
 

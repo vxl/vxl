@@ -1,9 +1,10 @@
+#include "btom_gauss_cylinder.h"
 //:
 // \file
 #include <vnl/vnl_math.h>
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
-#include <btom/btom_gauss_cylinder.h>
+
 //--------------------------------------------------------------
 //
 // Constructor and Destructor Functions
@@ -90,17 +91,17 @@ float btom_gauss_cylinder::radon_transform(float theta, float t)
 
 vcl_ostream& operator<< (vcl_ostream& os, const btom_gauss_cylinder& gc)
 {
-  os << "btom_gauss_cylinder:" << "\n" << "[---" << "\n"
-     << "xy_sigma " << gc.xy_sigma_ << "\n"
-     << "z_sigma " << gc.z_sigma_ << "\n"
-     << "length_sigma " << gc.length_sigma_ << "\n"
-     << "density " << gc.density_ << "\n"
-     << "x_origin " << gc.x_origin_ << "\n"
-     << "y_origin " << gc.y_origin_ << "\n"
-     << "z_position " << gc.z_position_ << "\n"
-     << "elevation " << gc.elevation_ << "\n"
-     << "azimuth " << gc.azimuth_ << "\n"
-     << "---]" << "\n";
+  os << "btom_gauss_cylinder:\n[---\n"
+     << "xy_sigma " << gc.xy_sigma_ << '\n'
+     << "z_sigma " << gc.z_sigma_ << '\n'
+     << "length_sigma " << gc.length_sigma_ << '\n'
+     << "density " << gc.density_ << '\n'
+     << "x_origin " << gc.x_origin_ << '\n'
+     << "y_origin " << gc.y_origin_ << '\n'
+     << "z_position " << gc.z_position_ << '\n'
+     << "elevation " << gc.elevation_ << '\n'
+     << "azimuth " << gc.azimuth_ << '\n'
+     << "---]\n";
   return os;
 }
 

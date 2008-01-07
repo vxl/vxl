@@ -1,8 +1,10 @@
+#include "bmvv_tomg_menus.h"
+//:
+// \file
 #include <vgui/vgui.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_menu.h>
 #include <bmvv/bmvv_tomography_manager.h>
-#include <bmvv/bmvv_tomg_menus.h>
 
 //Static munu callback functions
 

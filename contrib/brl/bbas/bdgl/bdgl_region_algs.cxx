@@ -1,9 +1,9 @@
+#include "bdgl_region_algs.h"
 //:
 // \file
 #include <vcl_cmath.h>
 #include <vcl_cstdlib.h>
 #include <vdgl/vdgl_digital_region.h>
-#include <bdgl/bdgl_region_algs.h>
 
 //:
 //--------------------------------------------------------------------------

@@ -1,3 +1,6 @@
+#include "bxml_vtol_edge_2d_input_converter.h"
+//:
+// \file
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_cmath.h>
@@ -5,9 +8,8 @@
 #include <vdgl/vdgl_digital_curve.h>
 #include <vtol/vtol_edge_2d.h>
 #include <bdgl/bdgl_curve_algs.h>
-#include <bxml/bxml_vtol_zero_chain_2d_input_converter.h>
-#include <bxml/bxml_vdgl_digital_curve_input_converter.h>
-#include <bxml/bxml_vtol_edge_2d_input_converter.h>
+#include "bxml_vtol_zero_chain_2d_input_converter.h"
+#include "bxml_vdgl_digital_curve_input_converter.h"
 
 bxml_vtol_edge_2d_input_converter::bxml_vtol_edge_2d_input_converter()
 {

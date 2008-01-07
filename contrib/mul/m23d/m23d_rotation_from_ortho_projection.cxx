@@ -1,3 +1,4 @@
+#include "m23d_rotation_from_ortho_projection.h"
 //:
 // \file
 // \author Tim Cootes
@@ -5,7 +6,6 @@
 
 #include <vnl/vnl_cross.h>
 #include <m23d/m23d_pure_ortho_projection.h>
-#include <m23d/m23d_rotation_from_ortho_projection.h>
 
 //: Generate pure 3 x 3 rotation matrix from 2 x 3 projection matrix
 //  Result may also include a reflection.

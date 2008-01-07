@@ -1,10 +1,11 @@
+#include "rgrl_feature_point.h"
 //:
 // \file
 // \author Amitha Perera
 // \date   Feb 2003
+
 #include <vnl/vnl_math.h>
 
-#include <rgrl/rgrl_feature_point.h>
 #include <rgrl/rgrl_cast.h>
 #include <rgrl/rgrl_transformation.h>
 #include <rgrl/rgrl_util.h>
@@ -138,19 +139,19 @@ transform_scale( rgrl_transformation const& xform ) const
   xform.jacobian_wrt_loc( jac, this->location() );
   assert( jac.cols() == dim );
 
-  // each column in this jac matrix represents the change 
+  // each column in this jac matrix represents the change
   // on fixed image coordindate given one change on one of the axes of
-  // the moving image. 
-  // Thus, the magnitude of this column vector represents the scale change 
-  // on this particular axis. 
+  // the moving image.
+  // Thus, the magnitude of this column vector represents the scale change
+  // on this particular axis.
   // Take the average of magnitude on all the axes
   double cumulative_scale_change = 0.0;
-  for( unsigned i=0; i<jac.cols(); ++i ) {
-    
+  for ( unsigned i=0; i<jac.cols(); ++i ) {
+
     double sqr_mag = 0.0;
-    for( unsigned j=0; j<jac.rows(); ++j )
+    for ( unsigned j=0; j<jac.rows(); ++j )
       sqr_mag += vnl_math_sqr( jac(j,i) );
-    
+
     cumulative_scale_change += vcl_sqrt( sqr_mag );
   }
   cumulative_scale_change /= jac.cols();

@@ -1,11 +1,11 @@
+#include "brip_watershed.h"
 //:
 // \file
 #include <vcl_cmath.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>
 #include <vil1/vil1_rgb.h>
-#include <brip/brip_vil1_float_ops.h>
-#include <brip/brip_watershed.h>
+#include "brip_vil1_float_ops.h"
 
 //Define 8-connected neighbors
 static int n_col[8]={-1, 0, 1,-1,1,-1,0,1};

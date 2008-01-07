@@ -1,3 +1,4 @@
+#include "btol_face_algs.h"
 //:
 // \file
 #include <vdgl/vdgl_digital_curve.h>
@@ -10,8 +11,7 @@
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <bsol/bsol_algs.h>
-#include <btol/btol_vertex_algs.h>
-#include <btol/btol_face_algs.h>
+#include "btol_vertex_algs.h"
 
 //:
 //If the edge direction is minus then the vertices are flipped using
@@ -306,18 +306,18 @@ transform(vtol_face_2d_sptr const& face,
 bool btol_face_algs::vsol_to_vtol(vsol_polygon_2d_sptr const & poly,
                                   vtol_face_2d_sptr& face)
 {
-  if(!poly)
+  if (!poly)
     return false;
   int n_verts = poly->size();
-  if(!n_verts)
+  if (!n_verts)
     return false;
   vcl_vector<vtol_vertex_sptr> verts;
-  for(int i = 0; i<n_verts; i++)
-    {
-      vsol_point_2d_sptr p = poly->vertex(i);
-      vtol_vertex_sptr v = (new vtol_vertex_2d(p->x(), p->y()))->cast_to_vertex();
-      verts.push_back(v);
-    }
+  for (int i = 0; i<n_verts; i++)
+  {
+    vsol_point_2d_sptr p = poly->vertex(i);
+    vtol_vertex_sptr v = (new vtol_vertex_2d(p->x(), p->y()))->cast_to_vertex();
+    verts.push_back(v);
+  }
   face = new vtol_face_2d(verts);
   return true;
 }

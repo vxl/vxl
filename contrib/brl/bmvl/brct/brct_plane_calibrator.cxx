@@ -1,10 +1,12 @@
+#include "brct_plane_calibrator.h"
+//:
+// \file
 #include <vcl_fstream.h>
 #include <vcl_cmath.h> // for exp()
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_4point.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
-#include <brct/brct_plane_calibrator.h>
 
 brct_plane_calibrator::brct_plane_calibrator()
 {

@@ -1,11 +1,11 @@
 // This is gel/vifa/vifa_norm_params.cxx
+#include "vifa_norm_params.h"
 
 #undef ROI_SUPPORTED  // No TargetJr-style ROI supported yet
 
 #include <vcl_algorithm.h>
 #include <vcl_iostream.h>
-#include <vifa/vifa_norm_params.h>
-#include <vifa/vifa_image_histogram.h>
+#include "vifa_image_histogram.h"
 #ifdef ROI_SUPPORTED
 #include <ImageClasses/RectROI.h>
 #endif  // ROI_SUPPORTED

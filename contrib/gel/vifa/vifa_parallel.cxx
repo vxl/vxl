@@ -1,12 +1,14 @@
 // This is gel/vifa/vifa_parallel.cxx
+#include "vifa_parallel.h"
+//:
+// \file
 #include <vnl/vnl_math.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vsol/vsol_curve_2d.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_intensity_face.h>
-#include <vifa/vifa_gaussian.h>
-#include <vifa/vifa_parallel.h>
+#include "vifa_gaussian.h"
 
 #ifdef DUMP
 #include <vul/vul_sprintf.h>

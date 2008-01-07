@@ -2,10 +2,13 @@
 #ifndef _VIFA_IMP_LINE_TXX_
 #define _VIFA_IMP_LINE_TXX_
 
+#include "vifa_imp_line.h"
+//:
+// \file
+
 #include <vcl_cmath.h>  // for vcl_sqrt()
 #include <vcl_cassert.h>
 #include <vgl/vgl_line_2d.h>
-#include <vifa/vifa_imp_line.h>
 
 
 template <class Type> vifa_imp_line<Type>::

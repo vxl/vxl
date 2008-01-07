@@ -1,8 +1,10 @@
+#include "segv_menus.h"
+//:
+// \file
 #include <vgui/vgui.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_menu.h>
-#include <segv/segv_segmentation_manager.h>
-#include <segv/segv_menus.h>
+#include "segv_segmentation_manager.h"
 
 //Static munu callback functions
 

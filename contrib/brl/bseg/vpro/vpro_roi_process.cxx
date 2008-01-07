@@ -1,5 +1,7 @@
+#include "vpro_roi_process.h"
+//:
+// \file
 #include <vcl_iostream.h>
-// not used? #include <vcl_fstream.h>
 #include <vil/vil_new.h>
 #include <vil/vil_image_resource.h>
 #include <vidl/vidl_movie.h>
@@ -8,7 +10,6 @@
 #include <vsol/vsol_box_2d.h>
 #include <brip/brip_vil_float_ops.h>
 #include <brip/brip_roi.h>
-#include <vpro/vpro_roi_process.h>
 
 vpro_roi_process::vpro_roi_process(vcl_string const & video_file,
                                    const unsigned x0,

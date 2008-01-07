@@ -1,3 +1,4 @@
+#include "mcal_trivial_ca.h"
 //:
 // \file
 // \author Tim Cootes
@@ -6,10 +7,8 @@
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
 
-#include <vsl/vsl_indent.h>
-#include <mcal/mcal_trivial_ca.h>
-#include <vnl/vnl_vector.h>
 #include <vsl/vsl_binary_io.h>
+#include <vnl/vnl_vector.h>
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>

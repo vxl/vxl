@@ -1,3 +1,4 @@
+#include "brct_dense_reconstructor.h"
 //:
 // \file
 #include <vcl_iostream.h>
@@ -5,10 +6,9 @@
 #include <vsol/vsol_point_2d.h>
 #include <vsrl/vsrl_parameters.h>
 #include <brip/brip_vil1_float_ops.h>
-#include <brct/brct_dense_reconstructor.h>
 
 brct_dense_reconstructor::brct_dense_reconstructor(const vil1_image &im1,
-                                                   const vil1_image &im2): 
+                                                   const vil1_image &im2):
   vsrl_dense_matcher(brip_vil1_float_ops::convert_to_grey(im1)),
   image_correlation_(image1_, brip_vil1_float_ops::convert_to_grey(im2))
 {

@@ -1,6 +1,8 @@
+#include "vpro_spatial_filter_process.h"
+//:
+// \file
 #include <vcl_iostream.h>
 #include <brip/brip_vil1_float_ops.h>
-#include <vpro/vpro_spatial_filter_process.h>
 #include <vil1/vil1_memory_image_of.h>
 
 bool vpro_spatial_filter_process::execute()

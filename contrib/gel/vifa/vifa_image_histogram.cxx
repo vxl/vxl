@@ -1,7 +1,9 @@
 // This is gel/vifa/vifa_image_histogram.cxx
-#include <vil/vil_image_view.h>
-#include <vifa/vifa_image_histogram.h>
+#include "vifa_image_histogram.h"
+//:
+// \file
 
+#include <vil/vil_image_view.h>
 
 vifa_image_histogram::
 vifa_image_histogram(vil_image_view_base_sptr  image,

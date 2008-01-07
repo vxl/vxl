@@ -1,10 +1,12 @@
-//: This is lemsvxlsrc/brcv/shp/bmsh3d/vis/bmsh3d_vis_point.cxx
-//  MingChing Chang
-//  May 03, 2005.
+// This is brl/bbas/bmsh3d/vis/bmsh3d_vis_vertex.cxx
+#include "bmsh3d_vis_vertex.h"
+//:
+// \file
+// \author MingChing Chang
+// \date   May 03, 2005.
 
 #include <bmsh3d/bmsh3d_mesh.h>
 
-#include <bmsh3d/vis/bmsh3d_vis_vertex.h>
 #include <bmsh3d/vis/bmsh3d_vis_backpt.h>
 #include <bmsh3d/vis/bmsh3d_vis_utils.h>
 

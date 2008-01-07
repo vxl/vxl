@@ -1,7 +1,9 @@
 // This is gel/vifa/vifa_int_face_attr.cxx
-#include <vtol/vtol_intensity_face.h>
-#include <vifa/vifa_int_face_attr.h>
+#include "vifa_int_face_attr.h"
+//:
+// \file
 
+#include <vtol/vtol_intensity_face.h>
 
 vifa_int_face_attr::
 vifa_int_face_attr(vdgl_fit_lines_params*  fitter_params,

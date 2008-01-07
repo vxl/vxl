@@ -1,8 +1,8 @@
+#include "bsta_k_medoid.h"
 //:
 // \file
 #include <vcl_cmath.h> //for HUGE_VAL
 #include <vcl_algorithm.h> //for find
-#include <bsta/bsta_k_medoid.h>
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 

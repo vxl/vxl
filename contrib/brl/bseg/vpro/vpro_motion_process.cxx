@@ -1,7 +1,9 @@
+#include "vpro_motion_process.h"
+//:
+// \file
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
 #include <brip/brip_vil1_float_ops.h>
-#include <vpro/vpro_motion_process.h>
 
 vpro_motion_process::vpro_motion_process(vpro_motion_params& vmp) : vpro_motion_params(vmp)
 {

@@ -1,6 +1,8 @@
+#include "vvid_frame_trail.h"
+//:
+// \file
 #include <vtol/vtol_topology_object.h>
 #include <vsol/vsol_spatial_object_2d.h>
-#include <vvid/vvid_frame_trail.h>
 
 vvid_frame_trail::vvid_frame_trail()
 {
@@ -55,7 +57,7 @@ void vvid_frame_trail::
 get_spatial_objects(vcl_vector<vsol_spatial_object_2d_sptr>& spat_objs)
 {
   spat_objs.clear();
-  for (vcl_deque<vcl_vector<vsol_spatial_object_2d_sptr> >::iterator sit = 
+  for (vcl_deque<vcl_vector<vsol_spatial_object_2d_sptr> >::iterator sit =
        spat_obj_queue_.begin(); sit != spat_obj_queue_.end(); sit++)
     for (vcl_vector<vsol_spatial_object_2d_sptr>::iterator sot = (*sit).begin();
          sot != (*sit).end(); sot++)

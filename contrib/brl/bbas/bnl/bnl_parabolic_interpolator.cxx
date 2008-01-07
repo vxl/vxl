@@ -1,9 +1,10 @@
+#include "bnl_parabolic_interpolator.h"
+
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vcl_iostream.h>
-#include <bnl/bnl_parabolic_interpolator.h>
 
-void 
+void
 bnl_parabolic_interpolator::add_data_point(const double p, const double v)
 {
   p_.push_back(p);
@@ -26,23 +27,23 @@ void bnl_parabolic_interpolator::fill_scatter_matrix()
   int n = this->n_points();
   double p4 = 0, p3 =0, p2 = 0, p2v=0, pv=0, v2=0, p =0, v=0;
   for (int i=0; i<n; i++)
-    {
-      double pi = p_[i], vi = v_[i];
-      double x2 = pi*pi;
-      double x3 = x2*pi;
-      double x4 = x3*pi;
-      double xvi = pi*vi;
-      double x2vi = pi*xvi;
-      double vi2 = vi*vi;
-      p2 += x2;
-      p3 += x3;
-      p4 += x4;
-      pv += xvi;
-      p2v += x2vi;
-      v2 += vi2;
-      p += pi;
-      v += vi;
-    }
+  {
+    double pi = p_[i], vi = v_[i];
+    double x2 = pi*pi;
+    double x3 = x2*pi;
+    double x4 = x3*pi;
+    double xvi = pi*vi;
+    double x2vi = pi*xvi;
+    double vi2 = vi*vi;
+    p2 += x2;
+    p3 += x3;
+    p4 += x4;
+    pv += xvi;
+    p2v += x2vi;
+    v2 += vi2;
+    p += pi;
+    v += vi;
+  }
   //solution vector is in the order
   // [Vxx Vx V0 1]
   s_ = vnl_matrix<double>(4,4);

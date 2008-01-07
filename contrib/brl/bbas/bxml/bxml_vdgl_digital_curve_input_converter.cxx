@@ -1,3 +1,6 @@
+#include "bxml_vdgl_digital_curve_input_converter.h"
+//:
+// \file
 #include <vcl_iostream.h>
 #include <dom/DOM_Element.hpp>
 #include <vdgl/vdgl_interpolator.h>
@@ -6,8 +9,7 @@
 #include <vdgl/vdgl_edgel_chain_sptr.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vsol/vsol_point_2d.h>
-#include <bxml/bxml_vsol_point_2d_input_converter.h>
-#include <bxml/bxml_vdgl_digital_curve_input_converter.h>
+#include "bxml_vsol_point_2d_input_converter.h"
 
 bxml_vdgl_digital_curve_input_converter::bxml_vdgl_digital_curve_input_converter()
 {

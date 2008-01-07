@@ -1,3 +1,4 @@
+#include "bdgl_curve_algs.h"
 //:
 // \file
 #include <vcl_cmath.h>
@@ -19,7 +20,6 @@
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_interpolator_linear.h>
 #include <vdgl/vdgl_digital_curve.h>
-#include <bdgl/bdgl_curve_algs.h>
 #include <vnl/algo/vnl_gaussian_kernel_1d.h>
 
 const double bdgl_curve_algs::tol = 1e-16;

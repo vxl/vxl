@@ -1,3 +1,6 @@
+#include "vpgl_adjust_rational_trans_onept.h"
+//:
+// \file
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
 #include <vgl/vgl_plane_3d.h>
@@ -6,7 +9,6 @@
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vpgl/algo/vpgl_backproject.h>
 #include <vpgl/algo/vpgl_ray_intersect.h>
-#include <vpgl/algo/vpgl_adjust_rational_trans_onept.h>
 
 //#define TRANS_ONE_DEBUG
 

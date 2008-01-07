@@ -2,12 +2,13 @@
 #define bsta_histogram_txx_
 //:
 // \file
+#include "bsta_histogram.h"
+
 #include <vcl_cmath.h> // for log()
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
-#include <bsta/bsta_gauss.h>
-#include <bsta/bsta_histogram.h>
-#define LOG2 1.4426950408889634074 // == 1/vcl_log(2.0)
+#include "bsta_gauss.h"
+#include <vnl/vnl_math.h> // for log2e == 1/vcl_log(2.0)
 
 template <class T>
 bsta_histogram<T>::bsta_histogram(const T range, const unsigned int nbins,
@@ -180,7 +181,7 @@ T bsta_histogram<T>::entropy() const
     if (pi>min_prob_)
       ent -= pi*T(vcl_log(pi));
   }
-  ent *= (T)LOG2;
+  ent *= (T)vnl_math::log2e;
   return ent;
 }
 
@@ -194,7 +195,7 @@ T bsta_histogram<T>::renyi_entropy() const
     sum += pi*pi;
   }
   if (sum>min_prob_)
-    ent = - T(vcl_log(sum))*(T)LOG2;
+    ent = - T(vcl_log(sum))*(T)vnl_math::log2e;
   return ent;
 }
 
@@ -215,7 +216,7 @@ void bsta_histogram<T>::parzen(const T sigma)
 template <class T>
 unsigned bsta_histogram<T>::low_bin()
 {
-  unsigned lowbin=0; 
+  unsigned lowbin=0;
   for (; lowbin<nbins_&&counts_[lowbin]==0; ++lowbin);
   return lowbin;
 }

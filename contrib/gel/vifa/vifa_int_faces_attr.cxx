@@ -1,11 +1,13 @@
 // This is gel/vifa/vifa_int_faces_attr.cxx
+#include "vifa_int_faces_attr.h"
+//:
+// \file
 #include <vcl_algorithm.h>
 #include <vcl_cmath.h>
 #include <vcl_map.h>
 #include <vcl_utility.h>
 #include <vtol/vtol_edge.h>
 #include <vifa/vifa_incr_var.h>
-#include <vifa/vifa_int_faces_attr.h>
 #include <vifa/vifa_parallel.h>
 
 

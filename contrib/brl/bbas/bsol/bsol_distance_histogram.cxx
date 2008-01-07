@@ -1,3 +1,4 @@
+#include "bsol_distance_histogram.h"
 //:
 // \file
 #include <vcl_cmath.h>
@@ -5,7 +6,6 @@
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vsol/vsol_line_2d.h>
-#include <bsol/bsol_distance_histogram.h>
 
 //: Constructors
 bsol_distance_histogram::bsol_distance_histogram()

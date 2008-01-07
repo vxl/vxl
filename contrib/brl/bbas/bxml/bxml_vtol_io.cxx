@@ -1,12 +1,14 @@
-#include <bxml/bxml_io.h>
+#include "bxml_vtol_io.h"
+//:
+// \file
 #include <vsol/vsol_spatial_object_2d.h>
 #include <vtol/vtol_topology_object.h>
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_edge_2d_sptr.h>
-#include <bxml/bxml_input_converter.h>
-#include <bxml/bxml_vtol_io.h>
-#include <bxml/bxml_generic_ptr.h>
+#include "bxml_io.h"
+#include "bxml_input_converter.h"
+#include "bxml_generic_ptr.h"
 
 bxml_vtol_io::bxml_vtol_io()
 {

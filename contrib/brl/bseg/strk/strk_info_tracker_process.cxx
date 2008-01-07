@@ -1,4 +1,7 @@
 // This is brl/bseg/strk/strk_info_tracker_process.cxx
+#include "strk_info_tracker_process.h"
+//:
+// \file
 #include <vcl_fstream.h>
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
@@ -7,10 +10,9 @@
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_face_2d.h>
 #include <vil1/vil1_image.h>
-#include <strk/strk_tracker.h>
-#include <strk/strk_tracking_face_2d.h>
-#include <strk/strk_info_tracker_process.h>
-#include <strk/strk_io.h>
+#include "strk_tracker.h"
+#include "strk_tracking_face_2d.h"
+#include "strk_io.h"
 
 strk_info_tracker_process::strk_info_tracker_process(strk_info_tracker_params & tp)
   : tracker_(tp)

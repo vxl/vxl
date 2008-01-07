@@ -1,8 +1,10 @@
+#include "bmvv_f_menus.h"
+//:
+// \file
 #include <vgui/vgui.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_menu.h>
 #include <bmvv/bmvv_f_manager.h>
-#include <bmvv/bmvv_f_menus.h>
 
 //Static munu callback functions
 //Static munu callback functions
@@ -108,6 +110,7 @@ void bmvv_f_menus::set_range_params_callback()
 {
   bmvv_f_manager::instance()->set_range_params();
 }
+
 void bmvv_f_menus::intensity_profile_callback()
 {
   bmvv_f_manager::instance()->intensity_profile();

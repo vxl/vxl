@@ -1,10 +1,12 @@
+#include "vpro_region_process.h"
+//:
+// \file
 #include <vcl_iostream.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vcl_vector.h>
 #include <vtol/vtol_intensity_face_sptr.h>
 #include <vtol/vtol_intensity_face.h>
 #include <sdet/sdet_region_proc.h>
-#include <vpro/vpro_region_process.h>
 
 vpro_region_process::vpro_region_process(sdet_detector_params & dp)
   : sdet_detector_params(dp)
@@ -17,12 +19,11 @@ vpro_region_process::~vpro_region_process()
 
 bool vpro_region_process::execute()
 {
-  if (this->get_N_input_images()!=1)
-    {
-      vcl_cout << "In vpro_region_process::execute() - not exactly one"
-               << " input image \n";
-      return false;
-    }
+  if (this->get_N_input_images() != 1)
+  {
+    vcl_cout << "In vpro_region_process::execute() - not exactly one input image\n";
+    return false;
+  }
   output_topo_objs_.clear();
   //assume the input images are grey scale (should really check)
   vil1_memory_image_of<unsigned char> img(vpro_video_process::get_input_image(0));

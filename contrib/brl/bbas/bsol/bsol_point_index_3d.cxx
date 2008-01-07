@@ -1,9 +1,9 @@
+#include "bsol_point_index_3d.h"
 //:
 // \file
 #include <vsol/vsol_point_3d.h>
 #include <vsol/vsol_box_3d.h>
-#include <bsol/bsol_algs.h>
-#include <bsol/bsol_point_index_3d.h>
+#include "bsol_algs.h"
 #ifdef DEBUG
 #include <vcl_iostream.h>
 #endif
