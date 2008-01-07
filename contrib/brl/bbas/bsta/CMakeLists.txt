@@ -2,7 +2,7 @@
 # A library for basic statistics classes and methods
 
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
 
 SET(bsta_sources
  bsta_gauss.cxx            bsta_gauss.h

@@ -1,6 +1,7 @@
 # bmsh3d - Brown 3D Mesh Library
 # brl/bbas/bmsh3d/CMakeLists.txt
 
+INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
 
 SET(bmsh3d_sources
@@ -8,7 +9,7 @@ SET(bmsh3d_sources
                                     bmsh3d_ptr_list.h
 
    bmsh3d_vertex.cxx                bmsh3d_vertex.h
-   
+
    bmsh3d_halfedge.cxx              bmsh3d_halfedge.h
    bmsh3d_edge.cxx                  bmsh3d_edge.h
    bmsh3d_face.cxx                  bmsh3d_face.h
@@ -24,8 +25,8 @@ SET(bmsh3d_sources
 
    bmsh3d_mesh_conn_recov.cxx
 
-                                    bmsh3d_fuzzy_boolean.h 
-                                    bmsh3d_triangle.h 
+                                    bmsh3d_fuzzy_boolean.h
+                                    bmsh3d_triangle.h
                                     bmsh3d_dist.h
 )
 
@@ -38,6 +39,3 @@ SUBDIRS( pro )
 SUBDIRS( vis )
 SUBDIRS( tests )
 SUBDIRS( examples )
-
-
-

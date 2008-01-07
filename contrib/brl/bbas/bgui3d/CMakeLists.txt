@@ -1,5 +1,6 @@
 # This is /brl/bbas/bgui3d
 
+INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
 
 # determines if vgui is built and opengl is available

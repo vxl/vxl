@@ -1,6 +1,7 @@
 # segmentation detection library
 # brl/bbas/btol/CMakeLists.txt
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )
 
 SET(btol_sources

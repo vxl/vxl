@@ -1,7 +1,7 @@
 # brl/bbas/bdpg/CMakeLists.txt
 # writen by J.L. Mundy for basic dynamic programming classes
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
 
 SET(bdpg_sources
 bdpg_node.cxx                     bdpg_node.h                  bdpg_node_sptr.h

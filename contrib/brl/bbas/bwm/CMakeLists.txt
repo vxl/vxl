@@ -5,11 +5,12 @@ INCLUDE( ${MODULE_PATH}/UseBGUI3D.cmake )
 
 IF(HAS_BGUI3D)
 
-IF(BUILD_EXPAT) 
+IF(BUILD_EXPAT)
 # Set CMake options for using vgui
 INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
 
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
+INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/b3p )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
@@ -21,14 +22,13 @@ IF(TIFF_FOUND)
 
 INCLUDE( ${MODULE_PATH}/FindGEOTIFF.cmake)
 IF(GEOTIFF_FOUND)
-  INCLUDE_DIRECTORIES( ${GEOTIFF_INCLUDE_DIR} ) 
+  INCLUDE_DIRECTORIES( ${GEOTIFF_INCLUDE_DIR} )
 
-  
 SET(bwm_sources
    bwm_macros.h
    bwm_def.h
    bwm_menu.cxx                bwm_menu.h
-   bwm_command.h               bwm_command_sptr.h   
+   bwm_command.h               bwm_command_sptr.h
    bwm_command_macros.h
    bwm_load_commands.h
    bwm_process_commands.h
@@ -48,19 +48,19 @@ SET(bwm_sources
    bwm_observable.h            bwm_observable_sptr.h
    bwm_observable_mesh.cxx     bwm_observable_mesh.h       bwm_observable_mesh_sptr.h
    bwm_observable_textured_mesh.cxx     bwm_observable_textured_mesh.h bwm_observable_textured_mesh_sptr.h
-   bwm_observable_polyline.cxx bwm_observable_polyline.h   bwm_observable_polyline_sptr.h 
+   bwm_observable_polyline.cxx bwm_observable_polyline.h   bwm_observable_polyline_sptr.h
    bwm_observable_point.cxx    bwm_observable_point.h      bwm_observable_point.h
-   bwm_observer.cxx            bwm_observer.h         
+   bwm_observer.cxx            bwm_observer.h
    bwm_observer_img.cxx        bwm_observer_img.h
-   bwm_observer_vgui.cxx       bwm_observer_vgui.h  
-   bwm_observer_cam.cxx        bwm_observer_cam.h     
+   bwm_observer_vgui.cxx       bwm_observer_vgui.h
+   bwm_observer_cam.cxx        bwm_observer_cam.h
    bwm_observer_proj_cam.cxx   bwm_observer_proj_cam.h
    bwm_observer_rat_cam.cxx    bwm_observer_rat_cam.h
 #   bwm_observer_coin3d.cxx     bwm_observer_coin3d.h
                                bwm_observer_proj2d.h
 #   bwm_observer_lidar.cxx      bwm_observer_lidar.h
     bwm_observer_video.cxx     bwm_observer_video.h
-   bwm_observer_mgr.cxx        bwm_observer_mgr.h    
+   bwm_observer_mgr.cxx        bwm_observer_mgr.h
    bwm_texture_map_generator.cxx bwm_texture_map_generator.h
    bwm_corr.cxx                bwm_corr.h       bwm_corr_sptr.h
 )
@@ -70,7 +70,7 @@ IF(NOT MINGW)
   # This should be fixed in FindMFC.cmake and then this IF can be removed
   INCLUDE(${CMAKE_ROOT}/Modules/FindMFC.cmake)
 ENDIF(NOT MINGW)
-    
+
 IF (MFC_FOUND)
   # add stuff to use MFC in this executable
   ADD_DEFINITIONS( "-D_AFXDLL" )
@@ -79,10 +79,8 @@ IF (MFC_FOUND)
 
 SET(bwm_sources ${bwm_sources}
    process/bwm_process.cxx           process/bwm_process.h
-   process/bwm_site_process.cxx      process/bwm_site_process.h	
+   process/bwm_site_process.cxx      process/bwm_site_process.h
 )
-
-
 
 AUX_SOURCE_DIRECTORY(Templates bwm_sources)
 
@@ -102,5 +100,5 @@ SUBDIRS(tests)
 ENDIF (MFC_FOUND)
 ENDIF(GEOTIFF_FOUND)
 ENDIF(TIFF_FOUND)
-ENDIF(BUILD_EXPAT) 
+ENDIF(BUILD_EXPAT)
 ENDIF(HAS_BGUI3D)

@@ -1,6 +1,7 @@
 # Brown digital geometry library
 # brl/bbas/bdgl/CMakeLists.txt
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )
 
 SET(bdgl_sources

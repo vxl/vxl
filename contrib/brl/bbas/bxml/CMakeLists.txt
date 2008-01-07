@@ -1,4 +1,5 @@
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
+INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
 
 # find the path to the xerces libraries and includes
