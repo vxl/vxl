@@ -29,7 +29,7 @@
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vsol/vsol_point_2d_sptr.h>
-#include <bsol/bsol_hough_line_index_sptr.h>
+#include <bbas/bsol/bsol_hough_line_index_sptr.h>
 #include <sdet/sdet_grid_finder_params.h>
 #include <vil1/vil1_image.h>
 

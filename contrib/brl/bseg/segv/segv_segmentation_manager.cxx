@@ -54,7 +54,7 @@
 #include <vtol/vtol_one_chain_sptr.h>
 #include <vtol/vtol_one_chain.h>
 #include <vtol/vtol_intensity_face.h>
-#include <bsol/bsol_algs.h>
+#include <bbas/bsol/bsol_algs.h>
 #include <brip/brip_vil1_float_ops.h>
 #include <brip/brip_para_cvrg_params.h>
 #include <brip/brip_para_cvrg.h>

@@ -24,11 +24,13 @@
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_2d.h>
-#include <bsol/bsol_algs.h>
-#include <bsta/bsta_histogram.h>
-#include <bsta/bsta_joint_histogram.h>
+#include <bbas/bsol/bsol_algs.h>
+#include <bbas/bsta/bsta_histogram.h>
+#include <bbas/bsta/bsta_joint_histogram.h>
 #include <brip/brip_roi.h>
+
 //Local utility functions
+
 //:compute normalized cross correlation from the intensity moment sums.
 static float cross_corr(double area, double si1, double si2,
                         double si1i1, double si2i2, double si1i2,

@@ -9,7 +9,7 @@
 #include <vidl_vil1/vidl_vil1_io.h>
 #include <vsol/vsol_box_2d.h>
 #include <vtol/vtol_face_2d.h>
-#include <bsol/bsol_algs.h>
+#include <bbas/bsol/bsol_algs.h>
 #include <brip/brip_roi.h>
 #include <brip/brip_vil1_float_ops.h>
 #include <strk/strk_io.h>

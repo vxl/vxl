@@ -15,8 +15,9 @@
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_2d.h>
-#include <bsol/bsol_algs.h>
+#include <bbas/bsol/bsol_algs.h>
 #include <brip/brip_roi.h>
+
 //------------------------------------------------------------
 //:  Convolve with a kernel
 //   It's assumed that the kernel is square with odd dimensions
@@ -150,48 +151,48 @@ brip_vil1_float_ops::half_resolution(vil1_memory_image_of<float> const & input,
 
 vil1_memory_image_of<vil1_rgb<unsigned char> > brip_vil1_float_ops::
 half_resolution(vil1_memory_image_of<vil1_rgb<unsigned char> > const & input,
-                  float filter_coef)
+                float filter_coef)
 {
   int w = input.width(), h = input.height();
   //make the three color planes
   vil1_memory_image_of<float> red(w,h), grn(w,h), blu(w,h);
-  for(int row = 0; row<h; row++)
-    for(int col = 0; col<w; col++)
-      {
-        vil1_rgb<unsigned char> v = input(col,row);
-        red(col,row) = v.r;
-        grn(col,row) = v.g;
-        blu(col,row) = v.b;
-      }      
-  vil1_memory_image_of<float> red_half = 
+  for (int row = 0; row<h; row++)
+    for (int col = 0; col<w; col++)
+    {
+      vil1_rgb<unsigned char> v = input(col,row);
+      red(col,row) = v.r;
+      grn(col,row) = v.g;
+      blu(col,row) = v.b;
+    }
+  vil1_memory_image_of<float> red_half =
     brip_vil1_float_ops::half_resolution(red, filter_coef);
 
-  vil1_memory_image_of<float> grn_half = 
+  vil1_memory_image_of<float> grn_half =
     brip_vil1_float_ops::half_resolution(grn, filter_coef);
 
-  vil1_memory_image_of<float> blu_half = 
+  vil1_memory_image_of<float> blu_half =
     brip_vil1_float_ops::half_resolution(blu, filter_coef);
 
-  vil1_memory_image_of<unsigned char> red_half_char = 
+  vil1_memory_image_of<unsigned char> red_half_char =
     brip_vil1_float_ops::convert_to_byte(red_half);
 
-  vil1_memory_image_of<unsigned char> grn_half_char = 
+  vil1_memory_image_of<unsigned char> grn_half_char =
     brip_vil1_float_ops::convert_to_byte(grn_half);
 
-  vil1_memory_image_of<unsigned char> blu_half_char = 
+  vil1_memory_image_of<unsigned char> blu_half_char =
     brip_vil1_float_ops::convert_to_byte(blu_half);
 
   int w2 = red_half.width(), h2 = red_half.height();
-  vil1_memory_image_of<vil1_rgb<unsigned char> > out(w2,h2);  
-  for(int row = 0; row<h2; row++)
-    for(int col = 0; col<w2; col++)
-      {
-        unsigned char rduc = red_half_char(col,row);
-        unsigned char gruc = grn_half_char(col,row);
-        unsigned char bluc = blu_half_char(col,row);
-        vil1_rgb<unsigned char> v(rduc, gruc, bluc);
-        out(col, row) = v;
-      }
+  vil1_memory_image_of<vil1_rgb<unsigned char> > out(w2,h2);
+  for (int row = 0; row<h2; row++)
+    for (int col = 0; col<w2; col++)
+    {
+      unsigned char rduc = red_half_char(col,row);
+      unsigned char gruc = grn_half_char(col,row);
+      unsigned char bluc = blu_half_char(col,row);
+      vil1_rgb<unsigned char> v(rduc, gruc, bluc);
+      out(col, row) = v;
+    }
   return out;
 }
 
@@ -824,13 +825,14 @@ brip_vil1_float_ops::convert_to_float(vil1_memory_image_of<vil1_rgb<unsigned cha
       output(x,y) = (float)image(x,y).grey();
   return output;
 }
+
 vil1_memory_image_of<float>
 brip_vil1_float_ops::convert_to_float(vnl_matrix<float> const & matrix)
 {
   unsigned int nr = matrix.rows(), nc = matrix.cols();
   vil1_memory_image_of<float> out(nc, nr);
-  for(unsigned int r = 0; r<nr; ++r)
-    for(unsigned int c = 0; c<nc; ++c)
+  for (unsigned int r = 0; r<nr; ++r)
+    for (unsigned int c = 0; c<nc; ++c)
       out(c,r)=matrix[r][c];
   return out;
 }
@@ -1815,7 +1817,7 @@ bool brip_vil1_float_ops::chip(vil1_image const & input,
   }
   //BAD but for now force to byte output regardless FIX FIX FIX!
   //if (input.get_size_bytes() ==1)
-  if(true)
+  if (true)
   {
     vil1_memory_image_of<unsigned char> timage(input);
     vil1_memory_image_of<unsigned char> tchip(CNc, CNr);
