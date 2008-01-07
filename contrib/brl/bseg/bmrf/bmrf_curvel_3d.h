@@ -12,7 +12,7 @@
 // \endverbatim
 
 #include <bmrf/bmrf_node_sptr.h>
-#include <bugl/bugl_gaussian_point_3d.h>
+#include <bbas/bugl/bugl_gaussian_point_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_2.h>
