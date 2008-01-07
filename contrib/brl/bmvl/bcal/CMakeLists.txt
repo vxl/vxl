@@ -1,6 +1,7 @@
 # multi-view camera library
 # brl/bmvl/bcal/CMakeLists.txt
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bmvl)
 
 SET(bcal_sources
     bcal_camera.h                   bcal_camera.cxx
