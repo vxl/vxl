@@ -1,12 +1,9 @@
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
+#include "vil3d_slice_list.h"
 //:
 // \file
 // \brief Reader/Writer for a volume made up of a list of slices.
 // \author Ian Scott - Manchester
 
-#include "vil3d_slice_list.h"
 #include <vcl_cstring.h>
 #include <vcl_cstdlib.h>
 #include <vcl_algorithm.h>
@@ -16,7 +13,6 @@
 #include <vil/vil_copy.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_slice.h>
-#include <vil3d/file_formats/vil3d_slice_list.h>
 #include <vil3d/file_formats/vil3d_dicom.h>
 
 vil3d_slice_list_format::vil3d_slice_list_format() {}

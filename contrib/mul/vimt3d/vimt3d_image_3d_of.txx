@@ -1,18 +1,16 @@
 #ifndef vimt3d_image_3d_of_txx_
 #define vimt3d_image_3d_of_txx_
-
 //:
 // \file
 // \brief Container for vil_image_view<T> + transform
 // \author Tim Cootes
 
-
 #include "vimt3d_image_3d_of.h"
+
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_vector_io.h>
-#include <vimt3d/vimt3d_image_3d_of.h>
 #include <vil3d/vil3d_print.h>
 #include <vil3d/io/vil3d_io_image_view.h>
 
@@ -25,7 +23,6 @@ void vimt3d_image_3d_of<T>::deep_copy(const vimt3d_image_3d_of& src)
   world2im_ = src.world2im_;
   image_.deep_copy(src.image_);
 }
-
 
 
 //=======================================================================
