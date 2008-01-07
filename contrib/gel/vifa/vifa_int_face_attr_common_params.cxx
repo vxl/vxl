@@ -1,10 +1,10 @@
 // This is gel/vifa/vifa_int_face_attr_common_params.cxx
-#include <vifa/vifa_int_face_attr_common_params.h>
+#include "vifa_int_face_attr_common_params.h"
 //:
 // \file
+
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
-
 
 //: Default constructor
 vifa_int_face_attr_common_params::

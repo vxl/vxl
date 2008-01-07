@@ -1,4 +1,4 @@
-#include <vpgl/algo/vpgl_invmap_cost_function.h>
+#include "vpgl_invmap_cost_function.h"
 //:
 // \file
 #include <vcl_cmath.h>

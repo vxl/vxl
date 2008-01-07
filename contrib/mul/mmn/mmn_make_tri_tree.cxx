@@ -1,9 +1,9 @@
+#include "mmn_make_tri_tree.h"
 //:
 // \file
 // \brief Representation of topological arc joining two vertices
 // \author Tim Cootes
 
-#include <mmn/mmn_make_tri_tree.h>
 #include <vcl_cassert.h>
 
 static void  update_best_arcs(const vnl_matrix<double>& D,

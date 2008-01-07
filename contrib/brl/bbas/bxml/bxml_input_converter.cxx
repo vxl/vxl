@@ -1,6 +1,6 @@
+#include "bxml_input_converter.h"
 //:
 // \file
-#include <bxml/bxml_input_converter.h>
 #include <vcl_iostream.h>
 #include <vsol/vsol_spatial_object_2d.h>
 

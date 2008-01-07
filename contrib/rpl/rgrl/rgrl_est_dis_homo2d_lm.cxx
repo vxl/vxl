@@ -1,6 +1,6 @@
+#include "rgrl_est_dis_homo2d_lm.h"
 //:
 // \file
-#include <rgrl/rgrl_est_dis_homo2d_lm.h>
 #include <rgrl/rgrl_est_homography2d.h>
 #include <rgrl/rgrl_trans_homography2d.h>
 #include <rgrl/rgrl_trans_rad_dis_homo2d.h>
@@ -26,7 +26,6 @@
 #include <vnl/algo/vnl_svd.h>
 
 #include <vcl_cassert.h>
-
 
 static
 inline
@@ -230,7 +229,6 @@ f(vnl_vector<double> const& x, vnl_vector<double>& fx)
 
   // check
   assert( ind == get_number_of_residuals() );
-  
 }
 
 void
@@ -329,7 +327,7 @@ rgrl_est_dis_homo2d_lm( vnl_vector<double> const& from_centre,
   assert( from_centre.size() == 2 && to_centre.size() == 2 );
 
   rgrl_estimator::set_param_dof( 10 );
-    
+
   // default value
   rgrl_nonlinear_estimator::set_max_num_iter( 50 );
   rgrl_nonlinear_estimator::set_rel_thres( 1e-5 );
@@ -356,9 +354,9 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     assert( to_centre_ == trans.to_centre() );
   }
   else {
-    
-    if( !rgrl_internal_util_upgrade_to_homography2D( init_H, cur_transform ) ) {
-    
+
+    if ( !rgrl_internal_util_upgrade_to_homography2D( init_H, cur_transform ) ) {
+
       // use normalized DLT to initialize
       DebugMacro( 0, "Use normalized DLT to initialize" );
       rgrl_est_homography2d est_homo;
@@ -459,24 +457,24 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   vnl_matrix<double> block_compliment = vnl_orthogonal_complement( homo_vector );
 
   vnl_matrix<double> compliment( 11, 10, 0.0 );
-  
-  for( unsigned i=0; i<9; ++i )
-    for( unsigned j=0; j<8; ++j )
+
+  for ( unsigned i=0; i<9; ++i )
+    for ( unsigned j=0; j<8; ++j )
       compliment(i,j) = block_compliment(i,j);
-      
+
   // distortion parameters
   compliment(9,8) = 1.0;
   compliment(10,9) = 1.0;
-  
+
   vnl_svd<double> svd( vnl_transpose(compliment) * jtj *compliment, 1e-6 );
   if ( svd.rank() < 10 ) {
     WarningMacro( "The covariance of homography ranks less than 8! ");
     return 0;
   }
-  
+
   vnl_matrix<double>covar = compliment * svd.inverse() * compliment.transpose();
-  
-  
+
+
 #else
   // compute inverse
   //
@@ -508,13 +506,13 @@ estimate( rgrl_match_set_sptr matches,
 }
 
 //: change frome_centre
-void 
+void
 rgrl_est_dis_homo2d_lm::
 set_centres( vnl_vector<double> const& from_centre,
              vnl_vector<double> const& to_centre )
 {
   assert( from_centre.size() == 2 && to_centre.size() == 2 );
-  
+
   from_centre_ = from_centre;
   to_centre_ = to_centre;
 }

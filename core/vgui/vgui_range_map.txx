@@ -1,7 +1,8 @@
 #ifndef vgui_range_map_txx_
 #define vgui_range_map_txx_
 
-#include <vgui/vgui_range_map.h>
+#include "vgui_range_map.h"
+
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vil/vil_pixel_traits.h>
@@ -102,9 +103,9 @@ compute_byte_table(const Type min, const Type max, const float gamma,
   else
   {
     //The values have to be shifted by min
-    unsigned long mint = 
+    unsigned long mint =
       static_cast<unsigned long>(vil_pixel_traits<Type>::minval());
-    unsigned long maxt = 
+    unsigned long maxt =
       static_cast<unsigned long>(vil_pixel_traits<Type>::maxval());
     for (unsigned long i = 0; mint+i <= maxt; ++i)
       bmap[i] = map_pixel_byte(static_cast<Type>(mint+i), min, max,

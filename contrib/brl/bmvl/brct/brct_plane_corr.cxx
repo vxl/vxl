@@ -1,4 +1,6 @@
-#include <brct/brct_plane_corr.h>
+#include "brct_plane_corr.h"
+//:
+// \file
 #include <vcl_iostream.h>
 
 brct_plane_corr::brct_plane_corr()
@@ -21,7 +23,7 @@ brct_plane_corr::~brct_plane_corr()
 //external functions
 vcl_ostream& operator<<(vcl_ostream& s, brct_plane_corr const& pc)
 {
-  s << " Plane No. " << pc.plane_ << " Index in Plane " << pc.index_ << "\n";
+  s << " Plane No. " << pc.plane_ << " Index in Plane " << pc.index_ << '\n';
   brct_corr const& c = (brct_corr)pc;
   s << c;
   return s;

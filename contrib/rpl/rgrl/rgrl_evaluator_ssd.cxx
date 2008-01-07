@@ -1,5 +1,6 @@
-// not used? #include <vcl_iostream.h>
-#include <rgrl/rgrl_evaluator_ssd.h>
+#include "rgrl_evaluator_ssd.h"
+//:
+// \file
 #include <vnl/vnl_math.h>
 #include <vcl_cassert.h>
 

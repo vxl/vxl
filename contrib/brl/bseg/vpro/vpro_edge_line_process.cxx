@@ -1,11 +1,11 @@
 // This is brl/bseg/vpro/vpro_edge_line_process.cxx
-#include <vpro/vpro_edge_line_process.h>
+#include "vpro_edge_line_process.h"
 //:
 // \file
 #include <vcl_iostream.h>
 #include <sdet/sdet_fit_lines.h>
-#include <vpro/vpro_edge_process.h>
-#include <vpro/vpro_line_fit_process.h>
+#include "vpro_edge_process.h"
+#include "vpro_line_fit_process.h"
 
 vpro_edge_line_process::vpro_edge_line_process(sdet_detector_params& dp,
                                                sdet_fit_lines_params& flp)
@@ -24,10 +24,10 @@ bool vpro_edge_line_process::execute()
   this->clear_output();
   //my_spat_objs_.clear();
   if (this->get_N_input_images()!=1)
-    {
-      vcl_cout << "In vpro_edge_line_process::execute() - not exactly one input image\n";
-      return false;
-    }
+  {
+    vcl_cout << "In vpro_edge_line_process::execute() - not exactly one input image\n";
+    return false;
+  }
   vpro_edge_process ep(*((sdet_detector_params*)this));
   ep.add_input_image(this->get_input_image(0));
   if (!ep.execute())

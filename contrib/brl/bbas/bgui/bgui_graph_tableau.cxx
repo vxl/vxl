@@ -1,5 +1,5 @@
 // This is brl/bbas/bgui/bgui_graph_tableau.cxx
-#include <bgui/bgui_graph_tableau.h>
+#include "bgui_graph_tableau.h"
 //:
 // \file
 #include <vcl_cmath.h> //for fabs()
@@ -155,7 +155,7 @@ void bgui_graph_tableau::update(vcl_vector<float> const& pos,
   compute_scale();
   draw_graph();
 }
-// In the current implementation, 
+// In the current implementation,
 // all plots have to have the same number of positions and values.
 // The vector position input is for future development where this
 // class takes care of the multiple position case - JLM

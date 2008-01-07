@@ -1,9 +1,9 @@
+#include "m23d_set_q_constraint.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief Functions to construct linear constraints as rows in a matrix
 
-#include <m23d/m23d_set_q_constraint.h>
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>
 

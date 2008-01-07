@@ -1,5 +1,5 @@
 // This is brl/bseg/strk/strk_region_info_params.cxx
-#include <strk/strk_region_info_params.h>
+#include "strk_region_info_params.h"
 //:
 // \file
 // See strk_region_info_params.h

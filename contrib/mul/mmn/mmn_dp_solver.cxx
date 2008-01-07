@@ -1,12 +1,12 @@
+#include "mmn_dp_solver.h"
 //:
 // \file
 // \brief Find choice of values at each node which minimises Markov problem
 // \author Tim Cootes
 
-#include <mmn/mmn_dp_solver.h>
 #include <vcl_cassert.h>
 
-  //: Default constructor
+//: Default constructor
 mmn_dp_solver::mmn_dp_solver()
 {
 }

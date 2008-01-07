@@ -1,14 +1,14 @@
+#include "bdgl_curve_region.h"
 //-----------------------------------------------------------------------------
 //:
 // \file
 // \author P.L. Bazin
 //-----------------------------------------------------------------------------
-#include <bdgl/bdgl_curve_region.h>
+
 #include <vdgl/vdgl_edgel.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
 #include <vcl_cmath.h>
-
 
 //-----------------------------------------------------------------------------
 void bdgl_curve_region::init(vdgl_edgel_chain_sptr curve)
@@ -38,7 +38,7 @@ void bdgl_curve_region::init(vdgl_edgel_chain_sptr curve)
     if (dist > radius_) radius_ = dist;
   }
 
-  //vcl_cout<<" region: ["<<floor(center_.x())<<","<<floor(center_.y())<<"] "<<radius_<<"\n";
+  //vcl_cout<<" region: ["<<floor(center_.x())<<','<<floor(center_.y())<<"] "<<radius_<<'\n';
 
   return;
 }

@@ -1,5 +1,5 @@
 // This is brl/bbas/bgui/bgui_bargraph_clipon_tableau.cxx
-#include <bgui/bgui_bargraph_clipon_tableau.h>
+#include "bgui_bargraph_clipon_tableau.h"
 //:
 // \file
 // \author  Joe Mundy
@@ -10,7 +10,7 @@
 //========================================================================
 //: Constructor
 bgui_bargraph_clipon_tableau::
-bgui_bargraph_clipon_tableau(vgui_easy2D_tableau_sptr const& easy) 
+bgui_bargraph_clipon_tableau(vgui_easy2D_tableau_sptr const& easy)
   : left_offset_(10), top_offset_(10),
     graph_width_(256), graph_height_(200), nominal_bar_width_(5)
 {
@@ -42,7 +42,7 @@ bgui_bargraph_clipon_tableau(vgui_easy2D_tableau_sptr const& easy)
   color_values_.push_back(c0);   color_values_.push_back(c1);
   color_values_.push_back(c2);   color_values_.push_back(c3);
   color_values_.push_back(c4);   color_values_.push_back(c5);
-  color_values_.push_back(c6);   color_values_.push_back(c7);    
+  color_values_.push_back(c6);   color_values_.push_back(c7);
 }
 
 //========================================================================
@@ -63,52 +63,51 @@ void bgui_bargraph_clipon_tableau::update(vcl_vector<float> const& bars,
   //if not fixed then scale max to graph_height_
   unsigned int nbars = bars.size();
   bars_.resize(nbars);
-  if(!nbars)
-    {
-      vcl_cout << "In bgui_bargraph_clipon_tableau::update(..) -"
-               << " no data\n";
-      return;
-    }
-  if(!fixed)
-    {
-      float max = bars[0];
-      for (unsigned int i=1; i<nbars; ++i)
-        if (max < bars[i]) max = bars[i];
-      
-      for (unsigned int i=0; i<nbars; ++i)
-        bars_[i] = graph_height_ - (bars[i]/max)*graph_height_;
-    }
+  if (!nbars)
+  {
+    vcl_cout << "In bgui_bargraph_clipon_tableau::update(..) - no data\n";
+    return;
+  }
+  if (!fixed)
+  {
+    float max = bars[0];
+    for (unsigned int i=1; i<nbars; ++i)
+      if (max < bars[i]) max = bars[i];
+
+    for (unsigned int i=0; i<nbars; ++i)
+      bars_[i] = graph_height_ - (bars[i]/max)*graph_height_;
+  }
   else
     for (unsigned int i=0; i<nbars; ++i)
       bars_[i] = graph_height_- bars[i]*graph_height_*scale;
 
   //reconcile the number of plot bars
   float bar_width = graph_width_/nbars;
-  if(bar_width>5*nominal_bar_width_)
+  if (bar_width>5*nominal_bar_width_)
     bar_width = 5*nominal_bar_width_;
-  if(bar_width<1)
+  if (bar_width<1)
     bar_width = 1;
 
-  //The first n_plot_bars data values will be plotted the 
+  //The first n_plot_bars data values will be plotted the
   //others are dropped
   this->clear();
   easy_->set_line_width(bar_width);
-  for(unsigned int i = 0; i<nbars; i++)
+  for (unsigned int i = 0; i<nbars; i++)
+  {
+    float x0 = i*bar_width + left_offset_ + 1, x1 = x0;
+    float y0 = top_offset_+graph_height_, y1 = top_offset_ + bars_[i];
+    unsigned int color_index = 2;
+    if (color_index_.size()>=nbars)
     {
-      float x0 = i*bar_width + left_offset_ + 1, x1 = x0;
-      float y0 = top_offset_+graph_height_, y1 = top_offset_ + bars_[i];
-      unsigned int color_index = 2;
-      if(color_index_.size()>=nbars)
-        {
-          unsigned int temp = color_index_[i];
-          if(temp<=7)
-            color_index = temp;
-        }
-      vcl_vector<float> c = color_values_[color_index];
-      easy_->set_foreground(c[0], c[1], c[2]);
-      vgui_soview2D_lineseg* l = easy_->add_line(x0, y0, x1, y1);
-      bar_plot_.push_back(l);
+      unsigned int temp = color_index_[i];
+      if (temp<=7)
+        color_index = temp;
     }
+    vcl_vector<float> c = color_values_[color_index];
+    easy_->set_foreground(c[0], c[1], c[2]);
+    vgui_soview2D_lineseg* l = easy_->add_line(x0, y0, x1, y1);
+    bar_plot_.push_back(l);
+  }
   easy_->post_redraw();
 }
 
@@ -120,12 +119,12 @@ void bgui_bargraph_clipon_tableau::set_color_vector(vcl_vector<unsigned char> co
 
 void bgui_bargraph_clipon_tableau::clear()
 {
-  for(vcl_vector<vgui_soview2D_lineseg*>::iterator sit = bar_plot_.begin();
-      sit != bar_plot_.end();++sit)
-    {
-      easy_->remove(*sit);
-      delete *sit;
-    }
+  for (vcl_vector<vgui_soview2D_lineseg*>::iterator sit = bar_plot_.begin();
+       sit != bar_plot_.end();++sit)
+  {
+    easy_->remove(*sit);
+    delete *sit;
+  }
   bar_plot_.clear();
   easy_->post_redraw();
 }

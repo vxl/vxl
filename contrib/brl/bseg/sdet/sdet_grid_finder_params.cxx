@@ -1,5 +1,5 @@
 // This is brl/bseg/sdet/sdet_grid_finder_params.cxx
-#include <sdet/sdet_grid_finder_params.h>
+#include "sdet_grid_finder_params.h"
 //:
 // \file
 // See sdet_grid_finder_params.h

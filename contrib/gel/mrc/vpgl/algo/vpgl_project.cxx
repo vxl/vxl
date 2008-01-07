@@ -1,6 +1,6 @@
+#include "vpgl_project.h"
 //:
 // \file
-#include <vpgl/algo/vpgl_project.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
 
@@ -12,6 +12,7 @@ project_bounding_box(vpgl_perspective_camera<double>   cam,
   vpgl_proj_camera<double> pcam = static_cast<vpgl_proj_camera<double> >(cam);
   return vpgl_project::project_bounding_box(pcam, box);
 }
+
 vgl_box_2d<double> vpgl_project::project_bounding_box(vpgl_proj_camera<double>  cam,
                                         vgl_box_3d<double> const & box)
 {
@@ -33,5 +34,4 @@ vgl_box_2d<double> vpgl_project::project_bounding_box(vpgl_proj_camera<double>  
     box_2d.add(vgl_point_2d<double>(hp2d));
   }
   return box_2d;
-  
 }

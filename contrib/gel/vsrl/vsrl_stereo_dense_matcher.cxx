@@ -1,5 +1,8 @@
-#include <vsrl/vsrl_stereo_dense_matcher.h>
-#include <vsrl/vsrl_parameters.h>
+#include "vsrl_stereo_dense_matcher.h"
+//:
+// \file
+
+#include "vsrl_parameters.h"
 #include <vil1/vil1_save.h>
 #include <vcl_iostream.h>
 
@@ -162,7 +165,7 @@ void vsrl_stereo_dense_matcher::write_disparity_image(char *filename)
 
 void vsrl_stereo_dense_matcher::print_correlation_cost(int x, int y)
 {
-  vcl_cout << "Correlation costs for pixel " << x << " " << y << vcl_endl;
+  vcl_cout << "Correlation costs for pixel " << x << ' ' << y << vcl_endl;
 
   for (int disp = 0-correlation_range_;disp < correlation_range_;disp++)
     vcl_cout << disp << " -> " << image_correlation_.get_correlation(x,y,disp) << vcl_endl;

@@ -1,5 +1,5 @@
 // This is brl/bseg/vpro/vpro_fourier_params.cxx
-#include <vpro/vpro_fourier_params.h>
+#include "vpro_fourier_params.h"
 //:
 // \file
 // See vpro_fourier_params.h

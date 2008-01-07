@@ -1,13 +1,14 @@
-#include <rgrl/rgrl_transformation.h>
-#include <rgrl/rgrl_util.h>
-#include <vnl/vnl_math.h>
-#include <vnl/vnl_least_squares_function.h>
-#include <vnl/algo/vnl_levenberg_marquardt.h>
+#include "rgrl_transformation.h"
 //:
 // \file
 // \brief Base class for transformation representation, estimations and application in generalized registration library
 // \author Chuck Stewart
 // \date 15 Nov 2002
+
+#include <rgrl/rgrl_util.h>
+#include <vnl/vnl_math.h>
+#include <vnl/vnl_least_squares_function.h>
+#include <vnl/algo/vnl_levenberg_marquardt.h>
 
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
@@ -227,8 +228,8 @@ map_intensity( vnl_vector<double> const& /*from*/,
 
 double
 rgrl_transformation::
-log_det_covar() const 
-{ 
+log_det_covar() const
+{
   return log_det_sym_matrix( covar_ );
 }
 
@@ -238,16 +239,16 @@ log_det_sym_matrix( vnl_matrix<double> const& m ) const
 {
   assert( m.rows() && m.cols() );
   assert( m.rows() == m.cols() );
-  
+
   // when computing the log of determinant,
   // because determinant is the product of all eigen-values,
-  // and because a log is taken, 
+  // and because a log is taken,
   // we go around it and do a sum on the log of *each* of the
   // eigen-values.
-  
+
   double result = 0;
   vnl_symmetric_eigensystem<double> eig(m);
-  for( unsigned i=0; i<m.rows(); ++i )
+  for ( unsigned i=0; i<m.rows(); ++i )
     result += vcl_log( eig.get_eigenvalue(i) );
   return result;
 }
@@ -256,67 +257,67 @@ double
 rgrl_transformation::
 log_det_covar_deficient( int rank ) const
 {
-  // first, scan the matrix and eleminate 
+  // first, scan the matrix and eleminate
   // rows and columns containing only zeros
   vcl_vector<unsigned int> zero_indices;
-  for( unsigned i=0; i<covar_.rows(); ++i )
-    if( !covar_(i,i) ) {
-      
+  for ( unsigned i=0; i<covar_.rows(); ++i )
+    if ( !covar_(i,i) ) {
+
       // scan the whole row
       bool all_zero=true;
-      for( unsigned j=0; j<covar_.cols()&&all_zero; ++j )
-        if( covar_(i,j) )
+      for ( unsigned j=0; j<covar_.cols()&&all_zero; ++j )
+        if ( covar_(i,j) )
           all_zero=false;
-      
-      if( all_zero )
+
+      if ( all_zero )
         zero_indices.push_back( i );
     }
-  
+
   vnl_matrix<double> m;
-  
-  if( !zero_indices.empty() ) {
-    
-    // put together a new matrix without the rows and 
+
+  if ( !zero_indices.empty() ) {
+
+    // put together a new matrix without the rows and
     // columns of zeros
     const unsigned int num = covar_.rows() - zero_indices.size();
     m.set_size( num, num );
-    for( unsigned i=0,ic=0,iz=0; i<covar_.rows(); ++i ) {
-      
-      if( iz<zero_indices.size() && i == zero_indices[iz] ) {
+    for ( unsigned i=0,ic=0,iz=0; i<covar_.rows(); ++i ) {
+
+      if ( iz<zero_indices.size() && i == zero_indices[iz] ) {
         ++iz;
         continue;
       }
-      
-      for( unsigned j=0,jc=0,jz=0; j<covar_.cols(); ++j ) {
-        
-        if( jz<zero_indices.size() && j == zero_indices[jz] ) {
+
+      for ( unsigned j=0,jc=0,jz=0; j<covar_.cols(); ++j ) {
+
+        if ( jz<zero_indices.size() && j == zero_indices[jz] ) {
           ++jz;
           continue;
         }
         m( ic, jc ) = covar_( i, j );
-        
+
         ++jc;
       }
-      
+
       ++ic;
     }
   } else
     m = covar_;
-    
+
   // compute the log of determinant with the largest [rank] eigenvalues
   const int num = m.rows();
-  
+
   // by default
-  if( rank <= 0 )
+  if ( rank <= 0 )
     rank = num;
-    
+
   double result = 0;
   vnl_symmetric_eigensystem<double> eig(m);
-  for( int i=0; i<rank; ++i )
+  for ( int i=0; i<rank; ++i )
     result += vcl_log( eig.get_eigenvalue(num-1-i) );
   return result;
 }
- 
+
 //:  Parameter covariance matrix
 vnl_matrix<double>
 rgrl_transformation::
@@ -424,7 +425,7 @@ read( vcl_istream& is )
     cov.fill(0.0);
     is >> cov;
 
-    if( !is.good() )
+    if ( !is.good() )
       return false;  // cannot read the covariance matrix
 
     this->set_covar( cov );
@@ -603,7 +604,7 @@ inv_map( const vnl_vector<double>& to,
 
 //: Return an inverse transformation
 //  This function only exist for certain transformations.
-rgrl_transformation_sptr 
+rgrl_transformation_sptr
 rgrl_transformation::
 inverse_transform() const
 {

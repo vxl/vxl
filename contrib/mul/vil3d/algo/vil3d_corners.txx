@@ -6,7 +6,8 @@
 // \brief  Class containing functions to estimate corner-ness in various ways.
 // \author Tim Cootes
 
-#include <vil3d/algo/vil3d_corners.h>
+#include "vil3d_corners.h"
+
 #include <vil3d/vil3d_math.h>
 #include <vil3d/vil3d_plane.h>
 #include <vil3d/algo/vil3d_grad_3x3x3.h>

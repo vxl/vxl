@@ -5,9 +5,9 @@
 // \file
 // \brief Construct histogram from pixels in given image.
 // \author Matt Leotta
-//
 
-#include <brip/brip_histogram.h>
+#include "brip_histogram.h"
+
 #include <vcl_cassert.h>
 #include <vcl_algorithm.h>
 

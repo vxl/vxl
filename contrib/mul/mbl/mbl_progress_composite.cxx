@@ -2,11 +2,9 @@
 #pragma implementation
 #endif
 
-
-#include <mbl/mbl_progress_composite.h>
-// not used? #include <vcl_iostream.h>
-#include <vsl/vsl_indent.h>
-
+#include "mbl_progress_composite.h"
+//:
+// \file
 
 //=======================================================================
 mbl_progress_composite::mbl_progress_composite()

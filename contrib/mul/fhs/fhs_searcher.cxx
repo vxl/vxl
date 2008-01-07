@@ -1,9 +1,9 @@
+#include "fhs_searcher.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief Use F&H's DP style algorithm to search for global solutions
 
-#include <fhs/fhs_searcher.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vcl_cstdlib.h> // for std::abort()

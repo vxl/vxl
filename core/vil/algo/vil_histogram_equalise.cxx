@@ -1,9 +1,9 @@
+#include "vil_histogram_equalise.h"
 //:
 //  \file
 //  \brief Apply histogram equalisation to given image
 //  \author Tim Cootes
 
-#include <vil/algo/vil_histogram_equalise.h>
 #include <vil/algo/vil_histogram.h>
 
 
@@ -40,5 +40,4 @@ void vil_histogram_equalise(vil_image_view<vxl_byte>& image)
       for (unsigned i=0;i<ni;++i,pixel+=istep) *pixel = lup[*pixel];
     }
   }
-
 }

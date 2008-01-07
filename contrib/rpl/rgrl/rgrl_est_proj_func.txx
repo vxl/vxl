@@ -6,7 +6,8 @@
 // \date   March 2007
 // \brief  a generic class to estimate a homogeneous projection matrix using L-M
 
-#include <rgrl/rgrl_est_proj_func.h>
+#include "rgrl_est_proj_func.h"
+
 #include <rgrl/rgrl_estimator.h>
 #include <rgrl/rgrl_match_set.h>
 #include <rgrl/rgrl_set_of.h>

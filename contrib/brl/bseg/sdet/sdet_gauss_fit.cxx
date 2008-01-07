@@ -1,5 +1,5 @@
 // This is brl/bseg/sdet/sdet_gauss_fit.cxx
-#include <sdet/sdet_gauss_fit.h>
+#include "sdet_gauss_fit.h"
 //:
 // \file
 

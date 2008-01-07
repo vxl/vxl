@@ -1,5 +1,5 @@
 // This is gel/vifa/vifa_group_pgram.cxx
-#include <vifa/vifa_group_pgram.h>
+#include "vifa_group_pgram.h"
 //:
 // \file
 

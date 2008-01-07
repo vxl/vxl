@@ -1,5 +1,6 @@
 // This is brl/bbas/vidl2/vidl2_dshow.cxx
 //=========================================================================
+#include "vidl2_dshow.h"
 //:
 // \file
 // \brief  DirectShow helper functions used in vidl2.
@@ -8,7 +9,6 @@
 //
 //=========================================================================
 
-#include <vidl2/vidl2_dshow.h>
 #include <vidl2/vidl2_exception.h>
 #include <vidl2/vidl2_pixel_format.h>
 

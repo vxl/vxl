@@ -1,4 +1,4 @@
-#include <vpgl/algo/vpgl_ortho_procrustes.h>
+#include "vpgl_ortho_procrustes.h"
 //:
 // \file
 #include <vnl/vnl_matrix.h>

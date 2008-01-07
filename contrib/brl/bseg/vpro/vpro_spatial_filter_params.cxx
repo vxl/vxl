@@ -1,5 +1,5 @@
 // This is brl/bseg/vpro/vpro_spatial_filter_params.cxx
-#include <vpro/vpro_spatial_filter_params.h>
+#include "vpro_spatial_filter_params.h"
 //:
 // \file
 // See vpro_spatial_filter_params.h

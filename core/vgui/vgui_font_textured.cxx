@@ -1,5 +1,6 @@
 // This is core/vgui/vgui_font_textured.cxx
 //=========================================================================
+#include "vgui_font_textured.h"
 //:
 // \file
 // \brief  vgui_font derived class that uses hardcoded fonts.
@@ -7,7 +8,6 @@
 // See vgui_font_textured.h for details.
 //=========================================================================
 
-#include <vgui/vgui_font_textured.h>
 #include <vgui/vgui_macro.h>
 
 #include <vil/vil_load.h>

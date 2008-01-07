@@ -1,6 +1,9 @@
 #ifndef vtol_extract_topology_txx_
 #define vtol_extract_topology_txx_
-#include <vtol/algo/vtol_extract_topology.h>
+
+#include "vtol_extract_topology.h"
+//:
+// \file
 
 #include <vcl_iosfwd.h>
 #include <vcl_cassert.h>

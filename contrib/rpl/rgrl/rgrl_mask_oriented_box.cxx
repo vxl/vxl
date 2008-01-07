@@ -1,6 +1,7 @@
-#include <rgrl/rgrl_mask_oriented_box.h>
+#include "rgrl_mask_oriented_box.h"
 //:
 // \file
+
 #include <vcl_cassert.h>
 #include <vcl_limits.h>
 #include <vnl/vnl_transpose.h>

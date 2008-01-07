@@ -1,9 +1,9 @@
+#include "fhs_arc.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief Link between one node and another
 
-#include <fhs/fhs_arc.h>
 #include <vcl_algorithm.h>
 
     //: Write to binary stream
@@ -31,8 +31,8 @@ void fhs_arc::b_read(vsl_b_istream& bfs)
 //: Print
 vcl_ostream& operator<<(vcl_ostream& os, const fhs_arc& a)
 {
-  os<<"("<<a.i()<<"->"<<a.j()<<" Offset: ("<<a.dx()<<","<<a.dy();
-  os<<") var: ("<<a.var_x()<<","<<a.var_y()<<")";
+  os<<'('<<a.i()<<"->"<<a.j()<<" Offset: ("<<a.dx()<<','<<a.dy()
+    <<") var: ("<<a.var_x()<<','<<a.var_y()<<')';
   return os;
 }
 
@@ -77,7 +77,6 @@ static void fhs_find_children(const vcl_vector<fhs_arc>& arc0,
       children.push_back(arc0[i].i());
     }
   }
-
 }
 
 //: Re-order list of arcs so that parents precede their children
@@ -95,8 +94,8 @@ bool fhs_order_tree_from_root(const vcl_vector<fhs_arc>& arc0,
   for (unsigned i=0;i<arc0.size();++i)
     if (arc0[i].i()>=n || arc0[i].j()>=n)
     {
-      vcl_cerr<<"Arc index outside range [0,"<<n-1<<"]"<<vcl_endl;
-      vcl_cerr<<"Arc = "<<arc0[i]<<vcl_endl;
+      vcl_cerr<<"Arc index outside range [0,"<<n-1<<']'<<vcl_endl
+              <<"Arc = "<<arc0[i]<<vcl_endl;
       return false;
     }
 

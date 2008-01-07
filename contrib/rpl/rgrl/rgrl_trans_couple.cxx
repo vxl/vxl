@@ -1,4 +1,4 @@
-#include <rgrl/rgrl_trans_couple.h>
+#include "rgrl_trans_couple.h"
 //:
 // \file
 // \brief a class that encapsulates a pair of transformations: forward & backward
@@ -132,7 +132,7 @@ read( vcl_istream& is )
   backward_xform_ = rgrl_trans_reader::read( is );
 
   // parent
-  return forward_xform_ 
+  return forward_xform_
     && backward_xform_
     && is.good()
     && rgrl_transformation::read( is );
@@ -179,7 +179,7 @@ inverse_transform() const
 }
 
 //: make a clone copy
-rgrl_transformation_sptr 
+rgrl_transformation_sptr
 rgrl_trans_couple::
 clone() const
 {

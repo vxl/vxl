@@ -1,5 +1,5 @@
 // This is brl/bbas/bgui/bgui_histogram_tableau.cxx
-#include <bgui/bgui_histogram_tableau.h>
+#include "bgui_histogram_tableau.h"
 //:
 // \file
 // \author  Matt Leotta
@@ -14,7 +14,7 @@
 
 //========================================================================
 //: Constructor
-bgui_histogram_tableau::bgui_histogram_tableau() 
+bgui_histogram_tableau::bgui_histogram_tableau()
   : left_offset_(10), top_offset_(10),
     graph_width_(256), graph_height_(200), plot_(0)
 {
@@ -63,7 +63,7 @@ void bgui_histogram_tableau::update(vil1_memory_image_of< vil1_rgb<unsigned char
   {
     // Update the plot points
     // This is a bit more efficient that deleting and reconstructing
-    //   but not as "clean" 
+    //   but not as "clean"
     for (unsigned int i=0; i<xscaled.size(); ++i) {
       plot_->x[i] = xscaled[i];
       plot_->y[i] = yscaled[i];
@@ -95,7 +95,7 @@ void bgui_histogram_tableau::update(vil_image_view< vxl_byte >& img_view)
   {
     // Update the plot points
     // This is a bit more efficient that deleting and reconstructing
-    //   but not as "clean" 
+    //   but not as "clean"
     for (unsigned int i=0; i<xscaled.size(); ++i) {
       plot_->x[i] = xscaled[i];
       plot_->y[i] = yscaled[i];

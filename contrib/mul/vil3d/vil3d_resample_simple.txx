@@ -1,13 +1,12 @@
 // This is mul/vil3d/vil3d_resample_simple.txx
 #ifndef vil3d_resample_simple_txx_
 #define vil3d_resample_simple_txx_
-
 //:
 // \file
 // \brief Resample a 3D image by a different factor in each dimension
 // \author Kevin de Souza
 
-#include <vil3d/vil3d_resample_simple.h>
+#include "vil3d_resample_simple.h"
 
 //: Resample a 3D image by a different factor in each dimension.
 //  dst_image resized by factors dx, dy, dz.
@@ -30,7 +29,7 @@ void vil3d_resample_simple(const vil3d_image_view< T >& src_image,
   const unsigned dni = static_cast<unsigned>(sni*dx);
   const unsigned dnj = static_cast<unsigned>(snj*dy);
   const unsigned dnk = static_cast<unsigned>(snk*dz);
-  
+
   dst_image.set_size(dni, dnj, dnk, np);
   const vcl_ptrdiff_t d_istep = dst_image.istep();
   const vcl_ptrdiff_t d_jstep = dst_image.jstep();
@@ -51,9 +50,9 @@ void vil3d_resample_simple(const vil3d_image_view< T >& src_image,
         T* d_pix = d_row;
         for (unsigned i=0; i<dni; ++i, d_pix+=d_istep)
         {
-          *d_pix = src_image(static_cast<unsigned>(i/dx), 
-                             static_cast<unsigned>(j/dy), 
-                             static_cast<unsigned>(k/dz), 
+          *d_pix = src_image(static_cast<unsigned>(i/dx),
+                             static_cast<unsigned>(j/dy),
+                             static_cast<unsigned>(k/dz),
                              p);
         }
       }

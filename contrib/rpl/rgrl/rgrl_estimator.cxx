@@ -1,4 +1,4 @@
-#include <rgrl/rgrl_estimator.h>
+#include "rgrl_estimator.h"
 //:
 // \file
 // \author Amitha Perera
@@ -88,7 +88,7 @@ rgrl_est_compute_weighted_centres( rgrl_set_of<rgrl_match_set_sptr> const& match
 
   // if the weight is too small or zero,
   // that means there is no good match
-  if( sum_wgt < 1e-8 ) {
+  if ( sum_wgt < 1e-8 ) {
     vcl_cerr << "Sum of weights is too small for centre computation.\n";
     return false;
   }
@@ -111,7 +111,7 @@ rgrl_est_matches_residual_number(rgrl_set_of<rgrl_match_set_sptr> const& matches
 
       rgrl_match_set const& one_set = *(matches[ms]);
       for ( FIter fi=one_set.from_begin(); fi!=one_set.from_end(); ++fi )
-        if( fi.size() ) {
+        if ( fi.size() ) {
           tot_num += fi.size() * fi.begin().to_feature()->dim();  // each point provides two constraints
         }
     }

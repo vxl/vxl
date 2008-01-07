@@ -1,6 +1,6 @@
+#include "rgrl_est_homo2d_lm.h"
 //:
 // \file
-#include <rgrl/rgrl_est_homo2d_lm.h>
 #include <rgrl/rgrl_est_homography2d.h>
 #include <rgrl/rgrl_trans_homography2d.h>
 #include <rgrl/rgrl_match_set.h>
@@ -200,7 +200,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // get initialization
   vnl_matrix_fixed<double, 3, 3> init_H;
 
-  if( !rgrl_internal_util_upgrade_to_homography2D( init_H, cur_transform ) ) {
+  if ( !rgrl_internal_util_upgrade_to_homography2D( init_H, cur_transform ) ) {
 
     // use normalized DLT to initialize
     DebugMacro( 0, "Use normalized DLT to initialize" );
@@ -217,7 +217,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   //
   vnl_vector<double> from_centre;
   vnl_vector<double> to_centre;
-  if( !rgrl_est_compute_weighted_centres( matches, from_centre, to_centre ) )
+  if ( !rgrl_est_compute_weighted_centres( matches, from_centre, to_centre ) )
     return 0;
    DebugMacro( 3, "From center: " << from_centre
                <<"  To center: " << to_centre << vcl_endl );
@@ -275,9 +275,8 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
   // check rank of H
   vnl_double_3x3 tmpH(init_H);
-  if( vcl_abs(vnl_det(tmpH)) < 1e-8 )
+  if ( vcl_abs(vnl_det(tmpH)) < 1e-8 )
     return 0;
-
 
   // compute covariance
   // JtJ is INVERSE of jacobian
@@ -307,8 +306,6 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   }
 
   vnl_matrix<double>covar = compliment * svd.inverse() * compliment.transpose();
-
-
 
 #else
   vnl_svd<double> svd( jtj, 1e-6 );

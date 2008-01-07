@@ -6,11 +6,12 @@
 // \date   Feb 2003
 //
 // \verbatim
-//  modifications:
-//  April 2004 Charlene: allow the use of kd_tree and user-defined bin_size.
+//  Modifications:
+//   April 2004 Charlene: allow the use of kd_tree and user-defined bin_size.
 // \endverbatim
 
-#include <rgrl/rgrl_feature_set_location.h>
+#include "rgrl_feature_set_location.h"
+
 #include <rgrl/rgrl_mask.h>
 #include <rsdl/rsdl_kd_tree.h>
 
@@ -31,14 +32,13 @@ rgrl_feature_set_location( feature_vector const& features,
   point_type min;
   point_type max;
 
-  if( features.empty() ) {
-  
+  if ( features.empty() )
+  {
     min.fill( 0 );
     max.fill( 0 );
-  
-  } 
-  else {
-
+  }
+  else
+  {
     feature_vector::const_iterator itr = features.begin();
     //feature_type_ = (*itr)->type_id();
     feature_type_ = &typeid(*(*itr));
@@ -61,7 +61,7 @@ rgrl_feature_set_location( feature_vector const& features,
   // Use kd_tree
   vcl_vector<rsdl_point> search_pts;
   search_pts.reserve( features.size() );
-  for( feature_vector::const_iterator itr = features.begin(); itr != features.end(); ++itr ) {
+  for ( feature_vector::const_iterator itr = features.begin(); itr != features.end(); ++itr ) {
     search_pts.push_back( rsdl_point((*itr)->location()) );
   }
   kd_tree_ = new rsdl_kd_tree( search_pts );
@@ -113,7 +113,6 @@ features_within_radius( feature_vector& results, vnl_vector<double> const& cente
   results.reserve( num_pts );
   for (unsigned int i = 0; i<num_pts; i++ )
     results.push_back( fea_vec_[temp_point_indices_[i]] );
-
 }
 
 template<unsigned N>

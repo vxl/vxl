@@ -1,11 +1,10 @@
+#include "vil3d_histogram_equalise.h"
 //:
 //  \file
 //  \brief Apply histogram equalisation to given image
 //  \author Tim Cootes
 
-#include <vil3d/algo/vil3d_histogram_equalise.h>
-#include <vil3d/algo/vil3d_histogram.h>
-
+#include "vil3d_histogram.h"
 
 //: Apply histogram equalisation to given image
 void vil3d_histogram_equalise(vil3d_image_view<vxl_byte>& image)
@@ -44,5 +43,4 @@ void vil3d_histogram_equalise(vil3d_image_view<vxl_byte>& image)
       }
     }
   }
-
 }

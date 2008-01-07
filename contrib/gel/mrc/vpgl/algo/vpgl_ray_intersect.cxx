@@ -1,4 +1,6 @@
-#include <vpgl/algo/vpgl_ray_intersect.h>
+#include "vpgl_ray_intersect.h"
+//:
+// \file
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_vector.h>
@@ -114,7 +116,7 @@ intersect(vcl_vector<vpgl_camera<double>* > const& cams,
   vpgl_ray_intersect_lsqr lqf(cams, image_pts, 2*dim_);
   vnl_levenberg_marquardt levmarq(lqf);
 #ifdef RAY_INT_DEBUG
-  vcl_cout << "Created LevenbergMarquardt minimizer ... setting tolerances" << '\n';
+  vcl_cout << "Created LevenbergMarquardt minimizer ... setting tolerances\n";
   levmarq.set_verbose(true);
 #endif
   // Set the x-tolerance.  When the length of the steps taken in X (variables)
@@ -137,7 +139,7 @@ intersect(vcl_vector<vpgl_camera<double>* > const& cams,
 
 #ifdef RAY_INT_DEBUG
   vcl_cout << "Initialized the intersection point " << intersection_pt
-           << " ... minimizing" << '\n';
+           << " ... minimizing\n";
 #endif
 
   // Minimize the error and get the best intersection point

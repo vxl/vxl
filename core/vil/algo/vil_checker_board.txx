@@ -6,7 +6,8 @@
 // \brief Build checker board image from two source
 // \author Gehua Yang
 
-#include <vil/algo/vil_checker_board.h>
+#include "vil_checker_board.h"
+
 #include <vil/vil_image_view.h>
 #include <vcl_cassert.h>
 

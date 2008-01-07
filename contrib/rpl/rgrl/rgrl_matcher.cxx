@@ -1,4 +1,6 @@
-#include <rgrl/rgrl_matcher.h>
+#include "rgrl_matcher.h"
+//:
+// \file
 #include <rgrl/rgrl_view.h>
 #include <rgrl/rgrl_feature.h>
 #include <rgrl/rgrl_match_set.h>
@@ -109,7 +111,7 @@ invert_matches( rgrl_match_set const&    current_set,
       tmp.from_    = fitr.from_feature();
       tmp.to_      = titr.to_feature();
       tmp.sig_wgt_ = titr.signature_weight();
-      
+
       matches.push_back( tmp );
       //rgrl_feature_sptr mapped = from->transform( *reverse_xform );
       //vcl_vector<rgrl_feature_sptr> to_vec(1, to );

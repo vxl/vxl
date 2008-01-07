@@ -1,5 +1,5 @@
 // This is core/tests/test_build_info.cxx
-#include <test_build_info.h>
+#include "test_build_info.h"
 //:
 // \file
 // Based on ITK, Testing/Code/Common/itkSystemInformationTest.cxx

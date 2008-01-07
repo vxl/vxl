@@ -1,5 +1,5 @@
 // This is brl/bseg/sdet/sdet_region_proc_params.cxx
-#include <sdet/sdet_region_proc_params.h>
+#include "sdet_region_proc_params.h"
 //:
 // \file
 // See sdet_region_proc_params.h

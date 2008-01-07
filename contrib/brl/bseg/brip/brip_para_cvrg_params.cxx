@@ -1,6 +1,6 @@
+#include "brip_para_cvrg_params.h"
 //:
 // \file
-#include <brip/brip_para_cvrg_params.h>
 #include <vcl_sstream.h>
 #include <vcl_iostream.h>
 

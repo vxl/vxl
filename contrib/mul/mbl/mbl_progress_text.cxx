@@ -4,7 +4,7 @@
 //:
 // \file
 
-#include <mbl/mbl_progress_text.h>
+#include "mbl_progress_text.h"
 
 //: Constructor
 mbl_progress_text::mbl_progress_text()
@@ -25,7 +25,7 @@ void mbl_progress_text::on_set_estimated_iterations(const vcl_string& identifier
 
 
 void mbl_progress_text::on_set_progress(const vcl_string& identifier,
-                               const int progress)
+                                        const int progress)
 {
   vcl_cout << "Progress for " << identifier << " is " << progress
            << " (out of " << estimated_iterations(identifier) << ')'

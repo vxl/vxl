@@ -1,17 +1,15 @@
 // This is mul/vil3d/vil3d_resample_trilinear.txx
 #ifndef vil3d_resample_trilinear_txx_
 #define vil3d_resample_trilinear_txx_
-
-
 //:
 // \file
 // \brief Resample a 3D image by a different factor in each dimension
 // \author Kevin de Souza, Ian Scott
 
+#include "vil3d_resample_trilinear.h"
 
-#include <vil3d/vil3d_resample_trilinear.h>
-#include <vil3d/vil3d_trilin_interp.h>
 #include <vil/vil_convert.h>
+#include <vil3d/vil3d_trilin_interp.h>
 #include <vil3d/vil3d_plane.h>
 #include <vcl_cassert.h>
 

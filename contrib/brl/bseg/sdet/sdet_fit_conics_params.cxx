@@ -1,5 +1,5 @@
 // This is brl/bseg/sdet/sdet_fit_conics_params.cxx
-#include <sdet/sdet_fit_conics_params.h>
+#include "sdet_fit_conics_params.h"
 //:
 // \file
 // See sdet_fit_conics_params.h
@@ -58,7 +58,7 @@ bool sdet_fit_conics_params::SanityCheck()
   }
   if (aspect_ratio_>30)
   {
-       msg << "ERROR: better to have an aspect ratio cutoff less than 10 \n";
+    msg << "ERROR: better to have an aspect ratio cutoff less than 10\n";
     valid = false;
   }
 

@@ -1,9 +1,9 @@
+#include "vil_distance_transform.h"
 //:
 // \file
 // \brief Compute distance function
 // \author Tim Cootes
 
-#include <vil/algo/vil_distance_transform.h>
 #include <vil/vil_fill.h>
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>
@@ -106,7 +106,7 @@ void vil_distance_transform_r2_one_way(vil_image_view<float>& image)
   //   -- o6 -- o7 --
   //   o5 o2 o3 o4 o8
   //   -- o1 XX -- --
-  vcl_ptrdiff_t o1 = -istep, o2 = -jstep-istep; 
+  vcl_ptrdiff_t o1 = -istep, o2 = -jstep-istep;
   vcl_ptrdiff_t o3 = -jstep, o4 = istep-jstep;
   vcl_ptrdiff_t o5 = -2*istep-jstep;
   vcl_ptrdiff_t o6 = -istep-2*jstep;
@@ -158,7 +158,7 @@ void vil_distance_transform_r2_one_way(vil_image_view<float>& image)
   *p0 = vcl_min(p0[o4]+sqrt2,*p0); // (1,-1)
   *p0 = vcl_min(p0[o5]+sqrt5,*p0); // (-2,-1)
 
-  p0+=istep;  // Move to element ni-1  
+  p0+=istep;  // Move to element ni-1
   // Check last element in row
   *p0 = vcl_min(p0[o1]+1.0f,*p0); // (-1,0)
   *p0 = vcl_min(p0[o2]+sqrt2,*p0); // (-1,-1)
@@ -170,7 +170,7 @@ void vil_distance_transform_r2_one_way(vil_image_view<float>& image)
   // Process each subsequent row from low to high values of j
   for (unsigned j=2;j<nj;++j,row0+=jstep)
   {
-    // Check first element 
+    // Check first element
     *row0 = vcl_min(row0[o3]+1.0f,*row0);  // (0,-1)
     *row0 = vcl_min(row0[o4]+sqrt2,*row0); // (1,-1)
     *row0 = vcl_min(row0[o7]+sqrt5,*row0); // (1,-2)

@@ -1,5 +1,5 @@
 // This is brl/bseg/strk/strk_info_model_tracker_params.cxx
-#include <strk/strk_info_model_tracker_params.h>
+#include "strk_info_model_tracker_params.h"
 //:
 // \file
 // See strk_info_model_tracker_params.h

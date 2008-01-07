@@ -1,5 +1,6 @@
 // This is brl/bbas/vidl2/vidl2_dshow_file_istream.cxx
 //=========================================================================
+#include "vidl2_dshow_file_istream.h"
 //:
 // \file
 // \brief  DirectShow file input stream support.
@@ -8,7 +9,6 @@
 //
 //=========================================================================
 
-#include <vidl2/vidl2_dshow_file_istream.h>
 #include <vidl2/vidl2_dshow.h>
 #include <vidl2/vidl2_frame.h>
 

@@ -1,5 +1,5 @@
 // This is brl/bseg/sdet/sdet_harris_detector_params.cxx
-#include <sdet/sdet_harris_detector_params.h>
+#include "sdet_harris_detector_params.h"
 //:
 // \file
 // See sdet_harris_detector_params.h

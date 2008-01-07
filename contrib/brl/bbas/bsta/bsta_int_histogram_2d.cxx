@@ -1,12 +1,12 @@
 // This is brl/bbas/bsta/bsta_int_histogram_2d.cxx
 // see bsta/bsta_int_histogram_2d.h for description of class
-#include <bsta/bsta_int_histogram_2d.h>
+#include "bsta_int_histogram_2d.h"
 //:
 // \file
 #include <vcl_cmath.h>
 // for gausian parzan window filter
-#include <bsta/bsta_gauss.h>
-#include <bsta/bsta_int_histogram_1d.h>
+#include "bsta_gauss.h"
+#include "bsta_int_histogram_1d.h"
 
 // constructor
 bsta_int_histogram_2d::bsta_int_histogram_2d(const unsigned int nbins_x, const unsigned int nbins_y)

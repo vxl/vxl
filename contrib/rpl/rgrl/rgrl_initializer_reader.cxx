@@ -1,8 +1,8 @@
+#include "rgrl_initializer_reader.h"
 //:
 // \file
 // \author Gehua Yang
 
-#include <rgrl/rgrl_initializer_reader.h>
 #include <rgrl/rgrl_view.h>
 #include <rgrl/rgrl_transformation.h>
 #include <rgrl/rgrl_trans_reader.h>
@@ -28,107 +28,107 @@ rgrl_initializer_reader(vcl_istream& istr,
   //
   // here read in the number of initializations.
   int num=-1;
-  
+
   istr>> num;
-  if( !istr || num < 0 ) {
+  if ( !istr || num < 0 ) {
     WarningMacro( "Cannot read in the number of initializations." );
     return;
   }
-  
+
   // go through inits
-  for( int i=0; i<num; ++i ) {
-   
+  for ( int i=0; i<num; ++i ) {
+
     // read in transformation
     init_record one;
     rgrl_mask_box region(2), global_region(2);
     bool is_global_region_set = false;
-    
+
     rgrl_transformation_sptr xform = rgrl_trans_reader::read( istr );
-    if( !istr || !xform ) {
+    if ( !istr || !xform ) {
       WarningMacro( "Cannot parse transformation" );
       return;
     }
     one.xform_ = xform;
-    
-    while(1) {
-      
+
+    while (true)
+    {
       vcl_streampos pos;
       vcl_string tag_str;
-      
+
       // skip any empty lines
       rgrl_util_skip_empty_lines( istr );
-      
+
       // store current reading position
       pos = istr.tellg();
       vcl_getline( istr, tag_str );
-    
-      if( tag_str.find( "REGION" ) == 0 ) {
-        
-        vnl_vector<double> x0(2), x1(2);
-        istr >> x0 >> x1;
-        if( !istr ) {
-          WarningMacro( "Cannot parse region" );
-          return;
-        }
-        
-        region.set_x0( x0 );
-        region.set_x1( x1 );
-        
-      } else if( tag_str.find( "GLOBAL_REGION" ) == 0 ) {
+
+      if ( tag_str.find( "REGION" ) == 0 ) {
 
         vnl_vector<double> x0(2), x1(2);
         istr >> x0 >> x1;
-        if( !istr ) {
+        if ( !istr ) {
           WarningMacro( "Cannot parse region" );
           return;
         }
-        
+
+        region.set_x0( x0 );
+        region.set_x1( x1 );
+      }
+      else if ( tag_str.find( "GLOBAL_REGION" ) == 0 )
+      {
+        vnl_vector<double> x0(2), x1(2);
+        istr >> x0 >> x1;
+        if ( !istr ) {
+          WarningMacro( "Cannot parse region" );
+          return;
+        }
+
         global_region.set_x0( x0 );
         global_region.set_x1( x1 );
         is_global_region_set = true;
-        
-      } else if( tag_str.find( "GEOMETRIC_SCALE" ) == 0 ) {
-  
+      }
+      else if ( tag_str.find( "GEOMETRIC_SCALE" ) == 0 )
+      {
         double scale=-1.0;
         istr >> scale;
-        if( !istr ) {
+        if ( !istr ) {
           WarningMacro( "Cannot parse scale" );
           return;
         }
         one.scale_ = new rgrl_scale;
         one.scale_->set_geometric_scale( scale, rgrl_scale::prior );
-  
-      } else {
+      }
+      else
+      {
         // Maybe it is the beginning of next transformation
         // back to the beginning of the tag line
         istr.seekg( pos );
-        
+
         // break the loop
         break;
       }
-    
     }
 
     // estimate global region
-    if( !is_global_region_set ) {
+    if ( !is_global_region_set ) {
       global_region =
         rgrl_util_estimate_global_region(from_image_roi_,
                                          to_image_roi_,
                                          from_image_roi_->bounding_box(),
                                          *one.xform_);
     }
-    
+
     // should use general prior_scale?
-    if( !one.scale_ ) 
+    if ( !one.scale_ )
       one.scale_ = prior_scale_;
-    
+
     //inverse transformation
     rgrl_transformation_sptr inverse_xform;
-    if( xform->is_invertible() ) 
+    if ( xform->is_invertible() )
       inverse_xform = xform->inverse_transform();
-  
+
     // setup view
-    one.view_ = new rgrl_view( from_image_roi_, 
+    one.view_ = new rgrl_view( from_image_roi_,
                                to_image_roi_,
                                region,
                                global_region,
@@ -149,7 +149,7 @@ next_initial( rgrl_view_sptr           & view,
 {
   if ( xform_index_ >= init_records_.size())
     return false;
-  
+
   init_record const& one = init_records_[xform_index_];
   //view = new rgrl_view( from_image_roi_,
   //                      to_image_roi_,

@@ -1,13 +1,10 @@
 // This is mul/vimt/vimt_image_pyramid_builder.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
+#include "vimt_image_pyramid_builder.h"
 //:
 // \file
 // \brief Class to load and save images from named files
 // \author Tim Cootes
 
-#include <vimt/vimt_image_pyramid_builder.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 

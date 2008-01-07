@@ -1,5 +1,5 @@
 // This is brl/bseg/sdet/sdet_nonmax_suppression_params.cxx
-#include <sdet/sdet_nonmax_suppression_params.h>
+#include "sdet_nonmax_suppression_params.h"
 //:
 // \file
 // See sdet_nonmax_suppression_params.h

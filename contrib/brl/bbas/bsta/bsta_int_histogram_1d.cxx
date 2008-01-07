@@ -1,9 +1,9 @@
 // This is brl/bbas/bsta/bsta_int_histogram_1d.cxx
-#include <bsta/bsta_int_histogram_1d.h>
+#include "bsta_int_histogram_1d.h"
 //:
 // \file
 
-#include <bsta/bsta_gauss.h> // for gausian parzan window filter
+#include "bsta_gauss.h" // for gausian parzan window filter
 #include <vcl_iostream.h>
 
 // constructor

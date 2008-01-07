@@ -1,6 +1,6 @@
+#include "vpgl_backproject.h"
 //:
 // \file
-#include <vpgl/algo/vpgl_backproject.h>
 #include <vpgl/algo/vpgl_invmap_cost_function.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>

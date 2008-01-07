@@ -1,5 +1,6 @@
 // This is core/vgui/vgui_font_bitmap.cxx
 //=========================================================================
+#include "vgui_font_bitmap.h"
 //:
 // \file
 // \brief  vgui_font derived class that uses hardcoded fonts.
@@ -7,7 +8,6 @@
 // See vgui_font_bitmap.h for details.
 //=========================================================================
 
-#include <vgui/vgui_font_bitmap.h>
 #include <vgui/vgui_macro.h>
 
 #include <vcl_iostream.h>

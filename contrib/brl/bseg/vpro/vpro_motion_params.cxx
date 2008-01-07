@@ -1,5 +1,5 @@
 // This is brl/bseg/vpro/vpro_motion_params.cxx
-#include <vpro/vpro_motion_params.h>
+#include "vpro_motion_params.h"
 //:
 // \file
 // See vpro_motion_params.h

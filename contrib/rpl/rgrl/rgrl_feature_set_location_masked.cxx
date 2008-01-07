@@ -1,3 +1,4 @@
+#include "rgrl_feature_set_location_masked.h"
 //:
 // \file
 // \brief Derived class to represent point feature set with masked region
@@ -7,13 +8,12 @@
 // \verbatim
 //  Modifications
 //   Peter Vanroose - 14 aug 2004 - moved all impl from .txx to .h to avoid VC60 internal compile error
-//   Chuck Stewart - 8 Nov 2005 - added versions of nearest_feature and k_nearest_feature 
-//      based on point location alone 
+//   Chuck Stewart - 8 Nov 2005 - added versions of nearest_feature and k_nearest_feature
+//      based on point location alone
 // \endverbatim
-#include <rgrl/rgrl_feature_set_location_masked.h>
+
 #include <rgrl/rgrl_feature_sptr.h>
 #include <rgrl/rgrl_mask.h>
-
 
 //:  Return the bounding box encloses the feature set
 rgrl_mask_box
@@ -77,7 +77,7 @@ void
 rgrl_feature_set_location_masked::
 features_within_radius( feature_vector& results, rgrl_feature_sptr const& feature, double distance ) const
 {
-  if( mask_->inside(feature->location()) )
+  if ( mask_->inside(feature->location()) )
     fea_set_sptr_->features_within_radius(results, feature , distance);
 }
 
@@ -86,7 +86,7 @@ void
 rgrl_feature_set_location_masked::
 k_nearest_features( feature_vector& results, const vnl_vector<double>& loc, unsigned int k ) const
 {
-  if( mask_->inside(loc) )
+  if ( mask_->inside(loc) )
     fea_set_sptr_->k_nearest_features(results, loc, k);
 }
 
@@ -95,6 +95,6 @@ void
 rgrl_feature_set_location_masked::
 k_nearest_features( feature_vector& results, rgrl_feature_sptr const& feature, unsigned int k ) const
 {
-  if( mask_->inside(feature->location()) )
+  if ( mask_->inside(feature->location()) )
     fea_set_sptr_->k_nearest_features(results, feature, k);
 }

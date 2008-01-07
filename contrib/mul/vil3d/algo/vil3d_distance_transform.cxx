@@ -1,9 +1,9 @@
+#include "vil3d_distance_transform.h"
 //:
 // \file
 // \brief Compute distance transform using chamfer distance
 // \author Kola Babalola
-  
-#include <vil3d/algo/vil3d_distance_transform.h>
+
 #include <vil3d/vil3d_image_view.h>
 #include <vcl_cassert.h>
 #include <vcl_algorithm.h>

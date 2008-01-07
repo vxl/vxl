@@ -1,9 +1,9 @@
+#include "m23d_make_ortho_projection.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief Return 2 x 3 projection matrix based on viewing from angle (a,b)
 
-#include <m23d/m23d_make_ortho_projection.h>
 #include <m23d/m23d_rotation_matrix.h>
 
 //: Return 2 x 3 projection matrix based on viewing from angle (Ax,Ay,Az)

@@ -6,11 +6,11 @@
 // \date   Feb 2003
 //
 // \verbatim
-//  modifications:
-//  April 2004 Charlene: allow the use of kd_tree and user-defined bin_size.
+//  Modifications:
+//   April 2004 Charlene: allow the use of kd_tree and user-defined bin_size.
 // \endverbatim
 
-#include <rgrl/rgrl_feature_set_bins.h>
+#include "rgrl_feature_set_bins.h"
 
 #include <vcl_cassert.h>
 

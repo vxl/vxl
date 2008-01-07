@@ -1,5 +1,5 @@
 // This is brl/bseg/sdet/sdet_vehicle_finder_params.cxx
-#include <sdet/sdet_vehicle_finder_params.h>
+#include "sdet_vehicle_finder_params.h"
 //:
 // \file
 // See sdet_vehicle_finder_params.h
@@ -28,10 +28,10 @@ bool sdet_vehicle_finder_params::SanityCheck()
 
   valid = valid && wrpp_.SanityCheck();
   msg << wrpp_.GetErrorMsg() << vcl_ends;
-  
+
   valid = valid && pcp_.SanityCheck();
   msg << pcp_.GetErrorMsg() << vcl_ends;
-  
+
   SetErrorMsg(msg.str().c_str());
   return valid;
 }

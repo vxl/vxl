@@ -1,5 +1,5 @@
 // This is brl/bseg/strk/strk_info_tracker_params.cxx
-#include <strk/strk_info_tracker_params.h>
+#include "strk_info_tracker_params.h"
 //:
 // \file
 // See strk_info_tracker_params.h
@@ -96,7 +96,7 @@ void strk_info_tracker_params::InitParams(int n_samples,
   color_info_ = color_info;
   min_gradient_ = min_gradient;
   parzen_sigma_ = parzen_sigma;
-  intensity_hist_bins_=intensity_hist_bins; 
+  intensity_hist_bins_=intensity_hist_bins;
   gradient_dir_hist_bins_=gradient_dir_hist_bins;
   color_hist_bins_=color_hist_bins;
   use_background_ =   use_background;

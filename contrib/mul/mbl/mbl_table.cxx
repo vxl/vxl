@@ -1,11 +1,10 @@
+#include "mbl_table.h"
 //:
 // \file
 // \author Kevin de Souza
 // \date 05-Aug-2004
 // \brief Container for tabulated data suitable for reading/writing to delimited text files
 
-
-#include <mbl/mbl_table.h>
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
@@ -81,7 +80,7 @@ bool mbl_table::column_exists(const vcl_string& header) const
     vcl_map<vcl_string, unsigned>::const_iterator iter =
         header_to_column_index_.find(header);
 
-    return  (iter != header_to_column_index_.end());
+    return  iter != header_to_column_index_.end();
 }
 
 //========================================================================
@@ -603,7 +602,7 @@ bool mbl_table::operator!=(const mbl_table& rhs) const
 //========================================================================
 // Set the tolerance used to determine whether table entries are equal.
 //========================================================================
-void mbl_table::set_tolerance(const double& tol, 
+void mbl_table::set_tolerance(const double& tol,
                               const bool& fract/*=false*/)
 {
   tolerance_ = tol;

@@ -1,9 +1,9 @@
+#include "mvl2_video_from_avi_linux.h"
 //:
 // \file
 // \brief A class for reading video files on linux platform
 // \author Franck Bettinger
 
-#include <mvl2/mvl2_video_from_avi_linux.h>
 #include <avifile.h>
 #include <videodecoder.h>
 #include <infotypes.h>

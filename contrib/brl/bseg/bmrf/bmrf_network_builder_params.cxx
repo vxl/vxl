@@ -1,5 +1,5 @@
 // This is brl/bseg/bmrf/bmrf_network_builder_params.cxx
-#include <bmrf/bmrf_network_builder_params.h>
+#include "bmrf_network_builder_params.h"
 //:
 // \file
 // See bmrf_network_builder_params.h

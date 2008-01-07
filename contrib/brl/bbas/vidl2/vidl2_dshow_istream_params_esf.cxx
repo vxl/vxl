@@ -1,5 +1,6 @@
 // This is brl/bbas/vidl2/vidl2_dshow_istream_params_esf.cxx
 //=========================================================================
+#include "vidl2_dshow_istream_params_esf.h"
 //:
 // \file
 // \brief  Euresys Source Filter (ESF) DirectShow istream parameter block.
@@ -8,7 +9,6 @@
 //
 //=========================================================================
 
-#include <vidl2/vidl2_dshow_istream_params_esf.h>
 #include <vidl2/vidl2_dshow.h>
 
 #include <vcl_iostream.h>

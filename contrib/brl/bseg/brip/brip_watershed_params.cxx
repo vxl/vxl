@@ -1,6 +1,6 @@
+#include "brip_watershed_params.h"
 //:
 // \file
-#include <brip/brip_watershed_params.h>
 #include <vcl_sstream.h>
 #include <vcl_iostream.h>
 

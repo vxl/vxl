@@ -1,5 +1,5 @@
 // This is brl/bseg/sdet/sdet_fit_lines_params.cxx
-#include <sdet/sdet_fit_lines_params.h>
+#include "sdet_fit_lines_params.h"
 //:
 // \file
 // See sdet_fit_lines_params.h

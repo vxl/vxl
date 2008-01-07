@@ -1,5 +1,7 @@
 // This is rpl/rrel/rrel_homography2d_est_aff.cxx
-#include <rrel/rrel_homography2d_est_aff.h>
+#include "rrel_homography2d_est_aff.h"
+//:
+// \file
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 

@@ -1,16 +1,16 @@
 // This is brl/bseg/vpro/vpro_grid_finder_process.cxx
-#include <vpro/vpro_grid_finder_process.h>
+#include "vpro_grid_finder_process.h"
 //:
 // \file
 #include <vcl_string.h>
 #include <vcl_fstream.h>
 #include <vcl_iostream.h>
 #include <vil1/vil1_image.h>
+#include <vsol/vsol_line_2d.h>
 #include <sdet/sdet_fit_lines.h>
 #include <sdet/sdet_grid_finder.h>
-#include <vpro/vpro_edge_process.h>
-#include <vpro/vpro_line_fit_process.h>
-#include <vsol/vsol_line_2d.h>
+#include "vpro_edge_process.h"
+#include "vpro_line_fit_process.h"
 
 vpro_grid_finder_process::vpro_grid_finder_process(sdet_detector_params& dp,
                                                    sdet_fit_lines_params& flp,

@@ -6,7 +6,8 @@
 // \brief Profile sampling functions for 3D images
 // \author Tim Cootes
 
-#include <vil3d/vil3d_sample_profile_trilin.h>
+#include "vil3d_sample_profile_trilin.h"
+
 #include <vil3d/vil3d_trilin_interp.h>
 
 inline bool vil3d_profile_in_image(double x0, double y0, double z0,

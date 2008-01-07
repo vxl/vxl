@@ -1,5 +1,5 @@
 // This is gel/vifa/vifa_line_cover.cxx
-#include <vifa/vifa_line_cover.h>
+#include "vifa_line_cover.h"
 //:
 // \file
 #include <vcl_algorithm.h>

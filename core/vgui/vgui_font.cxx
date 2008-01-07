@@ -1,5 +1,6 @@
 // This is core/vgui/vgui_font.cxx
 //=========================================================================
+#include "vgui_font.h"
 //:
 // \file
 // \brief  Font class for rendering text in OpenGL.
@@ -7,7 +8,6 @@
 // See vgui_font.h for details.
 //=========================================================================
 
-#include <vgui/vgui_font.h>
 #include <vcl_iostream.h>
 
 //: Draw a string of font symbols.

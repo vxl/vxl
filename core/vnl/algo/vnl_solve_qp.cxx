@@ -1,9 +1,9 @@
+#include "vnl_solve_qp.h"
 //:
 // \file
 // \brief Functions to solve various forms of constrained quadratic programming
 // \author  Tim Cootes
 
-#include <vnl/algo/vnl_solve_qp.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_cholesky.h>
 #include <vcl_vector.h>

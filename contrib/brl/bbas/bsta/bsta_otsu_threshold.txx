@@ -1,8 +1,7 @@
 #ifndef bsta_otsu_threshold_txx_
 #define bsta_otsu_threshold_txx_
 
-#include <bsta/bsta_otsu_threshold.h>
-// not used? #include <vcl_cmath.h>
+#include "bsta_otsu_threshold.h"
 
 template <class T>
 bsta_otsu_threshold<T>::bsta_otsu_threshold(bsta_histogram<T> const& hist)

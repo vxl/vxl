@@ -1,17 +1,16 @@
+#include "mmn_graph_rep1.h"
 //:
 // \file
 // \brief Representation of a graph, stored by links at each node.
 // \author Tim Cootes
 
-#include <mmn/mmn_graph_rep1.h>
-
-  //: Default constructor
+//: Default constructor
 mmn_graph_rep1::mmn_graph_rep1()
   : max_n_arcs_(0), n_arcs_(0)
 {
 }
 
-  //: Build from list of arcs
+//: Build from list of arcs
 void mmn_graph_rep1::build(unsigned n_nodes,
                            const vcl_vector<mmn_arc>& arcs)
 {

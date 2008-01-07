@@ -1,5 +1,5 @@
 // This is brl/bbas/bgui/bgui_range_adjuster_tableau.cxx
-#include <bgui/bgui_range_adjuster_tableau.h>
+#include "bgui_range_adjuster_tableau.h"
 //:
 // \file
 // \author  J. L. Mundy after Matt Leotta original

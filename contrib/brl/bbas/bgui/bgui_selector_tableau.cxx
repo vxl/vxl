@@ -1,5 +1,5 @@
 // This is brl/bbas/bgui/bgui_selector_tableau.cxx
-#include <bgui/bgui_selector_tableau.h>
+#include "bgui_selector_tableau.h"
 //:
 // \file
 // \author Matthew Leotta
@@ -186,8 +186,8 @@ bool bgui_selector_tableau::remove(const vcl_string name)
   if (v_itr != visible_.end())
     visible_.erase(v_itr);
 
-  vcl_vector<vcl_string>::iterator o_itr = vcl_find(render_order_.begin(), 
-                                                    render_order_.end(), 
+  vcl_vector<vcl_string>::iterator o_itr = vcl_find(render_order_.begin(),
+                                                    render_order_.end(),
                                                     name);
   if (o_itr != render_order_.end())
     render_order_.erase(o_itr);
@@ -353,7 +353,7 @@ class bgui_selector_position_command : public vgui_command
   bgui_selector_position_command(bgui_selector_tableau* s, motion m) : selector(s), m_type(m) {}
   void execute()
   {
-    switch(m_type){
+    switch (m_type){
     case TO_TOP:
       selector->active_to_top();
       break;
@@ -402,12 +402,12 @@ void bgui_selector_tableau::get_popup(const vgui_popup_params& params,
 
     if ( *itr == active_child_ ) check = "x";
     else check = " ";
-    active_menu.add(box_head+check+box_tail+(*itr), 
+    active_menu.add(box_head+check+box_tail+(*itr),
                     new bgui_selector_switch_command(this,*itr));
 
     if ( is_visible(*itr) ) check = "x";
     else check = " ";
-    visible_menu.add(box_head+check+box_tail+(*itr), 
+    visible_menu.add(box_head+check+box_tail+(*itr),
                      new bgui_selector_toggle_command(this,*itr));
   }
 

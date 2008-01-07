@@ -1,4 +1,4 @@
-#include <rgrl/rgrl_matcher_k_nearest_pick_one.h>
+#include "rgrl_matcher_k_nearest_pick_one.h"
 //:
 // \file
 // \author Gehua Yang
@@ -39,8 +39,8 @@ compute_matches( rgrl_feature_set const&       from_set,
   typedef rgrl_view::feature_vector feat_vector;
   typedef feat_vector::const_iterator feat_iter;
 
-  DebugMacro( 2, "Compute matches between features " 
-    << from_set.label().name() << "-->" 
+  DebugMacro( 2, "Compute matches between features "
+    << from_set.label().name() << "-->"
     << to_set.label().name() << vcl_endl; );
 
   // faster to check a boolean variable
@@ -50,20 +50,20 @@ compute_matches( rgrl_feature_set const&       from_set,
   //
   typedef rgrl_match_set::const_from_iterator  from_feature_iterator;
   vcl_map< rgrl_feature_sptr, from_feature_iterator > feature_sptr_iterator_map;
-  if( allow_reuse_match ) {
-    
-    for( from_feature_iterator i=old_matches->from_begin(); i!=old_matches->from_end(); ++i )
+  if ( allow_reuse_match )
+  {
+    for ( from_feature_iterator i=old_matches->from_begin(); i!=old_matches->from_end(); ++i )
       feature_sptr_iterator_map[ i.from_feature() ] = i;
   }
-  
+
   // create the new match set
   //
-  rgrl_match_set_sptr matches_sptr 
+  rgrl_match_set_sptr matches_sptr
     = new rgrl_match_set( from_set.type(), to_set.type(), from_set.label(), to_set.label() );
 
   //  get the features in the current view
   feat_vector from;
-  if( !current_view.features_in_region( from, from_set ) ) {
+  if ( !current_view.features_in_region( from, from_set ) ) {
     DebugMacro( 1, "Cannot get features in current region!!!" << vcl_endl );
     return matches_sptr;
   }
@@ -80,43 +80,45 @@ compute_matches( rgrl_feature_set const&       from_set,
   for ( feat_iter fitr = from.begin(); fitr != from.end(); ++fitr )
   {
     rgrl_feature_sptr mapped = (*fitr)->transform( current_xform );
-    if( !validate( mapped, current_view.to_image_roi() ) )
+    if ( !validate( mapped, current_view.to_image_roi() ) )
       continue;   // feature is invalid
 
     matching_features.clear();
-    
-    if( allow_reuse_match ) {
-      
+
+    if ( allow_reuse_match )
+    {
       prev_xform_->map_location( (*fitr)->location(), prev_mapped );
 
-      // if the mapping difference is smaller than this threshold  
+      // if the mapping difference is smaller than this threshold
       vcl_map< rgrl_feature_sptr, from_feature_iterator >::const_iterator map_itr;
-      if( vnl_vector_ssd( prev_mapped, mapped->location() ) < sqr_thres_for_reuse_match_  && 
-          (map_itr=feature_sptr_iterator_map.find( *fitr )) != feature_sptr_iterator_map.end() ) {
-            
+      if ( vnl_vector_ssd( prev_mapped, mapped->location() ) < sqr_thres_for_reuse_match_  &&
+          (map_itr=feature_sptr_iterator_map.find( *fitr )) != feature_sptr_iterator_map.end() )
+      {
         // re-use the to features
         const from_feature_iterator& prev_from_iter = map_itr->second;
-        for( from_feature_iterator::to_iterator titr=prev_from_iter.begin(); titr!=prev_from_iter.end(); ++titr )
+        for ( from_feature_iterator::to_iterator titr=prev_from_iter.begin(); titr!=prev_from_iter.end(); ++titr )
           matching_features.push_back( titr.to_feature() );
-        
+
         // increament the count
         ++reuse_match_count;
-      } else 
+      }
+      else
         to_set.k_nearest_features( matching_features, mapped, k_ );
-    } else
+    }
+    else
       to_set.k_nearest_features( matching_features, mapped, k_ );
-    
-    if( debug_flag()>=4 ) {
-      
+
+    if ( debug_flag()>=4 )
+    {
       vcl_cout << " From feature: ";
       (*fitr)->write( vcl_cout );
       vcl_cout << vcl_endl;
-      for( unsigned i=0; i<matching_features.size(); ++i ) {
+      for ( unsigned i=0; i<matching_features.size(); ++i ) {
         vcl_cout << " ###### " << i << " ###### " << vcl_endl;
         matching_features[i]->write(vcl_cout);
       }
     }
-      
+
 
     // find the one most similar
     double max_weight = -1;
@@ -130,16 +132,16 @@ compute_matches( rgrl_feature_set const&       from_set,
 
       double wgt = (*i)->absolute_signature_weight( mapped );
 
-      if ( wgt > max_weight ) {
-        
-        // more similar feature is always preferred. 
+      if ( wgt > max_weight )
+      {
+        // more similar feature is always preferred.
         max_weight = wgt;
         min_eucl_dist = eucl_dist;
         max_feature = *i;
-
-      } else if ( vcl_abs( wgt-max_weight) < 1e-12 && eucl_dist < min_eucl_dist ) {
-        
-        // when the weights are approximately the same, 
+      }
+      else if ( vcl_abs( wgt-max_weight) < 1e-12 && eucl_dist < min_eucl_dist )
+      {
+        // when the weights are approximately the same,
         // but one point is closer than the other,
         // use the closer point
         max_weight = wgt;
@@ -161,11 +163,11 @@ compute_matches( rgrl_feature_set const&       from_set,
     //
     //matches_sptr->add_feature_and_matches( *fitr, mapped, pruned_set );
 
-    if ( max_feature ) {
-      
+    if ( max_feature )
+    {
       matches_sptr->add_feature_and_match( *fitr, mapped, max_feature, max_weight );
-      DebugMacro( 4, " ====== Final Choice ====== \n" );
-      if( debug_flag() >=4 ) {
+      DebugMacro( 4, " ====== Final Choice ======\n" );
+      if ( debug_flag() >=4 ) {
         max_feature->write(vcl_cout);
         vcl_cout << vcl_endl;
       }
@@ -176,7 +178,7 @@ compute_matches( rgrl_feature_set const&       from_set,
 
   // store xform
   prev_xform_ = current_view.xform_estimate();
-  
+
   return matches_sptr;
 }
 
@@ -197,7 +199,7 @@ add_one_flipped_match( rgrl_match_set_sptr&      inv_set,
   rgrl_feature_sptr mapped = from->transform( *inverse_xform );
 
   // check mapped
-  if( !validate( mapped, current_view.from_image_roi() ) )
+  if ( !validate( mapped, current_view.from_image_roi() ) )
     return;
 
   // for consistent behavior,
@@ -245,23 +247,22 @@ add_one_flipped_match( rgrl_match_set_sptr&      inv_set,
     rgrl_feature_sptr const& one_fea = dist_nodes[i].itr_->from_; // from is reversed as to
     double wgt = one_fea->absolute_signature_weight( mapped );
 
-    if ( wgt > max_weight ) {
-      
-      // more similar feature is always preferred. 
+    if ( wgt > max_weight )
+    {
+      // more similar feature is always preferred.
       max_weight = wgt;
       min_eucl_dist = eucl_dist;
       max_feature = one_fea;
-
-    } else if ( vcl_abs( wgt-max_weight) < 1e-12 && eucl_dist < min_eucl_dist ) {
-      
-      // when the weights are approximately the same, 
+    }
+    else if ( vcl_abs( wgt-max_weight) < 1e-12 && eucl_dist < min_eucl_dist )
+    {
+      // when the weights are approximately the same,
       // but one point is closer than the other,
       // use the closer point
       max_weight = wgt;
       min_eucl_dist = eucl_dist;
       max_feature = one_fea;
-    }        
-
+    }
   }
 
   // add matches

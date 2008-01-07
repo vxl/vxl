@@ -1,5 +1,5 @@
 // This is brl/bseg/vpro/vpro_frame_diff_params.cxx
-#include <vpro/vpro_frame_diff_params.h>
+#include "vpro_frame_diff_params.h"
 //:
 // \file
 // See vpro_frame_diff_params.h

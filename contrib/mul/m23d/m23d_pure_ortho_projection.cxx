@@ -1,9 +1,9 @@
+#include "m23d_pure_ortho_projection.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief Extracts pure rotation/projection component of 2x3 projection matrix P
 
-#include <m23d/m23d_pure_ortho_projection.h>
 #include <vnl/algo/vnl_svd.h>
 
 //: Extracts pure rotation/projection component of 2x3 projection matrix P

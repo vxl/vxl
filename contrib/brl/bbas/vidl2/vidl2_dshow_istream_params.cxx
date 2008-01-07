@@ -1,5 +1,6 @@
 // This is brl/bbas/vidl2/vidl2_dshow_istream_params.cxx
 //=========================================================================
+#include "vidl2_dshow_istream_params.h"
 //:
 // \file
 // \brief  DirectShow input stream parameter block.
@@ -8,7 +9,6 @@
 //
 //=========================================================================
 
-#include <vidl2/vidl2_dshow_istream_params.h>
 #include <vidl2/vidl2_dshow.h>
 
 #include <vcl_iostream.h>

@@ -1,5 +1,5 @@
 // This is brl/bmvl/brct/brct_plane_sweeper_params.cxx
-#include <brct/brct_plane_sweeper_params.h>
+#include "brct_plane_sweeper_params.h"
 //:
 // \file
 // See brct_plane_sweeper_params.h

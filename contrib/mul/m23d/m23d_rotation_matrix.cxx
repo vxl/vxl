@@ -1,9 +1,9 @@
+#include "m23d_rotation_matrix.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief Generate pure 3x3 rotation matrices
 
-#include <m23d/m23d_rotation_matrix.h>
 #include <vcl_cmath.h>
 
 //: Generate 3x3 matrix which applies a rotation about the x axis

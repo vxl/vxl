@@ -1,5 +1,5 @@
 // This is gel/vifa/vifa_histogram.cxx
-#include <vifa/vifa_histogram.h>
+#include "vifa_histogram.h"
 //:
 // \file
 #include <vcl_algorithm.h>
