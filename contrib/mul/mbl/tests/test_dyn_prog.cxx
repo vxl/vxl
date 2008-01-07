@@ -5,9 +5,9 @@
 #include <mbl/mbl_combination.h>
 #include <vnl/vnl_random.h>
 
-inline int mbl_abs(int i) { return (i>=0?i:-i); }
+static inline int mbl_abs(int i) { return i>=0 ? i : -i; }
 
-double dp_cost1(const vnl_matrix<double>& W, 
+double dp_cost1(const vnl_matrix<double>& W,
                 const vnl_vector<double>& pair_cost,
                 const vcl_vector<unsigned>& x)
 {
@@ -19,7 +19,7 @@ double dp_cost1(const vnl_matrix<double>& W,
   return sum;
 }
 
-double dp_cost2(const vnl_matrix<double>& W, 
+double dp_cost2(const vnl_matrix<double>& W,
                 const vnl_vector<double>& pair_cost,
                 const vcl_vector<unsigned>& x)
 {
@@ -32,7 +32,7 @@ double dp_cost2(const vnl_matrix<double>& W,
   return sum;
 }
 
-double global_optima1(const vnl_matrix<double>& W, 
+double global_optima1(const vnl_matrix<double>& W,
                       const vnl_vector<double>& pair_cost,
                       vcl_vector<int>& x)
 {
@@ -43,7 +43,7 @@ double global_optima1(const vnl_matrix<double>& W,
   vcl_vector<unsigned> ux = mbl_combination_begin(nd);
   vcl_vector<unsigned> best_x=ux;
   double best_cost = dp_cost1(W,pair_cost,ux);
-  do 
+  do
   {
     double cost = dp_cost1(W,pair_cost,ux);
     if (cost<best_cost) { best_cost=cost; best_x=ux; }
@@ -51,9 +51,10 @@ double global_optima1(const vnl_matrix<double>& W,
 
   x.resize(n);
   for (unsigned i=0;i<n;++i) x[i]=best_x[i];
+  return best_cost;
 }
 
-double global_optima2(const vnl_matrix<double>& W, 
+double global_optima2(const vnl_matrix<double>& W,
                       const vnl_vector<double>& pair_cost,
                       vcl_vector<int>& x)
 {
@@ -64,7 +65,7 @@ double global_optima2(const vnl_matrix<double>& W,
   vcl_vector<unsigned> ux = mbl_combination_begin(nd);
   vcl_vector<unsigned> best_x=ux;
   double best_cost = dp_cost2(W,pair_cost,ux);
-  do 
+  do
   {
     double cost = dp_cost2(W,pair_cost,ux);
     if (cost<best_cost) { best_cost=cost; best_x=ux; }
@@ -72,6 +73,7 @@ double global_optima2(const vnl_matrix<double>& W,
 
   x.resize(n);
   for (unsigned i=0;i<n;++i) x[i]=best_x[i];
+  return best_cost;
 }
 
 
@@ -82,7 +84,7 @@ void test_dyn_prog1(unsigned n, unsigned n_states)
   // Generate some random data
   vnl_random rand1(473849);
   vnl_matrix<double> W(n,n_states);
-  for (unsigned i=0;i<n;++i) 
+  for (unsigned i=0;i<n;++i)
     for (unsigned j=0;j<n_states;++j)
       W(i,j)=rand1.drand64(0,1);
 
@@ -112,7 +114,7 @@ void test_dyn_prog_loop(unsigned n, unsigned n_states)
   // Generate some random data
   vnl_random rand1(473349);
   vnl_matrix<double> W(n,n_states);
-  for (unsigned i=0;i<n;++i) 
+  for (unsigned i=0;i<n;++i)
     for (unsigned j=0;j<n_states;++j)
       W(i,j)=rand1.drand64(0,1);
 
