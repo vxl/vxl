@@ -1,7 +1,4 @@
-#ifndef vgui_range_map_params_cxx_
-#define vgui_range_map_params_cxx_
-
-#include <vgui/vgui_range_map_params.h>
+#include "vgui_range_map_params.h"
 
 vcl_vector<vcl_string> minit()
 {
@@ -12,5 +9,3 @@ vcl_vector<vcl_string> minit()
 }
 
 vcl_vector<vcl_string> vgui_range_map_params::bmap = minit();
-
-#endif // vgui_range_map_params_cxx_

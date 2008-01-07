@@ -1,16 +1,13 @@
-#ifndef rgrl_feature_set_bins_2d_cxx_
-#define rgrl_feature_set_bins_2d_cxx_
+#include "rgrl_feature_set_bins_2d.h"
 //:
 // \file
 // \author Amitha Perera
 // \date   Feb 2003
 //
 // \verbatim
-//  modifications:
-//  April 2004 Charlene: allow the use of kd_tree and user-defined bin_size.
+//  Modifications:
+//   April 2004 Charlene: allow the use of kd_tree and user-defined bin_size.
 // \endverbatim
-
-#include <rgrl/rgrl_feature_set_bins_2d.h>
 
 #include <vcl_cassert.h>
 
@@ -34,9 +31,9 @@ rgrl_feature_set_bins_2d( feature_vector const& features,
   typedef vnl_vector_fixed<double, 2> point_type;
   point_type min;
   point_type max;
- 
+
   // if no features
-  if( features.empty() ) {
+  if ( features.empty() ) {
     min.fill( 0 );
     max.fill( bin_size );
 
@@ -153,4 +150,3 @@ type() const
   return *feature_type_;
 }
 
-#endif // rgrl_feature_set_bins_2d_cxx_
