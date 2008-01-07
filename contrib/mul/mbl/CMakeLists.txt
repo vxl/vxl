@@ -89,7 +89,7 @@ SET(mbl_sources
   mbl_linear_interpolator.cxx          mbl_linear_interpolator.h
   mbl_minimum_spanning_tree.cxx        mbl_minimum_spanning_tree.h
   mbl_stepwise_regression.cxx          mbl_stepwise_regression.h
-
+  mbl_dyn_prog.cxx                     mbl_dyn_prog.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates mbl_sources)
