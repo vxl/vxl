@@ -1,12 +1,12 @@
+#include "bgui_bmrf_soview2D.h"
 //:
 // \file
-#include "bgui_bmrf_soview2D.h"
-#include <bmrf/bmrf_epi_seg.h>
-#include <bmrf/bmrf_epi_point_sptr.h>
-#include <bmrf/bmrf_epi_point.h>
+#include <bseg/bmrf/bmrf_epi_seg.h>
+#include <bseg/bmrf/bmrf_epi_point_sptr.h>
+#include <bseg/bmrf/bmrf_epi_point.h>
 
 #include <vcl_iostream.h>
-#include <vcl_limits.h> 
+#include <vcl_limits.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
 
@@ -22,13 +22,13 @@ bgui_bmrf_epi_seg_soview2D::bgui_bmrf_epi_seg_soview2D( bmrf_epi_seg_sptr const 
                                                         bool intensity )
  : seg_sptr_(seg), intensity_view_ (NULL)
 {
-  if(intensity)
+  if (intensity)
     intensity_view_ = make_intensity_view(epipole);
 }
 
 
 //: Destructor
-bgui_bmrf_epi_seg_soview2D::~bgui_bmrf_epi_seg_soview2D() 
+bgui_bmrf_epi_seg_soview2D::~bgui_bmrf_epi_seg_soview2D()
 {
   delete intensity_view_;
 }
@@ -38,12 +38,12 @@ bgui_bmrf_epi_seg_soview2D::~bgui_bmrf_epi_seg_soview2D()
 void
 bgui_bmrf_epi_seg_soview2D::draw() const
 {
-  if(intensity_view_)
+  if (intensity_view_)
     intensity_view_->draw();
 
   glBegin(GL_LINE_STRIP);
   vcl_vector<bmrf_epi_point_sptr>::const_iterator p_itr;
-  for(p_itr = seg_sptr_->begin(); p_itr != seg_sptr_->end(); ++p_itr)
+  for (p_itr = seg_sptr_->begin(); p_itr != seg_sptr_->end(); ++p_itr)
     glVertex2f((*p_itr)->x(), (*p_itr)->y());
   glEnd();
 }
@@ -61,17 +61,18 @@ bgui_bmrf_epi_seg_soview2D::print(vcl_ostream&s) const
 float
 bgui_bmrf_epi_seg_soview2D::distance_squared(float x, float y) const
 {
-  if(seg_sptr_->n_pts() == 0) return vcl_numeric_limits<float>::infinity();
-  if(seg_sptr_->n_pts() == 1){
+  if (seg_sptr_->n_pts() == 0)
+    return vcl_numeric_limits<float>::infinity();
+  if (seg_sptr_->n_pts() == 1) {
     bmrf_epi_point_sptr pt = *(seg_sptr_->begin());
     float dx = x-pt->x();
     float dy = y-pt->y();
     return dx*dx + dy*dy;
   }
-  
+
   float dd = -1.0f;
   vcl_vector<bmrf_epi_point_sptr>::const_iterator p_itr;
-  for(p_itr = seg_sptr_->begin(); (p_itr+1) != seg_sptr_->end(); ++p_itr){
+  for (p_itr = seg_sptr_->begin(); (p_itr+1) != seg_sptr_->end(); ++p_itr) {
     float nd = vgl_distance2_to_linesegment(float((*p_itr)->x()),     float((*p_itr)->y()),
                                             float((*(p_itr+1))->x()), float((*(p_itr+1))->y()),
                                             x, y);
@@ -90,7 +91,7 @@ bgui_bmrf_epi_seg_soview2D::get_centroid(float* x, float* y) const
   *y = 0;
   int n=0;
   vcl_vector<bmrf_epi_point_sptr>::const_iterator p_itr;
-  for(p_itr = seg_sptr_->begin(); p_itr != seg_sptr_->end(); ++p_itr, ++n){
+  for (p_itr = seg_sptr_->begin(); p_itr != seg_sptr_->end(); ++p_itr, ++n) {
     *x += (*p_itr)->x();
     *y += (*p_itr)->y();
   }
@@ -107,13 +108,13 @@ bgui_bmrf_epi_seg_soview2D::translate(float x, float y)
   // WARNING - This updates x,y position of each point but DOES NOT
   //           adjust any other dependent variables such as s and alpha
   vcl_vector<bmrf_epi_point_sptr>::const_iterator p_itr;
-  for(p_itr = seg_sptr_->begin(); p_itr != seg_sptr_->end(); ++p_itr){
+  for (p_itr = seg_sptr_->begin(); p_itr != seg_sptr_->end(); ++p_itr) {
     (*p_itr)->set( (*p_itr)->x()+x, (*p_itr)->y()+y );
   }
 }
 
 
-vgui_soview2D_image* 
+vgui_soview2D_image*
 bgui_bmrf_epi_seg_soview2D::make_intensity_view(const bmrf_epipole& epipole) const
 {
   double min_a = seg_sptr_->min_alpha(), max_a = seg_sptr_->max_alpha();
@@ -131,15 +132,15 @@ bgui_bmrf_epi_seg_soview2D::make_intensity_view(const bmrf_epipole& epipole) con
     int ui = (int)(u+0.5), vi = (int)(v+0.5);
     min_u = vcl_min(min_u, ui);  max_u = vcl_max(max_u, ui);
     min_v = vcl_min(min_v, vi);  max_v = vcl_max(max_v, vi);
-    
+
     epipole.to_img_coords(s+rd, a, u, v);
     ui = (int)(u+0.5); vi = (int)(v+0.5);
     min_u = vcl_min(min_u, ui);  max_u = vcl_max(max_u, ui);
     min_v = vcl_min(min_v, vi);  max_v = vcl_max(max_v, vi);
   }
-  
-  vil_image_view< vxl_byte> img( max_u - min_u +1, 
-                                 max_v - min_v +1, 
+
+  vil_image_view< vxl_byte> img( max_u - min_u +1,
+                                 max_v - min_v +1,
                                  4 );
   img.fill(0);
   for (double a = min_a; a<=max_a; a+=da)
@@ -150,7 +151,7 @@ bgui_bmrf_epi_seg_soview2D::make_intensity_view(const bmrf_epipole& epipole) con
     vxl_byte ri = vxl_byte(seg_sptr_->right_int(a)*255.0);
     double s = seg_sptr_->s(a);
 
-    for(int i=0; i<=(int)ld; ++i){
+    for (int i=0; i<=(int)ld; ++i) {
       double u,v;
       epipole.to_img_coords(s-i, a, u, v);
       int ui = (int)(u+0.5)-min_u, vi = (int)(v+0.5)-min_v;
@@ -159,7 +160,7 @@ bgui_bmrf_epi_seg_soview2D::make_intensity_view(const bmrf_epipole& epipole) con
       img(ui,vi,2) = li;
       img(ui,vi,3) = 255;
     }
-    for(int i=0; i<=(int)rd; ++i){
+    for (int i=0; i<=(int)rd; ++i) {
       double u,v;
       epipole.to_img_coords(s+i, a, u, v);
       int ui = (int)(u+0.5)-min_u, vi = (int)(v+0.5)-min_v;
@@ -168,8 +169,6 @@ bgui_bmrf_epi_seg_soview2D::make_intensity_view(const bmrf_epipole& epipole) con
       img(ui,vi,2) = ri;
       img(ui,vi,3) = 255;
     }
-    
   }
   return new vgui_soview2D_image((float)min_u, (float)min_v, img, true);
-  
 }

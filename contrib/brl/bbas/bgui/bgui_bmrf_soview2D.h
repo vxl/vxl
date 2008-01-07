@@ -15,8 +15,8 @@
 
 #include <vcl_iosfwd.h>
 
-#include <bmrf/bmrf_epi_seg_sptr.h>
-#include <bmrf/bmrf_epipole.h>
+#include <bseg/bmrf/bmrf_epi_seg_sptr.h>
+#include <bseg/bmrf/bmrf_epipole.h>
 #include <vgui/vgui_soview2D.h>
 
 //: This is a soview2D for a bmrf_epi_seg with a smart pointer back to the bmrf_epi_seg
@@ -24,7 +24,7 @@ class bgui_bmrf_epi_seg_soview2D : public vgui_soview2D
 {
  public:
   //: Constructor - creates a default view
-  bgui_bmrf_epi_seg_soview2D( bmrf_epi_seg_sptr const & seg, 
+  bgui_bmrf_epi_seg_soview2D( bmrf_epi_seg_sptr const & seg,
                               const bmrf_epipole& epipole = bmrf_epipole(),
                               bool intensity = false);
 
@@ -54,7 +54,7 @@ class bgui_bmrf_epi_seg_soview2D : public vgui_soview2D
 
   vgui_soview2D_image* make_intensity_view(const bmrf_epipole& epipole) const;
 
-protected:
+ protected:
   //: Smart pointer to a bmrf_epi_seg
   bmrf_epi_seg_sptr seg_sptr_;
 
