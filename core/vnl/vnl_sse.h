@@ -30,7 +30,10 @@
 //Try and use compiler instructions for forcing inlining if possible
 //Also instruction for aligning stack memory is compiler dependent
 #if defined(VCL_GCC)
-# define VNL_SSE_FORCE_INLINE __attribute__((always_inline)) inline
+// With attribute always_inline, gcc can give an error if a function
+// cannot be inlined, so it is disabled.  Problem seen on 64 bit
+// platforms with vcl_vector<vnl_rational>.
+# define VNL_SSE_FORCE_INLINE /* __attribute__((always_inline)) */ inline
 # define VNL_SSE_STACK_ALIGNED(x)  __attribute__((aligned(x)))
 #elif defined VCL_VC || defined VCL_ICC
 # define VNL_SSE_FORCE_INLINE __forceinline
