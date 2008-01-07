@@ -80,7 +80,7 @@ vil_image_view<T>::vil_image_view(vil_memory_chunk_sptr const& mem_chunk,
                << reinterpret_cast<const void*>(mem_chunk->data()) << ", size " << mem_chunk->size()
                << ", size of data type " << sizeof(T) << '\n';
     assert(top_left >= reinterpret_cast<const T*>(mem_chunk->data()) &&
-           top_left  < reinterpret_cast<const T*>(reinterpret_cast<const char*>(mem_chunk->data()) + mem_chunk->size()));
+           (mem_chunk->size()==0 || top_left  < reinterpret_cast<const T*>(reinterpret_cast<const char*>(mem_chunk->data()) + mem_chunk->size())) );
   }
 #endif
 }

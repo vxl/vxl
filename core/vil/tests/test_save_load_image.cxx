@@ -38,6 +38,7 @@
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
 #include <vil/vil_print.h>
+#include <vil/vil_plane.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_pixel_format.h>
@@ -47,12 +48,43 @@
 #endif
 
 
+
+//: false if the two values differ by more than tol.
+template <class T>
+inline bool my_comparison(T a, T b, T tol);
+
+
+// bool specific implementation. if tol is true, then equality is not important.
+template <>
+inline bool my_comparison(bool a, bool b, bool tol)
+{
+  return tol || a==b;
+}
+
+#if 0
+//: false if the two values differ by more than tol.
+template <>
+inline bool my_comparison(vxl_uint_32 a, vxl_uint_32 b, vxl_uint_32 tol)
+{
+  return vcl_abs((int)a-(int)b) <= tol;
+}
+#endif
+
+//: false if the two values differ by more than tol.
+template <class T>
+inline bool my_comparison(T a, T b, T tol)
+{
+  // handle unsigned types safely.
+  if (a>b) return  a-b <= tol;
+  else return b-a <= tol;
+}
+
 //: Test to see if all the pixels in two images are equal
 template <class T>
 bool test_image_equal(char const* type_name,
                       vil_image_view<T> const & image,
                       vil_image_view_base_sptr const& pimage2,
-                      bool exact = true)
+                      T tolerance = 0)
 {
   vil_image_view<T> image2 = *pimage2;
 
@@ -88,11 +120,13 @@ bool test_image_equal(char const* type_name,
     return false;
   }
 
+#if 0
   if (!exact) // no exact pixel match wanted
   {
     TEST("image headers are identical", true, true);
     return true;
   }
+#endif
   vcl_cout << "istep()=" << image2.istep() << ", jstep()=" << image2.jstep()
            << ", planestep()=" << image2.planestep() << '\n' << vcl_flush;
   TEST("istep is non-zero", image2.istep()==0, false);
@@ -115,7 +149,7 @@ bool test_image_equal(char const* type_name,
     {
       for (int i=0; i < sizex; ++i)
       {
-        if ( !(image(i,j,p) == image2(i,j,p)) )
+        if ( !my_comparison(image(i,j,p), image2(i,j,p), tolerance) )
         {
     #ifndef NDEBUG
           if (++bad < 20)
@@ -230,7 +264,7 @@ static bool create_grey_gif(const char* filename)
 template<class T>
 void vil_test_image_type(char const* type_name, // type for image to read and write
                          vil_image_view<T> const & image, // test image to save and restore
-                         bool exact = true,  // require read back image identical
+                         T tolerance = 0,  // require read back image identical
                          bool fail_save = false) // expect fail on save if true
 {
   vcl_cout << "=== Start testing " << type_name << " (" << sizeof(T)
@@ -272,7 +306,7 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
     return; // fatal error
 
   // STEP 3) Sanity check on the image that was read in
-  test_image_equal(type_name, image, image2, exact);
+  test_image_equal(type_name, image, image2, tolerance);
 
   // STEP 4) Load image as vil_image_resource + sanity check
   vil_image_resource_sptr image3 = vil_load_image_resource(fname.c_str());
@@ -376,6 +410,19 @@ vil_image_view<vxl_byte> CreateTest3planeImage(int wd, int ht)
   return image;
 }
 
+// create a 24 bit color test image, with 3 interleaved planes
+vil_image_view<vxl_byte> CreateTest3ComponentImage(int wd, int ht)
+{
+  vil_image_view<vxl_byte> image( wd, ht, 1, 3);
+  for (int i = 0; i < wd; i++)
+    for (int j = 0; j < ht; j++) {
+      image(i,j,0) = i%(1<<8);
+      image(i,j,1) = ((i-wd/2)*(j-ht/2)/16) % (1<<8);
+      image(i,j,2) = ((j/3)%(1<<8));
+    }
+  return image;
+}
+
 // create a float-pixel test image
 vil_image_view<float> CreateTestfloatImage(int wd, int ht)
 {
@@ -424,6 +471,7 @@ static void test_save_load_image()
 #endif
   vil_image_view<vxl_uint_32>         image32 = CreateTest32bitImage(sizex, sizey);
   vil_image_view<vxl_byte>            image3p = CreateTest3planeImage(sizex, sizey);
+  vil_image_view<vxl_byte>            image3c = CreateTest3ComponentImage(sizex, sizey);
   vil_image_view<float>               imagefloat = CreateTestfloatImage(sizex, sizey);
   vil_image_view<double>              imagedouble = CreateTestdoubleImage(sizex, sizey);
 
@@ -439,7 +487,9 @@ static void test_save_load_image()
   // JPEG
 #if HAS_JPEG
   // lossy format ==> not guaranteed to be identical (hence arg. 3 set to false)
-  vil_test_image_type("jpeg", image8, false);
+  vil_test_image_type("jpeg", image8, vxl_byte(45));
+  vil_test_image_type("jpeg", image3p, vxl_byte(65));
+  vil_test_image_type("jpeg", vil_plane(image3c, 0), vxl_byte(5));
 #if 0
   vil_test_image_type("jpeg", image16, false);
   vil_test_image_type("jpeg", image3p, false);
@@ -452,7 +502,7 @@ static void test_save_load_image()
     for (unsigned j=0;j<nj;++j)
       for (unsigned i=0;i<ni;++i) small_greyscale_image(i,j)=(i+j)*4;
 //    vil_print_all(vcl_cout, small_greyscale_image);
-    vil_test_image_type("jpeg", small_greyscale_image, false);
+    vil_test_image_type("jpeg", small_greyscale_image, vxl_byte(5));
     vcl_string out_path("test_save_load_jpeg.jpg");
     TEST("Saving JPEG",vil_save(small_greyscale_image, out_path.c_str()),true);
 

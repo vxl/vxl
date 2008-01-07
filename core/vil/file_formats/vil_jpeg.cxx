@@ -198,7 +198,7 @@ bool vil_jpeg_image::put_view(const vil_image_view_base &view,
   }
 
   // write each scanline
-  if (view2.planestep() == 1 || view2.nplanes() == 1)
+  if ((view2.planestep() == 1 || view2.nplanes() == 1) && view2.istep() == jc->jobj.input_components)
   {
     assert(view2.istep() > 0);
     assert(view2.istep() == jc->jobj.input_components); // bytes per pixel in the section
