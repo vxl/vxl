@@ -3,7 +3,7 @@
 !Attending
 Matt Leotta and Gamze Tunali @ Brown
 Fred Wheeler @ GE
-Amitha Perera, Ruddy Collins, Matt Turek @ Kitware
+Amitha Perera, Roddy Collins, Matt Turek @ Kitware
 Ian Scott @ Imorphics
 
 ! Threads
