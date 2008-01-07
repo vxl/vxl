@@ -1,7 +1,7 @@
 # Brown Markov Random Field library
 # brl/bseg/bmrf/CMakeLists.txt
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )
 
 SET(bmrf_sources

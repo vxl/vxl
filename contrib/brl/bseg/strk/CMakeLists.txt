@@ -1,7 +1,7 @@
 # segmentation tracking library
 # brl/bseg/strk/CMakeLists.txt
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )
 
 SET(strk_sources

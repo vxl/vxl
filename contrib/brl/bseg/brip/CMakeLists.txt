@@ -1,7 +1,7 @@
 # Brown image processing library
 # brl/bseg/brip/CMakeLists.txt
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
+INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR})
 
 SET(brip_sources
@@ -12,10 +12,10 @@ SET(brip_sources
    brip_vil_ops.h
    brip_para_cvrg_params.h   brip_para_cvrg_params.cxx
    brip_para_cvrg.h          brip_para_cvrg.cxx
-   brip_region_pixel.h       brip_region_pixel.cxx brip_region_pixel_sptr.h
-   brip_watershed_params.h   brip_watershed_params.cxx    
-   brip_watershed.h          brip_watershed.cxx    
-   brip_roi.h                brip_roi.cxx          brip_roi_sptr.h
+   brip_region_pixel.h       brip_region_pixel.cxx     brip_region_pixel_sptr.h
+   brip_watershed_params.h   brip_watershed_params.cxx
+   brip_watershed.h          brip_watershed.cxx
+   brip_roi.h                brip_roi.cxx              brip_roi_sptr.h
 )
 AUX_SOURCE_DIRECTORY(Templates brip_sources)
 
