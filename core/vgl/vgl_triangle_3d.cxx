@@ -18,7 +18,7 @@
 //  \date 21/6/2007
 
 // Define a file-scope vgl_nan constant
-static const double nan = vcl_sqrt(-1.0);
+static const double vgl_nan = vcl_sqrt(-1.0);
 static const double sqrteps = vcl_sqrt(vcl_numeric_limits<double>::epsilon());
 static const double pi = 3.14159265358979323846;
 
@@ -289,7 +289,7 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_line_intersection(
       //special case of line completely contained within the triangle
       if(vgl_triangle_3d_test_inside(line_p1, p1, p2, p3))
       {
-        i_pnt.set(nan, nan, nan);
+        i_pnt.set(vgl_nan, vgl_nan, vgl_nan);
         return Coplanar;
       }
       
@@ -606,7 +606,7 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
     if(vgl_triangle_3d_test_inside(a_p1, b_p1, b_p2, b_p3) ||
       vgl_triangle_3d_test_inside(b_p1, a_p1, a_p2, a_p3)) 
     {
-      i_line.set(vgl_point_3d<double> (nan, nan, nan),vgl_point_3d<double> (nan,nan,nan));
+      i_line.set(vgl_point_3d<double> (vgl_nan, vgl_nan, vgl_nan),vgl_point_3d<double> (vgl_nan,vgl_nan,vgl_nan));
       return Coplanar;
     }
 
@@ -1093,7 +1093,7 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
 //: Compute the line of intersection of the given triangle and plane
 //  The triangle is represented by its vertices \a p1, \a p2, \a p3
 //  \return intersection type
-//  \note an intersection line is not defined (vgl_nan) for a coplanar intersection
+//  \note an intersection line is not defined (vgl_vgl_nan) for a coplanar intersection
 vgl_triangle_3d_intersection_t vgl_triangle_3d_plane_intersection(
   const vgl_point_3d<double>& p1,
   const vgl_point_3d<double>& p2, 
@@ -1183,7 +1183,7 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_plane_intersection(
   }
   else //triangle lies in plane 
   {
-    i_pnt1.set(nan, nan, nan);
+    i_pnt1.set(vgl_nan, vgl_nan, vgl_nan);
     i_line.set(i_pnt1,i_pnt1);
     return Coplanar; 
   }
