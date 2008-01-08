@@ -48,6 +48,7 @@ SET( vgl_sources
   vgl_lineseg_test.h             vgl_lineseg_test.txx
   vgl_triangle_test.h            vgl_triangle_test.txx
   vgl_polygon_test.h             vgl_polygon_test.txx
+  vgl_triangle_3d.h              vgl_triangle_3d.cxx
 
   vgl_region_scan_iterator.h
   vgl_triangle_scan_iterator.h   vgl_triangle_scan_iterator.txx
