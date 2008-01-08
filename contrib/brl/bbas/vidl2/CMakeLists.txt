@@ -9,7 +9,6 @@ FIND_FILE (VIDEODEV_FOUND videodev.h /usr/include/linux/)
 
 CONFIGURE_FILE( ${vidl2_SOURCE_DIR}/vidl2_config.h.in
                 ${vidl2_BINARY_DIR}/vidl2_config.h )
-INCLUDE_DIRECTORIES( ${vxl_BINARY_DIR}/contrib/brl/bbas )
 
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
