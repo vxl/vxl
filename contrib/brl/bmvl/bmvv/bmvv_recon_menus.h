@@ -15,6 +15,7 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 #include <bmvv/dll.h>
+class vgui_menu;
 
 class bmvv_recon_menus
 {

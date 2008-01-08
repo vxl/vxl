@@ -14,7 +14,9 @@
 //   J.L. Mundy December 11, 2002    Initial version.
 // \endverbatim
 //-----------------------------------------------------------------------------
+
 #include <bmvv/dll.h>
+class vgui_menu;
 
 class bmvv_cal_menus
 {
