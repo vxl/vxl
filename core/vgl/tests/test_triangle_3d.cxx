@@ -127,7 +127,7 @@ inline void test_intersecting_degenerate_triangles1()
     { vgl_point_3d<double>(2, 1, 3), vgl_point_3d<double>(2, 1, 1), vgl_point_3d<double>(2, 1, -2) }    //Non-coplanar intersecting
   };
   
-  char* degen_desc[NUM_TESTS] = { 
+  const char* degen_desc[NUM_TESTS] = { 
     "Coplanar non-intersecting",
     "Coplanar intersecting",
     "Coplanar non-intersecting edge collinear",
@@ -152,7 +152,7 @@ inline void test_intersecting_degenerate_triangles1()
     { 0, 1, 2 }  // all vertices distinct
   };
   
-  char* degen_tests_desc[3] = {
+  const char* degen_tests_desc[3] = {
     "point",
     "one vertex distinct",
     "all vertices distinct"
