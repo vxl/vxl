@@ -83,7 +83,7 @@ template <class T>
 bool test_image_equal(char const* type_name,
                       vil_image_view<T> const & image,
                       vil_image_view_base_sptr const& pimage2,
-                      T tolerance = 0)
+                      T tolerance = 0, unsigned max_bad_pixels = 0)
 {
   vil_image_view<T> image2 = *pimage2;
 
@@ -141,7 +141,7 @@ bool test_image_equal(char const* type_name,
     vcl_cout << "*** Something is terribly wrong with image2's jstep() ***\n";
     return false;
   }
-  int bad = 0;
+  unsigned bad = 0;
   for (int p=0; p < planes; ++p)
   {
     for (int j=0; j < sizey; ++j)
@@ -170,8 +170,9 @@ bool test_image_equal(char const* type_name,
 #ifdef NDEBUG
   if (bad) vcl_cout << vcl_endl;
 #endif
-  TEST("pixelwise comparison", bad, 0);
-  if (bad)
+  TEST_NEAR("pixelwise comparison", bad, 0, max_bad_pixels);
+
+  if (bad > max_bad_pixels)
   {
     vcl_cout << type_name << ": number of unequal pixels: "  << bad
              << " out of " << planes *sizex * sizey << vcl_endl;
@@ -267,6 +268,7 @@ template<class T>
 void vil_test_image_type(char const* type_name, // type for image to read and write
                          vil_image_view<T> const & image, // test image to save and restore
                          T tolerance = 0,  // require read back image identical
+                         unsigned max_bad_pixels = 0,  // require read back image identical
                          bool fail_save = false) // expect fail on save if true
 {
   vcl_cout << "=== Start testing " << type_name << " (" << sizeof(T)
@@ -308,7 +310,7 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
     return; // fatal error
 
   // STEP 3) Sanity check on the image that was read in
-  test_image_equal(type_name, image, image2, tolerance);
+  test_image_equal(type_name, image, image2, tolerance, max_bad_pixels);
 
   // STEP 4) Load image as vil_image_resource + sanity check
   vil_image_resource_sptr image3 = vil_load_image_resource(fname.c_str());
@@ -488,10 +490,11 @@ static void test_save_load_image()
 
   // JPEG
 #if HAS_JPEG
-  // lossy format ==> not guaranteed to be identical (hence arg. 3 set to false)
-  vil_test_image_type("jpeg", image8, vxl_byte(45));
-  vil_test_image_type("jpeg", image3p, vxl_byte(65));
-  vil_test_image_type("jpeg", vil_plane(image3c, 0), vxl_byte(5));
+  // lossy format ==> not guaranteed to be identical hence arg 3 and 4 set
+  // to large tolerance.
+  vil_test_image_type("jpeg", image8, vxl_byte(40), 5);
+  vil_test_image_type("jpeg", image3p, vxl_byte(65), 300);
+  vil_test_image_type("jpeg", vil_plane(image3c, 0), vxl_byte(4), 5);
 #if 0
   vil_test_image_type("jpeg", image16, false);
   vil_test_image_type("jpeg", image3p, false);
