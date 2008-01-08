@@ -48,7 +48,6 @@
 #endif
 
 
-
 //: false if the two values differ by more than tol.
 template <class T>
 inline bool my_comparison(T a, T b, T tol);
@@ -100,7 +99,7 @@ bool test_image_equal(char const* type_name,
   if (!image2)
   {
     vcl_cout << "read back image type has pixel type " << pimage2->pixel_format()
-             << " instead of (as written) " << image.pixel_format() << '\n' << vcl_flush;
+             << " instead of (as written) " << image.pixel_format() << vcl_endl;
     return false;
   }
 
@@ -108,7 +107,7 @@ bool test_image_equal(char const* type_name,
   if (sizex != sizex2 || sizey != sizey2)
   {
     vcl_cout << type_name << ": sizes are " << sizex2 << " x " << sizey2
-             << " instead of " << sizex << " x " << sizey << '\n' << vcl_flush;
+             << " instead of " << sizex << " x " << sizey << vcl_endl;
     return false;
   }
 
@@ -116,7 +115,7 @@ bool test_image_equal(char const* type_name,
   if (planes != planes2)
   {
     vcl_cout << type_name << ": nplanes are " << planes2
-             << " instead of " << planes << '\n' << vcl_flush;
+             << " instead of " << planes << vcl_endl;
     return false;
   }
 
@@ -128,7 +127,7 @@ bool test_image_equal(char const* type_name,
   }
 #endif
   vcl_cout << "istep()=" << image2.istep() << ", jstep()=" << image2.jstep()
-           << ", planestep()=" << image2.planestep() << '\n' << vcl_flush;
+           << ", planestep()=" << image2.planestep() << vcl_endl;
   TEST("istep is non-zero", image2.istep()==0, false);
   TEST_NEAR("|istep| is at most 3 x height", image2.istep(), 0.0, 3*sizey2);
   TEST("jstep is non-zero", image2.jstep()==0, false);
@@ -168,11 +167,14 @@ bool test_image_equal(char const* type_name,
     }
   }
 
+#ifdef NDEBUG
+  if (bad) vcl_cout << vcl_endl;
+#endif
   TEST("pixelwise comparison", bad, 0);
   if (bad)
   {
     vcl_cout << type_name << ": number of unequal pixels: "  << bad
-             << " out of " << planes *sizex * sizey << '\n' << vcl_flush;
+             << " out of " << planes *sizex * sizey << vcl_endl;
     return false;
   }
   else
