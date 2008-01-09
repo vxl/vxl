@@ -9,26 +9,61 @@ Ian Scott @ Imorphics
 ! Threads
 
 Brief description of three approaches
-1: Locks and threads. These are the low level threading approaches. They are not composable - which precludes spreading them liberally throughout VXL. boost/threads was used as the basis for the design in the C++09 standard.
-2: TBB / OpenMP. These split for loops into tasks running each task on a thread pool. TBB is designed for C++ and can handle multiple tasks at multiple levels of the code hierarchy - unlike OpenMP. This omission precludes OpenMP from being used liberally throughout VXL.
-3: CSP / MPI. Message passing approaches. No threads share writable memory, or other contensious resources. Has the best academic pedigree, although CSP has stagnated for a while.
+
+1: Locks and threads. These are the low level threading
+  approaches. They are not composable - which precludes spreading them
+  liberally throughout VXL. boost/threads was used as the basis for
+  the design in the C++09 standard.
+2: TBB / OpenMP. These split for loops into tasks running each task on
+  a thread pool. TBB is designed for C++ and can handle multiple tasks
+  at multiple levels of the code hierarchy - unlike OpenMP. This
+  omission precludes OpenMP from being used liberally throughout VXL.
+3: CSP / MPI. Message passing approaches. No threads share writable
+  memory, or other contensious resources. Has the best academic
+  pedigree, although CSP has stagnated for a while.
 
 
-Ian wants to bring in boost threads into vcl in anticipation of the c++09 standard. Then  use a version of TBB which sits on top of that. Imorphics is interested in running programs efficiently on multi-core chips. We need to move from running n programs on a single server to running one program with n tasks/threads, in order to reduce our program's running time and to avoid being limited by the memory IO bottleneck. Our program structure will remain largely sequential - in particular due to the use of fundamentally sequential non-linear optimisation algorithms. Initially at least, we can only think of a few VXL functions that we would like to multi-task. Most the the parallelism would happen in out private code.
+Ian wants to bring in boost threads into vcl in anticipation of the
+c++09 standard. Then use a version of TBB which sits on top of
+that. Imorphics is interested in running programs efficiently on
+multi-core chips. We need to move from running n programs on a single
+server to running one program with n tasks/threads, in order to reduce
+our program's running time and to avoid being limited by the memory IO
+bottleneck. Our program structure will remain largely sequential - in
+particular due to the use of fundamentally sequential non-linear
+optimisation algorithms. Initially at least, we can only think of a
+few VXL functions that we would like to multi-task. Most the the
+parallelism would happen in out private code.
 
-Amitha and Matt L. independently want to build a program based on strategies of algorithm blocks to do video processing. CSP approaches are attractive here, such that each block is independent and by having large independent blocks that communicate over CSP.
+Amitha and Matt L. independently want to build a program based on
+strategies of algorithm blocks to do video processing. CSP approaches
+are attractive here, such that each block is independent and by having
+large independent blocks that communicate over CSP.
 
 ! VXL mods with consensus.
 
-*Bring all bits of boost that look like the TR1 or C++09 into vcl.  We anticipate these will be in the standard, and can have vcl start tracking them now.
+*Bring all bits of boost that look like the TR1 or C++09 into vcl.  We
+ anticipate these will be in the standard, and can have vcl start
+ tracking them now.
 
 ! Other VXL mods for which there is interest, but not yet consensus.
 
-*Bring in other bits of boost into v3p as might usefully be used by core.
-*Get rid of horrible workarounds for VC6 and BCC, dropping support for these compilers
+*Bring in other bits of boost into v3p as might usefully be used by
+ core. Some pieces that were mentioned: boost::function and boost::bind.
+
+*Get rid of horrible workarounds for VC6 and BCC, dropping support for
+ these compilers
+
 *vnl_name -> namespaces
-*Import contrib/libs to core (such as rpl/*, mul/vil3d, gel/vpgl (in gel, but worked on by Brown))
+
+*Import contrib/libs to core (such as rpl/*, mul/vil3d, gel/vpgl (in
+ gel, but worked on by Brown))
+
 *Branch VXL2.0 for some or all of this stuff.
+
+*Upgrading chunks of libraries in vxl should be done with a concrete
+ proposal for these blocks of libraries. (Like the vil->vil2 update.)
+ Since stuff works now, there is not much motivation for a "rewrite".
 
 ! VXL Book.
 People are interested. No action.
