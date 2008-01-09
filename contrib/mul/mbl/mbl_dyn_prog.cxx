@@ -1,16 +1,13 @@
-
 #include "mbl_dyn_prog.h"
-#include <vcl_cassert.h>
+//:
+// \file
+
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <vcl_algorithm.h> // for std::min() & std::max()
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_matrix.h>
-#include <mbl/mbl_index_sort.h>
-
-#include <vcl_cstdlib.h>
-#include <vcl_cmath.h>
 
 //=======================================================================
 
@@ -34,16 +31,16 @@ mbl_dyn_prog::~mbl_dyn_prog()
 //: Construct path from links_, assuming it ends at end_state
 void mbl_dyn_prog::construct_path(vcl_vector<int>& x, int end_state)
 {
-  int n = links_.rows()+1;
+  unsigned int n = links_.rows();
   int ** b_data = links_.get_rows()-1;  // So that b_data[i] corresponds to i-th row
-  if (x.size()!=n) x.resize(n);
+  if (x.size()!=n+1) x.resize(n+1);
   int *x_data = &x[0];
-  x_data[n-1] = end_state;
-  for (int i=n-1;i>=1;--i)
+  x_data[n] = end_state;
+  for (unsigned int i=n; i>0; --i)
     x_data[i-1] = b_data[i][x_data[i]];
 }
 
-inline int mbl_abs(int i) { return (i>=0?i:-i); }
+static inline int mbl_abs(int i) { return i>=0 ? i : -i; }
 
 //=======================================================================
 //: Compute running costs for DP problem with costs W
@@ -51,8 +48,8 @@ inline int mbl_abs(int i) { return (i>=0?i:-i); }
 //  Size of c indicates maximum displacement between neighbouring
 //  states.
 //  If first_state>=0 then the first is constrained to that index value
-void mbl_dyn_prog::running_costs( 
-               const vnl_matrix<double>& W, 
+void mbl_dyn_prog::running_costs(
+               const vnl_matrix<double>& W,
                const vnl_vector<double>& pair_cost,
                int first_state)
 {
@@ -61,10 +58,10 @@ void mbl_dyn_prog::running_costs(
   const double * const* W_data = W.data_array();
   int max_d = pair_cost.size()-1;
 
-   // On completion b(i,j) shows the best prior state (ie at i) 
+   // On completion b(i,j) shows the best prior state (ie at i)
    // leading to state j at time i+1
   links_.resize(n-1,n_states);
-  int ** b_data = links_.get_rows()-1;  
+  int ** b_data = links_.get_rows()-1;
      // So that b_data[i] corresponds to i-th row
 
     // ci(j) is total cost to get to current state j
@@ -128,10 +125,10 @@ void mbl_dyn_prog::running_costs(
 //  If first_state>=0 then the first is constrained to that index value
 // \retval x  Optimal path
 // \return Total cost of given path
-double mbl_dyn_prog::solve(vcl_vector<int>& x, 
-               const vnl_matrix<double>& W, 
-               const vnl_vector<double>& pair_cost,
-               int first_state)
+double mbl_dyn_prog::solve(vcl_vector<int>& x,
+                           const vnl_matrix<double>& W,
+                           const vnl_vector<double>& pair_cost,
+                           int first_state)
 {
   running_costs(W,pair_cost,first_state);
 
@@ -157,11 +154,10 @@ double mbl_dyn_prog::solve(vcl_vector<int>& x,
 // Includes cost between x[0] and x[n-1] to ensure loop closure.
 // \retval x  Optimal path
 // \return Total cost of given path
-double mbl_dyn_prog::solve_loop(vcl_vector<int>& x, 
-                    const vnl_matrix<double>& W,
-                    const vnl_vector<double>& pair_cost)
+double mbl_dyn_prog::solve_loop(vcl_vector<int>& x,
+                                const vnl_matrix<double>& W,
+                                const vnl_vector<double>& pair_cost)
 {
-  int n = W.rows();
   int n_states = W.columns();
   int max_d = pair_cost.size()-1;
 
@@ -246,9 +242,9 @@ void mbl_dyn_prog::b_read(vsl_b_istream& bfs)
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "DerivedClass::load : ";
-    vcl_cerr << "Attempted to load object of type ";
-    vcl_cerr << name <<" into object of type " << is_a() << vcl_endl;
+    vcl_cerr << "DerivedClass::load :"
+             << " Attempted to load object of type "
+             << name <<" into object of type " << is_a() << vcl_endl;
     vcl_abort();
   }
 
@@ -260,8 +256,8 @@ void mbl_dyn_prog::b_read(vsl_b_istream& bfs)
       // vsl_b_read(bfs,data_); // example of data input
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mbl_dyn_prog &) \n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mbl_dyn_prog &)\n"
+               << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
@@ -274,7 +270,6 @@ void mbl_dyn_prog::b_read(vsl_b_istream& bfs)
 void vsl_b_write(vsl_b_ostream& bfs, const mbl_dyn_prog& b)
 {
     b.b_write(bfs);
-
 }
 
 //=======================================================================
@@ -284,7 +279,6 @@ void vsl_b_write(vsl_b_ostream& bfs, const mbl_dyn_prog& b)
 void vsl_b_read(vsl_b_istream& bfs, mbl_dyn_prog& b)
 {
     b.b_read(bfs);
-
 }
 
 //=======================================================================
