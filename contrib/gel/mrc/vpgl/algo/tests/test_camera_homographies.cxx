@@ -48,7 +48,7 @@ static void test_camera_homographies()
             ptp4.x(), -1.414, 0.001);
 // An  set of data corresponding to an actual image sequence
   //World plane derived from 3 world points
-  vgl_plane_3d<double> world_plane(-0.0585478, +0.685533, +0.725683, -10.9752);
+  vgl_plane_3d<double> world_plane(+0.0585478, -0.685533, -0.725683, +10.9752);
   vgl_point_3d<double> w0(34.89, -9.92, 27.31);
   vgl_point_3d<double> w1(48.92, -1.46, 20.45);
   vgl_point_3d<double> w2(48.5, -16.03, 34.18);

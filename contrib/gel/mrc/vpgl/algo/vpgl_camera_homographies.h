@@ -24,12 +24,7 @@ class vpgl_camera_homographies
   // world plane. The homography is computed by transforming the plane
   // to the X-Y plane and applying the inverse transformation to the camera.
   // Columns 0, 1, and 3 of the transformed camera matrix are extracted 
-  // to form the homography. There are two possible homographies:
-  // 1) the transformed plane normal is in the + Z direction;
-  // 2) the transformed plane normal is in the - Z direction.
-  // Both transformations exclude column 2 of the camera matrix.
-  // The plane transformation is defined so that the transformed
-  // plane normal is along the positive Z axis. 
+  // to form the homography. 
 
   //: create a plane projective transformation from the camera image plane to
   //  the specified plane
