@@ -9,14 +9,15 @@ int main(int argc, char* argv[])
 {
 #if 1
   char** my_argv = new char*[argc+1];
-  my_argv[0] = new char[13];
-  vcl_strcpy(my_argv[0], "--mfc-use-gl");
-  for (int i=0; i<argc; ++i)
+  my_argv[1] = new char[13];
+  vcl_strcpy(my_argv[1], "--mfc-use-gl");
+  my_argv[0] = argv[0];
+  for (int i=1; i<argc; ++i)
     my_argv[i+1] = argv[i];
 
    // Initialize the toolkit.
   vgui::init(++argc, my_argv);
-  delete [] my_argv[0];
+  delete [] my_argv[1];
   delete [] my_argv;
 #else
   vgui::init(argc, argv);
