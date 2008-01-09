@@ -6,10 +6,8 @@
 // \date 18 Dec 2007
 //
 
-#include <vcl_cstring.h>
 #include <vcl_string.h>
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
 
 #include <vxl_config.h> // for vxl_byte
 
@@ -21,7 +19,7 @@
 #include <vil3d/vil3d_print.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_image_resource.h>
-#include <vil/vil_pixel_format.h>
+#include <vil/vil_print.h>
 #include <vil3d/vil3d_property.h>
 
 #ifndef LEAVE_IMAGES_BEHIND
@@ -35,10 +33,8 @@ bool test_image_equal(char const* type_name,
                       vil3d_image_view<T> const & image,
                       float voxel_size[3],
                       vil3d_image_resource_sptr const& pimage2,
-
                       bool exact = true)
 {
-
   int sizex = image.ni();
   int sizey = image.nj();
   int planes = image.nplanes();
@@ -115,23 +111,17 @@ bool test_image_equal(char const* type_name,
              << " out of " << planes *sizex * sizey << '\n' << vcl_flush;
     return false;
   }
-  else
-    return true;
 
   if (voxel_size != 0)
   {
     float vs2[3];
     TEST("Voxel size provided", pimage2->get_property(vil3d_property_voxel_size, vs2), true);
-    TEST_NEAR("Voxel size i correct", vs2[0], voxel_size[0], 1e-4);
-    TEST_NEAR("Voxel size j correct", vs2[1], voxel_size[1], 1e-4);
-    TEST_NEAR("Voxel size k correct", vs2[2], voxel_size[2], 1e-4);
+    TEST_NEAR("Voxel size i correct", vs2[0], 0.001*voxel_size[0], 1e-4);
+    TEST_NEAR("Voxel size j correct", vs2[1], 0.001*voxel_size[1], 1e-4);
+    TEST_NEAR("Voxel size k correct", vs2[2], 0.001*voxel_size[2], 1e-4);
   }
-
-
-    
-
+  return true;
 }
-
 
 
 template<class T>
@@ -277,8 +267,6 @@ static void test_save_load_image()
 
   float voxel_size[3] = { 0.5, 2, 5 };
 
-
-
   vil3d_test_image_type("gipl", image8, voxel_size);
   vil3d_test_image_type("gipl", image16, voxel_size);
   vil3d_test_image_type("gipl", imageu16, voxel_size);
@@ -299,8 +287,6 @@ static void test_save_load_image()
   vil3d_test_image_type("v3i", image32, voxel_size);
   vil3d_test_image_type("v3i", imagefloat, voxel_size);
 #endif
-
-
 }
 
 TESTMAIN(test_save_load_image);
