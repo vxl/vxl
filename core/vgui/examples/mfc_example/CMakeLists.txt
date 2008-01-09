@@ -1,4 +1,4 @@
-# oxl/vgui/examples/mfc_example
+# core/vgui/examples/mfc_example
 
 SET(mfc_example_sources
  example_mfc.cpp     example_mfc.h    example_mfc.rc

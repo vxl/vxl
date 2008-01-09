@@ -57,7 +57,7 @@
 * }
 * \endverbatim
 *
-* There are more examples for VGUI on the VXL webpage and in oxl/vgui/examples.
+* There are more examples for VGUI on the VXL webpage and in vgui/examples.
 * Also xcv uses VGUI and you can find its code in oxl/xcv.
 *
 * \section Lead Developer
