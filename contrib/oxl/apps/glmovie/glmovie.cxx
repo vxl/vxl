@@ -43,7 +43,11 @@
 #include <oxp/oxp_vidl_mpeg_codec.h>
 #endif
 
-#include <GL/glut.h>
+#ifdef __APPLE__
+# include <glut.h>
+#else
+# include <GL/glut.h>
+#endif
 
 #include <oxp/ImageSequenceName.h>
 #include <oxp/GXFileVisitor.h>
