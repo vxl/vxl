@@ -26,7 +26,21 @@ void test_ortho_rigid_builder()
         C(2,c)=k*vcl_sqrt(1.0/3.0);
       }
 
+  vcl_cout<<"C="<<C<<vcl_endl;
+  vcl_cout<<"C.rows()="<<C.rows()<<vcl_endl;
+  vcl_cout<<"C.cols()="<<C.cols()<<vcl_endl;
+  
+  
   vnl_matrix<double> D=P*C;
+  
+  //vcl_cout<<"P="<<P<<vcl_endl;
+  //vcl_cout<<"P.rows()="<<P.rows()<<vcl_endl;
+  //vcl_cout<<"P.cols()="<<P.cols()<<vcl_endl;
+  
+  //vcl_cout<<"D="<<D<<vcl_endl;
+  //vcl_cout<<"D.rows()="<<D.rows()<<vcl_endl;
+  //vcl_cout<<"D.cols()="<<D.cols()<<vcl_endl;
+
 
   m23d_ortho_rigid_builder builder;
   builder.reconstruct(D);

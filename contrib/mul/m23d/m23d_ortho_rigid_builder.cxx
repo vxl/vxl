@@ -20,13 +20,13 @@
 void m23d_ortho_rigid_builder::reconstruct(const vnl_matrix<double>& P2D)
 {
   assert(P2D.rows()%2==0);
-  unsigned ns = P2D.rows()/2;
+  unsigned nf = P2D.rows()/2;
   unsigned np = P2D.cols();
 
   // Take copy of 2D points and remove CoG from each
   P2Dc_=P2D;
-  cog_.resize(ns);
-  for (unsigned i=0;i<ns;++i)
+  cog_.resize(nf);
+  for (unsigned i=0;i<nf;++i)
   {
     vnl_vector<double> row_x=P2D.get_row(2*i);
     vnl_vector<double> row_y=P2D.get_row(2*i+1);
@@ -42,38 +42,146 @@ void m23d_ortho_rigid_builder::reconstruct(const vnl_matrix<double>& P2D)
   // Use SVD to get first estimate of the projection/shape matrices
   // These are ambiguous up to a 3x3 affine transformation.
   vnl_svd<double> svd(P2Dc_);
-  P_.set_size(2*ns,3);
+  P_.set_size(2*nf,3);
   P3D_.set_size(3,np);
+  vnl_matrix<double> W(3,3);
+  W.fill(0);
+  
   for (unsigned i=0;i<3;++i)
   {
-    P_.set_column(i,svd.W(i)*svd.U().get_column(i));
-    P3D_.set_row(i,svd.V().get_column(i));
+    //P_.set_column(i,svd.W(i)*svd.U().get_column(i));
+    P_.set_column(i, svd.U().get_column(i) );
+    //U.set_column(i, svd.U().get_column(i) );
+    P3D_.set_row(i, svd.V().get_column(i) );
+    W(i,i)= vcl_sqrt( svd.W(i) );
   }
+  
+  
+  //vcl_cout<<"W= "<<W<<vcl_endl; 
+  //vcl_cout<<"P_.rows()= "<<P_.rows()<<vcl_endl; 
+  //vcl_cout<<"P_.cols()= "<<P_.cols()<<vcl_endl; 
+  //vcl_cout<<"P3D_.rows()= "<<P3D_.rows()<<vcl_endl; 
+  //vcl_cout<<"P3D_.cols()= "<<P3D_.cols()<<vcl_endl; 
+  
+  P_= P_*W;
+  P3D_= W*P3D_;
+  
+  //vcl_cout<<"P_.extract(2,3)= "<<P_.extract(2,3)<<vcl_endl;
+  //vcl_cout<<"P3D_.extract(3,5)= "<<P3D_.extract(3,5)<<vcl_endl;
+  
+  //using notation from orig paper
+  //ie 
+  //i QQt i=1
+  //j QQt j=1
+  //i QQt j=0
+  // find this matrix Q
+  vnl_matrix<double> Q;
+  find_correction_matrix( Q, P_);
+ 
+  // older method (still works fine!)
+  // uses fewer constraints
+  find_correction_matrix_alt( Q, P_);
+  
+/*
+  // apply correction
+  P_= P_*Q;
+  //P3D_= Q.transpose() * P3D_;
+  vnl_svd<double> Q_svd(Q);
+  P3D_=Q_svd.inverse() * P3D_;
+  
+  // align model frame with first frame
+  // Now need to apply an additional rotation so that the
+  // first projection matrix is approximately the identity.
+  vnl_matrix<double> P0=P_.extract(2,3);
+  vcl_cout<<"P0= "<<P0<<vcl_endl;
+  
+  // Compute a rotation matrix for this projection
+  // then update shape and
+  vnl_matrix<double> R0=m23d_rotation_from_ortho_projection(P0);
+  vcl_cout<<"R0= "<<R0<<vcl_endl;
+  P_= P_*R0;
+  P3D_=R0.transpose() * P3D_;
+*/
+  
+  
+
+  //apply correction + rotation at same time
+  
+  // Now need to apply an additional rotation so that the
+  // first projection matrix is approximately the identity.
+  vnl_matrix<double> P0=P_.extract(2,3)*Q;
+
+  //vcl_cout<<"P_.extract(2,3)= "<<P_.extract(2,3)<<vcl_endl;
+  //vcl_cout<<"Q= "<<Q<<vcl_endl;
+  //vcl_cout<<"P0= "<<P0<<vcl_endl;
+  
+  // Compute a rotation matrix for this
+  vnl_matrix<double> R=m23d_rotation_from_ortho_projection(P0);
+
+  vcl_cout<<"P0*Rt\n"<<P0*R.transpose()<<vcl_endl;
+  // Apply inverse so that P.G gives unit projection
+  Q=Q*R.transpose();
+
+  // Apply the correction matrix
+  P_=P_*Q;
+  vnl_svd<double> Q_svd(Q);
+  P3D_=Q_svd.inverse() * P3D_;
+
+  
+
+  // Disambiguate the ambiguity in the sign of the z ordinates
+  // First non-zero element should be negative.
+  // nb mainly for benefit of test program!
+  for (unsigned i=0;i<np;++i)
+  {
+    if (P3D_(2,i)<0) break;
+    if (P3D_(2,i)>0)
+    {
+      // Flip sign of z elements
+      vcl_cout<<"flipping z coords!"<<vcl_endl;
+      for (unsigned j=0;j<np;++j) P3D_(2,j)*=-1;
+      for (unsigned j=0;j<2*nf;++j) P_(j,2)*=-1;
+      break;
+    }
+  }
+
+  
+   
+}
+
+//: find matrix Q using constraints on matrix P which must contain 
+// orthonormal projects in each (2*3) submatrix for each frame 
+// old method
+void m23d_ortho_rigid_builder::find_correction_matrix_alt( vnl_matrix<double>& Q,
+                                                        const vnl_matrix<double>& P)
+{
+
 
   // Apply orthogonality constraints to estimate affine correction matrix G
   unsigned nq = 6;
-  unsigned n_con = 2*ns+1;
+  int nf= P.rows()/2;
+  unsigned n_con = 2*nf+1;
 
-  // Set up constraints on elements of Q
-  // Q symmetric, encoded using elements i,j<=i in the vector q
+  // Set up constraints on elements of L=QQt
+  // L symmetric, encoded using elements i,j<=i in the vector q
   // q obtained by solving Aq=rhs
   vnl_matrix<double> A(n_con,nq);
   vnl_vector<double> rhs(n_con);
 
   unsigned c=0;
   // If P0 is projection matrix for first shape, arrange that P0.P0'=I
-  vnl_vector<double> px0 = P_.get_row(0);
-  vnl_vector<double> py0 = P_.get_row(1);
+  vnl_vector<double> px0 = P.get_row(0);
+  vnl_vector<double> py0 = P.get_row(1);
   m23d_set_q_constraint1(A,rhs,c,px0,px0,1); ++c;
   m23d_set_q_constraint1(A,rhs,c,py0,py0,1); ++c;
   m23d_set_q_constraint1(A,rhs,c,px0,py0,0); ++c;
 
   // These constraints aim to impose orthogonality on rows of projection
   // matrices.
-  for (unsigned i=1;i<ns;++i)
+  for (unsigned i=1;i<nf;++i)
   {
-    vnl_vector<double> pxi = P_.get_row(2*i);
-    vnl_vector<double> pyi = P_.get_row(2*i+1);
+    vnl_vector<double> pxi = P.get_row(2*i);
+    vnl_vector<double> pyi = P.get_row(2*i+1);
     m23d_set_q_constraint2(A,rhs,c,pxi,pyi); ++c;
     m23d_set_q_constraint1(A,rhs,c,pxi,pyi,0); ++c;
   }
@@ -86,53 +194,159 @@ void m23d_ortho_rigid_builder::reconstruct(const vnl_matrix<double>& P2D)
   vnl_vector<double> q = svd_A.solve(rhs);
   vcl_cout<<"RMS Error in q = "<<(A*q-rhs).rms()<<vcl_endl;
 
-  vnl_matrix<double> Q(3,3);
+  vnl_matrix<double> L(3,3);
   c=0;
   for (unsigned i=0;i<3;++i)
     for (unsigned j=0;j<=i;++j,++c)
-      Q(i,j)=Q(j,i)=q[c];
+      L(i,j)=L(j,i)=q[c];
+  
+  //vcl_cout<<"L= "<<L<<vcl_endl;
 
   // If G is the 3 x 3 correction matrix, then G.G'=Q
   // Use cholesky decomposition to compute G
-  vnl_symmetric_eigensystem<double> eig(Q);
-  vnl_matrix<double> G(3,3);
+  vnl_symmetric_eigensystem<double> eig(L);
+  //vnl_matrix<double> Q(3,3);
+  Q.set_size(3,3);
   vcl_cout<<"Eigenvalues: "<<eig.D.diagonal()<<vcl_endl;
   for (unsigned i=0;i<3;++i)
   {
-    G.set_column(i,vcl_sqrt(eig.get_eigenvalue(2-i))
-                            *eig.get_eigenvector(2-i));
+    // Deal with case where Q is not pos-definite (ie has -ive eigenvalues).
+    //double s = 0.00001;
+    //if (eig.get_eigenvalue(2-i)>0.0)
+    //  s = vcl_sqrt(eig.get_eigenvalue(2-i));
+    
+    // nb critical bit making sure Q is pos def
+    double s= vcl_sqrt(  vcl_fabs(eig.get_eigenvalue(2-i)) );
+    Q.set_column(i,s*eig.get_eigenvector(2-i));
   }
 
-  // Now need to apply an additional rotation so that the
-  // first projection matrix is approximately the identity.
-  vnl_matrix<double> P0=P_.extract(2,3)*G;
-
-  // Compute a rotation matrix for this
-  vnl_matrix<double> R=m23d_rotation_from_ortho_projection(P0);
-
-vcl_cout<<"P0*Rt\n"<<P0*R.transpose()<<vcl_endl;
-  // Apply inverse so that P.G gives unit projection
-  G=G*R.transpose();
-
-  // Apply the correction matrix
-  P_=P_*G;
-  vnl_svd<double> G_svd(G);
-  P3D_=G_svd.inverse() * P3D_;
-
-  // Disambiguate the ambiguity in the sign of the z ordinates
-  // First non-zero element should be negative.
-  for (unsigned i=0;i<np;++i)
-  {
-    if (P3D_(2,i)<0) break;
-    if (P3D_(2,i)>0)
-    {
-      // Flip sign of z elements
-      for (unsigned j=0;j<np;++j) P3D_(2,j)*=-1;
-      for (unsigned j=0;j<2*ns;++j) P_(j,2)*=-1;
-      break;
-    }
-  }
+  //vcl_cout<<"Q= "<<Q<<vcl_endl;
+  
 }
+  
+
+
+//: find matrix Q using constraints on matrix P which must contain 
+// orthonormal projects in each (2*3) submatrix for each frame 
+void m23d_ortho_rigid_builder::find_correction_matrix( vnl_matrix<double>& Q,
+                                                        const vnl_matrix<double>& P)
+{
+  int nf= P.rows()/2;
+  
+  // build ortho constraint matrix G
+  // where GI=c
+  // G= 3nf * 6
+  // I= 6 * 1
+  // c= 3nf * 1
+  
+  // then
+  //L = [I(1) I(2) I(3); 
+  //     I(2) I(4) I(5);
+  //      I(3) I(5) I(6)];
+  // and L=QQt
+  
+  // based on
+  //i QQt i=1
+  //j QQt j=1
+  //i QQt j=0
+  vnl_matrix<double> G(nf*3,6);
+  vnl_vector<double> con_vec(nf*3);
+  for (int f=0; f<nf; ++f)
+  {
+    // 3 constraints per frame
+    vnl_vector<double> i_vec= P.get_row(f*2);
+    vnl_vector<double> j_vec= P.get_row(f*2+1);
+    
+    //vcl_cout<<"f="<<f<<vcl_endl;
+    //vcl_cout<<"i_vec= "<<i_vec<<vcl_endl;
+    //vcl_cout<<"j_vec= "<<j_vec<<vcl_endl;
+    
+    //i QQt i=1
+    int r0= f*3;
+    vnl_vector<double> c0_vec;
+    compute_one_row_of_constraints( c0_vec, i_vec, i_vec );
+    G.set_row(r0,c0_vec);
+    con_vec(r0)=1;
+    
+    //j QQt j=1
+    int r1= f*3+1;
+    vnl_vector<double> c1_vec;
+    compute_one_row_of_constraints( c1_vec, j_vec, j_vec );
+    G.set_row(r1,c1_vec);
+    con_vec(r1)=1;
+    
+    //i QQt j=0
+    int r2= f*3+2;
+    vnl_vector<double> c2_vec;
+    compute_one_row_of_constraints( c2_vec, i_vec, j_vec );
+    G.set_row(r2,c2_vec);
+    con_vec(r2)=0;
+  
+  }
+  
+  // solve for I
+  //GI=con
+  vnl_svd<double> svd_G(G);
+  vnl_vector<double> I= svd_G.pinverse()*con_vec;
+  
+  //3x3 matrix L
+  vnl_matrix<double> L(3,3);
+  L(0,0)= I(0);
+  L(0,1)= I(1);
+  L(0,2)= I(2);
+  L(1,0)= I(1);
+  L(1,1)= I(3);
+  L(1,2)= I(4);
+  L(2,0)= I(2);
+  L(2,1)= I(4);
+  L(2,2)= I(5);
+ 
+  // solve QQt= L
+  // use symmetric eigen decomposition L= V*D*Vt
+  //vcl_cout<<"L= "<<L<<vcl_endl;
+  
+  vnl_symmetric_eigensystem<double> eig(L);
+  
+  //vcl_cout<<"eig.V= "<<eig.V<<vcl_endl;
+  //vcl_cout<<"eig.D= "<<eig.D<<vcl_endl;
+  //vnl_matrix<double> Q(3,3);
+  Q.set_size(3,3);
+  vcl_cout<<"Eigenvalues: "<<eig.D.diagonal()<<vcl_endl;
+  for (unsigned i=0;i<3;++i)
+  {
+    
+    // Deal with case where Q is not pos-definite (ie has -ive eigenvalues).
+    //double s=0.00001; // = vcl_sqrt(0.00001);
+    //if (eig.get_eigenvalue(2-i)>0.0)
+    //{
+    //  s = vcl_sqrt(eig.get_eigenvalue(2-i));
+    //}
+   
+    // nb critical bit making sure Q is pos def
+    double s= vcl_sqrt(  vcl_fabs(eig.get_eigenvalue(2-i)) );
+    Q.set_column(i,s*eig.get_eigenvector(2-i) );
+  }
+  
+  //vcl_cout<<"Q= "<<Q<<vcl_endl;
+  
+}
+
+//: find matrix Q using constraints on matrix P which must contain 
+// from two rows of a projection matrix (a+b) find six constraints used to compute (QQt)
+// symmetric matrix
+void m23d_ortho_rigid_builder::compute_one_row_of_constraints( vnl_vector<double>& c,
+                                                        const vnl_vector<double>& a,
+                                                        const vnl_vector<double>& b)
+{
+  c.set_size(6);
+  c(0)=a(0)*b(0);
+  c(1)=a(1)*b(0)+a(0)*b(1);
+  c(2)=a(2)*b(0)+a(0)*b(2);
+  c(3)=a(1)*b(1);
+  c(4)=a(2)*b(1)+a(1)*b(2);
+  c(5)=a(2)*b(2);
+}
+
 
 //: Modify projection matrices so they are scaled orthographic projections
 //  P = s(I|0)*R

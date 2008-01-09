@@ -43,6 +43,24 @@ class m23d_ortho_rigid_builder
     //: Modify projection matrices so they are scaled orthographic projections
     //  P = s(I|0)*R
     void make_pure_projections();
+    
+    //: find matrix Q using constraints on matrix P which must contain 
+    // orthonormal projects in each (2*3) submatrix for each frame 
+    void find_correction_matrix( vnl_matrix<double>& Q,
+                                     const vnl_matrix<double>& P);
+    
+    //: find matrix Q using constraints on matrix P which must contain 
+    // from two rows of a projection matrix (a+b) find six constraints used to compute (QQt)
+    // symmetric matrix
+    void compute_one_row_of_constraints( vnl_vector<double>& c,
+                                                            const vnl_vector<double>& a,
+                                                            const vnl_vector<double>& b);
+    
+    //: find matrix Q using constraints on matrix P which must contain 
+    // orthonormal projects in each (2*3) submatrix for each frame 
+    // old method
+    void find_correction_matrix_alt( vnl_matrix<double>& Q,
+                                                            const vnl_matrix<double>& P);
 
   public:
     //: Reconstruct structure of 3D points given multiple 2D views
