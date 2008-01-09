@@ -28,7 +28,8 @@ SET(bwm_sources
    bwm_macros.h
    bwm_def.h
    bwm_menu.cxx                bwm_menu.h
-   bwm_command.h               bwm_command_sptr.h
+   bwm_popup_menu.cxx          bwm_popup_menu.h
+   bwm_command.h               bwm_command_sptr.h   
    bwm_command_macros.h
    bwm_load_commands.h
    bwm_process_commands.h
@@ -48,9 +49,9 @@ SET(bwm_sources
    bwm_observable.h            bwm_observable_sptr.h
    bwm_observable_mesh.cxx     bwm_observable_mesh.h       bwm_observable_mesh_sptr.h
    bwm_observable_textured_mesh.cxx     bwm_observable_textured_mesh.h bwm_observable_textured_mesh_sptr.h
-   bwm_observable_polyline.cxx bwm_observable_polyline.h   bwm_observable_polyline_sptr.h
-   bwm_observable_point.cxx    bwm_observable_point.h      bwm_observable_point.h
-   bwm_observer.cxx            bwm_observer.h
+   bwm_observable_polyline.cxx bwm_observable_polyline.h   bwm_observable_polyline_sptr.h 
+   bwm_observable_point.cxx    bwm_observable_point.h 
+   bwm_observer.cxx            bwm_observer.h         
    bwm_observer_img.cxx        bwm_observer_img.h
    bwm_observer_vgui.cxx       bwm_observer_vgui.h
    bwm_observer_cam.cxx        bwm_observer_cam.h
@@ -94,9 +95,6 @@ SUBDIRS(io)
 SUBDIRS(reg)
 SUBDIRS(video)
 SUBDIRS(tests)
-#SUBDIRS(freeCGI)
-#SUBDIRS(cgi)
-#SUBDIRS(process)
 ENDIF (MFC_FOUND)
 ENDIF(GEOTIFF_FOUND)
 ENDIF(TIFF_FOUND)

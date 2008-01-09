@@ -111,10 +111,10 @@ class bwm_tableau_cam : public bwm_tableau_img
   void label_wall();
   void help_pop();
 
+  bool show_vertices_;
  protected:
   bwm_observer_cam* my_observer_;
-  bool show_vertices_;
-  //void bwm_vertex_toggle(const void* boolref);
+  
 };
 
 #endif

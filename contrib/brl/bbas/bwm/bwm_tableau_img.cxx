@@ -2,6 +2,7 @@
 #include "bwm_tableau_text.h"
 #include "bwm_command_macros.h"
 #include "bwm_observer_mgr.h"
+#include "bwm_popup_menu.h"
 
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_box_2d.h>
@@ -16,98 +17,9 @@ void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu
 {
   menu.clear();
 
+  bwm_popup_menu pop(this);
   vgui_menu submenu;
-  submenu.add("Polygon..",
-    new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::create_polygon),
-    vgui_key('p'),
-    vgui_modifier(vgui_SHIFT) );
-  submenu.separator();
-
-  submenu.add("PolyLine..",
-    new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::create_polyline),
-    vgui_key('l'),
-    vgui_modifier(vgui_SHIFT) );
-  submenu.separator();
-
-  submenu.add("Box..",
-    new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::create_box),
-    vgui_key('b'),
-    vgui_modifier(vgui_SHIFT) );
-
-  submenu.separator();
-
-  submenu.add("Pointset..",
-              new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::create_pointset));
-
-  submenu.separator();
-  submenu.add("Point..",
-    new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::create_point),
-    vgui_key('t'),
-    vgui_modifier(vgui_SHIFT) );
-
-  vgui_menu selmenu;
-  selmenu.add( "Delete Selected",
-    new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::clear_poly),
-    vgui_key('d'), vgui_modifier(vgui_SHIFT));
-  selmenu.separator();
-  selmenu.add( "Empty the Box",
-    new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::clear_box),
-    vgui_key('b'), vgui_modifier(vgui_SHIFT));
-  selmenu.separator();
-  selmenu.add( "Delete All",
-    new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::clear_all),
-    vgui_key('a'), vgui_modifier(vgui_SHIFT));
-  selmenu.separator();
-  submenu.add( "Delete ", selmenu);
-  menu.add( "2D OBJECTS", submenu);
-  menu.separator();
-#if 0
-  menu.add( "Detect Edges",
-    new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::step_edges_vd),
-    vgui_key('e'), vgui_modifier(vgui_SHIFT));
-
-  menu.add( "Detect Lines ",
-    new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::lines_vd),
-    vgui_key('v'), vgui_modifier(vgui_SHIFT));
-#endif
-
-  vgui_menu image_submenu;
-  MENU_TAB_ADD_PROCESS("Range Map", "range_map", image_submenu, this);
-  MENU_TAB_ADD_PROCESS("Intensity Profile", "intensity_profile", image_submenu, this);
-  MENU_TAB_ADD_PROCESS("Histogram Plot", "histogram", image_submenu, this);
-  MENU_TAB_ADD_PROCESS("Step Edges VD", "step_edge", image_submenu, this);
-  MENU_TAB_ADD_PROCESS("Detect Lines", "detect_lines", image_submenu, this);
-  image_submenu.add( "Redisplay Edges",
-    new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::recover_edges),
-    vgui_key('b'), vgui_modifier(vgui_SHIFT));
-  image_submenu.add( "Redisplay Lines",
-    new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::recover_lines));
-  menu.add("IMAGE ", image_submenu);
-  menu.separator();
-#if 0
-  menu.add( "HELP..." ,
-    new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::help_pop),
-    vgui_key('h'),vgui_modifier(vgui_SHIFT));
-#endif
-  menu.add( "Show Path" ,
-    new vgui_command_simple<bwm_tableau_img>(this,
-                                             &bwm_tableau_img::
-                                             toggle_show_image_path));
-  menu.separator();
-  menu.add( "Zoom to Fit" ,
-    new vgui_command_simple<bwm_tableau_img>(this,
-                                             &bwm_tableau_img::
-                                             zoom_to_fit));
-  menu.separator();
-  menu.add( "Scroll to Image Location" ,
-    new vgui_command_simple<bwm_tableau_img>(this,
-                                             &bwm_tableau_img::
-                                             scroll_to_point));
-  menu.separator();
-  menu.add( "Deselect All Objects",
-    new vgui_command_simple<bwm_tableau_img>(this,&bwm_tableau_img::deselect_all),
-    vgui_key('-'));
-  menu.separator();
+  pop.get_menu(menu);
 }
 
 

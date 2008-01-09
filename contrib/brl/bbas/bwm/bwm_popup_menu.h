@@ -1,48 +1,28 @@
-#ifndef bwm_tableau_img_h_
-#define bwm_tableau_img_h_
-//:
-// \file
+#ifndef bwm_popup_menu_h_
+#define bwm_popup_menu_h_
 
-#include "bwm_tableau.h"
-#include "bwm_observer_img.h"
-
-#include <vcl_string.h>
-
+#include <vgui/vgui_popup_params.h>
 #include <vgui/vgui_menu.h>
-#include <vgui/vgui_event.h>
-#include <vgui/vgui_command.h>
+#include <vgui/vgui_tableau.h>
 
-#include <bgui/bgui_picker_tableau.h>
+class bwm_popup_menu {
+public:
 
-class bwm_tableau_img : public bwm_tableau, public bgui_picker_tableau
-{
- public:
+  bwm_popup_menu(vgui_tableau_sptr tab) : tab_(tab) {}
+  virtual ~bwm_popup_menu() {}
+  void get_menu(vgui_menu& menu);
 
-  bwm_tableau_img(bwm_observer_img* obs)
-    : bgui_picker_tableau(obs), my_observer_(obs) {}
-
-  //: destructor
-  // Tableaux are responsible for their observers
-  virtual ~bwm_tableau_img() { delete my_observer_; }
-
-  virtual vcl_string type_name() const { return "bwm_tableau_img"; }
-
-  void get_popup(vgui_popup_params const &params, vgui_menu &menu);
-
-  bool handle(const vgui_event& e);
-
-  vcl_string img_path() { return my_observer_->image_tableau()->file_name(); }
-
-  virtual void create_box();
+  // Image Processing Related Menu Items
+ /* virtual void create_box();
   virtual void create_polygon();
   virtual void create_polyline();
   virtual void create_point();
-  virtual void create_pointset();
+  virtual void create_pointset();*/
 
   //************* IMAGE Processing Methods
 
   //: Draws the hostogram on a graph (if the image is greyscale)
-  void hist_plot() { my_observer_->hist_plot(); }
+  void hist_plot();// { (tab_->hist_plot(); }
 
   //: Draws the intensity profile on a selected line(if the image is greyscale)
   void intensity_profile();
@@ -74,8 +54,9 @@ class bwm_tableau_img : public bwm_tableau, public bgui_picker_tableau
   void recover_edges();
   void recover_lines();
 
- protected:
-  bwm_observer_img* my_observer_;
+private:
+  vgui_tableau_sptr tab_;
+
 };
 
 #endif

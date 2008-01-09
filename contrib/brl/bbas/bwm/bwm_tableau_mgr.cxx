@@ -112,9 +112,9 @@ void bwm_tableau_mgr::init_env()
 
   int rows = grid_->rows();
   int cols = grid_->cols();
-  for (unsigned row=0; row<rows; row++)
+  for (int row=0; row<rows; row++)
     grid_->remove_row();
-  for (unsigned col=0; col<cols; col++)
+  for (int col=0; col<cols; col++)
     grid_->remove_column();
 
   grid_->remove_at(0,0);
