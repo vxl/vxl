@@ -99,6 +99,12 @@ void vil3d_analyze_header::reset()
   history.reset();
 }
 
+// This function centralises the compiler warning concerning "const cast":
+static inline void do_write(vcl_ofstream& bfs, const void* data, unsigned int sz)
+{
+  bfs.write((char*)data, sz);
+}
+#define WRITE(X) do_write(bfs, &X, sizeof(X))
 
 bool vil3d_analyze_header::write_file(const vcl_string& path) const
 {
@@ -112,77 +118,68 @@ bool vil3d_analyze_header::write_file(const vcl_string& path) const
   }
   else
   {
-    bfs.write((char *)&key.sizeof_hdr,sizeof(key.sizeof_hdr));
+    WRITE(key.sizeof_hdr);
     for (int i=0; i<10; ++i)
-      bfs.write((char *)&key.data_type[i],sizeof(key.data_type[i]));
+      WRITE(key.data_type[i]);
     for (int i=0; i<18; ++i)
-      bfs.write((char *)&key.db_name[i], sizeof(key.db_name[i]));
-    bfs.write((char *)&key.extents,sizeof(key.extents));
-    bfs.write((char *)&key.session_error, sizeof(key.session_error));
-    bfs.write((char *)&key.regular, sizeof(key.regular));
-    bfs.write((char *)&key.hkey_un0, sizeof(key.hkey_un0));
+      WRITE(key.db_name[i]);
+    WRITE(key.extents);
+    WRITE(key.session_error);
+    WRITE(key.regular);
+    WRITE(key.hkey_un0);
 
     for (int i=0; i<8; ++i)
-      bfs.write((char *)&dim.dim[i],sizeof(dim.dim[i]));
-    bfs.write((char *)&dim.unused8,sizeof(dim.unused8));
-    bfs.write((char *)&dim.unused9,sizeof(dim.unused9));
-    bfs.write((char *)&dim.unused10,sizeof(dim.unused10));
-    bfs.write((char *)&dim.unused11,sizeof(dim.unused11));
-    bfs.write((char *)&dim.unused12,sizeof(dim.unused12));
-    bfs.write((char *)&dim.unused13,sizeof(dim.unused13));
-    bfs.write((char *)&dim.unused14,sizeof(dim.unused14));
-    bfs.write((char *)&dim.datatype,sizeof(dim.datatype));
-    bfs.write((char *)&dim.bitpix, sizeof(dim.bitpix));
-    bfs.write((char *)&dim.dim_un0, sizeof(dim.dim_un0));
+      WRITE(dim.dim[i]);
+    WRITE(dim.unused8);
+    WRITE(dim.unused9);
+    WRITE(dim.unused10);
+    WRITE(dim.unused11);
+    WRITE(dim.unused12);
+    WRITE(dim.unused13);
+    WRITE(dim.unused14);
+    WRITE(dim.datatype);
+    WRITE(dim.bitpix);
+    WRITE(dim.dim_un0);
     for (int i=0; i<8; ++i)
-      bfs.write((char *)&dim.pixdim[i],sizeof(dim.pixdim[i]));
-    bfs.write((char *)&dim.funused8,sizeof(dim.funused8));
-    bfs.write((char *)&dim.funused9,sizeof(dim.funused9));
-    bfs.write((char *)&dim.funused10,sizeof(dim.funused10));
-    bfs.write((char *)&dim.funused11,sizeof(dim.funused11));
-    bfs.write((char *)&dim.funused12,sizeof(dim.funused12));
-    bfs.write((char *)&dim.funused13,sizeof(dim.funused13));
-    bfs.write((char *)&dim.compressed,sizeof(dim.compressed));
-    bfs.write((char *)&dim.verified,sizeof(dim.verified));
-    bfs.write((char *)&dim.glmax,sizeof(dim.glmax));
-    bfs.write((char *)&dim.glmin,sizeof(dim.glmin));
+      WRITE(dim.pixdim[i]);
+    WRITE(dim.funused8);
+    WRITE(dim.funused9);
+    WRITE(dim.funused10);
+    WRITE(dim.funused11);
+    WRITE(dim.funused12);
+    WRITE(dim.funused13);
+    WRITE(dim.compressed);
+    WRITE(dim.verified);
+    WRITE(dim.glmax);
+    WRITE(dim.glmin);
 
     for (int i=0; i<80; ++i)
-      bfs.write((char *)&history.descrip[i],
-                sizeof(history.descrip[i]));
+      WRITE(history.descrip[i]);
     for (int i=0; i<24; ++i)
-      bfs.write((char *)&history.aux_file[i],
-                sizeof(history.aux_file[i]));
-    bfs.write((char *)&history.orient,sizeof(history.orient));
+      WRITE(history.aux_file[i]);
+    WRITE(history.orient);
     for (int i=0; i<10; ++i)
-      bfs.write((char *)&history.originator[i],
-                sizeof(history.originator[i]));
+      WRITE(history.originator[i]);
     for (int i=0; i<10; ++i)
-      bfs.write((char *)&history.generated[i],
-                sizeof(history.generated[i]));
+      WRITE(history.generated[i]);
     for (int i=0; i<10; ++i)
-      bfs.write((char *)&history.scannum[i],
-                sizeof(history.scannum[i]));
+      WRITE(history.scannum[i]);
     for (int i=0; i<10; ++i)
-      bfs.write((char *)&history.patient_id[i],
-                sizeof(history.patient_id[i]));
+      WRITE(history.patient_id[i]);
     for (int i=0; i<10; ++i)
-      bfs.write((char *)&history.exp_date[i],
-                sizeof(history.exp_date[i]));
+      WRITE(history.exp_date[i]);
     for (int i=0; i<10; ++i)
-      bfs.write((char *)&history.exp_time[i],
-                sizeof(history.exp_time[i]));
+      WRITE(history.exp_time[i]);
     for (int i=0; i<3; ++i)
-      bfs.write((char *)&history.hist_un0[i],
-                sizeof(history.hist_un0[i]));
-    bfs.write((char *)&history.views,sizeof(history.views));
-    bfs.write((char *)&history.vols_added,sizeof(history.vols_added));
-    bfs.write((char *)&history.start_field,sizeof(history.start_field));
-    bfs.write((char *)&history.field_skip,sizeof(history.field_skip));
-    bfs.write((char *)&history.omax,sizeof(history.omax));
-    bfs.write((char *)&history.omin,sizeof(history.omin));
-    bfs.write((char *)&history.smax,sizeof(history.smax));
-    bfs.write((char *)&history.smin,sizeof(history.smin));
+      WRITE(history.hist_un0[i]);
+    WRITE(history.views);
+    WRITE(history.vols_added);
+    WRITE(history.start_field);
+    WRITE(history.field_skip);
+    WRITE(history.omax);
+    WRITE(history.omin);
+    WRITE(history.smax);
+    WRITE(history.smin);
   }
   return true;
 }
