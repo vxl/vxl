@@ -51,10 +51,7 @@ SET (PROJECT_URL http://vxl.sourceforge.net/)
 SET (EXPECTED_BUILDS "\\
   {cs.rpi.edu FreeBSD-fresh-gcc-3.4.2} \\
   {GE FreeBSD-6.2_gcc-3.4.6_profile_static} \\
-  {GE FreeBSD-6.2_gcc-3.2.3_-O2_shared} \\
-  {GE FreeBSD-6.2_gcc-3.3.6_-O2_shared} \\
   {GE FreeBSD-6.2_gcc-4.0.4_-O2_shared} \\
-  {GE FreeBSD-6.2_gcc-4.1.2_-O2_shared} \\
   {GE FreeBSD-6.2_gcc-4.2.2_-O2_shared} \\
   {GE Linux-2.6.9_icc-9.0-64bit_-O2_shared} \\
   {GE MinGW-3.8_gcc-3.4.4_-O2_static} \\
