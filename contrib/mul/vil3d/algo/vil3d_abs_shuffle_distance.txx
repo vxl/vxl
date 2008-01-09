@@ -50,49 +50,49 @@ double vil3d_abs_shuffle_distance(const vil3d_image_view<T1>& image1,
   if (include_borders)
   {
     // Deal with left edge
-    for (unsigned int i=0;i<ilo;++i)
-      for (unsigned int j=0;j<nj;++j)
-        for (unsigned int k=0;k<nk;++k)
+    for (unsigned int i=0; int(i)<ilo; ++i)
+      for (unsigned int j=0; j<nj; ++j)
+        for (unsigned int k=0; k<nk; ++k)
           sum+=vil3d_abs_shuffle_distance(image1(i,j,k),image2,0,element,i,j,k);
     // Deal with right edge
-    for (unsigned int i=ihi+1;i<ni;++i)
+    for (unsigned int i=ihi+1; i<ni; ++i)
       for (unsigned int j=0;j<nj;++j)
-        for (unsigned int k=0;k<nk;++k)
+        for (unsigned int k=0; k<nk; ++k)
           sum+=vil3d_abs_shuffle_distance(image1(i,j,k),image2,0,element,i,j,k);
 
     // Deal with bottom edge
-    for (unsigned int i=ilo;i<=ihi;++i)
-      for (unsigned int j=0;j<jlo;++j)
-        for (unsigned int k=klo;k<khi;++k)
+    for (unsigned int i=ilo; int(i)<=ihi; ++i)
+      for (unsigned int j=0; int(j)<jlo; ++j)
+        for (unsigned int k=klo; int(k)<khi; ++k)
           sum+=vil3d_abs_shuffle_distance(image1(i,j,k),image2,0,element,i,j,k);
     // Deal with top edge
-    for (unsigned int i=ilo;i<=ihi;++i)
-      for (unsigned int j=jhi+1;j<nj;++j)
-        for (unsigned int k=klo;k<khi;++k)
+    for (unsigned int i=ilo; int(i)<=ihi; ++i)
+      for (unsigned int j=jhi+1; j<nj; ++j)
+        for (unsigned int k=klo; int(k)<khi; ++k)
           sum+=vil3d_abs_shuffle_distance(image1(i,j,k),image2,0,element,i,j,k);
 
     // Deal with front edge
-    for (unsigned int i=ilo;i<=ihi;++i)
-      for (unsigned int j=jlo;j<jhi;++j)
-        for (unsigned int k=0;k<klo;++k)
+    for (unsigned int i=ilo; int(i)<=ihi; ++i)
+      for (unsigned int j=jlo; int(j)<jhi; ++j)
+        for (unsigned int k=0; int(k)<klo; ++k)
           sum+=vil3d_abs_shuffle_distance(image1(i,j,k),image2,0,element,i,j,k);
     // Deal with back edge
-    for (unsigned int i=ilo;i<=ihi;++i)
-      for (unsigned int j=jlo;j<jhi;++j)
-        for (unsigned int k=khi+1;k<nk;++k)
+    for (unsigned int i=ilo; int(i)<=ihi; ++i)
+      for (unsigned int j=jlo; int(j)<jhi; ++j)
+        for (unsigned int k=khi+1; k<nk; ++k)
           sum+=vil3d_abs_shuffle_distance(image1(i,j,k),image2,0,element,i,j,k);
   }
 
   const T1* image1_start = image1.origin_ptr();
   const T2* image2_start = image2.origin_ptr();
 
-  for (unsigned int k = klo;k<=khi;++k)
-    for (unsigned int j=jlo;j<=jhi;++j)
+  for (unsigned int k=klo; int(k)<=khi; ++k)
+    for (unsigned int j=jlo; int(j)<=jhi; ++j)
     {
       const T1* p1 = image1_start + k*kstep1 + j*jstep1 + ilo*istep1;
       const T2* p2 = image2_start + k*kstep2 + j*jstep2 + ilo*istep2;
 
-      for (int i=ilo;i<=ihi;++i,p1+=istep1,p2+=istep2)
+      for (int i=ilo; i<=ihi; ++i,p1+=istep1,p2+=istep2)
         sum += vil3d_abs_shuffle_distance(*p1,p2,&offset[0],offset.size());
     }
 

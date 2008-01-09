@@ -33,7 +33,7 @@ void test_clusters()
 
   clusters.set_data(data);
 
-  TEST("Number of clusters",clusters.n_clusters(),1+int((n-1)/max_r));
+  TEST("Number of clusters",clusters.n_clusters(),(unsigned int)((n-1)/max_r)+1);
 
   double d;
   TEST("Nearest point to 0 is 0",clusters.nearest(0.0,d),0);
@@ -45,7 +45,7 @@ void test_clusters()
 
   data.push_back(n+17.3);
   TEST("Cluster for added point correct",
-       clusters.add_object(data.size()-1),1+int((n-1)/max_r));
+       clusters.add_object(data.size()-1),(unsigned int)((n-1)/max_r)+1);
 }
 
 TESTMAIN(test_clusters);
