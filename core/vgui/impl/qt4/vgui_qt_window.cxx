@@ -66,11 +66,24 @@ void vgui_qt_window::set_menubar(const vgui_menu &menu)
 {
    use_menubar = true;
 
-   vgui_qt_menu* qm;
    for (unsigned int i=0; i < menu.size(); ++i)
    {
-      qm = new vgui_qt_menu(*(menu[i].menu));
-      qm->setTitle(menu[i].name.c_str());
-      menuBar()->addMenu(qm);
+      if (menu[i].is_separator())
+      {
+         menuBar()->addSeparator();
+      }
+      else if (menu[i].is_command())
+      {
+         QAction* action = menuBar()->addAction(menu[i].name.c_str());
+         action->setShortcut(vgui_key_to_qt(menu[i].short_cut.key,
+                                            menu[i].short_cut.mod));
+         //commands_[action] = menu[i].cmnd;
+      }
+      else if (menu[i].is_submenu())
+      {
+         vgui_qt_menu* qm = new vgui_qt_menu(*(menu[i].menu));
+         qm->setTitle(menu[i].name.c_str());
+         menuBar()->addMenu((QMenu*)qm);
+      }
    }
 }
