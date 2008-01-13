@@ -28,6 +28,7 @@ SET(bmsh3d_sources
                                     bmsh3d_fuzzy_boolean.h
                                     bmsh3d_triangle.h
                                     bmsh3d_dist.h
+                                    bmsh3d_graph.h
 )
 
 ADD_LIBRARY( bmsh3d  ${bmsh3d_sources})

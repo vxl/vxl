@@ -16,8 +16,10 @@ SET(vil3d_algo_sources
   vil3d_normalised_correlation_3d.h
   vil3d_convolve_1d.h
   vil3d_distance_transform.h    vil3d_distance_transform.cxx
+  vil3d_exp_distance_transform.h 
   vil3d_fill_boundary.h         vil3d_fill_boundary.cxx
   vil3d_anisotropic_filter.h
+  vil3d_max_product_filter.h
   vil3d_corners.h               vil3d_corners.txx
   vil3d_find_peaks.h
   vil3d_quad_distance_function.h 

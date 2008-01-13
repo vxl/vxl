@@ -23,6 +23,7 @@
 #include <vgui/vgui_deck_tableau.h>
 #include <vgui/vgui_deck_tableau_sptr.h>
 #include <vgui/vgui_dialog.h>
+#include <vgui/vgui_dialog_extensions.h>
 #include <vgui/vgui_displaybase_tableau.h>
 #include <vgui/vgui_displaybase_tableau_sptr.h>
 #include <vgui/vgui_displaylist2D_tableau.h>

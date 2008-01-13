@@ -34,6 +34,7 @@
 #include <vgl/vgl_polygon_test.h>
 #include <vgl/vgl_region_scan_iterator.h>
 #include <vgl/vgl_sphere_3d.h>
+#include <vgl/vgl_triangle_3d.h>
 #include <vgl/vgl_triangle_scan_iterator.h>
 #include <vgl/vgl_triangle_test.h>
 #include <vgl/vgl_vector_2d.h>

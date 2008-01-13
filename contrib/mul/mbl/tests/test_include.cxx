@@ -17,6 +17,7 @@
 #include <mbl/mbl_data_wrapper.h>
 #include <mbl/mbl_data_wrapper_mixer.h>
 #include <mbl/mbl_draw_line.h>
+#include <mbl/mbl_dyn_prog.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_file_data_collector.h>
 #include <mbl/mbl_file_data_wrapper.h>
@@ -39,6 +40,7 @@
 #include <mbl/mbl_priority_bounded_queue.h>
 #include <mbl/mbl_progress.h>
 #include <mbl/mbl_progress_composite.h>
+#include <mbl/mbl_progress_hierarchy.h>
 #include <mbl/mbl_progress_null.h>
 #include <mbl/mbl_progress_text.h>
 #include <mbl/mbl_random_n_from_m.h>

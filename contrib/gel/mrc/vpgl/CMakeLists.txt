@@ -17,6 +17,7 @@ SET( vpgl_sources
   vpgl_radial_distortion.h         vpgl_radial_distortion.txx
   vpgl_poly_radial_distortion.h    vpgl_poly_radial_distortion.txx
   vpgl_rational_camera.h           vpgl_rational_camera.txx
+  vpgl_comp_rational_camera.h      vpgl_comp_rational_camera.txx
 
 )
 

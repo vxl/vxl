@@ -13,15 +13,14 @@ IF (APPLE)
   SET(expatpp_sources expatpp.h expatpp.cpp)
 ELSE (APPLE)
  SET(expatpp_sources
-    ascii.h asciitab.h
-    expat.h iasciitab.h
-    internal.h latin1tab.h
-    macconfig.h nametab.h
-    utf8tab.h winconfig.h
-    xmlparse.c xmlrole.c 
-##  libxmlrole.h
-    xmltok.c xmltok.h
-    expatpp.h expatpp.cpp
+    ascii.h              asciitab.h
+    expat.h              iasciitab.h
+    internal.h           latin1tab.h
+    macconfig.h          nametab.h
+    utf8tab.h            winconfig.h
+    xmlparse.c xmlrole.c xmlrole.h
+    xmltok.c xmltok.h    xmltok_impl.h
+    expatpp.cpp          expatpp.h expatpplib.h
  )
 ENDIF (APPLE)
 
