@@ -41,7 +41,7 @@ class test_func1 : public vnl_sparse_lst_sqr_function
 };
 
 
-MAIN( test_sparse_lst_sqr_func )
+MAIN( test_sparse_lst_sqr_function )
 {
    START ("sparse_lst_sqr_function");
 
