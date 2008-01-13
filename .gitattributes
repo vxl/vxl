@@ -2,6 +2,7 @@
 
 *.bat           -crlf
 *.bmp           -crlf
+*.dsp           -crlf
 *.dsptemplate   -crlf
 *.ico           -crlf
 *.jpg           -crlf
