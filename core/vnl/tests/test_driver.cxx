@@ -33,7 +33,7 @@ DECLARE( test_hungarian_algorithm );
 DECLARE( test_integrant );
 DECLARE( test_bessel );
 DECLARE( test_crs_index );
-DECLARE( test_sparse_lst_sqr_func );
+DECLARE( test_sparse_lst_sqr_function );
 
 void
 register_tests()
@@ -71,7 +71,7 @@ register_tests()
   REGISTER( test_integrant );
   REGISTER( test_bessel );  
   REGISTER( test_crs_index );
-  REGISTER( test_sparse_lst_sqr_func );
+  REGISTER( test_sparse_lst_sqr_function );
 }
 
 DEFINE_MAIN;
