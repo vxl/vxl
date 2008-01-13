@@ -8,6 +8,4 @@ ADD_EXECUTABLE( bwm_test_all
 
 TARGET_LINK_LIBRARIES(bwm_test_all bwm bwm_algo testlib)
 
-ADD_TEST(test_move_proj_plane bwm_test_all)
-
-
+ADD_TEST(test_move_proj_plane ${EXECUTABLE_OUTPUT_PATH}/bwm_test_all test_move_proj_plane)

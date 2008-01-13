@@ -10,8 +10,8 @@ ADD_EXECUTABLE( bwm_video_test_all
 
 TARGET_LINK_LIBRARIES(bwm_video_test_all bwm_video bwm bwm_algo vpgl_algo vpgl testlib)
 
-ADD_TEST(test_cam_iostream bwm_video_test_all)
-ADD_TEST(test_video_site_io bwm_video_test_all)
-ADD_TEST(test_video_core_processor bwm_video_test_all)
+ADD_TEST(test_cam_iostream ${EXECUTABLE_OUTPUT_PATH}/bwm_video_test_all test_cam_iostream)
+ADD_TEST(test_video_site_io ${EXECUTABLE_OUTPUT_PATH}/bwm_video_test_all test_video_site_io)
+ADD_TEST(test_video_corr_processor ${EXECUTABLE_OUTPUT_PATH}/bwm_video_test_all test_video_corr_processor)
 
 
