@@ -180,6 +180,9 @@ SOURCE=.\Templates/vil_line_filter+byte-.cxx
 SOURCE=.\Templates/vil_threshold+byte-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vil_threshold+double-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil_threshold+float-.cxx
 # End Source File
 # Begin Source File

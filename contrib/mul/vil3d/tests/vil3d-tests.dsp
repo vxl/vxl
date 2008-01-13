@@ -327,6 +327,15 @@ SOURCE=.\test_algo_distance_transform.cxx
 # Begin Source File
 SOURCE=.\test_algo_abs_shuffle_distance.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_algo_exp_distance_transform.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_algo_make_distance_filter.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_save_load_image.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

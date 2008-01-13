@@ -261,6 +261,9 @@ SOURCE=.\vgl_1d_basis.cxx
 SOURCE=.\internals/gpc.c
 # End Source File
 # Begin Source File
+SOURCE=.\vgl_triangle_3d.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vgl_conic+float-.cxx
 # End Source File
 # Begin Source File
@@ -607,6 +610,9 @@ SOURCE=.\vgl_tolerance.h
 # End Source File
 # Begin Source File
 SOURCE=.\vgl_tolerance.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vgl_triangle_3d.h
 # End Source File
 # End Group
 # End Target

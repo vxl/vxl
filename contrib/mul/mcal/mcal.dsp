@@ -94,6 +94,9 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
+SOURCE=.\mcal_add_all_loaders.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\mcal_component_analyzer.cxx
 # End Source File
 # Begin Source File
@@ -104,6 +107,15 @@ SOURCE=.\mcal_single_basis_cost.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\mcal_sparse_basis_cost.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mcal_general_ca.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mcal_trivial_ca.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mcal_var_basis_cost.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/mbl_cloneables_factory+mcal_component_analyzer-.cxx
@@ -121,6 +133,9 @@ SOURCE=.\Templates/vsl_binary_loader+mcal_single_basis_cost-.cxx
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
+SOURCE=.\mcal_add_all_loaders.h
+# End Source File
+# Begin Source File
 SOURCE=.\mcal_component_analyzer.h
 # End Source File
 # Begin Source File
@@ -131,6 +146,15 @@ SOURCE=.\mcal_single_basis_cost.h
 # End Source File
 # Begin Source File
 SOURCE=.\mcal_sparse_basis_cost.h
+# End Source File
+# Begin Source File
+SOURCE=.\mcal_general_ca.h
+# End Source File
+# Begin Source File
+SOURCE=.\mcal_trivial_ca.h
+# End Source File
+# Begin Source File
+SOURCE=.\mcal_var_basis_cost.h
 # End Source File
 # End Group
 # End Target

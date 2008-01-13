@@ -146,9 +146,6 @@ LINK32=link.exe
 SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_sparse_lm.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_legendre_polynomial.cxx
 # End Source File
 # Begin Source File

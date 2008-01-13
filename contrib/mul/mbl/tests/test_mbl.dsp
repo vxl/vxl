@@ -257,6 +257,9 @@ SOURCE=.\test_cluster_tree.cxx
 SOURCE=.\test_clusters.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_dyn_prog.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

@@ -224,6 +224,12 @@ SOURCE=.\vpgl_essential_matrix.h
 # Begin Source File
 SOURCE=.\vpgl_essential_matrix.txx
 # End Source File
+# Begin Source File
+SOURCE=.\vpgl_comp_rational_camera.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_comp_rational_camera.txx
+# End Source File
 # End Group
 # End Target
 # End Project

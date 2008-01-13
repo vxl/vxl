@@ -186,6 +186,15 @@ SOURCE=.\test_quaternion.cxx
 # Begin Source File
 SOURCE=.\test_rotation_matrix.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_alignment.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_crs_index.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_sparse_lst_sqr_function.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

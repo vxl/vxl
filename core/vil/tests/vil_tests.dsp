@@ -87,6 +87,12 @@ SOURCE=.\test_pyramid_image_resource.cxx
 # Begin Source File
 SOURCE=.\test_border.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_4_plane_tiff.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_math_median.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

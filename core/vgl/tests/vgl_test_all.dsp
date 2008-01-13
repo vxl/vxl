@@ -170,6 +170,9 @@ SOURCE=.\test_intersection.cxx
 # Begin Source File
 SOURCE=.\test_rotation_3d.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_triangle_3d.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

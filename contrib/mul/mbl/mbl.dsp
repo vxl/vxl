@@ -299,6 +299,12 @@ SOURCE=.\mbl_stepwise_regression.cxx
 # Begin Source File
 SOURCE=.\mbl_wt_histogram.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\mbl_dyn_prog.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_progress_hierarchy.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx;in"
@@ -550,6 +556,12 @@ SOURCE=.\mbl_clusters.txx
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_vector_distance.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_dyn_prog.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_progress_hierarchy.h
 # End Source File
 # End Group
 # End Target

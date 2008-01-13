@@ -186,6 +186,9 @@ SOURCE=.\test_bracket_minimum.cxx
 # Begin Source File
 SOURCE=.\test_brent_minimizer.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_sparse_lm.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

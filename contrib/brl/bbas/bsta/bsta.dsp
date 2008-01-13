@@ -116,6 +116,12 @@ SOURCE=.\bsta_gauss.cxx
 # Begin Source File
 SOURCE=.\bsta_k_medoid.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bsta_int_histogram_1d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_int_histogram_2d.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -142,6 +148,12 @@ SOURCE=.\bsta_otsu_threshold.h
 # End Source File
 # Begin Source File
 SOURCE=.\bsta_otsu_threshold.txx
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_int_histogram_1d.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_int_histogram_2d.h
 # End Source File
 # End Group
 # End Target

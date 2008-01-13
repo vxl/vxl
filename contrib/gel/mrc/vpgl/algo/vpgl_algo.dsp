@@ -138,6 +138,24 @@ SOURCE=.\vpgl_ortho_procrustes.cxx
 SOURCE=.\vpgl_bundle_adjust.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vpgl_adjust_rational_trans_onept.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_camera_homographies.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_interpolate.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_rational_geo_adjust.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_ray.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_ray_intersect.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vpgl_list+vgl_h_matrix_2d+double--.cxx
 # End Source File
 # Begin Source File
@@ -199,6 +217,24 @@ SOURCE=.\vpgl_ortho_procrustes.h
 # End Source File
 # Begin Source File
 SOURCE=.\vpgl_bundle_adjust.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_adjust_rational_trans_onept.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_camera_homographies.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_interpolate.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_rational_geo_adjust.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_ray.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_ray_intersect.h
 # End Source File
 # End Group
 # End Target

@@ -734,6 +734,12 @@ SOURCE=.\vnl_definite_integral.cxx
 # Begin Source File
 SOURCE=.\vnl_bessel.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vnl_crs_index.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_sparse_lst_sqr_function.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -1144,6 +1150,12 @@ SOURCE=.\vnl_sse.h
 # End Source File
 # Begin Source File
 SOURCE=.\dll.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_crs_index.h
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_sparse_lst_sqr_function.h
 # End Source File
 # End Group
 # End Target

@@ -522,6 +522,9 @@ SOURCE=.\vil_pyramid_image_resource.cxx
 SOURCE=.\vil_image_list.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vil_math.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\file_formats/vil_geotiff_header.cxx
 # End Source File
 # Begin Source File

@@ -125,6 +125,24 @@ SOURCE=.\test_ortho_procrustes.cxx
 # Begin Source File
 SOURCE=.\test_bundle_adjust.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_adjust_rational_trans_onept.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_camera_homographies.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_interpolate.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_rational_geo_adjust.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_ray.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_ray_intersect.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

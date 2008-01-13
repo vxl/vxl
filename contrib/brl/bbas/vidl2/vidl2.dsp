@@ -169,7 +169,7 @@ SOURCE=.\Templates/vil_smart_ptr+vidl2_ostream-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter "h;txx"
+# PROP Default_Filter "h;txx;in"
 # Begin Source File
 SOURCE=.\vidl2_ffmpeg_init.h
 # End Source File
@@ -256,6 +256,9 @@ SOURCE=.\vidl2_istream_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\vidl2_ostream_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_config.h.in
 # End Source File
 # End Group
 # End Target

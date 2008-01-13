@@ -213,6 +213,9 @@ SOURCE=.\Templates/vnl_io_matrix_fixed+double.3.4-.cxx
 SOURCE=.\Templates/vnl_io_matrix_fixed+double.4.4-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vnl_io_vector_fixed+float.3-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vsl_map_io+unsigned.vnl_double_2-.cxx
 # End Source File
 # Begin Source File

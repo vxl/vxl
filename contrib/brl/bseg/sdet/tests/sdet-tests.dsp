@@ -251,6 +251,9 @@ SOURCE=.\test_detector.cxx
 SOURCE=.\test_region_proc.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_gauss_fit.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

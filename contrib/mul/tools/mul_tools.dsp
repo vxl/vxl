@@ -246,6 +246,9 @@ LINK32=link.exe
 # Begin Source File
 SOURCE=.\concat_3d_images.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\print_mbl_log_properties.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
