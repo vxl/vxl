@@ -34,12 +34,15 @@ TESTS += test_resample.cxx
 TESTS += test_analyze_format.cxx
 TESTS += test_reflect.cxx
 TESTS += test_gen_synthetic.cxx
+TESTS += test_save_load_image.cxx
 
 TESTS += test_algo_corners.cxx
 TESTS += test_algo_quad_distance_function.cxx
 TESTS += test_algo_smooth_121.cxx
 TESTS += test_algo_distance_transform.cxx
 TESTS += test_algo_abs_shuffle_distance.cxx
+TESTS += test_algo_exp_distance_transform.cxx
+TESTS += test_algo_make_distance_filter.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

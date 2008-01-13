@@ -13,6 +13,12 @@ TESTS += test_project.cxx
 TESTS += test_backproject.cxx
 TESTS += test_ortho_procrustes.cxx
 TESTS += test_bundle_adjust.cxx
+TESTS += test_adjust_rational_trans_onept.cxx
+TESTS += test_camera_homographies.cxx
+TESTS += test_interpolate.cxx
+TESTS += test_rational_geo_adjust.cxx
+TESTS += test_ray.cxx
+TESTS += test_ray_intersect.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

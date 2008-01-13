@@ -27,6 +27,10 @@ MANPAGE_SOURCES += vil3d_grad_3x3x3.h
 MANPAGE_SOURCES += vil3d_quad_distance_function.h
 MANPAGE_SOURCES += vil3d_abs_shuffle_distance.txx
 MANPAGE_SOURCES += vil3d_smooth_121.h
+MANPAGE_SOURCES += vil3d_exp_distance_transform.h
+MANPAGE_SOURCES += vil3d_max_product_filter.h
+SOURCES += vil3d_make_distance_filter.cxx
+SOURCES += vil3d_make_edt_filter.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

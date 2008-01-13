@@ -37,7 +37,7 @@ SOURCES += vgui_observer.cxx
 SOURCES += vgui_observable.cxx
 MANPAGE_SOURCES += vgui_satellite_tableau.txx
 MANPAGE_SOURCES += vgui_range_map.txx
-MANPAGE_SOURCES += vgui_range_map_params.h
+SOURCES += vgui_range_map_params.cxx
 MANPAGE_SOURCES += vgui_range_map_params_sptr.h
 SOURCES += vgui_font.cxx
 MANPAGE_SOURCES += vgui_font_sptr.h
@@ -144,11 +144,13 @@ MANPAGE_SOURCES += vgui_viewer3D_tableau_sptr.h
 
 # dialog classes
 SOURCES += vgui_dialog.cxx
+SOURCES += vgui_dialog_extensions.cxx
 MANPAGE_SOURCES += internals/vgui_dialog_field.h
 SOURCES += internals/vgui_simple_field.cxx
 MANPAGE_SOURCES += internals/vgui_string_field.h
 MANPAGE_SOURCES += internals/vgui_file_field.h
 SOURCES += internals/vgui_dialog_impl.cxx
+SOURCES += internals/vgui_dialog_extensions_impl.cxx
 
 # statusbar classes
 SOURCES += vgui_statusbuf.cxx
@@ -275,6 +277,8 @@ SOURCES += impl/mfc/vgui_mfc_tag.cxx
 SOURCES += impl/mfc/vgui_mfc_utils.cxx
 SOURCES += impl/mfc/vgui_mfc_view.cxx
 SOURCES += impl/mfc/vgui_mfc_window.cxx
+SOURCES += impl/mfc/vgui_dir_dialog.cxx
+SOURCES += impl/mfc/vgui_mfc_dialog_extensions_impl.cxx
 endif
 
 ifeq ($(HAS_WX),1)

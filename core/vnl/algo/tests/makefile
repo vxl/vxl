@@ -36,6 +36,7 @@ TESTS += test_matrix_update.cxx
 TESTS += test_sparse_lu.cxx
 TESTS += test_bracket_minimum.cxx
 TESTS += test_brent_minimizer.cxx
+TESTS += test_sparse_lm.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

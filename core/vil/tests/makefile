@@ -25,6 +25,7 @@ TESTS += test_stream.cxx
 PARAMS_test_stream := file_read_data
 TESTS += test_image_list.cxx
 TESTS += test_pyramid_image_resource.cxx
+TESTS += test_4_plane_tiff.cxx
 
 # image operations
 TESTS += test_deep_copy_3_plane.cxx
@@ -46,6 +47,7 @@ TESTS += test_resample_bicub.cxx
 
 # Math
 TESTS += test_math_value_range.cxx
+TESTS += test_math_median.cxx
 
 # Blocking
 TESTS += test_blocked_image_resource.cxx

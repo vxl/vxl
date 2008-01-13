@@ -7,6 +7,7 @@ include ${VXLROOT}/core/testlib/config.mk
 TESTMAIN := test_driver.cxx
 TESTS += test_detector.cxx
 TESTS += test_region_proc.cxx
+TESTS += test_gauss_fit.cxx
 
 PARAMS_test_detector := jar-closeup.tif
 PARAMS_test_region_proc := jar-closeup.tif

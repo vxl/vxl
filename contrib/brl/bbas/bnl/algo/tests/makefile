@@ -3,7 +3,6 @@ include ../config.mk
 
 TESTMAIN := test_driver.cxx
 TESTS += test_legendre_polynomial.cxx
-TESTS += test_sparse_lm.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

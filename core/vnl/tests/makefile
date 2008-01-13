@@ -36,6 +36,9 @@ TESTS += test_integrant.cxx
 TESTS += test_bessel.cxx
 TESTS += test_quaternion.cxx
 TESTS += test_rotation_matrix.cxx
+TESTS += test_alignment.cxx
+TESTS += test_crs_index.cxx
+TESTS += test_sparse_lst_sqr_function.cxx
 
 MANPAGE_SOURCES += test_arithmetic_body.h
 

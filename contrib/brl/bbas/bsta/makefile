@@ -8,6 +8,8 @@ MANPAGE_SOURCES += bsta_histogram.txx
 MANPAGE_SOURCES += bsta_joint_histogram.txx
 SOURCES += bsta_k_medoid.cxx
 MANPAGE_SOURCES += bsta_otsu_threshold.txx
+SOURCES += bsta_int_histogram_1d.cxx
+SOURCES += bsta_int_histogram_2d.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

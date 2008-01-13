@@ -39,6 +39,7 @@ SOURCES += vidl2_v4l_istream.cxx
 SOURCES += vidl2_v4l_params.cxx
 
 MANPAGE_SOURCES += vidl2_exception.h
+MANPAGE_SOURCES += vidl2_config.h.in
 
 # vgui add-on library
 SUBDIRS += gui

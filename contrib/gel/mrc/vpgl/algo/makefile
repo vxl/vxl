@@ -20,6 +20,12 @@ SOURCES += vpgl_invmap_cost_function.cxx
 SOURCES += vpgl_fm_compute_2_point.cxx
 SOURCES += vpgl_ortho_procrustes.cxx
 SOURCES += vpgl_bundle_adjust.cxx
+SOURCES += vpgl_adjust_rational_trans_onept.cxx
+SOURCES += vpgl_camera_homographies.cxx
+SOURCES += vpgl_interpolate.cxx
+SOURCES += vpgl_rational_geo_adjust.cxx
+SOURCES += vpgl_ray.cxx
+SOURCES += vpgl_ray_intersect.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

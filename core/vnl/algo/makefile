@@ -56,6 +56,7 @@ SOURCES += vnl_brent.cxx
 SOURCES += vnl_lsqr.cxx
 SOURCES += vnl_bracket_minimum.cxx
 SOURCES += vnl_brent_minimizer.cxx
+SOURCES += vnl_sparse_lm.cxx
 
 # equation solvers
 SOURCES += vnl_rpoly_roots.cxx

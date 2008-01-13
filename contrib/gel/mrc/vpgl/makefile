@@ -18,12 +18,13 @@ MANPAGE_SOURCES += vpgl_reg_fundamental_matrix.txx
 MANPAGE_SOURCES += vpgl_affine_camera.txx
 MANPAGE_SOURCES += vpgl_affine_fundamental_matrix.txx
 MANPAGE_SOURCES += vpgl_essential_matrix.txx
+MANPAGE_SOURCES += vpgl_comp_rational_camera.txx
 
 #MANPAGE_SOURCES += vpgl_basic_camera_sptr.h
 #MANPAGE_SOURCES += vpgl_matrix_camera_sptr.h
 #MANPAGE_SOURCES += vpgl_perspective_camera_sptr.h
 
-SUBDIRS += xio algo file_formats
+SUBDIRS += xio algo file_formats bgeo
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

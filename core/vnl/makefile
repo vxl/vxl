@@ -119,7 +119,9 @@ MANPAGE_SOURCES += vnl_double_4x4.h
 SOURCES += vnl_cost_function.cxx
 SOURCES += vnl_least_squares_function.cxx
 SOURCES += vnl_least_squares_cost_function.cxx
+SOURCES += vnl_sparse_lst_sqr_function.cxx
 SOURCES += vnl_nonlinear_minimizer.cxx
+
 SOURCES += vnl_hungarian_algorithm.cxx
 
 # linear systems
@@ -130,6 +132,9 @@ SOURCES += vnl_sparse_matrix_linear_system.cxx
 SOURCES += vnl_rotation_matrix.cxx
 MANPAGE_SOURCES += vnl_cross_product_matrix.h
 MANPAGE_SOURCES += vnl_identity_3x3.h
+
+# indexing of sparse structures
+SOURCES += vnl_crs_index.cxx
 
 # special functions
 SOURCES += vnl_bessel.cxx
