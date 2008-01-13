@@ -1,4 +1,3 @@
-#include <vidl2/vidl2_config.h>
 #include <vidl2/vidl2_color.h>
 #include <vidl2/vidl2_convert.h>
 #include <vidl2/vidl2_exception.h>
