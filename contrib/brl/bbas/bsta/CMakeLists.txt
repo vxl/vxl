@@ -1,8 +1,7 @@
-# ./brl/bbas/bsta/CMakeLists.txt
-# A library for basic statistics classes and methods
+# basic/bsta/CMakeLists.txt
+# Brown statistics Library.
 
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
+INCLUDE_DIRECTORIES( ${lems_SOURCE_DIR}/basic )
 
 SET(bsta_sources
  bsta_gauss.cxx            bsta_gauss.h
@@ -12,16 +11,48 @@ SET(bsta_sources
  bsta_otsu_threshold.txx   bsta_otsu_threshold.h
  bsta_int_histogram_1d.cxx  bsta_int_histogram_1d.h
  bsta_int_histogram_2d.cxx  bsta_int_histogram_2d.h
-)
-AUX_SOURCE_DIRECTORY(Templates bsta_sources)
 
-ADD_LIBRARY(bsta ${bsta_sources})
+
+  bsta_distribution.h
+
+  bsta_gaussian.h
+  bsta_gaussian_full.txx         bsta_gaussian_full.h
+  bsta_gaussian_indep.txx        bsta_gaussian_indep.h
+  bsta_gaussian_sphere.txx       bsta_gaussian_sphere.h
+
+  bsta_gauss_f1.h
+  bsta_gauss_sf3.h               bsta_gauss_sd3.h
+  bsta_gauss_if3.h               bsta_gauss_id3.h
+  bsta_gauss_ff3.h               bsta_gauss_fd3.h
+
+  bsta_mixture.h
+  bsta_basic_functors.h
+  bsta_attributes.h
+  bsta_detector_gaussian.h
+  bsta_detector_mixture.h
+bsta_gaussian_angles_1d.h bsta_gaussian_angles_1d.cxx
+bsta_gaussian_x_y_theta.h bsta_gaussian_x_y_theta.cxx
+
+
+)
+
+AUX_SOURCE_DIRECTORY(Templates bsta_sources)
+ADD_LIBRARY(bsta  ${bsta_sources})
 INSTALL_TARGETS(/lib bsta)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/bsta ${bsta_sources})
 
-TARGET_LINK_LIBRARIES(bsta vnl vbl vcl)
 
-IF(BUILD_TESTING)
+
+TARGET_LINK_LIBRARIES(bsta vnl_algo vbl vnl_io vnl vsl)
+
+IF( BUILD_TESTING )
   SUBDIRS(tests)
-ENDIF(BUILD_TESTING)
+ENDIF( BUILD_TESTING )
+
+
+# algorithms for statistical modeling
+SUBDIRS( algo )
+
+# Binary I/O clip on library
+SUBDIRS( io )
 
