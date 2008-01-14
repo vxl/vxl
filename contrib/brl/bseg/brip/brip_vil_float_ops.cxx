@@ -1404,14 +1404,18 @@ brip_vil_float_ops::convert_to_short(vil_image_resource_sptr const& image)
   // Here we assume the color elements are unsigned char.
   if (image->nplanes()==3&&image->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
   {
-    vil_image_view<vil_rgb<vxl_byte> > color_image = image->get_view();
+    vil_image_view<vxl_byte> color_image = image->get_view();
     unsigned width = color_image.ni(), height = color_image.nj();
     // the output image
     vil_image_view<unsigned short> short_image;
     short_image.set_size(width, height);
     for (unsigned y = 0; y<height; y++)
       for (unsigned x = 0; x<width; x++)
-        short_image(x,y) = static_cast<unsigned short>(color_image(x,y).grey());
+        {
+          double v = color_image(x,y,0)+color_image(x,y,1)+color_image(x,y,2);
+          v/=3.0;
+          short_image(x,y) = static_cast<unsigned short>(v);
+        }
     return short_image;
   }
   // the image is multispectral so we should convert it to greyscale
