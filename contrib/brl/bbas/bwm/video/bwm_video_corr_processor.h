@@ -140,23 +140,29 @@ class bwm_video_corr_processor
  protected:
 
   // INTERNALS-----------------------------------------------------------------
+  //: compute the boolean mask defining which frames have coorespondences
+  void mask(unsigned& min_frame, unsigned& max_frame, 
+            vcl_vector<vcl_vector<bool> >& mask);
+
   //: get a float view of the frame at the specified index
   bool frame_at_index(unsigned frame_index, vil_image_view<float>& view);
 
   //: extract the float pixel windows for start and end frames used to
   //  find correspondences
-  bool compute_ab_corr_windows(unsigned match_radius);
+  void compute_ab_corr_windows(unsigned match_radius,
+                               vcl_vector<bool> const& mask_a,
+                               vcl_vector<bool> const& mask_b);
+
+
 
   //: find correpondences on frame_index_x, between two frames,a and b
   // it must be true that index_a < index_x < index_b
   // if use_lmq = true levenberg_marquardt is used to refine the correspondence
   // position otherwise the amoeba algorithm is used
-  bool find_missing_corrs(unsigned frame_index_a,
-                          unsigned frame_index_b,
-                          unsigned frame_index_x,
-                          unsigned win_radius,
-                          unsigned search_radius,
-                          bool use_lmq);
+  bool find_missing_corrs(unsigned frame_index_a, vcl_vector<bool> mask_a,
+                          unsigned frame_index_b, vcl_vector<bool> mask_b,
+                          unsigned frame_index_x, unsigned win_radius,
+                          unsigned search_radius, bool use_lmq);
 
   //: iterpolate between the set of known cameras (kcams). The vector,
   // unknown, specifies which cameras are unknown. The number of elements

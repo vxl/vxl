@@ -22,7 +22,8 @@
 #include <vidl2/vidl2_frame.h>
 #include <vidl2/vidl2_convert.h>
 #include <vidl2/vidl2_image_list_istream.h>
-
+//Minimum number of correspondences on a frame to compute cameras
+static const unsigned min_corrs = 10;
 // if an element of pixels is negative it indicates the point was outside the
 // image
 static void extract_window(float u, float v, int radius, 
@@ -74,11 +75,11 @@ void bwm_video_corr_lsqr_cost_func::f(vnl_vector<double> const& x,
 			double res = corr_window_ab_[k] - pixels[k];
 			fx[k] = res;}
 #if 0
- vcl_cout << "\nX = (" << x[0] << ' ' << x[1] << '\n';
- vcl_cout << "f\n";
- vcl_cout.precision(3);
- for(unsigned i = 0; i< fx.size(); ++i)
-	 vcl_cout<< fx[i] << ' ';
+  vcl_cout << "\nX = (" << x[0] << ' ' << x[1] << '\n';
+  vcl_cout << "f\n";
+  vcl_cout.precision(3);
+  for(unsigned i = 0; i< fx.size(); ++i)
+    vcl_cout<< fx[i] << ' ';
   vcl_cout << '\n';
 #endif
 }
@@ -165,7 +166,7 @@ bool bwm_video_corr_processor::open_video_site(vcl_string const& site_path,
     if(vul_file::exists(dir))
       remove_dir(dir);
     if(!vul_file::make_directory_path(dir))
-    return false;
+      return false;
     camera_path_ = dir+"/*";
     if(!this->open_camera_ostream(dir))
       return false;
@@ -253,20 +254,20 @@ interpolate_cameras(vcl_vector<vpgl_perspective_camera<double> > known_cams,
                      << ':' << ki-1 << "]\n";
           if(!vpgl_interpolate::interpolate(c0, c1, n_interp, icams))
             {
-            vcl_cerr << "Interpolation failed\n";
-            return false;}
-		  for(unsigned c = 0; c<icams.size(); ++c)
-			interp_cams[fi+c] = icams[c];
-		  fi = ki-1;
+              vcl_cerr << "Interpolation failed\n";
+              return false;}
+          for(unsigned c = 0; c<icams.size(); ++c)
+            interp_cams[fi+c] = icams[c];
+          fi = ki-1;
         }
     }
   if(verbose_){
-  vcl_cout << "Solved and Interpolated Cameras \n";
-  for(unsigned c = 0; c<ncameras; ++c){
-    vgl_point_3d<double> p =interp_cams[c].get_camera_center();
-    vgl_rotation_3d<double> R = interp_cams[c].get_rotation();
-    vcl_cout << "C[" << c << "]("<< R << '|' << p.x() << ' ' << p.y() << ' '
-             << p.z() <<  ")\n"; }
+    vcl_cout << "Solved and Interpolated Cameras \n";
+    for(unsigned c = 0; c<ncameras; ++c){
+      vgl_point_3d<double> p =interp_cams[c].get_camera_center();
+      vgl_rotation_3d<double> R = interp_cams[c].get_rotation();
+      vcl_cout << "C[" << c << "]("<< R << '|' << p.x() << ' ' << p.y() << ' '
+               << p.z() <<  ")\n"; }
   }
   return true;
 }
@@ -286,50 +287,72 @@ void min_max_frame(vcl_vector<bwm_video_corr_sptr> const& corrs,
         max_frame = maxf;
     }
 }
-bool bwm_video_corr_processor::
-initialize_world_pts_and_cameras(vpgl_calibration_matrix<double> const& K,
-                                 double initial_depth)
+//
+//compute the mask on existing correspondences
+//the mask is m x n , where m = number of cameras and 
+//n = number of world points (corrs)
+//
+void bwm_video_corr_processor::mask(unsigned& min_frame, unsigned& max_frame, 
+                                    vcl_vector<vcl_vector<bool> >& mask)
 {
-    //first get the start and end frame numbers
-  unsigned min_frame =0, max_frame = 0;
+  //get the start and end frame numbers. assume contiguous frames inbetween
+  min_frame =0, max_frame = 0;
   min_max_frame(corrs_, min_frame, max_frame);
   if(verbose_)
     vcl_cout << "Start frame = " << min_frame << " End frame = " 
              << max_frame << '\n';
   unsigned ncameras = max_frame-min_frame +1;
   unsigned npoints = corrs_.size();
-  if(verbose_)
-  vcl_cout << "Initializing " << ncameras << " cameras on " << npoints 
-           << " correspondences\n";
-  //next populate the image points and the mask array
-  //the mask appears to be m x n ,
-  // where m = number of cameras an n = number of world points (corrs)
-  //
   vcl_vector<bool> init(npoints);
-  vcl_vector<vcl_vector<bool> > mask(ncameras, init);
-  vcl_vector<vgl_point_2d<double> > image_points(ncameras*npoints);
-  for(unsigned w = 0; w<npoints; ++w)
-    for(unsigned f = min_frame; f<=max_frame; ++f)
+  mask.resize(ncameras, init);
+ 
+  for(unsigned w = 0; w<npoints; ++w){
+	   unsigned f_rel = 0;//relative frame number
+    for(unsigned f = min_frame; f<=max_frame; ++f, ++f_rel)
       {
         vgl_point_2d<double> pt;
-        if(corrs_[w]->match(f, pt))
-          {
-            image_points[f*npoints + w] = pt;
-            mask[f][w] = true;
-          }
-        else
-          mask[f][w] = false;
+        mask[f_rel][w] = corrs_[w]->match(f, pt);
       }
+  }
+}
+
+bool bwm_video_corr_processor::
+initialize_world_pts_and_cameras(vpgl_calibration_matrix<double> const& K,
+                                 double initial_depth)
+{
+  unsigned min_frame =0, max_frame = 0;
+  vcl_vector<vcl_vector<bool> > mask;
+  this->mask(min_frame, max_frame, mask);
+  //The implementation is not general enough yet to handle 
+  //a non-zero start frame
+  if(min_frame)
+    return false;
+  unsigned ncameras = max_frame-min_frame +1;
+  unsigned npoints = corrs_.size();
+  if(verbose_)
+    vcl_cout << "Initializing " << ncameras << " cameras on " << npoints 
+             << " correspondences\n";
+  vcl_vector<vgl_point_2d<double> > image_points(ncameras*npoints);
+  for(unsigned w = 0; w<npoints; ++w)
+    {
+      unsigned f_rel = 0;//relative frame num == 0 at min_frame
+      for(unsigned f = min_frame; f<=max_frame; ++f, ++f_rel)
+        {
+          vgl_point_2d<double> pt;
+          if(corrs_[w]->match(f, pt))
+            image_points[f_rel*npoints + w] = pt;
+        }
+    }
   //find the number of rows that are completely masked and 
   //remove them creating a smaller problem
   vcl_vector<bool> unknown_frames(ncameras, false);
   int filled_rows = 0;
-  for(unsigned f = 0; f<ncameras; ++f){
+  for(unsigned f_rel = 0; f_rel<ncameras; ++f_rel){
     bool empty = true;
     for(unsigned w = 0; w<npoints; ++w)
-      if(mask[f][w]) empty = false;
+      if(mask[f_rel][w]) empty = false;
     if(empty)
-      unknown_frames[f] = true;
+      unknown_frames[f_rel] = true;
     else 
       ++filled_rows;
   }
@@ -337,17 +360,41 @@ initialize_world_pts_and_cameras(vpgl_calibration_matrix<double> const& K,
     vcl_cout << "Executing bundle adjustment on " << filled_rows 
              << " cameras\n";
   //create a new mask array and image point vector for the smaller problem
+  vcl_vector<bool> init(npoints);
   vcl_vector<vcl_vector<bool> > cmask(filled_rows, init);
-  vcl_vector<vgl_point_2d<double> > cimage_points(filled_rows*npoints);
+  vcl_vector<vgl_point_2d<double> > cimage_points;
   unsigned ff = 0;
   for(unsigned f = 0; f<ncameras; ++f)
 	  if(!unknown_frames[f]){
+		  unsigned cnt = 0;
       for(unsigned w = 0; w<npoints; ++w){
         cmask[ff][w] = mask[f][w];
-        cimage_points[ff*npoints + w] = image_points[f*npoints + w];
+        if(mask[f][w]){ cnt++;
+        cimage_points.push_back(image_points[f*npoints + w]);}
       }
-	  ++ff;
+      if(cnt<min_corrs){
+        vcl_cout << "NCorrs[" << f << "]= " << cnt << '\n';
+        for(unsigned w = 0; w<npoints; ++w)
+          if(mask[f][w])
+            {
+              vgl_point_2d<double> pt;
+              if(corrs_[w]->match(f, pt))
+                vcl_cout << "bad corr " << pt << '\n';
+            }
+      }
+      ++ff;
 	  }
+#if 0
+  //sanity check on image points
+  unsigned kk = 0;
+  for(unsigned ff = 0; ff<filled_rows; ++ff)
+    for(unsigned w = 0; w<npoints; ++w)
+      if(cmask[ff][w]){
+        vcl_cout << "Image Point[" << ff << "][" << w 
+                 << "]=" << cimage_points[kk] << '\n';
+        kk++;
+      }
+#endif
   vnl_double_3 r(0,0,0.000001);
   vgl_rotation_3d<double> I(r); // small initial rotation
   vgl_homg_point_3d<double> center(0.0, 0.0, -initial_depth);
@@ -369,6 +416,7 @@ initialize_world_pts_and_cameras(vpgl_calibration_matrix<double> const& K,
       vgl_point_3d<double> pt = unknown_world[w];
       corrs_[w]->set_world_pt(pt);
     }
+  //WARNING!! THIS FUNCTION NOT VALID FOR MIN_FRAME != 0
   if(!this->interpolate_cameras(unknown_cameras, unknown_frames,
                                 cameras_))
     return false;
@@ -391,52 +439,58 @@ bool bwm_video_corr_processor::frame_at_index(unsigned frame_index,
   video_istr_->seek_frame(frame_index);
   vidl2_frame_sptr frame = video_istr_->current_frame();
   if(!frame)
-    return false;
+    {
+      vcl_cerr << "Failed to seek to frame " << frame_index << '\n';
+      return false;
+    }
   else if(frame->pixel_format() == VIDL2_PIXEL_FORMAT_MONO_16){
     static vil_image_view<vxl_uint_16> img;
     if (vidl2_convert_to_view(*frame,img))
       view = brip_vil_float_ops::convert_to_float(img);
-    else
+    else{
+      vcl_cerr << "Failed to convert frame to vil_image_view\n";
       return false;
+    }
   }
   else{
     static vil_image_view<vxl_byte> img;
     if (vidl2_convert_to_view(*frame,img,VIDL2_PIXEL_COLOR_RGB))
       view = brip_vil_float_ops::convert_to_float(img);
-    else
+    else{
+      vcl_cerr << "Failed to convert frame to vil_image_view\n";
       return false;
+    }
   }
   return true;
 }
 // compute the set of image samples around each correspondence
 // at the start frame and end frame of a tracking interval (a, b).
-bool bwm_video_corr_processor::compute_ab_corr_windows(unsigned match_radius)
+void bwm_video_corr_processor::
+compute_ab_corr_windows(unsigned match_radius,
+                        vcl_vector<bool> const& mask_a,
+                        vcl_vector<bool> const& mask_b)
 {
   //n is the number of correspondences to find, i.e. determine (u, v) for each.
   unsigned n = corrs_.size();
-  //extract the correspondences and world points
-  bool all_valid = true;
-  vcl_vector<vgl_point_2d<double> > corrs_a, corrs_b, proj_wld_pts;
-  vcl_vector<vgl_point_3d<double> > world_pts;
-  
-  for(unsigned i = 0; i<n&&all_valid; ++i){
+  vgl_point_2d<double> ini(-1, -1);
+  vcl_vector<vgl_point_2d<double> > corrs_a(n, ini), corrs_b(n, ini);
+  for(unsigned i = 0; i<n; ++i){
+    if(!(mask_a[i]&&mask_b[i])) continue;
     bwm_video_corr_sptr c = corrs_[i];
     vgl_point_2d<double> ipt;
-    if(c->match(frame_index_a_, ipt)) corrs_a.push_back(ipt);
-    else{ all_valid = false; continue;}
-    if(c->match(frame_index_b_, ipt)) corrs_b.push_back(ipt);
-    else{ all_valid = false; continue;}
-    if(c->world_pt_valid()) world_pts.push_back(c->world_pt());
-    else all_valid = false;
+    if(c->match(frame_index_a_, ipt)) corrs_a[i]=ipt;
+    else continue;
+    if(c->match(frame_index_b_, ipt)) corrs_b[i]=ipt;
+    else continue;
   }
-  if(!all_valid)
-    return false;
-
   //extract the correspondence image windows
   //bilinear interpolation is used to sample the input images 
   for(unsigned i = 0; i<n; ++i)
     {
+      if(!(mask_a[i]&&mask_b[i])) continue;
       vgl_point_2d<double> ipta = corrs_a[i], iptb = corrs_b[i];
+      if(ipta.x()<0||ipta.y()<0||iptb.x()<0||iptb.y()<0)
+        continue;
       float ua = static_cast<float>(ipta.x());
       float va = static_cast<float>(ipta.y());
       vcl_vector<float> pixels_a;
@@ -445,11 +499,9 @@ bool bwm_video_corr_processor::compute_ab_corr_windows(unsigned match_radius)
       float vb = static_cast<float>(iptb.y());
       vcl_vector<float> pixels_b;
       extract_window(ub, vb, match_radius, image_b_, pixels_b);
-      unsigned msq = pixels_a.size();
       corr_windows_a_.push_back(pixels_a);
       corr_windows_b_.push_back(pixels_b);
     }
-  return true;
 }
 void bwm_video_corr_processor::
 set_correspondences(vcl_vector<bwm_video_corr_sptr> const& corrs)
@@ -515,7 +567,9 @@ exhaustive_init(vnl_vector<double>& position,
 // The search starts at the projected world point location in each 
 // between frame 
 bool bwm_video_corr_processor::find_missing_corrs(unsigned frame_index_a,
+                                                  vcl_vector<bool> mask_a,
                                                   unsigned frame_index_b,
+                                                  vcl_vector<bool> mask_b,
                                                   unsigned frame_index_x,
                                                   unsigned win_radius,
                                                   unsigned search_radius,
@@ -523,7 +577,8 @@ bool bwm_video_corr_processor::find_missing_corrs(unsigned frame_index_a,
 {
   unsigned n = corrs_.size();
   if(!n) return false;
-
+  //all correspondences must have a world point for the 
+  //algorithm to work
   if(!world_pts_valid_){
     world_pts_valid_ = true;
     for(unsigned i = 0; i<n&&world_pts_valid_; ++i)
@@ -532,11 +587,14 @@ bool bwm_video_corr_processor::find_missing_corrs(unsigned frame_index_a,
         if(c->world_pt_valid()) 
           world_pts_.push_back(c->world_pt());
         else
-			world_pts_valid_ = false;
+          world_pts_valid_ = false;
       }
   }
-  if(!world_pts_valid_) return false;
-    //check for index bounds consistency
+  if(!world_pts_valid_){
+    vcl_cerr << " world points not valid\n";
+      return false;
+  }
+  //check for index bounds consistency
   if(frame_index_a>=frame_index_b ||
      frame_index_x <= frame_index_a ||
      frame_index_x >= frame_index_b)
@@ -561,15 +619,19 @@ bool bwm_video_corr_processor::find_missing_corrs(unsigned frame_index_a,
     vcl_cout << "Finding correspondences in frame interval ["
              << frame_index_a << ':' << frame_index_b << "]\n";
   if(compute_ab)
-    if(!this->compute_ab_corr_windows(win_radius))
-      return false;
+    this->compute_ab_corr_windows(win_radius, mask_a, mask_b);
   vil_image_view<float> fvx;
   if(!this->frame_at_index(frame_index_x, fvx))
     return false;
   //get the camera at frame x
-  if(!cam_istr_) return false;
-  if(!cam_istr_->seek_camera(frame_index_x))
+  if(!cam_istr_) {
+    vcl_cerr << "No camera stream\n";
     return false;
+  }
+  if(!cam_istr_->seek_camera(frame_index_x)){
+    vcl_cerr << "Can't seek to camera frame " << frame_index_x << '\n';
+    return false;
+  }
   vpgl_perspective_camera<double>* camx = cam_istr_->current_camera();
   
   double nres = 2*win_radius +1;
@@ -578,22 +640,25 @@ bool bwm_video_corr_processor::find_missing_corrs(unsigned frame_index_a,
   unsigned da = frame_index_x - frame_index_a;
   unsigned db = frame_index_b - frame_index_x;
   for(unsigned i = 0; i<n; ++i){
-      vnl_vector<double> unknowns(2);
-      vgl_point_2d<double> ip = (*camx).project(world_pts_[i]);
-      unknowns[0] = ip.x(); unknowns[1] = ip.y(); 
-      double sr = 0, er = 0;
-      vcl_vector<float> cwin = corr_windows_a_[i];
-      if(db<da)
-        cwin = corr_windows_b_[i];
-      this->exhaustive_init(unknowns,win_radius, search_radius,
-                            fvx, cwin, sr, er);
-      if(verbose_)
-        vcl_cout << "c["<<i <<"]:f[" << frame_index_x << "] Bf(" << ip.x() 
-                 << ' ' << ip.y() << ") Af("  << unknowns[0] << ' '
-                 << unknowns[1] << ")ier " 
-                 << sr << ':' << er << '\n' << vcl_flush;
-      double xb = unknowns[0], yb = unknowns[1];
-      if(use_lmq){
+    //check if the correspondence is present on frame a and on frame b
+    if( !(mask_a[i] && mask_b[i]) )
+		continue;
+    vnl_vector<double> unknowns(2);
+    vgl_point_2d<double> ip = (*camx).project(world_pts_[i]);
+    unknowns[0] = ip.x(); unknowns[1] = ip.y(); 
+    double sr = 0, er = 0;
+    vcl_vector<float> cwin = corr_windows_a_[i];
+    if(db<da)
+      cwin = corr_windows_b_[i];
+    this->exhaustive_init(unknowns,win_radius, search_radius,
+                          fvx, cwin, sr, er);
+    if(verbose_)
+      vcl_cout << "c["<<i <<"]:f[" << frame_index_x << "] Bf(" << ip.x() 
+               << ' ' << ip.y() << ") Af("  << unknowns[0] << ' '
+               << unknowns[1] << ")ier " 
+               << sr << ':' << er << '\n' << vcl_flush;
+    double xb = unknowns[0], yb = unknowns[1];
+    if(use_lmq){
       bwm_video_corr_lsqr_cost_func vlcf(fvx, win_radius,
                                          cwin);
       vnl_levenberg_marquardt lmq(vlcf);
@@ -611,13 +676,13 @@ bool bwm_video_corr_processor::find_missing_corrs(unsigned frame_index_a,
       a.minimize(unknowns);
       er = vcl_sqrt(vcf.f(unknowns)/nres);
     }
-  if(verbose_)
-    vcl_cout << "c["<<i <<"]:f[" << frame_index_x << "] Bf(" << xb 
-             << ' ' << yb << ") Af("  << unknowns[0] << ' '
-             << unknowns[1] << ")f " 
-             << sr << ':' << er << '\n' << vcl_flush;
-  bwm_video_corr_sptr c = corrs_[i];
-  c->add(frame_index_x, vgl_point_2d<double>(unknowns[0], unknowns[1]));
+    if(verbose_)
+      vcl_cout << "c["<<i <<"]:f[" << frame_index_x << "] Bf(" << xb 
+               << ' ' << yb << ") Af("  << unknowns[0] << ' '
+               << unknowns[1] << ")f " 
+               << sr << ':' << er << '\n' << vcl_flush;
+    bwm_video_corr_sptr c = corrs_[i];
+    c->add(frame_index_x, vgl_point_2d<double>(unknowns[0], unknowns[1]));
   }
   return true;
 }
@@ -626,32 +691,48 @@ find_missing_correspondences(unsigned win_radius,
                              unsigned search_radius, bool use_lmq)
 {
   unsigned n = corrs_.size();
-  if(!n)
+  if(!n){
+    vcl_cerr << "No correspondences\n";
     return false;
+  }
   //get the start and end frame numbers
   unsigned min_frame =0, max_frame = 0;
-  min_max_frame(corrs_, min_frame, max_frame);
+  vcl_vector<vcl_vector<bool> > mask;
+  this->mask(min_frame, max_frame, mask);
+  //implementation not yet general enough to handle non_zero start frame
+  if(min_frame){
+    vcl_cerr << "start frame not zero\n";
+    return false;
+  }
   unsigned nframes = max_frame - min_frame +1;
   vcl_vector<unsigned> frame_intervals;
   for(unsigned f = min_frame; f<=max_frame; ++f)
     {
-      bool valid_frame = true;
-      for(unsigned w = 0; w<n&&valid_frame; ++w)
-        if(!corrs_[w]->match(f))
-          valid_frame = false;
-      if(valid_frame)
+      //number of correspondences on frame
+      unsigned count = 0;
+      for(unsigned w = 0; w<n; ++w)
+        if(corrs_[w]->match(f))
+          count++;
+      if(count>=min_corrs)
         frame_intervals.push_back(f);
     }
   unsigned nfi = frame_intervals.size();
-  if(nfi<2)
-    return false;
+  if(nfi<2){
+    vcl_cerr << " not at least two frame bounds\n";
+      return false;
+  }
   for(unsigned i = 0; i<nfi-1; ++i)
     {
       unsigned frame_a = frame_intervals[i];
       unsigned frame_b = frame_intervals[i+1];
-      for(unsigned ix = frame_a +1; ix<frame_b; ++ix)
-        if(!this->find_missing_corrs(frame_a, frame_b, ix, win_radius, search_radius, use_lmq))
+      vcl_vector<bool> mask_a = mask[frame_a];
+      vcl_vector<bool> mask_b = mask[frame_b];
+      for(unsigned ix = frame_a +1; ix<frame_b; ++ix){
+        if(!this->find_missing_corrs(frame_a, mask_a,
+                                     frame_b, mask_b,
+                                     ix, win_radius, search_radius, use_lmq))
           return false;
+      }
     }
   return true;
 }
@@ -659,33 +740,35 @@ bool bwm_video_corr_processor::refine_world_pts_and_cameras()
 {
   //get the start and end frame numbers
   unsigned min_frame =0, max_frame = 0;
-  min_max_frame(corrs_, min_frame, max_frame);
-  if(verbose_)
-    vcl_cout << "Start frame = " << min_frame << " End frame = " 
-             << max_frame << '\n';
+  vcl_vector<vcl_vector<bool> > mask;
+  this->mask(min_frame, max_frame, mask);
+  //The implementation is not general enough yet to handle 
+  //a non-zero start frame
+  if(min_frame){
+    vcl_cerr << "Can't handle a non-zero start frame\n";
+    return false;
+  }
   unsigned ncameras = max_frame-min_frame +1;
   unsigned npoints = corrs_.size();
   if(verbose_)
-  vcl_cout << "Refining " << ncameras << " cameras on " << npoints 
-           << " correspondences\n";
+    vcl_cout << "Refining " << ncameras << " cameras on " << npoints 
+             << " correspondences\n";
+
   //next populate the image points and the mask array
   //the mask appears to be m x n ,
   // where m = number of cameras an n = number of world points (corrs)
   //
-  vcl_vector<bool> init(npoints);
-  vcl_vector<vcl_vector<bool> > mask(ncameras, init);
   vcl_vector<vgl_point_2d<double> > image_points(ncameras*npoints);
   for(unsigned w = 0; w<npoints; ++w)
     for(unsigned f = min_frame; f<=max_frame; ++f)
       {
         vgl_point_2d<double> pt;
         if(corrs_[w]->match(f, pt))
-          {
-            image_points[f*npoints + w] = pt;
-            mask[f][w] = true;
-          }
-        else
-          mask[f][w] = false;
+          image_points[f*npoints + w] = pt;
+        else if(mask[f][w]){
+          vcl_cerr << "fatal[" << f << "][" << w << "]\n";
+          return false;
+        }
       }
   //find the number of rows that have insufficient correspondences
   //remove them creating a smaller problem
@@ -695,7 +778,7 @@ bool bwm_video_corr_processor::refine_world_pts_and_cameras()
     unsigned nc = 0;
     for(unsigned w = 0; w<npoints; ++w)
       if(mask[f][w]) nc++;
-    if(nc<6)
+    if(nc<min_corrs)
       unknown_frames[f] = true;
     else 
       ++filled_rows;
@@ -704,8 +787,9 @@ bool bwm_video_corr_processor::refine_world_pts_and_cameras()
     vcl_cout << "Executing bundle adjustment on " << filled_rows 
              << " cameras\n";
   //create a new mask array and image point vector for the smaller problem
+  vcl_vector<bool> init(npoints);
   vcl_vector<vcl_vector<bool> > cmask(filled_rows, init);
-  vcl_vector<vgl_point_2d<double> > cimage_points(filled_rows*npoints);
+  vcl_vector<vgl_point_2d<double> > cimage_points;
   vcl_vector<vpgl_perspective_camera<double> > unknown_cameras;
   if(!cam_istr_)
     return false;
@@ -713,21 +797,23 @@ bool bwm_video_corr_processor::refine_world_pts_and_cameras()
   for(unsigned f = 0; f<ncameras; ++f)
 	  if(!unknown_frames[f]){
     
-      for(unsigned w = 0; w<npoints; ++w){
-        cmask[ff][w] = mask[f][w];
-        cimage_points[ff*npoints + w] = image_points[f*npoints + w];
-      }
-      if(!cam_istr_->seek_camera(f))
+      for(unsigned w = 0; w<npoints; ++w)
+        if(cmask[ff][w] = mask[f][w])
+          cimage_points.push_back(image_points[f*npoints + w]);
+
+      if(!cam_istr_->seek_camera(f)){
+        vcl_cerr << "Can't seek camera at frame " << f << '\n';
         return false;
+      }
       unknown_cameras.push_back(*(cam_istr_->current_camera()));
-	  ++ff;
+      ++ff;
 	  }
-    // initialize unknown world points
+  // initialize unknown world points
   vgl_point_3d<double> pun(0.0, 0.0, 0.0);
   vcl_vector<vgl_point_3d<double> > unknown_world(npoints,pun);
   for(unsigned w = 0; w<npoints; ++w)
     if(corrs_[w]->world_pt_valid())
-	   unknown_world[w]=corrs_[w]->world_pt();
+      unknown_world[w]=corrs_[w]->world_pt();
 
   // exectute the bundle adjustment
   bool success = vpgl_bundle_adjust::optimize(unknown_cameras,
@@ -758,35 +844,35 @@ print_frame_alignment_quality(unsigned start_frame, unsigned end_frame)
   if(!video_istr_ || !cam_istr_)
     return;
   
-    for(unsigned f = start_frame; f<=end_frame; ++f)
-      {
-        if(!cam_istr_->seek_camera(f))
-          continue;
-        vpgl_perspective_camera<double>* cam = cam_istr_->current_camera();
-        bsta_histogram<double> h(0.0, 5.0, 10);
-        double min_error = vnl_numeric_traits<double>::maxval, max_error = 0;
-        for(unsigned i = 0; i<n; ++i)
-          {
-            bwm_video_corr_sptr c = corrs_[i];
-            if(!c->world_pt_valid())
-              continue;
-            vgl_point_2d<double> cpt;
-            if(!c->match(f, cpt))
-              continue;
-            vgl_point_2d<double> ppt = (*cam).project(c->world_pt());
-            double d = vgl_distance(cpt, ppt);
-            if(d<min_error) min_error = d;
-            if(d>max_error) max_error = d;
-            if(d>5.0) h.upcount(5.0, 1.0);
-            else h.upcount(d, 1.0);
-          }
-        vcl_cout.precision(2);
-        vcl_cout << "frame[" << f << "](" << min_error << "<" << max_error
-                 << "):c(" << h.p(0.5)+h.p(1.5) << ") p["; 
-        for(double x = 0.5; x<=5.5; x+=1.0)
-          vcl_cout << h.p(x) << ' ';
-        vcl_cout << "]\n";
-      }
+  for(unsigned f = start_frame; f<=end_frame; ++f)
+    {
+      if(!cam_istr_->seek_camera(f))
+        continue;
+      vpgl_perspective_camera<double>* cam = cam_istr_->current_camera();
+      bsta_histogram<double> h(0.0, 5.0, 10);
+      double min_error = vnl_numeric_traits<double>::maxval, max_error = 0;
+      for(unsigned i = 0; i<n; ++i)
+        {
+          bwm_video_corr_sptr c = corrs_[i];
+          if(!c->world_pt_valid())
+            continue;
+          vgl_point_2d<double> cpt;
+          if(!c->match(f, cpt))
+            continue;
+          vgl_point_2d<double> ppt = (*cam).project(c->world_pt());
+          double d = vgl_distance(cpt, ppt);
+          if(d<min_error) min_error = d;
+          if(d>max_error) max_error = d;
+          if(d>5.0) h.upcount(5.0, 1.0);
+          else h.upcount(d, 1.0);
+        }
+      vcl_cout.precision(2);
+      vcl_cout << "frame[" << f << "](" << min_error << "<" << max_error
+               << "):c(" << h.p(0.5)+h.p(1.5) << ") p["; 
+      for(double x = 0.5; x<=5.5; x+=1.0)
+        vcl_cout << h.p(x) << ' ';
+      vcl_cout << "]\n";
+    }
 }
 void bwm_video_corr_processor::close()
 {
