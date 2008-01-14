@@ -1,6 +1,6 @@
-// This is brcv/seg/bsta/io/dbsta_io_gaussian_sphere.h
-#ifndef dbsta_io_gaussian_sphere_h_
-#define dbsta_io_gaussian_sphere_h_
+// This is brl/bbas/bsta/io/bsta_io_gaussian_sphere.h
+#ifndef bsta_io_gaussian_sphere_h_
+#define bsta_io_gaussian_sphere_h_
 
 //:
 // \file
@@ -48,4 +48,4 @@ vsl_print_summary(vcl_ostream &os, const bsta_gaussian_sphere<T,n>& g)
 }
 
 
-#endif // dbsta_io_gaussian_sphere_h_
+#endif // bsta_io_gaussian_sphere_h_

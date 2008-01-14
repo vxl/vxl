@@ -1,6 +1,6 @@
-// This is brcv/seg/bsta/io/dbsta_io_attributes.h
-#ifndef dbsta_io_attributes_h_
-#define dbsta_io_attributes_h_
+// This is brcv/seg/bsta/io/bsta_io_attributes.h
+#ifndef bsta_io_attributes_h_
+#define bsta_io_attributes_h_
 
 //:
 // \file
@@ -45,4 +45,4 @@ vsl_print_summary(vcl_ostream &os, const bsta_num_obs<_comp>& m)
 }
 
 
-#endif // dbsta_io_attributes_h_
+#endif // bsta_io_attributes_h_

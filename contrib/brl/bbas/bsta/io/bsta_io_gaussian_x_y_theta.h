@@ -1,6 +1,6 @@
-// This is brcv/seg/bsta/io/dbsta_io_gaussian_angles_1d.h
-#ifndef dbsta_io_gaussian_angles_1d_h_
-#define dbsta_io_gaussian_angles_1d_h_
+// This is brl/bbas/bsta/io/bsta_io_gaussian_angles_1d.h
+#ifndef bsta_io_gaussian_angles_1d_h_
+#define bsta_io_gaussian_angles_1d_h_
 
 //:
 // \file
@@ -46,4 +46,4 @@ vsl_print_summary(vcl_ostream &os, const bsta_gaussian_x_y_theta & g)
 }
 
 
-#endif // dbsta_io_gaussian_full_h_
+#endif // bsta_io_gaussian_full_h_

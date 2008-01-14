@@ -1,6 +1,6 @@
-// This is brcv/seg/bsta/io/dbsta_io_gaussian_full.h
-#ifndef dbsta_io_gaussian_full_h_
-#define dbsta_io_gaussian_full_h_
+// This is brl/bbas/bsta/io/bsta_io_gaussian_full.h
+#ifndef bsta_io_gaussian_full_h_
+#define bsta_io_gaussian_full_h_
 
 //:
 // \file
@@ -48,4 +48,4 @@ vsl_print_summary(vcl_ostream &os, const bsta_gaussian_full<T,n>& g)
 }
 
 
-#endif // dbsta_io_gaussian_full_h_
+#endif // bsta_io_gaussian_full_h_
