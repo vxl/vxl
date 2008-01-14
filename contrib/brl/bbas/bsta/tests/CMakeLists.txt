@@ -10,7 +10,7 @@ ADD_EXECUTABLE( bsta_test_all
   test_bsta_histogram.cxx
 )
 
-TARGET_LINK_LIBRARIES( bsta_test_all dbsta2 testlib)
+TARGET_LINK_LIBRARIES( bsta_test_all bsta testlib)
 
 ADD_TEST( bsta_test_gaussian_full           bsta_test_all test_gaussian_full )
 ADD_TEST( bsta_test_gaussian_indep          bsta_test_all test_gaussian_indep )
