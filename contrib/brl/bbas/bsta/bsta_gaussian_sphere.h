@@ -43,7 +43,7 @@ class bsta_gaussian_sphere : public bsta_gaussian<T,n>
     {
       if(det_covar_ <= 0)
         return T(0);
-      return static_cast<float>(vcl_sqrt(1/(det_covar_*two_pi_power<n>::value()))
+      return static_cast<T>(vcl_sqrt(1/(det_covar_*two_pi_power<n>::value()))
            * vcl_exp(-sqr_mahal_dist/2));
     }
 

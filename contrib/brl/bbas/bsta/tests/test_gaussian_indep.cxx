@@ -40,7 +40,7 @@ void test_gaussian_indep_type(T epsilon, const vcl_string& type_name)
        gauss.sqr_mahalanobis_dist(test_pt), sqr_mah_dist);
 
   T two_pi = 2.0*vnl_math::pi;
-  T prob = 1.0/vcl_sqrt(two_pi*two_pi*two_pi*0.25) * vcl_exp(-sqr_mah_dist/2);
+  T prob = 1.0/vcl_sqrt(two_pi*two_pi*two_pi*gauss.det_covar()) * vcl_exp(-sqr_mah_dist/2);
   TEST_NEAR(("probability <"+type_name+">").c_str(), 
        gauss.probability(test_pt), prob, epsilon);
 
