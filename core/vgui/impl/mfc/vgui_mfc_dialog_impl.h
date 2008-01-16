@@ -25,11 +25,16 @@ class CFont;
 
 #include <vgui/internals/vgui_dialog_impl.h>
 #include "StdAfx.h"
+#undef MAX_ITEMS // also defined in vgui_mfc_dialog_extensions_impl.h
 #define MAX_ITEMS 255
 // MFC documentation says that our IDs should be in the range 0x8000-0xDFF
+#undef ID_BROWSE_FILES // also defined in vgui_mfc_dialog_extensions_impl.h
 #define ID_BROWSE_FILES 0x8000  // Assume that there won't be more than 100 browser buttons
+#undef ID_CHOOSE_COLOUR // also defined in vgui_mfc_dialog_extensions_impl.h
 #define ID_CHOOSE_COLOUR 0x8100 // Assume that there won't be more than 100 color chooser buttons
+#undef ID_EDIT // also defined in vgui_mfc_dialog_extensions_impl.h
 #define ID_EDIT 0x8200
+#undef ID_COMBOBOX // also defined in vgui_mfc_dialog_extensions_impl.h
 #define ID_COMBOBOX 0x8300
 
 //: The MFC implementation of vgui_dialog_impl.
