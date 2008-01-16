@@ -85,10 +85,18 @@ void vpdfl_axis_gaussian_builder::build(vpdfl_pdf_base& model,
 
   unsigned long n_samples = data.size();
 
-  if (n_samples<2L)
+  if (n_samples<1L)
   {
     vcl_cerr<<"vpdfl_axis_gaussian_builder::build() Too few examples available.\n";
     vcl_abort();
+  }
+
+  data.reset();
+  if (n_samples==1)
+  {
+    // Build using the single example as mean
+    build(model,data.current());
+    return;
   }
 
   unsigned long n_dims = data.current().size();
@@ -289,7 +297,7 @@ void vpdfl_axis_gaussian_builder::config_from_stream(vcl_istream & is)
 
   double mv=1.0e-6;
 
-  if (!props["min_var"].empty())
+  if (props.find("min_var")!=props.end())
   {
     mv=vul_string_atof(props["min_var"]);
     props.erase("min_var");

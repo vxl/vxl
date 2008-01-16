@@ -645,7 +645,7 @@ void vpdfl_mixture_builder::config_from_stream(vcl_istream & is)
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   double mv=1.0e-6;
-  if (!props["min_var"].empty())
+  if (props.find("min_var")!=props.end())
   {
     mv=vul_string_atof(props["min_var"]);
     props.erase("min_var");
@@ -653,27 +653,27 @@ void vpdfl_mixture_builder::config_from_stream(vcl_istream & is)
   set_min_var(mv);
 
   unsigned n_pdfs = 2;
-  if (!props["n_pdfs"].empty())
+  if (props.find("n_pdfs")!=props.end())
   {
     n_pdfs=vul_string_atoi(props["n_pdfs"]);
     props.erase("n_pdfs");
   }
 
   max_its_=10;
-  if (!props["max_its"].empty())
+  if (props.find("max_its")!=props.end())
   {
     max_its_=vul_string_atoi(props["max_its"]);
     props.erase("max_its");
   }
 
   weights_fixed_=false;
-  if (!props["weights_fixed"].empty())
+  if (props.find("weights_fixed")!=props.end())
   {
     weights_fixed_=vul_string_to_bool(props["weights_fixed"]);
     props.erase("weights_fixed");
   }
 
-  if (!props["basis_pdf"].empty())
+  if (props.find("basis_pdf")!=props.end())
   {
     vcl_istringstream pdf_ss(props["basis_pdf"]);
     vcl_auto_ptr<vpdfl_builder_base>

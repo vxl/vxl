@@ -375,7 +375,7 @@ void vpdfl_kernel_pdf_builder::config_from_stream(vcl_istream & is)
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   double mv=1.0e-6;
-  if (!props["min_var"].empty())
+  if (props.find("min_var")!=props.end())
   {
     mv=vul_string_atof(props["min_var"]);
     props.erase("min_var");
@@ -383,7 +383,7 @@ void vpdfl_kernel_pdf_builder::config_from_stream(vcl_istream & is)
   set_min_var(mv);
 
   build_type bt=select_equal;
-  if (!props["kernel_widths"].empty())
+  if (props.find("kernel_widths")!=props.end())
   {
     if (props["kernel_widths"]=="fixed_width") bt=fixed_width;
     else
@@ -402,7 +402,7 @@ void vpdfl_kernel_pdf_builder::config_from_stream(vcl_istream & is)
   build_type_ = bt;
 
   fixed_width_=1.0;
-  if (!props["fixed_width"].empty())
+  if (props.find("fixed_width")!=props.end())
   {
     fixed_width_=vul_string_atof(props["fixed_width"]);
     props.erase("fixed_width");
