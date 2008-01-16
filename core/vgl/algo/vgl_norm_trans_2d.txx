@@ -213,7 +213,7 @@ scale_xyroot2(vcl_vector<vgl_homg_point_2d<T> > const& in, T& radius)
 
   if (numfinite > 0)
   {
-    radius = magnitude / (numfinite*vnl_math::sqrt2);
+    radius = T(magnitude / (numfinite*vnl_math::sqrt2));
     return radius>=tol;
   }
   return false;
