@@ -39,13 +39,13 @@ class vsrl_diffusion
   int get_width() { return width_; }
   int get_height() { return height_; }
 
-  void write_disparity_image(char *filename);
+  void write_disparity_image(const char *filename);
 
  protected:
 
   // print an image of the disparity_matrix
-  void write_image(char *file_name,vnl_matrix<double> *mat);
-  void write_image(char *file_name,int it_num, vnl_matrix<double> *mat);
+  void write_image(const char *file_name,vnl_matrix<double> *mat);
+  void write_image(const char *file_name,int it_num, vnl_matrix<double> *mat);
 };
 
 #endif

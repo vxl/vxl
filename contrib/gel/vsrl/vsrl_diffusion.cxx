@@ -32,7 +32,7 @@ double vsrl_diffusion::get_disparity(int x, int y)
 }
 
 
-void vsrl_diffusion::write_image(char *file_name,int it_num, vnl_matrix<double> *mat)
+void vsrl_diffusion::write_image(const char *file_name,int it_num, vnl_matrix<double> *mat)
 {
   // we want to write the file_name concatenated with the it_number
 
@@ -55,7 +55,7 @@ void vsrl_diffusion::write_image(char *file_name,int it_num, vnl_matrix<double> 
   return;
 }
 
-void vsrl_diffusion::write_image(char *file_name,vnl_matrix<double> *mat)
+void vsrl_diffusion::write_image(const char *file_name,vnl_matrix<double> *mat)
 {
   // write an image of the disparity_matrix_
 
@@ -101,7 +101,7 @@ void vsrl_diffusion::write_image(char *file_name,vnl_matrix<double> *mat)
   vil1_save(buffer, file_name);
 }
 
-void vsrl_diffusion::write_disparity_image(char *filename)
+void vsrl_diffusion::write_disparity_image(const char *filename)
 {
   write_image(filename,disparity_matrix_);
 }
