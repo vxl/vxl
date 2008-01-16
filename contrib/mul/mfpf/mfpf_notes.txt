@@ -1,0 +1,5 @@
+To Do:
+
+Add options of searching at multiple angles/scales?
+
+Actually do something useful, now that we have a near complete implementation!

@@ -1,0 +1,7 @@
+// The following text is included in the main documentation page by doxygen
+/*! \mainpage mfpf : Manchester Feature Point Finding algorithms
+* Classes to model local regions in an image, and to search for the best 
+* match of a model in a nearby region.
+*
+* Classes are derived from mfpf_point_finder.
+*/
