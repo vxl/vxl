@@ -11,6 +11,10 @@
 
 #include "vidl2_ffmpeg_ostream_params.h"
 
+#include <vidl2/vidl2_config.h>
+
+#if VIDL2_HAS_FFMPEG
+
 extern "C" {
 #include <ffmpeg/avformat.h>
 }
@@ -110,3 +114,10 @@ vidl2_ffmpeg_ostream_params::vidl2_ffmpeg_ostream_params()
 {
 }
 
+#else // VIDL2_HAS_FFMPEG
+
+vidl2_ffmpeg_ostream_params::vidl2_ffmpeg_ostream_params()
+{
+}
+
+#endif
