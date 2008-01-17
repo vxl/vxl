@@ -1,5 +1,5 @@
 # brcv/seg/bbgm/tests/CMakeLists.txt
-# Tests for dbbgm library
+# Tests for bbgm library
 
 ADD_EXECUTABLE( bbgm_test_all
   test_driver.cxx
@@ -12,4 +12,4 @@ ADD_TEST( bbgm_test_bg_model_speed           bbgm_test_all test_bg_model_speed )
 
 ADD_EXECUTABLE( bbgm_test_include test_include.cxx )
 
-TARGET_LINK_LIBRARIES( bbgm_test_include dbbgm)
+TARGET_LINK_LIBRARIES( bbgm_test_include bbgm)

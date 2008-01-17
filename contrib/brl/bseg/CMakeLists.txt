@@ -25,3 +25,6 @@ SUBDIRS(segv)
 
 # segmentation application executables
 SUBDIRS(sbin)
+
+# background modeling
+SUBDIRS(bbgm)

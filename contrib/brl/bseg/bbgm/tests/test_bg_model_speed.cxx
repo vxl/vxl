@@ -48,7 +48,7 @@ MAIN( test_bg_model_speed )
   const float window_size = 50.0;
   const unsigned int max_components = 3;
   const float init_var = 0.01f;
-  const unsigned int ni = 1024, nj = 768;
+  const unsigned int ni = 640, nj = 480;
 
   vnl_vector_fixed<float,3> init_mean(0.0f);
   vnl_vector_fixed<float,3> init_covar(init_var);

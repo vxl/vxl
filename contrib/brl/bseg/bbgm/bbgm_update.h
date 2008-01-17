@@ -25,11 +25,8 @@
 
 #include <vnl/vnl_vector_fixed.h>
 
-//=============================================================================
-// Templated version for dbsta2
+
 //: Update with no data
-
-
 template <class _dist, class _updater>
 void update(bbgm_image_of<_dist>& dimg,
             const _updater& updater)
