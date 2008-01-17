@@ -1,0 +1,5 @@
+// The following text is included in the main documentation page by doxygen
+/*! \mainpage msm : Manchester Shape Model library
+* Classes to model 2D shape and shape variation
+*
+*/
