@@ -9,7 +9,8 @@
 // \brief a templated 3-tuple
 // \author fsm
 
-#include <vcl_compiler.h>
+#include <vcl_utility.h>
+#include <vcl_iosfwd.h>
 
 //: a templated 3-tuple
 template <class T1, class T2, class T3>
@@ -64,5 +65,18 @@ inline vbl_triple<T1, T2, T3> vbl_make_triple(T1 const &x, T2 const &y, T3 const
 {
   return vbl_triple<T1, T2, T3>(x, y, z);
 }
+
+template <class T1, class T2, class T3>
+inline vcl_ostream& operator<<(vcl_ostream& os, vbl_triple<T1, T2, T3> const &x)
+{
+  return os << x.first << ' ' << x.second << ' ' << x.third;
+}
+
+template <class T1, class T2, class T3>
+inline vcl_istream& operator>>(vcl_istream& os, vbl_triple<T1, T2, T3> &x)
+{
+  return os >> x.first >> x.second >> x.third;
+}
+
 
 #endif // vbl_triple_h_
