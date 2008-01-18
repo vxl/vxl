@@ -48,15 +48,19 @@ vcl_string timestamp()
 
 //: A historical measurement recording framework.
 // Currently the function will append the measurement to the file specified
-// by ${MBL_TEST_SAVE_MEASUREMENT_PATH}/measurement_path.
+// by ${MBL_TEST_SAVE_MEASUREMENT_PATH}/measurement_path, and exports it to Dart.
 // In the longer term it may save the value via Dart2.
 void mbl_test_save_measurement( const vcl_string &measurement_path, double value)
 {
+  vcl_cout << "<DartMeasurement name=\"" <<
+    vul_file::strip_directory(measurement_path) <<
+    "\" type=\"numeric/float\">"<<value<<"</DartMeasurement>" << vcl_endl;
+
   char * cpath = vcl_getenv("MBL_TEST_SAVE_MEASUREMENT_ROOT");
   vcl_string path(cpath?cpath:"");
   if (path.empty())
     path = MBL_CONFIG_TEST_SAVE_MEASUREMENT_ROOT;
-  if (path.empty()) // Nobody wants the measurements
+  if (path.empty()) // Nobody wants the measurements stored this way.
     return;
 
   vcl_string config = MBL_CONFIG_BUILD_NAME;
