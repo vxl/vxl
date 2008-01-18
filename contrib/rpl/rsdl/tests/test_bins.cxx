@@ -412,18 +412,6 @@ test_bins_nearest ( unsigned n,
   test_name = "n_nearest match " + name;
   TEST( test_name.c_str(), pass_match_all, true );
 
-//   {
-//       vcl_ostringstream oss;
-//       oss << "n_nearest size  " << name << ",iter=" << tn;
-//       TEST( oss.str().c_str(), vals_fst.size() == vals_exh.size(), true );
-//   }
-
-//   {
-//       vcl_ostringstream oss;
-//       oss << "n_nearest match " << name << ",iter=" << tn;
-//       TEST( oss.str().c_str(), vals_fst == vals_exh, true );
-//   }
-
   bins.clear();
 }
 
