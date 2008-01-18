@@ -408,7 +408,7 @@ n_nearest_impl( point_type const& pt,
       // sort the points we have found so far
       // we only need the closest n points
       vcl_nth_element( distances.begin(),
-                       distances.begin() + n,
+                       distances.begin() + (n-1),
                        distances.end() );
 
       // remove all points that are further away than the nth closest point
@@ -761,7 +761,7 @@ n_nearest_exhaustive_impl( point_type const& pt,
 
         if ( distances.size() >= n )
           vcl_nth_element ( distances.begin(),
-                            distances.begin() + n,
+                            distances.begin() + (n-1),
                             distances.end() );
 
         // if we now have more than n points, get rid of the extra
