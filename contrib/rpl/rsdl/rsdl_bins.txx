@@ -376,8 +376,15 @@ n_nearest_impl( point_type const& pt,
                 vcl_vector< value_type >& values,
                 vcl_vector< point_type >* points ) const
 {
-  bool done = false;
-  coord_type nth_dist_sqr = 0;  // squared distance to nth closest point found
+  // The rectangular region of bins defined here starts out empty and
+  // is iteratively expanded in the loop below.  This region is the
+  // bins which have been searched for nearest points.  Each expansion
+  // extends one face of the rectangular region.  We will choose the
+  // face that is closest to the point pt, skipping those that are
+  // already at the limit of the bins.  The region is expanded until
+  // we have found enough points and it is not possible for a point
+  // closer than the current nth closest point to be in an unsearched
+  // bin.
 
   // is the set of bins searched empty?
   bool bin_rng_empty = true;
@@ -386,9 +393,13 @@ n_nearest_impl( point_type const& pt,
   // new portion of the search range
   int bin_new_lo[N], bin_new_hi[N];
 
+  // squared distance to nth closest point found
+  coord_type nth_dist_sqr = 0;
+
   // the n closest points, with their distances to the test point
   vcl_vector< point_dist_entry > distances;
 
+  bool done = false;
   while( ! done ) {
 
     // STEP 1: Determine whether we need to search more bins, either
