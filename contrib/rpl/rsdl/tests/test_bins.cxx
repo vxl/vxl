@@ -343,7 +343,7 @@ test_bins_nearest ( unsigned n,
 
   // optionally extend the bins size in one dimension so there will be
   // only one bin in that dimension (for edge testing)
-  if( single_bin_dim >=0 && single_bin_dim<N )
+  if( single_bin_dim >=0 && single_bin_dim<int(N) )
       bin_size[single_bin_dim] = CoordType( max_pt[single_bin_dim] - min_pt[single_bin_dim] + 1.0 );
 
   rsdl_bins< N, CoordType, ValueType > bins( min_pt, max_pt, bin_size  ) ;
