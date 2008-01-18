@@ -419,7 +419,7 @@ n_nearest_impl( point_type const& pt,
       // squared distance to the nth closest point
       nth_dist_sqr = distances[n-1].sqr_dist_;
 
-      coord_type face_dist;     // not-squared distance to closest side of rectangular region of bins searched
+      coord_type face_dist = 0; // not-squared distance to closest side of rectangular region of bins searched
       bool face_inf_dist;       // is this distance infinite?
       closest_face (pt, bin_rng_lo, bin_rng_hi,
                     0, 0, &face_dist, face_inf_dist);
@@ -456,8 +456,8 @@ n_nearest_impl( point_type const& pt,
 
         // add bins to search region by extending the closest face
 
-        unsigned face_dim;
-        unsigned face_dir;
+        unsigned face_dim = 0;
+        unsigned face_dir = 0;
         bool face_inf_dist;
 
         closest_face (pt, bin_rng_lo, bin_rng_hi,
