@@ -16,7 +16,8 @@ AUX_SOURCE_DIRECTORY(Templates bbgm_sources)
 ADD_LIBRARY(bbgm  ${bbgm_sources})
 
 # add the required libraries into this list
-TARGET_LINK_LIBRARIES(bbgm bsta vsl vbl vbl_io)
+TARGET_LINK_LIBRARIES(bbgm bsta vsl vil vbl vbl_io)  
+
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
