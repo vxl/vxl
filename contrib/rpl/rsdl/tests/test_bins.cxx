@@ -404,6 +404,23 @@ test_bins_nearest ( unsigned n,
 
       pass_size_all  = pass_size_all  && pass_size;
       pass_match_all = pass_match_all && pass_match;
+
+#if 0
+      if ( ! pass_match ) {
+
+          vcl_cout << "debug vals_fst and vals_exh do not match" << vcl_endl;
+          vcl_cout << "debug tn: " << tn << vcl_endl;
+          vcl_cout << "debug vals_fst (" << vals_fst.size() << ")";
+          for( typename vcl_vector<ValueType>::iterator i=vals_fst.begin(); i!=vals_fst.end(); ++i )
+              vcl_cout << ' ' << *i;
+          vcl_cout << vcl_endl;
+          vcl_cout << "debug vals_exh (" << vals_exh.size() << ")";
+          for( typename vcl_vector<ValueType>::iterator i=vals_exh.begin(); i!=vals_exh.end(); ++i )
+              vcl_cout << ' ' << *i;
+          vcl_cout << vcl_endl;
+
+      }
+#endif
   }
 
   vcl_string test_name;
