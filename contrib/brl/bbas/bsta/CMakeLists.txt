@@ -26,6 +26,7 @@ SET(bsta_sources
   bsta_gauss_ff3.h               bsta_gauss_fd3.h
 
   bsta_mixture.h
+  bsta_mixture_fixed.h
   bsta_basic_functors.h
   bsta_attributes.h
   bsta_detector_gaussian.h

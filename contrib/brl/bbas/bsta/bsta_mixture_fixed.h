@@ -1,12 +1,12 @@
-// This is brcv/seg/bsta/bsta_mixture.h
-#ifndef bsta_mixture_h_
-#define bsta_mixture_h_
+// This is brcv/seg/bsta/bsta_mixture_fixed.h
+#ifndef bsta_mixture_fixed_h_
+#define bsta_mixture_fixed_h_
 
 //:
 // \file
-// \brief A mixture of distributions
+// \brief A mixture of distributions of fixed size
 // \author Matt Leotta (mleotta@lems.brown.edu)
-// \date 1/26/06
+// \date 1/17/08
 //
 // \verbatim
 //  Modifications
@@ -17,24 +17,20 @@
 #include <vcl_algorithm.h>
 #include <vnl/vnl_vector_fixed.h>
 
-//: A mixture of distributions
-template <class _dist>
-class bsta_mixture : public bsta_distribution<typename _dist::math_type,
-                                                       _dist::dimension>
+//: A mixture of distributions with a fixed size of s components
+template <class _dist, unsigned s>
+class bsta_mixture_fixed : public bsta_distribution<typename _dist::math_type,
+                                                             _dist::dimension>
 {
   public:
     typedef _dist dist_type;
-    // unlimited number of component is indicated by 0
-    enum { max_components = 0 };
+    enum { max_components = s };
   
   private:
     typedef typename _dist::math_type T;
 
   //: A struct to hold the component distributions and weights
   // This class is private and should not be used outside of the mixture.
-  // Dynamic memory is used to allow for polymorphic distributions.
-  // However, this use of memory is self-contained and private so the user
-  // should not be able to introduce a memory leak
   struct component
   {
     //: Constructor
@@ -72,100 +68,103 @@ class bsta_mixture : public bsta_distribution<typename _dist::math_type,
   {
    public:
     sort_adaptor(_comp_type c) : comp(c) {}
-    bool operator() (const component* const c1, const component* const c2) const
-      { return comp(c1->distribution, c1->weight, c2->distribution, c2->weight); }
+    bool operator() (const component& c1, const component& c2) const
+      { return comp(c1.distribution, c1.weight, c2.distribution, c2.weight); }
     _comp_type comp;
   };
 
-  //: The vector of components
-  vcl_vector<component*> components_;
+  //: The fixed size array of components
+  component components_[s];
+  //: The number of active components
+  unsigned num_components_;
 
  public:
   //: Constructor
-  bsta_mixture<_dist>(){}
+  bsta_mixture_fixed<_dist,s>() : num_components_(0) {}
 
   //: Copy Constructor
-  bsta_mixture<_dist>(const bsta_mixture<_dist>& other)
-    : components_(other.components_.size(),NULL)
+  bsta_mixture_fixed<_dist,s>(const bsta_mixture_fixed<_dist,s>& other)
+  : num_components_(other.num_components_)
   {
     // deep copy of the data
-    for(unsigned int i=0; i<components_.size(); ++i){
-      components_[i] = new component(*other.components_[i]);
+    for(unsigned int i=0; i<s; ++i){
+      components_[i] = other.components_[i];
     }
   }
 
   //: Destructor
-  ~bsta_mixture<_dist>()
+  ~bsta_mixture_fixed<_dist,s>()
   {
-    for(unsigned int i=0; i<components_.size(); ++i){
-      delete components_[i];
-    }
   }
 
   //: Assignment operator
-  bsta_mixture<_dist>& operator= (const bsta_mixture<_dist>& rhs)
+  bsta_mixture_fixed<_dist,s>& operator= (const bsta_mixture_fixed<_dist,s>& rhs)
   {
     if(this != &rhs){
-      for(unsigned int i=0; i<components_.size(); ++i){
-        delete components_[i];
-      }
-      components_.clear();
-      for(unsigned int i=0; i<rhs.components_.size(); ++i){
-        components_.push_back(new component(*rhs.components_[i]));
-      }
+       // deep copy of the data
+       for(unsigned int i=0; i<s; ++i){
+          components_[i] = rhs.components_[i];
+       }
+       num_components_ = rhs.num_components_;
     }
     return *this;
   }
 
   //: Return the number of components in the mixture
-  unsigned int num_components() const { return components_.size(); }
+  unsigned int num_components() const { return num_components_; }
 
   //: Access (const) a component distribution of the mixture
   const _dist& distribution(unsigned int index) const
-  { return components_[index]->distribution; }
+  { return components_[index].distribution; }
 
   //: Access a component distribution of the mixture
   _dist& distribution(unsigned int index)
-  { return components_[index]->distribution; }
+  { return components_[index].distribution; }
 
   //: Return the weight of a component in the mixture
-  T weight(unsigned int index) const { return components_[index]->weight; }
+  T weight(unsigned int index) const { return components_[index].weight; }
 
   //: Set the weight of a component in the mixture
-  void set_weight(unsigned int index, const T& w) { components_[index]->weight = w; }
-
-  //: Insert a new component at the end of the vector
+  void set_weight(unsigned int index, const T& w) { components_[index].weight = w; }
+  
+  //: Insert a new component in the next location in the array
   bool insert(const _dist& d, const T& weight = T(0))
-  { components_.push_back(new component(d, weight)); return true; }
-
+  { 
+    if(num_components_ >= s)
+      return false;
+    
+    components_[num_components_++] = component(d, weight); 
+    return true;
+  }
+  
   //: Remove the last component in the vector
-  void remove_last() { delete components_.back(); components_.pop_back(); }
+  void remove_last() { components_[--num_components_].weight = T(0); }
 
   //: Compute the probablity of this point
   // \note assumes weights have been normalized
   T probability(const vnl_vector_fixed<T,_dist::dimension>& pt) const
   {
-    typedef typename vcl_vector<component*>::const_iterator comp_itr;
     T prob = 0;
-    for(comp_itr i = components_.begin(); i != components_.end(); ++i)
-      prob += (*i)->weight * (*i)->distribution.probability(pt);
+     
+    for(unsigned i=0; i<num_components_; ++i)
+      prob += components_[i].weight 
+            * components_[i].distribution.probability(pt);
     return prob;
   }
 
   //: Normalize the weights of the components to add to 1.
   void normalize_weights()
   {
-    typedef typename vcl_vector<component*>::iterator comp_itr;
     T sum = 0;
-    for(comp_itr i = components_.begin(); i != components_.end(); ++i)
-      sum += (*i)->weight;
+    for(unsigned i=0; i<num_components_; ++i)
+      sum += components_[i].weight;
     assert(sum > 0);
-    for(comp_itr i = components_.begin(); i != components_.end(); ++i)
-      (*i)->weight /= sum;
+    for(unsigned i=0; i<num_components_; ++i)
+      components_[i].weight /= sum;
   }
 
   //: Sort the components in order of decreasing weight
-  void sort() { vcl_sort(components_.begin(), components_.end(), sort_weight() ); }
+  void sort() { vcl_sort(components_, components_+num_components_, sort_weight() ); }
 
   //: Sort the components using any StrictWeakOrdering function
   // the prototype should be
@@ -176,13 +175,15 @@ class bsta_mixture : public bsta_distribution<typename _dist::math_type,
   // \endcode
   template <class _comp_type>
   void sort(_comp_type comp) 
-  { vcl_sort(components_.begin(), components_.end(), sort_adaptor<_comp_type>(comp)); }
+  { vcl_sort(components_, components_+num_components_, sort_adaptor<_comp_type>(comp)); }
 
+  //: Sort the first components up to index idx 
   template <class _comp_type>
   void sort(_comp_type comp, unsigned int idx)
-  { vcl_sort(components_.begin(), components_.begin()+idx+1, sort_adaptor<_comp_type>(comp)); }
+  { assert(idx < s);
+    vcl_sort(components_, components_+idx+1, sort_adaptor<_comp_type>(comp)); }
 
 };
 
 
-#endif // bsta_mixture_h_
+#endif // bsta_mixture_fixed_h_

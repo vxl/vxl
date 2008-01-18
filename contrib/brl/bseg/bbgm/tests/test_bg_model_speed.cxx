@@ -6,12 +6,12 @@
 #include <bbgm/bbgm_image_of.h>
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_mixture.h>
+#include <bsta/bsta_mixture_fixed.h>
 #include <bsta/bsta_gauss_if3.h>
 #include <bsta/algo/bsta_adaptive_updater.h>
 
 #include <bbgm/bbgm_update.h>
 #include <bsta/bsta_gaussian_indep.h>
-#include <bsta/algo/bsta_adaptive_updater.h>
 #include <vil/vil_image_view.h>
 #include <vul/vul_timer.h>
 #include <vnl/vnl_random.h>
@@ -60,22 +60,22 @@ MAIN( test_bg_model_speed )
   for(unsigned t=1; t<10; ++t){
     vil_image_view<float> new_img;
     new_img.deep_copy(img);
-    add_random_noise(new_img, 0.1f);
+    add_random_noise(new_img, 0.5f);
     images.push_back(new_img);
   }
 
-
+  vcl_cout << "testing variable size mixture speeds" << vcl_endl;
   {
     typedef bsta_num_obs<bsta_gauss_if3> gauss_type;
-    typedef bsta_num_obs<bsta_mixture<gauss_type> > mix_gauss_type;
-    typedef bsta_num_obs<bsta_mixture<gauss_type> > mix_gauss_type;
+    typedef bsta_mixture<gauss_type> mix_gauss_type;
+    typedef bsta_num_obs<mix_gauss_type> obs_mix_gauss_type;
 
     bsta_gauss_if3 init_gauss( init_mean, init_covar );
-    bsta_mg_window_updater<bsta_gauss_if3> updater( init_gauss,
-                                                        max_components,
-                                                        window_size);
+    bsta_mg_window_updater<mix_gauss_type> updater( init_gauss,
+                                                    max_components,
+                                                    window_size);
 
-    bbgm_image_of<mix_gauss_type> model(ni,nj,mix_gauss_type());
+    bbgm_image_of<obs_mix_gauss_type> model(ni,nj,obs_mix_gauss_type());
 
     for(unsigned int t=0; t<images.size(); ++t){
       vul_timer time;
@@ -84,7 +84,28 @@ MAIN( test_bg_model_speed )
       vcl_cout << " updated in " << up_time << " sec" <<vcl_endl;
     }
   }
-
+  
+  vcl_cout << "testing fixed size mixture speeds" << vcl_endl;
+  {
+    typedef bsta_num_obs<bsta_gauss_if3> gauss_type;
+    typedef bsta_mixture_fixed<gauss_type,3> mix_gauss_type;
+    typedef bsta_num_obs<mix_gauss_type> obs_mix_gauss_type;
+    
+    bsta_gauss_if3 init_gauss( init_mean, init_covar );
+    bsta_mg_window_updater<mix_gauss_type> updater( init_gauss,
+                                                   max_components,
+                                                   window_size);
+    
+    bbgm_image_of<obs_mix_gauss_type> model(ni,nj,obs_mix_gauss_type());
+    
+    for(unsigned int t=0; t<images.size(); ++t){
+      vul_timer time;
+      update(model,images[t],updater);
+      double up_time = time.real() / 1000.0;
+      vcl_cout << " updated in " << up_time << " sec" <<vcl_endl;
+    }
+  }
+  
   SUMMARY();
 }
 

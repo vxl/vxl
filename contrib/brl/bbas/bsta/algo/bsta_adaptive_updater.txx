@@ -7,7 +7,6 @@
 #include "bsta_adaptive_updater.h"
 #include "bsta_gaussian_updater.h"
 #include "bsta_gaussian_stats.h"
-#include <bsta/bsta_gauss_ff3.h>
 
 #include <vcl_iostream.h>
 #include <vcl_limits.h>
@@ -21,9 +20,9 @@
 
 
 //: The update function
-template <class _gaussian>
+template <class _mix_dist>
 void
-bsta_mg_statistical_updater<_gaussian>::update( _mix_dist& mix, const _vector& sample, T alpha ) const
+bsta_mg_statistical_updater<_mix_dist>::update( _mix_dist& mix, const _vector& sample, T alpha ) const
 {
   const unsigned num_components = mix.num_components();
 
@@ -104,9 +103,9 @@ bsta_mg_statistical_updater<_gaussian>::update( _mix_dist& mix, const _vector& s
 
 
 //: The main function
-template <class _gaussian>
+template <class _mix_dist>
 void 
-bsta_mg_grimson_statistical_updater<_gaussian>::update( _mix_dist& mix,
+bsta_mg_grimson_statistical_updater<_mix_dist>::update( _mix_dist& mix,
                                                           const _vector& sample,
                                                           T alpha ) const
 {

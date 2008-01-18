@@ -19,8 +19,12 @@
 template <class _dist>
 class bsta_num_obs : public _dist
 {
-  typedef typename _dist::math_type T;
+    typedef typename _dist::math_type T;
+  
   public:
+  
+    typedef _dist contained_type;
+  
     //: Constructor
     bsta_num_obs<_dist>() : _dist(), num_observations(T(0)) {}
 
