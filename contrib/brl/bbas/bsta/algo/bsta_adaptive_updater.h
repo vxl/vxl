@@ -119,7 +119,6 @@ class bsta_mg_statistical_updater : public bsta_mg_adaptive_updater<_mix_dist>
 };
 
 
-
 //: A mixture of Gaussians statistical updater 
 // This updater treats all data equally
 template <class _mix_dist>
@@ -153,6 +152,44 @@ class bsta_mg_window_updater : public bsta_mg_statistical_updater<_mix_dist>
 
   protected:
     unsigned int window_size_;
+};
+
+//: A mixture of Gaussians weighted statistical updater
+// This updater treats data according to a specified weigth
+template <class _mix_dist>
+class bsta_mg_weighted_updater : bsta_mg_statistical_updater<_mix_dist>
+{
+  public:
+    typedef typename _mix_dist::dist_type _obs_gaussian;
+    typedef typename _obs_gaussian::contained_type _gaussian;
+    typedef typename _gaussian::math_type T;
+    typedef typename _gaussian::vector_type _vector;
+    typedef bsta_num_obs<_mix_dist> _obs_mix_dist;
+
+    enum { data_dimension = _gaussian::dimension };
+
+    //: Constructor
+    bsta_mg_weighted_updater(const _gaussian& model,
+                                  unsigned int max_cmp = 5,
+                                  T g_thresh = T(3),
+                                  T min_stdev = T(0))
+      : bsta_mg_adaptive_updater<_mix_dist>(model, max_cmp),
+        gt2_(g_thresh*g_thresh), min_var_(min_stdev*min_stdev) {}
+
+    //: The main function
+    void operator() ( _obs_mix_dist& mix, const _vector& sample, const T weight ) const
+    {
+      mix.num_observations += weight;
+      this->update(mix, sample, weight/mix.num_observations);
+    }
+
+    void update( _mix_dist& mix, const _vector& sample, T alpha ) const;
+
+   // void update( _mix_dist& mix, const T & sample, T alpha ) const;
+    //: Squared Gaussian Mahalanobis distance threshold
+    T gt2_;
+    //: Minimum variance allowed in each Gaussian component
+    T min_var_;
 };
 
 
@@ -193,7 +230,6 @@ class bsta_mg_grimson_statistical_updater : public bsta_mg_adaptive_updater<_mix
     T min_var_;
 };
 
-
 //: A mixture of Gaussians window updater 
 // using the grimson approximation to prior probablilities
 template <class _mix_dist>
@@ -228,5 +264,43 @@ class bsta_mg_grimson_window_updater : public bsta_mg_grimson_statistical_update
   protected:
     unsigned int window_size_;
 };
+
+//: A mixture of Gaussians statistical weighted updater
+// using the grimson approximation to prior probablilities
+template <class _mix_dist>
+class bsta_mg_grimson_weighted_updater : bsta_mg_grimson_statistical_updater<_mix_dist>
+{
+  public:
+    typedef typename _mix_dist::dist_type _obs_gaussian;
+    typedef typename _obs_gaussian::contained_type _gaussian;
+    typedef typename _gaussian::math_type T;
+    typedef typename _gaussian::vector_type _vector;
+    typedef bsta_num_obs<_mix_dist> _obs_mix_dist;
+
+    enum { data_dimension = _gaussian::dimension };
+
+    //: Constructor
+    bsta_mg_grimson_weighted_updater(const _gaussian& model,
+                                          unsigned int max_cmp = 5,
+                                          T g_thresh = T(3),
+                                          T min_stdev = T(0) )
+      : bsta_mg_adaptive_updater<_mix_dist>(model, max_cmp),
+        gt2_(g_thresh*g_thresh), min_var_(min_stdev*min_stdev) {}
+
+    //: The main function
+    void operator() ( _obs_mix_dist& mix, const _vector& sample, const T weight ) const
+    {
+      mix.num_observations += weight;
+      this->update(mix, sample, weight/mix.num_observations);
+    }
+
+    void update( _mix_dist& mix, const _vector& sample, T alpha ) const;
+
+    //: Squared Gaussian Mahalanobis distance threshold
+    T gt2_;
+    //: Minimum variance allowed in each Gaussian component
+    T min_var_;
+};
+
 
 #endif // bsta_adaptive_updater_h_
