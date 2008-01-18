@@ -444,6 +444,8 @@ static void test_bins_nearest_all_inst( unsigned n,
   test_bins_nearest< 3, float, int >( n, npoints, square_bins, bound_points, single_bin_dim, name+",N=3,C=float,V=int" );
   test_bins_nearest< 2, double, int >( n, npoints, square_bins, bound_points, single_bin_dim, name+",N=2,C=double,V=int" );
   test_bins_nearest< 3, double, int >( n, npoints, square_bins, bound_points, single_bin_dim, name+",N=3,C=double,V=int" );
+  test_bins_nearest< 1, float, unsigned short >( n, npoints, square_bins, bound_points, single_bin_dim, name+",N=1,C=float,V=ushort" );
+  test_bins_nearest< 7, float, unsigned short >( n, npoints, square_bins, bound_points, single_bin_dim, name+",N=7,C=float,V=ushort" );
 }
 
 static void test_bins_nearest_all()
@@ -490,3 +492,9 @@ static void test_bins()
 }
 
 TESTMAIN(test_bins);
+
+// cases tested above, but not instantiated in ../Templates/
+// these are extreme cases for testing
+#include <rsdl/rsdl_bins.txx>
+INSTANTIATE_RSDL_BINS( 1, float, unsigned short );
+INSTANTIATE_RSDL_BINS( 7, float, unsigned short );
