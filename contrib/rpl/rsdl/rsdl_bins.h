@@ -23,7 +23,7 @@ struct rsdl_bins_bin_entry_type;
 
 //: N-dimensional bin structure for fast point retrieval.
 //
-// This data structure stores point locations in larger bins so that
+// This data structure stores point locations in bins so that
 // neighbourhood queries can be performed efficiently by not having to
 // consider the whole data set.
 //
@@ -42,7 +42,7 @@ template<unsigned N, typename CoordType, typename ValueType>
 class rsdl_bins
 {
  public:
-  //:
+  //: The type of each element of a (vector) point
   typedef CoordType                       coord_type;
 
   //: The type of data object associated with each location.
@@ -104,6 +104,25 @@ class rsdl_bins
                   unsigned n,
                   vcl_vector< point_type >& points,
                   vcl_vector< value_type >& values  ) const;
+
+  //: Return the values of the \a n nearest neighbours.
+  //
+  // A slow exhaustive search version of n_nearest, used for testing
+  // and validation.
+  //
+  void n_nearest_exhaustive( point_type const& pt,
+                             unsigned n,
+                             vcl_vector< value_type >& values ) const;
+
+  //: Return the values and locations of the \a n nearest neighbours.
+  //
+  // A slow exhaustive search version of n_nearest, used for testing
+  // and validation.
+  //
+  void n_nearest_exhaustive( point_type const& pt,
+                             unsigned n,
+                             vcl_vector< point_type >& points,
+                             vcl_vector< value_type >& values  ) const;
 
   //: Check if there is at least one point within \a radius of \a pt.
   //
@@ -192,6 +211,29 @@ class rsdl_bins
   // current distance tolerance.
   bin_index_vector bin_indices( point_type const& pt ) const;
 
+  //:
+  // For a rectangular subset of bins bounded by \a bin_lo and \a
+  // bin_hi, find the face that is closest to point \pt.  Faces that
+  // are at the edge of the whole set of bins are treated as faces at
+  // infinity, since the bins at these faces hold points out to
+  // infinity.  The closest face is returned as dimension \a face_dim
+  // and direction \a face_dir if those pointers are not NULL.  The
+  // distance to the closest face is returned via \a face_dist if that
+  // pointer is not NULL.  If the subset of bins is the full set of
+  // bins, then \a face_inf_dist will be true, indicating infinite
+  // distance to the nearest face.  Return values \a face_dim, \a
+  // face_dir, and \a face_dist will only be valid if \a face_inf_dist
+  // is false.
+  //
+  // This function is a helper to \a n_nearest_impl.
+  //
+  void closest_face ( point_type const& pt,
+                      int bin_lo[N],
+                      int bin_hi[N],
+                      unsigned * face_dim,
+                      unsigned * face_dir,
+                      coord_type * face_dist,
+                      bool & face_inf_dist) const;
 
   //:
   // Implementation of n_nearest. See the documentation for that.
@@ -203,6 +245,17 @@ class rsdl_bins
                         unsigned n,
                         vcl_vector< value_type >& values,
                         vcl_vector< point_type >* points ) const;
+
+  //:
+  // Implementation of n_nearest_exhaustive. See the documentation for that.
+  //
+  // This version will add the results to values, and, if points is
+  // not null, to points.
+  //
+  void  n_nearest_exhaustive_impl( point_type const& pt,
+                                   unsigned n,
+                                   vcl_vector< value_type >& values,
+                                   vcl_vector< point_type >* points ) const;
 
   //:
   // Implementation of points_within_radius. See the documentation for
@@ -232,10 +285,11 @@ class rsdl_bins
   unsigned scan_region( int lo[N], int hi[N], int cur[N], unsigned dim,
                         bin_index_vector& indices ) const;
 
+#if 0
   // documentation in .txx
   unsigned scan_bdy( int lo[N], int hi[N], int cur[N], unsigned dim,
                      bin_index_vector& indices ) const;
-
+#endif
 
  private:
   //:
@@ -274,7 +328,7 @@ template<unsigned N, typename CoordType, typename ValueType>
 struct rsdl_bins_bin_entry_type
 {
   // For some reason, MSVC7 doesn't like rsdl_bins<N,CoordType,ValueType>::coord_type.
-  // It complains that rsdl_bins is undefined, but doesn't complain about the same 
+  // It complains that rsdl_bins is undefined, but doesn't complain about the same
   // declaration in rsdl_bins_point_dist_entry (in the .txx). Go figure.
 
   typedef CoordType                       coord_type;
