@@ -24,6 +24,7 @@ class rgrl_trans_homo2d_proj_rad
   rgrl_trans_homo2d_proj_rad();
 
   //: Constructor based on an initial transformation and covar estimate
+  //  The radial parameters are assumed to be unnormalized.
   rgrl_trans_homo2d_proj_rad( vnl_matrix_fixed<double, 3, 3> const& H,
                               vcl_vector<double>             const & k,
                               vnl_vector_fixed< double, 2 >  const & image_centre );
@@ -33,8 +34,24 @@ class rgrl_trans_homo2d_proj_rad
   rgrl_trans_homo2d_proj_rad( vnl_matrix<double> const& H );
 
   //: Construct a centered transform.
+  //  The radial parameters are assumed to be unnormalized.
   rgrl_trans_homo2d_proj_rad( vnl_matrix_fixed<double, 3, 3> const& H,
                               vcl_vector<double>             const & k,
+                              vnl_vector_fixed< double, 2 >  const & image_centre,
+                              vnl_matrix<double> const& covar,
+                              vnl_vector<double> const& from_centre,
+                              vnl_vector<double> const& to_centre );
+
+  //: Constructor based on an initial transformation and covar estimate
+  //  The radial parameters are assumed to be normalized.
+  rgrl_trans_homo2d_proj_rad( vcl_vector<double>             const & norm_k,
+                              vnl_matrix_fixed<double, 3, 3> const& H,
+                              vnl_vector_fixed< double, 2 >  const & image_centre );
+
+  //: Construct a centered transform.
+  //  The radial parameters are assumed to be normalized.
+  rgrl_trans_homo2d_proj_rad( vcl_vector<double>             const & norm_k,
+                              vnl_matrix_fixed<double, 3, 3> const& H,
                               vnl_vector_fixed< double, 2 >  const & image_centre,
                               vnl_matrix<double> const& covar,
                               vnl_vector<double> const& from_centre,
@@ -71,6 +88,11 @@ class rgrl_trans_homo2d_proj_rad
   //: return unnormalized radial parameters
   vcl_vector<double>
   radial_params() const;
+
+  //: return the normalized radial parameters
+  vcl_vector<double> const&
+  normalized_radial_params() const
+  { return rad_k_; }
 
  protected:
   void map_loc( vnl_vector<double> const& from,

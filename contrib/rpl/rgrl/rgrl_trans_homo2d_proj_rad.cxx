@@ -22,8 +22,8 @@ rgrl_trans_homo2d_proj_rad()
 
 rgrl_trans_homo2d_proj_rad::
 rgrl_trans_homo2d_proj_rad( vnl_matrix_fixed<double, 3, 3> const& H,
-                            vcl_vector<double>             const & k,
-                            vnl_vector_fixed< double, 2 >  const & image_centre)
+                            vcl_vector<double>             const& k,
+                            vnl_vector_fixed< double, 2 >  const& image_centre)
   : rgrl_est_proj_rad_func<2,2>( k.size(), true ),
     H_(H),
     rad_k_(k)
@@ -35,8 +35,8 @@ rgrl_trans_homo2d_proj_rad( vnl_matrix_fixed<double, 3, 3> const& H,
 
 rgrl_trans_homo2d_proj_rad::
 rgrl_trans_homo2d_proj_rad( vnl_matrix_fixed<double, 3, 3> const& H,
-                            vcl_vector<double>             const & k,
-                            vnl_vector_fixed< double, 2 >  const & image_centre,
+                            vcl_vector<double>             const& k,
+                            vnl_vector_fixed< double, 2 >  const& image_centre,
                             vnl_matrix<double> const& covar,
                             vnl_vector<double> const& from_centre,
                             vnl_vector<double> const& to_centre )
@@ -47,6 +47,33 @@ rgrl_trans_homo2d_proj_rad( vnl_matrix_fixed<double, 3, 3> const& H,
 {
   this->set_centres( from_centre, to_centre, image_centre );
   set_up_rad_k( k );
+}
+
+rgrl_trans_homo2d_proj_rad::
+rgrl_trans_homo2d_proj_rad( vcl_vector<double>             const& norm_k,
+                            vnl_matrix_fixed<double, 3, 3> const& H,
+                            vnl_vector_fixed< double, 2 >  const& image_centre )
+  : rgrl_est_proj_rad_func<2,2>( norm_k.size(), true ),
+    H_(H),
+    rad_k_(norm_k)
+{
+  const vnl_vector_fixed<double, 2> zeroc( 0, 0 );
+  this->set_centres( zeroc, zeroc, image_centre );
+}
+
+rgrl_trans_homo2d_proj_rad::
+rgrl_trans_homo2d_proj_rad( vcl_vector<double>             const& norm_k,
+                            vnl_matrix_fixed<double, 3, 3> const& H,
+                            vnl_vector_fixed< double, 2 >  const& image_centre,
+                            vnl_matrix<double> const& covar,
+                            vnl_vector<double> const& from_centre,
+                            vnl_vector<double> const& to_centre )
+  : rgrl_transformation( covar ),
+    rgrl_est_proj_rad_func<2,2>( norm_k.size(), true ),
+    H_(H),
+    rad_k_(norm_k)
+{
+  this->set_centres( from_centre, to_centre, image_centre );
 }
 
 void

@@ -46,7 +46,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   {
     rgrl_trans_homo2d_proj_rad const& trans = static_cast<rgrl_trans_homo2d_proj_rad const&>( cur_transform );
     init_H = trans.H();
-    const vcl_vector<double> k = trans.radial_params();
+    const vcl_vector<double> k = trans.normalized_radial_params();
     for ( unsigned int i=0; i<k.size()&&i<camera_dof_; ++i )
       radk[i] = k[i];
   }
@@ -88,8 +88,8 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     return 0;
   }
 
-  return new rgrl_trans_homo2d_proj_rad( init_H,
-                                         radk,
+  return new rgrl_trans_homo2d_proj_rad( radk,
+                                         init_H,
                                          to_camera_centre_,
                                          covar,
                                          from_centre, to_centre );
