@@ -332,7 +332,7 @@ closest_face ( point_type const& pt,
                bool & face_inf_dist) const
 {
   face_inf_dist = true;         // init dist to closest face as infinity
-  coord_type best_dist;         // need local copy of best distance since face_dist might be NULL
+  coord_type best_dist=0;       // need local copy of best distance since face_dist might be NULL
 
   // for each dimension
   for( unsigned dim=0; dim<N; ++dim ) {
@@ -754,11 +754,10 @@ n_nearest_exhaustive_impl( point_type const& pt,
 
       // if we don't yet have the requested n points, or this point is
       // closer than the nth closest point found so far
-      coord_type dist_sqr = vnl_vector_ssd( pt, ei->point_ );
       if ( distances.size() < n
-           || vnl_vector_ssd( pt, ei->point_ ) < nth_dist_sqr ) {
+           || vnl_vector_ssd( pt, entry.point_ ) < nth_dist_sqr ) {
 
-        distances.push_back( point_dist_entry( pt, &(*ei) ) );
+        distances.push_back( point_dist_entry( pt, &entry ) );
 
         if ( distances.size() >= n )
           vcl_nth_element ( distances.begin(),
