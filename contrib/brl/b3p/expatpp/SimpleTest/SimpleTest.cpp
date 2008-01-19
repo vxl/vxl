@@ -2,18 +2,19 @@
 //
 #include "StdAfx.h"
 #include <stdio.h>
-#include "expatpplib.h"
+#include <expatpplib.h> // resides in b3p/expatpp
 #include <string.h>
 
-class myParser : public expatpp {
-public:  myParser() : mDepth(0) {};
+class myParser : public expatpp
+{
+ public:  myParser() : mDepth(0) {};
   virtual void startElement(const XML_Char *name, const XML_Char **atts);
   virtual void endElement(const XML_Char* name);
   virtual void charData(const XML_Char *s, int len);
 
-  private:
+ private:
   void WriteIndent();
-  int mDepth; 
+  int mDepth;
 };
 
 
@@ -29,8 +30,8 @@ void myParser::startElement(const char* name, const char** atts)
   WriteIndent();
   puts(name);
   if (atts) {  /* write list of attributes indented below element */
-   int i;
-   for (i=0; atts[i]; i++) {
+    int i;
+    for (i=0; atts[i]; i++) {
       WriteIndent();
       putchar('-'); putchar(' ');
       puts(atts[i]);
@@ -66,7 +67,7 @@ int main(int argc, char* argv[])
   char filename[80];
   FILE* xmlFile;
   for (;;) {
-  int depth = 0;
+    int depth = 0;
     puts("\n\nXML test: enter filename");
     gets(filename);
     if (strlen(filename)==0)
