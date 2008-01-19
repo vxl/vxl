@@ -20,15 +20,13 @@
 #include "bwm_load_commands.h"
 #include "bwm_site_sptr.h"
 #include "bwm_site.h"
-#include "bwm/video/bwm_video_site_io.h"
+#include "video/bwm_video_site_io.h"
 #include "algo/bwm_algo.h"
 #include "algo/bwm_rat_proj_camera.h"
 #include "algo/bwm_image_processor.h"
 #include "algo/bwm_utils.h"
 #include <vcl_cstdio.h>
-#include <vgui/vgui_poly_tableau.h>
 #include <vsol/vsol_point_2d.h>
-#include <vgui/vgui_composite_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_range_map_params.h>
 
@@ -804,49 +802,50 @@ void bwm_tableau_mgr::save_site()
 void bwm_tableau_mgr::load_video_site()
 {
   vcl_string site_path = bwm_utils::select_file();
-  if(!site_path.size())
-    {
-      vcl_cerr << "In bwm_tableau_mgr::load_video_site() -"
-               << " no site path specified\n";
-      return;
-    }
-    
+  if (!site_path.size())
+  {
+    vcl_cerr << "In bwm_tableau_mgr::load_video_site() -"
+             << " no site path specified\n";
+    return;
+  }
+
   bwm_video_site_io cio;
-  if(!cio.open(site_path))
-    {
-      vcl_cerr << "In bwm_tableau_mgr::load_video_site() -"
-               << " load failed in XML parse\n";
-      return;
-    }
+  if (!cio.open(site_path))
+  {
+    vcl_cerr << "In bwm_tableau_mgr::load_video_site() -"
+             << " load failed in XML parse\n";
+    return;
+  }
   site_name_ = cio.name();
   vcl_string frame_glob = cio.video_path();
   vcl_string camera_glob = cio.camera_path();
-  bwm_observer_video* vobs = 
+  bwm_observer_video* vobs =
     this->create_video_tableau(site_name_, frame_glob, camera_glob);
-  if(!vobs)
+  if (!vobs)
     return;
   vobs->set_corrs(cio.corrs());
 }
+
 void bwm_tableau_mgr::save_video_site()
 {
   //for now - only support one video observer
-  vcl_vector<bwm_observer_cam*> obsvs = 
+  vcl_vector<bwm_observer_cam*> obsvs =
     bwm_observer_mgr::instance()->observers_cam();
   bwm_observer_video* obv = 0;
   bool found = false;
-  for(vcl_vector<bwm_observer_cam*>::iterator oit = obsvs.begin();
-      oit != obsvs.end()&&!found; ++oit)
-    if((*oit)->type_name()=="bwm_observer_video")
-      {
-        obv = static_cast<bwm_observer_video*>(*oit);
-        found =true;
-      }
-  if(!found)
+  for (vcl_vector<bwm_observer_cam*>::iterator oit = obsvs.begin();
+       oit != obsvs.end()&&!found; ++oit)
+    if ((*oit)->type_name()=="bwm_observer_video")
     {
-      vcl_cerr << "In bwm_tableau_mgr::save_video_site() - "
-               << " no observer of type video\n";
-      return;
+      obv = static_cast<bwm_observer_video*>(*oit);
+      found =true;
     }
+  if (!found)
+  {
+    vcl_cerr << "In bwm_tableau_mgr::save_video_site() - "
+             << " no observer of type video\n";
+    return;
+  }
   bwm_video_site_io vio;
   vio.set_name(obv->tab_name());
   vio.set_video_path(obv->image_path());
@@ -859,6 +858,7 @@ void bwm_tableau_mgr::save_video_site()
   vcl_string site_path = site_dir_ + "\\" + site_name_ + "_v" + ver + ".xml";
   vio.x_write(site_path);
 }
+
 void bwm_tableau_mgr::create_img_tableau(vcl_string name,
                                          vcl_string& image_path)
 {
@@ -894,11 +894,12 @@ void bwm_tableau_mgr::create_img_tableau(vcl_string name,
   obs->set_grid_location(col, row);
   tableaus_[name] = t;
 }
+
 bwm_observer_video* bwm_tableau_mgr::
 create_video_tableau(vcl_string name, vcl_string& frame_glob,
                      vcl_string& camera_glob)
 {
-  if(frame_glob=="") return 0;
+  if (frame_glob=="") return 0;
   bgui_image_tableau_sptr img = bgui_image_tableau_new();
   img->set_file_name(frame_glob);
   bwm_observer_video* obs = new bwm_observer_video(img);
@@ -910,19 +911,19 @@ create_video_tableau(vcl_string name, vcl_string& frame_glob,
   bwm_observer_mgr::instance()->add(obs);
   bool open = obs->open_video_stream(frame_glob);
 
-  if(camera_glob!=""){
+  if (camera_glob!="") {
     open = open && obs->open_camera_stream(camera_glob);
-    if(open)obs->toggle_world_pt_display();
+    if (open)obs->toggle_world_pt_display();
   }
 
-  if(open) 
+  if (open)
     obs->display_current_frame();
   unsigned row = 0, col = 0;
   add_to_grid(viewer, col, row);
   obs->set_grid_location(col, row);
   tableaus_[name] = t;
   //temporary video site mechanism (assumes only one video tableau)
-  //also assumes that the video directory and camera directories are 
+  //also assumes that the video directory and camera directories are
   //below the site directory
   site_name_ = name;
   vcl_string dir = vul_file::dirname(frame_glob);
@@ -1012,7 +1013,6 @@ void bwm_tableau_mgr::create_cam_tableau(vcl_string name,
   observer->set_grid_location(col, row);
   tableaus_[name] = t;
 }
-
 
 void bwm_tableau_mgr::load_img_tableau()
 {
@@ -1131,16 +1131,14 @@ void bwm_tableau_mgr::remove_tableau()
   grid_->layout_grid2();
 }
 
-
 vil_image_resource_sptr bwm_tableau_mgr::load_image(vcl_string& filename,
                                                     vgui_range_map_params_sptr& rmps)
 {
   vil_image_resource_sptr res;
 
-    // if filename is a directory, assume pyramid image
+  // if filename is a directory, assume pyramid image
   if (vul_file::is_directory(filename))
   {
-    // if filename is a directory, assume pyramid image  if (vul_file::is_directory(filename)) {
     vil_pyramid_image_resource_sptr pyr = vil_load_pyramid_resource(filename.c_str());
 
     if (pyr) {
@@ -1270,13 +1268,14 @@ void bwm_tableau_mgr::show_error(vcl_string msg)
   err.message(msg.c_str());
   err.ask();
 }
+
 void bwm_tableau_mgr::exit()
-{ 
+{
   vcl_vector<bwm_observer_cam*> obs =
     bwm_observer_mgr::instance()->observers_cam();
-  for(vcl_vector<bwm_observer_cam*>::iterator oit = obs.begin();
-      oit != obs.end(); ++oit)
-    if((*oit)->type_name() == "bwm_observer_video")
+  for (vcl_vector<bwm_observer_cam*>::iterator oit = obs.begin();
+       oit != obs.end(); ++oit)
+    if ((*oit)->type_name() == "bwm_observer_video")
     {
       bwm_observer_video* obv = static_cast<bwm_observer_video*>(*oit);
       obv->stop();
