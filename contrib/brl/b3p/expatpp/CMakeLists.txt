@@ -1,4 +1,4 @@
-#This is contrib/brl/bbas/expatpp
+#This is brl/b3p/expatpp
 
 OPTION(BUILD_EXPAT "Build expatpp XML parser" NO)
 IF (BUILD_BGUI3D)
