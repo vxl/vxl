@@ -3,14 +3,13 @@
 #endif
 
 #include "bwm_site_process.h"
-#include "bwm/algo/bwm_algo.h"
-#include "bwm/bwm_site.h"
-#include "bwm/io/bwm_io_structs.h"
+#include <bwm/algo/bwm_algo.h>
+#include <bwm/bwm_site.h>
+#include <bwm/io/bwm_io_structs.h>
 
 #include <vul/vul_file.h>
 #include <vil/vil_image_list.h>
 #include <vpgl/vpgl_rational_camera.h>
-#include <vgui/vgui_dialog_extensions.h>
 #include <vgui/vgui_error_dialog.h>
 
 double bwm_site_process::version_num = 0;
