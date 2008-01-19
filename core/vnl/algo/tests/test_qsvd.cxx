@@ -3,7 +3,7 @@
 #undef printf // to work around a bug in libintl.h
 #include <vcl_cstdio.h>
 
-#include "v3p_netlib.h"
+#include <v3p_netlib.h> // resides in v3p/netlib
 
 static
 void test_qsvd()
