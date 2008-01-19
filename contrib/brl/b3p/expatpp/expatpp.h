@@ -20,7 +20,7 @@
 
 
 #ifdef EXPATPP_COMPATIBLE_EXPAT12 // earlier versions of expat up to v1.2 
-  #include "xmlparse.h"
+  #include <xmlparse.h>
 #else
   #include "expat.h"  // since some version of expat moved to SourceForge
 #endif
