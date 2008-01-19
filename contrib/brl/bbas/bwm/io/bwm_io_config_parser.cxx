@@ -3,7 +3,7 @@
 // \brief Parses the configuration file for bwm tool.
 //
 #include "bwm_io_config_parser.h"
-#include "bwm/bwm_site.h"
+#include <bwm/bwm_site.h>
 
 #include <vcl_sstream.h>
 #include <vcl_iostream.h>
