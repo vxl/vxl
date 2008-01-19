@@ -5,18 +5,17 @@
 
 #include "bwm_observable.h"
 
-#include <dbmsh3d/dbmsh3d_mesh_mc.h>
+#include <bmsh3d/bmsh3d_mesh_mc.h>
 
 class bwm_mesh_observable : public bwm_observable
 {
  public:
-
-  vcl_string type_name() {return "bwm_mesh_observable"; }
+  vcl_string type_name() { return "bwm_mesh_observable"; }
 
   //: constructors
   bwm_mesh_observable() {}
 
-  bwm_mesh_observable(dbmsh3d_mesh_mc* object)
+  bwm_mesh_observable(bmsh3d_mesh_mc* object)
     : object_(object) {}
 
   bwm_mesh_observable(vsol_polygon_3d_sptr poly);
@@ -26,7 +25,7 @@ class bwm_mesh_observable : public bwm_observable
   virtual ~bwm_mesh_observable();
 
  private:
-  dbmsh3d_mesh_mc* object_;
+  bmsh3d_mesh_mc* object_;
 };
 
-#endif
+#endif // bwm_mesh_observable_h_
