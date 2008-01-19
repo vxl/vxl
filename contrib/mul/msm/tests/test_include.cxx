@@ -1,3 +1,3 @@
-#include <mul/msm/msm_points.h>
+#include <msm/msm_points.h>
 
 int main() { return 0; }
