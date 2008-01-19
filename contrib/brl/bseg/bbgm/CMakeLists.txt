@@ -1,4 +1,4 @@
-# This is brcv/seg/bbgm/CMakeLists.txt
+# This is brl/bseg/bbgm/CMakeLists.txt
 # Brown background modeling Library
 
 SET(bbgm_sources
@@ -16,7 +16,7 @@ AUX_SOURCE_DIRECTORY(Templates bbgm_sources)
 ADD_LIBRARY(bbgm  ${bbgm_sources})
 
 # add the required libraries into this list
-TARGET_LINK_LIBRARIES(bbgm bsta vsl vil vbl vbl_io)  
+TARGET_LINK_LIBRARIES(bbgm bsta vbl_io vnl_io vsl vnl vil vbl)
 
 
 IF( BUILD_TESTING )
