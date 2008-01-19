@@ -27,6 +27,9 @@ SUBDIRS += fhs
 # mcal
 SUBDIRS += mcal
 
+# msm
+SUBDIRS += msm
+
 ################################
 include ${VXLROOT}/config/top.mk
 ################################
