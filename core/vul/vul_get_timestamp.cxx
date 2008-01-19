@@ -12,15 +12,10 @@
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
 #include <direct.h>
-#include <sys/timeb.h>
 #else
 #include <unistd.h> // for struct timeval
-#ifdef __CYGWIN__
-#include <sys/time.h>
-#endif
 #endif
 
-//#include <vcl_ctime.h> // for struct timezone
 #include <vcl_sys/time.h> // for gettimeofday()
 
 // for vul_get_time_string()
@@ -29,7 +24,6 @@
 #include <vcl_sstream.h>
 #include <vcl_iomanip.h>
 //
-
 
 #if !defined(VCL_WIN32) || defined(__CYGWIN__)
 // POSIX
