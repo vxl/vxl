@@ -1,5 +1,5 @@
 # world modeling application
-# contrib/bwm/reg/CMakeLists.txt
+# brl/bbas/bwm/reg/CMakeLists.txt
 
 
 SET(bwm_reg_sources
@@ -15,7 +15,7 @@ AUX_SOURCE_DIRECTORY(Templates bwm_reg_sources)
 
 ADD_LIBRARY(bwm_reg ${bwm_reg_sources})
 
-TARGET_LINK_LIBRARIES( bwm_reg brip sdet vil vbl vgl vgl_algo vnl vsol vpgl vpgl_algo bgeo)
+TARGET_LINK_LIBRARIES( bwm_reg brip sdet vil vbl vgl vnl bsta bsol vsol vpgl vpgl_algo bgeo)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)
