@@ -1,5 +1,5 @@
 # gel/mrc/vpgl/CMakeLists.txt
-# Photogrametry Library.
+# Photogrammetry Library.
 
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc)
 
@@ -24,7 +24,7 @@ SET( vpgl_sources
 AUX_SOURCE_DIRECTORY(Templates vpgl_sources)
 
 ADD_LIBRARY(vpgl ${vpgl_sources})
-TARGET_LINK_LIBRARIES( vpgl vnl vnl_algo vnl_io vgl vgl_algo vgl_io vgl_xio vsl)
+TARGET_LINK_LIBRARIES( vpgl vnl vnl_algo vnl_io vgl vgl_algo vgl_io vsl)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
