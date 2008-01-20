@@ -41,6 +41,6 @@ ADD_EXECUTABLE(bgui3d_example_examiner_cylinders example_examiner_cylinders.cxx)
 TARGET_LINK_LIBRARIES(bgui3d_example_examiner_cylinders bgui3d)
 
 ADD_EXECUTABLE(bgui3d_example_interact example_interact.cxx)
-TARGET_LINK_LIBRARIES(bgui3d_example_interact bgui3d vsol vgl)
+TARGET_LINK_LIBRARIES(bgui3d_example_interact bgui3d vgl)
 
 ENDIF (HAS_BGUI3D)
