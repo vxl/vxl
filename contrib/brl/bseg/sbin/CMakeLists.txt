@@ -1,5 +1,6 @@
 # executables for segmentation processing
 # brl/bseg/sbin/CMakeLists.txt
+
 INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
 INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/find_xerces.cmake )
 INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
@@ -24,13 +25,13 @@ IF( HAS_VGUI )
 ENDIF( HAS_VGUI )
 
 ADD_EXECUTABLE (negate negate.cxx)
-TARGET_LINK_LIBRARIES(negate vbl vul vnl vil vcl)
+TARGET_LINK_LIBRARIES(negate vul vil vcl)
 
 ADD_EXECUTABLE (vil_convert vil_convert.cxx)
-TARGET_LINK_LIBRARIES(vil_convert vbl vul vnl vil vcl)
+TARGET_LINK_LIBRARIES(vil_convert vul vil vcl)
 
 ADD_EXECUTABLE (generate_tiff_pyramids generate_tiff_pyramids.cxx)
-TARGET_LINK_LIBRARIES(generate_tiff_pyramids vpl vul vbl vnl vil)
+TARGET_LINK_LIBRARIES(generate_tiff_pyramids vpl vul vil)
 
 ADD_EXECUTABLE (generate_tiff_rset generate_tiff_rset.cxx)
-TARGET_LINK_LIBRARIES(generate_tiff_rset vpl vbl vul vil)
+TARGET_LINK_LIBRARIES(generate_tiff_rset vpl vul vil)
