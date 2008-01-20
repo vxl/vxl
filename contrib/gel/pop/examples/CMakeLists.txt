@@ -1,4 +1,4 @@
-# pop/examples/CMakeLists.txt
+# gel/pop/examples/CMakeLists.txt
 
 IF( WIN32 )
   ADD_DEFINITIONS( -D_AFXDLL )
@@ -6,6 +6,4 @@ IF( WIN32 )
 ENDIF( WIN32 )
 
 ADD_EXECUTABLE( pop_simple_exec pop_simple_exec.cxx )
-TARGET_LINK_LIBRARIES( pop_simple_exec pop vnl)
-
-
+TARGET_LINK_LIBRARIES( pop_simple_exec pop)
