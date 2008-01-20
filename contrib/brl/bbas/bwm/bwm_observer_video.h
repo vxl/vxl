@@ -22,13 +22,13 @@ class bwm_observer_video : public bwm_observer_cam
   bwm_observer_video(bgui_image_tableau_sptr const& img,
                      vpgl_camera<double> *camera, vcl_string cam_path)
     : bwm_observer_cam(img, camera, cam_path), play_video_(false),
-    time_interval_(0.0f), video_istr_(0), cam_istr_(0),
+    time_interval_(0.0f), video_istr_(0), cam_istr_(0), tracked_corr_(0),
     display_world_pts_(false)
     {init();}
 
   bwm_observer_video(bgui_image_tableau_sptr const& img)
     : bwm_observer_cam(img), play_video_(false), time_interval_(0.0f),
-    video_istr_(0), cam_istr_(0), display_world_pts_(false)
+    video_istr_(0), cam_istr_(0), tracked_corr_(0), display_world_pts_(false)
     {init();}
 
   virtual ~bwm_observer_video(){this->clear_video_corrs_display();}
@@ -60,6 +60,12 @@ class bwm_observer_video : public bwm_observer_cam
   //: remove the selected correspondence
   void remove_selected_corr();
 
+  //: select corr for tracking
+  void set_selected_corr_for_tracking();
+
+  //: select corr for tracking
+  void unset_selected_corr_for_tracking();
+
   //correspondence display methods
   //: display the correspondences for a given frame on the current frame
   void display_video_corrs(unsigned frame_index);
@@ -87,15 +93,8 @@ class bwm_observer_video : public bwm_observer_cam
   vgui_style_sptr MATCHED_STYLE; 
   vgui_style_sptr PREV_STYLE;
   vgui_style_sptr POINT_3D_STYLE;
-  //:initialization
-  void init()
-    {
-      EDIT_STYLE =  vgui_style::new_style(1.0f, 1.0f, 0.0f, 1.0f, 1.0f);
-      CORR_STYLE =  vgui_style::new_style(0.0f, 1.0f, 0.0f, 1.0f, 1.0f);
-      MATCHED_STYLE =  vgui_style::new_style(1.0f, 0.0f, 1.0f, 1.0f, 1.0f);
-      PREV_STYLE =  vgui_style::new_style(0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-      POINT_3D_STYLE = vgui_style::new_style(0.75f, 1.0f, 0.25f, 5.0f, 1.0f);
-    }
+
+  void init();
   //: this function is called when a correspondence is set by observer_vgui.
   virtual void correspondence_action();
 
@@ -127,6 +126,9 @@ class bwm_observer_video : public bwm_observer_cam
   //: display the current frame matches and those closest in time to the current frame
   void display_corr_track();
 
+  //: display the correspondence index number as text
+  void display_corr_index();
+
   //: should the world points be displayed? (requires cameras)
   bool display_world_pts_;
   //:the video play state - if true the video is playing
@@ -138,6 +140,9 @@ class bwm_observer_video : public bwm_observer_cam
   //: the camera input stream - currently only camera list is supported
   bwm_video_cam_istream_sptr cam_istr_;
 
+  //: a correspondence being tracked
+  bwm_video_corr_sptr tracked_corr_;
+
   //: the video frame-to-frame correspondences, over all frames
   vcl_map<unsigned, bwm_video_corr_sptr> video_corrs_;
   
@@ -146,6 +151,7 @@ class bwm_observer_video : public bwm_observer_cam
 
   //: relation between 3-d point display and corr id
   vcl_map<unsigned, vgui_soview2D_point*> world_pt_map_;
+
 };
 
 #endif

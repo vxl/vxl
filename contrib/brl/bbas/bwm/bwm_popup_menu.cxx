@@ -288,6 +288,16 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
                        &bwm_tableau_video::remove_selected_corr)); 
     video_corr_submenu.separator();
 
+    video_corr_submenu.add( "Track Selected Corr ",
+                       new vgui_command_simple<bwm_tableau_video>(video_tab,
+                       &bwm_tableau_video::set_selected_corr_for_tracking)); 
+    video_corr_submenu.separator();
+
+    video_corr_submenu.add( "Stop Tracking Corr ",
+                       new vgui_command_simple<bwm_tableau_video>(video_tab,
+                       &bwm_tableau_video::unset_selected_corr_for_tracking)); 
+    video_corr_submenu.separator();
+
     video_corr_submenu.add( "Display Corrs",
                        new vgui_command_simple<bwm_tableau_video>(video_tab,
                        &bwm_tableau_video::display_video_corrs)); 

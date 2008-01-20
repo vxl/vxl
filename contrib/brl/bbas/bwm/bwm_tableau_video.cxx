@@ -65,6 +65,15 @@ void bwm_tableau_video::remove_selected_corr()
   my_observer_->remove_selected_corr();
 }
 
+void bwm_tableau_video::set_selected_corr_for_tracking()
+{
+  my_observer_->set_selected_corr_for_tracking();
+}
+
+void bwm_tableau_video::unset_selected_corr_for_tracking()
+{
+  my_observer_->unset_selected_corr_for_tracking();
+}
 
 void bwm_tableau_video::display_video_corrs()
 {

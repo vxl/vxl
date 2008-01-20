@@ -2,6 +2,7 @@
 #include "bwm_observer_mgr.h"
 #include "video/bwm_video_corr.h"
 #include "algo/bwm_soview2D_cross.h"
+#include <vcl_sstream.h>
 #include <vgl/vgl_distance.h>
 #include <vgui/vgui.h>
 #include <vul/vul_timer.h>
@@ -18,10 +19,10 @@ bool bwm_observer_video::handle(const vgui_event &e)
     {
       unsigned cur_frame =  video_istr_->frame_number();
       if(e.modifier == vgui_SHIFT){
-        if(cur_frame<10)
+        if(cur_frame<5)
           this->seek(0);
         else
-          this->seek(cur_frame-10);
+          this->seek(cur_frame-5);
       }
       else
         if(cur_frame > 0)
@@ -33,7 +34,7 @@ bool bwm_observer_video::handle(const vgui_event &e)
     {
       unsigned cur_frame =  video_istr_->frame_number();
       if(e.modifier == vgui_SHIFT)
-        this->seek(cur_frame+10);
+        this->seek(cur_frame+5);
       else
         this->seek(cur_frame+1);
       return true;
@@ -44,6 +45,15 @@ bool bwm_observer_video::handle(const vgui_event &e)
       return true;
     }
   return bwm_observer_cam::handle(e);
+}
+  //:initialization
+void bwm_observer_video::init()
+{
+  EDIT_STYLE =  vgui_style::new_style(1.0f, 1.0f, 0.0f, 1.0f, 1.0f);
+  CORR_STYLE =  vgui_style::new_style(0.0f, 1.0f, 0.0f, 1.0f, 1.0f);
+  MATCHED_STYLE =  vgui_style::new_style(1.0f, 0.0f, 1.0f, 1.0f, 1.0f);
+  PREV_STYLE =  vgui_style::new_style(0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+  POINT_3D_STYLE = vgui_style::new_style(0.75f, 1.0f, 0.25f, 5.0f, 1.0f);
 }
 
 
@@ -68,6 +78,28 @@ bool bwm_observer_video::open_camera_stream(vcl_string const& camera_glob)
   return open;
 }
 
+void bwm_observer_video::display_corr_index()
+{
+  vgui_text_tableau_sptr tt = img_tab_->text_tab();
+  if(!tt) return;
+  if(!video_istr_) return;
+  tt->clear();
+  unsigned cur_frame = video_istr_->frame_number();
+  vcl_map<unsigned, bwm_video_corr_sptr>::iterator cit = video_corrs_.begin();
+  for(;cit != video_corrs_.end(); ++cit)
+    {
+      bwm_video_corr_sptr c = (*cit).second;
+      vgl_point_2d<double> pt;
+      if(!c->match(cur_frame, pt)) continue;
+      unsigned index = (*cit).first;
+      vcl_stringstream ind_str;
+      ind_str << index;
+      float x = static_cast<float>(pt.x()+2.0);
+      float y = static_cast<float>(pt.y()-2.0);
+      tt->add(x, y, ind_str.str());
+    }
+  tt->post_redraw();
+}
 void bwm_observer_video::display_current_frame()
 {
   if (video_istr_) {
@@ -106,6 +138,7 @@ void bwm_observer_video::display_current_frame()
       this->clear_video_corrs_display();
         this->display_corr_track();
     }
+  this->display_corr_index();
 }
 
 void bwm_observer_video::next_frame()
@@ -216,6 +249,23 @@ bool bwm_observer_video::find_selected_video_corr(unsigned& frame,
         }
   return found;
 }
+//: select selected corr for tracking
+void bwm_observer_video::set_selected_corr_for_tracking()
+{
+  unsigned frame = 0, corr_index = 0;
+  bwm_soview2D_cross* cross =0;
+  if(!this->find_selected_video_corr(frame, corr_index, cross))
+    return;
+  tracked_corr_ = video_corrs_[corr_index];
+}
+
+
+//: unset selected corr for tracking
+void bwm_observer_video::unset_selected_corr_for_tracking()
+{
+  tracked_corr_ = 0;
+}
+
 
 void bwm_observer_video::remove_selected_corr_match()
 {
@@ -310,7 +360,8 @@ void bwm_observer_video::select_closest_match()
 // observer_vgui's handle method.
 void bwm_observer_video::correspondence_action()
 {
-  this->select_closest_match();
+  if(!tracked_corr_)
+    this->select_closest_match();
 }
 
 //Create a new video correspondence from the corr currently set
@@ -335,6 +386,9 @@ void bwm_observer_video::add_video_corr()
 void bwm_observer_video::add_match()
 {
   if(!video_istr_) return;
+  unsigned cur_frame =  video_istr_->frame_number();
+  vgl_point_2d<double> pt;
+  if(!tracked_corr_){
   unsigned frame = 0, corr_index = 0;
   bwm_soview2D_cross* cross =0;
   if(!this->find_selected_video_corr(frame, corr_index, cross))
@@ -343,12 +397,11 @@ void bwm_observer_video::add_match()
      this->add_video_corr();
      return;
     }
-  unsigned cur_frame =  video_istr_->frame_number();
   // if the correspondence is in *this* frame then the match already exists
   // and there is nothing to do
   if(frame == cur_frame)
     return;
-  vgl_point_2d<double> pt;
+  
   bool valid = this->corr_image_pt(pt);
   if(!valid)
     return;
@@ -364,6 +417,17 @@ void bwm_observer_video::add_match()
   this->remove(cross);
   corr_soview_map_[frame].erase(corr_index);
   this->display_video_corr(c, frame, MATCHED_STYLE);
+  return;
+  }
+  bool valid = this->corr_image_pt(pt);
+  if(!valid)
+    return;
+  this->remove_corr_pt();
+  //if the frame match aready exists do nothing
+  if(!tracked_corr_->add(cur_frame, pt))
+    return;
+  //display the new match
+  this->display_video_corr(tracked_corr_, cur_frame, CORR_STYLE);
 }
 
 bool bwm_observer_video::is_displayed(bwm_video_corr_sptr const& corr,
@@ -483,9 +547,10 @@ void bwm_observer_video::clear_display_map()
 // clear everything (only temporary for now)
 void bwm_observer_video::clear_video_corrs_display()
 {
-  this->clear();
+  this->remove_corr_pt();
   this->clear_display_map();
   this->world_pt_map_.clear();
+  this->clear();
 }
 
 vcl_vector<bwm_video_corr_sptr> bwm_observer_video::corrs()

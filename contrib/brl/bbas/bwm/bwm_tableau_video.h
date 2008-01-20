@@ -32,6 +32,8 @@ class bwm_tableau_video : public bwm_tableau_cam
   void add_match();
   void remove_selected_corr_match();
   void remove_selected_corr();
+  void set_selected_corr_for_tracking();
+  void unset_selected_corr_for_tracking();
   void display_video_corrs();
   void display_current_video_corrs();
   void clear_video_corrs_display();
