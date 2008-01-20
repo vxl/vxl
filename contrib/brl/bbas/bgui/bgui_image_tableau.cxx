@@ -24,23 +24,30 @@
 //--------------------------------------------------------------------------------
 
 bgui_image_tableau::bgui_image_tableau()
-  { handle_motion_ = true; locked_ = false; show_path_=false;}
+  { 
+    handle_motion_ = true; locked_ = false; show_path_=false;
+    tt_ = new vgui_text_tableau();
+  }
 
 bgui_image_tableau::bgui_image_tableau(vil_image_resource_sptr const & img,
                                        vgui_range_map_params_sptr const& rmp)
- : base(img, rmp) { handle_motion_ = true; locked_ = false; show_path_=false;}
+ : base(img, rmp) { handle_motion_ = true; locked_ = false; show_path_=false;
+ tt_ = new vgui_text_tableau();}
 
 bgui_image_tableau::bgui_image_tableau(vil_image_view_base const & img,
                                        vgui_range_map_params_sptr const& rmp)
- : base(img, rmp) { handle_motion_ = true; locked_ = false; show_path_=false;}
+ : base(img, rmp) { handle_motion_ = true; locked_ = false; show_path_=false;
+ tt_ = new vgui_text_tableau();}
 
 bgui_image_tableau::bgui_image_tableau(vil1_image const & img,
                                        vgui_range_map_params_sptr const& rmp)
- : base(img, rmp) { handle_motion_ = true; locked_ = false; show_path_=false;}
+ : base(img, rmp) { handle_motion_ = true; locked_ = false; show_path_=false;
+ tt_ = new vgui_text_tableau();}
 
 bgui_image_tableau::bgui_image_tableau(char const *f,
                                        vgui_range_map_params_sptr const& rmp)
- : base(f, rmp) { handle_motion_ = true; locked_ = false; show_path_=false;}
+ : base(f, rmp) { handle_motion_ = true; locked_ = false; show_path_=false;
+ tt_ = new vgui_text_tableau();}
 
 //--------------------------------------------------------------------------------
 
@@ -522,6 +529,7 @@ bool bgui_image_tableau::handle(vgui_event const &e)
   if (e.type == vgui_DRAW)
   {
     base::handle(e);
+    if(tt_) tt_->handle(e);
     return true;
   }
 

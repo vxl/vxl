@@ -21,6 +21,7 @@
 #include <vgui/vgui_range_map_params_sptr.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view_base.h>
+#include <vgui/vgui_text_tableau.h>
 #include <vil1/vil1_image.h>
 #include <vgui/vgui_gl.h>
 
@@ -106,6 +107,7 @@ class bgui_image_tableau : public vgui_image_tableau
   // true means locked, false unlocked
   void lock_linenum(bool b) { locked_ = b; handle_motion_=!b; }
   void show_image_path(bool show){show_path_ = show;}
+  vgui_text_tableau_sptr text_tab(){return tt_;}
  protected:
   //: Handle all events for this tableau.
   bool handle(vgui_event const &e);
@@ -129,6 +131,7 @@ class bgui_image_tableau : public vgui_image_tableau
 
   bool locked_;
   bool show_path_;
+  vgui_text_tableau_sptr tt_;
 };
 
 //: Creates a smart-pointer to a bgui_image_tableau.
