@@ -33,7 +33,7 @@ SET(bmsh3d_sources
 
 ADD_LIBRARY( bmsh3d  ${bmsh3d_sources})
 
-TARGET_LINK_LIBRARIES( bmsh3d vsol vil)
+TARGET_LINK_LIBRARIES( bmsh3d vgl vgl_algo vnl)
 
 SUBDIRS( algo )
 SUBDIRS( pro )
