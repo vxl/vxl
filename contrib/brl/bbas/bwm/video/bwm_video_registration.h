@@ -42,7 +42,8 @@ class bwm_video_registration
                                vgl_plane_3d<double> const& world_plane,
                                unsigned input_ni, unsigned input_nj,
                                vsol_box_2d_sptr& bounds,
-                               double& world_sample_distance
+                               double& world_sample_distance,
+                               unsigned skip_frames = 1
                                );
   
   //: Given a set of input images, perspective cameras and world plane:
@@ -56,8 +57,10 @@ register_image_stream_planar(vidl2_istream_sptr& in_stream,
                              vgl_plane_3d<double> const& world_plane,
                              vsol_box_2d_sptr const& bounds,
                              double world_sample_distance,
-                             vidl2_ostream_sptr& out_stream
+                             vidl2_ostream_sptr& out_stream,
+                             unsigned skip_frames = 1
                              );
+
  private:
   // only static methods
   bwm_video_registration(); 

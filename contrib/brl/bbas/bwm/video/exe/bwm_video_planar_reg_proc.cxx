@@ -7,6 +7,7 @@
 #include <vcl_vector.h>
 #include <vcl_string.h>
 #include <vnl/vnl_double_4.h>
+#include <vgl/vgl_point_3d.h>
 #include <bwm/video/bwm_video_registration.h>
 #include <vidl2/vidl2_image_list_istream.h>
 #include <vidl2/vidl2_image_list_ostream.h>
@@ -52,8 +53,15 @@ static bool planar_reg(vcl_string const& video_input_glob,
   unsigned input_ni = f0->ni(), input_nj = f0->nj();
   unsigned output_ni = 0, output_nj = 0;    
 
+#if 0
+  vgl_point_3d<double> world_point(69.014420,-3.638463, 13.361106);
+  if(!bwm_video_registration::measure_stability(cam_istr, world_plane, 
+                                                world_point))
+     return false;
+#endif
   vsol_box_2d_sptr bounds;
   double sample_distance = 0;
+
    if(!bwm_video_registration::output_frame_bounds_planar(cam_istr,
                                                 world_plane,
                                                 input_ni, input_nj,
@@ -68,6 +76,10 @@ static bool planar_reg(vcl_string const& video_input_glob,
                                                        sample_distance,
                                                        video_ostr))
 													   return false;
+
+  
+  
+
   return true;
 }
 

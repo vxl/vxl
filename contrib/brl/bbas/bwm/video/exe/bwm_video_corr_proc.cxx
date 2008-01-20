@@ -27,9 +27,10 @@ static bool process(vcl_string const& site_path,
   vcl_string dir = vul_file::dirname(site_path);
   vcl_string temp_site0 = dir + "/temp0.xml";
   vcl_string temp_site1 = dir + "/temp1.xml";
-  {
+  vcl_string final_site = dir + "/final_corrs_cams.xml";
   bwm_video_corr_processor cp;
   cp.set_verbose(true);
+#if 1
   if(!cp.open_video_site(site_path, false)) return false;
 
   vnl_double_3x3 M;
@@ -53,6 +54,7 @@ static bool process(vcl_string const& site_path,
   cp.write_video_site(temp_site1);
   cp.close();
 
+
   if(!cp.open_video_site(temp_site1, true)) return false;
   //Set up output directory for refined cameras
   vcl_string cam_dir = dir +"/refined_cameras";
@@ -65,13 +67,13 @@ static bool process(vcl_string const& site_path,
   //refine the cameras and 3-d geometry
   if(!cp.refine_world_pts_and_cameras())
     return false;
-  vcl_string final_site = dir + "/final_corrs_cams.xml";
   vcl_string camera_opath = cam_dir+"/*";
   cp.set_camera_path(camera_opath);
   cp.write_video_site(final_site);
-  }// exit scope 
   vpl_unlink(temp_site0.c_str());
   vpl_unlink(temp_site1.c_str());
+#endif
+  
   return true;
 }
 
@@ -85,9 +87,9 @@ int main(int argc, char** argv)
   vul_arg<double> initial_depth(arglist, "-depth", "initial camera depth",
                                 1000);
   vul_arg<int> window_radius(arglist, "win_radius", 
-                             "correlation window radius", 7);
+                             "correlation window radius", 2);
   vul_arg<int> search_radius(arglist, "search_radius", "search window radius",
-                             10);
+                             4);
   vul_arg<bool> use_lmq(arglist, "use_lmq",
                         "Use levenberg_marquardt vs. amoeba", true);
   arglist.parse(argc, argv, true);

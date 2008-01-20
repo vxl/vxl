@@ -30,25 +30,31 @@ output_frame_bounds_planar(bwm_video_cam_istream_sptr& cam_istream,
                            vgl_plane_3d<double> const& world_plane,
                            unsigned input_ni, unsigned input_nj,
                            vsol_box_2d_sptr& bounds,
-                           double& world_sample_distance
+                           double& world_sample_distance,
+                           unsigned skip_frames
                            )
 {
   vsol_polygon_2d_sptr input_poly = poly_from_image_region(input_ni, input_nj);
   bounds = new vsol_box_2d();
   cam_istream->seek_camera(0);
+  unsigned current_frame = 0;
   double sd = 0;
   unsigned ncams = 0;
+  vpgl_perspective_camera<double>* cam0 = cam_istream->current_camera();
+  vgl_h_matrix_2d<double> H0 = 
+    vpgl_camera_homographies::homography_to_camera(*cam0, world_plane);
+
   //scan through the camera stream and determine the max min range
   //of projected image bounds. The input polygon is a rectangle and the
   //projected output polygon is an arbitary quadrilateral
-  while(cam_istream->advance())
+  do 
     {
-      vpgl_perspective_camera<double>* cam = cam_istream->read_camera();
+      vpgl_perspective_camera<double>* cam = cam_istream->current_camera();
       if(!cam) break;
       vgl_h_matrix_2d<double> H = 
         vpgl_camera_homographies::homography_from_camera(*cam, world_plane);
       vsol_polygon_2d_sptr output_poly;
-      if (!bsol_algs::homography(input_poly, H, output_poly))
+      if (!bsol_algs::homography(input_poly, H0*H, output_poly))
         return false; 
       vsol_box_2d_sptr b = output_poly->get_bounding_box();
       //expand output box by the size of the mapped input box
@@ -60,7 +66,8 @@ output_frame_bounds_planar(bwm_video_cam_istream_sptr& cam_istream,
       double w = b->width(), h = b->height();
       sd += vcl_sqrt(w*w + h*h);//accumulate for the average
       ncams++;
-    }
+      current_frame +=skip_frames;
+    }  while(cam_istream->seek_camera(current_frame));
   if(!ncams) return false;
   sd/=ncams;//average diagonal of projected image
   double ini = input_ni, inj = input_nj;
@@ -125,7 +132,8 @@ register_image_stream_planar(vidl2_istream_sptr& in_stream,
                              vgl_plane_3d<double> const& world_plane,
                              vsol_box_2d_sptr const& bounds,
                              double world_sample_distance,
-                             vidl2_ostream_sptr& out_stream
+                             vidl2_ostream_sptr& out_stream,
+                             unsigned skip_frames
                              )
 {
   if(!in_stream || !cam_istream || !out_stream)
@@ -134,6 +142,10 @@ register_image_stream_planar(vidl2_istream_sptr& in_stream,
     return false;
   if(!bounds)
     return false;
+  unsigned current_frame = 0;
+  vpgl_perspective_camera<double>* cam0 = cam_istream->current_camera();
+  vgl_h_matrix_2d<double> H0 = 
+    vpgl_camera_homographies::homography_to_camera(*cam0, world_plane);
   // the size of the output image is defined by the bounds and the
   // ground sample distance
   double w = bounds->width(), h = bounds->height();
@@ -146,7 +158,7 @@ register_image_stream_planar(vidl2_istream_sptr& in_stream,
   t[1][0]=0;  t[1][1]=1; t[1][2]=-bounds->get_min_y();
   t[2][0]=0;  t[2][1]=0; t[2][2]=world_sample_distance;
   unsigned f = 0;
-  while(in_stream->advance()&&cam_istream->advance())
+  do
     {
       vul_timer tim;
       vidl2_frame_sptr frame = in_stream->current_frame();
@@ -155,8 +167,9 @@ register_image_stream_planar(vidl2_istream_sptr& in_stream,
       vpgl_perspective_camera<double>* cam = cam_istream->current_camera();
       if(!cam)
         return false;
-      vgl_h_matrix_2d<double> H = 
+      vgl_h_matrix_2d<double> tem = 
         vpgl_camera_homographies::homography_from_camera(*cam, world_plane);
+      vgl_h_matrix_2d<double> H = H0*tem;
       vnl_matrix_fixed<double,3, 3> Mt = H.get_matrix();
       vnl_matrix_fixed<double,3,3> Msh;
       Msh = t*Mt;
@@ -173,9 +186,11 @@ register_image_stream_planar(vidl2_istream_sptr& in_stream,
         return false;
       if(!out_stream->write_frame(oframe))
         return false;
-      vcl_cout << "Registered frame[" << f << "](" << out_ni << " x " 
-               << out_nj << ") in " << tim.real() << " milliseconds\n";
-      f++;
-    }
+      current_frame +=skip_frames;
+      vcl_cout << "Registered frame[" << current_frame << "](" << out_ni 
+               << " x " << out_nj << ") in " << tim.real() << " milliseconds\n"
+               << vcl_flush;
+    }  while(in_stream->seek_frame(current_frame)&&
+             cam_istream->seek_camera(current_frame));
   return true;
 }

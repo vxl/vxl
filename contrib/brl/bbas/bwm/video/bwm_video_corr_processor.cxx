@@ -150,12 +150,12 @@ void remove_dir(vcl_string const& dir)
 bool bwm_video_corr_processor::open_video_site(vcl_string const& site_path,
                                                bool cameras_exist)
 {
-  bwm_video_site_io sio;
-  if(!sio.open(site_path))
+  if(!site_io_.open(site_path))
     return false;
-  site_name_ = sio.name();
-  video_path_ = sio.video_path();
-  camera_path_ = sio.camera_path();
+  site_path_ = site_path;
+  site_name_ = site_io_.name();
+  video_path_ = site_io_.video_path();
+  camera_path_ = site_io_.camera_path();
   if(!this->open_video_stream(video_path_))
     return false;
   if(cameras_exist){
@@ -171,7 +171,7 @@ bool bwm_video_corr_processor::open_video_site(vcl_string const& site_path,
     if(!this->open_camera_ostream(dir))
       return false;
   }
-  vcl_vector<bwm_video_corr_sptr> corrs = sio.corrs();
+  vcl_vector<bwm_video_corr_sptr> corrs = site_io_.corrs();
   if(!corrs.size())
     return false;
   this->set_correspondences(corrs);
@@ -525,9 +525,9 @@ exhaustive_init(vnl_vector<double>& position,
   float vmin = v0-search_radius, vmax = v0+search_radius;
   if(umin < 0) umin = 0;
   float ni = static_cast<float>(base.ni()), nj = static_cast<float>(base.nj());
-  if(umax>ni) umax = ni;
+  if(umax>=ni) umax = ni-1;
   if(vmin < 0) vmin = 0;
-  if(vmax>nj) vmax = nj;
+  if(vmax>=nj) vmax = nj-1;
   unsigned pix_cnt = 0;
   double rmin = vnl_numeric_traits<double>::maxval;
   for(float v = vmin; v<=vmax; ++v)
@@ -557,6 +557,9 @@ exhaustive_init(vnl_vector<double>& position,
         }
       }
   end_error = vcl_sqrt(rmin);
+  if(uf == umin || uf == umax || vf == vmin || vf == vmax)
+    end_error = -1.0;
+
   position[0]=uf;   position[1]=vf;
 }
 
@@ -657,6 +660,7 @@ bool bwm_video_corr_processor::find_missing_corrs(unsigned frame_index_a,
                << ' ' << ip.y() << ") Af("  << unknowns[0] << ' '
                << unknowns[1] << ")ier " 
                << sr << ':' << er << '\n' << vcl_flush;
+#if 0
     double xb = unknowns[0], yb = unknowns[1];
     if(use_lmq){
       bwm_video_corr_lsqr_cost_func vlcf(fvx, win_radius,
@@ -681,8 +685,12 @@ bool bwm_video_corr_processor::find_missing_corrs(unsigned frame_index_a,
                << ' ' << yb << ") Af("  << unknowns[0] << ' '
                << unknowns[1] << ")f " 
                << sr << ':' << er << '\n' << vcl_flush;
+#endif
     bwm_video_corr_sptr c = corrs_[i];
-    c->add(frame_index_x, vgl_point_2d<double>(unknowns[0], unknowns[1]));
+    if(er>0)
+      c->add(frame_index_x, vgl_point_2d<double>(unknowns[0], unknowns[1]));
+    else
+      n_failures_[i]++;
   }
   return true;
 }
@@ -695,6 +703,7 @@ find_missing_correspondences(unsigned win_radius,
     vcl_cerr << "No correspondences\n";
     return false;
   }
+  n_failures_.resize(n, 0);
   //get the start and end frame numbers
   unsigned min_frame =0, max_frame = 0;
   vcl_vector<vcl_vector<bool> > mask;
@@ -705,6 +714,7 @@ find_missing_correspondences(unsigned win_radius,
     return false;
   }
   unsigned nframes = max_frame - min_frame +1;
+  corrs_per_frame_.resize(nframes, 0);
   vcl_vector<unsigned> frame_intervals;
   for(unsigned f = min_frame; f<=max_frame; ++f)
     {
@@ -734,6 +744,15 @@ find_missing_correspondences(unsigned win_radius,
           return false;
       }
     }
+  for(unsigned ic = 0; ic<n; ++ic)
+    vcl_cout << "nf[" << ic << "]= " << n_failures_[ic]<< '\n';
+  for(unsigned f = min_frame; f<=max_frame; ++f){
+
+    for(unsigned ic=0; ic<n; ++ic)
+      if(corrs_[ic]->match(f))
+        corrs_per_frame_[f]++;
+    vcl_cout << "Nc[" << f << "]= " << corrs_per_frame_[f] << '\n';
+  }
   return true;
 }
 bool bwm_video_corr_processor::refine_world_pts_and_cameras()
@@ -889,6 +908,7 @@ void bwm_video_corr_processor::close()
   cam_ostr_ = 0;
 
   site_name_ = "";
+  site_path_ = "";
   video_path_ = "";
   camera_path_ = "";
 

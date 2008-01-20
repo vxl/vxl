@@ -24,7 +24,7 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bwm/video/bwm_video_cam_istream_sptr.h>
 #include <bwm/video/bwm_video_cam_ostream_sptr.h>
-
+#include <bwm/video/bwm_video_site_io.h>
 //: A least squares cost function for registering correspondences
 // by minimizing square difference in intensities
 class bwm_video_corr_lsqr_cost_func : public vnl_least_squares_function
@@ -80,7 +80,7 @@ class bwm_video_corr_processor
   // Constructors/Initializers/Destructors-------------------------------------
 
   //: Constructor - default
-  bwm_video_corr_processor() : verbose_(false), site_name_(""),
+  bwm_video_corr_processor() : verbose_(false), site_name_(""), site_path_(""),
     video_path_(""), camera_path_(""), video_istr_(0), cam_istr_(0), 
     world_pts_valid_(false){}
 
@@ -135,6 +135,7 @@ class bwm_video_corr_processor
   //              2) Correspondences are defined for each frame
   bool refine_world_pts_and_cameras();
 
+
   void close(); //close all streams and clear data
   void print_frame_alignment_quality(unsigned start_frame, unsigned end_frame);
  protected:
@@ -186,6 +187,12 @@ void exhaustive_init(vnl_vector<double>& unknowns,
   //: verbosity flag
   bool verbose_;
 
+  //: video_site path
+  bwm_video_site_io site_io_;
+
+  //: video_site path
+  vcl_string site_path_;
+
   //: video_site name
   vcl_string site_name_;
 
@@ -222,6 +229,9 @@ void exhaustive_init(vnl_vector<double>& unknowns,
   vcl_vector<vcl_vector<float> >corr_windows_a_;
   //: the float vectors for each correspondence match window on end frame
   vcl_vector<vcl_vector<float> >corr_windows_b_;
+  //: statistics on correspondence matching
+  vcl_vector<unsigned> n_failures_;
+  vcl_vector<unsigned> corrs_per_frame_;
 };
 
 #endif
