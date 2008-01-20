@@ -7,7 +7,7 @@ ADD_EXECUTABLE( bmsh3d_test_all
       bmsh3d_test_face_geom.cxx
       test_mesh_break_face.cxx
 )
-TARGET_LINK_LIBRARIES( bmsh3d_test_all bmsh3d bmsh3d_algo testlib vul)
+TARGET_LINK_LIBRARIES( bmsh3d_test_all bmsh3d bmsh3d_algo testlib)
 
 ADD_TEST( bmsh3d_test_face_geom bmsh3d_test_all bmsh3d_test_face_geom )
 ADD_TEST( bmsh3d_test_mesh_break_face bmsh3d_test_all test_mesh_break_face )
