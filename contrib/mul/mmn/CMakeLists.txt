@@ -12,7 +12,7 @@ SET(mmn_sources
 AUX_SOURCE_DIRECTORY(Templates mmn_sources)
 
 ADD_LIBRARY(mmn ${mmn_sources})
-TARGET_LINK_LIBRARIES(mmn vimt vnl vil_algo vil vsl)
+TARGET_LINK_LIBRARIES(mmn vnl vsl)
 
 IF (BUILD_TESTING)
   SUBDIRS(tests)
