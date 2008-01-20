@@ -1,5 +1,5 @@
 # world modeling application
-# contrib/brl/bwm/CMakeLists.txt
+# brl/bbas/bwm/CMakeLists.txt
 
 INCLUDE( ${MODULE_PATH}/UseBGUI3D.cmake )
 
@@ -97,7 +97,7 @@ AUX_SOURCE_DIRECTORY(Templates bwm_sources)
 
 ADD_LIBRARY(bwm ${bwm_sources})
 
-TARGET_LINK_LIBRARIES( bwm bwm_video bwm_reg bwm_algo bwm_io bmsh3d bmsh3d_algo bmsh3d_vis expatpp vil vbl vgl vgl_algo vnl vsol vpgl vpgl_algo vpgl_file_formats bgui bgeo)
+TARGET_LINK_LIBRARIES( bwm bwm_video bgui3d bwm_algo bmsh3d bmsh3d_algo bgeo bmsh3d_vis expatpp bsol vsol vdgl bgui vgui vil vbl vgl vgl_algo vnl vpgl vpgl_algo vpgl_file_formats)
 
 SUBDIRS(exe)
 SUBDIRS(algo)
