@@ -1,5 +1,5 @@
 # 3D application
-# contrib/dbmsh3d/vis/CMakeLists.txt
+# bbas/bmsh3d/vis/CMakeLists.txt
 
 INCLUDE( ${MODULE_PATH}/UseBGUI3D.cmake )
 
@@ -18,7 +18,7 @@ SET(bmsh3d_vis_sources
 
 ADD_LIBRARY(bmsh3d_vis ${bmsh3d_vis_sources})
 
-TARGET_LINK_LIBRARIES( bmsh3d_vis bmsh3d bmsh3d_algo bmsh3d_pro bgui3d )
+TARGET_LINK_LIBRARIES( bmsh3d_vis bmsh3d bmsh3d_algo bmsh3d_pro )
 
 ENDIF (HAS_BGUI3D)
 
