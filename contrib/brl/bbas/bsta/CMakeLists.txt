@@ -1,4 +1,4 @@
-# basic/bsta/CMakeLists.txt
+# bbas/bsta/CMakeLists.txt
 # Brown statistics Library.
 
 INCLUDE_DIRECTORIES( ${lems_SOURCE_DIR}/basic )
@@ -44,7 +44,7 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/bsta ${bsta_sources})
 
 
 
-TARGET_LINK_LIBRARIES(bsta vnl_algo vbl vnl_io vnl vsl)
+TARGET_LINK_LIBRARIES(bsta vnl_algo vbl vnl)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
