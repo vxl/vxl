@@ -1299,4 +1299,38 @@ bool vgl_triangle_3d_triangle_coplanar(
   return coplanar(a_p1,b_p1,b_p2,b_p3) && coplanar(a_p2,b_p1,b_p2,b_p3) && coplanar(a_p3,b_p1,b_p2,b_p3);
 }
 
+//=======================================================================
+//! Compute the area of a triangle
+//  The triangle is represented by its vertices \a p1, \a p2, \a p3
+double vgl_triangle_3d_area( 
+  const vgl_point_3d<double> &p0,
+  const vgl_point_3d<double> &p1,
+  const vgl_point_3d<double> &p2 )
+{
+  vgl_vector_3d<double> edge_vector0;
+  edge_vector0 = p0 - p1;
+  vgl_vector_3d<double> edge_vector1;
+  edge_vector1 = p0 - p2;
+
+  vgl_vector_3d<double> area_vector;
+  area_vector = cross_product( edge_vector0, edge_vector1 );
+  
+  double area;
+  area = area_vector.length();
+  area /= 2;
+
+  return area;
+}
+
+//=======================================================================
+//! Compute the aspect ration of a triangle
+//  The triangle is represented by its vertices \a p1, \a p2, \a p3
+double vgl_triangle_3d_aspect_ratio( 
+  const vgl_point_3d<double> &p0,
+  const vgl_point_3d<double> &p1,
+  const vgl_point_3d<double> &p2 )
+{
+  return ( vgl_triangle_3d_longest_side( p0, p1, p2 ) / vgl_triangle_3d_shortest_side( p0, p1, p2 ) );
+}
+
 

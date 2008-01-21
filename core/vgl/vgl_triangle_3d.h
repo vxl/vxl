@@ -113,6 +113,19 @@ inline double vgl_triangle_3d_longest_side(
   return vcl_sqrt(side_length_max);
 }
 
+//! Compute the shortest side of the given triangle
+//  The triangle is represented by its vertices \a p1, \a p2, \a p3
+//  \return length of the longest side
+inline double vgl_triangle_3d_shortest_side(
+  const vgl_point_3d<double>& p1,
+  const vgl_point_3d<double>& p2, 
+  const vgl_point_3d<double>& p3) 
+{
+  double side_length_min = vcl_min( (p2 - p1).sqr_length(), (p3 - p2).sqr_length());
+  side_length_min = vcl_min( side_length_min, (p1 - p3).sqr_length());  
+  return vcl_sqrt(side_length_min);
+}
+
 //! Compute the closest point on a triangle to a reference point
 //! The triangle is represented by its vertices \a p1, \a p2, \a p3.
 //! \param q The reference point.
@@ -144,5 +157,21 @@ bool vgl_triangle_3d_triangle_coplanar(
   const vgl_point_3d<double>& b_p2, 
   const vgl_point_3d<double>& b_p3);
 
+
+//=======================================================================
+//! Compute the area of a triangle
+//  The triangle is represented by its vertices \a p1, \a p2, \a p3
+double vgl_triangle_3d_area( 
+  const vgl_point_3d<double> &p0,
+  const vgl_point_3d<double> &p1,
+  const vgl_point_3d<double> &p2 );
+
+//=======================================================================
+//! Compute the aspect ratio of a triangle
+//  The triangle is represented by its vertices \a p1, \a p2, \a p3
+double vgl_triangle_3d_aspect_ratio( 
+  const vgl_point_3d<double> &p0,
+  const vgl_point_3d<double> &p1,
+  const vgl_point_3d<double> &p2 );
 
 #endif // VGL_TRIANGLE_3D_H_
