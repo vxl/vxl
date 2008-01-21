@@ -3,7 +3,7 @@
 
 SET( bsta_algo_sources
    bsta_gaussian_stats.h
-   bsta_gaussian_updater.h    bsta_gaussian_updater.cxx
+   bsta_gaussian_updater.h
    bsta_mixture_functors.h
    bsta_bayes_functor.h
    bsta_adaptive_updater.txx  bsta_adaptive_updater.h

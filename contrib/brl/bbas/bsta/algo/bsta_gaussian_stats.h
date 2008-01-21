@@ -15,7 +15,6 @@
 #include <bsta/bsta_gaussian_sphere.h>
 #include <bsta/bsta_gaussian_indep.h>
 #include <bsta/bsta_gaussian_full.h>
-#include <bsta/bsta_gaussian_angles_1d.h>
 #include <bsta/bsta_mixture.h>
 #include <bsta/bsta_attributes.h>
 
@@ -49,7 +48,7 @@ class bsta_mixture_weight_by_obs_updater
 };
 
 
-//: Unroll the mahalanobis distance calculation
+//: Unroll the power calculation
 template <class T, unsigned n>
 struct bsta_compute_pow
 {
@@ -97,27 +96,6 @@ struct bsta_gaussian_fitness<bsta_gaussian_sphere<T,n> >
   }
 };
 
-//: Used to sort a mixture of gaussians in decreasing order of fitness
-// Partial specialization for 1d angles case
 
-template<>
-struct bsta_gaussian_fitness<bsta_gaussian_angles_1d>
-{
-  static bool order (const bsta_gaussian_angles_1d& d1, const float& w1,
-                     const bsta_gaussian_angles_1d& d2, const float& w2)
-  {
-    return w1*w1/d1.var() > w2*w2/d2.var();
-  }
-};
-
-template<>
-struct bsta_gaussian_fitness<bsta_gaussian_x_y_theta>
-{
-  static bool order (const bsta_gaussian_x_y_theta& d1, const float& w1,
-                     const bsta_gaussian_x_y_theta& d2, const float& w2)
-  {
-    return w1*w1/d1.det_covar() > w2*w2/d2.det_covar();
-  }
-};
 
 #endif // bsta_gaussian_stats_h_

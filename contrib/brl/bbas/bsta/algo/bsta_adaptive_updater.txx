@@ -68,7 +68,7 @@ bsta_mg_statistical_updater<_mix_dist>::update( _mix_dist& mix, const _vector& s
       for(m_itr itr = matched.begin(); itr != matched.end(); ++itr){
         const unsigned int i = *itr;
         _obs_gaussian& g = mix.distribution(i);
-        probs[i] = g.dist_probability(probs[i]) * mix.weight(i);
+        probs[i] = g.dist_prob_density(probs[i]) * mix.weight(i);
         sum_probs += probs[i];
       }
       // update each match

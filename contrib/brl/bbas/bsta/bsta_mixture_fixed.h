@@ -10,12 +10,14 @@
 //
 // \verbatim
 //  Modifications
+//    Jan 21 2008  -  Matt Leotta  -  Rename probability to prob_density and 
+//                                    add probability integration over a box
 // \endverbatim
 
 #include "bsta_distribution.h"
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
-#include <vnl/vnl_vector_fixed.h>
+
 
 //: A mixture of distributions with a fixed size of s components
 template <class _dist, unsigned s>
@@ -28,6 +30,7 @@ class bsta_mixture_fixed : public bsta_distribution<typename _dist::math_type,
   
   private:
     typedef typename _dist::math_type T;
+    typedef typename _dist::vector_type _vector;
 
   //: A struct to hold the component distributions and weights
   // This class is private and should not be used outside of the mixture.
@@ -140,15 +143,27 @@ class bsta_mixture_fixed : public bsta_distribution<typename _dist::math_type,
   //: Remove the last component in the vector
   void remove_last() { components_[--num_components_].weight = T(0); }
 
-  //: Compute the probablity of this point
+  //: Compute the probability density at this point
   // \note assumes weights have been normalized
-  T probability(const vnl_vector_fixed<T,_dist::dimension>& pt) const
+  T prob_density(const _vector& pt) const
   {
     T prob = 0;
      
     for(unsigned i=0; i<num_components_; ++i)
       prob += components_[i].weight 
-            * components_[i].distribution.probability(pt);
+            * components_[i].distribution.prob_density(pt);
+    return prob;
+  }
+  
+  //: The probability integrated over a box
+  // \note assumes weights have been normalized
+  T probability(const _vector& min_pt, const _vector& max_pt) const
+  {
+    T prob = 0;
+    
+    for(unsigned i=0; i<num_components_; ++i)
+      prob += components_[i].weight 
+      * components_[i].distribution.probability(min_pt,max_pt);
     return prob;
   }
 

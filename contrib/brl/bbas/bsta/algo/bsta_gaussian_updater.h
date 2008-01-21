@@ -15,29 +15,11 @@
 #include <bsta/bsta_gaussian_sphere.h>
 #include <bsta/bsta_gaussian_indep.h>
 #include <bsta/bsta_gaussian_full.h>
-#include <bsta/bsta_gaussian_angles_1d.h>
-#include <bsta/bsta_gaussian_x_y_theta.h>
 #include <bsta/bsta_mixture.h>
 #include <bsta/bsta_attributes.h>
 #include <vcl_algorithm.h>
 
-void
-bsta_update_gaussian(bsta_gaussian_angles_1d & gaussian, float rho,
-                       const float& sample,float min_var );
 
-
-void
-bsta_update_gaussian(bsta_gaussian_angles_1d & gaussian, float rho,
-                       const float& sample);
-
-void
-bsta_update_gaussian(bsta_gaussian_x_y_theta & gaussian, float rho,
-                       const vnl_vector_fixed<float,3>& sample,float min_var );
-
-
-void
-bsta_update_gaussian(bsta_gaussian_x_y_theta & gaussian, float rho,
-                       const vnl_vector_fixed<float,3>& sample);
 
 //: Update the statistics given a 1D Gaussian distribution and a learning rate
 // \note if rho = 1/(num observations) then this just an online cumulative average

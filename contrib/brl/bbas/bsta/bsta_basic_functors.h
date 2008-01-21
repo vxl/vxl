@@ -18,9 +18,9 @@
 #include <vnl/vnl_vector_fixed.h>
 
 
-//: A functor to return the probability of a sample
+//: A functor to return the probability density at a sample
 template <class _dist>
-class bsta_probability_functor
+class bsta_prob_density_functor
 {
   public:
     typedef typename _dist::math_type T;
@@ -31,11 +31,29 @@ class bsta_probability_functor
     //: The main function
     bool operator() ( const _dist& d, const _vector& sample, return_T& retval ) const
     {
-      retval = d.probability(sample);
+      retval = d.prob_density(sample);
       return true;
     }
 };
 
+//: A functor to return the probability integrated over a box
+template <class _dist>
+class bsta_probability_functor
+{
+  public:
+    typedef typename _dist::math_type T;
+    typedef typename _dist::vector_type _vector;
+    typedef T return_T;
+    enum { return_dim = 1 };
+    
+    //: The main function
+    bool operator() ( const _dist& d, const _vector& min_pt, 
+                      const _vector& max_pt, return_T& retval ) const
+    {
+      retval = d.probability(min_pt,max_pt);
+      return true;
+    }
+};
 
 //: A functor to return the mean of the Gaussian
 // \note the distribution must be Gaussian

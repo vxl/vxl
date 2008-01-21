@@ -13,7 +13,7 @@
 // Grimson et. al.
 //
 // \verbatim
-//  Modifications
+//   Modifications
 // \endverbatim
 
 #include <bsta/bsta_distribution.h>

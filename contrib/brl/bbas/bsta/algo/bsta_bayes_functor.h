@@ -41,7 +41,7 @@ class bsta_bayes_functor
       for(unsigned int i=0; i<mix.num_components(); ++i){
         T weight = mix.weight(i);
         if(weight > best_probability){
-          T prob = mix.distribution(i).probability(sample) * weight;
+          T prob = mix.distribution(i).prob_density(sample) * weight;
           if(prob > best_probability){
             best_index = i;
             best_probability = prob;
@@ -84,7 +84,7 @@ class bsta_mixture_prob_functor
       for(unsigned int i=0; i<mix.num_components(); ++i){
         T w = mix.weight(i);
         if(w > T(0)){
-          result[i] = w * mix.distribution(i).probability(sample);
+          result[i] = w * mix.distribution(i).prob_density(sample);
           tmp += result[i];
         }
       }

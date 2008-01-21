@@ -42,16 +42,16 @@ void test_gaussian_full_type(T epsilon, const vcl_string& type_name)
 
   T two_pi = (T)2.0*vnl_math::pi;
   T prob = (T)1.0/vcl_sqrt(two_pi*two_pi*two_pi*gauss.det_covar()) * vcl_exp(-sqr_mah_dist/2);
-  TEST_NEAR(("probability <"+type_name+">").c_str(), 
-       gauss.probability(test_pt), prob, epsilon);
+  TEST_NEAR(("probability density <"+type_name+">").c_str(), 
+       gauss.prob_density(test_pt), prob, epsilon);
 
   bsta_gaussian_full<T,3> zero_var_gauss;
   TEST(("zero var mahalanobis dist <"+type_name+">").c_str(),
         zero_var_gauss.sqr_mahalanobis_dist(test_pt),
         vcl_numeric_limits<T>::infinity());
 
-  TEST(("zero var probability <"+type_name+">").c_str(),
-        zero_var_gauss.probability(test_pt), T(0));
+  TEST(("zero var probability density <"+type_name+">").c_str(),
+        zero_var_gauss.prob_density(test_pt), T(0));
 
 }
 MAIN( test_gaussian_full )

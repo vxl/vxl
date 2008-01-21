@@ -10,6 +10,8 @@
 //
 // \verbatim
 //  Modifications
+//    Jan 21 2008  -  Matt Leotta  -  Rename probability to prob_density and 
+//                                    add probability integration over a box
 // \endverbatim
 
 #include "bsta_gaussian.h"
@@ -43,8 +45,8 @@ class bsta_gaussian_full : public bsta_gaussian<T,n>
     //: Set the covariance matrix of the distribution
     void set_covar(const vnl_matrix_fixed<T,n,n>& covar);
 
-    //: The probability of this sample given square mahalanobis distance
-    T dist_probability(const T& sqr_mahal_dist) const
+    //: The probability density at this sample given square mahalanobis distance
+    T dist_prob_density(const T& sqr_mahal_dist) const
     {
       if(det_covar_ <= 0)
         return T(0);
@@ -52,10 +54,18 @@ class bsta_gaussian_full : public bsta_gaussian<T,n>
            * vcl_exp(-sqr_mahal_dist/2));
     }
 
-    //: The probability of this sample
-    T probability(const vnl_vector_fixed<T,n>& pt) const
+    //: The probability density at this sample
+    T prob_density(const vnl_vector_fixed<T,n>& pt) const
     {
-      return dist_probability(sqr_mahalanobis_dist(pt));
+      return dist_prob_density(sqr_mahalanobis_dist(pt));
+    }
+  
+    //: The probability integrated over a box
+    T probability(const vnl_vector_fixed<T,n>& min_pt, 
+                  const vnl_vector_fixed<T,n>& max_pt) const
+    {
+      // This stub needs implementation
+      return 0.0;
     }
 
     //: The squared Mahalanobis distance to this point

@@ -31,9 +31,6 @@ SET(bsta_sources
   bsta_attributes.h
   bsta_detector_gaussian.h
   bsta_detector_mixture.h
-bsta_gaussian_angles_1d.h bsta_gaussian_angles_1d.cxx
-bsta_gaussian_x_y_theta.h bsta_gaussian_x_y_theta.cxx
-
 
 )
 
