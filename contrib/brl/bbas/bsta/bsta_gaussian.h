@@ -40,42 +40,22 @@ struct two_pi_power<0>
 template <class T, unsigned n>
 class bsta_gaussian : public bsta_distribution<T,n>
 {
+  typedef typename bsta_distribution<T,n>::vector_type _vector;
+
   public:
 
     //: The mean of the distribution
-    const vnl_vector_fixed<T,n>& mean() const { return mean_; }
+    const _vector& mean() const { return mean_; }
 
     //: Set the mean of the distribution
-    void set_mean(const vnl_vector_fixed<T,n>& mean) { mean_ = mean; }
+    void set_mean(const _vector& mean) { mean_ = mean; }
 
   protected:
     bsta_gaussian() : mean_(T(0)) {}
-    bsta_gaussian(const vnl_vector_fixed<T,n>& mean) : mean_(mean) {}
+    bsta_gaussian(const _vector& mean) : mean_(mean) {}
 
     //: The mean
-    vnl_vector_fixed<T,n> mean_;
-};
-
-
-//: A Gaussian distribution 1D
-// warning: this is partial specialization, some compilers may complain
-template <class T>
-class bsta_gaussian<T,1> : public bsta_distribution<T,1>
-{
-  public:
-
-    //: The mean of the distribution
-    const T& mean() const { return mean_; }
-
-    //: Set the mean of the distribution
-    void set_mean(const T& mean) { mean_ = mean; }
-
-  protected:
-    bsta_gaussian() : mean_(T(0)) {}
-    bsta_gaussian(const T& mean) : mean_(mean) {}
-
-    //: The mean
-    T mean_;
+    _vector mean_;
 };
 
 
