@@ -112,7 +112,6 @@ struct compute_probability_box<T,n,0>
   {
     if(covar[0]<=T(0))
       return vcl_numeric_limits<T>::infinity();
-      double jnk = static_cast<double>(covar[0]);
     double sigma_sq_2 = 2.0*static_cast<double>(covar[0]);
     double s2 = 1/vcl_sqrt(sigma_sq_2);
     double temp = vnl_erf(max_minus_mean[0]*s2);
@@ -126,8 +125,8 @@ template <class T, unsigned int n>
 T bsta_gaussian_indep<T,n>::probability(const vnl_vector_fixed<T,n>& min_pt, 
                                         const vnl_vector_fixed<T,n>& max_pt) const
 {
-  vnl_vector_fixed<T,n> min_minus_mean = min_pt-mean_;
-  vnl_vector_fixed<T,n> max_minus_mean = max_pt-mean_;
+  vnl_vector_fixed<T,n> min_minus_mean = min_pt-bsta_gaussian<T,n>::mean_;
+  vnl_vector_fixed<T,n> max_minus_mean = max_pt-bsta_gaussian<T,n>::mean_;
   return compute_probability_box<T, n, n-1>::value(min_minus_mean,
                                                  max_minus_mean,
                                                  diag_covar_);
