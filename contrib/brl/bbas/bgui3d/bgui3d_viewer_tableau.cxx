@@ -575,7 +575,11 @@ bgui3d_viewer_tableau::set_clipping_planes()
       // to zero.
 
       GLint depthbits[1];
-      glGetIntegerv(GL_DEPTH_BITS, depthbits);
+      // assume 16-bit depth
+      // it is unsafe to use GL functions here because a GL context 
+      // might not have been created yet.
+      depthbits[0] = 16;
+      //glGetIntegerv(GL_DEPTH_BITS, depthbits);
 
       int use_bits = (int) (float(depthbits[0]) * (0.4f));
       float r = (float) vcl_pow(2.0, (double) use_bits);
