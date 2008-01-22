@@ -22,10 +22,19 @@
 #include <Inventor/SbLinear.h>
 
 
+//: Default Constructor - don't use this, use bgui3d_project2d_tableau_new.
+bgui3d_project2d_tableau::bgui3d_project2d_tableau()
+ : bgui3d_tableau(NULL), draw_headlight_(true)
+{
+  // Use the identity camera
+  this->set_camera(vpgl_proj_camera<double>());
+}
+
+
 //: Constructor - don't use this, use bgui3d_project2d_tableau_new.
 bgui3d_project2d_tableau::bgui3d_project2d_tableau( const vpgl_proj_camera<double>& camera,
-                                                    SoNode * scene_root )
- : bgui3d_tableau(scene_root), draw_headlight_(true)
+                                                   SoNode * scene_root )
+: bgui3d_tableau(scene_root), draw_headlight_(true)
 {
   this->set_camera(camera);
 }

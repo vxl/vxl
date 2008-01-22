@@ -21,7 +21,9 @@
 //  The image plane is specified by 3x4 camera matrix
 class bgui3d_project2d_tableau : public bgui3d_tableau
 {
- public:
+ public:  
+  //: Default Constructor - don't use this, use bgui3d_project2d_tableau_new.
+  bgui3d_project2d_tableau();
   //: Constructor - don't use this, use bgui3d_project2d_tableau_new.
   bgui3d_project2d_tableau(const vpgl_proj_camera<double>& camera,
                            SoNode* scene_root = NULL);
@@ -72,8 +74,11 @@ class bgui3d_project2d_tableau : public bgui3d_tableau
 struct bgui3d_project2d_tableau_new : public bgui3d_project2d_tableau_sptr
 {
   typedef bgui3d_project2d_tableau_sptr base;
+  
+  bgui3d_project2d_tableau_new() : base(new bgui3d_project2d_tableau()) { }
+  
   bgui3d_project2d_tableau_new(const vpgl_proj_camera<double>& camera, SoNode* scene_root = NULL)
-   : base(new bgui3d_project2d_tableau(camera, scene_root)) { }
+  : base(new bgui3d_project2d_tableau(camera, scene_root)) { }
 };
 
 #endif // bgui3d_project2d_tableau_h_
