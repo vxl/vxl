@@ -284,7 +284,7 @@ class bsta_mg_grimson_weighted_updater : bsta_mg_grimson_statistical_updater<_mi
                                           unsigned int max_cmp = 5,
                                           T g_thresh = T(3),
                                           T min_stdev = T(0) )
-      : bsta_mg_adaptive_updater<_mix_dist>(model, max_cmp),
+      : bsta_mg_grimson_statistical_updater<_mix_dist>(model, max_cmp),
         gt2_(g_thresh*g_thresh), min_var_(min_stdev*min_stdev) {}
 
     //: The main function
