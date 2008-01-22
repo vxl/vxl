@@ -57,13 +57,9 @@ class bsta_gaussian_indep : public bsta_gaussian<T,n>
       return dist_prob_density(sqr_mahalanobis_dist(pt));
     }
   
-    //: The probability integrated over a box
+    //: The probability that a sample lies inside a n-d box
     T probability(const vnl_vector_fixed<T,n>& min_pt, 
-                  const vnl_vector_fixed<T,n>& max_pt) const
-    {
-      // This stub needs implementation
-      return 0.0;
-    }
+                  const vnl_vector_fixed<T,n>& max_pt) const;
 
     //: The squared Mahalanobis distance to this point
     T sqr_mahalanobis_dist(const vnl_vector_fixed<T,n>& pt) const;

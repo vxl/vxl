@@ -52,6 +52,9 @@ void test_gaussian_indep_type(T epsilon, const vcl_string& type_name)
   TEST(("zero var probability density <"+type_name+">").c_str(),
         zero_var_gauss.prob_density(test_pt), T(0));
 
+  vnl_vector_fixed<T,3> delta(T(0.1), T(0.1), T(0.1));
+  T prob_box = gauss.probability(mean-delta, mean+delta);
+  TEST_NEAR(("box probability density <"+type_name+">").c_str(),prob_box,0.00100748,1e-07);
 }
 
 
