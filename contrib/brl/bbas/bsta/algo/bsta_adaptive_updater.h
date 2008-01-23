@@ -173,7 +173,7 @@ class bsta_mg_weighted_updater : bsta_mg_statistical_updater<_mix_dist>
                                   unsigned int max_cmp = 5,
                                   T g_thresh = T(3),
                                   T min_stdev = T(0))
-      : bsta_mg_adaptive_updater<_mix_dist>(model, max_cmp),
+      : bsta_mg_statistical_updater<_mix_dist>(model, max_cmp),
         gt2_(g_thresh*g_thresh), min_var_(min_stdev*min_stdev) {}
 
     //: The main function
@@ -183,13 +183,6 @@ class bsta_mg_weighted_updater : bsta_mg_statistical_updater<_mix_dist>
       this->update(mix, sample, weight/mix.num_observations);
     }
 
-    void update( _mix_dist& mix, const _vector& sample, T alpha ) const;
-
-   // void update( _mix_dist& mix, const T & sample, T alpha ) const;
-    //: Squared Gaussian Mahalanobis distance threshold
-    T gt2_;
-    //: Minimum variance allowed in each Gaussian component
-    T min_var_;
 };
 
 
@@ -293,13 +286,6 @@ class bsta_mg_grimson_weighted_updater : bsta_mg_grimson_statistical_updater<_mi
       mix.num_observations += weight;
       this->update(mix, sample, weight/mix.num_observations);
     }
-
-    void update( _mix_dist& mix, const _vector& sample, T alpha ) const;
-
-    //: Squared Gaussian Mahalanobis distance threshold
-    T gt2_;
-    //: Minimum variance allowed in each Gaussian component
-    T min_var_;
 };
 
 
