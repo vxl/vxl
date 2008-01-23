@@ -16,7 +16,7 @@ AUX_SOURCE_DIRECTORY(Templates bbgm_sources)
 ADD_LIBRARY(bbgm  ${bbgm_sources})
 
 # add the required libraries into this list
-TARGET_LINK_LIBRARIES(bbgm bsta bsta_io bsta_algo vbl_io vsl vnl vil vbl)
+TARGET_LINK_LIBRARIES(bbgm bsta bsta_algo vnl_io vbl_io vsl vnl vil vbl)
 
 
 IF( BUILD_TESTING )
