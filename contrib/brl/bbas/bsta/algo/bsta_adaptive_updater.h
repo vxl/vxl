@@ -173,8 +173,7 @@ class bsta_mg_weighted_updater : bsta_mg_statistical_updater<_mix_dist>
                                   unsigned int max_cmp = 5,
                                   T g_thresh = T(3),
                                   T min_stdev = T(0))
-      : bsta_mg_statistical_updater<_mix_dist>(model, max_cmp),
-        gt2_(g_thresh*g_thresh), min_var_(min_stdev*min_stdev) {}
+      : bsta_mg_statistical_updater<_mix_dist>(model, max_cmp, g_thresh, min_stdev){}
 
     //: The main function
     void operator() ( _obs_mix_dist& mix, const _vector& sample, const T weight ) const
@@ -277,8 +276,7 @@ class bsta_mg_grimson_weighted_updater : bsta_mg_grimson_statistical_updater<_mi
                                           unsigned int max_cmp = 5,
                                           T g_thresh = T(3),
                                           T min_stdev = T(0) )
-      : bsta_mg_grimson_statistical_updater<_mix_dist>(model, max_cmp),
-        gt2_(g_thresh*g_thresh), min_var_(min_stdev*min_stdev) {}
+      : bsta_mg_grimson_statistical_updater<_mix_dist>(model, max_cmp, g_thresh, min_stdev){}
 
     //: The main function
     void operator() ( _obs_mix_dist& mix, const _vector& sample, const T weight ) const
