@@ -14,10 +14,15 @@ SET(bsta_io_sources
 
 #AUX_SOURCE_DIRECTORY(Templates bsta_io_sources)
 
-ADD_LIBRARY(bsta_io  ${bsta_io_sources})
+# This directory currently contains only headers with template code
+# so there is no library to be built.  If cxx files or template
+# instantiations are added then the library targets below
+# should be uncommented
 
-SET_TARGET_PROPERTIES(bsta_io PROPERTIES LINKER_LANGUAGE CXX)
-TARGET_LINK_LIBRARIES(bsta_io bsta vnl_io)
+#ADD_LIBRARY(bsta_io  ${bsta_io_sources})
+
+#SET_TARGET_PROPERTIES(bsta_io PROPERTIES LINKER_LANGUAGE CXX)
+#TARGET_LINK_LIBRARIES(bsta_io bsta vnl_io)
 
 #IF( BUILD_TESTING )
 #  SUBDIRS(tests)
