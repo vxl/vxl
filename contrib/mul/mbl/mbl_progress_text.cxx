@@ -5,6 +5,7 @@
 // \file
 
 #include "mbl_progress_text.h"
+#include <vcl_iostream.h>
 
 //: Constructor
 mbl_progress_text::mbl_progress_text()

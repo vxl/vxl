@@ -11,7 +11,7 @@
 // \date 25 Feb 2005
 
 #include <vcl_string.h>
-#include <vsl/vsl_binary_io.h>
+#include <vcl_map.h>
 
 //========================================================================
 //: An exception that can be thrown by an operation when cancelled.
@@ -24,7 +24,7 @@ class mbl_progress_cancel_exception
 
 
 //========================================================================
-//: A base for classes which wish to take some action during a lengthy operation.
+//: An API for reporting progress.
 //
 // An mbl_progress object can be used to keep track of multiple operations.
 // Each one is identified by a unique string.
@@ -102,14 +102,6 @@ class mbl_progress
   //  \return True if a cancel flag is set for this progress object.
   bool is_cancelled(const vcl_string& identifier) const;
 
-  //: Version number for I/O
-  short version_no() const;
-
-  //: Name of the class
-  virtual vcl_string is_a() const;
-
-  //: Print class to os
-  virtual void print_summary(vcl_ostream& ) const {};
 
  protected:
 

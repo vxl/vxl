@@ -139,19 +139,3 @@ bool mbl_progress::is_cancelled(const vcl_string &identifier) const
   return retval;
 }
 
-
-//=======================================================================
-short mbl_progress::version_no() const
-{
-  return 1;
-}
-
-
-//=======================================================================
-vcl_string mbl_progress::is_a() const
-{
-  return vcl_string("mbl_progress");
-}
-
-
-//=======================================================================
