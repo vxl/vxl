@@ -1,6 +1,11 @@
 //:
 // \file
 // converted from COOL/test/test_BigNum.C by Peter Vanroose, 25 April 2002.
+//
+// \verbatim
+//  Modifications:
+//   20 jan 2008 - Peter Vanroose - added tests on "large" divisions
+// \endverbatim
 
 #include <vcl_iostream.h>
 #include <vcl_limits.h> // for vcl_numeric_limits<double>::infinity()
@@ -13,6 +18,29 @@
 #include <vnl/vnl_numeric_traits.h> // for vnl_numeric_traits<double>::maxval
 
 #include <testlib/testlib_test.h>
+
+// Two auxiliary functions, used in multiplication and division tests
+
+// Factorial
+static vnl_bignum factorial(int n)
+{
+  if (n <= 1) return vnl_bignum(1);
+  else        return n * factorial(n-1);
+}
+
+// Combinations (n choose k)
+static vnl_bignum Combinations(int n, int k)
+{ 
+  vnl_bignum CC(1);
+  if (k >= n || k <= 0) return CC;
+  else 
+  {
+    for (int i = n; i > n - k; --i)
+      CC *= i; 
+    CC /= factorial(k);
+    return CC;
+  }
+}
 
 static void run_constructor_tests()
 {
@@ -413,6 +441,46 @@ static void run_division_tests()
 #endif
 }
 
+static void run_large_division_tests()
+{
+  vcl_cout << "\nStarting large division tests:\n";
+
+  vnl_bignum a("10000000"), b("10000001"); b *= a;
+  vcl_cout << b << " / 10000001 = " << (b/10000001) << ", must be 10000000\n";
+  TEST("100000010000000 / 10000001", b/10000001, a);
+
+  // these are the same numbers, now written in hexadecimal:
+  a = "0X989680"; b = "0X989681"; b *= a;
+  vcl_cout << b << " / 10000001 = " << (b/vnl_bignum("0X989681"))
+           << ", must be " << a << "\n";
+  TEST("0x5AF31112D680 / 0x989681", b/vnl_bignum("0X989681"), a);
+
+  // an other decimal example:
+  a = "111111"; b = "111111"; b *= a;
+  vcl_cout << b << " / 111111 = " << (b/111111) << ", must be 111111\n";
+  TEST("12345654321 / 111111", b/111111, a);
+
+  // these are the same numbers, now written in hexadecimal:
+  a = "0X2B67"; b = "0X2B67"; b *= a;
+  vcl_cout << b << " / 0X2B67 = " << (b/vnl_bignum("0X2B67"))
+           << ", must be " << a << "\n";
+  TEST("12345654321 / 111111", b/vnl_bignum("0X2B67"), a);
+
+  a = "98789"; b = "98789"; b *= a;
+  vcl_cout << b << " / 98789 = " << (b/98789) << ", must be 98789\n";
+  TEST("9759266521 / 98789", b/98789, a);
+
+  vcl_cout << "C(16,8) = " << Combinations(16,8) << "\n";
+  TEST("16 choose 8 = 12870", Combinations(16,8), 12870);
+  vcl_cout << "C(18,9) = " << Combinations(18,9) << "\n";
+  TEST("18 choose 9 = 48620", Combinations(18,9), 48620);
+  vcl_cout << "C(20,10) = " << Combinations(20,10) << "\n";
+  TEST("20 choose 10 = 184756", Combinations(20,10), 184756);
+  vcl_cout << "C(100,44) = " << Combinations(100,44) << "\n";
+  TEST("100 choose 44 = 49378235797073715747364762200",
+       Combinations(100,44), "49378235797073715747364762200");
+}
+
 static void run_multiplication_division_tests()
 {
   vcl_cout << "\nCheck example in book:\n";
@@ -614,6 +682,11 @@ static void run_multiplication_tests()
   TEST("zillion*-b1000 == b1000*-zillion", zillion*-b1000, b1000*-zillion);
   TEST("p_inf*b1000 == p_inf", p_inf*b1000, p_inf);
   TEST("m_inf*b1000 == m_inf", m_inf*b1000, m_inf);
+
+  TEST("10! = 3628800", factorial(10), 3628800);
+  TEST("15! = 1307674368000", factorial(15), "1307674368000");
+  TEST("44! = 2.65827157478844e54", factorial(44),
+       "2658271574788448768043625811014615890319638528000000000");
 }
 
 static void run_left_shift_tests()
@@ -751,6 +824,7 @@ void test_bignum()
   run_multiplication_tests();
   run_division_tests();
   run_multiplication_division_tests();
+  run_large_division_tests();
   run_shift_tests();
   run_logical_comparison_tests();
 }
