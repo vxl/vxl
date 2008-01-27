@@ -408,6 +408,7 @@ vcl_istream& operator>> (vcl_istream& is, vnl_bignum& x)
   vcl_istream* isp = &is;
   rt[0] = '\0';
 
+//delete[] x.data;                      // Delete existing data
   if (is_plus_inf(rt,&isp))
     x.sign=1,x.count=1,x.data=new Data[1],x.data[0]=0;
   else if (is_minus_inf(rt,&isp))
@@ -450,7 +451,7 @@ vnl_bignum::~vnl_bignum ()
 vnl_bignum& vnl_bignum::operator= (const vnl_bignum& rhs)
 {
   if (this != &rhs) {                           // Avoid self-assignment
-    delete [] this->data;                       // Delete existing data
+    delete[] this->data;                        // Delete existing data
     this->count = rhs.count;                    // Copy rhs's count
     this->data = rhs.data ? new Data[rhs.count] : 0; // Allocate data if necessary
     for (Counter i = 0; i < rhs.count; ++i)     // Copy rhs's data
@@ -933,6 +934,7 @@ void add (const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& sum)
     bmax = &b2;
     bmin = &b1;
   }
+//delete[] sum.data;                    // Delete existing data
   sum.data = (sum.count = bmax->count) > 0 ?   // Allocate data for their sum
              new Data[sum.count] : 0;
   unsigned long temp, carry = 0;
@@ -979,6 +981,7 @@ void increment (vnl_bignum& bnum)
 
 void subtract (const vnl_bignum& bmax, const vnl_bignum& bmin, vnl_bignum& diff)
 {
+//delete[] diff.data;                           // Delete existing data
   diff.data = new Data[diff.count = bmax.count];// Allocate data for difference
   unsigned long temp;
   int borrow = 0;
@@ -1073,13 +1076,16 @@ void multiply_aux (const vnl_bignum& b, Data d, vnl_bignum& prod, Counter i)
 //: normalize two vnl_bignums
 // (Refer to Knuth, V.2, Section 4.3.1, Algorithm D for details.
 //  A digit here is one data element in the radix 2**2.)
-// - Inputs:  references to two vnl_bignums b1, b2, and their normalized counterparts
-// - Outputs: the integral normalization factor used
+// - Inputs:  references to two vnl_bignums b1, b2
+// - Outputs: their normalized counterparts u and v,
+//            and the integral normalization factor used
 
 Data normalize (const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& u, vnl_bignum& v)
 {
   Data d = Data(0x10000L/(long(b2.data[b2.count - 1]) + 1)); // Calculate normalization factor.
+//delete[] u.data;                              // Delete existing data
   u.data = new Data[u.count = b1.count + 1];    // Get data for u (plus extra)
+//delete[] v.data;                              // Delete existing data
   v.data = new Data[v.count = b2.count];        // Get data for v
   u.data[b1.count] = 0;                         // Set u's leading digit to 0
   multiply_aux(b1,d,u,0);                       // u = b1 * d
@@ -1228,8 +1234,8 @@ Data multiply_subtract (vnl_bignum& u, const vnl_bignum& v, Data q_hat, Counter 
 //: divide b2 into b1, getting quotient q and remainder r.
 // (Refer to Knuth, V.2, Section 4.3.1, Algorithm D for details.
 //  This function implements Algorithm D.)
-// - Inputs:  references to a vnl_bignum dividend b1, divisor b2, quotient q, and
-//            remainder r.
+// - Inputs: references to a vnl_bignum dividend b1, divisor b2, quotient q, and
+//           remainder r.
 
 void divide (const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& q, vnl_bignum& r)
 {
@@ -1244,24 +1250,40 @@ void divide (const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& q, vnl_bign
   else if (mag == 0)                 // if abs(b1) == abs(b2)
     q = 1L;                          //   quotient is 1, remainder is 0
   else {                             // otherwise abs(b1) > abs(b2), so divide
+//  delete[] q.data;                            // Delete existing data
     q.data = new Data[q.count = b1.count - b2.count + 1]; // Allocate quotient
-    r.data = new Data[r.count = b2.count];                // Allocate remainder
+//  delete[] r.data;                            // Delete existing data
+    r.data = new Data[r.count = b2.count];      // Allocate remainder
     if (b2.count == 1) {                        // Single digit divisor?
       divide_aux(b1,b2.data[0],q,r.data[0]);    // Do single digit divide
     }
     else {                                      // Else full-blown divide
       vnl_bignum u,v;
-      Data d = normalize(b1,b2,u,v);            // Set u = b1/d, v = b2/d
-      Data q_hat;                               // Multiplier
+#ifdef DEBUG
+      vcl_cerr << vcl_hex;
+      vcl_cerr << "\nvnl_bignum::divide: b1 ="; for (Counter x=b1.count; x>0; --x) vcl_cerr << ' ' << b1.data[x-1];
+      vcl_cerr << "\nvnl_bignum::divide: b2 ="; for (Counter x=b2.count; x>0; --x) vcl_cerr << ' ' << b2.data[x-1];
+#endif
+      Data d = normalize(b1,b2,u,v);            // Set u = b1*d, v = b2*d
+#ifdef DEBUG
+      vcl_cerr << "\nvnl_bignum::divide: d = 0x" << d;
+      vcl_cerr << "\nvnl_bignum::divide: u ="; for (Counter x=u.count; x>0; --x) vcl_cerr << ' ' << u.data[x-1];
+      vcl_cerr << "\nvnl_bignum::divide: v ="; for (Counter x=v.count; x>0; --x) vcl_cerr << ' ' << v.data[x-1];
+#endif
       Counter j = 0;
       while (j <= b1.count - b2.count) {        // Main division loop
-        q_hat = estimate_q_hat(u,v,j);          // Estimate # times v divides
+        Data q_hat = estimate_q_hat(u,v,j);     // Estimate # times v divides
         q.data[q.count - 1 - j] =               // Do division, get true answ.
           multiply_subtract(u,v,q_hat,j);
         j++;
       }
       static Data dufus;                // dummy variable
       divide_aux(u,d,r,dufus);          // Unnormalize u for remainder
+#ifdef DEBUG
+      vcl_cerr << "\nvnl_bignum::divide: q ="; for (Counter x=q.count; x>0; --x) vcl_cerr << ' ' << q.data[x-1];
+      vcl_cerr << "\nvnl_bignum::divide: r ="; for (Counter x=r.count; x>0; --x) vcl_cerr << ' ' << r.data[x-1];
+      vcl_cerr << vcl_dec << "\n";
+#endif
     }
     q.trim();                           // Trim leading zeros of quot.
     r.trim();                           // Trim leading zeros of rem.
