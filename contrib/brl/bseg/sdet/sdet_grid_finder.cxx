@@ -3,11 +3,23 @@
 //:
 // \file
 
+// \verbatim
+//  Modifications 
+//  Bing Yu 1/18/2008
+//    - removed unnecessary check on line length in compute_affine_homography()
+//    - bug fixed: n_lines_x_/n_lines_y were switched when computing 
+//      grid offset in compute_homography_linear_chamfer(),
+//      writing grid points in init_output_file(), and write_image_points()
+//    - bug fixed in iterator over "squares" in a few places in
+//      get_square_pixel_stats()
+// \endverbatim
+
 #include <vcl_fstream.h>
 #include <vcl_algorithm.h> // for vcl_sort() and vcl_find()
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_det.h>
 #include <vbl/vbl_bounding_box.h>
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
@@ -301,7 +313,8 @@ double grid_profile_matcher::calculate_grid_offset(int n_grid_lines, double spac
 //: constructor from a parameter block (the only way)
 //
 sdet_grid_finder::sdet_grid_finder(sdet_grid_finder_params& gfp)
-  : sdet_grid_finder_params(gfp)
+  : sdet_grid_finder_params(gfp),
+    length_threshold_(15.0)
 {
   groups_valid_ = false;
   vanishing_points_valid_=false;
@@ -415,16 +428,12 @@ get_vanishing_point(vcl_vector<vsol_line_2d_sptr> const & para_lines,
   //line from the origin with each line.  This point set defines the
   //translation offset for the lines.
   //
-
-  // hack: c of small lines not reliable -DEC
-  double length_threshold = 15.0;
-
   for (vcl_vector<vsol_line_2d_sptr>::const_iterator lit = para_lines.begin();
        lit != para_lines.end(); lit++)
   {
-    if ((*lit)->length() < length_threshold)
+    if ((*lit)->length() < length_threshold_)
     {
-      vcl_cout << "discarding line with length < "<<length_threshold<<'\n';
+      vcl_cout << "discarding line with length < "<<length_threshold_<<'\n';
       continue;
     }
     vgl_homg_line_2d<double> l= (*lit)->vgl_hline_2d();
@@ -708,10 +717,13 @@ bool sdet_grid_finder::compute_affine_homography()
        lit != lines_.end(); lit++)
     {
       vsol_line_2d_sptr pline = this->transform_line(projective_homography_,*lit);
-      vcl_cout << "*lit = ["<<(*lit)->p0()->x()<<','<<(*lit)->p0()->y()<<"] ["
-               << (*lit)->p1()->x()<<','<<(*lit)->p1()->y()<<"]\n"
-               << "pline = ["<<pline->p0()->x()<<','<<pline->p0()->y()<<"] ["
-               << pline->p1()->x()<<','<<pline->p1()->y()<<"]\n";
+      if (verbose_)
+      {
+          vcl_cout << "*lit = ["<<(*lit)->p0()->x()<<','<<(*lit)->p0()->y()<<"] ["
+                   << (*lit)->p1()->x()<<','<<(*lit)->p1()->y()<<"]\n"
+                   << "pline = ["<<pline->p0()->x()<<','<<pline->p0()->y()<<"] ["
+                   << pline->p1()->x()<<','<<pline->p1()->y()<<"]\n";
+      }
       // weed out lines with _huge_ coordinates
       if ( (vcl_abs(pline->p0()->x()) > 10000) ||
            (vcl_abs(pline->p0()->y()) > 10000) ||
@@ -836,8 +848,8 @@ bool sdet_grid_finder::compute_affine_homography()
   for (vcl_vector<vsol_line_2d_sptr>::iterator lit = afgroup1_.begin();
        lit != afgroup1_.end(); lit++)
     {
-      if ((*lit)->length()<length_threshold)//JLM
-        continue;
+      //if ((*lit)->length()<length_threshold)//JLM
+      //  continue;
 
       if (zero_is_zero)
         grid_lines90.push_back(this->transform_line(affine_homography_,*lit));
@@ -899,18 +911,18 @@ compute_homography_linear_chamfer(vgl_h_matrix_2d<double> & H)
 {
   double transx=0, transy=0;
 
-  transx = chamf90_.calculate_grid_offset(n_lines_x_,spacing_);
-  transy = chamf0_.calculate_grid_offset(n_lines_y_,spacing_);
-
-  vcl_cout << "transx = "<<transx<<'\n'
-           << "transy = "<<transy<<'\n';
+  transx = chamf90_.calculate_grid_offset(n_lines_y_,spacing_);
+  transy = chamf0_.calculate_grid_offset(n_lines_x_,spacing_);
+  
+  if (verbose_)
+    vcl_cout << " Translation (" << transx << ' ' << transy << ")\n";
 
   if (debug_state_ == TRANS_PERIM_LINES)
   {
     float xmin = 0, ymin = 0;
     float xmax = 2000, ymax = 2000;
     // vertical lines
-    for (int i = 0; i < n_lines_x_; i++)
+    for (int i = 0; i < n_lines_y_; i++)
     {
       vsol_point_2d_sptr p0 = new vsol_point_2d(i*spacing_+transx,ymin);
       vsol_point_2d_sptr p1 = new vsol_point_2d(i*spacing_+transx,ymax);
@@ -933,13 +945,13 @@ compute_homography_linear_chamfer(vgl_h_matrix_2d<double> & H)
   T.put(1, 0, 0); T.put(1,1, 1); T.put(1,2,-transy);
   T.put(2, 0, 0); T.put(2,1, 0); T.put(2,2,1);
   vgl_h_matrix_2d<double> Htrans(T);
-  double min_x_offset = -10.0, max_x_offset =(n_lines_x_-1)*spacing_ + 10;
-  double min_y_offset = -10.0, max_y_offset =(n_lines_y_-1)*spacing_ + 10;
+  double min_x_offset = -10.0, max_x_offset =(n_lines_y_-1)*spacing_ + 10;
+  double min_y_offset = -10.0, max_y_offset =(n_lines_x_-1)*spacing_ + 10;
   vcl_vector<vgl_homg_line_2d<double> > lines_grid, lines_image;
   vcl_vector<double> weights;
   //insert horizontal line correspondences
   double length_sum = 0;
-  for (int i0 = 0; i0< n_lines_y_; i0++)
+  for (int i0 = 0; i0< n_lines_x_; i0++)
   {
     double dy = i0*spacing_;
     vgl_homg_line_2d<double> lh(0.0, 1.0, -dy);
@@ -977,10 +989,7 @@ compute_homography_linear_chamfer(vgl_h_matrix_2d<double> & H)
     }
   }
 
-  if (verbose_)
-    vcl_cout << " Translation (" << transx << ' ' << transy << ")\n";
-
-  for (int i90 = 0; i90< n_lines_x_; i90++)
+  for (int i90 = 0; i90< n_lines_y_; i90++)
   {
     double dx = i90*spacing_;
     vgl_homg_line_2d<double> lv(1.0, 0.0, -dx);
@@ -1176,6 +1185,7 @@ bool sdet_grid_finder::compute_manual_homography(vsol_point_2d_sptr ul,
   //vcl_cout << "Error Term = " << error_term << "\n\n";
 
   homography_ = H;
+
   homography_valid_ = true;
 
   return true;
@@ -1206,7 +1216,10 @@ bool sdet_grid_finder::compute_homography()
   {
     vcl_cout << "The composite homography\n" << homography_ << '\n';
   }
-  homography_valid_=true;
+ 
+  double det = vnl_det(homography_.get_matrix());
+  if (det != 0.0)
+    homography_valid_ = true;
 
   return true;
 }
@@ -1234,6 +1247,39 @@ sdet_grid_finder::get_affine_lines(vcl_vector<vsol_line_2d_sptr> & lines)
 {
   lines = display_lines_;
   return true;
+}
+
+bool
+sdet_grid_finder::get_grid_points(vcl_vector<double> &image_x, vcl_vector<double> &image_y)
+{
+    if (!homography_valid_)
+        return false;
+
+    // grid points are stored in image_x_ and image_y_ here, in
+    // anticipation of being used elsewhere by this class
+
+    image_x.clear();
+    image_y.clear();
+    image_x_.clear();
+    image_y_.clear();
+    vgl_h_matrix_2d<double> grid_to_image = homography_.get_inverse();
+
+    // x/y mismatch ok - see comment in sdet_grid_finder_params.h
+    for (int x = 0; x < n_lines_y_; x++)
+    {
+        for (int y = 0; y < n_lines_x_; y++)
+        {
+            vgl_homg_point_2d<double> hp(x*spacing_, y*spacing_);
+            vgl_homg_point_2d<double> thp = grid_to_image(hp);
+            double imgx = thp.x() / thp.w();
+            double imgy = thp.y() / thp.w();
+            image_x_.push_back(imgx);
+            image_y_.push_back(imgy);          
+        }
+    }
+    image_x = image_x_;
+    image_y = image_y_;
+    return true;
 }
 
 bool
@@ -1325,9 +1371,10 @@ sdet_grid_finder::get_backprojected_grid(vcl_vector<vsol_line_2d_sptr> & lines)
 bool sdet_grid_finder::init_output_file(vcl_ofstream & outstream)
 {
   outstream << (n_lines_x_*n_lines_y_) << '\n';
-  for (int x = 0; x < n_lines_x_; x++)
+  // x/y mismatch ok - see comment in sdet_grid_finder_params.h
+  for (int x = 0; x < n_lines_y_; x++)
   {
-    for (int y = 0; y < n_lines_y_; y++)
+    for (int y = 0; y < n_lines_x_; y++)
     {
       outstream << x*spacing_<<' '<<y*spacing_<<'\n';
     }
@@ -1341,9 +1388,10 @@ bool sdet_grid_finder::write_image_points(vcl_ofstream & outstream)
 {
   vgl_h_matrix_2d<double> grid_to_image = homography_.get_inverse();
 
-  for (int x = 0; x < n_lines_x_; x++)
+  // x/y mismatch ok - see comment in sdet_grid_finder_params.h
+  for (int x=0; x<n_lines_y_; x++)
   {
-    for (int y = 0; y < n_lines_y_; y++)
+    for (int y=0; y<n_lines_x_; y++)
     {
       vgl_homg_point_2d<double> hp(x*spacing_, y*spacing_);
       vgl_homg_point_2d<double> thp = grid_to_image(hp);
@@ -1516,9 +1564,13 @@ bool sdet_grid_finder::get_square_pixel_stats(vil1_image img,
     scan_rows[i][0] = vnl_numeric_traits<int>::maxval;
     scan_rows[i][1] = -vnl_numeric_traits<int>::maxval;
   }
+
+  // start_t and end_t are set so we stay within the square region,
+  // avoiding the boundary pixels
+
   // upper line
-  int start_t = vnl_math_rnd(ul.x());
-  int end_t = vnl_math_rnd(ur.x());
+  int start_t = vnl_math_rnd(ul.x()+0.5);
+  int end_t = vnl_math_rnd(ur.x()-0.5);
   double slope = (ur.y() - ul.y())/(ur.x() - ul.x());
   double real_pix = ul.y();
   int rounded_pix;
@@ -1534,8 +1586,8 @@ bool sdet_grid_finder::get_square_pixel_stats(vil1_image img,
   }
 
   // lower line
-  start_t = vnl_math_rnd(ll.x());
-  end_t = vnl_math_rnd(lr.x());
+  start_t = vnl_math_rnd(ll.x()+0.5);
+  end_t = vnl_math_rnd(lr.x()-0.5);
   slope = (lr.y() - ll.y())/(lr.x() - ll.x());
   real_pix = ll.y();
   //vcl_cout << "start_t = "<<start_t<<" end_t= "<<end_t<<" slope = "<<slope<<'\n';
@@ -1549,8 +1601,8 @@ bool sdet_grid_finder::get_square_pixel_stats(vil1_image img,
   }
 
   // left line
-  start_t = vnl_math_rnd(ul.y());
-  end_t = vnl_math_rnd(ll.y());
+  start_t = vnl_math_rnd(ul.y()+0.5);
+  end_t = vnl_math_rnd(ll.y()-0.5);
   slope = (ll.x() - ul.x())/(ll.y() - ul.y());
   real_pix = ul.x();
   //vcl_cout << "start_t = "<<start_t<<" end_t= "<<end_t<<" slope = "<<slope<<'\n';
@@ -1562,9 +1614,10 @@ bool sdet_grid_finder::get_square_pixel_stats(vil1_image img,
     scan_rows[row_idx][1] = vnl_math_max(scan_rows[row_idx][1],rounded_pix);
     real_pix += slope;
   }
+
   // right line
-  start_t = vnl_math_rnd(ur.y());
-  end_t = vnl_math_rnd(lr.y());
+  start_t = vnl_math_rnd(ur.y()+0.5);
+  end_t = vnl_math_rnd(lr.y()-0.5);
   slope = (lr.x() - ur.x())/(lr.y() - ur.y());
   real_pix = ur.x();
   //vcl_cout << "start_t = "<<start_t<<" end_t= "<<end_t<<" slope = "<<slope<<'\n';
@@ -1598,7 +1651,8 @@ bool sdet_grid_finder::get_square_pixel_stats(vil1_image img,
     return false;
   }
   mean_intensity =  intensity_total / n_pix;
-  vcl_cout << '('<<x<<','<<y<<") mean_intensity = "<<mean_intensity<<'\n';
+  if (verbose_)
+      vcl_cout << '('<<x<<','<<y<<") mean_intensity = "<<mean_intensity<<'\n';
   return true;
 }
 

@@ -47,6 +47,15 @@ class sdet_grid_finder_params : public gevd_param_mixin
   //
   // Parameter blocks and parameters
   //
+
+  // Variables n_lines_x_ and n_lines_y_ appear to be backwards here,
+  // with n_lines_x_ representing the number of grid lines you have as
+  // you move in the Y direction, and vice versa.  This results in
+  // many statements in the implementation of sdet_grid_finder that
+  // appear to have an x/y mismatch.  Any development of these classes
+  // should be tested on a non-square grid.  There may still be bugs in
+  // sdet_grid_finder related to this issue.
+
   int n_lines_x_;  //!< number of horizontal grid lines
   int n_lines_y_;  //!< number of vertical grid lines
   double spacing_; //!< spacing between lines

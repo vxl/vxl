@@ -21,6 +21,9 @@
 //   DEC 9/3/2003 - replaced line_chamfer_1d with grid_profile_matcher
 //                - added functions to output homographies to file
 //                - added function to check homography with original image
+//   Bing Yu 11/22/2007
+//                - added an accessor function to output grid points
+//                - added an accessor function to set minimum line length
 // \endverbatim
 //
 //-------------------------------------------------------------------------
@@ -29,7 +32,7 @@
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vsol/vsol_point_2d_sptr.h>
-#include <bbas/bsol/bsol_hough_line_index_sptr.h>
+#include <bsol/bsol_hough_line_index_sptr.h>
 #include <sdet/sdet_grid_finder_params.h>
 #include <vil1/vil1_image.h>
 
@@ -124,7 +127,10 @@ class sdet_grid_finder : public sdet_grid_finder_params
   bool get_backprojected_grid(vcl_vector<vsol_line_2d_sptr> & lines);
   void set_verbose() { verbose_=true; } //non-params interface
   void unset_verbose() { verbose_=false; }
+  void set_line_length_threshold(double length)  { length_threshold_ = length; }
 
+  //: get all grid corner points, in column-major order
+  bool get_grid_points(vcl_vector<double> &image_x, vcl_vector<double> &image_y);
 
   //:test camera parameter matrices
   bool transform_grid_points(vnl_matrix_fixed<double,3,3> & K,
@@ -195,6 +201,15 @@ class sdet_grid_finder : public sdet_grid_finder_params
   vgl_h_matrix_2d<double> projective_homography_;
   vgl_h_matrix_2d<double> affine_homography_;
   vgl_h_matrix_2d<double> homography_;
+
+  //: grid corner point coordinates in the image
+  vcl_vector<double> image_x_;
+  vcl_vector<double> image_y_;
+
+  //: minimum length of line segments used to estimate the vanishing point
+  //
+  // Use to ignore short line segments, which are generally less reliable.
+  double length_threshold_;
 };
 
 #endif // sdet_grid_finder_h_
