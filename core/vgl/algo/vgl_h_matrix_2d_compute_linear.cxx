@@ -377,6 +377,9 @@ compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
   // The result is a transform on lines so we need to convert it to
   // a point transform, i.e., hp = hl^-t.
   vnl_matrix_fixed<double, 3, 3> const &  Ml = hl.get_matrix();
+  // make sure Ml can be inverted
+  if( vnl_det(Ml) == 0.0 )
+      return false;     
   vnl_matrix_fixed<double, 3, 3> Mp = vnl_inverse_transpose(Ml);
   hp.set(Mp);
   //
