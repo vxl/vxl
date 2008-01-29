@@ -10,6 +10,7 @@
 #include "bwm_tableau_sptr.h"
 #include "bwm_tableau_cam.h"
 #include "bwm_command_sptr.h"
+#include "bwm_corr_sptr.h"
 #include "io/bwm_io_config_parser.h"
 #include "process/bwm_site_process.h"
 
@@ -27,8 +28,6 @@ class bwm_observer_video;
 class bwm_tableau_mgr
 {
  public:
-  typedef enum {RATIONAL=0, PROJECTIVE=1} BWM_CAMERA_TYPES;
-  typedef enum {MESH_FEATURE, MESH_IMAGE_PROCESSING, MESH_TERRAIN, VSOL, OBJ_UNDEF} BWM_OBJECT_TYPES;
 
   ~bwm_tableau_mgr();
 
@@ -40,34 +39,7 @@ class bwm_tableau_mgr
 
   static void register_tableau(bwm_command_sptr tab_comm);
 
-  void create_site();
-
-  void edit_site();
-
-  void load_site();
-
-  void save_site();
-
-  void load_video_site();
-
-  void save_video_site();
-
-  void create_img_tableau(vcl_string name, vcl_string& image_path);
-
-  void create_cam_tableau(vcl_string name, vcl_string& image_path, vcl_string& cam_path,
-                          BWM_CAMERA_TYPES camera_type, vsol_point_3d_sptr lvcs = 0);
-
-  bwm_observer_video* create_video_tableau(vcl_string name,
-                                           vcl_string& frame_glob,
-                                           vcl_string& camera_glob);
-
   bwm_command_sptr load_tableau_by_type(vcl_string tableau_type);
-
-  void load_img_tableau();
-
-  void load_cam_tableau();
-
-  void load_video_tableau();
 
   void remove_tableau();
 
@@ -75,7 +47,11 @@ class bwm_tableau_mgr
 
   void display_image_path(bool display){display_image_path_=display;}
 
+  void add_corresp(vcl_string tab_name, bwm_corr_sptr corr, double X, double Y);
+
   static vcl_map<vcl_string, bwm_command_sptr> tab_types_;
+
+  void redraw() { grid_->post_redraw(); }
 
  private:
 
@@ -88,14 +64,8 @@ class bwm_tableau_mgr
 
   //: Tableaux are mapped to their names
   vcl_map<vcl_string, vgui_tableau_sptr> tableaus_;
-  vcl_vector<bwm_io_tab_config*> inactive_tableaus_;
 
   vgui_grid_tableau_sptr grid_;
-
-  // object files are mapped to the file paths
-  vcl_map<vcl_string, vcl_vector<vcl_string> > site_objs_;
-
-  vcl_vector<vcl_string> object_types_;
 
   //: bool to keep the add rows and columns to the grid.
   // It alternately adds rows and columns
@@ -103,39 +73,16 @@ class bwm_tableau_mgr
 
   bool display_image_path_;
 
-  bwm_site_process* site_create_process_;
-  vcl_string site_name_, site_dir_, pyr_exe_ ;
-
-  bwm_io_config_parser* parse_config();
-
-  vil_image_resource_sptr load_image(vcl_string& filename, vgui_range_map_params_sptr& rmps);
-
-  vgui_range_map_params_sptr range_params(vil_image_resource_sptr const& image);
+  //vgui_range_map_params_sptr range_params(vil_image_resource_sptr const& image);
 
   void add_to_grid(vgui_tableau_sptr tab);
 
   void add_to_grid(vgui_tableau_sptr tab, unsigned& col, unsigned& row);
 
-  vpgl_proj_camera<double> read_projective_camera(vcl_string cam_path);
-
   vgui_tableau_sptr find_tableau(vcl_string name);
-#if 0
-  vcl_vector<vcl_string> coin3d_tableau_names();
-#endif
-  void create_site_dialog(vgui_dialog_extensions &site_dialog,
-                               vcl_string &site_name,
-                               vcl_string &site_dir,
-                               vcl_string &pyr_exe_dir,
-                               vcl_vector<vcl_string> &files,
-                               bool* pyr_v, bool* act_v,
-                               vcl_vector<vcl_string> &pyr_levels,
-                               vcl_vector<vcl_string> &objs,
-                               int *choices,
-                               double &lat, double &lon, double &elev);
 
-  void show_error(vcl_string);
 
-  vul_timer timer_;
+  
 };
 
 #endif

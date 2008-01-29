@@ -3,6 +3,14 @@
 #include <vcl_iostream.h>
 
 #include <vgui/vgui_dialog.h>
+#include <bgui/bgui_image_utils.h>
+
+#include <vil/vil_load.h>
+#include <vil/vil_blocked_image_resource.h>
+#include <vil/vil_pyramid_image_resource.h>
+#include <vil/vil_property.h>
+
+#include <vul/vul_file.h>
 
 vcl_string bwm_utils::select_file()
 {
@@ -254,4 +262,41 @@ void bwm_utils::load_from_txt(vcl_string filename,
     else if (type == "END")
       return;
   }
+}
+
+vil_image_resource_sptr 
+bwm_utils::load_image(vcl_string& filename, vgui_range_map_params_sptr& rmps)
+{
+  vil_image_resource_sptr res;
+
+    // if filename is a directory, assume pyramid image
+  if (vul_file::is_directory(filename))
+  {
+    // if filename is a directory, assume pyramid image  if (vul_file::is_directory(filename)) {
+    vil_pyramid_image_resource_sptr pyr = vil_load_pyramid_resource(filename.c_str());
+
+    if (pyr) {
+      res = pyr.ptr();
+    }
+    else {
+      vcl_cerr << "error loading image pyramid "<< filename << vcl_endl;
+      return 0;
+    }
+  }
+  else {
+    res = vil_load_image_resource(filename.c_str());
+  }
+  bgui_image_utils biu(res);
+#if 0
+  biu.default_range_map(rmps);
+#endif
+  biu.range_map_from_hist(1.0, false, true, true,rmps);
+  return res;
+}
+
+void bwm_utils::show_error(vcl_string msg)
+{
+  vgui_dialog err("ERROR occured");
+  err.message(msg.c_str());
+  err.ask();
 }

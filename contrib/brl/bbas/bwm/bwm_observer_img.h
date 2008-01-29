@@ -33,6 +33,9 @@ class bwm_observer_img : public bgui_vsol2D_tableau
 
   typedef bgui_vsol2D_tableau base;
 
+  bwm_observer_img(bgui_image_tableau_sptr const& img, vcl_string name, 
+    vcl_string image_path, bool display_image_path);
+
   bwm_observer_img(bgui_image_tableau_sptr const& img)
     : bgui_vsol2D_tableau(img), img_tab_(img), viewer_(0),
     show_image_path_(false), start_x_(0), start_y_(0), moving_p_(0),
@@ -148,7 +151,8 @@ class bwm_observer_img : public bgui_vsol2D_tableau
 
   //: returns a list of selected object from the given type
   vcl_vector<vgui_soview2D*> get_selected_objects(vcl_string type);
-
+  vil_image_resource_sptr load_image(vcl_string& filename,
+                                                    vgui_range_map_params_sptr& rmps);
   vcl_string tab_name_;
 
   unsigned row_; //location of observer in grid

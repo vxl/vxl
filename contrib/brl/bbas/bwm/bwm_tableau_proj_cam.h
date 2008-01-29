@@ -16,7 +16,6 @@
 class bwm_tableau_proj_cam : public bwm_tableau_cam
 {
  public:
-  //  bwm_tableau_proj_cam(){}
 
   bwm_tableau_proj_cam(bwm_observer_proj_cam* obs)
     : bwm_tableau_cam(obs), my_observer_(obs) {}
@@ -32,6 +31,7 @@ class bwm_tableau_proj_cam : public bwm_tableau_cam
  protected:
   vpgl_proj_camera<double> camera_;
   bwm_observer_proj_cam* my_observer_;
+ 
 };
 
 #endif

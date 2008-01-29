@@ -16,14 +16,14 @@ class bwm_observer_proj_cam : public bwm_observer_cam
 {
  public:
 
-  bwm_observer_proj_cam(){}
-
-  bwm_observer_proj_cam(bgui_image_tableau_sptr const& img,
-    vpgl_proj_camera<double> *camera, vcl_string cam_path)
-    : bwm_observer_cam(img, camera, cam_path) {}
+  bwm_observer_proj_cam(bgui_image_tableau_sptr img,
+    vcl_string name, 
+    vcl_string& image_path, 
+    vcl_string& cam_path,                
+    bool display_image_path); 
 
   // set the initial projection plane to z=0
-  bwm_observer_proj_cam(bgui_image_tableau_sptr const& img, const char* n="unnamed")
+  bwm_observer_proj_cam(bgui_image_tableau_sptr img, const char* n="unnamed")
     : bwm_observer_cam(img, n) {}
 
   virtual ~bwm_observer_proj_cam(){}
@@ -40,6 +40,8 @@ class bwm_observer_proj_cam : public bwm_observer_cam
   virtual bool intersect_ray_and_plane(vgl_homg_point_2d<double> img_point,
                                        vgl_homg_plane_3d<double> plane,
                                        vgl_homg_point_3d<double> &world_point);
+
+  vpgl_proj_camera<double> read_projective_camera(vcl_string cam_path);
 
   vcl_ostream& print_camera(vcl_ostream& s);
 };

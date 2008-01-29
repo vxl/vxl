@@ -24,6 +24,36 @@
 #include <vsol/vsol_digital_curve_2d.h>
 #include <vsol/vsol_line_2d.h>
 
+#include <vil/vil_load.h>
+#include <vil/vil_blocked_image_resource.h>
+#include <vil/vil_pyramid_image_resource.h>
+#include <vil/vil_property.h>
+
+#include <vul/vul_file.h>
+#include <vul/vul_string.h>
+#include <bgui/bgui_image_utils.h>
+
+bwm_observer_img::bwm_observer_img(bgui_image_tableau_sptr const& img, vcl_string name, vcl_string image_path, bool display_image_path)
+: bgui_vsol2D_tableau(img), img_tab_(img), viewer_(0),
+    show_image_path_(false), start_x_(0), start_y_(0), moving_p_(0),
+    moving_v_(0), moving_vertex_(false), moving_polygon_(false),
+    in_jog_mode_(false), row_(0), col_(0)
+{
+// LOAD IMAGE
+
+  vgui_range_map_params_sptr params;
+  vil_image_resource_sptr img_res = load_image(image_path, params);
+  if (!img_res) {
+    //show_error("Image [" + image_path + "] NOT found");
+    return;
+  }
+  img->set_image_resource(img_res, params);
+
+  img->show_image_path(display_image_path);
+  img->set_file_name(image_path);
+  set_tab_name(name);
+}
+
 bool bwm_observer_img::handle(const vgui_event &e)
 {
   vgui_projection_inspector pi;
@@ -694,4 +724,33 @@ void bwm_observer_img::scroll_to_point()
     return;
   float x = static_cast<float>(ix), y = static_cast<float>(iy);
   this->move_to_point(x,y);
+}
+
+vil_image_resource_sptr bwm_observer_img::load_image(vcl_string& filename,
+                                                    vgui_range_map_params_sptr& rmps)
+{
+  vil_image_resource_sptr res;
+
+  // if filename is a directory, assume pyramid image
+  if (vul_file::is_directory(filename))
+  {
+    vil_pyramid_image_resource_sptr pyr = vil_load_pyramid_resource(filename.c_str());
+
+    if (pyr) {
+      res = pyr.ptr();
+    }
+    else {
+      vcl_cerr << "error loading image pyramid "<< filename << vcl_endl;
+      return 0;
+    }
+  }
+  else {
+    res = vil_load_image_resource(filename.c_str());
+  }
+  bgui_image_utils biu(res);
+#if 0
+  biu.default_range_map(rmps);
+#endif
+  biu.range_map_from_hist(1.0, false, true, true,rmps);
+  return res;
 }

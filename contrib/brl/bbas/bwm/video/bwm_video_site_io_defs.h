@@ -10,7 +10,7 @@
 #define PYRAMID_EXE_TAG "PyramidExePath"
 #define TABLEAUS_TAG "Tableaus"
 #define CAMERA_TABLEAU_TAG "CameraTableau"
-#define VIDEO_TABLEAU_TAG "VideoTableau"
+
 #define IMAGE_TABLEAU_TAG "ImageTableau"
 #define COIN3D_TABLEAU_TAG "Coin3DTableau"
 #define PROJ2D_TABLEAU_TAG "Proj2DTableau"

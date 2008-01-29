@@ -1,4 +1,5 @@
 #include "bwm_tableau_cam.h"
+#include "algo/bwm_utils.h"
 //:
 // \file
 #include "bwm_tableau_mgr.h"
@@ -314,7 +315,7 @@ bool bwm_tableau_cam::handle(const vgui_event& e)
     this->help_pop();
     return true;
   }
-  return bgui_picker_tableau::handle(e);
+  return bwm_tableau_img::handle(e);
 }
 
 // Private Methods

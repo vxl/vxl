@@ -5,13 +5,13 @@
 
 #include <vcl_iosfwd.h>
 
-
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
 
 #include <vpgl/vpgl_rational_camera.h>
-
 #include <vpgl/bgeo/bgeo_lvcs.h>
+
+#include <bgui/bgui_image_tableau_sptr.h>
 
 class bwm_observer_rat_cam : public bwm_observer_cam
 {
@@ -19,15 +19,17 @@ class bwm_observer_rat_cam : public bwm_observer_cam
 
   typedef bwm_observer_cam base;
 
-  bwm_observer_rat_cam() {}
+  //bwm_observer_rat_cam() {}
 
-  bwm_observer_rat_cam(bgui_image_tableau_sptr const& img,
-    vpgl_rational_camera<double> *camera,
-    vcl_string cam_path)
-    : bwm_observer_cam(img, camera, cam_path) { }
+  bwm_observer_rat_cam(bgui_image_tableau_sptr img,
+    vcl_string& name, 
+    vcl_string& image_path, 
+    vcl_string& cam_path, 
+    bool display_image_path);
+    //: bwm_observer_cam(img, camera, cam_path) { }
 
   // set the initial projection plane to z=0
-  bwm_observer_rat_cam(bgui_image_tableau_sptr const& img, const char* n="unnamed")
+  bwm_observer_rat_cam(bgui_image_tableau_sptr img, const char* n="unnamed")
     : bwm_observer_cam(img, n) {}
 
   virtual ~bwm_observer_rat_cam(){};
@@ -60,11 +62,7 @@ class bwm_observer_rat_cam : public bwm_observer_cam
   void adjust_camera_offset(vsol_point_2d_sptr img_point);
   void center_pos();
   void print_selected_vertex();
-  //  void set_lvcs(double lat, double lon, double elev) {lvcs_ = new bgeo_lvcs(lat, lon, elev); }
   void set_lvcs_at_selected_vertex();
-  //void save_lvcs();
-  //void convert_file_to_lvcs();
-  //void load_lvcs();
   void define_lvcs(float x1, float y1);
 
   //*********** Save methods
@@ -95,7 +93,6 @@ class bwm_observer_rat_cam : public bwm_observer_cam
   void register_search_to_master();
 
  protected:
-  //bgeo_lvcs* lvcs_;
   vcl_string select_file();
   void set_selected_vertex();
 };

@@ -204,8 +204,7 @@ void bwm_site_process::RunBackgroundTask()
           cam_path = cam_dir+"\\"+base+".RPB";
           vul_file::make_directory(cam_dir);
           cam->save(cam_path);
-          bwm_io_tab_config_cam* cam_tab = new bwm_io_tab_config_cam(CAMERA_TABLEAU_TAG,
-              base, act[i], img_path, cam_path, "rational");
+          bwm_io_tab_config_cam* cam_tab = new bwm_io_tab_config_cam(base, act[i], img_path, cam_path, "rational");
           site_->tableaus_.push_back(cam_tab);
         }
         else

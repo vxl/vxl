@@ -3,7 +3,7 @@
 #INCLUDE_DIRECTORIES(${lems_SOURCE_DIR}/contrib )
 
 ADD_EXECUTABLE( bwm_main bwm_main.cxx )
-TARGET_LINK_LIBRARIES( bwm_main bwm vgui vil )
+TARGET_LINK_LIBRARIES( bwm_main bwm bwm_io bwm_reg vgui vil )
 
 ADD_EXECUTABLE( bwm_img_main bwm_img_main.cxx )
 TARGET_LINK_LIBRARIES( bwm_img_main bwm vgui )

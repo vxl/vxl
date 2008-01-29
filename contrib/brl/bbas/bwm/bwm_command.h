@@ -14,6 +14,9 @@
 // \verbatim
 //  Modifications
 // \endverbatim
+#include <bwm/bwm_tableau_sptr.h>
+#include <bwm/bwm_tableau.h>
+
 
 #include <vgui/vgui_command.h>
 #include <vgui/vgui_tableau_sptr.h>

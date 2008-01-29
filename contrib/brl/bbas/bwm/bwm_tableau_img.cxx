@@ -18,7 +18,6 @@ void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu
   menu.clear();
 
   bwm_popup_menu pop(this);
-  vgui_menu submenu;
   pop.get_menu(menu);
 }
 

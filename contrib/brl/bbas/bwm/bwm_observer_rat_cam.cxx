@@ -7,6 +7,8 @@
 #include "bwm_world.h"
 #include "reg/bwm_reg_utils.h"
 #include "reg/bwm_reg_processor.h"
+#include "algo/bwm_utils.h"
+
 #include <vgl/vgl_box_2d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
@@ -29,6 +31,47 @@
 #include <vul/vul_file.h>
 
 #include <bmsh3d/bmsh3d_textured_mesh_mc.h>
+
+bwm_observer_rat_cam::bwm_observer_rat_cam(bgui_image_tableau_sptr img,
+    vcl_string& name, 
+    vcl_string& image_path, 
+    vcl_string& cam_path, 
+    bool display_image_path)
+    : bwm_observer_cam(img) 
+{ 
+  img->show_image_path(display_image_path);
+  // LOAD IMAGE
+  vgui_range_map_params_sptr params;
+  vil_image_resource_sptr img_res = bwm_utils::load_image(image_path, params);
+
+  if (!img_res) {
+     bwm_utils::show_error("Image [" + image_path + "] is NOT found");
+     return;
+  }
+
+  img->set_image_resource(img_res, params);
+  img->set_file_name(image_path);
+
+  // LOAD CAMERA
+  // check if the camera path is not empty, if it is NITF, the camera
+  // info is in the image, not a seperate file
+  if (cam_path.size() == 0)
+  {
+    bwm_utils::show_error("Camera tableaus need a valid camera path!");
+    return;
+  }
+  
+  vpgl_rational_camera<double> *camera_ = read_rational_camera<double>(cam_path);
+  if (!camera_) {
+    bwm_utils::show_error("[" + cam_path + "] is not a valid rational camera path");
+    return;
+  }
+
+  bwm_observer_mgr::instance()->add(this);
+  set_tab_name(name);
+}
+
+
 
 vpgl_rational_camera<double> bwm_observer_rat_cam::camera()
 {

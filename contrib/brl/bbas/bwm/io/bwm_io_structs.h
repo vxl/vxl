@@ -12,6 +12,7 @@
 #define IMAGE_TABLEAU_TAG "ImageTableau"
 #define COIN3D_TABLEAU_TAG "Coin3DTableau"
 #define PROJ2D_TABLEAU_TAG "Proj2DTableau"
+#define VIDEO_TABLEAU_TAG "Proj2DTableau"
 #define IMAGE_PATH_TAG "imagePath"
 #define CAMERA_PATH_TAG "cameraPath"
 #define OBJECTS_TAG "Objects"
@@ -38,16 +39,16 @@ class bwm_io_tab_config
 };
 
 struct bwm_io_tab_config_img : public bwm_io_tab_config {
-  bwm_io_tab_config_img(vcl_string type, vcl_string name, bool status, vcl_string path)
-    : bwm_io_tab_config(type, name, status), img_path(path) {}
+  bwm_io_tab_config_img(vcl_string name, bool status, vcl_string path)
+    : bwm_io_tab_config(IMAGE_TABLEAU_TAG, name, status), img_path(path) {}
   vcl_string img_path;
 };
 
 
 struct bwm_io_tab_config_cam : public bwm_io_tab_config {
-  bwm_io_tab_config_cam(vcl_string type, vcl_string name, bool status,
+  bwm_io_tab_config_cam(vcl_string name, bool status,
     vcl_string i_path, vcl_string c_path, vcl_string c_type, bool adj=false)
-    : bwm_io_tab_config(type, name, status), img_path(i_path),
+    : bwm_io_tab_config(CAMERA_TABLEAU_TAG, name, status), img_path(i_path),
     cam_path(c_path), cam_type(c_type) {}
   vcl_string img_path;
   vcl_string cam_path;
@@ -55,22 +56,30 @@ struct bwm_io_tab_config_cam : public bwm_io_tab_config {
 };
 
 struct bwm_io_tab_config_coin3d: public bwm_io_tab_config {
-  bwm_io_tab_config_coin3d(vcl_string type, vcl_string name, bool status,
+  bwm_io_tab_config_coin3d(vcl_string name, bool status,
     vcl_string c_path, vcl_string c_type)
-    : bwm_io_tab_config(type, name, status), cam_path(c_path), cam_type(c_type) {}
+    : bwm_io_tab_config(COIN3D_TABLEAU_TAG, name, status), cam_path(c_path), cam_type(c_type) {}
   vcl_string cam_path;
   vcl_string cam_type;
 };
 
 struct bwm_io_tab_config_proj2d: public bwm_io_tab_config {
-  bwm_io_tab_config_proj2d(vcl_string type, vcl_string name, bool status,
+  bwm_io_tab_config_proj2d(vcl_string name, bool status,
     vcl_string p_type, vcl_string c_path, vcl_string c_type, vcl_string coin3d)
-    : bwm_io_tab_config(type, name, status), proj2d_type(p_type), cam_path(c_path),
+    : bwm_io_tab_config(PROJ2D_TABLEAU_TAG, name, status), proj2d_type(p_type), cam_path(c_path),
     cam_type(c_type), coin3d_tab_name(coin3d) {}
   vcl_string cam_path;
   vcl_string cam_type;
   vcl_string proj2d_type;
   vcl_string coin3d_tab_name;
+};
+
+struct bwm_io_tab_config_video: public bwm_io_tab_config {
+  bwm_io_tab_config_video(vcl_string name, bool status,
+    vcl_string frames, vcl_string cameras)
+    : bwm_io_tab_config(VIDEO_TABLEAU_TAG, name, status), frame_glob(frames), camera_glob(cameras) {}
+  vcl_string frame_glob;
+  vcl_string camera_glob;
 };
 
 #endif

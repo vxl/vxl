@@ -3,14 +3,14 @@
 
 #include <vgui/vgui_command.h>
 #include "bwm_command.h"
-#include "bwm_tableau_mgr.h"
+#include "bwm_site_mgr.h"
 
 class bwm_load_img_command: public bwm_command
 {
  public:
   bwm_load_img_command() {}
   ~bwm_load_img_command() {}
-  void execute() { bwm_tableau_mgr::instance()->load_img_tableau(); }
+  void execute() { bwm_site_mgr::instance()->load_img_tableau(); }
   vcl_string name() {return "bwm_tableau_img"; }
 };
 
@@ -20,7 +20,7 @@ class bwm_load_cam_command: public bwm_command
   bwm_load_cam_command() {}
   ~bwm_load_cam_command() {}
   vcl_string name() {return "bwm_tableau_cam"; }
-  void execute() { bwm_tableau_mgr::instance()->load_cam_tableau(); }
+  void execute() { bwm_site_mgr::instance()->load_cam_tableau(); }
 };
 
 #if 0

@@ -16,14 +16,15 @@
 class bwm_tableau_rat_cam : public bwm_tableau_cam
 {
  public:
-//  bwm_tableau_rat_cam(){};
+ /* bwm_tableau_rat_cam(vcl_string name, 
+    vcl_string& image_path, 
+    vcl_string& cam_path, 
+    bool display_image_path);*/
 
   bwm_tableau_rat_cam(bwm_observer_rat_cam* observer)
     : bwm_tableau_cam(observer), my_observer_(observer) {}
 
   void set_observer(bwm_observer_rat_cam* observer) { my_observer_ = observer; }
-
-//  bwm_tableau_rat_cam(vcl_string& image_path){}
 
   virtual ~bwm_tableau_rat_cam(){}
 
@@ -45,20 +46,12 @@ class bwm_tableau_rat_cam : public bwm_tableau_cam
   void convert_file_to_lvcs();
 
   //********************* Save Menu
-
   void save();
-#if 0
-  void save_all();
-  void save_gml();
-  void save_kml();
-  void save_kml_collada();
-  void save_x3d();
-#endif // 0
 
   //****************** Misc
-
   void project_edges_from_master();
   void register_search_to_master();
+
 protected:
   bwm_observer_rat_cam* my_observer_;
 };

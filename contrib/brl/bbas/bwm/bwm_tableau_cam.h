@@ -17,12 +17,13 @@
 
 #include <vpgl/vpgl_camera.h>
 
+#include <vsol/vsol_point_3d_sptr.h>
+
 class bwm_tableau_cam : public bwm_tableau_img
 {
  public:
-
-  bwm_tableau_cam(bwm_observer_cam* obs) : bwm_tableau_img(obs), my_observer_(obs) {}
-
+  typedef enum {RATIONAL=0, PROJECTIVE=1} BWM_CAMERA_TYPES;
+  
   //: destructor
   // Tableaux are responsible for deleting their observers
   virtual ~bwm_tableau_cam(){ delete my_observer_; }
@@ -31,7 +32,7 @@ class bwm_tableau_cam : public bwm_tableau_img
 
   bool bwm_tableau_cam::handle(const vgui_event& e);
 
-  void set_observer(bwm_observer_cam* obs) { my_observer_ = obs; }
+  void set_observer(bwm_observer_cam* obs) { my_observer_ = obs;}
 
   bwm_observer_cam* observer() const { return this->my_observer_; }
 
@@ -59,6 +60,8 @@ class bwm_tableau_cam : public bwm_tableau_img
 
   //: Draws the hostogram on a graph (if the image is greyscale)
   void hist_plot();
+
+  void set_corr(double X, double Y);
 
   void move_corr();
 
@@ -112,8 +115,11 @@ class bwm_tableau_cam : public bwm_tableau_img
   void help_pop();
 
   bool show_vertices_;
+
  protected:
   bwm_observer_cam* my_observer_;
+  bwm_tableau_cam(bwm_observer_cam* obs) 
+    : bwm_tableau_img(obs), my_observer_(obs) {}
   
 };
 
