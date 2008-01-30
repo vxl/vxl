@@ -44,6 +44,9 @@ SUBDIRS(bmsh3d)
 #3D modeling library
 SUBDIRS(bwm)
 
+#In memory relational database
+SUBDIRS(brdb)
+
 OPTION( BUILD_CONTRIB_VIDL2 "Build Experimental Video Streaming Library" YES )
 IF(BUILD_CONTRIB_VIDL2)
 # Video Library (rewrite)
