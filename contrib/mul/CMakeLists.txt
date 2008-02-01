@@ -9,9 +9,10 @@ SET( MUL_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/mul CAC
 INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${VXL_MUL_INCLUDE_DIR} )
 
-SUBDIRS(mbl vpdfl pdf1d clsfy vimt ipts vil3d vimt3d mvl2)
+SUBDIRS(mbl vpdfl pdf1d clsfy vimt ipts vil3d vimt3d mvl2 mmn mcal)
+SUBDIRS(msm mfpf)
 IF (BUILD_UNMAINTAINED_LIBRARIES)
-  SUBDIRS(mil mil3d mcal msm)
+  SUBDIRS(mil mil3d)
 ENDIF (BUILD_UNMAINTAINED_LIBRARIES) 
 
 OPTION(BUILD_MUL_TOOLS "Build the MUL tools?" YES)
