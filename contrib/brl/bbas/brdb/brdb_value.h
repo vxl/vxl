@@ -17,7 +17,7 @@
 // Apr 4th, 2007
 // Make it work with the whole database initially based on Matt's sketch.
 
-
+#include <brdb/brdb_value_sptr.h>
 #include <vcl_string.h>
 #include <vcl_map.h>
 #include <vcl_cassert.h>
@@ -30,7 +30,7 @@ template< class T > class brdb_value_t;
 
 
 //: This abstract class is the base class for database values
-class brdb_value
+class brdb_value : public vbl_ref_count
 {
  public:
   

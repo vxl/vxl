@@ -2,7 +2,7 @@
 # The Brown Relational Database Library
 
 SET(brdb_sources
-   brdb_value.cxx                    brdb_value.h
+   brdb_value.cxx                    brdb_value.h                    brdb_value_sptr.h
    brdb_value.txx
    brdb_tuple.cxx                    brdb_tuple.h                    brdb_tuple_sptr.h
    brdb_relation.cxx                 brdb_relation.h                 brdb_relation_sptr.h
