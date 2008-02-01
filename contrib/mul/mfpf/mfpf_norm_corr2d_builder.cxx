@@ -37,6 +37,8 @@ void mfpf_norm_corr2d_builder::set_defaults()
   ref_y_=0.5*(nj_-1);
   search_ni_=5;
   search_nj_=5;
+  nA_=0;
+  dA_=0.0;
 }
 
 void mfpf_norm_corr2d_builder::set_step_size(double s)
@@ -100,7 +102,7 @@ static void normalize(vil_image_view<double>& im)
 }
 
 //: Add one example to the model
-void mfpf_norm_corr2d_builder::add_example(const vimt_image_2d_of<float>& image,
+void mfpf_norm_corr2d_builder::add_one_example(const vimt_image_2d_of<float>& image,
                         const vgl_point_2d<double>& p,
                         const vgl_vector_2d<double>& u)
 {
@@ -124,6 +126,26 @@ void mfpf_norm_corr2d_builder::add_example(const vimt_image_2d_of<float>& image,
   if (n_added_==0) sum_.deep_copy(sample);
   else             vil_math_add_image_fraction(sum_,1.0,sample,1.0);
   n_added_++;
+}
+
+//: Add one example to the model
+void mfpf_norm_corr2d_builder::add_example(const vimt_image_2d_of<float>& image,
+                        const vgl_point_2d<double>& p,
+                        const vgl_vector_2d<double>& u)
+{
+  if (nA_==0)
+  {
+    add_example(image,p,u);
+    return;
+  }
+
+  vgl_vector_2d<double> v(-u.y(),u.x());
+  for (int iA=-int(nA_);iA<=nA_;++iA)
+  {
+    double A = iA*dA_;
+    vgl_vector_2d<double> uA = u*vcl_cos(A)+v*vcl_sin(A);
+    add_example(image,p,uA);
+  }
 }
 
 //: Build this object from the data supplied in add_example()
@@ -190,6 +212,18 @@ bool mfpf_norm_corr2d_builder::set_from_stream(vcl_istream &is)
     props.erase("search_nj"); 
   }
 
+  if (props.find("nA")!=props.end())
+  { 
+    nA_=vul_string_atoi(props["nA"]); 
+    props.erase("nA"); 
+  }
+
+  if (props.find("dA")!=props.end())
+  { 
+    dA_=vul_string_atof(props["dA"]); 
+    props.erase("dA"); 
+  }
+
   // Check for unused props
   mbl_read_props_look_for_unused_props(
       "mfpf_norm_corr2d_builder::set_from_stream", props, mbl_read_props_type());
@@ -221,6 +255,7 @@ void mfpf_norm_corr2d_builder::print_summary(vcl_ostream& os) const
   os<<" size: "<<ni_<<"x"<<nj_;
   os<<" search_ni: "<<search_ni_;
   os<<" search_nj: "<<search_nj_;
+  os<<" nA: "<<nA_<<" dA: "<<dA_;
   os<<" }";
 }
 
@@ -236,6 +271,8 @@ void mfpf_norm_corr2d_builder::b_write(vsl_b_ostream& bfs) const
   vsl_b_write(bfs,n_added_); 
   vsl_b_write(bfs,search_ni_); 
   vsl_b_write(bfs,search_nj_); 
+  vsl_b_write(bfs,nA_);
+  vsl_b_write(bfs,dA_);
 }
 
 //=======================================================================
@@ -259,6 +296,8 @@ void mfpf_norm_corr2d_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,n_added_);
       vsl_b_read(bfs,search_ni_);
       vsl_b_read(bfs,search_nj_);
+      vsl_b_read(bfs,nA_);
+      vsl_b_read(bfs,dA_);
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&) \n";

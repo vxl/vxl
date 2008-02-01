@@ -58,6 +58,12 @@ private:
   //: Number of points either side of centre to search
   int search_nj_;
 
+  //: Number of angles either side of 0 to sample at
+  unsigned nA_;
+
+  //: Angle displacement
+  double dA_;
+
   //: Define default values
   void set_defaults();
 
@@ -76,6 +82,12 @@ private:
   //: Parse stream to set up as an ellipse shape.
   // Expects: "{ ri: 2.1 rj: 5.2 }
   void config_as_ellipse(vcl_istream &is);
+
+  //: Add one example to the model
+  void add_one_example(const vimt_image_2d_of<float>& image,
+                        const vgl_point_2d<double>& p,
+                        const vgl_vector_2d<double>& u);
+
 public:
 
     //: Dflt ctor

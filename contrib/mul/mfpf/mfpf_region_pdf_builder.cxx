@@ -44,7 +44,8 @@ void mfpf_region_pdf_builder::set_defaults()
   roi_nj_=0;
   ref_x_=0;
   ref_y_=0;
-
+  nA_=0;
+  dA_=0.0;
 }
 
 void mfpf_region_pdf_builder::set_step_size(double s)
@@ -139,7 +140,7 @@ void mfpf_region_pdf_builder::clear(unsigned n_egs)
 }
 
 //: Add one example to the model
-void mfpf_region_pdf_builder::add_example(const vimt_image_2d_of<float>& image,
+void mfpf_region_pdf_builder::add_one_example(const vimt_image_2d_of<float>& image,
                         const vgl_point_2d<double>& p,
                         const vgl_vector_2d<double>& u)
 {
@@ -167,6 +168,26 @@ void mfpf_region_pdf_builder::add_example(const vimt_image_2d_of<float>& image,
 
   mfpf_norm_vec(v);
   data_.push_back(v);
+}
+
+//: Add one example to the model
+void mfpf_region_pdf_builder::add_example(const vimt_image_2d_of<float>& image,
+                        const vgl_point_2d<double>& p,
+                        const vgl_vector_2d<double>& u)
+{
+  if (nA_==0)
+  {
+    add_example(image,p,u);
+    return;
+  }
+
+  vgl_vector_2d<double> v(-u.y(),u.x());
+  for (int iA=-int(nA_);iA<=nA_;++iA)
+  {
+    double A = iA*dA_;
+    vgl_vector_2d<double> uA = u*vcl_cos(A)+v*vcl_sin(A);
+    add_example(image,p,uA);
+  }
 }
 
 //: Build this object from the data supplied in add_example()
@@ -253,6 +274,8 @@ void mfpf_region_pdf_builder::config_as_ellipse(vcl_istream &is)
     props.erase("rj"); 
   }
 
+
+
   // Check for unused props
   mbl_read_props_look_for_unused_props(
       "mfpf_region_pdf_builder::config_as_ellipse", 
@@ -308,6 +331,18 @@ bool mfpf_region_pdf_builder::set_from_stream(vcl_istream &is)
     props.erase("search_nj"); 
   }
 
+  if (props.find("nA")!=props.end())
+  { 
+    nA_=vul_string_atoi(props["nA"]); 
+    props.erase("nA"); 
+  }
+
+  if (props.find("dA")!=props.end())
+  { 
+    dA_=vul_string_atof(props["dA"]); 
+    props.erase("dA"); 
+  }
+
   if (props.find("pdf_builder")!=props.end())
   { 
     vcl_istringstream b_ss(props["pdf_builder"]); 
@@ -352,6 +387,7 @@ void mfpf_region_pdf_builder::print_summary(vcl_ostream& os) const
   else                       os<<" pdf_builder: "<<pdf_builder_;
   os<<" search_ni: "<<search_ni_;
   os<<" search_nj: "<<search_nj_;
+  os<<" nA: "<<nA_<<" dA: "<<dA_;
   os<<" }";
 }
 
@@ -384,6 +420,8 @@ void mfpf_region_pdf_builder::b_write(vsl_b_ostream& bfs) const
   vsl_b_write(bfs,ref_y_); 
   vsl_b_write(bfs,search_ni_); 
   vsl_b_write(bfs,search_nj_); 
+  vsl_b_write(bfs,nA_);
+  vsl_b_write(bfs,dA_);
   vsl_b_write(bfs,pdf_builder_); 
   vsl_b_write(bfs,data_); 
 }
@@ -409,6 +447,8 @@ void mfpf_region_pdf_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,ref_y_); 
       vsl_b_read(bfs,search_ni_);
       vsl_b_read(bfs,search_nj_);
+      vsl_b_read(bfs,nA_);
+      vsl_b_read(bfs,dA_);
       vsl_b_read(bfs,pdf_builder_);
       vsl_b_read(bfs,data_);
       break;

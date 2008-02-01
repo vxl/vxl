@@ -25,6 +25,12 @@ private:
   //: Kernel mask is ni_ x nj_
   unsigned nj_;
 
+  //: Number of angles either side of 0 to sample at
+  unsigned nA_;
+
+  //: Angle displacement
+  double dA_;
+
   //: Workspace for sum
   vil_image_view<double> sum_;
 
@@ -39,6 +45,12 @@ private:
 
   //: Define default values
   void set_defaults();
+
+  //: Add one example to the model
+  void add_one_example(const vimt_image_2d_of<float>& image,
+                        const vgl_point_2d<double>& p,
+                        const vgl_vector_2d<double>& u);
+
 public:
 
     //: Dflt ctor
