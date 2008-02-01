@@ -23,6 +23,7 @@
 //--------------------------------------------------------------------------------
 
 #include <vcl_vector.h>
+#include <vcl_map.h>
 #include <vcl_string.h>
 #include <vbl/vbl_ref_count.h>
 #include <brdb/brdb_value.h>
@@ -77,6 +78,19 @@ class bprb_process : public vbl_ref_count
   //: The name of the process
   virtual vcl_string name() = 0;
 
+  //: The name and type of each input, <name, value type>
+  virtual vcl_vector<vcl_pair<vcl_string, vcl_string> > inputs() = 0;
+
+  //: The name and type of each output, <name, value type>
+  virtual vcl_vector<vcl_pair<vcl_string, vcl_string> > outputs() = 0;
+
+  //: The set of inputs
+  void set_input_data(vcl_vector<brdb_value> > const& inputs){input_data=inputs;}
+
+  //: The set of outputs
+  void vcl_vector<brdb_value> >& output_data(){return=output_data;}
+
+
   //: Perform any initialization required by the process
   virtual bool init() = 0;
 
@@ -95,6 +109,8 @@ class bprb_process : public vbl_ref_count
 
  private:
   //: The parameters of this process
+  vcl_vector<brdb_value> input_data_;
+  vcl_vector<brdb_value> output_data_;
   bprb_parameters_sptr parameters_;
 };
 #include <bprb/bprb_process_sptr.h>
