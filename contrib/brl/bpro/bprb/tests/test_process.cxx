@@ -36,7 +36,20 @@ MAIN( test_process )
   //create the process - the database is global
   bprb_process_sptr proc = new bprb_test_process();
   
+  //test getting the inputs and outputs
+  vcl_vector<vcl_pair<vcl_string, vcl_string> > inputs = proc->inputs();
+  for(vcl_vector<vcl_pair<vcl_string, vcl_string> >::iterator iit = inputs.begin();
+      iit != inputs.end(); ++iit)
+    vcl_cout << "input name: " << (*iit).first << " type: " << (*iit).second << '\n';
+
+  vcl_vector<vcl_pair<vcl_string, vcl_string> > outputs = proc->outputs();
+  for(vcl_vector<vcl_pair<vcl_string, vcl_string> >::iterator iit = outputs.begin();
+      iit != outputs.end(); ++iit)
+    vcl_cout << "output name: " << (*iit).first << " type: " << (*iit).second << '\n';
+  TEST("test names and types", inputs[0].first, "input0");
+
   proc->parameters()->set_value("-prm1", 5.0f);
+
   //execute the process (command pattern) just adds the two inputs and the parameter
   proc->execute();
 

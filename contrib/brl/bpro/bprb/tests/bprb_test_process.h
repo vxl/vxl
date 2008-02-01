@@ -25,6 +25,13 @@ class bprb_test_process : public bprb_process
   //: The name of the process
   virtual vcl_string name(){ return "Test Process";}
 
+  //: The name and type of each input, <name, value type>
+  virtual vcl_vector<vcl_pair<vcl_string, vcl_string> > inputs();
+
+  //: The name and type of each output, <name, value type>
+  virtual vcl_vector<vcl_pair<vcl_string, vcl_string> > outputs();
+
+
   //: Perform any initialization required by the process
   virtual bool init() {return true;}
 

@@ -14,6 +14,23 @@ bprb_test_process::bprb_test_process()
      vcl_cerr << " Error in adding parameters \n";
     }
 }
+vcl_vector<vcl_pair<vcl_string, vcl_string> > bprb_test_process::inputs()
+{
+  vcl_pair<vcl_string, vcl_string> input0(vcl_string("input0"), vcl_string("float"));
+  vcl_pair<vcl_string, vcl_string> input1(vcl_string("input1"), vcl_string("float"));
+  vcl_vector<vcl_pair<vcl_string, vcl_string> > to_return;
+  to_return.push_back(input0);
+  to_return.push_back(input1);
+  return to_return;
+}
+
+vcl_vector<vcl_pair<vcl_string, vcl_string> > bprb_test_process::outputs()
+{
+  vcl_pair<vcl_string, vcl_string> output0(vcl_string("output0"), vcl_string("float"));
+  vcl_vector<vcl_pair<vcl_string, vcl_string> > to_return;
+  to_return.push_back(output0);
+  return to_return;
+}
 
 bool bprb_test_process::execute()
 {
