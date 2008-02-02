@@ -62,6 +62,7 @@
 //
 // Typically, the constructor is used to define the parameters
 // for a process. See bprb_parameters. 
+#include <brdb/brdb_value_sptr.h>
 class bprb_process : public vbl_ref_count
 {
  public:
@@ -85,10 +86,10 @@ class bprb_process : public vbl_ref_count
   virtual vcl_vector<vcl_pair<vcl_string, vcl_string> > outputs() = 0;
 
   //: The set of inputs
-  void set_input_data(vcl_vector<brdb_value> > const& inputs){input_data=inputs;}
+  void set_input_data(vcl_vector<brdb_value_sptr> const& inputs){input_data_=inputs;}
 
   //: The set of outputs
-  void vcl_vector<brdb_value> >& output_data(){return=output_data;}
+  vcl_vector<brdb_value_sptr>& output_data(){return output_data_;}
 
 
   //: Perform any initialization required by the process
@@ -109,8 +110,8 @@ class bprb_process : public vbl_ref_count
 
  private:
   //: The parameters of this process
-  vcl_vector<brdb_value> input_data_;
-  vcl_vector<brdb_value> output_data_;
+  vcl_vector<brdb_value_sptr> input_data_;
+  vcl_vector<brdb_value_sptr> output_data_;
   bprb_parameters_sptr parameters_;
 };
 #include <bprb/bprb_process_sptr.h>
