@@ -8,63 +8,39 @@
 #include <vcl_iostream.h>
 #include "bprb_test_process.h"
 #include <bprb/bprb_parameters.h>
+#include <bprb/bprb_macros.h>
 MAIN( test_process )
 {
-  //Set up a simple process database that holds some sample inputs, and outputs,
-  //this step would be done by the process manager from a script or from menu inputs
-    //define the process input relation
-  vcl_vector<vcl_string> r_names(2);
-  vcl_vector<vcl_string> r_types(2);
-  vcl_vector<brdb_tuple_sptr> r_tuples(2);
-  r_names[0]="input";
-  r_names[1]="value";
-  r_types[0]=brdb_value_t<vcl_string>::type();
-  r_types[1]=brdb_value_t<float>::type();
-  brdb_tuple_sptr t =new brdb_tuple(vcl_string("input0"), 1.0f); 
-  r_tuples[0]=t;
-  r_tuples[1]=new brdb_tuple(vcl_string("input1"), 2.0f);
+  REG_PROCESS(bprb_test_process, bprb_batch_process_manager);
+  REGISTER_DATATYPE(float);
+  // set the inputs 
+  brdb_value_sptr v0 = new brdb_value_t<float>(1.0f);
+  brdb_value_sptr v1 = new brdb_value_t<float>(2.0f);
+  bool good = bprb_batch_process_manager::instance()->init_process("Test Process");
+  good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
+  good = good && bprb_batch_process_manager::instance()->set_input(1, v1);
+  good = good && bprb_batch_process_manager::instance()->run_process();
+  unsigned id;
+  good = good && bprb_batch_process_manager::instance()->commit_output(0, id);
+  TEST("run process", good ,true);
+  //Check if result is in the database
+    // query to get the data 
+  brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
 
-  brdb_relation_sptr r_in = new brdb_relation(r_names, r_tuples, r_types);
-  //add the relation to the database
-  DATABASE->add_relation(vcl_string("process_input_relation"), r_in);
+  brdb_selection_sptr selec = DATABASE->select("float_data", Q);
+  if(selec->size()!=1){
+    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+    << " no selections\n";
+  }
 
-  //define the output relation that stores process results
-  r_names[0]="output";
-  brdb_relation_sptr r_out = new brdb_relation(r_names, r_types);
-  DATABASE->add_relation(vcl_string("process_output_relation"), r_out);
-
-  //create the process - the database is global
-  bprb_process_sptr proc = new bprb_test_process();
-  
-  //test getting the inputs and outputs
-  vcl_vector<vcl_pair<vcl_string, vcl_string> > inputs = proc->inputs();
-  for(vcl_vector<vcl_pair<vcl_string, vcl_string> >::iterator iit = inputs.begin();
-      iit != inputs.end(); ++iit)
-    vcl_cout << "input name: " << (*iit).first << " type: " << (*iit).second << '\n';
-
-  vcl_vector<vcl_pair<vcl_string, vcl_string> > outputs = proc->outputs();
-  for(vcl_vector<vcl_pair<vcl_string, vcl_string> >::iterator iit = outputs.begin();
-      iit != outputs.end(); ++iit)
-    vcl_cout << "output name: " << (*iit).first << " type: " << (*iit).second << '\n';
-  TEST("test names and types", inputs[0].first, "input0");
-
-  proc->parameters()->set_value("-prm1", 5.0f);
-
-  //execute the process (command pattern) just adds the two inputs and the parameter
-  proc->execute();
-
-  //test that output is correct
-  brdb_query_aptr Q = brdb_query_comp_new("output", brdb_query::EQ,
-                                          vcl_string("output0"));
-  bool good = true;
-  brdb_selection_sptr selec = DATABASE->select("process_output_relation", Q);
-  if(selec->size()!=1)
-    good = false;
-  brdb_value_t<float> arg;
-
-  if(!selec->get_value(vcl_string("value"), arg))
-    good = false;
-  TEST("Process using db", arg.value(), 8.0f);
-      
+  brdb_value_sptr value;
+  if(!selec->get_value(vcl_string("value"), value)){
+    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+     << " didn't get value\n";
+  }
+  brdb_value_t<float>* result = 
+    static_cast<brdb_value_t<float>* >(value.ptr());
+  float rv = result->value();
+  TEST_NEAR("test result in DB", rv, 7.0f, 0.01);
   SUMMARY();
 }

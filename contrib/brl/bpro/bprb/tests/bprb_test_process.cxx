@@ -5,6 +5,7 @@
 #include <brdb/brdb_selection.h>
 #include <brdb/brdb_database_manager.h>
 #include <bprb/bprb_parameters.h>
+#include <brdb/brdb_value.h>
 
 bprb_test_process::bprb_test_process()
 {
@@ -13,75 +14,34 @@ bprb_test_process::bprb_test_process()
     {
      vcl_cerr << " Error in adding parameters \n";
     }
-}
-vcl_vector<vcl_pair<vcl_string, vcl_string> > bprb_test_process::inputs()
-{
-  vcl_pair<vcl_string, vcl_string> input0(vcl_string("input0"), vcl_string("float"));
-  vcl_pair<vcl_string, vcl_string> input1(vcl_string("input1"), vcl_string("float"));
-  vcl_vector<vcl_pair<vcl_string, vcl_string> > to_return;
-  to_return.push_back(input0);
-  to_return.push_back(input1);
-  return to_return;
-}
-
-vcl_vector<vcl_pair<vcl_string, vcl_string> > bprb_test_process::outputs()
-{
-  vcl_pair<vcl_string, vcl_string> output0(vcl_string("output0"), vcl_string("float"));
-  vcl_vector<vcl_pair<vcl_string, vcl_string> > to_return;
-  to_return.push_back(output0);
-  return to_return;
+  input_data_.resize(2, brdb_value_sptr(0));
+  output_data_.resize(1,brdb_value_sptr(0));
+  input_types_.resize(2);
+  output_types_.resize(1);
+  input_types_[0]="float";
+  input_types_[1]="float";
+  output_types_[0]="float";
 }
 
 bool bprb_test_process::execute()
 {
-  // the database is assumed to contain of the following relations
-  //
-  // "process_input_relation"
-  //  ----- tuples -----
-  //   input         value
-  //  "input0"      float
-  //  "input1"      float
-  // 
-  // "process_output_relation"
-  //  ----- tuples -----
-  //   output      value
-  //  "output0"    float
-  //
-  // query to get the first input - these steps could be rolled into a method
-  brdb_query_aptr Q0 = brdb_query_comp_new("input", brdb_query::EQ,
-                                           vcl_string("input0"));
-
-  brdb_selection_sptr selec0 = DATABASE->select("process_input_relation", Q0);
-  if(selec0->size()!=1)
-    return false;
-  brdb_value_t<float> arg0, arg1;
-
-  if(!selec0->get_value(vcl_string("value"), arg0))
-    return false;
-
-  // query to get the second input
-  brdb_query_aptr Q1 = brdb_query_comp_new("input", brdb_query::EQ, 
-                                           vcl_string("input1"));
-  brdb_selection_sptr selec1 = DATABASE->select("process_input_relation", Q1);
-  if(selec1->size()!=1)
-    return false;
-  if(!selec1->get_value(vcl_string("value"), arg1))
-    return false;
-
   // the process is simple, just add the two values
-  float sum = arg0.value() + arg1.value();
+  brdb_value_t<float>* i0 = 
+    static_cast<brdb_value_t<float>* >(input_data_[0].ptr());
 
+  brdb_value_t<float>* i1 = 
+    static_cast<brdb_value_t<float>* >(input_data_[1].ptr());
+
+  float sum = i0->value() + i1->value();
+  
   // add in one of the parameters
   float argp;
   if(!parameters()->get_value("-prm1", argp))
     return false;
+  sum += argp;
   
-  //store the result in the output relation
-
-  brdb_tuple_sptr result_tuple = new brdb_tuple(vcl_string("output0"), sum+argp);
-
-  brdb_relation_sptr r = DATABASE->get_relation("process_output_relation");
-  r->add_tuple(result_tuple);
-
+  // set the output
+  brdb_value_sptr v = new brdb_value_t<float>(sum);
+  output_data_[0]=v;
   return true;
 }

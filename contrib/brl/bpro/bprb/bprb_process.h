@@ -63,10 +63,11 @@
 // Typically, the constructor is used to define the parameters
 // for a process. See bprb_parameters. 
 #include <brdb/brdb_value_sptr.h>
+#include <vcl_string.h>
 class bprb_process : public vbl_ref_count
 {
  public:
-
+  bprb_process();
   //: Clone the process
   virtual bprb_process* clone() const = 0;
   
@@ -79,18 +80,39 @@ class bprb_process : public vbl_ref_count
   //: The name of the process
   virtual vcl_string name() = 0;
 
-  //: The name and type of each input, <name, value type>
-  virtual vcl_vector<vcl_pair<vcl_string, vcl_string> > inputs() = 0;
+  //: The number of inputs
+  unsigned n_inputs();
 
-  //: The name and type of each output, <name, value type>
-  virtual vcl_vector<vcl_pair<vcl_string, vcl_string> > outputs() = 0;
+  //: Get all input types at once
+  vcl_vector<vcl_string>& input_types(){return input_types_;}
 
-  //: The set of inputs
-  void set_input_data(vcl_vector<brdb_value_sptr> const& inputs){input_data_=inputs;}
+  // The type of each input
+  vcl_string input_type(unsigned i);
 
-  //: The set of outputs
+  //: The number of outputs
+  unsigned n_outputs();
+
+  //: Get all output types at once
+  vcl_vector<vcl_string>& output_types(){return output_types_;}
+
+  // The type of each output
+  vcl_string output_type(unsigned i);
+
+  //: Set all the inputs at once
+  bool set_input_data(vcl_vector<brdb_value_sptr> const& inputs);
+
+  //: set a particular input
+  bool set_input(unsigned i, brdb_value_sptr const& value);
+
+  //: get all outputs at once
   vcl_vector<brdb_value_sptr>& output_data(){return output_data_;}
 
+  //: get a particular output
+  brdb_value_sptr output(unsigned i)
+    {if(i<n_inputs()) return output_data_[i]; return 0;}
+  
+  //: Insure that inputs are valid
+  bool verify_inputs();
 
   //: Perform any initialization required by the process
   virtual bool init() = 0;
@@ -101,18 +123,19 @@ class bprb_process : public vbl_ref_count
   //: Perform any clean up or final computation 
   virtual bool finish() = 0;
   
+
  protected:
   
   //: Copy Constructor
   bprb_process(const bprb_process& other);
-  bprb_process();
   virtual ~bprb_process();
 
- private:
   //: The parameters of this process
   vcl_vector<brdb_value_sptr> input_data_;
   vcl_vector<brdb_value_sptr> output_data_;
   bprb_parameters_sptr parameters_;
+  vcl_vector<vcl_string> input_types_;
+  vcl_vector<vcl_string> output_types_;
 };
 #include <bprb/bprb_process_sptr.h>
 #endif // bprb_process_h_
