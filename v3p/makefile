@@ -6,6 +6,8 @@ SUBDIRS += netlib
 
 SUBDIRS += Qv
 
+SUBDIRS += rply
+
 # do not compile zlib, png, jpeg or tiff by default as they
 # are "native" libraries on some systems. clients who wish
 # to compile the 3rd libraries which come with the v3p source
