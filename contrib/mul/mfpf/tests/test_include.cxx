@@ -5,5 +5,13 @@
 #include <mfpf/mfpf_point_finder.h>
 #include <mfpf/mfpf_norm_corr1d.h>
 #include <mfpf/mfpf_norm_corr1d_builder.h>
+#include <mfpf/mfpf_norm_corr2d.h>
+#include <mfpf/mfpf_norm_corr2d_builder.h>
+#include <mfpf/mfpf_norm_vec.h>
+#include <mfpf/mfpf_profile_pdf.h>
+#include <mfpf/mfpf_profile_pdf_builder.h>
+#include <mfpf/mfpf_region_pdf.h>
+#include <mfpf/mfpf_region_pdf_builder.h>
+#include <mfpf/mfpf_sample_region.h>
 
 int main() { return 0; }
