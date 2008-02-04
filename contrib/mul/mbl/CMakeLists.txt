@@ -65,6 +65,7 @@ SET(mbl_sources
   mbl_progress_null.cxx                 mbl_progress_null.h
   mbl_progress_composite.cxx            mbl_progress_composite.h
   mbl_progress_hierarchy.cxx            mbl_progress_hierarchy.h
+  mbl_progress_callback.h
   mbl_exception.h                       mbl_exception.cxx
   mbl_rvm_regression_builder.cxx        mbl_rvm_regression_builder.h
   mbl_test.h                            mbl_test.cxx

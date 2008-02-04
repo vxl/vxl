@@ -47,12 +47,12 @@ void mbl_progress_hierarchy::on_set_progress(const vcl_string& identifier,
                                const int progress)
 {
   just_ended_=false;
-  
+
   if (identifier != identifier_stack_.back())
     MBL_LOG(WARN, logger(), "set progress for identifier \"" << identifier << 
       "\" rather than most recently created identifier \"" << identifier_stack_.back() << '"');
 
-  double a=0.0, b=1.0;
+  double a=0.0, b=1.0; // The lower and upper bound on the current value
   for (vcl_vector<vcl_string>::const_iterator it=identifier_stack_.begin(),
     end=identifier_stack_.end(); it!=end; ++it)
   {
@@ -65,9 +65,7 @@ void mbl_progress_hierarchy::on_set_progress(const vcl_string& identifier,
       b=a+width;
     }
     else
-    {
-      a = b - width*(1.0-vcl_exp(1.0 - (double)its/(double)n_its));
-    }
+      a = b - width*vcl_exp(1.0 - its/(n_its-0.5));
   }
   on_changed_progress(a);
 }
@@ -80,7 +78,7 @@ void mbl_progress_hierarchy::on_end_progress(const vcl_string& identifier)
   just_ended_ = true;
 
 
-  double a=0.0, b=1.0;
+  double a=0.0, b=1.0; // The lower and upper bound on the current value
   for (vcl_vector<vcl_string>::const_iterator it=identifier_stack_.begin(),
     end=identifier_stack_.end(); it!=end; ++it)
   {
@@ -93,9 +91,15 @@ void mbl_progress_hierarchy::on_end_progress(const vcl_string& identifier)
       b=a+width;
     }
     else
-    {
-      a = b - width*(1.0-vcl_exp(1.0 - (double)its/(double)n_its));
-    }
+      a = b - width*vcl_exp(1.0 - its/(n_its-0.5));
+
   }
-  on_changed_progress(b);
+  on_changed_progress(0.1*a+0.9*b);
+
+  if (identifier_stack_.back() != identifier)
+    MBL_LOG(WARN, logger(), "Trying to end_progress on identifier: \"" << identifier <<
+    "\" when most recently created identifier is \"" << identifier_stack_.back() << '"');
+
+  identifier_stack_.pop_back();
+
 }

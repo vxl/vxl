@@ -45,6 +45,7 @@ DECLARE( test_stepwise_regression );
 DECLARE( test_clusters );
 DECLARE( test_cluster_tree );
 DECLARE( test_dyn_prog );
+DECLARE( test_progress );
 
 void
 register_tests()
@@ -94,6 +95,7 @@ register_tests()
   REGISTER( test_clusters );
   REGISTER( test_cluster_tree );
   REGISTER( test_dyn_prog );
+  REGISTER( test_progress );
 }
 
 DEFINE_MAIN;
