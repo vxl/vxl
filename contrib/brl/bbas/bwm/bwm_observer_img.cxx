@@ -1,6 +1,7 @@
 #include "bwm_observer_img.h"
 //:
 // \file
+
 #include <bwm/algo/bwm_algo.h>
 #include <bwm/algo/bwm_image_processor.h>
 
@@ -12,10 +13,6 @@
 #include <vgui/vgui_projection_inspector.h>
 #include <vgl/vgl_box_2d.h>
 #include <bsol/bsol_algs.h>
-#include <vdgl/vdgl_digital_curve.h>
-#include <vdgl/vdgl_interpolator.h>
-#include <vdgl/vdgl_edgel_chain.h>
-#include <vdgl/vdgl_edgel.h>
 
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_box_2d.h>
@@ -27,10 +24,8 @@
 #include <vil/vil_load.h>
 #include <vil/vil_blocked_image_resource.h>
 #include <vil/vil_pyramid_image_resource.h>
-#include <vil/vil_property.h>
 
 #include <vul/vul_file.h>
-#include <vul/vul_string.h>
 #include <bgui/bgui_image_utils.h>
 
 bwm_observer_img::bwm_observer_img(bgui_image_tableau_sptr const& img, vcl_string name, vcl_string image_path, bool display_image_path)
@@ -267,7 +262,7 @@ void bwm_observer_img::delete_selected()
   // first get the selected polygon
   vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
 
-  if (select_list.size() == 0) 
+  if (select_list.size() == 0)
     return;
 
   if ((select_list.size() == 1) &&
@@ -397,12 +392,12 @@ void bwm_observer_img::clear_box()
   // get the selected box
   bgui_vsol_soview2D_polygon* p = 0;
 
-  if(!this->get_selected_box(p))
-    {
-      vcl_cerr << "In bwm_observer_img::clear_box() - no box selected\n";
-      return ;
-    }
-  
+  if (!this->get_selected_box(p))
+  {
+    vcl_cerr << "In bwm_observer_img::clear_box() - no box selected\n";
+    return ;
+  }
+
   vcl_vector<bgui_vsol_soview2D* >& soviews = seg_views[p->get_id()];
   for (unsigned i=0; i<soviews.size(); i++) {
     this->remove(soviews[i]);
@@ -440,7 +435,6 @@ void bwm_observer_img::recover_edges()
 
 void bwm_observer_img::recover_lines()
 {
-
   //make sure the box is actually empty
   this->clear_box();
 
@@ -465,14 +459,12 @@ void bwm_observer_img::recover_lines()
 }
 // display edges for experimental registration
 void bwm_observer_img::
-display_reg_seg(vcl_vector<vsol_digital_curve_2d_sptr> const& search_edges, 
+display_reg_seg(vcl_vector<vsol_digital_curve_2d_sptr> const& search_edges,
                 vcl_vector<vsol_digital_curve_2d_sptr> const& model_edges)
 {
   this->clear_reg_segmentation();
-  vgui_style_sptr mstyle = 
-    vgui_style::new_style(0.1f, 0.8f, 0.1f, 1.0f, 3.0f);
-  vgui_style_sptr sstyle = 
-    vgui_style::new_style(0.8f, 0.1f, 0.8f, 1.0f, 3.0f);
+  vgui_style_sptr mstyle = vgui_style::new_style(0.1f, 0.8f, 0.1f, 1.0f, 3.0f);
+  vgui_style_sptr sstyle = vgui_style::new_style(0.8f, 0.1f, 0.8f, 1.0f, 3.0f);
 
   vcl_vector<vsol_digital_curve_2d_sptr>::const_iterator cit =
     search_edges.begin();
@@ -481,7 +473,7 @@ display_reg_seg(vcl_vector<vsol_digital_curve_2d_sptr> const& search_edges,
 
   cit = model_edges.begin();
   for (; cit != model_edges.end(); ++cit)
-   reg_seg_views_.push_back(this->add_digital_curve(*cit, mstyle));
+    reg_seg_views_.push_back(this->add_digital_curve(*cit, mstyle));
 
   this->post_redraw();
 }
@@ -489,8 +481,8 @@ display_reg_seg(vcl_vector<vsol_digital_curve_2d_sptr> const& search_edges,
 // clear the edges displayed for the experimental registration tasks
 void bwm_observer_img::clear_reg_segmentation()
 {
-  for(vcl_vector<bgui_vsol_soview2D* >::iterator sit = reg_seg_views_.begin();
-      sit != reg_seg_views_.end(); ++sit)
+  for (vcl_vector<bgui_vsol_soview2D* >::iterator sit = reg_seg_views_.begin();
+       sit != reg_seg_views_.end(); ++sit)
     this->remove(*sit);
   reg_seg_views_.clear();
 }
@@ -596,13 +588,13 @@ void bwm_observer_img::move_to_point(float x, float y)
   // the image size
   unsigned ni = img_tab_->get_image_resource()->ni();
   unsigned nj = img_tab_->get_image_resource()->nj();
-  if(x<0 || x>=ni || y<0 || y>=nj)
-    vcl_cerr << "In bwm_observer_img::move_to_point(.) - "
-             << "requested point outside of image bounds\n";
-  if(x<0) x=0;
-  if(x>=ni) x = ni-1;
-  if(y<0) y=0;
-  if(y>=nj) y = nj-1;
+  if (x<0 || x>=ni || y<0 || y>=nj)
+    vcl_cerr << "In bwm_observer_img::move_to_point(.) -"
+             << " requested point outside of image bounds\n";
+  if (x<0) x=0;
+  if (x>=ni) x = ni-1;
+  if (y<0) y=0;
+  if (y>=nj) y = nj-1;
   if (viewer_)
   {
     //Get the current viewer state (scale and offset)
