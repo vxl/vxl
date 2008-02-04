@@ -4,12 +4,11 @@
 // \author Tim Cootes
 
 #include <msm/msm_points.h>
-#include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_vector.h>
-#include <vcl_cstdlib.h>  // for vcl_atoi
+#include <vcl_cstdlib.h>  // for vcl_atoi() & vcl_abort()
 
 
 //=======================================================================
@@ -87,9 +86,9 @@ void msm_points::get_cog_and_scale(vgl_point_2d<double>& cog, double& scale) con
 
   // compute sum and sum of squares of elements
   double sx=0.0,s2x=0.0,sy=0.0,s2y=0.0;
-  for (;v!=end_v;v+=2) 
-  { 
-    sx+=v[0];  s2x+=v[0]*v[0]; 
+  for (;v!=end_v;v+=2)
+  {
+    sx+=v[0];  s2x+=v[0]*v[0];
     sy+=v[1];  s2y+=v[1]*v[1];
   }
 
@@ -113,7 +112,7 @@ void msm_points::translate_by(double tx, double ty)
   if (tx==0.0 && ty==0.0) return;
   double* v=v_.data_block();
   double* end_v=v+2*size();
-  for (;v!=end_v;v+=2) 
+  for (;v!=end_v;v+=2)
   {
     v[0]+=tx;
     v[1]+=ty;
@@ -125,7 +124,7 @@ void msm_points::transform_by(const vimt_transform_2d& t)
 {
   double* v=v_.data_block();
   double* end_v=v+2*size();
-  for (;v!=end_v;v+=2) 
+  for (;v!=end_v;v+=2)
   {
     vgl_point_2d<double> p = t(v[0],v[1]);
     v[0]=p.x(); v[1]=p.y();
@@ -133,7 +132,7 @@ void msm_points::transform_by(const vimt_transform_2d& t)
 }
 
 //: Bounding box of points
-void msm_points::get_bounds(vgl_point_2d<double>& b_lo, 
+void msm_points::get_bounds(vgl_point_2d<double>& b_lo,
                   vgl_point_2d<double>& b_hi) const
 {
   if (size()==0)
@@ -147,14 +146,13 @@ void msm_points::get_bounds(vgl_point_2d<double>& b_lo,
   const double* end_v=v+2*size();
   b_lo=vgl_point_2d<double>(v[0],v[1]);
   b_hi=b_lo;
-  for (;v!=end_v;v+=2) 
+  for (;v!=end_v;v+=2)
   {
     if (v[0]<b_lo.x()) b_lo.x()=v[0];
     if (v[0]>b_hi.x()) b_hi.x()=v[0];
     if (v[1]<b_lo.y()) b_lo.y()=v[1];
     if (v[1]>b_hi.y()) b_hi.y()=v[1];
   }
-
 }
 
 //: Equality test
@@ -178,28 +176,26 @@ bool msm_points::write_text_file(const vcl_string& path) const
 
   unsigned n = size();
   const double* v = v_.data_block();
-  afs<<"version: 1"<<vcl_endl;
-  afs<<"n_points: "<<n<<vcl_endl;
-  afs<<"{"<<vcl_endl;
+  afs << "version: 1\nn_points: " << n << "\n{" << vcl_endl;
   for (unsigned i=0;i<n;++i)
   {
     // Write out elements of point on a single line
-    afs<<v[2*i]<<" "<<v[2*i+1]<<vcl_endl;
+    afs << v[2*i] << ' ' << v[2*i+1] << vcl_endl;
   }
-  afs<<"}"<<vcl_endl;
+  afs << '}' << vcl_endl;
 
   afs.close();
 
   return true;
 }
 
-static bool read_points(vcl_istream& afs, 
+static bool read_points(vcl_istream& afs,
                         vnl_vector<double>& vec, unsigned n)
 {
   if (n>999999)
   {
-    vcl_cerr<<"msm_points read_points(): "
-      <<"Bizarre number of points specified : "<<n<<vcl_endl;
+    vcl_cerr << "msm_points read_points() :\n"
+             << "Bizarre number of points specified : " << n << vcl_endl;
     return false;
   }
 
@@ -209,9 +205,9 @@ static bool read_points(vcl_istream& afs,
   {
     if (afs.eof())
     {
-      vcl_cerr<<"msm_points read_points(): ";
-      vcl_cerr<<" EOF reached after reading "
-          <<i<<" of "<<n<<" points."<<vcl_endl;
+      vcl_cerr << "msm_points read_points() :\n"
+               << "EOF reached after reading "
+               << i << " of " << n << " points." << vcl_endl;
       return false;
     }
     afs>>v[0]>>v[1];
@@ -239,7 +235,7 @@ bool msm_points::read_text_file(const vcl_string& path)
       return read_points(afs, v_, n);
     }
 
-    vcl_cerr<< "Expecting <version:> got <" << label <<vcl_endl;
+    vcl_cerr << "Expecting <version:> got <" << label << vcl_endl;
     return false;
   }
 
@@ -247,8 +243,8 @@ bool msm_points::read_text_file(const vcl_string& path)
   afs >> ver;
   if (ver!=1)
   {
-    vcl_cerr<<"msm_points::read_text_file() ";
-    vcl_cerr<<"Cannot cope with version number "<<ver<<vcl_endl;
+    vcl_cerr << "msm_points::read_text_file() :\n"
+             << "Cannot cope with version number " << ver << vcl_endl;
     return false;
   }
 
@@ -281,7 +277,7 @@ bool msm_points::read_text_file(const vcl_string& path)
     }
     else
     {
-      vcl_cerr<<"Unexpected label: <"<<label<<vcl_endl;
+      vcl_cerr << "Unexpected label: <" << label << vcl_endl;
       return false;
     }
 
@@ -296,8 +292,8 @@ bool msm_points::read_text_file(const vcl_string& path)
 // Method: version_no
 //=======================================================================
 
-short msm_points::version_no() const 
-{ 
+short msm_points::version_no() const
+{
   return 1;
 }
 
@@ -317,9 +313,9 @@ vcl_string msm_points::is_a() const
   // required if data is present in this class
 void msm_points::print_summary(vcl_ostream& os) const
 {
-  os<<size()<<" pts: ";
+  os << size() << " pts: ";
   for (unsigned i=0;i<size();++i)
-    os<<"("<<v_[2*i]<<","<<v_[2*i+1]<<")";
+    os << '(' << v_[2*i] << ',' << v_[2*i+1] << ')';
 }
 
 //=======================================================================
@@ -348,15 +344,15 @@ void msm_points::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,v_);
       break;
     default:
-      vcl_cerr << "msm_points::b_read() ";
-      vcl_cerr << "Unexpected version number " << version << vcl_endl;
-      abort();
+      vcl_cerr << "msm_points::b_read() :\n"
+               << "Unexpected version number " << version << vcl_endl;
+      vcl_abort();
   }
 }
 
 
 //=======================================================================
-// Associated function: operator<< 
+// Associated function: operator<<
 //=======================================================================
 
 void vsl_b_write(vsl_b_ostream& bfs, const msm_points& b)
@@ -365,7 +361,7 @@ void vsl_b_write(vsl_b_ostream& bfs, const msm_points& b)
 }
 
 //=======================================================================
-// Associated function: operator>> 
+// Associated function: operator>>
 //=======================================================================
 
 void vsl_b_read(vsl_b_istream& bfs, msm_points& b)
@@ -374,7 +370,7 @@ void vsl_b_read(vsl_b_istream& bfs, msm_points& b)
 }
 
 //=======================================================================
-// Associated function: operator<< 
+// Associated function: operator<<
 //=======================================================================
 
 vcl_ostream& operator<<(vcl_ostream& os,const msm_points& b)
@@ -389,5 +385,5 @@ vcl_ostream& operator<<(vcl_ostream& os,const msm_points& b)
 //: Stream output operator for class reference
 void vsl_print_summary(vcl_ostream& os,const msm_points& b)
 {
- os<<b;
+ os << b;
 }
