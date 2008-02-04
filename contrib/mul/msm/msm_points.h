@@ -1,11 +1,12 @@
 #ifndef msm_points_h_
 #define msm_points_h_
-
 //:
 // \file
 // \brief Set of 2D points, stored in a vnl_vector (x0,y0,x1,y1...)
 // \author Tim Cootes
 
+#include <vcl_cassert.h>
+#include <vcl_iosfwd.h>
 #include <vcl_string.h>
 #include <vsl/vsl_fwd.h>
 #include <vnl/vnl_vector.h>
@@ -13,15 +14,16 @@
 
 //: Set of 2D points, stored in a vnl_vector (x0,y0,x1,y1...)
 //  Get at raw vector with vector()
-class msm_points {
-private:
+class msm_points
+{
+ private:
   vnl_vector<double> v_;
-public:
+ public:
 
-    //: Dflt ctor
+  // Dflt ctor
   msm_points();
 
-    //: Destructor
+  // Destructor
   ~msm_points();
 
   //: Vector storing point ordinates as (x0,y0,x1,y1...)
@@ -66,34 +68,33 @@ public:
   void transform_by(const vimt_transform_2d& t);
 
   //: Bounding box of points
-  void get_bounds(vgl_point_2d<double>& b_lo, 
+  void get_bounds(vgl_point_2d<double>& b_lo,
                   vgl_point_2d<double>& b_hi) const;
 
-    //: Write out points to named text file
-    //  Returns true if successful.
+  //: Write out points to named text file
+  //  Returns true if successful.
   bool write_text_file(const vcl_string& path) const;
 
-    //: Read in points from named text file
-    //  Returns true if successful.
+  //: Read in points from named text file
+  //  Returns true if successful.
   bool read_text_file(const vcl_string& path);
 
-
-    //: Version number for I/O
+  //: Version number for I/O
   short version_no() const;
 
-    //: Name of the class
+  //: Name of the class
   vcl_string is_a() const;
 
-    //: Print class to os
+  //: Print class to os
   void print_summary(vcl_ostream& os) const;
 
-    //: Save class to binary file stream
+  //: Save class to binary file stream
   void b_write(vsl_b_ostream& bfs) const;
 
-    //: Load class from binary file stream
+  //: Load class from binary file stream
   void b_read(vsl_b_istream& bfs);
 
-    //: Equality test
+  //: Equality test
   bool operator==(const msm_points& points);
 };
 
@@ -112,5 +113,3 @@ vcl_ostream& operator<<(vcl_ostream& os,const msm_points& pts);
 void vsl_print_summary(vcl_ostream& os,const msm_points& pts);
 
 #endif // msm_points_h_
-
-
