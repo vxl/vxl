@@ -85,7 +85,7 @@ bsta_gaussian_sphere<T,n>::compute_det()
 }
 
 
-#define DBSTA_GAUSSIAN_SPHERE_INSTANTIATE(T,n) \
+#define BSTA_GAUSSIAN_SPHERE_INSTANTIATE(T,n) \
 template class bsta_gaussian_sphere<T,n >
 
 

@@ -131,7 +131,7 @@ T bsta_gaussian_indep<T,n>::probability(const vnl_vector_fixed<T,n>& min_pt,
 }
 
 
-#define DBSTA_GAUSSIAN_INDEP_INSTANTIATE(T,n) \
+#define BSTA_GAUSSIAN_INDEP_INSTANTIATE(T,n) \
 template class bsta_gaussian_indep<T,n >
 
 

@@ -1,3 +1,3 @@
 #include <bsta/bsta_gaussian_sphere.txx>
 
-DBSTA_GAUSSIAN_SPHERE_INSTANTIATE(double, 3);
+BSTA_GAUSSIAN_SPHERE_INSTANTIATE(double, 3);

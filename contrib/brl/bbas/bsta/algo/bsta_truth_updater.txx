@@ -29,7 +29,7 @@ bsta_truth_updater<T>::operator() ( bsta_distribution<T>& d,
   (*updater_)(mixture.distribution(index),data);
 }
 
-#define DBSTA_TRUTH_UPDATER_INSTANTIATE(T) \
+#define BSTA_TRUTH_UPDATER_INSTANTIATE(T) \
 template class bsta_truth_updater<T >
 
 #endif // bsta_truth_updater_txx_

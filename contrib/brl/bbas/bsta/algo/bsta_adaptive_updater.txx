@@ -132,7 +132,7 @@ bsta_mg_grimson_statistical_updater<mix_dist_>::update( mix_dist_& mix,
 }
 
 
-#define DBSTA_ADAPTIVE_UPDATER_INSTANTIATE(T) \
+#define BSTA_ADAPTIVE_UPDATER_INSTANTIATE(T) \
 template class bsta_mg_statistical_updater<T >; \
 template class bsta_mg_grimson_statistical_updater<T >
 
