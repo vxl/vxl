@@ -179,10 +179,10 @@ mfpf_point_finder_builder* mfpf_profile_pdf_builder::clone() const
 
 void mfpf_profile_pdf_builder::print_summary(vcl_ostream& os) const
 {
-  os << "{ step_size: " << step_size_;
-     << " size: [" << ilo_ << ',' << ihi_ << "] ";
-     << " search_ni: " << search_ni_;
-     << " pdf_builder: " << pdf_builder_;
+  os << "{ step_size: " << step_size_
+     << " size: [" << ilo_ << ',' << ihi_ << "] "
+     << " search_ni: " << search_ni_
+     << " pdf_builder: " << pdf_builder_
      << '}';
 }
 
