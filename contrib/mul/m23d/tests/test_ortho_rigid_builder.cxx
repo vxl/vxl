@@ -26,21 +26,21 @@ void test_ortho_rigid_builder()
         C(2,c)=k*vcl_sqrt(1.0/3.0);
       }
 
-  vcl_cout<<"C="<<C<<vcl_endl;
-  vcl_cout<<"C.rows()="<<C.rows()<<vcl_endl;
-  vcl_cout<<"C.cols()="<<C.cols()<<vcl_endl;
-  
-  
-  vnl_matrix<double> D=P*C;
-  
-  //vcl_cout<<"P="<<P<<vcl_endl;
-  //vcl_cout<<"P.rows()="<<P.rows()<<vcl_endl;
-  //vcl_cout<<"P.cols()="<<P.cols()<<vcl_endl;
-  
-  //vcl_cout<<"D="<<D<<vcl_endl;
-  //vcl_cout<<"D.rows()="<<D.rows()<<vcl_endl;
-  //vcl_cout<<"D.cols()="<<D.cols()<<vcl_endl;
+  vcl_cout<<"C="<<C<<vcl_endl
+          <<"C.rows()="<<C.rows()<<vcl_endl
+          <<"C.cols()="<<C.cols()<<vcl_endl;
 
+
+  vnl_matrix<double> D=P*C;
+#if 0
+  vcl_cout<<"P="<<P<<vcl_endl
+          <<"P.rows()="<<P.rows()<<vcl_endl
+          <<"P.cols()="<<P.cols()<<vcl_endl
+
+          <<"D="<<D<<vcl_endl
+          <<"D.rows()="<<D.rows()<<vcl_endl
+          <<"D.cols()="<<D.cols()<<vcl_endl;
+#endif
 
   m23d_ortho_rigid_builder builder;
   builder.reconstruct(D);
@@ -98,8 +98,8 @@ void test_ortho_rigid_builder()
   vcl_cout<<"P0:"<<vcl_endl<<P_1<<vcl_endl
           <<"P0.P0'="<<vcl_endl<<P_1*P_1.transpose()<<vcl_endl;
 
-  vcl_cout<<"=== Test refinement ==="<<vcl_endl;
   builder.refine();
+  vcl_cout<<"=== Test refinement ==="<<vcl_endl;
   P1  = builder.projections();
   P3D = builder.shape_3d();
   TEST_NEAR("RMS error on projection",(P1*P3D-D).rms(),0,0.1);
@@ -107,10 +107,10 @@ void test_ortho_rigid_builder()
   TEST_NEAR("RMS error on P3D",(P3D-C).rms(),0,0.1);
   TEST_NEAR("First projection is identity",
             (P1.extract(2,3)-pure_P0).rms(),0,0.05);
-
-
-//  vcl_cout<<"Recovered 3D points: "<<vcl_endl<<P3D<<vcl_endl
-//          <<"True 3D points: "<<vcl_endl<<C<<vcl_endl;
+#if 0
+  vcl_cout<<"Recovered 3D points: "<<vcl_endl<<P3D<<vcl_endl
+          <<"True 3D points: "<<vcl_endl<<C<<vcl_endl;
+#endif
 }
 
 TESTMAIN(test_ortho_rigid_builder);
