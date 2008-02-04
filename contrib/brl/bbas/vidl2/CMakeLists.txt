@@ -38,6 +38,7 @@ ENDIF(DIRECTSHOW_FOUND)
 
 
 SET(vidl2_sources
+    vidl2_config.h.in
     vidl2_pixel_format.h           vidl2_pixel_format.cxx
     vidl2_color.h                  vidl2_color.cxx
     vidl2_frame.h                  vidl2_frame.cxx           vidl2_frame_sptr.h
@@ -69,7 +70,21 @@ IF( FFMPEG_FOUND )
       vidl2_ffmpeg_init.h             vidl2_ffmpeg_init.cxx
       vidl2_ffmpeg_convert.h          vidl2_ffmpeg_convert.cxx
   )
+# Stub implementation, when ffmeg is not available
+ELSE( FFMPEG_FOUND )
+  SET(vidl2_sources ${vidl2_sources}
+      vidl2_ffmpeg_istream_stub.txx
+      vidl2_ffmpeg_ostream_stub.txx
+  )
 ENDIF( FFMPEG_FOUND )
+
+# Earlier implementations
+IF( FALSE )
+  SET(vidl2_sources ${vidl2_sources}
+      vidl2_ffmpeg_istream_v1.txx     vidl2_ffmpeg_ostream_v1.txx
+      vidl2_ffmpeg_istream_v2.txx     vidl2_ffmpeg_ostream_v2.txx
+  )
+ENDIF( FALSE )
 
 IF( DC1394_FOUND )
   SET(vidl2_sources ${vidl2_sources}
