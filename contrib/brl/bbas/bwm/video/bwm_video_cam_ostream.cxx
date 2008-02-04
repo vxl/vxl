@@ -1,8 +1,10 @@
 #include "bwm_video_cam_ostream.h"
+//:
+// \file
 #include <vul/vul_file.h>
 #include <vul/vul_sprintf.h>
 #include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_binary_loader.h>
+//#include <vsl/vsl_binary_loader.h>
 
 //------------------------------------------------------------------------------
 
@@ -85,12 +87,12 @@ bool
 bwm_video_cam_ostream::
 write_camera(const vpgl_perspective_camera<double>*  cam)
 {
-  if(!cam)
+  if (!cam)
     return false;
   vcl_string file_name = next_file_name();
   ++index_;
   vsl_b_ofstream bp_out(file_name.c_str());
-  if(!bp_out)
+  if (!bp_out)
     return false;
   cam->b_write(bp_out);
   bp_out.close();

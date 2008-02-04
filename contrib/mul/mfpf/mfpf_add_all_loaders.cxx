@@ -1,3 +1,6 @@
+#include "mfpf_add_all_loaders.h"
+//:
+// \file
 #include <mbl/mbl_cloneables_factory.h>
 #include <mfpf/mfpf_edge_finder.h>
 #include <mfpf/mfpf_edge_finder_builder.h>

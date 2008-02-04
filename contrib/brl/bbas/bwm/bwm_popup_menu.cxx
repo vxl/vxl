@@ -1,4 +1,7 @@
 #include "bwm_popup_menu.h"
+//:
+// \file
+
 #include "bwm_tableau_img.h"
 #include "bwm_tableau_rat_cam.h"
 #include "bwm_tableau_video.h"
@@ -8,7 +11,7 @@
 class bwm_vertex_toggle_command : public vgui_command
 {
  public:
-  bwm_vertex_toggle_command(bwm_tableau_cam* t, const void* boolref) : 
+  bwm_vertex_toggle_command(bwm_tableau_cam* t, const void* boolref) :
        tab(t), bref((bool*) boolref) {}
   void execute() { *bref = !(*bref); tab->observer()->show_vertices(*bref); }
 
@@ -18,7 +21,6 @@ class bwm_vertex_toggle_command : public vgui_command
 
 void bwm_popup_menu::get_menu(vgui_menu &menu)
 {
-
   vgui_menu submenu;
 
   bwm_tableau_img* img_tab = static_cast<bwm_tableau_img* > (tab_.as_pointer());
@@ -56,7 +58,7 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
     new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::clear_poly),
     vgui_key('d'), vgui_modifier(vgui_SHIFT));
   selmenu.separator();
-  
+
   selmenu.add( "Delete All",
     new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::clear_all),
     vgui_key('a'), vgui_modifier(vgui_SHIFT));
@@ -101,34 +103,34 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
   menu.add( "Deselect All Objects",
     new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::deselect_all),
     vgui_key('-'));
-  
+
   // add more based on the tableau type
   // all camera tableau children will do the following menu items
-  if ((tab_->type_name().compare("bwm_tableau_proj_cam") == 0) || 
-    (tab_->type_name().compare("bwm_tableau_rat_cam") == 0)  || 
-    (tab_->type_name().compare("bwm_tableau_video") == 0)) {
-
+  if ((tab_->type_name().compare("bwm_tableau_proj_cam") == 0) ||
+    (tab_->type_name().compare("bwm_tableau_rat_cam") == 0)  ||
+    (tab_->type_name().compare("bwm_tableau_video") == 0))
+  {
     bwm_tableau_cam* cam_tab = static_cast<bwm_tableau_cam* > (tab_.as_pointer());
     vgui_menu reg_submenu, threed_menu;
     menu.separator();
-    menu.add( "Set as Master", new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::set_master)); 
-  
-    reg_submenu.add( "Set as EO", new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::set_eo)); 
+    menu.add( "Set as Master", new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::set_master));
+
+    reg_submenu.add( "Set as EO", new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::set_eo));
     reg_submenu.separator();
-    reg_submenu.add( "Set as Other Mode", new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::set_other_mode)); 
+    reg_submenu.add( "Set as Other Mode", new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::set_other_mode));
     reg_submenu.separator();
-    
+
     if (tab_->type_name().compare("bwm_tableau_rat_cam") == 0) {
       bwm_tableau_rat_cam* rat_cam_tab = static_cast<bwm_tableau_rat_cam* > (tab_.as_pointer());
-      reg_submenu.add( "Register Image to World Pt", 
+      reg_submenu.add( "Register Image to World Pt",
         new vgui_command_simple<bwm_tableau_rat_cam>(rat_cam_tab,
         &bwm_tableau_rat_cam::adjust_camera_to_world_pt));
       reg_submenu.separator();
-      reg_submenu.add( "Register to Master", 
-        new vgui_command_simple<bwm_tableau_rat_cam>(rat_cam_tab, 
+      reg_submenu.add( "Register to Master",
+        new vgui_command_simple<bwm_tableau_rat_cam>(rat_cam_tab,
         &bwm_tableau_rat_cam::register_search_to_master));
       reg_submenu.separator();
-      reg_submenu.add( "Transfer Edges from Master", 
+      reg_submenu.add( "Transfer Edges from Master",
         new vgui_command_simple<bwm_tableau_rat_cam>(rat_cam_tab,
         &bwm_tableau_rat_cam::project_edges_from_master));
     }
@@ -140,51 +142,51 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
     mesh_submenu.add( ((cam_tab->show_vertices_)?on:off)+"show vertices", new bwm_vertex_toggle_command(cam_tab, &(cam_tab->show_vertices_)));
     mesh_submenu.separator();
 
-    mesh_submenu.add("Create Mesh Polygon", 
+    mesh_submenu.add("Create Mesh Polygon",
       new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::create_polygon_mesh),
       vgui_key('p'), vgui_modifier(vgui_SHIFT) );
 
     mesh_submenu.separator();
-    mesh_submenu.add("Triangulate..", 
+    mesh_submenu.add("Triangulate..",
       new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::triangulate_mesh),
       vgui_key('t'), vgui_modifier(vgui_SHIFT));
     mesh_submenu.separator();
 
-    mesh_submenu.add( "Create Inner Face", 
+    mesh_submenu.add( "Create Inner Face",
       new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::create_inner_face));
     mesh_submenu.separator();
 
-    mesh_submenu.add( "Move Face with Selected Vertex", 
+    mesh_submenu.add( "Move Face with Selected Vertex",
       new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::move_obj_by_vertex),
       vgui_key('m'), vgui_modifier(vgui_SHIFT));
     mesh_submenu.separator();
 
-    mesh_submenu.add( "Extrude Face", 
+    mesh_submenu.add( "Extrude Face",
       new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::extrude_face),
       vgui_key('e'), vgui_modifier(vgui_SHIFT));
     mesh_submenu.separator();
 
-    mesh_submenu.add( "Divide Face", 
+    mesh_submenu.add( "Divide Face",
       new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::divide_face));
     mesh_submenu.separator();
 
-    mesh_submenu.add("Scan Regions", 
+    mesh_submenu.add("Scan Regions",
       new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::scan_regions));
 
     if (tab_->type_name().compare("bwm_tableau_rat_cam") == 0) {
       bwm_tableau_rat_cam* rat_cam_tab = static_cast<bwm_tableau_rat_cam* > (tab_.as_pointer());
       mesh_submenu.separator();
-      mesh_submenu.add( "Center on Geographic Position", 
+      mesh_submenu.add( "Center on Geographic Position",
         new vgui_command_simple<bwm_tableau_rat_cam>(rat_cam_tab,
         &bwm_tableau_rat_cam::center_pos));
     }
 
     vgui_menu del_menu;
-    del_menu.add( "Delete Selected", 
+    del_menu.add( "Delete Selected",
       new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::delete_object));
     del_menu.separator();
 
-    del_menu.add( "Delete All", 
+    del_menu.add( "Delete All",
       new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::delete_all));
     mesh_submenu.separator();
     mesh_submenu.add("Delete", del_menu);
@@ -193,7 +195,7 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
 
     menu.separator();
     vgui_menu corr_menu;
-    corr_menu.add( "Move (selected)" , 
+    corr_menu.add( "Move (selected)" ,
       new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::move_corr));
     corr_menu.separator();
 
@@ -201,81 +203,80 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
       new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::set_corr_to_vertex));
     corr_menu.separator();
 
-    corr_menu.add( "Save World Point (selected)" , 
+    corr_menu.add( "Save World Point (selected)" ,
       new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::world_pt_corr));
     menu.add( "Image Correspondence", corr_menu);
 
     menu.separator();
     vgui_menu plane_submenu;
-    plane_submenu.add( "Define XY Projection Plane", 
+    plane_submenu.add( "Define XY Projection Plane",
       new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::define_xy_proj_plane));
     plane_submenu.separator();
 
-    plane_submenu.add( "Define YZ Projection Plane", 
+    plane_submenu.add( "Define YZ Projection Plane",
       new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::define_yz_proj_plane));
     plane_submenu.separator();
 
-    plane_submenu.add( "Define XZ Projection Plane", 
+    plane_submenu.add( "Define XZ Projection Plane",
       new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::define_xz_proj_plane));
     plane_submenu.separator();
 
-    plane_submenu.add( "Selected Face", 
+    plane_submenu.add( "Selected Face",
       new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::select_proj_plane));
     menu.add("Projection Plane", plane_submenu);
 
     if (tab_->type_name().compare("bwm_tableau_rat_cam") == 0) {
       bwm_tableau_rat_cam* rat_cam_tab = static_cast<bwm_tableau_rat_cam* > (tab_.as_pointer());
-      
-      
+
       menu.separator();
       vgui_menu lvcs_submenu;
       //lvcs_submenu.add( "Load LVCS", new bwm_load_lvcs_command(this));
       //lvcs_submenu.add( "Save LVCS", new bwm_save_lvcs_command(this));
-      lvcs_submenu.add( "Define LVCS", 
+      lvcs_submenu.add( "Define LVCS",
         new vgui_command_simple<bwm_tableau_rat_cam>(rat_cam_tab,
-        &bwm_tableau_rat_cam::define_lvcs)); 
+        &bwm_tableau_rat_cam::define_lvcs));
       //lvcs_submenu.add( "Convert File to LVCS", new bwm_convert_to_lvcs_command(this));
       lvcs_submenu.separator();
-      lvcs_submenu.add( "Adjust Camera To LVCS", 
+      lvcs_submenu.add( "Adjust Camera To LVCS",
         new vgui_command_simple<bwm_tableau_rat_cam>(rat_cam_tab,
-        &bwm_tableau_rat_cam::adjust_camera_to_world_pt)); 
+        &bwm_tableau_rat_cam::adjust_camera_to_world_pt));
       menu.add("LVCS", lvcs_submenu);
     }
-  } 
+  }
 
   // video tableau specific menu items
   if (tab_->type_name().compare("bwm_tableau_video") == 0) {
     bwm_tableau_video* video_tab = static_cast<bwm_tableau_video* > (tab_.as_pointer());
     menu.separator();
     vgui_menu video_submenu;
-    video_submenu.add( "Play", 
-      new vgui_command_simple<bwm_tableau_video>(video_tab,&bwm_tableau_video::play)); 
+    video_submenu.add( "Play",
+      new vgui_command_simple<bwm_tableau_video>(video_tab,&bwm_tableau_video::play));
     video_submenu.separator();
 
-    video_submenu.add( "Stop", 
-      new vgui_command_simple<bwm_tableau_video>(video_tab,&bwm_tableau_video::stop)); 
+    video_submenu.add( "Stop",
+      new vgui_command_simple<bwm_tableau_video>(video_tab,&bwm_tableau_video::stop));
     video_submenu.separator();
 
-    video_submenu.add( "Pause", 
-      new vgui_command_simple<bwm_tableau_video>(video_tab,&bwm_tableau_video::pause)); 
+    video_submenu.add( "Pause",
+      new vgui_command_simple<bwm_tableau_video>(video_tab,&bwm_tableau_video::pause));
     video_submenu.separator();
 
-    video_submenu.add( "Goto Frame", 
-      new vgui_command_simple<bwm_tableau_video>(video_tab,&bwm_tableau_video::seek)); 
+    video_submenu.add( "Goto Frame",
+      new vgui_command_simple<bwm_tableau_video>(video_tab,&bwm_tableau_video::seek));
     video_submenu.separator();
 
-    video_submenu.add( "Next Frame", 
-      new vgui_command_simple<bwm_tableau_video>(video_tab,&bwm_tableau_video::next_frame)); 
+    video_submenu.add( "Next Frame",
+      new vgui_command_simple<bwm_tableau_video>(video_tab,&bwm_tableau_video::next_frame));
     video_submenu.separator();
 
-    video_submenu.add( "Previous Frame", 
-      new vgui_command_simple<bwm_tableau_video>(video_tab,&bwm_tableau_video::previous_frame)); 
+    video_submenu.add( "Previous Frame",
+      new vgui_command_simple<bwm_tableau_video>(video_tab,&bwm_tableau_video::previous_frame));
     menu.add("Video", video_submenu);
     menu.separator();
 
     vgui_menu video_corr_submenu;
-    video_corr_submenu.add( "Add Match", 
-      new vgui_command_simple<bwm_tableau_video>(video_tab,&bwm_tableau_video::add_match)); 
+    video_corr_submenu.add( "Add Match",
+      new vgui_command_simple<bwm_tableau_video>(video_tab,&bwm_tableau_video::add_match));
     video_corr_submenu.separator();
 
     video_corr_submenu.add( "Remove Selected Corr Match",
@@ -285,37 +286,37 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
 
     video_corr_submenu.add( "Remove Selected Corr ",
                        new vgui_command_simple<bwm_tableau_video>(video_tab,
-                       &bwm_tableau_video::remove_selected_corr)); 
+                       &bwm_tableau_video::remove_selected_corr));
     video_corr_submenu.separator();
 
     video_corr_submenu.add( "Track Selected Corr ",
                        new vgui_command_simple<bwm_tableau_video>(video_tab,
-                       &bwm_tableau_video::set_selected_corr_for_tracking)); 
+                       &bwm_tableau_video::set_selected_corr_for_tracking));
     video_corr_submenu.separator();
 
     video_corr_submenu.add( "Stop Tracking Corr ",
                        new vgui_command_simple<bwm_tableau_video>(video_tab,
-                       &bwm_tableau_video::unset_selected_corr_for_tracking)); 
+                       &bwm_tableau_video::unset_selected_corr_for_tracking));
     video_corr_submenu.separator();
 
     video_corr_submenu.add( "Display Corrs",
                        new vgui_command_simple<bwm_tableau_video>(video_tab,
-                       &bwm_tableau_video::display_video_corrs)); 
+                       &bwm_tableau_video::display_video_corrs));
     video_corr_submenu.separator();
 
     video_corr_submenu.add( "Display Current Corrs",
                        new vgui_command_simple<bwm_tableau_video>(video_tab,
-                       &bwm_tableau_video::display_current_video_corrs)); 
+                       &bwm_tableau_video::display_current_video_corrs));
     video_corr_submenu.separator();
 
     video_corr_submenu.add( "Clear Corr Display",
                        new vgui_command_simple<bwm_tableau_video>(video_tab,
-                       &bwm_tableau_video::clear_video_corrs_display)); 
+                       &bwm_tableau_video::clear_video_corrs_display));
     video_corr_submenu.separator();
 
     video_corr_submenu.add( "Toggle World Point Display",
                        new vgui_command_simple<bwm_tableau_video>(video_tab,
-                       &bwm_tableau_video::toggle_world_pt_display)); 
-    menu.add("Video Correspondence", video_corr_submenu);  
+                       &bwm_tableau_video::toggle_world_pt_display));
+    menu.add("Video Correspondence", video_corr_submenu);
   }
 }

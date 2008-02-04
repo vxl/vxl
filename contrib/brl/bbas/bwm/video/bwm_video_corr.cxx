@@ -1,4 +1,6 @@
 #include "bwm_video_corr.h"
+//:
+// \file
 #include "bwm_video_site_io_defs.h"
 #include <vsl/vsl_basic_xml_element.h>
 #include <vnl/vnl_numeric_traits.h>
@@ -29,7 +31,7 @@ bool bwm_video_corr::add(unsigned frame, vgl_point_2d<double> const& pt)
   vcl_map<unsigned, vgl_point_2d<double> >::iterator iter = matches_.begin();
   iter = matches_.find(frame);
   //if so return false
-  if(iter != matches_.end())
+  if (iter != matches_.end())
     return false;
   matches_[frame]=pt;
   return true;
@@ -40,8 +42,8 @@ unsigned bwm_video_corr::min_frame()
 {
   unsigned min = vnl_numeric_traits<unsigned>::maxval;
   vcl_map<unsigned, vgl_point_2d<double> >::iterator mit = matches_.begin();
-  for(; mit != matches_.end(); ++mit)
-    if((*mit).first < min)
+  for (; mit != matches_.end(); ++mit)
+    if ((*mit).first < min)
       min = (*mit).first;
   return min;
 }
@@ -51,30 +53,29 @@ unsigned bwm_video_corr::max_frame()
 {
   unsigned max = 0;
   vcl_map<unsigned, vgl_point_2d<double> >::iterator mit = matches_.begin();
-  for(; mit != matches_.end(); ++mit)
-    if((*mit).first > max)
+  for (; mit != matches_.end(); ++mit)
+    if ((*mit).first > max)
       max = (*mit).first;
   return max;
-
 }
 
 bool bwm_video_corr::nearest_frame(unsigned frame, unsigned& near_frame)
 {
-  if(!matches_.size()) return false;
+  if (!matches_.size()) return false;
   bool found = false;
   unsigned closest = vnl_numeric_traits<unsigned>::maxval;
   vcl_map<unsigned, vgl_point_2d<double> >::iterator mit = matches_.begin();
-  for(; mit != matches_.end(); ++mit)
-    {
-      unsigned fr = (*mit).first;
-      int dif = frame - fr;
-      if(dif<0) dif = -dif;
-      unsigned d = static_cast<unsigned>(dif);
-      if(d<closest){
-        closest = d;
-        near_frame = fr;
-        found = true;
-      }
+  for (; mit != matches_.end(); ++mit)
+  {
+    unsigned fr = (*mit).first;
+    int dif = frame - fr;
+    if (dif<0) dif = -dif;
+    unsigned d = static_cast<unsigned>(dif);
+    if (d<closest){
+      closest = d;
+      near_frame = fr;
+      found = true;
+    }
   }
   return found;
 }
@@ -94,14 +95,14 @@ void bwm_video_corr::x_write(vcl_ostream &os)
 
    vcl_map<unsigned, vgl_point_2d<double> >::iterator
      iter = matches_.begin();
-   for(; iter != matches_.end(); ++iter)
-     {
-       vgl_point_2d<double>& pt = (*iter).second;
-       vsl_basic_xml_element ce(CORR_ELE);
-       ce.add_attribute("fr", static_cast<int>((*iter).first));
-       ce.add_attribute("u", pt.x());
-       ce.add_attribute("v", pt.y());
-       ce.x_write(os);
-     }
+   for (; iter != matches_.end(); ++iter)
+   {
+     vgl_point_2d<double>& pt = (*iter).second;
+     vsl_basic_xml_element ce(CORR_ELE);
+     ce.add_attribute("fr", static_cast<int>((*iter).first));
+     ce.add_attribute("u", pt.x());
+     ce.add_attribute("v", pt.y());
+     ce.x_write(os);
+   }
    corr.x_write_close(os);
 }

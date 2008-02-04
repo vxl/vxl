@@ -1,5 +1,7 @@
 #ifndef mfpf_add_all_loaders_h_
 #define mfpf_add_all_loaders_h_
+//:
+// \file
 
 //: Add all binary loaders and factory objects available in mfpf
 //  Necessary for binary loading of derived classes by

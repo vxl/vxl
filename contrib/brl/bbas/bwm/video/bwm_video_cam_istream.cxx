@@ -1,9 +1,11 @@
 #include "bwm_video_cam_istream.h"
+//:
+// \file
 #include <vcl_algorithm.h>
 #include <vul/vul_file_iterator.h>
 #include <vul/vul_file.h>
 #include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_binary_loader.h>
+//#include <vsl/vsl_binary_loader.h>
 
 //: The initial camera index
 // \note the initial camera index is invalid until advance() is called
@@ -57,7 +59,7 @@ open(const vcl_vector<vcl_string>& paths)
   cam_paths_.clear();
   cam_paths_ = paths;
   index_ = INIT_INDEX;
-  if(current_camera_)
+  if (current_camera_)
     delete current_camera_;
   current_camera_ = NULL;
   return !cam_paths_.empty();
@@ -71,7 +73,7 @@ close()
 {
   cam_paths_.clear();
   index_ = INIT_INDEX;
-  if(current_camera_)
+  if (current_camera_)
     delete current_camera_;
   current_camera_ = NULL;
 }
@@ -82,10 +84,10 @@ bool
 bwm_video_cam_istream::
 advance()
 {
-  if(current_camera_)
+  if (current_camera_)
     delete current_camera_;
   current_camera_ = NULL;
-  if(index_ < cam_paths_.size() || index_ == INIT_INDEX )
+  if (index_ < cam_paths_.size() || index_ == INIT_INDEX )
     return ++index_ < cam_paths_.size();
 
   return false;
@@ -106,9 +108,9 @@ vpgl_perspective_camera<double>*
 bwm_video_cam_istream::current_camera()
 {
   if (is_valid()){
-    if(!current_camera_){
+    if (!current_camera_){
       vsl_b_ifstream bp_in(cam_paths_[index_].c_str());
-      vpgl_perspective_camera<double>* P_in = 
+      vpgl_perspective_camera<double>* P_in =
         new vpgl_perspective_camera<double>();
       P_in->b_read(bp_in);
       bp_in.close();
@@ -127,8 +129,8 @@ bwm_video_cam_istream::
 seek_camera(unsigned int camera_number)
 {
   if (is_open() && camera_number < cam_paths_.size()){
-    if(index_ != camera_number)
-      if(current_camera_){
+    if (index_ != camera_number)
+      if (current_camera_){
         delete current_camera_;
         current_camera_ = NULL;
       }

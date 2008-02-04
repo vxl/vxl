@@ -1,6 +1,7 @@
 #ifndef bwm_observer_rat_cam_h_
 #define bwm_observer_rat_cam_h_
-
+//:
+// \file
 #include "bwm_observer_cam.h"
 
 #include <vcl_iosfwd.h>
@@ -18,15 +19,15 @@ class bwm_observer_rat_cam : public bwm_observer_cam
  public:
 
   typedef bwm_observer_cam base;
-
-  //bwm_observer_rat_cam() {}
-
+#if 0
+  bwm_observer_rat_cam() {}
+  bwm_observer_cam(img, camera, cam_path) { }
+#endif
   bwm_observer_rat_cam(bgui_image_tableau_sptr img,
-    vcl_string& name, 
-    vcl_string& image_path, 
-    vcl_string& cam_path, 
+    vcl_string& name,
+    vcl_string& image_path,
+    vcl_string& cam_path,
     bool display_image_path);
-    //: bwm_observer_cam(img, camera, cam_path) { }
 
   // set the initial projection plane to z=0
   bwm_observer_rat_cam(bgui_image_tableau_sptr img, const char* n="unnamed")
@@ -65,7 +66,8 @@ class bwm_observer_rat_cam : public bwm_observer_cam
   void set_lvcs_at_selected_vertex();
   void define_lvcs(float x1, float y1);
 
-  //*********** Save methods
+  // *********** Save methods ******************
+
   void save_selected();
   void save_all();
   void save_gml();
@@ -75,18 +77,14 @@ class bwm_observer_rat_cam : public bwm_observer_cam
 
   void generate_textures();
 
-  //
   // given that there exists at least one world_to_image correspondence
   // in the site align the camera of this observer to that world point
-  //
   void adjust_camera_to_world_pt();
 
-  //
   // project edges from the master to this image using the
   // master's projection plane to transfer. Just a temporary experiment
   // to understand how edges behave across image resolution and sensor
   // modality. **Not to be used in production**
-  //
   void project_edges_from_master();
 
   // project edges from the master to a target search image and register

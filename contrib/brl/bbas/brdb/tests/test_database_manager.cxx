@@ -1,4 +1,6 @@
 #include <testlib/testlib_test.h>
+//:
+// \file
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_tuple.h>
 #include <brdb/brdb_relation.h>
@@ -21,15 +23,14 @@ MAIN( test_database_manager )
   vcl_vector<vcl_string> r1_names(3);
   vcl_vector<vcl_string> r1_types(3);
   vcl_vector<brdb_tuple_sptr> r1_tuples(20);
-  
+
   vcl_vector<vcl_string> r2_names(2);
   vcl_vector<vcl_string> r2_types(2);
   vcl_vector<brdb_tuple_sptr> r2_tuples(30);
-  
+
   vcl_vector<vcl_string> r3_names(2);
   vcl_vector<vcl_string> r3_types(2);
   vcl_vector<brdb_tuple_sptr> r3_tuples(40);
-
 
   r1_names[0] = "ID";
   r1_names[1] = "Name";
@@ -39,7 +40,7 @@ MAIN( test_database_manager )
   r1_types[1] = brdb_value_t<vcl_string>::type();
   r1_types[2] = brdb_value_t<bool>::type();
 
-  for(int i=0; i<20; i++)
+  for (int i=0; i<20; i++)
   {
     int ID = 100+i;
     vcl_stringstream SS;
@@ -47,8 +48,8 @@ MAIN( test_database_manager )
     vcl_string name;
     SS >> name;
     bool gender;
-    
-    if(i%2)
+
+    if (i%2)
       gender = true;
     else
       gender = false;
@@ -62,11 +63,10 @@ MAIN( test_database_manager )
   r2_names[0] = "ID";
   r2_names[1] = "Age";
 
-
   r2_types[0] = brdb_value_t<int>::type();
   r2_types[1] = brdb_value_t<double>::type();
 
-  for(int i=0; i<30; i++)
+  for (int i=0; i<30; i++)
   {
     int ID = 100+i;
     double age = 20.0+i*0.1;
@@ -76,16 +76,14 @@ MAIN( test_database_manager )
   }
 
   brdb_relation_sptr r2 = new brdb_relation(r2_names, r2_tuples, r2_types);
-  
 
   r3_names[0] = "ID";
   r3_names[1] = "Department";
 
-
   r3_types[0] = brdb_value_t<int>::type();
   r3_types[1] = brdb_value_t<vcl_string>::type();
 
-  for(int i=0; i<40; i++)
+  for (int i=0; i<40; i++)
   {
     int ID = 100+i;
     vcl_stringstream SS;
@@ -98,7 +96,6 @@ MAIN( test_database_manager )
   }
 
   brdb_relation_sptr r3 = new brdb_relation(r3_names, r3_tuples, r3_types);
-
 
   ////////////////////////////////////////////////////////////////////////////
   //: example: creating database using relations
@@ -113,7 +110,6 @@ MAIN( test_database_manager )
   relation_names.push_back("name_gender");
   relation_names.push_back("age");
   relation_names.push_back("department");
-
 
   brdb_database_sptr test_db = new brdb_database(test_relations, relation_names);
   test_db->print();
@@ -147,12 +143,10 @@ MAIN( test_database_manager )
   brdb_database_manager::instance()->load_database("test_database_manager_bio.vsl");
   brdb_database_manager::instance()->print_database();
 
-
-
   brdb_database_manager::instance()->clear_relation("age");
   brdb_database_manager::instance()->print_database();
   TEST("clear_relation()", true, true);
-  
+
   vcl_set<vcl_string> names1;
   names1.insert("age");
   names1.insert("name_gender");
@@ -182,8 +176,7 @@ MAIN( test_database_manager )
   brdb_database_manager::instance()->print_database();
   TEST("add_relation()", true, true);
 
-
-  for(int i=0; i<30;i++)
+  for (int i=0; i<30;i++)
   brdb_database_manager::instance()->add_tuple("age", r2_tuples[i]);
   brdb_database_manager::instance()->print_database();
   TEST("add_relation()", true, true);
@@ -194,7 +187,6 @@ MAIN( test_database_manager )
   TEST("add_tuple()", true, true);
 
   brdb_database_manager::instance()->print_database();
-
 
   ////////////////////////////////////////////////////////////////////////////
   //: example: join two relations from database
@@ -227,7 +219,6 @@ MAIN( test_database_manager )
   brdb_database_manager::instance()->join("age", join2, join4);
   join4->print();
   TEST("join one database relation and one user relation", true, true);
-
 
   ////////////////////////////////////////////////////////////////////////////
   //: example: doing selecting on database relations;
@@ -271,8 +262,6 @@ MAIN( test_database_manager )
   s1b->print();
   brdb_database_manager::instance()->print_database();
 
-
-
   ////////////////////////////////////////////////////////////////////////////
   //: example: doing selecting on user relations;
   ////////////////////////////////////////////////////////////////////////////
@@ -305,9 +294,8 @@ MAIN( test_database_manager )
   s5->print();
   s5->delete_tuples();
   brdb_database_manager::instance()->print_database();
-  
-  TEST("select in user selections", true, true);
 
+  TEST("select in user selections", true, true);
 
   ////////////////////////////////////////////////////////////////////////////
   //: example: getting tuple from database
@@ -328,7 +316,7 @@ MAIN( test_database_manager )
   brdb_database_manager::instance()->select(q6_a, s6_a);
   vcl_vector<vcl_string> get_names;
 
-  for(unsigned int i=0; i<s6_a->size(); i++)
+  for (unsigned int i=0; i<s6_a->size(); i++)
   {
     vcl_string get_name_a;
     brdb_database_manager::instance()->get(s6_a, "Name", i, get_name_a);
@@ -416,15 +404,12 @@ MAIN( test_database_manager )
   TEST("selection_xor()", true, true);
   TEST("selection_not()", true, true);
 
-
   ////////////////////////////////////////////////////////////////////////////
   //: example: database ordering
   ////////////////////////////////////////////////////////////////////////////
   brdb_database_manager::instance()->order_by_name("age", "ID", false);
   brdb_database_manager::instance()->print_database();
   TEST("order_by_name()", true, true);
-
-
 
   ////////////////////////////////////////////////////////////////////////////
   //: example: query by index
@@ -436,7 +421,7 @@ MAIN( test_database_manager )
   s15->print();
   s15->delete_tuples();
   brdb_database_manager::instance()->print_database();
-  // notice that s15 still has something because the query was make by the 0th tuple in relation "age", 
+  // notice that s15 still has something because the query was make by the 0th tuple in relation "age",
   // and "age" still have its 0th tuple after the original 0th one was delete
   s15->print();
 
@@ -455,10 +440,8 @@ MAIN( test_database_manager )
   brdb_selection_sptr s17;
   brdb_database_manager::instance()->select(q17, s17);
   s17->print();
-  
-  TEST("selection by index()", true, true);
-  
 
+  TEST("selection by index()", true, true);
 
   SUMMARY();
 }
