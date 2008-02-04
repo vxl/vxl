@@ -41,6 +41,13 @@ SOURCES += vidl2_v4l_params.cxx
 MANPAGE_SOURCES += vidl2_exception.h
 MANPAGE_SOURCES += vidl2_config.h.in
 
+MANPAGE_SOURCES += vidl2_ffmpeg_istream_stub.txx
+MANPAGE_SOURCES += vidl2_ffmpeg_istream_v1.txx
+MANPAGE_SOURCES += vidl2_ffmpeg_istream_v2.txx
+MANPAGE_SOURCES += vidl2_ffmpeg_ostream_stub.txx
+MANPAGE_SOURCES += vidl2_ffmpeg_ostream_v1.txx
+MANPAGE_SOURCES += vidl2_ffmpeg_ostream_v2.txx
+
 # vgui add-on library
 SUBDIRS += gui
 

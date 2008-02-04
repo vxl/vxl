@@ -11,6 +11,30 @@ MANPAGE_SOURCES += bsta_otsu_threshold.txx
 SOURCES += bsta_int_histogram_1d.cxx
 SOURCES += bsta_int_histogram_2d.cxx
 
+MANPAGE_SOURCES += bsta_attributes.h
+MANPAGE_SOURCES += bsta_basic_functors.h
+MANPAGE_SOURCES += bsta_detector_gaussian.h
+MANPAGE_SOURCES += bsta_detector_mixture.h
+MANPAGE_SOURCES += bsta_distribution.h
+MANPAGE_SOURCES += bsta_gauss_f1.h
+MANPAGE_SOURCES += bsta_gauss_fd3.h
+MANPAGE_SOURCES += bsta_gauss_ff3.h
+MANPAGE_SOURCES += bsta_gauss_id3.h
+MANPAGE_SOURCES += bsta_gauss_if3.h
+MANPAGE_SOURCES += bsta_gauss_sd3.h
+MANPAGE_SOURCES += bsta_gauss_sf3.h
+MANPAGE_SOURCES += bsta_gaussian.h
+MANPAGE_SOURCES += bsta_gaussian_full.h
+MANPAGE_SOURCES += bsta_gaussian_full.txx
+MANPAGE_SOURCES += bsta_gaussian_indep.h
+MANPAGE_SOURCES += bsta_gaussian_indep.txx
+MANPAGE_SOURCES += bsta_gaussian_sphere.h
+MANPAGE_SOURCES += bsta_gaussian_sphere.txx
+MANPAGE_SOURCES += bsta_mixture.h
+MANPAGE_SOURCES += bsta_mixture_fixed.h
+
+SUBDIRS += algo io
+
 #######################################
 include ${VXLROOT}/config/top-params.mk
 #######################################
