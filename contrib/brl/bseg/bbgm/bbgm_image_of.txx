@@ -1,7 +1,6 @@
-// This is brcv/seg/bbgm/bbgm_image_of.txx
+// This is brl/bseg/bbgm/bbgm_image_of.txx
 #ifndef bbgm_image_of_txx_
 #define bbgm_image_of_txx_
-
 //:
 // \file
 
@@ -15,35 +14,35 @@
 
 //: Return a string name
 // \note this is probably not portable
-template<class _dist>
+template<class dist_>
 vcl_string
-bbgm_image_of<_dist>::is_a() const
+bbgm_image_of<dist_>::is_a() const
 {
-  return "bbgm_image_of<"+vcl_string(typeid(_dist).name())+">";
+  return "bbgm_image_of<"+vcl_string(typeid(dist_).name())+">";
 }
 
 
-template<class _dist>
+template<class dist_>
 bbgm_image_base*
-bbgm_image_of<_dist>::clone() const
+bbgm_image_of<dist_>::clone() const
 {
-  return new bbgm_image_of<_dist>(*this);
+  return new bbgm_image_of<dist_>(*this);
 }
 
 
 //: Return IO version number;
-template<class _dist>
+template<class dist_>
 short
-bbgm_image_of<_dist>::version() const
+bbgm_image_of<dist_>::version() const
 {
   return 1;
 }
 
 
 //: Binary save self to stream.
-template<class _dist>
+template<class dist_>
 void
-bbgm_image_of<_dist>::b_write(vsl_b_ostream &os) const
+bbgm_image_of<dist_>::b_write(vsl_b_ostream &os) const
 {
   vsl_b_write(os, version());
   vsl_b_write(os, data_);
@@ -51,9 +50,9 @@ bbgm_image_of<_dist>::b_write(vsl_b_ostream &os) const
 
 
 //: Binary load self from stream.
-template<class _dist>
+template<class dist_>
 void
-bbgm_image_of<_dist>::b_read(vsl_b_istream &is)
+bbgm_image_of<dist_>::b_read(vsl_b_istream &is)
 {
   if (!is)
     return;

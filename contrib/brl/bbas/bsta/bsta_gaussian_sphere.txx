@@ -1,7 +1,6 @@
-// This is brcv/seg/bsta/bsta_gaussian_sphere.txx
+// This is brl/bbas/bsta/bsta_gaussian_sphere.txx
 #ifndef bsta_gaussian_sphere_txx_
 #define bsta_gaussian_sphere_txx_
-
 //:
 // \file
 
@@ -64,18 +63,16 @@ struct determinant<T,n,0>
 };
 
 
-
 //: The squared Mahalanobis distance to this point
 template <class T, unsigned int n>
 T
-bsta_gaussian_sphere<T,n>::sqr_mahalanobis_dist(const _vector& pt) const
+bsta_gaussian_sphere<T,n>::sqr_mahalanobis_dist(const vector_& pt) const
 {
-  if(var_<=T(0))
+  if (var_<=T(0))
     return vcl_numeric_limits<T>::infinity();
-  _vector d = bsta_gaussian<T,n>::mean_-pt;
+  vector_ d = bsta_gaussian<T,n>::mean_-pt;
   return compute_dot<T,n,n>::value(d)/var_;
 }
-
 
 
 //: The squared Mahalanobis distance to this point
@@ -88,10 +85,8 @@ bsta_gaussian_sphere<T,n>::compute_det()
 }
 
 
-
 #define DBSTA_GAUSSIAN_SPHERE_INSTANTIATE(T,n) \
-template class bsta_gaussian_sphere<T,n >;
-
+template class bsta_gaussian_sphere<T,n >
 
 
 #endif // bsta_gaussian_sphere_txx_

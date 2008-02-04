@@ -1,15 +1,15 @@
-// This is brcv/seg/bsta/algo/bsta_gaussian_stats.h
+// This is brl/bbas/bsta/algo/bsta_gaussian_stats.h
 #ifndef bsta_gaussian_stats_h_
 #define bsta_gaussian_stats_h_
-
 //:
 // \file
-// \brief Statistics using Gaussians 
+// \brief Statistics using Gaussians
 // \author Matt Leotta (mleotta@lems.brown.edu)
 // \date 1/26/06
 //
 // \verbatim
 //  Modifications
+//   (none yet)
 // \endverbatim
 
 #include <bsta/bsta_gaussian_sphere.h>
@@ -21,30 +21,29 @@
 
 //: An updater that normalizes weights of a mixture based on number of observations
 // Each components is weighted as num_observation / total_observations
-// The original weights are ignored 
-template <class _comp_dist >
+// The original weights are ignored
+template <class comp_dist_ >
 class bsta_mixture_weight_by_obs_updater
 {
   private:
-    typedef bsta_num_obs<_comp_dist> _comp_obs_dist;
-    typedef bsta_mixture<_comp_obs_dist> _mix_dist;
-    typedef typename _comp_dist::math_type T;
+    typedef bsta_num_obs<comp_dist_> comp_obs_dist_;
+    typedef bsta_mixture<comp_obs_dist_> mix_dist_;
+    typedef typename comp_dist_::math_type T;
 
   public:
     //: The main function
-    void operator() ( _mix_dist& mix ) const
+    void operator() ( mix_dist_& mix ) const
     {
       T total = 0;
       vcl_vector<T> new_weights(mix.num_components(),T(0));
-      for(unsigned int i=0; i<new_weights.size(); ++i){
-        _comp_obs_dist& d = mix.distribution(i);
+      for (unsigned int i=0; i<new_weights.size(); ++i){
+        comp_obs_dist_& d = mix.distribution(i);
         total += d.num_observations;
         new_weights[i] = d.num_observations;
       }
-      for(unsigned int i=0; i<new_weights.size(); ++i)
+      for (unsigned int i=0; i<new_weights.size(); ++i)
         mix.set_weight(i, new_weights[i]/total);
     }
-
 };
 
 
@@ -66,17 +65,16 @@ struct bsta_compute_pow<T,0>
 };
 
 
-
 //: Used to sort a mixture of gaussians in decreasing order of fitness
-template <class _gaussian>
+template <class gaussian_>
 struct bsta_gaussian_fitness
 {
   private:
-    typedef typename _gaussian::math_type T;
-    enum { n = _gaussian::dimension };
+    typedef typename gaussian_::math_type T;
+    enum { n = gaussian_::dimension };
   public:
-    static bool order (const _gaussian& d1, const T& w1,
-                       const _gaussian& d2, const T& w2)
+    static bool order (const gaussian_& d1, const T& w1,
+                       const gaussian_& d2, const T& w2)
     {
       return bsta_compute_pow<T,n>::value(w1*w1)/d1.det_covar() >
              bsta_compute_pow<T,n>::value(w2*w2)/d2.det_covar();
@@ -95,7 +93,6 @@ struct bsta_gaussian_fitness<bsta_gaussian_sphere<T,n> >
     return w1*w1/d1.var() > w2*w2/d2.var();
   }
 };
-
 
 
 #endif // bsta_gaussian_stats_h_

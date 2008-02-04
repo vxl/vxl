@@ -1,15 +1,15 @@
-// This is brcv/seg/bsta/bsta_gaussian.h
+// This is brl/bbas/bsta/bsta_gaussian.h
 #ifndef bsta_gaussian_h_
 #define bsta_gaussian_h_
-
 //:
 // \file
-// \brief A Gaussian distribution for use in a mixture model 
+// \brief A Gaussian distribution for use in a mixture model
 // \author Matt Leotta (mleotta@lems.brown.edu)
 // \date 1/25/06
 //
 // \verbatim
 //  Modifications
+//   (none yet)
 // \endverbatim
 
 
@@ -34,31 +34,27 @@ struct two_pi_power<0>
 };
 
 
-
-//: A Gaussian distribution 
+//: A Gaussian distribution
 // used as a component of the mixture
 template <class T, unsigned n>
 class bsta_gaussian : public bsta_distribution<T,n>
 {
-  typedef typename bsta_distribution<T,n>::vector_type _vector;
+  typedef typename bsta_distribution<T,n>::vector_type vector_;
 
-  public:
+ public:
 
-    //: The mean of the distribution
-    const _vector& mean() const { return mean_; }
+  //: The mean of the distribution
+  const vector_& mean() const { return mean_; }
 
-    //: Set the mean of the distribution
-    void set_mean(const _vector& mean) { mean_ = mean; }
+  //: Set the mean of the distribution
+  void set_mean(const vector_& mean) { mean_ = mean; }
 
-  protected:
-    bsta_gaussian() : mean_(T(0)) {}
-    bsta_gaussian(const _vector& mean) : mean_(mean) {}
+ protected:
+  bsta_gaussian() : mean_(T(0)) {}
+  bsta_gaussian(const vector_& mean) : mean_(mean) {}
 
-    //: The mean
-    _vector mean_;
+  //: The mean
+  vector_ mean_;
 };
-
-
-
 
 #endif // bsta_gaussian_h_

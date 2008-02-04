@@ -1,7 +1,6 @@
-// This is brcv/seg/bsta/bsta_attributes.h
+// This is brl/bbas/bsta/bsta_attributes.h
 #ifndef bsta_attributes_h_
 #define bsta_attributes_h_
-
 //:
 // \file
 // \brief Attributes for distributions
@@ -16,26 +15,24 @@
 #include "bsta_distribution.h"
 
 //: Adds number of observations
-template <class _dist>
-class bsta_num_obs : public _dist
+template <class dist_>
+class bsta_num_obs : public dist_
 {
-    typedef typename _dist::math_type T;
-  
+    typedef typename dist_::math_type T;
+
   public:
-  
-    typedef _dist contained_type;
-  
+
+    typedef dist_ contained_type;
+
     //: Constructor
-    bsta_num_obs<_dist>() : _dist(), num_observations(T(0)) {}
+    bsta_num_obs<dist_>() : dist_(), num_observations(T(0)) {}
 
     //: Constructor - somewhat like a copy constructor
-    bsta_num_obs<_dist>(const _dist& d, const T& n_obs = T(0))
-      : _dist(d), num_observations(n_obs) {}
+    bsta_num_obs<dist_>(const dist_& d, const T& n_obs = T(0))
+      : dist_(d), num_observations(n_obs) {}
 
     //: The number of observations
     T num_observations;
 };
-
-
 
 #endif // bsta_attributes_h_

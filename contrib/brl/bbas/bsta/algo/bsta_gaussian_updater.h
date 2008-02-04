@@ -1,7 +1,6 @@
-// This is brcv/seg/bsta/algo/bsta_gaussian_updater.h
+// This is brl/bbas/bsta/algo/bsta_gaussian_updater.h
 #ifndef bsta_gaussian_updater_h_
 #define bsta_gaussian_updater_h_
-
 //:
 // \file
 // \brief Iterative updating of Gaussians
@@ -10,6 +9,7 @@
 //
 // \verbatim
 //  Modifications
+//   (none yet)
 // \endverbatim
 
 #include <bsta/bsta_gaussian_sphere.h>
@@ -18,7 +18,6 @@
 #include <bsta/bsta_mixture.h>
 #include <bsta/bsta_attributes.h>
 #include <vcl_algorithm.h>
-
 
 
 //: Update the statistics given a 1D Gaussian distribution and a learning rate
@@ -103,7 +102,6 @@ void bsta_update_gaussian(bsta_gaussian_full<T,n>& gaussian, T rho,
 }
 
 
-
 //-----------------------------------------------------------------------------
 // The following versions allow for a lower limit on variances.
 // If the same sample is observed repeatedly, the variances will
@@ -152,7 +150,6 @@ void bsta_update_gaussian(bsta_gaussian_sphere<T,n>& gaussian, T rho,
 }
 
 
-
 //: element-wise minimum of vector.
 template <class T, unsigned n>
 vnl_vector_fixed<T,n> element_max(const vnl_vector_fixed<T,n>& a_vector,
@@ -162,7 +159,7 @@ vnl_vector_fixed<T,n> element_max(const vnl_vector_fixed<T,n>& a_vector,
   T* r = min_vector.data_block();
   const T* a = a_vector.data_block();
   const T* b = b_vector.data_block();
-  for(unsigned i=0; i<n; ++i, ++r, ++a, ++b)
+  for (unsigned i=0; i<n; ++i, ++r, ++a, ++b)
     *r = vcl_max(*a,*b);
   return min_vector;
 }
@@ -177,7 +174,7 @@ vnl_matrix_fixed<T,n,n> element_max(const vnl_matrix_fixed<T,n,n>& a_matrix,
   T* r = min_matrix.data_block();
   const T* a = a_matrix.data_block();
   const T* b = b_matrix.data_block();
-  for(unsigned i=0; i<n*n; ++i, ++r, ++a, ++b)
+  for (unsigned i=0; i<n*n; ++i, ++r, ++a, ++b)
     *r = vcl_max(*a,*b);
   return min_matrix;
 }
@@ -248,7 +245,7 @@ void bsta_update_gaussian(bsta_gaussian_full<T,n>& gaussian, T rho,
                             T min_var)
 {
   vnl_matrix_fixed<T,n,n> covar(T(0));
-  for(unsigned i=0; i<n; ++i) covar(i,i) = min_var;
+  for (unsigned i=0; i<n; ++i) covar(i,i) = min_var;
   bsta_update_gaussian(gaussian,rho,sample,covar);
 }
 
@@ -257,18 +254,18 @@ void bsta_update_gaussian(bsta_gaussian_full<T,n>& gaussian, T rho,
 
 
 //: An updater for statistically updating Gaussian distributions
-template <class _gauss>
+template <class gauss_>
 class bsta_gaussian_updater
 {
   private:
-    typedef bsta_num_obs<_gauss> _obs_gauss;
-    typedef typename _gauss::math_type T;
-    typedef vnl_vector_fixed<T,_gauss::dimension> _vector;
+    typedef bsta_num_obs<gauss_> obs_gauss_;
+    typedef typename gauss_::math_type T;
+    typedef vnl_vector_fixed<T,gauss_::dimension> vector_;
   public:
 
     //: The main function
     // make the appropriate type casts and call a helper function
-    void operator() ( _obs_gauss& d, const _vector& sample ) const
+    void operator() ( obs_gauss_& d, const vector_& sample ) const
     {
       d.num_observations += T(1);
       bsta_update_gaussian(d, T(1)/d.num_observations, sample);
@@ -279,13 +276,13 @@ class bsta_gaussian_updater
 //: An updater for updating Gaussian distributions with a moving window
 // When the number of samples exceeds the window size the most recent
 // samples contribute more toward the distribution.
-template <class _gauss>
+template <class gauss_>
 class bsta_gaussian_window_updater
 {
   private:
-    typedef bsta_num_obs<_gauss> _obs_gauss;
-    typedef typename _gauss::math_type T;
-    typedef vnl_vector_fixed<T,_gauss::dimension> _vector;
+    typedef bsta_num_obs<gauss_> obs_gauss_;
+    typedef typename gauss_::math_type T;
+    typedef vnl_vector_fixed<T,gauss_::dimension> vector_;
   public:
 
     //: Constructor
@@ -293,16 +290,15 @@ class bsta_gaussian_window_updater
 
     //: The main function
     // make the appropriate type casts and call a helper function
-    void operator() ( _obs_gauss& d, const _vector& sample) const
+    void operator() ( obs_gauss_& d, const vector_& sample) const
     {
-      if(d.num_observations < window_size)
+      if (d.num_observations < window_size)
         d.num_observations += T(1);
       bsta_update_gaussian(d, T(1)/d.num_observations, sample);
     }
 
     unsigned int window_size;
 };
-
 
 
 #endif // bsta_gaussian_updater_h_
