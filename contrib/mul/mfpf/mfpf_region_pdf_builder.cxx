@@ -13,6 +13,7 @@
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
+#include <mbl/mbl_exception.h>
 
 #include <vil/vil_resample_bilin.h>
 #include <vsl/vsl_vector_io.h>
