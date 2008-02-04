@@ -12,8 +12,7 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vcl_iosfwd.h>
 #include <vcl_map.h>
 #include <vbl/vbl_ref_count.h>
 #include <vgl/vgl_point_2d.h>
@@ -36,17 +35,17 @@ class bwm_video_corr : public vbl_ref_count
   bwm_video_corr(bwm_observer_video* obs, unsigned frame_index,
                  vgl_point_2d<double> const& pt): observer_(obs),
     world_pt_valid_(false), id_(unique_id_++)
-    {matches_[frame_index]=pt;}
-
+    { matches_[frame_index]=pt; }
 
   //: Constructor - don't copy the ref count
   bwm_video_corr(bwm_video_corr const& c):vbl_ref_count(){};
 
-  //: Destructor
+  // Destructor
   ~bwm_video_corr() {}
 
-  //: Accessors 
-  //: the video observer generating the correspondences 
+  // Accessors-----------------------------------------------------------------
+
+  //: the video observer generating the correspondences
   void set_observer(bwm_observer_video* obs){observer_ = obs;}
   bwm_observer_video* observer(){return observer_;}
 
@@ -58,32 +57,32 @@ class bwm_video_corr : public vbl_ref_count
 
   //: add a match
   bool add(unsigned frame, vgl_point_2d<double> const& pt);
-  //: remove a match 
- void remove(unsigned frame)
-   { matches_.erase(frame);}
+
+  //: remove a match
+  void remove(unsigned frame)
+  { matches_.erase(frame);}
 
   //: Number of matches assigned, i.e. number of matched video frames.
- unsigned num_matches()
-   { return matches_.size();}
+  unsigned num_matches()
+  { return matches_.size();}
 
- unsigned id(){return id_;}
+  unsigned id(){return id_;}
 
   //: the lowest frame number for which there is a match
- unsigned min_frame();
+  unsigned min_frame();
 
   //: the highest frame number for which there is a match
- unsigned max_frame();
+  unsigned max_frame();
 
- //: the frame closest to the specified frame where there is a match
- bool nearest_frame(unsigned frame, unsigned& near_frame);
+  //: the frame closest to the specified frame where there is a match
+  bool nearest_frame(unsigned frame, unsigned& near_frame);
 
- //: methods that apply if a 3-d world point is defined
- //: access
- void set_world_pt(vgl_point_3d<double> const& world_pt)
-   {world_pt_ = world_pt; world_pt_valid_ = true;}
+  //: methods that apply if a 3-d world point is defined
+  void set_world_pt(vgl_point_3d<double> const& world_pt)
+  { world_pt_ = world_pt; world_pt_valid_ = true; }
 
-  vgl_point_3d<double> world_pt() const { return world_pt_;}
-                    
+  vgl_point_3d<double> world_pt() const { return world_pt_; }
+
   bool world_pt_valid() {return world_pt_valid_;}
 
   //: Write the correspondence as xml
@@ -91,15 +90,17 @@ class bwm_video_corr : public vbl_ref_count
  protected:
 
   // INTERNALS-----------------------------------------------------------------
- unsigned id_;
+  unsigned id_;
 
   // Data Members--------------------------------------------------------------
  private:
- BWM_VIDEO_DLL_DATA static unsigned unique_id_;
+  BWM_VIDEO_DLL_DATA static unsigned unique_id_;
   bwm_observer_video* observer_;
   vcl_map<unsigned, vgl_point_2d<double> > matches_;//match in each frame
   bool world_pt_valid_;
   vgl_point_3d<double> world_pt_;
 };
+
 #include <bwm/video/bwm_video_corr_sptr.h>
-#endif
+
+#endif // bwm_video_corr_h_

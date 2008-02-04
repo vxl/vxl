@@ -1,6 +1,5 @@
 #ifndef mfpf_region_pdf_builder_h_
 #define mfpf_region_pdf_builder_h_
-
 //:
 // \file
 // \brief Builder for mfpf_region_pdf objects.
@@ -10,20 +9,21 @@
 #include <vpdfl/vpdfl_builder_base.h>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <mbl/mbl_chord.h>
+#include <vcl_iosfwd.h>
 
 //: Builder for mfpf_region_pdf objects.
 // Text for configuring:
 // \verbatim
 // mfpf_region_pdf_builder { shape: ellipse { ri: 5 rj: 3  }
 //  pdf_builder: vpdfl_axis_gaussian_builder { }
-//  search_ni: 5 search_nj: 4 
+//  search_ni: 5 search_nj: 4
 // }
 // Alternative for shape:
 //   shape: box { ni: 5 nj: 3 ref_x: 2.5 ref_y: 1.5 }
 // \endverbatim
 class mfpf_region_pdf_builder : public mfpf_point_finder_builder
 {
-private:
+ private:
   //: Size of step between sample points
   double step_size_;
 
@@ -68,8 +68,8 @@ private:
   void set_defaults();
 
   //: Define model region as an ni x nj box
-  void set_as_box(unsigned ni, unsigned nj, 
-                  double ref_x, double ref_y); 
+  void set_as_box(unsigned ni, unsigned nj,
+                  double ref_x, double ref_y);
 
   //: Define model region as an ellipse with radii ri, rj
   //  Ref. point in centre.
@@ -88,30 +88,30 @@ private:
                         const vgl_point_2d<double>& p,
                         const vgl_vector_2d<double>& u);
 
-public:
+ public:
 
-    //: Dflt ctor
+  // Dflt ctor
   mfpf_region_pdf_builder();
 
-    //: Destructor
+  // Destructor
   virtual ~mfpf_region_pdf_builder();
 
   //: Size of step between sample points
   virtual void set_step_size(double);
 
   //: Define model region as an ni x nj box
-  void set_as_box(unsigned ni, unsigned nj, 
-                  double ref_x, double ref_y, 
+  void set_as_box(unsigned ni, unsigned nj,
+                  double ref_x, double ref_y,
                   const vpdfl_builder_base& builder);
 
   //: Define model region as an ni x nj box
   //  Ref. point in centre.
-  void set_as_box(unsigned ni, unsigned nj, 
+  void set_as_box(unsigned ni, unsigned nj,
                   const vpdfl_builder_base& builder);
 
   //: Define model region as an ellipse with radii ri, rj
   //  Ref. point in centre.
-  void set_as_ellipse(double ri, double rj, 
+  void set_as_ellipse(double ri, double rj,
                   const vpdfl_builder_base& builder);
 
   //: Number of pixels in region
@@ -130,13 +130,13 @@ public:
   virtual mfpf_point_finder* new_finder() const;
 
   //: Initialise building
-  // Must be called before any calls to add_example(...) 
+  // Must be called before any calls to add_example(...)
   virtual void clear(unsigned n_egs);
 
   //: Add one example to the model
   virtual void add_example(const vimt_image_2d_of<float>& image,
-                        const vgl_point_2d<double>& p,
-                        const vgl_vector_2d<double>& u);
+                           const vgl_point_2d<double>& p,
+                           const vgl_vector_2d<double>& u);
 
   //: Build object from the data supplied in add_example()
   virtual void build(mfpf_point_finder&);
@@ -144,25 +144,23 @@ public:
   //: Initialise from a string stream
   virtual bool set_from_stream(vcl_istream &is);
 
-    //: Name of the class
+  //: Name of the class
   virtual vcl_string is_a() const;
 
-    //: Create a copy on the heap and return base class pointer
+  //: Create a copy on the heap and return base class pointer
   virtual mfpf_point_finder_builder* clone() const;
 
-    //: Print class to os
+  //: Print class to os
   virtual void print_summary(vcl_ostream& os) const;
 
   //: Prints ASCII representation of shape to os
   void print_shape(vcl_ostream& os) const;
 
-    //: Save class to binary file stream
+  //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
 
-    //: Load class from binary file stream
+  //: Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs);
 };
 
 #endif
-
-
