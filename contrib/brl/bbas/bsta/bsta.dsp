@@ -111,6 +111,33 @@ SOURCE=.\Templates/bsta_otsu_threshold+double-.cxx
 SOURCE=.\Templates/bsta_otsu_threshold+float-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/bsta_gaussian_full+double.3-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_gaussian_full+float.3-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_gaussian_full+float.6-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_gaussian_indep+double.3-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_gaussian_indep+float.2-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_gaussian_indep+float.3-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_gaussian_sphere+double.3-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_gaussian_sphere+float.1-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bsta_gaussian_sphere+float.3-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\bsta_gauss.cxx
 # End Source File
 # Begin Source File
@@ -154,6 +181,69 @@ SOURCE=.\bsta_int_histogram_1d.h
 # End Source File
 # Begin Source File
 SOURCE=.\bsta_int_histogram_2d.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_attributes.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_basic_functors.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_detector_gaussian.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_detector_mixture.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_distribution.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_gauss_f1.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_gauss_fd3.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_gauss_ff3.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_gauss_id3.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_gauss_if3.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_gauss_sd3.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_gauss_sf3.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_gaussian.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_gaussian_full.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_gaussian_full.txx
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_gaussian_indep.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_gaussian_indep.txx
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_gaussian_sphere.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_gaussian_sphere.txx
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_mixture.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_mixture_fixed.h
 # End Source File
 # End Group
 # End Target

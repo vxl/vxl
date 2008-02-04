@@ -104,6 +104,12 @@ SOURCE=.\process/bwm_process.cxx
 # Begin Source File
 SOURCE=.\process/bwm_site_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bwm_site_mgr.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bwm_tableau_factory.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -175,12 +181,6 @@ SOURCE=.\bwm_observer.h
 # End Source File
 # Begin Source File
 SOURCE=.\bwm_observer_cam.h
-# End Source File
-# Begin Source File
-SOURCE=.\bwm_observer_cam_proj.h
-# End Source File
-# Begin Source File
-SOURCE=.\bwm_observer_cam_rat.h
 # End Source File
 # Begin Source File
 SOURCE=.\bwm_observer_coin3d.h
@@ -274,6 +274,12 @@ SOURCE=.\process/bwm_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\process/bwm_site_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\bwm_site_mgr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bwm_tableau_factory.h
 # End Source File
 # End Group
 # End Target

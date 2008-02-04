@@ -184,6 +184,18 @@ SOURCE=.\test_k_medoid.cxx
 SOURCE=.\test_otsu_threshold.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_gaussian_full.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_gaussian_indep.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_gaussian_sphere.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_mixture.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

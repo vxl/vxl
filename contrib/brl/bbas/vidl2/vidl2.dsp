@@ -258,6 +258,24 @@ SOURCE=.\vidl2_istream_sptr.h
 SOURCE=.\vidl2_ostream_sptr.h
 # End Source File
 # Begin Source File
+SOURCE=.\vidl2_ffmpeg_istream_stub.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_ffmpeg_istream_v1.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_ffmpeg_istream_v2.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_ffmpeg_ostream_stub.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_ffmpeg_ostream_v1.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vidl2_ffmpeg_ostream_v2.txx
+# End Source File
+# Begin Source File
 SOURCE=.\vidl2_config.h.in
 # End Source File
 # End Group

@@ -192,9 +192,6 @@ SOURCE=.\Templates/vsl_vector_io+vcl_vector+vcl_vector+vnl_vector+double----.cxx
 SOURCE=.\Templates/vsl_vector_io+vnl_matrix+double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vnl_io_matrix_fixed+double.2.2-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vnl_io_vector_fixed+double.2-.cxx
 # End Source File
 # Begin Source File
@@ -204,6 +201,9 @@ SOURCE=.\Templates/vnl_io_vector_fixed+double.3-.cxx
 SOURCE=.\Templates/vnl_io_vector_fixed+double.4-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vnl_io_matrix_fixed+double.2.2-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vnl_io_matrix_fixed+double.3.3-.cxx
 # End Source File
 # Begin Source File
@@ -211,6 +211,9 @@ SOURCE=.\Templates/vnl_io_matrix_fixed+double.3.4-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vnl_io_matrix_fixed+double.4.4-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_io_matrix_fixed+float.3.3-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vnl_io_vector_fixed+float.3-.cxx

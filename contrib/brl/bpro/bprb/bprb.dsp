@@ -1,31 +1,31 @@
-# Microsoft Developer Studio Project File - Name="bbgm" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="bprb" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # variables to REPLACE
 # 
-# /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" == include path
+# /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
-# bbgm  == name of output library
+# bprb  == name of output library
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=bbgm - Win32 Debug
+CFG=bprb - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "bbgm.mak".
+!MESSAGE NMAKE /f "bprb.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "bbgm.mak" CFG="bbgm - Win32 Debug"
+!MESSAGE NMAKE /f "bprb.mak" CFG="bprb - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "bbgm - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "bbgm - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "bprb - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "bprb - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
@@ -33,7 +33,7 @@ CFG=bbgm - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "bbgm - Win32 Release"
+!IF  "$(CFG)" == "bprb - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -47,7 +47,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bbgm_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bprb_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -59,7 +59,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-!ELSEIF  "$(CFG)" == "bbgm - Win32 Debug"
+!ELSEIF  "$(CFG)" == "bprb - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -73,7 +73,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bbgm_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bprb_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -86,86 +86,63 @@ LIB32=link.exe -lib
 !ENDIF 
 
 # Begin Target
-
-# Name "bbgm - Win32 Release"
-# Name "bbgm - Win32 Debug"
-
+# Name "bprb - Win32 Release"
+# Name "bprb - Win32 Debug"
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\bbgm_viewer.cxx
+SOURCE=.\bprb_parameters.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bbgm_image_of.cxx
+SOURCE=.\bprb_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bbgm_image_of-mix-gauss_f1++.cxx
+SOURCE=.\Templates/bprb_parameters+bool-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bbgm_image_of-mix-gauss_ff3++.cxx
+SOURCE=.\Templates/bprb_parameters+bpro_filepath-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bbgm_image_of-mix-gauss_if3++.cxx
+SOURCE=.\Templates/bprb_parameters+double-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bbgm_image_of-mix-gauss_sf3++.cxx
+SOURCE=.\Templates/bprb_parameters+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bbgm_image_of-mix_fixed-gauss_if3.3++.cxx
+SOURCE=.\Templates/bprb_parameters+int-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_io_smart_ptr+bbgm_image_base-.cxx
+SOURCE=.\Templates/bprb_parameters+unsigned-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bbgm_image_base-.cxx
+SOURCE=.\Templates/bprb_parameters+unsigned_int-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bbgm_viewer-.cxx
+SOURCE=.\Templates/bprb_parameters+vcl_string-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vsl_binary_loader+bbgm_image_base-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+bprb_parameters-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vsl_vector_io+vbl_array_2d+float--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vsl_vector_io+vbl_array_2d+int--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_gaussian_indep+float.3---.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_gaussian_sphere+float.1---.cxx
+SOURCE=.\Templates/vbl_smart_ptr+bprb_process-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\bbgm_apply.h
+SOURCE=.\bprb_parameters.h
 # End Source File
 # Begin Source File
-SOURCE=.\bbgm_detect.h
+SOURCE=.\bprb_parameters.txx
 # End Source File
 # Begin Source File
-SOURCE=.\bbgm_image_of.h
+SOURCE=.\bprb_parameters_sptr.h
 # End Source File
 # Begin Source File
-SOURCE=.\bbgm_image_of.txx
+SOURCE=.\bprb_process.h
 # End Source File
 # Begin Source File
-SOURCE=.\bbgm_image_sptr.h
-# End Source File
-# Begin Source File
-SOURCE=.\bbgm_planes_to_sample.h
-# End Source File
-# Begin Source File
-SOURCE=.\bbgm_update.h
-# End Source File
-# Begin Source File
-SOURCE=.\bbgm_viewer.h
-# End Source File
-# Begin Source File
-SOURCE=.\bbgm_viewer_sptr.h
+SOURCE=.\bprb_process_sptr.h
 # End Source File
 # End Group
 # End Target

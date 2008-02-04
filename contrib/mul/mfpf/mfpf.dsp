@@ -1,31 +1,31 @@
-# Microsoft Developer Studio Project File - Name="bbgm" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="mfpf" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # variables to REPLACE
 # 
-# /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" == include path
+# /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
-# bbgm  == name of output library
+# mfpf  == name of output library
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=bbgm - Win32 Debug
+CFG=mfpf - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "bbgm.mak".
+!MESSAGE NMAKE /f "mfpf.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "bbgm.mak" CFG="bbgm - Win32 Debug"
+!MESSAGE NMAKE /f "mfpf.mak" CFG="mfpf - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "bbgm - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "bbgm - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "mfpf - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "mfpf - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
@@ -33,7 +33,7 @@ CFG=bbgm - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "bbgm - Win32 Release"
+!IF  "$(CFG)" == "mfpf - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -47,7 +47,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bbgm_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "mfpf_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -59,7 +59,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-!ELSEIF  "$(CFG)" == "bbgm - Win32 Debug"
+!ELSEIF  "$(CFG)" == "mfpf - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -73,7 +73,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bbgm_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "mfpf_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -86,86 +86,108 @@ LIB32=link.exe -lib
 !ENDIF 
 
 # Begin Target
-
-# Name "bbgm - Win32 Release"
-# Name "bbgm - Win32 Debug"
-
+# Name "mfpf - Win32 Release"
+# Name "mfpf - Win32 Debug"
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\bbgm_viewer.cxx
+SOURCE=.\Templates/mbl_cloneables_factory+mfpf_point_finder-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bbgm_image_of.cxx
+SOURCE=.\Templates/mbl_cloneables_factory+mfpf_point_finder_builder-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bbgm_image_of-mix-gauss_f1++.cxx
+SOURCE=.\Templates/vsl_binary_loader+mfpf_point_finder-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bbgm_image_of-mix-gauss_ff3++.cxx
+SOURCE=.\Templates/vsl_binary_loader+mfpf_point_finder_builder-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bbgm_image_of-mix-gauss_if3++.cxx
+SOURCE=.\mfpf_add_all_loaders.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bbgm_image_of-mix-gauss_sf3++.cxx
+SOURCE=.\mfpf_edge_finder.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bbgm_image_of-mix_fixed-gauss_if3.3++.cxx
+SOURCE=.\mfpf_edge_finder_builder.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_io_smart_ptr+bbgm_image_base-.cxx
+SOURCE=.\mfpf_norm_corr1d.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bbgm_image_base-.cxx
+SOURCE=.\mfpf_norm_corr1d_builder.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bbgm_viewer-.cxx
+SOURCE=.\mfpf_norm_corr2d.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vsl_binary_loader+bbgm_image_base-.cxx
+SOURCE=.\mfpf_norm_corr2d_builder.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vsl_vector_io+vbl_array_2d+float--.cxx
+SOURCE=.\mfpf_point_finder.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vsl_vector_io+vbl_array_2d+int--.cxx
+SOURCE=.\mfpf_point_finder_builder.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_gaussian_indep+float.3---.cxx
+SOURCE=.\mfpf_profile_pdf.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_gaussian_sphere+float.1---.cxx
+SOURCE=.\mfpf_profile_pdf_builder.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_region_pdf.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_region_pdf_builder.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\bbgm_apply.h
+SOURCE=.\mfpf_add_all_loaders.h
 # End Source File
 # Begin Source File
-SOURCE=.\bbgm_detect.h
+SOURCE=.\mfpf_edge_finder.h
 # End Source File
 # Begin Source File
-SOURCE=.\bbgm_image_of.h
+SOURCE=.\mfpf_edge_finder_builder.h
 # End Source File
 # Begin Source File
-SOURCE=.\bbgm_image_of.txx
+SOURCE=.\mfpf_norm_corr1d.h
 # End Source File
 # Begin Source File
-SOURCE=.\bbgm_image_sptr.h
+SOURCE=.\mfpf_norm_corr1d_builder.h
 # End Source File
 # Begin Source File
-SOURCE=.\bbgm_planes_to_sample.h
+SOURCE=.\mfpf_norm_corr2d.h
 # End Source File
 # Begin Source File
-SOURCE=.\bbgm_update.h
+SOURCE=.\mfpf_norm_corr2d_builder.h
 # End Source File
 # Begin Source File
-SOURCE=.\bbgm_viewer.h
+SOURCE=.\mfpf_norm_vec.h
 # End Source File
 # Begin Source File
-SOURCE=.\bbgm_viewer_sptr.h
+SOURCE=.\mfpf_point_finder.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_point_finder_builder.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_profile_pdf.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_profile_pdf_builder.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_region_pdf.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_region_pdf_builder.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_sample_region.h
 # End Source File
 # End Group
 # End Target
