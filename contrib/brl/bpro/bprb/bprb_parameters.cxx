@@ -1,9 +1,7 @@
-// This is brl/bprb/bprb_parameters.cxx
-
+// This is brl/bpro/bprb/bprb_parameters.cxx
+#include "bprb_parameters.h"
 //:
 // \file
-
-#include <bprb/bprb_parameters.h>
 
 #include <vcl_utility.h>
 #include <vcl_iostream.h>

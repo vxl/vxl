@@ -1,12 +1,9 @@
-// This is brl/bpro/bprb/bprb_process.h
+// This is brl/bpro/bprb/bprb_test_process.h
 #ifndef bprb_test_process_h_
 #define bprb_test_process_h_
-//--------------------------------------------------------------------------------
 //:
 // \file
 // \brief A test process
-//
-//--------------------------------------------------------------------------------
 
 #include <vcl_vector.h>
 #include <vcl_string.h>
