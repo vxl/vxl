@@ -1,25 +1,21 @@
 // This is mul/mfpf/tests/test_profile_pdf.cxx
-//=======================================================================
-//
-//  Copyright: (C) 2008 The University of Manchester
-//
-//=======================================================================
 #include <testlib/testlib_test.h>
 //:
 // \file
 // \author Tim Cootes
 // \brief test mfpf_profile_pdf
+//=======================================================================
+//
+//  Copyright: (C) 2008 The University of Manchester
+//
+//=======================================================================
 
 #include <vcl_iostream.h>
 #include <vsl/vsl_binary_loader.h>
-#include <vcl_cmath.h>
-#include <vnl/vnl_math.h>
-#include <mbl/mbl_cloneables_factory.h>
 #include <mfpf/mfpf_add_all_loaders.h>
 #include <mfpf/mfpf_profile_pdf.h>
 #include <mfpf/mfpf_profile_pdf_builder.h>
 #include <vil/vil_bilin_interp.h>
-#include <mfpf/mfpf_add_all_loaders.h>
 #include <vpdfl/vpdfl_axis_gaussian_builder.h>
 
 //=======================================================================
@@ -53,9 +49,9 @@ void test_profile_pdf_search(mfpf_point_finder_builder& b)
 
   pf->set_search_area(3,0);
 
-  vcl_cout<<"Value at p0-u: "<<pf->evaluate(image,p0-u,u)<<vcl_endl;
-  vcl_cout<<"Value at p0  : "<<pf->evaluate(image,p0,u)<<vcl_endl;
-  vcl_cout<<"Value at p0+u: "<<pf->evaluate(image,p0+u,u)<<vcl_endl;
+  vcl_cout<<"Value at p0-u: "<<pf->evaluate(image,p0-u,u)<<vcl_endl
+          <<"Value at p0  : "<<pf->evaluate(image,p0,u)<<vcl_endl
+          <<"Value at p0+u: "<<pf->evaluate(image,p0+u,u)<<vcl_endl;
 
   pf->search(image,p1,u,new_p,new_u);
   vcl_cout<<"Found point: "<<new_p<<vcl_endl;
@@ -78,7 +74,7 @@ void test_profile_pdf_search(mfpf_point_finder_builder& b)
   double r0 = vil_bilin_interp_safe(response.image(),ip.x(),ip.y());
   double r1 = vil_bilin_interp_safe(response.image(),ip.x()-1,ip.y());
   double r2 = vil_bilin_interp_safe(response.image(),ip.x()+1,ip.y());
-  vcl_cout<<r0<<","<<r1<<","<<r2<<vcl_endl;
+  vcl_cout<<r0<<','<<r1<<','<<r2<<vcl_endl;
   TEST("Local minima 1",r0<r1,true);
   TEST("Local minima 2",r0<r2,true);
  
@@ -87,9 +83,9 @@ void test_profile_pdf_search(mfpf_point_finder_builder& b)
 
 void test_profile_pdf()
 {
-  vcl_cout << "***********************\n"
+  vcl_cout << "**************************\n"
            << " Testing mfpf_profile_pdf\n"
-           << "***********************\n";
+           << "**************************\n";
 
   mfpf_add_all_loaders();
 
@@ -136,8 +132,7 @@ void test_profile_pdf()
     vcl_auto_ptr<mfpf_point_finder_builder>
             pf = mfpf_point_finder_builder::create_from_stream(ss);
 
-    TEST("Correct Point Finder Builder",
-         pf->is_a(),"mfpf_profile_pdf_builder");
+    TEST("Correct Point Finder Builder", pf->is_a(),"mfpf_profile_pdf_builder");
     if (pf->is_a()=="mfpf_profile_pdf_builder")
     {
       mfpf_profile_pdf_builder &a_pf = static_cast<mfpf_profile_pdf_builder&>(*pf);
@@ -149,7 +144,6 @@ void test_profile_pdf()
            "vpdfl_axis_gaussian_builder");
     }
   }
-
 
   {
     // Test builder returns correct type of object
@@ -167,8 +161,7 @@ void test_profile_pdf()
     mfpf_point_finder * base_ptr = &profile_pdf;
 
     vsl_b_ofstream bfs_out("test_profile_pdf.bvl.tmp");
-    TEST ("Created test_profile_pdf.bvl.tmp for writing",
-             (!bfs_out), false);
+    TEST ("Created test_profile_pdf.bvl.tmp for writing", (!bfs_out), false);
     vsl_b_write(bfs_out, profile_pdf);
     vsl_b_write(bfs_out, base_ptr);
     bfs_out.close();
@@ -177,8 +170,7 @@ void test_profile_pdf()
     mfpf_point_finder *base_ptr_in = 0;
 
     vsl_b_ifstream bfs_in("test_profile_pdf.bvl.tmp");
-    TEST ("Opened test_profile_pdf.bvl.tmp for reading",
-           (!bfs_in), false);
+    TEST ("Opened test_profile_pdf.bvl.tmp for reading", (!bfs_in), false);
     vsl_b_read(bfs_in, profile_pdf_in);
     vsl_b_read(bfs_in, base_ptr_in);
     TEST ("Finished reading file successfully", (!bfs_in), false);
@@ -186,12 +178,10 @@ void test_profile_pdf()
 
     TEST("Loaded==Saved",profile_pdf_in,profile_pdf);
     TEST("Load profile_pdf by base ptr (type)",
-        base_ptr_in->is_a()==profile_pdf.is_a(),true);
-
+         base_ptr_in->is_a()==profile_pdf.is_a(),true);
   }
 
   vsl_delete_all_loaders();
-
 }
 
 TESTMAIN(test_profile_pdf);

@@ -1,25 +1,21 @@
 // This is mul/mfpf/tests/test_norm_corr2d.cxx
-//=======================================================================
-//
-//  Copyright: (C) 2008 The University of Manchester
-//
-//=======================================================================
 #include <testlib/testlib_test.h>
 //:
 // \file
 // \author Tim Cootes
 // \brief test mfpf_norm_corr2d
+//=======================================================================
+//
+//  Copyright: (C) 2008 The University of Manchester
+//
+//=======================================================================
 
 #include <vcl_iostream.h>
 #include <vsl/vsl_binary_loader.h>
-#include <vcl_cmath.h>
-#include <vnl/vnl_math.h>
-#include <mbl/mbl_cloneables_factory.h>
 #include <mfpf/mfpf_add_all_loaders.h>
 #include <mfpf/mfpf_norm_corr2d.h>
 #include <mfpf/mfpf_norm_corr2d_builder.h>
 #include <vil/vil_bilin_interp.h>
-#include <mfpf/mfpf_add_all_loaders.h>
 
 //=======================================================================
 
@@ -48,7 +44,6 @@ void test_norm_corr2d_search(mfpf_point_finder_builder& b)
   vgl_point_2d<double> new_p;
   vgl_vector_2d<double> new_u;
 
-
   TEST_NEAR("Evaluate at true point",pf->evaluate(image,p0,u),-1,1e-6);
 
   pf->set_search_area(0,0);
@@ -72,15 +67,13 @@ void test_norm_corr2d_search(mfpf_point_finder_builder& b)
 
   // Check that response has local minima in correct place
   vgl_point_2d<double> ip = response.world2im()(new_p);
-  TEST("Best pt in image (i)",
-       ip.x()>=0 && ip.x()<response.image().ni(),true);
-  TEST("Best pt in image (j)",
-       ip.y()>=0 && ip.y()<response.image().nj(),true);
+  TEST("Best pt in image (i)", ip.x()>=0 && ip.x()<response.image().ni(),true);
+  TEST("Best pt in image (j)", ip.y()>=0 && ip.y()<response.image().nj(),true);
 
   double r0 = vil_bilin_interp_safe(response.image(),ip.x(),ip.y());
   double r1 = vil_bilin_interp_safe(response.image(),ip.x()-1,ip.y());
   double r2 = vil_bilin_interp_safe(response.image(),ip.x()+1,ip.y());
-  vcl_cout<<r0<<","<<r1<<","<<r2<<vcl_endl;
+  vcl_cout<<r0<<','<<r1<<','<<r2<<vcl_endl;
   TEST("Local minima 1",r0<r1,true);
   TEST("Local minima 2",r0<r2,true);
  
@@ -89,9 +82,9 @@ void test_norm_corr2d_search(mfpf_point_finder_builder& b)
 
 void test_norm_corr2d()
 {
-  vcl_cout << "***********************\n"
+  vcl_cout << "**************************\n"
            << " Testing mfpf_norm_corr2d\n"
-           << "***********************\n";
+           << "**************************\n";
 
   mfpf_add_all_loaders();
 
@@ -136,8 +129,7 @@ void test_norm_corr2d()
     vcl_auto_ptr<mfpf_point_finder_builder>
             pf = mfpf_point_finder_builder::create_from_stream(ss);
 
-    TEST("Correct Point Finder Builder",
-         pf->is_a(),"mfpf_norm_corr2d_builder");
+    TEST("Correct Point Finder Builder", pf->is_a(),"mfpf_norm_corr2d_builder");
     if (pf->is_a()=="mfpf_norm_corr2d_builder")
     {
       mfpf_norm_corr2d_builder &a_pf = static_cast<mfpf_norm_corr2d_builder&>(*pf);
@@ -148,7 +140,6 @@ void test_norm_corr2d()
       TEST("nj configured",a_pf.nj(),5);
     }
   }
-
 
   {
     // Test builder returns correct type of object
@@ -166,8 +157,7 @@ void test_norm_corr2d()
     mfpf_point_finder * base_ptr = &norm_corr2d;
 
     vsl_b_ofstream bfs_out("test_norm_corr2d.bvl.tmp");
-    TEST ("Created test_norm_corr2d.bvl.tmp for writing",
-             (!bfs_out), false);
+    TEST ("Created test_norm_corr2d.bvl.tmp for writing", (!bfs_out), false);
     vsl_b_write(bfs_out, norm_corr2d);
     vsl_b_write(bfs_out, base_ptr);
     bfs_out.close();
@@ -176,22 +166,19 @@ void test_norm_corr2d()
     mfpf_point_finder *base_ptr_in = 0;
 
     vsl_b_ifstream bfs_in("test_norm_corr2d.bvl.tmp");
-    TEST ("Opened test_norm_corr2d.bvl.tmp for reading",
-           (!bfs_in), false);
+    TEST ("Opened test_norm_corr2d.bvl.tmp for reading", (!bfs_in), false);
     vsl_b_read(bfs_in, norm_corr2d_in);
     vsl_b_read(bfs_in, base_ptr_in);
     TEST ("Finished reading file successfully", (!bfs_in), false);
     bfs_in.close();
-vcl_cout<<norm_corr2d<<vcl_endl;
-vcl_cout<<norm_corr2d_in<<vcl_endl;
+    vcl_cout<<norm_corr2d<<vcl_endl
+            <<norm_corr2d_in<<vcl_endl;
     TEST("Loaded==Saved",norm_corr2d_in,norm_corr2d);
     TEST("Load norm_corr2d by base ptr (type)",
-        base_ptr_in->is_a()==norm_corr2d.is_a(),true);
-
+         base_ptr_in->is_a()==norm_corr2d.is_a(),true);
   }
 
   vsl_delete_all_loaders();
-
 }
 
 TESTMAIN(test_norm_corr2d);

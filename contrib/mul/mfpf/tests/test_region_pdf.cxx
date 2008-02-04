@@ -1,25 +1,21 @@
 // This is mul/mfpf/tests/test_region_pdf.cxx
-//=======================================================================
-//
-//  Copyright: (C) 2008 The University of Manchester
-//
-//=======================================================================
 #include <testlib/testlib_test.h>
 //:
 // \file
 // \author Tim Cootes
 // \brief test mfpf_region_pdf
+//=======================================================================
+//
+//  Copyright: (C) 2008 The University of Manchester
+//
+//=======================================================================
 
 #include <vcl_iostream.h>
 #include <vsl/vsl_binary_loader.h>
-#include <vcl_cmath.h>
-#include <vnl/vnl_math.h>
-#include <mbl/mbl_cloneables_factory.h>
 #include <mfpf/mfpf_add_all_loaders.h>
 #include <mfpf/mfpf_region_pdf.h>
 #include <mfpf/mfpf_region_pdf_builder.h>
 #include <vil/vil_bilin_interp.h>
-#include <mfpf/mfpf_add_all_loaders.h>
 #include <vpdfl/vpdfl_axis_gaussian_builder.h>
 
 //=======================================================================
@@ -58,8 +54,8 @@ void test_region_pdf_search(mfpf_point_finder_builder& b)
 
   pf->set_search_area(3,3);
   pf->search(image,p1,u,new_p,new_u);
-  vcl_cout<<"Found point: "<<new_p<<vcl_endl;
-  vcl_cout<<"Should be : "<<p0<<vcl_endl;
+  vcl_cout<<"Found point: "<<new_p<<vcl_endl
+          <<"Should be : "<<p0<<vcl_endl;
 
   TEST_NEAR("Correct orientation",(new_u-u).length(),0.0,1e-6);
   TEST_NEAR("Correct location",(new_p-p0).length(),0.0,1e-6);
@@ -72,15 +68,13 @@ void test_region_pdf_search(mfpf_point_finder_builder& b)
 
   // Check that response has local minima in correct place
   vgl_point_2d<double> ip = response.world2im()(new_p);
-  TEST("Best pt in image (i)",
-       ip.x()>=0 && ip.x()<response.image().ni(),true);
-  TEST("Best pt in image (j)",
-       ip.y()>=0 && ip.y()<response.image().nj(),true);
+  TEST("Best pt in image (i)", ip.x()>=0 && ip.x()<response.image().ni(),true);
+  TEST("Best pt in image (j)", ip.y()>=0 && ip.y()<response.image().nj(),true);
 
   double r0 = vil_bilin_interp_safe(response.image(),ip.x(),ip.y());
   double r1 = vil_bilin_interp_safe(response.image(),ip.x()-1,ip.y());
   double r2 = vil_bilin_interp_safe(response.image(),ip.x()+1,ip.y());
-  vcl_cout<<r0<<","<<r1<<","<<r2<<vcl_endl;
+  vcl_cout<<r0<<','<<r1<<','<<r2<<vcl_endl;
   TEST("Local minima 1",r0<r1,true);
   TEST("Local minima 2",r0<r2,true);
  
@@ -89,9 +83,9 @@ void test_region_pdf_search(mfpf_point_finder_builder& b)
 
 void test_region_pdf()
 {
-  vcl_cout << "***********************\n"
+  vcl_cout << "*************************\n"
            << " Testing mfpf_region_pdf\n"
-           << "***********************\n";
+           << "*************************\n";
 
   mfpf_add_all_loaders();
 
@@ -111,7 +105,6 @@ void test_region_pdf()
   r_builder.print_shape(vcl_cout);
 
   test_region_pdf_search(r_builder);
-
 
   // -------------------------------------------
   //  Test configuring from stream
@@ -149,8 +142,7 @@ void test_region_pdf()
     vcl_auto_ptr<mfpf_point_finder_builder>
             pf = mfpf_point_finder_builder::create_from_stream(ss);
 
-    TEST("Correct Point Finder Builder",
-         pf->is_a(),"mfpf_region_pdf_builder");
+    TEST("Correct Point Finder Builder", pf->is_a(),"mfpf_region_pdf_builder");
     if (pf->is_a()=="mfpf_region_pdf_builder")
     {
       mfpf_region_pdf_builder &a_pf = static_cast<mfpf_region_pdf_builder&>(*pf);
@@ -174,8 +166,7 @@ void test_region_pdf()
     vcl_auto_ptr<mfpf_point_finder_builder>
             pf = mfpf_point_finder_builder::create_from_stream(ss);
 
-    TEST("Correct Point Finder Builder",
-         pf->is_a(),"mfpf_region_pdf_builder");
+    TEST("Correct Point Finder Builder", pf->is_a(),"mfpf_region_pdf_builder");
     if (pf->is_a()=="mfpf_region_pdf_builder")
     {
       mfpf_region_pdf_builder &a_pf = static_cast<mfpf_region_pdf_builder&>(*pf);
@@ -186,7 +177,6 @@ void test_region_pdf()
       TEST("n_pixels configured",a_pf.n_pixels(),45);
     }
   }
-
 
   {
     // Test builder returns correct type of object
@@ -204,8 +194,7 @@ void test_region_pdf()
     mfpf_point_finder * base_ptr = &region_pdf;
 
     vsl_b_ofstream bfs_out("test_region_pdf.bvl.tmp");
-    TEST ("Created test_region_pdf.bvl.tmp for writing",
-             (!bfs_out), false);
+    TEST ("Created test_region_pdf.bvl.tmp for writing", (!bfs_out), false);
     vsl_b_write(bfs_out, region_pdf);
     vsl_b_write(bfs_out, base_ptr);
     bfs_out.close();
@@ -214,22 +203,19 @@ void test_region_pdf()
     mfpf_point_finder *base_ptr_in = 0;
 
     vsl_b_ifstream bfs_in("test_region_pdf.bvl.tmp");
-    TEST ("Opened test_region_pdf.bvl.tmp for reading",
-           (!bfs_in), false);
+    TEST ("Opened test_region_pdf.bvl.tmp for reading", (!bfs_in), false);
     vsl_b_read(bfs_in, region_pdf_in);
     vsl_b_read(bfs_in, base_ptr_in);
     TEST ("Finished reading file successfully", (!bfs_in), false);
     bfs_in.close();
-vcl_cout<<region_pdf<<vcl_endl;
-vcl_cout<<region_pdf_in<<vcl_endl;
+    vcl_cout<<region_pdf<<vcl_endl
+            <<region_pdf_in<<vcl_endl;
     TEST("Loaded==Saved",region_pdf_in,region_pdf);
     TEST("Load region_pdf by base ptr (type)",
-        base_ptr_in->is_a()==region_pdf.is_a(),true);
-
+         base_ptr_in->is_a()==region_pdf.is_a(),true);
   }
 
   vsl_delete_all_loaders();
-
 }
 
 TESTMAIN(test_region_pdf);
