@@ -1,7 +1,6 @@
-// This is brl/brdb/brdb_database_sptr.h
+// This is brl/bbas/brdb/brdb_database_sptr.h
 #ifndef brdb_database_sptr_h
 #define brdb_database_sptr_h
-
 //:
 // \file
 

@@ -1,7 +1,6 @@
-// This is brl/brdb/brdb_selection_sptr.h
+// This is brl/bbas/brdb/brdb_selection_sptr.h
 #ifndef brdb_selection_sptr_h
 #define brdb_selection_sptr_h
-
 //:
 // \file
 

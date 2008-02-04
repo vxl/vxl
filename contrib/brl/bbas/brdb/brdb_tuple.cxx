@@ -1,4 +1,5 @@
 // This is brl/bbas/brdb/brdb_tuple.cxx
+#include "brdb_tuple.h"
 //:
 // \file
 //
@@ -6,7 +7,6 @@
 // Apr 4th, 2007
 // make it work with the database initially
 
-#include <brdb/brdb_tuple.h>
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 
@@ -126,10 +126,10 @@ bool
 brdb_tuple::get_value(unsigned int index, brdb_value_sptr& value) const
 {
   // check index range
-  if(index >= values_.size())
+  if (index >= values_.size())
     return false;
   // check for an existing value
-  if(!values_[index])
+  if (!values_[index])
     return false;
   // assign the value if types agree
   value =  values_[index];
@@ -146,10 +146,10 @@ brdb_tuple::add_value(const brdb_value& value)
 }
 
 //: add a value into the tuple
-bool 
+bool
 brdb_tuple::add_value(brdb_value_sptr const& value)
 {
-  if(!value)
+  if (!value)
     return false;
   // add it into the tuple
   values_.push_back(value->clone());
@@ -173,8 +173,8 @@ brdb_tuple::print() const
 void
 brdb_tuple::b_read_values(vsl_b_istream &is)
 {
-  for(vcl_vector<brdb_value_sptr>::iterator i=values_.begin();
-      i!=values_.end(); ++i)
+  for (vcl_vector<brdb_value_sptr>::iterator i=values_.begin();
+       i!=values_.end(); ++i)
     (*i)->b_read_value(is);
 }
 
@@ -184,8 +184,8 @@ brdb_tuple::b_read_values(vsl_b_istream &is)
 void
 brdb_tuple::b_write_values(vsl_b_ostream &os) const
 {
-	for(vcl_vector<brdb_value_sptr>::const_iterator i=values_.begin();
-      i!=values_.end(); ++i)
+  for (vcl_vector<brdb_value_sptr>::const_iterator i=values_.begin();
+       i!=values_.end(); ++i)
     (*i)->b_write_value(os);
 }
 

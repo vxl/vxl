@@ -1,7 +1,6 @@
-// This is brl/brdb/brdb_query_aptr.h
+// This is brl/bbas/brdb/brdb_query_aptr.h
 #ifndef brdb_query_aptr_h
 #define brdb_query_aptr_h
-
 //:
 // \file
 
