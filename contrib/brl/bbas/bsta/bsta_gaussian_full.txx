@@ -148,7 +148,7 @@ bsta_gaussian_full<T,n>::inv_covar() const
 }
 
 
-#define DBSTA_GAUSSIAN_FIXED_INSTANTIATE(T,n) \
+#define BSTA_GAUSSIAN_FULL_INSTANTIATE(T,n) \
 template class bsta_gaussian_full<T,n >
 
 
