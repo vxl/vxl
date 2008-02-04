@@ -31,6 +31,7 @@ void bwm_video_site_io::init_params()
   camera_path_ = "";
   corr_ = 0;
 }
+
 void bwm_video_site_io::clear()
 {
   name_ = "";
@@ -100,7 +101,7 @@ bwm_video_site_io::startElement(const char* name, const char** atts)
   else if (vcl_strcmp(name, CORRESP_WORLD_PT_TAG) == 0) {
     double X = 0, Y = 0, Z = 0;
     bool success = true;
-      if(vcl_strcmp(atts[0], "X") == 0)
+      if (vcl_strcmp(atts[0], "X") == 0)
         convert(atts[1], X);
       else success = false;
       if (vcl_strcmp(atts[2], "Y") == 0)
@@ -109,14 +110,14 @@ bwm_video_site_io::startElement(const char* name, const char** atts)
       if (vcl_strcmp(atts[4], "Z") == 0)
         convert(atts[5], Z);
       else success = false;
-      if(success)
+      if (success)
         corr_->set_world_pt(vgl_point_3d<double>(X, Y, Z));
   }
   else if (vcl_strcmp(name, CORR_ELE) == 0) {
     unsigned frame=0;
     double u = 0, v = 0;
     bool success = true;
-      if(vcl_strcmp(atts[0], "fr") == 0)
+      if (vcl_strcmp(atts[0], "fr") == 0)
         convert(atts[1], frame);
       else success = false;
       if (vcl_strcmp(atts[2], "u") == 0)
@@ -125,7 +126,7 @@ bwm_video_site_io::startElement(const char* name, const char** atts)
       if (vcl_strcmp(atts[4], "v") == 0)
         convert(atts[5], v);
       else success = false;
-      if(success)
+      if (success)
         corr_->add(frame, vgl_point_2d<double>(u, v));
   }
 }
@@ -133,13 +134,13 @@ bwm_video_site_io::startElement(const char* name, const char** atts)
 void
 bwm_video_site_io::endElement(const char* name)
 {
-	// first check if the last element has some cdata
+   // first check if the last element has some cdata
    if (cdata.size() > 0) {
      cdataHandler(name, cdata);
      cdata= "";
    }
 
-   if(vcl_strcmp(name, CORRESP_TAG) == 0){
+   if (vcl_strcmp(name, CORRESP_TAG) == 0){
      corrs_.push_back(corr_);
    }
    else if (vcl_strcmp(name, CORRESPONDENCES_TAG) == 0) {
@@ -169,14 +170,17 @@ void bwm_video_site_io::trim_string(vcl_string& s)
   vcl_string t = s.substr(i,j-i+1);
   s = t;
 }
+
 //
 // =========  xwrite section ========
 //
+
 void bwm_video_site_io::
 set_corrs(vcl_vector<bwm_video_corr_sptr> const& corrs)
 {
   corrs_ = corrs;
 }
+
 void bwm_video_site_io::set_video_path(vcl_string const& video_path)
 {
   video_path_ = video_path;
@@ -190,7 +194,7 @@ void bwm_video_site_io::set_camera_path(vcl_string const& camera_path)
 void bwm_video_site_io::x_write(vcl_string const& xml_path)
 {
   vcl_ofstream os(xml_path.c_str());
-  if(!os)
+  if (!os)
     return;
   vsl_basic_xml_element vsite(VIDEO_SITE);
   vsite.add_attribute("name", name_);
@@ -208,7 +212,7 @@ void bwm_video_site_io::x_write(vcl_string const& xml_path)
   vsl_basic_xml_element corrs(CORRESPONDENCES_TAG);
   corrs.x_write_open(os);
   vcl_vector<bwm_video_corr_sptr >::iterator cit = corrs_.begin();
-  for(; cit != corrs_.end(); ++cit)
+  for (; cit != corrs_.end(); ++cit)
     (*cit)->x_write(os);
   corrs.x_write_close(os);
   vsite.x_write_close(os);

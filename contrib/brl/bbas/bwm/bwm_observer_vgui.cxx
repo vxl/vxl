@@ -28,19 +28,19 @@
 #define SHRINK_MESH 1
 
 bwm_observer_vgui::bwm_observer_vgui(bgui_image_tableau_sptr const& img)
-  : bwm_observer_img(img), moving_face_(0), corr_valid_(false) 
+  : bwm_observer_img(img), moving_face_(0), corr_valid_(false)
 {
   corr_.second = 0;
   mesh_style_= vgui_style::new_style();
-  mesh_style_->rgba[0] = 0.75f; 
-  mesh_style_->rgba[1] = 0.75f; 
-  mesh_style_->rgba[2] = 0.0f; 
+  mesh_style_->rgba[0] = 0.75f;
+  mesh_style_->rgba[1] = 0.75f;
+  mesh_style_->rgba[2] = 0.0f;
   mesh_style_->line_width = 3.0;
 
   vertex_style_ = vgui_style::new_style();
-  vertex_style_->rgba[0] = 0.0f; 
-  vertex_style_->rgba[1] = 1.0f; 
-  vertex_style_->rgba[2] = 0.0f; 
+  vertex_style_->rgba[0] = 0.0f;
+  vertex_style_->rgba[1] = 1.0f;
+  vertex_style_->rgba[2] = 0.0f;
   vertex_style_->line_width = 2.0;
 }
 
@@ -80,15 +80,15 @@ void bwm_observer_vgui::corr_image_pt(float& x, float& y)
 //: the current location of the correspondence point, if corr is valid
 bool bwm_observer_vgui::corr_image_pt(vgl_point_2d<double>& pt)
 {
-  if(corr_valid_){
+  if (corr_valid_){
     pt = corr_.first;
     return true;
   }
   else
-    { 
-      pt.set(-1, -1);
+  {
+    pt.set(-1, -1);
     return false;
-    }
+  }
 }
 
 void bwm_observer_vgui::show_vertices(bool show)
@@ -119,8 +119,9 @@ void bwm_observer_vgui::show_vertices(bool show)
         object_verts_[obs] = new_vertex_list;
         it++;
       }
-      
-    } else {
+    }
+    else
+    {
       // remove the vertices from the tableau
       vcl_map<bwm_observable_sptr, vcl_vector<bwm_soview2D_vertex* > >::iterator it = object_verts_.begin();
       while (it != object_verts_.end()) {
@@ -136,11 +137,10 @@ void bwm_observer_vgui::show_vertices(bool show)
   }
 }
 
-void bwm_observer_vgui::draw_mesh(bwm_observable_sptr observable, 
+void bwm_observer_vgui::draw_mesh(bwm_observable_sptr observable,
                                   vcl_map<unsigned, bgui_vsol_soview2D_polygon* > &poly_list,
                                   vcl_vector<bwm_soview2D_vertex*> &vertx_list,
                                   vcl_vector<vsol_point_2d_sptr> &vertx_xy_list)
-
 {
   if (observable) {
     vcl_map<int, vsol_polygon_3d_sptr> faces = observable->extract_faces();
@@ -179,14 +179,15 @@ void bwm_observer_vgui::draw_mesh(bwm_observable_sptr observable,
     }
 
     // add the vertices of the mesh
-    for(unsigned i=0; i<vertices.size(); i++) {
+    for (unsigned i=0; i<vertices.size(); i++)
+    {
       vsol_point_3d_sptr v = vertices[i];
       vgl_point_2d<double> v2d;
       proj_point(v->get_p(), v2d);
       vertx_xy_list.push_back(new vsol_point_2d(v2d.x(), v2d.y()));
-      
+
       if (show_vertices_) {
-        if (poly_list.size() == 0) 
+        if (poly_list.size() == 0)
           return ;
 
         vcl_map<unsigned, bgui_vsol_soview2D_polygon* >::iterator face_it = poly_list.begin();
@@ -202,7 +203,7 @@ void bwm_observer_vgui::draw_mesh(bwm_observable_sptr observable,
 }
 
 void bwm_observer_vgui::add_new_obj(bwm_observable_sptr observable)
-{  
+{
   vcl_map<unsigned, bgui_vsol_soview2D_polygon* > poly_list;
   vcl_vector<bwm_soview2D_vertex*> vertx_list;
   vcl_vector<vsol_point_2d_sptr> vertx_list_xy;
@@ -214,6 +215,7 @@ void bwm_observer_vgui::add_new_obj(bwm_observable_sptr observable)
     object_verts_xy_[observable] = vertx_list_xy;
   }
 }
+
 void bwm_observer_vgui::handle_update(vgui_message const& msg,
                                       bwm_observable_sptr observable)
 {
@@ -245,8 +247,9 @@ void bwm_observer_vgui::handle_update(vgui_message const& msg,
         //delete ov[i];
       }
     }
-  } else {
-        
+  }
+  else
+  {
     vcl_map<unsigned, bgui_vsol_soview2D_polygon* > poly_list;
     vcl_vector<bwm_soview2D_vertex*> poly_verts;
     vcl_vector<vsol_point_2d_sptr> poly_verts_xy;
@@ -264,14 +267,14 @@ void bwm_observer_vgui::handle_update(vgui_message const& msg,
       while (it != p.end()) {
         // remove the polygon
         this->remove(it->second);
-        //delete (it->second);
+        //delete it->second;
         it++;
       }
 
       // remove the vertices
       for (unsigned i=0; i<ov.size(); i++) {
           this->remove(ov[i]);
-          //delete(ov[i]);
+          //delete ov[i];
       }
       objects_[observable] = poly_list;
       object_verts_[observable] = poly_verts;
@@ -331,7 +334,6 @@ void bwm_observer_vgui::delete_all()
       bwm_world::instance()->remove(obj);
       obj->remove();
     }
-
   }
   objects_.clear();
 }
@@ -344,7 +346,7 @@ void bwm_observer_vgui::set_corr(float x, float y)
   // delete the previous correlation point if valid
   if (corr_valid_&&corr_.second) {
     this->remove(corr_.second);
-	corr_.second=0;
+    corr_.second=0;
   }
 
   // draw a cross at that point
@@ -596,11 +598,12 @@ vsol_polygon_2d_sptr bwm_observer_vgui::shrink_face(vsol_polygon_2d_sptr poly)
   vsol_polygon_2d_sptr new_polygon = new vsol_polygon_2d(new_points);
   return new_polygon;
 }
+
 //: only is implemented for a single polygonal face
 void bwm_observer_vgui::select_object(bwm_observable_sptr const& obj)
 {
   vcl_map<unsigned, bgui_vsol_soview2D_polygon* > pmap = objects_[obj];
-  if(pmap.size()!=1)
+  if (pmap.size()!=1)
     return;
   bgui_vsol_soview2D_polygon* sov = (*pmap.begin()).second;
   unsigned id = sov->get_id();

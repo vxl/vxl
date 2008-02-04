@@ -1,5 +1,4 @@
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
 #include <testlib/testlib_test.h>
 #include <vul/vul_file.h>
 #include <vcl_string.h>
@@ -9,7 +8,6 @@
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
-#include <vnl/vnl_double_3x4.h>
 
 #include <bwm/video/bwm_video_cam_istream.h>
 #include <bwm/video/bwm_video_cam_ostream.h>
@@ -35,7 +33,7 @@ static void test_cam_iostream()
     vpgl_perspective_camera<double> P(K, center, vgl_rotation_3d<double>(R));
 
     vcl_cout << "Camera " << P;
-    
+
     vcl_string dir = "cam_dir";
     vcl_cout << "Made camera stream directory "<< dir << '\n';
     vul_file::make_directory(dir.c_str());
@@ -43,7 +41,7 @@ static void test_cam_iostream()
     bool open = cam_ostr.is_open();
     TEST("open output camera stream", open, true);
     bool write = true;
-    for(unsigned i = 0; i<11; ++i)
+    for (unsigned i = 0; i<11; ++i)
       write = write && cam_ostr.write_camera(&P);
     TEST("write to camera stream", write, true);
     cam_ostr.close();
@@ -53,10 +51,10 @@ static void test_cam_iostream()
     open = cam_istr.is_open();
     TEST("open input camera stream", open, true);
     bool read = true;
-    while(vpgl_perspective_camera<double>* c = cam_istr.read_camera())
+    while (vpgl_perspective_camera<double>* c = cam_istr.read_camera())
       read = read && *c == P;
     TEST("read input camera stream", read, true);
-	vpl_unlink(dir.c_str());
+    vpl_unlink(dir.c_str());
 }
 
 TESTMAIN(test_cam_iostream);

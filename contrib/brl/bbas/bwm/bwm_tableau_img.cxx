@@ -46,11 +46,10 @@ void bwm_tableau_img::create_polygon()
   vsol_polygon_2d_sptr poly2d;
   set_color(1, 0, 0);
   pick_polygon(poly2d);
-  if(!poly2d)
+  if (!poly2d)
   {
-	  vcl_cerr << "In bwm_tableau_img::create_polygon() -" 
-		          " picking failed\n";
-	  return;
+    vcl_cerr << "In bwm_tableau_img::create_polygon() - picking failed\n";
+    return;
   }
   my_observer_->image_tableau()->lock_linenum(false);
 
@@ -67,11 +66,10 @@ void bwm_tableau_img::create_polyline()
   vsol_polyline_2d_sptr poly2d;
   set_color(1, 0, 0);
   this->pick_polyline(poly2d);
-  if(!poly2d)
+  if (!poly2d)
   {
-	  vcl_cerr << "In bwm_tableau_img::create_polyline() -" 
-		          " picking failed\n";
-	  return;
+    vcl_cerr << "In bwm_tableau_img::create_polyline() - picking failed\n";
+    return;
   }
 
   my_observer_->image_tableau()->lock_linenum(false);
@@ -179,9 +177,7 @@ void bwm_tableau_img::lines_vd()
 
 void bwm_tableau_img::recover_edges()
 {
-
   my_observer_->recover_edges();
-
 }
 
 void bwm_tableau_img::recover_lines()

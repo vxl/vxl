@@ -57,7 +57,7 @@ bool vil_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const *scanline)
     }
 
     jpeg_set_defaults(&jobj);
-	jpeg_set_quality(&jobj, quality, TRUE);
+    jpeg_set_quality(&jobj, quality, TRUE);
 
     // start compression
     bool write_all_tables = true;
@@ -102,10 +102,10 @@ vil_jpeg_compressor::~vil_jpeg_compressor()
 
 void vil_jpeg_compressor::set_quality(int q)
 {
-	quality = q;
+  quality = q;
 }
 
 int vil_jpeg_compressor::get_quality()
 {
-	return quality;
+  return quality;
 }

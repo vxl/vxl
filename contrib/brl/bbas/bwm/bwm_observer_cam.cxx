@@ -40,11 +40,11 @@ bool bwm_observer_cam::handle(const vgui_event &e)
   if (e.type == vgui_BUTTON_DOWN && e.button == vgui_MIDDLE &&
       e.modifier == vgui_SHIFT)
   {
-    if(in_jog_mode_)
-      {
-        in_jog_mode_ = false;
-        return true;
-      }
+    if (in_jog_mode_)
+    {
+      in_jog_mode_ = false;
+      return true;
+    }
     // first get the selected polygon
     vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
     if (select_list.size() == 1)
@@ -168,26 +168,26 @@ bool bwm_observer_cam::handle(const vgui_event &e)
     moving_polygon_ = false;
     return true;
   }
-  if(e.type==vgui_KEY_PRESS && e.key == vgui_CURSOR_UP)
-    {
-      if(this == bwm_observer_mgr::BWM_MASTER_OBSERVER)
-        if(e.modifier == vgui_SHIFT)
-          this->translate_along_optical_axis(1.0);
-        else
-          this->translate_along_optical_axis(0.1);
-      in_jog_mode_ = true;
-      return true;
-    }
-  if(e.type==vgui_KEY_PRESS && e.key == vgui_CURSOR_DOWN)
-    {
-      if(this == bwm_observer_mgr::BWM_MASTER_OBSERVER)
-        if(e.modifier == vgui_SHIFT)
-          this->translate_along_optical_axis(-1.0);
-        else
-          this->translate_along_optical_axis(-0.1);
-      in_jog_mode_ = true;
-      return true;
-    }
+  if (e.type==vgui_KEY_PRESS && e.key == vgui_CURSOR_UP)
+  {
+    if (this == bwm_observer_mgr::BWM_MASTER_OBSERVER)
+      if (e.modifier == vgui_SHIFT)
+        this->translate_along_optical_axis(1.0);
+      else
+        this->translate_along_optical_axis(0.1);
+    in_jog_mode_ = true;
+    return true;
+  }
+  if (e.type==vgui_KEY_PRESS && e.key == vgui_CURSOR_DOWN)
+  {
+    if (this == bwm_observer_mgr::BWM_MASTER_OBSERVER)
+      if (e.modifier == vgui_SHIFT)
+        this->translate_along_optical_axis(-1.0);
+      else
+        this->translate_along_optical_axis(-0.1);
+    in_jog_mode_ = true;
+    return true;
+  }
 
   return base::handle(e);
 }
@@ -302,41 +302,40 @@ void bwm_observer_cam::move_ground_plane( vgl_plane_3d<double> master_plane,
 //Translate along *this* observer's optical axis
 void bwm_observer_cam::translate_along_optical_axis(double da)
 {
+  vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
 
-	vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
-
-  if ((select_list.size() == 1) &&
-	  select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0){ 
-    
-    bgui_vsol_soview2D_polygon* poly = 
+  if (select_list.size() == 1 &&
+      select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0)
+  {
+    bgui_vsol_soview2D_polygon* poly =
       static_cast<bgui_vsol_soview2D_polygon*> (select_list[0]);
-  
+
     //find the mesh this polygon belongs to
     unsigned int face_id;
     bwm_observable_sptr obs = find_object(poly->get_id(), face_id);
-    if(!obs) 
-      {
-        vcl_cerr << "In bwm_observer_cam::translate_along_optical_axis - "
-                 << "nothing selected to move\n";
-        return;
-      }
+    if (!obs)
+    {
+      vcl_cerr << "In bwm_observer_cam::translate_along_optical_axis - "
+               << "nothing selected to move\n";
+      return;
+    }
     vcl_vector<vsol_point_3d_sptr> verts = obs->extract_vertices();
-    if(!verts.size())
-      {
-        vcl_cerr << "In bwm_observer_cam::translate_along_optical_axis - "
-                 << "object has no vertices\n";
-        return;
-      }
+    if (!verts.size())
+    {
+      vcl_cerr << "In bwm_observer_cam::translate_along_optical_axis - "
+               << "object has no vertices\n";
+      return;
+    }
     vsol_point_3d_sptr p3d = verts[0];
-	vgl_point_3d<double> pg3d= p3d->get_p();
+    vgl_point_3d<double> pg3d= p3d->get_p();
     //get the direction of a ray
     vgl_vector_3d<double> ray_dir;
-    if(!vpgl_ray::ray(camera_, pg3d, ray_dir))
-      {
-        vcl_cerr << "In bwm_observer_cam::translate_along_optical_axis - "
-                 << "ray direction computation failed\n";
-        return;
-      }
+    if (!vpgl_ray::ray(camera_, pg3d, ray_dir))
+    {
+      vcl_cerr << "In bwm_observer_cam::translate_along_optical_axis - "
+               << "ray direction computation failed\n";
+      return;
+    }
     ray_dir *= da;
     this->translate(ray_dir, obs);
     this->select_object(obs);
@@ -345,6 +344,7 @@ void bwm_observer_cam::translate_along_optical_axis(double da)
   vcl_cerr << "In bwm_observer_cam::translate_along_optical_axis - "
            << "not exactly one selected vertex\n";
 }
+
 void bwm_observer_cam::proj_point(vgl_point_3d<double> world_pt,
                                   vgl_point_2d<double> &image_pt)
 {
@@ -761,9 +761,9 @@ void bwm_observer_cam::extrude_face(vsol_point_2d_sptr pt)
     unsigned index1 = -1, index2 = -1;
     vcl_cout << vcl_endl << "-- Selected v1=" << picked_v1->get_p() << vcl_endl
              <<  "-- Selected v2=" << picked_v2->get_p() << vcl_endl;
-    for (unsigned i=0; i<face2d->size(); i++) {
+    for (unsigned i=0; i<face2d->size(); i++)
+    {
       vgl_point_2d<double> pt = face2d->vertex(i)->get_p();
-
 
       double dist1 = (pt - picked_v1->get_p()).length();
       double dist2 = (pt - picked_v2->get_p()).length();

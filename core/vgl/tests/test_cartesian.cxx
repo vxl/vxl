@@ -142,10 +142,10 @@ static void test_vector_3d()
   tr[2] = n0.orthogonal_vectors(0.5);
   tr[3] = n0.orthogonal_vectors(0.75);
   double check = 0.0;
-  for(unsigned i = 0; i<4; ++i)
+  for (unsigned i = 0; i<4; ++i)
   {
     double d = dot_product<double>(n0, tr[i]);
-	  check += d*d;
+    check += d*d;
     d = dot_product<double>(tr[i], tr[i])-1.0;
     check += d*d;
   }
@@ -155,10 +155,10 @@ static void test_vector_3d()
   tr[1] = n1.orthogonal_vectors(0.25);
   tr[2] = n1.orthogonal_vectors(0.5);
   tr[3] = n1.orthogonal_vectors(0.75);
-  for(unsigned i = 0; i<4; ++i)
+  for (unsigned i = 0; i<4; ++i)
   {
     double d = dot_product<double>(n1, tr[i]);
-	  check += d*d;
+    check += d*d;
     d = dot_product<double>(tr[i], tr[i])-1.0;
     check += d*d;
   }
@@ -168,15 +168,14 @@ static void test_vector_3d()
   tr[1] = n2.orthogonal_vectors(0.25);
   tr[2] = n2.orthogonal_vectors(0.5);
   tr[3] = n2.orthogonal_vectors(0.75);
-  for(unsigned i = 0; i<4; ++i)
+  for (unsigned i = 0; i<4; ++i)
   {
     double d = dot_product<double>(n2, tr[i]);
-	  check += d*d;
+    check += d*d;
     d = dot_product<double>(tr[i], tr[i])-1.0;
     check += d*d;
   }
   TEST_NEAR("orthogonal vectors case III", check, 0.0, 1e-8);
-
 }
 
 static void test_point_2d()
@@ -654,7 +653,6 @@ static void test_box_2d()
   vcl_cout << ib << ib.centroid() << vcl_endl;
   TEST("Integer box centroid", ib.centroid_x() == 10 && ib.centroid_y()==10, true);
 
-
   ib = vgl_box_2d<int>(-11, -10, -11, -10);
   vcl_cout << ib << ib.centroid() << vcl_endl;
   ib.set_width(3); ib.set_height(3);
@@ -673,8 +671,6 @@ static void test_box_2d()
   ib.set_width(4); ib.set_height(4);
   vcl_cout << ib << ib.centroid() << vcl_endl;
   TEST("Integer box negative centroid drift", ib.centroid_x() == -10 && ib.centroid_y()==-10, true);
-
-
 
   vgl_point_2d<double> min1(10,10), max1(20,20),
                        min2(40,40), max2(50,50),
@@ -842,7 +838,6 @@ static void test_box_3d()
   TEST("!contains(p3)", b.contains(p3), false);
   TEST("box is empty", b.is_empty(), true);
   TEST("box has no volume", b.volume(), 0.0);
-
 
   vgl_point_3d<double> min1(10,10,10), max1(20,20,20),
                        min2(40,40,40), max2(50,50,50),

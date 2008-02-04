@@ -5,7 +5,6 @@
 
 #include "bwm_observer_cam.h"
 #include "video/bwm_video_corr_sptr.h"
-#include <vcl_iostream.h>
 #include <vcl_map.h>
 #include <vgui/vgui_style.h>
 #include <vpgl/vpgl_camera.h>
@@ -36,8 +35,8 @@ class bwm_observer_video : public bwm_observer_cam
   bool handle(const vgui_event &e);
 
   virtual vcl_string type_name() const { return "bwm_observer_video"; }
-  //:these are syncronized streams
-  // currently the camera stream is implemented as a set of files, 
+  // these are syncronized streams
+  // currently the camera stream is implemented as a set of files,
   // one for each video frame
   bool open_video_stream(vcl_string const& video_path);
   bool open_camera_stream(vcl_string const& camera_path);
@@ -66,7 +65,8 @@ class bwm_observer_video : public bwm_observer_cam
   //: select corr for tracking
   void unset_selected_corr_for_tracking();
 
-  //correspondence display methods
+  // --- correspondence display methods ---------------------------------------
+
   //: display the correspondences for a given frame on the current frame
   void display_video_corrs(unsigned frame_index);
 
@@ -85,19 +85,17 @@ class bwm_observer_video : public bwm_observer_cam
   //: turn on/off world point display
   void toggle_world_pt_display(){display_world_pts_ = !display_world_pts_;}
 
+  //Internals --------------------------------------- -------------------------
  protected:
-  //Internals
-	 protected:
-  vgui_style_sptr EDIT_STYLE; 
-  vgui_style_sptr CORR_STYLE; 
-  vgui_style_sptr MATCHED_STYLE; 
+  vgui_style_sptr EDIT_STYLE;
+  vgui_style_sptr CORR_STYLE;
+  vgui_style_sptr MATCHED_STYLE;
   vgui_style_sptr PREV_STYLE;
   vgui_style_sptr POINT_3D_STYLE;
 
   void init();
   //: this function is called when a correspondence is set by observer_vgui.
   virtual void correspondence_action();
-
 
   //: add the current correspondence on bwm_observer_vgui as a video_corr
   void add_video_corr();
@@ -106,7 +104,7 @@ class bwm_observer_video : public bwm_observer_cam
   bool find_selected_video_corr(unsigned& frame, unsigned& corr_index,
                                 bwm_soview2D_cross*& cross);
   //: display a single video correspondence
-  void display_video_corr(bwm_video_corr_sptr const& corr, 
+  void display_video_corr(bwm_video_corr_sptr const& corr,
                           unsigned frame_index,
                           vgui_style_sptr const& style);
 
@@ -116,8 +114,7 @@ class bwm_observer_video : public bwm_observer_cam
   //: is the correspondence displayed?
   bool is_displayed(bwm_video_corr_sptr const& corr, unsigned frame_index);
 
-  //: select the correspondence from a different frame that is 
-  // closest in time and position to the new correspondence
+  //: select the correspondence from a different frame that is closest in time and position to the new correspondence
   void select_closest_match();
 
   //: clear the entire display map
@@ -145,13 +142,12 @@ class bwm_observer_video : public bwm_observer_cam
 
   //: the video frame-to-frame correspondences, over all frames
   vcl_map<unsigned, bwm_video_corr_sptr> video_corrs_;
-  
+
   //: relation between correspondence views and correspondences and frame
   vcl_map<unsigned, vcl_map<unsigned, bwm_soview2D_cross*> > corr_soview_map_;
 
   //: relation between 3-d point display and corr id
   vcl_map<unsigned, vgui_soview2D_point*> world_pt_map_;
-
 };
 
 #endif
