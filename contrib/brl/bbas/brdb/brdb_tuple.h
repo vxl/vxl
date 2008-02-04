@@ -160,6 +160,12 @@ class brdb_tuple : public vbl_ref_count
   //  \retval false if invalid index or invalid type
   bool get_value(unsigned int index, brdb_value& value) const;
 
+  //: Get a value pointer by index with type checking
+  //  \retval true if successful
+  //  \retval false if invalid index or invalid type
+  bool get_value(unsigned int index, brdb_value_sptr& value) const;
+
+
   //: Convenience function for getting a value by index
   //  \retval true if successful
   //  \retval false if invalid index or invalid type
@@ -175,6 +181,9 @@ class brdb_tuple : public vbl_ref_count
 
   //: add a value into the tuple
   bool add_value(const brdb_value& value);
+
+  //: add a value pointer into the tuple
+  bool add_value(brdb_value_sptr const& value);
 
   //: Convenience function for adding a value
   template<class T>
@@ -198,7 +207,8 @@ class brdb_tuple : public vbl_ref_count
   //============================== Data Members ===============================
  private:
   //: The values of the attributes
-  vcl_vector<brdb_value*> values_;
+  vcl_vector<brdb_value_sptr> values_;
+
 };
 
 

@@ -61,7 +61,7 @@ brdb_tuple::brdb_tuple(const brdb_tuple& other)
 brdb_tuple::~brdb_tuple()
 {
   for (unsigned int i=0; i<values_.size(); ++i){
-    delete values_[i];
+    //delete values_[i];
   }
 }
 
@@ -74,7 +74,7 @@ brdb_tuple&
 brdb_tuple::operator = (const brdb_tuple& rhs)
 {
   for (unsigned int i=0; i<values_.size(); ++i){
-    delete values_[i];
+//    delete values_[i];
   }
   values_.resize(rhs.values_.size());
   for (unsigned int i=0; i<rhs.values_.size(); ++i){
@@ -100,7 +100,7 @@ brdb_tuple::set_value(unsigned int index, const brdb_value& value)
   assert(value.is_a() == values_[index]->is_a());
 
   // remove the old value;
-  delete values_[index];
+//  delete values_[index];
   values_[index] = value.clone();
   return values_[index] != NULL;
 }
@@ -121,6 +121,20 @@ brdb_tuple::get_value(unsigned int index, brdb_value& value) const
   // assign the value if types agree
   return value.assign(*values_[index]);
 }
+//: Get a value pointer by index
+bool
+brdb_tuple::get_value(unsigned int index, brdb_value_sptr& value) const
+{
+  // check index range
+  if(index >= values_.size())
+    return false;
+  // check for an existing value
+  if(!values_[index])
+    return false;
+  // assign the value if types agree
+  value =  values_[index];
+  return true;
+}
 
 //: add a value into the tuple
 bool
@@ -128,6 +142,17 @@ brdb_tuple::add_value(const brdb_value& value)
 {
   // add it into the tuple
   values_.push_back(value.clone());
+  return true;
+}
+
+//: add a value into the tuple
+bool 
+brdb_tuple::add_value(brdb_value_sptr const& value)
+{
+  if(!value)
+    return false;
+  // add it into the tuple
+  values_.push_back(value->clone());
   return true;
 }
 
@@ -148,8 +173,8 @@ brdb_tuple::print() const
 void
 brdb_tuple::b_read_values(vsl_b_istream &is)
 {
-  for (vcl_vector<brdb_value*>::iterator i=values_.begin();
-       i!=values_.end(); ++i)
+  for(vcl_vector<brdb_value_sptr>::iterator i=values_.begin();
+      i!=values_.end(); ++i)
     (*i)->b_read_value(is);
 }
 
@@ -159,8 +184,8 @@ brdb_tuple::b_read_values(vsl_b_istream &is)
 void
 brdb_tuple::b_write_values(vsl_b_ostream &os) const
 {
-  for (vcl_vector<brdb_value*>::const_iterator i=values_.begin();
-       i!=values_.end(); ++i)
+	for(vcl_vector<brdb_value_sptr>::const_iterator i=values_.begin();
+      i!=values_.end(); ++i)
     (*i)->b_write_value(os);
 }
 

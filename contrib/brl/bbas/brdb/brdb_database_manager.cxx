@@ -18,6 +18,7 @@
 
 brdb_database_sptr brdb_database_manager::instance_ = NULL;
 
+unsigned brdb_database_manager::id_ = 0;
 //: Insure only one instance is created
 brdb_database_sptr brdb_database_manager::instance()
 {

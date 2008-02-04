@@ -142,6 +142,26 @@ brdb_selection::get_value(const vcl_string& attribute_name, brdb_value& value)
   unsigned int index = this->relation_->index(attribute_name);
   return (*(*(itr)))->get_value(index ,value);
 }
+//: get value pointer from selected tupe (suppose there is only one tuple been selected)
+bool 
+brdb_selection::get_value(const vcl_string& attribute_name,
+                          brdb_value_sptr& value)
+{
+  // check and make sure that the selection is updated.
+  this->check_and_update();
+
+  // make sure that the size of this selection is 1;
+  if(size()!=1)
+  {
+    vcl_cout << "DB Selection error: trying to update tuples with zero or more than one new tuple. " << vcl_endl;   
+    return false;
+  }
+
+  selection_t::const_iterator itr = selected_set_.begin();
+  
+  unsigned int index = this->relation_->index(attribute_name);
+  return (*(*(itr)))->get_value(index ,value);
+}
 
 //: convenient function to get value from selected tuples with an index (say, the value of ith selected tuples)
 bool 

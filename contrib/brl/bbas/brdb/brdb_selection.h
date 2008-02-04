@@ -65,6 +65,9 @@ public:
   //: get value from selected tupe
   bool get_value(const vcl_string& attribute_name, brdb_value& value);
 
+  //: get value pointer from selected tupe
+  bool get_value(const vcl_string& attribute_name, brdb_value_sptr& value);
+
   //: convenient function to get value from selected tupe
   template<class T>
   bool get(const vcl_string& attribute_name, T& value)

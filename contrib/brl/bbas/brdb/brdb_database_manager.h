@@ -25,7 +25,8 @@ public:
   //: the global database instance
   static brdb_database_sptr instance();
 
-
+  //: a unique id
+  static unsigned id() {return id_++;}
   //: clear all relations except
   static bool clear_all_except(const vcl_set<vcl_string>& relation_names);
 
@@ -53,7 +54,8 @@ private:
 private:
   //: A static instance of the database
   static brdb_database_sptr instance_;
-
+  //: A unique id
+  static unsigned id_;
 };
 
 
