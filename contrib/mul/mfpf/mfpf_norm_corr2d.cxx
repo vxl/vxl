@@ -5,20 +5,18 @@
 
 
 #include <mfpf/mfpf_norm_corr2d.h>
-#include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
 #include <vcl_cmath.h>
+#include <vcl_cassert.h>
 #include <vcl_algorithm.h>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
-#include <mbl/mbl_cloneables_factory.h>
 
 #include <vil/vil_resample_bilin.h>
 #include <vil/io/vil_io_image_view.h>
 #include <vil/vil_math.h>
-#include <vil/vil_print.h>
 
 //=======================================================================
 // Dflt ctor
@@ -51,7 +49,7 @@ void mfpf_norm_corr2d::set_step_size(double s)
 }
 
 //: Define filter kernel to search with
-void mfpf_norm_corr2d::set(const vil_image_view<double>& k, 
+void mfpf_norm_corr2d::set(const vil_image_view<double>& k,
                            double ref_x, double ref_y)
 {
   // Copy, ensuring istep==1
@@ -90,8 +88,8 @@ void mfpf_norm_corr2d::set_search_area(unsigned ni, unsigned nj)
 
 // Assumes im2[i] has zero mean and unit length as a vector
 // Assumes element (i,j) is im1[i+j*jstep1] etc
-inline double norm_corr(const float* im1, const double* im2, 
-                        vcl_ptrdiff_t jstep1, vcl_ptrdiff_t jstep2, 
+inline double norm_corr(const float* im1, const double* im2,
+                        vcl_ptrdiff_t jstep1, vcl_ptrdiff_t jstep2,
                         unsigned ni, unsigned nj)
 {
   double sum1=0.0,sum2=0.0,sum_sq=0.0;
@@ -109,7 +107,7 @@ inline double norm_corr(const float* im1, const double* im2,
   return sum1/s;
 }
 
-//: Evaluate match at p, using u to define scale and orientation 
+//: Evaluate match at p, using u to define scale and orientation
 // Returns -1*edge strength at p along direction u
 double mfpf_norm_corr2d::evaluate(const vimt_image_2d_of<float>& image,
                         const vgl_point_2d<double>& p,
@@ -129,7 +127,7 @@ double mfpf_norm_corr2d::evaluate(const vimt_image_2d_of<float>& image,
 
   vil_resample_bilin(image.image(),sample,
                       im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
-                      im_v.x(),im_v.y(), 
+                      im_v.x(),im_v.y(),
                       kernel_.ni(),kernel_.nj());
 
   return -1*norm_corr(sample.top_left_ptr(),kernel_.top_left_ptr(),
@@ -137,7 +135,7 @@ double mfpf_norm_corr2d::evaluate(const vimt_image_2d_of<float>& image,
                       kernel_.ni(),kernel_.nj());
 }
 
-//: Evaluate match at in a region around p 
+//: Evaluate match at in a region around p
 // Returns a qualtity of fit at a set of positions.
 // response image (whose size and transform is set inside the
 // function), indicates the points at which the function was
@@ -169,7 +167,7 @@ void mfpf_norm_corr2d::evaluate_region(
 
   vil_resample_bilin(image.image(),sample,
                       im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
-                      im_v.x(),im_v.y(), 
+                      im_v.x(),im_v.y(),
                       nsi,nsj);
 
   response.image().set_size(ni,nj);
@@ -200,10 +198,10 @@ void mfpf_norm_corr2d::evaluate_region(
   response.set_world2im(i2w.inverse());
 }
 
-   //: Search given image around p, using u to define scale and orientation 
-   //  On exit, new_p and new_u define position, scale and orientation of 
-   //  the best nearby match.  Returns a qualtity of fit measure at that
-   //  point (the smaller the better).
+//: Search given image around p, using u to define scale and orientation
+//  On exit, new_p and new_u define position, scale and orientation of
+//  the best nearby match.  Returns a qualtity of fit measure at that
+//  point (the smaller the better).
 double mfpf_norm_corr2d::search(const vimt_image_2d_of<float>& image,
                         const vgl_point_2d<double>& p,
                         const vgl_vector_2d<double>& u,
@@ -228,7 +226,7 @@ double mfpf_norm_corr2d::search(const vimt_image_2d_of<float>& image,
 
   vil_resample_bilin(image.image(),sample,
                       im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
-                      im_v.x(),im_v.y(), 
+                      im_v.x(),im_v.y(),
                       nsi,nsj);
 
   const double* k = kernel_.top_left_ptr();
@@ -269,19 +267,19 @@ bool mfpf_norm_corr2d::set_from_stream(vcl_istream &is)
 
   // Extract the properties
   if (props.find("step_size")!=props.end())
-  { 
-    step_size_=vul_string_atof(props["step_size"]); 
-    props.erase("step_size"); 
+  {
+    step_size_=vul_string_atof(props["step_size"]);
+    props.erase("step_size");
   }
   if (props.find("search_ni")!=props.end())
-  { 
-    search_ni_=vul_string_atoi(props["search_ni"]); 
-    props.erase("search_ni"); 
+  {
+    search_ni_=vul_string_atoi(props["search_ni"]);
+    props.erase("search_ni");
   }
   if (props.find("search_nj")!=props.end())
-  { 
-    search_nj_=vul_string_atoi(props["search_nj"]); 
-    props.erase("search_nj"); 
+  {
+    search_nj_=vul_string_atoi(props["search_nj"]);
+    props.erase("search_nj");
   }
 
   // Check for unused props
@@ -311,22 +309,22 @@ mfpf_point_finder* mfpf_norm_corr2d::clone() const
 
 void mfpf_norm_corr2d::print_summary(vcl_ostream& os) const
 {
-  os<<"{ step_size: "<<step_size_;
-  os<<" size: "<<kernel_.ni()<<" x "<<kernel_.nj();
-  os<<" search_ni: "<<search_ni_;
-  os<<" search_nj: "<<search_nj_;
-  os<<" }";
+  os << "{ step_size: " << step_size_
+     << " size: " << kernel_.ni() << " x " << kernel_.nj()
+     << " search_ni: " << search_ni_
+     << " search_nj: " << search_nj_
+     << '}';
 }
 
 void mfpf_norm_corr2d::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
-  vsl_b_write(bfs,step_size_); 
-  vsl_b_write(bfs,kernel_); 
-  vsl_b_write(bfs,ref_x_); 
-  vsl_b_write(bfs,ref_y_); 
-  vsl_b_write(bfs,search_ni_); 
-  vsl_b_write(bfs,search_nj_); 
+  vsl_b_write(bfs,step_size_);
+  vsl_b_write(bfs,kernel_);
+  vsl_b_write(bfs,ref_x_);
+  vsl_b_write(bfs,ref_y_);
+  vsl_b_write(bfs,search_ni_);
+  vsl_b_write(bfs,search_nj_);
 }
 
 //=======================================================================
@@ -349,8 +347,8 @@ void mfpf_norm_corr2d::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,search_nj_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&) \n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
@@ -367,8 +365,6 @@ bool mfpf_norm_corr2d::operator==(const mfpf_norm_corr2d& nc) const
   if (vcl_fabs(ref_y_-nc.ref_y_)>1e-6) return false;
   if (vcl_fabs(step_size_-nc.step_size_)>1e-6) return false;
   if (kernel_.size()!=nc.kernel_.size()) return false;
-  if (kernel_.size()==0) return true;  // ssd fails on empty 
+  if (kernel_.size()==0) return true;  // ssd fails on empty
   return (vil_math_ssd(kernel_,nc.kernel_,double(0))<1e-4);
 }
-
-

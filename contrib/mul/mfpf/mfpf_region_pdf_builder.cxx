@@ -6,17 +6,15 @@
 
 #include <mfpf/mfpf_region_pdf_builder.h>
 #include <mfpf/mfpf_region_pdf.h>
-#include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
 #include <vcl_cmath.h>
+#include <vcl_cassert.h>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
-#include <mbl/mbl_cloneables_factory.h>
 
 #include <vil/vil_resample_bilin.h>
-#include <vil/vil_math.h>
 #include <vsl/vsl_vector_io.h>
 
 #include <mfpf/mfpf_sample_region.h>
@@ -69,17 +67,17 @@ mfpf_point_finder* mfpf_region_pdf_builder::new_finder() const
 }
 
 //: Define model region as an ni x nj box
-void mfpf_region_pdf_builder::set_as_box(unsigned ni, unsigned nj, 
-                  double ref_x, double ref_y, 
-                  const vpdfl_builder_base& builder)
+void mfpf_region_pdf_builder::set_as_box(unsigned ni, unsigned nj,
+                                         double ref_x, double ref_y,
+                                         const vpdfl_builder_base& builder)
 {
   set_as_box(ni,nj,ref_x,ref_y);
   pdf_builder_ = builder.clone();
 }
 
 //: Define model region as an ni x nj box
-void mfpf_region_pdf_builder::set_as_box(unsigned ni, unsigned nj, 
-                  double ref_x, double ref_y)
+void mfpf_region_pdf_builder::set_as_box(unsigned ni, unsigned nj,
+                                         double ref_x, double ref_y)
 {
   roi_ni_=ni; roi_nj_=nj;
   n_pixels_ = ni*nj;
@@ -94,16 +92,16 @@ void mfpf_region_pdf_builder::set_as_box(unsigned ni, unsigned nj,
 
 
 //: Define model region as an ni x nj box
-void mfpf_region_pdf_builder::set_as_box(unsigned ni, unsigned nj, 
-                  const vpdfl_builder_base& builder)
+void mfpf_region_pdf_builder::set_as_box(unsigned ni, unsigned nj,
+                                         const vpdfl_builder_base& builder)
 {
   set_as_box(ni,nj, 0.5*(ni-1),0.5*(nj-1), builder);
 }
 
 //: Define model region as an ellipse with radii ri, rj
 //  Ref. point in centre.
-void mfpf_region_pdf_builder::set_as_ellipse(double ri, double rj, 
-                  const vpdfl_builder_base& builder)
+void mfpf_region_pdf_builder::set_as_ellipse(double ri, double rj,
+                                             const vpdfl_builder_base& builder)
 {
   set_as_ellipse(ri,rj);
   pdf_builder_ = builder.clone();
@@ -128,12 +126,12 @@ void mfpf_region_pdf_builder::set_as_ellipse(double ri, double rj)
 
   ref_x_=ni;
   ref_y_=nj;
-  roi_ni_=2*ni+1; 
-  roi_nj_=2*nj+1; 
+  roi_ni_=2*ni+1;
+  roi_nj_=2*nj+1;
 }
 
 //: Initialise building
-// Must be called before any calls to add_example(...) 
+// Must be called before any calls to add_example(...)
 void mfpf_region_pdf_builder::clear(unsigned n_egs)
 {
   data_.resize(0);
@@ -141,8 +139,8 @@ void mfpf_region_pdf_builder::clear(unsigned n_egs)
 
 //: Add one example to the model
 void mfpf_region_pdf_builder::add_one_example(const vimt_image_2d_of<float>& image,
-                        const vgl_point_2d<double>& p,
-                        const vgl_vector_2d<double>& u)
+                                              const vgl_point_2d<double>& p,
+                                              const vgl_vector_2d<double>& u)
 {
   vgl_vector_2d<double> u1=step_size_*u;
   vgl_vector_2d<double> v1(-u1.y(),u1.x());
@@ -159,8 +157,8 @@ void mfpf_region_pdf_builder::add_one_example(const vimt_image_2d_of<float>& ima
   vgl_vector_2d<double> im_v = s_w2i.delta(p0, v1);
 
   vil_resample_bilin(image.image(),sample,
-                      im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
-                      im_v.x(),im_v.y(),roi_ni_,roi_nj_);
+                     im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
+                     im_v.x(),im_v.y(),roi_ni_,roi_nj_);
 
   vnl_vector<double> v(n_pixels_*sample.nplanes());
   mfpf_sample_region(sample.top_left_ptr(),sample.jstep(),
@@ -172,8 +170,8 @@ void mfpf_region_pdf_builder::add_one_example(const vimt_image_2d_of<float>& ima
 
 //: Add one example to the model
 void mfpf_region_pdf_builder::add_example(const vimt_image_2d_of<float>& image,
-                        const vgl_point_2d<double>& p,
-                        const vgl_vector_2d<double>& u)
+                                          const vgl_point_2d<double>& p,
+                                          const vgl_vector_2d<double>& u)
 {
   if (nA_==0)
   {
@@ -220,33 +218,33 @@ void mfpf_region_pdf_builder::config_as_box(vcl_istream &is)
 
   unsigned ni=5,nj=5;
   if (props.find("ni")!=props.end())
-  { 
-    ni=vul_string_atoi(props["ni"]); 
-    props.erase("ni"); 
+  {
+    ni=vul_string_atoi(props["ni"]);
+    props.erase("ni");
   }
   if (props.find("nj")!=props.end())
-  { 
-    nj=vul_string_atoi(props["nj"]); 
-    props.erase("nj"); 
+  {
+    nj=vul_string_atoi(props["nj"]);
+    props.erase("nj");
   }
 
   if (props.find("ref_x")!=props.end())
-  { 
-    ref_x_=vul_string_atof(props["ref_x"]); 
-    props.erase("ref_x"); 
+  {
+    ref_x_=vul_string_atof(props["ref_x"]);
+    props.erase("ref_x");
   }
   else ref_x_=0.5*(ni-1.0);
 
   if (props.find("ref_y")!=props.end())
-  { 
-    ref_y_=vul_string_atof(props["ref_y"]); 
-    props.erase("ref_y"); 
+  {
+    ref_y_=vul_string_atof(props["ref_y"]);
+    props.erase("ref_y");
   }
   else ref_y_=0.5*(nj-1.0);
 
   // Check for unused props
   mbl_read_props_look_for_unused_props(
-      "mfpf_region_pdf_builder::config_as_box", 
+      "mfpf_region_pdf_builder::config_as_box",
       props, mbl_read_props_type());
 
   set_as_box(ni,nj,ref_x_,ref_y_);
@@ -263,22 +261,20 @@ void mfpf_region_pdf_builder::config_as_ellipse(vcl_istream &is)
 
   double ri=3.1,rj=3.1;
   if (props.find("ri")!=props.end())
-  { 
-    ri=vul_string_atof(props["ri"]); 
-    props.erase("ri"); 
+  {
+    ri=vul_string_atof(props["ri"]);
+    props.erase("ri");
   }
 
   if (props.find("rj")!=props.end())
-  { 
-    rj=vul_string_atof(props["rj"]); 
-    props.erase("rj"); 
+  {
+    rj=vul_string_atof(props["rj"]);
+    props.erase("rj");
   }
-
-
 
   // Check for unused props
   mbl_read_props_look_for_unused_props(
-      "mfpf_region_pdf_builder::config_as_ellipse", 
+      "mfpf_region_pdf_builder::config_as_ellipse",
       props, mbl_read_props_type());
 
   set_as_ellipse(ri,rj);
@@ -300,7 +296,7 @@ bool mfpf_region_pdf_builder::set_from_stream(vcl_istream &is)
 
   // Extract the properties
   if (props.find("shape")!=props.end())
-  { 
+  {
     vcl_istringstream shape_s(props["shape"]);
     shape_s>>shape_;
     if (shape_=="box")
@@ -316,40 +312,40 @@ bool mfpf_region_pdf_builder::set_from_stream(vcl_istream &is)
     }
     else throw mbl_exception_parse_error("Unknown shape: "+shape_);
 
-    props.erase("shape"); 
+    props.erase("shape");
   }
 
   if (props.find("search_ni")!=props.end())
-  { 
-    search_ni_=vul_string_atoi(props["search_ni"]); 
-    props.erase("search_ni"); 
+  {
+    search_ni_=vul_string_atoi(props["search_ni"]);
+    props.erase("search_ni");
   }
 
   if (props.find("search_nj")!=props.end())
-  { 
-    search_nj_=vul_string_atoi(props["search_nj"]); 
-    props.erase("search_nj"); 
+  {
+    search_nj_=vul_string_atoi(props["search_nj"]);
+    props.erase("search_nj");
   }
 
   if (props.find("nA")!=props.end())
-  { 
-    nA_=vul_string_atoi(props["nA"]); 
-    props.erase("nA"); 
+  {
+    nA_=vul_string_atoi(props["nA"]);
+    props.erase("nA");
   }
 
   if (props.find("dA")!=props.end())
-  { 
-    dA_=vul_string_atof(props["dA"]); 
-    props.erase("dA"); 
+  {
+    dA_=vul_string_atof(props["dA"]);
+    props.erase("dA");
   }
 
   if (props.find("pdf_builder")!=props.end())
-  { 
-    vcl_istringstream b_ss(props["pdf_builder"]); 
+  {
+    vcl_istringstream b_ss(props["pdf_builder"]);
     vcl_auto_ptr<vpdfl_builder_base> bb =
          vpdfl_builder_base::new_pdf_builder_from_stream(b_ss);
     pdf_builder_ = bb->clone();
-    props.erase("pdf_builder"); 
+    props.erase("pdf_builder");
   }
 
   // Check for unused props
@@ -379,16 +375,17 @@ mfpf_point_finder_builder* mfpf_region_pdf_builder::clone() const
 
 void mfpf_region_pdf_builder::print_summary(vcl_ostream& os) const
 {
-  os<<"{ step_size: "<<step_size_;
-  os<<" size: "<<roi_ni_<<"x"<<roi_nj_;
-  os<<" n_pixels: "<<n_pixels_;
-  os<<" ref_pt: ("<<ref_x_<<","<<ref_y_<<")";
-  if (pdf_builder_.ptr()==0) os<<" pdf_builder: - ";
-  else                       os<<" pdf_builder: "<<pdf_builder_;
-  os<<" search_ni: "<<search_ni_;
-  os<<" search_nj: "<<search_nj_;
-  os<<" nA: "<<nA_<<" dA: "<<dA_;
-  os<<" }";
+  os << "{ step_size: " << step_size_
+     << " size: " << roi_ni_ << 'x' << roi_nj_
+     << " n_pixels: " << n_pixels_
+     << " ref_pt: (" << ref_x_ << ',' << ref_y_ << ')'
+     << " pdf_builder: ";
+  if (pdf_builder_.ptr()==0) os << '-';
+  else                       os << pdf_builder_;
+  os << " search_ni: " << search_ni_
+     << " search_nj: " << search_nj_
+     << " nA: " << nA_ << " dA: " << dA_
+     << '}';
 }
 
 void mfpf_region_pdf_builder::print_shape(vcl_ostream& os) const
@@ -401,8 +398,8 @@ void mfpf_region_pdf_builder::print_shape(vcl_ostream& os) const
   for (unsigned j=0;j<im.nj();++j)
   {
     for (unsigned i=0;i<im.ni();++i)
-      if (im(i,j)==0) os<<" ";
-      else            os<<"X";
+      if (im(i,j)==0) os<<' ';
+      else            os<<'X';
     os<<vcl_endl;
   }
 }
@@ -411,19 +408,19 @@ void mfpf_region_pdf_builder::print_shape(vcl_ostream& os) const
 void mfpf_region_pdf_builder::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
-  vsl_b_write(bfs,step_size_); 
-  vsl_b_write(bfs,roi_); 
-  vsl_b_write(bfs,roi_ni_); 
-  vsl_b_write(bfs,roi_nj_); 
-  vsl_b_write(bfs,n_pixels_); 
-  vsl_b_write(bfs,ref_x_); 
-  vsl_b_write(bfs,ref_y_); 
-  vsl_b_write(bfs,search_ni_); 
-  vsl_b_write(bfs,search_nj_); 
+  vsl_b_write(bfs,step_size_);
+  vsl_b_write(bfs,roi_);
+  vsl_b_write(bfs,roi_ni_);
+  vsl_b_write(bfs,roi_nj_);
+  vsl_b_write(bfs,n_pixels_);
+  vsl_b_write(bfs,ref_x_);
+  vsl_b_write(bfs,ref_y_);
+  vsl_b_write(bfs,search_ni_);
+  vsl_b_write(bfs,search_nj_);
   vsl_b_write(bfs,nA_);
   vsl_b_write(bfs,dA_);
-  vsl_b_write(bfs,pdf_builder_); 
-  vsl_b_write(bfs,data_); 
+  vsl_b_write(bfs,pdf_builder_);
+  vsl_b_write(bfs,data_);
 }
 
 //=======================================================================
@@ -443,8 +440,8 @@ void mfpf_region_pdf_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,roi_ni_);
       vsl_b_read(bfs,roi_nj_);
       vsl_b_read(bfs,n_pixels_);
-      vsl_b_read(bfs,ref_x_); 
-      vsl_b_read(bfs,ref_y_); 
+      vsl_b_read(bfs,ref_x_);
+      vsl_b_read(bfs,ref_y_);
       vsl_b_read(bfs,search_ni_);
       vsl_b_read(bfs,search_nj_);
       vsl_b_read(bfs,nA_);
@@ -453,10 +450,9 @@ void mfpf_region_pdf_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,data_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&) \n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
-

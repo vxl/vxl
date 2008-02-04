@@ -1,7 +1,6 @@
 // This is brl/bbas/brdb/brdb_value.txx
 #ifndef brdb_value_txx_
 #define brdb_value_txx_
-
 //:
 // \file
 // \brief Templated code for brdb_value_t
@@ -10,10 +9,12 @@
 //
 // \verbatim
 //  Modifications
+//   (none yet)
 // \endverbatim
 
 
 #include "brdb_value.h"
+#include <vcl_cassert.h>
 
 
 //: Test for equality under polymorphism
@@ -42,7 +43,7 @@ bool
 brdb_value_t<T>::assign(const brdb_value& other)
 {
   const brdb_value_t<T>* my_type = dynamic_cast<const brdb_value_t<T>*>(&other);
-  if(my_type){
+  if (my_type){
     this->value_ = my_type->value_;
     return true;
   }
@@ -72,8 +73,8 @@ brdb_value_t<T>::b_write_value(vsl_b_ostream& os) const
 
 //: Use this macro to instantiate brdb_value_t for each storage type
 #define BRDB_VALUE_INSTANTIATE(T,NAME) \
-template class brdb_value_t< T >; \
-template <> const vcl_string brdb_value_t< T >::type_string_(NAME); \
-const brdb_value::registrar reg_inst_##T(new brdb_value_t< T >);
+template class brdb_value_t<T >; \
+template <> const vcl_string brdb_value_t<T >::type_string_(NAME); \
+const brdb_value::registrar reg_inst_##T(new brdb_value_t<T >)
 
 #endif // brdb_value_txx_

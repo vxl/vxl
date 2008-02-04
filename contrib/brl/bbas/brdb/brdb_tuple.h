@@ -18,8 +18,9 @@
 
 
 #include <vcl_vector.h>
-#include <brdb/brdb_value.h>
+#include <vcl_cassert.h>
 #include <vbl/vbl_ref_count.h>
+#include <brdb/brdb_value.h>
 #include <brdb/brdb_tuple_sptr.h>
 #include <vsl/vsl_binary_io.h>
 
@@ -27,13 +28,13 @@
 class brdb_tuple : public vbl_ref_count
 {
   //======================= Constructors / Destructors ========================
- public: 
+ public:
   //: Default Constructor (0-tuple)
   brdb_tuple() {}
 
   //: Constructor for a 1-tuple
   template< class T1 >
-  explicit brdb_tuple(const T1& value1         ) : values_(1) 
+  explicit brdb_tuple(const T1& value1         ) : values_(1)
   {
     values_[0] = new brdb_value_t<T1>(value1);
   }
@@ -106,9 +107,8 @@ class brdb_tuple : public vbl_ref_count
   //: Destructor
   virtual ~brdb_tuple();
 
-
-
   //========================= Accessors / Modifiers ==========================
+
  public:
   //: Assignment operator
   brdb_tuple& operator = (const brdb_tuple& rhs);
@@ -167,7 +167,7 @@ class brdb_tuple : public vbl_ref_count
   bool get( unsigned int index , T& value ) const
   {
     brdb_value_t<T> val(value);
-    if(!this->get_value(index, static_cast<brdb_value&>(val)))
+    if (!this->get_value(index, static_cast<brdb_value&>(val)))
       return false;
     value = val.value();
     return true;
@@ -199,7 +199,6 @@ class brdb_tuple : public vbl_ref_count
  private:
   //: The values of the attributes
   vcl_vector<brdb_value*> values_;
-
 };
 
 
@@ -257,9 +256,6 @@ class brdb_tuple_greater : public brdb_tuple_order
   //: The index to sort by
   int index_;
 };
-
-
-
 
 
 #endif // brdb_tuple_h_

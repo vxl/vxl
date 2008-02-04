@@ -6,14 +6,13 @@
 
 #include <mfpf/mfpf_norm_corr2d_builder.h>
 #include <mfpf/mfpf_norm_corr2d.h>
-#include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
 #include <vcl_cmath.h>
+#include <vcl_cassert.h>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
-#include <mbl/mbl_cloneables_factory.h>
 
 #include <vil/vil_resample_bilin.h>
 #include <vil/vil_math.h>
@@ -61,13 +60,14 @@ mfpf_point_finder* mfpf_norm_corr2d_builder::new_finder() const
   return new mfpf_norm_corr2d();
 }
 
-void mfpf_norm_corr2d_builder::set_kernel_size(unsigned ni, unsigned nj, 
+void mfpf_norm_corr2d_builder::set_kernel_size(unsigned ni, unsigned nj,
                                                double ref_x, double ref_y)
 {
   ni_=ni; nj_=nj;
   ref_x_=ref_x;
   ref_y_=ref_y;
 }
+
 void mfpf_norm_corr2d_builder::set_kernel_size(unsigned ni, unsigned nj)
 {
   ni_=ni; nj_=nj;
@@ -77,7 +77,7 @@ void mfpf_norm_corr2d_builder::set_kernel_size(unsigned ni, unsigned nj)
 
 
 //: Initialise building
-// Must be called before any calls to add_example(...) 
+// Must be called before any calls to add_example(...)
 void mfpf_norm_corr2d_builder::clear(unsigned n_egs)
 {
   n_added_=0;
@@ -176,52 +176,52 @@ bool mfpf_norm_corr2d_builder::set_from_stream(vcl_istream &is)
 
   // Extract the properties
   if (props.find("ni")!=props.end())
-  { 
-    ni_=vul_string_atoi(props["ni"]); 
-    props.erase("ni"); 
+  {
+    ni_=vul_string_atoi(props["ni"]);
+    props.erase("ni");
   }
   if (props.find("nj")!=props.end())
-  { 
-    nj_=vul_string_atoi(props["nj"]); 
-    props.erase("nj"); 
+  {
+    nj_=vul_string_atoi(props["nj"]);
+    props.erase("nj");
   }
 
   if (props.find("ref_x")!=props.end())
-  { 
-    ref_x_=vul_string_atof(props["ref_x"]); 
-    props.erase("ref_x"); 
+  {
+    ref_x_=vul_string_atof(props["ref_x"]);
+    props.erase("ref_x");
   }
   else ref_x_=0.5*(ni_-1.0);
 
   if (props.find("ref_y")!=props.end())
-  { 
-    ref_y_=vul_string_atof(props["ref_y"]); 
-    props.erase("ref_y"); 
+  {
+    ref_y_=vul_string_atof(props["ref_y"]);
+    props.erase("ref_y");
   }
   else ref_y_=0.5*(nj_-1.0);
 
   if (props.find("search_ni")!=props.end())
-  { 
-    search_ni_=vul_string_atoi(props["search_ni"]); 
-    props.erase("search_ni"); 
+  {
+    search_ni_=vul_string_atoi(props["search_ni"]);
+    props.erase("search_ni");
   }
 
   if (props.find("search_nj")!=props.end())
-  { 
-    search_nj_=vul_string_atoi(props["search_nj"]); 
-    props.erase("search_nj"); 
+  {
+    search_nj_=vul_string_atoi(props["search_nj"]);
+    props.erase("search_nj");
   }
 
   if (props.find("nA")!=props.end())
-  { 
-    nA_=vul_string_atoi(props["nA"]); 
-    props.erase("nA"); 
+  {
+    nA_=vul_string_atoi(props["nA"]);
+    props.erase("nA");
   }
 
   if (props.find("dA")!=props.end())
-  { 
-    dA_=vul_string_atof(props["dA"]); 
-    props.erase("dA"); 
+  {
+    dA_=vul_string_atof(props["dA"]);
+    props.erase("dA");
   }
 
   // Check for unused props
@@ -251,26 +251,26 @@ mfpf_point_finder_builder* mfpf_norm_corr2d_builder::clone() const
 
 void mfpf_norm_corr2d_builder::print_summary(vcl_ostream& os) const
 {
-  os<<"{ step_size: "<<step_size_;
-  os<<" size: "<<ni_<<"x"<<nj_;
-  os<<" search_ni: "<<search_ni_;
-  os<<" search_nj: "<<search_nj_;
-  os<<" nA: "<<nA_<<" dA: "<<dA_;
-  os<<" }";
+  os << "{ step_size: " << step_size_
+     << " size: " << ni_ << 'x' << nj_
+     << " search_ni: " << search_ni_
+     << " search_nj: " << search_nj_
+     << " nA: " << nA_ << " dA: " << dA_
+     << '}';
 }
 
 void mfpf_norm_corr2d_builder::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
-  vsl_b_write(bfs,step_size_); 
-  vsl_b_write(bfs,ni_); 
-  vsl_b_write(bfs,nj_); 
-  vsl_b_write(bfs,ref_x_); 
-  vsl_b_write(bfs,ref_y_); 
-  vsl_b_write(bfs,sum_); 
-  vsl_b_write(bfs,n_added_); 
-  vsl_b_write(bfs,search_ni_); 
-  vsl_b_write(bfs,search_nj_); 
+  vsl_b_write(bfs,step_size_);
+  vsl_b_write(bfs,ni_);
+  vsl_b_write(bfs,nj_);
+  vsl_b_write(bfs,ref_x_);
+  vsl_b_write(bfs,ref_y_);
+  vsl_b_write(bfs,sum_);
+  vsl_b_write(bfs,n_added_);
+  vsl_b_write(bfs,search_ni_);
+  vsl_b_write(bfs,search_nj_);
   vsl_b_write(bfs,nA_);
   vsl_b_write(bfs,dA_);
 }
@@ -290,8 +290,8 @@ void mfpf_norm_corr2d_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,step_size_);
       vsl_b_read(bfs,ni_);
       vsl_b_read(bfs,nj_);
-      vsl_b_read(bfs,ref_x_); 
-      vsl_b_read(bfs,ref_y_); 
+      vsl_b_read(bfs,ref_x_);
+      vsl_b_read(bfs,ref_y_);
       vsl_b_read(bfs,sum_);
       vsl_b_read(bfs,n_added_);
       vsl_b_read(bfs,search_ni_);
@@ -300,8 +300,8 @@ void mfpf_norm_corr2d_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,dA_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&) \n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }

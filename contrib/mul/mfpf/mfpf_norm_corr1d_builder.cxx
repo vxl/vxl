@@ -6,14 +6,12 @@
 
 #include <mfpf/mfpf_norm_corr1d_builder.h>
 #include <mfpf/mfpf_norm_corr1d.h>
-#include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
-#include <vcl_cmath.h>
+#include <vcl_cassert.h>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
-#include <mbl/mbl_cloneables_factory.h>
 
 #include <vimt/vimt_bilin_interp.h>
 #include <vimt/vimt_sample_profile_bilin.h>
@@ -64,7 +62,7 @@ void mfpf_norm_corr1d_builder::set_kernel_size(int ilo, int ihi)
 
 
 //: Initialise building
-// Must be called before any calls to add_example(...) 
+// Must be called before any calls to add_example(...)
 void mfpf_norm_corr1d_builder::clear(unsigned n_egs)
 {
   n_added_=0;
@@ -113,20 +111,20 @@ bool mfpf_norm_corr1d_builder::set_from_stream(vcl_istream &is)
 
   // Extract the properties
   if (props.find("ilo")!=props.end())
-  { 
-    ilo_=vul_string_atoi(props["ilo"]); 
-    props.erase("ilo"); 
+  {
+    ilo_=vul_string_atoi(props["ilo"]);
+    props.erase("ilo");
   }
   if (props.find("ihi")!=props.end())
-  { 
-    ihi_=vul_string_atoi(props["ihi"]); 
-    props.erase("ihi"); 
+  {
+    ihi_=vul_string_atoi(props["ihi"]);
+    props.erase("ihi");
   }
 
   if (props.find("search_ni")!=props.end())
-  { 
-    search_ni_=vul_string_atoi(props["search_ni"]); 
-    props.erase("search_ni"); 
+  {
+    search_ni_=vul_string_atoi(props["search_ni"]);
+    props.erase("search_ni");
   }
 
   // Check for unused props
@@ -156,21 +154,21 @@ mfpf_point_finder_builder* mfpf_norm_corr1d_builder::clone() const
 
 void mfpf_norm_corr1d_builder::print_summary(vcl_ostream& os) const
 {
-  os<<"{ step_size: "<<step_size_;
-  os<<" size: ["<<ilo_<<","<<ihi_<<"] ";
-  os<<" search_ni: "<<search_ni_;
-  os<<" }";
+  os << "{ step_size: " << step_size_
+     << " size: [" << ilo_ << ',' << ihi_ << ']'
+     << " search_ni: " << search_ni_
+     << '}';
 }
 
 void mfpf_norm_corr1d_builder::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
-  vsl_b_write(bfs,step_size_); 
-  vsl_b_write(bfs,ilo_); 
-  vsl_b_write(bfs,ihi_); 
-  vsl_b_write(bfs,sum_); 
-  vsl_b_write(bfs,n_added_); 
-  vsl_b_write(bfs,search_ni_); 
+  vsl_b_write(bfs,step_size_);
+  vsl_b_write(bfs,ilo_);
+  vsl_b_write(bfs,ihi_);
+  vsl_b_write(bfs,sum_);
+  vsl_b_write(bfs,n_added_);
+  vsl_b_write(bfs,search_ni_);
 }
 
 //=======================================================================
@@ -193,8 +191,8 @@ void mfpf_norm_corr1d_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,search_ni_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&) \n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }

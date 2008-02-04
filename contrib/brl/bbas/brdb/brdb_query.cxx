@@ -1,15 +1,17 @@
+//:
 // \file
-// \a brdb_query to be submit to brdb_database_manager
+// \brief a brdb_query to be submitted to brdb_database_manager
 // \author Yong Zhao
 // \date Tue Mar 23, 2007
 //
 // \verbatim
 //  Modifications
+//   (none yet)
 // \endverbatim
 
-
-
 #include <brdb/brdb_query.h>
+#include <vcl_cassert.h>
+
 
 //: Return the complement query comparison type
 brdb_query::comp_type operator ~(brdb_query::comp_type type)
@@ -21,37 +23,39 @@ brdb_query::comp_type operator ~(brdb_query::comp_type type)
 //: Return the complement query
 brdb_query_aptr operator ~(const brdb_query_aptr& q)
 {
-  if(!q.get())
+  if (!q.get())
     return brdb_query_aptr(NULL);
 
   return q->complement();
 }
 
+
 //: Create the union of two queries (takes ownership)
 brdb_query_aptr operator &(brdb_query_aptr q1, brdb_query_aptr q2)
 {
-  if(!q1.get()){
-    if(!q2.get())
+  if (!q1.get()){
+    if (!q2.get())
       return brdb_query_aptr(NULL);
     else
       return q2;
   }
-  else if(!q2.get())
+  else if (!q2.get())
     return q1;
 
   return brdb_query_aptr(new brdb_query_and(q1,q2));
 }
 
+
 //: Create the intersection of two queries (takes ownership)
 brdb_query_aptr operator |(brdb_query_aptr q1, brdb_query_aptr q2)
 {
-  if(!q1.get()){
-    if(!q2.get())
+  if (!q1.get()){
+    if (!q2.get())
       return brdb_query_aptr(NULL);
     else
       return q2;
   }
-  else if(!q2.get())
+  else if (!q2.get())
     return q1;
 
   return brdb_query_aptr(new brdb_query_or(q1,q2));
@@ -65,6 +69,7 @@ brdb_query_branch::brdb_query_branch(brdb_query_aptr q1, brdb_query_aptr q2)
   assert(first_.get() && second_.get());
 }
 
+
 //: Copy constructor
 brdb_query_branch::brdb_query_branch(const brdb_query_branch& other)
   : first_(other.first_->clone()),
@@ -72,8 +77,9 @@ brdb_query_branch::brdb_query_branch(const brdb_query_branch& other)
 {
 }
 
+
 //: Assignment operator
-brdb_query_branch& 
+brdb_query_branch&
 brdb_query_branch::operator = (const brdb_query_branch& rhs)
 {
   this->first_ = rhs.first_->clone();
@@ -86,7 +92,7 @@ brdb_query_branch::operator = (const brdb_query_branch& rhs)
 
 //: Constructor from two auto pointers (takes ownership)
 brdb_query_and::brdb_query_and(brdb_query_aptr q1, brdb_query_aptr q2)
-  : brdb_query_branch(q1,q2) 
+  : brdb_query_branch(q1,q2)
 {
 }
 
@@ -104,7 +110,7 @@ brdb_query_and::clone() const
 }
 
 
-brdb_query_aptr 
+brdb_query_aptr
 brdb_query_and::complement() const
 {
   brdb_query_aptr q1c = first_->complement();
@@ -127,14 +133,14 @@ brdb_query_or::brdb_query_or(const brdb_query& q1, const brdb_query& q2)
 }
 
 
-brdb_query_aptr 
+brdb_query_aptr
 brdb_query_or::clone() const
 {
   return brdb_query_aptr(new brdb_query_or(*this));
 }
 
 
-brdb_query_aptr 
+brdb_query_aptr
 brdb_query_or::complement() const
 {
   brdb_query_aptr q1c = first_->complement();
@@ -166,7 +172,6 @@ brdb_query_comp::brdb_query_comp(const brdb_query_comp& other)
 }
 
 
-
 brdb_query_aptr
 brdb_query_comp::complement() const
 {
@@ -182,7 +187,6 @@ brdb_query_comp::clone() const
   return brdb_query_aptr(new brdb_query_comp(*this));
 }
 
-
 //: Assignment operator
 brdb_query_comp&
 brdb_query_comp::operator = (const brdb_query_comp& rhs)
@@ -193,31 +197,30 @@ brdb_query_comp::operator = (const brdb_query_comp& rhs)
   return *this;
 }
 
-
-//: whether some value pass the constraint
-bool 
+//: whether some value passes the constraint
+bool
 brdb_query_comp::pass(const brdb_value& input_value) const
 {
-  switch(comparison_type_)
+  switch (comparison_type_)
   {
-  case EQ:
+   case EQ:
     return input_value == (*value_);
-  case GT:
+   case GT:
     return input_value > (*value_);
-  case GEQ:
+   case GEQ:
     return input_value >= (*value_);
-  case LT:
+   case LT:
     return input_value < (*value_);
-  case LEQ:
+   case LEQ:
     return input_value <= (*value_);
-  case NEQ:
+   case NEQ:
     return input_value != (*value_);
-  case ALL:
+   case ALL:
     return true;
-  case NONE:
+   case NONE:
     return false;
-  default:
-    assert(false);
+   default:
+    assert(!"nonexisting operator; use EQ, NEQ, GT, GEQ, LT, LEQ, ALL or NONE");
     return false;
-  }  
+  }
 }

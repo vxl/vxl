@@ -8,6 +8,7 @@
 
 #include <brdb/brdb_tuple.h>
 #include <vcl_iostream.h>
+#include <vcl_cassert.h>
 
 
 //======================= Constructors / Destructors ========================
@@ -33,7 +34,7 @@ brdb_tuple::make_prototype(const vcl_vector<vcl_string>& types)
   vcl_vector<brdb_value* > values(types.size(),NULL);
   for (unsigned int i=0; i<types.size(); ++i){
     reg_t::const_iterator f = reg.find(types[i]);
-    if(f != reg.end())
+    if (f != reg.end())
       values[i] = f->second->clone();
     else{
       vcl_cerr << "brdb_tuple: can not create instance of unknown type: "<< types[i] << vcl_endl;
@@ -50,7 +51,7 @@ brdb_tuple::brdb_tuple(const brdb_tuple& other)
 : values_(other.values_.size(),NULL)
 {
   for (unsigned int i=0; i<other.values_.size(); ++i){
-    if(other.values_[i])
+    if (other.values_[i])
       values_[i] = other.values_[i]->clone();
   }
 }
@@ -88,10 +89,10 @@ bool
 brdb_tuple::set_value(unsigned int index, const brdb_value& value)
 {
   // check index range
-  if(index >= values_.size())
+  if (index >= values_.size())
     return false;
   // check for whether this value exists
-  if(!values_[index]){
+  if (!values_[index]){
     values_[index] = value.clone();
     return values_[index] != NULL;
   }
@@ -109,20 +110,20 @@ bool
 brdb_tuple::get_value(unsigned int index, brdb_value& value) const
 {
   // check index range
-  if(index >= values_.size())
+  if (index >= values_.size())
     return false;
   // check the data type
   assert(value.is_a() == this->values_[index]->is_a());
 
   // check for an existing value
-  if(!values_[index])
+  if (!values_[index])
     return false;
   // assign the value if types agree
   return value.assign(*values_[index]);
 }
 
 //: add a value into the tuple
-bool 
+bool
 brdb_tuple::add_value(const brdb_value& value)
 {
   // add it into the tuple
@@ -131,10 +132,10 @@ brdb_tuple::add_value(const brdb_value& value)
 }
 
 //: print all values of tuple
-void 
+void
 brdb_tuple::print() const
 {
-  for(unsigned int i=0; i<this->arity(); i++)
+  for (unsigned int i=0; i<this->arity(); i++)
   {
     values_[i]->print();
   }
@@ -144,11 +145,11 @@ brdb_tuple::print() const
 
 //: binary io read values only
 // read values from the stream only (assumes arity and types are initialized)
-void 
+void
 brdb_tuple::b_read_values(vsl_b_istream &is)
 {
-  for(vcl_vector<brdb_value*>::iterator i=values_.begin();
-      i!=values_.end(); ++i)
+  for (vcl_vector<brdb_value*>::iterator i=values_.begin();
+       i!=values_.end(); ++i)
     (*i)->b_read_value(is);
 }
 
@@ -158,8 +159,8 @@ brdb_tuple::b_read_values(vsl_b_istream &is)
 void
 brdb_tuple::b_write_values(vsl_b_ostream &os) const
 {
-  for(vcl_vector<brdb_value*>::const_iterator i=values_.begin();
-      i!=values_.end(); ++i)
+  for (vcl_vector<brdb_value*>::const_iterator i=values_.begin();
+       i!=values_.end(); ++i)
     (*i)->b_write_value(os);
 }
 
