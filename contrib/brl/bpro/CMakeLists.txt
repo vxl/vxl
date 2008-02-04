@@ -4,4 +4,6 @@
 # Basic process classes
 SUBDIRS(bprb)
 
+# Python wrappers
+SUBDIRS(bppy)
 
