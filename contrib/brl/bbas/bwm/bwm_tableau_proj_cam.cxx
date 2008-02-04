@@ -2,9 +2,10 @@
 #include "bwm_observer_mgr.h"
 #include "algo/bwm_utils.h"
 
-/*bwm_tableau_proj_cam::bwm_tableau_proj_cam(vcl_string name, 
-    vcl_string& image_path, 
-    vcl_string& cam_path,                
+#if 0 // method commented out
+bwm_tableau_proj_cam::bwm_tableau_proj_cam(vcl_string name,
+    vcl_string& image_path,
+    vcl_string& cam_path,
     bool display_image_path)
 : bwm_tableau_cam(my_observer_)
 {
@@ -36,26 +37,27 @@
     bwm_utils::show_error("Camera tableaus need a valid camera path!");
     return;
   }
-  
-   
+
+
   camera_ = read_projective_camera(cam_path);
   my_observer_ = new bwm_observer_proj_cam(img, &camera_, cam_path);
   //t = new bwm_tableau_proj_cam(proj_observer);
-   
+
   // add the observer to the observer pool
   bwm_observer_mgr::instance()->add(my_observer_);
   my_observer_->set_tab_name(name);
   vgui_viewer2D_tableau_sptr viewer = vgui_viewer2D_tableau_new(this);
 
   my_observer_->set_viewer(viewer);
-}*/
+}
+#endif // 0
 
-bool bwm_tableau_proj_cam::handle(const vgui_event &e) 
-{ 
-  return bwm_tableau_cam::handle(e); 
+bool bwm_tableau_proj_cam::handle(const vgui_event &e)
+{
+  return bwm_tableau_cam::handle(e);
 }
 
-void bwm_tableau_proj_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu) 
+void bwm_tableau_proj_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu)
 {
   vgui_menu parent_menu;
   bwm_tableau_cam::get_popup(params, menu);

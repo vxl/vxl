@@ -1,25 +1,28 @@
 #ifndef bwm_popup_menu_h_
 #define bwm_popup_menu_h_
-
+//:
+// \file
 #include <vgui/vgui_popup_params.h>
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_tableau.h>
 
-class bwm_popup_menu {
-public:
-
+class bwm_popup_menu
+{
+ public:
   bwm_popup_menu(vgui_tableau_sptr tab) : tab_(tab) {}
   virtual ~bwm_popup_menu() {}
   void get_menu(vgui_menu& menu);
 
   // Image Processing Related Menu Items
- /* virtual void create_box();
+#if 0
+  virtual void create_box();
   virtual void create_polygon();
   virtual void create_polyline();
   virtual void create_point();
-  virtual void create_pointset();*/
+  virtual void create_pointset();
+#endif // 0
 
-  //************* IMAGE Processing Methods
+  // ************* IMAGE Processing Methods
 
   //: Draws the hostogram on a graph (if the image is greyscale)
   void hist_plot();// { (tab_->hist_plot(); }
@@ -54,9 +57,8 @@ public:
   void recover_edges();
   void recover_lines();
 
-private:
+ private:
   vgui_tableau_sptr tab_;
-
 };
 
 #endif

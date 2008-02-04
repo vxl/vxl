@@ -15,11 +15,16 @@
 
 class bwm_tableau_rat_cam : public bwm_tableau_cam
 {
+ protected:
+  bwm_observer_rat_cam* my_observer_;
+
  public:
- /* bwm_tableau_rat_cam(vcl_string name, 
-    vcl_string& image_path, 
-    vcl_string& cam_path, 
-    bool display_image_path);*/
+#if 0 // commented out, both here and in the .cxx file
+  bwm_tableau_rat_cam(vcl_string name,
+                      vcl_string& image_path,
+                      vcl_string& cam_path,
+                      bool display_image_path);
+#endif
 
   bwm_tableau_rat_cam(bwm_observer_rat_cam* observer)
     : bwm_tableau_cam(observer), my_observer_(observer) {}
@@ -38,22 +43,19 @@ class bwm_tableau_rat_cam : public bwm_tableau_cam
   void adjust_camera_to_world_pt();
   void center_pos();
 
-  //******************** LVCS Menu
+  // ******************** LVCS Menu
 
   void load_lvcs();
   void save_lvcs();
   void define_lvcs();
   void convert_file_to_lvcs();
 
-  //********************* Save Menu
+  // ********************* Save Menu
   void save();
 
-  //****************** Misc
+  // ****************** Misc
   void project_edges_from_master();
   void register_search_to_master();
-
-protected:
-  bwm_observer_rat_cam* my_observer_;
 };
 
 #endif
