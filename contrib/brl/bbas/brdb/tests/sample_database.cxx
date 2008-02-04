@@ -1,6 +1,7 @@
-// This is brl/bbas/brdb/test/sample_database.cxx
-
+// This is brl/bbas/brdb/tests/sample_database.cxx
 #include "sample_database.h"
+//:
+// \file
 
 #include <vcl_sstream.h>
 #include <brdb/brdb_tuple.h>
@@ -31,7 +32,7 @@ brdb_database_sptr generate_sample_database()
   r1_types[1] = brdb_value_t<vcl_string>::type();
   r1_types[2] = brdb_value_t<bool>::type();
 
-  for(int i=0; i<20; i++)
+  for (int i=0; i<20; i++)
   {
     int ID = 100+i;
     vcl_stringstream SS;
@@ -40,7 +41,7 @@ brdb_database_sptr generate_sample_database()
     SS >> name;
     bool gender;
 
-    if(i%2)
+    if (i%2)
       gender = true;
     else
       gender = false;
@@ -58,7 +59,7 @@ brdb_database_sptr generate_sample_database()
   r2_types[0] = brdb_value_t<int>::type();
   r2_types[1] = brdb_value_t<double>::type();
 
-  for(int i=0; i<30; i++)
+  for (int i=0; i<30; i++)
   {
     int ID = 100+i;
     double age = 20.0+i*0.1;
@@ -77,7 +78,7 @@ brdb_database_sptr generate_sample_database()
   r3_types[0] = brdb_value_t<int>::type();
   r3_types[1] = brdb_value_t<vcl_string>::type();
 
-  for(int i=0; i<40; i++)
+  for (int i=0; i<40; i++)
   {
     int ID = 100+i;
     vcl_stringstream SS;

@@ -1,7 +1,6 @@
-// This is brcv/seg/bsta/bsta_gaussian_full.h
+// This is brl/bbas/bsta/bsta_gaussian_full.h
 #ifndef bsta_gaussian_full_h_
 #define bsta_gaussian_full_h_
-
 //:
 // \file
 // \brief A Gaussian distribution with a full covariance matrix
@@ -10,7 +9,7 @@
 //
 // \verbatim
 //  Modifications
-//    Jan 21 2008  -  Matt Leotta  -  Rename probability to prob_density and 
+//    Jan 21 2008  -  Matt Leotta  -  Rename probability to prob_density and
 //                                    add probability integration over a box
 // \endverbatim
 
@@ -48,7 +47,7 @@ class bsta_gaussian_full : public bsta_gaussian<T,n>
     //: The probability density at this sample given square mahalanobis distance
     T dist_prob_density(const T& sqr_mahal_dist) const
     {
-      if(det_covar_ <= 0)
+      if (det_covar_ <= 0)
         return T(0);
       return static_cast<T>(vcl_sqrt(1/(det_covar_*two_pi_power<n>::value()))
            * vcl_exp(-sqr_mahal_dist/2));
@@ -59,9 +58,9 @@ class bsta_gaussian_full : public bsta_gaussian<T,n>
     {
       return dist_prob_density(sqr_mahalanobis_dist(pt));
     }
-  
+
     //: The probability integrated over a box
-    T probability(const vnl_vector_fixed<T,n>& min_pt, 
+    T probability(const vnl_vector_fixed<T,n>& min_pt,
                   const vnl_vector_fixed<T,n>& max_pt) const
     {
       // This stub needs implementation

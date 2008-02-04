@@ -1,17 +1,16 @@
-// This is brcv/seg/bbgm/bbgm_planes_to_sample.h
+// This is brl/bseg/bbgm/bbgm_planes_to_sample.h
 #ifndef bbgm_planes_to_sample_h_
 #define bbgm_planes_to_sample_h_
-
 //:
 // \file
-// \brief Templated Helper function extracting a data sample from image planes 
+// \brief Templated Helper function extracting a data sample from image planes
 // \author Matt Leotta (mleotta@lems.brown.edu)
 // \date 6/13/06
 //
 // \verbatim
 //  Modifications
+//   (none yet)
 // \endverbatim
-
 
 
 template <class T1, class T2, unsigned n>

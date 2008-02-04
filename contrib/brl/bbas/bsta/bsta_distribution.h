@@ -1,7 +1,6 @@
-// This is brcv/seg/bsta/bsta_distribution.h
+// This is brl/bbas/bsta/bsta_distribution.h
 #ifndef bsta_distribution_h_
 #define bsta_distribution_h_
-
 //:
 // \file
 // \brief A base class for probability distributions
@@ -10,6 +9,7 @@
 //
 // \verbatim
 //  Modifications
+//   (none yet)
 // \endverbatim
 
 #include <vnl/vnl_vector_fixed.h>
@@ -29,7 +29,7 @@ class bsta_distribution
 
 
 //: A base class for 1D probability distributions
-// warning: this is partial specialization
+//  Warning: this is partial specialization
 template <class T>
 class bsta_distribution<T,1>
 {

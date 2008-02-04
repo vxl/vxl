@@ -1,4 +1,4 @@
-// This is brl/bbas/brdb/test/sample_database.h
+// This is brl/bbas/brdb/tests/sample_database.h
 #ifndef sample_database_h_
 #define sample_database_h_
 //:

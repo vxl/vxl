@@ -1,7 +1,6 @@
-// This is brl/bbas/brdb/dbpro_relation_sptr.h
+// This is brl/bbas/brdb/brdb_relation_sptr.h
 #ifndef brdb_relation_sptr_h
 #define brdb_relation_sptr_h
-
 //:
 // \file
 

@@ -1,17 +1,16 @@
-// This is brcv/seg/bsta/bsta_gaussian_indep.txx
+// This is brl/bbas/bsta/bsta_gaussian_indep.txx
 #ifndef bsta_gaussian_indep_txx_
 #define bsta_gaussian_indep_txx_
-
 //:
 // \file
 
 #include "bsta_gaussian_indep.h"
-#include <vcl_cassert.h>
 #include <vcl_limits.h>
 #include <vnl/vnl_erf.h>
-namespace {
 
-  //: Unroll the mahalanobis distance calculation
+namespace
+{
+  //: Unrol the mahalanobis distance calculation
   template <class T, unsigned n, unsigned index>
   struct compute_sqr_mahalanobis
   {
@@ -24,7 +23,7 @@ namespace {
   };
 
   //: base case
-  // this is partial specialization: expect MSVC6 to complain
+  //  This is partial specialization: expect MSVC6 to complain
   template <class T, unsigned n>
   struct compute_sqr_mahalanobis<T,n,0>
   {
@@ -34,7 +33,7 @@ namespace {
   };
 
 
-  //: Unroll the determinant calculation
+  //: Unrol the determinant calculation
   template <class T, unsigned n, unsigned index>
   struct determinant
   {
@@ -45,24 +44,22 @@ namespace {
   };
 
   //: base case
-  // this is partial specialization: expect MSVC6 to complain
+  //  This is partial specialization: expect MSVC6 to complain
   template <class T, unsigned n>
   struct determinant<T,n,0>
   {
     static inline T value(const vnl_vector_fixed<T,n>& covar)
     { return 1; }
   };
-
 };
-
 
 
 //: The squared Mahalanobis distance to this point
 template <class T, unsigned int n>
 T
-bsta_gaussian_indep<T,n>::sqr_mahalanobis_dist(const vnl_vector_fixed<T,n>& pt) const 
+bsta_gaussian_indep<T,n>::sqr_mahalanobis_dist(const vnl_vector_fixed<T,n>& pt) const
 {
-  if(det_covar_<=T(0))
+  if (det_covar_<=T(0))
     return vcl_numeric_limits<T>::infinity();
   vnl_vector_fixed<T,n> d = bsta_gaussian<T,n>::mean_-pt;
   return compute_sqr_mahalanobis<T,n,n>::value(d,diag_covar_);
@@ -77,8 +74,8 @@ bsta_gaussian_indep<T,n>::compute_det()
   det_covar_ = determinant<T,n,n>::value(diag_covar_);
 }
 
-//: Unroll the compute probability calculation
-// The general induction step
+//: Unrol the compute probability calculation
+//  The general induction step
 template <class T, unsigned n, unsigned index>
 struct compute_probability_box
 {
@@ -87,7 +84,7 @@ struct compute_probability_box
                         const vnl_vector_fixed<T,n>& covar
                         )
   {
-    if(covar[index]<=T(0))
+    if (covar[index]<=T(0))
       return vcl_numeric_limits<T>::infinity();
     double sigma_sq_2 = 2.0*static_cast<double>(covar[index]);
     double s2 = 1/vcl_sqrt(sigma_sq_2);
@@ -102,7 +99,7 @@ struct compute_probability_box
 };
 
 //: base case
-// this is partial specialization: expect MSVC6 to complain
+//  This is partial specialization: expect MSVC6 to complain
 template <class T, unsigned n>
 struct compute_probability_box<T,n,0>
 {
@@ -110,7 +107,7 @@ struct compute_probability_box<T,n,0>
                         const vnl_vector_fixed<T,n>& max_minus_mean,
                         const vnl_vector_fixed<T,n>& covar)
   {
-    if(covar[0]<=T(0))
+    if (covar[0]<=T(0))
       return vcl_numeric_limits<T>::infinity();
     double sigma_sq_2 = 2.0*static_cast<double>(covar[0]);
     double s2 = 1/vcl_sqrt(sigma_sq_2);
@@ -119,10 +116,11 @@ struct compute_probability_box<T,n,0>
     return static_cast<T>(0.5*temp);
   };
 };
+
 //: The probability that a sample lies inside a n-d bounding box
-// min_pt and max_pt are the corners of the box
+//  \note min_pt and max_pt are the corners of the box
 template <class T, unsigned int n>
-T bsta_gaussian_indep<T,n>::probability(const vnl_vector_fixed<T,n>& min_pt, 
+T bsta_gaussian_indep<T,n>::probability(const vnl_vector_fixed<T,n>& min_pt,
                                         const vnl_vector_fixed<T,n>& max_pt) const
 {
   vnl_vector_fixed<T,n> min_minus_mean = min_pt-bsta_gaussian<T,n>::mean_;
@@ -134,7 +132,7 @@ T bsta_gaussian_indep<T,n>::probability(const vnl_vector_fixed<T,n>& min_pt,
 
 
 #define DBSTA_GAUSSIAN_INDEP_INSTANTIATE(T,n) \
-template class bsta_gaussian_indep<T,n >;
+template class bsta_gaussian_indep<T,n >
 
 
 #endif // bsta_gaussian_indep_txx_
