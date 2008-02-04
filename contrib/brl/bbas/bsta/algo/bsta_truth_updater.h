@@ -28,7 +28,7 @@ class bsta_truth_updater
     enum {data_dimension = dist_::dimension+1};
 
     bsta_truth_updater (const dist_& model, const updater_& updater)
-    : model_dist_(model), updater_(updater) {}
+    : model_dist_(model), updater_mbr_(updater) {}
 
     //: The main function
     void operator() ( bsta_mixture<dist_>& mixture, const vector_& sample ) const
@@ -42,7 +42,7 @@ class bsta_truth_updater
       while (mixture.num_components() <= index)
         mixture.insert(model_dist_,T(0));
 
-      updater_(mixture.distribution(index),data);
+      updater_mbr_(mixture.distribution(index),data);
     }
 
   protected:
@@ -51,8 +51,7 @@ class bsta_truth_updater
     dist_ model_dist_;
 
     //: The updater applied to the components
-    updater_ updater_;
+    updater_ updater_mbr_;
 };
-
 
 #endif // bsta_truth_updater_h_
