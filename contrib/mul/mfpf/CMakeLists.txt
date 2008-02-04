@@ -18,6 +18,8 @@ SET(mfpf_sources
   mfpf_profile_pdf_builder.h   mfpf_profile_pdf_builder.cxx
   mfpf_region_pdf.h            mfpf_region_pdf.cxx
   mfpf_region_pdf_builder.h    mfpf_region_pdf_builder.cxx
+  mfpf_norm_vec.h
+  mfpf_sample_region.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates mfpf_sources)
