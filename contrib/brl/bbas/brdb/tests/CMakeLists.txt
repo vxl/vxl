@@ -15,12 +15,12 @@ ADD_EXECUTABLE( brdb_test_all
 
 TARGET_LINK_LIBRARIES( brdb_test_all brdb testlib )
 
-ADD_TEST( brdb_test_value             brdb_test_all test_value )
-ADD_TEST( brdb_test_tuple             brdb_test_all test_tuple )
-ADD_TEST( brdb_test_relation          brdb_test_all test_relation )
-ADD_TEST( brdb_test_database          brdb_test_all test_database )
-#ADD_TEST( brdb_test_database_manager  brdb_test_all test_database_manager )
-ADD_TEST( brdb_test_query             brdb_test_all test_query )
+ADD_TEST( brdb_test_value             ${EXECUTABLE_OUTPUT_PATH}/brdb_test_all test_value )
+ADD_TEST( brdb_test_tuple             ${EXECUTABLE_OUTPUT_PATH}/brdb_test_all test_tuple )
+ADD_TEST( brdb_test_relation          ${EXECUTABLE_OUTPUT_PATH}/brdb_test_all test_relation )
+ADD_TEST( brdb_test_database          ${EXECUTABLE_OUTPUT_PATH}/brdb_test_all test_database )
+#ADD_TEST( brdb_test_database_manager  ${EXECUTABLE_OUTPUT_PATH}/brdb_test_all test_database_manager )
+ADD_TEST( brdb_test_query             ${EXECUTABLE_OUTPUT_PATH}/brdb_test_all test_query )
 
 AUX_SOURCE_DIRECTORY(Templates brdb_test_value)
 

@@ -8,5 +8,5 @@ ADD_EXECUTABLE( bprb_test_all
 
 TARGET_LINK_LIBRARIES( bprb_test_all bprb testlib )
 
-ADD_TEST( bprb_test_process           bprb_test_all test_process )
+ADD_TEST( bprb_test_process ${EXECUTABLE_OUTPUT_PATH}/bprb_test_all test_process )
 
