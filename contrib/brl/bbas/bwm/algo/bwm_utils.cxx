@@ -8,7 +8,6 @@
 #include <vil/vil_load.h>
 #include <vil/vil_blocked_image_resource.h>
 #include <vil/vil_pyramid_image_resource.h>
-#include <vil/vil_property.h>
 
 #include <vul/vul_file.h>
 
@@ -264,7 +263,7 @@ void bwm_utils::load_from_txt(vcl_string filename,
   }
 }
 
-vil_image_resource_sptr 
+vil_image_resource_sptr
 bwm_utils::load_image(vcl_string& filename, vgui_range_map_params_sptr& rmps)
 {
   vil_image_resource_sptr res;
@@ -296,7 +295,7 @@ bwm_utils::load_image(vcl_string& filename, vgui_range_map_params_sptr& rmps)
 
 void bwm_utils::show_error(vcl_string msg)
 {
-  vgui_dialog err("ERROR occured");
+  vgui_dialog err("ERROR occurred");
   err.message(msg.c_str());
   err.ask();
 }
