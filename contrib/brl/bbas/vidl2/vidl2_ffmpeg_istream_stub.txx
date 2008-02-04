@@ -1,5 +1,7 @@
 // This is brl/bbas/vidl2/vidl2_ffmpeg_istream_stub.txx
-
+#ifndef vidl2_ffmpeg_istream_stub_txx_
+#define vidl2_ffmpeg_istream_stub_txx_
+#include "vidl2_ffmpeg_istream.h"
 //:
 // \file
 // \brief A null implementation for the ffmpeg video reader
@@ -7,10 +9,7 @@
 // \author Amitha Perera
 // \date 14 Jan 2008
 
-#include "vidl2_ffmpeg_istream.h"
-
 #include <vcl_string.h>
-
 
 struct vidl2_ffmpeg_istream::pimpl
 {
@@ -106,3 +105,5 @@ vidl2_ffmpeg_istream
 {
   return false;
 }
+
+#endif // vidl2_ffmpeg_istream_stub_txx_

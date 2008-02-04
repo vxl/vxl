@@ -1,7 +1,7 @@
 // This is brl/bbas/vidl2/vidl2_ffmpeg_ostream_v2.txx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
+#ifndef vidl2_ffmpeg_ostream_v2_txx_
+#define vidl2_ffmpeg_ostream_v2_txx_
+#include "vidl2_ffmpeg_ostream.h"
 //:
 // \file
 // \author Matt Leotta
@@ -12,7 +12,6 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "vidl2_ffmpeg_ostream.h"
 #include "vidl2_ffmpeg_init.h"
 #include "vidl2_ffmpeg_convert.h"
 #include "vidl2_frame.h"
@@ -559,3 +558,5 @@ write_frame(const vidl2_frame_sptr& frame)
   ++os_->cur_frame_;
   return true;
 }
+
+#endif // vidl2_ffmpeg_ostream_v2_txx_

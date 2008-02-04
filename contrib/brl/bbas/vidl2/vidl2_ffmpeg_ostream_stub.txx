@@ -1,13 +1,13 @@
 // This is brl/bbas/vidl2/vidl2_ffmpeg_ostream_stub.txx
-
+#ifndef vidl2_ffmpeg_ostream_stub_txx_
+#define vidl2_ffmpeg_ostream_stub_txx_
+#include "vidl2_ffmpeg_ostream.h"
 //:
 // \file
 // \brief A stub implementation when ffmpeg is not available.
 //
 // \author Amitha Perera
 // \date 26 Dec 2007
-
-#include "vidl2_ffmpeg_ostream.h"
 
 #include <vcl_iostream.h>
 
@@ -67,3 +67,5 @@ vidl2_ffmpeg_ostream
 {
   return false;
 }
+
+#endif // vidl2_ffmpeg_ostream_stub_txx_

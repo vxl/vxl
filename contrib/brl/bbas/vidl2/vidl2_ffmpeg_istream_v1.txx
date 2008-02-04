@@ -1,7 +1,7 @@
 // This is brl/bbas/vidl2/vidl2_ffmpeg_istream_v1.txx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
+#ifndef vidl2_ffmpeg_istream_v1_txx_
+#define vidl2_ffmpeg_istream_v1_txx_
+#include "vidl2_ffmpeg_istream.h"
 //:
 // \file
 // \author Matt Leotta
@@ -9,7 +9,6 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "vidl2_ffmpeg_istream.h"
 #include "vidl2_ffmpeg_init.h"
 #include "vidl2_frame.h"
 #include "vidl2_ffmpeg_convert.h"
@@ -363,7 +362,7 @@ vidl2_ffmpeg_istream::current_frame()
     {
       // Test for contiguous memory.  Sometimes FFMPEG uses scanline buffers larger
       // than the image width.  The extra memory is used in optimized decoding routines.
-      // This leads to a segmented image buffer, not supported by vidl2. 
+      // This leads to a segmented image buffer, not supported by vidl2.
       AVPicture test_frame;
       avpicture_fill(&test_frame, is_->frame_->data[0], enc->pix_fmt, width, height);
       if (test_frame.data[1] == is_->frame_->data[1] &&
@@ -454,3 +453,4 @@ seek_frame(unsigned int frame)
   }
 }
 
+#endif // vidl2_ffmpeg_istream_v1_txx_

@@ -1,5 +1,7 @@
-// This is brl/bbas/vidl2/vidl2_ffmpeg_istream_v1.txx
-
+// This is brl/bbas/vidl2/vidl2_ffmpeg_istream_v2.txx
+#ifndef vidl2_ffmpeg_istream_v2_txx_
+#define vidl2_ffmpeg_istream_v2_txx_
+#include "vidl2_ffmpeg_istream.h"
 //:
 // \file
 // \author Matt Leota
@@ -10,7 +12,6 @@
 
 //-----------------------------------------------------------------------------
 
-#include "vidl2_ffmpeg_istream.h"
 #include "vidl2_ffmpeg_init.h"
 #include "vidl2_frame.h"
 #include "vidl2_ffmpeg_convert.h"
@@ -154,7 +155,7 @@ open(const vcl_string& filename)
   is_->vid_str_ = is_->fmt_cxt_->streams[ is_->vid_index_ ];
   is_->frame_ = avcodec_alloc_frame();
 
-  if( is_->vid_str_->start_time == int64_t(1)<<63 ) {
+  if ( is_->vid_str_->start_time == int64_t(1)<<63 ) {
     is_->start_time = 0;
   } else {
     is_->start_time = is_->vid_str_->start_time;
@@ -266,9 +267,9 @@ advance()
     // Make sure that the packet is from the actual video stream.
     if (pkt.stream_index==is_->vid_index_)
     {
-      if( avcodec_decode_video( codec,
-                                is_->frame_, &got_picture,
-                                pkt.data, pkt.size ) < 0 ) {
+      if ( avcodec_decode_video( codec,
+                                 is_->frame_, &got_picture,
+                                 pkt.data, pkt.size ) < 0 ) {
         vcl_cerr << "vidl2_ffmpeg_istream: Error decoding packet!\n";
         return false;
       }
@@ -280,9 +281,9 @@ advance()
   // I and P frame with a latency of one frame. You must do the
   // following to have a chance to get the last frame of the video.
   if ( !got_picture ) {
-    if( avcodec_decode_video( codec,
-                              is_->frame_, &got_picture,
-                              NULL, 0 ) >= 0 ) {
+    if ( avcodec_decode_video( codec,
+                               is_->frame_, &got_picture,
+                               NULL, 0 ) >= 0 ) {
       is_->last_dts += int64_t(is_->vid_str_->time_base.den) * is_->vid_str_->r_frame_rate.den
         / is_->vid_str_->time_base.num / is_->vid_str_->r_frame_rate.num;
     }
@@ -351,7 +352,7 @@ vidl2_ffmpeg_istream::current_frame()
         SWS_BILINEAR,
         NULL, NULL, NULL );
 
-      if( is_->sws_context_ == NULL ) {
+      if ( is_->sws_context_ == NULL ) {
         vcl_cerr << "vidl2_ffmpeg_istream: couldn't create conversion context\n";
         return vidl2_frame_sptr();
       }
@@ -371,7 +372,7 @@ vidl2_ffmpeg_istream::current_frame()
     {
       // Test for contiguous memory.  Sometimes FFMPEG uses scanline buffers larger
       // than the image width.  The extra memory is used in optimized decoding routines.
-      // This leads to a segmented image buffer, not supported by vidl2. 
+      // This leads to a segmented image buffer, not supported by vidl2.
       AVPicture test_frame;
       avpicture_fill(&test_frame, is_->frame_->data[0], enc->pix_fmt, width, height);
       if (test_frame.data[1] == is_->frame_->data[1] &&
@@ -413,7 +414,7 @@ seek_frame(unsigned int frame)
   }
 
   // We rely on the initial cast to make sure all the operations happen in int64.
-  int64_t req_timestamp = 
+  int64_t req_timestamp =
     int64_t(frame + is_->frame_number_offset_)
     * is_->vid_str_->time_base.den
     * is_->vid_str_->r_frame_rate.den
@@ -445,3 +446,4 @@ seek_frame(unsigned int frame)
   }
 }
 
+#endif // vidl2_ffmpeg_istream_v2_txx_
