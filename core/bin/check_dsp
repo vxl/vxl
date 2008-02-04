@@ -21,21 +21,29 @@ if (defined($ARGV[0])) {
   @DIRS = @ARGV;
 }
 else {
-  $VXLROOT = $ENV{VXLROOT};
-  unless (defined($VXLROOT)) {
+  $V = $ENV{VXLROOT};
+  if (defined($V)) {
+    $DIRS = `find $V/vcl $V/core $V/contrib $V/v3p -type d -print`;
+  }
+  elsif (-d 'vcl' && -d 'core' && -d 'contrib') {
+    $DIRS = `find vcl core contrib v3p -type d -print`;
+  }
+  else
+  {
     print STDERR "VXLROOT is not defined, and no command line arguments were given\n";
     exit 0;
   }
-  $DIRS = `find \$VXLROOT/vcl \$VXLROOT/v3p \$VXLROOT/core \$VXLROOT/contrib  -type d \\\( -name xerces-c-src\\\* -prune -o -print \\\)`;
-  @DIRS = grep { ! m!(/CVS|awfmfc|vgui_example_mfc)$! } sort split ' ', $DIRS;
+  @DIRS = grep { ! m!(/CVS|awfmfc|vgui_example_mfc|v3p/netlib)$! } sort split ' ', $DIRS;
 }
 
 foreach $dir (@DIRS)
 {
-  # make that the embedding directory, if this is a file name:
-  $dir =~ s!/[^/]+$!! if -f $dir;
+  # make that the embedding directory, if this is not a directory name:
+  $dir =~ s!/[^/]+$!! unless -d $dir;
+  # remove possible slash at end of directory name:
+  $dir =~ s![\\/]+$!!;
   # temporarily skip this directory -- it gives useless messages:
-  next if ($dir =~ m!bmvl/brct/tests/?$!);
+  next if ($dir =~ m!bmvl/brct/tests$!);
   # Now read directory content and open relevant files (like CMakeLists.txt, makefile and *.dsp)
   opendir(TMP,$dir);
   @tmp_list = readdir(TMP);
