@@ -1,7 +1,6 @@
 // This is brl/bbas/bsta/io/bsta_io_gaussian_angles_1d.h
 #ifndef bsta_io_gaussian_angles_1d_h_
 #define bsta_io_gaussian_angles_1d_h_
-
 //:
 // \file
 // \brief Binary I/O for full gaussians
@@ -45,5 +44,4 @@ vsl_print_summary(vcl_ostream &os, const bsta_gaussian_angles_1d & g)
   os << "Gaussian (full) mean:"<<g.mean()<<" var:"<<g.var();
 }
 
-
-#endif // bsta_io_gaussian_full_h_
+#endif // bsta_io_gaussian_angles_1d_h_

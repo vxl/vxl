@@ -1,7 +1,5 @@
 #ifndef mbl_progress_hierarchy_h_
 #define mbl_progress_hierarchy_h_
-
-
 //:
 // \file
 // \brief Assumes a hierarchy in the identifiers and reports a single float score.
@@ -11,7 +9,6 @@
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <mbl/mbl_progress.h>
-
 
 //========================================================================
 //: API for reporting a single progress fraction from multiple hierarchical sources.
@@ -23,9 +20,6 @@
 // and provide a defintion of on_changed_progress().
 class mbl_progress_hierarchy: public mbl_progress
 {
- public:
-
-
  protected:
 
   //: Called when set_estimate_iterations() is called for a given identifier.
@@ -52,14 +46,14 @@ class mbl_progress_hierarchy: public mbl_progress
   // value is out of 1.0.
   virtual void on_changed_progress(double fraction)=0;
 
-private:
+ private:
   //: The ordered hierarchy of identifiers.
   vcl_vector<vcl_string> identifier_stack_;
-  
+
   //: Has an existing identifer just been ended.
   bool just_ended_;
 };
 
 //========================================================================
 
-#endif // mbl_progress_h_
+#endif // mbl_progress_hierarchy_h_
