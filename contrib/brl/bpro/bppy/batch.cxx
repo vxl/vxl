@@ -1,31 +1,8 @@
-#include "Python.h"
-#include <bprb/bprb_macros.h>
-#include <bprb/bprb_batch_process_manager.h>
+#include "batch.h"
 #include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <bprb/bprb_batch_process_manager.h>
 #include <brdb/brdb_value.h>
-static PyObject *
-register_processes(PyObject *self, PyObject *args)
-{
-  REG_PROCESS(bprb_null_process, bprb_batch_process_manager);
-	Py_INCREF(Py_None);
-	return Py_None;
-}
-
-static PyObject *
-register_datatypes(PyObject *self, PyObject *args)
-{
-  REGISTER_DATATYPE(bool);
-  REGISTER_DATATYPE(vcl_string);
-  REGISTER_DATATYPE(int);
-  REGISTER_DATATYPE(long);
-  REGISTER_DATATYPE(float);
-  REGISTER_DATATYPE(double);
-	Py_INCREF(Py_None);
-	return Py_None;
-}
-
-
+#include <vcl_iostream.h>
 static PyObject *
 init_process(PyObject *self, PyObject *args)
 {
