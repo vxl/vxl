@@ -59,32 +59,30 @@ void vil3d_gauss_reduce(const vil3d_image_view<T>& src_im,
   unsigned nj2 = (nj+1)/2;
   unsigned nk2 = (nk+1)/2;
 
-  // Smooth and subsample in i, result in work_im1
   if (work_im1.ni()<ni2 || work_im1.nj()<nj || work_im1.nk()<nk)
     work_im1.set_size(ni2,nj,nk);
+
+  if (work_im2.ni()<ni2 || work_im2.nj()<nj2 || work_im2.nk()<nk)
+    work_im2.set_size(ni2,nj2,nk);
+
+  dest_im.set_size(ni2,nj2,nk2,n_planes);
+
   for (unsigned p=0;p<n_planes;++p)
   {
+    // Smooth and subsample in i, result in work_im1
+
     vil3d_gauss_reduce_i(
       src_im.origin_ptr()+p*src_im.planestep(),ni,nj,nk,
       src_im.istep(),src_im.jstep(),src_im.kstep(),
       work_im1.origin_ptr(),work_im1.istep(),work_im1.jstep(),work_im1.kstep());
-  }
 
-  // Smooth and subsample in j (by implicitly transposing), result in work_im2
-  if (work_im2.ni()<ni2 || work_im2.nj()<nj2 || work_im2.nk()<nk)
-    work_im2.set_size(ni2,nj2,nk);
-  for (unsigned p=0;p<n_planes;++p)
-  {
+    // Smooth and subsample in j (by implicitly transposing), result in work_im2
     vil3d_gauss_reduce_i(
       work_im1.origin_ptr(),nj,ni2,nk,
       work_im1.jstep(),work_im1.istep(),work_im1.kstep(),
       work_im2.origin_ptr(),work_im2.jstep(),work_im2.istep(),work_im2.kstep());
-  }
-
-  // Smooth and subsample in k (by implicitly transposing)
-  dest_im.set_size(ni2,nj2,nk2,n_planes);
-  for (unsigned p=0;p<n_planes;++p)
-  {
+ 
+    // Smooth and subsample in k (by implicitly transposing)
     vil3d_gauss_reduce_i(
       work_im2.origin_ptr(),nk,ni2,nj2,
       work_im2.kstep(),work_im2.istep(),work_im2.jstep(),
@@ -112,21 +110,19 @@ void vil3d_gauss_reduce_ij(const vil3d_image_view<T>& src_im,
   unsigned nj2 = (nj+1)/2;
   unsigned nk2 = nk;
 
-  // Smooth and subsample in i, result in work_im1
   if (work_im1.ni()<ni2 || work_im1.nj()<nj || work_im1.nk()<nk)
     work_im1.set_size(ni2,nj,nk);
+  dest_im.set_size(ni2,nj2,nk2,n_planes);
+
   for (unsigned p=0;p<n_planes;++p)
   {
+    // Smooth and subsample in i, result in work_im1
     vil3d_gauss_reduce_i(
       src_im.origin_ptr()+p*src_im.planestep(),ni,nj,nk,
       src_im.istep(),src_im.jstep(),src_im.kstep(),
       work_im1.origin_ptr(),work_im1.istep(),work_im1.jstep(),work_im1.kstep());
-  }
-  
-  // Smooth and subsample in j (by implicitly transposing), result in dest_im
-  dest_im.set_size(ni2,nj2,nk2,n_planes);
-  for (unsigned p=0;p<n_planes;++p)
-  {
+
+    // Smooth and subsample in j (by implicitly transposing), result in dest_im
     vil3d_gauss_reduce_i(
       work_im1.origin_ptr(),nj,ni2,nk,
       work_im1.jstep(),work_im1.istep(),work_im1.kstep(),
@@ -154,21 +150,19 @@ void vil3d_gauss_reduce_ik(const vil3d_image_view<T>& src_im,
   unsigned nj2 = nj;
   unsigned nk2 = (nk+1)/2;
 
-  // Smooth and subsample in i, result in work_im1
   if (work_im1.ni()<ni2 || work_im1.nj()<nj || work_im1.nk()<nk)
     work_im1.set_size(ni2,nj,nk);
+  dest_im.set_size(ni2,nj2,nk2,n_planes);
+
   for (unsigned p=0;p<n_planes;++p)
   {
+    // Smooth and subsample in i, result in work_im1
     vil3d_gauss_reduce_i(
       src_im.origin_ptr()+p*src_im.planestep(),ni,nj,nk,
       src_im.istep(),src_im.jstep(),src_im.kstep(),
       work_im1.origin_ptr(),work_im1.istep(),work_im1.jstep(),work_im1.kstep());
-  }
-    
-  // Smooth and subsample in k (by implicitly transposing), result in dest_im
-  dest_im.set_size(ni2,nj2,nk2,n_planes);
-  for (unsigned p=0;p<n_planes;++p)
-  {
+
+    // Smooth and subsample in k (by implicitly transposing), result in dest_im
     vil3d_gauss_reduce_i(
         work_im1.origin_ptr(),nk,ni2,nj,
         work_im1.kstep(),work_im1.istep(),work_im1.jstep(),
@@ -196,21 +190,20 @@ void vil3d_gauss_reduce_jk(const vil3d_image_view<T>& src_im,
   unsigned nj2 = (nj+1)/2;
   unsigned nk2 = (nk+1)/2;
 
-  // Smooth and subsample in j (by implicitly transposing), result in work_im1
   if (work_im1.ni()<ni || work_im1.nj()<nj2 || work_im1.nk()<nk)
-    work_im1.set_size(ni,nj2,nk);  
+    work_im1.set_size(ni,nj2,nk);
+
+  dest_im.set_size(ni2,nj2,nk2,n_planes);
+
   for (unsigned p=0;p<n_planes;++p)
   {
+    // Smooth and subsample in j (by implicitly transposing), result in work_im1
     vil3d_gauss_reduce_i(
       src_im.origin_ptr()+p*src_im.planestep(),nj,ni,nk,
       src_im.jstep(),src_im.istep(),src_im.kstep(),
       work_im1.origin_ptr(),work_im1.jstep(),work_im1.istep(),work_im1.kstep());
-  }
 
-  // Smooth and subsample in k (by implicitly transposing), result in dest_im
-  dest_im.set_size(ni2,nj2,nk2,n_planes);
-  for (unsigned p=0;p<n_planes;++p)
-  {
+    // Smooth and subsample in k (by implicitly transposing), result in dest_im
     vil3d_gauss_reduce_i(
       work_im1.origin_ptr(),nk,ni,nj2,
       work_im1.kstep(),work_im1.istep(),work_im1.jstep(),
