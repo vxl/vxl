@@ -3,6 +3,7 @@
 DECLARE( test_jarque_bera );
 DECLARE( test_parse_block );
 DECLARE( test_parse_sequence );
+DECLARE( test_parse_tuple );
 DECLARE( test_lda );
 DECLARE( test_file_data_wrapper );
 DECLARE( test_selected_data_wrapper );
@@ -53,6 +54,7 @@ register_tests()
   REGISTER( test_jarque_bera );
   REGISTER( test_parse_block );
   REGISTER( test_parse_sequence );
+  REGISTER( test_parse_tuple );
   REGISTER( test_lda );
   REGISTER( test_file_data_wrapper );
   REGISTER( test_selected_data_wrapper );

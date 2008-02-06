@@ -26,7 +26,7 @@
 // mbl_parse_sequence(vcl_cin, vcl_back_inserter(v), unsigned());
 // \endverbatim
 template <class ITER, class T>
-void mbl_parse_sequence(vcl_istream &afs, ITER insert_iter, T dummy)
+inline void mbl_parse_sequence(vcl_istream &afs, ITER insert_iter, T dummy)
 {
   // Can't use iterator_traits<ITER>::value_type to infer T,
   // because output_iterators may not have a useful value_type
