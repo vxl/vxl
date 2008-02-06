@@ -9,6 +9,6 @@ SET(bipp_sources
 AUX_SOURCE_DIRECTORY(Templates bipp_sources)
 ADD_LIBRARY(bipp ${bipp_sources})
 
-TARGET_LINK_LIBRARIES(bipp vil bvam_io)
+TARGET_LINK_LIBRARIES(bipp vil)
 
 SUBDIRS(io)
