@@ -1,6 +1,6 @@
-// This is mul/mbl/mbl_parse_sequence.h
-#ifndef mbl_parse_sequence_h_
-#define mbl_parse_sequence_h_
+// This is mul/mbl/mbl_parse_tuple.h
+#ifndef mbl_parse_tuple_h_
+#define mbl_parse_tuple_h_
 //:
 // \file
 // \author Ian Scott
@@ -151,4 +151,4 @@ inline void mbl_parse_tuple(vcl_istream &afs, T& a, U& b, V& c, W& d)
       throw mbl_exception_parse_error("mbl_parse_tuple failed with stream error");
   }
 }
-#endif // mbl_parse_sequence_h_
+#endif // mbl_parse_tuple_h_
