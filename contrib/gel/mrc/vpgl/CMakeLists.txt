@@ -33,6 +33,7 @@ ENDIF( BUILD_TESTING )
 SUBDIRS(algo)
 SUBDIRS(xio)
 SUBDIRS(file_formats)
+SUBDIRS(io)
 
 # Geographic utilities
 SUBDIRS(bgeo)

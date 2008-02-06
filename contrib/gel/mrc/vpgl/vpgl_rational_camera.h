@@ -46,6 +46,7 @@
 //
 #include <vgl/vgl_fwd.h>
 #include <vcl_iostream.h>
+#include <vsl/vsl_binary_io.h>
 #include <vcl_vector.h>
 #include <vcl_string.h>
 #include <vnl/vnl_vector_fixed.h>
@@ -206,6 +207,13 @@ class vpgl_rational_camera : public vpgl_camera<T>
   virtual void print(vcl_ostream& s = vcl_cout) const;
 
   bool save(vcl_string cam_path);
+
+  // binary IO
+   //: Binary save self to stream.
+  virtual void b_write(vsl_b_ostream &os) const;
+
+  //: Binary load self from stream.
+  virtual void b_read(vsl_b_istream &is);
 
  protected:
   // utilities

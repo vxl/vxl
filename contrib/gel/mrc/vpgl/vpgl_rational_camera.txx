@@ -7,6 +7,8 @@
 #include "vpgl_rational_camera.h"
 #include <vcl_vector.txx>
 #include <vcl_fstream.h>
+#include <vsl/vsl_binary_io.h>
+#include <vnl/io/vnl_io_matrix_fixed.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 //--------------------------------------
@@ -609,6 +611,47 @@ vpgl_rational_camera<T>* read_rational_camera(vcl_string cam_path)
   scale_offsets_[V_INDX] = vpgl_scale_offset<T>(v_scale, v_off);
 #endif // 0
 }
+
+// Binary I/O
+
+//: Binary read self from stream
+template <class T> void vpgl_rational_camera<T>::
+b_read(vsl_b_istream &is)
+{
+  // read rational coefficients
+  vsl_b_read(is,rational_coeffs_);
+  // read scale+offsets
+  unsigned n_scale_offsets;
+  vsl_b_read(is,n_scale_offsets);
+  scale_offsets_.resize(n_scale_offsets);
+
+  for (unsigned i=0; i<n_scale_offsets; ++i) {
+    T scale, off;
+    vsl_b_read(is,scale);
+    vsl_b_read(is,off);
+    scale_offsets_[i] = vpgl_scale_offset<T>(scale,off);
+  }
+ 
+  return;
+}
+
+
+//: Binary save self to stream.
+template <class T> void vpgl_rational_camera<T>::
+b_write(vsl_b_ostream &os) const
+{
+  // write rational coefficients
+  vsl_b_write(os,rational_coeffs_);
+  // write scale+offsets
+  vsl_b_write(os,scale_offsets_.size());
+  for (unsigned i=0; i<scale_offsets_.size(); ++i) {
+    vsl_b_write(os,scale_offsets_[i].scale());
+    vsl_b_write(os,scale_offsets_[i].offset());
+  }
+  return;
+}
+
+
 
 // Code for easy instantiation.
 #undef vpgl_RATIONAL_CAMERA_INSTANTIATE
