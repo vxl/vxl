@@ -10,6 +10,6 @@ SET(vpgl_io_sources
 AUX_SOURCE_DIRECTORY(Templates vpgl_io_sources)
 
 ADD_LIBRARY(vpgl_io ${vpgl_io_sources})
-TARGET_LINK_LIBRARIES(vpgl_io vsl vpgl)
+TARGET_LINK_LIBRARIES(vpgl_io vsl vpgl vnl vnl_io)
 
 
