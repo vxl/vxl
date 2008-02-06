@@ -34,7 +34,7 @@ class bipp_load_image_process : public bprb_process
   //: Clone the process
   virtual bipp_load_image_process* clone() const {return new bipp_load_image_process(*this);}
 
-  vcl_string name(){return "Load Image";}
+  vcl_string name(){return "LoadImageProcess";}
 
   bool init() { return true; }
   bool execute();
