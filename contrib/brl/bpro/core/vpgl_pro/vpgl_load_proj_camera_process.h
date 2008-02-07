@@ -31,7 +31,7 @@ class vpgl_load_proj_camera_process : public bprb_process
   //: Clone the process
   virtual vpgl_load_proj_camera_process* clone() const {return new vpgl_load_proj_camera_process(*this);}
 
-  vcl_string name(){return "LoadprojCameraProcess";}
+  vcl_string name(){return "LoadProjCameraProcess";}
 
   bool init() { return true; }
   bool execute();
