@@ -149,23 +149,35 @@ clear(PyObject *self, PyObject *args){
 }
 
 static PyMethodDef batch_methods[] = {
-	{"register_processes", register_processes, METH_VARARGS, "register_processes() doc string"},
-	{"register_datatypes", register_datatypes, METH_VARARGS, "register_datatypes() doc string"},
-	{"init_process", init_process, METH_VARARGS, "init_process(s) doc string"},
-	{"set_input_bool", set_input_bool, METH_VARARGS, "set_input_(i,b) doc string"},
-	{"set_input_string", set_input_string, METH_VARARGS, "set_input_(i,s) doc string"},
-	{"set_input_int", set_input_int, METH_VARARGS, "set_input_(i,i) doc string"},
-	{"set_input_long", set_input_long, METH_VARARGS, "set_input_(i,l) doc string"},
-	{"set_input_float", set_input_float, METH_VARARGS, "set_input_(i,f) doc string"},
-	{"set_input_double", set_input_double, METH_VARARGS, "set_input_(i,d) doc string"},
-  {"run_process", run_process, METH_VARARGS, "run_process() doc string"},
-  {"commit_output", commit_output, METH_VARARGS, "commit_output() doc string"},
-  {"set_input_from_db", set_input_from_db, METH_VARARGS, "set_input_from_db(i, i) doc string"},
-  {"print_db", print_db, METH_VARARGS, "print_db() doc string"},
-  {"clear", clear, METH_VARARGS, "clear() doc string"},
+	{"register_processes", register_processes, METH_VARARGS,
+   "register_processes() create instances of each defined process"},
+	{"register_datatypes", register_datatypes, METH_VARARGS,
+   "register_datatypes() insert tables in the database for each type"},
+	{"init_process", init_process, METH_VARARGS,
+   "init_process(s) create a new process instance by name"},
+	{"set_input_bool", set_input_bool, METH_VARARGS,
+   "set_input_(i,b) set input i on current process to a bool value"},
+	{"set_input_string", set_input_string, METH_VARARGS,
+   "set_input_(i,s) set input i on current process to a string value"},
+	{"set_input_int", set_input_int, METH_VARARGS,
+   "set_input_(i,i) set input i on current process to an int value"},
+	{"set_input_long", set_input_long, METH_VARARGS,
+   "set_input_(i,l) set input i on current process to a long value"},
+	{"set_input_float", set_input_float, METH_VARARGS,
+   "set_input_(i,f) set input i on current process to a float value"},
+	{"set_input_double", set_input_double, METH_VARARGS,
+   "set_input_(i,d) set input i on current process to a double value"},
+  {"run_process", run_process, METH_VARARGS,
+   "run_process() run the current process"},
+  {"commit_output", commit_output, METH_VARARGS,
+   "commit_output(i) put output i in the database "},
+  {"set_input_from_db", set_input_from_db, METH_VARARGS,
+   "set_input_from_db(i, i) set input i of the current process to db id value"},
+  {"print_db", print_db, METH_VARARGS, "print_db() print the database"},
+  {"clear", clear, METH_VARARGS, "clear() clear the database tables"},
+	{NULL, NULL},
 	{NULL, NULL}
 };
-
 
 
 PyMODINIT_FUNC
