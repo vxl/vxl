@@ -7,6 +7,7 @@
 
 #include <bprb/bprb_parameters.h>
 #include <vcl_iostream.h>
+#include <vcl_string.h>
 #include <vil/vil_load.h>
 #include <vil/vil_image_view_base.h>
 

@@ -4,7 +4,8 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
 
 SET(vil_bpro_sources
     vil_io_image_view_base.h vil_io_image_view_base.cxx
-    vil_load_image_view_process.cxx vil_load_image_view_process.h
+    vil_load_image_view_process.h vil_load_image_view_process.cxx
+    vil_save_image_view_process.h vil_save_image_view_process.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vil_bpro_sources)
