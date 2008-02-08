@@ -17,16 +17,31 @@ int main(int argc, char** argv)
     vcl_cerr << "Please specify the path to scene file (IV or VRML)\n";
     return -1;
   }
-  vcl_string filename(argv[1]);
+  
+  vcl_vector<vcl_string> files;
+  for(int i=1; i<argc; ++i)
+    files.push_back(argv[i]);
+  
   // initialize vgui
   vgui::init(argc, argv);
 
   // initialize bgui_3d
   bgui3d_init();
 
-  // read the file into a scene graph
-  SoNode* root = bgui3d_import_file(filename);
-  root->ref();
+  // read each file into a scene graph
+  SoNode* root;
+  if(files.size() == 1){
+    root = bgui3d_import_file(files.front());
+    root->ref();
+  }
+  else{
+    // add each file as a child of a Separator
+    SoSeparator* group = new SoSeparator;
+    group->ref();
+    for(unsigned i=0; i<files.size(); ++i)
+      group->addChild(bgui3d_import_file(files[i]));
+    root = group;
+  }
 
   // wrap the scenegraph in an examiner tableau
   bgui3d_examiner_tableau_new tab3d(root);
