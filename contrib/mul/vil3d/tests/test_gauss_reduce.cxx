@@ -7,36 +7,32 @@
 #include <vil3d/vil3d_print.h>
 #include <vil3d/vil3d_crop.h>
 
-static void test_gauss_reduce_float()
+static void test_gauss_reduce_float(vil3d_image_view<float>& image,
+                                    vil3d_image_view<float>& dest)
 {
-  vcl_cout << "***********************************\n"
-           << " Testing vil3d_gauss_reduce<float>\n"
-           << "***********************************\n";
-
-  unsigned ni = 10, nj = 20, nk = 30;
+  unsigned ni = image.ni(), nj = image.nj(), nk = image.nk();
   vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<" k "<<nk<<vcl_endl;
 
-  vil3d_image_view<float> image0;
-  image0.set_size(ni,nj,nk);
 
-  for (unsigned k=0;k<image0.nk();++k)
-    for (unsigned j=0;j<image0.nj();++j)
-      for (unsigned i=0;i<image0.ni();++i)
-        image0(i,j,k) = i*0.1f-j+k*10;
+  for (unsigned k=0;k<nk;++k)
+    for (unsigned j=0;j<nj;++j)
+      for (unsigned i=0;i<ni;++i)
+        image(i,j,k) = i*0.1f-j+k*10;
 
   unsigned ni2 = (ni+1)/2;
   unsigned nj2 = (nj+1)/2;
   unsigned nk2 = (nk+1)/2;
-  vil3d_image_view<float> image1,work_im1,work_im2;
-  vil3d_gauss_reduce(image0,image1,work_im1,work_im2);
+  vil3d_image_view<float> work_im1,work_im2;
+  float old_image222 = image(2,2,2);
+  vil3d_gauss_reduce(image,dest,work_im1,work_im2);
 
-  TEST("size i",image1.ni(),(ni+1)/2);
-  TEST("size j",image1.nj(),(nj+1)/2);
-  TEST("size k",image1.nk(),(nk+1)/2);
-  TEST_NEAR("Pixel (0,0,0)", image1(0,0,0), 4.5409f, 1e-4f);
-  TEST_NEAR("Pixel (1,1,1)", image1(1,1,1), image0(2,2,2), 1e-5f);
-  TEST_NEAR("Pixel (2,3,3)", image1(2,3,3), 54.4f, 1e-4f);
-  TEST_NEAR("Corner pixel", image1(ni2-1,nj2-1,nk2-1),  258.2591f, 1e-4f);
+  TEST("size i",dest.ni(),(ni+1)/2);
+  TEST("size j",dest.nj(),(nj+1)/2);
+  TEST("size k",dest.nk(),(nk+1)/2);
+  TEST_NEAR("Pixel (0,0,0)", dest(0,0,0), 4.5409f, 1e-4f);
+  TEST_NEAR("Pixel (1,1,1)", dest(1,1,1), old_image222, 1e-5f);
+  TEST_NEAR("Pixel (2,3,3)", dest(2,3,3), 54.4f, 1e-4f);
+  TEST_NEAR("Corner pixel", dest(ni2-1,nj2-1,nk2-1),  258.2591f, 1e-4f);
 }
 
 // Check in-homogeneous smoothing option (ie onlj smooth in i,j but not k on some levels)
@@ -185,7 +181,20 @@ static void test_gauss_reduce_int()
 static void test_gauss_reduce()
 {
   vcl_cout << vcl_setprecision(10);
-  test_gauss_reduce_float();
+
+  vcl_cout << "***********************************\n"
+           << " Testing vil3d_gauss_reduce<float>\n"
+           << "***********************************\n";
+  vil3d_image_view<float> image(10, 20, 30);
+  vil3d_image_view<float> dest;
+  test_gauss_reduce_float(image, dest);
+  vcl_cout<<"Test non-contiguous image\n";
+  vil3d_image_view<float> image2(20, 30, 41);
+  vil3d_image_view<float> crop_image = vil3d_crop(image2,2,10,3,20,4,30);
+  test_gauss_reduce_float(crop_image, dest);
+  vcl_cout<<"Test input image = output_image\n";
+  test_gauss_reduce_float(image, image);
+
   test_gauss_reduce_ij();
   test_gauss_reduce_ik();
   test_gauss_reduce_jk();
