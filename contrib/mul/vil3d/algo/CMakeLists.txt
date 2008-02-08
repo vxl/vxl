@@ -27,6 +27,8 @@ SET(vil3d_algo_sources
   vil3d_abs_shuffle_distance.h  vil3d_abs_shuffle_distance.txx
   vil3d_make_distance_filter.h  vil3d_make_distance_filter.cxx
   vil3d_make_edt_filter.h       vil3d_make_edt_filter.cxx
+
+  vil3d_overlap.h               vil3d_overlap.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vil3d_algo_sources)
