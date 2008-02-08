@@ -42,7 +42,7 @@
 // to take as little time as possible - so that there is no overhead in leaving the
 // log message in your code. To achieve this we can test the log level first
 // \code
-// if (my_log.level() < mbl_logger::WARN)
+// if (my_log.level() >= mbl_logger::WARN)
 //   my_log.log(mbl_logger::WARN) << "Infinite loop: Time wasted so far " << time() << vcl_endl;
 // \endcode
 // Of course, you should just use MBL_LOG which handles this for you. Additionally
