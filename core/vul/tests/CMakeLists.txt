@@ -30,3 +30,6 @@ GENERATE_TEST_INCLUDE(vul vul_test_include_sources "vul/")
 
 ADD_EXECUTABLE( vul_test_debug test_debug.cxx )
 TARGET_LINK_LIBRARIES( vul_test_debug vul vpl testlib )
+
+ADD_EXECUTABLE( vul_try_reg_exp try_reg_exp.cxx )
+TARGET_LINK_LIBRARIES( vul_try_reg_exp vul vpl )
