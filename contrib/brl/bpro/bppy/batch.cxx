@@ -135,6 +135,18 @@ set_input_from_db(PyObject *self, PyObject *args)
 }
 
 static PyObject *
+remove_data(PyObject *self, PyObject *args)
+{
+  unsigned id;
+  if (!PyArg_ParseTuple(args, "i:set_input_from_db", &id))
+		return NULL;
+  bool result = 
+    bprb_batch_process_manager::instance()->remove_data(id);
+
+  return Py_BuildValue("b", result);
+}
+
+static PyObject *
 print_db(PyObject *self, PyObject *args){
   bprb_batch_process_manager::instance()->print_db();
   Py_INCREF(Py_None);
@@ -173,6 +185,8 @@ static PyMethodDef batch_methods[] = {
    "commit_output(i) put output i in the database "},
   {"set_input_from_db", set_input_from_db, METH_VARARGS,
    "set_input_from_db(i, i) set input i of the current process to db id value"},
+  {"remove_data", remove_data, METH_VARARGS,
+   "remove_data(i) remove data with id from db"},
   {"print_db", print_db, METH_VARARGS, "print_db() print the database"},
   {"clear", clear, METH_VARARGS, "clear() clear the database tables"},
 	{NULL, NULL},
