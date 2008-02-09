@@ -139,7 +139,19 @@ bool bprb_batch_process_manager::commit_all_outputs(vcl_vector<unsigned>& ids)
 //: remove data from the database
 bool bprb_batch_process_manager::remove_data(unsigned id)
 {
-  return false;
+  bool removed = false;
+  vcl_set<vcl_string> names = DATABASE->get_all_relation_names();
+  for(vcl_set<vcl_string>::iterator nit = names.begin();
+      nit != names.end()&&!removed; ++nit){
+    // query to get the data 
+    brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
+
+    brdb_selection_sptr selec = DATABASE->select(*nit, Q);
+    if(selec->size()!=1) continue;
+    selec->delete_tuples();
+    removed = true;
+  }
+  return removed;
 }
 
 //: Run a process on the current frame
