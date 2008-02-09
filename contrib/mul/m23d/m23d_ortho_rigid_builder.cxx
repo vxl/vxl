@@ -7,10 +7,45 @@
 #include <m23d/m23d_rotation_from_ortho_projection.h>
 #include <m23d/m23d_scaled_ortho_projection.h>
 #include <m23d/m23d_set_q_constraint.h>
+
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
+
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
+#include <vcl_cstdlib.h>
+
+//: Reconstruct structure from set of 2d pts
+// formulates measurement matrix P2D then calls reconstruct funtion above
+void m23d_ortho_rigid_builder::reconstruct(const vcl_vector< vcl_vector< vgl_point_2d<double> > >& pt_vec_list )
+{
+  // convert pts into a matrix
+  int nf= pt_vec_list.size();
+  int n0= pt_vec_list[0].size();
+  vnl_matrix<double> D(2*nf,n0);
+  for (int i=0; i<nf; ++i)
+  {
+    if ( n0!= pt_vec_list[i].size() )
+    {
+      vcl_cerr<<"ERROR m23d_ortho_rigid_builder::reconstruct()"<<vcl_endl;
+      vcl_cerr<<"problem with different numbers of pts"<<vcl_endl;
+      vcl_cerr<<"pt_vec_list[0].size()= "<<pt_vec_list[0].size()<<vcl_endl;
+      vcl_cerr<<"pt_vec_list["<<i<<"].size()= "<<pt_vec_list[i].size()<<vcl_endl;
+      vcl_abort();
+    }
+     
+    for (int p=0; p<n0; ++p)
+    {
+       D(2*i,p)= pt_vec_list[i][p].x();
+       D(2*i+1,p)= pt_vec_list[i][p].y();
+    }
+     
+  }
+  
+  reconstruct(D);
+  
+}
+
 
 //: Reconstruct structure of 3D points given multiple 2D views
 //  Data assumed to be scaled orthographic projections.
@@ -67,6 +102,10 @@ void m23d_ortho_rigid_builder::reconstruct(const vnl_matrix<double>& P2D)
   vcl_cout<<"P_.extract(2,3)= "<<P_.extract(2,3)<<vcl_endl
           <<"P3D_.extract(3,5)= "<<P3D_.extract(3,5)<<vcl_endl;
 #endif
+  
+   
+  // start of new method
+  
   //using notation from orig paper
   //ie
   //i QQt i=1
@@ -75,12 +114,7 @@ void m23d_ortho_rigid_builder::reconstruct(const vnl_matrix<double>& P2D)
   // find this matrix Q
   vnl_matrix<double> Q;
   find_correction_matrix( Q, P_);
-
-  // older method (still works fine!)
-  // uses fewer constraints
-  find_correction_matrix_alt( Q, P_);
-
-#if 0 // commented out
+  
   // apply correction
   P_= P_*Q;
   //P3D_= Q.transpose() * P3D_;
@@ -91,38 +125,54 @@ void m23d_ortho_rigid_builder::reconstruct(const vnl_matrix<double>& P2D)
   // Now need to apply an additional rotation so that the
   // first projection matrix is approximately the identity.
   vnl_matrix<double> P0=P_.extract(2,3);
+
   vcl_cout<<"P0= "<<P0<<vcl_endl;
 
   // Compute a rotation matrix for this projection
-  // then update shape and
   vnl_matrix<double> R0=m23d_rotation_from_ortho_projection(P0);
-  vcl_cout<<"R0= "<<R0<<vcl_endl;
-  P_= P_*R0;
-  P3D_=R0.transpose() * P3D_;
-#endif // 0
 
+  // apply rotation to mean shape
+  P_= P_*R0.transpose();
+  
+  // apply reverse rotation to projections
+  P3D_=R0* P3D_;
+
+
+#if 0 // commented out  
+  
+  // older method (still works fine!)
+  // uses fewer constraints
+  vnl_matrix<double> Q;
+  find_correction_matrix_alt( Q, P_);
+  
   //apply correction + rotation at same time
 
   // Now need to apply an additional rotation so that the
   // first projection matrix is approximately the identity.
+  
   vnl_matrix<double> P0=P_.extract(2,3)*Q;
-#if 0
-  vcl_cout<<"P_.extract(2,3)= "<<P_.extract(2,3)<<vcl_endl
-          <<"Q= "<<Q<<vcl_endl
-          <<"P0= "<<P0<<vcl_endl;
-#endif
+  
+
+  //vcl_cout<<"P_.extract(2,3)= "<<P_.extract(2,3)<<vcl_endl
+  //        <<"Q= "<<Q<<vcl_endl
+  //        <<"P0= "<<P0<<vcl_endl;
+  
   // Compute a rotation matrix for this
   vnl_matrix<double> R=m23d_rotation_from_ortho_projection(P0);
 
   vcl_cout<<"P0*Rt\n"<<P0*R.transpose()<<vcl_endl;
-  // Apply inverse so that P.G gives unit projection
+  
+  // Apply inverse so that P.Q gives unit projection
+  // ie apply rotation to the correction matrix
   Q=Q*R.transpose();
 
   // Apply the correction matrix
   P_=P_*Q;
   vnl_svd<double> Q_svd(Q);
   P3D_=Q_svd.inverse() * P3D_;
-
+#endif
+  
+  
   // Disambiguate the ambiguity in the sign of the z ordinates
   // First non-zero element should be negative.
   // nb mainly for benefit of test program!
@@ -138,6 +188,8 @@ void m23d_ortho_rigid_builder::reconstruct(const vnl_matrix<double>& P2D)
       break;
     }
   }
+  
+  
 }
 
 //: find matrix Q using constraints on matrix P which must contain orthonormal projects in each (2*3) submatrix for each frame old method
@@ -339,7 +391,7 @@ void m23d_ortho_rigid_builder::compute_one_row_of_constraints( vnl_vector<double
 //  P = s(I|0)*R
 void m23d_ortho_rigid_builder::make_pure_projections()
 {
-  unsigned ns = P_.rows()/2;
+  unsigned nf = P_.rows()/2;
 
   // Force first to be identity
   P_(0,0)=1; P_(0,1)=0; P_(0,2)=0;
@@ -347,7 +399,7 @@ void m23d_ortho_rigid_builder::make_pure_projections()
 
   // Replace each subsequent 2x3 projection with the
   // closest pure scaled orthogonal projection.
-  for (unsigned i=1;i<ns;++i)
+  for (unsigned i=1;i<nf;++i)
   {
     vnl_matrix<double> newPi = m23d_scaled_ortho_projection(P_.extract(2,3,2*i,0));
     P_.update(newPi,2*i,0);
@@ -361,6 +413,111 @@ void m23d_ortho_rigid_builder::refine()
   // Re-estimate the 3D shape by solving the linear equation
   vnl_svd<double> svd(P_);
   P3D_ = svd.pinverse() * P2Dc_;
-  // Slightly less stable than backsub, but what the heck.
+  // Slightly less stable than backsub, but what the heck 
+  //(you live on the edge Tim!-dac)
 }
+
+
+//: Return 3d rigid pts 
+// ie aligned with first frame
+void m23d_ortho_rigid_builder::mat_to_3d_pts(vcl_vector< vgl_point_3d<double> >& pt_vec,
+                                                  const vnl_matrix<double>& M) const
+{
+  // get pts out of P3D_ matrix
+  if ( M.rows() != 3 )
+  {
+    vcl_cerr<<"ERROR m23d_ortho_rigid_builder::mat_to_3d_pts()"<<vcl_endl;
+    vcl_cerr<<"problem with size of matrix"<<vcl_endl;
+    vcl_cerr<<"M.rows()= "<<M.rows()<<vcl_endl;
+    vcl_cerr<<"M.cols()= "<<M.cols()<<vcl_endl;
+    vcl_abort();
+  }
+    
+  int np= M.cols();
+  pt_vec.resize(np);
+  for (int i=0; i<np; ++i)
+  {
+    pt_vec[i].set( M(0,i), M(1,i), M(2,i) );
+  }
+
+}
+
+//: Get back 3d pts rotated and shifted for each frame
+void m23d_ortho_rigid_builder::recon_shapes(vcl_vector< vcl_vector< vgl_point_3d<double> > >& pt_vec_list ) const
+{
+  if (P_.rows() < 2 || P_.cols() != 3 )
+  {
+    vcl_cerr<<"ERROR m23d_ortho_rigid_builder::recon_shapes()"<<vcl_endl;
+    vcl_cerr<<"problem with size of P_"<<vcl_endl;
+    vcl_cerr<<"P_.rows()= "<<P_.rows()<<vcl_endl;
+    vcl_cerr<<"P_.cols()= "<<P_.cols()<<vcl_endl;
+    vcl_abort();
+  }
+  
+  unsigned nf= P_.rows()/2;
+  pt_vec_list.resize(nf);
+  for (unsigned i=0;i<nf;++i)
+  {
+    //vnl_matrix<double> newPi = m23d_scaled_ortho_projection(P_.extract(2,3,2*i,0));
+    //P_.update(newPi,2*i,0);
+    vnl_matrix<double> P0= P_.extract(2,3,2*i,0);
+    
+    // Compute a rotation matrix for this projection
+    // then update shape and
+    vnl_matrix<double> R0=m23d_rotation_from_ortho_projection(P0);
+    
+    // apply rotation to base shape
+    vnl_matrix<double> rot_pts_mat=R0* P3D_;
+    mat_to_3d_pts( pt_vec_list[i], rot_pts_mat );   
+    
+    // apply cog_ translation to each pt vector
+    int np= pt_vec_list[i].size();
+    vgl_vector_3d<double> tran_vec( cog_[i].x(), cog_[i].y(), 0 );
+    for (int p=0; p<np; ++p)
+    {
+      pt_vec_list[i][p]= pt_vec_list[i][p] + tran_vec; 
+    }
+    
+  }
+  
+ 
+}
+
+
+//: Get back 3d pts rotated and shifted for each frame
+void m23d_ortho_rigid_builder::get_shape_3d_pts( vcl_vector< vgl_point_3d<double> >& pts ) const
+{
+  if (P_.rows() < 2 || P_.cols() != 3 )
+  {
+    vcl_cerr<<"ERROR m23d_ortho_rigid_builder::get_shape_3d_pts()"<<vcl_endl;
+    vcl_cerr<<"problem with size of P_"<<vcl_endl;
+    vcl_cerr<<"P_.rows()= "<<P_.rows()<<vcl_endl;
+    vcl_cerr<<"P_.cols()= "<<P_.cols()<<vcl_endl;
+    vcl_abort();
+  }
+  
+ 
+  //vnl_matrix<double> newPi = m23d_scaled_ortho_projection(P_.extract(2,3,2*i,0));
+  //P_.update(newPi,2*i,0);
+  vnl_matrix<double> P0= P_.extract(2,3);
+    
+  // Compute a rotation matrix for this projection
+  // then update shape and
+  vnl_matrix<double> R0=m23d_rotation_from_ortho_projection(P0);
+    
+  // apply rotation to base shape
+  vnl_matrix<double> rot_pts_mat=R0* P3D_;
+  mat_to_3d_pts( pts, rot_pts_mat );   
+    
+    
+  int np= pts.size();
+  vgl_vector_3d<double> tran_vec( cog_[0].x(), cog_[0].y(), 0 );
+  for (int p=0; p<np; ++p)
+  {
+    pts[p]= pts[p] + tran_vec; 
+  }
+    
+ 
+}
+
 
