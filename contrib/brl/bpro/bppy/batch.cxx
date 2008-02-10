@@ -101,6 +101,14 @@ set_input_double(PyObject *self, PyObject *args)
 }
 
 static PyObject *
+process_init(PyObject *self, PyObject *args)
+{
+  bool result = bprb_batch_process_manager::instance()->process_init();
+  return Py_BuildValue("b", result);
+}
+
+
+static PyObject *
 run_process(PyObject *self, PyObject *args)
 {
   bool result = bprb_batch_process_manager::instance()->run_process();
@@ -179,6 +187,8 @@ static PyMethodDef batch_methods[] = {
    "set_input_(i,f) set input i on current process to a float value"},
 	{"set_input_double", set_input_double, METH_VARARGS,
    "set_input_(i,d) set input i on current process to a double value"},
+  {"process_init", process_init, METH_VARARGS,
+   "process_init() initialize the current process state before execution"},
   {"run_process", run_process, METH_VARARGS,
    "run_process() run the current process"},
   {"commit_output", commit_output, METH_VARARGS,

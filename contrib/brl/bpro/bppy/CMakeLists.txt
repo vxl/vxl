@@ -1,6 +1,6 @@
 # brl/bpro/bppy/CMakeLists.txt
 # ==== NEED TO SETUP FIND SCRIPT ===
-SET(HAS_PYTHON FALSE)
+SET(HAS_PYTHON TRUE)
 IF(HAS_PYTHON)
 INCLUDE_DIRECTORIES( c:/Python-2.5.1/Include )
 INCLUDE_DIRECTORIES( c:/Python-2.5.1/PC )
@@ -14,5 +14,5 @@ SET(batch_sources
  )
 ADD_LIBRARY(batch SHARED ${batch_sources})
 SET_TARGET_PROPERTIES(batch PROPERTIES OUTPUT_NAME batch_d SUFFIX .pyd)
-TARGET_LINK_LIBRARIES(batch bprb brdb vbl python25_d)
+TARGET_LINK_LIBRARIES(batch bprb bsta_algo bsta bbgm brdb bbgm_bpro vidl2_bpro vil_bpro vbl python25_d)
 ENDIF(HAS_PYTHON)
