@@ -1,4 +1,4 @@
-# brcv/seg/bbgm/tests/CMakeLists.txt
+# brl/bseg/bbgm/tests/CMakeLists.txt
 # Tests for bbgm library
 
 ADD_EXECUTABLE( bbgm_test_all
