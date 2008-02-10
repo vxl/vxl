@@ -15,6 +15,12 @@ void vsl_b_write(vsl_b_ostream & os, vil_image_view_base_sptr const& view_base);
 void vsl_b_read(vsl_b_istream & is, vil_image_view_base_sptr &view_base);
 
 
+//: Binary write voxel world to stream
+void vsl_b_write(vsl_b_ostream & os, vil_image_view_base const& view_base);
+
+
+//: Binary load voxel world from stream.
+void vsl_b_read(vsl_b_istream & is, vil_image_view_base &view_base);
 
 
 #endif
