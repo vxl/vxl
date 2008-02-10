@@ -34,7 +34,7 @@ class vidl2_open_istream_process : public bprb_process
   //: Clone the process
   virtual vidl2_open_istream_process* clone() const {return new vidl2_open_istream_process(*this);}
 
-  vcl_string name(){return "LoadVidl2IstreamProcess";}
+  vcl_string name(){return "OpenVidl2IstreamProcess";}
 
   bool init() { return true; }
   bool execute();
