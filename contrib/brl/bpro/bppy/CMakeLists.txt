@@ -1,6 +1,6 @@
 # brl/bpro/bppy/CMakeLists.txt
 # ==== NEED TO SETUP FIND SCRIPT ===
-SET(HAS_PYTHON TRUE)
+SET(HAS_PYTHON FALSE)
 IF(HAS_PYTHON)
 INCLUDE_DIRECTORIES( c:/Python-2.5.1/Include )
 INCLUDE_DIRECTORIES( c:/Python-2.5.1/PC )
