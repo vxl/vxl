@@ -59,7 +59,7 @@ bbgm_load_image_of_process::execute()
     return false;
   }
 
-  vsl_b_istream& bis = static_cast<vsl_b_istream>(istr);
+  vsl_b_istream& bis = static_cast<vsl_b_istream&>(istr);
   bbgm_image_sptr image;
   vsl_b_read(bis, image);
   brdb_value_sptr output0 = new brdb_value_t<bbgm_image_sptr>(image);

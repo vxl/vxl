@@ -51,7 +51,7 @@ bbgm_save_image_of_process::execute()
     return false;
   }
 
-  vsl_b_ostream& bos = static_cast<vsl_b_ostream>(ostr);
+  vsl_b_ostream& bos = static_cast<vsl_b_ostream&>(ostr);
 
   // Retrieve background image
   brdb_value_t<bbgm_image_sptr>* input1 = 
