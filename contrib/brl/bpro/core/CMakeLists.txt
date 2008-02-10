@@ -8,5 +8,7 @@ SUBDIRS(vpgl_pro)
 # vil process classes
 SUBDIRS(vil_pro)
 
+# vidl2 process classes (note it is expected that vidl2 will go to core)
+SUBDIRS(vidl2_pro)
 
 
