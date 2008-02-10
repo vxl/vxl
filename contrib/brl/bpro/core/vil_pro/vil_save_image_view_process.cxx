@@ -26,7 +26,7 @@ vil_save_image_view_process::vil_save_image_view_process()
   //this process has no outputs
   output_data_.resize(0);
   output_types_.resize(0);
-
+}
 //: Destructor
 vil_save_image_view_process::~vil_save_image_view_process()
 {
