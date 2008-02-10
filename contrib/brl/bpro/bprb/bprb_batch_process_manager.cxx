@@ -153,7 +153,19 @@ bool bprb_batch_process_manager::remove_data(unsigned id)
   }
   return removed;
 }
+//: initilize before execution
+bool bprb_batch_process_manager::process_init()
+{
+  bool to_return = false;
+  if(!current_process_)
+    return to_return;
+  vcl_cout << "Initializing process: " << current_process_->name() << '\n';
 
+  to_return = current_process_->init();
+
+  return to_return;
+
+}
 //: Run a process on the current frame
 bool bprb_batch_process_manager::run_process()
 {

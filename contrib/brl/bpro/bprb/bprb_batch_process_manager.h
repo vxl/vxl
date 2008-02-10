@@ -52,6 +52,9 @@ public:
   //: remove data from the database
   bool remove_data(unsigned id);
 
+  //: Initilize the current process state variables
+  bool process_init();
+
   //: Run the current process
   bool run_process();
 
