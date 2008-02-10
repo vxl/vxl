@@ -4,7 +4,7 @@
 #include <vil/vil_image_view_base.h>
 
 
-//: Binary write voxel world to stream
+//: Binary write image view base to stream
 void vsl_b_write(vsl_b_ostream & os, vil_image_view_base_sptr const& view_base)
 {
   vcl_cerr << "warning: vsl_b_write not implemented for vil_image_view_base_sptr" << vcl_endl;
@@ -12,7 +12,7 @@ void vsl_b_write(vsl_b_ostream & os, vil_image_view_base_sptr const& view_base)
 }
 
 
-//: Binary load voxel world from stream.
+//: Binary load image view base from stream.
 void vsl_b_read(vsl_b_istream & is, vil_image_view_base_sptr &view_base)
 {
   vcl_cerr << "warning: vsl_b_read not implemented for vil_image_view_base_sptr" << vcl_endl;

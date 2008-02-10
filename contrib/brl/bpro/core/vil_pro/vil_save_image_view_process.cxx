@@ -26,14 +26,6 @@ vil_save_image_view_process::vil_save_image_view_process()
   //this process has no outputs
   output_data_.resize(0);
   output_types_.resize(0);
-  
-  //parameters
- /* if( !parameters()->add( "Image file <filename...>" , "-image_filename" , bprb_filepath("","*") ))
-  {
-    vcl_cerr << "ERROR: Adding parameters in " __FILE__ << vcl_endl;
-  }*/
-}
-
 
 //: Destructor
 vil_save_image_view_process::~vil_save_image_view_process()
@@ -49,12 +41,6 @@ vil_save_image_view_process::execute()
   if(!this->verify_inputs())
     return false;
 
-  ////Keep this to use filename as a parameter of this process
-  //bprb_filepath image_path;
-  //parameters()->get_value( "-image_filename" , image_path );
-  //vcl_string image_filename = image_path.path;
-
-  
   //Retrieve image from input
   brdb_value_t<vil_image_view_base_sptr>* input0 = 
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(input_data_[0].ptr());
@@ -67,7 +53,6 @@ vil_save_image_view_process::execute()
 
   vcl_string image_filename = input1->value();
  
-  //vil_image_view_base_sptr saveed_image = vil_save(image_filename.c_str() );
   bool result = vil_save(*img,image_filename.c_str());
   if( !result ) {
     vcl_cerr << "Failed to save image to" << image_filename << vcl_endl;

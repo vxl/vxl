@@ -14,8 +14,7 @@
 //: Constructor
 vil_load_image_view_process::vil_load_image_view_process()
 {
-  //this process takes no inputs
-  
+  //input  
   input_data_.resize(1,brdb_value_sptr(0));
   input_types_.resize(1);
   input_types_[0]="vcl_string";
@@ -25,11 +24,6 @@ vil_load_image_view_process::vil_load_image_view_process()
   output_types_.resize(1);
   output_types_[0]= "vil_image_view_base_sptr";
   
-  //parameters
- /* if( !parameters()->add( "Image file <filename...>" , "-image_filename" , bprb_filepath("","*") ))
-  {
-    vcl_cerr << "ERROR: Adding parameters in " __FILE__ << vcl_endl;
-  }*/
 }
 
 
@@ -46,12 +40,6 @@ vil_load_image_view_process::execute()
   // Sanity check
     if(!this->verify_inputs())
     return false;
-
-  ////Keep this to use filename as a parameter of this process
-  //bprb_filepath image_path;
-  //parameters()->get_value( "-image_filename" , image_path );
-  //vcl_string image_filename = image_path.path;
-
   
   //Retrieve filename from input
   brdb_value_t<vcl_string>* input0 = 
