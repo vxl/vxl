@@ -449,7 +449,7 @@ void bwm_site_mgr::load_site()
       bwm_io_tab_config* t = tableaus[i];
       if (t->status == true) {
         // create an active tableau
-        vgui_tableau_sptr tab = tableau_factory_.create_tableau(t);
+        bwm_tableau_img* tab = tableau_factory_.create_tableau(t);
         bwm_tableau_mgr::instance()->add_tableau(tab, t->name);
         active_tableaus_.push_back(t);
       } else // inactive tableau
@@ -556,7 +556,6 @@ void bwm_site_mgr::load_site()
       }
     }
     delete parser;
-    //grid_->post_redraw();
     bwm_tableau_mgr::instance()->redraw();
   }
 }
@@ -617,6 +616,7 @@ void bwm_site_mgr::save_site()
   for (unsigned i=0; i<active_tableaus_.size(); i++) {
     site->tableaus_.push_back(active_tableaus_[i]);
   }
+
 #if 0 // 47 lines commented out
   vcl_map<vcl_string, vgui_tableau_sptr>::iterator it = tableaus_.begin();
   while (it != tableaus_.end())
@@ -731,15 +731,16 @@ void bwm_site_mgr::load_video_site()
   vcl_string camera_glob = cio.camera_path();
   bwm_io_tab_config_video* v = new bwm_io_tab_config_video(site_name_, true, frame_glob, camera_glob);
   active_tableaus_.push_back(v);
-  vgui_tableau_sptr t = tableau_factory_.create_tableau(v);
-  if (!t)
+  bwm_tableau_img* t = tableau_factory_.create_tableau(v);
+  if(!t)
     return;
-  bwm_tableau_video* vt = static_cast<bwm_tableau_video*> (t.as_pointer());
+  bwm_tableau_video* vt = static_cast<bwm_tableau_video*> (t);
   vt->set_corrs(cio.corrs());
   bwm_tableau_mgr::instance()->add_tableau(t, site_name_);
 
   //temporary video site mechanism (assumes only one video tableau)
   //also assumes that the video directory and camera directories are
+
   //below the site directory
  //?? site_name_ = name;
   vcl_string dir = vul_file::dirname(frame_glob);
@@ -780,13 +781,14 @@ void bwm_site_mgr::save_video_site()
         v = active_tableaus_[i];
         found = true;
     }
-  #endif
-  if (!found)
-  {
-    vcl_cerr << "In bwm_site_mgr::save_video_site() - "
-             << " no observer of type video\n";
-    return;
-  }
+#endif
+  if(!found)
+    {
+      vcl_cerr << "In bwm_site_mgr::save_video_site() - "
+               << " no observer of type video\n";
+      return;
+    }
+
   bwm_video_site_io vio;
   vio.set_name(obv->tab_name());
   vio.set_video_path(obv->image_path());
@@ -818,7 +820,7 @@ void bwm_site_mgr::load_img_tableau()
   }
 
   bwm_io_tab_config_img img(name, true, img_file);
-  vgui_tableau_sptr tab = tableau_factory_.create_tableau(&img);
+  bwm_tableau_img* tab = tableau_factory_.create_tableau(&img);
   bwm_tableau_mgr::instance()->add_tableau(tab, name);
 }
 
@@ -846,9 +848,8 @@ void bwm_site_mgr::load_video_tableau()
 
   bwm_io_tab_config_video* video = new bwm_io_tab_config_video(name, true, video_glob, camera_glob);
   active_tableaus_.push_back(video);
-  vgui_tableau_sptr t = tableau_factory_.create_tableau(video);
+  bwm_tableau_img*  t = tableau_factory_.create_tableau(video);
   bwm_tableau_mgr::instance()->add_tableau(t, name);
-  //create_video_tableau(name, video_glob, camera_glob);
 }
 
 void bwm_site_mgr::load_cam_tableau()
@@ -884,9 +885,8 @@ void bwm_site_mgr::load_cam_tableau()
 
   bwm_io_tab_config_cam* cam = new bwm_io_tab_config_cam(name, true, img_file, cam_file, cam_str);
   active_tableaus_.push_back(cam);
-  vgui_tableau_sptr t = tableau_factory_.create_tableau(cam);
+  bwm_tableau_img*  t = tableau_factory_.create_tableau(cam);
   bwm_tableau_mgr::instance()->add_tableau(t, name);
-  //create_cam_tableau(name, img_file, cam_file, (BWM_CAMERA_TYPES) camera_type);
 }
 
 bwm_io_config_parser* bwm_site_mgr::parse_config()

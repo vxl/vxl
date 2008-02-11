@@ -12,7 +12,7 @@
 
 #include "algo/bwm_utils.h"
 
-vgui_tableau_sptr
+bwm_tableau_img*
 bwm_tableau_factory::create_tableau(bwm_io_tab_config* t)
 {
   if (t->type_name.compare(IMAGE_TABLEAU_TAG) == 0) {

@@ -67,27 +67,24 @@ bwm_tableau_mgr::~bwm_tableau_mgr()
 {
 }
 
-void bwm_tableau_mgr::add_tableau(vgui_tableau_sptr tab, vcl_string name)
+void bwm_tableau_mgr::add_tableau(bwm_tableau_img* tab, vcl_string name)//vgui_tableau_sptr tab, vcl_string name)
 {
-#if 0
+
   //create only if registered
-  bwm_load_img_command comm;
-  vcl_map<vcl_string, bwm_command_sptr>::iterator iter = tab_types_.find(comm.name());
+  //bwm_command comm;
+  vcl_map<vcl_string, bwm_command_sptr>::iterator iter = tab_types_.find(tab->type_name());
   if (iter == tab_types_.end()) {
-    vcl_cerr << "Image tableau type is not registered, not creating!\n";
+    vcl_cerr << "Tableau type is not registered, not creating!\n";
     return;
   }
-#endif
 
   vgui_viewer2D_tableau_sptr viewer = vgui_viewer2D_tableau_new(tab);
-  //obs->set_viewer(viewer);
+
   unsigned row = 0, col = 0;
   add_to_grid(viewer, col, row);
-  //obs->set_grid_location(col, row);
+  tab->set_viewer(viewer);
+  tab->set_grid_location(col, row);
   tableaus_[name] = tab;
-
-  /*add_to_grid(tab);
-  tableaus_[name] = tab;*/
 }
 
 void bwm_tableau_mgr::register_tableau(bwm_command_sptr tab_comm)

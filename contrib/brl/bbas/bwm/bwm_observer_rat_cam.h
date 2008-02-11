@@ -19,10 +19,7 @@ class bwm_observer_rat_cam : public bwm_observer_cam
  public:
 
   typedef bwm_observer_cam base;
-#if 0
-  bwm_observer_rat_cam() {}
-  bwm_observer_cam(img, camera, cam_path) { }
-#endif
+
   bwm_observer_rat_cam(bgui_image_tableau_sptr img,
     vcl_string& name,
     vcl_string& image_path,

@@ -33,7 +33,7 @@ class bwm_tableau_mgr
 
   static bwm_tableau_mgr* bwm_tableau_mgr::instance();
 
-  void add_tableau(vgui_tableau_sptr tab, vcl_string name);
+  void add_tableau(bwm_tableau_img* tab, vcl_string name);//vgui_tableau_sptr tab, vcl_string name);
 
   vgui_grid_tableau_sptr grid() { return grid_; }
 

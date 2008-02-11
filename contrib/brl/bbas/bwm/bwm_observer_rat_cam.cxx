@@ -61,7 +61,8 @@ bwm_observer_rat_cam::bwm_observer_rat_cam(bgui_image_tableau_sptr img,
     return;
   }
   
-  vpgl_rational_camera<double> *camera_ = read_rational_camera<double>(cam_path);
+  //vpgl_rational_camera<double> *
+  camera_ = read_rational_camera<double>(cam_path);
   if (!camera_) {
     bwm_utils::show_error("[" + cam_path + "] is not a valid rational camera path");
     return;

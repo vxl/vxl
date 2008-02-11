@@ -74,6 +74,8 @@ class bwm_tableau_img : public bwm_tableau, public bgui_picker_tableau
   void recover_edges();
   void recover_lines();
 
+  void set_viewer(vgui_viewer2D_tableau_sptr viewer) { my_observer_->set_viewer(viewer); }
+
  protected:
   bwm_observer_img* my_observer_;
 };
