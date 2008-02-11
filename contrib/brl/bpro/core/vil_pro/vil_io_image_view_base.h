@@ -1,6 +1,19 @@
 #ifndef vil_io_image_view_base_h_
 #define vil_io_image_view_base_h_
 
+//:
+// \file
+// \brief vsl binary I/O functions for reading and writing vil_image_view_base_sptr. 
+// \author Daniel Crispell
+// \date 02/11/2008
+//
+// \verbatim
+//  Modifications
+// \endverbatim
+//
+// These functions are needed so we can place vil_image_view_base_sptr's in a brdb_database.
+//
+
 #include <vsl/vsl_binary_io.h>
 
 #include <vil/vil_image_view_base.h>
