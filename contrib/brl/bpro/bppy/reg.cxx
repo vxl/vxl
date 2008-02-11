@@ -14,6 +14,7 @@
 #include <bbgm/pro/bbgm_update_dist_image_process.h>
 #include <bbgm/pro/bbgm_update_dist_image_stream_process.h>
 #include <bbgm/pro/bbgm_display_dist_image_process.h>
+#include <bbgm/pro/bbgm_measure_process.h>
 PyObject *
 register_processes(PyObject *self, PyObject *args)
 {
@@ -27,6 +28,7 @@ register_processes(PyObject *self, PyObject *args)
   REG_PROCESS(bbgm_update_dist_image_process, bprb_batch_process_manager);
   REG_PROCESS(bbgm_update_dist_image_stream_process, bprb_batch_process_manager);
   REG_PROCESS(bbgm_display_dist_image_process, bprb_batch_process_manager);
+  REG_PROCESS(bbgm_measure_process, bprb_batch_process_manager);
 	Py_INCREF(Py_None);
 	return Py_None;
 }
