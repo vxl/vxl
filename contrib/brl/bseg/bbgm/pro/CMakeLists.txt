@@ -12,7 +12,7 @@ SET(bbgm_bpro_sources
     bbgm_update_dist_image_stream_process.cxx
     bbgm_display_dist_image_process.h
     bbgm_display_dist_image_process.cxx
-
+    bbgm_measure_process.h            bbgm_measure_process.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates bbgm_bpro_sources)
