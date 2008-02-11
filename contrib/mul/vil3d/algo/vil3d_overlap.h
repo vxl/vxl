@@ -1,4 +1,4 @@
-// This is mul/vil3d/vil3d_overlap.h
+// This is mul/vil3d/algo/vil3d_overlap.h
 #ifndef vil3d_overlap_h_
 #define vil3d_overlap_h_
 //:
@@ -12,7 +12,7 @@
 
 //: Dice overlap = 2*intersection/(intersection+union)
 double vil3d_overlap_dice(const vil3d_image_view<bool>& im1,
-                        const vil3d_image_view<bool>& im2);
+                          const vil3d_image_view<bool>& im2);
 
 //: Jaccard overlap = intersection/union
 double vil3d_overlap_jaccard(const vil3d_image_view<bool>& im1,
@@ -22,7 +22,7 @@ double vil3d_overlap_jaccard(const vil3d_image_view<bool>& im1,
 template <class T1, class T2>
 class vil3d_overlap_functor
 {
-public:
+ public:
   //: Threshold for image 1
   T1 t1;
   //: Threshold for image 2
@@ -61,7 +61,7 @@ public:
 //  Voxel in image A is true if its value is strictly above the threshold t
 template <class T1, class T2>
 double vil3d_overlap_dice(const vil3d_image_view<T1>& im1, T1 t1,
-                        const vil3d_image_view<T2>& im2, T2 t2)
+                          const vil3d_image_view<T2>& im2, T2 t2)
 {
   vil3d_overlap_functor<T1,T2> f(t1,t2);
   vil3d_scan_image(im1,im2,f);
@@ -74,7 +74,7 @@ double vil3d_overlap_dice(const vil3d_image_view<T1>& im1, T1 t1,
 //  Voxel in image A is true if its value is strictly above the threshold t
 template <class T1, class T2>
 double vil3d_overlap_jaccard(const vil3d_image_view<T1>& im1, T1 t1,
-                        const vil3d_image_view<T2>& im2, T2 t2)
+                             const vil3d_image_view<T2>& im2, T2 t2)
 {
   vil3d_overlap_functor<T1,T2> f(t1,t2);
   vil3d_scan_image(im1,im2,f);
@@ -83,5 +83,4 @@ double vil3d_overlap_jaccard(const vil3d_image_view<T1>& im1, T1 t1,
 }
 
 
-
-#endif
+#endif // vil3d_overlap_h_
