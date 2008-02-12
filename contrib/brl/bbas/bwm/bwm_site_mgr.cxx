@@ -451,9 +451,9 @@ void bwm_site_mgr::load_site()
         // create an active tableau
         bwm_tableau_img* tab = tableau_factory_.create_tableau(t);
         bwm_tableau_mgr::instance()->add_tableau(tab, t->name);
-        active_tableaus_.push_back(t);
+        active_tableaus_.push_back(t->clone());
       } else // inactive tableau
-        inactive_tableaus_.push_back(t);
+        inactive_tableaus_.push_back(t->clone());
     }
 
     // create the correspondences
@@ -822,6 +822,7 @@ void bwm_site_mgr::load_img_tableau()
   bwm_io_tab_config_img img(name, true, img_file);
   bwm_tableau_img* tab = tableau_factory_.create_tableau(&img);
   bwm_tableau_mgr::instance()->add_tableau(tab, name);
+  active_tableaus_.push_back(img.clone());
 }
 
 void bwm_site_mgr::load_video_tableau()

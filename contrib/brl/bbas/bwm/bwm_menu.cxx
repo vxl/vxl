@@ -12,7 +12,7 @@ vgui_menu bwm_menu::add_to_menu (vgui_menu& top_menu)
   load_menu.add("Save VideoSite..." , save_video_site);
   MENU_LOAD_TABLEAU("Load Image Tableau...", "bwm_tableau_img", load_menu);
   load_menu.add("Load Video Tableau...", load_video_tableau);
-  MENU_LOAD_TABLEAU("Load Camera Tableau...", "bwm_tableau_cam", load_menu);
+  MENU_LOAD_TABLEAU("Load Camera Tableau...", "bwm_tableau_rat_cam", load_menu);
   MENU_LOAD_TABLEAU("Load 3D Tableau...", "bwm_tableau_coin3d", load_menu);
   MENU_LOAD_TABLEAU("Load Proj2D Tableau...", "bwm_tableau_proj2d", load_menu);
   MENU_LOAD_TABLEAU("Load LIDAR Tableau...", "bwm_tableau_lidar", load_menu);
