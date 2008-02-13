@@ -40,6 +40,22 @@ SET( MODULE_PATH ${vxl_SOURCE_DIR}/config/cmake/Modules CACHE STATIC "VXL module
 # For use in client projects that call UseVXL.cmake
 SET (VXL_LIBRARY_PATH ${LIBRARY_OUTPUT_PATH} CACHE STATIC "Where all the vxl libraries are, for clients to use." )
 
+# Options to add extra compiler and linker flags
+#
+# These options allow you to specify additional flags without
+# affecting the default flags for a particular platform or build type.
+# This is especially useful for adding extra warning flags.
+SET( VXL_EXTRA_CMAKE_C_FLAGS             CACHE STRING "Extra flags appended to CMAKE_C_FLAGS" )
+SET( VXL_EXTRA_CMAKE_CXX_FLAGS           CACHE STRING "Extra flags appended to CMAKE_CXX_FLAGS" )
+SET( VXL_EXTRA_CMAKE_EXE_LINKER_FLAGS    CACHE STRING "Extra flags appended to CMAKE_EXE_LINKER_FLAGS" )
+SET( VXL_EXTRA_CMAKE_MODULE_LINKER_FLAGS CACHE STRING "Extra flags appended to CMAKE_MODULE_LINKER_FLAGS" )
+SET( VXL_EXTRA_CMAKE_SHARED_LINKER_FLAGS CACHE STRING "Extra flags appended to CMAKE_SHARED_LINKER_FLAGS" )
+SET( CMAKE_C_FLAGS             "${CMAKE_C_FLAGS} ${VXL_EXTRA_CMAKE_C_FLAGS}" )
+SET( CMAKE_CXX_FLAGS           "${CMAKE_CXX_FLAGS} ${VXL_EXTRA_CMAKE_CXX_FLAGS}" )
+SET( CMAKE_EXE_LINKER_FLAGS    "${CMAKE_EXE_LINKER_FLAGS} ${VXL_EXTRA_CMAKE_EXE_LINKER_FLAGS}" )
+SET( CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${VXL_EXTRA_CMAKE_MODULE_LINKER_FLAGS}" )
+SET( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${VXL_EXTRA_CMAKE_SHARED_LINKER_FLAGS}" )
+
 # Do platform-specific configuration.
 IF(NOT VXL_NO_CMAKE_CONFIGURE)
   SUBDIRS(config/cmake/config)
