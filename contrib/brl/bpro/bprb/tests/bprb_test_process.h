@@ -20,7 +20,7 @@ class bprb_test_process : public bprb_process
   virtual bprb_process* clone() const {return new bprb_test_process(*this);}
   
   //: The name of the process
-  virtual vcl_string name(){ return "Test Process";}
+  virtual vcl_string name(){ return "Process";}
 
   //: Perform any initialization required by the process
   virtual bool init() {return true;}

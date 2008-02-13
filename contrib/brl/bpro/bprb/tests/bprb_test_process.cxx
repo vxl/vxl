@@ -9,8 +9,8 @@
 
 bprb_test_process::bprb_test_process()
 {
-  if( !parameters()->add( "Param 1" ,      "-prm1" ,  4.0f ) ||
-      !parameters()->add( "Add/Subtract" , "-add_sub" , true ) )
+  if( !parameters()->add( "Param 1" ,      "prm1" ,  4.0f ) ||
+      !parameters()->add( "Add/Subtract" , "add_sub" , true ) )
     {
      vcl_cerr << " Error in adding parameters \n";
     }
@@ -36,7 +36,7 @@ bool bprb_test_process::execute()
   
   // add in one of the parameters
   float argp;
-  if(!parameters()->get_value("-prm1", argp))
+  if(!parameters()->get_value("prm1", argp))
     return false;
   sum += argp;
   
