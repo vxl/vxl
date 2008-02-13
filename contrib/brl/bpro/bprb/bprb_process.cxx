@@ -42,6 +42,11 @@ void bprb_process::set_parameters(const bprb_parameters_sptr& params)
   parameters_ = params;
 }
 
+void bprb_process::parse_params_XML(const vcl_string& xml_path)
+{
+  parameters_->parse_XML(xml_path);
+}
+
 //: The number of inputs
 unsigned bprb_process::n_inputs()
 {

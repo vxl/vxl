@@ -6,7 +6,9 @@
 #include <vcl_utility.h>
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
-
+#include <bxml/bxml_read.h>
+#include <bxml/bxml_find.h>
+#include <bxml/bxml_write.h>
 
 //: Output stream operator for bprb_params
 vcl_ostream& operator<<(vcl_ostream& os, const bprb_param& p)
@@ -62,6 +64,87 @@ bprb_parameters::valid_parameter( const vcl_string& name ) const
   return (itr != name_param_map_.end());
 }
 
+
+//: reads the parameters and their values from an XML document
+bool bprb_parameters::parse_XML(const vcl_string& xml_path, 
+                                const vcl_string& root_tag)
+{
+  // open the XML document
+  if (xml_path.size() == 0) {
+    vcl_cout << "bprb_parameters::parse_XML -- xml file path is not set" << vcl_endl;
+    return false;
+  }
+
+  bxml_document xml_doc_ = bxml_read(xml_path);
+  if (!xml_doc_.root_element()) {
+    vcl_cout << "bprb_parameters::parse_XML -- xml root not found" << vcl_endl;
+    return false;
+  }
+
+  if (xml_doc_.root_element()->type() != bxml_data::ELEMENT) {
+    vcl_cout << "bprb_parameters::parse_XML params root is not ELEMENT" << vcl_endl;
+    return false;
+  }
+
+  bxml_element* root;
+  // if the root tag is not defined, used the document root, else find the element
+  if (root_tag.size() == 0)
+    root = static_cast<bxml_element*> (xml_doc_.root_element().as_pointer());
+  else {
+    bxml_element query(root_tag);
+    root = static_cast<bxml_element*> (bxml_find_by_name(xml_doc_.root_element(), query).as_pointer());
+    if (!root) {
+      vcl_cout << "bprb_parameters::parse_XML root tag is not found" << vcl_endl;
+      return false;
+    }
+  }
+
+  // iterate over each parameter, and set the ones found
+  for( vcl_vector< bprb_param * >::iterator it = param_list_.begin();
+       it != param_list_.end();
+       it++ ) {
+    vcl_string name = (*it)->name();
+    vcl_string value = root->attribute(name);
+    (*it)->parse_value_str(value);
+  }
+  return true;
+}
+
+//: prints the default parameter values to an XML document
+void bprb_parameters::print_def_XML(const vcl_string& root_tag,
+                                    const vcl_string& xml_path)
+{
+  bxml_element* root = new bxml_element(root_tag);
+  // iterate over each parameter, and get the default ones
+  for( vcl_vector< bprb_param * >::iterator it = param_list_.begin();
+       it != param_list_.end();
+       it++ ) {
+    vcl_string name = (*it)->name();
+    vcl_string def_value = (*it)->default_str();
+    root->set_attribute(name, def_value);
+  }
+  bxml_document doc;
+  doc.set_root_element(root);
+  bxml_write(xml_path, doc);
+}
+
+//: prints the currently used parameter values to an XML document
+void bprb_parameters::print_current_XML(const vcl_string& root_tag,
+                                        const vcl_string& xml_path)
+{
+  bxml_element* root = new bxml_element(root_tag);
+  // iterate over each parameter, and get the default ones
+  for( vcl_vector< bprb_param * >::iterator it = param_list_.begin();
+       it != param_list_.end();
+       it++ ) {
+    vcl_string name = (*it)->name();
+    vcl_string value = (*it)->value_str();
+    root->set_attribute(name, value);
+  }
+  bxml_document doc;
+  doc.set_root_element(root);
+  bxml_write(xml_path, doc);
+}
 
 //: Reset all parameters to their default values
 bool

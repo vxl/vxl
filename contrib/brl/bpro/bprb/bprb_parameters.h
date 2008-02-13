@@ -24,6 +24,8 @@
 
 #include <vbl/vbl_ref_count.h>
 
+#include <bxml/bxml_document.h>
+
 #include <bprb/bprb_parameters_sptr.h>
 
 
@@ -266,6 +268,17 @@ class bprb_parameters : public vbl_ref_count
     return false;
   }
 
+  //: reads the parameters and their values from an XML document
+  bool parse_XML(vcl_string const& xml_fname, const vcl_string& root_tag="");
+
+  //: prints the default parameter values to an XML document
+  void print_def_XML(const vcl_string& root_tag,
+                     const vcl_string& xml_path);
+
+  //: prints the currently used parameter values to an XML document
+  void print_current_XML(const vcl_string& root_tag,
+                         const vcl_string& xml_path);
+
   //: Reset all parameters to their default values
   bool reset_all();
   //: Reset the parameter named \p name to its default value
@@ -302,6 +315,8 @@ class bprb_parameters : public vbl_ref_count
   vcl_map< vcl_string , bprb_param* > name_param_map_;
   //: The vector of parameters in order of declaration
   vcl_vector< bprb_param* > param_list_;
+
+  bxml_document xml_doc_;
 };
 
 

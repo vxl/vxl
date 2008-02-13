@@ -15,7 +15,7 @@ AUX_SOURCE_DIRECTORY(Templates bprb_sources)
 
 ADD_LIBRARY(bprb ${bprb_sources})
 
-TARGET_LINK_LIBRARIES(bprb brdb vbl vsl)
+TARGET_LINK_LIBRARIES(bprb brdb bxml vbl vsl)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)

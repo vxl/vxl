@@ -77,6 +77,8 @@ class bprb_process : public vbl_ref_count
   //: Set the parameters
   void set_parameters(const bprb_parameters_sptr& params);
 
+  void parse_params_XML(const vcl_string& xml_path);
+
   //: The name of the process
   virtual vcl_string name() = 0;
 

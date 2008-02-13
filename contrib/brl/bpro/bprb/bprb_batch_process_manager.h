@@ -37,6 +37,9 @@ public:
   //: initialize the process
   bool init_process(vcl_string const& process_name);
 
+  //: initialize the process, read the parameters from an XML file
+  bool init_process(vcl_string const& process_name, vcl_string const& params_XML);
+
   //: set primitive data type input on current process
   bool set_input(unsigned i, brdb_value_sptr const& input);
 
