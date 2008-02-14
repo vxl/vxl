@@ -46,6 +46,10 @@ int main(int argc,char * argv[])
       vcl_string base_image_dir(argv[1]);
       vcl_string base_image_extension(argv[2]);
       unsigned nlevels = vcl_atoi(argv[3]);
+
+      vcl_cout << base_image_dir << vcl_endl;
+      vcl_cout << base_image_extension << vcl_endl;
+      vcl_cout << nlevels << vcl_endl;
       if (nlevels<2)
       {
         vcl_cout << "Must have at least 2 levels\n";

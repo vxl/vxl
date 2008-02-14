@@ -88,6 +88,9 @@ int main(int argc,char * argv[])
       vcl_string image_outdir(argv[2]);
 
       unsigned nlevels = vcl_atoi(argv[3]);
+      vcl_cout << image_indir << vcl_endl;
+      vcl_cout << image_outdir << vcl_endl;
+      vcl_cout << nlevels << vcl_endl;
       if (nlevels<2)
       {
         vcl_cout << "Must have at least 2 levels\n";
