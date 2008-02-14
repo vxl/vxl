@@ -1,18 +1,19 @@
 # brl/bpro/bppy/CMakeLists.txt
-# ==== NEED TO SETUP FIND SCRIPT ===
-SET(HAS_PYTHON FALSE)
-IF(HAS_PYTHON)
-INCLUDE_DIRECTORIES( c:/Python-2.5.1/Include )
-INCLUDE_DIRECTORIES( c:/Python-2.5.1/PC )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
-LINK_DIRECTORIES(C:/Python-2.5.1/PCbuild8/Win32)
+#update vxl/config/cmake/Modules folder to get the following
 
-SET(batch_sources
+INCLUDE( ${VXL_CMAKE_DIR}/FindPython.cmake )
+IF( PYTHON_FOUND )
+MESSAGE(${PYTHON_INCLUDE_DIR})
+  INCLUDE_DIRECTORIES( ${PYTHON_INCLUDE_DIR} )
+  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
+  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
+
+  SET(batch_sources
     batch.h  batch.cxx
-    reg.cxx
- )
-ADD_LIBRARY(batch SHARED ${batch_sources})
-SET_TARGET_PROPERTIES(batch PROPERTIES OUTPUT_NAME batch_d SUFFIX .pyd)
-TARGET_LINK_LIBRARIES(batch bprb bsta_algo bsta bbgm brdb bbgm_bpro vidl2_bpro vil_bpro vbl python25_d)
-ENDIF(HAS_PYTHON)
+    reg.cxx 
+  )
+
+  ADD_LIBRARY(batch SHARED ${batch_sources})
+  SET_TARGET_PROPERTIES(batch PROPERTIES OUTPUT_NAME batch DEBUG_POSTFIX _d SUFFIX .pyd)
+  TARGET_LINK_LIBRARIES(batch bprb bsta_algo bsta bbgm brdb bbgm_bpro vidl2_bpro vil_bpro vbl debug ${PYTHON_DEBUG_LIBRARIES} optimized ${PYTHON_LIBRARIES})
+ENDIF( PYTHON_FOUND )
