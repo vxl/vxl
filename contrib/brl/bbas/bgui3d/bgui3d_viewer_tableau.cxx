@@ -130,7 +130,8 @@ bgui3d_viewer_tableau::set_scene_root(SoNode* scene_root)
   }
 
   // The users scene should be added last
-  super_root->addChild(scene_root);
+  if(scene_root)
+    super_root->addChild(scene_root);
 
   bgui3d_tableau::set_scene_root(super_root);
 
