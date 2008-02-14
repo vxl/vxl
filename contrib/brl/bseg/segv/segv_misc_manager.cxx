@@ -20,11 +20,6 @@
 #include <vil/vil_save.h>
 #include <vil/vil_new.h>
 #include <vil/vil_property.h>
-#if 0
-#ifdef HAS_XERCES
-#include <bxml/bxml_vtol_io.h>
-#endif
-#endif
 #include <sdet/sdet_detector_params.h>
 #include <sdet/sdet_detector.h>
 #include <sdet/sdet_harris_detector_params.h>

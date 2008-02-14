@@ -14,11 +14,6 @@
 #include <vil1/vil1_crop.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
-#if 0
-#ifdef HAS_XERCES
-#include <bxml/bxml_vtol_io.h>
-#endif
-#endif
 #include <sdet/sdet_detector_params.h>
 #include <sdet/sdet_detector.h>
 #include <sdet/sdet_harris_detector_params.h>
@@ -988,23 +983,6 @@ void segv_segmentation_manager::fit_lines()
   }
   this->draw_lines(lines);
 }
-
-#if 0
-#ifdef HAS_XERCES
-void segv_segmentation_manager::read_xml_edges()
-{
-  vgui_dialog load_image_dlg("Load XML edges");
-  static vcl_string xml_filename = "";
-  static vcl_string ext = "*.*";
-  load_image_dlg.file("XML filename:", ext, xml_filename);
-  if (!load_image_dlg.ask())
-    return;
-  vcl_vector<vtol_edge_2d_sptr> edges;
-  if (bxml_vtol_io::read_edges(xml_filename, edges))
-    this->draw_edges(edges, true);
-}
-#endif // HAS_XERCES
-#endif // 0
 
 void segv_segmentation_manager::test_face()
 {
