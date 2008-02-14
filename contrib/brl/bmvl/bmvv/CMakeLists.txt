@@ -32,12 +32,12 @@ IF(BUILD_RPL) # bmvv_f_manager.cxx needs rpl/rrel
  INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bmvl/bmvv ${bmvv_sources})
 
  # find the path to the xerces libraries and includes
- INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/find_xerces.cmake )
+ #INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/find_xerces.cmake )
 
- IF(HAS_XERCES)
-  ADD_DEFINITIONS(-DHAS_XERCES)
-  TARGET_LINK_LIBRARIES(bmvv bxml)
- ENDIF(HAS_XERCES)
+ #IF(HAS_XERCES)
+ # ADD_DEFINITIONS(-DHAS_XERCES)
+ # TARGET_LINK_LIBRARIES(bmvv bxml)
+ #ENDIF(HAS_XERCES)
 
  #TARGET_LINK_LIBRARIES(bmvv btom) # when compiling bmvv_tomography_manager.cxx
  TARGET_LINK_LIBRARIES(bmvv brct sdet brip bdgl mvl vpgl vpgl_algo vtol vdgl bgui vgui vsol vgl_algo vgl vnl vil vil1)
