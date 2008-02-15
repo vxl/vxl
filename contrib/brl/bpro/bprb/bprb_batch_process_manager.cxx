@@ -43,14 +43,13 @@ bool bprb_batch_process_manager::init_process(vcl_string const& process_name)
 }
 
 //: initialize the process, read the parameters from an XML file
-bool bprb_batch_process_manager::init_process(vcl_string const& process_name, 
-                                              vcl_string const& params_XML)
+bool bprb_batch_process_manager::set_process_params(vcl_string const& process_name, 
+                                                    vcl_string const& params_XML)
 {
   bprb_process_sptr p = get_process_by_name(process_name);
   if(p){
     vcl_cout << "Process: " << p->name() << '\n';
-    current_process_ = p;
-    current_process_->parse_params_XML(params_XML);
+    p->parse_params_XML(params_XML);
     return true;
   }
   return false;
