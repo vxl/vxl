@@ -66,6 +66,13 @@ bprb_parameters::valid_parameter( const vcl_string& name ) const
 
 
 //: reads the parameters and their values from an XML document
+// it assumes the following XML format
+// <ProcessName>
+//   <param1 type="" desc="" value=""/>
+//   <param2 type="" desc="" value=""/>
+//   .
+//   .
+// </ProcessName>
 bool bprb_parameters::parse_XML(const vcl_string& xml_path, 
                                 const vcl_string& root_tag)
 {
@@ -86,13 +93,15 @@ bool bprb_parameters::parse_XML(const vcl_string& xml_path,
     return false;
   }
 
-  bxml_element* root;
+  bxml_data_sptr root;
   // if the root tag is not defined, used the document root, else find the element
   if (root_tag.size() == 0)
-    root = static_cast<bxml_element*> (xml_doc_.root_element().as_pointer());
+    //root = static_cast<bxml_element*> (xml_doc_.root_element().as_pointer());
+    root = xml_doc_.root_element();
   else {
     bxml_element query(root_tag);
-    root = static_cast<bxml_element*> (bxml_find_by_name(xml_doc_.root_element(), query).as_pointer());
+    //root = static_cast<bxml_element*> (bxml_find_by_name(xml_doc_.root_element(), query).as_pointer());
+    root = bxml_find_by_name(xml_doc_.root_element(), query);
     if (!root) {
       vcl_cout << "bprb_parameters::parse_XML root tag is not found" << vcl_endl;
       return false;
@@ -104,8 +113,17 @@ bool bprb_parameters::parse_XML(const vcl_string& xml_path,
        it != param_list_.end();
        it++ ) {
     vcl_string name = (*it)->name();
-    vcl_string value = root->attribute(name);
-    (*it)->parse_value_str(value);
+    bxml_element query(name);
+    // look for the attribute in the tree under root element
+    bxml_element* param = static_cast<bxml_element*> (bxml_find_by_name(root, query).as_pointer());
+    if (param) {
+      vcl_string value = param->attribute("value");
+      vcl_string type = param->attribute("type");
+      vcl_string desc = param->attribute("desc");
+      (*it)->parse_value_str(value);
+      // TODO : set the type and description in the params, they are not settable
+    }
+    
   }
   return true;
 }
