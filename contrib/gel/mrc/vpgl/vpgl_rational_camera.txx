@@ -438,7 +438,14 @@ vpgl_rational_camera<T>* read_rational_camera(vcl_string cam_path)
     vcl_cout << "error: bad filename: " << cam_path << vcl_endl;
     return 0;
   }
-
+  vpgl_rational_camera<T>* rcam = read_rational_camera<T>(file_inp);
+  file_inp.close();
+  return rcam;
+}
+//: read from an open istream
+template <class T> 
+vpgl_rational_camera<T>* read_rational_camera(vcl_istream& istr)
+{
   vcl_vector<T> neu_u;
   vcl_vector<T> den_u;
   vcl_vector<T> neu_v;
@@ -448,97 +455,108 @@ vpgl_rational_camera<T>* read_rational_camera(vcl_string cam_path)
   vcl_string input;
   char bulk[100];
 
-  while (!file_inp.eof()){
-    file_inp >> input;
+  while (!istr.eof()){
+    istr >> input;
 
     if (input=="sampScale") {
-      file_inp >> input;
-      file_inp >> u_scale;
+      istr >> input;
+      istr >> u_scale;
     }
     if (input=="sampOffset") {
-      file_inp >> input;
-      file_inp >> u_off;
+      istr >> input;
+      istr >> u_off;
     }
 
     if (input=="lineScale") {
-      file_inp >> input;
-      file_inp >> v_scale;
+      istr >> input;
+      istr >> v_scale;
     }
     if (input=="lineOffset") {
-      file_inp >> input;
-      file_inp >> v_off;
+      istr >> input;
+      istr >> v_off;
     }
 
     if (input=="longScale") {
-      file_inp >> input;
-      file_inp >> x_scale;
+      istr >> input;
+      istr >> x_scale;
     }
     if (input=="longOffset") {
-      file_inp >> input;
-      file_inp >> x_off;
+      istr >> input;
+      istr >> x_off;
     }
 
     if (input=="latScale") {
-      file_inp >> input;
-      file_inp >> y_scale;
+      istr >> input;
+      istr >> y_scale;
     }
     if (input=="latOffset") {
-      file_inp >> input;
-      file_inp >> y_off;
+      istr >> input;
+      istr >> y_off;
     }
 
     if (input=="heightScale") {
-      file_inp >> input;
-      file_inp >> z_scale;
+      istr >> input;
+      istr >> z_scale;
     }
     if (input=="heightOffset") {
-      file_inp >> input;
-      file_inp >> z_off;
+      istr >> input;
+      istr >> z_off;
     }
 
     T temp_dbl;
     if (input=="lineNumCoef") {
-      file_inp >> input;
-      file_inp >> input;
+      istr >> input;
+      istr >> input;
       for (int i=0; i<20; i++) {
-        file_inp >> temp_dbl;
+        istr >> temp_dbl;
         neu_v.push_back(temp_dbl);
-        file_inp.getline(bulk,200);
+        istr.getline(bulk,200);
       }
     }
 
     if (input=="lineDenCoef") {
-      file_inp >> input;
-      file_inp >> input;
+      istr >> input;
+      istr >> input;
       for (int i=0; i<20; i++) {
-        file_inp >> temp_dbl;
+        istr >> temp_dbl;
         den_v.push_back(temp_dbl);
-        file_inp.getline(bulk,200);
+        istr.getline(bulk,200);
       }
     }
 
     if (input=="sampNumCoef") {
-      file_inp >> input;
-      file_inp >> input;
+      istr >> input;
+      istr >> input;
       for (int i=0; i<20; i++) {
-        file_inp >> temp_dbl;
+        istr >> temp_dbl;
         neu_u.push_back(temp_dbl);
-        file_inp.getline(bulk,200);
+        istr.getline(bulk,200);
       }
     }
 
     if (input=="sampDenCoef") {
-      file_inp >> input;
-      file_inp >> input;
+      istr >> input;
+      istr >> input;
       for (int i=0; i<20; i++) {
-        file_inp >> temp_dbl;
+        istr >> temp_dbl;
         den_u.push_back(temp_dbl);
-        file_inp.getline(bulk,200);
+        istr.getline(bulk,200);
       }
+      break;
     }
-  }
-  file_inp.close();
-
+  }    
+  istr >> input;
+  if(input!="END_GROUP")
+    return 0;
+  istr >> input;
+  if(input!="=")
+    return 0;
+  istr >> input;
+  if(input!="IMAGE")
+    return 0;
+  istr >> input;
+  if(input!="END;")
+    return 0;
   int map[20];
   map[0]=19;
   map[1]=9;
@@ -562,7 +580,7 @@ vpgl_rational_camera<T>* read_rational_camera(vcl_string cam_path)
   map[19]=16;
 
   if ((neu_u.size() != 20) || (den_u.size() != 20)) {
-    vcl_cerr << "the file [" << cam_path << "] is not a valid rational camera file\n";
+    vcl_cerr << "the input is not a valid rational camera \n";
     return 0;
     }
 
@@ -660,6 +678,7 @@ template class vpgl_scale_offset<T >; \
 template class vpgl_rational_camera<T >; \
 template vcl_ostream& operator<<(vcl_ostream&, const vpgl_rational_camera<T >&); \
 template vpgl_rational_camera<T > * read_rational_camera(vcl_string); \
+template vpgl_rational_camera<T > * read_rational_camera(vcl_istream&); \
 typedef vpgl_scale_offset<T > soff; \
 VCL_VECTOR_INSTANTIATE(soff)
 

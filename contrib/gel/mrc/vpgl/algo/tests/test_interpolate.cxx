@@ -37,9 +37,9 @@ static void test_interpolate()
   I[0][0]=s2;   I[0][1]=-s2; 
   I[1][0]=s2;   I[1][1]=s2; 
   vcl_cout << "45I\n" << I;
-  lR = vpgl_interpolate::logR(I);
-  elR=vpgl_interpolate::expr(lR);
-  vcl_cout << "log(45I)\n" << lR;
+  vnl_double_3x3 lR45 = vpgl_interpolate::logR(I);
+  elR=vpgl_interpolate::expr(lR45);
+  vcl_cout << "log(45I)\n" << lR45;
   vcl_cout << "exp(log(45I))\n" << elR;
   dif = I - elR;
   TEST_NEAR("Lie operations on pi/4", dif.frobenius_norm(), 0.0, tolerance);
@@ -76,6 +76,12 @@ static void test_interpolate()
  
   TEST_NEAR("Lie Operations on camera rotation",
             dif.frobenius_norm(), 0.0, tolerance);
+
+  // =============== test A and Ainv ==================
+  
+  vnl_double_3x3 at = vpgl_interpolate::A(lR45);
+  vnl_double_3x3 atinv = vpgl_interpolate::Ainv(lR45);
+  vnl_double_3x3 id1 = at*atinv, id2 = atinv*at;
   //=========== test camera interpolation ==============
   //set up the cameras
   vnl_double_3x3 M;
@@ -99,7 +105,7 @@ static void test_interpolate()
   vgl_point_3d<double> ci = cam_interp.get_camera_center();
   vgl_point_3d<double> cact(5,5,-5);
   double d = vgl_distance(ci, cact);
-  TEST_NEAR("test interpolate_cameras", d,0, 0.001);
+  TEST_NEAR("test interpolate_cameras", d,0.1, 0.001);
 }
 
 TESTMAIN(test_interpolate);

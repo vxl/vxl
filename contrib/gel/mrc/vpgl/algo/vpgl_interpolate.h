@@ -8,6 +8,7 @@
 // \date Dec 29, 2007
 
 #include <vcl_vector.h>
+#include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
@@ -45,6 +46,24 @@ class vpgl_interpolate
   static vnl_double_3x3 expr(vnl_double_3x3 const& r);
 
 
+  //: the "A" matrix in the exp operator for Special Euclidiean 3-d (SE3)
+  //  Let r be as above.
+  //  Then 
+  //                    1 - cos(|r|)         |r| - sin(|r|)
+  //            A = I + ------------ r   +   -------------- r*r
+  //                      |r|*|r|             |r|*|r|*|r|
+  //
+  static vnl_double_3x3 A(vnl_double_3x3 const& r);
+
+  //: the inverse A  matrix for log operator on Special Euclidiean 3-d (SE3)
+  //  Let r be as above.
+  //  Then 
+  //                       1       2*sin(|r|)-|r|*(1+cos(|r|)
+  //            Ainv = I + - r  +  -------------------------- r*r
+  //                       2            2 |r|*|r|*sin(|r|)   
+  //
+  static vnl_double_3x3 Ainv(vnl_double_3x3 const& r);
+
   //:Interpolate between two rotation matrices, R0 and R1
   // Lie group theory can be used to find a two-point interpolation of rotation
   // with respect to a parameter s, where 0<= s <=1
@@ -60,6 +79,16 @@ class vpgl_interpolate
   static vcl_vector<vnl_double_3x3> interpolateR(vnl_double_3x3 R0,
                                                  vnl_double_3x3 R1,
                                                  unsigned n_between);
+
+  //:Interpolate both R and t at the specified intervals
+  static void interpolateRt(vnl_double_3x3 R0,
+                            vnl_double_3 t0,
+                            vnl_double_3x3 R1,
+                            vnl_double_3 t1,
+                            unsigned n_between,
+                            vcl_vector<vnl_double_3x3>& Rintrp,
+                            vcl_vector<vnl_double_3>& tintrp);
+
 
   //:Interpolate between two perpspective cameras with the same K
   // given that cam0 = K[R0|t0], cam1 = K[R1|t1]

@@ -18,7 +18,7 @@ SET( vpgl_sources
   vpgl_poly_radial_distortion.h    vpgl_poly_radial_distortion.txx
   vpgl_rational_camera.h           vpgl_rational_camera.txx
   vpgl_comp_rational_camera.h      vpgl_comp_rational_camera.txx
-
+  vpgl_local_rational_camera.h     vpgl_local_rational_camera.txx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vpgl_sources)

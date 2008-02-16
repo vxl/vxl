@@ -238,6 +238,11 @@ vcl_istream& operator>>(vcl_istream& is, vpgl_rational_camera<T>& p);
 template <class T> 
 vpgl_rational_camera<T>* read_rational_camera(vcl_string cam_path);
 
+//: Creates a rational camera from a stream
+// \relates vpgl_rational_camera
+template <class T> 
+vpgl_rational_camera<T>* read_rational_camera(vcl_istream& istr);
+
 #define VPGL_RATIONAL_CAMERA_INSTANTIATE(T) extern "please include vgl/vpgl_rational_camera.txx first"
 
 
