@@ -641,3 +641,44 @@ vcl_ostream& operator << (vcl_ostream& os, const bgeo_lvcs& local_coord_sys)
   local_coord_sys.print(os);
   return os;
 }
+// binary IO
+//: Binary save self to stream.
+void bgeo_lvcs::b_write(vsl_b_ostream &os) const
+{
+  unsigned csn = static_cast<unsigned>(local_cs_name_);
+  vsl_b_write(os, csn);
+  vsl_b_write(os, localCSOriginLat_);
+  vsl_b_write(os, localCSOriginLon_);
+  vsl_b_write(os, localCSOriginElev_);
+  vsl_b_write(os, lat_scale_);
+  vsl_b_write(os, lon_scale_);
+  unsigned gaunit = static_cast<unsigned>(geo_angle_unit_);
+  vsl_b_write(os, gaunit);
+  unsigned xyzunit = static_cast<unsigned>(localXYZUnit_);
+  vsl_b_write(os, xyzunit);
+  vsl_b_write(os, lox_);
+  vsl_b_write(os, loy_);
+  vsl_b_write(os, theta_);
+}
+
+//: Binary load self from stream.
+void bgeo_lvcs::b_read(vsl_b_istream &is)
+{
+  unsigned cs_name;
+  vsl_b_read(is, cs_name);
+  local_cs_name_ = static_cast<cs_names>(cs_name);
+  vsl_b_read(is, localCSOriginLat_);
+  vsl_b_read(is, localCSOriginLon_);
+  vsl_b_read(is, localCSOriginElev_);
+  vsl_b_read(is, lat_scale_);
+  vsl_b_read(is, lon_scale_);
+  unsigned gaunit;
+  vsl_b_read(is, gaunit);
+  geo_angle_unit_ = static_cast<AngUnits>(gaunit);
+  unsigned lunit;
+  vsl_b_read(is, lunit);
+  localXYZUnit_ = static_cast<LenUnits>(lunit);
+  vsl_b_read(is, lox_);
+  vsl_b_read(is, loy_);
+  vsl_b_read(is, theta_);
+}

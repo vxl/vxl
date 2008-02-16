@@ -14,7 +14,7 @@ ADD_LIBRARY(bgeo ${bgeo_sources})
 INSTALL_TARGETS(/lib bgeo)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/mrc/vpgl/bgeo ${bgeo_sources})
 
-TARGET_LINK_LIBRARIES(bgeo vnl vbl)
+TARGET_LINK_LIBRARIES(bgeo vsl vnl vbl)
 
 IF(BUILD_TESTING)
   SUBDIRS(tests)

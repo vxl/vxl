@@ -5,6 +5,7 @@
 #include <vpgl/bgeo/bgeo_lvcs.h>
 #include <vgl/vgl_point_3d.h>
 #include <vcl_fstream.h>
+#include <vcl_cmath.h>
 static bool read_geo_points(vcl_ifstream& str,
                             vcl_vector<vgl_point_3d<double> >& wpts)
 {
@@ -40,7 +41,7 @@ static void write_cart_points(vcl_ofstream& str,
   }
 }
 
-//: Test the graph class
+//: Test the lvcs class
 static void test_lvcs()
 {
   bgeo_lvcs lvcs(33.4447732, -114.3085932, 0.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::FEET);
@@ -73,6 +74,21 @@ static void test_lvcs()
     write_cart_points(ostr, cart_pts);
     TEST("Test geo conversion", 1==1, true);
   }
+  //Test binary I/O
+  vcl_string b_path = "./test_binary.vsl";
+  vsl_b_ofstream os(b_path);
+  lvcs.b_write(os);
+  os.close();
+  vsl_b_ifstream is(b_path);
+  bgeo_lvcs lvcs_r;
+  lvcs_r.b_read(is);
+  double longitude, latitude, elevation;
+  lvcs_r.get_origin(latitude, longitude, elevation);
+  bgeo_lvcs::cs_names name = lvcs_r.get_cs_name();
+  double er1 = vcl_fabs(longitude+114.3085932)+
+    vcl_fabs(latitude-33.4447732) + vcl_fabs(elevation);
+  TEST("cs_name", name-bgeo_lvcs::wgs84, 0);
+  TEST_NEAR("origin", er1, 0.0, 1e-3);
 }
 
 TESTMAIN( test_lvcs );

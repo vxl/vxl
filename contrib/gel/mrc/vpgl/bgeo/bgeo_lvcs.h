@@ -23,6 +23,7 @@
 //             GE Corporate Research and Development
 /////////////////////////////////////////////////////////////////////////////
 #include <vcl_iostream.h>
+#include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_ref_count.h>
 #include <vpgl/bgeo/bgeo_dll.h>
 class bgeo_lvcs : public vbl_ref_count
@@ -93,6 +94,14 @@ class bgeo_lvcs : public vbl_ref_count
   inline AngUnits geo_angle_unit() const {return this->geo_angle_unit_;}
   void print(vcl_ostream&) const;
   friend vcl_ostream& operator << (vcl_ostream& os, const bgeo_lvcs& local_coord_sys);
+
+  // binary IO
+   //: Binary save self to stream.
+  virtual void b_write(vsl_b_ostream &os) const;
+
+  //: Binary load self from stream.
+  virtual void b_read(vsl_b_istream &is);
+
   // INTERNALS-----------------------------------------------------------------
 
  protected:
