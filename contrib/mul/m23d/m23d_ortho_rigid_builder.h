@@ -31,11 +31,9 @@
 
 class m23d_ortho_rigid_builder
 {
+ private:
+//===========================private workspace variables========================
 
-private:
-    
-//===========================private workspace variables==================================    
-    
   //: 3 x np matrix, each column containing one 3D point
   vnl_matrix<double> P3D_;
 
@@ -51,61 +49,54 @@ private:
   //: Centred version of the 2D views supplied to reconstruct()
   //  Each 2D shape has been translated so that it's CoG is at the origin
   vnl_matrix<double> P2Dc_;
-    
-//=============================private functions==========================================
+
+//=============================private functions================================
 
   //: Modify projection matrices so they are scaled orthographic projections
-  //  P = s(I|0)*R
+  //  $ P = s(I|0)*R $
   void make_pure_projections();
-    
-  //: find matrix Q using constraints on matrix P which must contain 
-  // orthonormal projects in each (2*3) submatrix for each frame 
+
+  //: find matrix Q using constraints on matrix P which must contain orthonormal projects in each (2*3) submatrix for each frame
   void find_correction_matrix( vnl_matrix<double>& Q,
-                                     const vnl_matrix<double>& P);
-    
-  //: find matrix Q using constraints on matrix P which must contain 
-  // from two rows of a projection matrix (a+b) find six constraints used to compute (QQt)
-  // symmetric matrix
+                               const vnl_matrix<double>& P);
+
+  //: find matrix Q using constraints on matrix P which must contain
+  // From two rows of a projection matrix (a+b) find six constraints
+  // used to compute (QQt) symmetric matrix
   void compute_one_row_of_constraints( vnl_vector<double>& c,
-                                                            const vnl_vector<double>& a,
-                                                            const vnl_vector<double>& b);
-    
-  //: find matrix Q using constraints on matrix P which must contain 
-  // orthonormal projects in each (2*3) submatrix for each frame 
+                                       const vnl_vector<double>& a,
+                                       const vnl_vector<double>& b);
+
+  //: find matrix Q using constraints on matrix P which must contain orthonormal projects in each (2*3) submatrix for each frame.
   // old method
   void find_correction_matrix_alt( vnl_matrix<double>& Q,
-                                           const vnl_matrix<double>& P);
+                                   const vnl_matrix<double>& P);
 
-  
   //: Return 3d pts given 3*np matrix
   void mat_to_3d_pts( vcl_vector< vgl_point_3d<double> >& pts,
-                           const vnl_matrix<double>& M) const;
-  
-  
-public: 
-    
+                      const vnl_matrix<double>& M) const;
+
+ public:
   //: Reconstruct structure of 3D points given multiple 2D views
   //  Data assumed to be scaled orthographic projections
   //  The result is stored in the shape_3d() matrix.
   //  The estimated projection matrices are stored in the projections() matrix
   //  \param P2D 2ns x np matrix. Rows contain alternating x's and y's from 2D shapes
   void reconstruct(const vnl_matrix<double>& P2D);
-    
+
   //: Reconstruct structure from set of 2d pts
-  // formulates measurement matrix P2D then calls reconstruct funtion above
+  // Formulates measurement matrix P2D then calls reconstruct funtion above
   void reconstruct(const vcl_vector< vcl_vector< vgl_point_2d<double> > >& pt_vec_list );
-  
+
   //: Refine estimates of projection and structure
   void refine();
-  
- 
-    
-//===========================Access functions=========================================    
-    
+
+//===========================Access functions===================================
+
   //: Return 3 x np matrix, each column containing one 3D point
   //  Points are centred on the origin
   const vnl_matrix<double>& shape_3d() const { return P3D_; };
-  
+
   //: The 2ns x 3 projection matrix
   //  Each 2x3 sub-matrix is a scaled orthographic projection matrix
   const vnl_matrix<double>& projections() const { return P_; };
@@ -113,16 +104,15 @@ public:
   //: Centred version of the 2D views supplied to reconstruct()
   //  Each 2D shape has been translated so that it's CoG is at the origin
   const vnl_matrix<double>& centred_views() const { return P2Dc_; }
-     
+
   //: Return 3d pts given 3*np matrix
-  void get_shape_3d_pts( vcl_vector< vgl_point_3d<double> >& pts ) const; 
-  //{ mat_to_3d_pts( pts, P3D_); }
-                              
+  void get_shape_3d_pts( vcl_vector< vgl_point_3d<double> >& pts ) const;
+#if 0
+  { mat_to_3d_pts( pts, P3D_); }
+#endif
+
   //: Get back 3d pts rotated and shifted for each frame
   void recon_shapes(vcl_vector< vcl_vector< vgl_point_3d<double> > >& pt_vec_list ) const;
-  
- 
 };
 
 #endif // m2d3_ortho_rigid_builder_h_
-

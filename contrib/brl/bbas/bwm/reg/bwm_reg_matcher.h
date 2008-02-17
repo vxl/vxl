@@ -40,21 +40,19 @@ class bwm_reg_matcher
   ~bwm_reg_matcher(){}
 
 
-  //: Scan over entire search region, return the 
-  //  offset from the upper left of the search region
-  //  with the best match. min_probability is the threshold on
-  //  the  cumulative probability of distances <= distance_threshold
+  //: Scan over entire search region, return the offset from the upper left of the search region with the best match.
+  //  \a min_probability is the threshold on
+  //  the  cumulative probability of distances <= \a distance_threshold
   bool match(int& tcol, int& trow, double distance_threshold,
              double angle_threshold,
              double min_probability);
 
-  //: Filter out model edges whose samples  don't lie within the 
-  //  specified distance of some search edge point
+  //: Filter out model edges whose samples  don't lie within the specified distance of some search edge point
   bool close_edges(double filter_distance, double angle_threshold,
                    unsigned min_curve_length,
                    vcl_vector<vsol_digital_curve_2d_sptr>& close_edges);
 
-  //: Debug 
+  //: Debug
   void print_hist(){min_hist_.print();}
  protected:
   // INTERNALS-----------------------------------------------------------------
@@ -73,7 +71,7 @@ class bwm_reg_matcher
 
 
   //: the dimensions of the search array
-  unsigned search_cols_, search_rows_; 
+  unsigned search_cols_, search_rows_;
 
   //: the origin of the model edges bounding box
   unsigned model_col_origin_;
@@ -84,12 +82,12 @@ class bwm_reg_matcher
   unsigned model_rows_;
 
   //: the model edges
-  vcl_vector<vsol_digital_curve_2d_sptr> model_edges_;  
+  vcl_vector<vsol_digital_curve_2d_sptr> model_edges_;
 
 
   //: the edges to search for a match
-  vcl_vector<vsol_digital_curve_2d_sptr> search_edges_;  
-  
+  vcl_vector<vsol_digital_curve_2d_sptr> search_edges_;
+
   //: the index for efficient search
   bwm_reg_edge_champher champh_;
 
@@ -98,7 +96,6 @@ class bwm_reg_matcher
 
   //: a histogram of match distances (for finding min histogram)
   bsta_histogram<double> hist_;
-
 };
 
 #endif

@@ -5,7 +5,6 @@
 
 #include <vcl_utility.h>
 #include <vcl_iostream.h>
-#include <vcl_sstream.h>
 #include <bxml/bxml_read.h>
 #include <bxml/bxml_find.h>
 #include <bxml/bxml_write.h>
@@ -14,15 +13,15 @@
 vcl_ostream& operator<<(vcl_ostream& os, const bprb_param& p)
 {
   os << "parameter{\n  Description: " << p.description();
-  if(p.has_bounds())
+  if (p.has_bounds())
     os << "\n  Range: " << p.min_str() << " to " << p.max_str();
-  os << "\n  Default: " << p.default_str();
-  os << "\n  Value: " << p.value_str() << "\n}\n";
+  os << "\n  Default: " << p.default_str()
+     << "\n  Value: " << p.value_str() << "\n}\n";
 
   return os;
 }
 
-//===========================================================================================
+//==============================================================================
 
 //: Constructor
 bprb_parameters::bprb_parameters()
@@ -33,19 +32,19 @@ bprb_parameters::bprb_parameters()
 //: Destructor
 bprb_parameters::~bprb_parameters()
 {
-  for( vcl_vector< bprb_param * >::iterator it = param_list_.begin();
-       it != param_list_.end();
-       it++ ) {
-    delete (*it);
+  for ( vcl_vector< bprb_param * >::iterator it = param_list_.begin();
+        it != param_list_.end();
+        it++ ) {
+    delete *it;
   }
 }
 
 //: Deep copy constructor
 bprb_parameters::bprb_parameters(const bprb_parameters_sptr& old_params)
 {
-  for( vcl_vector< bprb_param * >::iterator it = old_params->param_list_.begin();
-      it != old_params->param_list_.end();
-      it++ ) {
+  for ( vcl_vector< bprb_param * >::iterator it = old_params->param_list_.begin();
+        it != old_params->param_list_.end();
+        it++ ) {
 
     //deep copy this param
     bprb_param * new_param = (*it)->clone();
@@ -61,19 +60,19 @@ bool
 bprb_parameters::valid_parameter( const vcl_string& name ) const
 {
   vcl_map< vcl_string , bprb_param * >::const_iterator itr = name_param_map_.find( name );
-  return (itr != name_param_map_.end());
+  return itr != name_param_map_.end();
 }
 
 
 //: reads the parameters and their values from an XML document
-// it assumes the following XML format
+// It assumes the following XML format
 // <ProcessName>
 //   <param1 type="" desc="" value=""/>
 //   <param2 type="" desc="" value=""/>
 //   .
 //   .
 // </ProcessName>
-bool bprb_parameters::parse_XML(const vcl_string& xml_path, 
+bool bprb_parameters::parse_XML(const vcl_string& xml_path,
                                 const vcl_string& root_tag)
 {
   // open the XML document
@@ -109,9 +108,9 @@ bool bprb_parameters::parse_XML(const vcl_string& xml_path,
   }
 
   // iterate over each parameter, and set the ones found
-  for( vcl_vector< bprb_param * >::iterator it = param_list_.begin();
-       it != param_list_.end();
-       it++ ) {
+  for ( vcl_vector< bprb_param * >::iterator it = param_list_.begin();
+        it != param_list_.end();
+        it++ ) {
     vcl_string name = (*it)->name();
     bxml_element query(name);
     // look for the attribute in the tree under root element
@@ -123,7 +122,6 @@ bool bprb_parameters::parse_XML(const vcl_string& xml_path,
       (*it)->parse_value_str(value);
       // TODO : set the type and description in the params, they are not settable
     }
-    
   }
   return true;
 }
@@ -134,9 +132,9 @@ void bprb_parameters::print_def_XML(const vcl_string& root_tag,
 {
   bxml_element* root = new bxml_element(root_tag);
   // iterate over each parameter, and get the default ones
-  for( vcl_vector< bprb_param * >::iterator it = param_list_.begin();
-       it != param_list_.end();
-       it++ ) {
+  for ( vcl_vector< bprb_param * >::iterator it = param_list_.begin();
+        it != param_list_.end();
+        it++ ) {
     vcl_string name = (*it)->name();
     vcl_string def_value = (*it)->default_str();
     root->set_attribute(name, def_value);
@@ -152,9 +150,9 @@ void bprb_parameters::print_current_XML(const vcl_string& root_tag,
 {
   bxml_element* root = new bxml_element(root_tag);
   // iterate over each parameter, and get the default ones
-  for( vcl_vector< bprb_param * >::iterator it = param_list_.begin();
-       it != param_list_.end();
-       it++ ) {
+  for ( vcl_vector< bprb_param * >::iterator it = param_list_.begin();
+        it != param_list_.end();
+        it++ ) {
     vcl_string name = (*it)->name();
     vcl_string value = (*it)->value_str();
     root->set_attribute(name, value);
@@ -168,9 +166,9 @@ void bprb_parameters::print_current_XML(const vcl_string& root_tag,
 bool
 bprb_parameters::reset_all()
 {
-  for( vcl_vector< bprb_param * >::iterator it = param_list_.begin();
-       it != param_list_.end();
-       it++ ) {
+  for ( vcl_vector< bprb_param * >::iterator it = param_list_.begin();
+        it != param_list_.end();
+        it++ ) {
     (*it)->reset();
   }
   return true;
@@ -182,7 +180,7 @@ bool
 bprb_parameters::reset( const vcl_string& name )
 {
   vcl_map< vcl_string , bprb_param * >::iterator it = name_param_map_.find( name );
-  if( it == name_param_map_.end() ) {
+  if ( it == name_param_map_.end() ) {
     return false;
   }
 
@@ -205,7 +203,7 @@ vcl_string
 bprb_parameters::get_desc( const vcl_string& name ) const
 {
   vcl_map< vcl_string , bprb_param * >::const_iterator it = name_param_map_.find( name );
-  if( it == name_param_map_.end() ) {
+  if ( it == name_param_map_.end() ) {
     return "";
   }
   return it->second->description();
@@ -216,24 +214,24 @@ bprb_parameters::get_desc( const vcl_string& name ) const
 void
 bprb_parameters::print_all(vcl_ostream& os) const
 {
-  for( vcl_vector< bprb_param * >::const_iterator it = param_list_.begin();
-       it != param_list_.end();
-       it++ ) {
+  for ( vcl_vector< bprb_param * >::const_iterator it = param_list_.begin();
+        it != param_list_.end();
+        it++ ) {
     os << *it;
   }
 }
 
 
 //: Add parameter helper function
-bool 
+bool
 bprb_parameters::add( bprb_param* param )
 {
-  if( !param )
+  if ( !param )
     return false;
   vcl_string name = param->name();
   vcl_string desc = param->description();
-  if( name_param_map_.find( name ) != name_param_map_.end() ||
-      desc == "" || name == "" ) {
+  if ( name_param_map_.find( name ) != name_param_map_.end() ||
+       desc == "" || name == "" ) {
     delete param;
     return false;
   }
@@ -244,7 +242,7 @@ bprb_parameters::add( bprb_param* param )
   return true;
 }
 
-//===========================================================================================
+//==============================================================================
 
 //: Less than operator for bprb_filepath objects
 bool operator<( const bprb_filepath& lhs, const bprb_filepath& rhs )

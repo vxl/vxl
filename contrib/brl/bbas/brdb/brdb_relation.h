@@ -32,7 +32,7 @@ class brdb_relation : public vbl_ref_count
 {
   //======================= Constructors / Destructors ========================
  public:
-  //: Default Constructor
+  // Default Constructor
   brdb_relation();
 
   //: Constructor - create an empty relation but define the columns
@@ -40,13 +40,13 @@ class brdb_relation : public vbl_ref_count
                      const vcl_vector<vcl_string>& types );
 
   //: Constructor - create a relation populated with tuples
-  //  if types are not provided they will be infered from the tuples.
+  //  If types are not provided they will be infered from the tuples.
   //  All tuples must have the same types and arity.
   brdb_relation( const vcl_vector<vcl_string>& names,
                      const vcl_vector<brdb_tuple_sptr>& tuples,
                      const vcl_vector<vcl_string>& types = vcl_vector<vcl_string>() );
 
-  //: Destructor
+  // Destructor
   virtual ~brdb_relation();
 
 
@@ -74,7 +74,7 @@ class brdb_relation : public vbl_ref_count
   bool exists(const vcl_string& name) const;
 
   //: Return true if there are no tuples in the relation.
-  bool empty() const {return tuples_.empty();} 
+  bool empty() const {return tuples_.empty();}
 
   //: Sort the tuples by a certain attribute name
   bool order_by(const vcl_string& name, bool ascending=true);
@@ -87,7 +87,7 @@ class brdb_relation : public vbl_ref_count
   void clear();
 
   //: Add one tuple to relation
-  bool add_tuple(const brdb_tuple_sptr& new_tuple); 
+  bool add_tuple(const brdb_tuple_sptr& new_tuple);
 
   //: insert a tuple at certain position
   bool insert_tuple(const brdb_tuple_sptr& new_tuple, const vcl_vector<brdb_tuple_sptr>::iterator& pos);
@@ -136,7 +136,7 @@ class brdb_relation : public vbl_ref_count
   //: if compatible, add tuples from the other relation into this one
   bool merge(const brdb_relation_sptr& other);
 
-private:
+ private:
   //: Verify that the data stored in this class make a valid relation
   // \note called by the constructors
   bool is_valid() const;
@@ -147,7 +147,7 @@ private:
   //: update the timestamp of this relation
   void update_timestamp();
 
-private:
+ private:
   //: The time stamp of this relation
   unsigned long time_stamp_;
   //: The names of the attributes
@@ -161,7 +161,6 @@ private:
 
 //: SQL join of two generic relations
 brdb_relation_sptr brdb_join(const brdb_relation_sptr& r1, const brdb_relation_sptr& r2);
-
 
 
 #endif // brdb_relation_h_

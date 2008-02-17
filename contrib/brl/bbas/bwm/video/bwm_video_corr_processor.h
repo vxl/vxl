@@ -14,7 +14,7 @@
 //-----------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vcl_string.h>
-#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/vnl_cost_function.h>
 #include <vil/vil_image_view.h>
@@ -25,19 +25,19 @@
 #include <bwm/video/bwm_video_cam_istream_sptr.h>
 #include <bwm/video/bwm_video_cam_ostream_sptr.h>
 #include <bwm/video/bwm_video_site_io.h>
-//: A least squares cost function for registering correspondences
-// by minimizing square difference in intensities
+
+//: A least squares cost function for registering correspondences by minimizing square difference in intensities
 class bwm_video_corr_lsqr_cost_func : public vnl_least_squares_function
 {
-public:
+ public:
   //: Constructor
-  // the base image is the between frame with missing correspondences
+  // The base image is the between frame with missing correspondences
   // corr_image_a and corr_image_b are the images with known correspondences
   // corrs_a and corrs_b are the known correspondences in frames a and b
   // it is necessary that corrs_a and corrs_b are matching correspondences
   // proj_wld_pts are the projection of the 3-d correspondence world points
   // into the base image.
-  
+
   bwm_video_corr_lsqr_cost_func(vil_image_view<float> const& base_image,
                                 unsigned match_radius,
                                 vcl_vector<float> corr_window_ab
@@ -71,7 +71,7 @@ class bwm_video_corr_cost_function: public vnl_cost_function
   vcl_vector<float> corr_window_ab_;
 };
 
-class bwm_video_corr_processor 
+class bwm_video_corr_processor
 {
   // PUBLIC INTERFACE----------------------------------------------------------
   // the type of solver
@@ -81,13 +81,13 @@ class bwm_video_corr_processor
 
   //: Constructor - default
   bwm_video_corr_processor() : verbose_(false), site_name_(""), site_path_(""),
-    video_path_(""), camera_path_(""), video_istr_(0), cam_istr_(0), 
+    video_path_(""), camera_path_(""), video_istr_(0), cam_istr_(0),
     world_pts_valid_(false){}
 
   //: Destructor
   ~bwm_video_corr_processor() {}
 
-  //: Accessors 
+  //: Accessors
   void set_site_name(vcl_string const& site_name) {site_name_=site_name;}
   void set_video_path(vcl_string const& video_path) {video_path_=video_path;}
   void set_camera_path(vcl_string const& cam_path) {camera_path_=cam_path;}
@@ -109,71 +109,71 @@ class bwm_video_corr_processor
   bool write_video_site(vcl_string const& site_path);
 
   // Process directives
+
   //: Find an initial set of world points and interpolated cameras
-  // Assumptions: 1) a partial set of correspondences, e.g. every 5th frame
-  //              2) no cameras available on any frame
-  //              3) no world points are known
-  //              4) initial_depth is a guess at camera standoff distance
-  bool 
-    initialize_world_pts_and_cameras(vpgl_calibration_matrix<double> const& K,
-                                    double initial_depth);   
+  // Assumptions:
+  // - a partial set of correspondences, e.g. every 5th frame
+  // - no cameras available on any frame
+  // - no world points are known
+  // - initial_depth is a guess at camera standoff distance
+  bool initialize_world_pts_and_cameras(vpgl_calibration_matrix<double> const& K,
+                                        double initial_depth);
   //:get the resulting cameras
   vcl_vector<vpgl_perspective_camera<double> >cameras(){return cameras_;}
 
   //: save cameras to output stream
   bool write_cameras_to_stream();
 
-  //: Find the missing correspondences by correlating with respect to 
-  //  the bounding adjacent frames with correspondences
-  // Assumptions: 1) Cameras are defined for each frame
-  //              2) World points are available 
+  //: Find the missing correspondences by correlating with respect to the bounding adjacent frames with correspondences
+  // Assumptions:
+  // - Cameras are defined for each frame
+  // - World points are available
   // (if use_lmq == false then use amoeba)
   bool find_missing_correspondences(unsigned win_radius,
                                     unsigned search_radius, bool use_lmq = true);
-  //: Recompute cameras and world points on the current set of correspondences 
-  // Assumptions: 1) Cameras are defined for each frame
-  //              2) Correspondences are defined for each frame
+  //: Recompute cameras and world points on the current set of correspondences
+  // Assumptions:
+  // - Cameras are defined for each frame
+  // - Correspondences are defined for each frame
   bool refine_world_pts_and_cameras();
-
 
   void close(); //close all streams and clear data
   void print_frame_alignment_quality(unsigned start_frame, unsigned end_frame);
- protected:
 
   // INTERNALS-----------------------------------------------------------------
+
+ protected:
   //: compute the boolean mask defining which frames have coorespondences
-  void mask(unsigned& min_frame, unsigned& max_frame, 
+  void mask(unsigned& min_frame, unsigned& max_frame,
             vcl_vector<vcl_vector<bool> >& mask);
 
   //: get a float view of the frame at the specified index
   bool frame_at_index(unsigned frame_index, vil_image_view<float>& view);
 
-  //: extract the float pixel windows for start and end frames used to
-  //  find correspondences
+  //: extract the float pixel windows for start and end frames used to find correspondences
   void compute_ab_corr_windows(unsigned match_radius,
                                vcl_vector<bool> const& mask_a,
                                vcl_vector<bool> const& mask_b);
 
-
-
   //: find correpondences on frame_index_x, between two frames,a and b
-  // it must be true that index_a < index_x < index_b
-  // if use_lmq = true levenberg_marquardt is used to refine the correspondence
+  // It must be true that index_a < index_x < index_b
+  // If use_lmq = true levenberg_marquardt is used to refine the correspondence
   // position otherwise the amoeba algorithm is used
   bool find_missing_corrs(unsigned frame_index_a, vcl_vector<bool> mask_a,
                           unsigned frame_index_b, vcl_vector<bool> mask_b,
                           unsigned frame_index_x, unsigned win_radius,
                           unsigned search_radius, bool use_lmq);
 
-  //: iterpolate between the set of known cameras (kcams). The vector,
-  // unknown, specifies which cameras are unknown. The number of elements
-  // in icams is the same as in unknown. The number of false entries in
-  // unknown must be the same as the size of kcams.
+  //: iterpolate between the set of known cameras (\a kcams).
+  // The vector \a unknown specifies which cameras are unknown.
+  // The number of elements in \a icams is the same as in \a unknown.
+  // The number of false entries in \a unknown must be the same as the size of \a kcams.
   bool interpolate_cameras(vcl_vector<vpgl_perspective_camera<double> > kcams,
-                           vcl_vector<bool> unknown, 
+                           vcl_vector<bool> unknown,
                            vcl_vector<vpgl_perspective_camera<double> >& icams);
+
 //: search each pixel location in a square around the specified position
-// the result is set back onto the position argument. RMS intensity difference
+// The result is set back onto the position argument. RMS intensity difference
 // at the start and end of the search is reported
 void exhaustive_init(vnl_vector<double>& unknowns,
                      unsigned win_radius,
@@ -202,9 +202,9 @@ void exhaustive_init(vnl_vector<double>& unknowns,
    //: video_path name
   vcl_string camera_path_;
 
- //: the list of corrs
+  //: the list of corrs
   vcl_vector<bwm_video_corr_sptr> corrs_;
-   //: the video input stream - currently only image list is supported
+  //: the video input stream - currently only image list is supported
   vidl2_istream_sptr video_istr_;
   //: the camera input stream - currently only camera list is supported
   bwm_video_cam_istream_sptr cam_istr_;
@@ -212,7 +212,7 @@ void exhaustive_init(vnl_vector<double>& unknowns,
   bwm_video_cam_ostream_sptr cam_ostr_;
 
   //: the current set of cameras
-  vcl_vector<vpgl_perspective_camera<double> > cameras_;  
+  vcl_vector<vpgl_perspective_camera<double> > cameras_;
   //: the start index for correspondence processing
   unsigned frame_index_a_;
   //: the end index for correspondence processing

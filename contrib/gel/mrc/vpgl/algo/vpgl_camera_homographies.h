@@ -20,34 +20,30 @@
 class vpgl_camera_homographies
 {
  public:
-  // The following four methods compute a homography with respect to a 
+  // The following four methods compute a homography with respect to a
   // world plane. The homography is computed by transforming the plane
   // to the X-Y plane and applying the inverse transformation to the camera.
-  // Columns 0, 1, and 3 of the transformed camera matrix are extracted 
-  // to form the homography. 
+  // Columns 0, 1, and 3 of the transformed camera matrix are extracted
+  // to form the homography.
 
-  //: create a plane projective transformation from the camera image plane to
-  //  the specified plane
-  static  vgl_h_matrix_2d<double> 
+  //: create a plane projective transformation from the camera image plane to the specified plane
+  static  vgl_h_matrix_2d<double>
     homography_from_camera(vpgl_proj_camera<double> const& cam,
                            vgl_plane_3d<double> const& plane);
 
-  //: create a plane projective transformation from the camera image plane to
-  //  the specified plane
-  static  vgl_h_matrix_2d<double> 
+  //: create a plane projective transformation from the camera image plane to the specified plane
+  static  vgl_h_matrix_2d<double>
     homography_from_camera(vpgl_perspective_camera<double> const& cam,
                            vgl_plane_3d<double> const& plane);
 
 
-  //: create a plane projective transformation from the specified plane
-  //  to the camera image plane 
-  static  vgl_h_matrix_2d<double> 
+  //: create a plane projective transformation from the specified plane to the camera image plane
+  static  vgl_h_matrix_2d<double>
     homography_to_camera(vpgl_proj_camera<double> const& cam,
                          vgl_plane_3d<double> const& plane);
 
-  //: create a plane projective transformation from the specified plane
-  //  to the camera image plane 
-  static  vgl_h_matrix_2d<double> 
+  //: create a plane projective transformation from the specified plane to the camera image plane
+  static  vgl_h_matrix_2d<double>
     homography_to_camera(vpgl_perspective_camera<double> const& cam,
                          vgl_plane_3d<double> const& plane);
 
