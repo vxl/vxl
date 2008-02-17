@@ -6,7 +6,6 @@
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vpgl/bgeo/bgeo_lvcs.h>
 #include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_double_3.h>
 
 //a rational camera from a commercial satellite image
 vpgl_rational_camera<double> construct_rational_camera()
@@ -65,14 +64,14 @@ static void test_local_rational_camera()
   double xoff = rcam.offset(vpgl_rational_camera<double>::X_INDX);
   double yoff = rcam.offset(vpgl_rational_camera<double>::Y_INDX);
   double zoff = rcam.offset(vpgl_rational_camera<double>::Z_INDX);
-  
+
   bgeo_lvcs lvcs(yoff, xoff, zoff);
   vpgl_local_rational_camera<double> lrcam(lvcs, rcam);
   double ug, vg, ul, vl;
   rcam.project(xoff, yoff, zoff, ug, vg);
   lrcam.project(0.0, 0.0, 0.0, ul, vl);
-  vcl_cout << "Global (u v) (" << ug << ' ' << vg << ")\n";
-  vcl_cout << "Local (u v) (" << ul << ' ' << vl << ")\n";
+  vcl_cout << "Global (u v) (" << ug << ' ' << vg << ")\n"
+           << "Local (u v) (" << ul << ' ' << vl << ")\n";
   TEST_NEAR("local projection", vcl_fabs(ug-ul)+vcl_fabs(vg-vl), 0.0, 1e-3);
   //---- test file I/O
   vcl_string path = "./test.lrcam";
