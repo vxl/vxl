@@ -1,39 +1,33 @@
-// This is brl/bprb/bprb_batch_process_manager.h
+// This is brl/bpro/bprb/bprb_batch_process_manager.h
 #ifndef bprb_batch_process_manager_h_
 #define bprb_batch_process_manager_h_
-
 //:
 // \file
-// \brief This file defines a process manager for handing batch processing
-// i.e. no user interface
+// \brief This file defines a process manager for handing batch processing, i.e. no user interface
 // \author J.L. Mundy
 // \date 1/31/2008
 //
 // \verbatim
 //  Modifications
-//           
+//   <none yet>
 // \endverbatim
 
 
 #include <vcl_vector.h>
-#include <vcl_map.h>
-#include <vcl_set.h>
 #include <vcl_string.h>
-#include <vbl/vbl_ref_count.h>
 #include <bprb/bprb_process_sptr.h>
 #include <bprb/bprb_process_manager.h>
 #include <brdb/brdb_value_sptr.h>
 
 class bprb_batch_process_manager : public bprb_process_manager<bprb_batch_process_manager>
 {
-public:
-
-   //: Destructor
+ public:
+  // Destructor
   virtual ~bprb_batch_process_manager();
-  
+
   //: clear the database for new script processing
   bool clear();
-  
+
   //: initialize the process
   bool init_process(vcl_string const& process_name);
 
@@ -55,7 +49,7 @@ public:
   //: remove data from the database
   bool remove_data(unsigned id);
 
-  //: Initilize the current process state variables
+  //: Initialize the current process state variables
   bool process_init();
 
   //: Run the current process
@@ -65,12 +59,12 @@ public:
   void print_db();
 
   friend class bprb_process_manager<bprb_batch_process_manager>;
-protected:
-  
-  //: Constructor
+
+ protected:
+  // Constructor
   bprb_batch_process_manager();
 
-  //: Members
+  // Members
   bprb_process_sptr current_process_;
 };
 
