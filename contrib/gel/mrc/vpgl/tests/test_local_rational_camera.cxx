@@ -94,6 +94,7 @@ static void test_local_rational_camera()
   lrc_r->project(0.0, 0.0, 0.0, ulb, vlb);
   TEST_NEAR("read from binary file", vcl_fabs(ug-ulb)+vcl_fabs(vg-vlb),
             0.0, 1e-3);
+  vpl_unlink(b_path.c_str());
   //-- test other geographic locations
   double x0 = -71.402457, y0 = 41.821589, z0 = 20;
   double ug0, vg0, ul0, vl0;
