@@ -12,55 +12,62 @@
 #include <vnl/vnl_double_3x3.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
-
-
 class vpgl_interpolate
 {
  public:
   ~vpgl_interpolate();
 
-  //: the log of a rotation matrix 
+  //: the log of a rotation matrix
   //
+  //  \verbatim
   //               phi
   // log(R) =   --------- (R - transpose(R))
   //           2*sin(phi)
+  //  \endverbatim
   //
   // where 1 + 2*cos(phi) = Trace(R)
   //
   //
   static vnl_double_3x3 logR(vnl_double_3x3 const& R);
-  
-  //: the exponential form of a rotation Lie algebra element 
+
+  //: the exponential form of a rotation Lie algebra element
   //
-  //                  sin(|r|)     1-cos(|r|)        
+  //  \verbatim
+  //                  sin(|r|)     1-cos(|r|)
   // exp(r) = I  +  --------- r   ----------- r*r
   //                    |r|         |r|*|r|
+  //  \endverbatim
   //
   // where r is a skew-symmetric matric matrix formed from a vector, v as,
+  //  \verbatim
   //        _             _
   //       |  0   -vz   vy |
   //   r = |  vz   0   -vx | ,and |r| = |v|. Note this norm is different from
   //       | -vy   vx   0  |   the Frobenius norm of r as a 3x3 matrix.
   //        -             -
+  //  \endverbatim
   //
   static vnl_double_3x3 expr(vnl_double_3x3 const& r);
 
-
-  //: the "A" matrix in the exp operator for Special Euclidiean 3-d (SE3)
+  //: the "A" matrix in the exp operator for Special Euclidean 3-d (SE3)
   //  Let r be as above.
-  //  Then 
+  //  Then
+  //  \verbatim
   //                    1 - cos(|r|)         |r| - sin(|r|)
   //            A = I + ------------ r   +   -------------- r*r
   //                      |r|*|r|             |r|*|r|*|r|
+  //  \endverbatim
   //
   static vnl_double_3x3 A(vnl_double_3x3 const& r);
 
-  //: the inverse A  matrix for log operator on Special Euclidiean 3-d (SE3)
+  //: the inverse A  matrix for log operator on Special Euclidean 3-d (SE3)
   //  Let r be as above.
-  //  Then 
+  //  Then
+  //  \verbatim
   //                       1       2*sin(|r|)-|r|*(1+cos(|r|)
   //            Ainv = I + - r  +  -------------------------- r*r
-  //                       2            2 |r|*|r|*sin(|r|)   
+  //                       2            2 |r|*|r|*sin(|r|)
+  //  \endverbatim
   //
   static vnl_double_3x3 Ainv(vnl_double_3x3 const& r);
 
@@ -72,7 +79,7 @@ class vpgl_interpolate
   //  R(s) = R0*exp(s r)
   //  where r = log(transpose(R0).R1)
   //
-  // for more details, see 
+  // for more details, see
   // F. C. Park, B. Ravani,"Smooth invariant interpolation of rotations,"
   // ACM Transactions on Graphics, Vol. 16, No. 3, July 1997, pp. 277-295.
   //
@@ -89,14 +96,12 @@ class vpgl_interpolate
                             vcl_vector<vnl_double_3x3>& Rintrp,
                             vcl_vector<vnl_double_3>& tintrp);
 
-
-  //:Interpolate between two perpspective cameras with the same K
-  // given that cam0 = K[R0|t0], cam1 = K[R1|t1]
+  //:Interpolate between two perpspective cameras with the same K given that cam0 = K[R0|t0], cam1 = K[R1|t1]
   // The interpolation produces cameras on uniform intervals in Lie distance
   static bool interpolate(vpgl_perspective_camera<double> const& cam0,
-                        vpgl_perspective_camera<double> const& cam1,
-                        unsigned n_between,
-                        vcl_vector<vpgl_perspective_camera<double> >& cams);
+                          vpgl_perspective_camera<double> const& cam1,
+                          unsigned n_between,
+                          vcl_vector<vpgl_perspective_camera<double> >& cams);
 
  private:
   //: constructor private - static methods only
