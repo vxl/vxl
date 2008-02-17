@@ -402,7 +402,7 @@ void draw_filled_polygon_geom (SoGroup* root, const vcl_vector<bmsh3d_vertex*>& 
   for (unsigned int i=0; i<vertices.size(); i++)
     verts[i] = SbVec3f (vertices[i]->pt().x(), vertices[i]->pt().y(), vertices[i]->pt().z());
 
-  _draw_filled_polygon_geom (root, verts, vertices.size());
+  draw_filled_polygon_geom_ (root, verts, vertices.size());
 
   delete[] verts;
 }
@@ -427,7 +427,7 @@ SoSeparator* draw_filled_polygon (SbVec3f* vertices, const unsigned int nVertice
   material->transparency = fTransparency;
   root->addChild (material);
 
-  _draw_filled_polygon_geom (root, vertices, nVertices);
+  draw_filled_polygon_geom_ (root, vertices, nVertices);
 
   return root;
 }
@@ -448,14 +448,14 @@ SoSeparator* draw_filled_polygon (float** vertices, const unsigned int nVertices
   for (unsigned int i=0; i<nVertices; i++)
     verts[i] = SbVec3f (vertices[i][0], vertices[i][1], vertices[i][2]);
 
-  _draw_filled_polygon_geom (root, verts, nVertices);
+  draw_filled_polygon_geom_ (root, verts, nVertices);
 
   delete[] verts;
   return root;
 }
 
 // draw a simple filled polygon with no special properties
-void _draw_filled_polygon_geom (SoGroup* root, SbVec3f* vertices, const unsigned int nVertices)
+void draw_filled_polygon_geom_ (SoGroup* root, SbVec3f* vertices, const unsigned int nVertices)
 {
   SoCoordinate3* coords = new SoCoordinate3;
   coords->point.setValues (0, nVertices, vertices);

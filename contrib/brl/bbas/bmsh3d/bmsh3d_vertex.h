@@ -1,7 +1,7 @@
 // This is brl/bbas/bmsh3d/bmsh3d_vertex.h
 //---------------------------------------------------------------------
-#ifndef _bmsh3d_vertex_h_
-#define _bmsh3d_vertex_h_
+#ifndef bmsh3d_vertex_h_
+#define bmsh3d_vertex_h_
 //:
 // \file
 // \brief Basic 3d point sample on a mesh
@@ -137,8 +137,8 @@ class bmsh3d_vertex : public vispt_elm
     return clear_ptr_list (F_list_);
   }
   void add_F (void* F) {
-    bmsh3d_ptr_node* cur = new bmsh3d_ptr_node (F);
-    _add_to_ptr_list_head (F_list_, cur);
+    bmsh3d_ptr_node* curr = new bmsh3d_ptr_node (F);
+    _add_to_ptr_list_head (F_list_, curr);
   }
 
   int id () const {
@@ -270,4 +270,4 @@ bool is_F_V_incidence (bmsh3d_vertex* V, const bmsh3d_vertex* V1, const bmsh3d_v
 
 bmsh3d_edge* V_find_other_E (const bmsh3d_vertex* V, const bmsh3d_edge* inputE);
 
-#endif // _bmsh3d_vertex_h_
+#endif // bmsh3d_vertex_h_
