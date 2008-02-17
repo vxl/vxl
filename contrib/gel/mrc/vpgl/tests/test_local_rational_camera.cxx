@@ -95,6 +95,19 @@ static void test_local_rational_camera()
   lrc_r->project(0.0, 0.0, 0.0, ulb, vlb);
   TEST_NEAR("read from binary file", vcl_fabs(ug-ulb)+vcl_fabs(vg-vlb),
             0.0, 1e-3);
+  //-- test other geographic locations
+  double x0 = -71.402457, y0 = 41.821589, z0 = 20;
+  double ug0, vg0, ul0, vl0;
+  rcam.project(x0, y0, z0, ug0, vg0);
+  lrcam.project(202.47, 0, 50, ul0, vl0);
+  TEST_NEAR("test displacement East", vcl_fabs(ug0-ul0)+vcl_fabs(vg0-vl0),
+            0.0, 3);
+  double x1 = -71.404887, y1 = 41.823402, z1 = 16;
+  double ug1, vg1, ul1, vl1;
+  rcam.project(x1, y1, z1, ug1, vg1);
+  lrcam.project(0, 200, 46, ul1, vl1);
+  TEST_NEAR("test displacement North", vcl_fabs(ug1-ul1)+vcl_fabs(vg1-vl1),
+            0.0, 3);
 }
 
 TESTMAIN(test_local_rational_camera);
