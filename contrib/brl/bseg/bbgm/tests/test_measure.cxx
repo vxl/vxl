@@ -1,6 +1,4 @@
 #include <testlib/testlib_test.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
 #include <vcl_iostream.h>
 
 #include <bbgm/bbgm_image_of.h>
@@ -23,9 +21,9 @@
 void init_random_image(vil_image_view<float>& img)
 {
   vnl_random rand;
-  for(unsigned int p=0; p<img.nplanes(); ++p)
-    for(unsigned int j=0; j<img.nj(); ++j)
-      for(unsigned int i=0; i<img.ni(); ++i)
+  for (unsigned int p=0; p<img.nplanes(); ++p)
+    for (unsigned int j=0; j<img.nj(); ++j)
+      for (unsigned int i=0; i<img.ni(); ++i)
         img(i,j,p) = static_cast<float>(rand.drand32());
 }
 
@@ -62,22 +60,22 @@ MAIN( test_measure )
   update(model,img,updater);
   double up_time = time.real() / 1000.0;
   vcl_cout << " updated in " << up_time << " sec" <<vcl_endl;
-  for(unsigned j = 0; j<nj; ++j)
-	  for(unsigned i = 0; i<ni; ++i){
+  for (unsigned j = 0; j<nj; ++j)
+    for (unsigned i = 0; i<ni; ++i) {
       obs_mix_gauss_type& om = model(i, j);
       gauss_type g =  om.distribution(0);
       vcl_cout << "weight:"<< om.weight(0) << " mean(" << g.mean() << ") dcvar(" << g.diag_covar() <<")\n";
-      }
+    }
   bsta_probability_functor<mix_gauss_type> functor_;
   vil_image_view<float> result;
   float delta = 0.01f;
   measure(model, img, result, functor_, delta);
-  for(unsigned j = 0; j<nj; ++j)
-    {
-		for(unsigned i = 0; i<ni; ++i)
-        vcl_cout << result(i,j) << ' ';
-      vcl_cout << '\n';
-    }
+  for (unsigned j = 0; j<nj; ++j)
+  {
+    for (unsigned i = 0; i<ni; ++i)
+      vcl_cout << result(i,j) << ' ';
+    vcl_cout << vcl_endl;
+  }
   TEST_NEAR("measure probability", 1.60547e-005, result(0,0), 1.60547e-008);
   SUMMARY();
 }
