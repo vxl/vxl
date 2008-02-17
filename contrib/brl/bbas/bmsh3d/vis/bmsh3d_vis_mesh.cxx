@@ -33,7 +33,7 @@
 #include <Inventor/engines/SoTimeCounter.h>
 #include <Inventor/engines/SoCalculator.h>
 
-int _count_faces_indices (const vcl_vector<vcl_vector<int> >& faces)
+int count_faces_indices_ (const vcl_vector<vcl_vector<int> >& faces)
 {
   unsigned int total = 0;
   for (unsigned int i=0; i<faces.size(); i++)
@@ -56,7 +56,7 @@ void draw_ifs_geom (SoGroup* root,
 
   //Assign faces
   SoVertexProperty* vp = new SoVertexProperty;
-  unsigned int n_ind = _count_faces_indices (faces);
+  unsigned int n_ind = count_faces_indices_ (faces);
   int* ind = new int [n_ind];
   unsigned int k = 0;
   for (unsigned int i=0; i<faces.size(); i++) {
@@ -274,7 +274,7 @@ SoSeparator* draw_ifs (vcl_set<bmsh3d_vertex*>& pts, vcl_set<bmsh3d_face*>& face
 //  return:
 //     SoVertexProperty* vp,
 //     int *ind
-void _draw_M_ifs_geom (bmsh3d_mesh* M, SoVertexProperty* vp, int n_ind, int* ind)
+void draw_M_ifs_geom_ (bmsh3d_mesh* M, SoVertexProperty* vp, int n_ind, int* ind)
 {
   int nVertices = M->vertexmap().size();
   float (*xyz)[3] = new float[nVertices][3];
@@ -315,7 +315,7 @@ void _draw_M_ifs_geom (bmsh3d_mesh* M, SoVertexProperty* vp, int n_ind, int* ind
   delete []xyz;
 }
 
-void _draw_M_mhe_geom (bmsh3d_mesh* M, SoVertexProperty* vp, int n_ind, int* ind)
+void draw_M_mhe_geom_ (bmsh3d_mesh* M, SoVertexProperty* vp, int n_ind, int* ind)
 {
   int nVertices = M->vertexmap().size();
   float (*xyz)[3] = new float[nVertices][3];
@@ -364,7 +364,7 @@ void draw_M_ifs_geom (SoGroup* root, bmsh3d_mesh* M)
   unsigned int n_ind = M->_count_faces_indices_ifs();
   int* ind = new int [n_ind];
 
-  _draw_M_ifs_geom (M, vp, n_ind, ind);
+  draw_M_ifs_geom_ (M, vp, n_ind, ind);
 
   SoIndexedFaceSet* indexedFaceSet = new SoIndexedFaceSet ();
   indexedFaceSet->vertexProperty = vp;
@@ -381,7 +381,7 @@ void draw_M_mhe_geom (SoGroup* root, bmsh3d_mesh* M)
   unsigned int n_ind = M->_count_faces_indices_mhe();
   int* ind = new int [n_ind];
 
-  _draw_M_mhe_geom (M, vp, n_ind, ind);
+  draw_M_mhe_geom_ (M, vp, n_ind, ind);
 
   SoIndexedFaceSet* indexedFaceSet = new SoIndexedFaceSet ();
   indexedFaceSet->vertexProperty = vp;
