@@ -209,7 +209,8 @@ class vpgl_rational_camera : public vpgl_camera<T>
   bool save(vcl_string cam_path);
 
   // binary IO
-   //: Binary save self to stream.
+
+  //: Binary save self to stream.
   virtual void b_write(vsl_b_ostream &os) const;
 
   //: Binary load self from stream.

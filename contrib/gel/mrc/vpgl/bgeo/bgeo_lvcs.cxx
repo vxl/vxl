@@ -641,7 +641,9 @@ vcl_ostream& operator << (vcl_ostream& os, const bgeo_lvcs& local_coord_sys)
   local_coord_sys.print(os);
   return os;
 }
+
 // binary IO
+
 //: Binary save self to stream.
 void bgeo_lvcs::b_write(vsl_b_ostream &os) const
 {

@@ -12,7 +12,6 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
-#include <vcl_vector.h>
 #include <vbl/vbl_ref_count.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
@@ -23,6 +22,7 @@ class bwm_video_cam_ostream : public vbl_ref_count
  public:
 
   // Constructors/Initializers/Destructors-------------------------------------
+
   //: Default
   bwm_video_cam_ostream();
 
@@ -54,12 +54,9 @@ class bwm_video_cam_ostream : public vbl_ref_count
   // \retval false if the image could not be written
   bool write_camera(const vpgl_perspective_camera<double>* cam);
 
-
-
  protected:
 
   // INTERNALS-----------------------------------------------------------------
-
 
   // Data Members--------------------------------------------------------------
 
@@ -75,7 +72,6 @@ class bwm_video_cam_ostream : public vbl_ref_count
 
   //: The camera file format to use (currently vsl binary io)
   vcl_string file_format_;
-
 };
 
 #endif

@@ -9,7 +9,6 @@
 
 #include <vpgl/vpgl_rational_camera.h>
 #include <vgl/vgl_fwd.h>
-#include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
@@ -26,12 +25,12 @@ class vpgl_ray
   // of the x-y plane. This assumption is necessary since some cameras
   // don't have a natural center of projection (e.g. rational cameras).
 
-  // vnl interface
-  //:compute the ray at a given 3-d point
-static  bool ray(const vpgl_camera<double>* cam,
+       // === vnl interface ===
 
-                 vnl_double_3 const& point_3d,
-                 vnl_double_3& ray);
+  //:compute the ray at a given 3-d point
+  static  bool ray(const vpgl_camera<double>* cam,
+                   vnl_double_3 const& point_3d,
+                   vnl_double_3& ray);
 
        // === vgl interface ===
 
@@ -42,7 +41,8 @@ static  bool ray(const vpgl_camera<double>* cam,
 
             // +++ concrete rational camera interfaces +++
 
-  // vnl interface
+       // === vnl interface ===
+
   //:compute the ray at a given 3-d point
   static bool ray(vpgl_rational_camera<double> const& rcam,
                   vnl_double_3 const& point_3d,

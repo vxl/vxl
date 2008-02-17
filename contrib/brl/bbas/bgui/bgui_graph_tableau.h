@@ -29,7 +29,7 @@ class bgui_graph_tableau : public  vgui_tableau
   ~bgui_graph_tableau();
 
   //: Update the graph with new data
-  //: Single plot
+  //  Single plot
   void update(vcl_vector<double> const& pos, vcl_vector<double> const & vals);
   void update(vcl_vector<float> const& pos, vcl_vector<float> const & vals);
   //: multiple plots. The current implementation requires pos to contain the same horizontal axis values. 

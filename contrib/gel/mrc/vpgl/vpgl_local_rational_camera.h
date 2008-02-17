@@ -9,7 +9,7 @@
 //
 // Rational camera models are defined with respect to global geographic
 // coordinates. In many applications it is necessary to project points wiht
-// local 3-d Cartesian coordinates. This camera class incorporates a 
+// local 3-d Cartesian coordinates. This camera class incorporates a
 // Local Vertical Coordinate System (LVCS) to convert local coordinates
 // to geographic coordinates to input to the native geographic RPC model.
 
@@ -51,7 +51,7 @@ class vpgl_local_rational_camera : public vpgl_rational_camera<T>
   void set_lvcs(bgeo_lvcs const& lvcs){lvcs_ = lvcs;}
 
   bgeo_lvcs lvcs(){return lvcs_;}
-  
+
   //: The generic camera interface. u represents image column, v image row.
   virtual void project(const T x, const T y, const T z, T& u, T& v) const;
 
@@ -73,13 +73,14 @@ class vpgl_local_rational_camera : public vpgl_rational_camera<T>
   bool save(vcl_string cam_path);
 
   // binary IO
-   //: Binary save self to stream.
+
+  //: Binary save self to stream.
   virtual void b_write(vsl_b_ostream &os) const;
 
   //: Binary load self from stream.
   virtual void b_read(vsl_b_istream &is);
 
-   protected:
+ protected:
   bgeo_lvcs lvcs_;
 };
 

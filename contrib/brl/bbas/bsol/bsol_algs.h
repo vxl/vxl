@@ -117,13 +117,15 @@ class bsol_algs
   //: Compute the tragent to a vsol_digital_curve_2d at the specified index
   static void tangent(vsol_digital_curve_2d_sptr const& dc, unsigned index,
                       double& dx, double& dy);
-  //: 
-  //: print methods
-  static void print(vsol_box_2d_sptr const& b);
-  static void print(vsol_box_3d_sptr const& b);
-  static void print(vsol_point_2d_sptr const& p);
-  static void print(vsol_point_3d_sptr const& p);
 
+  //: print method
+  static void print(vsol_box_2d_sptr const& b);
+  //: print method
+  static void print(vsol_box_3d_sptr const& b);
+  //: print method
+  static void print(vsol_point_2d_sptr const& p);
+  //: print method
+  static void print(vsol_point_3d_sptr const& p);
 
  private:
   bsol_algs();

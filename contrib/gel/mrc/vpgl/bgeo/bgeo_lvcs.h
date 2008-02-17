@@ -96,7 +96,8 @@ class bgeo_lvcs : public vbl_ref_count
   friend vcl_ostream& operator << (vcl_ostream& os, const bgeo_lvcs& local_coord_sys);
 
   // binary IO
-   //: Binary save self to stream.
+
+  //: Binary save self to stream.
   virtual void b_write(vsl_b_ostream &os) const;
 
   //: Binary load self from stream.
