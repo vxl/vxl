@@ -126,16 +126,16 @@ bool vpgl_local_rational_camera<T>::save(vcl_string cam_path)
            << "SpecId = \"RPC00B\";\n"
            << "BEGIN_GROUP = IMAGE\n"
            << "\n\n"  // skip errBias and errRand fields
-           << "  lineOffset = " << offset(V_INDX) << '\n'
-           << "  sampOffset = " << offset(U_INDX) << '\n'
-           << "  latOffset = " << offset(Y_INDX) << '\n'
-           << "  longOffset = " << offset(X_INDX) << '\n'
-           << "  heightOffset = " << offset(Z_INDX) << '\n'
-           << "  lineScale = " << scale(V_INDX) << '\n'
-           << "  sampScale = " << scale(U_INDX) << '\n'
-           << "  latScale = " << scale(Y_INDX) << '\n'
-           << "  longScale = " << scale(X_INDX) << '\n'
-           << "  heightScale = " << scale(Z_INDX) << '\n';
+           << "  lineOffset = " << offset(vpgl_rational_camera<T>::V_INDX) << '\n'
+           << "  sampOffset = " << offset(vpgl_rational_camera<T>::U_INDX) << '\n'
+           << "  latOffset = " << offset(vpgl_rational_camera<T>::Y_INDX) << '\n'
+           << "  longOffset = " << offset(vpgl_rational_camera<T>::X_INDX) << '\n'
+           << "  heightOffset = " << offset(vpgl_rational_camera<T>::Z_INDX) << '\n'
+           << "  lineScale = " << scale(vpgl_rational_camera<T>::V_INDX) << '\n'
+           << "  sampScale = " << scale(vpgl_rational_camera<T>::U_INDX) << '\n'
+           << "  latScale = " << scale(vpgl_rational_camera<T>::Y_INDX) << '\n'
+           << "  longScale = " << scale(vpgl_rational_camera<T>::X_INDX) << '\n'
+           << "  heightScale = " << scale(vpgl_rational_camera<T>::Z_INDX) << '\n';
   vnl_matrix_fixed<double,4,20> coeffs = this->coefficient_matrix();
   file_out << "  lineNumCoef = (";
   for (int i=0; i<20; i++) {
