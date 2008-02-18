@@ -97,7 +97,7 @@ void bwm_site_process::RunBackgroundTask()
           vcl_cout << "Deleting the image from the site...\n";
           vcl_string command = "rd /q /s \"" + img_path + "\"";
           if (system(command.data()) != 0)
-            vcl_cerr << "An error occured while removing the folder\n";
+            vcl_cerr << "An error occurred while removing the folder\n";
         }
       }
       delete site_->tableaus_[idx];
@@ -214,7 +214,7 @@ void bwm_site_process::RunBackgroundTask()
                                                                      base, act[i], img_path);
           site_->tableaus_.push_back(img_tab);
 #endif // 0
-          // do not create a tableu for now
+          // do not create a tableau for now
           vcl_cerr <<  "\nNITF camera is not successfully created, not creating the tableau!\n";
         }
       }
