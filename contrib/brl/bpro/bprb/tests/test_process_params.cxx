@@ -9,23 +9,13 @@
 #include "bprb_test_process.h"
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
-#include <bxml/bxml_write.h>
+//#include <bxml/bxml_write.h>
 
 int test_process_params_main(int argc, char* argv[] )
 {
   vcl_cout << "Start test process\n";
   REG_PROCESS(bprb_test_process, bprb_batch_process_manager);
   REGISTER_DATATYPE(float);
-
-  // create the simple XML paramater file
-  bxml_document doc;
-  bxml_element * root = new bxml_element("Process");
-  doc.set_root_element(root);
-
-  root->set_attribute("prm1","10.0");
-  root->set_attribute("add_sub","true");
-  root->append_text("\n   ");
-  bxml_write("params.xml", doc);
 
   // set the inputs 
   brdb_value_sptr v0 = new brdb_value_t<float>(1.0f);
