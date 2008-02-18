@@ -14,13 +14,13 @@
 #include "io/bwm_io_config_parser.h"
 #include "process/bwm_site_process.h"
 
-#include <vcl_vector.h>
-
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_dialog_extensions.h>
+#if 0
 #include <vil/vil_image_resource_sptr.h>
+#endif
 
 #include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
@@ -72,17 +72,14 @@ class bwm_tableau_mgr
   bool row_added_;
 
   bool display_image_path_;
-
-  //vgui_range_map_params_sptr range_params(vil_image_resource_sptr const& image);
-
+#if 0
+  vgui_range_map_params_sptr range_params(vil_image_resource_sptr const& image);
+#endif
   void add_to_grid(vgui_tableau_sptr tab);
 
   void add_to_grid(vgui_tableau_sptr tab, unsigned& col, unsigned& row);
 
   vgui_tableau_sptr find_tableau(vcl_string name);
-
-
-  
 };
 
 #endif
