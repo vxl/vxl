@@ -108,6 +108,10 @@ class vil_nitf2_image_subheader
                        vcl_string& image_corner_geo_locations,
                        double* rpc_data );
 
+  //: sun_el --> sun elevation angle 
+  //: sun_az --> sun azimuthal angle 
+  bool get_sun_params( double& sun_el, double& sun_az);
+
  protected:
   vil_nitf2_field_sequence m_field_sequence;
   vil_nitf2_data_mask_table* m_data_mask_table;
@@ -123,6 +127,8 @@ class vil_nitf2_image_subheader
   static void add_geo_field_defs( vil_nitf2_field_definitions* defs, const vil_nitf2_classification::file_version& version );
   static void add_shared_field_defs_3( vil_nitf2_field_definitions* defs );
   static void add_rpc_definitions();
+  static void add_USE_definitions();
+
   static vil_nitf2_field_definitions* s_field_definitions_21;
   static vil_nitf2_field_definitions* s_field_definitions_20;
   // so these static members can be cleaned up when the program is done

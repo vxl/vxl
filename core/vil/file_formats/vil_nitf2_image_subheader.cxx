@@ -24,7 +24,8 @@ vil_nitf2_image_subheader::vil_nitf2_image_subheader(vil_nitf2_classification::f
                      *get_field_definitions_21()),
     m_data_mask_table(0),
     m_version(version)
-{ add_rpc_definitions(); }
+{ add_rpc_definitions(); 
+  add_USE_definitions();}
 
 vil_nitf2_image_subheader::~vil_nitf2_image_subheader()
 {
@@ -516,6 +517,60 @@ void vil_nitf2_image_subheader::add_rpc_definitions()
     .end();  // of RPCA TRE
   }
 }
+void vil_nitf2_image_subheader::add_USE_definitions()
+{
+  vil_nitf2_tagged_record_definition* tr =vil_nitf2_tagged_record_definition::find("USE00A");
+  if (!tr)
+  {
+    vil_nitf2_tagged_record_definition::define("USE00A", "EXPLOITATION USABILITY EXTENSION FORMAT" )
+
+    .field("ANGLE_TO_NORTH","Angle to North",  NITF_INT(3))                 // not used, but must read
+    .field("MEAN_GSD",      "Mean Ground Sample Distance",NITF_DBL(5, 1, false), false) // not used, but must read
+    .field("Reserved1", "",NITF_STR(1), false)
+    .field("DYNAMIC_RANGE", "Dynamic Range",NITF_LONG(5,  false), true) // not used
+    .field("Reserved2", "",NITF_STR(7), false)
+    .field("OBL_ANG",       "Obliquity Angle",        NITF_DBL(5,2,false), true)
+    .field("ROLL_ANG",      "Roll Angle",     NITF_DBL(6,2,true), true)
+    .field("Reserved3", "",NITF_STR(37), false)
+    .field("N_REF",         "Number of Reference Lines.",      NITF_INT(2, false), false)
+    .field("REV_NUM",       "Revolution Number",    NITF_LONG(5, false), false)
+    .field("N_SEG",         "Number of Segments",   NITF_INT(3,  false), false)
+    .field("MAX_LP_SEG",    "Maximum Lines Per Segment",         NITF_LONG(6,false), true)
+    .field("Reserved4", "",NITF_STR(12), false)
+    .field("SUN_EL",        "Sun Elevation",       NITF_DBL(5,1,true),false)
+    .field("SUN_AZ",        "Sun Azimuth",     NITF_DBL(5,1,false),false)
+
+
+    .end();  // of USE00A TRE
+  }
+}
+// Collect the Sun angles
+  bool vil_nitf2_image_subheader::
+get_sun_params( double& sun_el, double& sun_az)
+{
+
+  // Now get the sub-header TRE parameters
+  vil_nitf2_tagged_record_sequence isxhd_tres;
+  vil_nitf2_tagged_record_sequence::iterator tres_itr;
+  this->get_property("IXSHD", isxhd_tres);
+
+
+  bool success=false;
+  // Check through the TREs to find "RPC"
+  for (tres_itr = isxhd_tres.begin(); tres_itr != isxhd_tres.end(); ++tres_itr)
+  {
+    vcl_string type = (*tres_itr)->name();
+    if( type == "USE00A")
+    {
+        double sun_el;
+         success = (*tres_itr)->get_value("SUN_EL", sun_el);
+
+        double sun_az;
+        success = (*tres_itr)->get_value("SUN_AZ", sun_az);
+    }
+}
+  return success;
+}
 
 // Collect the RPC parameters for the current image. Image corners are reported
 // as a string of geographic coordinates,one for each image corner.
@@ -545,10 +600,19 @@ get_rpc_params( vcl_string& rpc_type, vcl_string& image_id,
   vil_nitf2_tagged_record_sequence::iterator tres_itr;
   this->get_property("IXSHD", isxhd_tres);
 
+
   // Check through the TREs to find "RPC"
   for (tres_itr = isxhd_tres.begin(); tres_itr != isxhd_tres.end(); ++tres_itr)
   {
     vcl_string type = (*tres_itr)->name();
+    if( type == "USE00A")
+    {
+        double sun_el;
+        success = (*tres_itr)->get_value("SUN_EL", sun_el);
+
+        double sun_az;
+        success = (*tres_itr)->get_value("SUN_AZ", sun_az);
+    }
     if ( type == "RPC00B" || type == "RPC00A") // looking for "RPC..."
     {
       // set type in return value
