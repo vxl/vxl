@@ -1,7 +1,7 @@
 // This is brl/bbas/bmsh3d/bmsh3d_mesh.h
 //---------------------------------------------------------------------
-#ifndef _bmsh3d_mesh_h_
-#define _bmsh3d_mesh_h_
+#ifndef bmsh3d_mesh_h_
+#define bmsh3d_mesh_h_
 //:
 // \file
 // \brief mesh

@@ -396,7 +396,7 @@ void draw_polyline_geom (SoGroup* root, SbVec3f* vertices, const unsigned int nV
 }
 
 
-void draw_filled_polygon_geom (SoGroup* root, const vcl_vector<bmsh3d_vertex*>& vertices)
+void draw_filled_polygon_geom_ (SoGroup* root, const vcl_vector<bmsh3d_vertex*>& vertices)
 {
   SbVec3f* verts = new SbVec3f[vertices.size()];
   for (unsigned int i=0; i<vertices.size(); i++)

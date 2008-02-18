@@ -138,7 +138,7 @@ class bmsh3d_vertex : public vispt_elm
   }
   void add_F (void* F) {
     bmsh3d_ptr_node* curr = new bmsh3d_ptr_node (F);
-    _add_to_ptr_list_head (F_list_, curr);
+    add_to_ptr_list_head_ (F_list_, curr);
   }
 
   int id () const {
