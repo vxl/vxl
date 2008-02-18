@@ -8,8 +8,6 @@
 
 #include "algo/bwm_algo.h"
 #include "algo/bwm_utils.h"
-#include <vcl_cstdio.h>
-#include <vsol/vsol_point_2d.h>
 
 #include <bgui3d/bgui3d.h>
 #include <bgui/bgui_image_utils.h>
@@ -69,7 +67,6 @@ bwm_tableau_mgr::~bwm_tableau_mgr()
 
 void bwm_tableau_mgr::add_tableau(bwm_tableau_img* tab, vcl_string name)//vgui_tableau_sptr tab, vcl_string name)
 {
-
   //create only if registered
   //bwm_command comm;
   vcl_map<vcl_string, bwm_command_sptr>::iterator iter = tab_types_.find(tab->type_name());
@@ -202,7 +199,7 @@ void bwm_tableau_mgr::add_to_grid(vgui_tableau_sptr tab, unsigned& col,
     return;
    }
 
-  // it alternatively adds rows and colums, to equally divide the grid
+  // it alternatively adds rows and columns, to equally divide the grid
   if ((tableaus_.size()%2 == 0) && (grid_->rows()*grid_->cols() == tableaus_.size())) {
     if (row_added_) {
       grid_->add_column();
