@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Process>
+  <prm1 value="10.0" type="float" desc=""/>
+  <add_sub value="true" type="bool" desc=""/>
+</Process>
