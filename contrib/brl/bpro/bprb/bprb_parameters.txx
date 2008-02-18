@@ -6,19 +6,19 @@
 // \brief Templated code for bprb parameters.
 // \author Matt Leotta, (mleotta@lems.brown.edu)
 // \date 7/2/2004
-// ported 1/30/2008  J.L. Mundy
+// \verbatim
+//  Modifications
+//   ported 1/30/2008  J.L. Mundy
+// \endverbatim
 
 #include "bprb_parameters.h"
-#include <vcl_utility.h>
-#include <vcl_iostream.h>
-
 
 //: Set the current value to \p val
 template<class T>
 bool
 bprb_param_type<T>::set_value( const T& val )
 {
-  if( has_bounds_ && (val < min_value_ || max_value_ < val) )
+  if ( has_bounds_ && (val < min_value_ || max_value_ < val) )
     return false;
 
   value_ = val;
@@ -48,10 +48,10 @@ bprb_param_type<T>::parse_string(const vcl_string& input) const
   return val;
 }
 
-//===========================================================================================
+//==============================================================================
 
 //: Use this macro to instantiate bprb_parameters for each parameter type
 #define BPRB_PARAMETERS_INSTANTIATE(T) \
-template class bprb_param_type< T >;
+template class bprb_param_type< T >
 
 #endif // bprb_parameters_txx_
