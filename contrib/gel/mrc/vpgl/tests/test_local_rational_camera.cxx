@@ -60,7 +60,7 @@ vpgl_rational_camera<double> construct_rational_camera()
 
 static void test_local_rational_camera()
 {
-  vpgl_rational_camera<double>& rcam = construct_rational_camera();
+  vpgl_rational_camera<double> rcam = construct_rational_camera();
   double xoff = rcam.offset(vpgl_rational_camera<double>::X_INDX);
   double yoff = rcam.offset(vpgl_rational_camera<double>::Y_INDX);
   double zoff = rcam.offset(vpgl_rational_camera<double>::Z_INDX);
