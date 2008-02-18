@@ -83,7 +83,7 @@ vgl_point_2d<T> vpgl_local_rational_camera<T>::project(vgl_point_3d<T> world_poi
 template <class T>
 void vpgl_local_rational_camera<T>::print(vcl_ostream& s) const
 {
-  vpgl_rational_camera::print(s);
+  vpgl_rational_camera<T>::print(s);
   s << lvcs_ <<'\n'
     <<"------------------------------------------------\n\n";
 }
