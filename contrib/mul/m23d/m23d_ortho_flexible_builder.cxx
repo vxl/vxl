@@ -10,13 +10,17 @@
 #include <m23d/m23d_correction_matrix_error.h>
 #include <m23d/m23d_select_basis_views.h>
 #include <m23d/m23d_pure_ortho_projection.h>
+
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
+
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
 #include <vcl_cstdlib.h>  // abort()
 #include <vcl_cassert.h>
+
+
 
 //: Reconstruct structure of 3D points given multiple 2D views
 //  Data assumed to be scaled orthographic projections
@@ -38,6 +42,41 @@ inline void m23d_swap_rows(vnl_matrix<double>& M,
   M.update(M.extract(n,M.cols(),j,0),i,0);  // Copy rows at j to i
   M.update(Mi,j,0);                         // Copy rows from i to j
 }
+
+
+//: Reconstruct structure from set of 2d pts
+// formulates measurement matrix P2D then calls reconstruct() function
+void m23d_ortho_flexible_builder::reconstruct(
+   const vcl_vector< vcl_vector< vgl_point_2d<double> > >& pt_vec_list,
+                            const unsigned& n_modes )
+{
+  // convert pts into a matrix
+  int nf= pt_vec_list.size();
+  int n0= pt_vec_list[0].size();
+  vnl_matrix<double> D(2*nf,n0);
+  for (int i=0; i<nf; ++i)
+  {
+    if ( n0!= pt_vec_list[i].size() )
+    {
+      vcl_cerr<<"ERROR m23d_ortho_rigid_builder::reconstruct()"<<vcl_endl;
+      vcl_cerr<<"problem with different numbers of pts"<<vcl_endl;
+      vcl_cerr<<"pt_vec_list[0].size()= "<<pt_vec_list[0].size()<<vcl_endl;
+      vcl_cerr<<"pt_vec_list["<<i<<"].size()= "<<pt_vec_list[i].size()<<vcl_endl;
+      vcl_abort();
+    }
+      
+    for (int p=0; p<n0; ++p)
+    {
+      D(2*i,p)= pt_vec_list[i][p].x();
+      D(2*i+1,p)= pt_vec_list[i][p].y();
+    }
+      
+  }
+   
+  reconstruct(D, n_modes);
+  
+}
+
 
 //: Reconstruct structure of 3D points given multiple 2D views
 //  Data assumed to be scaled orthographic projections
@@ -216,8 +255,14 @@ static vnl_matrix<double> am_solve_for_G0(const vnl_matrix<double>& A,
   vnl_matrix<double> Gk(n,3);
   for (unsigned i=0;i<3;++i)
   {
-    Gk.set_column(i,vcl_sqrt(eig.get_eigenvalue(n-1-i))
-                            *eig.get_eigenvector(n-1-i));
+    //Gk.set_column(i,vcl_sqrt(eig.get_eigenvalue(n-1-i))
+    //                        *eig.get_eigenvector(n-1-i));
+    
+ 
+    // nb critical bit making sure Gk is pos def
+    double s= vcl_sqrt(  vcl_fabs(eig.get_eigenvalue(n-1-i)) );
+    Gk.set_column(i, s*eig.get_eigenvector(n-1-i) );
+    
   }
 
   return Gk;
@@ -545,3 +590,76 @@ vnl_matrix<double> m23d_ortho_flexible_builder::shape(unsigned i) const
     S += P3D_.extract(3,np,3*j,0) * coeffs_(i,j);
   return S;
 }
+
+
+//: Get back 3d pts rotated and shifted for each frame
+void m23d_ortho_flexible_builder::get_shape_3d_pts( vcl_vector< vgl_point_3d<double> >& pts ) const
+{
+  
+  /*
+  if (P_.rows() < 2 || P_.cols() != 3 )
+  {
+    vcl_cerr<<"ERROR m23d_ortho_flexible_builder::get_shape_3d_pts()"<<vcl_endl;
+    vcl_cerr<<"problem with size of P_"<<vcl_endl;
+    vcl_cerr<<"P_.rows()= "<<P_.rows()<<vcl_endl;
+    vcl_cerr<<"P_.cols()= "<<P_.cols()<<vcl_endl;
+    vcl_abort();
+  }
+  
+ 
+  //vnl_matrix<double> newPi = m23d_scaled_ortho_projection(P_.extract(2,3,2*i,0));
+  //P_.update(newPi,2*i,0);
+  vnl_matrix<double> P0= P_.extract(2,3);
+  */
+  
+  // get projection matrix for first shape
+  vnl_matrix<double> P0=shape(0);
+    
+  // Compute a rotation matrix for this projection
+  // then update shape and
+  vnl_matrix<double> R0=m23d_rotation_from_ortho_projection(P0);
+    
+  // apply rotation to base shape
+  vnl_matrix<double> rot_pts_mat=R0* P3D_;
+  mat_to_3d_pts( pts, rot_pts_mat );   
+    
+    
+  int np= pts.size();
+  vgl_vector_3d<double> tran_vec( cog_[0].x(), cog_[0].y(), 0 );
+  for (int p=0; p<np; ++p)
+  {
+    pts[p]= pts[p] + tran_vec; 
+  }
+    
+ 
+}
+
+
+//: Return 3d rigid pts 
+// ie aligned with first frame
+void m23d_ortho_flexible_builder::mat_to_3d_pts(vcl_vector< vgl_point_3d<double> >& pt_vec,
+                                                  const vnl_matrix<double>& M) const
+{
+  /*
+  // get pts out of P3D_ matrix
+  if ( M.rows() != 3 )
+  {
+    vcl_cerr<<"ERROR m23d_ortho_flexible_builder::mat_to_3d_pts()"<<vcl_endl;
+    vcl_cerr<<"problem with size of matrix"<<vcl_endl;
+    vcl_cerr<<"M.rows()= "<<M.rows()<<vcl_endl;
+    vcl_cerr<<"M.cols()= "<<M.cols()<<vcl_endl;
+    vcl_abort();
+  }
+  */
+  
+  int np= M.cols();
+  pt_vec.resize(np);
+  for (int i=0; i<np; ++i)
+  {
+    pt_vec[i].set( M(0,i), M(1,i), M(2,i) );
+  }
+
+}
+
+
+
