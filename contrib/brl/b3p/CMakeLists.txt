@@ -9,4 +9,7 @@
 ####################################################################
 
 #XML Parser
+INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/find_expat.cmake )
+IF(HAS_EXPAT)
 SUBDIRS( expatpp )
+ENDIF(HAS_EXPAT)
