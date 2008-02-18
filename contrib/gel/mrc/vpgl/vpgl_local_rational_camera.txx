@@ -139,25 +139,25 @@ bool vpgl_local_rational_camera<T>::save(vcl_string cam_path)
   vnl_matrix_fixed<double,4,20> coeffs = this->coefficient_matrix();
   file_out << "  lineNumCoef = (";
   for (int i=0; i<20; i++) {
-    file_out << "\n    " << coeffs[NEU_V][map[i]];
+    file_out << "\n    " << coeffs[vpgl_rational_camera<T>::NEU_V][map[i]];
     if (i < 19)
       file_out << ',';
   }
   file_out << ");\n  lineDenCoef = (";
   for (int i=0; i<20; i++) {
-    file_out << "\n    " << coeffs[DEN_V][map[i]];
+    file_out << "\n    " << coeffs[vpgl_rational_camera<T>::DEN_V][map[i]];
     if (i < 19)
       file_out << ',';
   }
   file_out << ");\n  sampNumCoef = (";
   for (int i=0; i<20; i++) {
-    file_out << "\n    " << coeffs[NEU_U][map[i]];
+    file_out << "\n    " << coeffs[vpgl_rational_camera<T>::NEU_U][map[i]];
     if (i < 19)
       file_out << ',';
   }
   file_out << ");\n  sampDenCoef = (";
   for (int i=0; i<20; i++) {
-    file_out << "\n    " << coeffs[DEN_U][map[i]];
+    file_out << "\n    " << coeffs[vpgl_rational_camera<T>::DEN_U][map[i]];
     if (i < 19)
       file_out << ',';
   }
