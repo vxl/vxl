@@ -1,7 +1,7 @@
 # brl/bpro/bppy/CMakeLists.txt
 #update vxl/config/cmake/Modules folder to get the following
 
-INCLUDE( ${VXL_CMAKE_DIR}/FindPython.cmake )
+INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindPython.cmake )
 IF( PYTHON_FOUND )
   INCLUDE_DIRECTORIES( ${PYTHON_INCLUDE_DIR} )
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
