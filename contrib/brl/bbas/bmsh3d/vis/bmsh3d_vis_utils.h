@@ -42,7 +42,7 @@ void generate_color_table (unsigned long seed, unsigned int size,
 
 #define VIS_CLOSE_TH  1E-6 //1E-6
 
-inline bool _vis_too_close (const float a, const float b)
+inline bool vis_too_close_ (const float a, const float b)
 {
   //If relative error < threshold, too close.
   if (vcl_fabs((a-b)/a) < VIS_CLOSE_TH)
@@ -56,7 +56,7 @@ inline bool bmsh3d_vis_too_close (const float x1, const float y1, const float z1
                                    const float x2, const float y2, const float z2)
 {
   //if (x1==x2 && y1==y2 && z1==z2)
-  if (_vis_too_close(x1, x2) && _vis_too_close(y1, y2) && _vis_too_close(z1, z2))
+  if (vis_too_close_(x1, x2) && vis_too_close_(y1, y2) && vis_too_close_(z1, z2))
     return true;
   else
     return false;
@@ -120,7 +120,7 @@ SoSeparator* draw_filled_polygon (SbVec3f* vertices, const int unsigned nVertice
                                   const SbColor& color, const float fTransparency);
 SoSeparator* draw_filled_polygon (float** vertices, const int unsigned nVertices,
                                   const SbColor& color, const float fTransparency);
-void _draw_filled_polygon_geom (SoGroup* root, SbVec3f* vertices, const int unsigned nVertices);
+void draw_filled_polygon_geom_ (SoGroup* root, SbVec3f* vertices, const int unsigned nVertices);
 
 SoSeparator* draw_line_set (const vcl_vector<vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > >& lines,
                             const SbColor& color);
