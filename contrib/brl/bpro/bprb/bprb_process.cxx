@@ -42,9 +42,9 @@ void bprb_process::set_parameters(const bprb_parameters_sptr& params)
   parameters_ = params;
 }
 
-void bprb_process::parse_params_XML(const vcl_string& xml_path)
+bool bprb_process::parse_params_XML(const vcl_string& xml_path)
 {
-  parameters_->parse_XML(xml_path, name());
+  return parameters_->parse_XML(xml_path, name());
 }
 
 //: The number of inputs

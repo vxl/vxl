@@ -249,6 +249,20 @@ class bprb_parameters : public vbl_ref_count
     return false;
   }
 
+  //: Return the value of the parameter 
+  //  Be carefull when using this method, if the parameter DOES NOT EXIST --> returns 0
+  //  so MAKE SURE that a parameter with the given name EXISTS in the parameter list of the process
+  template<class T>
+  T value( const vcl_string& name )
+  {
+    bprb_param_type<T> * param = NULL;
+    T val = 0;
+    if( get_param(name, param) && param ){
+      val = param->value();
+    }
+    return val;
+  }
+
   //: Return the default value of the parameter named \p name by reference
   template<class T>
   bool get_default( const vcl_string& name , T& deflt ) const

@@ -54,11 +54,15 @@ bool bprb_batch_process_manager::print_default_params(vcl_string const & process
 bool bprb_batch_process_manager::set_params(vcl_string const& params_XML)
 {
   if (!current_process_) {
-    vcl_cout << "In bprb_batch_process_manager::set_input(.) -"
+    vcl_cout << "In bprb_batch_process_manager::set_params(.) -"
              << " null process\n";
     return false;
   }
-  current_process_->parse_params_XML(params_XML);
+  if (!current_process_->parse_params_XML(params_XML)) {
+    vcl_cout << "In bprb_batch_process_manager::set_params(.) -"
+      << " not able to parse the XML file: " << params_XML << "\n";
+    return false;
+  }
   return true;
 }
 

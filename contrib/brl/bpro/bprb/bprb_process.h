@@ -75,7 +75,7 @@ class bprb_process : public vbl_ref_count
   //: Set the parameters
   void set_parameters(const bprb_parameters_sptr& params);
 
-  void parse_params_XML(const vcl_string& xml_path);
+  bool parse_params_XML(const vcl_string& xml_path);
 
   //: The name of the process
   virtual vcl_string name() = 0;
@@ -109,7 +109,7 @@ class bprb_process : public vbl_ref_count
 
   //: get a particular output
   brdb_value_sptr output(unsigned i)
-    { if (i<n_inputs()) return output_data_[i]; return 0; }
+    { if (i<n_outputs()) return output_data_[i]; return 0; }
 
   //: Insure that inputs are valid
   bool verify_inputs();
