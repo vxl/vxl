@@ -31,8 +31,11 @@ class bprb_batch_process_manager : public bprb_process_manager<bprb_batch_proces
   //: initialize the process
   bool init_process(vcl_string const& process_name);
 
-  //: initialize the process, read the parameters from an XML file
-  bool set_process_params(vcl_string const& process_name, vcl_string const& params_XML);
+  //: print the default values of the process into the specified XML file
+  bool print_default_params(vcl_string const & process_name, vcl_string const& params_XML);
+
+  //: read and set the parameters from an XML file for the current process
+  bool set_params(vcl_string const& params_XML);
 
   //: set primitive data type input on current process
   bool set_input(unsigned i, brdb_value_sptr const& input);

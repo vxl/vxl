@@ -21,7 +21,7 @@ int test_process_params_main(int argc, char* argv[] )
   brdb_value_sptr v0 = new brdb_value_t<float>(1.0f);
   brdb_value_sptr v1 = new brdb_value_t<float>(2.0f);
   bool good = bprb_batch_process_manager::instance()->init_process("Process");
-  good = bprb_batch_process_manager::instance()->set_process_params("Process", "params.xml");
+  good = bprb_batch_process_manager::instance()->set_params("params.xml");
   good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
   good = good && bprb_batch_process_manager::instance()->set_input(1, v1);
   good = good && bprb_batch_process_manager::instance()->run_process();

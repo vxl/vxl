@@ -56,6 +56,9 @@ class bprb_param
   virtual vcl_string value_str() const = 0;
   //: Return a string representation of the default value
   virtual vcl_string default_str() const = 0;
+  //: Return a string representation of the type
+  virtual vcl_string type_str() const = 0;
+  
   //: Return a string representation of the minimum value
   virtual vcl_string min_str() const = 0;
   //: Return a string representation of the maximium value
@@ -124,6 +127,9 @@ class bprb_param_type : public bprb_param
   virtual vcl_string value_str() const { return create_string(value_); }
   //: Return a string representation of the default value
   virtual vcl_string default_str() const { return create_string(default_); }
+  //: Return a string representation of the default value
+  virtual vcl_string type_str() const { return (typeid(vcl_string("dummy")) == typeid(default_)) ? "string" : typeid(default_).name(); }
+
   //: Return a string representation of the minimum value
   virtual vcl_string min_str() const { return has_bounds_? create_string(min_value_) : ""; }
   //: Return a string representation of the maximium value

@@ -10,6 +10,7 @@
 #include <brdb/brdb_tuple.h>
 #include <bprb/bprb_process.h>
 #include <bprb/bprb_null_process.h>
+#include <bprb/bprb_parameters.h>
 
 //: Constructor
 bprb_batch_process_manager::bprb_batch_process_manager() : current_process_(0)
@@ -37,17 +38,28 @@ bool bprb_batch_process_manager::init_process(vcl_string const& process_name)
   return false;
 }
 
-//: initialize the process, read the parameters from an XML file
-bool bprb_batch_process_manager::set_process_params(vcl_string const& process_name,
-                                                    vcl_string const& params_XML)
+//: print the default values of the process into the specified XML file
+bool bprb_batch_process_manager::print_default_params(vcl_string const & process_name, vcl_string const& params_XML)
 {
   bprb_process_sptr p = get_process_by_name(process_name);
   if (p) {
-    vcl_cout << "Process: " << p->name() << '\n';
-    p->parse_params_XML(params_XML);
+    vcl_cout << "Printing default params for process: " << p->name() << '\n';
+    (p->parameters())->print_def_XML(p->name(), params_XML);
     return true;
   }
   return false;
+}
+
+//: read and set the parameters from an XML file for the current process
+bool bprb_batch_process_manager::set_params(vcl_string const& params_XML)
+{
+  if (!current_process_) {
+    vcl_cout << "In bprb_batch_process_manager::set_input(.) -"
+             << " null process\n";
+    return false;
+  }
+  current_process_->parse_params_XML(params_XML);
+  return true;
 }
 
 //: set primitive data type input on current process

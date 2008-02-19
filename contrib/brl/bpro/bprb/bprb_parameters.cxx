@@ -102,7 +102,7 @@ bool bprb_parameters::parse_XML(const vcl_string& xml_path,
     //root = static_cast<bxml_element*> (bxml_find_by_name(xml_doc_.root_element(), query).as_pointer());
     root = bxml_find_by_name(xml_doc_.root_element(), query);
     if (!root) {
-      vcl_cout << "bprb_parameters::parse_XML root tag is not found" << vcl_endl;
+      vcl_cout << "bprb_parameters::parse_XML root tag: " << root_tag << " is not found" << vcl_endl;
       return false;
     }
   }
@@ -131,13 +131,19 @@ void bprb_parameters::print_def_XML(const vcl_string& root_tag,
                                     const vcl_string& xml_path)
 {
   bxml_element* root = new bxml_element(root_tag);
+  root->append_text("\n");
   // iterate over each parameter, and get the default ones
   for ( vcl_vector< bprb_param * >::iterator it = param_list_.begin();
         it != param_list_.end();
         it++ ) {
     vcl_string name = (*it)->name();
     vcl_string def_value = (*it)->default_str();
-    root->set_attribute(name, def_value);
+    bxml_element* param_elem = new bxml_element(name);
+    param_elem->set_attribute("type", (*it)->type_str());
+    param_elem->set_attribute("desc", (*it)->description());
+    param_elem->set_attribute("value", def_value);
+    root->append_data(param_elem);
+    root->append_text("\n");
   }
   bxml_document doc;
   doc.set_root_element(root);
@@ -149,13 +155,19 @@ void bprb_parameters::print_current_XML(const vcl_string& root_tag,
                                         const vcl_string& xml_path)
 {
   bxml_element* root = new bxml_element(root_tag);
+  root->append_text("\n");
   // iterate over each parameter, and get the default ones
   for ( vcl_vector< bprb_param * >::iterator it = param_list_.begin();
         it != param_list_.end();
         it++ ) {
     vcl_string name = (*it)->name();
     vcl_string value = (*it)->value_str();
-    root->set_attribute(name, value);
+    bxml_element* param_elem = new bxml_element(name);
+    param_elem->set_attribute("type", (*it)->type_str());
+    param_elem->set_attribute("desc", (*it)->description());
+    param_elem->set_attribute("value", value);
+    root->append_data(param_elem);
+    root->append_text("\n");
   }
   bxml_document doc;
   doc.set_root_element(root);
