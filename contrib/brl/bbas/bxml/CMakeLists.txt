@@ -1,6 +1,9 @@
 # vxl/contrib/brl/bbas/bxml/CMakeLists.txt
 # The Development Brown XML Parser
 
+
+SET(HAS_BXML "NO")
+
 IF(BUILD_EXPAT)
 INCLUDE_DIRECTORIES (${BRL_INCLUDE_DIR}/b3p/expatpp )
 
@@ -12,7 +15,7 @@ SET( bxml_sources
 )
 
 
-ADD_DEFINITIONS(-DHAS_BXML)
+SET(HAS_BXML "YES")
 
 AUX_SOURCE_DIRECTORY(Templates bxml_sources)
 
