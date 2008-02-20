@@ -1,9 +1,9 @@
 # - Test for Python
 # Once loaded this will define
-#   PYTHON_FOUND        - system has Python
-#   PYTHON_INCLUDE_DIR  - include directory for Python
-#   PYTHON_LIBRARIES    - libraries you need to link to
-#   PYTHON_DEBUG_LIBRARIES = path to the debug library
+#   PYTHON_FOUND           - system has Python
+#   PYTHON_LIBRARY         - libraries you need to link to
+#   PYTHON_PC_INCLUDE_PATH - PC directory for Win
+#   PYTHON_DEBUG_LIBRARY   - path to the debug library
 
 SET(PYTHON_FOUND "NO")
 
@@ -13,7 +13,7 @@ IF(PYTHON_LIBRARY OR PYTHON_DEBUG_LIBRARY)
   SET(PYTHON_FOUND "YES")
 
   IF( WIN32 )
-    FIND_PATH(PYTHON_PC_INCLUDE_DIR 
+    FIND_PATH(PYTHON_PC_INCLUDE_PATH 
     NAMES pyconfig.h
 
     PATHS
@@ -38,10 +38,15 @@ IF(PYTHON_LIBRARY OR PYTHON_DEBUG_LIBRARY)
      python1.5
     )
 
-    SET(PYTHON_INCLUDE_DIR
+    SET(PYTHON_INCLUDE_PATH
       ${PYTHON_INCLUDE_PATH}
-      ${PYTHON_PC_INCLUDE_DIR}
+      ${PYTHON_PC_INCLUDE_PATH}
     )
 
-  ENDIF( WIN32 )	
+    MARK_AS_ADVANCED(
+     PYTHON_PC_INCLUDE_PATH
+    )
+
+  ENDIF(WIN32)
+	
 ENDIF(PYTHON_LIBRARY OR PYTHON_DEBUG_LIBRARY)
