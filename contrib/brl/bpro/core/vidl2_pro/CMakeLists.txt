@@ -1,5 +1,6 @@
 # brl/bpro/core/vidl2_pro/CMakeLists.txt
 
+IF(HAS_BPRB)
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
 
@@ -14,5 +15,5 @@ AUX_SOURCE_DIRECTORY(Templates vidl2_bpro_sources)
 
 ADD_LIBRARY(vidl2_bpro ${vidl2_bpro_sources})
 TARGET_LINK_LIBRARIES(vidl2_bpro bprb brdb vidl2 vsl)
-
+ENDIF(HAS_BPRB)
 

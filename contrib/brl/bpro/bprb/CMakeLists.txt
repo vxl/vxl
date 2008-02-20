@@ -12,6 +12,7 @@ SET(bprb_sources
    bprb_null_process.cxx           bprb_null_process.h
 )
 
+ADD_DEFINITIONS(-DHAS_BPRB)
 
 AUX_SOURCE_DIRECTORY(Templates bprb_sources)
 
