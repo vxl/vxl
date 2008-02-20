@@ -44,16 +44,16 @@ SET (EMAIL_PROJECT_NAME "VXL")
 SET (BUILD_MONITORS "\\
   {cs\\.rpi\\.edu .* amithaperera@users.sourceforge.net} \\
   {esat\\.kuleuven\\.be .* peter_vanroose@users.sourceforge.net} \\
-  {grc\\.ge\\.com_DISABLED .* fred_wheeler@users.sourceforge.net} \\
+  {GE_DISABLED .* fred_wheeler@users.sourceforge.net} \\
 ")
 
 SET (PROJECT_URL http://vxl.sourceforge.net/)
 SET (EXPECTED_BUILDS "\\
   {cs.rpi.edu FreeBSD-fresh-gcc-3.4.2} \\
   {GE Cygwin_gcc-3.4.4_-O0_static} \\
-  {GE FreeBSD-6.2_gcc-3.4.6_profile_static} \\
+  {GE FreeBSD-7.0_gcc-4.2.1_profile_static} \\
   {GE FreeBSD-6.2_gcc-4.0.4_-O2_shared} \\
-  {GE FreeBSD-6.2_gcc-4.2.2_-O2_shared} \\
+  {GE FreeBSD-6.2_gcc-4.2.3_-O2_shared} \\
   {GE Linux-2.6.9_icc-9.1-64bit_-O2_shared} \\
   {GE MinGW-3.8_gcc-3.4.4_-O2_static} \\
   {GE Win2k_bcc-5.5.1_Release} \\
