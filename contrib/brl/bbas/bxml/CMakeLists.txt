@@ -11,6 +11,9 @@ SET( bxml_sources
     bxml_find.cxx                bxml_find.h
 )
 
+
+ADD_DEFINITIONS(-DHAS_BXML)
+
 AUX_SOURCE_DIRECTORY(Templates bxml_sources)
 
 ADD_LIBRARY(bxml ${bxml_sources})
