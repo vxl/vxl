@@ -176,16 +176,16 @@ void mfpf_region_pdf_builder::add_example(const vimt_image_2d_of<float>& image,
 {
   if (nA_==0)
   {
-    add_example(image,p,u);
+    add_one_example(image,p,u);
     return;
   }
 
   vgl_vector_2d<double> v(-u.y(),u.x());
-  for (int iA=-int(nA_);iA<=nA_;++iA)
+  for (int iA=-int(nA_);iA<=(int)nA_;++iA)
   {
     double A = iA*dA_;
     vgl_vector_2d<double> uA = u*vcl_cos(A)+v*vcl_sin(A);
-    add_example(image,p,uA);
+    add_one_example(image,p,uA);
   }
 }
 
