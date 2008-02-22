@@ -64,7 +64,7 @@ static vnl_matrix<double> am_solve_for_G0(const vnl_matrix<double>& A,
   vcl_cout<<"Singular Values of A: "<<svd.W().diagonal()<<vcl_endl;
   vnl_vector<double> q0 = svd.solve(rhs);
   vnl_matrix<double> Q0=sym_matrix_from_vec(q0,n);
-  unsigned nq = q0.size();
+//   unsigned nq = q0.size();
   vcl_cout<<"Error for q0 = "<<(A*q0-rhs).rms()<<vcl_endl;
 
   // If Gk is the t x 3 matrix, the k-th triplet of columns of G,
