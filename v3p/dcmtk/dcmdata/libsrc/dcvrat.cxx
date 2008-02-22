@@ -108,9 +108,14 @@ void DcmAttributeTag::print(ostream &out,
             {
                 out << hex << setfill('0');
                 /* print tag values in hex mode */
-                out << setw(4) << '(' << (*(uintVals++)) << ',' << setw(4) << (*(uintVals++)) << ')';
+                out << setw(4) << '(' << (*(uintVals)) << ',' << setw(4) << (*(uintVals+1)) << ')';
+                uintVals+=2;
+
                 for (unsigned long i = 1; i < printCount; i++)
-                    out << "\\" << setw(4) << '(' << (*(uintVals++)) << ',' << setw(4) << (*(uintVals++)) << ')';
+                {
+                  out << setw(4) << '(' << (*(uintVals)) << ',' << setw(4) << (*(uintVals+1)) << ')';
+                  uintVals+=2;
+                }
                 /* reset i/o manipulators */
                 out << dec << setfill(' ');
             }
