@@ -254,7 +254,7 @@ void test_ortho_flexible_builder_on_flexible()
           <<P.extract(2,3,8,0)<<vcl_endl
           <<"Pure Projection 4, mode 1:"<<vcl_endl
           <<P.extract(2,3,8,3)<<vcl_endl;
-#endif / 0
+#endif // 0
   vcl_cout<<"Mean shape: "<<vcl_endl
           <<builder.mean_shape().transpose()<<vcl_endl;
 
