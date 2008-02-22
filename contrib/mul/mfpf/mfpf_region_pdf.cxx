@@ -79,7 +79,7 @@ void mfpf_region_pdf::set(const vcl_vector<mbl_chord>& roi,
     if (roi[k].start_x()<ilo) ilo=roi[k].start_x();
     if (roi[k].end_x()>ihi)   ihi=roi[k].end_x();
     if (roi[k].y()<jlo) jlo=roi[k].y();
-    if (roi[k].y()>jhi) jhi=roi[k].y();  
+    if (roi[k].y()>jhi) jhi=roi[k].y();
   }
   roi_ni_=1+ihi-ilo;
   roi_nj_=1+jhi-jlo;
@@ -103,7 +103,7 @@ void mfpf_region_pdf::set_search_area(unsigned ni, unsigned nj)
   search_nj_=nj;
 }
 
-//: Evaluate match at p, using u to define scale and orientation 
+//: Evaluate match at p, using u to define scale and orientation
 // Returns -1*edge strength at p along direction u
 double mfpf_region_pdf::evaluate(const vimt_image_2d_of<float>& image,
                         const vgl_point_2d<double>& p,
@@ -125,7 +125,7 @@ double mfpf_region_pdf::evaluate(const vimt_image_2d_of<float>& image,
 
   vil_resample_bilin(image.image(),sample,
                       im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
-                      im_v.x(),im_v.y(), 
+                      im_v.x(),im_v.y(),
                       roi_ni_,roi_nj_);
 
   vnl_vector<double> v(n_pixels_*sample.nplanes());
@@ -136,7 +136,7 @@ double mfpf_region_pdf::evaluate(const vimt_image_2d_of<float>& image,
   return -1*pdf().log_p(v);
 }
 
-//: Evaluate match at in a region around p 
+//: Evaluate match at in a region around p
 // Returns a qualtity of fit at a set of positions.
 // response image (whose size and transform is set inside the
 // function), indicates the points at which the function was
@@ -169,7 +169,7 @@ void mfpf_region_pdf::evaluate_region(
 
   vil_resample_bilin(image.image(),sample,
                       im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
-                      im_v.x(),im_v.y(), 
+                      im_v.x(),im_v.y(),
                       nsi,nsj);
 
   vnl_vector<double> v(n_pixels_*np);
@@ -180,7 +180,7 @@ void mfpf_region_pdf::evaluate_region(
   vcl_ptrdiff_t r_jstep = response.image().jstep();
   vcl_ptrdiff_t s_jstep = sample.jstep();
 
-  for (unsigned j=0;j<nj;++j,r+=r_jstep,s+=s_jstep)
+  for (unsigned j=0;j<(unsigned)nj;++j,r+=r_jstep,s+=s_jstep)
   {
     for (int i=0;i<ni;++i)
     {
@@ -201,8 +201,8 @@ void mfpf_region_pdf::evaluate_region(
   response.set_world2im(i2w.inverse());
 }
 
-   //: Search given image around p, using u to define scale and orientation 
-   //  On exit, new_p and new_u define position, scale and orientation of 
+   //: Search given image around p, using u to define scale and orientation
+   //  On exit, new_p and new_u define position, scale and orientation of
    //  the best nearby match.  Returns a qualtity of fit measure at that
    //  point (the smaller the better).
 double mfpf_region_pdf::search(const vimt_image_2d_of<float>& image,
@@ -231,7 +231,7 @@ double mfpf_region_pdf::search(const vimt_image_2d_of<float>& image,
 
   vil_resample_bilin(image.image(),sample,
                       im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
-                      im_v.x(),im_v.y(), 
+                      im_v.x(),im_v.y(),
                       nsi,nsj);
 
   vnl_vector<double> v(n_pixels_*np);
@@ -241,7 +241,7 @@ double mfpf_region_pdf::search(const vimt_image_2d_of<float>& image,
 
   double best_r=9.99e9;
   int best_i,best_j;
-  for (unsigned j=0;j<nj;++j,s+=s_jstep)
+  for (unsigned j=0;j<(unsigned)nj;++j,s+=s_jstep)
   {
     for (int i=0;i<ni;++i)
     {
@@ -273,19 +273,19 @@ bool mfpf_region_pdf::set_from_stream(vcl_istream &is)
 
   // Extract the properties
   if (props.find("step_size")!=props.end())
-  { 
-    step_size_=vul_string_atof(props["step_size"]); 
-    props.erase("step_size"); 
+  {
+    step_size_=vul_string_atof(props["step_size"]);
+    props.erase("step_size");
   }
   if (props.find("search_ni")!=props.end())
-  { 
-    search_ni_=vul_string_atoi(props["search_ni"]); 
-    props.erase("search_ni"); 
+  {
+    search_ni_=vul_string_atoi(props["search_ni"]);
+    props.erase("search_ni");
   }
   if (props.find("search_nj")!=props.end())
-  { 
-    search_nj_=vul_string_atoi(props["search_nj"]); 
-    props.erase("search_nj"); 
+  {
+    search_nj_=vul_string_atoi(props["search_nj"]);
+    props.erase("search_nj");
   }
 
   // Check for unused props
@@ -345,16 +345,16 @@ void mfpf_region_pdf::print_shape(vcl_ostream& os) const
 void mfpf_region_pdf::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
-  vsl_b_write(bfs,step_size_); 
-  vsl_b_write(bfs,roi_); 
-  vsl_b_write(bfs,roi_ni_); 
-  vsl_b_write(bfs,roi_nj_); 
-  vsl_b_write(bfs,n_pixels_); 
-  vsl_b_write(bfs,pdf_); 
-  vsl_b_write(bfs,ref_x_); 
-  vsl_b_write(bfs,ref_y_); 
-  vsl_b_write(bfs,search_ni_); 
-  vsl_b_write(bfs,search_nj_); 
+  vsl_b_write(bfs,step_size_);
+  vsl_b_write(bfs,roi_);
+  vsl_b_write(bfs,roi_ni_);
+  vsl_b_write(bfs,roi_nj_);
+  vsl_b_write(bfs,n_pixels_);
+  vsl_b_write(bfs,pdf_);
+  vsl_b_write(bfs,ref_x_);
+  vsl_b_write(bfs,ref_y_);
+  vsl_b_write(bfs,search_ni_);
+  vsl_b_write(bfs,search_nj_);
 }
 
 //=======================================================================
@@ -370,11 +370,11 @@ void mfpf_region_pdf::b_read(vsl_b_istream& bfs)
   {
     case (1):
       vsl_b_read(bfs,step_size_);
-      vsl_b_read(bfs,roi_); 
-      vsl_b_read(bfs,roi_ni_); 
-      vsl_b_read(bfs,roi_nj_); 
-      vsl_b_read(bfs,n_pixels_); 
-      vsl_b_read(bfs,pdf_); 
+      vsl_b_read(bfs,roi_);
+      vsl_b_read(bfs,roi_ni_);
+      vsl_b_read(bfs,roi_nj_);
+      vsl_b_read(bfs,n_pixels_);
+      vsl_b_read(bfs,pdf_);
       vsl_b_read(bfs,ref_x_);
       vsl_b_read(bfs,ref_y_);
       vsl_b_read(bfs,search_ni_);

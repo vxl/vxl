@@ -51,7 +51,7 @@ void mfpf_norm_corr1d::set_step_size(double s)
 //: Define filter kernel to search with
 void mfpf_norm_corr1d::set(int ilo, int ihi, const vnl_vector<double>& k)
 {
-  assert(1+ihi-ilo==k.size());
+  assert(1+ihi-ilo==(int)k.size());
   ilo_=ilo;
   ihi_=ihi;
   kernel_=k;
