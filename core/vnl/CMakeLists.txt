@@ -14,7 +14,7 @@ OPTION(VNL_CONFIG_THREAD_SAFE
 #    "Enable Streaming SIMD Extensions 2 optimisations (hardware dependant)." ON)
 #ELSE ( VXL_HAS_EMMINTRIN_H AND VXL_HAS_SSE2_HARDWARE_SUPPORT )
   OPTION(VNL_CONFIG_ENABLE_SSE2
-    "Enable Streaming SIMD Extensions 2 optimisations (hardware dependant)." OFF)
+    "Enable Streaming SIMD Extensions 2 optimisations (hardware dependant). Currently broken. For use by VNL developers only." OFF)
 #ENDIF( VXL_HAS_EMMINTRIN_H AND VXL_HAS_SSE2_HARDWARE_SUPPORT )
 
 MARK_AS_ADVANCED(
