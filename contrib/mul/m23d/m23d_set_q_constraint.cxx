@@ -54,7 +54,6 @@ void m23d_set_q_constraints(const vnl_matrix<double> & M, unsigned k,
                             vnl_matrix<double>& A,
                             vnl_vector<double>& rhs)
 {
-  unsigned mc = M.cols();
   unsigned m = M.cols()/3 -1;
   unsigned ns = M.rows()/2;
   unsigned nq = ((M.cols()+1)*M.cols())/2;

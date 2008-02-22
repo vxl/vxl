@@ -56,7 +56,7 @@ void m23d_ortho_flexible_builder::reconstruct(
   vnl_matrix<double> D(2*nf,n0);
   for (int i=0; i<nf; ++i)
   {
-    if ( n0!= pt_vec_list[i].size() )
+    if ( (unsigned)n0!= pt_vec_list[i].size() )
     {
       vcl_cerr<<"ERROR m23d_ortho_rigid_builder::reconstruct()"<<vcl_endl;
       vcl_cerr<<"problem with different numbers of pts"<<vcl_endl;
@@ -64,17 +64,17 @@ void m23d_ortho_flexible_builder::reconstruct(
       vcl_cerr<<"pt_vec_list["<<i<<"].size()= "<<pt_vec_list[i].size()<<vcl_endl;
       vcl_abort();
     }
-      
+
     for (int p=0; p<n0; ++p)
     {
       D(2*i,p)= pt_vec_list[i][p].x();
       D(2*i+1,p)= pt_vec_list[i][p].y();
     }
-      
+
   }
-   
+
   reconstruct(D, n_modes);
-  
+
 }
 
 
@@ -87,8 +87,6 @@ void m23d_ortho_flexible_builder::reconstruct(
 void m23d_ortho_flexible_builder::reconstruct(const vnl_matrix<double>& P2D, unsigned n_modes)
 {
   assert(P2D.rows()%2==0);
-  unsigned ns = P2D.rows()/2;
-  unsigned np = P2D.cols();
 
   set_view_data(P2D);
 
@@ -127,7 +125,6 @@ void m23d_ortho_flexible_builder::set_view_data(const vnl_matrix<double>& P2D)
 {
   assert(P2D.rows()%2==0);
   unsigned ns = P2D.rows()/2;
-  unsigned np = P2D.cols();
 
   // Take copy of 2D points and remove CoG from each
   P2Dc_=P2D;
@@ -198,8 +195,6 @@ void m23d_ortho_flexible_builder::partial_reconstruct(const vnl_matrix<double>& 
                                                       unsigned n_modes)
 {
   assert(P2D.rows()%2==0);
-  unsigned ns = P2D.rows()/2;
-  unsigned np = P2D.cols();
 
   set_view_data(P2D);
   initial_decomposition(n_modes);
@@ -246,7 +241,6 @@ static vnl_matrix<double> am_solve_for_G0(const vnl_matrix<double>& A,
   vnl_svd<double> svd(A);
   vnl_vector<double> q0 = svd.solve(rhs);
   vnl_matrix<double> Q0=sym_matrix_from_vec(q0,n);
-  unsigned nq = q0.size();
 
   // If Gk is the t x 3 matrix, the k-th triplet of columns of G,
   // then Gk.Gk'=Q0
@@ -257,12 +251,12 @@ static vnl_matrix<double> am_solve_for_G0(const vnl_matrix<double>& A,
   {
     //Gk.set_column(i,vcl_sqrt(eig.get_eigenvalue(n-1-i))
     //                        *eig.get_eigenvector(n-1-i));
-    
- 
+
+
     // nb critical bit making sure Gk is pos def
     double s= vcl_sqrt(  vcl_fabs(eig.get_eigenvalue(n-1-i)) );
     Gk.set_column(i, s*eig.get_eigenvector(n-1-i) );
-    
+
   }
 
   return Gk;
@@ -595,7 +589,7 @@ vnl_matrix<double> m23d_ortho_flexible_builder::shape(unsigned i) const
 //: Get back 3d pts rotated and shifted for each frame
 void m23d_ortho_flexible_builder::get_shape_3d_pts( vcl_vector< vgl_point_3d<double> >& pts ) const
 {
-  
+
   /*
   if (P_.rows() < 2 || P_.cols() != 3 )
   {
@@ -605,37 +599,37 @@ void m23d_ortho_flexible_builder::get_shape_3d_pts( vcl_vector< vgl_point_3d<dou
     vcl_cerr<<"P_.cols()= "<<P_.cols()<<vcl_endl;
     vcl_abort();
   }
-  
- 
+
+
   //vnl_matrix<double> newPi = m23d_scaled_ortho_projection(P_.extract(2,3,2*i,0));
   //P_.update(newPi,2*i,0);
   vnl_matrix<double> P0= P_.extract(2,3);
   */
-  
+
   // get projection matrix for first shape
   vnl_matrix<double> P0=shape(0);
-    
+
   // Compute a rotation matrix for this projection
   // then update shape and
   vnl_matrix<double> R0=m23d_rotation_from_ortho_projection(P0);
-    
+
   // apply rotation to base shape
   vnl_matrix<double> rot_pts_mat=R0* P3D_;
-  mat_to_3d_pts( pts, rot_pts_mat );   
-    
-    
+  mat_to_3d_pts( pts, rot_pts_mat );
+
+
   int np= pts.size();
   vgl_vector_3d<double> tran_vec( cog_[0].x(), cog_[0].y(), 0 );
   for (int p=0; p<np; ++p)
   {
-    pts[p]= pts[p] + tran_vec; 
+    pts[p]= pts[p] + tran_vec;
   }
-    
- 
+
+
 }
 
 
-//: Return 3d rigid pts 
+//: Return 3d rigid pts
 // ie aligned with first frame
 void m23d_ortho_flexible_builder::mat_to_3d_pts(vcl_vector< vgl_point_3d<double> >& pt_vec,
                                                   const vnl_matrix<double>& M) const
@@ -651,7 +645,7 @@ void m23d_ortho_flexible_builder::mat_to_3d_pts(vcl_vector< vgl_point_3d<double>
     vcl_abort();
   }
   */
-  
+
   int np= M.cols();
   pt_vec.resize(np);
   for (int i=0; i<np; ++i)

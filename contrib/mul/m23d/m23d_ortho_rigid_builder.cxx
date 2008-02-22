@@ -25,7 +25,7 @@ void m23d_ortho_rigid_builder::reconstruct(const vcl_vector< vcl_vector< vgl_poi
   vnl_matrix<double> D(2*nf,n0);
   for (int i=0; i<nf; ++i)
   {
-    if ( n0!= pt_vec_list[i].size() )
+    if ( (unsigned)n0!= pt_vec_list[i].size() )
     {
       vcl_cerr<<"ERROR m23d_ortho_rigid_builder::reconstruct()"<<vcl_endl
               <<"problem with different numbers of pts"<<vcl_endl
@@ -214,7 +214,7 @@ void m23d_ortho_rigid_builder::find_correction_matrix_alt( vnl_matrix<double>& Q
 
   // These constraints aim to impose orthogonality on rows of projection
   // matrices.
-  for (unsigned i=1;i<nf;++i)
+  for (unsigned i=1;i<(unsigned)nf;++i)
   {
     vnl_vector<double> pxi = P.get_row(2*i);
     vnl_vector<double> pyi = P.get_row(2*i+1);
