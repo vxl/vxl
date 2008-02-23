@@ -34,8 +34,9 @@ void test_gaussian_sphere_type(T epsilon, const vcl_string& type_name)
   TEST(("mahalanobis dist <"+type_name+">").c_str(),
         gauss.sqr_mahalanobis_dist(test_pt), sqr_mah_dist);
 
-  T two_pi = 2.0*vnl_math::pi;
-  T prob = 1.0/vcl_sqrt(two_pi*two_pi*two_pi*gauss.det_covar()) * vcl_exp(-sqr_mah_dist/2);
+  T two_pi = static_cast<T>(2.0*vnl_math::pi);
+  T prob = static_cast<T>(1.0/vcl_sqrt(two_pi*two_pi*two_pi*gauss.det_covar()) * vcl_exp(-sqr_mah_dist/2));
+
   TEST_NEAR(("probability density <"+type_name+">").c_str(),
              gauss.prob_density(test_pt), prob, epsilon);
 
@@ -47,6 +48,18 @@ void test_gaussian_sphere_type(T epsilon, const vcl_string& type_name)
   TEST(("zero var probability density<"+type_name+">").c_str(),
         zero_var_gauss.prob_density(test_pt), T(0));
 
+  vnl_vector_fixed<T,3> delta(T(0.1), T(0.1), T(0.1));
+  T prob_box = gauss.probability(mean-delta, mean+delta);
+  TEST_NEAR(("box probability <"+type_name+">").c_str(),
+            prob_box,0.00142242,1e-07);
+  // test the 1-d sphere case
+  typedef bsta_gaussian_sphere<T,1>::vector_type vector_;
+  vector_ mean_1d = vector_(1.0);
+  bsta_gaussian_sphere<T,1> gauss_1d(mean_1d, var);
+  vector_ box_1d_low = vector_(0.9), box_1d_high = vector_(1.1);
+  T prob_box_1d = gauss_1d.probability(box_1d_low, box_1d_high);
+  TEST_NEAR(("box probability (1-d) <"+type_name+">").c_str(),
+            prob_box_1d,0.11246291,1e-07);
 }
 
 

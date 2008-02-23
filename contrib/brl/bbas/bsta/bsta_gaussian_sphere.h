@@ -56,11 +56,7 @@ class bsta_gaussian_sphere : public bsta_gaussian<T,n>
 
     //: The probability integrated over a box
     T probability(const vector_& min_pt,
-                  const vector_& max_pt) const
-    {
-      // This stub needs implementation
-      return 0.0;
-    }
+                  const vector_& max_pt) const;
 
     //: The squared Mahalanobis distance to this point
     T sqr_mahalanobis_dist(const vector_& pt) const;

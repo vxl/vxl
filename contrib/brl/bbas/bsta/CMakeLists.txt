@@ -19,7 +19,6 @@ SET(bsta_sources
   bsta_gaussian_full.txx         bsta_gaussian_full.h
   bsta_gaussian_indep.txx        bsta_gaussian_indep.h
   bsta_gaussian_sphere.txx       bsta_gaussian_sphere.h
-
   bsta_gauss_f1.h
   bsta_gauss_sf3.h               bsta_gauss_sd3.h
   bsta_gauss_if3.h               bsta_gauss_id3.h

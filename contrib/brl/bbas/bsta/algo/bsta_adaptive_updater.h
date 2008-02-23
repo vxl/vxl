@@ -31,10 +31,10 @@ template <class mix_dist_>
 class bsta_mg_adaptive_updater
 {
   private:
-    typedef typename mix_dist_::dist_type obs_gaussian_;
-    typedef typename obs_gaussian_::contained_type gaussian_;
-    typedef typename gaussian_::math_type T;
-    typedef typename gaussian_::vector_type vector_;
+  typedef typename mix_dist_::dist_type obs_gaussian_; //mixture comp type
+  typedef typename obs_gaussian_::contained_type gaussian_; //num_obs parent
+  typedef typename gaussian_::math_type T;//the field type, e.g. float
+  typedef typename gaussian_::vector_type vector_;// the vector type 
 
   protected:
     //: Constructor
@@ -43,6 +43,7 @@ class bsta_mg_adaptive_updater
      : init_gaussian_(model,T(1)),
        max_components_(max_cmp) {}
 
+    //: insert a sample in the mixture
     void insert(mix_dist_& mixture, const vector_& sample, T init_weight) const
     {
       bool removed = false;
