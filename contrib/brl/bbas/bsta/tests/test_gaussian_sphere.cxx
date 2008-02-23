@@ -53,10 +53,10 @@ void test_gaussian_sphere_type(T epsilon, const vcl_string& type_name)
   TEST_NEAR(("box probability <"+type_name+">").c_str(),
             prob_box,0.00142242,1e-07);
   // test the 1-d sphere case
-  typedef bsta_gaussian_sphere<T,1>::vector_type vector_;
-  vector_ mean_1d = vector_(1.0);
+  typedef bsta_gaussian_sphere<T,1>::vector_type _vector;
+  _vector mean_1d = _vector(1.0);
   bsta_gaussian_sphere<T,1> gauss_1d(mean_1d, var);
-  vector_ box_1d_low = vector_(0.9), box_1d_high = vector_(1.1);
+  _vector box_1d_low = _vector(0.9), box_1d_high = _vector(1.1);
   T prob_box_1d = gauss_1d.probability(box_1d_low, box_1d_high);
   TEST_NEAR(("box probability (1-d) <"+type_name+">").c_str(),
             prob_box_1d,0.11246291,1e-07);
