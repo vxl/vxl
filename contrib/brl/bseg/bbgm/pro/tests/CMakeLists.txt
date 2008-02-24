@@ -13,6 +13,5 @@ ADD_TEST( bbgm_test_io  bbgm_bpro_test_all test_io )
 ADD_TEST( bbgm_test_io  bbgm_bpro_test_all test_update_dist_image )
 
 
-#ADD_EXECUTABLE( bbgm_bpro_test_include test_include.cxx )
-
-#TARGET_LINK_LIBRARIES( bbgm_bpro_test_include bbgm_pro bbgm)
+ADD_EXECUTABLE( bbgm_bpro_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( bbgm_bpro_test_include bbgm_pro bbgm)
