@@ -102,6 +102,9 @@ SOURCE=.\Templates/vgl_io_vector_3d+double-.cxx
 SOURCE=.\Templates/vgl_io_vector_3d+float-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vgl_io_vector_3d+uint-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vgl_io_box_2d+double-.cxx
 # End Source File
 # Begin Source File

@@ -111,6 +111,9 @@ SOURCE=.\bsta_io_gaussian_x_y_theta.h
 # Begin Source File
 SOURCE=.\bsta_io_mixture.h
 # End Source File
+# Begin Source File
+SOURCE=.\bsta_io_mixture_fixed.h
+# End Source File
 # End Group
 # End Target
 # End Project

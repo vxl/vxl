@@ -93,6 +93,27 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
+SOURCE=.\vsl_binary_io.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vsl_vector_io_bool.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vsl_binary_loader_base.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vsl_indent.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vsl_vector_io_vector_bool.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vsl_basic_xml_element.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vsl_block_binary.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vsl_set_io+vcl_string-.cxx
 # End Source File
 # Begin Source File
@@ -212,30 +233,12 @@ SOURCE=.\Templates/vsl_vector_io+vcl_pair+int.float--.cxx
 # Begin Source File
 SOURCE=.\Templates/vsl_vector_io+vcl_vector+unsigned--.cxx
 # End Source File
-# Begin Source File
-SOURCE=.\vsl_binary_io.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vsl_vector_io_bool.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vsl_binary_loader_base.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vsl_indent.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vsl_vector_io_vector_bool.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vsl_basic_xml_element.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vsl_block_binary.cxx
-# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
+# Begin Source File
+SOURCE=.\vsl_fwd.h
+# End Source File
 # Begin Source File
 SOURCE=.\vsl_binary_explicit_io.h
 # End Source File
@@ -315,9 +318,6 @@ SOURCE=.\vsl_vector_io.h
 SOURCE=.\vsl_vector_io.txx
 # End Source File
 # Begin Source File
-SOURCE=.\vsl_fwd.h
-# End Source File
-# Begin Source File
 SOURCE=.\vsl_quick_file.h
 # End Source File
 # Begin Source File
@@ -328,6 +328,9 @@ SOURCE=.\vsl_b_read_block_old.h
 # End Source File
 # Begin Source File
 SOURCE=.\vsl_basic_xml_element.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsl_stream.h
 # End Source File
 # End Group
 # End Target

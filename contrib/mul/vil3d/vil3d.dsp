@@ -320,6 +320,9 @@ SOURCE=.\vil3d_resample_trilinear.txx
 # Begin Source File
 SOURCE=.\vil3d_decimate.h
 # End Source File
+# Begin Source File
+SOURCE=.\vil3d_scan_image.h
+# End Source File
 # End Group
 # End Target
 # End Project

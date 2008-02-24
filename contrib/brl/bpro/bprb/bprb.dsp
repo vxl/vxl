@@ -97,10 +97,13 @@ SOURCE=.\bprb_parameters.cxx
 SOURCE=.\bprb_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bprb_parameters+bool-.cxx
+SOURCE=.\bprb_batch_process_manager.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bprb_parameters+bpro_filepath-.cxx
+SOURCE=.\bprb_null_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bprb_parameters+bool-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bprb_parameters+double-.cxx
@@ -126,6 +129,12 @@ SOURCE=.\Templates/vbl_smart_ptr+bprb_parameters-.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+bprb_process-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bprb_process_manager+bprb_batch_process_manager-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bprb_parameters+bprb_filepath-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -143,6 +152,21 @@ SOURCE=.\bprb_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\bprb_process_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bprb_batch_process_manager.h
+# End Source File
+# Begin Source File
+SOURCE=.\bprb_macros.h
+# End Source File
+# Begin Source File
+SOURCE=.\bprb_null_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\bprb_process_manager.h
+# End Source File
+# Begin Source File
+SOURCE=.\bprb_process_manager.txx
 # End Source File
 # End Group
 # End Target

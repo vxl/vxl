@@ -99,19 +99,25 @@ SOURCE=.\bbgm_viewer.cxx
 SOURCE=.\bbgm_image_of.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bbgm_image_of-mix-gauss_f1++.cxx
+SOURCE=.\bbgm_loader.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bbgm_image_of-mix-gauss_ff3++.cxx
+SOURCE=.\Templates/bbgm_image_of+bsta_mixture+bsta_num_obs+bsta_gauss_if3---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bbgm_image_of-mix-gauss_if3++.cxx
+SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_mixture+bsta_num_obs+bsta_gauss_f1----.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bbgm_image_of-mix-gauss_sf3++.cxx
+SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_mixture+bsta_num_obs+bsta_gauss_ff3----.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bbgm_image_of-mix_fixed-gauss_if3.3++.cxx
+SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_mixture+bsta_num_obs+bsta_gauss_if3----.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_mixture+bsta_num_obs+bsta_gauss_sf3----.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bbgm_image_of+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if3-.3---.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vbl_io_smart_ptr+bbgm_image_base-.cxx
@@ -166,6 +172,12 @@ SOURCE=.\bbgm_viewer.h
 # End Source File
 # Begin Source File
 SOURCE=.\bbgm_viewer_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bbgm_loader.h
+# End Source File
+# Begin Source File
+SOURCE=.\bbgm_measure.h
 # End Source File
 # End Group
 # End Target

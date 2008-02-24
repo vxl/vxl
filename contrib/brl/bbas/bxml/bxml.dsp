@@ -93,67 +93,34 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bxml_input_converter-.cxx
+SOURCE=.\bxml_document.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bxml_vtol_zero_chain_2d_input_converter.cxx
+SOURCE=.\bxml_find.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bxml_io.cxx
+SOURCE=.\bxml_read.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bxml_vdgl_digital_curve_input_converter.cxx
+SOURCE=.\bxml_write.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\bxml_vsol_point_2d_input_converter.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bxml_vtol_edge_2d_input_converter.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bxml_vtol_io.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bxml_input_converter.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bxml_vtol_vertex_2d_input_converter.cxx
+SOURCE=.\Templates/vbl_smart_ptr+bxml_data-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\bxml_generic_ptr.h
+SOURCE=.\bxml_document.h
 # End Source File
 # Begin Source File
-SOURCE=.\bxml_input_converter.h
+SOURCE=.\bxml_find.h
 # End Source File
 # Begin Source File
-SOURCE=.\bxml_input_converter_sptr.h
+SOURCE=.\bxml_read.h
 # End Source File
 # Begin Source File
-SOURCE=.\bxml_io.h
-# End Source File
-# Begin Source File
-SOURCE=.\bxml_vdgl_digital_curve_input_converter.h
-# End Source File
-# Begin Source File
-SOURCE=.\bxml_vsol_point_2d_input_converter.h
-# End Source File
-# Begin Source File
-SOURCE=.\bxml_vsol_point_2d_input_converter_sptr.h
-# End Source File
-# Begin Source File
-SOURCE=.\bxml_vtol_edge_2d_input_converter.h
-# End Source File
-# Begin Source File
-SOURCE=.\bxml_vtol_io.h
-# End Source File
-# Begin Source File
-SOURCE=.\bxml_vtol_vertex_2d_input_converter.h
-# End Source File
-# Begin Source File
-SOURCE=.\bxml_vtol_zero_chain_2d_input_converter.h
+SOURCE=.\bxml_write.h
 # End Source File
 # End Group
 # End Target

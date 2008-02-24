@@ -129,6 +129,9 @@ SOURCE=.\Templates/bsta_gaussian_indep+float.2-.cxx
 SOURCE=.\Templates/bsta_gaussian_indep+float.3-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/bsta_gaussian_sphere+double.1-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bsta_gaussian_sphere+double.3-.cxx
 # End Source File
 # Begin Source File

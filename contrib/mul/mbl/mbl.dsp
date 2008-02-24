@@ -563,6 +563,12 @@ SOURCE=.\mbl_dyn_prog.h
 # Begin Source File
 SOURCE=.\mbl_progress_hierarchy.h
 # End Source File
+# Begin Source File
+SOURCE=.\mbl_parse_tuple.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_progress_callback.h
+# End Source File
 # End Group
 # End Target
 # End Project

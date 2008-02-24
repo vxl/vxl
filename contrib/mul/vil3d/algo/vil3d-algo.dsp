@@ -117,6 +117,15 @@ SOURCE=.\vil3d_distance_transform.cxx
 SOURCE=.\vil3d_fill_boundary.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vil3d_make_distance_filter.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_make_edt_filter.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_overlap.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vil3d_grad_1x3+byte.float-.cxx
 # End Source File
 # Begin Source File
@@ -160,12 +169,6 @@ SOURCE=.\Templates/vil3d_abs_shuffle_distance+int.int-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vil3d_abs_shuffle_distance+int_16.int_16-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vil3d_make_distance_filter.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vil3d_make_edt_filter.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -262,6 +265,9 @@ SOURCE=.\vil3d_make_edt_filter.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil3d_max_product_filter.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil3d_overlap.h
 # End Source File
 # End Group
 # End Target

@@ -260,6 +260,12 @@ SOURCE=.\test_clusters.cxx
 SOURCE=.\test_dyn_prog.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_parse_tuple.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_progress.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

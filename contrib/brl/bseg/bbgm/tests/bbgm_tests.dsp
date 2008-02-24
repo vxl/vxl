@@ -94,6 +94,9 @@ LIB32=link.exe -lib
 SOURCE=.\test_bg_model_speed.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_measure.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_driver.cxx
 # End Source File
 # Begin Source File

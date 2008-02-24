@@ -9,7 +9,7 @@ SOURCE=.\Templates/vbl_smart_ptr+bwm_video_cam_istream-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+bwm_video_corr-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bwm_video_ostream-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+bwm_video_cam_ostream-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\bwm_video_cam_istream.cxx

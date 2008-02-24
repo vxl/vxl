@@ -96,6 +96,18 @@ LIB32=link.exe -lib
 SOURCE=.\vnl_io_bignum.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vnl_io_nonlinear_minimizer.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_io_rational.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_io_real_npolynomial.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vnl_io_real_polynomial.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vnl_io_diag_matrix+double-.cxx
 # End Source File
 # Begin Source File
@@ -222,16 +234,7 @@ SOURCE=.\Templates/vnl_io_vector_fixed+float.3-.cxx
 SOURCE=.\Templates/vsl_map_io+unsigned.vnl_double_2-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\vnl_io_nonlinear_minimizer.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_io_rational.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_io_real_npolynomial.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\vnl_io_real_polynomial.cxx
+SOURCE=.\Templates/vnl_io_matrix_fixed+double.4.20-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

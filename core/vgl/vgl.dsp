@@ -255,6 +255,9 @@ SOURCE=.\Templates/vgl_vector_3d+float-.cxx
 SOURCE=.\Templates/vgl_vector_3d+int-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vgl_vector_3d+uint-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\vgl_1d_basis.cxx
 # End Source File
 # Begin Source File

@@ -91,31 +91,31 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\Templates/bsta_adaptive_updater+mixture+gauss_f1--.cxx
+SOURCE=.\Templates/bsta_adaptive_updater+bsta_mixture+bsta_num_obs+bsta_gauss_f1---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bsta_adaptive_updater+mixture+gauss_fd3--.cxx
+SOURCE=.\Templates/bsta_adaptive_updater+bsta_mixture+bsta_num_obs+bsta_gauss_fd3---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bsta_adaptive_updater+mixture+gauss_ff3--.cxx
+SOURCE=.\Templates/bsta_adaptive_updater+bsta_mixture+bsta_num_obs+bsta_gauss_ff3---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bsta_adaptive_updater+mixture+gauss_id3--.cxx
+SOURCE=.\Templates/bsta_adaptive_updater+bsta_mixture+bsta_num_obs+bsta_gauss_id3---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bsta_adaptive_updater+mixture+gauss_if3--.cxx
+SOURCE=.\Templates/bsta_adaptive_updater+bsta_mixture+bsta_num_obs+bsta_gauss_if3---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bsta_adaptive_updater+mixture+gauss_sd3--.cxx
+SOURCE=.\Templates/bsta_adaptive_updater+bsta_mixture+bsta_num_obs+bsta_gauss_sd3---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bsta_adaptive_updater+mixture+gauss_sf3--.cxx
+SOURCE=.\Templates/bsta_adaptive_updater+bsta_mixture+bsta_num_obs+bsta_gauss_sf3---.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bsta_adaptive_updater+mixture_fixed+gauss_f1.3--.cxx
+SOURCE=.\Templates/bsta_adaptive_updater+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_f1-.3--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bsta_adaptive_updater+mixture_fixed+gauss_if3.3--.cxx
+SOURCE=.\Templates/bsta_adaptive_updater+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if3-.3--.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
