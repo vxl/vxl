@@ -11,6 +11,7 @@ SET(bprb_sources
    bprb_process_manager.txx        bprb_process_manager.h
    bprb_batch_process_manager.cxx  bprb_batch_process_manager.h
    bprb_null_process.cxx           bprb_null_process.h
+   bprb_macros.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates bprb_sources)
