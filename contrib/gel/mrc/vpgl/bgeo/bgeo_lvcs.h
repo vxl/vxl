@@ -93,8 +93,9 @@ class bgeo_lvcs : public vbl_ref_count
   inline LenUnits local_length_unit() const{return this->localXYZUnit_;}
   inline AngUnits geo_angle_unit() const {return this->geo_angle_unit_;}
   void print(vcl_ostream&) const;
+  void read(vcl_istream& strm);
   friend vcl_ostream& operator << (vcl_ostream& os, const bgeo_lvcs& local_coord_sys);
-
+  friend vcl_istream& operator >> (vcl_ostream& os, bgeo_lvcs& local_coord_sys);
   // binary IO
 
   //: Binary save self to stream.

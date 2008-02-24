@@ -580,6 +580,43 @@ void bgeo_lvcs::print(vcl_ostream& strm) const
        << ' ' << theta_ << ")\n]\n";
 }
 
+//: Read internals from strm.
+void bgeo_lvcs::read(vcl_istream& strm)
+{
+  vcl_string len_u = "meters", ang_u="degrees";
+
+  vcl_string local_cs_name_str;
+  strm >> local_cs_name_str;
+  if (local_cs_name_str.compare("wgs84") == 0)
+    local_cs_name_ = wgs84;
+  else if (local_cs_name_str.compare("nad27n") == 0)
+    local_cs_name_ = nad27n;
+  else if (local_cs_name_str.compare("wgs72") == 0)
+    local_cs_name_ = wgs72;
+  else 
+    vcl_cerr << "undefined local_cs_name" << vcl_endl;
+
+  strm >> ang_u >> len_u;
+  if (len_u.compare("feet") == 0)
+    localXYZUnit_ = FEET;
+  else if (len_u.compare("meters") == 0)
+    localXYZUnit_ = METERS;
+  else 
+    vcl_cerr << "undefined localXYZUnit_" << vcl_endl;
+
+  if (ang_u.compare("degrees") == 0)
+    geo_angle_unit_ = DEG;
+  else if (ang_u.compare("radians") == 0)
+    geo_angle_unit_ = RADIANS;
+  else 
+    vcl_cerr << "undefined geo_angle_unit_" << vcl_endl;
+
+  strm >> localCSOriginLat_ >> localCSOriginLon_ >> localCSOriginElev_;
+  strm >> lat_scale_ >> lon_scale_;
+  strm >> lox_ >> loy_ >> theta_;
+
+}
+
 //------------------------------------------------------------
 //: Transform from local co-ordinates to north=y,east=x.
 void bgeo_lvcs::local_transform(double& x, double& y)
@@ -640,6 +677,12 @@ vcl_ostream& operator << (vcl_ostream& os, const bgeo_lvcs& local_coord_sys)
 {
   local_coord_sys.print(os);
   return os;
+}
+
+vcl_istream& operator >> (vcl_istream& is, bgeo_lvcs& local_coord_sys)
+{
+  local_coord_sys.read(is);
+  return is;
 }
 
 // binary IO
