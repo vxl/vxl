@@ -270,6 +270,10 @@ foreach $dir (@DIRS)
     %names = ('MAKECOMMAND','make');
   }
   $moc_files = '';
+  # "Exceptions": special cases, to avoid unnecessary warnings:
+  $cmakefile =~ s/\n#(ADD_LIBRARY\(bsta_io\s+\$\{bsta_io_sources\}\))/\n$1/;
+
+  # General manipulations of the CMakeLists.txt content:
   $cmakefile =~ s/\n\s*\#[^\n]*//g;
   $cmakefile =~ s!\$\{EXECUTABLE_OUTPUT_PATH\}/!!g;
   if ($cmakefile =~ s/\bQT_WRAP_CPP\s*\(\s*(\S+)\s+(\S+)\s+(.+?)\)//s) {
@@ -289,7 +293,8 @@ foreach $dir (@DIRS)
       my $a = $1;
       my $b = $names{$a};
       unless (defined $b) { $b=''; print STDERR "$a is an undefined variable in $cmakef\n"; }
-      $l =~ s/\$\{$a\}/$b/g;
+      if ($a eq 'QT_SRCS_DIR' && $b =~ m!impl/qt$!) { my $c = "${b}4"; $l =~ s/\$\{$a\}(\S*)/$b$1 $c$1/g; }
+      else { $l =~ s/\$\{$a\}/$b/g; }
     }
     # %names is a global hash list, first filled in here
     $names{$n} = $l;
@@ -331,6 +336,7 @@ foreach $dir (@DIRS)
   while ($cmakefile =~ s/\bADD_LIBRARY\s*\(\s*\S+\s+(.*?)\)//s)
   {
     $g = $1; # list of file names
+    $g =~ s/^SHARED\s+//; # ignore optional keyword "SHARED", if present
     foreach (split /\s+/, $g) {
       if (m/^\s*$/) { next; }
       elsif (-f "$dir/$_" && m/\.(h(\.in)?|txx)$/) { push @hsource_files, $_; }
@@ -361,6 +367,7 @@ foreach $dir (@DIRS)
       next;
     }
     $names{$name} = $_;
+    $names{$name} =~ s/\bbprb_test_process\.(h|cxx)\b//g;
     foreach (split /\s+/) {
       next if ($_ eq '');
       if (m/_sources$/) {
@@ -457,7 +464,7 @@ foreach $dir (@DIRS)
     next if ($source eq $sources && $source eq $source_files);
     while ($source_files lt $sources) {
       if (-f "$dir/$source_files") { print STDOUT "SOURCES += $source_files\tis missing from $makef\n"; }
-      else { $source_files =~ s/\.(cxx|c|C|cpp)$//; print STDOUT "SOURCES($source_files)\tmust be removed from $cmakef\n"; }
+      elsif ($source_files !~ m/_mocced\.cxx$/) { $source_files =~ s/\.(cxx|c|C|cpp)$//; print STDOUT "SOURCES($source_files)\tmust be removed from $cmakef\n"; }
       $source_files = shift @source_files;
     }
     last if ($source eq '~END' && $sources eq '~END' && $source_files eq '~END');
@@ -471,7 +478,7 @@ foreach $dir (@DIRS)
                     $sources eq 'internals/vgui_accelerate_x11.cxx');
         }
         print STDOUT " $sources\tis missing from SOURCE_FILES in $cmakef\n"
-          if ($sources lt $source_files);
+          if ($sources lt $source_files && $sources !~ m/_mocced\.cxx$/);
       } else {
         print STDOUT "SOURCES += $sources\tmust be removed from $makef\n"
           unless ($sources eq '${MOCSOURCES}');
