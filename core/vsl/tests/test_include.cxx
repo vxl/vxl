@@ -16,6 +16,7 @@
 #include <vsl/vsl_quick_file.h>
 #include <vsl/vsl_set_io.h>
 #include <vsl/vsl_stack_io.h>
+#include <vsl/vsl_stream.h>
 #include <vsl/vsl_string_io.h>
 #include <vsl/vsl_vector_io.h>
 
