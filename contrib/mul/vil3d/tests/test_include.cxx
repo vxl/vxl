@@ -20,6 +20,7 @@
 #include <vil3d/algo/vil3d_make_edt_filter.h>
 #include <vil3d/algo/vil3d_max_product_filter.h>
 #include <vil3d/algo/vil3d_normalised_correlation_3d.h>
+#include <vil3d/algo/vil3d_overlap.h>
 #include <vil3d/algo/vil3d_quad_distance_function.h>
 #include <vil3d/algo/vil3d_smooth_121.h>
 #include <vil3d/algo/vil3d_structuring_element.h>
@@ -46,6 +47,7 @@
 #include <vil3d/vil3d_resample_trilinear.h>
 #include <vil3d/vil3d_sample_profile_trilin.h>
 #include <vil3d/vil3d_save.h>
+#include <vil3d/vil3d_scan_image.h>
 #include <vil3d/vil3d_slice.h>
 #include <vil3d/vil3d_switch_axes.h>
 #include <vil3d/vil3d_trilin_interp.h>

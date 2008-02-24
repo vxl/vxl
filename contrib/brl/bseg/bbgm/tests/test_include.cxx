@@ -6,5 +6,7 @@
 #include <bbgm/bbgm_image_sptr.h>
 #include <bbgm/bbgm_viewer_sptr.h>
 #include <bbgm/bbgm_viewer.h>
+#include <bbgm/bbgm_loader.h>
+#include <bbgm/bbgm_measure.h>
 
 int main() { return 0; }

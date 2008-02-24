@@ -36,9 +36,11 @@
 #include <mbl/mbl_mod_gram_schmidt.h>
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_parse_sequence.h>
+#include <mbl/mbl_parse_tuple.h>
 #include <mbl/mbl_print.h>
 #include <mbl/mbl_priority_bounded_queue.h>
 #include <mbl/mbl_progress.h>
+#include <mbl/mbl_progress_callback.h>
 #include <mbl/mbl_progress_composite.h>
 #include <mbl/mbl_progress_hierarchy.h>
 #include <mbl/mbl_progress_null.h>
