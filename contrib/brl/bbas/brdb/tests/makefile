@@ -4,7 +4,7 @@ include ${VXLROOT}/core/testlib/config.mk
 
 TESTMAIN := test_driver.cxx
 
-TESTS += sample_database.cxx
+SOURCES += sample_database.cxx
 TESTS += test_database.cxx
 TESTS += test_query.cxx
 TESTS += test_relation.cxx

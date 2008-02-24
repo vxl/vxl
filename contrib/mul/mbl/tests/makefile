@@ -52,6 +52,8 @@ TESTS += test_parse_sequence.cxx
 TESTS += test_cluster_tree.cxx
 TESTS += test_clusters.cxx
 TESTS += test_dyn_prog.cxx
+TESTS += test_parse_tuple.cxx
+TESTS += test_progress.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 

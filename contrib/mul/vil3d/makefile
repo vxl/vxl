@@ -37,6 +37,7 @@ SOURCES += vil3d_save.cxx
 MANPAGE_SOURCES += vil3d_from_image_2d.h
 MANPAGE_SOURCES += vil3d_reflect.h
 MANPAGE_SOURCES += vil3d_decimate.h
+MANPAGE_SOURCES += vil3d_scan_image.h
 
 SUBDIRS += algo io
 

@@ -1,4 +1,12 @@
-TESTS += test_driver.cxx
+USES += contrib/brl/bpro contrib/brl/bbas core
+include ../config.mk
 
-TESTS += bprb_test_process.cxx
+TESTMAIN := test_driver.cxx
+
+SOURCES += bprb_test_process.cxx
 TESTS += test_process.cxx
+TESTS += test_process_params.cxx
+
+#########################################
+include ${VXLROOT}/config/static-tests.mk
+#########################################

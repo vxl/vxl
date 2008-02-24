@@ -24,6 +24,7 @@ MANPAGE_SOURCES += vsl_map_io.txx
 MANPAGE_SOURCES += vsl_pair_io.txx
 MANPAGE_SOURCES += vsl_set_io.txx
 MANPAGE_SOURCES += vsl_stack_io.txx
+MANPAGE_SOURCES += vsl_stream.h
 MANPAGE_SOURCES += vsl_string_io.txx
 MANPAGE_SOURCES += vsl_vector_io.txx
 MANPAGE_SOURCES += vsl_quick_file.h

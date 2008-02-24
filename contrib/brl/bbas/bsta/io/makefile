@@ -10,6 +10,7 @@ MANPAGE_SOURCES += bsta_io_gaussian_indep.h
 MANPAGE_SOURCES += bsta_io_gaussian_sphere.h
 MANPAGE_SOURCES += bsta_io_gaussian_x_y_theta.h
 MANPAGE_SOURCES += bsta_io_mixture.h
+MANPAGE_SOURCES += bsta_io_mixture_fixed.h
 
 ################################
 include ${VXLROOT}/config/top.mk

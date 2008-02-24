@@ -77,6 +77,8 @@ MANPAGE_SOURCES += mbl_parse_sequence.h
 MANPAGE_SOURCES += mbl_cluster_tree.txx
 MANPAGE_SOURCES += mbl_clusters.txx
 MANPAGE_SOURCES += mbl_vector_distance.h
+MANPAGE_SOURCES += mbl_parse_tuple.h
+MANPAGE_SOURCES += mbl_progress_callback.h
 
 MANPAGE_SOURCES += mbl_config.h.in
 
