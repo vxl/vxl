@@ -7,6 +7,8 @@ TESTMAIN := test_driver.cxx
 TESTS += test_histogram.cxx
 PARAMS_test_histogram := 18_al05_1770_0365.tif
 
+MINI_PROG_SOURCES += test_include.cxx
+
 #########################################
 include ${VXLROOT}/config/static-tests.mk
 #########################################

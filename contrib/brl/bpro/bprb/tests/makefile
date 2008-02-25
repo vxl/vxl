@@ -7,6 +7,8 @@ SOURCES += bprb_test_process.cxx
 TESTS += test_process.cxx
 TESTS += test_process_params.cxx
 
+MINI_PROG_SOURCES += test_include.cxx
+
 #########################################
 include ${VXLROOT}/config/static-tests.mk
 #########################################

@@ -7,6 +7,8 @@ TESTS += test_cam_iostream.cxx
 TESTS += test_video_corr_processor.cxx
 TESTS += test_video_site_io.cxx
 
+MINI_PROG_SOURCES += test_include.cxx
+
 #########################################
 include ${VXLROOT}/config/static-tests.mk
 #########################################
