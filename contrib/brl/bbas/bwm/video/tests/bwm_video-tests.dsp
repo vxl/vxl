@@ -14,6 +14,9 @@ SOURCE=.\test_video_corr_processor.cxx
 # Begin Source File
 SOURCE=.\test_video_site_io.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
