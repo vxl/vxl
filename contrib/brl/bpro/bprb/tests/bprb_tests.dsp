@@ -102,6 +102,9 @@ SOURCE=.\test_process.cxx
 # Begin Source File
 SOURCE=.\test_process_params.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_include.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
