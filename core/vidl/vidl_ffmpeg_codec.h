@@ -12,6 +12,7 @@
 // \endverbatim
 
 extern "C" {
+#define __STDC_CONSTANT_MACROS
 #include <ffmpeg/avcodec.h>
 #include <ffmpeg/avformat.h>
 }
