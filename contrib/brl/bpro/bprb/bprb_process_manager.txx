@@ -46,7 +46,7 @@ template <class T>
 bprb_process_sptr
 bprb_process_manager<T>::get_process_by_name( const vcl_string& name ) const
 {
-  vcl_multimap< vcl_string , bprb_process_sptr >::const_iterator it = process_map.find( name );
+  vcl_map< vcl_string , bprb_process_sptr >::const_iterator it = process_map.find( name );
   if ( it == process_map.end() ) {
     return NULL ;
   }
@@ -93,8 +93,15 @@ template <class T>
 void
 bprb_process_manager<T>::register_process( const bprb_process_sptr& sptr )
 {
-  process_map.insert( vcl_pair< vcl_string , bprb_process_sptr >( sptr->name() , sptr ) );
-  vcl_cout << "Registered " << sptr->name() << '\n';
+  if(!sptr)
+    return;
+  vcl_map< vcl_string , bprb_process_sptr >::iterator pit;
+  vcl_string nm = sptr->name();
+  pit = process_map.find(nm);
+  if(pit == process_map.end()){
+  process_map.insert( vcl_pair< vcl_string , bprb_process_sptr >( nm , sptr ) );
+  vcl_cout << "Registered " << nm << '\n';
+  }
 }
 
 
@@ -102,6 +109,6 @@ bprb_process_manager<T>::register_process( const bprb_process_sptr& sptr )
 #define BPRB_PROCESS_MANAGER_INSTANTIATE(T) \
 template class bprb_process_manager<T >; \
 template <class T > T* bprb_process_manager<T >::instance_ = 0; \
-template <class T > vcl_multimap< vcl_string , bprb_process_sptr > bprb_process_manager<T >::process_map
+template <class T > vcl_map< vcl_string , bprb_process_sptr > bprb_process_manager<T >::process_map
 
 #endif // bprb_process_manager_txx_

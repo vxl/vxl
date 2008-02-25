@@ -26,7 +26,8 @@
 template <class T>
 class bprb_process_manager : public vbl_ref_count 
 {
-public:
+
+ public:
 
    //: Destructor
   virtual ~bprb_process_manager();
@@ -56,7 +57,7 @@ protected:
   void initialize();
   
 
-  static vcl_multimap< vcl_string , bprb_process_sptr > process_map;
+  static vcl_map< vcl_string , bprb_process_sptr > process_map;
 
   vcl_vector< bprb_process_sptr > process_queue;
 };
