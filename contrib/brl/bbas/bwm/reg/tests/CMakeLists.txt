@@ -11,9 +11,11 @@ ADD_EXECUTABLE(bwm_reg_test_all
 )
 TARGET_LINK_LIBRARIES(bwm_reg_test_all bwm_reg vsol testlib)
 
-ADD_TEST(bwm_reg_test_matcher    ${EXECUTABLE_OUTPUT_PATH}/bwm_reg_test_all test_champher)
+ADD_TEST(bwm_reg_test_matcher   ${EXECUTABLE_OUTPUT_PATH}/bwm_reg_test_all test_champher)
 
-ADD_TEST(bwm_reg_test_matcher    ${EXECUTABLE_OUTPUT_PATH}/bwm_reg_test_all test_matcher)
+ADD_TEST(bwm_reg_test_matcher   ${EXECUTABLE_OUTPUT_PATH}/bwm_reg_test_all test_matcher)
 
-ADD_TEST(bwm_reg_test_processor    ${EXECUTABLE_OUTPUT_PATH}/bwm_reg_test_all test_processor)
+ADD_TEST(bwm_reg_test_processor ${EXECUTABLE_OUTPUT_PATH}/bwm_reg_test_all test_processor)
 
+ADD_EXECUTABLE(bwm_reg_test_include test_include.cxx)
+TARGET_LINK_LIBRARIES(bwm_reg_test_include bwm_reg)
