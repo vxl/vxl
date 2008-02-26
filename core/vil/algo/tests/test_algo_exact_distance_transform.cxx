@@ -1,14 +1,16 @@
 #include <testlib/testlib_test.h>
+//:
+// \file
+// \author Ricardo Fabbri
+
 #include <vil/algo/vil_exact_distance_transform.h>
 #include <vil/vil_print.h>
 #include <vil/vil_copy.h>
-#include <vil/vil_fill.h>
-#include <vcl_cstdio.h>
-//:\author Ricardo Fabbri
+#include <vcl_cstdlib.h>
 
 void vil_exact_distance_transform_test(vil_image_view<vxl_uint_32> &im, bool print, bool three_d=false);
 
-void 
+void
 vil_exact_distance_transform_test_3D(vil_image_view<vxl_uint_32> &im, bool print);
 
 void
@@ -21,7 +23,7 @@ MAIN( test_algo_exact_distance_transform )
   START ("Exact Euclidean Distance Transform Algorithms");
 
   {
-  unsigned r=5,c=7; 
+  unsigned r=5,c=7;
 
   vil_image_view <vxl_uint_32> image(r,c,1);
 
@@ -79,7 +81,7 @@ MAIN( test_algo_exact_distance_transform )
   // ----- 3D -----
 
   {
-  unsigned r=7,c=5,p=3; 
+  unsigned r=7,c=5,p=3;
 
   vil_image_view <vxl_uint_32> image(c,r,p);
 
@@ -94,9 +96,9 @@ MAIN( test_algo_exact_distance_transform )
   }
 
 
-  /*
+#if 0
   { //: just runs on big image
-  unsigned r=200,c=300,p=400; 
+  unsigned r=200,c=300,p=400;
   vil_image_view <vxl_uint_32> image(c,r,p);
 
   image.fill(1);
@@ -104,10 +106,10 @@ MAIN( test_algo_exact_distance_transform )
   image(200,150,350)=0;
   vil_exact_distance_transform_saito(image);
   }
-  */
+#endif // 0
 
   {
-  unsigned r=7,c=5,p=3; 
+  unsigned r=7,c=5,p=3;
   vil_image_view <vxl_uint_32> image(c,r,p);
   image.fill(1);
 
@@ -122,16 +124,16 @@ MAIN( test_algo_exact_distance_transform )
 }
 
 //: test 2D EDT
-void 
+void
 vil_exact_distance_transform_test(vil_image_view<vxl_uint_32> &im, bool print, bool three_d)
 {
   vil_image_view <vxl_uint_32> dt_brute(vil_copy_deep(im));
- 
+
   if (three_d)
     vil_exact_distance_transform_brute_force(dt_brute);
   else
     vil_exact_distance_transform_brute_force_with_list(dt_brute);
- 
+
   if (print) {
      vcl_cout << "BRUTE DT:\n";
      vil_print_all(vcl_cout,dt_brute);
@@ -144,14 +146,13 @@ vil_exact_distance_transform_test(vil_image_view<vxl_uint_32> &im, bool print, b
     vil_exact_distance_transform_test_specific(im, dt_brute, print, "Maurer");
     vil_exact_distance_transform_test_specific(im, dt_brute, print, "Saito");
   }
-
 }
 
 void
 vil_exact_distance_transform_test_specific(
-    const vil_image_view<vxl_uint_32> &im, 
-    const vil_image_view<vxl_uint_32> dt_brute, 
-    bool print, 
+    const vil_image_view<vxl_uint_32> &im,
+    const vil_image_view<vxl_uint_32> dt_brute,
+    bool print,
     vcl_string algo)
 {
   vil_image_view <vxl_uint_32> dt_algo(vil_copy_deep(im));
@@ -163,7 +164,7 @@ vil_exact_distance_transform_test_specific(
   else if (algo == "Saito 3D")
     vil_exact_distance_transform_saito_3D(dt_algo);
   else
-    abort();
+    vcl_abort();
 
   if (print) {
     vcl_cout << algo << " DT:\n";
