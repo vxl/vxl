@@ -29,6 +29,7 @@ class bgui_roi_tableau_make_roi : public vgui_rubberband_client
 #define swap(a, b) { float t=a; a=b; b=t; }
     if (x0<x1) swap(x0,x1);
     if (y0<y1) swap(y0,y1);
+#undef swap
     image_tableau_->set_roi(x1,y1,x0-x1,y0-y1);
     done_ = true;
   }
