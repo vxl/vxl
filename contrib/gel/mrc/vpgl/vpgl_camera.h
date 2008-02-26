@@ -18,8 +18,11 @@
 // projective camera, since projective geometry may not apply in the
 // most general case, e.g. rational cameras. - JLM
 #include <vcl_string.h>
+#include <vbl/vbl_ref_count.h>
+#include <vbl/vbl_smart_ptr.h>
+
 template<class T>
-class vpgl_camera
+class vpgl_camera : public vbl_ref_count
 {
  public:
 
@@ -31,5 +34,9 @@ class vpgl_camera
   //: The generic camera interface. u represents image column, v image row.
   virtual void project(const T x, const T y, const T z, T& u, T& v) const = 0;
 };
+
+// convienance typedefs for smart pointers to generic cameras
+typedef vbl_smart_ptr<vpgl_camera<double> > vpgl_camera_double_sptr;
+
 
 #endif // vpgl_camera_h_
