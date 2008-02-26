@@ -14,6 +14,8 @@ effect.  If you change something in VXL, please document it here.
       - changed the interface of vnl_matrix_fixed get_row and get_column
         to return a vnl_vector_fixed
 
+      - Added fast exact Euclidean distance transforms to vil/algo
+
 ****************************
 VXL 1.9.0	- July 2007
 ****************************
