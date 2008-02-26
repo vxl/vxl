@@ -10,6 +10,7 @@ INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
 SET( vpgl_bpro_sources
  vpgl_load_proj_camera_process.h vpgl_load_proj_camera_process.cxx
  vpgl_load_rational_camera_process.h  vpgl_load_rational_camera_process.cxx
+ vpgl_load_perspective_camera_process.h vpgl_load_perspective_camera_process.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vpgl_bpro_sources)
