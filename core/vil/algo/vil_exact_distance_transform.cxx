@@ -16,7 +16,7 @@
 #include <vcl_vector.h>
 
 
-//: Row-wise 1D EDT 
+//: Row-wise 1D EDT
 //
 // This is the first step for independent-scanning EDT algorithms.
 //
@@ -26,19 +26,17 @@
 //
 // \Remarks
 // This particular implementation is based on the 1st part of the following method:
-// R. Lotufo and F. Zampirolli, Fast multidimensional parallel euclidean distance 
+// R. Lotufo and F. Zampirolli, Fast multidimensional parallel euclidean distance
 // transform based on mathematical morphology, in T. Wu and D. Borges, editors,
-// Proccedings of SIBGRAPI 2001, XIV Brazilian Symposium on Computer Graphics 
+// Proccedings of SIBGRAPI 2001, XIV Brazilian Symposium on Computer Graphics
 // and Image Processing, pages 100-105. IEEE Computer Society, 2001.
 //
-inline bool 
+inline bool
 vil_exact_distance_transform_1d_horizontal(vil_image_view<vxl_uint_32> &im)
 {
-
    unsigned ni=im.ni(), i,
             nj=im.nj(), j;
    vxl_uint_32 b;
-
 
    for (j=0; j < nj; j++) {
       b=1;
@@ -58,7 +56,7 @@ vil_exact_distance_transform_1d_horizontal(vil_image_view<vxl_uint_32> &im)
       }
    }
 
-   // NOTE: Lotufo's implementation (obtained by requesting him) of this first 
+   // NOTE: Lotufo's implementation (obtained by requesting him) of this first
    // part is less readable. Although pointers could be used more efficiently,
    // this first part is much faster than the 2nd part and is not worth
    // optimizing.  So I kept it readable, close to the paper's pseudocode.
@@ -74,8 +72,8 @@ vil_exact_distance_transform_1d_horizontal(vil_image_view<vxl_uint_32> &im)
 //  --------------------------------------
 
 //: internal test function as in Maurer's paper
-inline bool 
-remove_edt(int du, int dv, int dw, 
+inline bool
+remove_edt(int du, int dv, int dw,
            int u,  int v,  int w)
 {
     // 11 integer expressions
@@ -89,9 +87,8 @@ remove_edt(int du, int dv, int dw,
 //: global variable storing the infinity value for each image
 static vxl_uint_32 infty_;
 
-//: Internal function that eliminates unnecessary sites and computes 2D
-// Euclidean distances to the nearest sites.
-inline bool 
+//: Internal function that eliminates unnecessary sites and computes 2D Euclidean distances to the nearest sites.
+inline bool
 maurer_voronoi_edt_2D(vil_image_view<vxl_uint_32> &im, unsigned j1, int *g, int *h)
 {
    int l, ns, tmp0, tmp1, tmp2;
@@ -117,7 +114,7 @@ maurer_voronoi_edt_2D(vil_image_view<vxl_uint_32> &im, unsigned j1, int *g, int 
    for (i=0; i < im.nj(); ++i) {
       tmp0 = h[l] - i;
       tmp1 = g[l] + tmp0*tmp0;
-      while(true) {
+      while (true) {
          if (l >= ns) break;
 
          tmp2 = h[l+1] - i;
@@ -136,13 +133,12 @@ maurer_voronoi_edt_2D(vil_image_view<vxl_uint_32> &im, unsigned j1, int *g, int 
    return true;
 }
 
-//: Internal function that computes 2D EDT given 1D EDT using Maurer's Voronoi
-// algorithm for the integer grid.
+//: Internal function that computes 2D EDT given 1D EDT using Maurer's Voronoi algorithm for the integer grid.
 inline bool
 edt_maurer_2D_from_1D(vil_image_view<vxl_uint_32> &im)
 {
    bool stat;
-   unsigned i1; 
+   unsigned i1;
    int *g, *h; // same naming as in the paper
 
    // Call voronoi_edt_2D for every row.
@@ -163,21 +159,20 @@ edt_maurer_2D_from_1D(vil_image_view<vxl_uint_32> &im)
 }
 
 
-
 //: Internal function
-inline bool 
+inline bool
 test_contiguous(vil_image_view<vxl_uint_32> &im)
 {
    if (!im.is_contiguous()) {
 #ifndef NDEBUG
-      vcl_cerr << "edt: only contiguous row-wise images currently supported\n"; 
+      vcl_cerr << "edt: only contiguous row-wise images currently supported\n";
 #endif
       return false;
    }
 
    if (im.istep() != 1) {
 #ifndef NDEBUG
-      vcl_cerr << "edt(2): only contiguous row-wise images currently supported\n"; 
+      vcl_cerr << "edt(2): only contiguous row-wise images currently supported\n";
       vcl_cerr << "istep: " << im.istep() << vcl_endl;
 #endif
       return false;
@@ -189,10 +184,10 @@ test_contiguous(vil_image_view<vxl_uint_32> &im)
 //: Linear-time, 2D exact Euclidean distance transform (Maurer's Algorithm)
 //
 // This is one of the fastest methods according to a recent survey (distance.sourceforge.net)
-// Paper: Calvin Maurer et. al. PAMI feb. 2003 
+// Paper: Calvin Maurer et. al. PAMI feb. 2003
 //
 // Squared Euclidean distances are computed in-place for every pixel relative to the zero-pixels.
-// 
+//
 // \param[in,out] im   The input binary image using vxl_uint_32 storage. The
 // squared distance map is output to the same array, since the squared Euclidean
 // distances are integers, assuming pixels are unit distance apart.
@@ -202,7 +197,7 @@ test_contiguous(vil_image_view<vxl_uint_32> &im)
 //  Implementation influenced by the LTI lib, which is licensed under LGPL:
 //    http://ltilib.sourceforge.net
 //
-bool 
+bool
 vil_exact_distance_transform_maurer(vil_image_view<vxl_uint_32> &im)
 {
    unsigned i,r,c;
@@ -214,7 +209,7 @@ vil_exact_distance_transform_maurer(vil_image_view<vxl_uint_32> &im)
    r = im.nj();  c = im.ni();
    infty_ = vcl_numeric_limits<vxl_uint_32>::max() - r*r - c*c -1;
 
-   data = im.top_left_ptr(); 
+   data = im.top_left_ptr();
    for (i=0;  i<r*c;  ++i)
       if (data[i])
          data[i] = infty_;
@@ -223,10 +218,10 @@ vil_exact_distance_transform_maurer(vil_image_view<vxl_uint_32> &im)
 
    // Vertical row-wise EDT
    stat = vil_exact_distance_transform_1d_horizontal(im);
-   if (!stat) return false; 
+   if (!stat) return false;
 
    stat = edt_maurer_2D_from_1D(im);
-   if (!stat) return false; 
+   if (!stat) return false;
 
    return true;
 }
@@ -249,16 +244,16 @@ vil_exact_distance_transform_maurer(vil_image_view<vxl_uint_32> &im)
 //
 // \remarks Non-contiguous images not currently supported.
 //
-// Final implementation by Ricardo Fabbri, 
+// Final implementation by Ricardo Fabbri,
 // based on two independent implementations by Olivier Cuisenaire
 // and Julio Torelli.
 //
-bool 
+bool
 vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx)
 {
-  unsigned i,r,c; 
-  r = im.nj();  c = im.ni(); 
-  unsigned n = r*c;   
+  unsigned i,r,c;
+  r = im.nj();  c = im.ni();
+  unsigned n = r*c;
 
   unsigned diag1 = (unsigned)vcl_ceil( vcl_sqrt(double(r*r + c*c)) ) -1;
 
@@ -271,7 +266,7 @@ vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im, unsigned pla
   infty_ = vcl_numeric_limits<vxl_uint_32>::max() - r*r - c*c -1;
 
   vxl_uint_32 *data;
-  data = im.top_left_ptr(); 
+  data = im.top_left_ptr();
   for (i=0;  i < n;  ++i)
      if (data[i])
         data[i] = infty_;
@@ -279,19 +274,16 @@ vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im, unsigned pla
   return vil_exact_distance_transform_saito(im, plane_idx, sq);
 }
 
-//: Exact 3D EDT 
-// 
+//: Exact 3D EDT
+//
 // \remarks See comment on vil_exact_distance_transform_saito
 //
-bool 
+bool
 vil_exact_distance_transform_saito_3D(vil_image_view<vxl_uint_32> &im)
 {
-
-
-
-  unsigned i,r,c,nk; 
+  unsigned i,r,c,nk;
   r = im.nj();  c = im.ni(); nk = im.nplanes();
-  unsigned n = r*c*nk;   
+  unsigned n = r*c*nk;
 
   unsigned diag1 = (unsigned)vcl_ceil( vcl_sqrt(double(r*r + c*c + nk*nk)) ) -1;
 
@@ -304,7 +296,7 @@ vil_exact_distance_transform_saito_3D(vil_image_view<vxl_uint_32> &im)
   infty_ = vcl_numeric_limits<vxl_uint_32>::max() - r*r - c*c - nk*nk -1;
 
   vxl_uint_32 *data;
-  data = im.top_left_ptr(); 
+  data = im.top_left_ptr();
   for (i=0;  i < n;  ++i)
      if (data[i])
         data[i] = infty_;
@@ -317,14 +309,12 @@ vil_exact_distance_transform_saito_3D(vil_image_view<vxl_uint_32> &im)
       return false;
   }
 
-
-  //: Now, for each pixel, compute final distance by searching along Z direction
-  
+  // Now, for each pixel, compute final distance by searching along Z direction
 
   unsigned rc = r*c;
   for (unsigned j=0; j < r; ++j, data+=c) {
     vcl_vector<unsigned> buff(nk);
-    
+
     vxl_uint_32 *pt;
 
     for (unsigned i=0; i < c; ++i) {
@@ -392,31 +382,29 @@ vil_exact_distance_transform_saito_3D(vil_image_view<vxl_uint_32> &im)
   return true;
 }
 
-//: Overload that assumes given a Lookup table of integer squares. Also assumes the image im
-// already has infinity in all non-zero points.
-// 
+//: Overload that assumes given a Lookup table of integer squares.
+// Also assumes the image im already has infinity in all non-zero points.
+//
 // \sa see documentation of vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx=0);
 //
-bool 
+bool
 vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx, const vcl_vector<unsigned> &sq)
 {
-
    if (!test_contiguous(im))
       return false;
 
-   unsigned r,c,nk; //: TODO: unsigned long might be needed for large volumetric data
+   unsigned r,c,nk; // TODO: unsigned long might be needed for large volumetric data
    r = im.nj();  c = im.ni(); nk = im.nplanes();
-   unsigned n = r*c*nk;   
+   unsigned n = r*c*nk;
 
-
-   /* Cuisenaire's idea: a LUT with precomputed i*i TODO move this outside
-    * this fn (class? parameter?) */
-
+   // Cuisenaire's idea: a LUT with precomputed i*i
+   // TODO: move this outside this fn (class? parameter?)
+   //
    // Create a temporary 2D image view for this plane, whose top_left_ptr is
    // data plus r*c
 
    vxl_uint_32 *data;
-   data = im.top_left_ptr(); 
+   data = im.top_left_ptr();
    data += plane_idx*r*c;
    vil_image_view<vxl_uint_32> plane_im;
 
@@ -425,17 +413,13 @@ vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im, unsigned pla
    // Vertical row-wise EDT
    bool stat;
    stat = vil_exact_distance_transform_1d_horizontal(plane_im);
-   if (!stat) return false; 
-
+   if (!stat) return false;
 
    // ----------- Step 2 -----------
-
-
 
    vcl_vector<unsigned> buff;
    buff.resize(r);
 
-   
    unsigned *pt;
 
    for (unsigned i=0; i < c; ++i) {
@@ -498,11 +482,9 @@ vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im, unsigned pla
          buffer = buff[j];
       }
    }
-   
 
    return true;
 }
-
 
 
 //  -----------------------------
@@ -521,7 +503,7 @@ vil_exact_distance_transform_saito(vil_image_view<vxl_uint_32> &im, unsigned pla
 // distances are integers, assuming pixels are unit distance apart.
 //
 //
-bool 
+bool
 vil_exact_distance_transform_brute_force(vil_image_view<vxl_uint_32> &im)
 {
   unsigned i, xi, yi, zi,
@@ -550,11 +532,10 @@ vil_exact_distance_transform_brute_force(vil_image_view<vxl_uint_32> &im)
 
         for (j=0; j<n; ++j)
            if (I[j] == 0) {
-
               zj = j / ninj;
               unsigned j_idx_2dimg = j % ninj;
 
-              xj  = j_idx_2dimg % ni; yj = j_idx_2dimg / ni; 
+              xj  = j_idx_2dimg % ni; yj = j_idx_2dimg / ni;
 
               dx  = xi-xj; dy = yi-yj; dz = zi-zj; // ok if its unsigned (modular arithmetic)
               dst = dx*dx + dy*dy + dz*dz;
@@ -567,15 +548,15 @@ vil_exact_distance_transform_brute_force(vil_image_view<vxl_uint_32> &im)
 }
 
 //: Another Naive implementation of the exact Euclidean distance transform (for ground-truth).
-// 
+//
 // This implementation uses about 2x more memory than plain brute-force but is faster in
 // most cases. It is O(N^2) if the number of white pixels is about the same as
 // the number of black pixels. In general, the complexity is between O(N) and
 // O(N^2) depending on the content (N is the total number of pixels).
 //
-// \sa description of vil_exact_distance_transform_brute_force 
+// \sa description of vil_exact_distance_transform_brute_force
 //
-bool 
+bool
 vil_exact_distance_transform_brute_force_with_list(vil_image_view<vxl_uint_32> &im)
 {
    unsigned i, xi, yi,
@@ -621,25 +602,24 @@ vil_exact_distance_transform_brute_force_with_list(vil_image_view<vxl_uint_32> &
    return true;
 }
 
-//: Computes signed Euclidean distance transform by using unsigned EDT of an
-// image and its binary complement. 
+//: Computes signed Euclidean distance transform by using unsigned EDT of an image and its binary complement.
 //
 // The input image will be modified as an auxiliary array, so if you want to
 // keep the input you are responsible for making a copy before calling this
 // function.
 //
 // Regions on input image are pixels where intensity > 0;
-// Distance Transform is > 0 INSIDE the regions amd 
+// Distance Transform is > 0 INSIDE the regions amd
 //                       < 0 OUTSIDE the regions.
 //
-// \Remarks The code for combining the interior and exterior distance maps 
+// \Remarks The code for combining the interior and exterior distance maps
 // has been blindly adapted from a previous implementation; the original code was from
 // a legacy repository at Brown University (algo/contourtracing/signed_dt.cpp)
 //
-bool 
+bool
 vil_exact_distance_transform_signed(
-    vil_image_view<unsigned int> &input_image, 
-    vil_image_view<float> &signed_edt_image) 
+    vil_image_view<unsigned int> &input_image,
+    vil_image_view<float> &signed_edt_image)
 {
   float distance_from_interior,
         surface_value, diff;
@@ -649,7 +629,6 @@ vil_exact_distance_transform_signed(
   const float cutoff_margin = 1000.0; // ??
   float *signed_edt;
   unsigned i;
-
 
   vxl_uint_32 *image_data = input_image.top_left_ptr();
 
@@ -680,6 +659,6 @@ vil_exact_distance_transform_signed(
 
     signed_edt[i] = (float)(surface_value - 0.5);
   }
-  
+
   return true;
 }
