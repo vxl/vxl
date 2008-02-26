@@ -4,6 +4,7 @@
 // \file
 
 #include "bwm_observer_vgui.h"
+#include "bwm_observable_sptr.h"
 
 #include <vcl_iostream.h>
 
@@ -30,12 +31,12 @@ class bwm_observer_cam : public bwm_observer_vgui
 
   bwm_observer_cam(bgui_image_tableau_sptr const& img, vpgl_camera<double> *camera, vcl_string cam_path)
     : bwm_observer_vgui(img), proj_plane_(vgl_plane_3d<double>(0, 0, 1, 0)),
-    camera_(camera), cam_path_(cam_path), cam_adjusted_(false){}
+    camera_(camera), cam_path_(cam_path), cam_adjusted_(false), extrude_mode_(false){}
 
   // set the initial projection plane to z=0
   bwm_observer_cam(bgui_image_tableau_sptr const& img, const char* n="unnamed")
     : bwm_observer_vgui(img), proj_plane_(vgl_plane_3d<double>(0, 0, 1, 0)),
-     cam_adjusted_(false){}
+     cam_adjusted_(false),extrude_mode_(false){}
 
   virtual ~bwm_observer_cam(){ delete camera_;}
 
@@ -124,6 +125,8 @@ class bwm_observer_cam : public bwm_observer_vgui
 
   void extrude_face(vsol_point_2d_sptr pt);
 
+  void extrude_face2(vsol_point_2d_sptr pt);
+
   void divide_face(bwm_observable_sptr obs, unsigned face_id,
     float x1, float y1, float x2, float y2);
 
@@ -157,6 +160,11 @@ class bwm_observer_cam : public bwm_observer_vgui
   bool cam_adjusted_;
 
   vgl_plane_3d<double> proj_plane_;
+
+  // controls extrude for keybord manipulation
+  bool extrude_mode_;
+  bwm_observable_sptr extrude_obj_;
+
 
   bwm_observer_cam() {}
 

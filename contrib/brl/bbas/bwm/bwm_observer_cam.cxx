@@ -168,6 +168,29 @@ bool bwm_observer_cam::handle(const vgui_event &e)
     moving_polygon_ = false;
     return true;
   }
+  // extrude mode, goes only in z direction (up and down)
+  if (extrude_mode_ && e.type==vgui_KEY_PRESS && e.key == vgui_CURSOR_UP)
+  {
+      if (e.modifier == vgui_SHIFT)
+        extrude_obj_->move_extr_face(1.0);
+      else
+        extrude_obj_->move_extr_face(0.1);
+    in_jog_mode_ = true;
+    return true;
+  }
+  if (extrude_mode_ && e.type==vgui_KEY_PRESS && e.key == vgui_CURSOR_DOWN)
+  {
+      if (e.modifier == vgui_SHIFT)
+        extrude_obj_->move_extr_face(-1.0);
+      else
+        extrude_obj_->move_extr_face(-0.1);
+    in_jog_mode_ = true;
+    return true;
+  }
+  // stops the extrude mode 
+  if (extrude_mode_ && e.type==vgui_KEY_PRESS && e.key == vgui_END)
+    extrude_mode_ = false;
+  // moving along the optical axis
   if (e.type==vgui_KEY_PRESS && e.key == vgui_CURSOR_UP)
   {
     if (this == bwm_observer_mgr::BWM_MASTER_OBSERVER)
@@ -718,7 +741,7 @@ void bwm_observer_cam::connect_inner_face(bwm_observable* obj,
 // plane. The face is extruded to this position along the normal of
 // the selected face.
 //
-void bwm_observer_cam::extrude_face(vsol_point_2d_sptr pt)
+void bwm_observer_cam::extrude_face2(vsol_point_2d_sptr pt)
 {
   // first get the selected objects
   //vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
@@ -874,6 +897,47 @@ void bwm_observer_cam::extrude_face(vsol_point_2d_sptr pt)
     //construction plane.
 
     obs->extrude(face_id, pt3d->z());
+}
+
+// The input point, pt, is supplied by the caller. The routine
+// expects that the user has selected a face and a vertex on the face.
+// A plane is constructed that is perpendicular to the face to be extruded,
+// and passing through one of the edges of the face. The 3-d location of
+// the picked point is determined by projecting it onto the perpendicular
+// plane. The face is extruded to this position along the normal of
+// the selected face.
+//
+void bwm_observer_cam::extrude_face(vsol_point_2d_sptr pt)
+{
+  // first get the selected objects
+  //vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
+  bgui_vsol_soview2D_polygon* poly = (bgui_vsol_soview2D_polygon*) this->get_selected_object(POLYGON_TYPE);
+  if (!poly) {
+    vcl_cerr << "Please select a face (only one) to extrude!" << vcl_endl;
+    return;
+  }
+
+  // make sure that the polygon is in the z=d plane, do NOT extrude otherwise
+  unsigned face_id;
+  bwm_observable_sptr obs = this->find_object(poly->get_id(), face_id);
+  if (!obs)
+    return;
+
+  vsol_polygon_3d_sptr face = obs->extract_face(face_id);
+  vgl_vector_3d<double> up(0,0,1);
+  vgl_vector_3d<double> down(0,0,-1);
+  vgl_vector_3d<double> normal = face->normal();
+  double angle_u = angle(normal, up);
+  double angle_d = angle(normal, down);
+  // check if the normal is either up or down
+  if ((angle_u < 0.01) || (angle_d < 0.01)) {
+    extrude_mode_ = true;
+    extrude_obj_ = obs;
+    obs->extrude(face_id);
+  } else {
+    this->deselect_all();
+    vcl_cout << "The face is not extrudable, it should be parallel to the ground!" << vcl_endl;
+  }
 }
 
 void bwm_observer_cam::divide_face(bwm_observable_sptr obs, unsigned face_id,

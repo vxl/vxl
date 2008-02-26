@@ -432,11 +432,11 @@ void bwm_observable_mesh::move_extr_face(double z)
       vsol_point_3d_sptr p = polygon->vertex(i);
       //vgl_vector_3d<double> normal = polygon->normal_at_point(p);
 #if 0
-      v->set_pt (vgl_point_3d<double> (v->get_pt().x() + dist*normal.x() ,
-                                       v->get_pt().y() + dist*normal.y(),
-                                       v->get_pt().z() + dist*normal.z()));
+      v->set_pt (vgl_point_3d<double> (v->get_pt().x() + z*normal.x()/1000. ,
+                                       v->get_pt().y() + z*normal.y()/1000.,
+                                       v->get_pt().z() + z*normal.z()));
 #endif // 0
-      v->set_pt (vgl_point_3d<double> (v->get_pt().x(), v->get_pt().y(), z));
+      v->set_pt (vgl_point_3d<double> (v->get_pt().x(), v->get_pt().y(), v->get_pt().z()+z));
       //just use the z value as the new height
 
       //vcl_cout << "new v=" << v->get_pt() << vcl_endl;

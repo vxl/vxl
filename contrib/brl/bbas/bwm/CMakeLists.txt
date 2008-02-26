@@ -53,7 +53,7 @@ SET(bwm_sources
    bwm_tableau_factory.cxx     bwm_tableau_factory.h 
    bwm_process_mgr.cxx         bwm_process_mgr.h
    bwm_observable.h            bwm_observable_sptr.h
-   bwm_mesh_observable.h
+ #  bwm_mesh_observable.h
    bwm_observable_mesh.cxx     bwm_observable_mesh.h       bwm_observable_mesh_sptr.h
    bwm_observable_textured_mesh.cxx bwm_observable_textured_mesh.h bwm_observable_textured_mesh_sptr.h
    bwm_observable_polyline.cxx bwm_observable_polyline.h   bwm_observable_polyline_sptr.h
@@ -97,7 +97,7 @@ AUX_SOURCE_DIRECTORY(Templates bwm_sources)
 
 ADD_LIBRARY(bwm ${bwm_sources})
 
-TARGET_LINK_LIBRARIES( bwm bwm_video bgui3d bwm_algo bmsh3d bmsh3d_algo bgeo bmsh3d_vis expatpp bsol vsol vdgl bgui vgui vil vbl vgl vgl_algo vnl vpgl vpgl_algo vpgl_file_formats)
+TARGET_LINK_LIBRARIES( bwm bwm_video bwm_reg bgui3d bwm_algo bmsh3d bmsh3d_algo bgeo bmsh3d_vis expatpp bsol vsol vdgl bgui vgui vil vbl vgl vgl_algo vnl vpgl vpgl_algo vpgl_file_formats)
 
 SUBDIRS(exe)
 SUBDIRS(algo)
