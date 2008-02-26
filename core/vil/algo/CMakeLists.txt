@@ -42,6 +42,7 @@ SET( vil_algo_sources
   vil_trace_8con_boundary.cxx vil_trace_8con_boundary.h
   vil_blob_finder.cxx         vil_blob_finder.h
   vil_distance_transform.cxx  vil_distance_transform.h
+  vil_exact_distance_transform.cxx  vil_exact_distance_transform.h
   vil_corners.cxx             vil_corners.h
   vil_region_finder.txx       vil_region_finder.h
   vil_cartesian_differential_invariants.txx   vil_cartesian_differential_invariants.h 

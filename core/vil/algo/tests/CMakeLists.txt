@@ -21,6 +21,7 @@ ADD_EXECUTABLE( vil_algo_test_all
   test_algo_histogram.cxx
   test_algo_histogram_equalise.cxx
   test_algo_distance_transform.cxx
+  test_algo_exact_distance_transform.cxx
   test_algo_blob_finder.cxx
   test_algo_find_peaks.cxx
   test_algo_find_plateaus.cxx
@@ -70,6 +71,7 @@ ADD_TEST( vil_algo_test_fft                 ${EXECUTABLE_OUTPUT_PATH}/vil_algo_t
 ADD_TEST( vil_algo_test_histogram           ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_histogram )
 ADD_TEST( vil_algo_test_histogram_equalise  ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_histogram_equalise )
 ADD_TEST( vil_algo_test_distance_transform  ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_distance_transform )
+ADD_TEST( vil_algo_test_exact_distance_transform ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_exact_distance_transform )
 ADD_TEST( vil_algo_test_blob_finder         ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_blob_finder )
 ADD_TEST( vil_algo_test_find_peaks          ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_find_peaks )
 ADD_TEST( vil_algo_test_find_plateaus       ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_find_plateaus )
