@@ -75,9 +75,9 @@ vpgl_load_perspective_camera_process::execute()
   vnl_vector_fixed<double,3> center_v = -R_matrix.transpose()*T_vector;
   vgl_point_3d<double> camera_center(center_v[0],center_v[1],center_v[2]);
 
-   vbl_smart_ptr<vpgl_camera<double> > cam = new vpgl_perspective_camera<double>(K,camera_center,rot);
+   vpgl_camera_double_sptr cam = new vpgl_perspective_camera<double>(K,camera_center,rot);
 
-  brdb_value_sptr output0 = new brdb_value_t<vbl_smart_ptr<vpgl_camera<double> > >(cam);
+  brdb_value_sptr output0 = new brdb_value_t<vpgl_camera_double_sptr>(cam);
   
   output_data_[0] = output0;
 

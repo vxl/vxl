@@ -53,14 +53,14 @@ vpgl_load_rational_camera_process::execute()
 
   vcl_string camera_filename = input0->value();
 
-  vbl_smart_ptr<vpgl_camera<double> > ratcam = read_rational_camera<double>(camera_filename);;
+  vpgl_camera_double_sptr ratcam = read_rational_camera<double>(camera_filename);;
 
   if( !ratcam.as_pointer() ) {
     vcl_cerr << "Failed to load rational camera from file" << camera_filename << vcl_endl;
     return false;
   }
 
-  brdb_value_sptr output0 = new brdb_value_t<vbl_smart_ptr<vpgl_camera<double> > >(ratcam);
+  brdb_value_sptr output0 = new brdb_value_t<vpgl_camera_double_sptr>(ratcam);
   
   output_data_[0] = output0;
 

@@ -65,7 +65,7 @@ vpgl_load_proj_camera_process::execute()
 
   vbl_smart_ptr<vpgl_camera<double> > procam = new vpgl_proj_camera<double>(projection_matrix);
 
-  brdb_value_sptr output0 = new brdb_value_t<vbl_smart_ptr<vpgl_camera<double> > >(procam);
+  brdb_value_sptr output0 = new brdb_value_t<vpgl_camera_double_sptr>(procam);
   
   output_data_[0] = output0;
 
