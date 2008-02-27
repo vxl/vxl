@@ -5,20 +5,16 @@
 
 
 #include <mfpf/mfpf_region_pdf.h>
-#include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
 #include <vcl_cmath.h>
-#include <vcl_algorithm.h>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
-#include <mbl/mbl_cloneables_factory.h>
+//#include <mbl/mbl_cloneables_factory.h>
 
 #include <vil/vil_resample_bilin.h>
 #include <vil/io/vil_io_image_view.h>
-#include <vil/vil_math.h>
-#include <vil/vil_print.h>
 #include <vsl/vsl_vector_io.h>
 
 #include <mfpf/mfpf_sample_region.h>
@@ -315,15 +311,14 @@ mfpf_point_finder* mfpf_region_pdf::clone() const
 
 void mfpf_region_pdf::print_summary(vcl_ostream& os) const
 {
-  os<<"{ step_size: "<<step_size_;
-  os<<" size: "<<roi_ni_<<" x "<<roi_nj_;
-  os<<" n_pixels: "<<n_pixels_;
-  os<<" ref_pt: ("<<ref_x_<<","<<ref_y_<<")";
-  if (pdf_.ptr()==0) os<<" PDF: - ";
-  else               os<<" PDF: "<<pdf_;
-  os<<" search_ni: "<<search_ni_;
-  os<<" search_nj: "<<search_nj_;
-  os<<" }";
+  os << "{ step_size: "<<step_size_
+     << " size: "<<roi_ni_<<" x "<<roi_nj_
+     << " n_pixels: "<<n_pixels_
+     << " ref_pt: ("<<ref_x_<<','<<ref_y_<<')';
+     << " PDF: " << ( pdf_.ptr()==0 ? "--" : pdf_ )
+     << " search_ni: "<<search_ni_
+     << " search_nj: "<<search_nj_
+     << '}';
 }
 
 void mfpf_region_pdf::print_shape(vcl_ostream& os) const
@@ -336,8 +331,8 @@ void mfpf_region_pdf::print_shape(vcl_ostream& os) const
   for (unsigned j=0;j<im.nj();++j)
   {
     for (unsigned i=0;i<im.ni();++i)
-      if (im(i,j)==0) os<<" ";
-      else            os<<"X";
+      if (im(i,j)==0) os<<' ';
+      else            os<<'X';
     os<<vcl_endl;
   }
 }
@@ -381,8 +376,8 @@ void mfpf_region_pdf::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,search_nj_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&) \n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
