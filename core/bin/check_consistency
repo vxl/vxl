@@ -358,6 +358,7 @@ foreach $f (@FILES)
     # VIL/ALGO
     elsif ($j eq 'vil/algo/vil_cartesian_differential_invariants.h') { $i.='_3'; }
     elsif ($j eq 'vil/algo/vil_convolve_1d.h') { $i='vil_convolve_(1d|edge_1d|boundary_option)'; }
+    elsif ($j eq 'vil/algo/vil_exact_distance_transform.h') { $i.='_([a-z_]+)'; }
     elsif ($j eq 'vil/algo/vil_find_peaks.h') { $i='vil_(find_peaks_3x3|is_peak_3x3)'; }
     elsif ($j eq 'vil/algo/vil_find_4con_boundary.h') { $i.='(_below|_above)_threshold'; }
     elsif ($j eq 'vil/algo/vil_flood_fill.h') { $i.='(_row|4|8)'; }
