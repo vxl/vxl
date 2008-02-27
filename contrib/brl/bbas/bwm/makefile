@@ -45,7 +45,6 @@ MANPAGE_SOURCES += bwm_def.h
 MANPAGE_SOURCES += bwm_input.h
 MANPAGE_SOURCES += bwm_load_commands.h
 MANPAGE_SOURCES += bwm_macros.h
-MANPAGE_SOURCES += bwm_mesh_observable.h
 MANPAGE_SOURCES += bwm_observable.h
 MANPAGE_SOURCES += bwm_observable_sptr.h
 MANPAGE_SOURCES += bwm_observer_coin3d.h
