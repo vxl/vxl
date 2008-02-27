@@ -9,11 +9,10 @@
 //
 // \verbatim
 //  Modifications
-//   (none yet)
+//   <none yet>
 // \endverbatim
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
 #include <vil/vil_image_view.h>
 #include "bbgm_image_of.h"
 #include "bbgm_planes_to_sample.h"
@@ -58,6 +57,5 @@ void measure(bbgm_image_of<dist_>& dimg,
         result(i,j) = temp_val;
       }
 }
-                                                                        
 
 #endif // bbgm_measure_h_

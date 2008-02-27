@@ -1,8 +1,7 @@
 #include <testlib/testlib_test.h>
 #include <bxml/bxml_find.h>
-#include <vcl_iostream.h>
 
-namespace{
+namespace {
 
 bxml_document make_simple_doc()
 {
@@ -36,14 +35,14 @@ bxml_document make_long_doc()
   doc.set_root_element(root);
   root->append_text("\n");
 
-  for(unsigned i=0; i<100; ++i){
+  for (unsigned i=0; i<100; ++i){
     bxml_element * frame = new bxml_element("frame");
     root->append_text("  ");
     root->append_data(frame);
     root->append_text("\n");
     frame->set_attribute("number",i);
 
-    for(unsigned j=0; j<5; ++j){
+    for (unsigned j=0; j<5; ++j){
       bxml_element * data = new bxml_element("data");
       frame->append_text("\n    ");
       frame->append_data(data);
@@ -63,7 +62,6 @@ bxml_document make_long_doc()
 int
 test_find_main( int argc, char* argv[] )
 {
-
   START ("XML Find");
 
   {
@@ -79,7 +77,6 @@ test_find_main( int argc, char* argv[] )
     result = bxml_find(doc.root_element(), query);
 
     TEST("find missing element", !result, true);
-
   }
 
 

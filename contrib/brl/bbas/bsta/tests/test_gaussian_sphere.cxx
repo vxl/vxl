@@ -1,7 +1,6 @@
 #include <testlib/testlib_test.h>
 #include <bsta/bsta_gaussian_sphere.h>
 #include <vcl_string.h>
-#include <vcl_iostream.h>
 #include <vcl_limits.h>
 
 
@@ -61,7 +60,6 @@ void test_gaussian_sphere_type(T epsilon, const vcl_string& type_name)
   TEST_NEAR(("box probability (1-d) <"+type_name+">").c_str(),
             prob_box_1d,0.11246291,1e-07);
 }
-
 
 
 MAIN( test_gaussian_sphere )
