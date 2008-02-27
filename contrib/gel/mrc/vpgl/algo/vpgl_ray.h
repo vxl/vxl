@@ -27,14 +27,14 @@ class vpgl_ray
 
        // === vnl interface ===
 
-  //:compute the ray at a given 3-d point
+  //: compute the ray at a given 3-d point
   static  bool ray(const vpgl_camera<double>* cam,
                    vnl_double_3 const& point_3d,
                    vnl_double_3& ray);
 
        // === vgl interface ===
 
-  //:compute the ray at a given 3-d point
+  //: compute the ray at a given 3-d point
   static bool ray(const vpgl_camera<double>*  cam,
                   vgl_point_3d<double> const& point_3d,
                   vgl_vector_3d<double>& ray);
@@ -43,14 +43,14 @@ class vpgl_ray
 
        // === vnl interface ===
 
-  //:compute the ray at a given 3-d point
+  //: compute the ray at a given 3-d point
   static bool ray(vpgl_rational_camera<double> const& rcam,
                   vnl_double_3 const& point_3d,
                   vnl_double_3& ray);
 
        // === vgl interface ===
 
-  //:compute the ray at a given 3-d point
+  //: compute the ray at a given 3-d point
   static bool ray(vpgl_rational_camera<double> const& rcam,
                   vgl_point_3d<double> const& point_3d,
                   vgl_vector_3d<double>& ray);

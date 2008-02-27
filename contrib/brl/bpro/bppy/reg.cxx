@@ -29,8 +29,8 @@ register_processes(PyObject *self, PyObject *args)
   REG_PROCESS(bbgm_update_dist_image_stream_process, bprb_batch_process_manager);
   REG_PROCESS(bbgm_display_dist_image_process, bprb_batch_process_manager);
   REG_PROCESS(bbgm_measure_process, bprb_batch_process_manager);
-	Py_INCREF(Py_None);
-	return Py_None;
+  Py_INCREF(Py_None);
+  return Py_None;
 }
 
 PyObject *
@@ -46,7 +46,7 @@ register_datatypes(PyObject *self, PyObject *args)
   REGISTER_DATATYPE(vidl2_istream_sptr);
   REGISTER_DATATYPE(vidl2_ostream_sptr);
   REGISTER_DATATYPE(bbgm_image_sptr);
-	Py_INCREF(Py_None);
-	return Py_None;
+  Py_INCREF(Py_None);
+  return Py_None;
 }
 

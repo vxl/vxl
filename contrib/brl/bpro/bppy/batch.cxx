@@ -3,15 +3,16 @@
 #include <bprb/bprb_batch_process_manager.h>
 #include <brdb/brdb_value.h>
 #include <vcl_iostream.h>
+
 static PyObject *
 init_process(PyObject *self, PyObject *args)
 {
   const char* name;
   if (!PyArg_ParseTuple(args, "s:init_process", &name))
-		return NULL;
+    return NULL;
   vcl_string n(name);
   vcl_cout << n << '\n';
-  bool result = 
+  bool result =
     bprb_batch_process_manager::instance()->init_process(n);
   return Py_BuildValue("b", result);
 }
@@ -22,10 +23,10 @@ set_input_bool(PyObject *self, PyObject *args)
   int input;
   bool value;
   if (!PyArg_ParseTuple(args, "ib:set_input_bool", &input, &value))
-		return NULL;
+    return NULL;
   brdb_value_sptr v = new brdb_value_t<bool>(value);
   vcl_cout << "input[" << input << "](bool): " << value << '\n';
-  bool result = 
+  bool result =
     bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
 }
@@ -36,10 +37,10 @@ set_input_string(PyObject *self, PyObject *args)
   int input;
   const char* value;
   if (!PyArg_ParseTuple(args, "is:set_input_string", &input, &value))
-		return NULL;
+    return NULL;
   brdb_value_sptr v = new brdb_value_t<vcl_string>(value);
   vcl_cout << "input[" << input << "](string): " << value << '\n';
-  bool result = 
+  bool result =
     bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
 }
@@ -50,10 +51,10 @@ set_input_int(PyObject *self, PyObject *args)
   int input;
   int ivalue;
   if (!PyArg_ParseTuple(args, "ii:set_input_int", &input, &ivalue))
-		return NULL;
+    return NULL;
   brdb_value_sptr iv = new brdb_value_t<int>(ivalue);
   vcl_cout << "input[" << input << "](int): " << ivalue << '\n';
-  bool result = 
+  bool result =
     bprb_batch_process_manager::instance()->set_input(input, iv);
   return Py_BuildValue("b", result);
 }
@@ -64,10 +65,10 @@ set_input_long(PyObject *self, PyObject *args)
   int input;
   long value;
   if (!PyArg_ParseTuple(args, "il:set_input_long", &input, &value))
-		return NULL;
+    return NULL;
   brdb_value_sptr v = new brdb_value_t<long>(value);
   vcl_cout << "input[" << input << "](long): " << value << '\n';
-  bool result = 
+  bool result =
     bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
 }
@@ -78,10 +79,10 @@ set_input_float(PyObject *self, PyObject *args)
   int input;
   float value;
   if (!PyArg_ParseTuple(args, "if:set_input_float", &input, &value))
-		return NULL;
+    return NULL;
   brdb_value_sptr v = new brdb_value_t<float>(value);
   vcl_cout << "input[" << input << "](float): " << value << '\n';
-  bool result = 
+  bool result =
     bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
 }
@@ -92,10 +93,10 @@ set_input_double(PyObject *self, PyObject *args)
   int input;
   double value;
   if (!PyArg_ParseTuple(args, "id:set_input_double", &input, &value))
-		return NULL;
+    return NULL;
   brdb_value_sptr v = new brdb_value_t<double>(value);
   vcl_cout << "input[" << input << "](double): " << value << '\n';
-  bool result = 
+  bool result =
     bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
 }
@@ -121,10 +122,10 @@ commit_output(PyObject *self, PyObject *args)
   unsigned id;
   unsigned output;
   if (!PyArg_ParseTuple(args, "i:commit_output", &output))
-		return NULL;
-  bool result = 
+    return NULL;
+  bool result =
     bprb_batch_process_manager::instance()->commit_output(output,id);
-  if(!result)
+  if (!result)
     return Py_BuildValue("i", -1);
   return Py_BuildValue("i", id);
 }
@@ -135,8 +136,8 @@ set_input_from_db(PyObject *self, PyObject *args)
   unsigned input;
   unsigned id;
   if (!PyArg_ParseTuple(args, "ii:set_input_from_db", &input, &id))
-		return NULL;
-  bool result = 
+    return NULL;
+  bool result =
     bprb_batch_process_manager::instance()->set_input_from_db(input,id);
 
   return Py_BuildValue("b", result);
@@ -147,45 +148,48 @@ remove_data(PyObject *self, PyObject *args)
 {
   unsigned id;
   if (!PyArg_ParseTuple(args, "i:set_input_from_db", &id))
-		return NULL;
-  bool result = 
+    return NULL;
+  bool result =
     bprb_batch_process_manager::instance()->remove_data(id);
 
   return Py_BuildValue("b", result);
 }
 
 static PyObject *
-print_db(PyObject *self, PyObject *args){
+print_db(PyObject *self, PyObject *args)
+{
   bprb_batch_process_manager::instance()->print_db();
   Py_INCREF(Py_None);
   return Py_None;
 }
 
 static PyObject *
-clear(PyObject *self, PyObject *args){
+clear(PyObject *self, PyObject *args)
+{
   bprb_batch_process_manager::instance()->clear();
   Py_INCREF(Py_None);
   return Py_None;
 }
 
-static PyMethodDef batch_methods[] = {
-	{"register_processes", register_processes, METH_VARARGS,
+static PyMethodDef batch_methods[] =
+{
+  {"register_processes", register_processes, METH_VARARGS,
    "register_processes() create instances of each defined process"},
-	{"register_datatypes", register_datatypes, METH_VARARGS,
+  {"register_datatypes", register_datatypes, METH_VARARGS,
    "register_datatypes() insert tables in the database for each type"},
-	{"init_process", init_process, METH_VARARGS,
+  {"init_process", init_process, METH_VARARGS,
    "init_process(s) create a new process instance by name"},
-	{"set_input_bool", set_input_bool, METH_VARARGS,
+  {"set_input_bool", set_input_bool, METH_VARARGS,
    "set_input_(i,b) set input i on current process to a bool value"},
-	{"set_input_string", set_input_string, METH_VARARGS,
+  {"set_input_string", set_input_string, METH_VARARGS,
    "set_input_(i,s) set input i on current process to a string value"},
-	{"set_input_int", set_input_int, METH_VARARGS,
+  {"set_input_int", set_input_int, METH_VARARGS,
    "set_input_(i,i) set input i on current process to an int value"},
-	{"set_input_long", set_input_long, METH_VARARGS,
+  {"set_input_long", set_input_long, METH_VARARGS,
    "set_input_(i,l) set input i on current process to a long value"},
-	{"set_input_float", set_input_float, METH_VARARGS,
+  {"set_input_float", set_input_float, METH_VARARGS,
    "set_input_(i,f) set input i on current process to a float value"},
-	{"set_input_double", set_input_double, METH_VARARGS,
+  {"set_input_double", set_input_double, METH_VARARGS,
    "set_input_(i,d) set input i on current process to a double value"},
   {"process_init", process_init, METH_VARARGS,
    "process_init() initialize the current process state before execution"},
@@ -199,13 +203,13 @@ static PyMethodDef batch_methods[] = {
    "remove_data(i) remove data with id from db"},
   {"print_db", print_db, METH_VARARGS, "print_db() print the database"},
   {"clear", clear, METH_VARARGS, "clear() clear the database tables"},
-	{NULL, NULL},
-	{NULL, NULL}
+  {NULL, NULL},
+  {NULL, NULL}
 };
 
 
 PyMODINIT_FUNC
 initbatch(void)
 {
-	Py_InitModule("batch", batch_methods);
+  Py_InitModule("batch", batch_methods);
 }
