@@ -4,12 +4,12 @@
 //:
 // \file
 // \brief External function declarations
-// \author J.L. Mundy 
+// \author J.L. Mundy
 // \date February 5, 2008
-//
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 #include "Python.h"
 
@@ -19,5 +19,4 @@ register_processes(PyObject *self, PyObject *args);
 extern PyObject *
 register_datatypes(PyObject *self, PyObject *args);
 
-
-#endif //batch
+#endif // batch_h_
