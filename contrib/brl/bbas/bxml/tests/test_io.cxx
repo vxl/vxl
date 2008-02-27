@@ -2,7 +2,6 @@
 #include <bxml/bxml_read.h>
 #include <bxml/bxml_write.h>
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
 #include <vcl_sstream.h>
 
 
@@ -38,14 +37,14 @@ bxml_document make_long_doc()
   doc.set_root_element(root);
   root->append_text("\n");
 
-  for(unsigned i=0; i<100; ++i){
+  for (unsigned i=0; i<100; ++i){
     bxml_element * frame = new bxml_element("frame");
     root->append_text("  ");
     root->append_data(frame);
     root->append_text("\n");
     frame->set_attribute("number",i);
 
-    for(unsigned j=0; j<5; ++j){
+    for (unsigned j=0; j<5; ++j){
       bxml_element * data = new bxml_element("data");
       frame->append_text("\n    ");
       frame->append_data(data);
@@ -101,19 +100,19 @@ test_io_main( int argc, char* argv[] )
     bxml_data_sptr data = NULL;
     bool fail = false;
     int count = 0;
-    while(data = str_reader.next_element(s, depth)){
-      if(depth == 1){
-        if(data->type() != bxml_data::ELEMENT){
+    while (data = str_reader.next_element(s, depth)){
+      if (depth == 1){
+        if (data->type() != bxml_data::ELEMENT){
           fail = true;
           break;
         }
         bxml_element* el = static_cast<bxml_element*>(data.ptr());
-        if(el->name() != "frame"){
+        if (el->name() != "frame"){
           fail = true;
           break;
         }
         int val;
-        if(!el->get_attribute("number",val) || val != count){
+        if (!el->get_attribute("number",val) || val != count){
           fail = true;
           break;
         }
