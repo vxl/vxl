@@ -18,7 +18,6 @@
 #include <bwm/bwm_load_commands.h>
 #include <bwm/bwm_macros.h>
 #include <bwm/bwm_menu.h>
-#include <bwm/bwm_mesh_observable.h>
 #include <bwm/bwm_observable.h>
 #include <bwm/bwm_observable_mesh.h>
 #include <bwm/bwm_observable_mesh_sptr.h>
