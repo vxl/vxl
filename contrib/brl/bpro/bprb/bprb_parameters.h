@@ -7,7 +7,6 @@
 // \author Matt Leotta, (mleotta@lems.brown.edu)
 // \date 7/1/2004
 //
-//
 // \verbatim
 //  Modifications
 //    Matt Leotta  12/15/04     Migrated from vidpro
@@ -16,7 +15,6 @@
 // \endverbatim
 
 #include <vcl_string.h>
-#include <vcl_sstream.h>
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vcl_vector.h>
@@ -58,7 +56,7 @@ class bprb_param
   virtual vcl_string default_str() const = 0;
   //: Return a string representation of the type
   virtual vcl_string type_str() const = 0;
-  
+
   //: Return a string representation of the minimum value
   virtual vcl_string min_str() const = 0;
   //: Return a string representation of the maximium value
@@ -107,7 +105,7 @@ class bprb_param_type : public bprb_param
   T min_value() const { return min_value_; }
   //: Accessor for the default value;
   T max_value() const { return max_value_; }
-  
+
   //: Accessor for the current value;
   T value() const { return value_; }
   //: A reference for temporary storage of values
@@ -128,7 +126,7 @@ class bprb_param_type : public bprb_param
   //: Return a string representation of the default value
   virtual vcl_string default_str() const { return create_string(default_); }
   //: Return a string representation of the default value
-  virtual vcl_string type_str() const { return (typeid(vcl_string("dummy")) == typeid(default_)) ? "string" : typeid(default_).name(); }
+  virtual vcl_string type_str() const { return typeid(vcl_string("dummy")) == typeid(default_) ? "string" : typeid(default_).name(); }
 
   //: Return a string representation of the minimum value
   virtual vcl_string min_str() const { return has_bounds_? create_string(min_value_) : ""; }
@@ -164,7 +162,7 @@ class bprb_choice_param_type : public bprb_param_type<unsigned>
 {
  public:
   // Constructor
-  bprb_choice_param_type(const vcl_string& name, const vcl_string& desc,  
+  bprb_choice_param_type(const vcl_string& name, const vcl_string& desc,
   const vcl_vector<vcl_string>& choices, const unsigned def_val)
    : bprb_param_type<unsigned>(name, desc, def_val, 0, choices.size()-1), choices_(choices) {}
 
@@ -201,12 +199,12 @@ class bprb_parameters : public vbl_ref_count
   template<class T>
   bool valid_parameter_type( const vcl_string& name, const T&) const
   {
-    vcl_map< vcl_string, bprb_param* >::const_iterator 
+    vcl_map< vcl_string, bprb_param* >::const_iterator
       itr = name_param_map_.find( name );
-    if( itr == name_param_map_.end() ) {
+    if ( itr == name_param_map_.end() ) {
       return false; // Not Found
     }
-    return (dynamic_cast<bprb_param_type<T> *>(itr->second) != NULL);
+    return dynamic_cast<bprb_param_type<T> *>(itr->second) != NULL;
   }
 
   //: Add a new parameter with no bounds
@@ -222,7 +220,7 @@ class bprb_parameters : public vbl_ref_count
 
   //: Add a new parameter for multiple choice options
   template<class T>
-  bool add( const vcl_string& desc, const vcl_string& name, 
+  bool add( const vcl_string& desc, const vcl_string& name,
             const vcl_vector<vcl_string>& choices, const T& default_val )
   { return add(new bprb_choice_param_type(name, desc, choices, default_val)); }
 
@@ -231,7 +229,7 @@ class bprb_parameters : public vbl_ref_count
   bool set_value( const vcl_string& name , const T& value )
   {
     bprb_param_type<T> * param = NULL;
-    if( get_param(name, param) && param ){
+    if ( get_param(name, param) && param ){
       return param->set_value(value);
     }
     return false;
@@ -242,14 +240,14 @@ class bprb_parameters : public vbl_ref_count
   bool get_value( const vcl_string& name , T& value ) const
   {
     bprb_param_type<T> * param = NULL;
-    if( get_param(name, param) && param ){
+    if ( get_param(name, param) && param ){
       value = param->value();
       return true;
     }
     return false;
   }
 
-  //: Return the value of the parameter 
+  //: Return the value of the parameter
   //  Be carefull when using this method, if the parameter DOES NOT EXIST --> returns 0
   //  so MAKE SURE that a parameter with the given name EXISTS in the parameter list of the process
   template<class T>
@@ -257,7 +255,7 @@ class bprb_parameters : public vbl_ref_count
   {
     bprb_param_type<T> * param = NULL;
     T val = 0;
-    if( get_param(name, param) && param ){
+    if ( get_param(name, param) && param ){
       val = param->value();
     }
     return val;
@@ -268,7 +266,7 @@ class bprb_parameters : public vbl_ref_count
   bool get_default( const vcl_string& name , T& deflt ) const
   {
     bprb_param_type<T> * param = NULL;
-    if( get_param(name, param) && param ){
+    if ( get_param(name, param) && param ){
       deflt = param->default_value();
       return true;
     }
@@ -280,7 +278,7 @@ class bprb_parameters : public vbl_ref_count
   bool get_bounds( const vcl_string& name, T & min, T & max ) const
   {
     bprb_param_type<T> * param = NULL;
-    if( get_param(name, param) && param ){
+    if ( get_param(name, param) && param ){
       min = param->min_value();
       max = param->max_value();
       return true;
@@ -310,24 +308,24 @@ class bprb_parameters : public vbl_ref_count
   vcl_string get_desc( const vcl_string& name ) const;
   //: Print all parameters to \p os
   void print_all(vcl_ostream& os) const;
-  
+
  private:
   //: Add parameter helper function
   bool add( bprb_param* param );
 
   template<class T>
-  bool get_param( const vcl_string& name, 
+  bool get_param( const vcl_string& name,
                   bprb_param_type<T> * &param) const
   {
-    vcl_map< vcl_string, bprb_param* >::const_iterator 
+    vcl_map< vcl_string, bprb_param* >::const_iterator
       itr = name_param_map_.find( name );
-    if( itr == name_param_map_.end() ) {
+    if ( itr == name_param_map_.end() ) {
       return false; // Not Found
     }
     param = dynamic_cast<bprb_param_type<T> *>(itr->second);
-    if( !param )
-      vcl_cerr << "WARNING: parameter \""<< name 
-               << "\" was found but has incorrect type" << vcl_endl;
+    if ( !param )
+      vcl_cerr << "WARNING: parameter \""<< name
+               << "\" was found but has incorrect type\n";
     return true;
   }
 
