@@ -315,8 +315,9 @@ void mfpf_region_pdf::print_summary(vcl_ostream& os) const
      << " size: "<<roi_ni_<<" x "<<roi_nj_
      << " n_pixels: "<<n_pixels_
      << " ref_pt: ("<<ref_x_<<','<<ref_y_<<')'
-     << " PDF: " << ( pdf_.ptr()==0 ? "--" : pdf_ )
-     << " search_ni: "<<search_ni_
+     << " PDF: ";
+  if (pdf_.ptr()==0) os << "--"; else os << pdf_;
+  os << " search_ni: "<<search_ni_
      << " search_nj: "<<search_nj_
      << '}';
 }
