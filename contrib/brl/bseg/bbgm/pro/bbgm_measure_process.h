@@ -1,7 +1,6 @@
 // This is brl/bseg/bbgm/pro/bbgm_measure_process.h
 #ifndef bbgm_measure_process_h_
 #define bbgm_measure_process_h_
-
 //:
 // \file
 // \brief A process for computing a measurement on a distribution image
@@ -10,9 +9,9 @@
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
-#include <vcl_vector.h>
 #include <vcl_string.h>
 #include <bprb/bprb_process.h>
 
@@ -20,7 +19,7 @@
 class bbgm_measure_process : public bprb_process
 {
  public:
-  
+
   bbgm_measure_process();
 
   //: Copy Constructor (no local data)
@@ -33,12 +32,9 @@ class bbgm_measure_process : public bprb_process
 
   vcl_string name(){return "MeasureProcess";}
 
-  bool init(){return true;} 
+  bool init(){return true;}
   bool execute();
   bool finish(){return true;}
- 
- private:
-
 };
 
 #endif //bbgm_measure_process_h_
