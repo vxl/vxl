@@ -118,9 +118,7 @@ vcl_vector<vnl_double_3x3> vpgl_interpolate::interpolateR(vnl_double_3x3 R0,
 }
 
 
-vnl_double_3x3 vpgl_interpolate::interpolateR(vnl_double_3x3 R0,
-						                      vnl_double_3x3 R1,
-							                  double alpha)
+vnl_double_3x3 vpgl_interpolate::interpolateR(double alpha, vnl_double_3x3 R0, vnl_double_3x3 R1)
 {
 	vnl_double_3x3 r = R0.transpose()*R1;
 	vnl_double_3x3 log_r = vpgl_interpolate::logR(r);
