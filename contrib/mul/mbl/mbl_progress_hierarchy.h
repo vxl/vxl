@@ -46,6 +46,8 @@ class mbl_progress_hierarchy: public mbl_progress
   // value is out of 1.0.
   virtual void on_changed_progress(double fraction)=0;
 
+  mbl_progress_hierarchy() : just_ended_(false) {}
+  
  private:
   //: The ordered hierarchy of identifiers.
   vcl_vector<vcl_string> identifier_stack_;
