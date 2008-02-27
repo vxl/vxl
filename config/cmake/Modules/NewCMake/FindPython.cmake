@@ -5,12 +5,14 @@
 #   PYTHON_PC_INCLUDE_PATH - PC directory for Win
 #   PYTHON_DEBUG_LIBRARY   - path to the debug library
 
-SET(PYTHON_FOUND "NO")
+# Flag that determines if we were able to successfully build Python.
+# Initialize to NO. Change below if yes.
+SET(PYTHON_FOUND "NO" CACHE INTERNAL "Was Python successfully built?" )
 
 INCLUDE( ${CMAKE_ROOT}/Modules/FindPythonLibs.cmake )
 IF(PYTHON_LIBRARY OR PYTHON_DEBUG_LIBRARY)
   # everything found
-  SET(PYTHON_FOUND "YES")
+  SET(PYTHON_FOUND "YES" CACHE INTERNAL "Was Python successfully built?")
 
   IF( WIN32 )
     FIND_PATH(PYTHON_PC_INCLUDE_PATH 
