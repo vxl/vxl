@@ -25,10 +25,10 @@ struct vsl_stream_summary_t
   vsl_stream_summary_t(const T& x): x(x) {}
 };
 
-template <class T>
-inline struct vsl_stream_summary_t<T> vsl_stream_summary(const T& x)
+template <class S>
+inline vsl_stream_summary_t<S> vsl_stream_summary(const S& x)
 {
-  return vsl_stream_summary_t<T>(x);
+  return vsl_stream_summary_t<S>(x);
 }
 
 
