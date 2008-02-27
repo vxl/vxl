@@ -11,7 +11,6 @@
 
 #include <vcl_vector.h>
 
-#include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_point_2d.h>
 
@@ -29,8 +28,7 @@
 //  CoG at the origin.
 class m23d_ortho_flexible_builder
 {
-  
-  private:
+ private:
     //: 3(1+m) x np matrix, each column containing one 3D point
     vnl_matrix<double> P3D_;
 
@@ -78,20 +76,19 @@ class m23d_ortho_flexible_builder
     //: Compute the mean 3D shape
     void compute_mean(vnl_matrix<double>& mean_shape,
                       vnl_vector<double>& mean_coeffs);
-    
-    
-    //: Return 3d pts given 3*np matrix
-    void mat_to_3d_pts( vcl_vector< vgl_point_3d<double> >& pts,
-                               const vnl_matrix<double>& M) const;
 
-  public:
-    
+    //: Return 3d pts given 3*np matrix
+    void mat_to_3d_pts(vcl_vector< vgl_point_3d<double> >& pts,
+                       const vnl_matrix<double>& M) const;
+
+ public:
+
     //: Reconstruct structure from set of 2d pts
     // formulates measurement matrix P2D then calls reconstruct() function
     void reconstruct(const vcl_vector< vcl_vector< vgl_point_2d<double> > >& pt_vec_list,
-                              const unsigned& n_modes );
-    
-    
+                     const unsigned& n_modes );
+
+
     //: Reconstruct approximate structure of 3D points given multiple 2D views
     //  Data assumed to be scaled orthographic projections
     //  The result is stored in the shape_3d() matrix.
@@ -161,13 +158,14 @@ class m23d_ortho_flexible_builder
 
     //: Mean coefficients
     const vnl_vector<double>& mean_coeffs() const { return mean_coeffs_; }
-    
+
+#if 0
     //: Get back 3d pts rotated and shifted for each frame
-    //void recon_shapes(vcl_vector< vcl_vector< vgl_point_3d<double> > >& pt_vec_list ) const;
-    
+    void recon_shapes(vcl_vector< vcl_vector< vgl_point_3d<double> > >& pt_vec_list ) const;
+#endif // 0
+
     //: Return 3d pts given 3*np matrix
-    void get_shape_3d_pts( vcl_vector< vgl_point_3d<double> >& pts ) const; 
-    
+    void get_shape_3d_pts( vcl_vector< vgl_point_3d<double> >& pts ) const;
 };
 
 #endif // m2d3_ortho_flexible_builder_h_

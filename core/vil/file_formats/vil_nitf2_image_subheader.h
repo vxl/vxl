@@ -14,6 +14,7 @@
 
 class vil_stream;
 class vil_nitf2_data_mask_table;
+
 //:
 // This class is responsible for parsing a NITF 2.1 image header.
 // It is used by vil_nitf_image for this purpose.  You can access
@@ -30,7 +31,9 @@ class vil_nitf2_image_subheader
   //: Read the image header starting at stream's current position.
   // \returns false if failed
   virtual bool read( vil_stream* stream );
-  //virtual bool write( vil_stream* stream );
+#if 0
+  virtual bool write( vil_stream* stream );
+#endif // 0
 
   //: Sets \a out_value to the value of field specified by tag.
   // \returns 0 if such a field is not found or is of the wrong type.
@@ -84,32 +87,32 @@ class vil_nitf2_image_subheader
   // so you need to delete it.
   virtual vil_nitf2_field::field_tree* get_tree( int i = 0 ) const;
 
-  //
   //: Get RPC parameters, if present. User provides rpc_data array.
-  // The parameters describe a camera projection based on the 
+  // The parameters describe a camera projection based on the
   // ratio of cubic polynomials in (lon, lat, ele). All variables
   // are normalized to the range [-1, 1] using scale and offset parameters.
-  // For further definition of parameters see 
-  // http://www.ismc.nima.mil/ntb/superceded/vimas/vimas.pdf 
+  // For further definition of parameters see
+  // http://www.ismc.nima.mil/ntb/superceded/vimas/vimas.pdf
   // The returned rpc_data vector is encoded as:
   //  rpc_data[0]-rpc_data[19]         Line Numerator Cubic Coefficients
   //  rpc_data[20]-rpc_data[39]        Line Denominator Cubic Coefficients
   //  rpc_data[40]-rpc_data[59]        Sample Numerator Cubic Coefficients
   //  rpc_data[60]-rpc_data[79]        Sample Denominator Cubic Coefficients
-  //  rpc_data[80] Line Offset         rpc_data[81] Sample Offset     
-  //  rpc_data[82] Latitude Offset     rpc_data[83] Longitude Offset     
+  //  rpc_data[80] Line Offset         rpc_data[81] Sample Offset
+  //  rpc_data[82] Latitude Offset     rpc_data[83] Longitude Offset
   //  rpc_data[84] Elevation Offset    rpc_data[85] Line Scale
   //  rpc_data[86] Sample Scale        rpc_data[87] Latitude Scale
-  //  rpc_data[88] Longitude Scale     rpc_data[89] Elevation Scale     
+  //  rpc_data[88] Longitude Scale     rpc_data[89] Elevation Scale
   //
   //  The ordering of coefficients can vary as indicated by rpc_type
   //  Defined extensions are RPC00A and RPC00B.
-  bool get_rpc_params( vcl_string& rpc_type, vcl_string& image_id, 
+  bool get_rpc_params( vcl_string& rpc_type, vcl_string& image_id,
                        vcl_string& image_corner_geo_locations,
                        double* rpc_data );
 
-  //: sun_el --> sun elevation angle 
-  //: sun_az --> sun azimuthal angle 
+  //: Return the elevation and azimuth angles of the sun
+  //  \a sun_el --> sun elevation angle
+  //  \a sun_az --> sun azimuthal angle
   bool get_sun_params( double& sun_el, double& sun_az);
 
  protected:
