@@ -103,6 +103,12 @@ class vpgl_interpolate
                           unsigned n_between,
                           vcl_vector<vpgl_perspective_camera<double> >& cams);
 
+  //:Linearly interpolate (or extrapolate if abs(alpha) > 1) a rotation in Lie space.
+  // In Lie space, the interpolated rotation = R0 + alpha*(R1 - R0)
+  static vnl_double_3x3 interpolateR(vnl_double_3x3 R0,
+                                     vnl_double_3x3 R1,
+                                     double alpha);
+
  private:
   //: constructor private - static methods only
   vpgl_interpolate();
