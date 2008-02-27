@@ -144,9 +144,6 @@ SOURCE=.\bwm_macros.h
 SOURCE=.\bwm_menu.h
 # End Source File
 # Begin Source File
-SOURCE=.\bwm_mesh_observable.h
-# End Source File
-# Begin Source File
 SOURCE=.\bwm_observable.h
 # End Source File
 # Begin Source File
