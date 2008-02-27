@@ -1,3 +1,7 @@
+#ifndef vpgl_io_camera_txx_
+#define vpgl_io_camera_txx_
+//:
+// \file
 #include "vpgl_io_camera.h"
 #include "vpgl_io_rational_camera.h"
 #include "vpgl_io_proj_camera.h"
@@ -32,7 +36,7 @@ void vsl_b_write(vsl_b_ostream & os, vpgl_camera<T>* const& camera)
     vsl_b_write(os,cam_type);
     vsl_b_write(os,*lratcam);
   }else {
-    vcl_cerr << "tried to write unknown camera type!" << vcl_endl;
+    vcl_cerr << "tried to write unknown camera type!\n";
     vcl_string cam_type("unknown");
     vsl_b_write(os,cam_type);
   }
@@ -63,15 +67,16 @@ void vsl_b_read(vsl_b_istream & is, vpgl_camera<T>* &camera)
     vsl_b_read(is,*lratcam);
     camera = lratcam;
   }else if (cam_type == "unknown") {
-    vcl_cerr << "cannot read camera of unknown type!" << vcl_endl;
+    vcl_cerr << "cannot read camera of unknown type!\n";
   }
   else {
-    vcl_cerr << "error reading vpgl_camera!" << vcl_endl;
+    vcl_cerr << "error reading vpgl_camera!\n";
   }
   return;
 }
 
 #define VPGL_IO_CAMERA_INSTANTIATE(T) \
-template void vsl_b_read(vsl_b_istream &, vpgl_camera<T>* &); \
-template void vsl_b_write(vsl_b_ostream &, vpgl_camera<T>* const&);
+template void vsl_b_read(vsl_b_istream &, vpgl_camera<T >* &); \
+template void vsl_b_write(vsl_b_ostream &, vpgl_camera<T >* const&)
 
+#endif // vpgl_io_camera_txx_
