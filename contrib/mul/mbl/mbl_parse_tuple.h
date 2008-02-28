@@ -7,9 +7,7 @@
 // \date  6-Feb-2008
 // \brief Convenience function a tuple of PODs from a config file.
 
-#include <vcl_algorithm.h>
 #include <vcl_istream.h>
-#include <vcl_iterator.h>
 #include <mbl/mbl_exception.h>
 
 //: Read a 2-tuple of PODs from a config file.
@@ -19,17 +17,17 @@
 //
 // \throws mbl_exception_parse_error if unrecoverable parse error.
 //
-// \verbatim
 // Example:
-// vcl_istringstream ss("{ 1.0 4 }");
-// float a;
-// int b;
-// mbl_parse_tuple(ss, a, b)
-// \endverbatim
+// \code
+//   vcl_istringstream ss("{ 1.0 4 }");
+//   float a;
+//   int b;
+//   mbl_parse_tuple(ss, a, b)
+// \endcode
+//
 template <class T, class U>
 inline void mbl_parse_tuple(vcl_istream &afs, T& a, U& b)
 {
-
   if (!afs) return;
   char brace1, brace2;
   afs >> vcl_ws >> brace1;
@@ -75,7 +73,6 @@ inline void mbl_parse_tuple(vcl_istream &afs, T& a, U& b)
 template <class T, class U, class V>
 inline void mbl_parse_tuple(vcl_istream &afs, T& a, U& b, V& c)
 {
-
   if (!afs) return;
   char brace1, brace2;
   afs >> vcl_ws >> brace1;
@@ -104,7 +101,6 @@ inline void mbl_parse_tuple(vcl_istream &afs, T& a, U& b, V& c)
 }
 
 
-
 //: Read a 4-tuple of PODs from a config file.
 // This function will read through a stream, and store the text found to a string.
 // The function reads 4 elements. If there was an openning brace it will also consume the closing brace.
@@ -124,7 +120,6 @@ inline void mbl_parse_tuple(vcl_istream &afs, T& a, U& b, V& c)
 template <class T, class U, class V, class W>
 inline void mbl_parse_tuple(vcl_istream &afs, T& a, U& b, V& c, W& d)
 {
-
   if (!afs) return;
   char brace1, brace2;
   afs >> vcl_ws >> brace1;
@@ -151,4 +146,5 @@ inline void mbl_parse_tuple(vcl_istream &afs, T& a, U& b, V& c, W& d)
       throw mbl_exception_parse_error("mbl_parse_tuple failed with stream error");
   }
 }
+
 #endif // mbl_parse_tuple_h_
