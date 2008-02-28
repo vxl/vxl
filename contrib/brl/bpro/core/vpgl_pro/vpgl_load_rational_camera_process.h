@@ -1,7 +1,6 @@
 // This is brl/bpro/core/vpgl_pro/vpgl_load_rational_camera_process.h
 #ifndef vpgl_load_rational_camera_process_h_
 #define vpgl_load_rational_camera_process_h_
-
 //:
 // \file
 // \brief A process for loading a vpgl_rational_camera from ascii file
@@ -10,9 +9,9 @@
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
-#include <vcl_vector.h>
 #include <vcl_string.h>
 #include <bprb/bprb_process.h>
 
@@ -20,7 +19,7 @@
 class vpgl_load_rational_camera_process : public bprb_process
 {
  public:
-  
+
   vpgl_load_rational_camera_process();
 
   //: Copy Constructor (no local data)
@@ -36,9 +35,6 @@ class vpgl_load_rational_camera_process : public bprb_process
   bool init() { return true; }
   bool execute();
   bool finish(){return true;}
- 
- private:
-
 };
 
 #endif //vpgl_load_rational_camera_process_h_

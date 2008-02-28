@@ -1,7 +1,6 @@
-// This is brl/bpro/core/vil_pro/vidl2_open_istream_process.h
+// This is brl/bpro/core/vidl2_pro/vidl2_open_istream_process.h
 #ifndef vidl2_open_istream_process_h_
 #define vidl2_open_istream_process_h_
-
 //:
 // \file
 // \brief A process for loading a vidl2_istream
@@ -10,20 +9,20 @@
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
-#include <vcl_vector.h>
 #include <vcl_string.h>
 #include <bprb/bprb_process.h>
+
 //: Loads an image list video istream
 //  Inputs:  Index          Type                Purpose
 //             0         vcl_string    Directory for the image list
 //
-
 class vidl2_open_istream_process : public bprb_process
 {
  public:
-  
+
   vidl2_open_istream_process();
 
   //: Copy Constructor (no local data)
@@ -39,9 +38,6 @@ class vidl2_open_istream_process : public bprb_process
   bool init() { return true; }
   bool execute();
   bool finish(){return true;}
- 
- private:
-
 };
 
 #endif //vidl2_open_istream_process_h_

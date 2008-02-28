@@ -1,7 +1,6 @@
 // This is brl/bseg/bbgm/pro/bbgm_update_dist_image_stream_process.h
 #ifndef bbgm_update_dist_image_stream_process_h_
 #define bbgm_update_dist_image_stream_process_h_
-
 //:
 // \file
 // \brief A process for updating a distribution image
@@ -10,17 +9,17 @@
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
-#include <vcl_vector.h>
 #include <vcl_string.h>
 #include <bprb/bprb_process.h>
 #include <vidl2/vidl2_istream_sptr.h>
-#include <vil/vil_image_view.h>
+
 class bbgm_update_dist_image_stream_process : public bprb_process
 {
  public:
-  
+
   bbgm_update_dist_image_stream_process();
 
   //: Copy Constructor (no local data)
@@ -36,7 +35,7 @@ class bbgm_update_dist_image_stream_process : public bprb_process
   bool init();
   bool execute();
   bool finish(){return true;}
- 
+
  private:
   vidl2_istream_sptr istream_;
   unsigned ni_;

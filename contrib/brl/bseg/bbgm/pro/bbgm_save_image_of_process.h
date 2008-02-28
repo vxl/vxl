@@ -1,7 +1,6 @@
 // This is brl/bseg/bbgm/pro/bbgm_save_image_of_process.h
 #ifndef bbgm_save_image_of_process_h_
 #define bbgm_save_image_of_process_h_
-
 //:
 // \file
 // \brief A process for saving a background image of distributions
@@ -10,17 +9,16 @@
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
-#include <vcl_vector.h>
 #include <vcl_string.h>
 #include <bprb/bprb_process.h>
-
 
 class bbgm_save_image_of_process : public bprb_process
 {
  public:
-  
+
   bbgm_save_image_of_process();
 
   //: Copy Constructor (no local data)
@@ -36,9 +34,6 @@ class bbgm_save_image_of_process : public bprb_process
   bool init() { return true; }
   bool execute();
   bool finish(){return true;}
- 
- private:
-
 };
 
 #endif //bbgm_save_image_of_process_h_
