@@ -16,6 +16,8 @@
 #include <vimt/vimt_bilin_interp.h>
 #include <vimt/vimt_sample_profile_bilin.h>
 #include <vnl/io/vnl_io_vector.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 
 //=======================================================================
 // Dflt ctor
