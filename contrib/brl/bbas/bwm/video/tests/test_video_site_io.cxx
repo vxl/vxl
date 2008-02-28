@@ -1,14 +1,12 @@
-#include <vcl_iostream.h>
 #include <vcl_vector.h>
-#include <vcl_fstream.h>
 #include <testlib/testlib_test.h>
-#include <vul/vul_file.h>
 #include <vcl_string.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <bwm/video/bwm_video_site_io.h>
 #include <bwm/video/bwm_video_corr.h>
 #include <bwm/video/bwm_video_corr_sptr.h>
 #include <vgl/vgl_point_2d.h>
+
 static void test_video_site_io()
 {
   vcl_string xml_path = "site_io.xml";
@@ -33,15 +31,15 @@ static void test_video_site_io()
   good = good && sio.camera_path() == "my_camera";
   vcl_vector<bwm_video_corr_sptr> restored_corrs = sio.corrs();
   unsigned i = 0;
-  for(vcl_vector<bwm_video_corr_sptr>::iterator cit = restored_corrs.begin();
-      cit != restored_corrs.end(); ++cit, ++i)
-    {
-      vgl_point_2d<double> pt;
-      vgl_point_2d<double> ptr;
-      corrs[i]->match(i, pt);
-      (*cit)->match(i, ptr);
-      good = good && pt == ptr;
-    }
+  for (vcl_vector<bwm_video_corr_sptr>::iterator cit = restored_corrs.begin();
+       cit != restored_corrs.end(); ++cit, ++i)
+  {
+    vgl_point_2d<double> pt;
+    vgl_point_2d<double> ptr;
+    corrs[i]->match(i, pt);
+    (*cit)->match(i, ptr);
+    good = good && pt == ptr;
+  }
   TEST("save and restore correspondences", good, true);
   vpl_unlink(xml_path.c_str());
 }
