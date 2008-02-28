@@ -1,11 +1,12 @@
+#include "mfpf_edge_finder.h"
 //:
 // \file
 // \brief Locates strongest edge along a profile
 // \author Tim Cootes
 
-#include <mfpf/mfpf_edge_finder.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
+#include <vnl/vnl_vector.h>
 #include <vcl_cmath.h>
 
 #include <mbl/mbl_parse_block.h>
