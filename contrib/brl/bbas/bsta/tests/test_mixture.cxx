@@ -1,8 +1,6 @@
 #include <testlib/testlib_test.h>
 #include <bsta/bsta_mixture.h>
 #include <vcl_string.h>
-#include <vcl_iostream.h>
-
 
 template <class T>
 void test_mixture_type(T dummy, const vcl_string& type_name)
@@ -11,8 +9,6 @@ void test_mixture_type(T dummy, const vcl_string& type_name)
   TEST(("Dummy test <"+type_name+">").c_str(), true, true);
 }
 
-
-
 MAIN( test_mixture )
 {
   START ("mixture");
@@ -20,5 +16,4 @@ MAIN( test_mixture )
   test_mixture_type(double(),"double");
   SUMMARY();
 }
-
 
