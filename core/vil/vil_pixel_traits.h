@@ -15,14 +15,14 @@
 // \author Ian Scott
 // \date   27 Nov 2002
 // \verbatim
-
-//  Modifications J.L. Mundy Dec. 2004, Added traits to support range mapping.
+//  Modifications
+//   J.L. Mundy Dec. 2004, Added traits to support range mapping.
 //
-//    is_signed   -  does the type have negative values
-//    num_bits    -  number of bits required to encode the value range
-//    minval      -  the minimum value of the type (possibly negative).
-//    maxval      -  the maximum value of the type
-//    real_number_field - is the type an approximation to the field of reals
+//  - is_signed         -  does the type have negative values
+//  - num_bits          -  number of bits required to encode the value range
+//  - minval            -  the minimum value of the type (possibly negative).
+//  - maxval            -  the maximum value of the type
+//  - real_number_field - is the type an approximation to the field of reals
 //
 //  (Note, functions used rather than static constants for minimal linking issues)
 // \endverbatim
