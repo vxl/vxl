@@ -12,8 +12,6 @@
 
 #include <vcl_iostream.h>
 #include <vsl/vsl_binary_loader.h>
-#include <vcl_cmath.h>
-#include <vnl/vnl_math.h>
 #include <mbl/mbl_cloneables_factory.h>
 #include <mfpf/mfpf_add_all_loaders.h>
 #include <mfpf/mfpf_edge_finder.h>
@@ -72,10 +70,10 @@ void test_edge_finder_search(mfpf_point_finder_builder& b)
   double r0 = vil_bilin_interp_safe(response.image(),ip.x(),ip.y());
   double r1 = vil_bilin_interp_safe(response.image(),ip.x()-1,ip.y());
   double r2 = vil_bilin_interp_safe(response.image(),ip.x()+1,ip.y());
-  vcl_cout<<r0<<","<<r1<<","<<r2<<vcl_endl;
+  vcl_cout<<r0<<','<<r1<<','<<r2<<vcl_endl;
   TEST("Local minima 1",r0<r1,true);
   TEST("Local minima 2",r0<r2,true);
- 
+
   delete pf;
 }
 
@@ -89,7 +87,6 @@ void test_edge_finder()
 
   mfpf_edge_finder_builder edge_builder;
   test_edge_finder_search(edge_builder);
-
 
   // -------------------------------------------
   //  Test configuring from stream
@@ -142,7 +139,7 @@ void test_edge_finder()
 
     vsl_b_ifstream bfs_in("test_edge_finder.bvl.tmp");
     TEST ("Opened test_edge_finder.bvl.tmp for reading",
-           (!bfs_in), false);
+          (!bfs_in), false);
     vsl_b_read(bfs_in, edge_finder_in);
     vsl_b_read(bfs_in, base_ptr_in);
     TEST ("Finished reading file successfully", (!bfs_in), false);
@@ -151,12 +148,10 @@ void test_edge_finder()
     TEST("Loaded: search_ni",
          edge_finder_in.search_ni(),edge_finder.search_ni());
     TEST("Load edge_finder by base ptr (type)",
-        base_ptr_in->is_a()==edge_finder.is_a(),true);
-
+         base_ptr_in->is_a()==edge_finder.is_a(),true);
   }
 
   vsl_delete_all_loaders();
-
 }
 
 TESTMAIN(test_edge_finder);

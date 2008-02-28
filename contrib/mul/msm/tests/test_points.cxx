@@ -12,8 +12,6 @@
 
 #include <vcl_iostream.h>
 #include <vsl/vsl_binary_loader.h>
-#include <vcl_cmath.h>
-#include <vnl/vnl_math.h>
 #include <msm/msm_points.h>
 
 //=======================================================================
@@ -68,7 +66,6 @@ void test_points()
           (b_lo-vgl_point_2d<double>(0,1)).length(),0,1e-6);
   TEST_NEAR("Upper bound",
           (b_hi-vgl_point_2d<double>(8,9)).length(),0,1e-6);
-  
 
   {
     vcl_cout<<"Test binary load and save"<<vcl_endl;
@@ -89,7 +86,6 @@ void test_points()
     bfs_in.close();
 
     TEST("Loaded==Saved",points_in,points);
-
   }
 
   {
@@ -102,8 +98,6 @@ void test_points()
 
     TEST("Loaded==Saved",points_in,points);
   }
-
-
 }
 
 TESTMAIN(test_points);
