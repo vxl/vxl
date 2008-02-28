@@ -30,8 +30,8 @@ template <class T, unsigned n>
 void
 vsl_b_read(vsl_b_istream &is, bsta_gaussian_sphere<T,n>& g)
 {
-  typedef typename bsta_gaussian_sphere<T,n>::vector_type _vector;
-  _vector mean;
+  typedef typename bsta_gaussian_sphere<T,n>::vector_type vector_;
+  vector_ mean;
   T var;
   vsl_b_read(is, mean);
   vsl_b_read(is, var);
