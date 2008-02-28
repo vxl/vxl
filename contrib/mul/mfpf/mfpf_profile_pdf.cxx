@@ -1,15 +1,12 @@
+#include "mfpf_profile_pdf.h"
 //:
 // \file
 // \brief Searches along a profile using a statistical model.
 // \author Tim Cootes
 
-
-#include <mfpf/mfpf_profile_pdf.h>
-#include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
 #include <vcl_cmath.h>
-#include <vcl_algorithm.h>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
@@ -66,11 +63,11 @@ void mfpf_profile_pdf::set_search_area(unsigned ni, unsigned)
   search_ni_=ni;
 }
 
-//: Evaluate match at p, using u to define scale and orientation 
+//: Evaluate match at p, using u to define scale and orientation
 // Returns -1*edge strength at p along direction u
 double mfpf_profile_pdf::evaluate(const vimt_image_2d_of<float>& image,
-                        const vgl_point_2d<double>& p,
-                        const vgl_vector_2d<double>& u)
+                                  const vgl_point_2d<double>& p,
+                                  const vgl_vector_2d<double>& u)
 {
   int n=1+ihi_-ilo_;
   vnl_vector<double> v(n*image.image().nplanes());
@@ -82,7 +79,7 @@ double mfpf_profile_pdf::evaluate(const vimt_image_2d_of<float>& image,
   return -1*pdf().log_p(v);
 }
 
-   //: Evaluate match at in a region around p 
+   //: Evaluate match at in a region around p
    // Returns a qualtity of fit at a set of positions.
    // response image (whose size and transform is set inside the
    // function), indicates the points at which the function was
@@ -125,15 +122,15 @@ void mfpf_profile_pdf::evaluate_region(
   response.set_world2im(i2w.inverse());
 }
 
-   //: Search given image around p, using u to define scale and orientation 
-   //  On exit, new_p and new_u define position, scale and orientation of 
+   //: Search given image around p, using u to define scale and orientation
+   //  On exit, new_p and new_u define position, scale and orientation of
    //  the best nearby match.  Returns a qualtity of fit measure at that
    //  point (the smaller the better).
 double mfpf_profile_pdf::search(const vimt_image_2d_of<float>& image,
-                        const vgl_point_2d<double>& p,
-                        const vgl_vector_2d<double>& u,
-                        vgl_point_2d<double>& new_p,
-                        vgl_vector_2d<double>& new_u)
+                                const vgl_point_2d<double>& p,
+                                const vgl_vector_2d<double>& u,
+                                vgl_point_2d<double>& new_p,
+                                vgl_vector_2d<double>& new_u)
 {
   int n=1+2*search_ni_;
   int ns = 2*search_ni_ + 1+ ihi_-ilo_;
@@ -178,24 +175,24 @@ bool mfpf_profile_pdf::set_from_stream(vcl_istream &is)
 
   // Extract the properties
   if (props.find("step_size")!=props.end())
-  { 
-    step_size_=vul_string_atof(props["step_size"]); 
-    props.erase("step_size"); 
+  {
+    step_size_=vul_string_atof(props["step_size"]);
+    props.erase("step_size");
   }
   if (props.find("ilo")!=props.end())
-  { 
-    ilo_=vul_string_atoi(props["ilo"]); 
-    props.erase("ilo"); 
+  {
+    ilo_=vul_string_atoi(props["ilo"]);
+    props.erase("ilo");
   }
   if (props.find("ihi")!=props.end())
-  { 
-    ihi_=vul_string_atoi(props["ihi"]); 
-    props.erase("ihi"); 
+  {
+    ihi_=vul_string_atoi(props["ihi"]);
+    props.erase("ihi");
   }
   if (props.find("search_ni")!=props.end())
-  { 
-    search_ni_=vul_string_atoi(props["search_ni"]); 
-    props.erase("search_ni"); 
+  {
+    search_ni_=vul_string_atoi(props["search_ni"]);
+    props.erase("search_ni");
   }
 
   // Check for unused props
@@ -225,22 +222,23 @@ mfpf_point_finder* mfpf_profile_pdf::clone() const
 
 void mfpf_profile_pdf::print_summary(vcl_ostream& os) const
 {
-  os<<"{ step_size: "<<step_size_;
-  os<<" size: ["<<ilo_<<","<<ihi_<<"]";
-  os<<" search_ni: "<<search_ni_;
-  if (pdf_.ptr()==0) os<<" PDF: - ";
-  else               os<<" PDF: "<<pdf_;
-  os<<" }";
+  os<< "{ step_size: " << step_size_
+    << " size: [" << ilo_ << ',' << ihi_<< ']'
+    << " search_ni: " << search_ni_;
+    << " PDF: ";
+  if (pdf_.ptr()==0) os << "--";
+  else               os << pdf_;
+  os << " }";
 }
 
 void mfpf_profile_pdf::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
-  vsl_b_write(bfs,step_size_); 
-  vsl_b_write(bfs,ilo_); 
-  vsl_b_write(bfs,ihi_); 
-  vsl_b_write(bfs,pdf_); 
-  vsl_b_write(bfs,search_ni_); 
+  vsl_b_write(bfs,step_size_);
+  vsl_b_write(bfs,ilo_);
+  vsl_b_write(bfs,ihi_);
+  vsl_b_write(bfs,pdf_);
+  vsl_b_write(bfs,search_ni_);
 }
 
 //=======================================================================
@@ -262,8 +260,8 @@ void mfpf_profile_pdf::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,search_ni_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&) \n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
@@ -279,5 +277,4 @@ bool mfpf_profile_pdf::operator==(const mfpf_profile_pdf& nc) const
   // Doesn't check pdf, though it should.
   return true;
 }
-
 
