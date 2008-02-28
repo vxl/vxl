@@ -1,8 +1,4 @@
 #include <testlib/testlib_test.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
-#include <vpl/vpl.h>
 #include <bbgm/bbgm_image_of.h>
 #include <bbgm/bbgm_image_sptr.h>
 #include <bsta/bsta_attributes.h>
@@ -14,19 +10,19 @@
 #include <bbgm/bbgm_update.h>
 #include <bsta/bsta_gaussian_indep.h>
 #include <vil/vil_image_view.h>
-#include <vul/vul_timer.h>
 #include <vnl/vnl_random.h>
 #include <bbgm/bbgm_loader.h>
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_value_sptr.h>
 #include <core/vil_pro/vil_load_image_view_process.h>
 #include <bbgm/pro/bbgm_update_dist_image_process.h>
+
 void init_random_image(vil_image_view<float>& img)
 {
   vnl_random rand;
-  for(unsigned int p=0; p<img.nplanes(); ++p)
-    for(unsigned int j=0; j<img.nj(); ++j)
-      for(unsigned int i=0; i<img.ni(); ++i)
+  for (unsigned int p=0; p<img.nplanes(); ++p)
+    for (unsigned int j=0; j<img.nj(); ++j)
+      for (unsigned int i=0; i<img.ni(); ++i)
         img(i,j,p) = static_cast<float>(rand.drand32());
 }
 
@@ -40,8 +36,8 @@ MAIN( test_update_dist_image )
   const float window_size = 50.0;
   const unsigned int max_components = 3;
   const float init_var = 0.01f;
-  
-  brdb_value_sptr image_view_value = 
+
+  brdb_value_sptr image_view_value =
     new brdb_value_t<vil_image_view_base_sptr>(&img);
 
   bprb_process_sptr p1 = new bbgm_update_dist_image_process();
@@ -55,5 +51,4 @@ MAIN( test_update_dist_image )
   TEST("update distribution image process", good, true);
   SUMMARY();
 }
-
 
