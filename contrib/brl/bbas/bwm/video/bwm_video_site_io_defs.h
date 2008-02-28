@@ -1,8 +1,6 @@
 #ifndef bwm_video_io_defs_h_
 #define bwm_video_io_defs_h_
 
-#include <vcl_string.h>
-
 // XML Tags
 #define SITE_TAG "BWM_SITE"
 #define VIDEO_SITE "BWM_VIDEO_SITE"
