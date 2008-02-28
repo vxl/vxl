@@ -1,21 +1,16 @@
 // This is mul/mbl/tests/test_parse_tuple.cxx
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
-#include <vcl_vector.h>
 
 #include <mbl/mbl_parse_tuple.h>
-#include <vsl/vsl_vector_io.h>
 
 #include <testlib/testlib_test.h>
-
-
 
 void test_parse_tuple()
 {
   vcl_cout << "\n*************************\n"
            <<   " Testing mbl_parse_tuple\n"
            <<   "*************************\n";
-
 
   {
     vcl_cout << "\nCase 1\n";
@@ -112,7 +107,6 @@ void test_parse_tuple()
     TEST("Case 8: \"{ 1 1.0 a -4 }\"", a==1 && b==1.0 && c=='a' && d==-4, true);
   }
 
-
   {
     vcl_cout << "\nCase 9\n";
     vcl_istringstream ss("{}");
@@ -199,7 +193,5 @@ void test_parse_tuple()
 
   vcl_cout << "\n\n";
 }
-
-
 
 TESTMAIN(test_parse_tuple);
