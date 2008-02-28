@@ -1,5 +1,4 @@
 #include <testlib/testlib_test.h>
-#include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 
@@ -21,9 +20,9 @@ namespace{
 void init_random_image(vil_image_view<float>& img)
 {
   vnl_random rand;
-  for(unsigned int p=0; p<img.nplanes(); ++p)
-    for(unsigned int j=0; j<img.nj(); ++j)
-      for(unsigned int i=0; i<img.ni(); ++i)
+  for (unsigned int p=0; p<img.nplanes(); ++p)
+    for (unsigned int j=0; j<img.nj(); ++j)
+      for (unsigned int i=0; i<img.ni(); ++i)
         img(i,j,p) = static_cast<float>(rand.drand32());
 }
 
@@ -31,17 +30,16 @@ void init_random_image(vil_image_view<float>& img)
 void add_random_noise(vil_image_view<float>& img, float std)
 {
   vnl_random rand;
-  for(unsigned int p=0; p<img.nplanes(); ++p)
-    for(unsigned int j=0; j<img.nj(); ++j)
-      for(unsigned int i=0; i<img.ni(); ++i){
+  for (unsigned int p=0; p<img.nplanes(); ++p)
+    for (unsigned int j=0; j<img.nj(); ++j)
+      for (unsigned int i=0; i<img.ni(); ++i){
         img(i,j) = img(i,j) + static_cast<float>(rand.normal()*std);
-        if(img(i,j,p)>1.0f) img(i,j,p) = 1.0f;
-        if(img(i,j,p)<0.0f) img(i,j,p) = 0.0f;
+        if (img(i,j,p)>1.0f) img(i,j,p) = 1.0f;
+        if (img(i,j,p)<0.0f) img(i,j,p) = 0.0f;
       }
 }
 
-
-};
+}; // namespace
 
 MAIN( test_bg_model_speed )
 {
@@ -57,7 +55,7 @@ MAIN( test_bg_model_speed )
   init_random_image(img);
 
   vcl_vector<vil_image_view<float> > images(1,img);
-  for(unsigned t=1; t<10; ++t){
+  for (unsigned t=1; t<10; ++t){
     vil_image_view<float> new_img;
     new_img.deep_copy(img);
     add_random_noise(new_img, 0.5f);
@@ -77,36 +75,35 @@ MAIN( test_bg_model_speed )
 
     bbgm_image_of<obs_mix_gauss_type> model(ni,nj,obs_mix_gauss_type());
 
-    for(unsigned int t=0; t<images.size(); ++t){
+    for (unsigned int t=0; t<images.size(); ++t){
       vul_timer time;
       update(model,images[t],updater);
       double up_time = time.real() / 1000.0;
       vcl_cout << " updated in " << up_time << " sec" <<vcl_endl;
     }
   }
-  
+
   vcl_cout << "testing fixed size mixture speeds" << vcl_endl;
   {
     typedef bsta_num_obs<bsta_gauss_if3> gauss_type;
     typedef bsta_mixture_fixed<gauss_type,3> mix_gauss_type;
     typedef bsta_num_obs<mix_gauss_type> obs_mix_gauss_type;
-    
+
     bsta_gauss_if3 init_gauss( init_mean, init_covar );
     bsta_mg_window_updater<mix_gauss_type> updater( init_gauss,
                                                    max_components,
                                                    window_size);
-    
+
     bbgm_image_of<obs_mix_gauss_type> model(ni,nj,obs_mix_gauss_type());
-    
-    for(unsigned int t=0; t<images.size(); ++t){
+
+    for (unsigned int t=0; t<images.size(); ++t){
       vul_timer time;
       update(model,images[t],updater);
       double up_time = time.real() / 1000.0;
       vcl_cout << " updated in " << up_time << " sec" <<vcl_endl;
     }
   }
-  
+
   SUMMARY();
 }
-
 
