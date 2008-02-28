@@ -224,7 +224,7 @@ void mfpf_profile_pdf::print_summary(vcl_ostream& os) const
 {
   os<< "{ step_size: " << step_size_
     << " size: [" << ilo_ << ',' << ihi_<< ']'
-    << " search_ni: " << search_ni_;
+    << " search_ni: " << search_ni_
     << " PDF: ";
   if (pdf_.ptr()==0) os << "--";
   else               os << pdf_;
