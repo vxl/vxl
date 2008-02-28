@@ -6,9 +6,8 @@
 #include <expatpp/expatpplib.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
-#include <vcl_utility.h>
-#include <vgl/vgl_point_2d.h>
 #include "bwm_video_corr_sptr.h"
+
 class bwm_video_site_io : public expatpp
 {
  public:
