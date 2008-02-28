@@ -6,6 +6,7 @@
 // \author Tim Cootes
 
 #include <mfpf/mfpf_point_finder_builder.h>
+#include <vnl/vnl_vector.h>
 #include <vcl_iosfwd.h>
 
 //: Builder for mfpf_norm_corr1d objects.
