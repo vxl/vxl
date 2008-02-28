@@ -6,7 +6,6 @@
 #include <brdb/brdb_database.h>
 #include <vcl_iostream.h>
 #include <vcl_string.h>
-#include <vcl_sstream.h>
 
 MAIN( test_database )
 {
@@ -23,7 +22,7 @@ MAIN( test_database )
 
   vsl_b_ofstream out_stream("test_database_bio.vsl");
   if (!out_stream){
-    vcl_cerr<<"Failed to open " << "test_database_bio.vsl" << " for output." << vcl_endl;
+    vcl_cerr<<"Failed to open test_database_bio.vsl for output.\n";
   }
   vcl_cout << "Opened file successfully " << vcl_endl;
 
@@ -35,7 +34,7 @@ MAIN( test_database )
 
   vsl_b_ifstream in_stream("test_database_bio.vsl");
   if (!in_stream){
-    vcl_cerr<<"Failed to open " << "test_relation_bio.vsl" << " for input." << vcl_endl;
+    vcl_cerr<<"Failed to open test_relation_bio.vsl for input.\n";
   }
   vcl_cout << "Opened file successfully " << vcl_endl;
 
@@ -46,12 +45,11 @@ MAIN( test_database )
 
   TEST("Binary IO read and write", true, true);
 
-
   TEST("construct", true, true);
 
   vcl_set<vcl_string> all_relation_names = test_db->get_all_relation_names();
   vcl_cout << " Relation names:  " << vcl_endl;
-  for(vcl_set<vcl_string>::iterator itr = all_relation_names.begin(); itr != all_relation_names.end(); ++itr)
+  for (vcl_set<vcl_string>::iterator itr = all_relation_names.begin(); itr != all_relation_names.end(); ++itr)
   {
     vcl_cout << "   " << (*itr) << vcl_endl;
   }
