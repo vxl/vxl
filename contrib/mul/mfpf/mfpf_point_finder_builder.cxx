@@ -1,13 +1,11 @@
+#include "mfpf_point_finder_builder.h"
 //:
 // \file
 // \brief Base for classes which build mfpf_point_finder objects.
 // \author Tim Cootes
 
-
-#include <mfpf/mfpf_point_finder_builder.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
-#include <vcl_cassert.h>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
@@ -29,17 +27,17 @@ mfpf_point_finder_builder::~mfpf_point_finder_builder()
 {
 }
 
-//: Initialise from a string stream 
+//: Initialise from a string stream
 bool mfpf_point_finder_builder::set_from_stream(vcl_istream &is)
 {
   // Cycle through string and produce a map of properties
-  vcl_string s = mbl_parse_block(is);  
+  vcl_string s = mbl_parse_block(is);
   vcl_istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   if (props.size()!=0)
   {
-    vcl_cerr<<is_a()<<" does not expect any extra arguments."<<vcl_endl;
+    vcl_cerr<<is_a()<<" does not expect any extra arguments.\n";
     mbl_read_props_look_for_unused_props(
       "mfpf_point_finder_builder::set_from_stream", props, mbl_read_props_type());
   }
@@ -108,7 +106,7 @@ void vsl_b_read(vsl_b_istream& bfs, mfpf_point_finder_builder& b)
 }
 
 //=======================================================================
-// Associated function: operator<< 
+// Associated function: operator<<
 //=======================================================================
 
 vcl_ostream& operator<<(vcl_ostream& os,const mfpf_point_finder_builder& b)
@@ -121,12 +119,12 @@ vcl_ostream& operator<<(vcl_ostream& os,const mfpf_point_finder_builder& b)
 }
 
 //=======================================================================
-// Associated function: operator<< 
+// Associated function: operator<<
 //=======================================================================
 
 vcl_ostream& operator<<(vcl_ostream& os,const mfpf_point_finder_builder* b)
 {
-  if (b)  
+  if (b)
     return os << *b;
   else
     return os << "No mfpf_point_finder_builder defined.";
