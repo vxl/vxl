@@ -1,5 +1,4 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_quaternion.h>
@@ -22,13 +21,13 @@ static void test_camera_homographies()
   vpgl_proj_camera<double> pc(p);
   vgl_plane_3d<double> pl(0.0,0.0,1.0,-1.0);
   vgl_h_matrix_2d<double> Ht =vpgl_camera_homographies::homography_to_camera(pc, pl);
-  
+
   TEST_NEAR("test plane to image",Ht.get(2,2), 3.0, 0.001);
   vgl_plane_3d<double> p2(0.707107,0, 0.707107,-1.414);
   vgl_h_matrix_2d<double> Ht2 =
     vpgl_camera_homographies::homography_to_camera(pc, p2);
   vgl_homg_point_2d<double> pt1(-1.414, 0,1), pt2(-4,0,1), pt3(0,0,1);
- 
+
   vgl_point_2d<double> ptp1 = Ht2(pt1);
   TEST_NEAR("test plane to image 45degrees point1",ptp1.x(), 0, 0.001);
   vgl_point_2d<double> ptp2 = Ht2(pt2);
@@ -43,7 +42,7 @@ static void test_camera_homographies()
   TEST_NEAR("test plane to image 45degrees perspective point1",
             ptp3.x(), 0, 0.001);
   vgl_h_matrix_2d<double> Ht4 =vpgl_camera_homographies::homography_from_camera(psc, p2);
-  vgl_point_2d<double> ptp4 = Ht4(pt3); 
+  vgl_point_2d<double> ptp4 = Ht4(pt3);
   TEST_NEAR("test plane from image 45degrees perspective point1",
             ptp4.x(), -1.414, 0.001);
 // An  set of data corresponding to an actual image sequence
@@ -54,7 +53,7 @@ static void test_camera_homographies()
   vgl_point_3d<double> w2(48.5, -16.03, 34.18);
 
   // Several cameras from a video sequence
-  vnl_double_3x3 M; 
+  vnl_double_3x3 M;
   M.fill(0.0);
   M[0][0] = 2200; M[0][2] = 640;
   M[1][1] = 2200; M[1][2] = 360;
@@ -67,10 +66,10 @@ static void test_camera_homographies()
   vgl_point_2d<double> proj_w0 = pact.project(w0);
   vgl_point_2d<double> proj_w1 = pact.project(w1);
   vgl_point_2d<double> proj_w2 = pact.project(w2);
-  
-  vgl_h_matrix_2d<double> Hact = 
+
+  vgl_h_matrix_2d<double> Hact =
     vpgl_camera_homographies::homography_from_camera(pact, world_plane);
-  
+
   vgl_homg_point_2d<double> hi0(1022, 225);
   vgl_homg_point_2d<double> hi1(1111, 283);
   vgl_homg_point_2d<double> hi2(1111, 195);
@@ -82,7 +81,6 @@ static void test_camera_homographies()
   double dw2 = vgl_distance(w0, w2);
   double diw2 = vgl_distance(hwi0, hwi2);
 
-
   vnl_quaternion<double> q45(-0.00123478, 0.0259162, 0.00083254, 0.999663);
   vgl_rotation_3d<double> R45(q45);
   vgl_point_3d<double> cen45(1.28374, 2.36223,-321.679);
@@ -92,8 +90,7 @@ static void test_camera_homographies()
   vgl_point_2d<double> proj_w1_45 = pact_45.project(w1);
   vgl_point_2d<double> proj_w2_45 = pact_45.project(w2);
 
-
-  vgl_h_matrix_2d<double> Hact_45 = 
+  vgl_h_matrix_2d<double> Hact_45 =
     vpgl_camera_homographies::homography_from_camera(pact_45, world_plane);
   vgl_homg_point_2d<double> hi0_45(966, 288);
   vgl_homg_point_2d<double> hi1_45(1063, 341);
@@ -113,7 +110,7 @@ static void test_camera_homographies()
   vgl_point_2d<double> proj_w1_23 = pact_23.project(w1);
   vgl_point_2d<double> proj_w2_23 = pact_23.project(w2);
 
-  vgl_h_matrix_2d<double> Hact_23 = 
+  vgl_h_matrix_2d<double> Hact_23 =
     vpgl_camera_homographies::homography_from_camera(pact_23, world_plane);
   vgl_homg_point_2d<double> hi0_23(913, 218);
   vgl_homg_point_2d<double> hi1_23(1005, 272);
@@ -131,7 +128,7 @@ static void test_camera_homographies()
   error +=  vcl_fabs(dw1-diw1_23);
   error +=  vcl_fabs(dw2-diw2_23);
   error /= 6;
-TEST_NEAR("Map from image to world average distance error", error, 0.0, 0.2);
+  TEST_NEAR("Map from image to world average distance error", error, 0.0, 0.2);
 }
 
 TESTMAIN(test_camera_homographies);
