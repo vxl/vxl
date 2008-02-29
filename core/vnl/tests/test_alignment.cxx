@@ -121,6 +121,8 @@ static void test_alignment_type()
            << "Testing vnl_sse alignment issues in with type " << typeid(float).name() << '\n'
            << "*****************************************************\n";
 
+  vcl_cout << "VNL_CONFIG_ENABLE_SSE2 is " << VNL_CONFIG_ENABLE_SSE2 << vcl_endl;
+
   // Set up random data arrays.
   const unsigned ndata = 13; // not a multiple of 2
   float matrix_data[ndata*ndata];
