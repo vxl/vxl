@@ -21,7 +21,15 @@ inline bool test_element_product(const vnl_vector<float> &vec, const vnl_vector<
   for (unsigned i = 0; i < n; ++i)
     correct(i) = vec(i) * vec2(i);
 
-  return vnl_vector_ssd(correct, result)<n*vcl_numeric_limits<float>::epsilon();
+  float err = vnl_vector_ssd(correct, result);
+  float neps = n*vcl_numeric_limits<float>::epsilon();
+  if (err < neps)
+    return true;
+  else
+  {
+    vcl_cout << "err: " << err << " n*eps: " << neps << vcl_endl;
+    return false;
+  }
 }
 
 
@@ -33,7 +41,15 @@ inline bool test_dot_product(const vnl_vector<float> &vec, const vnl_vector<floa
   for (unsigned i = 0; i < n; ++i)
     correct += vec(i) * vec2(i);
 
-  return vcl_abs(correct-val) < n*vcl_numeric_limits<float>::epsilon();
+  float err = vcl_abs(correct-val);
+  float neps = n*vcl_numeric_limits<float>::epsilon();
+  if (err < neps)
+    return true;
+  else
+  {
+    vcl_cout << "dot_product: err: " << err << " n*eps: " << neps << vcl_endl;
+    return false;
+  }
 }
 
 inline bool test_euclid_dist_sq(const vnl_vector<float> &vec, const vnl_vector<float> &vec2)
@@ -44,7 +60,15 @@ inline bool test_euclid_dist_sq(const vnl_vector<float> &vec, const vnl_vector<f
   for (unsigned i = 0; i < n; ++i)
     correct += vnl_math_sqr(vec(i) - vec2(i));
 
-  return vcl_abs(correct-val) < n*vcl_sqrt(vcl_numeric_limits<float>::epsilon());
+  float err = vcl_abs(correct-val);
+  float neps = n*vcl_sqrt(vcl_numeric_limits<float>::epsilon());
+  if (err < neps)
+    return true;
+  else
+  {
+    vcl_cout << "euclid_dist_sq: err: " << err << " n*sqrt_eps: " << neps << vcl_endl;
+    return false;
+  }
 }
 
 inline bool test_matrix_x_vector(const vnl_matrix<float> &mat, const vnl_vector<float> &vec, vnl_vector<float> &result)
@@ -61,7 +85,15 @@ inline bool test_matrix_x_vector(const vnl_matrix<float> &mat, const vnl_vector<
     correct(i) = som;
   }
 
-  return vnl_vector_ssd(correct, result) < n*vcl_numeric_limits<float>::epsilon();
+  float err = vnl_vector_ssd(correct, result);
+  float neps = n*vcl_numeric_limits<float>::epsilon();
+  if (err < neps)
+    return true;
+  else
+  {
+    vcl_cout << "matrix_x_vector: err: " << err << " n*eps: " << neps << vcl_endl;
+    return false;
+  }
 }
 
 inline bool test_vector_x_matrix(const vnl_vector<float> &vec, const vnl_matrix<float> &mat, vnl_vector<float> &result)
@@ -78,7 +110,15 @@ inline bool test_vector_x_matrix(const vnl_vector<float> &vec, const vnl_matrix<
     correct(j) = som;
   }
 
-  return vnl_vector_ssd(correct, result) < n*vcl_numeric_limits<float>::epsilon();
+  float err = vnl_vector_ssd(correct, result);
+  float neps = n*vcl_numeric_limits<float>::epsilon();
+  if (err < neps)
+    return true;
+  else
+  {
+    vcl_cout << "vector_x_matrix: err: " << err << " n*eps: " << neps << vcl_endl;
+    return false;
+  }
 }
 
 inline bool test_sum(const vnl_vector<float> &vec)
@@ -89,7 +129,15 @@ inline bool test_sum(const vnl_vector<float> &vec)
   for (unsigned i = 0; i < n; ++i)
     correct += vec(i);
 
-  return vcl_abs(correct-val) < n*vcl_numeric_limits<float>::epsilon();
+  float err = vcl_abs(correct-val);
+  float neps = n*vcl_numeric_limits<float>::epsilon();
+  if (err < neps)
+    return true;
+  else
+  {
+    vcl_cout << "sum: err: " << err << " n*eps: " << neps << vcl_endl;
+    return false;
+  }
 }
 
 inline bool test_max(const vnl_vector<float> &vec)
@@ -100,7 +148,15 @@ inline bool test_max(const vnl_vector<float> &vec)
   for (unsigned i = 0; i < n; ++i)
     correct = vcl_max(vec(i), correct);
 
-  return vcl_abs(correct-val) < n*vcl_numeric_limits<float>::epsilon();
+  float err = vcl_abs(correct-val);
+  float neps = n*vcl_numeric_limits<float>::epsilon();
+  if (err < neps)
+    return true;
+  else
+  {
+    vcl_cout << "max: err: " << err << " n*eps: " << neps << vcl_endl;
+    return false;
+  }
 }
 
 inline bool test_min(const vnl_vector<float> &vec)
@@ -111,7 +167,15 @@ inline bool test_min(const vnl_vector<float> &vec)
   for (unsigned i = 0; i < n; ++i)
     correct = vcl_min(vec(i), correct);
 
-  return vcl_abs(correct-val) < n*vcl_numeric_limits<float>::epsilon();
+  float err = vcl_abs(correct-val);
+  float neps = n*vcl_numeric_limits<float>::epsilon();
+  if (err < neps)
+    return true;
+  else
+  {
+    vcl_cout << "min: err: " << err << " n*eps: " << neps << vcl_endl;
+    return false;
+  }
 }
 
 
@@ -149,15 +213,16 @@ static void test_alignment_type()
           const vnl_vector_ref<float> vec2(nv, matrix_data+m);
           const vnl_vector_ref<float> vec(nv, vector_data+v);
           vnl_vector_ref<float> result(nv, result_data+r);
-          TEST("SSE",
-               test_element_product(vec, vec2, result) &&
-               test_dot_product(vec, vec2) &&
-               test_euclid_dist_sq(vec, vec2) &&
-               test_matrix_x_vector(mat, vec, result) &&
-               test_vector_x_matrix(vec, mat, result) &&
-               test_sum(vec) &&
-               test_max(vec) &&
-               test_min(vec), true);
+          bool rvtest =
+            test_element_product(vec, vec2, result) &&
+            test_dot_product(vec, vec2) &&
+            test_euclid_dist_sq(vec, vec2) &&
+            test_matrix_x_vector(mat, vec, result) &&
+            test_vector_x_matrix(vec, mat, result) &&
+            test_sum(vec) &&
+            test_max(vec) &&
+            test_min(vec);
+          TEST("SSE", rvtest, true);
         }
   }
 }
