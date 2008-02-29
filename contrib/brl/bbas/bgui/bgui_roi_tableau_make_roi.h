@@ -30,7 +30,7 @@ class bgui_roi_tableau_make_roi : public vgui_rubberband_client
     if (x0<x1) swap(x0,x1);
     if (y0<y1) swap(y0,y1);
 #undef swap
-  // FIXME - dodgy hack to clean dashboard IMS - image_tableau_->set_roi(x1,y1,x0-x1,y0-y1);
+    image_tableau_->set_roi(x1,y1,x0-x1,y0-y1);
     done_ = true;
   }
 };
