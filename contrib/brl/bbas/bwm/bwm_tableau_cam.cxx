@@ -94,9 +94,10 @@ void bwm_tableau_cam::extrude_face()
   float x,y;
 
   set_color(1, 0, 0);
-  pick_point(&x, &y);
-  vsol_point_2d_sptr pt = new vsol_point_2d((double)x,(double)y);
-  my_observer_->extrude_face(pt);
+    // commenting out the following, changed the extrude methid to adjustable
+  //pick_point(&x, &y);
+  //vsol_point_2d_sptr pt = new vsol_point_2d((double)x,(double)y);
+  my_observer_->extrude_face();
 }
 
 void bwm_tableau_cam::divide_face()

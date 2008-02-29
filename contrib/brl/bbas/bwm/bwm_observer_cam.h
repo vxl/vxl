@@ -123,9 +123,9 @@ class bwm_observer_cam : public bwm_observer_vgui
 
   //virtual vgl_vector_3d<double> camera_direction(vgl_point_3d<double> origin)=0;
 
-  void extrude_face(vsol_point_2d_sptr pt);
+  void extrude_face();
 
-  void extrude_face2(vsol_point_2d_sptr pt);
+  void extrude_face(vsol_point_2d_sptr pt);
 
   void divide_face(bwm_observable_sptr obs, unsigned face_id,
     float x1, float y1, float x2, float y2);

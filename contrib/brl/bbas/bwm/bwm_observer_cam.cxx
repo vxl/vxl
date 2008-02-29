@@ -741,7 +741,7 @@ void bwm_observer_cam::connect_inner_face(bwm_observable* obj,
 // plane. The face is extruded to this position along the normal of
 // the selected face.
 //
-void bwm_observer_cam::extrude_face2(vsol_point_2d_sptr pt)
+void bwm_observer_cam::extrude_face(vsol_point_2d_sptr pt)
 {
   // first get the selected objects
   //vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
@@ -907,7 +907,7 @@ void bwm_observer_cam::extrude_face2(vsol_point_2d_sptr pt)
 // plane. The face is extruded to this position along the normal of
 // the selected face.
 //
-void bwm_observer_cam::extrude_face(vsol_point_2d_sptr pt)
+void bwm_observer_cam::extrude_face()
 {
   // first get the selected objects
   //vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
