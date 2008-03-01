@@ -23,11 +23,10 @@
 //
 //  \param D: a symmetric matrix indicating proximity of two nodes
 //  \param arcs: Output 2n-3 arcs defining the graph.
-//  \param v0: If input as >=0 then defines one node of the first arc
+//  \param v0: If input as < D.rows() then defines one node of the first arc
 void mmn_make_tri_tree(const vnl_matrix<double>& D,
                        vcl_vector<mmn_arc>& arcs,
-                       int v0=-1);
-
+                       unsigned int v0 = (unsigned int)(-1));
 
 #endif // mmn_make_tri_tree_h_
 

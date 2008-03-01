@@ -41,10 +41,10 @@ static void  update_best_arcs(const vnl_matrix<double>& D,
 //
 //  \param D: a symmetric matrix indicating proximity of two nodes
 //  \param arcs: Output 2n-3 arcs defining the graph.
-//  \param v0: If input as >=0 then defines one node of the first arc
+//  \param v0: If input as < D.rows() then defines one node of the first arc
 void mmn_make_tri_tree(const vnl_matrix<double>& D,
                        vcl_vector<mmn_arc>& arcs,
-                       int v0)
+                       unsigned int v0)
 {
   unsigned n = D.rows();
   assert(D.cols()==n);
@@ -62,7 +62,7 @@ void mmn_make_tri_tree(const vnl_matrix<double>& D,
   // Deduce the first arc
   mmn_arc arc(0,1);
 
-  if (v0>=0 && v0<n)
+  if (v0<n)
   {
     // Find nearest neighbour of v0
     double min_d=9e9;
