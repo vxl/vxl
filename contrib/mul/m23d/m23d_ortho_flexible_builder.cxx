@@ -60,7 +60,8 @@ void m23d_ortho_flexible_builder::reconstruct(
       vcl_cerr<< "ERROR m23d_ortho_rigid_builder::reconstruct()\n"
               << "problem with different numbers of pts\n"
               << "pt_vec_list[0].size()= " << pt_vec_list[0].size() << '\n'
-              << "pt_vec_list[" << i << "].size()= " << pt_vec_list[i].size() << vcl_endl;
+              << "pt_vec_list[" << i << "].size()= " << pt_vec_list[i].size()
+              << vcl_endl;
       vcl_abort();
     }
 
@@ -208,17 +209,6 @@ void m23d_ortho_flexible_builder::partial_reconstruct(const vnl_matrix<double>& 
   correct_coord_frame(P_,P3D_);
 }
 
-static vnl_vector<double> vec_from_sym_matrix(const vnl_matrix<double>& S)
-{
-  unsigned n = S.rows();
-  vnl_vector<double> v((n*(n+1))/2);
-  unsigned k=0;
-   for (unsigned i=0;i<n;++i)
-     for (unsigned j=0;j<=i;++j,++k)
-       v[k]=S(i,j);
-  return v;
-}
-
 //: Fill a symmetric matrix with elements from v
 static vnl_matrix<double> sym_matrix_from_vec(const vnl_vector<double>& v, unsigned n)
 {
@@ -283,6 +273,21 @@ static vnl_matrix<double> am_solve_for_Gk(const vnl_matrix<double>& A,
 }
 
 #if 0 // refinement of am_solve_for_Gk()
+
+static vnl_vector<double> vec_from_sym_matrix(const vnl_matrix<double>& S)
+{
+  unsigned n = S.rows();
+  vnl_vector<double> v((n*(n+1))/2);
+  unsigned k=0;
+   for (unsigned i=0;i<n;++i)
+     for (unsigned j=0;j<=i;++j,++k)
+       v[k]=S(i,j);
+  return v;
+}
+
+static vnl_matrix<double> am_solve_for_Gk(const vnl_matrix<double>& A,
+                                          const vnl_vector<double>& rhs,
+                                          unsigned m, unsigned k)
 {
   // Now refine the solution   *** Not sure that this helps ***
   vnl_diag_matrix<double> W(nq);
@@ -362,6 +367,7 @@ void m23d_ortho_flexible_builder::compute_correction(
   }
 }
 
+#if 0 // unused static function
 static double min_row_scale(const vnl_matrix<double>& M)
 {
   double r1=0,r2=0;
@@ -372,6 +378,7 @@ static double min_row_scale(const vnl_matrix<double>& M)
   }
   return vcl_sqrt(vcl_min(r1,r2));
 }
+#endif // 0
 
 // Apply rotation matrices to each 3 columns of M (and inverse to rows of B)
 // Matrix selected so that projection matrices in each 3 cols have same
