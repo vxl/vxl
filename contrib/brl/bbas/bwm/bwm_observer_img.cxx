@@ -754,16 +754,16 @@ void bwm_observer_img::init_mask()
 
 void bwm_observer_img::add_poly_to_mask()
 {
-    bgui_vsol_soview2D_polygon* p=0;
-    // get the selected polyline or polygon
-    if(p = (bgui_vsol_soview2D_polygon*) get_selected_object(POLYGON_TYPE))
-      {
-        vsol_polygon_2d_sptr poly = p->sptr();
-        if(!poly)
-          return;
-        mask_polys_.push_back(poly);
-        return;
-      }
+  bgui_vsol_soview2D_polygon* p=0;
+  // get the selected polyline or polygon
+  if (p = (bgui_vsol_soview2D_polygon*) get_selected_object(POLYGON_TYPE))
+  {
+    vsol_polygon_2d_sptr poly = p->sptr();
+    if (!poly)
+      return;
+    mask_polys_.push_back(poly);
+    return;
+  }
 }
 
 void bwm_observer_img::remove_poly_from_mask()
@@ -780,20 +780,20 @@ void bwm_observer_img::create_mask()
   unsigned nj = img_tab_->get_image_resource()->nj();
   vil_image_view<bool>* mask = new vil_image_view<bool>(ni, nj);
   mask->fill(false);
-  for(vcl_vector<vsol_polygon_2d_sptr>::iterator pit = mask_polys_.begin();
-      pit != mask_polys_.end(); ++pit)
-    {
-		vgl_polygon<double> v_poly =  bsol_algs::vgl_from_poly(*pit);
-      vgl_polygon_scan_iterator<double> psi(v_poly, false);
-      for(psi.reset(); psi.next();){
-        int y = psi.scany();
-        for(int x = psi.startx(); x<=psi.endx(); ++x)
-          {
-            unsigned u = static_cast<unsigned>(x);
-            unsigned v = static_cast<unsigned>(y);
-            (*mask)(u,v) = true;
-          }        
+  for (vcl_vector<vsol_polygon_2d_sptr>::iterator pit = mask_polys_.begin();
+       pit != mask_polys_.end(); ++pit)
+  {
+    vgl_polygon<double> v_poly =  bsol_algs::vgl_from_poly(*pit);
+    vgl_polygon_scan_iterator<double> psi(v_poly, false);
+    for (psi.reset(); psi.next();){
+      int y = psi.scany();
+      for (int x = psi.startx(); x<=psi.endx(); ++x)
+      {
+        unsigned u = static_cast<unsigned>(x);
+        unsigned v = static_cast<unsigned>(y);
+        (*mask)(u,v) = true;
       }
     }
+  }
   mask_ = mask;
 }
