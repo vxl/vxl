@@ -15,6 +15,8 @@
 #include <vil/vil_blocked_image_resource.h>
 #include <vil/vil_property.h>
 
+
+
 bwm_tableau_mgr* bwm_tableau_mgr::instance_ = 0;
 vcl_map<vcl_string, bwm_command_sptr> bwm_tableau_mgr::tab_types_;
 
@@ -82,6 +84,13 @@ void bwm_tableau_mgr::add_tableau(bwm_tableau_img* tab, vcl_string name)//vgui_t
   tab->set_viewer(viewer);
   tab->set_grid_location(col, row);
   tableaus_[name] = tab;
+}
+
+bool bwm_tableau_mgr::is_registered(vcl_string const& name)
+{
+  vcl_map<vcl_string, bwm_command_sptr>::iterator iter = 
+    tab_types_.find(name);
+  return iter != tab_types_.end();   
 }
 
 void bwm_tableau_mgr::register_tableau(bwm_command_sptr tab_comm)

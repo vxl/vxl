@@ -109,10 +109,14 @@ void bwm_observer_video::display_current_frame()
 {
   if (video_istr_) {
     unsigned int frame_num = video_istr_->frame_number();
-    if (bwm_observer_mgr::instance()->in_corr_picking())
+    if (bwm_observer_mgr::instance()->in_corr_picking()){
       img_tab_->lock_linenum(true);
-    else
-      img_tab_->lock_linenum(false);
+      bwm_observer_img::lock_vgui_status(true);
+    }else{
+      if(!bwm_observer_img::vgui_status_on())
+        img_tab_->lock_linenum(false);
+      bwm_observer_img::lock_vgui_status(false);
+    }
     if (frame_num == unsigned(-1))
       vgui::out << "invalid frame\n";
     else

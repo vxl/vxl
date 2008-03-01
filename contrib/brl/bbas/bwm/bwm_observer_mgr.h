@@ -77,6 +77,7 @@ class bwm_observer_mgr
   //: Given a set of image-to-image correpondences, solve for the 3-d world point and adjust the cameras
   void adjust_camera_offsets();
 
+
  private:
   bwm_observer_mgr() : start_corr_(false)
   {

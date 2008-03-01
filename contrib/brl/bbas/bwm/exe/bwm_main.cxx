@@ -36,7 +36,9 @@ int main(int argc, char** argv)
   REG_TABLEAU(bwm_load_img_command);
   REG_TABLEAU(bwm_load_rat_cam_command);
   REG_TABLEAU(bwm_load_proj_cam_command);
-
+#if 0 //enable only if video processing is desired
+  REG_TABLEAU(bwm_load_video_command);
+#endif
   // correspondence processes
   REG_PROCESS(bwm_corresp_process_command);
 

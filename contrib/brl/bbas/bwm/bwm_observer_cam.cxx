@@ -6,13 +6,13 @@
 #include "algo/bwm_algo.h"
 #include "algo/bwm_plane_fitting_lsf.h"
 #include "algo/bwm_image_processor.h"
-
 #include "bwm_tableau_mgr.h"
 #include "bwm_world.h"
 
 #include <vcl_iostream.h>
+#include <vcl_iomanip.h>
 #include <vcl_cstdio.h>
-
+#include <vgui/vgui.h>
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 
@@ -21,6 +21,7 @@
 #include <vgl/vgl_polygon.h>
 #include <vgl/algo/vgl_convex_hull_2d.h>
 #include <vpgl/algo/vpgl_ray.h>
+#include <vpgl/algo/vpgl_backproject.h>
 
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
@@ -211,7 +212,24 @@ bool bwm_observer_cam::handle(const vgui_event &e)
     in_jog_mode_ = true;
     return true;
   }
-
+  if (e.type == vgui_MOTION && 
+      e.button != vgui_MIDDLE &&
+      show_geo_position_&&
+      bwm_world::instance()->world_pt_valid()&&
+      !bwm_observer_img::vgui_status_locked())
+    {
+		if(camera_){
+      vgl_plane_3d<double> plane = bwm_world::instance()->world_plane();
+      vgl_point_2d<double> pt(x, y);
+      vgl_point_3d<double> init_world_pt = bwm_world::instance()->world_pt();
+      vgl_point_3d<double> world_pt;
+      vpgl_backproject::bproj_plane(camera_, pt, plane, init_world_pt,
+                                    world_pt);
+      vgui::out << vcl_fixed << vcl_setprecision(6)<< "Lat(deg): " << world_pt.y() << " Lon(deg): " 
+                << world_pt.x() << vcl_setprecision(2) << " Ele(m): " 
+                << world_pt.z() << " (WGS84)" << vcl_endl;
+		}
+    }
   return base::handle(e);
 }
 
@@ -1223,4 +1241,18 @@ void bwm_observer_cam::set_selection(bool status)
     make_object_selectable(it->first, status);
     it++;
   }
+}
+
+void bwm_observer_cam::show_geo_position()
+{
+  show_geo_position_ = !show_geo_position_;
+  if(!show_geo_position_){
+    img_tab_->lock_linenum(false);
+    bwm_observer_img::set_vgui_status_on(false);
+    bwm_observer_img::lock_vgui_status(false);
+    return;
+  }
+  img_tab_->lock_linenum(true);
+  bwm_observer_img::lock_vgui_status(false);
+  bwm_observer_img::set_vgui_status_on(true);
 }

@@ -31,12 +31,12 @@ class bwm_observer_cam : public bwm_observer_vgui
 
   bwm_observer_cam(bgui_image_tableau_sptr const& img, vpgl_camera<double> *camera, vcl_string cam_path)
     : bwm_observer_vgui(img), proj_plane_(vgl_plane_3d<double>(0, 0, 1, 0)),
-    camera_(camera), cam_path_(cam_path), cam_adjusted_(false), extrude_mode_(false){}
+    camera_(camera), cam_path_(cam_path), cam_adjusted_(false), extrude_mode_(false),show_geo_position_(false){}
 
   // set the initial projection plane to z=0
   bwm_observer_cam(bgui_image_tableau_sptr const& img, const char* n="unnamed")
     : bwm_observer_vgui(img), proj_plane_(vgl_plane_3d<double>(0, 0, 1, 0)),
-     cam_adjusted_(false),extrude_mode_(false){}
+     cam_adjusted_(false),extrude_mode_(false), show_geo_position_(false){}
 
   virtual ~bwm_observer_cam(){ delete camera_;}
 
@@ -149,6 +149,8 @@ class bwm_observer_cam : public bwm_observer_vgui
 
   void world_pt_corr();
 
+  void show_geo_position();
+
   virtual vcl_ostream& print_camera(vcl_ostream& s) {return s;}
 
  protected:
@@ -165,6 +167,7 @@ class bwm_observer_cam : public bwm_observer_vgui
   bool extrude_mode_;
   bwm_observable_sptr extrude_obj_;
 
+  bool show_geo_position_;
 
   bwm_observer_cam() {}
 

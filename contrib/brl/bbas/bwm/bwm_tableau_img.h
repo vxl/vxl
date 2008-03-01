@@ -64,7 +64,6 @@ class bwm_tableau_img : public bwm_tableau, public bgui_picker_tableau
   //: deselects all the selected objects on the tableau
   void deselect_all();
 
-  void save();
   void help_pop();
   void toggle_show_image_path();
   void zoom_to_fit();
@@ -73,10 +72,20 @@ class bwm_tableau_img : public bwm_tableau, public bgui_picker_tableau
   void lines_vd();
   void recover_edges();
   void recover_lines();
-
+  
+  //: mask operations
+  void init_mask();
+  void add_poly_to_mask();
+  void remove_poly_from_mask();
+  void create_mask();
+  void save_mask();
+  //: internal detail
   void set_viewer(vgui_viewer2D_tableau_sptr viewer) { my_observer_->set_viewer(viewer); }
 
+  
  protected:
+  void lock();
+  void unlock();
   bwm_observer_img* my_observer_;
 };
 

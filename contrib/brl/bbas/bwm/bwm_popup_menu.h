@@ -47,7 +47,7 @@ class bwm_popup_menu
   //: deselects all the selected objects on the tableau
   void deselect_all();
 
-  void save();
+
   void help_pop();
   void toggle_show_image_path();
   void zoom_to_fit();
@@ -56,6 +56,7 @@ class bwm_popup_menu
   void lines_vd();
   void recover_edges();
   void recover_lines();
+
 
  private:
   vgui_tableau_sptr tab_;

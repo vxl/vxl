@@ -12,6 +12,7 @@
 
 #include <vgui/vgui_projection_inspector.h>
 #include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_polygon_scan_iterator.h>
 #include <bsol/bsol_algs.h>
 
 #include <vsol/vsol_point_2d.h>
@@ -30,9 +31,10 @@
 
 bwm_observer_img::bwm_observer_img(bgui_image_tableau_sptr const& img, vcl_string name, vcl_string image_path, bool display_image_path)
 : bgui_vsol2D_tableau(img), img_tab_(img), viewer_(0),
-    show_image_path_(false), start_x_(0), start_y_(0), moving_p_(0),
-    moving_v_(0), moving_vertex_(false), moving_polygon_(false),
-    in_jog_mode_(false), row_(0), col_(0)
+  show_image_path_(false), start_x_(0), start_y_(0), moving_p_(0),
+  moving_v_(0), moving_vertex_(false), moving_polygon_(false),
+  in_jog_mode_(false), row_(0), col_(0), lock_vgui_status_(false),
+  vgui_status_on_(false)
 {
 // LOAD IMAGE
 
@@ -487,9 +489,6 @@ void bwm_observer_img::clear_reg_segmentation()
   reg_seg_views_.clear();
 }
 
-void bwm_observer_img::save()
-{
-}
 
 void bwm_observer_img::hist_plot()
 {
@@ -745,4 +744,56 @@ vil_image_resource_sptr bwm_observer_img::load_image(vcl_string& filename,
 #endif
   biu.range_map_from_hist(1.0, false, true, true,rmps);
   return res;
+}
+
+void bwm_observer_img::init_mask()
+{
+  mask_ = 0;
+  mask_polys_.clear();
+}
+
+void bwm_observer_img::add_poly_to_mask()
+{
+    bgui_vsol_soview2D_polygon* p=0;
+    // get the selected polyline or polygon
+    if(p = (bgui_vsol_soview2D_polygon*) get_selected_object(POLYGON_TYPE))
+      {
+        vsol_polygon_2d_sptr poly = p->sptr();
+        if(!poly)
+          return;
+        mask_polys_.push_back(poly);
+        return;
+      }
+}
+
+void bwm_observer_img::remove_poly_from_mask()
+{
+  //not implemented yet
+}
+
+void bwm_observer_img::create_mask()
+{
+  mask_ = 0;
+  //index through the polygons and create the boolean mask image
+  // the image size
+  unsigned ni = img_tab_->get_image_resource()->ni();
+  unsigned nj = img_tab_->get_image_resource()->nj();
+  vil_image_view<bool>* mask = new vil_image_view<bool>(ni, nj);
+  mask->fill(false);
+  for(vcl_vector<vsol_polygon_2d_sptr>::iterator pit = mask_polys_.begin();
+      pit != mask_polys_.end(); ++pit)
+    {
+		vgl_polygon<double> v_poly =  bsol_algs::vgl_from_poly(*pit);
+      vgl_polygon_scan_iterator<double> psi(v_poly, false);
+      for(psi.reset(); psi.next();){
+        int y = psi.scany();
+        for(int x = psi.startx(); x<=psi.endx(); ++x)
+          {
+            unsigned u = static_cast<unsigned>(x);
+            unsigned v = static_cast<unsigned>(y);
+            (*mask)(u,v) = true;
+          }        
+      }
+    }
+  mask_ = mask;
 }

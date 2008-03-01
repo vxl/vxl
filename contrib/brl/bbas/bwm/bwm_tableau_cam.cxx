@@ -30,7 +30,7 @@ void bwm_tableau_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu
 void bwm_tableau_cam::create_polygon_mesh()
 {
   // first lock the bgui_image _tableau
-  my_observer_->image_tableau()->lock_linenum(true);
+  this->lock();
   bwm_observer_mgr::instance()->stop_corr();
   vsol_polygon_2d_sptr poly2d;
   set_color(1, 0, 0);
@@ -46,7 +46,7 @@ void bwm_tableau_cam::create_polygon_mesh()
   bwm_world::instance()->add(my_polygon);
   bwm_observer_mgr::instance()->attach(my_polygon);
   my_polygon->set_object(poly3d);
-  my_observer_->image_tableau()->lock_linenum(false);
+  this->unlock();
 }
 
 void bwm_tableau_cam::triangulate_mesh()
@@ -91,12 +91,6 @@ void bwm_tableau_cam::move_obj_by_vertex()
 
 void bwm_tableau_cam::extrude_face()
 {
-  float x,y;
-
-  set_color(1, 0, 0);
-    // commenting out the following, changed the extrude methid to adjustable
-  //pick_point(&x, &y);
-  //vsol_point_2d_sptr pt = new vsol_point_2d((double)x,(double)y);
   my_observer_->extrude_face();
 }
 
@@ -273,6 +267,11 @@ void bwm_tableau_cam::save_all(vcl_string path)
 void bwm_tableau_cam::scan_regions()
 {
   my_observer_->scan_regions();
+}
+
+void bwm_tableau_cam::show_geo_position()
+{
+  my_observer_->show_geo_position();
 }
 
 void bwm_tableau_cam::help_pop()

@@ -6,6 +6,7 @@
 #include "bwm_tableau_rat_cam.h"
 #include "bwm_tableau_video.h"
 #include "bwm_command_macros.h"
+#include "bwm_tableau_mgr.h"
 
 //: Use in menus to toggle a parameter
 class bwm_vertex_toggle_command : public vgui_command
@@ -79,8 +80,24 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
     new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::recover_lines));
   image_submenu.add( "Clear Segmentation Display",
     new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::clear_box));
+  if(bwm_tableau_mgr::is_registered("bwm_tableau_video")){
+  image_submenu.add( "Init Mask",
+    new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::init_mask));
+
+  image_submenu.add( "Add Region to Mask(selected poly)",
+    new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::add_poly_to_mask));
+
+  image_submenu.add( "Remove Region from Mask(selected poly)",
+    new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::remove_poly_from_mask));
+
+  image_submenu.add( "Create Mask Image(bool)",
+    new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::create_mask));
+
+  image_submenu.add( "Save Mask Image(bool)",
+    new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::save_mask));
+  }
   //image_submenu.separator();
-  menu.add("Image Display", image_submenu);
+  menu.add("Image Processing", image_submenu);
   menu.separator();
 
   vgui_menu img_other;
@@ -98,7 +115,7 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
     new vgui_command_simple<bwm_tableau_img>(img_tab,
                                              &bwm_tableau_img::
                                              scroll_to_point));
-  menu.add("Image Processing", img_other);
+  menu.add("Image Display", img_other);
   menu.separator();
   menu.add( "Deselect All Objects",
     new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::deselect_all),
@@ -180,7 +197,11 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
         new vgui_command_simple<bwm_tableau_rat_cam>(rat_cam_tab,
         &bwm_tableau_rat_cam::center_pos));
     }
-
+    mesh_submenu.separator();
+    mesh_submenu.add( "Toggle GeoPosition Display",
+        new vgui_command_simple<bwm_tableau_cam>(cam_tab,
+        &bwm_tableau_cam::show_geo_position));
+    
     vgui_menu del_menu;
     del_menu.add( "Delete Selected",
       new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::delete_object));

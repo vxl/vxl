@@ -39,6 +39,8 @@ class bwm_tableau_mgr
 
   static void register_tableau(bwm_command_sptr tab_comm);
 
+  static bool is_registered(vcl_string const& name);
+
   bwm_command_sptr load_tableau_by_type(vcl_string tableau_type);
 
   void remove_tableau();
@@ -52,6 +54,7 @@ class bwm_tableau_mgr
   static vcl_map<vcl_string, bwm_command_sptr> tab_types_;
 
   void redraw() { grid_->post_redraw(); }
+
 
  private:
 

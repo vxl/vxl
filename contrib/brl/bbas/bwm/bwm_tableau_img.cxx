@@ -2,8 +2,9 @@
 #include "bwm_tableau_text.h"
 #include "bwm_command_macros.h"
 #include "bwm_observer_mgr.h"
+#include "bwm_tableau_mgr.h"
 #include "bwm_popup_menu.h"
-
+#include <vil/vil_save.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_box_2d.h>
 
@@ -12,7 +13,7 @@
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_command.h>
 
-
+  
 void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu)
 {
   menu.clear();
@@ -20,20 +21,30 @@ void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu
   bwm_popup_menu pop(this);
   pop.get_menu(menu);
 }
+void bwm_tableau_img::lock()
+{
+  my_observer_->image_tableau()->lock_linenum(true);
+  my_observer_->lock_vgui_status(true);
+}
 
+void bwm_tableau_img::unlock()
+{
+  my_observer_->lock_vgui_status(false);
+  if(!my_observer_->vgui_status_on())
+    my_observer_->image_tableau()->lock_linenum(false);
+}
 
 void bwm_tableau_img::create_box()
 {
   // first lock the bgui_image _tableau
-  my_observer_->image_tableau()->lock_linenum(true);
+  this->lock();
   set_color(1, 0, 0);
   float x1=0, y1=0, x2=0, y2=0;
   pick_box(&x1, &y1, &x2, &y2);
   vsol_box_2d_sptr box2d = new vsol_box_2d();
   box2d->add_point(x1, y1);
   box2d->add_point(x2, y2);
-  my_observer_->image_tableau()->lock_linenum(false);
-
+  this->unlock();
   // add the box to the list
   my_observer_->create_box(box2d);
 }
@@ -42,7 +53,7 @@ void bwm_tableau_img::create_polygon()
 {
   // first lock the bgui_image _tableau
   bwm_observer_mgr::instance()->stop_corr();
-  my_observer_->image_tableau()->lock_linenum(true);
+  this->lock();
   vsol_polygon_2d_sptr poly2d;
   set_color(1, 0, 0);
   pick_polygon(poly2d);
@@ -51,7 +62,7 @@ void bwm_tableau_img::create_polygon()
     vcl_cerr << "In bwm_tableau_img::create_polygon() - picking failed\n";
     return;
   }
-  my_observer_->image_tableau()->lock_linenum(false);
+  this->unlock();
 
   // add the polygon to the list
   my_observer_->create_polygon(poly2d);
@@ -60,7 +71,7 @@ void bwm_tableau_img::create_polygon()
 void bwm_tableau_img::create_polyline()
 {
   // first lock the bgui_image _tableau
-  my_observer_->image_tableau()->lock_linenum(true);
+  this->lock();
   bwm_observer_mgr::instance()->stop_corr();
 
   vsol_polyline_2d_sptr poly2d;
@@ -72,8 +83,7 @@ void bwm_tableau_img::create_polyline()
     return;
   }
 
-  my_observer_->image_tableau()->lock_linenum(false);
-
+  this->unlock();
   // add the polygon to the list
   my_observer_->create_polyline(poly2d);
 }
@@ -120,11 +130,11 @@ void bwm_tableau_img::clear_all()
 void bwm_tableau_img::intensity_profile()
 {
   float x1, y1, x2, y2;
-  my_observer_->image_tableau()->lock_linenum(true);
+  this->lock();
   pick_line(&x1, &y1, &x2, &y2);
   vcl_cout << x1 << ',' << y1 << "-->" << x2 << ',' << y2 << vcl_endl;
   my_observer_->intensity_profile(x1, y1, x2, y2);
-  my_observer_->image_tableau()->lock_linenum(false);
+  this->unlock();
 }
 
 void bwm_tableau_img::range_map()
@@ -147,9 +157,22 @@ void bwm_tableau_img::scroll_to_point()
   my_observer_->scroll_to_point();
 }
 
-void bwm_tableau_img::save()
+void bwm_tableau_img::save_mask()
 {
-  my_observer_->save();
+  vil_image_view_base_sptr mask = my_observer_->mask();
+  if(!mask)
+    return;
+  vgui_dialog save_dlg("Save Mask");
+  vcl_string ext, file_path;
+  save_dlg.file("Mask Filename", ext, file_path);
+  if(!save_dlg.ask())
+    return;
+  if(file_path =="")
+    return;
+  bool result = vil_save(*mask,file_path.c_str());
+  if( !result ) {
+    vcl_cerr << "Failed to save image to" << file_path << vcl_endl;
+  }
 }
 
 void bwm_tableau_img::help_pop()
@@ -219,4 +242,21 @@ bool bwm_tableau_img::handle(const vgui_event& e)
   }
 #endif // 0
   return bgui_picker_tableau::handle(e);
+}
+
+void bwm_tableau_img::init_mask()
+{
+  my_observer_->init_mask();
+}
+void bwm_tableau_img::add_poly_to_mask()
+{
+  my_observer_->add_poly_to_mask();
+}
+void bwm_tableau_img::remove_poly_from_mask()
+{
+  my_observer_->remove_poly_from_mask();
+}
+void bwm_tableau_img::create_mask()
+{
+  my_observer_->create_mask();
 }

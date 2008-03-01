@@ -11,6 +11,7 @@
 
 #include <vgui/vgui_viewer2D_tableau.h>
 
+#include <vil/vil_image_view.h>
 #include <bgui/bgui_image_tableau.h>
 #include <bgui/bgui_vsol2D_tableau.h>
 #include <bgui/bgui_vsol_soview2D.h>
@@ -40,7 +41,8 @@ class bwm_observer_img : public bgui_vsol2D_tableau
     : bgui_vsol2D_tableau(img), img_tab_(img), viewer_(0),
     show_image_path_(false), start_x_(0), start_y_(0), moving_p_(0),
     moving_v_(0), moving_vertex_(false), moving_polygon_(false),
-    in_jog_mode_(false), row_(0), col_(0) {  }
+    in_jog_mode_(false), row_(0), col_(0), mask_(0), lock_vgui_status_(false),
+    vgui_status_on_(false){  }
 
   virtual ~bwm_observer_img();
 
@@ -73,7 +75,6 @@ class bwm_observer_img : public bgui_vsol2D_tableau
 
   void delete_all();
 
-  void save();
 
   void hist_plot();
 
@@ -115,13 +116,42 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   void clear_reg_segmentation();
 
   vcl_string image_path(){return img_tab_->file_name();}
+
+  void init_mask();
+  void add_poly_to_mask();
+  void remove_poly_from_mask();
+  void create_mask();
+  vil_image_view_base_sptr mask(){return mask_;}
+
+  //: lock/unlock the status display
+  void lock_vgui_status(bool lock){lock_vgui_status_ = lock;}
+  //: is status locked?
+  bool vgui_status_locked(){return lock_vgui_status_;}
+
+  //is vgui status being displayed by *this observer?
+  bool vgui_status_on(){return vgui_status_on_;}
+
+  void set_vgui_status_on(bool status_on){vgui_status_on_ = status_on;}
+
  protected:
+  //:flags to indicate vgui status displays by observers
+
+  //: lock status display when drawing or other motion tracking
+  bool lock_vgui_status_;
+
+  //: observer status is being displayed, 
+  //  so image pixel values should be blocked
+  bool vgui_status_on_;
 
   bwm_observer_img();
 
   bgui_image_tableau_sptr img_tab_;
 
   vgui_viewer2D_tableau_sptr viewer_;
+
+  vil_image_view_base_sptr mask_;
+
+  vcl_vector<vsol_polygon_2d_sptr> mask_polys_;
 
   bool show_image_path_;
 
