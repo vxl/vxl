@@ -667,7 +667,9 @@ void bwm_observable_mesh::create_mesh_HE(vsol_polygon_3d_sptr polygon,
                                    polygon->vertex(i)->y() + fact*normal.y(),
                                    polygon->vertex(i)->z() + fact*normal.z()));
 #endif // 0
-    v->set_pt (vgl_point_3d<double> (polygon->vertex(i)->x(),polygon->vertex(i)->y(),dist));
+    v->set_pt (vgl_point_3d<double> (polygon->vertex(i)->x(),
+		polygon->vertex(i)->y(),
+		polygon->vertex(i)->z()-dist));
     object_->_add_vertex (v);
     v_list[n+i] = v;
   }
