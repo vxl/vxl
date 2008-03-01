@@ -76,6 +76,8 @@ class bwm_tableau_cam : public bwm_tableau_img
   void scan_regions();
 
   void show_geo_position();
+
+  void geo_position_vertex();
   //------------ save methods
 
   //: saves the observables with their save method specific to the object

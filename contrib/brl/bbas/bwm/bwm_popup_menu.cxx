@@ -202,6 +202,11 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
         new vgui_command_simple<bwm_tableau_cam>(cam_tab,
         &bwm_tableau_cam::show_geo_position));
     
+    mesh_submenu.separator();
+    mesh_submenu.add( "GeoPosition of Selected Vertex",
+        new vgui_command_simple<bwm_tableau_cam>(cam_tab,
+        &bwm_tableau_cam::geo_position_vertex));
+
     vgui_menu del_menu;
     del_menu.add( "Delete Selected",
       new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::delete_object));

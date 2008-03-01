@@ -151,6 +151,8 @@ class bwm_observer_cam : public bwm_observer_vgui
 
   void show_geo_position();
 
+  void geo_position_vertex();
+
   virtual vcl_ostream& print_camera(vcl_ostream& s) {return s;}
 
  protected:
@@ -168,6 +170,8 @@ class bwm_observer_cam : public bwm_observer_vgui
   bwm_observable_sptr extrude_obj_;
 
   bool show_geo_position_;
+
+  bool geo_position(double u, double v, double& x, double& y, double& z);
 
   bwm_observer_cam() {}
 

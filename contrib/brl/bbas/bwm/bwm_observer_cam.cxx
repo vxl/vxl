@@ -32,6 +32,26 @@
 #include <vgui/vgui_projection_inspector.h>
 #include <bgui/bgui_vsol_soview2D.h>
 
+bool bwm_observer_cam::geo_position(double u, double v,
+                                    double& x, double& y, double& z)
+{
+  x = 0; y=0; z=0;
+  if(!bwm_world::instance()->world_pt_valid())
+    return false;
+  if(!camera_)
+    return false;
+  vgl_plane_3d<double> plane = bwm_world::instance()->world_plane();
+  vgl_point_2d<double> pt(u, v);
+  vgl_point_3d<double> init_world_pt = bwm_world::instance()->world_pt();
+  vgl_point_3d<double> world_pt;
+  bool good = vpgl_backproject::bproj_plane(camera_, pt, plane, init_world_pt,
+                                            world_pt);
+  if(!good)
+    return false;
+  x = world_pt.x();   y = world_pt.y();   z = world_pt.z();
+  return true;
+}
+
 bool bwm_observer_cam::handle(const vgui_event &e)
 {
   // handle movements for meshes
@@ -215,20 +235,14 @@ bool bwm_observer_cam::handle(const vgui_event &e)
   if (e.type == vgui_MOTION && 
       e.button != vgui_MIDDLE &&
       show_geo_position_&&
-      bwm_world::instance()->world_pt_valid()&&
       !bwm_observer_img::vgui_status_locked())
     {
-		if(camera_){
-      vgl_plane_3d<double> plane = bwm_world::instance()->world_plane();
-      vgl_point_2d<double> pt(x, y);
-      vgl_point_3d<double> init_world_pt = bwm_world::instance()->world_pt();
-      vgl_point_3d<double> world_pt;
-      vpgl_backproject::bproj_plane(camera_, pt, plane, init_world_pt,
-                                    world_pt);
-      vgui::out << vcl_fixed << vcl_setprecision(6)<< "Lat(deg): " << world_pt.y() << " Lon(deg): " 
-                << world_pt.x() << vcl_setprecision(2) << " Ele(m): " 
-                << world_pt.z() << " (WGS84)" << vcl_endl;
-		}
+      double X, Y, Z;
+      if(this->geo_position(x, y, X, Y, Z))
+      vgui::out << vcl_fixed << vcl_setprecision(6)<< "Lat(deg): " 
+                << Y << " Lon(deg): " 
+                << X << vcl_setprecision(2) << " Ele(m): " 
+                << Z << " (WGS84)" << vcl_endl;
     }
   return base::handle(e);
 }
@@ -1255,4 +1269,31 @@ void bwm_observer_cam::show_geo_position()
   img_tab_->lock_linenum(true);
   bwm_observer_img::lock_vgui_status(false);
   bwm_observer_img::set_vgui_status_on(true);
+}
+void  bwm_observer_cam::geo_position_vertex()
+{
+  vcl_vector<vgui_soview2D*> vertices = this->get_selected_objects(VERTEX_TYPE);
+  if (vertices.size()  != 1) {
+    vcl_cerr << "Please select exactly 1 vertex for geo_position!" << vcl_endl;
+    return;
+  }
+  bwm_soview2D_vertex* vert = static_cast<bwm_soview2D_vertex*>(vertices[0]);
+  double u = vert->x, v = vert->y;
+  double X, Y, Z;
+  if(!this->geo_position(u, v, X, Y, Z)){
+    vcl_cerr << "Geo position computation failed\n";
+    return;
+  }
+  vgui_text_tableau_sptr tt = img_tab_->text_tab();
+  if (!tt) return;
+  tt->clear();
+  tt->set_colour(1.0, 1.0, 0.0);
+  vcl_stringstream str;
+  str << vcl_fixed << vcl_setprecision(6)<< "(" << Y 
+      << ' '  << X << vcl_setprecision(2)<< ' ' << Z << ')' << vcl_ends;
+  
+  float x = static_cast<float>(u+2.0);
+  float y = static_cast<float>(v-2.0);
+  tt->add(x, y, str.str());
+  tt->post_redraw();
 }

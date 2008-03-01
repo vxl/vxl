@@ -274,6 +274,11 @@ void bwm_tableau_cam::show_geo_position()
   my_observer_->show_geo_position();
 }
 
+void bwm_tableau_cam::geo_position_vertex()
+{
+  my_observer_->geo_position_vertex();
+}
+
 void bwm_tableau_cam::help_pop()
 {
   bwm_tableau_text* text = new bwm_tableau_text(500, 500);
