@@ -36,7 +36,8 @@ class bwm_observer_cam : public bwm_observer_vgui
   // set the initial projection plane to z=0
   bwm_observer_cam(bgui_image_tableau_sptr const& img, const char* n="unnamed")
     : bwm_observer_vgui(img), proj_plane_(vgl_plane_3d<double>(0, 0, 1, 0)),
-     cam_adjusted_(false),extrude_mode_(false), show_geo_position_(false){}
+    cam_adjusted_(false),extrude_mode_(false), show_geo_position_(false)
+    {}
 
   virtual ~bwm_observer_cam(){ delete camera_;}
 
@@ -84,14 +85,14 @@ class bwm_observer_cam : public bwm_observer_vgui
 
   //: Special case of backprojecting onto the projection plane
   void backproj_poly(vsol_polygon_2d_sptr poly2d,
-    vsol_polygon_3d_sptr& poly3d) {
-      backproj_poly(poly2d, poly3d, proj_plane_);
+                     vsol_polygon_3d_sptr& poly3d) {
+    backproj_poly(poly2d, poly3d, proj_plane_);
   }
 
   //: Special case of backprojecting onto the projection plane translated by dist in the direction of the normal
   void backproj_poly(vsol_polygon_2d_sptr poly2d,
-                              vsol_polygon_3d_sptr& poly3d,
-                              double dist);
+                     vsol_polygon_3d_sptr& poly3d,
+                     double dist);
 
   void proj_point(vgl_point_3d<double> world_pt,
                   vgl_point_2d<double> &image_pt);
@@ -164,6 +165,9 @@ class bwm_observer_cam : public bwm_observer_vgui
   bool cam_adjusted_;
 
   vgl_plane_3d<double> proj_plane_;
+
+  //face that is involved with moving
+  vgl_plane_3d<double> moving_face_plane_;
 
   // controls extrude for keybord manipulation
   bool extrude_mode_;

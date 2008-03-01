@@ -22,38 +22,35 @@ class bwm_vertex_toggle_command : public vgui_command
 
 void bwm_popup_menu::get_menu(vgui_menu &menu)
 {
+  // 2D objects submenu
   vgui_menu submenu;
 
   bwm_tableau_img* img_tab = static_cast<bwm_tableau_img* > (tab_.as_pointer());
   submenu.add("Polygon..",
     new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::create_polygon),
-    vgui_key('p'),
-    vgui_modifier(vgui_SHIFT) );
+    vgui_key('p'),  vgui_modifier(vgui_SHIFT) );
   submenu.separator();
 
   submenu.add("PolyLine..",
     new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::create_polyline),
-    vgui_key('l'),
-    vgui_modifier(vgui_SHIFT) );
+    vgui_key('l'),  vgui_modifier(vgui_SHIFT) );
   submenu.separator();
 
   submenu.add("Box..",
     new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::create_box),
-    vgui_key('b'),
-    vgui_modifier(vgui_SHIFT) );
-
+    vgui_key('b'), vgui_modifier(vgui_SHIFT) );
   submenu.separator();
 
   submenu.add("Pointset..",
-              new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::create_pointset));
-
+     new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::create_pointset));
   submenu.separator();
+
   submenu.add("Point..",
     new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::create_point),
-    vgui_key('t'),
-    vgui_modifier(vgui_SHIFT) );
-
+    vgui_key('t'), vgui_modifier(vgui_SHIFT) );
   submenu.separator();
+
+  // Delete 2D submenu
   vgui_menu selmenu;
   selmenu.add( "Delete Selected",
     new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::clear_poly),
@@ -64,43 +61,59 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
     new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::clear_all),
     vgui_key('a'), vgui_modifier(vgui_SHIFT));
   submenu.add( "Delete ", selmenu);
+
   menu.add( "2D Objects", submenu);
   menu.separator();
 
+  // Image Processing submenu
   vgui_menu image_submenu;
-  MENU_TAB_ADD_PROCESS("Range Map", "range_map", image_submenu, img_tab);
-  MENU_TAB_ADD_PROCESS("Intensity Profile", "intensity_profile", image_submenu, img_tab);
-  MENU_TAB_ADD_PROCESS("Histogram Plot", "histogram", image_submenu, img_tab);
+
+  // Add command to run 2D Gauss fit
+  //MENU_TAB_ADD_PROCESS("JIMs item", "jim's process", image_submenu, this);
+  MENU_TAB_ADD_PROCESS("Gauss fit - Subpixel", "gauss process", image_submenu, img_tab);
+
   MENU_TAB_ADD_PROCESS("Step Edges VD", "step_edge", image_submenu, img_tab);
   MENU_TAB_ADD_PROCESS("Detect Lines", "detect_lines", image_submenu, img_tab);
+
   image_submenu.add( "Redisplay Edges",
     new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::recover_edges),
     vgui_key('b'), vgui_modifier(vgui_SHIFT));
-  image_submenu.add( "Redisplay Lines",
+
+	image_submenu.add( "Redisplay Lines",
     new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::recover_lines));
-  image_submenu.add( "Clear Segmentation Display",
+
+	image_submenu.add( "Clear Segmentation Display",
     new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::clear_box));
-  if(bwm_tableau_mgr::is_registered("bwm_tableau_video")){
-  image_submenu.add( "Init Mask",
-    new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::init_mask));
 
-  image_submenu.add( "Add Region to Mask(selected poly)",
-    new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::add_poly_to_mask));
+	if(bwm_tableau_mgr::is_registered("bwm_tableau_video"))
+	{
+		image_submenu.add( "Init Mask",
+		new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::init_mask));
 
-  image_submenu.add( "Remove Region from Mask(selected poly)",
-    new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::remove_poly_from_mask));
+		image_submenu.add( "Add Region to Mask(selected poly)",
+		new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::add_poly_to_mask));
 
-  image_submenu.add( "Create Mask Image(bool)",
-    new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::create_mask));
+		image_submenu.add( "Remove Region from Mask(selected poly)",
+		new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::remove_poly_from_mask));
 
-  image_submenu.add( "Save Mask Image(bool)",
-    new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::save_mask));
-  }
+		image_submenu.add( "Create Mask Image(bool)",
+		new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::create_mask));
+
+		image_submenu.add( "Save Mask Image(bool)",
+		new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::save_mask));
+	}
   //image_submenu.separator();
+
   menu.add("Image Processing", image_submenu);
   menu.separator();
 
+  // Image Display submenu
   vgui_menu img_other;
+
+  MENU_TAB_ADD_PROCESS("Range Map", "range_map", img_other, img_tab);
+  MENU_TAB_ADD_PROCESS("Intensity Profile", "intensity_profile", img_other, img_tab);
+  MENU_TAB_ADD_PROCESS("Histogram Plot", "histogram", img_other, img_tab);
+
   img_other.add( "Show Path" ,
     new vgui_command_simple<bwm_tableau_img>(img_tab,
                                              &bwm_tableau_img::
@@ -110,16 +123,17 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
     new vgui_command_simple<bwm_tableau_img>(img_tab,
                                              &bwm_tableau_img::
                                              zoom_to_fit));
-  img_other.separator();
+//  img_other.separator();
   img_other.add( "Scroll to Image Location" ,
     new vgui_command_simple<bwm_tableau_img>(img_tab,
                                              &bwm_tableau_img::
                                              scroll_to_point));
   menu.add("Image Display", img_other);
-  menu.separator();
-  menu.add( "Deselect All Objects",
-    new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::deselect_all),
-    vgui_key('-'));
+//  menu.separator();
+
+//  menu.add( "Deselect All Objects",	// Not needed with shift middle mouse
+//      new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::deselect_all),
+//      vgui_key('-'));
 
   // add more based on the tableau type
   // all camera tableau children will do the following menu items
@@ -127,36 +141,12 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
     (tab_->type_name().compare("bwm_tableau_rat_cam") == 0)  ||
     (tab_->type_name().compare("bwm_tableau_video") == 0))
   {
-    bwm_tableau_cam* cam_tab = static_cast<bwm_tableau_cam* > (tab_.as_pointer());
-    vgui_menu reg_submenu, threed_menu;
-    menu.separator();
-    menu.add( "Set as Master", new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::set_master));
-
-    reg_submenu.add( "Set as EO", new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::set_eo));
-    reg_submenu.separator();
-    reg_submenu.add( "Set as Other Mode", new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::set_other_mode));
-    reg_submenu.separator();
-
-    if (tab_->type_name().compare("bwm_tableau_rat_cam") == 0) {
-      bwm_tableau_rat_cam* rat_cam_tab = static_cast<bwm_tableau_rat_cam* > (tab_.as_pointer());
-      reg_submenu.add( "Register Image to World Pt",
-        new vgui_command_simple<bwm_tableau_rat_cam>(rat_cam_tab,
-        &bwm_tableau_rat_cam::adjust_camera_to_world_pt));
-      reg_submenu.separator();
-      reg_submenu.add( "Register to Master",
-        new vgui_command_simple<bwm_tableau_rat_cam>(rat_cam_tab,
-        &bwm_tableau_rat_cam::register_search_to_master));
-      reg_submenu.separator();
-      reg_submenu.add( "Transfer Edges from Master",
-        new vgui_command_simple<bwm_tableau_rat_cam>(rat_cam_tab,
-        &bwm_tableau_rat_cam::project_edges_from_master));
-    }
-    menu.separator();
-    menu.add("Registration", reg_submenu);
-
+    // 3D Objects menu
+	bwm_tableau_cam* cam_tab = static_cast<bwm_tableau_cam* > (tab_.as_pointer());
     vgui_menu mesh_submenu;
     vcl_string on = "[x] ", off = "[ ] ";
-    mesh_submenu.add( ((cam_tab->show_vertices_)?on:off)+"show vertices", new bwm_vertex_toggle_command(cam_tab, &(cam_tab->show_vertices_)));
+    mesh_submenu.add( ((cam_tab->show_vertices_)?on:off)+"show vertices", 
+	new bwm_vertex_toggle_command(cam_tab, &(cam_tab->show_vertices_)));
     mesh_submenu.separator();
 
     mesh_submenu.add("Create Mesh Polygon",
@@ -207,7 +197,8 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
         new vgui_command_simple<bwm_tableau_cam>(cam_tab,
         &bwm_tableau_cam::geo_position_vertex));
 
-    vgui_menu del_menu;
+	// 3D Delete submenu
+	vgui_menu del_menu;
     del_menu.add( "Delete Selected",
       new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::delete_object));
     del_menu.separator();
@@ -219,6 +210,37 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
     menu.separator();
     menu.add("3D Objects", mesh_submenu);
 
+  // Registration menu
+    vgui_menu reg_submenu, threed_menu;
+    menu.separator();
+	
+    menu.add( "Set as Master", new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::set_master));
+
+    reg_submenu.add( "Set as EO", new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::set_eo));
+    reg_submenu.separator();
+    reg_submenu.add( "Set as Other Mode", new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::set_other_mode));
+    reg_submenu.separator();
+
+    if (tab_->type_name().compare("bwm_tableau_rat_cam") == 0) {
+      bwm_tableau_rat_cam* rat_cam_tab = static_cast<bwm_tableau_rat_cam* > (tab_.as_pointer());
+      reg_submenu.add( "Register Image to World Pt",
+        new vgui_command_simple<bwm_tableau_rat_cam>(rat_cam_tab,
+        &bwm_tableau_rat_cam::adjust_camera_to_world_pt));
+      reg_submenu.separator();
+	  
+      reg_submenu.add( "Register to Master",
+        new vgui_command_simple<bwm_tableau_rat_cam>(rat_cam_tab,
+        &bwm_tableau_rat_cam::register_search_to_master));
+      reg_submenu.separator();
+	  
+      reg_submenu.add( "Transfer Edges from Master",
+        new vgui_command_simple<bwm_tableau_rat_cam>(rat_cam_tab,
+        &bwm_tableau_rat_cam::project_edges_from_master));
+    }
+    menu.separator();
+    menu.add("Registration", reg_submenu);
+
+	// Corrospondances menu
     menu.separator();
     vgui_menu corr_menu;
     corr_menu.add( "Move (selected)" ,

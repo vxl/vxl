@@ -66,6 +66,7 @@ bool bwm_observer_cam::handle(const vgui_event &e)
       in_jog_mode_ = false;
       return true;
     }
+
     vgui_text_tableau_sptr tt = img_tab_->text_tab();
     if (tt)
       tt->clear();
@@ -82,6 +83,11 @@ bool bwm_observer_cam::handle(const vgui_event &e)
           if (obj->num_faces() == 1) {
             moving_p_ = (bgui_vsol_soview2D*) select_list[0];
             moving_face_ = obj;
+            vsol_polygon_3d_sptr poly3d = obj->extract_face(face_id);
+            if(poly3d){
+            vgl_homg_plane_3d<double> plane = poly3d->plane();
+            moving_face_plane_ = plane;
+            }
             start_x_ = x;
             start_y_ = y;
             moving_polygon_ = true;
@@ -104,6 +110,11 @@ bool bwm_observer_cam::handle(const vgui_event &e)
             // since there is only one face we can choose the only one
             moving_p_ = poly;
             moving_face_ = obj;
+            vsol_polygon_3d_sptr poly3d = obj->extract_face(face_id);
+            if(poly3d){
+            vgl_homg_plane_3d<double> plane = poly3d->plane();
+            moving_face_plane_ = plane;
+            }
             moving_vertex_ = true;
             moving_polygon_ = false;
           }
@@ -161,7 +172,7 @@ bool bwm_observer_cam::handle(const vgui_event &e)
       bgui_vsol_soview2D_polygon* polygon = (bgui_vsol_soview2D_polygon*) moving_p_;
       vsol_polygon_2d_sptr poly2d = polygon->sptr();
       vsol_polygon_3d_sptr poly3d;
-      this->backproj_poly(poly2d, poly3d);
+      this->backproj_poly(poly2d, poly3d, moving_face_plane_);
       moving_face_->set_object(poly3d);
     }
     this->deselect_all();
@@ -184,7 +195,7 @@ bool bwm_observer_cam::handle(const vgui_event &e)
       polygon->sptr()->vertex(i)->set_y(y);
       vsol_polygon_2d_sptr poly2d = polygon->sptr();
       vsol_polygon_3d_sptr poly3d;
-      this->backproj_poly(poly2d, poly3d);
+      this->backproj_poly(poly2d, poly3d, moving_face_plane_);
       moving_face_->set_object(poly3d);
     }
     this->deselect_all();
