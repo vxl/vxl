@@ -19,6 +19,7 @@
 #include <vgl/vgl_point_2d.h>
 
 #include <vsol/vsol_point_3d_sptr.h>
+#include <vsol/vsol_point_3d.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
 
@@ -112,6 +113,8 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
   //: vertices are kept as a pair (bwm_observable *, vector<bwm_soview2D_vertex*> )
   vcl_map<bwm_observable_sptr, vcl_vector<bwm_soview2D_vertex* > > object_verts_;
   vcl_map<bwm_observable_sptr, vcl_vector<vsol_point_2d_sptr> > object_verts_xy_;
+
+  vcl_map<unsigned, vsol_point_3d_sptr> vertex_3d_map_;
 
   bwm_observable_sptr moving_face_;
 

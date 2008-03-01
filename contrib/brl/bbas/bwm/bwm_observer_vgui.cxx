@@ -12,7 +12,6 @@
 #include <vgl/vgl_vector_3d.h>
 
 #include <vsol/vsol_point_2d.h>
-#include <vsol/vsol_point_3d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_polygon_3d.h>
 
@@ -194,6 +193,8 @@ void bwm_observer_vgui::draw_mesh(bwm_observable_sptr observable,
         bgui_vsol_soview2D_polygon* poly = face_it->second;
 
         bwm_soview2D_vertex* sopt = new bwm_soview2D_vertex(v2d.x(), v2d.y(), 0.5f, poly, i);
+        unsigned vid = static_cast<unsigned>(sopt->get_id());
+        vertex_3d_map_[vid]=v;
         this->add(sopt);
         sopt->set_style(vertex_style_);
         vertx_list.push_back(sopt);

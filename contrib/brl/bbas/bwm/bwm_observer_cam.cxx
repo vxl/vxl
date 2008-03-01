@@ -66,6 +66,10 @@ bool bwm_observer_cam::handle(const vgui_event &e)
       in_jog_mode_ = false;
       return true;
     }
+    vgui_text_tableau_sptr tt = img_tab_->text_tab();
+    if (tt)
+      tt->clear();
+
     // first get the selected polygon
     vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
     if (select_list.size() == 1)
@@ -1279,21 +1283,24 @@ void  bwm_observer_cam::geo_position_vertex()
   }
   bwm_soview2D_vertex* vert = static_cast<bwm_soview2D_vertex*>(vertices[0]);
   double u = vert->x, v = vert->y;
-  double X, Y, Z;
-  if(!this->geo_position(u, v, X, Y, Z)){
-    vcl_cerr << "Geo position computation failed\n";
+  vcl_map<unsigned, vsol_point_3d_sptr>::iterator vit;
+  vit = vertex_3d_map_.find(vert->get_id());
+  if(vit==vertex_3d_map_.end())
+   {
+    vcl_cerr << "Can't find selected vertex for geo_position!" << vcl_endl;
     return;
-  }
+  } 
+  vsol_point_3d_sptr p3d = (*vit).second;
   vgui_text_tableau_sptr tt = img_tab_->text_tab();
   if (!tt) return;
   tt->clear();
   tt->set_colour(1.0, 1.0, 0.0);
   vcl_stringstream str;
-  str << vcl_fixed << vcl_setprecision(6)<< "(" << Y 
-      << ' '  << X << vcl_setprecision(2)<< ' ' << Z << ')' << vcl_ends;
+  str << vcl_fixed << vcl_setprecision(6)<< "(" << p3d->y() 
+      << ' '  << p3d->x() << vcl_setprecision(2)<< ' ' << p3d->z() << ')' << vcl_ends;
   
   float x = static_cast<float>(u+2.0);
   float y = static_cast<float>(v-2.0);
   tt->add(x, y, str.str());
-  tt->post_redraw();
+  img_tab_->post_redraw();
 }
