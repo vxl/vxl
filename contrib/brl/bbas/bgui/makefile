@@ -12,7 +12,6 @@ SOURCES += bgui_vtol2D_rubberband_client.cxx
 SOURCES += bgui_vtol_soview2D.cxx
 SOURCES += bgui_image_tableau.cxx
 MANPAGE_SOURCES += bgui_image_tableau_sptr.h
-MANPAGE_SOURCES += bgui_roi_tableau_make_roi.h
 SOURCES += bgui_vsol_camera_tableau.cxx
 MANPAGE_SOURCES += bgui_vsol_camera_tableau_sptr.h
 SOURCES += bgui_vsol_soview2D.cxx
