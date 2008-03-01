@@ -12,6 +12,7 @@
 //  Created June 2, 2003
 //  Modifications:
 //   Peter Vanroose - 8 May 2004 - re-implemented add_vsol_box_3d() with a single polygon
+//   Now obsolete == do not use in new code === J.L. Mundy, March 1, 2008
 // \endverbatim
 //-----------------------------------------------------------------------------
 #include <vcl_vector.h>
