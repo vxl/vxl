@@ -12,16 +12,16 @@
 #include <vnl/vnl_numeric_traits.h>
 
 bgui_image_utils::bgui_image_utils():
-  hist_valid_(false), percent_limit_(0.005), bin_limit_(1000),
-  n_skip_upper_bins_(0), n_skip_lower_bins_(1), min_blocks_(20),
+  hist_valid_(false), percent_limit_(0.0002), bin_limit_(1000),
+  n_skip_upper_bins_(0), n_skip_lower_bins_(1), min_blocks_(50),
   scan_fraction_(0.1), image_(0)
 {
 }
 
 bgui_image_utils::bgui_image_utils(vil_image_resource_sptr const& image):
-  hist_valid_(false), percent_limit_(0.005),
+  hist_valid_(false), percent_limit_(0.0002),
   bin_limit_(1000), n_skip_upper_bins_(0),
-  n_skip_lower_bins_(1), min_blocks_(20),
+  n_skip_lower_bins_(1), min_blocks_(50),
   scan_fraction_(0.1), image_(image)
 {
   if (!image)
