@@ -12,7 +12,6 @@
 #include <bgui/bgui_picker_tableau_sptr.h>
 #include <bgui/bgui_range_adjuster_tableau.h>
 #include <bgui/bgui_range_adjuster_tableau_sptr.h>
-#include <bgui/bgui_roi_tableau_make_roi.h>
 #include <bgui/bgui_selector_tableau.h>
 #include <bgui/bgui_selector_tableau_sptr.h>
 #include <bgui/bgui_vsol2D_tableau.h>
