@@ -1292,6 +1292,7 @@ void divide (const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& q, vnl_bign
         divide(r*r.sign, b2*b2.sign, q1, r1);
         q += q1*r.sign*b2.sign; r = r1*r.sign*b2.sign;
 #ifdef DEBUG
+        vcl_cerr << vcl_hex;
         vcl_cerr << "\nvnl_bignum::divide: q1 ="; if (q1.sign < 0) vcl_cerr << " -"; for (Counter x=q1.count; x>0; --x) vcl_cerr << ' ' << q1.data[x-1];
         vcl_cerr << "\nvnl_bignum::divide: r1 ="; if (r1.sign < 0) vcl_cerr << " -"; for (Counter x=r1.count; x>0; --x) vcl_cerr << ' ' << r1.data[x-1];
 #endif
