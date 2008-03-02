@@ -66,7 +66,7 @@ void mmn_make_tri_tree(const vnl_matrix<double>& D,
   {
     // Find nearest neighbour of v0
     double min_d=9e9;
-    unsigned best_i;
+    unsigned best_i=0;
     for (unsigned i=0;i<n;++i)
       if (i!=v0 && D(v0,i)<min_d)
       { best_i=i; min_d=D(v0,i); }
@@ -99,8 +99,8 @@ void mmn_make_tri_tree(const vnl_matrix<double>& D,
   for (unsigned k=2;k<n;++k)
   {
     // Search for node with lowest distance to an arc end
-    unsigned best_i=0;
     double min_d=9e9;
+    unsigned best_i=0;
     for (unsigned i=0;i<n;++i)
       if (node_free[i] && best_d[i]<min_d)
         {min_d=best_d[i]; best_i=i; }
