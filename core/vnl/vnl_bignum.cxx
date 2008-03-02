@@ -1259,30 +1259,47 @@ void divide (const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& q, vnl_bign
     }
     else {                                      // Else full-blown divide
       vnl_bignum u,v;
+#define DEBUG
 #ifdef DEBUG
       vcl_cerr << vcl_hex;
-      vcl_cerr << "\nvnl_bignum::divide: b1 ="; for (Counter x=b1.count; x>0; --x) vcl_cerr << ' ' << b1.data[x-1];
-      vcl_cerr << "\nvnl_bignum::divide: b2 ="; for (Counter x=b2.count; x>0; --x) vcl_cerr << ' ' << b2.data[x-1];
+      vcl_cerr << "\nvnl_bignum::divide: b1 ="; if (b1.sign < 0) vcl_cerr << " -"; for (Counter x=b1.count; x>0; --x) vcl_cerr << ' ' << b1.data[x-1];
+      vcl_cerr << "\nvnl_bignum::divide: b2 ="; if (b2.sign < 0) vcl_cerr << " -"; for (Counter x=b2.count; x>0; --x) vcl_cerr << ' ' << b2.data[x-1];
 #endif
       Data d = normalize(b1,b2,u,v);            // Set u = b1*d, v = b2*d
 #ifdef DEBUG
       vcl_cerr << "\nvnl_bignum::divide: d = 0x" << d;
-      vcl_cerr << "\nvnl_bignum::divide: u ="; for (Counter x=u.count; x>0; --x) vcl_cerr << ' ' << u.data[x-1];
-      vcl_cerr << "\nvnl_bignum::divide: v ="; for (Counter x=v.count; x>0; --x) vcl_cerr << ' ' << v.data[x-1];
+      vcl_cerr << "\nvnl_bignum::divide: u ="; if (u.sign < 0) vcl_cerr << " -"; for (Counter x=u.count; x>0; --x) vcl_cerr << ' ' << u.data[x-1];
+      vcl_cerr << "\nvnl_bignum::divide: v ="; if (v.sign < 0) vcl_cerr << " -"; for (Counter x=v.count; x>0; --x) vcl_cerr << ' ' << v.data[x-1];
 #endif
       Counter j = 0;
       while (j <= b1.count - b2.count) {        // Main division loop
-        Data q_hat = estimate_q_hat(u,v,j);     // Estimate # times v divides
+        Data q_hat = estimate_q_hat(u,v,j);     // Estimate # times v divides u
         q.data[q.count - 1 - j] =               // Do division, get true answ.
           multiply_subtract(u,v,q_hat,j);
         j++;
       }
       static Data dufus;                // dummy variable
       divide_aux(u,d,r,dufus);          // Unnormalize u for remainder
+
+      // Peter Vanroose - 2 March 2008 - clumsy bug fix (which solves 5 out of the 6 test errors):
+      // remainder should never be larger than divisor; if still so, continue dividing...
+      while (r*r.sign >= b2*b2.sign) {
 #ifdef DEBUG
-      vcl_cerr << "\nvnl_bignum::divide: q ="; for (Counter x=q.count; x>0; --x) vcl_cerr << ' ' << q.data[x-1];
-      vcl_cerr << "\nvnl_bignum::divide: r ="; for (Counter x=r.count; x>0; --x) vcl_cerr << ' ' << r.data[x-1];
-      vcl_cerr << vcl_dec << "\n";
+      vcl_cerr << "\nvnl_bignum::divide: q ="; if (q.sign < 0) vcl_cerr << " -"; for (Counter x=q.count; x>0; --x) vcl_cerr << ' ' << q.data[x-1];
+      vcl_cerr << "\nvnl_bignum::divide: r ="; if (r.sign < 0) vcl_cerr << " -"; for (Counter x=r.count; x>0; --x) vcl_cerr << ' ' << r.data[x-1];
+#endif
+        vnl_bignum r1, q1;
+        divide(r*r.sign, b2*b2.sign, q1, r1);
+        q += q1*r.sign*b2.sign; r = r1*r.sign*b2.sign;
+#ifdef DEBUG
+        vcl_cerr << "\nvnl_bignum::divide: q1 ="; if (q1.sign < 0) vcl_cerr << " -"; for (Counter x=q1.count; x>0; --x) vcl_cerr << ' ' << q1.data[x-1];
+        vcl_cerr << "\nvnl_bignum::divide: r1 ="; if (r1.sign < 0) vcl_cerr << " -"; for (Counter x=r1.count; x>0; --x) vcl_cerr << ' ' << r1.data[x-1];
+#endif
+      }
+#ifdef DEBUG
+      vcl_cerr << "\nvnl_bignum::divide: q ="; if (q.sign < 0) vcl_cerr << " -"; for (Counter x=q.count; x>0; --x) vcl_cerr << ' ' << q.data[x-1];
+      vcl_cerr << "\nvnl_bignum::divide: r ="; if (r.sign < 0) vcl_cerr << " -"; for (Counter x=r.count; x>0; --x) vcl_cerr << ' ' << r.data[x-1];
+      vcl_cerr << vcl_dec << vcl_endl;
 #endif
     }
     q.trim();                           // Trim leading zeros of quot.
