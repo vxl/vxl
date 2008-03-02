@@ -149,13 +149,13 @@ static void run_constructor_tests()
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
    is << "0x1aF"; is >> b; TEST("\"0x1aF\" >> b;", b, 0x1af);}
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
-   is << "0"; is >> b; TEST("\"0\" >> b;", b, 0L);}
+   is << '0'; is >> b; TEST("\"0\" >> b;", b, 0L);}
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
    is << "00"; is >> b; TEST("\"00\" >> b;", b, 0L);}
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
    is << "012334567"; is >> b; TEST("\"012334567\" >> b;", b, 012334567);}
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
-   is << "9"; is >> b; TEST("\"9\" >> b;", b, 9L);}
+   is << '9'; is >> b; TEST("\"9\" >> b;", b, 9L);}
   {vcl_stringstream is(vcl_ios_in | vcl_ios_out); vnl_bignum b;
    is << " 9"; is >> b; TEST("\" 9\" >> b;", b, 9L);}
 #endif
@@ -414,7 +414,7 @@ static void run_division_tests()
     }
   }
 
-  vcl_cout << "\n";
+  vcl_cout << '\n';
   TEST("(vnl_bignum(i+k)/vnl_bignum(j+l)) == vnl_bignum(long((i+k)/(j+l)))",
        div_errors, 0);
   TEST("(vnl_bignum(i+k)%vnl_bignum(j+l)) == vnl_bignum(long((i+k)%(j+l)))",
@@ -445,38 +445,56 @@ static void run_large_division_tests()
 {
   vcl_cout << "\nStarting large division tests:\n";
 
-  vnl_bignum a("10000000"), b("10000001"); b *= a;
-  vcl_cout << b << " / 10000001 = " << (b/10000001) << ", must be 10000000\n";
-  TEST("100000010000000 / 10000001", b/10000001, a);
+  vnl_bignum a("10000000"), b("10000001"); b *= a; vnl_bignum c = b/10000001;
+  vcl_cout << b << " / 10000001 = " << c << ", must be 10000000\n";
+  TEST("100000010000000 / 10000001", c, a);
 
   // these are the same numbers, now written in hexadecimal:
-  a = "0X989680"; b = "0X989681"; b *= a;
-  vcl_cout << b << " / 10000001 = " << (b/vnl_bignum("0X989681"))
-           << ", must be " << a << "\n";
-  TEST("0x5AF31112D680 / 0x989681", b/vnl_bignum("0X989681"), a);
+  a = "0X989680"; b = "0X989681"; b *= a; c = b/vnl_bignum("0X989681");
+  vcl_cout << b << " / 0X989681 = " << c << ", must be " << a << vcl_endl;
+  TEST("0x5AF31112D680 / 0x989681", c, a);
 
   // an other decimal example:
-  a = "111111"; b = "111111"; b *= a;
-  vcl_cout << b << " / 111111 = " << (b/111111) << ", must be 111111\n";
-  TEST("12345654321 / 111111", b/111111, a);
+  a = "111111"; b = "111111"; b *= a; c = b/111111;
+  vcl_cout << b << " / 111111 = " << c << ", must be 111111\n";
+  TEST("12345654321 / 111111", c, a);
 
   // these are the same numbers, now written in hexadecimal:
-  a = "0X2B67"; b = "0X2B67"; b *= a;
-  vcl_cout << b << " / 0X2B67 = " << (b/vnl_bignum("0X2B67"))
-           << ", must be " << a << "\n";
-  TEST("12345654321 / 111111", b/vnl_bignum("0X2B67"), a);
+  a = "0X2B67"; b = "0X2B67"; b *= a; c = b/vnl_bignum("0X2B67");
+  vcl_cout << b << " / 0X2B67 = " << c << ", must be " << a << vcl_endl;
+  TEST("12345654321 / 0X2B67", c, a);
 
-  a = "98789"; b = "98789"; b *= a;
-  vcl_cout << b << " / 98789 = " << (b/98789) << ", must be 98789\n";
-  TEST("9759266521 / 98789", b/98789, a);
+  a = "98789"; b = "98789"; b *= a; c = b/98789;
+  vcl_cout << b << " / 98789 = " << c << ", must be 98789\n";
+  TEST("9759266521 / 98789", c, a);
 
-  vcl_cout << "C(16,8) = " << Combinations(16,8) << "\n";
+  a = "1e100"; b = "1e200"; c = b/a;
+  vcl_cout << "1e200 / 1e100 = " << c << ", must be 1e100\n";
+  TEST("1e200 / 1e100", c, a);
+
+  a = "-1e100"; b = "1e200"; c = b/a;
+  vcl_cout << "1e200 / -1e100 = " << c << ", must be -1e100\n";
+  TEST("1e200 / -1e100", c, a);
+
+  a = "1e100"; b = "-1e200"; c = b/a;
+  vcl_cout << "-1e200 / 1e100 = " << c << ", must be -1e100\n";
+  TEST("-1e200 / 1e100", c, -a);
+
+  a = "-1e100"; b = "-1e200"; c = b/a;
+  vcl_cout << "-1e200 / -1e100 = " << c << ", must be 1e100\n";
+  TEST("-1e200 / -1e100", c, -a);
+
+  a = "1e100"; b = "1e200"; c = b%a;
+  vcl_cout << "1e200 % 1e100 = " << c << ", must be 0\n";
+  TEST("1e100^2 % 1e100", c, 0);
+
+  vcl_cout << "C(16,8) = " << Combinations(16,8) << vcl_endl;
   TEST("16 choose 8 = 12870", Combinations(16,8), 12870);
-  vcl_cout << "C(18,9) = " << Combinations(18,9) << "\n";
+  vcl_cout << "C(18,9) = " << Combinations(18,9) << vcl_endl;
   TEST("18 choose 9 = 48620", Combinations(18,9), 48620);
-  vcl_cout << "C(20,10) = " << Combinations(20,10) << "\n";
+  vcl_cout << "C(20,10) = " << Combinations(20,10) << vcl_endl;
   TEST("20 choose 10 = 184756", Combinations(20,10), 184756);
-  vcl_cout << "C(100,44) = " << Combinations(100,44) << "\n";
+  vcl_cout << "C(100,44) = " << Combinations(100,44) << vcl_endl;
   TEST("100 choose 44 = 49378235797073715747364762200",
        Combinations(100,44), "49378235797073715747364762200");
 }
@@ -517,18 +535,18 @@ static void run_addition_subtraction_tests()
       bij = vnl_bignum(i+j);
       if (bi + bj != bij) {
         TEST("bi + bj == vnl_bignum(i + j)", false, true);
-        vcl_cout << "i = "<<i<<", j = "<<j<<"\n";
+        vcl_cout << "i = "<<i<<", j = "<<j<<vcl_endl;
         ++add_errors;
       }
       bij = vnl_bignum(i-j);
       if (bi - bj != bij) {
         TEST("bi - bj == vnl_bignum(i - j)", false, true);
-        vcl_cout << "i = "<<i<<", j = "<<j<<"\n";
+        vcl_cout << "i = "<<i<<", j = "<<j<<vcl_endl;
         ++sub_errors;
       }
     }
   }}
-  vcl_cout << "\n";
+  vcl_cout << vcl_endl;
   TEST("bi + bj == vnl_bignum(i + j)", add_errors, 0);
   TEST("bi - bj == vnl_bignum(i - j)", sub_errors, 0);
 
@@ -807,7 +825,7 @@ static void run_shift_tests()
     b = s;
     vcl_cout << "Enter shift amount: ";
     vcl_cin >> sh;
-    vcl_cout << "Shift == " << sh << "\n";
+    vcl_cout << "Shift == " << sh << vcl_endl;
 
     b = b << sh;
   }
