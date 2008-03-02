@@ -435,7 +435,7 @@ void m23d_ortho_flexible_builder::correct_coord_frame(vnl_matrix<double>& M,
     // For each one, select the closest of the four possible matrices
     // for each shape
     vnl_matrix<double> best_meanU;
-    double best_rms;
+    double best_rms = 1e99;
 
     for (unsigned i=0;i<vcl_min(2*ns,40u);++i)
     {
