@@ -235,7 +235,7 @@ double mfpf_norm_corr2d::search(const vimt_image_2d_of<float>& image,
   vcl_ptrdiff_t k_jstep = kernel_.jstep();
 
   double best_r=-9.99e9;
-  int best_i,best_j;
+  int best_i=0,best_j=0;
   for (unsigned j=0;j<(unsigned)nj;++j,s+=s_jstep)
   {
     for (int i=0;i<ni;++i)
