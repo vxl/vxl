@@ -1259,7 +1259,6 @@ void divide (const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& q, vnl_bign
     }
     else {                                      // Else full-blown divide
       vnl_bignum u,v;
-#define DEBUG
 #ifdef DEBUG
       vcl_cerr << vcl_hex;
       vcl_cerr << "\nvnl_bignum::divide: b1 ="; if (b1.sign < 0) vcl_cerr << " -"; for (Counter x=b1.count; x>0; --x) vcl_cerr << ' ' << b1.data[x-1];
