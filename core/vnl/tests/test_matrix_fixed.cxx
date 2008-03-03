@@ -5,6 +5,7 @@
 #include <vcl_cstdlib.h>
 #include <vcl_cstddef.h> // for vcl_size_t
 #include <vcl_cmath.h> // for sqrt
+#include <vcl_iostream.h>
 
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
@@ -383,6 +384,25 @@ void test_double()
   TEST("normalize_columns()", d8[0][0]==0 && d8[1][0]==1, true);
 }
 
+namespace {
+
+template<class T>
+void
+test_extract( T* )
+{
+  vnl_matrix_fixed<T,2,6> m;
+  m(0,0)=1; m(0,1)=2; m(0,2)=3; m(0,3)=4; m(0,4)=5; m(0,5) = 11;
+  m(1,0)=6; m(1,1)=7; m(1,2)=8; m(1,3)=9; m(1,4)=0; m(1,5) = 12;
+  vcl_cout << "m=\n" << m.as_ref() << "\n";
+
+  vnl_matrix_fixed<T,1,3> r;
+  m.extract( r.as_ref().non_const(), 1, 2 );
+  vcl_cout << "r=\n" << r.as_ref() << "\n";
+  TEST( "extract into existing matrix", r(0,0)==8 && r(0,1)==9 && r(0,2)==0, true );
+}
+
+} // end anonymous namespace
+
 void test_matrix_fixed()
 {
   verbose_malloc = true;
@@ -445,6 +465,8 @@ void test_matrix_fixed()
   test_int();
   test_float();
   test_double();
+
+  test_extract( (double*)0 );
 }
 
 #ifdef TEST_MALLOC

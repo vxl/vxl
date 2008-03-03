@@ -314,6 +314,15 @@ class vnl_matrix
   vnl_matrix<T> extract(unsigned r, unsigned c,
                         unsigned top=0, unsigned left=0) const;
 
+  //: Extract a sub-matrix starting at (top,left)
+  //
+  //  The output is stored in \a sub_matrix, and it should have the
+  //  required size on entry.  Thus the result will contain elements
+  //  [top,top+sub_matrix.rows()-1][left,left+sub_matrix.cols()-1]
+  void extract ( vnl_matrix<T>& sub_matrix,
+                 unsigned top=0, unsigned left=0) const;
+
+
   //: Get a vector equal to the given row
   vnl_vector<T> get_row(unsigned r) const;
 

@@ -209,6 +209,19 @@ vnl_matrix<T>
 vnl_matrix_fixed<T,nrows,ncols>::extract (unsigned rowz, unsigned colz,
                                           unsigned top, unsigned left) const
 {
+  vnl_matrix<T> result(rowz, colz);
+  this->extract( result, top, left );
+  return result;
+}
+
+
+template<class T, unsigned nrows, unsigned ncols>
+void
+vnl_matrix_fixed<T,nrows,ncols>::extract (vnl_matrix<T>& sub_matrix,
+                                          unsigned top, unsigned left) const
+{
+  unsigned int rowz = sub_matrix.rows();
+  unsigned int colz = sub_matrix.cols();
 #ifndef NDEBUG
   unsigned int bottom = top + rowz;
   unsigned int right = left + colz;
@@ -216,11 +229,9 @@ vnl_matrix_fixed<T,nrows,ncols>::extract (unsigned rowz, unsigned colz,
     vnl_error_matrix_dimension ("extract",
                                 nrows, ncols, bottom, right);
 #endif
-  vnl_matrix<T> result(rowz, colz);
   for (unsigned int i = 0; i < rowz; i++)      // actual copy of all elements
     for (unsigned int j = 0; j < colz; j++)    // in submatrix
-      result(i,j) = this->data_[top+i][left+j];
-  return result;
+      sub_matrix(i,j) = this->data_[top+i][left+j];
 }
 
 

@@ -435,6 +435,27 @@ void test_leak()   // use top4.1 to watch memory usage.
 }
 #endif
 
+
+namespace {
+
+template<class T>
+void
+test_extract( T* )
+{
+  vnl_matrix<T> m( 2, 5 );
+  m(0,0)=1; m(0,1)=2; m(0,2)=3; m(0,3)=4; m(0,4)=5;
+  m(1,0)=6; m(1,1)=7; m(1,2)=8; m(1,3)=9; m(1,4)=0;
+  vcl_cout << "m=\n" << m << "\n";
+
+  vnl_matrix<T> r( 1, 3 );
+  m.extract( r, 1, 2 );
+  vcl_cout << "r=\n" << r << "\n";
+  TEST( "extract into existing matrix", r(0,0)==8 && r(0,1)==9 && r(0,2)==0, true );
+}
+
+} // end anonymous namespace
+
+
 static
 void test_matrix()
 {
@@ -444,6 +465,7 @@ void test_matrix()
 #ifdef LEAK
   test_leak();
 #endif
+  test_extract( (double*)0 );
 }
 
 TESTMAIN(test_matrix);

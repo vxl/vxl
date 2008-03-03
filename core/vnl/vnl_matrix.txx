@@ -745,6 +745,16 @@ vnl_matrix<T>& vnl_matrix<T>::update (vnl_matrix<T> const& m,
 template<class T>
 vnl_matrix<T> vnl_matrix<T>::extract (unsigned rowz, unsigned colz,
                                       unsigned top, unsigned left) const{
+  vnl_matrix<T> result(rowz, colz);
+  this->extract( result, top, left );
+  return result;
+}
+
+template<class T>
+void vnl_matrix<T>::extract( vnl_matrix<T>& submatrix,
+                             unsigned top, unsigned left) const{
+  unsigned const rowz = submatrix.rows();
+  unsigned const colz = submatrix.cols();
 #ifndef NDEBUG
   unsigned int bottom = top + rowz;
   unsigned int right = left + colz;
@@ -752,11 +762,9 @@ vnl_matrix<T> vnl_matrix<T>::extract (unsigned rowz, unsigned colz,
     vnl_error_matrix_dimension ("extract",
                                 this->num_rows, this->num_cols, bottom, right);
 #endif
-  vnl_matrix<T> result(rowz, colz);
   for (unsigned int i = 0; i < rowz; i++)      // actual copy of all elements
     for (unsigned int j = 0; j < colz; j++)    // in submatrix
-      result.data[i][j] = data[top+i][left+j];
-  return result;
+      submatrix.data[i][j] = data[top+i][left+j];
 }
 
 //: Returns the dot product of the two matrices. O(m*n).
