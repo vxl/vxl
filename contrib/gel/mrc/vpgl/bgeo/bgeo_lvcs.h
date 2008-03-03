@@ -96,6 +96,7 @@ class bgeo_lvcs : public vbl_ref_count
   void read(vcl_istream& strm);
   friend vcl_ostream& operator << (vcl_ostream& os, const bgeo_lvcs& local_coord_sys);
   friend vcl_istream& operator >> (vcl_istream& os, bgeo_lvcs& local_coord_sys);
+  bool operator==(bgeo_lvcs const& r) const;
   // binary IO
 
   //: Binary save self to stream.

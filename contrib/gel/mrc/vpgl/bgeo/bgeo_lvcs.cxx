@@ -597,16 +597,16 @@ void bgeo_lvcs::read(vcl_istream& strm)
     vcl_cerr << "undefined local_cs_name" << vcl_endl;
 
   strm >> ang_u >> len_u;
-  if (len_u.compare("feet") == 0)
+  if (ang_u.compare("feet") == 0)
     localXYZUnit_ = FEET;
-  else if (len_u.compare("meters") == 0)
+  else if (ang_u.compare("meters") == 0)
     localXYZUnit_ = METERS;
   else 
     vcl_cerr << "undefined localXYZUnit_" << vcl_endl;
 
-  if (ang_u.compare("degrees") == 0)
+  if (len_u.compare("degrees") == 0)
     geo_angle_unit_ = DEG;
-  else if (ang_u.compare("radians") == 0)
+  else if (len_u.compare("radians") == 0)
     geo_angle_unit_ = RADIANS;
   else 
     vcl_cerr << "undefined geo_angle_unit_" << vcl_endl;
@@ -685,6 +685,22 @@ vcl_istream& operator >> (vcl_istream& is, bgeo_lvcs& local_coord_sys)
   return is;
 }
 
+bool bgeo_lvcs::operator==(bgeo_lvcs const& r) const
+{
+  bool eq = true;
+  eq = eq && (this->local_cs_name_ == r.local_cs_name_);
+  eq = eq && (this->localCSOriginLat_ == r.localCSOriginLat_);
+  eq = eq && (this->localCSOriginLon_ == r.localCSOriginLon_);
+  eq = eq && (this->localCSOriginElev_ == r.localCSOriginElev_);
+  eq = eq && (this->lat_scale_ == r.lat_scale_);
+  eq = eq && (this->lon_scale_ == r.lon_scale_);
+  eq = eq && (this->geo_angle_unit_ == r.geo_angle_unit_);
+  eq = eq && (this->localXYZUnit_ == r.localXYZUnit_);
+  eq = eq && (this->lox_ == r.lox_);
+  eq = eq && (this->loy_ == r.loy_);
+  eq = eq && (this->theta_ == r.theta_);
+  return eq;
+}
 // binary IO
 
 //: Binary save self to stream.
