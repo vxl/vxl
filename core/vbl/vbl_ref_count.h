@@ -19,7 +19,7 @@ class vbl_ref_count
   vbl_ref_count(vbl_ref_count const&) : ref_count_(0) { }
 
   vbl_ref_count&
-  operator=(vbl_ref_count const& rhs)
+  operator=(vbl_ref_count const& /*rhs*/)
   { /* should not copy the ref count */ return *this; }
   
   virtual ~vbl_ref_count() {}
