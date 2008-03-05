@@ -618,6 +618,61 @@ void vil_nitf2_image_subheader::add_ICHIPB_definitions()
   }
 }
 
+
+bool vil_nitf2_image_subheader::
+get_rows_offset(double & ul, double & ur, double & ll,double & lr)
+{
+  // Now get the sub-header TRE parameters
+  vil_nitf2_tagged_record_sequence isxhd_tres;
+  vil_nitf2_tagged_record_sequence::iterator tres_itr;
+  this->get_property("IXSHD", isxhd_tres);
+
+  bool success = false;
+
+  // Check through the TREs to find "RPC"
+  for (tres_itr = isxhd_tres.begin(); tres_itr != isxhd_tres.end(); ++tres_itr)
+  {
+    vcl_string type = (*tres_itr)->name();
+    if ( type == "ICHIPB" )
+    {
+       success = (*tres_itr)->get_value("FI_ROW_11", ul); 
+
+       success = (*tres_itr)->get_value("FI_ROW_12", ur); 
+
+       success = (*tres_itr)->get_value("FI_ROW_21", ll); 
+
+       success = (*tres_itr)->get_value("FI_ROW_22", lr); 
+    }
+  }
+  return true;
+}
+bool vil_nitf2_image_subheader::
+get_cols_offset(double & ul, double & ur, double & ll,double & lr)
+{
+  // Now get the sub-header TRE parameters
+  vil_nitf2_tagged_record_sequence isxhd_tres;
+  vil_nitf2_tagged_record_sequence::iterator tres_itr;
+  this->get_property("IXSHD", isxhd_tres);
+
+bool success = false;
+  // Check through the TREs to find "RPC"
+  for (tres_itr = isxhd_tres.begin(); tres_itr != isxhd_tres.end(); ++tres_itr)
+  {
+    vcl_string type = (*tres_itr)->name();
+    if ( type == "ICHIPB" )
+    {
+              success = (*tres_itr)->get_value("FI_COL_11", ul); 
+
+       success = (*tres_itr)->get_value("FI_COL_12", ur); 
+
+       success = (*tres_itr)->get_value("FI_COL_21", ll); 
+
+       success = (*tres_itr)->get_value("FI_COL_22", lr); 
+
+    }
+  }
+  return true;
+}
 // Collect the RPC parameters for the current image. Image corners are reported
 // as a string of geographic coordinates,one for each image corner.
   bool vil_nitf2_image_subheader::
