@@ -131,6 +131,8 @@ class vil_nitf2_image_subheader
   static void add_shared_field_defs_3( vil_nitf2_field_definitions* defs );
   static void add_rpc_definitions();
   static void add_USE_definitions();
+  static void add_ICHIPB_definitions();
+
 
   static vil_nitf2_field_definitions* s_field_definitions_21;
   static vil_nitf2_field_definitions* s_field_definitions_20;

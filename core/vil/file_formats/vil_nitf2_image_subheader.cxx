@@ -24,8 +24,12 @@ vil_nitf2_image_subheader::vil_nitf2_image_subheader(vil_nitf2_classification::f
                      *get_field_definitions_21()),
     m_data_mask_table(0),
     m_version(version)
-{ add_rpc_definitions(); 
-  add_USE_definitions();}
+{ 
+    add_rpc_definitions(); 
+    add_USE_definitions();
+    add_ICHIPB_definitions();
+                     
+                     }
 
 vil_nitf2_image_subheader::~vil_nitf2_image_subheader()
 {
@@ -562,14 +566,56 @@ get_sun_params( double& sun_el, double& sun_az)
     vcl_string type = (*tres_itr)->name();
     if( type == "USE00A")
     {
-        double sun_el;
+        
          success = (*tres_itr)->get_value("SUN_EL", sun_el);
-
-        double sun_az;
         success = (*tres_itr)->get_value("SUN_AZ", sun_az);
     }
 }
   return success;
+}
+void vil_nitf2_image_subheader::add_ICHIPB_definitions()
+{
+  vil_nitf2_tagged_record_definition* tr =vil_nitf2_tagged_record_definition::find("ICHIPB");
+  if (!tr)
+  {
+    vil_nitf2_tagged_record_definition::define("ICHIPB", "ICHIPB SUPPORT DATA EXTENSION" )
+
+    .field("XFRM_FLAG",    "Non-linear Transformation Flag",  NITF_INT(2),false)                 // not used, but must read
+    .field("SCALE_FACTOR", "Scale Factor Relative to R0",NITF_DBL(10, 5, false), false) // not used, but must read
+    .field("ANAMRPH_CORR", "Anamorphic Correction Indicator", NITF_INT(2),false)
+    .field("SCANBLK_NUM",  "Scan Block Number",NITF_INT(2,  false), true) // not used
+    //: intelligent data
+    .field("OP_ROW_11", "Output product row number component of grid point index (1,1)",NITF_DBL(12,3), false)
+    .field("OP_COL_11", "Output product column number component of grid point index (1,1)",NITF_DBL(12,3), false)
+
+    .field("OP_ROW_12", "Output product row number component of grid point index (1,2)",NITF_DBL(12,3), false)
+    .field("OP_COL_12", "Output product column number component of grid point index (1,2)",NITF_DBL(12,3), false)
+
+    .field("OP_ROW_21", "Output product row number component of grid point index (2,1)",NITF_DBL(12,3), false)
+    .field("OP_COL_21", "Output product column number component of grid point index (2,1)",NITF_DBL(12,3), false)
+
+    .field("OP_ROW_22", "Output product row number component of grid point index (2,2)",NITF_DBL(12,3), false)
+    .field("OP_COL_22", "Output product column number component of grid point index (2,2)",NITF_DBL(12,3), false)
+
+    //: full image coordinate system
+    .field("FI_ROW_11", "Output product row number component of grid point index (1,1)",NITF_DBL(12,3), false)
+    .field("FI_COL_11", "Output product column number component of grid point index (1,1)",NITF_DBL(12,3), false)
+
+    .field("FI_ROW_12", "Output product row number component of grid point index (1,2)",NITF_DBL(12,3), false)
+    .field("FI_COL_12", "Output product column number component of grid point index (1,2)",NITF_DBL(12,3), false)
+
+    .field("FI_ROW_21", "Output product row number component of grid point index (2,1)",NITF_DBL(12,3), false)
+    .field("FI_COL_21", "Output product column number component of grid point index (2,1)",NITF_DBL(12,3), false)
+
+    .field("FI_ROW_22", "Output product row number component of grid point index (2,2)",NITF_DBL(12,3), false)
+    .field("FI_COL_22", "Output product column number component of grid point index (2,2)",NITF_DBL(12,3), false)
+
+    .field("FI_ROW",      "Full Image Number of Rows",     NITF_LONG(8,false), false)
+    .field("FI_COL",      "Full Image Number of COlumns",     NITF_LONG(8,false), false)
+
+
+    .end();  // of ICHIPB TRE
+  }
 }
 
 // Collect the RPC parameters for the current image. Image corners are reported
@@ -605,14 +651,7 @@ get_rpc_params( vcl_string& rpc_type, vcl_string& image_id,
   for (tres_itr = isxhd_tres.begin(); tres_itr != isxhd_tres.end(); ++tres_itr)
   {
     vcl_string type = (*tres_itr)->name();
-    if( type == "USE00A")
-    {
-        double sun_el;
-        success = (*tres_itr)->get_value("SUN_EL", sun_el);
 
-        double sun_az;
-        success = (*tres_itr)->get_value("SUN_AZ", sun_az);
-    }
     if ( type == "RPC00B" || type == "RPC00A") // looking for "RPC..."
     {
       // set type in return value
