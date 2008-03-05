@@ -585,30 +585,30 @@ void vil_nitf2_image_subheader::add_ICHIPB_definitions()
     .field("ANAMRPH_CORR", "Anamorphic Correction Indicator", NITF_INT(2),false)
     .field("SCANBLK_NUM",  "Scan Block Number",NITF_INT(2,  false), true) // not used
     //: intelligent data
-    .field("OP_ROW_11", "Output product row number component of grid point index (1,1)",NITF_DBL(12,3), false)
-    .field("OP_COL_11", "Output product column number component of grid point index (1,1)",NITF_DBL(12,3), false)
+    .field("OP_ROW_11", "Output product row number component of grid point index (1,1)",NITF_DBL(12,3,false), false)
+    .field("OP_COL_11", "Output product column number component of grid point index (1,1)",NITF_DBL(12,3,false), false)
 
-    .field("OP_ROW_12", "Output product row number component of grid point index (1,2)",NITF_DBL(12,3), false)
-    .field("OP_COL_12", "Output product column number component of grid point index (1,2)",NITF_DBL(12,3), false)
+    .field("OP_ROW_12", "Output product row number component of grid point index (1,2)",NITF_DBL(12,3,false), false)
+    .field("OP_COL_12", "Output product column number component of grid point index (1,2)",NITF_DBL(12,3,false), false)
 
-    .field("OP_ROW_21", "Output product row number component of grid point index (2,1)",NITF_DBL(12,3), false)
-    .field("OP_COL_21", "Output product column number component of grid point index (2,1)",NITF_DBL(12,3), false)
+    .field("OP_ROW_21", "Output product row number component of grid point index (2,1)",NITF_DBL(12,3,false), false)
+    .field("OP_COL_21", "Output product column number component of grid point index (2,1)",NITF_DBL(12,3,false), false)
 
-    .field("OP_ROW_22", "Output product row number component of grid point index (2,2)",NITF_DBL(12,3), false)
-    .field("OP_COL_22", "Output product column number component of grid point index (2,2)",NITF_DBL(12,3), false)
+    .field("OP_ROW_22", "Output product row number component of grid point index (2,2)",NITF_DBL(12,3,false), false)
+    .field("OP_COL_22", "Output product column number component of grid point index (2,2)",NITF_DBL(12,3,false), false)
 
     //: full image coordinate system
-    .field("FI_ROW_11", "Output product row number component of grid point index (1,1)",NITF_DBL(12,3), false)
-    .field("FI_COL_11", "Output product column number component of grid point index (1,1)",NITF_DBL(12,3), false)
+    .field("FI_ROW_11", "Output product row number component of grid point index (1,1)",NITF_DBL(12,3,false), false)
+    .field("FI_COL_11", "Output product column number component of grid point index (1,1)",NITF_DBL(12,3,false), false)
 
-    .field("FI_ROW_12", "Output product row number component of grid point index (1,2)",NITF_DBL(12,3), false)
-    .field("FI_COL_12", "Output product column number component of grid point index (1,2)",NITF_DBL(12,3), false)
+    .field("FI_ROW_12", "Output product row number component of grid point index (1,2)",NITF_DBL(12,3,false), false)
+    .field("FI_COL_12", "Output product column number component of grid point index (1,2)",NITF_DBL(12,3,false), false)
 
-    .field("FI_ROW_21", "Output product row number component of grid point index (2,1)",NITF_DBL(12,3), false)
-    .field("FI_COL_21", "Output product column number component of grid point index (2,1)",NITF_DBL(12,3), false)
+    .field("FI_ROW_21", "Output product row number component of grid point index (2,1)",NITF_DBL(12,3,false), false)
+    .field("FI_COL_21", "Output product column number component of grid point index (2,1)",NITF_DBL(12,3,false), false)
 
-    .field("FI_ROW_22", "Output product row number component of grid point index (2,2)",NITF_DBL(12,3), false)
-    .field("FI_COL_22", "Output product column number component of grid point index (2,2)",NITF_DBL(12,3), false)
+    .field("FI_ROW_22", "Output product row number component of grid point index (2,2)",NITF_DBL(12,3,false), false)
+    .field("FI_COL_22", "Output product column number component of grid point index (2,2)",NITF_DBL(12,3,false), false)
 
     .field("FI_ROW",      "Full Image Number of Rows",     NITF_LONG(8,false), false)
     .field("FI_COL",      "Full Image Number of COlumns",     NITF_LONG(8,false), false)
