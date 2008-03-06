@@ -135,7 +135,7 @@ class vil_nitf2_image_subheader
   static void add_rpc_definitions();
   static void add_USE_definitions();
   static void add_ICHIPB_definitions();
-
+  static void add_MPD26A_definitions();
 
   static vil_nitf2_field_definitions* s_field_definitions_21;
   static vil_nitf2_field_definitions* s_field_definitions_20;

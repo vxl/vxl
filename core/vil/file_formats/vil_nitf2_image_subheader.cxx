@@ -28,6 +28,7 @@ vil_nitf2_image_subheader::vil_nitf2_image_subheader(vil_nitf2_classification::f
     add_rpc_definitions(); 
     add_USE_definitions();
     add_ICHIPB_definitions();
+    add_MPD26A_definitions();
                      
                      }
 
@@ -568,7 +569,13 @@ get_sun_params( double& sun_el, double& sun_az)
     {
         
          success = (*tres_itr)->get_value("SUN_EL", sun_el);
-        success = (*tres_itr)->get_value("SUN_AZ", sun_az);
+        success = success && (*tres_itr)->get_value("SUN_AZ", sun_az);
+    }
+    else if( type == "MPD26A")
+    {
+        
+        success = (*tres_itr)->get_value("SUN_EL", sun_el);
+        success = success && (*tres_itr)->get_value("SUN_AZ", sun_az);
     }
 }
   return success;
@@ -619,6 +626,45 @@ void vil_nitf2_image_subheader::add_ICHIPB_definitions()
 }
 
 
+void vil_nitf2_image_subheader::add_MPD26A_definitions()
+{
+  vil_nitf2_tagged_record_definition* tr =vil_nitf2_tagged_record_definition::find("MPD26A");
+  if (!tr)
+  {
+    vil_nitf2_tagged_record_definition::define("MPD26A", "MPD26A SUPPORT DATA EXTENSION" )
+
+        .field("UNK1",    "Unknown ",  NITF_DBL(11,5,false),false)                 // not used, but must read
+        .field("UNK2",    "Unknown ",  NITF_STR(2), false) // not used, but must read
+        .field("UNK3",    "Unknown ",  NITF_INT(7,true),false)                 // not used, but must read
+        .field("UNK4",    "Unknown ",  NITF_DBL(6,3,false), false) // not used, but must read
+        .field("UNK5",    "Unknown ",  NITF_DBL(6,9,false), false) // not used, but must read
+        .field("UNK6",    "Unknown ",  NITF_STR(3), false) // not used, but must read
+        .field("UNK7",    "Unknown ",  NITF_INT(1,false), false) // not used, but must read
+        .field("UNK8",    "Unknown ",  NITF_STR(1), false) // not used, but must read
+        .field("SUN_EL", "Sun Elevation angle", NITF_DBL(5,1,true),false)
+        .field("SUN_AZ", "Sun Azimuthal angle", NITF_DBL(5,1,false),false)
+        .field("UNK9",    "Unknown ",  NITF_INT(1,false), false) // not used, but must read
+        .field("UNK10",    "Unknown ",  NITF_INT(1,false), false) // not used, but must read
+        .field("UNK11",    "Unknown ",  NITF_INT(4,false), false) // not used, but must read
+        .field("UNK12",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+        .field("UNK13",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+        .field("UNK14",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+        .field("UNK15",    "Unknown ",  NITF_STR(10), false) // not used, but must read
+        .field("UNK16",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+        .field("UNK17",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+        .field("UNK18",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+        .field("UNK19",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+        .field("UNK20",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+        .field("UNK21",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+        .field("UNK22",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+        .field("UNK23",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+        .field("UNK24",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+
+    .end();  // of ICHIPB TRE
+  }
+}
+
+
 bool vil_nitf2_image_subheader::
 get_rows_offset(double & ul, double & ur, double & ll,double & lr)
 {
@@ -636,15 +682,12 @@ get_rows_offset(double & ul, double & ur, double & ll,double & lr)
     if ( type == "ICHIPB" )
     {
        success = (*tres_itr)->get_value("FI_ROW_11", ul); 
-
-       success = (*tres_itr)->get_value("FI_ROW_12", ur); 
-
-       success = (*tres_itr)->get_value("FI_ROW_21", ll); 
-
-       success = (*tres_itr)->get_value("FI_ROW_22", lr); 
+       success = success && (*tres_itr)->get_value("FI_ROW_12", ur); 
+       success = success && (*tres_itr)->get_value("FI_ROW_21", ll); 
+       success = success && (*tres_itr)->get_value("FI_ROW_22", lr); 
     }
   }
-  return true;
+  return success;
 }
 bool vil_nitf2_image_subheader::
 get_cols_offset(double & ul, double & ur, double & ll,double & lr)
@@ -661,17 +704,13 @@ bool success = false;
     vcl_string type = (*tres_itr)->name();
     if ( type == "ICHIPB" )
     {
-              success = (*tres_itr)->get_value("FI_COL_11", ul); 
-
-       success = (*tres_itr)->get_value("FI_COL_12", ur); 
-
-       success = (*tres_itr)->get_value("FI_COL_21", ll); 
-
-       success = (*tres_itr)->get_value("FI_COL_22", lr); 
-
+        success = (*tres_itr)->get_value("FI_COL_11", ul); 
+        success = success && (*tres_itr)->get_value("FI_COL_12", ur); 
+        success = success && (*tres_itr)->get_value("FI_COL_21", ll); 
+        success = success && (*tres_itr)->get_value("FI_COL_22", lr); 
     }
   }
-  return true;
+  return success;
 }
 // Collect the RPC parameters for the current image. Image corners are reported
 // as a string of geographic coordinates,one for each image corner.
