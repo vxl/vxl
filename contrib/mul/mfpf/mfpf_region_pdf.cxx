@@ -35,6 +35,8 @@ void mfpf_region_pdf::set_defaults()
   step_size_=1.0;
   search_ni_=5;
   search_nj_=5;
+  nA_=0; dA_=0.0;
+  ns_=0; s_ =1.0;
   n_pixels_=0;
   roi_.resize(0);
   roi_ni_=0;
@@ -55,6 +57,21 @@ void mfpf_region_pdf::set_step_size(double s)
 {
   step_size_=s;
 }
+
+//: Define angle search parameters
+void mfpf_region_pdf::set_angle_range(unsigned nA, double dA)
+{
+  nA_=nA;
+  dA_=dA;
+}
+
+//: Define scale search parameters
+void mfpf_region_pdf::set_scale_range(unsigned ns, double s)
+{
+  ns_=ns;
+  s_ =s;
+}
+
 
 //: Define region and PDF of region
 void mfpf_region_pdf::set(const vcl_vector<mbl_chord>& roi,
@@ -201,11 +218,10 @@ void mfpf_region_pdf::evaluate_region(
    //  On exit, new_p and new_u define position, scale and orientation of
    //  the best nearby match.  Returns a qualtity of fit measure at that
    //  point (the smaller the better).
-double mfpf_region_pdf::search(const vimt_image_2d_of<float>& image,
+double mfpf_region_pdf::search_one_pose(const vimt_image_2d_of<float>& image,
                         const vgl_point_2d<double>& p,
                         const vgl_vector_2d<double>& u,
-                        vgl_point_2d<double>& new_p,
-                        vgl_vector_2d<double>& new_u)
+                        vgl_point_2d<double>& new_p)
 {
   int ni=1+2*search_ni_;
   int nj=1+2*search_nj_;
@@ -250,9 +266,54 @@ double mfpf_region_pdf::search(const vimt_image_2d_of<float>& image,
 
   // Compute position of best point
   new_p = p+(best_i-search_ni_)*u1+(best_j-search_nj_)*v1;
-  new_u = u;
   return best_r;
 }
+
+//: Search given image around p, using u to define scale and orientation 
+//  On exit, new_p and new_u define position, scale and orientation of 
+//  the best nearby match.  Returns a qualtity of fit measure at that
+//  point (the smaller the better).
+double mfpf_region_pdf::search(const vimt_image_2d_of<float>& image,
+                        const vgl_point_2d<double>& p,
+                        const vgl_vector_2d<double>& u,
+                        vgl_point_2d<double>& new_p,
+                        vgl_vector_2d<double>& new_u)
+{
+  if (nA_==0 && ns_==0)
+  {
+    // Only search at one scale/orientation
+    new_u = u;
+    return search_one_pose(image,p,u,new_p);
+  }
+
+  double best_fit=9e99;
+  int best_iA,best_is;
+  vgl_point_2d<double> p1;
+
+  vgl_vector_2d<double> v(-u.y(),u.x());
+
+  for (int is=-int(ns_);is<=int(ns_);++is)
+  {
+    double s = vcl_pow(s_,is);
+    for (int iA=-int(nA_);iA<=int(nA_);++iA)
+    {
+      double A = iA*dA_;
+      vgl_vector_2d<double> uA = s*(u*vcl_cos(A)+v*vcl_sin(A));
+
+      double f = search_one_pose(image,p,uA,p1);
+      if (f<best_fit)
+      {
+        best_iA=iA;
+        best_is=is;
+        best_fit = f;
+        new_u = uA;
+        new_p = p1;
+      }
+    }
+  }
+  return best_fit;
+}
+
 
 //=======================================================================
 // Method: set_from_stream
@@ -319,6 +380,8 @@ void mfpf_region_pdf::print_summary(vcl_ostream& os) const
   if (pdf_.ptr()==0) os << "--"; else os << pdf_;
   os << " search_ni: "<<search_ni_
      << " search_nj: "<<search_nj_
+     <<" nA: "<<nA_<<" dA: "<<dA_
+     <<" ns: "<<ns_<<"  s: "<<s_
      << '}';
 }
 
@@ -351,6 +414,10 @@ void mfpf_region_pdf::b_write(vsl_b_ostream& bfs) const
   vsl_b_write(bfs,ref_y_);
   vsl_b_write(bfs,search_ni_);
   vsl_b_write(bfs,search_nj_);
+  vsl_b_write(bfs,nA_); 
+  vsl_b_write(bfs,dA_); 
+  vsl_b_write(bfs,ns_); 
+  vsl_b_write(bfs,s_); 
 }
 
 //=======================================================================
@@ -375,6 +442,10 @@ void mfpf_region_pdf::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,ref_y_);
       vsl_b_read(bfs,search_ni_);
       vsl_b_read(bfs,search_nj_);
+      vsl_b_read(bfs,nA_); 
+      vsl_b_read(bfs,dA_); 
+      vsl_b_read(bfs,ns_); 
+      vsl_b_read(bfs,s_); 
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
