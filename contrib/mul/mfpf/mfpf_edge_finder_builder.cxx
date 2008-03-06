@@ -59,6 +59,7 @@ void mfpf_edge_finder_builder::build(mfpf_point_finder& pf)
   assert(pf.is_a()=="mfpf_edge_finder");
   mfpf_edge_finder& ef = static_cast<mfpf_edge_finder&>(pf);
   ef.set_search_area(search_ni_,0);
+  ef.set_step_size(step_size_);
 }
 
 //=======================================================================

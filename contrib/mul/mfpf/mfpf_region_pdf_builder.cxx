@@ -202,6 +202,7 @@ void mfpf_region_pdf_builder::build(mfpf_point_finder& pf)
   pdf_builder().build(*pdf,data);
 
   rp.set(roi_,ref_x_,ref_y_,*pdf);
+  rp.set_step_size(step_size_);
 
   // Tidy up
   delete pdf;

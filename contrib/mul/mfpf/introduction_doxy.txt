@@ -4,4 +4,11 @@
 * match of a model in a nearby region.
 *
 * Classes are derived from mfpf_point_finder.
+*
+* Examples include:
+* - mfpf_edge_finder
+* - mfpf_norm_corr_1d
+* - mfpf_profile_pdf
+* - mfpf_norm_corr_2d
+* - mfpf_region_pdf
 */

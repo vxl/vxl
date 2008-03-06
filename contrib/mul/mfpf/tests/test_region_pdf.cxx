@@ -48,7 +48,7 @@ void test_region_pdf_search(mfpf_point_finder_builder& b)
   vcl_cout<<"Value at true point ="<<pf->evaluate(image,p0,u)<<vcl_endl;
 
   pf->set_search_area(0,0);
-//   double v0 = pf->search(image,p0,u,new_p,new_u);
+  double v0 = pf->search(image,p0,u,new_p,new_u);
   vcl_cout<<"search(): Found point: "<<new_p<<vcl_endl;
   TEST_NEAR("Correct location",(new_p-p0).length(),0.0,1e-6);
 

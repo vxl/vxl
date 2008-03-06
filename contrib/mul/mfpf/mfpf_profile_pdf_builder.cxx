@@ -105,6 +105,7 @@ void mfpf_profile_pdf_builder::build(mfpf_point_finder& pf)
   pdf_builder().build(*pdf,data);
 
   nc.set(ilo_,ihi_,*pdf);
+  nc.set_step_size(step_size_);
 
   // Tidy up
   delete pdf;

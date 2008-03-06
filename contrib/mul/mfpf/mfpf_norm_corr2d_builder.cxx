@@ -159,6 +159,7 @@ void mfpf_norm_corr2d_builder::build(mfpf_point_finder& pf)
   vil_math_scale_values(mean,1.0/n_added_);
   normalize(mean);
   nc.set(mean,ref_x_,ref_y_);
+  nc.set_step_size(step_size_);
 }
 
 //=======================================================================

@@ -95,6 +95,7 @@ void mfpf_norm_corr1d_builder::build(mfpf_point_finder& pf)
   nc.set_search_area(search_ni_,0);
   vnl_vector<double> mean=sum_/n_added_;
   mean.normalize();
+  nc.set_step_size(step_size_);
   nc.set(ilo_,ihi_,mean);
 }
 

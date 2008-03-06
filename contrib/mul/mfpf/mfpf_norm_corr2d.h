@@ -29,9 +29,31 @@ class mfpf_norm_corr2d : public mfpf_point_finder
   //: Number of points either side of centre to search
   int search_nj_;
 
+  //: Number of angles to try at
+  unsigned nA_;
+
+  //: Angle step size (ie try at A+idA, i in [-nA,+nA]
+  double dA_;
+
+  //: Number of scales to try at
+  unsigned ns_;
+
+  //: Scaling factor (ie try at (s^i), i in [-ns,+ns]
+  double s_;
+
   //: Define default values
   void set_defaults();
- public:
+
+  //: Search given image around p, using u to define scale and angle 
+  //  On exit, new_p defines position of the best nearby match.  
+  //  Returns a qualtity of fit measure at that
+  //  point (the smaller the better).
+  virtual double search_one_pose(const vimt_image_2d_of<float>& image,
+                        const vgl_point_2d<double>& p,
+                        const vgl_vector_2d<double>& u,
+                        vgl_point_2d<double>& new_p);
+
+public:
 
   // Dflt ctor
   mfpf_norm_corr2d();
@@ -52,6 +74,12 @@ class mfpf_norm_corr2d : public mfpf_point_finder
 
   //: Define search size
   virtual void set_search_area(unsigned ni, unsigned nj);
+
+  //: Define angle search parameters
+  void set_angle_range(unsigned nA, double dA);
+
+  //: Define scale search parameters
+  void set_scale_range(unsigned ns, double s);
 
   int search_ni() const { return search_ni_; }
   int search_nj() const { return search_nj_; }
