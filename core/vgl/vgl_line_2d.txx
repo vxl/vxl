@@ -21,6 +21,14 @@ vgl_line_2d<Type>::vgl_line_2d (vgl_point_2d<Type> const& p1, vgl_point_2d<Type>
   assert(a_||b_); // two points were distinct
 }
 
+//: line defined by one point and one vector
+template <class Type>
+vgl_line_2d<Type>::vgl_line_2d (vgl_point_2d<Type> const& p, vgl_vector_2d<Type> const& v)
+: a_ ( -v.y() )
+, b_ ( v.x() )
+, c_ ( -a_*p.x() - b_*p.y() )
+{
+}
 template <class Type>
 vgl_line_2d<Type>::vgl_line_2d (vgl_homg_line_2d<Type> const& l)
  : a_(l.a()) , b_(l.b()) , c_(l.c())

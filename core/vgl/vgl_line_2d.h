@@ -57,6 +57,9 @@ class vgl_line_2d
   //  The two points must be distinct!
   vgl_line_2d (vgl_point_2d<Type> const& p1, vgl_point_2d<Type> const& p2);
 
+  //: Construct from one point and one vector
+  vgl_line_2d (vgl_point_2d<Type> const& p, vgl_vector_2d<Type> const& v);
+
 #if 0 // use compiler defaults for these
   // Default destructor
   inline ~vgl_line_2d () {}
