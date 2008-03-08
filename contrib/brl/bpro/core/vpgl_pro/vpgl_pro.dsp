@@ -102,6 +102,9 @@ SOURCE=.\vpgl_load_rational_camera_process.cxx
 SOURCE=.\vpgl_load_perspective_camera_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\vpgl_save_perspective_camera_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+vpgl_camera_double_sptr-.cxx
 # End Source File
 # End Group
@@ -115,6 +118,9 @@ SOURCE=.\vpgl_load_rational_camera_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\vpgl_load_perspective_camera_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vpgl_save_perspective_camera_process.h
 # End Source File
 # End Group
 # End Target
