@@ -100,9 +100,19 @@ void segv_vil_menus::reduce_image_callback()
   segv_vil_segmentation_manager::instance()->reduce_image();
 }
 
+void segv_vil_menus::reduce_image_bicubic_callback()
+{
+  segv_vil_segmentation_manager::instance()->reduce_image_bicubic();
+}
+
 void segv_vil_menus::expand_image_callback()
 {
   segv_vil_segmentation_manager::instance()->expand_image();
+}
+
+void segv_vil_menus::expand_image_bicubic_callback()
+{
+  segv_vil_segmentation_manager::instance()->expand_image_bicubic();
 }
 
 void segv_vil_menus::flip_image_lr_callback()
@@ -188,8 +198,10 @@ vgui_menu segv_vil_menus::get_menu()
   menuview.add("Inline Histogram Viewer", inline_viewer_callback);
   menuview.add("Histogram Plot ", intensity_histogram_callback);
   menuview.add("RotateImage ", rotate_image_callback);
-  menuview.add("ReduceImage ", reduce_image_callback);
-  menuview.add("ExpandImage ", expand_image_callback);
+  menuview.add("ReduceImage(Burt)", reduce_image_callback);
+  menuview.add("ReduceImage(bicubic)", reduce_image_bicubic_callback);  
+  menuview.add("ExpandImage(Burt) ", expand_image_callback);
+  menuview.add("ExpandImage(bicubic) ", expand_image_bicubic_callback);
   menuview.add("Flip Image (LR)", flip_image_lr_callback);
   menuview.add("Images as Color", display_images_as_color_callback);
   menuview.add("Project Points RPC", project_points_callback);

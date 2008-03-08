@@ -22,6 +22,7 @@
 #include <vil/vil_copy.h>
 #include <vil/vil_property.h>
 #include <vil/vil_flip.h>
+#include <vil/vil_resample_bicub.h>
 #include <vil/vil_convert.h>
 #include <vil/algo/vil_sobel_1x3.h>
 #include <sdet/sdet_detector_params.h>
@@ -1484,6 +1485,25 @@ void segv_vil_segmentation_manager::reduce_image()
   this->add_image(out_image);
 }
 
+void segv_vil_segmentation_manager::reduce_image_bicubic()
+{
+  vil_image_resource_sptr img = selected_image();
+  if (!img)
+  {
+    vcl_cout << "In segv_vil_segmentation_manager::reduce_image_bicubic - no image\n";
+    return;
+  }
+  vil_image_view<float> flt =
+    brip_vil_float_ops::convert_to_float(img);
+
+  vil_image_view<float> reduced;
+  vil_resample_bicub(flt, reduced, flt.ni()/2, flt.nj()/2);
+
+  vil_image_resource_sptr out_image = 
+    vil_new_image_resource_of_view(reduced);
+  this->add_image(out_image);
+}
+
 void segv_vil_segmentation_manager::expand_image()
 {
   vil_image_resource_sptr img = selected_image();
@@ -1508,6 +1528,23 @@ void segv_vil_segmentation_manager::expand_image()
   this->add_image(out_image);
 }
 
+void segv_vil_segmentation_manager::expand_image_bicubic()
+{
+  vil_image_resource_sptr img = selected_image();
+  if (!img)
+  {
+    vcl_cout << "In segv_vil_segmentation_manager::expand_image_bicubic - no image\n";
+    return;
+  }
+  vil_image_view<float> flt =
+    brip_vil_float_ops::convert_to_float(img);
+
+  vil_image_view<float> expanded;
+  vil_resample_bicub(flt, expanded, 2*flt.ni(), 2*flt.nj());
+
+  vil_image_resource_sptr out_image = vil_new_image_resource_of_view(expanded);
+  this->add_image(out_image);
+}
 
 void segv_vil_segmentation_manager::flip_image_lr()
 {
@@ -1546,4 +1583,41 @@ void segv_vil_segmentation_manager::max_trace_scale()
   scale_image =
     brip_vil_float_ops::max_scale_trace(fimg, min_scale, max_scale, sinc);
   this->add_image(vil_new_image_resource_of_view(scale_image));
+}
+
+void segv_vil_segmentation_manager::create_polygon()
+{
+  bgui_picker_tableau_sptr ptab = selected_picker_tab();
+  if(!ptab){
+    vcl_cerr << "In segv_vil_segmentation_managerd::create_polygon() - "
+             << "no picker tableau\n";
+    return;
+  }
+  vsol_polygon_2d_sptr poly2d;
+  ptab->pick_polygon(poly2d);
+  if (!poly2d)
+  {
+    vcl_cerr << "In segv_vil_segmentation_manager::create_polygon() - "
+             << "picking failed\n";
+    return;
+  }
+  bgui_vtol2D_tableau_sptr btab = selected_vtol2D_tab();  
+  if(!btab){
+    vcl_cerr << "In segv_vil_segmentation_managerd::create_polygon() - "
+             << "no vtol2D tableau\n";
+    return;
+  }
+//  btab->add(poly2d);
+  mask_.push_back(poly2d);
+  btab->post_redraw();
+}
+
+void segv_vil_segmentation_manager::clear_mask()
+{
+  mask_.clear();
+}
+
+void segv_vil_segmentation_manager::save_mask()
+{
+  mask_.clear();
 }

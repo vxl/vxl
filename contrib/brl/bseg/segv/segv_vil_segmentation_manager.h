@@ -17,6 +17,7 @@
 #include <vil/vil_image_resource.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vsol/vsol_conic_2d_sptr.h>
+#include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vsol/vsol_point_2d_sptr.h>
@@ -45,6 +46,7 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void load_image();
   void save_image();
   void save_nitf_camera();
+  void save_mask();
 
   //: visualization
   void set_range_params();
@@ -57,7 +59,9 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void flip_image_lr();
   void rotate_image();
   void reduce_image();
+  void reduce_image_bicubic();
   void expand_image();
+  void expand_image_bicubic();
 
   //: image arithmetic
   void add_images();
@@ -88,7 +92,11 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   void init();
   void remove_image();
   void convert_to_grey();
+  void clear_mask();
+  void add_poly_to_mask();
 
+ //:drawing
+  void create_polygon();
   //: access to the window
   vgui_window* get_window(){return win_;}
   void set_window(vgui_window* win){win_=win;}
@@ -135,8 +143,9 @@ class segv_vil_segmentation_manager : public vgui_wrapper_tableau
   vtol_face_2d_sptr foreground_face_;
   vtol_face_2d_sptr background_face_;
   bgui_bargraph_clipon_tableau_sptr bargraph_;
+  vcl_vector<vsol_polygon_2d_sptr> mask_;
   static segv_vil_segmentation_manager *instance_;
-
+  
 };
 
 #endif // segv_vil_segmentation_manager_h_
