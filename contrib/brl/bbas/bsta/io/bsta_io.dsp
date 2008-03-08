@@ -94,9 +94,6 @@ LIB32=link.exe -lib
 SOURCE=.\bsta_io_attributes.h
 # End Source File
 # Begin Source File
-SOURCE=.\bsta_io_gaussian_angles_1d.h
-# End Source File
-# Begin Source File
 SOURCE=.\bsta_io_gaussian_full.h
 # End Source File
 # Begin Source File
@@ -106,13 +103,13 @@ SOURCE=.\bsta_io_gaussian_indep.h
 SOURCE=.\bsta_io_gaussian_sphere.h
 # End Source File
 # Begin Source File
-SOURCE=.\bsta_io_gaussian_x_y_theta.h
-# End Source File
-# Begin Source File
 SOURCE=.\bsta_io_mixture.h
 # End Source File
 # Begin Source File
 SOURCE=.\bsta_io_mixture_fixed.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_io_histogram.h
 # End Source File
 # End Group
 # End Target

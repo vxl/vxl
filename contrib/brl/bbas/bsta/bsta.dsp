@@ -141,6 +141,12 @@ SOURCE=.\Templates/bsta_gaussian_sphere+float.1-.cxx
 SOURCE=.\Templates/bsta_gaussian_sphere+float.3-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bsta_histogram-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bsta_joint_histogram-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\bsta_gauss.cxx
 # End Source File
 # Begin Source File
@@ -247,6 +253,18 @@ SOURCE=.\bsta_mixture.h
 # End Source File
 # Begin Source File
 SOURCE=.\bsta_mixture_fixed.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_histogram_base.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_histogram_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_joint_histogram_base.h
+# End Source File
+# Begin Source File
+SOURCE=.\bsta_joint_histogram_sptr.h
 # End Source File
 # End Group
 # End Target
