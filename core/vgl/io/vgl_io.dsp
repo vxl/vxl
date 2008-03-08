@@ -198,6 +198,9 @@ SOURCE=.\Templates/vgl_io_point_3d+double-.cxx
 SOURCE=.\Templates/vgl_io_point_3d+float-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vgl_io_point_3d+int-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vgl_io_vector_2d+double-.cxx
 # End Source File
 # Begin Source File
