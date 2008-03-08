@@ -131,12 +131,12 @@ void bsta_joint_histogram<T>::parzen(const T sigma)
 }
 
 template <class T>
-void bsta_joint_histogram<T>::print() const
+void bsta_joint_histogram<T>::print(vcl_ostream& os) const
 {
   for (unsigned int a = 0; a<nbins_; a++)
     for (unsigned int b = 0; b<nbins_; b++)
       if (p(a,b) > 0)
-        vcl_cout << "p[" << a << "][" << b << "]=" << p(a,b) << '\n';
+        os << "p[" << a << "][" << b << "]=" << p(a,b) << '\n';
 }
 
 #undef BSTA_JOINT_HISTOGRAM_INSTANTIATE

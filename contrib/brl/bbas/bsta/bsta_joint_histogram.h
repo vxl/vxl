@@ -14,13 +14,24 @@
 //  Modifications
 // \endverbatim
 #include <vbl/vbl_array_2d.h>
-template <class T> class bsta_joint_histogram
+#include <vcl_iostream.h>
+#include <vbl/vbl_ref_count.h>
+#include <bsta/bsta_joint_histogram_base.h>
+template <class T> class bsta_joint_histogram : public bsta_joint_histogram_base
 {
  public:
   bsta_joint_histogram(const T range = 360, const unsigned int nbins = 8,
-                  const T min_prob = 0.0);//0.005
+                       const T min_prob = 0.0);//0.005
  ~bsta_joint_histogram() {}
+
   unsigned int nbins() const { return nbins_; }
+
+  T range() const {return range_;}
+
+  T min_prob() const {return min_prob_;}
+
+  vbl_array_2d<T> counts() const {return counts_;}
+
   void upcount(T a, T mag_a,
                T b, T mag_b);
   void parzen(const T sigma);
@@ -29,7 +40,12 @@ template <class T> class bsta_joint_histogram
   T volume() const;
   T entropy() const;
   T renyi_entropy() const;
-  void print() const;
+  void print(vcl_ostream& os = vcl_cout) const;
+
+  void set_count(unsigned r, unsigned c, T cnt)
+    { if(r<static_cast<unsigned>(counts_.rows())&&
+	c<static_cast<unsigned>(counts_.cols())) counts_[r][c]=cnt;}
+
  private:
   void compute_volume() const; // mutable const
   mutable bool volume_valid_;

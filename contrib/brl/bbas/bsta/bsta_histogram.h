@@ -16,10 +16,14 @@
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
-template <class T> class bsta_histogram
+#include <bsta/bsta_histogram_base.h>
+template <class T> class bsta_histogram : public bsta_histogram_base
 {
  public:
-  //:Simple default constructor that assumes all data values are positive
+  //: Default constructor
+  bsta_histogram();
+
+  //:Simple constructor that assumes all data values are positive
   bsta_histogram(const T range, const unsigned int nbins,
                  const T min_prob = 0.0);
 
@@ -44,12 +48,15 @@ template <class T> class bsta_histogram
   //: bin interval
   T delta() const {return delta_;}
 
+  //: minimum probability
+  T min_prob() const {return min_prob_;}
+
   //: The value range for a bin
-  void value_range(const unsigned int bin, T& vmin, T& vmax)
+  void value_range(const unsigned int bin, T& vmin, T& vmax) const
     {assert(bin<nbins_); vmin = bin*delta_+min_; vmax = (bin+1)*delta_+min_;}
   
   //: The average value for a bin
-  T avg_bin_value(const unsigned int bin)
+  T avg_bin_value(const unsigned int bin) const
     {assert(bin<nbins_); return (min_ + bin*delta_ + delta_/2);}
 
   //: The counts in a given bin
@@ -109,11 +116,11 @@ template <class T> class bsta_histogram
     {if(bin<nbins_) counts_[bin]=count;}
     
   //: array of bin values
-  vcl_vector<T> value_array(){vcl_vector<T> v(nbins_);
+  vcl_vector<T> value_array() const {vcl_vector<T> v(nbins_);
   for(unsigned b = 0; b<nbins_; ++b) v[b]=avg_bin_value(b); return v;}
 
   //: array of bin counts
-  vcl_vector<T> count_array(){vcl_vector<T> v(nbins_);
+  vcl_vector<T> count_array() const {vcl_vector<T> v(nbins_);
   for(unsigned b = 0; b<nbins_; ++b) v[b]=counts(b); return v;}
 
  //: Smooth the histogram with a Parzen window of sigma
@@ -125,7 +132,7 @@ template <class T> class bsta_histogram
   //: Read from stream
   vcl_istream& read(vcl_istream&);
 
-  void print() const;
+  void print(vcl_ostream& os = vcl_cout) const;
  private:
   void compute_area() const; // mutable const
   mutable bool area_valid_;

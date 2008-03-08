@@ -8,8 +8,7 @@ SET(bsta_io_sources
   bsta_io_gaussian_full.h
   bsta_io_gaussian_indep.h
   bsta_io_gaussian_sphere.h
-  bsta_io_gaussian_angles_1d.h
-  bsta_io_gaussian_x_y_theta.h
+  bsta_io_histogram.h
 )
 
 #AUX_SOURCE_DIRECTORY(Templates bsta_io_sources)

@@ -11,6 +11,12 @@
 #include <vnl/vnl_math.h> // for log2e == 1/vcl_log(2.0)
 
 template <class T>
+bsta_histogram<T>::bsta_histogram()
+  : area_valid_(false), area_(0), nbins_(1), range_(0),
+    delta_(0),min_prob_(0), min_(0), max_(0)
+{
+}
+template <class T>
 bsta_histogram<T>::bsta_histogram(const T range, const unsigned int nbins,
                                   const T min_prob)
   : area_valid_(false), area_(0), nbins_(nbins), range_(range),
@@ -307,11 +313,11 @@ T  bsta_histogram<T>::value_with_area_above(const T area_fraction) const
 }
 
 template <class T>
-void bsta_histogram<T>::print() const
+void bsta_histogram<T>::print(vcl_ostream& os) const
 {
   for (unsigned int i=0; i<nbins_; i++)
     if (p(i) > 0)
-      vcl_cout << "p[" << i << "]=" << p(i) << '\n';
+      os << "p[" << i << "]=" << p(i) << '\n';
 }
 
 template <class T>

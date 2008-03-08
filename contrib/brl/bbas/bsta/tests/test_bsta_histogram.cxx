@@ -1,14 +1,18 @@
 //:
 // \file
 #include <testlib/testlib_test.h>
+#include <vcl_cmath.h>
+#include <vcl_typeinfo.h>
 #include <bsta/bsta_histogram.h>
 #include <bsta/bsta_joint_histogram.h>
 #include <bsta/bsta_int_histogram_1d.h>
 #include <bsta/bsta_int_histogram_2d.h>
+#include <vpl/vpl.h>
 #include <vcl_iostream.h>
-
-
-
+#include <bsta/io/bsta_io_histogram.h>
+#include <vsl/vsl_binary_io.h>
+#include <bsta/bsta_histogram_sptr.h>
+#include <bsta/bsta_joint_histogram_sptr.h>
 static void test_int_hist()
 {
   bsta_int_histogram_1d h1d(50);
@@ -81,7 +85,50 @@ void test_bsta_histogram()
   TEST_NEAR("test joint histogram uniform distribution entropy", jent, 31.0/4, 1e-9);
   test_int_hist();
  //=================================================
+  // test binary io for histogram classes
+  // 1-d histogram
+  double nbinsd = h.nbins();
+  double cn = h.counts(3);
+  double max = h.max();
+  vsl_b_ofstream os("./temp.bin");
+  vsl_b_write(os, h);
+  os.close();
+  vsl_b_ifstream is("./temp.bin");
+  bsta_histogram<double> h_in;
+  vsl_b_read(is, h_in);
+  double nbins_in = h_in.nbins();
+  double max_in = h_in.max();
+  double cn_in = h_in.counts(3);
+  double error = vcl_fabs(nbins_in-nbinsd)+
+    vcl_fabs(max-max_in)+vcl_fabs(cn-cn_in);
+  TEST_NEAR("histogram binary io", error, 0.0, 0.001);
+  vpl_unlink("./temp.bin");
 
+  // joint histogram
+  double nbinsjd = jh.nbins();
+  double pj = jh.p(1,1);
+  double rangej = jh.range();
+  vsl_b_ofstream jos("./temp.bin");
+  vsl_b_write(jos, jh);
+  jos.close();
+
+  vsl_b_ifstream jis("./temp.bin");
+  bsta_joint_histogram<double> jh_in;
+  vsl_b_read(jis, jh_in);
+  double nbinsj_in = jh_in.nbins();
+  double rangej_in = jh_in.range();
+  double pj_in = jh_in.p(1,1);
+  double jerror = vcl_fabs(nbinsj_in-nbinsjd)+
+    vcl_fabs(rangej-rangej_in)+vcl_fabs(pj-pj_in);
+
+  TEST_NEAR("joint_histogram binary io", jerror, 0.0, 0.001);
+  vpl_unlink("./temp.bin");
+
+  //Test smart pointer
+  bsta_histogram_sptr hptr = new bsta_histogram<double>(10.0, 10);
+  bsta_histogram<double>* dcast = dynamic_cast<bsta_histogram<double>*>(hptr.ptr());
+  bsta_histogram<float>* fcast = dynamic_cast<bsta_histogram<float>*>(hptr.ptr());
+  TEST("dynamic cast histogram", dcast&&!fcast, true);
 }
 
 TESTMAIN(test_bsta_histogram);

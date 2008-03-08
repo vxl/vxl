@@ -5,8 +5,8 @@ INCLUDE_DIRECTORIES( ${lems_SOURCE_DIR}/basic )
 
 SET(bsta_sources
  bsta_gauss.cxx            bsta_gauss.h
- bsta_histogram.txx        bsta_histogram.h
- bsta_joint_histogram.txx  bsta_joint_histogram.h
+ bsta_histogram.txx        bsta_histogram.h       bsta_histogram_sptr.h
+ bsta_joint_histogram.txx  bsta_joint_histogram.h bsta_joint_histogram_sptr.h
  bsta_k_medoid.cxx         bsta_k_medoid.h
  bsta_otsu_threshold.txx   bsta_otsu_threshold.h
  bsta_int_histogram_1d.cxx  bsta_int_histogram_1d.h

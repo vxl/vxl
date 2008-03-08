@@ -12,7 +12,7 @@ ADD_EXECUTABLE( bsta_test_all
   test_otsu_threshold.cxx
 )
 
-TARGET_LINK_LIBRARIES( bsta_test_all bsta testlib)
+TARGET_LINK_LIBRARIES( bsta_test_all bsta vpl vsl vbl vbl_io testlib)
 
 ADD_TEST( bsta_test_gaussian_full           ${EXECUTABLE_OUTPUT_PATH}/bsta_test_all test_gaussian_full )
 ADD_TEST( bsta_test_gaussian_indep          ${EXECUTABLE_OUTPUT_PATH}/bsta_test_all test_gaussian_indep )
