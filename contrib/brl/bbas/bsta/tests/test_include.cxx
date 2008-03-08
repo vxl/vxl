@@ -1,3 +1,6 @@
+#include <bsta/bsta_histogram_sptr.h>
+#include <bsta/bsta_joint_histogram_sptr.h>
+
 #include <bsta/bsta_basic_functors.h>
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_distribution.h>
@@ -22,6 +25,8 @@
 #include <bsta/bsta_int_histogram_1d.h>
 #include <bsta/bsta_int_histogram_2d.h>
 #include <bsta/bsta_joint_histogram.h>
+#include <bsta/bsta_histogram_base.h>
+#include <bsta/bsta_joint_histogram_base.h>
 #include <bsta/bsta_k_medoid.h>
 #include <bsta/bsta_otsu_threshold.h>
 
