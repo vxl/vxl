@@ -53,10 +53,8 @@ vsl_b_read(vsl_b_istream &is, bsta_histogram<T>& h)
   vsl_b_read(is, values);
   vsl_b_read(is, counts);
   bsta_histogram<T> temp(min, max, nbins, min_prob);
-  vcl_vector<T>::iterator vit, cit;
-  for(vit = values.begin(), cit = counts.begin();
-      vit!=values.end()&&cit!=counts.end(); ++vit, ++cit)
-    temp.upcount(*vit, *cit);
+  for(unsigned i = 0; i<nbins; ++i)
+    temp.upcount(values[i], counts[i]);
   h = temp;
 }
 
