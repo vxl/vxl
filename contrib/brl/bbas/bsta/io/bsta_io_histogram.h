@@ -53,7 +53,7 @@ vsl_b_read(vsl_b_istream &is, bsta_histogram<T>& h)
   vsl_b_read(is, values);
   vsl_b_read(is, counts);
   bsta_histogram<T> temp(min, max, nbins, min_prob);
-  for(unsigned i = 0; i<nbins; ++i)
+  for(unsigned i = 0; i<static_cast<unsigned>(nbins); ++i)
     temp.upcount(values[i], counts[i]);
   h = temp;
 }
