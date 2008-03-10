@@ -141,6 +141,12 @@ SOURCE=.\mfpf_region_pdf.cxx
 # Begin Source File
 SOURCE=.\mfpf_region_pdf_builder.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\mfpf_draw_pose_cross.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_searcher.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -188,6 +194,15 @@ SOURCE=.\mfpf_region_pdf_builder.h
 # End Source File
 # Begin Source File
 SOURCE=.\mfpf_sample_region.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_draw_pose_cross.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_pose.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_searcher.h
 # End Source File
 # End Group
 # End Target
