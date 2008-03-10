@@ -11,7 +11,6 @@
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
-//#include <mbl/mbl_cloneables_factory.h>
 
 #include <vil/vil_resample_bilin.h>
 #include <vil/io/vil_io_image_view.h>
@@ -36,7 +35,7 @@ void mfpf_region_pdf::set_defaults()
   search_ni_=5;
   search_nj_=5;
   nA_=0; dA_=0.0;
-  ns_=0; s_ =1.0;
+  ns_=0; ds_=1.0;
   n_pixels_=0;
   roi_.resize(0);
   roi_ni_=0;
@@ -52,26 +51,6 @@ void mfpf_region_pdf::set_defaults()
 mfpf_region_pdf::~mfpf_region_pdf()
 {
 }
-
-void mfpf_region_pdf::set_step_size(double s)
-{
-  step_size_=s;
-}
-
-//: Define angle search parameters
-void mfpf_region_pdf::set_angle_range(unsigned nA, double dA)
-{
-  nA_=nA;
-  dA_=dA;
-}
-
-//: Define scale search parameters
-void mfpf_region_pdf::set_scale_range(unsigned ns, double s)
-{
-  ns_=ns;
-  s_ =s;
-}
-
 
 //: Define region and PDF of region
 void mfpf_region_pdf::set(const vcl_vector<mbl_chord>& roi,
@@ -109,12 +88,19 @@ void mfpf_region_pdf::set(const vcl_vector<mbl_chord>& roi,
   }
 }
 
-
-void mfpf_region_pdf::set_search_area(unsigned ni, unsigned nj)
+//: Radius of circle containing modelled region
+double mfpf_region_pdf::radius() const
 {
-  search_ni_=ni;
-  search_nj_=nj;
+  // Compute distance to each corner
+  double wx = roi_ni_-1;
+  double x2 = vcl_max(ref_x_*ref_x_,(ref_x_-wx)*(ref_x_-wx));
+  double wy = roi_nj_-1;
+  double y2 = vcl_max(ref_y_*ref_y_,(ref_y_-wy)*(ref_y_-wy));
+  double r2 = x2+y2; 
+  if (r2<=1) return 1.0;
+  return vcl_sqrt(r2);
 }
+
 
 //: Evaluate match at p, using u to define scale and orientation
 // Returns -1*edge strength at p along direction u
@@ -269,87 +255,48 @@ double mfpf_region_pdf::search_one_pose(const vimt_image_2d_of<float>& image,
   return best_r;
 }
 
-//: Search given image around p, using u to define scale and orientation 
-//  On exit, new_p and new_u define position, scale and orientation of 
-//  the best nearby match.  Returns a qualtity of fit measure at that
-//  point (the smaller the better).
-double mfpf_region_pdf::search(const vimt_image_2d_of<float>& image,
-                        const vgl_point_2d<double>& p,
-                        const vgl_vector_2d<double>& u,
-                        vgl_point_2d<double>& new_p,
-                        vgl_vector_2d<double>& new_u)
+// Returns true if p is inside region at given pose
+bool mfpf_region_pdf::is_inside(const mfpf_pose& pose,
+                               const vgl_point_2d<double>& p) const
 {
-  if (nA_==0 && ns_==0)
-  {
-    // Only search at one scale/orientation
-    new_u = u;
-    return search_one_pose(image,p,u,new_p);
-  }
-
-  double best_fit=9e99;
-  int best_iA,best_is;
-  vgl_point_2d<double> p1;
-
-  vgl_vector_2d<double> v(-u.y(),u.x());
-
-  for (int is=-int(ns_);is<=int(ns_);++is)
-  {
-    double s = vcl_pow(s_,is);
-    for (int iA=-int(nA_);iA<=int(nA_);++iA)
-    {
-      double A = iA*dA_;
-      vgl_vector_2d<double> uA = s*(u*vcl_cos(A)+v*vcl_sin(A));
-
-      double f = search_one_pose(image,p,uA,p1);
-      if (f<best_fit)
-      {
-        best_iA=iA;
-        best_is=is;
-        best_fit = f;
-        new_u = uA;
-        new_p = p1;
-      }
-    }
-  }
-  return best_fit;
-}
-
-
-//=======================================================================
-// Method: set_from_stream
-//=======================================================================
-//: Initialise from a string stream
-bool mfpf_region_pdf::set_from_stream(vcl_istream &is)
-{
-  // Cycle through string and produce a map of properties
-  vcl_string s = mbl_parse_block(is);
-  vcl_istringstream ss(s);
-  mbl_read_props_type props = mbl_read_props_ws(ss);
-
-  set_defaults();
-
-  // Extract the properties
-  if (props.find("step_size")!=props.end())
-  {
-    step_size_=vul_string_atof(props["step_size"]);
-    props.erase("step_size");
-  }
-  if (props.find("search_ni")!=props.end())
-  {
-    search_ni_=vul_string_atoi(props["search_ni"]);
-    props.erase("search_ni");
-  }
-  if (props.find("search_nj")!=props.end())
-  {
-    search_nj_=vul_string_atoi(props["search_nj"]);
-    props.erase("search_nj");
-  }
-
-  // Check for unused props
-  mbl_read_props_look_for_unused_props(
-      "mfpf_region_pdf::set_from_stream", props, mbl_read_props_type());
+  // Set transform model frame -> World
+  vimt_transform_2d t1;
+  t1.set_similarity(step_size()*pose.u(),pose.p());  
+  // Compute position of p in model frame
+  vgl_point_2d<double> q=t1.inverse()(p);
+  q.x()+=ref_x_;
+  if (q.x()<0 || q.x()>(roi_ni_-1)) return false;
+  q.y()+=ref_y_;
+  if (q.y()<0 || q.y()>(roi_nj_-1)) return false;
   return true;
 }
+
+//: Return true if modelled regions at pose1 and pose2 overlap
+//  Checks if reference point of one is inside region of other
+bool mfpf_region_pdf::overlap(const mfpf_pose& pose1,
+                               const mfpf_pose& pose2) const
+{
+  if (is_inside(pose1,pose2.p())) return true;
+  if (is_inside(pose2,pose1.p())) return true;
+  return false;
+}
+
+//: Generate points in ref frame that represent boundary
+//  Points of a contour around the shape.
+//  Used for display purposes.
+void mfpf_region_pdf::get_outline(vcl_vector<vgl_point_2d<double> >& pts) const
+{
+  pts.resize(7);
+  vgl_vector_2d<double> r(ref_x_,ref_y_);
+  pts[0]=vgl_point_2d<double>(0,roi_nj_)-r;
+  pts[1]=vgl_point_2d<double>(0,0);
+  pts[2]=vgl_point_2d<double>(roi_ni_,roi_nj_)-r;
+  pts[3]=vgl_point_2d<double>(0,roi_nj_)-r;
+  pts[4]=vgl_point_2d<double>(0,0)-r;
+  pts[5]=vgl_point_2d<double>(roi_ni_,0)-r;
+  pts[6]=vgl_point_2d<double>(roi_ni_,roi_nj_)-r;
+}
+
 
 //=======================================================================
 // Method: is_a
@@ -372,17 +319,13 @@ mfpf_point_finder* mfpf_region_pdf::clone() const
 
 void mfpf_region_pdf::print_summary(vcl_ostream& os) const
 {
-  os << "{ step_size: "<<step_size_
-     << " size: "<<roi_ni_<<" x "<<roi_nj_
+  os << "{  size: "<<roi_ni_<<" x "<<roi_nj_
      << " n_pixels: "<<n_pixels_
      << " ref_pt: ("<<ref_x_<<','<<ref_y_<<')'
      << " PDF: ";
   if (pdf_.ptr()==0) os << "--"; else os << pdf_;
-  os << " search_ni: "<<search_ni_
-     << " search_nj: "<<search_nj_
-     <<" nA: "<<nA_<<" dA: "<<dA_
-     <<" ns: "<<ns_<<"  s: "<<s_
-     << '}';
+  mfpf_point_finder::print_summary(os);
+  os<<" }";
 }
 
 void mfpf_region_pdf::print_shape(vcl_ostream& os) const
@@ -401,10 +344,16 @@ void mfpf_region_pdf::print_shape(vcl_ostream& os) const
   }
 }
 
+short mfpf_region_pdf::version_no() const
+{
+  return 1;
+}
+
+
 void mfpf_region_pdf::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
-  vsl_b_write(bfs,step_size_);
+  mfpf_point_finder::b_write(bfs);  // Save base class
   vsl_b_write(bfs,roi_);
   vsl_b_write(bfs,roi_ni_);
   vsl_b_write(bfs,roi_nj_);
@@ -412,12 +361,6 @@ void mfpf_region_pdf::b_write(vsl_b_ostream& bfs) const
   vsl_b_write(bfs,pdf_);
   vsl_b_write(bfs,ref_x_);
   vsl_b_write(bfs,ref_y_);
-  vsl_b_write(bfs,search_ni_);
-  vsl_b_write(bfs,search_nj_);
-  vsl_b_write(bfs,nA_); 
-  vsl_b_write(bfs,dA_); 
-  vsl_b_write(bfs,ns_); 
-  vsl_b_write(bfs,s_); 
 }
 
 //=======================================================================
@@ -432,7 +375,7 @@ void mfpf_region_pdf::b_read(vsl_b_istream& bfs)
   switch (version)
   {
     case (1):
-      vsl_b_read(bfs,step_size_);
+      mfpf_point_finder::b_read(bfs);  // Load in base class
       vsl_b_read(bfs,roi_);
       vsl_b_read(bfs,roi_ni_);
       vsl_b_read(bfs,roi_nj_);
@@ -440,12 +383,6 @@ void mfpf_region_pdf::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,pdf_);
       vsl_b_read(bfs,ref_x_);
       vsl_b_read(bfs,ref_y_);
-      vsl_b_read(bfs,search_ni_);
-      vsl_b_read(bfs,search_nj_);
-      vsl_b_read(bfs,nA_); 
-      vsl_b_read(bfs,dA_); 
-      vsl_b_read(bfs,ns_); 
-      vsl_b_read(bfs,s_); 
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
@@ -458,14 +395,12 @@ void mfpf_region_pdf::b_read(vsl_b_istream& bfs)
 //: Test equality
 bool mfpf_region_pdf::operator==(const mfpf_region_pdf& nc) const
 {
+  if (!base_equality(nc)) return false;
   if (roi_ni_!=nc.roi_ni_) return false;
   if (roi_nj_!=nc.roi_nj_) return false;
   if (n_pixels_!=nc.n_pixels_) return false;
-  if (search_ni_!=nc.search_ni_) return false;
-  if (search_nj_!=nc.search_nj_) return false;
   if (vcl_fabs(ref_x_-nc.ref_x_)>1e-6) return false;
   if (vcl_fabs(ref_y_-nc.ref_y_)>1e-6) return false;
-  if (vcl_fabs(step_size_-nc.step_size_)>1e-6) return false;
   // Strictly should compare PDFs
   return true;
 }

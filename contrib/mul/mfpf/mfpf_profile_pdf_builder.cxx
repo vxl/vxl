@@ -38,12 +38,6 @@ void mfpf_profile_pdf_builder::set_defaults()
   search_ni_=5;
 }
 
-void mfpf_profile_pdf_builder::set_step_size(double s)
-{
-  step_size_=s;
-}
-
-
 //=======================================================================
 // Destructor
 //=======================================================================
@@ -105,7 +99,7 @@ void mfpf_profile_pdf_builder::build(mfpf_point_finder& pf)
   pdf_builder().build(*pdf,data);
 
   nc.set(ilo_,ihi_,*pdf);
-  nc.set_step_size(step_size_);
+  set_base_parameters(nc);
 
   // Tidy up
   delete pdf;
@@ -127,6 +121,8 @@ bool mfpf_profile_pdf_builder::set_from_stream(vcl_istream &is)
   set_defaults();
 
   // Extract the properties
+  parse_base_props(props);
+
   if (props.find("ilo")!=props.end())
   {
     ilo_=vul_string_atoi(props["ilo"]);
@@ -136,12 +132,6 @@ bool mfpf_profile_pdf_builder::set_from_stream(vcl_istream &is)
   {
     ihi_=vul_string_atoi(props["ihi"]);
     props.erase("ihi");
-  }
-
-  if (props.find("search_ni")!=props.end())
-  {
-    search_ni_=vul_string_atoi(props["search_ni"]);
-    props.erase("search_ni");
   }
 
   if (props.find("pdf_builder")!=props.end())
@@ -180,20 +170,24 @@ mfpf_point_finder_builder* mfpf_profile_pdf_builder::clone() const
 
 void mfpf_profile_pdf_builder::print_summary(vcl_ostream& os) const
 {
-  os << "{ step_size: " << step_size_
-     << " size: [" << ilo_ << ',' << ihi_ << "] "
-     << " search_ni: " << search_ni_
-     << " pdf_builder: " << pdf_builder_
-     << '}';
+  os << "{ size: [" << ilo_ << ',' << ihi_ << ']' <<vcl_endl;
+  mfpf_point_finder_builder::print_summary(os);
+  os << " pdf_builder: " << pdf_builder_;
+  os << " }";
+}
+
+//: Version number for I/O
+short mfpf_profile_pdf_builder::version_no() const
+{
+  return 1;
 }
 
 void mfpf_profile_pdf_builder::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
-  vsl_b_write(bfs,step_size_);
+  mfpf_point_finder_builder::b_write(bfs);  // Save base class
   vsl_b_write(bfs,ilo_);
   vsl_b_write(bfs,ihi_);
-  vsl_b_write(bfs,search_ni_);
   vsl_b_write(bfs,pdf_builder_);
   vsl_b_write(bfs,data_);
 }
@@ -210,10 +204,9 @@ void mfpf_profile_pdf_builder::b_read(vsl_b_istream& bfs)
   switch (version)
   {
     case (1):
-      vsl_b_read(bfs,step_size_);
+      mfpf_point_finder_builder::b_read(bfs);  // Load base class
       vsl_b_read(bfs,ilo_);
       vsl_b_read(bfs,ihi_);
-      vsl_b_read(bfs,search_ni_);
       vsl_b_read(bfs,pdf_builder_);
       vsl_b_read(bfs,data_);
       break;

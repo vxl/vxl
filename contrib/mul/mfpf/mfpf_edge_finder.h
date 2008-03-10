@@ -12,12 +12,6 @@
 //: Locates strongest edge along a profile.
 class mfpf_edge_finder : public mfpf_point_finder
 {
- private:
-  //: Size of step between sample points
-  double step_size_;
-
-  //: Number of points either side of centre to search
-  int search_ni_;
  public:
 
   //: Dflt ctor
@@ -26,13 +20,8 @@ class mfpf_edge_finder : public mfpf_point_finder
   //: Destructor
   virtual ~mfpf_edge_finder();
 
-  //: Size of step between sample points
-  virtual void set_step_size(double);
-
-  //: Define search size
-  virtual void set_search_area(unsigned ni, unsigned nj);
-
-  int search_ni() const { return search_ni_; }
+  //: Radius of circle containing modelled region
+  virtual double radius() const;
 
   //: Evaluate match at p, using u to define scale and orientation
   // Returns -1*edge strength at p along direction u
@@ -56,14 +45,15 @@ class mfpf_edge_finder : public mfpf_point_finder
   //  On exit, new_p and new_u define position, scale and orientation of
   //  the best nearby match.  Returns a qualtity of fit measure at that
   //  point (the smaller the better).
-  virtual double search(const vimt_image_2d_of<float>& image,
+  virtual double search_one_pose(const vimt_image_2d_of<float>& image,
                         const vgl_point_2d<double>& p,
                         const vgl_vector_2d<double>& u,
-                        vgl_point_2d<double>& new_p,
-                        vgl_vector_2d<double>& new_u);
+                        vgl_point_2d<double>& new_p);
 
-  //: Initialise from a string stream
-  virtual bool set_from_stream(vcl_istream &is);
+  //: Generate points in ref frame that represent boundary
+  //  Points of a closed contour around the shape.
+  //  Used for display purposes.
+  virtual void get_outline(vcl_vector<vgl_point_2d<double> >& pts) const;
 
   //: Name of the class
   virtual vcl_string is_a() const;
@@ -73,6 +63,9 @@ class mfpf_edge_finder : public mfpf_point_finder
 
   //: Print class to os
   virtual void print_summary(vcl_ostream& os) const;
+
+  //: Version number for I/O
+  short version_no() const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;

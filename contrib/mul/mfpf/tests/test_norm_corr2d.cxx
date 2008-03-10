@@ -80,6 +80,47 @@ void test_norm_corr2d_search(mfpf_point_finder_builder& b)
   delete pf;
 }
 
+void test_norm_corr2d_refine()
+{
+  vcl_cout<<"Testing mfpf_norm_corr2d::refine_match"<<vcl_endl;
+
+  // Create a test image
+  vimt_image_2d_of<float> image(40,40);
+  image.image().fill(0);
+
+  // Create a square in the centre
+  for (unsigned j=20;j<26;++j)
+    for (unsigned i=20;i<26;++i)
+      image.image()(i,j)=99;
+
+  vgl_point_2d<double> p0(23,23), p1(22.5,25.7), p;
+  vgl_vector_2d<double> u0(1,0),u1(0.9,0.4), u;
+
+  mfpf_norm_corr2d_builder nc_builder;
+  mfpf_norm_corr2d nc;
+  nc_builder.set_kernel_size(10,10);
+  nc_builder.clear(1);
+  nc_builder.add_example(image,p0,u0);
+  nc_builder.build(nc);
+
+  nc.set_search_area(5,5);
+  vcl_cout<<nc<<vcl_endl;
+
+  double f0 = nc.evaluate(image,p0,u0);
+  vcl_cout<<"Fit at correct position: "<<f0<<vcl_endl;
+
+  vcl_cout<<"Search at wrong scale/angle."<<vcl_endl;
+  double f = nc.search(image,p1,u1,p,u);
+  vcl_cout<<"Position: "<<p<<" Basis: "<<u<<" fit: "<<f<<vcl_endl;
+
+  vcl_cout<<"Refine solution."<<vcl_endl;
+  nc.refine_match(image,p,u,f);
+  vcl_cout<<"Position: "<<p<<" Basis: "<<u<<" fit: "<<f<<vcl_endl;
+
+  TEST("Refined position",(p-p0).length()<0.1,true);
+  TEST("Refined basis",(u-u0).length()<0.1,true);
+}
+
 void test_norm_corr2d()
 {
   vcl_cout << "**************************\n"
@@ -91,32 +132,12 @@ void test_norm_corr2d()
   mfpf_norm_corr2d_builder nc_builder;
   nc_builder.set_kernel_size(4,4);
   test_norm_corr2d_search(nc_builder);
+  test_norm_corr2d_refine();
 
 
   // -------------------------------------------
   //  Test configuring from stream
   // -------------------------------------------
-  {
-    vcl_istringstream ss(
-          "mfpf_norm_corr2d\n"
-          "{\n"
-          "  search_ni: 17\n"
-          "  search_nj: 15\n"
-          "}\n");
-
-    vcl_auto_ptr<mfpf_point_finder>
-            pf = mfpf_point_finder::create_from_stream(ss);
-
-    TEST("Correct Point Finder",pf->is_a(),"mfpf_norm_corr2d");
-    if (pf->is_a()=="mfpf_norm_corr2d")
-    {
-      mfpf_norm_corr2d &a_pf = static_cast<mfpf_norm_corr2d&>(*pf);
-      vcl_cout<<a_pf<<vcl_endl;
-      TEST("search_ni configured",a_pf.search_ni(),17);
-      TEST("search_nj configured",a_pf.search_nj(),15);
-    }
-  }
-
   {
     vcl_istringstream ss(
           "mfpf_norm_corr2d_builder\n"

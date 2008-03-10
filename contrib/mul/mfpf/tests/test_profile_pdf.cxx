@@ -100,28 +100,6 @@ void test_profile_pdf()
   // -------------------------------------------
   {
     vcl_istringstream ss(
-          "mfpf_profile_pdf\n"
-          "{\n"
-          "  ilo: -3 ihi: 4\n"
-          "  search_ni: 17\n"
-          "}\n");
-
-    vcl_auto_ptr<mfpf_point_finder>
-            pf = mfpf_point_finder::create_from_stream(ss);
-
-    TEST("Correct Point Finder",pf->is_a(),"mfpf_profile_pdf");
-    if (pf->is_a()=="mfpf_profile_pdf")
-    {
-      mfpf_profile_pdf &a_pf = static_cast<mfpf_profile_pdf&>(*pf);
-      vcl_cout<<a_pf<<vcl_endl;
-      TEST("search_ni configured",a_pf.search_ni(),17);
-      TEST("ilo configured",a_pf.ilo(),-3);
-      TEST("ihi configured",a_pf.ihi(),4);
-    }
-  }
-
-  {
-    vcl_istringstream ss(
           "mfpf_profile_pdf_builder\n"
           "{\n"
           "  ilo: -3 ihi: 4\n"

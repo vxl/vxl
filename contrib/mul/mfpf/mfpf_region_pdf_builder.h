@@ -24,9 +24,6 @@
 class mfpf_region_pdf_builder : public mfpf_point_finder_builder
 {
  private:
-  //: Size of step between sample points
-  double step_size_;
-
   //: Kernel reference point (in roi_ni_ x roi_nj_ grid)
   double ref_x_;
   //: Kernel reference point (in roi_ni_ x roi_nj_ grid)
@@ -51,12 +48,6 @@ class mfpf_region_pdf_builder : public mfpf_point_finder_builder
 
   //: Samples added in calls to add_example()
   vcl_vector<vnl_vector<double> > data_;
-
-  //: Number of points either side of centre to search
-  int search_ni_;
-
-  //: Number of points either side of centre to search
-  int search_nj_;
 
   //: Number of angles either side of 0 to sample at
   unsigned nA_;
@@ -96,9 +87,6 @@ class mfpf_region_pdf_builder : public mfpf_point_finder_builder
   // Destructor
   virtual ~mfpf_region_pdf_builder();
 
-  //: Size of step between sample points
-  virtual void set_step_size(double);
-
   //: Define model region as an ni x nj box
   void set_as_box(unsigned ni, unsigned nj,
                   double ref_x, double ref_y,
@@ -122,9 +110,6 @@ class mfpf_region_pdf_builder : public mfpf_point_finder_builder
 
   //: Builder for PDF
   vpdfl_builder_base& pdf_builder() { return pdf_builder_; }
-
-  int search_ni() const { return search_ni_; }
-  int search_nj() const { return search_nj_; }
 
   //: Create new mfpf_region_pdf on heap
   virtual mfpf_point_finder* new_finder() const;
@@ -155,6 +140,9 @@ class mfpf_region_pdf_builder : public mfpf_point_finder_builder
 
   //: Prints ASCII representation of shape to os
   void print_shape(vcl_ostream& os) const;
+
+  //: Version number for I/O
+  short version_no() const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;

@@ -109,28 +109,9 @@ void test_region_pdf()
   // -------------------------------------------
   //  Test configuring from stream
   // -------------------------------------------
-  {
-    vcl_istringstream ss(
-          "mfpf_region_pdf\n"
-          "{\n"
-          "  search_ni: 17\n"
-          "  search_nj: 15\n"
-          "}\n");
-
-    vcl_auto_ptr<mfpf_point_finder>
-            pf = mfpf_point_finder::create_from_stream(ss);
-
-    TEST("Correct Point Finder",pf->is_a(),"mfpf_region_pdf");
-    if (pf->is_a()=="mfpf_region_pdf")
-    {
-      mfpf_region_pdf &a_pf = static_cast<mfpf_region_pdf&>(*pf);
-      vcl_cout<<a_pf<<vcl_endl;
-      TEST("search_ni configured",a_pf.search_ni(),17);
-      TEST("search_nj configured",a_pf.search_nj(),15);
-    }
-  }
 
   {
+    vcl_cout<<"Testing initialisation as box"<<vcl_endl;
     vcl_istringstream ss(
           "mfpf_region_pdf_builder\n"
           "{\n"
@@ -155,12 +136,16 @@ void test_region_pdf()
   }
 
   {
+    vcl_cout<<"Testing initialisation as ellipse"<<vcl_endl;
     vcl_istringstream ss(
           "mfpf_region_pdf_builder\n"
           "{\n"
-          "  shape: ellipse { ri: 5 rj: 3  }\n"
+          "  shape: ellipse { ri: 5 rj: 3 }\n"
           "  search_ni: 17\n"
           "  search_nj: 15\n"
+          "  search_nA: 2\n"
+          "  search_dA: 0.1\n"
+          "  step_size: 1.01\n"
           "}\n");
 
     vcl_auto_ptr<mfpf_point_finder_builder>

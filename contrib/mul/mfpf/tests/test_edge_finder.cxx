@@ -92,23 +92,23 @@ void test_edge_finder()
   //  Test configuring from stream
   // -------------------------------------------
   {
-    mbl_cloneables_factory<mfpf_point_finder>::add(mfpf_edge_finder());
+    mbl_cloneables_factory<mfpf_point_finder_builder>::add(mfpf_edge_finder_builder());
 
     vcl_istringstream ss(
-          "mfpf_edge_finder\n"
+          "mfpf_edge_finder_builder\n"
           "{\n"
           "  search_ni: 17\n"
           "}\n");
 
-    vcl_auto_ptr<mfpf_point_finder>
-            pf = mfpf_point_finder::create_from_stream(ss);
+    vcl_auto_ptr<mfpf_point_finder_builder>
+            pfb = mfpf_point_finder_builder::create_from_stream(ss);
 
-    TEST("Correct Point Finder",pf->is_a(),"mfpf_edge_finder");
-    if (pf->is_a()=="mfpf_edge_finder")
+    TEST("Correct Builder",pfb->is_a(),"mfpf_edge_finder_builder");
+    if (pfb->is_a()=="mfpf_edge_finder_builder")
     {
-      mfpf_edge_finder &a_pf = static_cast<mfpf_edge_finder&>(*pf);
-      vcl_cout<<a_pf<<vcl_endl;
-      TEST("search_ni configured",a_pf.search_ni(),17);
+      mfpf_edge_finder_builder &a_pfb = static_cast<mfpf_edge_finder_builder&>(*pfb);
+      vcl_cout<<a_pfb<<vcl_endl;
+      TEST("search_ni configured",a_pfb.search_ni(),17);
     }
   }
 

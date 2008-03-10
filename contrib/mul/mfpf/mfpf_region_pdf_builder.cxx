@@ -47,12 +47,6 @@ void mfpf_region_pdf_builder::set_defaults()
   dA_=0.0;
 }
 
-void mfpf_region_pdf_builder::set_step_size(double s)
-{
-  step_size_=s;
-}
-
-
 //=======================================================================
 // Destructor
 //=======================================================================
@@ -139,9 +133,10 @@ void mfpf_region_pdf_builder::clear(unsigned n_egs)
 }
 
 //: Add one example to the model
-void mfpf_region_pdf_builder::add_one_example(const vimt_image_2d_of<float>& image,
-                                              const vgl_point_2d<double>& p,
-                                              const vgl_vector_2d<double>& u)
+void mfpf_region_pdf_builder::add_one_example(
+                 const vimt_image_2d_of<float>& image,
+                 const vgl_point_2d<double>& p,
+                 const vgl_vector_2d<double>& u)
 {
   vgl_vector_2d<double> u1=step_size_*u;
   vgl_vector_2d<double> v1(-u1.y(),u1.x());
@@ -194,7 +189,6 @@ void mfpf_region_pdf_builder::build(mfpf_point_finder& pf)
 {
   assert(pf.is_a()=="mfpf_region_pdf");
   mfpf_region_pdf& rp = static_cast<mfpf_region_pdf&>(pf);
-  rp.set_search_area(search_ni_,search_nj_);
 
   vpdfl_pdf_base *pdf = pdf_builder().new_model();
   mbl_data_array_wrapper<vnl_vector<double> > data(&data_[0],data_.size());
@@ -202,7 +196,7 @@ void mfpf_region_pdf_builder::build(mfpf_point_finder& pf)
   pdf_builder().build(*pdf,data);
 
   rp.set(roi_,ref_x_,ref_y_,*pdf);
-  rp.set_step_size(step_size_);
+  set_base_parameters(rp);
 
   // Tidy up
   delete pdf;
@@ -219,6 +213,7 @@ void mfpf_region_pdf_builder::config_as_box(vcl_istream &is)
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   unsigned ni=5,nj=5;
+
   if (props.find("ni")!=props.end())
   {
     ni=vul_string_atoi(props["ni"]);
@@ -297,6 +292,8 @@ bool mfpf_region_pdf_builder::set_from_stream(vcl_istream &is)
   set_defaults();
 
   // Extract the properties
+  parse_base_props(props);
+
   if (props.find("shape")!=props.end())
   {
     vcl_istringstream shape_s(props["shape"]);
@@ -315,18 +312,6 @@ bool mfpf_region_pdf_builder::set_from_stream(vcl_istream &is)
     else throw mbl_exception_parse_error("Unknown shape: "+shape_);
 
     props.erase("shape");
-  }
-
-  if (props.find("search_ni")!=props.end())
-  {
-    search_ni_=vul_string_atoi(props["search_ni"]);
-    props.erase("search_ni");
-  }
-
-  if (props.find("search_nj")!=props.end())
-  {
-    search_nj_=vul_string_atoi(props["search_nj"]);
-    props.erase("search_nj");
   }
 
   if (props.find("nA")!=props.end())
@@ -377,17 +362,15 @@ mfpf_point_finder_builder* mfpf_region_pdf_builder::clone() const
 
 void mfpf_region_pdf_builder::print_summary(vcl_ostream& os) const
 {
-  os << "{ step_size: " << step_size_
-     << " size: " << roi_ni_ << 'x' << roi_nj_
+  os << "{ size: " << roi_ni_ << 'x' << roi_nj_
      << " n_pixels: " << n_pixels_
      << " ref_pt: (" << ref_x_ << ',' << ref_y_ << ')'
      << " pdf_builder: ";
   if (pdf_builder_.ptr()==0) os << '-';
   else                       os << pdf_builder_;
-  os << " search_ni: " << search_ni_
-     << " search_nj: " << search_nj_
-     << " nA: " << nA_ << " dA: " << dA_
-     << '}';
+  os << " nA: " << nA_ << " dA: " << dA_ << ' ';
+  mfpf_point_finder_builder::print_summary(os);
+  os << " }";
 }
 
 void mfpf_region_pdf_builder::print_shape(vcl_ostream& os) const
@@ -406,19 +389,22 @@ void mfpf_region_pdf_builder::print_shape(vcl_ostream& os) const
   }
 }
 
+//: Version number for I/O
+short mfpf_region_pdf_builder::version_no() const
+{
+  return 1;
+}
 
 void mfpf_region_pdf_builder::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
-  vsl_b_write(bfs,step_size_);
+  mfpf_point_finder_builder::b_write(bfs);  // Save base class
   vsl_b_write(bfs,roi_);
   vsl_b_write(bfs,roi_ni_);
   vsl_b_write(bfs,roi_nj_);
   vsl_b_write(bfs,n_pixels_);
   vsl_b_write(bfs,ref_x_);
   vsl_b_write(bfs,ref_y_);
-  vsl_b_write(bfs,search_ni_);
-  vsl_b_write(bfs,search_nj_);
   vsl_b_write(bfs,nA_);
   vsl_b_write(bfs,dA_);
   vsl_b_write(bfs,pdf_builder_);
@@ -437,15 +423,13 @@ void mfpf_region_pdf_builder::b_read(vsl_b_istream& bfs)
   switch (version)
   {
     case (1):
-      vsl_b_read(bfs,step_size_);
+      mfpf_point_finder_builder::b_read(bfs);  // Load base class
       vsl_b_read(bfs,roi_);
       vsl_b_read(bfs,roi_ni_);
       vsl_b_read(bfs,roi_nj_);
       vsl_b_read(bfs,n_pixels_);
       vsl_b_read(bfs,ref_x_);
       vsl_b_read(bfs,ref_y_);
-      vsl_b_read(bfs,search_ni_);
-      vsl_b_read(bfs,search_nj_);
       vsl_b_read(bfs,nA_);
       vsl_b_read(bfs,dA_);
       vsl_b_read(bfs,pdf_builder_);

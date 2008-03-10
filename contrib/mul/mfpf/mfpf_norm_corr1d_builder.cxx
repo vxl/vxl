@@ -36,12 +36,6 @@ void mfpf_norm_corr1d_builder::set_defaults()
   search_ni_=5;
 }
 
-void mfpf_norm_corr1d_builder::set_step_size(double s)
-{
-  step_size_=s;
-}
-
-
 //=======================================================================
 // Destructor
 //=======================================================================
@@ -92,11 +86,10 @@ void mfpf_norm_corr1d_builder::build(mfpf_point_finder& pf)
 {
   assert(pf.is_a()=="mfpf_norm_corr1d");
   mfpf_norm_corr1d& nc = static_cast<mfpf_norm_corr1d&>(pf);
-  nc.set_search_area(search_ni_,0);
   vnl_vector<double> mean=sum_/n_added_;
   mean.normalize();
-  nc.set_step_size(step_size_);
   nc.set(ilo_,ihi_,mean);
+  set_base_parameters(nc);
 }
 
 //=======================================================================
@@ -113,6 +106,8 @@ bool mfpf_norm_corr1d_builder::set_from_stream(vcl_istream &is)
   set_defaults();
 
   // Extract the properties
+  parse_base_props(props);
+
   if (props.find("ilo")!=props.end())
   {
     ilo_=vul_string_atoi(props["ilo"]);
@@ -122,12 +117,6 @@ bool mfpf_norm_corr1d_builder::set_from_stream(vcl_istream &is)
   {
     ihi_=vul_string_atoi(props["ihi"]);
     props.erase("ihi");
-  }
-
-  if (props.find("search_ni")!=props.end())
-  {
-    search_ni_=vul_string_atoi(props["search_ni"]);
-    props.erase("search_ni");
   }
 
   // Check for unused props
@@ -157,21 +146,26 @@ mfpf_point_finder_builder* mfpf_norm_corr1d_builder::clone() const
 
 void mfpf_norm_corr1d_builder::print_summary(vcl_ostream& os) const
 {
-  os << "{ step_size: " << step_size_
-     << " size: [" << ilo_ << ',' << ihi_ << ']'
-     << " search_ni: " << search_ni_
-     << '}';
+  os << "{ size: [" << ilo_ << ',' << ihi_ << ']' <<vcl_endl;
+  mfpf_point_finder_builder::print_summary(os);
+  os << " }";
 }
+
+//: Version number for I/O
+short mfpf_norm_corr1d_builder::version_no() const
+{
+  return 1;
+}
+
 
 void mfpf_norm_corr1d_builder::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
-  vsl_b_write(bfs,step_size_);
+  mfpf_point_finder_builder::b_write(bfs);  // Save base class
   vsl_b_write(bfs,ilo_);
   vsl_b_write(bfs,ihi_);
   vsl_b_write(bfs,sum_);
   vsl_b_write(bfs,n_added_);
-  vsl_b_write(bfs,search_ni_);
 }
 
 //=======================================================================
@@ -186,12 +180,11 @@ void mfpf_norm_corr1d_builder::b_read(vsl_b_istream& bfs)
   switch (version)
   {
     case (1):
-      vsl_b_read(bfs,step_size_);
+      mfpf_point_finder_builder::b_read(bfs);  // Load base class
       vsl_b_read(bfs,ilo_);
       vsl_b_read(bfs,ihi_);
       vsl_b_read(bfs,sum_);
       vsl_b_read(bfs,n_added_);
-      vsl_b_read(bfs,search_ni_);
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"

@@ -14,9 +14,6 @@
 class mfpf_profile_pdf_builder : public mfpf_point_finder_builder
 {
  private:
-  //: Size of step between sample points
-  double step_size_;
-
   //: Kernel mask is [ilo_,ihi_]
   int ilo_;
   //: Kernel mask is [ilo_,ihi_]
@@ -28,9 +25,6 @@ class mfpf_profile_pdf_builder : public mfpf_point_finder_builder
   //: Samples added in calls to add_example()
   vcl_vector<vnl_vector<double> > data_;
 
-  //: Number of points either side of centre to search
-  int search_ni_;
-
   //: Define default values
   void set_defaults();
  public:
@@ -40,9 +34,6 @@ class mfpf_profile_pdf_builder : public mfpf_point_finder_builder
 
   // Destructor
   virtual ~mfpf_profile_pdf_builder();
-
-  //: Size of step between sample points
-  virtual void set_step_size(double);
 
   void set(int ilo, int ihi,
            const vpdfl_builder_base& builder);
@@ -54,8 +45,6 @@ class mfpf_profile_pdf_builder : public mfpf_point_finder_builder
   int ihi() const { return ihi_; }
 
   vpdfl_builder_base& pdf_builder() { return pdf_builder_; }
-
-  int search_ni() const { return search_ni_; }
 
   //: Create new mfpf_profile_pdf on heap
   virtual mfpf_point_finder* new_finder() const;
@@ -83,6 +72,9 @@ class mfpf_profile_pdf_builder : public mfpf_point_finder_builder
 
   //: Print class to os
   virtual void print_summary(vcl_ostream& os) const;
+
+  //: Version number for I/O
+  short version_no() const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;

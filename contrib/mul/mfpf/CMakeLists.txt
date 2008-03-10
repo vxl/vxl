@@ -20,6 +20,9 @@ SET(mfpf_sources
   mfpf_region_pdf_builder.h    mfpf_region_pdf_builder.cxx
   mfpf_norm_vec.h
   mfpf_sample_region.h
+  mfpf_pose.h
+  mfpf_searcher.h              mfpf_searcher.cxx
+  mfpf_draw_pose_cross.h       mfpf_draw_pose_cross.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates mfpf_sources)

@@ -13,11 +13,6 @@
 class mfpf_edge_finder_builder : public mfpf_point_finder_builder
 {
  private:
-  //: Size of step between sample points
-  double step_size_;
-
-  //: Number of points either side of centre to search
-  int search_ni_;
  public:
 
   //: Dflt ctor
@@ -25,9 +20,6 @@ class mfpf_edge_finder_builder : public mfpf_point_finder_builder
 
   //: Destructor
   virtual ~mfpf_edge_finder_builder();
-
-  //: Size of step between sample points
-  virtual void set_step_size(double);
 
   //: Create new mfpf_edge_finder on heap
   virtual mfpf_point_finder* new_finder() const;
@@ -46,6 +38,9 @@ class mfpf_edge_finder_builder : public mfpf_point_finder_builder
 
   //: Initialise from a string stream
   virtual bool set_from_stream(vcl_istream &is);
+
+  //: Version number for I/O
+  short version_no() const;
 
   //: Name of the class
   virtual vcl_string is_a() const;

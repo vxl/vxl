@@ -43,10 +43,16 @@ mfpf_norm_corr1d::~mfpf_norm_corr1d()
 {
 }
 
-void mfpf_norm_corr1d::set_step_size(double s)
+//: Generate points in ref frame that represent boundary
+//  Points of a contour around the shape.
+//  Used for display purposes.
+void mfpf_norm_corr1d::get_outline(vcl_vector<vgl_point_2d<double> >& pts) const
 {
-  step_size_=s;
+  pts.resize(2);
+  pts[0]=vgl_point_2d<double>(ilo_-0.5,0);
+  pts[1]=vgl_point_2d<double>(ihi_+0.5,0);
 }
+
 
 //: Define filter kernel to search with
 void mfpf_norm_corr1d::set(int ilo, int ihi, const vnl_vector<double>& k)
@@ -60,9 +66,10 @@ void mfpf_norm_corr1d::set(int ilo, int ihi, const vnl_vector<double>& k)
   kernel_.normalize();
 }
 
-void mfpf_norm_corr1d::set_search_area(unsigned ni, unsigned)
+//: Radius of circle containing modelled region
+double mfpf_norm_corr1d::radius() const
 {
-  search_ni_=ni;
+  return vcl_max(vcl_fabs(ilo_),vcl_fabs(ihi_));
 }
 
 // Assumes v2[i] has zero mean and unit length as a vector
@@ -138,11 +145,11 @@ void mfpf_norm_corr1d::evaluate_region(
 //  On exit, new_p and new_u define position, scale and orientation of
 //  the best nearby match.  Returns a qualtity of fit measure at that
 //  point (the smaller the better).
-double mfpf_norm_corr1d::search(const vimt_image_2d_of<float>& image,
+double mfpf_norm_corr1d::search_one_pose(
+                                const vimt_image_2d_of<float>& image,
                                 const vgl_point_2d<double>& p,
                                 const vgl_vector_2d<double>& u,
-                                vgl_point_2d<double>& new_p,
-                                vgl_vector_2d<double>& new_u)
+                                vgl_point_2d<double>& new_p)
 {
   int n=1+2*search_ni_;
   int ns = 2*search_ni_ + 1+ ihi_-ilo_;
@@ -158,50 +165,9 @@ double mfpf_norm_corr1d::search(const vimt_image_2d_of<float>& image,
     if (r>best_r) { best_r=r; best_i=i; }
   }
   new_p = p+(best_i-search_ni_)*u1;
-  new_u = u;
   return -1.0 * best_r;
 }
 
-//=======================================================================
-// Method: set_from_stream
-//=======================================================================
-//: Initialise from a string stream
-bool mfpf_norm_corr1d::set_from_stream(vcl_istream &is)
-{
-  // Cycle through string and produce a map of properties
-  vcl_string s = mbl_parse_block(is);
-  vcl_istringstream ss(s);
-  mbl_read_props_type props = mbl_read_props_ws(ss);
-
-  set_defaults();
-
-  // Extract the properties
-  if (props.find("step_size")!=props.end())
-  {
-    step_size_=vul_string_atof(props["step_size"]);
-    props.erase("step_size");
-  }
-  if (props.find("ilo")!=props.end())
-  {
-    ilo_=vul_string_atoi(props["ilo"]);
-    props.erase("ilo");
-  }
-  if (props.find("ihi")!=props.end())
-  {
-    ihi_=vul_string_atoi(props["ihi"]);
-    props.erase("ihi");
-  }
-  if (props.find("search_ni")!=props.end())
-  {
-    search_ni_=vul_string_atoi(props["search_ni"]);
-    props.erase("search_ni");
-  }
-
-  // Check for unused props
-  mbl_read_props_look_for_unused_props(
-      "mfpf_norm_corr1d::set_from_stream", props, mbl_read_props_type());
-  return true;
-}
 
 //=======================================================================
 // Method: is_a
@@ -224,21 +190,24 @@ mfpf_point_finder* mfpf_norm_corr1d::clone() const
 
 void mfpf_norm_corr1d::print_summary(vcl_ostream& os) const
 {
-  os << "{ step_size: " << step_size_
-     << " size: [" << ilo_ << ',' << ihi_ << ']'
-     << " search_ni: " << search_ni_
-     << " Kernel: " << kernel_ << vcl_endl
-     << '}';
+  os << "{ size: [" << ilo_ << ',' << ihi_ << ']'
+     << " Kernel: " << kernel_ << vcl_endl;
+  mfpf_point_finder::print_summary(os);
+  os << '}';
+}
+
+short mfpf_norm_corr1d::version_no() const
+{
+  return 1;
 }
 
 void mfpf_norm_corr1d::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
-  vsl_b_write(bfs,step_size_);
+  mfpf_point_finder::b_write(bfs);  // Save base class
   vsl_b_write(bfs,ilo_);
   vsl_b_write(bfs,ihi_);
   vsl_b_write(bfs,kernel_);
-  vsl_b_write(bfs,search_ni_);
 }
 
 //=======================================================================
@@ -253,11 +222,10 @@ void mfpf_norm_corr1d::b_read(vsl_b_istream& bfs)
   switch (version)
   {
     case 1:
-      vsl_b_read(bfs,step_size_);
+      mfpf_point_finder::b_read(bfs);  // Load in base class
       vsl_b_read(bfs,ilo_);
       vsl_b_read(bfs,ihi_);
       vsl_b_read(bfs,kernel_);
-      vsl_b_read(bfs,search_ni_);
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
@@ -270,10 +238,9 @@ void mfpf_norm_corr1d::b_read(vsl_b_istream& bfs)
 //: Test equality
 bool mfpf_norm_corr1d::operator==(const mfpf_norm_corr1d& nc) const
 {
+  if (!base_equality(nc)) return false;
   if (ilo_!=nc.ilo_) return false;
   if (ihi_!=nc.ihi_) return false;
-  if (search_ni_!=nc.search_ni_) return false;
-  if (vcl_fabs(step_size_-nc.step_size_)>1e-6) return false;
   if (kernel_.size()!=nc.kernel_.size()) return false;
   return vnl_vector_ssd(kernel_,nc.kernel_)<1e-4;
 }

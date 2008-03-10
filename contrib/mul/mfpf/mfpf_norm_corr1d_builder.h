@@ -13,9 +13,6 @@
 class mfpf_norm_corr1d_builder : public mfpf_point_finder_builder
 {
  private:
-  //: Size of step between sample points
-  double step_size_;
-
   //: Kernel mask is [ilo_,ihi_]
   int ilo_;
   //: Kernel mask is [ilo_,ihi_]
@@ -27,9 +24,6 @@ class mfpf_norm_corr1d_builder : public mfpf_point_finder_builder
   //: Number of examples added
   unsigned n_added_;
 
-  //: Number of points either side of centre to search
-  int search_ni_;
-
   //: Define default values
   void set_defaults();
  public:
@@ -40,9 +34,6 @@ class mfpf_norm_corr1d_builder : public mfpf_point_finder_builder
   // Destructor
   virtual ~mfpf_norm_corr1d_builder();
 
-  //: Size of step between sample points
-  virtual void set_step_size(double);
-
   void set_kernel_size(int ilo, int ihi);
 
   //: Kernel mask is [ilo_,ihi_]
@@ -50,8 +41,6 @@ class mfpf_norm_corr1d_builder : public mfpf_point_finder_builder
 
   //: Kernel mask is [ilo_,ihi_]
   int ihi() const { return ihi_; }
-
-  int search_ni() const { return search_ni_; }
 
   //: Create new mfpf_norm_corr1d on heap
   virtual mfpf_point_finder* new_finder() const;
@@ -79,6 +68,9 @@ class mfpf_norm_corr1d_builder : public mfpf_point_finder_builder
 
   //: Print class to os
   virtual void print_summary(vcl_ostream& os) const;
+
+  //: Version number for I/O
+  short version_no() const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;

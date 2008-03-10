@@ -18,26 +18,10 @@
 class mfpf_region_pdf : public mfpf_point_finder
 {
  private:
-  //: Size of step between sample points
-  double step_size_;
-
   //: Kernel reference point (in roi_ni_ x roi_nj_ grid)
   double ref_x_;
   //: Kernel reference point (in roi_ni_ x roi_nj_ grid)
   double ref_y_;
-
-  //: Number of angles to try at
-  unsigned nA_;
-
-  //: Angle step size (ie try at A+idA, i in [-nA,+nA]
-  double dA_;
-
-  //: Number of scales to try at
-  unsigned ns_;
-
-  //: Scaling factor (ie try at (s^i), i in [-ns,+ns]
-  double s_;
-
 
   //: Chords defining the region of interest
   vcl_vector<mbl_chord> roi_;
@@ -53,24 +37,8 @@ class mfpf_region_pdf : public mfpf_point_finder
   //: PDf for vector sampled over ROI
   mbl_cloneable_ptr<vpdfl_pdf_base> pdf_;
 
-  //: Number of points either side of centre to search
-  int search_ni_;
-
-  //: Number of points either side of centre to search
-  int search_nj_;
-
   //: Define default values
   void set_defaults();
-
-
-  //: Search given image around p, using u to define scale and angle 
-  //  On exit, new_p defines position of the best nearby match.  
-  //  Returns a qualtity of fit measure at that
-  //  point (the smaller the better).
-  virtual double search_one_pose(const vimt_image_2d_of<float>& image,
-                        const vgl_point_2d<double>& p,
-                        const vgl_vector_2d<double>& u,
-                        vgl_point_2d<double>& new_p);
 
  public:
 
@@ -80,25 +48,13 @@ class mfpf_region_pdf : public mfpf_point_finder
   // Destructor
   virtual ~mfpf_region_pdf();
 
-  //: Size of step between sample points
-  virtual void set_step_size(double);
-
   //: Define region and PDF of region
   void set(const vcl_vector<mbl_chord>& roi,
            double ref_x, double ref_y,
            const vpdfl_pdf_base& pdf);
 
-  //: Define search size
-  virtual void set_search_area(unsigned ni, unsigned nj);
-
-  //: Define angle search parameters
-  void set_angle_range(unsigned nA, double dA);
-
-  //: Define scale search parameters
-  void set_scale_range(unsigned ns, double s);
-
-  int search_ni() const { return search_ni_; }
-  int search_nj() const { return search_nj_; }
+  //: Radius of circle containing modelled region
+  virtual double radius() const;
 
   //: PDf for region vector
   const vpdfl_pdf_base& pdf() const { return pdf_; }
@@ -121,18 +77,32 @@ class mfpf_region_pdf : public mfpf_point_finder
                                const vgl_vector_2d<double>& u,
                                vimt_image_2d_of<double>& response);
 
-  //: Search given image around p, using u to define scale and orientation
-  //  On exit, new_p and new_u define position, scale and orientation of
-  //  the best nearby match.  Returns a qualtity of fit measure at that
+  //: Search given image around p, using u to define scale and angle 
+  //  On exit, new_p defines position of the best nearby match.  
+  //  Returns a qualtity of fit measure at that
   //  point (the smaller the better).
-  virtual double search(const vimt_image_2d_of<float>& image,
+  virtual double search_one_pose(const vimt_image_2d_of<float>& image,
                         const vgl_point_2d<double>& p,
                         const vgl_vector_2d<double>& u,
-                        vgl_point_2d<double>& new_p,
-                        vgl_vector_2d<double>& new_u);
+                        vgl_point_2d<double>& new_p);
 
-  //: Initialise from a string stream
-  virtual bool set_from_stream(vcl_istream &is);
+  // Returns true if p is inside region at given pose
+  // Actually only checks if p is inside bounding box
+  bool is_inside(const mfpf_pose& pose,
+                 const vgl_point_2d<double>& p) const;
+
+  //: Return true if modelled regions at pose1 and pose2 overlap
+  //  Checks if reference point of one is inside region of other
+  virtual bool overlap(const mfpf_pose& pose1,
+                       const mfpf_pose& pose2) const;
+
+  //: Generate points in ref frame that represent boundary
+  //  Points of a contour around the shape.
+  //  Used for display purposes.
+  virtual void get_outline(vcl_vector<vgl_point_2d<double> >& pts) const;
+
+  //: Version number for I/O
+  short version_no() const;
 
   //: Name of the class
   virtual vcl_string is_a() const;

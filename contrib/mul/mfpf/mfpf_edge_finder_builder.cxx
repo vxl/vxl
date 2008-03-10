@@ -17,13 +17,7 @@
 //=======================================================================
 
 mfpf_edge_finder_builder::mfpf_edge_finder_builder()
-  : step_size_(1.0),search_ni_(5)
 {
-}
-
-void mfpf_edge_finder_builder::set_step_size(double s)
-{
-  step_size_=s;
 }
 
 //=======================================================================
@@ -58,8 +52,7 @@ void mfpf_edge_finder_builder::build(mfpf_point_finder& pf)
 {
   assert(pf.is_a()=="mfpf_edge_finder");
   mfpf_edge_finder& ef = static_cast<mfpf_edge_finder&>(pf);
-  ef.set_search_area(search_ni_,0);
-  ef.set_step_size(step_size_);
+  set_base_parameters(ef);
 }
 
 //=======================================================================
@@ -75,16 +68,7 @@ bool mfpf_edge_finder_builder::set_from_stream(vcl_istream &is)
 
   search_ni_=5;
   // Extract the properties
-  if (props.find("step_size")!=props.end())
-  {
-    step_size_=vul_string_atof(props["step_size"]);
-    props.erase("step_size");
-  }
-  if (props.find("search_ni")!=props.end())
-  {
-    search_ni_=vul_string_atoi(props["search_ni"]);
-    props.erase("search_ni");
-  }
+  parse_base_props(props);
 
   // Check for unused props
   mbl_read_props_look_for_unused_props(
@@ -113,16 +97,21 @@ mfpf_point_finder_builder* mfpf_edge_finder_builder::clone() const
 
 void mfpf_edge_finder_builder::print_summary(vcl_ostream& os) const
 {
-  os << "{ step_size: " << step_size_
-     << " search_ni: " << search_ni_
-     << '}';
+  os << "{ ";
+  mfpf_point_finder_builder::print_summary(os);
+  os << " }";
+}
+
+//: Version number for I/O
+short mfpf_edge_finder_builder::version_no() const
+{
+  return 1;
 }
 
 void mfpf_edge_finder_builder::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
-  vsl_b_write(bfs,search_ni_);
-  vsl_b_write(bfs,step_size_);
+  mfpf_point_finder_builder::b_write(bfs);  // Save base class
 }
 
 //=======================================================================
@@ -137,8 +126,7 @@ void mfpf_edge_finder_builder::b_read(vsl_b_istream& bfs)
   switch (version)
   {
     case (1):
-      vsl_b_read(bfs,step_size_);
-      vsl_b_read(bfs,search_ni_);
+      mfpf_point_finder_builder::b_read(bfs);  // Load base class
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"

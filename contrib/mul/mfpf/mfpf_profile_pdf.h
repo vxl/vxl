@@ -14,9 +14,6 @@
 class mfpf_profile_pdf : public mfpf_point_finder
 {
  private:
-  //: Size of step between sample points
-  double step_size_;
-
   //: Kernel mask is [ilo_,ihi_]
   int ilo_;
   //: Kernel mask is [ilo_,ihi_]
@@ -24,9 +21,6 @@ class mfpf_profile_pdf : public mfpf_point_finder
 
   //: PDf for profile vector
   mbl_cloneable_ptr<vpdfl_pdf_base> pdf_;
-
-  //: Number of points either side of centre to search
-  int search_ni_;
 
   //: Define default values
   void set_defaults();
@@ -38,22 +32,17 @@ class mfpf_profile_pdf : public mfpf_point_finder
   // Destructor
   virtual ~mfpf_profile_pdf();
 
-  //: Size of step between sample points
-  virtual void set_step_size(double);
+  //: Radius of circle containing modelled region
+  virtual double radius() const;
 
   //: Define size and PDF (clone taken)
   void set(int ilo, int ihi, const vpdfl_pdf_base& pdf);
-
-  //: Define search size
-  virtual void set_search_area(unsigned ni, unsigned nj);
 
   //: Kernel mask is [ilo_,ihi_]
   int ilo() const { return ilo_; }
 
   //: Kernel mask is [ilo_,ihi_]
   int ihi() const { return ihi_; }
-
-  int search_ni() const { return search_ni_; }
 
   //: PDf for profile vector
   const vpdfl_pdf_base& pdf() const { return pdf_; }
@@ -76,18 +65,22 @@ class mfpf_profile_pdf : public mfpf_point_finder
                                const vgl_vector_2d<double>& u,
                                vimt_image_2d_of<double>& response);
 
-  //: Search given image around p, using u to define scale and orientation
-  //  On exit, new_p and new_u define position, scale and orientation of
-  //  the best nearby match.  Returns a qualtity of fit measure at that
+  //: Search given image around p, using u to define scale and angle 
+  //  On exit, new_p defines position of the best nearby match.
+  //  Returns a qualtity of fit measure at that
   //  point (the smaller the better).
-  virtual double search(const vimt_image_2d_of<float>& image,
+  virtual double search_one_pose(const vimt_image_2d_of<float>& image,
                         const vgl_point_2d<double>& p,
                         const vgl_vector_2d<double>& u,
-                        vgl_point_2d<double>& new_p,
-                        vgl_vector_2d<double>& new_u);
+                        vgl_point_2d<double>& new_p);
 
-  //: Initialise from a string stream
-  virtual bool set_from_stream(vcl_istream &is);
+  //: Generate points in ref frame that represent boundary
+  //  Points of a contour around the shape.
+  //  Used for display purposes.
+  virtual void get_outline(vcl_vector<vgl_point_2d<double> >& pts) const;
+
+  //: Version number for I/O
+  short version_no() const;
 
   //: Name of the class
   virtual vcl_string is_a() const;

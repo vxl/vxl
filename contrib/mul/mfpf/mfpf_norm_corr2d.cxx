@@ -36,7 +36,7 @@ void mfpf_norm_corr2d::set_defaults()
   search_ni_=5;
   search_nj_=5;
   nA_=0; dA_=0.0;
-  ns_=0; s_ =1.0;
+  ns_=0; ds_=1.0;
 }
 
 //=======================================================================
@@ -46,26 +46,6 @@ void mfpf_norm_corr2d::set_defaults()
 mfpf_norm_corr2d::~mfpf_norm_corr2d()
 {
 }
-
-void mfpf_norm_corr2d::set_step_size(double s)
-{
-  step_size_=s;
-}
-
-//: Define angle search parameters
-void mfpf_norm_corr2d::set_angle_range(unsigned nA, double dA)
-{
-  nA_=nA;
-  dA_=dA;
-}
-
-//: Define scale search parameters
-void mfpf_norm_corr2d::set_scale_range(unsigned ns, double s)
-{
-  ns_=ns;
-  s_ =s;
-}
-
 
 //: Define filter kernel to search with
 void mfpf_norm_corr2d::set(const vil_image_view<double>& k, 
@@ -99,12 +79,6 @@ void mfpf_norm_corr2d::set(const vil_image_view<double>& k)
   set(k, 0.5*(k.ni()-1.0), 0.5*(k.nj()-1.0));
 }
 
-void mfpf_norm_corr2d::set_search_area(unsigned ni, unsigned nj)
-{
-  search_ni_=ni;
-  search_nj_=nj;
-}
-
 // Assumes im2[i] has zero mean and unit length as a vector
 // Assumes element (i,j) is im1[i+j*jstep1] etc
 inline double norm_corr(const float* im1, const double* im2, 
@@ -124,6 +98,19 @@ inline double norm_corr(const float* im1, const double* im2,
   double ss = vcl_max(1e-6,sum_sq-n*mean*mean);
   double s = vcl_sqrt(ss);
   return sum1/s;
+}
+
+//: Radius of circle containing modelled region
+double mfpf_norm_corr2d::radius() const
+{
+  // Compute distance to each corner
+  double wx = kernel_.ni()-1;
+  double x2 = vcl_max(ref_x_*ref_x_,(ref_x_-wx)*(ref_x_-wx));
+  double wy = kernel_.nj()-1;
+  double y2 = vcl_max(ref_y_*ref_y_,(ref_y_-wy)*(ref_y_-wy));
+  double r2 = x2+y2; 
+  if (r2<=1) return 1.0;
+  return vcl_sqrt(r2);
 }
 
 //: Evaluate match at p, using u to define scale and orientation 
@@ -270,85 +257,48 @@ double mfpf_norm_corr2d::search_one_pose(
   return -1.0 * best_r;
 }
 
-//: Search given image around p, using u to define scale and orientation 
-//  On exit, new_p and new_u define position, scale and orientation of 
-//  the best nearby match.  Returns a qualtity of fit measure at that
-//  point (the smaller the better).
-double mfpf_norm_corr2d::search(const vimt_image_2d_of<float>& image,
-                        const vgl_point_2d<double>& p,
-                        const vgl_vector_2d<double>& u,
-                        vgl_point_2d<double>& new_p,
-                        vgl_vector_2d<double>& new_u)
+// Returns true if p is inside region at given pose
+bool mfpf_norm_corr2d::is_inside(const mfpf_pose& pose,
+                               const vgl_point_2d<double>& p) const
 {
-  if (nA_==0 && ns_==0)
-  {
-    // Only search at one scale/orientation
-    new_u = u;
-    return search_one_pose(image,p,u,new_p);
-  }
-
-  double best_fit=9e99;
-  int best_iA,best_is;
-  vgl_point_2d<double> p1;
-
-  vgl_vector_2d<double> v(-u.y(),u.x());
-
-  for (int is=-int(ns_);is<=int(ns_);++is)
-  {
-    double s = vcl_pow(s_,is);
-    for (int iA=-int(nA_);iA<=int(nA_);++iA)
-    {
-      double A = iA*dA_;
-      vgl_vector_2d<double> uA = s*(u*vcl_cos(A)+v*vcl_sin(A));
-
-      double f = search_one_pose(image,p,uA,p1);
-      if (f<best_fit)
-      {
-        best_iA=iA;
-        best_is=is;
-        best_fit = f;
-        new_u = uA;
-        new_p = p1;
-      }
-    }
-  }
-  return best_fit;
+  // Set transform model frame -> World
+  vimt_transform_2d t1;
+  t1.set_similarity(step_size()*pose.u(),pose.p());  
+  // Compute position of p in model frame
+  vgl_point_2d<double> q=t1.inverse()(p);
+  q.x()+=ref_x_;
+  if (q.x()<0 || q.x()>(kernel_.ni()-1)) return false;
+  q.y()+=ref_y_;
+  if (q.y()<0 || q.y()>(kernel_.nj()-1)) return false;
+  return true;
 }
 
-//=======================================================================
-// Method: set_from_stream
-//=======================================================================
-//: Initialise from a string stream
-bool mfpf_norm_corr2d::set_from_stream(vcl_istream &is)
+//: Return true if modelled regions at pose1 and pose2 overlap
+//  Checks if reference point of one is inside region of other
+bool mfpf_norm_corr2d::overlap(const mfpf_pose& pose1,
+                               const mfpf_pose& pose2) const
 {
-  // Cycle through string and produce a map of properties
-  vcl_string s = mbl_parse_block(is);
-  vcl_istringstream ss(s);
-  mbl_read_props_type props = mbl_read_props_ws(ss);
+  if (is_inside(pose1,pose2.p())) return true;
+  if (is_inside(pose2,pose1.p())) return true;
+  return false;
+}
 
-  set_defaults();
-
-  // Extract the properties
-  if (props.find("step_size")!=props.end())
-  { 
-    step_size_=vul_string_atof(props["step_size"]); 
-    props.erase("step_size"); 
-  }
-  if (props.find("search_ni")!=props.end())
-  { 
-    search_ni_=vul_string_atoi(props["search_ni"]); 
-    props.erase("search_ni"); 
-  }
-  if (props.find("search_nj")!=props.end())
-  { 
-    search_nj_=vul_string_atoi(props["search_nj"]); 
-    props.erase("search_nj"); 
-  }
-
-  // Check for unused props
-  mbl_read_props_look_for_unused_props(
-      "mfpf_norm_corr2d::set_from_stream", props, mbl_read_props_type());
-  return true;
+//: Generate points in ref frame that represent boundary
+//  Points of a contour around the shape.
+//  Used for display purposes.
+void mfpf_norm_corr2d::get_outline(vcl_vector<vgl_point_2d<double> >& pts) const
+{
+  pts.resize(7);
+  int roi_ni=kernel_.ni();
+  int roi_nj=kernel_.nj();
+  vgl_vector_2d<double> r(ref_x_,ref_y_);
+  pts[0]=vgl_point_2d<double>(0,roi_nj)-r;
+  pts[1]=vgl_point_2d<double>(0,0);
+  pts[2]=vgl_point_2d<double>(roi_ni,roi_nj)-r;
+  pts[3]=vgl_point_2d<double>(0,roi_nj)-r;
+  pts[4]=vgl_point_2d<double>(0,0)-r;
+  pts[5]=vgl_point_2d<double>(roi_ni,0)-r;
+  pts[6]=vgl_point_2d<double>(roi_ni,roi_nj)-r;
 }
 
 //=======================================================================
@@ -372,28 +322,23 @@ mfpf_point_finder* mfpf_norm_corr2d::clone() const
 
 void mfpf_norm_corr2d::print_summary(vcl_ostream& os) const
 {
-  os<<"{ step_size: "<<step_size_;
-  os<<" size: "<<kernel_.ni()<<" x "<<kernel_.nj();
-  os<<" search_ni: "<<search_ni_;
-  os<<" search_nj: "<<search_nj_;
-  os<<" nA: "<<nA_<<" dA: "<<dA_;
-  os<<" ns: "<<ns_<<"  s: "<<s_;
+  os<<"{  size: "<<kernel_.ni()<<" x "<<kernel_.nj();
+  mfpf_point_finder::print_summary(os);
   os<<" }";
 }
 
 void mfpf_norm_corr2d::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
-  vsl_b_write(bfs,step_size_); 
+  mfpf_point_finder::b_write(bfs);  // Save base class
   vsl_b_write(bfs,kernel_); 
   vsl_b_write(bfs,ref_x_); 
   vsl_b_write(bfs,ref_y_); 
-  vsl_b_write(bfs,search_ni_); 
-  vsl_b_write(bfs,search_nj_); 
-  vsl_b_write(bfs,nA_); 
-  vsl_b_write(bfs,dA_); 
-  vsl_b_write(bfs,ns_); 
-  vsl_b_write(bfs,s_); 
+}
+
+short mfpf_norm_corr2d::version_no() const
+{
+  return 1;
 }
 
 //=======================================================================
@@ -408,16 +353,10 @@ void mfpf_norm_corr2d::b_read(vsl_b_istream& bfs)
   switch (version)
   {
     case (1):
-      vsl_b_read(bfs,step_size_);
+      mfpf_point_finder::b_read(bfs);  // Load in base class
       vsl_b_read(bfs,kernel_);
       vsl_b_read(bfs,ref_x_);
       vsl_b_read(bfs,ref_y_);
-      vsl_b_read(bfs,search_ni_);
-      vsl_b_read(bfs,search_nj_);
-      vsl_b_read(bfs,nA_); 
-      vsl_b_read(bfs,dA_); 
-      vsl_b_read(bfs,ns_); 
-      vsl_b_read(bfs,s_); 
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&) \n";
@@ -430,17 +369,11 @@ void mfpf_norm_corr2d::b_read(vsl_b_istream& bfs)
 //: Test equality
 bool mfpf_norm_corr2d::operator==(const mfpf_norm_corr2d& nc) const
 {
+  if (!base_equality(nc)) return false;
   if (kernel_.ni()!=nc.kernel_.ni()) return false;
   if (kernel_.nj()!=nc.kernel_.nj()) return false;
-  if (search_ni_!=nc.search_ni_) return false;
-  if (search_nj_!=nc.search_nj_) return false;
-  if (nA_!=nc.nA_) return false;
-  if (ns_!=nc.ns_) return false;
-  if (vcl_fabs(dA_-nc.dA_)>1e-6) return false;
-  if (vcl_fabs(s_-nc.s_)>1e-6) return false;
   if (vcl_fabs(ref_x_-nc.ref_x_)>1e-6) return false;
   if (vcl_fabs(ref_y_-nc.ref_y_)>1e-6) return false;
-  if (vcl_fabs(step_size_-nc.step_size_)>1e-6) return false;
   if (kernel_.size()!=nc.kernel_.size()) return false;
   if (kernel_.size()==0) return true;  // ssd fails on empty 
   return (vil_math_ssd(kernel_,nc.kernel_,double(0))<1e-4);

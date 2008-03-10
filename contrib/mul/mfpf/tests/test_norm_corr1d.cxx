@@ -90,27 +90,6 @@ void test_norm_corr1d()
   // -------------------------------------------
   //  Test configuring from stream
   // -------------------------------------------
-  {
-    vcl_istringstream ss(
-          "mfpf_norm_corr1d\n"
-          "{\n"
-          "  ilo: -3 ihi: 4\n"
-          "  search_ni: 17\n"
-          "}\n");
-
-    vcl_auto_ptr<mfpf_point_finder>
-            pf = mfpf_point_finder::create_from_stream(ss);
-
-    TEST("Correct Point Finder",pf->is_a(),"mfpf_norm_corr1d");
-    if (pf->is_a()=="mfpf_norm_corr1d")
-    {
-      mfpf_norm_corr1d &a_pf = static_cast<mfpf_norm_corr1d&>(*pf);
-      vcl_cout<<a_pf<<vcl_endl;
-      TEST("search_ni configured",a_pf.search_ni(),17);
-      TEST("ilo configured",a_pf.ilo(),-3);
-      TEST("ihi configured",a_pf.ihi(),4);
-    }
-  }
 
   {
     vcl_istringstream ss(

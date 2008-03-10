@@ -20,7 +20,6 @@
 //=======================================================================
 
 mfpf_edge_finder::mfpf_edge_finder()
-  : step_size_(1.0),search_ni_(5)
 {
 }
 
@@ -32,16 +31,22 @@ mfpf_edge_finder::~mfpf_edge_finder()
 {
 }
 
-void mfpf_edge_finder::set_step_size(double s)
+//: Radius of circle containing modelled region
+double mfpf_edge_finder::radius() const
 {
-  step_size_=s;
+  return 1.0;
 }
 
-
-void mfpf_edge_finder::set_search_area(unsigned ni, unsigned)
+//: Generate points in ref frame that represent boundary
+//  Points of a closed contour around the shape.
+//  Used for display purposes.
+void mfpf_edge_finder::get_outline(vcl_vector<vgl_point_2d<double> >& pts) const
 {
-  search_ni_=ni;
+  pts.resize(2);
+  pts[0]=vgl_point_2d<double>(-0.5,0);
+  pts[1]=vgl_point_2d<double>( 0.5,0);
 }
+
 
 //: Evaluate match at p, using u to define scale and orientation
 // Returns -1*edge strength at p along direction u
@@ -88,29 +93,17 @@ void mfpf_edge_finder::evaluate_region(
   vimt_transform_2d i2w;
   i2w.set_similarity(vgl_point_2d<double>(u1.x(),u1.y()),p1);
   response.set_world2im(i2w.inverse());
-#if 0 // commented out
-  // Inverse:
-  double d2 = u.x()*u.x()+u.y()*u.y();
-  vgl_point_2d<double> ui(u.y()/d2,-u.x()/d2);
-  vgl_point_2d<double> vi(-ui.y(),ui.x()); // Rotate ui by 90 degrees
-  // q = -R*p1, where R is rotatoin defined by ui
-  vgl_point_2d<double> q(-ui.x()*p1.x()-vi.x()*p1.y(),
-                         -ui.y()*p1.x()-vi.y()*p1.y());
-  vimt_transform_2d w2i;
-  w2i.set_similarity(ui,q);
-  response.set_world2im(w2i);
-#endif // 0
 }
 
    //: Search given image around p, using u to define scale and orientation
    //  On exit, new_p and new_u define position, scale and orientation of
    //  the best nearby match.  Returns a qualtity of fit measure at that
    //  point (the smaller the better).
-double mfpf_edge_finder::search(const vimt_image_2d_of<float>& image,
+double mfpf_edge_finder::search_one_pose(
+                                const vimt_image_2d_of<float>& image,
                                 const vgl_point_2d<double>& p,
                                 const vgl_vector_2d<double>& u,
-                                vgl_point_2d<double>& new_p,
-                                vgl_vector_2d<double>& new_u)
+                                vgl_point_2d<double>& new_p)
 {
   int n=1+2*search_ni_;
   vnl_vector<double> v(n+1);
@@ -125,38 +118,7 @@ double mfpf_edge_finder::search(const vimt_image_2d_of<float>& image,
     if (e>best_e) { best_e=e; best_i=i; }
   }
   new_p = p+(best_i-search_ni_)*u1;
-  new_u = u;
   return -1.0 * best_e;
-}
-
-//=======================================================================
-// Method: set_from_stream
-//=======================================================================
-//: Initialise from a string stream
-bool mfpf_edge_finder::set_from_stream(vcl_istream &is)
-{
-  // Cycle through string and produce a map of properties
-  vcl_string s = mbl_parse_block(is);
-  vcl_istringstream ss(s);
-  mbl_read_props_type props = mbl_read_props_ws(ss);
-
-  search_ni_=5;
-  // Extract the properties
-  if (props.find("step_size")!=props.end())
-  {
-    step_size_=vul_string_atof(props["step_size"]);
-    props.erase("step_size");
-  }
-  if (props.find("search_ni")!=props.end())
-  {
-    search_ni_=vul_string_atoi(props["search_ni"]);
-    props.erase("search_ni");
-  }
-
-  // Check for unused props
-  mbl_read_props_look_for_unused_props(
-      "mfpf_edge_finder::set_from_stream", props, mbl_read_props_type());
-  return true;
 }
 
 //=======================================================================
@@ -180,16 +142,21 @@ mfpf_point_finder* mfpf_edge_finder::clone() const
 
 void mfpf_edge_finder::print_summary(vcl_ostream& os) const
 {
-  os<<"{ step_size: "<<step_size_
-    <<" search_ni: "<<search_ni_
-    <<" }";
+  os<<"{ ";
+  mfpf_point_finder::print_summary(os);
+  os<<" }";
 }
+
+short mfpf_edge_finder::version_no() const
+{
+  return 1;
+}
+
 
 void mfpf_edge_finder::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
-  vsl_b_write(bfs,step_size_);
-  vsl_b_write(bfs,search_ni_);
+  mfpf_point_finder::b_write(bfs);  // Save baseclass
 }
 
 //=======================================================================
@@ -204,8 +171,7 @@ void mfpf_edge_finder::b_read(vsl_b_istream& bfs)
   switch (version)
   {
     case 1:
-      vsl_b_read(bfs,step_size_);
-      vsl_b_read(bfs,search_ni_);
+      mfpf_point_finder::b_read(bfs);  // Load in baseclass
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
