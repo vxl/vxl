@@ -1,9 +1,8 @@
 # contrib/brl/bbas/bil/algo/tests/CMakeLists.txt
 
-
 ADD_EXECUTABLE( bil_algo_test_all
   test_driver.cxx
-#  test_bil_scale_image.cxx
+  test_bil_scale_image.cxx
   test_bil_wshed2d.cxx
   test_bil_edt.cxx
   test_bil_cedt.cxx
