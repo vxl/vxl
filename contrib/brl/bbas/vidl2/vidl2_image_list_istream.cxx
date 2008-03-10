@@ -54,14 +54,25 @@ open(const vcl_string& glob)
   }
 
   // no matching filenames
-  if (filenames.empty())
+  if (filenames.empty()){
+    vcl_cerr << "In vidl2_image_list_istream(.) - no files to open\n";
     return false;
-
+  }
   // Sort - because the file iterator uses readdir() it does not
   //        iterate over files in alphanumeric order
   vcl_sort(filenames.begin(),filenames.end());
 
-  return open(filenames);
+  bool can_open = open(filenames);
+
+  if(!can_open){
+    vcl_cerr << "In vidl2_image_list_istream(.) -can't open files as images\n";
+    for(vcl_vector<vcl_string>::iterator fit = filenames.begin();
+        fit != filenames.end(); ++fit)
+      vcl_cerr << *fit << '\n';
+    return false;
+  }
+
+  return true;
 }
 
 
