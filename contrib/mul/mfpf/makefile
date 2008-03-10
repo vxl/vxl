@@ -13,5 +13,8 @@ SOURCES += mfpf_region_pdf.cxx
 SOURCES += mfpf_region_pdf_builder.cxx
 MANPAGE_SOURCES += mfpf_norm_vec.h
 MANPAGE_SOURCES += mfpf_sample_region.h
+SOURCES += mfpf_searcher.cxx
+SOURCES += mfpf_draw_pose_cross.cxx
+MANPAGE_SOURCES += mfpf_pose.h
 
 SUBDIRS += tests
