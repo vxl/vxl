@@ -1,0 +1,10 @@
+// The following text is included in the main documentation page by doxygen
+/*! \mainpage dbil : Development Brown Imaging Library
+* A collection of numerical routines augmenting vil
+*
+* \section Watersheds
+* - dbil_wshed2d
+*
+* \section Distance Transform
+* - dbil_edt_maurer : fast exact Euclidean distance transform
+*/
