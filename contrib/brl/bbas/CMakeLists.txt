@@ -47,6 +47,9 @@ SUBDIRS(bwm)
 #In memory relational database
 SUBDIRS(brdb)
 
+#Brown Imaging Library
+SUBDIRS(bil)
+
 OPTION( BUILD_CONTRIB_VIDL2 "Build Experimental Video Streaming Library" YES )
 IF(BUILD_CONTRIB_VIDL2)
 # Video Library (rewrite)
