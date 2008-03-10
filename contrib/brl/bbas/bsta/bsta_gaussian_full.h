@@ -16,7 +16,7 @@
 #include "bsta_gaussian.h"
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
-
+#include <vcl_iostream.h>
 
 //: A Gaussian distribution with a full covariance matrix
 template <class T, unsigned n>
@@ -91,5 +91,13 @@ class bsta_gaussian_full : public bsta_gaussian<T,n>
     mutable vnl_matrix_fixed<T,n,n>* inv_covar_;
 };
 
+template <class T , unsigned n>
+inline vcl_ostream& operator<< (vcl_ostream& os, 
+                                bsta_gaussian_full<T, n> const& g)
+{
+  os << "gauss_full:mean(" << g.mean() << ")\n";
+  os << "gauss_full:covar(\n" << g.covar() << ")\n";
+  return os;
+}
 
 #endif // bsta_gaussian_full_h_

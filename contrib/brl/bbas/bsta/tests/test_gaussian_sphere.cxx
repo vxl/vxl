@@ -1,8 +1,9 @@
 #include <testlib/testlib_test.h>
 #include <bsta/bsta_gaussian_sphere.h>
+#include <bsta/bsta_attributes.h>
 #include <vcl_string.h>
 #include <vcl_limits.h>
-
+#include <vcl_iostream.h>
 
 template <class T>
 void test_gaussian_sphere_type(T epsilon, const vcl_string& type_name)
@@ -59,6 +60,13 @@ void test_gaussian_sphere_type(T epsilon, const vcl_string& type_name)
   T prob_box_1d = gauss_1d.probability(box_1d_low, box_1d_high);
   TEST_NEAR(("box probability (1-d) <"+type_name+">").c_str(),
             prob_box_1d,0.11246291,1e-07);
+
+  // test stream
+  vcl_cout << "testing stream operator\n";
+  vcl_cout << gauss << '\n';
+
+  bsta_num_obs<bsta_gaussian_sphere<T, 3> > nobs(gauss, 1);
+  vcl_cout << nobs << '\n';
 }
 
 

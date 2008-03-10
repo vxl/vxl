@@ -76,4 +76,13 @@ class bsta_gaussian_sphere : public bsta_gaussian<T,n>
     void compute_det();
 };
 
+template <class T , unsigned n>
+inline vcl_ostream& operator<< (vcl_ostream& os, 
+                                bsta_gaussian_sphere<T, n> const& g)
+{
+  os << "gauss_sphere:mean(" << g.mean() << ")\n";
+  os << "gauss_sphere:var(" << g.var() << ")\n";
+  return os;
+}
+
 #endif // bsta_gaussian_sphere_h_

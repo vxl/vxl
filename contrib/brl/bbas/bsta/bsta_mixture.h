@@ -196,4 +196,18 @@ class bsta_mixture : public bsta_distribution<typename dist_::math_type,
   { vcl_sort(components_.begin(), components_.begin()+idx+1, sort_adaptor<comp_type_>(comp)); }
 };
 
+template <class dist_>
+inline vcl_ostream& operator<< (vcl_ostream& os, 
+                                bsta_mixture<dist_> const& m)
+{
+  unsigned n = m.num_components();
+  for(unsigned c = 0; c<n; ++c){
+    const dist_& mc = m.distribution(c);
+    dist_::math_type weight = m.weight(c);
+    os << "mixture_comp["<< c << "]wgt(" << weight << ")\n";
+    os << mc << '\n';
+  }
+  return os;
+}
+
 #endif // bsta_mixture_h_

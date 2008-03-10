@@ -4,6 +4,7 @@
 #include <vcl_limits.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_inverse.h>
+#include <vcl_iostream.h>
 
 template <class T>
 void test_gaussian_full_type(T epsilon, const vcl_string& type_name)
@@ -50,6 +51,10 @@ void test_gaussian_full_type(T epsilon, const vcl_string& type_name)
 
   TEST(("zero var probability density <"+type_name+">").c_str(),
         zero_var_gauss.prob_density(test_pt), T(0));
+
+  // test stream
+  vcl_cout << "testing stream operator\n";
+  vcl_cout << gauss << '\n';
 }
 
 MAIN( test_gaussian_full )

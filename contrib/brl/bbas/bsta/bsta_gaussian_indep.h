@@ -78,4 +78,13 @@ class bsta_gaussian_indep : public bsta_gaussian<T,n>
     void compute_det();
 };
 
+template <class T , unsigned n>
+inline vcl_ostream& operator<< (vcl_ostream& os, 
+                                bsta_gaussian_indep<T, n> const& g)
+{
+  os << "gauss_indep:mean(" << g.mean() << ")\n";
+  os << "gauss_indep:covar(" << g.diag_covar() << ")\n";
+  return os;
+}
+
 #endif // bsta_gaussian_indep_h_

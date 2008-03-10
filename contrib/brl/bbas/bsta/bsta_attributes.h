@@ -35,4 +35,14 @@ class bsta_num_obs : public dist_
     T num_observations;
 };
 
+template <class dist_>
+inline vcl_ostream& operator<< (vcl_ostream& os, 
+                                bsta_num_obs<dist_> const& no)
+{
+  dist_ const& dist = static_cast<dist_ const&>(no);
+  os << "n_obs:" << no.num_observations << '\n';
+  os << dist ;
+  return os;
+}
+
 #endif // bsta_attributes_h_

@@ -3,6 +3,7 @@
 #include <vnl/vnl_math.h>
 #include <vcl_string.h>
 #include <vcl_limits.h>
+#include <vcl_iostream.h>
 
 
 template <class T>
@@ -54,6 +55,11 @@ void test_gaussian_indep_type(T epsilon, const vcl_string& type_name)
   vnl_vector_fixed<T,3> delta(T(0.1), T(0.1), T(0.1));
   T prob_box = gauss.probability(mean-delta, mean+delta);
   TEST_NEAR(("box probability density <"+type_name+">").c_str(),prob_box,0.00100748,1e-07);
+
+  // test stream
+  vcl_cout << "testing stream operator\n";
+  vcl_cout << gauss << '\n';
+
 }
 
 
