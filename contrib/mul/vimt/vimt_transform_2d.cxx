@@ -272,7 +272,20 @@ void vimt_transform_2d::set_similarity(double s, double theta, double t_x, doubl
 }
 
 //: Sets Euclidean transformation.
-void vimt_transform_2d::set_similarity(const vgl_point_2d<double> & dx, const vgl_point_2d<double> & t)
+void vimt_transform_2d::set_similarity(const vgl_point_2d<double> & dx,
+                                       const vgl_point_2d<double> & t)
+{
+    form_=Similarity;
+    xx_ = dx.x(); xy_ = -dx.y();
+    yx_ = dx.y(); yy_ = dx.x();
+    xt_ = t.x();  yt_ = t.y();
+    tx_=ty_=0.0;   tt_=1.0;
+    inv_uptodate_=false;
+}
+
+//: Sets Euclidean transformation.
+void vimt_transform_2d::set_similarity(const vgl_vector_2d<double> & dx,
+                                       const vgl_point_2d<double> & t)
 {
     form_=Similarity;
     xx_ = dx.x(); xy_ = -dx.y();

@@ -114,7 +114,14 @@ class vimt_transform_2d
     //: Sets Euclidean transformation.
     // \param dx  Rotation and scaling of x axis
     // \param t  Translation
-    void set_similarity(const vgl_point_2d<double> & dx, const vgl_point_2d<double> & t);
+    void set_similarity(const vgl_point_2d<double> & dx, 
+                        const vgl_point_2d<double> & t);
+
+    //: Sets Euclidean transformation.
+    // \param dx  Rotation and scaling of x axis
+    // \param t  Translation
+    void set_similarity(const vgl_vector_2d<double> & dx, 
+                        const vgl_point_2d<double> & t);
 
     //: reflect about a line though the points m1, and m2
     void set_reflection( const vgl_point_2d<double> & m1, const vgl_point_2d<double> & m2);
