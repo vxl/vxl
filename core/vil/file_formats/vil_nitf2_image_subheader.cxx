@@ -633,13 +633,14 @@ void vil_nitf2_image_subheader::add_MPD26A_definitions()
   {
     vil_nitf2_tagged_record_definition::define("MPD26A", "MPD26A SUPPORT DATA EXTENSION" )
 
-        .field("UNK1",    "Unknown ",  NITF_DBL(11,5,false),false)                 // not used, but must read
+        .field("UNK1",    "Unknown ",  NITF_DBL(11,1,false), false) // not used, but must read
         .field("UNK2",    "Unknown ",  NITF_STR(2), false) // not used, but must read
-        .field("UNK3",    "Unknown ",  NITF_INT(7,true),false)                 // not used, but must read
-        .field("UNK4",    "Unknown ",  NITF_DBL(6,3,false), false) // not used, but must read
-        .field("UNK5",    "Unknown ",  NITF_DBL(6,9,false), false) // not used, but must read
+        .field("UNK3",    "Unknown ",  NITF_INT(7,false),false)                 // not used, but must read
+        .field("UNK31",    "Unknown ", NITF_STR(10),false)                 // not used, but must read
+        .field("UNK4",    "Unknown ",  NITF_DBL(6,1,false), true) // not used, but must read
+        .field("UNK5",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
         .field("UNK6",    "Unknown ",  NITF_STR(3), false) // not used, but must read
-        .field("UNK7",    "Unknown ",  NITF_INT(1,false), false) // not used, but must read
+        .field("UNK7",    "Unknown ",  NITF_STR(1), false) // not used, but must read
         .field("UNK8",    "Unknown ",  NITF_STR(1), false) // not used, but must read
         .field("SUN_EL", "Sun Elevation angle", NITF_DBL(5,1,true),false)
         .field("SUN_AZ", "Sun Azimuthal angle", NITF_DBL(5,1,false),false)
@@ -650,6 +651,24 @@ void vil_nitf2_image_subheader::add_MPD26A_definitions()
         .field("UNK13",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
         .field("UNK14",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
         .field("UNK15",    "Unknown ",  NITF_STR(10), false) // not used, but must read
+        .field("UNK16",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+        .field("UNK17",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+        .field("UNK18",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+        .field("UNK19",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+        .field("UNK20",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+        .field("UNK21",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+        .field("UNK22",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+        .field("UNK23",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+        .field("UNK24",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+        .field("UNK16",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+        .field("UNK17",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+        .field("UNK18",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+        .field("UNK19",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+        .field("UNK20",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+        .field("UNK21",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+        .field("UNK22",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+        .field("UNK23",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
+        .field("UNK24",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
         .field("UNK16",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
         .field("UNK17",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
         .field("UNK18",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
