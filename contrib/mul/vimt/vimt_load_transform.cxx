@@ -46,13 +46,13 @@ vimt_transform_2d vimt_load_transform(const vil_image_resource_sptr& im,
   return tx;
 }
 
-// Create a transform from the properties of image resource.
+// Create a transform from the properties of image resource, assuming a right-hand world frame.
 // NB unit scaling is to convert from metres to desired world unts (e.g. 1000.0 for mm)
 // This version incorporates a reflection through the x-axis so that 
 // the transform is put into a right-handed coordinate frame 
 // (with y increasing from bottom to top of image).
-vimt_transform_2d vimt_load_transform2(const vil_image_resource_sptr& im,
-                                      float unit_scaling)
+vimt_transform_2d vimt_load_transform_right_hand(const vil_image_resource_sptr& im,
+                                                 float unit_scaling)
 {
   float pixSize[2] = { 1.0f, 1.0f };
   bool valid_pixSize = im->get_property(vil_property_pixel_size, pixSize);
