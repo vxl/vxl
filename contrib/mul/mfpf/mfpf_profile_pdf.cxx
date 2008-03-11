@@ -5,8 +5,7 @@
 // \author Tim Cootes
 
 #include <vsl/vsl_binary_loader.h>
-#include <vul/vul_string.h>
-#include <vcl_cmath.h>
+#include <vcl_cmath.h> // for std::abs
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
@@ -56,7 +55,7 @@ void mfpf_profile_pdf::set(int ilo, int ihi, const vpdfl_pdf_base& pdf)
 //: Radius of circle containing modelled region
 double mfpf_profile_pdf::radius() const
 {
-  return vcl_max(vcl_fabs(ilo_),vcl_fabs(ihi_));
+  return vcl_max(vcl_abs(ilo_),vcl_abs(ihi_));
 }
 
 //: Evaluate match at p, using u to define scale and orientation
@@ -120,7 +119,7 @@ void mfpf_profile_pdf::evaluate_region(
 
    //: Search given image around p, using u to define scale and orientation
    //  On exit, new_p defines position of
-   //  the best nearby match.  
+   //  the best nearby match.
    //  Returns a qualtity of fit measure at that
    //  point (the smaller the better).
 double mfpf_profile_pdf::search_one_pose(

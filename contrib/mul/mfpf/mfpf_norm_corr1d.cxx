@@ -6,8 +6,7 @@
 
 #include <mfpf/mfpf_norm_corr1d.h>
 #include <vsl/vsl_binary_loader.h>
-#include <vul/vul_string.h>
-#include <vcl_cmath.h>
+#include <vcl_cmath.h> // for std::abs()
 #include <vcl_cassert.h>
 #include <vcl_algorithm.h>
 
@@ -69,7 +68,7 @@ void mfpf_norm_corr1d::set(int ilo, int ihi, const vnl_vector<double>& k)
 //: Radius of circle containing modelled region
 double mfpf_norm_corr1d::radius() const
 {
-  return vcl_max(vcl_fabs(ilo_),vcl_fabs(ihi_));
+  return vcl_max(vcl_abs(ilo_),vcl_abs(ihi_));
 }
 
 // Assumes v2[i] has zero mean and unit length as a vector
