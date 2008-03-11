@@ -147,6 +147,9 @@ SOURCE=.\mfpf_draw_pose_cross.cxx
 # Begin Source File
 SOURCE=.\mfpf_searcher.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\mfpf_draw_pose_lines.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -203,6 +206,9 @@ SOURCE=.\mfpf_pose.h
 # End Source File
 # Begin Source File
 SOURCE=.\mfpf_searcher.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_draw_pose_lines.h
 # End Source File
 # End Group
 # End Target
