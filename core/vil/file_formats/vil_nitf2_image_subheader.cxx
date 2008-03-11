@@ -564,19 +564,17 @@ get_sun_params( double& sun_el, double& sun_az)
   // Check through the TREs to find "RPC"
   for (tres_itr = isxhd_tres.begin(); tres_itr != isxhd_tres.end(); ++tres_itr)
   {
-    vcl_string type = (*tres_itr)->name();
-    if( type == "USE00A")
-    {
-        
-         success = (*tres_itr)->get_value("SUN_EL", sun_el);
-        success = success && (*tres_itr)->get_value("SUN_AZ", sun_az);
-    }
-    else if( type == "MPD26A")
-    {
-        
-        success = (*tres_itr)->get_value("SUN_EL", sun_el);
-        success = success && (*tres_itr)->get_value("SUN_AZ", sun_az);
-    }
+      vcl_string type = (*tres_itr)->name();
+      if( type == "USE00A")
+      {
+          success = (*tres_itr)->get_value("SUN_EL", sun_el);
+          success = success && (*tres_itr)->get_value("SUN_AZ", sun_az);
+      }
+      else if( type == "MPD26A")
+      {
+          success = (*tres_itr)->get_value("SUN_EL", sun_el);
+          success = success && (*tres_itr)->get_value("SUN_AZ", sun_az);
+      }
 }
   return success;
 }
@@ -679,7 +677,7 @@ void vil_nitf2_image_subheader::add_MPD26A_definitions()
         .field("UNK23",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
         .field("UNK24",    "Unknown ",  NITF_DBL(9,1,false), false) // not used, but must read
 
-    .end();  // of ICHIPB TRE
+    .end();  // of MPD26A TRE
   }
 }
 
