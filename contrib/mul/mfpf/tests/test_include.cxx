@@ -1,8 +1,11 @@
 #include <mfpf/mfpf_add_all_loaders.h>
+#include <mfpf/mfpf_draw_pose_cross.h>
+#include <mfpf/mfpf_draw_pose_lines.h>
 #include <mfpf/mfpf_edge_finder_builder.h>
 #include <mfpf/mfpf_edge_finder.h>
 #include <mfpf/mfpf_point_finder_builder.h>
 #include <mfpf/mfpf_point_finder.h>
+#include <mfpf/mfpf_pose.h>
 #include <mfpf/mfpf_norm_corr1d.h>
 #include <mfpf/mfpf_norm_corr1d_builder.h>
 #include <mfpf/mfpf_norm_corr2d.h>
@@ -13,5 +16,6 @@
 #include <mfpf/mfpf_region_pdf.h>
 #include <mfpf/mfpf_region_pdf_builder.h>
 #include <mfpf/mfpf_sample_region.h>
+#include <mfpf/mfpf_searcher.h>
 
 int main() { return 0; }
