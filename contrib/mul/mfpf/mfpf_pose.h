@@ -45,8 +45,59 @@ public:
   mfpf_pose(const vgl_point_2d<double>& p,
             const vgl_vector_2d<double>& u) : p_(p),u_(u) {};
 
+  //: Constructor.  Defines translation (px,py), basis vector (ux,uy)
+  mfpf_pose(double px, double py, double ux, double uy) 
+    : p_(px,py),u_(ux,uy) {};
+
   //: Default constructor
   mfpf_pose() : p_(0,0),u_(1,0) {};
+
+  //: Square of scaling factor applied by this pose
+  double sqr_scale() const { return u_.x()*u_.x()+u_.y()*u_.y(); }
+
+  //: Apply pose transformation (map from ref frame to pose)
+  vgl_point_2d<double> operator()(double x, double y) const
+  {  return vgl_point_2d<double>(p_.x()+x*u_.x()-y*u_.y(),
+                                 p_.y()+x*u_.y()+y*u_.x()); }
+
+  //: Apply pose transformation (map from ref frame to pose)
+  vgl_point_2d<double> operator()(const vgl_point_2d<double>& q) const
+  {  return vgl_point_2d<double>(p_.x()+q.x()*u_.x()-q.y()*u_.y(),
+                                 p_.y()+q.x()*u_.y()+q.y()*u_.x()); }
+
+  //: Apply inverse of pose transformation (map from pose frame -> ref)
+  vgl_point_2d<double> apply_inverse(double x, double y) const
+  {
+    double dx=x-p_.x(), dy=y-p_.y(),s2=sqr_scale();
+    return vgl_point_2d<double>((dx*u_.x()+dy*u_.y())/s2,
+                                (dy*u_.x()-dx*u_.y())/s2); 
+  }
+
+  //: Apply inverse of pose transformation (map from pose frame -> ref)
+  vgl_point_2d<double> apply_inverse(const vgl_point_2d<double>& q) const
+  {  
+    double dx=q.x()-p_.x(), dy=q.y()-p_.y(),s2=sqr_scale();
+    return vgl_point_2d<double>((dx*u_.x()+dy*u_.y())/s2,
+                                (dy*u_.x()-dx*u_.y())/s2); 
+  }
+
+  //: Return pose in co-ordinates defined by this pose
+  //  ie pose(p) == *this(rel_pose(pose)(p))
+  mfpf_pose rel_pose(const mfpf_pose& pose) const 
+  {
+    vgl_point_2d<double> p1 = apply_inverse(pose.p());
+    vgl_vector_2d<double> u1 = apply_inverse(pose.p()+pose.u())-p1;
+    return mfpf_pose(p1,u1);
+  }
+
+  //: Return pose appling inverse of this pose
+  mfpf_pose inverse() const 
+  {
+    vgl_point_2d<double> p1 = apply_inverse(0,0);
+    double s2=sqr_scale();
+    vgl_vector_2d<double> u1(u_.x()/s2,-u_.y()/s2);
+    return mfpf_pose(p1,u1);
+  }
 };
 
 inline bool operator==(const mfpf_pose& p1, 
@@ -83,6 +134,14 @@ inline vcl_ostream& operator<<(vcl_ostream& os,
   os<<"{("<<p.p().x()<<","<<p.p().y()<<") u:";
   os<<p.u().x()<<","<<p.u().y()<<")}";
   return os;
+}
+
+//: Treating poses as transformations, return p12=p1.p2
+//  ie p12(x) = p1(p2(x))
+inline mfpf_pose operator*(const mfpf_pose& p1, const mfpf_pose& p2)
+{
+  vgl_point_2d<double> q = p1(p2.p());
+  return mfpf_pose(q,p1(p2.p()+p2.u())-q);
 }
 
 inline void vsl_b_write(vsl_b_ostream& bfs, 
