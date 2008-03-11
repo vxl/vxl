@@ -200,10 +200,11 @@ template <class dist_>
 inline vcl_ostream& operator<< (vcl_ostream& os, 
                                 bsta_mixture<dist_> const& m)
 {
+  typedef typename dist_::math_type T;
   unsigned n = m.num_components();
   for(unsigned c = 0; c<n; ++c){
     const dist_& mc = m.distribution(c);
-    dist_::math_type weight = m.weight(c);
+    T weight = m.weight(c);
     os << "mixture_comp["<< c << "]wgt(" << weight << ")\n";
     os << mc << '\n';
   }
