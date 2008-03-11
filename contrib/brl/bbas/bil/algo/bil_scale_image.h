@@ -1,6 +1,6 @@
-// This is basic/dbil/algo/dbil_scale_image.h
-#ifndef dbil_scale_image_h_
-#define dbil_scale_image_h_
+// This is basic/bil/algo/bil_scale_image.h
+#ifndef bil_scale_image_h_
+#define bil_scale_image_h_
 //:
 // \file
 // \brief A scale-space image pyramid
@@ -31,24 +31,24 @@
 
 
 template< class T >
-class dbil_scale_image  
+class bil_scale_image  
 {
 public:
   //: Constructor
-  dbil_scale_image(unsigned int num_levels=3, unsigned int num_octaves=0,
+  bil_scale_image(unsigned int num_levels=3, unsigned int num_octaves=0,
                    float init_scale=1.0f, int first_octave=0);
 
   //: Constructor - Make a Gaussian scale space from this image
-  dbil_scale_image(const vil_image_view<T>& image, unsigned int num_levels=3,
+  bil_scale_image(const vil_image_view<T>& image, unsigned int num_levels=3,
                    unsigned int num_octaves=0, float init_scale=1.0f, int first_octave=0);
 
   //: Produce two new scale images by applying vil_orientations_from_sobel to each scale.
   //  The results are gradient magnitude and orientation scale images
-  void compute_gradients(dbil_scale_image<T>& orientation, dbil_scale_image<T>& magnitude) const;
+  void compute_gradients(bil_scale_image<T>& orientation, bil_scale_image<T>& magnitude) const;
 
   //: Populate the scale space by Gaussian smoothing of \p image
   //  \param diff If not NULL, it is populated with the difference of Gaussians (DoG) scale space.
-  void build_gaussian(const vil_image_view<T>& image, dbil_scale_image<T>* diff = NULL);
+  void build_gaussian(const vil_image_view<T>& image, bil_scale_image<T>* diff = NULL);
 
   //: Find the scale for the given octave and level
   float scale(int octave, unsigned int level) const
@@ -110,4 +110,4 @@ private:
 
 };
 
-#endif // dbil_scale_image_h_
+#endif // bil_scale_image_h_

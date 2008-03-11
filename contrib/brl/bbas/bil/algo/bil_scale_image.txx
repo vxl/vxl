@@ -1,6 +1,6 @@
-// This is basic/dbil/algo/dbil_scale_image.txx
-#ifndef dbil_scale_image_txx_
-#define dbil_scale_image_txx_
+// This is basic/bil/algo/bil_scale_image.txx
+#ifndef bil_scale_image_txx_
+#define bil_scale_image_txx_
 //:
 // \file
 
@@ -21,7 +21,7 @@
 
 //: Constructor
 template < class T >
-dbil_scale_image<T>::dbil_scale_image(unsigned num_levels, unsigned num_octaves,
+bil_scale_image<T>::bil_scale_image(unsigned num_levels, unsigned num_octaves,
                                       float init_scale, int first_octave)
  : data_(num_octaves,vcl_vector< vil_image_view< T > >(num_levels+2)),
    num_levels_(num_levels), init_scale_(init_scale), first_octave_(first_octave)
@@ -31,7 +31,7 @@ dbil_scale_image<T>::dbil_scale_image(unsigned num_levels, unsigned num_octaves,
 
 //: Constructor - Make a Gaussian scale space from this image
 template < class T >
-dbil_scale_image<T>::dbil_scale_image(const vil_image_view<T>& image, unsigned int num_levels,
+dbil_scale_image<T>::bil_scale_image(const vil_image_view<T>& image, unsigned int num_levels,
                                       unsigned int num_octaves, float init_scale, int first_octave)
  : data_(num_octaves,vcl_vector< vil_image_view< T > >(num_levels+2)),
    num_levels_(num_levels), init_scale_(init_scale), first_octave_(first_octave)
@@ -93,8 +93,8 @@ smooth(double sigma, const vil_image_view< T >& in,
 //  \param diff If not NULL, it is populated with the difference of Gaussians (DoG) scale space.
 template < class T >
 void
-dbil_scale_image<T>::build_gaussian(const vil_image_view<T>& image,
-                                    dbil_scale_image<T>* diff)
+bil_scale_image<T>::build_gaussian(const vil_image_view<T>& image,
+                                    bil_scale_image<T>* diff)
 {
   if(diff){
     diff->init_scale_ = this->init_scale_;
@@ -158,8 +158,8 @@ dbil_scale_image<T>::build_gaussian(const vil_image_view<T>& image,
 // The results are gradient magnitude and orientation scale images
 template < class T >
 void
-dbil_scale_image<T>::compute_gradients(dbil_scale_image<T>& orientation,
-                                       dbil_scale_image<T>& magnitude) const
+bil_scale_image<T>::compute_gradients(bil_scale_image<T>& orientation,
+                                       bil_scale_image<T>& magnitude) const
 {
   orientation.init_scale_ = this->init_scale_;
   magnitude.init_scale_ = this->init_scale_;
@@ -184,7 +184,7 @@ dbil_scale_image<T>::compute_gradients(dbil_scale_image<T>& orientation,
 //: create a 3x3x3 image estimating the 26 neighbors at location (i,j)
 template < class T >
 vil_image_view< T >
-dbil_scale_image<T>::neighbors(int octave, unsigned int level,
+bil_scale_image<T>::neighbors(int octave, unsigned int level,
                                unsigned int x, unsigned int y) const
 {
   assert( level > 0 && level <= num_levels_ );
@@ -205,7 +205,7 @@ dbil_scale_image<T>::neighbors(int octave, unsigned int level,
 }
 
 
-#define DBIL_SCALE_IMAGE_INSTANTIATE(T) \
-template class dbil_scale_image<T >
+#define BIL_SCALE_IMAGE_INSTANTIATE(T) \
+template class bil_scale_image<T >
 
-#endif // dbil_scale_image_txx_
+#endif // bil_scale_image_txx_
