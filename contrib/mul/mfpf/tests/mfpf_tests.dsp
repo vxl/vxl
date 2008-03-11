@@ -106,6 +106,9 @@ SOURCE=.\test_norm_corr1d.cxx
 SOURCE=.\test_norm_corr2d.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_pose.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_profile_pdf.cxx
 # End Source File
 # Begin Source File
