@@ -55,7 +55,8 @@ void test_pose()
   TEST("Inverse consistent",
        (pose0.apply_inverse(q1)-inv_pose(q1)).length()<1e-6,true);
 
-  TEST("Composition p1*p2",pose0*inv_pose,mfpf_pose());
+  mfpf_pose identity;
+  TEST("Composition p1*p2",pose0*inv_pose,identity);
 
   mfpf_pose pose01 = pose0*pose1;
   vgl_point_2d<double> p4 = pose01(p0);
