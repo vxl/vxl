@@ -1,12 +1,10 @@
 #include <testlib/testlib_test.h>
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
-#include <dbil/algo/dbil_scale_image.h>
+#include <bil/algo/bil_scale_image.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_new.h>
 #include <vil/vil_save.h>
 #include <vil/vil_convert.h>
-#include <vil/vil_math.h>
 
 
 static void save_and_display(const vil_image_view<float> img, const vcl_string& name)
@@ -19,36 +17,34 @@ static void save_and_display(const vil_image_view<float> img, const vcl_string& 
 }
 
 
-MAIN( test_dbil_scale_image )
+MAIN( test_bil_scale_image )
 {
   START ("scale_image");
 
   float sigma = 64.0f;
   unsigned int img_size = 256;
   vil_image_view<float> gaussian(img_size,img_size);
-  for(unsigned int i=0; i<img_size; ++i){
-    for(unsigned int j=0; j<img_size; ++j){
+  for (unsigned int i=0; i<img_size; ++i) {
+    for (unsigned int j=0; j<img_size; ++j) {
       float x = (i - float(img_size/2));
       float y = (j - float(img_size/2));
       gaussian(i,j) = vcl_exp(-(x*x+y*y)/(2.0*sigma*sigma));
     }
   }
-  
+
   save_and_display(gaussian,"original");
 
-  dbil_scale_image<float> gs_test(3,4,0.5);
+  bil_scale_image<float> gs_test(3,4,0.5);
   TEST("levels()",gs_test.levels(),3);
   TEST("octaves()",gs_test.octaves(),4);
   TEST("closest_scale(scale)",gs_test.closest_scale(2.01f),2.0f);
 
-  
-  
   int octaves = 5;
   int levels = 3;
   float k = vcl_pow(2.0,1.0/double(levels));
-  dbil_scale_image<float> gauss_scale(levels, octaves);
+  bil_scale_image<float> gauss_scale(levels, octaves);
 
-  dbil_scale_image<float> dog_scale;
+  bil_scale_image<float> dog_scale;
   gauss_scale.build_gaussian(gaussian, &dog_scale);
 
   save_and_display(gauss_scale(0,1),"gauss_2");
@@ -59,8 +55,8 @@ MAIN( test_dbil_scale_image )
 
   bool good_approx = true;
   vcl_cout << "  scale \t actual \t expected \t error"<<vcl_endl;
-  for(unsigned int oct=0; oct<gauss_scale.octaves(); ++oct){
-    for(unsigned int lvl=0; lvl<gauss_scale.levels(); ++lvl){
+  for (unsigned int oct=0; oct<gauss_scale.octaves(); ++oct) {
+    for (unsigned int lvl=0; lvl<gauss_scale.levels(); ++lvl) {
     float x = img_size/2;
     float y = img_size/2;
 
