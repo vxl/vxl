@@ -8,6 +8,7 @@ TESTS += test_norm_corr1d.cxx
 TESTS += test_norm_corr2d.cxx
 TESTS += test_profile_pdf.cxx
 TESTS += test_region_pdf.cxx
+TESTS += test_pose.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
