@@ -27,7 +27,7 @@ AUX_SOURCE_DIRECTORY(Templates bil_algo_sources)
 
 ADD_LIBRARY( bil_algo ${bil_algo_sources} )
 
-TARGET_LINK_LIBRARIES( bil_algo vil_algo)
+TARGET_LINK_LIBRARIES( bil_algo vil vil_algo)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
