@@ -6,6 +6,8 @@
 #include <vil3d/vil3d_math.h>
 #include <vil3d/vil3d_new.h>
 #include <vil3d/vil3d_print.h>
+#include <vil3d/vil3d_crop.h>
+
 
 template <class T>
 inline void test_image_resource(vcl_string type, vil_pixel_format format, T /*dummy*/)
@@ -23,9 +25,17 @@ inline void test_image_resource(vcl_string type, vil_pixel_format format, T /*du
        view1 && view1.ni()==10 && view1.nj()==5 &&
        view1.nk()==3 && view1.nplanes()==1, true );
 
+  /* vil3d_new_image_resource_of_view() NYI
+  vil3d_image_resource_sptr mem2 = vil3d_new_image_resource_of_view(view1);
+  TEST("vil3d_new_image_resource_of_view", mem2 && view1==(*mem2->get_view()), true);
+  */
+
   view1.fill(0);
 
   TEST("vil3d_memory_image::put_view()", mem->put_view(view1,0,0,0), true);
+
+  vil3d_image_resource_sptr crop = vil3d_crop(mem, 2, 6, 2, 4, 1, 2);
+  TEST("vil3d_crop(image_resource)", crop?true:false, true);
 
   vil3d_image_view<T> view2 = mem->get_copy_view(0, mem->ni(), 0, mem->nj(), 0, mem->nk());
   TEST("vil3d_memory_image::get_copy_view()",

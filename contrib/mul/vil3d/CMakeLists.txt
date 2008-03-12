@@ -7,7 +7,7 @@ SET(vil3d_sources
     vil3d_print.h
     vil3d_plane.h
     vil3d_slice.h
-    vil3d_crop.h
+    vil3d_crop.h					vil3d_crop.cxx
     vil3d_transform.h
     vil3d_trilin_interp.h
     vil3d_sample_profile_trilin.h    vil3d_sample_profile_trilin.txx

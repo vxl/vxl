@@ -14,6 +14,7 @@ DECLARE( test_from_image_2d );
 DECLARE( test_resample );
 DECLARE( test_analyze_format );
 DECLARE( test_reflect );
+DECLARE( test_image_resource );
 
 DECLARE( test_algo_threshold );
 DECLARE( test_algo_structuring_element );
@@ -21,7 +22,6 @@ DECLARE( test_algo_binary_dilate );
 DECLARE( test_algo_binary_erode );
 DECLARE( test_algo_exp_filter );
 DECLARE( test_algo_grad_1x3 );
-DECLARE( test_image_resource );
 DECLARE( test_algo_normalised_correlation_3d );
 DECLARE( test_algo_convolve_1d );
 DECLARE( test_algo_histogram_equalise );
