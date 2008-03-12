@@ -267,7 +267,7 @@ foreach $dir (@DIRS)
     $cmakefile = <CMAKEFILE>;
     close CMAKEFILE;
     $/=$old_v;
-    %names = ('MAKECOMMAND','make');
+    %names = qw(MAKECOMMAND make CMAKE_CURRENT_SOURCE_DIR $dir);
   }
   $moc_files = '';
   # "Exceptions": special cases, to avoid unnecessary warnings:
@@ -288,7 +288,7 @@ foreach $dir (@DIRS)
     next if $n =~ m/_(PREFIX|FLAGS|LIBRARIES|PATH|SOURCE_DIR|INCLUDE_DIR)$/;
     next if $n =~ m/^[a-z0-9]+_test_include_sources$/;
     next if $n =~ m/^\${/;
-    foreach ($l =~ m/\$\{(.*?)\}/g) { print STDOUT "$_ is and undefined variable in $cmakef\n" unless (defined $names{$_}); }
+    foreach ($l =~ m/\$\{(.*?)\}/g) { print STDOUT "$_ is an undefined variable in $cmakef\n" unless (defined $names{$_}); }
     while ($l =~ m/\$\{(.*?)\}/) {
       my $a = $1;
       my $b = $names{$a};
