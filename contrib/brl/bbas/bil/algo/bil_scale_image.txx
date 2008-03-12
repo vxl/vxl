@@ -20,18 +20,17 @@
 
 
 //: Constructor
-template < class T >
+template <class T>
 bil_scale_image<T>::bil_scale_image(unsigned num_levels, unsigned num_octaves,
                                       float init_scale, int first_octave)
- : data_(num_octaves,vcl_vector< vil_image_view< T > >(num_levels+2)),
+ : data_(num_octaves,vcl_vector<vil_image_view< T > >(num_levels+2)),
    num_levels_(num_levels), init_scale_(init_scale), first_octave_(first_octave)
-{
-}
+{}
 
 
 //: Constructor - Make a Gaussian scale space from this image
-template < class T >
-dbil_scale_image<T>::bil_scale_image(const vil_image_view<T>& image, unsigned int num_levels,
+template <class T>
+bil_scale_image<T>::bil_scale_image(const vil_image_view<T>& image, unsigned int num_levels,
                                       unsigned int num_octaves, float init_scale, int first_octave)
  : data_(num_octaves,vcl_vector< vil_image_view< T > >(num_levels+2)),
    num_levels_(num_levels), init_scale_(init_scale), first_octave_(first_octave)

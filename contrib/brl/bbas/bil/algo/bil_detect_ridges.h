@@ -13,24 +13,24 @@
 
 template <class T> 
 void bil_detect_ridges( const vil_image_view<T>& Im,
-                                        float sigma,
-                                        float epsilon,
-                                        vil_image_view<int>& rho_int,
-                                        vil_image_view<float>& ex,
-                                        vil_image_view<float>& ey,
-                                        vil_image_view<float>& lambda);
+                        float sigma,
+                        float epsilon,
+                        vil_image_view<int>& rho_int,
+                        vil_image_view<float>& ex,
+                        vil_image_view<float>& ey,
+                        vil_image_view<float>& lambda);
 
 void bil_detect_ridges( const vil_image_view<float>& Ix,
-                         const vil_image_view<float>& Iy,
-                         const vil_image_view<float>& Ixx,
-                         const vil_image_view<float>& Iyy,
-                         const vil_image_view<float>& Ixy,
-                         float sigma,
-                         float epsilon,
-                         vil_image_view<int>& rho_int,
-                         vil_image_view<float>& ex,
-                         vil_image_view<float>& ey,
-                         vil_image_view<float>& lambda);
+                        const vil_image_view<float>& Iy,
+                        const vil_image_view<float>& Ixx,
+                        const vil_image_view<float>& Iyy,
+                        const vil_image_view<float>& Ixy,
+                        float sigma,
+                        float epsilon,
+                        vil_image_view<int>& rho_int,
+                        vil_image_view<float>& ex,
+                        vil_image_view<float>& ey,
+                        vil_image_view<float>& lambda);
 
 
 #endif 

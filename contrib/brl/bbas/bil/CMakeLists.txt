@@ -15,10 +15,6 @@ TARGET_LINK_LIBRARIES(bil vil vil_io vsl)
 
 SUBDIRS( algo )
 
-#SUBDIRS( pro )
-
-#SUBDIRS( vis )
-
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )

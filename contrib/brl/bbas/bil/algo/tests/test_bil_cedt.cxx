@@ -1,10 +1,15 @@
 #include <testlib/testlib_test.h>
+
+#include <vcl_cstdio.h>
+#include <vcl_cmath.h>
+#include <vcl_cassert.h>
+
 #include <bil/algo/bil_cedt.h>
+#include <vil/vil_image_view.h>
 #include <vil/vil_print.h>
 #include <vil/vil_copy.h>
 #include <vil/vil_fill.h>
-#include <vcl_cstdio.h>
-#include <vcl_cmath.h>
+
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_math.h>
 

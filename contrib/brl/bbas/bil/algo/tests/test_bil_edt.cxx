@@ -1,10 +1,13 @@
 #include <testlib/testlib_test.h>
+#include <vcl_cstdio.h>
+
 #include <bil/algo/bil_edt.h>
+
 #include <vil/vil_print.h>
 #include <vil/vil_copy.h>
 #include <vil/vil_fill.h>
 #include <vil/vil_image_view.h>
-#include <vcl_cstdio.h>
+
 
 void bil_edt_test(vil_image_view<vxl_uint_32> &im, bool print, bool three_d=false);
 

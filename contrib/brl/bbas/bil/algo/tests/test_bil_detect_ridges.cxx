@@ -1,15 +1,19 @@
 #include <testlib/testlib_test.h>
+
+#include <vcl_cstdio.h>
+#include <vcl_cmath.h>
+
+#include <bil/algo/bil_detect_ridges.h>
+
+#include <vnl/vnl_random.h>
+#include <vnl/vnl_math.h>
+
 #include <vil/vil_print.h>
 #include <vil/vil_copy.h>
 #include <vil/vil_fill.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
-#include <vcl_cstdio.h>
-#include <vcl_cmath.h>
-#include <vnl/vnl_random.h>
-#include <vnl/vnl_math.h>
 #include <vil/vil_convert.h>
-#include <bil/algo/bil_detect_ridges.h>
 #include <vil/algo/vil_sobel_3x3.h>
 #include <vil/algo/vil_gauss_filter.h>
 

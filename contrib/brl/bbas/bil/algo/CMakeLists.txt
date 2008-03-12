@@ -7,7 +7,7 @@ INCLUDE_DIRECTORIES( ${VXL_BRL_INCLUDE_DIR}/bseg )
 SET(CMAKE_CXX_FLAGS -Wall)
 
 SET( bil_algo_sources
-#   bil_scale_image.txx                bil_scale_image.h
+   bil_scale_image.txx                bil_scale_image.h
    bil_harr_wavelet_transform.txx     bil_harr_wavelet_transform.h
    bil_wshed2d.cxx                    bil_wshed2d.h
    bil_edt.cxx                        bil_edt.h
@@ -27,7 +27,7 @@ AUX_SOURCE_DIRECTORY(Templates bil_algo_sources)
 
 ADD_LIBRARY( bil_algo ${bil_algo_sources} )
 
-TARGET_LINK_LIBRARIES( bil_algo vil vil_algo)
+TARGET_LINK_LIBRARIES( bil_algo vil_algo)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
