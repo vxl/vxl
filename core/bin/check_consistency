@@ -114,8 +114,10 @@ foreach $f (@FILES)
     if ($printed && $file =~ m![{;:](\s*//.*\n)?\s*([a-zA-Z]\S*)\s*\<\<[^;]+\;\s*\2\s*\<\<!);
   &msg(1, "consider joining consecutive strings in output for $1")
     if ($printed && $file =~ m!(\S+)\s*\<\<[^;]*(..)\"\s*\<\<\s*\"! && $2 ne "\\n" && $2 ne " -");
+  $file =~ s/\\\"/\005/g;
   &msg(1, "consider replacing \"$2\" by \'$2\' in output for $1")
     if ($printed && $file =~ m!(\S+)\s*\<\<[^;]+\"([^\\]|\\.)\"!);
+  $file =~ s/\005/\\\"/g;
   &msg(1, "consider removing space before \\n")
     if ($printed && $file =~ m!(\s|\\t)\\n\b!);
 
@@ -305,6 +307,7 @@ foreach $f (@FILES)
     elsif ($j eq 'vgl/vgl_distance.h') { $i.='(|_origin|(|2)_to_linesegment|_to_(|non_)closed_polygon)'; }
     elsif ($j eq 'vgl/vgl_lineseg_test.h') { $i.='(_line|_lineseg)'; }
     elsif ($j eq 'vgl/vgl_triangle_test.h') { $i.='_(discriminant|inside)'; }
+    elsif ($j eq 'vgl/vgl_triangle_3d.h') { $i.='_([a-z]+_intersection|distance|coplanar|area|aspect_ratio|coincident_edges|test_inside(|_simple)|(shortest|longest)_side|closest_point)'; }
     elsif ($j eq 'vgl/algo/vgl_homg_operators_2d.h') { $i.='|vnl_double_3x3[^\000]*vgl_homg_point_2d|cond_matrix . x'; }
     elsif ($j eq 'vgl/algo/vgl_homg_operators_3d.h') { $i.='|vnl_double_4x4[^\000]*vgl_homg_point_3d|p_matrix_ \* X'; }
     elsif ($j eq 'vgl/xio/vgl_xio_point_2d.h') { $i='x_write'; }
