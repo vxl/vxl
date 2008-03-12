@@ -1,6 +1,6 @@
-// This is basic/dbil/algo/dbil_harr_wavelet_transform.h
-#ifndef dbil_harr_wavelet_transform_h_
-#define dbil_harr_wavelet_transform_h_
+// This is contrib/brl/bbas/bil/algo/bil_harr_wavelet_transform.h
+#ifndef bil_harr_wavelet_transform_h_
+#define bil_harr_wavelet_transform_h_
 //:
 // \file
 // \brief Harr Wavelet Transform on Images
@@ -19,14 +19,14 @@
 
 //: Compute the Harr wavelet transform on each plane
 template< class T >
-void dbil_harr_wavelet_transform(const vil_image_view<T>& src, 
-                                       vil_image_view<T>& dest);  
+void bil_harr_wavelet_transform(const vil_image_view<T>& src, 
+                                      vil_image_view<T>& dest);  
                                        
 
 //: Computes the inverse of the Harr wavelet transform on each plane
 template< class T >
-void dbil_harr_wavelet_inverse(const vil_image_view<T>& src, 
-                                     vil_image_view<T>& dest);  
+void bil_harr_wavelet_inverse(const vil_image_view<T>& src, 
+                                    vil_image_view<T>& dest);  
 
 
-#endif // dbil_harr_wavelet_transform_h_
+#endif // bil_harr_wavelet_transform_h_
