@@ -1,4 +1,4 @@
-// This is contrib/brl/bbas/bil/algo/bil_equalize.h
+// This is brl/bbas/bil/algo/bil_equalize.h
 #ifndef bil_equalize_h_
 #define bil_equalize_h_
 //:
@@ -6,22 +6,25 @@
 // \brief Equalize the color of one image with respect to another
 // \author Matt Leotta
 
-
 #include <vil/vil_math.h>
-
+#include <vcl_cassert.h>
 
 //: Equalize the pixels values relative to a model image
 // \relates vil_image_view
 template<class mT, class dT>
 inline void bil_equalize_linear_vals(const vil_image_view<mT>& model,
-                                      const vil_image_view<dT>& data,
-                                      double& scale, double& offset)
+                                     const vil_image_view<dT>& data,
+                                     double& scale, double& offset)
 {
-  unsigned ni = model.ni(),nj = model.nj(),np = model.nplanes();
+  unsigned ni = model.ni(), nj = model.nj(), np = model.nplanes();
   assert(data.ni()==ni && data.nj()==nj && data.nplanes()==np);
 
-  vcl_ptrdiff_t istepM=model.istep(),jstepM=model.jstep(),pstepM = model.planestep();
-  vcl_ptrdiff_t istepD=data.istep(),jstepD=data.jstep(),pstepD = data.planestep();
+  vcl_ptrdiff_t istepM=model.istep(),
+                jstepM=model.jstep(),
+                pstepM=model.planestep();
+  vcl_ptrdiff_t istepD=data.istep(),
+                jstepD=data.jstep(),
+                pstepD=data.planestep();
   const mT* planeM = model.top_left_ptr();
   const dT* planeD = data.top_left_ptr();
 
@@ -59,11 +62,11 @@ inline void bil_equalize_linear_vals(const vil_image_view<mT>& model,
 // \relates vil_image_view
 template<class mT, class dT>
 inline void bil_equalize_linear(const vil_image_view<mT>& model,
-                                       vil_image_view<dT>& data)
+                                      vil_image_view<dT>& data)
 {
   double scale=1.0, offset=0.0;
   bil_equalize_linear_vals(model,data,scale,offset);
-  for(unsigned p=0; p<data.nplanes(); ++p)
+  for (unsigned p=0; p<data.nplanes(); ++p)
   {
     vil_image_view<dT> plane = vil_plane(data,p);
     vil_math_scale_and_offset_values(plane,scale,offset);
@@ -75,10 +78,10 @@ inline void bil_equalize_linear(const vil_image_view<mT>& model,
 // \relates vil_image_view
 template<class mT, class dT>
 inline void bil_equalize_linear_planes(const vil_image_view<mT>& model,
-                                              vil_image_view<dT>& data)
+                                             vil_image_view<dT>& data)
 {
   double scale=1.0, offset=0.0;
-  for(unsigned p=0; p<data.nplanes(); ++p)
+  for (unsigned p=0; p<data.nplanes(); ++p)
   {
     vil_image_view<dT> plane = vil_plane(data,p);
     bil_equalize_linear_vals(model,plane,scale,offset);
@@ -91,12 +94,9 @@ inline void bil_equalize_linear_planes(const vil_image_view<mT>& model,
 // \relates vil_image_view
 template<class mT, class dT>
 inline void bil_equalize_linear_vals(const vil_image_view<mT>& model,
-                                      const vil_image_view<dT>& data,
-                                      const vil_image_view<bool>& mask,
-                                      double& scale, double& offset)
-
-
-
+                                     const vil_image_view<dT>& data,
+                                     const vil_image_view<bool>& mask,
+                                     double& scale, double& offset)
 {
   unsigned ni = model.ni(),nj = model.nj(),np = model.nplanes();
   assert(data.ni()==ni && data.nj()==nj && data.nplanes()==np);
@@ -122,7 +122,7 @@ inline void bil_equalize_linear_vals(const vil_image_view<mT>& model,
       const dT* pixelD   = rowD;
       const bool* pixelB = rowB;
       for (unsigned i=0;i<ni;++i,pixelM+=istepM,pixelD+=istepD,pixelB+=istepB)
-        if(*pixelB)
+        if (*pixelB)
         {
           double m = *pixelM;
           double d = *pixelD;
@@ -146,12 +146,12 @@ inline void bil_equalize_linear_vals(const vil_image_view<mT>& model,
 // \relates vil_image_view
 template<class mT, class dT>
 inline void bil_equalize_linear(const vil_image_view<mT>& model,
-                                       vil_image_view<dT>& data,
-                                 const vil_image_view<bool>& mask)
+                                      vil_image_view<dT>& data,
+                                const vil_image_view<bool>& mask)
 {
   double scale=1.0, offset=0.0;
   bil_equalize_linear_vals(model,data,mask,scale,offset);
-  for(unsigned p=0; p<data.nplanes(); ++p)
+  for (unsigned p=0; p<data.nplanes(); ++p)
   {
     vil_image_view<dT> plane = vil_plane(data,p);
     vil_math_scale_and_offset_values(plane,scale,offset);
@@ -163,11 +163,11 @@ inline void bil_equalize_linear(const vil_image_view<mT>& model,
 // \relates vil_image_view
 template<class mT, class dT>
 inline void bil_equalize_linear_planes(const vil_image_view<mT>& model,
-                                              vil_image_view<dT>& data,
-                                        const vil_image_view<bool>& mask)
+                                             vil_image_view<dT>& data,
+                                       const vil_image_view<bool>& mask)
 {
   double scale=1.0, offset=0.0;
-  for(unsigned p=0; p<data.nplanes(); ++p)
+  for (unsigned p=0; p<data.nplanes(); ++p)
   {
     vil_image_view<dT> plane = vil_plane(data,p);
     bil_equalize_linear_vals(model,plane,mask,scale,offset);
