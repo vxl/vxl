@@ -95,7 +95,7 @@ int test_memory_main(int /*argc*/,char* /*argv*/[])
     // FIXME several more tests are needed here
   }
   
-#endif VCL_INCLUDE_CXX_0X
+#endif //VCL_INCLUDE_CXX_0X
   
   return status;
 }
