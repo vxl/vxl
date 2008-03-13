@@ -61,6 +61,35 @@ mfpf_point_finder* mfpf_region_pdf_builder::new_finder() const
   return new mfpf_region_pdf();
 }
 
+//: Define model region using description in form
+//  Assumes form defined in world-coords.
+//  Assumes step_size() pixel units (ie dimensions
+//  are divided by step_size() to map to reference frame).
+void mfpf_region_pdf_builder::set_region(const mfpf_region_form& form)
+{
+  step_size_ = form.pose().scale();
+
+  if (form.form()=="box")
+  {
+    int ni = vcl_max(1,int(0.99+form.wi()));
+    int nj = vcl_max(1,int(0.99+form.wj()));
+    set_as_box(unsigned(ni),unsigned(nj),0.5*ni,0.5*nj);
+  }
+  else
+  if (form.form()=="ellipse")
+  {
+    double ri = vcl_max(1.0,form.wi());
+    double rj = vcl_max(1.0,form.wj());
+    set_as_ellipse(ri,rj);
+  }
+  else
+  {
+    vcl_cerr<<"mfpf_region_pdf_builder::set_region : Unknown form: "<<form<<vcl_endl;
+    vcl_abort();
+  }
+}
+
+
 //: Define model region as an ni x nj box
 void mfpf_region_pdf_builder::set_as_box(unsigned ni, unsigned nj,
                                          double ref_x, double ref_y,

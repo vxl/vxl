@@ -55,6 +55,11 @@ public:
   //: Square of scaling factor applied by this pose
   double sqr_scale() const { return u_.x()*u_.x()+u_.y()*u_.y(); }
 
+  //: Scaling applied by this pose
+  double scale() const 
+   { double s2 = u_.x()*u_.x()+u_.y()*u_.y();  
+     return (s2>0.0?vcl_sqrt(s2):0.0);}
+
   //: Apply pose transformation (map from ref frame to pose)
   vgl_point_2d<double> operator()(double x, double y) const
   {  return vgl_point_2d<double>(p_.x()+x*u_.x()-y*u_.y(),

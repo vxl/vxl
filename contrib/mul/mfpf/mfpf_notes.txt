@@ -6,10 +6,7 @@ To Do:
 - Tune refine_match algorithm 
    - Probably using too many iterations at present.
 
-- May need to do more work to group similar responses together
-  - How similar is similar?  If centre of one within the other?
-
-- Double check the inside fn - seems to be failing occasionally.
+- add switch for normalisation in region_pdf
 
 - * Problem with vpdfl_pc_gaussian - not very sensible implementation
     (ie builds full square eigenvector matrix.  Fix this!)

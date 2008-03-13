@@ -10,6 +10,7 @@
 #include <mbl/mbl_cloneable_ptr.h>
 #include <mbl/mbl_chord.h>
 #include <vcl_iosfwd.h>
+#include <mfpf/mfpf_region_form.h>
 
 //: Builder for mfpf_region_pdf objects.
 // Text for configuring:
@@ -101,6 +102,11 @@ class mfpf_region_pdf_builder : public mfpf_point_finder_builder
   //  Ref. point in centre.
   void set_as_ellipse(double ri, double rj,
                   const vpdfl_builder_base& builder);
+
+  //: Define model region using description in form
+  //  Assumes form defined in world-coords.
+  //  Sets step_size() to form.pose().scale().
+  void set_region(const mfpf_region_form& form);
 
   //: Number of pixels in region
   unsigned n_pixels() const { return n_pixels_; }
