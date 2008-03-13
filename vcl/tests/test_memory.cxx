@@ -72,6 +72,30 @@ int test_memory_main(int /*argc*/,char* /*argv*/[])
   }
 
   ASSERT(instances == 0, "auto_ptr leaked an object");
-
+  
+  // Test parts of <memory> related to C++ 0x (if available)
+#if VCL_INCLUDE_CXX_0X
+  // reset instance count for shared pointer tests
+  instances = 0;
+  {
+    vcl_shared_ptr<A> spa0;
+    vcl_shared_ptr<A> spa1(new A());
+    vcl_shared_ptr<B> spb1(new B());
+    vcl_shared_ptr<A> spa2(new B());
+    vcl_shared_ptr<A> spa3(spb1);
+    vcl_weak_ptr<A> wpa1(spa1);
+    
+    A* ptr = get_A(*spa1);
+    ASSERT(ptr == spa1.get(),
+           "shared_ptr does not return correct object when dereferenced");
+    ptr = spa1->self();
+    ASSERT(ptr == spa1.get(),
+           "shared_ptr does not return correct pointer from operator->");
+    
+    // FIXME several more tests are needed here
+  }
+  
+#endif VCL_INCLUDE_CXX_0X
+  
   return status;
 }

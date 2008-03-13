@@ -56,6 +56,21 @@ SET( CMAKE_EXE_LINKER_FLAGS    "${CMAKE_EXE_LINKER_FLAGS} ${VXL_EXTRA_CMAKE_EXE_
 SET( CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${VXL_EXTRA_CMAKE_MODULE_LINKER_FLAGS}" )
 SET( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${VXL_EXTRA_CMAKE_SHARED_LINKER_FLAGS}" )
 
+
+# Option to specify whether this is a build for the dashboard.  Each
+# dashboard build should set BUILD_FOR_VXL_DASHBOARD to YES in the
+# initial cache (set in the CTest script).
+OPTION( BUILD_FOR_VXL_DASHBOARD "Is this a build for the dashboard?" NO )
+
+# A variable to default some OPTIONs to YES for the dashboard, but to
+# NO for other builds.
+IF( BUILD_FOR_VXL_DASHBOARD )
+  SET( YES_FOR_DASHBOARD "YES" )
+ELSE( BUILD_FOR_VXL_DASHBOARD )
+  SET( YES_FOR_DASHBOARD "NO" )
+ENDIF( BUILD_FOR_VXL_DASHBOARD )
+
+
 # Do platform-specific configuration.
 IF(NOT VXL_NO_CMAKE_CONFIGURE)
   SUBDIRS(config/cmake/config)
@@ -77,18 +92,6 @@ IF (BUILD_CORE_GEOMETRY AND BUILD_CORE_NUMERICS)
   ENDIF (BUILD_CORE_UTILITIES AND BUILD_CORE_SERIALISATION)
 ENDIF (BUILD_CORE_GEOMETRY AND BUILD_CORE_NUMERICS)
 
-# Option to specify whether this is a build for the dashboard.  Each
-# dashboard build should set BUILD_FOR_VXL_DASHBOARD to YES in the
-# initial cache (set in the CTest script).
-OPTION( BUILD_FOR_VXL_DASHBOARD "Is this a build for the dashboard?" NO )
-
-# A variable to default some OPTIONs to YES for the dashboard, but to
-# NO for other builds.
-IF( BUILD_FOR_VXL_DASHBOARD )
-  SET( YES_FOR_DASHBOARD "YES" )
-ELSE( BUILD_FOR_VXL_DASHBOARD )
-  SET( YES_FOR_DASHBOARD "NO" )
-ENDIF( BUILD_FOR_VXL_DASHBOARD )
 
 # Options to build no longer maintained libraries.
 # It is still useful to have the dashboard check that they are correct,

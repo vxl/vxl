@@ -10,6 +10,12 @@
 // Whether to use the compiler's STL.
 #define VCL_USE_NATIVE_STL @VCL_USE_NATIVE_STL@
 
+// Whether new additions to the C++0x standard are available
+// and where they are found
+#define VCL_INCLUDE_CXX_0X @VCL_INCLUDE_CXX_0X@
+#define VCL_MEMORY_HAS_SHARED_PTR @VCL_MEMORY_HAS_SHARED_PTR@
+#define VCL_TR1_MEMORY_HAS_SHARED_PTR @VCL_TR1_MEMORY_HAS_SHARED_PTR@
+
 
 //: VCL_USE_NATIVE_COMPLEX
 // Whether to use the compiler's complex type.
