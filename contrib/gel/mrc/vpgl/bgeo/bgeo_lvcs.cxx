@@ -615,6 +615,9 @@ void bgeo_lvcs::read(vcl_istream& strm)
   strm >> lat_scale_ >> lon_scale_;
   strm >> lox_ >> loy_ >> theta_;
 
+  if(lat_scale_==0.0 && lon_scale_==0.0)
+      this->compute_scale();
+
 }
 
 //------------------------------------------------------------
