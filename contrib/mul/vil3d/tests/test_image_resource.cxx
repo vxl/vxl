@@ -34,7 +34,7 @@ inline void test_image_resource(vcl_string type, vil_pixel_format format, T /*du
 
   TEST("vil3d_memory_image::put_view()", mem->put_view(view1,0,0,0), true);
 
-  vil3d_image_resource_sptr crop = vil3d_crop(mem, 2, 6, 2, 4, 1, 2);
+  vil3d_image_resource_sptr crop = vil3d_crop(mem, 2, 6, 2, 2, 1, 2);
   TEST("vil3d_crop(image_resource)", crop?true:false, true);
 
   vil3d_image_view<T> view2 = mem->get_copy_view(0, mem->ni(), 0, mem->nj(), 0, mem->nk());
