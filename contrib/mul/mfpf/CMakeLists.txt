@@ -23,8 +23,10 @@ SET(mfpf_sources
   mfpf_pose.h
   mfpf_pose_set.h
   mfpf_searcher.h              mfpf_searcher.cxx
+
   mfpf_draw_pose_cross.h       mfpf_draw_pose_cross.cxx
   mfpf_draw_pose_lines.h       mfpf_draw_pose_lines.cxx
+  mfpf_draw_matches.h          mfpf_draw_matches.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates mfpf_sources)

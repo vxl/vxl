@@ -6,7 +6,7 @@
 // \author Tim Cootes
 
 #include <mfpf/mfpf_point_finder.h>
-
+#include <mfpf/mfpf_pose_set.h>
 
 //: Algorithms to perform global search for multiple matches
 //  Note that some search algorithms are in mfpf_point_finder
@@ -24,13 +24,6 @@ private:
                      const vcl_vector<mfpf_pose>& poses,
                      const mfpf_pose& pose, 
                      vcl_vector<unsigned>& overlaps);
-
-  //: If pose not near any poses in list, return false
-  //  If it is near one, and its fit is better, then replace it.
-  bool find_near_pose(vcl_vector<mfpf_pose>& poses,
-                      vcl_vector<double>& fits,
-                      const mfpf_pose& pose, double fit,
-                      double r, double r_thresh);
 
   //: If pose not near any poses in list, return false
   //  If it is near one, and its fit is better, then replace it.
@@ -53,6 +46,15 @@ public:
   //: Sorts so that pose[0] is best fit (ie smallest fit value)
   void sort_matches(vcl_vector<mfpf_pose>& poses,
                     vcl_vector<double>& fits);
+
+  //: Sorts so that pose_set.pose[0] is best fit (ie smallest fit value)
+  void sort_matches(mfpf_pose_set& pose_set);
+
+  //: For each pose in the set, perform local search+refinement
+  //  On exit pose_set contains the improved matches.
+  void search_around_set(mfpf_point_finder& pf,
+                         const vimt_image_2d_of<float>& image,
+                         mfpf_pose_set& pose_set);
 };
 
 

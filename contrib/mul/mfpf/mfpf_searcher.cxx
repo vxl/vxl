@@ -28,51 +28,12 @@ void mfpf_searcher::find_overlaps(mfpf_point_finder& pf,
 
 //: If pose not near any poses in list, return false
 //  If it is near one, and its fit is better, then replace it.
-bool mfpf_searcher::find_near_pose(vcl_vector<mfpf_pose>& poses,
-                      vcl_vector<double>& fits,
-                      const mfpf_pose& pose, double fit,
-                      double r, double r_thresh)
-{
-  double t = r_thresh*r_thresh;
-
-  for (unsigned i=0;i<poses.size();++i)
-  {
-    double d2 = mfpf_max_sqr_diff(poses[i],pose,r);
-    if (d2<t)
-    {
-      if (fit<fits[i])
-      {
-        fits[i]=fit; poses[i]=pose;
-      }
-      return true;
-    }
-  }
-  return false;
-}
-
-//: If pose not near any poses in list, return false
-//  If it is near one, and its fit is better, then replace it.
 //  Uses pf.overlap() function to check for proximity
 bool mfpf_searcher::find_near_pose(mfpf_point_finder& pf,
                       vcl_vector<mfpf_pose>& poses,
                       vcl_vector<double>& fits,
                       const mfpf_pose& pose, double fit)
 {
-/*
-  // Incorrect approach as it may lead to overlaps left in.
-  for (unsigned i=0;i<poses.size();++i)
-  {
-    if (pf.overlap(poses[i],pose))
-    {
-      if (fit<fits[i])
-      {
-        fits[i]=fit; poses[i]=pose;
-      }
-      return true;
-    }
-  }
-  return false;
-*/
   vcl_vector<unsigned> index;
   find_overlaps(pf,poses,pose,index);
   if (index.size()==0) return false;  // No overlaps
@@ -177,11 +138,6 @@ vcl_cout<<"N.responses: "<<poses1.size()<<vcl_endl;
     double f = fits1[i];
     pf.refine_match(image,pose.p(),pose.u(),f);
     if (f>fits1[i]) vcl_cerr<<"Refinement failed!!!"<<vcl_endl;
-    if (fits1[i]<-0.99)
-    {
-      vcl_cout<<"Good match: "<<poses1[i]<<" fit: "<<fits1[i]<<vcl_endl;
-      vcl_cout<<"Refined to: "<<pose<<" fit: "<<f<<vcl_endl;
-    }
     if (!find_near_pose(pf,poses,fits,pose,f))
     {
       // Point distinct
@@ -204,6 +160,42 @@ void mfpf_searcher::sort_matches(vcl_vector<mfpf_pose>& poses,
     poses[i]=poses0[index[i]];
     fits[i] =fits0[index[i]];
   }
+}
+
+//: Sorts so that pose_set.pose[0] is best fit (ie smallest fit value)
+void mfpf_searcher::sort_matches(mfpf_pose_set& pose_set)
+{
+  sort_matches(pose_set.poses,pose_set.fits);
+}
+
+//: For each pose in the set, perform local search+refinement
+//  On exit pose_set contains the improved matches.
+void mfpf_searcher::search_around_set(mfpf_point_finder& pf,
+                         const vimt_image_2d_of<float>& image,
+                         mfpf_pose_set& pose_set)
+{
+  if (pose_set.poses.size()==0) return;
+
+  // Record size of search region, so that it can be re-instated later
+  unsigned search_ni0=pf.search_ni();
+  unsigned search_nj0=pf.search_nj();
+
+  // Set to perform search over a small region
+  pf.set_search_area(1,1);
+  for (unsigned i=0;i<pose_set.poses.size();++i)
+  {
+    mfpf_pose pose_i=pose_set.poses[i];
+    mfpf_pose new_pose;
+    double f = pf.search(image,pose_i.p(),pose_i.u(),
+                         new_pose.p(),new_pose.u());
+
+    pf.refine_match(image,new_pose.p(),new_pose.u(),f);
+    pose_set.poses[i]=new_pose;
+    pose_set.fits[i] =f;
+  }
+
+  // Return pf to original state
+  pf.set_search_area(search_ni0,search_nj0);
 }
 
 

@@ -10,3 +10,7 @@ To Do:
   - How similar is similar?  If centre of one within the other?
 
 - Double check the inside fn - seems to be failing occasionally.
+
+- * Problem with vpdfl_pc_gaussian - not very sensible implementation
+    (ie builds full square eigenvector matrix.  Fix this!)
+
