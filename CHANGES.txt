@@ -5,6 +5,10 @@ aren't documented here, unless the bug-fix has a major observable
 effect.  If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
+      - Added initial CMake configuration to help bring C++ 0x standard code
+         (including TR1) into vcl.  This will remain experimental until fully
+         tested and should not be used outside of vcl for now.
+
       - vil_math_median implemented for vxl_byte images using fast histogram
         method.
 
