@@ -33,10 +33,10 @@ struct bil_wshed_2d_region
 class bil_wshed_2d
 {
 public:
-  struct bil_wshed_2d_region *wshed_regions_;
   double max_mean_intensity_;
   double min_mean_intensity_;
-
+  //struct bil_wshed_2d_region *wshed_regions_;
+  vcl_vector<struct bil_wshed_2d_region> wshed_regions_;
 protected:
 
   vil_image_view< unsigned char > input_img_;
@@ -50,7 +50,8 @@ protected:
   vil_image_view< unsigned char > output_img_wout_wsheds_uchar_;
 
   int width_, height_, image_size_;
-  unsigned char min_value_src_, max_value_src_;
+  unsigned char min_value_src_;
+  unsigned char max_value_src_;
 
   int h_start_, h_end_;
   int current_distance_;

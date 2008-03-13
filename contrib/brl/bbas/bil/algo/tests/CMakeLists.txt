@@ -2,7 +2,6 @@
 
 ADD_EXECUTABLE( bil_algo_test_all
   test_driver.cxx
-  test_bil_scale_image.cxx
   test_bil_wshed2d.cxx
   test_bil_edt.cxx
   test_bil_cedt.cxx
@@ -12,7 +11,6 @@ ADD_EXECUTABLE( bil_algo_test_all
 )
 
 TARGET_LINK_LIBRARIES( bil_algo_test_all bil_algo vil_algo testlib )
-ADD_TEST( bil_algo_test_bil_scale_image   bil_algo_test_all test_bil_scale_image )
 ADD_TEST( bil_algo_test_bil_wshed2d       bil_algo_test_all test_bil_wshed2d )
 ADD_TEST( bil_algo_test_bil_edt           bil_algo_test_all test_bil_edt )
 ADD_TEST( bil_algo_test_bil_cedt          bil_algo_test_all test_bil_cedt )

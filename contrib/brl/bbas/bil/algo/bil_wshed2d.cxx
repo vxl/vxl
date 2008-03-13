@@ -60,7 +60,7 @@ bil_wshed_2d::bil_wshed_2d_main(vil_image_view< unsigned char > src_img, double 
 
   sorted_pixels_x_ = (int *) malloc(sizeof(int) * width_ * height_);
   sorted_pixels_y_ = (int *) malloc(sizeof(int) * width_ * height_);
-    
+
   smooth_and_gradient_img(gsigma1, gsigma2);
   //sort the pixels w.r.t. intensity values of gradient_img_
   sort_pixels();
@@ -137,8 +137,8 @@ bil_wshed_2d::calculate_region_properties()
   double temp_mean;
   max_mean_intensity_ = 0;
   min_mean_intensity_ = 0xFFFFFFFF;
-  wshed_regions_ = (struct bil_wshed_2d_region *) malloc(sizeof(bil_wshed_2d_region) * (current_label_+1));
-
+  //wshed_regions_ = (struct bil_wshed_2d_region *) malloc(sizeof(bil_wshed_2d_region) * (current_label_+1));
+  wshed_regions_.resize(current_label_+1);
   for(int i = 1; i < current_label_+1; i++)
   {
     wshed_regions_[i].number_of_pixels = 0;
