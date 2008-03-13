@@ -14,6 +14,7 @@
 
 # if VCL_INCLUDE_CXX_0X
 // This is where C++0x emulation goes when available
+****Error: shared_ptr emulation not available****
 // #include "emulation/vcl_shared_ptr.h"
 # endif // VCL_INCLUDE_CXX_0X
 
@@ -34,6 +35,7 @@
 #   include "tr1/vcl_memory.h"
 #  else
 // This is where C++0x emulation goes when available
+****Error: shared_ptr emulation not available****
 // #include "emulation/vcl_shared_ptr.h"
 #  endif // VCL_MEMORY_HAS_SHARED_PTR
 # endif // VCL_INCLUDE_CXX_0X
