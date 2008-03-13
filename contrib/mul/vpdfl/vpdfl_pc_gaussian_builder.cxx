@@ -29,6 +29,10 @@
 #include <vpdfl/vpdfl_gaussian_builder.h>
 #include <vpdfl/vpdfl_pdf_base.h>
 #include <vpdfl/vpdfl_pc_gaussian.h>
+#include <mbl/mbl_parse_block.h>
+#include <mbl/mbl_read_props.h>
+#include <mbl/mbl_exception.h>
+#include <vul/vul_string.h>
 
 //=======================================================================
 
@@ -355,6 +359,73 @@ unsigned vpdfl_pc_gaussian_builder::decide_partition(const vnl_vector<double>& e
   }
 }
 
+//: Read initialisation settings from a stream.
+// Parameters:
+// \verbatim
+// {
+//   mode_choice: fixed  // Alternative: proportionate
+//   var_prop: 0.95
+//   n_modes: 3
+//   min_var: 1.0e-6
+// }
+// \endverbatim
+// \throw mbl_exception_parse_error if the parse fails.
+void vpdfl_pc_gaussian_builder::config_from_stream(vcl_istream & is)
+{
+  vcl_string s = mbl_parse_block(is);
+
+  vcl_istringstream ss(s);
+  mbl_read_props_type props = mbl_read_props_ws(ss);
+
+  if (props.find("mode_choice")!=props.end())
+  {
+    if (props["mode_choice"]=="fixed") 
+      partitionMethod_=fixed;
+    else
+    if (props["mode_choice"]=="proportionate") 
+      partitionMethod_=proportionate;
+    else
+    {
+      vcl_string err_msg = "Unknown mode_choice: "+props["mode_choice"];
+      throw mbl_exception_parse_error(err_msg);
+    }
+
+    props.erase("mode_choice");
+  }
+
+  if (props.find("var_prop")!=props.end())
+  {
+    proportionOfVariance_=vul_string_atof(props["var_prop"]);
+    props.erase("var_prop");
+  }
+
+  if (props.find("n_modes")!=props.end())
+  {
+    fixed_partition_=vul_string_atoi(props["n_modes"]);
+    props.erase("n_modes");
+  }
+
+  double mv=1.0e-6;
+  if (props.find("min_var")!=props.end())
+  {
+    mv=vul_string_atof(props["min_var"]);
+    props.erase("min_var");
+  }
+  set_min_var(mv);
+
+  try
+  {
+    mbl_read_props_look_for_unused_props(
+        "vpdfl_axis_gaussian_builder::config_from_stream", props);
+  }
+  catch(mbl_exception_unused_props &e)
+  {
+    throw mbl_exception_parse_error(e.what());
+  }
+
+}
+
+
 //=======================================================================
 
 vcl_string vpdfl_pc_gaussian_builder::is_a() const
@@ -397,6 +468,11 @@ vpdfl_builder_base* vpdfl_pc_gaussian_builder::clone() const
 void vpdfl_pc_gaussian_builder::print_summary(vcl_ostream& os) const
 {
   vpdfl_gaussian_builder::print_summary(os);
+  if (partitionMethod_==fixed) os<<" mode_choice: fixed ";
+  if (partitionMethod_==proportionate) 
+    os<<" mode_choice: proportionate ";
+  os<<" var_prop: "<<proportionOfVariance_;
+  os<<" n_fixed: "<<fixed_partition_<<' ';
 }
 
 //=======================================================================

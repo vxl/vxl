@@ -109,6 +109,20 @@ class vpdfl_pc_gaussian_builder : public vpdfl_gaussian_builder
   partitionMethods partition_method() const
   {return partitionMethod_;}
 
+  //: Read initialisation settings from a stream.
+  // Parameters:
+  // \verbatim
+  // {
+  //   mode_choice: fixed  // Alternative: proportionate
+  //   var_prop: 0.95
+  //   n_modes: 3
+  //   min_var: 1.0e-6
+  // }
+  // \endverbatim
+  // \throw mbl_exception_parse_error if the parse fails.
+  virtual void config_from_stream(vcl_istream & is);
+
+
   //: Version number for I/O
   short version_no() const;
 

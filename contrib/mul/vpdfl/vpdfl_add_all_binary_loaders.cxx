@@ -42,4 +42,7 @@ void vpdfl_add_all_binary_loaders()
   mbl_cloneables_factory<vpdfl_builder_base>::add(vpdfl_gaussian_kernel_pdf_builder());
   mbl_cloneables_factory<vpdfl_builder_base>::add(vpdfl_gaussian_kernel_pdf_builder(),
                                                   "gaussian_kernel");
+
+  mbl_cloneables_factory<vpdfl_builder_base>::add(vpdfl_pc_gaussian_builder());
+
 }
