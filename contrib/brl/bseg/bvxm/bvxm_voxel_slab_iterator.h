@@ -33,10 +33,13 @@ protected:
 };
 
 template <class T>
-class bvxm_voxel_slab_iterator : public bvxm_voxel_slab_iterator_base<T>, public vcl_iterator<vcl_bidirectional_iterator_tag, T>
+class bvxm_voxel_slab_iterator : public bvxm_voxel_slab_iterator_base<T>, 
+  public vcl_iterator<vcl_bidirectional_iterator_tag, T>
 {
 public:
-  bvxm_voxel_slab_iterator() : bvxm_voxel_slab_iterator_base() {};
+  bvxm_voxel_slab_iterator() 
+    : bvxm_voxel_slab_iterator_base<T>() {};
+
   bvxm_voxel_slab_iterator(bvxm_voxel_storage<T> *storage, vgl_vector_3d<unsigned int> grid_size, unsigned slice_idx, unsigned slab_thickness)
     : bvxm_voxel_slab_iterator_base<T>(storage,grid_size,slice_idx,slab_thickness){};
 
