@@ -57,7 +57,19 @@ set_input_int(PyObject *self, PyObject *args)
     bprb_batch_process_manager::instance()->set_input(input, iv);
   return Py_BuildValue("b", result);
 }
-
+static PyObject *
+set_input_unsigned(PyObject *self, PyObject *args)
+{
+  int input;
+  unsigned ivalue;
+  if (!PyArg_ParseTuple(args, "ii:set_input_int", &input, &ivalue))
+    return NULL;
+  brdb_value_sptr iv = new brdb_value_t<unsigned>(ivalue);
+  vcl_cout << "input[" << input << "](unsigned): " << ivalue << '\n';
+  bool result = 
+    bprb_batch_process_manager::instance()->set_input(input, iv);
+  return Py_BuildValue("b", result);
+}
 static PyObject *
 set_input_long(PyObject *self, PyObject *args)
 {
@@ -212,6 +224,8 @@ static PyMethodDef batch_methods[] = {
   "set_input_(i,s) set input i on current process to a string value"},
   {"set_input_int", set_input_int, METH_VARARGS,
   "set_input_(i,i) set input i on current process to an int value"},
+  {"set_input_unsigned", set_input_unsigned, METH_VARARGS,
+  "set_input_(i,i) set input i on current process to an unsigned value"},
   {"set_input_long", set_input_long, METH_VARARGS,
   "set_input_(i,l) set input i on current process to a long value"},
   {"set_input_float", set_input_float, METH_VARARGS,

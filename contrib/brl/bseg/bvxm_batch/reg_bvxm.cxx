@@ -22,7 +22,7 @@
 #include <bvxm/pro/bvxm_rpc_registration_process.h>
 #include <bvxm/pro/bvxm_generate_edge_map_process.h>
 #include <bvxm/pro/bvxm_save_occupancy_raw_process.h>
-
+#include <bvxm/pro/bvxm_change_detection_display_process.h>
 // datatypes
 #include <vcl_string.h>
 #include <vil/vil_image_view_base.h>
@@ -50,6 +50,7 @@ register_processes(PyObject *self, PyObject *args)
   REG_PROCESS(bvxm_illum_index_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_rpc_registration_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_generate_edge_map_process, bprb_batch_process_manager);
+  REG_PROCESS(bvxm_change_detection_display_process, bprb_batch_process_manager);
   //REG_PROCESS(bvxm_ekf_camera_optimize_process, bprb_batch_process_manager);
   //REG_PROCESS(bvxm_init_ekf_camera_optimizer_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_save_occupancy_raw_process, bprb_batch_process_manager);
@@ -64,6 +65,7 @@ register_datatypes(PyObject *self, PyObject *args)
   REGISTER_DATATYPE(bool);
   REGISTER_DATATYPE(vcl_string);
   REGISTER_DATATYPE(int);
+  REGISTER_DATATYPE(unsigned);
   REGISTER_DATATYPE(long);
   REGISTER_DATATYPE(float);
   REGISTER_DATATYPE(double);
