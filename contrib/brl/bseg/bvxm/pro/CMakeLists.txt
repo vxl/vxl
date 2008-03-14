@@ -23,6 +23,7 @@ SET(bvxm_pro_sources
     bvxm_rpc_registration_process.h       bvxm_rpc_registration_process.cxx
     bvxm_save_occupancy_raw_process.h     bvxm_save_occupancy_raw_process.cxx
     bvxm_clean_world_process.h            bvxm_clean_world_process.cxx
+    bvam_create_local_rpc_process.h       bvam_create_local_rpc_process.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates bvxm_pro_sources)
