@@ -10,6 +10,7 @@ ADD_EXECUTABLE( bvxm_pro_test_all
   test_bvxm_change_detection_display_process.cxx
   test_bvxm_generate_edge_map_process.cxx
   test_bvxm_rpc_registration_process.cxx
+  test_bvxm_create_local_rpc_process.cxx
 )
 
 TARGET_LINK_LIBRARIES( bvxm_pro_test_all testlib bvxm_pro bvxm vcl vbl vpgl_algo vpgl vpgl_io vpgl_bpro bprb brdb vil vil_io vil_bpro)
@@ -32,3 +33,4 @@ ADD_TEST( bvxm_test_create_voxel_world_process    ${EXECUTABLE_OUTPUT_PATH}/bvxm
 ADD_TEST( bvxm_test_bvxm_normalize_image_process    ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_normalize_image_process )
 ADD_TEST( bvxm_test_generate_edge_map_process    ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_generate_edge_map_process )
 ADD_TEST( bvxm_test_rpc_registration_process    ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_rpc_registration_process )
+ADD_TEST( bvxm_test_create_local_rpc_process    ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_create_local_rpc_process )
