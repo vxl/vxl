@@ -130,7 +130,7 @@ void bvxm_util::warp_slab_bilinear(bvxm_voxel_slab<T> const& slab_in, vgl_h_matr
 
     slab_out.fill(T(0.0)); // this should work whether T is a vector_fixed or a scalar
 
-    bvxm_voxel_slab<T>::iterator out_it = slab_out.begin();
+    typename bvxm_voxel_slab<T>::iterator out_it = slab_out.begin();
 
     // if z > 1, it would be more efficient to put the z loop as the inner-most.
     // z will probably be 1 most of the time though, so leave it here for now.
@@ -195,7 +195,7 @@ bool bvxm_util::img_to_slab(vil_image_view_base_sptr const image, bvxm_voxel_sla
           vil_image_view<unsigned char>::const_iterator plane_it = img_view->begin() + (p*img_view->planestep());
           img_its.push_back(plane_it);
         }
-        bvxm_voxel_slab<vnl_vector_fixed<T,N> >::iterator slab_it = slab.begin();
+        typename bvxm_voxel_slab<vnl_vector_fixed<T,N> >::iterator slab_it = slab.begin();
         for (; slab_it != slab.end(); ++slab_it) {
           for (unsigned p=0; p<N; ++p) {
             (*slab_it)[p] = (T)(*(img_its[p]) / 255.0);
@@ -224,7 +224,7 @@ bool bvxm_util::img_to_slab(vil_image_view_base_sptr const image, bvxm_voxel_sla
           vil_image_view<unsigned char>::const_iterator plane_it = plane_view.begin() + (p*plane_view.planestep());
           img_its.push_back(plane_it);
         }
-        bvxm_voxel_slab<vnl_vector_fixed<T,N> >::iterator slab_it = slab.begin();
+        typename bvxm_voxel_slab<vnl_vector_fixed<T,N> >::iterator slab_it = slab.begin();
         for (; slab_it != slab.end(); ++slab_it) {
           for (unsigned p=0; p<N; ++p) {
             (*slab_it)[p] = (T)(*(img_its[p]) / 255.0);
@@ -248,7 +248,7 @@ bool bvxm_util::img_to_slab(vil_image_view_base_sptr const image, bvxm_voxel_sla
           vil_image_view<float>::const_iterator plane_it = img_view->begin() + (p*img_view->planestep());
           img_its.push_back(plane_it);
         }
-        bvxm_voxel_slab<vnl_vector_fixed<T,N> >::iterator slab_it = slab.begin();
+        typename bvxm_voxel_slab<vnl_vector_fixed<T,N> >::iterator slab_it = slab.begin();
         for (; slab_it != slab.end(); ++slab_it) {
           for (unsigned p=0; p<N; ++p) {
             (*slab_it)[p] = (T)(*(img_its[p]));  // no divide by 255, we copy the image to the slab directly, assuming image is already scaled to [0,1] range
@@ -272,7 +272,7 @@ bool bvxm_util::img_to_slab(vil_image_view_base_sptr const image, bvxm_voxel_sla
           vil_image_view<float>::const_iterator plane_it = plane_view.begin() + (p*plane_view.planestep());
           img_its.push_back(plane_it);
         }
-        bvxm_voxel_slab<vnl_vector_fixed<T,N> >::iterator slab_it = slab.begin();
+        typename bvxm_voxel_slab<vnl_vector_fixed<T,N> >::iterator slab_it = slab.begin();
         for (; slab_it != slab.end(); ++slab_it) {
           for (unsigned p=0; p<N; ++p) {
             (*slab_it)[p] = (T)(*(img_its[p]));  // no divide by 255, we copy the image to the slab directly, assuming image is already scaled to [0,1] range
@@ -312,14 +312,14 @@ bool bvxm_util::img_to_slab(vil_image_view_base_sptr const image, bvxm_voxel_sla
         vil_image_view<vxl_byte> img_view_grey(img_view->ni(),img_view->nj(),1);
         vil_convert_planes_to_grey(*img_view,img_view_grey);
         vil_image_view<unsigned char>::const_iterator img_it = img_view_grey.begin();
-        bvxm_voxel_slab<T>::iterator slab_it = slab.begin();
+        typename bvxm_voxel_slab<T>::iterator slab_it = slab.begin();
         for (; img_it != img_view_grey.end(); ++img_it, ++slab_it) {
           *slab_it = (T)(*img_it / 255.0);
         }
       } 
       else {
         vil_image_view<unsigned char>::const_iterator img_it = img_view->begin();
-        bvxm_voxel_slab<T>::iterator slab_it = slab.begin();
+        typename bvxm_voxel_slab<T>::iterator slab_it = slab.begin();
         for (; img_it != img_view->end(); ++img_it, ++slab_it) {
           *slab_it = (T)(*img_it / 255.0);
         }
@@ -341,7 +341,7 @@ bool bvxm_util::img_to_slab(vil_image_view_base_sptr const image, bvxm_voxel_sla
         return false;
       }
       vil_image_view<float>::const_iterator img_it = img_view_grey.begin();
-      bvxm_voxel_slab<T>::iterator slab_it = slab.begin();
+      typename bvxm_voxel_slab<T>::iterator slab_it = slab.begin();
       for (; img_it != img_view_grey.end(); ++img_it, ++slab_it) {
         *slab_it = (T)(*img_it / 255.0);
       }
@@ -351,7 +351,7 @@ bool bvxm_util::img_to_slab(vil_image_view_base_sptr const image, bvxm_voxel_sla
   } else if (image->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
     if (vil_image_view<float> *img_view = dynamic_cast<vil_image_view<float>* >(image.ptr())) {
       vil_image_view<float>::const_iterator img_it = img_view->begin();
-      bvxm_voxel_slab<T>::iterator slab_it = slab.begin();
+      typename bvxm_voxel_slab<T>::iterator slab_it = slab.begin();
       for (; img_it != img_view->end(); ++img_it, ++slab_it) {
         *slab_it = (T)(*img_it); // no divide by 255, we copy the image to the slab directly, assuming image is already scaled to [0,1] range
       }
@@ -370,7 +370,7 @@ bool bvxm_util::img_to_slab(vil_image_view_base_sptr const image, bvxm_voxel_sla
         return false;
       }
       vil_image_view<float>::const_iterator img_it = img_view_grey.begin();
-      bvxm_voxel_slab<T>::iterator slab_it = slab.begin();
+      typename bvxm_voxel_slab<T>::iterator slab_it = slab.begin();
       for (; img_it != img_view_grey.end(); ++img_it, ++slab_it) {
         *slab_it = (T)(*img_it); // no divide by 255, we copy the image to the slab directly, assuming image is already scaled to [0,1] range
       }
@@ -409,7 +409,7 @@ bool bvxm_util::slab_to_img(bvxm_voxel_slab<vnl_vector_fixed<T,N> > const &slab,
           img_its.push_back(plane_it);
         }
 
-        bvxm_voxel_slab<vnl_vector_fixed<T,N> >::const_iterator slab_it = slab.begin();
+        typename bvxm_voxel_slab<vnl_vector_fixed<T,N> >::const_iterator slab_it = slab.begin();
         for (; slab_it != slab.end(); ++slab_it)
         {
           for (unsigned p=0; p<N; ++p) 
@@ -444,7 +444,7 @@ bool bvxm_util::slab_to_img(bvxm_voxel_slab<vnl_vector_fixed<T,N> > const &slab,
           img_its.push_back(plane_it);
         }
 
-        bvxm_voxel_slab<vnl_vector_fixed<T,N> >::const_iterator slab_it = slab.begin();
+        typename bvxm_voxel_slab<vnl_vector_fixed<T,N> >::const_iterator slab_it = slab.begin();
         for (; slab_it != slab.end(); ++slab_it)
         {
           for (unsigned p=0; p<N; ++p) 
@@ -482,7 +482,7 @@ bool bvxm_util::slab_to_img(bvxm_voxel_slab<vnl_vector_fixed<T,N> > const &slab,
           vil_image_view<unsigned char>::iterator plane_it = plane_view.begin() + (p*plane_view.planestep());
           img_its.push_back(plane_it);
         }
-        bvxm_voxel_slab<vnl_vector_fixed<T,N> >::const_iterator slab_it = slab.begin();
+        typename bvxm_voxel_slab<vnl_vector_fixed<T,N> >::const_iterator slab_it = slab.begin();
         for (; slab_it != slab.end(); ++slab_it) 
         {
           for (unsigned p=0; p<N; ++p) 
@@ -533,7 +533,7 @@ bool bvxm_util::slab_to_img(bvxm_voxel_slab<T> const& slab, vil_image_view_base_
     if (vil_image_view<unsigned char> *img_view = dynamic_cast<vil_image_view<unsigned char>*>(image.ptr())) 
     {
       vil_image_view<unsigned char>::iterator img_it = img_view->begin();
-      bvxm_voxel_slab<T>::const_iterator slab_it = slab.begin();
+      typename bvxm_voxel_slab<T>::const_iterator slab_it = slab.begin();
       for (; img_it != img_view->end(); ++img_it, ++slab_it) {
         *img_it = (unsigned char)((*slab_it * 255.0) + 0.5);
       }
@@ -549,7 +549,7 @@ bool bvxm_util::slab_to_img(bvxm_voxel_slab<T> const& slab, vil_image_view_base_
     if (vil_image_view<float> *img_view = dynamic_cast<vil_image_view<float>*>(image.ptr()))
     {
       vil_image_view<float>::iterator img_it = img_view->begin();
-      bvxm_voxel_slab<T>::const_iterator slab_it = slab.begin();
+      typename bvxm_voxel_slab<T>::const_iterator slab_it = slab.begin();
       for (; img_it != img_view->end(); ++img_it, ++slab_it) {
         *img_it = (float)(*slab_it);
       }
@@ -574,7 +574,7 @@ template<class T>
 T bvxm_util::sum_slab(bvxm_voxel_slab<T> const& slab)
 {
   T sum = 0;
-  bvxm_voxel_slab<T>::const_iterator slab_it = slab.begin();
+  typename bvxm_voxel_slab<T>::const_iterator slab_it = slab.begin();
   for (; slab_it != slab.end(); ++slab_it) {
     sum += *slab_it;
   }
@@ -582,7 +582,7 @@ T bvxm_util::sum_slab(bvxm_voxel_slab<T> const& slab)
 }
 
 template<class T>
-static void bvxm_util::add_slabs(bvxm_voxel_slab<T> const& s1, bvxm_voxel_slab<T> const& s2, bvxm_voxel_slab<T> &sum)
+void bvxm_util::add_slabs(bvxm_voxel_slab<T> const& s1, bvxm_voxel_slab<T> const& s2, bvxm_voxel_slab<T> &sum)
 {
   // check sizes
   if ( (sum.nx() != s1.nx()) || (sum.nx() != s2.nx()) ||
@@ -592,8 +592,8 @@ static void bvxm_util::add_slabs(bvxm_voxel_slab<T> const& s1, bvxm_voxel_slab<T
       return;
   }
 
-  bvxm_voxel_slab<T>::const_iterator s1_it = s1.begin(), s2_it = s2.begin();
-  bvxm_voxel_slab<T>::iterator sum_it = sum.begin();
+  typename bvxm_voxel_slab<T>::const_iterator s1_it = s1.begin(), s2_it = s2.begin();
+  typename bvxm_voxel_slab<T>::iterator sum_it = sum.begin();
   for (; sum_it != sum.end(); ++s1_it, ++s2_it, ++sum_it) {
     *sum_it = *s1_it + *s2_it;
   }
@@ -613,8 +613,8 @@ void bvxm_util::multiply_slabs(bvxm_voxel_slab<T> const& s1, bvxm_voxel_slab<T> 
       return;
   }
 
-  bvxm_voxel_slab<T>::const_iterator s1_it = s1.begin(), s2_it = s2.begin();
-  bvxm_voxel_slab<T>::iterator prod_it = product.begin();
+  typename bvxm_voxel_slab<T>::const_iterator s1_it = s1.begin(), s2_it = s2.begin();
+  typename bvxm_voxel_slab<T>::iterator prod_it = product.begin();
   for (; prod_it != product.end(); ++s1_it, ++s2_it, ++prod_it) {
     *prod_it = *s1_it * *s2_it;
   }
@@ -630,8 +630,8 @@ void bvxm_util::threshold_slab_above(bvxm_voxel_slab<T> const& slab, T const& th
     return;
   }
 
-  bvxm_voxel_slab<T>::const_iterator slab_it = slab.begin();
-  bvxm_voxel_slab<bool>::iterator mask_it = mask.begin();
+  typename bvxm_voxel_slab<T>::const_iterator slab_it = slab.begin();
+  typename bvxm_voxel_slab<bool>::iterator mask_it = mask.begin();
   for (; slab_it != slab.end(); ++slab_it, ++mask_it) {
     *mask_it = (*slab_it >= thresh);
   }
@@ -745,8 +745,8 @@ template<class T>
 void bvxm_util::write_slab_as_image(bvxm_voxel_slab<T> const& slab_in,vcl_string filename)
 {
   vil_image_view<T> img(slab_in.nx(),slab_in.ny(),1);
-  vil_image_view<T>::iterator img_it = img.begin();
-  bvxm_voxel_slab<T>::const_iterator slab_it = slab_in.begin();
+  typename vil_image_view<T>::iterator img_it = img.begin();
+  typename bvxm_voxel_slab<T>::const_iterator slab_it = slab_in.begin();
   for (; img_it != img.end(); ++img_it, ++slab_it) {
     *img_it = *slab_it;
   }
@@ -760,12 +760,12 @@ template<class T, unsigned N>
 void bvxm_util::write_slab_as_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > const& slab_in,vcl_string filename)
 {
   vil_image_view<T> img(slab_in.nx(),slab_in.ny(),N);
-  vcl_vector<vil_image_view<T>::iterator> img_its;
+  vcl_vector<typename vil_image_view<T>::iterator> img_its;
   for (unsigned p=0; p < N; ++p) {
-    vil_image_view<T>::iterator plane_it = img.begin() + (p*img.planestep());
+    typename vil_image_view<T>::iterator plane_it = img.begin() + (p*img.planestep());
     img_its.push_back(plane_it);
   }
-  bvxm_voxel_slab<vnl_vector_fixed<T,N> >::const_iterator slab_it = slab_in.begin();
+  typename bvxm_voxel_slab<vnl_vector_fixed<T,N> >::const_iterator slab_it = slab_in.begin();
   for (; slab_it != slab_in.end(); ++slab_it) {
     for (unsigned p=0; p<N; ++p) {
       *(img_its[p]) = (*slab_it)[p];
