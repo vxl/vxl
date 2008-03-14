@@ -46,7 +46,6 @@ MAIN( test_bvxm_illum_index_process )
     //bgeo_lvcs_sptr lvcs = new bgeo_lvcs(32.724233, -117.156105, 39);
 
     bool good = bprb_batch_process_manager::instance()->init_process("bvxmIllumIndexProcess");
-    good = good && bprb_batch_process_manager::instance()->set_params("illum_index_params.xml");
     good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
     good = good && bprb_batch_process_manager::instance()->set_input(1, v1);
     good = good && bprb_batch_process_manager::instance()->set_input(2, v2);
