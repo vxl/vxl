@@ -810,6 +810,12 @@ SOURCE=.\generic/vcl_valarray.h
 SOURCE=.\generic/vcl_vector.h
 # End Source File
 # Begin Source File
+SOURCE=.\generic/vcl_memory_tr1.h
+# End Source File
+# Begin Source File
+SOURCE=.\generic/vcl_memory_tr1.h
+# End Source File
+# Begin Source File
 SOURCE=.\iso/vcl_bitset.h
 # End Source File
 # Begin Source File
@@ -931,6 +937,12 @@ SOURCE=.\iso/vcl_typeinfo.h
 # End Source File
 # Begin Source File
 SOURCE=.\iso/vcl_valarray.h
+# End Source File
+# Begin Source File
+SOURCE=.\iso/vcl_memory_tr1.h
+# End Source File
+# Begin Source File
+SOURCE=.\iso/vcl_memory_tr1.h
 # End Source File
 # Begin Source File
 SOURCE=.\mwerks/vcl_cmath.h
