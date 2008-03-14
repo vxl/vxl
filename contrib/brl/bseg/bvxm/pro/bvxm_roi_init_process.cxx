@@ -156,6 +156,9 @@ bool bvxm_roi_init_process::roi_init(vcl_string const& image_path,
     return false;
   }
 
+  if(!roi.as_pointer())
+   return false;
+
   if (roi->pixel_format() == VIL_PIXEL_FORMAT_UINT_16) {
     vil_image_view<vxl_uint_16> nitf_image_vxl_uint_16(roi);
     *nitf_image_unsigned_char = vil_image_view<unsigned char> (roi->ni(),roi->nj(),roi->nplanes());
