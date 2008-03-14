@@ -89,7 +89,7 @@ bool bvxm_render_virtual_view_process::execute()
       virtual_img = new vil_image_view<float>(img_og->ni(),img_og->nj(),img_og->nplanes());
       break;
     case VIL_PIXEL_FORMAT_RGB_BYTE:
-      virtual_img = new vil_image_view<vil_rgb<unsigned char>>(img_og->ni(),img_og->nj(),img_og->nplanes());
+      virtual_img = new vil_image_view<vil_rgb<unsigned char> >(img_og->ni(),img_og->nj(),img_og->nplanes());
       break;
     default:
       vcl_cerr << "error: bvxm_render_virtual_view_process: unknown pixel format " << img_og->pixel_format() << vcl_endl;
