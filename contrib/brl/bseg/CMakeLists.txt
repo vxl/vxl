@@ -28,3 +28,6 @@ SUBDIRS(sbin)
 
 # background modeling
 SUBDIRS(bbgm)
+
+#voxel world modeling
+SUBDIRS(bvxm)
