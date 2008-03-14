@@ -209,6 +209,9 @@ SOURCE=.\vil3d_copy.cxx
 # Begin Source File
 SOURCE=.\vil3d_save.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vil3d_crop.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"

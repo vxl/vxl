@@ -150,6 +150,12 @@ SOURCE=.\mfpf_searcher.cxx
 # Begin Source File
 SOURCE=.\mfpf_draw_pose_lines.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\mfpf_draw_matches.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_draw_matches.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -209,6 +215,24 @@ SOURCE=.\mfpf_searcher.h
 # End Source File
 # Begin Source File
 SOURCE=.\mfpf_draw_pose_lines.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_draw_matches.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_pose_set.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_region_form.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_draw_matches.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_pose_set.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_region_form.h
 # End Source File
 # End Group
 # End Target

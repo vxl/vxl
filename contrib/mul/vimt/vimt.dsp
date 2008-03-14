@@ -302,6 +302,9 @@ SOURCE=.\vimt_sample_grid_bicub.txx
 # Begin Source File
 SOURCE=.\vimt_vil_v2i.h
 # End Source File
+# Begin Source File
+SOURCE=.\vimt_convert.h
+# End Source File
 # End Group
 # End Target
 # End Project
