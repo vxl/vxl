@@ -29,6 +29,6 @@ ADD_TEST( bvxm_change_detection_display_process    ${EXECUTABLE_OUTPUT_PATH}/bvx
 ADD_TEST( bvxm_test_roi_init_process       ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_roi_init_process )
 ADD_TEST( bvxm_test_illum_index_process    ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_illum_index_process )
 ADD_TEST( bvxm_test_create_voxel_world_process    ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_create_voxel_world_process )
-ADD_TEST( bvxm_test_bvxm_normalize_image_process    ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_bvxm_normalize_image_process )
+ADD_TEST( bvxm_test_bvxm_normalize_image_process    ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_normalize_image_process )
 ADD_TEST( bvxm_test_generate_edge_map_process    ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_generate_edge_map_process )
 ADD_TEST( bvxm_test_rpc_registration_process    ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_rpc_registration_process )
