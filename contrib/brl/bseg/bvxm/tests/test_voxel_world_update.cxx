@@ -77,8 +77,8 @@ static void test_voxel_world_update()
   world.update<APM_MOG_GREY>(observation, prob_map, mask, 0);
   world.update<APM_MOG_GREY>(observation, prob_map, mask, 2);
 
-  world.update<APM_MOG_RGB> (observation, prob_map, mask, 10);
-  world.update<APM_MOG_RGB> (observation, prob_map, mask, 15);
+  //world.update<APM_MOG_RGB> (observation, prob_map, mask, 10);
+  //world.update<APM_MOG_RGB> (observation, prob_map, mask, 15);
 
   return;
 }
