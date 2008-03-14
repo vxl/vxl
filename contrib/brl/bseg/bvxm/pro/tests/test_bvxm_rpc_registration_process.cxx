@@ -37,7 +37,7 @@ MAIN( test_bvxm_rpc_registration_process )
   float voxel_length = 1.0;
   bgeo_lvcs_sptr lvcs = new bgeo_lvcs(33.3358982058333, 44.38220165, 74.5333333333333);
   bvxm_world_params_sptr voxel_world_params = new bvxm_world_params();
-  voxel_world_params->set_params("C:\\temp\\voxel_world", vgl_point_3d<float> (-10.0,-10.0,-2.5), num_voxels, voxel_length, lvcs);
+  voxel_world_params->set_params("./", vgl_point_3d<float> (-10.0,-10.0,-2.5), num_voxels, voxel_length, lvcs);
   bvxm_voxel_world_sptr voxel_world = new bvxm_voxel_world();
   voxel_world->set_params(voxel_world_params);
  
