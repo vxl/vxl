@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<bvxmRpcRegistrationProcess>
+<cedt_image_gaussian_sigma desc="gaussian sigma for the edge distance map" type="double" value="2" />
+<offset_search_size desc="maximum expected error in the rpc image offset" type="int" value="20" />
+</bvxmRpcRegistrationProcess>
