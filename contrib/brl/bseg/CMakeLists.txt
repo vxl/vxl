@@ -31,3 +31,6 @@ SUBDIRS(bbgm)
 
 #voxel world modeling
 SUBDIRS(bvxm)
+
+#voxel world modeling batch
+SUBDIRS(bvxm_batch)
