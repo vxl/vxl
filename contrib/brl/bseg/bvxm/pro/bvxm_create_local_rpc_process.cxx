@@ -1,4 +1,4 @@
-#include "bvam_create_local_rpc_process.h"
+#include "bvxm_create_local_rpc_process.h"
 
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
@@ -10,7 +10,7 @@
 #include <vnl/algo/vnl_gaussian_kernel_1d.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 
-bvam_create_local_rpc_process::bvam_create_local_rpc_process()
+bvxm_create_local_rpc_process::bvxm_create_local_rpc_process()
 {
   // process takes 2 inputs: 
   //input[0]: The voxel world
@@ -27,7 +27,7 @@ bvam_create_local_rpc_process::bvam_create_local_rpc_process()
   output_types_[0] = "vpgl_camera_double_sptr";
 }
 
-bool bvam_create_local_rpc_process::execute()
+bool bvxm_create_local_rpc_process::execute()
 {
   // Sanity check
   if(!this->verify_inputs())
