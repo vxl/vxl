@@ -141,9 +141,10 @@ bmrf_arc::time_init()
 bmrf_gamma_func_sptr 
 bmrf_arc::gamma_func(){ 
   if(!gamma_func_)
-    gamma_func_ = new bmrf_pwl_gamma_func( from_->epi_seg(), 
-                                           to_->epi_seg(), 
-                                           double(time_step()) );
+    //gamma_func_ = new bmrf_pwl_gamma_func( from_->epi_seg(), 
+    //                                       to_->epi_seg(), 
+    //                                       double(time_step()) );
+    gamma_func_ = new bmrf_const_gamma_func( gamma_ );
   return gamma_func_; 
 }
 

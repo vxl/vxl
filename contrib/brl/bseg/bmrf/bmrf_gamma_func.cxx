@@ -34,6 +34,9 @@ bmrf_pwl_gamma_func::mean(double /*t*/) const
   if (knots_.empty())
     return 0.0;
 
+  if (knots_.size() == 1)
+    return knots_.begin()->second;
+
   vcl_map<double,double>::const_iterator k = knots_.begin(), last_k = k;
   double sum = 0.0, min_alpha = k->first;
   for (++k; k != knots_.end();  last_k=k, ++k){
