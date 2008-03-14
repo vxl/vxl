@@ -125,6 +125,8 @@ bvxm_voxel_slab_base_sptr create_mog_image_using_grey_processor(vcl_string model
 
   vpgl_camera_double_sptr cam1 = create_camera();
 
+  vox_world->increment_observations<APM_MOG_GREY>(0);
+
   expected_img = new vil_image_view<unsigned char>(640,480);
   vil_image_view<float> mask(640,480);
   bvxm_image_metadata meta1(expected_img,cam1);
