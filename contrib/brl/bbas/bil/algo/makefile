@@ -17,7 +17,6 @@ MANPAGE_SOURCES += bil_harr_wavelet_transform.h
 MANPAGE_SOURCES += bil_harr_wavelet_transform.txx
 MANPAGE_SOURCES += bil_perform_tensor_decomposition.txx
 MANPAGE_SOURCES += bil_roi_mask.h
-MANPAGE_SOURCES += bil_scale_image.txx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

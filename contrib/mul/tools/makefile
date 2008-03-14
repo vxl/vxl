@@ -4,6 +4,7 @@ include ${VXLROOT}/core/vbl/config.mk
 
 MINI_PROG_SOURCES += concat_3d_images.cxx
 SOURCES += print_mbl_log_properties.cxx
+SOURCES += crop_image_3d.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

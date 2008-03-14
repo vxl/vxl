@@ -14,7 +14,6 @@ MANPAGE_SOURCES += vil3d_resample_simple.txx
 MANPAGE_SOURCES += vil3d_resample_trilinear.txx
 MANPAGE_SOURCES += vil3d_slice.h
 MANPAGE_SOURCES += vil3d_trilin_interp.h
-MANPAGE_SOURCES += vil3d_crop.h
 MANPAGE_SOURCES += vil3d_switch_axes.h
 MANPAGE_SOURCES += vil3d_math.h
 SOURCES += vil3d_file_format.cxx
@@ -32,6 +31,7 @@ SOURCES += file_formats/vil3d_slice_list.cxx
 SOURCES += file_formats/vil3d_analyze_format.cxx
 SOURCES += file_formats/vil3d_gen_synthetic.cxx
 
+SOURCES += vil3d_crop.cxx
 SOURCES += vil3d_copy.cxx
 SOURCES += vil3d_save.cxx
 MANPAGE_SOURCES += vil3d_from_image_2d.h

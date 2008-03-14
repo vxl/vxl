@@ -17,5 +17,8 @@ SOURCES += mfpf_searcher.cxx
 SOURCES += mfpf_draw_pose_cross.cxx
 MANPAGE_SOURCES += mfpf_pose.h
 SOURCES += mfpf_draw_pose_lines.cxx
+SOURCES += mfpf_draw_matches.cxx
+MANPAGE_SOURCES += mfpf_pose_set.h
+MANPAGE_SOURCES += mfpf_region_form.h
 
 SUBDIRS += tests

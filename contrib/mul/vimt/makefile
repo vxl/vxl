@@ -25,6 +25,7 @@ MANPAGE_SOURCES += vimt_resample_bilin.h
 MANPAGE_SOURCES += vimt_sample_grid_bilin.txx
 MANPAGE_SOURCES += vimt_sample_grid_bicub.txx
 MANPAGE_SOURCES += vimt_crop.h
+MANPAGE_SOURCES += vimt_convert.h
 
 SUBDIRS += algo
 

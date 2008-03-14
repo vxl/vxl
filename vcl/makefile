@@ -124,6 +124,7 @@ MANPAGE_SOURCES += generic/vcl_typeinfo.h
 MANPAGE_SOURCES += generic/vcl_utility.h
 MANPAGE_SOURCES += generic/vcl_valarray.h
 MANPAGE_SOURCES += generic/vcl_vector.h
+MANPAGE_SOURCES += generic/vcl_memory_tr1.h
 MANPAGE_SOURCES += iso/vcl_bitset.h
 MANPAGE_SOURCES += iso/vcl_cassert.h
 MANPAGE_SOURCES += iso/vcl_cctype.h
@@ -174,6 +175,7 @@ MANPAGE_SOURCES += iso/vcl_set.txx
 MANPAGE_SOURCES += iso/vcl_string.txx
 MANPAGE_SOURCES += iso/vcl_utility.txx
 MANPAGE_SOURCES += iso/vcl_vector.txx
+MANPAGE_SOURCES += iso/vcl_memory_tr1.h
 
 MANPAGE_SOURCES += gcc/vcl_cmath.h
 MANPAGE_SOURCES += gcc/vcl_cstdlib.h
