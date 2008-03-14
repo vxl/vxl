@@ -17,7 +17,7 @@ bvxm_create_local_rpc_process::bvxm_create_local_rpc_process()
   //input[1]: The current camera
   input_data_.resize(2,brdb_value_sptr(0));
   input_types_.resize(2);
-  input_types_[0] = "bvam_voxel_world_sptr";
+  input_types_[0] = "bvxm_voxel_world_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
 
   // process has 1 output:

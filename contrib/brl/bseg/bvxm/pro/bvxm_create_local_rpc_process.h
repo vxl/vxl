@@ -1,4 +1,4 @@
-// This is contrib/bvam/pro/bvxm_create_local_rpc_process.h
+// This is contrib/brl/bseg/bvxm/pro/bvxm_create_local_rpc_process.h
 #ifndef bvxm_create_local_rpc_process_h_
 #define bvxm_create_local_rpc_process_h_
 
@@ -30,7 +30,7 @@ class bvxm_create_local_rpc_process : public bprb_process
   virtual bvxm_create_local_rpc_process* clone() const 
   { return new bvxm_create_local_rpc_process(*this); }
 
-  vcl_string name(){return "bvamCreateLocalRpcProcess";}
+  vcl_string name(){return "bvxmCreateLocalRpcProcess";}
 
   bool init() { return true; }
   bool execute();
