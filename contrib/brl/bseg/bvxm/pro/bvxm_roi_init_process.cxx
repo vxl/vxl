@@ -82,7 +82,10 @@ bool bvxm_roi_init_process::execute()
   }
 
   vpgl_local_rational_camera<double> local_camera;
-  roi_init(image_path, rat_camera, world_params, uncertainty, img_ptr, local_camera);
+  if (!roi_init(image_path, rat_camera, world_params, uncertainty, img_ptr, local_camera)) {
+    vcl_cerr << "The process has failed!" << vcl_endl;
+    return false;
+  }
 
   // update the camera and store
   brdb_value_sptr output0 = 
@@ -145,9 +148,13 @@ bool bvxm_roi_init_process::roi_init(vcl_string const& image_path,
   bb->add_point(roi_box->min_x(), roi_box->min_y());
   bb->add_point(roi_box->max_x(), roi_box->max_y());
   bb = broi.clip_to_image_bounds(bb);
-
-  vil_image_view_base_sptr roi = nitf->get_copy_view((unsigned int)roi_box->min_x(),
-    (unsigned int)roi_box->width(),  (unsigned int)roi_box->min_y(), (unsigned int)roi_box->height());
+  
+  vil_image_view_base_sptr roi = nitf->get_copy_view((unsigned int)bb->get_min_x(),
+    (unsigned int)bb->width(),  (unsigned int)bb->get_min_y(), (unsigned int)bb->height());
+  if (!roi) {
+    vcl_cerr << "bvxm_roi_init_process::roi_init()-- clipping box is out of image boundaries" << vcl_endl;
+    return false;
+  }
 
   if (roi->pixel_format() == VIL_PIXEL_FORMAT_UINT_16) {
     vil_image_view<vxl_uint_16> nitf_image_vxl_uint_16(roi);
