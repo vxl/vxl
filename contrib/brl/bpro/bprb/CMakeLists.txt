@@ -2,7 +2,6 @@
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
 
-IF(BUILD_EXPAT)
 
 SET(bprb_sources
    bprb_parameters.cxx             bprb_parameters.h            bprb_parameters_sptr.h
@@ -23,4 +22,4 @@ TARGET_LINK_LIBRARIES(bprb brdb bxml vbl vsl)
 IF(BUILD_TESTING)
   SUBDIRS(tests)
 ENDIF(BUILD_TESTING)
-ENDIF(BUILD_EXPAT)
+

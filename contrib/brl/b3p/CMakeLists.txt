@@ -8,8 +8,13 @@
 #                                                                  #
 ####################################################################
 
-#XML Parser
-INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/find_expat.cmake )
-IF(HAS_EXPAT)
-SUBDIRS( expatpp )
-ENDIF(HAS_EXPAT)
+#XML Parser 
+
+
+OPTION( VXL_FORCE_B3P_EXPAT "Use B3P instead of any native EXPAT library?" NO)
+MARK_AS_ADVANCED( VXL_FORCE_B3P_EXPAT )
+SUBDIRS(expat)
+
+SUBDIRS(expatpp)
+
+

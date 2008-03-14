@@ -1,6 +1,8 @@
 # brl/bpro/CMakeLists.txt
 # main package for processing operations
 
+IF(HAS_BXML)
+
 # Basic process classes
 SUBDIRS(bprb)
 
@@ -10,3 +12,5 @@ SUBDIRS(bppy)
 
 # Brown core processing
 SUBDIRS(core)
+
+ENDIF(HAS_BXML)
