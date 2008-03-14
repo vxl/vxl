@@ -38,20 +38,20 @@ class bvxm_voxel_slab_iterator : public bvxm_voxel_slab_iterator_base<T>, public
 public:
   bvxm_voxel_slab_iterator() : bvxm_voxel_slab_iterator_base() {};
   bvxm_voxel_slab_iterator(bvxm_voxel_storage<T> *storage, vgl_vector_3d<unsigned int> grid_size, unsigned slice_idx, unsigned slab_thickness)
-    : bvxm_voxel_slab_iterator_base(storage,grid_size,slice_idx,slab_thickness){};
+    : bvxm_voxel_slab_iterator_base<T>(storage,grid_size,slice_idx,slab_thickness){};
 
   ~bvxm_voxel_slab_iterator(){/*storage_->put_slab();*/};
 
-  bvxm_voxel_slab_iterator& operator=(const bvxm_voxel_slab_iterator& that);
+  bvxm_voxel_slab_iterator<T>& operator=(const bvxm_voxel_slab_iterator<T>& that);
 
-  bool operator==(const bvxm_voxel_slab_iterator& that);
+  bool operator==(const bvxm_voxel_slab_iterator<T>& that);
 
-  bool operator!=(const bvxm_voxel_slab_iterator& that);
+  bool operator!=(const bvxm_voxel_slab_iterator<T>& that);
 
-  bvxm_voxel_slab_iterator& operator++();
+  bvxm_voxel_slab_iterator<T>& operator++();
   //bvxm_voxel_slab_iterator& operator++(int); // postfix version
 
-  bvxm_voxel_slab_iterator& operator--();
+  bvxm_voxel_slab_iterator<T>& operator--();
   //bvxm_voxel_slab_iterator& operator--(int); // postfix version
 
   bvxm_voxel_slab<T>& operator*(){return slab_;}
