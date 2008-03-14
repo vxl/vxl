@@ -210,7 +210,7 @@ template<bvxm_voxel_type VOX_T>
 unsigned int bvxm_voxel_world::num_observations(unsigned int bin_idx)
 {
   // call get_grid so data will be loaded from disk if necessary.
-  typedef bvxm_voxel_traits<VOX_T>::voxel_datatype vox_datatype;
+  typedef typename bvxm_voxel_traits<VOX_T>::voxel_datatype vox_datatype;
   bvxm_voxel_grid<vox_datatype> *grid = static_cast<bvxm_voxel_grid<vox_datatype>*>(this->get_grid<VOX_T>(bin_idx).ptr());
   return grid->num_observations();
 }
@@ -221,7 +221,7 @@ template<bvxm_voxel_type VOX_T>
 void bvxm_voxel_world::increment_observations(unsigned int bin_idx)
 {
   // call get_grid so data will be loaded from disk if necessary.
-  typedef bvxm_voxel_traits<VOX_T>::voxel_datatype vox_datatype;
+  typedef typename bvxm_voxel_traits<VOX_T>::voxel_datatype vox_datatype;
   bvxm_voxel_grid<vox_datatype> *grid = static_cast<bvxm_voxel_grid<vox_datatype>*>(this->get_grid<VOX_T>(bin_idx).ptr());
   grid->increment_observations();
 
@@ -260,7 +260,7 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index)
         vcl_cerr << "error parsing filename " << file_it() << vcl_endl;
       } else {
         // create voxel grid and insert into map
-        bvxm_voxel_grid_base_sptr grid = new bvxm_voxel_grid<bvxm_voxel_traits<VOX_T>::voxel_datatype>(file_it(),grid_size);
+        bvxm_voxel_grid_base_sptr grid = new bvxm_voxel_grid<typename bvxm_voxel_traits<VOX_T>::voxel_datatype>(file_it(),grid_size);
         bin_map.insert(vcl_make_pair((unsigned)idx, grid));
       }
     }
@@ -283,7 +283,7 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index)
     vcl_string fname_prefix = bvxm_voxel_traits<VOX_T>::filename_prefix();
     apm_fname << storage_directory << "/" << fname_prefix << "_" << bin_index << ".vox";
 
-    typedef bvxm_voxel_traits<VOX_T>::voxel_datatype voxel_datatype;
+    typedef typename bvxm_voxel_traits<VOX_T>::voxel_datatype voxel_datatype;
     bvxm_voxel_grid<voxel_datatype> *grid = new bvxm_voxel_grid<voxel_datatype>(apm_fname.str(),grid_size);
 
     // fill grid with default value
@@ -338,7 +338,7 @@ bool bvxm_voxel_world::set_grid(unsigned bin_index,bvxm_voxel_grid_base_sptr gri
         vcl_cerr << "error parsing filename " << file_it() << vcl_endl;
       } else {
         // create voxel grid and insert into map
-        bvxm_voxel_grid_base_sptr grid = new bvxm_voxel_grid<bvxm_voxel_traits<VOX_T>::voxel_datatype>(file_it(),grid_size);
+        bvxm_voxel_grid_base_sptr grid = new bvxm_voxel_grid<typename bvxm_voxel_traits<VOX_T>::voxel_datatype>(file_it(),grid_size);
         bin_map.insert(vcl_make_pair((unsigned)idx, grid));
       }
     }
@@ -362,7 +362,7 @@ bool bvxm_voxel_world::set_grid(unsigned bin_index,bvxm_voxel_grid_base_sptr gri
     vcl_string fname_prefix = bvxm_voxel_traits<VOX_T>::filename_prefix();
     apm_fname << storage_directory << "/" <<   ".vox";
 
-    typedef bvxm_voxel_traits<VOX_T>::voxel_datatype voxel_datatype;
+    typedef typename bvxm_voxel_traits<VOX_T>::voxel_datatype voxel_datatype;
     bvxm_voxel_grid_base_sptr grid = 
       new bvxm_voxel_grid<voxel_datatype>(apm_fname.str(),grid_size);
 
@@ -415,13 +415,13 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
 {
 
   // datatype for current appearance model
-  typedef bvxm_voxel_traits<APM_T>::voxel_datatype apm_datatype;
+  typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype apm_datatype;
   // datatype of the pixels that the processor operates on.
-  typedef bvxm_voxel_traits<APM_T>::obs_datatype obs_datatype;
-  typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
+  typedef typename bvxm_voxel_traits<APM_T>::obs_datatype obs_datatype;
+  typedef typename bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
 
   // the appearance model processor
-  bvxm_voxel_traits<APM_T>::appearance_processor apm_processor;
+  typename bvxm_voxel_traits<APM_T>::appearance_processor apm_processor;
 
   vgl_vector_3d<unsigned int> grid_size = params_->num_voxels();
   ocp_datatype min_vox_prob = params_->min_occupancy_prob();
@@ -480,10 +480,10 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
   bvxm_voxel_grid_base_sptr apm_grid_base = this->get_grid<APM_T>(bin_index);
   bvxm_voxel_grid<apm_datatype> *apm_grid  = static_cast<bvxm_voxel_grid<apm_datatype>*>(apm_grid_base.ptr());
 
-  bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
-  bvxm_voxel_grid<apm_datatype>::iterator apm_slab_it = apm_grid->begin();
-  bvxm_voxel_grid<float>::iterator preX_slab_it = preX.begin();
-  bvxm_voxel_grid<float>::iterator PIvisX_slab_it = PIvisX.begin();
+  typename bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
+  typename bvxm_voxel_grid<apm_datatype>::iterator apm_slab_it = apm_grid->begin();
+  typename bvxm_voxel_grid<float>::iterator preX_slab_it = preX.begin();
+  typename bvxm_voxel_grid<float>::iterator PIvisX_slab_it = PIvisX.begin();
 
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it, ++apm_slab_it, ++preX_slab_it, ++PIvisX_slab_it)
   {
@@ -627,13 +627,13 @@ bool bvxm_voxel_world::expected_image(bvxm_image_metadata const& camera,
                                       unsigned bin_index)
 {
   // datatype for current appearance model
-  typedef bvxm_voxel_traits<APM_T>::voxel_datatype apm_datatype;
-  typedef bvxm_voxel_traits<APM_T>::obs_datatype obs_datatype;
-  typedef bvxm_voxel_traits<APM_T>::obs_mathtype obs_mathtype;
-  typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
+  typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype apm_datatype;
+  typedef typename bvxm_voxel_traits<APM_T>::obs_datatype obs_datatype;
+  typedef typename bvxm_voxel_traits<APM_T>::obs_mathtype obs_mathtype;
+  typedef typename bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
 
   // the appearance model processor
-  bvxm_voxel_traits<APM_T>::appearance_processor apm_processor;
+  typename bvxm_voxel_traits<APM_T>::appearance_processor apm_processor;
 
   // extract global parameters
   vgl_vector_3d<unsigned int> grid_size = params_->num_voxels();
@@ -669,8 +669,8 @@ bool bvxm_voxel_world::expected_image(bvxm_image_metadata const& camera,
   bvxm_voxel_grid_base_sptr apm_grid_base = this->get_grid<APM_T>(bin_index);
   bvxm_voxel_grid<apm_datatype> *apm_grid  = static_cast<bvxm_voxel_grid<apm_datatype>*>(apm_grid_base.ptr());
 
-  bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
-  bvxm_voxel_grid<apm_datatype>::const_iterator apm_slab_it = apm_grid->begin();
+  typename bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
+  typename bvxm_voxel_grid<apm_datatype>::const_iterator apm_slab_it = apm_grid->begin();
 
   vcl_cout << "Generating Expected Image: " << vcl_endl;
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it, ++apm_slab_it) {
@@ -684,10 +684,10 @@ bool bvxm_voxel_world::expected_image(bvxm_image_metadata const& camera,
     // warp slice_probability to image plane
     bvxm_util::warp_slab_bilinear(*ocp_slab_it, H_img_to_plane[z], slice_ocp_img);
 
-    bvxm_voxel_slab<obs_datatype>::const_iterator I_it = expected_slice_img.begin();
-    bvxm_voxel_slab<ocp_datatype>::const_iterator PX_it = slice_ocp_img.begin();
-    bvxm_voxel_slab<obs_datatype>::iterator out_it = expected_slab.begin();
-    bvxm_voxel_slab<float>::iterator visX_it = visX_accum.begin(), W_it = PXvisX_accum.begin();
+    typename bvxm_voxel_slab<obs_datatype>::const_iterator I_it = expected_slice_img.begin();
+    typename bvxm_voxel_slab<ocp_datatype>::const_iterator PX_it = slice_ocp_img.begin();
+    typename bvxm_voxel_slab<obs_datatype>::iterator out_it = expected_slab.begin();
+    typename bvxm_voxel_slab<float>::iterator visX_it = visX_accum.begin(), W_it = PXvisX_accum.begin();
 
     for (; out_it != expected_slab.end(); ++I_it, ++PX_it, ++out_it, ++visX_it, ++W_it) {
       float w = *PX_it * *visX_it;
@@ -699,8 +699,8 @@ bool bvxm_voxel_world::expected_image(bvxm_image_metadata const& camera,
   }
   vcl_cout << vcl_endl;
 
-  bvxm_voxel_slab<obs_datatype>::iterator out_it = expected_slab.begin();
-  bvxm_voxel_slab<float>::const_iterator W_it = PXvisX_accum.begin();
+  typename bvxm_voxel_slab<obs_datatype>::iterator out_it = expected_slab.begin();
+  typename bvxm_voxel_slab<float>::const_iterator W_it = PXvisX_accum.begin();
   // normalize expected image by weight sum
   for (; out_it != expected_slab.end(); ++out_it, ++W_it) {
     if(*W_it > 0)
@@ -730,11 +730,11 @@ bool bvxm_voxel_world::inv_pixel_range_probability(bvxm_image_metadata const& ob
                                                    unsigned bin_index, float pixel_range)
 {
   // datatype for current appearance model
-  typedef bvxm_voxel_traits<APM_T>::voxel_datatype apm_datatype;
-  typedef bvxm_voxel_traits<APM_T>::obs_datatype obs_datatype;
-  typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
+  typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype apm_datatype;
+  typedef typename bvxm_voxel_traits<APM_T>::obs_datatype obs_datatype;
+  typedef typename bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
 
-  bvxm_voxel_traits<APM_T>::appearance_processor apm_processor;
+  typename bvxm_voxel_traits<APM_T>::appearance_processor apm_processor;
 
   bvxm_world_params_sptr params = params_;
 
@@ -754,7 +754,7 @@ bool bvxm_voxel_world::inv_pixel_range_probability(bvxm_image_metadata const& ob
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
     for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
     {
-      bvxm_util::compute_plane_image_H(observation.camera,z,Hp2i,Hi2p);
+      bvxm_util::compute_plane_image_H(observation.camera,params,z,Hp2i,Hi2p);
       H_plane_to_img.push_back(Hp2i);
       H_img_to_plane.push_back(Hi2p);
     }
@@ -785,8 +785,8 @@ bool bvxm_voxel_world::inv_pixel_range_probability(bvxm_image_metadata const& ob
   bvxm_voxel_grid_base_sptr apm_grid_base = this->get_grid<APM_T>(bin_index);
   bvxm_voxel_grid<apm_datatype> *apm_grid  = static_cast<bvxm_voxel_grid<apm_datatype> >(apm_grid_base.ptr());
 
-  bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
-  bvxm_voxel_grid<apm_datatype>::iterator apm_slab_it = apm_grid->begin();
+  typename bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
+  typename bvxm_voxel_grid<apm_datatype>::iterator apm_slab_it = apm_grid->begin();
 
   for (int z=0; z<grid_size.z(); ++z, ++ocp_slab_it, ++apm_slab_it)
   {
@@ -803,8 +803,8 @@ bool bvxm_voxel_world::inv_pixel_range_probability(bvxm_image_metadata const& ob
     // create min and max observations: for now, just use same range for every pixel
     bvxm_voxel_slab<obs_datatype> obs_min(frame_backproj.nx(),frame_backproj.ny(),frame_backproj.nz());
     bvxm_voxel_slab<obs_datatype> obs_max(frame_backproj.ny(),frame_backproj.ny(),frame_backproj.nz());
-    bvxm_voxel_slab<obs_datatype>::const_iterator backproj_it = frame_backproj.begin();
-    bvxm_voxel_slab<obs_datatype>::iterator max_it = obs_max.begin(), min_it = obs_min.begin();
+    typename bvxm_voxel_slab<obs_datatype>::const_iterator backproj_it = frame_backproj.begin();
+    typename bvxm_voxel_slab<obs_datatype>::iterator max_it = obs_max.begin(), min_it = obs_min.begin();
     for (; backproj_it != frame_backproj.end(); ++backproj_it, ++max_it, ++min_it) {
       *max_it = *backproj_it + pixel_range;
       *min_it = *backproj_it - pixel_range;
@@ -842,12 +842,12 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
                                                  vil_image_view<float> &pixel_probability, unsigned bin_index)
 {
   // datatype for current appearance model
-  typedef bvxm_voxel_traits<APM_T>::voxel_datatype apm_datatype;
-  typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
-  typedef bvxm_voxel_traits<APM_T>::obs_datatype obs_datatype;
+  typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype apm_datatype;
+  typedef typename bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
+  typedef typename bvxm_voxel_traits<APM_T>::obs_datatype obs_datatype;
 
   // the appearance model processor
-  bvxm_voxel_traits<APM_T>::appearance_processor apm_processor;
+  typename bvxm_voxel_traits<APM_T>::appearance_processor apm_processor;
 
   // check image sizes
   if ( (observation.img->ni() != pixel_probability.ni()) || (observation.img->nj() != pixel_probability.nj()) ) {
@@ -903,8 +903,8 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
   bvxm_voxel_grid_base_sptr apm_grid_base = this->get_grid<APM_T>(bin_index);
   bvxm_voxel_grid<apm_datatype> *apm_grid  = static_cast<bvxm_voxel_grid<apm_datatype>*>(apm_grid_base.ptr());
 
-  bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
-  bvxm_voxel_grid<apm_datatype>::iterator apm_slab_it = apm_grid->begin();
+  typename bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
+  typename bvxm_voxel_grid<apm_datatype>::iterator apm_slab_it = apm_grid->begin();
 
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it, ++apm_slab_it)
   {
@@ -976,12 +976,12 @@ bool bvxm_voxel_world::mixture_of_gaussians_image(bvxm_image_metadata const& obs
                                                   bvxm_voxel_slab_base_sptr& mog_image, unsigned bin_index)
 {
   // datatype for current appearance model
-  typedef bvxm_voxel_traits<APM_T>::voxel_datatype apm_datatype; // datatype for current appearance model
-  typedef bvxm_voxel_traits<APM_T>::obs_datatype obs_datatype;   // datatype of the pixels that the processor operates on.
-  typedef bvxm_voxel_traits<APM_T>::obs_mathtype obs_mathtype;
-  typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
+  typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype apm_datatype; // datatype for current appearance model
+  typedef typename bvxm_voxel_traits<APM_T>::obs_datatype obs_datatype;   // datatype of the pixels that the processor operates on.
+  typedef typename bvxm_voxel_traits<APM_T>::obs_mathtype obs_mathtype;
+  typedef typename bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
 
-  bvxm_voxel_traits<APM_T>::appearance_processor apm_processor;
+  typename bvxm_voxel_traits<APM_T>::appearance_processor apm_processor;
 
   // extract global parameters
   vgl_vector_3d<unsigned int> grid_size = params_->num_voxels();
@@ -1014,8 +1014,8 @@ bool bvxm_voxel_world::mixture_of_gaussians_image(bvxm_image_metadata const& obs
   bvxm_voxel_grid_base_sptr apm_grid_base = this->get_grid<APM_T>(bin_index);
   bvxm_voxel_grid<apm_datatype> *apm_grid  = static_cast<bvxm_voxel_grid<apm_datatype>*>(apm_grid_base.ptr());
 
-  bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
-  bvxm_voxel_grid<apm_datatype>::const_iterator apm_slab_it = apm_grid->begin();
+  typename bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
+  typename bvxm_voxel_grid<apm_datatype>::const_iterator apm_slab_it = apm_grid->begin();
 
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it, ++apm_slab_it) {
 
@@ -1027,8 +1027,8 @@ bool bvxm_voxel_world::mixture_of_gaussians_image(bvxm_image_metadata const& obs
     // warp slice_probability to image plane
     bvxm_util::warp_slab_bilinear(*ocp_slab_it, H_img_to_plane[z], slice_ocp_img);
 
-    bvxm_voxel_slab<ocp_datatype>::const_iterator PX_it = slice_ocp_img.begin();
-    bvxm_voxel_slab<apm_datatype>::iterator out_it = mog_slab.begin();
+    typename bvxm_voxel_slab<ocp_datatype>::const_iterator PX_it = slice_ocp_img.begin();
+    typename bvxm_voxel_slab<apm_datatype>::iterator out_it = mog_slab.begin();
     bvxm_voxel_slab<float>::iterator visX_it = visX_accum.begin();
 
     // do the following update operation from Thom's code
@@ -1067,12 +1067,12 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
                                     unsigned bin_index)
 {
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
-  typedef bvxm_voxel_traits<APM_T>::obs_datatype obs_datatype;
+  typedef typename bvxm_voxel_traits<APM_T>::obs_datatype obs_datatype;
   // extract global parameters
   vgl_vector_3d<unsigned int> grid_size = params_->num_voxels();
 
   // the appearance model processor
-  bvxm_voxel_traits<APM_T>::appearance_processor apm_processor;
+  typename bvxm_voxel_traits<APM_T>::appearance_processor apm_processor;
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
   vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
@@ -1205,8 +1205,8 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
     bvxm_voxel_slab<float> slice_prob_vimg(virtual_view->ni(),virtual_view->nj(),1);
     bvxm_util::warp_slab_bilinear(*ocp_slab_it, H_virtual_img_to_plane[z], slice_prob_vimg);
 
-    bvxm_voxel_slab<obs_datatype>::const_iterator frame_it = frame_virtual_proj.begin();
-    bvxm_voxel_slab<obs_datatype>::iterator vframe_it = virtual_view_slab.begin();
+    typename bvxm_voxel_slab<obs_datatype>::const_iterator frame_it = frame_virtual_proj.begin();
+    typename bvxm_voxel_slab<obs_datatype>::iterator vframe_it = virtual_view_slab.begin();
     bvxm_voxel_slab<float>::const_iterator height_it = heightmap_filtered.begin();
     bvxm_voxel_slab<float>::const_iterator PX_vproj_it = slice_prob_vimg.begin();
     bvxm_voxel_slab<float>::iterator visX_accum_vproj_it = visX_accum_virtual_proj.begin();

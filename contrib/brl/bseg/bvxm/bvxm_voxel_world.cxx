@@ -224,7 +224,7 @@ bool bvxm_voxel_world::expected_edge_image(bvxm_image_metadata const& camera,vil
   bvxm_voxel_grid_base_sptr edges_grid_base = this->get_grid<EDGES>(0);
   bvxm_voxel_grid<edges_datatype> *edges_grid  = static_cast<bvxm_voxel_grid<edges_datatype>*>(edges_grid_base.ptr());
 
-  bvxm_voxel_grid<edges_datatype>::const_iterator edges_slab_it = edges_grid->begin();
+  bvxm_voxel_grid<edges_datatype>::const_iterator edges_slab_it(edges_grid->begin());
 
   vcl_cout << "Generating Expected Edge Image: " << vcl_endl;
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++edges_slab_it) {
