@@ -43,7 +43,7 @@ MAIN( test_bvxm_roi_init_process )
   // create the voxel world
   vgl_vector_3d<unsigned int> num_voxels(30,30,5);
   float voxel_length = 10;
-  bgeo_lvcs_sptr lvcs = new bgeo_lvcs(32.716835, -117.163714, 0);
+  bgeo_lvcs_sptr lvcs = new bgeo_lvcs(32.716835, 117.163714, 0);//32.716835, -117.163714, 0);
   bvxm_world_params_sptr world_params = new bvxm_world_params();
   world_params->set_params("./", vgl_point_3d<float> (0,0,0), num_voxels, voxel_length, lvcs);
   bvxm_voxel_world_sptr world = new bvxm_voxel_world();
@@ -55,6 +55,14 @@ MAIN( test_bvxm_roi_init_process )
   good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
   good = good && bprb_batch_process_manager::instance()->set_input(1, v1);
   good = good && bprb_batch_process_manager::instance()->set_input(2, v2);
+  good = good && bprb_batch_process_manager::instance()->run_process();
+  TEST("run roi process should be unsuccesful", good ,false);
+
+  // run with good lvcs setting
+  bgeo_lvcs_sptr lvcs_good = new bgeo_lvcs(32.716835, -117.163714, 0);
+  world_params->set_params("./", vgl_point_3d<float> (0,0,0), num_voxels, voxel_length, lvcs_good);
+  world->set_params(world_params);
+  good=true;
   good = good && bprb_batch_process_manager::instance()->run_process();
 
   unsigned id_cam, id_img;
