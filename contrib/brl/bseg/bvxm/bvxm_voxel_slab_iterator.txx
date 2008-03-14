@@ -93,7 +93,7 @@ bvxm_voxel_slab_iterator<T>& bvxm_voxel_slab_iterator<T>::operator--()
 
 template <class T>
 bvxm_voxel_slab_const_iterator<T>::bvxm_voxel_slab_const_iterator(bvxm_voxel_slab_iterator<T> &non_const_it)
-: bvxm_voxel_slab_iterator_base(static_cast<bvxm_voxel_slab_iterator_base<T>&>(non_const_it))
+: bvxm_voxel_slab_iterator_base<T>(static_cast<bvxm_voxel_slab_iterator_base<T>&>(non_const_it))
 {}
   
 

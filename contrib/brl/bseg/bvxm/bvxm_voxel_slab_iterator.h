@@ -64,7 +64,7 @@ public:
 
   bvxm_voxel_slab<T>& operator*(){return bvxm_voxel_slab_iterator_base<T>::slab_;}
 
-  bvxm_voxel_slab<T>* operator->(){return &bvxm_voxel_slab_iterator_base<T>::slab_;}
+  bvxm_voxel_slab<T>* operator->(){return &slab_;}
 
 private:
 
@@ -100,9 +100,9 @@ public:
   bvxm_voxel_slab_const_iterator& operator--();
   //bvxm_voxel_slab_iterator& operator--(int); // postfix version
 
-  bvxm_voxel_slab<T> const& operator*(){return bvxm_voxel_slab_iterator_base<T>::slab_;}
+  bvxm_voxel_slab<T> const& operator*(){return slab_;}
 
-  bvxm_voxel_slab<T> const* operator->(){return &bvxm_voxel_slab_iterator_base<T>::slab_;}
+  bvxm_voxel_slab<T> const* operator->(){return &slab_;}
   
 private:
 
