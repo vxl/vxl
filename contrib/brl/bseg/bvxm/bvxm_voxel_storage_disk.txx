@@ -12,7 +12,7 @@
 
 template <class T>
 bvxm_voxel_storage_disk<T>::bvxm_voxel_storage_disk(vcl_string storage_filename, vgl_vector_3d<unsigned int> grid_size)
-: bvxm_voxel_storage(grid_size), storage_fname_(storage_filename)
+: bvxm_voxel_storage<T>(grid_size), storage_fname_(storage_filename)
 {
   slab_buffer_ = new bvxm_memory_chunk(grid_size.x()*grid_size.y()*sizeof(T));
 
