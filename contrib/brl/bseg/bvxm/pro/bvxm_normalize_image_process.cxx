@@ -81,9 +81,10 @@ bool bvxm_normalize_image_process::execute()
   unsigned bin_index = input4->value();
 
   //: if the world is not updated yet, we just return the input image
-  if (((voxel_type == "apm_mog_rgb") && !world->num_observations<APM_MOG_RGB>(bin_index)) ||
-      ((voxel_type == "apm_mog_grey") && !world->num_observations<APM_MOG_GREY>(bin_index))) {
+  if ((voxel_type == "apm_mog_rgb") ){
+      if(!world->num_observations<APM_MOG_RGB>(bin_index) ) {
     
+          
     // return the input img
     brdb_value_sptr output0 = new brdb_value_t<vil_image_view_base_sptr>(input_img);
     output_data_[0] = output0;
@@ -94,8 +95,24 @@ bool bvxm_normalize_image_process::execute()
     output_data_[2] = output2;
 
     return true;
+      }
   }
-  
+  if((voxel_type == "apm_mog_grey") )
+  {
+      if(!world->num_observations<APM_MOG_GREY>(bin_index))
+      {
+          // return the input img
+          brdb_value_sptr output0 = new brdb_value_t<vil_image_view_base_sptr>(input_img);
+          output_data_[0] = output0;
+
+          brdb_value_sptr output1 = new brdb_value_t<float>(1.0f); // a
+          brdb_value_sptr output2 = new brdb_value_t<float>(0.0f); // b
+          output_data_[1] = output1;
+          output_data_[2] = output2;
+
+          return true;
+      }
+  }
   //: create metadata:
   bvxm_image_metadata observation(input_img,camera);
 
