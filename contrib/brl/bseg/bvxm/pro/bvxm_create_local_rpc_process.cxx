@@ -3,8 +3,8 @@
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
 
-#include <bvam/bvam_voxel_world.h>
-#include <bvam/bvam_image_metadata.h>
+#include <bvxm/bvxm_voxel_world.h>
+#include <bvxm/bvxm_image_metadata.h>
 
 #include <bil/algo/bil_cedt.h>
 #include <vnl/algo/vnl_gaussian_kernel_1d.h>
@@ -33,10 +33,10 @@ bool bvxm_create_local_rpc_process::execute()
   if(!this->verify_inputs())
     return false;
 
-  brdb_value_t<bvam_voxel_world_sptr>* input0 = static_cast<brdb_value_t<bvam_voxel_world_sptr>* >(input_data_[0].ptr());
+  brdb_value_t<bvxm_voxel_world_sptr>* input0 = static_cast<brdb_value_t<bvxm_voxel_world_sptr>* >(input_data_[0].ptr());
   brdb_value_t<vpgl_camera_double_sptr>* input1 =  static_cast<brdb_value_t<vpgl_camera_double_sptr>* >(input_data_[1].ptr());
 
-  bvam_voxel_world_sptr vox_world = input0->value();
+  bvxm_voxel_world_sptr vox_world = input0->value();
 
   vpgl_camera_double_sptr camera_inp = input1->value();
   vpgl_rational_camera<double> *cam_inp;

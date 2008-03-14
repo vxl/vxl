@@ -17,6 +17,7 @@
 #include <bvxm/pro/bvxm_roi_init_process.h>
 #include <bvxm/pro/bvxm_normalize_image_process.h>
 #include <bvxm/pro/bvxm_illum_index_process.h>
+#include <bvxm/pro/bvxm_create_local_rpc_process.h>
 
 #include <bvxm/pro/bvxm_rpc_registration_process.h>
 #include <bvxm/pro/bvxm_generate_edge_map_process.h>
@@ -52,6 +53,7 @@ register_processes(PyObject *self, PyObject *args)
   //REG_PROCESS(bvxm_ekf_camera_optimize_process, bprb_batch_process_manager);
   //REG_PROCESS(bvxm_init_ekf_camera_optimizer_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_save_occupancy_raw_process, bprb_batch_process_manager);
+  REG_PROCESS(bvxm_create_local_rpc_process, bprb_batch_process_manager);
   Py_INCREF(Py_None);
   return Py_None;
 }
