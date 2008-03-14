@@ -1,13 +1,14 @@
 # This is contrib/brl/bseg/bvxm/pro/CMakeLists.txt
-# Bvxm's Process Library
+# bvxm's Process Library
 
+# bprb depends on expat and bvxm_prodepends on bprb primarily
+INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
+IF(EXPAT_FOUND)
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/dbil/algo )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc/vpgl )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR})
-#INCLUDE_DIRECTORIES( ${lems_SOURCE_DIR}/contrib )
-#INCLUDE_DIRECTORIES( ${lems_SOURCE_DIR}/basic )
 
 SET(bvxm_pro_sources
     bvxm_create_voxel_world_process.h     bvxm_create_voxel_world_process.cxx
@@ -30,12 +31,12 @@ AUX_SOURCE_DIRECTORY(Templates bvxm_pro_sources)
 
 ADD_LIBRARY(bvxm_pro ${bvxm_pro_sources})
 
-TARGET_LINK_LIBRARIES(bvxm_pro bvxm bvxm_io bprb bil_algo sdet vpgl vpgl_io vpgl_algo vpgl_file_formats vsol vil vil_io vnl vnl_io bgeo vgl vgl_algo brip brdb)
+TARGET_LINK_LIBRARIES(bvxm_pro bvxm bvxm_io bprb bil_algo sdet vpgl vpgl_io vpgl_algo vpgl_file_formats vpgl_bpro vsol vil vil_io vnl vnl_io bgeo vgl vgl_algo brip brdb)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
-
+ENDIF(EXPAT_FOUND)
 
 
 
