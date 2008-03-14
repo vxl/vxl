@@ -19,7 +19,7 @@ template <class T>
 bool bvxm_voxel_storage_mem<T>::initialize_data(const T& value)
 {
   // interpret entire grid as a slab and fill with data.
-  bvxm_voxel_slab<T> grid_slab(grid_size_.x(),grid_size_.y(),grid_size_.z(),mem_,reinterpret_cast<T*>(mem_->data()));
+  bvxm_voxel_slab<T> grid_slab(this->grid_size_.x(),this->grid_size_.y(),this->grid_size_.z(),mem_,reinterpret_cast<T*>(mem_->data()));
   grid_slab.fill(value);
   nobservations_ = 0;
 
@@ -30,16 +30,16 @@ bool bvxm_voxel_storage_mem<T>::initialize_data(const T& value)
 template <class T>
 bvxm_voxel_slab<T> bvxm_voxel_storage_mem<T>::get_slab(unsigned slice_idx, unsigned slab_thickness)
 {
-  unsigned long slice_size = grid_size_.x() * grid_size_.y();
+  unsigned long slice_size = this->grid_size_.x() * this->grid_size_.y();
   unsigned long mem_offset = slice_size * slice_idx;
 
   T* first_voxel = static_cast<T*>(mem_->data()) + mem_offset;
 
   unsigned slab_thickness_actual = slab_thickness;
-  if (slice_idx + slab_thickness > (unsigned)(grid_size_.z() - 1)) {
-    slab_thickness_actual = grid_size_.z() - slice_idx;
+  if (slice_idx + slab_thickness > (unsigned)(this->grid_size_.z() - 1)) {
+    slab_thickness_actual = this->grid_size_.z() - slice_idx;
   }
-  bvxm_voxel_slab<T> slab(grid_size_.x(),grid_size_.y(),slab_thickness_actual,mem_, first_voxel);
+  bvxm_voxel_slab<T> slab(this->grid_size_.x(),this->grid_size_.y(),slab_thickness_actual,mem_, first_voxel);
 
   
   return slab;

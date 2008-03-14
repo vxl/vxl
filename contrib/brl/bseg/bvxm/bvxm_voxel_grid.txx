@@ -26,7 +26,7 @@ bvxm_voxel_slab_iterator<T> bvxm_voxel_grid<T>::begin(unsigned slab_thickness)
 
 // note: traversing top-down, end() is one slab past the bottom.
 template <class T>
-bvxm_voxel_slab_iterator<T> bvxm_voxel_grid<T>::end(unsigned slab_thickness = 1)
+bvxm_voxel_slab_iterator<T> bvxm_voxel_grid<T>::end(unsigned slab_thickness)
 {
   bvxm_voxel_slab_iterator<T> slab_it(storage_, grid_size_, grid_size_.z(), slab_thickness);
 

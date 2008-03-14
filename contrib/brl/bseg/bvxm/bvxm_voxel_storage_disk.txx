@@ -69,7 +69,7 @@ bool bvxm_voxel_storage_disk<T>::initialize_data(T const& value)
     }
   }
   // everything looks ok. open file for write and fill with data
-  bvxm_voxel_slab<T> init_slab(grid_size_.x(),grid_size_.y(),1,slab_buffer_,static_cast<T*>(slab_buffer_->data()));
+  bvxm_voxel_slab<T> init_slab(this->grid_size_.x(),this->grid_size_.y(),1,slab_buffer_,static_cast<T*>(slab_buffer_->data()));
   init_slab.fill(value);
 
   if (fio_.is_open()) {
@@ -82,10 +82,10 @@ bool bvxm_voxel_storage_disk<T>::initialize_data(T const& value)
     return false;
   }
   // write the header
-  bvxm_voxel_storage_header<T> header(grid_size_);
+  bvxm_voxel_storage_header<T> header(this->grid_size_);
   fio_.write(reinterpret_cast<char*>(&header),sizeof(header));
   // write each slice
-  for (unsigned z=0; z <grid_size_.z(); z++) {
+  for (unsigned z=0; z <this->grid_size_.z(); z++) {
     fio_.write(reinterpret_cast<char*>(init_slab.first_voxel()),init_slab.size()*sizeof(T));
   }
 
@@ -103,8 +103,10 @@ bool bvxm_voxel_storage_disk<T>::initialize_data(T const& value)
 template <class T>
 bvxm_voxel_slab<T> bvxm_voxel_storage_disk<T>::get_slab(unsigned slice_idx, unsigned slab_thickness)
 {
-  if (slice_idx + slab_thickness > grid_size_.z()) {
-    vcl_cerr << "error: tried to get slab " << slice_idx << " with thickness " << slab_thickness << "; grid_size_.z() = " << grid_size_.z() << vcl_endl;
+  if (slice_idx + slab_thickness > this->grid_size_.z()) {
+    vcl_cerr << "error: tried to get slab " << slice_idx
+             << " with thickness " << slab_thickness
+             << "; grid_size_.z() = " << this->grid_size_.z() << vcl_endl;
     bvxm_voxel_slab<T> slab;
     return slab;
   }
@@ -112,13 +114,13 @@ bvxm_voxel_slab<T> bvxm_voxel_storage_disk<T>::get_slab(unsigned slice_idx, unsi
   if (!fio_.is_open()) {
     fio_.open(storage_fname_.c_str(),vcl_ios::binary | vcl_ios::in | vcl_ios::out);
   }
-  unsigned long slice_pos = grid_size_.x()*grid_size_.y()*slice_idx*sizeof(T) + sizeof(bvxm_voxel_storage_header<T>);
+  unsigned long slice_pos = this->grid_size_.x()*this->grid_size_.y()*slice_idx*sizeof(T) + sizeof(bvxm_voxel_storage_header<T>);
   unsigned long file_pos = fio_.tellg();
   if (slice_pos != file_pos) {
     fio_.seekg(slice_pos,vcl_ios::beg);
   }
   fio_.read(reinterpret_cast<char*>(slab_buffer_->data()),slab_buffer_->size());
-  bvxm_voxel_slab<T> slab(grid_size_.x(),grid_size_.y(),1,slab_buffer_,reinterpret_cast<T*>(slab_buffer_->data()));
+  bvxm_voxel_slab<T> slab(this->grid_size_.x(),this->grid_size_.y(),1,slab_buffer_,reinterpret_cast<T*>(slab_buffer_->data()));
   return slab;
 }
 
@@ -135,11 +137,11 @@ void bvxm_voxel_storage_disk<T>::put_slab()
     }
   }
   unsigned long in_pos = fio_.tellg();
-  if (in_pos < grid_size_.x()*grid_size_.y()*sizeof(T) + sizeof(bvxm_voxel_storage_header<T>)) {
+  if (in_pos < this->grid_size_.x()*this->grid_size_.y()*sizeof(T) + sizeof(bvxm_voxel_storage_header<T>)) {
     vcl_cerr << "error: attempted to put_slice() when current file position is not past first slice." << vcl_endl;
     return;
   }
-  unsigned long slice_pos = in_pos - (grid_size_.x()*grid_size_.y()*sizeof(T));
+  unsigned long slice_pos = in_pos - (this->grid_size_.x()*this->grid_size_.y()*sizeof(T));
   unsigned long file_pos = fio_.tellp();
   if (slice_pos != file_pos) {
     fio_.seekp(slice_pos,vcl_ios::beg);

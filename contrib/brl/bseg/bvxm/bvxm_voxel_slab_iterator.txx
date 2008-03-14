@@ -35,11 +35,11 @@ bvxm_voxel_slab_iterator_base<T>::bvxm_voxel_slab_iterator_base(bvxm_voxel_stora
 template <class T>
 bvxm_voxel_slab_iterator<T>& bvxm_voxel_slab_iterator<T>::operator=(const bvxm_voxel_slab_iterator<T>& that)
 {
-  storage_ = that.storage_;
-  slab_thickness_ = that.slab_thickness_;
-  slab_ = that.slab_;
-  grid_size_ = that.grid_size_;
-  slice_idx_ = that.slice_idx_;
+  this->storage_ = that.storage_;
+  this->slab_thickness_ = that.slab_thickness_;
+  this->slab_ = that.slab_;
+  this->grid_size_ = that.grid_size_;
+  this->slice_idx_ = that.slice_idx_;
 
   return *this;
 }
@@ -47,28 +47,28 @@ bvxm_voxel_slab_iterator<T>& bvxm_voxel_slab_iterator<T>::operator=(const bvxm_v
 template <class T>
 bool bvxm_voxel_slab_iterator<T>::operator==(const bvxm_voxel_slab_iterator<T>& that)
 {
-  return slab_ == that.slab_;
+  return this->slab_ == that.slab_;
 }
 
 
 template <class T>
 bool bvxm_voxel_slab_iterator<T>::operator!=(const bvxm_voxel_slab_iterator<T>& that)
 {
-  return slab_ != that.slab_;
+  return this->slab_ != that.slab_;
 }
 
 template <class T>
 bvxm_voxel_slab_iterator<T>& bvxm_voxel_slab_iterator<T>::operator++()
 {
   // commit prev slice to memory
-  storage_->put_slab();
+  this->storage_->put_slab();
 
-  ++slice_idx_;
-  if (slice_idx_ >= static_cast<int>(grid_size_.z())) {
-    slab_ = this->end_slab_;
+  ++this->slice_idx_;
+  if (this->slice_idx_ >= static_cast<int>(this->grid_size_.z())) {
+    this->slab_ = this->end_slab_;
   }
   else {
-    slab_ = storage_->get_slab(slice_idx_,slab_thickness_);
+    this->slab_ = this->storage_->get_slab(this->slice_idx_,this->slab_thickness_);
   }
   return *this;
 }
@@ -79,21 +79,21 @@ template <class T>
 bvxm_voxel_slab_iterator<T>& bvxm_voxel_slab_iterator<T>::operator--()
 {
   // commit old slice to memory
-  storage_->put_slab();
+  this->storage_->put_slab();
 
-  --slice_idx_;
-  if (slice_idx_ < 0) {
-    slab_ = this->end_slab_;
+  --this->slice_idx_;
+  if (this->slice_idx_ < 0) {
+    this->slab_ = this->end_slab_;
   } else {
-    slab_ = storage_->get_slab(slice_idx_,slab_thickness_);
+    this->slab_ = this->storage_->get_slab(this->slice_idx_,this->slab_thickness_);
   }
   return *this;
 }
 ///////////////////// bvxm_voxel_slab_const_iterator methods //////////////////////////////
 
 template <class T>
-bvxm_voxel_slab_const_iterator<T>::bvxm_voxel_slab_const_iterator(bvxm_voxel_slab_iterator<T> &non_const_it)
-: bvxm_voxel_slab_iterator_base<T>(static_cast<bvxm_voxel_slab_iterator_base<T>&>(non_const_it))
+bvxm_voxel_slab_const_iterator<T>::bvxm_voxel_slab_const_iterator(const bvxm_voxel_slab_iterator<T> &non_const_it)
+: bvxm_voxel_slab_iterator_base<T>(non_const_it)
 {}
   
 
@@ -102,11 +102,11 @@ bvxm_voxel_slab_const_iterator<T>::bvxm_voxel_slab_const_iterator(bvxm_voxel_sla
 template <class T>
 bvxm_voxel_slab_const_iterator<T>& bvxm_voxel_slab_const_iterator<T>::operator=(const bvxm_voxel_slab_const_iterator<T>& that)
 {
-  storage_ = that.storage_;
-  slab_thickness_ = that.slab_thickness_;
-  slab_ = that.slab_;
-  grid_size_ = that.grid_size_;
-  slice_idx_ = that.slice_idx_;
+  this->storage_ = that.storage_;
+  this->slab_thickness_ = that.slab_thickness_;
+  this->slab_ = that.slab_;
+  this->grid_size_ = that.grid_size_;
+  this->slice_idx_ = that.slice_idx_;
 
   return *this;
 }
@@ -114,14 +114,14 @@ bvxm_voxel_slab_const_iterator<T>& bvxm_voxel_slab_const_iterator<T>::operator=(
 template <class T>
 bool bvxm_voxel_slab_const_iterator<T>::operator==(const bvxm_voxel_slab_const_iterator<T>& that)
 {
-  return slab_ == that.slab_;
+  return this->slab_ == that.slab_;
 }
 
 
 template <class T>
 bool bvxm_voxel_slab_const_iterator<T>::operator!=(const bvxm_voxel_slab_const_iterator<T>& that)
 {
-  return slab_ != that.slab_;
+  return this->slab_ != that.slab_;
 }
 
 template <class T>
@@ -130,12 +130,12 @@ bvxm_voxel_slab_const_iterator<T>& bvxm_voxel_slab_const_iterator<T>::operator++
   // no need to commit prev slice to memory
   //storage_->put_slab();
 
-  ++slice_idx_;
-  if (slice_idx_ >= static_cast<int>(grid_size_.z())) {
-    slab_ = this->end_slab_;
+  ++this->slice_idx_;
+  if (this->slice_idx_ >= static_cast<int>(this->grid_size_.z())) {
+    this->slab_ = this->end_slab_;
   }
   else {
-    slab_ = storage_->get_slab(slice_idx_,slab_thickness_);
+    this->slab_ = this->storage_->get_slab(this->slice_idx_,this->slab_thickness_);
   }
   return *this;
 }
@@ -148,11 +148,11 @@ bvxm_voxel_slab_const_iterator<T>& bvxm_voxel_slab_const_iterator<T>::operator--
   // no need to commit old slice to memory
   //storage_->put_slab();
 
-  --slice_idx_;
-  if (slice_idx_ < 0) {
-    slab_ = this->end_slab_;
+  --this->slice_idx_;
+  if (this->slice_idx_ < 0) {
+    this->slab_ = this->end_slab_;
   } else {
-    slab_ = storage_->get_slab(slice_idx_,slab_thickness_);
+    this->slab_ = this->storage_->get_slab(this->slice_idx_,this->slab_thickness_);
   }
   return *this;
 }

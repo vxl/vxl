@@ -62,9 +62,9 @@ public:
   bvxm_voxel_slab_iterator<T>& operator--();
   //bvxm_voxel_slab_iterator& operator--(int); // postfix version
 
-  bvxm_voxel_slab<T>& operator*(){return bvxm_voxel_slab_iterator_base<T>::slab_;}
+  bvxm_voxel_slab<T>& operator*(){return this->slab_;}
 
-  bvxm_voxel_slab<T>* operator->(){return &slab_;}
+  bvxm_voxel_slab<T>* operator->(){return &(this->slab_);}
 
 private:
 
@@ -84,7 +84,7 @@ public:
                                  unsigned slice_idx, unsigned slab_thickness)
     : bvxm_voxel_slab_iterator_base<T>(storage,grid_size,slice_idx,slab_thickness){};
 
-  bvxm_voxel_slab_const_iterator(bvxm_voxel_slab_iterator<T> &non_const_it);
+  bvxm_voxel_slab_const_iterator(const bvxm_voxel_slab_iterator<T> &non_const_it);
 
   ~bvxm_voxel_slab_const_iterator(){};
 
@@ -100,9 +100,9 @@ public:
   bvxm_voxel_slab_const_iterator& operator--();
   //bvxm_voxel_slab_iterator& operator--(int); // postfix version
 
-  bvxm_voxel_slab<T> const& operator*(){return slab_;}
+  bvxm_voxel_slab<T> const& operator*(){return this->slab_;}
 
-  bvxm_voxel_slab<T> const* operator->(){return &slab_;}
+  bvxm_voxel_slab<T> const* operator->(){return &this->slab_;}
   
 private:
 
