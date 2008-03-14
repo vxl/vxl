@@ -20,6 +20,7 @@ SET(mfpf_sources
   mfpf_region_pdf_builder.h    mfpf_region_pdf_builder.cxx
   mfpf_norm_vec.h
   mfpf_sample_region.h
+  mfpf_region_form.h
   mfpf_pose.h
   mfpf_pose_set.h
   mfpf_searcher.h              mfpf_searcher.cxx

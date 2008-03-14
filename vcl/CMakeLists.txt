@@ -123,6 +123,7 @@ SET( vcl_sources
   generic/vcl_locale.h
   generic/vcl_map.h
   generic/vcl_memory.h
+  generic/vcl_memory_tr1.h
   generic/vcl_numeric.h
   generic/vcl_ostream.h
   generic/vcl_queue.h
@@ -179,6 +180,7 @@ SET( vcl_sources
   iso/vcl_limits.h
   iso/vcl_locale.h
   iso/vcl_memory.h
+  iso/vcl_memory_tr1.h
   iso/vcl_new.h
   iso/vcl_numeric.h
   iso/vcl_ostream.h
