@@ -16,13 +16,15 @@
 
 bvxm_change_detection_display_process::bvxm_change_detection_display_process()
 {
-  //inputs
-  input_data_.resize(2,brdb_value_sptr(0));
-  input_types_.resize(2);
+ //inputs
+  input_data_.resize(3,brdb_value_sptr(0));
+  input_types_.resize(3);
   //: original image
   input_types_[0] = "vil_image_view_base_sptr";
   //: probability image
   input_types_[1] = "vil_image_view_base_sptr";
+  //: mask image
+  input_types_[2] = "vil_image_view_base_sptr";
 
   //output
   output_data_.resize(1,brdb_value_sptr(0));
@@ -31,7 +33,6 @@ bvxm_change_detection_display_process::bvxm_change_detection_display_process()
 
   parameters()->add("Probability Threshold for detection", "prob_thresh", 0.5f);
   parameters()->add("Probability Image Scale", "prob_image_scale", 0.5f);
-
 
 }
 
@@ -51,8 +52,13 @@ bool bvxm_change_detection_display_process::execute()
   brdb_value_t<vil_image_view_base_sptr>* input1 = 
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(input_data_[1].ptr());
 
+    //get the mask image
+  brdb_value_t<vil_image_view_base_sptr>* input2 = 
+    static_cast<brdb_value_t<vil_image_view_base_sptr>* >(input_data_[2].ptr());
+
   vil_image_view_base_sptr img0 = input0->value();
   vil_image_view_base_sptr img1 = input1->value();
+  vil_image_view_base_sptr img2 = input2->value();
 
 
   
@@ -65,6 +71,7 @@ bool bvxm_change_detection_display_process::execute()
 
   vil_image_view<unsigned char> input_image(img0);
   vil_image_view<float> prob_image(img1);
+  vil_image_view<bool> mask_image(img2);
   vil_image_view<unsigned char> output_image( image_width, image_height, 3 );
 
   float prob_thresh = .50;
@@ -79,7 +86,7 @@ bool bvxm_change_detection_display_process::execute()
  
 
           float this_prob = 1.0;
-          if( prob_image(i,j) < prob_thresh ) 
+          if( prob_image(i,j) < prob_thresh && mask_image(i,j)) 
               this_prob = prob_image( i,j )/(prob_thresh);
           
           output_image(i,j,0) = (int)floor( input_image(i,j)*this_prob + 255*(1-this_prob) );
@@ -87,6 +94,7 @@ bool bvxm_change_detection_display_process::execute()
           output_image(i,j,2) = (int)floor( input_image(i,j)*this_prob );
       }
   }
+  
   
   
   brdb_value_sptr output0 = 
