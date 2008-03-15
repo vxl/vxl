@@ -78,7 +78,6 @@ bool bvxm_rpc_registration_process::execute()
   int ni = edge_image.ni();
   int nj = edge_image.nj();
 
-  double max_prob = 0.0;
   int max_u = 0, max_v = 0;
 
   vil_image_view<vxl_byte> expected_edge_image_output;
@@ -103,27 +102,7 @@ bool bvxm_rpc_registration_process::execute()
       }
     }
 
-    vcl_cout << "Estimating image offsets:" << vcl_endl;
-    for(int u=-offset_search_size; u<=offset_search_size; u++){
-      vcl_cout << ".";
-      for(int v=-offset_search_size; v<=offset_search_size; v++){
-        double prob = 0.0;
-        for(int m=offset_search_size; m<ni-offset_search_size; m++){
-          for(int n=offset_search_size; n<nj-offset_search_size; n++){
-            if(edge_image(m,n)==255){
-              prob += expected_edge_image(m-u,n-v);
-            }
-          }
-        }
-
-        if(prob > max_prob){
-          max_prob = prob;
-          max_u = u;
-          max_v = v;
-        }
-      }
-    }
-    vcl_cout << vcl_endl;
+    advanced_offset_estimation(offset_search_size,edge_image,expected_edge_image,max_u,max_v);
 
     vcl_cout << "Estimated changes in offsets (u,v)=(" << max_u << "," << max_v << ")" << vcl_endl;
   }
@@ -169,4 +148,33 @@ bool bvxm_rpc_registration_process::execute()
   output_data_[1] = output1;
 
   return true;
+}
+
+void bvxm_rpc_registration_process::advanced_offset_estimation(const int offset_search_size,const vil_image_view<vxl_byte>& edge_image,const vil_image_view<float>& expected_edge_image,int& max_u,int& max_v){
+    vcl_cout << "Estimating image offsets:" << vcl_endl;
+
+    double max_prob = 0.0;
+    int ni = edge_image.ni();
+    int nj = edge_image.nj();
+
+    for(int u=-offset_search_size; u<=offset_search_size; u++){
+      vcl_cout << ".";
+      for(int v=-offset_search_size; v<=offset_search_size; v++){
+        double prob = 0.0;
+        for(int m=offset_search_size; m<ni-offset_search_size; m++){
+          for(int n=offset_search_size; n<nj-offset_search_size; n++){
+            if(edge_image(m,n)==255){
+              prob += expected_edge_image(m-u,n-v);
+            }
+          }
+        }
+
+        if(prob > max_prob){
+          max_prob = prob;
+          max_u = u;
+          max_v = v;
+        }
+      }
+    }
+    vcl_cout << vcl_endl;
 }
