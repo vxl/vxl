@@ -1,11 +1,11 @@
 # brl/bpro/CMakeLists.txt
 # main package for processing operations
 
-IF(HAS_BXML)
+INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
+IF(EXPAT_FOUND)
 
 # Basic process classes
 SUBDIRS(bprb)
-
 
 # Python wrappers
 SUBDIRS(bppy)
@@ -13,4 +13,4 @@ SUBDIRS(bppy)
 # Brown core processing
 SUBDIRS(core)
 
-ENDIF(HAS_BXML)
+ENDIF(EXPAT_FOUND)

@@ -1,9 +1,6 @@
 # vxl/contrib/brl/bbas/bxml/CMakeLists.txt
 # The Development Brown XML Parser
 
-
-SET(HAS_BXML "NO")
-
 INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 
 IF(EXPAT_FOUND)
@@ -15,9 +12,6 @@ SET( bxml_sources
     bxml_write.cxx               bxml_write.h
     bxml_find.cxx                bxml_find.h
 )
-
-
-SET(HAS_BXML "YES")
 
 AUX_SOURCE_DIRECTORY(Templates bxml_sources)
 
