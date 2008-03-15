@@ -143,11 +143,6 @@ public:
   //: set the world parameters
   void set_params(bvxm_world_params_sptr params){ params_ = params;}
 
-  //:set the voxel grid map entry   
-  template<bvxm_voxel_type VOX_T> 
-  bool set_grid(unsigned bin_index,bvxm_voxel_grid_base_sptr grid_sptr);
-
-
   // Operators that allow voxel world to be placed in a brdb database
   //: equality operator
   bool operator == (bvxm_voxel_world const& that) const;
@@ -301,83 +296,6 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index)
 
 }
 
-template<bvxm_voxel_type VOX_T>
-bool bvxm_voxel_world::set_grid(unsigned bin_index,bvxm_voxel_grid_base_sptr grid_sptr)
-{
-  assert(grid_sptr->grid_size().x() == params_->num_voxels().x());
-  assert(grid_sptr->grid_size().y() == params_->num_voxels().y());
-  assert(grid_sptr->grid_size().z() == params_->num_voxels().z());
-
-  //assert(VOX_T == params_->apm_type());
-
-  //retrieve map for current bvxm_voxel_type
-  //if no map found create a new one
-  if (grid_map_.find(VOX_T) == grid_map_.end())
-  {
-    //create map
-    vcl_map<unsigned, bvxm_voxel_grid_base_sptr> bin_map;
-
-    // look for existing appearance model grids in the directory
-    vgl_vector_3d<unsigned int> grid_size = params_->num_voxels();
-    vcl_string storage_directory = params_->model_dir();
-
-    vcl_stringstream grid_glob;
-    vcl_string fname_prefix = bvxm_voxel_traits<VOX_T>::filename_prefix();
-    grid_glob << storage_directory << "/" << fname_prefix  << "*.vox";
-
-    //insert grids
-    for (vul_file_iterator file_it = grid_glob.str().c_str(); file_it; ++file_it) {
-      vcl_string match_str = file_it.filename();
-      unsigned idx_start = match_str.find_last_of('_') + 1;
-      unsigned idx_end = match_str.find(".vox");
-      vcl_stringstream idx_str;
-      idx_str << match_str.substr(idx_start,idx_end - idx_start);
-      int idx = -1;
-      idx_str >> idx;
-      if (idx < 0) {
-        vcl_cerr << "error parsing filename " << file_it() << vcl_endl;
-      } else {
-        // create voxel grid and insert into map
-        bvxm_voxel_grid_base_sptr grid = new bvxm_voxel_grid<typename bvxm_voxel_traits<VOX_T>::voxel_datatype>(file_it(),grid_size);
-        bin_map.insert(vcl_make_pair((unsigned)idx, grid));
-      }
-    }
-
-    grid_map_.insert(vcl_make_pair(VOX_T, bin_map));
-    return 1;
-  }
-
-
-  //retrieve map containing voxel_grid
-  vcl_map<unsigned, bvxm_voxel_grid_base_sptr> voxel_map = grid_map_[VOX_T];
-
-  //retrieve voxel_grid for current bin
-  //if no grid exists at bin location create one filled with default values
-  if (voxel_map.find(bin_index) == voxel_map.end())
-  {
-    vgl_vector_3d<unsigned int> grid_size = params_->num_voxels();
-    vcl_string storage_directory = params_->model_dir();
-
-    vcl_stringstream apm_fname;
-    vcl_string fname_prefix = bvxm_voxel_traits<VOX_T>::filename_prefix();
-    apm_fname << storage_directory << "/" <<   ".vox";
-
-    typedef typename bvxm_voxel_traits<VOX_T>::voxel_datatype voxel_datatype;
-    bvxm_voxel_grid_base_sptr grid = 
-      new bvxm_voxel_grid<voxel_datatype>(apm_fname.str(),grid_size);
-
-    static_cast<bvxm_voxel_grid<voxel_datatype>*>(grid.ptr())->initialize_data(bvxm_voxel_traits<VOX_T>::initial_val());
-
-    //Insert voxel grid into map
-    grid_map_[VOX_T].insert(vcl_make_pair(bin_index, grid));
-    return 1;
-  }
-  else
-  {
-    vcl_cerr << "the entry already exists in the map" << vcl_endl;
-    return 0;
-  }
-}
 
 // Update a voxel grid with data from image/camera pair
 template <bvxm_voxel_type APM_T>
