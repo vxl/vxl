@@ -33,6 +33,7 @@ bvxm_rpc_registration_process::bvxm_rpc_registration_process()
   output_types_[1] = "vil_image_view_base_sptr";
 
   // adding parameters
+  parameters()->add("parameter specifying whether to use corrected images in the update part", "use_online_algorithm", false);
   parameters()->add("gaussian sigma for the edge distance map", "cedt_image_gaussian_sigma", 2.0);
   parameters()->add("maximum expected error in the rpc image offset", "offset_search_size", 20);
 }
@@ -65,7 +66,9 @@ bool bvxm_rpc_registration_process::execute()
   // getting parameters
   double cedt_image_gaussian_sigma;
   int offset_search_size;
-  if (!parameters()->get_value("cedt_image_gaussian_sigma", cedt_image_gaussian_sigma) || 
+  bool use_online_algorithm;
+  if (!parameters()->get_value("use_online_algorithm", use_online_algorithm) || 
+    !parameters()->get_value("cedt_image_gaussian_sigma", cedt_image_gaussian_sigma) || 
     !parameters()->get_value("offset_search_size", offset_search_size)
     ){
       vcl_cout << "problems in retrieving parameters\n";
@@ -135,34 +138,28 @@ bool bvxm_rpc_registration_process::execute()
 
   // part 2: update
 
-  //vil_image_view<vxl_byte> edge_image_negated;
-  //edge_image_negated.set_size(ni,nj);
-  //edge_image_negated.fill(255);
-  //for(int k=0; k<ni; k++){
-  //  for(int l=0; l<nj; l++){
-  //    edge_image_negated(k,l) = 255 - edge_image(k,l);  
-  //  } 
-  //}
-
-  vil_image_view<vxl_byte> edge_image_negated(edge_image);
-  vil_math_scale_and_offset_values(edge_image_negated,-1.0,255);
-
-  bil_cedt bil_cedt_operator(edge_image_negated);
-  bil_cedt_operator.compute_cedt();
-  vil_image_view<float> cedt_image = bil_cedt_operator.cedtimg();
-
-  vnl_gaussian_kernel_1d gaussian(cedt_image_gaussian_sigma);
-  for(int i=0; i<ni; i++){
-    for(int j=0; j<nj; j++){
-      cedt_image(i,j) = (float)gaussian.G((double)cedt_image(i,j));
-    }
-  }
-
   vpgl_camera_double_sptr camera_out = new vpgl_local_rational_camera<double>(cam_out);
-  vil_image_view_base_sptr cedt_image_sptr = new vil_image_view<float>(cedt_image);
-  bvxm_image_metadata camera_metadata_out(cedt_image_sptr,camera_inp);
 
-  vox_world->update_edges(camera_metadata_out);
+  if(use_online_algorithm || !rpc_correction_flag){
+    vil_image_view<vxl_byte> edge_image_negated(edge_image);
+    vil_math_scale_and_offset_values(edge_image_negated,-1.0,255);
+
+    bil_cedt bil_cedt_operator(edge_image_negated);
+    bil_cedt_operator.compute_cedt();
+    vil_image_view<float> cedt_image = bil_cedt_operator.cedtimg();
+
+    vnl_gaussian_kernel_1d gaussian(cedt_image_gaussian_sigma);
+    for(int i=0; i<ni; i++){
+      for(int j=0; j<nj; j++){
+        cedt_image(i,j) = (float)gaussian.G((double)cedt_image(i,j));
+      }
+    }
+
+    vil_image_view_base_sptr cedt_image_sptr = new vil_image_view<float>(cedt_image);
+    bvxm_image_metadata camera_metadata_out(cedt_image_sptr,camera_inp);
+
+    vox_world->update_edges(camera_metadata_out);
+  }
 
   // update the camera and store
   brdb_value_sptr output0 = new brdb_value_t<vpgl_camera_double_sptr>(camera_out);

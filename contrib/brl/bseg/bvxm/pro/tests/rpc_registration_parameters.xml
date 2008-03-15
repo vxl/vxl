@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <bvxmRpcRegistrationProcess>
+<use_online_algorithm desc="parameter specifying whether to use corrected images in the update part" type="bool" value="0" />
 <cedt_image_gaussian_sigma desc="gaussian sigma for the edge distance map" type="double" value="2" />
 <offset_search_size desc="maximum expected error in the rpc image offset" type="int" value="20" />
 </bvxmRpcRegistrationProcess>
