@@ -17,8 +17,8 @@
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 
-int IMAGE_U = 200;
-int IMAGE_V = 200;
+int IMAGE_U = 250;
+int IMAGE_V = 250;
 double x_scale = 700;
 double y_scale = 700;
 double focal_length = 1.;
@@ -26,7 +26,7 @@ double camera_dist= 200;
 
 //size of the world
 unsigned nx=100, ny=100, nz=50;
-float vox_length = 1;
+float vox_length = 1.0f;
 
 typedef bvxm_voxel_traits<APM_MOG_GREY>::voxel_datatype apm_datatype;
 
@@ -152,7 +152,7 @@ perspective_to_rational(vpgl_perspective_camera<double>& cam_pers)
 }
 
 
-
+#if 0
 vcl_vector<vpgl_camera_double_sptr >
 generate_cameras_z(vgl_box_3d<double>& world)
 {
@@ -195,6 +195,7 @@ generate_cameras_z(vgl_box_3d<double>& world)
   }
   return rat_cameras;
 }
+#endif 
 
 vcl_vector<vpgl_camera_double_sptr >
 generate_cameras_yz(vgl_box_3d<double>& world)
@@ -209,7 +210,7 @@ generate_cameras_yz(vgl_box_3d<double>& world)
   for (unsigned i=0; i<11; i++) {
     x = camera_dist*cos(alpha);
     y = camera_dist*sin(alpha);
-    centers.push_back(vgl_point_3d<double> (x+centroid.x(), y+centroid.y(), 200+centroid.z()));
+    centers.push_back(vgl_point_3d<double> (x+centroid.x(), y+centroid.y(), 450+centroid.z()));
     vcl_cout << centers[i] << vcl_endl;
     alpha += delta_alpha;
   }
@@ -435,6 +436,7 @@ static void test_gen_synthetic_world()
     vox_length);
   bvxm_voxel_world_sptr world = new bvxm_voxel_world();
   world->set_params(world_params);
+  world->clean_grids();
 
   unsigned int bin_num_1 = 0,bin_num_2 = 10;
   //create an mog grid for appearance model and use appearence model processor update to properly initialize it
@@ -463,6 +465,8 @@ static void test_gen_synthetic_world()
     cameras, image_set_2, bin_num_2);
   //reconstruct the world from synthehtic imag  
 
+  world->save_occupancy_raw("./test_gen_synthetic_world/ocp.raw");
+
   bvxm_voxel_world_sptr recon_world = new bvxm_voxel_world();
 
   bvxm_world_params_sptr recon_world_params = new bvxm_world_params();
@@ -477,8 +481,10 @@ static void test_gen_synthetic_world()
 
   //reconstruct the world from synthetic images and the apm grid stored in bin bin_num_1
   reconstruct_world(recon_world,cameras, image_set_1,bin_num_1);
+  recon_world->save_occupancy_raw("./recon_world/ocp1.raw");
 
   reconstruct_world(recon_world,cameras, image_set_2,bin_num_2);
+  recon_world->save_occupancy_raw("./recon_world/ocp2.raw");
 
   return;
 }
