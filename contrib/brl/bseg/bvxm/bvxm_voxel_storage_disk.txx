@@ -81,9 +81,12 @@ bool bvxm_voxel_storage_disk<T>::initialize_data(T const& value)
     vcl_cerr << " error opening file " << storage_fname_ << " for write. " << vcl_endl;
     return false;
   }
+  fio_.seekp(0,vcl_ios::beg);
+
   // write the header
   bvxm_voxel_storage_header<T> header(this->grid_size_);
   fio_.write(reinterpret_cast<char*>(&header),sizeof(header));
+
   // write each slice
   for (unsigned z=0; z <this->grid_size_.z(); z++) {
     fio_.write(reinterpret_cast<char*>(init_slab.first_voxel()),init_slab.size()*sizeof(T));
@@ -156,6 +159,10 @@ void bvxm_voxel_storage_disk<T>::put_slab()
 template <class T>
 unsigned bvxm_voxel_storage_disk<T>::num_observations()
 {
+  // check if file exists or not
+  if (!vul_file::exists(storage_fname_.c_str())) {
+    return 0;
+  }
   // read header from disk
   // check to see if file is already open
   if (!fio_.is_open()) {
@@ -167,7 +174,8 @@ unsigned bvxm_voxel_storage_disk<T>::num_observations()
     }
   }
   // seek to beginning of file
-  fio_.seekp(0,vcl_ios::beg);
+  fio_.seekg(0,vcl_ios::beg);
+
   bvxm_voxel_storage_header<T> header;
 
   fio_.read(reinterpret_cast<char*>(&header),sizeof(header));
@@ -189,7 +197,7 @@ void bvxm_voxel_storage_disk<T>::increment_observations()
     }
   }
   // seek to beginning of file
-  fio_.seekp(0,vcl_ios::beg);
+  fio_.seekg(0,vcl_ios::beg);
   bvxm_voxel_storage_header<T> header;
   // read
   fio_.read(reinterpret_cast<char*>(&header),sizeof(header));

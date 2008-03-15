@@ -9,7 +9,7 @@
 
 template <class T>
 bvxm_voxel_storage_mem<T>::bvxm_voxel_storage_mem(vgl_vector_3d<unsigned int> grid_size)
- : bvxm_voxel_storage<T>(grid_size)
+: bvxm_voxel_storage<T>(grid_size), nobservations_(0)
 {
   mem_ = new bvxm_memory_chunk(grid_size.x() * grid_size.y() * grid_size.z() * sizeof(T));
 
