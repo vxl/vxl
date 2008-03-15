@@ -16,7 +16,11 @@ static void test_voxel_grid()
   START("bvxm_voxel_grid test");
 
   // we need temporary disk storage for this test.
-  vcl_string storage_fname("bvxm_voxel_grid_test_temp.vox");
+  vcl_string storage_fname("./bvxm_voxel_grid_test_temp.vox");
+  // remove file if exists from previous test.
+  if (vul_file::exists(storage_fname.c_str())) {
+    vul_file::delete_file_glob(storage_fname.c_str());
+  }
 
   vgl_vector_3d<unsigned> grid_size(300,300,120);
 
@@ -33,11 +37,22 @@ static void test_voxel_grid()
 
     bvxm_voxel_grid<float> *grid = grids[i];
 
+    // check num_observations
+    unsigned nobs = grid->num_observations();
+    TEST("number of observations initially == 0",nobs,0);
+
     // fill with test data
     float init_val = 0.5;
     grid->initialize_data(init_val);
     bool init_check = true;
     bool write_read_check = true;
+
+    nobs = grid->num_observations();
+    TEST("number of observations == 0 after init",nobs,0);
+
+    grid->increment_observations();
+    nobs = grid->num_observations();
+    TEST("number of observations == 1 after increment",nobs,1);
 
     // read in each slice, check that init_val was set, and fill with new value
     unsigned count = 0;
