@@ -322,7 +322,7 @@ void gen_voxel_world_2box(vgl_vector_3d<unsigned> grid_size,
 {
   
   // fill with test data
-  float init_val = 0.01;
+  float init_val = 0.00;//0.01;
   ocp_grid->initialize_data(init_val);
   intensity_grid->initialize_data(init_val);
 
