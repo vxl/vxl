@@ -17,10 +17,10 @@
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 
-int IMAGE_U = 250;
-int IMAGE_V = 250;
-double x_scale = 700;
-double y_scale = 700;
+int IMAGE_U = 200;
+int IMAGE_V = 200;
+double x_scale = 900;
+double y_scale = 900;
 double focal_length = 1.;
 double camera_dist= 200;
 
