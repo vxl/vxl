@@ -7,7 +7,7 @@ IF (EXPAT_FOUND)
 SET(expatpp_sources expatpp.h expatpp.cpp expatpplib.h )
 
 ADD_LIBRARY(expatpp ${expatpp_sources})
-TARGET_LINK_LIBRARIES(expatpp expat)
+TARGET_LINK_LIBRARIES(expatpp ${EXPAT_LIBRARIES})
 
 
 ENDIF (EXPAT_FOUND)
