@@ -22,6 +22,7 @@
 //   24 Mar 2007 J.L. Mundy - added smart pointer on TIFF handle to support
 //       multiple resources from a single tiff file; required for pyramid
 //   KNOWN BUG - 24bit samples for both nplanes = 1 and nplanes = 3
+//   KNOWN BUG - bool pixel format write - crashes due to incorrect block size
 //\endverbatim
 
 #include <vcl_vector.h>
