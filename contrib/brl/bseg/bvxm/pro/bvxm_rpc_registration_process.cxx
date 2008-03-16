@@ -216,6 +216,7 @@ bool bvxm_rpc_registration_process::execute()
   brdb_value_sptr output0 = new brdb_value_t<vpgl_camera_double_sptr>(camera_out);
   output_data_[0] = output0;
 
+  // update the expected edge image and store
   brdb_value_sptr output1 = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<vxl_byte>(expected_edge_image_output));
   output_data_[1] = output1;
 
