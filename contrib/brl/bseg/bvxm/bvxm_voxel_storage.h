@@ -1,23 +1,22 @@
 #ifndef bvxm_voxel_storage_h_
 #define bvxm_voxel_storage_h_
-
+//:
+// \file
 
 #include <vgl/vgl_vector_3d.h>
-
 #include "bvxm_voxel_slab.h"
 
-
-template<class T> 
+template<class T>
 class bvxm_voxel_storage
 {
-public:
+ public:
   //: Constructor
   bvxm_voxel_storage(vgl_vector_3d<unsigned int> grid_size) : grid_size_(grid_size) {}
   virtual ~bvxm_voxel_storage(){};
 
-  //: Initialize all data in the grid 
+  //: Initialize all data in the grid
   virtual bool initialize_data(T const& value) = 0;
-  //: Get a slab of data from the grid.  Only one slab can be "active" at a time. 
+  //: Get a slab of data from the grid.  Only one slab can be "active" at a time.
   virtual bvxm_voxel_slab<T> get_slab(unsigned slice_idx, unsigned slab_thickness) = 0;
   //: Commit currently active slab to memory.
   virtual void put_slab() = 0;
@@ -34,9 +33,8 @@ public:
   //: return grid length in z dimension
   inline unsigned nz(){return grid_size_.z();}
 
-protected:
+ protected:
   vgl_vector_3d<unsigned int> grid_size_;
-
 };
 
 

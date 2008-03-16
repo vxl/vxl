@@ -1,18 +1,21 @@
 #include "bvxm_change_detection_display_process.h"
+//:
+// \file
 
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
 
 #include <vil/vil_image_view_base.h>
-#include <vil/vil_convert.h>
 #include <vpgl/vpgl_camera.h>
 
 #include <bvxm/bvxm_voxel_grid_base.h>
 #include <bvxm/bvxm_image_metadata.h>
 
-
+#if 0
 #include <vgl/vgl_point_2d.h>
+#endif
 
+#include <vcl_cmath.h>
 
 bvxm_change_detection_display_process::bvxm_change_detection_display_process()
 {
@@ -33,23 +36,21 @@ bvxm_change_detection_display_process::bvxm_change_detection_display_process()
 
   parameters()->add("Probability Threshold for detection", "prob_thresh", 0.5f);
   parameters()->add("Probability Image Scale", "prob_image_scale", 0.5f);
-
 }
 
 
 bool bvxm_change_detection_display_process::execute()
 {
-
   // Sanity check
-  if(!this->verify_inputs())
+  if (!this->verify_inputs())
     return false;
 
   //get the input image
-  brdb_value_t<vil_image_view_base_sptr>* input0 = 
+  brdb_value_t<vil_image_view_base_sptr>* input0 =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(input_data_[0].ptr());
 
   //get the probability image
-  brdb_value_t<vil_image_view_base_sptr>* input1 = 
+  brdb_value_t<vil_image_view_base_sptr>* input1 =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(input_data_[1].ptr());
 
     //get the mask image
@@ -60,12 +61,10 @@ bool bvxm_change_detection_display_process::execute()
   vil_image_view_base_sptr img1 = input1->value();
   vil_image_view_base_sptr img2 = input2->value();
 
-
-  
-  if(img0->pixel_format()!=7)
+  if (img0->pixel_format()!=7)
     return false;
-  if(img1->pixel_format()!=9)
-      return false;
+  if (img1->pixel_format()!=9)
+    return false;
   unsigned image_height = img0->nj();
   unsigned image_width = img0->ni();
 
@@ -79,30 +78,26 @@ bool bvxm_change_detection_display_process::execute()
   parameters()->get_value("prob_thresh",prob_thresh);
   parameters()->get_value("prob_image_scale",prob_image_scale);
 
-  for( int i = 0; i < image_width; i++ ){
-      for( int j = 0; j < image_height; j++ ){
-          //vgl_point_2d<double> prob_img_pixel( 
-          //    (int)floor( prob_image_scale*i ), (int)floor( prob_image_scale*j ) );
- 
+  for ( int i = 0; i < image_width; i++ ){
+    for ( int j = 0; j < image_height; j++ ){
+#if 0
+      vgl_point_2d<double> prob_img_pixel(
+          (int)vcl_floor( prob_image_scale*i ), (int)vcl_floor( prob_image_scale*j ) );
+#endif
+      float this_prob = 1.0;
+      if ( prob_image(i,j) < prob_thresh && mask_image(i,j)) 
+        this_prob = prob_image( i,j )/(prob_thresh);
 
-          float this_prob = 1.0;
-          if( prob_image(i,j) < prob_thresh && mask_image(i,j)) 
-              this_prob = prob_image( i,j )/(prob_thresh);
-          
-          output_image(i,j,0) = (int)floor( input_image(i,j)*this_prob + 255*(1-this_prob) );
-          output_image(i,j,1) = (int)floor( input_image(i,j)*this_prob );
-          output_image(i,j,2) = (int)floor( input_image(i,j)*this_prob );
-      }
+      output_image(i,j,0) = (int)vcl_floor( input_image(i,j)*this_prob + 255*(1-this_prob) );
+      output_image(i,j,1) = (int)vcl_floor( input_image(i,j)*this_prob );
+      output_image(i,j,2) = (int)vcl_floor( input_image(i,j)*this_prob );
+    }
   }
-  
-  
-  
-  brdb_value_sptr output0 = 
+
+  brdb_value_sptr output0 =
     new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<unsigned char>(output_image));
   output_data_[0] = output0;
 
   return true;
 }
-
-
 

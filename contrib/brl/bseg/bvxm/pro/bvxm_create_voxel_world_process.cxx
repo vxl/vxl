@@ -1,4 +1,6 @@
 #include "bvxm_create_voxel_world_process.h"
+//:
+// \file
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_mog_grey_processor.h>
 #include <bvxm/bvxm_world_params.h>
@@ -8,7 +10,6 @@
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
-#include <vcl_sstream.h>
 
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
@@ -52,7 +53,7 @@ bvxm_create_voxel_world_process::bvxm_create_voxel_world_process()
   if (!parameters()->add("Voxel Length", "voxel_length", (float)1.0))
     vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << vcl_endl;
 
-  // path to the lvcs file 
+  // path to the lvcs file
   if (!parameters()->add("LVCS Path", "lvcs", vcl_string("./")))
     vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << vcl_endl;
 
@@ -61,7 +62,6 @@ bvxm_create_voxel_world_process::bvxm_create_voxel_world_process()
 
   if (!parameters()->add("Maximum Occupancy Probability", "max_ocp_prob", 1-1e-5f))
     vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << vcl_endl;
-
 }
 
 //: Destructor
@@ -75,7 +75,7 @@ bool
 bvxm_create_voxel_world_process::execute()
 {
   // Sanity check
-  if(!this->verify_inputs())
+  if (!this->verify_inputs())
     return false;
 
   vcl_string vox_dir;
@@ -83,9 +83,9 @@ bvxm_create_voxel_world_process::execute()
     vcl_cout << "bvxm_create_voxel_world_process::execute() -- problem in retrieving parameter input_directory\n";
     return false;
   }
-  
+
   if (!vul_file::is_directory(vox_dir) || !vul_file::exists(vox_dir)) {
-    vcl_cout << "In bvxm_create_voxel_world_process::execute() -- input directory is not valid!" << vcl_endl;
+    vcl_cerr << "In bvxm_create_voxel_world_process::execute() -- input directory is not valid!\n";
     return false;
   }
 
@@ -103,12 +103,14 @@ bvxm_create_voxel_world_process::execute()
 
   float vox_len = parameters()->value<float>("voxel_length");
 
-  /*bvxm_world_params::appearance_model_type apm_type;
+#if 0
+  bvxm_world_params::appearance_model_type apm_type;
   unsigned int type = parameters()->value<unsigned int>("apm_type");
   if (type < 3) // there are 3 types and values are 0,1 and 2
     apm_type = (bvxm_world_params::appearance_model_type) type;
-  else 
-    apm_type = bvxm_world_params::mog_grey;*/
+  else
+    apm_type = bvxm_world_params::mog_grey;
+#endif // 0
 
   vcl_string lvcs_path;
   if (!parameters()->get_value(vcl_string("lvcs"), lvcs_path)) {
@@ -119,7 +121,7 @@ bvxm_create_voxel_world_process::execute()
   bgeo_lvcs_sptr lvcs = new bgeo_lvcs();
   if (lvcs_path != "") {
     vcl_ifstream is(lvcs_path.c_str());
-    if (!is) 
+    if (!is)
     {
       vcl_cerr << " Error opening file  " << lvcs_path << vcl_endl;
       return false;
@@ -142,7 +144,3 @@ bvxm_create_voxel_world_process::execute()
 
   return true;
 }
-
-
-
-

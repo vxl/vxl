@@ -1,5 +1,7 @@
 #ifndef bvxm_memory_chunk_h_
 #define bvxm_memory_chunk_h_
+//:
+// \file
 
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
@@ -8,10 +10,9 @@ class bvxm_memory_chunk : public vbl_ref_count
 {
   //: Data
   void *data_;
-  
+
   //: Number of elements (bytes)
   unsigned long size_;
-  
 
  public:
     //: Default constructor
@@ -28,7 +29,7 @@ class bvxm_memory_chunk : public vbl_ref_count
 
     //: Destructor
     virtual ~bvxm_memory_chunk();
-    
+
     //: Pointer to first element of data
     void* data() { return data_;}
 
@@ -43,8 +44,6 @@ class bvxm_memory_chunk : public vbl_ref_count
 };
 
 typedef vbl_smart_ptr<bvxm_memory_chunk> bvxm_memory_chunk_sptr;
-
-
 
 #endif
 

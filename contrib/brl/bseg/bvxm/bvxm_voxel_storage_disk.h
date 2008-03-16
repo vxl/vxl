@@ -1,5 +1,7 @@
 #ifndef bvxm_voxel_storage_disk_h_
 #define bvxm_voxel_storage_disk_h_
+//:
+// \file
 
 #include <vcl_string.h>
 #include <vcl_fstream.h>
@@ -11,9 +13,9 @@
 template<class T>
 class bvxm_voxel_storage_header
 {
-public:
+ public:
   bvxm_voxel_storage_header(){};
-  bvxm_voxel_storage_header(vgl_vector_3d<unsigned> grid_size) 
+  bvxm_voxel_storage_header(vgl_vector_3d<unsigned> grid_size)
     : nx_(grid_size.x()), ny_(grid_size.y()), nz_(grid_size.z()), nobservations_(0) {};
   bvxm_voxel_storage_header(unsigned nx, unsigned ny, unsigned nz)
     : nx_(nx),ny_(ny),nz_(nz),nobservations_(0){};
@@ -30,7 +32,7 @@ public:
 template <class T>
 class bvxm_voxel_storage_disk : public bvxm_voxel_storage<T>
 {
-public:
+ public:
   bvxm_voxel_storage_disk(vcl_string storage_filename, vgl_vector_3d<unsigned int> grid_size);
   virtual ~bvxm_voxel_storage_disk(){fio_.close();}
 
@@ -43,9 +45,8 @@ public:
   //: increment the number of observations
   virtual void increment_observations();
 
+ protected:
 
-protected:
-  
   vcl_string storage_fname_;
 
   // input and output file stream
@@ -54,9 +55,7 @@ protected:
 
   // slab-sized buffer
   bvxm_memory_chunk_sptr slab_buffer_;
-
-
 };
-                          
-                         
+
+
 #endif

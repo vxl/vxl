@@ -1,11 +1,12 @@
 #ifndef bvxm_io_voxel_world_h_
 #define bvxm_io_voxel_world_h_
-
+//:
+// \file
 
 #include <vsl/vsl_binary_io.h>
 #include <vcl_iostream.h>
-#include "../bvxm_voxel_world.h"
-#include "../bvxm_world_params.h"
+#include <bvxm/bvxm_voxel_world.h>
+#include <bvxm/bvxm_world_params.h>
 
 
 //: Binary save parameters to stream.

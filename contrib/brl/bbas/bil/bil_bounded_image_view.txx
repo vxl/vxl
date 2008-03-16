@@ -1,26 +1,20 @@
-// This is contrib/brl/bbas/bil/bil_bounded_image_view.txx
+// This is brl/bbas/bil/bil_bounded_image_view.txx
 #ifndef bil_bounded_image_view_txx_
 #define bil_bounded_image_view_txx_
 
-
-#include <bil/bil_bounded_image_view.h>
-#include <vcl_string.h>
+#include "bil_bounded_image_view.h"
+//:
+// \file
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h>
-#include <vcl_cmath.h>
-#include <vcl_ostream.h>
-#include <vil/vil_pixel_format.h>
-#include <vcl_cstring.h>
 #include <vil/io/vil_io_image_view.h>
 
 
 //:The main constructor
 template<class T>
 bil_bounded_image_view<T>::bil_bounded_image_view(const vil_image_view<T>& bounded_data,
-                                    unsigned ib0, unsigned jb0,
-                                    unsigned nib, unsigned njb )
-  : vil_image_view<T>(bounded_data) 
-                                    
+                                                  unsigned ib0, unsigned jb0,
+                                                  unsigned nib, unsigned njb )
+  : vil_image_view<T>(bounded_data)
 {
   //Require that bounds are consistent
   assert(ib0+bounded_data.ni()<=nib);
@@ -43,12 +37,12 @@ bil_bounded_image_view<T>::bil_bounded_image_view(const bil_bounded_image_view<T
   nib_ = rhs.nib();
   njb_ = rhs.njb();
 }
+
 template<class T> bil_bounded_image_view<T>::
 bil_bounded_image_view(const vil_image_view_base& rhs)
   : vil_image_view<T>(rhs)
 {
-
-  const bil_bounded_image_view<T>& bv = 
+  const bil_bounded_image_view<T>& bv =
     static_cast<const bil_bounded_image_view<T>& >(rhs);
   zero_ = (T)0;
   ib0_ = bv.ib0();
@@ -60,24 +54,26 @@ bil_bounded_image_view(const vil_image_view_base& rhs)
 template<class T>
 const T&  bil_bounded_image_view<T>::gpix(unsigned i, unsigned j) const
 {
-  assert(i<nib_ ); 
+  assert(i<nib_ );
   assert(j<njb_ );
   int ti = (int)i-(int)ib0_, tj =(int)j-(int)jb0_;
-  if(ti>=0&&ti<(int)this->ni_&&(tj>=0&&tj<(int)this->nj_))
+  if (ti>=0&&ti<(int)this->ni_&&(tj>=0&&tj<(int)this->nj_))
     return this->top_left_[ti*this->istep_+tj*this->jstep_];
   else
     return zero_;
 }
+
 template<class T>
 T& bil_bounded_image_view<T>::gpix(unsigned i, unsigned j)
 {
   //  assert(i<nib_); assert(j<njb_); fill with zeros outside real data
   int ti = (int)i-(int)ib0_, tj =(int)j-(int)jb0_;
-  if(ti>=0&&ti<(int)this->ni_&&(tj>=0&&tj<(int)this->nj_))
+  if (ti>=0&&ti<(int)this->ni_&&(tj>=0&&tj<(int)this->nj_))
     return this->top_left_[ti*this->istep_+tj*this->jstep_];
   else
     return zero_;
 }
+
 template<class T>
 const T& bil_bounded_image_view<T>::
 gpix(unsigned i, unsigned j, unsigned p) const
@@ -85,23 +81,25 @@ gpix(unsigned i, unsigned j, unsigned p) const
   //assert(i<nib_); assert(j<njb_); //fill with zeros outside real data
   assert(p<this->nplanes_);
   int ti = (int)i-(int)ib0_, tj =(int)j-(int)jb0_;
-  if(ti>=0&&ti<(int)this->ni_&&(tj>=0&&tj<(int)this->nj_))
+  if (ti>=0&&ti<(int)this->ni_&&(tj>=0&&tj<(int)this->nj_))
     return this->top_left_[p*this->planestep_ + ti*this->istep_+tj*this->jstep_];
   else
     return zero_;
 }
+
 template<class T>
 T& bil_bounded_image_view<T>::
 gpix(unsigned i, unsigned j, unsigned p)
 {
-  //assert(i<nib_); assert(j<njb_); 
+  //assert(i<nib_); assert(j<njb_);
   assert(p<this->nplanes_);
   int ti = (int)i-(int)ib0_, tj =(int)j-(int)jb0_;
-  if(ti>=0&&ti<(int)this->ni_&&(tj>=0&&tj<(int)this->nj_))
+  if (ti>=0&&ti<(int)this->ni_&&(tj>=0&&tj<(int)this->nj_))
     return this->top_left_[p*this->planestep_ + ti*this->istep_+tj*this->jstep_];
   else
     return zero_;
 }
+
 template<class T>
 void bil_bounded_image_view<T>::b_write(vsl_b_ostream &os) const
 {
@@ -120,11 +118,11 @@ void bil_bounded_image_view<T>::b_read(vsl_b_istream &is)
   short ver;
   unsigned ib0, jb0, nib, njb;
   vil_image_view<T> img;
-  
+
   if (!is)
     return;
   vsl_b_read(is, ver);
-  switch(ver)
+  switch (ver)
   {
   case 1:
     vsl_b_read(is, ib0);
@@ -144,7 +142,6 @@ void bil_bounded_image_view<T>::b_read(vsl_b_istream &is)
 }
 
 #define BIL_BOUNDED_IMAGE_VIEW_INSTANTIATE(T) \
-template class bil_bounded_image_view<T >; 
-
+template class bil_bounded_image_view<T >
 
 #endif // bil_bounded_image_view_txx_

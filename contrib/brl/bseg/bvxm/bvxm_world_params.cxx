@@ -1,6 +1,6 @@
-
 #include "bvxm_world_params.h"
-
+//:
+// \file
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 
@@ -17,12 +17,11 @@ bvxm_world_params::bvxm_world_params()
 //---------------------------------------------------
 bvxm_world_params::~bvxm_world_params()
 {
-
 };
 
 
 //---------------------------------------------------
-void 
+void
 bvxm_world_params::set_params(
   const vcl_string& model_dir,
   const vgl_point_3d<float>& corner,
@@ -32,7 +31,6 @@ bvxm_world_params::set_params(
   float min_ocp_prob,
   float max_ocp_prob)
 {
-
   model_dir_ = model_dir;
   corner_ = corner;
   num_voxels_ = num_voxels;
@@ -40,7 +38,6 @@ bvxm_world_params::set_params(
   lvcs_ = lvcs;
   min_occupancy_prob_ = min_ocp_prob;
   max_occupancy_prob_ = max_ocp_prob;
-
 };
 
 void bvxm_world_params::b_write(vsl_b_ostream & os) const
@@ -52,7 +49,6 @@ void bvxm_world_params::b_write(vsl_b_ostream & os) const
   lvcs_->b_write(os);
   vsl_b_write(os,min_occupancy_prob_);
   vsl_b_write(os,max_occupancy_prob_);
-
 }
 
 
@@ -65,19 +61,18 @@ void bvxm_world_params::b_read(vsl_b_istream & is)
   lvcs_->b_read(is);
   vsl_b_read(is,min_occupancy_prob_);
   vsl_b_read(is,max_occupancy_prob_);
-
 }
 
 //: output world_params to stream
 vcl_ostream&  operator << (vcl_ostream& os, bvxm_world_params const& params)
 {
-  os << params.model_dir_ << vcl_endl;
-  os << params.corner_.x() << " " << params.corner_.y() << " " << params.corner_.z() << vcl_endl;
-  os << params.num_voxels_.x() << " " << params.num_voxels_.y() << " " << params.num_voxels_.z() << vcl_endl;
-  os << params.voxel_length_ << vcl_endl;
-  os << *(params.lvcs_) << vcl_endl;
-  os << params.min_occupancy_prob_ << vcl_endl;
-  os << params.max_occupancy_prob_ << vcl_endl;
+  os << params.model_dir_ << vcl_endl
+     << params.corner_.x() << ' ' << params.corner_.y() << ' ' << params.corner_.z() << vcl_endl
+     << params.num_voxels_.x() << ' ' << params.num_voxels_.y() << ' ' << params.num_voxels_.z() << vcl_endl
+     << params.voxel_length_ << vcl_endl
+     << *(params.lvcs_) << vcl_endl
+     << params.min_occupancy_prob_ << vcl_endl
+     << params.max_occupancy_prob_ << vcl_endl;
 
   return os;
 }

@@ -1,8 +1,9 @@
 #ifndef bvxm_voxel_slab_iterator_h_
 #define bvxm_voxel_slab_iterator_h_
+//:
+// \file
 
 #include <vcl_iterator.h>
-#include <vcl_string.h>
 
 #include <vgl/vgl_vector_3d.h>
 
@@ -14,7 +15,7 @@
 template <class T>
 class bvxm_voxel_slab_iterator_base
 {
-public:
+ public:
   bvxm_voxel_slab_iterator_base() : storage_(0), slice_idx_(0), slab_thickness_(0) {};
   bvxm_voxel_slab_iterator_base(bvxm_voxel_storage<T> *storage,
                                 vgl_vector_3d<unsigned int> grid_size,
@@ -22,25 +23,24 @@ public:
 
   ~bvxm_voxel_slab_iterator_base(){};
 
-protected:
+ protected:
   bvxm_voxel_storage<T> *storage_;
 
   unsigned slab_thickness_;
   int slice_idx_; // signed so we can move one past the beginning
- 
+
   bvxm_voxel_slab<T> slab_;
   const bvxm_voxel_slab<T> end_slab_;
   vgl_vector_3d<unsigned int> grid_size_;
-
 };
 
 template <class T>
 
-class bvxm_voxel_slab_iterator : public bvxm_voxel_slab_iterator_base<T>, 
+class bvxm_voxel_slab_iterator : public bvxm_voxel_slab_iterator_base<T>,
   public vcl_iterator<vcl_bidirectional_iterator_tag, T>
 {
-public:
-  bvxm_voxel_slab_iterator() 
+ public:
+  bvxm_voxel_slab_iterator()
     : bvxm_voxel_slab_iterator_base<T>() {};
 
   bvxm_voxel_slab_iterator(bvxm_voxel_storage<T> *storage,
@@ -65,10 +65,6 @@ public:
   bvxm_voxel_slab<T>& operator*(){return this->slab_;}
 
   bvxm_voxel_slab<T>* operator->(){return &(this->slab_);}
-
-private:
-
-
 };
 
 
@@ -76,7 +72,7 @@ template <class T>
 class bvxm_voxel_slab_const_iterator : public bvxm_voxel_slab_iterator_base<T>,
                                        public vcl_iterator<vcl_bidirectional_iterator_tag, T>
 {
-public:
+ public:
   bvxm_voxel_slab_const_iterator() : bvxm_voxel_slab_iterator_base<T>(){};
 
   bvxm_voxel_slab_const_iterator(bvxm_voxel_storage<T> *storage,
@@ -103,11 +99,6 @@ public:
   bvxm_voxel_slab<T> const& operator*(){return this->slab_;}
 
   bvxm_voxel_slab<T> const* operator->(){return &this->slab_;}
-  
-private:
-
-
 };
 
 #endif
-

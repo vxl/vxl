@@ -1,6 +1,7 @@
 #ifndef vpgl_io_proj_camera_h_
 #define vpgl_io_proj_camera_h_
-
+//:
+// \file
 #include <vsl/vsl_binary_io.h>
 #include "../vpgl_proj_camera.h"
 
@@ -13,7 +14,6 @@ void vsl_b_write(vsl_b_ostream & os, vpgl_proj_camera<T> const& camera){ camera.
 //: Binary load camera from stream.
 template <class T>
 void vsl_b_read(vsl_b_istream & is, vpgl_proj_camera<T> &camera) { camera.b_read(is); }
-
 
 
 #endif

@@ -1,9 +1,11 @@
-// This is contrib/brl/bbas/bil/algo/bil_color_conversions.cxx
-
+// This is brl/bbas/bil/algo/bil_color_conversions.cxx
 #include "bil_color_conversions.h"
-
-#include <vnl/vnl_math.h>
+//:
+// \file
 #include <vnl/vnl_vector_fixed.h>
+#if 0
+#include <vcl_iostream.h>
+#endif
 
 void rgb2lab(double R, double G, double B, double &L , double &a, double &b)
 {
@@ -30,7 +32,7 @@ void rgb2lab(double R, double G, double B, double &L , double &a, double &b)
   //2) now convert 1931 CIE-XYZ to 1976 CIE-Lab
   // Assuming Observer = 2°, Illuminant = D65
 
-  double var_X = X * 100.0/95.047;       
+  double var_X = X * 100.0/95.047;
   double var_Y = Y * 100.0/100.000;
   double var_Z = Z * 100.0/108.883;
 
@@ -92,7 +94,6 @@ void convert_RGB_to_Lab(vil_image_view<unsigned char> const& image,
 }
 
 
-
 void rgb2luv(double R, double G, double B, double &L , double &u, double &v)
 {
   //1) First convert RGB (assuming sRGB) to 1931 CIE-XYZ space
@@ -118,7 +119,7 @@ void rgb2luv(double R, double G, double B, double &L , double &u, double &v)
   //2) now convert 1931 CIE-XYZ to 1976 CIE-Luv
   // Assuming Observer = 2°, Illuminant = D65
 
-  double var_X = X * 100.0/95.047;       
+  double var_X = X * 100.0/95.047;
   double var_Y = Y * 100.0/100.000;
   double var_Z = Z * 100.0/108.883;
 

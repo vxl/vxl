@@ -1,5 +1,7 @@
 #ifndef bvxm_voxel_grid_h_
 #define bvxm_voxel_grid_h_
+//:
+// \file
 
 #include <vcl_string.h>
 #include <vgl/vgl_vector_3d.h>
@@ -12,24 +14,22 @@
 #include "bvxm_voxel_slab_iterator.h"
 
 
-
 template<class T>
 class bvxm_voxel_grid : public bvxm_voxel_grid_base
 {
-public:
-
+ public:
   //: Default Constructor
   bvxm_voxel_grid() : storage_(0), bvxm_voxel_grid_base(vgl_vector_3d<unsigned>(0,0,0)) {};
 
   //: Constructor for disk-based voxel grid.
-  bvxm_voxel_grid(vcl_string storage_fname, vgl_vector_3d<unsigned int> grid_size) 
+  bvxm_voxel_grid(vcl_string storage_fname, vgl_vector_3d<unsigned int> grid_size)
     : bvxm_voxel_grid_base(grid_size)
   {
     storage_ = new bvxm_voxel_storage_disk<T>(storage_fname, grid_size);
   }
 
   //: Constructor for memory-based voxel grid.
-  bvxm_voxel_grid(vgl_vector_3d<unsigned int> grid_size) 
+  bvxm_voxel_grid(vgl_vector_3d<unsigned int> grid_size)
     : bvxm_voxel_grid_base(grid_size)
   {
     storage_ = new bvxm_voxel_storage_mem<T>(grid_size);
@@ -37,14 +37,14 @@ public:
 
   //: Destructor
   ~bvxm_voxel_grid()
-  { 
-    if(storage_) {
+  {
+    if (storage_) {
       delete storage_;
       storage_ = 0;
     }
   }
 
-  // fill with data
+  //: fill with data
   bool initialize_data(T const& val) {return storage_->initialize_data(val); }
 
   //: return number of observations
@@ -63,12 +63,9 @@ public:
   // note: traversing top-down, end() is one slab past the bottom.
   bvxm_voxel_slab_iterator<T> end(unsigned slab_thickness = 1);
 
-
-private:
+ private:
 
   bvxm_voxel_storage<T> *storage_;
-
 };
 
 #endif
-

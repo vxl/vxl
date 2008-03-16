@@ -1,14 +1,15 @@
 #ifndef bvxm_voxel_storage_mem_h_
 #define bvxm_voxel_storage_mem_h_
+//:
+// \file
 
 #include "bvxm_voxel_storage.h"
-
 #include <vgl/vgl_vector_3d.h>
 
 template <class T>
 class bvxm_voxel_storage_mem : public bvxm_voxel_storage<T>
 {
-public:
+ public:
   bvxm_voxel_storage_mem(vgl_vector_3d<unsigned int> grid_size);
 
   virtual bool initialize_data(T const& value);
@@ -20,13 +21,10 @@ public:
   //: increment the number of observations
   virtual void increment_observations(){++nobservations_;}
 
-
-private:
+ private:
 
   bvxm_memory_chunk_sptr mem_;
   unsigned nobservations_;
-
 };
-                          
-                         
+
 #endif
