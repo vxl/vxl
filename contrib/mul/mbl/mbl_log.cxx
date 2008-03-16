@@ -420,7 +420,23 @@ void mbl_logger_root::load_log_config_file(
   }
 
   config_file.clear(); // May have been set to fail on failed open.
-  categories_.config(config_file, stream_names);
+  load_log_config(config_file);
+#endif
+}
+
+
+//:Load a default configuration file
+// Current Format is
+//\verbatim
+//LEVEL
+//\end verbatim
+// where LEVEL is an integer - setting the logging level.
+// see mbl_logger:levels for useful values.
+void mbl_logger_root::load_log_config(vcl_istream& is,
+  const vcl_map<vcl_string, vcl_ostream *> &stream_names)
+{
+#ifndef MBL_LOG_DISABLE_ALL_LOGGING
+  categories_.config(is, stream_names);
   update_all_loggers();
 #endif
 }

@@ -283,7 +283,11 @@ class mbl_logger_root
   // "mbl_log.properties" in the current directory, or if no there,
   // in the user's home directory. Unix users can call it
   // ".mbl_log.properties" in their home directory.
-  // Each section of the file should begin with a category.
+  // See load_log_config() for description of config file format, and \p stream_names.
+  void load_log_config_file(const stream_names_t &stream_names = stream_names_t());
+
+  //: Load a configuration from a stream.
+  // Each section of the text should begin with a category.
   // A logger named "A.B.C" will be controlled by a section labelled A.B.C
   // The categories labels have a hierarchical structure, so if A.B.C
   // doesn't exist, the code will look for a section labelled A.B,
@@ -301,7 +305,8 @@ class mbl_logger_root
   //\endverbatim
   // where LEVEL is an integer - setting the logging level.
   // see mbl_logger:levels for useful values.
-  void load_log_config_file(const stream_names_t &stream_names = stream_names_t());
+  void load_log_config(vcl_istream &config, const stream_names_t &stream_names = stream_names_t());
+
   //: Force all loggers to update themselves in light of changes to the root and configuration.
   // This is already called automatically by load_log_config_file().
   void update_all_loggers();
