@@ -1,24 +1,17 @@
+#include "mfpf_norm_corr2d.h"
 //:
 // \file
 // \brief Searches over a grid using normalised correllation
 // \author Tim Cootes
 
-
-#include <mfpf/mfpf_norm_corr2d.h>
-#include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
-#include <vul/vul_string.h>
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
-
-#include <mbl/mbl_parse_block.h>
-#include <mbl/mbl_read_props.h>
-#include <mbl/mbl_cloneables_factory.h>
+#include <vcl_cassert.h>
 
 #include <vil/vil_resample_bilin.h>
 #include <vil/io/vil_io_image_view.h>
 #include <vil/vil_math.h>
-#include <vil/vil_print.h>
 
 //=======================================================================
 // Dflt ctor
@@ -48,7 +41,7 @@ mfpf_norm_corr2d::~mfpf_norm_corr2d()
 }
 
 //: Define filter kernel to search with
-void mfpf_norm_corr2d::set(const vil_image_view<double>& k, 
+void mfpf_norm_corr2d::set(const vil_image_view<double>& k,
                            double ref_x, double ref_y)
 {
   // Copy, ensuring istep==1
@@ -81,8 +74,8 @@ void mfpf_norm_corr2d::set(const vil_image_view<double>& k)
 
 // Assumes im2[i] has zero mean and unit length as a vector
 // Assumes element (i,j) is im1[i+j*jstep1] etc
-inline double norm_corr(const float* im1, const double* im2, 
-                        vcl_ptrdiff_t jstep1, vcl_ptrdiff_t jstep2, 
+inline double norm_corr(const float* im1, const double* im2,
+                        vcl_ptrdiff_t jstep1, vcl_ptrdiff_t jstep2,
                         unsigned ni, unsigned nj)
 {
   double sum1=0.0,sum2=0.0,sum_sq=0.0;
@@ -108,12 +101,12 @@ double mfpf_norm_corr2d::radius() const
   double x2 = vcl_max(ref_x_*ref_x_,(ref_x_-wx)*(ref_x_-wx));
   double wy = kernel_.nj()-1;
   double y2 = vcl_max(ref_y_*ref_y_,(ref_y_-wy)*(ref_y_-wy));
-  double r2 = x2+y2; 
+  double r2 = x2+y2;
   if (r2<=1) return 1.0;
   return vcl_sqrt(r2);
 }
 
-//: Evaluate match at p, using u to define scale and orientation 
+//: Evaluate match at p, using u to define scale and orientation
 // Returns -1*edge strength at p along direction u
 double mfpf_norm_corr2d::evaluate(const vimt_image_2d_of<float>& image,
                         const vgl_point_2d<double>& p,
@@ -133,7 +126,7 @@ double mfpf_norm_corr2d::evaluate(const vimt_image_2d_of<float>& image,
 
   vil_resample_bilin(image.image(),sample,
                       im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
-                      im_v.x(),im_v.y(), 
+                      im_v.x(),im_v.y(),
                       kernel_.ni(),kernel_.nj());
 
   return -1*norm_corr(sample.top_left_ptr(),kernel_.top_left_ptr(),
@@ -141,7 +134,7 @@ double mfpf_norm_corr2d::evaluate(const vimt_image_2d_of<float>& image,
                       kernel_.ni(),kernel_.nj());
 }
 
-//: Evaluate match at in a region around p 
+//: Evaluate match at in a region around p
 // Returns a qualtity of fit at a set of positions.
 // response image (whose size and transform is set inside the
 // function), indicates the points at which the function was
@@ -173,7 +166,7 @@ void mfpf_norm_corr2d::evaluate_region(
 
   vil_resample_bilin(image.image(),sample,
                       im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
-                      im_v.x(),im_v.y(), 
+                      im_v.x(),im_v.y(),
                       nsi,nsj);
 
   response.image().set_size(ni,nj);
@@ -204,8 +197,8 @@ void mfpf_norm_corr2d::evaluate_region(
   response.set_world2im(i2w.inverse());
 }
 
-//: Search given image around p, using u to define scale and angle 
-//  On exit, new_p defines position of the best nearby match.  
+//: Search given image around p, using u to define scale and angle
+//  On exit, new_p defines position of the best nearby match.
 //  Returns a qualtity of fit measure at that
 //  point (the smaller the better).
 double mfpf_norm_corr2d::search_one_pose(
@@ -232,7 +225,7 @@ double mfpf_norm_corr2d::search_one_pose(
 
   vil_resample_bilin(image.image(),sample,
                       im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
-                      im_v.x(),im_v.y(), 
+                      im_v.x(),im_v.y(),
                       nsi,nsj);
 
   const double* k = kernel_.top_left_ptr();
@@ -263,7 +256,7 @@ bool mfpf_norm_corr2d::is_inside(const mfpf_pose& pose,
 {
   // Set transform model frame -> World
   vimt_transform_2d t1;
-  t1.set_similarity(step_size()*pose.u(),pose.p());  
+  t1.set_similarity(step_size()*pose.u(),pose.p());
   // Compute position of p in model frame
   vgl_point_2d<double> q=t1.inverse()(p);
   q.x()+=ref_x_;
@@ -331,9 +324,9 @@ void mfpf_norm_corr2d::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
   mfpf_point_finder::b_write(bfs);  // Save base class
-  vsl_b_write(bfs,kernel_); 
-  vsl_b_write(bfs,ref_x_); 
-  vsl_b_write(bfs,ref_y_); 
+  vsl_b_write(bfs,kernel_);
+  vsl_b_write(bfs,ref_x_);
+  vsl_b_write(bfs,ref_y_);
 }
 
 short mfpf_norm_corr2d::version_no() const
@@ -359,8 +352,8 @@ void mfpf_norm_corr2d::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,ref_y_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&) \n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
@@ -375,7 +368,7 @@ bool mfpf_norm_corr2d::operator==(const mfpf_norm_corr2d& nc) const
   if (vcl_fabs(ref_x_-nc.ref_x_)>1e-6) return false;
   if (vcl_fabs(ref_y_-nc.ref_y_)>1e-6) return false;
   if (kernel_.size()!=nc.kernel_.size()) return false;
-  if (kernel_.size()==0) return true;  // ssd fails on empty 
+  if (kernel_.size()==0) return true;  // ssd fails on empty
   return (vil_math_ssd(kernel_,nc.kernel_,double(0))<1e-4);
 }
 

@@ -1,4 +1,4 @@
-// This is bvxm/bvxm_voxel_world.h
+// This is brl/bseg/bvxm/bvxm_voxel_world.h
 #ifndef bvxm_voxel_world_h_
 #define bvxm_voxel_world_h_
 //:
@@ -8,52 +8,54 @@
 // \date 1/22/2008
 //
 // The world has the ability to store voxel grids of any type defined in bvxm_voxel_traits.h.
-// These grids are accessable through the get_grid() method.  
+// These grids are accessable through the get_grid() method.
 // A voxel_type which is an appearance model type must have an associated appearance model processor class.
 // The appearance model processor type needs to have the following methods:
 //
 //
-//   bvxm_voxel_slab<float> prob_density(bvxm_voxel_slab<APM_PROC::apm_datatype> const& appearance, 
+//   bvxm_voxel_slab<float> prob_density(bvxm_voxel_slab<APM_PROC::apm_datatype> const& appearance,
 //                                       bvxm_voxel_slab<APM_PROC::obs_datatype> const& observation);
 //
-//   bvxm_voxel_slab<float> prob_range(bvxm_voxel_slab<APM_PROC::apm_datatype> const& appearance, 
+//   bvxm_voxel_slab<float> prob_range(bvxm_voxel_slab<APM_PROC::apm_datatype> const& appearance,
 //                                     bvxm_voxel_slab<APM_PROC::obs_datatype> const& observation,
 //                                     bvxm_voxel_slab<float> pix_range);
-//                                      
-//   bool update(bvxm_voxel_slab<APM_PROC::apm_datatype> appearance, 
+//
+//   bool update(bvxm_voxel_slab<APM_PROC::apm_datatype> appearance,
 //               bvxm_voxel_slab<APM_PROC::obs_datatype> const& observation,
 //               bvxm_voxel_slab<float> const& weights);
 //
 //   bvxm_voxel_slab<APM_PROC::obs_datatype> expected_color(bvxm_voxel_slab<APM_PROC::apm_datatype> const& appearance);
 //
-// \Modifications:
-//     Ozge C Ozcanli - 2/20/2008 - added  the method:
-//             bool mixture_of_gaussians_image(bvxm_image_metadata const& camera, 
-//                                             bvxm_voxel_slab<apm_datatype> &mog_image);
+// \verbatim
+//  Modifications:
+//   Ozge C Ozcanli - 2/20/2008 - added  the method:
+//           bool mixture_of_gaussians_image(bvxm_image_metadata const& camera,
+//                                           bvxm_voxel_slab<apm_datatype> &mog_image);
 //
-//     Isabel Restrepo - 2/23/2008 
-//                 -Changed class to support different VOXEL_GRID_TYPES simultaneously.
+//   Isabel Restrepo - 2/23/2008
+//               -Changed class to support different VOXEL_GRID_TYPES simultaneously.
 //                 Thus, the calss is not templated anymore but rather the indiviual functions.
-//                 - There is no need for bvxm_world_base, hence this class is not subclassed form it anymore
-//                 - Subclassed form vbl_ref_count
+//               - There is no need for bvxm_world_base, hence this class is not subclassed form it anymore
+//               - Subclassed form vbl_ref_count
 //
-//     Ozge C Ozcanli - 2/27/2008 - made get_grid method public
+//   Ozge C Ozcanli - 2/27/2008 - made get_grid method public
 //
-//     Ibrahim Eden - 03/06/2008 - added the method:
-//             bool expected_edge_image(bvxm_image_metadata const& camera,vil_image_view_base_sptr &expected);
+//   Ibrahim Eden - 03/06/2008 - added the method:
+//           bool expected_edge_image(bvxm_image_metadata const& camera,vil_image_view_base_sptr &expected);
 //
-//     Ibrahim Eden - 03/07/2008 - added the method:
-//             bool update_edges(bvxm_image_metadata const& metadata);
-//  
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//   Ibrahim Eden - 03/07/2008 - added the method:
+//           bool update_edges(bvxm_image_metadata const& metadata);
+// \endverbatim
+//
+////////////////////////////////////////////////////////////////////////////////
 
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_ref_count.h>
 
-#include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_plane_3d.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 
 #include <vil/vil_image_view.h>
@@ -71,18 +73,17 @@
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
 #include <vcl_utility.h>
-#include <vgl/vgl_homg_point_2d.h>
-#include <vgl/vgl_plane_3d.h>
 #include <vil/vil_image_view_base.h>
 #include <vul/vul_file_iterator.h>
 
 
 class bvxm_voxel_world: public vbl_ref_count
 {
-public:
+ public:
 
   //: default constructor
   bvxm_voxel_world(){};
+
   //: construct world with parameters
   bvxm_voxel_world(bvxm_world_params_sptr params){params_ = params;}
 
@@ -93,7 +94,7 @@ public:
   template<bvxm_voxel_type APM_T>
   bool update(bvxm_image_metadata const& observation, unsigned bin_index = 0);
 
-  //: update voxel grid wtih data from image/camera pair and return pixel probability densities. 
+  //: update voxel grid wtih data from image/camera pair and return pixel probability densities.
   // Based on algorithm published in Pollard and Mundy 06.
   // The probability density of observing each pixel in the observation is returned in pixel_prob_density, which should be allocated by the caller.
   template<bvxm_voxel_type APM_T>
@@ -104,7 +105,7 @@ public:
   bool expected_image(bvxm_image_metadata const& camera,
     vil_image_view_base_sptr &expected, vil_image_view<float> &mask, unsigned bin_index = 0);
 
-  // update voxel grid for edges with data from image/camera pair and return the edge probability density of pixel values
+  //: update voxel grid for edges with data from image/camera pair and return the edge probability density of pixel values
   bool update_edges(bvxm_image_metadata const& metadata);
 
   //: generate the expected edge image from the specified viewpoint. the expected image should be allocated by the caller.
@@ -119,7 +120,7 @@ public:
 
   //: for each pixel, return the sum along the corresponding ray of voxels that the observation was produced by the voxel.
   // Based on algorithm published in Pollard + Mundy 06.
-  // The returned values are approximate samples of a probability density, with the pixel values being the independant value.
+  // The returned values are approximate samples of a probability density, with the pixel values being the independent value.
   template<bvxm_voxel_type APM_T>
   bool pixel_probability_density(bvxm_image_metadata const& observation,
     vil_image_view<float> &pixel_probability, unsigned bin_index = 0);
@@ -132,18 +133,20 @@ public:
   //: return the original image, viewed from a new viewpoint
   template<bvxm_voxel_type APM_T>
   bool virtual_view(bvxm_image_metadata const& original_view,
-    const vpgl_camera_double_sptr virtual_camera, 
+    const vpgl_camera_double_sptr virtual_camera,
     vil_image_view_base_sptr &virtual_view, vil_image_view<float> &vis_prob, unsigned bin_index = 0);
 
-  // return a planar approximation to the world
+  //: return a planar approximation to the world
   vgl_plane_3d<double> fit_plane();
 
   //: get the world parameters
   bvxm_world_params_sptr get_params() const { return params_; }
+
   //: set the world parameters
   void set_params(bvxm_world_params_sptr params){ params_ = params;}
 
-  // Operators that allow voxel world to be placed in a brdb database
+  // === Operators that allow voxel world to be placed in a brdb database ===
+
   //: equality operator
   bool operator == (bvxm_voxel_world const& that) const;
 
@@ -168,7 +171,7 @@ public:
   template<bvxm_voxel_type VOX_T>
   void increment_observations( unsigned int bin_idx = 0);
 
-protected:
+ protected:
 
   //: appearance model voxel storage
   vcl_map<bvxm_voxel_type, vcl_map<unsigned int, bvxm_voxel_grid_base_sptr> > grid_map_;
@@ -176,14 +179,12 @@ protected:
   //: the world parameters
   bvxm_world_params_sptr params_;
 
-
-private:
+ private:
 
   template<bvxm_voxel_type APM_T>
-  bool update_impl(bvxm_image_metadata const& metadata, 
-    bool return_prob, vil_image_view<float> &pix_prob_density, 
-    bool return_mask, vil_image_view<bool> &mask, unsigned bin_index);
-
+  bool update_impl(bvxm_image_metadata const& metadata,
+  bool return_prob, vil_image_view<float> &pix_prob_density,
+  bool return_mask, vil_image_view<bool> &mask, unsigned bin_index);
 };
 
 
@@ -192,9 +193,6 @@ vcl_ostream&  operator<<(vcl_ostream& s, bvxm_voxel_world const& vox_world);
 
 
 typedef vbl_smart_ptr<bvxm_voxel_world> bvxm_voxel_world_sptr;
-
-
-
 
 //////////////////////////////////////////////////////////
 // TODO: Move everything below here to .txx files -DEC
@@ -219,7 +217,6 @@ void bvxm_voxel_world::increment_observations(unsigned int bin_idx)
   typedef typename bvxm_voxel_traits<VOX_T>::voxel_datatype vox_datatype;
   bvxm_voxel_grid<vox_datatype> *grid = static_cast<bvxm_voxel_grid<vox_datatype>*>(this->get_grid<VOX_T>(bin_idx).ptr());
   grid->increment_observations();
-
 }
 
 
@@ -240,7 +237,7 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index)
 
     vcl_stringstream grid_glob;
     vcl_string fname_prefix = bvxm_voxel_traits<VOX_T>::filename_prefix();
-    grid_glob << storage_directory << "/" << fname_prefix << "*.vox";
+    grid_glob << storage_directory << '/' << fname_prefix << "*.vox";
 
     //insert grids
     for (vul_file_iterator file_it = grid_glob.str().c_str(); file_it; ++file_it) {
@@ -263,7 +260,6 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index)
     grid_map_.insert(vcl_make_pair(VOX_T, bin_map));
   }
 
-
   //retrieve map containing voxel_grid
   vcl_map<unsigned, bvxm_voxel_grid_base_sptr> voxel_map = grid_map_[VOX_T];
 
@@ -276,14 +272,14 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index)
 
     vcl_stringstream apm_fname;
     vcl_string fname_prefix = bvxm_voxel_traits<VOX_T>::filename_prefix();
-    apm_fname << storage_directory << "/" << fname_prefix << "_" << bin_index << ".vox";
+    apm_fname << storage_directory << '/' << fname_prefix << '_' << bin_index << ".vox";
 
     typedef typename bvxm_voxel_traits<VOX_T>::voxel_datatype voxel_datatype;
     bvxm_voxel_grid<voxel_datatype> *grid = new bvxm_voxel_grid<voxel_datatype>(apm_fname.str(),grid_size);
 
     // fill grid with default value
-    if (!grid->initialize_data(bvxm_voxel_traits<VOX_T>::initial_val())){ 
-      vcl_cerr << "error initializing voxel grid" << vcl_endl;
+    if (!grid->initialize_data(bvxm_voxel_traits<VOX_T>::initial_val())){
+      vcl_cerr << "error initializing voxel grid\n";
       return bvxm_voxel_grid_base_sptr(0);
     }
 
@@ -293,7 +289,6 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index)
   }
 
   return grid_map_[VOX_T][bin_index];
-
 }
 
 
@@ -314,10 +309,10 @@ bool bvxm_voxel_world::update(bvxm_image_metadata const& observation,
 {
   // check image sizes
   if ( (observation.img->ni() != pix_prob_density.ni()) || (observation.img->nj() != pix_prob_density.nj()) ) {
-    vcl_cerr << "error: metadata image size does not match probability image size. " << vcl_endl;
+    vcl_cerr << "error: metadata image size does not match probability image size.\n";
   }
   if ( (observation.img->ni() != mask.ni()) || (observation.img->nj() != mask.nj()) ) {
-    vcl_cerr << "error: metadata image size does not match mask image size. " << vcl_endl;
+    vcl_cerr << "error: metadata image size does not match mask image size.\n";
   }
   return this->update_impl<APM_T>(observation, true, pix_prob_density, true, mask, bin_index);
 }
@@ -327,11 +322,10 @@ bool bvxm_voxel_world::update(bvxm_image_metadata const& observation,
 template<bvxm_voxel_type APM_T>
 bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
                                    bool return_prob,
-                                   vil_image_view<float> &pix_prob_density, 
+                                   vil_image_view<float> &pix_prob_density,
                                    bool return_mask,
                                    vil_image_view<bool> &mask, unsigned bin_index)
 {
-
   // datatype for current appearance model
   typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype apm_datatype;
   // datatype of the pixels that the processor operates on.
@@ -389,8 +383,7 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
 
   vcl_cout << "Pass 1: " << vcl_endl;
 
-
-  // get ocuppancy probability grid 
+  // get ocuppancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
@@ -405,7 +398,7 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
 
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it, ++apm_slab_it, ++preX_slab_it, ++PIvisX_slab_it)
   {
-    vcl_cout << ".";
+    vcl_cout << '.';
 
     if ( (ocp_slab_it == ocp_grid->end()) || (apm_slab_it == apm_grid->end()) ) {
       vcl_cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << vcl_endl;
@@ -414,8 +407,6 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
 
     // backproject image onto voxel plane
     bvxm_util::warp_slab_bilinear(image_slab, H_plane_to_img[z], frame_backproj);
-
-    
 
     //bvxm_util::write_slab_as_image(frame_backproj,"c:/research/registration/output/frame_backproj.tiff");
 
@@ -458,14 +449,14 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
     // transform (1-P(X)) to image plane to accumulate visX for next level
     bvxm_util::warp_slab_bilinear(*ocp_slab_it, H_img_to_plane[z], PX_img);
 
-    if (return_mask){ 
+    if (return_mask){
       bvxm_util::add_slabs(PX_img,mask_slab,mask_slab);
     }
 
     // note: doing scale and offset in image domain so invalid pixels become 1.0 and dont affect visX
     bvxm_voxel_slab<float>::iterator PX_img_it = PX_img.begin();
     visX_accum_it = visX_accum.begin();
-    for(; visX_accum_it != visX_accum.end(); ++visX_accum_it, ++PX_img_it) {
+    for (; visX_accum_it != visX_accum.end(); ++visX_accum_it, ++PX_img_it) {
       *visX_accum_it *= (1 - *PX_img_it);
     }
   }
@@ -477,12 +468,12 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
   //bvxm_util::write_slab_as_image(visX_accum,"visX_accum.tiff");
   //bvxm_util::write_slab_as_image(preX_accum,"preX_accum.tiff");
 
-  vcl_cout << vcl_endl << "Pass 2: ";
+  vcl_cout << vcl_endl << "Pass 2: " << vcl_endl;
   PIvisX_slab_it = PIvisX.begin();
   preX_slab_it = preX.begin();
   bvxm_voxel_grid<ocp_datatype>::iterator ocp_slab_it2 = ocp_grid->begin();
   for (unsigned z = 0; z < (unsigned)grid_size.z(); ++z, ++PIvisX_slab_it, ++preX_slab_it, ++ocp_slab_it2) {
-    vcl_cout << ".";
+    vcl_cout << '.';
 
     // transform preX_sum to current level
     bvxm_util::warp_slab_bilinear(preX_accum, H_plane_to_img[z], preX_accum_vox);
@@ -515,7 +506,7 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
     vil_image_view<float>::iterator pix_prob_it = pix_prob_density.begin();
     bvxm_voxel_slab<float>::const_iterator preX_accum_it = preX_accum.begin();
 
-    for(; pix_prob_it != pix_prob_density.end(); ++pix_prob_it, ++preX_accum_it) {
+    for (; pix_prob_it != pix_prob_density.end(); ++pix_prob_it, ++preX_accum_it) {
       *pix_prob_it = *preX_accum_it;
     }
   }
@@ -525,11 +516,10 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
     vil_image_view<bool>::iterator mask_it = mask.begin();
     bvxm_voxel_slab<float>::const_iterator mask_slab_it = mask_slab.begin();
 
-    for(; mask_it != mask.end(); ++mask_it, ++mask_slab_it) {
+    for (; mask_it != mask.end(); ++mask_it, ++mask_slab_it) {
       *mask_it = (*mask_slab_it > 0);
     }
   }
-
 
   // increment the observation count
   this->increment_observations<APM_T>(bin_index);
@@ -540,7 +530,7 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
 
 template<bvxm_voxel_type APM_T>
 bool bvxm_voxel_world::expected_image(bvxm_image_metadata const& camera,
-                                      vil_image_view_base_sptr &expected, 
+                                      vil_image_view_base_sptr &expected,
                                       vil_image_view<float> &mask,
                                       unsigned bin_index)
 {
@@ -579,7 +569,7 @@ bool bvxm_voxel_world::expected_image(bvxm_image_metadata const& camera,
   obs_datatype data(obs_mathtype(0));
   expected_slab.fill(data);
 
-  // get ocuppancy probability grid 
+  // get ocuppancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
@@ -592,7 +582,7 @@ bool bvxm_voxel_world::expected_image(bvxm_image_metadata const& camera,
 
   vcl_cout << "Generating Expected Image: " << vcl_endl;
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it, ++apm_slab_it) {
-    vcl_cout << ".";
+    vcl_cout << '.';
 
     // get expected observation
     bvxm_voxel_slab<obs_datatype> expected_slice = apm_processor.expected_color(*apm_slab_it);
@@ -621,7 +611,7 @@ bool bvxm_voxel_world::expected_image(bvxm_image_metadata const& camera,
   typename bvxm_voxel_slab<float>::const_iterator W_it = PXvisX_accum.begin();
   // normalize expected image by weight sum
   for (; out_it != expected_slab.end(); ++out_it, ++W_it) {
-    if(*W_it > 0)
+    if (*W_it > 0)
       *out_it /= *W_it;
   }
 
@@ -643,7 +633,7 @@ bool bvxm_voxel_world::expected_image(bvxm_image_metadata const& camera,
 }
 
 template<bvxm_voxel_type APM_T>
-bool bvxm_voxel_world::inv_pixel_range_probability(bvxm_image_metadata const& observation, 
+bool bvxm_voxel_world::inv_pixel_range_probability(bvxm_image_metadata const& observation,
                                                    vil_image_view<float> &inv_prob,
                                                    unsigned bin_index, float pixel_range)
 {
@@ -692,10 +682,9 @@ bool bvxm_voxel_world::inv_pixel_range_probability(bvxm_image_metadata const& ob
   bvxm_voxel_slab<float> PIPX_image(observation.img->ni(),observation.img->nj(),1);
   bvxm_voxel_slab<float> slice_prob_image(observation.img->ni(),observation.img->nj(),1);
 
-
   vcl_cout << "Computing inverse probability of frame +- range: ";
 
-  // get ocuppancy probability grid 
+  // get ocuppancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype> >(ocp_grid_base.ptr());
 
@@ -708,7 +697,7 @@ bool bvxm_voxel_world::inv_pixel_range_probability(bvxm_image_metadata const& ob
 
   for (int z=0; z<grid_size.z(); ++z, ++ocp_slab_it, ++apm_slab_it)
   {
-    vcl_cout << ".";
+    vcl_cout << '.';
 
     if ( (ocp_slab_it == ocp_grid->end()) || (apm_slab_it == apm_grid->end()) ) {
       vcl_cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << vcl_endl;
@@ -802,7 +791,6 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
   bvxm_voxel_slab<float> PIPX_img(image_slab.nx(), image_slab.ny(),1);
   bvxm_voxel_slab<float> PX_img(image_slab.nx(), image_slab.ny(),1);
 
-
   preX_accum.fill(0.0f);
   visX_accum.fill(1.0f);
 
@@ -813,7 +801,7 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
 
   vcl_cout << "Pass 1: " << vcl_endl;
 
-  // get ocuppancy probability grid 
+  // get ocuppancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
@@ -826,7 +814,7 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
 
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it, ++apm_slab_it)
   {
-    vcl_cout << ".";
+    vcl_cout << '.';
 
     if ( (ocp_slab_it == ocp_grid->end()) || (apm_slab_it == apm_grid->end()) ) {
       vcl_cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << vcl_endl;
@@ -871,7 +859,7 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
     // note: doing scale and offset in image domain so invalid pixels become 1.0 and dont affect visX
     bvxm_voxel_slab<float>::iterator PX_img_it = PX_img.begin();
     visX_accum_it = visX_accum.begin();
-    for(; visX_accum_it != visX_accum.end(); ++visX_accum_it, ++PX_img_it) {
+    for (; visX_accum_it != visX_accum.end(); ++visX_accum_it, ++PX_img_it) {
       *visX_accum_it *= (1 - *PX_img_it);
     }
   }
@@ -881,7 +869,7 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
   // fill pixel_probabilities with preX_accum
   vil_image_view<float>::iterator pix_prob_it = pixel_probability.begin();
   bvxm_voxel_slab<float>::const_iterator preX_accum_it = preX_accum.begin();
-  for(; pix_prob_it != pixel_probability.end(); ++pix_prob_it, ++preX_accum_it) {
+  for (; pix_prob_it != pixel_probability.end(); ++pix_prob_it, ++preX_accum_it) {
     *pix_prob_it = *preX_accum_it;
   }
 
@@ -924,7 +912,7 @@ bool bvxm_voxel_world::mixture_of_gaussians_image(bvxm_image_metadata const& obs
   visX_accum.fill(1.0f);
   mog_slab.fill(bvxm_voxel_traits<APM_T>::initial_val());
 
-  // get ocuppancy probability grid 
+  // get ocuppancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
@@ -935,8 +923,8 @@ bool bvxm_voxel_world::mixture_of_gaussians_image(bvxm_image_metadata const& obs
   typename bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
   typename bvxm_voxel_grid<apm_datatype>::const_iterator apm_slab_it = apm_grid->begin();
 
-  for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it, ++apm_slab_it) {
-
+  for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it, ++apm_slab_it)
+  {
     // get expected observation
     bvxm_voxel_slab<obs_datatype> expected_slice = apm_processor.expected_color(*apm_slab_it);
     // and project to image plane
@@ -951,9 +939,9 @@ bool bvxm_voxel_world::mixture_of_gaussians_image(bvxm_image_metadata const& obs
 
     // do the following update operation from Thom's code
     //float hard_mult = 1;
-    //for( unsigned v = 0; v < voxels.size(); v++ ){
+    //for ( unsigned v = 0; v < voxels.size(); v++ ){
     //  float this_color = voxels[v]->appearance->expected_color( light );
-    //  if( this_color >= 0 )
+    //  if ( this_color >= 0 )
     //    mog->update( this_color, hard_mult*voxels[v]->occupancy_prob[0], light );
     //  hard_mult *= (1-voxels[v]->occupancy_prob[0]);
     //}
@@ -969,8 +957,7 @@ bool bvxm_voxel_world::mixture_of_gaussians_image(bvxm_image_metadata const& obs
     if (!apm_processor.update(mog_slab, expected_slice_img, w)) {   // check if does "if (*I_it >= 0)" during update
       vcl_cout << "In bvxm_voxel_world<APM_T>::mixture_of_gaussians_image() -- problems in appearance update\n";
       return false;
-    } 
-
+    }
   }
 
   mog_image = new bvxm_voxel_slab<apm_datatype>(mog_slab);
@@ -981,7 +968,7 @@ bool bvxm_voxel_world::mixture_of_gaussians_image(bvxm_image_metadata const& obs
 template<bvxm_voxel_type APM_T>
 bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
                                     const vpgl_camera_double_sptr virtual_camera,
-                                    vil_image_view_base_sptr &virtual_view, vil_image_view<float> &vis_prob, 
+                                    vil_image_view_base_sptr &virtual_view, vil_image_view<float> &vis_prob,
                                     unsigned bin_index)
 {
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
@@ -1026,16 +1013,15 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
   visX_accum_virtual.fill(1.0f);
   max_prob_image.fill(0.0f);
 
-  // get ocuppancy probability grid 
+  // get ocuppancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
-
 
   bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
 
   vcl_cout << "Pass 1 - generating height map from virtual camera: " << vcl_endl;
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it) {
-    vcl_cout << ".";
+    vcl_cout << '.';
 
     // compute PXvisX for virtual camera and update visX
     bvxm_util::warp_slab_bilinear(*ocp_slab_it,H_virtual_img_to_plane[z],slice_prob_img);
@@ -1046,7 +1032,7 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
     //bvxm_util::write_slab_as_image(slice_prob_img,"c:/research/registration/output/slice_prob_img.tiff");
     //bvxm_util::write_slab_as_image(visX_accum_virtual,"c:/research/registration/output/visX_accum_virtual.tiff");
 
-    for(; hmap_it != heightmap_rough.end(); ++hmap_it, ++PX_it, ++max_it, ++visX_it) {
+    for (; hmap_it != heightmap_rough.end(); ++hmap_it, ++PX_it, ++max_it, ++visX_it) {
       float PXvisX = (*visX_it) * (*PX_it);
       if (PXvisX > *max_it) {
         *max_it = PXvisX;
@@ -1077,7 +1063,7 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
   }
 
   for (unsigned i=0; i< n_smooth_iterations; ++i) {
-    vcl_cout << ".";
+    vcl_cout << '.';
     // smooth heightmap
     bvxm_util::smooth_gaussian(heightmap_filtered, 1.0f, 1.0f);
     // reset values we are confident in
@@ -1105,8 +1091,8 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
   vcl_cout <<"Pass 2 - generating virtual image: ";
 
   ocp_slab_it = ocp_grid->begin();
-  for(unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it) {
-    vcl_cout << ".";
+  for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it) {
+    vcl_cout << '.';
 
     // project image to virtual image
     bvxm_voxel_slab<obs_datatype> image_slab(original_view.img->ni(),original_view.img->nj(),1);
@@ -1150,14 +1136,14 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
   }
   vcl_cout << vcl_endl;
 
-
   // mask out pixels whose rays did not intersct any voxels in the original and virtual frames
   vcl_cout << "Normalizing visibility probability. ";
   const float visX_thresh = 1.0f - params_->min_occupancy_prob();
 
   // set mask to 0 for all pixels whose corresponding pixel in the original image did not pass through a voxel.
-  for(unsigned z=0; z<(unsigned)grid_size.z(); ++z) {
-    vcl_cout << ".";
+  for (unsigned z=0; z<(unsigned)grid_size.z(); ++z)
+  {
+    vcl_cout << '.';
 
     // project final visX_accum from image to virtual image
     bvxm_util::warp_slab_bilinear(visX_accum, H_virtual_img_to_img[z], visX_accum_virtual_proj);
@@ -1186,8 +1172,6 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
 
   return true;
 }
-
-
 
 
 #endif

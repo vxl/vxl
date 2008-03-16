@@ -1,4 +1,4 @@
-// This is contrib/brl/bbas/bil/bil_math.h
+// This is brl/bbas/bil/bil_math.h
 #ifndef bil_math_h_
 #define bil_math_h_
 //:
@@ -6,16 +6,15 @@
 // \brief Various mathematical manipulations of 2D images
 // \author Matt Leotta
 
-
-#include <vil/vil_math.h>
+#include <vcl_cassert.h>
 
 //: compute the boolean "and" of two boolean images
 inline void bil_math_boolean_and(const vil_image_view<bool>& mask1,
-                                  const vil_image_view<bool>& mask2,
-                                        vil_image_view<bool>& result)
+                                 const vil_image_view<bool>& mask2,
+                                       vil_image_view<bool>& result)
 {
   unsigned ni = mask1.ni(),nj = mask1.nj(),np = mask1.nplanes();
-  if(!result) result = vil_image_view<bool>(ni,nj,np);
+  if (!result) result = vil_image_view<bool>(ni,nj,np);
   assert(mask2.ni()==ni && mask2.nj()==nj && mask2.nplanes()==np);
   assert(result.ni()==ni && result.nj()==nj && result.nplanes()==np);
 
@@ -47,18 +46,18 @@ inline void bil_math_boolean_and(const vil_image_view<bool>& mask1,
 
 //: compute the boolean "or" of two boolean images
 inline void bil_math_boolean_or(const vil_image_view<bool>& mask1,
-                                 const vil_image_view<bool>& mask2,
-                                       vil_image_view<bool>& result)
+                                const vil_image_view<bool>& mask2,
+                                      vil_image_view<bool>& result)
 {
   unsigned ni = mask1.ni(),nj = mask1.nj(),np = mask1.nplanes();
-  if(!result) result = vil_image_view<bool>(ni,nj,np);
+  if (!result) result = vil_image_view<bool>(ni,nj,np);
   assert(mask2.ni()==ni && mask2.nj()==nj && mask2.nplanes()==np);
   assert(result.ni()==ni && result.nj()==nj && result.nplanes()==np);
 
   vcl_ptrdiff_t istep1=mask1.istep(),jstep1=mask1.jstep(),pstep1=mask1.planestep();
   vcl_ptrdiff_t istep2=mask2.istep(),jstep2=mask2.jstep(),pstep2=mask2.planestep();
   vcl_ptrdiff_t istepR=result.istep(),jstepR=result.jstep(),pstepR=result.planestep();
-  
+
   const bool* plane1 = mask1.top_left_ptr();
   const bool* plane2 = mask2.top_left_ptr();
   bool*       planeR = result.top_left_ptr();
@@ -83,10 +82,10 @@ inline void bil_math_boolean_or(const vil_image_view<bool>& mask1,
 
 //: compute the complement of a boolean image
 inline void bil_math_boolean_not(const vil_image_view<bool>& mask,
-                                        vil_image_view<bool>& inv_mask)
+                                       vil_image_view<bool>& inv_mask)
 {
   unsigned ni = mask.ni(),nj = mask.nj(),np = mask.nplanes();
-  if(!inv_mask) inv_mask = vil_image_view<bool>(ni,nj,np);
+  if (!inv_mask) inv_mask = vil_image_view<bool>(ni,nj,np);
   assert(inv_mask.ni()==ni && inv_mask.nj()==nj && inv_mask.nplanes()==np);
 
   vcl_ptrdiff_t istep1=mask.istep(),jstep1=mask.jstep(),pstep1=mask.planestep();
@@ -116,7 +115,7 @@ inline void bil_math_boolean_not(const vil_image_view<bool>& mask,
 //       if for pixels in the range
 template<class T>
 inline void bil_math_threshold_mask(const vil_image_view<T>& image, T min, T max,
-                                           vil_image_view<bool>& mask)
+                                          vil_image_view<bool>& mask)
 {
   unsigned ni = image.ni(),nj = image.nj();
   assert(image.nplanes()==1);
@@ -134,13 +133,11 @@ inline void bil_math_threshold_mask(const vil_image_view<T>& image, T min, T max
     bool*    pixelM = rowM;
     for (unsigned i=0;i<ni;++i,pixelM+=istepM,pixelD+=istepD)
     {
-      if(*pixelD < min || *pixelD > max)
+      if (*pixelD < min || *pixelD > max)
         *pixelM = false;
     }
   }
 }
-
-
 
 
 #endif // bil_math_h_
