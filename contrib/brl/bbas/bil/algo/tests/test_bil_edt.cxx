@@ -1,17 +1,16 @@
 #include <testlib/testlib_test.h>
-#include <vcl_cstdio.h>
+#include <vcl_cstdlib.h>
 
 #include <bil/algo/bil_edt.h>
 
 #include <vil/vil_print.h>
 #include <vil/vil_copy.h>
-#include <vil/vil_fill.h>
 #include <vil/vil_image_view.h>
 
 
 void bil_edt_test(vil_image_view<vxl_uint_32> &im, bool print, bool three_d=false);
 
-void 
+void
 bil_edt_test_3D(vil_image_view<vxl_uint_32> &im, bool print);
 
 void
@@ -24,7 +23,7 @@ MAIN( test_bil_edt )
   START ("Exact Euclidean Distance Transform Algorithms");
 
   {
-  unsigned r=5,c=7; 
+  unsigned r=5,c=7;
 
   vil_image_view <vxl_uint_32> image(r,c,1);
 
@@ -82,7 +81,7 @@ MAIN( test_bil_edt )
   // ----- 3D -----
 
   {
-  unsigned r=7,c=5,p=3; 
+  unsigned r=7,c=5,p=3;
 
   vil_image_view <vxl_uint_32> image(c,r,p);
 
@@ -96,9 +95,8 @@ MAIN( test_bil_edt )
   bil_edt_test(image,true,true);
   }
 
-
-  { //: just runs on big image
-  unsigned r=200,c=300,p=400; 
+  { // just runs on big image
+  unsigned r=200,c=300,p=400;
   vil_image_view <vxl_uint_32> image(c,r,p);
 
   image.fill(1);
@@ -108,7 +106,7 @@ MAIN( test_bil_edt )
   }
 
   {
-  unsigned r=7,c=5,p=3; 
+  unsigned r=7,c=5,p=3;
   vil_image_view <vxl_uint_32> image(c,r,p);
   image.fill(1);
 
@@ -118,26 +116,24 @@ MAIN( test_bil_edt )
   bil_edt_test(image,false,true);
   }
 
-
   SUMMARY();
 }
 
-//: test 2D EDT
-void 
+// test 2D EDT
+void
 bil_edt_test(vil_image_view<vxl_uint_32> &im, bool print, bool three_d)
 {
   vil_image_view <vxl_uint_32> dt_brute(vil_copy_deep(im));
- 
+
   if (three_d)
     bil_edt_brute_force(dt_brute);
   else
     bil_edt_brute_force_with_list(dt_brute);
- 
+
   if (print) {
      vcl_cout << "BRUTE DT:\n";
      vil_print_all(vcl_cout,dt_brute);
   }
-
 
   if (three_d) {
     bil_edt_test_specific(im, dt_brute, print, "Saito 3D");
@@ -145,14 +141,13 @@ bil_edt_test(vil_image_view<vxl_uint_32> &im, bool print, bool three_d)
     bil_edt_test_specific(im, dt_brute, print, "Maurer");
     bil_edt_test_specific(im, dt_brute, print, "Saito");
   }
-
 }
 
 void
 bil_edt_test_specific(
-    const vil_image_view<vxl_uint_32> &im, 
-    const vil_image_view<vxl_uint_32> dt_brute, 
-    bool print, 
+    const vil_image_view<vxl_uint_32> &im,
+    const vil_image_view<vxl_uint_32> dt_brute,
+    bool print,
     vcl_string algo)
 {
   vil_image_view <vxl_uint_32> dt_algo(vil_copy_deep(im));
@@ -164,7 +159,7 @@ bil_edt_test_specific(
   else if (algo == "Saito 3D")
     bil_edt_saito_3D(dt_algo);
   else
-    abort();
+    vcl_abort();
 
   if (print) {
     vcl_cout << algo << " DT:\n";
