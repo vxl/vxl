@@ -10,8 +10,6 @@
 #include <vnl/algo/vnl_gaussian_kernel_1d.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 
-#include <brip/brip_vil_float_ops.h>
-
 bvxm_rpc_registration_process::bvxm_rpc_registration_process()
 {
   // process takes 4 inputs: 
@@ -80,6 +78,7 @@ bool bvxm_rpc_registration_process::execute()
   int ni = edge_image.ni();
   int nj = edge_image.nj();
 
+  double max_prob = 0.0;
   int max_u = 0, max_v = 0;
 
   vil_image_view<vxl_byte> expected_edge_image_output;
@@ -104,7 +103,27 @@ bool bvxm_rpc_registration_process::execute()
       }
     }
 
-    advanced_offset_estimation(offset_search_size,edge_image,expected_edge_image,max_u,max_v);
+    vcl_cout << "Estimating image offsets:" << vcl_endl;
+    for(int u=-offset_search_size; u<=offset_search_size; u++){
+      vcl_cout << ".";
+      for(int v=-offset_search_size; v<=offset_search_size; v++){
+        double prob = 0.0;
+        for(int m=offset_search_size; m<ni-offset_search_size; m++){
+          for(int n=offset_search_size; n<nj-offset_search_size; n++){
+            if(edge_image(m,n)==255){
+              prob += expected_edge_image(m-u,n-v);
+            }
+          }
+        }
+
+        if(prob > max_prob){
+          max_prob = prob;
+          max_u = u;
+          max_v = v;
+        }
+      }
+    }
+    vcl_cout << vcl_endl;
 
     vcl_cout << "Estimated changes in offsets (u,v)=(" << max_u << "," << max_v << ")" << vcl_endl;
   }
@@ -150,76 +169,4 @@ bool bvxm_rpc_registration_process::execute()
   output_data_[1] = output1;
 
   return true;
-}
-
-void bvxm_rpc_registration_process::advanced_offset_estimation(const int offset_search_size,const vil_image_view<vxl_byte>& edge_image,const vil_image_view<float>& expected_edge_image,int& max_u,int& max_v){
-  vcl_cout << "Estimating image offsets:" << vcl_endl;
-
-  //bool brip_vil_float_ops::homography(vil_image_view<float> const& input,
-  //  vgl_h_matrix_2d<double> const& H,
-  //  vil_image_view<float>& output,
-  //  bool output_size_fixed,
-  //  float output_fill_value)
-
-  double max_prob = 0.0;
-  int ni = edge_image.ni();
-  int nj = edge_image.nj();
-
-  //brip_vil_float_ops::convert_to_float(
-  //  vil_math_scale_and_offset_values(
-
-  vil_image_view<float> expected_edge_image_translated(ni,nj);
-
-  for(int u=-offset_search_size; u<=offset_search_size; u++){
-    vcl_cout << ".";
-    for(int v=-offset_search_size; v<=offset_search_size; v++){
-      translate_image(expected_edge_image,expected_edge_image_translated,(double)u,(double)v);
-      double prob = 0.0;
-      for(int m=0; m<ni; m++){
-        for(int n=0; n<nj; n++){
-          if(edge_image(m,n)==255){
-            prob += expected_edge_image_translated(m,n);
-          }
-        }
-      }
-
-      if(prob > max_prob){
-        max_prob = prob;
-        max_u = u;
-        max_v = v;
-      }
-    }
-  }
-  vcl_cout << vcl_endl;
-}
-
-void bvxm_rpc_registration_process::translate_image(const vil_image_view<float>& inp,vil_image_view<float>& out, double ti,double tj){
-  int ti_int = vnl_math_rnd(ti);
-  int tj_int = vnl_math_rnd(tj);
-
-  int ti_abs = vnl_math_abs(ti_int);
-  int tj_abs = vnl_math_abs(tj_int);
-
-  int ni = inp.ni();
-  int nj = inp.nj();
-
-  out.set_size(ni,nj);
-  out.fill(0.0);
-
-  bool sub_pixel_mode = true;
-  if(vnl_math_abs(ti-(double)ti_int) < 0.049 && vnl_math_abs(tj-(double)tj_int) < 0.049 ){
-    sub_pixel_mode = false;
-  }
-
-  if(sub_pixel_mode){
-  }
-  else{
-    for(int i=ti_abs; i<ni-ti_abs; i++){
-      for(int j=tj_abs; j<nj-tj_abs; j++){
-        int ci = i-ti_int;
-        int cj = j-tj_int;
-        out(i,j) = inp(ci,cj);
-      }
-    }
-  }
 }

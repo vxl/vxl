@@ -60,15 +60,6 @@ bool bvxm_generate_edge_map_process::execute()
       return false;
   }
 
-  vcl_vector<bprb_param*> all_parameters = parameters()->get_param_list();
-  vcl_cout << vcl_endl;
-  vcl_cout << "printing parameters:" << vcl_endl;
-  vcl_cout << "--------------------" << vcl_endl;
-  for(unsigned i=0; i<all_parameters.size(); i++){
-    vcl_cout << all_parameters[i]->name() << ": " << all_parameters[i]->value_str() << vcl_endl;
-  }
-  vcl_cout << vcl_endl;
-
   vil_image_view<vxl_byte> input_image(input_image_sptr);
 
   int ni = input_image.ni();

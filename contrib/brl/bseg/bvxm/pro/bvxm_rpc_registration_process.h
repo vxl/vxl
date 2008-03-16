@@ -15,8 +15,6 @@
 #include <vcl_string.h>
 #include <bprb/bprb_process.h>
 
-#include <vil/vil_image_view.h>
-
 class bvxm_rpc_registration_process : public bprb_process
 {
  public:
@@ -37,9 +35,7 @@ class bvxm_rpc_registration_process : public bprb_process
   bool init() { return true; }
   bool execute();
   bool finish(){return true;}
-
-  void advanced_offset_estimation(const int offset_search_size,const vil_image_view<vxl_byte>& edge_image,const vil_image_view<float>& expected_edge_image,int& max_u,int& max_v);
-  void translate_image(const vil_image_view<float>& inp,vil_image_view<float>& out, double ti,double tj);
+ 
  private:
 
 };
