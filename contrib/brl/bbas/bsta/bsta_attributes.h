@@ -13,35 +13,36 @@
 //
 
 #include "bsta_distribution.h"
+#include <vcl_iostream.h>
 
 //: Adds number of observations
 template <class dist_>
 class bsta_num_obs : public dist_
 {
-    typedef typename dist_::math_type T;
+  typedef typename dist_::math_type T;
 
-  public:
+ public:
 
-    typedef dist_ contained_type;
+  typedef dist_ contained_type;
 
-    //: Constructor
-    bsta_num_obs<dist_>() : dist_(), num_observations(T(0)) {}
+  //: Constructor
+  bsta_num_obs<dist_>() : dist_(), num_observations(T(0)) {}
 
-    //: Constructor - somewhat like a copy constructor
-    bsta_num_obs<dist_>(const dist_& d, const T& n_obs = T(0))
-      : dist_(d), num_observations(n_obs) {}
+  //: Constructor - somewhat like a copy constructor
+  bsta_num_obs<dist_>(const dist_& d, const T& n_obs = T(0))
+    : dist_(d), num_observations(n_obs) {}
 
-    //: The number of observations
-    T num_observations;
+  //: The number of observations
+  T num_observations;
 };
 
 template <class dist_>
-inline vcl_ostream& operator<< (vcl_ostream& os, 
+inline vcl_ostream& operator<< (vcl_ostream& os,
                                 bsta_num_obs<dist_> const& no)
 {
   dist_ const& dist = static_cast<dist_ const&>(no);
-  os << "n_obs:" << no.num_observations << '\n';
-  os << dist ;
+  os << "n_obs:" << no.num_observations << '\n'
+     << dist ;
   return os;
 }
 

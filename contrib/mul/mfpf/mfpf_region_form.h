@@ -6,6 +6,8 @@
 // \author Tim Cootes
 
 #include <mfpf/mfpf_pose.h>
+#include <vcl_iostream.h>
+#include <vcl_cstdlib.h>
 
 //: Defines pose and shape (box/ellipse etc) of a region
 //  General purpose object.  form() gives shape (eg "box", "ellipse")
@@ -14,7 +16,7 @@
 //  which is mapped to the world frame by pose.
 struct mfpf_region_form
 {
-private:
+ private:
   //: Pose (position + scale/orientation)
   mfpf_pose pose_;
 
@@ -25,10 +27,10 @@ private:
 
   //: Name of form of shape ("box","ellipse")
   vcl_string form_;
-public:
+ public:
 
   //: Constructor
-  mfpf_region_form(const mfpf_pose& p, vcl_string form, 
+  mfpf_region_form(const mfpf_pose& p, vcl_string form,
                    double wi, double wj)
    : pose_(p),form_(form),wi_(wi),wj_(wj) {};
 
@@ -56,11 +58,9 @@ public:
 
   //: Name of form of shape ("box","ellipse")
   const vcl_string& form() const { return form_; }
-
-
 };
 
-inline vcl_ostream& operator<<(vcl_ostream& os, 
+inline vcl_ostream& operator<<(vcl_ostream& os,
                                const mfpf_region_form& p)
 {
   os<<p.form()<<" wi: "<<p.wi()<<" wj: "<<p.wj()<<' '<<p.pose();
@@ -68,7 +68,7 @@ inline vcl_ostream& operator<<(vcl_ostream& os,
 }
 
 
-inline void vsl_b_write(vsl_b_ostream& bfs, 
+inline void vsl_b_write(vsl_b_ostream& bfs,
                         const mfpf_region_form& p)
 {
   vsl_b_write(bfs,short(1));  // Version number
@@ -92,14 +92,14 @@ inline void vsl_b_read(vsl_b_istream& bfs, mfpf_region_form& p)
       vsl_b_read(bfs,p.wj());
       break;
     default:
-      vcl_cerr << "vsl_b_read(bfs,mfpf_region_form): ";
-      vcl_cerr << "Unexpected version number " << version << vcl_endl;
-      abort();
+      vcl_cerr << "vsl_b_read(bfs,mfpf_region_form): "
+               << "Unexpected version number " << version << vcl_endl;
+      vcl_abort();
   }
 }
 
 //: Write vector of region forms to stream
-inline void vsl_b_write(vsl_b_ostream& bfs, 
+inline void vsl_b_write(vsl_b_ostream& bfs,
                         const vcl_vector<mfpf_region_form>& p)
 {
   vsl_b_write(bfs,short(1));  // Version number
@@ -109,7 +109,7 @@ inline void vsl_b_write(vsl_b_ostream& bfs,
 }
 
 //: Read in vector of feature points from stream
-inline void vsl_b_read(vsl_b_istream& bfs, 
+inline void vsl_b_read(vsl_b_istream& bfs,
                        vcl_vector<mfpf_region_form>& p)
 {
   short version;
@@ -123,9 +123,9 @@ inline void vsl_b_read(vsl_b_istream& bfs,
       for (unsigned i=0;i<n;++i) vsl_b_read(bfs,p[i]);
       break;
     default:
-      vcl_cerr << "vsl_b_read(bfs,vcl_vector<mfpf_region_form>): ";
-      vcl_cerr << "Unexpected version number " << version << vcl_endl;
-      abort();
+      vcl_cerr << "vsl_b_read(bfs,vcl_vector<mfpf_region_form>): "
+               << "Unexpected version number " << version << vcl_endl;
+      vcl_abort();
   }
 }
 

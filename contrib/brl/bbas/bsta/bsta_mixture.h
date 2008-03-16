@@ -17,7 +17,7 @@
 #include <vcl_cassert.h>
 #include <vcl_vector.h>
 #include <vcl_algorithm.h>
-
+#include <vcl_iostream.h>
 
 //: A mixture of distributions
 template <class dist_>
@@ -197,16 +197,15 @@ class bsta_mixture : public bsta_distribution<typename dist_::math_type,
 };
 
 template <class dist_>
-inline vcl_ostream& operator<< (vcl_ostream& os, 
+inline vcl_ostream& operator<< (vcl_ostream& os,
                                 bsta_mixture<dist_> const& m)
 {
   typedef typename dist_::math_type T;
   unsigned n = m.num_components();
-  for(unsigned c = 0; c<n; ++c){
+  for (unsigned c = 0; c<n; ++c){
     const dist_& mc = m.distribution(c);
     T weight = m.weight(c);
-    os << "mixture_comp["<< c << "]wgt(" << weight << ")\n";
-    os << mc << '\n';
+    os << "mixture_comp["<< c << "]wgt(" << weight << ")\n" << mc << '\n';
   }
   return os;
 }

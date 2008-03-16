@@ -7,6 +7,8 @@
 
 #include <mfpf/mfpf_pose.h>
 #include <vsl/vsl_vector_io.h>
+#include <vcl_iostream.h>
+#include <vcl_cstdlib.h>
 
 struct mfpf_pose_set
 {
@@ -17,7 +19,7 @@ struct mfpf_pose_set
   vcl_vector<double> fits;
 };
 
-inline void vsl_b_write(vsl_b_ostream& bfs, 
+inline void vsl_b_write(vsl_b_ostream& bfs,
                         const mfpf_pose_set& p)
 {
   vsl_b_write(bfs,short(1));  // Version number
@@ -36,14 +38,14 @@ inline void vsl_b_read(vsl_b_istream& bfs, mfpf_pose_set& p)
       vsl_b_read(bfs,p.fits);
       break;
     default:
-      vcl_cerr << "vsl_b_read(bfs,mfpf_pose_set): ";
-      vcl_cerr << "Unexpected version number " << version << vcl_endl;
-      abort();
+      vcl_cerr << "vsl_b_read(bfs,mfpf_pose_set): "
+               << "Unexpected version number " << version << vcl_endl;
+      vcl_abort();
   }
 }
 
 //: Write vector of objects to stream
-inline void vsl_b_write(vsl_b_ostream& bfs, 
+inline void vsl_b_write(vsl_b_ostream& bfs,
                         const vcl_vector<mfpf_pose_set>& p)
 {
   vsl_b_write(bfs,short(1));  // Version number
@@ -53,7 +55,7 @@ inline void vsl_b_write(vsl_b_ostream& bfs,
 }
 
 //: Read in vector of feature points from stream
-inline void vsl_b_read(vsl_b_istream& bfs, 
+inline void vsl_b_read(vsl_b_istream& bfs,
                        vcl_vector<mfpf_pose_set>& p)
 {
   short version;
@@ -67,9 +69,9 @@ inline void vsl_b_read(vsl_b_istream& bfs,
       for (unsigned i=0;i<n;++i) vsl_b_read(bfs,p[i]);
       break;
     default:
-      vcl_cerr << "vsl_b_read(bfs,vcl_vector<mfpf_pose_set>): ";
-      vcl_cerr << "Unexpected version number " << version << vcl_endl;
-      abort();
+      vcl_cerr << "vsl_b_read(bfs,vcl_vector<mfpf_pose_set>): "
+               << "Unexpected version number " << version << vcl_endl;
+      vcl_abort();
   }
 }
 
