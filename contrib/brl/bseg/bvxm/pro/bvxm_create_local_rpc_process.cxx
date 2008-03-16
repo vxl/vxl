@@ -33,7 +33,10 @@ bool bvxm_create_local_rpc_process::execute()
   if(!this->verify_inputs())
     return false;
 
+  // get the inputs
+  // voxel world
   brdb_value_t<bvxm_voxel_world_sptr>* input0 = static_cast<brdb_value_t<bvxm_voxel_world_sptr>* >(input_data_[0].ptr());
+  // camera
   brdb_value_t<vpgl_camera_double_sptr>* input1 =  static_cast<brdb_value_t<vpgl_camera_double_sptr>* >(input_data_[1].ptr());
 
   bvxm_voxel_world_sptr vox_world = input0->value();
@@ -45,6 +48,7 @@ bool bvxm_create_local_rpc_process::execute()
     return false;
   }
 
+  // create the local rational camera using the voxel model and the rational camera
   bgeo_lvcs_sptr lvcs = vox_world->get_params()->lvcs();
   vpgl_local_rational_camera<double> cam_out(*lvcs,*cam_inp);
 

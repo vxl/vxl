@@ -46,9 +46,12 @@ bool bvxm_generate_edge_map_process::execute()
   if(!this->verify_inputs())
     return false;
 
+  // get inputs
+  // image
   brdb_value_t<vil_image_view_base_sptr>* input0 = static_cast<brdb_value_t<vil_image_view_base_sptr>* >(input_data_[0].ptr());
   vil_image_view_base_sptr input_image_sptr = input0->value();
 
+  // get parameters
   double edge_detection_gaussian_sigma,line_fitting_min_length,line_fitting_error_tolerance;
   bool use_lines;
   if (!parameters()->get_value("use_lines", use_lines) ||
@@ -64,27 +67,35 @@ bool bvxm_generate_edge_map_process::execute()
 
   int ni = input_image.ni();
   int nj = input_image.nj();
+
+  // initialize the output edge image
   vil_image_view<vxl_byte> edge_image;  
   edge_image.set_size(ni,nj);
   edge_image.fill(0);
 
+  // set parameters for the edge detector
   sdet_detector_params dp;
   dp.smooth = (float)edge_detection_gaussian_sigma;
   dp.automatic_threshold = false;
   dp.aggressive_junction_closure = 0;
   dp.junctionp = false;
 
+  // detect edgels from the input image
   sdet_detector detector(dp);
   vil_image_resource_sptr input_image_res_sptr = vil_new_image_resource_of_view(*input_image_sptr);
   detector.SetImage(input_image_res_sptr);
   detector.DoContour();
   vcl_vector<vtol_edge_2d_sptr> * edges = detector.GetEdges();
 
+  // checks if the user selected to use lines instead of edges
   if(use_lines){
+    // set parameters for line detection
     sdet_fit_lines_params line_detector_params((int)line_fitting_min_length,line_fitting_error_tolerance);
     sdet_fit_lines line_detector(line_detector_params);
     line_detector.set_edges(*edges);
     line_detector.fit_lines();
+
+    // estimate 2d line segments using the detected edgels
     vcl_vector<vsol_line_2d_sptr> & lines = line_detector.get_line_segs();
 
     double ni_d = (double)ni;
@@ -124,8 +135,10 @@ bool bvxm_generate_edge_map_process::execute()
     }
   }
   else{
+    // the user selected use edges instead of lines (default option)
     vcl_vector<vcl_pair<int,int> > curr_edge_points;
 
+    // iterate over each connected edge component
     for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges->begin(); eit != edges->end(); eit++)
     {
       vsol_curve_2d_sptr c = (*eit)->curve();
@@ -134,16 +147,20 @@ bool bvxm_generate_edge_map_process::execute()
         continue;
       vdgl_interpolator_sptr intp = dc->get_interpolator();
       vdgl_edgel_chain_sptr ec = intp->get_edgel_chain();
+
+      // iterate over each point in the connected edge component
       for(unsigned j=0; j<ec->size(); j++){
         vdgl_edgel curr_edgel = ec->edgel(j);
         int cr_x = (int)curr_edgel.x();
         int cr_y = (int)curr_edgel.y();
 
+        // add the current edge point to the list of edge points
         vcl_pair<int,int> curr_pair(cr_x,cr_y);
         curr_edge_points.push_back(curr_pair);
       }
     }
 
+    // print edge to the empty edge image
     for(unsigned i=0; i<curr_edge_points.size(); i++) {
       edge_image(curr_edge_points[i].first,curr_edge_points[i].second) = 255;
     }
@@ -161,6 +178,7 @@ bool bvxm_generate_edge_map_process::execute()
     }
   }
 
+  // return the output edge image
   brdb_value_sptr output0 = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<vxl_byte>(edge_image));
   output_data_[0] = output0;
 
