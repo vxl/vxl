@@ -6,6 +6,8 @@
 #include <bprb/bprb_parameters.h>
 
 #include <vil/vil_image_view_base.h>
+#include <vil/vil_image_view.h>
+
 #include <vpgl/vpgl_camera.h>
 
 #include <bvxm/bvxm_voxel_grid_base.h>
