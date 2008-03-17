@@ -28,6 +28,7 @@ double camera_dist= 200;
 //size of the world
 unsigned nx=100, ny=100, nz=50;
 float vox_length = 1.0f;
+vcl_vector<vgl_box_3d<double> > boxes;
 
 typedef bvxm_voxel_traits<APM_MOG_GREY>::voxel_datatype apm_datatype;
 
@@ -298,7 +299,7 @@ bool reconstruct_world( bvxm_voxel_world_sptr recon_world, vcl_vector<vpgl_camer
     recon_world->update<APM_MOG_GREY>(observation,bin_num);
   }
 
-   for (unsigned i=0; i<cameras.size(); i++) {
+  for (unsigned i=0; i<cameras.size(); i++) {
     vil_image_view_base_sptr img_arg;
     vil_image_view<float> mask(IMAGE_U, IMAGE_V);
     vil_image_view_base_sptr expected = new vil_image_view<unsigned char>(IMAGE_U, IMAGE_V);
@@ -333,9 +334,11 @@ void gen_voxel_world_2box(vgl_vector_3d<unsigned> grid_size,
   //object (essentially a box) placed in the voxel world
   vgl_box_3d<double> box(vgl_point_3d<double> (10,10,10),
     vgl_point_3d<double> (80,80,30));
+  boxes.push_back(box);
 
   vgl_box_3d<double> top_box;
   create_top_box(box, top_box, 30,30,10);
+  boxes.push_back(top_box);
 
   float face_intens[6] = {0.3, 0.45, 0.6, 0.75, 0.85, 1.0};
   vcl_ofstream is("test_gen_synthetic_world/intensity_grid.txt");
@@ -355,10 +358,12 @@ void gen_voxel_world_2box(vgl_vector_3d<unsigned> grid_size,
         int face1 = on_box_surface(box, vgl_point_3d<double>(i,j,z));
         int face2 = on_box_surface(top_box, vgl_point_3d<double>(i,j,z));
         if ((face1 != -1) || (face2 != -1)){
+          // generate a random intensity
+          float r = (rand() % 256)/255.0;
           if (face1 != -1)
-            (*intensity_slab_it)(i,j,0) = face_intens[face1];
+            (*intensity_slab_it)(i,j,0) = r;//face_intens[face1];
           else
-            (*intensity_slab_it)(i,j,0) = face_intens[5-face2];
+            (*intensity_slab_it)(i,j,0) = r;//face_intens[5-face2];
           (*ocp_slab_it)(i,j,0) = 1.0f;
           is << " x" ;
         } else
@@ -412,6 +417,31 @@ void gen_voxel_world_plane(vgl_vector_3d<unsigned> grid_size,
   vcl_cout << "grid done." << vcl_endl;
 }
 
+bool test_reconstructed_ocp(bvxm_voxel_world_sptr recon_world)
+{
+
+  bvxm_voxel_grid<float>* ocp_grid =
+    dynamic_cast<bvxm_voxel_grid<float>*>(recon_world->get_grid<OCCUPANCY>(0).ptr());
+
+  vxl_uint_32 nx = ocp_grid->grid_size().x();
+  vxl_uint_32 ny = ocp_grid->grid_size().y();
+  vxl_uint_32 nz = ocp_grid->grid_size().z();
+
+  // iterate through slabs 
+  unsigned i = 15, j=15, k=nz;
+  bvxm_voxel_grid<float>::iterator ocp_slab_it = ocp_grid->begin();
+  for (ocp_slab_it = ocp_grid->begin(); ocp_slab_it != ocp_grid->end(); ++ocp_slab_it ) {
+    k--;
+    float ocp = (*ocp_slab_it)(i,j,0);
+    vcl_cout << "z=" << k << "  " << ocp << vcl_endl;
+    for (unsigned b=0; b<boxes.size(); b++) {
+      if (on_box_surface(boxes[b], vgl_point_3d<double>(i,j,k)) != -1) 
+        vcl_cout << "ON " << b << vcl_endl;
+    }
+  }
+  return true;
+}
+
 static void test_gen_synthetic_world()
 {
   START("test_gen_synthetic_world test");
@@ -457,7 +487,7 @@ static void test_gen_synthetic_world()
 
   vcl_vector <vil_image_view_base_sptr> image_set_1,image_set_2;
 
-  // generate images from synthetis world
+  // generate images from synthetic world
   gen_images(grid_size, world, intensity_grid, ocp_grid, apm_grid_1,
     cameras, image_set_1, bin_num_1);
 
@@ -483,6 +513,7 @@ static void test_gen_synthetic_world()
   reconstruct_world(recon_world,cameras, image_set_1,bin_num_1);
   recon_world->save_occupancy_raw("./recon_world/ocp1.raw");
 
+  //test_reconstructed_ocp(recon_world);
   reconstruct_world(recon_world,cameras, image_set_2,bin_num_2);
   recon_world->save_occupancy_raw("./recon_world/ocp2.raw");
 
