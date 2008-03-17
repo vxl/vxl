@@ -102,6 +102,19 @@ class mfpf_point_finder
                         const vgl_vector_2d<double>& u,
                         vgl_point_2d<double>& new_p)=0;
 
+  //: Search given image around p, using u to define scale and angle 
+  //  Evaluates responses on a grid, finds the best point on the
+  //  grid, then optimises its position by fitting a parabola.
+  //
+  //  On exit, new_p defines position of the best nearby match.
+  //  Returns a qualtity of fit measure at that
+  //  point (the smaller the better).
+  virtual double search_one_pose_with_opt(
+                        const vimt_image_2d_of<float>& image,
+                        const vgl_point_2d<double>& p,
+                        const vgl_vector_2d<double>& u,
+                        vgl_point_2d<double>& new_p);
+
   //: Search given image around p, using u to define scale and orientation
   //  On exit, new_p and new_u define position, scale and orientation of
   //  the best nearby match.  Returns a quality of fit measure at that
@@ -112,6 +125,23 @@ class mfpf_point_finder
   //  and one of the given angle/scales.  True optima can then
   //  be found by further optimisation of the point.
   virtual double search(const vimt_image_2d_of<float>& image,
+                        const vgl_point_2d<double>& p,
+                        const vgl_vector_2d<double>& u,
+                        vgl_point_2d<double>& new_p,
+                        vgl_vector_2d<double>& new_u);
+
+  //: Search given image around p, using u to define scale and orientation
+  //  On exit, new_p and new_u define position, scale and orientation of
+  //  the best nearby match.  Returns a quality of fit measure at that
+  //  point (the smaller the better). 
+  //  Parabolic fit used to estimate optimal position.
+  //
+  //  Default impementation calls search_one_pose(...) at multiple
+  //  angles and scales. Result will be at a grid position
+  //  and one of the given angle/scales.  True optima can then
+  //  be found by further optimisation of the point.
+  virtual double search_with_opt(
+                        const vimt_image_2d_of<float>& image,
                         const vgl_point_2d<double>& p,
                         const vgl_vector_2d<double>& u,
                         vgl_point_2d<double>& new_p,
@@ -128,9 +158,24 @@ class mfpf_point_finder
                            vcl_vector<double>& fit);
 
   //: Search for local optima around given point/scale/angle
+  //  Search in a grid around p (defined by search_ni and search_nj).
+  //  Find local minima on this grid.
+  //  Perform single sub-grid optimisation by fitting a parabola
+  //  in x and y and testing resulting point.
+  //  Append each to pts.  
+  //  Note: pts is not resized, so empty beforehand if necessary.
+  virtual void multi_search_one_pose(
+                           const vimt_image_2d_of<float>& image,
+                           const vgl_point_2d<double>& p,
+                           const vgl_vector_2d<double>& u,
+                           vcl_vector<mfpf_pose>& pts,
+                           vcl_vector<double>& fit);
+
+  //: Search for local optima around given point/scale/angle
   //  For each angle and scale (defined by internal nA,dA,ns,ds)
   //  search in a grid around p (defined by search_ni and search_nj).
-  //  Find local minima on this grid and return them in pts.
+  //  Find local minima on this grid and return them in poses.
+  //  Responses lie on grid in (x,y,ds,dA)
   //
   //  Note that an object in an image may lead to multiple responses,
   //  one at each scale and angle near to the optima.  Thus the
@@ -139,8 +184,25 @@ class mfpf_point_finder
   virtual void grid_search(const vimt_image_2d_of<float>& image,
                            const vgl_point_2d<double>& p,
                            const vgl_vector_2d<double>& u,
-                           vcl_vector<mfpf_pose>& pts,
+                           vcl_vector<mfpf_pose>& poses,
                            vcl_vector<double>& fit);
+
+  //: Search for local optima around given point/scale/angle
+  //  For each angle and scale (defined by internal nA,dA,ns,ds)
+  //  search in a grid around p (defined by search_ni and search_nj).
+  //  Find local minima on this grid.
+  //  Sub-grid estimation using parabolic fitting included.
+  //  poses[i] defines result i, with corresponding fit fits[i]
+  //
+  //  Note that an object in an image may lead to multiple responses,
+  //  one at each scale and angle near to the optima.  Thus the
+  //  poses defined in pts should be further refined to eliminate
+  //  such multiple responses.
+  virtual void multi_search(const vimt_image_2d_of<float>& image,
+                           const vgl_point_2d<double>& p,
+                           const vgl_vector_2d<double>& u,
+                           vcl_vector<mfpf_pose>& poses,
+                           vcl_vector<double>& fits);
 
   //: Perform local optimisation to refine position,scale and angle
   //  On input fit is match at p,u.  On exit p,u and fit are updated.

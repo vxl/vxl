@@ -9,6 +9,7 @@
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
 #include <vcl_cassert.h>
+#include <vcl_algorithm.h>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
@@ -60,6 +61,15 @@ void mfpf_profile_pdf_builder::set(int ilo, int ihi,
   pdf_builder_ = builder.clone();
 }
 
+//: Define region size in world co-ordinates
+//  Sets up ROI to cover given box (with samples at step_size()), 
+//  with ref point at centre.
+void mfpf_profile_pdf_builder::set_region_size(double wi, double)
+{
+  wi/=step_size();
+  ihi_ = vcl_max(1,int(0.99+wi));
+  ilo_ = -ihi_;
+}
 
 //: Initialise building
 // Must be called before any calls to add_example(...)

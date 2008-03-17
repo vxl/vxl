@@ -32,7 +32,7 @@ void test_norm_corr2d_search(mfpf_point_finder_builder& b)
   // Add a point in the centre
   image.image()(10,10)=99;
 
-  vgl_point_2d<double> p0(9.5,9.5), p1(7.5,8.5);
+  vgl_point_2d<double> p0(9.5,9.5), p1(7.5,8.5), p2(7.8,8.2);
   vgl_vector_2d<double> u(1,0);
 
   b.clear(1);
@@ -58,6 +58,17 @@ void test_norm_corr2d_search(mfpf_point_finder_builder& b)
 
   TEST_NEAR("Correct orientation",(new_u-u).length(),0.0,1e-6);
   TEST_NEAR("Correct location",(new_p-p0).length(),0.0,1e-6);
+
+  vcl_cout<<"Without parabolic optimisation: "<<vcl_endl;
+  pf->search(image,p2,u,new_p,new_u);
+  vcl_cout<<"Found point (no opt): "<<new_p<<vcl_endl;
+  vcl_cout<<"Testing parabolic optimisation."<<vcl_endl;
+  pf->set_search_area(3,3);
+  pf->search_with_opt(image,p2,u,new_p,new_u);
+  vcl_cout<<"Found point ( + opt): "<<new_p<<vcl_endl;
+
+  TEST_NEAR("Correct orientation",(new_u-u).length(),0.0,1e-6);
+  TEST_NEAR("Correct location",(new_p-p0).length(),0.0,0.25);
 
   vimt_image_2d_of<double> response;
   pf->evaluate_region(image,p1,u,response);

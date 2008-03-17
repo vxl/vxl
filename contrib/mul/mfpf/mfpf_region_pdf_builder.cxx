@@ -17,6 +17,7 @@
 
 #include <vil/vil_resample_bilin.h>
 #include <vsl/vsl_vector_io.h>
+#include <vsl/vsl_indent.h>
 
 #include <mfpf/mfpf_sample_region.h>
 #include <mfpf/mfpf_norm_vec.h>
@@ -45,6 +46,7 @@ void mfpf_region_pdf_builder::set_defaults()
   ref_y_=0;
   nA_=0;
   dA_=0.0;
+  norm_method_=1;
 }
 
 //=======================================================================
@@ -87,6 +89,18 @@ void mfpf_region_pdf_builder::set_region(const mfpf_region_form& form)
     vcl_cerr<<"mfpf_region_pdf_builder::set_region : Unknown form: "<<form<<vcl_endl;
     vcl_abort();
   }
+}
+
+//: Define region size in world co-ordinates
+//  Sets up ROI to cover given box (with samples at step_size()), 
+//  with ref point at centre.
+void mfpf_region_pdf_builder::set_region_size(double wi, double wj)
+{
+  wi/=step_size();
+  wj/=step_size();
+  int ni = vcl_max(1,int(0.99+wi));
+  int nj = vcl_max(1,int(0.99+wj));
+  set_as_box(unsigned(ni),unsigned(nj),0.5*(ni-1),0.5*(nj-1));
 }
 
 
@@ -189,7 +203,7 @@ void mfpf_region_pdf_builder::add_one_example(
   mfpf_sample_region(sample.top_left_ptr(),sample.jstep(),
                      np,roi_,v);
 
-  mfpf_norm_vec(v);
+  if (norm_method_==1) mfpf_norm_vec(v);
   data_.push_back(v);
 }
 
@@ -224,7 +238,7 @@ void mfpf_region_pdf_builder::build(mfpf_point_finder& pf)
 
   pdf_builder().build(*pdf,data);
 
-  rp.set(roi_,ref_x_,ref_y_,*pdf);
+  rp.set(roi_,ref_x_,ref_y_,*pdf,norm_method_);
   set_base_parameters(rp);
 
   // Tidy up
@@ -343,6 +357,16 @@ bool mfpf_region_pdf_builder::set_from_stream(vcl_istream &is)
     props.erase("shape");
   }
 
+  if (props.find("norm")!=props.end())
+  {
+    if (props["norm"]=="none") norm_method_=0;
+    else
+    if (props["norm"]=="linear") norm_method_=1;
+    else throw mbl_exception_parse_error("Unknown norm: "+props["norm"]);
+
+    props.erase("norm");
+  }
+
   if (props.find("nA")!=props.end())
   {
     nA_=vul_string_atoi(props["nA"]);
@@ -393,13 +417,19 @@ void mfpf_region_pdf_builder::print_summary(vcl_ostream& os) const
 {
   os << "{ size: " << roi_ni_ << 'x' << roi_nj_
      << " n_pixels: " << n_pixels_
-     << " ref_pt: (" << ref_x_ << ',' << ref_y_ << ')'
-     << " pdf_builder: ";
-  if (pdf_builder_.ptr()==0) os << '-';
-  else                       os << pdf_builder_;
-  os << " nA: " << nA_ << " dA: " << dA_ << ' ';
+     << " ref_pt: (" << ref_x_ << ',' << ref_y_ << ')' <<vcl_endl;
+  vsl_indent_inc(os);
+  if (norm_method_==0) os<<vsl_indent()<<"norm: none"<<vcl_endl;
+  else                 os<<vsl_indent()<<"norm: linear"<<vcl_endl;
+  os <<vsl_indent()<< "pdf_builder: ";
+  if (pdf_builder_.ptr()==0) os << '-'<<vcl_endl;
+  else                       os << pdf_builder_<<vcl_endl;
+  os <<vsl_indent()<< "nA: " << nA_ << " dA: " << dA_ << ' '<<vcl_endl;
+  os <<vsl_indent();
   mfpf_point_finder_builder::print_summary(os);
-  os << " }";
+  os <<vcl_endl;
+  vsl_indent_dec(os);
+  os <<vsl_indent()<< "}";
 }
 
 void mfpf_region_pdf_builder::print_shape(vcl_ostream& os) const
@@ -437,6 +467,7 @@ void mfpf_region_pdf_builder::b_write(vsl_b_ostream& bfs) const
   vsl_b_write(bfs,nA_);
   vsl_b_write(bfs,dA_);
   vsl_b_write(bfs,pdf_builder_);
+  vsl_b_write(bfs,norm_method_);
   vsl_b_write(bfs,data_);
 }
 
@@ -462,6 +493,7 @@ void mfpf_region_pdf_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,nA_);
       vsl_b_read(bfs,dA_);
       vsl_b_read(bfs,pdf_builder_);
+      vsl_b_read(bfs,norm_method_);
       vsl_b_read(bfs,data_);
       break;
     default:

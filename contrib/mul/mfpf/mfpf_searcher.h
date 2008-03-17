@@ -43,13 +43,6 @@ public:
                            vcl_vector<mfpf_pose>& pts,
                            vcl_vector<double>& fit);
 
-  //: Sorts so that pose[0] is best fit (ie smallest fit value)
-  void sort_matches(vcl_vector<mfpf_pose>& poses,
-                    vcl_vector<double>& fits);
-
-  //: Sorts so that pose_set.pose[0] is best fit (ie smallest fit value)
-  void sort_matches(mfpf_pose_set& pose_set);
-
   //: For each pose in the set, perform local search+refinement
   //  On exit pose_set contains the improved matches.
   void search_around_set(mfpf_point_finder& pf,

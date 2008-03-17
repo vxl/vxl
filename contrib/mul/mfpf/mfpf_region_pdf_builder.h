@@ -17,6 +17,7 @@
 // \verbatim
 // mfpf_region_pdf_builder { shape: ellipse { ri: 5 rj: 3  }
 //  pdf_builder: vpdfl_axis_gaussian_builder { }
+//  norm: linear
 //  search_ni: 5 search_nj: 4
 // }
 // Alternative for shape:
@@ -46,6 +47,9 @@ class mfpf_region_pdf_builder : public mfpf_point_finder_builder
 
   //: Builder for PDf for profile vector
   mbl_cloneable_ptr<vpdfl_builder_base> pdf_builder_;
+
+  //: Which normalisation to use (0=none, 1=linear)
+  short norm_method_;
 
   //: Samples added in calls to add_example()
   vcl_vector<vnl_vector<double> > data_;
@@ -107,6 +111,13 @@ class mfpf_region_pdf_builder : public mfpf_point_finder_builder
   //  Assumes form defined in world-coords.
   //  Sets step_size() to form.pose().scale().
   void set_region(const mfpf_region_form& form);
+
+  //: Define region size in world co-ordinates
+  //  Sets up ROI to cover given box (with samples at step_size()), 
+  //  with ref point at centre.
+  //  Currently just defines as a box
+  virtual void set_region_size(double wi, double wj);
+
 
   //: Number of pixels in region
   unsigned n_pixels() const { return n_pixels_; }

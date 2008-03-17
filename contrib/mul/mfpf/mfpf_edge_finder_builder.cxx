@@ -28,6 +28,13 @@ mfpf_edge_finder_builder::~mfpf_edge_finder_builder()
 {
 }
 
+//: Define region size in world co-ordinates
+//  Sets up ROI to cover given box (with samples at step_size()), 
+//  with ref point at centre.
+void mfpf_edge_finder_builder::set_region_size(double, double)
+{
+}
+
 //: Create new mfpf_edge_finder on heap
 mfpf_point_finder* mfpf_edge_finder_builder::new_finder() const
 {

@@ -15,6 +15,7 @@
 #include <vil/vil_resample_bilin.h>
 #include <vil/io/vil_io_image_view.h>
 #include <vsl/vsl_vector_io.h>
+#include <vsl/vsl_indent.h>
 
 #include <mfpf/mfpf_sample_region.h>
 #include <mfpf/mfpf_norm_vec.h>
@@ -42,6 +43,7 @@ void mfpf_region_pdf::set_defaults()
   roi_nj_=0;
   ref_x_=0;
   ref_y_=0;
+  norm_method_=1;
 }
 
 //=======================================================================
@@ -55,7 +57,8 @@ mfpf_region_pdf::~mfpf_region_pdf()
 //: Define region and PDF of region
 void mfpf_region_pdf::set(const vcl_vector<mbl_chord>& roi,
                           double ref_x, double ref_y,
-                          const vpdfl_pdf_base& pdf)
+                          const vpdfl_pdf_base& pdf,
+                          short norm_method)
 {
   pdf_ = pdf.clone();
   ref_x_ = ref_x;
@@ -86,6 +89,9 @@ void mfpf_region_pdf::set(const vcl_vector<mbl_chord>& roi,
                        roi[k].end_x()-ilo,   roi[k].y()-jlo);
     n_pixels_+=1+roi[k].end_x()-roi[k].start_x();
   }
+
+  assert(norm_method>=0 && norm_method<=1);
+  norm_method_ = norm_method;
 }
 
 //: Radius of circle containing modelled region
@@ -131,7 +137,7 @@ double mfpf_region_pdf::evaluate(const vimt_image_2d_of<float>& image,
   mfpf_sample_region(sample.top_left_ptr(),sample.jstep(),
                      np,roi_,v);
 
-  mfpf_norm_vec(v);
+  if (norm_method_==1) mfpf_norm_vec(v);
   return -1*pdf().log_p(v);
 }
 
@@ -184,7 +190,7 @@ void mfpf_region_pdf::evaluate_region(
     for (int i=0;i<ni;++i)
     {
       mfpf_sample_region(s+i*np,s_jstep,np,roi_,v);
-      mfpf_norm_vec(v);
+      if (norm_method_==1) mfpf_norm_vec(v);
       r[i] = -1*pdf().log_p(v);
     }
   }
@@ -244,7 +250,7 @@ double mfpf_region_pdf::search_one_pose(const vimt_image_2d_of<float>& image,
     for (int i=0;i<ni;++i)
     {
       mfpf_sample_region(s+i*np,s_jstep,np,roi_,v);
-      mfpf_norm_vec(v);
+      if (norm_method_==1) mfpf_norm_vec(v);
       double r = -1*pdf().log_p(v);
       if (r<best_r) { best_r=r; best_i=i; best_j=j; }
     }
@@ -321,11 +327,17 @@ void mfpf_region_pdf::print_summary(vcl_ostream& os) const
 {
   os << "{  size: "<<roi_ni_<<" x "<<roi_nj_
      << " n_pixels: "<<n_pixels_
-     << " ref_pt: ("<<ref_x_<<','<<ref_y_<<')'
-     << " PDF: ";
-  if (pdf_.ptr()==0) os << "--"; else os << pdf_;
+     << " ref_pt: ("<<ref_x_<<','<<ref_y_<<')'<<vcl_endl;
+  vsl_indent_inc(os);
+  if (norm_method_==0) os<<vsl_indent()<<"norm: none"<<vcl_endl;
+  else                 os<<vsl_indent()<<"norm: linear"<<vcl_endl;
+  os <<vsl_indent()<< "PDF: ";
+  if (pdf_.ptr()==0) os << "--"<<vcl_endl; else os << pdf_<<vcl_endl;
+  os<<vsl_indent();
   mfpf_point_finder::print_summary(os);
-  os<<" }";
+  os <<vcl_endl;
+  vsl_indent_dec(os);
+  os<<vsl_indent()<<"}";
 }
 
 void mfpf_region_pdf::print_shape(vcl_ostream& os) const
@@ -361,6 +373,7 @@ void mfpf_region_pdf::b_write(vsl_b_ostream& bfs) const
   vsl_b_write(bfs,pdf_);
   vsl_b_write(bfs,ref_x_);
   vsl_b_write(bfs,ref_y_);
+  vsl_b_write(bfs,norm_method_);
 }
 
 //=======================================================================
@@ -383,6 +396,7 @@ void mfpf_region_pdf::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,pdf_);
       vsl_b_read(bfs,ref_x_);
       vsl_b_read(bfs,ref_y_);
+      vsl_b_read(bfs,norm_method_);
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
@@ -398,6 +412,7 @@ bool mfpf_region_pdf::operator==(const mfpf_region_pdf& nc) const
   if (!base_equality(nc)) return false;
   if (roi_ni_!=nc.roi_ni_) return false;
   if (roi_nj_!=nc.roi_nj_) return false;
+  if (norm_method_!=nc.norm_method_) return false;
   if (n_pixels_!=nc.n_pixels_) return false;
   if (vcl_fabs(ref_x_-nc.ref_x_)>1e-6) return false;
   if (vcl_fabs(ref_y_-nc.ref_y_)>1e-6) return false;

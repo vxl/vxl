@@ -38,6 +38,12 @@ class mfpf_profile_pdf_builder : public mfpf_point_finder_builder
   void set(int ilo, int ihi,
            const vpdfl_builder_base& builder);
 
+  //: Define region size in world co-ordinates
+  //  Sets up ROI to cover given box (with samples at step_size()), 
+  //  with ref point at centre.  
+  //  Sets ihi = ceil(wi/2*step_size), ilo=-ihi
+  virtual void set_region_size(double wi, double wj);
+
   //: Kernel mask is [ilo_,ihi_]
   int ilo() const { return ilo_; }
 

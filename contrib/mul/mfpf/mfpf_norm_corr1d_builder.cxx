@@ -9,6 +9,7 @@
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
 #include <vcl_cassert.h>
+#include <vcl_algorithm.h>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
@@ -54,6 +55,16 @@ void mfpf_norm_corr1d_builder::set_kernel_size(int ilo, int ihi)
 {
   ilo_=ilo;
   ihi_=ihi;
+}
+
+//: Define region size in world co-ordinates
+//  Sets up ROI to cover given box (with samples at step_size()), 
+//  with ref point at centre.
+void mfpf_norm_corr1d_builder::set_region_size(double wi, double)
+{
+  wi/=step_size();
+  int ni = vcl_max(1,int(0.99+wi));
+  set_kernel_size(-ni,ni);
 }
 
 

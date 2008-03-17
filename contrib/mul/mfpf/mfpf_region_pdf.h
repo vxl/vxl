@@ -37,6 +37,9 @@ class mfpf_region_pdf : public mfpf_point_finder
   //: PDf for vector sampled over ROI
   mbl_cloneable_ptr<vpdfl_pdf_base> pdf_;
 
+  //: Which normalisation to use (0=none, 1=linear)
+  short norm_method_;
+
   //: Define default values
   void set_defaults();
 
@@ -51,7 +54,8 @@ class mfpf_region_pdf : public mfpf_point_finder
   //: Define region and PDF of region
   void set(const vcl_vector<mbl_chord>& roi,
            double ref_x, double ref_y,
-           const vpdfl_pdf_base& pdf);
+           const vpdfl_pdf_base& pdf,
+           short norm_method=1);
 
   //: Radius of circle containing modelled region
   virtual double radius() const;

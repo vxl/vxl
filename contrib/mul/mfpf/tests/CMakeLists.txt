@@ -8,6 +8,7 @@ ADD_EXECUTABLE( mfpf_test_all
   test_profile_pdf.cxx
   test_region_pdf.cxx
   test_pose.cxx
+  test_mr_point_finder.cxx
   )
 TARGET_LINK_LIBRARIES( mfpf_test_all mfpf testlib )
 
@@ -17,6 +18,7 @@ ADD_TEST( mfpf_test_norm_corr2d ${EXECUTABLE_OUTPUT_PATH}/mfpf_test_all test_nor
 ADD_TEST( mfpf_test_profile_pdf ${EXECUTABLE_OUTPUT_PATH}/mfpf_test_all test_profile_pdf)
 ADD_TEST( mfpf_test_region_pdf  ${EXECUTABLE_OUTPUT_PATH}/mfpf_test_all test_region_pdf)
 ADD_TEST( mfpf_test_pose        ${EXECUTABLE_OUTPUT_PATH}/mfpf_test_all test_pose)
+ADD_TEST( test_mr_point_finder  ${EXECUTABLE_OUTPUT_PATH}/mfpf_test_all test_mr_point_finder)
 
 ADD_EXECUTABLE( mfpf_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( mfpf_test_include mfpf )

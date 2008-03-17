@@ -36,6 +36,13 @@ class mfpf_norm_corr1d_builder : public mfpf_point_finder_builder
 
   void set_kernel_size(int ilo, int ihi);
 
+  //: Define region size in world co-ordinates
+  //  Sets up ROI to cover given box (with samples at step_size()), 
+  //  with ref point at centre.  
+  //  Sets ihi = ceil(wi/2*step_size), ilo=-ihi
+  virtual void set_region_size(double wi, double wj);
+
+
   //: Kernel mask is [ilo_,ihi_]
   int ilo() const { return ilo_; }
 

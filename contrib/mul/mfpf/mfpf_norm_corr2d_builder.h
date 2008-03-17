@@ -58,6 +58,12 @@ class mfpf_norm_corr2d_builder : public mfpf_point_finder_builder
   // Ref point is centre
   void set_kernel_size(unsigned ni, unsigned nj);
 
+  //: Define region size in world co-ordinates
+  //  Sets up ROI to cover given box (with samples at step_size()), 
+  //  with ref point at centre.
+  //  Currently just defines as a box.
+  virtual void set_region_size(double wi, double wj);
+
   //: Kernel mask is ni x nj
   unsigned ni() const { return ni_; }
 

@@ -69,6 +69,18 @@ void mfpf_norm_corr2d_builder::set_kernel_size(unsigned ni, unsigned nj)
   ref_y_=0.5*(nj_-1);
 }
 
+//: Define region size in world co-ordinates
+//  Sets up ROI to cover given box (with samples at step_size()), 
+//  with ref point at centre.
+void mfpf_norm_corr2d_builder::set_region_size(double wi, double wj)
+{
+  wi/=step_size();
+  wj/=step_size();
+  int ni = vcl_max(1,int(0.99+wi));
+  int nj = vcl_max(1,int(0.99+wj));
+  set_kernel_size(unsigned(ni),unsigned(nj));
+}
+
 
 //: Initialise building
 // Must be called before any calls to add_example(...)
