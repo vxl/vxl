@@ -1,6 +1,4 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
 #include <vul/vul_file.h>
 
 #include <vgl/vgl_vector_3d.h>
@@ -30,7 +28,7 @@ static void test_voxel_world()
 
   bvxm_world_params_sptr params = new bvxm_world_params();
 
-  // NEEDS AN LVCS, TODO: initilize lvcs
+  // NEEDS AN LVCS, TODO: initialize lvcs
   bgeo_lvcs_sptr lvcs = new bgeo_lvcs();
   params->set_params(model_dir,grid_corner,grid_size,vox_len,lvcs);
 
@@ -41,13 +39,14 @@ static void test_voxel_world()
   // initialize the data
   bvxm_mog_grey_processor::apm_datatype init_apm;
 
- /* float init_ocp = 1.0f/120;
-  world.init_world(init_ocp,init_apm);*/
+#if 0
+  float init_ocp = 1.0f/120;
+  world.init_world(init_ocp,init_apm);
 
   //camera for frame 0
   //vcl_string cam_file = "./cameras/frame_00000.txt";
   // run the executable for the test file from lemsvxl/build/contrib/bvxm/tests/  to find the following cam file
-  /*vcl_string cam_file = "frame_00000.txt";
+  vcl_string cam_file = "frame_00000.txt";
 
   vcl_ifstream cam_ifstream(cam_file.c_str());
   vpgl_proj_camera<double>* camera = new vpgl_proj_camera<double>();
@@ -66,11 +65,10 @@ static void test_voxel_world()
   vil_image_view<float> prob_map(view_sptr->ni(),view_sptr->nj(),1);
   world.update<APM_MOG_GREY>(observation, prob_map);
   // TODO: cleanup files
-*/
+#endif // 0
 
   return;
 }
-
 
 
 TESTMAIN( test_voxel_world );

@@ -1,6 +1,4 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
 #include <vul/vul_file.h>
 
 #include <vgl/vgl_vector_3d.h>
@@ -8,16 +6,13 @@
 #include "../bvxm_voxel_world.h"
 #include "../bvxm_world_params.h"
 #include "../bvxm_mog_grey_processor.h"
-#include <vil/vil_load.h>
 #include <vil/vil_image_resource_sptr.h>
-#include <vil/vil_convert.h>
 #include <vil/vil_image_view.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
 
 static void test_voxel_world_mog_image()
 {
-
   START("bvxm_voxel_world_mog_image test");
 
   vcl_string model_dir("./test_world_dir");
@@ -45,7 +40,6 @@ static void test_voxel_world_mog_image()
   // data not written to disk until iterator is iterated
   ++ocp_it;
 
-
   // create a synthetic image to fill layers with
   bvxm_voxel_slab<float> plane_img(nx,ny,1);
   for (unsigned i=0; i<nx; ++i) {
@@ -57,7 +51,7 @@ static void test_voxel_world_mog_image()
       // just make some squares of constant color
       else if ( (i > 10) && (i < 90) && (j > 10) && (j < 90) ) {
         plane_img(i,j) = 0.7f;
-      } 
+      }
       else if ((i > 110) && (i < 190) && (j > 10) && (j < 90) ) {
         plane_img(i,j) = 0.5f;
       }
@@ -87,12 +81,11 @@ static void test_voxel_world_mog_image()
   bvxm_voxel_grid<mog_type> *apm_grid = dynamic_cast<bvxm_voxel_grid<mog_type>*>(apm_base.ptr());
   // initialize the appearance model data to get rid of any previous data on disk
   apm_grid->initialize_data(bvxm_voxel_traits<APM_MOG_GREY>::initial_val());
-  
+
   bvxm_voxel_grid<mog_type>::iterator apm_it = apm_grid->begin();
   for (; apm_it != apm_grid->end(); ++apm_it) {
     apm_processor.update(*apm_it, plane_img, ones);
   }
-
 
  // now create a couple of cameras and generate the expected images
   vnl_matrix_fixed<double,3,3> K(0.0);
@@ -124,13 +117,13 @@ static void test_voxel_world_mog_image()
   bvxm_voxel_slab<mog_type>* mog_image_ptr = dynamic_cast<bvxm_voxel_slab<mog_type>*>(mog_image.ptr());
   TEST("testing mixture of gaussian image creation", !mog_image_ptr, false);
 
-  bvxm_voxel_slab<float> prob = apm_processor.expected_color(*mog_image_ptr); 
+  bvxm_voxel_slab<float> prob = apm_processor.expected_color(*mog_image_ptr);
 
   vil_image_view_base_sptr expected_img = new vil_image_view<vxl_byte>(640,480,1);
   bvxm_util::slab_to_img(prob, expected_img);
   //vil_save(*expected_img,"./expected2.png");
 
-  //: we want the two expected images to be exactly the same
+  // we want the two expected images to be exactly the same
   vil_image_view<float> im_dif;
   vil_image_view<vxl_byte> expected_img_r(*expected_img);
   vil_image_view<vxl_byte> img1_r(*img1);
