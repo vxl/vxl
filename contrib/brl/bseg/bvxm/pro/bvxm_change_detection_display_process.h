@@ -1,13 +1,14 @@
-// This is /pro/bvxm_change_detection_display_process.h
+// This is brl/bseg/bvxm/pro/bvxm_change_detection_display_process.h
 #ifndef bvxm_change_detection_display_process_h_
 #define bvxm_change_detection_display_process_h_
-
 //:
 // \file
-// \brief // process to threshold the changes for foreground detection.
-//           
+// \brief process to threshold the changes for foreground detection.
 //
-// \Modifications 
+// \verbatim
+//  Modifications
+//   <none yet>
+// \endverbatim
 
 #include <vcl_string.h>
 #include <bprb/bprb_process.h>
@@ -15,7 +16,7 @@
 class bvxm_change_detection_display_process : public bprb_process
 {
  public:
-  
+
    bvxm_change_detection_display_process();
 
   //: Copy Constructor (no local data)
@@ -31,12 +32,6 @@ class bvxm_change_detection_display_process : public bprb_process
   bool init() { return true; }
   bool execute();
   bool finish(){return true;}
- 
- private:
-
 };
 
-
-
-#endif // bvxm_change_detection_display_process
-
+#endif // bvxm_change_detection_display_process_h_

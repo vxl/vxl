@@ -1,16 +1,16 @@
-// This is contrib/bvxm/pro/bvxm_render_expected_image_process.h
+// This is brl/bseg/bvxm/pro/bvxm_render_expected_image_process.h
 #ifndef bvxm_render_expected_image_process_h_
 #define bvxm_render_expected_image_process_h_
-
 //:
 // \file
-// \brief // A process that renders a video frame from a new viewpoint (used for 3-D registration)
-//           
-// \author Daniel Crispell
-// \date 02/10/08
-// \verbatim
+// \brief A process that renders a video frame from a new viewpoint (used for 3-D registration)
 //
-// \Modifications 
+// \author Daniel Crispell
+// \date 02/10/2008
+// \verbatim
+//  Modifications
+//   <none yet>
+// \endverbatim
 
 #include <vcl_string.h>
 #include <bprb/bprb_process.h>
@@ -18,7 +18,7 @@
 class bvxm_render_expected_image_process : public bprb_process
 {
  public:
-  
+
    bvxm_render_expected_image_process();
 
   //: Copy Constructor (no local data)
@@ -34,12 +34,6 @@ class bvxm_render_expected_image_process : public bprb_process
   bool init() { return true; }
   bool execute();
   bool finish(){return true;}
- 
- private:
-
 };
 
-
-
-#endif // bvma_update_process_h_
-
+#endif // bvxm_render_expected_image_process_h_
