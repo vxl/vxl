@@ -173,12 +173,18 @@ unsigned bvxm_voxel_storage_disk<T>::num_observations()
       return 0;
     }
   }
+  // remember where filepointer was
+  unsigned long gpos = fio_.tellg();
+
   // seek to beginning of file
   fio_.seekg(0,vcl_ios::beg);
 
   bvxm_voxel_storage_header<T> header;
 
   fio_.read(reinterpret_cast<char*>(&header),sizeof(header));
+
+  // put pointer back where we found it
+  fio_.seekg(gpos,vcl_ios::beg);
 
   return header.nobservations_;
 }
