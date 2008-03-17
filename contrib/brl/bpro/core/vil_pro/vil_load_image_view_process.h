@@ -5,18 +5,17 @@
 // \file
 // \brief A process for loading an image into a frame
 // \author Amir Tamrakar
-// \date 06/06/04
+// \date 06/06/2004
 //
 // \verbatim
 //  Modifications
-//   02/04/08 Isabel Restrepo : Migrated to brl/bipp
+//   02/04/2008 Isabel Restrepo : Migrated to brl/bipp
 // \endverbatim
 
 #include <vcl_string.h>
 #include <bprb/bprb_process.h>
 
-//: Loads an image into a video frame by creating a
-// bipp_image_storage class at that frame
+//: Loads an image into a video frame by creating a bipp_image_storage class at that frame
 //
 class vil_load_image_view_process : public bprb_process
 {
