@@ -8,6 +8,7 @@
 
 #include <vsl/vsl_binary_io.h>
 #include <vcl_iostream.h>
+#include <vcl_vector.h>
 
 //: Representation of topological arc joining two vertices
 class mmn_arc
@@ -50,6 +51,38 @@ inline void vsl_b_read(vsl_b_istream& bfs, mmn_arc& t)
   vsl_b_read(bfs,t.v1);
   vsl_b_read(bfs,t.v2);
 }
+
+inline void vsl_b_write(vsl_b_ostream& bfs, const vcl_vector<mmn_arc>& a)
+{
+  short version_no = 1;
+  vsl_b_write(bfs,version_no);
+  vsl_b_write(bfs,a.size());
+  for (unsigned i=0;i<a.size();++i) vsl_b_write(bfs,a[i]);
+}
+
+inline void vsl_b_read(vsl_b_istream& bfs, vcl_vector<mmn_arc>& a)
+{
+  if (!bfs) return;
+  short version;
+  vsl_b_read(bfs,version);
+  unsigned n;
+  switch (version)
+  {
+    case (1):
+      vsl_b_read(bfs,n);
+      a.resize(n);
+      for (unsigned i=0;i<n;++i) vsl_b_read(bfs,a[i]);
+      break;
+    default:
+      vcl_cerr << "I/O ERROR: vsl_b_read(bfs,vector<arc>) \n";
+      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      return;
+  }
+
+}
+
+
 
 #endif // mmn_arc_h_
 
