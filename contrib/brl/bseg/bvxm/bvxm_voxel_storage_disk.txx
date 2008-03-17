@@ -196,6 +196,8 @@ void bvxm_voxel_storage_disk<T>::increment_observations()
       return;
     }
   }
+  // store get position so we can put it back were we found it
+  unsigned long gpos = fio_.tellg();
   // seek to beginning of file
   fio_.seekg(0,vcl_ios::beg);
   bvxm_voxel_storage_header<T> header;
@@ -210,6 +212,8 @@ void bvxm_voxel_storage_disk<T>::increment_observations()
   fio_.seekp(0,vcl_ios::beg);
   // write
   fio_.write(reinterpret_cast<char*>(&header),sizeof(header));
+  // put get pos back where we found it 
+  fio_.seekg(gpos);
 
 }
 
