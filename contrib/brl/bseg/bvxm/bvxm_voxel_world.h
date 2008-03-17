@@ -491,8 +491,8 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
       if (*preX_sum_it > preX_sum_thresh) {
         float multiplier = (*PIvisX_it + *preX_it) / *preX_sum_it;
         // leave out normalization for now - results seem a little better without it.  -DEC
-        //float ray_norm = 1 - *visX_sum_it; //normalize based on probability that a surface voxel is located along the ray. This was not part of the original Pollard + Mundy algorithm.
-        *PX_it *= multiplier; // * ray_norm;
+        float ray_norm = 1 - *visX_sum_it; //normalize based on probability that a surface voxel is located along the ray. This was not part of the original Pollard + Mundy algorithm.
+        *PX_it *= multiplier * ray_norm;
       }
       if (*PX_it < min_vox_prob)
         *PX_it = min_vox_prob;
