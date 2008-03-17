@@ -1,7 +1,6 @@
 #ifndef bvxm_voxel_grid_txx_
 #define bvxm_voxel_grid_txx_
 
-
 #include "bvxm_voxel_grid.h"
 #include "bvxm_voxel_slab.h"
 #include "bvxm_voxel_slab_iterator.h"
@@ -33,11 +32,7 @@ bvxm_voxel_slab_iterator<T> bvxm_voxel_grid<T>::end(unsigned slab_thickness)
   return slab_it;
 }
 
+#define BVXM_VOXEL_GRID_INSTANTIATE(T) \
+template class bvxm_voxel_grid<T >
 
-#define BVXM_VOXEL_GRID_INSTANTIATE(T)\
-template class bvxm_voxel_grid<T >; 
-
-
-
-
-#endif
+#endif // bvxm_voxel_grid_txx_

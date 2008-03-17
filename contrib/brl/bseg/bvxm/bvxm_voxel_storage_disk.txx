@@ -2,8 +2,6 @@
 #define bvxm_voxel_storage_disk_txx_
 
 #include <vcl_string.h>
-#include <vcl_fstream.h>
-#include <vcl_cassert.h>
 #include <vul/vul_file.h>
 #include <vgl/vgl_vector_3d.h>
 
@@ -21,14 +19,14 @@ bvxm_voxel_storage_disk<T>::bvxm_voxel_storage_disk(vcl_string storage_filename,
     // make sure filename is not a directory
     bool is_dir = vul_file::is_directory(storage_fname_);
     if (is_dir) {
-      vcl_cerr << "error: directory name " << storage_fname_ << " passed to bvxm_voxel_storage_disk constructor." << vcl_endl;
+      vcl_cerr << "error: directory name " << storage_fname_ << " passed to bvxm_voxel_storage_disk constructor.\n";
       return;
     }
     // read header and make sure that it matches given dimensions
     // open the file with in and out flags so we dont truncate
     fio_.open(storage_fname_.c_str(),vcl_ios::binary | vcl_ios::out | vcl_ios::in);
     if (!fio_.is_open()) {
-      vcl_cerr << "error opening " << storage_fname_ << " for read/write " << vcl_endl;
+      vcl_cerr << "error opening " << storage_fname_ << " for read/write\n";
       return;
     }
     // seek to beginning of file
@@ -38,8 +36,8 @@ bvxm_voxel_storage_disk<T>::bvxm_voxel_storage_disk(vcl_string storage_filename,
     fio_.read(reinterpret_cast<char*>(&header),sizeof(header));
 
     if ((header.nx_ != grid_size.x()) || (header.ny_ != grid_size.y()) || (header.nz_ != grid_size.z())) {
-      vcl_cerr << "error: file on disk has size " << vgl_vector_3d<unsigned>(header.nx_,header.ny_,header.nz_) << vcl_endl;
-      vcl_cerr << "       size passed to constructor = " << grid_size << vcl_endl;
+      vcl_cerr << "error: file on disk has size " << vgl_vector_3d<unsigned>(header.nx_,header.ny_,header.nz_) << vcl_endl
+               << "       size passed to constructor = " << grid_size << vcl_endl;
       return;
     }
   }
@@ -57,14 +55,14 @@ bool bvxm_voxel_storage_disk<T>::initialize_data(T const& value)
     vcl_string base_dir = vul_file::dirname(storage_fname_);
     bool base_dir_exists = vul_file::is_directory(base_dir);
     if (!base_dir_exists) {
-      vcl_cerr << "error: base directory " << base_dir << " does not exist. " << vcl_endl;
+      vcl_cerr << "error: base directory " << base_dir << " does not exist.\n";
       return false;
     }
   }else {
     // make sure filename is not a directory
     bool is_dir = vul_file::is_directory(storage_fname_);
     if (is_dir) {
-      vcl_cerr << "error: directory name " << storage_fname_ << " passed to bvxm_voxel_storage_disk constructor." << vcl_endl;
+      vcl_cerr << "error: directory name " << storage_fname_ << " passed to bvxm_voxel_storage_disk constructor.\n";
       return false;
     }
   }
@@ -78,7 +76,7 @@ bool bvxm_voxel_storage_disk<T>::initialize_data(T const& value)
   }
   fio_.open(storage_fname_.c_str(),vcl_ios::binary | vcl_ios::out);
   if (!fio_.is_open()) {
-    vcl_cerr << " error opening file " << storage_fname_ << " for write. " << vcl_endl;
+    vcl_cerr << " error opening file " << storage_fname_ << " for write.\n";
     return false;
   }
   fio_.seekp(0,vcl_ios::beg);
@@ -96,11 +94,7 @@ bool bvxm_voxel_storage_disk<T>::initialize_data(T const& value)
   fio_.close();
 
   return true;
-
 }
-
-
-
 
 
 template <class T>
@@ -135,13 +129,13 @@ void bvxm_voxel_storage_disk<T>::put_slab()
     // open the file with in and out flags so we dont truncate
     fio_.open(storage_fname_.c_str(),vcl_ios::binary | vcl_ios::out | vcl_ios::in);
     if (!fio_.is_open()) {
-      vcl_cerr << "error opening " << storage_fname_ << "for read/write " << vcl_endl;
+      vcl_cerr << "error opening " << storage_fname_ << "for read/write\n";
       return;
     }
   }
   unsigned long in_pos = fio_.tellg();
   if (in_pos < this->grid_size_.x()*this->grid_size_.y()*sizeof(T) + sizeof(bvxm_voxel_storage_header<T>)) {
-    vcl_cerr << "error: attempted to put_slice() when current file position is not past first slice." << vcl_endl;
+    vcl_cerr << "error: attempted to put_slice() when current file position is not past first slice.\n";
     return;
   }
   unsigned long slice_pos = in_pos - (this->grid_size_.x()*this->grid_size_.y()*sizeof(T));
@@ -151,9 +145,8 @@ void bvxm_voxel_storage_disk<T>::put_slab()
   }
   fio_.write(reinterpret_cast<char*>(slab_buffer_->data()),slab_buffer_->size());
   fio_.flush();
-  
-  return;
 
+  return;
 }
 
 template <class T>
@@ -169,7 +162,7 @@ unsigned bvxm_voxel_storage_disk<T>::num_observations()
     // open the file with in and out flags so we dont truncate
     fio_.open(storage_fname_.c_str(),vcl_ios::binary | vcl_ios::out | vcl_ios::in);
     if (!fio_.is_open()) {
-      vcl_cerr << "error opening " << storage_fname_ << "for read/write " << vcl_endl;
+      vcl_cerr << "error opening " << storage_fname_ << "for read/write\n";
       return 0;
     }
   }
@@ -198,7 +191,7 @@ void bvxm_voxel_storage_disk<T>::increment_observations()
     // open the file with in and out flags so we dont truncate
     fio_.open(storage_fname_.c_str(),vcl_ios::binary | vcl_ios::out | vcl_ios::in);
     if (!fio_.is_open()) {
-      vcl_cerr << "error opening " << storage_fname_ << "for read/write " << vcl_endl;
+      vcl_cerr << "error opening " << storage_fname_ << "for read/write\n";
       return;
     }
   }
@@ -218,14 +211,11 @@ void bvxm_voxel_storage_disk<T>::increment_observations()
   fio_.seekp(0,vcl_ios::beg);
   // write
   fio_.write(reinterpret_cast<char*>(&header),sizeof(header));
-  // put get pos back where we found it 
+  // put get pos back where we found it
   fio_.seekg(gpos);
-
 }
 
+#define BVXM_VOXEL_STORAGE_DISK_INSTANTIATE(T) \
+template class bvxm_voxel_storage_disk<T >
 
-
-#define BVXM_VOXEL_STORAGE_DISK_INSTANTIATE(T)\
-template class bvxm_voxel_storage_disk<T >; \
-
-#endif
+#endif // bvxm_voxel_storage_disk_txx_

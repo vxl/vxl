@@ -12,7 +12,6 @@ bvxm_voxel_storage_mem<T>::bvxm_voxel_storage_mem(vgl_vector_3d<unsigned int> gr
 : bvxm_voxel_storage<T>(grid_size), nobservations_(0)
 {
   mem_ = new bvxm_memory_chunk(grid_size.x() * grid_size.y() * grid_size.z() * sizeof(T));
-
 }
 
 template <class T>
@@ -41,7 +40,6 @@ bvxm_voxel_slab<T> bvxm_voxel_storage_mem<T>::get_slab(unsigned slice_idx, unsig
   }
   bvxm_voxel_slab<T> slab(this->grid_size_.x(),this->grid_size_.y(),slab_thickness_actual,mem_, first_voxel);
 
-  
   return slab;
 }
 
@@ -52,11 +50,7 @@ void bvxm_voxel_storage_mem<T>::put_slab()
   return;
 }
 
+#define BVXM_VOXEL_STORAGE_MEM_INSTANTIATE(T) \
+template class bvxm_voxel_storage_mem<T >
 
-
-
-#define BVXM_VOXEL_STORAGE_MEM_INSTANTIATE(T)\
-template class bvxm_voxel_storage_mem<T >; 
-
-#endif
-
+#endif // bvxm_voxel_storage_mem_txx_

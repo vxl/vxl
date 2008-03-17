@@ -5,19 +5,11 @@
 // \brief A 3-D slab of data of type T.  Based loosely on vil_image_view.
 // \author Daniel Crispell (dec@lems.brown.edu)
 // \date 1/22/2008
-//
-
 
 #include "bvxm_voxel_slab.h"
-#include <vnl/vnl_matrix_fixed.h>
-#include <vnl/vnl_double_3.h>
 
-#include <vcl_cassert.h>
 #include <vcl_cstring.h> // for memcpy
 #include <vcl_algorithm.h>
-#include <vcl_cstdlib.h>
-#include <vcl_iostream.h>
-
 
 //=======================================================================
 
@@ -39,7 +31,6 @@ bvxm_voxel_slab<T>::bvxm_voxel_slab(const bvxm_voxel_slab<T>& that)
 }
 
 
-
 //: Fill view with given value
 template<class T>
 void bvxm_voxel_slab<T>::fill(T const& value)
@@ -53,7 +44,6 @@ void bvxm_voxel_slab<T>::fill(T const& value)
 template<class T>
 bool bvxm_voxel_slab<T>::operator==(const bvxm_voxel_slab &rhs) const
 {
-  
   if (this == &rhs) return true;
 
   return    mem_ == rhs.mem_ &&
@@ -90,9 +80,7 @@ void bvxm_voxel_slab<T>::set_size(unsigned nx, unsigned ny, unsigned nz)
   return;
 }
 
-
 #define BVXM_VOXEL_SLAB_INSTANTIATE(T) \
-template class bvxm_voxel_slab<T >; 
+template class bvxm_voxel_slab<T >
 
-#endif // vil_image_view_txx_
-
+#endif // bvxm_voxel_slab_txx_
