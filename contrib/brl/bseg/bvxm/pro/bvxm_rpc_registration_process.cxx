@@ -116,56 +116,41 @@ bool bvxm_rpc_registration_process::execute()
 
     // this a two level search algorithm
     // the first level search for the optimal offset parameters in a large scale depending on the input offset search size
-    int offset_step_size = ((offset_search_size-1)/20)+1;
-    for(int u=-offset_search_size+offset_step_size; u<=offset_search_size-offset_step_size; u=u+offset_step_size){
-      vcl_cout << ".";
-      for(int v=-offset_search_size+offset_step_size; v<=offset_search_size-offset_step_size; v=v+offset_step_size){
-        // for each offset pair (u,v)
-        double prob = 0.0;
-        // find the total probability of the edge image given the expected edge image
-        for(int m=offset_search_size; m<ni-offset_search_size; m++){
-          for(int n=offset_search_size; n<nj-offset_search_size; n++){
-            if(edge_image(m,n)==255){
-              prob += expected_edge_image(m-u,n-v);
-            }
-          }
-        }
-
-        // if maximum is found
-        if(prob > max_prob){
-          max_prob = prob;
-          max_u = u;
-          max_v = v;
-        }
-      }
-    }
-    vcl_cout << vcl_endl;
-
     // the second level search for the optimal offset parameters in a small scale
-    int max_u_fixed = max_u;
-    int max_v_fixed = max_v;
-    for(int u=max_u_fixed-offset_step_size; u<=max_u_fixed+offset_step_size; u++){
-      vcl_cout << ".";
-      for(int v=max_v_fixed-offset_step_size; v<=max_v_fixed+offset_step_size; v++){
-        // for each offset pair (u,v)
-        double prob = 0.0;
-        // find the total probability of the edge image given the expected edge image
-        for(int m=offset_search_size; m<ni-offset_search_size; m++){
-          for(int n=offset_search_size; n<nj-offset_search_size; n++){
-            if(edge_image(m,n)==255){
-              prob += expected_edge_image(m-u,n-v);
+    int offset_step_size = vnl_math_min(((offset_search_size-1)/25)+1,4);
+    int offset_lower_limit_u = -offset_search_size+offset_step_size;
+    int offset_lower_limit_v = offset_lower_limit_u;
+    int offset_upper_limit_u = offset_search_size-offset_step_size;
+    int offset_upper_limit_v = offset_upper_limit_u;
+
+    for(int level=1; level<=2; level++){
+      for(int u=offset_lower_limit_u; u<=offset_upper_limit_u; u=u+offset_step_size){
+        vcl_cout << ".";
+        for(int v=offset_lower_limit_v; v<=offset_upper_limit_v; v=v+offset_step_size){
+          // for each offset pair (u,v)
+          double prob = 0.0;
+          // find the total probability of the edge image given the expected edge image
+          for(int m=offset_search_size; m<ni-offset_search_size; m++){
+            for(int n=offset_search_size; n<nj-offset_search_size; n++){
+              if(edge_image(m,n)==255){
+                prob += expected_edge_image(m-u,n-v);
+              }
             }
           }
-        }
-        // if maximum is found
-        if(prob > max_prob){
-          max_prob = prob;
-          max_u = u;
-          max_v = v;
+          // if maximum is found
+          if(prob > max_prob){
+            max_prob = prob;
+            max_u = u;
+            max_v = v;
+          }
         }
       }
+      offset_lower_limit_u = max_u-offset_step_size;
+      offset_lower_limit_v = max_v-offset_step_size;
+      offset_upper_limit_u = max_u+offset_step_size;;
+      offset_upper_limit_v = max_v+offset_step_size;;
+      offset_step_size = 1;
     }
-
     vcl_cout << vcl_endl;
 
     vcl_cout << "Estimated changes in offsets (u,v)=(" << max_u << "," << max_v << ")" << vcl_endl;
