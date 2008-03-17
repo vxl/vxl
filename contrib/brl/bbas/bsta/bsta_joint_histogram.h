@@ -5,18 +5,19 @@
 // \file
 // \brief A simple joint_histogram class
 // \author Joseph L. Mundy
-// \date 5/19/04
+// \date   05/19/2004
 //
 // A templated joint_histogram class.  Supports entropy calculations
-// 
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
+
 #include <vbl/vbl_array_2d.h>
 #include <vcl_iostream.h>
-#include <vbl/vbl_ref_count.h>
 #include <bsta/bsta_joint_histogram_base.h>
+
 template <class T> class bsta_joint_histogram : public bsta_joint_histogram_base
 {
  public:
@@ -43,8 +44,10 @@ template <class T> class bsta_joint_histogram : public bsta_joint_histogram_base
   void print(vcl_ostream& os = vcl_cout) const;
 
   void set_count(unsigned r, unsigned c, T cnt)
-    { if(r<static_cast<unsigned>(counts_.rows())&&
-	c<static_cast<unsigned>(counts_.cols())) counts_[r][c]=cnt;}
+  { if (r<static_cast<unsigned>(counts_.rows())&&
+        c<static_cast<unsigned>(counts_.cols()))
+      counts_[r][c]=cnt;
+  }
 
  private:
   void compute_volume() const; // mutable const
