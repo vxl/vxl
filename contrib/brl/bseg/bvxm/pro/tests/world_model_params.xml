@@ -11,5 +11,5 @@
   <lvcs type="string" value="world_model_params_lvcs.txt"></lvcs>
   <apm_type type="unsigned" value="1"></apm_type>
   <min_ocp_prob type="float" value="0.001"></min_ocp_prob>
-  <max_ocp_prob type="float" value="0.5"></max_ocp_prob>
+  <max_ocp_prob type="float" value="0.999"></max_ocp_prob>
 </bvxmCreateVoxelWorldProcess>
