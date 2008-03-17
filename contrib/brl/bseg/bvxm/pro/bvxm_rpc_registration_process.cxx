@@ -8,6 +8,7 @@
 
 #include <bil/algo/bil_cedt.h>
 #include <vnl/algo/vnl_gaussian_kernel_1d.h>
+#include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 
 bvxm_rpc_registration_process::bvxm_rpc_registration_process()
@@ -57,14 +58,9 @@ bool bvxm_rpc_registration_process::execute()
   bvxm_voxel_world_sptr vox_world = input0->value();
 
   vpgl_camera_double_sptr camera_inp = input1->value();
-  vpgl_local_rational_camera<double> *cam_inp;
-  if (!(cam_inp = dynamic_cast<vpgl_local_rational_camera<double>*>(camera_inp.ptr()))) {
-    vcl_cerr << "error: process expects camera to be a vpgl_local_rational_camera." << vcl_endl;
-    return false;
-  }
+
   vil_image_view_base_sptr edge_image_sptr = input2->value();
   bool rpc_correction_flag = input3->value();
-
   vil_image_view<vxl_byte> edge_image(edge_image_sptr);
 
   // get parameters
@@ -156,15 +152,43 @@ bool bvxm_rpc_registration_process::execute()
     vcl_cout << "Estimated changes in offsets (u,v)=(" << max_u << "," << max_v << ")" << vcl_endl;
   }
 
-  // correct the output local rational camera using the estimated offset pair (max_u,max_v)
+  // correct the output for (local) rational camera using the estimated offset pair (max_u,max_v)
   // note that is the correction part is skipped, (max_u,max_v)=(0,0)
-  vpgl_local_rational_camera<double> cam_out(*cam_inp);
-  double offset_u,offset_v;
-  cam_out.image_offset(offset_u,offset_v);
-  offset_u += (double)max_u;
-  offset_v += (double)max_v;
-  cam_out.set_image_offset(offset_u,offset_v);
-  vpgl_camera_double_sptr camera_out = new vpgl_local_rational_camera<double>(cam_out);
+  // the following block of code takes care of different input camera types
+  //  e.g., vpgl_local_rational_camera and vpgl_rational_camera
+  bool is_local_cam = true;
+  bool is_rational_cam = true;
+  vpgl_local_rational_camera<double> *cam_inp_local;
+  if (!(cam_inp_local = dynamic_cast<vpgl_local_rational_camera<double>*>(camera_inp.ptr()))) {
+    is_local_cam = false;
+  }
+  vpgl_rational_camera<double> *cam_inp_rational;
+  if (!(cam_inp_rational = dynamic_cast<vpgl_rational_camera<double>*>(camera_inp.ptr()))) {
+    is_rational_cam = false;
+  }
+  vpgl_camera_double_sptr camera_out;
+  if(is_local_cam){
+    vpgl_local_rational_camera<double> cam_out_local(*cam_inp_local);
+    double offset_u,offset_v;
+    cam_out_local.image_offset(offset_u,offset_v);
+    offset_u += (double)max_u;
+    offset_v += (double)max_v;
+    cam_out_local.set_image_offset(offset_u,offset_v);
+    camera_out = new vpgl_local_rational_camera<double>(cam_out_local);
+  }
+  else if(is_rational_cam){
+    vpgl_rational_camera<double> cam_out_rational(*cam_inp_rational);
+    double offset_u,offset_v;
+    cam_out_rational.image_offset(offset_u,offset_v);
+    offset_u += (double)max_u;
+    offset_v += (double)max_v;
+    cam_out_rational.set_image_offset(offset_u,offset_v);
+    camera_out = new vpgl_rational_camera<double>(cam_out_rational);
+  }
+  else{
+    vcl_cerr << "error: process expects camera to be a vpgl_rational_camera or vpgl_local_rational_camera." << vcl_endl;
+    return false;
+  }
 
   // part 2: update
   // this part contains the correction rpc camera parameters using the expected edge image obtained
