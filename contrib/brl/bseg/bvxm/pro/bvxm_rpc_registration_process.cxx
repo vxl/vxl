@@ -117,7 +117,7 @@ bool bvxm_rpc_registration_process::execute()
     // this a two level search algorithm
     // the first level search for the optimal offset parameters in a large scale depending on the input offset search size
     // the second level search for the optimal offset parameters in a small scale
-    int offset_step_size = vnl_math_min(((offset_search_size-1)/25)+1,4);
+    int offset_step_size = vnl_math_min(((offset_search_size-1)/20)+1,3);
     int offset_lower_limit_u = -offset_search_size+offset_step_size;
     int offset_lower_limit_v = offset_lower_limit_u;
     int offset_upper_limit_u = offset_search_size-offset_step_size;
