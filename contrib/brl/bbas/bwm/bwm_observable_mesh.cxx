@@ -180,16 +180,20 @@ void bwm_observable_mesh::extrude(int face_id, double dist)
         object_ = new bmsh3d_mesh_mc();
         // the first polygon is always the outer one
         create_mesh_HE(poly, dist, inner_faces);
-      } else {
+      }
+      else {
         current_extr_face = extrude_face(object_, face);
         move_extr_face(dist);
       }
       notify_observers("update");
-    } else
+    }
+    else
       current_extr_face = 0;
-   }
-  //vcl_cout << "FACES====>" << vcl_endl;
-  //this->print_faces();
+  }
+#if 0
+  vcl_cout << "FACES====>" << vcl_endl;
+  this->print_faces();
+#endif
 }
 
 void bwm_observable_mesh::set_object(bmsh3d_mesh_mc* obj)
@@ -249,7 +253,8 @@ void bwm_observable_mesh::replace(bmsh3d_mesh_mc* obj)
   if (object_) {
     delete object_;
     msg = "update";
-  } else
+  }
+  else
     msg = "new";
   object_ = obj;
   //object_->orient_face_normals();
@@ -260,14 +265,14 @@ void bwm_observable_mesh::replace(bmsh3d_mesh_mc* obj)
 //  If there are inner faces, there are more than one polygon,
 //  otherwise it is always one.
 vsol_polygon_3d_sptr bwm_observable_mesh::extract_face(bmsh3d_face_mc* face,
-                                             vcl_vector<bmsh3d_vertex*> &vertices)
+                                                       vcl_vector<bmsh3d_vertex*> &vertices)
 {
   vcl_vector<vsol_point_3d_sptr> v_list;
   bmsh3d_halfedge* cur_he = (bmsh3d_halfedge*) face->halfedge();
-
+#if 0
   //open
-//   bwm_algo::move_points_to_plane(face);
-
+  bwm_algo::move_points_to_plane(face);
+#endif
   int i=0;
   do {
     bmsh3d_halfedge* next_he = (bmsh3d_halfedge*) cur_he->next();
@@ -280,7 +285,8 @@ vsol_polygon_3d_sptr bwm_observable_mesh::extract_face(bmsh3d_face_mc* face,
     vgl_point_3d<double> p = vertex->get_pt();
     v_list.push_back(new vsol_point_3d (p.x(), p.y(), p.z()));
     cur_he = (bmsh3d_halfedge*) cur_he->next();
-  } while (cur_he != face->halfedge());
+  }
+  while (cur_he != face->halfedge());
 
   vsol_polygon_3d_sptr poly3d = new vsol_polygon_3d(v_list);
   return poly3d;
@@ -293,7 +299,8 @@ bwm_observable_mesh::extract_inner_faces(bmsh3d_face_mc* face)
   vcl_map<int, bmsh3d_halfedge*> set_he = face->get_mc_halfedges();
   vcl_map<int, vsol_polygon_3d_sptr> polygons;
   vcl_map<int, bmsh3d_halfedge*>::iterator it = set_he.begin();
-  while (it != set_he.end()) {
+  while (it != set_he.end())
+  {
     bmsh3d_halfedge* he = it->second;
     bmsh3d_halfedge* HE = he;
     vcl_vector<vsol_point_3d_sptr> v_list;
@@ -448,10 +455,10 @@ void bwm_observable_mesh::move_extr_face(double z)
 }
 
 void bwm_observable_mesh::divide_face(unsigned face_id,
-                                 vgl_point_3d<double> l1, vgl_point_3d<double> l2,
-                                 vgl_point_3d<double> p1,
-                                 vgl_point_3d<double> l3, vgl_point_3d<double> l4,
-                                 vgl_point_3d<double> p2)
+                                      vgl_point_3d<double> l1, vgl_point_3d<double> l2,
+                                      vgl_point_3d<double> p1,
+                                      vgl_point_3d<double> l3, vgl_point_3d<double> l4,
+                                      vgl_point_3d<double> p2)
 {
   bmsh3d_face_mc* face = (bmsh3d_face_mc*) object_->facemap(face_id);
   vcl_vector<bmsh3d_halfedge *> halfedges;
@@ -489,7 +496,6 @@ void bwm_observable_mesh::divide_face(unsigned face_id,
     bmsh3d_vertex* e = (bmsh3d_vertex*) edge->eV();
     vgl_point_3d<double> sp(s->get_pt());
     vgl_point_3d<double> ep(e->get_pt());
-
 
     vgl_line_3d_2_points<double> line(sp, ep);
     //vcl_cout << "edge" << edge->id() << " s=" << s->get_pt() << "e =" << e->get_pt() << vcl_endl;
@@ -633,8 +639,8 @@ int bwm_observable_mesh::find_closest_face(vgl_point_3d<double> point)
 }
 
 void bwm_observable_mesh::create_mesh_HE(vsol_polygon_3d_sptr polygon,
-                                    double dist,
-                                    vcl_map<int, vsol_polygon_3d_sptr> inner_faces)
+                                         double dist,
+                                         vcl_map<int, vsol_polygon_3d_sptr> inner_faces)
 {
   polygon = bwm_algo::move_points_to_plane(polygon);
 
@@ -668,8 +674,8 @@ void bwm_observable_mesh::create_mesh_HE(vsol_polygon_3d_sptr polygon,
                                    polygon->vertex(i)->z() + fact*normal.z()));
 #endif // 0
     v->set_pt (vgl_point_3d<double> (polygon->vertex(i)->x(),
-		polygon->vertex(i)->y(),
-		polygon->vertex(i)->z()-dist));
+    polygon->vertex(i)->y(),
+    polygon->vertex(i)->z()-dist));
     object_->_add_vertex (v);
     v_list[n+i] = v;
   }

@@ -14,38 +14,34 @@
 #include <bbgm/bbgm_update.h>
 #include <bsta/bsta_gaussian_indep.h>
 #include <vil/vil_image_view.h>
-#include <vul/vul_timer.h>
 #include <vnl/vnl_random.h>
 #include <bbgm/pro/bbgm_save_image_of_process.h>
 #include <bbgm/pro/bbgm_load_image_of_process.h>
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_value_sptr.h>
 
-namespace{
-
+namespace
+{
   void init_random_image(vil_image_view<float>& img)
   {
     vnl_random rand;
-    for(unsigned int p=0; p<img.nplanes(); ++p)
-      for(unsigned int j=0; j<img.nj(); ++j)
-        for(unsigned int i=0; i<img.ni(); ++i)
+    for (unsigned int p=0; p<img.nplanes(); ++p)
+      for (unsigned int j=0; j<img.nj(); ++j)
+        for (unsigned int i=0; i<img.ni(); ++i)
           img(i,j,p) = static_cast<float>(rand.drand32());
   }
-
 
   void add_random_noise(vil_image_view<float>& img, float std)
   {
     vnl_random rand;
-    for(unsigned int p=0; p<img.nplanes(); ++p)
-      for(unsigned int j=0; j<img.nj(); ++j)
-        for(unsigned int i=0; i<img.ni(); ++i){
+    for (unsigned int p=0; p<img.nplanes(); ++p)
+      for (unsigned int j=0; j<img.nj(); ++j)
+        for (unsigned int i=0; i<img.ni(); ++i){
           img(i,j) = img(i,j) + static_cast<float>(rand.normal()*std);
-          if(img(i,j,p)>1.0f) img(i,j,p) = 1.0f;
-          if(img(i,j,p)<0.0f) img(i,j,p) = 0.0f;
+          if (img(i,j,p)>1.0f) img(i,j,p) = 1.0f;
+          if (img(i,j,p)<0.0f) img(i,j,p) = 0.0f;
         }
   }
-
-
 };
 
 MAIN( test_io )
@@ -62,53 +58,51 @@ MAIN( test_io )
   init_random_image(img);
 
   vcl_vector<vil_image_view<float> > images(1,img);
-  for(unsigned t=1; t<10; ++t){
+  for (unsigned t=1; t<10; ++t){
     vil_image_view<float> new_img;
     new_img.deep_copy(img);
     add_random_noise(new_img, 0.5f);
     images.push_back(new_img);
   }
 
-
   typedef bsta_num_obs<bsta_gauss_if3> gauss_type;
   typedef bsta_mixture_fixed<gauss_type,3> mix_gauss_type;
   typedef bsta_num_obs<mix_gauss_type> obs_mix_gauss_type;
-    
+
   bsta_gauss_if3 init_gauss( init_mean, init_covar );
   bsta_mg_window_updater<mix_gauss_type> updater( init_gauss,
                                                   max_components,
                                                   window_size);
-    
-  bbgm_image_of<obs_mix_gauss_type>* mptr = 
+
+  bbgm_image_of<obs_mix_gauss_type>* mptr =
     new bbgm_image_of<obs_mix_gauss_type>(ni,nj,obs_mix_gauss_type());
-    
+
   update(*mptr,images[0],updater);
   bbgm_image_sptr mp = mptr;
   vcl_string source = mp->is_a();
-  vcl_cout << "Starting save/read bbgm_image_sptr\n";
-  vcl_cout << "Saving an image_of with type " << source << '\n';
+  vcl_cout << "Starting save/read bbgm_image_sptr\n"
+           << "Saving an image_of with type " << source << '\n';
   bprb_process_sptr lm = new bbgm_load_image_of_process();
   bprb_process_sptr sm = new bbgm_save_image_of_process();
   brdb_value_sptr mv = new brdb_value_t<bbgm_image_sptr>(mp);
-	brdb_value_sptr pv = new brdb_value_t<vcl_string>(vcl_string("./background.md"));
+  brdb_value_sptr pv = new brdb_value_t<vcl_string>(vcl_string("./background.md"));
   sm->set_input(0, pv);
   sm->set_input(1, mv);
   bool good = sm->execute();
   lm->set_input(0, pv);
-	good = good&&lm->execute();
-	brdb_value_sptr iv = lm->output(0);
-  if(!iv) good = false;
+  good = good&&lm->execute();
+  brdb_value_sptr iv = lm->output(0);
+  if (!iv) good = false;
   vcl_string test;
-  if(good){
-	  brdb_value_t<bbgm_image_sptr>* vp = 
+  if (good){
+    brdb_value_t<bbgm_image_sptr>* vp =
     static_cast<brdb_value_t<bbgm_image_sptr>*>(iv.ptr());
-	  test = vp->value()->is_a();
+    test = vp->value()->is_a();
   }
-	vcl_cout << "Retrieved image_of with type " << test << '\n';
+  vcl_cout << "Retrieved image_of with type " << test << '\n';
   good = good && source==test;
   TEST("test save and load image_of", good, true);
   vpl_unlink("./background.md");
   SUMMARY();
 }
-
 
