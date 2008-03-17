@@ -7,6 +7,7 @@ ADD_EXECUTABLE( bvxm_pro_test_all
   test_bvxm_illum_index_process.cxx
   test_bvxm_create_voxel_world_process.cxx
   test_bvxm_normalize_image_process.cxx
+  test_bvxm_create_normalized_image_process.cxx
   test_bvxm_change_detection_display_process.cxx
   test_bvxm_generate_edge_map_process.cxx
   test_bvxm_rpc_registration_process.cxx
@@ -32,6 +33,7 @@ ADD_TEST( bvxm_test_roi_init_process       ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_te
 ADD_TEST( bvxm_test_illum_index_process    ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_illum_index_process )
 ADD_TEST( bvxm_test_create_voxel_world_process    ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_create_voxel_world_process )
 ADD_TEST( bvxm_test_bvxm_normalize_image_process    ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_normalize_image_process )
+ADD_TEST( bvxm_test_bvxm_create_normalized_image_process    ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_create_normalized_image_process )
 ADD_TEST( bvxm_test_generate_edge_map_process    ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_generate_edge_map_process )
 ADD_TEST( bvxm_test_rpc_registration_process    ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_rpc_registration_process )
 ADD_TEST( bvxm_test_create_local_rpc_process    ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_create_local_rpc_process )

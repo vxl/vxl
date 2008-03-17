@@ -11,20 +11,22 @@ INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc/vpgl )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR})
 
 SET(bvxm_pro_sources
-    bvxm_create_voxel_world_process.h     bvxm_create_voxel_world_process.cxx
-    bvxm_detect_changes_process.h         bvxm_detect_changes_process.cxx
-    bvxm_generate_edge_map_process.h      bvxm_generate_edge_map_process.cxx
-    bvxm_render_virtual_view_process.h    bvxm_render_virtual_view_process.cxx
-    bvxm_render_expected_image_process.h  bvxm_render_expected_image_process.cxx
+    bvxm_create_voxel_world_process.h       bvxm_create_voxel_world_process.cxx
+    bvxm_detect_changes_process.h           bvxm_detect_changes_process.cxx
+    bvxm_generate_edge_map_process.h        bvxm_generate_edge_map_process.cxx
+    bvxm_render_virtual_view_process.h      bvxm_render_virtual_view_process.cxx
+    bvxm_render_expected_image_process.h    bvxm_render_expected_image_process.cxx
     bvxm_change_detection_display_process.h bvxm_change_detection_display_process.cxx
-    bvxm_update_process.h                 bvxm_update_process.cxx
-    bvxm_normalize_image_process.h        bvxm_normalize_image_process.cxx
-    bvxm_illum_index_process.h            bvxm_illum_index_process.cxx
-    bvxm_roi_init_process.h               bvxm_roi_init_process.cxx
-    bvxm_rpc_registration_process.h       bvxm_rpc_registration_process.cxx
-    bvxm_save_occupancy_raw_process.h     bvxm_save_occupancy_raw_process.cxx
-    bvxm_clean_world_process.h            bvxm_clean_world_process.cxx
-    bvxm_create_local_rpc_process.h       bvxm_create_local_rpc_process.cxx
+    bvxm_update_process.h                   bvxm_update_process.cxx
+    bvxm_normalize_image_process.h          bvxm_normalize_image_process.cxx
+    bvxm_illum_index_process.h              bvxm_illum_index_process.cxx
+    bvxm_roi_init_process.h                 bvxm_roi_init_process.cxx
+    bvxm_rpc_registration_process.h         bvxm_rpc_registration_process.cxx
+    bvxm_save_occupancy_raw_process.h       bvxm_save_occupancy_raw_process.cxx
+    bvxm_clean_world_process.h              bvxm_clean_world_process.cxx
+    bvxm_create_local_rpc_process.h         bvxm_create_local_rpc_process.cxx
+    bvxm_create_normalized_image_process.h  bvxm_create_normalized_image_process.cxx
+
 )
 
 AUX_SOURCE_DIRECTORY(Templates bvxm_pro_sources)

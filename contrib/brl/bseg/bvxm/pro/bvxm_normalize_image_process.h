@@ -6,7 +6,6 @@
 // \file
 // \brief // A class for contrast normalization of images using a voxel world . 
 //           CAUTION: 1) Input image is assumed to have type vxl_byte
-//                    2) Even if the image is RGB, it is converted to grey and the best gain and offset is calculated from the grey image
 //           
 // \author Ozge Can Ozcanli
 // \date 02/13/08
@@ -72,5 +71,5 @@ inline bool normalize_image(const vil_image_view<T>& in_view, vil_image_view<T>&
 }
 
 
-#endif // bvma_update_process_h_
+#endif // bvxm_normalize_image_process_h_
 
