@@ -74,7 +74,6 @@ bvxm_voxel_slab_iterator<T>& bvxm_voxel_slab_iterator<T>::operator++()
 }
 
 
-
 template <class T>
 bvxm_voxel_slab_iterator<T>& bvxm_voxel_slab_iterator<T>::operator--()
 {
@@ -95,8 +94,6 @@ template <class T>
 bvxm_voxel_slab_const_iterator<T>::bvxm_voxel_slab_const_iterator(const bvxm_voxel_slab_iterator<T> &non_const_it)
 : bvxm_voxel_slab_iterator_base<T>(non_const_it)
 {}
-  
-
 
 
 template <class T>
@@ -141,7 +138,6 @@ bvxm_voxel_slab_const_iterator<T>& bvxm_voxel_slab_const_iterator<T>::operator++
 }
 
 
-
 template <class T>
 bvxm_voxel_slab_const_iterator<T>& bvxm_voxel_slab_const_iterator<T>::operator--()
 {
@@ -159,12 +155,6 @@ bvxm_voxel_slab_const_iterator<T>& bvxm_voxel_slab_const_iterator<T>::operator--
 
 #define BVXM_VOXEL_SLAB_ITERATOR_INSTANTIATE(T) \
 template class bvxm_voxel_slab_iterator<T >; \
-template class bvxm_voxel_slab_const_iterator<T>;
+template class bvxm_voxel_slab_const_iterator<T >
 
-
-
-
-
-
-
-#endif
+#endif // bvxm_voxel_slab_iterator_txx_

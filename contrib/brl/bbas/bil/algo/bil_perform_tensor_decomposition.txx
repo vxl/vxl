@@ -8,24 +8,24 @@
 class vil_math_square_functor
 {
  public:
-  vxl_byte operator()(vxl_byte x) const { return x*x; } 
-  unsigned operator()(unsigned x) const { return x*x; } 
-  int operator()(int x)           const { return x*x; } 
-  short operator()(short x)       const { return x*x; } 
-  float operator()(float x)       const { return x*x; } 
-  double operator()(double x)     const { return x*x; } 
+  vxl_byte operator()(vxl_byte x) const { return x*x; }
+  unsigned operator()(unsigned x) const { return x*x; }
+  int operator()(int x)           const { return x*x; }
+  short operator()(short x)       const { return x*x; }
+  float operator()(float x)       const { return x*x; }
+  double operator()(double x)     const { return x*x; }
 };
 
 
-template <class T> 
-void bil_perform_tensor_decomposition( const vil_image_view<T>& k11,
-                                        const vil_image_view<T>& k12, 
-                                        const vil_image_view<T>& k21,
-                                        const vil_image_view<T>& k22,
-                                        vil_image_view<T>& e1,
-                                        vil_image_view<T>& e2,
-                                        vil_image_view<T>& l1,
-                                        vil_image_view<T>& l2) 
+template <class T>
+void bil_perform_tensor_decomposition( const vil_image_view<T >& k11,
+                                       const vil_image_view<T>& k12,
+                                       const vil_image_view<T>& k21,
+                                       const vil_image_view<T>& k22,
+                                       vil_image_view<T>& e1,
+                                       vil_image_view<T>& e2,
+                                       vil_image_view<T>& l1,
+                                       vil_image_view<T>& l2)
 {
   unsigned ni = k11.ni();
   unsigned nj = k11.nj();
@@ -50,7 +50,7 @@ void bil_perform_tensor_decomposition( const vil_image_view<T>& k11,
   vil_image_view<T> b_sq; b_sq.deep_copy(b);
   vil_transform(b_sq,vil_math_square_functor());
 
-  vil_image_view<T> ab2; 
+  vil_image_view<T> ab2;
   vil_math_image_sum(a_sq,b_sq,ab2);
   vil_math_sqrt(ab2);
 
@@ -60,30 +60,31 @@ void bil_perform_tensor_decomposition( const vil_image_view<T>& k11,
   vil_math_image_difference(t,ab2,l2);
 
   float theta;
-  for(int j = 0; j < static_cast<int>(nj); j++){
-  for(int i = 0; i < static_cast<int>(ni); i++){
-    if(b(i,j) != 0){
-      theta = vcl_atan2( (double)(ab2(i,j)-a(i,j)), (double)b(i,j) );
+  for (int j = 0; j < static_cast<int>(nj); j++){
+    for (int i = 0; i < static_cast<int>(ni); i++){
+      if (b(i,j) != 0){
+        theta = vcl_atan2( (double)(ab2(i,j)-a(i,j)), (double)b(i,j) );
+      }
+      else{
+        theta = vnl_math::pi_over_2;
+      }
+      e1(i,j,0) = vcl_cos(theta);
+      e1(i,j,1) = vcl_sin(theta);
+      e2(i,j,0) = -vcl_sin(theta);
+      e2(i,j,1) = vcl_cos(theta);
     }
-    else{
-      theta = vnl_math::pi_over_2;
-    }
-    e1(i,j,0) = vcl_cos(theta);
-    e1(i,j,1) = vcl_sin(theta);
-    e2(i,j,0) = -vcl_sin(theta); 
-    e2(i,j,1) = vcl_cos(theta);
   }
-  }
-
 }
+
 #undef  BIL_PERFORM_TENSOR_DECOMPOSITION_INSTANTIATE
 #define BIL_PERFORM_TENSOR_DECOMPOSITION_INSTANTIATE(T) \
-template void bil_perform_tensor_decomposition( const vil_image_view<T>& k11,\
-                                        const vil_image_view<T>& k12, \
-                                        const vil_image_view<T>& k21,\
-                                        const vil_image_view<T>& k22,\
-                                        vil_image_view<T>& e1,\
-                                        vil_image_view<T>& e2,\
-                                        vil_image_view<T>& l1,\
-                                        vil_image_view<T>& l2);
-#endif
+template void bil_perform_tensor_decomposition( const vil_image_view<T >& k11,\
+                                                const vil_image_view<T >& k12,\
+                                                const vil_image_view<T >& k21,\
+                                                const vil_image_view<T >& k22,\
+                                                vil_image_view<T >& e1,\
+                                                vil_image_view<T >& e2,\
+                                                vil_image_view<T >& l1,\
+                                                vil_image_view<T >& l2)
+
+#endif // bil_perform_tensor_decomposition_txx_
