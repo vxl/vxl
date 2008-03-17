@@ -1,4 +1,4 @@
-// This is contrib/brl/bbas/bil/algo/bil_color_conversions.h
+// This is brl/bbas/bil/algo/bil_color_conversions.h
 #ifndef bil_color_conversions_h_
 #define bil_color_conversions_h_
 //:
@@ -9,9 +9,7 @@
 // \verbatim
 //  Modifications
 //   O.C.Ozcanli  02/18/2007   added the distance method in LAB space
-//
-// \endverbatim 
-
+// \endverbatim
 
 #include <vil/vil_image_view.h>
 #include <vnl/vnl_vector_fixed.h>

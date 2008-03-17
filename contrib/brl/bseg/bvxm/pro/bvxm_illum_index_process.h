@@ -1,16 +1,16 @@
-// This is contrib/brl/bseg/bvxm/pro/bvxm_illum_index_process.h
+// This is brl/bseg/bvxm/pro/bvxm_illum_index_process.h
 #ifndef bvxm_illum_index_process_h_
 #define bvxm_illum_index_process_h_
-
 //:
 // \file
-// \brief // A class for illum_index process of a voxel world . 
-//           
-// \author Isabel Restrepo
-// \date 02/20/ 08
-// \verbatim
+// \brief A class for illum_index process of a voxel world .
 //
-// \Modifications 
+// \author Isabel Restrepo
+// \date 02/20/2008
+// \verbatim
+//  Modifications
+//   <none yet>
+// \endverbatim
 
 #include <vcl_string.h>
 #include <bprb/bprb_process.h>
@@ -19,7 +19,7 @@
 class bvxm_illum_index_process : public bprb_process
 {
  public:
-  
+
   bvxm_illum_index_process();
 
   //: Copy Constructor (no local data)
@@ -37,13 +37,7 @@ class bvxm_illum_index_process : public bprb_process
   bool finish(){return true;}
 
   unsigned bin_index(vcl_string map_type, double sun_el, double sun_az,
-                   unsigned num_lat = 0, unsigned num_long = 0);
- 
- private:
-
+                     unsigned num_lat = 0, unsigned num_long = 0);
 };
 
-
-
-#endif // bvma_illum_index_process_h_
-
+#endif // bvxm_illum_index_process_h_

@@ -1,28 +1,27 @@
-// This is contrib/brl/bseg/bvxm/pro/bvxm_normalize_image_process.h
+// This is brl/bseg/bvxm/pro/bvxm_normalize_image_process.h
 #ifndef bvxm_normalize_image_process_h_
 #define bvxm_normalize_image_process_h_
-
 //:
 // \file
-// \brief // A class for contrast normalization of images using a voxel world . 
-//           CAUTION: 1) Input image is assumed to have type vxl_byte
-//           
-// \author Ozge Can Ozcanli
-// \date 02/13/08
-// \verbatim
+// \brief A class for contrast normalization of images using a voxel world.
+//  CAUTION: Input image is assumed to have type vxl_byte
 //
-// \Modifications 
+// \author Ozge Can Ozcanli
+// \date 02/13/2008
+// \verbatim
+//  Modifications
+//   <none yet>
+// \endverbatim
 
 #include <vcl_string.h>
 #include <bprb/bprb_process.h>
 
 #include <vil/vil_image_view.h>
-#include <vcl_cmath.h>
 
 class bvxm_normalize_image_process : public bprb_process
 {
  public:
-  
+
   bvxm_normalize_image_process();
 
   //: Copy Constructor (no local data)
@@ -38,9 +37,6 @@ class bvxm_normalize_image_process : public bprb_process
   bool init() { return true; }
   bool execute();
   bool finish(){return true;}
- 
- private:
-
 };
 
 template<class T>
@@ -59,17 +55,15 @@ inline bool normalize_image(const vil_image_view<T>& in_view, vil_image_view<T>&
       {
         //T p = (T)vcl_floor(a*in_view(i,j,k) + b);
         T p = (T)(a*in_view(i,j,k) + b);
-        if (p < 0) 
+        if (p < 0)
           out_img(i,j,k) = 0;
-        else if ( p > max_value ) 
+        else if ( p > max_value )
           out_img(i,j,k) = max_value;
-        else 
+        else
           out_img(i,j,k) = p;
       }
 
   return true;
 }
 
-
 #endif // bvxm_normalize_image_process_h_
-

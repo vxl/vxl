@@ -1,7 +1,6 @@
-// This is contrib/brl/bbas/bil/algo/bil_edge_indicator.h
+// This is brl/bbas/bil/algo/bil_edge_indicator.h
 #ifndef bil_edge_indicator_h_
 #define bil_edge_indicator_h_
-
 //:
 // \file
 // \brief Functions to compute Malladi image force
@@ -10,8 +9,8 @@
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
-
 
 #include <vnl/vnl_math.h>
 
@@ -21,11 +20,12 @@
 #include <vil/algo/vil_gauss_filter.h>
 #include <vil/algo/vil_sobel_3x3.h>
 
+#include <vcl_iostream.h>
 
 //: Functor class to compute malladi image force function
 class bil_malladi_scale_functor
 {
-public:
+ public:
   float operator()(float x) const {return x<0 ? 1.0f : 1.0f/(1.0f+x); }
   double operator()(double x) const {return x<0 ? 1.0 : 1.0/(1.0+x); }
 };
@@ -33,17 +33,16 @@ public:
 //: Functor class to compute square of a number
 class bil_square_functor
 {
-public:
+ public:
   float operator()(float x) const {return x*x; }
   double operator()(double x) const {return x*x; }
 };
 
 
-
 //: Functor class to compute cubic of a number
 class bil_cube_functor
 {
-public:
+ public:
   float operator()(float x) const {return x*x*x; }
   double operator()(double x) const {return x*x*x; }
 };
@@ -51,51 +50,48 @@ public:
 //: Functor class to compute power of a number
 class bil_power_functor
 {
-public:
+  int p_;
+ public:
   bil_power_functor(int p):p_(p){}
   float operator()(float x) const {return vcl_pow(x, (float)p_); }
   double operator()(double x) const {return vcl_pow(x, p_); }
-private:
-  int p_;
 };
 
 
 //: Functor class to apply a Gaussian function on a number
 class bil_gaussian_functor
 {
-public:
-  bil_gaussian_functor(double mu, double sigma): mu_(mu), sigma_(sigma){}
-  double operator()(double x) const 
-  { 
-    return vcl_exp(-(x-mu_)*(x-mu_)/(2*sigma_*sigma_) ) / 
-      (sigma_ * vnl_math::two_over_sqrtpi * vnl_math::sqrt1_2 / 2);
-  }
-  float operator()(float x) const 
-  {
-    return float(vcl_exp(-(x-mu_)*(x-mu_)/(2*sigma_*sigma_) ) / 
-      (sigma_ * vnl_math::two_over_sqrtpi * vnl_math::sqrt1_2 / 2));
-  }
-  
-private:
   double mu_;
   double sigma_;
+ public:
+  bil_gaussian_functor(double mu, double sigma): mu_(mu), sigma_(sigma){}
+  double operator()(double x) const
+  {
+    return vcl_exp(-(x-mu_)*(x-mu_)/(2*sigma_*sigma_) ) /
+      (sigma_ * vnl_math::two_over_sqrtpi * vnl_math::sqrt1_2 / 2);
+  }
+  float operator()(float x) const
+  {
+    return float(vcl_exp(-(x-mu_)*(x-mu_)/(2*sigma_*sigma_) ) /
+      (sigma_ * vnl_math::two_over_sqrtpi * vnl_math::sqrt1_2 / 2));
+  }
 };
 
 
 // ------------------------------------------------------------------
 //: Compute image force using gradient of image
-// g = 1 / (1 + (|dG*I|/M)^p
-// dG : Gaussian smoothing
-// M : down_scale value
-// p: exponent
-// (for now) keep gauss_sigma < 0.7
+// \a g = 1 / (1 + (|dG*I|/M)^p
+// \a dG : Gaussian smoothing
+// \a M : down_scale value
+// \a p: exponent
+// (for now) keep \a gauss_sigma < 0.7
 // Reference: Malladi, R., J. A. Sethian, and B. C. Vemuri, "Shape Modeling with front propagation: A Level Set Approach".
 template <class inT, class outT>
 inline void bil_malladi_image_force(const vil_image_view<inT >& src_im,
-                                      double M,
-                                      int exponent,
-                                      double gauss_sigma,
-                                      vil_image_view<outT >& gmap)
+                                    double M,
+                                    int exponent,
+                                    double gauss_sigma,
+                                    vil_image_view<outT >& gmap)
 {
   vil_image_view<outT > smoothed;
 
@@ -103,23 +99,22 @@ inline void bil_malladi_image_force(const vil_image_view<inT >& src_im,
   vil_gauss_filter_5tap_params gauss_params(gauss_sigma);
   vil_gauss_filter_5tap<inT, outT>(src_im, smoothed, gauss_params);
 
-  //compute image gradient values 
+  //compute image gradient values
   vil_image_view<outT > grad_i, grad_j, grad_mag;
   vil_sobel_3x3(smoothed, grad_i, grad_j);
 
   // gradient magnitude
   vil_math_image_vector_mag(grad_i, grad_j, grad_mag);
 
-  //compute image gradient magnitude and values for 
+  //compute image gradient magnitude and values for
   // g = 1/1+(|dG*I|/M)^p
   //                 1
   // g = ---------------------------
   //       1 +   (|dG * I| /M)^p
-  //            
+  //
 
   if (M == 0) M = 1;
   vil_math_scale_values(grad_mag, (1.0/M));
-
 
   // compute (|dG*I|/M)^p
   // special treatment for cases exponent=2 and exponent=3
@@ -140,32 +135,31 @@ inline void bil_malladi_image_force(const vil_image_view<inT >& src_im,
 
   // g
   gmap = grad_mag;
-
-  ////compute gradients of g
-  //vil_sobel_3x3(gmap, gx, gy);
+#if 0
+  //compute gradients of g
+  vil_sobel_3x3(gmap, gx, gy);
+#endif
   return;
 }
 
 
-
-
-
-
 // ------------------------------------------------------------------
 //: Compute image force using gradient of image and feature map
-// similary to malladi_image_force but also take in an feature map
+// Similar to malladi_image_force but also take in an feature map
 template <class inT, class outT>
 inline void bil_malladi_image_force_with_feature_map(
-  const vil_image_view<inT >& src_im,                                    
+  const vil_image_view<inT >& src_im,
   double M,
   int exponent,
   double gauss_sigma,
   const vil_image_view<bool>& feature_map,
   vil_image_view<outT >& gmap)
 {
-  //unsigned ni = src_im.ni();
-  //unsigned nj = src_im.nj();
-  //unsigned np = src_im.nplanes();
+#if 0
+  unsigned ni = src_im.ni();
+  unsigned nj = src_im.nj();
+  unsigned np = src_im.nplanes();
+#endif
 
   vil_image_view<outT > smoothed;
 
@@ -173,13 +167,12 @@ inline void bil_malladi_image_force_with_feature_map(
   vil_gauss_filter_5tap_params gauss_params(gauss_sigma);
   vil_gauss_filter_5tap<inT, outT>(src_im, smoothed, gauss_params);
 
-  //compute image gradient values 
+  //compute image gradient values
   vil_image_view<outT > grad_i, grad_j, grad_mag;
   vil_sobel_3x3(smoothed, grad_i, grad_j);
 
   // gradient magnitude
   vil_math_image_vector_mag(grad_i, grad_j, grad_mag);
-
 
   // set grad_mag to max wherever there is feature
   outT min_value, max_value;
@@ -198,16 +191,15 @@ inline void bil_malladi_image_force_with_feature_map(
     }
   }
 
-  //compute image gradient magnitude and values for 
+  //compute image gradient magnitude and values for
   // g = 1/1+(|dG*I|/M)^p
   //                 1
   // g = ---------------------------
   //       1 +   (|dG * I| /M)^p
-  //            
+  //
 
   if (M == 0) M = 1;
   vil_math_scale_values(grad_mag, (1.0/M));
-
 
   // compute (|dG*I|/M)^p
   // special treatment for cases exponent=2 and exponent=3
@@ -246,7 +238,7 @@ inline void bil_malladi_image_force_with_feature_map(
 // Currently only "quadratic" mapping is implemented
 template <class inT, class outT>
 inline void bil_normalized_inverse_gradient(
-  const vil_image_view<inT >& src_image,                                    
+  const vil_image_view<inT >& src_image,
   double gauss_sigma,
   vil_image_view<outT >& out_image,
   const vcl_string& option = "quadratic")
@@ -255,9 +247,9 @@ inline void bil_normalized_inverse_gradient(
   vil_image_view<float > float_image;
   vil_convert_cast(src_image, float_image);
   vil_image_view<float > gauss_image;
-  vil_gauss_filter_5tap<float, float >(float_image, gauss_image, 
-    vil_gauss_filter_5tap_params(gauss_sigma));
-  
+  vil_gauss_filter_5tap<float, float >(float_image, gauss_image,
+                                       vil_gauss_filter_5tap_params(gauss_sigma));
+
   // compute gradient using sobel kernel
   vil_image_view<float > grad_x;
   vil_image_view<float > grad_y;
@@ -286,12 +278,12 @@ inline void bil_normalized_inverse_gradient(
     {
       for (unsigned int j=0; j<grad_mag_cost.nj(); ++j)
       {
-        grad_mag_cost(i,j) = 
+        grad_mag_cost(i,j) =
           1 + a*vnl_math_sqr(grad_mag_cost(i, j)-b);
       }
     }
 
-    vil_convert_cast(grad_mag_cost, out_image);  
+    vil_convert_cast(grad_mag_cost, out_image);
     return;
   }
   else
@@ -299,9 +291,7 @@ inline void bil_normalized_inverse_gradient(
     vcl_cerr << "ERROR: Only 'quadratic' mapping is currently implemented.\n";
     return;
   }
-  
 }
-
 
 
 // ------------------------------------------------------------------
@@ -310,7 +300,7 @@ inline void bil_normalized_inverse_gradient(
 // then inverse the sign
 template <class inT, class outT>
 inline void bil_negative_normalized_gradient_magnitude(
-  const vil_image_view<inT >& src_image,                                    
+  const vil_image_view<inT >& src_image,
   double smoothing_sigma,
   double normalized_sigma,
   vil_image_view<outT >& out_image)
@@ -319,9 +309,9 @@ inline void bil_negative_normalized_gradient_magnitude(
   vil_image_view<float > float_image;
   vil_convert_cast(src_image, float_image);
   vil_image_view<float > gauss_image;
-  vil_gauss_filter_5tap<float, float >(float_image, gauss_image, 
-    vil_gauss_filter_5tap_params(smoothing_sigma));
-  
+  vil_gauss_filter_5tap<float, float >(float_image, gauss_image,
+                                       vil_gauss_filter_5tap_params(smoothing_sigma));
+
   // compute gradient using sobel kernel
   vil_image_view<float > grad_x;
   vil_image_view<float > grad_y;
@@ -335,19 +325,13 @@ inline void bil_negative_normalized_gradient_magnitude(
   float grad_max, grad_min;
   vil_math_value_range(grad_mag_cost, grad_min, grad_max);
 
-    
-  vil_transform(grad_mag_cost, 
-    bil_gaussian_functor(grad_max, (grad_max-grad_min)*normalized_sigma));
+  vil_transform(grad_mag_cost,
+                bil_gaussian_functor(grad_max, (grad_max-grad_min)*normalized_sigma));
 
   vil_math_scale_values(grad_mag_cost, -1.0);
 
   vil_convert_cast(grad_mag_cost, out_image);
-  return; 
+  return;
 }
 
-
-
-
-
-#endif // bil_image_filters_h_
-
+#endif // bil_edge_indicator_h_

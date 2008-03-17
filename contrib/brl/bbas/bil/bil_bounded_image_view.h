@@ -1,4 +1,4 @@
-// This is contrib/brl/bbas/bil/bil_bounded_image_view.h
+// This is brl/bbas/bil/bil_bounded_image_view.h
 #ifndef bil_bounded_image_view_h_
 #define bil_bounded_image_view_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
@@ -9,25 +9,22 @@
 // \brief A type of image view that masquerades as a larger image
 // \author J.L. Mundy
 // \verbatim
-//  Modifications <none>
+//  Modifications
+//   <none yet>
 // \endverbatim
 
-#include <vcl_iosfwd.h>
-#include <vcl_string.h>
-#include <vcl_cassert.h>
-#include <vcl_cstddef.h>
 #include <vil/vil_image_view.h>
 #include <vsl/vsl_binary_io.h>
 
 //  The actual image data is contained in the parent of this class.
 //  The parent has data (ni(), nj(), nplanes());
-//  This view considers that data to be a region inside a larger image 
+//  This view considers that data to be a region inside a larger image
 //  space with an offset, (ib0(), jb0()),  the size of this view is
 //  (nib(), njb()) and the same number of planes.
 // The purpose of the bounded view is support uniform processing
-// on a specified image space, even though only a variable portion 
-// of the image is valid. This situation arises, for example, in 
-// projecting a given 3-d region into a set of camera views of 
+// on a specified image space, even though only a variable portion
+// of the image is valid. This situation arises, for example, in
+// projecting a given 3-d region into a set of camera views of
 // the region.
 template <class T>
 class bil_bounded_image_view : public vil_image_view<T>
@@ -50,9 +47,9 @@ class bil_bounded_image_view : public vil_image_view<T>
 
   //: the main constructor
   bil_bounded_image_view(const vil_image_view<T>& bounded_data,
-                          unsigned ib0, unsigned jb0,//data origin
-                          unsigned nib, unsigned njb //global image size
-                          );
+                         unsigned ib0, unsigned jb0,//data origin
+                         unsigned nib, unsigned njb //global image size
+                        );
 
   //: Copy constructor
   //  For simplicity, the pixel format of the bounded view must be the same
@@ -102,7 +99,7 @@ class bil_bounded_image_view : public vil_image_view<T>
     return *this;
   }
 
-  short version() const { return 1; } 
+  short version() const { return 1; }
 
   void b_write(vsl_b_ostream &os) const;
 

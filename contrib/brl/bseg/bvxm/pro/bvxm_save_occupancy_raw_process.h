@@ -1,17 +1,19 @@
-// This is contrib/brl/bseg/bvxm/pro/bvxm_save_occupancy_raw_process.h
+// This is brl/bseg/bvxm/pro/bvxm_save_occupancy_raw_process.h
 #ifndef bvxm_save_occupancy_raw_process_h_
 #define bvxm_save_occupancy_raw_process_h_
-
 //:
 // \file
-// \brief // A process that saves the voxel world occupancy grid in a binary format 
-//        // readable by the Drishti volume rendering program (http://anusf.anu.edu.au/Vizlab/drishti/)
-//            
-// \author Daniel Crispell
-// \date 03/05/08
-// \verbatim
+// \brief Save the voxel world occupancy grid in binary format
+// A process that saves the voxel world occupancy grid in a binary format
+// readable by the Drishti volume rendering program
+// (http://anusf.anu.edu.au/Vizlab/drishti/)
 //
-// \Modifications 
+// \author Daniel Crispell
+// \date 03/05/2008
+// \verbatim
+//  Modifications
+//   <none yet>
+// \endverbatim
 
 #include <vcl_string.h>
 #include <bprb/bprb_process.h>
@@ -19,7 +21,7 @@
 class bvxm_save_occupancy_raw_process : public bprb_process
 {
  public:
-  
+
    bvxm_save_occupancy_raw_process();
 
   //: Copy Constructor (no local data)
@@ -35,12 +37,6 @@ class bvxm_save_occupancy_raw_process : public bprb_process
   bool init() { return true; }
   bool execute();
   bool finish(){return true;}
- 
- private:
-
 };
 
-
-
-#endif // bvma_update_process_h_
-
+#endif // bvxm_save_occupancy_raw_process_h_

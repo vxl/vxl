@@ -1,22 +1,21 @@
-// This is contrib/brl/bbas/bil/algo/bil_wshed2d.h
-
+// This is brl/bbas/bil/algo/bil_wshed2d.h
 #ifndef bil_wshed_2d_h_
 #define bil_wshed_2d_h_
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //:
 // \file
 // \brief The watershed transform algorithm as explained in Soille-Vincent paper
 //
 // \author H.C. Aras
-// \date 02/17/05 (committed), written in August'2004
+// \date 02/17/2005 (committed), written in August'2004
 //
 // \verbatim
 //  Modifications:
+//   <none yet>
 // \endverbatim
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 #include <vcl_vector.h>
-#include <vcl_string.h>
 #include <vcl_list.h>
 
 #include <vil/vil_image_view.h>
@@ -32,12 +31,12 @@ struct bil_wshed_2d_region
 
 class bil_wshed_2d
 {
-public:
+ public:
   double max_mean_intensity_;
   double min_mean_intensity_;
   //struct bil_wshed_2d_region *wshed_regions_;
   vcl_vector<struct bil_wshed_2d_region> wshed_regions_;
-protected:
+ protected:
 
   vil_image_view< unsigned char > input_img_;
   vil_image_view< unsigned char > gradient_img_;
@@ -59,11 +58,11 @@ protected:
 
   int *sorted_pixels_x_; //holds the x position of the pixel
   int *sorted_pixels_y_; //holds the y position of the pixel
-    
+
   vcl_list< int > queue_x;
   vcl_list< int > queue_y;
 
-public:
+ public:
 
   bil_wshed_2d();
   virtual ~bil_wshed_2d();
@@ -75,11 +74,11 @@ public:
   // (min_x,min_y) and (max_x,max_y) specify the region of the image that the algorithm is to be applied
   // All boundary values are set to zero as default, in which case the algorithm is applied on the whole image
   // The necessary boundary checks are also performed
-  vcl_vector< vil_image_view< unsigned char > > 
-  bil_wshed_2d_main(vil_image_view< unsigned char > src_img, 
-                     double gsigma1, double gsigma2, int min_x, int min_y, int max_x, int max_y);
+  vcl_vector< vil_image_view< unsigned char > >
+  bil_wshed_2d_main(vil_image_view< unsigned char> src_img,
+                    double gsigma1, double gsigma2, int min_x, int min_y, int max_x, int max_y);
 
-protected:
+ protected:
   void add_connected_pixels_to_queue(int pos_x, int pos_y);
   void calculate_region_properties();
   void collect_garbage();

@@ -1,16 +1,16 @@
-// This is contrib/brl/bseg/bvxm/pro/bvxm_detect_changes_process.h
+// This is brl/bseg/bvxm/pro/bvxm_detect_changes_process.h
 #ifndef bvxm_detect_changes_process_h_
 #define bvxm_detect_changes_process_h_
-
 //:
 // \file
-// \brief // A class for detecting changes using a voxel world . 
-//           
-// \author Daniel Crispell
-// \date 02/10/08
-// \verbatim
+// \brief A class for detecting changes using a voxel world .
 //
-// \Modifications 
+// \author Daniel Crispell
+// \date 02/10/2008
+// \verbatim
+//  Modifications
+//   <none yet>
+// \endverbatim
 
 #include <vcl_string.h>
 #include <bprb/bprb_process.h>
@@ -18,7 +18,7 @@
 class bvxm_detect_changes_process : public bprb_process
 {
  public:
-  
+
    bvxm_detect_changes_process();
 
   //: Copy Constructor (no local data)
@@ -34,12 +34,6 @@ class bvxm_detect_changes_process : public bprb_process
   bool init() { return true; }
   bool execute();
   bool finish(){return true;}
- 
- private:
-
 };
 
-
-
-#endif // bvma_update_process_h_
-
+#endif // bvxm_detect_changes_process_h_

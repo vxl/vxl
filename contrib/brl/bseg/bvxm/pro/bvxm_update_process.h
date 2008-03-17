@@ -1,16 +1,16 @@
-// This is contrib/brl/bseg/bvxm/pro/bvma_update_process.h
+// This is brl/bseg/bvxm/pro/bvxm_update_process.h
 #ifndef bvxm_update_process_h_
 #define bvxm_update_process_h_
-
 //:
 // \file
-// \brief // A class for update process of a voxel world . 
-//           
-// \author Isabel Restrepo
-// \date 01/30/ 08
-// \verbatim
+// \brief A class for update process of a voxel world.
 //
-// \Modifications 
+// \author Isabel Restrepo
+// \date 01/30/2008
+// \verbatim
+//  Modifications
+//   <none yet>
+// \endverbatim
 
 #include <vcl_string.h>
 #include <bprb/bprb_process.h>
@@ -19,7 +19,7 @@
 class bvxm_update_process : public bprb_process
 {
  public:
-  
+
    bvxm_update_process();
 
   //: Copy Constructor (no local data)
@@ -35,12 +35,6 @@ class bvxm_update_process : public bprb_process
   bool init() { return true; }
   bool execute();
   bool finish(){return true;}
- 
- private:
-
 };
 
-
-
-#endif // bvma_update_process_h_
-
+#endif // bvxm_update_process_h_

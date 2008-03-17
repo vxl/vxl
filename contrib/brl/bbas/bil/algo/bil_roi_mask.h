@@ -1,13 +1,14 @@
-// This is contrib/brl/bbas/bil/algo/bil_roi_mask.h
+// This is brl/bbas/bil/algo/bil_roi_mask.h
 #ifndef bil_roi_mask_h_
 #define bil_roi_mask_h_
 //:
 // \file
-// \brief 
+// \brief
 // \author Nhon Trinh (ntrinh@lems.brown.edu)
 // \date 12/07/2006
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
 #include <vil/vil_image_view.h>
@@ -20,9 +21,9 @@
 //: Add a polygon to a ROI mask
 // (assumption on mask: true for ROI pixels, false otherwise)
 template <class T>
-inline void bil_roi_mask_add_polygon(vil_image_view<bool >& mask,
-                   const vgl_polygon<T >& polygon
-                   )
+inline void bil_roi_mask_add_polygon(vil_image_view<bool>& mask,
+                                     const vgl_polygon<T>& polygon
+                                    )
 {
   // do nothing for empty view
   if (!mask) return;
@@ -32,7 +33,7 @@ inline void bil_roi_mask_add_polygon(vil_image_view<bool >& mask,
 
   // use polygon scan iterator to extract image points in the polygons
   vgl_polygon_scan_iterator<T > psi(polygon,  true, box);
-  for (psi.reset(); psi.next();) 
+  for (psi.reset(); psi.next();)
   {
     int y = psi.scany();
     for (int x = psi.startx(); x <= psi.endx(); ++x)
@@ -48,9 +49,9 @@ inline void bil_roi_mask_add_polygon(vil_image_view<bool >& mask,
 //: Remove a polygon from a ROI mask
 // (assumption on mask: true for ROI pixels, false otherwise)
 template <class T>
-inline void bil_roi_mask_remove_polygon(vil_image_view<bool >& mask,
-                   const vgl_polygon<T >& polygon
-                   )
+inline void bil_roi_mask_remove_polygon(vil_image_view<bool>& mask,
+                                        const vgl_polygon<T>& polygon
+                                       )
 {
   // do nothing for empty view
   if (!mask) return;
@@ -60,7 +61,7 @@ inline void bil_roi_mask_remove_polygon(vil_image_view<bool >& mask,
 
   // use polygon scan iterator to extract image points in the polygons
   vgl_polygon_scan_iterator<T > psi(polygon,  true, box);
-  for (psi.reset(); psi.next();) 
+  for (psi.reset(); psi.next();)
   {
     int y = psi.scany();
     for (int x = psi.startx(); x <= psi.endx(); ++x)
@@ -72,16 +73,14 @@ inline void bil_roi_mask_remove_polygon(vil_image_view<bool >& mask,
 }
 
 
-
-
 // ------------------------------------------------------------------
 //: Toggle a polygon to a ROI mask
 // (turn true to false and vice versa)
 // (assumption on mask: true for ROI pixels, false otherwise)
 template <class T>
-inline void bil_roi_mask_toggle_polygon(vil_image_view<bool >& mask,
-                   const vgl_polygon<T >& polygon
-                   )
+inline void bil_roi_mask_toggle_polygon(vil_image_view<bool>& mask,
+                                        const vgl_polygon<T>& polygon
+                                       )
 {
   // do nothing for empty view
   if (!mask) return;
@@ -91,7 +90,7 @@ inline void bil_roi_mask_toggle_polygon(vil_image_view<bool >& mask,
 
   // use polygon scan iterator to extract image points in the polygons
   vgl_polygon_scan_iterator<T > psi(polygon,  true, box);
-  for (psi.reset(); psi.next();) 
+  for (psi.reset(); psi.next();)
   {
     int y = psi.scany();
     for (int x = psi.startx(); x <= psi.endx(); ++x)
@@ -103,7 +102,6 @@ inline void bil_roi_mask_toggle_polygon(vil_image_view<bool >& mask,
 }
 
 
-
 // ------------------------------------------------------------------
 //: Add an ellipse to a ROI mask
 // (assumption on mask: true for ROI pixels, false otherwise)
@@ -112,8 +110,8 @@ inline void bil_roi_mask_toggle_polygon(vil_image_view<bool >& mask,
 //  the rotation of the main axis (in radians) about the centre of the
 //  ellipse w.r.t\. the horizontal direction (X-axis).
 template <class T>
-inline void bil_roi_mask_add_ellipse(vil_image_view<bool >& mask,
-                   T xc, T yc, T rx, T ry, T theta)
+inline void bil_roi_mask_add_ellipse(vil_image_view<bool>& mask,
+                                     T xc, T yc, T rx, T ry, T theta)
 {
   // do nothing for empty view
   if (!mask) return;
@@ -123,7 +121,7 @@ inline void bil_roi_mask_add_ellipse(vil_image_view<bool >& mask,
 
   // use polygon scan iterator to extract image points in the polygons
   vgl_ellipse_scan_iterator<T> esi(xc, yc, rx, ry, theta, true, box);
-  for (esi.reset(); esi.next();) 
+  for (esi.reset(); esi.next();)
   {
     int y = esi.scany();
     for (int x = esi.startx(); x <= esi.endx(); ++x)
@@ -135,7 +133,6 @@ inline void bil_roi_mask_add_ellipse(vil_image_view<bool >& mask,
 }
 
 
-
 // ------------------------------------------------------------------
 //: Remove an ellipse to a ROI mask
 // (assumption on mask: true for ROI pixels, false otherwise)
@@ -144,8 +141,8 @@ inline void bil_roi_mask_add_ellipse(vil_image_view<bool >& mask,
 //  the rotation of the main axis (in radians) about the centre of the
 //  ellipse w.r.t\. the horizontal direction (X-axis).
 template <class T>
-inline void bil_roi_mask_remove_ellipse(vil_image_view<bool >& mask,
-                   T xc, T yc, T rx, T ry, T theta)
+inline void bil_roi_mask_remove_ellipse(vil_image_view<bool>& mask,
+                                        T xc, T yc, T rx, T ry, T theta)
 {
   // do nothing for empty view
   if (!mask) return;
@@ -155,7 +152,7 @@ inline void bil_roi_mask_remove_ellipse(vil_image_view<bool >& mask,
 
   // use polygon scan iterator to extract image points in the polygons
   vgl_ellipse_scan_iterator<T> esi(xc, yc, rx, ry, theta, true, box);
-  for (esi.reset(); esi.next();) 
+  for (esi.reset(); esi.next();)
   {
     int y = esi.scany();
     for (int x = esi.startx(); x <= esi.endx(); ++x)
@@ -167,4 +164,4 @@ inline void bil_roi_mask_remove_ellipse(vil_image_view<bool >& mask,
 }
 
 
-#endif 
+#endif
