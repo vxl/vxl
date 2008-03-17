@@ -79,29 +79,29 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
     new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::recover_edges),
     vgui_key('b'), vgui_modifier(vgui_SHIFT));
 
-	image_submenu.add( "Redisplay Lines",
+  image_submenu.add( "Redisplay Lines",
     new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::recover_lines));
 
-	image_submenu.add( "Clear Segmentation Display",
+  image_submenu.add( "Clear Segmentation Display",
     new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::clear_box));
 
-	if(bwm_tableau_mgr::is_registered("bwm_tableau_video"))
-	{
-		image_submenu.add( "Init Mask",
-		new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::init_mask));
+  if (bwm_tableau_mgr::is_registered("bwm_tableau_video"))
+  {
+    image_submenu.add( "Init Mask",
+      new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::init_mask));
 
-		image_submenu.add( "Add Region to Mask(selected poly)",
-		new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::add_poly_to_mask));
+    image_submenu.add( "Add Region to Mask(selected poly)",
+      new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::add_poly_to_mask));
 
-		image_submenu.add( "Remove Region from Mask(selected poly)",
-		new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::remove_poly_from_mask));
+    image_submenu.add( "Remove Region from Mask(selected poly)",
+      new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::remove_poly_from_mask));
 
-		image_submenu.add( "Create Mask Image(bool)",
-		new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::create_mask));
+    image_submenu.add( "Create Mask Image(bool)",
+      new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::create_mask));
 
-		image_submenu.add( "Save Mask Image(bool)",
-		new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::save_mask));
-	}
+    image_submenu.add( "Save Mask Image(bool)",
+      new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::save_mask));
+  }
   //image_submenu.separator();
 
   menu.add("Image Processing", image_submenu);
@@ -131,22 +131,22 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
   menu.add("Image Display", img_other);
 //  menu.separator();
 
-//  menu.add( "Deselect All Objects",	// Not needed with shift middle mouse
+//  menu.add( "Deselect All Objects", // Not needed with shift middle mouse
 //      new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::deselect_all),
 //      vgui_key('-'));
 
   // add more based on the tableau type
   // all camera tableau children will do the following menu items
   if ((tab_->type_name().compare("bwm_tableau_proj_cam") == 0) ||
-    (tab_->type_name().compare("bwm_tableau_rat_cam") == 0)  ||
-    (tab_->type_name().compare("bwm_tableau_video") == 0))
+      (tab_->type_name().compare("bwm_tableau_rat_cam") == 0)  ||
+      (tab_->type_name().compare("bwm_tableau_video") == 0))
   {
     // 3D Objects menu
-	bwm_tableau_cam* cam_tab = static_cast<bwm_tableau_cam* > (tab_.as_pointer());
+    bwm_tableau_cam* cam_tab = static_cast<bwm_tableau_cam* > (tab_.as_pointer());
     vgui_menu mesh_submenu;
     vcl_string on = "[x] ", off = "[ ] ";
-    mesh_submenu.add( ((cam_tab->show_vertices_)?on:off)+"show vertices", 
-	new bwm_vertex_toggle_command(cam_tab, &(cam_tab->show_vertices_)));
+    mesh_submenu.add( ((cam_tab->show_vertices_)?on:off)+"show vertices",
+      new bwm_vertex_toggle_command(cam_tab, &(cam_tab->show_vertices_)));
     mesh_submenu.separator();
 
     mesh_submenu.add("Create Mesh Polygon",
@@ -189,16 +189,16 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
     }
     mesh_submenu.separator();
     mesh_submenu.add( "Toggle GeoPosition Display",
-        new vgui_command_simple<bwm_tableau_cam>(cam_tab,
-        &bwm_tableau_cam::show_geo_position));
-    
+      new vgui_command_simple<bwm_tableau_cam>(cam_tab,
+      &bwm_tableau_cam::show_geo_position));
+
     mesh_submenu.separator();
     mesh_submenu.add( "GeoPosition of Selected Vertex",
-        new vgui_command_simple<bwm_tableau_cam>(cam_tab,
-        &bwm_tableau_cam::geo_position_vertex));
+      new vgui_command_simple<bwm_tableau_cam>(cam_tab,
+      &bwm_tableau_cam::geo_position_vertex));
 
-	// 3D Delete submenu
-	vgui_menu del_menu;
+    // 3D Delete submenu
+    vgui_menu del_menu;
     del_menu.add( "Delete Selected",
       new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::delete_object));
     del_menu.separator();
@@ -213,7 +213,7 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
   // Registration menu
     vgui_menu reg_submenu, threed_menu;
     menu.separator();
-	
+
     menu.add( "Set as Master", new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::set_master));
 
     reg_submenu.add( "Set as EO", new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::set_eo));
@@ -227,12 +227,12 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
         new vgui_command_simple<bwm_tableau_rat_cam>(rat_cam_tab,
         &bwm_tableau_rat_cam::adjust_camera_to_world_pt));
       reg_submenu.separator();
-	  
+
       reg_submenu.add( "Register to Master",
         new vgui_command_simple<bwm_tableau_rat_cam>(rat_cam_tab,
         &bwm_tableau_rat_cam::register_search_to_master));
       reg_submenu.separator();
-	  
+
       reg_submenu.add( "Transfer Edges from Master",
         new vgui_command_simple<bwm_tableau_rat_cam>(rat_cam_tab,
         &bwm_tableau_rat_cam::project_edges_from_master));
@@ -240,7 +240,7 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
     menu.separator();
     menu.add("Registration", reg_submenu);
 
-	// Corrospondances menu
+    // Correspondences menu
     menu.separator();
     vgui_menu corr_menu;
     corr_menu.add( "Move (selected)" ,
@@ -293,7 +293,8 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
   }
 
   // video tableau specific menu items
-  if (tab_->type_name().compare("bwm_tableau_video") == 0) {
+  if (tab_->type_name().compare("bwm_tableau_video") == 0)
+  {
     bwm_tableau_video* video_tab = static_cast<bwm_tableau_video* > (tab_.as_pointer());
     menu.separator();
     vgui_menu video_submenu;
