@@ -4,13 +4,10 @@
 #include <vcl_limits.h>
 #include <vcl_cmath.h>
 #include <vcl_vector.h>
-#include <vil/vil_print.h> // TODO REMOVE
-
 //:
 // \file
 // \brief Computes the exact Euclidean distance transform
-
-
+//
 //  --------------------------------------
 //    Maurer's EDT
 //  --------------------------------------
@@ -26,14 +23,14 @@ bool test_contiguous(vil_image_view<vxl_uint_32> &im)
 {
    if (!im.is_contiguous()) {
 #ifndef NDEBUG
-      vcl_cerr << "edt: only contiguous row-wise images currently supported\n"; 
+      vcl_cerr << "edt: only contiguous row-wise images currently supported\n";
 #endif
       return false;
    }
 
    if (im.istep() != 1) {
 #ifndef NDEBUG
-      vcl_cerr << "edt(2): only contiguous row-wise images currently supported\n"; 
+      vcl_cerr << "edt(2): only contiguous row-wise images currently supported\n";
       vcl_cerr << "istep: " << im.istep() << vcl_endl;
 #endif
       return false;
@@ -42,33 +39,29 @@ bool test_contiguous(vil_image_view<vxl_uint_32> &im)
    return true;
 }
 
-/*
- * Final implementation by R. Fabbri, 
- * based on two independent implementations by O. Cuisenaire
- * and J. C. Torelli.
- *
- * PAPER
- *    T. Saito and J.I. Toriwaki, "New algorithms for Euclidean distance 
- *    transformations of an n-dimensional digitised picture with applications",
- *    Pattern Recognition, 27(11), pp. 1551-1565, 1994
- *
- * A nice overview of Saito's method may be found at:
- *    Chapter 2 of "Distance transformations: fast algorithms and applications 
- *    to medical image processing", Olivier Cuisenaire's Ph.D. Thesis, October 
- *    1999, UniversitÃ© catholique de Louvain, Belgium.
- * 
- *  
- */
-bool 
+// Final implementation by R. Fabbri,
+// based on two independent implementations by O. Cuisenaire
+// and J. C. Torelli.
+//
+// PAPER
+//    T. Saito and J.I. Toriwaki, "New algorithms for Euclidean distance
+//    transformations of an n-dimensional digitised picture with applications",
+//    Pattern Recognition, 27(11), pp. 1551-1565, 1994
+//
+// A nice overview of Saito's method may be found at:
+//    Chapter 2 of "Distance transformations: fast algorithms and applications
+//    to medical image processing", Olivier Cuisenaire's Ph.D. Thesis, October
+//    1999, Université Catholique de Louvain, Belgium.
+bool
 bil_edt_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx)
 {
-  unsigned i,r,c; 
-  r = im.nj();  c = im.ni(); 
-  unsigned n = r*c;   
+  unsigned i,r,c;
+  r = im.nj();  c = im.ni();
+  unsigned n = r*c;
 
   unsigned diag1 = (unsigned)vcl_ceil( vcl_sqrt(double(r*r + c*c)) ) -1;
 
-  unsigned nsqr = 2*(diag1 + 1);   /* was: 2*r + 2 in Cuisenaire's code */
+  unsigned nsqr = 2*(diag1 + 1);   // was: 2*r + 2 in Cuisenaire's code
   vcl_vector<unsigned> sq;
   sq.resize(nsqr);
   for (i=0; i<nsqr; ++i)
@@ -77,7 +70,7 @@ bil_edt_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx)
   infty_ = vcl_numeric_limits<vxl_uint_32>::max() - r*r - c*c -1;
 
   vxl_uint_32 *data;
-  data = im.top_left_ptr(); 
+  data = im.top_left_ptr();
   for (i=0;  i < n;  ++i)
      if (data[i])
         data[i] = infty_;
@@ -85,27 +78,24 @@ bil_edt_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx)
   return bil_edt_saito(im, plane_idx, sq);
 }
 
-//: Exact EDT 
-// 
+//: Exact EDT
+//
 // \remarks The returned distances are *squared*
 // \remarks See comment on bil_edt_saito for the reference paper.
 //
 // \remarks it would be easy to return the "labels" or indexes of the closest
 // feature pixel for each entry of the image, although this is not being done.
 //
-bool 
+bool
 bil_edt_saito_3D(vil_image_view<vxl_uint_32> &im)
 {
-
-
-
-  unsigned i,r,c,nk; 
+  unsigned i,r,c,nk;
   r = im.nj();  c = im.ni(); nk = im.nplanes();
-  unsigned n = r*c*nk;   
+  unsigned n = r*c*nk;
 
   unsigned diag1 = (unsigned)vcl_ceil( vcl_sqrt(double(r*r + c*c + nk*nk)) ) -1;
 
-  unsigned nsqr = 2*(diag1 + 1);   /* was: 2*r + 2 in Cuisenaire's code */
+  unsigned nsqr = 2*(diag1 + 1);   // was: 2*r + 2 in Cuisenaire's code
   vcl_vector<unsigned> sq;
   sq.resize(nsqr);
   for (i=0; i<nsqr; ++i)
@@ -114,7 +104,7 @@ bil_edt_saito_3D(vil_image_view<vxl_uint_32> &im)
   infty_ = vcl_numeric_limits<vxl_uint_32>::max() - r*r - c*c - nk*nk -1;
 
   vxl_uint_32 *data;
-  data = im.top_left_ptr(); 
+  data = im.top_left_ptr();
   for (i=0;  i < n;  ++i)
      if (data[i])
         data[i] = infty_;
@@ -127,14 +117,12 @@ bil_edt_saito_3D(vil_image_view<vxl_uint_32> &im)
       return false;
   }
 
-
-  //: Now, for each pixel, compute final distance by searching along Z direction
-  
+  // Now, for each pixel, compute final distance by searching along Z direction
 
   unsigned rc = r*c;
   for (unsigned j=0; j < r; ++j, data+=c) {
     vcl_vector<unsigned> buff(nk);
-    
+
     vxl_uint_32 *pt;
 
     for (unsigned i=0; i < c; ++i) {
@@ -159,7 +147,7 @@ bil_edt_saito_3D(vil_image_view<vxl_uint_32> &im)
            for (unsigned l=a; l<=b; ++l) {
               unsigned m = buffer + sq[l+1];
               if (buff[k+l] <= m)
-                 break;   /* go to next plane k */
+                 break;   // go to next plane k
               if (m < *npt)
                  *npt = m;
               npt += rc;
@@ -186,7 +174,7 @@ bil_edt_saito_3D(vil_image_view<vxl_uint_32> &im)
             for (unsigned l=a; l<=b; ++l) {
                unsigned m = buffer + sq[l+1];
                if (buff[k-l] <= m)
-                  break;   /* go to next column k */
+                  break;   // go to next column k
                if (m < *npt)
                   *npt = m;
                npt -= rc;
@@ -202,28 +190,27 @@ bil_edt_saito_3D(vil_image_view<vxl_uint_32> &im)
   return true;
 }
 
-//: assume given a Lookup table of integer squares. Also assumes the image im
-//already has infinity in all non-zero points.
-bool 
+//:
+// Assumes given a Lookup table of integer squares.
+// Also assumes the image \a im already has infinity in all non-zero points.
+bool
 bil_edt_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx, const vcl_vector<unsigned> &sq)
 {
-
    if (!test_contiguous(im))
       return false;
 
-   unsigned r,c,nk; //: TODO: unsigned long might be needed for large volumetric data
+   unsigned r,c,nk; // TODO: unsigned long might be needed for large volumetric data
    r = im.nj();  c = im.ni(); nk = im.nplanes();
-   unsigned n = r*c*nk;   
+   unsigned n = r*c*nk;
 
-
-   /* Cuisenaire's idea: a LUT with precomputed i*i TODO move this outside
-    * this fn (class? parameter?) */
+   // Cuisenaire's idea: a LUT with precomputed i*i TODO move this outside
+   // this fn (class? parameter?)
 
    // Create a temporary 2D image view for this plane, whose top_left_ptr is
    // data plus r*c
 
    vxl_uint_32 *data;
-   data = im.top_left_ptr(); 
+   data = im.top_left_ptr();
    data += plane_idx*r*c;
    vil_image_view<vxl_uint_32> plane_im;
 
@@ -232,17 +219,13 @@ bil_edt_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx, const vcl_vec
    // Vertical row-wise EDT
    bool stat;
    stat = bil_edt_1d_horizontal(plane_im);
-   if (!stat) return false; 
-
+   if (!stat) return false;
 
    // ----------- Step 2 -----------
-
-
 
    vcl_vector<unsigned> buff;
    buff.resize(r);
 
-   
    unsigned *pt;
 
    for (unsigned i=0; i < c; ++i) {
@@ -267,7 +250,7 @@ bil_edt_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx, const vcl_vec
           for (unsigned l=a; l<=b; ++l) {
              unsigned m = buffer + sq[l+1];
              if (buff[j+l] <= m)
-                break;   /* go to next column j */
+                break;   // go to next column j
              if (m < *npt)
                 *npt = m;
              npt += c;
@@ -294,7 +277,7 @@ bil_edt_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx, const vcl_vec
             for (unsigned l=a; l<=b; ++l) {
                unsigned m = buffer + sq[l+1];
                if (buff[j-l] <= m)
-                  break;   /* go to next column j */
+                  break;   // go to next column j
                if (m < *npt)
                   *npt = m;
                npt -= c;
@@ -305,14 +288,12 @@ bil_edt_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx, const vcl_vec
          buffer = buff[j];
       }
    }
-   
 
    return true;
 }
 
 
-
-bool 
+bool
 bil_edt_maurer(vil_image_view<vxl_uint_32> &im)
 {
    unsigned i,r,c;
@@ -324,7 +305,7 @@ bil_edt_maurer(vil_image_view<vxl_uint_32> &im)
    r = im.nj();  c = im.ni();
    infty_ = vcl_numeric_limits<vxl_uint_32>::max() - r*r - c*c -1;
 
-   data = im.top_left_ptr(); 
+   data = im.top_left_ptr();
    for (i=0;  i<r*c;  ++i)
       if (data[i])
          data[i] = infty_;
@@ -333,15 +314,15 @@ bil_edt_maurer(vil_image_view<vxl_uint_32> &im)
 
    // Vertical row-wise EDT
    stat = bil_edt_1d_horizontal(im);
-   if (!stat) return false; 
+   if (!stat) return false;
 
    stat = edt_maurer_2D_from_1D(im);
-   if (!stat) return false; 
+   if (!stat) return false;
 
    return true;
 }
 
-//: Row-wise 1D EDT 
+//: Row-wise 1D EDT
 //
 // This is the first step for independent-scanning EDT algorithms.
 //
@@ -351,20 +332,18 @@ bil_edt_maurer(vil_image_view<vxl_uint_32> &im)
 //
 // \sa
 // This particular implementation is based on the 1st part of the following method:
-// R. Lotufo and F. Zampirolli, Fast multidimensional parallel euclidean distance 
+// R. Lotufo and F. Zampirolli, Fast multidimensional parallel euclidean distance
 // transform based on mathematical morphology, in T. Wu and D. Borges, editors,
-// Proccedings of SIBGRAPI 2001, XIV Brazilian Symposium on Computer Graphics 
+// Proccedings of SIBGRAPI 2001, XIV Brazilian Symposium on Computer Graphics
 // and Image Processing, pages 100-105. IEEE Computer Society, 2001.
 //
 //
-inline bool 
+inline bool
 bil_edt_1d_horizontal(vil_image_view<vxl_uint_32> &im)
 {
-
    unsigned ni=im.ni(), i,
             nj=im.nj(), j;
    vxl_uint_32 b;
-
 
    for (j=0; j < nj; j++) {
       b=1;
@@ -384,10 +363,10 @@ bil_edt_1d_horizontal(vil_image_view<vxl_uint_32> &im)
       }
    }
 
-   // NOTE: Lotufo's implementation (obtained by requesting him) of this first 
-   // part  is much less readable. Although pointers could be used more 
-   // efficiently, this first part is much faster than the 2nd part and is not 
-   // worth optimizing.  So I kept it readable, close to the paper's pseudocode.  
+   // NOTE: Lotufo's implementation (obtained by requesting him) of this first
+   // part  is much less readable. Although pointers could be used more
+   // efficiently, this first part is much faster than the 2nd part and is not
+   // worth optimizing.  So I kept it readable, close to the paper's pseudocode.
    // TODO: VIL uses asserts for bounds in the above code. This is not
    // acceptable for stable code. Optimize this.
 
@@ -397,13 +376,12 @@ bil_edt_1d_horizontal(vil_image_view<vxl_uint_32> &im)
 
 static inline bool maurer_voronoi_edt_2D(vil_image_view<vxl_uint_32> &im, unsigned j1, int *g, int *h);
 
-//: internal function that computes 2D EDT from 1D using Maurer's Voronoi
-// algorithm for the integer grid.
+//: internal function that computes 2D EDT from 1D using Maurer's Voronoi algorithm for the integer grid.
 inline bool
 edt_maurer_2D_from_1D(vil_image_view<vxl_uint_32> &im)
 {
    bool stat;
-   unsigned i1; 
+   unsigned i1;
    int *g, *h; // same naming as in the paper
 
    // Call voronoi_edt_2D for every row.
@@ -425,9 +403,8 @@ edt_maurer_2D_from_1D(vil_image_view<vxl_uint_32> &im)
 
 static bool remove_edt(int du, int dv, int dw, int u,  int v,  int w);
 
-//: Function in the paper that elliminates unecessary sites and computes 2D
-// Euclidean distances to the nearest sites.
-inline bool 
+//: Function in the paper that elliminates unnecessary sites and computes 2D Euclidean distances to the nearest sites.
+inline bool
 maurer_voronoi_edt_2D(vil_image_view<vxl_uint_32> &im, unsigned j1, int *g, int *h)
 {
    int l, ns, tmp0, tmp1, tmp2;
@@ -453,7 +430,7 @@ maurer_voronoi_edt_2D(vil_image_view<vxl_uint_32> &im, unsigned j1, int *g, int 
    for (i=0; i < im.nj(); ++i) {
       tmp0 = h[l] - i;
       tmp1 = g[l] + tmp0*tmp0;
-      while(true) {
+      while (true) {
          if (l >= ns) break;
 
          tmp2 = h[l+1] - i;
@@ -473,8 +450,8 @@ maurer_voronoi_edt_2D(vil_image_view<vxl_uint_32> &im, unsigned j1, int *g, int 
 }
 
 //: test function as in Maurer's paper
-inline bool 
-remove_edt(int du, int dv, int dw, 
+inline bool
+remove_edt(int du, int dv, int dw,
            int u,  int v,  int w)
 {
     // 11 integer expressions
@@ -486,14 +463,13 @@ remove_edt(int du, int dv, int dw,
 }
 
 
-
 //  -----------------------------
 //    Brute-Force (for testing)
 //  -----------------------------
 
 //: Naive implementation, O(N^2) for image with N pixels
 //  Works for both 3D and 2D
-bool 
+bool
 bil_edt_brute_force(vil_image_view<vxl_uint_32> &im)
 {
   unsigned i, xi, yi, zi,
@@ -522,11 +498,10 @@ bil_edt_brute_force(vil_image_view<vxl_uint_32> &im)
 
         for (j=0; j<n; ++j)
            if (I[j] == 0) {
-
               zj = j / ninj;
               unsigned j_idx_2dimg = j % ninj;
 
-              xj  = j_idx_2dimg % ni; yj = j_idx_2dimg / ni; 
+              xj  = j_idx_2dimg % ni; yj = j_idx_2dimg / ni;
 
               dx  = xi-xj; dy = yi-yj; dz = zi-zj; // ok if its unsigned (modular arithmetic)
               dst = dx*dx + dy*dy + dz*dz;
@@ -543,7 +518,7 @@ bil_edt_brute_force(vil_image_view<vxl_uint_32> &im)
 // most cases. It is O(N^2) if the number of white pixels is about the same as
 // the number of black pixels. In general, the complexity is between O(N) and
 // O(N^2) depending on the content (N is the total number of pixels).
-bool 
+bool
 bil_edt_brute_force_with_list(vil_image_view<vxl_uint_32> &im)
 {
    unsigned i, xi, yi,
@@ -589,19 +564,18 @@ bil_edt_brute_force_with_list(vil_image_view<vxl_uint_32> &im)
    return true;
 }
 
-//: Computes signed EDT by using unsigned EDT of an image and its binary
-// complement. Input image will be modified as an auxiliary array, so if you
-// want to keep the input you are responsible for making a copy before calling
-// this function.
+//: Computes signed EDT by using unsigned EDT of an image and its binary complement.
+// Input image will be modified as an auxiliary array, so if you want to keep
+// the input you are responsible for making a copy before calling this function.
 //
-// \Remarks The code has been blindly adapted from previous implementation. It
+// \remark The code has been blindly adapted from previous implementation. It
 // remains to explain what precisely it is doing. The original code was at
 // lemsvxlsrc/algo/contourtracing/signed_dt.cpp
 //
-bool 
+bool
 bil_edt_signed(
-    vil_image_view<unsigned int> &input_image, 
-    vil_image_view<float> &signed_edt_image) 
+    vil_image_view<unsigned int> &input_image,
+    vil_image_view<float> &signed_edt_image)
 {
   float distance_from_interior,
         surface_value, diff;
@@ -611,7 +585,6 @@ bil_edt_signed(
   const float cutoff_margin = 1000.0; // what's this??
   float *signed_edt;
   unsigned i;
-
 
   vxl_uint_32 *image_data = input_image.top_left_ptr();
 
@@ -642,6 +615,6 @@ bil_edt_signed(
 
     signed_edt[i] = (float)(surface_value - 0.5);
   }
-  
+
   return true;
 }
