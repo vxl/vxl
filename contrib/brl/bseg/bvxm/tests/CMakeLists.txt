@@ -21,5 +21,5 @@ ADD_TEST( bvxm_test_voxel_world_update      ${EXECUTABLE_OUTPUT_PATH}/bvxm_test_
 ADD_TEST( bvxm_test_voxel_world_mog_image   ${EXECUTABLE_OUTPUT_PATH}/bvxm_test_all   test_voxel_world_mog_image )
 ADD_TEST( bvxm_test_gen_synthetic_world     ${EXECUTABLE_OUTPUT_PATH}/bvxm_test_all   test_gen_synthetic_world )
 
-
-
+ADD_EXECUTABLE( bvxm_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( bvxm_test_include bvxm )

@@ -37,3 +37,6 @@ ADD_TEST( bvxm_test_bvxm_create_normalized_image_process    ${EXECUTABLE_OUTPUT_
 ADD_TEST( bvxm_test_generate_edge_map_process    ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_generate_edge_map_process )
 ADD_TEST( bvxm_test_rpc_registration_process    ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_rpc_registration_process )
 ADD_TEST( bvxm_test_create_local_rpc_process    ${EXECUTABLE_OUTPUT_PATH}/bvxm_pro_test_all   test_bvxm_create_local_rpc_process )
+
+ADD_EXECUTABLE( bvxm_pro_test_include test_include.cxx )
+TARGET_LINK_LIBRARIES( bvxm_pro_test_include bvxm_pro )
