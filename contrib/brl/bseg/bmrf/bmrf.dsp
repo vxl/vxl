@@ -93,6 +93,48 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
+SOURCE=.\bmrf_curve_3d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bmrf_epi_point.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bmrf_epi_seg.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bmrf_gamma_func.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bmrf_network.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bmrf_node.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bmrf_network_builder.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bmrf_network_builder_params.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bmrf_epi_transform.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bmrf_epipole.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bmrf_curve_3d_builder.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bmrf_curvel_3d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bmrf_arc.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bmrf_epi_seg_compare.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vbl_io_smart_ptr+bmrf_arc-.cxx
 # End Source File
 # Begin Source File
@@ -136,48 +178,6 @@ SOURCE=.\Templates/vbl_smart_ptr+bmrf_curve_3d-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vsl_list_io+bmrf_curvel_3d_sptr-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bmrf_curve_3d.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bmrf_epi_point.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bmrf_epi_seg.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bmrf_gamma_func.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bmrf_network.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bmrf_node.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bmrf_network_builder.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bmrf_network_builder_params.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bmrf_epi_transform.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bmrf_epipole.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bmrf_curve_3d_builder.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bmrf_curvel_3d.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bmrf_arc.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bmrf_epi_seg_compare.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

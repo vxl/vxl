@@ -108,9 +108,6 @@ SOURCE=.\test_bil_finite_differences.cxx
 SOURCE=.\test_bil_finite_second_differences.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_bil_scale_image.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\test_bil_wshed2d.cxx
 # End Source File
 # Begin Source File

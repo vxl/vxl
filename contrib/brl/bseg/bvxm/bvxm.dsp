@@ -1,31 +1,31 @@
-# Microsoft Developer Studio Project File - Name="mfpf" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="bvxm" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # variables to REPLACE
 # 
-# /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" == include path
+# /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
-# mfpf  == name of output library
+# bvxm  == name of output library
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=mfpf - Win32 Debug
+CFG=bvxm - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "mfpf.mak".
+!MESSAGE NMAKE /f "bvxm.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "mfpf.mak" CFG="mfpf - Win32 Debug"
+!MESSAGE NMAKE /f "bvxm.mak" CFG="bmrf - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "mfpf - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "mfpf - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "bvxm - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "bvxm - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
@@ -33,7 +33,7 @@ CFG=mfpf - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "mfpf - Win32 Release"
+!IF  "$(CFG)" == "bvxm - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -47,7 +47,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "mfpf_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bvxm_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -59,7 +59,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-!ELSEIF  "$(CFG)" == "mfpf - Win32 Debug"
+!ELSEIF  "$(CFG)" == "bvxm - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -73,7 +73,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "mfpf_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/brl/bseg" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bvxm_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -86,165 +86,169 @@ LIB32=link.exe -lib
 !ENDIF 
 
 # Begin Target
-# Name "mfpf - Win32 Release"
-# Name "mfpf - Win32 Debug"
+
+# Name "bvxm - Win32 Release"
+# Name "bvxm - Win32 Debug"
+
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\Templates/mbl_cloneables_factory+mfpf_point_finder-.cxx
+SOURCE=.\bvxm_image_metadata.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/mbl_cloneables_factory+mfpf_point_finder_builder-.cxx
+SOURCE=.\bvxm_memory_chunk.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vsl_binary_loader+mfpf_point_finder-.cxx
+SOURCE=.\bvxm_mog_grey_processor.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vsl_binary_loader+mfpf_point_finder_builder-.cxx
+SOURCE=.\bvxm_mog_rgb_processor.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_add_all_loaders.cxx
+SOURCE=.\bvxm_util.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_edge_finder.cxx
+SOURCE=.\bvxm_voxel_world.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_edge_finder_builder.cxx
+SOURCE=.\bvxm_world_params.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_norm_corr1d.cxx
+SOURCE=.\Templates/bvxm_voxel_grid+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_norm_corr1d_builder.cxx
+SOURCE=.\Templates/bvxm_voxel_grid+mix_gauss_f1-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_norm_corr2d.cxx
+SOURCE=.\Templates/bvxm_voxel_grid+mix_gauss_f3-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_norm_corr2d_builder.cxx
+SOURCE=.\Templates/bvxm_voxel_slab+bool-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_point_finder.cxx
+SOURCE=.\Templates/bvxm_voxel_slab+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_point_finder_builder.cxx
+SOURCE=.\Templates/bvxm_voxel_slab+uint-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_profile_pdf.cxx
+SOURCE=.\Templates/bvxm_voxel_slab+mix_gauss_f1-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_profile_pdf_builder.cxx
+SOURCE=.\Templates/bvxm_voxel_slab+mix_gauss_f3-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_region_pdf.cxx
+SOURCE=.\Templates/bvxm_voxel_slab+vnl_vector_fixed+f3--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_region_pdf_builder.cxx
+SOURCE=.\Templates/bvxm_voxel_slab_iterator+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_draw_pose_cross.cxx
+SOURCE=.\Templates/bvxm_voxel_slab_iterator+mix_gauss_f1-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_searcher.cxx
+SOURCE=.\Templates/bvxm_voxel_slab_iterator+mix_gauss_f3-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_draw_pose_lines.cxx
+SOURCE=.\Templates/bvxm_voxel_storage_disk+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_draw_matches.cxx
+SOURCE=.\Templates/bvxm_voxel_storage_disk+mix_gauss_f1-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_mr_point_finder.cxx
+SOURCE=.\Templates/bvxm_voxel_storage_disk+mix_gauss_f3-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_mr_point_finder_builder.cxx
+SOURCE=.\Templates/bvxm_voxel_storage_mem+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_prune_overlaps.cxx
+SOURCE=.\Templates/bvxm_voxel_storage_mem+mix_gauss_f1-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_sort_matches.cxx
+SOURCE=.\Templates/bvxm_voxel_storage_mem+mix_gauss_f3-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bvxm_memory_chunk-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bvxm_voxel_grid_base-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bvxm_voxel_slab_base-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bvxm_voxel_world-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bvxm_world_params-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\mfpf_add_all_loaders.h
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_edge_finder.h
+SOURCE=.\bvxm_image_metadata.h
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_edge_finder_builder.h
+SOURCE=.\bvxm_memory_chunk.h
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_norm_corr1d.h
+SOURCE=.\bvxm_mog_grey_processor.h
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_norm_corr1d_builder.h
+SOURCE=.\bvxm_mog_rgb_processor.h
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_norm_corr2d.h
+SOURCE=.\bvxm_util.h
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_norm_corr2d_builder.h
+SOURCE=.\bvxm_voxel_grid.h
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_norm_vec.h
+SOURCE=.\bvxm_voxel_grid.txx
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_point_finder.h
+SOURCE=.\bvxm_voxel_grid_base.h
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_point_finder_builder.h
+SOURCE=.\bvxm_voxel_slab.h
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_profile_pdf.h
+SOURCE=.\bvxm_voxel_slab.txx
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_profile_pdf_builder.h
+SOURCE=.\bvxm_voxel_slab_base.h
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_region_pdf.h
+SOURCE=.\bvxm_voxel_slab_iterator.h
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_region_pdf_builder.h
+SOURCE=.\bvxm_voxel_slab_iterator.txx
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_sample_region.h
+SOURCE=.\bvxm_voxel_storage.h
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_draw_pose_cross.h
+SOURCE=.\bvxm_voxel_storage_disk.h
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_pose.h
+SOURCE=.\bvxm_voxel_storage_disk.txx
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_searcher.h
+SOURCE=.\bvxm_voxel_storage_mem.h
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_draw_pose_lines.h
+SOURCE=.\bvxm_voxel_storage_mem.txx
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_draw_matches.h
+SOURCE=.\bvxm_voxel_traits.h
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_pose_set.h
+SOURCE=.\bvxm_voxel_world.h
 # End Source File
 # Begin Source File
-SOURCE=.\mfpf_region_form.h
-# End Source File
-# Begin Source File
-SOURCE=.\mfpf_mr_point_finder.h
-# End Source File
-# Begin Source File
-SOURCE=.\mfpf_mr_point_finder_builder.h
-# End Source File
-# Begin Source File
-SOURCE=.\mfpf_prune_overlaps.h
-# End Source File
-# Begin Source File
-SOURCE=.\mfpf_sort_matches.h
+SOURCE=.\bvxm_world_params.h
 # End Source File
 # End Group
 # End Target
