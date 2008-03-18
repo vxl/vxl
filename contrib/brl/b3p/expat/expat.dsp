@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="expatpp" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="expat" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -7,25 +7,25 @@
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
-# expatpp  == name of output library
+# expat  == name of output library
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=expatpp - Win32 Debug
+CFG=expat - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "expatpp.mak".
+!MESSAGE NMAKE /f "expat.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "expatpp.mak" CFG="vil2 - Win32 Debug"
+!MESSAGE NMAKE /f "expat.mak" CFG="vil2 - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "expatpp - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "expatpp - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "expat - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "expat - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
@@ -33,7 +33,7 @@ CFG=expatpp - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "expatpp - Win32 Release"
+!IF  "$(CFG)" == "expat - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -47,7 +47,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "expatpp_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "expat_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -59,7 +59,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-!ELSEIF  "$(CFG)" == "expatpp - Win32 Debug"
+!ELSEIF  "$(CFG)" == "expat - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -73,7 +73,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "expatpp_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "expat_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -87,22 +87,62 @@ LIB32=link.exe -lib
 
 # Begin Target
 
-# Name "expatpp - Win32 Release"
-# Name "expatpp - Win32 Debug"
+# Name "expat - Win32 Release"
+# Name "expat - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter "c;cpp"
+# PROP Default_Filter "c"
 # Begin Source File
-SOURCE=.\expatpp.cpp
+SOURCE=.\xmlparse.c
+# End Source File
+# Begin Source File
+SOURCE=.\xmlrole.c
+# End Source File
+# Begin Source File
+SOURCE=.\xmltok.c
 # End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h"
 # Begin Source File
-SOURCE=.\expatpp.h
+SOURCE=.\ascii.h
 # End Source File
 # Begin Source File
-SOURCE=.\expatpplib.h
+SOURCE=.\asciitab.h
+# End Source File
+# Begin Source File
+SOURCE=.\expat.h
+# End Source File
+# Begin Source File
+# Begin Source File
+SOURCE=.\iasciitab.h
+# End Source File
+# Begin Source File
+SOURCE=.\internal.h
+# End Source File
+# Begin Source File
+SOURCE=.\latin1tab.h
+# End Source File
+# Begin Source File
+SOURCE=.\macconfig.h
+# End Source File
+# Begin Source File
+SOURCE=.\nametab.h
+# End Source File
+# Begin Source File
+SOURCE=.\utf8tab.h
+# End Source File
+# Begin Source File
+SOURCE=.\winconfig.h
+# End Source File
+# Begin Source File
+SOURCE=.\xmlrole.h
+# End Source File
+# Begin Source File
+SOURCE=.\xmltok.h
+# End Source File
+# Begin Source File
+SOURCE=.\xmltok_impl.h
 # End Source File
 # End Group
 # End Target

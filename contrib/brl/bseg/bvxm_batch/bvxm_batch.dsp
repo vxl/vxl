@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="expatpp" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="bvxm_batch" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -7,25 +7,25 @@
 # /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" == include path
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 #  == override in output directory
-# expatpp  == name of output library
+# bvxm_batch  == name of output library
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=expatpp - Win32 Debug
+CFG=bvxm_batch - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "expatpp.mak".
+!MESSAGE NMAKE /f "bvxm_batch.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "expatpp.mak" CFG="vil2 - Win32 Debug"
+!MESSAGE NMAKE /f "bvxm_batch.mak" CFG="vil2 - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "expatpp - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "expatpp - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "bvxm_batch - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "bvxm_batch - Win32 Release" (based on "Win32 (x86) Static Library")
 # Begin Project
 # PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
@@ -33,7 +33,7 @@ CFG=expatpp - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "expatpp - Win32 Release"
+!IF  "$(CFG)" == "bvxm_batch - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -47,7 +47,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "expatpp_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bvxm_batch_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MD /O2
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -59,7 +59,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-!ELSEIF  "$(CFG)" == "expatpp - Win32 Debug"
+!ELSEIF  "$(CFG)" == "bvxm_batch - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -73,7 +73,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # ADD CPP /nologo /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /FD /GZ /c
-# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "expatpp_EXPORTS"
+# ADD CPP /I "$(VXLROOT)/vcl" /I "$(VXLROOT)/core" /I "$(VXLROOT)/vcl/config.win32" /I "$(VXLROOT)/contrib/mul" -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE /D "bvxm_batch_EXPORTS"
 # ADD CPP /W3 /Zm1000 /GX /GR
 # ADD CPP /MDd /Zi /Od /GZ
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -87,22 +87,22 @@ LIB32=link.exe -lib
 
 # Begin Target
 
-# Name "expatpp - Win32 Release"
-# Name "expatpp - Win32 Debug"
+# Name "bvxm_batch - Win32 Release"
+# Name "bvxm_batch - Win32 Debug"
 
 # Begin Group "Source Files"
-# PROP Default_Filter "c;cpp"
+# PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\expatpp.cpp
+SOURCE=.\batch_bvxm.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\reg_bvxm.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
-# PROP Default_Filter "h"
+# PROP Default_Filter "h;txx"
 # Begin Source File
-SOURCE=.\expatpp.h
-# End Source File
-# Begin Source File
-SOURCE=.\expatpplib.h
+SOURCE=.\batch_bvxm.h
 # End Source File
 # End Group
 # End Target
