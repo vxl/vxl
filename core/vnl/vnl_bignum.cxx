@@ -798,9 +798,10 @@ void vnl_bignum::dump (vcl_ostream& os) const
   //    {'%','0',char(2*2 + '0'),'X','%','s'};
   //  format_str[2] = char(2*2 + '0');
   if (this->count > 0) { // output data array
-    for (Counter i = this->count; i > 1; i--)
+    os << vcl_hex;
+    for (Counter i = this->count; i > 1; --i)
       os << (this->data[i - 1]) << ',';
-    os << (this->data[0]);
+    os << (this->data[0]) << vcl_dec;
   }
   os << "}}\n";                         // close brackets
 }
@@ -1260,15 +1261,14 @@ void divide (const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& q, vnl_bign
     else {                                      // Else full-blown divide
       vnl_bignum u,v;
 #ifdef DEBUG
-      vcl_cerr << vcl_hex;
-      vcl_cerr << "\nvnl_bignum::divide: b1 ="; if (b1.sign < 0) vcl_cerr << " -"; for (Counter x=b1.count; x>0; --x) vcl_cerr << ' ' << b1.data[x-1];
-      vcl_cerr << "\nvnl_bignum::divide: b2 ="; if (b2.sign < 0) vcl_cerr << " -"; for (Counter x=b2.count; x>0; --x) vcl_cerr << ' ' << b2.data[x-1];
+      vcl_cerr << "\nvnl_bignum::divide: b1 ="; b1.dump(vcl_cerr);
+      vcl_cerr << "\nvnl_bignum::divide: b2 ="; b2.dump(vcl_cerr);
 #endif
       Data d = normalize(b1,b2,u,v);            // Set u = b1*d, v = b2*d
 #ifdef DEBUG
-      vcl_cerr << "\nvnl_bignum::divide: d = 0x" << d;
-      vcl_cerr << "\nvnl_bignum::divide: u ="; if (u.sign < 0) vcl_cerr << " -"; for (Counter x=u.count; x>0; --x) vcl_cerr << ' ' << u.data[x-1];
-      vcl_cerr << "\nvnl_bignum::divide: v ="; if (v.sign < 0) vcl_cerr << " -"; for (Counter x=v.count; x>0; --x) vcl_cerr << ' ' << v.data[x-1];
+      vcl_cerr << "\nvnl_bignum::divide: d = " << d;
+      vcl_cerr << "\nvnl_bignum::divide: u ="; u.dump(vcl_cerr);
+      vcl_cerr << "\nvnl_bignum::divide: v ="; v.dump(vcl_cerr);
 #endif
       Counter j = 0;
       while (j <= b1.count - b2.count) {        // Main division loop
@@ -1284,22 +1284,20 @@ void divide (const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& q, vnl_bign
       // remainder should never be larger than divisor; if still so, continue dividing...
       while (r*r.sign >= b2*b2.sign) {
 #ifdef DEBUG
-      vcl_cerr << "\nvnl_bignum::divide: q ="; if (q.sign < 0) vcl_cerr << " -"; for (Counter x=q.count; x>0; --x) vcl_cerr << ' ' << q.data[x-1];
-      vcl_cerr << "\nvnl_bignum::divide: r ="; if (r.sign < 0) vcl_cerr << " -"; for (Counter x=r.count; x>0; --x) vcl_cerr << ' ' << r.data[x-1];
+      vcl_cerr << "\nvnl_bignum::divide: q ="; q.dump(vcl_cerr);
+      vcl_cerr << "\nvnl_bignum::divide: r ="; r.dump(vcl_cerr);
 #endif
         vnl_bignum r1, q1;
         divide(r*r.sign, b2*b2.sign, q1, r1);
         q += q1*r.sign*b2.sign; r = r1*r.sign*b2.sign;
 #ifdef DEBUG
-        vcl_cerr << vcl_hex;
-        vcl_cerr << "\nvnl_bignum::divide: q1 ="; if (q1.sign < 0) vcl_cerr << " -"; for (Counter x=q1.count; x>0; --x) vcl_cerr << ' ' << q1.data[x-1];
-        vcl_cerr << "\nvnl_bignum::divide: r1 ="; if (r1.sign < 0) vcl_cerr << " -"; for (Counter x=r1.count; x>0; --x) vcl_cerr << ' ' << r1.data[x-1];
+        vcl_cerr << "\nvnl_bignum::divide: q1 ="; q1.dump(vcl_cerr);
+        vcl_cerr << "\nvnl_bignum::divide: r1 ="; r1.dump(vcl_cerr);
 #endif
       }
 #ifdef DEBUG
-      vcl_cerr << "\nvnl_bignum::divide: q ="; if (q.sign < 0) vcl_cerr << " -"; for (Counter x=q.count; x>0; --x) vcl_cerr << ' ' << q.data[x-1];
-      vcl_cerr << "\nvnl_bignum::divide: r ="; if (r.sign < 0) vcl_cerr << " -"; for (Counter x=r.count; x>0; --x) vcl_cerr << ' ' << r.data[x-1];
-      vcl_cerr << vcl_dec << vcl_endl;
+        vcl_cerr << "\nvnl_bignum::divide: q ="; q.dump(vcl_cerr);
+        vcl_cerr << "\nvnl_bignum::divide: r ="; r.dump(vcl_cerr);
 #endif
     }
     q.trim();                           // Trim leading zeros of quot.
