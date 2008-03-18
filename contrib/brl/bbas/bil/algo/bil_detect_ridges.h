@@ -1,4 +1,4 @@
-// This is contrib/brl/bbas/bil/algo/bil_detect_ridges.h
+// This is brl/bbas/bil/algo/bil_detect_ridges.h
 #ifndef bil_detect_ridges_h_
 #define bil_detect_ridges_h_
 //:
@@ -6,7 +6,8 @@
 // \brief  Ridge Detection
 // \author  jdfunaro, from matlab code by Amir Tamrakar, from Kalitzin etal PAMI 2001
 // \verbatim
-//  Modifications <none>
+//  Modifications
+//   <none yet>
 // \endverbatim
 
 #include <vil/vil_image_view.h>
@@ -32,5 +33,4 @@ void bil_detect_ridges( const vil_image_view<float>& Ix,
                         vil_image_view<float>& ey,
                         vil_image_view<float>& lambda);
 
-
-#endif 
+#endif // bil_detect_ridges_h_
