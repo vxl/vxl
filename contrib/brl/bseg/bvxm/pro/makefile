@@ -1,0 +1,32 @@
+USES += contrib/brl contrib/brl/bseg core
+
+LIBRARY := bvxm_pro
+VERSION := 1.0
+
+SOURCES += bvxm_change_detection_display_process.cxx
+SOURCES += bvxm_clean_world_process.cxx
+SOURCES += bvxm_create_voxel_world_process.cxx
+SOURCES += bvxm_detect_changes_process.cxx
+SOURCES += bvxm_generate_edge_map_process.cxx
+SOURCES += bvxm_illum_index_process.cxx
+SOURCES += bvxm_normalize_image_process.cxx
+SOURCES += bvxm_render_expected_image_process.cxx
+SOURCES += bvxm_render_virtual_view_process.cxx
+SOURCES += bvxm_roi_init_process.cxx
+SOURCES += bvxm_rpc_registration_process.cxx
+SOURCES += bvxm_save_occupancy_raw_process.cxx
+SOURCES += bvxm_update_process.cxx
+SOURCES += bvxm_create_local_rpc_process.cxx
+SOURCES += bvxm_create_normalized_image_process.cxx
+
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
+SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################

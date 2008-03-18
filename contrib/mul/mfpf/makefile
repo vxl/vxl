@@ -1,3 +1,8 @@
+USES += contrib/mul core
+
+LIBRARY := mfpf
+VERSION := 1.0
+
 SOURCES += mfpf_add_all_loaders.cxx
 SOURCES += mfpf_edge_finder.cxx
 SOURCES += mfpf_edge_finder_builder.cxx
@@ -20,5 +25,19 @@ SOURCES += mfpf_draw_pose_lines.cxx
 SOURCES += mfpf_draw_matches.cxx
 MANPAGE_SOURCES += mfpf_pose_set.h
 MANPAGE_SOURCES += mfpf_region_form.h
+SOURCES += mfpf_mr_point_finder.cxx
+SOURCES += mfpf_mr_point_finder_builder.cxx
+SOURCES += mfpf_prune_overlaps.cxx
+SOURCES += mfpf_sort_matches.cxx
 
+#######################################
+include ${VXLROOT}/config/top-params.mk
+#######################################
+
+ifndef NOTEST
 SUBDIRS += tests
+endif
+
+######################################
+include ${VXLROOT}/config/top-rules.mk
+######################################
