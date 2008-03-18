@@ -88,6 +88,29 @@ void mfpf_mr_point_finder_builder::set_region_size(double wi, double wj)
   }
 }
 
+void mfpf_mr_point_finder_builder::set_size_and_levels(
+                const mfpf_point_finder_builder& builder0,
+                double wi, double wj,
+                double scale_step, 
+                int min_pixel_width, 
+                int max_pixel_width)
+{
+  double max_w = vcl_max(wi,wj);
+
+  double log_s = vcl_log(scale_step);
+
+  // Estimate level above which size falls below min_pixel_width pixels
+  int max_L = int(vcl_log(max_w/min_pixel_width)/log_s);
+  // Estimate level below which size is above max_pixel_width pixels
+  int min_L = vnl_math_rnd(0.5+vcl_log(max_w/max_pixel_width)/log_s);
+  if (min_L>max_L) max_L=min_L;
+
+  double step0 = vcl_pow(scale_step,min_L);
+  int n_levels = 1+max_L-min_L;
+
+  set(builder0,n_levels,step0,scale_step);
+  set_region_size(wi,wj);
+}
 
 
 //: Select best level for building model using u as basis
