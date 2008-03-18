@@ -39,41 +39,40 @@ bgui3d_examiner_tableau::bgui3d_examiner_tableau(SoNode * scene_root)
    scale_(1.0f),
    axis_visible_(true)
 {
-   interaction_type_ = CAMERA;
-   spin_projector_ = new SbSphereSheetProjector(SbSphere(SbVec3f(0, 0, 0), 0.8f));
-   SbViewVolume volume;
-   volume.ortho(-1, 1, -1, 1, -1, 1);
-   spin_projector_->setViewVolume( volume );
-   _seekSensor = new SoTimerSensor( seeksensorCB, this );
-   find_scale();
+  interaction_type_ = CAMERA;
+  spin_projector_ = new SbSphereSheetProjector(SbSphere(SbVec3f(0, 0, 0), 0.8f));
+  SbViewVolume volume;
+  volume.ortho(-1, 1, -1, 1, -1, 1);
+  spin_projector_->setViewVolume( volume );
+  _seekSensor = new SoTimerSensor( seeksensorCB, this );
+  find_scale();
 }
 
 
 //: Destructor
 bgui3d_examiner_tableau::~bgui3d_examiner_tableau()
 {
-  //: Ming: no need to delete the SbSphereSheetProjector object
-  ///delete spin_projector_;
+  // Ming: no need to delete the SbSphereSheetProjector object
+  // delete spin_projector_;
 }
 
 
 vcl_string bgui3d_examiner_tableau::type_name() const {return "bgui3d_examiner_tableau";}
 
 //: Handle the events coming in
-//   Left mouse = spin
-//   Middle mouse = pan
-//   Middle mouse with control = zoom (dolly)
-//   's' and then click = seeks 2/3 of the distance to the object
-//   'i' toggles idle events
-//   'h' puts camera to the current view
-//   'h' with control sets the home view to the current view
-//   'v' views the entire scene
-//   'n' go to the next camera
-//   'p' go the the previous camera
-//   The cursors pan
-//   The cursors with 'control' spin
-//   The up and down cursors with shift zoom (dolly)
-
+// - Left mouse = spin
+// - Middle mouse = pan
+// - Middle mouse with control = zoom (dolly)
+// - 's' and then click = seeks 2/3 of the distance to the object
+// - 'i' toggles idle events
+// - 'h' puts camera to the current view
+// - 'h' with control sets the home view to the current view
+// - 'v' views the entire scene
+// - 'n' go to the next camera
+// - 'p' go the the previous camera
+// - The cursors pan
+// - The cursors with 'control' spin
+// - The up and down cursors with shift zoom (dolly)
 
 bool bgui3d_examiner_tableau::handle(const vgui_event& e)
 {
@@ -108,7 +107,7 @@ bool bgui3d_examiner_tableau::handle(const vgui_event& e)
 
      case 'n': {
       int next = camera_group_->whichChild.getValue()+1;
-      if (next < camera_group_->getChildren()->getLength()){
+      if (next < camera_group_->getChildren()->getLength()) {
         camera_group_->whichChild.setValue(next);
         set_camera((SoCamera*)(*camera_group_->getChildren())[next]);
       }
@@ -255,7 +254,7 @@ bool bgui3d_examiner_tableau::handle(const vgui_event& e)
       const SbVec2f last_pos_norm = last_pos_;
       const SbVec2s curr_pos = SbVec2s(e.wx, e.wy) - viewport_origin;
       const SbVec2f curr_pos_norm((float) curr_pos[0] / (float) vcl_max((int)(viewport_size[0] - 1), 1),
-                                (float) curr_pos[1] / (float) vcl_max((int)(viewport_size[1] - 1), 1));
+                                  (float) curr_pos[1] / (float) vcl_max((int)(viewport_size[1] - 1), 1));
 
       last_pos_ = curr_pos_norm;
 
@@ -347,14 +346,13 @@ class bgui3d_axis_visible_command : public vgui_command
 
 
 //----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
 //: A vgui command used to toggle interaction type
 class bgui3d_seek_distance_command : public vgui_command
 {
  public:
   bgui3d_seek_distance_command(bgui3d_examiner_tableau* tab,
                                bgui3d_examiner_tableau::SeekDistance seek)
-                              : bgui3d_examiner_tab(tab), seek_distance(seek) {}
+    : bgui3d_examiner_tab(tab), seek_distance(seek) {}
   void execute()
   {
     bgui3d_examiner_tab->set_seek_distance(seek_distance);
@@ -366,7 +364,7 @@ class bgui3d_seek_distance_command : public vgui_command
 
 //: Builds a popup menu
 void bgui3d_examiner_tableau::get_popup(const vgui_popup_params& params,
-                                            vgui_menu &menu)
+                                        vgui_menu &menu)
 {
   bgui3d_fullviewer_tableau::get_popup(params, menu);
 
@@ -385,13 +383,13 @@ void bgui3d_examiner_tableau::get_popup(const vgui_popup_params& params,
   SeekDistance seek = seek_distance_;
 
   seek_menu.add(((seek==SEEK_FAR)?check_on:check_off) + " 3/4 ",
-              new bgui3d_seek_distance_command(this,SEEK_FAR));
+                new bgui3d_seek_distance_command(this,SEEK_FAR));
   seek_menu.add(((seek==SEEK_HALF)?check_on:check_off) + " 1/2",
-                  new bgui3d_seek_distance_command(this,SEEK_HALF));
+                new bgui3d_seek_distance_command(this,SEEK_HALF));
   seek_menu.add(((seek==SEEK_NEAR)?check_on:check_off) + " 1/4",
-                  new bgui3d_seek_distance_command(this,SEEK_NEAR));
+                new bgui3d_seek_distance_command(this,SEEK_NEAR));
   seek_menu.add(((seek==SEEK_ZERO)?check_on:check_off) + " 0 (focus)",
-                  new bgui3d_seek_distance_command(this,SEEK_ZERO));
+                new bgui3d_seek_distance_command(this,SEEK_ZERO));
 
   menu.add( "Seek Distance", seek_menu );
 }
@@ -450,7 +448,7 @@ void bgui3d_examiner_tableau::reorient_camera(const SbRotation & rot)
   SbVec3f direction;
   cam->orientation.getValue().multVec(SbVec3f(0, 0, -1), direction);
   SbVec3f focalpoint = cam->position.getValue() +
-          cam->focalDistance.getValue() * direction;
+                  cam->focalDistance.getValue() * direction;
 
   // Set new orientation value by accumulating the new rotation.
   cam->orientation = rot * cam->orientation.getValue();
@@ -549,8 +547,8 @@ void bgui3d_examiner_tableau::seek_to_point( SbVec2s pos )
   camrot.multVec(lookat, lookat);
   SbRotation rot(lookat, diff);
 
-   _fromRot = camrot;
-  _toRot = camrot*rot ;
+  _fromRot = camrot;
+  _toRot = camrot*rot;
 
   scene_camera_->focalDistance = diff.length()*(1.0-factor);
   _seekSensor->setBaseTime( SbTime::getTimeOfDay() );
