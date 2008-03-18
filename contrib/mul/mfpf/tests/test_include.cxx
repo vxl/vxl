@@ -4,6 +4,9 @@
 #include <mfpf/mfpf_draw_pose_lines.h>
 #include <mfpf/mfpf_edge_finder_builder.h>
 #include <mfpf/mfpf_edge_finder.h>
+#include <mfpf/mfpf_mr_point_finder.h>
+#include <mfpf/mfpf_mr_point_finder_builder.h>
+#include <mfpf/mfpf_prune_overlaps.h>
 #include <mfpf/mfpf_point_finder_builder.h>
 #include <mfpf/mfpf_point_finder.h>
 #include <mfpf/mfpf_pose.h>
@@ -20,5 +23,6 @@
 #include <mfpf/mfpf_region_pdf_builder.h>
 #include <mfpf/mfpf_sample_region.h>
 #include <mfpf/mfpf_searcher.h>
+#include <mfpf/mfpf_sort_matches.h>
 
 int main() { return 0; }
