@@ -120,8 +120,16 @@ void test_rotation_3d()
 {
   vcl_cout << "*************************\n"
            << " Testing vgl_rotation_3d\n"
-           << "*************************\n\n"
-           << "1. Rotation about the x axis over 90 degrees.\n";
+           << "*************************\n";
+
+
+  vcl_cout << "\n1. Rotation about the x axis over 90 degrees.\n";
+  vgl_rotation_3d<double> rot_id;
+  test_conversions(rot_id);
+  test_inverse(rot_id);
+  test_application(rot_id);
+
+  vcl_cout << "\n2. Rotation about the x axis over 90 degrees.\n";
 
   vgl_rotation_3d<double> rot_x90(1.57079632679489661923, 0.0, 0.0);
   test_conversions(rot_x90);
@@ -130,7 +138,7 @@ void test_rotation_3d()
 
   vnl_random rnd;
   vgl_rotation_3d<double> rot_rand(rnd.normal(), rnd.normal(), rnd.normal());
-  vcl_cout << "\n2. Random rotation: " << rot_rand.as_quaternion() << vcl_endl;
+  vcl_cout << "\n3. Random rotation: " << rot_rand.as_quaternion() << vcl_endl;
   test_conversions(rot_rand);
   test_inverse(rot_rand);
   test_application(rot_rand);

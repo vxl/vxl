@@ -48,7 +48,13 @@ class vgl_rotation_3d
 
   //: Construct from a Rodrigues vector.
   explicit vgl_rotation_3d( const vnl_vector_fixed<T,3>& rvector )
-    : q_(rvector/rvector.magnitude(),rvector.magnitude()) {}
+    {
+      T mag = rvector.magnitude();
+      if(mag > T(0))
+        q_ = vnl_quaternion<T>(rvector/mag,mag);
+      else // identity rotation is a special case
+        q_ = vnl_quaternion<T>(0,0,0,1);
+    }
 
   //: Construct from a 3x3 rotation matrix
   explicit vgl_rotation_3d( const vnl_matrix_fixed<T,3,3>& matrix )
@@ -107,7 +113,10 @@ class vgl_rotation_3d
   //  The length of this vector is the angle of rotation in radians
   vnl_vector_fixed<T,3> as_rodrigues() const
     {
-      return q_.axis()*q_.angle();
+      T ang = q_.angle();
+      if(ang == T(0))
+        return vnl_vector_fixed<T,3>(T(0));
+      return q_.axis()*ang;
     }
 
   //: Output the matrix representation of this rotation in 3x3 form.
