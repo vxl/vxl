@@ -4,7 +4,7 @@
 # Include for brip
 INCLUDE_DIRECTORIES( ${VXL_BRL_INCLUDE_DIR}/bseg )
 
-SET(CMAKE_CXX_FLAGS -Wall)
+#SET(CMAKE_CXX_FLAGS -Wall)
 
 SET( bil_algo_sources
    bil_harr_wavelet_transform.txx     bil_harr_wavelet_transform.h
