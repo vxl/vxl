@@ -19,6 +19,7 @@ SET( bil_algo_sources
    bil_equalize.h
    bil_edge_indicator.h
    bil_color_conversions.cxx          bil_color_conversions.h
+   bil_scale_image.txx                bil_scale_image.h
 )
 
 AUX_SOURCE_DIRECTORY(Templates bil_algo_sources)

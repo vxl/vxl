@@ -7,6 +7,7 @@
 // \author Matt Leotta
 
 #include <vcl_cassert.h>
+#include <vil/vil_image_view.h>
 
 //: compute the boolean "and" of two boolean images
 inline void bil_math_boolean_and(const vil_image_view<bool>& mask1,
