@@ -290,7 +290,8 @@ vnl_vector_fixed<T,3> vnl_quaternion<T>::rotate(vnl_vector_fixed<T,3> const& v) 
 {
   T r = this->real();
   vnl_vector_fixed<T,3> i = this->imaginary();
-  return v + vnl_cross_3d(i, v) * T(2*r) - vnl_cross_3d(vnl_cross_3d(i, v), i) * T(2);
+  vnl_vector_fixed<T,3> i_x_v(vnl_cross_3d(i, v));
+  return v + i_x_v * T(2*r) - vnl_cross_3d(i_x_v, i) * T(2);
 }
 
 #undef VNL_QUATERNION_INSTANTIATE
