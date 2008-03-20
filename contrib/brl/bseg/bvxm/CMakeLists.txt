@@ -5,6 +5,13 @@ INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/bsta)
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/bvxm )
 
+IF (WIN32 AND VXL_USE_LFS)
+#This is a hack since win32 doesn't have transparent Large File Support.
+  ADD_DEFINITIONS( -DBVXM_USE_FSTREAM64 )
+  # so we can include vil_stream_fstream64
+  ADD_DEFINITIONS( -DVIL_USE_FSTREAM64 )
+ENDIF (WIN32 AND VXL_USE_LFS)
+
 SET(bvxm_sources
 
     bvxm_memory_chunk.h             bvxm_memory_chunk.cxx 

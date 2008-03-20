@@ -2,6 +2,13 @@
 #define bvxm_voxel_storage_disk_txx_
 
 #include <vcl_string.h>
+#include <vcl_iostream.h>
+#ifdef BVXM_USE_FSTREAM64
+#include <vil/vil_stream_fstream64.h>
+#else
+#include <vil/vil_stream_fstream.h>
+#endif
+#include <vcl_cassert.h>
 #include <vul/vul_file.h>
 #include <vgl/vgl_vector_3d.h>
 
@@ -10,8 +17,9 @@
 
 template <class T>
 bvxm_voxel_storage_disk<T>::bvxm_voxel_storage_disk(vcl_string storage_filename, vgl_vector_3d<unsigned int> grid_size)
-: bvxm_voxel_storage<T>(grid_size), storage_fname_(storage_filename)
+: bvxm_voxel_storage<T>(grid_size), storage_fname_(storage_filename), active_slab_start_(-1), fio_(0)
 {
+  // assumes desired slab thickness is 1
   slab_buffer_ = new bvxm_memory_chunk(grid_size.x()*grid_size.y()*sizeof(T));
 
   // check if file exsist already or not
@@ -24,16 +32,19 @@ bvxm_voxel_storage_disk<T>::bvxm_voxel_storage_disk(vcl_string storage_filename,
     }
     // read header and make sure that it matches given dimensions
     // open the file with in and out flags so we dont truncate
-    fio_.open(storage_fname_.c_str(),vcl_ios::binary | vcl_ios::out | vcl_ios::in);
-    if (!fio_.is_open()) {
-      vcl_cerr << "error opening " << storage_fname_ << " for read/write\n";
+#ifdef BVXM_USE_FSTREAM64
+    fio_ = new vil_stream_fstream64(storage_fname_.c_str(),"rw");
+#else
+    fio_ = new vil_stream_fstream(storage_fname_.c_str(),"rw");
+#endif
+
+    if (!fio_->ok()) {
+      vcl_cerr << "error opening " << storage_fname_ << " for read/write " << vcl_endl;
       return;
     }
-    // seek to beginning of file
-    fio_.seekp(0,vcl_ios::beg);
     bvxm_voxel_storage_header<T> header;
 
-    fio_.read(reinterpret_cast<char*>(&header),sizeof(header));
+    fio_->read(reinterpret_cast<char*>(&header),sizeof(header));
 
     if ((header.nx_ != grid_size.x()) || (header.ny_ != grid_size.y()) || (header.nz_ != grid_size.z())) {
       vcl_cerr << "error: file on disk has size " << vgl_vector_3d<unsigned>(header.nx_,header.ny_,header.nz_) << vcl_endl
@@ -49,9 +60,9 @@ bvxm_voxel_storage_disk<T>::bvxm_voxel_storage_disk(vcl_string storage_filename,
 template <class T>
 bool bvxm_voxel_storage_disk<T>::initialize_data(T const& value)
 {
-  // check if file exsist already or not
+  // check if file exists already or not
   if (!(vul_file::exists(storage_fname_)))  {
-    // create file
+    // make sure base directory exists
     vcl_string base_dir = vul_file::dirname(storage_fname_);
     bool base_dir_exists = vul_file::is_directory(base_dir);
     if (!base_dir_exists) {
@@ -67,31 +78,34 @@ bool bvxm_voxel_storage_disk<T>::initialize_data(T const& value)
     }
   }
   // everything looks ok. open file for write and fill with data
+#ifdef BVXM_USE_FSTREAM64
+    fio_ = new vil_stream_fstream64(storage_fname_.c_str(),"w");
+#else
+    fio_ = new vil_stream_fstream(storage_fname_.c_str(),"w");
+#endif
+  
   bvxm_voxel_slab<T> init_slab(this->grid_size_.x(),this->grid_size_.y(),1,slab_buffer_,static_cast<T*>(slab_buffer_->data()));
   init_slab.fill(value);
 
-  if (fio_.is_open()) {
-    // close the file if it was already open.
-    fio_.close();
-  }
-  fio_.open(storage_fname_.c_str(),vcl_ios::binary | vcl_ios::out);
-  if (!fio_.is_open()) {
-    vcl_cerr << " error opening file " << storage_fname_ << " for write.\n";
+  if (!fio_->ok()) {
+    vcl_cerr << " error opening file " << storage_fname_ << " for write. " << vcl_endl;
     return false;
   }
-  fio_.seekp(0,vcl_ios::beg);
-
   // write the header
   bvxm_voxel_storage_header<T> header(this->grid_size_);
-  fio_.write(reinterpret_cast<char*>(&header),sizeof(header));
+  fio_->write(reinterpret_cast<char*>(&header),sizeof(header));
 
   // write each slice
   for (unsigned z=0; z <this->grid_size_.z(); z++) {
-    fio_.write(reinterpret_cast<char*>(init_slab.first_voxel()),init_slab.size()*sizeof(T));
+    fio_->write(reinterpret_cast<char*>(init_slab.first_voxel()),init_slab.size()*sizeof(T));
   }
 
+  // no longer have any active slabs
+  active_slab_start_ = -1;
+
   // close output stream
-  fio_.close();
+  //delete fio_;
+  fio_ = 0;
 
   return true;
 }
@@ -108,16 +122,32 @@ bvxm_voxel_slab<T> bvxm_voxel_storage_disk<T>::get_slab(unsigned slice_idx, unsi
     return slab;
   }
   // check to see if file is already open
-  if (!fio_.is_open()) {
-    fio_.open(storage_fname_.c_str(),vcl_ios::binary | vcl_ios::in | vcl_ios::out);
+  if (!fio_) {
+#ifdef BVXM_USE_FSTREAM64
+    fio_ = new vil_stream_fstream64(storage_fname_.c_str(),"rw");
+#else
+    fio_ = new vil_stream_fstream(storage_fname_.c_str(),"rw");
+#endif
+    if (!fio_->ok()) {
+      vcl_cerr << "error opening file " << storage_fname_ << " for read/write! " << vcl_endl;
+      bvxm_voxel_slab<T> dummy_slab(0,0,0);
+      return dummy_slab;
+    }
   }
-  unsigned long slice_pos = this->grid_size_.x()*this->grid_size_.y()*slice_idx*sizeof(T) + sizeof(bvxm_voxel_storage_header<T>);
-  unsigned long file_pos = fio_.tellg();
+  vil_streampos slice_pos = this->slab_filepos(slice_idx);
+  vil_streampos file_pos = fio_->tell();
   if (slice_pos != file_pos) {
-    fio_.seekg(slice_pos,vcl_ios::beg);
+    fio_->seek(slice_pos);
   }
-  fio_.read(reinterpret_cast<char*>(slab_buffer_->data()),slab_buffer_->size());
+  // need to check that slab_buffer_ is right size if/when we start using thickness > 1 - DEC
+  if (slab_thickness > 1) {
+    vcl_cerr << "error: slab thickness > 1 not yet supported. " << vcl_endl;
+    bvxm_voxel_slab<T> dummy_slab(0,0,0);
+    return dummy_slab;
+  }
+  fio_->read(reinterpret_cast<char*>(slab_buffer_->data()),slab_buffer_->size());
   bvxm_voxel_slab<T> slab(this->grid_size_.x(),this->grid_size_.y(),1,slab_buffer_,reinterpret_cast<T*>(slab_buffer_->data()));
+  active_slab_start_ = slice_idx;
   return slab;
 }
 
@@ -125,26 +155,27 @@ template <class T>
 void bvxm_voxel_storage_disk<T>::put_slab()
 {
   // check to see if file is already open
-  if (!fio_.is_open()) {
-    // open the file with in and out flags so we dont truncate
-    fio_.open(storage_fname_.c_str(),vcl_ios::binary | vcl_ios::out | vcl_ios::in);
-    if (!fio_.is_open()) {
-      vcl_cerr << "error opening " << storage_fname_ << "for read/write\n";
+  if (!fio_) {
+    vcl_cerr << "error: voxel_storage_disk: put_slab() called, but file is not open. " << vcl_endl;
+    return;
+  }
+  // assume that we are putting slab back from where we got it
+  if (active_slab_start_ < 0) {
+    vcl_cerr << "error: attempted to put_slice() with no active slab " << vcl_endl;
+    return;
+  }
+  vil_streampos slice_pos = slab_filepos(active_slab_start_);
+  vil_streampos file_pos = fio_->tell();
+  if (slice_pos != file_pos) {
+    fio_->seek(slice_pos);
+    file_pos = fio_->tell();
+    if (file_pos != slice_pos) {
+      vcl_cerr << "error seeking to file position " << slice_pos << vcl_endl;
       return;
     }
   }
-  unsigned long in_pos = fio_.tellg();
-  if (in_pos < this->grid_size_.x()*this->grid_size_.y()*sizeof(T) + sizeof(bvxm_voxel_storage_header<T>)) {
-    vcl_cerr << "error: attempted to put_slice() when current file position is not past first slice.\n";
-    return;
-  }
-  unsigned long slice_pos = in_pos - (this->grid_size_.x()*this->grid_size_.y()*sizeof(T));
-  unsigned long file_pos = fio_.tellp();
-  if (slice_pos != file_pos) {
-    fio_.seekp(slice_pos,vcl_ios::beg);
-  }
-  fio_.write(reinterpret_cast<char*>(slab_buffer_->data()),slab_buffer_->size());
-  fio_.flush();
+  fio_->write(reinterpret_cast<char*>(slab_buffer_->data()),slab_buffer_->size());
+  //fio_->flush();
 
   return;
 }
@@ -152,32 +183,31 @@ void bvxm_voxel_storage_disk<T>::put_slab()
 template <class T>
 unsigned bvxm_voxel_storage_disk<T>::num_observations()
 {
-  // check if file exists or not
-  if (!vul_file::exists(storage_fname_.c_str())) {
-    return 0;
-  }
+
   // read header from disk
   // check to see if file is already open
-  if (!fio_.is_open()) {
-    // open the file with in and out flags so we dont truncate
-    fio_.open(storage_fname_.c_str(),vcl_ios::binary | vcl_ios::out | vcl_ios::in);
-    if (!fio_.is_open()) {
-      vcl_cerr << "error opening " << storage_fname_ << "for read/write\n";
+  if (!fio_) {
+    // check if file exists or not
+    if (!vul_file::exists(storage_fname_.c_str())) {
+      return 0;
+    }
+#ifdef BVXM_USE_FSTREAM64
+    fio_ = new vil_stream_fstream64(storage_fname_.c_str(),"rw");
+#else
+    fio_ = new vil_stream_fstream(storage_fname_.c_str(),"rw");
+#endif
+    if (!fio_->ok()) {
+      vcl_cerr << "error opening " << storage_fname_ << "for read/write " << vcl_endl;
       return 0;
     }
   }
-  // remember where filepointer was
-  unsigned long gpos = fio_.tellg();
 
   // seek to beginning of file
-  fio_.seekg(0,vcl_ios::beg);
+  fio_->seek(0);
 
   bvxm_voxel_storage_header<T> header;
 
-  fio_.read(reinterpret_cast<char*>(&header),sizeof(header));
-
-  // put pointer back where we found it
-  fio_.seekg(gpos,vcl_ios::beg);
+  fio_->read(reinterpret_cast<char*>(&header),sizeof(header));
 
   return header.nobservations_;
 }
@@ -187,32 +217,53 @@ void bvxm_voxel_storage_disk<T>::increment_observations()
 {
   // read header from disk
   // check to see if file is already open
-  if (!fio_.is_open()) {
-    // open the file with in and out flags so we dont truncate
-    fio_.open(storage_fname_.c_str(),vcl_ios::binary | vcl_ios::out | vcl_ios::in);
-    if (!fio_.is_open()) {
-      vcl_cerr << "error opening " << storage_fname_ << "for read/write\n";
+  if (!fio_) {
+#ifdef BVXM_USE_FSTREAM64
+    fio_ = new vil_stream_fstream64(storage_fname_.c_str(),"rw");
+#else
+    fio_ = new vil_stream_fstream(storage_fname_.c_str(),"rw");
+#endif
+    if (!fio_->ok()) {
+      vcl_cerr << "error opening " << storage_fname_ << "for read/write " << vcl_endl;
       return;
     }
   }
-  // store get position so we can put it back were we found it
-  unsigned long gpos = fio_.tellg();
   // seek to beginning of file
-  fio_.seekg(0,vcl_ios::beg);
+  fio_->seek(0);
+  vil_streampos pos = fio_->tell();
+  if (pos != 0) {
+    vcl_cerr << "error seeking to begining of file" << vcl_endl;
+    return;
+  }
   bvxm_voxel_storage_header<T> header;
   // read
-  fio_.read(reinterpret_cast<char*>(&header),sizeof(header));
+  fio_->read(reinterpret_cast<char*>(&header),sizeof(header));
 
   // increment observations
   ++header.nobservations_;
 
   // write header back to disk
   // seek to beginning of file
-  fio_.seekp(0,vcl_ios::beg);
+  fio_->seek(0);
+  pos = fio_->tell();
+  if (pos != 0) {
+    vcl_cerr << "error seeking to beggining of file " << vcl_endl;
+    return;
+  }
   // write
-  fio_.write(reinterpret_cast<char*>(&header),sizeof(header));
-  // put get pos back where we found it
-  fio_.seekg(gpos);
+  fio_->write(reinterpret_cast<char*>(&header),sizeof(header));
+
+  return;
+}
+
+//: convert slab start index to file position
+template<class T>
+vil_streampos bvxm_voxel_storage_disk<T>::slab_filepos(unsigned slab_index)
+{
+  vil_streampos pos = 
+    ((vil_streampos)(this->grid_size_.x()*this->grid_size_.y()*slab_index))*sizeof(T) + sizeof(bvxm_voxel_storage_header<T>);
+
+  return pos;
 }
 
 #define BVXM_VOXEL_STORAGE_DISK_INSTANTIATE(T) \

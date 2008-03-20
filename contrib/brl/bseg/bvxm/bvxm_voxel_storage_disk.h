@@ -4,10 +4,16 @@
 // \file
 
 #include <vcl_string.h>
-#include <vcl_fstream.h>
+#ifdef BVXM_USE_FSTREAM64
+#include <vil/vil_stream_fstream64.h>
+#else
+#include <vil/vil_stream_fstream.h>
+#endif
+//#include <vcl_fstream.h>
 #include <vgl/vgl_vector_3d.h>
 
 #include "bvxm_voxel_storage.h"
+
 
 //: the data structure at the beginning of each voxel grid file.
 template<class T>
@@ -34,7 +40,7 @@ class bvxm_voxel_storage_disk : public bvxm_voxel_storage<T>
 {
  public:
   bvxm_voxel_storage_disk(vcl_string storage_filename, vgl_vector_3d<unsigned int> grid_size);
-  virtual ~bvxm_voxel_storage_disk(){fio_.close();}
+  virtual ~bvxm_voxel_storage_disk(){};
 
   virtual bool initialize_data(T const& value);
   virtual bvxm_voxel_slab<T> get_slab(unsigned slice_idx, unsigned slab_thickness);
@@ -45,14 +51,25 @@ class bvxm_voxel_storage_disk : public bvxm_voxel_storage<T>
   //: increment the number of observations
   virtual void increment_observations();
 
- protected:
+ private:
 
   vcl_string storage_fname_;
 
   // input and output file stream
-  vcl_fstream fio_;
-  //vcl_ifstream fin_;
+#ifdef BVXM_USE_FSTREAM64
+  vil_stream_fstream64 *fio_;
+#else //BVXM_USE_FSTREAM64
+  vil_stream_fstream *fio_;
+#endif //BVXM_USE_FSTREAM64
 
+  //vcl_fstream fio_;
+  
+  // currently active slab starting index
+  int active_slab_start_;
+
+  //: convert slab start index to file position
+  vil_streampos slab_filepos(unsigned slab_index);
+  
   // slab-sized buffer
   bvxm_memory_chunk_sptr slab_buffer_;
 };
