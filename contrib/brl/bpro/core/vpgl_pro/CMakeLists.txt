@@ -7,7 +7,7 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
 
 
-SET( vpgl_bpro_sources
+SET( vpgl_pro_sources
  vpgl_load_proj_camera_process.h vpgl_load_proj_camera_process.cxx
  vpgl_load_rational_camera_process.h vpgl_load_rational_camera_process.cxx 
   vpgl_load_rational_camera_nitf_process.h vpgl_load_rational_camera_nitf_process.cxx 
@@ -15,8 +15,8 @@ SET( vpgl_bpro_sources
  vpgl_save_perspective_camera_process.h vpgl_save_perspective_camera_process.cxx
 )
 
-AUX_SOURCE_DIRECTORY(Templates vpgl_bpro_sources)
+AUX_SOURCE_DIRECTORY(Templates vpgl_pro_sources)
 
-ADD_LIBRARY(vpgl_bpro ${vpgl_bpro_sources})
-TARGET_LINK_LIBRARIES( vpgl_bpro bprb brdb vpgl vpgl_io vnl)
+ADD_LIBRARY(vpgl_pro ${vpgl_pro_sources})
+TARGET_LINK_LIBRARIES( vpgl_pro bprb brdb vpgl vpgl_io vnl)
 
