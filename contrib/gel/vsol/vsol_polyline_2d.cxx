@@ -59,6 +59,10 @@ vsol_polyline_2d::vsol_polyline_2d(vsol_polyline_2d const& other)
 //---------------------------------------------------------------------------
 vsol_polyline_2d::~vsol_polyline_2d()
 {
+  for (unsigned i = 0; i < storage_->size(); i++)
+    (*storage_)[i] = 0;
+  p0_ = 0;
+  p1_ = 0;
   delete storage_;
 }
 
