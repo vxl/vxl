@@ -43,6 +43,8 @@ vsol_polygon_2d::vsol_polygon_2d(const vsol_polygon_2d &other)
 //---------------------------------------------------------------------------
 vsol_polygon_2d::~vsol_polygon_2d()
 {
+  for (unsigned i = 0; i < storage_->size(); i++)
+   (*storage_)[i] = 0;
   delete storage_;
 }
 
