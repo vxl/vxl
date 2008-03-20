@@ -40,7 +40,7 @@ class bvxm_voxel_storage_disk : public bvxm_voxel_storage<T>
 {
  public:
   bvxm_voxel_storage_disk(vcl_string storage_filename, vgl_vector_3d<unsigned int> grid_size);
-  virtual ~bvxm_voxel_storage_disk(){};
+  virtual ~bvxm_voxel_storage_disk();
 
   virtual bool initialize_data(T const& value);
   virtual bvxm_voxel_slab<T> get_slab(unsigned slice_idx, unsigned slab_thickness);

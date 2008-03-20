@@ -57,6 +57,19 @@ bvxm_voxel_storage_disk<T>::bvxm_voxel_storage_disk(vcl_string storage_filename,
   }
 }
 
+
+template<class T>
+bvxm_voxel_storage_disk<T>::~bvxm_voxel_storage_disk()
+{
+  // this will delete the stream object
+  if (fio_) {
+    fio_->ref();
+    fio_->unref();
+    fio_ = 0;
+  }
+}
+
+
 template <class T>
 bool bvxm_voxel_storage_disk<T>::initialize_data(T const& value)
 {
@@ -104,7 +117,9 @@ bool bvxm_voxel_storage_disk<T>::initialize_data(T const& value)
   active_slab_start_ = -1;
 
   // close output stream
-  //delete fio_;
+  // this will delete the stream object.
+  fio_->ref();
+  fio_->unref();
   fio_ = 0;
 
   return true;
