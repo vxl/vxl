@@ -33,7 +33,7 @@ AUX_SOURCE_DIRECTORY(Templates bvxm_pro_sources)
 
 ADD_LIBRARY(bvxm_pro ${bvxm_pro_sources})
 
-TARGET_LINK_LIBRARIES(bvxm_pro bvxm bvxm_io bprb bil_algo sdet vpgl vpgl_io vpgl_algo vpgl_file_formats vpgl_pro vsol vil vil_io vnl vnl_io bgeo vgl vgl_algo brip brdb)
+TARGET_LINK_LIBRARIES(bvxm_pro bvxm bvxm_io bprb bil_algo sdet vpgl vpgl_io vpgl_algo vpgl_file_formats vpgl_pro vsol vil vil_io vil_pro vnl vnl_io bgeo vgl vgl_algo brip brdb)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)
