@@ -8,6 +8,7 @@
 //  Modifications
 //   Nov.2003 - Peter Vanroose - made all functions templated
 //   Sep.2005 - Peter Vanroose - bug fix: collinear line segments always "true"
+//   Mar.2008 - Ibrahim Eden - bug fix: bool vgl_lineseg_test_line(vgl_line_2d<T> const& l1,vgl_line_segment_2d<T> const& l2)
 // \endverbatim
 
 #include <vgl/vgl_line_segment_2d.h>
@@ -35,8 +36,10 @@ template <class T>
 inline bool vgl_lineseg_test_line(vgl_line_2d<T> const& l1,
                                   vgl_line_segment_2d<T> const& l2)
 {
-  return vgl_lineseg_test_line(l1.point1().x(),l1.point1().y(),
-                               l1.point2().x(),l1.point2().y(),
+  vgl_point_2d<T> l1_p1,l1_p2;
+  l1.get_two_points(l1_p1,l1_p2);
+  return vgl_lineseg_test_line(l1_p1.x(),l1_p1.y(),
+                               l1_p2.x(),l1_p2.y(),
                                l2.point1().x(),l2.point1().y(),
                                l2.point2().x(),l2.point2().y());
 }
