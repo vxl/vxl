@@ -21,7 +21,7 @@ SET(bbgm_pro_sources
 AUX_SOURCE_DIRECTORY(Templates bbgm_pro_sources)
 
 ADD_LIBRARY(bbgm_pro ${bbgm_pro_sources})
-TARGET_LINK_LIBRARIES(bbgm_pro bbgm bprb brdb bsta_algo bsta brip vidl2 vil vsl)
+TARGET_LINK_LIBRARIES(bbgm_pro bbgm bprb brdb bsta_algo bsta brip vidl2 vil vil_pro vsl)
 
 IF( BUILD_TESTING )
   SUBDIRS(tests)

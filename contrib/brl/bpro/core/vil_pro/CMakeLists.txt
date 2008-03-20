@@ -2,15 +2,15 @@
 
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
 
-SET(vil_bpro_sources
+SET(vil_pro_sources
     vil_io_image_view_base.h vil_io_image_view_base.cxx
     vil_load_image_view_process.h vil_load_image_view_process.cxx
     vil_save_image_view_process.h vil_save_image_view_process.cxx
 )
 
-AUX_SOURCE_DIRECTORY(Templates vil_bpro_sources)
+AUX_SOURCE_DIRECTORY(Templates vil_pro_sources)
 
-ADD_LIBRARY(vil_bpro ${vil_bpro_sources})
-TARGET_LINK_LIBRARIES(vil_bpro bprb vsl vil vil_io)
+ADD_LIBRARY(vil_pro ${vil_pro_sources})
+TARGET_LINK_LIBRARIES(vil_pro bprb vsl vil vil_io)
 
 

@@ -14,7 +14,7 @@ IF( PYTHON_FOUND )
 
   ADD_LIBRARY(batch SHARED ${batch_sources})
   SET_TARGET_PROPERTIES(batch PROPERTIES OUTPUT_NAME batch DEBUG_POSTFIX _d SUFFIX .pyd)
-  TARGET_LINK_LIBRARIES(batch bprb bsta_algo bsta bbgm brdb bbgm_bpro vidl2_bpro vil_bpro vbl)
+  TARGET_LINK_LIBRARIES(batch bprb bsta_algo bsta bbgm brdb bbgm_pro vidl2_bpro vil_pro vbl)
 
 IF (PYTHON_DEBUG_LIBRARY)
  TARGET_LINK_LIBRARIES( batch debug ${PYTHON_DEBUG_LIBRARY})

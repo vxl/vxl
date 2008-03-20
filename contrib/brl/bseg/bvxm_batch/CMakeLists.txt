@@ -26,7 +26,7 @@ IF( PYTHON_FOUND )
 
     SET_TARGET_PROPERTIES(bvxm_batch PROPERTIES OUTPUT_NAME bvxm_batch DEBUG_POSTFIX _d SUFFIX .pyd)
 
-    TARGET_LINK_LIBRARIES(bvxm_batch bprb brdb vbl bvxm bvxm_pro bvxm_io vpgl_io vpgl_bpro vil_io vil_bpro)
+    TARGET_LINK_LIBRARIES(bvxm_batch bprb brdb vbl bvxm bvxm_pro bvxm_io vpgl_io vpgl_pro vil_io vil_pro)
   
     IF (PYTHON_DEBUG_LIBRARIES)
       TARGET_LINK_LIBRARIES( bvxm_batch debug ${PYTHON_DEBUG_LIBRARY})
