@@ -306,15 +306,16 @@ static void brip_1d_gaussian_kernel(double sigma, double fuzz,
 }
 
 vil_image_view<float>
-brip_vil_float_ops::gaussian(vil_image_view<float> const& input, float sigma)
+brip_vil_float_ops::gaussian(vil_image_view<float> const& input, float sigma,
+                             float fill)
 {
   vil_image_view<float> dest(input.ni(), input.nj());
-  dest.fill(0.0);
+  dest.fill(fill);
   unsigned r;
   double* ker;
   brip_1d_gaussian_kernel(sigma, 0.02, r, ker);
   vil_image_view<float> work(input.ni(), input.nj());
-  work.fill(0.0);
+  work.fill(fill);
 
   // filter horizontal
   int ksize = 2*r + 1 ;

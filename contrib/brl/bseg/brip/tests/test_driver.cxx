@@ -7,6 +7,8 @@ DECLARE( test_fourier );
 DECLARE( test_homography );
 DECLARE( test_lucas_kanade );
 DECLARE( test_Horn_Schunck );
+DECLARE( test_quadtree );
+DECLARE( test_max_scale_response );
 
 void
 register_tests()
@@ -18,6 +20,8 @@ register_tests()
   REGISTER( test_homography );
   REGISTER( test_lucas_kanade );
   REGISTER( test_Horn_Schunck );
+  REGISTER( test_quadtree );
+  REGISTER( test_max_scale_response );
 }
 
 DEFINE_MAIN;
