@@ -16,7 +16,6 @@ SET(brip_sources
    brip_watershed_params.h   brip_watershed_params.cxx
    brip_watershed.h          brip_watershed.cxx
    brip_roi.h                brip_roi.cxx              brip_roi_sptr.h
-   brip_wavelet_transform.h  brip_wavelet_transform.cxx
    brip_quadtree_node.h      brip_quadtree_node_base_sptr.h
    brip_max_scale_response.h brip_max_scale_response.txx
 )
