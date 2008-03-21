@@ -1,3 +1,5 @@
+INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
+
 ADD_EXECUTABLE(vgl_conic_example vgl_conic_example.cxx)
 TARGET_LINK_LIBRARIES( vgl_conic_example vgl_algo )
 
