@@ -84,7 +84,7 @@ class brip_quadtree_node : public brip_quadtree_node_base
  public:
 
   // Constructors/Initializers/Destructors--------------------------
-  brip_quadtree_node(): valid_(false), data_(T(0)){}
+  brip_quadtree_node(): data_(T(0)){}
 
   brip_quadtree_node(unsigned iul, unsigned jul, unsigned ilr, unsigned jlr) :
   brip_quadtree_node_base(iul, jul, ilr, jlr, false){}
