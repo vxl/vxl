@@ -48,7 +48,7 @@ class brip_vil_float_ops
                                         float sigma,
                                         float fill = 0.0f);
 
-#if 1 // #ifdef VIL_CONVOLVE_WITH_MASK_EXISTS // TODO
+#ifdef VIL_CONVOLVE_WITH_MASK_EXISTS // TODO
   //: convolves with a Gaussian kernel and for a given mask
   static vil_image_view<float> gaussian(vil_image_view<float> const& input,
                                         float sigma,
