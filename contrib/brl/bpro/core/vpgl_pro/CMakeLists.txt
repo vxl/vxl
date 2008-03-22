@@ -16,5 +16,5 @@ SET( vpgl_pro_sources
 AUX_SOURCE_DIRECTORY(Templates vpgl_pro_sources)
 
 ADD_LIBRARY(vpgl_pro ${vpgl_pro_sources})
-TARGET_LINK_LIBRARIES( vpgl_pro bprb brdb vpgl vpgl_io vnl vil)
+TARGET_LINK_LIBRARIES(vpgl_pro bprb brdb vpgl_file_formats vpgl_io vpgl vnl vil)
 
