@@ -16,6 +16,10 @@ SOURCES += brip_roi.cxx
 MANPAGE_SOURCES += brip_roi_sptr.h
 SOURCES += brip_watershed.cxx
 SOURCES += brip_watershed_params.cxx
+MANPAGE_SOURCES += brip_max_scale_response.txx
+MANPAGE_SOURCES += brip_quadtree_node.h
+MANPAGE_SOURCES += brip_quadtree_node_base_sptr.h
+MANPAGE_SOURCES += brip_quadtree_utils.txx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

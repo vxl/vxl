@@ -10,6 +10,8 @@ TESTS += test_fourier.cxx
 TESTS += test_homography.cxx
 TESTS += test_lucas_kanade.cxx
 TESTS += test_Horn_Schunck.cxx
+TESTS += test_max_scale_response.cxx
+TESTS += test_quadtree.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
