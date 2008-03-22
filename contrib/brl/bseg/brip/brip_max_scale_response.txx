@@ -32,9 +32,10 @@ brip_max_scale_response( vcl_vector<vil_image_view<T> > const& pyramid)
 template <class T>
 brip_max_scale_response<T>::
 brip_max_scale_response( vil_image_view<T> const& base_image,
-                         float max_scale) : trace_valid_(false)
+                         float max_scale )
+: trace_valid_(false)
 {
-  //not implemented - FIXME - JLM
+  // not yet implemented - FIXME - JLM
 }
 
 template <class T>
@@ -45,7 +46,7 @@ void brip_max_scale_response<T>::compute_trace_pyramid()
   {
     unsigned ni = pyramid_[level].ni(), nj = pyramid_[level].nj();
     vil_image_view<float> lview;
-    if (ni<=5||nj<=5){
+    if (ni<=5||nj<=5) {
       lview.set_size(ni, nj);
       lview.fill(0.0f);
       trace_.push_back(lview);
@@ -53,24 +54,24 @@ void brip_max_scale_response<T>::compute_trace_pyramid()
     }
     if (pyramid_[level].nplanes()>1)
       vil_convert_planes_to_grey(pyramid_[level], lview);
-    else{
+    else {
       vil_image_view_base_sptr v = new vil_image_view<T>(pyramid_[level]);
       lview = vil_convert_cast(float(), v);
-      }
+    }
     vil_image_view<float> smooth = brip_vil_float_ops::gaussian(lview, 0.75, lview(0,0));
-#if 0
-     vcl_cout << "Input at level " << level << '\n';
+#ifdef DEBUG
+    vcl_cout << "Input at level " << level << '\n';
     for (unsigned j = 0; j<smooth.nj(); ++j){
       for (unsigned i = 0; i<smooth.nj(); ++i)
         vcl_cout << vcl_setprecision(2) << vcl_fixed << smooth(i,j) << ' ';
       vcl_cout <<'\n';
     }
 #endif
-    unsigned radius = 2;
+    const unsigned radius = 2;
     vil_image_view<float> tr =
       brip_vil_float_ops::trace_grad_matrix_NxN(smooth, radius);
     trace_.push_back(tr);
-#if 0
+#ifdef DEBUG
     vcl_cout << "Level " << level << '\n';
     for (unsigned j = 0; j<tr.nj(); ++j){
       for (unsigned i = 0; i<tr.nj(); ++i)
@@ -111,7 +112,7 @@ brip_max_scale_response<T>::scale_pyramid()
     unsigned nil = trace_[level].ni(), njl = trace_[level].nj();
     vil_image_view<float> sl(nil, njl);
     for (unsigned j = 0; j<njl; ++j)
-      for (unsigned i = 0; i<nil; ++i){
+      for (unsigned i = 0; i<nil; ++i) {
         //find the maximum scale within the pixel at level
         float scg = vnl_numeric_traits<float>::maxval;
         for (unsigned m = 0; m<step; ++m){
