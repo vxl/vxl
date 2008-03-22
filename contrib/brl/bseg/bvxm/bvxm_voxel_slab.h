@@ -5,10 +5,8 @@
 // \brief A 3-D slab of data of type T.  Based loosely on vil_image_view.
 // \author Daniel Crispell (dec@lems.brown.edu)
 // \date 1/22/2008
-//
 
 #include <vcl_cassert.h>
-#include <vnl/vnl_matrix_fixed.h>
 
 #include "bvxm_voxel_slab_base.h"
 #include "bvxm_memory_chunk.h"
@@ -16,15 +14,15 @@
 template <class T>
 class bvxm_voxel_slab : public bvxm_voxel_slab_base
 {
-public:
+ public:
   //: Default Constructor. Create an empty slab.
-  bvxm_voxel_slab() : bvxm_voxel_slab_base(0,0,0), mem_(0), first_voxel_(0) {};
+  bvxm_voxel_slab() : bvxm_voxel_slab_base(0,0,0), first_voxel_(0), mem_(0) {};
 
   //: Create a voxel slab using its own memory.
   bvxm_voxel_slab(unsigned nx, unsigned ny, unsigned nz);
 
   //: Create a voxel_slab using an exisiting bvxm_memory_chunk
-  bvxm_voxel_slab(unsigned nx, unsigned ny, unsigned nz, bvxm_memory_chunk_sptr mem, T* first_voxel) 
+  bvxm_voxel_slab(unsigned nx, unsigned ny, unsigned nz, bvxm_memory_chunk_sptr mem, T* first_voxel)
     : bvxm_voxel_slab_base(nx,ny,nz), first_voxel_(first_voxel), mem_(mem){};
 
   //: Copy Constructor
@@ -71,18 +69,17 @@ public:
     return first_voxel_[nx_*ny_*z + nx_*y + x]; }
 
   //: not-equals operator
-  bool operator != (bvxm_voxel_slab const& rhs) 
+  bool operator != (bvxm_voxel_slab const& rhs)
   {
     return !operator==(rhs);
   }
 
   //: deep copy data in slab
- void deep_copy(bvxm_voxel_slab<T> const& src);
+  void deep_copy(bvxm_voxel_slab<T> const& src);
 
- void set_size(unsigned nx, unsigned ny, unsigned nz);
+  void set_size(unsigned nx, unsigned ny, unsigned nz);
 
-
-protected:
+ protected:
   T* first_voxel_;
 
   //: Reference to actual voxel data.
@@ -90,9 +87,6 @@ protected:
 
   //: Disconnect this slab from the underlying data.
   void release_memory() { mem_ = 0; }
-
-
 };
 
-
-#endif
+#endif // bvxm_voxel_slab_h_
