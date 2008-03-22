@@ -5,11 +5,10 @@
 // \date   03/07/2008
 //
 #include <testlib/testlib_test.h>
-#include "../bvxm_rpc_registration_process.h"
+#include <bvxm/pro/bvxm_rpc_registration_process.h>
 #include <bvxm/bvxm_voxel_world.h>
 
 #include <vcl_string.h>
-#include <vcl_vector.h>
 #include <vcl_iostream.h>
 
 #include <brdb/brdb_value.h>
@@ -25,6 +24,7 @@
 
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
+#include <vgl/vgl_vector_3d.h>
 
 #include <vul/vul_file.h>
 
@@ -44,7 +44,7 @@ MAIN( test_bvxm_rpc_registration_process )
   voxel_world_params->set_params("./rpc_test", vgl_point_3d<float> (-10.0,-10.0,-2.5), num_voxels, voxel_length, lvcs);
   bvxm_voxel_world_sptr voxel_world = new bvxm_voxel_world();
   voxel_world->set_params(voxel_world_params);
- 
+
   vpgl_rational_camera<double>* camera_rational = read_rational_camera<double>("rpc_registration_camera.rpb");
   vpgl_camera<double>* camera = new vpgl_local_rational_camera<double>(*lvcs,*camera_rational);
   vil_image_view_base_sptr img = vil_load("rpc_registration_image.png");
@@ -70,43 +70,44 @@ MAIN( test_bvxm_rpc_registration_process )
   // check if the results are in DB
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id_cam);
   brdb_selection_sptr S = DATABASE->select("vpgl_camera_double_sptr_data", Q);
-  if(S->size()!=1){
+  if (S->size()!=1) {
     vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-    << " no selections\n";
+             << " no selections\n";
   }
 
   brdb_value_sptr value;
   if (!S->get_value(vcl_string("value"), value)) {
     vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-     << " didn't get value\n";
+             << " didn't get value\n";
   }
   bool non_null = (value != 0);
   TEST("vpgl_camera_double_sptr non-null", non_null ,true);
 
-  brdb_value_t<vpgl_camera_double_sptr>* result = 
+  brdb_value_t<vpgl_camera_double_sptr>* result =
     static_cast<brdb_value_t<vpgl_camera_double_sptr>* >(value.ptr());
   vpgl_camera_double_sptr cam = result->value();
 
 
   brdb_query_aptr Q_img = brdb_query_comp_new("id", brdb_query::EQ, id_img);
   brdb_selection_sptr S_img = DATABASE->select("vil_image_view_base_sptr_data", Q_img);
-  if(S_img->size()!=1){
+  if (S_img->size()!=1) {
     vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-    << " no selections\n";
+             << " no selections\n";
   }
 
   brdb_value_sptr value_img;
   if (!S_img->get_value(vcl_string("value"), value_img)) {
     vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-     << " didn't get value\n";
+             << " didn't get value\n";
   }
   non_null = (value_img != 0);
   TEST("image output non-null", non_null ,true);
 
-  brdb_value_t<vil_image_view_base_sptr>* result_img = 
+  brdb_value_t<vil_image_view_base_sptr>* result_img =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_img.ptr());
   vil_image_view_base_sptr img_out = result_img->value();
   bool saved = vil_save(*img_out, "voxel_image.tif");
+  TEST("image saved", saved ,true);
 
   SUMMARY();
 }
