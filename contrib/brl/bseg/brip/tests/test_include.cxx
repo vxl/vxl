@@ -1,7 +1,11 @@
 #include <brip/brip_histogram.h>
+#include <brip/brip_max_scale_response.h>
 #include <brip/brip_mutual_info.h>
 #include <brip/brip_para_cvrg.h>
 #include <brip/brip_para_cvrg_params.h>
+#include <brip/brip_quadtree_node.h>
+#include <brip/brip_quadtree_node_base_sptr.h>
+#include <brip/brip_quadtree_utils.h>
 #include <brip/brip_region_pixel.h>
 #include <brip/brip_region_pixel_sptr.h>
 #include <brip/brip_roi.h>
