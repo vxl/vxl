@@ -9,6 +9,7 @@
 #include <bil/algo/bil_harr_wavelet_transform.h>
 #include <bil/algo/bil_perform_tensor_decomposition.h>
 #include <bil/algo/bil_roi_mask.h>
+#include <bil/algo/bil_scale_image.h>
 #include <bil/algo/bil_wshed2d.h>
 
 int main() { return 0; }
