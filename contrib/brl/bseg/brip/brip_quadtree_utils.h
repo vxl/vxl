@@ -44,10 +44,9 @@ class brip_quadtree_utils
                              vbl_array_2d<brip_quadtree_node_base_sptr>& nodes);
 
   //: given two layers of a pyramid of quadtree nodes, establish the parent-chlid links
-static void brip_quadtree_utils<T>::
-connect_children(vbl_array_2d<brip_quadtree_node_base_sptr>& nodes,
-                 unsigned scale,
-                 vbl_array_2d<brip_quadtree_node_base_sptr> const& prev);
+static void connect_children(vbl_array_2d<brip_quadtree_node_base_sptr>& nodes,
+                             unsigned scale,
+                             vbl_array_2d<brip_quadtree_node_base_sptr> const& prev);
 
 //: Construct the quadtree from an image pyramid, with masks defined for each pyramid layer
 static 
