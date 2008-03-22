@@ -15,7 +15,6 @@ brip_max_scale_response( vcl_vector<vil_image_view<T> > const& pyramid)
   pyramid_ = pyramid;
   pyramid_scales_.push_back(1.0f);
   unsigned ni = pyramid_[0].ni(), nj = pyramid_[0].nj();
-  unsigned nplanes = pyramid_[0].nplanes();
   float nif = static_cast<float>(ni), njf = static_cast<float>(nj);
   float diag0 = vcl_sqrt(nif*nif + njf*njf);
   for (unsigned level = 1; level<pyramid.size(); ++level)
@@ -91,8 +90,8 @@ brip_max_scale_response<T>::scale_pyramid()
   if (!trace_valid_)
     return temp;
   vil_image_view<float> sbase = this->scale_base();
-  unsigned ni = sbase.ni(), nj = sbase.nj();
 #if 0
+  unsigned ni = sbase.ni(), nj = sbase.nj();
   vcl_cout << "Printing scale base\n";
   for (unsigned j = 0; j<nj; ++j){
     for (unsigned i = 0; i<ni; ++i)
@@ -107,7 +106,6 @@ brip_max_scale_response<T>::scale_pyramid()
   for (unsigned level = 1; level<nlevels; ++level)
   {
     float sc = pyramid_scales_[level];
-    float sc1 = pyramid_scales_[level-1];
     unsigned step = static_cast<unsigned>(sc/sc0);
     unsigned nil = trace_[level].ni(), njl = trace_[level].nj();
     vil_image_view<float> sl(nil, njl);
