@@ -104,6 +104,12 @@ SOURCE=.\vil_load_image_view_process.cxx
 # Begin Source File
 SOURCE=.\vil_save_image_view_process.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vil_binary_image_op_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vil_map_image_process.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -115,6 +121,15 @@ SOURCE=.\vil_load_image_view_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_save_image_view_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_binary_image_op_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_map_image_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_math_functors.h
 # End Source File
 # End Group
 # End Target

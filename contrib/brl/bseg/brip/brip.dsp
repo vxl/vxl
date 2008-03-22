@@ -134,6 +134,15 @@ SOURCE=.\Templates/vbl_smart_ptr+brip_region_pixel-.cxx
 # Begin Source File
 SOURCE=.\Templates/vbl_smart_ptr+brip_roi-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/brip_max_scale_response+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brip_quadtree_utils+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+brip_quadtree_node_base-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -181,6 +190,24 @@ SOURCE=.\brip_watershed.h
 # End Source File
 # Begin Source File
 SOURCE=.\brip_watershed_params.h
+# End Source File
+# Begin Source File
+SOURCE=.\brip_max_scale_response.h
+# End Source File
+# Begin Source File
+SOURCE=.\brip_max_scale_response.txx
+# End Source File
+# Begin Source File
+SOURCE=.\brip_quadtree_node.h
+# End Source File
+# Begin Source File
+SOURCE=.\brip_quadtree_node_base_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\brip_quadtree_utils.h
+# End Source File
+# Begin Source File
+SOURCE=.\brip_quadtree_utils.txx
 # End Source File
 # End Group
 # End Target

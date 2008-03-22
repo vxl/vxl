@@ -185,6 +185,12 @@ SOURCE=.\bil_roi_mask.h
 # Begin Source File
 SOURCE=.\bil_wshed2d.h
 # End Source File
+# Begin Source File
+SOURCE=.\bil_scale_image.h
+# End Source File
+# Begin Source File
+SOURCE=.\bil_scale_image.txx
+# End Source File
 # End Group
 # End Target
 # End Project

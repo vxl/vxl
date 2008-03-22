@@ -236,6 +236,12 @@ SOURCE=.\test_lucas_kanade.cxx
 SOURCE=.\test_Horn_Schunck.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_max_scale_response.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_quadtree.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group
