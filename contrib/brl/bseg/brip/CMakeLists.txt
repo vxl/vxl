@@ -18,6 +18,7 @@ SET(brip_sources
    brip_roi.h                brip_roi.cxx              brip_roi_sptr.h
    brip_quadtree_node.h      brip_quadtree_node_base_sptr.h
    brip_max_scale_response.h brip_max_scale_response.txx
+   brip_quadtree_utils.h     brip_quadtree_utils.txx
 )
 AUX_SOURCE_DIRECTORY(Templates brip_sources)
 
