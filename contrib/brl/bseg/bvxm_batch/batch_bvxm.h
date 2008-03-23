@@ -4,7 +4,7 @@
 //:
 // \file
 // \brief External function declarations
-// \author J.L. Mundy 
+// \author J.L. Mundy
 // \date February 5, 2008
 //
 //
@@ -20,4 +20,4 @@ register_processes(PyObject *self, PyObject *args);
 extern PyObject *
 register_datatypes(PyObject *self, PyObject *args);
 
-#endif //batch
+#endif // batch_bvxm_h_
