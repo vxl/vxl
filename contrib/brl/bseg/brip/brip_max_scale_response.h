@@ -14,7 +14,8 @@
 // In the latter case a pyramid is generated as input to the scale max response
 // search. The interval between scales is uniform on according to the 
 // logarithm of scale ratios. For example if the scale range is 
-// from 1 to 8 the scale intervals are 1, 1.4, 2, 2.8, 4, 5.6, 8, i.e.,
+// from 1 to 8 and the scale ratio is sqrt(2), the scale intervals are:
+// 1, 1.4, 2, 2.8, 4, 5.6, 8, i.e.,
 // 8/4 = 2, 2^(0.5) = 1.4, 4*1.4 = 5.6
 // 
 #include <vil/vil_image_view.h>
@@ -26,7 +27,8 @@ class brip_max_scale_response
  public:
   //:compute pyramid from base
   brip_max_scale_response( vil_image_view<T> const& base_image,
-                           float max_scale);
+                           double scale_ratio,
+                           double max_scale);
   //: a pre-computed pyramid
   brip_max_scale_response( vcl_vector<vil_image_view<T> > const& pyramid);
 

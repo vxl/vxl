@@ -59,43 +59,30 @@ static void test_max_scale_response()
   pyramid.push_back(level1);
   pyramid.push_back(level2);
   brip_max_scale_response<float> msr(pyramid);
+  vcl_vector<vil_image_view<float> > spyr = msr.scale_pyramid();
+  vcl_vector<vil_image_view<vxl_byte> > mask = msr.mask_pyramid();
 #ifdef DEBUG
   vcl_cout << "trace pyramid large blob\n";
   vcl_vector<vil_image_view<float> > tr = msr.trace_pyramid();
   print_pyramid(tr);
 
   vcl_cout << "Scale pyramid large blob\n";
-  vcl_vector<vil_image_view<float> > spyr = msr.scale_pyramid();
   print_pyramid(spyr);
 
   vcl_cout << "Mask pyramid large blob\n";
-  vcl_vector<vil_image_view<vxl_byte> > mask = msr.mask_pyramid();
   print_pyramid(mask);
 #endif // DEBUG
+  bool good = spyr[0](15,15)==4.0f;
+  good = good && spyr[1](7,7)==4.0f;
+  good = good && spyr[2](3,3)==4.0f;
+  good = good && spyr[0](4,4)==2.0f;
+  good = good && spyr[1](2,2)==2.0f;
+  good = good && spyr[2](1,1)==2.0f;
+  good = good && !mask[0](15,15)&&!mask[1](7,7)&&mask[2](3,3);
+  good = good && !mask[0](4,4)&&mask[1](2,2)&&!mask[2](1,1);
+  TEST("Test scale and mask pyramid - large blob", good, true);
 
-  level0.fill(0.0f);
-  for (unsigned j = 14; j<18; ++j)
-    for (unsigned i = 14; i<18; ++i)
-      level0(i,j) = 1.0f;
-  vil_resample_bilin(level0, level1, 16, 16);
-  vil_resample_bilin(level1, level2, 8, 8);
-  vcl_vector<vil_image_view<float> > pyramid1;
-  pyramid1.push_back(level0);
-  pyramid1.push_back(level1);
-  pyramid1.push_back(level2);
-  brip_max_scale_response<float> msr1(pyramid1);
 
-  vcl_vector<vil_image_view<float> > spyr1 = msr1.scale_pyramid();
-  vcl_vector<vil_image_view<vxl_byte> > mask1 = msr1.mask_pyramid();
-#ifdef DEBUG
-  vcl_cout << "Scale pyramid small blob\n";
-  print_pyramid(spyr1);
-
-  vcl_cout << "Mask pyramid small blob\n";
-  print_pyramid(mask1);
-#endif // DEBUG
-  bool good = mask1[0](15,15)&&!mask1[1](7,7)&&!mask1[2](3,3);
-  TEST("Test mask pyramid", good, true);
   level0.fill(1.0f);
                      level0(14,12)=0.5f;level0(15,13)=0.0f;level0(16,12)=0.5f;
   level0(13,13)=0.5f;level0(14,13)=0.0f;level0(15,13)=0.0f;level0(15,13)=0.5f;
@@ -111,12 +98,16 @@ static void test_max_scale_response()
   pyramid2.push_back(level1);
   pyramid2.push_back(level2);
   brip_max_scale_response<float> msr2(pyramid2);
-
-#ifdef DEBUG
   vcl_vector<vil_image_view<float> > spyr2 = msr2.scale_pyramid();
+  vcl_vector<vil_image_view<vxl_byte> > mask2 = msr2.mask_pyramid();
+  good = spyr2[0](15,15)==1.0;
+  good = good&& spyr2[1](8,8)==1.0;
+  good = good&& spyr2[2](4,4)==1.0;
+  good = good&& mask2[0](15,15)&&!mask2[0](8,8)&&!mask2[0](4,4);
+  TEST("Test scale and mask pyramid - human blob", good, true);
+#ifdef DEBUG
   vcl_cout << "Scale pyramid human\n";
   print_pyramid(spyr2);
-  vcl_vector<vil_image_view<vxl_byte> > mask2 = msr2.mask_pyramid();
   vcl_cout << "Mask pyramid human\n";
   print_pyramid(mask2);
 #endif // DEBUG
