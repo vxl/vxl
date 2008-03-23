@@ -1,17 +1,16 @@
-
+#include "mfpf_mr_point_finder_builder.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief Builder for mfpf_mr_point_finder objects.
 
-#include <vcl_cstdlib.h>
-#include <mfpf/mfpf_mr_point_finder_builder.h>
 #include <mfpf/mfpf_mr_point_finder.h>
 
 #include <vimt/vimt_image_pyramid.h>
 #include <vnl/vnl_math.h>
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
+#include <vcl_cassert.h>
 
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
@@ -74,7 +73,6 @@ void mfpf_mr_point_finder_builder::set(
     if (builder0.search_ns()>0)
       builder(i).set_search_angle_range(1,dA);
   }
-
 }
 
 //: Define region size in world co-ordinates
@@ -91,8 +89,8 @@ void mfpf_mr_point_finder_builder::set_region_size(double wi, double wj)
 void mfpf_mr_point_finder_builder::set_size_and_levels(
                 const mfpf_point_finder_builder& builder0,
                 double wi, double wj,
-                double scale_step, 
-                int min_pixel_width, 
+                double scale_step,
+                int min_pixel_width,
                 int max_pixel_width)
 {
   double max_w = vcl_max(wi,wj);
@@ -159,7 +157,7 @@ void mfpf_mr_point_finder_builder::add_example(
 void mfpf_mr_point_finder_builder::build(mfpf_mr_point_finder& mr_pf)
 {
   vcl_vector<mfpf_point_finder*> finders(size());
-  for (unsigned i=0;i<size();++i) 
+  for (unsigned i=0;i<size();++i)
   {
     finders[i] = builder(i).new_finder();
     builder(i).build(*finders[i]);
@@ -237,12 +235,11 @@ void mfpf_mr_point_finder_builder::b_read(vsl_b_istream& bfs)
       for (unsigned i=0;i<n;++i) vsl_b_read(bfs,builders_[i]);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&) \n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
-
 }
 
 //=======================================================================

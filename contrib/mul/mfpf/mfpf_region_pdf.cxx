@@ -1,16 +1,12 @@
+#include "mfpf_region_pdf.h"
 //:
 // \file
 // \brief Searches with a PDF of an arbitrary region
 // \author Tim Cootes
 
-
-#include <mfpf/mfpf_region_pdf.h>
 #include <vsl/vsl_binary_loader.h>
-#include <vul/vul_string.h>
 #include <vcl_cmath.h>
-
-#include <mbl/mbl_parse_block.h>
-#include <mbl/mbl_read_props.h>
+#include <vcl_cassert.h>
 
 #include <vil/vil_resample_bilin.h>
 #include <vil/io/vil_io_image_view.h>
@@ -102,7 +98,7 @@ double mfpf_region_pdf::radius() const
   double x2 = vcl_max(ref_x_*ref_x_,(ref_x_-wx)*(ref_x_-wx));
   double wy = roi_nj_-1;
   double y2 = vcl_max(ref_y_*ref_y_,(ref_y_-wy)*(ref_y_-wy));
-  double r2 = x2+y2; 
+  double r2 = x2+y2;
   if (r2<=1) return 1.0;
   return vcl_sqrt(r2);
 }
@@ -267,7 +263,7 @@ bool mfpf_region_pdf::is_inside(const mfpf_pose& pose,
 {
   // Set transform model frame -> World
   vimt_transform_2d t1;
-  t1.set_similarity(step_size()*pose.u(),pose.p());  
+  t1.set_similarity(step_size()*pose.u(),pose.p());
   // Compute position of p in model frame
   vgl_point_2d<double> q=t1.inverse()(p);
   q.x()+=ref_x_;
@@ -337,7 +333,7 @@ void mfpf_region_pdf::print_summary(vcl_ostream& os) const
   mfpf_point_finder::print_summary(os);
   os <<vcl_endl;
   vsl_indent_dec(os);
-  os<<vsl_indent()<<"}";
+  os<<vsl_indent()<<'}';
 }
 
 void mfpf_region_pdf::print_shape(vcl_ostream& os) const

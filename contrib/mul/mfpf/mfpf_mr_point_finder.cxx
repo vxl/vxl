@@ -1,16 +1,15 @@
-
+#include "mfpf_mr_point_finder.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief Multi-res point finder.  Searches at range of scales.
 
-#include <vcl_cstdlib.h>
-#include <mfpf/mfpf_mr_point_finder.h>
 #include <mfpf/mfpf_prune_overlaps.h>
 
 #include <vimt/vimt_image_pyramid.h>
 #include <vnl/vnl_math.h>
 #include <vcl_cmath.h>
+#include <vcl_cassert.h>
 
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
@@ -86,7 +85,7 @@ double mfpf_mr_point_finder::search(const vimt_image_pyramid& im_pyr,
 
 //: Searches around given pose, starting at coarsest model.
 //  Searches with finder(L_hi) and feeds best result into
-//  search for next model, until level L_lo.  
+//  search for next model, until level L_lo.
 //  Result can be further improved by a call to refine_match()
 double mfpf_mr_point_finder::mr_search(
                    const vimt_image_pyramid& im_pyr,
@@ -204,7 +203,7 @@ void mfpf_mr_point_finder::multi_search_and_prune(
     }
 
     // Remove overlaps if we are at prune_level
-    if (L==prune_level) 
+    if (L==prune_level)
     {
       mfpf_prune_overlaps(finder(L),poses,fits);
     }
@@ -277,12 +276,11 @@ void mfpf_mr_point_finder::b_read(vsl_b_istream& bfs)
       for (unsigned i=0;i<n;++i) vsl_b_read(bfs,finders_[i]);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&) \n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
-
 }
 
 //=======================================================================

@@ -1,38 +1,40 @@
 #ifndef mfpf_mr_point_finder_h_
 #define mfpf_mr_point_finder_h_
-
 //:
 // \file
 // \author Tim Cootes
-// \brief Multi-res point finder.  Searches at range of scales. 
+// \brief Multi-res point finder.  Searches at range of scales.
 
 #include <mbl/mbl_cloneable_ptr.h>
 #include <mfpf/mfpf_point_finder.h>
+#include <vcl_cassert.h>
+#include <vcl_iosfwd.h>
 
 class vimt_image_pyramid;
 
 //: Multi-res point finder.
 // Contains a set of mfpf_point_finders, each trained at a different
 // resolution.  Contains search algorithms to take advantage of this.
-class mfpf_mr_point_finder {
-protected:
+class mfpf_mr_point_finder
+{
+ protected:
 
   //: Set of cost function objects.
   vcl_vector<mbl_cloneable_ptr<mfpf_point_finder> > finders_;
 
-public:
+ public:
 
     //: Dflt ctor
   mfpf_mr_point_finder();
 
-    //: Destructor
+  //: Destructor
   virtual ~mfpf_mr_point_finder();
 
   //: Number of finders
   unsigned size() const { return finders_.size(); }
 
   //: Point finder at level L
-  const mfpf_point_finder& finder(unsigned L) const 
+  const mfpf_point_finder& finder(unsigned L) const
   { assert (L<finders_.size()); return *finders_[L]; }
 
   //: Point finder at level L
@@ -60,7 +62,7 @@ public:
 
   //: Searches around given pose, starting at coarsest model.
   //  Searches with finder(L_hi) and feeds best result into
-  //  search for next model, until level L_lo.  
+  //  search for next model, until level L_lo.
   //  Result can be further improved by a call to refine_match()
   double mr_search(const vimt_image_pyramid& im_pyr,
                    mfpf_pose& pose, int L_lo, int L_hi);
@@ -75,7 +77,7 @@ public:
   //  If multiple angles/scales considered, the there may be many
   //  nearby responses.
   //  Each candidate is then localised by searching at finer and
-  //  finer resolutions.  
+  //  finer resolutions.
   //  Final responses may be further improved with refine_match()
   void multi_search(const vimt_image_pyramid& im_pyr,
                     const mfpf_pose& pose0,
@@ -99,31 +101,30 @@ public:
                     vcl_vector<double>& fits,
                     int prune_level=-1);
 
-    //: Version number for I/O
+  //: Version number for I/O
   short version_no() const;
 
-    //: Name of the class
+  //: Name of the class
   virtual vcl_string is_a() const;
 
-    //: Print class to os
+  //: Print class to os
   virtual void print_summary(vcl_ostream& os) const;
 
-    //: Save class to binary file stream
+  //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
 
-    //: Load class from binary file stream
+  //: Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs);
 };
 
-  //: Stream output operator for class reference
+//: Stream output operator for class reference
 vcl_ostream& operator<<(vcl_ostream& os,const mfpf_mr_point_finder& b);
 
-  //: Binary file stream output operator for class reference
+//: Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const mfpf_mr_point_finder& b);
 
-  //: Binary file stream input operator for class reference
+//: Binary file stream input operator for class reference
 void vsl_b_read(vsl_b_istream& bfs, mfpf_mr_point_finder& b);
 
 #endif // mfpf_mr_point_finder_h_
-
 
