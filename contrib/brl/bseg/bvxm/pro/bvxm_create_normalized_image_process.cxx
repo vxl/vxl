@@ -1,15 +1,14 @@
 #include "bvxm_create_normalized_image_process.h"
-#include "bvxm_normalize_image_process.h"
-
+//:
+// \file
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
 
 #include <vil/vil_image_view_base.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_new.h>
 #include <brip/brip_vil_float_ops.h>
 #include <vpgl/vpgl_camera.h>
 
+#include <bvxm/bvxm_normalize_image_process.h>
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_mog_grey_processor.h>
 #include <bvxm/bvxm_image_metadata.h>
@@ -23,7 +22,7 @@ bvxm_create_normalized_image_process::bvxm_create_normalized_image_process()
   input_data_.resize(3,brdb_value_sptr(0));
   input_types_.resize(3);
   input_types_[0] = "vil_image_view_base_sptr";
-  input_types_[1] = "float";  // input a 
+  input_types_[1] = "float";  // input a
   input_types_[2] = "float";  // input b
 
   //output
@@ -35,22 +34,21 @@ bvxm_create_normalized_image_process::bvxm_create_normalized_image_process()
 
 bool bvxm_create_normalized_image_process::execute()
 {
-
   // Sanity check
-  if(!this->verify_inputs())
+  if (!this->verify_inputs())
     return false;
 
   //get the inputs
-  brdb_value_t<vil_image_view_base_sptr>* input0 = 
+  brdb_value_t<vil_image_view_base_sptr>* input0 =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(input_data_[0].ptr());
 
   vil_image_view_base_sptr input_img = input0->value();
 
-  brdb_value_t<float>* input2 = 
+  brdb_value_t<float>* input2 =
     static_cast<brdb_value_t<float>* >(input_data_[1].ptr());
   float a = input2->value();
 
-  brdb_value_t<float>* input3 = 
+  brdb_value_t<float>* input3 =
     static_cast<brdb_value_t<float>* >(input_data_[2].ptr());
   float b = input3->value();
 
@@ -59,7 +57,7 @@ bool bvxm_create_normalized_image_process::execute()
     vcl_cout << "In bvxm_create_normalized_image_process::execute() -- Input image pixel format is not VIL_PIXEL_FORMAT_BYTE!\n";
     return false;
   }
-  
+
   // return the normalized input img
   vil_image_view<vxl_byte> in_image(input_img);
   vil_image_view<vxl_byte> out_image(input_img->ni(), input_img->nj(), input_img->nplanes());

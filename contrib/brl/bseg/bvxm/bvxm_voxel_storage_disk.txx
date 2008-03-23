@@ -1,6 +1,7 @@
 #ifndef bvxm_voxel_storage_disk_txx_
 #define bvxm_voxel_storage_disk_txx_
-
+//:
+// \file
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #ifdef BVXM_USE_FSTREAM64
@@ -8,7 +9,6 @@
 #else
 #include <vil/vil_stream_fstream.h>
 #endif
-#include <vcl_cassert.h>
 #include <vul/vul_file.h>
 #include <vgl/vgl_vector_3d.h>
 
@@ -39,7 +39,7 @@ bvxm_voxel_storage_disk<T>::bvxm_voxel_storage_disk(vcl_string storage_filename,
 #endif
 
     if (!fio_->ok()) {
-      vcl_cerr << "error opening " << storage_fname_ << " for read/write " << vcl_endl;
+      vcl_cerr << "error opening " << storage_fname_ << " for read/write\n";
       return;
     }
     bvxm_voxel_storage_header<T> header;
@@ -96,12 +96,12 @@ bool bvxm_voxel_storage_disk<T>::initialize_data(T const& value)
 #else
     fio_ = new vil_stream_fstream(storage_fname_.c_str(),"w");
 #endif
-  
+
   bvxm_voxel_slab<T> init_slab(this->grid_size_.x(),this->grid_size_.y(),1,slab_buffer_,static_cast<T*>(slab_buffer_->data()));
   init_slab.fill(value);
 
   if (!fio_->ok()) {
-    vcl_cerr << " error opening file " << storage_fname_ << " for write. " << vcl_endl;
+    vcl_cerr << " error opening file " << storage_fname_ << " for write.\n";
     return false;
   }
   // write the header
@@ -144,7 +144,7 @@ bvxm_voxel_slab<T> bvxm_voxel_storage_disk<T>::get_slab(unsigned slice_idx, unsi
     fio_ = new vil_stream_fstream(storage_fname_.c_str(),"rw");
 #endif
     if (!fio_->ok()) {
-      vcl_cerr << "error opening file " << storage_fname_ << " for read/write! " << vcl_endl;
+      vcl_cerr << "error opening file " << storage_fname_ << " for read/write!\n";
       bvxm_voxel_slab<T> dummy_slab(0,0,0);
       return dummy_slab;
     }
@@ -156,7 +156,7 @@ bvxm_voxel_slab<T> bvxm_voxel_storage_disk<T>::get_slab(unsigned slice_idx, unsi
   }
   // need to check that slab_buffer_ is right size if/when we start using thickness > 1 - DEC
   if (slab_thickness > 1) {
-    vcl_cerr << "error: slab thickness > 1 not yet supported. " << vcl_endl;
+    vcl_cerr << "error: slab thickness > 1 not yet supported.\n";
     bvxm_voxel_slab<T> dummy_slab(0,0,0);
     return dummy_slab;
   }
@@ -171,12 +171,12 @@ void bvxm_voxel_storage_disk<T>::put_slab()
 {
   // check to see if file is already open
   if (!fio_) {
-    vcl_cerr << "error: voxel_storage_disk: put_slab() called, but file is not open. " << vcl_endl;
+    vcl_cerr << "error: voxel_storage_disk: put_slab() called, but file is not open.\n";
     return;
   }
   // assume that we are putting slab back from where we got it
   if (active_slab_start_ < 0) {
-    vcl_cerr << "error: attempted to put_slice() with no active slab " << vcl_endl;
+    vcl_cerr << "error: attempted to put_slice() with no active slab\n";
     return;
   }
   vil_streampos slice_pos = slab_filepos(active_slab_start_);
@@ -198,7 +198,6 @@ void bvxm_voxel_storage_disk<T>::put_slab()
 template <class T>
 unsigned bvxm_voxel_storage_disk<T>::num_observations()
 {
-
   // read header from disk
   // check to see if file is already open
   if (!fio_) {
@@ -212,7 +211,7 @@ unsigned bvxm_voxel_storage_disk<T>::num_observations()
     fio_ = new vil_stream_fstream(storage_fname_.c_str(),"rw");
 #endif
     if (!fio_->ok()) {
-      vcl_cerr << "error opening " << storage_fname_ << "for read/write " << vcl_endl;
+      vcl_cerr << "error opening " << storage_fname_ << "for read/write\n";
       return 0;
     }
   }
@@ -239,7 +238,7 @@ void bvxm_voxel_storage_disk<T>::increment_observations()
     fio_ = new vil_stream_fstream(storage_fname_.c_str(),"rw");
 #endif
     if (!fio_->ok()) {
-      vcl_cerr << "error opening " << storage_fname_ << "for read/write " << vcl_endl;
+      vcl_cerr << "error opening " << storage_fname_ << "for read/write\n";
       return;
     }
   }
@@ -247,7 +246,7 @@ void bvxm_voxel_storage_disk<T>::increment_observations()
   fio_->seek(0);
   vil_streampos pos = fio_->tell();
   if (pos != 0) {
-    vcl_cerr << "error seeking to begining of file" << vcl_endl;
+    vcl_cerr << "error seeking to beginning of file\n";
     return;
   }
   bvxm_voxel_storage_header<T> header;
@@ -262,7 +261,7 @@ void bvxm_voxel_storage_disk<T>::increment_observations()
   fio_->seek(0);
   pos = fio_->tell();
   if (pos != 0) {
-    vcl_cerr << "error seeking to beggining of file " << vcl_endl;
+    vcl_cerr << "error seeking to beggining of file\n";
     return;
   }
   // write
@@ -275,7 +274,7 @@ void bvxm_voxel_storage_disk<T>::increment_observations()
 template<class T>
 vil_streampos bvxm_voxel_storage_disk<T>::slab_filepos(unsigned slab_index)
 {
-  vil_streampos pos = 
+  vil_streampos pos =
     ((vil_streampos)(this->grid_size_.x()*this->grid_size_.y()*slab_index))*sizeof(T) + sizeof(bvxm_voxel_storage_header<T>);
 
   return pos;
