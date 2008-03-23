@@ -17,7 +17,6 @@ brip_max_scale_response( vcl_vector<vil_image_view<T> > const& pyramid)
   pyramid_ = pyramid;
   pyramid_scales_.push_back(1.0f);
   unsigned ni = pyramid_[0].ni(), nj = pyramid_[0].nj();
-  unsigned nplanes = pyramid_[0].nplanes();
   float nif = static_cast<float>(ni), njf = static_cast<float>(nj);
   float diag0 = vcl_sqrt(nif*nif + njf*njf);
   for (unsigned level = 1; level<pyramid.size(); ++level)
@@ -46,7 +45,6 @@ brip_max_scale_response( vil_image_view<T> const& base_image,
       pyramid_scales_.push_back(scale);
       scale*=static_cast<float>(scale_ratio);
     }
-  unsigned ni = base_image.ni(), nj = base_image.nj();
   pyramid_.push_back(base_image);
   unsigned nlevels = pyramid_scales_.size();
   for(unsigned level = 1; level<nlevels; ++level)
