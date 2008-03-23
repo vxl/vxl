@@ -8,7 +8,7 @@
 #include <mfpf/mfpf_pose_set.h>
 
 //: Sorts matches so first has smallest fit
-//: Sorts so that pose[0] is best fit (ie smallest fit value)
+//  Sorts so that pose[0] is best fit (ie smallest fit value)
 void mfpf_sort_matches(vcl_vector<mfpf_pose>& poses,
                        vcl_vector<double>& fits);
 
