@@ -3,6 +3,9 @@ Copyright (c) 1998, 1999 Thai Open Source Software Center Ltd
 See the file COPYING for copying permission.
 */
 
+#ifndef expat_xmltok_impl_h_
+#define expat_xmltok_impl_h_
+
 enum {
   BT_NONXML,
   BT_MALFORM,
@@ -44,3 +47,5 @@ enum {
 };
 
 #include <stddef.h>
+
+#endif /* expat_xmltok_impl_h_ */

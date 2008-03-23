@@ -2,6 +2,9 @@
    See the file COPYING for copying permission.
 */
 
+#ifndef expat_ascii_h_
+#define expat_ascii_h_
+
 #define ASCII_A 0x41
 #define ASCII_B 0x42
 #define ASCII_C 0x43
@@ -83,3 +86,5 @@
 #define ASCII_LSQB 0x5B
 #define ASCII_RSQB 0x5D
 #define ASCII_UNDERSCORE 0x5F
+
+#endif /* expat_ascii_h_ */

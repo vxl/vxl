@@ -20,6 +20,9 @@
          and therefore subject to change.
 */
 
+#ifndef expat_internal_h_
+#define expat_internal_h_
+
 #if defined(__GNUC__)
 /* Instability reported with egcs on a RedHat Linux 7.3.
    Let's comment it out:
@@ -71,3 +74,5 @@
 #define inline
 #endif
 #endif
+
+#endif /* expat_internal_h_ */

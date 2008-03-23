@@ -2,6 +2,9 @@
    See the file COPYING for copying permission.
 */
 
+#ifndef expat_iasciitab_h_
+#define expat_iasciitab_h_
+
 /* Like asciitab.h, except that 0xD has code BT_S rather than BT_CR */
 /* 0x00 */ BT_NONXML, BT_NONXML, BT_NONXML, BT_NONXML,
 /* 0x04 */ BT_NONXML, BT_NONXML, BT_NONXML, BT_NONXML,
@@ -35,3 +38,5 @@
 /* 0x74 */ BT_NMSTRT, BT_NMSTRT, BT_NMSTRT, BT_NMSTRT,
 /* 0x78 */ BT_NMSTRT, BT_NMSTRT, BT_NMSTRT, BT_OTHER,
 /* 0x7C */ BT_VERBAR, BT_OTHER, BT_OTHER, BT_OTHER,
+
+#endif /* expat_iasciitab_h_ */
