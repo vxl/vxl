@@ -1,4 +1,4 @@
-// This is basic/bil/algo/bil_scale_image.h
+// This is brl/bbas/bil/algo/bil_scale_image.h
 #ifndef bil_scale_image_h_
 #define bil_scale_image_h_
 //:
@@ -31,9 +31,9 @@
 
 
 template< class T >
-class bil_scale_image  
+class bil_scale_image
 {
-public:
+ public:
   //: Constructor
   bil_scale_image(unsigned int num_levels=3, unsigned int num_octaves=0,
                    float init_scale=1.0f, int first_octave=0);
@@ -73,7 +73,7 @@ public:
 
   //: Return the number of levels
   unsigned int levels() const { return num_levels_; }
-  
+
   //: Return the number of octaves
   unsigned int octaves() const { return data_.size(); }
 
@@ -93,11 +93,11 @@ public:
   //: create a 3x3x3 image estimating the 26 neighbors at location (i,j)
   vil_image_view< T > neighbors(int octave, unsigned int level,
                                 unsigned int i, unsigned int j) const;
-  
-private:
+
+ private:
   //: The image data
   vcl_vector< vcl_vector< vil_image_view< T > > > data_;
-  
+
   //: Number of images per octave
   unsigned int num_levels_;
 
@@ -107,7 +107,6 @@ private:
   //: The first octave level
   // typically zero but could be negative if we upsample the image
   int first_octave_;
-
 };
 
 #endif // bil_scale_image_h_
