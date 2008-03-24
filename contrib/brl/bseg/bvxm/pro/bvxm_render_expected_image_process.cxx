@@ -5,7 +5,6 @@
 
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_pixel_format.h>
 #include <vpgl/vpgl_camera.h>
 
 #include <bvxm/bvxm_voxel_world.h>
@@ -39,27 +38,25 @@ bvxm_render_expected_image_process::bvxm_render_expected_image_process()
 
 bool bvxm_render_expected_image_process::execute()
 {
-
   // Sanity check
-  if(!this->verify_inputs())
+  if (!this->verify_inputs())
     return false;
   //get the inputs
-  brdb_value_t<vpgl_camera_double_sptr>* input0 = 
+  brdb_value_t<vpgl_camera_double_sptr>* input0 =
     static_cast<brdb_value_t<vpgl_camera_double_sptr>* >(input_data_[0].ptr());
   vpgl_camera_double_sptr camera = input0->value();
 
-  brdb_value_t<bvxm_voxel_world_sptr>* input1 = 
+  brdb_value_t<bvxm_voxel_world_sptr>* input1 =
     static_cast<brdb_value_t<bvxm_voxel_world_sptr>* >(input_data_[1].ptr());
   bvxm_voxel_world_sptr world = input1->value();
-  
-  brdb_value_t<vcl_string>* input2 = 
+
+  brdb_value_t<vcl_string>* input2 =
     static_cast<brdb_value_t<vcl_string>* >(input_data_[2].ptr());
   vcl_string voxel_type = input2->value();
 
-  brdb_value_t<unsigned>* input3 = 
+  brdb_value_t<unsigned>* input3 =
     static_cast<brdb_value_t<unsigned>* >(input_data_[3].ptr());
   unsigned bin_index = input3->value();
-
 
   //create image metadata object (no image with camera, so just use dummy):
   vil_image_view_base_sptr dummy_img;
@@ -71,7 +68,7 @@ bool bvxm_render_expected_image_process::execute()
   vil_image_view<float> *mask = new vil_image_view<float>(expected_img->ni(),expected_img->nj(),1);
   vil_image_view_base_sptr mask_sptr = mask;
 
-  if (voxel_type == "apm_mog_rgb"){  
+  if (voxel_type == "apm_mog_rgb"){
     expected_img = new vil_image_view<vxl_byte>(1280,720,3);
     vil_image_view<float> mask_img(expected_img->ni(),expected_img->nj(),1);
   result = world->expected_image<APM_MOG_RGB>(camera_metadata, expected_img, mask_img, bin_index);
@@ -83,16 +80,14 @@ bool bvxm_render_expected_image_process::execute()
   }
 
   //store output
-  brdb_value_sptr output0 = 
+  brdb_value_sptr output0 =
     new brdb_value_t<vil_image_view_base_sptr>(expected_img);
   output_data_[0] = output0;
 
-  brdb_value_sptr output1 = 
+  brdb_value_sptr output1 =
     new brdb_value_t<vil_image_view_base_sptr>(mask_sptr);
   output_data_[1] = output1;
 
   return result;
 }
-
-
 
