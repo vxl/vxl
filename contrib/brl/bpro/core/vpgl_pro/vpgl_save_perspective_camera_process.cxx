@@ -10,13 +10,12 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vgl/vgl_point_3d.h>
 #include <vpgl/vpgl_calibration_matrix.h>
-#include <vgl/algo/vgl_rotation_3d.h>
 #include <vnl/vnl_matrix_fixed.h>
 
 //: Constructor
 vpgl_save_perspective_camera_process::vpgl_save_perspective_camera_process()
 {
-  //this process takes two inputs: 
+  //this process takes two inputs:
   //input[0]: the camera
   //input[1]: the filename
   input_data_.resize(2,brdb_value_sptr(0));
@@ -53,14 +52,14 @@ vpgl_save_perspective_camera_process::execute()
     return false;
 
     // Retrieve the camera from input
-  brdb_value_t<vpgl_camera_double_sptr>* input0 = 
+  brdb_value_t<vpgl_camera_double_sptr>* input0 =
       static_cast<brdb_value_t<vpgl_camera_double_sptr>* >(input_data_[0].ptr());
 
   //Retrieve filename from input
   brdb_value_t<vcl_string>* input1 =
     static_cast<brdb_value_t<vcl_string>* >(input_data_[1].ptr());
 
-  vpgl_perspective_camera<double> *cam = 
+  vpgl_perspective_camera<double> *cam =
     dynamic_cast<vpgl_perspective_camera<double>*>(input0->value().ptr());
 
   if (!cam) {
