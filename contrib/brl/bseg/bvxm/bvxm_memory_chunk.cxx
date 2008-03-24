@@ -1,12 +1,10 @@
 #include "bvxm_memory_chunk.h"
-
 //:
 // \file
 // \brief Ref. counted block of data on the heap. Based on vil_memory_chunk.cxx
 // \author Dan Crispell
-#include <vcl_cstring.h>
-#include <vcl_cassert.h>
 
+#include <vcl_cstring.h>
 #include <vbl/vbl_smart_ptr.txx>
 
 //: Default constructor
