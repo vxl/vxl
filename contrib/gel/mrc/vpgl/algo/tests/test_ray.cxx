@@ -1,6 +1,5 @@
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
-#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vpgl/vpgl_rational_camera.h>
@@ -44,15 +43,15 @@ static void test_ray()
   double sv = 15787, ov = 15430;
 
   vpgl_rational_camera<double> rcam(neu_u, den_u, neu_v, den_v,
-                                     sx, ox, sy, oy, sz, oz,
-                                     su, ou, sv, ov);
+                                    sx, ox, sy, oy, sz, oz,
+                                    su, ou, sv, ov);
   vgl_point_3d<double> p3d(ox, oy, oz);
   vgl_vector_3d<double> v;
   vpgl_ray::ray(rcam, p3d, v); 
   vcl_cout << "Ray Direction " << v << '\n';
   double x_y = v.x()/v.y();
 
- TEST_NEAR("test ray_direction", x_y,-0.16767109029721888, 0.001);
+  TEST_NEAR("test ray_direction", x_y,-0.16767109029721888, 0.001);
 }
 
 TESTMAIN(test_ray);
