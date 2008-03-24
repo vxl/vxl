@@ -5,15 +5,14 @@
 // \file
 // \author  J.L. Mundy March 8, 2008
 // \brief brip_quadtree_utils - Various utilities using quadtrees
-
+//
 // \verbatim
-// Modifications:
+//  Modifications:
 //   None
 // \endverbatim
 //------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
-#include <vbl/vbl_ref_count.h>
 #include <vil/vil_image_view.h>
 #include <brip/brip_quadtree_node.h>
 #include <vbl/vbl_array_2d.h>
@@ -35,7 +34,7 @@ class brip_quadtree_utils
   //  Scale is the ratio of the child resolution to the parent resolution,
   //  e.g. scale = 2 indicates that the dimensions of the child are twice
   //  that of the parent.
-  static void 
+  static void
     extract_nodes_from_image(vil_image_view<T> const & img,
                              vil_image_view<bool> const & mask,
                              vil_image_view<T> const& parent_img,
@@ -49,7 +48,7 @@ static void connect_children(vbl_array_2d<brip_quadtree_node_base_sptr>& nodes,
                              vbl_array_2d<brip_quadtree_node_base_sptr> const& prev);
 
 //: Construct the quadtree from an image pyramid, with masks defined for each pyramid layer
-static 
+static
 void quadtrees_from_pyramid(vcl_vector<vil_image_view<T> > levels,
                             vcl_vector<vil_image_view<bool> > masks,
                             vbl_array_2d<brip_quadtree_node_base_sptr>& roots);
