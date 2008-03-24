@@ -2,9 +2,6 @@
    See the file COPYING for copying permission.
 */
 
-#ifndef expat_utf8tab_h_
-#define expat_utf8tab_h_
-
 /* 0x80 */ BT_TRAIL, BT_TRAIL, BT_TRAIL, BT_TRAIL,
 /* 0x84 */ BT_TRAIL, BT_TRAIL, BT_TRAIL, BT_TRAIL,
 /* 0x88 */ BT_TRAIL, BT_TRAIL, BT_TRAIL, BT_TRAIL,
@@ -37,5 +34,3 @@
 /* 0xF4 */ BT_LEAD4, BT_NONXML, BT_NONXML, BT_NONXML,
 /* 0xF8 */ BT_NONXML, BT_NONXML, BT_NONXML, BT_NONXML,
 /* 0xFC */ BT_NONXML, BT_NONXML, BT_MALFORM, BT_MALFORM,
-
-#endif /* expat_utf8tab_h_ */

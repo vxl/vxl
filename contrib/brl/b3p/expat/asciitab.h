@@ -2,9 +2,6 @@
    See the file COPYING for copying permission.
 */
 
-#ifndef expat_asciitab_h_
-#define expat_asciitab_h_
-
 /* 0x00 */ BT_NONXML, BT_NONXML, BT_NONXML, BT_NONXML,
 /* 0x04 */ BT_NONXML, BT_NONXML, BT_NONXML, BT_NONXML,
 /* 0x08 */ BT_NONXML, BT_S, BT_LF, BT_NONXML,
@@ -37,5 +34,3 @@
 /* 0x74 */ BT_NMSTRT, BT_NMSTRT, BT_NMSTRT, BT_NMSTRT,
 /* 0x78 */ BT_NMSTRT, BT_NMSTRT, BT_NMSTRT, BT_OTHER,
 /* 0x7C */ BT_VERBAR, BT_OTHER, BT_OTHER, BT_OTHER,
-
-#endif /* expat_asciitab_h_ */

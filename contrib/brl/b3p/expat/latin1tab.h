@@ -2,9 +2,6 @@
    See the file COPYING for copying permission.
 */
 
-#ifndef expat_latin1tab_h_
-#define expat_latin1tab_h_
-
 /* 0x80 */ BT_OTHER, BT_OTHER, BT_OTHER, BT_OTHER,
 /* 0x84 */ BT_OTHER, BT_OTHER, BT_OTHER, BT_OTHER,
 /* 0x88 */ BT_OTHER, BT_OTHER, BT_OTHER, BT_OTHER,
@@ -37,5 +34,3 @@
 /* 0xF4 */ BT_NMSTRT, BT_NMSTRT, BT_NMSTRT, BT_OTHER,
 /* 0xF8 */ BT_NMSTRT, BT_NMSTRT, BT_NMSTRT, BT_NMSTRT,
 /* 0xFC */ BT_NMSTRT, BT_NMSTRT, BT_NMSTRT, BT_NMSTRT,
-
-#endif /* expat_latin1tab_h_ */
