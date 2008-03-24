@@ -10,7 +10,6 @@
 #include <bvxm/bvxm_voxel_world.h>
 
 #include <vcl_string.h>
-#include <vcl_vector.h>
 #include <vcl_iostream.h>
 
 #include <brdb/brdb_value.h>
@@ -20,7 +19,9 @@
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
 #include <vil/vil_save.h>
-#include <vnl/vnl_random.h>
+#include <vnl/vnl_double_3x3.h>
+#include <vnl/vnl_float_3.h>
+#include <vgl/vgl_vector_3d.h>
 
 #include <brip/brip_vil_float_ops.h>
 #include <vul/vul_file.h>
@@ -28,8 +29,10 @@
 
 
 //: create a synthetic slab to fill layers with
-void create_a_synthetic_slab(bvxm_voxel_slab<float>& plane_img, unsigned nx, unsigned ny) {
-  for (unsigned i=0; i<nx; ++i) {
+void create_a_synthetic_slab(bvxm_voxel_slab<float>& plane_img, unsigned nx, unsigned ny)
+{
+  for (unsigned i=0; i<nx; ++i)
+  {
     for (unsigned j=0; j<ny; ++j) {
       // mark the origin/x axis
       if ( (i < 20) && (j < 5) ) {
@@ -38,7 +41,7 @@ void create_a_synthetic_slab(bvxm_voxel_slab<float>& plane_img, unsigned nx, uns
       // just make some squares of constant color
       else if ( (i > 10) && (i < 90) && (j > 10) && (j < 90) ) {
         plane_img(i,j) = 0.7f;
-      } 
+      }
       else if ((i > 110) && (i < 190) && (j > 10) && (j < 90) ) {
         plane_img(i,j) = 0.5f;
       }
@@ -56,25 +59,25 @@ void create_a_synthetic_slab(bvxm_voxel_slab<float>& plane_img, unsigned nx, uns
   }
 }
 
-vpgl_camera_double_sptr create_camera() {
+vpgl_camera_double_sptr create_camera()
+{
 // now create a couple of cameras and generate the expected images
-  vnl_matrix_fixed<double,3,3> K(0.0);
+  vnl_double_3x3 K(0.0);
   double f = 550.0;
   double offx = 320.0;
   double offy = 240.0;
   K(0,0) = f; K(1,1) = f;
   K(0,2) = offx; K(1,2) = offy;
   K(2,2) = 1.0;
-  //vgl_point_3d<double> center1(100,-100,275);
-  vgl_point_3d<double> center1(100,100,150);
-  //vgl_rotation_3d<double> rot1(5*vnl_math::pi/6,0.0,0.0);
-  vgl_rotation_3d<double> rot1(0.0,0.0,0.0);
+  vgl_point_3d<double> center1(100,100,150); // was (100,-100,275);
+  vgl_rotation_3d<double> rot1(0.0,0.0,0.0); // was (5*vnl_math::pi/6,0.0,0.0);
 
   vpgl_camera_double_sptr cam1 = new vpgl_perspective_camera<double>(K,center1,rot1);
   return cam1;
 }
 
-bvxm_voxel_slab_base_sptr create_mog_image_using_grey_processor(vcl_string model_dir, bvxm_voxel_world_sptr& vox_world, vil_image_view_base_sptr& expected_img) {
+bvxm_voxel_slab_base_sptr create_mog_image_using_grey_processor(vcl_string model_dir, bvxm_voxel_world_sptr& vox_world, vil_image_view_base_sptr& expected_img)
+{
   vul_file::make_directory(model_dir);
 
   unsigned nx = 200;
@@ -102,7 +105,7 @@ bvxm_voxel_slab_base_sptr create_mog_image_using_grey_processor(vcl_string model
 
   bvxm_voxel_slab<float> plane_img(nx,ny,1);
   create_a_synthetic_slab(plane_img, nx, ny);
-  
+
   typedef bvxm_voxel_traits<APM_MOG_GREY>::voxel_datatype mog_type;
 
   bvxm_voxel_traits<APM_MOG_GREY>::appearance_processor apm_processor;
@@ -117,7 +120,7 @@ bvxm_voxel_slab_base_sptr create_mog_image_using_grey_processor(vcl_string model
   bvxm_voxel_grid<mog_type> *apm_grid = dynamic_cast<bvxm_voxel_grid<mog_type>*>(apm_base.ptr());
   // initialize the appearance model data to get rid of any previous data on disk
   apm_grid->initialize_data(bvxm_voxel_traits<APM_MOG_GREY>::initial_val());
-  
+
   bvxm_voxel_grid<mog_type>::iterator apm_it = apm_grid->begin();
   for (; apm_it != apm_grid->end(); ++apm_it) {
     apm_processor.update(*apm_it, plane_img, ones);
@@ -228,11 +231,11 @@ MAIN( test_bvxm_normalize_image_process )
   bvxm_voxel_slab<obs_datatype_rgb> image_slab_rgb(ni, nj, 1);
   bvxm_util::img_to_slab(input_img_rgb_float_stretched_sptr,image_slab_rgb);
   input_img_rgb_float_stretched_sptr = 0;
-  vnl_vector_fixed<float,3> a = *(image_slab_rgb.begin());
+  vnl_float_3 a = *(image_slab_rgb.begin());
   TEST_NEAR("check slab conversion", a[0], 205.0f/255.0f, 0.01f);
   TEST_NEAR("check slab conversion", a[1], 205.0f/255.0f, 0.01f);
   TEST_NEAR("check slab conversion", a[2], 205.0f/255.0f, 0.01f);
-    
+
 
   //: create a GREY mog image from a known world
   vcl_string command = "rm -rf ./test_world_dir";
@@ -249,8 +252,8 @@ MAIN( test_bvxm_normalize_image_process )
   //TEST_NEAR("testing expected img", expected_i(146,332), (int)vcl_floor(0.2*255 + 0.5), 0.01);
   //TEST_NEAR("testing expected img", expected_i(400,250), (int)vcl_floor(0.5*255 + 0.5), 0.01);
 
-  bvxm_voxel_traits<APM_MOG_GREY>::appearance_processor apm_processor;  
-  bvxm_voxel_slab<float> prob = apm_processor.prob_density(*mog_image_ptr,image_slab); //prob( nimg );  
+  bvxm_voxel_traits<APM_MOG_GREY>::appearance_processor apm_processor;
+  bvxm_voxel_slab<float> prob = apm_processor.prob_density(*mog_image_ptr,image_slab); //prob( nimg );
   // find the total prob
   bvxm_voxel_slab<float> product(ni, nj, 1);
   bvxm_util::multiply_slabs(prob, weights, product);
@@ -262,7 +265,7 @@ MAIN( test_bvxm_normalize_image_process )
   //float aa = 1.0f;
   float bb = 20.0f;
   //float bb = 0.0f;
-  
+
   vil_image_view<unsigned char> expected_i_norm(*expected_image);
   normalize_image<unsigned char>(expected_i, expected_i_norm, aa, bb, 255);
   vil_save(expected_i_norm, "./expected_normed.png");
@@ -308,7 +311,7 @@ MAIN( test_bvxm_normalize_image_process )
   TEST("output image is in db", S_img->get_value(vcl_string("value"), value_img), true);
   TEST("output image is non-null", (value_img != 0) ,true);
 
-  brdb_value_t<vil_image_view_base_sptr>* result = 
+  brdb_value_t<vil_image_view_base_sptr>* result =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_img.ptr());
   vil_image_view_base_sptr denormed_img = result->value();
   vil_image_view<vxl_byte> denormed_img_v(denormed_img);
@@ -325,7 +328,7 @@ MAIN( test_bvxm_normalize_image_process )
 
   brdb_value_t<float>* resulta = static_cast<brdb_value_t<float>* >(value_a.ptr());
   float result_a = resulta->value();
-  
+
   //: get b
   brdb_query_aptr Q_b = brdb_query_comp_new("id", brdb_query::EQ, id_b);
   brdb_selection_sptr S_b = DATABASE->select("float_data", Q_b);
@@ -337,10 +340,10 @@ MAIN( test_bvxm_normalize_image_process )
 
   brdb_value_t<float>* resultb = static_cast<brdb_value_t<float>* >(value_b.ptr());
   float result_b = resultb->value();
-  
+
   TEST_NEAR("testing a", result_a, 1.0f/aa, 0.1);
   TEST_NEAR("testing b", result_b, -bb, 7);
-  
+
   //
 
   SUMMARY();

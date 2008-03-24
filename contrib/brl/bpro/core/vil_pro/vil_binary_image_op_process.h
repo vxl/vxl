@@ -1,7 +1,6 @@
 // This is brl/bpro/core/vil_pro/vil_binary_image_op_process.h
 #ifndef vil_binary_image_op_process_h_
 #define vil_binary_image_op_process_h_
-
 //:
 // \file
 // \brief A process for computing the product of two float images
@@ -12,14 +11,13 @@
 //  Modifications
 // \endverbatim
 
-#include <vcl_vector.h>
 #include <vcl_string.h>
 #include <bprb/bprb_process.h>
 
 class vil_binary_image_op_process : public bprb_process
 {
  public:
-  
+
   vil_binary_image_op_process();
 
   //: Copy Constructor (no local data)
@@ -32,12 +30,9 @@ class vil_binary_image_op_process : public bprb_process
 
   vcl_string name(){return "ImageProductProcess";}
 
-  bool init(){return true;} 
+  bool init(){return true;}
   bool execute();
   bool finish(){return true;}
- 
- private:
-
 };
 
 #endif //vil_binary_image_op_process_h_

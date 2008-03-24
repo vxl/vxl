@@ -11,7 +11,6 @@
 #include <bvxm/bvxm_voxel_world.h>
 
 #include <vcl_string.h>
-#include <vcl_vector.h>
 #include <vcl_iostream.h>
 
 #include <brdb/brdb_value.h>
@@ -20,14 +19,10 @@
 #include <bprb/bprb_batch_process_manager.h>
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
-#include <vil/vil_save.h>
-#include <vnl/vnl_random.h>
+#include <vil/vil_math.h>
 
 #include <brip/brip_vil_float_ops.h>
-#include <vul/vul_file.h>
 #include <vpgl/vpgl_perspective_camera.h>
-
-
 
 
 MAIN( test_bvxm_create_normalized_image_process )
@@ -67,7 +62,7 @@ MAIN( test_bvxm_create_normalized_image_process )
   REG_PROCESS(bvxm_create_normalized_image_process, bprb_batch_process_manager);
   REGISTER_DATATYPE(vil_image_view_base_sptr);
   REGISTER_DATATYPE(float);
-  
+
   //: set the inputs
   vil_image_view_base_sptr input_img1 = new vil_image_view<vxl_byte>(img1);
   brdb_value_sptr v0 = new brdb_value_t<vil_image_view_base_sptr>(input_img1);
@@ -93,7 +88,7 @@ MAIN( test_bvxm_create_normalized_image_process )
   TEST("output image is in db", S_img->get_value(vcl_string("value"), value_img), true);
   TEST("output image is non-null", (value_img != 0) ,true);
 
-  brdb_value_t<vil_image_view_base_sptr>* result = 
+  brdb_value_t<vil_image_view_base_sptr>* result =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_img.ptr());
   vil_image_view_base_sptr normed_img = result->value();
   vil_image_view<vxl_byte> normed_img_v(normed_img);
@@ -107,7 +102,6 @@ MAIN( test_bvxm_create_normalized_image_process )
   vil_math_sum(sum, im_dif, 2);
   TEST_NEAR("image dif should sum to 0", sum, 0.0, 0.01);
 
-  
   //
 
   SUMMARY();

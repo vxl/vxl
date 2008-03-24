@@ -11,7 +11,6 @@
 #include <bvxm/bvxm_voxel_world.h>
 
 #include <vcl_string.h>
-#include <vcl_vector.h>
 #include <vcl_iostream.h>
 
 #include <brdb/brdb_value.h>
@@ -20,13 +19,10 @@
 #include <bprb/bprb_batch_process_manager.h>
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
-#include <vil/vil_save.h>
-#include <vnl/vnl_random.h>
 
 
 MAIN( test_bvxm_illum_index_process )
 {
-
   // This test conssist of two parts
   // 1. Run process using the process manager, checking that
   //    parameter, inputs and outputs are being set properly
@@ -37,7 +33,7 @@ MAIN( test_bvxm_illum_index_process )
     REG_PROCESS(bvxm_illum_index_process, bprb_batch_process_manager);
     REGISTER_DATATYPE(unsigned);
 
-    // set the inputs 
+    // set the inputs
     brdb_value_sptr v0 = new brdb_value_t<vcl_string>("eq_area");
     brdb_value_sptr v1 = new brdb_value_t<vcl_string>("po_39928_pan_0000000_chip_700_700_withICHIPB.nitf");
     brdb_value_sptr v2 = new brdb_value_t<unsigned>(10);
@@ -61,25 +57,25 @@ MAIN( test_bvxm_illum_index_process )
 
     // check if the results are in DB
 
-    if(good)
+    if (good)
     {
       brdb_query_aptr bin_idx_Q = brdb_query_comp_new("id", brdb_query::EQ, id_bin_idx);
       brdb_selection_sptr bin_idx_S = DATABASE->select("unsigned_data", bin_idx_Q);
-      if(bin_idx_S->size()!=1){
+      if (bin_idx_S->size()!=1){
         vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-          << " no selections\n";
+                 << " no selections\n";
       }
 
       brdb_value_sptr value;
       if (!bin_idx_S->get_value(vcl_string("value"), value)) {
         vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-          << " didn't get value\n";
+                 << " didn't get value\n";
       }
       bool non_null = (value != 0);
       TEST("bin index output non-null", non_null ,true);
 
       // check that for zero regions choice, the index is zero
-      brdb_value_t<unsigned>* result = 
+      brdb_value_t<unsigned>* result =
         static_cast<brdb_value_t<unsigned>* >(value.ptr());
       unsigned idx = result->value();
 
@@ -104,7 +100,7 @@ MAIN( test_bvxm_illum_index_process )
 
      idx = p1->bin_index("eq_area",(180.0/8),270.0,2,0);
        TEST("bin_idx", idx ,0);
-       
+
      //----
 
      idx = p1->bin_index("eq_area",(90.0),0,2,0);
@@ -146,7 +142,6 @@ MAIN( test_bvxm_illum_index_process )
 
      idx = p1->bin_index("eq_area",90.0,270.0,2,2);
        TEST("bin_idx", idx ,3);
-    
   }
 
   SUMMARY();

@@ -9,7 +9,6 @@
 #include <bvxm/bvxm_voxel_world.h>
 
 #include <vcl_string.h>
-#include <vcl_vector.h>
 #include <vcl_iostream.h>
 
 #include <brdb/brdb_value.h>
@@ -45,20 +44,20 @@ MAIN( test_bvxm_generate_edge_map_process )
   // check if the results are in DB
   brdb_query_aptr Q1 = brdb_query_comp_new("id", brdb_query::EQ, id0);
   brdb_selection_sptr S1 = DATABASE->select("vil_image_view_base_sptr_data", Q1);
-  if(S1->size()!=1){
+  if (S1->size()!=1){
     vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-    << " no selections\n";
+             << " no selections\n";
   }
 
   brdb_value_sptr value;
   if (!S1->get_value(vcl_string("value"), value)) {
     vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
-     << " didn't get value\n";
+             << " didn't get value\n";
   }
   bool non_null = (value != 0);
   TEST("vil_image_view_base_sptr non-null", non_null ,true);
 
-  brdb_value_t<vil_image_view_base_sptr>* result = 
+  brdb_value_t<vil_image_view_base_sptr>* result =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value.ptr());
   vil_image_view<unsigned char> img0(result->value());
 

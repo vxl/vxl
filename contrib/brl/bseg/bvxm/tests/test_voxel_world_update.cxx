@@ -1,6 +1,4 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
 #include <vul/vul_file.h>
 
 #include <vgl/vgl_vector_3d.h>
@@ -8,15 +6,13 @@
 #include "../bvxm_voxel_world.h"
 #include "../bvxm_world_params.h"
 #include "../bvxm_mog_grey_processor.h"
-#include <vil/vil_load.h>
+#include <vil/vil_image_view.h>
 #include <vil/vil_image_resource_sptr.h>
 #include <vpgl/vpgl_proj_camera.h>
-#include <vil/vil_convert.h>
 
 
 static void test_voxel_world_update()
 {
-
   START("bvxm_voxel_world_update test");
 
   vcl_string model_dir("./test_world_dir");
@@ -58,11 +54,11 @@ static void test_voxel_world_update()
   camera_matrix.put(2,1,0);
   camera_matrix.put(2,2,1);
   camera_matrix.put(2,3,1);
- 
+
   vpgl_proj_camera<double>* camera = new vpgl_proj_camera<double>(camera_matrix);
 
 
-  //create a synthetic image 
+  //create a synthetic image
   vil_image_view_base_sptr view_sptr = new vil_image_view<vxl_byte>(50,100,1,1);
   // img_view.fill((vxl_byte)1);
 
@@ -73,7 +69,7 @@ static void test_voxel_world_update()
   vil_image_view<float> prob_map(view_sptr->ni(),view_sptr->nj(),1);
 
   //testing the update on mog_grey,mg_rgb and also with different bin numbers
-  vil_image_view<bool> mask(view_sptr->ni(),view_sptr->nj(),1); 
+  vil_image_view<bool> mask(view_sptr->ni(),view_sptr->nj(),1);
   world.update<APM_MOG_GREY>(observation, prob_map, mask, 0);
   world.update<APM_MOG_GREY>(observation, prob_map, mask, 2);
 
