@@ -1,16 +1,11 @@
 #include <testlib/testlib_test.h>
 
-#include <vcl_cstdio.h>
 #include <vcl_cmath.h>
 
 #include <bil/algo/bil_detect_ridges.h>
 
-#include <vnl/vnl_random.h>
 #include <vnl/vnl_math.h>
 
-#include <vil/vil_print.h>
-#include <vil/vil_copy.h>
-#include <vil/vil_fill.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_convert.h>
@@ -35,7 +30,7 @@ inline void vil_convert_stretch_range(const vil_image_view<T>& src,
 
 class vil_math_abs_functor
 {
-public:
+ public:
   vxl_byte operator()(vxl_byte x) const { return vcl_abs(x); }
   unsigned operator()(unsigned x) const { return x; }
   int operator()(int x)           const { return vcl_abs(x); }
@@ -46,9 +41,7 @@ public:
 
 static int test_bil_detect_ridges(int argc, char** argv )
 {
-
   START ("2D Ridge Detection");
-  
 
   vil_image_resource_sptr res = vil_load_image_resource(argv[1]);
   vil_image_view<vxl_uint_16> view_uint16 = res->get_view();
@@ -89,53 +82,51 @@ static int test_bil_detect_ridges(int argc, char** argv )
     vil_image_view<vxl_uint_16> rho_dot_lambda_uint;
     vil_convert_stretch_range(rho_dot_lambda,rho_dot_lambda_uint);
     vil_save(rho_dot_lambda_uint,"other_ridgetest4.tif");
-
   }
- 
+
   {
-  vil_image_view<float> ix;
-  vil_image_view<float> iy;
-  vil_image_view<float> ixx;
-  vil_image_view<float> iyy;
-  vil_image_view<float> ixy;
+    vil_image_view<float> ix;
+    vil_image_view<float> iy;
+    vil_image_view<float> ixx;
+    vil_image_view<float> iyy;
+    vil_image_view<float> ixy;
 
-  vil_gauss_filter_2d(view_float, view_float, 1.5,vnl_math_rnd(3*1.5/2.));
+    vil_gauss_filter_2d(view_float, view_float, 1.5,vnl_math_rnd(3*1.5/2.));
 
-  vil_sobel_3x3(view_float,ix,iy);
-  vil_sobel_3x3(ix,ixx,ixy);
-  vil_sobel_3x3(iy,ixy,iyy);
+    vil_sobel_3x3(view_float,ix,iy);
+    vil_sobel_3x3(ix,ixx,ixy);
+    vil_sobel_3x3(iy,ixy,iyy);
 
-  bil_detect_ridges( ix, iy, ixx, iyy, ixy,
-                  1.5, 0.7,
-                  rho, ex, ey, lambda);
+    bil_detect_ridges( ix, iy, ixx, iyy, ixy,
+                    1.5, 0.7,
+                    rho, ex, ey, lambda);
 
 
-  vil_image_view<vxl_byte> ridge_byte;
-  vil_convert_stretch_range(rho,ridge_byte);
-  vil_save(ridge_byte,"ridgetest0.tif");
+    vil_image_view<vxl_byte> ridge_byte;
+    vil_convert_stretch_range(rho,ridge_byte);
+    vil_save(ridge_byte,"ridgetest0.tif");
 
-  vil_image_view<vxl_uint_16> lambda_uint;
-  vil_convert_stretch_range(lambda,lambda_uint);
-  vil_save(lambda_uint,"ridgetest1.tif");
+    vil_image_view<vxl_uint_16> lambda_uint;
+    vil_convert_stretch_range(lambda,lambda_uint);
+    vil_save(lambda_uint,"ridgetest1.tif");
 
-  vil_image_view<vxl_uint_16> ex_uint;
-  vil_convert_stretch_range(ex,ex_uint);
-  vil_save(ex_uint,"ridgetest2.tif");
+    vil_image_view<vxl_uint_16> ex_uint;
+    vil_convert_stretch_range(ex,ex_uint);
+    vil_save(ex_uint,"ridgetest2.tif");
 
-  vil_image_view<vxl_uint_16> ey_uint;
-  vil_convert_stretch_range(ey,ey_uint);
-  vil_save(ey_uint,"ridgetest3.tif");
+    vil_image_view<vxl_uint_16> ey_uint;
+    vil_convert_stretch_range(ey,ey_uint);
+    vil_save(ey_uint,"ridgetest3.tif");
 
-  vil_image_view<float> rho_dot_lambda;
-  vil_transform(lambda,vil_math_abs_functor());
-  vil_image_view<float> rho_float;
-  vil_convert_cast(rho,rho_float);
-  vil_math_image_product(lambda,rho_float,rho_dot_lambda);
+    vil_image_view<float> rho_dot_lambda;
+    vil_transform(lambda,vil_math_abs_functor());
+    vil_image_view<float> rho_float;
+    vil_convert_cast(rho,rho_float);
+    vil_math_image_product(lambda,rho_float,rho_dot_lambda);
 
-  vil_image_view<vxl_uint_16> rho_dot_lambda_uint;
-  vil_convert_stretch_range(rho_dot_lambda,rho_dot_lambda_uint);
-  vil_save(rho_dot_lambda_uint,"ridgetest4.tif");
-
+    vil_image_view<vxl_uint_16> rho_dot_lambda_uint;
+    vil_convert_stretch_range(rho_dot_lambda,rho_dot_lambda_uint);
+    vil_save(rho_dot_lambda_uint,"ridgetest4.tif");
   }
 
   SUMMARY();
