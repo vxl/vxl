@@ -935,11 +935,13 @@ bmsh3d_face_mc* bwm_observable_mesh::extrude_face(bmsh3d_mesh_mc* M, bmsh3d_face
 vgl_plane_3d<double> bwm_observable_mesh::get_plane(unsigned face_id)
 {
   bmsh3d_face* face = object_->facemap(face_id);
+  vcl_vector<bmsh3d_vertex*> vertices;
+  face->get_ordered_Vs(vertices);
 
   vcl_vector<vsol_point_3d_sptr> points;
   vgl_fit_plane_3d<double> fitter;
-  for (unsigned i=0; i<face->vertices().size(); i++) {
-    bmsh3d_vertex* v = (bmsh3d_vertex*) face->vertices(i);
+  for (unsigned i=0; i<vertices.size(); i++) {
+    bmsh3d_vertex* v = (bmsh3d_vertex*) vertices[i];
     vgl_homg_point_3d<double> hp(v->get_pt().x(), v->get_pt().y(), v->get_pt().z());
     fitter.add_point(hp);
   }
