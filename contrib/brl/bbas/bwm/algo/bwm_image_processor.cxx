@@ -18,6 +18,9 @@
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vsol/vsol_digital_curve_2d_sptr.h>
 
+#include <vil/vil_image_view_base.h>
+#include <vil/vil_save.h>
+
 void bwm_image_processor::hist_plot(bgui_image_tableau_sptr img)
 {
   if (!img)
@@ -45,11 +48,14 @@ void bwm_image_processor::hist_plot(bgui_image_tableau_sptr img)
   char location[100];
   vcl_sprintf(location, "Intensity Histogram");
   vgui_dialog* ip_dialog = g->popup_graph(location);
+ 
   if (!ip_dialog->ask())
   {
+    g->dump_tableau();
     delete ip_dialog;
     return;
   }
+  g->dump_tableau();
   delete ip_dialog;
 }
 

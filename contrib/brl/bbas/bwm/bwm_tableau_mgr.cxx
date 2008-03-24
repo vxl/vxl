@@ -5,6 +5,7 @@
 #include "bwm_observer_video.h"
 #include "bwm_corr_sptr.h"
 #include "bwm_load_commands.h"
+#include "bwm_tableau_rat_cam.h"
 
 #include "algo/bwm_algo.h"
 #include "algo/bwm_utils.h"
@@ -106,6 +107,25 @@ bwm_command_sptr bwm_tableau_mgr::load_tableau_by_type(vcl_string tableau_type)
     comm = iter->second;
 
   return comm;
+}
+
+vcl_string bwm_tableau_mgr::save_camera(vcl_string tab_name)
+{
+  vgui_tableau_sptr tab = find_tableau(tab_name);
+
+  // tableau is not found
+  if (!tab) {
+    vcl_cerr << "Tableau " << tab_name << "is not found!" << vcl_endl;
+    return "";
+  }
+
+  if (tab->type_name().compare("bwm_tableau_rat_cam") == 0) {
+    bwm_tableau_rat_cam* tab_cam = static_cast<bwm_tableau_rat_cam*> (tab.as_pointer());
+    vcl_string path = tab_cam->save_camera();
+    return path;
+  }
+  vcl_cerr << "Tableau " << tab_name << "is not a rational camera tableau!" << vcl_endl;
+  return "";
 }
 
 void bwm_tableau_mgr::add_corresp(vcl_string tab_name, bwm_corr_sptr corr, double X, double Y)

@@ -12,22 +12,18 @@
 #include <bgui/bgui_picker_tableau.h>
 
 #include <vpgl/vpgl_rational_camera.h>
+#include <vul/vul_timer.h>
 
 class bwm_tableau_rat_cam : public bwm_tableau_cam
 {
  protected:
   bwm_observer_rat_cam* my_observer_;
+  vul_timer timer_;
 
  public:
-#if 0 // commented out, both here and in the .cxx file
-  bwm_tableau_rat_cam(vcl_string name,
-                      vcl_string& image_path,
-                      vcl_string& cam_path,
-                      bool display_image_path);
-#endif
 
   bwm_tableau_rat_cam(bwm_observer_rat_cam* observer)
-    : bwm_tableau_cam(observer), my_observer_(observer) {}
+    : bwm_tableau_cam(observer), my_observer_(observer) {timer_.mark();}
 
   void set_observer(bwm_observer_rat_cam* observer) { my_observer_ = observer; }
 
@@ -42,6 +38,9 @@ class bwm_tableau_rat_cam : public bwm_tableau_cam
   void adjust_camera_offset();
   void adjust_camera_to_world_pt();
   void center_pos();
+
+  // saves the camera with a new version number and returns the path
+  vcl_string save_camera();
 
   // ******************** LVCS Menu
 

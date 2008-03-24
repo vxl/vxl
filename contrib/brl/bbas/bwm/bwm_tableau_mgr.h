@@ -33,7 +33,7 @@ class bwm_tableau_mgr
 
   static bwm_tableau_mgr* bwm_tableau_mgr::instance();
 
-  void add_tableau(bwm_tableau_img* tab, vcl_string name);//vgui_tableau_sptr tab, vcl_string name);
+  void add_tableau(bwm_tableau_img* tab, vcl_string name);
 
   vgui_grid_tableau_sptr grid() { return grid_; }
 
@@ -42,6 +42,8 @@ class bwm_tableau_mgr
   static bool is_registered(vcl_string const& name);
 
   bwm_command_sptr load_tableau_by_type(vcl_string tableau_type);
+
+  vcl_string save_camera(vcl_string tab_name);
 
   void remove_tableau();
 
@@ -70,14 +72,12 @@ class bwm_tableau_mgr
 
   vgui_grid_tableau_sptr grid_;
 
+  bool display_image_path_;
+
   //: bool to keep the add rows and columns to the grid.
   // It alternately adds rows and columns
   bool row_added_;
 
-  bool display_image_path_;
-#if 0
-  vgui_range_map_params_sptr range_params(vil_image_resource_sptr const& image);
-#endif
   void add_to_grid(vgui_tableau_sptr tab);
 
   void add_to_grid(vgui_tableau_sptr tab, unsigned& col, unsigned& row);

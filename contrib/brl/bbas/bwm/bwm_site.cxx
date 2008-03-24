@@ -142,7 +142,7 @@ void bwm_site::x_write(vcl_ostream& s)
      }
 
      vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > c_list = corresp_[i];
-    // int i=0;
+    
      for (unsigned c=0; c<c_list.size(); c++) {
        vsl_basic_xml_element corr_elm(CORRESP_ELM_TAG);
        corr_elm.x_write_open(s);

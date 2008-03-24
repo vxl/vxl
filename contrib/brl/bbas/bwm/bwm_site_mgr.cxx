@@ -614,58 +614,16 @@ void bwm_site_mgr::save_site()
 
   // get the tableaux
   for (unsigned i=0; i<active_tableaus_.size(); i++) {
+    if (active_tableaus_[i]->type_name.compare("CameraTableau") == 0) {
+      vcl_string new_cam_path = bwm_tableau_mgr::instance()->save_camera(active_tableaus_[i]->name);
+      if (new_cam_path.size() > 0) {
+        bwm_io_tab_config_cam* t  = static_cast<bwm_io_tab_config_cam*> (active_tableaus_[i]);
+        t->cam_path = new_cam_path;
+      }
+    }
     site->tableaus_.push_back(active_tableaus_[i]);
   }
 
-#if 0 // 47 lines commented out
-  vcl_map<vcl_string, vgui_tableau_sptr>::iterator it = tableaus_.begin();
-  while (it != tableaus_.end())
-  {
-    vgui_tableau_sptr tab = it->second;
-    vcl_string name = it->first;
-    if (tab->type_name().compare("bwm_tableau_image") == 0) {
-      bwm_tableau_img* img_tab = static_cast<bwm_tableau_img*> (tab.as_pointer());
-      vcl_string img_path = img_tab->img_path();
-      bwm_io_tab_config_img *t = new bwm_io_tab_config_img(IMAGE_TABLEAU_TAG, name, "active", img_path);
-      site->tableaus_.push_back(t);
-    }
-    else if (tab->type_name().compare("bwm_tableau_rat_cam") == 0)
-    {
-      bwm_tableau_rat_cam* cam_tab = static_cast<bwm_tableau_rat_cam*> (tab.as_pointer());
-      vcl_string img_path = cam_tab->img_path();
-      vcl_string cam_path = cam_tab->observer()->camera_path();
-      bwm_io_tab_config_cam *t=0;
-      // see if the camera is adjusted
-      if (cam_tab->observer()->camera_adjusted()) {
-        //need to save the new camera
-        vcl_string new_cam_path = vul_file::strip_extension(cam_path);
-        int pos = new_cam_path.find("_v", 0);
-        if (pos != vcl_string::npos) {
-          new_cam_path.erase(pos, new_cam_path.length()-1);
-        }
-        vcl_stringstream strm;
-        strm << vcl_fixed << timer_.real();
-        vcl_string str(strm.str());
-        new_cam_path += "_v" + str + vul_file::extension(cam_path);
-        bwm_observer_rat_cam* observer = static_cast<bwm_observer_rat_cam*> (cam_tab->observer());
-        observer->camera().save(new_cam_path);
-        t = new bwm_io_tab_config_cam(CAMERA_TABLEAU_TAG, name, "active", img_path, new_cam_path, "rational");
-      } else  {
-        t = new bwm_io_tab_config_cam(CAMERA_TABLEAU_TAG, name, "active", img_path, cam_path, "rational");
-      }
-      site->tableaus_.push_back(t);
-    }
-    else if (tab->type_name().compare("bwm_tableau_proj_cam") == 0) {
-      bwm_tableau_cam* cam_tab = static_cast<bwm_tableau_cam*> (tab.as_pointer());
-      vcl_string img_path = cam_tab->img_path();
-       vcl_string cam_path = cam_tab->observer()->camera_path();
-      bwm_io_tab_config_cam *t = new bwm_io_tab_config_cam(CAMERA_TABLEAU_TAG,
-        name, "active", img_path, cam_path, "projective");
-      site->tableaus_.push_back(t);
-    }
-    it++;
-  }
-#endif // 0
   // add the inactive tableaux
   for (unsigned i=0; i<inactive_tableaus_.size(); i++) {
     site->tableaus_.push_back(inactive_tableaus_[i]);

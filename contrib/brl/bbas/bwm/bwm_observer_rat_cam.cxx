@@ -37,7 +37,7 @@ bwm_observer_rat_cam::bwm_observer_rat_cam(bgui_image_tableau_sptr img,
     vcl_string& image_path, 
     vcl_string& cam_path, 
     bool display_image_path)
-    : bwm_observer_cam(img) 
+    : bwm_observer_cam(img)
 { 
   img->show_image_path(display_image_path);
   // LOAD IMAGE
@@ -70,6 +70,7 @@ bwm_observer_rat_cam::bwm_observer_rat_cam(bgui_image_tableau_sptr img,
 
   bwm_observer_mgr::instance()->add(this);
   set_tab_name(name);
+  set_camera_path(cam_path);
 }
 
 
@@ -301,6 +302,7 @@ void bwm_observer_rat_cam::adjust_camera_offset(vsol_point_2d_sptr img_point)
       vcl_cout << "shifted right camera offset by [" <<
         img_point->x() - image_pt.x() <<", " <<
         image_pt.y() - image_pt.y() <<"]\n";
+      cam_adjusted_ = true;
     }else {
       vcl_cerr << " error shifting camera offset\n";
     }
@@ -1082,12 +1084,13 @@ void bwm_observer_rat_cam::adjust_camera_to_world_pt()
            << tx << ' ' << ty << "):\n point_3d("
            << pt_3d.x() << ' ' << pt_3d.y()
            << ' ' << pt_3d.z() << ")\n";
-
+  cam_adjusted_ = true;
   //send the objects in the world the fact that they need to redisplay
   vcl_vector<bwm_observable_sptr> objs = bwm_world::instance()->objects();
   for(vcl_vector<bwm_observable_sptr>::iterator oit = objs.begin();
       oit != objs.end(); ++oit)
     (*oit)->send_update();
+
   this->post_redraw();
 }
 

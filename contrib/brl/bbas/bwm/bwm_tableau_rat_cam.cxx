@@ -4,6 +4,7 @@
 
 #include "algo/bwm_utils.h"
 #include <vsol/vsol_point_2d.h>
+#include <vul/vul_file.h>
 
 bool bwm_tableau_rat_cam::handle(const vgui_event &e)
 {
@@ -57,4 +58,27 @@ void bwm_tableau_rat_cam::project_edges_from_master()
 void bwm_tableau_rat_cam::register_search_to_master()
 {
   my_observer_->register_search_to_master();
+}
+
+vcl_string bwm_tableau_rat_cam::save_camera()
+{
+  vcl_string img_path = this->img_path();
+  vcl_string cam_path = my_observer_->camera_path();
+ 
+  // see if the camera is adjusted
+  if (my_observer_->camera_adjusted()) {
+    //need to save the new camera
+    vcl_string new_cam_path = vul_file::strip_extension(cam_path);
+    int pos = new_cam_path.find("_v", 0);
+    if (pos != vcl_string::npos) {
+      new_cam_path.erase(pos, new_cam_path.length()-1);
+    }
+    vcl_stringstream strm;
+    strm << vcl_fixed << timer_.real();
+    vcl_string str(strm.str());
+    new_cam_path += "_v" + str + vul_file::extension(cam_path);
+    my_observer_->camera().save(new_cam_path);
+    return new_cam_path;
+  }
+  return "";
 }
