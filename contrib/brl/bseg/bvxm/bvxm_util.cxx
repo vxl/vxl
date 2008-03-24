@@ -11,11 +11,6 @@
 #include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3x1.h>
-#include <vil/vil_image_view.h>
-#include <vil/vil_image_resource.h>
-#include <vil/vil_load.h>
-#include <vil/vil_math.h>
-
 
 #include "bvxm_voxel_slab.h"
 #include "bvxm_world_params.h"
@@ -73,7 +68,6 @@ void bvxm_util::compute_plane_image_H(vpgl_camera_double_sptr const& cam, bvxm_w
 }
 
 
-
 bool bvxm_util::read_cameras(const vcl_string filename, std::vector<vnl_double_3x3> &Ks, std::vector<vnl_double_3x3> &Rs, std::vector<vnl_double_3x1> &Ts)
 {
   vcl_ifstream file_inp(filename.c_str());
@@ -97,7 +91,6 @@ bool bvxm_util::read_cameras(const vcl_string filename, std::vector<vnl_double_3
   file_inp.close();
 
   return true;
-
 }
 
 
@@ -121,7 +114,6 @@ bool bvxm_util::write_cameras(const vcl_string filename, std::vector<vnl_double_
   file_out.close();
 
   return true;
-
 }
 
 
@@ -133,7 +125,7 @@ void bvxm_util::bilinear_weights(vgl_h_matrix_2d<double> invH, unsigned nx_out, 
   // convert H to a float matrix
   vnl_matrix_fixed<float,3,3>::iterator Hit = H.begin();
   vnl_matrix_fixed<double,3,3>::iterator Hdit = Hd.begin();
-  for (; Hit != H.end(); ++Hit, ++Hdit) 
+  for (; Hit != H.end(); ++Hit, ++Hdit)
       *Hit = (float)(*Hdit);
 
   unsigned npix_out = nx_out * ny_out;
@@ -148,7 +140,7 @@ void bvxm_util::bilinear_weights(vgl_h_matrix_2d<double> invH, unsigned nx_out, 
     vnl_matrix<float> pix_in_homg = H*pix_out_homg;
     xvals = vnl_matrix<unsigned>(4,npix_out);
     yvals = vnl_matrix<unsigned>(4,npix_out);
-    weights = vnl_matrix<float>(4,npix_out); 
+    weights = vnl_matrix<float>(4,npix_out);
 
     for (unsigned n=0; n<npix_out; ++n) {
       // normalize homogeneous coordinate
@@ -165,13 +157,10 @@ void bvxm_util::bilinear_weights(vgl_h_matrix_2d<double> invH, unsigned nx_out, 
       float y1_weight = (float)(1.0f - y0_weight);
       xvals.set_column(n,vnl_vector_fixed<unsigned,4>(x0,x0,x1,x1));
       yvals.set_column(n,vnl_vector_fixed<unsigned,4>(y0,y1,y0,y1));
-      weights.set_column(n,vnl_vector_fixed<float,4>(x0_weight*y0_weight, 
-                                                     x0_weight*y1_weight, 
-                                                     x1_weight*y0_weight, 
+      weights.set_column(n,vnl_vector_fixed<float,4>(x0_weight*y0_weight,
+                                                     x0_weight*y1_weight,
+                                                     x1_weight*y0_weight,
                                                      x1_weight*y1_weight));
     }
-      
-
-
 }
 
