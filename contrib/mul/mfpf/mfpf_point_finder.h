@@ -7,7 +7,6 @@
 
 #include <vcl_string.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_memory.h>
 
 #include <vimt/vimt_image_2d_of.h>
 #include <vgl/vgl_vector_2d.h>
@@ -15,7 +14,7 @@
 #include <mfpf/mfpf_pose.h>
 
 //: Base for classes which locate feature points
-//  The object will be set up by an 
+//  The object will be set up by an
 //  associated mfpf_point_finder_builder object
 class mfpf_point_finder
 {
@@ -29,7 +28,7 @@ class mfpf_point_finder
   //: Number of points either side of centre to search
   int search_nj_;
 
-  //: Define N. angles (ie try at A+idA, i in [-nA,+nA]) 
+  //: Define N. angles (ie try at A+idA, i in [-nA,+nA])
   unsigned nA_;
 
   //: Angle step size (ie try at A+idA, i in [-nA,+nA])
@@ -93,7 +92,7 @@ class mfpf_point_finder
                                const vgl_vector_2d<double>& u,
                                vimt_image_2d_of<double>& response)=0;
 
-  //: Search given image around p, using u to define scale and angle 
+  //: Search given image around p, using u to define scale and angle
   //  On exit, new_p defines position of the best nearby match.
   //  Returns a qualtity of fit measure at that
   //  point (the smaller the better).
@@ -102,7 +101,7 @@ class mfpf_point_finder
                         const vgl_vector_2d<double>& u,
                         vgl_point_2d<double>& new_p)=0;
 
-  //: Search given image around p, using u to define scale and angle 
+  //: Search given image around p, using u to define scale and angle
   //  Evaluates responses on a grid, finds the best point on the
   //  grid, then optimises its position by fitting a parabola.
   //
@@ -133,7 +132,7 @@ class mfpf_point_finder
   //: Search given image around p, using u to define scale and orientation
   //  On exit, new_p and new_u define position, scale and orientation of
   //  the best nearby match.  Returns a quality of fit measure at that
-  //  point (the smaller the better). 
+  //  point (the smaller the better).
   //  Parabolic fit used to estimate optimal position.
   //
   //  Default impementation calls search_one_pose(...) at multiple
@@ -162,7 +161,7 @@ class mfpf_point_finder
   //  Find local minima on this grid.
   //  Perform single sub-grid optimisation by fitting a parabola
   //  in x and y and testing resulting point.
-  //  Append each to pts.  
+  //  Append each to pts.
   //  Note: pts is not resized, so empty beforehand if necessary.
   virtual void multi_search_one_pose(
                            const vimt_image_2d_of<float>& image,
