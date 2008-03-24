@@ -19,7 +19,7 @@
 
 #include <vcl_string.h>
 #include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vcl_iostream.h>
 
 #include <atlbase.h>
 #include <dshow.h>
