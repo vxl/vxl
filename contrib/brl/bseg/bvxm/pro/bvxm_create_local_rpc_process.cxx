@@ -7,12 +7,11 @@
 #include <bvxm/bvxm_image_metadata.h>
 
 #include <bil/algo/bil_cedt.h>
-#include <vnl/algo/vnl_gaussian_kernel_1d.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 
 bvxm_create_local_rpc_process::bvxm_create_local_rpc_process()
 {
-  // process takes 2 inputs: 
+  // process takes 2 inputs:
   //input[0]: The voxel world
   //input[1]: The current camera
   input_data_.resize(2,brdb_value_sptr(0));
@@ -30,7 +29,7 @@ bvxm_create_local_rpc_process::bvxm_create_local_rpc_process()
 bool bvxm_create_local_rpc_process::execute()
 {
   // Sanity check
-  if(!this->verify_inputs())
+  if (!this->verify_inputs())
     return false;
 
   // get the inputs
