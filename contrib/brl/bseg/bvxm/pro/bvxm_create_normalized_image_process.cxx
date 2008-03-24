@@ -1,6 +1,8 @@
 #include "bvxm_create_normalized_image_process.h"
 //:
 // \file
+
+#include "bvxm_normalize_image_process.h"
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
 
@@ -8,7 +10,6 @@
 #include <brip/brip_vil_float_ops.h>
 #include <vpgl/vpgl_camera.h>
 
-#include <bvxm/bvxm_normalize_image_process.h>
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_mog_grey_processor.h>
 #include <bvxm/bvxm_image_metadata.h>
