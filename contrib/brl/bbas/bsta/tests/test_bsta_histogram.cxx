@@ -2,7 +2,6 @@
 // \file
 #include <testlib/testlib_test.h>
 #include <vcl_cmath.h>
-#include <vcl_typeinfo.h>
 #include <bsta/bsta_histogram.h>
 #include <bsta/bsta_joint_histogram.h>
 #include <bsta/bsta_int_histogram_1d.h>
@@ -18,18 +17,17 @@ static void test_int_hist()
   bsta_int_histogram_1d h1d(50);
   vcl_cout << "Num 1d bins "  << h1d.get_nbins() << '\n';
   TEST("Test No Bins 1d", h1d.get_nbins(), 50);
-  for(unsigned k = 0; k<50; ++k)
+  for (unsigned k = 0; k<50; ++k)
     h1d.set_count(k, k*k);
   unsigned int index;
   unsigned long int max_value = h1d.get_max_val(index);
   vcl_cout << "Max value " << max_value << " at index " << index << '\n';
-  
+
   bsta_int_histogram_2d h2d(50, 50);
 
-  unsigned int imax_x = 0; 
+  unsigned int imax_x = 0;
   unsigned int imax_y = 0;
   h2d.get_max_val(imax_x, imax_y);
-
 }
 
 //: Test bsta histograms
