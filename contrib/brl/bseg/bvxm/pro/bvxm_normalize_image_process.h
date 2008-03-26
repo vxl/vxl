@@ -16,6 +16,7 @@
 // \endverbatim
 
 #include <vcl_string.h>
+#include <vcl_algorithm.h>
 #include <bprb/bprb_process.h>
 
 #include <vil/vil_image_view.h>
