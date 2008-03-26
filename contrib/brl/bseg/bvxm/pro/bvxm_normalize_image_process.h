@@ -9,8 +9,10 @@
 // \author Ozge Can Ozcanli
 // \date 02/13/2008
 // \verbatim
-//  Modifications
-//   <none yet>
+//
+// Modifications 
+//   Ozge C Ozcanli - 03/25/08 - fixed a compiler warning as suggested by Daniel Lyddy
+//
 // \endverbatim
 
 #include <vcl_string.h>
@@ -53,14 +55,11 @@ inline bool normalize_image(const vil_image_view<T>& in_view, vil_image_view<T>&
     for (unsigned j=0;j<nj;++j)
       for (unsigned i=0;i<ni;++i)
       {
-        //T p = (T)vcl_floor(a*in_view(i,j,k) + b);
         T p = (T)(a*in_view(i,j,k) + b);
-        if (p < 0)
-          out_img(i,j,k) = 0;
-        else if ( p > max_value )
-          out_img(i,j,k) = max_value;
-        else
-          out_img(i,j,k) = p;
+  
+        // Proposed fix
+        T min_value = (T) 0;
+        out_img(i, j, k) = vcl_min(vcl_max(min_value, p), max_value);
       }
 
   return true;

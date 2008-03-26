@@ -80,8 +80,8 @@ bool bvxm_change_detection_display_process::execute()
   parameters()->get_value("prob_thresh",prob_thresh);
   parameters()->get_value("prob_image_scale",prob_image_scale);
 
-  for ( int i = 0; i < image_width; i++ ){
-    for ( int j = 0; j < image_height; j++ ){
+  for ( unsigned int i = 0; i < image_width; i++ ){
+    for ( unsigned int j = 0; j < image_height; j++ ){
 #if 0
       vgl_point_2d<double> prob_img_pixel(
           (int)vcl_floor( prob_image_scale*i ), (int)vcl_floor( prob_image_scale*j ) );

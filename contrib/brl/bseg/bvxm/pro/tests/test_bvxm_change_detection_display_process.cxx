@@ -24,13 +24,14 @@ MAIN( test_bvxm_change_detection_display_process )
   input_img.fill(255);
 
   vil_image_view<float> prob_img(5,5,1);
-  prob_img.fill(0.3);
-  prob_img(2,2)=0.6;
-  prob_img(3,2)=0.6;
-  prob_img(2,3)=0.6;
-  prob_img(3,3)=0.6;
 
-  // set the inputs
+  prob_img.fill(0.3f);
+  prob_img(2,2)=0.6f;
+  prob_img(3,2)=0.6f;
+  prob_img(2,3)=0.6f;
+  prob_img(3,3)=0.6f;
+  
+  // set the inputs 
   brdb_value_sptr v0 = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<unsigned char>(input_img));
   brdb_value_sptr v1 = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(prob_img));
 
