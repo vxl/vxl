@@ -12,6 +12,7 @@
 #include <vil/vil_resample_bilin.h>
 #include <vil/io/vil_io_image_view.h>
 #include <vil/vil_math.h>
+#include <vnl/vnl_math.h>
 
 //=======================================================================
 // Dflt ctor
@@ -57,6 +58,8 @@ void mfpf_norm_corr2d::set(const vil_image_view<double>& k,
       sum+=k(i,j); ss+=k(i,j)*k(i,j);
     }
 
+  assert(!vnl_math_isnan(sum));
+
   // Normalise so that kernel_ has zero mean and unit sum of squares.
   double mean=sum/(ni*nj);
   ss-=(mean*mean*ni*nj);
@@ -92,6 +95,7 @@ inline double norm_corr(const float* im1, const double* im2,
   double mean = sum2/n;
   double ss = vcl_max(1e-6,sum_sq-n*mean*mean);
   double s = vcl_sqrt(ss);
+
   return sum1/s;
 }
 

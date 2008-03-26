@@ -17,29 +17,61 @@
 #include <vsl/vsl_vector_io.h>
 
 //=======================================================================
-// Dflt ctor
+// Constructors
 //=======================================================================
 
 mfpf_mr_point_finder_builder::mfpf_mr_point_finder_builder()
 {
 }
 
+//: Copy ctor
+mfpf_mr_point_finder_builder::mfpf_mr_point_finder_builder(const mfpf_mr_point_finder_builder& b)
+{
+ *this=b;
+}
+
+//: Copy operator
+mfpf_mr_point_finder_builder& mfpf_mr_point_finder_builder::operator=(const mfpf_mr_point_finder_builder& b)
+{
+  if (&b==this) return *this;
+
+  delete_all();
+
+  // Take clones of all builders.
+  unsigned n=b.size();
+  builders_.resize(n);
+  for (unsigned i=0;i<n;++i) builders_[i]=b.builders_[i]->clone();
+
+  return *this;
+}
 
 //=======================================================================
 // Destructor
 //=======================================================================
 
+
 mfpf_mr_point_finder_builder::~mfpf_mr_point_finder_builder()
 {
+  delete_all();
 }
+
+//: Delete all the builders
+void mfpf_mr_point_finder_builder::delete_all()
+{
+  for (unsigned i=0;i<builders_.size();++i)
+    delete builders_[i];
+  builders_.resize(0);
+}
+
 
 //: Define point builders.  Clone of each taken
 void mfpf_mr_point_finder_builder::set(
              const vcl_vector<mfpf_point_finder_builder*>& builders)
 {
+  delete_all();
   builders_.resize(builders.size());
   for (unsigned i=0;i<builders.size();++i)
-    builders_[i]=*builders[i];  // Clone taken by copy operator
+    builders_[i]=builders[i]->clone(); 
 }
 
 //: Set up n builders, with step size step0*scale_step^L
@@ -51,10 +83,11 @@ void mfpf_mr_point_finder_builder::set(
           const mfpf_point_finder_builder& builder0,
           unsigned n, double step0, double scale_step)
 {
+  delete_all();
   builders_.resize(n);
   for (unsigned i=0;i<n;++i)
   {
-    builders_[i]=builder0;  // Clone taken by copy operator
+    builders_[i]=builder0.clone(); 
     builder(i).set_step_size(step0*vcl_pow(scale_step,int(i)));
   }
 
@@ -224,6 +257,9 @@ void mfpf_mr_point_finder_builder::b_write(vsl_b_ostream& bfs) const
 void mfpf_mr_point_finder_builder::b_read(vsl_b_istream& bfs)
 {
   if (!bfs) return;
+
+  delete_all();
+
   short version;
   vsl_b_read(bfs,version);
   unsigned n;
@@ -232,7 +268,11 @@ void mfpf_mr_point_finder_builder::b_read(vsl_b_istream& bfs)
     case (1):
       vsl_b_read(bfs,n);
       builders_.resize(n);
-      for (unsigned i=0;i<n;++i) vsl_b_read(bfs,builders_[i]);
+      for (unsigned i=0;i<n;++i) 
+      {
+        builders_[i]=0;
+        vsl_b_read(bfs,builders_[i]);
+      }
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"

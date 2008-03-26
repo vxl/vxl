@@ -17,6 +17,7 @@
 #include <vil/vil_resample_bilin.h>
 #include <vil/vil_math.h>
 #include <vil/io/vil_io_image_view.h>
+#include <vnl/vnl_math.h>
 
 //=======================================================================
 // Dflt ctor
@@ -99,6 +100,9 @@ static void normalize(vil_image_view<double>& im)
       sum+=im(i,j); ss+=im(i,j)*im(i,j);
     }
 
+  assert(!vnl_math_isnan(sum));
+
+
   // Normalise so that im has zero mean and unit sum of squares.
   double mean=sum/(ni*nj);
   ss-=(mean*mean*ni*nj);
@@ -157,6 +161,7 @@ void mfpf_norm_corr2d_builder::add_example(const vimt_image_2d_of<float>& image,
 //: Build this object from the data supplied in add_example()
 void mfpf_norm_corr2d_builder::build(mfpf_point_finder& pf)
 {
+  assert(n_added_>0);
   assert(pf.is_a()=="mfpf_norm_corr2d");
   mfpf_norm_corr2d& nc = static_cast<mfpf_norm_corr2d&>(pf);
   vil_image_view<double> mean;

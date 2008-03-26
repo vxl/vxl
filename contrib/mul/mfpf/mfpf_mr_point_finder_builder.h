@@ -19,15 +19,24 @@ class mfpf_pose;
 // each designed to work at a different resolution.
 class mfpf_mr_point_finder_builder
 {
- protected:
+protected:
 
   //: Set of cost function objects.
-  vcl_vector<mbl_cloneable_ptr<mfpf_point_finder_builder> > builders_;
+  vcl_vector<mfpf_point_finder_builder*> builders_;
 
- public:
+  //: Delete all the builders
+  void delete_all();
+public:
 
   //: Dflt ctor
   mfpf_mr_point_finder_builder();
+
+  //: Copy ctor
+  mfpf_mr_point_finder_builder(const mfpf_mr_point_finder_builder&);
+
+  //: Copy operator
+  //  Required to deal with correct cloning of builders
+  mfpf_mr_point_finder_builder& operator=(const mfpf_mr_point_finder_builder&);
 
   //: Destructor
   virtual ~mfpf_mr_point_finder_builder();

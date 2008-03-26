@@ -16,6 +16,8 @@
 #include <vnl/vnl_cost_function.h>
 #include <vnl/algo/vnl_amoeba.h>
 #include <vnl/algo/vnl_powell.h>
+#include <vnl/vnl_math.h>
+#include <vil/vil_print.h>
 
 //=======================================================================
 //=== Utility functions for optimisation
@@ -368,6 +370,16 @@ void mfpf_point_finder::multi_search_one_pose(
   {
     unsigned x =t_pts[i].x(), y=t_pts[i].y();
     double f0 = r_im(x,y);  // Value at minima on grid
+
+    if (vnl_math_isnan(f0))
+    {
+      vcl_cerr<<"mfpf_point_finder::multi_search_one_pose()"<<vcl_endl;
+      vcl_cerr<<"Response was a NaN at "<<x<<','<<y<<vcl_endl;
+      vcl_cerr<<"Reponse image: "<<response_im.image()<<vcl_endl;
+      vil_print_all(vcl_cout,response_im.image());
+      vcl_abort();
+    }
+
     // Perform local prediction of minima
     double dx=parabolic_min(r_im(x-1,y  ),f0,r_im(x+1,y  ));
     double dy=parabolic_min(r_im(x  ,y-1),f0,r_im(x  ,y+1));
