@@ -18,7 +18,7 @@
 #include <bvxm/pro/bvxm_normalize_image_process.h>
 #include <bvxm/pro/bvxm_illum_index_process.h>
 #include <bvxm/pro/bvxm_create_local_rpc_process.h>
-
+#include <bvxm/pro/bvxm_clean_world_process.h>
 #include <bvxm/pro/bvxm_rpc_registration_process.h>
 #include <bvxm/pro/bvxm_generate_edge_map_process.h>
 #include <bvxm/pro/bvxm_save_occupancy_raw_process.h>
@@ -51,8 +51,7 @@ register_processes(PyObject *self, PyObject *args)
   REG_PROCESS(bvxm_rpc_registration_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_generate_edge_map_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_change_detection_display_process, bprb_batch_process_manager);
-  //REG_PROCESS(bvxm_ekf_camera_optimize_process, bprb_batch_process_manager);
-  //REG_PROCESS(bvxm_init_ekf_camera_optimizer_process, bprb_batch_process_manager);
+  REG_PROCESS(bvxm_clean_world_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_save_occupancy_raw_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_create_local_rpc_process, bprb_batch_process_manager);
   Py_INCREF(Py_None);
