@@ -122,7 +122,7 @@ void mfpf_region_pdf_builder::set_as_box(unsigned ni, unsigned nj,
 
   // Set ROI to be a box
   roi_.resize(nj);
-  for (unsigned j=0;j<nj;++j) roi_.push_back(mbl_chord(0,ni-1,j));
+  for (unsigned j=0;j<nj;++j) roi_[j]=mbl_chord(0,ni-1,j);
 
   ref_x_=ref_x;
   ref_y_=ref_y;
