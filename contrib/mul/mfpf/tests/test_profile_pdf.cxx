@@ -157,6 +157,8 @@ void test_profile_pdf()
     TEST("Loaded==Saved",profile_pdf_in,profile_pdf);
     TEST("Load profile_pdf by base ptr (type)",
          base_ptr_in->is_a()==profile_pdf.is_a(),true);
+
+    delete base_ptr_in;
   }
 
   vsl_delete_all_loaders();

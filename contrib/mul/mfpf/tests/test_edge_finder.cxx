@@ -149,6 +149,8 @@ void test_edge_finder()
          edge_finder_in.search_ni(),edge_finder.search_ni());
     TEST("Load edge_finder by base ptr (type)",
          base_ptr_in->is_a()==edge_finder.is_a(),true);
+
+    delete base_ptr_in;
   }
 
   vsl_delete_all_loaders();

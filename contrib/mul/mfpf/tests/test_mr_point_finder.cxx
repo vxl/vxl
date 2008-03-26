@@ -15,6 +15,8 @@
 #include <mfpf/mfpf_add_all_loaders.h>
 #include <mfpf/mfpf_norm_corr2d.h>
 #include <mfpf/mfpf_norm_corr2d_builder.h>
+#include <mfpf/mfpf_region_finder_builder.h>
+#include <mfpf/mfpf_sad_vec_cost_builder.h>
 #include <vil/vil_bilin_interp.h>
 #include <mfpf/mfpf_mr_point_finder.h>
 #include <mfpf/mfpf_mr_point_finder_builder.h>
@@ -23,7 +25,8 @@
 
 //=======================================================================
 
-void test_mr_point_finder_search(mfpf_mr_point_finder_builder& b)
+void test_mr_point_finder_search(mfpf_mr_point_finder_builder& b,
+                                 double d_thresh)
 {
   vcl_cout<<"Testing building and search."<<vcl_endl;
 
@@ -66,7 +69,7 @@ void test_mr_point_finder_search(mfpf_mr_point_finder_builder& b)
   vcl_cout<<"Final   pose: "<<new_pose<<vcl_endl;
 
   TEST_NEAR("search: Correct location",
-            (new_pose.p()-p0).length(),0.0,0.1);
+            (new_pose.p()-p0).length(),0.0,d_thresh);
 
   vcl_vector<mfpf_pose> poses;
   vcl_vector<double> fits;
@@ -90,17 +93,42 @@ void test_mr_point_finder()
            << " Testing mfpf_mr_point_finder\n"
            << "**************************\n";
 
-  mfpf_norm_corr2d_builder nc_builder;
-  nc_builder.set_kernel_size(7,7);
-  nc_builder.set_search_area(4,4);
-  nc_builder.set_search_scale_range(3,1.1);
-  nc_builder.set_search_angle_range(3,0.05);
+  {
+    vcl_cout<<"*** Test using mfpf_norm_corr2d_builder ***"<<vcl_endl;
 
-  mfpf_mr_point_finder_builder mr_builder;
-  mr_builder.set(nc_builder,3,1.0,2.0);
+    mfpf_norm_corr2d_builder nc_builder;
+    nc_builder.set_kernel_size(7,7);
+    nc_builder.set_search_area(4,4);
+    nc_builder.set_search_scale_range(3,1.1);
+    nc_builder.set_search_angle_range(3,0.05);
 
-  test_mr_point_finder_search(mr_builder);
+    mfpf_mr_point_finder_builder mr_builder;
+    mr_builder.set(nc_builder,3,1.0,2.0);
 
+    test_mr_point_finder_search(mr_builder,0.1);
+  }
+
+  {
+    vcl_cout<<"*** Test using mfpf_region_finder_builder ***"<<vcl_endl;
+
+    mfpf_sad_vec_cost_builder sad_vec_cost_builder;
+
+    mfpf_region_finder_builder rf_builder;
+    rf_builder.set_as_box(7,7,sad_vec_cost_builder);
+
+    rf_builder.set_search_area(4,4);
+    rf_builder.set_search_scale_range(3,1.1);
+    rf_builder.set_search_angle_range(3,0.05);
+
+    vcl_cout<<"Base builder: "<<rf_builder<<vcl_endl;
+
+    mfpf_mr_point_finder_builder mr_builder;
+    mr_builder.set(rf_builder,3,1.0,2.0);
+
+    // Sum of absolutes gives slightly less accurate result 
+    // than normalised correlation in this case.
+    test_mr_point_finder_search(mr_builder,0.25);
+  }
 }
 
 TESTMAIN(test_mr_point_finder);

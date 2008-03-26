@@ -100,7 +100,7 @@ double mfpf_norm_corr1d::evaluate(const vimt_image_2d_of<float>& image,
   const vgl_point_2d<double> p0 = p+ilo_*u1;
   vimt_sample_profile_bilin(v,image,p0,u1,n);
 
-  return -1*norm_corr(v.data_block(),kernel_.data_block(),n);
+  return 1.0-norm_corr(v.data_block(),kernel_.data_block(),n);
 }
 
 //: Evaluate match at in a region around p
@@ -126,7 +126,7 @@ void mfpf_norm_corr1d::evaluate_region(
   double* r = response.image().top_left_ptr();
   for (int i=0;i<n;++i,++r)
   {
-    *r = -1*norm_corr(&v[i],kernel_.data_block(),kernel_.size());
+    *r = 1.0-norm_corr(&v[i],kernel_.data_block(),kernel_.size());
   }
 
   // Set up transformation parameters
@@ -164,7 +164,7 @@ double mfpf_norm_corr1d::search_one_pose(
     if (r>best_r) { best_r=r; best_i=i; }
   }
   new_p = p+(best_i-search_ni_)*u1;
-  return -1.0 * best_r;
+  return 1.0 - best_r;
 }
 
 

@@ -44,12 +44,12 @@ void test_norm_corr2d_search(mfpf_point_finder_builder& b)
   vgl_point_2d<double> new_p;
   vgl_vector_2d<double> new_u;
 
-  TEST_NEAR("Evaluate at true point",pf->evaluate(image,p0,u),-1,1e-6);
+  TEST_NEAR("Evaluate at true point",pf->evaluate(image,p0,u),0.0,1e-6);
 
   pf->set_search_area(0,0);
   double v0 = pf->search(image,p0,u,new_p,new_u);
   vcl_cout<<"Found point: "<<new_p<<vcl_endl;
-  TEST_NEAR("Search with one point",v0,-1,1e-6);
+  TEST_NEAR("Search with one point",v0,0.0,1e-6);
   TEST_NEAR("Correct location",(new_p-p0).length(),0.0,1e-6);
 
   pf->set_search_area(3,3);
@@ -78,12 +78,13 @@ void test_norm_corr2d_search(mfpf_point_finder_builder& b)
 
   // Check that response has local minima in correct place
   vgl_point_2d<double> ip = response.world2im()(new_p);
+  vcl_cout<<"Best pt: "<<ip.x()<<","<<ip.y()<<vcl_endl;
   TEST("Best pt in image (i)", ip.x()>=0 && ip.x()<response.image().ni(),true);
   TEST("Best pt in image (j)", ip.y()>=0 && ip.y()<response.image().nj(),true);
 
   double r0 = vil_bilin_interp_safe(response.image(),ip.x(),ip.y());
-  double r1 = vil_bilin_interp_safe(response.image(),ip.x()-1,ip.y());
-  double r2 = vil_bilin_interp_safe(response.image(),ip.x()+1,ip.y());
+  double r1 = vil_bilin_interp_safe(response.image(),ip.x()-0.5,ip.y());
+  double r2 = vil_bilin_interp_safe(response.image(),ip.x()+0.5,ip.y());
   vcl_cout<<r0<<','<<r1<<','<<r2<<vcl_endl;
   TEST("Local minima 1",r0<r1,true);
   TEST("Local minima 2",r0<r2,true);
@@ -208,6 +209,8 @@ void test_norm_corr2d()
     TEST("Loaded==Saved",norm_corr2d_in,norm_corr2d);
     TEST("Load norm_corr2d by base ptr (type)",
          base_ptr_in->is_a()==norm_corr2d.is_a(),true);
+
+    delete base_ptr_in;
   }
 
   vsl_delete_all_loaders();

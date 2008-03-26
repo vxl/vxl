@@ -147,6 +147,8 @@ void test_norm_corr1d()
     TEST("Loaded==Saved",norm_corr1d_in,norm_corr1d);
     TEST("Load norm_corr1d by base ptr (type)",
          base_ptr_in->is_a()==norm_corr1d.is_a(),true);
+
+    delete base_ptr_in;
   }
 
   vsl_delete_all_loaders();

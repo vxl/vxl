@@ -1,9 +1,9 @@
-// This is mul/mfpf/tests/test_region_pdf.cxx
+// This is mul/mfpf/tests/test_region_finder.cxx
 #include <testlib/testlib_test.h>
 //:
 // \file
 // \author Tim Cootes
-// \brief test mfpf_region_pdf
+// \brief test mfpf_region_finder
 //=======================================================================
 //
 //  Copyright: (C) 2008 The University of Manchester
@@ -13,14 +13,14 @@
 #include <vcl_iostream.h>
 #include <vsl/vsl_binary_loader.h>
 #include <mfpf/mfpf_add_all_loaders.h>
-#include <mfpf/mfpf_region_pdf.h>
-#include <mfpf/mfpf_region_pdf_builder.h>
+#include <mfpf/mfpf_region_finder.h>
+#include <mfpf/mfpf_region_finder_builder.h>
 #include <vil/vil_bilin_interp.h>
-#include <vpdfl/vpdfl_axis_gaussian_builder.h>
+#include <mfpf/mfpf_sad_vec_cost_builder.h>
 
 //=======================================================================
 
-void test_region_pdf_search(mfpf_point_finder_builder& b)
+void test_region_finder_search(mfpf_point_finder_builder& b)
 {
   vcl_cout<<"Testing building and search."<<vcl_endl;
 
@@ -81,30 +81,30 @@ void test_region_pdf_search(mfpf_point_finder_builder& b)
   delete pf;
 }
 
-void test_region_pdf()
+void test_region_finder()
 {
   vcl_cout << "*************************\n"
-           << " Testing mfpf_region_pdf\n"
+           << " Testing mfpf_region_finder\n"
            << "*************************\n";
 
   mfpf_add_all_loaders();
 
-  vpdfl_axis_gaussian_builder pdf_builder;
+  mfpf_sad_vec_cost_builder sad_vec_cost_builder;
 
-  mfpf_region_pdf_builder r_builder;
-  r_builder.set_as_box(4,5,pdf_builder);
+  mfpf_region_finder_builder r_builder;
+  r_builder.set_as_box(4,5,sad_vec_cost_builder);
   TEST("Number of pixels",r_builder.n_pixels(),20);
   vcl_cout<<r_builder<<vcl_endl;
   r_builder.print_shape(vcl_cout);
 
-  test_region_pdf_search(r_builder);
+  test_region_finder_search(r_builder);
 
-  r_builder.set_as_ellipse(4,3,pdf_builder);
+  r_builder.set_as_ellipse(4,3,sad_vec_cost_builder);
   TEST("Number of pixels",r_builder.n_pixels(),35);
   vcl_cout<<r_builder<<vcl_endl;
   r_builder.print_shape(vcl_cout);
 
-  test_region_pdf_search(r_builder);
+  test_region_finder_search(r_builder);
 
   // -------------------------------------------
   //  Test configuring from stream
@@ -113,32 +113,35 @@ void test_region_pdf()
   {
     vcl_cout<<"Testing initialisation as box"<<vcl_endl;
     vcl_istringstream ss(
-          "mfpf_region_pdf_builder\n"
+          "mfpf_region_finder_builder\n"
           "{\n"
           "  shape: box { ni: 5 nj: 3 ref_x: 2.5 ref_y: 1.5 }\n"
           "  search_ni: 17\n"
           "  search_nj: 15\n"
+          "  cost_builder: mfpf_sad_vec_cost_builder { min_mad: 1.1 }\n"
           "}\n");
 
     vcl_auto_ptr<mfpf_point_finder_builder>
             pf = mfpf_point_finder_builder::create_from_stream(ss);
 
-    TEST("Correct Point Finder Builder", pf->is_a(),"mfpf_region_pdf_builder");
-    if (pf->is_a()=="mfpf_region_pdf_builder")
+    TEST("Correct Point Finder Builder", pf->is_a(),"mfpf_region_finder_builder");
+    if (pf->is_a()=="mfpf_region_finder_builder")
     {
-      mfpf_region_pdf_builder &a_pf = static_cast<mfpf_region_pdf_builder&>(*pf);
+      mfpf_region_finder_builder &a_pf = static_cast<mfpf_region_finder_builder&>(*pf);
       vcl_cout<<a_pf<<vcl_endl;
       TEST("search_ni configured",a_pf.search_ni(),17);
       TEST("search_nj configured",a_pf.search_nj(),15);
       TEST("shape",a_pf.shape(),"box");
       TEST("n_pixels configured",a_pf.n_pixels(),15);
+      TEST("cost_builder configured",a_pf.cost_builder().is_a(),
+                                     "mfpf_sad_vec_cost_builder");
     }
   }
 
   {
     vcl_cout<<"Testing initialisation as ellipse"<<vcl_endl;
     vcl_istringstream ss(
-          "mfpf_region_pdf_builder\n"
+          "mfpf_region_finder_builder\n"
           "{\n"
           "  shape: ellipse { ri: 5 rj: 3 }\n"
           "  search_ni: 17\n"
@@ -146,58 +149,61 @@ void test_region_pdf()
           "  search_nA: 2\n"
           "  search_dA: 0.1\n"
           "  step_size: 1.01\n"
+          "  cost_builder: mfpf_sad_vec_cost_builder { min_mad: 1.2 }\n"
           "}\n");
 
     vcl_auto_ptr<mfpf_point_finder_builder>
             pf = mfpf_point_finder_builder::create_from_stream(ss);
 
-    TEST("Correct Point Finder Builder", pf->is_a(),"mfpf_region_pdf_builder");
-    if (pf->is_a()=="mfpf_region_pdf_builder")
+    TEST("Correct Point Finder Builder", pf->is_a(),"mfpf_region_finder_builder");
+    if (pf->is_a()=="mfpf_region_finder_builder")
     {
-      mfpf_region_pdf_builder &a_pf = static_cast<mfpf_region_pdf_builder&>(*pf);
+      mfpf_region_finder_builder &a_pf = static_cast<mfpf_region_finder_builder&>(*pf);
       vcl_cout<<a_pf<<vcl_endl;
       TEST("search_ni configured",a_pf.search_ni(),17);
       TEST("search_nj configured",a_pf.search_nj(),15);
       TEST("shape",a_pf.shape(),"ellipse");
       TEST("n_pixels configured",a_pf.n_pixels(),45);
+      TEST("cost_builder configured",a_pf.cost_builder().is_a(),
+                                     "mfpf_sad_vec_cost_builder");
     }
   }
 
   {
     // Test builder returns correct type of object
-    mfpf_region_pdf_builder b;
+    mfpf_region_finder_builder b;
     mfpf_point_finder* pf = b.new_finder();
-    TEST("Builder: Correct Finder",pf->is_a(),"mfpf_region_pdf");
+    TEST("Builder: Correct Finder",pf->is_a(),"mfpf_region_finder");
     delete pf;
   }
 
   {
-    mfpf_region_pdf region_pdf;
-    region_pdf.set_search_area(13,14);
+    mfpf_region_finder region_finder;
+    region_finder.set_search_area(13,14);
 
     // Test binary load and save
-    mfpf_point_finder * base_ptr = &region_pdf;
+    mfpf_point_finder * base_ptr = &region_finder;
 
-    vsl_b_ofstream bfs_out("test_region_pdf.bvl.tmp");
-    TEST ("Created test_region_pdf.bvl.tmp for writing", (!bfs_out), false);
-    vsl_b_write(bfs_out, region_pdf);
+    vsl_b_ofstream bfs_out("test_region_finder.bvl.tmp");
+    TEST ("Created test_region_finder.bvl.tmp for writing", (!bfs_out), false);
+    vsl_b_write(bfs_out, region_finder);
     vsl_b_write(bfs_out, base_ptr);
     bfs_out.close();
 
-    mfpf_region_pdf region_pdf_in;
+    mfpf_region_finder region_finder_in;
     mfpf_point_finder *base_ptr_in = 0;
 
-    vsl_b_ifstream bfs_in("test_region_pdf.bvl.tmp");
-    TEST ("Opened test_region_pdf.bvl.tmp for reading", (!bfs_in), false);
-    vsl_b_read(bfs_in, region_pdf_in);
+    vsl_b_ifstream bfs_in("test_region_finder.bvl.tmp");
+    TEST ("Opened test_region_finder.bvl.tmp for reading", (!bfs_in), false);
+    vsl_b_read(bfs_in, region_finder_in);
     vsl_b_read(bfs_in, base_ptr_in);
     TEST ("Finished reading file successfully", (!bfs_in), false);
     bfs_in.close();
-    vcl_cout<<region_pdf<<vcl_endl
-            <<region_pdf_in<<vcl_endl;
-    TEST("Loaded==Saved",region_pdf_in,region_pdf);
-    TEST("Load region_pdf by base ptr (type)",
-         base_ptr_in->is_a()==region_pdf.is_a(),true);
+    vcl_cout<<region_finder<<vcl_endl
+            <<region_finder_in<<vcl_endl;
+    TEST("Loaded==Saved",region_finder_in,region_finder);
+    TEST("Load region_finder by base ptr (type)",
+         base_ptr_in->is_a()==region_finder.is_a(),true);
 
     delete base_ptr_in;
   }
@@ -205,4 +211,4 @@ void test_region_pdf()
   vsl_delete_all_loaders();
 }
 
-TESTMAIN(test_region_pdf);
+TESTMAIN(test_region_finder);

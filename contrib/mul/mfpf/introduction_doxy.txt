@@ -11,4 +11,5 @@
 * - mfpf_profile_pdf
 * - mfpf_norm_corr_2d
 * - mfpf_region_pdf
+* - mfpf_region_finder
 */
