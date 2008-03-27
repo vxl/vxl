@@ -79,10 +79,14 @@ test_feature_point()
 
     rgrl_trans_affine xform( A, t, covar );
     rgrl_feature_sptr result = pf2d->transform( xform );
-    testlib_test_perform( pf2d->location() == loc2d &&
-                          result->is_type( rgrl_feature_point::type_id() ) &&
-                          result->location() == xform.map_location( loc2d ) &&
-                          result->error_projector().is_identity() );
+    TEST( "Transform 2D point feature (point location remains unchanged)", pf2d->location(), loc2d );
+    TEST( "Transform 2D point feature (feature is of point type)", result->is_type( rgrl_feature_point::type_id() ), true );
+    TEST( "Transform 2D point feature (mapped feature has location same as mapping location only)", result->location(), xform.map_location( loc2d ) );
+    // vcl_cout << "Error projector: " << result->error_projector() << vcl_endl;
+    vnl_matrix<double> true_error_projector(2, 2);
+    true_error_projector.set_identity();
+    true_error_projector /= vnl_math_sqr(result->scale());
+    TEST( "Transform 2D point feature (Error projector is identity matrix)", result->error_projector(), true_error_projector );
   }
 }
 
