@@ -74,8 +74,10 @@ compute_matches( rgrl_feature_set const&       from_set,
         rgrl_cast<rgrl_feature_trace_pt *>(ti.to_feature());
       feature_vector to_bd_pts = to_feature->boundary_points(vnl_vector<double>());
       vbl_array_2d<bool> assignment = match_boundary_pts(mapped_bd_pts, to_bd_pts);
-      for (int i = 0; i<assignment.rows(); ++i)
-        for (int j = 0; j<assignment.cols(); ++j){
+
+      typedef vbl_array_2d<bool>::size_type size_type;
+      for (size_type i = 0; i<assignment.rows(); ++i)
+        for (size_type j = 0; j<assignment.cols(); ++j){
           if (assignment(i,j)) to_bd_pt_set[i].push_back(to_bd_pts[j]);
         }
     }
@@ -99,8 +101,9 @@ match_boundary_pts(feature_vector const& from_pts,
   assert(from_pts.size() == to_pts.size());
 
   vbl_array_2d<double> dist_errors( from_pts.size(), to_pts.size());
-  for (int i = 0; i<dist_errors.rows(); ++i) {
-    for (int j = 0; j<dist_errors.cols(); ++j) {
+  typedef vbl_array_2d<double>::size_type size_type;
+  for (size_type i = 0; i<dist_errors.rows(); ++i) {
+    for (size_type j = 0; j<dist_errors.cols(); ++j) {
       dist_errors(i,j) = vnl_vector_ssd(from_pts[i]->location(),to_pts[j]->location());
     }
   }
@@ -136,12 +139,13 @@ match_boundary_pts_helper(vbl_array_2d<double> const& dist_error,
   double obj;
   bool min_obj_set = false;
 
-  for (int i = 0; i < valid.cols(); i++) {
+  typedef vbl_array_2d<bool>::size_type size_type;
+  for (size_type i = 0; i < valid.cols(); i++) {
     if (valid(count-1,i)) {
       vbl_array_2d<bool> valid2(valid);
-      for ( int j = 0; j < valid.rows(); j++)
+      for ( size_type j = 0; j < valid.rows(); j++)
          valid2.put(j,i,false);
-      for ( int j = 0; j < valid.cols(); j++)
+      for ( size_type j = 0; j < valid.cols(); j++)
          valid2.put(count-1,j,false);
       vbl_array_2d<bool> assignment =
         match_boundary_pts_helper(dist_error, valid2, count-1, obj);
