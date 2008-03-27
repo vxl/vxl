@@ -18,7 +18,7 @@
 // This allocates a 3D array which can be referenced using the form myarray[a][b][c].
 // Useful in C although maybe superfluous here as access is via a get function anyway.
 template <class T>
-void vbl_array_3d<T>::construct(int n1, int n2, int n3)
+void vbl_array_3d<T>::construct(size_type n1, size_type n2, size_type n3)
 {
   assert(n1 >= 0);
   assert(n2 >= 0);
@@ -40,15 +40,15 @@ void vbl_array_3d<T>::construct(int n1, int n2, int n3)
   // set the first level pointers and allocate the memory for the second level pointers.
   {
     element_[0] = new T* [n1 * n2];
-    for (int row1_index = 0; row1_index < n1; row1_index++)
+    for (size_type row1_index = 0; row1_index < n1; row1_index++)
       element_ [row1_index] = element_[0] + n2 * row1_index;
   }
 
   T* array_ptr = new T [n1*n2*n3];
 
   // set the second level pointers.
-  for (int row1_index = 0; row1_index < n1; row1_index++)
-    for (int row2_index = 0; row2_index < n2; row2_index++) {
+  for (size_type row1_index = 0; row1_index < n1; row1_index++)
+    for (size_type row2_index = 0; row2_index < n2; row2_index++) {
       element_ [row1_index][row2_index] = array_ptr;
       array_ptr += n3;
     }
@@ -70,7 +70,7 @@ void vbl_array_3d<T>::destruct()
 }
 
 template <class T>
-void vbl_array_3d<T>::resize(int n1, int n2, int n3)
+void vbl_array_3d<T>::resize(size_type n1, size_type n2, size_type n3)
 {
   if (n1 == row1_count_ && n2 == row2_count_ && n3 == row3_count_)
     return;
@@ -84,9 +84,9 @@ void vbl_array_3d<T>::resize(int n1, int n2, int n3)
 template <class T>
 void vbl_array_3d<T>::set(T const* p)
 {
-  for (int row1_index = 0; row1_index < row1_count_; row1_index++)
-    for (int row2_index = 0; row2_index < row2_count_; row2_index++)
-      for (int row3_index = 0; row3_index < row3_count_; row3_index++)
+  for (size_type row1_index = 0; row1_index < row1_count_; row1_index++)
+    for (size_type row2_index = 0; row2_index < row2_count_; row2_index++)
+      for (size_type row3_index = 0; row3_index < row3_count_; row3_index++)
         element_ [row1_index][row2_index][row3_index] = *p++;
 }
 
@@ -94,9 +94,9 @@ void vbl_array_3d<T>::set(T const* p)
 template <class T>
 void vbl_array_3d<T>::get(T* p) const
 {
-  for (int row1_index = 0; row1_index < row1_count_; row1_index++)
-    for (int row2_index = 0; row2_index < row2_count_; row2_index++)
-      for (int row3_index = 0; row3_index < row3_count_; row3_index++)
+  for (size_type row1_index = 0; row1_index < row1_count_; row1_index++)
+    for (size_type row2_index = 0; row2_index < row2_count_; row2_index++)
+      for (size_type row3_index = 0; row3_index < row3_count_; row3_index++)
         *p++ = element_ [row1_index][row2_index][row3_index];
 }
 
@@ -104,7 +104,7 @@ void vbl_array_3d<T>::get(T* p) const
 template <class T>
 void vbl_array_3d<T>::fill(T const& value)
 {
-  int n = row1_count_ * row2_count_ * row3_count_;
+  size_type n = row1_count_ * row2_count_ * row3_count_;
   T* d = data_block();
   T* e = d + n;
   while (d < e)
@@ -118,9 +118,10 @@ void vbl_array_3d<T>::fill(T const& value)
 template <class T>
 vcl_ostream & operator<<(vcl_ostream& os, vbl_array_3d<T> const& A)
 {
-  for (int i=0; i<A.get_row1_count(); ++i) {
-    for (int j=0; j<A.get_row2_count(); ++j) {
-      for (int k=0; k<A.get_row3_count(); ++k) {
+  typedef vbl_array_3d<T>::size_type size_type;
+  for (size_type i=0; i<A.get_row1_count(); ++i) {
+    for (size_type j=0; j<A.get_row2_count(); ++j) {
+      for (size_type k=0; k<A.get_row3_count(); ++k) {
         if (k)
           os << ' ';
         os << A(i,j,k);
@@ -135,9 +136,10 @@ vcl_ostream & operator<<(vcl_ostream& os, vbl_array_3d<T> const& A)
 template <class T>
 vcl_istream & operator>>(vcl_istream& is, vbl_array_3d<T>& A)
 {
-  for (int i=0; i<A.get_row1_count(); ++i)
-    for (int j=0; j<A.get_row2_count(); ++j)
-      for (int k=0; k<A.get_row3_count(); ++k)
+  typedef vbl_array_3d<T>::size_type size_type;
+  for (size_type i=0; i<A.get_row1_count(); ++i)
+    for (size_type j=0; j<A.get_row2_count(); ++j)
+      for (size_type k=0; k<A.get_row3_count(); ++k)
         is >> A(i,j,k);
   return is;
 }

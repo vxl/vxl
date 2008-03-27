@@ -18,13 +18,14 @@ void vsl_b_write(vsl_b_ostream & os, const vbl_array_2d<T> &p)
   const short io_version_no = 1;
   vsl_b_write(os, io_version_no);
 
-  int array_rows = p.rows();
-  int array_cols = p.cols();
+  typedef typename vbl_array_2d<T>::size_type size_type;
+  size_type array_rows = p.rows();
+  size_type array_cols = p.cols();
   vsl_b_write(os, array_rows);
   vsl_b_write(os, array_cols);
-  for (int i=0; i<array_rows; i++)
+  for (size_type i=0; i<array_rows; i++)
   {
-    for (int j=0; j<array_cols; j++)
+    for (size_type j=0; j<array_cols; j++)
       vsl_b_write(os, p(i,j));
   }
 }
@@ -37,7 +38,8 @@ void vsl_b_read(vsl_b_istream &is, vbl_array_2d<T> &p)
   if (!is) return;
 
   short ver;
-  int array_rows, array_cols;
+  typedef typename vbl_array_2d<T>::size_type size_type;
+  size_type array_rows, array_cols;
   vsl_b_read(is, ver);
   switch (ver)
   {
@@ -45,9 +47,9 @@ void vsl_b_read(vsl_b_istream &is, vbl_array_2d<T> &p)
     vsl_b_read(is, array_rows);
     vsl_b_read(is, array_cols);
     p.resize(array_rows, array_cols);
-    for (int i=0; i<array_rows; i++)
+    for (size_type i=0; i<array_rows; i++)
     {
-      for (int j=0; j<array_cols; j++)
+      for (size_type j=0; j<array_cols; j++)
         vsl_b_read(is, p(i,j));
     }
     break;
@@ -67,9 +69,10 @@ void vsl_print_summary(vcl_ostream & os,const vbl_array_2d<T> & p)
 {
   os << "Rows: " << p.rows() << vcl_endl
      << "Columns: " << p.cols() << vcl_endl;
-  for (int i =0; i<p.rows() && i<5; i++)
+  typedef typename vbl_array_2d<T>::size_type size_type;
+  for (size_type i =0; i<p.rows() && i<5; i++)
   {
-    for (int j=0; j<p.cols() && j<5; j++)
+    for (size_type j=0; j<p.cols() && j<5; j++)
     {
       os << ' ';
       vsl_print_summary(os, p(i,j));

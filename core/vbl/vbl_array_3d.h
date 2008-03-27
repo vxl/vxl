@@ -22,13 +22,14 @@
 
 
 #include <vcl_compiler.h>
+#include <vcl_cstddef.h>
 
 #ifdef __OPTIMIZE__
 # define RANGECHECK(i,j,k) ((void)0)
 #else
 # include <vcl_cassert.h>
-# define RANGECHECK(i,j,k) assert(((int)i < row1_count_) && \
-                   ((int)j < row2_count_) && ((int)k < row3_count_))
+# define RANGECHECK(i,j,k) assert(((size_type)i < row1_count_) && \
+                   ((size_type)j < row2_count_) && ((size_type)k < row3_count_))
 #endif
 
 //: Templated 3-dimensional array
@@ -37,6 +38,8 @@ export template <class T>
 class vbl_array_3d
 {
  public:
+  typedef vcl_size_t size_type;
+ public:
   typedef T element_type;
   typedef T* iterator;
   typedef T const* const_iterator;
@@ -44,14 +47,14 @@ class vbl_array_3d
   vbl_array_3d(): element_(0), row1_count_(0), row2_count_(0), row3_count_(0)
   {}
 
-  vbl_array_3d(int n1, int n2, int n3) { construct(n1, n2, n3); }
+  vbl_array_3d(size_type n1, size_type n2, size_type n3) { construct(n1, n2, n3); }
 
-  vbl_array_3d(int n1, int n2, int n3, T const* init_values)
+  vbl_array_3d(size_type n1, size_type n2, size_type n3, T const* init_values)
   {
     construct(n1, n2, n3); set(init_values);
   }
 
-  vbl_array_3d(int n1, int n2, int n3, T const& fill_value)
+  vbl_array_3d(size_type n1, size_type n2, size_type n3, T const& fill_value)
   {
     construct(n1, n2, n3); fill(fill_value);
   }
@@ -107,9 +110,9 @@ class vbl_array_3d
   T const* const* operator[](unsigned i1) const { return element_[i1]; }
 
   // dimensions
-  int get_row1_count () const { return row1_count_; }
-  int get_row2_count () const { return row2_count_; }
-  int get_row3_count () const { return row3_count_; }
+  size_type get_row1_count () const { return row1_count_; }
+  size_type get_row2_count () const { return row2_count_; }
+  size_type get_row3_count () const { return row3_count_; }
 
   // iterators
   unsigned size() const
@@ -126,20 +129,20 @@ class vbl_array_3d
   T      * data_block()       { return element_[0][0]; }
   T const* data_block() const { return element_[0][0]; }
 
-  void resize(int n1, int n2, int n3); // no malloc unless size changes.
+  void resize(size_type n1, size_type n2, size_type n3); // no malloc unless size changes.
   void set(T const* array);
   void get(T* array) const;
   void fill(T const& value);
 
  protected:
-  void construct(int, int, int);
+  void construct(size_type, size_type, size_type);
   void destruct ();
 
  private:
   T ***element_;
-  int row1_count_;
-  int row2_count_;
-  int row3_count_;
+  size_type row1_count_;
+  size_type row2_count_;
+  size_type row3_count_;
 };
 
 #undef RANGECHECK
