@@ -118,7 +118,7 @@ void vbl_array_3d<T>::fill(T const& value)
 template <class T>
 vcl_ostream & operator<<(vcl_ostream& os, vbl_array_3d<T> const& A)
 {
-  typedef vbl_array_3d<T>::size_type size_type;
+  typedef typename vbl_array_3d<T>::size_type size_type;
   for (size_type i=0; i<A.get_row1_count(); ++i) {
     for (size_type j=0; j<A.get_row2_count(); ++j) {
       for (size_type k=0; k<A.get_row3_count(); ++k) {
@@ -136,7 +136,7 @@ vcl_ostream & operator<<(vcl_ostream& os, vbl_array_3d<T> const& A)
 template <class T>
 vcl_istream & operator>>(vcl_istream& is, vbl_array_3d<T>& A)
 {
-  typedef vbl_array_3d<T>::size_type size_type;
+  typedef typename vbl_array_3d<T>::size_type size_type;
   for (size_type i=0; i<A.get_row1_count(); ++i)
     for (size_type j=0; j<A.get_row2_count(); ++j)
       for (size_type k=0; k<A.get_row3_count(); ++k)
