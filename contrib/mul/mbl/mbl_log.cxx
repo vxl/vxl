@@ -420,7 +420,7 @@ void mbl_logger_root::load_log_config_file(
   }
 
   config_file.clear(); // May have been set to fail on failed open.
-  load_log_config(config_file);
+  load_log_config(config_file, stream_names);
 #endif
 }
 
