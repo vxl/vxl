@@ -51,11 +51,9 @@ void bwm_image_processor::hist_plot(bgui_image_tableau_sptr img)
  
   if (!ip_dialog->ask())
   {
-    g->dump_tableau();
     delete ip_dialog;
     return;
   }
-  g->dump_tableau();
   delete ip_dialog;
 }
 
