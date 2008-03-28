@@ -45,6 +45,9 @@
 //
 //   Ibrahim Eden - 03/07/2008 - added the method:
 //           bool update_edges(bvxm_image_metadata const& metadata);
+//
+//   Ibrahim Eden - 03/28/2008 - added the method:
+//           bool save_edges_raw(vcl_string filename);
 // \endverbatim
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -156,6 +159,9 @@ class bvxm_voxel_world: public vbl_ref_count
   //: get a grid from the map: creates a new one if nothing exists at the specified index.
   template<bvxm_voxel_type VOX_T>
   bvxm_voxel_grid_base_sptr get_grid(unsigned bin_index);
+
+  //: save the edge probability grid in a ".raw" format readable by Drishti volume rendering software
+  bool save_edges_raw(vcl_string filename);
 
   //: save the occupancy grid in a ".raw" format readable by Drishti volume rendering software
   bool save_occupancy_raw(vcl_string filename);

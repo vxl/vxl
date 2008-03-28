@@ -109,6 +109,53 @@ bool bvxm_voxel_world::save_occupancy_raw(vcl_string filename)
   return true;
 }
 
+//: save the edge probability grid in a ".raw" format readable by Drishti volume rendering software
+bool bvxm_voxel_world::save_edges_raw(vcl_string filename)
+{
+  vcl_fstream ofs(filename.c_str(),vcl_ios::binary | vcl_ios::out);
+  if (!ofs.is_open()) {
+    vcl_cerr << "error opening file " << filename << " for write!\n";
+    return false;
+  }
+  typedef bvxm_voxel_traits<EDGES>::voxel_datatype edges_datatype;
+
+  // write header
+  unsigned char data_type = 0; // 0 means unsigned byte
+
+  bvxm_voxel_grid<edges_datatype> *edges_grid =
+    dynamic_cast<bvxm_voxel_grid<edges_datatype>*>(get_grid<EDGES>(0).ptr());
+
+  vxl_uint_32 nx = edges_grid->grid_size().x();
+  vxl_uint_32 ny = edges_grid->grid_size().y();
+  vxl_uint_32 nz = edges_grid->grid_size().z();
+
+  ofs.write(reinterpret_cast<char*>(&data_type),sizeof(data_type));
+  ofs.write(reinterpret_cast<char*>(&nx),sizeof(nx));
+  ofs.write(reinterpret_cast<char*>(&ny),sizeof(ny));
+  ofs.write(reinterpret_cast<char*>(&nz),sizeof(nz));
+
+  // write data
+  // iterate through slabs and fill in memory array
+  char *edges_array = new char[nx*ny*nz];
+
+  bvxm_voxel_grid<edges_datatype>::iterator edges_it = edges_grid->begin();
+  for (unsigned k=0; edges_it != edges_grid->end(); ++edges_it, ++k) {
+    vcl_cout << '.';
+    for (unsigned i=0; i<(*edges_it).nx(); ++i) {
+      for (unsigned j=0; j < (*edges_it).ny(); ++j) {
+        edges_array[i*ny*nz + j*nz + k] = (unsigned char)((*edges_it)(i,j) * 255.0);;
+      }
+    }
+  }
+  vcl_cout << vcl_endl;
+  ofs.write(reinterpret_cast<char*>(edges_array),sizeof(unsigned char)*nx*ny*nz);
+
+  ofs.close();
+
+  delete[] edges_array;
+
+  return true;
+}
 
 //: remove all voxel data from disk - use with caution!
 bool bvxm_voxel_world::clean_grids()
