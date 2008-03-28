@@ -31,26 +31,18 @@ bvxm_save_edges_raw_process::bvxm_save_edges_raw_process()
 
 bool bvxm_save_edges_raw_process::execute()
 {
-  vcl_cout << "hebe1\n";
-
   // Sanity check
   if(!this->verify_inputs())
     return false;
-
-  vcl_cout << "hebe2\n";
 
   //get the inputs
   brdb_value_t<bvxm_voxel_world_sptr>* input0 = 
     static_cast<brdb_value_t<bvxm_voxel_world_sptr>* >(input_data_[0].ptr());
   bvxm_voxel_world_sptr world = input0->value();
 
-  vcl_cout << "hebe3\n";
-
   brdb_value_t<vcl_string>* input1 = 
     static_cast<brdb_value_t<vcl_string>* >(input_data_[1].ptr());
   vcl_string filename = input1->value();
-
-  vcl_cout << "hebe4\n";
 
   return world->save_edges_raw(filename);
 }
