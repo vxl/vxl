@@ -76,6 +76,9 @@ class vidl2_image_list_istream
   //: Return the current frame in the stream
   virtual vidl2_frame_sptr current_frame();
 
+  //: Return the path to the current image in the stream
+  vcl_string current_path() const;
+
   //: Seek to the given frame number (but do not load the image)
   // \returns true if successful
   virtual bool seek_frame(unsigned int frame_number);

@@ -142,6 +142,17 @@ vidl2_image_list_istream::current_frame()
 }
 
 
+//: Return the path to the current image in the stream
+vcl_string
+vidl2_image_list_istream::current_path() const
+{
+  if (is_valid()){
+    return image_paths_[index_];
+  }
+  return "";
+}
+
+
 //: Seek to the given frame number (but do not load the image)
 // \returns true if successful
 bool
