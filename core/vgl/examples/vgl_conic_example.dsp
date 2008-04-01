@@ -8,7 +8,7 @@
 # $(VXLROOT)/bin/ == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE == compiler defines
 # vgl_conic_example  == name of output library
-#  /libpath:"$(VXLROOT)/core/algo/$(OUTDIR)" /libpath:"$(VXLROOT)/vcl/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/netlib/$(OUTDIR)" "vgl_algo.lib" "vgl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vcl.lib" /STACK:10000000  == libraries linked in 
+#  /libpath:"$(VXLROOT)/core/algo/$(OUTDIR)" /libpath:"$(VXLROOT)/vcl/$(OUTDIR)" /libpath:"$(VXLROOT)/v3p/netlib/$(OUTDIR)" "vgl_algo.lib" "vgl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vgui.lib" "vcl.lib" /STACK:10000000  == libraries linked in 
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
 CFG=vgl_conic_example - Win32 Debug
@@ -64,7 +64,7 @@ LINK32=link.exe
 # ADD LINK32 /libpath:"$(VXLROOT)/core/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/vcl/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/netlib/$(OUTDIR)"
-# ADD LINK32 "vgl_algo.lib" "vgl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vcl.lib" /STACK:10000000 
+# ADD LINK32 "vgl_algo.lib" "vgl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vgui.lib" "vcl.lib" /STACK:10000000 
 
 !ELSEIF  "$(CFG)" == "vgl_conic_example - Win32 Debug"
 
@@ -96,7 +96,7 @@ LINK32=link.exe
 # ADD LINK32 /libpath:"$(VXLROOT)/core/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/vcl/$(OUTDIR)"
 # ADD LINK32 /libpath:"$(VXLROOT)/v3p/netlib/$(OUTDIR)"
-# ADD LINK32 "vgl_algo.lib" "vgl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vcl.lib" /STACK:10000000 
+# ADD LINK32 "vgl_algo.lib" "vgl.lib" "vnl_algo.lib" "netlib.lib" "vnl.lib" "vgui.lib" "vcl.lib" /STACK:10000000 
 
 !ENDIF 
 
@@ -109,6 +109,9 @@ LINK32=link.exe
 # PROP Default_Filter "cxx"
 # Begin Source File
 SOURCE=.\vgl_conic_example.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\calculate_homography.cxx
 # End Source File
 # End Group
 # End Target
