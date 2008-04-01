@@ -170,8 +170,18 @@ bool vgui_font_textured::load_bmf_font(const vcl_string &font_file)
     sum += stream->read(&symbol_coords_[i].height, 4);
 
 #if VXL_BIG_ENDIAN
+    // &symbol_coords_[i] is of type *texture_coord;
+    // swap32 expects a char* as its first argument
+    // original code:
+#if 0 // this causes a compile error when VXL_BIG_ENDIAN is true
     swap32(&symbol_coords_[i], 4);
-#endif
+#else // I *think* this is what the original author had in mind:
+    swap32((char *) &symbol_coords_[i].x,      4);
+    swap32((char *) &symbol_coords_[i].y,      4);
+    swap32((char *) &symbol_coords_[i].width,  4);
+    swap32((char *) &symbol_coords_[i].height, 4);
+#endif // 0
+#endif // VXL_BIG_ENDIAN
   }
   if (sum != 256*4*4) // 256 symbols * 4 floats * 4 bytes
   {
