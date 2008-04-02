@@ -19,7 +19,7 @@ class bvxm_voxel_grid : public bvxm_voxel_grid_base
 {
  public:
   //: Default Constructor
-  bvxm_voxel_grid() : storage_(0), bvxm_voxel_grid_base(vgl_vector_3d<unsigned>(0,0,0)) {};
+  bvxm_voxel_grid() : bvxm_voxel_grid_base(vgl_vector_3d<unsigned>(0,0,0)), storage_(0) {};
 
   //: Constructor for disk-based voxel grid.
   bvxm_voxel_grid(vcl_string storage_fname, vgl_vector_3d<unsigned int> grid_size)
