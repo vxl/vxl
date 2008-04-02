@@ -85,10 +85,10 @@ class bvxm_voxel_world: public vbl_ref_count
  public:
 
   //: default constructor
-  bvxm_voxel_world(){};
+  bvxm_voxel_world() {}
 
   //: construct world with parameters
-  bvxm_voxel_world(bvxm_world_params_sptr params){params_ = params;}
+  bvxm_voxel_world(bvxm_world_params_sptr params) { params_ = params; }
 
   //: destructor
   ~bvxm_voxel_world();
@@ -106,7 +106,8 @@ class bvxm_voxel_world: public vbl_ref_count
   //: generate the expected image from the specified viewpoint. the expected image and mask should be allocated by the caller.
   template<bvxm_voxel_type APM_T>
   bool expected_image(bvxm_image_metadata const& camera,
-    vil_image_view_base_sptr &expected, vil_image_view<float> &mask, unsigned bin_index = 0);
+                      vil_image_view_base_sptr &expected,
+                      vil_image_view<float> &mask, unsigned bin_index = 0);
 
   //: update voxel grid for edges with data from image/camera pair and return the edge probability density of pixel values
   bool update_edges(bvxm_image_metadata const& metadata);
@@ -119,25 +120,30 @@ class bvxm_voxel_world: public vbl_ref_count
   // Default value of 0.008 is approximately two 8-bit levels in either direction (assuming intensity is normalized 0-1)
   template<bvxm_voxel_type APM_T>
   bool inv_pixel_range_probability(bvxm_image_metadata const& observation,
-    vil_image_view<float> &inv_prob, unsigned bin_index = 0,  float pixel_range = 0.008f);
+                                   vil_image_view<float> &inv_prob,
+                                   unsigned bin_index = 0,
+                                   float pixel_range = 0.008f);
 
   //: for each pixel, return the sum along the corresponding ray of voxels that the observation was produced by the voxel.
   // Based on algorithm published in Pollard + Mundy 06.
   // The returned values are approximate samples of a probability density, with the pixel values being the independent value.
   template<bvxm_voxel_type APM_T>
   bool pixel_probability_density(bvxm_image_metadata const& observation,
-    vil_image_view<float> &pixel_probability, unsigned bin_index = 0);
+                                 vil_image_view<float> &pixel_probability,
+                                 unsigned bin_index = 0);
 
   //: generate the mixture of gaussians slab from the specified viewpoint. the slab should be allocated by the caller.
   template<bvxm_voxel_type APM_T>
   bool mixture_of_gaussians_image(bvxm_image_metadata const& camera,
-    bvxm_voxel_slab_base_sptr& mog_image, unsigned bin_index = 0);
+                                  bvxm_voxel_slab_base_sptr& mog_image,
+                                  unsigned bin_index = 0);
 
   //: return the original image, viewed from a new viewpoint
   template<bvxm_voxel_type APM_T>
   bool virtual_view(bvxm_image_metadata const& original_view,
-    const vpgl_camera_double_sptr virtual_camera,
-    vil_image_view_base_sptr &virtual_view, vil_image_view<float> &vis_prob, unsigned bin_index = 0);
+                    const vpgl_camera_double_sptr virtual_camera,
+                    vil_image_view_base_sptr &virtual_view,
+                    vil_image_view<float> &vis_prob, unsigned bin_index = 0);
 
   //: return a planar approximation to the world
   vgl_plane_3d<double> fit_plane();
@@ -186,11 +192,10 @@ class bvxm_voxel_world: public vbl_ref_count
   bvxm_world_params_sptr params_;
 
  private:
-
-  template<bvxm_voxel_type APM_T>
+  template <bvxm_voxel_type APM_T>
   bool update_impl(bvxm_image_metadata const& metadata,
-  bool return_prob, vil_image_view<float> &pix_prob_density,
-  bool return_mask, vil_image_view<bool> &mask, unsigned bin_index);
+                   bool return_prob, vil_image_view<float> &pix_prob_density,
+                   bool return_mask, vil_image_view<bool> &mask, unsigned bin_index);
 };
 
 
@@ -413,9 +418,9 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
 
     // backproject image onto voxel plane
     bvxm_util::warp_slab_bilinear(image_slab, H_plane_to_img[z], frame_backproj);
-
-    //bvxm_util::write_slab_as_image(frame_backproj,"c:/research/registration/output/frame_backproj.tiff");
-
+#ifdef DEBUG
+    bvxm_util::write_slab_as_image(frame_backproj,"c:/research/registration/output/frame_backproj.tiff");
+#endif
     // transform preX to voxel plane for this level
     bvxm_util::warp_slab_bilinear(preX_accum, H_plane_to_img[z], *preX_slab_it);
     // transform visX to voxel plane for this level
@@ -433,9 +438,10 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
 
     // multiply to get PIPX
     bvxm_util::multiply_slabs(PI,*ocp_slab_it,PIPX);
-    // bvxm_util::write_slab_as_image(PI,"PI.tiff");
-    //bvxm_util::write_slab_as_image(*ocp_slab_it,"PX.tiff");
-
+#ifdef DEBUG
+    bvxm_util::write_slab_as_image(PI,"PI.tiff");
+    bvxm_util::write_slab_as_image(*ocp_slab_it,"PX.tiff");
+#endif
     // warp PIPX back to image domain
     bvxm_util::warp_slab_bilinear(PIPX, H_img_to_plane[z], PIPX_img);
 
@@ -447,10 +453,11 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
     for (; preX_accum_it != preX_accum.end(); ++preX_accum_it, ++PIPX_img_it, ++visX_accum_it) {
       *preX_accum_it += (*PIPX_img_it) * (*visX_accum_it);
     }
-    //bvxm_util::write_slab_as_image(PIPX_img,"PIPX_img.tiff");
-    //bvxm_util::write_slab_as_image(visX_accum,"visX_accum.tiff");
-    //bvxm_util::write_slab_as_image(preX_accum,"preX_accum.tiff");
-
+#ifdef DEBUG
+    bvxm_util::write_slab_as_image(PIPX_img,"PIPX_img.tiff");
+    bvxm_util::write_slab_as_image(visX_accum,"visX_accum.tiff");
+    bvxm_util::write_slab_as_image(preX_accum,"preX_accum.tiff");
+#endif
     // scale and offset voxel probabilities to get (1-P(X))
     // transform (1-P(X)) to image plane to accumulate visX for next level
     bvxm_util::warp_slab_bilinear(*ocp_slab_it, H_img_to_plane[z], PX_img);
@@ -470,10 +477,10 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
 
   bvxm_voxel_slab<float> preX_accum_vox(grid_size.x(),grid_size.y(),1);
   bvxm_voxel_slab<float> visX_accum_vox(grid_size.x(),grid_size.y(),1);
-
-  //bvxm_util::write_slab_as_image(visX_accum,"visX_accum.tiff");
-  //bvxm_util::write_slab_as_image(preX_accum,"preX_accum.tiff");
-
+#ifdef DEBUG
+  bvxm_util::write_slab_as_image(visX_accum,"visX_accum.tiff");
+  bvxm_util::write_slab_as_image(preX_accum,"preX_accum.tiff");
+#endif
   vcl_cout << vcl_endl << "Pass 2: " << vcl_endl;
   PIvisX_slab_it = PIvisX.begin();
   preX_slab_it = preX.begin();
@@ -841,9 +848,10 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
 
     // multiply to get PIPX
     bvxm_util::multiply_slabs(PI,*ocp_slab_it,PIPX);
-    // bvxm_util::write_slab_as_image(PI,"PI.tiff");
-    //bvxm_util::write_slab_as_image(*ocp_slab_it,"PX.tiff");
-
+#ifdef DEBUG
+    bvxm_util::write_slab_as_image(PI,"PI.tiff");
+    bvxm_util::write_slab_as_image(*ocp_slab_it,"PX.tiff");
+#endif
     // warp PIPX back to image domain
     bvxm_util::warp_slab_bilinear(PIPX, H_img_to_plane[z], PIPX_img);
 
@@ -855,10 +863,11 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
     for (; preX_accum_it != preX_accum.end(); ++preX_accum_it, ++PIPX_img_it, ++visX_accum_it) {
       *preX_accum_it += (*PIPX_img_it) * (*visX_accum_it);
     }
-    //bvxm_util::write_slab_as_image(PIPX_img,"PIPX_img.tiff");
-    //bvxm_util::write_slab_as_image(visX_accum,"visX_accum.tiff");
-    //bvxm_util::write_slab_as_image(preX_accum,"preX_accum.tiff");
-
+#ifdef DEBUG
+    bvxm_util::write_slab_as_image(PIPX_img,"PIPX_img.tiff");
+    bvxm_util::write_slab_as_image(visX_accum,"visX_accum.tiff");
+    bvxm_util::write_slab_as_image(preX_accum,"preX_accum.tiff");
+#endif
     // scale and offset voxel probabilities to get (1-P(X))
     // transform (1-P(X)) to image plane to accumulate visX for next level
     bvxm_util::warp_slab_bilinear(*ocp_slab_it, H_img_to_plane[z], PX_img);
@@ -941,18 +950,17 @@ bool bvxm_voxel_world::mixture_of_gaussians_image(bvxm_image_metadata const& obs
     bvxm_util::warp_slab_bilinear(*ocp_slab_it, H_img_to_plane[z], slice_ocp_img);
 
     typename bvxm_voxel_slab<ocp_datatype>::const_iterator PX_it = slice_ocp_img.begin();
-    typename bvxm_voxel_slab<apm_datatype>::iterator out_it = mog_slab.begin();
     bvxm_voxel_slab<float>::iterator visX_it = visX_accum.begin();
 
-    // do the following update operation from Thom's code
-    //float hard_mult = 1;
-    //for ( unsigned v = 0; v < voxels.size(); v++ ){
-    //  float this_color = voxels[v]->appearance->expected_color( light );
-    //  if ( this_color >= 0 )
-    //    mog->update( this_color, hard_mult*voxels[v]->occupancy_prob[0], light );
-    //  hard_mult *= (1-voxels[v]->occupancy_prob[0]);
-    //}
-
+#if 0 // do the following update operation from Thom's code
+    float hard_mult = 1;
+    for ( unsigned v = 0; v < voxels.size(); v++ ){
+      float this_color = voxels[v]->appearance->expected_color( light );
+      if ( this_color >= 0 )
+        mog->update( this_color, hard_mult*voxels[v]->occupancy_prob[0], light );
+      hard_mult *= (1-voxels[v]->occupancy_prob[0]);
+    }
+#endif // 0
     bvxm_voxel_slab<float> w(observation.img->ni(), observation.img->nj(),1);
     w.fill(1.0f);
     bvxm_voxel_slab<float>::iterator w_it = w.begin();
@@ -961,7 +969,7 @@ bool bvxm_voxel_world::mixture_of_gaussians_image(bvxm_image_metadata const& obs
       *visX_it *= (1.0f - *PX_it);  // update visX for next level
     }
 
-    if (!apm_processor.update(mog_slab, expected_slice_img, w)) {   // check if does "if (*I_it >= 0)" during update
+    if (!apm_processor.update(mog_slab, expected_slice_img, w)) {   // check "if (*I_it >= 0)" during update
       vcl_cout << "In bvxm_voxel_world<APM_T>::mixture_of_gaussians_image() -- problems in appearance update\n";
       return false;
     }
@@ -975,7 +983,8 @@ bool bvxm_voxel_world::mixture_of_gaussians_image(bvxm_image_metadata const& obs
 template<bvxm_voxel_type APM_T>
 bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
                                     const vpgl_camera_double_sptr virtual_camera,
-                                    vil_image_view_base_sptr &virtual_view, vil_image_view<float> &vis_prob,
+                                    vil_image_view_base_sptr &virtual_view,
+                                    vil_image_view<float> &vis_prob,
                                     unsigned bin_index)
 {
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
@@ -1035,10 +1044,10 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
     bvxm_voxel_slab<ocp_datatype>::const_iterator PX_it = slice_prob_img.begin();
     bvxm_voxel_slab<float>::iterator max_it = max_prob_image.begin(), visX_it = visX_accum_virtual.begin();
     bvxm_voxel_slab<unsigned>::iterator hmap_it = heightmap_rough.begin();
-
-    //bvxm_util::write_slab_as_image(slice_prob_img,"c:/research/registration/output/slice_prob_img.tiff");
-    //bvxm_util::write_slab_as_image(visX_accum_virtual,"c:/research/registration/output/visX_accum_virtual.tiff");
-
+#ifdef DEBUG
+    bvxm_util::write_slab_as_image(slice_prob_img,"c:/research/registration/output/slice_prob_img.tiff");
+    bvxm_util::write_slab_as_image(visX_accum_virtual,"c:/research/registration/output/visX_accum_virtual.tiff");
+#endif
     for (; hmap_it != heightmap_rough.end(); ++hmap_it, ++PX_it, ++max_it, ++visX_it) {
       float PXvisX = (*visX_it) * (*PX_it);
       if (PXvisX > *max_it) {
@@ -1050,9 +1059,9 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
     }
   }
   vcl_cout << vcl_endl;
-
-  //bvxm_util::write_slab_as_image(heightmap_rough,"c:/research/registration/output/heightmap_rough.tiff");
-
+#ifdef DEBUG
+  bvxm_util::write_slab_as_image(heightmap_rough,"c:/research/registration/output/heightmap_rough.tiff");
+#endif
   // now clean up height map
   unsigned n_smooth_iterations = 10;
   float conf_thresh = 0.05f;
@@ -1086,15 +1095,14 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
   vcl_cout << vcl_endl;
 
   // create virtual image based on smoothed height map
-  //bvxm_voxel_slab<float> frame_backproj(grid_size.x(),grid_size.y(),1);
   bvxm_voxel_slab<obs_datatype> frame_virtual_proj(virtual_view->ni(),virtual_view->nj(),1);
 
   bvxm_voxel_slab<ocp_datatype> visX_accum(original_view.img->ni(),original_view.img->nj(),1);
   bvxm_voxel_slab<ocp_datatype> visX_accum_virtual_proj(virtual_view->ni(),virtual_view->nj(),1);
   visX_accum.fill(1.0f);
-
-  // bvxm_util::write_slab_as_image(heightmap_filtered,"c:/research/registration/output/heightmap_filtered.tiff");
-
+#ifdef DEBUG
+  bvxm_util::write_slab_as_image(heightmap_filtered,"c:/research/registration/output/heightmap_filtered.tiff");
+#endif
   vcl_cout <<"Pass 2 - generating virtual image: ";
 
   ocp_slab_it = ocp_grid->begin();
@@ -1108,10 +1116,10 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
 
     // project visX_accum from image to virtual image
     bvxm_util::warp_slab_bilinear(visX_accum, H_virtual_img_to_img[z], visX_accum_virtual_proj);
-
-    //bvxm_util::write_slab_as_image(visX_accum,"c:/research/registration/output/visX_accum.tiff");
-    //bvxm_util::write_slab_as_image(visX_accum_virtual,"c:/research/registration/output/visX_accum_virtual.tiff");
-
+#ifdef DEBUG
+    bvxm_util::write_slab_as_image(visX_accum,"c:/research/registration/output/visX_accum.tiff");
+    bvxm_util::write_slab_as_image(visX_accum_virtual,"c:/research/registration/output/visX_accum_virtual.tiff");
+#endif
     // project slice probabilities into virtual camera
     bvxm_voxel_slab<float> slice_prob_vimg(virtual_view->ni(),virtual_view->nj(),1);
     bvxm_util::warp_slab_bilinear(*ocp_slab_it, H_virtual_img_to_plane[z], slice_prob_vimg);
@@ -1138,8 +1146,9 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
     for (; visX_accum_it != visX_accum.end(); ++visX_accum_it, ++PX_it) {
       *visX_accum_it *= (1.0f - *PX_it);
     }
-
-    //bvxm_util::write_slab_as_image(visX_accum,"c:/research/registration/output/visX_accum.tiff");
+#ifdef DEBUG
+    bvxm_util::write_slab_as_image(visX_accum,"c:/research/registration/output/visX_accum.tiff");
+#endif
   }
   vcl_cout << vcl_endl;
 
@@ -1180,5 +1189,4 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
   return true;
 }
 
-
-#endif
+#endif // bvxm_voxel_world_h_
