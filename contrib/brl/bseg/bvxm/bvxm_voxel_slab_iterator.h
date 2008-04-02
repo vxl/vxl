@@ -16,12 +16,12 @@ template <class T>
 class bvxm_voxel_slab_iterator_base
 {
  public:
-  bvxm_voxel_slab_iterator_base() : storage_(0), slice_idx_(0), slab_thickness_(0) {};
+  bvxm_voxel_slab_iterator_base() : storage_(0), slab_thickness_(0), slice_idx_(0) {}
   bvxm_voxel_slab_iterator_base(bvxm_voxel_storage<T> *storage,
                                 vgl_vector_3d<unsigned int> grid_size,
                                 unsigned slice_idx, unsigned slab_thickness);
 
-  ~bvxm_voxel_slab_iterator_base(){};
+  ~bvxm_voxel_slab_iterator_base() {}
 
  protected:
   bvxm_voxel_storage<T> *storage_;
@@ -41,14 +41,14 @@ class bvxm_voxel_slab_iterator : public bvxm_voxel_slab_iterator_base<T>,
 {
  public:
   bvxm_voxel_slab_iterator()
-    : bvxm_voxel_slab_iterator_base<T>() {};
+    : bvxm_voxel_slab_iterator_base<T>() {}
 
   bvxm_voxel_slab_iterator(bvxm_voxel_storage<T> *storage,
                            vgl_vector_3d<unsigned int> grid_size,
                            unsigned slice_idx, unsigned slab_thickness)
-    : bvxm_voxel_slab_iterator_base<T>(storage,grid_size,slice_idx,slab_thickness){};
+    : bvxm_voxel_slab_iterator_base<T>(storage,grid_size,slice_idx,slab_thickness){}
 
-  ~bvxm_voxel_slab_iterator(){/*storage_->put_slab();*/};
+  ~bvxm_voxel_slab_iterator(){/*storage_->put_slab();*/}
 
   bvxm_voxel_slab_iterator<T>& operator=(const bvxm_voxel_slab_iterator<T>& that);
 
@@ -73,16 +73,16 @@ class bvxm_voxel_slab_const_iterator : public bvxm_voxel_slab_iterator_base<T>,
                                        public vcl_iterator<vcl_bidirectional_iterator_tag, T>
 {
  public:
-  bvxm_voxel_slab_const_iterator() : bvxm_voxel_slab_iterator_base<T>(){};
+  bvxm_voxel_slab_const_iterator() : bvxm_voxel_slab_iterator_base<T>() {}
 
   bvxm_voxel_slab_const_iterator(bvxm_voxel_storage<T> *storage,
                                  vgl_vector_3d<unsigned int> grid_size,
                                  unsigned slice_idx, unsigned slab_thickness)
-    : bvxm_voxel_slab_iterator_base<T>(storage,grid_size,slice_idx,slab_thickness){};
+    : bvxm_voxel_slab_iterator_base<T>(storage,grid_size,slice_idx,slab_thickness) {}
 
   bvxm_voxel_slab_const_iterator(const bvxm_voxel_slab_iterator<T> &non_const_it);
 
-  ~bvxm_voxel_slab_const_iterator(){};
+  ~bvxm_voxel_slab_const_iterator() {}
 
   bvxm_voxel_slab_const_iterator& operator=(const bvxm_voxel_slab_const_iterator& that);
 
@@ -101,4 +101,4 @@ class bvxm_voxel_slab_const_iterator : public bvxm_voxel_slab_iterator_base<T>,
   bvxm_voxel_slab<T> const* operator->(){return &this->slab_;}
 };
 
-#endif
+#endif // bvxm_voxel_slab_iterator_h_
