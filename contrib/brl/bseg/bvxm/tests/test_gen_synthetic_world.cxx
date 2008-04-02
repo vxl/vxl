@@ -340,7 +340,6 @@ void gen_voxel_world_2box(vgl_vector_3d<unsigned> grid_size,
   create_top_box(box, top_box, 30,30,10);
   boxes.push_back(top_box);
 
-  float face_intens[6] = {0.3, 0.45, 0.6, 0.75, 0.85, 1.0};
   vcl_ofstream is("test_gen_synthetic_world/intensity_grid.txt");
   unsigned z=nz;
   for (ocp_slab_it = ocp_grid->begin();
@@ -359,11 +358,11 @@ void gen_voxel_world_2box(vgl_vector_3d<unsigned> grid_size,
         int face2 = on_box_surface(top_box, vgl_point_3d<double>(i,j,z));
         if ((face1 != -1) || (face2 != -1)){
           // generate a random intensity
-          float r = (rand() % 256)/255.0;
+          float r = (rand() % 256)/255.0;    // float face_intens[6] = {0.3, 0.45, 0.6, 0.75, 0.85, 1.0};
           if (face1 != -1)
-            (*intensity_slab_it)(i,j,0) = r;//face_intens[face1];
+            (*intensity_slab_it)(i,j,0) = r; // face_intens[face1];
           else
-            (*intensity_slab_it)(i,j,0) = r;//face_intens[5-face2];
+            (*intensity_slab_it)(i,j,0) = r; // face_intens[5-face2];
           (*ocp_slab_it)(i,j,0) = 1.0f;
           is << " x" ;
         } else
@@ -419,7 +418,6 @@ void gen_voxel_world_plane(vgl_vector_3d<unsigned> grid_size,
 
 bool test_reconstructed_ocp(bvxm_voxel_world_sptr recon_world)
 {
-
   bvxm_voxel_grid<float>* ocp_grid =
     dynamic_cast<bvxm_voxel_grid<float>*>(recon_world->get_grid<OCCUPANCY>(0).ptr());
 
@@ -427,15 +425,15 @@ bool test_reconstructed_ocp(bvxm_voxel_world_sptr recon_world)
   vxl_uint_32 ny = ocp_grid->grid_size().y();
   vxl_uint_32 nz = ocp_grid->grid_size().z();
 
-  // iterate through slabs 
-  unsigned i = 15, j=15, k=nz;
+  // iterate through slabs
+  unsigned i=nx, j=ny, k=nz;
   bvxm_voxel_grid<float>::iterator ocp_slab_it = ocp_grid->begin();
   for (ocp_slab_it = ocp_grid->begin(); ocp_slab_it != ocp_grid->end(); ++ocp_slab_it ) {
     k--;
     float ocp = (*ocp_slab_it)(i,j,0);
     vcl_cout << "z=" << k << "  " << ocp << vcl_endl;
     for (unsigned b=0; b<boxes.size(); b++) {
-      if (on_box_surface(boxes[b], vgl_point_3d<double>(i,j,k)) != -1) 
+      if (on_box_surface(boxes[b], vgl_point_3d<double>(i,j,k)) != -1)
         vcl_cout << "ON " << b << vcl_endl;
     }
   }
@@ -521,4 +519,3 @@ static void test_gen_synthetic_world()
 }
 
 TESTMAIN( test_gen_synthetic_world );
-
