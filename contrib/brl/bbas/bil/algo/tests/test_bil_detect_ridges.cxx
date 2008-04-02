@@ -43,7 +43,7 @@ static int test_bil_detect_ridges(int argc, char** argv )
 {
   START ("2D Ridge Detection");
 
-  vil_image_resource_sptr res = vil_load_image_resource(argv[1]);
+  vil_image_resource_sptr res = vil_load_image_resource("c.20.tif");
   vil_image_view<vxl_uint_16> view_uint16 = res->get_view();
   vil_image_view<float> view_float;
 
