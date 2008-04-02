@@ -148,7 +148,7 @@ quadtrees_from_pyramid(vcl_vector<vil_image_view<T> > levels,
   if (n_levels<2)
     return;
   vil_image_view<T> parent_img = levels[1];
-  vil_image_view<bool> parent_mask = levels[1];
+  vil_image_view<bool> parent_mask = masks[1];
 
   vbl_array_2d<brip_quadtree_node_base_sptr> prev;
   brip_quadtree_utils<T>::extract_nodes_from_image(levels[0],

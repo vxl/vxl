@@ -32,6 +32,12 @@ class brip_max_scale_response
   //: a pre-computed pyramid
   brip_max_scale_response( vcl_vector<vil_image_view<T> > const& pyramid);
 
+  //: The vector of image scales
+  vcl_vector<float> scales() {return pyramid_scales_;}
+
+  //: A pyramid from a base image with scales according to this->scales()
+  vcl_vector<vil_image_view<T> > image_pyramid(vil_image_view<T> const& base);
+
   //: a single image with the natual scale at each pixel
   vil_image_view<float> scale_base();
 
@@ -48,7 +54,7 @@ class brip_max_scale_response
   brip_max_scale_response(): trace_valid_(false){}
   void compute_trace_pyramid();
   vcl_vector<float> pyramid_scales_;
-  vcl_vector<vil_image_view<float> > pyramid_;
+  vcl_vector<vil_image_view<float> > grey_pyramid_;
   bool trace_valid_;
   vcl_vector<vil_image_view<float> > trace_;
 };

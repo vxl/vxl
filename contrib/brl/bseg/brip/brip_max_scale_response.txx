@@ -2,6 +2,7 @@
 #define brip_max_scale_response_txx_
 
 #include "brip_max_scale_response.h"
+#include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vcl_iomanip.h>
 #include <vnl/vnl_math.h>
@@ -14,14 +15,29 @@ template <class T>
 brip_max_scale_response<T>::
 brip_max_scale_response( vcl_vector<vil_image_view<T> > const& pyramid)
 {
-  pyramid_ = pyramid;
+  unsigned nlevels = pyramid.size();
+  assert(nlevels>0);
   pyramid_scales_.push_back(1.0f);
-  unsigned ni = pyramid_[0].ni(), nj = pyramid_[0].nj();
+  vil_image_view<float> lview;
+  if (pyramid[0].nplanes()>1)
+    vil_convert_planes_to_grey(pyramid[0], lview);
+  else {
+    vil_image_view_base_sptr v = new vil_image_view<T>(pyramid[0]);
+    lview = vil_convert_cast(float(), v);
+  }
+  grey_pyramid_.push_back(lview);
+  unsigned ni = pyramid[0].ni(), nj = pyramid[0].nj();
   float nif = static_cast<float>(ni), njf = static_cast<float>(nj);
   float diag0 = vcl_sqrt(nif*nif + njf*njf);
-  for (unsigned level = 1; level<pyramid.size(); ++level)
-  {
-    ni = pyramid_[level].ni(); nj = pyramid_[level].nj();
+  for(unsigned level = 1; level<nlevels; ++level){
+    if (pyramid[level].nplanes()>1)
+      vil_convert_planes_to_grey(pyramid[level], lview);
+    else {
+      vil_image_view_base_sptr v = new vil_image_view<T>(pyramid[level]);
+      lview = vil_convert_cast(float(), v);
+    }
+    grey_pyramid_.push_back(lview);
+    ni = lview.ni(); nj = lview.nj();
     nif = static_cast<float>(ni); njf = static_cast<float>(nj);
     float diag = vcl_sqrt(nif*nif + njf*njf);
     float scale = diag0/diag;
@@ -36,6 +52,13 @@ brip_max_scale_response( vil_image_view<T> const& base_image,
                          double scale_ratio,
                          double max_scale )
 {
+  vil_image_view<float> basef;
+  if (base_image.nplanes()>1)
+    vil_convert_planes_to_grey(base_image, basef);
+  else {
+    vil_image_view_base_sptr v = new vil_image_view<T>(base_image);
+    basef = vil_convert_cast(float(), v);
+  }
   // compute half octave scale intervals
   float scale = 1.0;
   if(scale_ratio>max_scale)
@@ -45,30 +68,53 @@ brip_max_scale_response( vil_image_view<T> const& base_image,
       pyramid_scales_.push_back(scale);
       scale*=static_cast<float>(scale_ratio);
     }
-  pyramid_.push_back(base_image);
+  grey_pyramid_.push_back(basef);
   unsigned nlevels = pyramid_scales_.size();
   for(unsigned level = 1; level<nlevels; ++level)
     {
       float s = pyramid_scales_[level];
       float s1 = pyramid_scales_[level-1];
-      vil_image_view<T> img1 = pyramid_[level-1];
+      vil_image_view<T> img1 = grey_pyramid_[level-1];
       unsigned nil1 = img1.ni(), nilj = img1.nj();
       unsigned nil =  static_cast<unsigned>(nil1*s1/s),
         njl = static_cast<unsigned>(nilj*s1/s);
       vil_image_view<T> dec_img;
       vil_resample_bilin(img1, dec_img, nil, njl);
-      pyramid_.push_back(dec_img);
+      grey_pyramid_.push_back(dec_img);
     }
   this->compute_trace_pyramid();
 }
 
 template <class T>
+vcl_vector<vil_image_view<T> > brip_max_scale_response<T>::
+image_pyramid(vil_image_view<T> const& base)
+{
+  vcl_vector<vil_image_view<T> > temp;
+  temp.push_back(base);
+  unsigned nlevels = pyramid_scales_.size();
+  assert(nlevels>0);
+  for(unsigned level = 1; level<nlevels; ++level)
+    {
+      float s = pyramid_scales_[level];
+      float s1 = pyramid_scales_[level-1];
+      vil_image_view<T> img1 = temp[level-1];
+      unsigned nil1 = img1.ni(), nilj = img1.nj();
+      unsigned nil =  static_cast<unsigned>(nil1*s1/s),
+        njl = static_cast<unsigned>(nilj*s1/s);
+      vil_image_view<T> dec_img;
+      vil_resample_bilin(img1, dec_img, nil, njl);
+      temp.push_back(dec_img);
+    }
+  return temp;
+}
+
+template <class T>
 void brip_max_scale_response<T>::compute_trace_pyramid()
 {
-  unsigned nlevels = pyramid_.size();
+  unsigned nlevels = grey_pyramid_.size();
   for (unsigned level = 0; level<nlevels; ++level)
   {
-    unsigned ni = pyramid_[level].ni(), nj = pyramid_[level].nj();
+    unsigned ni = grey_pyramid_[level].ni(), nj = grey_pyramid_[level].nj();
     vil_image_view<float> lview;
     if (ni<=5||nj<=5) {
       lview.set_size(ni, nj);
@@ -76,13 +122,8 @@ void brip_max_scale_response<T>::compute_trace_pyramid()
       trace_.push_back(lview);
       continue;
     }
-    if (pyramid_[level].nplanes()>1)
-      vil_convert_planes_to_grey(pyramid_[level], lview);
-    else {
-      vil_image_view_base_sptr v = new vil_image_view<T>(pyramid_[level]);
-      lview = vil_convert_cast(float(), v);
-    }
-    vil_image_view<float> smooth = brip_vil_float_ops::gaussian(lview, 0.75, lview(0,0));
+    vil_image_view<float> temp = grey_pyramid_[level];
+    vil_image_view<float> smooth = brip_vil_float_ops::gaussian(temp, 0.75, temp(0,0));
 #ifdef DEBUG
     vcl_cout << "Input at level " << level << '\n';
     for (unsigned j = 0; j<smooth.nj(); ++j){
@@ -182,6 +223,7 @@ brip_max_scale_response<T>::mask_pyramid()
           mask(i,j) = 255;
     temp.push_back(mask);
   }
+
   return temp;
 }
 
