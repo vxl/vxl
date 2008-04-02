@@ -103,5 +103,6 @@ MAIN( test_bvxm_roi_init_process )
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_img.ptr());
   vil_image_view_base_sptr nitf_roi = result->value();
   bool saved = vil_save(*nitf_roi, "./roi.tif");
+  TEST("saved", saved, true);
   SUMMARY();
 }

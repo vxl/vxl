@@ -316,6 +316,7 @@ MAIN( test_bvxm_normalize_image_process )
   vil_image_view_base_sptr denormed_img = result->value();
   vil_image_view<vxl_byte> denormed_img_v(denormed_img);
   bool saved = vil_save(denormed_img_v, "./expected_denormed.png");
+  TEST("saved", saved, true);
 
   //: get a
   brdb_query_aptr Q_a = brdb_query_comp_new("id", brdb_query::EQ, id_a);
