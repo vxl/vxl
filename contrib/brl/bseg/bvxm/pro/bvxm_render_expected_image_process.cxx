@@ -64,20 +64,23 @@ bool bvxm_render_expected_image_process::execute()
   //render image
   bool result;
   vil_image_view_base_sptr expected_img;
-
-  vil_image_view<float> *mask = new vil_image_view<float>(expected_img->ni(),expected_img->nj(),1);
-  vil_image_view_base_sptr mask_sptr = mask;
+  vil_image_view<float> *mask;
 
   if (voxel_type == "apm_mog_rgb"){
     expected_img = new vil_image_view<vxl_byte>(1280,720,3);
     vil_image_view<float> mask_img(expected_img->ni(),expected_img->nj(),1);
-  result = world->expected_image<APM_MOG_RGB>(camera_metadata, expected_img, mask_img, bin_index);
+    result = world->expected_image<APM_MOG_RGB>(camera_metadata, expected_img, mask_img, bin_index);
+    mask = new vil_image_view<float>(mask_img);
   }
   else {
-  expected_img = new vil_image_view<vxl_byte>(200,200,1);
-  vil_image_view<float> mask_img(expected_img->ni(),expected_img->nj(),1);
-  result = world->expected_image<APM_MOG_GREY>(camera_metadata, expected_img, mask_img, bin_index);
+    expected_img = new vil_image_view<vxl_byte>(200,200,1);
+    vil_image_view<float> mask_img(expected_img->ni(),expected_img->nj(),1);
+    result = world->expected_image<APM_MOG_GREY>(camera_metadata, expected_img, mask_img, bin_index);
+    mask = new vil_image_view<float>(mask_img);
   }
+
+   
+  vil_image_view_base_sptr mask_sptr = mask;
 
   //store output
   brdb_value_sptr output0 =
