@@ -1,5 +1,7 @@
 # This is core/vgui/test/CMakeLists.txt
 
+PROJECT( vgui_tests )
+
 INCLUDE( ${MODULE_PATH}/UseVGUI.cmake )
 
 IF( HAS_VGUI )
@@ -43,5 +45,7 @@ IF( HAS_VGUI )
   TARGET_LINK_LIBRARIES( vgui_test_include vgui )
 
   ADD_EXECUTABLE( vgui_test_drawpix_speed2 test_drawpix_speed2.cxx )
+
+  ADD_EXECUTABLE( vgui_test_rubberband_dialog test_rubberband_dialog.cxx )
 
 ENDIF( HAS_VGUI )

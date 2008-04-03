@@ -672,14 +672,24 @@ void vgui_mfc_adaptor::domouse(vgui_event_type et, UINT nFlags, CPoint point, vg
   else
     dispatch_to_tableau(e);
 
-  // Grab mouse?
-  {
-    if (et == vgui_BUTTON_DOWN) {
-      SetCapture();
-    } else if (et != vgui_MOTION) {
-      ReleaseCapture();
-    }
-  }
+  // Grabbing the mouse here causes an issue with code that runs
+  // another instance of the event loop in response to the event (sent
+  // by the dispatch_to_tableau call above).  An example if
+  // vgui_rubberband_tableau, which, on a point add, could cause a
+  // dialog to pop up.  In general, grabbing the mouse is a very
+  // client specific thing, and we should probably not be doing it all
+  // the time, as it is being done here.  If we want, we may consider
+  // putting this in the interface.  However, given vgui's goals of
+  // being a light & thin wrapper, I don't think that's a good idea.
+  //
+  // // Grab mouse?
+  // {
+  //   if (et == vgui_BUTTON_DOWN) {
+  //     SetCapture();
+  //   } else if (et != vgui_MOTION) {
+  //     ReleaseCapture();
+  //   }
+  // }
 }
 
 //: Called by MFC when the left mouse button is pressed inside the application.
