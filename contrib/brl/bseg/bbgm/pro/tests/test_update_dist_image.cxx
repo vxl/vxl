@@ -30,15 +30,15 @@ MAIN( test_update_dist_image )
 {
   bbgm_loader::register_loaders();
   const unsigned int ni = 640, nj = 480;
-  vil_image_view<float> img(ni,nj,3);
-  init_random_image(img);
+  vil_image_view<float>* ip = new vil_image_view<float>(ni,nj,3);
+  init_random_image(*ip);
 
   const float window_size = 50.0;
   const unsigned int max_components = 3;
   const float init_var = 0.01f;
 
   brdb_value_sptr image_view_value =
-    new brdb_value_t<vil_image_view_base_sptr>(&img);
+    new brdb_value_t<vil_image_view_base_sptr>(ip);
 
   bprb_process_sptr p1 = new bbgm_update_dist_image_process();
   p1->set_input(1, image_view_value);

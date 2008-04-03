@@ -12,6 +12,7 @@
 #include <bsta/algo/bsta_adaptive_updater.h>
 
 #include <bbgm/bbgm_update.h>
+#include <bbgm/bbgm_loader.h>
 #include <bsta/bsta_gaussian_indep.h>
 #include <vil/vil_image_view.h>
 #include <vnl/vnl_random.h>
@@ -46,6 +47,8 @@ namespace
 
 MAIN( test_io )
 {
+  vcl_cout << "Starting test_io \n";
+  bbgm_loader::register_loaders();
   const float window_size = 50.0;
   const unsigned int max_components = 3;
   const float init_var = 0.01f;
@@ -56,14 +59,6 @@ MAIN( test_io )
 
   vil_image_view<float> img(ni,nj,3);
   init_random_image(img);
-
-  vcl_vector<vil_image_view<float> > images(1,img);
-  for (unsigned t=1; t<10; ++t){
-    vil_image_view<float> new_img;
-    new_img.deep_copy(img);
-    add_random_noise(new_img, 0.5f);
-    images.push_back(new_img);
-  }
 
   typedef bsta_num_obs<bsta_gauss_if3> gauss_type;
   typedef bsta_mixture_fixed<gauss_type,3> mix_gauss_type;
@@ -77,7 +72,8 @@ MAIN( test_io )
   bbgm_image_of<obs_mix_gauss_type>* mptr =
     new bbgm_image_of<obs_mix_gauss_type>(ni,nj,obs_mix_gauss_type());
 
-  update(*mptr,images[0],updater);
+  update(*mptr,img,updater);
+
   bbgm_image_sptr mp = mptr;
   vcl_string source = mp->is_a();
   vcl_cout << "Starting save/read bbgm_image_sptr\n"
