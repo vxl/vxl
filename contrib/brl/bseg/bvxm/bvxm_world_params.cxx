@@ -2,6 +2,7 @@
 //:
 // \file
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_vector_3d.h>
 
 //---------------------------------------------------
@@ -39,6 +40,15 @@ bvxm_world_params::set_params(
   min_occupancy_prob_ = min_ocp_prob;
   max_occupancy_prob_ = max_ocp_prob;
 };
+
+vgl_box_3d<float> bvxm_world_params::world_box_local()
+{
+  float xdim = num_voxels_.x()*voxel_length_;
+  float ydim = num_voxels_.y()*voxel_length_;
+  float zdim = num_voxels_.z()*voxel_length_;
+  vgl_box_3d<float> box(corner_, xdim, ydim, zdim, vgl_box_3d<float>::min_pos);
+  return box;
+}
 
 void bvxm_world_params::b_write(vsl_b_ostream & os) const
 {
