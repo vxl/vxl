@@ -38,7 +38,7 @@
 // mbl_cloneables_factory<vimt_image>::add(vimt_image_2d());
 // mbl_cloneables_factory<vimt_image>::add(vimt_image_3d());
 //
-// vcl_auto_ptr<vimt_image> p = mbl_cloneables_factory<vimt_image>::get("vimt_image_2d()");
+// vcl_auto_ptr<vimt_image> p = mbl_cloneables_factory<vimt_image>::get_clone("vimt_image_2d()");
 // assert(dynamic_cast<vimt_image_2d>(p));
 // \endcode
 
