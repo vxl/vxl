@@ -21,10 +21,15 @@
 
 #include <vgl/vgl_vector_3d.h>
 
+#include <vul/vul_file.h>
+
 MAIN( test_bvxm_create_voxel_world_process )
 {
   REG_PROCESS(bvxm_create_voxel_world_process, bprb_batch_process_manager);
   REGISTER_DATATYPE(bvxm_voxel_world_sptr);
+
+  vcl_string test_dir("./create_world_test");
+  vul_file::make_directory(test_dir);
 
   bool good = bprb_batch_process_manager::instance()->init_process("bvxmCreateVoxelWorldProcess");
   good = good && bprb_batch_process_manager::instance()->set_params("world_model_params.xml");
@@ -58,7 +63,7 @@ MAIN( test_bvxm_create_voxel_world_process )
   bvxm_world_params_sptr params = voxel_world->get_params();
   vcl_string dir = params->model_dir();
 
-  bool comp = (!dir.compare("C:\\"));
+  bool comp = (!dir.compare("./create_world_test"));
   comp = comp && (params->corner() == vgl_point_3d<float>(0,0,0));
   comp = comp && (params->num_voxels() == vgl_vector_3d<unsigned int> (50,50,5));
   comp = comp && (params->voxel_length() == 10);
