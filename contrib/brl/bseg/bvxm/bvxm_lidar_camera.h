@@ -1,0 +1,43 @@
+#ifndef bvxm_lidar_camera_h_
+#define bvxm_lidar_camera_h_
+
+//#include <vcl_string.h>
+#include <bgeo/bgeo_lvcs.h>
+#include <vpgl/vpgl_camera.h>
+#include <vnl/vnl_matrix.h>
+
+#include "bvxm_world_params.h"
+
+class bvxm_lidar_camera : public vpgl_camera<double>
+{
+public:
+  bvxm_lidar_camera(vnl_matrix<double> trans_matrix, 
+                    bgeo_lvcs_sptr lvcs, 
+                    vcl_vector<vcl_vector<double> > tiepoints)
+    : trans_matrix_(trans_matrix), lvcs_(lvcs), tiepoints_(tiepoints) {}
+
+  // copy constructor
+  bvxm_lidar_camera(bvxm_lidar_camera const& rhs);
+
+  ~bvxm_lidar_camera() {}
+
+  //: Implementing the generic camera interface of vpgl_camera. 
+  //: x,y,z are in local coordinates, u represents image column, v image row
+  void project(const double x, const double y, const double z, double& u, double& v) const;
+
+  //: backprojects an image point into local coordinates (based on lvcs_)
+  void backproject(const double u, const double v, double& x, double& y, double& z);
+
+  bool operator ==(bvxm_lidar_camera const& rhs) const;
+
+private:
+
+  //: lvcs of world parameters
+  bgeo_lvcs_sptr lvcs_;
+  vnl_matrix<double> trans_matrix_;
+  vcl_vector<vcl_vector<double> > tiepoints_;
+
+  void img_to_wgs(const unsigned i, const unsigned j, double& lon, double& lat);
+};
+
+#endif
