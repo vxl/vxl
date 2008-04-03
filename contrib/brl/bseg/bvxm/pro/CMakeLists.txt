@@ -27,6 +27,7 @@ SET(bvxm_pro_sources
     bvxm_clean_world_process.h              bvxm_clean_world_process.cxx
     bvxm_create_local_rpc_process.h         bvxm_create_local_rpc_process.cxx
     bvxm_create_normalized_image_process.h  bvxm_create_normalized_image_process.cxx
+    bvxm_lidar_init_process.h               bvxm_lidar_init_process.cxx
 
 )
 
