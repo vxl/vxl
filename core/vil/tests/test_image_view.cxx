@@ -31,6 +31,10 @@ void test_image_view_rgba(vil_image_view<vxl_byte> &image2, vil_image_view<float
   vil_convert_cast(image7, image6);
   TEST("vil_convert_cast<float, rgba<byte> >", image6?true:false, true);
 
+  image6 = vil_convert_cast(vil_rgba<vxl_byte>(), vil_new_image_view_base_sptr(image7));
+  TEST("vil_convert_cast(vil_rgba<vxl_byte>, sptr)", image6?true:false, true);
+  vil_print_all(vcl_cout, image6);
+
   image2 = vil_plane(vil_view_as_planes(image6),1);
   vil_transform(vil_plane(vil_view_as_planes(image6),1), image2,
                 vcl_bind2nd(vcl_plus<vxl_byte>(),1));
@@ -244,6 +248,12 @@ void test_image_view(S /*d1*/, vcl_string s_name, T /*d2*/)
   vil_convert_cast(image7, image5);
   TEST("vil_convert_cast<T,S>", image5?true:false, true);
   vil_print_all(vcl_cout, image5);
+
+  vil_image_view<T> image10 =
+    vil_convert_to_n_planes(3, vil_new_image_view_base_sptr(image7));
+  TEST("vil_convert_round(image10<T>, sptr)", image10?true:false, true);
+  vil_print_all(vcl_cout, image10);
+
 
   // Only test rgba conversion for float and byte.
   // other components types don't have rgba instantiated.

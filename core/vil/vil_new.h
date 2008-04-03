@@ -197,4 +197,9 @@ vil_image_view<T> vil_new_image_view_i_j_plane(unsigned ni, unsigned nj, unsigne
   return vil_image_view<T>(chunk, reinterpret_cast<T*>(chunk->data()), ni, nj, nplanes, nplanes*nj, nplanes, 1);
 }
 
+//: Create a shallow copy of an image and wrap it in a vil_image_view_base_sptr
+// \note vil_image_view_base_sptr almost certainly doesn't behave as
+// you would expect, and this function should really only be used by experts.
+vil_image_view_base_sptr vil_new_image_view_base_sptr(const vil_image_view_base&);
+
 #endif // vil_new_h_

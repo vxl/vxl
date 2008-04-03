@@ -271,3 +271,34 @@ vil_pyramid_image_resource_sptr
                                             filename);
 }
 
+//: Create a shallow copy of an image and wrap it in a vil_image_view_base_sptr
+// \note vil_image_view_base_sptr almost certainly doesn't behave as
+// you would expect, and this function should really only be used by experts.
+vil_image_view_base_sptr vil_new_image_view_base_sptr(const vil_image_view_base& src)
+{
+  vil_image_view_base_sptr dest;
+  switch (vil_pixel_format_component_format(src.pixel_format()))
+  {
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+#define macro( F , T ) \
+   case F: { \
+      dest = new vil_image_view<T>(src); \
+    break; }
+   macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
+   macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+#if VXL_HAS_INT_64 && !defined(VCL_VC_6)
+   macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
+   macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
+#endif
+   macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+   macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+   macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+   macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+   macro(VIL_PIXEL_FORMAT_FLOAT , float )
+   macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+#undef macro
+#endif // DOXYGEN_SHOULD_SKIP_THIS
+
+  }
+  return dest;
+}
