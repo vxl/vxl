@@ -9,6 +9,19 @@
 
 #include <bgeo/bgeo_utm.h>
 
+bvxm_lidar_camera::bvxm_lidar_camera()
+{
+  trans_matrix_.set_size(4,4);
+  trans_matrix_.fill(0);
+  trans_matrix_.fill_diagonal(1);
+  trans_matrix_[1][1] = -1;
+
+  tiepoints_.resize(1);
+  tiepoints_[0].resize(6,0);
+
+  lvcs_=new bgeo_lvcs();
+}
+
 bvxm_lidar_camera::bvxm_lidar_camera(bvxm_lidar_camera const& rhs)
 {
   this->trans_matrix_ = rhs.trans_matrix_;
@@ -86,4 +99,46 @@ bool bvxm_lidar_camera::operator==(bvxm_lidar_camera const& rhs) const
     return true;
   else 
     return false;
+}
+
+//: Write vpgl_perspective_camera to stream
+vcl_ostream&  operator<<(vcl_ostream& s,
+                         bvxm_lidar_camera const& p)
+{
+  s << p.trans_matrix_ << "\n";
+  s << p.tiepoints_[0][0] << "\n";
+  s << p.tiepoints_[0][1] << "\n";
+  s << p.tiepoints_[0][2] << "\n";
+  s << p.tiepoints_[0][3] << "\n";
+  s << p.tiepoints_[0][4] << "\n";
+  s << p.tiepoints_[0][5] << "\n";
+  s << *(p.lvcs_) << "\n";
+
+  return s ;
+}
+
+//: Read vpgl_perspective_camera from stream
+template <class Type>
+vcl_istream&  operator>>(vcl_istream& s,
+                         bvxm_lidar_camera& p)
+{
+  vnl_matrix_fixed<double,4,4> tr_matrix;
+  s >> tr_matrix;
+
+  // read a set of tiepoints
+  vcl_vector<vcl_vector<double> > tiepoints(1);
+  double t0, t1, t2, t3, t4, t5;
+  s >> t0 >> t1 >> t2 >> t3 >> t4 >> t5;
+  tiepoints[0].resize(6);
+  t[0][0] = t0;
+  t[0][1] = t1;
+  t[0][2] = t2;
+  t[0][3] = t3;
+  t[0][4] = t4;
+  t[0][5] = t5;
+
+  bgeo_lvcs_sptr lvcs = new bgeo_lvcs();
+  s >> (*lvcs);
+  p = bvxm_lidar_camera(tr_matrix, lvcs, tiepoints);
+  return s ;
 }

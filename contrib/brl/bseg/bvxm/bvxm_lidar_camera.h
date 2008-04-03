@@ -11,6 +11,9 @@
 class bvxm_lidar_camera : public vpgl_camera<double>
 {
 public:
+  //: creates identity matrix and all zero tiepoints
+  bvxm_lidar_camera();
+
   bvxm_lidar_camera(vnl_matrix<double> trans_matrix, 
                     bgeo_lvcs_sptr lvcs, 
                     vcl_vector<vcl_vector<double> > tiepoints)
@@ -30,14 +33,22 @@ public:
 
   bool operator ==(bvxm_lidar_camera const& rhs) const;
 
+  //: Write camera to stream
+  friend vcl_ostream&  operator<<(vcl_ostream& s, bvxm_lidar_camera const& p);
+
+  //: Read camera  from stream
+  friend vcl_istream&  operator>>(vcl_istream& s, bvxm_lidar_camera& p);
 private:
 
   //: lvcs of world parameters
   bgeo_lvcs_sptr lvcs_;
-  vnl_matrix<double> trans_matrix_;
-  vcl_vector<vcl_vector<double> > tiepoints_;
+  vnl_matrix<double> trans_matrix_;           // 4x4 matrix
+  vcl_vector<vcl_vector<double> > tiepoints_; // set of 6 values, normally 1 set
 
   void img_to_wgs(const unsigned i, const unsigned j, double& lon, double& lat);
 };
+
+
+
 
 #endif
