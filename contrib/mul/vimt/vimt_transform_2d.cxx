@@ -502,6 +502,7 @@ bool vimt_transform_2d::operator==(const vimt_transform_2d& t) const
         tt_ == t.tt_;
 }
 
+//: Transform composition (L*R)(x) = L(R(x))
 vimt_transform_2d operator*(const vimt_transform_2d& L, const vimt_transform_2d& R)
 {
                 // Default is identity_
