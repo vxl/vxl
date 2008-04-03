@@ -29,8 +29,9 @@ vil_nitf2_image_subheader::vil_nitf2_image_subheader(vil_nitf2_classification::f
     add_USE_definitions();
     add_ICHIPB_definitions();
     add_MPD26A_definitions();
-                     
-                     }
+    add_STDIDB_definitions();
+    add_STDIDC_definitions();              
+ }
 
 vil_nitf2_image_subheader::~vil_nitf2_image_subheader()
 {
@@ -624,6 +625,87 @@ void vil_nitf2_image_subheader::add_ICHIPB_definitions()
 }
 
 
+void vil_nitf2_image_subheader::add_STDIDC_definitions()
+{
+  vil_nitf2_tagged_record_definition* tr =vil_nitf2_tagged_record_definition::find("STDIDC");
+  if (!tr)
+  {
+    vil_nitf2_tagged_record_definition::define("STDIDC", "STDIDC SUPPORT DATA EXTENSION" )
+
+    .field("ACQUISITION_DATE",    "",  NITF_STR(14),false)                 // not used, but must read
+    .field("MISSION", "",NITF_STR(14), false) // not used, but must read
+    .field("PASS", "", NITF_STR(2),false)
+    .field("OP_NUM",  "",NITF_INT(3,  false), true) // not used
+    .field("START_SEGMENT", "",NITF_STR(2), false)
+    .field("REPRO_NUM", "",NITF_INT(2,false), false)
+    .field("REPLAY_REGEN", "",NITF_STR(3), false)
+    .field("BLANK_FILL", "",NITF_STR(1), false)
+    .field("START_COLUMN", "",NITF_INT(3,false), false)
+    .field("START_ROW", "",NITF_INT(5,false), false)
+    .field("END_SEGMENT", "",NITF_STR(2), false)
+    .field("END_COLUMN", "",NITF_INT(3,false), false)
+    .field("END_ROW", "",NITF_INT(5,false), false)
+    .field("COUNTRY", "",NITF_STR(2), false)
+    .field("WAC", "",NITF_INT(4,false), false)
+    .field("LOCATION", "",NITF_STR(11), false)
+    .field("RESERVED1", "",NITF_STR(5), false)
+    .field("RESERVED2", "",NITF_STR(8), false)
+
+
+
+    .end();  // of STDIDC TRE
+  }
+
+
+
+}
+
+
+void vil_nitf2_image_subheader::add_STDIDB_definitions()
+{
+  vil_nitf2_tagged_record_definition* tr =vil_nitf2_tagged_record_definition::find("STDIDB");
+  if (!tr)
+  {
+    vil_nitf2_tagged_record_definition::define("STDIDB", "STDIDB SUPPORT DATA EXTENSION" )
+
+    .field("unk1",    "",  NITF_INT(2,false),false)                 // not used, but must read
+    .field("unk2",    "",  NITF_STR(3),false)                 // not used, but must read
+    .field("unk3",    "",  NITF_INT(2,false),false)                 // not used, but must read
+    .field("unk4",    "",  NITF_INT(4,false),false)                 // not used, but must read
+    .field("unk5",    "",  NITF_STR(2),false)                 // not used, but must read
+    .field("unk6",    "",  NITF_INT(3,false),false)                 // not used, but must read
+    .field("unk7",    "",  NITF_STR(2),false)                 // not used, but must read
+    .field("unk8",    "",  NITF_INT(2,false),false) 
+    .field("unk9",    "",  NITF_STR(3),false)    // not used, but must read
+    .field("unk10",    "",  NITF_STR(1),false) 
+    .field("START_COLUMN",    "",  NITF_STR(2),false) 
+    .field("START_ROW",    "",  NITF_INT(5,false),false) 
+    .field("unk11",    "",  NITF_STR(2),false)                 // not used, but must read
+    .field("unk12",    "",  NITF_STR(2),false)                 // not used, but must read
+    .field("unk13",    "",  NITF_INT(5,false),false)                 // not used, but must read
+    .field("unk14",    "",  NITF_STR(2),false)                 // not used, but must read
+    .field("unk15",    "",  NITF_INT(4,false),false)                 // not used, but must read
+    .field("unk16",    "",  NITF_STR(4),false)                 // not used, but must read
+    .field("unk17",    "",  NITF_STR(1),false)                 // not used, but must read
+    .field("unk18",    "",  NITF_STR(5),false) 
+    .field("unk19",    "",  NITF_STR(1),false)    // not used, but must read
+    .field("unk20",    "",  NITF_STR(5),false) 
+    .field("unk21",    "",  NITF_STR(7),false) 
+
+
+
+
+
+
+    .end();  // of STDIDC TRE
+  }
+
+
+
+}
+
+
+
 void vil_nitf2_image_subheader::add_MPD26A_definitions()
 {
   vil_nitf2_tagged_record_definition* tr =vil_nitf2_tagged_record_definition::find("MPD26A");
@@ -682,6 +764,43 @@ void vil_nitf2_image_subheader::add_MPD26A_definitions()
 }
 
 
+// obtain column and row offset from STDIDB /SDTDIDC
+bool vil_nitf2_image_subheader::
+get_row_col_offset(int & r_off,int & c_off)
+{
+  // Now get the sub-header TRE parameters
+  vil_nitf2_tagged_record_sequence isxhd_tres;
+  vil_nitf2_tagged_record_sequence::iterator tres_itr;
+  this->get_property("IXSHD", isxhd_tres);
+
+  bool success = false;
+    // Check through the TREs to find "STDIDC"
+  for (tres_itr = isxhd_tres.begin(); tres_itr != isxhd_tres.end(); ++tres_itr)
+  {
+    vcl_string type = (*tres_itr)->name();
+    if ( type == "STDIDC" )
+    {
+       success = (*tres_itr)->get_value("START_ROW", r_off); 
+       success = success && (*tres_itr)->get_value("START_COLUMN", c_off); 
+       return success;
+    }
+    else if ( type == "STDIDB" )
+    {
+       success = (*tres_itr)->get_value("START_ROW", r_off); 
+       vcl_string temp_off;
+       success = success && (*tres_itr)->get_value("START_COLUMN", temp_off); 
+       if((int)temp_off[0]>=65)
+           c_off=((int)temp_off[0]-55)*10;
+       else
+           c_off=((int)temp_off[0]-48)*10;
+
+       c_off+=(int)temp_off[1]-48;
+       return success;
+    }
+
+  }
+  return success;
+}
 bool vil_nitf2_image_subheader::
 get_rows_offset(double & ul, double & ur, double & ll,double & lr)
 {
@@ -702,7 +821,9 @@ get_rows_offset(double & ul, double & ur, double & ll,double & lr)
        success = success && (*tres_itr)->get_value("FI_ROW_12", ur); 
        success = success && (*tres_itr)->get_value("FI_ROW_21", ll); 
        success = success && (*tres_itr)->get_value("FI_ROW_22", lr); 
+
     }
+
   }
   return success;
 }

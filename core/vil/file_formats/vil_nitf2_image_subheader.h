@@ -118,6 +118,8 @@ class vil_nitf2_image_subheader
   bool get_rows_offset(double & ul, double & ur, double & ll,double & lr);
  
   bool get_cols_offset(double & ul, double & ur, double & ll,double & lr);
+
+  bool get_row_col_offset(int & r_off,int & c_off);
  protected:
   vil_nitf2_field_sequence m_field_sequence;
   vil_nitf2_data_mask_table* m_data_mask_table;
@@ -136,6 +138,8 @@ class vil_nitf2_image_subheader
   static void add_USE_definitions();
   static void add_ICHIPB_definitions();
   static void add_MPD26A_definitions();
+  static void add_STDIDC_definitions();
+  static void add_STDIDB_definitions();
 
   static vil_nitf2_field_definitions* s_field_definitions_21;
   static vil_nitf2_field_definitions* s_field_definitions_20;
