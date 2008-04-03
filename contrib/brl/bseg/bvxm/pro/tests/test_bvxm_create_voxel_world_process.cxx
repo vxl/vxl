@@ -63,7 +63,7 @@ MAIN( test_bvxm_create_voxel_world_process )
   comp = comp && (params->num_voxels() == vgl_vector_3d<unsigned int> (50,50,5));
   comp = comp && (params->voxel_length() == 10);
   comp = comp && (0.0009 < params->min_occupancy_prob()) && (params->min_occupancy_prob() < 0.0011);
-  comp = comp && (0.49< params->max_occupancy_prob()) && (params->max_occupancy_prob() < 0.51);
+  comp = comp && (0.98< params->max_occupancy_prob()) && (params->max_occupancy_prob() < 1.0);
   comp = comp && (params->lvcs());   // non-null lvcs
   // fill out the values in the test lvcs file
   bgeo_lvcs lvcs(32.724233, -117.156105, 39.0, bgeo_lvcs::wgs84, 0.1, 0.1);
