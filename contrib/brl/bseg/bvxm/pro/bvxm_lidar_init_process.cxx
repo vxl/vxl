@@ -89,13 +89,13 @@ bool bvxm_lidar_init_process::execute()
   vil_image_view_base_sptr roi_first=0, roi_last=0;
   bvxm_lidar_camera *cam_first=0, *cam_last=0;
 
-  if (lidar_init(first_ret, world_params, roi_first, cam_first)) {
+  if (!lidar_init(first_ret, world_params, roi_first, cam_first)) {
     vcl_cerr << "bvxm_lidar_init_process -- The process has failed!\n";
     return false;
   }
 
   if (last_ret) {
-    if (lidar_init(last_ret, world_params, roi_last, cam_last)) {
+    if (!lidar_init(last_ret, world_params, roi_last, cam_last)) {
       vcl_cerr << "bvxm_lidar_init_process -- The process has failed!\n";
       return false;
     }
@@ -131,7 +131,7 @@ bool bvxm_lidar_init_process::execute()
 
 bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar, 
                                          bvxm_world_params_sptr params,
-                                         vil_image_view_base_sptr roi,
+                                         vil_image_view_base_sptr& roi,
                                          bvxm_lidar_camera*& camera)
 {
   // the file should be a geotiff
@@ -295,7 +295,7 @@ bool bvxm_lidar_init_process::gen_mask(vil_image_view_base_sptr roi_first,
                                        bvxm_lidar_camera* cam_first, 
                                        vil_image_view_base_sptr roi_last, 
                                        bvxm_lidar_camera* cam_last, 
-                                       vil_image_view_base_sptr mask,
+                                       vil_image_view_base_sptr& mask,
                                        double thresh)
 {
   // compare the cameras, if the second one existed
@@ -312,7 +312,7 @@ bool bvxm_lidar_init_process::gen_mask(vil_image_view_base_sptr roi_first,
   vil_image_view<vxl_byte>* view = new vil_image_view<vxl_byte>(roi_first->ni(), roi_first->nj());
   // if there is no second camera and image, just use one
   if (!roi_last || !cam_last) {
-    view->fill(1);
+    view->fill(0);
     mask = view;
   } else {
     assert(roi_first->ni() == roi_last->ni());
@@ -326,9 +326,9 @@ bool bvxm_lidar_init_process::gen_mask(vil_image_view_base_sptr roi_first,
         for (unsigned j=0; j<roi_first->nj(); j++) {
           double diff = (*view1)(i,j)-(*view2)(i,j);
           if (diff > thresh)
-            (*view)(i,j) = 0;
+            (*view)(i,j) = 255;
           else
-            (*view)(i,j) = 1;
+            (*view)(i,j) = 0;
         }
     }
     mask = view;

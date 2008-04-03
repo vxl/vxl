@@ -63,7 +63,7 @@ class bvxm_lidar_init_process : public bprb_process
 
   bool lidar_init(vil_image_resource_sptr lidar, 
                   bvxm_world_params_sptr params,
-                  vil_image_view_base_sptr roi,
+                  vil_image_view_base_sptr& roi,
                   bvxm_lidar_camera*& camera);
 
  private:
@@ -77,7 +77,7 @@ class bvxm_lidar_init_process : public bprb_process
                                        bvxm_lidar_camera* cam_first, 
                                        vil_image_view_base_sptr roi_last, 
                                        bvxm_lidar_camera* cam_last, 
-                                       vil_image_view_base_sptr mask,
+                                       vil_image_view_base_sptr& mask,
                                        double thresh);
 
   //: return the corner point of a box (no particular order)
