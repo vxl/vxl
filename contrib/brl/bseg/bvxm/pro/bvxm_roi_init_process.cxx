@@ -27,7 +27,7 @@ bvxm_roi_init_process::bvxm_roi_init_process()
   int i=0;
   input_types_[i++] = "vcl_string";                // NITF image path
   input_types_[i++] = "vpgl_camera_double_sptr";   // rational camera
-  input_types_[i++] = "bvxm_voxel_world_sptr";     // rational camera
+  input_types_[i++] = "bvxm_voxel_world_sptr";     // voxel world spec
 
   //output
   output_data_.resize(2,brdb_value_sptr(0));
@@ -112,14 +112,6 @@ bool bvxm_roi_init_process::roi_init(vcl_string const& image_path,
   }
 
   vil_nitf2_image* nitf =  static_cast<vil_nitf2_image*> (img.ptr());
-#if 0 // old interface code
-  if (!nitf->parse_headers()){
-    vcl_cerr << "bvxm_roi_init_process::execute - NITF Image header not correct\n";
-    return false;
-  }
-
-  vpgl_rational_camera<double>* camera = new vpgl_nitf_rational_camera(nitf, true);
-#endif // 0
 
   vgl_vector_3d<unsigned int> dims = world_params->num_voxels();
   int dimx = dims.x();
