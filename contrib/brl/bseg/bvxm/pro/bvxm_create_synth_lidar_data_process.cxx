@@ -130,7 +130,7 @@ bool bvxm_create_synth_lidar_data_process::gen_lidar_view(int x, int y, int z,
       }
   }
 
-  lidar = new vil_image_view<unsigned char>(lv);
+  lidar = new vil_image_view<float>(lv);
 
   // generate the camera, which is a one to one mapping between 
   // lidar image and voxel slabs
