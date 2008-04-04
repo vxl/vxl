@@ -34,7 +34,7 @@ bvxm_gen_synthetic_world_process::bvxm_gen_synthetic_world_process()
 
   output_data_.resize(1,brdb_value_sptr(0));
   output_types_.resize(1);
-  output_types_[0]= "bvxm_vovel_wolrd_sptr";
+  output_types_[0]= "bvxm_voxel_world_sptr";
 
 }
 
