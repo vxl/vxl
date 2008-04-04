@@ -56,9 +56,6 @@ class bvxm_gen_synthetic_world_process : public bprb_process
  	
  int on_box_surface(vgl_box_3d<double> box, vgl_point_3d<double> v);
  int in_box(vgl_box_3d<double> box, vgl_point_3d<double> v);
- void create_top_box(vgl_box_3d<double> box, vgl_box_3d<double>& top_box,
-                    double dimx, double dimy, double dimz);
- vcl_vector<vgl_point_3d<double> > corners_of_box_3d(vgl_box_3d<double> box);
  
  void generate_persp_camera(double focal_length,
                            vgl_point_2d<double>& pp,  //principal point
@@ -74,7 +71,6 @@ generate_cameras_yz(vgl_box_3d<double>& world);
 
 bool gen_images(vgl_vector_3d<unsigned> grid_size,
                 bvxm_voxel_world_sptr world,
-               // bvxm_world_params_sptr world_params,
                 bvxm_voxel_grid<float>* intensity_grid,
                 bvxm_voxel_grid<float>* ocp_grid,
                 bvxm_voxel_grid<apm_datatype>* apm_grid,

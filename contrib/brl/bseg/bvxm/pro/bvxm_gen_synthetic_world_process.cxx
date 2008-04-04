@@ -1,4 +1,5 @@
 #include "bvxm_gen_synthetic_world_process.h"
+#include "bvxm_process_utils.h"
 
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
@@ -82,39 +83,6 @@ bvxm_gen_synthetic_world_process::in_box(vgl_box_3d<double> box, vgl_point_3d<do
     return 1;
   else
     return -1;
-}
-
-void 
-bvxm_gen_synthetic_world_process::create_top_box(vgl_box_3d<double> box,
-	                                               vgl_box_3d<double>& top_box,
-                                                 double dimx,
-                                                 double dimy,
-                                                 double dimz)
-{
-  // find top face center
-  vgl_point_3d<double> centroid = box.centroid();
-  centroid.set(centroid.x(), centroid.y(), box.max_z() + dimz/2.0);
-  top_box = vgl_box_3d<double> (centroid, dimx, dimy, dimz, vgl_box_3d<double>::centre);
-  // translate it a bit
-  vgl_point_3d<double> top_centroid = top_box.centroid();
-  top_box.set_centroid(vgl_point_3d<double>(top_centroid.x()+dimx/3., top_centroid.y()+dimx/3., top_centroid.z()));
-  //vcl_cout << top_box << vcl_endl;
-}
-
-vcl_vector<vgl_point_3d<double> >
-bvxm_gen_synthetic_world_process::corners_of_box_3d(vgl_box_3d<double> box)
-{
-  vcl_vector<vgl_point_3d<double> > corners;
-
-  corners.push_back(box.min_point());
-  corners.push_back(vgl_point_3d<double> (box.min_x()+box.width(), box.min_y(), box.min_z()));
-  corners.push_back(vgl_point_3d<double> (box.min_x()+box.width(), box.min_y()+box.height(), box.min_z()));
-  corners.push_back(vgl_point_3d<double> (box.min_x(), box.min_y()+box.height(), box.min_z()));
-  corners.push_back(vgl_point_3d<double> (box.min_x(), box.min_y(), box.max_z()));
-  corners.push_back(vgl_point_3d<double> (box.min_x()+box.width(), box.min_y(), box.max_z()));
-  corners.push_back(box.max_point());
-  corners.push_back(vgl_point_3d<double> (box.min_x(), box.min_y()+box.height(), box.max_z()));
-  return corners;
 }
 
 void 
@@ -242,7 +210,7 @@ bvxm_gen_synthetic_world_process::generate_cameras_yz(vgl_box_3d<double>& world)
     vpgl_rational_camera<double>* rat_cam = new vpgl_rational_camera<double>(perspective_to_rational(persp_cam));
     rat_cameras.push_back(rat_cam);
 
-    vcl_vector<vgl_point_3d<double> > corners = corners_of_box_3d(world);
+    vcl_vector<vgl_point_3d<double> > corners = bvxm_process_utils::corners_of_box_3d(world);
     for (unsigned i=0; i<corners.size(); i++) {
       vgl_point_3d<double> c = corners[i];
       double u,v, u2, v2;
@@ -262,7 +230,6 @@ bvxm_gen_synthetic_world_process::generate_cameras_yz(vgl_box_3d<double>& world)
 bool 
 bvxm_gen_synthetic_world_process::gen_images(vgl_vector_3d<unsigned> grid_size,
                                              bvxm_voxel_world_sptr world,
-                                           // bvxm_world_params_sptr world_params,
                                              bvxm_voxel_grid<float>* intensity_grid,
                                              bvxm_voxel_grid<float>* ocp_grid,
                                              bvxm_voxel_grid<apm_datatype>* apm_grid,
@@ -383,28 +350,26 @@ bvxm_gen_synthetic_world_process::gen_voxel_world_2box(vgl_vector_3d<unsigned> g
   bvxm_voxel_grid<float>::iterator ocp_slab_it;
   bvxm_voxel_grid<float>::iterator intensity_slab_it = intensity_grid->begin();
 
-  //object (essentially a box) placed in the voxel world
-  vgl_box_3d<double> box(vgl_point_3d<double> (10,10,10),
-    vgl_point_3d<double> (89,89,33));
-  boxes.push_back(box);
-
-  vgl_box_3d<double> top_box;
-  create_top_box(box, top_box, 29,29,15);
-  boxes.push_back(top_box);
-
+  //object (essentially two boxes) placed in the voxel world
+  bvxm_process_utils::generate_test_boxes(10,10,10,89,89,33,nx,ny,nz,boxes);
   vcl_ofstream is("test_gen_synthetic_world/intensity_grid.txt");
+
+  assert(boxes.size() == 2);
+
+  vgl_box_3d<double> box = boxes[0];
+  vgl_box_3d<double> top_box = boxes[1];
 
   // generate intensity maps
   vcl_vector<vcl_vector<float> > intens_map_bt;
   vcl_vector<vcl_vector<float> > intens_map_side1;
   vcl_vector<vcl_vector<float> > intens_map_side2;
-  gen_texture_map(box, intens_map_bt, intens_map_side1, intens_map_side2);
+  gen_texture_map(boxes[0], intens_map_bt, intens_map_side1, intens_map_side2);
 
 
   vcl_vector<vcl_vector<float> > top_intens_map_bt;
   vcl_vector<vcl_vector<float> > top_intens_map_side1;
   vcl_vector<vcl_vector<float> > top_intens_map_side2;
-  gen_texture_map(top_box, top_intens_map_bt, top_intens_map_side1, top_intens_map_side2);
+  gen_texture_map(boxes[1], top_intens_map_bt, top_intens_map_side1, top_intens_map_side2);
  
   unsigned z=nz;
   for (ocp_slab_it = ocp_grid->begin();ocp_slab_it != ocp_grid->end();++ocp_slab_it,++intensity_slab_it) {
@@ -417,8 +382,8 @@ bvxm_gen_synthetic_world_process::gen_voxel_world_2box(vgl_vector_3d<unsigned> g
     for (unsigned i=0; i<nx; i++) {
       is << vcl_endl;
       for (unsigned j=0; j<ny; j++) {
-        int face1 = on_box_surface(box, vgl_point_3d<double>(i,j,z));
-        int face2 = on_box_surface(top_box, vgl_point_3d<double>(i,j,z));
+        int face1 = on_box_surface(boxes[0], vgl_point_3d<double>(i,j,z));
+        int face2 = on_box_surface(boxes[1], vgl_point_3d<double>(i,j,z));
         // create a checkerboard intensity
         if ((face1 != -1) || (face2 != -1)){
           if (face1 != -1) {
