@@ -158,6 +158,7 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
   // based on the model defined in GEOTIFF
 
   // is this a PCS_WGS84_UTM?
+  bool is_utm = false;
   if (gtif->PCS_WGS84_UTM_zone(utm_zone, h))
   {
     vcl_vector<vcl_vector<double> > tiepoints;
@@ -165,7 +166,7 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
     bool south_flag = false;
     if (h == 1)
       south_flag = true;
-
+    is_utm = true;
     // transform each tiepoint
     bgeo_utm utm;
     double lat, lon, elev ;
@@ -192,7 +193,7 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
     if (gtif->gtif_trans_matrix(trans_matrix_values)){
       vcl_cout << "Transfer matrix is given, using that...." << vcl_endl;
       trans_matrix.copy_in(trans_matrix_values);
-      //vcl_cout << trans_matrix << vcl_endl;
+      vcl_cout << trans_matrix << vcl_endl;
     } else if (gtif->gtif_pixelscale(sx1, sy1, sz1)) {
       comp_trans_matrix(sx1, sy1, sz1, tiepoints, trans_matrix);
     } else {
@@ -202,6 +203,8 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
 
     // create the camera
     camera = new bvxm_lidar_camera(trans_matrix, params->lvcs(), tiepoints);
+    if (is_utm)
+      camera->set_utm(utm_zone, h);
 
     // create image view
     vil_tiff_image* tiff_img = static_cast<vil_tiff_image*> (lidar.as_pointer());
@@ -288,7 +291,7 @@ bool bvxm_lidar_init_process::comp_trans_matrix(double sx1, double sy1, double s
   m[1][3] = Ty;
   m[2][3] = Tz;
   trans_matrix = m;
-  //vcl_cout << trans_matrix << vcl_endl;
+  vcl_cout << trans_matrix << vcl_endl;
   return true;
 }
 
