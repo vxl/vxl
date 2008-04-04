@@ -282,6 +282,27 @@ vgl_point_3d<T> vgl_intersection(vgl_line_3d_2_points<T> const& line,
   return pt;
 }
 
+template <class T>
+bool vgl_intersection( const vgl_line_2d<T> &line0,
+                       const vgl_line_2d<T> &line1,
+                       vgl_point_2d<T>      &intersection_point )
+{
+  double a0, b0, c0,  a1, b1, c1;
+  a0 = line0.a(); b0 = line0.b(); c0 = line0.c();
+  a1 = line1.a(); b1 = line1.b(); c1 = line1.c();
+
+  double delta, delta_x, delta_y, x, y;
+  delta = a0*b1 - a1*b0;
+  if( delta < vnl_math::eps ) // Lines are parallel
+    return false;
+  delta_x = -c0*b1 + b0*c1; delta_y = -a0*c1 + a1*c0;
+  x = delta_x / delta; y = delta_y / delta;
+
+//   intersection_point.set( (Type)x, (Type)y );
+  intersection_point.set( x, y );
+  return true;
+}
+
 //: Return the intersection point of three planes.
 // \relates vgl_plane_3d
 template <class T>
@@ -305,5 +326,10 @@ template bool vgl_intersection(const vgl_box_2d<T >&, const vgl_line_2d<T >& lin
 #undef VGL_INTERSECTION_BOX_INSTANTIATE
 #define VGL_INTERSECTION_BOX_INSTANTIATE(T) \
 template bool vgl_intersection(const vgl_box_2d<T >&, const vgl_line_2d<T >& line, vgl_point_2d<T >& p0, vgl_point_2d<T >&)
+
+#undef VGL_INTERSECTION_LINE_2D_INSTANTIATE
+#define VGL_INTERSECTION_LINE_2D_INSTANTIATE(T) \
+template bool vgl_intersection(const vgl_line_2d<T> &line0, const vgl_line_2d<T> &line1, vgl_point_2d<T> &intersection_point )
+
 
 #endif // vgl_intersection_txx_

@@ -9,7 +9,7 @@
 // This file aims to gather all the intersection methods involving two or more types
 // into one place. You will also find overloads of vgl_intersection in
 // vgl/algo/vgl_intersection if they require significant computation,
-// and in some ordinary files if they only involve one type 
+// and in some ordinary files if they only involve one type
 // (e.g. vgl_box2d& vgl_intersection(vgl_box_2d&, vgl_box_2d&) is in vgl_box_2d.h)
 //
 // \verbatim
@@ -40,6 +40,14 @@ template <class T>
 bool vgl_intersection(vgl_line_segment_3d<T> const& l1,
                       vgl_line_segment_3d<T> const& l2,
                       vgl_point_3d<T>& i_pnt);
+
+//: Return the intersection point of two lines. Return false if lines
+//  are parallel
+// \relates vgl_line_segment_3d
+template <class T>
+bool vgl_intersection( const vgl_line_2d<T>  &line0,
+                       const vgl_line_2d<T>  &line1,
+                       vgl_point_2d<T>       &intersection_point );
 
 //: Return the intersection point of a line and a plane.
 // \relates vgl_line_3d_2_points
