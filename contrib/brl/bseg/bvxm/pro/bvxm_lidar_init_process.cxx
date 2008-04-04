@@ -1,5 +1,6 @@
 #include "bvxm_lidar_init_process.h"
 #include "bvxm_voxel_world.h"
+#include "bvxm_process_utils.h"
 
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_box_3d.h>
@@ -208,8 +209,8 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
     // crop the image to include the voxel world only
     // backproject the voxel world coordinates on the image
     vgl_box_2d<double> roi_box;
-    vgl_box_3d<float> world = params->world_box_local();
-    vcl_vector<vgl_point_3d<float> > corners = corners_of_box_3d(world);
+    vgl_box_3d<double> world = params->world_box_local();
+    vcl_vector<vgl_point_3d<double> > corners = bvxm_process_utils::corners_of_box_3d(world);
     for (unsigned i=0; i<corners.size(); i++) {
       float x = corners[i].x();
       float y = corners[i].y();
@@ -321,7 +322,7 @@ bool bvxm_lidar_init_process::gen_mask(vil_image_view_base_sptr roi_first,
     if (roi_first->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
       vil_image_view<float>* view1 = static_cast<vil_image_view<float>*> (roi_first.as_pointer());
       vil_image_view<float>* view2 = static_cast<vil_image_view<float>*> (roi_second.as_pointer());
-      // compare the cameras they should be the same
+      // compare the cameras, they should be the same
       for (unsigned i=0; i<roi_first->ni(); i++)
         for (unsigned j=0; j<roi_first->nj(); j++) {
           double diff = (*view1)(i,j)-(*view2)(i,j);
@@ -334,20 +335,4 @@ bool bvxm_lidar_init_process::gen_mask(vil_image_view_base_sptr roi_first,
     mask = view;
   }
   return true;
-}
-
-vcl_vector<vgl_point_3d<float> >
-bvxm_lidar_init_process::corners_of_box_3d(vgl_box_3d<float> box)
-{
-  vcl_vector<vgl_point_3d<float> > corners;
-
-  corners.push_back(box.min_point());
-  corners.push_back(vgl_point_3d<float> (box.min_x()+box.width(), box.min_y(), box.min_z()));
-  corners.push_back(vgl_point_3d<float> (box.min_x()+box.width(), box.min_y()+box.height(), box.min_z()));
-  corners.push_back(vgl_point_3d<float> (box.min_x(), box.min_y()+box.height(), box.min_z()));
-  corners.push_back(vgl_point_3d<float> (box.min_x(), box.min_y(), box.max_z()));
-  corners.push_back(vgl_point_3d<float> (box.min_x()+box.width(), box.min_y(), box.max_z()));
-  corners.push_back(box.max_point());
-  corners.push_back(vgl_point_3d<float> (box.min_x(), box.min_y()+box.height(), box.max_z()));
-  return corners;
 }

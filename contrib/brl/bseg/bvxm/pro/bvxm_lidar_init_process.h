@@ -81,7 +81,7 @@ class bvxm_lidar_init_process : public bprb_process
                                        double thresh);
 
   //: return the corner point of a box (no particular order)
-  vcl_vector<vgl_point_3d<float> > corners_of_box_3d(vgl_box_3d<float> box);
+  //vcl_vector<vgl_point_3d<float> > corners_of_box_3d(vgl_box_3d<float> box);
 };
 
 
