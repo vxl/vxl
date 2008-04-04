@@ -41,12 +41,16 @@ bvxm_world_params::set_params(
   max_occupancy_prob_ = max_ocp_prob;
 };
 
-vgl_box_3d<float> bvxm_world_params::world_box_local()
+vgl_box_3d<double> bvxm_world_params::world_box_local()
 {
-  float xdim = num_voxels_.x()*voxel_length_;
-  float ydim = num_voxels_.y()*voxel_length_;
-  float zdim = num_voxels_.z()*voxel_length_;
-  vgl_box_3d<float> box(corner_, xdim, ydim, zdim, vgl_box_3d<float>::min_pos);
+  double xdim = num_voxels_.x()*voxel_length_;
+  double ydim = num_voxels_.y()*voxel_length_;
+  double zdim = num_voxels_.z()*voxel_length_;
+  double c[3];
+  c[0] = corner_.x();
+  c[1] = corner_.y();
+  c[2] = corner_.z();
+  vgl_box_3d<double> box(c, xdim, ydim, zdim, vgl_box_3d<double>::min_pos);
   return box;
 }
 

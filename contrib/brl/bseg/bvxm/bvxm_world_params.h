@@ -45,7 +45,7 @@ public:
   inline float min_occupancy_prob(){ return min_occupancy_prob_;}
   inline float max_occupancy_prob(){ return max_occupancy_prob_;}
   inline bgeo_lvcs_sptr lvcs(){return lvcs_;}
-  vgl_box_3d<float> world_box_local();
+  vgl_box_3d<double> world_box_local();
 
   //: Binary save parameters to stream.
   void b_write(vsl_b_ostream & os) const;
