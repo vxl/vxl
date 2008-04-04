@@ -14,5 +14,6 @@
 #include <bvxm/bvxm_voxel_traits.h>
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_world_params.h>
+#include <bvxm/bvxm_lidar_camera.h>
 
 int main() { return 0; }
