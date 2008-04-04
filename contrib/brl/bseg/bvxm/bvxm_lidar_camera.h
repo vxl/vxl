@@ -48,7 +48,5 @@ private:
   void img_to_wgs(const unsigned i, const unsigned j, double& lon, double& lat);
 };
 
-
-
-
 #endif
+
