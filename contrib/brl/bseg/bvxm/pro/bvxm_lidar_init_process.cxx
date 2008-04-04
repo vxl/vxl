@@ -27,7 +27,7 @@ bvxm_lidar_init_process::bvxm_lidar_init_process()
 
   int i=0;
   input_types_[i++] = "vcl_string";             // first ret. image path (geotiff)
-  input_types_[i++] = "vcl_string";             // last ret. image path (geotiff)
+  input_types_[i++] = "vcl_string";             // second ret. image path (geotiff)
   input_types_[i++] = "bvxm_voxel_world_sptr";  // rational camera
 
   //output
@@ -36,7 +36,7 @@ bvxm_lidar_init_process::bvxm_lidar_init_process()
   int j=0;
   output_types_[j++]= "vpgl_camera_double_sptr";   // lidar local camera
   output_types_[j++]= "vil_image_view_base_sptr";  // first ret image ROI
-  output_types_[j++]= "vil_image_view_base_sptr";  // last ret image ROI
+  output_types_[j++]= "vil_image_view_base_sptr";  // second ret image ROI
   output_types_[j++]= "vil_image_view_base_sptr";  // mask
 
   if (!parameters()->add( "Upper bound for Lidar differences" , "mask_thresh" , (float) 10.0 ))
@@ -57,7 +57,7 @@ bool bvxm_lidar_init_process::execute()
 
   brdb_value_t<vcl_string>* input1 =
     static_cast<brdb_value_t< vcl_string>* >(input_data_[1].ptr());
-  vcl_string last = input1->value();
+  vcl_string second = input1->value();
 
   //voxel_world
   brdb_value_t<bvxm_voxel_world_sptr >* input2 =
@@ -77,8 +77,8 @@ bool bvxm_lidar_init_process::execute()
     return false;
   }
 
-  // last return may be null, in that case only first return will be considered
-  vil_image_resource_sptr last_ret = vil_load_image_resource(last.c_str());
+  // second return may be null, in that case only first return will be considered
+  vil_image_resource_sptr second_ret = vil_load_image_resource(second.c_str());
 
   bgeo_lvcs_sptr lvcs = world_params->lvcs();
   if (!lvcs) {
@@ -86,23 +86,23 @@ bool bvxm_lidar_init_process::execute()
     return false;
   }
 
-  vil_image_view_base_sptr roi_first=0, roi_last=0;
-  bvxm_lidar_camera *cam_first=0, *cam_last=0;
+  vil_image_view_base_sptr roi_first=0, roi_second=0;
+  bvxm_lidar_camera *cam_first=0, *cam_second=0;
 
   if (!lidar_init(first_ret, world_params, roi_first, cam_first)) {
     vcl_cerr << "bvxm_lidar_init_process -- The process has failed!\n";
     return false;
   }
 
-  if (last_ret) {
-    if (!lidar_init(last_ret, world_params, roi_last, cam_last)) {
+  if (second_ret) {
+    if (!lidar_init(second_ret, world_params, roi_second, cam_second)) {
       vcl_cerr << "bvxm_lidar_init_process -- The process has failed!\n";
       return false;
     }
   } 
 
   vil_image_view_base_sptr mask=0;
-  if (!gen_mask(roi_first, cam_first, roi_last, cam_last, mask, thresh)) {
+  if (!gen_mask(roi_first, cam_first, roi_second, cam_second, mask, thresh)) {
     vcl_cerr << "bvxm_lidar_init_process -- The process has failed!\n";
     return false;
   }
@@ -117,9 +117,9 @@ bool bvxm_lidar_init_process::execute()
     new brdb_value_t<vil_image_view_base_sptr>(roi_first);
   output_data_[1] = output1;
 
-  // store image output (last return roi)
+  // store image output (second return roi)
   brdb_value_sptr output2 =
-    new brdb_value_t<vil_image_view_base_sptr>(roi_last);
+    new brdb_value_t<vil_image_view_base_sptr>(roi_second);
   output_data_[2] = output2;
 
   // store the mask
@@ -247,7 +247,7 @@ bool bvxm_lidar_init_process::comp_trans_matrix(double sx1, double sy1, double s
 {
   double sx, sy, sz;
   
-  // use tiepoints and sclae values to create a transformation matrix
+  // use tiepoints and scale values to create a transformation matrix
   // for now use the first tiepoint if there are more than one
   assert (tiepoints.size() > 0);
   vcl_vector<double> tiepoint = tiepoints[0];
@@ -293,8 +293,8 @@ bool bvxm_lidar_init_process::comp_trans_matrix(double sx1, double sy1, double s
 
 bool bvxm_lidar_init_process::gen_mask(vil_image_view_base_sptr roi_first, 
                                        bvxm_lidar_camera* cam_first, 
-                                       vil_image_view_base_sptr roi_last, 
-                                       bvxm_lidar_camera* cam_last, 
+                                       vil_image_view_base_sptr roi_second, 
+                                       bvxm_lidar_camera* cam_second, 
                                        vil_image_view_base_sptr& mask,
                                        double thresh)
 {
@@ -311,16 +311,16 @@ bool bvxm_lidar_init_process::gen_mask(vil_image_view_base_sptr roi_first,
 
   vil_image_view<vxl_byte>* view = new vil_image_view<vxl_byte>(roi_first->ni(), roi_first->nj());
   // if there is no second camera and image, just use one
-  if (!roi_last || !cam_last) {
+  if (!roi_second || !cam_second) {
     view->fill(0);
     mask = view;
   } else {
-    assert(roi_first->ni() == roi_last->ni());
-    assert(roi_first->nj() == roi_last->nj());
+    assert(roi_first->ni() == roi_second->ni());
+    assert(roi_first->nj() == roi_second->nj());
 
     if (roi_first->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
       vil_image_view<float>* view1 = static_cast<vil_image_view<float>*> (roi_first.as_pointer());
-      vil_image_view<float>* view2 = static_cast<vil_image_view<float>*> (roi_last.as_pointer());
+      vil_image_view<float>* view2 = static_cast<vil_image_view<float>*> (roi_second.as_pointer());
       // compare the cameras they should be the same
       for (unsigned i=0; i<roi_first->ni(); i++)
         for (unsigned j=0; j<roi_first->nj(); j++) {

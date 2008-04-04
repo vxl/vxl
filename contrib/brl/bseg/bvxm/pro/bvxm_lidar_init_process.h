@@ -7,17 +7,17 @@
 // \brief A class for clipping and image based on a 3D bounding box.
 //        -  Input:
 //             - First return path (string)
-//             - Last return path (string)
+//             - Second return path (string)
 //             - bvxm_voxel_world_sptr
 //
 //        -  Output:
 //             - lidar pseudo camera "vpgl_camera_double_sptr"
 //             - clipped image area (first ret) "vil_image_view_base_sptr"
-//             - clipped image area (last ret) "vil_image_view_base_sptr"
+//             - clipped image area (second ret) "vil_image_view_base_sptr"
 //             - mask "vil_image_view_base_sptr"
 //
 //        -  Params:
-//             - threshold for first and last return differences 
+//             - threshold for first and second return differences 
 //
 // \author  Gamze D. Tunali
 // \date    04/02/2008
@@ -75,8 +75,8 @@ class bvxm_lidar_init_process : public bprb_process
 
   bool gen_mask(vil_image_view_base_sptr roi_first, 
                                        bvxm_lidar_camera* cam_first, 
-                                       vil_image_view_base_sptr roi_last, 
-                                       bvxm_lidar_camera* cam_last, 
+                                       vil_image_view_base_sptr roi_second, 
+                                       bvxm_lidar_camera* cam_second, 
                                        vil_image_view_base_sptr& mask,
                                        double thresh);
 
