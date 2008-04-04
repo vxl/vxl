@@ -11,6 +11,7 @@
 #include <vcl_cassert.h>
 
 #include <vgl/vgl_point_2d.h>
+#include <vnl/vnl_math.h>
 #include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_line_3d_2_points.h>
 #include <vgl/vgl_line_segment_3d.h>
