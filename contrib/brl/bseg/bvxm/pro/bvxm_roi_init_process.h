@@ -69,7 +69,7 @@ class bvxm_roi_init_process : public bprb_process
                                   float r);
 
   //: return the corner point of a box (no particular order)
-  vcl_vector<vgl_point_3d<double> > corners_of_box_3d(vgl_box_3d<double> box);
+  //vcl_vector<vgl_point_3d<double> > corners_of_box_3d(vgl_box_3d<double> box);
 };
 
 
