@@ -17,12 +17,15 @@ public:
   bvxm_lidar_camera(vnl_matrix<double> trans_matrix, 
                     bgeo_lvcs_sptr lvcs, 
                     vcl_vector<vcl_vector<double> > tiepoints)
-    : trans_matrix_(trans_matrix), lvcs_(lvcs), tiepoints_(tiepoints) {}
+    : trans_matrix_(trans_matrix), lvcs_(lvcs), tiepoints_(tiepoints), is_utm(false) {}
 
   // copy constructor
   bvxm_lidar_camera(bvxm_lidar_camera const& rhs);
 
   ~bvxm_lidar_camera() {}
+
+  //northing=0 is North, 1 is east
+  void set_utm(int utm_zone, unsigned northing){is_utm=true, utm_zone_=utm_zone; northing_=northing;} 
 
   //: Implementing the generic camera interface of vpgl_camera. 
   //: x,y,z are in local coordinates, u represents image column, v image row
@@ -44,7 +47,9 @@ private:
   bgeo_lvcs_sptr lvcs_;
   vnl_matrix<double> trans_matrix_;           // 4x4 matrix
   vcl_vector<vcl_vector<double> > tiepoints_; // set of 6 values, normally 1 set
-
+  bool is_utm;
+  int utm_zone_;
+  int northing_; //0 North, 1 South
   void img_to_wgs(const unsigned i, const unsigned j, double& lon, double& lat);
 };
 

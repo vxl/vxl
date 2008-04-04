@@ -20,6 +20,8 @@ bvxm_lidar_camera::bvxm_lidar_camera()
   tiepoints_[0].resize(6,0);
 
   lvcs_=new bgeo_lvcs();
+
+  is_utm = false;
 }
 
 bvxm_lidar_camera::bvxm_lidar_camera(bvxm_lidar_camera const& rhs)
@@ -36,11 +38,13 @@ void bvxm_lidar_camera::project(const double x, const double y, const double z,
   vnl_vector<double> vec(4), res(4);
   double lat, lon, gz;
   lvcs_->local_to_global(x, y, z, bgeo_lvcs::wgs84, lon, lat, gz);
-  bgeo_utm utm;
-  //double lat, lon, elev;
-  double x1, y1;
-  int utm_zone;
-  utm.transform(lat, lon, x1, y1, utm_zone);
+  
+  double x1=lat, y1=lon;
+  if (is_utm) {
+    bgeo_utm utm;
+    int utm_zone;
+    utm.transform(lat, lon, x1, y1, utm_zone);
+  }
   vec[0] = x1;
   vec[1] = y1;
   vec[2] = 0;
@@ -69,12 +73,17 @@ void bvxm_lidar_camera::backproject(const double u, const double v,
   vec[3] = 1;
 
   //vcl_cout << "Northing=" << v[0] << " Easting=" << v[1];
-
-  //find the UTM values
-  bgeo_utm utm;
   double lat, lon, elev;
+  if (is_utm) {
+    //find the UTM values
+    bgeo_utm utm;
+    utm.transform(utm_zone_, vec[0], vec[1], vec[2], lat, lon, elev);
+  } else {
+    lat = vec[0];
+    lon = vec[1];
+    elev = vec[2];
+  }
 
-  utm.transform(38, vec[0], vec[1], vec[2], lat, lon, elev);
   lvcs_->global_to_local(lon, lat, elev, bgeo_lvcs::wgs84, x, y, z);
   //z = img_view_(u, v);
 }
@@ -90,7 +99,7 @@ void bvxm_lidar_camera::img_to_wgs(const unsigned i, const unsigned j,
   //find the UTM values
   bgeo_utm utm;
   double elev;
-  utm.transform(38, v[0], v[1], v[2], lat, lon, elev);
+  utm.transform(utm_zone_, v[0], v[1], v[2], lat, lon, elev);
 }
 
 bool bvxm_lidar_camera::operator==(bvxm_lidar_camera const& rhs) const
