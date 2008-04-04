@@ -19,6 +19,7 @@ SET(bvxm_pro_sources
     bvxm_render_expected_image_process.h    bvxm_render_expected_image_process.cxx
     bvxm_change_detection_display_process.h bvxm_change_detection_display_process.cxx
     bvxm_update_process.h                   bvxm_update_process.cxx
+    bvxm_update_lidar_process.h             bvxm_update_lidar_process.cxx
     bvxm_normalize_image_process.h          bvxm_normalize_image_process.cxx
     bvxm_illum_index_process.h              bvxm_illum_index_process.cxx
     bvxm_roi_init_process.h                 bvxm_roi_init_process.cxx
@@ -29,6 +30,7 @@ SET(bvxm_pro_sources
     bvxm_create_local_rpc_process.h         bvxm_create_local_rpc_process.cxx
     bvxm_create_normalized_image_process.h  bvxm_create_normalized_image_process.cxx
     bvxm_lidar_init_process.h               bvxm_lidar_init_process.cxx
+    bvxm_gen_synthetic_world_process.h      bvxm_gen_synthetic_world_process.cxx
 
 )
 
