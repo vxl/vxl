@@ -31,6 +31,7 @@ SET(bvxm_pro_sources
     bvxm_create_normalized_image_process.h  bvxm_create_normalized_image_process.cxx
     bvxm_lidar_init_process.h               bvxm_lidar_init_process.cxx
     bvxm_gen_synthetic_world_process.h      bvxm_gen_synthetic_world_process.cxx
+    bvxm_create_synth_lidar_data_process.h  bvxm_create_synth_lidar_data_process.cxx
 
 )
 
