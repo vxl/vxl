@@ -118,7 +118,6 @@ vcl_ostream&  operator<<(vcl_ostream& s,
 }
 
 //: Read vpgl_perspective_camera from stream
-template <class Type>
 vcl_istream&  operator>>(vcl_istream& s,
                          bvxm_lidar_camera& p)
 {
@@ -130,12 +129,12 @@ vcl_istream&  operator>>(vcl_istream& s,
   double t0, t1, t2, t3, t4, t5;
   s >> t0 >> t1 >> t2 >> t3 >> t4 >> t5;
   tiepoints[0].resize(6);
-  t[0][0] = t0;
-  t[0][1] = t1;
-  t[0][2] = t2;
-  t[0][3] = t3;
-  t[0][4] = t4;
-  t[0][5] = t5;
+  tiepoints[0][0] = t0;
+  tiepoints[0][1] = t1;
+  tiepoints[0][2] = t2;
+  tiepoints[0][3] = t3;
+  tiepoints[0][4] = t4;
+  tiepoints[0][5] = t5;
 
   bgeo_lvcs_sptr lvcs = new bgeo_lvcs();
   s >> (*lvcs);
