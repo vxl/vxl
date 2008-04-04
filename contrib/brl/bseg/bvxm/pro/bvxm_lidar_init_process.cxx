@@ -212,9 +212,9 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
     vgl_box_3d<double> world = params->world_box_local();
     vcl_vector<vgl_point_3d<double> > corners = bvxm_process_utils::corners_of_box_3d(world);
     for (unsigned i=0; i<corners.size(); i++) {
-      float x = corners[i].x();
-      float y = corners[i].y();
-      float z = corners[i].z();
+      double x = corners[i].x();
+      double y = corners[i].y();
+      double z = corners[i].z();
       double u,v;
       camera->project(x,y,z,u,v);
       vgl_point_2d<double> p(u,v);
