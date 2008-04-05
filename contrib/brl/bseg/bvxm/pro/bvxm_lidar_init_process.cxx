@@ -144,15 +144,19 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
     return false;
   }
 
+#if HAS_GEOTIFF
   vil_tiff_image* tiff_img = static_cast<vil_tiff_image*> (lidar.as_pointer());
 
   // check if the tiff file is geotiff
   if (!tiff_img->is_GEOTIFF()) {
+#endif
     vcl_cerr << "bvxm_lidar_init_process::lidar_init -- The image should be a GEOTIFF!\n";
     return false;
+#if HAS_GEOTIFF
   }
 
   vil_geotiff_header* gtif = tiff_img->get_geotiff_header();
+#endif
   int utm_zone;
   vil_geotiff_header::GTIF_HEMISPH h;
 
