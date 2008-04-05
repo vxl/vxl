@@ -29,10 +29,10 @@ static void vnl_solve_symmetric_le(const vnl_matrix<double>& S,
 //  \param H Hessian of F(x) - must be symmetric
 //  \retval True if successful
 bool vnl_solve_qp_with_equality_constraints(const vnl_matrix<double>& H,
-                                const vnl_vector<double>& g,
-                                const vnl_matrix<double>& A,
-                                const vnl_vector<double>& b,
-                                vnl_vector<double>& x)
+                                            const vnl_vector<double>& g,
+                                            const vnl_matrix<double>& A,
+                                            const vnl_vector<double>& b,
+                                            vnl_vector<double>& x)
 {
   // Test inputs
   unsigned n=H.rows();   // Number of unknowns
@@ -118,10 +118,10 @@ bool vnl_solve_qp_zero_sum(const vnl_matrix<double>& H,
 
 //: Update x, checking inequality constraints and modifying valid where necessary
 static bool vnl_solve_qp_update_x(vnl_vector<double>& x,
-                                const vnl_vector<double>& x1,
-                                vnl_vector<double>& dx,
-                                vcl_vector<bool>& valid,
-                                unsigned& n_valid)
+                                  const vnl_vector<double>& x1,
+                                  vnl_vector<double>& dx,
+                                  vcl_vector<bool>& valid,
+                                  unsigned& n_valid)
 {
   unsigned n=x.size();
   // Check non-negativity constraints
@@ -164,12 +164,12 @@ static bool vnl_solve_qp_update_x(vnl_vector<double>& x,
 //  Used by vnl_non_neg_constrained_qp
 //  Returns true if valid minimum found
 bool vnl_solve_qp_non_neg_step(const vnl_matrix<double>& H,
-                                const vnl_vector<double>& g,
-                                const vnl_matrix<double>& A,
-                                const vnl_vector<double>& b,
-                                vnl_vector<double>& x,
-                                vcl_vector<bool>& valid,
-                                unsigned& n_valid)
+                               const vnl_vector<double>& g,
+                               const vnl_matrix<double>& A,
+                               const vnl_vector<double>& b,
+                               vnl_vector<double>& x,
+                               vcl_vector<bool>& valid,
+                               unsigned& n_valid)
 {
   // Find solution to H1(x+dx)+g1=0, subject to A1(x1+dx)=b
   // H1,A1,g1,x1 contain subsets defined by valid array
@@ -224,10 +224,10 @@ bool vnl_solve_qp_non_neg_step(const vnl_matrix<double>& H,
 //: Solve unconstrained problem and apply one extra constraint if necessary
 //  Returns true if valid minimum found
 bool vnl_solve_qp_non_neg_sum_one_step(const vnl_matrix<double>& H,
-                                const vnl_vector<double>& g,
-                                vnl_vector<double>& x,
-                                vcl_vector<bool>& valid,
-                                unsigned& n_valid)
+                                       const vnl_vector<double>& g,
+                                       vnl_vector<double>& x,
+                                       vcl_vector<bool>& valid,
+                                       unsigned& n_valid)
 {
   // Find solution to H1(x+dx)+g1=0, subject to sum(dx)=0.0
   // H1,g1,x1 contain subsets defined by valid array
@@ -283,12 +283,12 @@ bool vnl_solve_qp_non_neg_sum_one_step(const vnl_matrix<double>& H,
 //  \param verbose When true, output error messages to cerr if failed
 //  \retval True if successful
 bool vnl_solve_qp_with_non_neg_constraints(const vnl_matrix<double>& H,
-                                const vnl_vector<double>& g,
-                                const vnl_matrix<double>& A,
-                                const vnl_vector<double>& b,
-                                vnl_vector<double>& x,
-                                double con_tol,
-                                bool verbose)
+                                           const vnl_vector<double>& g,
+                                           const vnl_matrix<double>& A,
+                                           const vnl_vector<double>& b,
+                                           vnl_vector<double>& x,
+                                           double con_tol,
+                                           bool verbose)
 {
   // Test inputs
   unsigned n=H.rows();   // Number of unknowns
@@ -341,9 +341,9 @@ bool vnl_solve_qp_with_non_neg_constraints(const vnl_matrix<double>& H,
 //  \param verbose When true, output error messages to cerr if failed
 //  \retval True if successful
 bool vnl_solve_qp_non_neg_sum_one(const vnl_matrix<double>& H,
-                                const vnl_vector<double>& g,
-                                vnl_vector<double>& x,
-                                bool verbose)
+                                  const vnl_vector<double>& g,
+                                  vnl_vector<double>& x,
+                                  bool verbose)
 {
   // Test inputs
   unsigned n=H.rows();   // Number of unknowns

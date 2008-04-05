@@ -104,26 +104,26 @@ class vgl_h_matrix_2d_optimize
 
   //: optimize homography from matched points
   bool optimize(vcl_vector<vgl_homg_point_2d<double> > const& points1,
-               vcl_vector<vgl_homg_point_2d<double> > const& points2,
-               vgl_h_matrix_2d<double>& H)
+                vcl_vector<vgl_homg_point_2d<double> > const& points2,
+                vgl_h_matrix_2d<double>& H)
   {
     return optimize_p(points1, points2, H);
   }
 
   //: optimize homography from matched lines
   bool optimize(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
-               vcl_vector<vgl_homg_line_2d<double> > const& lines2,
-               vgl_h_matrix_2d<double>& H)
+                vcl_vector<vgl_homg_line_2d<double> > const& lines2,
+                vgl_h_matrix_2d<double>& H)
   {
     return optimize_l(lines1, lines2, H);
   }
 
   //: optimize homography from matched points and lines
   bool optimize(vcl_vector<vgl_homg_point_2d<double> > const& points1,
-               vcl_vector<vgl_homg_point_2d<double> > const& points2,
-               vcl_vector<vgl_homg_line_2d<double> > const& lines1,
-               vcl_vector<vgl_homg_line_2d<double> > const& lines2,
-               vgl_h_matrix_2d<double>& H)
+                vcl_vector<vgl_homg_point_2d<double> > const& points2,
+                vcl_vector<vgl_homg_line_2d<double> > const& lines1,
+                vcl_vector<vgl_homg_line_2d<double> > const& lines2,
+                vgl_h_matrix_2d<double>& H)
   {
     return optimize_pl(points1, points2, lines1, lines2, H);
   }
@@ -131,21 +131,21 @@ class vgl_h_matrix_2d_optimize
   //: optimize homography from matched points - return h_matrix
   vgl_h_matrix_2d<double>
   optimize(vcl_vector<vgl_homg_point_2d<double> > const& p1,
-          vcl_vector<vgl_homg_point_2d<double> > const& p2)
+           vcl_vector<vgl_homg_point_2d<double> > const& p2)
   { vgl_h_matrix_2d<double> H; optimize_p(p1, p2, H); return H; }
 
   //: optimize homography from matched lines - return h_matrix
   vgl_h_matrix_2d<double>
   optimize(vcl_vector<vgl_homg_line_2d<double> > const& l1,
-          vcl_vector<vgl_homg_line_2d<double> > const& l2)
+           vcl_vector<vgl_homg_line_2d<double> > const& l2)
   { vgl_h_matrix_2d<double> H; optimize_l(l1, l2, H); return H; }
 
   //: optimize homography from matched points and lines - return h_matrix
   vgl_h_matrix_2d<double>
   optimize(vcl_vector<vgl_homg_point_2d<double> > const& p1,
-          vcl_vector<vgl_homg_point_2d<double> > const& p2,
-          vcl_vector<vgl_homg_line_2d<double> > const& l1,
-          vcl_vector<vgl_homg_line_2d<double> > const& l2)
+           vcl_vector<vgl_homg_point_2d<double> > const& p2,
+           vcl_vector<vgl_homg_line_2d<double> > const& l1,
+           vcl_vector<vgl_homg_line_2d<double> > const& l2)
   { vgl_h_matrix_2d<double>  H; optimize_pl(p1, p2, l1, l2, H); return H; }
 
  protected:
@@ -157,18 +157,18 @@ class vgl_h_matrix_2d_optimize
   int max_iter_;
   vgl_h_matrix_2d<double> initial_h_;
   virtual bool optimize_p(vcl_vector<vgl_homg_point_2d<double> > const& points1,
-                         vcl_vector<vgl_homg_point_2d<double> > const& points2,
-                         vgl_h_matrix_2d<double>& H) = 0;
+                          vcl_vector<vgl_homg_point_2d<double> > const& points2,
+                          vgl_h_matrix_2d<double>& H) = 0;
 
   virtual bool optimize_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
-                         vcl_vector<vgl_homg_line_2d<double> > const& lines2,
-                         vgl_h_matrix_2d<double>& H) = 0;
-
-  virtual bool optimize_pl(vcl_vector<vgl_homg_point_2d<double> > const& points1,
-                          vcl_vector<vgl_homg_point_2d<double> > const& points2,
-                          vcl_vector<vgl_homg_line_2d<double> > const& lines1,
                           vcl_vector<vgl_homg_line_2d<double> > const& lines2,
                           vgl_h_matrix_2d<double>& H) = 0;
+
+  virtual bool optimize_pl(vcl_vector<vgl_homg_point_2d<double> >const& points1,
+                           vcl_vector<vgl_homg_point_2d<double> >const& points2,
+                           vcl_vector<vgl_homg_line_2d<double> > const& lines1,
+                           vcl_vector<vgl_homg_line_2d<double> > const& lines2,
+                           vgl_h_matrix_2d<double>& H) = 0;
 };
 
 #endif // vgl_h_matrix_2d_optimize_h_

@@ -135,10 +135,10 @@ vil_new_pyramid_image_resource(char const* file_or_directory,
 //  then the intermediate resources are created in memory.
 vil_pyramid_image_resource_sptr
 vil_new_pyramid_image_from_base(char const* filename,
-                            vil_image_resource_sptr const& base_image,
-                            unsigned nlevels,
-                            char const* file_format,
-                            char const* temp_dir);
+                                vil_image_resource_sptr const& base_image,
+                                unsigned nlevels,
+                                char const* file_format,
+                                char const* temp_dir);
 
 //: Construct a new pyramid image resource from a base image
 //  The result is a directory containing separate images for each
@@ -154,8 +154,7 @@ vil_new_pyramid_image_list_from_base(char const* directory,
                                      unsigned nlevels,
                                      bool copy_base,
                                      char const* level_file_format,
-                                     char const* filename
-                                    );
+                                     char const* filename);
 
 #if 0 // deprecated
 //: Create a new image view whose plane step is 1.

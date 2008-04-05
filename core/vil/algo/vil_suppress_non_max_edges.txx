@@ -55,14 +55,14 @@ void vil_suppress_non_max_edges(const vil_image_view<srcT>& grad_i,
   unsigned ihi=ni-3;
   unsigned jhi=nj-3;
 
-  for (unsigned j=2;j<=jhi;++j, gi_row+=gi_jstep, gj_row+=gj_jstep,
-                              gm_row+=gm_jstep)
+  for (unsigned j=2; j<=jhi; ++j, gi_row+=gi_jstep, gj_row+=gj_jstep,
+                                  gm_row+=gm_jstep)
   {
     const srcT* pgi = gi_row;
     const srcT* pgj = gj_row;
     destT *pgm = gm_row;
-    for (unsigned i=2;i<=ihi;++i, pgi+=gi_istep, pgj+=gj_istep,
-                                pgm+=gm_istep)
+    for (unsigned i=2; i<=ihi; ++i, pgi+=gi_istep, pgj+=gj_istep,
+                                    pgm+=gm_istep)
     {
       double gmag=vcl_sqrt(double(pgi[0]*pgi[0] + pgj[0]*pgj[0]));
       if (gmag<grad_mag_threshold) *pgm=0;
@@ -91,8 +91,8 @@ void vil_suppress_non_max_edges(const vil_image_view<srcT>& grad_i,
 #undef VIL_SUPPRESS_NON_MAX_EDGES_INSTANTIATE
 #define VIL_SUPPRESS_NON_MAX_EDGES_INSTANTIATE(srcT, destT) \
 template void vil_suppress_non_max_edges(const vil_image_view<srcT >& grad_i,\
-                                const vil_image_view<srcT >& grad_j,\
-                                double grad_mag_threshold,\
-                                vil_image_view<destT >& grad_mag)
+                                         const vil_image_view<srcT >& grad_j,\
+                                         double grad_mag_threshold,\
+                                         vil_image_view<destT >& grad_mag)
 
 #endif // vil_suppress_non_max_edges_txx_

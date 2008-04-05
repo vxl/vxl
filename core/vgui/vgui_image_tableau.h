@@ -149,8 +149,7 @@ class vgui_image_tableau
   //: Constructor - don't use this, use vgui_image_tableau_new.
   //  Creates a tableau displaying the given image view.
   vgui_image_tableau( vil_image_view_base const& img,
-                      vgui_range_map_params_sptr const& rmp = 0
- );
+                      vgui_range_map_params_sptr const& rmp = 0);
 
   //: Constructor - don't use this, use vgui_image_tableau_new.
   //  Creates a tableau displaying the given image resource.

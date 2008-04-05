@@ -64,7 +64,7 @@ vil_blocked_image_facade::fill_block(vil_image_view_base_sptr& view) const
 //border then the block pixels outside the image boundary are undefined
 vil_image_view_base_sptr
 vil_blocked_image_facade::get_block( unsigned  block_index_i,
-                                       unsigned  block_index_j ) const
+                                     unsigned  block_index_j ) const
 {
   unsigned ni = src_->ni(), nj = src_->nj();
   unsigned i0 = block_index_i*sbi_, j0 =  block_index_j*sbj_;
@@ -72,12 +72,12 @@ vil_blocked_image_facade::get_block( unsigned  block_index_i,
   //check if the view that is supplied is smaller than a block
   unsigned icrop = ni-i0, jcrop = nj-j0;
   bool needs_fill = false;
-  if(icrop>=sbi_)
+  if (icrop>=sbi_)
     icrop = sbi_;
   else
     needs_fill = true;
 
-  if(jcrop>=sbj_)
+  if (jcrop>=sbj_)
     jcrop = sbj_;
   else
     needs_fill = true;

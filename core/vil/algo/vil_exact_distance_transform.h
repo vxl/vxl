@@ -80,8 +80,8 @@ bool vil_exact_distance_transform_saito_3D(vil_image_view<vxl_uint_32> &im);
 // has been blindly adapted from a previous implementation; the original code was from
 // a legacy repository at Brown University (algo/contourtracing/signed_dt.cpp)
 //
-bool vil_exact_distance_transform_signed( vil_image_view<unsigned int> &input_image,
-    vil_image_view<float> &signed_edt_image);
+bool vil_exact_distance_transform_signed( vil_image_view<unsigned int>& input_image,
+                                          vil_image_view<float>& signed_edt_image);
 
 
 //: Naive implementation of exact Euclidean distance transform (for ground-truth)

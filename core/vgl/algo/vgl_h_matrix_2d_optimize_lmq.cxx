@@ -49,8 +49,8 @@ optimize_h(vcl_vector<vgl_homg_point_2d<double> > const& points1,
 
 bool vgl_h_matrix_2d_optimize_lmq::
 optimize_p(vcl_vector<vgl_homg_point_2d<double> > const& points1,
-          vcl_vector<vgl_homg_point_2d<double> > const& points2,
-          vgl_h_matrix_2d<double>& H)
+           vcl_vector<vgl_homg_point_2d<double> > const& points2,
+           vgl_h_matrix_2d<double>& H)
 {
   //number of points must be the same
   assert(points1.size() == points2.size());
@@ -99,8 +99,8 @@ optimize_p(vcl_vector<vgl_homg_point_2d<double> > const& points1,
 
 bool vgl_h_matrix_2d_optimize_lmq::
 optimize_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
-          vcl_vector<vgl_homg_line_2d<double> > const& lines2,
-          vgl_h_matrix_2d<double>& H)
+           vcl_vector<vgl_homg_line_2d<double> > const& lines2,
+           vgl_h_matrix_2d<double>& H)
 {
   //number of lines must be the same
   assert(lines1.size() == lines2.size());
@@ -171,10 +171,10 @@ optimize_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
 
 bool vgl_h_matrix_2d_optimize_lmq::
 optimize_pl(vcl_vector<vgl_homg_point_2d<double> > const& points1,
-           vcl_vector<vgl_homg_point_2d<double> > const& points2,
-           vcl_vector<vgl_homg_line_2d<double> > const& lines1,
-           vcl_vector<vgl_homg_line_2d<double> > const& lines2,
-           vgl_h_matrix_2d<double>& H)
+            vcl_vector<vgl_homg_point_2d<double> > const& points2,
+            vcl_vector<vgl_homg_line_2d<double> > const& lines1,
+            vcl_vector<vgl_homg_line_2d<double> > const& lines2,
+            vgl_h_matrix_2d<double>& H)
 {
   //number of points must be the same
   assert(points1.size() == points2.size());

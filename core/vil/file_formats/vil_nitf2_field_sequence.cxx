@@ -30,7 +30,7 @@ void vil_nitf2_field_sequence::insert_field( const vcl_string& str, vil_nitf2_fi
 
 bool vil_nitf2_field_sequence::
 create_array_fields(const vil_nitf2_field_definitions* field_defs,
-                     int num_dimensions)
+                    int num_dimensions)
 {
   for (vil_nitf2_field_definitions::const_iterator node = field_defs->begin();
        node != field_defs->end(); ++node)

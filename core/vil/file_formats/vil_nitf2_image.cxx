@@ -44,10 +44,10 @@ vil_image_resource_sptr  vil_nitf2_file_format::make_input_image(vil_stream *vs)
 
 vil_image_resource_sptr
   vil_nitf2_file_format::make_output_image(vil_stream* /*vs*/,
-                                          unsigned /*nx*/,
-                                          unsigned /*ny*/,
-                                          unsigned /*nplanes*/,
-                                          enum vil_pixel_format /*format*/)
+                                           unsigned /*nx*/,
+                                           unsigned /*ny*/,
+                                           unsigned /*nplanes*/,
+                                           enum vil_pixel_format /*format*/)
 {
   //write not supported
   return 0;
@@ -214,7 +214,7 @@ vil_streampos vil_nitf2_image::get_offset_to_image_data_block_band(
 
 #if 0  //Not valid if blocks are partially filled (JLM 11/03/07)
   unsigned int bytes_per_band = ni() * nj() * bits_per_pixel_per_band / 8;
-#endif 
+#endif
   // New version
   unsigned int nbi = n_block_i(), nbj = n_block_j();
   unsigned int sbi = size_block_i(), sbj = size_block_j();
@@ -446,7 +446,7 @@ unsigned int vil_nitf2_image::n_block_j() const
 }
 
 void  compute_block_and_offset(unsigned j0, unsigned long block_size,
-                                unsigned int& block, unsigned int& offset)
+                               unsigned int& block, unsigned int& offset)
 {
   block = 0;
   offset = 0;
@@ -493,7 +493,7 @@ vil_image_view_base_sptr vil_nitf2_image::get_copy_view_decimated_j2k(
 }
 
 vil_image_view_base_sptr vil_nitf2_image::get_copy_view(unsigned start_i, unsigned num_i,
-                                                         unsigned start_j, unsigned num_j) const
+                                                        unsigned start_j, unsigned num_j) const
 {
   // ACCORDING TO DOCUMENTATION, IF PARAMETERS ARE BAD, WE SHOULD RETURN NULL POINTER.
   if ((start_i + num_i > ni()) || (start_j + num_j > nj())) {
@@ -514,7 +514,7 @@ vil_image_view_base_sptr vil_nitf2_image::get_copy_view(unsigned start_i, unsign
 }
 
 vil_image_view_base_sptr vil_nitf2_image::get_copy_view_uncompressed(unsigned start_i, unsigned num_i,
-                                                                      unsigned start_j, unsigned num_j) const
+                                                                     unsigned start_j, unsigned num_j) const
 {
   return vil_blocked_image_resource::get_copy_view(start_i, num_i, start_j, num_j);
 }
@@ -615,9 +615,9 @@ vil_image_view_base_sptr get_block_vcl_internal(vil_pixel_format pix_format, vil
 
 vil_image_view_base_sptr vil_nitf2_image::get_block_j2k( unsigned int blockIndexX, unsigned int blockIndexY ) const
 {
-  if( ! is_jpeg_2000_compressed() ) return 0;
-  if( blockIndexX >= n_block_i() ) return 0;
-  if( blockIndexY >= n_block_j() ) return 0;
+  if ( ! is_jpeg_2000_compressed() ) return 0;
+  if ( blockIndexX >= n_block_i() ) return 0;
+  if ( blockIndexY >= n_block_j() ) return 0;
 
   //sometimes blocks don't align nicely with the image edge.  I'm not sure
   //if this is a bug in the file or if we need to handle it.  Anyway,
@@ -634,7 +634,7 @@ vil_image_view_base_sptr vil_nitf2_image::get_block(unsigned int block_index_x, 
 {
   if (pixel_format() == VIL_PIXEL_FORMAT_UNKNOWN) return 0;
 
-  if( is_jpeg_2000_compressed() ){
+  if ( is_jpeg_2000_compressed() ) {
     return get_block_j2k( block_index_x, block_index_y );
   }
 
@@ -811,7 +811,7 @@ bool vil_nitf2_image::get_property (char const *tag, void *property_value) const
   }
   vcl_string result;
   if (m_file_header.get_property(tag, result) ||
-    (current_image_header() && current_image_header()->get_property(tag, result)))
+      (current_image_header() && current_image_header()->get_property(tag, result)))
   {
     property_value = malloc(result.size());
     vcl_memcpy(property_value, result.c_str(), result.size());

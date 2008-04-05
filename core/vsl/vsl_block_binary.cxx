@@ -120,7 +120,7 @@ void vsl_block_binary_write_int_impl(vsl_b_ostream &os, const T* begin, vcl_size
   {
     // Do simple single block version
     vcl_size_t nbytes = vsl_convert_to_arbitrary_length(begin,
-      (unsigned char *)block.ptr, nelems);
+                                                        (unsigned char *)block.ptr, nelems);
     vsl_b_write(os, nbytes);
     os.os().write( block.ptr, nbytes);
   }
@@ -137,7 +137,7 @@ void vsl_block_binary_write_int_impl(vsl_b_ostream &os, const T* begin, vcl_size
     {
       vcl_size_t items = vcl_min(items_per_block, n);
       n_bytes += vsl_convert_to_arbitrary_length(p,
-        (unsigned char *)block.ptr, items);
+                                                 (unsigned char *)block.ptr, items);
       p += items;
       n -= items;
     }
@@ -151,7 +151,7 @@ void vsl_block_binary_write_int_impl(vsl_b_ostream &os, const T* begin, vcl_size
     {
       vcl_size_t items = vcl_min(items_per_block, n);
       vcl_size_t bytes = vsl_convert_to_arbitrary_length(p,
-        (unsigned char *)block.ptr, items );
+                                                         (unsigned char *)block.ptr, items );
       os.os().write( block.ptr, bytes);
       p += items;
       n -= items;

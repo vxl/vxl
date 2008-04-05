@@ -40,8 +40,8 @@ class vgl_conic_segment_2d
 
   //: Construct from two end points and an conic
   inline vgl_conic_segment_2d(vgl_point_2d<Type> const& p1,
-                                vgl_point_2d<Type> const& p2,
-                                vgl_conic<Type> const& conic)
+                              vgl_point_2d<Type> const& p2,
+                              vgl_conic<Type> const& conic)
     : point1_(p1), point2_(p2), conic_(conic) {}
 
   //: Destructor
@@ -59,9 +59,9 @@ class vgl_conic_segment_2d
   //: The equality comparison operator
   inline bool operator==(vgl_conic_segment_2d<Type> const& l) const {
     return this==&l ||
-            (l.conic() == conic_ &&
-                ((point1() == l.point1() && point2() == l.point2()) ||
-                 (point1() == l.point2() && point2() == l.point1()))); }
+           (l.conic() == conic_ &&
+            ((point1() == l.point1() && point2() == l.point2()) ||
+             (point1() == l.point2() && point2() == l.point1()))); }
 
   //: The inequality comparison operator.
   inline bool operator!=(vgl_conic_segment_2d<Type>const& other)const{return !operator==(other);}

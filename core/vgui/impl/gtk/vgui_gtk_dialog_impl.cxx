@@ -584,7 +584,7 @@ bool vgui_gtk_dialog_impl::ask()
 
   // Destroy widgets that weren't inserted into this dialog
   for ( vcl_vector<GtkWidget*>::iterator iter = delete_wlist.begin();
-       iter != delete_wlist.end(); ++iter ) {
+        iter != delete_wlist.end(); ++iter ) {
     gtk_widget_destroy( *iter );
   }
 

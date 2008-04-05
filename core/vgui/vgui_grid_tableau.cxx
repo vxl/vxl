@@ -369,7 +369,8 @@ void vgui_grid_tableau::set_selected(int r, int c, bool onoff)
 //  button.  It can be deselected by clicking with the middle mouse button.
 //------------------------------------------------------------------------------
 int vgui_grid_tableau::get_selected_positions(vcl_vector<int>* col_pos,
-vcl_vector<int>* row_pos, vcl_vector<int>* times)
+                                              vcl_vector<int>* row_pos,
+                                              vcl_vector<int>* times)
 {
   int nb_selected = 0;
   for (unsigned i = 0; i < nb_cols; i++)

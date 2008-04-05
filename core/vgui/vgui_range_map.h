@@ -147,11 +147,13 @@ class vgui_range_map : public vgui_range_map_params
 
   //: Initialize the byte mapping table
   vbl_array_1d<vxl_byte> compute_byte_table(const Type min, const Type max,
-                               const float gamma,  const long double ratio);
+                                            const float gamma,
+                                            const long double ratio);
 
   //: Initialize the float mapping table
   vbl_array_1d<float> compute_float_table(const Type min, const Type max,
-                             const float gamma, const long double ratio);
+                                          const float gamma,
+                                          const long double ratio);
 
   bool mapable_;           //!< input pixel type can be mapped
   bool table_mapable_;     //!< input pixel type can be mapped by a table.

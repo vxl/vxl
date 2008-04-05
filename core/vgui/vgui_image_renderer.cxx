@@ -78,8 +78,8 @@ create_buffer(vgui_range_map_params_sptr const& rmp)
   delete buffer;
 
   buffer = new vgui_section_buffer(0, 0,
-                                     the_image.width(), the_image.height(),
-                                     GL_NONE, GL_NONE);
+                                   the_image.width(), the_image.height(),
+                                   GL_NONE, GL_NONE);
   buffer->apply( the_image, rmp );
 
   buffer_params = rmp;
@@ -96,7 +96,7 @@ bool vgui_image_renderer::
 render_directly(vgui_range_map_params_sptr const& rmp)
 {
   //hardware mapping not currently supported for vil1 images
-  if(rmp)//test needed to eliminate warning of unused parameter
+  if (rmp)//test needed to eliminate warning of unused parameter
     vcl_cout << "No hardware mapping support for vil1 images\n";
   return false;
 }
@@ -130,7 +130,7 @@ bool vgui_image_renderer::
 old_range_map_params(vgui_range_map_params_sptr const& rmp)
 {
   //Cases
-  
+
   //1) Both the current params and the new params are null
   if (!buffer_params&&!rmp)
     return true;

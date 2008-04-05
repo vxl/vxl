@@ -27,13 +27,13 @@ vil_nitf2_field_definition_node::repeat_node()
 
 vil_nitf2_field_definition::
 vil_nitf2_field_definition(vcl_string tag,
-                    vcl_string pretty_name,
-                    vil_nitf2_field_formatter* formatter,
-                    bool blanks_ok,
-                    vil_nitf2_field_functor<int>* width_functor,
-                    vil_nitf2_field_functor<bool>* condition_functor,
-                    vcl_string units,
-                    vcl_string description)
+                           vcl_string pretty_name,
+                           vil_nitf2_field_formatter* formatter,
+                           bool blanks_ok,
+                           vil_nitf2_field_functor<int>* width_functor,
+                           vil_nitf2_field_functor<bool>* condition_functor,
+                           vcl_string units,
+                           vcl_string description)
   : vil_nitf2_field_definition_node(type_field),
     tag(tag), 
     pretty_name(pretty_name),

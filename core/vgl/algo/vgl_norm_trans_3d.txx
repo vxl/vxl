@@ -105,8 +105,8 @@ compute_from_points(vcl_vector<vgl_homg_point_3d<T> > const& points)
 //
 template <class T>
 void vgl_norm_trans_3d<T>::
-center_of_mass(vcl_vector<vgl_homg_point_3d<T> > const& in, T& cx, T& cy,
-T& cz)
+center_of_mass(vcl_vector<vgl_homg_point_3d<T> > const& in,
+               T& cx, T& cy, T& cz)
 {
   T cog_x = 0;
   T cog_y = 0;

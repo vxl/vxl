@@ -230,10 +230,10 @@ vil_new_pyramid_image_resource(char const* file_or_directory,
 
 vil_pyramid_image_resource_sptr
   vil_new_pyramid_image_from_base(char const* filename,
-                               vil_image_resource_sptr const& base_image,
-                               unsigned nlevels,
-                               char const* file_format,
-                               char const* temp_dir)
+                                  vil_image_resource_sptr const& base_image,
+                                  unsigned nlevels,
+                                  char const* file_format,
+                                  char const* temp_dir)
 {
   if (!file_format) // avoid segfault in strcmp()
     file_format = "tiff";
@@ -258,12 +258,11 @@ vil_pyramid_image_resource_sptr
 //for now there is only one directory based pyramid format
 vil_pyramid_image_resource_sptr
   vil_new_pyramid_image_list_from_base(char const* directory,
-                               vil_image_resource_sptr const& base_image,
-                               unsigned nlevels,
-                               bool copy_base,
-                               char const* level_file_format,
-                               char const* filename
-                               )
+                                       vil_image_resource_sptr const& base_image,
+                                       unsigned nlevels,
+                                       bool copy_base,
+                                       char const* level_file_format,
+                                       char const* filename)
 {
   vil_pyramid_image_list_format vpilf;
   return vpilf.make_pyramid_image_from_base(directory, base_image, nlevels,
@@ -298,7 +297,7 @@ vil_image_view_base_sptr vil_new_image_view_base_sptr(const vil_image_view_base&
    macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
 #endif // DOXYGEN_SHOULD_SKIP_THIS
-
+   default: /* do nothing */;
   }
   return dest;
 }

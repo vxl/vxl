@@ -190,9 +190,8 @@ class vgl_homg_operators_2d
 
   //: Return the shortest squared distance between the conic and the point
   inline static T distance_squared(vgl_conic<T> const& c,
-                                        vgl_homg_point_2d<T> const& p) {
-    return distance_squared(closest_point(c,p), p);
-  }
+                                   vgl_homg_point_2d<T> const& p)
+  { return distance_squared(closest_point(c,p), p); }
 
   //: Compute the bounding box of an ellipse
   static vgl_box_2d<T> compute_bounding_box(vgl_conic<T> const& c);

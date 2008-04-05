@@ -27,7 +27,7 @@ bool vgl_sphere_3d<T>::contains(vgl_point_3d<T> const& p) const
 // \return true if any of the line touches the sphere.
 template <class T>
 bool vgl_sphere_3d<T>::clip(const vgl_line_3d_2_points<T> & line,
-  vgl_point_3d<T> &p1, vgl_point_3d<T> &p2) const
+                            vgl_point_3d<T> &p1, vgl_point_3d<T> &p2) const
 {
   vgl_point_3d<T> cp = vgl_closest_point(line, c_);
 

@@ -105,8 +105,8 @@ vxl_uint_32 vil_nitf2_data_mask_table::blocked_image_data_offset() const
 }
 
 vxl_uint_32 vil_nitf2_data_mask_table::block_band_offset( unsigned int block_x,
-                                                           unsigned int block_y,
-                                                           int band ) const
+                                                          unsigned int block_y,
+                                                          int band ) const
 {
   int band_to_use = i_mode == "S" ? band : 0;
   assert( block_x < BMR_n_BND_m.size() &&
@@ -118,8 +118,8 @@ vxl_uint_32 vil_nitf2_data_mask_table::block_band_offset( unsigned int block_x,
 }
 
 vxl_uint_32 vil_nitf2_data_mask_table::pad_pixel( unsigned int block_x,
-                                                   unsigned int block_y,
-                                                   int band ) const
+                                                  unsigned int block_y,
+                                                  int band ) const
 {
   int band_to_use = i_mode == "S" ? band : 0;
   assert( block_x < TMR_n_BND_m.size() &&
@@ -161,7 +161,7 @@ void swap64(char *a, unsigned n)
 #endif
 
 void vil_nitf2_data_mask_table::maybe_endian_swap( char* a, unsigned size_of_a_in_bytes,
-                                                    vil_pixel_format pix_format )
+                                                   vil_pixel_format pix_format )
 {
 #if VXL_LITTLE_ENDIAN
   maybe_endian_swap( a, size_of_a_in_bytes, vil_pixel_format_sizeof_components( pix_format ) );
@@ -173,7 +173,7 @@ void vil_nitf2_data_mask_table::maybe_endian_swap( char* a, unsigned size_of_a_i
 }
 
 void vil_nitf2_data_mask_table::maybe_endian_swap( char* a, unsigned size_of_a_in_bytes,
-                                                    unsigned int bytesPerSample )
+                                                   unsigned int bytesPerSample )
 {
 #if VXL_LITTLE_ENDIAN
   switch ( bytesPerSample )

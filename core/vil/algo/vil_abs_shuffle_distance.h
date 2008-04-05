@@ -28,9 +28,9 @@ inline double vil_abs_shuffle_distance(T1 v0, const T2* im,
 //  Checks boundary overlap.
 template <class T1, class T2>
 inline double vil_abs_shuffle_distance(T1 v0, const vil_image_view<T2>& image,
-                             unsigned plane,
-                             const vil_structuring_element& element,
-                             int i0, int j0)
+                                       unsigned plane,
+                                       const vil_structuring_element& element,
+                                       int i0, int j0)
 {
   double min_v=9e99;
   unsigned n = element.p_i().size();

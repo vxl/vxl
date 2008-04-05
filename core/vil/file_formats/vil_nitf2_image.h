@@ -1,11 +1,12 @@
+//:
+// \file
 // vil_nitf2: Written by Rob Radtke (rob@) and Harry Voorhees (hlv@) of
 // Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
 #ifndef VIL_NITF2_IMAGE_H
 #define VIL_NITF2_IMAGE_H
-//:
-// \file
+
 #include <vil/vil_blocked_image_resource.h>
 
 #include <vcl_vector.h>
@@ -203,7 +204,9 @@ class vil_nitf2_image : public vil_blocked_image_resource
   // If this block isn't present in the stream (ie. it's all blank), then
   // I'll return 0;
   vil_streampos get_offset_to_image_data_block_band( unsigned int imageIndex,
-    unsigned int blockIndexX,unsigned int blockIndexY, int bandIndex ) const;
+                                                     unsigned int blockIndexX,
+                                                     unsigned int blockIndexY,
+                                                     int bandIndex ) const;
 
   //main file header
   vil_nitf2_header m_file_header;

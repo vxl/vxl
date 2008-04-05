@@ -37,9 +37,9 @@ vil_pyramid_image_list_format::make_pyramid_output_image(char const* file)
 }
 
 static bool copy_base_resc(vil_image_resource_sptr const& base_image,
-                      vcl_string full_filename,
-                      char const* file_format,
-                      vil_blocked_image_resource_sptr& copy)
+                           vcl_string full_filename,
+                           char const* file_format,
+                           vil_blocked_image_resource_sptr& copy)
 {
   { //scope for closing resource
   //Create a new blocked base image resource
@@ -306,12 +306,12 @@ vil_pyramid_image_list::get_copy_view(unsigned i0, unsigned n_i,
                                       unsigned level) const
 {
   if (level>=this->nlevels())
-    {
-      vcl_cerr << "pyramid_image_list::get_copy_view(.) level = " 
-               << level << " max level = "
-               << this->nlevels() -1 << '\n';
-      return 0;
-    }
+  {
+    vcl_cerr << "pyramid_image_list::get_copy_view(.) level = "
+             << level << " max level = "
+             << this->nlevels() -1 << '\n';
+    return 0;
+  }
   pyramid_level* pl = levels_[level];
   float actual_scale = pl->scale_;
 
@@ -324,15 +324,15 @@ vil_pyramid_image_list::get_copy_view(unsigned i0, unsigned n_i,
   unsigned snj = static_cast<unsigned>(fnj);
   if (snj == 0) snj = 1;//can't have less than one pixel
   vil_image_view_base_sptr v = pl->image_->get_copy_view(si0, sni, sj0, snj);
-  if(!v)
-    {
-      vcl_cerr << "pyramid_image_list::get_copy_view(.) level = " 
-               << level << "(i0,j0):(" 
-               << i0 << ' ' << j0 << ") (ni, nj):(" 
-               << n_i << ' ' << n_j << ")\n";
-      vcl_cerr << "Get copy view from level image failed\n";
-      return 0;
-    }
+  if (!v)
+  {
+    vcl_cerr << "pyramid_image_list::get_copy_view(.) level = "
+             << level << "(i0,j0):("
+             << i0 << ' ' << j0 << ") (ni, nj):("
+             << n_i << ' ' << n_j << ")\n"
+             << "Get copy view from level image failed\n";
+    return 0;
+  }
   return v;
 }
 

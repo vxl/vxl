@@ -73,18 +73,18 @@ double vil_abs_shuffle_distance(const vil_image_view<T1>& image1,
     for (int i=ilo;i<=ihi;++i,p1+=istep1,p2+=istep2)
       sum += vil_abs_shuffle_distance(*p1,p2,&offset[0],offset.size());
   }
-  
+
   int np = ni*nj;
   if (!include_borders) np = (1+ihi-ilo)*(1+jhi-jlo);
-  
+
   return sum/np;
 }
 
 #undef VIL_ABS_SHUFFLE_DISTANCE_INSTANTIATE
 #define VIL_ABS_SHUFFLE_DISTANCE_INSTANTIATE( T1, T2 ) \
 template double vil_abs_shuffle_distance(const vil_image_view< T1 >& image1, \
-                                  const vil_image_view< T2 >& image2, \
-                                  const vil_structuring_element& element, \
-                                  bool include_borders)
+                                         const vil_image_view< T2 >& image2, \
+                                         const vil_structuring_element& element, \
+                                         bool include_borders)
 
 #endif // vil_abs_shuffle_distance_txx_

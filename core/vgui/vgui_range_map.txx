@@ -67,7 +67,7 @@ map_pixel_byte(const Type pix, const Type min, const Type max,
 template <class Type>
 float vgui_range_map<Type>::
 map_pixel_float(const Type pix, const Type min, const Type max,
-               const float gamma, const long double ratio)
+                const float gamma, const long double ratio)
 {
   if (vil_pixel_traits<Type>::num_bits()==1)
     if (pix)

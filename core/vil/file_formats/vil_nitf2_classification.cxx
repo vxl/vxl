@@ -15,11 +15,11 @@ vil_nitf2_classification::type_field_defs_map & vil_nitf2_classification::s_fiel
 {
   class type_field_defs_map_t : public vil_nitf2_classification::type_field_defs_map
   {
-  public:
+   public:
     ~type_field_defs_map_t()
     {
-      for( iterator it = begin(), last = end(); 
-        it != last; it++ )
+      for (iterator it = begin(), last = end();
+           it != last; it++ )
       {
         delete it->second;
       }

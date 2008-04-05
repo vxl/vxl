@@ -1275,9 +1275,9 @@ vgl_point_3d<double> vgl_triangle_3d_closest_point(
 // Compute the distance to the closest point on a triangle from a reference point.
 //=======================================================================
 double vgl_triangle_3d_distance(const vgl_point_3d<double>& q,
-  const vgl_point_3d<double>& p1,
-  const vgl_point_3d<double>& p2,
-  const vgl_point_3d<double>& p3)
+                                const vgl_point_3d<double>& p1,
+                                const vgl_point_3d<double>& p2,
+                                const vgl_point_3d<double>& p3)
 {
   vgl_point_3d<double> c = vgl_triangle_3d_closest_point(q, p1, p2, p3);
   return vgl_distance(c, q);
@@ -1288,12 +1288,12 @@ double vgl_triangle_3d_distance(const vgl_point_3d<double>& q,
 //  The triangles are represented by their respective vertices \a a_p1, \a a_p2, \a a_p3
 //  and \a b_p1, \a b_p2, \a b_p3
 bool vgl_triangle_3d_triangle_coplanar(
-  const vgl_point_3d<double>& a_p1,
-  const vgl_point_3d<double>& a_p2,
-  const vgl_point_3d<double>& a_p3,
-  const vgl_point_3d<double>& b_p1,
-  const vgl_point_3d<double>& b_p2,
-  const vgl_point_3d<double>& b_p3)
+                            const vgl_point_3d<double>& a_p1,
+                            const vgl_point_3d<double>& a_p2,
+                            const vgl_point_3d<double>& a_p3,
+                            const vgl_point_3d<double>& b_p1,
+                            const vgl_point_3d<double>& b_p2,
+                            const vgl_point_3d<double>& b_p3)
 {
   return coplanar(a_p1,b_p1,b_p2,b_p3) && coplanar(a_p2,b_p1,b_p2,b_p3) && coplanar(a_p3,b_p1,b_p2,b_p3);
 }
@@ -1301,10 +1301,9 @@ bool vgl_triangle_3d_triangle_coplanar(
 //=======================================================================
 //: Compute the area of a triangle
 //  The triangle is represented by its vertices \a p1, \a p2, \a p3
-double vgl_triangle_3d_area(
-  const vgl_point_3d<double> &p0,
-  const vgl_point_3d<double> &p1,
-  const vgl_point_3d<double> &p2 )
+double vgl_triangle_3d_area(const vgl_point_3d<double> &p0,
+                            const vgl_point_3d<double> &p1,
+                            const vgl_point_3d<double> &p2 )
 {
   vgl_vector_3d<double> edge_vector0;
   edge_vector0 = p0 - p1;

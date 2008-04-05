@@ -45,8 +45,7 @@ class vil_pyramid_image_list_format : public vil_file_format
                                unsigned nlevels,
                                bool copy_base,
                                char const* level_file_format,
-                               char const* filename
-                              );
+                               char const* filename);
 
   //: A non-pyramid output image doesn't make sense here
   virtual vil_image_resource_sptr make_output_image(vil_stream* vs,

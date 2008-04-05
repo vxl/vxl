@@ -40,11 +40,10 @@ class vgl_norm_trans_3d: public vgl_h_matrix_3d<T>
   //: compute the normalizing transform
   bool compute_from_points(vcl_vector<vgl_homg_point_3d<T> > const& points);
 
- protected :
-  //Utility functions
+ protected : // --- Utility functions -----------------------------------------
 
   static bool scale_xyzroot2(vcl_vector<vgl_homg_point_3d<T> > const& in,
-                            T& radius);
+                             T& radius);
 
   static void center_of_mass(vcl_vector<vgl_homg_point_3d<T> > const& points,
                              T& cx, T& cy, T& cz);

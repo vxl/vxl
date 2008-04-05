@@ -216,9 +216,8 @@ inline void vil_convolve_1d(const srcT* src0, unsigned nx, vcl_ptrdiff_t s_step,
   assert(k_rbegin >= k_rend);
   const srcT* src = src0;
 
-  
   for (destT       * dest = dest0 + d_step*k_hi,
-         * const end_dest = dest0 + d_step*(int(nx)+k_lo);
+       * const   end_dest = dest0 + d_step*(int(nx)+k_lo);
        dest!=end_dest;
        dest+=d_step,src+=s_step)
   {

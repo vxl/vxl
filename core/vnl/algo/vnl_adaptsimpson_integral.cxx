@@ -17,7 +17,8 @@ double vnl_adaptsimpson_integral::integral(vnl_integrant_fnct* f, double a,
 }
 
 double vnl_adaptsimpson_integral::adaptivesimpson(double(*f)(double*),
-                       double a, double b, double eps, int level, int level_max)
+                                                  double a, double b, double eps,
+                                                  int level, int level_max)
 {
   double c, d, e, h, result;
   double one_simpson, two_simpson;

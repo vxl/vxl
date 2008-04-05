@@ -263,27 +263,27 @@ void vnl_sparse_matrix<T>::pre_mult(const vnl_vector<T>& lhs, vnl_vector<T>& res
   // Now, iterate over lhs values and rows of rhs
   unsigned lhs_col_id = 0;
   for (typename vcl_vector<row>::const_iterator rhs_row_iter = elements.begin();
-        rhs_row_iter != elements.end();
-        ++rhs_row_iter, lhs_col_id++ )
+       rhs_row_iter != elements.end();
+       ++rhs_row_iter, lhs_col_id++ )
+  {
+    // Get the row from rhs matrix.
+    row const & rhs_row = *rhs_row_iter;
+
+    // Skip to next row if empty.
+    if (rhs_row.empty()) continue;
+
+    // Iterate over values in rhs row
+    for (typename row::const_iterator rhs_col_iter = rhs_row.begin();
+         rhs_col_iter != rhs_row.end();
+         ++rhs_col_iter)
     {
-      // Get the row from rhs matrix.
-      row const & rhs_row = *rhs_row_iter;
+      // Get the element from the row.
+      vnl_sparse_matrix_pair<T> const& entry = *rhs_col_iter;
+      unsigned const rhs_col_id = entry.first;
 
-      // Skip to next row if empty.
-      if (rhs_row.empty()) continue;
-
-      // Iterate over values in rhs row
-      for (typename row::const_iterator rhs_col_iter = rhs_row.begin();
-           rhs_col_iter != rhs_row.end();
-           ++rhs_col_iter)
-        {
-          // Get the element from the row.
-          vnl_sparse_matrix_pair<T> const& entry = *rhs_col_iter;
-          unsigned const rhs_col_id = entry.first;
-
-          result[ rhs_col_id ] += lhs[ lhs_col_id ] * entry.second;
-        }
+      result[ rhs_col_id ] += lhs[ lhs_col_id ] * entry.second;
     }
+  }
 }
 
 //------------------------------------------------------------
@@ -513,12 +513,12 @@ template <class T>
 void vnl_sparse_matrix<T>::resize( int r, int c)
 {
   unsigned int oldCs = cs_;
-  
+
   rs_ = r;
   cs_ = c;
   elements.resize(r);
 
-  // If the array has fewer columns now, we also need to cut them out  
+  // If the array has fewer columns now, we also need to cut them out
   if (oldCs > cs_){
     for (unsigned int r = 0; r < elements.size(); r++){
       row& rw = elements[r];
@@ -527,7 +527,7 @@ void vnl_sparse_matrix<T>::resize( int r, int c)
       if (iter != rw.end()) rw.erase(iter,rw.end());
     }
   }
-  
+
   reset(); // reset iterator
 }
 

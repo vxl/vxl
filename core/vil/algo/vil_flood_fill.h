@@ -12,19 +12,19 @@
 
 //: Search along i direction either side for limits of pixels matching v
 //  Fills in all such pixels with new_v.  Returns limits in ilo and ihi
-template<class T> 
+template<class T>
 inline void vil_flood_fill_row(vil_image_view<T>& image,
-                     unsigned i, unsigned j,
-                     T v, T new_v,
-                     unsigned& ilo, unsigned& ihi)
+                               unsigned i, unsigned j,
+                               T v, T new_v,
+                               unsigned& ilo, unsigned& ihi)
 {
   T* row=image.top_left_ptr() + j*image.jstep();
   unsigned ni1=image.ni()-1;
   vcl_ptrdiff_t istep=image.istep();
-  ilo=i; 
+  ilo=i;
   T* p=row+(i-1)*istep;
   while (ilo>0 && *p==v) { ilo--; *p=new_v; p-=istep; }
-  ihi=i; 
+  ihi=i;
   p=row+(i+1)*istep;
   while (ihi<ni1 && *p==v) { ihi++; *p=new_v; p+=istep;}
 }
@@ -63,14 +63,14 @@ void vil_flood_fill4(vil_image_view<T>& image,
       {
         // Consider row above
         for (unsigned i1=ilo;i1<=ihi;++i1)
-          if (image(i1,j-1)==v) 
+          if (image(i1,j-1)==v)
             q.push_back(vcl_pair<unsigned,unsigned>(i1,j-1));
       }
       if (j<nj1)
       {
         // Consider row below
         for (unsigned i1=ilo;i1<=ihi;++i1)
-          if (image(i1,j+1)==v) 
+          if (image(i1,j+1)==v)
             q.push_back(vcl_pair<unsigned,unsigned>(i1,j+1));
       }
     }
@@ -83,7 +83,7 @@ void vil_flood_fill4(vil_image_view<T>& image,
 //  containing (seed_i,seed_j), and change their values to new_v
 //
 //  On exit region is filled with a set of image chords which cover the
-//  region.  
+//  region.
 //
 //  Note, currently uses inefficient (x,y) access to image. Could be improved
 //  using fast pointer access to work along the rows.
@@ -119,14 +119,14 @@ void vil_flood_fill4(vil_image_view<T>& image,
       {
         // Consider row above
         for (unsigned i1=ilo;i1<=ihi;++i1)
-          if (image(i1,j-1)==v) 
+          if (image(i1,j-1)==v)
             q.push_back(vcl_pair<unsigned,unsigned>(i1,j-1));
       }
       if (j<nj1)
       {
         // Consider row below
         for (unsigned i1=ilo;i1<=ihi;++i1)
-          if (image(i1,j+1)==v) 
+          if (image(i1,j+1)==v)
             q.push_back(vcl_pair<unsigned,unsigned>(i1,j+1));
       }
     }
@@ -172,14 +172,14 @@ void vil_flood_fill8(vil_image_view<T>& image,
       {
         // Consider row above
         for (unsigned i1=ilo;i1<=ihi;++i1)
-          if (image(i1,j-1)==v) 
+          if (image(i1,j-1)==v)
             q.push_back(vcl_pair<unsigned,unsigned>(i1,j-1));
       }
       if (j<nj1)
       {
         // Consider row below
         for (unsigned i1=ilo;i1<=ihi;++i1)
-          if (image(i1,j+1)==v) 
+          if (image(i1,j+1)==v)
             q.push_back(vcl_pair<unsigned,unsigned>(i1,j+1));
       }
     }
@@ -192,7 +192,7 @@ void vil_flood_fill8(vil_image_view<T>& image,
 //  containing (seed_i,seed_j), and change their values to new_v
 //
 //  On exit region is filled with a set of image chords which cover the
-//  region. 
+//  region.
 //
 //  Note, currently uses inefficient (x,y) access to image. Could be improved
 //  using fast pointer access to work along the rows.
@@ -231,14 +231,14 @@ void vil_flood_fill8(vil_image_view<T>& image,
       {
         // Consider row above
         for (unsigned i1=ilo;i1<=ihi;++i1)
-          if (image(i1,j-1)==v) 
+          if (image(i1,j-1)==v)
             q.push_back(vcl_pair<unsigned,unsigned>(i1,j-1));
       }
       if (j<nj1)
       {
         // Consider row below
         for (unsigned i1=ilo;i1<=ihi;++i1)
-          if (image(i1,j+1)==v) 
+          if (image(i1,j+1)==v)
             q.push_back(vcl_pair<unsigned,unsigned>(i1,j+1));
       }
     }

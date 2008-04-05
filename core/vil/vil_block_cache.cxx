@@ -22,8 +22,8 @@ vil_block_cache::~vil_block_cache()
 
 //:add a block to the buffer.
 bool vil_block_cache::add_block(const unsigned& block_index_i,
-                                 const unsigned& block_index_j,
-                                 vil_image_view_base_sptr const& blk)
+                                const unsigned& block_index_j,
+                                vil_image_view_base_sptr const& blk)
 {
   //create a cell
 
@@ -37,8 +37,8 @@ bool vil_block_cache::add_block(const unsigned& block_index_i,
 }
 
 bool vil_block_cache::get_block(const unsigned& block_index_i,
-                                 const unsigned& block_index_j,
-                                 vil_image_view_base_sptr& blk) const
+                                const unsigned& block_index_j,
+                                vil_image_view_base_sptr& blk) const
 {
   bool found = false;
   for (vcl_vector<bcell*>::const_iterator bit=blocks_.begin(); bit!= blocks_.end()&&!found; ++bit)

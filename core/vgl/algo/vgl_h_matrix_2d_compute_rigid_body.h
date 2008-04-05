@@ -45,9 +45,9 @@ class vgl_h_matrix_2d_compute_rigid_body : public vgl_h_matrix_2d_compute
                   vgl_h_matrix_2d<double>& H);
   //:Assumes all corresponding points have equal weight
   bool solve_rigid_body_problem(int equ_count,
-                            vcl_vector<vgl_homg_point_2d<double> > const& p1,
-                            vcl_vector<vgl_homg_point_2d<double> > const& p2,
-                            vgl_h_matrix_2d<double>& H);
+                                vcl_vector<vgl_homg_point_2d<double> >const& p1,
+                                vcl_vector<vgl_homg_point_2d<double> >const& p2,
+                                vgl_h_matrix_2d<double>& H);
 
 
  public:

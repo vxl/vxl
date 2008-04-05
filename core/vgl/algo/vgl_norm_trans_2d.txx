@@ -227,7 +227,7 @@ scale_xyroot2(vcl_vector<vgl_homg_point_2d<T> > const& in, T& radius)
 template <class T>
 bool vgl_norm_trans_2d<T>::
 scale_aniostropic(vcl_vector<vgl_homg_point_2d<T> > const& in,
-                       T& sdx, T& sdy, T& c, T& s)
+                  T& sdx, T& sdy, T& c, T& s)
 {
   T tol = T(1e-06);
   unsigned count = 0;

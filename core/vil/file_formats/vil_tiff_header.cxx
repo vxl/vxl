@@ -108,24 +108,24 @@ bool vil_tiff_header::read_header()
   read_short_tag(tif_,TIFFTAG_CELLWIDTH, cell_width);
   color_map_valid = false;
   if (bits_per_sample.valid &&
-     photometric.valid &&
-     photometric.val == PHOTOMETRIC_PALETTE)
+      photometric.valid &&
+      photometric.val == PHOTOMETRIC_PALETTE)
+  {
+    vxl_uint_16* cm[3];
+    TIFFGetField(tif_,TIFFTAG_COLORMAP, &cm[0], &cm[1], &cm[2]);
+    unsigned size = 1<<bits_per_sample.val;
+    color_map.resize(size);
+    for (unsigned i = 0; i<size; ++i)
     {
-      vxl_uint_16* cm[3];
-      TIFFGetField(tif_,TIFFTAG_COLORMAP, &cm[0], &cm[1], &cm[2]);
-      unsigned size = 1<<bits_per_sample.val;
-      color_map.resize(size);
-      for (unsigned i = 0; i<size; ++i)
-      {
-        vcl_vector<vxl_uint_16> rgb(3);
-        rgb[0]=cm[0][i];  rgb[1]=cm[1][i];  rgb[2]=cm[2][i];
-        color_map[i] = rgb;
+      vcl_vector<vxl_uint_16> rgb(3);
+      rgb[0]=cm[0][i];  rgb[1]=cm[1][i];  rgb[2]=cm[2][i];
+      color_map[i] = rgb;
 #ifdef DEBUG
-        vcl_cout << "RGB[" << i << "]=(" << rgb[0] << ' ' << rgb[1] << ' ' << rgb[2] << ")\n";
+      vcl_cout << "RGB[" << i << "]=(" << rgb[0] << ' ' << rgb[1] << ' ' << rgb[2] << ")\n";
 #endif
-      }
-      color_map_valid = true;
     }
+    color_map_valid = true;
+  }
   read_short_tag(tif_,TIFFTAG_COMPRESSION, compression);
   read_string(tif_,TIFFTAG_COPYRIGHT, copyright);
   read_string(tif_,TIFFTAG_DATETIME,date_time);
@@ -333,8 +333,7 @@ bool vil_tiff_header::compute_pixel_format()
 {
   //also need sample_format.valid but use default (1) for images that don't have it
   if (!(bits_per_sample.valid) || !(samples_per_pixel.valid) ||
-      !(planar_config.valid) || !photometric.valid
-     )
+      !(planar_config.valid) || !photometric.valid           )
   {
     pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
     return false;

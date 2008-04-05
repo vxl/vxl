@@ -7,7 +7,7 @@
 // \brief  See vgui_gtk_adaptor.h for a description of this file.
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   19 Dec 99
-// 
+//
 // \verbatim
 //  Modifications
 //   04-OCT-2002 K.Y.McGaul - Use event.set_key() to set key for events,
@@ -51,7 +51,7 @@ vgui_gtk_adaptor::vgui_gtk_adaptor(vgui_gtk_window* win)
                                  GDK_GL_BLUE_SIZE, 8,
                                  //GDK_GL_ALPHA_SIZE, 8,
                                  GDK_GL_DEPTH_SIZE,1,
-                                     GDK_GL_NONE); // last argument must be GDK_GL_NONE
+                                 GDK_GL_NONE); // last argument must be GDK_GL_NONE
   if (!widget) {
     widget = gtk_gl_area_new_vargs(0/*NULL*/,         // no sharing
                                    GDK_GL_RGBA,
@@ -172,16 +172,16 @@ void vgui_gtk_adaptor::kill_timer(int name)
 {
   vcl_map<int, internal_timer>::iterator it
     = timers_.find( name );
-  if( it == timers_.end() )  // if such timer does not exist
+  if ( it == timers_.end() )  // if such timer does not exist
     return;
-  
+
   internal_timer timer;
   timer = (*it).second;
   // remove timer
   gtk_timeout_remove(timer.real_id_);
   // remove callback ptr
   delete  (vgui_gtk_adaptor_callback_data*)(timer.callback_ptr_);
-  
+
   // remove timer from map
   timers_.erase(it);
 }

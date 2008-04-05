@@ -1,5 +1,5 @@
 // vil_nitf2: Written by Harry Voorhees (hlv@) and Rob Radtke (rob@) of
-// Stellar Science Ltd. Co. (stellarscience.com) for 
+// Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
 #include "vil_nitf2_tagged_record_definition.h"
@@ -14,7 +14,7 @@ vil_nitf2_tagged_record_definition::tagged_record_definition_map&
 {
   class tagged_record_definition_map_t: public vil_nitf2_tagged_record_definition::tagged_record_definition_map
   {
-  public:
+   public:
     ~tagged_record_definition_map_t()
     {
       for (iterator it = begin(), last = end(); it != last; it++) {
@@ -29,8 +29,8 @@ vil_nitf2_tagged_record_definition::tagged_record_definition_map&
 
 
 vil_nitf2_tagged_record_definition::vil_nitf2_tagged_record_definition(
-  vcl_string name, vcl_string pretty_name, vil_nitf2_field_definitions* defs) 
-  : m_name(name), 
+  vcl_string name, vcl_string pretty_name, vil_nitf2_field_definitions* defs)
+  : m_name(name),
     m_pretty_name(pretty_name),
     m_field_definitions(defs ? defs : new vil_nitf2_field_definitions()),
     m_definition_completed(false)
@@ -40,7 +40,7 @@ vil_nitf2_tagged_record_definition::vil_nitf2_tagged_record_definition(
 vil_nitf2_tagged_record_definition& vil_nitf2_tagged_record_definition::define(
   vcl_string name, vcl_string pretty_name)
 {
-  vil_nitf2_tagged_record_definition* definition = 
+  vil_nitf2_tagged_record_definition* definition =
     new vil_nitf2_tagged_record_definition(name, pretty_name);
   if (all_definitions().find(name) != all_definitions().end()) {
     throw("vil_nitf2_tagged_record_definition already defined.");
@@ -74,31 +74,31 @@ vil_nitf2_tagged_record_definition& vil_nitf2_tagged_record_definition::field(
     vcl_cerr << "vil_nitf2_tagged_record_definition:field() failed; definition already complete.";
   } else {
     vil_nitf2_field_definition* field_definition = new vil_nitf2_field_definition(
-      tag, pretty_name, formatter, blanks_ok, 
+      tag, pretty_name, formatter, blanks_ok,
       width_functor, condition_functor, units, description);
     m_field_definitions->push_back(field_definition);
   }
   return *this;
 }
 
-vil_nitf2_tagged_record_definition& 
+vil_nitf2_tagged_record_definition&
 vil_nitf2_tagged_record_definition::repeat(vil_nitf2_field_functor<int>* repeat_functor,
-                                   vil_nitf2_field_definitions& field_definitions)
+                                           vil_nitf2_field_definitions& field_definitions)
 {
   if (m_definition_completed) {
     vcl_cerr << "vil_nitf2_tagged_record_definition:repeat() failed; definition already complete.";
   } else {
     m_field_definitions->push_back(
       new vil_nitf2_field_definition_repeat_node(
-        repeat_functor, 
+        repeat_functor,
         new vil_nitf2_field_definitions(field_definitions)));
   }
   return *this;
 }
 
-void vil_nitf2_tagged_record_definition::end() 
-{ 
-  m_definition_completed = true; 
+void vil_nitf2_tagged_record_definition::end()
+{
+  m_definition_completed = true;
 }
 
 vil_nitf2_tagged_record_definition* vil_nitf2_tagged_record_definition::find(vcl_string name)
@@ -116,13 +116,13 @@ vil_nitf2_tagged_record_definition::~vil_nitf2_tagged_record_definition()
 vil_nitf2_tagged_record_definition& vil_nitf2_tagged_record_definition::repeat(
   vcl_string int_tag, vil_nitf2_field_definitions& field_definitions)
 {
-  return repeat(new vil_nitf2_field_value<int>(int_tag), field_definitions); 
+  return repeat(new vil_nitf2_field_value<int>(int_tag), field_definitions);
 }
 
 vil_nitf2_tagged_record_definition& vil_nitf2_tagged_record_definition::repeat(
   int repeat_count, vil_nitf2_field_definitions& field_definitions)
-{ 
-  return repeat(new vil_nitf2_constant_functor<int>(repeat_count), field_definitions); 
+{
+  return repeat(new vil_nitf2_constant_functor<int>(repeat_count), field_definitions);
 }
 
 void vil_nitf2_tagged_record_definition::register_test_tre()

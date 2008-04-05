@@ -23,7 +23,7 @@ static void test_plane_intersection()
 
   const double inf = vcl_numeric_limits<double>::infinity();
   TEST("vgl_intersection(l2,pl1) = (inf,inf,inf)", pt2,
-    vgl_point_3d<double>(inf, inf, inf));
+       vgl_point_3d<double>(inf, inf, inf));
 
   vgl_line_3d_2_points<double> l3(vgl_point_3d<double>(0,10,0),vgl_point_3d<double>(10,10,-10));
   vgl_point_3d<double> pt3 = vgl_intersection(l3,pl1);

@@ -349,10 +349,9 @@ void vgui_parent_child_link::get_parents_of (vgui_tableau_sptr const& tab,
     parents->push_back(vec[i]);
 #else
   for (vcl_set<void*>::iterator i=vgui_parent_child_link_impl::all->begin();
-    i!=vgui_parent_child_link_impl::all->end(); ++i)
-    {
-    vgui_parent_child_link_impl *ptr
-      = static_cast<vgui_parent_child_link_impl*>(*i);
+       i!=vgui_parent_child_link_impl::all->end(); ++i)
+  {
+    vgui_parent_child_link_impl *ptr = static_cast<vgui_parent_child_link_impl*>(*i);
     if ( ptr->child() == tab.operator->() )
       children->push_back( ptr->parent() );
   }
@@ -372,7 +371,7 @@ void vgui_parent_child_link::replace_child_everywhere(vgui_tableau_sptr const &o
     vcl_cerr << "vgui_parent_child_link::replace_child_everywhere: old_child == new_child\n";
 
   for (vcl_set<void*>::iterator i=vgui_parent_child_link_impl::all->begin();
-    i!=vgui_parent_child_link_impl::all->end(); ++i)
+       i!=vgui_parent_child_link_impl::all->end(); ++i)
   {
     vgui_parent_child_link_impl *ptr
       = static_cast<vgui_parent_child_link_impl*>(*i);

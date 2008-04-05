@@ -148,7 +148,6 @@ void vil_resample_bilin(const vil_image_view<sType>& src_image,
 }
 
 
-
 //: Sample grid of points in one image and place in another, using bilinear interpolation.
 //  dest_image(i,j,p) is sampled from the src_image at
 //  (x0+i.dx1+j.dx2,y0+i.dy1+j.dy2), where i=[0..n1-1], j=[0..n2-1]
@@ -258,8 +257,8 @@ void vil_resample_bilin_edge_extend(
 //: Resample image to a specified width (n1) and height (n2)
 template <class sType, class dType>
 void vil_resample_bilin_edge_extend(const vil_image_view<sType>& src_image,
-                        vil_image_view<dType>& dest_image,
-                        int n1, int n2)
+                                    vil_image_view<dType>& dest_image,
+                                    int n1, int n2)
 {
   double f= 0.9999999; // so sampler doesn't go off edge of image
   double x0=0;
@@ -280,12 +279,11 @@ template void vil_resample_bilin(const vil_image_view<sType >& src_image, \
                                  vil_image_view<dType >& dest_image, \
                                  int n1, int n2); \
 template void vil_resample_bilin_edge_extend(const vil_image_view<sType >& src_image, \
-                                 vil_image_view<dType >& dest_image, \
-                                 double x0, double y0, double dx1, double dy1, \
-                                 double dx2, double dy2, int n1, int n2); \
+                                             vil_image_view<dType >& dest_image, \
+                                             double x0, double y0, double dx1, double dy1, \
+                                             double dx2, double dy2, int n1, int n2); \
 template void vil_resample_bilin_edge_extend(const vil_image_view<sType >& src_image, \
-                                 vil_image_view<dType >& dest_image, \
-                                 int n1, int n2)
-
+                                             vil_image_view<dType >& dest_image, \
+                                             int n1, int n2)
 
 #endif // vil_resample_bilin_txx_

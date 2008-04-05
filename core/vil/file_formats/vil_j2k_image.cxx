@@ -38,10 +38,10 @@ vil_image_resource_sptr  vil_j2k_file_format::make_input_image(vil_stream *vs)
 
 vil_image_resource_sptr
   vil_j2k_file_format::make_output_image(vil_stream* /*vs*/,
-                                          unsigned /*nx*/,
-                                          unsigned /*ny*/,
-                                          unsigned /*nplanes*/,
-                                          enum vil_pixel_format /*format*/)
+                                         unsigned /*nx*/,
+                                         unsigned /*ny*/,
+                                         unsigned /*nplanes*/,
+                                         enum vil_pixel_format /*format*/)
 {
   //write not supported
   return 0;
@@ -106,7 +106,7 @@ vil_j2k_image::vil_j2k_image( const vcl_string& fileOrUrl )
     return;
   }
   if ( fileOrUrl.substr( 0, 7 ) == "ecwp://" ||
-      fileOrUrl.substr( 0, 7 ) == "ECWP://" )
+       fileOrUrl.substr( 0, 7 ) == "ECWP://" )
   {
     mRemoteFile = true;
   }
@@ -185,8 +185,8 @@ vil_j2k_image::get_copy_view_decimated_by_size(unsigned sample0,
                                                unsigned int output_height) const
 {
   if ( !( mFileResource ) ||
-      !( ( sample0 + num_samples - 1 ) < ni() &&
-         ( line0 + numLines - 1 ) < nj() ) )
+       !( ( sample0 + num_samples - 1 ) < ni() &&
+          ( line0 + numLines - 1 ) < nj() ) )
   {
     return 0;
   }

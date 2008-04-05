@@ -630,7 +630,8 @@ view_from_buffer(vil_pixel_format& fmt, vil_memory_chunk_sptr const& buf,
    case FORMAT: { \
     vil_image_view_base_sptr view; \
     buf_out = tiff_maybe_byte_align_data<T>(buf, samples_per_block, \
-      bits_per_sample, samples_per_block*vil_pixel_format_sizeof_components(fmt)); \
+                                            bits_per_sample, \
+                                            samples_per_block*vil_pixel_format_sizeof_components(fmt)); \
     view = new vil_image_view<T>(buf_out, reinterpret_cast<T*>(buf_out->data()), \
                                  size_block_i(), size_block_j(), \
                                  spp, spp, size_block_i()*spp, 1); \

@@ -78,7 +78,7 @@ void vsl_print_summary(vcl_ostream& os,const vbl_sparse_array_base<T, Index> & p
   int k=0;
 
   for (typename vbl_sparse_array_base<T, Index>::const_iterator s = p.begin();
-      s != p.end() && k<5; ++s)
+       s != p.end() && k<5; ++s)
   {
     k++;
     os << ' ';

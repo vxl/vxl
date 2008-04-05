@@ -80,19 +80,19 @@ class vil_nitf2_field_sequence
   // Appends to, instead of clearing, out_values if clear_out_values is false.
   // Returns 0 if such a field is not found or is of the wrong type.
   bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes,
-                 vcl_vector<int>& out_values, bool clear_out_values = true) const;
+                  vcl_vector<int>& out_values, bool clear_out_values = true) const;
   bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes,
-                 vcl_vector<double>& out_values, bool clear_out_values = true) const;
+                  vcl_vector<double>& out_values, bool clear_out_values = true) const;
   bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes,
-                 vcl_vector<char>& out_values, bool clear_out_values = true) const;
+                  vcl_vector<char>& out_values, bool clear_out_values = true) const;
   bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes,
-                 vcl_vector<void*>& out_values, bool clear_out_values = true) const;
+                  vcl_vector<void*>& out_values, bool clear_out_values = true) const;
   bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes,
-                 vcl_vector<vcl_string>& out_values, bool clear_out_values = true) const;
+                  vcl_vector<vcl_string>& out_values, bool clear_out_values = true) const;
   bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes,
-                 vcl_vector<vil_nitf2_location*>& out_values, bool clear_out_values = true) const;
+                  vcl_vector<vil_nitf2_location*>& out_values, bool clear_out_values = true) const;
   bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes,
-                 vcl_vector<vil_nitf2_date_time>& out_values, bool clear_out_values = true) const;
+                  vcl_vector<vil_nitf2_date_time>& out_values, bool clear_out_values = true) const;
 #if VXL_HAS_INT_64
   bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes,
                   vcl_vector<vil_nitf2_long>& out_values, bool clear_out_values = true) const;

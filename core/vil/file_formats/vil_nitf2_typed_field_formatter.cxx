@@ -47,7 +47,8 @@ vil_nitf2_field_formatter* vil_nitf2_location_formatter::copy() const
 }
 
 bool vil_nitf2_location_formatter::read_vcl_stream(vcl_istream& input,
-                                 vil_nitf2_location*& out_value, bool& out_blank)
+                                                   vil_nitf2_location*& out_value,
+                                                   bool& out_blank)
 {
   vcl_streampos tag_start_pos = input.tellg();
   vil_nitf2_location* location = new vil_nitf2_location_degrees(deg_precision(field_width));
@@ -86,14 +87,14 @@ vil_nitf2_integer_formatter::vil_nitf2_integer_formatter(int field_width, bool s
   //assert( field_width < 10 );
 }
 
-vil_nitf2_field_formatter* vil_nitf2_integer_formatter::copy() const 
+vil_nitf2_field_formatter* vil_nitf2_integer_formatter::copy() const
 {
-  return new vil_nitf2_integer_formatter(field_width, show_sign); 
+  return new vil_nitf2_integer_formatter(field_width, show_sign);
 }
 
 bool
 vil_nitf2_integer_formatter::read_vcl_stream(vcl_istream& input,
-                           int& out_value, bool& out_blank)
+                                             int& out_value, bool& out_blank)
 {
   char* cstr;
   if (!read_c_str(input, field_width, cstr, out_blank)) {
@@ -132,9 +133,9 @@ vil_nitf2_long_long_formatter(int field_width, bool show_sign)
     show_sign(show_sign)
 {};
 
-vil_nitf2_field_formatter* vil_nitf2_long_long_formatter::copy() const 
+vil_nitf2_field_formatter* vil_nitf2_long_long_formatter::copy() const
 {
-  return new vil_nitf2_long_long_formatter(field_width, show_sign); 
+  return new vil_nitf2_long_long_formatter(field_width, show_sign);
 }
 
 bool vil_nitf2_long_long_formatter::
@@ -196,13 +197,13 @@ vil_nitf2_double_formatter(int field_width, int precision, bool show_sign)
     show_sign(show_sign)
 {};
 
-vil_nitf2_field_formatter* vil_nitf2_double_formatter::copy() const 
+vil_nitf2_field_formatter* vil_nitf2_double_formatter::copy() const
 {
-  return new vil_nitf2_double_formatter(field_width, precision, show_sign); 
+  return new vil_nitf2_double_formatter(field_width, precision, show_sign);
 }
 
 bool vil_nitf2_double_formatter::read_vcl_stream(vcl_istream& input,
-                               double& out_value, bool& out_blank)
+                                                 double& out_value, bool& out_blank)
 {
   char* cstr;
   if (!read_c_str(input, field_width, cstr, out_blank)) {
@@ -241,19 +242,19 @@ bool vil_nitf2_double_formatter::write_vcl_stream(vcl_ostream& output, const dou
 
 vil_nitf2_exponential_formatter::
 vil_nitf2_exponential_formatter(int mantissa_width, int exponent_width)
-  : vil_nitf2_typed_field_formatter<double>(vil_nitf2::type_double, 
-      mantissa_width + exponent_width + 5),
+  : vil_nitf2_typed_field_formatter<double>(vil_nitf2::type_double,
+                                            mantissa_width + exponent_width + 5),
     mantissa_width(mantissa_width),
     exponent_width(exponent_width)
 {};
 
-vil_nitf2_field_formatter* vil_nitf2_exponential_formatter::copy() const 
+vil_nitf2_field_formatter* vil_nitf2_exponential_formatter::copy() const
 {
-  return new vil_nitf2_exponential_formatter(mantissa_width, exponent_width); 
+  return new vil_nitf2_exponential_formatter(mantissa_width, exponent_width);
 }
 
 bool vil_nitf2_exponential_formatter::read_vcl_stream(vcl_istream& input,
-                                            double& out_value, bool& out_blank)
+                                                      double& out_value, bool& out_blank)
 {
   char* cstr;
   if (!read_c_str(input, field_width, cstr, out_blank)) {
@@ -281,7 +282,7 @@ bool vil_nitf2_exponential_formatter::read_vcl_stream(vcl_istream& input,
   return retVal;
 }
 
-bool vil_nitf2_exponential_formatter::write_vcl_stream(vcl_ostream& output, 
+bool vil_nitf2_exponential_formatter::write_vcl_stream(vcl_ostream& output,
                                                        const double& value)
 {
   // Can't control the width of exponent (it's 3) so write it to a buffer first
@@ -295,7 +296,7 @@ bool vil_nitf2_exponential_formatter::write_vcl_stream(vcl_ostream& output,
   // Write everything up to the exponent sign
   output << buffer_string.substr(0,length-3);
   // Write exponent digits, padding or unpadding them to desired width
-  output << vcl_setw(exponent_width) << vcl_setfill('0') 
+  output << vcl_setw(exponent_width) << vcl_setfill('0')
          << buffer_string.substr(length-vcl_min(3,exponent_width), vcl_min(3,exponent_width));
   return !output.fail();
 }
@@ -307,9 +308,9 @@ vil_nitf2_binary_formatter::vil_nitf2_binary_formatter(int width_bytes)
   : vil_nitf2_typed_field_formatter<void*>(vil_nitf2::type_binary, width_bytes)
 {};
 
-vil_nitf2_field_formatter* vil_nitf2_binary_formatter::copy() const 
+vil_nitf2_field_formatter* vil_nitf2_binary_formatter::copy() const
 {
-  return new vil_nitf2_binary_formatter(field_width); 
+  return new vil_nitf2_binary_formatter(field_width);
 }
 
 bool vil_nitf2_binary_formatter::read(vil_stream& input, void*& out_value,
@@ -332,9 +333,9 @@ vil_nitf2_char_formatter::vil_nitf2_char_formatter()
   : vil_nitf2_typed_field_formatter<char>(vil_nitf2::type_char, 1)
 {};
 
-vil_nitf2_field_formatter* vil_nitf2_char_formatter::copy() const 
+vil_nitf2_field_formatter* vil_nitf2_char_formatter::copy() const
 {
-  return new vil_nitf2_char_formatter(); 
+  return new vil_nitf2_char_formatter();
 }
 
 bool vil_nitf2_char_formatter::read_vcl_stream(vcl_istream& input, char& out_value, bool& out_blank)
@@ -361,13 +362,14 @@ vil_nitf2_string_formatter(int field_width, enum_char_set char_set)
     char_set(char_set)
 {};
 
-vil_nitf2_field_formatter* vil_nitf2_string_formatter::copy() const 
+vil_nitf2_field_formatter* vil_nitf2_string_formatter::copy() const
 {
-  return new vil_nitf2_string_formatter(field_width, char_set); 
+  return new vil_nitf2_string_formatter(field_width, char_set);
 }
 
 bool vil_nitf2_string_formatter::read_vcl_stream(vcl_istream& input,
-                               vcl_string& out_value, bool& out_blank)
+                                                 vcl_string& out_value,
+                                                 bool& out_blank)
 {
   char* cstr;
   if (!read_c_str(input, field_width, cstr, out_blank)) {
@@ -408,15 +410,15 @@ vil_nitf2_enum_string_formatter(int field_width, const vil_nitf2_enum_values& va
   validate_value_map();
 }
 
-vil_nitf2_field_formatter* vil_nitf2_enum_string_formatter::copy() const 
+vil_nitf2_field_formatter* vil_nitf2_enum_string_formatter::copy() const
 {
-  return new vil_nitf2_enum_string_formatter(field_width, value_map); 
+  return new vil_nitf2_enum_string_formatter(field_width, value_map);
 }
 
 void vil_nitf2_enum_string_formatter::validate_value_map()
 {
   for (vil_nitf2_enum_values::iterator entry = value_map.begin();
-    entry != value_map.end(); ++entry)
+       entry != value_map.end(); ++entry)
   {
     vcl_string token = entry->first;
     if (int(token.length()) > field_width) {
@@ -451,21 +453,21 @@ vil_nitf2_enum_values& vil_nitf2_enum_values::value(vcl_string token, vcl_string
 
 #include "vil_nitf2_tagged_record.h"
 
-vil_nitf2_tagged_record_sequence_formatter::vil_nitf2_tagged_record_sequence_formatter() 
+vil_nitf2_tagged_record_sequence_formatter::vil_nitf2_tagged_record_sequence_formatter()
   : vil_nitf2_typed_field_formatter<vil_nitf2_tagged_record_sequence>(
       vil_nitf2::type_tagged_record_sequence, 1 /* ignored */)
 {}
 
-vil_nitf2_field_formatter* 
-vil_nitf2_tagged_record_sequence_formatter::copy() const 
+vil_nitf2_field_formatter*
+vil_nitf2_tagged_record_sequence_formatter::copy() const
 {
-  return new vil_nitf2_tagged_record_sequence_formatter(); 
+  return new vil_nitf2_tagged_record_sequence_formatter();
 }
 
 bool vil_nitf2_tagged_record_sequence_formatter::
-read( vil_nitf2_istream& input, 
+read( vil_nitf2_istream& input,
       vil_nitf2_tagged_record_sequence& out_value, bool& out_blank )
-{ 
+{
   if (field_width <= 0) return false;
   vil_streampos current = input.tell();
   vil_streampos end = current + field_width;
@@ -492,6 +494,6 @@ read( vil_nitf2_istream& input,
 
 bool vil_nitf2_tagged_record_sequence_formatter::
 write(vil_nitf2_ostream& /*output*/, vil_nitf2_tagged_record_sequence& /*value*/ )
-{ 
-  return false; 
+{
+  return false;
 }

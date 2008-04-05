@@ -56,10 +56,9 @@ void vsl_b_read(vsl_b_istream &is, vul_user_info & p)
 //: Output a human readable summary to the stream
 void vsl_print_summary(vcl_ostream& os,const vul_user_info & p)
 {
-      os<<"( uid,gid,name,home_directory,full_name,shell,passwd="<<
-      p.uid<<','<<p.gid<<','<<p.name<<
-      " home_directory,full_name,shell=" <<
-      p.home_directory<<','<< p.full_name<<','<<p.shell<<
-      " passwd="<<
-      p.passwd<<')';
+  os << "( uid,gid,name,home_directory,full_name,shell,passwd="
+     << p.uid<<','<<p.gid<<','<<p.name
+     << " home_directory,full_name,shell="
+     << p.home_directory<<','<< p.full_name<<','<<p.shell
+     << " passwd=" << p.passwd<<')';
 }

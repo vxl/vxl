@@ -17,7 +17,7 @@ vgl_h_matrix_2d_compute_rigid_body::vgl_h_matrix_2d_compute_rigid_body()
 }
 
 const int TM_UNKNOWNS_COUNT = 3;
-const double DEGENERACY_THRESHOLD = 0.01; 
+const double DEGENERACY_THRESHOLD = 0.01;
 
 //-----------------------------------------------------------------------------
 //
@@ -48,15 +48,14 @@ solve_rigid_body_problem(int equ_count,
     D(row, 4) =  -p2[i].y();
     ++row;
   }
-  
 
   D.normalize_rows();
   vnl_svd<double> svd(D);
   vnl_vector<double> nullv = svd.nullvector();
   //last singular value should be zero for ideal data
   if (svd.W(4)>DEGENERACY_THRESHOLD*svd.W(3)) {
-            vcl_cout  << "vgl_h_matrix_2d_compute_rigid_body : inaccurate solution probably due to inconsistent point correspondences \n"
-                      << "W \n" << svd.W() << '\n';
+            vcl_cout  << "vgl_h_matrix_2d_compute_rigid_body : inaccurate solution probably due to inconsistent point correspondences\n"
+                      << "W\n" << svd.W() << vcl_endl;
     return false;
   }
 
@@ -101,10 +100,10 @@ compute_p(vcl_vector<vgl_homg_point_2d<double> > const& points1,
     return false;
   vcl_vector<vgl_homg_point_2d<double> > tpoints1, tpoints2;
   for (int i = 0; i<n; i++)
-    {
-      tpoints1.push_back(tr1(points1[i]));
-      tpoints2.push_back(tr2(points2[i]));
-    }
+  {
+    tpoints1.push_back(tr1(points1[i]));
+    tpoints2.push_back(tr2(points2[i]));
+  }
   vgl_h_matrix_2d<double> hh;
   if (!solve_rigid_body_problem(equ_count, tpoints1, tpoints2, hh))
     return false;
@@ -139,23 +138,23 @@ compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
     return false;
   vcl_vector<vgl_homg_point_2d<double> > tlines1, tlines2;
   for (vcl_vector<vgl_homg_line_2d<double> >::const_iterator
-         lit = lines1.begin(); lit != lines1.end(); lit++)
-    {
-      // transform the lines according to the normalizing transform
-      vgl_homg_line_2d<double> l = tr1(*lit);
-      // convert the line to a point to use the same rigid_body code
-      vgl_homg_point_2d<double> p(l.a(), l.b(), l.c());
-      tlines1.push_back(p);
-    }
+       lit = lines1.begin(); lit != lines1.end(); lit++)
+  {
+    // transform the lines according to the normalizing transform
+    vgl_homg_line_2d<double> l = tr1(*lit);
+    // convert the line to a point to use the same rigid_body code
+    vgl_homg_point_2d<double> p(l.a(), l.b(), l.c());
+    tlines1.push_back(p);
+  }
   for (vcl_vector<vgl_homg_line_2d<double> >::const_iterator
-         lit = lines2.begin(); lit != lines2.end(); lit++)
-    {
-      // transform the lines according to the normalizing transform
-      vgl_homg_line_2d<double> l = tr2(*lit);
-      // convert the line to a point to use the same rigid_body code
-      vgl_homg_point_2d<double> p(l.a(), l.b(), l.c());
-      tlines2.push_back(p);
-    }
+       lit = lines2.begin(); lit != lines2.end(); lit++)
+  {
+    // transform the lines according to the normalizing transform
+    vgl_homg_line_2d<double> l = tr2(*lit);
+    // convert the line to a point to use the same rigid_body code
+    vgl_homg_point_2d<double> p(l.a(), l.b(), l.c());
+    tlines2.push_back(p);
+  }
 
   vgl_h_matrix_2d<double> hl,hp,tr2inv;
   if (!solve_rigid_body_problem(equ_count, tlines1, tlines2, hl))
@@ -194,11 +193,11 @@ compute_pl(vcl_vector<vgl_homg_point_2d<double> > const& points1,
 
   int equ_count = np * 2 + 2*nl;
   if ((np+nl)*2 < TM_UNKNOWNS_COUNT)
-    {
-      vcl_cerr << "vgl_h_matrix_2d_compute_rigid_body: Need at least 4 matches.\n";
-      if (np+nl == 0) vcl_cerr << "Could be vcl_vector setlength idiosyncrasies!\n";
-      return false;
-    }
+  {
+    vcl_cerr << "vgl_h_matrix_2d_compute_rigid_body: Need at least 4 matches.\n";
+    if (np+nl == 0) vcl_cerr << "Could be vcl_vector setlength idiosyncrasies!\n";
+    return false;
+  }
   //compute the normalizing transforms
   vgl_norm_trans_2d<double> tr1, tr2;
   if (!tr1.compute_from_points_and_lines(points1,lines1))
@@ -207,17 +206,17 @@ compute_pl(vcl_vector<vgl_homg_point_2d<double> > const& points1,
     return false;
   vcl_vector<vgl_homg_point_2d<double> > tpoints1, tpoints2;
   for (int i = 0; i<np; i++)
-    {
-      tpoints1.push_back(tr1(points1[i]));
-      tpoints2.push_back(tr2(points2[i]));
-    }
+  {
+    tpoints1.push_back(tr1(points1[i]));
+    tpoints2.push_back(tr2(points2[i]));
+  }
   for (int i = 0; i<nl; i++)
-    {
-      double a=lines1[i].a(), b=lines1[i].b(), c=lines1[i].c(), d=vcl_sqrt(a*a+b*b);
-      tpoints1.push_back(tr1(vgl_homg_point_2d<double>(-a*c,-b*c,d)));
-      a=lines2[i].a(), b=lines2[i].b(), c=lines2[i].c(), d = vcl_sqrt(a*a+b*b);
-      tpoints2.push_back(tr2(vgl_homg_point_2d<double>(-a*c,-b*c,d)));
-    }
+  {
+    double a=lines1[i].a(), b=lines1[i].b(), c=lines1[i].c(), d=vcl_sqrt(a*a+b*b);
+    tpoints1.push_back(tr1(vgl_homg_point_2d<double>(-a*c,-b*c,d)));
+    a=lines2[i].a(), b=lines2[i].b(), c=lines2[i].c(), d = vcl_sqrt(a*a+b*b);
+    tpoints2.push_back(tr2(vgl_homg_point_2d<double>(-a*c,-b*c,d)));
+  }
   vgl_h_matrix_2d<double> hh;
   if (!solve_rigid_body_problem(equ_count, tpoints1, tpoints2, hh))
     return false;
@@ -226,6 +225,7 @@ compute_pl(vcl_vector<vgl_homg_point_2d<double> > const& points1,
   H = tr2_inv*hh*tr1;
   return true;
 }
+
 bool vgl_h_matrix_2d_compute_rigid_body::
 compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
           vcl_vector<vgl_homg_line_2d<double> > const& lines2,
@@ -234,6 +234,7 @@ compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
 {
   return false;
 }
+
 #if 0 // do later
 //--------------------------------------------------------
 //:
@@ -264,10 +265,10 @@ solve_weighted_least_squares(vcl_vector<vgl_homg_line_2d<double> > const& l1,
   vnl_vector<double> two_w(2*Nc);
   int j =0;
   for (int i = 0; i<Nc; i++, j+=2)
-    {
-      two_w[j]=w[i];
-      two_w[j+1]=w[i];
-    }
+  {
+    two_w[j]=w[i];
+    two_w[j+1]=w[i];
+  }
   vnl_diag_matrix<double> W(two_w);
 
   //Form the design matrix, D
@@ -276,29 +277,29 @@ solve_weighted_least_squares(vcl_vector<vgl_homg_line_2d<double> > const& l1,
 
   int row = 0;
   for (int i = 0; i < Nc; i++)
-    {
-      D(row, 0) =  l1[i].a() * l2[i].c();
-      D(row, 1) =  l1[i].b() * l2[i].c();
-      D(row, 2) =  l1[i].c() * l2[i].c();
-      D(row, 3) = 0;
-      D(row, 4) = 0;
-      D(row, 5) = 0;
-      D(row, 6) = -l1[i].a() * l2[i].a();
-      D(row, 7) = -l1[i].b() * l2[i].a();
-      D(row, 8) = -l1[i].c() * l2[i].a();
-      ++row;
+  {
+    D(row, 0) =  l1[i].a() * l2[i].c();
+    D(row, 1) =  l1[i].b() * l2[i].c();
+    D(row, 2) =  l1[i].c() * l2[i].c();
+    D(row, 3) = 0;
+    D(row, 4) = 0;
+    D(row, 5) = 0;
+    D(row, 6) = -l1[i].a() * l2[i].a();
+    D(row, 7) = -l1[i].b() * l2[i].a();
+    D(row, 8) = -l1[i].c() * l2[i].a();
+    ++row;
 
-      D(row, 0) = 0;
-      D(row, 1) = 0;
-      D(row, 2) = 0;
-      D(row, 3) =  l1[i].a() * l2[i].c();
-      D(row, 4) =  l1[i].b() * l2[i].c();
-      D(row, 5) =  l1[i].c() * l2[i].c();
-      D(row, 6) = -l1[i].a() * l2[i].b();
-      D(row, 7) = -l1[i].b() * l2[i].b();
-      D(row, 8) = -l1[i].c() * l2[i].b();
-      ++row;
-    }
+    D(row, 0) = 0;
+    D(row, 1) = 0;
+    D(row, 2) = 0;
+    D(row, 3) =  l1[i].a() * l2[i].c();
+    D(row, 4) =  l1[i].b() * l2[i].c();
+    D(row, 5) =  l1[i].c() * l2[i].c();
+    D(row, 6) = -l1[i].a() * l2[i].b();
+    D(row, 7) = -l1[i].b() * l2[i].b();
+    D(row, 8) = -l1[i].c() * l2[i].b();
+    ++row;
+  }
   M = vnl_transpose(D)*W*D;
   D.normalize_rows();
   vnl_svd<double> svd(D);
@@ -334,19 +335,19 @@ compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
     return false;
   vcl_vector<vgl_homg_line_2d<double> > tlines1, tlines2;
   for (vcl_vector<vgl_homg_line_2d<double> >::const_iterator
-         lit = lines1.begin(); lit != lines1.end(); lit++)
-    {
-      // transform the lines according to the normalizing transform
-      vgl_homg_line_2d<double> l = tr1(*lit);
-      tlines1.push_back(l);
-    }
+       lit = lines1.begin(); lit != lines1.end(); lit++)
+  {
+    // transform the lines according to the normalizing transform
+    vgl_homg_line_2d<double> l = tr1(*lit);
+    tlines1.push_back(l);
+  }
   for (vcl_vector<vgl_homg_line_2d<double> >::const_iterator
-         lit = lines2.begin(); lit != lines2.end(); lit++)
-    {
-      // transform the lines according to the normalizing transform
-      vgl_homg_line_2d<double> l = tr2(*lit);
-      tlines2.push_back(l);
-    }
+       lit = lines2.begin(); lit != lines2.end(); lit++)
+  {
+    // transform the lines according to the normalizing transform
+    vgl_homg_line_2d<double> l = tr2(*lit);
+    tlines2.push_back(l);
+  }
 
   vgl_h_matrix_2d<double> hl,hp,tr2inv;
   if (!solve_weighted_least_squares(tlines1, tlines2, weights, hl))
@@ -368,4 +369,4 @@ compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
   H = tr2inv*hp*tr1;
   return true;
 }
-#endif
+#endif // 0

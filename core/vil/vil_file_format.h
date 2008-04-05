@@ -47,9 +47,9 @@ class vil_file_format
   //  then the intermediate resources are created in memory.
   virtual vil_pyramid_image_resource_sptr
     make_pyramid_image_from_base(char const* filename,
-                                vil_image_resource_sptr const& base_image,
-                                unsigned nlevels,
-                                char const* temp_dir)
+                                 vil_image_resource_sptr const& base_image,
+                                 unsigned nlevels,
+                                 char const* temp_dir)
   {return 0;}
 
   //: Make a "generic_image" on which put_section may be applied.
@@ -81,7 +81,6 @@ class vil_file_format
  public:
   static vil_file_format** all();
   static void add_file_format(vil_file_format* ff);
-
 };
 
 #endif // vil_file_format_h_
