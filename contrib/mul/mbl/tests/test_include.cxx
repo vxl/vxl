@@ -71,5 +71,8 @@
 #include <mbl/mbl_thin_plate_spline_weights_3d.h>
 #include <mbl/mbl_vector_distance.h>
 #include <mbl/mbl_wt_histogram.h>
+#include <mbl/mbl_get.h>
+#include <mbl/mbl_replace_string.h>
+#include <mbl/mbl_vector_txt_files.h>
 
 int main() { return 0; }

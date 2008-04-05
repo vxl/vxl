@@ -24,5 +24,11 @@
 #include <mfpf/mfpf_sample_region.h>
 #include <mfpf/mfpf_searcher.h>
 #include <mfpf/mfpf_sort_matches.h>
+#include <mfpf/mfpf_region_finder.h>
+#include <mfpf/mfpf_region_finder_builder.h>
+#include <mfpf/mfpf_sad_vec_cost.h>
+#include <mfpf/mfpf_sad_vec_cost_builder.h>
+#include <mfpf/mfpf_vec_cost.h>
+#include <mfpf/mfpf_vec_cost_builder.h>
 
 int main() { return 0; }
