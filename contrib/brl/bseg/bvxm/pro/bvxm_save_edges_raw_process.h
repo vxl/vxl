@@ -1,17 +1,17 @@
-// This is contrib/brl/bseg/bvxm/pro/bvxm_save_edges_raw_process.h
+// This is brl/bseg/bvxm/pro/bvxm_save_edges_raw_process.h
 #ifndef bvxm_save_edges_raw_process_h_
 #define bvxm_save_edges_raw_process_h_
-
 //:
 // \file
-// \brief // A process that saves the voxel world edge probability grid in a binary format 
-//        // readable by the Drishti volume rendering program (http://anusf.anu.edu.au/Vizlab/drishti/)
-//            
+// \brief A process that saves the voxel world edge probability grid in a binary format readable by the Drishti volume rendering program
+//        (http://anusf.anu.edu.au/Vizlab/drishti/)
+//
 // \author Ibrahim Eden (modification of bvxm_save_occupancy_raw_process)
 // \date 03/28/08
 // \verbatim
-//
-// \Modifications 
+//  Modifications
+//   <none yet>
+// \endverbatim
 
 #include <vcl_string.h>
 #include <bprb/bprb_process.h>
@@ -19,8 +19,8 @@
 class bvxm_save_edges_raw_process : public bprb_process
 {
  public:
-  
-   bvxm_save_edges_raw_process();
+
+  bvxm_save_edges_raw_process();
 
   //: Copy Constructor (no local data)
   bvxm_save_edges_raw_process(const bvxm_save_edges_raw_process& other): bprb_process(*static_cast<const bprb_process*>(&other)){};
@@ -35,9 +35,6 @@ class bvxm_save_edges_raw_process : public bprb_process
   bool init() { return true; }
   bool execute();
   bool finish(){return true;}
- 
- private:
-
 };
 
-#endif // bvma_update_process_h_
+#endif // bvxm_save_edges_raw_process_h_
