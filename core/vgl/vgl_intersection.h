@@ -41,13 +41,12 @@ bool vgl_intersection(vgl_line_segment_3d<T> const& l1,
                       vgl_line_segment_3d<T> const& l2,
                       vgl_point_3d<T>& i_pnt);
 
-//: Return the intersection point of two lines. Return false if lines
-//  are parallel
+//: Return the intersection point of two lines. Return false if lines are parallel
 // \relates vgl_line_segment_3d
 template <class T>
-bool vgl_intersection( const vgl_line_2d<T>  &line0,
-                       const vgl_line_2d<T>  &line1,
-                       vgl_point_2d<T>       &intersection_point );
+bool vgl_intersection(const vgl_line_2d<T>  &line0,
+                      const vgl_line_2d<T>  &line1,
+                      vgl_point_2d<T>       &intersection_point );
 
 //: Return the intersection point of a line and a plane.
 // \relates vgl_line_3d_2_points
