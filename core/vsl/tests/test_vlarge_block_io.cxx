@@ -98,7 +98,7 @@ void test_vlarge_block_io()
   s /= 1024*4; // a sensible block size.
   s *= 1024;
   unsigned max_blocks = vcl_min<vcl_size_t>(1024*1024,
-    vcl_numeric_limits<vcl_size_t>::max() / (s/2) );
+                                            vcl_numeric_limits<vcl_size_t>::max() / (s/2) );
 
   vcl_cout << "Try to allocate up to " << max_blocks << " blocks of "
            << s/1024 << "KiB" << vcl_endl;

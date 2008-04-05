@@ -517,7 +517,7 @@ bool vgui_gtk2_dialog_impl::ask() {
   // function call ends. That is, by the time further iterations of
   // the gtk main loop occur.
   for ( vcl_vector<vgui_gtk2_adaptor*>::iterator iter = adaptor_list.begin();
-       iter != adaptor_list.end(); ++iter ) {
+        iter != adaptor_list.end(); ++iter ) {
     delete *iter;
   }
 

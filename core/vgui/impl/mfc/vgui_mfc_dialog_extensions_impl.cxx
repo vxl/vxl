@@ -4,7 +4,7 @@
 #endif
 //:
 // \file
-// \author Gamze Tunali, LEMS, Brown University 
+// \author Gamze Tunali, LEMS, Brown University
 // \date   16 Nov 2007
 //
 // See vgui_mfc_dialog_extensions_impl.h for a description of this file.
@@ -65,8 +65,9 @@ struct vgui_mfc_dialog_choice
 //------------------------------------------------------------------------------
 //: Make a choice widget
 void* vgui_mfc_dialog_extensions_impl::choice_field_widget(const char* /*txt*/,
-                                                const vcl_vector<vcl_string>& labels, int& val) {
-
+                                                           const vcl_vector<vcl_string>& labels,
+                                                           int& val)
+{
   vgui_mfc_dialog_choice *ch = new vgui_mfc_dialog_choice;
   ch->names = labels;
   ch->index = val;
@@ -85,7 +86,7 @@ struct vgui_mfc_dialog_inline_tab
 //------------------------------------------------------------------------------
 //: Make a tableau widget.
 void* vgui_mfc_dialog_extensions_impl::inline_tableau_widget(const vgui_tableau_sptr tab,
-                                                  unsigned width, unsigned height)
+                                                             unsigned width, unsigned height)
 {
   vgui_mfc_dialog_inline_tab* tab_data = new vgui_mfc_dialog_inline_tab;
   tab_data->tab = tab;
@@ -141,7 +142,7 @@ void vgui_mfc_dialog_extensions_impl::OnBrowse(UINT uID)
    CFileDialog file_dialog(TRUE,"*.*",NULL,OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, "All Files (*.*)|*.*||", this);
    file_dialog.DoModal();
    CString s(file_dialog.GetPathName());
-   fbsrs[which]->SetWindowText(s);  
+   fbsrs[which]->SetWindowText(s);
 }
 
 //: Called by MFC when the user clicks the (directory) browse button.
@@ -187,7 +188,7 @@ void vgui_mfc_dialog_extensions_impl::OnClose()
   OnCancel();
 }
 
-//: Display the dialog in a user formatted box. 
+//: Display the dialog in a user formatted box.
 // Line breaks are used to seperate lines of elements
 bool vgui_mfc_dialog_extensions_impl::ask()
 {
@@ -224,8 +225,8 @@ bool vgui_mfc_dialog_extensions_impl::ask()
       //if (max_length<int(field->label.size()+field->current_value().size()))
       //  max_length = field->label.size()+field->current_value().size();
       width += 24 + field->label.size()*8;
-    } 
-    
+    }
+
     else if (l.type == line_br) {
       width += 32;
       if (max_length< width)
@@ -249,7 +250,7 @@ bool vgui_mfc_dialog_extensions_impl::ask()
     {
       fbsr_count++;
       width += 8 + (20+10)*8; // 20 extra for path entry, 20 was counted in text field
-    } 
+    }
     else if (l.type == dir_bsr) {
       dbsr_count++;
       width += 8 + (20+10)*8;
@@ -397,7 +398,7 @@ bool vgui_mfc_dialog_extensions_impl::ask()
       awlist.push_back(text);
 
       r.left = r.right + 2*4;
-      r.right = r.left+20*8; 
+      r.right = r.left+20*8;
       vgui_mfc_dialog_choice *ch = (vgui_mfc_dialog_choice*)l.widget;
       r.bottom+=__min(ch->names.size(),4)*32;
       CComboBox *combobox = new CComboBox();
@@ -444,7 +445,7 @@ bool vgui_mfc_dialog_extensions_impl::ask()
       CEdit *edit = new CEdit();
       int savey = r.top;
       r.left  = r.right+2*4;
-      r.right = r.left+40*8; 
+      r.right = r.left+40*8;
 
       // CEdit::Create does not support extended window styles
       //MFC impl:Create(_T("EDIT"), NULL, dwStyle, rect, pParentWnd, nID);
@@ -457,8 +458,8 @@ bool vgui_mfc_dialog_extensions_impl::ask()
       edit->ShowWindow(SW_SHOW);
       CButton *button = new CButton();
 
-      r.left = r.right+2*4; 
-      r.right = r.left+10*8; 
+      r.left = r.right+2*4;
+      r.right = r.left+10*8;
       button->Create(_T("Browse..."),WS_VISIBLE|WS_CHILD|WS_TABSTOP|BS_PUSHBUTTON,
                      r,this,ID_BROWSE_FILES+count_fbsr);
       fbsrs[count_fbsr++] = edit;
@@ -523,7 +524,7 @@ bool vgui_mfc_dialog_extensions_impl::ask()
       CEdit *edit = new CEdit();
       int savey = r.top;
       r.left  = r.right+2*4;
-      r.right = r.left+40*8; 
+      r.right = r.left+40*8;
 
       // CEdit::Create does not support extended window styles
       //MFC impl:Create(_T("EDIT"), NULL, dwStyle, rect, pParentWnd, nID);
@@ -536,8 +537,8 @@ bool vgui_mfc_dialog_extensions_impl::ask()
       edit->ShowWindow(SW_SHOW);
       CButton *button = new CButton();
 
-      r.left = r.right+2*4; 
-      r.right = r.left+10*8; 
+      r.left = r.right+2*4;
+      r.right = r.left+10*8;
       button->Create(_T("Browse..."),WS_VISIBLE|WS_CHILD|WS_TABSTOP|BS_PUSHBUTTON,
                      r,this,ID_BROWSE_DIRS+count_dbsr);
       dbsrs[count_dbsr++] = edit;
@@ -602,8 +603,8 @@ bool vgui_mfc_dialog_extensions_impl::ask()
 
       // line break does not have a widget element, go on to the next element
       if (l.type == line_br)
-        continue;   
-      
+        continue;
+
       CWnd *input = *w_iter;
 
       if (l.type == int_elem ||
@@ -648,9 +649,9 @@ bool vgui_mfc_dialog_extensions_impl::ask()
   delete accept;
   delete cancel;
   DestroyWindow();
-  
+
   delete font;
-  
+
   // Enable the parent window
   AfxGetApp()->EnableModeless(TRUE);
   AfxGetApp()->GetMainWnd()->EnableWindow(TRUE);

@@ -150,7 +150,6 @@
 #include <vcl_cctype.h>
 
 
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -229,8 +228,7 @@ void CDlgWnd::OnOpen()
             {
                 // Appears to be a valid drive (or relative path)
                 CString mess(ss);
-                mess += _T("\nThis folder does not exist.\n\n"
-                      "Do you want to create it?");
+                mess += _T("\nThis folder does not exist.\n\nDo you want to create it?");
                 if (AfxMessageBox(mess, MB_YESNO) == IDYES)
                 {
                     // MakeSureDirectoryPathExists is not part of Windows but is
@@ -399,8 +397,7 @@ void CDirEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
                 {
                     // Appears to be a valid drive (or relative path)
                     CString mess(ss);
-                    mess += _T("\nThis folder does not exist.\n\n"
-                          "Do you want to create it?");
+                    mess += _T("\nThis folder does not exist.\n\nDo you want to create it?");
                     if (AfxMessageBox(mess, MB_YESNO) == IDYES)
                     {
                         if (!::MakeSureDirectoryPathExists(ss + _T("\\")))
@@ -526,7 +523,6 @@ void CDirEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
                     strMatch = strMatch.Left(1) + temp;
                 }
 
-
                 // Get the bit of the directory name that the user has not yet typed
                 int lb_len;             // Length of last bit (after \ or :)
                 lb_len = ss.ReverseFind('\\');
@@ -644,7 +640,6 @@ void vgui_dir_dialog::OnInitDone()
     CWnd *pp;                           // Parent = the dialog window itself
     VERIFY(pp = GetParent());
 
-
     ASSERT(pp->GetDlgItem(stc3) != NULL);
     pp->GetDlgItem(stc3)->SetWindowText(_T("Folder:"));
 
@@ -675,7 +670,7 @@ void vgui_dir_dialog::OnInitDone()
     pp->ScreenToClient(rct);
 
     m_Open.Create(_T("Open"), WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
-                    rct, pp, IDC_OPEN);
+                  rct, pp, IDC_OPEN);
     m_Open.SetFont(pp->GetDlgItem(IDOK)->GetFont());
     m_Open.SetWindowPos(&m_Edit, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 

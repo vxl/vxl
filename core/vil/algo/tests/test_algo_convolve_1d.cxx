@@ -71,7 +71,6 @@ static void test_algo_convolve_1d_double()
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 
-  
   vcl_cout << "Test vil_convolve_no_extend end type with 5-tap filter\n";
   // edge -888.88 values are not part of the kernel proper, but to detect misreadings
   double kernel2[7] = {-888.88, 1.0, 5.0, 8.0, 5.0, 1.0, -888.88};
@@ -89,7 +88,6 @@ static void test_algo_convolve_1d_double()
   TEST_NEAR("End",dest[n],0.0,1e-6);
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
- 
 
   vcl_cout<<"Testing vil_convolve_zero_extend end type\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
@@ -105,7 +103,6 @@ static void test_algo_convolve_1d_double()
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 
-    
   vcl_cout << "Test vil_convolve_zero_extend end type with 5-tap filter\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil_convolve_1d(&src[0],n,1, &dest[1],1,
@@ -121,7 +118,7 @@ static void test_algo_convolve_1d_double()
   TEST_NEAR("End",dest[n],14.0*n-7.0,1e-6);
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
- 
+
   vcl_cout << "Test vil_convolve_zero_extend end type with 4-tap filter\n";
   double kernel3[6] = {-888.88, 1.0, 3.0, 5.0, 1.0, -888.88};
   vcl_vector<double> src2(n, 0.0);
@@ -132,12 +129,10 @@ static void test_algo_convolve_1d_double()
                   double(), // indicates accumulator type
                   vil_convolve_zero_extend,vil_convolve_zero_extend);
 
-  
   vcl_cout << "SRC: ";  print_vector(src2);
   vcl_cout << "   DEST: "; print_vector(dest);
   vcl_cout << vcl_endl;
-  
-  
+
   TEST_NEAR("Start",dest[1], 5.0,1e-6);
   TEST_NEAR("Next",dest[2], 1.0,1e-6);
   TEST_NEAR("Next",dest[3], 0.0,1e-6);
@@ -150,8 +145,7 @@ static void test_algo_convolve_1d_double()
   TEST_NEAR("End",dest[10],5.0,1e-6);
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
-  
-  
+
   vcl_cout<<"Testing vil_convolve_constant_extend end type\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil_convolve_1d(&src[0],n,1, &dest[1],1,
@@ -166,7 +160,6 @@ static void test_algo_convolve_1d_double()
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 
-    
   vcl_cout << "Test vil_convolve_constant_extend end type with 5-tap filter\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil_convolve_1d(&src[0],n,1, &dest[1],1,
@@ -182,8 +175,7 @@ static void test_algo_convolve_1d_double()
   TEST_NEAR("End",dest[n],20.0*n-7.0,1e-6);
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
-   
-  
+
   vcl_cout<<"Testing vil_convolve_reflect_extend end type\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil_convolve_1d(&src[0],n,1, &dest[1],1,
@@ -198,7 +190,6 @@ static void test_algo_convolve_1d_double()
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 
-    
   vcl_cout << "Test vil_convolve_reflect_extend end type with 5-tap filter\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil_convolve_1d(&src[0],n,1, &dest[1],1,
@@ -214,9 +205,7 @@ static void test_algo_convolve_1d_double()
   TEST_NEAR("End",dest[n],20.0*n-14.0,1e-6);
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
- 
-  
-  
+
   vcl_cout<<"Testing vil_convolve_periodic_extend end type\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil_convolve_1d(&src[0],n,1, &dest[1],1,
@@ -265,16 +254,14 @@ static void test_algo_convolve_1d_double()
   vcl_cout << "Test vil_convolve_trim end type with 4-tap filter\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil_convolve_1d(&src2[0],n,1, &dest[1],1,
-                   &kernel3[3],-2,1,
-                   double(), // indicates accumulator type
-                   vil_convolve_trim,vil_convolve_trim);
+                  &kernel3[3],-2,1,
+                  double(), // indicates accumulator type
+                  vil_convolve_trim,vil_convolve_trim);
 
-  
   vcl_cout << "SRC: ";  print_vector(src2);
   vcl_cout << "   DEST: "; print_vector(dest);
   vcl_cout << vcl_endl;
-  
-  
+
   TEST_NEAR("Start",dest[1], 5.0*10.0/9.0,1e-6);
   TEST_NEAR("Next",dest[2], 1.0,1e-6);
   TEST_NEAR("Next",dest[3], 0.0,1e-6);
@@ -287,8 +274,6 @@ static void test_algo_convolve_1d_double()
   TEST_NEAR("End",dest[10],5.0*10.0/6.0,1e-6);
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
-  
-  
 
   vcl_cout << "\n\nvil_convolve_1d(vil_image_resource_sptr&,...)\n";
 
@@ -319,8 +304,6 @@ static void test_algo_convolve_1d_double()
   TEST("convolved resource.get_view() == convolved view.window() bottom-right corner",
        vil_image_view_deep_equality(vil_crop(v_out,n-4,4,n-4,4),
                                     vil_image_view<vxl_byte>(conv->get_view(n-4,4,n-4,4))), true);
-  
- 
 }
 
 static void test_algo_convolve_1d()

@@ -72,7 +72,7 @@ wxMenuBar* vgui_wx_menu::create_wx_menubar(const vgui_menu& menu)
     else if (menu[i].is_command())
     {
 #ifdef DEBUG
-      vcl_cerr << __FILE__ ":command as top level menu item!" << vcl_endl;
+      vcl_cerr << __FILE__ ":command as top level menu item!\n";
 #endif
       // create a submenu and add this top-level command to it
       vgui_menu submenu;
@@ -126,7 +126,7 @@ wxMenu* vgui_wx_menu::create_wx_submenu(const vgui_menu& menu)
 
       // connect the event handler
       Connect(menu_id, wxEVT_COMMAND_MENU_SELECTED,
-        wxCommandEventHandler(vgui_wx_menu::on_command));
+              wxCommandEventHandler(vgui_wx_menu::on_command));
     }
     else if (menu[i].is_submenu())
     {
