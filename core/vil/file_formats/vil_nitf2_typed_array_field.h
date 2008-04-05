@@ -1,3 +1,5 @@
+//:
+// \file
 // vil_nitf2: Written by Harry Voorhees (hlv@) and Rob Radtke (rob@) of
 // Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
@@ -13,8 +15,8 @@
 
 class vil_nitf2_index_vector;
 
-// Typed concrete class for array fields. Stores values and implements I/O of
-// values.
+//: Typed concrete class for array fields.
+// Stores values and implements I/O of values.
 //
 template<class T>
 class vil_nitf2_typed_array_field : public vil_nitf2_array_field
@@ -24,6 +26,7 @@ class vil_nitf2_typed_array_field : public vil_nitf2_array_field
   vil_nitf2_typed_array_field(int num_dimensions, vil_nitf2_field_definition* field_definition)
     : vil_nitf2_array_field(field_definition, num_dimensions) {};
 
+  //:
   // Set out_value to the scalar value at the specified index vector,
   // and returns whether specified element was defined.
   // The length of the index vector must equal num_dimensions(),
@@ -34,25 +37,27 @@ class vil_nitf2_typed_array_field : public vil_nitf2_array_field
   // vil_nitf2_array_field::value() for my specific type.)
   bool value(const vil_nitf2_index_vector& indexes, T& out_value) const;
 
-  // Reads from input stream the scalar value at specified index.
+  //: Reads from input stream the scalar value at specified index.
   // check_index(indexes) must be true, or this will emit an error.
   // Returns success.
   bool read_vector_element(vil_nitf2_istream& input,
-    const vil_nitf2_index_vector& indexes, int variable_width);
+                           const vil_nitf2_index_vector& indexes,
+                           int variable_width);
 
-  // Writes to output stream the scalar value at specified index.
+  //: Writes to output stream the scalar value at specified index.
   // check_index(indexes) must be true, of this will emit an error.
   // Returns success. Arg variable_width, if non-negative, overrides
   // formatter's field_width.
   bool write_vector_element(vil_nitf2_ostream& output,
-    const vil_nitf2_index_vector& indexes, int variable_width) const;
+                            const vil_nitf2_index_vector& indexes,
+                            int variable_width) const;
 
-  // Output in human-readable form. Implementation provides an example of
-  // how to iterate over all elements.
+  //: Output in human-readable form.
+  // Implementation provides an example of how to iterate over all elements.
   virtual vcl_ostream& output(vcl_ostream& os) const;
 
-  // Destructor (overridden below for instantiations where T is a pointer)
-  ~vil_nitf2_typed_array_field() {};
+  //: Destructor (overridden below for instantiations where T is a pointer)
+  ~vil_nitf2_typed_array_field() {}
 
  protected:
   // Helper method for output() method above. Iterates over one
@@ -211,7 +216,7 @@ inline vil_nitf2_typed_array_field<void*>::~vil_nitf2_typed_array_field()
     delete[] (char*) it->second;
   }
   m_value_map.clear();
-} 
+}
 
 template<>
 inline vil_nitf2_typed_array_field<vil_nitf2_location*>::~vil_nitf2_typed_array_field()
@@ -222,6 +227,6 @@ inline vil_nitf2_typed_array_field<vil_nitf2_location*>::~vil_nitf2_typed_array_
     delete it->second;
   }
   m_value_map.clear();
-} 
+}
 
 #endif // VIL_NITF2_TYPED_ARRAY_FIELD_H
