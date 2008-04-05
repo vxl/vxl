@@ -12,9 +12,9 @@ mfpf_searcher::mfpf_searcher()
 
 //: Find list of poses overlapping given pose
 void mfpf_searcher::find_overlaps(mfpf_point_finder& pf,
-                     const vcl_vector<mfpf_pose>& poses,
-                     const mfpf_pose& pose, 
-                     vcl_vector<unsigned>& overlaps)
+                                  const vcl_vector<mfpf_pose>& poses,
+                                  const mfpf_pose& pose, 
+                                  vcl_vector<unsigned>& overlaps)
 {
   overlaps.resize(0);
   for (unsigned i=0;i<poses.size();++i)
@@ -22,16 +22,15 @@ void mfpf_searcher::find_overlaps(mfpf_point_finder& pf,
     if (pf.overlap(poses[i],pose))
       overlaps.push_back(i);
   }
-
 }
 
 //: If pose not near any poses in list, return false
 //  If it is near one, and its fit is better, then replace it.
 //  Uses pf.overlap() function to check for proximity
 bool mfpf_searcher::find_near_pose(mfpf_point_finder& pf,
-                      vcl_vector<mfpf_pose>& poses,
-                      vcl_vector<double>& fits,
-                      const mfpf_pose& pose, double fit)
+                                   vcl_vector<mfpf_pose>& poses,
+                                   vcl_vector<double>& fits,
+                                   const mfpf_pose& pose, double fit)
 {
   vcl_vector<unsigned> index;
   find_overlaps(pf,poses,pose,index);
@@ -105,11 +104,11 @@ bool mfpf_searcher::find_near_pose(mfpf_point_finder& pf,
 }
 
 void mfpf_searcher::find_refined_matches(mfpf_point_finder& pf,
-                           const vimt_image_2d_of<float>& image,
-                           const vgl_point_2d<double>& p,
-                           const vgl_vector_2d<double>& u,
-                           vcl_vector<mfpf_pose>& poses,
-                           vcl_vector<double>& fits)
+                                         const vimt_image_2d_of<float>& image,
+                                         const vgl_point_2d<double>& p,
+                                         const vgl_vector_2d<double>& u,
+                                         vcl_vector<mfpf_pose>& poses,
+                                         vcl_vector<double>& fits)
 {
   vcl_vector<mfpf_pose> poses1;
   vcl_vector<double> fits1;
@@ -120,14 +119,14 @@ void mfpf_searcher::find_refined_matches(mfpf_point_finder& pf,
   pf.grid_search(image,p,u,poses1,fits1);
 vcl_cout<<"N.responses: "<<poses1.size()<<vcl_endl;
 
-/*
+#if 0
   double step = pf.step_size();
   double r = pf.radius()*step;
 
   // Two poses assumed similar if within about r/4 of each other
   // Or two pixels in the model frame
   double r_thresh = vcl_max(0.5*r,2*step);
-*/
+#endif // 0
 
   // Refine each one in turn, and add it to list if new
   poses.resize(0); fits.resize(0);
@@ -136,7 +135,7 @@ vcl_cout<<"N.responses: "<<poses1.size()<<vcl_endl;
     mfpf_pose pose=poses1[i];
     double f = fits1[i];
     pf.refine_match(image,pose.p(),pose.u(),f);
-    if (f>fits1[i]) vcl_cerr<<"Refinement failed!!!"<<vcl_endl;
+    if (f>fits1[i]) vcl_cerr<<"Refinement failed!!!\n";
     if (!find_near_pose(pf,poses,fits,pose,f))
     {
       // Point distinct
@@ -149,8 +148,8 @@ vcl_cout<<"N.responses: "<<poses1.size()<<vcl_endl;
 //: For each pose in the set, perform local search+refinement
 //  On exit pose_set contains the improved matches.
 void mfpf_searcher::search_around_set(mfpf_point_finder& pf,
-                         const vimt_image_2d_of<float>& image,
-                         mfpf_pose_set& pose_set)
+                                      const vimt_image_2d_of<float>& image,
+                                      mfpf_pose_set& pose_set)
 {
   if (pose_set.poses.size()==0) return;
 
@@ -175,5 +174,4 @@ void mfpf_searcher::search_around_set(mfpf_point_finder& pf,
   // Return pf to original state
   pf.set_search_area(search_ni0,search_nj0);
 }
-
 

@@ -103,7 +103,7 @@ bool bvxm_roi_init_process::roi_init(vcl_string const& image_path,
                                      vil_image_view<unsigned char>* nitf_image_unsigned_char,
                                      vpgl_local_rational_camera<double>& local_camera)
 {
- // read the image and extract the camera
+  // read the image and extract the camera
   vil_image_resource_sptr img = vil_load_image_resource(image_path.c_str());
   vcl_string format = img->file_format();
   vcl_string prefix = format.substr(0,4);
@@ -152,7 +152,7 @@ bool bvxm_roi_init_process::roi_init(vcl_string const& image_path,
   }
 
   if (!roi.as_pointer())
-   return false;
+    return false;
 
   if (roi->pixel_format() == VIL_PIXEL_FORMAT_UINT_16)
   {
@@ -249,7 +249,7 @@ bvxm_roi_init_process::project_box(vpgl_rational_camera<double>* cam,
     for (unsigned int j=0; j < box_corners.size(); j++) {
       // convert the box corners to world coordinates
       lvcs->local_to_global(box_corners[j].x(), box_corners[j].y(), box_corners[j].z(),
-      bgeo_lvcs::wgs84, lon, lat, gz, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
+                            bgeo_lvcs::wgs84, lon, lat, gz, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
 #ifdef DEBUG
       vcl_cout << "BOX " << lat << ',' << lon << ',' << gz << ",\n";
 #endif
@@ -260,7 +260,8 @@ bvxm_roi_init_process::project_box(vpgl_rational_camera<double>* cam,
   return roi;
 }
 
-/*vcl_vector<vgl_point_3d<double> >
+#if 0
+vcl_vector<vgl_point_3d<double> >
 bvxm_roi_init_process::corners_of_box_3d(vgl_box_3d<double> box)
 {
   vcl_vector<vgl_point_3d<double> > corners;
@@ -274,4 +275,5 @@ bvxm_roi_init_process::corners_of_box_3d(vgl_box_3d<double> box)
   corners.push_back(box.max_point());
   corners.push_back(vgl_point_3d<double> (box.min_x(), box.min_y()+box.height(), box.max_z()));
   return corners;
-}*/
+}
+#endif // 0

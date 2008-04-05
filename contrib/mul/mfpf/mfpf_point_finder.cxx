@@ -35,14 +35,14 @@ inline double parabolic_min(double fa, double fb, double fc)
 
 class mfpf_pf_cost : public vnl_cost_function
 {
-private:
+ private:
   mfpf_point_finder* pf_;
   const vimt_image_2d_of<float>& image_;
   vgl_point_2d<double> p_;
   vgl_vector_2d<double> u_;
   vgl_vector_2d<double> v_;
   double ds_,dA_;
-public:
+ public:
   virtual ~mfpf_pf_cost() {};
   mfpf_pf_cost(mfpf_point_finder& pf,
                const vimt_image_2d_of<float>& image,
@@ -63,11 +63,11 @@ public:
 
   //: Checks if parameter index is at minima by displacing by +/-dx
   //  If it is, then uses parabolic fit to attempt to improved it.
-  //  fit is f(params).  On exit params contains new 
+  //  fit is f(params).  On exit params contains new
   //  values, and fit contains new fit at that position.
   bool check_and_refine_minima(vnl_vector<double>& params,
-                          double &fit,
-                          unsigned index, double dx);
+                               double &fit,
+                               unsigned index, double dx);
 };
 
 double mfpf_pf_cost::f(const vnl_vector<double>& params)
@@ -79,8 +79,8 @@ double mfpf_pf_cost::f(const vnl_vector<double>& params)
 }
 
 void mfpf_pf_cost::get_pose(const vnl_vector<double>& v,
-                vgl_point_2d<double>& p,
-                vgl_vector_2d<double>& u) const
+                            vgl_point_2d<double>& p,
+                            vgl_vector_2d<double>& u) const
 {
   p = p_+pf_->step_size()*(v[0]*u_+v[1]*v_);
   double s = vcl_pow(ds_,v[2]);
@@ -90,11 +90,11 @@ void mfpf_pf_cost::get_pose(const vnl_vector<double>& v,
 
 //: Checks if parameter index is at minima by displacing by +/-dx
 //  If it is, then uses parabolic fit to attempt to improved it.
-//  fit is f(params).  On exit params contains new 
+//  fit is f(params).  On exit params contains new
 //  values, and fit contains new fit at that position.
 bool mfpf_pf_cost::check_and_refine_minima(vnl_vector<double>& params,
-                          double &fit,
-                          unsigned index, double dx)
+                                           double &fit,
+                                           unsigned index, double dx)
 {
   double p0 = params[index];
   params[index]=p0-dx;
@@ -163,7 +163,7 @@ void mfpf_point_finder::set_scale_range(unsigned ns, double ds)
   ds_=ds;
 }
 
-//: Search given image around p, using u to define scale and angle 
+//: Search given image around p, using u to define scale and angle
 //  Evaluates responses on a grid, finds the best point on the
 //  grid, then optimises its position by fitting a parabola.
 //
@@ -214,15 +214,15 @@ double mfpf_point_finder::search_one_pose_with_opt(
 }
 
 
-//: Search given image around p, using u to define scale and orientation 
-//  On exit, new_p and new_u define position, scale and orientation of 
+//: Search given image around p, using u to define scale and orientation
+//  On exit, new_p and new_u define position, scale and orientation of
 //  the best nearby match.  Returns a qualtity of fit measure at that
 //  point (the smaller the better).
 double mfpf_point_finder::search(const vimt_image_2d_of<float>& image,
-                        const vgl_point_2d<double>& p,
-                        const vgl_vector_2d<double>& u,
-                        vgl_point_2d<double>& new_p,
-                        vgl_vector_2d<double>& new_u)
+                                 const vgl_point_2d<double>& p,
+                                 const vgl_vector_2d<double>& u,
+                                 vgl_point_2d<double>& new_p,
+                                 vgl_vector_2d<double>& new_u)
 {
   if (nA_==0 && ns_==0)
   {
@@ -259,8 +259,8 @@ double mfpf_point_finder::search(const vimt_image_2d_of<float>& image,
   return best_fit;
 }
 
-//: Search given image around p, using u to define scale and orientation 
-//  On exit, new_p and new_u define position, scale and orientation of 
+//: Search given image around p, using u to define scale and orientation
+//  On exit, new_p and new_u define position, scale and orientation of
 //  the best nearby match.  Returns a qualtity of fit measure at that
 //  point (the smaller the better).
 double mfpf_point_finder::search_with_opt(
@@ -325,7 +325,7 @@ void mfpf_point_finder::grid_search_one_pose(
                            const vgl_point_2d<double>& p,
                            const vgl_vector_2d<double>& u,
                            vcl_vector<mfpf_pose>& pts,
-                          vcl_vector<double>& fit)
+                           vcl_vector<double>& fit)
 {
   vimt_image_2d_of<double> response_im;
   evaluate_region(image,p,u,response_im);
@@ -348,7 +348,7 @@ void mfpf_point_finder::grid_search_one_pose(
 //  Find local minima on this grid.
 //  Perform single sub-grid optimisation by fitting a parabola
 //  in x and y and testing resulting point.
-//  Append each to pts.  
+//  Append each to pts.
 //  Note: pts is not resized, so empty beforehand if necessary.
 void mfpf_point_finder::multi_search_one_pose(
                           const vimt_image_2d_of<float>& image,
@@ -373,9 +373,9 @@ void mfpf_point_finder::multi_search_one_pose(
 
     if (vnl_math_isnan(f0))
     {
-      vcl_cerr<<"mfpf_point_finder::multi_search_one_pose()"<<vcl_endl;
-      vcl_cerr<<"Response was a NaN at "<<x<<','<<y<<vcl_endl;
-      vcl_cerr<<"Reponse image: "<<response_im.image()<<vcl_endl;
+      vcl_cerr<<"mfpf_point_finder::multi_search_one_pose()"<<vcl_endl
+              <<"Response was a NaN at "<<x<<','<<y<<vcl_endl
+              <<"Reponse image: "<<response_im.image()<<vcl_endl;
       vil_print_all(vcl_cout,response_im.image());
       vcl_abort();
     }
@@ -422,7 +422,6 @@ void mfpf_point_finder::multi_search_one_pose(
 
     fit.push_back(f1);
     pts.push_back(mfpf_pose(p1,u1));
-
   }
 }
 
@@ -513,9 +512,9 @@ void mfpf_point_finder::multi_search(
 //  On input fit is match at p,u.  On exit p,u and fit are updated.
 //  Baseclass implementation uses simplex optimisation.
 void mfpf_point_finder::refine_match(const vimt_image_2d_of<float>& image,
-                          vgl_point_2d<double>& p,
-                          vgl_vector_2d<double>& u,
-                          double& fit)
+                                     vgl_point_2d<double>& p,
+                                     vgl_vector_2d<double>& u,
+                                     double& fit)
 {
   // Strictly should set up scale and orientation tolerances
   // based on extent of object
@@ -530,18 +529,19 @@ void mfpf_point_finder::refine_match(const vimt_image_2d_of<float>& image,
   // One unit in v moves p by 1, scale by pow(ds,1) and A by dA
   amoeba.set_x_tolerance(0.1);  // Default 1e-8
   amoeba.set_f_tolerance(9e9);
-    // amoeba continues until both x and f tolerances are satisfied
-    // Setting large f tolerance ensures x is satisfied
+  // amoeba continues until both x and f tolerances are satisfied
+  // Setting large f tolerance ensures x is satisfied
 
   amoeba.minimize(v, initial_dv);
 
-/* Powell minimizer seems to require a huge number of iterations
-   Stick with Simplex for the moment.
+#if 0
+  // Powell minimizer seems to require a huge number of iterations
+  // Stick with Simplex for the moment.
   vnl_powell powell(&cost_fn);
   powell.set_initial_step(0.5);
   powell.set_linmin_xtol(0.1);
   powell.minimize(v);
-*/
+#endif // 0
 
   fit = cost_fn.f(v);
   cost_fn.get_pose(v,p,u);
@@ -575,11 +575,11 @@ bool mfpf_point_finder::base_equality(const mfpf_point_finder& pf) const
 
 void mfpf_point_finder::print_summary(vcl_ostream& os) const
 {
-  os<<" step_size: "<<step_size_;
-  os<<" search_ni: "<<search_ni_;
-  os<<" search_nj: "<<search_nj_;
-  os<<" nA: "<<nA_<<" dA: "<<dA_;
-  os<<" ns: "<<ns_<<" ds: "<<ds_<<" ";
+  os<<" step_size: "<<step_size_
+    <<" search_ni: "<<search_ni_
+    <<" search_nj: "<<search_nj_
+    <<" nA: "<<nA_<<" dA: "<<dA_
+    <<" ns: "<<ns_<<" ds: "<<ds_<<' ';
 }
 
 //=======================================================================
@@ -599,13 +599,13 @@ short mfpf_point_finder::version_no() const
 void mfpf_point_finder::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
-  vsl_b_write(bfs,step_size_); 
-  vsl_b_write(bfs,search_ni_); 
-  vsl_b_write(bfs,search_nj_); 
-  vsl_b_write(bfs,nA_); 
-  vsl_b_write(bfs,dA_); 
-  vsl_b_write(bfs,ns_); 
-  vsl_b_write(bfs,ds_); 
+  vsl_b_write(bfs,step_size_);
+  vsl_b_write(bfs,search_ni_);
+  vsl_b_write(bfs,search_nj_);
+  vsl_b_write(bfs,nA_);
+  vsl_b_write(bfs,dA_);
+  vsl_b_write(bfs,ns_);
+  vsl_b_write(bfs,ds_);
 }
 
 //=======================================================================
@@ -623,14 +623,14 @@ void mfpf_point_finder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,step_size_);
       vsl_b_read(bfs,search_ni_);
       vsl_b_read(bfs,search_nj_);
-      vsl_b_read(bfs,nA_); 
-      vsl_b_read(bfs,dA_); 
-      vsl_b_read(bfs,ns_); 
-      vsl_b_read(bfs,ds_); 
+      vsl_b_read(bfs,nA_);
+      vsl_b_read(bfs,dA_);
+      vsl_b_read(bfs,ns_);
+      vsl_b_read(bfs,ds_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&) \n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
@@ -688,8 +688,8 @@ vcl_ostream& operator<<(vcl_ostream& os,const mfpf_point_finder& b)
 
 vcl_ostream& operator<<(vcl_ostream& os,const mfpf_point_finder* b)
 {
-    if (b)
+  if (b)
     return os << *b;
-    else
+  else
     return os << "No mfpf_point_finder defined.";
 }
