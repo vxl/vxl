@@ -11,10 +11,7 @@
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
 
-#include <vil/vil_load.h>
 #include <vil/vil_save.h>
-
-#include <vgl/vgl_vector_3d.h>
 
 #include <vpgl/vpgl_camera.h>
 
@@ -28,7 +25,7 @@ MAIN( test_bvxm_create_synth_lidar_data_process)
   bool good = bprb_batch_process_manager::instance()->init_process("bvxmCreateSynthLidarDataProcess");
   good = bprb_batch_process_manager::instance()->set_params("synth_test_params.xml");
   good = good && bprb_batch_process_manager::instance()->run_process();
-  TEST("run generate synthetic lidar data process should be succesful", good ,true);
+  TEST("run generate synthetic lidar data process should be successful", good ,true);
 
   unsigned id_cam, id_img;
   good = good && bprb_batch_process_manager::instance()->commit_output(0, id_img);
