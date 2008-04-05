@@ -316,30 +316,30 @@ bvxm_gen_synthetic_world_process::gen_texture_map(vgl_box_3d<double> box,
                                                   vcl_vector<vcl_vector<float> >& intens_map_side2)
 {
   // generate intensity maps
-  intens_map_bt.resize(box.width()/8+1);
-  intens_map_side1.resize(box.width()/8+1);
-  intens_map_side2.resize(box.width()/8+1);
+  intens_map_bt.resize(float(box.width()/8+1));
+  intens_map_side1.resize(float(box.width()/8+1));
+  intens_map_side2.resize(float(box.width()/8+1));
 
 #ifdef DEBUG
   vcl_cout << box.width() << ' ' << box.depth() << ' ' << box.height() << vcl_endl;
 #endif
 
   for (unsigned i=0; i<box.width()/8;i++) {
-    intens_map_bt[i].resize(box.height()/8+1);
+    intens_map_bt[i].resize(float(box.height()/8+1));
     for (unsigned j=0; j<box.height()/8;j++) {
       intens_map_bt[i][j] = (rand() % 85)/255.0;
     }
   }
 
   for (unsigned i=0; i<box.width()/8;i++) {
-    intens_map_side1[i].resize(box.depth()/8+1);
+    intens_map_side1[i].resize(float(box.depth()/8+1));
     for (unsigned j=0; j<box.depth()/8;j++) {
       intens_map_side1[i][j] = (rand() % 85)/255.0 + 0.4;
     }
   }
 
   for (unsigned i=0; i<box.height()/8;i++) {
-    intens_map_side2[i].resize(box.depth()/8+1);
+    intens_map_side2[i].resize(float(box.depth()/8+1));
     for (unsigned j=0; j<box.depth()/8;j++) {
       intens_map_side2[i][j] = (rand() % 85)/255.0 + 0.7;
       if (intens_map_side2[i][j] > 1.0)
@@ -405,18 +405,18 @@ bvxm_gen_synthetic_world_process::gen_voxel_world_2box(vgl_vector_3d<unsigned> g
           if (face1 != -1) {
             int a,b;
             if (face1 == 0) {
-              a = (i-box.min_x())/8;
-              b = (j-box.min_y())/8;
+              a = int(i-box.min_x())/8;
+              b = int(j-box.min_y())/8;
               (*intensity_slab_it)(i,j,0) = intens_map_bt[a][b];
             }
             else if (face1 == 1) {
-              a = (i-box.min_x())/8;
-              b = (z-box.min_z())/8;
+              a = int(i-box.min_x())/8;
+              b = int(z-box.min_z())/8;
               (*intensity_slab_it)(i,j,0) = intens_map_side1[a][b];
             }
             else {
-              a = (j-box.min_y())/8;
-              b = (z-box.min_z())/8;
+              a = int(j-box.min_y())/8;
+              b = int(z-box.min_z())/8;
               (*intensity_slab_it)(i,j,0) = intens_map_side2[a][b];
             }
 #ifdef DEBUG
@@ -427,18 +427,18 @@ bvxm_gen_synthetic_world_process::gen_voxel_world_2box(vgl_vector_3d<unsigned> g
             //(*intensity_slab_it)(i,j,0) = face_intens[5-face2];
             int a,b;
             if (face2 == 0) {
-              a = (i-top_box.min_x())/8;
-              b = (j-top_box.min_y())/8;
+              a = int(i-top_box.min_x())/8;
+              b = int(j-top_box.min_y())/8;
               (*intensity_slab_it)(i,j,0) = top_intens_map_bt[a][b];
             }
             else if (face2 == 1) {
-              a = (i-top_box.min_x())/8;
-              b = (z-top_box.min_z())/8;
+              a = int(i-top_box.min_x())/8;
+              b = int(z-top_box.min_z())/8;
               (*intensity_slab_it)(i,j,0) = top_intens_map_side1[a][b];
             }
             else {
-              a = (j-top_box.min_y())/8;
-              b = (z-top_box.min_z())/8;
+              a = int(j-top_box.min_y())/8;
+              b = int(z-top_box.min_z())/8;
               (*intensity_slab_it)(i,j,0) = top_intens_map_side2[a][b];
             }
           }
