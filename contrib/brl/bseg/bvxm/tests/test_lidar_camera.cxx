@@ -1,6 +1,4 @@
 #include <testlib/testlib_test.h>
-#include <vil/vil_load.h>
-#include <vil/vil_save.h>
 #include <bgeo/bgeo_lvcs_sptr.h>
 
 #include "../bvxm_world_params.h"
@@ -20,7 +18,7 @@ static void test_lidar_camera()
   TEST("identity camera, equality", equal, true);
 
   bgeo_lvcs_sptr lvcs = new bgeo_lvcs(33.3236, 44.3694, 0);
-  
+
   vnl_matrix<double> trans_matrix;
   trans_matrix.set_size(4,4);
   trans_matrix.fill(0);
