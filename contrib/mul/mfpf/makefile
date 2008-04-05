@@ -29,6 +29,12 @@ SOURCES += mfpf_mr_point_finder.cxx
 SOURCES += mfpf_mr_point_finder_builder.cxx
 SOURCES += mfpf_prune_overlaps.cxx
 SOURCES += mfpf_sort_matches.cxx
+SOURCES += mfpf_region_finder.cxx
+SOURCES += mfpf_region_finder_builder.cxx
+SOURCES += mfpf_sad_vec_cost.cxx
+SOURCES += mfpf_sad_vec_cost_builder.cxx
+SOURCES += mfpf_vec_cost.cxx
+SOURCES += mfpf_vec_cost_builder.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

@@ -18,6 +18,11 @@ SOURCES += bvxm_save_occupancy_raw_process.cxx
 SOURCES += bvxm_update_process.cxx
 SOURCES += bvxm_create_local_rpc_process.cxx
 SOURCES += bvxm_create_normalized_image_process.cxx
+SOURCES += bvxm_create_synth_lidar_data_process.cxx
+SOURCES += bvxm_gen_synthetic_world_process.cxx
+SOURCES += bvxm_lidar_init_process.cxx
+SOURCES += bvxm_process_utils.cxx
+SOURCES += bvxm_save_edges_raw_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
