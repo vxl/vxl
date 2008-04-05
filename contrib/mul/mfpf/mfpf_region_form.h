@@ -16,7 +16,6 @@
 //  which is mapped to the world frame by pose.
 struct mfpf_region_form
 {
- private:
   //: Pose (position + scale/orientation)
   mfpf_pose pose_;
 
@@ -27,15 +26,16 @@ struct mfpf_region_form
 
   //: Name of form of shape ("box","ellipse")
   vcl_string form_;
+
  public:
 
   //: Constructor
   mfpf_region_form(const mfpf_pose& p, vcl_string form,
                    double wi, double wj)
-   : pose_(p),form_(form),wi_(wi),wj_(wj) {};
+   : pose_(p),wi_(wi),wj_(wj),form_(form) {}
 
   //: Default constructor
-  mfpf_region_form() {};
+  mfpf_region_form() {}
 
   //: Pose (position + scale/orientation)
   mfpf_pose& pose() { return pose_; }
@@ -82,10 +82,9 @@ inline void vsl_b_read(vsl_b_istream& bfs, mfpf_region_form& p)
 {
   short version;
   vsl_b_read(bfs,version);
-  double ux,uy;
   switch (version)
   {
-    case (1):
+    case 1:
       vsl_b_read(bfs,p.pose());
       vsl_b_read(bfs,p.form());
       vsl_b_read(bfs,p.wi());
@@ -117,7 +116,7 @@ inline void vsl_b_read(vsl_b_istream& bfs,
   unsigned n;
   switch (version)
   {
-    case (1):
+    case 1:
       vsl_b_read(bfs,n);
       p.resize(n);
       for (unsigned i=0;i<n;++i) vsl_b_read(bfs,p[i]);
@@ -130,4 +129,3 @@ inline void vsl_b_read(vsl_b_istream& bfs,
 }
 
 #endif // mfpf_region_form_h_
-
