@@ -64,7 +64,7 @@ vcl_string bwm_tableau_rat_cam::save_camera()
 {
   vcl_string img_path = this->img_path();
   vcl_string cam_path = my_observer_->camera_path();
- 
+
   // see if the camera is adjusted
   if (my_observer_->camera_adjusted()) {
     //need to save the new camera
