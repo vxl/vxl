@@ -6,16 +6,11 @@
 
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
-#include <vcl_string.h>
 #include <vcl_iostream.h>
-#include <vcl_fstream.h>
 
 #include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
 
 #include <vil/vil_image_view.h>
-
-#include <vul/vul_file.h>
 
 //: Constructor
 bvxm_create_synth_lidar_data_process::bvxm_create_synth_lidar_data_process()
@@ -59,7 +54,6 @@ bvxm_create_synth_lidar_data_process::bvxm_create_synth_lidar_data_process()
 
   if (!parameters()->add("box dim in Z", "box_dim_z", (unsigned int)50))
     vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << vcl_endl;
- 
 }
 
 //: Destructor
@@ -79,7 +73,6 @@ bvxm_create_synth_lidar_data_process::execute()
   unsigned int v_dimx = parameters()->value<unsigned int>("voxel_dim_x");
   unsigned int v_dimy = parameters()->value<unsigned int>("voxel_dim_y");
   unsigned int v_dimz = parameters()->value<unsigned int>("voxel_dim_z");
-  //vgl_vector_3d<unsigned int> voxel_dims(dimx, dimy, dimz);
 
   // box dimensions
   unsigned int dimx = parameters()->value<unsigned int>("box_dim_x");
@@ -106,12 +99,11 @@ bvxm_create_synth_lidar_data_process::execute()
   return true;
 }
 
-bool bvxm_create_synth_lidar_data_process::gen_lidar_view(int x, int y, int z,
-                    vcl_vector<vgl_box_3d<double> > boxes,
-                    vil_image_view_base_sptr& lidar,
-                    vpgl_camera_double_sptr& cam)
+bool bvxm_create_synth_lidar_data_process::gen_lidar_view(int x, int y, int /*z*/,
+                                                          vcl_vector<vgl_box_3d<double> > boxes,
+                                                          vil_image_view_base_sptr& lidar,
+                                                          vpgl_camera_double_sptr& cam)
 {
-  
   vil_image_view<float> lv(x, y);
   lv.fill(0);
 
@@ -120,19 +112,19 @@ bool bvxm_create_synth_lidar_data_process::gen_lidar_view(int x, int y, int z,
     vgl_box_3d<double> box = boxes[b];
     double z = box.max_z(); // top face of the box
     for (int i=0; i<x; i++)
-      for (int j=0; j<y; j++){
+      for (int j=0; j<y; j++) {
         vgl_point_3d<double> p(i,j,z);
         if (box.contains(p)) {
           // check if there is already a higher d there
-          if (lv(i,j) < z)
-            lv(i,j) = z;
+          if (lv(i,j) < (float)z)
+            lv(i,j) = (float)z;
         }
       }
   }
 
   lidar = new vil_image_view<float>(lv);
 
-  // generate the camera, which is a one to one mapping between 
+  // generate the camera, which is a one to one mapping between
   // lidar image and voxel slabs
   cam = new bvxm_lidar_camera();
   return true;
