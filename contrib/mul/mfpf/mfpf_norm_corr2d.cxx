@@ -183,7 +183,7 @@ void mfpf_norm_corr2d::evaluate_region(
   vcl_ptrdiff_t s_jstep = sample.jstep();
   vcl_ptrdiff_t k_jstep = kernel_.jstep();
 
-  for (unsigned j=0;j<nj;++j,r+=r_jstep,s+=s_jstep)
+  for (int j=0;j<nj;++j,r+=r_jstep,s+=s_jstep)
   {
     for (int i=0;i<ni;++i)
     {
@@ -241,7 +241,7 @@ double mfpf_norm_corr2d::search_one_pose(
 
   double best_r=-9.99e9;
   int best_i,best_j;
-  for (unsigned j=0;j<nj;++j,s+=s_jstep)
+  for (int j=0;j<nj;++j,s+=s_jstep)
   {
     for (int i=0;i<ni;++i)
     {
