@@ -22,7 +22,7 @@
 *   right, top-bottom" iterator is being used: \c vipl_trivial_pixeliter .
 *
 * The common parent class of all filters is \c vipl_filter (through its derived
-* class \c vipl_filter_2d ).  There, all image iteration magic is taken care
+* class \c vipl_filter_2d).  There, all image iteration magic is taken care
 * of.  You, as a writer of a new filter, only have to implement the filter on
 * a single "section", which is the part of the image that has been loaded in
 * memory.  Often, for relatively small images, this is just the whole image,
@@ -31,6 +31,9 @@
 * implementation.
 *
 * For the most common case, viz. input and output image are of type
-* \c vil_image_view<T>, have a look at the \c vepl2 library.
+* \c vil_image_view<T>, have a look at the \c vepl library.
 * The old \c vil1 image representation is interfaced in \c vepl2.
+*
+* This library was originally designed by Terry Boult for the TargetJr
+* package, and then ported to vxl by Peter Vanroose.
 */
