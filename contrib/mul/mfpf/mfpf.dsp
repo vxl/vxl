@@ -103,6 +103,15 @@ SOURCE=.\Templates/vsl_binary_loader+mfpf_point_finder-.cxx
 SOURCE=.\Templates/vsl_binary_loader+mfpf_point_finder_builder-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/mbl_cloneables_factory+mfpf_vec_cost_builder-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_binary_loader+mfpf_vec_cost-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_binary_loader+mfpf_vec_cost_builder-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\mfpf_add_all_loaders.cxx
 # End Source File
 # Begin Source File
@@ -164,6 +173,24 @@ SOURCE=.\mfpf_prune_overlaps.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\mfpf_sort_matches.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_region_finder.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_region_finder_builder.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_sad_vec_cost.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_sad_vec_cost_builder.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_vec_cost.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_vec_cost_builder.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -245,6 +272,24 @@ SOURCE=.\mfpf_prune_overlaps.h
 # End Source File
 # Begin Source File
 SOURCE=.\mfpf_sort_matches.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_region_finder.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_region_finder_builder.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_sad_vec_cost.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_sad_vec_cost_builder.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_vec_cost.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_vec_cost_builder.h
 # End Source File
 # End Group
 # End Target

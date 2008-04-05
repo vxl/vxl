@@ -239,6 +239,9 @@ SOURCE=.\test_voxel_world_mog_image.cxx
 SOURCE=.\test_voxel_world_update.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_lidar_camera.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group

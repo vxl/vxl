@@ -145,6 +145,9 @@ SOURCE=.\test_range_map.cxx
 # Begin Source File
 SOURCE=.\test_drawpix_speed2.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_rubberband_dialog.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

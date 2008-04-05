@@ -138,6 +138,21 @@ SOURCE=.\bvxm_create_local_rpc_process.cxx
 SOURCE=.\bvxm_create_normalized_image_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvxm_create_synth_lidar_data_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_gen_synthetic_world_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_lidar_init_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_process_utils.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_save_edges_raw_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvxm_voxel_world_sptr.cxx
 # End Source File
 # Begin Source File
@@ -190,6 +205,21 @@ SOURCE=.\bvxm_create_local_rpc_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_create_normalized_image_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_create_synth_lidar_data_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_gen_synthetic_world_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_lidar_init_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_process_utils.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_save_edges_raw_process.h
 # End Source File
 # End Group
 # End Target

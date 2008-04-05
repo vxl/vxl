@@ -11,6 +11,9 @@ SOURCE=.\bgeo_datum_conversion.cxx
 # Begin Source File
 SOURCE=.\bgeo_lvcs.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\bgeo_utm.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -28,6 +31,9 @@ SOURCE=.\bgeo_lvcs.h
 # End Source File
 # Begin Source File
 SOURCE=.\bgeo_lvcs_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\bgeo_utm.h
 # End Source File
 # End Group
 # End Target

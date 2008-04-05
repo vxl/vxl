@@ -305,6 +305,15 @@ SOURCE=.\mbl_dyn_prog.cxx
 # Begin Source File
 SOURCE=.\mbl_progress_hierarchy.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\mbl_get.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_replace_string.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_vector_txt_files.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx;in"
@@ -568,6 +577,15 @@ SOURCE=.\mbl_parse_tuple.h
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_progress_callback.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_get.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_replace_string.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_vector_txt_files.h
 # End Source File
 # End Group
 # End Target

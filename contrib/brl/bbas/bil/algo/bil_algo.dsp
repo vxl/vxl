@@ -131,6 +131,9 @@ SOURCE=.\Templates/bil_harr_wavelet_transform+float-.cxx
 # Begin Source File
 SOURCE=.\Templates/bil_perform_tensor_decomposition+float-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bil_scale_image+float-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
