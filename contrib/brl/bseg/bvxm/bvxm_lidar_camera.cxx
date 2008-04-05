@@ -1,7 +1,7 @@
 #include "bvxm_lidar_camera.h"
+//:
+// \file
 
-#include <vcl_cassert.h>
-#include <vcl_cstring.h>
 #include <vcl_vector.h>
 
 #include <vnl/vnl_vector.h>
@@ -32,13 +32,13 @@ bvxm_lidar_camera::bvxm_lidar_camera(bvxm_lidar_camera const& rhs)
 }
 
 //: transforms a given 3d world point to image plane
-void bvxm_lidar_camera::project(const double x, const double y, const double z, 
+void bvxm_lidar_camera::project(const double x, const double y, const double z,
                                 double& u, double& v) const
 {
   vnl_vector<double> vec(4), res(4);
   double lat, lon, gz;
   lvcs_->local_to_global(x, y, z, bgeo_lvcs::wgs84, lon, lat, gz);
-  
+
   double x1=lat, y1=lon;
   if (is_utm) {
     bgeo_utm utm;
@@ -63,8 +63,8 @@ void bvxm_lidar_camera::project(const double x, const double y, const double z,
 }
 
 //: backprojects an image point into local coordinates (based on lvcs_)
-void bvxm_lidar_camera::backproject(const double u, const double v, 
-                             double& x, double& y, double& z)
+void bvxm_lidar_camera::backproject(const double u, const double v,
+                                    double& x, double& y, double& z)
 {
   vnl_vector<double> vec(4), res(4);
   vec[0] = tiepoints_[0][3] + u;
@@ -89,7 +89,7 @@ void bvxm_lidar_camera::backproject(const double u, const double v,
 }
 
 void bvxm_lidar_camera::img_to_wgs(const unsigned i, const unsigned j,
-                                     double& lon, double& lat)
+                                   double& lon, double& lat)
 {
   vnl_vector<double> v(4), res(4);
   v[0] = tiepoints_[0][3] + i;
@@ -106,7 +106,7 @@ bool bvxm_lidar_camera::operator==(bvxm_lidar_camera const& rhs) const
 {
   if ((this->trans_matrix_ == rhs.trans_matrix_) && (*(this->lvcs_) == *(rhs.lvcs_)))
     return true;
-  else 
+  else
     return false;
 }
 
@@ -114,14 +114,14 @@ bool bvxm_lidar_camera::operator==(bvxm_lidar_camera const& rhs) const
 vcl_ostream&  operator<<(vcl_ostream& s,
                          bvxm_lidar_camera const& p)
 {
-  s << p.trans_matrix_ << "\n";
-  s << p.tiepoints_[0][0] << "\n";
-  s << p.tiepoints_[0][1] << "\n";
-  s << p.tiepoints_[0][2] << "\n";
-  s << p.tiepoints_[0][3] << "\n";
-  s << p.tiepoints_[0][4] << "\n";
-  s << p.tiepoints_[0][5] << "\n";
-  s << *(p.lvcs_) << "\n";
+  s << p.trans_matrix_ << '\n'
+    << p.tiepoints_[0][0] << '\n'
+    << p.tiepoints_[0][1] << '\n'
+    << p.tiepoints_[0][2] << '\n'
+    << p.tiepoints_[0][3] << '\n'
+    << p.tiepoints_[0][4] << '\n'
+    << p.tiepoints_[0][5] << '\n'
+    << *(p.lvcs_) << '\n';
 
   return s ;
 }

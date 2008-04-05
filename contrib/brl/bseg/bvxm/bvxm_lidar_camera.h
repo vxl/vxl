@@ -1,7 +1,9 @@
 #ifndef bvxm_lidar_camera_h_
 #define bvxm_lidar_camera_h_
+//:
+// \file
 
-//#include <vcl_string.h>
+#include <vcl_iosfwd.h>
 #include <bgeo/bgeo_lvcs.h>
 #include <vpgl/vpgl_camera.h>
 #include <vnl/vnl_matrix.h>
@@ -10,12 +12,12 @@
 
 class bvxm_lidar_camera : public vpgl_camera<double>
 {
-public:
+ public:
   //: creates identity matrix and all zero tiepoints
   bvxm_lidar_camera();
 
-  bvxm_lidar_camera(vnl_matrix<double> trans_matrix, 
-                    bgeo_lvcs_sptr lvcs, 
+  bvxm_lidar_camera(vnl_matrix<double> trans_matrix,
+                    bgeo_lvcs_sptr lvcs,
                     vcl_vector<vcl_vector<double> > tiepoints)
     : trans_matrix_(trans_matrix), lvcs_(lvcs), tiepoints_(tiepoints), is_utm(false) {}
 
@@ -25,10 +27,10 @@ public:
   ~bvxm_lidar_camera() {}
 
   //northing=0 is North, 1 is east
-  void set_utm(int utm_zone, unsigned northing){is_utm=true, utm_zone_=utm_zone; northing_=northing;} 
+  void set_utm(int utm_zone, unsigned northing) { is_utm=true, utm_zone_=utm_zone; northing_=northing; }
 
-  //: Implementing the generic camera interface of vpgl_camera. 
-  //: x,y,z are in local coordinates, u represents image column, v image row
+  //: Implementing the generic camera interface of vpgl_camera.
+  //  x,y,z are in local coordinates, u represents image column, v image row
   void project(const double x, const double y, const double z, double& u, double& v) const;
 
   //: backprojects an image point into local coordinates (based on lvcs_)
@@ -41,7 +43,8 @@ public:
 
   //: Read camera  from stream
   friend vcl_istream&  operator>>(vcl_istream& s, bvxm_lidar_camera& p);
-private:
+
+ private:
 
   //: lvcs of world parameters
   bgeo_lvcs_sptr lvcs_;
