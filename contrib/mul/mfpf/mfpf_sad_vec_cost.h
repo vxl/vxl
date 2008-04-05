@@ -1,24 +1,24 @@
 #ifndef mfpf_sad_vec_cost_h_
 #define mfpf_sad_vec_cost_h_
-
 //:
 // \file
 // \brief Computes weighted sum of absolute differences to a mean
 // \author Tim Cootes
 
 #include <mfpf/mfpf_vec_cost.h>
+#include <vcl_iosfwd.h>
 
 //: Computes weighted sum of absolute differences to a mean
 class mfpf_sad_vec_cost : public mfpf_vec_cost
 {
-private:
+ private:
   //: Mean for vector 
   vnl_vector<double> mean_;
 
   //: Weights to apply to each element in sum
   vnl_vector<double> wts_;
 
-public:
+ public:
 
   //: Dflt ctor
   mfpf_sad_vec_cost();
@@ -56,9 +56,6 @@ public:
 
   //: Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs);
-  
 };
 
 #endif
-
-
