@@ -17,7 +17,7 @@
 
 template <class T>
 bvxm_voxel_storage_disk<T>::bvxm_voxel_storage_disk(vcl_string storage_filename, vgl_vector_3d<unsigned int> grid_size)
-: bvxm_voxel_storage<T>(grid_size), storage_fname_(storage_filename), active_slab_start_(-1), fio_(0)
+: bvxm_voxel_storage<T>(grid_size), storage_fname_(storage_filename), fio_(0), active_slab_start_(-1)
 {
   // assumes desired slab thickness is 1
   slab_buffer_ = new bvxm_memory_chunk(grid_size.x()*grid_size.y()*sizeof(T));

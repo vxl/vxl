@@ -19,7 +19,7 @@ class bvxm_lidar_camera : public vpgl_camera<double>
   bvxm_lidar_camera(vnl_matrix<double> trans_matrix,
                     bgeo_lvcs_sptr lvcs,
                     vcl_vector<vcl_vector<double> > tiepoints)
-    : trans_matrix_(trans_matrix), lvcs_(lvcs), tiepoints_(tiepoints), is_utm(false) {}
+    : lvcs_(lvcs), trans_matrix_(trans_matrix), tiepoints_(tiepoints), is_utm(false) {}
 
   // copy constructor
   bvxm_lidar_camera(bvxm_lidar_camera const& rhs);
