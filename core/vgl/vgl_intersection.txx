@@ -35,7 +35,7 @@ bool vgl_intersection(const vgl_box_2d<Type>& box,
   double xmin=box.min_x(), xmax=box.max_x();
   double ymin=box.min_y(), ymax=box.max_y();
 
- //Run through the cases
+  //Run through the cases
   //
   if (vgl_near_zero(a))// The line is y = -c/b
   {
@@ -294,7 +294,7 @@ bool vgl_intersection( const vgl_line_2d<T> &line0,
 
   T delta, delta_x, delta_y, x, y;
   delta = a0*b1 - a1*b0;
-  if( delta <= vgl_tolerance<T>::position ) // Lines are parallel
+  if ( delta <= vgl_tolerance<T>::position ) // Lines are parallel
     return false;
   delta_x = -c0*b1 + b0*c1; delta_y = -a0*c1 + a1*c0;
   x = delta_x / delta; y = delta_y / delta;
@@ -308,8 +308,8 @@ bool vgl_intersection( const vgl_line_2d<T> &line0,
 // \relates vgl_plane_3d
 template <class T>
 vgl_point_3d<T> vgl_intersection(const vgl_plane_3d<T>& p1,
-                             const vgl_plane_3d<T>& p2,
-                             const vgl_plane_3d<T>& p3)
+                                 const vgl_plane_3d<T>& p2,
+                                 const vgl_plane_3d<T>& p3)
 {
   vgl_point_3d<T> p(p1, p2, p3);
   return p;
@@ -317,18 +317,16 @@ vgl_point_3d<T> vgl_intersection(const vgl_plane_3d<T>& p1,
 
 #undef VGL_INTERSECTION_INSTANTIATE
 #define VGL_INTERSECTION_INSTANTIATE(T) \
-template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_line_3d_2_points<T > const&);\
-template bool vgl_intersection(vgl_line_segment_3d<T > const&,vgl_line_segment_3d<T > const&,vgl_point_3d<T >&);\
-template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_plane_3d<T > const&);\
-template vgl_point_3d<T > vgl_intersection(const vgl_plane_3d<T >&,const vgl_plane_3d<T >&,const vgl_plane_3d<T >&);\
+template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_line_3d_2_points<T > const&); \
+template bool vgl_intersection(vgl_line_segment_3d<T > const&,vgl_line_segment_3d<T > const&,vgl_point_3d<T >&); \
+template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_plane_3d<T > const&); \
+template vgl_point_3d<T > vgl_intersection(const vgl_plane_3d<T >&,const vgl_plane_3d<T >&,const vgl_plane_3d<T >&); \
 template bool vgl_intersection(const vgl_box_2d<T >&, const vgl_line_2d<T >& line, vgl_point_2d<T >& p0, vgl_point_2d<T >&); \
-template bool vgl_intersection(const vgl_line_2d<T> &line0, const vgl_line_2d<T> &line1, vgl_point_2d<T> &intersection_point )
+template bool vgl_intersection(const vgl_line_2d<T > &line0, const vgl_line_2d<T > &line1, vgl_point_2d<T > &intersection_point )
 
 //: Instantiate only functions suitable for integer instantiation.
 #undef VGL_INTERSECTION_BOX_INSTANTIATE
 #define VGL_INTERSECTION_BOX_INSTANTIATE(T) \
 template bool vgl_intersection(const vgl_box_2d<T >&, const vgl_line_2d<T >& line, vgl_point_2d<T >& p0, vgl_point_2d<T >&)
-
-
 
 #endif // vgl_intersection_txx_
