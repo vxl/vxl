@@ -2,6 +2,8 @@
 #include "bvxm_voxel_world.h"
 #include "bvxm_process_utils.h"
 
+#include <vcl_cassert.h>
+
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_point_2d.h>
@@ -71,7 +73,7 @@ bool bvxm_lidar_init_process::execute()
     return false;
 
   bvxm_world_params_sptr world_params = voxel_world->get_params();
-  
+
   vil_image_resource_sptr first_ret = vil_load_image_resource(first.c_str());
   if (!first_ret) {
     vcl_cerr << "bvxm_lidar_init_process -- First return image path is not valid!\n";
@@ -100,7 +102,7 @@ bool bvxm_lidar_init_process::execute()
       vcl_cerr << "bvxm_lidar_init_process -- The process has failed!\n";
       return false;
     }
-  } 
+  }
 
   vil_image_view_base_sptr mask=0;
   if (!gen_mask(roi_first, cam_first, roi_second, cam_second, mask, thresh)) {
@@ -130,7 +132,7 @@ bool bvxm_lidar_init_process::execute()
   return true;
 }
 
-bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar, 
+bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
                                          bvxm_world_params_sptr params,
                                          vil_image_view_base_sptr& roi,
                                          bvxm_lidar_camera*& camera)
@@ -138,7 +140,7 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
   // the file should be a geotiff
   vcl_cout << "FORMAT=" << lidar->file_format();
   if (vcl_strcmp(lidar->file_format(),"tiff") != 0) {
-    vcl_cerr << "bvxm_lidar_init_process::lidar_init -- The image should be a TIFF!" << vcl_endl;
+    vcl_cerr << "bvxm_lidar_init_process::lidar_init -- The image should be a TIFF!\n";
     return false;
   }
 
@@ -146,7 +148,7 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
 
   // check if the tiff file is geotiff
   if (!tiff_img->is_GEOTIFF()) {
-    vcl_cerr << "bvxm_lidar_init_process::lidar_init -- The image should be a GEOTIFF!" << vcl_endl;
+    vcl_cerr << "bvxm_lidar_init_process::lidar_init -- The image should be a GEOTIFF!\n";
     return false;
   }
 
@@ -197,7 +199,7 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
     } else if (gtif->gtif_pixelscale(sx1, sy1, sz1)) {
       comp_trans_matrix(sx1, sy1, sz1, tiepoints, trans_matrix);
     } else {
-      vcl_cerr << "bvxm_lidar_init_process::comp_trans_matrix -- Transform matrix cannot be formed.. " << vcl_endl;
+      vcl_cerr << "bvxm_lidar_init_process::comp_trans_matrix -- Transform matrix cannot be formed..\n";
       return false;
     }
 
@@ -246,11 +248,11 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
 }
 
 bool bvxm_lidar_init_process::comp_trans_matrix(double sx1, double sy1, double sz1,//vil_geotiff_header* gtif,
-                                  vcl_vector<vcl_vector<double> > tiepoints,
-                                  vnl_matrix<double>& trans_matrix)
+                                                vcl_vector<vcl_vector<double> > tiepoints,
+                                                vnl_matrix<double>& trans_matrix)
 {
   double sx, sy, sz;
-  
+
   // use tiepoints and scale values to create a transformation matrix
   // for now use the first tiepoint if there are more than one
   assert (tiepoints.size() > 0);
@@ -295,21 +297,21 @@ bool bvxm_lidar_init_process::comp_trans_matrix(double sx1, double sy1, double s
   return true;
 }
 
-bool bvxm_lidar_init_process::gen_mask(vil_image_view_base_sptr roi_first, 
-                                       bvxm_lidar_camera* cam_first, 
-                                       vil_image_view_base_sptr roi_second, 
-                                       bvxm_lidar_camera* cam_second, 
+bool bvxm_lidar_init_process::gen_mask(vil_image_view_base_sptr roi_first,
+                                       bvxm_lidar_camera* cam_first,
+                                       vil_image_view_base_sptr roi_second,
+                                       bvxm_lidar_camera* cam_second,
                                        vil_image_view_base_sptr& mask,
                                        double thresh)
 {
   // compare the cameras, if the second one existed
   if (!cam_first) {
-    vcl_cerr << "bvxm_lidar_init_process::gen_mask -- camera not found!" << vcl_endl;
+    vcl_cerr << "bvxm_lidar_init_process::gen_mask -- camera not found!\n";
     return false;
   }
 
   if (!roi_first) {
-    vcl_cerr << "bvxm_lidar_init_process::gen_mask -- image not found!" << vcl_endl;
+    vcl_cerr << "bvxm_lidar_init_process::gen_mask -- image not found!\n";
     return false;
   }
 

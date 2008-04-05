@@ -5,10 +5,9 @@
 
 
 #include "mfpf_sad_vec_cost.h"
-#include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
-#include <vul/vul_string.h>
 #include <vcl_cmath.h>
+#include <vcl_cassert.h>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
@@ -34,7 +33,7 @@ mfpf_sad_vec_cost::~mfpf_sad_vec_cost()
 
 //: Define mean and weights
 void mfpf_sad_vec_cost::set(const vnl_vector<double>& mean,
-           const vnl_vector<double>& wts)
+                            const vnl_vector<double>& wts)
 {
   assert(mean.size()==wts.size());
   mean_=mean;
@@ -113,8 +112,8 @@ void mfpf_sad_vec_cost::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,wts_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&) \n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
