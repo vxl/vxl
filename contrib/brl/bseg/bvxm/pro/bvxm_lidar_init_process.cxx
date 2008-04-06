@@ -156,7 +156,6 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
   }
 
   vil_geotiff_header* gtif = tiff_img->get_geotiff_header();
-#endif
   int utm_zone;
   vil_geotiff_header::GTIF_HEMISPH h;
 
@@ -243,12 +242,14 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
       vcl_cerr << "bvxm_lidar_init_process::lidar_init()-- clipping box is out of image boundaries\n";
       return false;
     }
-  } else {
+  }
+  else {
       vcl_cout << "bvxm_lidar_init_process::lidar_init()-- Only ProjectedCSTypeGeoKey=PCS_WGS84_UTM_zoneXX_X is defined rigth now, please define yours!!" << vcl_endl;
       return false;
   }
 
   return true;
+#endif // HAS_GEOTIFF
 }
 
 bool bvxm_lidar_init_process::comp_trans_matrix(double sx1, double sy1, double sz1,//vil_geotiff_header* gtif,
