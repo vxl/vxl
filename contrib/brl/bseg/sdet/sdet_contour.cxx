@@ -1689,8 +1689,8 @@ MergeEndPtTouchingJunction(vtol_vertex_2d_sptr const& endpt,
                            <<edgeMap->rows()<<'x'<<edgeMap->cols()<<'\n'
     if (x < 0) { WARN(x,y); x = 0; }
     if (y < 0) { WARN(x,y); y = 0; }
-    if (x >= edgeMap->rows()) { WARN(x,y); x = edgeMap->rows()-1; }
-    if (y >= edgeMap->cols()) { WARN(x,y); y = edgeMap->cols()-1; }
+    if (x >= int(edgeMap->rows())) { WARN(x,y); x = edgeMap->rows()-1; }
+    if (y >= int(edgeMap->cols())) { WARN(x,y); y = edgeMap->cols()-1; }
 #undef WARN
 
     if (sdet_contour::debug_)
