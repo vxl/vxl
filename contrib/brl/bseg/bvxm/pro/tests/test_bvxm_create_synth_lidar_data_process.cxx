@@ -25,12 +25,12 @@ MAIN( test_bvxm_create_synth_lidar_data_process)
   bool good = bprb_batch_process_manager::instance()->init_process("bvxmCreateSynthLidarDataProcess");
   good = bprb_batch_process_manager::instance()->set_params("synth_test_params.xml");
   good = good && bprb_batch_process_manager::instance()->run_process();
-  TEST("run generate synthetic lidar data process should be successful", good ,true);
+  TEST("run generate synthetic lidar data process should be successful", good, true);
 
   unsigned id_cam, id_img;
   good = good && bprb_batch_process_manager::instance()->commit_output(0, id_img);
   good = good && bprb_batch_process_manager::instance()->commit_output(1, id_cam);
-  TEST("run generate synthetic lidar data process commits output", good ,true);
+  TEST("run generate synthetic lidar data process commits output", good, true);
 
   // check if the results are in DB
   brdb_query_aptr Q_cam = brdb_query_comp_new("id", brdb_query::EQ, id_cam);
@@ -46,7 +46,7 @@ MAIN( test_bvxm_create_synth_lidar_data_process)
              << " didn't get value\n";
   }
   bool non_null = (value != 0);
-  TEST("camera output non-null", non_null ,true);
+  TEST("camera output non-null", non_null, true);
 
   brdb_query_aptr Q_img = brdb_query_comp_new("id", brdb_query::EQ, id_img);
   brdb_selection_sptr S_img = DATABASE->select("vil_image_view_base_sptr_data", Q_img);
@@ -61,12 +61,13 @@ MAIN( test_bvxm_create_synth_lidar_data_process)
              << " didn't get value\n";
   }
   non_null = (value_img != 0);
-  TEST("image output non-null", non_null ,true);
+  TEST("image output non-null", non_null, true);
 
   brdb_value_t<vil_image_view_base_sptr>* result =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_img.ptr());
   vil_image_view_base_sptr img = result->value();
   bool saved = vil_save(*img, "./lidar_img.tif");
+  TEST("image saved", saved, true);
 
   SUMMARY();
 }
