@@ -115,8 +115,8 @@ double mfpf_norm_corr2d::radius() const
 //: Evaluate match at p, using u to define scale and orientation
 // Returns -1*edge strength at p along direction u
 double mfpf_norm_corr2d::evaluate(const vimt_image_2d_of<float>& image,
-                        const vgl_point_2d<double>& p,
-                        const vgl_vector_2d<double>& u)
+                                  const vgl_point_2d<double>& p,
+                                  const vgl_vector_2d<double>& u)
 {
   vgl_vector_2d<double> u1=step_size_*u;
   vgl_vector_2d<double> v1(-u1.y(),u1.x());
@@ -131,13 +131,13 @@ double mfpf_norm_corr2d::evaluate(const vimt_image_2d_of<float>& image,
   vgl_vector_2d<double> im_v = s_w2i.delta(p0, v1);
 
   vil_resample_bilin(image.image(),sample,
-                      im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
-                      im_v.x(),im_v.y(),
-                      kernel_.ni(),kernel_.nj());
+                     im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
+                     im_v.x(),im_v.y(),
+                     kernel_.ni(),kernel_.nj());
 
   return 1.0-norm_corr(sample.top_left_ptr(),kernel_.top_left_ptr(),
-                      sample.jstep(),kernel_.jstep(),
-                      kernel_.ni(),kernel_.nj());
+                       sample.jstep(),kernel_.jstep(),
+                       kernel_.ni(),kernel_.nj());
 }
 
 //: Evaluate match at in a region around p
@@ -171,9 +171,9 @@ void mfpf_norm_corr2d::evaluate_region(
   vgl_vector_2d<double> im_v = s_w2i.delta(p0, v1);
 
   vil_resample_bilin(image.image(),sample,
-                      im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
-                      im_v.x(),im_v.y(),
-                      nsi,nsj);
+                     im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
+                     im_v.x(),im_v.y(),
+                     nsi,nsj);
 
   response.image().set_size(ni,nj);
   double* r = response.image().top_left_ptr();
@@ -230,17 +230,17 @@ double mfpf_norm_corr2d::search_one_pose(
   vgl_vector_2d<double> im_v = s_w2i.delta(p0, v1);
 
   vil_resample_bilin(image.image(),sample,
-                      im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
-                      im_v.x(),im_v.y(),
-                      nsi,nsj);
+                     im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
+                     im_v.x(),im_v.y(),
+                     nsi,nsj);
 
   const double* k = kernel_.top_left_ptr();
   const float* s = sample.top_left_ptr();
   vcl_ptrdiff_t s_jstep = sample.jstep();
   vcl_ptrdiff_t k_jstep = kernel_.jstep();
 
-  double best_r=-9.99e9;
-  int best_i,best_j;
+  double best_r=-9e99;
+  int best_i=-1,best_j=-1;
   for (int j=0;j<nj;++j,s+=s_jstep)
   {
     for (int i=0;i<ni;++i)
@@ -258,7 +258,7 @@ double mfpf_norm_corr2d::search_one_pose(
 
 // Returns true if p is inside region at given pose
 bool mfpf_norm_corr2d::is_inside(const mfpf_pose& pose,
-                               const vgl_point_2d<double>& p) const
+                                 const vgl_point_2d<double>& p) const
 {
   // Set transform model frame -> World
   vimt_transform_2d t1;
