@@ -71,7 +71,7 @@ vcl_string vil_nitf2_header::section_len_data_tag(section_type sec)
 bool vil_nitf2_header::read(vil_stream* stream)
 {
   // Read the first part of the header
-  bool success = m_field_sequence1.read(*stream) && 
+  bool success = m_field_sequence1.read(*stream) &&
     // If the version is not recognized, it may not even be a NITF file
     file_version() != vil_nitf2_classification::V_UNKNOWN;
 
@@ -128,38 +128,38 @@ vil_nitf2_field_definitions* vil_nitf2_header::get_field_definitions_2(
     .field("NUMI",   "Number of Image Segments",  NITF_INT(3),   false, 0, 0)
     .repeat("NUMI",   vil_nitf2_field_definitions()
 
-      .field("LISH", "Lengh of Image Subheader",  NITF_INT(6),   false, 0, 0)
-      .field("LI",   "Length of Image Segment",   NITF_LONG(10), false, 0, 0))
+            .field("LISH", "Lengh of Image Subheader",  NITF_INT(6),   false, 0, 0)
+            .field("LI",   "Length of Image Segment",   NITF_LONG(10), false, 0, 0))
 
     .field("NUMS",   "Number of Graphic Segments", NITF_INT(3), false, 0, 0)
     .repeat("NUMS",   vil_nitf2_field_definitions()
 
-      .field("LSSH", "Length of Graphic Subheader", NITF_INT(4), false, 0, 0)
-      .field("LS",   "Length of Graphic Segment",   NITF_INT(6), false, 0, 0))
+            .field("LSSH", "Length of Graphic Subheader", NITF_INT(4), false, 0, 0)
+            .field("LS",   "Length of Graphic Segment",   NITF_INT(6), false, 0, 0))
 
     .field("NUML",   "Number of Label Segments",   NITF_INT(3), false, 0, 0)
     .repeat("NUML",   vil_nitf2_field_definitions()
 
-      .field("LLSH", "Length of Label Subheader",  NITF_INT(4), false, 0, 0)
-      .field("LL",   "Length of Label Segment",    NITF_INT(3), false, 0, 0))
+            .field("LLSH", "Length of Label Subheader",  NITF_INT(4), false, 0, 0)
+            .field("LL",   "Length of Label Segment",    NITF_INT(3), false, 0, 0))
 
     .field("NUMT",   "Number of Text Segments",    NITF_INT(3), false, 0, 0)
     .repeat("NUMT",   vil_nitf2_field_definitions()
 
-      .field("LTSH", "Length of Text Subheader",   NITF_INT(4), false, 0, 0)
-      .field("LT",   "Length of Text Segment",     NITF_INT(5), false, 0, 0))
+            .field("LTSH", "Length of Text Subheader",   NITF_INT(4), false, 0, 0)
+            .field("LT",   "Length of Text Segment",     NITF_INT(5), false, 0, 0))
 
     .field("NUMDES", "Number of Data Extension Segments", NITF_INT(3), false, 0, 0)
     .repeat("NUMDES", vil_nitf2_field_definitions()
 
-      .field("LDSH", "Length of Data Extension Subheader", NITF_INT(4), false, 0, 0)
-      .field("LD",   "Length of Data Extension Segment",   NITF_INT(9), false, 0, 0))
+            .field("LDSH", "Length of Data Extension Subheader", NITF_INT(4), false, 0, 0)
+            .field("LD",   "Length of Data Extension Segment",   NITF_INT(9), false, 0, 0))
 
     .field("NUMRES", "Number of Reserved Extension Segments", NITF_INT(3), false, 0, 0)
     .repeat("NUMRES", vil_nitf2_field_definitions()
 
-      .field("LRESH", "Length of Reserved Extension Subheader", NITF_INT(4), false, 0, 0)
-      .field("LRE",   "Length of Reserved Extension Segment",   NITF_INT(7), false, 0, 0))
+            .field("LRESH", "Length of Reserved Extension Subheader", NITF_INT(4), false, 0, 0)
+            .field("LRE",   "Length of Reserved Extension Segment",   NITF_INT(7), false, 0, 0))
 
     .field("UDHDL",  "User Defined Header Data Length", NITF_INT(5), false, 0, 0) // range [00000,00003-99999]
 

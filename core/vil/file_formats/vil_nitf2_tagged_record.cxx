@@ -228,15 +228,14 @@ bool vil_nitf2_tagged_record::test()
             .value("T", "Duplicate value test")))
    .repeat(new vil_nitf2_field_value<int>("NO_VALID_TARGETS"),
            vil_nitf2_field_definitions()
-     .field("TGT_n_SPEED", "Target Estimated Ground Speed", NITF_INT(4),
-            true)
-     .field("TGT_n_CAT",   "Target Classification Category",
-            NITF_ENUM(1, vil_nitf2_enum_values()
-              .value("H", "Helicopter")
-              .value("T", "Tracked")
-              .value("U", "Unknown")
-              .value("W", "Wheeled")),
-            true))
+           .field("TGT_n_SPEED", "Target Estimated Ground Speed", NITF_INT(4), true)
+           .field("TGT_n_CAT",   "Target Classification Category",
+                  NITF_ENUM(1, vil_nitf2_enum_values()
+                            .value("H", "Helicopter")
+                            .value("T", "Tracked")
+                            .value("U", "Unknown")
+                            .value("W", "Wheeled")),
+                  true))
    .field("TEST_NEG_COND", "Test False Condition", NITF_STR_BCSA(14), false,
           0, new vil_nitf2_field_value_greater_than<int>("MTI_DP", 5))
    .field("TEST_POS_COND", "Test True Condition",  NITF_STR_BCSA(14), false,
@@ -268,27 +267,23 @@ bool vil_nitf2_tagged_record::test()
    // outside repeat loops
    .field( "N",   "Test repeat N", NITF_INT(1))
    .repeat(new vil_nitf2_field_value<int>("N"), vil_nitf2_field_definitions()
-     .field("A", "Test repeat A", NITF_INT(1))
-     .repeat(new vil_nitf2_field_value<int>("N"), vil_nitf2_field_definitions()
-        .field("S", "Test repeat S", NITF_STR(3))
-     )
-     .repeat(new vil_nitf2_field_value<int>("A"), vil_nitf2_field_definitions()
-       .field("B", "Test repeat B", NITF_STR_BCSA(3))
-       .repeat(new vil_nitf2_field_value<int>("A"), vil_nitf2_field_definitions()
-         .field("C", "Test repeat C", NITF_STR_BCSA(4))
-       )
-     )
-   )
+           .field("A", "Test repeat A", NITF_INT(1))
+           .repeat(new vil_nitf2_field_value<int>("N"), vil_nitf2_field_definitions()
+                   .field("S", "Test repeat S", NITF_STR(3)))
+           .repeat(new vil_nitf2_field_value<int>("A"), vil_nitf2_field_definitions()
+                   .field("B", "Test repeat B", NITF_STR_BCSA(3))
+                   .repeat(new vil_nitf2_field_value<int>("A"), vil_nitf2_field_definitions()
+                           .field("C", "Test repeat C", NITF_STR_BCSA(4)))))
    // test fixed repeat count
    .repeat(4, vil_nitf2_field_definitions()
-     .field("D", "Test fixed repeat", NITF_INT(1))
+           .field("D", "Test fixed repeat", NITF_INT(1))
    )
   .end();
   // Create a test input vcl_string
   vcl_string testFieldsStr =
     "02"                     // MTI_DP
     "003"                    // MTI_PACKET_ID
-    //"19990908070605"         // DATIME
+  //"19990908070605"         // DATIME
     "              "         // DATIME
     "+89.111111-159.222222"  // ACFT_LOC
     "890102.33N0091122.00W"  // ACFT_LOC2

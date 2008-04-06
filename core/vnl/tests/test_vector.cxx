@@ -89,9 +89,9 @@ void vnl_vector_test_int()
         (v1(0)==0 && v1(1)==-1 && v1(2)==1 && v1(3)==0)), true);
 #if 0
   TEST("v.update(v.abs())",
-        ((v1 = v.abs()),
-         (v2.update(v1)),
-         (v2==v1)), true);
+       ((v1 = v.abs()),
+        (v2.update(v1)),
+        (v2==v1)), true);
 #endif
   TEST("v.extract(1,3)",
        ((v1 = v.extract(1,3)),
@@ -474,7 +474,7 @@ static void vnl_vector_test_io()
   }
   {
     vcl_stringstream ss;
-    ss << " \n ";
+    ss << "\n ";
     vnl_vector<double> p;
     ss >> p;
     TEST("number of values read from stream, just WS", p.size(), 0);

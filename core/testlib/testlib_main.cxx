@@ -90,7 +90,6 @@ testlib_enter_stealth_mode()
     _control87(MCW_EM, MCW_EM);
 #endif // defined(VCL_BORLAND)
   }
-
 }
 
 
@@ -100,13 +99,13 @@ int testlib_run_test_unit(vcl_vector<vcl_string>::size_type i, int argc, char *a
   char * env_var1 = getenv("DART_TEST_FROM_DART");
   char * env_var2 = getenv("DASHBOARD_TEST_FROM_CTEST");  // DART Client built in CMake
   if ( env_var1 || env_var2 ) {
-    try { 
+    try {
       return testlib_test_func_[i]( argc, argv );
     }
     catch (const vcl_exception &e)
     {
       vcl_cerr << "\nTOP-LEVEL EXCEPTION HANDLER                                        **FAILED**\n"
-        << e.what() << "\n\n";
+               << e.what() << "\n\n";
       return 1;
     }
   }
@@ -172,7 +171,7 @@ testlib_main( int argc, char* argv[] )
                << "----------------------------------------\n" << vcl_flush;
 
       int result = testlib_run_test_unit(i, argc, argv);
-      
+
       vcl_cout << "----------------------------------------\n"
                << testlib_test_name_[i] << " returned " << result << ' '
                << ( result==0 ? "(PASS)" : "(FAIL)" ) << '\n'
