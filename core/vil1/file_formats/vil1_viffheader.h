@@ -247,11 +247,11 @@ struct vil1_viff_xvimage {
         float *location;        /* a pointer to the location data (for
                                    explicit locations, each location is
                                    paired with data pointed to by
-                                   *imagedata,  all locations are
+                                   *imagedata); all locations are
                                    in float  */
 
-        char *imagedata;        /* a pointer to the input data (straight off
-                                   of disk, must be cast into the proper type */
+        char *imagedata;        /* a pointer to the input data (straight off of
+                                   disk), must be cast into the proper type  */
         };
 
 #define XV_FILE_MAGIC_NUM       0xab    /* Khoros file identifier */
