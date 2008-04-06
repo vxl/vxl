@@ -703,7 +703,7 @@ inline void vil_convert_cast(const vil_image_view_base_sptr& src,
                              vil_image_view<outP >&dest)
 {
   VXL_DEPRECATED( "void vil_convert_cast(const vil_image_view_base_sptr&,"
-    " vil_image_view<outP >&" );
+                  " vil_image_view<outP>&)" );
 
   switch ( src->pixel_format() )
   {
