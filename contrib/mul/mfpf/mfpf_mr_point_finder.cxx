@@ -62,11 +62,11 @@ unsigned mfpf_mr_point_finder::image_level(
 //  search for next model.  Result can be further improved
 //  by a call to refine()
 double mfpf_mr_point_finder::search(const vimt_image_pyramid& im_pyr,
-              const mfpf_pose& pose0,
-              mfpf_pose& best_pose)
+                                    const mfpf_pose& pose0,
+                                    mfpf_pose& best_pose)
 {
   mfpf_pose pose=pose0;
-  double fit;
+  double fit = 9e99; // initialize to a "bad" value; in case iteration is empty
 
   // First search at coarsest level
   for (int L = size()-1; L>=0;--L) // use int 'cos unsigned always>0!
@@ -92,12 +92,12 @@ double mfpf_mr_point_finder::mr_search(
                    mfpf_pose& pose, int L_lo, int L_hi)
 {
   mfpf_pose pose0=pose;
-  double fit;
+  double fit = 9e99; // initialize to a "bad" value; in case iteration is empty
 
   assert(L_hi>=L_lo);
 
   // First search at coarsest level
-  for (int L = L_hi; L>=L_lo;--L) // use int 'cos unsigned always>0!
+  for (int L = L_hi; L>=L_lo;--L) // use int 'cos unsigned is always >= 0!
   {
     unsigned im_L = image_level(L,pose0,im_pyr);
     assert(im_pyr(im_L).is_a()=="vimt_image_2d_of<float>");
