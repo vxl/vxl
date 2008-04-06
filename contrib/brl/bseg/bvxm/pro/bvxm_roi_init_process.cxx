@@ -182,10 +182,9 @@ bool bvxm_roi_init_process::roi_init(vcl_string const& image_path,
           else { // little endian
             // [5abc][defgh3]
             // --> [abcdefgh]
-            unsigned char* arr = (unsigned char*) &curr_pixel_val;
+            curr_pixel_val = curr_pixel_val << 5;
             // [defgh3][5abc]
             // --> [abcdefgh]
-            curr_pixel_val = curr_pixel_val << 5;
             curr_pixel_val = curr_pixel_val >> 8;
           }
           unsigned char pixel_val = static_cast<unsigned char> (curr_pixel_val);
