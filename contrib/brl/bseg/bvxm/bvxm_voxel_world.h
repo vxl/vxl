@@ -776,8 +776,6 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
   }
 
   vgl_vector_3d<unsigned int> grid_size = params_->num_voxels();
-  ocp_datatype min_vox_prob = params_->min_occupancy_prob();
-  ocp_datatype max_vox_prob = params_->max_occupancy_prob();
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
   vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
