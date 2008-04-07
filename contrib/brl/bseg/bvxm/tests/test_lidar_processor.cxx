@@ -4,12 +4,9 @@
 #include "bvxm_lidar_processor.h"
 #include "bvxm_memory_chunk.h"
 
-
 #include <bsta/bsta_gauss_f1.h>
 #include <bsta/bsta_gaussian_indep.h>
 #include <bsta/algo/bsta_adaptive_updater.h>
-
-#include <vnl/vnl_random.h>
 
 namespace
 {
@@ -19,7 +16,6 @@ namespace
       for (unsigned int y=0; y<slab.ny(); ++y)
         for (unsigned int x=0; x<slab.nx(); ++x, i+=10)
           slab(x,y) = i;
-          
   }
 };
 

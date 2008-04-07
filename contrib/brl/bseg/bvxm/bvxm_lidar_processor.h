@@ -1,4 +1,4 @@
-// This is brl/bseg/bvxm/bvxm_lidar.h
+// This is brl/bseg/bvxm/bvxm_lidar_processor.h
 #ifndef bvxm_lidar_h_
 #define bvxm_lidar_h_
 //:
@@ -23,17 +23,16 @@
 
 class  bvxm_lidar_processor
 {
+ public:
 
-public:
+  bvxm_lidar_processor(unsigned vox_thresh): gauss_(bsta_gauss_f1(0,1)), vox_thresh_(vox_thresh) {}
 
-  bvxm_lidar_processor(unsigned vox_thresh): gauss_(bsta_gauss_f1(0,1)), vox_thresh_(vox_thresh){};
-
-  //: A function that assigns a gaussian weight to the lidar observation 
+  //: A function that assigns a gaussian weight to the lidar observation
   bvxm_voxel_slab<float>  prob_density(unsigned z_dim,
-    bvxm_voxel_slab<float> const& obs);
+                                       bvxm_voxel_slab<float> const& obs);
 
-private:
-  bsta_gauss_f1 gauss_;	
+ private:
+  bsta_gauss_f1 gauss_;
   unsigned vox_thresh_;
 };
 
