@@ -14,12 +14,12 @@ bvxm_lidar_camera::bvxm_lidar_camera()
   trans_matrix_.set_size(4,4);
   trans_matrix_.fill(0);
   trans_matrix_.fill_diagonal(1);
-  trans_matrix_[1][1] = -1;
+  //trans_matrix_[1][1] = -1;
 
   tiepoints_.resize(1);
   tiepoints_[0].resize(6,0);
 
-  lvcs_=new bgeo_lvcs();
+  //lvcs_=new bgeo_lvcs(33.4447732, -114.3085932, 0.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
 
   is_utm = false;
 }
@@ -37,7 +37,13 @@ void bvxm_lidar_camera::project(const double x, const double y, const double z,
 {
   vnl_vector<double> vec(4), res(4);
   double lat, lon, gz;
-  lvcs_->local_to_global(x, y, z, bgeo_lvcs::wgs84, lon, lat, gz);
+
+  if (lvcs_)
+    lvcs_->local_to_global(x, y, z, bgeo_lvcs::wgs84, lon, lat, gz);
+  else {
+    lat = x;
+    lon = y;
+  }
 
   double x1=lat, y1=lon;
   if (is_utm) {
@@ -54,8 +60,10 @@ void bvxm_lidar_camera::project(const double x, const double y, const double z,
   vnl_matrix<double> tm(trans_matrix_);
   tm[2][2] = 1;
 
-  //vcl_cout << trans_matrix_ << vcl_endl;
+  vcl_cout << trans_matrix_ << vcl_endl;
   vnl_matrix<double> trans_matrix_inv = vnl_inverse(tm);
+  vcl_cout << trans_matrix_inv << vcl_endl;
+  vcl_cout << vec << vcl_endl;
   res = trans_matrix_inv*vec;
   //vcl_cout << res[0] << ' ' << res[1] << vcl_endl;
   u = res[0];
@@ -84,7 +92,8 @@ void bvxm_lidar_camera::backproject(const double u, const double v,
     elev = vec[2];
   }
 
-  lvcs_->global_to_local(lon, lat, elev, bgeo_lvcs::wgs84, x, y, z);
+  if (lvcs_)
+    lvcs_->global_to_local(lon, lat, elev, bgeo_lvcs::wgs84, x, y, z);
   //z = img_view_(u, v);
 }
 
