@@ -24,6 +24,9 @@
 #include <bvxm/pro/bvxm_save_edges_raw_process.h>
 #include <bvxm/pro/bvxm_save_occupancy_raw_process.h>
 #include <bvxm/pro/bvxm_change_detection_display_process.h>
+#include <bvxm/pro/bvxm_gen_synthetic_world_process.h>
+#include <bvxm/pro/bvxm_create_synth_lidar_data_process.h>
+#include <bvxm/pro/bvxm_update_lidar_process.h>
 // datatypes
 #include <vcl_string.h>
 #include <vil/vil_image_view_base.h>
@@ -56,6 +59,9 @@ register_processes(PyObject *self, PyObject *args)
   REG_PROCESS(bvxm_save_edges_raw_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_save_occupancy_raw_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_create_local_rpc_process, bprb_batch_process_manager);
+  REG_PROCESS(bvxm_gen_synthetic_world_process, bprb_batch_process_manager);
+  REG_PROCESS(bvxm_create_synth_lidar_data_process, bprb_batch_process_manager);
+  REG_PROCESS(bvxm_update_lidar_process, bprb_batch_process_manager);
   Py_INCREF(Py_None);
   return Py_None;
 }

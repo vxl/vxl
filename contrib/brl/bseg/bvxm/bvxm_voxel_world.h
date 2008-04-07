@@ -79,7 +79,7 @@
 #include <vil/vil_image_view_base.h>
 #include <vul/vul_file_iterator.h>
 
-#define debug 0
+#define debug false
 
 class bvxm_voxel_world: public vbl_ref_count
 {
