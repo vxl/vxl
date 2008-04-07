@@ -43,7 +43,7 @@ bvxm_lidar_init_process::bvxm_lidar_init_process()
   output_types_[j++]= "vil_image_view_base_sptr";  // mask
 
   if (!parameters()->add( "Upper bound for Lidar differences" , "mask_thresh" , (float) 10.0 ))
-    vcl_cerr << "ERROR: Adding parameters in bvxm_lidar_init_process\n";
+    vcl_cout << "ERROR: Adding parameters in bvxm_lidar_init_process\n";
 }
 
 bool bvxm_lidar_init_process::execute()
@@ -71,12 +71,10 @@ bool bvxm_lidar_init_process::execute()
   float thresh;
   if (!parameters()->get_value("mask_thresh", thresh))
     return false;
-
   bvxm_world_params_sptr world_params = voxel_world->get_params();
-
   vil_image_resource_sptr first_ret = vil_load_image_resource(first.c_str());
   if (!first_ret) {
-    vcl_cerr << "bvxm_lidar_init_process -- First return image path is not valid!\n";
+    vcl_cout << "bvxm_lidar_init_process -- First return image path is not valid!\n";
     return false;
   }
 
@@ -85,7 +83,7 @@ bool bvxm_lidar_init_process::execute()
 
   bgeo_lvcs_sptr lvcs = world_params->lvcs();
   if (!lvcs) {
-    vcl_cerr << "bvxm_lidar_init_process -- LVCS is not set!\n";
+    vcl_cout << "bvxm_lidar_init_process -- LVCS is not set!\n";
     return false;
   }
 
@@ -93,20 +91,20 @@ bool bvxm_lidar_init_process::execute()
   bvxm_lidar_camera *cam_first=0, *cam_second=0;
 
   if (!lidar_init(first_ret, world_params, roi_first, cam_first)) {
-    vcl_cerr << "bvxm_lidar_init_process -- The process has failed!\n";
+    vcl_cout << "bvxm_lidar_init_process -- The process has failed!\n";
     return false;
   }
 
   if (second_ret) {
     if (!lidar_init(second_ret, world_params, roi_second, cam_second)) {
-      vcl_cerr << "bvxm_lidar_init_process -- The process has failed!\n";
+      vcl_cout << "bvxm_lidar_init_process -- The process has failed!\n";
       return false;
     }
   }
 
   vil_image_view_base_sptr mask=0;
   if (!gen_mask(roi_first, cam_first, roi_second, cam_second, mask, thresh)) {
-    vcl_cerr << "bvxm_lidar_init_process -- The process has failed!\n";
+    vcl_cout << "bvxm_lidar_init_process -- The process has failed!\n";
     return false;
   }
 
@@ -140,7 +138,7 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
   // the file should be a geotiff
   vcl_cout << "FORMAT=" << lidar->file_format();
   if (vcl_strcmp(lidar->file_format(),"tiff") != 0) {
-    vcl_cerr << "bvxm_lidar_init_process::lidar_init -- The image should be a TIFF!\n";
+    vcl_cout << "bvxm_lidar_init_process::lidar_init -- The image should be a TIFF!\n";
     return false;
   }
 
@@ -150,7 +148,7 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
   // check if the tiff file is geotiff
   if (!tiff_img->is_GEOTIFF()) {
 #endif
-    vcl_cerr << "bvxm_lidar_init_process::lidar_init -- The image should be a GEOTIFF!\n";
+    vcl_cout << "bvxm_lidar_init_process::lidar_init -- The image should be a GEOTIFF!\n";
     return false;
 #if HAS_GEOTIFF
   }
@@ -202,7 +200,7 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
     } else if (gtif->gtif_pixelscale(sx1, sy1, sz1)) {
       comp_trans_matrix(sx1, sy1, sz1, tiepoints, trans_matrix);
     } else {
-      vcl_cerr << "bvxm_lidar_init_process::comp_trans_matrix -- Transform matrix cannot be formed..\n";
+      vcl_cout << "bvxm_lidar_init_process::comp_trans_matrix -- Transform matrix cannot be formed..\n";
       return false;
     }
 
@@ -228,18 +226,19 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
       vgl_point_2d<double> p(u,v);
       roi_box.add(p);
     }
-
+    vcl_cout << tiff_img->ni() << " " <<  tiff_img->nj() << vcl_endl;
     brip_roi broi(tiff_img->ni(), tiff_img->nj());
     vsol_box_2d_sptr bb = new vsol_box_2d();
     bb->add_point(roi_box.min_x(), roi_box.min_y());
     bb->add_point(roi_box.max_x(), roi_box.max_y());
+    vcl_cout << *bb << vcl_endl;
     bb = broi.clip_to_image_bounds(bb);
-    roi = tiff_img->get_copy_view((unsigned int)roi_box.min_x(),
-                                  (unsigned int)roi_box.width(),
-                                  (unsigned int)roi_box.min_y(),
-                                  (unsigned int)roi_box.height());
+    roi = tiff_img->get_copy_view((unsigned int)bb->get_min_x(),
+                                  (unsigned int)bb->width(),
+                                  (unsigned int)bb->get_min_y(),
+                                  (unsigned int)bb->height());
     if (!roi) {
-      vcl_cerr << "bvxm_lidar_init_process::lidar_init()-- clipping box is out of image boundaries\n";
+      vcl_cout << "bvxm_lidar_init_process::lidar_init()-- clipping box is out of image boundaries\n";
       return false;
     }
   }
@@ -311,12 +310,12 @@ bool bvxm_lidar_init_process::gen_mask(vil_image_view_base_sptr roi_first,
 {
   // compare the cameras, if the second one existed
   if (!cam_first) {
-    vcl_cerr << "bvxm_lidar_init_process::gen_mask -- camera not found!\n";
+    vcl_cout << "bvxm_lidar_init_process::gen_mask -- camera not found!\n";
     return false;
   }
 
   if (!roi_first) {
-    vcl_cerr << "bvxm_lidar_init_process::gen_mask -- image not found!\n";
+    vcl_cout << "bvxm_lidar_init_process::gen_mask -- image not found!\n";
     return false;
   }
 
