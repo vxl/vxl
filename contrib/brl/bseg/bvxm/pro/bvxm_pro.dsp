@@ -132,6 +132,9 @@ SOURCE=.\bvxm_save_occupancy_raw_process.cxx
 SOURCE=.\bvxm_update_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvxm_update_lidar_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\bvxm_create_local_rpc_process.cxx
 # End Source File
 # Begin Source File
@@ -145,9 +148,6 @@ SOURCE=.\bvxm_gen_synthetic_world_process.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_lidar_init_process.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_process_utils.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_save_edges_raw_process.cxx
@@ -201,6 +201,9 @@ SOURCE=.\bvxm_save_occupancy_raw_process.h
 SOURCE=.\bvxm_update_process.h
 # End Source File
 # Begin Source File
+SOURCE=.\bvxm_update_lidar_process.h
+# End Source File
+# Begin Source File
 SOURCE=.\bvxm_create_local_rpc_process.h
 # End Source File
 # Begin Source File
@@ -214,9 +217,6 @@ SOURCE=.\bvxm_gen_synthetic_world_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_lidar_init_process.h
-# End Source File
-# Begin Source File
-SOURCE=.\bvxm_process_utils.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_save_edges_raw_process.h
