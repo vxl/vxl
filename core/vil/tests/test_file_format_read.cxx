@@ -62,6 +62,23 @@ struct CompareRGB
 
 
 template<class PixelType>
+struct CompareRGBA
+  : public Compare<PixelType, vil_rgba<PixelType> >
+{
+  virtual bool operator() ( vil_image_view< vil_rgba<PixelType> > const& img,
+                            int p, int i, int j,
+                            const vcl_vector<PixelType>& pixel ) const
+    {
+      return p==0 && pixel.size() == 4 &&
+             img(i,j).r == pixel[0] &&
+             img(i,j).g == pixel[1] &&
+             img(i,j).b == pixel[2] &&
+             img(i,j).a == pixel[3];
+    }
+};
+
+
+template<class PixelType>
 struct CompareRGBNear
   : public Compare<PixelType, vil_rgb<PixelType> >
 {
@@ -494,6 +511,8 @@ test_file_format_read_main( int argc, char* argv[] )
   testlib_test_perform(CheckFile(CompareRGB<vxl_byte>(), "ff_rgb8bit_true.txt", "ff_rgb8bit_packbits.tif" ) );
   testlib_test_begin( "  32-bit float grey" );
   testlib_test_perform(CheckFile(CompareGreyFloat<float>(), "ff_grey_float_true.txt", "ff_grey_float.tif" ) );
+  testlib_test_begin( "  8-bit RGBA uncompressed" );
+  testlib_test_perform(CheckFile(CompareRGBA<vxl_byte>(), "ff_rgba8bit_true.txt", "ff_rgba8bit_uncompressed.tif" ) );
 
   //The following tests are targeted to the vil_nitf2_image class which can read NITF 2.1, NITF 2.0 and 
   //NSIF 1.0 files.  All three of these formats are covered here as well as all four different

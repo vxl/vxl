@@ -447,7 +447,7 @@ bool vil_tiff_header::compute_pixel_format()
                 return true;
               case 4:
                 nplanes = 4;
-                return false;
+                return true;
               default:
                 pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
                 return false;
