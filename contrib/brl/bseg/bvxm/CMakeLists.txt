@@ -17,6 +17,7 @@ SET(bvxm_sources
     bvxm_memory_chunk.h             bvxm_memory_chunk.cxx 
     bvxm_mog_grey_processor.h       bvxm_mog_grey_processor.cxx  
     bvxm_mog_rgb_processor.h        bvxm_mog_rgb_processor.cxx
+    bvxm_lidar_processor.h          bvxm_lidar_processor.cxx
     bvxm_world_params.h             bvxm_world_params.cxx
     bvxm_voxel_slab_base.h
     bvxm_voxel_slab.h               bvxm_voxel_slab.txx

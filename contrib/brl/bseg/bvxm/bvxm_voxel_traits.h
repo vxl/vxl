@@ -19,6 +19,7 @@
 //-----------------------------------------------------------------------------
 #include "bvxm_mog_grey_processor.h"
 #include "bvxm_mog_rgb_processor.h"
+#include "bvxm_lidar_processor.h"
 
 enum bvxm_voxel_type
 {
@@ -26,6 +27,7 @@ enum bvxm_voxel_type
   APM_MOG_GREY,
   APM_MOG_RGB,
   EDGES,
+  LIDAR,
   UNKNOWN,
 };
 
@@ -96,6 +98,21 @@ class bvxm_voxel_traits<EDGES>
   static inline vcl_string filename_prefix() { return "edges"; }
   static inline bool is_multibin() { return false; }
   static inline voxel_datatype initial_val() { return 1.0f; }
+};
+
+template<>
+class bvxm_voxel_traits<LIDAR>
+{
+ public:
+
+  typedef bvxm_lidar_processor lidar_processor;
+
+  //:Datatype of the occupancy probabilities
+  typedef float voxel_datatype;
+
+  static inline vcl_string filename_prefix() { return "lidar"; }
+  static inline bool is_multibin() { return false; }
+  static inline voxel_datatype initial_val() { return 0.0f; }
 };
 
 #endif // bvxm_voxel_traits_h_

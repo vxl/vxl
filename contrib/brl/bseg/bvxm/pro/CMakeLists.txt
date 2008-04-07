@@ -19,7 +19,7 @@ SET(bvxm_pro_sources
     bvxm_render_expected_image_process.h    bvxm_render_expected_image_process.cxx
     bvxm_change_detection_display_process.h bvxm_change_detection_display_process.cxx
     bvxm_update_process.h                   bvxm_update_process.cxx
-   # bvxm_update_lidar_process.h             bvxm_update_lidar_process.cxx
+    bvxm_update_lidar_process.h             bvxm_update_lidar_process.cxx
     bvxm_normalize_image_process.h          bvxm_normalize_image_process.cxx
     bvxm_illum_index_process.h              bvxm_illum_index_process.cxx
     bvxm_roi_init_process.h                 bvxm_roi_init_process.cxx

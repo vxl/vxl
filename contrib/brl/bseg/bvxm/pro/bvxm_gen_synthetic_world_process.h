@@ -45,7 +45,7 @@ class bvxm_gen_synthetic_world_process : public bprb_process
   //: Clone the process
   virtual bvxm_gen_synthetic_world_process* clone() const {return new bvxm_gen_synthetic_world_process(*this);}
 
-  vcl_string name(){return "bvxm_gen_synthetic_world_process";}
+  vcl_string name(){return "bvxmGenSyntheticWorldProcess";}
 
   bool init() { return true; }
   bool execute();

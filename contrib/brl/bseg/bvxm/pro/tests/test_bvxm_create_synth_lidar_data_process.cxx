@@ -66,8 +66,11 @@ MAIN( test_bvxm_create_synth_lidar_data_process)
   brdb_value_t<vil_image_view_base_sptr>* result =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_img.ptr());
   vil_image_view_base_sptr img = result->value();
+
   bool saved = vil_save(*img, "./lidar_img.tif");
+
   TEST("image saved", saved, true);
+
 
   SUMMARY();
 }

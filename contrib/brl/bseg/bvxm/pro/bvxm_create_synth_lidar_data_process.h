@@ -20,6 +20,8 @@
 #include <vil/vil_image_view_base.h>
 #include <vpgl/vpgl_camera.h>
 
+#include "bvxm/bvxm_lidar_camera.h"
+
 class bvxm_create_synth_lidar_data_process : public bprb_process
 {
  public:
@@ -44,7 +46,8 @@ class bvxm_create_synth_lidar_data_process : public bprb_process
   bool gen_lidar_view(int x, int y, int z,
                     vcl_vector<vgl_box_3d<double> > boxes,
                     vil_image_view_base_sptr& lidar,
-                    vpgl_camera_double_sptr& cam);
+                    vpgl_camera_double_sptr& cam,
+                    bgeo_lvcs_sptr lvcs);
 };
 
 #endif //bvxm_create_synth_lidar_data_process_h_

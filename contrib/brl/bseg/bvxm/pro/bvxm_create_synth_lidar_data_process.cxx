@@ -2,7 +2,7 @@
 //:
 // \file
 #include "bvxm_process_utils.h"
-#include "bvxm/bvxm_lidar_camera.h"
+
 
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
@@ -54,6 +54,11 @@ bvxm_create_synth_lidar_data_process::bvxm_create_synth_lidar_data_process()
 
   if (!parameters()->add("box dim in Z", "box_dim_z", (unsigned int)50))
     vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << vcl_endl;
+
+  //lvcs parameters
+  if (!parameters()->add("LVCS Path", "lvcs", vcl_string("./")))
+    vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << vcl_endl;
+ 
 }
 
 //: Destructor
@@ -84,12 +89,32 @@ bvxm_create_synth_lidar_data_process::execute()
   unsigned int miny = parameters()->value<unsigned int>("box_min_y");
   unsigned int minz = parameters()->value<unsigned int>("box_min_z");
 
+  //lvcs parameters
+  vcl_string lvcs_path;
+  if (!parameters()->get_value(vcl_string("lvcs"), lvcs_path)) {
+    vcl_cout << "bvxm_create_voxel_world_process::execute() -- problem in retrieving parameter lvcs_path\n";
+    return false;
+  }
+
+  bgeo_lvcs_sptr lvcs = new bgeo_lvcs();
+  if (lvcs_path != "") {
+    vcl_ifstream is(lvcs_path.c_str());
+    if (!is)
+    {
+      vcl_cerr << " Error opening file  " << lvcs_path << vcl_endl;
+      return false;
+    }
+    lvcs->read(is);
+  }
+
+  // generate boxes, lidar image
   vil_image_view_base_sptr lidar_img;
   vpgl_camera_double_sptr lidar_cam;
   vcl_vector<vgl_box_3d<double> > boxes;
   bvxm_process_utils::generate_test_boxes(minx, miny, minz, dimx, dimy, dimz, v_dimx, v_dimy, v_dimz, boxes);
-  gen_lidar_view(v_dimx, v_dimy, v_dimz, boxes, lidar_img, lidar_cam);
+  gen_lidar_view(v_dimx, v_dimy, v_dimz, boxes, lidar_img, lidar_cam, lvcs);
 
+ 
   brdb_value_sptr output0 = new brdb_value_t<vil_image_view_base_sptr>(lidar_img);
   output_data_[0] = output0;
 
@@ -99,10 +124,12 @@ bvxm_create_synth_lidar_data_process::execute()
   return true;
 }
 
-bool bvxm_create_synth_lidar_data_process::gen_lidar_view(int x, int y, int /*z*/,
-                                                          vcl_vector<vgl_box_3d<double> > boxes,
-                                                          vil_image_view_base_sptr& lidar,
-                                                          vpgl_camera_double_sptr& cam)
+
+bool bvxm_create_synth_lidar_data_process::gen_lidar_view(int x, int y, int z,
+                    vcl_vector<vgl_box_3d<double> > boxes,
+                    vil_image_view_base_sptr& lidar,
+                    vpgl_camera_double_sptr& cam,
+                    bgeo_lvcs_sptr lvcs)
 {
   vil_image_view<float> lv(x, y);
   lv.fill(0);
@@ -126,6 +153,8 @@ bool bvxm_create_synth_lidar_data_process::gen_lidar_view(int x, int y, int /*z*
 
   // generate the camera, which is a one to one mapping between
   // lidar image and voxel slabs
-  cam = new bvxm_lidar_camera();
+  bvxm_lidar_camera lidar_cam;
+  lidar_cam.set_lvcs(lvcs);
+  cam = new bvxm_lidar_camera(lidar_cam);
   return true;
 }
