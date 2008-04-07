@@ -13,6 +13,7 @@ TESTS += test_bvxm_rpc_registration_process.cxx
 TESTS += test_bvxm_create_local_rpc_process.cxx
 TESTS += test_bvxm_create_normalized_image_process.cxx
 TESTS += test_bvxm_create_synth_lidar_data_process.cxx
+TESTS += test_bvxm_update_lidar_process.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
