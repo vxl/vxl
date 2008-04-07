@@ -13,6 +13,8 @@
 #include "../bvxm_voxel_world.h"
 #include "../bvxm_world_params.h"
 #include "../bvxm_mog_grey_processor.h"
+#include "../bvxm_lidar_camera.h"
+#include "../bvxm_util.h"
 
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
@@ -76,7 +78,7 @@ int in_box(vgl_box_3d<double> box, vgl_point_3d<double> v)
     return -1;
 }
 
-void create_top_box(vgl_box_3d<double> box, vgl_box_3d<double>& top_box,
+/*void create_top_box(vgl_box_3d<double> box, vgl_box_3d<double>& top_box,
                     double dimx, double dimy, double dimz)
 {
   // find top face center
@@ -103,7 +105,7 @@ corners_of_box_3d(vgl_box_3d<double> box)
   corners.push_back(box.max_point());
   corners.push_back(vgl_point_3d<double> (box.min_x(), box.min_y()+box.height(), box.max_z()));
   return corners;
-}
+}*/
 
 void generate_persp_camera(double focal_length,
                            vgl_point_2d<double>& pp,  //principal point
@@ -229,7 +231,7 @@ generate_cameras_yz(vgl_box_3d<double>& world)
     vpgl_rational_camera<double>* rat_cam = new vpgl_rational_camera<double>(perspective_to_rational(persp_cam));
     rat_cameras.push_back(rat_cam);
 
-    vcl_vector<vgl_point_3d<double> > corners = corners_of_box_3d(world);
+    vcl_vector<vgl_point_3d<double> > corners = bvxm_util::corners_of_box_3d<double>(world);
     for (unsigned i=0; i<corners.size(); i++) {
       vgl_point_3d<double> c = corners[i];
       double u,v, u2, v2;
@@ -287,6 +289,39 @@ bool gen_images(vgl_vector_3d<unsigned> grid_size,
   return true;
 }
 
+bool gen_lidar_2box(vgl_vector_3d<unsigned> grid_size,
+                bvxm_voxel_world_sptr world)
+                //vcl_vector<vpgl_camera_double_sptr>& cameras,
+                //vcl_vector <vil_image_view_base_sptr>& image_set,
+                //unsigned int bin_num)
+{
+  vil_image_view<unsigned char> lidar(grid_size.x(), grid_size.y());
+  lidar.fill(0.0);
+
+  // Generate the bottom one
+  for (unsigned int b=0; b<boxes.size(); b++) {
+    vgl_box_3d<double> box = boxes[b];
+    int z = box.max_z();
+
+    for (unsigned i=0; i<grid_size.x(); i++)
+      for (unsigned j=0; j<grid_size.y(); j++){
+        vgl_point_3d<double> p(i,j,z);
+        if (box.contains(p)) {
+          // check if there is already a higher d there
+          if (lidar(i,j) < z)
+            lidar(i,j) = z;
+        }
+      }
+  }
+    
+  vcl_string path = "./test_gen_synthetic_world/test_lidar";
+  vcl_stringstream s;
+  s << path << ".tif";
+  vil_save(lidar, s.str().c_str());
+
+  return true;
+}
+
 bool reconstruct_world( bvxm_voxel_world_sptr recon_world, vcl_vector<vpgl_camera_double_sptr>& cameras,
                  vcl_vector <vil_image_view_base_sptr>& image_set,unsigned int bin_num)
 {
@@ -328,8 +363,6 @@ void gen_texture_map(vgl_box_3d<double> box,
   intens_map_side1.resize(box.width()/8+1);
   intens_map_side2.resize(box.width()/8+1);
 
-  //vcl_cout << box.width() << " " << box.depth() << " " << box.height() << vcl_endl;
-
   for (unsigned i=0; i<box.width()/8;i++) {
     intens_map_bt[i].resize(box.height()/8+1);
     for (unsigned j=0; j<box.height()/8;j++) {
@@ -367,16 +400,19 @@ void gen_voxel_world_2box(vgl_vector_3d<unsigned> grid_size,
   bvxm_voxel_grid<float>::iterator intensity_slab_it = intensity_grid->begin();
 
   //object (essentially a box) placed in the voxel world
-  vgl_box_3d<double> box(vgl_point_3d<double> (10,10,10),
+  /*vgl_box_3d<double> box(vgl_point_3d<double> (10,10,10),
     vgl_point_3d<double> (89,89,33));
   boxes.push_back(box);
 
   vgl_box_3d<double> top_box;
   create_top_box(box, top_box, 29,29,15);
-  boxes.push_back(top_box);
+  boxes.push_back(top_box);*/
+  bvxm_util::generate_test_boxes<double>(10,10,10,79,79,23,nx,ny,nz,boxes);
 
   vcl_ofstream is("test_gen_synthetic_world/intensity_grid.txt");
+  assert (boxes.size() == 2);
 
+  vgl_box_3d<double> box=boxes[0], top_box = boxes[1];
   // generate intensity maps
   vcl_vector<vcl_vector<float> > intens_map_bt;
   vcl_vector<vcl_vector<float> > intens_map_side1;
@@ -567,6 +603,8 @@ static void test_gen_synthetic_world()
   vcl_vector<vpgl_camera_double_sptr> cameras = generate_cameras_yz(voxel_world);
 
   vcl_vector <vil_image_view_base_sptr> image_set_1,image_set_2;
+
+  gen_lidar_2box(grid_size, world);
 
   // generate images from synthetic world
   gen_images(grid_size, world, intensity_grid, ocp_grid, apm_grid_1,
