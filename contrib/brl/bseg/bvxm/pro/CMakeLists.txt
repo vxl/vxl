@@ -11,7 +11,6 @@ INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc/vpgl )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR})
 
 SET(bvxm_pro_sources
-    bvxm_process_utils.h                    bvxm_process_utils.cxx
     bvxm_create_voxel_world_process.h       bvxm_create_voxel_world_process.cxx
     bvxm_detect_changes_process.h           bvxm_detect_changes_process.cxx
     bvxm_generate_edge_map_process.h        bvxm_generate_edge_map_process.cxx

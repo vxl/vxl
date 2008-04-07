@@ -1,5 +1,5 @@
 #include "bvxm_gen_synthetic_world_process.h"
-#include "bvxm_process_utils.h"
+#include <bvxm/bvxm_util.h>
 
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
@@ -217,7 +217,7 @@ bvxm_gen_synthetic_world_process::generate_cameras_yz(vgl_box_3d<double>& world)
     vpgl_rational_camera<double>* rat_cam = new vpgl_rational_camera<double>(perspective_to_rational(persp_cam));
     rat_cameras.push_back(rat_cam);
 
-    vcl_vector<vgl_point_3d<double> > corners = bvxm_process_utils::corners_of_box_3d(world);
+    vcl_vector<vgl_point_3d<double> > corners = bvxm_util::corners_of_box_3d<double>(world);
     for (unsigned i=0; i<corners.size(); i++) {
       vgl_point_3d<double> c = corners[i];
       double u,v, u2, v2;
@@ -363,7 +363,7 @@ bvxm_gen_synthetic_world_process::gen_voxel_world_2box(vgl_vector_3d<unsigned> g
   bvxm_voxel_grid<float>::iterator intensity_slab_it = intensity_grid->begin();
 
   //object (essentially two boxes) placed in the voxel world
-  bvxm_process_utils::generate_test_boxes(10,10,10,89,89,33,nx,ny,nz,boxes);
+  bvxm_util::generate_test_boxes<double>(10,10,10,89,89,33,nx,ny,nz,boxes);
   vcl_ofstream is("test_gen_synthetic_world/intensity_grid.txt");
 
   assert(boxes.size() == 2);

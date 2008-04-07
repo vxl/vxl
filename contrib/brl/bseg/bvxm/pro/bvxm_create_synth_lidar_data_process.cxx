@@ -1,7 +1,7 @@
 #include "bvxm_create_synth_lidar_data_process.h"
 //:
 // \file
-#include "bvxm_process_utils.h"
+#include <bvxm/bvxm_util.h>
 
 
 #include <brdb/brdb_value.h>
@@ -111,7 +111,7 @@ bvxm_create_synth_lidar_data_process::execute()
   vil_image_view_base_sptr lidar_img;
   vpgl_camera_double_sptr lidar_cam;
   vcl_vector<vgl_box_3d<double> > boxes;
-  bvxm_process_utils::generate_test_boxes(minx, miny, minz, dimx, dimy, dimz, v_dimx, v_dimy, v_dimz, boxes);
+  bvxm_util::generate_test_boxes<double>(minx, miny, minz, dimx, dimy, dimz, v_dimx, v_dimy, v_dimz, boxes);
   gen_lidar_view(v_dimx, v_dimy, v_dimz, boxes, lidar_img, lidar_cam, lvcs);
 
  
@@ -153,8 +153,8 @@ bool bvxm_create_synth_lidar_data_process::gen_lidar_view(int x, int y, int z,
 
   // generate the camera, which is a one to one mapping between
   // lidar image and voxel slabs
-  bvxm_lidar_camera lidar_cam;
-  lidar_cam.set_lvcs(lvcs);
-  cam = new bvxm_lidar_camera(lidar_cam);
+  //bvxm_lidar_camera lidar_cam;
+  //lidar_cam.set_lvcs(lvcs);
+  cam = new bvxm_lidar_camera();
   return true;
 }
