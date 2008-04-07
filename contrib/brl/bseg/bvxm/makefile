@@ -11,6 +11,7 @@ SOURCES += bvxm_mog_rgb_processor.cxx
 SOURCES += bvxm_util.cxx
 SOURCES += bvxm_voxel_world.cxx
 SOURCES += bvxm_world_params.cxx
+SOURCES += bvxm_lidar_processor.cxx
 MANPAGE_SOURCES += bvxm_voxel_grid.h
 MANPAGE_SOURCES += bvxm_voxel_grid.txx
 MANPAGE_SOURCES += bvxm_voxel_grid_base.h
