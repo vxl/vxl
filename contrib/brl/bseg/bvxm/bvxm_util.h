@@ -19,6 +19,8 @@
 
 #include <vpgl/vpgl_camera.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
+#include <vgl/vgl_box_3d.h>
+
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_double_3x3.h>
@@ -102,6 +104,15 @@ class bvxm_util
 
   template<class T>
   static T sum_slab(bvxm_voxel_slab<T> const& slab);
+
+  template<class T>
+  static bool generate_test_boxes(T box_min_x, T box_min_y, T box_min_z, 
+                    T box_dim_x, T box_dim_y, T box_dim_z,
+                    T world_dim_x, T world_dim_y, T world_dim_z,
+                    vcl_vector<vgl_box_3d<T> >& boxes);
+
+  template<class T>
+  static vcl_vector<vgl_point_3d<T> > corners_of_box_3d(vgl_box_3d<T> box);
 
  protected:
 
@@ -806,6 +817,64 @@ void bvxm_util::write_slab_as_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > cons
   vil_save(img,filename.c_str());
 
   return;
+}
+
+template<class T>
+bool bvxm_util::generate_test_boxes(T box_min_x, T box_min_y, T box_min_z, 
+                    T box_dim_x, T box_dim_y, T box_dim_z,
+                    T world_dim_x, T world_dim_y, T world_dim_z,
+                    vcl_vector<vgl_box_3d<T> >& boxes)
+{
+  // create the big box at the bottom
+  T max_x = box_min_x + box_dim_x;
+  T max_y = box_min_y + box_dim_y;
+  T max_z = box_min_z + box_dim_z;
+  if ((max_x > world_dim_x) || (max_y > world_dim_y) || (max_z > world_dim_z)) {
+    vcl_cerr << "generate_boxes() -- the box is out of world boundaries!" << vcl_endl;
+    return false;
+  }
+
+  vgl_box_3d<T> box(box_min_x, box_min_y, box_min_z, max_x, max_y, max_z);
+  boxes.push_back(box);
+
+  // create the top boxe
+  vgl_point_3d<T> centroid = box.centroid();
+  // make the top box 2/3 of the size of the previous one 
+  T dimx = (box.max_x() - box.min_x())/2;
+  T dimy = (box.max_y() - box.min_y())/2;
+  T dimz = (box.max_z() - box.min_z())/2;
+  centroid.set(centroid.x(), centroid.y(), box.max_z() + dimz/2.0);
+  vgl_box_3d<T> top_box = vgl_box_3d<T> (centroid, dimx, dimy, dimz, vgl_box_3d<T>::centre);
+  // translate it a bit
+  vgl_point_3d<T> top_centroid = top_box.centroid();
+  top_box.set_centroid(vgl_point_3d<T>(top_centroid.x()+dimx/3., top_centroid.y()+dimx/3., top_centroid.z()));
+  // check if the box in the world completely
+  max_x = top_box.max_x();
+  max_y = top_box.max_y();
+  max_z = top_box.max_z();
+  // stop if the new box is getting out of the boundaries
+  if ((max_x > world_dim_x) || (max_y > world_dim_y) || (max_z > world_dim_z)) 
+    return false;
+  boxes.push_back(top_box);
+  
+  return true;
+}
+
+template<class T>
+vcl_vector<vgl_point_3d<T> >
+bvxm_util::corners_of_box_3d(vgl_box_3d<T> box)
+{
+  vcl_vector<vgl_point_3d<T> > corners;
+
+  corners.push_back(box.min_point());
+  corners.push_back(vgl_point_3d<T> (box.min_x()+box.width(), box.min_y(), box.min_z()));
+  corners.push_back(vgl_point_3d<T> (box.min_x()+box.width(), box.min_y()+box.height(), box.min_z()));
+  corners.push_back(vgl_point_3d<T> (box.min_x(), box.min_y()+box.height(), box.min_z()));
+  corners.push_back(vgl_point_3d<T> (box.min_x(), box.min_y(), box.max_z()));
+  corners.push_back(vgl_point_3d<T> (box.min_x()+box.width(), box.min_y(), box.max_z()));
+  corners.push_back(box.max_point());
+  corners.push_back(vgl_point_3d<T> (box.min_x(), box.min_y()+box.height(), box.max_z()));
+  return corners;
 }
 
 #endif
