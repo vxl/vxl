@@ -245,6 +245,9 @@ SOURCE=.\test_bvxm_create_normalized_image_process.cxx
 SOURCE=.\test_bvxm_create_synth_lidar_data_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_bvxm_update_lidar_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
 # End Group
