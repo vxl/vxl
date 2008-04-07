@@ -56,7 +56,7 @@ bvxm_create_synth_lidar_data_process::bvxm_create_synth_lidar_data_process()
     vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << vcl_endl;
 
   //lvcs parameters
-  if (!parameters()->add("LVCS Path", "lvcs", vcl_string("./")))
+  if (!parameters()->add("LVCS Path", "lvcs", vcl_string("")))
     vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << vcl_endl;
  
 }
