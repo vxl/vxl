@@ -24,10 +24,14 @@ class bvxm_lidar_camera : public vpgl_camera<double>
   // copy constructor
   bvxm_lidar_camera(bvxm_lidar_camera const& rhs);
 
+  bvxm_lidar_camera(vpgl_camera<double> const& rhs);
+
   ~bvxm_lidar_camera() {}
 
   //northing=0 is North, 1 is east
   void set_utm(int utm_zone, unsigned northing) { is_utm=true, utm_zone_=utm_zone; northing_=northing; }
+
+  void set_lvcs(bgeo_lvcs_sptr lvcs) {lvcs_ = lvcs;}
 
   //: Implementing the generic camera interface of vpgl_camera.
   //  x,y,z are in local coordinates, u represents image column, v image row
