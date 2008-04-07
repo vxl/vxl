@@ -1,7 +1,7 @@
 #include "bvxm_roi_init_process.h"
 #include "bvxm_voxel_world.h"
 #include "bvxm_world_params.h"
-#include "bvxm_process_utils.h"
+#include <bvxm/bvxm_util.h>
 
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_box_2d.h>
@@ -230,8 +230,8 @@ bvxm_roi_init_process::project_box(vpgl_rational_camera<double>* cam,
 
   // create a box with uncertainty
   vgl_box_3d<double> cam_box(center, 2*r, 2*r, 2*r, vgl_box_3d<double>::centre);
-  vcl_vector<vgl_point_3d<double> > cam_corners = bvxm_process_utils::corners_of_box_3d(cam_box);
-  vcl_vector<vgl_point_3d<double> > box_corners = bvxm_process_utils::corners_of_box_3d(box);
+  vcl_vector<vgl_point_3d<double> > cam_corners = bvxm_util::corners_of_box_3d<double>(cam_box);
+  vcl_vector<vgl_point_3d<double> > box_corners = bvxm_util::corners_of_box_3d<double>(box);
   vgl_box_2d<double>* roi = new vgl_box_2d<double>();
 
   double lon, lat, gz;

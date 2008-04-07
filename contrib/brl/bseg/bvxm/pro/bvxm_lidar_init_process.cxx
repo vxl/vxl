@@ -1,6 +1,6 @@
 #include "bvxm_lidar_init_process.h"
 #include "bvxm_voxel_world.h"
-#include "bvxm_process_utils.h"
+#include <bvxm/bvxm_util.h>
 
 #include <vcl_cassert.h>
 
@@ -218,7 +218,7 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
     // backproject the voxel world coordinates on the image
     vgl_box_2d<double> roi_box;
     vgl_box_3d<double> world = params->world_box_local();
-    vcl_vector<vgl_point_3d<double> > corners = bvxm_process_utils::corners_of_box_3d(world);
+    vcl_vector<vgl_point_3d<double> > corners = bvxm_util::corners_of_box_3d<double>(world);
     for (unsigned i=0; i<corners.size(); i++) {
       double x = corners[i].x();
       double y = corners[i].y();
