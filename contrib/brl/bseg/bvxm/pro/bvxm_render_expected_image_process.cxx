@@ -88,9 +88,6 @@ bool bvxm_render_expected_image_process::execute()
     result = world->expected_image<APM_MOG_GREY>(camera_metadata, expected_img, *mask_img, bin_index);
   }
 
-   
-  vil_image_view_base_sptr mask_sptr = mask;
-
   //store output
   brdb_value_sptr output0 =
     new brdb_value_t<vil_image_view_base_sptr>(expected_img);
