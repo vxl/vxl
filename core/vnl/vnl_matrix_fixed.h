@@ -119,6 +119,17 @@ class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
   //: Construct an empty num_rows*num_cols matrix
   vnl_matrix_fixed() {}
 
+  //: Construct an empty num_rows*num_cols matrix
+  //
+  // The sole purpose of this constructor is to match the interface of
+  // vnl_matrix, so that algorithms can template over the matrix type
+  // itself.  It is illegal to call this constructor without
+  // <tt>n==num_rows</tt> and <tt>m==num_cols</tt>.
+  vnl_matrix_fixed( unsigned n, unsigned m )
+  {
+    assert( n == num_rows && m == num_cols );
+  }
+
   //: Construct an m*n matrix and fill with value
   explicit vnl_matrix_fixed(T value)
   {
