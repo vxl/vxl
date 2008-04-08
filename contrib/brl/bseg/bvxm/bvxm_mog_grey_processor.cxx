@@ -63,12 +63,12 @@ bool bvxm_mog_grey_processor::update( bvxm_voxel_slab<mix_gauss_type> &appear,
 {
   // the model
   float init_variance = 0.008f;
-  float min_variance = 4.0e-4f;
+  float min_stddev = 0.02f;
   float g_thresh = 2.5; // number of std devs from mean sample must be
   bsta_gauss_f1 this_gauss(0.0f, init_variance);
 
  // the updater
-  bsta_mg_grimson_weighted_updater<mix_gauss> updater(this_gauss,this->n_gaussian_modes_,g_thresh,min_variance);
+  bsta_mg_grimson_weighted_updater<mix_gauss> updater(this_gauss,this->n_gaussian_modes_,g_thresh,min_stddev);
 
   //check dimensions match
   assert(appear.nx() == obs.nx());
