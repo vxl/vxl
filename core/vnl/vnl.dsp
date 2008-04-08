@@ -267,9 +267,6 @@ SOURCE=.\Templates/vnl_matrix+vcl_complex+float--.cxx
 SOURCE=.\Templates/vnl_matrix+vcl_complex+long_double--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vnl_matrix_exp+double-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vnl_matrix_fixed+double.1.1-.cxx
 # End Source File
 # Begin Source File
@@ -718,6 +715,21 @@ SOURCE=.\Templates/vnl_matrix_fixed+double.2.11-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vnl_matrix_fixed+double.2.8-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matrix_exp+vnl_matrix+double--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matrix_exp+vnl_matrix_fixed+double.1.1--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matrix_exp+vnl_matrix_fixed+double.2.2--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matrix_exp+vnl_matrix_fixed+double.3.3--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_matrix_exp+vnl_matrix_fixed+double.4.4--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vnl_erf.cxx
