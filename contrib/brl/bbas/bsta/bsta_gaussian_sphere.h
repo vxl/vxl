@@ -23,7 +23,7 @@ class bsta_gaussian_sphere : public bsta_gaussian<T,n>
 {
  public:
   typedef typename bsta_gaussian<T,n>::vector_type vector_;
-  typedef typename T covar_type;
+  typedef  T covar_type;
   //: Constructor
   bsta_gaussian_sphere<T,n>():
     bsta_gaussian<T,n>(), var_(T(0)), det_covar_(T(0)) {}

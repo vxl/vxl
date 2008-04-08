@@ -23,7 +23,7 @@ template <class T, unsigned n>
 class bsta_gaussian_indep : public bsta_gaussian<T,n>
 {
  public:
-  typedef typename vnl_vector_fixed<T,n> covar_type;
+  typedef vnl_vector_fixed<T,n> covar_type;
   //: Constructor
   bsta_gaussian_indep<T,n>()
    : bsta_gaussian<T,n>(), diag_covar_(T(0)), det_covar_(T(0)) {}

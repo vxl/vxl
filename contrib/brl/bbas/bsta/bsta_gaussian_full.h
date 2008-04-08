@@ -24,7 +24,7 @@ class bsta_gaussian_full : public bsta_gaussian<T,n>
 {
   public:
   //: the covariance type
-  typedef typename vnl_matrix_fixed<T,n,n> covar_type;
+  typedef vnl_matrix_fixed<T,n,n> covar_type;
     //: Constructor
     bsta_gaussian_full<T,n>():
       bsta_gaussian<T,n>(), covar_(T(0)),
