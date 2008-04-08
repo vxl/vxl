@@ -103,10 +103,10 @@ class bvxm_voxel_world: public vbl_ref_count
   // The probability density of observing each pixel in the observation is returned in pixel_prob_density, which should be allocated by the caller.
   template<bvxm_voxel_type APM_T>
   bool update(bvxm_image_metadata const& observation, vil_image_view<float> &pixel_prob_density, vil_image_view<bool> &mask, unsigned bin_index = 0);
-  
-  //: update voxel grid wtih data from LIDAR/camera pair                   
+
+  //: update voxel grid wtih data from LIDAR/camera pair
   bool update_lidar(bvxm_image_metadata const& observation);
- 
+
   //: update voxel grid wtih data from LIDAR/camera pair and return pixel probability densities.
   bool update_lidar(bvxm_image_metadata const& observation, vil_image_view<float> &pixel_prob_density, vil_image_view<bool> &mask);
 
@@ -115,7 +115,7 @@ class bvxm_voxel_world: public vbl_ref_count
   bool expected_image(bvxm_image_metadata const& camera,
                       vil_image_view_base_sptr &expected,
                       vil_image_view<float> &mask, unsigned bin_index = 0);
-                      
+
   //: update voxel grid for edges with data from image/camera pair and return the edge probability density of pixel values
   bool update_edges(bvxm_image_metadata const& metadata);
 
@@ -204,13 +204,12 @@ class bvxm_voxel_world: public vbl_ref_count
                    bool return_prob, vil_image_view<float> &pix_prob_density,
                    bool return_mask, vil_image_view<bool> &mask, unsigned bin_index);
 
-  
-// Update voxel grid with data from LIDAR image/camera pair and return probability density of pixel values.
- bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
-                                   bool return_prob,
-                                   vil_image_view<float> &pix_prob_density,
-                                   bool return_mask,
-                                   vil_image_view<bool> &mask);
+  // Update voxel grid with data from LIDAR image/camera pair and return probability density of pixel values.
+  bool update_lidar_impl(bvxm_image_metadata const& metadata,
+                         bool return_prob,
+                         vil_image_view<float> &pix_prob_density,
+                         bool return_mask,
+                         vil_image_view<bool> &mask);
 };
 
 
