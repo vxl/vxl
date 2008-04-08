@@ -9,8 +9,8 @@
 //
 // \verbatim
 //  Modifications
-//    Jan 21 2008  -  Matt Leotta  -  Rename probability to prob_density and
-//                                    add probability integration over a box
+//   Jan 21 2008 - Matt Leotta - Rename probability to prob_density and
+//                               add probability integration over a box
 // \endverbatim
 
 #include "bsta_gaussian.h"
@@ -25,14 +25,14 @@ class bsta_gaussian_sphere : public bsta_gaussian<T,n>
   typedef typename bsta_gaussian<T,n>::vector_type vector_;
   typedef  T covar_type;
   //: Constructor
-  bsta_gaussian_sphere<T,n>():
-    bsta_gaussian<T,n>(), var_(T(0)), det_covar_(T(0)) {}
+  bsta_gaussian_sphere()
+  : bsta_gaussian(), var_(T(0)), det_covar_(T(0)) {}
 
   //: Constructor
-  bsta_gaussian_sphere<T,n>(const vector_& mean,
-                            const covar_type& var):
-    bsta_gaussian<T,n>(mean), var_(var), det_covar_(T(-1))
-  {compute_det();}
+  bsta_gaussian_sphere(const vector_& mean,
+                       const covar_type& var)
+  : bsta_gaussian(mean), var_(var), det_covar_(T(-1))
+  { compute_det(); }
 
   //: The variance of the distribution
   const covar_type& var() const { return var_; }
