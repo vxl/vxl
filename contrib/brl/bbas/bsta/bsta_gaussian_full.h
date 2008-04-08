@@ -26,19 +26,17 @@ class bsta_gaussian_full : public bsta_gaussian<T,n>
   //: the covariance type
   typedef vnl_matrix_fixed<T,n,n> covar_type;
     //: Constructor
-    bsta_gaussian_full<T,n>():
-      bsta_gaussian<T,n>(), covar_(T(0)),
-      det_covar_(T(0)), inv_covar_(NULL) {}
+    bsta_gaussian_full()
+    : bsta_gaussian(), covar_(T(0)), det_covar_(T(0)), inv_covar_(NULL) {}
 
     //: Constructor
-    bsta_gaussian_full<T,n>(const vnl_vector_fixed<T,n>& mean,
-                              const covar_type& covar):
-      bsta_gaussian<T,n>(mean), covar_(covar),
-      det_covar_(T(-1)), inv_covar_(NULL)
-    {compute_det();}
+    bsta_gaussian_full(const vnl_vector_fixed<T,n>& mean,
+                       const vnl_matrix_fixed<T,n,n>& covar)
+    : bsta_gaussian(mean), covar_(covar), det_covar_(T(-1)), inv_covar_(NULL)
+    { compute_det(); }
 
     //: Destructor
-    ~bsta_gaussian_full<T,n>() { delete inv_covar_; }
+    ~bsta_gaussian_full() { delete inv_covar_; }
 
     //: The covariance matrix of the distribution
     const covar_type& covar() const { return covar_; }
@@ -94,12 +92,12 @@ class bsta_gaussian_full : public bsta_gaussian<T,n>
 };
 
 template <class T , unsigned n>
-inline vcl_ostream& operator<< (vcl_ostream& os, 
+inline vcl_ostream& operator<< (vcl_ostream& os,
                                 bsta_gaussian_full<T, n> const& g)
 {
-  os << "gauss_full:mean(" << g.mean() << ")\n";
-  os << "gauss_full:covar(\n" << g.covar() << ")\n";
-  return os;
+  return
+  os << "gauss_full:mean(" << g.mean() << ")\n"
+     << "gauss_full:covar(\n" << g.covar() << ")\n";
 }
 
 #endif // bsta_gaussian_full_h_
