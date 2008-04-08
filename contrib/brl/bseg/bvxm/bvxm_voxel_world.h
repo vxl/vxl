@@ -412,7 +412,7 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
-  //get appereance model grid
+  // get appereance model grid
   bvxm_voxel_grid_base_sptr apm_grid_base = this->get_grid<APM_T>(bin_index);
   bvxm_voxel_grid<apm_datatype> *apm_grid  = static_cast<bvxm_voxel_grid<apm_datatype>*>(apm_grid_base.ptr());
 
@@ -517,7 +517,6 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
       // if preX_sum is zero at the voxel, no ray passed through the voxel (out of image)
       if (*preX_sum_it > preX_sum_thresh) {
         float multiplier = (*PIvisX_it + *preX_it) / *preX_sum_it;
-        // leave out normalization for now - results seem a little better without it.  -DEC
         float ray_norm = 1 - *visX_sum_it; //normalize based on probability that a surface voxel is located along the ray. This was not part of the original Pollard + Mundy algorithm.
         *PX_it *= multiplier * ray_norm;
       }
@@ -562,6 +561,9 @@ bool bvxm_voxel_world::expected_image(bvxm_image_metadata const& camera,
                                       vil_image_view<float> &mask,
                                       unsigned bin_index)
 {
+  // threshold used to create mask
+  float min_PXvisX_accum = 0.1f;
+
   // datatype for current appearance model
   typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype apm_datatype;
   typedef typename bvxm_voxel_traits<APM_T>::obs_datatype obs_datatype;
@@ -648,7 +650,7 @@ bool bvxm_voxel_world::expected_image(bvxm_image_metadata const& camera,
 
   // convert PXvisX_accum to mask
   bvxm_voxel_slab<bool> mask_slab(PXvisX_accum.nx(),PXvisX_accum.ny(),1);
-  bvxm_util::threshold_slab_above(PXvisX_accum,0.001f,mask_slab);
+  bvxm_util::threshold_slab_above(PXvisX_accum, min_PXvisX_accum ,mask_slab);
   vil_image_view<float>::iterator mask_img_it = mask.begin();
   bvxm_voxel_slab<bool>::iterator mask_slab_it = mask_slab.begin();
   mask.fill(0.0f);
