@@ -23,23 +23,29 @@ template <class T, unsigned n>
 class bsta_gaussian_indep : public bsta_gaussian<T,n>
 {
  public:
+  typedef typename vnl_vector_fixed<T,n> covar_type;
   //: Constructor
   bsta_gaussian_indep<T,n>()
    : bsta_gaussian<T,n>(), diag_covar_(T(0)), det_covar_(T(0)) {}
 
   //: Constructor
   bsta_gaussian_indep<T,n>(const vnl_vector_fixed<T,n>& mean,
-                             const vnl_vector_fixed<T,n>& covar)
+                             const covar_type& covar)
    : bsta_gaussian<T,n>(mean), diag_covar_(covar), det_covar_(T(-1))
   {compute_det();}
 
   //: The diagonal covariance of the distribution
-  const vnl_vector_fixed<T,n>& diag_covar() const
+  const covar_type& diag_covar() const
   { return diag_covar_; }
 
-  //: Set the diagonal covariance of the distribution
-  void set_covar(const vnl_vector_fixed<T,n>& diag_covar)
-  { diag_covar_ = diag_covar; compute_det(); }
+  //: Generic access to covariance or variance across Gaussian subtypes
+  const covar_type& covar() const
+    { return diag_covar_; }
+
+  //: generic set covariance across Gaussian subtypes
+  void set_covar(const covar_type& covar)
+  { diag_covar_ = covar; compute_det(); }
+
 
   //: The probability density at this sample given square mahalanobis distance
   T dist_prob_density(const T& sqr_mahal_dist) const
@@ -68,7 +74,7 @@ class bsta_gaussian_indep : public bsta_gaussian<T,n>
 
  protected:
   //: The diagonal covariance matrix stored as a vector
-  vnl_vector_fixed<T,n> diag_covar_;
+  covar_type diag_covar_;
 
   //: The cached covariance determinant
   T det_covar_;

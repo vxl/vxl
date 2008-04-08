@@ -23,6 +23,8 @@ template <class T, unsigned n>
 class bsta_gaussian_full : public bsta_gaussian<T,n>
 {
   public:
+  //: the covariance type
+  typedef typename vnl_matrix_fixed<T,n,n> covar_type;
     //: Constructor
     bsta_gaussian_full<T,n>():
       bsta_gaussian<T,n>(), covar_(T(0)),
@@ -30,7 +32,7 @@ class bsta_gaussian_full : public bsta_gaussian<T,n>
 
     //: Constructor
     bsta_gaussian_full<T,n>(const vnl_vector_fixed<T,n>& mean,
-                              const vnl_matrix_fixed<T,n,n>& covar):
+                              const covar_type& covar):
       bsta_gaussian<T,n>(mean), covar_(covar),
       det_covar_(T(-1)), inv_covar_(NULL)
     {compute_det();}
@@ -39,10 +41,10 @@ class bsta_gaussian_full : public bsta_gaussian<T,n>
     ~bsta_gaussian_full<T,n>() { delete inv_covar_; }
 
     //: The covariance matrix of the distribution
-    const vnl_matrix_fixed<T,n,n>& covar() const { return covar_; }
+    const covar_type& covar() const { return covar_; }
 
     //: Set the covariance matrix of the distribution
-    void set_covar(const vnl_matrix_fixed<T,n,n>& covar);
+    void set_covar(const covar_type& covar);
 
     //: The probability density at this sample given square mahalanobis distance
     T dist_prob_density(const T& sqr_mahal_dist) const
@@ -74,11 +76,11 @@ class bsta_gaussian_full : public bsta_gaussian<T,n>
     T det_covar() const { return det_covar_; }
 
     //: The inverse covariance matrix of the distribution
-    const vnl_matrix_fixed<T,n,n>& inv_covar() const;
+    const covar_type& inv_covar() const;
 
   protected:
     //: The covariance matrix
-    vnl_matrix_fixed<T,n,n> covar_;
+    covar_type covar_;
 
     //: The cached covariance determinant
     T det_covar_;

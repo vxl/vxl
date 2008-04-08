@@ -23,21 +23,28 @@ class bsta_gaussian_sphere : public bsta_gaussian<T,n>
 {
  public:
   typedef typename bsta_gaussian<T,n>::vector_type vector_;
+  typedef typename T covar_type;
   //: Constructor
   bsta_gaussian_sphere<T,n>():
     bsta_gaussian<T,n>(), var_(T(0)), det_covar_(T(0)) {}
 
   //: Constructor
   bsta_gaussian_sphere<T,n>(const vector_& mean,
-                              const T& var):
+                            const covar_type& var):
     bsta_gaussian<T,n>(mean), var_(var), det_covar_(T(-1))
   {compute_det();}
 
   //: The variance of the distribution
-  const T& var() const { return var_; }
+  const covar_type& var() const { return var_; }
 
   //: Set the variance of the distribution
-  void set_var(const T& var) { var_ = var; compute_det(); }
+  void set_var(const covar_type& var) { var_ = var; compute_det(); }
+
+  //: generic access to covariance or variance across Gaussians
+  const covar_type& covar() const {return var_;}
+
+  //: generic set covariance across Gaussian subtypes
+  void set_covar(const covar_type& covar) {this->set_var(covar);}
 
   //: The probability density at this sample given square mahalanobis distance
   T dist_prob_density(const T& sqr_mahal_dist) const
@@ -66,7 +73,7 @@ class bsta_gaussian_sphere : public bsta_gaussian<T,n>
 
  protected:
   //: The variance
-  T var_;
+  covar_type var_;
 
   //: The cached covariance determinant
   T det_covar_;
