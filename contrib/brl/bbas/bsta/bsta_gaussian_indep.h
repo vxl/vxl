@@ -25,14 +25,14 @@ class bsta_gaussian_indep : public bsta_gaussian<T,n>
  public:
   typedef vnl_vector_fixed<T,n> covar_type;
   //: Constructor
-  bsta_gaussian_indep<T,n>()
-   : bsta_gaussian<T,n>(), diag_covar_(T(0)), det_covar_(T(0)) {}
+  bsta_gaussian_indep()
+  : bsta_gaussian<T,n>(), diag_covar_(T(0)), det_covar_(T(0)) {}
 
   //: Constructor
-  bsta_gaussian_indep<T,n>(const vnl_vector_fixed<T,n>& mean,
-                             const covar_type& covar)
-   : bsta_gaussian<T,n>(mean), diag_covar_(covar), det_covar_(T(-1))
-  {compute_det();}
+  bsta_gaussian_indep(const vnl_vector_fixed<T,n>& mean,
+                      const covar_type& covar)
+  : bsta_gaussian<T,n>(mean), diag_covar_(covar), det_covar_(T(-1))
+  { compute_det(); }
 
   //: The diagonal covariance of the distribution
   const covar_type& diag_covar() const
@@ -40,7 +40,7 @@ class bsta_gaussian_indep : public bsta_gaussian<T,n>
 
   //: Generic access to covariance or variance across Gaussian subtypes
   const covar_type& covar() const
-    { return diag_covar_; }
+  { return diag_covar_; }
 
   //: generic set covariance across Gaussian subtypes
   void set_covar(const covar_type& covar)

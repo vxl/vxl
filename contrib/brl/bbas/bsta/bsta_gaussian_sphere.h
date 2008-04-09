@@ -26,12 +26,12 @@ class bsta_gaussian_sphere : public bsta_gaussian<T,n>
   typedef  T covar_type;
   //: Constructor
   bsta_gaussian_sphere()
-  : bsta_gaussian(), var_(T(0)), det_covar_(T(0)) {}
+  : bsta_gaussian<T,n>(), var_(T(0)), det_covar_(T(0)) {}
 
   //: Constructor
   bsta_gaussian_sphere(const vector_& mean,
                        const covar_type& var)
-  : bsta_gaussian(mean), var_(var), det_covar_(T(-1))
+  : bsta_gaussian<T,n>(mean), var_(var), det_covar_(T(-1))
   { compute_det(); }
 
   //: The variance of the distribution

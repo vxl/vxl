@@ -22,73 +22,74 @@
 template <class T, unsigned n>
 class bsta_gaussian_full : public bsta_gaussian<T,n>
 {
-  public:
+ public:
   //: the covariance type
   typedef vnl_matrix_fixed<T,n,n> covar_type;
-    //: Constructor
-    bsta_gaussian_full()
-    : bsta_gaussian(), covar_(T(0)), det_covar_(T(0)), inv_covar_(NULL) {}
 
-    //: Constructor
-    bsta_gaussian_full(const vnl_vector_fixed<T,n>& mean,
-                       const vnl_matrix_fixed<T,n,n>& covar)
-    : bsta_gaussian(mean), covar_(covar), det_covar_(T(-1)), inv_covar_(NULL)
-    { compute_det(); }
+  //: Constructor
+  bsta_gaussian_full()
+  : bsta_gaussian<T,n>(), covar_(T(0)), det_covar_(T(0)), inv_covar_(NULL) {}
 
-    //: Destructor
-    ~bsta_gaussian_full() { delete inv_covar_; }
+  //: Constructor
+  bsta_gaussian_full(const vnl_vector_fixed<T,n>& mean,
+                     const vnl_matrix_fixed<T,n,n>& covar)
+  : bsta_gaussian<T,n>(mean), covar_(covar), det_covar_(T(-1)), inv_covar_(NULL)
+  { compute_det(); }
 
-    //: The covariance matrix of the distribution
-    const covar_type& covar() const { return covar_; }
+  //: Destructor
+  ~bsta_gaussian_full() { delete inv_covar_; }
 
-    //: Set the covariance matrix of the distribution
-    void set_covar(const covar_type& covar);
+  //: The covariance matrix of the distribution
+  const covar_type& covar() const { return covar_; }
 
-    //: The probability density at this sample given square mahalanobis distance
-    T dist_prob_density(const T& sqr_mahal_dist) const
-    {
-      if (det_covar_ <= 0)
-        return T(0);
-      return static_cast<T>(vcl_sqrt(1/(det_covar_*two_pi_power<n>::value()))
+  //: Set the covariance matrix of the distribution
+  void set_covar(const covar_type& covar);
+
+  //: The probability density at this sample given square mahalanobis distance
+  T dist_prob_density(const T& sqr_mahal_dist) const
+  {
+    if (det_covar_ <= 0)
+      return T(0);
+    return static_cast<T>(vcl_sqrt(1/(det_covar_*two_pi_power<n>::value()))
            * vcl_exp(-sqr_mahal_dist/2));
-    }
+  }
 
-    //: The probability density at this sample
-    T prob_density(const vnl_vector_fixed<T,n>& pt) const
-    {
-      return dist_prob_density(sqr_mahalanobis_dist(pt));
-    }
+  //: The probability density at this sample
+  T prob_density(const vnl_vector_fixed<T,n>& pt) const
+  {
+    return dist_prob_density(sqr_mahalanobis_dist(pt));
+  }
 
-    //: The probability integrated over a box
-    T probability(const vnl_vector_fixed<T,n>& min_pt,
-                  const vnl_vector_fixed<T,n>& max_pt) const
-    {
-      // This stub needs implementation
-      return 0.0;
-    }
+  //: The probability integrated over a box
+  T probability(const vnl_vector_fixed<T,n>& min_pt,
+                const vnl_vector_fixed<T,n>& max_pt) const
+  {
+    // This stub needs implementation
+    return 0.0;
+  }
 
-    //: The squared Mahalanobis distance to this point
-    T sqr_mahalanobis_dist(const vnl_vector_fixed<T,n>& pt) const;
+  //: The squared Mahalanobis distance to this point
+  T sqr_mahalanobis_dist(const vnl_vector_fixed<T,n>& pt) const;
 
-    //: Compute the determinant of the covariance matrix
-    T det_covar() const { return det_covar_; }
+  //: Compute the determinant of the covariance matrix
+  T det_covar() const { return det_covar_; }
 
-    //: The inverse covariance matrix of the distribution
-    const covar_type& inv_covar() const;
+  //: The inverse covariance matrix of the distribution
+  const covar_type& inv_covar() const;
 
-  protected:
-    //: The covariance matrix
-    covar_type covar_;
+ protected:
+  //: The covariance matrix
+  covar_type covar_;
 
-    //: The cached covariance determinant
-    T det_covar_;
+  //: The cached covariance determinant
+  T det_covar_;
 
-  private:
-    //: compute the determinant of the covariance
-    void compute_det();
+ private:
+  //: compute the determinant of the covariance
+  void compute_det();
 
-    //: cache for inverse of the covariance matrix
-    mutable vnl_matrix_fixed<T,n,n>* inv_covar_;
+  //: cache for inverse of the covariance matrix
+  mutable vnl_matrix_fixed<T,n,n>* inv_covar_;
 };
 
 template <class T , unsigned n>
