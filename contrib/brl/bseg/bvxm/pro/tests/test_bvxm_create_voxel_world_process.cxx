@@ -65,7 +65,7 @@ MAIN( test_bvxm_create_voxel_world_process )
 
   bool comp = (!dir.compare("./create_world_test"));
   comp = comp && (params->corner() == vgl_point_3d<float>(0,0,0));
-  comp = comp && (params->num_voxels() == vgl_vector_3d<unsigned int> (50,50,5));
+  comp = comp && (params->num_voxels() == vgl_vector_3d<unsigned int> (100,100,50));
   comp = comp && (params->voxel_length() == 10);
   comp = comp && (0.0009 < params->min_occupancy_prob()) && (params->min_occupancy_prob() < 0.0011);
   comp = comp && (0.98< params->max_occupancy_prob()) && (params->max_occupancy_prob() < 1.0);
