@@ -29,8 +29,8 @@ double focal_length = 1.;
 double camera_dist= 200;
 
 //size of the world
-unsigned nx=100, ny=100, nz=50;
-float vox_length = 1.0f;
+const unsigned nx=100, ny=100, nz=50;
+const float vox_length = 1.0f;
 vcl_vector<vgl_box_3d<double> > boxes;
 
 typedef bvxm_voxel_traits<APM_MOG_GREY>::voxel_datatype apm_datatype;
@@ -41,7 +41,7 @@ int on_box_surface(vgl_box_3d<double> box, vgl_point_3d<double> v)
 {
   // create a box a size smaller
   vgl_box_3d<double> in_box;
-  int thickness = 1;
+  const int thickness = 1;
   in_box.set_min_point(vgl_point_3d<double>(box.min_x()+thickness, box.min_y()+thickness, box.min_z()+thickness));
   in_box.set_max_point(vgl_point_3d<double>(box.max_x()-thickness, box.max_y()-thickness, box.max_z()-thickness));
 
@@ -156,7 +156,8 @@ perspective_to_rational(vpgl_perspective_camera<double>& cam_pers)
   }
 
   vpgl_rational_camera<double> cam_rat(neu_u,den_u,neu_v,den_v,
-    x_scale,x_off,y_scale,y_off,z_scale,z_off,u_scale,u_off,v_scale,v_off);
+                                       x_scale,x_off,y_scale,y_off,z_scale,z_off,
+                                       u_scale,u_off,v_scale,v_off);
   return cam_rat;
 }
 
@@ -260,7 +261,7 @@ generate_cameras_yz(vgl_box_3d<double>& world)
 
 bool gen_images(vgl_vector_3d<unsigned> grid_size,
                 bvxm_voxel_world_sptr world,
-               // bvxm_world_params_sptr world_params,
+                // bvxm_world_params_sptr world_params,
                 bvxm_voxel_grid<float>* intensity_grid,
                 bvxm_voxel_grid<float>* ocp_grid,
                 bvxm_voxel_grid<apm_datatype>* apm_grid,
@@ -299,19 +300,22 @@ bool gen_images(vgl_vector_3d<unsigned> grid_size,
   return true;
 }
 
-bool gen_lidar_2box(vgl_vector_3d<unsigned> grid_size,
-                bvxm_voxel_world_sptr world)
-                //vcl_vector<vpgl_camera_double_sptr>& cameras,
-                //vcl_vector <vil_image_view_base_sptr>& image_set,
-                //unsigned int bin_num)
+bool gen_lidar_2box(vgl_vector_3d<unsigned> grid_size
+                    , bvxm_voxel_world_sptr world
+#if 0
+                    , vcl_vector<vpgl_camera_double_sptr>& cameras
+                    , vcl_vector <vil_image_view_base_sptr>& image_set
+                    , unsigned int bin_num
+#endif
+                   )
 {
   vil_image_view<unsigned char> lidar(grid_size.x(), grid_size.y());
-  lidar.fill(0.0);
+  lidar.fill((unsigned char)0);
 
   // Generate the bottom one
   for (unsigned int b=0; b<boxes.size(); b++) {
     vgl_box_3d<double> box = boxes[b];
-    int z = box.max_z();
+    double z = box.max_z();
 
     for (unsigned i=0; i<grid_size.x(); i++)
       for (unsigned j=0; j<grid_size.y(); j++){
@@ -319,7 +323,7 @@ bool gen_lidar_2box(vgl_vector_3d<unsigned> grid_size,
         if (box.contains(p)) {
           // check if there is already a higher d there
           if (lidar(i,j) < z)
-            lidar(i,j) = z;
+            lidar(i,j) = (unsigned char)z;
         }
       }
   }
@@ -332,8 +336,10 @@ bool gen_lidar_2box(vgl_vector_3d<unsigned> grid_size,
   return true;
 }
 
-bool reconstruct_world( bvxm_voxel_world_sptr recon_world, vcl_vector<vpgl_camera_double_sptr>& cameras,
-                 vcl_vector <vil_image_view_base_sptr>& image_set,unsigned int bin_num)
+bool reconstruct_world(bvxm_voxel_world_sptr recon_world,
+                       vcl_vector<vpgl_camera_double_sptr>& cameras,
+                       vcl_vector<vil_image_view_base_sptr>& image_set,
+                       unsigned int bin_num)
 {
   vcl_string recon_path = "recon_world/test_img";
   vcl_string camera_path = "test_gen_cameras/camera";
@@ -364,31 +370,31 @@ bool reconstruct_world( bvxm_voxel_world_sptr recon_world, vcl_vector<vpgl_camer
 }
 
 void gen_texture_map(vgl_box_3d<double> box,
-                 vcl_vector<vcl_vector<float> >& intens_map_bt,
-                 vcl_vector<vcl_vector<float> >& intens_map_side1,
-                 vcl_vector<vcl_vector<float> >& intens_map_side2)
+                     vcl_vector<vcl_vector<float> >& intens_map_bt,
+                     vcl_vector<vcl_vector<float> >& intens_map_side1,
+                     vcl_vector<vcl_vector<float> >& intens_map_side2)
 {
   // generate intensity maps
-  intens_map_bt.resize(box.width()/8+1);
-  intens_map_side1.resize(box.width()/8+1);
-  intens_map_side2.resize(box.width()/8+1);
+  intens_map_bt.resize(long(box.width()/8+1));
+  intens_map_side1.resize(long(box.width()/8+1));
+  intens_map_side2.resize(long(box.width()/8+1));
 
   for (unsigned i=0; i<box.width()/8;i++) {
-    intens_map_bt[i].resize(box.height()/8+1);
+    intens_map_bt[i].resize(long(box.height()/8+1));
     for (unsigned j=0; j<box.height()/8;j++) {
       intens_map_bt[i][j] = (rand() % 85)/255.0;
     }
   }
 
   for (unsigned i=0; i<box.width()/8;i++) {
-    intens_map_side1[i].resize(box.depth()/8+1);
+    intens_map_side1[i].resize(long(box.depth()/8+1));
     for (unsigned j=0; j<box.depth()/8;j++) {
       intens_map_side1[i][j] = (rand() % 85)/255.0 + 0.4;
     }
   }
 
   for (unsigned i=0; i<box.height()/8;i++) {
-    intens_map_side2[i].resize(box.depth()/8+1);
+    intens_map_side2[i].resize(long(box.depth()/8+1));
     for (unsigned j=0; j<box.depth()/8;j++) {
       intens_map_side2[i][j] = (rand() % 85)/255.0 + 0.7;
       if (intens_map_side2[i][j] > 1.0)
@@ -441,12 +447,9 @@ void gen_voxel_world_2box(vgl_vector_3d<unsigned> grid_size,
   unsigned z=nz;
   for (ocp_slab_it = ocp_grid->begin();ocp_slab_it != ocp_grid->end();++ocp_slab_it,++intensity_slab_it)
   {
-    z--;
+    --z;
     is << z << "--->" << vcl_endl;
-    bvxm_voxel_slab<float>::iterator vit,iit;
 
-    iit = intensity_slab_it->begin();
-    vit = ocp_slab_it->begin();
     for (unsigned i=0; i<nx; i++)
     {
       is << vcl_endl;
@@ -458,20 +461,19 @@ void gen_voxel_world_2box(vgl_vector_3d<unsigned> grid_size,
         if ((face1 != -1) || (face2 != -1))
         {
           if (face1 != -1) {
-            int a,b;
             if (face1 == 0) {
-              a = (i-box.min_x())/8;
-              b = (j-box.min_y())/8;
+              int a = int(i-box.min_x())/8;
+              int b = int(j-box.min_y())/8;
               (*intensity_slab_it)(i,j,0) = intens_map_bt[a][b];
             }
             else if (face1 == 1) {
-              a = (i-box.min_x())/8;
-              b = (z-box.min_z())/8;
+              int a = int(i-box.min_x())/8;
+              int b = int(z-box.min_z())/8;
               (*intensity_slab_it)(i,j,0) = intens_map_side1[a][b];
             }
             else {
-              a = (j-box.min_y())/8;
-              b = (z-box.min_z())/8;
+              int a = int(j-box.min_y())/8;
+              int b = int(z-box.min_z())/8;
               (*intensity_slab_it)(i,j,0) = intens_map_side2[a][b];
             }
 #ifdef DEBUG
@@ -480,18 +482,17 @@ void gen_voxel_world_2box(vgl_vector_3d<unsigned> grid_size,
           }
           else {
             //(*intensity_slab_it)(i,j,0) = face_intens[5-face2];
-            int a,b;
             if (face2 == 0) {
-              a = (i-top_box.min_x())/8;
-              b = (j-top_box.min_y())/8;
+              int a = int(i-top_box.min_x())/8;
+              int b = int(j-top_box.min_y())/8;
               (*intensity_slab_it)(i,j,0) = top_intens_map_bt[a][b];
             }else if (face2 == 1) {
-              a = (i-top_box.min_x())/8;
-              b = (z-top_box.min_z())/8;
+              int a = int(i-top_box.min_x())/8;
+              int b = int(z-top_box.min_z())/8;
               (*intensity_slab_it)(i,j,0) = top_intens_map_side1[a][b];
             } else {
-              a = (j-top_box.min_y())/8;
-              b = (z-top_box.min_z())/8;
+              int a = int(j-top_box.min_y())/8;
+              int b = int(z-top_box.min_z())/8;
               (*intensity_slab_it)(i,j,0) = top_intens_map_side2[a][b];
             }
           }
@@ -528,19 +529,17 @@ void gen_voxel_world_plane(vgl_vector_3d<unsigned> grid_size,
   bvxm_voxel_grid<float>::iterator intensity_slab_it = intensity_grid->begin();
 
   vgl_box_3d<double> plane_box(vgl_point_3d<double> (20,20,24),
-    vgl_point_3d<double> (80, 80, 25));
+                               vgl_point_3d<double> (80, 80, 25));
 
   vcl_ofstream is("test_gen_synthetic_world/intensity_grid.txt");
   unsigned z=nz;
   for (ocp_slab_it = ocp_grid->begin();
-    ocp_slab_it != ocp_grid->end();
-    ++ocp_slab_it,++intensity_slab_it) {
+       ocp_slab_it != ocp_grid->end();
+       ++ocp_slab_it,++intensity_slab_it)
+  {
     z--;
     is << z << "--->" << vcl_endl;
-    bvxm_voxel_slab<float>::iterator vit,iit;
 
-    iit = intensity_slab_it->begin();
-    vit = ocp_slab_it->begin();
     for (unsigned i=0; i<nx; i++) {
       is << vcl_endl;
       for (unsigned j=0; j<ny; j++) {
@@ -596,13 +595,13 @@ static void test_gen_synthetic_world()
 
   vgl_vector_3d<unsigned> grid_size(nx,ny,nz);
   vgl_box_3d<double> voxel_world(vgl_point_3d<double> (0,0,0),
-    vgl_point_3d<double> (nx, ny, nz));
+                                 vgl_point_3d<double> (nx, ny, nz));
 
   bvxm_world_params_sptr world_params = new bvxm_world_params();
   world_params->set_params("./test_gen_synthetic_world",
-    vgl_point_3d<float> (0,0,0),
-    vgl_vector_3d<unsigned int>(nx, ny, nz),
-    vox_length);
+                           vgl_point_3d<float> (0,0,0),
+                           vgl_vector_3d<unsigned int>(nx, ny, nz),
+                           vox_length);
   bvxm_voxel_world_sptr world = new bvxm_voxel_world();
   world->set_params(world_params);
   world->clean_grids();
@@ -630,7 +629,7 @@ static void test_gen_synthetic_world()
 
   // generate images from synthetic world
   gen_images(grid_size, world, intensity_grid, ocp_grid, apm_grid_1,
-    cameras, image_set_1, bin_num_1);
+             cameras, image_set_1, bin_num_1);
 
   world->save_occupancy_raw("./test_gen_synthetic_world/ocp.raw");
 
@@ -638,7 +637,7 @@ static void test_gen_synthetic_world()
 
   bvxm_world_params_sptr recon_world_params = new bvxm_world_params();
   recon_world_params->set_params("./recon_world",vgl_point_3d<float> (0,0,0),
-    vgl_vector_3d<unsigned int>(nx, ny, nz), vox_length);
+                                 vgl_vector_3d<unsigned int>(nx, ny, nz), vox_length);
 
   recon_world->set_params(recon_world_params);
   recon_world->clean_grids();
