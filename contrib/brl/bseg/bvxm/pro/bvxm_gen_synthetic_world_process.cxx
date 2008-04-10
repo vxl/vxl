@@ -316,30 +316,30 @@ bvxm_gen_synthetic_world_process::gen_texture_map(vgl_box_3d<double> box,
                                                   vcl_vector<vcl_vector<float> >& intens_map_side2)
 {
   // generate intensity maps
-  intens_map_bt.resize(float(box.width()/8+1));
-  intens_map_side1.resize(float(box.width()/8+1));
-  intens_map_side2.resize(float(box.width()/8+1));
+  intens_map_bt.resize(long(box.width()/8+1));
+  intens_map_side1.resize(long(box.width()/8+1));
+  intens_map_side2.resize(long(box.width()/8+1));
 
 #ifdef DEBUG
   vcl_cout << box.width() << ' ' << box.depth() << ' ' << box.height() << vcl_endl;
 #endif
 
   for (unsigned i=0; i<box.width()/8;i++) {
-    intens_map_bt[i].resize(float(box.height()/8+1));
+    intens_map_bt[i].resize(long(box.height()/8+1));
     for (unsigned j=0; j<box.height()/8;j++) {
       intens_map_bt[i][j] = (rand() % 85)/255.0;
     }
   }
 
   for (unsigned i=0; i<box.width()/8;i++) {
-    intens_map_side1[i].resize(float(box.depth()/8+1));
+    intens_map_side1[i].resize(long(box.depth()/8+1));
     for (unsigned j=0; j<box.depth()/8;j++) {
       intens_map_side1[i][j] = (rand() % 85)/255.0 + 0.4;
     }
   }
 
   for (unsigned i=0; i<box.height()/8;i++) {
-    intens_map_side2[i].resize(float(box.depth()/8+1));
+    intens_map_side2[i].resize(long(box.depth()/8+1));
     for (unsigned j=0; j<box.depth()/8;j++) {
       intens_map_side2[i][j] = (rand() % 85)/255.0 + 0.7;
       if (intens_map_side2[i][j] > 1.0)
