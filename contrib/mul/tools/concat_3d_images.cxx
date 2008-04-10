@@ -119,9 +119,9 @@ void calc_image_sizes(
     max_size_j(images.get_row2_count(), 0u),
     max_size_i(images.get_row1_count(), 0u);
 
-  for (int k = 0; k < images.get_row3_count(); ++k)
-    for (int j = 0; j < images.get_row2_count(); ++j)
-      for (int i = 0; i < images.get_row1_count(); ++i)
+  for (unsigned int k = 0; k < images.get_row3_count(); ++k)
+    for (unsigned int j = 0; j < images.get_row2_count(); ++j)
+      for (unsigned int i = 0; i < images.get_row1_count(); ++i)
         if (images(i,j,k))
         {
           max_size_k[k]  = vcl_max(max_size_k[k], images(i,j,k)->nk());
@@ -131,11 +131,11 @@ void calc_image_sizes(
 
   // Add margins.
   vcl_transform(max_size_k.begin(), max_size_k.end(), max_size_k.begin(),
-    vcl_bind2nd(vcl_plus<unsigned>(),margin));
+                vcl_bind2nd(vcl_plus<unsigned>(),margin));
   vcl_transform(max_size_j.begin(), max_size_j.end(), max_size_j.begin(),
-    vcl_bind2nd(vcl_plus<unsigned>(),margin));
+                vcl_bind2nd(vcl_plus<unsigned>(),margin));
   vcl_transform(max_size_i.begin(), max_size_i.end(), max_size_i.begin(),
-    vcl_bind2nd(vcl_plus<unsigned>(),margin));
+                vcl_bind2nd(vcl_plus<unsigned>(),margin));
 
   // Sum these max sizes to find the position of each input image, in the output image.
 
@@ -178,7 +178,7 @@ int main(int argc, char*argv[])
     }
 
     if (vcl_string("-?") == argv[1] ||
-      vcl_string("--help") == argv[1] || vcl_string("-h") == argv[1])
+        vcl_string("--help") == argv[1] || vcl_string("-h") == argv[1])
       usage(progname);
   }
 
@@ -199,11 +199,11 @@ int main(int argc, char*argv[])
   parse_cmdline(argc-2, const_cast<const char **>(argv+2), fnames);
 
 
-  for (int k = 0; k < fnames.get_row3_count(); ++k)
+  for (unsigned int k = 0; k < fnames.get_row3_count(); ++k)
   {
-    for (int j = 0; j < fnames.get_row2_count(); ++j)
+    for (unsigned int j = 0; j < fnames.get_row2_count(); ++j)
     {
-      for (int i = 0; i < fnames.get_row1_count(); ++i)
+      for (unsigned int i = 0; i < fnames.get_row1_count(); ++i)
         vcl_cout << '\"' << fnames(i,j,k) << "\" ";
       vcl_cout << vcl_endl;
     }
@@ -218,7 +218,7 @@ int main(int argc, char*argv[])
   vil3d_file_format::add_format(new vil3d_gen_synthetic_format);
 
   vcl_transform(fnames.begin(), fnames.end(),
-    im_resources.begin(), fname_to_resource);
+                im_resources.begin(), fname_to_resource);
 
   if (!im_resources(0,0,0))
   {
@@ -232,8 +232,10 @@ int main(int argc, char*argv[])
   calc_image_sizes(im_resources, margin, sizes_i, sizes_j, sizes_k);
 
   vil3d_image_resource_sptr output =
-    vil3d_new_image_resource (filename, sizes_i.back(), sizes_j.back(), sizes_k.back(),
-    im_resources(0,0,0)->nplanes(), im_resources(0,0,0)->pixel_format());
+    vil3d_new_image_resource(filename,
+                             sizes_i.back(), sizes_j.back(), sizes_k.back(),
+                             im_resources(0,0,0)->nplanes(),
+                             im_resources(0,0,0)->pixel_format());
 
   if (!output)
   {
@@ -274,22 +276,22 @@ int main(int argc, char*argv[])
   }
 
   vil3d_image_resource_sptr blank =
-    new vil3d_gen_synthetic_image( sizes_i.back(), sizes_j.back(), sizes_k.back(),
-      im_resources(0,0,0)->pixel_format(), pv);
+    new vil3d_gen_synthetic_image(sizes_i.back(), sizes_j.back(), sizes_k.back(),
+                                  im_resources(0,0,0)->pixel_format(), pv);
 
   bool rv = vil3d_copy_deep(blank, output);
   assert(rv);
 
-  for (int k = 0; k < im_resources.get_row3_count(); ++k)
-    for (int j = 0; j < im_resources.get_row2_count(); ++j)
-      for (int i = 0; i < im_resources.get_row1_count(); ++i)
+  for (unsigned int k = 0; k < im_resources.get_row3_count(); ++k)
+    for (unsigned int j = 0; j < im_resources.get_row2_count(); ++j)
+      for (unsigned int i = 0; i < im_resources.get_row1_count(); ++i)
         if (im_resources(i,j,k))
         {
           vil3d_image_view_base_sptr in = im_resources(i,j,k)->get_view();
           if (!output->put_view(*in, sizes_i[i], sizes_j[j], sizes_k[k]))
           {
-            vcl_cerr << "ERROR: Unable to copy image \"" << fnames(i,j,k) <<
-              "\" into output image \"" << filename << "\"\n";
+            vcl_cerr << "ERROR: Unable to copy image \"" << fnames(i,j,k)
+                     << "\" into output image \"" << filename << "\"\n";
             vcl_exit(8);
           }
         }
