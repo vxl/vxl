@@ -1,7 +1,5 @@
 //This is core/vil/file_formats/vil_tiff.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
+#include "vil_tiff.h"
 //:
 // \file
 // See vil_tiff.h for a description of this file.
@@ -14,8 +12,6 @@
 //   2005-12-xx J.L. Mundy  Essentially a complete rewrite to support blocking.
 //                          Cleaner struct: hdr params moved to vil_tiff_header
 // \endverbatim
-
-#include "vil_tiff.h"
 
 #include <vcl_cassert.h>
 #include <vcl_cstring.h>
@@ -289,8 +285,7 @@ vil_tiff_file_format::make_blocked_output_image(vil_stream* vs,
                                                 unsigned nplanes,
                                                 unsigned size_block_i,
                                                 unsigned size_block_j,
-                                                enum vil_pixel_format format
-                                                )
+                                                enum vil_pixel_format format)
 {
   if (size_block_i%16!=0||size_block_j%16!=0)
   {
@@ -326,8 +321,7 @@ vil_tiff_file_format::make_output_image(vil_stream* vs,
                                         unsigned ni,
                                         unsigned nj,
                                         unsigned nplanes,
-                                        enum vil_pixel_format format
-                                        )
+                                        enum vil_pixel_format format)
 {
   return make_blocked_output_image(vs, ni, nj, nplanes, 0, 0, format).ptr();
 }
@@ -666,8 +660,8 @@ vil_tiff_image::get_block( unsigned block_index_i,
   //the only two possibilities
   assert(h_->is_tiled()||h_->is_striped());
   //
-  //If there are multiple images in the file it is 
-  //necessary to set the TIFF directory and file header corresponding to 
+  //If there are multiple images in the file it is
+  //necessary to set the TIFF directory and file header corresponding to
   //this resource according to the index
   //
   if (nimages_>1)
@@ -1295,7 +1289,7 @@ bool vil_tiff_pyramid_resource::put_resource(vil_image_resource_sptr const& ir)
     return false;
 #if 0 //DON'T NEED CLEAR?
   ti->clear_TIFF();
-#endif 
+#endif
   tiff_pyramid_level* pl = new tiff_pyramid_level(levels_.size(), ni, nj, nplanes, fmt);
   levels_.push_back(pl);
   int status = TIFFWriteDirectory(t_.tif());

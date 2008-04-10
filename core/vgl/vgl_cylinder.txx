@@ -10,18 +10,18 @@ template <class T>
 bool vgl_cylinder<T>::operator==(vgl_cylinder<T> const& cyl) const
 {
   return (this==&cyl) ||
-         ( cyl.center_ == this->center_
-         && cyl.radius_ ==  this->radius_
-         && cyl.length_ == this->length_
-         && cyl.orient_ == this->orient_);
+         ( cyl.center_ == this->center_ &&
+           cyl.radius_ == this->radius_ &&
+           cyl.length_ == this->length_ &&
+           cyl.orient_ == this->orient_);
 }
 
 template <class T>
 vcl_ostream& vgl_cylinder<T>::print(vcl_ostream& s) const
 {
-   return s << "<vgl_cylinder center=" << center_ << ','
-            << " radius=" << radius_ << ", length =" << length_
-            << ", direction=" << orient_ << '>';
+  return s << "<vgl_cylinder center=" << center_ << ','
+           << " radius=" << radius_ << ", length =" << length_
+           << ", direction=" << orient_ << '>';
 }
 
 template <class T>
@@ -48,4 +48,4 @@ template class vgl_cylinder<T >; \
 template vcl_ostream& operator<<(vcl_ostream&, vgl_cylinder<T >const&); \
 template vcl_istream& operator>>(vcl_istream&, vgl_cylinder<T >&)
 
-#endif
+#endif // vgl_cylinder_txx_

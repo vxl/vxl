@@ -1,4 +1,5 @@
 // This is core/vgui/impl/wx/vgui_wx_adaptor.cxx
+#include "vgui_wx_adaptor.h"
 //=========================================================================
 //:
 // \file
@@ -7,7 +8,6 @@
 // See vgui_wx_adaptor.h for details.
 //=========================================================================
 
-#include "vgui_wx_adaptor.h"
 #include "vgui_wx_menu.h"
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_popup_params.h>
@@ -351,8 +351,8 @@ void vgui_wx_adaptor::on_mouse_event(wxMouseEvent& event)
   // ***** what exactly goes here??
   e.timestamp = 0;
 
-  if ( e.modifier == mixin::popup_modifier
-    && e.button   == mixin::popup_button )
+  if ( e.modifier == mixin::popup_modifier &&
+       e.button   == mixin::popup_button )
   {
   vgui_macro_report_errors;
     vgui_popup_params params;

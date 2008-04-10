@@ -26,12 +26,12 @@ template <class Type>
 bool vgl_homg_point_3d<Type>::operator==(vgl_homg_point_3d<Type> const& other) const
 {
   return (this==&other) ||
-         (   x()*other.y() == y()*other.x()
-          && x()*other.z() == z()*other.x()
-          && x()*other.w() == w()*other.x()
-          && y()*other.z() == z()*other.y()
-          && y()*other.w() == w()*other.y()
-          && z()*other.w() == w()*other.z());
+         (x()*other.y() == y()*other.x() &&
+          x()*other.z() == z()*other.x() &&
+          x()*other.w() == w()*other.x() &&
+          y()*other.z() == z()*other.y() &&
+          y()*other.w() == w()*other.y() &&
+          z()*other.w() == w()*other.z());
 }
 
 template <class Type>
