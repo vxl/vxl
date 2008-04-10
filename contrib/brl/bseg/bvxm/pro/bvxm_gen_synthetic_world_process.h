@@ -45,11 +45,11 @@ class bvxm_gen_synthetic_world_process : public bprb_process
   //: Clone the process
   virtual bvxm_gen_synthetic_world_process* clone() const {return new bvxm_gen_synthetic_world_process(*this);}
 
-  vcl_string name(){return "bvxmGenSyntheticWorldProcess";}
+  vcl_string name() { return "bvxmGenSyntheticWorldProcess"; }
 
   bool init() { return true; }
   bool execute();
-  bool test(bvxm_voxel_world_sptr r) { return test_reconstructed_ocp(r); }
+  bool test();
   bool finish(){return true; }
 
  private:
