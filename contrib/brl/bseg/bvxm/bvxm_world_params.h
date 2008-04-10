@@ -40,6 +40,8 @@ public:
 
   inline vcl_string model_dir(){ return model_dir_; }
   inline vgl_point_3d<float> corner(){ return corner_; }
+  inline void set_corner(vgl_point_3d<float>& new_c){ corner_ = new_c; }
+
   inline vgl_vector_3d<unsigned int> num_voxels(){ return num_voxels_; }
   inline float voxel_length(){ return voxel_length_; }
   inline float min_occupancy_prob(){ return min_occupancy_prob_;}
