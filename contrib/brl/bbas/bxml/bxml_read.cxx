@@ -135,9 +135,9 @@ bxml_document bxml_read(vcl_istream& is)
 
   while (is.good()) {
     is.get(buf,sizeof(buf),0);
-    int n = is.gcount();
+    unsigned int n = is.gcount();
 
-    done = ((n+1) < sizeof(buf)) ? 1 : 0;
+    done = (n+1 < sizeof(buf)) ? 1 : 0;
 
     if (parser.XML_Parse(buf,n,done) != XML_STATUS_OK ) {
       vcl_cerr << "Error parsing\n";
