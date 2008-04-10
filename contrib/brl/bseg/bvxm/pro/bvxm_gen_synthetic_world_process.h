@@ -49,6 +49,7 @@ class bvxm_gen_synthetic_world_process : public bprb_process
 
   bool init() { return true; }
   bool execute();
+  bool test(bvxm_voxel_world_sptr r) { return test_reconstructed_ocp(r); }
   bool finish(){return true; }
 
  private:
