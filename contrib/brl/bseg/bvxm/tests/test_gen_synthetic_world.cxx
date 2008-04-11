@@ -21,7 +21,7 @@
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 
-+//hard-coded values ... should be removed and added as a parameter class
+//hard-coded values ... should be removed and added as a parameter class
 const int IMAGE_U = 200;
 const int IMAGE_V = 200;
 const double x_scale = 900;
