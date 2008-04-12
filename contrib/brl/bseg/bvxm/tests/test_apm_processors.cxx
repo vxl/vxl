@@ -55,6 +55,7 @@ MAIN( test_apm_processors )
   bvxm_mog_grey_processor processor;
 
   bool a = processor.update(appear, obs, weight);
+  TEST("processor.update()", a, true);
 
   SUMMARY();
 }
