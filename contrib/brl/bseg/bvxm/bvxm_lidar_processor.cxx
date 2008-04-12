@@ -17,15 +17,14 @@ bvxm_lidar_processor::prob_density(unsigned z_dim,  bvxm_voxel_slab<float> const
 
   for (obs_it = obs.begin(); obs_it!= obs.end(); ++obs_it, ++prob_it)
   {
-    float dummy = *obs_it;
     float d = *obs_it - z_dim;
 
-    // Calculate threshold such that the given number of pixels correspond to 2.5 standar deviation away
-    //in a standard normal gaussian
+    // Calculate threshold such that the given number of pixels corresponds to
+    // 2.5 standard deviations away in a standard normal gaussian
     float thresh = 2.5 / float(vox_thresh_);
-    d = d * thresh;
+    d *= thresh;
 
-    (*prob_it) = gauss_.prob_density(d);
+    *prob_it = gauss_.prob_density(d);
   }
 
   return probabilities;
