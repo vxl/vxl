@@ -102,8 +102,8 @@ void computeborgefors( const vbl_array_2d<bool> &edges, vbl_array_2d<short> &dis
 void computeedgemap( vil1_memory_image_of<vxl_byte> imbuf, vbl_array_2d<bool> &edges)
 {
   unsigned int r = edges.rows(), c = edges.columns();
-  assert( r == imbuf.width());
-  assert( c == imbuf.height());
+  assert( int(r) == imbuf.width());
+  assert( int(c) == imbuf.height());
 
   edges.fill( false);
 
