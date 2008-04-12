@@ -33,10 +33,6 @@ MAIN( test_update_dist_image )
   vil_image_view<float>* ip = new vil_image_view<float>(ni,nj,3);
   init_random_image(*ip);
 
-  const float window_size = 50.0;
-  const unsigned int max_components = 3;
-  const float init_var = 0.01f;
-
   brdb_value_sptr image_view_value =
     new brdb_value_t<vil_image_view_base_sptr>(ip);
 
