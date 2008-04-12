@@ -14,12 +14,12 @@ void fsetpixel(vbl_array_2d<DataType>& i, int x, int y, DataType e) {
 }
 template <class DataType>
 DataType getpixel(vbl_array_2d<DataType> const& i, int x, int y, DataType /* dummy */) {
-  if (x<0 || y<0 || x>=i.columns() || y>=i.rows()) return DataType();
+  if (x<0 || y<0 || x>=int(i.columns()) || y>=int(i.rows())) return DataType();
   return i(x,y);
 }
 template <class DataType>
 void setpixel(vbl_array_2d<DataType>& i, int x, int y, DataType e) {
-  if (x<0 || y<0 || x>=i.columns() || y>=i.rows()) return;
+  if (x<0 || y<0 || x>=int(i.columns()) || y>=int(i.rows())) return;
   i(x,y) = e;
 }
 
