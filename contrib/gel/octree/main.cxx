@@ -68,14 +68,16 @@ static int minimum5(int a, int b, int c, int d, int e)
 //////////////////////////////////////////////////////////////////////
 void computeborgefors( const vbl_array_2d<bool> &edges, vbl_array_2d<short> &distance)
 {
-  int r = edges.rows(), c = edges.columns();
+  unsigned int r = edges.rows(), c = edges.columns();
   assert( r == distance.rows());
   assert( c == distance.columns());
 
+  if (r <= 2 || c <= 2) return; // the iterations below are empty in that case
+
   distance.fill( short(1+vcl_sqrt((double)r*r + c*c)));
 
-  for (int i=1; i<r-1; i++)
-    for (int j=1; j<c-1; j++)
+  for (unsigned int i=1; i+1<r; ++i)
+    for (unsigned int j=1; j+1<c; ++j)
     {
       if (edges(i,j))
         distance(i,j)= 0;
@@ -86,8 +88,8 @@ void computeborgefors( const vbl_array_2d<bool> &edges, vbl_array_2d<short> &dis
                                distance(i  ,j));
     }
 
-  for (int i=r-2; i>0; i--)
-    for (int j=c-2; j>0; j--)
+  for (unsigned int i=r-2; i>0; --i)
+    for (unsigned int j=c-2; j>0; --j)
       distance(i,j)= minimum5( distance(i  ,j  )  ,
                                distance(i  ,j+1)+3,
                                distance(i+1,j-1)+4,
@@ -99,15 +101,17 @@ void computeborgefors( const vbl_array_2d<bool> &edges, vbl_array_2d<short> &dis
 ///////////////////////////////////////////////////////////////////
 void computeedgemap( vil1_memory_image_of<vxl_byte> imbuf, vbl_array_2d<bool> &edges)
 {
-  int r = edges.rows(), c = edges.columns();
-  assert( r == int(imbuf.width()));
-  assert( c == int(imbuf.height()));
+  unsigned int r = edges.rows(), c = edges.columns();
+  assert( r == imbuf.width());
+  assert( c == imbuf.height());
 
   edges.fill( false);
 
-  for (int i=1; i<r-1; i++)
+  if (r <= 2 || c <= 2) return; // the iteration below is empty in that case
+
+  for (unsigned int i=1; i+1<r; ++i)
   {
-    for (int j=1; j<c-1; j++)
+    for (unsigned int j=1; j+1<c; ++j)
     {
       if (!imbuf(i,j) &&
           (imbuf(i-1,j-1) || imbuf(i,j-1) || imbuf(i+1,j-1) ||
@@ -358,8 +362,8 @@ int main(int argc, char ** argv)
         }
       }
 
-      int xsize= imagestore[*it]->width();
-      int ysize= imagestore[*it]->height();
+      unsigned int xsize = imagestore[*it]->width();
+      unsigned int ysize = imagestore[*it]->height();
 
       for (unsigned int i=0; i< voxels.size(); i++)
       {
@@ -623,11 +627,11 @@ int main(int argc, char ** argv)
           {
             int q1=0,q2=0,q3=0;
 
-            switch( k)
+            switch (k)
             {
               case 0: break;
               case 1: q1=1; break;
-              case 2: q1=1;q2=1; break;
+              case 2: q1=q2=1; break;
               case 3: q2=1; break;
             }
 
@@ -676,11 +680,11 @@ int main(int argc, char ** argv)
           {
             int q1=0,q2=0,q3=0;
 
-            switch( k)
+            switch (k)
             {
               case 0: break;
               case 1: q1=1; break;
-              case 2: q1=1;q2=1; break;
+              case 2: q1=q2=1; break;
               case 3: q2=1; break;
             }
 
@@ -729,11 +733,11 @@ int main(int argc, char ** argv)
           {
             int q1=0,q2=0,q3=0;
 
-            switch( k)
+            switch (k)
             {
               case 0: break;
               case 1: q1=1; break;
-              case 2: q1=1;q2=1; break;
+              case 2: q1=q2=1; break;
               case 3: q2=1; break;
             }
 
