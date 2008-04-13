@@ -91,10 +91,10 @@ test_pixels()
   vcl_cerr << "\nr=1, g=0, b=1, a=0\n\n";
 
   // rgb
-  { vgui_pixel_rgb<5,6,5> pix; pix.R=255U; pix.G= 0U; pix.B=255U; print_binary("  rgb565", &pix, sizeof(pix)); }
+  { vgui_pixel_rgb<5,6,5> pix; pix.R=31U; pix.G= 0U; pix.B=31U; print_binary("  rgb565", &pix, sizeof(pix)); }
   { vgui_pixel_rgb<8,8,8> pix; pix.R=255U; pix.G= 0U; pix.B=255U; print_binary("  rgb888", &pix, sizeof(pix)); }
   // bgr
-  { vgui_pixel_bgr<5,6,5> pix; pix.R=255U; pix.G= 0U; pix.B=255U; print_binary("  bgr565", &pix, sizeof(pix)); }
+  { vgui_pixel_bgr<5,6,5> pix; pix.R=31U; pix.G= 0U; pix.B=31U; print_binary("  bgr565", &pix, sizeof(pix)); }
   { vgui_pixel_bgr<8,8,8> pix; pix.R=255U; pix.G= 0U; pix.B=255U; print_binary("  bgr888", &pix, sizeof(pix)); }
   // rgba
   { vgui_pixel_rgba<8,8,8,8> pix; pix.R=255U; pix.G= 0U; pix.B=255U; pix.A= 0U; print_binary("rgba8888", &pix, sizeof(pix)); }
