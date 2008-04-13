@@ -63,13 +63,12 @@ void mil_byte_image_2d_io::setColour(const vcl_string& c)
 //  Returns false if the depth is not supported
 bool mil_byte_image_2d_io::set_colour_depth( int new_depth )
 {
-  if ( new_depth == mil_byte_image_2d_io_depth_image ||
-       new_depth == mil_byte_image_2d_io_depth_grey  ||
-       new_depth == mil_byte_image_2d_io_depth_rgb )
-  {
-    colour_code_ = (mil_byte_image_2d_io_std_depths &)new_depth;
-    return true;
-  }
+  if      ( new_depth == mil_byte_image_2d_io_depth_image)
+  { colour_code_ = mil_byte_image_2d_io_depth_image; return true; }
+  else if ( new_depth == mil_byte_image_2d_io_depth_grey )
+  { colour_code_ = mil_byte_image_2d_io_depth_grey; return true; }
+  else if ( new_depth == mil_byte_image_2d_io_depth_rgb  )
+  { colour_code_ = mil_byte_image_2d_io_depth_rgb; return true; }
 
   vcl_cerr << " mil_byte_image_2d_io::set_colour(int); colour depth code "
            << new_depth << " not supported - NON FATAL ERROR\n";
