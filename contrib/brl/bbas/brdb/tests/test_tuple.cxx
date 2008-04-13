@@ -26,7 +26,7 @@ MAIN( test_tuple )
 
   TEST("operator =", tup_cp.arity(), tup3->arity());
 
-  int int_val;
+  int int_val = 0;
   TEST("get() right type", tup1->get(0,int_val) && int_val==10, true);
   TEST("get() bad bounds", tup2->get(2,int_val), false);
 
@@ -55,7 +55,7 @@ MAIN( test_tuple )
   brdb_tuple_sptr out_tup = new brdb_tuple(12, -12.43f, 34.56, static_cast<long>(987654321), vcl_string("this is a string"), false);
   vcl_vector<vcl_string> types;
   vcl_cout << "test tuple types\n";
-  for(unsigned int i=0; i<out_tup->arity(); ++i){
+  for (unsigned int i=0; i<out_tup->arity(); ++i) {
     types.push_back((*out_tup)[i].is_a());
     vcl_cout << "  " << types.back() << '\n';
   }
@@ -64,13 +64,13 @@ MAIN( test_tuple )
   brdb_tuple_sptr in_tup = brdb_tuple::make_prototype(types);
 
   bool type_check = (out_tup->arity() == in_tup->arity());
-  for(unsigned int i=0; type_check && i<out_tup->arity(); ++i){
+  for (unsigned int i=0; type_check && i<out_tup->arity(); ++i) {
     type_check = (types[i] == (*in_tup)[i].is_a());
   }
   TEST("make_prototype()", type_check, true);
-  if(!type_check){
+  if (!type_check) {
     vcl_cout << "mismatched prototype tuple types\n";
-    for(unsigned int i=0; type_check && i<out_tup->arity(); ++i){
+    for (unsigned int i=0; type_check && i<out_tup->arity(); ++i) {
       vcl_cout << "  " << (*in_tup)[i].is_a() << '\n';
     }
     vcl_cout << vcl_flush;
@@ -80,7 +80,7 @@ MAIN( test_tuple )
   //// test binary io on regular data types
   //////////////////////////////////////////////////////////////////
 
-  vcl_cout << "out_tup: "; 
+  vcl_cout << "out_tup: ";
   out_tup->print();
 
   vcl_cout << "in_tup before b_read: ";
@@ -88,17 +88,17 @@ MAIN( test_tuple )
 
   vsl_b_ofstream out_stream("test_tuple_bio.vsl");
   if (!out_stream){
-    vcl_cerr<<"Failed to open " << "test_tuple_bio.vsl" << " for output." << vcl_endl;
+    vcl_cerr<<"Failed to open test_tuple_bio.vsl for output.\n";
   }
   vcl_cout << "Opened file successfully " << vcl_endl;
-  
+
   out_tup->b_write_values(out_stream);
   out_stream.close();
 
 
   vsl_b_ifstream in_stream("test_tuple_bio.vsl");
   if (!out_stream){
-    vcl_cerr<<"Failed to open " << "test_tuple_bio.vsl" << " for input." << vcl_endl;
+    vcl_cerr<<"Failed to open test_tuple_bio.vsl for input.\n";
   }
   vcl_cout << "Opened file successfully " << vcl_endl;
   in_tup->b_read_values(in_stream);
@@ -108,7 +108,7 @@ MAIN( test_tuple )
   in_tup->print();
 
   bool val_check = true;
-  for(unsigned int i=0; val_check && i<in_tup->arity(); ++i){
+  for (unsigned int i=0; val_check && i<in_tup->arity(); ++i) {
     type_check = ((*out_tup)[i] == (*in_tup)[i]);
   }
 

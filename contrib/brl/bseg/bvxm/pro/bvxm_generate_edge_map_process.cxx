@@ -21,7 +21,7 @@
 
 bvxm_generate_edge_map_process::bvxm_generate_edge_map_process()
 {
-  // process takes 1 input: 
+  // process takes 1 input:
   //input[0]: input grayscale image
   input_data_.resize(1,brdb_value_sptr(0));
   input_types_.resize(1);
@@ -43,7 +43,7 @@ bvxm_generate_edge_map_process::bvxm_generate_edge_map_process()
 bool bvxm_generate_edge_map_process::execute()
 {
   // Sanity check
-  if(!this->verify_inputs())
+  if (!this->verify_inputs())
     return false;
 
   // get inputs
@@ -52,8 +52,8 @@ bool bvxm_generate_edge_map_process::execute()
   vil_image_view_base_sptr input_image_sptr = input0->value();
 
   // get parameters
-  double edge_detection_gaussian_sigma,line_fitting_min_length,line_fitting_error_tolerance;
-  bool use_lines;
+  double edge_detection_gaussian_sigma=0.0,line_fitting_min_length=0.0,line_fitting_error_tolerance=0.0;
+  bool use_lines = false;
   if (!parameters()->get_value("use_lines", use_lines) ||
     !parameters()->get_value("edge_detection_gaussian_sigma", edge_detection_gaussian_sigma) ||
     !parameters()->get_value("line_fitting_min_length", line_fitting_min_length) ||
@@ -69,7 +69,7 @@ bool bvxm_generate_edge_map_process::execute()
   int nj = input_image.nj();
 
   // initialize the output edge image
-  vil_image_view<vxl_byte> edge_image;  
+  vil_image_view<vxl_byte> edge_image;
   edge_image.set_size(ni,nj);
   edge_image.fill(0);
 
@@ -88,7 +88,8 @@ bool bvxm_generate_edge_map_process::execute()
   vcl_vector<vtol_edge_2d_sptr> * edges = detector.GetEdges();
 
   // checks if the user selected to use lines instead of edges
-  if(use_lines){
+  if (use_lines)
+  {
     // set parameters for line detection
     sdet_fit_lines_params line_detector_params((int)line_fitting_min_length,line_fitting_error_tolerance);
     sdet_fit_lines line_detector(line_detector_params);
@@ -111,7 +112,7 @@ bool bvxm_generate_edge_map_process::execute()
     }
 
     // Drawing lines to the edge image
-    for(unsigned i=0; i<lines.size(); i++){
+    for (unsigned i=0; i<lines.size(); i++) {
       vsol_point_2d_sptr tpt1 = lines[i]->p0();
       vsol_point_2d_sptr tpt2 = lines[i]->p1();
 
@@ -125,10 +126,10 @@ bool bvxm_generate_edge_map_process::execute()
 
       double line_length = lines[i]->length();
 
-      for(double j=0.0; j<line_length; j=j+0.5){
+      for (double j=0.0; j<line_length; j=j+0.5){
         int coord_x = vnl_math_rnd(x1 + ((j/line_length)*x_diff));
         int coord_y = vnl_math_rnd(y1 + ((j/line_length)*y_diff));
-        if(coord_x>=0 && coord_y>=0 && coord_x<ni && coord_y<nj){
+        if (coord_x>=0 && coord_y>=0 && coord_x<ni && coord_y<nj){
           edge_image(coord_x,coord_y) = 255;
         }
       }
@@ -149,7 +150,7 @@ bool bvxm_generate_edge_map_process::execute()
       vdgl_edgel_chain_sptr ec = intp->get_edgel_chain();
 
       // iterate over each point in the connected edge component
-      for(unsigned j=0; j<ec->size(); j++){
+      for (unsigned j=0; j<ec->size(); j++) {
         vdgl_edgel curr_edgel = ec->edgel(j);
         int cr_x = (int)curr_edgel.x();
         int cr_y = (int)curr_edgel.y();
@@ -161,18 +162,18 @@ bool bvxm_generate_edge_map_process::execute()
     }
 
     // print edge to the empty edge image
-    for(unsigned i=0; i<curr_edge_points.size(); i++) {
+    for (unsigned i=0; i<curr_edge_points.size(); i++) {
       edge_image(curr_edge_points[i].first,curr_edge_points[i].second) = 255;
     }
 
     // Following loop removes the edges in the image boundary
     int temp_index = nj-1;
-    for(int i=0; i<ni; i++){
+    for (int i=0; i<ni; i++) {
       edge_image(i,0) = 0;
       edge_image(i,temp_index) = 0;
     }
     temp_index = ni-1;
-    for(int j=0; j<nj; j++){
+    for (int j=0; j<nj; j++) {
       edge_image(0,j) = 0;
       edge_image(temp_index,j) = 0;
     }

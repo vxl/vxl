@@ -114,12 +114,12 @@ bool bvxm_normalize_image_process::execute()
   // get parameters
   bool verbose = false;
   parameters()->get_value("verbose", verbose);
-  float a_start, a_end, a_inc;
+  float a_start=0, a_end=0, a_inc=0;
   parameters()->get_value("a_start", a_start);
   parameters()->get_value("a_inc", a_inc);
   parameters()->get_value("a_end", a_end);
 
-  float b_start, b_end, b_ratio;
+  float b_start=0, b_end=0, b_ratio=0;
   parameters()->get_value("b_start", b_start);
   parameters()->get_value("b_ratio", b_ratio);
   parameters()->get_value("b_end", b_end);

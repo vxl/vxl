@@ -64,9 +64,9 @@ bool bvxm_rpc_registration_process::execute()
   vil_image_view<vxl_byte> edge_image(edge_image_sptr);
 
   // get parameters
-  double cedt_image_gaussian_sigma;
-  int offset_search_size;
-  bool use_online_algorithm;
+  double cedt_image_gaussian_sigma=0.0;
+  int offset_search_size=0;
+  bool use_online_algorithm=false;
   if (!parameters()->get_value("use_online_algorithm", use_online_algorithm) ||
       !parameters()->get_value("cedt_image_gaussian_sigma", cedt_image_gaussian_sigma) ||
       !parameters()->get_value("offset_search_size", offset_search_size)) {

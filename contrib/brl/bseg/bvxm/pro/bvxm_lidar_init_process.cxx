@@ -68,7 +68,7 @@ bool bvxm_lidar_init_process::execute()
   bvxm_voxel_world_sptr voxel_world = input2->value();
 
   // uncertainity (meters) -- SHOULD BE A PARAM
-  float thresh;
+  float thresh=0;
   if (!parameters()->get_value("mask_thresh", thresh))
     return false;
   bvxm_world_params_sptr world_params = voxel_world->get_params();
@@ -226,7 +226,7 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
       vgl_point_2d<double> p(u,v);
       roi_box.add(p);
     }
-    vcl_cout << tiff_img->ni() << " " <<  tiff_img->nj() << vcl_endl;
+    vcl_cout << tiff_img->ni() << ' ' <<  tiff_img->nj() << vcl_endl;
     brip_roi broi(tiff_img->ni(), tiff_img->nj());
     vsol_box_2d_sptr bb = new vsol_box_2d();
     bb->add_point(roi_box.min_x(), roi_box.min_y());

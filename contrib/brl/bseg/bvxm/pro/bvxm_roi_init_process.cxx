@@ -64,7 +64,7 @@ bool bvxm_roi_init_process::execute()
   bvxm_voxel_world_sptr voxel_world = input2->value();
 
   // uncertainity (meters) -- SHOULD BE A PARAM
-  float uncertainty;
+  float uncertainty=0;
   if (!parameters()->get_value("error", uncertainty))
     return false;
 
