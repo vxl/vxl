@@ -67,7 +67,7 @@ bool bvxm_lidar_init_process::execute()
     static_cast<brdb_value_t<bvxm_voxel_world_sptr >* >(input_data_[2].ptr());
   bvxm_voxel_world_sptr voxel_world = input2->value();
 
-  // uncertainity (meters) -- SHOULD BE A PARAM
+  // threshold (meters) -- SHOULD BE A PARAM
   float thresh=0;
   if (!parameters()->get_value("mask_thresh", thresh))
     return false;
@@ -223,20 +223,25 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
       double z = corners[i].z();
       double u,v;
       camera->project(x,y,z,u,v);
+      //vcl_cout << "(" <<  x << "," << y << "," << z << ") ->" << u << " " << v << vcl_endl;
       vgl_point_2d<double> p(u,v);
       roi_box.add(p);
+
     }
-    vcl_cout << tiff_img->ni() << ' ' <<  tiff_img->nj() << vcl_endl;
+    vcl_cout << 'ROI dim:" << tiff_img->ni() << ' ' <<  tiff_img->nj() << vcl_endl;
     brip_roi broi(tiff_img->ni(), tiff_img->nj());
     vsol_box_2d_sptr bb = new vsol_box_2d();
     bb->add_point(roi_box.min_x(), roi_box.min_y());
     bb->add_point(roi_box.max_x(), roi_box.max_y());
-    vcl_cout << *bb << vcl_endl;
+    
     bb = broi.clip_to_image_bounds(bb);
     roi = tiff_img->get_copy_view((unsigned int)bb->get_min_x(),
                                   (unsigned int)bb->width(),
                                   (unsigned int)bb->get_min_y(),
                                   (unsigned int)bb->height());
+    //add the translation to the camera
+    camera->translate(bb->get_min_x(), bb->get_min_y());
+
     if (!roi) {
       vcl_cout << "bvxm_lidar_init_process::lidar_init()-- clipping box is out of image boundaries\n";
       return false;

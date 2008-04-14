@@ -40,6 +40,9 @@ class bvxm_lidar_camera : public vpgl_camera<double>
   //: backprojects an image point into local coordinates (based on lvcs_)
   void backproject(const double u, const double v, double& x, double& y, double& z);
 
+  // adds translation to the trans matrix
+  void translate(double tx, double ty);
+
   bool operator ==(bvxm_lidar_camera const& rhs) const;
 
   //: Write camera to stream
