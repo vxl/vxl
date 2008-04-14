@@ -228,7 +228,7 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
       roi_box.add(p);
 
     }
-    vcl_cout << 'ROI dim:" << tiff_img->ni() << ' ' <<  tiff_img->nj() << vcl_endl;
+    vcl_cout << "ROI dim:" << tiff_img->ni() << ' ' <<  tiff_img->nj() << vcl_endl;
     brip_roi broi(tiff_img->ni(), tiff_img->nj());
     vsol_box_2d_sptr bb = new vsol_box_2d();
     bb->add_point(roi_box.min_x(), roi_box.min_y());
