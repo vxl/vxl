@@ -30,7 +30,8 @@ bvxm_world_params::set_params(
   float voxel_length,
   bgeo_lvcs_sptr lvcs,
   float min_ocp_prob,
-  float max_ocp_prob)
+  float max_ocp_prob,
+  unsigned max_scale)
 {
   model_dir_ = model_dir;
   corner_ = corner;
@@ -39,6 +40,7 @@ bvxm_world_params::set_params(
   lvcs_ = lvcs;
   min_occupancy_prob_ = min_ocp_prob;
   max_occupancy_prob_ = max_ocp_prob;
+  max_scale_=max_scale;
 };
 
 vgl_box_3d<double> bvxm_world_params::world_box_local()

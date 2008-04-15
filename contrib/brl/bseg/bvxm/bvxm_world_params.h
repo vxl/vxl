@@ -36,7 +36,8 @@ public:
     float voxel_length,
     bgeo_lvcs_sptr lvcs = bgeo_lvcs_sptr(0),
     float min_ocp_prob = 0.001,
-    float max_ocp_prob = 0.999);
+    float max_ocp_prob = 0.999,
+    unsigned max_scale = 0);
 
   inline vcl_string model_dir(){ return model_dir_; }
   inline vgl_point_3d<float> corner(){ return corner_; }
@@ -47,7 +48,11 @@ public:
   inline float min_occupancy_prob(){ return min_occupancy_prob_;}
   inline float max_occupancy_prob(){ return max_occupancy_prob_;}
   inline bgeo_lvcs_sptr lvcs(){return lvcs_;}
+
+  inline unsigned max_scale(){return max_scale_;}
   vgl_box_3d<double> world_box_local();
+
+  vgl_point_3d<float> center();
 
   //: Binary save parameters to stream.
   void b_write(vsl_b_ostream & os) const;
@@ -65,6 +70,8 @@ protected:
   bgeo_lvcs_sptr lvcs_;
   float min_occupancy_prob_;
   float max_occupancy_prob_;
+
+  unsigned max_scale_;
 
 private:
 
