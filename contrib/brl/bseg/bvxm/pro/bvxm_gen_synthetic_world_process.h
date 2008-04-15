@@ -84,7 +84,7 @@ class bvxm_gen_synthetic_world_process : public bprb_process
   void gen_texture_map(vgl_box_3d<double> box,
                        vcl_vector<vcl_vector<float> >& intens_map_bt,
                        vcl_vector<vcl_vector<float> >& intens_map_side1,
-                       vcl_vector<vcl_vector<float> >& intens_map_side2);
+                       vcl_vector<vcl_vector<float> >& intens_map_side2, bool rand, float app_val);
 
   void gen_voxel_world_2box(vgl_vector_3d<unsigned> grid_size,
                             vgl_box_3d<double> voxel_world,

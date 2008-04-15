@@ -53,6 +53,12 @@ bvxm_gen_synthetic_world_process::bvxm_gen_synthetic_world_process()
   parameters()->add("generate 2 boxes", "gen2", true);
   parameters()->add("generate images", "genImages", true);
 
+  parameters()->add("world_dir", "worlddir", vcl_string("./test_gen_synthetic_world"));
+
+  parameters()->add("random texture on box1", "rand1", true);
+  parameters()->add("random texture on box2", "rand2", true);
+  parameters()->add("fixed appearance val", "appval", 0.3f);
+
 }
 
 // returns a face number if a point is on the surface of a box [0,1,2,3,4,5],
@@ -276,7 +282,10 @@ bvxm_gen_synthetic_world_process::gen_images(vgl_vector_3d<unsigned> grid_size,
     update_status = processor.update(*apm_slab_it, *obs_it, *weight);
   }
 
-  vcl_string path = "./test_gen_synthetic_world/test_img";
+  //vcl_string path = "./test_gen_synthetic_world/test_img";
+  vcl_string dir; parameters()->get_value("worlddir", dir);
+  vcl_string path = dir + "test_img";
+
   for (unsigned i=0; i<cameras.size(); i++) {
     vil_image_view_base_sptr img_arg;
     vil_image_view<float>* mask = new vil_image_view<float>(IMAGE_U, IMAGE_V);
@@ -330,7 +339,7 @@ void
 bvxm_gen_synthetic_world_process::gen_texture_map(vgl_box_3d<double> box,
                                                   vcl_vector<vcl_vector<float> >& intens_map_bt,
                                                   vcl_vector<vcl_vector<float> >& intens_map_side1,
-                                                  vcl_vector<vcl_vector<float> >& intens_map_side2)
+                                                  vcl_vector<vcl_vector<float> >& intens_map_side2, bool gen_rand, float app_val)
 {
   // generate intensity maps
   unsigned upw = (unsigned)vcl_ceil(box.width()/8)+1;
@@ -345,26 +354,51 @@ bvxm_gen_synthetic_world_process::gen_texture_map(vgl_box_3d<double> box,
   vcl_cout << box.width() << ' ' << box.depth() << ' ' << box.height() << vcl_endl;
 #endif
 
-  for (unsigned i=0; i<upw;i++) {
-    intens_map_bt[i].resize(uph);
-    for (unsigned j=0; j<uph;j++) {
-      intens_map_bt[i][j] = (float)((rand() % 85)/255.0);
+  if (gen_rand) {
+    for (unsigned i=0; i<upw;i++) {
+      intens_map_bt[i].resize(uph);
+      for (unsigned j=0; j<uph;j++) {
+        intens_map_bt[i][j] = (float)((rand() % 85)/255.0);
+      }
     }
-  }
 
-  for (unsigned i=0; i<upw;i++) {
-    intens_map_side1[i].resize(upd);
-    for (unsigned j=0; j<upd;j++) {
-      intens_map_side1[i][j] = (float)((rand() % 85)/255.0 + 0.4);
+    for (unsigned i=0; i<upw;i++) {
+      intens_map_side1[i].resize(upd);
+      for (unsigned j=0; j<upd;j++) {
+        intens_map_side1[i][j] = (float)((rand() % 85)/255.0 + 0.4);
+      }
     }
-  }
 
-  for (unsigned i=0; i<uph;i++) {
-    intens_map_side2[i].resize(upd);
-    for (unsigned j=0; j<upd;j++) {
-      intens_map_side2[i][j] = (float)((rand() % 85)/255.0 + 0.7);
-      if (intens_map_side2[i][j] > 1.0f)
-        intens_map_side2[i][j] = 0.99f;
+    for (unsigned i=0; i<uph;i++) {
+      intens_map_side2[i].resize(upd);
+      for (unsigned j=0; j<upd;j++) {
+        intens_map_side2[i][j] = (float)((rand() % 85)/255.0 + 0.7);
+        if (intens_map_side2[i][j] > 1.0f)
+          intens_map_side2[i][j] = 0.99f;
+      }
+    }
+  } else {
+    for (unsigned i=0; i<upw;i++) {
+      intens_map_bt[i].resize(uph);
+      for (unsigned j=0; j<uph;j++) {
+        intens_map_bt[i][j] = app_val;
+      }
+    }
+
+    for (unsigned i=0; i<upw;i++) {
+      intens_map_side1[i].resize(upd);
+      for (unsigned j=0; j<upd;j++) {
+        intens_map_side1[i][j] = app_val;
+      }
+    }
+
+    for (unsigned i=0; i<uph;i++) {
+      intens_map_side2[i].resize(upd);
+      for (unsigned j=0; j<upd;j++) {
+        intens_map_side2[i][j] = app_val;
+        if (intens_map_side2[i][j] > 1.0f)
+          intens_map_side2[i][j] = 0.99f;
+      }
     }
   }
 }
@@ -378,6 +412,8 @@ bvxm_gen_synthetic_world_process::gen_voxel_world_2box(vgl_vector_3d<unsigned> g
                                                        unsigned nx, unsigned ny, unsigned nz,
                                                        bool gen_2box)
 {
+  boxes.clear();
+
   // fill with test data
   float init_val = 0.00;//0.01;
   ocp_grid->initialize_data(init_val);
@@ -401,22 +437,30 @@ bvxm_gen_synthetic_world_process::gen_voxel_world_2box(vgl_vector_3d<unsigned> g
   //bvxm_util::generate_test_boxes<double>(10,10,10,89,89,33,nx,ny,nz,boxes);
   bvxm_util::generate_test_boxes<double>(minx,miny,minz,dimx,dimy,dimz,nx,ny,nz,boxes,gen_2box);
 
-  vcl_ofstream is("test_gen_synthetic_world/intensity_grid.txt");
+  //vcl_ofstream is("test_gen_synthetic_world/intensity_grid.txt");
+  vcl_string dir; parameters()->get_value("worlddir", dir);
+  vcl_ofstream is((dir + "intensity_grid.txt").c_str());
 
   assert(boxes.size() == 2);
 
   vgl_box_3d<double> box=boxes[0], top_box=boxes[1];
 
+  bool rand1, rand2;  float app_val;
+  parameters()->get_value("rand1", rand1);
+  parameters()->get_value("rand2", rand2);
+  parameters()->get_value("appval", app_val);
+
   // generate intensity maps
   vcl_vector<vcl_vector<float> > intens_map_bt;
   vcl_vector<vcl_vector<float> > intens_map_side1;
   vcl_vector<vcl_vector<float> > intens_map_side2;
-  gen_texture_map(box, intens_map_bt, intens_map_side1, intens_map_side2);
+
+  gen_texture_map(box, intens_map_bt, intens_map_side1, intens_map_side2, rand1, app_val);
 
   vcl_vector<vcl_vector<float> > top_intens_map_bt;
   vcl_vector<vcl_vector<float> > top_intens_map_side1;
   vcl_vector<vcl_vector<float> > top_intens_map_side2;
-  gen_texture_map(top_box, top_intens_map_bt, top_intens_map_side1, top_intens_map_side2);
+  gen_texture_map(top_box, top_intens_map_bt, top_intens_map_side1, top_intens_map_side2, rand2, app_val);
 
   unsigned z=nz;
   for (ocp_slab_it = ocp_grid->begin();ocp_slab_it != ocp_grid->end();++ocp_slab_it,++intensity_slab_it)
@@ -508,7 +552,10 @@ void bvxm_gen_synthetic_world_process::gen_voxel_world_plane(vgl_vector_3d<unsig
   vgl_box_3d<double> plane_box(vgl_point_3d<double> (20,20,24),
                                vgl_point_3d<double> (80, 80, 25));
 
-  vcl_ofstream is("test_gen_synthetic_world/intensity_grid.txt");
+  //vcl_ofstream is("test_gen_synthetic_world/intensity_grid.txt");
+  vcl_string dir; parameters()->get_value("worlddir", dir);
+  vcl_ofstream is((dir + "intensity_grid.txt").c_str());
+
   unsigned z=nz;
   for (ocp_slab_it = ocp_grid->begin();
        ocp_slab_it != ocp_grid->end();
@@ -561,7 +608,8 @@ bvxm_gen_synthetic_world_process::test_reconstructed_ocp(bvxm_voxel_world_sptr r
 bool bvxm_gen_synthetic_world_process::execute()
 {
   // create the directory under build to put the intermediate files and the generated images
-  vcl_string model_dir("./test_gen_synthetic_world");
+  //vcl_string model_dir("./test_gen_synthetic_world");
+  vcl_string model_dir; parameters()->get_value("worlddir", model_dir);
   vul_file::make_directory(model_dir);
 
   vcl_string recon_model_dir("./recon_world");
@@ -594,7 +642,7 @@ bool bvxm_gen_synthetic_world_process::execute()
                                  vgl_point_3d<double> (nx, ny, nz));
 
   bvxm_world_params_sptr world_params = new bvxm_world_params();
-  world_params->set_params("./test_gen_synthetic_world",
+  world_params->set_params(model_dir,
                            vgl_point_3d<float> (0,0,0),
                            vgl_vector_3d<unsigned int>(nx, ny, nz),
                            vox_length);
@@ -615,7 +663,7 @@ bool bvxm_gen_synthetic_world_process::execute()
     (world->get_grid<APM_MOG_GREY>(bin_num_2).as_pointer());
 
   bvxm_voxel_grid<float>* intensity_grid = new bvxm_voxel_grid<float>
-    ("test_gen_synthetic_world/intensity.vox",grid_size);
+    (model_dir + "intensity.vox",grid_size);
 
   gen_voxel_world_2box(grid_size, voxel_world, ocp_grid, intensity_grid, minx, miny, minz, dimx, dimy, dimz, nx, ny, nz, gen2_box);
   vcl_vector<vpgl_camera_double_sptr> cameras = generate_cameras_yz(voxel_world);
@@ -628,7 +676,9 @@ bool bvxm_gen_synthetic_world_process::execute()
              cameras, image_set_1, bin_num_1);
   }
 
-  world->save_occupancy_raw("./test_gen_synthetic_world/ocp.raw");
+  //world->save_occupancy_raw("./test_gen_synthetic_world/ocp.raw");
+  vcl_string dir; parameters()->get_value("worlddir", dir);
+  world->save_occupancy_raw(dir + "ocp.raw");
 
   //store output
   output_data_[0] = new brdb_value_t<bvxm_voxel_world_sptr>(world);
@@ -681,9 +731,10 @@ bool bvxm_gen_synthetic_world_process::test()
   parameters()->get_value("nx", nx);
   parameters()->get_value("ny", ny);
   parameters()->get_value("nz", nz);
+  vcl_string model_dir; parameters()->get_value("worlddir", model_dir);
 
   bvxm_world_params_sptr world_params = new bvxm_world_params();
-  world_params->set_params("./test_gen_synthetic_world",
+  world_params->set_params(model_dir,
                            vgl_point_3d<float> (0,0,0),
                            vgl_vector_3d<unsigned int>(nx, ny, nz),
                            vox_length);
