@@ -109,7 +109,7 @@ class bvxm_util
   static bool generate_test_boxes(T box_min_x, T box_min_y, T box_min_z, 
                     T box_dim_x, T box_dim_y, T box_dim_z,
                     T world_dim_x, T world_dim_y, T world_dim_z,
-                    vcl_vector<vgl_box_3d<T> >& boxes);
+                    vcl_vector<vgl_box_3d<T> >& boxes, bool gen_2box);
 
   template<class T>
   static vcl_vector<vgl_point_3d<T> > corners_of_box_3d(vgl_box_3d<T> box);
@@ -823,7 +823,7 @@ template<class T>
 bool bvxm_util::generate_test_boxes(T box_min_x, T box_min_y, T box_min_z, 
                     T box_dim_x, T box_dim_y, T box_dim_z,
                     T world_dim_x, T world_dim_y, T world_dim_z,
-                    vcl_vector<vgl_box_3d<T> >& boxes)
+                    vcl_vector<vgl_box_3d<T> >& boxes, bool gen_2box = true)
 {
   // create the big box at the bottom
   T max_x = box_min_x + box_dim_x;
@@ -837,25 +837,30 @@ bool bvxm_util::generate_test_boxes(T box_min_x, T box_min_y, T box_min_z,
   vgl_box_3d<T> box(box_min_x, box_min_y, box_min_z, max_x, max_y, max_z);
   boxes.push_back(box);
 
-  // create the top boxe
-  vgl_point_3d<T> centroid = box.centroid();
-  // make the top box 2/3 of the size of the previous one 
-  T dimx = (box.max_x() - box.min_x())/2;
-  T dimy = (box.max_y() - box.min_y())/2;
-  T dimz = (box.max_z() - box.min_z())/2;
-  centroid.set(centroid.x(), centroid.y(), box.max_z() + dimz/2.0);
-  vgl_box_3d<T> top_box = vgl_box_3d<T> (centroid, dimx, dimy, dimz, vgl_box_3d<T>::centre);
-  // translate it a bit
-  vgl_point_3d<T> top_centroid = top_box.centroid();
-  top_box.set_centroid(vgl_point_3d<T>(top_centroid.x()+dimx/3., top_centroid.y()+dimx/3., top_centroid.z()));
-  // check if the box in the world completely
-  max_x = top_box.max_x();
-  max_y = top_box.max_y();
-  max_z = top_box.max_z();
-  // stop if the new box is getting out of the boundaries
-  if ((max_x > world_dim_x) || (max_y > world_dim_y) || (max_z > world_dim_z)) 
-    return false;
-  boxes.push_back(top_box);
+  if (gen_2box) {
+    // create the top boxe
+    vgl_point_3d<T> centroid = box.centroid();
+    // make the top box 2/3 of the size of the previous one 
+    T dimx = (box.max_x() - box.min_x())/2;
+    T dimy = (box.max_y() - box.min_y())/2;
+    T dimz = (box.max_z() - box.min_z())/2;
+    centroid.set(centroid.x(), centroid.y(), box.max_z() + dimz/2.0);
+    vgl_box_3d<T> top_box = vgl_box_3d<T> (centroid, dimx, dimy, dimz, vgl_box_3d<T>::centre);
+    // translate it a bit
+    vgl_point_3d<T> top_centroid = top_box.centroid();
+    top_box.set_centroid(vgl_point_3d<T>(top_centroid.x()+dimx/3., top_centroid.y()+dimx/3., top_centroid.z()));
+    // check if the box in the world completely
+    max_x = top_box.max_x();
+    max_y = top_box.max_y();
+    max_z = top_box.max_z();
+    // stop if the new box is getting out of the boundaries
+    if ((max_x > world_dim_x) || (max_y > world_dim_y) || (max_z > world_dim_z)) 
+      return false;
+    boxes.push_back(top_box);
+  } else {
+    vgl_box_3d<T> top_box = vgl_box_3d<T>();
+    boxes.push_back(top_box);
+  }
   
   return true;
 }
