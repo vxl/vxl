@@ -18,6 +18,7 @@
 #include <bprb/bprb_process_sptr.h>
 #include <bprb/bprb_process_manager.h>
 #include <brdb/brdb_value_sptr.h>
+#include <bprb/bprb_parameters_sptr.h>
 
 class bprb_batch_process_manager : public bprb_process_manager<bprb_batch_process_manager>
 {
@@ -36,6 +37,9 @@ class bprb_batch_process_manager : public bprb_process_manager<bprb_batch_proces
 
   //: read and set the parameters from an XML file for the current process
   bool set_params(vcl_string const& params_XML);
+
+  //: set the parameters from another parameter instance for the current process
+  bool set_params(const bprb_parameters_sptr& params);
 
   //: set primitive data type input on current process
   bool set_input(unsigned i, brdb_value_sptr const& input);

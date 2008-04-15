@@ -66,6 +66,18 @@ bool bprb_batch_process_manager::set_params(vcl_string const& params_XML)
   return true;
 }
 
+//: set the parameters from another parameter instance for the current process
+bool bprb_batch_process_manager::set_params(const bprb_parameters_sptr& params)
+{
+  if (!current_process_) {
+    vcl_cout << "In bprb_batch_process_manager::set_params(.) -"
+             << " null process\n";
+    return false;
+  }
+  current_process_->set_parameters(params);
+  return true;
+}
+
 //: set primitive data type input on current process
 bool bprb_batch_process_manager::
 set_input(unsigned i, brdb_value_sptr const& input)
