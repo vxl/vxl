@@ -10,7 +10,7 @@
 // \date 04/03/2008
 // \verbatim
 //  Modifications
-//   <none yet>
+//   Ozge C Ozcanli - added parameters
 // \endverbatim
 
 #include <vcl_string.h>
@@ -89,12 +89,17 @@ class bvxm_gen_synthetic_world_process : public bprb_process
   void gen_voxel_world_2box(vgl_vector_3d<unsigned> grid_size,
                             vgl_box_3d<double> voxel_world,
                             bvxm_voxel_grid<float>* ocp_grid,
-                            bvxm_voxel_grid<float>* intensity_grid);
+                            bvxm_voxel_grid<float>* intensity_grid,
+                            unsigned minx, unsigned miny, unsigned minz, 
+                            unsigned dimx, unsigned dimy, unsigned dimz, 
+                            unsigned nx, unsigned ny, unsigned nz,
+                            bool gen_2box);
 
   void gen_voxel_world_plane(vgl_vector_3d<unsigned> grid_size,
                              vgl_box_3d<double> voxel_world,
                              bvxm_voxel_grid<float>* ocp_grid,
-                             bvxm_voxel_grid<float>* intensity_grid);
+                             bvxm_voxel_grid<float>* intensity_grid,
+                             unsigned nx, unsigned ny, unsigned nz);
 
   bool test_reconstructed_ocp(bvxm_voxel_world_sptr recon_world);
 };

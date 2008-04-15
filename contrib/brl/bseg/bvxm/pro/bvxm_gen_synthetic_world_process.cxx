@@ -20,7 +20,7 @@ const double focal_length = 1.;
 const double camera_dist= 200;
 
 //size of the world
-const unsigned nx=100, ny=100, nz=50;
+//unsigned nx=100, ny=100, nz=50;
 const float vox_length = 1.0f;
 vcl_vector<vgl_box_3d<double> > boxes;
 
@@ -37,6 +37,22 @@ bvxm_gen_synthetic_world_process::bvxm_gen_synthetic_world_process()
   output_data_.resize(1,brdb_value_sptr(0));
   output_types_.resize(1);
   output_types_[0]= "bvxm_voxel_world_sptr";
+
+  parameters()->add("size world x", "nx", (unsigned)100);
+  parameters()->add("size world y", "ny", (unsigned)100);
+  parameters()->add("size world z", "nz", (unsigned)50);
+
+  parameters()->add("box min x", "minx", (unsigned)10);
+  parameters()->add("box min y", "miny", (unsigned)10);
+  parameters()->add("box min z", "minz", (unsigned)10);
+
+  parameters()->add("box dim x", "dimx", (unsigned)89);
+  parameters()->add("box dim y", "dimy", (unsigned)89);
+  parameters()->add("box dim z", "dimz", (unsigned)33);
+
+  parameters()->add("generate 2 boxes", "gen2", true);
+  parameters()->add("generate images", "genImages", true);
+
 }
 
 // returns a face number if a point is on the surface of a box [0,1,2,3,4,5],
@@ -317,32 +333,36 @@ bvxm_gen_synthetic_world_process::gen_texture_map(vgl_box_3d<double> box,
                                                   vcl_vector<vcl_vector<float> >& intens_map_side2)
 {
   // generate intensity maps
-  intens_map_bt.resize(long(box.width()/8+1));
-  intens_map_side1.resize(long(box.width()/8+1));
-  intens_map_side2.resize(long(box.width()/8+1));
+  unsigned upw = (unsigned)vcl_ceil(box.width()/8)+1;
+  unsigned uph = (unsigned)vcl_ceil(box.height()/8)+1;
+  unsigned upd = (unsigned)vcl_ceil(box.depth()/8)+1;
+
+  intens_map_bt.resize(upw);
+  intens_map_side1.resize(upw);
+  intens_map_side2.resize(upw);
 
 #ifdef DEBUG
   vcl_cout << box.width() << ' ' << box.depth() << ' ' << box.height() << vcl_endl;
 #endif
 
-  for (unsigned i=0; i<box.width()/8;i++) {
-    intens_map_bt[i].resize(long(box.height()/8+1));
-    for (unsigned j=0; j<box.height()/8;j++) {
-      intens_map_bt[i][j] = float(rand() % 85)/255.0f;
+  for (unsigned i=0; i<upw;i++) {
+    intens_map_bt[i].resize(uph);
+    for (unsigned j=0; j<uph;j++) {
+      intens_map_bt[i][j] = (float)((rand() % 85)/255.0);
     }
   }
 
-  for (unsigned i=0; i<box.width()/8;i++) {
-    intens_map_side1[i].resize(long(box.depth()/8+1));
-    for (unsigned j=0; j<box.depth()/8;j++) {
-      intens_map_side1[i][j] = float(rand() % 85)/255.0f + 0.4f;
+  for (unsigned i=0; i<upw;i++) {
+    intens_map_side1[i].resize(upd);
+    for (unsigned j=0; j<upd;j++) {
+      intens_map_side1[i][j] = (float)((rand() % 85)/255.0 + 0.4);
     }
   }
 
-  for (unsigned i=0; i<box.height()/8;i++) {
-    intens_map_side2[i].resize(long(box.depth()/8+1));
-    for (unsigned j=0; j<box.depth()/8;j++) {
-      intens_map_side2[i][j] = float(rand() % 85)/255.0f + 0.7f;
+  for (unsigned i=0; i<uph;i++) {
+    intens_map_side2[i].resize(upd);
+    for (unsigned j=0; j<upd;j++) {
+      intens_map_side2[i][j] = (float)((rand() % 85)/255.0 + 0.7);
       if (intens_map_side2[i][j] > 1.0f)
         intens_map_side2[i][j] = 0.99f;
     }
@@ -353,7 +373,10 @@ void
 bvxm_gen_synthetic_world_process::gen_voxel_world_2box(vgl_vector_3d<unsigned> grid_size,
                                                        vgl_box_3d<double> voxel_world,
                                                        bvxm_voxel_grid<float>* ocp_grid,
-                                                       bvxm_voxel_grid<float>* intensity_grid)
+                                                       bvxm_voxel_grid<float>* intensity_grid,
+                                                       unsigned minx, unsigned miny, unsigned minz, unsigned dimx, unsigned dimy, unsigned dimz, 
+                                                       unsigned nx, unsigned ny, unsigned nz,
+                                                       bool gen_2box)
 {
   // fill with test data
   float init_val = 0.00;//0.01;
@@ -375,7 +398,9 @@ bvxm_gen_synthetic_world_process::gen_voxel_world_2box(vgl_vector_3d<unsigned> g
 #endif // 0
 
   //object (essentially two boxes) placed in the voxel world
-  bvxm_util::generate_test_boxes<double>(10,10,10,89,89,33,nx,ny,nz,boxes);
+  //bvxm_util::generate_test_boxes<double>(10,10,10,89,89,33,nx,ny,nz,boxes);
+  bvxm_util::generate_test_boxes<double>(minx,miny,minz,dimx,dimy,dimz,nx,ny,nz,boxes,gen_2box);
+
   vcl_ofstream is("test_gen_synthetic_world/intensity_grid.txt");
 
   assert(boxes.size() == 2);
@@ -469,7 +494,8 @@ bvxm_gen_synthetic_world_process::gen_voxel_world_2box(vgl_vector_3d<unsigned> g
 void bvxm_gen_synthetic_world_process::gen_voxel_world_plane(vgl_vector_3d<unsigned> grid_size,
                                                              vgl_box_3d<double> voxel_world,
                                                              bvxm_voxel_grid<float>* ocp_grid,
-                                                             bvxm_voxel_grid<float>* intensity_grid)
+                                                             bvxm_voxel_grid<float>* intensity_grid,
+                                                             unsigned nx, unsigned ny, unsigned nz)
 {
   // fill with test data
   float init_val = 0.0;
@@ -543,6 +569,26 @@ bool bvxm_gen_synthetic_world_process::execute()
 
   vul_file::make_directory("./test_gen_cameras");
 
+  unsigned nx, ny, nz;
+  parameters()->get_value("nx", nx);
+  parameters()->get_value("ny", ny);
+  parameters()->get_value("nz", nz);
+
+  unsigned minx, miny, minz, dimx, dimy, dimz;
+  parameters()->get_value("minx", minx);
+  parameters()->get_value("miny", miny);
+  parameters()->get_value("minz", minz);
+
+  parameters()->get_value("dimx", dimx);
+  parameters()->get_value("dimy", dimy);
+  parameters()->get_value("dimz", dimz);
+
+  bool gen_image_outs;
+  parameters()->get_value("genImages", gen_image_outs);
+
+  bool gen2_box;
+  parameters()->get_value("gen2", gen2_box);
+
   vgl_vector_3d<unsigned> grid_size(nx,ny,nz);
   vgl_box_3d<double> voxel_world(vgl_point_3d<double> (0,0,0),
                                  vgl_point_3d<double> (nx, ny, nz));
@@ -571,14 +617,16 @@ bool bvxm_gen_synthetic_world_process::execute()
   bvxm_voxel_grid<float>* intensity_grid = new bvxm_voxel_grid<float>
     ("test_gen_synthetic_world/intensity.vox",grid_size);
 
-  gen_voxel_world_2box(grid_size, voxel_world, ocp_grid, intensity_grid);
+  gen_voxel_world_2box(grid_size, voxel_world, ocp_grid, intensity_grid, minx, miny, minz, dimx, dimy, dimz, nx, ny, nz, gen2_box);
   vcl_vector<vpgl_camera_double_sptr> cameras = generate_cameras_yz(voxel_world);
 
   vcl_vector <vil_image_view_base_sptr> image_set_1,image_set_2;
 
-  // generate images from synthetic world
-  gen_images(grid_size, world, intensity_grid, ocp_grid, apm_grid_1,
+  if (gen_image_outs) {
+    // generate images from synthetic world
+    gen_images(grid_size, world, intensity_grid, ocp_grid, apm_grid_1,
              cameras, image_set_1, bin_num_1);
+  }
 
   world->save_occupancy_raw("./test_gen_synthetic_world/ocp.raw");
 
@@ -628,6 +676,11 @@ bool gen_lidar_2box(vgl_vector_3d<unsigned> grid_size
 bool bvxm_gen_synthetic_world_process::test()
 {
   execute();
+
+  unsigned nx, ny, nz;
+  parameters()->get_value("nx", nx);
+  parameters()->get_value("ny", ny);
+  parameters()->get_value("nz", nz);
 
   bvxm_world_params_sptr world_params = new bvxm_world_params();
   world_params->set_params("./test_gen_synthetic_world",
