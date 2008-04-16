@@ -570,11 +570,19 @@ get_sun_params( double& sun_el, double& sun_az)
       {
           success = (*tres_itr)->get_value("SUN_EL", sun_el);
           success = success && (*tres_itr)->get_value("SUN_AZ", sun_az);
+          if(!success)
+              vcl_cout<<"\n Error reading USE00A \n";
+          else
+              return success
       }
       else if( type == "MPD26A")
       {
           success = (*tres_itr)->get_value("SUN_EL", sun_el);
           success = success && (*tres_itr)->get_value("SUN_AZ", sun_az);
+          if(!success)
+              vcl_cout<<"\n Error reading MPD26A \n";
+          else
+              return success
       }
 }
   return success;
@@ -1011,6 +1019,11 @@ get_rpc_params( vcl_string& rpc_type, vcl_string& image_id,
         rpc_data[i+60] = SDC[i];   // copy from vector to regular array.
       }
     }
+  }
+
+  if(correct)
+  {
+
   }
   return true;
 }
