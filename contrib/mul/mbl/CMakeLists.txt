@@ -35,7 +35,7 @@ SET(mbl_sources
   mbl_read_double.cxx                   mbl_read_double.h
   mbl_read_str.cxx                      mbl_read_str.h
   mbl_read_yes.cxx                      mbl_read_yes.h
-  mbl_get.cxx                           mbl_get.h
+  # mbl_get.cxx                           mbl_get.h
   mbl_thin_plate_spline_2d.cxx          mbl_thin_plate_spline_2d.h
   mbl_thin_plate_spline_3d.cxx          mbl_thin_plate_spline_3d.h
   mbl_thin_plate_spline_weights_3d.cxx  mbl_thin_plate_spline_weights_3d.h
@@ -94,8 +94,13 @@ SET(mbl_sources
   mbl_minimum_spanning_tree.cxx        mbl_minimum_spanning_tree.h
   mbl_stepwise_regression.cxx          mbl_stepwise_regression.h
   mbl_dyn_prog.cxx                     mbl_dyn_prog.h
-  mbl_vector_txt_files.cxx             mbl_vector_txt_files.h
-  mbl_replace_string.cxx               mbl_replace_string.h
+  
+  # mbl_vector_txt_files.cxx             mbl_vector_txt_files.h
+  mbl_save_text_file.txx               mbl_save_text_file.h
+  mbl_load_text_file.txx               mbl_load_text_file.h
+  #  mbl_replace_string.cxx               mbl_replace_string.h
+  #  mbl_convert_vector_ims.cxx           mbl_convert_vector_ims.h
+
 )
 
 AUX_SOURCE_DIRECTORY(Templates mbl_sources)
@@ -105,7 +110,7 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(mbl ${mbl_sources})
-TARGET_LINK_LIBRARIES(mbl vul vnl_io vnl_algo vnl vgl_io vgl vbl_io vbl vsl)
+TARGET_LINK_LIBRARIES(mbl vul vnl_io vnl_algo vnl vgl_io vgl vbl_io vbl vsl vil vil_io)
 
 INSTALL_TARGETS(/lib mbl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/mbl ${mbl_sources})
