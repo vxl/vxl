@@ -68,4 +68,11 @@ extern bool vul_string_to_bool(const vcl_string &str);
 extern bool vul_string_expand_var(vcl_string &str);
 
 
+//: replaces instances "find_str" in "full_str" with "replace_str"
+// a given "num_times"
+extern bool vul_string_replace( vcl_string& full_str,
+                            const vcl_string& find_str,
+                              const vcl_string& replace_str,
+                                int num_times=1000);
+
 #endif // vul_string_h

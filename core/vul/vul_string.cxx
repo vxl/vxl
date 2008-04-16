@@ -352,3 +352,30 @@ bool vul_string_expand_var(vcl_string &str)
   }
   return success;
 }
+
+//: replaces instances "find_str" in "full_str" with "replace_str"
+// a given "num_times"
+bool vul_string_replace( 
+                          vcl_string& full_str,
+                            const vcl_string& find_str,
+                              const vcl_string& replace_str,
+                                int num_times)
+{
+
+  bool rep=false;
+  for (int i = 0; i<num_times; i++)
+  {
+    int loc = full_str.find( find_str,0);
+    if (loc >= 0) 
+    {
+      full_str.replace( loc, find_str.length(), replace_str );
+      rep =true;
+    }
+    else 
+    {
+      return rep;
+    }
+  }
+  
+}
+
