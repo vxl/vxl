@@ -573,7 +573,7 @@ get_sun_params( double& sun_el, double& sun_az)
           if(!success)
               vcl_cout<<"\n Error reading USE00A \n";
           else
-              return success
+              return success;
       }
       else if( type == "MPD26A")
       {
@@ -582,7 +582,7 @@ get_sun_params( double& sun_el, double& sun_az)
           if(!success)
               vcl_cout<<"\n Error reading MPD26A \n";
           else
-              return success
+              return success;
       }
 }
   return success;
@@ -1021,9 +1021,5 @@ get_rpc_params( vcl_string& rpc_type, vcl_string& image_id,
     }
   }
 
-  if(correct)
-  {
-
-  }
   return true;
 }
