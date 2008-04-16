@@ -643,21 +643,21 @@ void vil_nitf2_image_subheader::add_STDIDC_definitions()
     .field("ACQUISITION_DATE",    "",  NITF_STR(14),false)                 // not used, but must read
     .field("MISSION", "",NITF_STR(14), false) // not used, but must read
     .field("PASS", "", NITF_STR(2),false)
-    .field("OP_NUM",  "",NITF_INT(3,  false), true) // not used
+    .field("OP_NUM",  "",NITF_INT(3,  false), false) // not used
     .field("START_SEGMENT", "",NITF_STR(2), false)
     .field("REPRO_NUM", "",NITF_INT(2,false), false)
     .field("REPLAY_REGEN", "",NITF_STR(3), false)
-    .field("BLANK_FILL", "",NITF_STR(1), false)
+    .field("BLANK_FILL", "",NITF_STR(1), true)
     .field("START_COLUMN", "",NITF_INT(3,false), false)
     .field("START_ROW", "",NITF_INT(5,false), false)
     .field("END_SEGMENT", "",NITF_STR(2), false)
     .field("END_COLUMN", "",NITF_INT(3,false), false)
     .field("END_ROW", "",NITF_INT(5,false), false)
-    .field("COUNTRY", "",NITF_STR(2), false)
-    .field("WAC", "",NITF_INT(4,false), false)
+    .field("COUNTRY", "",NITF_STR(2), true)
+    .field("WAC", "",NITF_INT(4,false), true)
     .field("LOCATION", "",NITF_STR(11), false)
-    .field("RESERVED1", "",NITF_STR(5), false)
-    .field("RESERVED2", "",NITF_STR(8), false)
+    .field("RESERVED1", "",NITF_STR(5), true)
+    .field("RESERVED2", "",NITF_STR(8), true)
 
 
 

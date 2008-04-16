@@ -114,7 +114,7 @@ bool vil_nitf2_tagged_record::read(vil_nitf2_istream& input)
   expected_pos += m_length;
   if (input.tell() != expected_pos) {
     vcl_cerr << "vil_nitf2_tagged_record::read(): Read " << input.tell() - record_data_start_pos
-             << " bytes instead of " << m_length << " as expected.\n";
+             << " bytes instead of " << m_length << " as expected in "<<cetag<<".\n";
     // Attempt to reposition input stream to end of record; return whether
     // successful
     input.seek(expected_pos);
