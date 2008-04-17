@@ -494,9 +494,6 @@ bvxm_gen_synthetic_world_process::gen_voxel_world_2box(vgl_vector_3d<unsigned> g
               int b = int(z-box.min_z())/8;
               (*intensity_slab_it)(i,j,0) = intens_map_side2[a][b];
             }
-#ifdef DEBUG
-            vcl_cout << face1 << '=' << a << ' ' << b << vcl_endl;
-#endif
           }
           else {
             //(*intensity_slab_it)(i,j,0) = face_intens[5-face2];
