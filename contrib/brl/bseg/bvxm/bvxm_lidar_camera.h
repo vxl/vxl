@@ -19,7 +19,7 @@ class bvxm_lidar_camera : public vpgl_camera<double>
   bvxm_lidar_camera(vnl_matrix<double> trans_matrix,
                     bgeo_lvcs_sptr lvcs,
                     vcl_vector<vcl_vector<double> > tiepoints)
-    : trans_matrix_(trans_matrix), lvcs_(lvcs), tiepoints_(tiepoints), is_utm(false) {}
+    : trans_matrix_(trans_matrix), lvcs_(lvcs), tiepoints_(tiepoints), is_utm(false), img_u_(0), img_v_(0) {}
 
   // copy constructor
   bvxm_lidar_camera(bvxm_lidar_camera const& rhs);
@@ -32,6 +32,8 @@ class bvxm_lidar_camera : public vpgl_camera<double>
   void set_utm(int utm_zone, unsigned northing) { is_utm=true, utm_zone_=utm_zone; northing_=northing; }
 
   void set_lvcs(bgeo_lvcs_sptr lvcs) {lvcs_ = lvcs;}
+
+  void set_img_dims(int x, int y) {img_u_ = new int(x), img_v_ = new int(y);}
 
   //: Implementing the generic camera interface of vpgl_camera.
   //  x,y,z are in local coordinates, u represents image column, v image row
@@ -60,6 +62,8 @@ class bvxm_lidar_camera : public vpgl_camera<double>
   bool is_utm;
   int utm_zone_;
   int northing_; //0 North, 1 South
+
+  int *img_u_, *img_v_;
   void img_to_wgs(const unsigned i, const unsigned j, double& lon, double& lat);
 };
 

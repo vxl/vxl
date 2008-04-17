@@ -14,14 +14,12 @@ bvxm_lidar_camera::bvxm_lidar_camera()
   trans_matrix_.set_size(4,4);
   trans_matrix_.fill(0);
   trans_matrix_.fill_diagonal(1);
-  //trans_matrix_[1][1] = -1;
 
   tiepoints_.resize(1);
   tiepoints_[0].resize(6,0);
 
-  //lvcs_=new bgeo_lvcs(33.4447732, -114.3085932, 0.0, bgeo_lvcs::wgs84, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
-
   is_utm = false;
+  img_u_ = img_v_ = 0;
 }
 
 bvxm_lidar_camera::bvxm_lidar_camera(bvxm_lidar_camera const& rhs)
@@ -29,6 +27,8 @@ bvxm_lidar_camera::bvxm_lidar_camera(bvxm_lidar_camera const& rhs)
   this->trans_matrix_ = rhs.trans_matrix_;
   this->lvcs_ = new bgeo_lvcs(*(rhs.lvcs_));
   this->tiepoints_ = rhs.tiepoints_;
+  this->img_u_ = new int(*rhs.img_u_);
+  this->img_v_ = new int(*rhs.img_v_);
 }
 
 //: transforms a given 3d world point to image plane
@@ -41,11 +41,11 @@ void bvxm_lidar_camera::project(const double x, const double y, const double z,
   if (lvcs_)
     lvcs_->local_to_global(x, y, z, bgeo_lvcs::wgs84, lon, lat, gz);
   else {
-    lat = x;
-    lon = y;
+    lat = y;
+    lon = x;
   }
 
-  double x1=lat, y1=lon;
+  double x1=lon, y1=lat;
   if (is_utm) {
     bgeo_utm utm;
     int utm_zone;
