@@ -40,11 +40,6 @@ class bvxm_util
 {
  public:
 
-  static void compute_plane_image_H(vpgl_camera_double_sptr const& cam,
-                                    bvxm_world_params_sptr world_params,
-                                    unsigned grid_zval,
-                                    vgl_h_matrix_2d<double> &H_plane_to_image,
-                                    vgl_h_matrix_2d<double> &H_image_to_plane);
 
   static bool read_cameras(const vcl_string filename,
                            vcl_vector<vnl_double_3x3> &Ks,
@@ -147,10 +142,10 @@ void bvxm_util::warp_slab_bilinear(bvxm_voxel_slab<T> const& slab_in,
     // if xsize is too big something is wrong - probably an invalid homography
     float max_projection_size = 20.0;
 
-    if ( (xsize > 2.0) && (xsize < max_projection_size) )
-      xstd = (float)xsize/2.0f;
-    if ( (ysize > 2.0) && (ysize < max_projection_size) )
-      ystd = (float)ysize/2.0f;
+    //if ( (xsize > 2.0) && (xsize < max_projection_size) )
+     // xstd = (float)xsize/2.0f;
+    //if ( (ysize > 2.0) && (ysize < max_projection_size) )
+    //  ystd = (float)ysize/2.0f;
 
     //vcl_cout << "xsize = " << xsize << " ysize = " << ysize << vcl_endl;
     bvxm_voxel_slab<T> slab_in_smooth;

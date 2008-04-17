@@ -7,65 +7,12 @@
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vpgl/vpgl_camera.h>
-#include <vgl/algo/vgl_h_matrix_2d.h>
-#include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3x1.h>
 
 #include "bvxm_voxel_slab.h"
 #include "bvxm_world_params.h"
 
-
-void bvxm_util::compute_plane_image_H(vpgl_camera_double_sptr const& cam, bvxm_world_params_sptr world_params, unsigned z_idx, vgl_h_matrix_2d<double> &H_plane_to_image, vgl_h_matrix_2d<double> &H_image_to_plane)
-{
-    float vox_length = world_params->voxel_length();
-    vgl_vector_3d<unsigned int> grid_size = world_params->num_voxels();
-    vgl_point_3d<float> grid_corner_bottom = world_params->corner();
-    // corner in parameters refers to the bottom. we want the top since slice 0 is the top-most slice.
-    vgl_point_3d<float> grid_corner = grid_corner_bottom + vgl_vector_3d<float>(0.0f,0.0f,vox_length*(grid_size.z() - 0.5f));
-
-
-    vcl_vector<vgl_homg_point_2d<double> > voxel_corners_img;
-    vcl_vector<vgl_homg_point_2d<double> > voxel_corners_vox;
-
-    vgl_vector_3d<float> x_step(vox_length,0,0);
-    vgl_vector_3d<float> y_step(0,vox_length,0);
-    vgl_vector_3d<float> z_step(0,0,-vox_length);
-
-    // create vectors containing four corners of grid, and their projections into the image
-    double u=0, v=0;
-    vgl_point_3d<float> corner_world;
-
-    voxel_corners_vox.push_back(vgl_homg_point_2d<double>(0,0));
-    corner_world = grid_corner + z_step*z_idx;
-    cam->project(corner_world.x(),corner_world.y(),corner_world.z(),u,v);
-    voxel_corners_img.push_back(vgl_homg_point_2d<double>(u,v));
-
-    voxel_corners_vox.push_back(vgl_homg_point_2d<double>(grid_size.x()-1,0));
-    corner_world = grid_corner + z_step*z_idx + x_step*(grid_size.x()-1);
-    cam->project(corner_world.x(),corner_world.y(),corner_world.z(),u,v);
-    voxel_corners_img.push_back(vgl_homg_point_2d<double>(u,v));
-
-    voxel_corners_vox.push_back(vgl_homg_point_2d<double>(grid_size.x()-1,grid_size.y()-1));
-    corner_world = grid_corner + z_step*z_idx + x_step*(grid_size.x()-1) + y_step*(grid_size.y()-1);
-    cam->project(corner_world.x(),corner_world.y(),corner_world.z(),u,v);
-    voxel_corners_img.push_back(vgl_homg_point_2d<double>(u,v));
-
-    voxel_corners_vox.push_back(vgl_homg_point_2d<double>(0,(grid_size.y()-1)));
-    corner_world = grid_corner + z_step*z_idx + y_step*(grid_size.y()-1);
-    cam->project(corner_world.x(),corner_world.y(),corner_world.z(),u,v);
-    voxel_corners_img.push_back(vgl_homg_point_2d<double>(u,v));
-
-
-    vgl_h_matrix_2d_compute_linear comp_4pt;
-    if (!comp_4pt.compute(voxel_corners_img,voxel_corners_vox, H_image_to_plane)) {
-      vcl_cerr << "ERROR computing homography from image to voxel slice. " << vcl_endl;
-    }
-    if (!comp_4pt.compute(voxel_corners_vox,voxel_corners_img, H_plane_to_image)) {
-      vcl_cerr << "ERROR computing homography from voxel slice to image. " << vcl_endl;
-    }
-    return;
-}
 
 
 bool bvxm_util::read_cameras(const vcl_string filename, std::vector<vnl_double_3x3> &Ks, std::vector<vnl_double_3x3> &Rs, std::vector<vnl_double_3x1> &Ts)

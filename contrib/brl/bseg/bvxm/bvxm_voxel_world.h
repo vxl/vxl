@@ -152,6 +152,10 @@ class bvxm_voxel_world: public vbl_ref_count
                     vil_image_view_base_sptr &virtual_view,
                     vil_image_view<float> &vis_prob, unsigned bin_index = 0);
 
+  //: generate a heightmap from the viewpoint of a virtual camera
+  // The pixel values are the z values of the most likely voxel intercepted by the corresponding camera ray
+  bool heightmap(vpgl_camera_double_sptr virtual_camera, vil_image_view<unsigned> &heightmap);
+
   //: return a planar approximation to the world
   vgl_plane_3d<double> fit_plane();
 
@@ -191,6 +195,14 @@ class bvxm_voxel_world: public vbl_ref_count
   void increment_observations( unsigned int bin_idx = 0);
 
  protected:
+
+   vgl_point_3d<float> voxel_index_to_xyz(unsigned vox_i, unsigned vox_j, unsigned vox_k);
+
+   
+   void compute_plane_image_H(vpgl_camera_double_sptr const& cam,
+                              unsigned grid_k,
+                              vgl_h_matrix_2d<double> &H_plane_to_image,
+                              vgl_h_matrix_2d<double> &H_image_to_plane);
 
   //: appearance model voxel storage
   vcl_map<bvxm_voxel_type, vcl_map<unsigned int, bvxm_voxel_grid_base_sptr> > grid_map_;
@@ -371,7 +383,7 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
     for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
     {
-      bvxm_util::compute_plane_image_H(metadata.camera,params_,z,Hp2i,Hi2p);
+      compute_plane_image_H(metadata.camera,z,Hp2i,Hi2p);
       H_plane_to_img.push_back(Hp2i);
       H_img_to_plane.push_back(Hi2p);
     }
@@ -563,6 +575,7 @@ bool bvxm_voxel_world::expected_image(bvxm_image_metadata const& camera,
 {
   // threshold used to create mask
   float min_PXvisX_accum = 0.1f;
+  float min_PX = 0.005;
 
   // datatype for current appearance model
   typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype apm_datatype;
@@ -582,7 +595,7 @@ bool bvxm_voxel_world::expected_image(bvxm_image_metadata const& camera,
   for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
   {
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
-    bvxm_util::compute_plane_image_H(camera.camera,params_,z,Hp2i,Hi2p);
+    compute_plane_image_H(camera.camera,z,Hp2i,Hi2p);
     H_plane_to_img.push_back(Hp2i);
     H_img_to_plane.push_back(Hi2p);
   }
@@ -599,11 +612,11 @@ bool bvxm_voxel_world::expected_image(bvxm_image_metadata const& camera,
   obs_datatype data(obs_mathtype(0));
   expected_slab.fill(data);
 
-  // get ocuppancy probability grid
+  // get occupancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
-  //get appereance model grid
+  //get appearance model grid
   bvxm_voxel_grid_base_sptr apm_grid_base = this->get_grid<APM_T>(bin_index);
   bvxm_voxel_grid<apm_datatype> *apm_grid  = static_cast<bvxm_voxel_grid<apm_datatype>*>(apm_grid_base.ptr());
 
@@ -628,11 +641,13 @@ bool bvxm_voxel_world::expected_image(bvxm_image_metadata const& camera,
     typename bvxm_voxel_slab<float>::iterator visX_it = visX_accum.begin(), W_it = PXvisX_accum.begin();
 
     for (; out_it != expected_slab.end(); ++I_it, ++PX_it, ++out_it, ++visX_it, ++W_it) {
-      float w = *PX_it * *visX_it;
-      *W_it += w;
-      *out_it += *I_it * w;
-      // update visX for next level
-      *visX_it *= (1.0f - *PX_it);
+      if (*PX_it > min_PX) {
+        float w = *PX_it * *visX_it;
+        *W_it += w;
+        *out_it += *I_it * w;
+        // update visX for next level
+        *visX_it *= (1.0f - *PX_it);
+      }
     }
   }
   vcl_cout << vcl_endl;
@@ -648,14 +663,19 @@ bool bvxm_voxel_world::expected_image(bvxm_image_metadata const& camera,
   // convert back to vil_image_view
   bvxm_util::slab_to_img(expected_slab, expected);
 
-  // convert PXvisX_accum to mask
-  bvxm_voxel_slab<bool> mask_slab(PXvisX_accum.nx(),PXvisX_accum.ny(),1);
-  bvxm_util::threshold_slab_above(PXvisX_accum, min_PXvisX_accum ,mask_slab);
-  vil_image_view<float>::iterator mask_img_it = mask.begin();
-  bvxm_voxel_slab<bool>::iterator mask_slab_it = mask_slab.begin();
+  // create mask of bottom plane of voxel grid
+  bvxm_voxel_slab<ocp_datatype> bottom_slab_mask(expected->ni(),expected->nj(),1);
+  bvxm_voxel_slab<ocp_datatype> ones(grid_size.x(),grid_size.y(),1);
+  ones.fill(1.0f);
+  bvxm_util::warp_slab_bilinear(ones,H_img_to_plane[grid_size.z()-1],bottom_slab_mask);
+
+  // generate expected view mask
+  typename vil_image_view<float>::iterator mask_img_it = mask.begin();
+  typename bvxm_voxel_slab<float>::iterator PXvisX_accum_it = PXvisX_accum.begin();
+  typename bvxm_voxel_slab<float>::iterator bottom_slab_mask_it = bottom_slab_mask.begin();
   mask.fill(0.0f);
-  for (; mask_img_it != mask.end(); ++mask_img_it, ++mask_slab_it) {
-    if (*mask_slab_it)
+  for (; mask_img_it != mask.end(); ++mask_img_it, ++PXvisX_accum_it, ++bottom_slab_mask_it) {
+    if ( (*PXvisX_accum_it > min_PXvisX_accum) && (*bottom_slab_mask_it > 0) )
       *mask_img_it = 1.0f;
   }
 
@@ -800,7 +820,7 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
     for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
     {
-      bvxm_util::compute_plane_image_H(observation.camera,params_,z,Hp2i,Hi2p);
+      compute_plane_image_H(observation.camera,z,Hp2i,Hi2p);
       H_plane_to_img.push_back(Hp2i);
       H_img_to_plane.push_back(Hi2p);
     }
@@ -928,7 +948,7 @@ bool bvxm_voxel_world::mixture_of_gaussians_image(bvxm_image_metadata const& obs
   for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
   {
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
-    bvxm_util::compute_plane_image_H(observation.camera,params_,z,Hp2i,Hi2p);
+    compute_plane_image_H(observation.camera,z,Hp2i,Hi2p);
     H_plane_to_img.push_back(Hp2i);
     H_img_to_plane.push_back(Hi2p);
   }
@@ -1020,11 +1040,11 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
   {
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
     // real camera
-    bvxm_util::compute_plane_image_H(original_view.camera,params_,z,Hp2i,Hi2p);
+    compute_plane_image_H(original_view.camera,z,Hp2i,Hi2p);
     H_plane_to_img.push_back(Hp2i);
     H_img_to_plane.push_back(Hi2p);
     // virtual camera
-    bvxm_util::compute_plane_image_H(virtual_camera,params_,z,Hp2i,Hi2p);
+    compute_plane_image_H(virtual_camera,z,Hp2i,Hi2p);
     H_plane_to_virtual_img.push_back(Hp2i);
     H_virtual_img_to_plane.push_back(Hi2p);
     // image to image
@@ -1058,6 +1078,7 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
     bvxm_voxel_slab<ocp_datatype>::const_iterator PX_it = slice_prob_img.begin();
     bvxm_voxel_slab<float>::iterator max_it = max_prob_image.begin(), visX_it = visX_accum_virtual.begin();
     bvxm_voxel_slab<unsigned>::iterator hmap_it = heightmap_rough.begin();
+//#define DEBUG
 #ifdef DEBUG
     bvxm_util::write_slab_as_image(slice_prob_img,"c:/research/registration/output/slice_prob_img.tiff");
     bvxm_util::write_slab_as_image(visX_accum_virtual,"c:/research/registration/output/visX_accum_virtual.tiff");
