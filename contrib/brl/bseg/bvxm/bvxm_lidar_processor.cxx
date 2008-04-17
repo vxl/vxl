@@ -6,7 +6,7 @@
 
 //: Return probability density of observing pixel values
 bvxm_voxel_slab<float>
-bvxm_lidar_processor::prob_density(unsigned z_dim,  bvxm_voxel_slab<float> const& obs)
+bvxm_lidar_processor::prob_density(float z_dim,  bvxm_voxel_slab<float> const& obs)
 {
   //the output
   bvxm_voxel_slab<float> probabilities(obs.nx(), obs.ny(), obs.nz());

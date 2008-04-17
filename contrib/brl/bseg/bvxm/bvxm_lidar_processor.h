@@ -28,7 +28,7 @@ class  bvxm_lidar_processor
   bvxm_lidar_processor(unsigned vox_thresh): gauss_(bsta_gauss_f1(0,1)), vox_thresh_(vox_thresh) {}
 
   //: A function that assigns a gaussian weight to the lidar observation
-  bvxm_voxel_slab<float>  prob_density(unsigned z_dim,
+  bvxm_voxel_slab<float>  prob_density(float z_dim,
                                        bvxm_voxel_slab<float> const& obs);
 
  private:
