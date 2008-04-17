@@ -147,10 +147,8 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
 
   // check if the tiff file is geotiff
   if (!tiff_img->is_GEOTIFF()) {
-#endif
     vcl_cout << "bvxm_lidar_init_process::lidar_init -- The image should be a GEOTIFF!\n";
     return false;
-#if HAS_GEOTIFF
   }
 
   vil_geotiff_header* gtif = tiff_img->get_geotiff_header();
@@ -241,6 +239,7 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
                                   (unsigned int)bb->height());
     //add the translation to the camera
     camera->translate(bb->get_min_x(), bb->get_min_y());
+    camera->set_img_dims(bb->width(), bb->height());
 
     if (!roi) {
       vcl_cout << "bvxm_lidar_init_process::lidar_init()-- clipping box is out of image boundaries\n";
@@ -253,6 +252,9 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
   }
 
   return true;
+#else // if !HAS_GEOTIFF
+  vcl_cout << "bvxm_lidar_init_process::lidar_init()-- GEOTIFF lib is needed to run bvxm_lidar_init_process--\n";
+  return false;
 #endif // HAS_GEOTIFF
 }
 
