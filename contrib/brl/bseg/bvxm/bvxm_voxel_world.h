@@ -137,6 +137,7 @@ class bvxm_voxel_world: public vbl_ref_count
   template<bvxm_voxel_type APM_T>
   bool pixel_probability_density(bvxm_image_metadata const& observation,
                                  vil_image_view<float> &pixel_probability,
+                                 vil_image_view<bool> &mask,
                                  unsigned bin_index = 0);
 
   //: generate the mixture of gaussians slab from the specified viewpoint. the slab should be allocated by the caller.
@@ -796,7 +797,8 @@ bool bvxm_voxel_world::inv_pixel_range_probability(bvxm_image_metadata const& ob
 
 template<bvxm_voxel_type APM_T>
 bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& observation,
-                                                 vil_image_view<float> &pixel_probability, unsigned bin_index)
+                                                 vil_image_view<float> &pixel_probability, vil_image_view<bool> &mask,
+                                                 unsigned bin_index)
 {
   // datatype for current appearance model
   typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype apm_datatype;
@@ -833,6 +835,7 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
   bvxm_voxel_slab<float> preX(grid_size.x(),grid_size.y(),1);
   bvxm_voxel_slab<float> PIPX(grid_size.x(),grid_size.y(),1);
 
+  bvxm_voxel_slab<float> mask_slab(image_slab.nx(),image_slab.ny(),1);
   bvxm_voxel_slab<float> preX_accum(image_slab.nx(),image_slab.ny(),1);
   bvxm_voxel_slab<float> visX_accum(image_slab.nx(),image_slab.ny(),1);
   bvxm_voxel_slab<float> img_scratch(image_slab.nx(),image_slab.ny(),1);
@@ -841,6 +844,7 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
 
   preX_accum.fill(0.0f);
   visX_accum.fill(1.0f);
+  mask_slab.fill(0.0f);
 
   // slabs for holding backprojections of visX
   bvxm_voxel_slab<float> visX(grid_size.x(),grid_size.y(),1);
@@ -906,6 +910,8 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
     // transform (1-P(X)) to image plane to accumulate visX for next level
     bvxm_util::warp_slab_bilinear(*ocp_slab_it, H_img_to_plane[z], PX_img);
 
+    bvxm_util::add_slabs(PX_img,mask_slab,mask_slab);
+
     // note: doing scale and offset in image domain so invalid pixels become 1.0 and dont affect visX
     bvxm_voxel_slab<float>::iterator PX_img_it = PX_img.begin();
     visX_accum_it = visX_accum.begin();
@@ -921,6 +927,14 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
   bvxm_voxel_slab<float>::const_iterator preX_accum_it = preX_accum.begin();
   for (; pix_prob_it != pixel_probability.end(); ++pix_prob_it, ++preX_accum_it) {
     *pix_prob_it = *preX_accum_it;
+  }
+
+  // fill mask values
+  vil_image_view<bool>::iterator mask_it = mask.begin();
+  bvxm_voxel_slab<float>::const_iterator mask_slab_it = mask_slab.begin();
+
+  for (; mask_it != mask.end(); ++mask_it, ++mask_slab_it) {
+    *mask_it = (*mask_slab_it > 0);
   }
 
   return true;

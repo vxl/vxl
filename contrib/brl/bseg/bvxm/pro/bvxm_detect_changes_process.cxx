@@ -71,11 +71,12 @@ bool bvxm_detect_changes_process::execute()
 
   //get probability density of all pixels in image
   vil_image_view<float> prob_map(img->ni(),img->nj(),1);
+  vil_image_view<bool> mask(img->ni(),img->nj(),1);
 
   if (voxel_type == "apm_mog_rgb")
-    world->pixel_probability_density<APM_MOG_RGB>(observation,prob_map,bin_index);
+    world->pixel_probability_density<APM_MOG_RGB>(observation,prob_map,mask,bin_index);
   else
-    world->pixel_probability_density<APM_MOG_GREY>(observation,prob_map,bin_index);
+    world->pixel_probability_density<APM_MOG_GREY>(observation,prob_map,mask,bin_index);
 
   // TODO: filtering / thresholding if necessary (Thom?)
 
