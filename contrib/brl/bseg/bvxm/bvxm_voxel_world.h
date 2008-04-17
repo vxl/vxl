@@ -713,7 +713,7 @@ bool bvxm_voxel_world::inv_pixel_range_probability(bvxm_image_metadata const& ob
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
     for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
     {
-      bvxm_util::compute_plane_image_H(observation.camera,params,z,Hp2i,Hi2p);
+      compute_plane_image_H(observation.camera,z,Hp2i,Hi2p);
       H_plane_to_img.push_back(Hp2i);
       H_img_to_plane.push_back(Hi2p);
     }
