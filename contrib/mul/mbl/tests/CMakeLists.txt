@@ -104,7 +104,7 @@ ADD_TEST (mbl_test_clusters ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_clusters
 ADD_TEST (mbl_test_cluster_tree ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_cluster_tree)
 ADD_TEST (mbl_test_dyn_prog ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_dyn_prog)
 ADD_TEST (mbl_test_progress ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_progress)
-ADD_TEST (mbl_test_text_file ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_text_files)
+ADD_TEST (mbl_test_text_file ${EXECUTABLE_OUTPUT_PATH}/mbl_test_all test_text_file)
 
 
 ADD_EXECUTABLE( mbl_test_include test_include.cxx )
