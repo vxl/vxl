@@ -12,6 +12,9 @@ bvxm_world_params::bvxm_world_params()
   corner_ = vgl_point_3d<float>(0.0,0.0,0.0);
   num_voxels_ = vgl_vector_3d<unsigned int>(10,10,10);
   voxel_length_ = 1.0;
+  base_x_ = vgl_vector_3d<float>(1.0f,0.0f,0.0f);
+  base_y_ = vgl_vector_3d<float>(0.0f,1.0f,0.0f);
+  base_z_ = vgl_vector_3d<float>(0.0f,0.0f,1.0f);
 };
 
 
@@ -31,7 +34,10 @@ bvxm_world_params::set_params(
   bgeo_lvcs_sptr lvcs,
   float min_ocp_prob,
   float max_ocp_prob,
-  unsigned max_scale)
+  unsigned max_scale,
+  vgl_vector_3d<float> basex, 
+  vgl_vector_3d<float> basey, 
+  vgl_vector_3d<float> basez)
 {
   model_dir_ = model_dir;
   corner_ = corner;
@@ -41,6 +47,9 @@ bvxm_world_params::set_params(
   min_occupancy_prob_ = min_ocp_prob;
   max_occupancy_prob_ = max_ocp_prob;
   max_scale_=max_scale;
+  base_x_ = basex;
+  base_y_ = basey;
+  base_z_ = basez;
 };
 
 vgl_box_3d<double> bvxm_world_params::world_box_local()
@@ -58,6 +67,7 @@ vgl_box_3d<double> bvxm_world_params::world_box_local()
 
 void bvxm_world_params::b_write(vsl_b_ostream & os) const
 {
+  vsl_b_write(os, version());
   vsl_b_write(os,model_dir_);
   vsl_b_write(os,corner_);
   vsl_b_write(os,num_voxels_);
@@ -65,18 +75,49 @@ void bvxm_world_params::b_write(vsl_b_ostream & os) const
   lvcs_->b_write(os);
   vsl_b_write(os,min_occupancy_prob_);
   vsl_b_write(os,max_occupancy_prob_);
+  vsl_b_write(os, base_x_);
+  vsl_b_write(os, base_y_);
+  vsl_b_write(os, base_z_);
 }
 
 
 void bvxm_world_params::b_read(vsl_b_istream & is)
 {
-  vsl_b_read(is,model_dir_);
-  vsl_b_read(is,corner_);
-  vsl_b_read(is,num_voxels_);
-  vsl_b_read(is,voxel_length_);
-  lvcs_->b_read(is);
-  vsl_b_read(is,min_occupancy_prob_);
-  vsl_b_read(is,max_occupancy_prob_);
+
+  unsigned ver = version();
+  switch (ver)
+  {
+  case 1: {
+    vsl_b_read(is,model_dir_);
+    vsl_b_read(is,corner_);
+    vsl_b_read(is,num_voxels_);
+    vsl_b_read(is,voxel_length_);
+    lvcs_->b_read(is);
+    vsl_b_read(is,min_occupancy_prob_);
+    vsl_b_read(is,max_occupancy_prob_);
+    break;
+          }
+  default: {
+    vsl_b_read(is, ver);
+    switch(ver) {
+  case 2: {
+    vsl_b_read(is,model_dir_);
+    vsl_b_read(is,corner_);
+    vsl_b_read(is,num_voxels_);
+    vsl_b_read(is,voxel_length_);
+    lvcs_->b_read(is);
+    vsl_b_read(is,min_occupancy_prob_);
+    vsl_b_read(is,max_occupancy_prob_);
+    vsl_b_read(is, base_x_);
+    vsl_b_read(is, base_y_);
+    vsl_b_read(is, base_z_);
+    break;
+          }
+  default:
+    vcl_cout << "In bvxm_world_params::b_read() - Version not supported\n";
+    }
+           }
+  }
 }
 
 //: output world_params to stream
