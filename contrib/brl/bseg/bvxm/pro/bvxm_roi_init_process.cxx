@@ -169,6 +169,9 @@ bool bvxm_roi_init_process::roi_init(vcl_string const& image_path,
         {
         // we will ignore the most significant 5 bits and less significant 3 bits
           vxl_uint_16 curr_pixel_val = nitf_image_vxl_uint_16(m,n,p);
+          
+          //Isa commented out this: This is temporarly commented out in order to reproduce Thom's initiall results
+          /*
           if (bigendian) {
             unsigned char* arr = (unsigned char*) &curr_pixel_val;
             // [defgh3][5abc]
@@ -186,8 +189,18 @@ bool bvxm_roi_init_process::roi_init(vcl_string const& image_path,
             // [defgh3][5abc]
             // --> [abcdefgh]
             curr_pixel_val = curr_pixel_val >> 8;
-          }
+          }*/
+
+                  
           unsigned char pixel_val = static_cast<unsigned char> (curr_pixel_val);
+          
+          //Temporary hack: Remove when Thom's results have been proved
+          int temp_pix_val = floor(int(curr_pixel_val)*255.0/1500.0);
+          if (temp_pix_val > 255)
+            temp_pix_val =255;
+          pixel_val = unsigned char(temp_pix_val);
+          //end hack
+       
           (*nitf_image_unsigned_char)(m,n,p) = pixel_val;
         }
       }
