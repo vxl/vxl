@@ -31,11 +31,17 @@ bvxm_detect_changes_process::bvxm_detect_changes_process()
   input_types_[3] = "vcl_string";
   input_types_[4] = "unsigned";
 
-  //process has 1 output
-  //output[0]: The change detection image
-  output_data_.resize(1,brdb_value_sptr(0));
-  output_types_.resize(1);
+   
+  //output has 2 outputs
+  //output[0] : The updated probability map
+  //output[1] : The mask of image pixels used in update
+  //output[2] : Thresholded image: Binary
+  output_data_.resize(3,brdb_value_sptr(0));
+  output_types_.resize(3);
   output_types_[0]= "vil_image_view_base_sptr";
+  output_types_[1]= "vil_image_view_base_sptr";
+  output_types_[2]= "vil_image_view_base_sptr";
+
 }
 
 
@@ -73,11 +79,18 @@ bool bvxm_detect_changes_process::execute()
   vil_image_view<float> prob_map(img->ni(),img->nj(),1);
   vil_image_view<bool> mask(img->ni(),img->nj(),1);
 
-  if (voxel_type == "apm_mog_rgb")
-    world->pixel_probability_density<APM_MOG_RGB>(observation,prob_map,mask,bin_index);
-  else
-    world->pixel_probability_density<APM_MOG_GREY>(observation,prob_map,mask,bin_index);
+  bool result;
 
+
+  if (voxel_type == "apm_mog_rgb")
+    result = world->pixel_probability_density<APM_MOG_RGB>(observation,prob_map, mask, bin_index);
+   else
+    result = world->pixel_probability_density<APM_MOG_GREY>(observation,prob_map, mask, bin_index);
+    
+   if(!result){
+    vcl_cerr << "error bvxm_detect_changes_process: failed to detect changes" << vcl_endl;
+    return false;
+  }
   // TODO: filtering / thresholding if necessary (Thom?)
 
   // the following thresholding is added temporarily in order to produce an
@@ -89,14 +102,18 @@ bool bvxm_detect_changes_process::execute()
   vil_image_view<bool> binary_img;
   vil_threshold_above<float>(prob_map, binary_img, threshold_value);
 
-  //store output
-  brdb_value_sptr output0 =
-#if 0
+    //store output
+  brdb_value_sptr output0 = 
     new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(prob_map));
-#else
-    new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<bool>(binary_img));
-#endif
   output_data_[0] = output0;
+
+  brdb_value_sptr output1 = 
+    new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<bool>(mask));
+  output_data_[1] = output1;
+
+  brdb_value_sptr output2 =
+    new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<bool>(binary_img));
+  output_data_[2] = output2;
 
   return true;
 }
