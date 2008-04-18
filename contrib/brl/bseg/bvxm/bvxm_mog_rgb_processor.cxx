@@ -116,3 +116,25 @@ bvxm_voxel_slab<bvxm_mog_rgb_processor::obs_datatype> bvxm_mog_rgb_processor::ex
   return expected_color;
 }
 
+//: color of the most probable mode in the mixtures in the slab
+bvxm_voxel_slab<bvxm_mog_rgb_processor::obs_datatype> bvxm_mog_rgb_processor::most_probable_mode_color(bvxm_voxel_slab<mix_gauss_type > const& appear) 
+{
+  //the output
+   bvxm_voxel_slab<obs_datatype> color(appear.nx(),appear.ny(),appear.nz());
+
+   //the iterator
+   bvxm_voxel_slab<mix_gauss_type>::const_iterator appear_it;
+   bvxm_voxel_slab<obs_datatype>::iterator ec_it = color.begin();
+
+  for (appear_it = appear.begin(); appear_it!= appear.end();++appear_it, ++ec_it)
+  {
+    if ((*appear_it).num_components() > 0) {
+      if ((*appear_it).weight(0) > 0.0f) {
+        (*ec_it) = (*appear_it).distribution(0).mean();
+      }
+    }
+  }
+
+  return color;
+}
+

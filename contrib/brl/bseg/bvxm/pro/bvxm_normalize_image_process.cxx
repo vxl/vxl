@@ -33,6 +33,7 @@ bvxm_normalize_image_process::bvxm_normalize_image_process()
   output_types_[1]= "float";  // output a
   output_types_[2]= "float";  // output b
 
+  parameters()->add("use most probable mode to create mog", "most_prob", true);   // otherwise uses expected values of the mixtures at voxels along the path of the rays 
   parameters()->add("start value for a", "a_start", 0.6f);
   parameters()->add("increment for a", "a_inc", 0.05f);
   parameters()->add("end value for a", "a_end", 1.8f);
@@ -112,6 +113,9 @@ bool bvxm_normalize_image_process::execute()
   bvxm_image_metadata observation(input_img,camera);
 
   // get parameters
+  bool most_prob = true;
+  parameters()->get_value("most_prob", most_prob);   // otherwise uses expected image
+
   bool verbose = false;
   parameters()->get_value("verbose", verbose);
   float a_start=0, a_end=0, a_inc=0;
@@ -125,6 +129,11 @@ bool bvxm_normalize_image_process::execute()
   parameters()->get_value("b_end", b_end);
 
   if (verbose) {
+    if (most_prob) 
+      vcl_cout << "using most probable modes' colors to create mog image ";
+    else 
+      vcl_cout << "using expected colors to create mog image ";
+
     vcl_cout << "normalization parameters to be used in this run:\n"
              << "a_start: " << a_start << " a_end: " << a_end << " a_inc: " << a_inc << vcl_endl
              << "b_start: " << b_start << " b_end: " << b_end << " b_ratio: " << b_ratio << vcl_endl;
@@ -160,7 +169,12 @@ bool bvxm_normalize_image_process::execute()
     typedef bvxm_voxel_traits<APM_MOG_RGB>::voxel_datatype mog_type;
     typedef bvxm_voxel_traits<APM_MOG_RGB>::obs_datatype obs_datatype;
 
-    world->mixture_of_gaussians_image<APM_MOG_RGB>(observation, mog_image, bin_index);
+    if (most_prob) {
+      world->mog_most_probable_image<APM_MOG_RGB>(observation, mog_image, bin_index); 
+    } else {
+      world->mixture_of_gaussians_image<APM_MOG_RGB>(observation, mog_image, bin_index);
+    }
+
     bvxm_voxel_slab<mog_type>* mog_image_ptr = dynamic_cast<bvxm_voxel_slab<mog_type>*>(mog_image.ptr());
 
     bvxm_voxel_traits<APM_MOG_RGB>::appearance_processor apm_processor;
@@ -225,7 +239,12 @@ bool bvxm_normalize_image_process::execute()
     typedef bvxm_voxel_traits<APM_MOG_GREY>::voxel_datatype mog_type;
     typedef bvxm_voxel_traits<APM_MOG_GREY>::obs_datatype obs_datatype;
 
-    world->mixture_of_gaussians_image<APM_MOG_GREY>(observation, mog_image, bin_index);
+    if (most_prob) {
+      world->mog_most_probable_image<APM_MOG_GREY>(observation, mog_image, bin_index); 
+    } else {
+      world->mixture_of_gaussians_image<APM_MOG_GREY>(observation, mog_image, bin_index);
+    }
+    
     bvxm_voxel_slab<mog_type>* mog_image_ptr = dynamic_cast<bvxm_voxel_slab<mog_type>*>(mog_image.ptr());
 
     bvxm_voxel_traits<APM_MOG_GREY>::appearance_processor apm_processor;

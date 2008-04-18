@@ -213,11 +213,13 @@ bvxm_gen_synthetic_world_process::generate_cameras_yz(vgl_box_3d<double>& world)
   vgl_point_2d<double> principal_point(IMAGE_U/2., IMAGE_V/2.);
 
   vgl_point_3d<double> centroid = world.centroid();
+  vcl_cout << "centroid: " << centroid << vcl_endl;
   double x,y;
   double alpha = (vnl_math::pi/8.) * 3;
   double delta_alpha = vnl_math::pi/40.;
   vcl_vector<vgl_point_3d<double> > centers;
-  for (unsigned i=0; i<11; i++) {
+  //for (unsigned i=0; i<11; i++) {
+  for (unsigned i=0; i<2; i++) {
     x = camera_dist*vcl_cos(alpha);
     y = camera_dist*vcl_sin(alpha);
     centers.push_back(vgl_point_3d<double> (x+centroid.x(), y+centroid.y(), 450+centroid.z()));
@@ -245,14 +247,14 @@ bvxm_gen_synthetic_world_process::generate_cameras_yz(vgl_box_3d<double>& world)
       persp_cam.project(c.x(), c.y() ,c.z(), u, v);
       rat_cam->project(c.x(), c.y() ,c.z(), u2, v2);
       bb.add(vgl_point_2d<double> (u,v));
-#ifdef DEBUG
+//#ifdef DEBUG
       vcl_cout << "Perspective [" << u << ',' << v << "]\n"
                << "Rational [" << u2 << ',' << v2 << "]\n" << vcl_endl;
-#endif
+//#endif
     }
-#ifdef DEBUG
+//#ifdef DEBUG
     vcl_cout << bb << vcl_endl;
-#endif
+//#endif
   }
   return rat_cameras;
 }

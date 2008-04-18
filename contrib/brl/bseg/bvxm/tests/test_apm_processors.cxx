@@ -52,10 +52,29 @@ MAIN( test_apm_processors )
 
    appear.fill(mix_gauss_type());
 
-  bvxm_mog_grey_processor processor;
+   bvxm_mog_grey_processor processor;
 
-  bool a = processor.update(appear, obs, weight);
-  TEST("processor.update()", a, true);
+   bool a = processor.update(appear, obs, weight);
+   TEST("processor.update()", a, true);
 
-  SUMMARY();
+   //: test the expected and most probable methods
+   bvxm_voxel_slab<mix_gauss_type> appear2(10,10,1);
+   appear2.fill(mix_gauss_type());
+
+   obs.fill(0.3f);
+   weight.fill(1.0f/100.0f);
+   a = a & processor.update(appear2, obs, weight);
+   obs.fill(0.8f);
+   a = a & processor.update(appear2, obs, weight);
+   obs.fill(0.81f);
+   a = a & processor.update(appear2, obs, weight);
+   TEST("processor.update()", a, true);
+
+   bvxm_voxel_slab<float> out = processor.most_probable_mode_color(appear2);
+   TEST_NEAR("most probable", *(out.first_voxel()), 0.8f, 0.01f);
+
+   out = processor.expected_color(appear2);
+   TEST_NEAR("expected", *(out.first_voxel()), 0.63f, 0.01f);
+
+   SUMMARY();
 }

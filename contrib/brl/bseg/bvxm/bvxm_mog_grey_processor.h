@@ -10,6 +10,7 @@
 // \verbatim
 //  Modifications
 //   02/11/2008  DEC  Changed prob() to prob_density(), added prob_range
+//   04/17/2008  Ozge C. Ozcanli added most_probable_mode_color() method
 // \endverbatim
 
 //Added the get_light_bin() virtual function which is useful in multiple mixture of gaussian case
@@ -56,6 +57,7 @@ class  bvxm_mog_grey_processor
                bvxm_voxel_slab<float> const& weight);
 
   bvxm_voxel_slab<float> expected_color( bvxm_voxel_slab<mix_gauss_type> const& appear);
+  bvxm_voxel_slab<float> most_probable_mode_color(bvxm_voxel_slab<mix_gauss_type > const& appear);
 
   // bin number is always 0 for the simple mixture of gaussian case
   virtual unsigned int get_light_bin(unsigned int num_light_bins, const vnl_vector<float>& light) {return 0;}

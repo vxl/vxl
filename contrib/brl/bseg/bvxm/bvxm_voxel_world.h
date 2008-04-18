@@ -48,6 +48,10 @@
 //
 //   Ibrahim Eden - 03/28/2008 - added the method:
 //           bool save_edges_raw(vcl_string filename);
+//
+//   Ozge C. Ozcanli - 04/18/2008 - added the method:
+//           bool mog_most_probable_image(bvxm_image_metadata const& camera, bvxm_voxel_slab_base_sptr& mog_image, unsigned bin_index);
+//
 // \endverbatim
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -145,6 +149,14 @@ class bvxm_voxel_world: public vbl_ref_count
   bool mixture_of_gaussians_image(bvxm_image_metadata const& camera,
                                   bvxm_voxel_slab_base_sptr& mog_image,
                                   unsigned bin_index = 0);
+
+  //: generate the mixture of gaussians slab from the specified viewpoint using the most probable modes
+  //  of the distributions at each voxel along the ray. 
+  //  the slab should be allocated by the caller.
+  template<bvxm_voxel_type APM_T>
+  bool mog_most_probable_image(bvxm_image_metadata const& camera,
+                               bvxm_voxel_slab_base_sptr& mog_image, 
+                               unsigned bin_index = 0);
 
   //: return the original image, viewed from a new viewpoint
   template<bvxm_voxel_type APM_T>
@@ -576,7 +588,7 @@ bool bvxm_voxel_world::expected_image(bvxm_image_metadata const& camera,
 {
   // threshold used to create mask
   float min_PXvisX_accum = 0.1f;
-  float min_PX = 0.005;
+  float min_PX = 0.005f;
 
   // datatype for current appearance model
   typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype apm_datatype;
@@ -1018,6 +1030,96 @@ bool bvxm_voxel_world::mixture_of_gaussians_image(bvxm_image_metadata const& obs
     }
 
     if (!apm_processor.update(mog_slab, expected_slice_img, w)) {   // check "if (*I_it >= 0)" during update
+      vcl_cout << "In bvxm_voxel_world<APM_T>::mixture_of_gaussians_image() -- problems in appearance update\n";
+      return false;
+    }
+  }
+
+  mog_image = new bvxm_voxel_slab<apm_datatype>(mog_slab);
+
+  return true;
+}
+
+//: generate the mixture of gaussians slab from the specified viewpoint using the most probable modes
+//  of the distributions at each voxel along the ray. 
+//  the slab should be allocated by the caller.
+template<bvxm_voxel_type APM_T>
+bool bvxm_voxel_world::mog_most_probable_image(bvxm_image_metadata const& observation,
+                                                  bvxm_voxel_slab_base_sptr& mog_image, unsigned bin_index)
+{
+  // datatype for current appearance model
+  typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype apm_datatype; // datatype for current appearance model
+  typedef typename bvxm_voxel_traits<APM_T>::obs_datatype obs_datatype;   // datatype of the pixels that the processor operates on.
+  typedef typename bvxm_voxel_traits<APM_T>::obs_mathtype obs_mathtype;
+  typedef typename bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
+
+  typename bvxm_voxel_traits<APM_T>::appearance_processor apm_processor;
+
+  // extract global parameters
+  vgl_vector_3d<unsigned int> grid_size = params_->num_voxels();
+
+  // compute homographies from voxel planes to image coordinates and vise-versa.
+  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
+  vcl_vector<vgl_h_matrix_2d<double> > H_img_to_plane;
+  for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
+  {
+    vgl_h_matrix_2d<double> Hp2i, Hi2p;
+    compute_plane_image_H(observation.camera,z,Hp2i,Hi2p);
+    H_plane_to_img.push_back(Hp2i);
+    H_img_to_plane.push_back(Hi2p);
+  }
+
+  // allocate some images
+  bvxm_voxel_slab<apm_datatype> mog_slab(observation.img->ni(),observation.img->nj(),1);
+  bvxm_voxel_slab<obs_datatype> slice_img(observation.img->ni(), observation.img->nj(),1);
+  bvxm_voxel_slab<float> slice_ocp_img(observation.img->ni(),observation.img->nj(),1);
+  bvxm_voxel_slab<float> visX_accum(observation.img->ni(), observation.img->nj(),1);
+
+  visX_accum.fill(1.0f);
+  mog_slab.fill(bvxm_voxel_traits<APM_T>::initial_val());
+
+  // get ocuppancy probability grid
+  bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0);
+  bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
+
+  //get appereance model grid
+  bvxm_voxel_grid_base_sptr apm_grid_base = this->get_grid<APM_T>(bin_index);
+  bvxm_voxel_grid<apm_datatype> *apm_grid  = static_cast<bvxm_voxel_grid<apm_datatype>*>(apm_grid_base.ptr());
+
+  typename bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
+  typename bvxm_voxel_grid<apm_datatype>::const_iterator apm_slab_it = apm_grid->begin();
+
+  for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it, ++apm_slab_it)
+  {
+    // get expected observation
+    bvxm_voxel_slab<obs_datatype> slice = apm_processor.most_probable_mode_color(*apm_slab_it);
+    // and project to image plane
+    bvxm_util::warp_slab_bilinear(slice, H_img_to_plane[z], slice_img);
+
+    // warp slice_probability to image plane
+    bvxm_util::warp_slab_bilinear(*ocp_slab_it, H_img_to_plane[z], slice_ocp_img);
+
+    typename bvxm_voxel_slab<ocp_datatype>::const_iterator PX_it = slice_ocp_img.begin();
+    bvxm_voxel_slab<float>::iterator visX_it = visX_accum.begin();
+
+#if 0 // do the following update operation from Thom's code
+    float hard_mult = 1;
+    for ( unsigned v = 0; v < voxels.size(); v++ ){
+      float this_color = voxels[v]->appearance->expected_color( light );
+      if ( this_color >= 0 )
+        mog->update( this_color, hard_mult*voxels[v]->occupancy_prob[0], light );
+      hard_mult *= (1-voxels[v]->occupancy_prob[0]);
+    }
+#endif // 0
+    bvxm_voxel_slab<float> w(observation.img->ni(), observation.img->nj(),1);
+    w.fill(1.0f);
+    bvxm_voxel_slab<float>::iterator w_it = w.begin();
+    for (; w_it != w.end(); ++PX_it, ++visX_it, ++w_it) {
+      *w_it *= *PX_it * *visX_it;
+      *visX_it *= (1.0f - *PX_it);  // update visX for next level
+    }
+
+    if (!apm_processor.update(mog_slab, slice_img, w)) {   // check "if (*I_it >= 0)" during update
       vcl_cout << "In bvxm_voxel_world<APM_T>::mixture_of_gaussians_image() -- problems in appearance update\n";
       return false;
     }

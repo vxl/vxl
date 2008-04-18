@@ -7,6 +7,10 @@
 //
 // \author Pradeep
 // \date 02/22/2008
+// \verbatim
+//  Modifications
+//   04/17/2008  Ozge C. Ozcanli added most_probable_mode_color() method
+// \endverbatim
 //
 
 #include "bvxm_voxel_slab.h"
@@ -49,6 +53,7 @@ class  bvxm_mog_rgb_processor
                bvxm_voxel_slab<float> const& weight);
 
    bvxm_voxel_slab<obs_datatype> expected_color( bvxm_voxel_slab<mix_gauss_type> const& appear);
+   bvxm_voxel_slab<obs_datatype> most_probable_mode_color(bvxm_voxel_slab<mix_gauss_type > const& appear);
 
   //bin number is always 0 for the simple mixture of gaussian case
   virtual unsigned int get_light_bin(unsigned int num_light_bins, const vnl_vector<float>& light) {return 0;}
