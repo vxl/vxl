@@ -62,7 +62,7 @@ bool bvxm_create_normalized_image_process::execute()
   // return the normalized input img
   vil_image_view<vxl_byte> in_image(input_img);
   vil_image_view<vxl_byte> out_image(input_img->ni(), input_img->nj(), input_img->nplanes());
-  if (!normalize_image<vxl_byte>(in_image, out_image, a, b, 255)) {
+  if (!normalize_image(in_image, out_image, a, b, (unsigned char)255)) {
     vcl_cout << "In bvxm_create_normalized_image_process::execute() -- Problems during normalization with given inputs\n";
     return false;
   }
