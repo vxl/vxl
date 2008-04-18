@@ -242,7 +242,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
     return false;
   }
 
-#ifdef debug
+#ifdef DEBUG
   vil_save(*metadata.img, "lidar_img.tiff");
   bvxm_util::write_slab_as_image(image_slab,"lidar_slab.tiff");
 #endif
@@ -289,7 +289,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
     // backproject image onto voxel plane
     bvxm_util::warp_slab_bilinear(image_slab, H_plane_to_img[k_idx], frame_backproj);
 
-#ifdef debug
+#ifdef DEBUG
     vcl_stringstream ss;
     ss << "./frame_backproj_" << k_idx <<".tiff";
     bvxm_util::write_slab_as_image(frame_backproj,ss.str());
@@ -312,7 +312,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
 
     // multiply to get PLPX
     bvxm_util::multiply_slabs(PL,*ocp_slab_it,PLPX);
-#ifdef debug
+#ifdef DEBUG
     vcl_stringstream ss1, ss2;
     ss1 << "PL_" << k_idx <<".tiff";
     ss2 <<"PX_" << k_idx <<".tiff";
@@ -330,7 +330,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
     for (; preX_accum_it != preX_accum.end(); ++preX_accum_it, ++PLPX_img_it, ++visX_accum_it) {
       *preX_accum_it += (*PLPX_img_it) * (*visX_accum_it);
     }
-#ifdef debug
+#ifdef DEBUG
     vcl_stringstream plpx, vis, prex;
     plpx << "PLPX_" << k_idx <<".tiff";
     vis << "visX_" << k_idx <<".tiff";
@@ -359,7 +359,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
   bvxm_voxel_slab<float> preX_accum_vox(grid_size.x(),grid_size.y(),1);
   bvxm_voxel_slab<float> visX_accum_vox(grid_size.x(),grid_size.y(),1);
 
-#ifdef debug
+#ifdef DEBUG
   vcl_stringstream vis2, prex2;
   vis2 << "visX2_"  <<".tiff";
   prex2 << "preX2_" <<".tiff";
@@ -421,7 +421,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
     }
   }
 
-#ifdef debug
+#ifdef DEBUG
   bvxm_util::write_slab_as_image(preX_accum,"prob.tiff");
 #endif
 
@@ -604,7 +604,7 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
   }
   vcl_cout << vcl_endl;
 #ifdef DEBUG
-  bvxm_util::write_slab_as_image(heightmap_rough,"c:/research/registration/output/heightmap_rough.tiff");
+  bvxm_util::write_slab_as_image(heightmap_rough,"c://test_images//LIDAR//heightmap//heightmap_rough.tiff");
 #endif
   // now clean up height map
   unsigned n_smooth_iterations = 10;

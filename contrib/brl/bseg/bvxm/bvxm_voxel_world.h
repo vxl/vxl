@@ -83,7 +83,7 @@
 #include <vil/vil_image_view_base.h>
 #include <vul/vul_file_iterator.h>
 
-#define debug false
+//#define DEBUG
 
 class bvxm_voxel_world: public vbl_ref_count
 {
@@ -1194,7 +1194,7 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
     bvxm_voxel_slab<ocp_datatype>::const_iterator PX_it = slice_prob_img.begin();
     bvxm_voxel_slab<float>::iterator max_it = max_prob_image.begin(), visX_it = visX_accum_virtual.begin();
     bvxm_voxel_slab<unsigned>::iterator hmap_it = heightmap_rough.begin();
-//#define DEBUG
+
 #ifdef DEBUG
     bvxm_util::write_slab_as_image(slice_prob_img,"c:/research/registration/output/slice_prob_img.tiff");
     bvxm_util::write_slab_as_image(visX_accum_virtual,"c:/research/registration/output/visX_accum_virtual.tiff");
@@ -1297,7 +1297,7 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
     for (; visX_accum_it != visX_accum.end(); ++visX_accum_it, ++PX_it) {
       *visX_accum_it *= (1.0f - *PX_it);
     }
-#ifdef DEBUG
+#ifdef  DEBUG
     bvxm_util::write_slab_as_image(visX_accum,"c:/research/registration/output/visX_accum.tiff");
 #endif
   }
