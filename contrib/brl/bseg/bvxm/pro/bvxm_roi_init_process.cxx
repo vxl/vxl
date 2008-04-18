@@ -131,10 +131,7 @@ bool bvxm_roi_init_process::roi_init(vcl_string const& image_path,
 
   bgeo_lvcs_sptr lvcs = world_params->lvcs();
   vgl_box_2d<double>* roi_box = project_box(camera, lvcs, box, error);
-  vcl_cout << *roi_box << vcl_endl;
-#ifdef DEBUG
-  vcl_cout << nitf->ni() << ' ' << nitf->nj() << vcl_endl;
-#endif
+
   brip_roi broi(nitf->ni(), nitf->nj());
   vsol_box_2d_sptr bb = new vsol_box_2d();
   bb->add_point(roi_box->min_x(), roi_box->min_y());
@@ -262,9 +259,6 @@ bvxm_roi_init_process::project_box(vpgl_rational_camera<double>* cam,
       // convert the box corners to world coordinates
       lvcs->local_to_global(box_corners[j].x(), box_corners[j].y(), box_corners[j].z(),
                             bgeo_lvcs::wgs84, lon, lat, gz, bgeo_lvcs::DEG, bgeo_lvcs::METERS);
-#ifdef DEBUG
-      vcl_cout << "BOX " << lat << ',' << lon << ',' << gz << ",\n";
-#endif
       vgl_point_2d<double> p2d = new_cam->project(vgl_point_3d<double>(lon, lat, gz));
       roi->add(p2d);
     }

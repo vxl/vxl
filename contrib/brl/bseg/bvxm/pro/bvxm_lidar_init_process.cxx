@@ -194,7 +194,6 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
     if (gtif->gtif_trans_matrix(trans_matrix_values)){
       vcl_cout << "Transfer matrix is given, using that...." << vcl_endl;
       trans_matrix.copy_in(trans_matrix_values);
-      vcl_cout << trans_matrix << vcl_endl;
     } else if (gtif->gtif_pixelscale(sx1, sy1, sz1)) {
       comp_trans_matrix(sx1, sy1, sz1, tiepoints, trans_matrix);
     } else {
@@ -221,12 +220,11 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
       double z = corners[i].z();
       double u,v;
       camera->project(x,y,z,u,v);
-      //vcl_cout << "(" <<  x << "," << y << "," << z << ") ->" << u << " " << v << vcl_endl;
       vgl_point_2d<double> p(u,v);
       roi_box.add(p);
 
     }
-    vcl_cout << "ROI dim:" << tiff_img->ni() << ' ' <<  tiff_img->nj() << vcl_endl;
+    
     brip_roi broi(tiff_img->ni(), tiff_img->nj());
     vsol_box_2d_sptr bb = new vsol_box_2d();
     bb->add_point(roi_box.min_x(), roi_box.min_y());
@@ -239,7 +237,6 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
                                   (unsigned int)bb->height());
     //add the translation to the camera
     camera->translate(bb->get_min_x(), bb->get_min_y());
-    camera->set_img_dims(bb->width(), bb->height());
 
     if (!roi) {
       vcl_cout << "bvxm_lidar_init_process::lidar_init()-- clipping box is out of image boundaries\n";
@@ -326,7 +323,7 @@ bool bvxm_lidar_init_process::gen_mask(vil_image_view_base_sptr roi_first,
     return false;
   }
 
-  vil_image_view<vxl_byte>* view = new vil_image_view<vxl_byte>(roi_first->ni(), roi_first->nj());
+  vil_image_view<bool>* view = new vil_image_view<bool>(roi_first->ni(), roi_first->nj());
   // if there is no second camera and image, just use one
   if (!roi_second || !cam_second) {
     view->fill(0);
@@ -343,9 +340,9 @@ bool bvxm_lidar_init_process::gen_mask(vil_image_view_base_sptr roi_first,
         for (unsigned j=0; j<roi_first->nj(); j++) {
           double diff = (*view1)(i,j)-(*view2)(i,j);
           if (diff > thresh)
-            (*view)(i,j) = 255;
+            (*view)(i,j) = false;
           else
-            (*view)(i,j) = 0;
+            (*view)(i,j) = true;
         }
     }
     mask = view;

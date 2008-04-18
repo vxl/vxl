@@ -3,7 +3,7 @@
 
 #include <vcl_cassert.h>
 
-//#include <vil/vil_load.h>
+#include <vil/vil_convert.h>
 //#include <vil/vil_image_resource.h>
 
 #include <bprb/bprb_parameters.h>
@@ -63,9 +63,12 @@ bool bvxm_heightmap_process::execute()
   vil_image_view<unsigned> *hmap = new vil_image_view<unsigned>(npixels_x, npixels_y, 1);
   voxel_world->heightmap(camera,*hmap);
 
+  vil_image_view<vxl_byte> *hmap_byte = new vil_image_view<vxl_byte>(npixels_x, npixels_y, 1);
+  vil_convert_stretch_range(*hmap, *hmap_byte);
+ 
   //store output
   brdb_value_sptr output0 =
-    new brdb_value_t<vil_image_view_base_sptr>(hmap);
+    new brdb_value_t<vil_image_view_base_sptr>(hmap_byte);
   output_data_[0] = output0;
 
   return true;
