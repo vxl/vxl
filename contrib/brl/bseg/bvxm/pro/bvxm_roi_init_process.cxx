@@ -195,7 +195,7 @@ bool bvxm_roi_init_process::roi_init(vcl_string const& image_path,
           int temp_pix_val = floor(int(curr_pixel_val)*255.0/1500.0);
           if (temp_pix_val > 255)
             temp_pix_val =255;
-          pixel_val = unsigned char(temp_pix_val);
+          pixel_val = static_cast<unsigned char>(temp_pix_val);
           //end hack
        
           (*nitf_image_unsigned_char)(m,n,p) = pixel_val;
