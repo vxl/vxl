@@ -1,32 +1,23 @@
 #ifndef mbl_load_text_file_txx_
 #define mbl_load_text_file_txx_
-
-
 //:
 // \file
-// \brief Functions to load objects from text file 
+// \brief Functions to load objects from text file
 // \author dac
 
 #include <mbl/mbl_load_text_file.h>
 #include <mbl/mbl_exception.h>
 
 #include <vcl_fstream.h>
-#include <vcl_cstdlib.h>
-#include <vcl_cassert.h>
 #include <vcl_iostream.h>
-#include <vcl_sstream.h>
-#include <vcl_map.h>
-#include <vcl_utility.h>
 #include <vcl_iterator.h>
 #include <vcl_algorithm.h>
-
 
 
 //: Load vector from file with format "v1 v2 .. vn"
 template <class T>
 void mbl_load_text_file(vcl_vector<T>& v, const vcl_string& path)
 {
-  
   v.resize(0);
   vcl_ifstream ifs(path.c_str());
   if (ifs)
@@ -38,20 +29,10 @@ void mbl_load_text_file(vcl_vector<T>& v, const vcl_string& path)
   {
     mbl_exception_throw_os_error( path, "mbl_load_text_file: failed to load" );
   }
-
-  
 }
-
-
-
 
 #undef MBL_LOAD_TEXT_FILE_INSTANTIATE
 #define MBL_LOAD_TEXT_FILE_INSTANTIATE(T ) \
-template void mbl_load_text_file(vcl_vector<T >& v, const vcl_string& path); 
-
-
-//template void mbl_load_text_file(vnl_vector<T >& v, const vcl_string& path); 
-
+template void mbl_load_text_file(vcl_vector<T >& v, const vcl_string& path)
 
 #endif //mbl_load_text_file_txx_
-

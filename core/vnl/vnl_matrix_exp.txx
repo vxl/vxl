@@ -1,9 +1,9 @@
 // This is core/vnl/vnl_matrix_exp.txx
 #ifndef vnl_matrix_exp_txx_
 #define vnl_matrix_exp_txx_
-/*
-  fsm
-*/
+//:
+// \file
+// \author fsm
 #include "vnl_matrix_exp.h"
 #include <vcl_cassert.h>
 #ifdef DEBUG
@@ -65,11 +65,11 @@ Matrix vnl_matrix_exp(Matrix const &X)
   return expX;
 }
 
-//--------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 #undef VNL_MATRIX_EXP_INSTANTIATE
 #define VNL_MATRIX_EXP_INSTANTIATE(Matrix) \
-template bool vnl_matrix_exp( Matrix const&, Matrix &, double); \
-template Matrix vnl_matrix_exp( Matrix const&);
+template bool vnl_matrix_exp(Matrix const&, Matrix &, double); \
+template Matrix vnl_matrix_exp(Matrix const&)
 
-#endif
+#endif // vnl_matrix_exp_txx_
