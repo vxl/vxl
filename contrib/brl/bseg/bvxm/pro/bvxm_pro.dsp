@@ -153,6 +153,9 @@ SOURCE=.\bvxm_lidar_init_process.cxx
 SOURCE=.\bvxm_save_edges_raw_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvxm_heightmap_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvxm_voxel_world_sptr.cxx
 # End Source File
 # Begin Source File
@@ -220,6 +223,9 @@ SOURCE=.\bvxm_lidar_init_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_save_edges_raw_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_heightmap_process.h
 # End Source File
 # End Group
 # End Target
