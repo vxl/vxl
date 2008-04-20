@@ -1,6 +1,5 @@
 #include <testlib/testlib_test.h>
 #include <vcl_string.h>
-#include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vpl/vpl.h>
 #include <bbgm/bbgm_image_of.h>
@@ -47,7 +46,7 @@ namespace
 
 MAIN( test_io )
 {
-  vcl_cout << "Starting test_io \n";
+  vcl_cout << "Starting test_io\n";
   bbgm_loader::register_loaders();
   const float window_size = 50.0;
   const unsigned int max_components = 3;
