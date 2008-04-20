@@ -10,9 +10,6 @@
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_cloneables_factory.h>
-#include <vcl_cmath.h>
-
-#include <vul/vul_string.h>
 
 //=======================================================================
 // Dflt ctor
@@ -29,7 +26,6 @@ mfpf_vec_cost_builder::mfpf_vec_cost_builder()
 mfpf_vec_cost_builder::~mfpf_vec_cost_builder()
 {
 }
-
 
 
 //: Initialise from a string stream
