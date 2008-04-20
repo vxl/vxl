@@ -90,21 +90,20 @@ void test_string()
     TEST("vul_string_expand_var", s, "wibble$foo wobble$[]");
   }
 
-  /*
-  //: replaces instances "find_str" in "full_str" with "replace_str"
+#if 0
+  // replaces instances "find_str" in "full_str" with "replace_str"
   // a given "num_times"
   vul_string_replace( vcl_string& full_str,
                               const vcl_string& find_str,
                                 const vcl_string& replace_str,
                                   int num_times=1000);
-  
-  */
+
+#endif // 0
   {
     vcl_string s("I hate mices to pieces");
     vul_string_replace( s, "hate", "love" );
     TEST( "vul_string_replace", s== "I love mices to pieces", true);
   }
-  
 }
 
 //TESTMAIN(test_string);

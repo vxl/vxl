@@ -57,7 +57,7 @@ MAIN( test_apm_processors )
    bool a = processor.update(appear, obs, weight);
    TEST("processor.update()", a, true);
 
-   //: test the expected and most probable methods
+   // test the expected and most probable methods
    bvxm_voxel_slab<mix_gauss_type> appear2(10,10,1);
    appear2.fill(mix_gauss_type());
 
