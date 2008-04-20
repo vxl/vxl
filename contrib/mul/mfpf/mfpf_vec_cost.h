@@ -1,26 +1,21 @@
-#ifndef  mfpf_vec_cost_h_
+#ifndef mfpf_vec_cost_h_
 #define mfpf_vec_cost_h_
-
 //:
 // \file
 // \brief Cost functions to evaluate vector of pixel samples
 // \author Tim Cootes
 
-#include <vcl_vector.h>
 #include <vcl_string.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_cassert.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_memory.h>
 
 //: Cost functions to evaluate vector of pixel samples
-//  Derived functions return some form of sum of differences 
+//  Derived functions return some form of sum of differences
 //  from a mean, or Mahalanobis type measure.  Perfect match
 //  returns zero, imperfect matches return positive numbers.
 class mfpf_vec_cost
 {
-protected:
-public:
+ public:
 
   //: Dflt ctor
   mfpf_vec_cost();
@@ -65,6 +60,4 @@ vcl_ostream& operator<<(vcl_ostream& os,const mfpf_vec_cost& b);
 //: Stream output operator for class pointer
 vcl_ostream& operator<<(vcl_ostream& os,const mfpf_vec_cost* b);
 
-#endif
-
-
+#endif // mfpf_vec_cost_h_

@@ -3,12 +3,10 @@
 // \brief Cost functions to evaluate vector of pixel samples
 // \author Tim Cootes
 
-
 #include "mfpf_vec_cost.h"
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <mbl/mbl_data_array_wrapper.h>
-#include <vcl_cassert.h>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
@@ -61,8 +59,7 @@ void vsl_add_to_binary_loader(const mfpf_vec_cost& b)
 
 void vsl_b_write(vsl_b_ostream& bfs, const mfpf_vec_cost& b)
 {
-    b.b_write(bfs);
-    
+  b.b_write(bfs);
 }
 
 //=======================================================================
@@ -71,12 +68,11 @@ void vsl_b_write(vsl_b_ostream& bfs, const mfpf_vec_cost& b)
 
 void vsl_b_read(vsl_b_istream& bfs, mfpf_vec_cost& b)
 {
-    b.b_read(bfs);
-    
+  b.b_read(bfs);
 }
 
 //=======================================================================
-// Associated function: operator<< 
+// Associated function: operator<<
 //=======================================================================
 
 vcl_ostream& operator<<(vcl_ostream& os,const mfpf_vec_cost& b)
@@ -89,13 +85,13 @@ vcl_ostream& operator<<(vcl_ostream& os,const mfpf_vec_cost& b)
 }
 
 //=======================================================================
-// Associated function: operator<< 
+// Associated function: operator<<
 //=======================================================================
 
 vcl_ostream& operator<<(vcl_ostream& os,const mfpf_vec_cost* b)
 {
-    if (b)  
+  if (b)
     return os << *b;
-    else      
+  else
     return os << "No mfpf_vec_cost defined.";
 }
