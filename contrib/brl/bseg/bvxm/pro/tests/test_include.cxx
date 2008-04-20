@@ -18,5 +18,6 @@
 #include <bvxm/pro/bvxm_gen_synthetic_world_process.h>
 #include <bvxm/pro/bvxm_lidar_init_process.h>
 #include <bvxm/pro/bvxm_save_edges_raw_process.h>
+#include <bvxm/pro/bvxm_heightmap_process.h>
 
 int main() { return 0; }
