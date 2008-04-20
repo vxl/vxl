@@ -31,7 +31,7 @@ static mbl_logger& logger()
 // Actual main function
 //========================================================================
 int main2(int argc, char*argv[])
-{ 
+{
   bool use_millimeters=false;
   unsigned i0=0, j0=0, k0=0;
   unsigned ni=10, nj=10, nk=10;
@@ -40,7 +40,7 @@ int main2(int argc, char*argv[])
   vul_arg<vcl_string> img_src(0, "input image filename");
   vul_arg<vcl_string> img_dst(0, "output image filename");
   vul_arg<vcl_vector<unsigned> > bbi("-bbi", "bounding box (image coords: i0,j0,k0,i1,j1,k1) of crop region");
-  vul_arg_parse(argc, argv); 
+  vul_arg_parse(argc, argv);
 
   // Log the program arguments
   MBL_LOG(NOTICE, logger(), "crop_image_3d: ");
@@ -49,21 +49,21 @@ int main2(int argc, char*argv[])
   if (bbi.set())
     MBL_LOG(NOTICE, logger(), "  bbi: " << bbi.print_value(logger().log(mbl_logger::NOTICE)));
 
-  // Validate the bbi argument - should be 6 unsigneds, specifying 
+  // Validate the bbi argument - should be 6 unsigneds, specifying
   // lower corner (i0,j0,k0) and upper corner (i1,j1,k1) of included voxels
   if (bbi.set())
   {
-    if (bbi().size() != 6) 
+    if (bbi().size() != 6)
     {
       MBL_LOG(ERR, logger(), "bbi argument should contain exactly 6 unsigneds");
-      vcl_cerr << "ERROR: " << "bbi argument should contain exactly 6 unsigneds" << vcl_endl;
+      vcl_cerr << "ERROR: bbi argument should contain exactly 6 unsigneds\n";
       return 1;
     }
-    
-    if (bbi()[0] >= bbi()[3] || bbi()[1] >= bbi()[4] || bbi()[2] >= bbi()[5]) 
+
+    if (bbi()[0] >= bbi()[3] || bbi()[1] >= bbi()[4] || bbi()[2] >= bbi()[5])
     {
       MBL_LOG(ERR, logger(), "bbi argument should indicate the lower and upper corners of a 3D box with strictly positive width, height and depth");
-      vcl_cerr << "ERROR: " << "bbi argument should indicate the lower and upper corners of a 3D box with strictly positive width, height and depth" << vcl_endl;
+      vcl_cerr << "ERROR: bbi argument should indicate the lower and upper corners of a 3D box with strictly positive width, height and depth\n";
       return 1;
     }
 
@@ -79,10 +79,10 @@ int main2(int argc, char*argv[])
   vimt3d_add_all_loaders();
 
   vil3d_image_resource_sptr ir = vil3d_load_image_resource(img_src().c_str());
-  if (!ir) 
+  if (!ir)
   {
     MBL_LOG(ERR, logger(), "Failed to load input image resource");
-    vcl_cerr << "ERROR: " << "Failed to load input image resource" << vcl_endl;
+    vcl_cerr << "ERROR: Failed to load input image resource\n";
     return 1;
   }
   MBL_LOG(INFO, logger(), "Loaded input image_resource");
@@ -101,52 +101,51 @@ int main2(int argc, char*argv[])
     MBL_LOG(DEBUG, logger(), "Image origin in world coords: " << img_orig_wc);
   }
 
-  /*
+#if 0
   vil3d_image_resource_sptr ir2 = vil3d_crop(ir, i0, ni, j0, nj, k0, nk);
   vimt3d_transform_3d tr2; // NEED TO SET THIS CORRECTLY HERE...see vimt3d_crop()
-  */
-  
+#endif // 0
+
+#if 0
   // Need to check that crop bbox is within bounds of input image
-/*
-  vil3d_image_view_base_sptr ivbp = ir->get_view();
-    ivbp->ni()
-*/
+  vil3d_image_view_base_sptr ivbp = ir->get_view(); // ==> use ivbp->ni() etc.
+#endif // 0
 
   if (i0 >= ir->ni() || j0 >= ir->nj() || k0 > ir->nk())
   {
     MBL_LOG(ERR, logger(), "Crop region bbox lower corner is outside input image.");
-    vcl_cerr << "ERROR: " << "Crop region bbox lower corner is outside input image." << vcl_endl;
+    vcl_cerr << "ERROR: Crop region bbox lower corner is outside input image.\n";
     return 2;
   }
   if (i0+ni >= ir->ni())
   {
     MBL_LOG(WARN, logger(), "Crop region bbox upper corner i was outside input image; truncating to fit.");
-    vcl_cerr << "WARNING: " << "Crop region bbox upper corner i was outside input image; truncating to fit." << vcl_endl;
+    vcl_cerr << "WARNING: Crop region bbox upper corner i was outside input image; truncating to fit.\n";
     ni = ir->ni()-i0;
   }
   if (j0+nj >= ir->nj())
   {
     MBL_LOG(WARN, logger(), "Crop region bbox upper corner j was outside input image; truncating to fit.");
-    vcl_cerr << "WARNING: " << "Crop region bbox upper corner j was outside input image; truncating to fit." << vcl_endl;
+    vcl_cerr << "WARNING: Crop region bbox upper corner j was outside input image; truncating to fit.\n";
     nj = ir->nj()-j0;
   }
   if (k0+nk >= ir->nk())
   {
     MBL_LOG(WARN, logger(), "Crop region bbox upper corner k was outside input image; truncating to fit.");
-    vcl_cerr << "WARNING: " << "Crop region bbox upper corner k was outside input image; truncating to fit." << vcl_endl;
+    vcl_cerr << "WARNING: Crop region bbox upper corner k was outside input image; truncating to fit.\n";
     nk = ir->nk()-k0;
   }
 
 
   vil3d_image_view_base_sptr ivbp = ir->get_copy_view(i0, ni, j0, nj, k0, nk);
 
-  
+
   vil3d_image_resource_sptr ir2 = vil3d_new_image_resource(
     img_dst().c_str(), ni, nj, nk, ivbp->nplanes(), ivbp->pixel_format(), filetype.c_str());
-  if (!ir2) 
+  if (!ir2)
   {
     MBL_LOG(ERR, logger(), "Failed to create output image resource");
-    vcl_cerr << "ERROR: " << "Failed to create output image resource" << vcl_endl;
+    vcl_cerr << "ERROR: Failed to create output image resource\n";
     return 2;
   }
   MBL_LOG(INFO, logger(), "Created output image_resource");
@@ -164,10 +163,10 @@ int main2(int argc, char*argv[])
   }
 
   bool succ = ir2->put_view(*ivbp);
-  if (!succ) 
+  if (!succ)
   {
     MBL_LOG(ERR, logger(), "Failed to put_view into output image resource");
-    vcl_cerr << "ERROR: " << "Failed to put_view into output image resource" << vcl_endl;
+    vcl_cerr << "ERROR: Failed to put_view into output image resource\n";
     return 3;
   }
   MBL_LOG(INFO, logger(), "Copied cropped image to output image_resource");

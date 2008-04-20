@@ -25,10 +25,11 @@ inline void test_image_resource(vcl_string type, vil_pixel_format format, T /*du
        view1 && view1.ni()==10 && view1.nj()==5 &&
        view1.nk()==3 && view1.nplanes()==1, true );
 
-  /* vil3d_new_image_resource_of_view() NYI
+#if 0
+  // vil3d_new_image_resource_of_view() // NYI
   vil3d_image_resource_sptr mem2 = vil3d_new_image_resource_of_view(view1);
   TEST("vil3d_new_image_resource_of_view", mem2 && view1==(*mem2->get_view()), true);
-  */
+#endif // 0
 
   view1.fill(0);
 
@@ -49,7 +50,6 @@ inline void test_image_resource(vcl_string type, vil_pixel_format format, T /*du
 
   view1 = mem->get_view(0, mem->ni(), 0, mem->nj(), 0, mem->nk());
   vil3d_print_all(vcl_cout, view1);
-
 
   T v1, v2;
 
