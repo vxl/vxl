@@ -1,7 +1,6 @@
 // This is brl/bseg/bvxm/pro/bvxm_lidar_init_process.h
 #ifndef bvxm_lidar_init_process_h_
 #define bvxm_lidar_init_process_h_
-
 //:
 // \file
 // \brief A class for clipping and image based on a 3D bounding box.
@@ -17,7 +16,7 @@
 //             - mask "vil_image_view_base_sptr"
 //
 //        -  Params:
-//             - threshold for first and second return differences 
+//             - threshold for first and second return differences
 //
 // \author  Gamze D. Tunali
 // \date    04/02/2008
@@ -29,7 +28,6 @@
 #include <vcl_string.h>
 #include <vcl_vector.h>
 
-#include <vgl/vgl_point_3d.h>
 #include <bgeo/bgeo_lvcs_sptr.h>
 #include <bprb/bprb_process.h>
 #include <vpgl/vpgl_local_rational_camera.h>
@@ -61,7 +59,7 @@ class bvxm_lidar_init_process : public bprb_process
   bool execute();
   bool finish(){return true;}
 
-  bool lidar_init(vil_image_resource_sptr lidar, 
+  bool lidar_init(vil_image_resource_sptr lidar,
                   bvxm_world_params_sptr params,
                   vil_image_view_base_sptr& roi,
                   bvxm_lidar_camera*& camera);
@@ -73,13 +71,12 @@ class bvxm_lidar_init_process : public bprb_process
                          vcl_vector<vcl_vector<double> > tiepoints,
                          vnl_matrix<double>& trans_matrix);
 
-  bool gen_mask(vil_image_view_base_sptr roi_first, 
-                                       bvxm_lidar_camera* cam_first, 
-                                       vil_image_view_base_sptr roi_second, 
-                                       bvxm_lidar_camera* cam_second, 
-                                       vil_image_view_base_sptr& mask,
-                                       double thresh);
-
+  bool gen_mask(vil_image_view_base_sptr roi_first,
+                bvxm_lidar_camera* cam_first,
+                vil_image_view_base_sptr roi_second,
+                bvxm_lidar_camera* cam_second,
+                vil_image_view_base_sptr& mask,
+                double thresh);
 };
 
 

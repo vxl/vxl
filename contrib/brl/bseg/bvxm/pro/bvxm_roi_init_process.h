@@ -1,7 +1,6 @@
 // This is brl/bseg/bvxm/pro/bvxm_roi_init_process.h
 #ifndef bvxm_roi_init_process_h_
 #define bvxm_roi_init_process_h_
-
 //:
 // \file
 // \brief A class for clipping and image based on a 3D bounding box.
@@ -25,7 +24,6 @@
 
 #include <vcl_string.h>
 
-#include <vgl/vgl_point_3d.h>
 #include <bgeo/bgeo_lvcs_sptr.h>
 #include <bprb/bprb_process.h>
 #include <vpgl/vpgl_local_rational_camera.h>
@@ -68,9 +66,10 @@ class bvxm_roi_init_process : public bprb_process
                                   vgl_box_3d<double> box,
                                   float r);
 
+#if 0
   //: return the corner point of a box (no particular order)
-  //vcl_vector<vgl_point_3d<double> > corners_of_box_3d(vgl_box_3d<double> box);
+  vcl_vector<vgl_point_3d<double> > corners_of_box_3d(vgl_box_3d<double> box);
+#endif // 0
 };
-
 
 #endif // bvxm_roi_init_process_h_
