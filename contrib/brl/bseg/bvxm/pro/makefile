@@ -23,6 +23,7 @@ SOURCES += bvxm_create_synth_lidar_data_process.cxx
 SOURCES += bvxm_gen_synthetic_world_process.cxx
 SOURCES += bvxm_lidar_init_process.cxx
 SOURCES += bvxm_save_edges_raw_process.cxx
+SOURCES += bvxm_heightmap_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
