@@ -8,12 +8,13 @@
 #include <mfpf/mfpf_vec_cost_builder.h>
 #include <vnl/vnl_vector.h>
 #include <vcl_iosfwd.h>
+#include <vcl_vector.h>
 
 //: Builder for mfpf_sad_vec_cost objects.
 class mfpf_sad_vec_cost_builder : public mfpf_vec_cost_builder
 {
  private:
-  //: Minimum mean abs diff allowed 
+  //: Minimum mean abs diff allowed
   double min_mad_;
 
   //: Space to record examples
@@ -65,4 +66,4 @@ class mfpf_sad_vec_cost_builder : public mfpf_vec_cost_builder
   virtual void b_read(vsl_b_istream& bfs);
 };
 
-#endif
+#endif // mfpf_sad_vec_cost_builder_h_
