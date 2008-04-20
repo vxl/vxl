@@ -3,8 +3,6 @@
 //:
 // \file
 
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h> // for vcl_abort()
 #include <mbl/mbl_gamma.h>
 #include <mbl/mbl_exception.h>
 
