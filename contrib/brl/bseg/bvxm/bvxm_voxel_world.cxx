@@ -206,8 +206,6 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
                                          bool return_mask,
                                          vil_image_view<bool> &mask)
 {
-
-
   typedef bvxm_voxel_traits<LIDAR>::voxel_datatype obs_datatype;
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
 
@@ -238,7 +236,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
   // convert image to a voxel_slab
   bvxm_voxel_slab<obs_datatype> image_slab(metadata.img->ni(), metadata.img->nj(), 1);
   if (!bvxm_util::img_to_slab(metadata.img,image_slab)) {
-    vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type: LIDAR" << vcl_endl;
+    vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type: LIDAR\n";
     return false;
   }
 
@@ -301,7 +299,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
 
     // initialize PLvisX with PL(X)
     vgl_point_3d<float> local_xyz = voxel_index_to_xyz(0,0,k_idx);
-    bvxm_voxel_slab<float> PL = lidar_processor.prob_density(local_xyz.z(),frame_backproj);   
+    bvxm_voxel_slab<float> PL = lidar_processor.prob_density(local_xyz.z(),frame_backproj);
 
     // now multiply by visX
     bvxm_util::multiply_slabs(visX,PL,*PLvisX_slab_it);
@@ -361,8 +359,8 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
 
 #ifdef DEBUG
   vcl_stringstream vis2, prex2;
-  vis2 << "visX2_"  <<".tiff";
-  prex2 << "preX2_" <<".tiff";
+  vis2  << "visX2_.tiff";
+  prex2 << "preX2_.tiff";
   bvxm_util::write_slab_as_image(visX_accum,vis2.str());
   bvxm_util::write_slab_as_image(preX_accum,prex2.str());
 #endif
@@ -665,9 +663,8 @@ vgl_point_3d<float> bvxm_voxel_world::voxel_index_to_xyz(unsigned vox_i, unsigne
 
 void bvxm_voxel_world::compute_plane_image_H(vpgl_camera_double_sptr const& cam, unsigned k_idx, vgl_h_matrix_2d<double> &H_plane_to_image, vgl_h_matrix_2d<double> &H_image_to_plane)
 {
-
     vgl_vector_3d<unsigned int> grid_size = params_->num_voxels();
-    
+
     vcl_vector<vgl_homg_point_2d<double> > voxel_corners_img;
     vcl_vector<vgl_homg_point_2d<double> > voxel_corners_vox;
 
@@ -698,10 +695,10 @@ void bvxm_voxel_world::compute_plane_image_H(vpgl_camera_double_sptr const& cam,
 
     vgl_h_matrix_2d_compute_linear comp_4pt;
     if (!comp_4pt.compute(voxel_corners_img,voxel_corners_vox, H_image_to_plane)) {
-      vcl_cerr << "ERROR computing homography from image to voxel slice. " << vcl_endl;
+      vcl_cerr << "ERROR computing homography from image to voxel slice.\n";
     }
     if (!comp_4pt.compute(voxel_corners_vox,voxel_corners_img, H_plane_to_image)) {
-      vcl_cerr << "ERROR computing homography from voxel slice to image. " << vcl_endl;
+      vcl_cerr << "ERROR computing homography from voxel slice to image.\n";
     }
     return;
 }
