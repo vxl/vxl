@@ -1,4 +1,3 @@
-
 #include "bvxm_util.h"
 
 #include <vcl_iostream.h>
@@ -14,8 +13,7 @@
 #include "bvxm_world_params.h"
 
 
-
-bool bvxm_util::read_cameras(const vcl_string filename, std::vector<vnl_double_3x3> &Ks, std::vector<vnl_double_3x3> &Rs, std::vector<vnl_double_3x1> &Ts)
+bool bvxm_util::read_cameras(const vcl_string filename, vcl_vector<vnl_double_3x3> &Ks, vcl_vector<vnl_double_3x3> &Rs, vcl_vector<vnl_double_3x1> &Ts)
 {
   vcl_ifstream file_inp(filename.c_str());
   if (!file_inp.good()) {
@@ -41,7 +39,7 @@ bool bvxm_util::read_cameras(const vcl_string filename, std::vector<vnl_double_3
 }
 
 
-bool bvxm_util::write_cameras(const vcl_string filename, std::vector<vnl_double_3x3> &Ks, std::vector<vnl_double_3x3> &Rs, std::vector<vnl_double_3x1> &Ts)
+bool bvxm_util::write_cameras(const vcl_string filename, vcl_vector<vnl_double_3x3> &Ks, vcl_vector<vnl_double_3x3> &Rs, vcl_vector<vnl_double_3x1> &Ts)
 {
   vcl_ofstream file_out(filename.c_str());
   if (!file_out.good()) {
@@ -53,10 +51,10 @@ bool bvxm_util::write_cameras(const vcl_string filename, std::vector<vnl_double_
   file_out << ncameras << vcl_endl << vcl_endl;
   for (unsigned i=0; i < ncameras; i++) {
 
-    file_out << Ks[i] << vcl_endl;
-    file_out << Rs[i] << vcl_endl;
-    file_out << Ts[i] << vcl_endl;
-    file_out << vcl_endl;
+    file_out << Ks[i] << vcl_endl
+             << Rs[i] << vcl_endl
+             << Ts[i] << vcl_endl
+             << vcl_endl;
   }
   file_out.close();
 
