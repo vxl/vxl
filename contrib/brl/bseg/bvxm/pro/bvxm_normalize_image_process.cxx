@@ -46,7 +46,6 @@ bvxm_normalize_image_process::bvxm_normalize_image_process()
   parameters()->add("verbose", "verbose", false);
 }
 
-
 bool bvxm_normalize_image_process::execute()
 {
   // Sanity check
@@ -201,7 +200,7 @@ bool bvxm_normalize_image_process::execute()
           //vil_image_view<float> nimg( ni, nj, nplanes );
           //normalize_image<float>(input_img_float, nimg, sa, sb, 255.0);
           vil_image_view<float>* nimg = new vil_image_view<float>( ni, nj, nplanes );
-          normalize_image<float>(*input_img_float_stretched, *nimg, sa, sb, 1.0f);
+          normalize_image(*input_img_float_stretched, *nimg, sa, sb, 1.0f);
           vil_image_view_base_sptr nimg_sptr = nimg;
 
           //vil_image_view<float>* nimg_stretched_ptr = new vil_image_view<float>( ni, nj, nplanes );
@@ -271,7 +270,7 @@ bool bvxm_normalize_image_process::execute()
           //vil_image_view<float> nimg( ni, nj, nplanes );
           //normalize_image<float>(input_img_float, nimg, sa, sb, 255.0);
           vil_image_view<float>* nimg = new vil_image_view<float>(ni, nj, nplanes);
-          normalize_image<float>(*input_img_float_stretched, *nimg, sa, sb, 1.0f);
+          normalize_image(*input_img_float_stretched, *nimg, sa, sb, 1.0f);
           vil_image_view_base_sptr nimg_sptr = nimg;
 
           //vil_image_view<float>* nimg_stretched_ptr = new vil_image_view<float>( ni, nj, nplanes );
@@ -319,7 +318,7 @@ bool bvxm_normalize_image_process::execute()
   //normalize_image<vxl_byte>(*input_image_sptr, output_img, a, b, 255);
 
   vil_image_view<float> output_img_float(ni, nj, nplanes);
-  normalize_image<float>(*input_img_float_stretched, output_img_float, a, b, 1.0f);
+  normalize_image(*input_img_float_stretched, output_img_float, a, b, 1.0f);
 
   vil_image_view<float> output_img_stretched(ni, nj, nplanes);
   vil_convert_stretch_range_limited<float>(output_img_float, output_img_stretched, 0.0f, 1.0f, 0.0f, 255.0f);

@@ -23,7 +23,7 @@
 
 class bvxm_normalize_image_process : public bprb_process
 {
- public:
+public:
 
   bvxm_normalize_image_process();
 
@@ -40,30 +40,57 @@ class bvxm_normalize_image_process : public bprb_process
   bool init() { return true; }
   bool execute();
   bool finish(){return true;}
+
 };
 
-template<class T>
-inline bool normalize_image(const vil_image_view<T>& in_view, vil_image_view<T>& out_img, float a, float b, T max_value)
+
+//: Float specialized function to normalize and image given a,b where new_I = a*I +b;
+inline bool normalize_image(const vil_image_view<float>& in_view, vil_image_view<float>& out_img, float a, float b, float max_value)
 {
   unsigned ni = in_view.ni();
   unsigned nj = in_view.nj();
   unsigned np = in_view.nplanes();
 
- if (ni != out_img.ni() || nj != out_img.nj() || np != out_img.nplanes())
+  if (ni != out_img.ni() || nj != out_img.nj() || np != out_img.nplanes())
     return false;
 
   for (unsigned k=0;k<np;++k)
     for (unsigned j=0;j<nj;++j)
       for (unsigned i=0;i<ni;++i)
       {
-        T p = (T)(a*in_view(i,j,k) + b);
-  
+        float p = (float)(a*in_view(i,j,k) + b);
+
         // Proposed fix
-        T min_value = (T) 0;
+        float min_value = (float) 0;
         out_img(i, j, k) = vcl_min(vcl_max(min_value, p), max_value);
+
       }
 
-  return true;
+      return true;
+}
+
+//: Byte specialized function to normalize and image given a,b where new_I = a*I +b;
+inline bool normalize_image(const vil_image_view<vxl_byte>& in_view, vil_image_view<vxl_byte>& out_img, float a, float b, unsigned char max_value)
+{
+  unsigned ni = in_view.ni();
+  unsigned nj = in_view.nj();
+  unsigned np = in_view.nplanes();
+
+  if (ni != out_img.ni() || nj != out_img.nj() || np != out_img.nplanes())
+    return false;
+
+  for (unsigned k=0;k<np;++k)
+    for (unsigned j=0;j<nj;++j)
+      for (unsigned i=0;i<ni;++i)
+      {
+        int p = (int)floor(a*in_view(i,j,k) + b);
+        if( !(p >= 0) ) out_img(i, j, k)  = 0;
+        else if( p > 255 ) out_img(i, j, k)  = 255;
+        else out_img(i, j, k)  = p;
+
+      }
+      vcl_cerr<<"entered byte case.................."<< vcl_endl;
+      return true;
 }
 
 #endif // bvxm_normalize_image_process_h_
