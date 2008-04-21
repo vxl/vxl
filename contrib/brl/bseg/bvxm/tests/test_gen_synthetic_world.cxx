@@ -628,7 +628,7 @@ static void test_gen_synthetic_world()
   bvxm_voxel_grid<apm_datatype>* apm_grid_1 = static_cast<bvxm_voxel_grid<apm_datatype>* >
     (world->get_grid<APM_MOG_GREY>(bin_num_1).as_pointer());
 
-    bvxm_voxel_grid<apm_datatype>* apm_grid_2 = static_cast<bvxm_voxel_grid<apm_datatype>* >
+  bvxm_voxel_grid<apm_datatype>* apm_grid_2 = static_cast<bvxm_voxel_grid<apm_datatype>* >
     (world->get_grid<APM_MOG_GREY>(bin_num_2).as_pointer());
 
   bvxm_voxel_grid<float>* intensity_grid = new bvxm_voxel_grid<float>

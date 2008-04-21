@@ -58,7 +58,6 @@ bvxm_gen_synthetic_world_process::bvxm_gen_synthetic_world_process()
   parameters()->add("random texture on box1", "rand1", true);
   parameters()->add("random texture on box2", "rand2", true);
   parameters()->add("fixed appearance val", "appval", 0.3f);
-
 }
 
 // returns a face number if a point is on the surface of a box [0,1,2,3,4,5],
@@ -410,7 +409,7 @@ bvxm_gen_synthetic_world_process::gen_voxel_world_2box(vgl_vector_3d<unsigned> g
                                                        vgl_box_3d<double> voxel_world,
                                                        bvxm_voxel_grid<float>* ocp_grid,
                                                        bvxm_voxel_grid<float>* intensity_grid,
-                                                       unsigned minx, unsigned miny, unsigned minz, unsigned dimx, unsigned dimy, unsigned dimz, 
+                                                       unsigned minx, unsigned miny, unsigned minz, unsigned dimx, unsigned dimy, unsigned dimz,
                                                        unsigned nx, unsigned ny, unsigned nz,
                                                        bool gen_2box)
 {
@@ -658,7 +657,7 @@ bool bvxm_gen_synthetic_world_process::execute()
   bvxm_voxel_grid<apm_datatype>* apm_grid_1 = static_cast<bvxm_voxel_grid<apm_datatype>* >
     (world->get_grid<APM_MOG_GREY>(bin_num_1).as_pointer());
 
-    bvxm_voxel_grid<apm_datatype>* apm_grid_2 = static_cast<bvxm_voxel_grid<apm_datatype>* >
+  bvxm_voxel_grid<apm_datatype>* apm_grid_2 = static_cast<bvxm_voxel_grid<apm_datatype>* >
     (world->get_grid<APM_MOG_GREY>(bin_num_2).as_pointer());
 
   bvxm_voxel_grid<float>* intensity_grid = new bvxm_voxel_grid<float>
@@ -672,7 +671,7 @@ bool bvxm_gen_synthetic_world_process::execute()
   if (gen_image_outs) {
     // generate images from synthetic world
     gen_images(grid_size, world, intensity_grid, ocp_grid, apm_grid_1,
-             cameras, image_set_1, bin_num_1);
+               cameras, image_set_1, bin_num_1);
   }
 
   //world->save_occupancy_raw("./test_gen_synthetic_world/ocp.raw");
