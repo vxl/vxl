@@ -101,10 +101,10 @@ class bvxm_util
   static T sum_slab(bvxm_voxel_slab<T> const& slab);
 
   template<class T>
-  static bool generate_test_boxes(T box_min_x, T box_min_y, T box_min_z, 
-                    T box_dim_x, T box_dim_y, T box_dim_z,
-                    T world_dim_x, T world_dim_y, T world_dim_z,
-                    vcl_vector<vgl_box_3d<T> >& boxes, bool gen_2box);
+  static bool generate_test_boxes(T box_min_x, T box_min_y, T box_min_z,
+                                  T box_dim_x, T box_dim_y, T box_dim_z,
+                                  T world_dim_x, T world_dim_y, T world_dim_z,
+                                  vcl_vector<vgl_box_3d<T> >& boxes, bool gen_2box);
 
   template<class T>
   static vcl_vector<vgl_point_3d<T> > corners_of_box_3d(vgl_box_3d<T> box);
@@ -121,87 +121,91 @@ class bvxm_util
 
 template<class T>
 void bvxm_util::warp_slab_bilinear(bvxm_voxel_slab<T> const& slab_in,
-                               vgl_h_matrix_2d<double> invH, bvxm_voxel_slab<T> &slab_out)
+                                   vgl_h_matrix_2d<double> invH, bvxm_voxel_slab<T> &slab_out)
 {
-    vnl_matrix_fixed<double,3,3> Hd = invH.get_matrix();
-    // test if slab_in's projection is higher resolution than slab out.
-    // if so, we need to smooth slab_in
-    // choose a pixel near the center of slab_out
-    vnl_vector_fixed<double,3> test_pix0(slab_out.nx()/2.0, slab_out.ny()/2.0, 1);
-    vnl_vector_fixed<double,3> test_pix1(test_pix0[0]+1,test_pix0[1]+1,1);
-    vnl_vector_fixed<double,3> test_pix_out0 = Hd*test_pix0;
-    vnl_vector_fixed<double,3> test_pix_out1 = Hd*test_pix1;
-    // normalize homogeneous coordinates
-    double xsize = vcl_fabs((test_pix_out1[0] / test_pix_out1[2]) - (test_pix_out0[0] / test_pix_out0[2]));
-    double ysize = vcl_fabs((test_pix_out1[1] / test_pix_out1[2]) - (test_pix_out0[1] / test_pix_out0[2]));
+  vnl_matrix_fixed<double,3,3> Hd = invH.get_matrix();
+  // test if slab_in's projection is higher resolution than slab out.
+  // if so, we need to smooth slab_in
+  // choose a pixel near the center of slab_out
+  vnl_vector_fixed<double,3> test_pix0(slab_out.nx()/2.0, slab_out.ny()/2.0, 1);
+  vnl_vector_fixed<double,3> test_pix1(test_pix0[0]+1,test_pix0[1]+1,1);
+  vnl_vector_fixed<double,3> test_pix_out0 = Hd*test_pix0;
+  vnl_vector_fixed<double,3> test_pix_out1 = Hd*test_pix1;
 
-    // smoothing radius of filter
-    // TODO: is gaussian convolution with std = projected_size the right amount to get us to nyquist res?
-    float xstd = 0.0f, ystd = 0.0f;
+  // smoothing radius of filter
+  // TODO: is gaussian convolution with std = projected_size the right amount to get us to Nyquist res?
+  float xstd = 0.0f, ystd = 0.0f;
 
-    // if xsize is too big something is wrong - probably an invalid homography
-    float max_projection_size = 20.0;
+  float max_projection_size = 20.0f;
 
-    //if ( (xsize > 2.0) && (xsize < max_projection_size) )
-     // xstd = (float)xsize/2.0f;
-    //if ( (ysize > 2.0) && (ysize < max_projection_size) )
-    //  ystd = (float)ysize/2.0f;
+#if 0 // normalize homogeneous coordinates
+  // if xsize is too big something is wrong - probably an invalid homography
+  double xsize = vcl_fabs((test_pix_out1[0] / test_pix_out1[2]) - (test_pix_out0[0] / test_pix_out0[2]));
+  double ysize = vcl_fabs((test_pix_out1[1] / test_pix_out1[2]) - (test_pix_out0[1] / test_pix_out0[2]));
+  if ( (xsize > 2.0) && (xsize < max_projection_size) )
+    xstd = (float)xsize/2.0f;
+  if ( (ysize > 2.0) && (ysize < max_projection_size) )
+    ystd = (float)ysize/2.0f;
+  vcl_cout << "xsize = " << xsize << " ysize = " << ysize << vcl_endl;
+#endif // 0
 
-    //vcl_cout << "xsize = " << xsize << " ysize = " << ysize << vcl_endl;
-    bvxm_voxel_slab<T> slab_in_smooth;
-    slab_in_smooth.deep_copy(slab_in);
-    smooth_gaussian(slab_in_smooth, xstd, ystd);
+  bvxm_voxel_slab<T> slab_in_smooth;
+  slab_in_smooth.deep_copy(slab_in);
+  smooth_gaussian(slab_in_smooth, xstd, ystd);
 
-    // perform bilinear interpolation.
-    vnl_matrix_fixed<float,3,3> H;
-    // convert H to a float matrix
-    vnl_matrix_fixed<float,3,3>::iterator Hit = H.begin();
-    vnl_matrix_fixed<double,3,3>::iterator Hdit = Hd.begin();
-    for (; Hit != H.end(); ++Hit, ++Hdit)
-        *Hit = (float)(*Hdit);
+  // perform bilinear interpolation.
+  vnl_matrix_fixed<float,3,3> H;
+  // convert H to a float matrix
+  vnl_matrix_fixed<float,3,3>::iterator Hit = H.begin();
+  vnl_matrix_fixed<double,3,3>::iterator Hdit = Hd.begin();
+  for (; Hit != H.end(); ++Hit, ++Hdit)
+    *Hit = (float)(*Hdit);
 
-    slab_out.fill(T(0.0)); // this should work whether T is a vector_fixed or a scalar
+  slab_out.fill(T(0.0)); // this should work whether T is a vector_fixed or a scalar
 
-    typename bvxm_voxel_slab<T>::iterator out_it = slab_out.begin();
+  typename bvxm_voxel_slab<T>::iterator out_it = slab_out.begin();
 
-    // if z > 1, it would be more efficient to put the z loop as the inner-most.
-    // z will probably be 1 most of the time though, so leave it here for now.
-    for (unsigned z=0; z<slab_out.nz(); ++z) {
-        for (unsigned y=0; y<slab_out.ny(); ++y) {
-            for (unsigned x=0; x<slab_out.nx(); ++x, ++out_it) {
-                vnl_vector_fixed<float,3> pix_in_homg = H*vnl_vector_fixed<float,3>((float)x,(float)y,1.0f);
-                // normalize homogeneous coordinate
+  // if z > 1, it would be more efficient to put the z loop as the inner-most.
+  // z will probably be 1 most of the time though, so leave it here for now.
+  for (unsigned z=0; z<slab_out.nz(); ++z)
+  {
+    for (unsigned y=0; y<slab_out.ny(); ++y)
+    {
+      for (unsigned x=0; x<slab_out.nx(); ++x, ++out_it)
+      {
+        vnl_vector_fixed<float,3> pix_in_homg = H*vnl_vector_fixed<float,3>((float)x,(float)y,1.0f);
+        // normalize homogeneous coordinate
 
-                float pix_in_x = pix_in_homg[0] / pix_in_homg[2];
-                float pix_in_y = pix_in_homg[1] / pix_in_homg[2];
-                // calculate weights and pixel values
-                unsigned x0 = (unsigned)vcl_floor(pix_in_x);
-                unsigned x1 = (unsigned)vcl_ceil(pix_in_x);
-                float x0_weight = (float)(x1 - pix_in_x);
-                float x1_weight = (float)(1.0f - x0_weight);
-                unsigned y0 = (unsigned)vcl_floor(pix_in_y);
-                unsigned y1 = (unsigned)vcl_ceil(pix_in_y);
-                float y0_weight = (float)(y1 - pix_in_y);
-                float y1_weight = (float)(1.0f - y0_weight);
-                vnl_vector_fixed<unsigned,4>xvals(x0,x0,x1,x1);
-                vnl_vector_fixed<unsigned,4>yvals(y0,y1,y0,y1);
-                vnl_vector_fixed<float,4> weights(x0_weight*y0_weight,
-                    x0_weight*y1_weight,
-                    x1_weight*y0_weight,
-                    x1_weight*y1_weight);
+        float pix_in_x = pix_in_homg[0] / pix_in_homg[2];
+        float pix_in_y = pix_in_homg[1] / pix_in_homg[2];
+        // calculate weights and pixel values
+        unsigned x0 = (unsigned)vcl_floor(pix_in_x);
+        unsigned x1 = (unsigned)vcl_ceil(pix_in_x);
+        float x0_weight = (float)(x1 - pix_in_x);
+        float x1_weight = (float)(1.0f - x0_weight);
+        unsigned y0 = (unsigned)vcl_floor(pix_in_y);
+        unsigned y1 = (unsigned)vcl_ceil(pix_in_y);
+        float y0_weight = (float)(y1 - pix_in_y);
+        float y1_weight = (float)(1.0f - y0_weight);
+        vnl_vector_fixed<unsigned,4>xvals(x0,x0,x1,x1);
+        vnl_vector_fixed<unsigned,4>yvals(y0,y1,y0,y1);
+        vnl_vector_fixed<float,4> weights(x0_weight*y0_weight,
+                                          x0_weight*y1_weight,
+                                          x1_weight*y0_weight,
+                                          x1_weight*y1_weight);
 
-                for (unsigned i=0; i<4; ++i) {
-                    // check if input pixel is inbounds
-                    if ( (xvals[i] >= 0) && (xvals[i] < slab_in_smooth.nx()) &&
-                        (yvals[i] >= 0) && (yvals[i] < slab_in_smooth.ny()) ) {
-                            // pixel is good
-                            (*out_it) += slab_in_smooth(xvals[i],yvals[i],z)*weights[i];
-                    }
-                }
-            } //x
-        } // y
-    } // z
-    return;
+        for (unsigned i=0; i<4; ++i) {
+          // check if input pixel is inbounds
+          if ( (xvals[i] >= 0) && (xvals[i] < slab_in_smooth.nx()) &&
+            (yvals[i] >= 0) && (yvals[i] < slab_in_smooth.ny()) ) {
+              // pixel is good
+              (*out_it) += slab_in_smooth(xvals[i],yvals[i],z)*weights[i];
+          }
+        }
+      } //x
+    } // y
+  } // z
+  return;
 }
 
 
@@ -233,7 +237,8 @@ bool bvxm_util::img_to_slab(vil_image_view_base_sptr const image, bvxm_voxel_sla
             ++(img_its[p]);
           }
         }
-      } else {
+      }
+      else {
         vcl_cerr << "error: img_to_slab (multi-dimensional): nplanes = " << img_view->nplanes() <<", but N = " << N << vcl_endl;
         return false;
       }
@@ -262,7 +267,8 @@ bool bvxm_util::img_to_slab(vil_image_view_base_sptr const image, bvxm_voxel_sla
             ++(img_its[p]);
           }
         }
-      } else {
+      }
+      else {
         vcl_cerr << "error: img_to_slab (multi-dimensional): nplanes = " << img_view->nplanes() <<", but N = 1\n";
         return false;
       }
@@ -287,11 +293,13 @@ bool bvxm_util::img_to_slab(vil_image_view_base_sptr const image, bvxm_voxel_sla
             (*slab_it)[p] = (T)(*(img_its[p]));  // no divide by 255, we copy the image to the slab directly, assuming image is already scaled to [0,1] range
           }
         }
-      } else {
+      }
+      else {
         vcl_cerr << "error: img_to_slab (multi-dimensional): nplanes = " << img_view->nplanes() <<", but N = " << N << vcl_endl;
         return false;
       }
-    } else {
+    }
+    else {
       vcl_cerr << "error: failed to cast image_view_base to image_view\n";
       return false;
     }
@@ -314,7 +322,8 @@ bool bvxm_util::img_to_slab(vil_image_view_base_sptr const image, bvxm_voxel_sla
             (*slab_it)[p] = (T)(*(img_its[p]));  // no divide by 255, we copy the image to the slab directly, assuming image is already scaled to [0,1] range
           }
         }
-      } else {
+      }
+      else {
         vcl_cerr << "error: img_to_slab (multi-dimensional): nplanes = " << img_view->nplanes() <<", but N = 1\n";
         return false;
       }
@@ -361,7 +370,8 @@ bool bvxm_util::img_to_slab(vil_image_view_base_sptr const image, bvxm_voxel_sla
           *slab_it = (T)(*img_it / 255.0);
         }
       }
-    } else {
+    }
+    else {
       vcl_cerr << "error: failed to cast image_view_base to image_view\n";
     }
   }
@@ -382,20 +392,24 @@ bool bvxm_util::img_to_slab(vil_image_view_base_sptr const image, bvxm_voxel_sla
       for (; img_it != img_view_grey.end(); ++img_it, ++slab_it) {
         *slab_it = (T)(*img_it / 255.0);
       }
-    } else {
+    }
+    else {
       vcl_cerr << "error: failed to cast image_view_base to image_view\n";
     }
-  } else if (image->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
+  }
+  else if (image->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
     if (vil_image_view<float> *img_view = dynamic_cast<vil_image_view<float>* >(image.ptr())) {
       vil_image_view<float>::const_iterator img_it = img_view->begin();
       typename bvxm_voxel_slab<T>::iterator slab_it = slab.begin();
       for (; img_it != img_view->end(); ++img_it, ++slab_it) {
         *slab_it = (T)(*img_it); // no divide by 255, we copy the image to the slab directly, assuming image is already scaled to [0,1] range
       }
-    } else {
+    }
+    else {
       vcl_cerr << "error: failed to cast image_view_base to image_view\n";
     }
-  } else if (image->pixel_format() == VIL_PIXEL_FORMAT_RGB_FLOAT) {
+  }
+  else if (image->pixel_format() == VIL_PIXEL_FORMAT_RGB_FLOAT) {
     if (vil_image_view<vil_rgb<float> > *img_view_rgb = dynamic_cast<vil_image_view<vil_rgb<float> >* >(image.ptr())) {
       vil_image_view<float> img_view_grey(img_view_rgb->ni(),img_view_rgb->nj(),1);
       if (img_view_rgb->nplanes() == 1) {
@@ -624,10 +638,10 @@ void bvxm_util::add_slabs(bvxm_voxel_slab<T> const& s1, bvxm_voxel_slab<T> const
 {
   // check sizes
   if ( (sum.nx() != s1.nx()) || (sum.nx() != s2.nx()) ||
-    (sum.ny() != s1.ny()) || (sum.ny() != s2.ny()) ||
-    (sum.nz() != s1.nz()) || (sum.nz() != s2.nz()) ) {
-      vcl_cerr << "error: sizes of slabs to multiply do not match.\n";
-      return;
+       (sum.ny() != s1.ny()) || (sum.ny() != s2.ny()) ||
+       (sum.nz() != s1.nz()) || (sum.nz() != s2.nz()) ) {
+    vcl_cerr << "error: sizes of slabs to multiply do not match.\n";
+    return;
   }
 
   typename bvxm_voxel_slab<T>::const_iterator s1_it = s1.begin(), s2_it = s2.begin();
@@ -644,10 +658,10 @@ void bvxm_util::multiply_slabs(bvxm_voxel_slab<T> const& s1, bvxm_voxel_slab<T> 
 {
   // check sizes
   if ( (product.nx() != s1.nx()) || (product.nx() != s2.nx()) ||
-    (product.ny() != s1.ny()) || (product.ny() != s2.ny()) ||
-    (product.nz() != s1.nz()) || (product.nz() != s2.nz()) ) {
-      vcl_cerr << "error: sizes of slabs to multiply do not match.\n";
-      return;
+       (product.ny() != s1.ny()) || (product.ny() != s2.ny()) ||
+       (product.nz() != s1.nz()) || (product.nz() != s2.nz()) ) {
+    vcl_cerr << "error: sizes of slabs to multiply do not match.\n";
+    return;
   }
 
   typename bvxm_voxel_slab<T>::const_iterator s1_it = s1.begin(), s2_it = s2.begin();
@@ -711,10 +725,12 @@ void bvxm_util::smooth_gaussian(bvxm_voxel_slab<T> &slab, float stdx, float stdy
   kernel_1dy = kernel_1dy / kernel_1dy.sum();
 
   bvxm_voxel_slab<T> slab_work(slab.nx(),slab.ny(),slab.nz());
-  if (stdx > 0) {
+  if (stdx > 0)
+  {
     // create temporary slab
     // convolve rows
-    for (unsigned y=0; y<slab.ny(); ++y) {
+    for (unsigned y=0; y<slab.ny(); ++y)
+    {
       for (unsigned x=0; x<=slab.nx() - kernel_size_x; ++x) {
         T sum = slab(x,y) * kernel_1dx[0];
         for (unsigned k=1; k<kernel_size_x; ++k) {
@@ -739,12 +755,14 @@ void bvxm_util::smooth_gaussian(bvxm_voxel_slab<T> &slab, float stdx, float stdy
         slab_work(x,y) = sum;
       }
     }
-  } else {
+  }
+  else {
     // stdx was zero, just use original slab.
     slab_work.deep_copy(slab);
   }
 
-  if (stdy > 0.0) {
+  if (stdy > 0.0)
+  {
     // convolve columns
     for (unsigned x=0; x<slab.nx(); ++x) {
       for (unsigned y=0; y<=slab.ny() - kernel_size_y; ++y) {
@@ -771,7 +789,8 @@ void bvxm_util::smooth_gaussian(bvxm_voxel_slab<T> &slab, float stdx, float stdy
         slab(x,y) = sum;
       }
     }
-  }else {
+  }
+  else {
     slab.deep_copy(slab_work);
   }
   return;
@@ -815,17 +834,17 @@ void bvxm_util::write_slab_as_image(bvxm_voxel_slab<vnl_vector_fixed<T,N> > cons
 }
 
 template<class T>
-bool bvxm_util::generate_test_boxes(T box_min_x, T box_min_y, T box_min_z, 
-                    T box_dim_x, T box_dim_y, T box_dim_z,
-                    T world_dim_x, T world_dim_y, T world_dim_z,
-                    vcl_vector<vgl_box_3d<T> >& boxes, bool gen_2box = true)
+bool bvxm_util::generate_test_boxes(T box_min_x, T box_min_y, T box_min_z,
+                                    T box_dim_x, T box_dim_y, T box_dim_z,
+                                    T world_dim_x, T world_dim_y, T world_dim_z,
+                                    vcl_vector<vgl_box_3d<T> >& boxes, bool gen_2box = true)
 {
   // create the big box at the bottom
   T max_x = box_min_x + box_dim_x;
   T max_y = box_min_y + box_dim_y;
   T max_z = box_min_z + box_dim_z;
   if ((max_x > world_dim_x) || (max_y > world_dim_y) || (max_z > world_dim_z)) {
-    vcl_cerr << "generate_boxes() -- the box is out of world boundaries!" << vcl_endl;
+    vcl_cerr << "generate_boxes() -- the box is out of world boundaries!\n";
     return false;
   }
 
@@ -835,7 +854,7 @@ bool bvxm_util::generate_test_boxes(T box_min_x, T box_min_y, T box_min_z,
   if (gen_2box) {
     // create the top boxe
     vgl_point_3d<T> centroid = box.centroid();
-    // make the top box 2/3 of the size of the previous one 
+    // make the top box 2/3 of the size of the previous one
     T dimx = (box.max_x() - box.min_x())/2;
     T dimy = (box.max_y() - box.min_y())/2;
     T dimz = (box.max_z() - box.min_z())/2;
@@ -849,14 +868,15 @@ bool bvxm_util::generate_test_boxes(T box_min_x, T box_min_y, T box_min_z,
     max_y = top_box.max_y();
     max_z = top_box.max_z();
     // stop if the new box is getting out of the boundaries
-    if ((max_x > world_dim_x) || (max_y > world_dim_y) || (max_z > world_dim_z)) 
+    if ((max_x > world_dim_x) || (max_y > world_dim_y) || (max_z > world_dim_z))
       return false;
     boxes.push_back(top_box);
-  } else {
+  }
+  else {
     vgl_box_3d<T> top_box = vgl_box_3d<T>();
     boxes.push_back(top_box);
   }
-  
+
   return true;
 }
 
@@ -877,4 +897,4 @@ bvxm_util::corners_of_box_3d(vgl_box_3d<T> box)
   return corners;
 }
 
-#endif
+#endif // bvxm_util_h_
