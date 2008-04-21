@@ -33,7 +33,8 @@ void create_a_synthetic_slab(bvxm_voxel_slab<float>& plane_img, unsigned nx, uns
 {
   for (unsigned i=0; i<nx; ++i)
   {
-    for (unsigned j=0; j<ny; ++j) {
+    for (unsigned j=0; j<ny; ++j)
+    {
       // mark the origin/x axis
       if ( (i < 20) && (j < 5) ) {
         plane_img(i,j) = 0.2f;
@@ -178,12 +179,12 @@ MAIN( test_bvxm_normalize_image_process )
   vil_image_view<float>* input_img_float_stretched_ptr2 = new vil_image_view<float>( ni, nj, 1 );
   vil_image_view_base_sptr input_img_float_stretched_sptr2 = input_img_float_stretched_ptr2;
   vil_convert_stretch_range_limited<vxl_byte>(input_img, *input_img_float_stretched_ptr2, 0, 255, 0.0f, 1.0f);
-  
+
   //: test normalize image method
   vil_image_view<float> img1(100, 200, 3), out_img(100, 200, 3), img2(100, 200, 3), im_dif(100, 200, 3);
   img1.fill(10);
   img2.fill(3*10 + 5);
-  normalize_image<float>(img1, out_img, 3, 5, 255);
+  normalize_image(img1, out_img, 3, 5, 255);
   vil_math_image_difference(img2, out_img, im_dif);
   float sum = 0;
   vil_math_sum(sum, im_dif, 0);
@@ -196,7 +197,7 @@ MAIN( test_bvxm_normalize_image_process )
   vil_image_view<float> img12(100, 200, 1), out_img2(100, 200, 1), img22(100, 200, 1), im_dif2(100, 200, 1);
   img12.fill(10);
   img22.fill(3*10 + 5);
-  normalize_image<float>(img12, out_img2, 3, 5, 255);
+  normalize_image(img12, out_img2, 3, 5, 255);
   vil_math_image_difference(img22, out_img2, im_dif2);
   vil_math_sum(sum, im_dif2, 0);
   TEST_NEAR("image dif 2 should sum to 0", sum, 0.0, 0.01);
@@ -256,7 +257,7 @@ MAIN( test_bvxm_normalize_image_process )
   //float bb = 0.0f;
 
   vil_image_view<unsigned char> expected_i_norm(*expected_image);
-  normalize_image<unsigned char>(expected_i, expected_i_norm, aa, bb, 255);
+  normalize_image(expected_i, expected_i_norm, aa, bb, 255);
   vil_save(expected_i_norm, "./expected_normed.png");
 
   //: now test the process
