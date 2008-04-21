@@ -1,7 +1,7 @@
 // This is brl/bbas/bmsh3d/bmsh3d_halfedge.h
 //---------------------------------------------------------------------
-#ifndef _bmsh3d_halfedge_h_
-#define _bmsh3d_halfedge_h_
+#ifndef bmsh3d_halfedge_h_
+#define bmsh3d_halfedge_h_
 //:
 // \file
 // \brief Basic 3d halfedge on a mesh
@@ -47,7 +47,7 @@ class bmsh3d_halfedge
  public:
   //###### Constructor/Destructor ######
   bmsh3d_halfedge (bmsh3d_halfedge* pair, bmsh3d_halfedge* next,
-                    bmsh3d_edge* edge, bmsh3d_face* face)
+                   bmsh3d_edge* edge, bmsh3d_face* face)
   {
     pair_ = pair;
     next_ = next;
@@ -120,7 +120,7 @@ class bmsh3d_halfedge
     //: be careful on the only-one-halfedge case!
     if (pair_ == NULL)
       return NULL;
-    bmsh3d_halfedge* HE = (bmsh3d_halfedge*) this;
+    bmsh3d_halfedge* HE = (bmsh3d_halfedge*) this; // casting away const!
     while (HE->pair() != this)
       HE = HE->pair();
     return HE;
@@ -132,5 +132,4 @@ void add_HE_to_circular_chain_end (bmsh3d_halfedge* headHE, bmsh3d_halfedge* inp
 //: Given two consecutive edges, find the common incident vertex.
 bmsh3d_vertex* incident_V_of_Es (const bmsh3d_halfedge* he0, const bmsh3d_halfedge* he1);
 
-#endif
-
+#endif // bmsh3d_halfedge_h_

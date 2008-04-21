@@ -40,7 +40,7 @@ class vispt_elm
 
   // ====== Data access functions ======
 
-  void set_vis_pointer (const void* pointer) { vis_pointer_ = (void*) pointer; }
+  void set_vis_pointer (const void* pointer) { vis_pointer_ = (void*) pointer; } // casting away const!
   const void* vis_pointer() const { return vis_pointer_; }
 
   //: Ming: don't make this function pure virtual. It eats up 4 bytes of mem for each derived object!
