@@ -18,6 +18,7 @@
 #endif
 
 #include <vcl_cmath.h>
+#include <vcl_algorithm.h>
 
 bvxm_change_detection_display_process::bvxm_change_detection_display_process()
 {
@@ -32,9 +33,13 @@ bvxm_change_detection_display_process::bvxm_change_detection_display_process()
   input_types_[2] = "vil_image_view_base_sptr";
 
   //output
-  output_data_.resize(1,brdb_value_sptr(0));
-  output_types_.resize(1);
+  output_data_.resize(2,brdb_value_sptr(0));
+  output_types_.resize(2);
+  //: red changes image
   output_types_[0]= "vil_image_view_base_sptr";
+  //: probability image in ragen 0-255
+  output_types_[1]= "vil_image_view_base_sptr";
+
 
   parameters()->add("Probability Threshold for detection", "prob_thresh", 0.5f);
   parameters()->add("Probability Image Scale", "prob_image_scale", 0.5f);
@@ -73,10 +78,11 @@ bool bvxm_change_detection_display_process::execute()
   vil_image_view<unsigned char> input_image(img0);
   vil_image_view<float> prob_image(img1);
   vil_image_view<bool> mask_image(img2);
-  vil_image_view<unsigned char> output_image( image_width, image_height, 3 );
+  vil_image_view<unsigned char> output_image0( image_width, image_height, 3 );
+  vil_image_view<unsigned char> output_image1( image_width, image_height, 1 );
 
   float prob_thresh = .50;
-  float prob_image_scale = .5;
+  float prob_image_scale = .7;
   parameters()->get_value("prob_thresh",prob_thresh);
   parameters()->get_value("prob_image_scale",prob_image_scale);
 
@@ -87,18 +93,34 @@ bool bvxm_change_detection_display_process::execute()
           (int)vcl_floor( prob_image_scale*i ), (int)vcl_floor( prob_image_scale*j ) );
 #endif
       float this_prob = 1.0;
-      if ( prob_image(i,j) < prob_thresh && mask_image(i,j)) 
+      float original_prob = 0.0;
+      
+      if ( prob_image(i,j) < prob_thresh && mask_image(i,j)){
+        original_prob = prob_image (i, j);
         this_prob = prob_image( i,j )/(prob_thresh);
+      }
 
-      output_image(i,j,0) = (int)vcl_floor( input_image(i,j)*this_prob + 255*(1-this_prob) );
-      output_image(i,j,1) = (int)vcl_floor( input_image(i,j)*this_prob );
-      output_image(i,j,2) = (int)vcl_floor( input_image(i,j)*this_prob );
-    }
+      output_image0(i,j,0) = (int)vcl_floor( input_image(i,j)*this_prob + 255*(1-this_prob) );
+      output_image0(i,j,1) = (int)vcl_floor( input_image(i,j)*this_prob );
+      output_image0(i,j,2) = (int)vcl_floor( input_image(i,j)*this_prob );
+      
+      if (mask_image(i,j)){
+        if (prob_image(i,j) > 0.8)
+          original_prob = 255.0;
+        else
+          original_prob = vcl_floor( 255* (1 - (prob_image (i, j))));
+      }
+      output_image1(i,j) = (int)(original_prob);
+   }
   }
 
   brdb_value_sptr output0 =
-    new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<unsigned char>(output_image));
+    new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<unsigned char>(output_image0));
   output_data_[0] = output0;
+
+    brdb_value_sptr output1 =
+    new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<unsigned char>(output_image1));
+  output_data_[1] = output1;
 
   return true;
 }
