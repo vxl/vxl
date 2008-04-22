@@ -13,7 +13,7 @@
 
 bvxm_render_expected_image_process::bvxm_render_expected_image_process()
 {
-  // process takes 3 inputs:
+  // process takes 6 inputs:
   //input[0]: The camera to render the expected image from
   //input[1]: number of pixels (x)
   //input[2]: number of pixels (y)
