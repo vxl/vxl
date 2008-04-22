@@ -310,8 +310,12 @@ bool bvxm_normalize_image_process::execute()
   }
 
   if (verbose) {
-    vcl_cout << "\noptimum a: " << a << "  b: " << b*255.0f << " best prob: " << best_prob << '\n';
+    vcl_ofstream file;
+    file.open("./normalization_parameters.txt", vcl_ofstream::app);
+    file << a << ' ' << b <<'\n';
   }
+
+ 
 
   // Normalize the image with the best a and b.
   //vil_image_view<vxl_byte> output_img(ni, nj, nplanes);
