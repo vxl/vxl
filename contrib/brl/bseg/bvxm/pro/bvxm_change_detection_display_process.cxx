@@ -105,10 +105,9 @@ bool bvxm_change_detection_display_process::execute()
       output_image0(i,j,2) = (int)vcl_floor( input_image(i,j)*this_prob );
       
       if (mask_image(i,j)){
-        if (prob_image(i,j) > 0.8)
+        original_prob = prob_image(i,j) * 128.0;
+        if ( original_prob > 255.0)
           original_prob = 255.0;
-        else
-          original_prob = vcl_floor( 255* (1 - (prob_image (i, j))));
       }
       output_image1(i,j) = (int)(original_prob);
    }
