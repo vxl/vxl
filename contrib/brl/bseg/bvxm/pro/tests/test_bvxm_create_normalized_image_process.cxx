@@ -51,7 +51,7 @@ MAIN( test_bvxm_create_normalized_image_process )
   vil_image_view<vxl_byte> img1(100, 200, 3), out_img(100, 200, 3), img2(100, 200, 3), im_dif(100, 200, 3);
   img1.fill(100);
   img2.fill((vxl_byte)(1.2*100 + 50));
-  normalize_image<vxl_byte>(img1, out_img, 1.2f, 50.0f, 255);
+  normalize_image(img1, out_img, 1.2f, 50.0f, 255);
   vil_math_image_difference(img2, out_img, im_dif);
   float sum = 0;
   vil_math_sum(sum, im_dif, 0);
