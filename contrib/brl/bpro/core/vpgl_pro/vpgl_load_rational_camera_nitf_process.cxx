@@ -19,7 +19,7 @@ vpgl_load_rational_camera_nitf_process::vpgl_load_rational_camera_nitf_process()
   //this process takes one input: the filename
   input_data_.resize(1,brdb_value_sptr(0));
   input_types_.resize(1);
-  input_types_[0]= "string";
+  input_types_[0]= "vcl_string";
 
   //output
   output_data_.resize(1,brdb_value_sptr(0));
