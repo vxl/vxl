@@ -4,6 +4,8 @@
 // \brief Representation of a graph, stored by links at each node.
 // \author Tim Cootes
 
+#include <vcl_cassert.h>
+
 //: Default constructor
 mmn_graph_rep1::mmn_graph_rep1()
   : max_n_arcs_(0), n_arcs_(0)
@@ -25,6 +27,9 @@ void mmn_graph_rep1::build(unsigned n_nodes,
 
   max_n_arcs_ = arcs.size();
   n_arcs_ = arcs.size();
+
+  // root node not chosen, so allow automatic selection
+  root_index_ = n_nodes+1;
 }
 
 //: Return index of arc between v1 and v2, or -1 if none
@@ -83,6 +88,8 @@ unsigned mmn_graph_rep1::remove_leaves(vcl_vector<mmn_dependancy>& deps)
   unsigned n_removed = 0;
   for (unsigned v1=0;v1<node_data_.size();++v1)
   {
+    if (v1==root_index_) continue;  // Don't remove the root
+
     if (node_data_[v1].size()==1)
     {
       // v1 is a leaf node, connected to node_data_[v1][0].first
@@ -134,6 +141,8 @@ unsigned mmn_graph_rep1::remove_pair_deps(vcl_vector<mmn_dependancy>& deps)
   unsigned n_removed = 0;
   for (unsigned v0=0;v0<node_data_.size();++v0)
   {
+    if (v0==root_index_) continue;  // Don't remove the root
+
     if (node_data_[v0].size()==2)
     {
       // v0 has two neighbours,
@@ -147,7 +156,11 @@ unsigned mmn_graph_rep1::remove_pair_deps(vcl_vector<mmn_dependancy>& deps)
       unsigned arc12 = get_arc(v1,v2);
 
       // Record dependency
-      deps.push_back(mmn_dependancy(v0,v1,v2,arc1,arc2,arc12));
+      // If one of v1,v2 is root_index, then re-arrange so that it is v1
+      if (v2==root_index_)
+        deps.push_back(mmn_dependancy(v0,v2,v1,arc2,arc1,arc12));
+      else
+        deps.push_back(mmn_dependancy(v0,v1,v2,arc1,arc2,arc12));
       n_removed++;
 
       // Remove the record of the arcs from v0
@@ -167,8 +180,32 @@ unsigned mmn_graph_rep1::remove_pair_deps(vcl_vector<mmn_dependancy>& deps)
 
 //: Compute list of all single and pairwise dependencies
 //  Return true if graph can be fully decomposed in this way
+bool mmn_graph_rep1::compute_dependancies(vcl_vector<mmn_dependancy>& deps, unsigned root_index)
+{
+  assert(root_index<node_data_.size());
+
+  root_index_=root_index;
+
+  deps.resize(0);
+  unsigned nr1=0;
+  do
+  {
+    nr1=remove_all_leaves(deps);
+    if (n_arcs_>1)
+      nr1+=remove_pair_deps(deps);
+  }
+  while (nr1>0 && n_arcs_>0);
+
+  return n_arcs_==0;
+}
+
+//: Compute list of all single and pairwise dependencies
+//  Return true if graph can be fully decomposed in this way
 bool mmn_graph_rep1::compute_dependancies(vcl_vector<mmn_dependancy>& deps)
 {
+  // Indicate that root index is undefined.
+  root_index_=node_data_.size()+1;
+
   deps.resize(0);
   unsigned nr1=0;
   do

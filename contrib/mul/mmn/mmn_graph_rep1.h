@@ -34,6 +34,9 @@ class mmn_graph_rep1
   //: Current number of arcs
   unsigned n_arcs_;
 
+  //: Index of node chosen to be root (if >n_nodes,then none chosen)
+  unsigned root_index_;
+
   //: Remove record of arc v1-v2 from v1
   void remove_arc_from_node(unsigned v1, unsigned v2);
  public:
@@ -94,7 +97,17 @@ class mmn_graph_rep1
   //  visiting every node only after any child/leaf nodes have been
   //  visited first.
   //  Destroys current structure in the process.
+  //
+  //  root_index indicates which node is to be the root for the
+  //  resulting tree (ie the one node remaining - defined in the
+  //  v1 of the last element in deps).
+  bool compute_dependancies(vcl_vector<mmn_dependancy>& deps,
+                            unsigned root_index);
+
+  //: Compute list of all single and pairwise dependencies
+  //  As compute_dependancies(deps,root), but root selected by algorithm
   bool compute_dependancies(vcl_vector<mmn_dependancy>& deps);
+
 };
 
 #endif // mmn_graph_rep1_h_
