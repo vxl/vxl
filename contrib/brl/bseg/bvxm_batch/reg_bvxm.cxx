@@ -29,6 +29,7 @@
 #include <bvxm/pro/bvxm_lidar_init_process.h>
 #include <bvxm/pro/bvxm_update_lidar_process.h>
 #include <bvxm/pro/bvxm_heightmap_process.h>
+#include <bvxm/pro/bvxm_create_normalized_image_process.h>
 
 // datatypes
 #include <vcl_string.h>
@@ -67,6 +68,7 @@ register_processes(PyObject *self, PyObject *args)
   REG_PROCESS(bvxm_lidar_init_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_update_lidar_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_heightmap_process, bprb_batch_process_manager);
+  REG_PROCESS(bvxm_create_normalized_image_process, bprb_batch_process_manager);
   Py_INCREF(Py_None);
   return Py_None;
 }
