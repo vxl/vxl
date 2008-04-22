@@ -207,10 +207,9 @@ class bvxm_voxel_world: public vbl_ref_count
   template<bvxm_voxel_type VOX_T>
   void increment_observations( unsigned int bin_idx = 0);
 
- protected:
-
    vgl_point_3d<float> voxel_index_to_xyz(unsigned vox_i, unsigned vox_j, unsigned vox_k);
 
+protected:
    
    void compute_plane_image_H(vpgl_camera_double_sptr const& cam,
                               unsigned grid_k,
@@ -223,7 +222,8 @@ class bvxm_voxel_world: public vbl_ref_count
   //: the world parameters
   bvxm_world_params_sptr params_;
 
- private:
+private:
+
   template <bvxm_voxel_type APM_T>
   bool update_impl(bvxm_image_metadata const& metadata,
                    bool return_prob, vil_image_view<float> &pix_prob_density,
@@ -557,9 +557,9 @@ bool bvxm_voxel_world::update_impl(bvxm_image_metadata const& metadata,
     // fill pixel_probabilities with preX_accum
     vil_image_view<float>::iterator pix_prob_it = pix_prob_density.begin();
     bvxm_voxel_slab<float>::const_iterator preX_accum_it = preX_accum.begin();
-
-    for (; pix_prob_it != pix_prob_density.end(); ++pix_prob_it, ++preX_accum_it) {
-      *pix_prob_it = *preX_accum_it;
+    bvxm_voxel_slab<float>::const_iterator visX_accum_it = visX_accum.begin();
+    for (; pix_prob_it != pix_prob_density.end(); ++pix_prob_it, ++preX_accum_it, ++visX_accum_it) {
+      *pix_prob_it = *preX_accum_it / (1.0f - *visX_accum_it);
     }
   }
 
@@ -937,8 +937,9 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
   // fill pixel_probabilities with preX_accum
   vil_image_view<float>::iterator pix_prob_it = pixel_probability.begin();
   bvxm_voxel_slab<float>::const_iterator preX_accum_it = preX_accum.begin();
-  for (; pix_prob_it != pixel_probability.end(); ++pix_prob_it, ++preX_accum_it) {
-    *pix_prob_it = *preX_accum_it;
+  bvxm_voxel_slab<float>::const_iterator visX_accum_it = visX_accum.begin();
+  for (; pix_prob_it != pixel_probability.end(); ++pix_prob_it, ++preX_accum_it, ++visX_accum_it) {
+    *pix_prob_it = *preX_accum_it / (1.0f - *visX_accum_it);
   }
 
   // fill mask values
@@ -1170,14 +1171,9 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
   // allocate some images
   bvxm_voxel_slab<obs_datatype> virtual_view_slab(virtual_view->ni(),virtual_view->nj(),1);
   bvxm_voxel_slab<float> visX_accum_virtual(virtual_view->ni(), virtual_view->nj(),1);
-  bvxm_voxel_slab<unsigned> heightmap_rough(virtual_view->ni(),virtual_view->nj(),1);
-  bvxm_voxel_slab<float> max_prob_image(virtual_view->ni(), virtual_view->nj(), 1);
-  bvxm_voxel_slab<float> heightmap_filtered(virtual_view->ni(),virtual_view->nj(),1);
+  bvxm_voxel_slab<unsigned> heightmap(virtual_view->ni(),virtual_view->nj(),1);
   bvxm_voxel_slab<ocp_datatype> slice_prob_img(virtual_view->ni(),virtual_view->nj(),1);
 
-  heightmap_rough.fill(grid_size.z());
-  visX_accum_virtual.fill(1.0f);
-  max_prob_image.fill(0.0f);
 
   // get ocuppancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0);
@@ -1185,65 +1181,14 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
 
   bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
 
-  vcl_cout << "Pass 1 - generating height map from virtual camera: " << vcl_endl;
-  for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++ocp_slab_it) {
-    vcl_cout << '.';
-
-    // compute PXvisX for virtual camera and update visX
-    bvxm_util::warp_slab_bilinear(*ocp_slab_it,H_virtual_img_to_plane[z],slice_prob_img);
-    bvxm_voxel_slab<ocp_datatype>::const_iterator PX_it = slice_prob_img.begin();
-    bvxm_voxel_slab<float>::iterator max_it = max_prob_image.begin(), visX_it = visX_accum_virtual.begin();
-    bvxm_voxel_slab<unsigned>::iterator hmap_it = heightmap_rough.begin();
-
-#ifdef DEBUG
-    bvxm_util::write_slab_as_image(slice_prob_img,"c:/research/registration/output/slice_prob_img.tiff");
-    bvxm_util::write_slab_as_image(visX_accum_virtual,"c:/research/registration/output/visX_accum_virtual.tiff");
-#endif
-    for (; hmap_it != heightmap_rough.end(); ++hmap_it, ++PX_it, ++max_it, ++visX_it) {
-      float PXvisX = (*visX_it) * (*PX_it);
-      if (PXvisX > *max_it) {
-        *max_it = PXvisX;
-        *hmap_it = z;
-      }
-      // update virtual visX
-      *visX_it *= (1.0f - *PX_it);
-    }
+  // generate heightmap from virtual cameras point of view
+  vil_image_view<unsigned> heightmap_img(virtual_view->ni(),virtual_view->nj(),1);
+  this->heightmap(virtual_camera,heightmap_img);
+  vil_image_view<unsigned>::iterator hmap_img_it = heightmap_img.begin();
+  bvxm_voxel_slab<unsigned>::iterator hmap_it = heightmap.begin();
+  for (; hmap_it != heightmap.end(); ++hmap_it, ++hmap_img_it) {
+    *hmap_it = *hmap_img_it;
   }
-  vcl_cout << vcl_endl;
-#ifdef DEBUG
-  bvxm_util::write_slab_as_image(heightmap_rough,"c:/research/registration/output/heightmap_rough.tiff");
-#endif
-  // now clean up height map
-  unsigned n_smooth_iterations = 10;
-  float conf_thresh = 0.05f;
-
-  vcl_cout << "smoothing height map: ";
-  bvxm_voxel_slab<bool> conf_mask(virtual_view->ni(),virtual_view->nj(),1);
-  // threshold confidence
-  bvxm_util::threshold_slab_above(max_prob_image, conf_thresh, conf_mask);
-
-  // initialize with rough heightmap
-  bvxm_voxel_slab<unsigned>::const_iterator hmap_rough_it = heightmap_rough.begin();
-  bvxm_voxel_slab<float>::iterator hmap_filt_it = heightmap_filtered.begin();
-  for (; hmap_filt_it != heightmap_filtered.end(); ++hmap_filt_it, ++hmap_rough_it) {
-    *hmap_filt_it = (float)(*hmap_rough_it);
-  }
-
-  for (unsigned i=0; i< n_smooth_iterations; ++i) {
-    vcl_cout << '.';
-    // smooth heightmap
-    bvxm_util::smooth_gaussian(heightmap_filtered, 1.0f, 1.0f);
-    // reset values we are confident in
-    bvxm_voxel_slab<bool>::const_iterator mask_it = conf_mask.begin();
-    hmap_rough_it = heightmap_rough.begin();
-    hmap_filt_it = heightmap_filtered.begin();
-    for (; hmap_filt_it != heightmap_filtered.end(); ++hmap_filt_it, ++hmap_rough_it, ++mask_it) {
-      if (*mask_it) {
-        *hmap_filt_it = (float)(*hmap_rough_it);
-      }
-    }
-  }
-  vcl_cout << vcl_endl;
 
   // create virtual image based on smoothed height map
   bvxm_voxel_slab<obs_datatype> frame_virtual_proj(virtual_view->ni(),virtual_view->nj(),1);
@@ -1251,9 +1196,7 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
   bvxm_voxel_slab<ocp_datatype> visX_accum(original_view.img->ni(),original_view.img->nj(),1);
   bvxm_voxel_slab<ocp_datatype> visX_accum_virtual_proj(virtual_view->ni(),virtual_view->nj(),1);
   visX_accum.fill(1.0f);
-#ifdef DEBUG
-  bvxm_util::write_slab_as_image(heightmap_filtered,"c:/research/registration/output/heightmap_filtered.tiff");
-#endif
+
   vcl_cout <<"Pass 2 - generating virtual image: ";
 
   ocp_slab_it = ocp_grid->begin();
@@ -1277,14 +1220,14 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
 
     typename bvxm_voxel_slab<obs_datatype>::const_iterator frame_it = frame_virtual_proj.begin();
     typename bvxm_voxel_slab<obs_datatype>::iterator vframe_it = virtual_view_slab.begin();
-    bvxm_voxel_slab<float>::const_iterator height_it = heightmap_filtered.begin();
+    bvxm_voxel_slab<unsigned>::const_iterator height_it = heightmap.begin();
     bvxm_voxel_slab<float>::const_iterator PX_vproj_it = slice_prob_vimg.begin();
     bvxm_voxel_slab<float>::iterator visX_accum_vproj_it = visX_accum_virtual_proj.begin();
     vil_image_view<float>::iterator vis_it = vis_prob.begin();
 
     for (; vframe_it != virtual_view_slab.end(); ++vframe_it, ++frame_it, ++height_it, ++vis_it, ++visX_accum_vproj_it, ++PX_vproj_it) {
       // fill in virtual image
-      if ((unsigned)(*height_it) == z) {
+      if (*height_it == z) {
         *vframe_it = *frame_it;
         *vis_it = (*visX_accum_vproj_it);// * (*PX_vproj_it);
       }
@@ -1315,12 +1258,13 @@ bool bvxm_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
     // project final visX_accum from image to virtual image
     bvxm_util::warp_slab_bilinear(visX_accum, H_virtual_img_to_img[z], visX_accum_virtual_proj);
 
-    bvxm_voxel_slab<float>::const_iterator height_it = heightmap_filtered.begin();
+    bvxm_voxel_slab<unsigned>::const_iterator height_it = heightmap.begin();
     vil_image_view<float>::iterator vis_it = vis_prob.begin();
     bvxm_voxel_slab<ocp_datatype>::iterator visX_virtual_proj_it = visX_accum_virtual_proj.begin();
 
     for (; vis_it != vis_prob.end(); ++vis_it, ++visX_virtual_proj_it, ++height_it)
-      if ((unsigned)(*height_it) == z) {
+      if (*height_it == z) {
+        // visX_accum == 1 means that the ray did not intersect any voxels.
         if (*visX_virtual_proj_it > visX_thresh) {
           *vis_it = 0.0f;
         }

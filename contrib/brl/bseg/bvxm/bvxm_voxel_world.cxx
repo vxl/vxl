@@ -592,6 +592,7 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
 
     for (; hmap_it != heightmap_rough.end(); ++hmap_it, ++PX_it, ++max_it, ++visX_it) {
       float PXvisX = (*visX_it) * (*PX_it);
+      //float PXvisX = *PX_it;
       if (PXvisX > *max_it) {
         *max_it = PXvisX;
         *hmap_it = z;
@@ -601,18 +602,24 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
     }
   }
   vcl_cout << vcl_endl;
-#ifdef DEBUG
-  bvxm_util::write_slab_as_image(heightmap_rough,"c://test_images//LIDAR//heightmap//heightmap_rough.tiff");
+
+#define HMAP_DEBUG
+#ifdef  HMAP_DEBUG
+  bvxm_util::write_slab_as_image(heightmap_rough,"c:/research/registration/output/heightmap_rough.tiff");
 #endif
   // now clean up height map
-  unsigned n_smooth_iterations = 10;
-  float conf_thresh = 0.05f;
+  unsigned n_smooth_iterations = 50;
+  float conf_thresh = 0.35f;
 
   vcl_cout << "smoothing height map: ";
   bvxm_voxel_slab<float> heightmap_filtered(heightmap.ni(),heightmap.nj(),1);
   bvxm_voxel_slab<bool> conf_mask(heightmap.ni(),heightmap.nj(),1);
   // threshold confidence
   bvxm_util::threshold_slab_above(max_prob_image, conf_thresh, conf_mask);
+
+#ifdef HMAP_DEBUG
+  bvxm_util::write_slab_as_image(max_prob_image,"c:/research/registration/output/heightmap_conf.tiff");
+#endif
 
   // initialize with rough heightmap
   bvxm_voxel_slab<unsigned>::const_iterator hmap_rough_it = heightmap_rough.begin();
@@ -636,6 +643,10 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
     }
   }
   vcl_cout << vcl_endl;
+
+#ifdef HMAP_DEBUG
+  bvxm_util::write_slab_as_image(heightmap_filtered,"c:/research/registration/output/heightmap_filtered.tiff");
+#endif
 
   // convert back to unsigned
   vil_image_view<unsigned>::iterator hmap_it = heightmap.begin();
@@ -693,7 +704,7 @@ void bvxm_voxel_world::compute_plane_image_H(vpgl_camera_double_sptr const& cam,
     voxel_corners_img.push_back(vgl_homg_point_2d<double>(u,v));
 
 
-    vgl_h_matrix_2d_compute_linear comp_4pt;
+    vgl_h_matrix_2d_compute_linear comp_4pt;  
     if (!comp_4pt.compute(voxel_corners_img,voxel_corners_vox, H_image_to_plane)) {
       vcl_cerr << "ERROR computing homography from image to voxel slice.\n";
     }
