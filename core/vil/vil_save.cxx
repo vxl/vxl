@@ -74,8 +74,8 @@ bool vil_save(const vil_image_view_base &im, char const* filename, char const* f
   }
 }
 
-static
-char const *guess_file_format(char const* filename)
+
+char const *vil_save_guess_file_format(char const* filename)
 {
   char const *file_format = "pnm"; // default file format
 
@@ -116,7 +116,7 @@ char const *guess_file_format(char const* filename)
 //: save to file, deducing format from filename.
 bool vil_save(const vil_image_view_base & i, char const* filename)
 {
-  return vil_save(i, filename, guess_file_format(filename));
+  return vil_save(i, filename, vil_save_guess_file_format(filename));
 }
 
 //: Send vil_image to disk.
@@ -141,5 +141,5 @@ bool vil_save_image_resource(const vil_image_resource_sptr &ir, char const* file
 //: save to file, deducing format from filename.
 bool vil_save_image_resource(const vil_image_resource_sptr &ir, char const* filename)
 {
-  return vil_save_image_resource(ir, filename, guess_file_format(filename));
+  return vil_save_image_resource(ir, filename, vil_save_guess_file_format(filename));
 }

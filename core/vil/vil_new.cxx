@@ -11,6 +11,7 @@
 
 #include <vcl_cstring.h>
 #include <vcl_cassert.h>
+#include <vil/vil_save.h>
 #include <vil/vil_file_format.h>
 #include <vil/vil_stream_fstream.h>
 #include <vil/vil_image_resource.h>
@@ -131,7 +132,8 @@ vil_image_resource_sptr vil_new_image_resource(char const* filename,
   vil_stream_fstream* os = new vil_stream_fstream(filename, "w");
 #endif //VIL_USE_FSTREAM64
 
-
+  if (!file_format || !*file_format)
+    file_format = vil_save_guess_file_format(filename);
   return vil_new_image_resource(os, ni, nj, nplanes, format, file_format);
 }
 

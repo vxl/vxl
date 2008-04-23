@@ -27,4 +27,8 @@ bool vil_save_image_resource(const vil_image_resource_sptr &ir, char const* file
 // \relates vil_image_resource
 bool vil_save_image_resource(const vil_image_resource_sptr &ir, char const* filename);
 
+//: Given a filename, guess the file format tag
+// The returned pointer may point into the filename string - so keep it valid.
+char const *vil_save_guess_file_format(char const* filename);
+
 #endif // vil_save_h_
