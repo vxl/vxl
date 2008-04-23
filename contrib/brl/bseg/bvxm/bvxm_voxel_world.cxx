@@ -664,7 +664,7 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
     // smooth heightmap
     vil_gauss_filter_2d(heightmap_filtered_img, heightmap_filtered_img, 1.0, 2, vil_convolve_constant_extend);
     // reset values we are confident in
-    typename vil_image_view<bool>::const_iterator mask_it = conf_mask.begin(), inlier_it = inliers.begin();
+    vil_image_view<bool>::const_iterator mask_it = conf_mask.begin(), inlier_it = inliers.begin();
     vil_image_view<float>::const_iterator hmap_med_it = heightmap_med_img.begin();
     hmap_filt_it = heightmap_filtered_img.begin();
     for (; hmap_filt_it != heightmap_filtered_img.end(); ++hmap_filt_it, ++hmap_med_it, ++mask_it, ++inlier_it) {
