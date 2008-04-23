@@ -11,3 +11,7 @@ TARGET_LINK_LIBRARIES(print_mbl_log_properties mbl)
 
 ADD_EXECUTABLE( crop_image_3d crop_image_3d.cxx )
 TARGET_LINK_LIBRARIES(crop_image_3d mbl vimt3d)
+
+ADD_EXECUTABLE( print_image print_image.cxx )
+TARGET_LINK_LIBRARIES(print_image vimt mbl)
+
