@@ -15,7 +15,7 @@
 void mfpf_draw_pose_cross(vimt_image_2d_of<vxl_byte>& image,
                              const mfpf_pose& pose,
                              double ru, double rv,
-                             vxl_byte value);
+                             vxl_byte value,unsigned width=1);
 
 //: Draw oriented cross onto 3-plane image, centred on pose.p()
 //  Orientation defined by pose.u(), size by (ru,rv)

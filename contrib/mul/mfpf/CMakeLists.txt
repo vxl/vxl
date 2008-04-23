@@ -32,6 +32,7 @@ SET(mfpf_sources
   mfpf_region_form.h
   mfpf_pose.h
   mfpf_pose_set.h
+  mfpf_feature_vec.h
   mfpf_searcher.h                mfpf_searcher.cxx
   mfpf_prune_overlaps.h          mfpf_prune_overlaps.cxx
 
