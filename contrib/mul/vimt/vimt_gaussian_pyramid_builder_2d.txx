@@ -14,6 +14,7 @@
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h> // for sqrt2
 #include <vil/algo/vil_gauss_reduce.h>
+#include <mbl/mbl_exception.h>
 #include <vimt/vimt_image_pyramid.h>
 #include <vimt/vimt_crop.h>
 
@@ -143,7 +144,9 @@ void vimt_gaussian_pyramid_builder_2d<T>::build(vimt_image_pyramid& image_pyr,
                                                 const vimt_image& im) const
 {
   //  Require image vimt_image_2d_of<T>
-  assert(im.is_class(work_im_.is_a()));
+  if (!im.is_class(work_im_.is_a()))
+    throw mbl_exception_abort("vimt_gaussian_pyramid_builder_2d<T>::build(): Expected a " 
+      + work_im_.is_a() + ", but got a " + im.is_a() );
 
   const vimt_image_2d_of<T>& base_image = static_cast<const vimt_image_2d_of<T>&>(im);
 
