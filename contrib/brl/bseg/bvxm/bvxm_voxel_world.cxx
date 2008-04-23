@@ -18,6 +18,12 @@
 
 #include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
 
+#include <vil/algo/vil_median.h>
+#include <vil/algo/vil_structuring_element.h>
+#include <vil/vil_math.h>
+#include <vil/algo/vil_threshold.h>
+#include <vil/algo/vil_gauss_filter.h>
+
 #include "bvxm_voxel_grid.h"
 #include "bvxm_voxel_traits.h"
 #include "bvxm_lidar_processor.h"
@@ -566,11 +572,11 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
 
   // allocate some images
   bvxm_voxel_slab<float> visX_accum_virtual(heightmap.ni(), heightmap.nj(),1);
-  bvxm_voxel_slab<unsigned> heightmap_rough(heightmap.ni(),heightmap.nj(),1);
+  bvxm_voxel_slab<float> heightmap_rough(heightmap.ni(),heightmap.nj(),1);
   bvxm_voxel_slab<float> max_prob_image(heightmap.ni(), heightmap.nj(), 1);
   bvxm_voxel_slab<ocp_datatype> slice_prob_img(heightmap.ni(),heightmap.nj(),1);
 
-  heightmap_rough.fill(grid_size.z());
+  heightmap_rough.fill((float)grid_size.z());
   visX_accum_virtual.fill(1.0f);
   max_prob_image.fill(0.0f);
 
@@ -588,14 +594,14 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
     bvxm_util::warp_slab_bilinear(*ocp_slab_it,H_virtual_img_to_plane[z],slice_prob_img);
     bvxm_voxel_slab<ocp_datatype>::const_iterator PX_it = slice_prob_img.begin();
     bvxm_voxel_slab<float>::iterator max_it = max_prob_image.begin(), visX_it = visX_accum_virtual.begin();
-    bvxm_voxel_slab<unsigned>::iterator hmap_it = heightmap_rough.begin();
+    bvxm_voxel_slab<float>::iterator hmap_it = heightmap_rough.begin();
 
     for (; hmap_it != heightmap_rough.end(); ++hmap_it, ++PX_it, ++max_it, ++visX_it) {
       float PXvisX = (*visX_it) * (*PX_it);
       //float PXvisX = *PX_it;
       if (PXvisX > *max_it) {
         *max_it = PXvisX;
-        *hmap_it = z;
+        *hmap_it = (float)z;
       }
       // update virtual visX
       *visX_it *= (1.0f - *PX_it);
@@ -603,54 +609,83 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
   }
   vcl_cout << vcl_endl;
 
-#define HMAP_DEBUG
+//#define HMAP_DEBUG
 #ifdef  HMAP_DEBUG
   bvxm_util::write_slab_as_image(heightmap_rough,"c:/research/registration/output/heightmap_rough.tiff");
 #endif
   // now clean up height map
-  unsigned n_smooth_iterations = 50;
-  float conf_thresh = 0.35f;
+  unsigned n_smooth_iterations = 70;
+  float conf_thresh = 0.1f;
+  int medfilt_halfsize = 4;
+  float med_diff_thresh = 8.0;
+
+  // convert confidence and heightmap to vil images
+  vil_image_view<float>* conf_img = new vil_image_view<float>(heightmap.ni(),heightmap.nj());
+  vil_image_view_base_sptr conf_img_sptr = conf_img;
+  bvxm_util::slab_to_img(max_prob_image,conf_img_sptr);
+  vil_image_view<float>* heightmap_rough_img = new vil_image_view<float>(heightmap.ni(),heightmap.nj());
+  vil_image_view_base_sptr heightmap_rough_img_sptr = heightmap_rough_img;
+  bvxm_util::slab_to_img(heightmap_rough,heightmap_rough_img_sptr);
+
+  // first, median filter heightmap 
+  vil_image_view<float> heightmap_med_img(heightmap.ni(),heightmap.nj());
+  vcl_vector<int> strel_vec;
+  for (int i=-medfilt_halfsize; i <= medfilt_halfsize; ++i)
+    strel_vec.push_back(i);
+  vil_structuring_element strel(strel_vec,strel_vec);
+  vil_median(*heightmap_rough_img,heightmap_med_img,strel);
+
+  // detect inliers as points which dont vary drastically from the median image
+  vil_image_view<float> med_abs_diff(heightmap.ni(),heightmap.nj());
+  vil_math_image_abs_difference(heightmap_med_img,*heightmap_rough_img,med_abs_diff);
+  vil_image_view<bool> inliers(heightmap.ni(),heightmap.nj());
+  vil_threshold_below(med_abs_diff,inliers,med_diff_thresh);
 
   vcl_cout << "smoothing height map: ";
-  bvxm_voxel_slab<float> heightmap_filtered(heightmap.ni(),heightmap.nj(),1);
-  bvxm_voxel_slab<bool> conf_mask(heightmap.ni(),heightmap.nj(),1);
+  vil_image_view<float> heightmap_filtered_img(heightmap.ni(),heightmap.nj(),1);
+  vil_image_view<bool> conf_mask(heightmap.ni(),heightmap.nj());
   // threshold confidence
-  bvxm_util::threshold_slab_above(max_prob_image, conf_thresh, conf_mask);
+  vil_threshold_above(*conf_img,conf_mask,conf_thresh);
 
 #ifdef HMAP_DEBUG
-  bvxm_util::write_slab_as_image(max_prob_image,"c:/research/registration/output/heightmap_conf.tiff");
+  vil_save(*conf_img,"c:/research/registration/output/heightmap_conf.tiff");
+  vil_save(heightmap_med_img,"c:/research/registration/output/heightmap_med.tiff");
 #endif
 
   // initialize with rough heightmap
-  bvxm_voxel_slab<unsigned>::const_iterator hmap_rough_it = heightmap_rough.begin();
-  bvxm_voxel_slab<float>::iterator hmap_filt_it = heightmap_filtered.begin();
-  for (; hmap_filt_it != heightmap_filtered.end(); ++hmap_filt_it, ++hmap_rough_it) {
+  vil_image_view<float>::const_iterator hmap_rough_it = heightmap_rough_img->begin();
+  vil_image_view<float>::iterator hmap_filt_it = heightmap_filtered_img.begin();
+  for (; hmap_filt_it != heightmap_filtered_img.end(); ++hmap_filt_it, ++hmap_rough_it) {
     *hmap_filt_it = (float)(*hmap_rough_it);
   }
 
   for (unsigned i=0; i< n_smooth_iterations; ++i) {
     vcl_cout << '.';
     // smooth heightmap
-    bvxm_util::smooth_gaussian(heightmap_filtered, 1.0f, 1.0f);
+    vil_gauss_filter_2d(heightmap_filtered_img, heightmap_filtered_img, 1.0, 2, vil_convolve_constant_extend);
     // reset values we are confident in
-    bvxm_voxel_slab<bool>::const_iterator mask_it = conf_mask.begin();
-    hmap_rough_it = heightmap_rough.begin();
-    hmap_filt_it = heightmap_filtered.begin();
-    for (; hmap_filt_it != heightmap_filtered.end(); ++hmap_filt_it, ++hmap_rough_it, ++mask_it) {
-      if (*mask_it) {
-        *hmap_filt_it = (float)(*hmap_rough_it);
+    typename vil_image_view<bool>::const_iterator mask_it = conf_mask.begin(), inlier_it = inliers.begin();
+    vil_image_view<float>::const_iterator hmap_med_it = heightmap_med_img.begin();
+    hmap_filt_it = heightmap_filtered_img.begin();
+    for (; hmap_filt_it != heightmap_filtered_img.end(); ++hmap_filt_it, ++hmap_med_it, ++mask_it, ++inlier_it) {
+      if (*mask_it && *inlier_it) {
+        *hmap_filt_it = (float)(*hmap_med_it);
       }
     }
   }
   vcl_cout << vcl_endl;
 
+  // finally, median filter final heightmap
+  vil_image_view<float> heightmap_filtered_med(heightmap.ni(),heightmap.nj());
+  vil_median(heightmap_filtered_img,heightmap_filtered_med,strel);
+
 #ifdef HMAP_DEBUG
-  bvxm_util::write_slab_as_image(heightmap_filtered,"c:/research/registration/output/heightmap_filtered.tiff");
+  vil_save(heightmap_filtered_med,"c:/research/registration/output/heightmap_filtered.tiff");
 #endif
 
   // convert back to unsigned
   vil_image_view<unsigned>::iterator hmap_it = heightmap.begin();
-  hmap_filt_it = heightmap_filtered.begin();
+  hmap_filt_it = heightmap_filtered_med.begin();
   for (; hmap_it != heightmap.end(); ++hmap_filt_it, ++hmap_it) {
     *hmap_it = (unsigned)(*hmap_filt_it); // should we do some rounding here?
   }
