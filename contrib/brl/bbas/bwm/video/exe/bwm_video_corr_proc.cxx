@@ -25,7 +25,7 @@ static bool process(vcl_string const& site_path,
   vcl_string final_site = dir + "/final_corrs_cams.xml";
   bwm_video_corr_processor cp;
   cp.set_verbose(true);
-#if 1
+
   if (!cp.open_video_site(site_path, false))
     return false;
 
@@ -42,7 +42,7 @@ static bool process(vcl_string const& site_path,
     return false;
   cp.write_video_site(temp_site0);
   cp.close();
-
+#if 0
   if (!cp.open_video_site(temp_site0, true))
     return false;
   if (!cp.find_missing_correspondences(corr_win_radius,
@@ -70,8 +70,8 @@ static bool process(vcl_string const& site_path,
   cp.write_video_site(final_site);
   vpl_unlink(temp_site0.c_str());
   vpl_unlink(temp_site1.c_str());
-#endif
 
+#endif
   return true;
 }
 
