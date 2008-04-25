@@ -47,6 +47,7 @@ private:
   vcl_vector<vcl_string> object_types_;
   bwm_site_process* site_create_process_;
   vcl_string site_name_, site_dir_, pyr_exe_ ;
+  vcl_string camera_path_, video_path_;
   vul_timer timer_;
 
   void create_site_dialog(vgui_dialog_extensions &site_dialog,

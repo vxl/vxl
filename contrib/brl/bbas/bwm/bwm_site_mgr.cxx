@@ -30,7 +30,8 @@ bwm_site_mgr* bwm_site_mgr::instance()
   return bwm_site_mgr::instance_;
 }
 
-bwm_site_mgr::bwm_site_mgr()
+bwm_site_mgr::bwm_site_mgr(): site_name_(""), site_dir_(""), pyr_exe_(""),
+                              camera_path_(""), video_path_("")
 {
   site_create_process_ = new bwm_site_process();
   object_types_.resize(OBJ_UNDEF);
@@ -38,6 +39,7 @@ bwm_site_mgr::bwm_site_mgr()
   object_types_[MESH_IMAGE_PROCESSING] = BWM_MESH_IMAGE_PROCESSING_STR;
   object_types_[MESH_TERRAIN] = BWM_MESH_TERRAIN_STR;
   object_types_[VSOL] = BWM_OBJ_VSOL_STR;
+
 }
 
 bwm_site_mgr::~bwm_site_mgr()
@@ -696,22 +698,9 @@ void bwm_site_mgr::load_video_site()
   vt->set_corrs(cio.corrs());
   bwm_tableau_mgr::instance()->add_tableau(t, site_name_);
 
-  //temporary video site mechanism (assumes only one video tableau)
-  //also assumes that the video directory and camera directories are
-
-  //below the site directory
- //?? site_name_ = name;
-  vcl_string dir = vul_file::dirname(frame_glob);
-  // go up one level
-  dir = vul_file::dirname(dir);
-  site_dir_ = dir;
-#if 0
-  bwm_observer_video* vobs =
-    this->create_video_tableau(site_name_, frame_glob, camera_glob);
-  if (!vobs)
-    return;
-  vobs->set_corrs(cio.corrs());
-#endif
+  site_dir_ = cio.site_directory();
+  video_path_ = cio.video_path();
+  camera_path_ = cio.camera_path();
 }
 
 void bwm_site_mgr::save_video_site()
@@ -730,16 +719,7 @@ void bwm_site_mgr::save_video_site()
       obv = static_cast<bwm_observer_video*>(*oit);
       found =true;
     }
-#if 0
-    // search the active tableaux for video
-
-    bwm_io_tab_config_video* v;
-    while (!found) {
-      if (active_tableaus_[i]->type_name.compare("bwm_io_tab_config_video") == 0)
-        v = active_tableaus_[i];
-        found = true;
-    }
-#endif
+  
   if(!found)
     {
       vcl_cerr << "In bwm_site_mgr::save_video_site() - "
@@ -748,9 +728,45 @@ void bwm_site_mgr::save_video_site()
     }
 
   bwm_video_site_io vio;
-  vio.set_name(obv->tab_name());
-  vio.set_video_path(obv->image_path());
-  vio.set_camera_path(obv->camera_path());
+
+  if ((this->site_name_.size() > 0) &&
+      (this->site_dir_.size() > 0) &&
+      (vul_file::exists(this->site_dir_)))
+  {
+    vgui_dialog_extensions d("Saving the Video Site");
+    d.message(("Saving the site " + site_name_).c_str());
+    d.message(("under: " + site_dir_).c_str());
+    d.line_break();
+    if (!d.ask()) {
+      return;
+    }
+    vio.set_name(this->site_name_);
+    vio.set_site_directory(this->site_dir_);
+    vio.set_video_path(this->video_path_);
+    vio.set_camera_path(this->camera_path_);
+  }
+  else
+  {
+    // ask the path for saving the site
+	vcl_string ext = "png";
+    vgui_dialog_extensions d("Save the Video Site!");
+    d.field("Video Site Name:", this->site_name_);
+    d.line_break();
+    d.dir("Video Site Dir:", ext, this->site_dir_);
+    d.line_break();
+    d.line_break();
+    if (!d.ask())
+      return;
+    if (!vul_file::is_directory(this->site_dir_)) {
+      vcl_cerr << "Please enter a directory for the video site\n";
+      return;
+    }
+    vio.set_name(this->site_name_);
+    vio.set_site_directory(this->site_dir_);
+    vio.set_video_path(obv->image_path());
+    vio.set_camera_path(obv->camera_path());
+  }
+
   vio.set_corrs(obv->corrs());
   long time = timer_.real();
   vcl_stringstream strm;

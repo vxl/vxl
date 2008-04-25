@@ -4,7 +4,7 @@
 #include "bwm_io_structs.h"
 #include <bwm/bwm_site_sptr.h>
 
-#include <expatpp/expatpplib.h>
+#include <expatpplib.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_utility.h>
