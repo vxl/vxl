@@ -27,6 +27,7 @@ bwm_video_site_io::bwm_video_site_io()
 void bwm_video_site_io::init_params()
 {
   name_ = "";
+  site_dir_ = "";
   video_path_ = "";
   camera_path_ = "";
   corr_ = 0;
@@ -35,6 +36,7 @@ void bwm_video_site_io::init_params()
 void bwm_video_site_io::clear()
 {
   name_ = "";
+  site_dir_ = "";
   video_path_ = "";
   camera_path_ = "";
   corr_ = 0;
@@ -62,16 +64,18 @@ bool bwm_video_site_io::open(vcl_string const& xml_path)
 void
 bwm_video_site_io ::cdataHandler(vcl_string name, vcl_string data)
 {
+
   // clean up the empty chars before and after the file paths
   trim_string(data);
   if (name.compare(VIDEO_PATH_TAG) == 0 ) {
     video_path_.assign(data);
   } else if (name.compare(CAMERA_PATH_TAG) == 0 ) {
     camera_path_.assign(data);
-  }
+  } else if (name.compare(SITE_DIR_TAG) == 0 ) {
+    site_dir_.assign(data);
     cdata = "";
+  }
 }
-
 void
 bwm_video_site_io::handleAtts(const XML_Char** atts)
 {
@@ -92,6 +96,10 @@ bwm_video_site_io::startElement(const char* name, const char** atts)
     if (vcl_strcmp(atts[0], "path") == 0)
       convert(atts[1], camera_path_);
   }
+  else if (vcl_strcmp(name, SITE_DIR_TAG) == 0) {
+    if (vcl_strcmp(atts[0], "path") == 0)
+      convert(atts[1], site_dir_);
+  }
   else if (vcl_strcmp(name, CORRESPONDENCES_TAG) == 0) {
     corrs_.clear();
   }
@@ -101,61 +109,61 @@ bwm_video_site_io::startElement(const char* name, const char** atts)
   else if (vcl_strcmp(name, CORRESP_WORLD_PT_TAG) == 0) {
     double X = 0, Y = 0, Z = 0;
     bool success = true;
-      if (vcl_strcmp(atts[0], "X") == 0)
-        convert(atts[1], X);
-      else success = false;
-      if (vcl_strcmp(atts[2], "Y") == 0)
-        convert(atts[3], Y);
-      else success = false;
-      if (vcl_strcmp(atts[4], "Z") == 0)
-        convert(atts[5], Z);
-      else success = false;
-      if (success)
-        corr_->set_world_pt(vgl_point_3d<double>(X, Y, Z));
+    if (vcl_strcmp(atts[0], "X") == 0)
+      convert(atts[1], X);
+    else success = false;
+    if (vcl_strcmp(atts[2], "Y") == 0)
+      convert(atts[3], Y);
+    else success = false;
+    if (vcl_strcmp(atts[4], "Z") == 0)
+      convert(atts[5], Z);
+    else success = false;
+    if (success)
+      corr_->set_world_pt(vgl_point_3d<double>(X, Y, Z));
   }
   else if (vcl_strcmp(name, CORR_ELE) == 0) {
     unsigned frame=0;
     double u = 0, v = 0;
     bool success = true;
-      if (vcl_strcmp(atts[0], "fr") == 0)
-        convert(atts[1], frame);
-      else success = false;
-      if (vcl_strcmp(atts[2], "u") == 0)
-        convert(atts[3], u);
-      else success = false;
-      if (vcl_strcmp(atts[4], "v") == 0)
-        convert(atts[5], v);
-      else success = false;
-      if (success)
-        corr_->add(frame, vgl_point_2d<double>(u, v));
+    if (vcl_strcmp(atts[0], "fr") == 0)
+      convert(atts[1], frame);
+    else success = false;
+    if (vcl_strcmp(atts[2], "u") == 0)
+      convert(atts[3], u);
+    else success = false;
+    if (vcl_strcmp(atts[4], "v") == 0)
+      convert(atts[5], v);
+    else success = false;
+    if (success)
+      corr_->add(frame, vgl_point_2d<double>(u, v));
   }
 }
 
 void
 bwm_video_site_io::endElement(const char* name)
 {
-   // first check if the last element has some cdata
-   if (cdata.size() > 0) {
-     cdataHandler(name, cdata);
-     cdata= "";
-   }
+  // first check if the last element has some cdata
+  if (cdata.size() > 0) {
+    cdataHandler(name, cdata);
+    cdata= "";
+  }
 
-   if (vcl_strcmp(name, CORRESP_TAG) == 0){
-     corrs_.push_back(corr_);
-   }
-   else if (vcl_strcmp(name, CORRESPONDENCES_TAG) == 0) {
-     //nothing for now
-   }
-   else if (vcl_strcmp(name, VIDEO_SITE) == 0) {
-     //nothing for now
-   }
+  if (vcl_strcmp(name, CORRESP_TAG) == 0){
+    corrs_.push_back(corr_);
+  }
+  else if (vcl_strcmp(name, CORRESPONDENCES_TAG) == 0) {
+    //nothing for now
+  }
+  else if (vcl_strcmp(name, VIDEO_SITE) == 0) {
+    //nothing for now
+  }
 }
 
 void bwm_video_site_io::charData(const XML_Char* s, int len)
 {
   const int leadingSpace = skipWhiteSpace(s);
   if (len==0 || len<=leadingSpace)
-     return;  // called with whitespace between elements
+    return;  // called with whitespace between elements
 
   vcl_putchar('(');
   vcl_fwrite(s, len, 1, stdout);
@@ -207,6 +215,10 @@ void bwm_video_site_io::x_write(vcl_string const& xml_path)
   vsl_basic_xml_element cpath(CAMERA_PATH_TAG);
   cpath.add_attribute("path", camera_path_);
   cpath.x_write(os);
+
+  vsl_basic_xml_element sdir(SITE_DIR_TAG);
+  sdir.add_attribute("path", site_dir_);
+  sdir.x_write(os);
 
   //write the correspondences
   vsl_basic_xml_element corrs(CORRESPONDENCES_TAG);

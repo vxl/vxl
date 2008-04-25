@@ -17,9 +17,11 @@ class bwm_video_site_io : public expatpp
   void clear();
   void set_name(vcl_string name){name_ = name;}
   void set_corrs(vcl_vector<bwm_video_corr_sptr>const& corrs);
+  void set_site_directory(vcl_string const& directory){site_dir_=directory;}
   void set_video_path(vcl_string const& video_path);
   void set_camera_path(vcl_string const& video_path);
   vcl_string name(){return name_;}
+  vcl_string site_directory(){return site_dir_;}
   vcl_string video_path(){return video_path_;}
   vcl_string camera_path(){return camera_path_;}
   vcl_vector<bwm_video_corr_sptr> corrs(){return corrs_;}
@@ -41,6 +43,7 @@ class bwm_video_site_io : public expatpp
 
   // intermediate variables to keep values during parsing
   vcl_string name_;
+  vcl_string site_dir_;
   vcl_string video_path_;
   vcl_string camera_path_;
   bwm_video_corr_sptr corr_;
