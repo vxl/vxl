@@ -252,6 +252,9 @@ SOURCE=.\print_mbl_log_properties.cxx
 # Begin Source File
 SOURCE=.\crop_image_3d.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\print_image.cxx
+# End Source File
 # End Group
 # End Target
 # End Project

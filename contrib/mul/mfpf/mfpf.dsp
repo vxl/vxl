@@ -291,6 +291,9 @@ SOURCE=.\mfpf_vec_cost.h
 # Begin Source File
 SOURCE=.\mfpf_vec_cost_builder.h
 # End Source File
+# Begin Source File
+SOURCE=.\mfpf_feature_vec.h
+# End Source File
 # End Group
 # End Target
 # End Project
