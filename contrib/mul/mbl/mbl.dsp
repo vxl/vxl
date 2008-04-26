@@ -93,9 +93,6 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\mbl_screen_counter.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/mbl_data_wrapper+double-.cxx
 # End Source File
 # Begin Source File
@@ -115,9 +112,6 @@ SOURCE=.\Templates/mbl_data_collector_list+vnl_vector+double--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/mbl_data_wrapper+vnl_vector+double--.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\mbl_rbf_network.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/mbl_stochastic_data_collector+vnl_vector+double--.cxx
@@ -181,6 +175,36 @@ SOURCE=.\Templates/mbl_cluster_tree+vnl_vector+double-+dist-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/mbl_clusters+vnl_vector+double-+dist-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_load_text_file+bool-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_load_text_file+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_load_text_file+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_load_text_file+int-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_save_text_file+bool-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_save_text_file+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_save_text_file+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_save_text_file+int-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_screen_counter.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_rbf_network.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_data_collector_base.cxx
@@ -304,15 +328,6 @@ SOURCE=.\mbl_dyn_prog.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_progress_hierarchy.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\mbl_get.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\mbl_replace_string.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\mbl_vector_txt_files.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -579,13 +594,16 @@ SOURCE=.\mbl_parse_tuple.h
 SOURCE=.\mbl_progress_callback.h
 # End Source File
 # Begin Source File
-SOURCE=.\mbl_get.h
+SOURCE=.\mbl_load_text_file.h
 # End Source File
 # Begin Source File
-SOURCE=.\mbl_replace_string.h
+SOURCE=.\mbl_load_text_file.txx
 # End Source File
 # Begin Source File
-SOURCE=.\mbl_vector_txt_files.h
+SOURCE=.\mbl_save_text_file.h
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_save_text_file.txx
 # End Source File
 # End Group
 # End Target

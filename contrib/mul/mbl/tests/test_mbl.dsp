@@ -266,7 +266,7 @@ SOURCE=.\test_parse_tuple.cxx
 SOURCE=.\test_progress.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_vector_txt_files.cxx
+SOURCE=.\test_text_file.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_include.cxx
