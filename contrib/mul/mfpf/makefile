@@ -35,6 +35,7 @@ SOURCES += mfpf_sad_vec_cost.cxx
 SOURCES += mfpf_sad_vec_cost_builder.cxx
 SOURCES += mfpf_vec_cost.cxx
 SOURCES += mfpf_vec_cost_builder.cxx
+MANPAGE_SOURCES += mfpf_feature_vec.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
