@@ -97,7 +97,7 @@ foreach $f (@FILES)
   &msg(1, "contains carriage returns (ascii 13)")
     if ($file =~ m!\r! && $f !~ m!\.ds[pw]$!);
   &msg(1, "contains non-standard ascii characters")
-    if ($file =~ m![\000-\010\013\014\016-\037\177-\277\320\327\336\360\367\376]!);
+    if ($file =~ m![\000-\010\013\014\016-\037\177-\257\261-\277\320\327\336\360\367\376]!);
 
 # 2. spaces (more than 1) at end of line
   $has_end_spaces = ($file =~ m!  +\n!);
@@ -300,6 +300,7 @@ foreach $f (@FILES)
     elsif ($j eq 'vsl/vsl_binary_explicit_io.h') { $i='vsl_(convert_[a-z_]+|swap_bytes|swap_bytes_to_buffer|b_(read|write)_[a-z_]+)'; }
     elsif ($j eq 'vsl/vsl_complex_io.h') { $i='VNL_IO_[A-Z]+_INSTANTIATE.vcl_complex|vsl_b_(read|write)'; }
     elsif ($j eq 'vsl/vsl_indent.h') { $i.='(|_inc|_dec|_set_tab|_tab|_clear|_clear_all_data)'; }
+    elsif ($j eq 'vsl/vsl_quick_file.h') { $i.='_(load|save)'; }
     # VGL
     elsif ($j eq 'vgl/vgl_clip.h') { $i.='(|_type|_line[a-z_]+)'; }
     elsif ($j eq 'vgl/vgl_convex.h') { $i.='(_hull)'; }
@@ -407,6 +408,8 @@ foreach $f (@FILES)
     elsif ($j eq 'vnl/vnl_T_n.h') { $i.='_[a-z_]*'; }
     elsif ($j eq 'vnl/vnl_sample.h') { $i.='(|_[a-z_]+)'; }
     elsif ($j eq 'vnl/vnl_tag.h') { $i.='_[a-z]+'; }
+    elsif ($j eq 'vnl/vnl_matrix.h') { $i.='|frobenius_norm'; }
+    elsif ($j eq 'vnl/vnl_vector.h') { $i.='|get_row'; }
     elsif ($j eq 'vnl/vnl_matrix_fixed_ref.h') { $i.='(|_const)'; }
     elsif ($j eq 'vnl/vnl_vector_fixed_ref.h') { $i.='(|_const)'; }
     elsif ($j eq 'vnl/vnl_config.h') { $i='VNL_CONFIG_(CHECK_BOUNDS|LEGACY_METHODS|THREAD_SAFE)'; }
@@ -476,7 +479,7 @@ foreach $f (@FILES)
     elsif ($j eq 'mbl/mbl_cloneables_factory.h') { $i.='|MBL_CLONEABLES_FACTORY_INSTANTIATE'; }
     elsif ($j eq 'mbl/mbl_combination.h') { $i.='(_begin|_next)'; }
     elsif ($j eq 'mbl/mbl_config.h') { $i='MBL_CONFIG_(BUILD_NAME|TEST_SAVE_MEASUREMENT_ROOT)'; }
-    elsif ($j eq 'mbl/mbl_exception.h') { $i.='_(error|warning|abort|(read_props_|parse_block_|)parse_error|no_name_in_factory|missing_property|unused_props)'; }
+    elsif ($j eq 'mbl/mbl_exception.h') { $i.='_(error|warning|abort|(read_props_|parse_block_|)parse_error|no_name_in_factory|missing_property|unused_props|throw_os_error)'; }
     elsif ($j eq 'mbl/mbl_gamma.h') { $i='mbl_(gamma_[pq]|erf)'; }
     elsif ($j eq 'mbl/mbl_matrix_products.h') { $i='mbl_matrix_product(|_a_bt|_at_b|_adb)'; }
     elsif ($j eq 'mbl/mbl_matxvec.h') { $i.='_(prod|add)_[a-z_]+'; }
