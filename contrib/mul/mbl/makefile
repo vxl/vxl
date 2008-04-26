@@ -47,9 +47,6 @@ SOURCES += mbl_stepwise_regression.cxx
 SOURCES += mbl_wt_histogram.cxx
 SOURCES += mbl_dyn_prog.cxx
 SOURCES += mbl_progress_hierarchy.cxx
-SOURCES += mbl_get.cxx
-SOURCES += mbl_replace_string.cxx
-SOURCES += mbl_vector_txt_files.cxx
 
 # Additional files to document:
 MANPAGE_SOURCES += mbl_cloneables_factory.h
@@ -82,6 +79,8 @@ MANPAGE_SOURCES += mbl_clusters.txx
 MANPAGE_SOURCES += mbl_vector_distance.h
 MANPAGE_SOURCES += mbl_parse_tuple.h
 MANPAGE_SOURCES += mbl_progress_callback.h
+MANPAGE_SOURCES += mbl_load_text_file.txx
+MANPAGE_SOURCES += mbl_save_text_file.txx
 
 MANPAGE_SOURCES += mbl_config.h.in
 

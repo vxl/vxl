@@ -54,7 +54,7 @@ TESTS += test_clusters.cxx
 TESTS += test_dyn_prog.cxx
 TESTS += test_parse_tuple.cxx
 TESTS += test_progress.cxx
-TESTS += test_vector_txt_files.cxx
+TESTS += test_text_file.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
