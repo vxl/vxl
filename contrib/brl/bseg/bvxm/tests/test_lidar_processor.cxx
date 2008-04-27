@@ -12,9 +12,9 @@ namespace
 {
   void init_slab(bvxm_voxel_slab<float>& slab)
   {
-    unsigned i = 0;
+    float i = 0.0f;
       for (unsigned int y=0; y<slab.ny(); ++y)
-        for (unsigned int x=0; x<slab.nx(); ++x, i+=10)
+        for (unsigned int x=0; x<slab.nx(); ++x, i+=10.0f)
           slab(x,y) = i;
   }
 };
