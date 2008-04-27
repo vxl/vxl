@@ -59,7 +59,7 @@ void bil_perform_tensor_decomposition( const vil_image_view<T >& k11,
   //l2 = -ab2 + t;
   vil_math_image_difference(t,ab2,l2);
 
-  float theta;
+  double theta;
   for (int j = 0; j < static_cast<int>(nj); j++){
     for (int i = 0; i < static_cast<int>(ni); i++){
       if (b(i,j) != 0){
@@ -68,23 +68,23 @@ void bil_perform_tensor_decomposition( const vil_image_view<T >& k11,
       else{
         theta = vnl_math::pi_over_2;
       }
-      e1(i,j,0) = vcl_cos(theta);
-      e1(i,j,1) = vcl_sin(theta);
-      e2(i,j,0) = -vcl_sin(theta);
-      e2(i,j,1) = vcl_cos(theta);
+      e1(i,j,0) =  T(vcl_cos(theta));
+      e1(i,j,1) =  T(vcl_sin(theta));
+      e2(i,j,0) = -e1(i,j,1);
+      e2(i,j,1) =  e1(i,j,0);
     }
   }
 }
 
 #undef  BIL_PERFORM_TENSOR_DECOMPOSITION_INSTANTIATE
 #define BIL_PERFORM_TENSOR_DECOMPOSITION_INSTANTIATE(T) \
-template void bil_perform_tensor_decomposition( const vil_image_view<T >& k11,\
-                                                const vil_image_view<T >& k12,\
-                                                const vil_image_view<T >& k21,\
-                                                const vil_image_view<T >& k22,\
-                                                vil_image_view<T >& e1,\
-                                                vil_image_view<T >& e2,\
-                                                vil_image_view<T >& l1,\
-                                                vil_image_view<T >& l2)
+template void bil_perform_tensor_decomposition(const vil_image_view<T >& k11,\
+                                               const vil_image_view<T >& k12,\
+                                               const vil_image_view<T >& k21,\
+                                               const vil_image_view<T >& k22,\
+                                               vil_image_view<T >& e1,\
+                                               vil_image_view<T >& e2,\
+                                               vil_image_view<T >& l1,\
+                                               vil_image_view<T >& l2)
 
 #endif // bil_perform_tensor_decomposition_txx_
