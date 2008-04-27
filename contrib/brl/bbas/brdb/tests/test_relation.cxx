@@ -83,8 +83,8 @@ MAIN( test_relation )
 
   bool set_value_test_pass = true;
   brdb_value_t<int> int_val1, int_val2;
-  it = my_relation2.begin();
-  for (int i=0; it != my_relation2.end(); ++it, ++i)
+
+  for (it = my_relation2.begin(); it != my_relation2.end(); ++it)
   {
     my_relation2.get_value(it, "frames", int_val1);
     int_val2 = 0 - int_val1;
