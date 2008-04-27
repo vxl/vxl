@@ -5,6 +5,7 @@
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_inverse.h>
 #include <vcl_iostream.h>
+#define COMMA ,
 
 template <class T>
 void test_gaussian_full_type(T epsilon, const vcl_string& type_name)
@@ -12,7 +13,7 @@ void test_gaussian_full_type(T epsilon, const vcl_string& type_name)
   bsta_gaussian_full<T,3> df_gauss;
 
   TEST(("dimension <"+type_name+">").c_str(),
-       bsta_gaussian_full<T,3>::dimension, 3);
+       bsta_gaussian_full<T COMMA 3>::dimension, 3);
   TEST(("det(null covar) <"+type_name+">").c_str(),
        df_gauss.det_covar(), T(0));
 
