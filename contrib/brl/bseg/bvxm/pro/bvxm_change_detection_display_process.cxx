@@ -18,7 +18,6 @@
 #endif
 
 #include <vcl_cmath.h>
-#include <vcl_algorithm.h>
 
 bvxm_change_detection_display_process::bvxm_change_detection_display_process()
 {
@@ -61,7 +60,7 @@ bool bvxm_change_detection_display_process::execute()
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(input_data_[1].ptr());
 
     //get the mask image
-  brdb_value_t<vil_image_view_base_sptr>* input2 = 
+  brdb_value_t<vil_image_view_base_sptr>* input2 =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(input_data_[2].ptr());
 
   vil_image_view_base_sptr img0 = input0->value();
@@ -81,21 +80,21 @@ bool bvxm_change_detection_display_process::execute()
   vil_image_view<unsigned char> output_image0( image_width, image_height, 3 );
   vil_image_view<unsigned char> output_image1( image_width, image_height, 1 );
 
-  float prob_thresh = .50;
-  float prob_image_scale = .7;
+  float prob_thresh = .50f;
+  float prob_image_scale = .7f;
   parameters()->get_value("prob_thresh",prob_thresh);
   parameters()->get_value("prob_image_scale",prob_image_scale);
 
-  for ( unsigned int i = 0; i < image_width; i++ ){
-    for ( unsigned int j = 0; j < image_height; j++ ){
+  for ( unsigned int i = 0; i < image_width; i++ ) {
+    for ( unsigned int j = 0; j < image_height; j++ ) {
 #if 0
-      vgl_point_2d<double> prob_img_pixel(
-          (int)vcl_floor( prob_image_scale*i ), (int)vcl_floor( prob_image_scale*j ) );
+      vgl_point_2d<double> prob_img_pixel((int)vcl_floor(prob_image_scale*i),
+                                          (int)vcl_floor(prob_image_scale*j) );
 #endif
-      float this_prob = 1.0;
-      float original_prob = 0.0;
-      
-      if ( prob_image(i,j) < prob_thresh && mask_image(i,j)){
+      float this_prob = 1.0f;
+      float original_prob = 0.0f;
+
+      if ( prob_image(i,j) < prob_thresh && mask_image(i,j)) {
         original_prob = prob_image (i, j);
         this_prob = prob_image( i,j )/(prob_thresh);
       }
@@ -103,14 +102,14 @@ bool bvxm_change_detection_display_process::execute()
       output_image0(i,j,0) = (int)vcl_floor( input_image(i,j)*this_prob + 255*(1-this_prob) );
       output_image0(i,j,1) = (int)vcl_floor( input_image(i,j)*this_prob );
       output_image0(i,j,2) = (int)vcl_floor( input_image(i,j)*this_prob );
-      
-      if (mask_image(i,j)){
-        original_prob = prob_image(i,j) * 128.0;
-        if ( original_prob > 255.0)
-          original_prob = 255.0;
+
+      if (mask_image(i,j)) {
+        original_prob = prob_image(i,j) * 128.0f;
+        if ( original_prob > 255.0f)
+          original_prob = 255.0f;
       }
       output_image1(i,j) = (int)(original_prob);
-   }
+    }
   }
 
   brdb_value_sptr output0 =
