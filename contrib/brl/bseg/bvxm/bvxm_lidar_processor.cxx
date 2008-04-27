@@ -21,7 +21,7 @@ bvxm_lidar_processor::prob_density(float z_dim,  bvxm_voxel_slab<float> const& o
 
     // Calculate threshold such that the given number of pixels corresponds to
     // 2.5 standard deviations away in a standard normal gaussian
-    float thresh = 2.5 / float(vox_thresh_);
+    float thresh = 2.5f / float(vox_thresh_);
     d *= thresh;
 
     *prob_it = gauss_.prob_density(d);
