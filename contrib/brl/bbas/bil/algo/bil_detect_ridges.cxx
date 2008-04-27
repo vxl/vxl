@@ -101,7 +101,7 @@ void bil_detect_ridges(const vil_image_view<float>& Ix,
 #define SIGN(X) (X < 0? -1 : (X==0 ? 0 : 1))
   for (unsigned j =0; j < nj; j++) {
     for (unsigned i =0; i < ni; i++) {
-      rho(i,j) = -0.5*SIGN(max_lambda(i,j))*vcl_abs(SIGN(gI_dot_nu_plus_e(i,j)) - SIGN(gI_dot_nu_minus_e(i,j)));
+      rho(i,j) = -0.5f*SIGN(max_lambda(i,j))*vcl_abs(SIGN(gI_dot_nu_plus_e(i,j)) - SIGN(gI_dot_nu_minus_e(i,j)));
     }
   }
 
