@@ -3,7 +3,7 @@
 
 #include "bil_finite_differences.h"
 
-#define IMVAL(im,i,j,p,ni,nj) (im(i<0?0:(i>=ni?ni-1:i),j<0?0:(j>=nj?nj-1:j),p))
+#define IMVAL(im,i,j,p,ni,nj) T(im(i<0?0:(i>=ni?ni-1:i),j<0?0:(j>=nj?nj-1:j),p))
 #define DX 1
 #define DY 1
 
@@ -34,10 +34,10 @@ void bil_finite_differences(const vil_image_view<T>& src_im,
               currentPixel = src_im(i,j,p);
               dxp(i,j,p) = (IMVAL(src_im,i+1,j,p,ni,nj) - currentPixel)/DX;
               dxm(i,j,p) = (currentPixel - IMVAL(src_im,i-1,j,p,ni,nj))/DX;
-              dxc(i,j,p) = (IMVAL(src_im,i+1,j,p,ni,nj) - IMVAL(src_im,i-1,j,p,ni,nj))/(2.*DX);
+              dxc(i,j,p) = (IMVAL(src_im,i+1,j,p,ni,nj) - IMVAL(src_im,i-1,j,p,ni,nj))/T(2*DX);
               dyp(i,j,p) = (IMVAL(src_im,i,j+1,p,ni,nj) - currentPixel)/DY;
               dym(i,j,p) = (currentPixel - IMVAL(src_im,i,j-1,p,ni,nj))/DY;
-              dyc(i,j,p) = (IMVAL(src_im,i,j+1,p,ni,nj) - IMVAL(src_im,i,j-1,p,ni,nj))/(2.*DY);
+              dyc(i,j,p) = (IMVAL(src_im,i,j+1,p,ni,nj) - IMVAL(src_im,i,j-1,p,ni,nj))/T(2*DY);
           }
       }
   }
