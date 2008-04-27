@@ -56,7 +56,7 @@ static int test_bil_detect_ridges(int argc, char** argv )
 
 
   {
-    bil_detect_ridges( view_float, 1.5, 0.7, rho, ex, ey, lambda);
+    bil_detect_ridges( view_float, 1.5f, 0.7f, rho, ex, ey, lambda);
     vil_image_view<vxl_byte> ridge_byte;
     vil_convert_stretch_range(rho,ridge_byte);
     vil_save(ridge_byte,"other_ridgetest0.tif");
@@ -98,9 +98,8 @@ static int test_bil_detect_ridges(int argc, char** argv )
     vil_sobel_3x3(iy,ixy,iyy);
 
     bil_detect_ridges( ix, iy, ixx, iyy, ixy,
-                    1.5, 0.7,
-                    rho, ex, ey, lambda);
-
+                       1.5f, 0.7f,
+                       rho, ex, ey, lambda);
 
     vil_image_view<vxl_byte> ridge_byte;
     vil_convert_stretch_range(rho,ridge_byte);
