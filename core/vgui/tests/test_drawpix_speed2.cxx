@@ -9,7 +9,7 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_window.h>
-#include <vgui/vgui_adaptor.h>
+//#include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_pixel.h>
 #include <vgui/vgui_macro.h>
 
@@ -281,7 +281,7 @@ test_pattern( unsigned option )
   r.pixmove = draws*1000.0 / elapsed_pix;
   r.draw    = draws*1000.0 / (elapsed-elapsed_pix);
 
-  if ( best_option == -1u || r.draw < best_result.draw ) {
+  if ( best_option+1 == 0u || r.draw < best_result.draw ) {
     best_option = option;
     best_result = r;
   }
