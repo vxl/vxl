@@ -191,7 +191,7 @@ bool bvxm_roi_init_process::roi_init(vcl_string const& image_path,
           unsigned char pixel_val = static_cast<unsigned char> (curr_pixel_val);
 
           //Temporary hack: Remove when Thom's results have been proved
-          int temp_pix_val = vcl_floor(int(curr_pixel_val)*255.0/1500.0);
+          int temp_pix_val = (int)vcl_floor(int(curr_pixel_val)*255.0/1500.0);
           if (temp_pix_val > 255)
             temp_pix_val =255;
           pixel_val = static_cast<unsigned char>(temp_pix_val);
