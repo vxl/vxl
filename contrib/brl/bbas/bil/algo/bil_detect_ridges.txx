@@ -5,7 +5,7 @@
 #include <vil/vil_convert.h>
 #include <vil/algo/vil_correlate_2d.h>
 #include <vil/vil_transpose.h>
-#include <vil/vil_bilin_interp.h>
+//#include <vil/vil_bilin_interp.h>
 #include <vil/vil_new.h>
 #include <vnl/vnl_math.h>
 
@@ -40,9 +40,9 @@ void bil_detect_ridges( const vil_image_view<T>& Im,
       int j = y + width;
       double exponential = vcl_exp(-(x*x + y*y)/(2*ssq));
 
-      dgau2D(i,j)    = -x*exponential/d1_denominator;
-      d2gau2D(i,j)   =-(ssq-x*x)*exponential/d2_denominator;
-      d2gauxy2D(i,j) = x*y*exponential/d2_denominator;
+      dgau2D(i,j)    = -float(x*exponential/d1_denominator);
+      d2gau2D(i,j)   = -float((ssq-x*x)*exponential/d2_denominator);
+      d2gauxy2D(i,j) =  float(x*y*exponential/d2_denominator);
     }
   }
 
