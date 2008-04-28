@@ -59,7 +59,9 @@ SET (EXPECTED_BUILDS "\\
   {GE MinGW-3.8_gcc-3.4.4_-O2_static} \\
   {GE Win2k_bcc-5.5.1_Release} \\
   {GE Win2k_msvc-7.1_Debug} \\
+  {GE WinXP_msvc-8.0_Release} \\
   {imorphics.com WinXP_msvc-7.1_RelWithDebInfo} \\
+  {imorphics.com Vista_msvc-8.0_RelWithDebInfo} \\
   {imorphics.com Linux-2.6.22_gcc-4.1.2_RelWithDebInfo} \\
   {lems.brown.edu Linux-2.6_gcc-4.1.3_-Wall} \\
   {lems.brown.edu Linux-2.6.18_gcc-4.1.2} \\
