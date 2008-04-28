@@ -133,7 +133,8 @@ vnl_powell::minimize(vnl_vector<double>& p)
         }
       }
     }
-    report_iter();
+    if (this->report_iter())
+      return FAILED_USER_REQUEST;
   }
   return FAILED_TOO_MANY_ITERATIONS;
 }
