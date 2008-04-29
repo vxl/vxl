@@ -19,6 +19,7 @@
 
 #include <vcl_string.h>
 #include <vcl_iostream.h>
+#include <vcl_cmath.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vbl/vbl_ref_count.h>
 #include <vgl/vgl_point_3d.h>
@@ -56,6 +57,15 @@ public:
   inline vgl_point_3d<float> corner(){ return corner_; }
   inline void set_corner(vgl_point_3d<float>& new_c){ corner_ = new_c; }
 
+
+  inline vgl_vector_3d<unsigned int> num_voxels(unsigned scale=0){ 
+	  vgl_vector_3d<unsigned int> num_voxels_scaled;
+	  num_voxels_scaled.set(num_voxels_.x()/vcl_pow(2.0,scale),num_voxels_.y()/vcl_pow(2.0,scale),num_voxels_.z()/vcl_pow(2.0,scale));
+	  return num_voxels_scaled; }
+
+  inline float voxel_length(unsigned scale=0){
+	  return vcl_pow(2.0,scale)*voxel_length_; }
+
   inline vgl_vector_3d<float> base_x(){ return base_x_; }
   inline vgl_vector_3d<float> base_y(){ return base_y_; }
   inline vgl_vector_3d<float> base_z(){ return base_z_; }
@@ -64,8 +74,6 @@ public:
   inline void set_base_y(vgl_vector_3d<float>& basey) { base_y_ = basey; }
   inline void set_base_z(vgl_vector_3d<float>& basez) { base_z_ = basez; }
 
-  inline vgl_vector_3d<unsigned int> num_voxels(){ return num_voxels_; }
-  inline float voxel_length(){ return voxel_length_; }
   inline float min_occupancy_prob(){ return min_occupancy_prob_;}
   inline float max_occupancy_prob(){ return max_occupancy_prob_;}
   inline bgeo_lvcs_sptr lvcs(){return lvcs_;}
