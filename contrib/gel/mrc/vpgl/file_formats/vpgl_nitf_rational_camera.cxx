@@ -311,7 +311,18 @@ init(vil_nitf2_image* nitf_image, bool verbose)
   scale_offsets_[U_INDX].set_offset(tre_data[81]);
   scale_offsets_[V_INDX].set_scale(tre_data[85]);
   scale_offsets_[V_INDX].set_offset(tre_data[80]);
+  
+  double correction_u_off,correction_v_off;
+  success=hdr->get_correction_offset(correction_u_off,correction_v_off);
+
+  
+  if(success)
+  {
+      scale_offsets_[U_INDX].set_offset(scale_offsets_[U_INDX].offset()-correction_u_off);
+      scale_offsets_[V_INDX].set_offset(scale_offsets_[V_INDX].offset()-correction_v_off);
+  }
   return true;
+
 }
 
 vpgl_nitf_rational_camera::vpgl_nitf_rational_camera(){
@@ -368,6 +379,7 @@ vpgl_nitf_rational_camera(vil_nitf2_image* nitf_image, bool verbose)
   //Get and set the information
   if (!this->init(nitf_image, verbose))
     return;
+
   if (verbose)
     vcl_cout << *this;
   vpgl_scale_offset<double> z = scale_offsets_[Z_INDX];
@@ -389,3 +401,5 @@ vpgl_nitf_rational_camera(vil_nitf2_image* nitf_image, bool verbose)
     vcl_cout << "Lower right image corner(" << lr_u << ' ' << lr_v << ")\n";
   }
 }
+
+
