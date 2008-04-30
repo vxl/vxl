@@ -60,11 +60,12 @@ public:
 
   inline vgl_vector_3d<unsigned int> num_voxels(unsigned scale=0){ 
 	  vgl_vector_3d<unsigned int> num_voxels_scaled;
-	  num_voxels_scaled.set(num_voxels_.x()/vcl_pow(2.0,scale),num_voxels_.y()/vcl_pow(2.0,scale),num_voxels_.z()/vcl_pow(2.0,scale));
+      double divisor=vcl_pow(2.0,(double)scale);
+	  num_voxels_scaled.set(num_voxels_.x()/divisor,num_voxels_.y()/divisor,num_voxels_.z()/divisor);
 	  return num_voxels_scaled; }
 
   inline float voxel_length(unsigned scale=0){
-	  return vcl_pow(2.0,scale)*voxel_length_; }
+	  return vcl_pow(2.0,(double)scale)*voxel_length_; }
 
   inline vgl_vector_3d<float> base_x(){ return base_x_; }
   inline vgl_vector_3d<float> base_y(){ return base_y_; }
