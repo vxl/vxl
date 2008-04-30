@@ -115,11 +115,9 @@ class vil_nitf2_image_subheader
   //  \a sun_az --> sun azimuthal angle
   bool get_sun_params( double& sun_el, double& sun_az);
 
-  bool get_rows_offset(double & ul, double & ur, double & ll,double & lr);
- 
-  bool get_cols_offset(double & ul, double & ur, double & ll,double & lr);
 
-  bool get_row_col_offset(int & r_off,int & c_off);
+  bool get_correction_offset(double & u_off, double & v_off);
+
  protected:
   vil_nitf2_field_sequence m_field_sequence;
   vil_nitf2_data_mask_table* m_data_mask_table;

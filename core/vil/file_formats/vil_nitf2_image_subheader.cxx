@@ -774,43 +774,7 @@ void vil_nitf2_image_subheader::add_MPD26A_definitions()
 
 // obtain column and row offset from STDIDB /SDTDIDC
 bool vil_nitf2_image_subheader::
-get_row_col_offset(int & r_off,int & c_off)
-{
-  // Now get the sub-header TRE parameters
-  vil_nitf2_tagged_record_sequence isxhd_tres;
-  vil_nitf2_tagged_record_sequence::iterator tres_itr;
-  this->get_property("IXSHD", isxhd_tres);
-
-  bool success = false;
-    // Check through the TREs to find "STDIDC"
-  for (tres_itr = isxhd_tres.begin(); tres_itr != isxhd_tres.end(); ++tres_itr)
-  {
-    vcl_string type = (*tres_itr)->name();
-    if ( type == "STDIDC" )
-    {
-       success = (*tres_itr)->get_value("START_ROW", r_off); 
-       success = success && (*tres_itr)->get_value("START_COLUMN", c_off); 
-       return success;
-    }
-    else if ( type == "STDIDB" )
-    {
-       success = (*tres_itr)->get_value("START_ROW", r_off); 
-       vcl_string temp_off;
-       success = success && (*tres_itr)->get_value("START_COLUMN", temp_off); 
-       if((int)temp_off[0]>=65)
-           c_off=((int)temp_off[0]-55)*10;
-       else
-           c_off=((int)temp_off[0]-48)*10;
-
-       c_off+=(int)temp_off[1]-48;
-       return success;
-    }
-
-  }
-  return success;
-}
-bool vil_nitf2_image_subheader::
-get_rows_offset(double & ul, double & ur, double & ll,double & lr)
+get_correction_offset(double & u_off, double & v_off)
 {
   // Now get the sub-header TRE parameters
   vil_nitf2_tagged_record_sequence isxhd_tres;
@@ -819,43 +783,63 @@ get_rows_offset(double & ul, double & ur, double & ll,double & lr)
 
   bool success = false;
 
+  double ulr=0;
+  double ulc=0;
   // Check through the TREs to find "RPC"
   for (tres_itr = isxhd_tres.begin(); tres_itr != isxhd_tres.end(); ++tres_itr)
   {
-    vcl_string type = (*tres_itr)->name();
-    if ( type == "ICHIPB" )
-    {
-       success = (*tres_itr)->get_value("FI_ROW_11", ul); 
-       success = success && (*tres_itr)->get_value("FI_ROW_12", ur); 
-       success = success && (*tres_itr)->get_value("FI_ROW_21", ll); 
-       success = success && (*tres_itr)->get_value("FI_ROW_22", lr); 
+      vcl_string type = (*tres_itr)->name();
+      if ( type == "ICHIPB" )
+      {
+          double r_off;
+          double c_off;
+          success = (*tres_itr)->get_value("FI_ROW_11", r_off); 
+          success = success && (*tres_itr)->get_value("FI_COL_11", c_off); 
+          if(success)
+          {
+              ulr+=r_off;
+              ulc+=c_off;
+          }
 
-    }
+      }
+      if ( type == "STDIDC" )
+      {
+          int r_off=1;
+          int c_off=1;
+          success = (*tres_itr)->get_value("START_ROW", r_off); 
+          success = success && (*tres_itr)->get_value("START_COLUMN", c_off); 
+
+          if(success)
+          {
+              ulr+=(double)((r_off-1)*get_pixels_per_block_y());
+              ulc+=(double)((c_off-1)*get_pixels_per_block_x());
+          }
+      }
+      else if ( type == "STDIDB" )
+      {
+          int r_off=1;
+          int c_off=1;
+
+          success = (*tres_itr)->get_value("START_ROW", r_off); 
+          vcl_string temp_off;
+          success = success && (*tres_itr)->get_value("START_COLUMN", temp_off); 
+          if((int)temp_off[0]>=65)
+              c_off=((int)temp_off[0]-55)*10;
+          else
+              c_off=((int)temp_off[0]-48)*10;
+
+          c_off+=(int)temp_off[1]-48;
+          if(success)
+          {
+              ulr+=(r_off-1)*get_pixels_per_block_y();
+              ulc+=(c_off-1)*get_pixels_per_block_x();
+          }
+      }
+
 
   }
-  return success;
-}
-bool vil_nitf2_image_subheader::
-get_cols_offset(double & ul, double & ur, double & ll,double & lr)
-{
-  // Now get the sub-header TRE parameters
-  vil_nitf2_tagged_record_sequence isxhd_tres;
-  vil_nitf2_tagged_record_sequence::iterator tres_itr;
-  this->get_property("IXSHD", isxhd_tres);
-
-bool success = false;
-  // Check through the TREs to find "RPC"
-  for (tres_itr = isxhd_tres.begin(); tres_itr != isxhd_tres.end(); ++tres_itr)
-  {
-    vcl_string type = (*tres_itr)->name();
-    if ( type == "ICHIPB" )
-    {
-        success = (*tres_itr)->get_value("FI_COL_11", ul); 
-        success = success && (*tres_itr)->get_value("FI_COL_12", ur); 
-        success = success && (*tres_itr)->get_value("FI_COL_21", ll); 
-        success = success && (*tres_itr)->get_value("FI_COL_22", lr); 
-    }
-  }
+  u_off=ulc;
+  v_off=ulr;
   return success;
 }
 // Collect the RPC parameters for the current image. Image corners are reported
