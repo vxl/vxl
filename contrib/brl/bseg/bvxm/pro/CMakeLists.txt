@@ -25,6 +25,7 @@ SET(bvxm_pro_sources
     bvxm_rpc_registration_process.h         bvxm_rpc_registration_process.cxx
     bvxm_save_edges_raw_process.h           bvxm_save_edges_raw_process.cxx
     bvxm_save_occupancy_raw_process.h       bvxm_save_occupancy_raw_process.cxx
+    bvxm_save_occupancy_vff_process.h       bvxm_save_occupancy_vff_process.cxx
     bvxm_clean_world_process.h              bvxm_clean_world_process.cxx
     bvxm_create_local_rpc_process.h         bvxm_create_local_rpc_process.cxx
     bvxm_create_normalized_image_process.h  bvxm_create_normalized_image_process.cxx

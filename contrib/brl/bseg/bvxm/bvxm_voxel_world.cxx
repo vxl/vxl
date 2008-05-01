@@ -70,6 +70,69 @@ vcl_ostream&  operator<<(vcl_ostream& s, bvxm_voxel_world const& vox_world)
   return s;
 }
 
+//: save the occupancy grid as an 8-bit 3-d vff image
+bool bvxm_voxel_world::save_occupancy_vff(vcl_string filename)
+{
+
+// open file for binary writing
+  vcl_fstream ofs(filename.c_str(),vcl_ios::binary | vcl_ios::out);
+  if (!ofs.is_open()) {
+    vcl_cerr << "error opening file " << filename << " for write!\n";
+    return false;
+  }
+  bvxm_world_params_sptr params = this->get_params();
+
+  typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
+
+  bvxm_voxel_grid<ocp_datatype> *ocp_grid =
+    dynamic_cast<bvxm_voxel_grid<ocp_datatype>*>(get_grid<OCCUPANCY>(0).ptr());
+
+  vxl_uint_32 nx = ocp_grid->grid_size().x();
+  vxl_uint_32 ny = ocp_grid->grid_size().y();
+  vxl_uint_32 nz = ocp_grid->grid_size().z();
+
+  // write header
+  vcl_stringstream header;
+  header << "ncaa\n";
+  header << "title=bvxm occupancy probabilities;\n";
+  header << "rank=3;\n";
+  header << "type=raster;\n";
+  header << "format=slice;\n";
+  header << "bits=8;\n";
+  header << "bands=1;\n";
+  header << "extent=" << nx << " " << ny << " " << nz << ";\n";
+  header << "size=" << nx << " " << ny << " " << nz << ";\n";
+  header << "aspect=1.0 1.0 1.0;\n";
+  header << "origin=0 0 0;\n";
+  header << "rawsize=" << nx*ny*nz << ";\n\f\n";
+
+  vcl_string header_string = header.str();
+  unsigned header_len = header_string.size();
+
+  ofs.write(header_string.c_str(),header_len);
+ 
+  // write data
+  // iterate through slabs and fill in memory array
+  char *ocp_array = new char[nx*ny*nz];
+
+  bvxm_voxel_grid<ocp_datatype>::iterator ocp_it = ocp_grid->begin();
+  for (unsigned k=nz-1; ocp_it != ocp_grid->end(); ++ocp_it, --k) {
+    vcl_cout << '.';
+    for (unsigned i=0; i<(*ocp_it).nx(); ++i) {
+      for (unsigned j=0; j < (*ocp_it).ny(); ++j) {
+        ocp_array[k*nx*ny + j*nx + i] = (unsigned char)((*ocp_it)(i,j) * 255.0);;
+      }
+    }
+  }
+  vcl_cout << vcl_endl;
+  ofs.write(reinterpret_cast<char*>(ocp_array),sizeof(unsigned char)*nx*ny*nz);
+
+  ofs.close();
+
+  delete[] ocp_array;
+
+  return true;
+}
 
 //: save the occupancy grid in a ".raw" format readable by Drishti volume rendering software
 bool bvxm_voxel_world::save_occupancy_raw(vcl_string filename)
@@ -609,7 +672,7 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
   }
   vcl_cout << vcl_endl;
 
-//#define HMAP_DEBUG
+#define HMAP_DEBUG
 #ifdef  HMAP_DEBUG
   bvxm_util::write_slab_as_image(heightmap_rough,"c:/research/registration/output/heightmap_rough.tiff");
 #endif

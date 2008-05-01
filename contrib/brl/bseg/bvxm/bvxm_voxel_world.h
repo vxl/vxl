@@ -193,6 +193,9 @@ class bvxm_voxel_world: public vbl_ref_count
   //: save the edge probability grid in a ".raw" format readable by Drishti volume rendering software
   bool save_edges_raw(vcl_string filename);
 
+  //: save the occupancy grid as a 3-d tiff image
+  bool save_occupancy_vff(vcl_string filename);
+
   //: save the occupancy grid in a ".raw" format readable by Drishti volume rendering software
   bool save_occupancy_raw(vcl_string filename);
 
@@ -587,8 +590,8 @@ bool bvxm_voxel_world::expected_image(bvxm_image_metadata const& camera,
                                       unsigned bin_index)
 {
   // threshold used to create mask
-  float min_PXvisX_accum = 0.1f;
-  float min_PX = 0.005f;
+  float min_PXvisX_accum = 0.01f;
+  float min_PX = 0.001f;
 
   // datatype for current appearance model
   typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype apm_datatype;
