@@ -47,6 +47,52 @@ MACRO(PERFORM_CMAKE_TEST FILE TEST)
 ENDMACRO(PERFORM_CMAKE_TEST FILE TEST)
 
 #
+# Perform a custom VXL try compile test with status output
+#
+# DIR is the directory containing the test project
+#
+# Sets the TEST to 1 if the corresponding program could be compiled
+# and linked
+#
+
+MACRO(PERFORM_CMAKE_TEST_CUSTOM DIR TEST)
+  IF( VXL_UPDATE_CONFIGURATION )
+    SET( ${TEST} "${TEST}" )
+  ENDIF( VXL_UPDATE_CONFIGURATION )
+  IF("${TEST}" MATCHES "^${TEST}$")
+    # Perform test
+    SET(MACRO_CHECK_FUNCTION_DEFINITIONS
+        "-D${TEST} ${CMAKE_REQUIRED_FLAGS}")
+    IF(CMAKE_REQUIRED_LIBRARIES)
+      SET(TEST_ADD_LIBRARIES
+          "-DLINK_LIBRARIES:STRING=${CMAKE_REQUIRED_LIBRARIES}")
+    ENDIF(CMAKE_REQUIRED_LIBRARIES)
+    MESSAGE(STATUS "Performing Test ${TEST}")
+
+    TRY_COMPILE(${TEST}
+                ${CMAKE_BINARY_DIR}/config/${DIR}
+                ${vxl_config_SOURCE_DIR}/${DIR}
+                ${TEST}
+                CMAKE_FLAGS -DCOMPILE_DEFINITIONS:STRING=${MACRO_CHECK_FUNCTION_DEFINITIONS}
+                -DCMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS}
+                -DCMAKE_C_FLAGS:STRING=${CMAKE_C_FLAGS}
+                "${TEST_ADD_LIBRARIES}"
+                OUTPUT_VARIABLE OUTPUT)
+    IF(${TEST})
+      SET(${TEST} 1 CACHE INTERNAL "VXL test ${FUNCTION}")
+      MESSAGE(STATUS "Performing Test ${TEST} - Success")
+    ELSE(${TEST})
+      MESSAGE(STATUS "Performing Test ${TEST} - Failed")
+      SET(${TEST} 0 CACHE INTERNAL "Test ${FUNCTION}")
+      WRITE_FILE(${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeError.log
+                 "Performing Test ${TEST} failed with the following output:\n"
+                 "${OUTPUT}\n" APPEND)
+    ENDIF(${TEST})
+  ENDIF("${TEST}" MATCHES "^${TEST}$")
+  FILE(REMOVE_RECURSE ${CMAKE_BINARY_DIR}/config/${DIR})
+ENDMACRO(PERFORM_CMAKE_TEST_CUSTOM DIR TEST)
+
+#
 # Perform the VXL specific try-run test with status output
 #
 # Sets TEST to 1 if the corresponding program compiles, links, run,

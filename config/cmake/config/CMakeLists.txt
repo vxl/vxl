@@ -24,7 +24,7 @@ MARK_AS_ADVANCED( VXL_UPDATE_CONFIGURATION )
 # number. The format follows a DNS-style numbering: the current date
 # followed by a modification time within the day.
 #
-SET( VXL_CONFIG_SERIAL_CURRENT "2007-13-09-001" )
+SET( VXL_CONFIG_SERIAL_CURRENT "2008-01-05-001" )
 
 IF( ${VXL_CONFIG_SERIAL_CURRENT} MATCHES "^${VXL_CONFIG_SERIAL_LAST}$" )
   # The configuration is current
@@ -125,6 +125,9 @@ IF(APPLE)
     ENDIF( NOT ${VXL_APPLE_HAS_INLINE_ISNAND})  
   ENDIF(NOT ${VXL_APPLE_HAS_ISNAND})
 ENDIF(APPLE)
+
+# Test the ability of shared libraries to link to static vxl libriares
+PERFORM_CMAKE_TEST_CUSTOM(vxl_shared_link_test VXL_PIC_COMPATIBLE)
 
 #
 # Find header files
