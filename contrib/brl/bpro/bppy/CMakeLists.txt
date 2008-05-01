@@ -12,6 +12,15 @@ IF( PYTHON_FOUND )
     reg.cxx 
   )
 
+  IF( NOT ${VXL_PIC_COMPATIBLE})
+    MESSAGE("Warning: linking a shared library to static VXL libraries will probably fail.\n"
+            "Try adding -fPIC to CMAKE_CXX_FLAGS and CMAKE_C_FLAGS.\n"
+            "This will compile the static libraries as Position-Independent Code.\n"
+            "However, this option could make the static executables slightly less efficient.")
+    # Reset the update configuration flag
+    SET( VXL_UPDATE_CONFIGURATION "ON" CACHE BOOL "Re-run the configuration tests?" FORCE )
+  ENDIF( NOT ${VXL_PIC_COMPATIBLE})
+
   ADD_LIBRARY(batch SHARED ${batch_sources})
   SET_TARGET_PROPERTIES(batch PROPERTIES OUTPUT_NAME batch DEBUG_POSTFIX _d SUFFIX .pyd)
   TARGET_LINK_LIBRARIES(batch bprb bsta_algo bsta bbgm brdb bbgm_pro vidl2_pro vil_pro vbl)
