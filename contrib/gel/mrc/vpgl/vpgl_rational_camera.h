@@ -190,6 +190,14 @@ class vpgl_rational_camera : public vpgl_camera<T>
   void image_offset(T& u_off, T& v_off)
     {u_off = offset(U_INDX); v_off = offset(V_INDX);}
 
+   //:set u-v scale
+  void set_image_scale(const T u_scale, const T v_scale)
+  { scale_offsets_[U_INDX].set_scale(u_scale);
+    scale_offsets_[V_INDX].set_scale(v_scale); }
+
+  //:get u-v  scale
+  void image_scale(T& u_scale, T& v_scale)
+    {u_scale = scale(U_INDX); v_scale = scale(V_INDX);}
   //: The generic camera interface. u represents image column, v image row.
   virtual void project(const T x, const T y, const T z, T& u, T& v) const;
 
