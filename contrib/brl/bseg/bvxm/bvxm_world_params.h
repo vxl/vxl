@@ -1,6 +1,5 @@
-#ifndef _bvxm_world_params_h_
-#define _bvxm_world_params_h_
-
+#ifndef bvxm_world_params_h_
+#define bvxm_world_params_h_
 //:
 // \file
 // \brief
@@ -31,14 +30,14 @@
 #include <bgeo/bgeo_lvcs.h>
 #include <bgeo/bgeo_lvcs_sptr.h>
 
-class bvxm_world_params : public vbl_ref_count {
-
-public:
+class bvxm_world_params : public vbl_ref_count
+{
+ public:
 
   bvxm_world_params();
   ~bvxm_world_params();
 
-  //enum appearance_model_type {apm_unknown, mog_grey, mog_rgb};
+  //enum appearance_model_type { apm_unknown, mog_grey, mog_rgb };
 
   void set_params(
     const vcl_string& model_dir,
@@ -53,48 +52,49 @@ public:
     vgl_vector_3d<float> basey = vgl_vector_3d<float>(0.0f,1.0f,0.0f),
     vgl_vector_3d<float> basez = vgl_vector_3d<float>(0.0f,0.0f,1.0f));
 
-  inline vcl_string model_dir(){ return model_dir_; }
-  inline vgl_point_3d<float> corner(){ return corner_; }
-  inline void set_corner(vgl_point_3d<float>& new_c){ corner_ = new_c; }
+  inline vcl_string model_dir() { return model_dir_; }
+  inline vgl_point_3d<float> corner() { return corner_; }
+  inline void set_corner(vgl_point_3d<float>& new_c) { corner_ = new_c; }
 
+  inline vgl_vector_3d<unsigned int> num_voxels(unsigned scale=0) {
+    vgl_vector_3d<unsigned int> num_voxels_scaled;
+    double divisor=vcl_pow(2.0,-(double)scale); // actually, inverse of divisor
+    num_voxels_scaled.set((unsigned int)(num_voxels_.x()*divisor+1-1e-9),
+                          (unsigned int)(num_voxels_.y()*divisor+1-1e-9),
+                          (unsigned int)(num_voxels_.z()*divisor+1-1e-9));
+    return num_voxels_scaled;
+  }
 
-  inline vgl_vector_3d<unsigned int> num_voxels(unsigned scale=0){ 
-	  vgl_vector_3d<unsigned int> num_voxels_scaled;
-      double divisor=vcl_pow(2.0,(double)scale);
-	  num_voxels_scaled.set(num_voxels_.x()/divisor,num_voxels_.y()/divisor,num_voxels_.z()/divisor);
-	  return num_voxels_scaled; }
+  inline float voxel_length(unsigned scale=0) {
+    return vcl_pow(2.0,(double)scale)*voxel_length_; }
 
-  inline float voxel_length(unsigned scale=0){
-	  return vcl_pow(2.0,(double)scale)*voxel_length_; }
-
-  inline vgl_vector_3d<float> base_x(){ return base_x_; }
-  inline vgl_vector_3d<float> base_y(){ return base_y_; }
-  inline vgl_vector_3d<float> base_z(){ return base_z_; }
+  inline vgl_vector_3d<float> base_x() { return base_x_; }
+  inline vgl_vector_3d<float> base_y() { return base_y_; }
+  inline vgl_vector_3d<float> base_z() { return base_z_; }
 
   inline void set_base_x(vgl_vector_3d<float>& basex) { base_x_ = basex; }
   inline void set_base_y(vgl_vector_3d<float>& basey) { base_y_ = basey; }
   inline void set_base_z(vgl_vector_3d<float>& basez) { base_z_ = basez; }
 
-  inline float min_occupancy_prob(){ return min_occupancy_prob_;}
-  inline float max_occupancy_prob(){ return max_occupancy_prob_;}
-  inline bgeo_lvcs_sptr lvcs(){return lvcs_;}
+  inline float min_occupancy_prob() { return min_occupancy_prob_; }
+  inline float max_occupancy_prob() { return max_occupancy_prob_; }
+  inline bgeo_lvcs_sptr lvcs() { return lvcs_; }
 
-  inline unsigned max_scale(){return max_scale_;}
+  inline unsigned max_scale() { return max_scale_; }
   vgl_box_3d<double> world_box_local();
 
   vgl_point_3d<float> center();
 
   //: Serial I/O format version
-  virtual unsigned version() const {return 2;}
+  virtual unsigned version() const { return 2; }
 
   //: Binary save parameters to stream.
   void b_write(vsl_b_ostream & os) const;
-  
+
   //: Binary load parameters from stream.
   void b_read(vsl_b_istream & is);
 
-
-protected:
+ protected:
 
   vcl_string model_dir_;
   vgl_point_3d<float> corner_;
@@ -110,11 +110,10 @@ protected:
 
   unsigned max_scale_;
 
-private:
+ private:
 
   friend vcl_ostream&  operator << (vcl_ostream& os, bvxm_world_params const& params);
   friend vcl_istream& operator >> (vcl_istream& is, bvxm_world_params &params);
-
 };
 
 vcl_ostream&  operator << (vcl_ostream& os, bvxm_world_params const& params);
@@ -122,4 +121,4 @@ vcl_istream& operator >> (vcl_istream& is, bvxm_world_params &params);
 
 typedef vbl_smart_ptr<bvxm_world_params> bvxm_world_params_sptr;
 
-#endif // _bvxm_world_params_h_
+#endif // bvxm_world_params_h_
