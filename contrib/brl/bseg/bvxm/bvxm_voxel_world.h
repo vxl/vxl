@@ -12,7 +12,7 @@
 // A voxel_type which is an appearance model type must have an associated appearance model processor class.
 // The appearance model processor type needs to have the following methods:
 //
-//
+// \code
 //   bvxm_voxel_slab<float> prob_density(bvxm_voxel_slab<APM_PROC::apm_datatype> const& appearance,
 //                                       bvxm_voxel_slab<APM_PROC::obs_datatype> const& observation);
 //
@@ -25,6 +25,7 @@
 //               bvxm_voxel_slab<float> const& weights);
 //
 //   bvxm_voxel_slab<APM_PROC::obs_datatype> expected_color(bvxm_voxel_slab<APM_PROC::apm_datatype> const& appearance);
+// \endcode
 //
 // \verbatim
 //  Modifications:
@@ -150,12 +151,12 @@ class bvxm_voxel_world: public vbl_ref_count
                                   bvxm_voxel_slab_base_sptr& mog_image,
                                   unsigned bin_index = 0);
 
-  //: generate the mixture of gaussians slab from the specified viewpoint using the most probable modes
-  //  of the distributions at each voxel along the ray. 
-  //  the slab should be allocated by the caller.
+  //: generate the mixture of gaussians slab from the specified viewpoint
+  //  Uses the most probable modes of the distributions at each voxel along the ray.
+  //  The slab should be allocated by the caller.
   template<bvxm_voxel_type APM_T>
   bool mog_most_probable_image(bvxm_image_metadata const& camera,
-                               bvxm_voxel_slab_base_sptr& mog_image, 
+                               bvxm_voxel_slab_base_sptr& mog_image,
                                unsigned bin_index = 0);
 
   //: return the original image, viewed from a new viewpoint
@@ -176,7 +177,7 @@ class bvxm_voxel_world: public vbl_ref_count
   bvxm_world_params_sptr get_params() const { return params_; }
 
   //: set the world parameters
-  void set_params(bvxm_world_params_sptr params){ params_ = params;}
+  void set_params(bvxm_world_params_sptr params) { params_ = params; }
 
   // === Operators that allow voxel world to be placed in a brdb database ===
 
@@ -210,14 +211,14 @@ class bvxm_voxel_world: public vbl_ref_count
   template<bvxm_voxel_type VOX_T>
   void increment_observations( unsigned int bin_idx = 0);
 
-   vgl_point_3d<float> voxel_index_to_xyz(unsigned vox_i, unsigned vox_j, unsigned vox_k);
+  vgl_point_3d<float> voxel_index_to_xyz(unsigned vox_i, unsigned vox_j, unsigned vox_k);
 
-protected:
-   
-   void compute_plane_image_H(vpgl_camera_double_sptr const& cam,
-                              unsigned grid_k,
-                              vgl_h_matrix_2d<double> &H_plane_to_image,
-                              vgl_h_matrix_2d<double> &H_image_to_plane);
+ protected:
+
+  void compute_plane_image_H(vpgl_camera_double_sptr const& cam,
+                             unsigned grid_k,
+                             vgl_h_matrix_2d<double> &H_plane_to_image,
+                             vgl_h_matrix_2d<double> &H_image_to_plane);
 
   //: appearance model voxel storage
   vcl_map<bvxm_voxel_type, vcl_map<unsigned int, bvxm_voxel_grid_base_sptr> > grid_map_;
@@ -225,7 +226,7 @@ protected:
   //: the world parameters
   bvxm_world_params_sptr params_;
 
-private:
+ private:
 
   template <bvxm_voxel_type APM_T>
   bool update_impl(bvxm_image_metadata const& metadata,
@@ -243,7 +244,6 @@ private:
 
 //: output description of voxel world to stream.
 vcl_ostream&  operator<<(vcl_ostream& s, bvxm_voxel_world const& vox_world);
-
 
 typedef vbl_smart_ptr<bvxm_voxel_world> bvxm_voxel_world_sptr;
 
@@ -293,7 +293,8 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index)
     grid_glob << storage_directory << '/' << fname_prefix << "*.vox";
 
     //insert grids
-    for (vul_file_iterator file_it = grid_glob.str().c_str(); file_it; ++file_it) {
+    for (vul_file_iterator file_it = grid_glob.str().c_str(); file_it; ++file_it)
+    {
       vcl_string match_str = file_it.filename();
       unsigned idx_start = match_str.find_last_of('_') + 1;
       unsigned idx_end = match_str.find(".vox");
@@ -331,7 +332,7 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index)
     bvxm_voxel_grid<voxel_datatype> *grid = new bvxm_voxel_grid<voxel_datatype>(apm_fname.str(),grid_size);
 
     // fill grid with default value
-    if (!grid->initialize_data(bvxm_voxel_traits<VOX_T>::initial_val())){
+    if (!grid->initialize_data(bvxm_voxel_traits<VOX_T>::initial_val())) {
       vcl_cerr << "error initializing voxel grid\n";
       return bvxm_voxel_grid_base_sptr(0);
     }
@@ -714,7 +715,7 @@ bool bvxm_voxel_world::inv_pixel_range_probability(bvxm_image_metadata const& ob
 
   // check image sizes
   if ( (observation.img->ni() != inv_prob.ni()) || (observation.img->nj() != inv_prob.nj()) ) {
-    vcl_cerr << "error: observation image size does not match input image size. " << vcl_endl;
+    vcl_cerr << "error: observation image size does not match input image size.\n";
   }
 
   vgl_vector_3d<unsigned int> grid_size = params->num_voxels();
@@ -825,7 +826,7 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
 
   // check image sizes
   if ( (observation.img->ni() != pixel_probability.ni()) || (observation.img->nj() != pixel_probability.nj()) ) {
-    vcl_cerr << "error: observation image size does not match input image size. " << vcl_endl;
+    vcl_cerr << "error: observation image size does not match input image size.\n";
   }
 
   vgl_vector_3d<unsigned int> grid_size = params_->num_voxels();
@@ -1044,12 +1045,12 @@ bool bvxm_voxel_world::mixture_of_gaussians_image(bvxm_image_metadata const& obs
   return true;
 }
 
-//: generate the mixture of gaussians slab from the specified viewpoint using the most probable modes
-//  of the distributions at each voxel along the ray. 
-//  the slab should be allocated by the caller.
+//: generate the mixture of gaussians slab from the specified viewpoint
+//  Uses the most probable modes of the distributions at each voxel along the ray.
+//  The slab should be allocated by the caller.
 template<bvxm_voxel_type APM_T>
 bool bvxm_voxel_world::mog_most_probable_image(bvxm_image_metadata const& observation,
-                                                  bvxm_voxel_slab_base_sptr& mog_image, unsigned bin_index)
+                                               bvxm_voxel_slab_base_sptr& mog_image, unsigned bin_index)
 {
   // datatype for current appearance model
   typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype apm_datatype; // datatype for current appearance model
