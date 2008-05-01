@@ -136,9 +136,9 @@ void bvxm_util::warp_slab_bilinear(bvxm_voxel_slab<T> const& slab_in,
   // TODO: is gaussian convolution with std = projected_size the right amount to get us to Nyquist res?
   float xstd = 0.0f, ystd = 0.0f;
 
+#if 0 // normalize homogeneous coordinates
   float max_projection_size = 20.0f;
 
-#if 0 // normalize homogeneous coordinates
   // if xsize is too big something is wrong - probably an invalid homography
   double xsize = vcl_fabs((test_pix_out1[0] / test_pix_out1[2]) - (test_pix_out0[0] / test_pix_out0[2]));
   double ysize = vcl_fabs((test_pix_out1[1] / test_pix_out1[2]) - (test_pix_out0[1] / test_pix_out0[2]));
