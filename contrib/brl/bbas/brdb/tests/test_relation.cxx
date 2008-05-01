@@ -127,7 +127,7 @@ MAIN( test_relation )
   my_relation2.get_value(it, "frames", int_val5);
   TEST("add tuple", int_val5, -300);
 
-  int size1 = my_relation2.size();
+  unsigned int size1 = my_relation2.size();
   my_relation2.remove_tuple(it);
   it = my_relation2.end();
   --it;
