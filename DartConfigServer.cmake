@@ -62,6 +62,6 @@ SET (EXPECTED_BUILDS "\\
   {GE WinXP_msvc-8.0_Release} \\
   {imorphics.com Vista_msvc-8.0_RelWithDebInfo} \\
   {imorphics.com Linux-2.6.22_gcc-4.1.2_RelWithDebInfo} \\
-  {lems.brown.edu Linux-2.6_gcc-4.1.3_-Wall} \\
+  {lems.brown.edu Linux-2.6_gcc-4.2.3_-Wall} \\
   {lems.brown.edu Linux-2.6.18_gcc-4.1.2} \\
 ")
