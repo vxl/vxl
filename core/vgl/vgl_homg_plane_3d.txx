@@ -56,7 +56,7 @@ template <class Type>
 vgl_homg_plane_3d<Type>::vgl_homg_plane_3d(vgl_vector_3d<Type> const& n,
                                            vgl_homg_point_3d<Type> const&p)
  : a_(n.x()*p.w()), b_(n.y()*p.w()), c_(n.z()*p.w()),
-   d_(n.x()*p.x()+n.y()*p.y()+n.z()*p.z()) {}
+   d_(-(n.x()*p.x()+n.y()*p.y()+n.z()*p.z())) {}
 
 template <class Type>
 bool vgl_homg_plane_3d<Type>::operator==(vgl_homg_plane_3d<Type> const& p) const

@@ -16,6 +16,7 @@
 //   Peter Vanroose  6 July 2001: Added constructor from 3 points
 //   CJB (Manchester) 16/03/2001: Tidied up the documentation
 //   Peter Vanroose 15 July 2002: Added constructor from two concurrent lines
+//   cbw (imorphics) 31 March 2008: Corrected constructor with normal and point (negated d) and added test
 // \endverbatim
 
 #include <vcl_iosfwd.h>

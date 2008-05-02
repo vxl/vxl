@@ -447,6 +447,9 @@ static void test_homg_plane_3d()
   vgl_homg_plane_3d<double> pp(1,1,1,-1);
   TEST("join", pl, pp);
 
+  vgl_homg_plane_3d<double> pln(pl.normal(),p1);
+  TEST("Plane constructed with normal",pln,pl); 
+
   TEST_NEAR("vgl_distance(plane,point)", vgl_distance(pl2,p2), vcl_sqrt(4.5/13), 1e-9);
   TEST_NEAR("vgl_distance(point,plane)", vgl_distance(p2,pl2), vcl_sqrt(4.5/13), 1e-9);
 
