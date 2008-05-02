@@ -104,7 +104,7 @@ bil_scale_image<T>::build_gaussian(const vil_image_view<T>& image,
   vil_image_view<T> temp;
   double sigma = 0.0;
   if (first_octave_ == -1){
-    temp = vil_image_view<T>(2*image.ni(), 2*image.nj());
+    temp = vil_image_view<T>(2*image.ni(), 2*image.nj(), images.nplanes());
     vil_resample_bilin( image, temp, 0.0, 0.0, 0.5, 0.0, 0.0, 0.5, 2*image.ni()-1, 2*image.nj()-1);
     if (init_scale_ > 1.0)
       sigma = vcl_sqrt(init_scale_*init_scale_ - 1.0);
@@ -115,7 +115,7 @@ bil_scale_image<T>::build_gaussian(const vil_image_view<T>& image,
       sigma = vcl_sqrt(init_scale_*init_scale_ - 0.5);
   }
 
-  data_[0][0] = vil_image_view<T>(temp.ni(),temp.nj());
+  data_[0][0] = vil_image_view<T>(temp.ni(),temp.nj(), temp.nplanes());
   if (sigma > 0.0)
     smooth(sigma, temp, data_[0][0]);
   else
@@ -135,9 +135,9 @@ bil_scale_image<T>::build_gaussian(const vil_image_view<T>& image,
     for (unsigned int lvl=0; lvl<num_levels_+2; ++lvl){
       vcl_cout << "img("<<oct<<','<<lvl<<") - ("<<data_[oct][lvl].ni()<<','<<data_[oct][lvl].nj()<<") "<< sigma <<vcl_endl;
       if (lvl<num_levels_+1)
-        temp = data_[oct][lvl+1] = vil_image_view<T>(temp.ni(),temp.nj());
+        temp = data_[oct][lvl+1] = vil_image_view<T>(temp.ni(),temp.nj(),temp.nplanes());
       else
-        temp = vil_image_view<T>(temp.ni(),temp.nj());
+        temp = vil_image_view<T>(temp.ni(),temp.nj(),temp.nplanes());
       // Smooth with a Gaussian filter
       smooth(sigma, data_[oct][lvl], temp);
       // compute DoG image if requested
