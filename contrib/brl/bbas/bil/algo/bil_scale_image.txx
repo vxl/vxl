@@ -104,7 +104,7 @@ bil_scale_image<T>::build_gaussian(const vil_image_view<T>& image,
   vil_image_view<T> temp;
   double sigma = 0.0;
   if (first_octave_ == -1){
-    temp = vil_image_view<T>(2*image.ni(), 2*image.nj(), images.nplanes());
+    temp = vil_image_view<T>(2*image.ni(), 2*image.nj(), image.nplanes());
     vil_resample_bilin( image, temp, 0.0, 0.0, 0.5, 0.0, 0.0, 0.5, 2*image.ni()-1, 2*image.nj()-1);
     if (init_scale_ > 1.0)
       sigma = vcl_sqrt(init_scale_*init_scale_ - 1.0);

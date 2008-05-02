@@ -66,7 +66,7 @@ class bil_scale_image
   //: Find the closest scale to \p scale that is represented by an image
   float closest_scale(float scale) const
   {
-    double log2_scale = vcl_log(scale/init_scale_) / 0.30102999566398; // divide by log(2) to get base 2 log
+    double log2_scale = vcl_log(scale/init_scale_) / 0.69314718056; // divide by log(2) to get base 2 log
     int s = int(log2_scale*num_levels_ +0.5);
     return (float) vcl_pow(2.0, double(s)/num_levels_) * init_scale_;
   }

@@ -39,6 +39,7 @@ MAIN( test_bil_scale_image )
   TEST("levels()",gs_test.levels(),3);
   TEST("octaves()",gs_test.octaves(),4);
   TEST("closest_scale(scale)",gs_test.closest_scale(2.01f),2.0f);
+  vcl_cout << gs_test.closest_scale(2.01f) <<vcl_endl;
 
   int octaves = 5;
   int levels = 3;
