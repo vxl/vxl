@@ -45,6 +45,8 @@ bool bil_cedt::compute_cedt()
       for (unsigned i=0;i<dist_.ni();i++)
           dist_(i,j)=vcl_sqrt((float)(dx_(j,i)*dx_(j,i)+dy_(j,i)*dy_(j,i)));
 
+
+    delete heap;
     return true;
 }
 
@@ -710,6 +712,13 @@ bil_cedt_heap::bil_cedt_heap(int nj,int ni)
 
 bil_cedt_heap::~bil_cedt_heap()
 {
+        delete[] data;
+    delete[] index;
+    delete[] rank;
+    delete[] loc;
+    delete[] locx;
+    delete[] locy;
+
 }
 
 void bil_cedt_heap::print_heap()
@@ -791,5 +800,6 @@ bil_cedt_contour::~bil_cedt_contour()
     delete[] x;
     delete[] y;
     delete[] dir;
-}
+    
+}   
 
