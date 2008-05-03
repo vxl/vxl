@@ -66,7 +66,7 @@ class bvxm_world_params : public vbl_ref_count
   }
 
   inline float voxel_length(unsigned scale=0) {
-    return vcl_pow(2.0,(double)scale)*voxel_length_; }
+    return (float)vcl_pow(2.0,(double)scale)*voxel_length_; }
 
   inline vgl_vector_3d<float> base_x() { return base_x_; }
   inline vgl_vector_3d<float> base_y() { return base_y_; }
