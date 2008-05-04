@@ -1,5 +1,4 @@
 #define _CRTDBG_MAP_ALLOC
-//#include <vcl_cstdlib.h>
 #include <crtdbg.h>
 
 #include <bwm/bwm_tableau_mgr.h>
@@ -41,7 +40,7 @@ int main(int argc, char** argv)
   REG_PROCESS(bwm_histogram_process_command);
   REG_PROCESS(bwm_intens_profile_process_command);
   REG_PROCESS(bwm_range_map_process_command);
-  REG_PROCESS(bwm_jim_process_command);
+//REG_PROCESS(bwm_jim_process_command);
 
   // Set up the app_menu
   vgui_menu main_menu;
