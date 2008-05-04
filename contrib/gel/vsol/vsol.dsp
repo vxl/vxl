@@ -285,10 +285,10 @@ SOURCE=.\Templates/vbl_smart_ptr+vsol_volume_3d-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+vsol_polyline_3d-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_map+uint.vcl_vector+vbl_smart_ptr+vsol_digital_curve_2d--.cxx
+SOURCE=.\Templates/vcl_map+uint.vsol_digital_curve_2d_sptr--.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_map+uint.vcl_vector+vbl_smart_ptr+vsol_line_2d--.cxx
+SOURCE=.\Templates/vcl_map+uint.vsol_line_2d_sptr--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vsol_box_2d.cxx

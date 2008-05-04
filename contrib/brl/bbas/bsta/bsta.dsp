@@ -141,10 +141,10 @@ SOURCE=.\Templates/bsta_gaussian_sphere+float.1-.cxx
 SOURCE=.\Templates/bsta_gaussian_sphere+float.3-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bsta_histogram-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+bsta_histogram_base-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bsta_joint_histogram-.cxx
+SOURCE=.\Templates/vbl_smart_ptr+bsta_joint_histogram_base-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\bsta_gauss.cxx

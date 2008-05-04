@@ -93,6 +93,9 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
+SOURCE=.\test_driver.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_bil_cedt.cxx
 # End Source File
 # Begin Source File
@@ -111,7 +114,7 @@ SOURCE=.\test_bil_finite_second_differences.cxx
 SOURCE=.\test_bil_wshed2d.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\test_driver.cxx
+SOURCE=.\test_bil_scale_image.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\test_include.cxx

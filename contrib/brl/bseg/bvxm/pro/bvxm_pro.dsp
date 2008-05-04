@@ -129,6 +129,9 @@ SOURCE=.\bvxm_rpc_registration_process.cxx
 SOURCE=.\bvxm_save_occupancy_raw_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvxm_save_occupancy_vff_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\bvxm_update_process.cxx
 # End Source File
 # Begin Source File
@@ -199,6 +202,9 @@ SOURCE=.\bvxm_rpc_registration_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_save_occupancy_raw_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_save_occupancy_vff_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_update_process.h

@@ -111,7 +111,7 @@ SOURCE=.\bil_wshed2d.cxx
 SOURCE=.\Templates/bil_detect_ridges+float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/bil_detect_ridges+uint16-.cxx
+SOURCE=.\Templates/bil_detect_ridges+uint_16-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bil_finite_differences+double-.cxx
