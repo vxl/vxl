@@ -180,6 +180,9 @@ SOURCE=.\bwm_observer.h
 SOURCE=.\bwm_observer_cam.h
 # End Source File
 # Begin Source File
+SOURCE=.\bwm_observer_cam_proj.h
+# End Source File
+# Begin Source File
 SOURCE=.\bwm_observer_coin3d.h
 # End Source File
 # Begin Source File
