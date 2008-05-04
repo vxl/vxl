@@ -17,23 +17,24 @@
 class bwm_observer_cam_proj : public bwm_observer_cam
 {
  public:
-
-  bwm_observer_cam_proj(){}
+  bwm_observer_cam_proj() {}
 
   bwm_observer_cam_proj(bgui_image_tableau_sptr const& img,
-    vpgl_proj_camera<double> *camera, vcl_string cam_path)
-    : bwm_observer_cam(img, camera, cam_path) {}
+                        vpgl_proj_camera<double> *camera,
+                        vcl_string cam_path)
+  : bwm_observer_cam(img, camera, cam_path) {}
 
   // set the initial projection plane to z=0
-  bwm_observer_cam_proj(bgui_image_tableau_sptr const& img, const char* n="unnamed")
-    : bwm_observer_cam(img, n) {}
+  bwm_observer_cam_proj(bgui_image_tableau_sptr const& img,
+                        const char* n="unnamed")
+  : bwm_observer_cam(img, n) {}
 
   virtual ~bwm_observer_cam_proj(){}
 
   virtual vcl_string type_name() const { return "bwm_observer_cam_proj"; }
 
   void set_camera(vpgl_proj_camera<double> *camera, vcl_string cam_path)
-  { bwm_observer_cam::set_camera(camera, cam_path);}
+  { bwm_observer_cam::set_camera(camera, cam_path); }
 
   void camera_center(vgl_homg_point_3d<double> &center);
 
@@ -46,4 +47,4 @@ class bwm_observer_cam_proj : public bwm_observer_cam
   vcl_ostream& print_camera(vcl_ostream& s);
 };
 
-#endif
+#endif // bwm_observer_cam_proj_h_
