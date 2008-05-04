@@ -9,6 +9,7 @@ TESTS += test_bil_edt.cxx
 TESTS += test_bil_finite_differences.cxx
 TESTS += test_bil_finite_second_differences.cxx
 TESTS += test_bil_wshed2d.cxx
+TESTS += test_bil_scale_image.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
