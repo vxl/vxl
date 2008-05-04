@@ -30,6 +30,7 @@
 #include <bwm/bwm_observable_textured_mesh_sptr.h>
 #include <bwm/bwm_observer.h>
 #include <bwm/bwm_observer_cam.h>
+#include <bwm/bwm_observer_cam_proj.h>
 #include <bwm/bwm_observer_coin3d.h>
 #include <bwm/bwm_observer_img.h>
 #include <bwm/bwm_observer_lidar.h>

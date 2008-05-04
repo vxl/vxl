@@ -4,6 +4,7 @@
 #include <mfpf/mfpf_draw_pose_lines.h>
 #include <mfpf/mfpf_edge_finder_builder.h>
 #include <mfpf/mfpf_edge_finder.h>
+#include <mfpf/mfpf_feature_vec.h>
 #include <mfpf/mfpf_mr_point_finder.h>
 #include <mfpf/mfpf_mr_point_finder_builder.h>
 #include <mfpf/mfpf_prune_overlaps.h>
