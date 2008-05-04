@@ -16,6 +16,7 @@ SOURCES += bwm_observable_textured_mesh.cxx
 MANPAGE_SOURCES += bwm_observable_textured_mesh_sptr.h
 SOURCES += bwm_observer.cxx
 SOURCES += bwm_observer_cam.cxx
+MANPAGE_SOURCES += bwm_observer_cam_proj.h
 SOURCES += bwm_observer_img.cxx
 SOURCES += bwm_observer_mgr.cxx
 SOURCES += bwm_observer_proj_cam.cxx
