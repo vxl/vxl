@@ -12,7 +12,7 @@
 #include <bwm/bwm_observer_cam_proj.h>
 
 #include <vnl/algo/vnl_levenberg_marquardt.h>
-#include <vnl/algo/vnl_vector.h>
+#include <vnl/vnl_vector.h>
 
 #include <vpgl/vpgl_proj_camera.h>
 #include <vsol/vsol_point_2d.h>
