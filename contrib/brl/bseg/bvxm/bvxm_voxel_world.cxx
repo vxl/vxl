@@ -211,9 +211,10 @@ bool bvxm_voxel_world::save_edges_raw(vcl_string filename)
   // iterate through slabs and fill in memory array
   char *edges_array = new char[nx*ny*nz];
 
+  vcl_cout << "Saving edges to RAW file: " << vcl_endl;
   bvxm_voxel_grid<edges_datatype>::iterator edges_it = edges_grid->begin();
   for (unsigned k=0; edges_it != edges_grid->end(); ++edges_it, ++k) {
-    vcl_cout << '.';
+    vcl_cout << ".";
     for (unsigned i=0; i<(*edges_it).nx(); ++i) {
       for (unsigned j=0; j < (*edges_it).ny(); ++j) {
         edges_array[i*ny*nz + j*nz + k] = (unsigned char)((*edges_it)(i,j) * 255.0);;
@@ -499,7 +500,6 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
   return true;
 }
 
-
 // update voxel grid for edges with data from image/camera pair and return the edge probability density of pixel values
 bool bvxm_voxel_world::update_edges(bvxm_image_metadata const& metadata)
 {
@@ -522,21 +522,37 @@ bool bvxm_voxel_world::update_edges(bvxm_image_metadata const& metadata)
   }
 
   // convert image to a voxel_slab
-  bvxm_voxel_slab<edges_datatype> image_slab(metadata.img->ni(), metadata.img->nj(), 1);
-  if (!bvxm_util::img_to_slab(metadata.img,image_slab)) {
+  bvxm_voxel_slab<edges_datatype> image_image(metadata.img->ni(), metadata.img->nj(), 1);
+  if (!bvxm_util::img_to_slab(metadata.img,image_image)) {
     vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type:" << EDGES << vcl_endl;
     return false;
   }
 
-  bvxm_voxel_slab<edges_datatype> frame_backproj(grid_size.x(),grid_size.y(),1);
+  float min_edge_prob = this->get_params()->min_occupancy_prob();
+  float max_edge_prob = this->get_params()->max_occupancy_prob();
+  for(unsigned i=0; i<image_image.nx(); i++){
+    for(unsigned j=0; j<image_image.ny(); j++){
+      image_image(i,j) = min_edge_prob + (image_image(i,j)*(max_edge_prob-min_edge_prob));
+    }
+  }
+
+  // convert marginal to a voxel_slab
+  bvxm_voxel_slab<edges_datatype> marginal_image(metadata.img->ni(), metadata.img->nj(), 1);
+  marginal_image.fill(0.0);
+  bvxm_voxel_slab<edges_datatype> edges_image(metadata.img->ni(), metadata.img->nj(), 1);
+  edges_image.fill(0.0);
+  bvxm_voxel_slab<edges_datatype> marginal_slab(grid_size.x(),grid_size.y(),1);
+  marginal_slab.fill(0.0);
+  bvxm_voxel_slab<edges_datatype> image_slab(grid_size.x(),grid_size.y(),1);
+  image_slab.fill(0.0);
 
   // get edge probability grid
   bvxm_voxel_grid_base_sptr edges_grid_base = this->get_grid<EDGES>(0);
   bvxm_voxel_grid<edges_datatype> *edges_grid  = static_cast<bvxm_voxel_grid<edges_datatype>*>(edges_grid_base.ptr());
+
+  // Pass 1: to build the marginal
+  vcl_cout << "Pass 1: " << vcl_endl;
   bvxm_voxel_grid<edges_datatype>::iterator edges_slab_it = edges_grid->begin();
-
-  vcl_cout << "Updating Voxels for the Edge Model: " << vcl_endl;
-
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++edges_slab_it)
   {
     vcl_cout << '.';
@@ -545,17 +561,47 @@ bool bvxm_voxel_world::update_edges(bvxm_image_metadata const& metadata)
       return false;
     }
 
-    // backproject image onto voxel plane
-    bvxm_util::warp_slab_bilinear(image_slab, H_plane_to_img[z], frame_backproj);
+    edges_image.fill(0.0);
+    bvxm_util::warp_slab_bilinear((*edges_slab_it), H_img_to_plane[z], edges_image);
 
-    bvxm_voxel_slab<edges_datatype>::iterator frame_backproj_it = frame_backproj.begin();
-    bvxm_voxel_slab<edges_datatype>::iterator edges_slab_it_it = (*edges_slab_it).begin();
+    bvxm_voxel_slab<edges_datatype>::iterator image_image_it = image_image.begin();
+    bvxm_voxel_slab<edges_datatype>::iterator marginal_image_it = marginal_image.begin();
+    bvxm_voxel_slab<edges_datatype>::iterator edges_image_it = edges_image.begin();
 
-    for (; frame_backproj_it != frame_backproj.end(); ++frame_backproj_it, ++edges_slab_it_it) {
-      (*edges_slab_it_it) = (*edges_slab_it_it)*(*frame_backproj_it);
+    for (; image_image_it != image_image.end(); ++image_image_it, ++marginal_image_it, ++edges_image_it) {
+      (*marginal_image_it) = (*marginal_image_it) + (*edges_image_it);
     }
   }
   vcl_cout << vcl_endl;
+
+  // Pass 2: update the voxel probability
+  vcl_cout << "Pass 2: " << vcl_endl;
+  edges_slab_it = edges_grid->begin();
+  for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++edges_slab_it)
+  {
+    vcl_cout << '.';
+    if ( (edges_slab_it == edges_grid->end()) ) {
+      vcl_cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << vcl_endl;
+      return false;
+    }
+
+    image_slab.fill(0.0);
+    marginal_slab.fill(0.0);
+    bvxm_util::warp_slab_bilinear(image_image,H_plane_to_img[z],image_slab);
+    bvxm_util::warp_slab_bilinear(marginal_image, H_plane_to_img[z], marginal_slab);
+
+    bvxm_voxel_slab<edges_datatype>::iterator image_slab_it = image_slab.begin();
+    bvxm_voxel_slab<edges_datatype>::iterator marginal_slab_it = marginal_slab.begin();
+    bvxm_voxel_slab<edges_datatype>::iterator edges_slab_it_it = (*edges_slab_it).begin();
+
+    for (; image_slab_it != image_slab.end(); ++image_slab_it, ++marginal_slab_it, ++edges_slab_it_it) {
+      if((*marginal_slab_it) > min_edge_prob){ 
+        (*edges_slab_it_it) = (*edges_slab_it_it) * ((*image_slab_it)/(*marginal_slab_it));
+      }
+    }
+  }
+  vcl_cout << vcl_endl;
+  vcl_cout << "Done: " << vcl_endl;
   return true;
 }
 
@@ -600,10 +646,25 @@ bool bvxm_voxel_world::expected_edge_image(bvxm_image_metadata const& camera,vil
     bvxm_voxel_slab<edges_datatype>::iterator expected_edge_image_it = expected_edge_image.begin();
 
     for (; expected_edge_image_it != expected_edge_image.end(); ++slice_edges_it, ++expected_edge_image_it) {
-      (*expected_edge_image_it) = vnl_math_max((*expected_edge_image_it),(*slice_edges_it));
+      (*expected_edge_image_it) = (*expected_edge_image_it) + (*slice_edges_it);
     }
   }
   vcl_cout << vcl_endl;
+
+  float min_expected_edge_image = vcl_numeric_limits<float>::max();
+  float max_expected_edge_image = vcl_numeric_limits<float>::min();
+  for(unsigned i=0; i<expected_edge_image.nx(); i++){
+    for(unsigned j=0; j<expected_edge_image.ny(); j++){
+      min_expected_edge_image = vnl_math_min(min_expected_edge_image,expected_edge_image(i,j));
+      max_expected_edge_image = vnl_math_max(max_expected_edge_image,expected_edge_image(i,j));
+    }
+  }
+
+  for(unsigned i=0; i<expected_edge_image.nx(); i++){
+    for(unsigned j=0; j<expected_edge_image.ny(); j++){
+      expected_edge_image(i,j) = (expected_edge_image(i,j)-min_expected_edge_image)/(max_expected_edge_image-min_expected_edge_image);
+    }
+  }
 
   // convert back to vil_image_view
   bvxm_util::slab_to_img(expected_edge_image, expected);

@@ -97,7 +97,7 @@ class bvxm_voxel_traits<EDGES>
 
   static inline vcl_string filename_prefix() { return "edges"; }
   static inline bool is_multibin() { return false; }
-  static inline voxel_datatype initial_val() { return 1.0f; }
+  static inline voxel_datatype initial_val() { return 0.01f; }
 };
 
 template<>
