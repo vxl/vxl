@@ -69,7 +69,7 @@ bool bvxm_rpc_registration_process::execute()
   bool rpc_correction_flag = input3->value();
   bool rpc_update_flag = input4->value();
 
-  bool analyzer_mode = true;
+  bool analyzer_mode = false;
   char temp_string[1024];
 
   // get parameters
@@ -93,7 +93,7 @@ bool bvxm_rpc_registration_process::execute()
   expected_edge_image_output.fill(0);
 
   if(analyzer_mode){
-    vcl_sprintf(temp_string,"edge_image_%d.tif",vox_world->num_observations<EDGES>());
+    vcl_sprintf(temp_string,"edge_image_%d.jpg",vox_world->num_observations<EDGES>());
     vil_save(edge_image,temp_string);
   }
 
@@ -125,7 +125,7 @@ bool bvxm_rpc_registration_process::execute()
     }
 
     if(analyzer_mode){
-      vcl_sprintf(temp_string,"expected_image_%d.tif",vox_world->num_observations<EDGES>());
+      vcl_sprintf(temp_string,"expected_image_%d.jpg",vox_world->num_observations<EDGES>());
       vil_save(expected_edge_image_output,temp_string);
     }
 
@@ -200,7 +200,7 @@ bool bvxm_rpc_registration_process::execute()
         }
       }
 
-      vcl_sprintf(temp_string,"edge_fit_image_%d.tif",vox_world->num_observations<EDGES>());
+      vcl_sprintf(temp_string,"edge_fit_image_%d.jpg",vox_world->num_observations<EDGES>());
       vil_save(edge_fit_image,temp_string);
     }
   }
