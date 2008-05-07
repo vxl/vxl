@@ -37,9 +37,9 @@ class bwm_observer_proj_cam : public bwm_observer_cam
 
   vgl_vector_3d<double> camera_direction(vgl_point_3d<double> origin);
 
-  virtual bool intersect_ray_and_plane(vgl_homg_point_2d<double> img_point,
-                                       vgl_homg_plane_3d<double> plane,
-                                       vgl_homg_point_3d<double> &world_point);
+  virtual bool intersect_ray_and_plane(vgl_point_2d<double> img_point,
+                                       vgl_plane_3d<double> plane,
+                                       vgl_point_3d<double> &world_point);
 
   vpgl_proj_camera<double> read_projective_camera(vcl_string cam_path);
 

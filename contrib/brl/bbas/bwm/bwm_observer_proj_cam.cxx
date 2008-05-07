@@ -40,12 +40,13 @@ bwm_observer_proj_cam::bwm_observer_proj_cam(bgui_image_tableau_sptr img,
   set_tab_name(name);
 }
 
-bool bwm_observer_proj_cam::intersect_ray_and_plane(vgl_homg_point_2d<double> img_point,
-                                                    vgl_homg_plane_3d<double> plane,
-                                                    vgl_homg_point_3d<double> &world_point)
+bool bwm_observer_proj_cam::intersect_ray_and_plane(vgl_point_2d<double> img_point,
+                                                    vgl_plane_3d<double> plane,
+                                                    vgl_point_3d<double> &world_point)
 { 
   vpgl_proj_camera<double>* proj_cam = static_cast<vpgl_proj_camera<double> *> (camera_);
-  vgl_homg_line_3d_2_points<double> ray = proj_cam->backproject(img_point);
+  vgl_homg_point_2d<double> img_point_h(img_point);
+  vgl_homg_line_3d_2_points<double> ray = proj_cam->backproject(img_point_h);
   vgl_homg_operators_3d<double> oper;
   vgl_homg_point_3d<double> p = oper.intersect_line_and_plane(ray,plane);
   world_point = p;
