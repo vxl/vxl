@@ -22,10 +22,6 @@
 #include <bsta/bsta_mixture_fixed.h>
 #include <bsta/bsta_gaussian_indep.h>
 
-typedef bsta_num_obs<bsta_gauss_if3> gauss_type;
-typedef bsta_mixture_fixed<gauss_type, 3> mix_gauss;
-typedef bsta_num_obs<mix_gauss> mix_gauss_type;
-//typedef gauss_type::vector_type T;
 
 
 // The mix_gauss_type contains the same data as mix_gauss plus an
@@ -33,7 +29,14 @@ typedef bsta_num_obs<mix_gauss> mix_gauss_type;
 
 class  bvxm_mog_rgb_processor
 {
- public:
+protected:
+  static const unsigned n_gaussian_modes_ = 3;
+
+  typedef bsta_num_obs<bsta_gauss_if3> gauss_type;
+  typedef bsta_mixture_fixed<gauss_type, 3> mix_gauss;
+  typedef bsta_num_obs<mix_gauss> mix_gauss_type;
+
+public:
 
   typedef mix_gauss_type apm_datatype;
   typedef gauss_type::vector_type obs_datatype;

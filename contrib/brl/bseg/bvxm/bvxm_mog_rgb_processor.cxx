@@ -63,17 +63,21 @@ bool bvxm_mog_rgb_processor::update( bvxm_voxel_slab<apm_datatype> &appear,
             bvxm_voxel_slab<float> const& weight)
 {
   // the model
-  bsta_gauss_if3 init_gauss(obs_datatype(0.0f),obs_datatype(0.01f));
+  float init_variance = 0.008f;
+  float min_stddev = 0.02f;
+  float g_thresh = 2.5; // number of std devs from mean sample must be
+  //bsta_gauss_if3 init_gauss(obs_datatype(0.0f),obs_datatype(0.01f));
+  bsta_gaussian_indep<float,3>::covar_type init_covar(init_variance);
+  bsta_gauss_if3 init_gauss(obs_datatype(0.0f),init_covar);
 
- // the updater
-  bsta_mg_grimson_weighted_updater<mix_gauss> updater(init_gauss);
+  // the updater
+  //bsta_mg_grimson_weighted_updater<mix_gauss> updater(init_gauss);
+  bsta_mg_grimson_weighted_updater<mix_gauss> updater(init_gauss,this->n_gaussian_modes_,g_thresh,min_stddev);
 
   //check dimensions match
   assert(appear.nx() == obs.nx());
   assert(appear.ny() == obs.ny());
-
-  //the assert does n't seem to be right : Please CHECK DAN
-  // assert(updater.data_dimension == appear.nz());
+  assert(appear.nz() == obs.nz());
 
   //the iterators
   bvxm_voxel_slab<apm_datatype>::iterator appear_it;
@@ -82,7 +86,8 @@ bool bvxm_mog_rgb_processor::update( bvxm_voxel_slab<apm_datatype> &appear,
 
   for (appear_it = appear.begin(); appear_it!= appear.end(); ++appear_it, ++obs_it, ++weight_it)
   {
-    updater(*appear_it, *obs_it, *weight_it);
+    if (*weight_it > 0)
+      updater(*appear_it, *obs_it, *weight_it);
   }
   return true;
 }
@@ -92,7 +97,7 @@ bool bvxm_mog_rgb_processor::update( bvxm_voxel_slab<apm_datatype> &appear,
 bvxm_voxel_slab<bvxm_mog_rgb_processor::obs_datatype> bvxm_mog_rgb_processor::expected_color(bvxm_voxel_slab<mix_gauss_type > const& appear)
 {
   //the output
-   bvxm_voxel_slab<obs_datatype> expected_color;
+   bvxm_voxel_slab<obs_datatype> expected_color(appear.nx(),appear.ny(),appear.nz());
 
    //the iterator
    bvxm_voxel_slab<apm_datatype>::const_iterator appear_it;
@@ -100,9 +105,10 @@ bvxm_voxel_slab<bvxm_mog_rgb_processor::obs_datatype> bvxm_mog_rgb_processor::ex
 
   for (appear_it = appear.begin(); appear_it!= appear.end();++appear_it, ++ec_it)
   {
-   obs_datatype total_weight,c;
-   total_weight.fill(0);
-   c.fill(0);
+    //obs_datatype total_weight,c;
+    //total_weight.fill(0);
+    float total_weight= 0;
+    obs_datatype c(0.0f);
 
     //should be components used
     for (unsigned i = 0 ; i< (*appear_it).num_components(); i++)
@@ -110,7 +116,8 @@ bvxm_voxel_slab<bvxm_mog_rgb_processor::obs_datatype> bvxm_mog_rgb_processor::ex
       total_weight += (*appear_it).weight(i);
       c+= (*appear_it).distribution(i).mean() * (*appear_it).weight(i);
     }
-    (*ec_it)= (1/total_weight.magnitude())*c;
+    if (total_weight > 0.0f)
+      (*ec_it)= (1/total_weight)*c;
    }
 
   return expected_color;

@@ -234,7 +234,7 @@ bool bvxm_util::img_to_slab(vil_image_view_base_sptr const image, bvxm_voxel_sla
         for (; slab_it != slab.end(); ++slab_it) {
           for (unsigned p=0; p<N; ++p) {
             (*slab_it)[p] = (T)(*(img_its[p]) / 255.0);
-            ++(img_its[p]);
+            img_its[p] += img_view->istep();
           }
         }
       }
@@ -264,7 +264,7 @@ bool bvxm_util::img_to_slab(vil_image_view_base_sptr const image, bvxm_voxel_sla
         for (; slab_it != slab.end(); ++slab_it) {
           for (unsigned p=0; p<N; ++p) {
             (*slab_it)[p] = (T)(*(img_its[p]) / 255.0);
-            ++(img_its[p]);
+            img_its[p] += plane_view.istep();
           }
         }
       }

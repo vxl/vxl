@@ -73,11 +73,11 @@ bool bvxm_mog_grey_processor::update( bvxm_voxel_slab<mix_gauss_type> &appear,
   //check dimensions match
   assert(appear.nx() == obs.nx());
   assert(appear.ny() == obs.ny());
-  assert(updater.data_dimension == appear.nz());
+  assert(appear.nz() == obs.nz());
 
   //the iterators
-  bvxm_voxel_slab<mix_gauss_type>::iterator appear_it;
-  bvxm_voxel_slab<float>::const_iterator obs_it = obs.begin();
+  bvxm_voxel_slab<apm_datatype>::iterator appear_it;
+  bvxm_voxel_slab<obs_datatype>::const_iterator obs_it = obs.begin();
   bvxm_voxel_slab<float>::const_iterator weight_it = weight.begin();
 
   for (appear_it = appear.begin(); appear_it!= appear.end(); ++appear_it, ++obs_it, ++weight_it)
