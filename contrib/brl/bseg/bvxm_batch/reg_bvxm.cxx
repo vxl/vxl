@@ -8,6 +8,7 @@
 #include <vpgl_pro/vpgl_load_perspective_camera_process.h>
 #include <vpgl_pro/vpgl_save_perspective_camera_process.h>
 #include <vpgl_pro/vpgl_load_rational_camera_process.h>
+#include <vpgl_pro/vpgl_save_rational_camera_process.h>
 #include <vpgl_pro/vpgl_load_rational_camera_nitf_process.h>
 #include <bvxm/pro/bvxm_create_voxel_world_process.h>
 #include <bvxm/pro/bvxm_update_process.h>
@@ -44,6 +45,7 @@ register_processes(PyObject *self, PyObject *args)
   REG_PROCESS(vil_load_image_view_process, bprb_batch_process_manager);
   REG_PROCESS(vil_save_image_view_process, bprb_batch_process_manager);
   REG_PROCESS(vpgl_load_rational_camera_process, bprb_batch_process_manager);
+  REG_PROCESS(vpgl_save_rational_camera_process, bprb_batch_process_manager);
   REG_PROCESS(vpgl_load_rational_camera_nitf_process, bprb_batch_process_manager);
   REG_PROCESS(vpgl_load_proj_camera_process, bprb_batch_process_manager);
   REG_PROCESS(vpgl_load_perspective_camera_process, bprb_batch_process_manager);
