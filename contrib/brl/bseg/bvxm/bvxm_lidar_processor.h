@@ -29,7 +29,8 @@ class  bvxm_lidar_processor
 
   //: A function that assigns a gaussian weight to the lidar observation
   bvxm_voxel_slab<float>  prob_density(float z_dim,
-                                       bvxm_voxel_slab<float> const& obs);
+                                       bvxm_voxel_slab<float> const& obs,
+                                       float voxel_width = 0.0 );
 
  private:
   bsta_gauss_f1 gauss_;
