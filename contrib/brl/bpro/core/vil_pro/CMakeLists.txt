@@ -10,7 +10,7 @@ SET(vil_pro_sources
     vil_map_image_process.h         vil_map_image_process.cxx
     vil_math_functors.h
     vil_binary_image_op_process.h   vil_binary_image_op_process.cxx 
-
+	vil_rgbi_to_grey_process.h		vil_rgbi_to_grey_process.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vil_pro_sources)
