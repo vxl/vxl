@@ -11,7 +11,7 @@
 bvxm_memory_chunk::bvxm_memory_chunk() : data_(0), size_(0) {}
 
 //: Allocate n bytes of memory
-bvxm_memory_chunk::bvxm_memory_chunk(unsigned long n) : data_(new char[n]), size_(n) {}
+bvxm_memory_chunk::bvxm_memory_chunk(vxl_uint_64 n) : data_(new char[(unsigned)n]), size_(n) {}
 
 //: Destructor
 bvxm_memory_chunk::~bvxm_memory_chunk()
@@ -21,9 +21,9 @@ bvxm_memory_chunk::~bvxm_memory_chunk()
 
 //: Copy constructor
 bvxm_memory_chunk::bvxm_memory_chunk(const bvxm_memory_chunk& d)
-: data_(new char[d.size()]), size_(d.size())
+: data_(new char[(unsigned)d.size()]), size_(d.size())
 {
-  vcl_memcpy(data_,d.data_,size_);
+  vcl_memcpy(data_,d.data_,(size_t)size_);
 }
 
 //: Assignment operator
@@ -32,19 +32,19 @@ bvxm_memory_chunk& bvxm_memory_chunk::operator=(const bvxm_memory_chunk& d)
   if (this==&d) return *this;
 
   set_size(d.size());
-  vcl_memcpy(data_,d.data_,size_);
+  vcl_memcpy(data_,d.data_,(size_t)size_);
   return *this;
 }
 
 //: Create empty space for n elements.
 //  Leave existing data untouched if the size is already n.
-void bvxm_memory_chunk::set_size(unsigned long n)
+void bvxm_memory_chunk::set_size(vxl_uint_64 n)
 {
   if (size_==n) return;
   delete [] reinterpret_cast<char*>(data_);
   data_ = 0;
   if (n>0)
-    data_ = new char[n];
+    data_ = new char[(unsigned)n];
   size_ = n;
 }
 

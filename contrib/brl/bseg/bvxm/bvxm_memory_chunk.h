@@ -5,6 +5,7 @@
 
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
+#include <vxl_config.h>
 
 class bvxm_memory_chunk : public vbl_ref_count
 {
@@ -12,14 +13,14 @@ class bvxm_memory_chunk : public vbl_ref_count
   void *data_;
 
   //: Number of elements (bytes)
-  unsigned long size_;
+  vxl_uint_64 size_;
 
  public:
     //: Default constructor
     bvxm_memory_chunk();
 
     //: Allocate n bytes of memory
-    bvxm_memory_chunk(unsigned long n);
+    bvxm_memory_chunk(vxl_uint_64 n);
 
     //: Copy constructor
     bvxm_memory_chunk(const bvxm_memory_chunk&);
@@ -37,10 +38,10 @@ class bvxm_memory_chunk : public vbl_ref_count
     void* const_data() const { return data_;}
 
     //: Number of bytes allocated
-    unsigned long size() const { return size_; }
+    vxl_uint_64 size() const { return size_; }
 
     //: Create space for n bytes
-    void set_size(unsigned long n);
+    void set_size(vxl_uint_64 n);
 };
 
 typedef vbl_smart_ptr<bvxm_memory_chunk> bvxm_memory_chunk_sptr;
