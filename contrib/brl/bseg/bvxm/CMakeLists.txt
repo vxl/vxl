@@ -23,6 +23,7 @@ SET(bvxm_sources
     bvxm_voxel_slab.h               bvxm_voxel_slab.txx
     bvxm_voxel_storage.h           
     bvxm_voxel_storage_disk.h       bvxm_voxel_storage_disk.txx
+    bvxm_voxel_storage_disk_cached.h  bvxm_voxel_storage_disk_cached.txx  
     bvxm_voxel_storage_mem.h        bvxm_voxel_storage_mem.txx
     bvxm_voxel_slab_iterator.h      bvxm_voxel_slab_iterator.txx
     bvxm_voxel_grid_base.h          

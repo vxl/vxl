@@ -2,6 +2,7 @@ ADD_EXECUTABLE( bvxm_test_all
   test_driver.cxx
   test_voxel_storage_mem.cxx
   test_voxel_storage_disk.cxx
+  test_voxel_storage_disk_cached.cxx
   test_voxel_grid.cxx
   test_apm_processors.cxx
   test_lidar_processor.cxx
@@ -16,6 +17,7 @@ TARGET_LINK_LIBRARIES( bvxm_test_all bvxm testlib vcl vbl vpgl bsta bsta_algo)
 
 ADD_TEST( bvxm_test_voxel_storage_mem       ${EXECUTABLE_OUTPUT_PATH}/bvxm_test_all   test_voxel_storage_mem )
 ADD_TEST( bvxm_test_voxel_storage_disk      ${EXECUTABLE_OUTPUT_PATH}/bvxm_test_all   test_voxel_storage_disk )
+ADD_TEST( bvxm_test_voxel_storage_disk_cached   ${EXECUTABLE_OUTPUT_PATH}/bvxm_test_all   test_voxel_storage_disk_cached )
 ADD_TEST( bvxm_test_voxel_grid              ${EXECUTABLE_OUTPUT_PATH}/bvxm_test_all   test_voxel_grid )
 ADD_TEST( bvxm_test_apm_processors          ${EXECUTABLE_OUTPUT_PATH}/bvxm_test_all   test_apm_processors )
 ADD_TEST( bvxm_test_lidar_processor        ${EXECUTABLE_OUTPUT_PATH}/bvxm_test_all   test_lidar_processor )

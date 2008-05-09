@@ -10,6 +10,7 @@
 #include "bvxm_voxel_slab.h"
 #include "bvxm_voxel_storage.h"
 #include "bvxm_voxel_storage_disk.h"
+#include "bvxm_voxel_storage_disk_cached.h"
 #include "bvxm_voxel_storage_mem.h"
 #include "bvxm_voxel_slab_iterator.h"
 
@@ -26,6 +27,13 @@ class bvxm_voxel_grid : public bvxm_voxel_grid_base
     : bvxm_voxel_grid_base(grid_size)
   {
     storage_ = new bvxm_voxel_storage_disk<T>(storage_fname, grid_size);
+  }
+
+   //: Constructor for cached disk-based voxel grid.
+  bvxm_voxel_grid(vcl_string storage_fname, vgl_vector_3d<unsigned int> grid_size, unsigned max_cache_size)
+    : bvxm_voxel_grid_base(grid_size)
+  {
+    storage_ = new bvxm_voxel_storage_disk_cached<T>(storage_fname, grid_size, max_cache_size);
   }
 
   //: Constructor for memory-based voxel grid.

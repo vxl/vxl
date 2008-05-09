@@ -17,12 +17,17 @@ static void test_voxel_grid()
 
   // we need temporary disk storage for this test.
   vcl_string storage_fname("./bvxm_voxel_grid_test_temp.vox");
+  vcl_string storage_cached_fname("./bvxm_voxel_grid_cached_test_temp.vox");
   // remove file if exists from previous test.
   if (vul_file::exists(storage_fname.c_str())) {
     vul_file::delete_file_glob(storage_fname.c_str());
   }
+  if (vul_file::exists(storage_cached_fname.c_str())) {
+    vul_file::delete_file_glob(storage_cached_fname.c_str());
+  }
 
   vgl_vector_3d<unsigned> grid_size(300,300,120);
+  unsigned max_cache_size = grid_size.x()*grid_size.y()*18;
 
   // try test with all types of underlying storage.
   vcl_vector<bvxm_voxel_grid<float>* > grids;
@@ -31,7 +36,10 @@ static void test_voxel_grid()
   grid_types.push_back("disk_storage");
   grids.push_back(new bvxm_voxel_grid<float>(grid_size)); // memory storage;
   grid_types.push_back("memory storage");
+  grids.push_back(new bvxm_voxel_grid<float>(storage_cached_fname,grid_size,max_cache_size)); // cached disk storage
+  grid_types.push_back("disk_cached_storage");
 
+  vcl_string test_name;
 
   for (unsigned i=0; i<grids.size(); i++) {
 
@@ -39,7 +47,8 @@ static void test_voxel_grid()
 
     // check num_observations
     unsigned nobs = grid->num_observations();
-    TEST("number of observations initially == 0",nobs,0);
+    test_name = grid_types[i] + ": number of observations initially == 0";
+    TEST(test_name.c_str(),nobs,0);
 
     // fill with test data
     float init_val = 0.5;
@@ -48,11 +57,13 @@ static void test_voxel_grid()
     bool write_read_check = true;
 
     nobs = grid->num_observations();
-    TEST("number of observations == 0 after init",nobs,0);
+    test_name = grid_types[i] + ": number of observations == 0 after init";
+    TEST(test_name.c_str(),nobs,0);
 
     grid->increment_observations();
     nobs = grid->num_observations();
-    TEST("number of observations == 1 after increment",nobs,1);
+    test_name = grid_types[i] + ": number of observations == 1 after increment";
+    TEST(test_name.c_str(),nobs,1);
 
     // read in each slice, check that init_val was set, and fill with new value
     unsigned count = 0;
@@ -72,12 +83,13 @@ static void test_voxel_grid()
     }
     vcl_cout << "done." << vcl_endl;
 
-    vcl_string test_name = grid_types[i] + ": Initialization correctly set voxel values?";
+    test_name = grid_types[i] + ": Initialization correctly set voxel values?";
     TEST(test_name.c_str(),init_check,true);
 
     grid->increment_observations();
     nobs = grid->num_observations();
-    TEST("number of observations == 2 after increment",nobs,2);
+    test_name = grid_types[i] + ": number of observations == 2 after increment";
+      TEST(test_name.c_str(),nobs,2);
 
     // read in each slice, check that written value is set. use const iterators.
     count = 0;
