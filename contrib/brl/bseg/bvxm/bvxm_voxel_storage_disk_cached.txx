@@ -169,12 +169,12 @@ bvxm_voxel_slab<T> bvxm_voxel_storage_disk_cached<T>::get_slab(unsigned slice_id
 
   // check to see if slab is already in cache
   T* first_voxel = 0;
-  if ( (slice_idx < first_cache_slice_ ) || (slice_idx > last_cache_slice_) ){
+  if ( ((int)slice_idx < first_cache_slice_ ) || ((int)slice_idx > last_cache_slice_) ){
     // slab is not in cache
     purge_cache();
     fill_cache(slice_idx);
     // make sure fill cache was successful
-    if ( (slice_idx < first_cache_slice_ ) || (last_slice_idx > last_cache_slice_) ) {
+    if ( ((int)slice_idx < first_cache_slice_ ) || ((int)last_slice_idx > last_cache_slice_) ) {
       vcl_cerr << "error: slices " << slice_idx << "through " << last_slice_idx << " still not in cache after fill. " << vcl_endl;
       bvxm_voxel_slab<T> slab;
       return slab;
