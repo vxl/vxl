@@ -75,6 +75,10 @@ static void test_voxel_grid()
     vcl_string test_name = grid_types[i] + ": Initialization correctly set voxel values?";
     TEST(test_name.c_str(),init_check,true);
 
+    grid->increment_observations();
+    nobs = grid->num_observations();
+    TEST("number of observations == 2 after increment",nobs,2);
+
     // read in each slice, check that written value is set. use const iterators.
     count = 0;
     vcl_cout << "read: ";
