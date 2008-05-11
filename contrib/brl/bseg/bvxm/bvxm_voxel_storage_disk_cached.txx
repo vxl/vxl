@@ -116,7 +116,7 @@ bool bvxm_voxel_storage_disk_cached<T>::initialize_data(T const& value)
   fio_ = new vil_stream_fstream(storage_fname_.c_str(),"w");
 #endif
 
-  bvxm_voxel_slab<T> init_slab(grid_size_.x(),grid_size_.y(),1);
+  bvxm_voxel_slab<T> init_slab(this->grid_size_.x(),this->grid_size_.y(),1);
   //bvxm_voxel_slab<T> init_slab(this->grid_size_.x(),this->grid_size_.y(),1,slab_buffer_,static_cast<T*>(slab_buffer_->data()));
   init_slab.fill(value);
 
@@ -184,10 +184,10 @@ bvxm_voxel_slab<T> bvxm_voxel_storage_disk_cached<T>::get_slab(unsigned slice_id
   }
   else {
     // entire slab is already in cache.
-    vxl_uint_64 slice_size = grid_size_.x()*grid_size_.y()*sizeof(T);
-    first_voxel = reinterpret_cast<T*>(cache_mem_->data()) + ((slice_idx - first_cache_slice_)*grid_size_.x()*grid_size_.y());
+    vxl_uint_64 slice_size = this->grid_size_.x()*this->grid_size_.y()*sizeof(T);
+    first_voxel = reinterpret_cast<T*>(cache_mem_->data()) + ((slice_idx - first_cache_slice_)*this->grid_size_.x()*this->grid_size_.y());
   }
-  bvxm_voxel_slab<T> slab(grid_size_.x(),grid_size_.y(), slab_thickness, cache_mem_, first_voxel);
+  bvxm_voxel_slab<T> slab(this->grid_size_.x(),this->grid_size_.y(), slab_thickness, cache_mem_, first_voxel);
   return slab;
 }
 
@@ -223,7 +223,7 @@ bool bvxm_voxel_storage_disk_cached<T>::purge_cache()
       return false;
     }
   }
-  vil_streampos write_len = (last_cache_slice_ - first_cache_slice_ + 1)*grid_size_.x()*grid_size_.y()*sizeof(T);
+  vil_streampos write_len = (last_cache_slice_ - first_cache_slice_ + 1)*this->grid_size_.x()*this->grid_size_.y()*sizeof(T);
   fio_->write(reinterpret_cast<char*>(cache_mem_->data()),write_len);
 
   first_cache_slice_ = -1;
@@ -254,10 +254,10 @@ bool bvxm_voxel_storage_disk_cached<T>::fill_cache(unsigned start_slice_idx)
     fio_->seek(slice_pos);
   }
   unsigned last_slice_idx = start_slice_idx + n_cache_slices_ - 1;
-  if (last_slice_idx >= grid_size_.z()) {
-    last_slice_idx = grid_size_.z() - 1;
+  if (last_slice_idx >= this->grid_size_.z()) {
+    last_slice_idx = this->grid_size_.z() - 1;
   }
-  vil_streampos slice_size = grid_size_.x()*grid_size_.y()*sizeof(T);
+  vil_streampos slice_size = this->grid_size_.x()*this->grid_size_.y()*sizeof(T);
   vil_streampos read_size = (last_slice_idx - start_slice_idx + 1)*slice_size;
   fio_->read(reinterpret_cast<char*>(cache_mem_->data()),read_size);
   
