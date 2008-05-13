@@ -9,6 +9,7 @@
 #include <mmn/mmn_dependancy.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
+#include <vil/vil_image_view.h>
 #include <vcl_vector.h>
 
 //: Find choice of values at each node which minimises Markov problem.
@@ -36,8 +37,22 @@ class mmn_dp_solver
   //: Dependencies
   vcl_vector<mmn_dependancy> deps_;
 
+  //: Compute optimal choice for node dep.v0 for each possible v1
+  //  Uses pair costs for v0-v1 (in pc_) and the node cost nc_(v0)
   void process_dep1(const mmn_dependancy& dep);
+
+  //: Compute optimal choice for dep.v0 given v1 and v2
+  //  Uses only pairwise and node costs (in nc_ and pc_)
   void process_dep2(const mmn_dependancy& dep);
+
+  //: Compute optimal choice for dep.v0 given v1 and v2
+  //  Includes cost depending on (v0,v1,v2) as well as pairwise and 
+  //  node costs.
+  // tri_cost(i,j,k) is cost of associating smallest node index
+  // with i, next with j and largest node index with k.
+  void process_dep2t(const mmn_dependancy& dep,
+                    const vil_image_view<double>& tri_cost);
+
  public:
   //: Default constructor
   mmn_dp_solver();
@@ -60,6 +75,17 @@ class mmn_dp_solver
   // Returns the minimum cost
   double solve(const vcl_vector<vnl_vector<double> >& node_cost,
                  const vcl_vector<vnl_matrix<double> >& pair_cost,
+                 vcl_vector<unsigned>& x);
+
+  //: Find values for each node with minimise the total cost
+  //  As solve(node_cost,pair_cost,x), but allows inclusion of
+  //  costs for triplets (ie when v0 depends on v1 and v2).
+  //  tri_cost(i,j,k) gives cost of node min(v0,v1,v2) being
+  //  value i, node mid(v0,v1,v2) being value j and 
+  //  node max(v0,v1,v2) being value k.
+  double solve(const vcl_vector<vnl_vector<double> >& node_cost,
+                 const vcl_vector<vnl_matrix<double> >& pair_cost,
+                 const vcl_vector<vil_image_view<double> >& tri_cost,
                  vcl_vector<unsigned>& x);
 
   //: Compute optimal values for x[i] given that root node is root_value

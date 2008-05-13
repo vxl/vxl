@@ -4,6 +4,7 @@
 // \brief Find choice of values at each node which minimises Markov problem
 // \author Tim Cootes
 
+#include <mmn/mmn_order_cost.h>
 #include <vcl_cassert.h>
 
 //: Default constructor
@@ -131,7 +132,80 @@ void mmn_dp_solver::process_dep2(const mmn_dependancy& dep)
   }
 }
 
-double mmn_dp_solver::solve(const vcl_vector<vnl_vector<double> >& node_cost,
+
+
+//: Compute optimal choice for dep.v0 given v1 and v2
+//  Includes cost depending on (v0,v1,v2) as well as pairwise and 
+//  node costs.
+// tri_cost(i,j,k) is cost of associating smallest node index
+// with i, next with j and largest node index with k.
+void mmn_dp_solver::process_dep2t(const mmn_dependancy& dep,
+                                 const vil_image_view<double>& tri_cost)
+{
+  // n_dep==2
+  // dep->v0 depends on dep->v1 and dep->v2
+  // dep->v0 depends on dep->v1 through arc dep->arc1
+  const vnl_vector<double>& nc0 = nc_[dep.v0];
+  const vnl_vector<double>& nc1 = nc_[dep.v1];
+  const vnl_vector<double>& nc2 = nc_[dep.v2];
+  const vnl_matrix<double>& pa1 = pc_[dep.arc1];
+  const vnl_matrix<double>& pa2 = pc_[dep.arc2];
+  vnl_matrix<double>& pa12 = pc_[dep.arc12];
+  vnl_matrix<int>& ind0 = index2_[dep.v0];
+
+  // Create a re-ordered view of tri_cost, so we can use tc(i1,i2,i3)
+  vil_image_view<double> tc=mmn_unorder_cost(tri_cost,
+                                             dep.v0,dep.v1,dep.v2);
+  vcl_ptrdiff_t tc_step0=tc.istep();
+
+  if (pa12.size()==0)
+  {
+    if (dep.v1<dep.v2)
+      pa12.set_size(nc1.size(),nc2.size());
+    else
+      pa12.set_size(nc2.size(),nc1.size());
+    pa12.fill(0.0);
+  }
+
+  // i0[i1,i2] to the optimal choice of node v0 if v1 is i1, v2 is i2
+  ind0.set_size(nc1.size(),nc2.size());
+
+  for (unsigned i1=0;i1<nc1.size();++i1)
+  {
+    vnl_vector<double> sum0(nc0);
+    if (dep.v0<dep.v1) sum0+=pa1.get_column(i1);
+    else               sum0+=pa1.get_row(i1);
+
+    for (unsigned i2=0;i2<nc2.size();++i2)
+    {
+      vnl_vector<double> sum(sum0);
+      if (dep.v0<dep.v2) sum+=pa2.get_column(i2);
+      else               sum+=pa2.get_row(i2);
+
+      // sum[i] is the cost of choosing i, given (i1,i2)
+      // Select minimum
+      unsigned best_i=0;
+      const double *tci=&tc(0,i1,i2);
+      double min_v=sum[0]+tci[0];
+      tci+=tc_step0; // move to element 1
+      for (unsigned i=1;i<sum.size();++i,tci+=tc_step0)
+      {
+        sum[i]+=(*tci);
+        if (sum[i]<min_v) { min_v=sum[i]; best_i=i; }
+      }
+
+      // Record position of minima
+      ind0(i1,i2)=best_i;
+      // Update pairwise cost for arc between v1 and v2
+      if (dep.v1<dep.v2) { pa12(i1,i2)+=min_v; }
+      else               { pa12(i2,i1)+=min_v; }
+    }
+  }
+}
+
+
+double mmn_dp_solver::solve(
+                 const vcl_vector<vnl_vector<double> >& node_cost,
                  const vcl_vector<vnl_matrix<double> >& pair_cost,
                  vcl_vector<unsigned>& x)
 {
@@ -162,6 +236,50 @@ double mmn_dp_solver::solve(const vcl_vector<vnl_vector<double> >& node_cost,
   backtrace(best_i,x);
   return min_v;
 }
+
+double mmn_dp_solver::solve(
+                 const vcl_vector<vnl_vector<double> >& node_cost,
+                 const vcl_vector<vnl_matrix<double> >& pair_cost,
+                 const vcl_vector<vil_image_view<double> >& tri_cost,
+                 vcl_vector<unsigned>& x)
+{
+  nc_ = node_cost;
+  for (unsigned i=0;i<pair_cost.size();++i) pc_[i]=pair_cost[i];
+  for (unsigned i=pair_cost.size();i<pc_.size();++i) pc_[i].set_size(0,0);
+
+  if (deps_.size()==0)
+  {
+    vcl_cerr<<"No dependencies.\n";
+    return 999.99;
+  }
+
+  // Process dependencies in given order
+  vcl_vector<mmn_dependancy>::const_iterator dep=deps_.begin();
+  for (;dep!=deps_.end();dep++)
+  {
+    if (dep->n_dep==1) process_dep1(*dep);
+    else
+    {
+      if (dep->tri1==mmn_no_tri) process_dep2(*dep);
+      else
+      {
+        // dep->v0 depends on arcs and a triplet relationship
+        assert(dep->tri1 < tri_cost.size());
+        process_dep2t(*dep,tri_cost[dep->tri1]);
+      }
+    }
+  }
+
+  const vnl_vector<double>& root_cost = nc_[root()];
+  unsigned best_i=0;
+  double min_v=root_cost[0];
+  for (unsigned i=1;i<root_cost.size();++i)
+    if (root_cost[i]<min_v) { min_v=root_cost[i]; best_i=i; }
+
+  backtrace(best_i,x);
+  return min_v;
+}
+
 
 //: Compute optimal values for x[i] given that root node is root_value
 //  Assumes that solve() has been already called.
