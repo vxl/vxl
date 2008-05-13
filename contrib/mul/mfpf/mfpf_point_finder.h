@@ -67,7 +67,10 @@ class mfpf_point_finder
   //: Define scale search parameters
   void set_scale_range(unsigned ns, double ds);
 
+  //: Number of points either side of centre to search along i
   int search_ni() const { return search_ni_; }
+
+  //: Number of points either side of centre to search along j
   int search_nj() const { return search_nj_; }
 
   //: Radius of circle containing modelled region (in model frame units)

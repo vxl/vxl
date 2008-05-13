@@ -10,6 +10,7 @@ SET(mfpf_sources
   mfpf_edge_finder_builder.h     mfpf_edge_finder_builder.cxx
   mfpf_point_finder.h            mfpf_point_finder.cxx
   mfpf_edge_finder.h             mfpf_edge_finder.cxx
+  mfpf_max_finder.h              mfpf_max_finder.cxx
   mfpf_norm_corr1d.h             mfpf_norm_corr1d.cxx
   mfpf_norm_corr1d_builder.h     mfpf_norm_corr1d_builder.cxx
   mfpf_norm_corr2d.h             mfpf_norm_corr2d.cxx
@@ -42,6 +43,8 @@ SET(mfpf_sources
   mfpf_draw_pose_cross.h         mfpf_draw_pose_cross.cxx
   mfpf_draw_pose_lines.h         mfpf_draw_pose_lines.cxx
   mfpf_draw_matches.h            mfpf_draw_matches.cxx
+
+  mfpf_dp_snake.h                mfpf_dp_snake.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates mfpf_sources)

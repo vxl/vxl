@@ -57,6 +57,10 @@ class mfpf_region_finder_builder : public mfpf_point_finder_builder
   //: Angle displacement
   double dA_;
 
+  //: Relative size of region used for estimating overlap
+  //  If 0.5, then overlap requires pt inside central 50% of region.
+  double overlap_f_;
+
   //: Define default values
   void set_defaults();
 

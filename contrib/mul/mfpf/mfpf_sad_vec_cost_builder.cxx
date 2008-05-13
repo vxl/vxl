@@ -13,6 +13,7 @@
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
+#include <mbl/mbl_stats_1d.h>
 
 #include <vnl/io/vnl_io_vector.h>
 #include <vsl/vsl_vector_io.h>
@@ -105,6 +106,16 @@ void mfpf_sad_vec_cost_builder::build(mfpf_vec_cost& pf)
   {
     wts[i]=1.0/vcl_max(min_mad_,dv_sum[i]/n);
   }
+
+  nc.set(mean,wts);
+
+  // Now compute the statistics of the output on the training set
+  mbl_stats_1d stats;
+  for (unsigned i=0;i<n;++i)
+    stats.obs(nc.evaluate(data_[i]));
+
+  // Tweak the weights so that the SD of this will be unity
+  wts/=stats.sd();
 
   nc.set(mean,wts);
 

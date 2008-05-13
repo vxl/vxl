@@ -8,6 +8,7 @@ DECLARE( test_region_pdf );
 DECLARE( test_region_finder );
 DECLARE( test_pose );
 DECLARE( test_mr_point_finder );
+DECLARE( test_dp_snake );
 
 void register_tests()
 {
@@ -19,6 +20,7 @@ void register_tests()
   REGISTER( test_region_finder );
   REGISTER( test_pose );
   REGISTER( test_mr_point_finder );
+  REGISTER( test_dp_snake );
 }
 
 

@@ -46,6 +46,7 @@ void mfpf_region_finder_builder::set_defaults()
   nA_=0;
   dA_=0.0;
   norm_method_=1;
+  overlap_f_=1.0;
 }
 
 //=======================================================================
@@ -239,6 +240,7 @@ void mfpf_region_finder_builder::build(mfpf_point_finder& pf)
 
   rp.set(roi_,ref_x_,ref_y_,*cost,norm_method_);
   set_base_parameters(rp);
+  rp.set_overlap_f(overlap_f_);
 
   // Tidy up
   delete cost;
@@ -365,6 +367,9 @@ bool mfpf_region_finder_builder::set_from_stream(vcl_istream &is)
     props.erase("norm");
   }
 
+  overlap_f_=vul_string_atof(props.get_optional_property("overlap_f",
+                                                         "1.0"));
+
   if (props.find("nA")!=props.end())
   {
     nA_=vul_string_atoi(props["nA"]);
@@ -426,6 +431,7 @@ void mfpf_region_finder_builder::print_summary(vcl_ostream& os) const
   os <<vsl_indent();
   mfpf_point_finder_builder::print_summary(os);
   os <<vcl_endl;
+  os <<vsl_indent()<<"overlap_f: "<<overlap_f_<<vcl_endl;
   vsl_indent_dec(os);
   os <<vsl_indent()<< "}";
 }
@@ -449,7 +455,7 @@ void mfpf_region_finder_builder::print_shape(vcl_ostream& os) const
 //: Version number for I/O
 short mfpf_region_finder_builder::version_no() const
 {
-  return 1;
+  return 2;
 }
 
 void mfpf_region_finder_builder::b_write(vsl_b_ostream& bfs) const
@@ -466,6 +472,7 @@ void mfpf_region_finder_builder::b_write(vsl_b_ostream& bfs) const
   vsl_b_write(bfs,dA_);
   vsl_b_write(bfs,cost_builder_);
   vsl_b_write(bfs,norm_method_);
+  vsl_b_write(bfs,overlap_f_);
 }
 
 //=======================================================================
@@ -480,6 +487,7 @@ void mfpf_region_finder_builder::b_read(vsl_b_istream& bfs)
   switch (version)
   {
     case (1):
+    case (2):
       mfpf_point_finder_builder::b_read(bfs);  // Load base class
       vsl_b_read(bfs,roi_);
       vsl_b_read(bfs,roi_ni_);
@@ -491,6 +499,8 @@ void mfpf_region_finder_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,dA_);
       vsl_b_read(bfs,cost_builder_);
       vsl_b_read(bfs,norm_method_);
+      if (version==1) overlap_f_=1.0;
+      else            vsl_b_read(bfs,overlap_f_);
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
