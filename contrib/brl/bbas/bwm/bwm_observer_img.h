@@ -143,7 +143,7 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   //  so image pixel values should be blocked
   bool vgui_status_on_;
 
-  bwm_observer_img();
+  bwm_observer_img(){};
 
   bgui_image_tableau_sptr img_tab_;
 

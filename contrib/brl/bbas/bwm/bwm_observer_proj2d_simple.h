@@ -28,7 +28,7 @@ class bwm_observer_proj2d_simple :  public bwm_observer_proj2d
  public:
   //: constructors
   bwm_observer_proj2d_simple(vpgl_proj_camera<double>* camera,
-    SoNode* scene_root): bwm_observer_proj2d(camera, scene_root){}//bgui3d_project2d_tableau(*camera, scene_root) {};
+    SoNode* scene_root): bwm_observer_proj2d(*camera, scene_root){}//bgui3d_project2d_tableau(*camera, scene_root) {};
 
   virtual ~bwm_observer_proj2d_simple() {}
 

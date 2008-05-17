@@ -40,11 +40,12 @@ class bwm_observer_cam_proj : public bwm_observer_cam
 
   vgl_vector_3d<double> camera_direction(vgl_point_3d<double> origin);
 
-  virtual bool intersect_ray_and_plane(vgl_homg_point_2d<double> img_point,
-                                       vgl_homg_plane_3d<double> plane,
-                                       vgl_homg_point_3d<double> &world_point);
+  ////
+  //virtual bool intersect_ray_and_plane(vgl_homg_point_2d<double> img_point,
+  //                                     vgl_homg_plane_3d<double> plane,
+  //                                     vgl_homg_point_3d<double> &world_point);
 
-  vcl_ostream& print_camera(vcl_ostream& s);
+  vcl_ostream& print_camera(vcl_ostream& s){return s;}
 };
 
 #endif // bwm_observer_cam_proj_h_

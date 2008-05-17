@@ -14,7 +14,7 @@ public:
   void save_diff(float diff_x, float diff_y) {diff_x_ = diff_x; diff_y_ = diff_y;}
   void save_last_event(vgui_event & e) { last_event_ = e; }
   void save_event_condition(vgui_button b, vgui_modifier m = vgui_MODIFIER_NULL,
-    bool is_pressed = true) {cond_ = vgui_event_condition(b, m, is_pressed);
+    bool is_pressed = true) {cond_ = vgui_event_condition(b, m, is_pressed);}
 
   void position(int& x, int& y) {x = last_x_; y = last_y_; }
   void diff(float& diff_x, float& diff_y) {diff_x = diff_x_; diff_y = diff_y_;}
