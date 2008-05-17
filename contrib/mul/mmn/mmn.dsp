@@ -101,6 +101,9 @@ SOURCE=.\mmn_graph_rep1.cxx
 # Begin Source File
 SOURCE=.\mmn_make_tri_tree.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\mmn_order_cost.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -124,6 +127,12 @@ SOURCE=.\mmn_make_tri_tree.h
 # End Source File
 # Begin Source File
 SOURCE=.\mmn_solve.h
+# End Source File
+# Begin Source File
+SOURCE=.\mmn_order_cost.h
+# End Source File
+# Begin Source File
+SOURCE=.\mmn_triplet.h
 # End Source File
 # End Group
 # End Target

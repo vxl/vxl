@@ -188,6 +188,15 @@ SOURCE=.\Templates/bvxm_voxel_storage_mem+bsta_num_obs+bsta_mixture_fixed+bsta_n
 # Begin Source File
 SOURCE=.\Templates/bvxm_voxel_storage_mem+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if3-.3---.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_f1-.3---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+bsta_num_obs+bsta_mixture_fixed+bsta_num_obs+bsta_gauss_if3-.3---.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+float-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -261,6 +270,12 @@ SOURCE=.\bvxm_lidar_camera.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_lidar_processor.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_voxel_storage_disk_cached.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_voxel_storage_disk_cached.txx
 # End Source File
 # End Group
 # End Target

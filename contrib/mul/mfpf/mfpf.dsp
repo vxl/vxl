@@ -192,6 +192,12 @@ SOURCE=.\mfpf_vec_cost.cxx
 # Begin Source File
 SOURCE=.\mfpf_vec_cost_builder.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\mfpf_dp_snake.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_max_finder.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -293,6 +299,12 @@ SOURCE=.\mfpf_vec_cost_builder.h
 # End Source File
 # Begin Source File
 SOURCE=.\mfpf_feature_vec.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_dp_snake.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_max_finder.h
 # End Source File
 # End Group
 # End Target
