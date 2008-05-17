@@ -66,10 +66,12 @@ SET(bwm_sources
                                     bwm_observer_cam_proj.h
    bwm_observer_proj_cam.cxx        bwm_observer_proj_cam.h
    bwm_observer_rat_cam.cxx         bwm_observer_rat_cam.h
-#  bwm_observer_coin3d.cxx          bwm_observer_coin3d.h                                  
+#  bwm_observer_coin3d.cxx
+                                    bwm_observer_coin3d.h                                  
                                     bwm_observer_proj2d.h
                                     bwm_observer_proj2d_simple.h
-#  bwm_observer_lidar.cxx           bwm_observer_lidar.h
+#  bwm_observer_lidar.cxx
+                                    bwm_observer_lidar.h
    bwm_observer_video.cxx           bwm_observer_video.h
    bwm_observer_mgr.cxx             bwm_observer_mgr.h
    bwm_texture_map_generator.cxx    bwm_texture_map_generator.h
