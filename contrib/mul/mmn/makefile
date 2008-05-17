@@ -10,6 +10,8 @@ SOURCES += mmn_dp_solver.cxx
 SOURCES += mmn_graph_rep1.cxx
 SOURCES += mmn_make_tri_tree.cxx
 MANPAGE_SOURCES += mmn_solve.h
+SOURCES += mmn_order_cost.cxx
+MANPAGE_SOURCES += mmn_triplet.h
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

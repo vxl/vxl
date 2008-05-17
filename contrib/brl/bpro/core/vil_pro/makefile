@@ -9,6 +9,7 @@ SOURCES += vil_save_image_view_process.cxx
 SOURCES += vil_binary_image_op_process.cxx
 SOURCES += vil_map_image_process.cxx
 MANPAGE_SOURCES += vil_math_functors.h
+SOURCES += vil_rgbi_to_grey_process.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk

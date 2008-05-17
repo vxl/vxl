@@ -11,6 +11,7 @@ TESTS += test_region_pdf.cxx
 TESTS += test_pose.cxx
 TESTS += test_mr_point_finder.cxx
 TESTS += test_region_finder.cxx
+TESTS += test_dp_snake.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
