@@ -1,5 +1,4 @@
 #include <testlib/testlib_test.h>
-#include <bsta/bsta_mixture.h>
 #include <vcl_string.h>
 #include <bsta/bsta_mixture.h>
 #include <bsta/bsta_mixture_fixed.h>
@@ -11,8 +10,8 @@ void test_mixture_type(T dummy, const vcl_string& type_name)
 {
   // test stuff here
   TEST(("Dummy test <"+type_name+">").c_str(), true, true);
-
 }
+
 void test_probability_functor()
 {
   vcl_cout << "Starting test of probability functors\n";
@@ -23,8 +22,8 @@ void test_probability_functor()
   typedef bsta_gauss_t::covar_type covar_t;
   typedef bsta_gauss_t::vector_type vector_t;
   typedef bsta_mixture<bsta_gauss_t> mix_gauss_type;
-  bsta_gauss_t gauss0(vector_t(0.0f), covar_t(covar) );  
-  bsta_gauss_t gauss1(vector_t(0.5f), covar_t(covar) );  
+  bsta_gauss_t gauss0(vector_t(0.0f), covar_t(covar) );
+  bsta_gauss_t gauss1(vector_t(0.5f), covar_t(covar) );
   mix_gauss_type mix;
   bool good = mix.insert(gauss0, 0.8f);
   good = good&& mix.insert(gauss1, 0.2f);
@@ -43,8 +42,8 @@ void test_probability_functor()
   float v0 = mix.distribution(0).covar();
   float v1 = mix.distribution(1).covar();
   TEST_NEAR("restored covariance", v0+v1, 0.02, 1e-06);
-  
 }
+
 MAIN( test_mixture )
 {
   START ("mixture");
