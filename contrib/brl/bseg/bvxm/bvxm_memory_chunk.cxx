@@ -5,6 +5,7 @@
 // \author Dan Crispell
 
 #include <vcl_cstring.h>
+#include <vcl_cstddef.h> // for std::size_t
 #include <vbl/vbl_smart_ptr.txx>
 
 //: Default constructor
@@ -23,7 +24,7 @@ bvxm_memory_chunk::~bvxm_memory_chunk()
 bvxm_memory_chunk::bvxm_memory_chunk(const bvxm_memory_chunk& d)
 : data_(new char[(unsigned)d.size()]), size_(d.size())
 {
-  vcl_memcpy(data_,d.data_,(size_t)size_);
+  vcl_memcpy(data_,d.data_,(vcl_size_t)size_);
 }
 
 //: Assignment operator
@@ -32,7 +33,7 @@ bvxm_memory_chunk& bvxm_memory_chunk::operator=(const bvxm_memory_chunk& d)
   if (this==&d) return *this;
 
   set_size(d.size());
-  vcl_memcpy(data_,d.data_,(size_t)size_);
+  vcl_memcpy(data_,d.data_,(vcl_size_t)size_);
   return *this;
 }
 
