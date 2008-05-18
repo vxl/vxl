@@ -39,7 +39,6 @@ bwm_site_mgr::bwm_site_mgr(): site_name_(""), site_dir_(""), pyr_exe_(""),
   object_types_[MESH_IMAGE_PROCESSING] = BWM_MESH_IMAGE_PROCESSING_STR;
   object_types_[MESH_TERRAIN] = BWM_MESH_TERRAIN_STR;
   object_types_[VSOL] = BWM_OBJ_VSOL_STR;
-
 }
 
 bwm_site_mgr::~bwm_site_mgr()
@@ -78,15 +77,15 @@ void bwm_site_mgr::init_site()
 }
 
 void bwm_site_mgr::create_site_dialog(vgui_dialog_extensions &site_dialog,
-                               vcl_string &site_name,
-                               vcl_string &site_dir,
-                               vcl_string &pyr_exe_dir,
-                               vcl_vector<vcl_string> &files,
-                               bool* pyr_v, bool* act_v,
-                               vcl_vector<vcl_string> &pyr_levels,
-                               vcl_vector<vcl_string> &objs,
-                               int* choices,
-                               double &lat, double &lon, double &elev)
+                                      vcl_string &site_name,
+                                      vcl_string &site_dir,
+                                      vcl_string &pyr_exe_dir,
+                                      vcl_vector<vcl_string> &files,
+                                      bool* pyr_v, bool* act_v,
+                                      vcl_vector<vcl_string> &pyr_levels,
+                                      vcl_vector<vcl_string> &objs,
+                                      int* choices,
+                                      double &lat, double &lon, double &elev)
 {
   vcl_string ext;
   site_dialog.field("SITE NAME:", site_name);
@@ -147,11 +146,12 @@ void bwm_site_mgr::create_site()
   double lat=0.0, lon=0.0, elev=0.0;
 
   create_site_dialog(site_dialog, site_name, site_dir, pyr_exe_path, files, pyr,
-    act, levels, objs, choices, lat, lon, elev);
+                     act, levels, objs, choices, lat, lon, elev);
 
   if (!site_dialog.ask()) {
     return;
-  } else {
+  }
+  else {
     // collect the paramaters
     vcl_cout << "name:" << site_name << vcl_endl
              << "dir:" << site_dir << vcl_endl;
@@ -166,7 +166,7 @@ void bwm_site_mgr::create_site()
     }
 
     // make sure site directory is filled and valid
-     while ((site_dir.size() == 0) || !vul_file::is_directory(site_dir)) {
+    while ((site_dir.size() == 0) || !vul_file::is_directory(site_dir)) {
       vgui_dialog error ("Error");
       error.message ("Please enter a valid SITE DIRECTORY!            " );
       error.ask();
@@ -174,34 +174,35 @@ void bwm_site_mgr::create_site()
         return;
     }
 
-     // check if the levels are numbers
-     bool not_int = true;
-     while (not_int) {
-       not_int = false;
-       for (unsigned i=0; i<levels.size(); i++) {
-         int l = vul_string_atoi(levels[i].c_str());
-         if (l == 0) {
-           not_int = true;
-           break;
-         }
-       }
-       if (not_int) {
+    // check if the levels are numbers
+    bool not_int = true;
+    while (not_int) {
+      not_int = false;
+      for (unsigned i=0; i<levels.size(); i++) {
+        int l = vul_string_atoi(levels[i].c_str());
+        if (l == 0) {
+          not_int = true;
+          break;
+        }
+      }
+      if (not_int) {
         vgui_dialog error ("Error");
         error.message ("Please enter an integer level value!            " );
         error.ask();
         if (site_dialog.ask() == false)
           return;
-       } else {
-         not_int = false;
-       }
-     }
+      }
+      else {
+        not_int = false;
+      }
+    }
   }
 
   vcl_vector<bool> pyramid;
   vcl_vector<bool> active;
   for (unsigned j=0; j<files.size(); j++) {
-     pyramid.push_back(pyr[j]);
-     active.push_back(act[j]);
+    pyramid.push_back(pyr[j]);
+    active.push_back(act[j]);
   }
 
   vcl_vector<vcl_pair<vcl_string, vcl_string> > objects;
@@ -386,8 +387,8 @@ void bwm_site_mgr::edit_site()
     vcl_vector<bool> pyramid;
     vcl_vector<bool> active;
     for (unsigned j=0; j<files.size(); j++) {
-       pyramid.push_back(pyr[j]);
-       active.push_back(act[j]);
+      pyramid.push_back(pyr[j]);
+      active.push_back(act[j]);
     }
 
     vcl_vector<vcl_pair<vcl_string, vcl_string> > objects;
@@ -692,7 +693,7 @@ void bwm_site_mgr::load_video_site()
   bwm_io_tab_config_video* v = new bwm_io_tab_config_video(site_name_, true, frame_glob, camera_glob);
   active_tableaus_.push_back(v);
   bwm_tableau_img* t = tableau_factory_.create_tableau(v);
-  if(!t)
+  if (!t)
     return;
   bwm_tableau_video* vt = static_cast<bwm_tableau_video*> (t);
   vt->set_corrs(cio.corrs());
@@ -719,13 +720,13 @@ void bwm_site_mgr::save_video_site()
       obv = static_cast<bwm_observer_video*>(*oit);
       found =true;
     }
-  
-  if(!found)
-    {
-      vcl_cerr << "In bwm_site_mgr::save_video_site() - "
-               << " no observer of type video\n";
-      return;
-    }
+
+  if (!found)
+  {
+    vcl_cerr << "In bwm_site_mgr::save_video_site() - "
+             << " no observer of type video\n";
+    return;
+  }
 
   bwm_video_site_io vio;
 
@@ -748,7 +749,7 @@ void bwm_site_mgr::save_video_site()
   else
   {
     // ask the path for saving the site
-	vcl_string ext = "png";
+    vcl_string ext = "png";
     vgui_dialog_extensions d("Save the Video Site!");
     d.field("Video Site Name:", this->site_name_);
     d.line_break();
