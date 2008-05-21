@@ -10,6 +10,7 @@
 #include <vcl_cassert.h>
 #include <vcl_cstring.h> // for std::memcpy()
 #include <vcl_algorithm.h>
+#include <vcl_cstdlib.h>
 #include <vil/vil_stream_fstream.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_property.h>
@@ -813,7 +814,7 @@ bool vil_nitf2_image::get_property (char const *tag, void *property_value) const
   if (m_file_header.get_property(tag, result) ||
       (current_image_header() && current_image_header()->get_property(tag, result)))
   {
-    property_value = malloc(result.size());
+    property_value = vcl_malloc(result.size());
     vcl_memcpy(property_value, result.c_str(), result.size());
     return true;
   }

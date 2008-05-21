@@ -8,6 +8,7 @@
 
 #include <vcl_cstddef.h> // for size_t
 #include <vcl_sstream.h>
+#include <vcl_cstdlib.h>
 #include <vil/vil_stream_core.h>
 
 int vil_nitf2_array_field::num_dimensions() const
@@ -89,7 +90,7 @@ vcl_string vil_nitf2_array_field::get_value_string(const vil_nitf2_index_vector&
   vil_streampos num_to_read = str->tell();
   str->seek( 0 );
   char* buffer;
-  buffer = (char*)malloc( (vcl_size_t) num_to_read+1 );
+  buffer = (char*)vcl_malloc( (vcl_size_t) num_to_read+1 );
   str->read( (void*)buffer, num_to_read );
   buffer[(vcl_size_t) num_to_read] = 0;
   return vcl_string( buffer );

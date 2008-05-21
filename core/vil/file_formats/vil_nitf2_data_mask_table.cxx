@@ -7,6 +7,7 @@
 #include <vil/vil_stream.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>
+#include <vcl_cstdlib.h>
 
 vil_nitf2_data_mask_table::vil_nitf2_data_mask_table(
   unsigned int num_blocks_x, unsigned int num_blocks_y,
@@ -38,7 +39,7 @@ bool vil_nitf2_data_mask_table::parse( vil_stream* stream )
   //TPXCDLNTH
   unsigned short width = TPXCDLNTH / 8;
   if ( TPXCDLNTH % 8 != 0 ) width++;
-  void* val = malloc( width );
+  void* val = vcl_malloc( width );
 //  if ( stream->read( &val, width ) != width ) return false;
   if ( stream->read( val, width ) != width ) return false;
   maybe_endian_swap( (char*)val, width, width );

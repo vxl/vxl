@@ -8,6 +8,7 @@
 #include "vil_nitf2_field_formatter.h"
 #include <vil/vil_stream_core.h>
 #include <vcl_cstddef.h> // for size_t
+#include <vcl_cstdlib.h>
 
 vil_nitf2_scalar_field*
 vil_nitf2_scalar_field::read(vil_nitf2_istream& input,
@@ -72,7 +73,7 @@ vil_nitf2_field::field_tree* vil_nitf2_scalar_field::get_tree() const
   vil_streampos num_to_read = str->tell();
   str->seek( 0 );
   char* buffer;
-  buffer = (char*)malloc( (vcl_size_t) num_to_read+1 );
+  buffer = (char*)vcl_malloc( (vcl_size_t) num_to_read+1 );
   str->read( (void*)buffer, num_to_read );
   buffer[(vcl_size_t) num_to_read] = 0;
   tr->columns.push_back( vcl_string( buffer ) );

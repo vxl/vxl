@@ -10,6 +10,7 @@
 #include <vcl_cassert.h>
 #include <vcl_cmath.h> // for ceil()
 #include <vcl_limits.h>
+#include <vcl_cstdlib.h>
 #include <vil/vil_memory_chunk.h>
 #include <vil/vil_image_view.h>
 
@@ -194,7 +195,7 @@ vil_j2k_image::get_copy_view_decimated_by_size(unsigned sample0,
   //we want all bands mapped in the same order as they come in the input file
   //eg. bandMap = {0,1,2,3...nBands}
   INT32 nBands = nplanes();
-  INT32* bandMap = (INT32*) malloc(sizeof(UINT32) * nBands );
+  INT32* bandMap = (INT32*) vcl_malloc(sizeof(UINT32) * nBands );
   for ( int i = 0 ; i < nBands ; i++ ) { bandMap[i] = i; }
 
   //this guards us from returning an image that is too big for the computer's memory
@@ -225,9 +226,9 @@ vil_j2k_image::get_copy_view_decimated_by_size(unsigned sample0,
   unsigned int singleBandLineSizeBytes = output_width * bytesPerSample;
   unsigned int allBandLineSizeBytes    = singleBandLineSizeBytes * nBands;
   unsigned int dataPtrSizeBytes        = allBandLineSizeBytes * output_height;
-  //void* data_ptr = malloc( dataPtrSizeBytes );
+  //void* data_ptr = vcl_malloc( dataPtrSizeBytes );
   vil_memory_chunk_sptr data_ptr = new vil_memory_chunk( dataPtrSizeBytes, convertType( mFileResource->GetFileInfo()->eCellType ) );
-  void** linePtrPtr = (void**)malloc( nBands * sizeof( int* /*all pointers have same size, so eg char* would work too*/ ) );
+  void** linePtrPtr = (void**)vcl_malloc( nBands * sizeof( int* /*all pointers have same size, so eg char* would work too*/ ) );
   //now read all the lines that we want
   for ( unsigned int currLine = 0 ; currLine < output_height ; currLine++ ){
     for (int currBand = 0 ; currBand < nBands ; currBand++ ){

@@ -1,5 +1,6 @@
 #include "vil_geotiff_header.h"
 #include <vcl_cassert.h>
+#include <vcl_cstdlib.h>
 #include <geo_tiffp.h>
 #include <geotiffio.h>
 #include <geovalues.h>
@@ -165,7 +166,7 @@ bool vil_geotiff_header::get_key_value(geokey_t key, void** value,
     return false;
   }
   else {
-    *value = malloc(size*length);
+    *value = vcl_malloc(size*length);
     GTIFKeyGet(gtif_, key, *value, 0, length);
     return true;
   }
