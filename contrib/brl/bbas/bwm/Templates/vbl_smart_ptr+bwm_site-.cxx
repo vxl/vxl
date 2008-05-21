@@ -1,4 +1,4 @@
-#include <bwm/bwm_site.h>
+#include <bwm/io/bwm_site.h>
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_box_3d.h>
 #include <vsol/vsol_point_2d.h>

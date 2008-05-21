@@ -90,7 +90,7 @@ class bwm_observer_lidar: public bwm_observer_cam
 
  private:
 
-  vbl_smart_ptr<bgeo_lvcs> lvcs_;
+  bgeo_lvcs_sptr lvcs_;
 
   vnl_matrix<double> trans_matrix_;
 

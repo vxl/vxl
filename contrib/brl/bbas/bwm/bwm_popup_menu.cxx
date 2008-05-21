@@ -69,7 +69,6 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
   vgui_menu image_submenu;
 
   // Add command to run 2D Gauss fit
-  //MENU_TAB_ADD_PROCESS("JIMs item", "jim's process", image_submenu, this);
   MENU_TAB_ADD_PROCESS("Gauss fit - Subpixel", "gauss process", image_submenu, img_tab);
 
   MENU_TAB_ADD_PROCESS("Step Edges VD", "step_edge", image_submenu, img_tab);

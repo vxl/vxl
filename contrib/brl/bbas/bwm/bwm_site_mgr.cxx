@@ -1,8 +1,8 @@
 #include "bwm_site_mgr.h"
 //:
 // \file
-#include "bwm_site_sptr.h"
-#include "bwm_site.h"
+#include <bwm/io/bwm_site_sptr.h>
+#include <bwm/io/bwm_site.h>
 #include "bwm_observer_mgr.h"
 #include "bwm_tableau_mgr.h"
 #include "bwm_tableau_video.h"

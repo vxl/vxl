@@ -1052,7 +1052,7 @@ void bwm_observer_cam::backproj_poly(vsol_polygon_2d_sptr poly2d,
     vsol_point_2d_sptr p = poly2d->vertex(i);
     vgl_point_2d<double> image_point(p->x(), p->y());
 
-    intersect_ray_and_plane(image_point,proj_plane,world_point);
+    this->intersect_ray_and_plane(image_point,proj_plane,world_point);
     double x = world_point.x();
     double y = world_point.y();
     double z = world_point.z();
