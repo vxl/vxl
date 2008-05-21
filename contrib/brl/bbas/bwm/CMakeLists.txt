@@ -36,7 +36,7 @@ SET(bwm_sources
    bwm_command_macros.h
    bwm_load_commands.h
    bwm_process_commands.h
-   bwm_site.cxx                     bwm_site.h               bwm_site_sptr.h
+#   bwm_site.cxx                     bwm_site.h               bwm_site_sptr.h
    bwm_site_mgr.cxx                 bwm_site_mgr.h
    bwm_world.cxx                    bwm_world.h
                                     bwm_tableau.h            bwm_tableau_sptr.h
