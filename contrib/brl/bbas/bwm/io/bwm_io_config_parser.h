@@ -2,7 +2,7 @@
 #define bwm_io_config_parser_h_
 
 #include "bwm_io_structs.h"
-#include <bwm/bwm_site_sptr.h>
+#include <bwm/io/bwm_site_sptr.h>
 
 #include <expatpplib.h>
 #include <vcl_string.h>
