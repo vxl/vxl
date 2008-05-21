@@ -3,6 +3,7 @@
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
+#include <vcl_cstdlib.h>
 #if VCL_HAS_EXCEPTIONS
 #include <vcl_exception.h>
 #endif
@@ -66,8 +67,8 @@ void
 testlib_enter_stealth_mode()
 {
   // check for Dashboard test
-  char * env_var1 = getenv("DART_TEST_FROM_DART");
-  char * env_var2 = getenv("DASHBOARD_TEST_FROM_CTEST");  // DART Client built in CMake
+  char * env_var1 = vcl_getenv("DART_TEST_FROM_DART");
+  char * env_var2 = vcl_getenv("DASHBOARD_TEST_FROM_CTEST");  // DART Client built in CMake
   if ( env_var1 || env_var2 ) {
 
   // Don't allow DART test to open critical error dialog boxes
@@ -96,8 +97,8 @@ testlib_enter_stealth_mode()
 int testlib_run_test_unit(vcl_vector<vcl_string>::size_type i, int argc, char *argv[])
 {
 #if VCL_HAS_EXCEPTIONS
-  char * env_var1 = getenv("DART_TEST_FROM_DART");
-  char * env_var2 = getenv("DASHBOARD_TEST_FROM_CTEST");  // DART Client built in CMake
+  char * env_var1 = vcl_getenv("DART_TEST_FROM_DART");
+  char * env_var2 = vcl_getenv("DASHBOARD_TEST_FROM_CTEST");  // DART Client built in CMake
   if ( env_var1 || env_var2 ) {
     try {
       return testlib_test_func_[i]( argc, argv );
