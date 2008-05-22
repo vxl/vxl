@@ -14,26 +14,40 @@
 
 #include "bvxm_voxel_slab.h"
 
+#include <vgl/vgl_point_3d.h>
+
 #include <bsta/algo/bsta_adaptive_updater.h>
 #include <bsta/bsta_distribution.h>
 #include <bsta/bsta_gauss_f1.h>
+#include <bsta/bsta_gauss_if3.h>
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_mixture_fixed.h>
 #include <bsta/bsta_gaussian_indep.h>
+
+#include <vil/vil_image_view_base.h>
 
 class  bvxm_lidar_processor
 {
  public:
 
-  bvxm_lidar_processor(unsigned vox_thresh): gauss_(bsta_gauss_f1(0,1)), vox_thresh_(vox_thresh) {}
+  bvxm_lidar_processor(unsigned vox_thresh)
+    : gauss_(bsta_gauss_f1(0,1)), vox_thresh_(vox_thresh) {}
 
   //: A function that assigns a gaussian weight to the lidar observation
   bvxm_voxel_slab<float>  prob_density(float z_dim,
                                        bvxm_voxel_slab<float> const& obs,
                                        float voxel_width = 0.0 );
 
+float bvxm_lidar_processor::prob_density(vil_image_view_base_sptr lidar,
+                                        float z_dim,//vgl_point_3d<float>& mean,
+                                        vnl_vector_fixed<float,3>& covar,  // sigma vals
+                                        vgl_box_2d<double> lidar_roi,
+                                        float voxel_width);
+
+
  private:
   bsta_gauss_f1 gauss_;
+  //bsta_gauss_if3 gauss_if3_;
   unsigned vox_thresh_;
 };
 
