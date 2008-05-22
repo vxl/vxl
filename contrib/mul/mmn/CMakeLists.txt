@@ -7,6 +7,7 @@ SET(mmn_sources
   mmn_dependancy.h
   mmn_graph_rep1.h    mmn_graph_rep1.cxx
   mmn_dp_solver.h     mmn_dp_solver.cxx
+  mmn_lbp_solver.h     mmn_lbp_solver.cxx
   mmn_make_tri_tree.h mmn_make_tri_tree.cxx
   mmn_solve.h
   mmn_order_cost.h    mmn_order_cost.cxx
