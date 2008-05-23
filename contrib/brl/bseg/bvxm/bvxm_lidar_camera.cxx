@@ -61,10 +61,7 @@ void bvxm_lidar_camera::project(const double x, const double y, const double z,
   tm[2][2] = 1;
 
   vnl_matrix<double> trans_matrix_inv = vnl_inverse(tm);
-  vcl_cout << trans_matrix_inv << vcl_endl;
-  vcl_cout << vec << vcl_endl;
   res = trans_matrix_inv*vec;
-  vcl_cout << res[0] << ' ' << res[1] << vcl_endl;
   u = res[0];
   v = res[1];
 }
@@ -93,7 +90,6 @@ void bvxm_lidar_camera::backproject(const double u, const double v,
 
   if (lvcs_)
     lvcs_->global_to_local(lon, lat, elev, bgeo_lvcs::wgs84, x, y, z);
-  //z = img_view_(u, v);
 }
 
 void bvxm_lidar_camera::translate(double tx, double ty)
