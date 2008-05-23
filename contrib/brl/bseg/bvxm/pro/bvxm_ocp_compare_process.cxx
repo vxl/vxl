@@ -9,12 +9,13 @@ bvxm_ocp_compare_process::bvxm_ocp_compare_process()
   // This process has 2 inputs:
   //input[0]: The voxel world 
   //input[1]: The voxel world 
-  input_data_.resize(2, brdb_value_sptr(0));
-  input_types_.resize(2);
+  input_data_.resize(3, brdb_value_sptr(0));
+  input_types_.resize(3);
 
   int i=0;
   input_types_[i++] = "bvxm_voxel_world_sptr";    // voxel_world for LIDAR ONLY update
   input_types_[i++] = "bvxm_voxel_world_sptr";    // voxel_world for IMAGE ONLY update
+  input_types_[i++] = "unsigned";                 // search neighb. size
 
   //output
   output_data_.resize(1,brdb_value_sptr(0));
@@ -41,18 +42,23 @@ bool bvxm_ocp_compare_process::execute()
     static_cast<brdb_value_t<bvxm_voxel_world_sptr >* >(input_data_[1].ptr());
   bvxm_voxel_world_sptr voxel_world2 = input1->value();
 
-  double N = compare(voxel_world1, voxel_world2);
+  brdb_value_t<unsigned >* input2 =
+    static_cast<brdb_value_t<unsigned >* >(input_data_[2].ptr());
+  unsigned n = input2->value();
+
+  double val = compare(voxel_world1, voxel_world2, n);
 
   //store output
   brdb_value_sptr output0 =
-    new brdb_value_t<double>(N);
+    new brdb_value_t<double>(val);
   output_data_[0] = output0;
 
   return true;
 }
 
 double bvxm_ocp_compare_process::compare(bvxm_voxel_world_sptr w1, 
-                                       bvxm_voxel_world_sptr w2)
+                                         bvxm_voxel_world_sptr w2,
+                                         unsigned n)
 {
   typedef bvxm_voxel_traits<LIDAR>::voxel_datatype lidar_datatype;
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
@@ -69,12 +75,12 @@ double bvxm_ocp_compare_process::compare(bvxm_voxel_world_sptr w1,
   vgl_vector_3d<unsigned int> grid_size = w1->get_params()->num_voxels();
 
   double maxN=0;
-  int w = 2, dim=2*w+1, imax=0, jmax=0, kmax=0;
+  int dim=2*n+1, imax=0, jmax=0, kmax=0;
   char *comp_array = new char[dim*dim*dim];
-  for (int k=-1*w; k<=w; k++) {
+  for (int k=-1*n; k<=n; k++) {
     vcl_cout << k << vcl_endl;
-    for (int j1=-1*w; j1<=w; j1++) {
-      for (int i1=-1*w; i1<=w; i1++) {
+    for (int j1=-1*n; j1<=n; j1++) {
+      for (int i1=-1*n; i1<=n; i1++) {
         double N=0;
         int num=0;
         ocp_slab_it1 = ocp_grid1->begin();
@@ -107,7 +113,7 @@ double bvxm_ocp_compare_process::compare(bvxm_voxel_world_sptr w1,
         }
         N = (N/num)*grid_size.x()*grid_size.y()*grid_size.z();
         vcl_cout << "k=" << k << "  j=" << j1 << "  i=" << i1 << "-->" << N << vcl_endl;
-        comp_array[(i1+w)*dim*dim + (j1+w)*dim + (k+w)] = (N/14927.35)*255.0;
+        comp_array[(i1+n)*dim*dim + (j1+n)*dim + (k+n)] = (N/14927.35)*255.0;
       }
     }
   }
@@ -137,21 +143,6 @@ bool bvxm_ocp_compare_process::save_raw(char *ocp_array,
   ofs.write(reinterpret_cast<char*>(&nx),sizeof(nx));
   ofs.write(reinterpret_cast<char*>(&ny),sizeof(ny));
   ofs.write(reinterpret_cast<char*>(&nz),sizeof(nz));
-
-  // write data
-  // iterate through slabs and fill in memory array
- /* char *ocp_array = new char[nx*ny*nz];
-
-  bvxm_voxel_grid<ocp_datatype>::iterator ocp_it = ocp_grid->begin();
-  for (unsigned k=0; ocp_it != ocp_grid->end(); ++ocp_it, ++k) {
-    vcl_cout << '.';
-    for (unsigned i=0; i<(*ocp_it).nx(); ++i) {
-      for (unsigned j=0; j < (*ocp_it).ny(); ++j) {
-        ocp_array[i*ny*nz + j*nz + k] = (unsigned char)((*ocp_it)(i,j) * 255.0);;
-      }
-    }
-  }*/
-  //vcl_cout << vcl_endl;
   ofs.write(reinterpret_cast<char*>(ocp_array),sizeof(unsigned char)*nx*ny*nz);
 
   ofs.close();

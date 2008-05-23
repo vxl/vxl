@@ -3,16 +3,18 @@
 #define bvxm_ocp_compare_process_h_
 //:
 // \file
-// \brief A class for generating a height map from a given camera viewpoint
+// \brief A class for comparing to occupancey grid for the probability 
+//        values. It makes a search in the kxkxk neighborhood and returns 
+//        the higher value. If the value is higher, the similarity is bigger.
 //        -  Input:
 //             - bvxm_voxel_world_sptr
-//             - vpgl_camera_double_sptr
+//             - bvxm_voxel_world_sptr
 //
 //        -  Output:
-//             - vil_image_view_base_sptr   generated image
+//             - double    the similarity measure
 //
 // \author  Gamze D. Tunali
-// \date    04/17/2008
+// \date    05/15/2008
 // \verbatim
 //  Modifications
 //   <none yet>
@@ -49,7 +51,7 @@ class bvxm_ocp_compare_process : public bprb_process
   bool execute();
   bool finish() { return true; }
 private:
-  double compare(bvxm_voxel_world_sptr w1, bvxm_voxel_world_sptr w2);
+  double compare(bvxm_voxel_world_sptr w1, bvxm_voxel_world_sptr w2, unsigned n);
   bool save_raw(char *ocp_array, int x, int y, int z, vcl_string filename);
 };
 
