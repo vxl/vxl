@@ -44,11 +44,6 @@ bool bvxm_ocp_hist_process::execute()
 
   compute(voxel_world, path);
 
-  //store output
-  /*brdb_value_sptr output0 =
-    new brdb_value_t<double>(N);
-  output_data_[0] = output0;*/
-
   return true;
 }
 
@@ -66,18 +61,16 @@ bool bvxm_ocp_hist_process::compute(bvxm_voxel_world_sptr w,
   bsta_histogram<double> hist(0.0, 1.0, 20, 0.0);
      
   for (unsigned k_idx = 0; k_idx < (unsigned)grid_size.z(); ++k_idx, ++ocp_slab_it) {
-    //vcl_cout << k_idx << vcl_endl;
     bvxm_voxel_slab<float> slab = *ocp_slab_it;
     for (unsigned i=0; i<grid_size.x(); i++) {
       for (unsigned j=0; j<grid_size.y(); j++) {
-          //vcl_cout << "[" << i << "," << j << "]" << vcl_endl;
          hist.upcount(slab(i,j), 1);
       }
     }
   }
   vcl_ofstream f(path.c_str());
   hist.print(f);
-  vcl_ofstream f2((path+".log").c_str());
-  hist.print_log(f2);
+  /*vcl_ofstream f2((path+".log").c_str());
+  hist.print_log(f2);*/
   return true;
 }
