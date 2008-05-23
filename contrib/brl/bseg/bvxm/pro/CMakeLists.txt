@@ -33,6 +33,9 @@ SET(bvxm_pro_sources
     bvxm_gen_synthetic_world_process.h      bvxm_gen_synthetic_world_process.cxx
     bvxm_create_synth_lidar_data_process.h  bvxm_create_synth_lidar_data_process.cxx
     bvxm_heightmap_process.h                bvxm_heightmap_process.cxx
+    bvxm_compare_rpc_process.h              bvxm_compare_rpc_process.cxx
+    bvxm_ocp_compare_process.h              bvxm_ocp_compare_process.cxx
+    bvxm_ocp_hist_process.h                 bvxm_ocp_hist_process.cxx
 
 )
 
