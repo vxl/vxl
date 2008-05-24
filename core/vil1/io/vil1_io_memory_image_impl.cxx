@@ -11,6 +11,7 @@
 #include <vil1/io/vil1_io_memory_image_format.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_explicit_io.h>
+#include <vcl_climits.h> // for CHAR_BIT
 
 //: Constructor
 vil1_io_memory_image_impl::vil1_io_memory_image_impl()
@@ -143,4 +144,3 @@ void vsl_print_summary(vcl_ostream& os,const vil1_memory_image_impl & p)
     break;
   }
 }
-
