@@ -39,6 +39,7 @@ void mfpf_norm_corr2d_builder::set_defaults()
   search_nj_=5;
   nA_=0;
   dA_=0.0;
+  overlap_f_=1.0;
 }
 
 //=======================================================================
@@ -170,6 +171,7 @@ void mfpf_norm_corr2d_builder::build(mfpf_point_finder& pf)
   normalize(mean);
   nc.set(mean,ref_x_,ref_y_);
   set_base_parameters(nc);
+  nc.set_overlap_f(overlap_f_);
 }
 
 //=======================================================================
@@ -198,6 +200,8 @@ bool mfpf_norm_corr2d_builder::set_from_stream(vcl_istream &is)
     nj_=vul_string_atoi(props["nj"]);
     props.erase("nj");
   }
+
+  overlap_f_=vul_string_atof(props.get_optional_property("overlap_f","1.0"));
 
   if (props.find("ref_x")!=props.end())
   {
@@ -255,13 +259,14 @@ void mfpf_norm_corr2d_builder::print_summary(vcl_ostream& os) const
   os << "{ size: " << ni_ << 'x' << nj_
      << " nA: " << nA_ << " dA: " << dA_ <<" ";
   mfpf_point_finder_builder::print_summary(os);
+  os<<" overlap_f: "<<overlap_f_;
   os << " }";
 }
 
 //: Version number for I/O
 short mfpf_norm_corr2d_builder::version_no() const
 {
-  return 1;
+  return 2;
 }
 
 void mfpf_norm_corr2d_builder::b_write(vsl_b_ostream& bfs) const
@@ -276,6 +281,7 @@ void mfpf_norm_corr2d_builder::b_write(vsl_b_ostream& bfs) const
   vsl_b_write(bfs,dA_);
   vsl_b_write(bfs,sum_);
   vsl_b_write(bfs,n_added_);
+  vsl_b_write(bfs,overlap_f_);
 }
 
 //=======================================================================
@@ -290,6 +296,7 @@ void mfpf_norm_corr2d_builder::b_read(vsl_b_istream& bfs)
   switch (version)
   {
     case (1):
+    case (2):
       mfpf_point_finder_builder::b_read(bfs);  // Load base class
       vsl_b_read(bfs,ni_);
       vsl_b_read(bfs,nj_);
@@ -299,6 +306,8 @@ void mfpf_norm_corr2d_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,dA_);
       vsl_b_read(bfs,sum_);
       vsl_b_read(bfs,n_added_);
+      if (version==1) overlap_f_=1.0;
+      else            vsl_b_read(bfs,overlap_f_);
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"

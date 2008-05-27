@@ -24,8 +24,10 @@ SET(mfpf_sources
 
   mfpf_vec_cost.h                mfpf_vec_cost.cxx
   mfpf_sad_vec_cost.h            mfpf_sad_vec_cost.cxx
+  mfpf_ssd_vec_cost.h            mfpf_ssd_vec_cost.cxx
   mfpf_vec_cost_builder.h        mfpf_vec_cost_builder.cxx
   mfpf_sad_vec_cost_builder.h    mfpf_sad_vec_cost_builder.cxx
+  mfpf_ssd_vec_cost_builder.h    mfpf_ssd_vec_cost_builder.cxx
 
   mfpf_sort_matches.h            mfpf_sort_matches.cxx
   mfpf_norm_vec.h

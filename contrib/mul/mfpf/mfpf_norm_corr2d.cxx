@@ -33,6 +33,7 @@ void mfpf_norm_corr2d::set_defaults()
   ns_=0; ds_=1.0;
   ref_x_ = 0.0;
   ref_y_ = 0.0;
+  overlap_f_=1.0;
 }
 
 //=======================================================================
@@ -75,6 +76,13 @@ void mfpf_norm_corr2d::set(const vil_image_view<double>& k,
 void mfpf_norm_corr2d::set(const vil_image_view<double>& k)
 {
   set(k, 0.5*(k.ni()-1.0), 0.5*(k.nj()-1.0));
+}
+
+//: Relative size of region used for estimating overlap
+//  If 0.5, then overlap requires pt inside central 50% of region.
+void mfpf_norm_corr2d::set_overlap_f(double f)
+{
+  overlap_f_=f;
 }
 
 // Assumes im2[i] has zero mean and unit length as a vector
@@ -258,13 +266,15 @@ double mfpf_norm_corr2d::search_one_pose(
 
 // Returns true if p is inside region at given pose
 bool mfpf_norm_corr2d::is_inside(const mfpf_pose& pose,
-                                 const vgl_point_2d<double>& p) const
+                                 const vgl_point_2d<double>& p,
+                                 double f) const
 {
   // Set transform model frame -> World
   vimt_transform_2d t1;
   t1.set_similarity(step_size()*pose.u(),pose.p());
   // Compute position of p in model frame
   vgl_point_2d<double> q=t1.inverse()(p);
+  q.x()/=f; q.y()/=f;  // To check that q in the central fraction f
   q.x()+=ref_x_;
   if (q.x()<0 || q.x()>(kernel_.ni()-1)) return false;
   q.y()+=ref_y_;
@@ -277,8 +287,8 @@ bool mfpf_norm_corr2d::is_inside(const mfpf_pose& pose,
 bool mfpf_norm_corr2d::overlap(const mfpf_pose& pose1,
                                const mfpf_pose& pose2) const
 {
-  if (is_inside(pose1,pose2.p())) return true;
-  if (is_inside(pose2,pose1.p())) return true;
+  if (is_inside(pose1,pose2.p(),overlap_f_)) return true;
+  if (is_inside(pose2,pose1.p(),overlap_f_)) return true;
   return false;
 }
 
@@ -333,11 +343,12 @@ void mfpf_norm_corr2d::b_write(vsl_b_ostream& bfs) const
   vsl_b_write(bfs,kernel_);
   vsl_b_write(bfs,ref_x_);
   vsl_b_write(bfs,ref_y_);
+  vsl_b_write(bfs,overlap_f_);
 }
 
 short mfpf_norm_corr2d::version_no() const
 {
-  return 1;
+  return 2;
 }
 
 //=======================================================================
@@ -352,10 +363,13 @@ void mfpf_norm_corr2d::b_read(vsl_b_istream& bfs)
   switch (version)
   {
     case (1):
+    case (2):
       mfpf_point_finder::b_read(bfs);  // Load in base class
       vsl_b_read(bfs,kernel_);
       vsl_b_read(bfs,ref_x_);
       vsl_b_read(bfs,ref_y_);
+      if (version==1) overlap_f_=1.0;
+      else            vsl_b_read(bfs,overlap_f_);
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"

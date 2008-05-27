@@ -16,6 +16,8 @@
 #include <mfpf/mfpf_region_finder_builder.h>
 #include <mfpf/mfpf_sad_vec_cost.h>
 #include <mfpf/mfpf_sad_vec_cost_builder.h>
+#include <mfpf/mfpf_ssd_vec_cost.h>
+#include <mfpf/mfpf_ssd_vec_cost_builder.h>
 
 #include <vpdfl/vpdfl_add_all_binary_loaders.h>
 
@@ -51,7 +53,10 @@ void mfpf_add_all_loaders()
   vsl_add_to_binary_loader(mfpf_region_finder());
 
   mbl_cloneables_factory<mfpf_vec_cost_builder>::add(mfpf_sad_vec_cost_builder());
+  mbl_cloneables_factory<mfpf_vec_cost_builder>::add(mfpf_ssd_vec_cost_builder());
   vsl_add_to_binary_loader(mfpf_sad_vec_cost_builder());
   vsl_add_to_binary_loader(mfpf_sad_vec_cost());
+  vsl_add_to_binary_loader(mfpf_ssd_vec_cost_builder());
+  vsl_add_to_binary_loader(mfpf_ssd_vec_cost());
 
 }

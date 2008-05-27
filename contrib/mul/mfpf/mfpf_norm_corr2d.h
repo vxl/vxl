@@ -17,6 +17,10 @@ class mfpf_norm_corr2d : public mfpf_point_finder
   //: Kernel reference point (in kni_ x knj_ grid)
   double ref_y_;
 
+  //: Relative size of region used for estimating overlap
+  //  If 0.5, then overlap requires pt inside central 50% of region.
+  double overlap_f_;
+
   //: Filter kernel to search with
   vil_image_view<double> kernel_;
 
@@ -39,6 +43,10 @@ public:
   //: Define filter kernel to search with
   void set(const vil_image_view<double>& k,
            double ref_x, double ref_y);
+
+  //: Relative size of region used for estimating overlap
+  //  If 0.5, then overlap requires pt inside central 50% of region.
+  void set_overlap_f(double);
 
   //: Filter kernel to search with
   const vil_image_view<double>& kernel() const { return kernel_; }
@@ -74,8 +82,11 @@ public:
                         vgl_point_2d<double>& new_p);
 
   // Returns true if p is inside region at given pose
+  // Actually only checks if p is inside bounding box,
+  // scaled by a factor f about the reference point.
   bool is_inside(const mfpf_pose& pose,
-                 const vgl_point_2d<double>& p) const;
+                 const vgl_point_2d<double>& p,
+                 double f=1.0) const;
 
   //: Return true if modelled regions at pose1 and pose2 overlap
   //  Checks if reference point of one is inside region of other
