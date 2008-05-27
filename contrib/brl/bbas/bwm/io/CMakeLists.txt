@@ -11,6 +11,7 @@ SET(bwm_io_sources
    bwm_site.h                  bwm_site.cxx
    bwm_site_sptr.h
 )
+AUX_SOURCE_DIRECTORY(Templates bwm_io_sources)
 
 ADD_LIBRARY(bwm_io ${bwm_io_sources})
 
