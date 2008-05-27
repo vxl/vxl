@@ -7,6 +7,7 @@ MANPAGE_SOURCES += mmn_analyze_graph.h
 MANPAGE_SOURCES += mmn_arc.h
 MANPAGE_SOURCES += mmn_dependancy.h
 SOURCES += mmn_dp_solver.cxx
+SOURCES += mmn_lbp_solver.cxx
 SOURCES += mmn_graph_rep1.cxx
 SOURCES += mmn_make_tri_tree.cxx
 MANPAGE_SOURCES += mmn_solve.h

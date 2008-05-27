@@ -6,6 +6,8 @@ VERSION := 1.0
 
 SOURCES += bwm_io_config_parser.cxx
 MANPAGE_SOURCES += bwm_io_structs.h
+SOURCES += bwm_site.cxx
+MANPAGE_SOURCES += bwm_site_sptr.h
 
 ################################
 include ${VXLROOT}/config/top.mk
