@@ -18,9 +18,6 @@ SOURCE=.\Templates/vbl_smart_ptr+bwm_observable_mesh-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+bwm_observable_textured_mesh-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vbl_smart_ptr+bwm_site-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\bwm_corr.cxx
 # End Source File
 # Begin Source File
@@ -67,9 +64,6 @@ SOURCE=.\bwm_popup_menu.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\bwm_process_mgr.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\bwm_site.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\bwm_tableau_cam.cxx
@@ -220,12 +214,6 @@ SOURCE=.\bwm_process_commands.h
 # End Source File
 # Begin Source File
 SOURCE=.\bwm_process_mgr.h
-# End Source File
-# Begin Source File
-SOURCE=.\bwm_site.h
-# End Source File
-# Begin Source File
-SOURCE=.\bwm_site_sptr.h
 # End Source File
 # Begin Source File
 SOURCE=.\bwm_tableau.h

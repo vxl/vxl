@@ -96,6 +96,9 @@ LIB32=link.exe -lib
 SOURCE=.\mmn_dp_solver.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\mmn_lbp_solver.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\mmn_graph_rep1.cxx
 # End Source File
 # Begin Source File
@@ -118,6 +121,9 @@ SOURCE=.\mmn_dependancy.h
 # End Source File
 # Begin Source File
 SOURCE=.\mmn_dp_solver.h
+# End Source File
+# Begin Source File
+SOURCE=.\mmn_lbp_solver.h
 # End Source File
 # Begin Source File
 SOURCE=.\mmn_graph_rep1.h

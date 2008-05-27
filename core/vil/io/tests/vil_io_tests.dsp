@@ -8,7 +8,7 @@
 #  == override in output directory
 #   -DVXL_WARN_DEPRECATED -DVXL_WARN_DEPRECATED_ONCE -DHAS_PNG -DHAS_JPEG -DHAS_TIFF == compiler defines
 # vil_io_tests  == name of output library
-#  /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\  vil_io.lib vpl.lib testlib.lib vsl.lib vil.lib vil1.lib ws2_32.lib tiff.lib png.lib zlib.lib jpeg.lib vcl.lib /STACK:10000000  == libraries linked in 
+#  /LIBPATH:$(VXLROOT)\lib\$(INTDIR)  /LIBPATH:$(VXLROOT)\lib\  vil_io.lib vpl.lib testlib.lib vsl.lib vil.lib ws2_32.lib tiff.lib png.lib zlib.lib jpeg.lib vcl.lib /STACK:10000000  == libraries linked in 
 # TARGTYPE "Win32 (x86) Application" 0x0103
 
 CFG=vil_io_tests - Win32 Debug
@@ -69,7 +69,6 @@ LINK32=link.exe
 # ADD LINK32 testlib.lib
 # ADD LINK32 vsl.lib
 # ADD LINK32 vil.lib
-# ADD LINK32 vil1.lib
 # ADD LINK32 ws2_32.lib
 # ADD LINK32 tiff.lib
 # ADD LINK32 png.lib
@@ -110,7 +109,6 @@ LINK32=link.exe
 # ADD LINK32 testlib.lib
 # ADD LINK32 vsl.lib
 # ADD LINK32 vil.lib
-# ADD LINK32 vil1.lib
 # ADD LINK32 ws2_32.lib
 # ADD LINK32 tiff.lib
 # ADD LINK32 png.lib
@@ -149,7 +147,6 @@ LINK32=link.exe
 # ADD LINK32 testlib.lib
 # ADD LINK32 vsl.lib
 # ADD LINK32 vil.lib
-# ADD LINK32 vil1.lib
 # ADD LINK32 ws2_32.lib
 # ADD LINK32 tiff.lib
 # ADD LINK32 png.lib
@@ -188,7 +185,6 @@ LINK32=link.exe
 # ADD LINK32 testlib.lib
 # ADD LINK32 vsl.lib
 # ADD LINK32 vil.lib
-# ADD LINK32 vil1.lib
 # ADD LINK32 ws2_32.lib
 # ADD LINK32 tiff.lib
 # ADD LINK32 png.lib

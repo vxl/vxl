@@ -204,6 +204,9 @@ SOURCE=.\Templates/vsl_vector_io+vcl_vector+vcl_vector+vnl_vector+double----.cxx
 SOURCE=.\Templates/vsl_vector_io+vnl_matrix+double--.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vcl_vector+vnl_vector_fixed+unsigned_short.2---.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/vnl_io_vector_fixed+double.2-.cxx
 # End Source File
 # Begin Source File
@@ -241,6 +244,9 @@ SOURCE=.\Templates/vnl_io_matrix_fixed+double.6.6-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/vnl_io_vector_fixed+double.6-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vnl_io_vector_fixed+unsigned_short.2-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"

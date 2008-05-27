@@ -126,6 +126,9 @@ SOURCE=.\test_driver.cxx
 SOURCE=.\test_dp_solver.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\test_lbp_solver.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\test_graph_rep1.cxx
 # End Source File
 # Begin Source File
