@@ -89,6 +89,7 @@ class bgeo_lvcs : public vbl_ref_count
   void get_scale(double& lat, double& lon) const;
   void get_transform(double& lox, double& loy, double& theta) const;
   void set_transform(const double lox, const double loy, const double theta);
+  void set_origin(const double lon, const double lat, const double elev);
   cs_names get_cs_name() const;
   inline LenUnits local_length_unit() const{return this->localXYZUnit_;}
   inline AngUnits geo_angle_unit() const {return this->geo_angle_unit_;}
@@ -170,6 +171,15 @@ inline void bgeo_lvcs::set_transform(const double lox, const double loy,
   lox_ = lox;
   loy_ = loy;
   theta_ = theta;
+}
+
+//------------------------------------------------------------
+//: Set the origin of the local system
+inline void bgeo_lvcs::set_origin(const double lon, const double lat, const double elev)
+{
+    localCSOriginLon_ = lon;
+    localCSOriginLat_ = lat;
+    localCSOriginElev_ = elev;
 }
 
 inline void bgeo_lvcs::radians_to_dms(double rad, int& degrees, int& minutes, double& seconds)
