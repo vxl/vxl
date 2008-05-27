@@ -8,6 +8,11 @@
 #include <bwm/algo/bwm_utils.h>
 #include <bwm/algo/bwm_utm_lat_lon.h>
 
+#include <bwm/io/bwm_io_config_parser.h>
+#include <bwm/io/bwm_io_structs.h>
+#include <bwm/io/bwm_site.h>
+#include <bwm/io/bwm_site_sptr.h>
+
 #include <bwm/bwm_command.h>
 #include <bwm/bwm_command_macros.h>
 #include <bwm/bwm_command_sptr.h>
@@ -44,9 +49,7 @@
 #include <bwm/bwm_popup_menu.h>
 #include <bwm/bwm_process_commands.h>
 #include <bwm/bwm_process_mgr.h>
-#include <bwm/bwm_site.h>
 #include <bwm/bwm_site_mgr.h>
-#include <bwm/bwm_site_sptr.h>
 #include <bwm/bwm_tableau.h>
 #include <bwm/bwm_tableau_cam.h>
 #include <bwm/bwm_tableau_coin3d.h>
