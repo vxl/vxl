@@ -5,7 +5,7 @@
   #include <dbgapi.h>
   #define assert ASSERT
 #else
-  #include <string.h>
+  #include <string>
   using namespace std;
   #include <assert.h>
 #endif
