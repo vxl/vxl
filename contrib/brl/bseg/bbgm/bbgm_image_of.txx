@@ -5,6 +5,7 @@
 // \file
 
 #include "bbgm_image_of.h"
+#include <vcl_typeinfo.h>
 #include <vbl/io/vbl_io_array_2d.h>
 
 

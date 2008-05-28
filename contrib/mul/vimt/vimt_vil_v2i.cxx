@@ -5,6 +5,7 @@
 
 #include <vcl_cassert.h>
 #include <vcl_cstring.h>
+#include <vcl_typeinfo.h>
 #include <vcl_fstream.h>
 
 #include <vxl_config.h> // for VXL_BIG_ENDIAN and vxl_byte

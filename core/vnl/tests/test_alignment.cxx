@@ -1,5 +1,6 @@
 // This is core/vnl/tests/test_alignment.cxx
 #include <vcl_limits.h>
+#include <vcl_typeinfo.h>
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>
 #include <vnl/vnl_matrix.h>
