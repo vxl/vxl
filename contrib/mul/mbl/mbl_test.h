@@ -64,9 +64,16 @@ bool mbl_test_summaries_are_equal(const S &a, const S &b, const char **exception
 
 
 //: A historical measurement recording framework.
-// Currently the function will append the measurement to the file specified
-// by ${MBL_TEST_SAVE_MEASUREMENT_PATH}/measurement_path.
-// In the longer term it may save the value via Dart2.
+// The function will append the measurement to the file specified
+// by $CMAKE_VAR{VXL_MBL_TEST_SAVE_MEASUREMENT_PATH}/measurement_path. The
+// value is also copied to stdout where it can be automatically
+// picked up by CTest and Dart.
+// We suggest formatting the measurement path as follows
+// "path/from/code/root/to/test_source_filename_minus_extension/MEASUREMENT_DESCRIPTION",
+// e.g. in the file "$CODE_SRC/algo/krr/tests/test_krr_optimise_model_parameters.cxx" 
+// \verbatim
+// mbl_test_save_measurement("algo/krr/tests/test_krr_optimise_model_parameters/Point_To_Point_RMS_Error",value);
+// \endverbatim
 void mbl_test_save_measurement( const vcl_string &measurement_path, double value);
 
 
