@@ -25,6 +25,9 @@ SOURCES += bvxm_gen_synthetic_world_process.cxx
 SOURCES += bvxm_lidar_init_process.cxx
 SOURCES += bvxm_save_edges_raw_process.cxx
 SOURCES += bvxm_heightmap_process.cxx
+SOURCES += bvxm_compare_rpc_process.cxx
+SOURCES += bvxm_ocp_compare_process.cxx
+SOURCES += bvxm_ocp_hist_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
