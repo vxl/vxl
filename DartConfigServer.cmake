@@ -54,7 +54,8 @@ SET (EXPECTED_BUILDS "\\
   {GE FreeBSD-7.0_gcc-4.2.1_profile_static} \\
   {GE FreeBSD-6.2_gcc-3.4.6_-O2_shared} \\
   {GE FreeBSD-6.2_gcc-4.0.4_-O2_shared} \\
-  {GE FreeBSD-6.2_gcc-4.2.3_-O2_shared} \\
+  {GE FreeBSD-6.2_gcc-4.2.4_-O2_shared} \\
+  {GE FreeBSD-6.2_gcc-4.3.0_-O2_shared} \\
   {GE Linux-2.6.9_icc-9.1-64bit_-O2_shared} \\
   {GE MinGW-3.8_gcc-3.4.4_-O2_static} \\
   {GE Win2k_bcc-5.5.1_Release} \\
