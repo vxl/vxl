@@ -38,6 +38,8 @@ SOURCES += mfpf_vec_cost_builder.cxx
 MANPAGE_SOURCES += mfpf_feature_vec.h
 SOURCES += mfpf_dp_snake.cxx
 SOURCES += mfpf_max_finder.cxx
+SOURCES += mfpf_ssd_vec_cost.cxx
+SOURCES += mfpf_ssd_vec_cost_builder.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
