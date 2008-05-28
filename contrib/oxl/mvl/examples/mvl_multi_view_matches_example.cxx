@@ -1,4 +1,5 @@
 #include <vxl_config.h>
+#include <vcl_cstdlib.h>
 #include <vul/vul_timer.h>
 #include <mvl/mvl_multi_view_matches.h>
 #include <vcl_iostream.h>

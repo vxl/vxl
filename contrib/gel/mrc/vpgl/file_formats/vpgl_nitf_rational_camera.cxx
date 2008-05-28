@@ -6,6 +6,7 @@
 // \author Jim Green
 // \date Dec 2006
 
+#include <vcl_cstdlib.h>
 #include <vil/vil_load.h>
 #include <vcl_cmath.h>
 #include <vcl_cstring.h>
@@ -82,7 +83,7 @@ static int geostr_to_double(const char* in_string, double* val, vpgl_nitf_ration
     if (length>14) return 0;
 
     vcl_strncpy(temp,in_string-length,length);
-    if ( (fsec = (float)atof(temp)) >= 60.0f || fsec<0.0f)
+    if ( (fsec = (float)vcl_atof(temp)) >= 60.0f || fsec<0.0f)
       return 0;
     delete [] temp;
 
@@ -139,7 +140,7 @@ static int geostr_to_double(const char* in_string, double* val, vpgl_nitf_ration
     if (length>14) return 0;
 
     vcl_strncpy(temp,in_string-length,length);
-    if ( (fsec = (float)atof(temp)) >= 60.0f || fsec<0.0f)
+    if ( (fsec = (float)vcl_atof(temp)) >= 60.0f || fsec<0.0f)
       return 0;
     delete temp;
 
@@ -182,7 +183,7 @@ static int geostr_to_double(const char* in_string, double* val, vpgl_nitf_ration
 
     //calculate value of float
     vcl_strncpy(temp,in_string-length,length);
-    *val = atof(temp);
+    *val = vcl_atof(temp);
     if (vcl_fabs(*val)>float(maxval)) return 0;
     delete temp;
 

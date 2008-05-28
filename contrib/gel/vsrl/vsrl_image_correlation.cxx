@@ -2,6 +2,7 @@
 #include "vsrl_image_correlation.h"
 
 #include <vcl_cmath.h> // for sqrt(double)
+#include <vcl_cstdlib.h>
 #include <vcl_cassert.h>
 #include <vil1/vil1_image.h>
 #include <vsrl/vsrl_window_accumulator.h>
@@ -251,7 +252,7 @@ void vsrl_image_correlation::initial_calculations()
 
   // now allocate memory for the various corelation matrix values
 
-  image_correlations_ = (vnl_matrix<double>**)(malloc(sizeof(*image_correlations_) * (correlation_range_*2 +1)));
+  image_correlations_ = (vnl_matrix<double>**)(vcl_malloc(sizeof(*image_correlations_) * (correlation_range_*2 +1)));
 
   // now compute each correlation
 

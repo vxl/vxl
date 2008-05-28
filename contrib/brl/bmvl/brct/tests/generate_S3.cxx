@@ -1,5 +1,6 @@
 //:
 // \file
+#include <vcl_cstdlib.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vcl_fstream.h>
@@ -341,20 +342,20 @@ int main(int argc,char * argv[])
   }
   vcl_string point_file(argv[1]);
   vcl_ofstream point_ostr(point_file.c_str());
-  double theta_min = static_cast<double>(atof(argv[2]));
-  double theta_max = static_cast<double>(atof(argv[3]));
-  double psi_min = static_cast<double>(atof(argv[4]));
-  double psi_max = static_cast<double>(atof(argv[5]));
-  double phi_min = static_cast<double>(atof(argv[6]));
-  double phi_max = static_cast<double>(atof(argv[7]));
+  double theta_min = static_cast<double>(vcl_atof(argv[2]));
+  double theta_max = static_cast<double>(vcl_atof(argv[3]));
+  double psi_min = static_cast<double>(vcl_atof(argv[4]));
+  double psi_max = static_cast<double>(vcl_atof(argv[5]));
+  double phi_min = static_cast<double>(vcl_atof(argv[6]));
+  double phi_max = static_cast<double>(vcl_atof(argv[7]));
   double theta_inc = 0.05;
   double psi_inc = 0.05;
   double phi_inc = 0.05;
   if (argc >8 )
   {
-    theta_inc = static_cast<double>(atof(argv[8]));
-    psi_inc = static_cast<double>(atof(argv[9]));
-    phi_inc = static_cast<double>(atof(argv[10]));
+    theta_inc = static_cast<double>(vcl_atof(argv[8]));
+    psi_inc = static_cast<double>(vcl_atof(argv[9]));
+    phi_inc = static_cast<double>(vcl_atof(argv[10]));
   }
   vcl_vector<vcl_vector<vgl_point_3d<double> > > polylines;
   vcl_vector<vgl_point_3d<float> > polycolors;

@@ -17,6 +17,7 @@
 
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
+#include <vcl_cstdlib.h>
 #include <vnl/vnl_random.h>
 #include <vgl/vgl_box_3d.h>
 #include <vul/vul_printf.h>
@@ -243,13 +244,13 @@ void perturb_points (bmsh3d_pt_set* pt_set, const float max_perturb)
     bmsh3d_vertex* v = (*it).second;
     assert (v);
 
-    double random = (double)rand() / (double)RAND_MAX - 0.5;
+    double random = (double)vcl_rand() / (double)RAND_MAX - 0.5;
     double rx = random * max_perturb;
 
-    random = (double)rand() / (double)RAND_MAX - 0.5;
+    random = (double)vcl_rand() / (double)RAND_MAX - 0.5;
     double ry = random * max_perturb;
 
-    random = (double)rand() / (double)RAND_MAX - 0.5;
+    random = (double)vcl_rand() / (double)RAND_MAX - 0.5;
     double rz = random * max_perturb;
 
     v->get_pt().set (v->get_pt().x() + rx,

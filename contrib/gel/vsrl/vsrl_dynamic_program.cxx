@@ -1,4 +1,5 @@
 #include "vsrl_dynamic_program.h"
+#include <vcl_cstdlib.h>
 #include <vsrl/vsrl_token.h>
 #include <vsrl/vsrl_null_token.h>
 #include <vsrl/vsrl_parameters.h>
@@ -170,10 +171,10 @@ bool vsrl_dynamic_program::allocate_cost_matrix()
     return false;
   }
 
-  cost_matrix_ = (assignment_node**)(malloc(num_row_ * sizeof(*cost_matrix_)));
+  cost_matrix_ = (assignment_node**)(vcl_malloc(num_row_ * sizeof(*cost_matrix_)));
 
   for (int i=0;i<num_row_;i++)
-    cost_matrix_[i]=(assignment_node*)(malloc(num_col_ * sizeof(**cost_matrix_)));
+    cost_matrix_[i]=(assignment_node*)(vcl_malloc(num_col_ * sizeof(**cost_matrix_)));
 
   // initialize the matrix
 
@@ -195,9 +196,9 @@ void vsrl_dynamic_program::deallocate_cost_matrix()
   // free the memory associated with matrix
 
   for (int i=0;i<num_row_;i++)
-    free((char*)(cost_matrix_[i]));
+    vcl_free((char*)(cost_matrix_[i]));
 
-  free((char*)cost_matrix_);
+  vcl_free((char*)cost_matrix_);
 
   cost_matrix_=0;
   num_row_=0;

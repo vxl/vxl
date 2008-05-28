@@ -3,6 +3,7 @@
 //:
 // \file
 
+#include <vcl_cstdlib.h>
 #include <vcl_vector.h>
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
@@ -87,7 +88,7 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
   {
     int random;
     if (buckets > 1) {
-      random  = (int)((float)(no_buckets - 1)*rand()/(RAND_MAX+1.0));
+      random  = (int)((float)(no_buckets - 1)*vcl_rand()/(RAND_MAX+1.0));
     } else {
       random  = 1;
     }
@@ -140,7 +141,7 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
       int counter = 0;
       bool fail;
       while (not_picked && counter < list_size*4) {
-        int pick = (int)((float)(list_size - 1)*rand()/(RAND_MAX+1.0));
+        int pick = (int)((float)(list_size - 1)*vcl_rand()/(RAND_MAX+1.0));
         int picked = list[pick];
         fail = false;
         for (unsigned int k = 0; k < i; k++) {
