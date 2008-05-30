@@ -85,6 +85,7 @@ for i in range(0,len(image_fnames),1):
     else:
       bvxm_batch.set_input_bool(3,1);
       bvxm_batch.set_input_bool(4,0);
+    bvxm_batch.set_input_bool(5,0);
     bvxm_batch.set_params_process(python_path + "rpc_registration_parameters.xml");
     bvxm_batch.run_process();
     cam_id = bvxm_batch.commit_output(0);
