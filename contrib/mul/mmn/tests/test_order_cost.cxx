@@ -1,8 +1,6 @@
 // This is mul/mmn/tests/test_order_cost.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_vector.h>
 #include <mmn/mmn_order_cost.h>
-
 
 void test_get_order()
 {
@@ -50,7 +48,6 @@ void test_get_rank()
 
   mmn_get_rank(2,1,0,i0,i1,i2);
   TEST("mmn_get_rank 2-1-0",i0==2 && i1==1 && i2==0, true);
-
 }
 
 void test_order_cost_a()
