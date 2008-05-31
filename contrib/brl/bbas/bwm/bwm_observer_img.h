@@ -11,7 +11,8 @@
 
 #include <vgui/vgui_viewer2D_tableau.h>
 
-#include <vil/vil_image_view.h>
+#include <vil/vil_image_view_base.h>
+#include <vil/vil_image_resource.h>
 #include <bgui/bgui_image_tableau.h>
 #include <bgui/bgui_vsol2D_tableau.h>
 #include <bgui/bgui_vsol_soview2D.h>
@@ -34,8 +35,8 @@ class bwm_observer_img : public bgui_vsol2D_tableau
 
   typedef bgui_vsol2D_tableau base;
 
-  bwm_observer_img(bgui_image_tableau_sptr const& img, vcl_string name, 
-    vcl_string image_path, bool display_image_path);
+  bwm_observer_img(bgui_image_tableau_sptr const& img, vcl_string name,
+                   vcl_string image_path, bool display_image_path);
 
   bwm_observer_img(bgui_image_tableau_sptr const& img)
     : bgui_vsol2D_tableau(img), img_tab_(img), viewer_(0),
@@ -75,7 +76,6 @@ class bwm_observer_img : public bgui_vsol2D_tableau
 
   void delete_all();
 
-
   void hist_plot();
 
   void intensity_profile(float start_col, float start_row,
@@ -112,7 +112,7 @@ class bwm_observer_img : public bgui_vsol2D_tableau
     {return edge_list[id];}
 
   void display_reg_seg(vcl_vector<vsol_digital_curve_2d_sptr> const& search_edges,
-                    vcl_vector<vsol_digital_curve_2d_sptr> const& model_edges); 
+                       vcl_vector<vsol_digital_curve_2d_sptr> const& model_edges);
   void clear_reg_segmentation();
 
   vcl_string image_path(){return img_tab_->file_name();}
@@ -139,7 +139,7 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   //: lock status display when drawing or other motion tracking
   bool lock_vgui_status_;
 
-  //: observer status is being displayed, 
+  //: observer status is being displayed,
   //  so image pixel values should be blocked
   bool vgui_status_on_;
 
@@ -182,7 +182,7 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   //: returns a list of selected object from the given type
   vcl_vector<vgui_soview2D*> get_selected_objects(vcl_string type);
   vil_image_resource_sptr load_image(vcl_string& filename,
-                                                    vgui_range_map_params_sptr& rmps);
+                                     vgui_range_map_params_sptr& rmps);
   vcl_string tab_name_;
 
   unsigned row_; //location of observer in grid
