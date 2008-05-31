@@ -6,7 +6,6 @@
 
 #include "mfpf_ssd_vec_cost.h"
 #include <vsl/vsl_binary_loader.h>
-#include <vcl_cmath.h>
 #include <vcl_cassert.h>
 
 #include <mbl/mbl_parse_block.h>

@@ -6,7 +6,6 @@
 
 #include <vsl/vsl_binary_loader.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_cmath.h>
 
 #include <vimt/vimt_bilin_interp.h>
 #include <vimt/vimt_sample_profile_bilin.h>
@@ -47,18 +46,18 @@ void mfpf_max_finder::get_outline(vcl_vector<vgl_point_2d<double> >& pts) const
 //: Evaluate match at p, using u to define scale and orientation
 // Returns -1*edge strength at p along direction u
 double mfpf_max_finder::evaluate(const vimt_image_2d_of<float>& image,
-                                  const vgl_point_2d<double>& p,
-                                  const vgl_vector_2d<double>& u)
+                                 const vgl_point_2d<double>& p,
+                                 const vgl_vector_2d<double>& u)
 {
   double v2 = vimt_bilin_interp_safe(image,p);
   return -1.0*v2;
 }
 
-   //: Evaluate match at in a region around p
-   // Returns a qualtity of fit at a set of positions.
-   // response image (whose size and transform is set inside the
-   // function), indicates the points at which the function was
-   // evaluated.  response(i,j) is the fit at the point
+//: Evaluate match at in a region around p
+// Returns a qualtity of fit at a set of positions.
+// response image (whose size and transform is set inside the
+// function), indicates the points at which the function was
+// evaluated.  response(i,j) is the fit at the point
 // response.world2im().inverse()(i,j).  The world2im() transformation
 // may be affine.
 void mfpf_max_finder::evaluate_region(
@@ -90,10 +89,10 @@ void mfpf_max_finder::evaluate_region(
   response.set_world2im(i2w.inverse());
 }
 
-   //: Search given image around p, using u to define scale and orientation
-   //  On exit, new_p and new_u define position, scale and orientation of
-   //  the best nearby match.  Returns a qualtity of fit measure at that
-   //  point (the smaller the better).
+//: Search given image around p, using u to define scale and orientation
+//  On exit, new_p and new_u define position, scale and orientation of
+//  the best nearby match.  Returns a qualtity of fit measure at that
+//  point (the smaller the better).
 double mfpf_max_finder::search_one_pose(
                                 const vimt_image_2d_of<float>& image,
                                 const vgl_point_2d<double>& p,
