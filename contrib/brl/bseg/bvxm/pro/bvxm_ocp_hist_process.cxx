@@ -1,21 +1,20 @@
 #include "bvxm_ocp_hist_process.h"
 //#include "bvxm_voxel_world.h"
 
-#include <vil/vil_convert.h>
 #include <bprb/bprb_parameters.h>
 #include <bsta/bsta_histogram.h>
 
 bvxm_ocp_hist_process::bvxm_ocp_hist_process()
 {
   // This process has 2 inputs:
-  //input[0]: The voxel world 
+  //input[0]: The voxel world
   //input[1]: The path for the output file
   input_data_.resize(2, brdb_value_sptr(0));
   input_types_.resize(2);
 
   int i=0;
   input_types_[i++] = "bvxm_voxel_world_sptr";    // voxel_world for IMAGE ONLY update
-  input_types_[i++] = "vcl_string"; 
+  input_types_[i++] = "vcl_string";
 
   //output
   output_data_.resize(0,brdb_value_sptr(0));
@@ -48,7 +47,7 @@ bool bvxm_ocp_hist_process::execute()
 }
 
 bool bvxm_ocp_hist_process::compute(bvxm_voxel_world_sptr w,
-                                      vcl_string path)
+                                    vcl_string path)
 {
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
 
@@ -59,7 +58,7 @@ bool bvxm_ocp_hist_process::compute(bvxm_voxel_world_sptr w,
 
   vgl_vector_3d<unsigned int> grid_size = w->get_params()->num_voxels();
   bsta_histogram<double> hist(0.0, 1.0, 20, 0.0);
-     
+
   for (unsigned k_idx = 0; k_idx < (unsigned)grid_size.z(); ++k_idx, ++ocp_slab_it) {
     bvxm_voxel_slab<float> slab = *ocp_slab_it;
     for (unsigned i=0; i<grid_size.x(); i++) {
