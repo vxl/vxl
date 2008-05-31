@@ -9,12 +9,10 @@
 // \date 04/03/2008
 // \verbatim
 //  Modifications
-//
+//   <none yet>
 // \endverbatim
 
 #include "bvxm_voxel_slab.h"
-
-#include <vgl/vgl_point_3d.h>
 
 #include <bsta/algo/bsta_adaptive_updater.h>
 #include <bsta/bsta_distribution.h>
@@ -43,7 +41,6 @@ class  bvxm_lidar_processor
                      vnl_vector_fixed<float,3>& covar,  // sigma vals
                      vgl_box_2d<double> lidar_roi,
                      float voxel_width);
-
 
  private:
   bsta_gauss_f1 gauss_;

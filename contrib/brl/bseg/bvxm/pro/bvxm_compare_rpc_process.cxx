@@ -8,11 +8,6 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-
-#include <vul/vul_file.h>
-
 //: Constructor
 bvxm_compare_rpc_process::bvxm_compare_rpc_process()
 {
@@ -28,7 +23,6 @@ bvxm_compare_rpc_process::bvxm_compare_rpc_process()
   output_data_.resize(0,brdb_value_sptr(0));
   output_types_.resize(0);
   //output_types_[0]= "bvxm_compare_rpc_sptr";
-  
 }
 
 
@@ -70,9 +64,9 @@ bvxm_compare_rpc_process::execute()
   rat_cam1->save(path+"_est.rpc");
 
   double u, v;
-  u = rat_cam1->offset(vpgl_rational_camera<double>::U_INDX) - 
+  u = rat_cam1->offset(vpgl_rational_camera<double>::U_INDX) -
     rat_cam0->offset(vpgl_rational_camera<double>::U_INDX);
-  v = rat_cam1->offset(vpgl_rational_camera<double>::V_INDX) - 
+  v = rat_cam1->offset(vpgl_rational_camera<double>::V_INDX) -
     rat_cam0->offset(vpgl_rational_camera<double>::V_INDX);
 
   vcl_cout << "u=" << u << " v=" << v << vcl_endl;
