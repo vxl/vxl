@@ -6,7 +6,7 @@
 #include <vcl_iosfwd.h>
 
 #include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_homg_plane_3d.h>
+#include <vgl/vgl_homg_point_3d.h>
 
 #include <vpgl/vpgl_proj_camera.h>
 
@@ -17,10 +17,10 @@ class bwm_observer_proj_cam : public bwm_observer_cam
  public:
 
   bwm_observer_proj_cam(bgui_image_tableau_sptr img,
-    vcl_string name, 
-    vcl_string& image_path, 
-    vcl_string& cam_path,                
-    bool display_image_path); 
+                        vcl_string name,
+                        vcl_string& image_path,
+                        vcl_string& cam_path,
+                        bool display_image_path);
 
   // set the initial projection plane to z=0
   bwm_observer_proj_cam(bgui_image_tableau_sptr img, const char* n="unnamed")
@@ -46,4 +46,4 @@ class bwm_observer_proj_cam : public bwm_observer_cam
   vcl_ostream& print_camera(vcl_ostream& s);
 };
 
-#endif
+#endif // bwm_observer_proj_cam_h_
