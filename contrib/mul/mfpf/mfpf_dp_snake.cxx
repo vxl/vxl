@@ -4,11 +4,8 @@
 // \brief Basic snake, using dynamic programming to update.
 
 #include "mfpf_dp_snake.h"
-#include <vcl_cstdlib.h>
 
-#include <vnl/vnl_math.h>
 #include <vcl_cmath.h>
-#include <vcl_algorithm.h>
 
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
@@ -44,9 +41,9 @@ mfpf_point_finder& mfpf_dp_snake::finder()
 //: Initialise as a circle of given radius about the given centre
 //  Clone taken of finder object
 void mfpf_dp_snake::set_to_circle(const mfpf_point_finder& finder,
-                     unsigned n_points,
-                     const vgl_point_2d<double>& c,
-                     double r)
+                                  unsigned n_points,
+                                  const vgl_point_2d<double>& c,
+                                  double r)
 {
   finder_=finder;
 
@@ -224,8 +221,8 @@ void mfpf_dp_snake::print_summary(vcl_ostream& os) const
   os<<vcl_endl;
   vsl_indent_inc(os);
 
-  os<<vsl_indent()<<"n_points: "<<pts_.size();
-  os<<vsl_indent()<<"finder: "<<finder_<<vcl_endl;
+  os<<vsl_indent()<<"n_points: "<<pts_.size()
+    <<vsl_indent()<<"finder: "<<finder_<<vcl_endl;
   vgl_point_2d<double> c = cog();
   os<<vsl_indent()<<" CoG: ("<<c.x()<<','<<c.y();
 
@@ -264,12 +261,11 @@ void mfpf_dp_snake::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,pts_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&) \n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << vcl_endl;
       bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
-
 }
 
 //=======================================================================
@@ -285,16 +281,15 @@ vcl_ostream& operator<<(vcl_ostream& os,const mfpf_dp_snake& b)
   return os;
 }
 
-  //: Binary file stream output operator for class reference
+//: Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const mfpf_dp_snake& b)
 {
   b.b_write(bfs);
 }
 
-  //: Binary file stream input operator for class reference
+//: Binary file stream input operator for class reference
 void vsl_b_read(vsl_b_istream& bfs, mfpf_dp_snake& b)
 {
   b.b_read(bfs);
 }
-
 

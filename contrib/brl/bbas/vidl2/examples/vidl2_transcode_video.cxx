@@ -5,7 +5,6 @@
 
 #include <vidl2/vidl2_config.h>
 
-#include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
 #include <vul/vul_arg.h>
 #include <vidl2/vidl2_ffmpeg_istream.h>
