@@ -51,8 +51,7 @@ bvxm_rpc_registration_process::bvxm_rpc_registration_process()
 
 bool bvxm_rpc_registration_process::execute()
 {
-  // todo : make false before update
-  bool DEBUG_MODE = true;
+  bool DEBUG_MODE = false;
   char temp_string[1024];
   vcl_ifstream file_inp;
   vcl_ofstream file_out;
