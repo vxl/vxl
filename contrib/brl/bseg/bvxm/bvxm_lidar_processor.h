@@ -22,6 +22,7 @@
 #include <bsta/bsta_mixture_fixed.h>
 #include <bsta/bsta_gaussian_indep.h>
 
+#include <vgl/vgl_box_2d.h>
 #include <vil/vil_image_view_base.h>
 
 class  bvxm_lidar_processor
