@@ -56,6 +56,17 @@ class bvxm_world_params : public vbl_ref_count
   inline vgl_point_3d<float> corner() { return corner_; }
   inline void set_corner(vgl_point_3d<float>& new_c) { corner_ = new_c; }
 
+  inline vgl_point_3d<float> rpc_origin() { return rpc_origin_; }
+  inline void set_rpc_origin(vgl_point_3d<float>& new_rpc_origin) { 
+    vgl_point_3d<float> old_corner = corner();
+    vgl_point_3d<float> new_corner(
+      old_corner.x() + new_rpc_origin.x() - rpc_origin_.x(),
+      old_corner.y() + new_rpc_origin.y() - rpc_origin_.y(),
+      old_corner.z() + new_rpc_origin.z() - rpc_origin_.z());
+    set_corner(new_corner);
+    rpc_origin_ = new_rpc_origin; 
+  }
+
   inline vgl_vector_3d<unsigned int> num_voxels(unsigned scale=0) {
     vgl_vector_3d<unsigned int> num_voxels_scaled;
     double divisor=vcl_pow(2.0,-(double)scale); // actually, inverse of divisor
@@ -98,6 +109,7 @@ class bvxm_world_params : public vbl_ref_count
 
   vcl_string model_dir_;
   vgl_point_3d<float> corner_;
+  vgl_point_3d<float> rpc_origin_;
   vgl_vector_3d<unsigned int> num_voxels_;
   float voxel_length_;
   bgeo_lvcs_sptr lvcs_;

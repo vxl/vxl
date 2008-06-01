@@ -595,9 +595,7 @@ bool bvxm_voxel_world::update_edges(bvxm_image_metadata const& metadata)
     bvxm_voxel_slab<edges_datatype>::iterator edges_slab_it_it = (*edges_slab_it).begin();
 
     for (; image_slab_it != image_slab.end(); ++image_slab_it, ++marginal_slab_it, ++edges_slab_it_it) {
-      if((*marginal_slab_it) > min_edge_prob){ 
-        (*edges_slab_it_it) = (*edges_slab_it_it) * ((*image_slab_it)/(*marginal_slab_it));
-      }
+      (*edges_slab_it_it) = (*edges_slab_it_it) * ((*image_slab_it)/(*marginal_slab_it));
     }
   }
   vcl_cout << vcl_endl;

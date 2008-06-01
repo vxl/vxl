@@ -51,7 +51,8 @@ bvxm_rpc_registration_process::bvxm_rpc_registration_process()
 
 bool bvxm_rpc_registration_process::execute()
 {
-  bool DEBUG_MODE = false;
+  // todo : make false before update
+  bool DEBUG_MODE = true;
   char temp_string[1024];
   vcl_ifstream file_inp;
   vcl_ofstream file_out;
@@ -219,19 +220,8 @@ bool bvxm_rpc_registration_process::execute()
     file_out.close();
   }
 
-  double lon,lat,elev;
-  bgeo_lvcs_sptr lvcs = vox_world->get_params()->lvcs();
+  float nlx,nly,nlz;
   if(rpc_shift_3d_flag){
-    bgeo_lvcs_sptr lvcs_org = new bgeo_lvcs();
-    // todo : get this file name automatically
-    vcl_ifstream is("BvxmCreateVoxelWorldProcess.lvcs");
-    if (!is)
-    {
-      vcl_cerr << " Error opening lvcs file:" << vcl_endl;
-      return false;
-    }
-    lvcs_org->read(is);
-
     vpgl_local_rational_camera<double> *cam_input_temp = dynamic_cast<vpgl_local_rational_camera<double>*>(camera_inp.ptr());
 
     vgl_point_3d<double> origin_3d(0.0,0.0,0.0);
@@ -256,16 +246,22 @@ bool bvxm_rpc_registration_process::execute()
     double motion_mult = 1.0/((double)(num_observations+1));
     motion = motion*motion_mult;
 
-    double lx,ly,lz;
-    lvcs->get_origin(lat,lon,elev);
-    lvcs_org->global_to_local(lon,lat,elev,bgeo_lvcs::wgs84,lx,ly,lz);
-    lvcs_org->local_to_global(lx*(1.0-motion_mult),ly*(1.0-motion_mult),lz*(1.0-motion_mult),bgeo_lvcs::wgs84,lon,lat,elev);
-    lvcs->global_to_local(lon,lat,elev,bgeo_lvcs::wgs84,lx,ly,lz);
+    float lx,ly,lz;
+    vgl_point_3d<float> rpc_origin = vox_world->get_params()->rpc_origin();
+    lx = rpc_origin.x();
+    ly = rpc_origin.y();
+    lz = rpc_origin.z();
+
+    lx = lx*(1.0f-(float)motion_mult);
+    ly = ly*(1.0f-(float)motion_mult);
+    lz = lz*(1.0f-(float)motion_mult);
 
     vgl_point_3d<double> pt_3d_est_vec(lx,ly,lz);
     vgl_point_3d<double> pt_3d_updated = pt_3d_est_vec + motion;
 
-    lvcs->local_to_global(pt_3d_updated.x(),pt_3d_updated.y(),pt_3d_updated.z(),bgeo_lvcs::wgs84,lon,lat,elev);
+    nlx = (float)pt_3d_updated.x();
+    nly = (float)pt_3d_updated.y();
+    nlz = (float)pt_3d_updated.z();
   }
 
   // correct the output for (local) rational camera using the estimated offset pair (max_u,max_v)
@@ -338,7 +334,8 @@ bool bvxm_rpc_registration_process::execute()
   }
 
   if(rpc_shift_3d_flag){
-    lvcs->set_origin(lon,lat,elev);
+    vgl_point_3d<float> new_rpc_origin(nlx,nly,nlz);
+    vox_world->get_params()->set_rpc_origin(new_rpc_origin);
   }
   vox_world->increment_observations<EDGES>();
 
