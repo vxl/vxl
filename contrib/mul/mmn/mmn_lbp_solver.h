@@ -5,12 +5,13 @@
 // \brief Run loopy belief propogation over the graph
 // \author Martin Roberts
 
-#include <mmn/mmn_arc.h>
-#include <mmn/mmn_graph_rep1.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
 #include <vcl_vector.h>
 #include <vcl_map.h>
+#include <vcl_deque.h>
+#include <vnl/vnl_vector.h>
+#include <vnl/vnl_matrix.h>
+#include <mmn/mmn_arc.h>
+#include <mmn/mmn_graph_rep1.h>
 //: Run loopy belief to estimate overall marginal probabilities of all node states
 //: Then use converged LBP messages to also estimate overall most likely configuration
 // Can use this for non-tree graphs, but convergence to optimum is not absolutely guaranteed
@@ -54,6 +55,13 @@ class mmn_lbp_solver
     // Assumes input node costs are well-normalised for these to be proper probabilities
     vcl_vector<vnl_vector<double> > belief_;
 
+
+    //: previous N solutions (used to trap cycling)
+    vcl_deque<vcl_vector<unsigned  > > soln_history_;
+
+        //: previous max_delta values(used to check still descending)
+    vcl_deque<double  > max_delta_history_;
+
     //: Current iteration count
     unsigned count_;
 
@@ -63,11 +71,44 @@ class mmn_lbp_solver
     //: max number of iterations allowed
     unsigned max_iterations_;
 
+    //: min number of iterations before checking for solution looping (cycling)
+    unsigned min_simple_iterations_;
+
     //: Convergence criterion on max_delta_
     double epsilon_;
 
+    //: count of number of times a solution in history is revisited
+    unsigned nrevisits_;
+    
+    //: cycle condition detected
+    bool isCycling_;
+
+    //: Number of times cycling has been detected
+    unsigned cycle_detection_count_;
+
+    //: message update smoothing constant (used if cycling detected)
+    double alpha_;
+
+    //: should message update be smoothed during cycling
+    bool smooth_on_cycling_;
+
+    //; Maximum number of allowed cycle detections
+    //NOTE only used if smooth_on_cycling_ is true
+    //Otherwise we give up after the first cycle is detected
+    unsigned max_cycle_detection_count_;
+
+    //: solution value when cycling first detected
+    double zbest_on_cycle_detection_;
+
+    //:verbose debug output
+    bool verbose_;
+
+    //: Magic numbers for cycle detection
+    static const unsigned NHISTORY_;
+    static const unsigned NCYCLE_DETECT_;
+    
     //: Check if we carry on
-    bool continue_propagation();
+    bool continue_propagation(vcl_vector<unsigned>& x);
 
     //: Update all messages from input node to its neighbours
     void update_messages_to_neighbours(unsigned inode,
@@ -80,6 +121,11 @@ class mmn_lbp_solver
     void init();
     //: Calculate final sum of node and arc values
     double solution_cost(vcl_vector<unsigned>& x);
+
+    double best_solution_cost_in_history(vcl_vector<unsigned>& x);
+
+    //: update beliefs and calculate changes therein
+    void calculate_beliefs(vcl_vector<unsigned>& x);
    public:
     //: Default constructor
     mmn_lbp_solver();
@@ -114,6 +160,14 @@ class mmn_lbp_solver
     const vcl_vector<vnl_vector<double>  >&  belief() const {return belief_;}
     //: final iteration count
     unsigned count() const {return count_;}
+
+    //: Set true if want to alpha smooth message updates when cycling detected
+    // This may break the cycling condition
+    void set_smooth_on_cycling(bool bOn) {smooth_on_cycling_=bOn;}
+
+    void set_max_cycle_detection_count_(unsigned max_cycle_detection_count) {max_cycle_detection_count_=max_cycle_detection_count;}
+
+    void set_verbose(bool verbose) {verbose_=verbose;}
 };
 
 #endif // mmn_lbp_solver_h_
