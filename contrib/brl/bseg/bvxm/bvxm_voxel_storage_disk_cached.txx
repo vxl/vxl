@@ -16,11 +16,11 @@
 
 #include "bvxm_voxel_storage.h" // base class
 #include "bvxm_voxel_storage_disk.h" // for header
-#include "bvxm_voxel_slab.h" 
+#include "bvxm_voxel_slab.h"
 
 template <class T>
 bvxm_voxel_storage_disk_cached<T>::bvxm_voxel_storage_disk_cached(vcl_string storage_filename, vgl_vector_3d<unsigned int> grid_size, vxl_int_64 max_cache_size)
-:  bvxm_voxel_storage<T>(grid_size), storage_fname_(storage_filename), fio_(0), first_cache_slice_(-1), last_cache_slice_(-1)
+:  bvxm_voxel_storage<T>(grid_size), storage_fname_(storage_filename), first_cache_slice_(-1), last_cache_slice_(-1), fio_(0)
 {
   //set up cache
   vxl_int_64 slice_size = sizeof(T)*grid_size.x()*grid_size.y();
@@ -31,7 +31,7 @@ bvxm_voxel_storage_disk_cached<T>::bvxm_voxel_storage_disk_cached(vcl_string sto
 
   cache_mem_ = new bvxm_memory_chunk(cache_size);
   if (!cache_mem_) {
-    vcl_cerr << "ERROR allocating cache memory!" << vcl_endl;
+    vcl_cerr << "ERROR allocating cache memory!\n";
   }
 
   // check if file exsist already or not
@@ -60,14 +60,13 @@ bvxm_voxel_storage_disk_cached<T>::bvxm_voxel_storage_disk_cached(vcl_string sto
 
     if ((header.nx_ != grid_size.x()) || (header.ny_ != grid_size.y()) || (header.nz_ != grid_size.z())) {
       vcl_cerr << "error: file on disk has size " << vgl_vector_3d<unsigned>(header.nx_,header.ny_,header.nz_) << vcl_endl
-        << "       size passed to constructor = " << grid_size << vcl_endl;
+               << "       size passed to constructor = " << grid_size << vcl_endl;
       return;
     }
   }
   else {
     // file does not yet exist. do nothing for now.
   }
-
 }
 
 
@@ -91,7 +90,6 @@ bvxm_voxel_storage_disk_cached<T>::~bvxm_voxel_storage_disk_cached()
 template <class T>
 bool bvxm_voxel_storage_disk_cached<T>::initialize_data(T const& value)
 {
-
   // check if file exists already or not
   if (!(vul_file::exists(storage_fname_)))  {
     // make sure base directory exists
@@ -143,7 +141,6 @@ bool bvxm_voxel_storage_disk_cached<T>::initialize_data(T const& value)
   fio_->unref();
   fio_ = 0;
 
-  
   return true;
 }
 
@@ -153,14 +150,14 @@ bvxm_voxel_slab<T> bvxm_voxel_storage_disk_cached<T>::get_slab(unsigned slice_id
 {
   if (slice_idx + slab_thickness > this->grid_size_.z()) {
     vcl_cerr << "error: tried to get slab " << slice_idx
-      << " with thickness " << slab_thickness
-      << "; grid_size_.z() = " << this->grid_size_.z() << vcl_endl;
+             << " with thickness " << slab_thickness
+             << "; grid_size_.z() = " << this->grid_size_.z() << vcl_endl;
     bvxm_voxel_slab<T> slab;
     return slab;
   }
   if (slab_thickness > n_cache_slices_) {
-    vcl_cerr << "error: tried to get slab with thickness > cache size " << vcl_endl;
-    vcl_cerr << "  requested slab_thickness = " << slab_thickness << ", cache size = " << n_cache_slices_ << vcl_endl;
+    vcl_cerr << "error: tried to get slab with thickness > cache size\n"
+             << "  requested slab_thickness = " << slab_thickness << ", cache size = " << n_cache_slices_ << vcl_endl;
     bvxm_voxel_slab<T> slab;
     return slab;
   }
@@ -175,7 +172,7 @@ bvxm_voxel_slab<T> bvxm_voxel_storage_disk_cached<T>::get_slab(unsigned slice_id
     fill_cache(slice_idx);
     // make sure fill cache was successful
     if ( ((int)slice_idx < first_cache_slice_ ) || ((int)last_slice_idx > last_cache_slice_) ) {
-      vcl_cerr << "error: slices " << slice_idx << "through " << last_slice_idx << " still not in cache after fill. " << vcl_endl;
+      vcl_cerr << "error: slices " << slice_idx << "through " << last_slice_idx << " still not in cache after fill.\n";
       bvxm_voxel_slab<T> slab;
       return slab;
     }
@@ -184,8 +181,8 @@ bvxm_voxel_slab<T> bvxm_voxel_storage_disk_cached<T>::get_slab(unsigned slice_id
   }
   else {
     // entire slab is already in cache.
-    vxl_uint_64 slice_size = this->grid_size_.x()*this->grid_size_.y()*sizeof(T);
-    first_voxel = reinterpret_cast<T*>(cache_mem_->data()) + ((slice_idx - first_cache_slice_)*this->grid_size_.x()*this->grid_size_.y());
+    vxl_uint_64 slice_size = this->grid_size_.x()*this->grid_size_.y();
+    first_voxel = reinterpret_cast<T*>(cache_mem_->data()) + ((slice_idx - first_cache_slice_)*slice_size);
   }
   bvxm_voxel_slab<T> slab(this->grid_size_.x(),this->grid_size_.y(), slab_thickness, cache_mem_, first_voxel);
   return slab;
@@ -234,7 +231,7 @@ bool bvxm_voxel_storage_disk_cached<T>::purge_cache()
 
 
 template<class T>
-bool bvxm_voxel_storage_disk_cached<T>::fill_cache(unsigned start_slice_idx) 
+bool bvxm_voxel_storage_disk_cached<T>::fill_cache(unsigned start_slice_idx)
 {
   // check to see if file is already open
   if (!fio_) {
@@ -260,7 +257,7 @@ bool bvxm_voxel_storage_disk_cached<T>::fill_cache(unsigned start_slice_idx)
   vil_streampos slice_size = this->grid_size_.x()*this->grid_size_.y()*sizeof(T);
   vil_streampos read_size = (last_slice_idx - start_slice_idx + 1)*slice_size;
   fio_->read(reinterpret_cast<char*>(cache_mem_->data()),read_size);
-  
+
   first_cache_slice_ = start_slice_idx;
   last_cache_slice_ = last_slice_idx;
 
@@ -270,7 +267,7 @@ bool bvxm_voxel_storage_disk_cached<T>::fill_cache(unsigned start_slice_idx)
 template <class T>
 void bvxm_voxel_storage_disk_cached<T>::put_slab()
 {
-  // dont need to do anything here. 
+  // dont need to do anything here.
   // data gets written to disk only before it is about to be replaced in cache
   return;
 }
