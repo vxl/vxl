@@ -79,7 +79,7 @@ double mfpf_dp_snake::update_step(const vimt_image_2d_of<float>& image)
 
   vcl_vector<vgl_vector_2d<double> > u(n); // Space for normals
 
-  // Create reference shape, 
+  // Create reference shape,
   // which will be slightly smoothed version of pts_
   vcl_vector<vgl_point_2d<double> > ref_pts(n);
 
@@ -103,7 +103,7 @@ double mfpf_dp_snake::update_step(const vimt_image_2d_of<float>& image)
 
     finder().evaluate_region(image,ref_pts[i],u[i],response);
 
-    for (unsigned j=0;j<nr;++j) 
+    for (unsigned j=0;j<nr;++j)
     {
       double d= response.image()(j,0);
       D(i,j)=d;
@@ -113,13 +113,13 @@ double mfpf_dp_snake::update_step(const vimt_image_2d_of<float>& image)
   mbl_dyn_prog dp;
   vnl_vector<double> move_cost(nr);
   double shape_k=1.0;
-  for (int i=0;i<nr;++i) 
+  for (unsigned int i=0;i<nr;++i)
   {
     move_cost[i]=shape_k*i;
   }
 
   vcl_vector<int> x;
-  double c = dp.solve_loop(x,D,move_cost);
+  dp.solve_loop(x,D,move_cost);
 
   // Compute new image positions
   double step_size = finder().step_size();
