@@ -51,7 +51,7 @@ bvxm_rpc_registration_process::bvxm_rpc_registration_process()
 
 bool bvxm_rpc_registration_process::execute()
 {
-  bool DEBUG_MODE = false;
+  bool ANALYZER_MODE = false;
   char temp_string[1024];
   vcl_ifstream file_inp;
   vcl_ofstream file_out;
@@ -103,7 +103,7 @@ bool bvxm_rpc_registration_process::execute()
   expected_edge_image_output.set_size(ni,nj);
   expected_edge_image_output.fill(0);
 
-  if(DEBUG_MODE){
+  if(ANALYZER_MODE){
     vcl_sprintf(temp_string,"edge_image_%d.jpg",num_observations);
     vil_save(edge_image,temp_string);
   }
@@ -130,7 +130,7 @@ bool bvxm_rpc_registration_process::execute()
       }
     }
 
-    if(DEBUG_MODE){
+    if(ANALYZER_MODE){
       vcl_sprintf(temp_string,"expected_image_%d.jpg",num_observations);
       vil_save(expected_edge_image_output,temp_string);
     }
@@ -184,7 +184,7 @@ bool bvxm_rpc_registration_process::execute()
     }
     vcl_cout << vcl_endl;
 
-    if(DEBUG_MODE){
+    if(ANALYZER_MODE){
       double edge_fit_matrix_min = vcl_numeric_limits<double>::max();
       double edge_fit_matrix_max = vcl_numeric_limits<double>::min();
 
@@ -212,7 +212,7 @@ bool bvxm_rpc_registration_process::execute()
     }
   }
 
-  if(DEBUG_MODE){
+  if(ANALYZER_MODE){
     file_out.clear();
     file_out.open("offsets.txt",vcl_ofstream::app);
     file_out << best_offset_u << "\t" << best_offset_v << vcl_endl;
