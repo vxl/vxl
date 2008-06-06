@@ -2,11 +2,12 @@
   fsm
 */
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-#include <vbl/vbl_shared_pointer.h>
 
 // don't test shared_ptr on VC6 because it doesn't work.
 #ifndef VCL_VC_6
+
+#include <vcl_iostream.h>
+#include <vbl/vbl_shared_pointer.h>
 
 #define print vcl_cout
 
