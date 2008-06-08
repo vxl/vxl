@@ -16,6 +16,8 @@
 #include <vil/vil_crop.h>
 #include <vil/vil_math.h>
 #include <vil/vil_convert.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 #include <mbl/mbl_index_sort.h>
 #include <fhs/fhs_searcher.h>
 #include <vimt/algo/vimt_normalised_correlation_2d.h>
@@ -24,11 +26,11 @@
 
 void print_usage()
 {
-  vcl_cout<<"find_matches -i1 image1.jpg -i2 image2.jpg -L 2"<<vcl_endl
-          <<"Loads in image1 and image2."<<vcl_endl
-          <<"Locates a set of interesting features (corners) on level L of image1."<<vcl_endl
-          <<"Constructs a model of their relative positions."<<vcl_endl
-          <<"Uses normalised correllation and this model to locate"<<vcl_endl
+  vcl_cout<<"find_matches -i1 image1.jpg -i2 image2.jpg -L 2\n"
+          <<"Loads in image1 and image2.\n"
+          <<"Locates a set of interesting features (corners) on level L of image1.\n"
+          <<"Constructs a model of their relative positions.\n"
+          <<"Uses normalised correllation and this model to locate\n"
           <<"equivalent points on the same level of the second image."<<vcl_endl;
   vul_arg_display_usage_and_exit();
 }

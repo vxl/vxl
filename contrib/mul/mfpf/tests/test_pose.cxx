@@ -12,7 +12,8 @@
 
 #include <vcl_iostream.h>
 #include <mfpf/mfpf_pose.h>
-
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 
 void test_pose()
 {
@@ -39,18 +40,18 @@ void test_pose()
   mfpf_pose pose1(8,3.2, 1.1,0.2);
 
   mfpf_pose rpose = pose0.rel_pose(pose1);
-  
+
   TEST("rel_pose",(pose1(p1) - pose0(rpose(p1))).length()<1e-6,true);
 
   mfpf_pose inv_pose = pose0.inverse();
-  vcl_cout<<"Pose0:   "<<pose0<<vcl_endl;
-  vcl_cout<<"Inverse: "<<inv_pose<<vcl_endl;
-  vcl_cout<<"Inverse of inverse: "<<inv_pose.inverse()<<vcl_endl;
+  vcl_cout<<"Pose0:   "<<pose0<<vcl_endl
+          <<"Inverse: "<<inv_pose<<vcl_endl
+          <<"Inverse of inverse: "<<inv_pose.inverse()<<vcl_endl;
   mfpf_pose pose2=inv_pose.inverse();
   TEST("Inverse of inverse == Identity",pose0,pose2);
 
   TEST("inverse(p)==(0,0)",
-      (inv_pose(pose0.p())-vgl_point_2d<double>(0,0)).length()<1e-6,true);
+       (inv_pose(pose0.p())-vgl_point_2d<double>(0,0)).length()<1e-6,true);
 
   TEST("Inverse consistent",
        (pose0.apply_inverse(q1)-inv_pose(q1)).length()<1e-6,true);
@@ -61,7 +62,6 @@ void test_pose()
   mfpf_pose pose01 = pose0*pose1;
   vgl_point_2d<double> p4 = pose01(p0);
   TEST("p1*p2(x)==p1(p2(x))",(pose0(pose1(p0))-p4).length()<1e-6,true);
-
 }
 
 TESTMAIN(test_pose);

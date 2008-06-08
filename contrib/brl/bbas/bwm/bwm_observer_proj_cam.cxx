@@ -2,16 +2,22 @@
 #include "bwm_observer_mgr.h"
 #include "algo/bwm_utils.h"
 
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_plane_3d.h>
+#include <vgl/vgl_homg_point_2d.h>
+#include <vgl/vgl_homg_point_3d.h>
+#include <vgl/vgl_homg_line_3d_2_points.h>
 #include <vgl/algo/vgl_homg_operators_3d.h>
 
 bwm_observer_proj_cam::bwm_observer_proj_cam(bgui_image_tableau_sptr img,
-    vcl_string name, 
-    vcl_string& image_path, 
-    vcl_string& cam_path,                
-    bool display_image_path)
+                                             vcl_string name,
+                                             vcl_string& image_path,
+                                             vcl_string& cam_path,
+                                             bool display_image_path)
 : bwm_observer_cam(img)
 {
-
   img->show_image_path(display_image_path);
 
   // LOAD IMAGE
@@ -32,9 +38,9 @@ bwm_observer_proj_cam::bwm_observer_proj_cam(bgui_image_tableau_sptr img,
   {
     bwm_utils::show_error("Camera tableaus need a valid camera path!");
     return;
-  } 
+  }
   camera_ = read_projective_camera(cam_path).clone();
-  
+
   // add the observer to the observer pool
   bwm_observer_mgr::instance()->add(this);
   set_tab_name(name);
@@ -43,7 +49,7 @@ bwm_observer_proj_cam::bwm_observer_proj_cam(bgui_image_tableau_sptr img,
 bool bwm_observer_proj_cam::intersect_ray_and_plane(vgl_point_2d<double> img_point,
                                                     vgl_plane_3d<double> plane,
                                                     vgl_point_3d<double> &world_point)
-{ 
+{
   vpgl_proj_camera<double>* proj_cam = static_cast<vpgl_proj_camera<double> *> (camera_);
   vgl_homg_point_2d<double> img_point_h(img_point);
   vgl_homg_line_3d_2_points<double> ray = proj_cam->backproject(img_point_h);
@@ -53,10 +59,10 @@ bool bwm_observer_proj_cam::intersect_ray_and_plane(vgl_point_2d<double> img_poi
   return true;
 }
 
-void bwm_observer_proj_cam::camera_center(vgl_homg_point_3d<double> &center) 
-{ 
+void bwm_observer_proj_cam::camera_center(vgl_homg_point_3d<double> &center)
+{
   vpgl_proj_camera<double>* proj_cam = static_cast<vpgl_proj_camera<double> *> (camera_);
-  center = proj_cam->camera_center(); 
+  center = proj_cam->camera_center();
 }
 
 vgl_vector_3d<double> bwm_observer_proj_cam::camera_direction(vgl_point_3d<double> origin)

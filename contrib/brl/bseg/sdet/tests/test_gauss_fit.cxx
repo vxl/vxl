@@ -3,14 +3,16 @@
 #include <sdet/sdet_gauss_fit.h>
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_math.h>
-// for new matrix operations
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_determinant.h>
 #include <vnl/algo/vnl_matrix_inverse.h>
+#if 0 // commented out
+#include <vgl/vgl_point_3d.h>
+#endif
 
 void test_gauss_fit()
 {
-#if 0
+#if 0 // commented out
   // Create 15x15 vector of image points with known parameters
   vcl_vector<vgl_point_3d<double> > img_pts;
 

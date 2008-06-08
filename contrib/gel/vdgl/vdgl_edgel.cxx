@@ -4,6 +4,7 @@
 #endif
 
 #include "vdgl_edgel.h"
+#include <vgl/vgl_point_2d.h>
 #include <vcl_iostream.h>
 
 vdgl_edgel::vdgl_edgel( const double x, const double y, const double grad, const double theta )

@@ -4,6 +4,7 @@
 // \file
 
 #include <rrel/rrel_homography2d_est.h>
+#include <vgl/vgl_fwd.h>
 
 //: Subclass of the generalized 8-DOF homography estimator for affine transformations (6 DOF).
 

@@ -3,6 +3,8 @@
 #include <vnl/vnl_vector.h>
 #include <mil3d/mil3d_image_3d_of.h>
 #include <mil3d/mil3d_sample_profile_3d.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vcl_iostream.h>
 
 void test_sample_profile_3d_float()

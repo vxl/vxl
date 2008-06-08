@@ -1,6 +1,10 @@
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
+#include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_homg_point_3d.h>
+#include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_box_3d.h>
+#include <vgl/algo/vgl_rotation_3d.h>
 #include <vpgl/algo/vpgl_project.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 

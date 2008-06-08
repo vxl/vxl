@@ -19,6 +19,7 @@
 #include <vsl/vsl_vector_io.h>
 #include <testlib/testlib_test.h>
 
+#include <vgl/vgl_conic.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d_sptr.h>

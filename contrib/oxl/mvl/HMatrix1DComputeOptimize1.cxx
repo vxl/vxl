@@ -7,6 +7,7 @@
 
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
+#include <vgl/vgl_homg_point_1d.h>
 #include <mvl/HMatrix1D.h>
 
 //********************************************************************************

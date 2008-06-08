@@ -9,6 +9,8 @@
 #include "vimt3d_sample_grid_trilin.h"
 #include <vimt3d/vimt3d_trilin_interp.h>
 #include <vnl/vnl_vector.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
 
 //: True if p clearly inside the image
 template<class T>
@@ -132,7 +134,7 @@ inline void vimt3d_sample_grid_trilin_ic_no_checks(
         for (unsigned l=0;l<nw;++l,p+=w)
           for (unsigned k=0;k<np;++k,++vc)
             *vc = vil3d_trilin_interp_raw(p.x(),p.y(),p.z(),
-              image.origin_ptr()+k*pstep,istep,jstep,kstep);
+                                          image.origin_ptr()+k*pstep,istep,jstep,kstep);
       }
     }
   }
@@ -242,8 +244,8 @@ inline void vimt3d_sample_grid_trilin_ic_extend(
         vgl_point_3d<double> p = p2;
         // Sample each row (along w)
         for (unsigned k=0;k<nw;++k,p+=w,++vc)
-          *vc = vil3d_trilin_interp_safe_extend(p.x(),p.y(),
-            p.z(),plane0,ni,nj,nk,istep,jstep,kstep);
+          *vc = vil3d_trilin_interp_safe_extend(p.x(),p.y(),p.z(),
+                                                plane0,ni,nj,nk,istep,jstep,kstep);
       }
     }
   }
@@ -259,7 +261,7 @@ inline void vimt3d_sample_grid_trilin_ic_extend(
         for (unsigned l=0;l<nw;++l,p+=w)
           for (unsigned k=0;k<np;++k,++vc)
             *vc = vil3d_trilin_interp_safe_extend(p.x(),p.y(),p.z(),
-              image.origin_ptr()+k*pstep,ni,nj,nk,istep,jstep,kstep);
+                                                  image.origin_ptr()+k*pstep,ni,nj,nk,istep,jstep,kstep);
       }
     }
   }

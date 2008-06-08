@@ -6,6 +6,8 @@
 
 #include <vcl_iosfwd.h>
 
+#include <vgl/vgl_fwd.h>
+
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
 
@@ -21,10 +23,10 @@ class bwm_observer_rat_cam : public bwm_observer_cam
   typedef bwm_observer_cam base;
 
   bwm_observer_rat_cam(bgui_image_tableau_sptr img,
-    vcl_string& name,
-    vcl_string& image_path,
-    vcl_string& cam_path,
-    bool display_image_path);
+                       vcl_string& name,
+                       vcl_string& image_path,
+                       vcl_string& cam_path,
+                       bool display_image_path);
 
   // set the initial projection plane to z=0
   bwm_observer_rat_cam(bgui_image_tableau_sptr img, const char* n="unnamed")

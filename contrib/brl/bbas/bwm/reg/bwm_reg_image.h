@@ -3,6 +3,7 @@
 
 #include <vcl_vector.h>
 #include <vbl/vbl_ref_count.h>
+#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vil/vil_image_resource_sptr.h>
@@ -55,7 +56,7 @@ class bwm_reg_image : public vbl_ref_count
                      double radius_3d);
   //: Edges on the image
   bool edges_2d(vcl_vector<vsol_digital_curve_2d_sptr>& edges);
-  
+
   //: Edges projected onto the world plane
   bool edges_3d(vcl_vector<vsol_digital_curve_3d_sptr>& edges);
 

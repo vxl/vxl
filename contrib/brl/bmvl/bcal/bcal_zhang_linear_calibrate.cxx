@@ -4,6 +4,7 @@
 #include "bcal_zhang_linear_calibrate.h"
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_double_3.h> // for vnl_cross_3d
+#include <vgl/vgl_homg_point_2d.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>

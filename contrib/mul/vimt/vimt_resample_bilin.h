@@ -8,6 +8,8 @@
 #include <vcl_cassert.h>
 #include <vil/vil_resample_bilin.h>
 #include <vil/algo/vil_gauss_reduce.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 #include <vimt/vimt_image_2d_of.h>
 
 //: Sample grid of points in one image and place in another, using bilinear interpolation.
@@ -38,8 +40,8 @@ inline void vimt_resample_bilin(
   vgl_vector_2d<double> im_v = s_w2i.delta(p, v);
 
   vil_resample_bilin(src_image.image(),dest_image.image(),
-                      im_p.x(),im_p.y(),  im_u.x(),im_u.y(),
-                      im_v.x(),im_v.y(), n1,n2);
+                     im_p.x(),im_p.y(),  im_u.x(),im_u.y(),
+                     im_v.x(),im_v.y(), n1,n2);
 
   // Point (i,j) in dest corresponds to p+i.u+j.v,
   // an affine transformation for image to world
@@ -77,8 +79,8 @@ inline void vimt_resample_bilin_edge_extend(
   vgl_vector_2d<double> im_v = s_w2i.delta(p, v);
 
   vil_resample_bilin_edge_extend(src_image.image(),dest_image.image(),
-                      im_p.x(),im_p.y(),  im_u.x(),im_u.y(),
-                      im_v.x(),im_v.y(), n1,n2);
+                                 im_p.x(),im_p.y(),  im_u.x(),im_u.y(),
+                                 im_v.x(),im_v.y(), n1,n2);
 
   // Point (i,j) in dest corresponds to p+i.u+j.v,
   // an affine transformation for image to world
@@ -125,9 +127,9 @@ inline void vimt_resample_bilin_smoothing(
     vimt_image_2d_of<sType> dest;
     vil_image_view<sType> work;
     vil_gauss_reduce(im.image(), dest.image(), work);
-    
+
     dest.set_world2im(scaling * im.world2im());
-    
+
     // re-establish loop invariant
     im = dest;
     im_d = im.world2im().delta(p, u) + im.world2im().delta(p, v);

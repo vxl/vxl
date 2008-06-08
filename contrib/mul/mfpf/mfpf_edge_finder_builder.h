@@ -1,12 +1,12 @@
 #ifndef mfpf_edge_finder_builder_h_
 #define mfpf_edge_finder_builder_h_
-
 //:
 // \file
 // \brief Builder for mfpf_edge_finder objects.
 // \author Tim Cootes
 
 #include <mfpf/mfpf_point_finder_builder.h>
+#include <vgl/vgl_fwd.h>
 #include <vcl_iosfwd.h>
 
 //: Builder for mfpf_edge_finder objects.
@@ -22,7 +22,7 @@ class mfpf_edge_finder_builder : public mfpf_point_finder_builder
   virtual ~mfpf_edge_finder_builder();
 
   //: Define region size in world co-ordinates
-  //  Sets up ROI to cover given box (with samples at step_size()), 
+  //  Sets up ROI to cover given box (with samples at step_size()),
   //  with ref point at centre.
   //  Currently does nothing.
   virtual void set_region_size(double wi, double wj);

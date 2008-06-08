@@ -10,6 +10,7 @@
 #include "bwm_world.h"
 #include "algo/bwm_utils.h"
 
+#include <vgl/vgl_homg_plane_3d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
@@ -24,7 +25,7 @@ void bwm_tableau_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu
 
   bwm_popup_menu pop(this);
   vgui_menu submenu;
-  pop.get_menu(menu); 
+  pop.get_menu(menu);
 }
 
 void bwm_tableau_cam::create_polygon_mesh()
@@ -58,11 +59,13 @@ void bwm_tableau_cam::set_master()
 {
   bwm_observer_mgr::BWM_MASTER_OBSERVER = this->my_observer_;
 }
-  //: set the observer as per the image type
+
+//: set the observer as per the image type
 void bwm_tableau_cam::set_eo()
 {
   bwm_observer_mgr::BWM_EO_OBSERVER = this->my_observer_;
 }
+
 void bwm_tableau_cam::set_other_mode()
 {
   bwm_observer_mgr::BWM_OTHER_MODE_OBSERVER = this->my_observer_;

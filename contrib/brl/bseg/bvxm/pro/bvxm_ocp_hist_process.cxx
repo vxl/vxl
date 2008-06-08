@@ -3,6 +3,7 @@
 
 #include <bprb/bprb_parameters.h>
 #include <bsta/bsta_histogram.h>
+#include <vgl/vgl_vector_3d.h>
 
 bvxm_ocp_hist_process::bvxm_ocp_hist_process()
 {

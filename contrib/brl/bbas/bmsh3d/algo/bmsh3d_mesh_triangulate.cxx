@@ -6,6 +6,8 @@
 #include "bmsh3d_mesh_tri.h"
 #include "bmsh3d_mesh_triangulate.h"
 #include <vcl_cassert.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
 
 //: Triangulate the input mesh face F into a set of triangular faces.
 //  The mesh face can be any contour/polygon without holes.

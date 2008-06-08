@@ -7,6 +7,7 @@
 // \author Tim Cootes
 
 #include <mfpf/mfpf_point_finder.h>
+#include <vgl/vgl_fwd.h>
 #include <vcl_iosfwd.h>
 
 //: Locates strongest edge along a profile.
@@ -46,9 +47,9 @@ class mfpf_edge_finder : public mfpf_point_finder
   //  the best nearby match.  Returns a qualtity of fit measure at that
   //  point (the smaller the better).
   virtual double search_one_pose(const vimt_image_2d_of<float>& image,
-                        const vgl_point_2d<double>& p,
-                        const vgl_vector_2d<double>& u,
-                        vgl_point_2d<double>& new_p);
+                                 const vgl_point_2d<double>& p,
+                                 const vgl_vector_2d<double>& u,
+                                 vgl_point_2d<double>& new_p);
 
   //: Generate points in ref frame that represent boundary
   //  Points of a closed contour around the shape.

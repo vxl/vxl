@@ -13,6 +13,8 @@
 #include <vil/io/vil_io_image_view.h>
 #include <vil/vil_math.h>
 #include <vnl/vnl_math.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 
 //=======================================================================
 // Dflt ctor

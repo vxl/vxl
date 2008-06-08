@@ -1,6 +1,7 @@
 #include <testlib/testlib_test.h>
 #include <vul/vul_file.h>
 
+#include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 
 #include "../bvxm_voxel_world.h"

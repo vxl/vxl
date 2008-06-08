@@ -3,6 +3,10 @@
 // \file
 #include "algo/bwm_utils.h"
 #include "bwm_world.h"
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_plane_3d.h>
 #include <vpgl/algo/vpgl_adjust_rational_trans_onept.h>
 #include <vsl/vsl_basic_xml_element.h>
 #include <vgui/vgui_dialog.h>
@@ -59,9 +63,9 @@ vcl_vector<bwm_observer_rat_cam*> bwm_observer_mgr::observers_rat_cam()
 }
 
 void bwm_observer_mgr::add(bwm_observer* o)
-{ 
-  observers_.push_back(o); 
- 
+{
+  observers_.push_back(o);
+
   // make the connection between this observer and the available observables
   vcl_vector<bwm_observable_sptr> objects = bwm_world::instance()->objects();
 #if 0
@@ -363,9 +367,9 @@ void bwm_observer_mgr::save_corr_XML()
     xml_element.add_attribute("mode", m);
 
     vcl_string n = "";
-    if (n_corrs_==MULTIPLE_CORRS) 
+    if (n_corrs_==MULTIPLE_CORRS)
       n = "MULTIPLE";
-    else 
+    else
       n = "SINGLE";
     xml_element.add_attribute("type", n);
     xml_element.x_write_open(s);
@@ -494,8 +498,8 @@ void bwm_observer_mgr::adjust_camera_offsets()
 
   //send the objects in the world the fact that they need to redisplay
   vcl_vector<bwm_observable_sptr> objs = bwm_world::instance()->objects();
-  for(vcl_vector<bwm_observable_sptr>::iterator oit = objs.begin();
-      oit != objs.end(); ++oit)
+  for (vcl_vector<bwm_observable_sptr>::iterator oit = objs.begin();
+       oit != objs.end(); ++oit)
     (*oit)->send_update();
 
   //

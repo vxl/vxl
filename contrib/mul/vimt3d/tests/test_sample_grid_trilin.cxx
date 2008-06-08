@@ -3,6 +3,8 @@
 
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vimt3d/vimt3d_sample_grid_trilin.h>
 #include <vimt3d/vimt3d_reconstruct_from_grid.h>
 #include <vimt3d/vimt3d_image_3d_of.h>

@@ -1,5 +1,7 @@
 #include "FMatrixComputeLMedSq.h"
 #include <mvl/HomgOperator2D.h>
+#include <vgl/vgl_homg_point_2d.h>
+#include <vgl/vgl_homg_line_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vcl_algorithm.h>
 
@@ -13,7 +15,8 @@ FMatrixComputeLMedSq::FMatrixComputeLMedSq(bool rank2_truncate, int size)
 
 FMatrixComputeLMedSq::~FMatrixComputeLMedSq() {}
 
-double FMatrixComputeLMedSq::calculate_term(vcl_vector<double>& residuals, vcl_vector<bool>& inlier_list, int& count) {
+double FMatrixComputeLMedSq::calculate_term(vcl_vector<double>& residuals, vcl_vector<bool>& inlier_list, int& count)
+{
   double M = median(residuals);
   double thresh = inthresh_;
   thresh *= M;

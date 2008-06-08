@@ -21,6 +21,7 @@
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 
+#include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 
 #include <vul/vul_file.h>

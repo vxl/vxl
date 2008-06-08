@@ -10,6 +10,7 @@
 #include <vil/vil_sample_profile_bilin.h>
 #include <vil/vil_bilin_interp.h>
 #include <vnl/vnl_vector.h>
+#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 
 inline bool vimt_profile_in_image(const vgl_point_2d<double>& p0,

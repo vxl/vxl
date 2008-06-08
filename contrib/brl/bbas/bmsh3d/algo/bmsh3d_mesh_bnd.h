@@ -1,7 +1,7 @@
 // This is brl/bbas/bmsh3d/algo/bmsh3d_mesh_bnd.h
 //---------------------------------------------------------------------
-#ifndef _bmsh3d_mesh_bnd_h_
-#define _bmsh3d_mesh_bnd_h_
+#ifndef bmsh3d_mesh_bnd_h_
+#define bmsh3d_mesh_bnd_h_
 //:
 // \file
 // \brief mesh boundary tracing
@@ -16,6 +16,7 @@
 //
 //-------------------------------------------------------------------------
 
+#include <vgl/vgl_point_3d.h>
 #include <bmsh3d/bmsh3d_mesh.h>
 
 class bmsh3d_bnd_chain
@@ -87,5 +88,4 @@ class bmsh3d_bnd_chain_set
   void remove_large_bnd_chain (unsigned int th);
 };
 
-#endif
-
+#endif // bmsh3d_mesh_bnd_h_

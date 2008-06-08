@@ -2,6 +2,8 @@
 #include "FMatrixComputeRANSAC.h"
 #include <mvl/FManifoldProject.h>
 #include <mvl/HomgOperator2D.h>
+#include <vgl/vgl_homg_point_2d.h>
+#include <vgl/vgl_homg_line_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 
 FMatrixComputeRANSAC::FMatrixComputeRANSAC(bool rank2_truncate, double std)
@@ -13,7 +15,8 @@ FMatrixComputeRANSAC::FMatrixComputeRANSAC(bool rank2_truncate, double std)
 
 FMatrixComputeRANSAC::~FMatrixComputeRANSAC() {}
 
-double FMatrixComputeRANSAC::calculate_term(vcl_vector<double>& residuals, vcl_vector<bool>& inlier_list, int& count) {
+double FMatrixComputeRANSAC::calculate_term(vcl_vector<double>& residuals, vcl_vector<bool>& inlier_list, int& count)
+{
   count = 0;
   for (unsigned int i = 0; i < residuals.size(); i++) {
     if (residuals[i] < inthresh_) {

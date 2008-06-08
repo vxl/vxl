@@ -19,6 +19,8 @@
 #include <vcl_cassert.h>
 #include <vcl_cstdio.h>
 
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_distance.h>
 
 #include "bmsh3d_face.h"
@@ -61,9 +63,9 @@ bmsh3d_edge* bmsh3d_edge::clone()
   bmsh3d_vertex* e = vertices_[1];
 
   bmsh3d_vertex* new_s = new bmsh3d_vertex(s->get_pt().x(), s->get_pt().y(),
-    s->get_pt().z(), -1);
+                                           s->get_pt().z(), -1);
   bmsh3d_vertex* new_e = new bmsh3d_vertex(e->get_pt().x(), e->get_pt().y(),
-    e->get_pt().z(), -1);
+                                           e->get_pt().z(), -1);
 
   bmsh3d_edge* new_edge = new bmsh3d_edge(new_s, new_e, -1);
   return new_edge;

@@ -2,6 +2,7 @@
 //:
 // \file
 #include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_polygon.h>
 #include <vgl/algo/vgl_convex_hull_2d.h>
 #include <vdgl/vdgl_digital_region.h>
 #include <vsol/vsol_polygon_2d.h>

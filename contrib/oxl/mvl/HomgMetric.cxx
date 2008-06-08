@@ -15,6 +15,8 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
+#include <vgl/vgl_line_segment_2d.h>
+#include <vgl/algo/vgl_homg_operators_2d.h>
 
 #include <mvl/HomgPoint2D.h>
 #include <mvl/HomgLine2D.h>

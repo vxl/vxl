@@ -11,6 +11,9 @@
 #include <vil/vil_math.h>
 #include <vil/vil_new.h>
 #include <vnl/vnl_matrix_fixed.h>
+#include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_homg_point_2d.h>
+#include <vgl/vgl_homg_point_3d.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vgl/algo/vgl_p_matrix.h>
 #include <vgui/vgui.h>
@@ -286,7 +289,7 @@ range_params(vil_image_resource_sptr const& image)
   }
 vcl_cout << "Image pixel format not handled\n";
  return new vgui_range_map_params(0, 255, gamma, invert,
-                                      gl_map, cache);
+                                  gl_map, cache);
 }
 
 void bmvv_cal_manager::set_range_params()

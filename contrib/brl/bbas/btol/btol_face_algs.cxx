@@ -1,6 +1,8 @@
 #include "btol_face_algs.h"
 //:
 // \file
+
+#include <vgl/vgl_point_2d.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator.h>
 #include <vdgl/vdgl_edgel_chain.h>

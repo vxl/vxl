@@ -2,6 +2,9 @@
 //:
 // \file
 #include <vsol/vsol_box_2d.h>
+#if 0 // later
+#include <vgl/vgl_box_2d.h>
+#endif
 
 brip_roi::brip_roi(const unsigned n_image_cols, const unsigned n_image_rows)
 {
@@ -131,7 +134,7 @@ void brip_roi::add_region(vsol_box_2d_sptr const & box)
 bool brip_roi::empty() const
 {
   return n_regions() == 0;
-#if 0//later
+#if 0 // later
   for (vcl_vector<vgl_box_2d<int> >::iterator rit = regions_.begin();
        rit != regions_.end(); rit++)
     if (!(*rit).is_empty())

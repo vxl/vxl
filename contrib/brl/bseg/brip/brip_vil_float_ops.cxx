@@ -6,6 +6,7 @@
 #include <vcl_complex.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 #include <vul/vul_timer.h>
 #include <vbl/vbl_array_1d.h>
@@ -1412,11 +1413,11 @@ brip_vil_float_ops::convert_to_short(vil_image_resource_sptr const& image)
     short_image.set_size(width, height);
     for (unsigned y = 0; y<height; y++)
       for (unsigned x = 0; x<width; x++)
-        {
-          double v = color_image(x,y,0)+color_image(x,y,1)+color_image(x,y,2);
-          v/=3.0;
-          short_image(x,y) = static_cast<unsigned short>(v);
-        }
+      {
+        double v = color_image(x,y,0)+color_image(x,y,1)+color_image(x,y,2);
+        v/=3.0;
+        short_image(x,y) = static_cast<unsigned short>(v);
+      }
     return short_image;
   }
   // the image is multispectral so we should convert it to greyscale
@@ -1614,7 +1615,7 @@ convert_to_IHS(vil_image_view<unsigned char >const& image,
     }
 }
 
-#if 0
+#if 0 // commented out
 void brip_vil_float_ops::
 display_IHS_as_RGB(vil_image_view<float> const& I,
                    vil_image_view<float> const& H,

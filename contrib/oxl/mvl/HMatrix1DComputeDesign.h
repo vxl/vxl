@@ -1,6 +1,7 @@
 #ifndef _HMatrix1DComputeDesign_h_
 #define _HMatrix1DComputeDesign_h_
 
+#include <vgl/vgl_fwd.h>
 #include "HMatrix1DCompute.h"
 
 class HMatrix1DComputeDesign : public HMatrix1DCompute

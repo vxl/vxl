@@ -3,11 +3,12 @@
 // \brief Builder for mfpf_profile_pdf objects.
 // \author Tim Cootes
 
-
 #include <mfpf/mfpf_profile_pdf_builder.h>
 #include <mfpf/mfpf_profile_pdf.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 #include <vcl_cassert.h>
 #include <vcl_algorithm.h>
 
@@ -54,7 +55,7 @@ mfpf_point_finder* mfpf_profile_pdf_builder::new_finder() const
 }
 
 void mfpf_profile_pdf_builder::set(int ilo, int ihi,
-                               const vpdfl_builder_base& builder)
+                                   const vpdfl_builder_base& builder)
 {
   ilo_=ilo;
   ihi_=ihi;
@@ -62,7 +63,7 @@ void mfpf_profile_pdf_builder::set(int ilo, int ihi,
 }
 
 //: Define region size in world co-ordinates
-//  Sets up ROI to cover given box (with samples at step_size()), 
+//  Sets up ROI to cover given box (with samples at step_size()),
 //  with ref point at centre.
 void mfpf_profile_pdf_builder::set_region_size(double wi, double)
 {
@@ -81,8 +82,8 @@ void mfpf_profile_pdf_builder::clear(unsigned n_egs)
 
 //: Add one example to the model
 void mfpf_profile_pdf_builder::add_example(const vimt_image_2d_of<float>& image,
-                        const vgl_point_2d<double>& p,
-                        const vgl_vector_2d<double>& u)
+                                           const vgl_point_2d<double>& p,
+                                           const vgl_vector_2d<double>& u)
 {
   int n=1+ihi_-ilo_;
   unsigned np=image.image().nplanes();
@@ -182,8 +183,8 @@ void mfpf_profile_pdf_builder::print_summary(vcl_ostream& os) const
 {
   os << "{ size: [" << ilo_ << ',' << ihi_ << ']' <<vcl_endl;
   mfpf_point_finder_builder::print_summary(os);
-  os << " pdf_builder: " << pdf_builder_;
-  os << " }";
+  os << " pdf_builder: " << pdf_builder_
+     << " }";
 }
 
 //: Version number for I/O

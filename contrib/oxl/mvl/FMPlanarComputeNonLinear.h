@@ -27,6 +27,7 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <vgl/vgl_fwd.h>
 #include <mvl/FMatrixCompute.h>
 
 class ImageMetric;

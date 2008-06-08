@@ -12,6 +12,8 @@
 #include <vcl_string.h>
 #include <vcl_cassert.h>
 
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 #include <vnl/vnl_math.h> // for sqrt2
 #include <mil/mil_image_pyramid.h>
 #include <mil/mil_gauss_reduce_2d.h>

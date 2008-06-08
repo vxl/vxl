@@ -15,6 +15,8 @@
 
 #include <vcl_vector.h>
 #include <vil/vil_image_resource.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vsol/vsol_conic_2d_sptr.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
@@ -88,7 +90,7 @@ class bmvv_f_manager : public vgui_wrapper_tableau
                   const vgui_style_sptr& style = NULL);
 
   void draw_conics(vcl_vector<vsol_conic_2d_sptr> const & conic_segs,
-                  const vgui_style_sptr& style = NULL);
+                   const vgui_style_sptr& style = NULL);
 
   void draw_polylines(vcl_vector<vsol_polyline_2d_sptr> const & polys,
                       vgui_style_sptr style=(vgui_style*)0);
@@ -101,8 +103,8 @@ class bmvv_f_manager : public vgui_wrapper_tableau
                                vgui_range_map_params_sptr const& rmps =0);
 
  void add_image_at(vil_image_resource_sptr const& image,
-                    const unsigned col, const unsigned row,
-                    vgui_range_map_params_sptr const& rmps = 0);
+                   const unsigned col, const unsigned row,
+                   vgui_range_map_params_sptr const& rmps = 0);
 
   void add_image(vil_image_resource_sptr const& image,
                  vgui_range_map_params_sptr const& rmps =0);

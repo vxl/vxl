@@ -25,6 +25,7 @@
 
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
+#include <vgl/vgl_fwd.h>
 #include <vifa/vifa_typedefs.h>
 
 class vifa_line_cover : public vbl_ref_count

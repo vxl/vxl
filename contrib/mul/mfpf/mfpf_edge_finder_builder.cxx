@@ -10,6 +10,8 @@
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 
 //=======================================================================
 // Dflt ctor
@@ -28,7 +30,7 @@ mfpf_edge_finder_builder::~mfpf_edge_finder_builder()
 }
 
 //: Define region size in world co-ordinates
-//  Sets up ROI to cover given box (with samples at step_size()), 
+//  Sets up ROI to cover given box (with samples at step_size()),
 //  with ref point at centre.
 void mfpf_edge_finder_builder::set_region_size(double, double)
 {

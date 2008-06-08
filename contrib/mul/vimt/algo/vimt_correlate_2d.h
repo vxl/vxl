@@ -8,6 +8,7 @@
 
 #include <vil/algo/vil_correlate_2d.h>
 #include <vimt/vimt_image_2d_of.h>
+#include <vgl/vgl_fwd.h>
 
 //: Correlate kernel with src_im, keeping track of transformations.
 // dest is resized to (1+src_im.ni()-kernel.ni())x(1+src_im.nj()-kernel.nj())
@@ -21,10 +22,10 @@
 // \relates vil_image_view
 template <class srcT, class destT, class kernelT, class accumT>
 inline void vimt_correlate_2d(const vimt_image_2d_of<srcT>& src_im,
-                             vimt_image_2d_of<destT>& dest_im,
-                             const vil_image_view<kernelT>& kernel,
-                             vgl_point_2d<double> kernel_ref_pt,
-                             accumT ac)
+                              vimt_image_2d_of<destT>& dest_im,
+                              const vil_image_view<kernelT>& kernel,
+                              vgl_point_2d<double> kernel_ref_pt,
+                              accumT ac)
 {
   vil_correlate_2d(src_im.image(),dest_im.image(),kernel,ac);
   vimt_transform_2d offset;

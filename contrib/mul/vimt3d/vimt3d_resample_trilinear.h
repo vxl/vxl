@@ -1,16 +1,16 @@
 // This is mul/vimt3d/vimt3d_resample_trilinear.h
 #ifndef vimt3d_resample_trilinear_h_
 #define vimt3d_resample_trilinear_h_
-
 //:
 // \file
 // \brief Resample a 3D image by a different factor in each dimension
 // \author Kevin de Souza
 
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_resample_trilinear.h>
 #include <vimt3d/vimt3d_image_3d_of.h>
-
 
 //: Resample a 3D image by a factor of 2 in each dimension.
 // \p dst_image has size 2*src.image().n?()-1 in each direction.
@@ -31,7 +31,7 @@ void vimt3d_resample_trilinear_scale_2(
 
 
 //: Sample grid of points in one image and place in another, using trilinear interpolation.
-//  dest_image(i,j,k,p) is sampled from the src_image at p+i.u+j.v+k.w, 
+//  dest_image(i,j,k,p) is sampled from the src_image at p+i.u+j.v+k.w,
 //  where i=[0..n1-1], j=[0..n2-1], k=[0..n3-1] in world co-ordinates.
 //
 //  dest_image resized to (n1,n2,n3,src_image.nplanes())
@@ -59,11 +59,11 @@ inline void vimt3d_resample_trilinear(
   vgl_vector_3d<double> im_w = s_w2i.delta(p, w);
 
   vil3d_resample_trilinear(src_image.image(),dest_image.image(),
-    im_p.x(), im_p.y(), im_p.z(), 
-    im_u.x(), im_u.y(), im_u.z(),
-    im_v.x(), im_v.y(), im_v.z(), 
-    im_w.x(), im_w.y(), im_w.z(),
-    n1, n2, n3);
+                           im_p.x(), im_p.y(), im_p.z(),
+                           im_u.x(), im_u.y(), im_u.z(),
+                           im_v.x(), im_v.y(), im_v.z(),
+                           im_w.x(), im_w.y(), im_w.z(),
+                           n1, n2, n3);
 
   // Point (i,j,k) in dest corresponds to p+i.u+j.v+k.w,
   // an affine transformation for image to world

@@ -18,7 +18,6 @@
 // \endverbatim
 //*****************************************************************************
 
-#include <vgl/vgl_fwd.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>

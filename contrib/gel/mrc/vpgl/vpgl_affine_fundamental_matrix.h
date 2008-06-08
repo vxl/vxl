@@ -1,7 +1,6 @@
 // This is gel/mrc/vpgl/vpgl_affine_fundamental_matrix.h
 #ifndef vpgl_affine_fundamental_matrix_h_
 #define vpgl_affine_fundamental_matrix_h_
-
 //:
 // \file
 // \brief A class for the fundamental matrix between two affine cameras..
@@ -9,18 +8,15 @@
 // \date 06/8/05
 // \author Joseph Mundy, Matt Leotta, Vishal Jain
 //
-// The fundamental matrix has form:
+// The fundamental matrix has the form:
+// \verbatim
 // |  0  0  e |
 // |  0  0  d |
 // |  a  b  c |
-
+// \endverbatim
 
 #include <vnl/vnl_fwd.h>
-#include <vgl/vgl_fwd.h>
-// not used? #include <vcl_iosfwd.h>
-
 #include "vpgl_fundamental_matrix.h"
-
 
 template <class T>
 class vpgl_affine_fundamental_matrix : public vpgl_fundamental_matrix<T>

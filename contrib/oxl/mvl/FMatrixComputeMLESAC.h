@@ -22,6 +22,7 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <vgl/vgl_fwd.h>
 #include <mvl/FMatrixComputeRobust.h>
 #include <mvl/FManifoldProject.h>
 #include <vcl_vector.h>

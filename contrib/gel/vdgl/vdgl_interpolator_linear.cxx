@@ -8,6 +8,7 @@
 #include "vdgl_interpolator_linear.h"
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vsol/vsol_point_2d.h>
+#include <vgl/vgl_point_2d.h>
 #include <vcl_cmath.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>

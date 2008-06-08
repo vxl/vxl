@@ -19,6 +19,8 @@
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
 #include <vnl/vnl_random.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vul/vul_printf.h>
 
@@ -320,8 +322,8 @@ void shift_points_to_first_octant (bmsh3d_pt_set* pt_set)
 //: Sub-sample the point cloud to be the specified # of points.
 void subsample_points (bmsh3d_pt_set* pt_set, const unsigned int subsam_pts)
 {
-  vul_printf (vcl_cerr, "  subsample_points(): %d to %d points.\n",
-               pt_set->vertexmap().size(), subsam_pts);
+  vul_printf(vcl_cerr, "  subsample_points(): %d to %d points.\n",
+             pt_set->vertexmap().size(), subsam_pts);
 
   vnl_random rand;
   rand.reseed (622);

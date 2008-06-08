@@ -25,6 +25,7 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
+#include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vil1/vil1_load.h>

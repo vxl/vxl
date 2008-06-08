@@ -13,6 +13,7 @@
 //:
 // \file
 
+#include <vgl/vgl_vector_3d.h>
 #include <vsol/vsol_line_3d.h>
 #include <vsol/vsol_line_3d_sptr.h>
 #include <vsol/vsol_point_3d.h>

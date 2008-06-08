@@ -11,9 +11,9 @@
 #include <vpgl/vpgl_lens_distortion.h>
 #include <vil/vil_image_view.h>
 #include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
-// not used? #include <vcl_cmath.h>
 #include <vcl_cassert.h>
 
 //: Compute a bounding box in the distorted space for an existing box

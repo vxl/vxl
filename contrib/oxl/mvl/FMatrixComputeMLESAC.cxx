@@ -2,6 +2,8 @@
 #include "FMatrixComputeMLESAC.h"
 #include <mvl/FManifoldProject.h>
 #include <mvl/HomgOperator2D.h>
+#include <vgl/vgl_homg_point_2d.h>
+#include <vgl/vgl_homg_line_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 
 FMatrixComputeMLESAC::FMatrixComputeMLESAC(bool rank2_truncate, double std)
@@ -14,7 +16,8 @@ FMatrixComputeMLESAC::FMatrixComputeMLESAC(bool rank2_truncate, double std)
 FMatrixComputeMLESAC::~FMatrixComputeMLESAC() {}
 
 // The robust Huber cost function
-double FMatrixComputeMLESAC::calculate_term(vcl_vector<double>& residuals, vcl_vector<bool>& inlier_list, int& count) {
+double FMatrixComputeMLESAC::calculate_term(vcl_vector<double>& residuals, vcl_vector<bool>& inlier_list, int& count)
+{
   double sse = 0.0;
   for (unsigned int i = 0; i < residuals.size(); i++) {
     if (residuals[i] < inthresh_) {

@@ -5,6 +5,11 @@
 #include <vpgl/vpgl_reg_fundamental_matrix.h>
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_vector_fixed.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_homg_point_2d.h>
+#include <vgl/vgl_homg_line_2d.h>
+#include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_distance.h>
 
 static void test_fundamental_matrix()
@@ -49,9 +54,9 @@ static void test_fundamental_matrix()
   vgl_homg_point_2d<double> p2r = C1r.project( p2w );
   vgl_homg_point_2d<double> p2l = C1l.project( p2w );
   TEST_NEAR( "right epipolar line finder",
-    vgl_distance( F1.r_epipolar_line( p2l ), p2r ), 0, 1e-06 );
+             vgl_distance( F1.r_epipolar_line( p2l ), p2r ), 0, 1e-06 );
   TEST_NEAR( "left epipolar line finder",
-    vgl_distance( F1.l_epipolar_line( p2r ), p2l ), 0, 1e-06 );
+             vgl_distance( F1.l_epipolar_line( p2r ), p2l ), 0, 1e-06 );
 
   // Test camera extraction:
   double random_list2l[12] = { 5, 6, 40, -1, 15, 8, 5, -1, 10, 3, 7, 9 };
@@ -64,8 +69,8 @@ static void test_fundamental_matrix()
   vcl_cerr << "\nTrue fundamental matrix: " << F3.get_matrix() << '\n'
            << "Estimated fundamental matrix: " << F3_est.get_matrix() << '\n';
   TEST_NEAR( "left camera extraction",
-    F3.get_matrix()(0,0)/F3_est.get_matrix()(0,0) -
-    F3.get_matrix()(0,1)/F3_est.get_matrix()(0,1), 0, 1e-06 );
+             F3.get_matrix()(0,0)/F3_est.get_matrix()(0,0) -
+             F3.get_matrix()(0,1)/F3_est.get_matrix()(0,1), 0, 1e-06 );
 
   // Test camera extraction with point correspondences.
   vcl_vector< vgl_point_3d<double> > p3w;
@@ -83,8 +88,8 @@ static void test_fundamental_matrix()
            << C2l.project( vgl_homg_point_3d<double>(p3w[1]) ) << '\n'
            << C2l_est.project( vgl_homg_point_3d<double>(p3w[1]) ) << '\n';
   TEST_NEAR( "left camera extraction from correspondences",
-    vgl_distance( p3i[0], vgl_point_2d<double>( C2l_est2.project(
-      vgl_homg_point_3d<double>(p3w[0]) ) ) ), 0, 4.0 );
+             vgl_distance( p3i[0], vgl_point_2d<double>(
+                C2l_est2.project( vgl_homg_point_3d<double>(p3w[0]) ) ) ), 0, 4.0 );
 
   // Test registered fundamental matrix construction:
   vgl_point_2d<double> p3r(0,2);

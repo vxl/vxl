@@ -5,6 +5,8 @@
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_distance.h>
 #include <vimt3d/vimt3d_transform_3d.h>
 #include <testlib/testlib_test.h>
@@ -271,7 +273,6 @@ static void test_transform_3d()
   vgl_point_3d<double> vec_z0_test= trans0_test( vec_z );
   vcl_cout<<"vec_z0_test= "<<vec_z0_test<<vcl_endl;
   TEST("Test z basis vec", (vec_z0- vec_z0_test).length()< 1e-6, true);
-
 
   vcl_cout<<"\n== Testing Affine ==\n";
   trans0.set_affine(0.2,-0.3,4,2,1,4,5,0.1,-0.21);

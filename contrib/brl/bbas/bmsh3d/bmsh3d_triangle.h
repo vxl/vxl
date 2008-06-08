@@ -1,6 +1,6 @@
 // This is brl/bbas/bmsh3d/bmsh3d_triangle.h
-#ifndef _bmsh3d_triangle_h_
-#define _bmsh3d_triangle_h_
+#ifndef bmsh3d_triangle_h_
+#define bmsh3d_triangle_h_
 //:
 // \file
 // \brief  Basic triangle geometric.
@@ -14,6 +14,7 @@
 //-----------------------------------------------------------------------------
 
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_distance.h>
 #include "bmsh3d_dist.h"
 #include "bmsh3d_fuzzy_boolean.h"
@@ -64,4 +65,4 @@ inline bool bmsh3d_footpt_on_line(const vgl_point_3d<double>& P,
     return false;
 }
 
-#endif
+#endif // bmsh3d_triangle_h_

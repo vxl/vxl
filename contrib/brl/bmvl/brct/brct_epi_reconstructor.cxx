@@ -10,12 +10,13 @@
 #include <vcl_cstdlib.h> // for exit()
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #if 0
 #include <mvl/FMatrix.h>
-#endif 
+#endif
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_quaternion.h>
 #include <vdgl/vdgl_edgel.h>

@@ -16,6 +16,8 @@
 #include <vcl_string.h>
 #include <bprb/bprb_process.h>
 
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_point_3d.h>
 
@@ -90,8 +92,8 @@ class bvxm_gen_synthetic_world_process : public bprb_process
                             vgl_box_3d<double> voxel_world,
                             bvxm_voxel_grid<float>* ocp_grid,
                             bvxm_voxel_grid<float>* intensity_grid,
-                            unsigned minx, unsigned miny, unsigned minz, 
-                            unsigned dimx, unsigned dimy, unsigned dimz, 
+                            unsigned minx, unsigned miny, unsigned minz,
+                            unsigned dimx, unsigned dimy, unsigned dimz,
                             unsigned nx, unsigned ny, unsigned nz,
                             bool gen_2box);
 

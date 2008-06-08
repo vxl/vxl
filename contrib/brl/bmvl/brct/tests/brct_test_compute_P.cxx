@@ -1,13 +1,13 @@
 // This is brl/bmvl/brct/tests/brct_test_compute_P.cxx
 #include <vcl_iostream.h>
-// not used? #include <vcl_fstream.h>
 #include <vcl_vector.h>
-// not used? #include <vcl_string.h>
 #include <brct/brct_algos.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_4.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3x4.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
 #include <testlib/testlib_test.h>
 
 static vnl_double_3x3 generate_K()

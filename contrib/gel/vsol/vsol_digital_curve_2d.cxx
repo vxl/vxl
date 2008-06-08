@@ -4,6 +4,7 @@
 // \file
 #include <vsol/vsol_point_2d.h>
 #include <vcl_iostream.h>
+#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_closest_point.h>
 #include <vsl/vsl_vector_io.h>
 #include <vcl_cmath.h>

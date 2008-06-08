@@ -5,6 +5,10 @@
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
+#include <vgl/algo/vgl_rotation_3d.h>
+#include <vgl/algo/vgl_h_matrix_3d.h>
+#include <vgl/vgl_homg_point_2d.h>
+#include <vgl/vgl_homg_point_3d.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
@@ -60,7 +64,7 @@ static void test_camera_io()
     double y_scale = 2;
     double skew = 0;
     vpgl_calibration_matrix<double> K1( focal_length, principal_point,
-      x_scale, y_scale, skew );
+                                        x_scale, y_scale, skew );
 
     vsl_b_ofstream bp_out("test_calibration_matrix_io.tmp");
     TEST("Created test_calibration_matrix_io.tmp for writing",(!bp_out), false);

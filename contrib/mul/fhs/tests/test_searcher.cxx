@@ -2,12 +2,12 @@
 #include <testlib/testlib_test.h>
 #include <vcl_vector.h>
 #include <fhs/fhs_searcher.h>
-
+#include <vgl/vgl_point_2d.h>
 
 void test_searcher1()
 {
   vcl_cout << "==== test fhs_searcher (1) =====\n"
-           << " Simple pair test (one arc)"<<vcl_endl;
+           << " Simple pair test (one arc)" << vcl_endl;
 
   // Generate arc list
   vcl_vector<fhs_arc> arcs(1);

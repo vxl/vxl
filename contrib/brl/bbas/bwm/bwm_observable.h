@@ -10,8 +10,10 @@
 #include <vcl_string.h>
 #include <vcl_map.h>
 
-#include <vgl/vgl_box_3d.h>
+#include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_plane_3d.h>
+#include <vgl/vgl_box_3d.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 
 #include <vgui/vgui_observable.h>
@@ -63,9 +65,9 @@ class bwm_observable : public vgui_observable, public vbl_ref_count
   virtual vcl_map<int, vsol_polygon_3d_sptr> extract_inner_faces(int face_id)=0;
 
   virtual void divide_face(unsigned face_id,
-    vgl_point_3d<double> l1, vgl_point_3d<double> l2,
-    vgl_point_3d<double> p1, vgl_point_3d<double> l3,
-    vgl_point_3d<double> l4, vgl_point_3d<double> p2)=0;
+                           vgl_point_3d<double> l1, vgl_point_3d<double> l2,
+                           vgl_point_3d<double> p1, vgl_point_3d<double> l3,
+                           vgl_point_3d<double> l4, vgl_point_3d<double> p2)=0;
 
   virtual void move_normal_dir(double dist)=0;
   virtual void move_extr_face(double dist)=0;

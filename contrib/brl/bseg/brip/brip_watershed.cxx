@@ -4,6 +4,7 @@
 #include <vcl_cmath.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>
+#include <vgl/vgl_point_2d.h>
 #include <vil1/vil1_rgb.h>
 #include "brip_vil1_float_ops.h"
 
@@ -287,7 +288,7 @@ bool brip_watershed::add_adjacency(const unsigned int reg,
 }
 
 bool brip_watershed::adjacent_regions(const unsigned int reg,
-                      vcl_vector<unsigned int>& adj_regs)
+                                      vcl_vector<unsigned int>& adj_regs)
 {
   adj_regs.clear();
   vcl_map<unsigned int, vcl_vector<unsigned int>* >::iterator adi;

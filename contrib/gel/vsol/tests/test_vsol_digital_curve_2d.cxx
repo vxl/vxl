@@ -14,6 +14,7 @@
 
 #include <vcl_vector.h>
 
+#include <vgl/vgl_point_2d.h>
 #include <vsol/vsol_digital_curve_2d.h>
 #include <vsol/vsol_digital_curve_2d_sptr.h>
 #include <vsol/vsol_point_2d.h>
@@ -74,9 +75,9 @@ void test_vsol_digital_curve_2d()
   TEST("split result 1", curve1->point(2)->get_p() == vgl_point_2d<double>(1.75,2.75)
                          && curve1->size() == 3, true);
   TEST("split result 2", curve2->point(0)->get_p() == vgl_point_2d<double>(1.75,2.75)
-                         && curve2->size() == 4, true);   
-  vcl_cout << "curve 1: " << *curve1 << vcl_endl;
-  vcl_cout << "curve 2: " << *curve2 << vcl_endl;
+                         && curve2->size() == 4, true);
+  vcl_cout << "curve 1: " << *curve1 << vcl_endl
+           << "curve 2: " << *curve2 << vcl_endl;
 
   // Split the curve at a point
   index = closest_index(vgl_point_2d<double>(5.0,2.0),dc);
@@ -86,9 +87,9 @@ void test_vsol_digital_curve_2d()
   TEST("split result 1", curve1->point(3)->get_p() == vgl_point_2d<double>(4.5,3.0)
                          && curve1->size() == 4, true);
   TEST("split result 2", curve2->point(0)->get_p() == vgl_point_2d<double>(4.5,3.0)
-                         && curve2->size() == 2, true); 
-  vcl_cout << "curve 1: " << *curve1 << vcl_endl;
-  vcl_cout << "curve 2: " << *curve2 << vcl_endl;
+                         && curve2->size() == 2, true);
+  vcl_cout << "curve 1: " << *curve1 << vcl_endl
+           << "curve 2: " << *curve2 << vcl_endl;
 
   // Split curve at its end points (this should fail)
   index = closest_index(vgl_point_2d<double>(7.0,5.0),dc);
@@ -99,7 +100,6 @@ void test_vsol_digital_curve_2d()
   TEST("closest_index at (0.0,-1.0)", index, 0.0);
   split_test = split(dc, 0.0, curve1, curve2);
   TEST("split curve at 0.0 (start)", split_test, false);
-
 }
 
 TESTMAIN(test_vsol_digital_curve_2d);

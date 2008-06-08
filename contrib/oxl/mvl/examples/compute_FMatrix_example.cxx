@@ -4,6 +4,7 @@
 
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
+#include <vgl/vgl_homg_point_2d.h>
 #include <mvl/FMatrix.h>
 #include <mvl/FMatrixComputeLinear.h>
 #include <mvl/FMatrixCompute7Point.h>

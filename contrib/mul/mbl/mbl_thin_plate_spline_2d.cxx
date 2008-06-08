@@ -13,6 +13,7 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
+#include <vgl/vgl_vector_2d.h>
 #include <vgl/io/vgl_io_point_2d.h>
 #include <mbl/mbl_matxvec.h>
 
@@ -289,7 +290,6 @@ void mbl_thin_plate_spline_2d::set_params(const vnl_vector<double>& W1,
 void mbl_thin_plate_spline_2d::compute_energy(vnl_vector<double>& W1,
                                               vnl_vector<double>& W2,
                                               const vnl_matrix<double>& L)
-
 {
   int n = W1.size()-3;
   double *W1_data=W1.data_block();
@@ -337,8 +337,8 @@ void mbl_thin_plate_spline_2d::set_up_rhs(vnl_vector<double>& Bx,
 }
 
 void mbl_thin_plate_spline_2d::build(const vcl_vector<vgl_point_2d<double> >& source_pts,
-                   const vcl_vector<vgl_point_2d<double> >& dest_pts,
-                   bool compute_the_energy)
+                                     const vcl_vector<vgl_point_2d<double> >& dest_pts,
+                                     bool compute_the_energy)
 {
   // See Booksteins paper in IPMI 1993 for details of calculation
 

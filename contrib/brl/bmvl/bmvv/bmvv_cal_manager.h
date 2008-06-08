@@ -24,8 +24,10 @@
 #include <vcl_vector.h>
 #include <vcl_map.h>
 #include <vcl_fstream.h>
-//#include <vil1/vil1_image.h>
 #include <vil/vil_image_resource_sptr.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_line_segment_2d.h>
 #include <vgl/algo/vgl_p_matrix.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
@@ -137,8 +139,8 @@ void draw_vsol_polygon_3d(vsol_polygon_3d_sptr const & poly,
                         const float g, const float b);
 
   void add_image(vil_image_resource_sptr const& image,
-               vgui_range_map_params_sptr rmps = 0,
-               bool greyscale =false);
+                 vgui_range_map_params_sptr rmps = 0,
+                 bool greyscale =false);
   vil1_image get_image_at(unsigned col, unsigned row);
   bool read_corrs(vcl_ifstream& str);
   bool draw_correspondences();

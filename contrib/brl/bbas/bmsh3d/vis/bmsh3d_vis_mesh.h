@@ -7,6 +7,7 @@
 // \date May 03, 2005.
 
 #include <vcl_set.h>
+#include <vgl/vgl_point_3d.h>
 #include <bmsh3d/bmsh3d_mesh.h>
 
 #include <bmsh3d/vis/bmsh3d_vis_utils.h>
@@ -74,7 +75,7 @@ SoSeparator* draw_M (bmsh3d_mesh* M, const bool b_shape_hints = false,
 void _draw_M_visited_ifs_geom (bmsh3d_mesh* M, SoVertexProperty* vp, int* ind);
 void draw_M_visited_ifs_geom (SoGroup* root, bmsh3d_mesh* M);
 
-SoSeparator* draw_M_ifs_visited (bmsh3d_mesh* M, const int colorcode = 0,
+SoSeparator* draw_M_ifs_visited(bmsh3d_mesh* M, const int colorcode = 0,
                                 const bool b_shape_hints = false,
                                 const float transp = 0.0f);
 

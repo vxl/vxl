@@ -7,6 +7,7 @@
 // \author Tim Cootes, VP (Sept03)
 
 #include <vimt/vimt_image_2d_of.h>
+#include <vgl/vgl_point_2d.h>
 
 //: True if pixel at *im is strictly above 8 neighbours
 template <class T>

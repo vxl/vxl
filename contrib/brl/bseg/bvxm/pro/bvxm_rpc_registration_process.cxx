@@ -16,9 +16,10 @@
 #include <vcl_cstdio.h>
 
 #include <vpgl/algo/vpgl_backproject.h>
-#include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_plane_3d.h>
 
 bvxm_rpc_registration_process::bvxm_rpc_registration_process()
 {

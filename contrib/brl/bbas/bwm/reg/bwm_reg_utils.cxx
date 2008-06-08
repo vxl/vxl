@@ -1,4 +1,5 @@
 #include "bwm_reg_utils.h"
+#include <vgl/vgl_point_2d.h>
 #include <vpgl/algo/vpgl_backproject.h>
 #include <vsol/vsol_digital_curve_2d.h>
 #include <vsol/vsol_digital_curve_3d.h>

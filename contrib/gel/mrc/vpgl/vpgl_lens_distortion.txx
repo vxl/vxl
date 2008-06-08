@@ -7,6 +7,9 @@
 #include "vpgl_lens_distortion.h"
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_point_2d.h>
+#if 0
+#include <vgl/vgl_vector_2d.h>
+#endif
 #include <vcl_cassert.h>
 
 //: Return the original point that was distorted to this location (inverse of distort)
@@ -15,7 +18,7 @@
 template <class T>
 vgl_homg_point_2d<T>
 vpgl_lens_distortion<T>::undistort( const vgl_homg_point_2d<T>& point,
-                                     const vgl_homg_point_2d<T>* init ) const
+                                    const vgl_homg_point_2d<T>* init ) const
 {
 #if 0 // Not yet implemented ...
   vgl_point_2d<T> pt = point;

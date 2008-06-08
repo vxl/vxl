@@ -4,6 +4,7 @@
 //  \author Tim Cootes
 
 #include "vimt3d_image_3d.h"
+#include <vgl/vgl_point_3d.h>
 
 //: Return vector indicating size of image in pixels
 //  3D image is v[0] x v[1] x v[2]
@@ -45,13 +46,13 @@ void vimt3d_image_3d::world_bounds(vcl_vector<double>& b_lo,
 
 //Related Functions
 //: Return bounding box containing image in world co-ords as a box
-vgl_box_3d<double> world_bounding_box(const vimt3d_image_3d& img) 
-{   
+vgl_box_3d<double> world_bounding_box(const vimt3d_image_3d& img)
+{
   vcl_vector<double> b_lo(3,0.0);
   vcl_vector<double> b_hi(3,0.0);
   img.world_bounds(b_lo,b_hi);
   //Use C-style vector interface for corner points, passing address of data as the C-style vector
-  return vgl_box_3d<double>(&(b_lo[0]),&(b_hi[0])); 
+  return vgl_box_3d<double>(&(b_lo[0]),&(b_hi[0]));
 }
 
 // Translate the image so that its centre is at the origin of the world coordinate system.

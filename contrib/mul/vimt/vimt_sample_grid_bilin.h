@@ -7,6 +7,7 @@
 
 #include <vimt/vimt_image_2d_of.h>
 #include <vnl/vnl_fwd.h>
+#include <vgl/vgl_fwd.h>
 
 //: Sample grid from image, using bilinear interpolation
 //  Grid points are p+i.u+j.v where i=[0..n1-1], j=[0..n2-1]

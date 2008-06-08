@@ -25,6 +25,7 @@
 #include <vil/vil_resample_bicub.h>
 #include <vil/vil_convert.h>
 #include <vil/algo/vil_sobel_1x3.h>
+#include <vgl/vgl_vector_2d.h>
 #include <sdet/sdet_detector_params.h>
 #include <sdet/sdet_detector.h>
 #include <sdet/sdet_harris_detector_params.h>
@@ -133,12 +134,12 @@ range_params(vil_image_resource_sptr const& image)
   bool pyr = image->get_property(vil_property_pyramid, 0);
   if (pyr)
   { gl_map = true; cache = true;}
-  
+
   bgui_image_utils iu(image);
   iu.set_percent_limit(0.005);
 
   vgui_range_map_params_sptr rmps;
-  if(iu.range_map_from_hist(gamma, invert, gl_map, cache, rmps))
+  if (iu.range_map_from_hist(gamma, invert, gl_map, cache, rmps))
     return rmps;
 
   return 0;
@@ -630,7 +631,6 @@ void segv_vil_segmentation_manager::save_nitf_camera()
     vpgl_nitf_rational_camera rpcam(nitf, true);
     rpcam.save(image_file);
   }
-  
 }
 
 void segv_vil_segmentation_manager::set_range_params()
@@ -1499,7 +1499,7 @@ void segv_vil_segmentation_manager::reduce_image_bicubic()
   vil_image_view<float> reduced;
   vil_resample_bicub(flt, reduced, flt.ni()/2, flt.nj()/2);
 
-  vil_image_resource_sptr out_image = 
+  vil_image_resource_sptr out_image =
     vil_new_image_resource_of_view(reduced);
   this->add_image(out_image);
 }
@@ -1588,7 +1588,7 @@ void segv_vil_segmentation_manager::max_trace_scale()
 void segv_vil_segmentation_manager::create_polygon()
 {
   bgui_picker_tableau_sptr ptab = selected_picker_tab();
-  if(!ptab){
+  if (!ptab){
     vcl_cerr << "In segv_vil_segmentation_managerd::create_polygon() - "
              << "no picker tableau\n";
     return;
@@ -1601,8 +1601,8 @@ void segv_vil_segmentation_manager::create_polygon()
              << "picking failed\n";
     return;
   }
-  bgui_vtol2D_tableau_sptr btab = selected_vtol2D_tab();  
-  if(!btab){
+  bgui_vtol2D_tableau_sptr btab = selected_vtol2D_tab();
+  if (!btab){
     vcl_cerr << "In segv_vil_segmentation_managerd::create_polygon() - "
              << "no vtol2D tableau\n";
     return;

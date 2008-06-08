@@ -12,6 +12,8 @@
 #include <vgui/vgui_easy2D_tableau_sptr.h>
 #include <vgui/vgui_easy2D_tableau.h>
 
+#include <vgl/vgl_fwd.h> // for vgl_vector_3d<T>
+
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
 
@@ -30,32 +32,35 @@ class bwm_observer_lidar: public bwm_observer_cam
   bwm_observer_lidar() {}
 
   bwm_observer_lidar(bgui_image_tableau_sptr const& img,
-    vil_image_resource_sptr res1,
-    vil_image_resource_sptr res2);
+                     vil_image_resource_sptr res1,
+                     vil_image_resource_sptr res2);
 
   virtual ~bwm_observer_lidar() {}
 
   virtual vcl_string type_name() const { return "bwm_observer_lidar"; }
+
+#if 0
   //: Handle all events sent to this tableau.
-  // bool handle(const vgui_event& e);
-  // {return vgui_easy2D_tableau::handle(e);}
+  bool handle(const vgui_event& e)
+  { return vgui_easy2D_tableau::handle(e); }
+#endif
 
   void update(vgui_message const& msg){}
   void handle_update(vgui_message const& msg,
-    bwm_observable_sptr observable){}
+                     bwm_observable_sptr observable) {}
 
   void update_all(){}
-  void translate(vgl_vector_3d<double> T){}
+  void translate(vgl_vector_3d<double> T) {}
 
   //: connect the the given face as an inner face to the selected face
   void connect_inner_face(vsol_polygon_2d_sptr poly){}
 
-  //: create the interior of an objects, as a smaller copy of the outer
-  // object
+  //: create the interior of an objects, as a smaller copy of the outer object
   void create_interior(){}
 
-  //: Select a polygon before you call this method. If it is a multiface
-  // object, it deletes the object where the selected polygon belongs to
+  //: Select a polygon before you call this method.
+  // If it is a multiface object, it deletes the object where the selected
+  // polygon belongs to.
   void delete_object(){}
 
   //: Deletes the whole set of objects created so far
@@ -107,7 +112,7 @@ class bwm_observer_lidar: public bwm_observer_cam
   double scale_;
 
   void set_trans_matrix(vil_geotiff_header* gtif,
-    vcl_vector<vcl_vector<double> > tiepoints);
+                        vcl_vector<vcl_vector<double> > tiepoints);
 
   void proj_point(vsol_point_3d_sptr p3d,  vsol_point_2d_sptr& p2d);
 

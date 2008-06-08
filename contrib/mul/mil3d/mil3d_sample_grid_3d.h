@@ -8,6 +8,7 @@
 
 #include <mil3d/mil3d_image_3d_of.h>
 #include <vnl/vnl_fwd.h>
+#include <vgl/vgl_fwd.h>
 
 //: Sample grid p+i.u+j.v+k.w using trilinear interpolation in world coordinates
 //  Profile points are p+i.u+j.v+k.w, where i=[0..nu-1],j=[0..nv-1], k=[0..nw-1]

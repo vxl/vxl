@@ -7,6 +7,7 @@
 #include <vcl_vector.h>
 #include <vcl_algorithm.h> // for vcl_find()
 #include <vul/vul_timer.h>
+#include <vgl/vgl_point_2d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vdgl/vdgl_digital_curve.h>

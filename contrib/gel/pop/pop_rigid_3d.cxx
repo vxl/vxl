@@ -2,6 +2,8 @@
 #include "pop_rigid_3d.h"
 //:
 // \file
+
+#include <vgl/vgl_homg_point_3d.h>
 #include <pop/pop_point_3d.h>
 #include <vcl_cassert.h>
 

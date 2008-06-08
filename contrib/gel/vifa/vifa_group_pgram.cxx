@@ -5,8 +5,9 @@
 
 #include <vcl_cmath.h>
 #include <vnl/vnl_math.h>
-#include <vgl/vgl_clip.h>
+#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
+#include <vgl/vgl_clip.h>
 
 #ifndef DEGTORAD
 #define DEGTORAD  (vnl_math::pi / 180.0)

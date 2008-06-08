@@ -2,11 +2,13 @@
 #include "strk_feature_capture_process.h"
 #include <vcl_iostream.h>
 #include <vcl_vector.h>
+#include <vgl/vgl_point_2d.h>
 #include <vtol/vtol_topology_object.h>
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_face_2d.h>
 #include <strk/strk_io.h>
 #include <strk/strk_tracking_face_2d.h>
+
 strk_feature_capture_process::strk_feature_capture_process(strk_info_tracker_params & tp)
   : tracker_(tp)
 {
@@ -87,7 +89,7 @@ bool strk_feature_capture_process::finish()
   float dia = tf->face()->Diameter();
   float r = tf->face()->AspectRatio();
   vcl_vector<vcl_vector<float> > junk;
-  if (!strk_io::write_histogram_data(start_frame_, n_pix, dia, r, 
+  if (!strk_io::write_histogram_data(start_frame_, n_pix, dia, r,
                                     tracker_.intensity_hist_bins_,
                                     tracker_.gradient_dir_hist_bins_,
                                     tracker_.color_hist_bins_,

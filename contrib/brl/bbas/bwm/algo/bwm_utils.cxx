@@ -11,6 +11,10 @@
 
 #include <vul/vul_file.h>
 
+#if 0
+#include <vgl/vgl_point_3d.h>
+#endif
+
 vcl_string bwm_utils::select_file()
 {
   vgui_dialog params ("File Open");

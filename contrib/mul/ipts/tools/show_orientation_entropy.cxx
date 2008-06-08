@@ -12,6 +12,7 @@
 #include <vil/vil_convert.h>
 #include <vil/vil_math.h>
 #include <vil/algo/vil_orientations.h>
+#include <vgl/vgl_point_2d.h>
 #include <ipts/ipts_local_entropy.h>
 #include <vimt/algo/vimt_find_peaks.h>
 #include <ipts/ipts_draw.h>

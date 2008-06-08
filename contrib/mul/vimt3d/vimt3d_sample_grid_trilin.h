@@ -8,6 +8,7 @@
 
 #include <vimt3d/vimt3d_image_3d_of.h>
 #include <vnl/vnl_fwd.h>
+#include <vgl/vgl_fwd.h>
 
 //: Sample grid p+i.u+j.v+k.w using trilinear interpolation in world coordinates
 //  Profile points are p+i.u+j.v+k.w, where i=[0..nu-1],j=[0..nv-1], k=[0..nw-1]
@@ -39,7 +40,6 @@ void vimt3d_sample_grid_trilin_extend(
   const vgl_vector_3d<double>& v,
   const vgl_vector_3d<double>& w,
   unsigned nu, unsigned nv, unsigned nw);
-
 
 
 //: Sample grid p+i.u+j.v+k.w using trilinear interpolation in image coordinates

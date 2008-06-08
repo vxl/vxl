@@ -17,6 +17,8 @@
 #include <mfpf/mfpf_region_pdf_builder.h>
 #include <vil/vil_bilin_interp.h>
 #include <vpdfl/vpdfl_axis_gaussian_builder.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 
 //=======================================================================
 

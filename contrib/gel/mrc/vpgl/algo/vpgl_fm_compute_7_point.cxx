@@ -6,7 +6,6 @@
 
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_math.h>
-#include <vgl/vgl_fwd.h>
 #include <vgl/algo/vgl_norm_trans_2d.h>
 #include <vcl_iostream.h>
 
@@ -93,7 +92,7 @@ vpgl_fm_compute_7_point::compute(
 //------------------------------------------------
 vcl_vector<double>
 vpgl_fm_compute_7_point::get_coeffs( vnl_double_3x3 const& F1,
-    vnl_double_3x3 const& F2 )
+                                     vnl_double_3x3 const& F2 )
 {
   // All the following computed with Mapl_norme for oxl/mvl/FMatrixCompute7Point.
   double a=F1(0,0), j=F2(0,0), aa=a-j,

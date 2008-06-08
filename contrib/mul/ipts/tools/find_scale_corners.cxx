@@ -5,6 +5,7 @@
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_math.h>
+#include <vgl/vgl_point_3d.h>
 #include <ipts/ipts_corner_pyramid.h>
 #include <ipts/ipts_scale_space_peaks.h>
 #include <ipts/ipts_draw.h>

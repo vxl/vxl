@@ -3,6 +3,7 @@
 #include <vcl_vector.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vimt/algo/vimt_find_peaks.h>
+#include <vgl/vgl_point_2d.h>
 
 static void test_find_peaks_byte()
 {

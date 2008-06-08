@@ -18,6 +18,8 @@
 #include <mfpf/mfpf_region_finder_builder.h>
 #include <mfpf/mfpf_sad_vec_cost_builder.h>
 #include <vil/vil_bilin_interp.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 #include <mfpf/mfpf_mr_point_finder.h>
 #include <mfpf/mfpf_mr_point_finder_builder.h>
 #include <vimt/vimt_image_pyramid.h>
@@ -64,9 +66,9 @@ void test_mr_point_finder_search(mfpf_mr_point_finder_builder& b,
   mfpf_pose new_pose;
   pf.search(image_pyr,pose1,new_pose);
 
-  vcl_cout<<"Initial pose: "<<pose1<<vcl_endl;
-  vcl_cout<<"Ideal   pose: "<<pose0<<vcl_endl;
-  vcl_cout<<"Final   pose: "<<new_pose<<vcl_endl;
+  vcl_cout<<"Initial pose: "<<pose1<<vcl_endl
+          <<"Ideal   pose: "<<pose0<<vcl_endl
+          <<"Final   pose: "<<new_pose<<vcl_endl;
 
   TEST_NEAR("search: Correct location",
             (new_pose.p()-p0).length(),0.0,d_thresh);
@@ -125,7 +127,7 @@ void test_mr_point_finder()
     mfpf_mr_point_finder_builder mr_builder;
     mr_builder.set(rf_builder,3,1.0,2.0);
 
-    // Sum of absolutes gives slightly less accurate result 
+    // Sum of absolutes gives slightly less accurate result
     // than normalised correlation in this case.
     test_mr_point_finder_search(mr_builder,0.25);
   }

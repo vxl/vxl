@@ -5,6 +5,7 @@
 #include <vcl_cstdlib.h>   // for vcl_abs(int) and vcl_sqrt()
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
+#include <vgl/vgl_point_2d.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vgl/vgl_homg_point_2d.h>

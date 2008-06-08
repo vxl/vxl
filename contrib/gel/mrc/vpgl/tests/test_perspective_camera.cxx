@@ -5,9 +5,13 @@
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_double_3.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_line_3d_2_points.h>
+#include <vgl/algo/vgl_h_matrix_3d.h>
+#include <vgl/algo/vgl_rotation_3d.h>
 
 
 static void test_perspective_camera()

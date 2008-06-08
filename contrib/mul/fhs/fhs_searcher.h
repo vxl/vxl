@@ -7,6 +7,7 @@
 // \brief Use F&H's DP style algorithm to search for global solutions
 
 #include <fhs/fhs_arc.h>
+#include <vgl/vgl_fwd.h> // for point_2d<T>
 #include <vimt/vimt_image_2d_of.h>
 
 //: Use F&H's DP style algorithm to search for global solutions to model match
@@ -26,7 +27,7 @@
 //  Pictoral Structure Matching.
 class fhs_searcher
 {
-private:
+ private:
   //: Arcs defining neighbour relationships between features
   //  Ordered so that parents precede children
   vcl_vector<fhs_arc> arc_;
@@ -51,7 +52,7 @@ private:
   void combine_responses(unsigned im_index,
                          const vimt_image_2d_of<float>& feature_response);
 
-public:
+ public:
   //: Default constructor
   fhs_searcher();
 

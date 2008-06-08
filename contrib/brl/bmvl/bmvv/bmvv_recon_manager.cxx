@@ -11,6 +11,10 @@
 #include <vil1/vil1_memory_image_of.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_homg_point_2d.h>
+#include <vgl/vgl_homg_line_2d.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vgl/algo/vgl_p_matrix.h>
 #include <vgui/vgui.h>
@@ -297,14 +301,13 @@ void bmvv_recon_manager::initial_model_projection()
   vcl_vector<vgl_point_2d<double> > pts_2d =
     cal_.projected_3d_points_initial(plane_, this->get_cam());
   btab->set_point_radius(5.0f);
-  int i = 0;
-  for (vcl_vector<vgl_point_2d<double> >::iterator pit = pts_2d.begin();
-      pit != pts_2d.end(); pit++, i++)
-    {
-      vgui_soview2D_point* sov = btab->add_point((*pit).x(), (*pit).y());
-      int id = sov->get_id();
-      point_3d_map_[id]=i;
-    }
+  vcl_vector<vgl_point_2d<double> >::iterator pit = pts_2d.begin();
+  for (int i=0; pit != pts_2d.end(); ++pit, ++i)
+  {
+    vgui_soview2D_point* sov = btab->add_point((*pit).x(), (*pit).y());
+    int id = sov->get_id();
+    point_3d_map_[id]=i;
+  }
   btab->post_redraw();
 }
 
@@ -320,14 +323,13 @@ void bmvv_recon_manager::model_projection()
   vcl_vector<vgl_point_2d<double> > pts_2d =
     cal_.projected_3d_points(plane_, this->get_cam());
   btab->set_point_radius(5.0f);
-  int i = 0;
-  for (vcl_vector<vgl_point_2d<double> >::iterator pit = pts_2d.begin();
-      pit != pts_2d.end(); pit++, i++)
-    {
-      vgui_soview2D_point* sov = btab->add_point((*pit).x(), (*pit).y());
-      int id = sov->get_id();
-      point_3d_map_[id]=i;
-    }
+  vcl_vector<vgl_point_2d<double> >::iterator pit = pts_2d.begin();
+  for (int i=0; pit != pts_2d.end(); ++pit, ++i)
+  {
+    vgui_soview2D_point* sov = btab->add_point((*pit).x(), (*pit).y());
+    int id = sov->get_id();
+    point_3d_map_[id]=i;
+  }
   btab->post_redraw();
 }
 
@@ -558,7 +560,7 @@ draw_vsol_points(const int cam, vcl_vector<vsol_point_2d_sptr> const & points,
     btab->clear_all();
   vgui_style_sptr style = vgui_style::new_style(r, g, b, 3, 0);
   for (vcl_vector<vsol_point_2d_sptr>::const_iterator pit = points.begin();
-      pit != points.end(); pit++)
+       pit != points.end(); pit++)
     btab->add_vsol_point_2d(*pit, style);
 }
 
@@ -595,7 +597,7 @@ draw_vsol_3d_points(const int cam, vcl_vector<vsol_point_3d_sptr> const& pts3d,
     btab->clear_all();
   double zmin = vnl_numeric_traits<double>::maxval, zmax = -zmin;
   for (vcl_vector<vsol_point_3d_sptr>::const_iterator pit = pts3d.begin();
-      pit != pts3d.end(); pit++)
+       pit != pts3d.end(); pit++)
   {
     zmin = vnl_math_min(zmin, (*pit)->z());
     zmax = vnl_math_max(zmax, (*pit)->z());
@@ -604,7 +606,7 @@ draw_vsol_3d_points(const int cam, vcl_vector<vsol_point_3d_sptr> const& pts3d,
   if (d)
     s = 1/d;
   for (vcl_vector<vsol_point_3d_sptr>::const_iterator pit = pts3d.begin();
-      pit != pts3d.end(); pit++)
+       pit != pts3d.end(); pit++)
   {
     float f = (float)(((*pit)->z()-zmin)*s);
     vcl_cout << "f(" << (*pit)->z() << ")=" << f << vcl_endl;

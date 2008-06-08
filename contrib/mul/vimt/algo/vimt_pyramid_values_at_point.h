@@ -7,6 +7,7 @@
 // \author Tim Cootes
 
 #include <vimt/vimt_image_pyramid.h>
+#include <vgl/vgl_point_2d.h>
 
 //: Use bilinear to sample from each level of the image pyramid
 //  \param samples: Filled with image_pyr.n_levels() values

@@ -14,6 +14,8 @@
 
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h> // for sqrt2
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 #include <vil/algo/vil_gauss_filter.h>
 #include <vil/vil_resample_bilin.h>
 #include <vil/vil_math.h>

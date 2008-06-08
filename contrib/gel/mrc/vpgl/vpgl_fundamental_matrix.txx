@@ -6,9 +6,12 @@
 
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vgl/vgl_fwd.h>
 #include <vnl/vnl_cross_product_matrix.h>
 #include <vnl/io/vnl_io_matrix_fixed.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_homg_point_2d.h>
+#include <vgl/vgl_homg_line_2d.h>
 #include <vcl_iosfwd.h>
 #include <vcl_cassert.h>
 
@@ -58,7 +61,7 @@ vpgl_fundamental_matrix<T>::~vpgl_fundamental_matrix()
 //---------------------------------
 template <class T>
 void vpgl_fundamental_matrix<T>::get_epipoles( vgl_homg_point_2d<T>& er,
-  vgl_homg_point_2d<T>& el ) const
+                                               vgl_homg_point_2d<T>& el ) const
 {
   vnl_vector_fixed<T,3> v = cached_svd_->nullvector();
   er.set( v[0], v[1], v[2] );
@@ -158,7 +161,7 @@ vpgl_proj_camera<T> vpgl_fundamental_matrix<T>::extract_left_camera(
 //---------------------------------
 template <class T>
 void vpgl_fundamental_matrix<T>::set_matrix( const vpgl_proj_camera<T>& cr,
-                                              const vpgl_proj_camera<T>& cl )
+                                             const vpgl_proj_camera<T>& cl )
 {
   vnl_cross_product_matrix e2x( cl.get_matrix() * cr.svd()->nullvector() );
   set_matrix( e2x * cl.get_matrix() * cr.svd()->inverse() );

@@ -19,6 +19,7 @@
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
 
+#include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 
 #include <vul/vul_file.h>

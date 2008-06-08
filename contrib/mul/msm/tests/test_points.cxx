@@ -13,6 +13,7 @@
 #include <vcl_iostream.h>
 #include <vsl/vsl_binary_loader.h>
 #include <msm/msm_points.h>
+#include <vgl/vgl_point_2d.h>
 
 //=======================================================================
 
@@ -30,7 +31,7 @@ void test_points()
 
   TEST("Number of points",points.size(),5);
   TEST_NEAR("First point",
-          (points[0]-vgl_point_2d<double>(0,1)).length(),0,1e-6);
+            (points[0]-vgl_point_2d<double>(0,1)).length(),0,1e-6);
 
   vcl_vector<vgl_point_2d<double> > pts0;
   points.get_points(pts0);
@@ -42,11 +43,11 @@ void test_points()
 
   vcl_cout<<"CoG: "<<points.cog()<<vcl_endl;
   TEST_NEAR("Centre of Gravity",
-          (points.cog()-vgl_point_2d<double>(4,5)).length(),0,1e-6);
+            (points.cog()-vgl_point_2d<double>(4,5)).length(),0,1e-6);
 
   points1.translate_by(0.5,0.7);
   TEST_NEAR("translate_by",
-          (points1.cog()-vgl_point_2d<double>(4.5,5.7)).length(),0,1e-6);
+            (points1.cog()-vgl_point_2d<double>(4.5,5.7)).length(),0,1e-6);
 
   vcl_cout<<"Scale: "<<points1.scale()<<vcl_endl;
   TEST_NEAR("scale()",points1.scale(),4,1e-6);
@@ -63,16 +64,16 @@ void test_points()
   vgl_point_2d<double> b_lo,b_hi;
   points.get_bounds(b_lo,b_hi);
   TEST_NEAR("Lower bound",
-          (b_lo-vgl_point_2d<double>(0,1)).length(),0,1e-6);
+            (b_lo-vgl_point_2d<double>(0,1)).length(),0,1e-6);
   TEST_NEAR("Upper bound",
-          (b_hi-vgl_point_2d<double>(8,9)).length(),0,1e-6);
+            (b_hi-vgl_point_2d<double>(8,9)).length(),0,1e-6);
 
   {
     vcl_cout<<"Test binary load and save"<<vcl_endl;
 
     vsl_b_ofstream bfs_out("test_points.bvl.tmp");
     TEST ("Created test_points.bvl.tmp for writing",
-             (!bfs_out), false);
+          (!bfs_out), false);
     vsl_b_write(bfs_out, points);
     bfs_out.close();
 
@@ -80,7 +81,7 @@ void test_points()
 
     vsl_b_ifstream bfs_in("test_points.bvl.tmp");
     TEST ("Opened test_points.bvl.tmp for reading",
-           (!bfs_in), false);
+          (!bfs_in), false);
     vsl_b_read(bfs_in, points_in);
     TEST ("Finished reading file successfully", (!bfs_in), false);
     bfs_in.close();

@@ -13,6 +13,7 @@
 #include <vcl_iostream.h>
 #include <mfpf/mfpf_dp_snake.h>
 #include <mfpf/mfpf_edge_finder.h>
+#include <vgl/vgl_point_2d.h>
 #include <vil/algo/vil_gauss_filter.h>
 
 void test_dp_snake()
@@ -52,8 +53,8 @@ void test_dp_snake()
   {
     double move = dp_snake.update_step(image);
 
-    vcl_cout<<i<<") "<<dp_snake<<vcl_endl;
-    vcl_cout<<"Mean move = "<<move<<vcl_endl;
+    vcl_cout<<i<<") "<<dp_snake<<vcl_endl
+            <<"Mean move = "<<move<<vcl_endl;
   }
 
 //  dp_snake.search(image);

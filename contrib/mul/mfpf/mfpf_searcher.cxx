@@ -4,6 +4,8 @@
 // \author Tim Cootes
 
 #include <mfpf/mfpf_searcher.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 
 mfpf_searcher::mfpf_searcher()
 {
@@ -13,7 +15,7 @@ mfpf_searcher::mfpf_searcher()
 //: Find list of poses overlapping given pose
 void mfpf_searcher::find_overlaps(mfpf_point_finder& pf,
                                   const vcl_vector<mfpf_pose>& poses,
-                                  const mfpf_pose& pose, 
+                                  const mfpf_pose& pose,
                                   vcl_vector<unsigned>& overlaps)
 {
   overlaps.resize(0);
@@ -53,7 +55,7 @@ bool mfpf_searcher::find_near_pose(mfpf_point_finder& pf,
   // If new one is worse than all of them, ignore it.
   // If new one is better than all of them, replace them all
   // Otherwise we have a potentially ambiguous situation
-  // eg three overlapping objects in a row A-B-C with A not 
+  // eg three overlapping objects in a row A-B-C with A not
   // overlapping with C, but f(A)<f(B)<f(C)
   // In this case elliminate all overlapping poses except the best one.
   // There's a danger that this might loose some weaker local
@@ -67,7 +69,7 @@ bool mfpf_searcher::find_near_pose(mfpf_point_finder& pf,
   for (unsigned i=0;i<index.size();++i)
   {
     if (fits[index[i]]>fit) { n_worse++;}
-    if (fits[index[i]]<best_fit) 
+    if (fits[index[i]]<best_fit)
     { best_i=index[i]; best_fit=fits[index[i]]; }
   }
 

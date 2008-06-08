@@ -10,6 +10,7 @@
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vpgl/algo/vpgl_interpolate.h>
 #include <vpgl/algo/vpgl_bundle_adjust.h>
+#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/algo/vgl_rotation_3d.h>
@@ -47,7 +48,7 @@ bwm_video_corr_lsqr_cost_func::
 bwm_video_corr_lsqr_cost_func(vil_image_view<float> const& base_image,
                               unsigned match_radius,
                               vcl_vector<float> corr_window_ab
-                              )
+                             )
   : vnl_least_squares_function(1,1), base_image_(base_image),
     match_radius_(match_radius), corr_window_ab_(corr_window_ab)
 {
@@ -610,8 +611,8 @@ bool bwm_video_corr_processor::find_missing_corrs(unsigned frame_index_a,
   }
   //check for index bounds consistency
   if (frame_index_a>=frame_index_b ||
-     frame_index_x <= frame_index_a ||
-     frame_index_x >= frame_index_b)
+      frame_index_x <= frame_index_a ||
+      frame_index_x >= frame_index_b)
     return false;
   //bounding frames may already be cached
   bool compute_ab = false;

@@ -19,6 +19,8 @@
 #include <vil/vil_resample_bilin.h>
 #include <mbl/mbl_index_sort.h>
 #include <vnl/vnl_math.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 #include <fhs/fhs_searcher.h>
 #include <vimt/algo/vimt_normalised_correlation_2d.h>
 #include <mbl/mbl_minimum_spanning_tree.h>
@@ -26,12 +28,12 @@
 
 void print_usage()
 {
-  vcl_cout<<"find_matches -i1 image1.jpg -i2 image2.jpg -Llo 0 Lhi 2"<<vcl_endl
-          <<"Loads in image1 and image2."<<vcl_endl
-          <<"Locates a set of interesting features (corners) on levels of image1."<<vcl_endl
-          <<"Constructs a tree model of their relative positions."<<vcl_endl
-          <<"Points at level L are linked to the nearest points at level L+1"<<vcl_endl
-          <<"Uses normalised correllation and this model to locate"<<vcl_endl
+  vcl_cout<<"find_matches -i1 image1.jpg -i2 image2.jpg -Llo 0 Lhi 2\n"
+          <<"Loads in image1 and image2.\n"
+          <<"Locates a set of interesting features (corners) on levels of image1.\n"
+          <<"Constructs a tree model of their relative positions.\n"
+          <<"Points at level L are linked to the nearest points at level L+1\n"
+          <<"Uses normalised correllation and this model to locate\n"
           <<"equivalent points on the second image."<<vcl_endl;
   vul_arg_display_usage_and_exit();
 }

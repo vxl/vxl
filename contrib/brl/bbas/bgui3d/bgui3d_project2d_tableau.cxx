@@ -13,6 +13,7 @@
 #include <vnl/vnl_double_3x4.h>
 #include <vnl/vnl_double_4x4.h>
 #include <vnl/vnl_det.h>
+#include <vgl/vgl_point_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 
 #include <vpgl/vpgl_perspective_camera.h>
@@ -33,7 +34,7 @@ bgui3d_project2d_tableau::bgui3d_project2d_tableau()
 
 //: Constructor - don't use this, use bgui3d_project2d_tableau_new.
 bgui3d_project2d_tableau::bgui3d_project2d_tableau( const vpgl_proj_camera<double>& camera,
-                                                   SoNode * scene_root )
+                                                    SoNode * scene_root )
 : bgui3d_tableau(scene_root), draw_headlight_(true)
 {
   this->set_camera(camera);

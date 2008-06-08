@@ -5,6 +5,8 @@
 #include <vimt/vimt_sample_grid_bilin.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 
 static void test_sample_grid_bilin_byte_affine()
 {

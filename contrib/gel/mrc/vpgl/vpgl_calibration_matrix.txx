@@ -6,6 +6,7 @@
 
 #include "vpgl_calibration_matrix.h"
 
+#include <vgl/vgl_point_2d.h>
 #include <vgl/io/vgl_io_point_2d.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vcl_cassert.h>
@@ -24,8 +25,8 @@ vpgl_calibration_matrix<T>::vpgl_calibration_matrix() :
 
 //--------------------------------------
 template <class T>
-vpgl_calibration_matrix<T>::vpgl_calibration_matrix( T focal_length,
-  const vgl_point_2d<T>& principal_point, T x_scale, T y_scale, T skew ) :
+vpgl_calibration_matrix<T>::vpgl_calibration_matrix(
+    T focal_length, const vgl_point_2d<T>& principal_point, T x_scale, T y_scale, T skew ) :
   focal_length_( focal_length ),
   principal_point_( principal_point ),
   x_scale_( x_scale ),
@@ -133,9 +134,9 @@ operator==(vpgl_calibration_matrix<T> const &that) const
     this->skew_ == that.skew_;
 }
 
-//: Map from image to focal plane. 
+//: Map from image to focal plane.
 // (Later may need to cache the svd for efficiency)
-template <class T> 
+template <class T>
 vgl_point_2d<T> vpgl_calibration_matrix<T>::
 map_to_focal_plane(vgl_point_2d<T> const& p_image) const
 {
@@ -147,7 +148,7 @@ map_to_focal_plane(vgl_point_2d<T> const& p_image) const
   return vgl_point_2d<T>(pf[0]/pf[2], pf[1]/pf[2]);
 }
 
-template <class T> 
+template <class T>
 vgl_point_2d<T> vpgl_calibration_matrix<T>::
 map_to_image(vgl_point_2d<T> const& p_focal_plane) const
 {

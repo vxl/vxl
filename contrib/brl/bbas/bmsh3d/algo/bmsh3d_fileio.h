@@ -1,7 +1,7 @@
 // This is brl/bbas/bmsh3d/algo/bmsh3d_fileio.h
 //---------------------------------------------------------------------
-#ifndef _bmsh3d_fileio_h_
-#define _bmsh3d_fileio_h_
+#ifndef bmsh3d_fileio_h_
+#define bmsh3d_fileio_h_
 //:
 // \file
 // \brief mesh file I/O
@@ -19,6 +19,8 @@
 #include <vcl_vector.h>
 #include <vcl_string.h>
 
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
 #include <bmsh3d/bmsh3d_mesh.h>
 //#include <bmsh3d/bmsh3d_richmesh.h>
 
@@ -64,15 +66,17 @@ bool bmsh3d_save_xyz (vcl_vector<vgl_point_3d<double> >& pts, const char* file);
 bool bmsh3d_load_xyz (vcl_vector<vcl_pair<int, vgl_point_3d<double> > >& idpts, const char* file);
 bool bmsh3d_save_xyz (vcl_vector<vcl_pair<int, vgl_point_3d<double> > >& idpts, const char* file);
 
-bool bmsh3d_load_xyzn1 (vcl_vector<vcl_pair<vgl_point_3d<double>, vgl_vector_3d<double> > >& ori_pts,
-                         const char* file);
-bool bmsh3d_save_xyzn1 (vcl_vector<vcl_pair<vgl_point_3d<double>, vgl_vector_3d<double> > >& ori_pts,
-                         const char* file);
+bool bmsh3d_load_xyzn1 (vcl_vector<vcl_pair<vgl_point_3d<double>,
+                        vgl_vector_3d<double> > >& ori_pts,
+                        const char* file);
+bool bmsh3d_save_xyzn1 (vcl_vector<vcl_pair<vgl_point_3d<double>,
+                        vgl_vector_3d<double> > >& ori_pts,
+                        const char* file);
 
 bool bmsh3d_load_xyznw (vcl_vector<vcl_pair<vgl_point_3d<double>, vgl_vector_3d<double> > >& ori_pts,
-                         const char* file);
+                        const char* file);
 bool bmsh3d_save_xyznw (vcl_vector<vcl_pair<vgl_point_3d<double>, vgl_vector_3d<double> > >& ori_pts,
-                         const char* file);
+                        const char* file);
 
 bool bmsh3d_load_p3d (bmsh3d_pt_set* pointset, const char* file);
 bool bmsh3d_save_p3d (bmsh3d_pt_set* pointset, const char* file);
@@ -95,9 +99,11 @@ bool bmsh3d_load_con (bmsh3d_pt_set* pointset, const char* pcFile_CON, double z)
 bool save_unmeshed_p3d (bmsh3d_mesh* M, const char* file);
 
 bool bmsh3d_load_ply2 (vcl_vector<vgl_point_3d<double> >* pts,
-                        vcl_vector<vcl_vector<int> >* faces, const char* file);
+                       vcl_vector<vcl_vector<int> >* faces,
+                       const char* file);
 bool bmsh3d_save_ply2 (const vcl_vector<vgl_point_3d<double> >& pts,
-                        const vcl_vector<vcl_vector<int> >& faces, const char* file);
+                       const vcl_vector<vcl_vector<int> >& faces,
+                       const char* file);
 
 //: Load a mesh files (only PLY and PLY2 are currently supported)
 // "format" should be upper case
@@ -146,19 +152,19 @@ bool bmsh3d_save_wrl_iv (bmsh3d_mesh* M, const char* file);
 //: Read IV as ASCII indexed-face-set.
 bool bmsh3d_load_iv_ifs (bmsh3d_mesh* M, const char* file);
 bool bmsh3d_load_iv_ifs_intp (const char *pcIVFile, const char *pcG3DFile, int option,
-                               float fMaxPerturb, float fIVRecursiveThreshold);
+                              float fMaxPerturb, float fIVRecursiveThreshold);
 bool bmsh3d_save_iv_ifs (bmsh3d_mesh* M, const char* file);
 vcl_string get_suffix (const vcl_string& filename);
 bool bmsh3d_read_list_file (const char* file,
-                             vcl_vector<vcl_string>& data_files,
-                             vcl_vector<vcl_string>& align_files);
+                            vcl_vector<vcl_string>& data_files,
+                            vcl_vector<vcl_string>& align_files);
 
 bool bmsh3d_save_list_file (const vcl_string& list_file,
-                             const vcl_vector<vcl_string>& data_files,
-                             const vcl_vector<vcl_string>& align_files);
+                            const vcl_vector<vcl_string>& data_files,
+                            const vcl_vector<vcl_string>& align_files);
 
 bool bmsh3d_save_list_view_run_file (const vcl_string& list_view_run,
-                                      const vcl_string& list_file);
+                                     const vcl_string& list_file);
 
 // ============================================================================
 // Rich Mesh
@@ -188,5 +194,5 @@ bool bmsh3d_save_xml (bmsh3d_mesh* mesh, const char* file);
 void sli_cons_to_nuages_cnt (vcl_string sli_file, vcl_string cnt_file);
 
 
-#endif
+#endif // bmsh3d_fileio_h_
 

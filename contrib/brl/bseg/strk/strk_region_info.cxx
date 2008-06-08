@@ -3,6 +3,7 @@
 //:
 // \file
 #include <vil1/vil1_memory_image_of.h>
+#include <vgl/vgl_homg_point_2d.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_4point.h>
 #include <vtol/vtol_vertex_sptr.h>
 #include <vtol/vtol_vertex_2d.h>

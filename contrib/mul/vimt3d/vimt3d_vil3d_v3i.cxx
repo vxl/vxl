@@ -12,6 +12,8 @@
 #include <vcl_cstring.h> // for vcl_strcmp()
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_loader.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_copy.h>
 #include <vil3d/vil3d_property.h>
@@ -87,16 +89,15 @@ vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image(vcl_auto_ptr<vcl_fstream> file):
 
   switch (version)
   {
-  case 1:
-    {
-      vimt_image *p_im=0;
-      vsl_b_read(is, p_im);
-      im_ = dynamic_cast<vimt3d_image_3d *>(p_im);
-      break;
-    }
-  default:
+   case 1: {
+    vimt_image *p_im=0;
+    vsl_b_read(is, p_im);
+    im_ = dynamic_cast<vimt3d_image_3d *>(p_im);
+    break;
+   }
+   default:
     vcl_cerr << "I/O ERROR: vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image()\n"
-      << "           Unknown version number "<< version << '\n';
+             << "           Unknown version number "<< version << '\n';
     return;
   }
 }

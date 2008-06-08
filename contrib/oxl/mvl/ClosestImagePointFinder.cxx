@@ -12,6 +12,7 @@
 #include <vcl_utility.h>
 
 #include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_homg_point_2d.h>
 #include <vnl/vnl_math.h>
 
 #include <mvl/HomgInterestPointSet.h>

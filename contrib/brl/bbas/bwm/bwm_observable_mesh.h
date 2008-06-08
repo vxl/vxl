@@ -7,6 +7,8 @@
 #include "bwm_observable_sptr.h"
 #include "bwm_observable_mesh_sptr.h"
 
+#include <vgl/vgl_fwd.h>
+
 #include <vgui/vgui_message.h>
 #include <vsol/vsol_polygon_3d.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
@@ -85,8 +87,8 @@ class bwm_observable_mesh : public bwm_observable
   vcl_map<int, vsol_polygon_3d_sptr> extract_inner_faces(int face_id);
 
   void divide_face(unsigned face_id, vgl_point_3d<double> l1, vgl_point_3d<double> l2,
-    vgl_point_3d<double> p1, vgl_point_3d<double> l3,
-    vgl_point_3d<double> l4, vgl_point_3d<double> p2);
+                   vgl_point_3d<double> p1, vgl_point_3d<double> l3,
+                   vgl_point_3d<double> l4, vgl_point_3d<double> p2);
 
   bool is_poly_in(unsigned id, unsigned& index);
 

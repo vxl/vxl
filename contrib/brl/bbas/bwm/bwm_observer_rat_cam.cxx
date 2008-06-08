@@ -9,7 +9,13 @@
 #include "reg/bwm_reg_processor.h"
 #include "algo/bwm_utils.h"
 
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_plane_3d.h>
+#if 0
 #include <vgl/vgl_box_2d.h>
+#endif
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
 #include <vsol/vsol_polygon_2d.h>
@@ -33,12 +39,12 @@
 #include <bmsh3d/bmsh3d_textured_mesh_mc.h>
 
 bwm_observer_rat_cam::bwm_observer_rat_cam(bgui_image_tableau_sptr img,
-    vcl_string& name, 
-    vcl_string& image_path, 
-    vcl_string& cam_path, 
-    bool display_image_path)
+                                           vcl_string& name,
+                                           vcl_string& image_path,
+                                           vcl_string& cam_path,
+                                           bool display_image_path)
     : bwm_observer_cam(img)
-{ 
+{
   img->show_image_path(display_image_path);
   // LOAD IMAGE
   vgui_range_map_params_sptr params;
@@ -60,7 +66,7 @@ bwm_observer_rat_cam::bwm_observer_rat_cam(bgui_image_tableau_sptr img,
     bwm_utils::show_error("Camera tableaus need a valid camera path!");
     return;
   }
-  
+
   //vpgl_rational_camera<double> *
   camera_ = read_rational_camera<double>(cam_path);
   if (!camera_) {
@@ -72,7 +78,6 @@ bwm_observer_rat_cam::bwm_observer_rat_cam(bgui_image_tableau_sptr img,
   set_tab_name(name);
   set_camera_path(cam_path);
 }
-
 
 
 vpgl_rational_camera<double> bwm_observer_rat_cam::camera()
@@ -114,9 +119,9 @@ vgl_vector_3d<double> bwm_observer_rat_cam::camera_direction()
                              rat_cam->offset(rat_cam->Z_INDX));
   vgl_vector_3d<double> plane_normal(0.0,0.0,1.0);
   vgl_point_3d<double> plane_point1(rat_cam->offset(rat_cam->X_INDX),
-                                      rat_cam->offset(rat_cam->Y_INDX),zval1);
+                                    rat_cam->offset(rat_cam->Y_INDX),zval1);
   vgl_point_3d<double> plane_point2(rat_cam->offset(rat_cam->X_INDX),
-                                      rat_cam->offset(rat_cam->Y_INDX),zval2);
+                                    rat_cam->offset(rat_cam->Y_INDX),zval2);
 
   vgl_plane_3d<double> plane1(plane_normal,plane_point1);
   vgl_plane_3d<double> plane2(plane_normal,plane_point2);
@@ -215,16 +220,16 @@ bool bwm_observer_rat_cam::shift_camera(double dx, double dy)
 }
 
 bool bwm_observer_rat_cam::intersect_ray_and_plane(vgl_point_2d<double> img_point,
-                                            vgl_plane_3d<double> plane,
-                                            vgl_point_3d<double> &world_point)
+                                                   vgl_plane_3d<double> plane,
+                                                   vgl_point_3d<double> &world_point)
 {
   vpgl_rational_camera<double>* rat_cam = static_cast<vpgl_rational_camera<double> *> (camera_);
   vgl_point_2d<double>  p2d(img_point.x(),img_point.y());
 
   // initial guess for backprojection - just use center point of image
   vgl_point_3d<double> guess(rat_cam->offset(rat_cam->X_INDX),
-                               rat_cam->offset(rat_cam->Y_INDX),
-                               rat_cam->offset(rat_cam->Z_INDX));
+                             rat_cam->offset(rat_cam->Y_INDX),
+                             rat_cam->offset(rat_cam->Z_INDX));
   vgl_plane_3d<double> plane_nonhomg(plane);
   vgl_point_3d<double> p;
 
@@ -267,8 +272,10 @@ void bwm_observer_rat_cam::define_lvcs(float x1, float y1)
   backproj_poly(origin_poly2d,origin_poly3d);
 
   // note constructor takes lat, long (as opposed to long, lat) so switch x and y
-  bgeo_lvcs lvcs(origin_poly3d->vertex(0)->y(),origin_poly3d->vertex(0)->x(),origin_poly3d->vertex(0)->z(),
-                        bgeo_lvcs::wgs84,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+  bgeo_lvcs lvcs(origin_poly3d->vertex(0)->y(),
+                 origin_poly3d->vertex(0)->x(),
+                 origin_poly3d->vertex(0)->z(),
+                 bgeo_lvcs::wgs84,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
   vcl_cout << "defining lvcs with origin = <"
            << origin_poly3d->vertex(0)->x() << ", "
            << origin_poly3d->vertex(0)->y() << ", "
@@ -291,7 +298,7 @@ void bwm_observer_rat_cam::adjust_camera_offset(vsol_point_2d_sptr img_point)
     // get projection of lvcs origin
     double lat,lon,elev;
     lvcs.local_to_global(0, 0, 0,bgeo_lvcs::wgs84, lon ,lat ,elev,
-      bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+                         bgeo_lvcs::DEG,bgeo_lvcs::METERS);
     vgl_point_3d<double> world_pt(lon,lat,elev);
     vgl_point_2d<double> image_pt;
     proj_point(world_pt,image_pt);
@@ -782,12 +789,12 @@ void bwm_observer_rat_cam::save_kml_collada()
     if (obj->type_name().compare("bwm_observable_textured_mesh") == 0) {
       bwm_observable_textured_mesh* tm_obj = static_cast<bwm_observable_textured_mesh*>(obj.as_pointer());
       tm_obj->save_kml_collada(dae_fp, lvcs_, geometry_ids[idx],
-                                                    geometry_position_ids[idx],
-                                                    geometry_position_array_ids[idx],
-                                                    geometry_uv_ids[idx],
-                                                    geometry_uv_array_ids[idx],
-                                                    geometry_vertex_ids[idx],
-                                                    material_names[idx]);
+                               geometry_position_ids[idx],
+                               geometry_position_array_ids[idx],
+                               geometry_uv_ids[idx],
+                               geometry_uv_array_ids[idx],
+                               geometry_vertex_ids[idx],
+                               material_names[idx]);
     }
 
     vcl_fprintf(dae_fp,"</p>\n");
@@ -1087,8 +1094,8 @@ void bwm_observer_rat_cam::adjust_camera_to_world_pt()
   cam_adjusted_ = true;
   //send the objects in the world the fact that they need to redisplay
   vcl_vector<bwm_observable_sptr> objs = bwm_world::instance()->objects();
-  for(vcl_vector<bwm_observable_sptr>::iterator oit = objs.begin();
-      oit != objs.end(); ++oit)
+  for (vcl_vector<bwm_observable_sptr>::iterator oit = objs.begin();
+       oit != objs.end(); ++oit)
     (*oit)->send_update();
 
   this->post_redraw();
@@ -1183,9 +1190,9 @@ void bwm_observer_rat_cam::register_search_to_master()
              << " no eo observer selected\n";
     return;
   }
-  vil_image_resource_sptr eo_image = 
+  vil_image_resource_sptr eo_image =
     eo_obs->image_tableau()->get_image_resource();
-  if(!eo_image)
+  if (!eo_image)
   {
     vcl_cout << "In bwm_observer_rat_cam::register_search_master() -"
              << " eo observer image null\n";
@@ -1208,9 +1215,9 @@ void bwm_observer_rat_cam::register_search_to_master()
              << " no other observer selected\n";
     return;
   }
-  vil_image_resource_sptr other_mode_image = 
+  vil_image_resource_sptr other_mode_image =
     other_mode_obs->image_tableau()->get_image_resource();
-  if(!other_mode_image)
+  if (!other_mode_image)
   {
     vcl_cout << "In bwm_observer_rat_cam::register_search_to_master() -"
              << " other_observer image null\n";
@@ -1239,11 +1246,11 @@ void bwm_observer_rat_cam::register_search_to_master()
 
   vpgl_rational_camera<double> search_cam =
     *static_cast<vpgl_rational_camera<double>* >(camera_);
-  vil_image_resource_sptr search_image = 
+  vil_image_resource_sptr search_image =
     this->image_tableau()->get_image_resource();
-  
+
   bwm_reg_processor brp(eo_image, eo_cam, other_mode_image, other_mode_cam,
-                        wpt, world_plane,  search_image, search_cam); 
+                        wpt, world_plane,  search_image, search_cam);
 
   vgui_dialog reg_params("Automatic Registration");
   unsigned min_curve_length = 10;
@@ -1266,19 +1273,19 @@ void bwm_observer_rat_cam::register_search_to_master()
   if (!reg_params.ask())
     return;
   int tcol=0, trow=0;
-  if(!brp.match(radius, perr, dist_threshold, angle_threshold,
-                min_curve_length,
-                min_probability,
-                model_noise_threshold,
-                search_noise_threshold,
-                tcol, trow))
+  if (!brp.match(radius, perr, dist_threshold, angle_threshold,
+                 min_curve_length,
+                 min_probability,
+                 model_noise_threshold,
+                 search_noise_threshold,
+                 tcol, trow))
   {
     vcl_cout << "In bwm_observer_rat_cam::register_search_to_master() -"
              << " registration failed\n";
     //   return;
   }
 
-  if(show_edges){
+  if (show_edges) {
     vcl_vector<vsol_digital_curve_2d_sptr> search_edges = brp.search_curves();
     vcl_vector<vsol_digital_curve_2d_sptr> trans_model_edges
       = brp.trans_model_curves();

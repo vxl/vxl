@@ -9,6 +9,9 @@
 //
 
 #include <vnl/vnl_least_squares_function.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_homg_point_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
 //: this class optimizes the rotation of a perspective camera given an initial estimate and a known internal calibration and position

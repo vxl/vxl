@@ -16,10 +16,11 @@
 //
 //-------------------------------------------------------------------------
 
-#include <vcl_vector.h>
-
 #include "bmsh3d_halfedge.h"
 #include "bmsh3d_utils.h"
+
+#include <vcl_vector.h>
+#include <vgl/vgl_fwd.h>
 
 //#######################################################
 //     The Mesh Library Data Structure

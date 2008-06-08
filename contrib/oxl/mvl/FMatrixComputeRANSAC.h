@@ -22,10 +22,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <vgl/vgl_fwd.h>
 #include <mvl/FMatrixComputeRobust.h>
 
-class FMatrixComputeRANSAC : public FMatrixComputeRobust {
-public:
+class FMatrixComputeRANSAC : public FMatrixComputeRobust
+{
+ public:
   //: Initialize FMatrixComputeRobust object.
   // If rank2_truncate = false, the resulting solution is not forced to rank 2
   // using the vnl_svd<double>.

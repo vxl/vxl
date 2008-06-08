@@ -14,6 +14,7 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
+#include <vgl/vgl_vector_3d.h>
 
 #include <vcl_iostream.h>
 #include <vcl_algorithm.h>

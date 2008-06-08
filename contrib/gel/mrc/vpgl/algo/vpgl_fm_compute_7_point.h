@@ -10,6 +10,7 @@
 // Should template this class. The code here is lifted from oxl/mvl/FMatrixCompute7Point.
 // Still need to add preconditioning to points.
 
+#include <vgl/vgl_homg_point_2d.h>
 #include <vpgl/vpgl_fundamental_matrix.h>
 
 class vpgl_fm_compute_7_point
@@ -28,8 +29,8 @@ class vpgl_fm_compute_7_point
                 vcl_vector< vpgl_fundamental_matrix<double>* >& fm );
 
  protected:
-  static vcl_vector<double> get_coeffs( vnl_double_3x3 const& F1, 
-    vnl_double_3x3 const& F2 );
+  static vcl_vector<double> get_coeffs( vnl_double_3x3 const& F1,
+                                        vnl_double_3x3 const& F2 );
   static vcl_vector<double> solve_quadratic( vcl_vector<double> v );
   static vcl_vector<double> solve_cubic( vcl_vector<double> v );
   bool precondition_;

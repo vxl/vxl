@@ -2,6 +2,7 @@
 //#include "bvxm_voxel_world.h"
 
 #include <bprb/bprb_parameters.h>
+#include <vgl/vgl_vector_3d.h>
 
 bvxm_ocp_compare_process::bvxm_ocp_compare_process()
 {

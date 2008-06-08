@@ -3,7 +3,6 @@
 // \brief Builder for mfpf_region_finder objects.
 // \author Tim Cootes
 
-
 #include <mfpf/mfpf_region_finder_builder.h>
 #include <mfpf/mfpf_region_finder.h>
 #include <vsl/vsl_binary_loader.h>
@@ -19,6 +18,8 @@
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_indent.h>
 
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 #include <mfpf/mfpf_sample_region.h>
 #include <mfpf/mfpf_norm_vec.h>
 
@@ -92,7 +93,7 @@ void mfpf_region_finder_builder::set_region(const mfpf_region_form& form)
 }
 
 //: Define region size in world co-ordinates
-//  Sets up ROI to cover given box (with samples at step_size()), 
+//  Sets up ROI to cover given box (with samples at step_size()),
 //  with ref point at centre.
 void mfpf_region_finder_builder::set_region_size(double wi, double wj)
 {
@@ -106,8 +107,8 @@ void mfpf_region_finder_builder::set_region_size(double wi, double wj)
 
 //: Define model region as an ni x nj box
 void mfpf_region_finder_builder::set_as_box(unsigned ni, unsigned nj,
-                                         double ref_x, double ref_y,
-                                         const mfpf_vec_cost_builder& builder)
+                                            double ref_x, double ref_y,
+                                            const mfpf_vec_cost_builder& builder)
 {
   set_as_box(ni,nj,ref_x,ref_y);
   cost_builder_ = builder.clone();
@@ -115,7 +116,7 @@ void mfpf_region_finder_builder::set_as_box(unsigned ni, unsigned nj,
 
 //: Define model region as an ni x nj box
 void mfpf_region_finder_builder::set_as_box(unsigned ni, unsigned nj,
-                                         double ref_x, double ref_y)
+                                            double ref_x, double ref_y)
 {
   roi_ni_=ni; roi_nj_=nj;
   n_pixels_ = ni*nj;
@@ -131,7 +132,7 @@ void mfpf_region_finder_builder::set_as_box(unsigned ni, unsigned nj,
 
 //: Define model region as an ni x nj box
 void mfpf_region_finder_builder::set_as_box(unsigned ni, unsigned nj,
-                                         const mfpf_vec_cost_builder& builder)
+                                            const mfpf_vec_cost_builder& builder)
 {
   set_as_box(ni,nj, 0.5*(ni-1),0.5*(nj-1), builder);
 }
@@ -139,7 +140,7 @@ void mfpf_region_finder_builder::set_as_box(unsigned ni, unsigned nj,
 //: Define model region as an ellipse with radii ri, rj
 //  Ref. point in centre.
 void mfpf_region_finder_builder::set_as_ellipse(double ri, double rj,
-                                             const mfpf_vec_cost_builder& builder)
+                                                const mfpf_vec_cost_builder& builder)
 {
   set_as_ellipse(ri,rj);
   cost_builder_ = builder.clone();
@@ -210,8 +211,8 @@ void mfpf_region_finder_builder::add_one_example(
 
 //: Add one example to the model
 void mfpf_region_finder_builder::add_example(const vimt_image_2d_of<float>& image,
-                                          const vgl_point_2d<double>& p,
-                                          const vgl_vector_2d<double>& u)
+                                             const vgl_point_2d<double>& p,
+                                             const vgl_vector_2d<double>& u)
 {
   if (nA_==0)
   {
@@ -427,13 +428,12 @@ void mfpf_region_finder_builder::print_summary(vcl_ostream& os) const
   os <<vsl_indent()<< "cost_builder: ";
   if (cost_builder_.ptr()==0) os << '-'<<vcl_endl;
   else                       os << cost_builder_<<vcl_endl;
-  os <<vsl_indent()<< "nA: " << nA_ << " dA: " << dA_ << ' '<<vcl_endl;
-  os <<vsl_indent();
+  os <<vsl_indent()<< "nA: " << nA_ << " dA: " << dA_ << ' '<<vcl_endl
+     <<vsl_indent();
   mfpf_point_finder_builder::print_summary(os);
-  os <<vcl_endl;
-  os <<vsl_indent()<<"overlap_f: "<<overlap_f_<<vcl_endl;
+  os <<vcl_endl <<vsl_indent()<<"overlap_f: "<<overlap_f_<<vcl_endl;
   vsl_indent_dec(os);
-  os <<vsl_indent()<< "}";
+  os <<vsl_indent()<< '}';
 }
 
 void mfpf_region_finder_builder::print_shape(vcl_ostream& os) const

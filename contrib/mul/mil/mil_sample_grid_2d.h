@@ -8,6 +8,7 @@
 
 #include <mil/mil_image_2d_of.h>
 #include <vnl/vnl_fwd.h>
+#include <vgl/vgl_fwd.h>
 
 //: Sample grid p+i.u+j.v using bilinear interpolation
 //  Profile points are p+i.u+j.v, where i=[0..nu-1],j=[0..nv-1]

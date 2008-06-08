@@ -6,6 +6,8 @@
 #include <vimt/algo/vimt_find_peaks.h>
 #include <vimt/algo/vimt_correlate_2d.h>
 #include <vimt/vimt_resample_bilin.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 
 static void test_correlate_2d_byte()
 {

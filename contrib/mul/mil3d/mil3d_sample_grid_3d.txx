@@ -9,6 +9,8 @@
 #include "mil3d_sample_grid_3d.h"
 #include <mil3d/mil3d_trilin_interp_3d.h>
 #include <vnl/vnl_vector.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
 
 //: True if p clearly inside the image
 inline bool mil3d_point_in_image(const vgl_point_3d<double>& p, const mil3d_image_3d& image)
@@ -50,11 +52,11 @@ inline bool mil3d_grid_in_image(const vgl_point_3d<double>& p,
 //: True if grid of size nu * nv * nw (in steps of u,v,w) is entirely in the image.
 //  p defines centre of one size.
 inline bool mil3d_grid_in_image_ic(const vgl_point_3d<double>& im_p,
-                                  const vgl_vector_3d<double>& im_u,
-                                  const vgl_vector_3d<double>& im_v,
-                                  const vgl_vector_3d<double>& im_w,
-                                  int nu, int nv, int nw,
-                                  const mil3d_image_3d& image)
+                                   const vgl_vector_3d<double>& im_u,
+                                   const vgl_vector_3d<double>& im_v,
+                                   const vgl_vector_3d<double>& im_w,
+                                   int nu, int nv, int nw,
+                                   const mil3d_image_3d& image)
 {
   vgl_vector_3d<double> u1=(nu-1)*im_u;
   vgl_vector_3d<double> v1=(nv-1)*im_v;
@@ -374,39 +376,39 @@ void mil3d_sample_grid_3d_ic_safe(vnl_vector<vecType>& vec,
 
 #define MIL3D_SAMPLE_GRID_3D_INSTANTIATE( imType, vecType ) \
 template void mil3d_sample_grid_3d(vnl_vector<vecType >& vec, \
-                                 const mil3d_image_3d_of<imType >& image, \
-                                 const vgl_point_3d<double >& p, \
-                                 const vgl_vector_3d<double >& u, \
-                                 const vgl_vector_3d<double >& v, \
-                                 const vgl_vector_3d<double >& w, \
-                                 int nu, int nv, int nw); \
+                                   const mil3d_image_3d_of<imType >& image, \
+                                   const vgl_point_3d<double >& p, \
+                                   const vgl_vector_3d<double >& u, \
+                                   const vgl_vector_3d<double >& v, \
+                                   const vgl_vector_3d<double >& w, \
+                                   int nu, int nv, int nw); \
 template void mil3d_sample_grid_3d_safe(vnl_vector<vecType >& vec, \
-                                      const mil3d_image_3d_of<imType >& image, \
-                                      const vgl_point_3d<double >& p, \
-                                      const vgl_vector_3d<double >& u, \
-                                      const vgl_vector_3d<double >& v, \
-                                      const vgl_vector_3d<double >& w, \
-                                      int nu, int nv, int nw); \
+                                        const mil3d_image_3d_of<imType >& image, \
+                                        const vgl_point_3d<double >& p, \
+                                        const vgl_vector_3d<double >& u, \
+                                        const vgl_vector_3d<double >& v, \
+                                        const vgl_vector_3d<double >& w, \
+                                        int nu, int nv, int nw); \
 template void mil3d_sample_grid_3d_no_checks(vnl_vector<vecType >& vec, \
+                                             const mil3d_image_3d_of<imType >& image, \
+                                             const vgl_point_3d<double >& p, \
+                                             const vgl_vector_3d<double >& u, \
+                                             const vgl_vector_3d<double >& v, \
+                                             const vgl_vector_3d<double >& w, \
+                                             int nu, int nv, int nw); \
+template void mil3d_sample_grid_3d_ic_safe(vnl_vector<vecType >& vec, \
                                            const mil3d_image_3d_of<imType >& image, \
                                            const vgl_point_3d<double >& p, \
                                            const vgl_vector_3d<double >& u, \
                                            const vgl_vector_3d<double >& v, \
                                            const vgl_vector_3d<double >& w, \
                                            int nu, int nv, int nw); \
-template void mil3d_sample_grid_3d_ic_safe(vnl_vector<vecType >& vec, \
-                                         const mil3d_image_3d_of<imType >& image, \
-                                         const vgl_point_3d<double >& p, \
-                                         const vgl_vector_3d<double >& u, \
-                                         const vgl_vector_3d<double >& v, \
-                                         const vgl_vector_3d<double >& w, \
-                                         int nu, int nv, int nw); \
 template void mil3d_sample_grid_3d_ic_no_checks(vnl_vector<vecType >& vec, \
-                                              const mil3d_image_3d_of<imType >& image, \
-                                              const vgl_point_3d<double >& p0, \
-                                              const vgl_vector_3d<double >& u, \
-                                              const vgl_vector_3d<double >& v, \
-                                              const vgl_vector_3d<double >& w, \
-                                              int nu, int nv, int nw)
+                                                const mil3d_image_3d_of<imType >& image, \
+                                                const vgl_point_3d<double >& p0, \
+                                                const vgl_vector_3d<double >& u, \
+                                                const vgl_vector_3d<double >& v, \
+                                                const vgl_vector_3d<double >& w, \
+                                                int nu, int nv, int nw)
 
 #endif // mil3d_sample_grid_3d_txx_

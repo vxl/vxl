@@ -7,9 +7,13 @@
 // \author Matt Leotta
 // \date 4/18/05
 
-#include <vnl/vnl_sparse_lst_sqr_function.h>
-#include <vpgl/vpgl_perspective_camera.h>
 #include <vnl/vnl_vector.h>
+#include <vnl/vnl_sparse_lst_sqr_function.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_homg_point_3d.h>
+#include <vgl/algo/vgl_rotation_3d.h>
+#include <vpgl/vpgl_perspective_camera.h>
 #include <vcl_vector.h>
 
 

@@ -1,34 +1,35 @@
 //: This is lemsvxlsrc\brcv\shp\bmsh3d\examples\example_triangles.cxx
 //  This example program demonstrates how to use the bmsh3d mesh library
 //  to create a mesh of two triangular faces and save to a file.
-//  Ming-Ching Chang             
+//  Ming-Ching Chang
 //  Oct 03, 2006.
 
 #include <vcl_iostream.h>
+#include <vgl/vgl_point_3d.h>
 #include <bmsh3d/bmsh3d_mesh.h>
 #include <bmsh3d/algo/bmsh3d_fileio.h>
 
 int main(int argc, char** argv)
 {
-  vcl_cout << "This example program demonstrates how to use the bmsh3d mesh library" << vcl_endl;
-  vcl_cout << "  to create a mesh of two triangular faces as follows:               " << vcl_endl;
-  vcl_cout << "                                                                     " << vcl_endl;
-  vcl_cout << "   v2                                                                " << vcl_endl;
-  vcl_cout << "   o --------o v3          v0: (0,0,0)                               " << vcl_endl;
-  vcl_cout << "   | \\      /              v1: (1,0,0)                               " << vcl_endl;
-  vcl_cout << "   |  \\    /               v2: (0,2,0)                               " << vcl_endl;
-  vcl_cout << "   |   \\  /                v3: (2,2,1)                               " << vcl_endl;
-  vcl_cout << "   o----o                  f0: (v0,v1,v2)                            " << vcl_endl;
-  vcl_cout << "   v0    v1                f1: (v1,v2,v3)                            " << vcl_endl;
-  vcl_cout << "                                                                     " << vcl_endl;
-  vcl_cout << "  In order to maintain topological correctness, vertices and edges   " << vcl_endl;
-  vcl_cout << "  should be created in prior to the faces.                           " << vcl_endl;
-  vcl_cout << "  In this example, we first create 3 vertices v0, v1, v2,            " << vcl_endl;
-  vcl_cout << "  and 3 edges e01, e12, e20, and finally add the face f0 to the mesh->" << vcl_endl;
-  vcl_cout << "  The second step is to create the vertex v3 and two edges e23 and e13," << vcl_endl;
-  vcl_cout << "  and then add the face f1 to the mesh->                               " << vcl_endl;
-  vcl_cout << "  The result is saved into a PLY2 file example_triangles.ply2.        " << vcl_endl;
-  
+  vcl_cout << "This example program demonstrates how to use the bmsh3d mesh library\n"
+           << "  to create a mesh of two triangular faces as follows:\n"
+           << '\n'
+           << "   v2\n"
+           << "   o --------o v3          v0: (0,0,0)\n"
+           << "   | \\      /              v1: (1,0,0)\n"
+           << "   |  \\    /               v2: (0,2,0)\n"
+           << "   |   \\  /                v3: (2,2,1)\n"
+           << "   o----o                  f0: (v0,v1,v2)\n"
+           << "   v0    v1                f1: (v1,v2,v3)\n"
+           << '\n'
+           << "  In order to maintain topological correctness, vertices and edges\n"
+           << "  should be created in prior to the faces.\n"
+           << "  In this example, we first create 3 vertices v0, v1, v2,\n"
+           << "  and 3 edges e01, e12, e20, and finally add the face f0 to the mesh->\n"
+           << "  The second step is to create the vertex v3 and two edges e23 and e13,\n"
+           << "  and then add the face f1 to the mesh->\n"
+           << "  The result is saved into a PLY2 file example_triangles.ply2." << vcl_endl;
+
   bmsh3d_mesh* mesh = new bmsh3d_mesh ();
 
   bmsh3d_vertex* v0 = mesh->_new_vertex ();

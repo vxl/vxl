@@ -4,6 +4,8 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/algo/vpgl_interpolate.h>
 #include <vnl/vnl_double_3x3.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
 #include <bwm/video/bwm_video_corr.h>
 #include <bwm/video/bwm_video_corr_processor.h>
 

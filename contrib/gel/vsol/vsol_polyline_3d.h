@@ -17,7 +17,6 @@
 // \endverbatim
 //*****************************************************************************
 
-#include <vgl/vgl_fwd.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsol/vsol_curve_3d.h>
 #include <vsol/vsol_point_3d_sptr.h>

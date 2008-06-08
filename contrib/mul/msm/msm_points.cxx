@@ -8,6 +8,7 @@
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_vector.h>
+#include <vgl/vgl_point_2d.h>
 #include <vcl_cstdlib.h>  // for vcl_atoi() & vcl_abort()
 
 
@@ -133,7 +134,7 @@ void msm_points::transform_by(const vimt_transform_2d& t)
 
 //: Bounding box of points
 void msm_points::get_bounds(vgl_point_2d<double>& b_lo,
-                  vgl_point_2d<double>& b_hi) const
+                            vgl_point_2d<double>& b_hi) const
 {
   if (size()==0)
   {
@@ -207,7 +208,7 @@ static bool read_points(vcl_istream& afs,
     {
       vcl_cerr << "msm_points read_points() :\n"
                << "EOF reached after reading "
-               << i << " of " << n << " points." << vcl_endl;
+               << i << " of " << n << " points.\n";
       return false;
     }
     afs>>v[0]>>v[1];

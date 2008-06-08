@@ -17,6 +17,8 @@
 #include <mfpf/mfpf_profile_pdf_builder.h>
 #include <vil/vil_bilin_interp.h>
 #include <vpdfl/vpdfl_axis_gaussian_builder.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 
 //=======================================================================
 
@@ -77,7 +79,7 @@ void test_profile_pdf_search(mfpf_point_finder_builder& b)
   vcl_cout<<r0<<','<<r1<<','<<r2<<vcl_endl;
   TEST("Local minima 1",r0<r1,true);
   TEST("Local minima 2",r0<r2,true);
- 
+
   delete pf;
 }
 

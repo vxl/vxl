@@ -4,7 +4,17 @@
 #include <vpgl/vpgl_proj_camera.h>
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_vector_fixed.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_distance.h>
+#include <vgl/vgl_homg_point_2d.h>
+#include <vgl/vgl_homg_point_3d.h>
+#include <vgl/vgl_homg_line_2d.h>
+#include <vgl/vgl_line_segment_2d.h>
+#include <vgl/vgl_line_segment_3d.h>
+#include <vgl/vgl_homg_line_3d_2_points.h>
+#include <vgl/vgl_homg_plane_3d.h>
+#include <vgl/algo/vgl_h_matrix_3d.h>
 
 static void test_proj_camera()
 {
@@ -75,30 +85,31 @@ static void test_proj_camera()
   vgl_homg_point_2d<double> q2i = P2.project(q2);
   vgl_homg_point_2d<double> q3i = P2.project(q3);
   TEST_NEAR( "plane backprojection1",
-    vgl_distance(l4,q1i)*vgl_distance(l4,q2i)*vgl_distance(l4,q3i), 0, 1e-06 );
+             vgl_distance(l4,q1i)*vgl_distance(l4,q2i)*vgl_distance(l4,q3i), 0, 1e-06 );
 
   vgl_homg_line_2d<double> l5(-10,13,40);
   l5.get_two_points(q1i, q2i);
   vgl_homg_plane_3d<double> plane5a = P2.backproject( l5 );
   vgl_homg_plane_3d<double> plane5b( P2.backproject(q2i).point_finite(),
-    P2.backproject(q1i).point_infinite(),P2.backproject(q2i).point_infinite() );
+                                     P2.backproject(q1i).point_infinite(),
+                                     P2.backproject(q2i).point_infinite() );
   TEST_NEAR( "plane backprojection2",
-    plane5a.a()*plane5b.d(), plane5b.a()*plane5a.d(), 1e-06 );
+             plane5a.a()*plane5b.d(), plane5b.a()*plane5a.d(), 1e-06 );
 
   // Test automatic SVD computation
   P1.svd();
   P1.set_matrix( random_matrix2 );
   TEST_NEAR( "automatic svd computation", random_matrix2(2,3),
-    P1.svd()->recompose()(2,3), 1e-06 );
+             P1.svd()->recompose()(2,3), 1e-06 );
 
   // Test get_canonical_h
   vpgl_proj_camera<double> P6( random_matrix );
   vgl_h_matrix_3d<double> H = get_canonical_h( P6 );
   vnl_matrix_fixed<double,3,4> I6 = P6.get_matrix() * H.get_matrix();
   TEST( "get_canonical_h",
-    vcl_fabs(I6(0,0)*I6(1,1)*I6(2,2)-1) < 1e-06 &&
-    vcl_fabs(I6(1,0)*I6(2,0)*I6(0,1)*I6(2,1)*I6(0,2)*I6(1,2)*I6(0,3)*I6(1,3)*I6(2,3))< 1e-06,
-    true );
+        vcl_fabs(I6(0,0)*I6(1,1)*I6(2,2)-1) < 1e-06 &&
+        vcl_fabs(I6(1,0)*I6(2,0)*I6(0,1)*I6(2,1)*I6(0,2)*I6(1,2)*I6(0,3)*I6(1,3)*I6(2,3))< 1e-06,
+        true );
 
   // Test camera center
   vgl_homg_point_2d<double> q6 = P6.project( P6.camera_center() );
@@ -123,7 +134,7 @@ static void test_proj_camera()
   P1.svd();
   P1.set_matrix( random_matrix3 );
   TEST_NEAR( "automatic svd computation", random_matrix3(2,3),
-    P1.svd()->recompose()(2,3), 1e-06 );
+             P1.svd()->recompose()(2,3), 1e-06 );
 
   // Test basic projection method
   vpgl_proj_camera<double> Pb;

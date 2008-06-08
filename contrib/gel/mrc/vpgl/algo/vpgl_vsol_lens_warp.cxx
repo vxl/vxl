@@ -3,6 +3,7 @@
 //:
 // \file
 
+#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_distance.h>
 #include <vsol/vsol_point_2d.h>
@@ -118,7 +119,7 @@ vpgl_vsol_lens_warp(const vsol_line_2d_sptr& ln,
   pts.push_back(p1);
   vcl_vector<vsol_point_2d_sptr> v_pts;
   for (vcl_list<vsol_point_2d_sptr>::iterator i = pts.begin();
-      i != pts.end(); ++i )
+       i != pts.end(); ++i )
     v_pts.push_back(*i);
   return new vsol_polyline_2d(v_pts);
 }
@@ -217,7 +218,7 @@ vpgl_vsol_lens_warp(const vsol_polygon_2d_sptr& pg,
   }
   vcl_vector<vsol_point_2d_sptr> v_pts;
   for (vcl_list<vsol_point_2d_sptr>::iterator i = pts.begin();
-      i != pts.end(); ++i )
+       i != pts.end(); ++i )
     v_pts.push_back(*i);
   return new vsol_polygon_2d(v_pts);
 }

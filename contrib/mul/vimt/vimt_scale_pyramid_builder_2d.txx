@@ -12,6 +12,8 @@
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vil/vil_bilin_interp.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_image_pyramid.h>
 #include <vsl/vsl_indent.h>
@@ -393,7 +395,7 @@ void vimt_scale_pyramid_builder_2d<T>::b_read(vsl_b_istream& bfs)
     break;
   default:
     vcl_cerr << "I/O ERROR: vimt_scale_pyramid_builder_2d<T>::b_read(vsl_b_istream&)\n"
-             << "           Unknown version number "<< version << "\n";
+             << "           Unknown version number "<< version << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

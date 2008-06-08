@@ -27,6 +27,11 @@
 #include <bgeo/bgeo_lvcs_sptr.h>
 #include <bprb/bprb_process.h>
 #include <vpgl/vpgl_local_rational_camera.h>
+#if 0
+#include <vgl/vgl_point_3d.h>
+#endif
+#include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_box_3d.h>
 #include <vil/vil_image_view.h>
 #include <bvxm/bvxm_world_params.h>
 

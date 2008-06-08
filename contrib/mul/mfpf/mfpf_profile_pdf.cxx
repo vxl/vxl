@@ -15,6 +15,8 @@
 #include <vimt/vimt_sample_profile_bilin.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/vnl_vector_ref.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 
 #include <mfpf/mfpf_norm_vec.h>
 

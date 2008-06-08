@@ -6,6 +6,7 @@
 
 #include "vpgl_xio_calibration_matrix.h"
 #include <vpgl/vpgl_calibration_matrix.h>
+#include <vgl/vgl_point_2d.h>
 #include <vgl/xio/vgl_xio_point_2d.h>
 #include <vsl/vsl_basic_xml_element.h>
 

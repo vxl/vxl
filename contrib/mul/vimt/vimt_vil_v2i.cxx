@@ -10,6 +10,8 @@
 
 #include <vxl_config.h> // for VXL_BIG_ENDIAN and vxl_byte
 
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 #include <vil/vil_exception.h>
 #include <vil/vil_property.h>
 #include <vil/vil_copy.h>
@@ -27,14 +29,13 @@ const unsigned V2I_MAGIC = 987123872U;
 
 class vimt_vil_fstream: vil_stream_fstream
 {
-protected:
+ protected:
   vcl_fstream& underlying_stream() { return vil_stream_fstream::underlying_stream(); }
   friend class vimt_vil_v2i_format;
   friend class vimt_vil_v2i_image;
-private:
+ private:
   vimt_vil_fstream(): vil_stream_fstream("", "") {} // Will never be constructed
 };
-
 
 
 vil_image_resource_sptr vimt_vil_v2i_format::make_input_image(vil_stream* vs)
@@ -44,7 +45,7 @@ vil_image_resource_sptr vimt_vil_v2i_format::make_input_image(vil_stream* vs)
   if (typeid(*vs) != typeid(vil_stream_fstream))
   {
     vcl_cerr << "vimt_vil_v2i_format::make_input_image() WARNING\n"
-             << "  Unable to deal with stream type" << vcl_endl;
+             << "  Unable to deal with stream type\n";
 
     return 0;
   }
@@ -87,7 +88,7 @@ vil_image_resource_sptr vimt_vil_v2i_format::make_input_image(vil_stream* vs)
 
   vil_pixel_format f = static_cast<vil_pixel_format>(v_i);
   vs->seek(start);
-  switch(f)
+  switch (f)
   {
 #define macro( F , T ) \
     case  F : \
@@ -121,7 +122,7 @@ vil_image_resource_sptr vimt_vil_v2i_format::make_output_image(vil_stream* vs,
   if (typeid(*vs) != typeid(vil_stream_fstream))
   {
     vcl_cerr << "vimt_vil_v2i_format::make_output_image() WARNING\n"
-             << "  Unable to deal with stream type" << vcl_endl;
+             << "  Unable to deal with stream type\n";
 
     return 0;
   }
@@ -157,16 +158,15 @@ vimt_vil_v2i_image::vimt_vil_v2i_image(vil_stream* vs):
 
   switch (version)
   {
-  case 1:
-    {
-      vimt_image *p_im=0;
-      vsl_b_read(vslstream, p_im);
-      im_ = dynamic_cast<vimt_image_2d *>(p_im);
-      break;
-    }
-  default:
+   case 1: {
+    vimt_image *p_im=0;
+    vsl_b_read(vslstream, p_im);
+    im_ = dynamic_cast<vimt_image_2d *>(p_im);
+    break;
+   }
+   default:
     vcl_cerr << "I/O ERROR: vimt_vil_v2i_image::vimt_vil_v2i_image()\n"
-      << "           Unknown version number "<< version << '\n';
+             << "           Unknown version number "<< version << '\n';
     return;
   }
 }
@@ -180,8 +180,8 @@ vimt_vil_v2i_image::vimt_vil_v2i_image(vil_stream* vs, vil_pixel_format f):
   vs_->seek(0L);
   vsl_b_istream vslstream(& reinterpret_cast<vimt_vil_fstream *>(vs_)->underlying_stream());
 
-  
-  switch(f)
+
+  switch (f)
   {
 #define macro( F , T ) \
     case  F : \
@@ -200,7 +200,7 @@ macro(VIL_PIXEL_FORMAT_FLOAT , float )
 macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
     default: throw vil_exception_image_io("vimt_vil_v2i_image::vimt_vil_v2i_image",
-      "v2i", "");
+                                          "v2i", "");
   }
 
   // Fiddle factor - most directly created vsl files have transforms in mm.
@@ -208,7 +208,6 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
   tr.set_zoom_only(1000.0, 0.0, 0.0);
   im_->world2im() = im_->world2im() * tr;
   assert(! !vslstream);
-  
 }
 
 bool vimt_vil_v2i_image::get_property(char const * key, void * value) const
@@ -274,7 +273,7 @@ vimt_vil_v2i_image::~vimt_vil_v2i_image()
   {
     vs_->seek(0l);
     vsl_b_ostream vslstream(& reinterpret_cast<vimt_vil_fstream *>(vs_)->underlying_stream());
- 
+
     vsl_b_write(vslstream, V2I_MAGIC);
 
     const short version = 1;

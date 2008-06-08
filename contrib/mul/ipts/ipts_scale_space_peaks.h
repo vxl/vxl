@@ -7,6 +7,8 @@
 // \author Tim Cootes
 
 #include <vimt/algo/vimt_find_peaks.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vimt/vimt_image_pyramid.h>
 #include <vcl_cmath.h> // for sqrt(double)

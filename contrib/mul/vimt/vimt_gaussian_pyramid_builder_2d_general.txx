@@ -12,6 +12,8 @@
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vil/algo/vil_gauss_reduce.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 #include <vimt/vimt_image_pyramid.h>
 #include <vimt/vimt_crop.h>
 

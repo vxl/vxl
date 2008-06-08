@@ -10,7 +10,6 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vgl/vgl_fwd.h>
 #include <vgl/algo/vgl_norm_trans_2d.h>
 #include <vcl_iostream.h>
 

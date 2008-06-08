@@ -1,6 +1,10 @@
 #include <testlib/testlib_test.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
+#include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
+#include <vgl/algo/vgl_rotation_3d.h>
 #include <vpgl/algo/vpgl_bundle_adjust.h>
 #include <vnl/vnl_crs_index.h>
 #include <vnl/vnl_random.h>

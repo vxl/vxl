@@ -6,6 +6,8 @@
 
 #include "vpgl_proj_camera.h"
 #include <vcl_iostream.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/io/vnl_io_matrix_fixed.h>
 #include <vsl/vsl_binary_loader.h>
@@ -331,9 +333,9 @@ vpgl_proj_camera<T> postmultiply( const vpgl_proj_camera<T>& in_camera,
 //--------------------------------
 template <class T>
 vgl_point_3d<T> triangulate_3d_point(const vpgl_proj_camera<T>& c1,
-                                          const vgl_point_2d<T>& x1,
-                                          const vpgl_proj_camera<T>& c2,
-                                          const vgl_point_2d<T>& x2)
+                                     const vgl_point_2d<T>& x1,
+                                     const vpgl_proj_camera<T>& c2,
+                                     const vgl_point_2d<T>& x2)
 {
   vnl_matrix_fixed<T,4,4> A;
   vnl_matrix_fixed<T,3,4> P1 = c1.get_matrix();

@@ -11,6 +11,9 @@
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>
 
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
+
 #include <mbl/mbl_dyn_prog.h>
 #include <mbl/mbl_stats_1d.h>
 

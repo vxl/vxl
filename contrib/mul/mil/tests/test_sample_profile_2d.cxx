@@ -1,6 +1,8 @@
 // This is mul/mil/tests/test_sample_profile_2d.cxx
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 #include <mil/mil_image_2d_of.h>
 #include <mil/mil_sample_profile_2d.h>
 #include <vxl_config.h>

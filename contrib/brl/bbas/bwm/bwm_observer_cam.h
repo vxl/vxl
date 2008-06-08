@@ -14,7 +14,7 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_plane_3d.h>
-//#include <vgl/vgl_homg_point_2d.h>
+#include <vgl/vgl_box_3d.h>
 
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_point_3d_sptr.h>
@@ -80,8 +80,8 @@ class bwm_observer_cam : public bwm_observer_vgui
   void backproj_point(vsol_point_2d_sptr p2d, vsol_point_3d_sptr& p3d);
 
   void backproj_point(vsol_point_2d_sptr p2d,
-    vsol_point_3d_sptr& p3d,
-    vgl_plane_3d<double> proj_plane);
+                      vsol_point_3d_sptr& p3d,
+                      vgl_plane_3d<double> proj_plane);
 
   //: Special case of backprojecting onto the projection plane
   void backproj_poly(vsol_polygon_2d_sptr poly2d,
@@ -129,7 +129,7 @@ class bwm_observer_cam : public bwm_observer_vgui
   void extrude_face(vsol_point_2d_sptr pt);
 
   void divide_face(bwm_observable_sptr obs, unsigned face_id,
-    float x1, float y1, float x2, float y2);
+                   float x1, float y1, float x2, float y2);
 
   void scan_regions();
 

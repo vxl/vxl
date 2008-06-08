@@ -6,6 +6,11 @@
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
+#include <vgl/vgl_homg_point_2d.h>
+#if 0
+#include <vgl/algo/vgl_h_matrix_3d.h>
+#endif
+#include <vgl/algo/vgl_rotation_3d.h>
 #include <vcl_cassert.h>
 
 //: Constructor
@@ -81,8 +86,8 @@ vpgl_orientation_position_lsqr::f(vnl_vector<double> const& x, vnl_vector<double
 //: Called after each LM iteration to print debugging etc.
 void
 vpgl_orientation_position_lsqr::trace(int iteration,
-                                       vnl_vector<double> const& x,
-                                       vnl_vector<double> const& fx)
+                                      vnl_vector<double> const& x,
+                                      vnl_vector<double> const& fx)
 {
   assert(x.size() == 6);
   vnl_double_3 w(x[0], x[1], x[2]);
@@ -127,7 +132,7 @@ vpgl_orientation_position_calibration_lsqr::f(vnl_vector<double> const& x, vnl_v
   kk[1][1]=x[8]; kk[1][2]=x[9]; kk[2][2]=1.0;
 
   // Check that it is a valid calibration matrix.
-  if( !(kk[0][0]>0) || !(kk[1][1]>0) ){
+  if ( !(kk[0][0]>0) || !(kk[1][1]>0) ){
     for (unsigned int i=0; i<world_points_.size(); ++i){
       fx[2*i]   = 100000000;
       fx[2*i+1] = 100000000;
@@ -200,9 +205,9 @@ vpgl_optimize_camera::opt_orient_pos(const vpgl_perspective_camera<double>& came
 // optimize all the parameters except internal skew
 vpgl_perspective_camera<double>
 vpgl_optimize_camera::opt_orient_pos_cal(const vpgl_perspective_camera<double>& camera,
-                       const vcl_vector<vgl_homg_point_3d<double> >& world_points,
-                       const vcl_vector<vgl_point_2d<double> >& image_points,
-                       const double xtol, const unsigned nevals)
+                                         const vcl_vector<vgl_homg_point_3d<double> >& world_points,
+                                         const vcl_vector<vgl_point_2d<double> >& image_points,
+                                         const double xtol, const unsigned nevals)
 {
   const vpgl_calibration_matrix<double>& K = camera.get_calibration();
   vgl_point_3d<double> c = camera.get_camera_center();

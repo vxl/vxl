@@ -10,6 +10,7 @@
 #include <vcl_vector.h>
 #include <vcl_string.h>
 
+#include <vgl/vgl_vector_3d.h>
 #include <vpgl/bgeo/bgeo_lvcs.h>
 
 class bwm_texture_map_generator

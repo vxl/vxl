@@ -5,14 +5,15 @@
 #include <vul/vul_arg.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
+#include <vgl/vgl_point_3d.h>
 #include <ipts/ipts_scale_space_peaks.h>
 #include <ipts/ipts_draw.h>
 
 void print_usage()
 {
   vcl_cout<<"find_scale_entropy_peaks -i input_image -s scale_step -h half_width -t threshold -o out_image -e entropy_pyramid\n"
-          <<"Generates scale pyramid"<<vcl_endl
-          <<"computes local entropy in squares with given half width"<<vcl_endl
+          <<"Generates scale pyramid\n"
+          <<"computes local entropy in squares with given half width\n"
           <<"looks for local peaks in the entropy pyramid"<<vcl_endl;
 }
 

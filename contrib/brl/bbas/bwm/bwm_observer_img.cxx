@@ -12,6 +12,7 @@
 
 #include <vgui/vgui_projection_inspector.h>
 #include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_polygon.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 #include <bsol/bsol_algs.h>
 
@@ -718,7 +719,7 @@ void bwm_observer_img::scroll_to_point()
 }
 
 vil_image_resource_sptr bwm_observer_img::load_image(vcl_string& filename,
-                                                    vgui_range_map_params_sptr& rmps)
+                                                     vgui_range_map_params_sptr& rmps)
 {
   vil_image_resource_sptr res;
 

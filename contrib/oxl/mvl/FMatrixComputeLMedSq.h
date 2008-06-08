@@ -22,11 +22,13 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <vgl/vgl_fwd.h>
 #include <mvl/FMatrixComputeRobust.h>
 #include <vcl_vector.h>
 
-class FMatrixComputeLMedSq : public FMatrixComputeRobust {
-public :
+class FMatrixComputeLMedSq : public FMatrixComputeRobust
+{
+ public:
   //: Initialize FMatrixComputeRobust object.
   // If rank2_truncate = false, the resulting solution is not forced to rank 2
   // using the vnl_svd<double>.
@@ -37,7 +39,7 @@ public :
   virtual double calculate_residual(HomgPoint2D& one, HomgPoint2D& two, FMatrix* F);
   virtual double calculate_residual(vgl_homg_point_2d<double>& one,
                                     vgl_homg_point_2d<double>& two, FMatrix* F);
-private :
+ private:
   // Helper Functions
   // Return the median vaule for a vector of residuals
   double median(vcl_vector<double> residuals);

@@ -15,7 +15,9 @@
 // Normalization of point coordinates is performed if precondition is true
 // In this case, the computation is modified to account for the normalization
 // so that F is expressed in the original coordinate system.
+
 #include <vpgl/vpgl_fundamental_matrix.h>
+#include <vgl/vgl_homg_point_2d.h>
 
 class vpgl_fm_compute_2_point
 {

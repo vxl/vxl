@@ -17,6 +17,8 @@
 #include <bgui/bgui_image_tableau.h>
 
 #include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
 
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vsol/vsol_point_3d.h>

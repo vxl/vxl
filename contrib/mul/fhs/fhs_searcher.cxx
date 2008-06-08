@@ -8,6 +8,8 @@
 #include <vcl_cmath.h>
 #include <vcl_cstdlib.h> // for std::abort()
 #include <vnl/vnl_math.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 #include <vil/vil_bilin_interp.h>
 #include <vil/algo/vil_quad_distance_function.h>
 #include <vimt/vimt_bilin_interp.h>
@@ -164,9 +166,9 @@ void fhs_searcher::search(const vcl_vector<vimt_image_2d_of<float> >& feature_re
     // Compute scaling applied to x and y axes
     const vimt_transform_2d& w2im = feature_response[node_a].world2im();
     double sx = w2im.delta(vgl_point_2d<double>(0,0),
-                       vgl_vector_2d<double>(1,0)).length();
+                           vgl_vector_2d<double>(1,0)).length();
     double sy = w2im.delta(vgl_point_2d<double>(0,0),
-                       vgl_vector_2d<double>(0,1)).length();
+                           vgl_vector_2d<double>(0,1)).length();
 
 
     vil_quad_distance_function(sum_im_[node_a].image(),
@@ -188,7 +190,7 @@ void fhs_searcher::search(const vcl_vector<vimt_image_2d_of<float> >& feature_re
 //: Compute optimal position of all points given position of root
 //  Assumes search() has been called first
 void fhs_searcher::points_from_root(const vgl_point_2d<double>& root_pt,
-                        vcl_vector<vgl_point_2d<double> >& pts) const
+                                    vcl_vector<vgl_point_2d<double> >& pts) const
 {
   if (n_points()<2)
   {

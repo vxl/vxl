@@ -10,6 +10,7 @@
 #include <vcl_string.h>
 #include <vsl/vsl_fwd.h>
 #include <vnl/vnl_vector.h>
+#include <vgl/vgl_point_2d.h>
 #include <vimt/vimt_transform_2d.h>
 
 //: Set of 2D points, stored in a vnl_vector (x0,y0,x1,y1...)

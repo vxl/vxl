@@ -18,6 +18,7 @@
 
 #include <vcl_map.h>
 #include <vcl_utility.h>
+#include <vgl/vgl_fwd.h>
 
 #include "bmsh3d_vertex.h"
 

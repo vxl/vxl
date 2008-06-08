@@ -20,7 +20,10 @@
 #include <vgl/vgl_homg_point_3d.h>
 #include <vpgl/algo/vpgl_ortho_procrustes.h>
 #include <vpgl/algo/vpgl_optimize_camera.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
+#include <vgl/vgl_homg_point_2d.h>
 
 #include <vpgl/bgeo/bgeo_lvcs.h>
 
@@ -712,9 +715,9 @@ compute( vpgl_rational_camera<double> const& rat_cam,
 
 bool vpgl_perspective_camera_compute::
 compute_local( vpgl_rational_camera<double> const& rat_cam,
-         vgl_box_3d<double> const& approximation_volume,
-         vpgl_perspective_camera<double>& camera,
-         vgl_h_matrix_3d<double>& norm_trans)
+               vgl_box_3d<double> const& approximation_volume,
+               vpgl_perspective_camera<double>& camera,
+               vgl_h_matrix_3d<double>& norm_trans)
 {
   // Set up the geo converter.
   double lon_low = approximation_volume.min_x();
@@ -723,7 +726,8 @@ compute_local( vpgl_rational_camera<double> const& rat_cam,
   double lat_high = approximation_volume.max_y();
   assert( lat_low < lat_high && lon_low < lon_high );
   bgeo_lvcs lvcs_converter( lat_low, lon_low,
-    .5*(approximation_volume.min_z()+approximation_volume.max_z()), bgeo_lvcs::wgs84, bgeo_lvcs::DEG );
+                            .5*(approximation_volume.min_z()+approximation_volume.max_z()),
+                            bgeo_lvcs::wgs84, bgeo_lvcs::DEG );
 
   // Get a new local bounding box.
   double min_lx=1e99, min_ly=1e99, min_lz=1e99, max_lx=0, max_ly=0, max_lz=0;

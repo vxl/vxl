@@ -4,6 +4,9 @@
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 #include <vnl/vnl_numeric_traits.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_plane_3d.h>
 #include <bwm/reg/bwm_reg_processor.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_digital_curve_2d_sptr.h>

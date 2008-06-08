@@ -5,11 +5,7 @@
 // \file
 
 #include <vnl/vnl_fwd.h>
-#include <vgl/vgl_fwd.h>
-// not used? #include <vcl_iosfwd.h>
-
 #include "vpgl_affine_fundamental_matrix.h"
-
 
 //---------------------------------
 template <class T>
@@ -29,7 +25,7 @@ vpgl_affine_fundamental_matrix<T>::vpgl_affine_fundamental_matrix(
   const vpgl_fundamental_matrix<T>& fm )
 {
   set_from_params( fm.get_matrix()(2,0), fm.get_matrix()(2,1), fm.get_matrix()(2,2),
-    fm.get_matrix()(1,2), fm.get_matrix()(0,2) );
+                   fm.get_matrix()(1,2), fm.get_matrix()(0,2) );
 }
 
 

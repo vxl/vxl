@@ -8,6 +8,9 @@
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
+#include <vgl/vgl_homg_point_3d.h>
+#include <vgl/algo/vgl_h_matrix_3d.h>
+#include <vgl/algo/vgl_rotation_3d.h>
 
 #include <bwm/video/bwm_video_cam_istream.h>
 #include <bwm/video/bwm_video_cam_ostream.h>

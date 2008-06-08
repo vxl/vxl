@@ -5,6 +5,8 @@
 #include <vsol/vsol_conic_2d.h>
 #include <vsol/vsol_conic_2d_sptr.h>
 #include <vsol/vsol_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
+#include <vgl/vgl_homg_point_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vcl_cmath.h>
 

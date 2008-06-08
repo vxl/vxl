@@ -13,6 +13,8 @@
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_indent.h>
 
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 #include <mfpf/mfpf_sample_region.h>
 #include <mfpf/mfpf_norm_vec.h>
 
@@ -107,8 +109,8 @@ double mfpf_region_pdf::radius() const
 //: Evaluate match at p, using u to define scale and orientation
 // Returns -1*edge strength at p along direction u
 double mfpf_region_pdf::evaluate(const vimt_image_2d_of<float>& image,
-                        const vgl_point_2d<double>& p,
-                        const vgl_vector_2d<double>& u)
+                                 const vgl_point_2d<double>& p,
+                                 const vgl_vector_2d<double>& u)
 {
   vgl_vector_2d<double> u1=step_size_*u;
   vgl_vector_2d<double> v1(-u1.y(),u1.x());
@@ -125,9 +127,9 @@ double mfpf_region_pdf::evaluate(const vimt_image_2d_of<float>& image,
   vgl_vector_2d<double> im_v = s_w2i.delta(p0, v1);
 
   vil_resample_bilin(image.image(),sample,
-                      im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
-                      im_v.x(),im_v.y(),
-                      roi_ni_,roi_nj_);
+                     im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
+                     im_v.x(),im_v.y(),
+                     roi_ni_,roi_nj_);
 
   vnl_vector<double> v(n_pixels_*sample.nplanes());
   mfpf_sample_region(sample.top_left_ptr(),sample.jstep(),
@@ -169,9 +171,9 @@ void mfpf_region_pdf::evaluate_region(
   vgl_vector_2d<double> im_v = s_w2i.delta(p0, v1);
 
   vil_resample_bilin(image.image(),sample,
-                      im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
-                      im_v.x(),im_v.y(),
-                      nsi,nsj);
+                     im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
+                     im_v.x(),im_v.y(),
+                     nsi,nsj);
 
   vnl_vector<double> v(n_pixels_*np);
 
@@ -207,9 +209,9 @@ void mfpf_region_pdf::evaluate_region(
    //  the best nearby match.  Returns a qualtity of fit measure at that
    //  point (the smaller the better).
 double mfpf_region_pdf::search_one_pose(const vimt_image_2d_of<float>& image,
-                        const vgl_point_2d<double>& p,
-                        const vgl_vector_2d<double>& u,
-                        vgl_point_2d<double>& new_p)
+                                        const vgl_point_2d<double>& p,
+                                        const vgl_vector_2d<double>& u,
+                                        vgl_point_2d<double>& new_p)
 {
   int ni=1+2*search_ni_;
   int nj=1+2*search_nj_;
@@ -230,9 +232,9 @@ double mfpf_region_pdf::search_one_pose(const vimt_image_2d_of<float>& image,
   vgl_vector_2d<double> im_v = s_w2i.delta(p0, v1);
 
   vil_resample_bilin(image.image(),sample,
-                      im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
-                      im_v.x(),im_v.y(),
-                      nsi,nsj);
+                     im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
+                     im_v.x(),im_v.y(),
+                     nsi,nsj);
 
   vnl_vector<double> v(n_pixels_*np);
 
@@ -259,7 +261,7 @@ double mfpf_region_pdf::search_one_pose(const vimt_image_2d_of<float>& image,
 
 // Returns true if p is inside region at given pose
 bool mfpf_region_pdf::is_inside(const mfpf_pose& pose,
-                               const vgl_point_2d<double>& p) const
+                                const vgl_point_2d<double>& p) const
 {
   // Set transform model frame -> World
   vimt_transform_2d t1;
@@ -276,7 +278,7 @@ bool mfpf_region_pdf::is_inside(const mfpf_pose& pose,
 //: Return true if modelled regions at pose1 and pose2 overlap
 //  Checks if reference point of one is inside region of other
 bool mfpf_region_pdf::overlap(const mfpf_pose& pose1,
-                               const mfpf_pose& pose2) const
+                              const mfpf_pose& pose2) const
 {
   if (is_inside(pose1,pose2.p())) return true;
   if (is_inside(pose2,pose1.p())) return true;

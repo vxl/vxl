@@ -14,6 +14,8 @@
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_det.h>
 
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
@@ -130,7 +132,7 @@ bgui3d_viewer_tableau::set_scene_root(SoNode* scene_root)
   }
 
   // The users scene should be added last
-  if(scene_root)
+  if (scene_root)
     super_root->addChild(scene_root);
 
   bgui3d_tableau::set_scene_root(super_root);
@@ -577,7 +579,7 @@ bgui3d_viewer_tableau::set_clipping_planes()
 
       GLint depthbits[1];
       // assume 16-bit depth
-      // it is unsafe to use GL functions here because a GL context 
+      // it is unsafe to use GL functions here because a GL context
       // might not have been created yet.
       depthbits[0] = 16;
       //glGetIntegerv(GL_DEPTH_BITS, depthbits);

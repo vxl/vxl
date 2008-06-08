@@ -21,6 +21,8 @@
 #include <vcl_list.h>
 
 #include <vnl/vnl_math.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
 
 #include "bmsh3d_face.h"
 
@@ -397,7 +399,7 @@ void merge_mesh(bmsh3d_mesh_mc* M1, bmsh3d_mesh_mc* M2)
 }
 
 bmsh3d_face* copy_inner_face(vcl_vector<bmsh3d_edge*> incident_edges,
-                          bmsh3d_mesh_mc* mesh)
+                             bmsh3d_mesh_mc* mesh)
 {
   bmsh3d_face* inner_face = new bmsh3d_face();
 

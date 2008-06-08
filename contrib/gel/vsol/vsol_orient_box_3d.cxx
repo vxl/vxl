@@ -5,9 +5,10 @@
 
 #include <vsol/vsol_point_3d.h>
 #include <vsol/vsol_box_3d.h>
+#include <vgl/vgl_point_3d.h>
 #include <vcl_cassert.h>
 
-vsol_orient_box_3d::vsol_orient_box_3d(vgl_orient_box_3d<double> const& orient_box) 
+vsol_orient_box_3d::vsol_orient_box_3d(vgl_orient_box_3d<double> const& orient_box)
  : orient_box_(orient_box)
 {
   //create a bounding box from the 8 corner points of the oriented box
@@ -64,7 +65,7 @@ bool vsol_orient_box_3d::in(vsol_point_3d_sptr const& p) const
     // now check if the rotated box contains the point
     if (orient_box_.contains(p->x(), p->y(), p->z()))
       return true;
-  } 
+  }
 
   return false;
 }

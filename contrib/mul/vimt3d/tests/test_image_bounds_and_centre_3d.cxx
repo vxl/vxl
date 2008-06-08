@@ -4,13 +4,14 @@
 #include <vcl_iostream.h>
 #include <vimt3d/vimt3d_image_3d.h>
 #include <vimt3d/vimt3d_image_3d_of.h>
-
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_box_3d.h>
 
 static void test_world_bounding_box()
 {
-  vcl_cout << "--------------------------------------------------\n";
-  vcl_cout << "test_world_bounding_box(): \n";
-  vcl_cout << "--------------------------------------------------\n";
+  vcl_cout << "---------------------------\n"
+           << "test_world_bounding_box():\n"
+           << "---------------------------\n";
 
   // Image with identity transform
   {
@@ -26,12 +27,12 @@ static void test_world_bounding_box()
     const vgl_box_3d<double> bbox = world_bounding_box(image);
     const vgl_point_3d<double> min_pt(0.0, 0.0, 0.0);
     const vgl_point_3d<double> max_pt((ni-1)*pix.x(), (nj-1)*pix.y(), (nk-1)*pix.z());
-    TEST("With identity transform", 
-         (bbox.min_point()-min_pt).length()<1e-6 && 
-         (bbox.max_point()-max_pt).length()<1e-6,  
+    TEST("With identity transform",
+         (bbox.min_point()-min_pt).length()<1e-6 &&
+         (bbox.max_point()-max_pt).length()<1e-6,
          true);
   }
-  
+
   // Image with zoom transform (i.e. non-unity pixel size)
   {
     const unsigned ni = 8;  // image width (pixels)
@@ -46,9 +47,9 @@ static void test_world_bounding_box()
     const vgl_box_3d<double> bbox = world_bounding_box(image);
     const vgl_point_3d<double> min_pt(0.0, 0.0, 0.0);
     const vgl_point_3d<double> max_pt((ni-1)*pix.x(), (nj-1)*pix.y(), (nk-1)*pix.z());
-    TEST("With zoom transform", 
-         (bbox.min_point()-min_pt).length()<1e-6 && 
-         (bbox.max_point()-max_pt).length()<1e-6,  
+    TEST("With zoom transform",
+         (bbox.min_point()-min_pt).length()<1e-6 &&
+         (bbox.max_point()-max_pt).length()<1e-6,
           true);
   }
 }
@@ -56,9 +57,9 @@ static void test_world_bounding_box()
 
 static void test_centre_image_at_origin()
 {
-  vcl_cout << "--------------------------------------------------\n";
-  vcl_cout << "test_centre_image_at_origin(): \n";
-  vcl_cout << "--------------------------------------------------\n";
+  vcl_cout << "-------------------------------\n"
+           << "test_centre_image_at_origin():\n"
+           << "-------------------------------\n";
 
   // Image with identity transform
   {
@@ -76,7 +77,7 @@ static void test_centre_image_at_origin()
     vimt3d_centre_image_at_origin(image);
     vgl_point_3d<double> orig2 = image.world2im().origin();
     vgl_box_3d<double> bbox2 = world_bounding_box(image);
-    
+
     const vgl_point_3d<double> orig_true((ni-1)/2.0, (nj-1)/2.0, (nk-1)/2.0);
     bool orig_ok = ((orig1-orig2).length()>1e-6 &&    // check that origin has changed
                     (orig2-orig_true).length()<1e-6); // check that new origin is correct
@@ -85,8 +86,8 @@ static void test_centre_image_at_origin()
     const double hwx = (ni-1)*pix.x()/2.0; // half-width of centred image in world coords
     const double hwy = (nj-1)*pix.y()/2.0; // half-width of centred image in world coords
     const double hwz = (nk-1)*pix.z()/2.0; // half-width of centred image in world coords
-    const vgl_point_3d<double> lo(-hwx, -hwy, -hwz); 
-    const vgl_point_3d<double> hi(+hwx, +hwy, +hwz); 
+    const vgl_point_3d<double> lo(-hwx, -hwy, -hwz);
+    const vgl_point_3d<double> hi(+hwx, +hwy, +hwz);
     const vgl_box_3d<double> bbox(lo, hi); // bbox of centred image in world coords
     bool bbox_ok = !(bbox1==bbox2) &&   // check that bbox has changed
                    (bbox.min_point()-bbox2.min_point()).length()<1e-6 && // check that bbox is correct
@@ -119,8 +120,8 @@ static void test_centre_image_at_origin()
     const double hwx = (ni-1)*pix.x()/2.0; // half-width of centred image in world coords
     const double hwy = (nj-1)*pix.y()/2.0; // half-width of centred image in world coords
     const double hwz = (nk-1)*pix.z()/2.0; // half-width of centred image in world coords
-    const vgl_point_3d<double> lo(-hwx, -hwy, -hwz); 
-    const vgl_point_3d<double> hi(+hwx, +hwy, +hwz); 
+    const vgl_point_3d<double> lo(-hwx, -hwy, -hwz);
+    const vgl_point_3d<double> hi(+hwx, +hwy, +hwz);
     const vgl_box_3d<double> bbox(lo, hi); // bbox of centred image in world coords
     bool bbox_ok = !(bbox1==bbox2) &&   // check that bbox has changed
                    (bbox.min_point()-bbox2.min_point()).length()<1e-6 && // check that bbox is correct

@@ -3,9 +3,10 @@
 #include "bvxm_world_params.h"
 #include <bvxm/bvxm_util.h>
 
-#include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_box_3d.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vsol/vsol_box_2d_sptr.h>
 #include <vsol/vsol_box_2d.h>
 #include <brip/brip_roi.h>

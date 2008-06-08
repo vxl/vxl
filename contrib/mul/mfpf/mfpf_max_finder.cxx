@@ -6,6 +6,8 @@
 
 #include <vsl/vsl_binary_loader.h>
 #include <vnl/vnl_vector.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 
 #include <vimt/vimt_bilin_interp.h>
 #include <vimt/vimt_sample_profile_bilin.h>

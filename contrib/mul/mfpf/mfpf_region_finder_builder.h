@@ -11,6 +11,7 @@
 #include <mbl/mbl_chord.h>
 #include <vcl_iosfwd.h>
 #include <mfpf/mfpf_region_form.h>
+#include <vgl/vgl_fwd.h>
 
 //: Builder for mfpf_region_finder objects.
 // Text for configuring:
@@ -82,8 +83,8 @@ class mfpf_region_finder_builder : public mfpf_point_finder_builder
 
   //: Add one example to the model
   void add_one_example(const vimt_image_2d_of<float>& image,
-                        const vgl_point_2d<double>& p,
-                        const vgl_vector_2d<double>& u);
+                       const vgl_point_2d<double>& p,
+                       const vgl_vector_2d<double>& u);
 
  public:
 
@@ -106,7 +107,7 @@ class mfpf_region_finder_builder : public mfpf_point_finder_builder
   //: Define model region as an ellipse with radii ri, rj
   //  Ref. point in centre.
   void set_as_ellipse(double ri, double rj,
-                  const mfpf_vec_cost_builder& builder);
+                      const mfpf_vec_cost_builder& builder);
 
   //: Define model region using description in form
   //  Assumes form defined in world-coords.
@@ -114,7 +115,7 @@ class mfpf_region_finder_builder : public mfpf_point_finder_builder
   void set_region(const mfpf_region_form& form);
 
   //: Define region size in world co-ordinates
-  //  Sets up ROI to cover given box (with samples at step_size()), 
+  //  Sets up ROI to cover given box (with samples at step_size()),
   //  with ref point at centre.
   //  Currently just defines as a box
   virtual void set_region_size(double wi, double wj);

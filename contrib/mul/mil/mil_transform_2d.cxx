@@ -13,6 +13,8 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_inverse.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 
 vnl_matrix<double> mil_transform_2d::matrix() const
 {

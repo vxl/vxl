@@ -4,6 +4,8 @@
 //
 #include "bwm_video_site_io.h"
 #include "bwm_video_corr.h"
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
 #include <vsl/vsl_basic_xml_element.h>
 #include <vcl_sstream.h>
 #include <vcl_iostream.h>
@@ -64,7 +66,6 @@ bool bwm_video_site_io::open(vcl_string const& xml_path)
 void
 bwm_video_site_io ::cdataHandler(vcl_string name, vcl_string data)
 {
-
   // clean up the empty chars before and after the file paths
   trim_string(data);
   if (name.compare(VIDEO_PATH_TAG) == 0 ) {
@@ -76,6 +77,7 @@ bwm_video_site_io ::cdataHandler(vcl_string name, vcl_string data)
     cdata = "";
   }
 }
+
 void
 bwm_video_site_io::handleAtts(const XML_Char** atts)
 {

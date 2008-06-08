@@ -10,6 +10,7 @@
 #include <bwm/algo/bwm_plane_fitting_lsf.h>
 #include <bwm/bwm_observer_cam_proj.h>
 
+#include <vgl/vgl_homg_plane_3d.h>
 #include <vpgl/vpgl_proj_camera.h>
 #include <vsol/vsol_point_2d.h>
 
@@ -17,7 +18,7 @@
 #include <vcl_iostream.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/vnl_vector.h>
-#include <vsol/vsol_point_3d.h>
+#include <vgl/vgl_point_2d.h>
 #endif
 
 class bwm_observer_lsf;

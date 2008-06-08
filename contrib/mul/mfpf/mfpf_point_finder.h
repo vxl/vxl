@@ -9,6 +9,7 @@
 #include <vsl/vsl_binary_io.h>
 
 #include <vimt/vimt_image_2d_of.h>
+#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 
 #include <mfpf/mfpf_pose.h>
@@ -80,8 +81,8 @@ class mfpf_point_finder
   //: Evaluate match at p, using u to define scale and orientation
   // Returns a qualtity of fit measure at the point (the smaller the better).
   virtual double evaluate(const vimt_image_2d_of<float>& image,
-                        const vgl_point_2d<double>& p,
-                        const vgl_vector_2d<double>& u)=0;
+                          const vgl_point_2d<double>& p,
+                          const vgl_vector_2d<double>& u)=0;
 
   //: Evaluate match at in a region around p
   // Returns a quality of fit at a set of positions.
@@ -100,9 +101,9 @@ class mfpf_point_finder
   //  Returns a qualtity of fit measure at that
   //  point (the smaller the better).
   virtual double search_one_pose(const vimt_image_2d_of<float>& image,
-                        const vgl_point_2d<double>& p,
-                        const vgl_vector_2d<double>& u,
-                        vgl_point_2d<double>& new_p)=0;
+                                 const vgl_point_2d<double>& p,
+                                 const vgl_vector_2d<double>& u,
+                                 vgl_point_2d<double>& new_p)=0;
 
   //: Search given image around p, using u to define scale and angle
   //  Evaluates responses on a grid, finds the best point on the
@@ -154,10 +155,10 @@ class mfpf_point_finder
   //  Find local minima on this grid and return append each to
   //  pts.  Note: pts is not resized, so empty beforehand if necessary.
   virtual void grid_search_one_pose(const vimt_image_2d_of<float>& image,
-                           const vgl_point_2d<double>& p,
-                           const vgl_vector_2d<double>& u,
-                           vcl_vector<mfpf_pose>& pts,
-                           vcl_vector<double>& fit);
+                                    const vgl_point_2d<double>& p,
+                                    const vgl_vector_2d<double>& u,
+                                    vcl_vector<mfpf_pose>& pts,
+                                    vcl_vector<double>& fit);
 
   //: Search for local optima around given point/scale/angle
   //  Search in a grid around p (defined by search_ni and search_nj).
@@ -201,18 +202,18 @@ class mfpf_point_finder
   //  poses defined in pts should be further refined to eliminate
   //  such multiple responses.
   virtual void multi_search(const vimt_image_2d_of<float>& image,
-                           const vgl_point_2d<double>& p,
-                           const vgl_vector_2d<double>& u,
-                           vcl_vector<mfpf_pose>& poses,
-                           vcl_vector<double>& fits);
+                            const vgl_point_2d<double>& p,
+                            const vgl_vector_2d<double>& u,
+                            vcl_vector<mfpf_pose>& poses,
+                            vcl_vector<double>& fits);
 
   //: Perform local optimisation to refine position,scale and angle
   //  On input fit is match at p,u.  On exit p,u and fit are updated.
   //  Baseclass implementation uses simplex optimisation.
   virtual void refine_match(const vimt_image_2d_of<float>& image,
-                           vgl_point_2d<double>& p,
-                           vgl_vector_2d<double>& u,
-                           double& fit);
+                            vgl_point_2d<double>& p,
+                            vgl_vector_2d<double>& u,
+                            double& fit);
 
   //: Return true if modelled regions at pose1 and pose2 overlap
   virtual bool overlap(const mfpf_pose& pose1,

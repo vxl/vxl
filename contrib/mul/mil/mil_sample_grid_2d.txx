@@ -10,6 +10,8 @@
 
 #include <mil/mil_bilin_interp_2d.h>
 #include <vnl/vnl_vector.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 
 //: True if p clearly inside the image
 inline bool mil_point_in_image(const vgl_point_2d<double>& p, const mil_image_2d& image)

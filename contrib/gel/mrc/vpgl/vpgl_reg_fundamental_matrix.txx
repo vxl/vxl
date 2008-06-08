@@ -6,9 +6,7 @@
 
 #include "vpgl_reg_fundamental_matrix.h"
 #include <vnl/vnl_fwd.h>
-#include <vgl/vgl_fwd.h>
-// not used? #include <vcl_iosfwd.h>
-
+#include <vgl/vgl_point_2d.h>
 
 //---------------------------------
 template <class T>

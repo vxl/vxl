@@ -7,6 +7,7 @@
 #include <vimt/vimt_image_pyramid.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vimt/algo/vimt_find_peaks.h>
+#include <vgl/vgl_point_2d.h>
 
 #ifndef LEAVE_FILES_BEHIND
 #define LEAVE_FILES_BEHIND 0

@@ -9,6 +9,7 @@
 #include <vpdfl/vpdfl_pdf_base.h>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <mbl/mbl_chord.h>
+#include <vgl/vgl_fwd.h>
 #include <vcl_iosfwd.h>
 
 //: Searches with a PDF of an arbitrary region.
@@ -81,14 +82,14 @@ class mfpf_region_pdf : public mfpf_point_finder
                                const vgl_vector_2d<double>& u,
                                vimt_image_2d_of<double>& response);
 
-  //: Search given image around p, using u to define scale and angle 
-  //  On exit, new_p defines position of the best nearby match.  
+  //: Search given image around p, using u to define scale and angle
+  //  On exit, new_p defines position of the best nearby match.
   //  Returns a qualtity of fit measure at that
   //  point (the smaller the better).
   virtual double search_one_pose(const vimt_image_2d_of<float>& image,
-                        const vgl_point_2d<double>& p,
-                        const vgl_vector_2d<double>& u,
-                        vgl_point_2d<double>& new_p);
+                                 const vgl_point_2d<double>& p,
+                                 const vgl_vector_2d<double>& u,
+                                 vgl_point_2d<double>& new_p);
 
   // Returns true if p is inside region at given pose
   // Actually only checks if p is inside bounding box

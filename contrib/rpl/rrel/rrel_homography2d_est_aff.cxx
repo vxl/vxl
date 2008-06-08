@@ -4,6 +4,7 @@
 // \file
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
+#include <vgl/vgl_homg_point_2d.h>
 
 
 rrel_homography2d_est_aff :: rrel_homography2d_est_aff( const vcl_vector< vgl_homg_point_2d<double> > & from_pts,

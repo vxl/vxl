@@ -6,6 +6,7 @@
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vpgl/vpgl_proj_camera.h>

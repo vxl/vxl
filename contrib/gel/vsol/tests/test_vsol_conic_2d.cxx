@@ -15,14 +15,16 @@
 
 #include <vcl_iostream.h>
 #include <vcl_cmath.h> // vcl_abs(double)
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 #include <vsol/vsol_conic_2d.h>
 #include <vsol/vsol_conic_2d_sptr.h>
 #include <vsol/vsol_point_2d.h>
 
 void f(const vsol_conic_2d::vsol_conic_type &t)
 {
-  switch(t)
-    {
+  switch (t)
+  {
     case vsol_conic_2d::invalid:
       vcl_cout<<"invalid\n";
       break;
@@ -62,7 +64,7 @@ void f(const vsol_conic_2d::vsol_conic_type &t)
     default:
       vcl_cout<<"Impossible\n";
       break;
-    }
+  }
 }
 
 //-----------------------------------------------------------------------------
@@ -124,7 +126,7 @@ void test_vsol_conic_2d()
   // Ignore rounding errors:
   if (vcl_abs(q->a()-2.5) < 1e-12 && vcl_abs(q->b()-3) < 1e-12 && vcl_abs(q->d()+8) < 1e-12 &&
       vcl_abs(q->c()-2.5) < 1e-12 && vcl_abs(q->f()-4) < 1e-12 && vcl_abs(q->e()+8) < 1e-12)
-    q->set(2.5, 3, 2.5, -8, -8, 4); 
+    q->set(2.5, 3, 2.5, -8, -8, 4);
   TEST("vsol_conic_2d::set_central_parameters()", *q, *p);
 
   p=new vsol_conic_2d(52,-72,73,0,0,-100); // ellipse: centre 0,0; axes 2,1; dir atan(3/4)
@@ -136,7 +138,7 @@ void test_vsol_conic_2d()
   // Ignore rounding errors:
   if (vcl_abs(q->a()-2.08) < 1e-12 && vcl_abs(q->b()+2.88) < 1e-12 &&
       vcl_abs(q->c()-2.92) < 1e-12 && vcl_abs(q->f()+4.0) < 1e-12)
-    q->set(52, -72, 73, 25*q->d(), 25*q->e(), -100); 
+    q->set(52, -72, 73, 25*q->d(), 25*q->e(), -100);
   TEST("vsol_conic_2d::set_central_parameters()", *q, *p);
 
   p=new vsol_conic_2d(1,0,0,0,-1,0); // parabola: y=x^2, x^2-y=0
@@ -160,7 +162,7 @@ void test_vsol_conic_2d()
   // Ignore rounding errors:
   if (vcl_abs(q->a()) < 1e-12 && vcl_abs(q->b()+4) < 1e-12 &&
       vcl_abs(q->c()) < 1e-12 && vcl_abs(q->f()-4) < 1e-12)
-    q->set(0.0, -4.0, 0.0, q->d(), q->e(), 4.0); 
+    q->set(0.0, -4.0, 0.0, q->d(), q->e(), 4.0);
   TEST("vsol_conic_2d::set_central_parameters()", *q, *p);
 
   p=new vsol_conic_2d(11,-24,4,0,0,20); // hyperbola: centre 0,0; axes 2,-1; dir atan(4/3)
@@ -172,7 +174,7 @@ void test_vsol_conic_2d()
   // Ignore rounding errors:
   if (vcl_abs(q->a()-2.2) < 1e-12 && vcl_abs(q->b()+4.8) < 1e-12 &&
       vcl_abs(q->c()-0.8) < 1e-12 && vcl_abs(q->f()-4.0) < 1e-12)
-    q->set(11, -24, 4, 5*q->d(), 5*q->e(), 20); 
+    q->set(11, -24, 4, 5*q->d(), 5*q->e(), 20);
   TEST("vsol_conic_2d::set_central_parameters()", *q, *p);
 
   p=new vsol_conic_2d(4,-24,11,16,2,-29); // hyperbola: centre 1,1; axes 1,-2; dir atan(-4/3)
@@ -184,14 +186,14 @@ void test_vsol_conic_2d()
   // Ignore rounding errors:
   if (vcl_abs(q->a()+0.8) < 1e-12 && vcl_abs(q->b()-4.8) < 1e-12 && vcl_abs(q->d()+3.2) < 1e-12 &&
       vcl_abs(q->c()+2.2) < 1e-12 && vcl_abs(q->f()-5.8) < 1e-12 && vcl_abs(q->e()+0.4) < 1e-12)
-    q->set(-4, 24, -11, -16, -2, 29); 
+    q->set(-4, 24, -11, -16, -2, 29);
   TEST("vsol_conic_2d::set_central_parameters()", *q, *p);
 //Test the length routine
   vsol_point_2d_sptr p0 = new vsol_point_2d(2.0,0.0), p1 = new vsol_point_2d(2.0,0.0);
-  vsol_conic_2d_sptr pl=new vsol_conic_2d(0.25,0,1,0,0,-1); 
+  vsol_conic_2d_sptr pl=new vsol_conic_2d(0.25,0,1,0,0,-1);
   pl->set_p0(p0); pl->set_p1(p1);
   double length = 0;
-  if(pl->is_real_ellipse())
+  if (pl->is_real_ellipse())
     length = pl->length();
   TEST_NEAR("elliptic arc length ", length, 9.68926, 1e-05);
 }

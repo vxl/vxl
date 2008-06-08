@@ -8,6 +8,7 @@
 #include <mfpf/mfpf_point_finder_builder.h>
 #include <vpdfl/vpdfl_builder_base.h>
 #include <mbl/mbl_cloneable_ptr.h>
+#include <vgl/vgl_fwd.h>
 #include <vcl_iosfwd.h>
 
 //: Builder for mfpf_profile_pdf objects.
@@ -39,8 +40,8 @@ class mfpf_profile_pdf_builder : public mfpf_point_finder_builder
            const vpdfl_builder_base& builder);
 
   //: Define region size in world co-ordinates
-  //  Sets up ROI to cover given box (with samples at step_size()), 
-  //  with ref point at centre.  
+  //  Sets up ROI to cover given box (with samples at step_size()),
+  //  with ref point at centre.
   //  Sets ihi = ceil(wi/2*step_size), ilo=-ihi
   virtual void set_region_size(double wi, double wj);
 

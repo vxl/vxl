@@ -2,8 +2,10 @@
 #include "vifa_line_cover.h"
 //:
 // \file
-#include <vcl_algorithm.h>
 
+#include <vcl_algorithm.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 
 //-----------------------------------------------------------
 //: Constructors

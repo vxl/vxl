@@ -7,16 +7,17 @@
 #include <mfpf/mfpf_draw_matches.h>
 #include <mfpf/mfpf_draw_pose_lines.h>
 #include <mfpf/mfpf_pose_set.h>
+#include <vgl/vgl_point_2d.h>
 #include <vcl_algorithm.h>
 #include <vimt/vimt_convert.h>
 
 //: Draws first n_draw matches (defined by poses) into out_image
 //  Shape to draw defined by pf.get_outline(pts)
 void mfpf_draw_matches(const mfpf_point_finder& pf,
-                    const vimt_image_2d_of<float>& image,
-                    const mfpf_pose_set& matches,
-                    unsigned n_draw,
-                    vimt_image_2d_of<vxl_byte>& out_image)
+                       const vimt_image_2d_of<float>& image,
+                       const mfpf_pose_set& matches,
+                       unsigned n_draw,
+                       vimt_image_2d_of<vxl_byte>& out_image)
 {
   vimt_convert_cast(image,out_image);
 

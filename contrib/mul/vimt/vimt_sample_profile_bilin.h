@@ -7,6 +7,7 @@
 
 #include <vimt/vimt_image_2d_of.h>
 #include <vnl/vnl_fwd.h>
+#include <vgl/vgl_fwd.h>
 
 //: Sample along profile, using bilinear interpolation
 //  Profile points are p+iu, where i=[0..n-1] (world co-ordinates).

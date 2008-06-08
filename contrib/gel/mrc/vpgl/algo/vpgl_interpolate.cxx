@@ -4,6 +4,10 @@
 #include <vcl_cmath.h>
 #include <vcl_complex.h>
 #include <vgl/vgl_point_3d.h>
+#if 0
+#include <vgl/vgl_vector_3d.h>
+#endif
+#include <vgl/algo/vgl_rotation_3d.h>
 
 vnl_double_3x3 vpgl_interpolate::logR(vnl_double_3x3 const& R)
 {

@@ -5,10 +5,11 @@
 // \brief Robust HMatrix computation
 //
 // \verbatim
-// Modifications
-//    22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
+//  Modifications
+//   22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
 // \endverbatim
 
+#include <vgl/vgl_fwd.h>
 #include <mvl/HMatrix2DCompute4Point.h>
 #include <mvl/HMatrix2D.h>
 #include <mvl/AffineMetric.h>

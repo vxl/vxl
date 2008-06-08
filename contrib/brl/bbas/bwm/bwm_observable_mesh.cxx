@@ -10,8 +10,14 @@
 #include <vcl_sstream.h>
 #include <vnl/vnl_math.h>
 
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_plane_3d.h>
+#include <vgl/vgl_box_3d.h>
+#include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_line_3d_2_points.h>
+#include <vgl/vgl_homg_point_3d.h>
 #include <vgl/algo/vgl_fit_plane_3d.h>
 #include <vgl/vgl_distance.h>
 
@@ -384,7 +390,7 @@ void bwm_observable_mesh::create_interior()
 void bwm_observable_mesh::move(vsol_polygon_3d_sptr poly)
 {
   if (!object_) {
-    vcl_cerr << "mesh object id null" << vcl_endl;
+    vcl_cerr << "mesh object id null\n";
     return;
   }
 
@@ -1067,7 +1073,8 @@ bwm_observable_sptr bwm_observable_mesh::global_to_local(bgeo_lvcs* lvcs, double
       bmsh3d_vertex* v = (bmsh3d_vertex*)vit->second;
       double x,y,z;
       lvcs->global_to_local(v->pt().x(), v->pt().y(), v->pt().z(),
-        bgeo_lvcs::wgs84,x,y,z,bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+                            bgeo_lvcs::wgs84,x,y,z,
+                            bgeo_lvcs::DEG,bgeo_lvcs::METERS);
       if (z < min_z) {
         min_z = z;
       }

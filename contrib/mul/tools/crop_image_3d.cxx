@@ -15,7 +15,7 @@
 #include <vul/vul_file.h>
 #include <vul/vul_string.h>
 #include <vimt3d/vimt3d_vil3d_v3i.h>
-
+#include <vgl/vgl_point_3d.h>
 
 //=========================================================================
 // Static function to create a static logger when first required

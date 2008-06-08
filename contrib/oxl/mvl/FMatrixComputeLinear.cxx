@@ -17,6 +17,7 @@
 #include <vcl_iostream.h>
 
 #include <vnl/algo/vnl_svd.h>
+#include <vgl/vgl_homg_point_2d.h>
 
 #include <mvl/HomgMetric.h>
 #include <mvl/PairMatchSetCorner.h>

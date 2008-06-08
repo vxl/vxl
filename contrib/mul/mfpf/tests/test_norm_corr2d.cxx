@@ -16,6 +16,8 @@
 #include <mfpf/mfpf_norm_corr2d.h>
 #include <mfpf/mfpf_norm_corr2d_builder.h>
 #include <vil/vil_bilin_interp.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 
 //=======================================================================
 
@@ -61,8 +63,8 @@ void test_norm_corr2d_search(mfpf_point_finder_builder& b)
 
   vcl_cout<<"Without parabolic optimisation: "<<vcl_endl;
   pf->search(image,p2,u,new_p,new_u);
-  vcl_cout<<"Found point (no opt): "<<new_p<<vcl_endl;
-  vcl_cout<<"Testing parabolic optimisation."<<vcl_endl;
+  vcl_cout<<"Found point (no opt): "<<new_p<<vcl_endl
+          <<"Testing parabolic optimisation."<<vcl_endl;
   pf->set_search_area(3,3);
   pf->search_with_opt(image,p2,u,new_p,new_u);
   vcl_cout<<"Found point ( + opt): "<<new_p<<vcl_endl;
@@ -78,7 +80,7 @@ void test_norm_corr2d_search(mfpf_point_finder_builder& b)
 
   // Check that response has local minima in correct place
   vgl_point_2d<double> ip = response.world2im()(new_p);
-  vcl_cout<<"Best pt: "<<ip.x()<<","<<ip.y()<<vcl_endl;
+  vcl_cout<<"Best pt: "<<ip.x()<<','<<ip.y()<<vcl_endl;
   TEST("Best pt in image (i)", ip.x()>=0 && ip.x()<response.image().ni(),true);
   TEST("Best pt in image (j)", ip.y()>=0 && ip.y()<response.image().nj(),true);
 
@@ -88,7 +90,7 @@ void test_norm_corr2d_search(mfpf_point_finder_builder& b)
   vcl_cout<<r0<<','<<r1<<','<<r2<<vcl_endl;
   TEST("Local minima 1",r0<r1,true);
   TEST("Local minima 2",r0<r2,true);
- 
+
   delete pf;
 }
 

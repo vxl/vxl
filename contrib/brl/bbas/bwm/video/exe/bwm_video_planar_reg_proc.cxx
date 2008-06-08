@@ -4,6 +4,7 @@
 #include <vcl_string.h>
 #include <vnl/vnl_double_4.h>
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_plane_3d.h>
 #include <bwm/video/bwm_video_registration.h>
 #include <vidl2/vidl2_image_list_istream.h>
 #include <vidl2/vidl2_image_list_ostream.h>
@@ -23,8 +24,9 @@ static bool planar_reg(vcl_string const& video_input_glob,
   wis >> pv;
   vgl_plane_3d<double> world_plane(pv[0], pv[1], pv[2], pv[3]);
 
-  if (video_input_glob == ""||camera_input_glob == ""||
-     video_output_dir == "")
+  if (video_input_glob == ""||
+      camera_input_glob == ""||
+      video_output_dir == "")
     return false;
 
   if (!vul_file::exists(video_output_dir))
@@ -81,7 +83,7 @@ int main(int argc, char** argv)
   vul_arg<vcl_string> video_input_glob(arglist, "-video_input_glob",
                                        "video input file glob", "");
   vul_arg<vcl_string> camera_input_glob(arglist, "-camera_input_glob",
-                                       "camera input file glob", "");
+                                        "camera input file glob", "");
   vul_arg<vcl_string> video_output_dir(arglist, "-video_output_dir",
                                        "video output file directory", "");
   vul_arg<vcl_string> world_plane_path(arglist, "-world_plane",

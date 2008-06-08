@@ -3,7 +3,6 @@
 // \brief Builder for mfpf_region_pdf objects.
 // \author Tim Cootes
 
-
 #include <mfpf/mfpf_region_pdf_builder.h>
 #include <mfpf/mfpf_region_pdf.h>
 #include <vsl/vsl_binary_loader.h>
@@ -19,6 +18,8 @@
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_indent.h>
 
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 #include <mfpf/mfpf_sample_region.h>
 #include <mfpf/mfpf_norm_vec.h>
 #include <mbl/mbl_data_array_wrapper.h>
@@ -92,7 +93,7 @@ void mfpf_region_pdf_builder::set_region(const mfpf_region_form& form)
 }
 
 //: Define region size in world co-ordinates
-//  Sets up ROI to cover given box (with samples at step_size()), 
+//  Sets up ROI to cover given box (with samples at step_size()),
 //  with ref point at centre.
 void mfpf_region_pdf_builder::set_region_size(double wi, double wj)
 {
@@ -424,12 +425,12 @@ void mfpf_region_pdf_builder::print_summary(vcl_ostream& os) const
   os <<vsl_indent()<< "pdf_builder: ";
   if (pdf_builder_.ptr()==0) os << '-'<<vcl_endl;
   else                       os << pdf_builder_<<vcl_endl;
-  os <<vsl_indent()<< "nA: " << nA_ << " dA: " << dA_ << ' '<<vcl_endl;
-  os <<vsl_indent();
+  os <<vsl_indent()<< "nA: " << nA_ << " dA: " << dA_ << ' '<<vcl_endl
+     <<vsl_indent();
   mfpf_point_finder_builder::print_summary(os);
   os <<vcl_endl;
   vsl_indent_dec(os);
-  os <<vsl_indent()<< "}";
+  os <<vsl_indent()<< '}';
 }
 
 void mfpf_region_pdf_builder::print_shape(vcl_ostream& os) const

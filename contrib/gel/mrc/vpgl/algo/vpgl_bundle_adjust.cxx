@@ -5,6 +5,7 @@
 
 #include <vnl/vnl_vector_ref.h>
 #include <vnl/algo/vnl_sparse_lm.h>
+#include <vgl/vgl_homg_point_2d.h>
 
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
@@ -142,8 +143,8 @@ vpgl_bundle_adj_lsqr::f(vnl_vector<double> const& a,
 //: Compute the sparse Jacobian in block form.
 void
 vpgl_bundle_adj_lsqr::jac_blocks(vnl_vector<double> const& a, vnl_vector<double> const& b,
-                                  vcl_vector<vnl_matrix<double> >& A,
-                                  vcl_vector<vnl_matrix<double> >& B)
+                                 vcl_vector<vnl_matrix<double> >& A,
+                                 vcl_vector<vnl_matrix<double> >& B)
 {
   const double stepsize = 0.001;
   typedef vnl_crs_index::sparse_vector::iterator sv_itr;
@@ -217,7 +218,7 @@ vpgl_bundle_adj_lsqr::jac_blocks(vnl_vector<double> const& a, vnl_vector<double>
 //: compute the Jacobian Bij
 void
 vpgl_bundle_adj_lsqr::jac_Bij(vnl_double_3x4 const& Pi, vnl_vector<double> const& bj,
-                               vnl_matrix<double>& Bij)
+                              vnl_matrix<double>& Bij)
 {
   double denom = Pi(2,0)*bj[0] + Pi(2,1)*bj[1] + Pi(2,2)*bj[2] + Pi(2,3);
   denom *= denom;
@@ -290,9 +291,9 @@ vpgl_bundle_adj_lsqr::create_param_vector(const vcl_vector<vgl_point_3d<double> 
 //: Bundle Adjust
 bool
 vpgl_bundle_adjust::optimize(vcl_vector<vpgl_perspective_camera<double> >& cameras,
-                              vcl_vector<vgl_point_3d<double> >& world_points,
-                              const vcl_vector<vgl_point_2d<double> >& image_points,
-                              const vcl_vector<vcl_vector<bool> >& mask)
+                             vcl_vector<vgl_point_3d<double> >& world_points,
+                             const vcl_vector<vgl_point_2d<double> >& image_points,
+                             const vcl_vector<vcl_vector<bool> >& mask)
 {
   // Extract the camera and point parameters
   vcl_vector<vpgl_calibration_matrix<double> > K;
@@ -324,8 +325,8 @@ vpgl_bundle_adjust::optimize(vcl_vector<vpgl_perspective_camera<double> >& camer
 //: Write cameras and points to a file in VRML 2.0 for debugging
 void
 vpgl_bundle_adjust::write_vrml(const vcl_string& filename,
-                                vcl_vector<vpgl_perspective_camera<double> >& cameras,
-                                vcl_vector<vgl_point_3d<double> >& world_points)
+                               vcl_vector<vpgl_perspective_camera<double> >& cameras,
+                               vcl_vector<vgl_point_3d<double> >& world_points)
 {
   vcl_ofstream os(filename.c_str());
   os << "#VRML V2.0 utf8\n\n";

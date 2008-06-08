@@ -8,6 +8,7 @@
 
 #include <mfpf/mfpf_point_finder.h>
 #include <vnl/vnl_vector.h>
+#include <vgl/vgl_fwd.h>
 #include <vcl_iosfwd.h>
 
 //: Searches along a profile using normalised correllation.
@@ -70,9 +71,9 @@ class mfpf_norm_corr1d : public mfpf_point_finder
   //  the best nearby match.  Returns a qualtity of fit measure at that
   //  point (the smaller the better).
   virtual double search_one_pose(const vimt_image_2d_of<float>& image,
-                        const vgl_point_2d<double>& p,
-                        const vgl_vector_2d<double>& u,
-                        vgl_point_2d<double>& new_p);
+                                 const vgl_point_2d<double>& p,
+                                 const vgl_vector_2d<double>& u,
+                                 vgl_point_2d<double>& new_p);
 
   //: Generate points in ref frame that represent boundary
   //  Points of a contour around the shape.

@@ -5,6 +5,7 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vsol/vsol_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vnl/vnl_math.h>
 
 //***************************************************************************
@@ -118,8 +119,8 @@ double vsol_triangle_3d::area(void) const
   double dy12=(*storage_)[1]->y()-(*storage_)[2]->y();
   double dz12=(*storage_)[1]->z()-(*storage_)[2]->z();
   return vcl_sqrt( vnl_math_sqr(dy02*dz12-dy12*dz02)
-                  +vnl_math_sqr(dz02*dx12-dz12*dx02)
-                  +vnl_math_sqr(dx02*dy12-dx12*dy02))/2;
+                 + vnl_math_sqr(dz02*dx12-dz12*dx02)
+                 + vnl_math_sqr(dx02*dy12-dx12*dy02))/2;
 }
 //***************************************************************************
 // Element change

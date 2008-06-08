@@ -8,7 +8,6 @@
 // \date June 29, 2007
 //
 
-#include <vgl/vgl_fwd.h>
 #include <vnl/vnl_fwd.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 

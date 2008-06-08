@@ -24,6 +24,7 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <vgl/vgl_fwd.h>
 #include <mvl/HMatrix2DComputeRobust.h>
 #include <mvl/HMatrix2DCompute4Point.h>
 #include <mvl/HMatrix2D.h>

@@ -16,6 +16,7 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
+#include <vgl/algo/vgl_h_matrix_3d.h>
 #include "bcal_camera_graph.h"
 #include "bcal_calibrate_plane.h"
 #include "bcal_zhang_camera_node.h"

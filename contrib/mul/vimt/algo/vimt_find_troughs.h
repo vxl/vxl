@@ -7,6 +7,7 @@
 // \author Tim Cootes
 
 #include <vimt/vimt_image_2d_of.h>
+#include <vgl/vgl_point_2d.h>
 
 //: True if pixel at *im is strictly below its 8 neighbours
 //  The image pixel (first argument) should *not* be a border pixel!
@@ -49,7 +50,7 @@ inline void vimt_find_image_troughs_3x3(vcl_vector<vgl_point_2d<unsigned> >& tro
 // \param clear_list: If true (the default) then empty list before adding new examples
 template <class T>
 inline void vimt_find_image_troughs_3x3(vcl_vector<vgl_point_2d<unsigned> >& troughs,
-                                      vcl_vector<T>& trough_value,
+                                        vcl_vector<T>& trough_value,
                                         const vil_image_view<T>& image,
                                         unsigned plane=0, bool clear_list=true)
 {

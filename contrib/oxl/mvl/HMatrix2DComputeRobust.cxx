@@ -5,6 +5,7 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_cmath.h>
+#include <vgl/vgl_homg_point_2d.h>
 #include <mvl/Probability.h>
 #include <mvl/AffineMetric.h>
 #include <mvl/HomgInterestPointSet.h>
@@ -148,14 +149,14 @@ bool HMatrix2DComputeRobust::compute(PairMatchSetCorner& matches, HMatrix2D *H)
       inlier_list = list;
       residualsH = residuals;
       count = temp_count;
-      vcl_cerr << "Minimum so far... : " << Ds << vcl_endl;
-      vcl_cerr << "Inliers : " << count << vcl_endl;
-      vcl_cerr << "HMatrix2D : " << Hs.get_matrix() << vcl_endl;
+      vcl_cerr << "Minimum so far... : " << Ds << vcl_endl
+               << "Inliers : " << count << vcl_endl
+               << "HMatrix2D : " << Hs.get_matrix() << vcl_endl;
     }
   }
-  vcl_cerr << "Final Figures...\n";
-  vcl_cerr << "Ds : " << Ds << vcl_endl;
-  vcl_cerr << "HMatrix2D : " << Hs << vcl_endl;
+  vcl_cerr << "Final Figures...\n"
+           << "Ds : " << Ds << vcl_endl
+           << "HMatrix2D : " << Hs << vcl_endl;
   H->set(Hs.get_matrix());
 
   int inlier_count = count;
@@ -165,9 +166,9 @@ bool HMatrix2DComputeRobust::compute(PairMatchSetCorner& matches, HMatrix2D *H)
   inlier_count = matches.compute_match_count();
   inliers_ = inlier_list;
   residuals_ = residualsH;
-  vcl_cerr << "Residuals Variance : " << std_in << vcl_endl;
-  vcl_cerr << "Inlier -\n";
-  vcl_cerr << "         " << inlier_count << vcl_endl;
+  vcl_cerr << "Residuals Variance : " << std_in << vcl_endl
+           << "Inlier -\n"
+           << "         " << inlier_count << vcl_endl;
 
   return true;
 }

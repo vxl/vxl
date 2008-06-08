@@ -13,6 +13,7 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vgl/io/vgl_io_point_3d.h>
 #include <mbl/mbl_matxvec.h>
 
@@ -190,8 +191,8 @@ void mbl_thin_plate_spline_weights_3d::build_pure_affine(
 
 //: Set parameters from vectors
 void mbl_thin_plate_spline_weights_3d::set_params(const vnl_vector<double>& W1,
-                                          const vnl_vector<double>& W2,
-                                          const vnl_vector<double>& W3)
+                                                  const vnl_vector<double>& W2,
+                                                  const vnl_vector<double>& W3)
 {
   int n = W1.size()-4;
 
@@ -230,10 +231,9 @@ void mbl_thin_plate_spline_weights_3d::set_params(const vnl_vector<double>& W1,
 }
 
 void mbl_thin_plate_spline_weights_3d::compute_energy(vnl_vector<double>& W1,
-                                              vnl_vector<double>& W2,
-                                              vnl_vector<double>& W3,
-                                              const vnl_matrix<double>& L)
-
+                                                      vnl_vector<double>& W2,
+                                                      vnl_vector<double>& W3,
+                                                      const vnl_matrix<double>& L)
 {
   int n = W1.size()-3;
   double *W1_data=W1.data_block();
@@ -261,9 +261,9 @@ void mbl_thin_plate_spline_weights_3d::compute_energy(vnl_vector<double>& W1,
 }
 
 void mbl_thin_plate_spline_weights_3d::set_up_rhs(vnl_vector<double>& Bx,
-                                          vnl_vector<double>& By,
-                                          vnl_vector<double>& Bz,
-                                          const vcl_vector<vgl_point_3d<double> >& dest_pts)
+                                                  vnl_vector<double>& By,
+                                                  vnl_vector<double>& Bz,
+                                                  const vcl_vector<vgl_point_3d<double> >& dest_pts)
 {
   int n =dest_pts.size();
 

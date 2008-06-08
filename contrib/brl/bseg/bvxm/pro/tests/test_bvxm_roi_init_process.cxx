@@ -17,6 +17,7 @@
 #include <vil/vil_save.h>
 #include <vil/file_formats/vil_nitf2_image.h>
 
+#include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vpgl/file_formats/vpgl_nitf_rational_camera.h>
 

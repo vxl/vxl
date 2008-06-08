@@ -5,6 +5,7 @@
 #include <vcl_iostream.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_numeric_traits.h>
+#include <vgl/vgl_homg_line_2d.h>
 #include <vsol/vsol_line_2d.h>
 
 //: Constructors

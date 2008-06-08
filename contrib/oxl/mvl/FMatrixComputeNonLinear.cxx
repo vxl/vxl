@@ -13,6 +13,7 @@
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>
+#include <vgl/vgl_homg_line_2d.h>
 #include <mvl/HomgNorm2D.h>
 #include <mvl/HomgPoint2D.h>
 #include <mvl/HomgLine2D.h>
@@ -28,11 +29,11 @@ const int FMatrixComputeNonLinear_nparams = 7;
 //-----------------------------------------------------------------------------
 //: Constructor
 //
-FMatrixComputeNonLinear::FMatrixComputeNonLinear(PairMatchSetCorner* matches) :
-   vnl_least_squares_function(FMatrixComputeNonLinear_nparams, matches->compute_match_count(), no_gradient),
-  data_size_(matches->compute_match_count()),
-  matches_(*matches),
-  one_(true)
+FMatrixComputeNonLinear::FMatrixComputeNonLinear(PairMatchSetCorner* matches)
+ : vnl_least_squares_function(FMatrixComputeNonLinear_nparams, matches->compute_match_count(), no_gradient),
+   data_size_(matches->compute_match_count()),
+   matches_(*matches),
+   one_(true)
 {
   // Copy matching points from matchset.
   // Set up some initial variables
@@ -62,7 +63,8 @@ FMatrixComputeNonLinear::FMatrixComputeNonLinear(PairMatchSetCorner* matches) :
 //-----------------------------------------------------------------------------
 //: Compute the F Matrix by augmenting a 7 point basis
 
-bool FMatrixComputeNonLinear::compute_basis(FMatrix* F, vcl_vector<int> basis) {
+bool FMatrixComputeNonLinear::compute_basis(FMatrix* F, vcl_vector<int> basis)
+{
   one_ = false;
   vcl_vector<vgl_homg_point_2d<double> > basis1(7), basis2(7);
   for (int i = 0; i < 7; i++) {
@@ -88,20 +90,24 @@ bool FMatrixComputeNonLinear::compute(FMatrix* F)
 {
   FMatrix F_final;
   // fm_fmatrix_nagmin
-  vcl_cerr << "FMatrixComputeNonLinear: matches = "<< data_size_ <<", using "<< FMatrixComputeNonLinear_nparams <<" parameters \n";
+  vcl_cerr << "FMatrixComputeNonLinear: matches = "<< data_size_ <<", using "<< FMatrixComputeNonLinear_nparams <<" parameters\n";
   double so_far = 1e+8;
   FMatrix norm_F = *F;
-  if (one_) {
-    for (p_ = 0; p_ < 3; p_++) {
-      for (q_ = 0; q_ < 3; q_++) {
-        for (r_ = 0; r_ < 4; r_++) {
+  if (one_)
+  {
+    for (p_ = 0; p_ < 3; p_++)
+    {
+      for (q_ = 0; q_ < 3; q_++)
+      {
+        for (r_ = 0; r_ < 4; r_++)
+        {
           FMatrix norm_F = *F;
           int r1 = 0, c1 = 0, r2 = 0, c2 = 0;
           get_plan(r1, c1, r2, c2);
           vnl_matrix<double> mat;
           norm_F.get(&mat);
 
-          switch(r_) {
+          switch (r_) {
             case 0 :
               mat /= mat.get(r1, c1);
               break;
@@ -141,7 +147,9 @@ bool FMatrixComputeNonLinear::compute(FMatrix* F)
         }
       }
     }
-  } else {
+  }
+  else
+  {
     F_orig_ = norm_F;
     vnl_vector<double> f_params(FMatrixComputeNonLinear_nparams, 0.0);
     FMatrix res = params_to_fmatrix(f_params);
@@ -193,7 +201,7 @@ void FMatrixComputeNonLinear::fmatrix_to_params(const FMatrix& F, vnl_vector<dou
   int c1= 0, r1 = 0, c2 = 0, r2 = 0;
   get_plan(r1, c1, r2, c2);
   double b = 0.0, a = 0.0, c = 0.0;
-  switch(r_) {
+  switch (r_) {
     case 0 :
       a = F.get(r1, c2);
       b = -F.get(r2, c1);
@@ -223,7 +231,7 @@ void FMatrixComputeNonLinear::fmatrix_to_params(const FMatrix& F, vnl_vector<dou
   e1h = e1h.normalize();
   e2h = e2h.normalize();
 
-  switch(p_) {
+  switch (p_) {
     case 0 :
       e1 = vnl_double_2(e1h[1]/e1h[0], e1h[2]/e1h[0]);
       break;
@@ -234,7 +242,7 @@ void FMatrixComputeNonLinear::fmatrix_to_params(const FMatrix& F, vnl_vector<dou
       e1 = vnl_double_2(e1h[0]/e1h[2], e1h[1]/e1h[2]);
       break;
   }
-  switch(q_) {
+  switch (q_) {
     case 0 :
       e2 = vnl_double_2(e2h[1]/e2h[0], e2h[2]/e2h[0]);
       break;
@@ -273,7 +281,8 @@ FMatrix FMatrixComputeNonLinear::params_to_fmatrix(const vnl_vector<double>& par
     double xd = -params.get(5);
     double yd = -params.get(6);
     double d;
-    switch(r_) {
+    switch (r_)
+    {
       case 0 :
         d = 1.0;
         ref.put(r1, c2, a);
@@ -325,7 +334,9 @@ FMatrix FMatrixComputeNonLinear::params_to_fmatrix(const vnl_vector<double>& par
     }
     ret.set(ref);
     return ret;
-  } else {
+  }
+  else
+  {
     vcl_vector<vgl_homg_point_2d<double> > new_points1(7);
     vgl_homg_point_2d<double> e1, e2;
     F_orig_.get_epipoles(e1, e2);
@@ -360,14 +371,15 @@ FMatrix FMatrixComputeNonLinear::params_to_fmatrix(const vnl_vector<double>& par
 
     for (unsigned int l = 0; l < ref.size(); l++)
       delete ref[l];
-    
+
     return ret;
   }
 }
 
 // Forms a map of the different rank-2 structures for the F Matrix
-void FMatrixComputeNonLinear::get_plan(int &r1, int &c1, int &r2, int &c2) {
-  switch(p_) {
+void FMatrixComputeNonLinear::get_plan(int &r1, int &c1, int &r2, int &c2)
+{
+  switch (p_) {
     case 0 :
       c1 = 1;
       c2 = 2;
@@ -381,7 +393,7 @@ void FMatrixComputeNonLinear::get_plan(int &r1, int &c1, int &r2, int &c2) {
       c2 = 1;
       break;
   }
-  switch(q_) {
+  switch (q_) {
     case 0 :
       r1 = 1;
       r2 = 2;

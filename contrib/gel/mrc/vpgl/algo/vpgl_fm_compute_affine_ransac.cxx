@@ -7,6 +7,9 @@
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_homg_point_2d.h>
+#include <vgl/vgl_homg_line_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vnl/algo/vnl_svd.h>
 #include <rrel/rrel_ran_sam_search.h>
@@ -40,7 +43,8 @@ vpgl_fm_compute_affine_ransac::compute(
   rrel_ran_sam_search* ransam = new rrel_ran_sam_search;
   ransam->set_trace_level(params_->trace_level);
   ransam->set_sampling_params( params_->max_outlier_frac,
-    params_->desired_prob_good, params_->max_pops );
+                               params_->desired_prob_good,
+                               params_->max_pops );
   bool ransac_succeeded = ransam->estimate( estimator, ransac );
 
   if ( ransac_succeeded )
@@ -139,9 +143,9 @@ rrel_fm_affine_problem::compute_residuals(
     vgl_homg_line_2d<double> ll =
       fm.l_epipolar_line( vgl_homg_point_2d<double>( pr_[i] ) );
     residuals[i] = vgl_homg_operators_2d<double>::perp_dist_squared( lr,
-                     vgl_homg_point_2d<double>( pr_[i] ) )
+                                                                     vgl_homg_point_2d<double>( pr_[i] ) )
                  + vgl_homg_operators_2d<double>::perp_dist_squared( ll,
-                     vgl_homg_point_2d<double>( pl_[i] ) );
+                                                                     vgl_homg_point_2d<double>( pl_[i] ) );
     ressum+=residuals[i];
   }
   if ( verbose ) vcl_cerr << ressum << '\n';

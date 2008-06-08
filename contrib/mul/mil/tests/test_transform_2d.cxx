@@ -5,6 +5,7 @@
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
+#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_distance.h>
 #include <mil/mil_transform_2d.h>
 
@@ -59,6 +60,7 @@ void test_products(const mil_transform_2d& trans1)
    trans0.set_projective(P);
    test_product(trans0,trans1);
 }
+
 void test_the_transform(mil_transform_2d& t)
 {
    mil_transform_2d t_inv = t.inverse();

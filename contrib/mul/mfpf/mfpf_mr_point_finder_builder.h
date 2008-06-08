@@ -7,6 +7,7 @@
 
 #include <mbl/mbl_cloneable_ptr.h>
 #include <mfpf/mfpf_point_finder_builder.h>
+#include <vgl/vgl_fwd.h>
 #include <vcl_cassert.h>
 #include <vcl_iosfwd.h>
 
@@ -19,14 +20,15 @@ class mfpf_pose;
 // each designed to work at a different resolution.
 class mfpf_mr_point_finder_builder
 {
-protected:
+ protected:
 
   //: Set of cost function objects.
   vcl_vector<mfpf_point_finder_builder*> builders_;
 
   //: Delete all the builders
   void delete_all();
-public:
+
+ public:
 
   //: Dflt ctor
   mfpf_mr_point_finder_builder();

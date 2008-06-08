@@ -10,6 +10,7 @@
 #include <vcl_cmath.h>
 #include <vul/vul_file.h>
 #include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_homg_point_3d.h>
 
 //hard-coded values ... should be removed and added as a parameter class
 const int IMAGE_U = 200;

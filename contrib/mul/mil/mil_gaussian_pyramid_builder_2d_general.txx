@@ -17,6 +17,8 @@
 #include <mil/mil_image_pyramid.h>
 #include <mbl/mbl_gamma.h>
 #include <vsl/vsl_indent.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 
 //=======================================================================
 

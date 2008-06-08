@@ -1,6 +1,7 @@
 // This is oxl/mvl/HMatrix2DComputeMLESAC.cxx
 #include "HMatrix2DComputeMLESAC.h"
 #include <mvl/HomgOperator2D.h>
+#include <vgl/vgl_homg_point_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #if 0
 #include <vnl/vnl_fastops.h>

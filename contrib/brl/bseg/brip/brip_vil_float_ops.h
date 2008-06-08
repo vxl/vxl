@@ -23,6 +23,8 @@
 #include <vcl_complex.h>
 #include <vnl/vnl_matrix.h>
 #include <vbl/vbl_array_2d.h>
+#include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_polygon.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
@@ -140,7 +142,7 @@ class brip_vil_float_ops
                                  vil_image_view<float>& vy);
 
   //: computes velocity of a region(view) using Lucas Kanade
-  static 
+  static
     void lucas_kanade_motion_on_view(vil_image_view<float> const& curr_frame,
                                      vil_image_view<float> const& prev_frame,
                                      const double thresh,

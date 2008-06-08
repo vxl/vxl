@@ -17,6 +17,7 @@
 #include <vnl/algo/vnl_amoeba.h>
 #include <vnl/algo/vnl_powell.h>
 #include <vnl/vnl_math.h>
+#include <vgl/vgl_point_2d.h>
 #include <vil/vil_print.h>
 
 //=======================================================================
@@ -373,7 +374,7 @@ void mfpf_point_finder::multi_search_one_pose(
 
     if (vnl_math_isnan(f0))
     {
-      vcl_cerr<<"mfpf_point_finder::multi_search_one_pose()"<<vcl_endl
+      vcl_cerr<<"mfpf_point_finder::multi_search_one_pose()\n"
               <<"Response was a NaN at "<<x<<','<<y<<vcl_endl
               <<"Reponse image: "<<response_im.image()<<vcl_endl;
       vil_print_all(vcl_cout,response_im.image());

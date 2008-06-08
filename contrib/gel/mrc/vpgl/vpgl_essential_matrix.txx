@@ -11,6 +11,8 @@
 #include <vnl/vnl_det.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_homg_point_3d.h>
+#include <vgl/algo/vgl_rotation_3d.h>
 #include <vcl_iosfwd.h>
 #include "vpgl_proj_camera.h"
 
@@ -166,10 +168,10 @@ vcl_istream&  operator>>(vcl_istream& s, vpgl_essential_matrix<T>& p)
 #define vpgl_ESSENTIAL_MATRIX_INSTANTIATE(T) \
 template class vpgl_essential_matrix<T >; \
 template bool extract_left_camera(const vpgl_essential_matrix<T >& E, \
-                         const vgl_point_2d<T >& left_corr, \
-                         const vgl_point_2d<T >& right_corr, \
-                         vpgl_perspective_camera<T >& p_left, \
-                         const T translation_mag); \
+                                  const vgl_point_2d<T >& left_corr, \
+                                  const vgl_point_2d<T >& right_corr, \
+                                  vpgl_perspective_camera<T >& p_left, \
+                                  const T translation_mag); \
 template vcl_ostream& operator<<(vcl_ostream&, const vpgl_essential_matrix<T >&); \
 template vcl_istream& operator>>(vcl_istream&, vpgl_essential_matrix<T >&)
 

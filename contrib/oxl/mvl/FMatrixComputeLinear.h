@@ -32,6 +32,7 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <vgl/vgl_fwd.h>
 #include <mvl/FMatrixCompute.h>
 #include <mvl/FMatrix.h>
 

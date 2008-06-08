@@ -9,6 +9,7 @@
 #include <vcl_cassert.h>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_math.h>
+#include <vgl/vgl_vector_3d.h>
 
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/nodes/SoBaseColor.h>
@@ -292,8 +293,8 @@ SoSeparator* draw_cylinder(float x1, float y1, float z1,
   SoCylinder* cylinder = new SoCylinder();
   cylinder->radius = radius;
   cylinder->height = vcl_sqrt(vnl_math_sqr(x2-x1) +
-    vnl_math_sqr(y2-y1) +
-    vnl_math_sqr(z2-z1));
+                              vnl_math_sqr(y2-y1) +
+                              vnl_math_sqr(z2-z1));
 
   root->addChild(cylinder);
   return root;
@@ -306,11 +307,11 @@ SoSeparator* draw_cylinder(const vgl_point_3d<double>& centerline_start,
                            float transparency)
 {
   return draw_cylinder((float)centerline_start.x(), (float)centerline_start.y(),
-    (float)centerline_start.z(), (float)centerline_end.x(),
-    (float)centerline_end.y(), (float)centerline_end.z(),
-    radius,
-    color,
-    transparency);
+                       (float)centerline_start.z(), (float)centerline_end.x(),
+                       (float)centerline_end.y(), (float)centerline_end.z(),
+                       radius,
+                       color,
+                       transparency);
 }
 
 
@@ -481,8 +482,8 @@ SoSeparator* draw_line_set (const vcl_vector<vcl_pair<vgl_point_3d<double>, vgl_
 }
 
 //: draw the whole set of lines in a single SoIndexedLineSet.
-void draw_line_set_geom (SoSeparator* root,
-        const vcl_vector<vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > >& lines)
+void draw_line_set_geom(SoSeparator* root,
+                        const vcl_vector<vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > >& lines)
 {
   unsigned int nVertices = lines.size() * 2;
   float (*xyz)[3] = new float[nVertices][3];
@@ -518,9 +519,9 @@ void draw_line_set_geom (SoSeparator* root,
 }
 
 void draw_triangle_geom (SoGroup* root,
-                             const vgl_point_3d<double>& Pt1,
-                             const vgl_point_3d<double>& Pt2,
-                             const vgl_point_3d<double>& Pt3)
+                         const vgl_point_3d<double>& Pt1,
+                         const vgl_point_3d<double>& Pt2,
+                         const vgl_point_3d<double>& Pt3)
 {
   SoCoordinate3* coords = new SoCoordinate3;
   coords->point.set1Value( 0, SbVec3f( (float)Pt1.x(), (float)Pt1.y(), (float)Pt1.z()) );
@@ -579,8 +580,8 @@ SoSeparator* draw_line (const vgl_point_3d<double>& pt1, const vgl_point_3d<doub
 
 // draws a single line with no special properties
 void draw_line_geom (SoGroup* root,
-                         const float x1, const float y1, const float z1,
-                         const float x2, const float y2, const float z2)
+                     const float x1, const float y1, const float z1,
+                     const float x2, const float y2, const float z2)
 {
   SoCoordinate3* coord = new SoCoordinate3;
   coord->point.set1Value(0, SbVec3f( x1,y1,z1 ) );
@@ -594,8 +595,9 @@ void draw_line_geom (SoGroup* root,
 
 void draw_line_geom (SoGroup* root, const vgl_point_3d<double>& pt1, const vgl_point_3d<double>& pt2)
 {
-  draw_line_geom (root, (float)pt1.x(), (float)pt1.y(), (float)pt1.z(),
-    (float)pt2.x(), (float)pt2.y(), (float)pt2.z());
+  draw_line_geom (root,
+                  (float)pt1.x(), (float)pt1.y(), (float)pt1.z(),
+                  (float)pt2.x(), (float)pt2.y(), (float)pt2.z());
 }
 
 SoSeparator* draw_text2d (const char* text,

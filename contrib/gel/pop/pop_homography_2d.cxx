@@ -2,7 +2,9 @@
 #include "pop_homography_2d.h"
 //:
 // \file
+
 #include <pop/pop_point_2d.h>
+#include <vgl/vgl_homg_point_2d.h>
 #include <vcl_cassert.h>
 
 //: constructor

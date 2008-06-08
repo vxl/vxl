@@ -19,6 +19,8 @@
 #include <vgl/vgl_sphere_3d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_line_segment_2d.h>
+#include <vgl/vgl_homg_point_2d.h>
+#include <vgl/vgl_homg_point_3d.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vgl/algo/vgl_p_matrix.h>
 #include <vnl/vnl_double_2.h>

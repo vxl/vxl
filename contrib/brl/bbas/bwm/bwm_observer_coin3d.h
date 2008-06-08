@@ -12,7 +12,9 @@
 #include <vsol/vsol_polygon_2d_sptr.h>
 
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_homg_plane_3d.h>
+#include <vgl/algo/vgl_h_matrix_3d.h>
 
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_proj_camera.h>
@@ -61,7 +63,7 @@ class bwm_observer_coin3d : public bwm_observer, public bgui3d_examiner_tableau
 
   void create_interior(){};
 
-  void translate(vgl_vector_3d<double> T){}
+  void translate(vgl_vector_3d<double> T) {}
 
   void set_trans(vgl_h_matrix_3d<double> m) { T_ = new vgl_h_matrix_3d<double>(m); }
 
@@ -103,8 +105,8 @@ class bwm_observer_coin3d : public bwm_observer, public bgui3d_examiner_tableau
   bwm_observable_sptr find_selected_obs(int &);
 
   bool find_intersection_points(int face_id, vgl_point_3d<double> i1, vgl_point_3d<double> i2,
-    vgl_point_3d<double> &p1, vgl_point_3d<double>& l1, vgl_point_3d<double>& l2,
-    vgl_point_3d<double> &p2, vgl_point_3d<double>& l3, vgl_point_3d<double>& l4);
+                                vgl_point_3d<double> &p1, vgl_point_3d<double>& l1, vgl_point_3d<double>& l2,
+                                vgl_point_3d<double> &p2, vgl_point_3d<double>& l3, vgl_point_3d<double>& l4);
 
   vcl_string create_obj_name();
 };

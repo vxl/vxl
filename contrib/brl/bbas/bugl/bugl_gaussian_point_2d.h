@@ -12,6 +12,7 @@
 
 #include "bugl_uncertainty_point_2d.h"
 #include <vnl/vnl_matrix_fixed.h>
+#include <vgl/vgl_point_2d.h>
 
 template<class T>
 class bugl_gaussian_point_2d : public bugl_uncertainty_point_2d<T>

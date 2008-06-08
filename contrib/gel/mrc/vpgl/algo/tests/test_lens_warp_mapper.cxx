@@ -1,5 +1,6 @@
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
+#include <vgl/vgl_point_2d.h>
 #include <vpgl/vpgl_poly_radial_distortion.h>
 #include <vpgl/algo/vpgl_lens_warp_mapper.h>
 #include <vil/vil_image_view.h>

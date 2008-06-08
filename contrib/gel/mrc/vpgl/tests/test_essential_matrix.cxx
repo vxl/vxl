@@ -8,6 +8,7 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
+#include <vgl/algo/vgl_rotation_3d.h>
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_double_3x3.h>

@@ -7,6 +7,7 @@
 
 #include <mfpf/mfpf_point_finder.h>
 #include <mfpf/mfpf_pose_set.h>
+#include <vgl/vgl_fwd.h>
 
 //: Algorithms to perform global search for multiple matches
 //  Note that some search algorithms are in mfpf_point_finder
@@ -15,14 +16,14 @@
 //  ways of doing things.
 class mfpf_searcher
 {
-private:
+ private:
   //: Radius around point (in model coords) for two poses to be similar
   double proximity_r_;
 
   //: Find list of poses overlapping given pose
   void find_overlaps(mfpf_point_finder& pf,
                      const vcl_vector<mfpf_pose>& poses,
-                     const mfpf_pose& pose, 
+                     const mfpf_pose& pose,
                      vcl_vector<unsigned>& overlaps);
 
   //: If pose not near any poses in list, return false
@@ -33,15 +34,15 @@ private:
                       vcl_vector<double>& fits,
                       const mfpf_pose& pose, double fit);
 
-public:
+ public:
   mfpf_searcher();
 
   void find_refined_matches(mfpf_point_finder& pf,
-                           const vimt_image_2d_of<float>& image,
-                           const vgl_point_2d<double>& p,
-                           const vgl_vector_2d<double>& u,
-                           vcl_vector<mfpf_pose>& pts,
-                           vcl_vector<double>& fit);
+                            const vimt_image_2d_of<float>& image,
+                            const vgl_point_2d<double>& p,
+                            const vgl_vector_2d<double>& u,
+                            vcl_vector<mfpf_pose>& pts,
+                            vcl_vector<double>& fit);
 
   //: For each pose in the set, perform local search+refinement
   //  On exit pose_set contains the improved matches.

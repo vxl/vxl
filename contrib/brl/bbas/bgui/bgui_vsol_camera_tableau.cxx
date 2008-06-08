@@ -11,6 +11,8 @@
 #include <vsol/vsol_polygon_3d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_box_3d.h>
+#include <vgl/vgl_homg_point_2d.h>
+#include <vgl/vgl_homg_point_3d.h>
 
 bgui_vsol_camera_tableau::bgui_vsol_camera_tableau(const char* n) : vgui_easy2D_tableau(n)
 { this->init(); }

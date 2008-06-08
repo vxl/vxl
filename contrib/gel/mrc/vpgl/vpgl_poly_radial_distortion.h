@@ -1,7 +1,6 @@
 // This is gel/mrc/vpgl/vpgl_poly_radial_distortion.h
 #ifndef vpgl_poly_radial_distortion_h_
 #define vpgl_poly_radial_distortion_h_
-
 //:
 // \file
 // \brief A class for polynomial radial lens distortions.
@@ -15,6 +14,7 @@
 
 
 #include "vpgl_radial_distortion.h"
+#include <vgl/vgl_point_2d.h>
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
 

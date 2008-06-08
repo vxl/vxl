@@ -10,6 +10,8 @@
 #include <vxl_config.h> // for vxl_byte
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 
 int main()
 {
@@ -38,7 +40,6 @@ int main()
   vcl_cout<<"Level 0: "<<v<<vcl_endl;
   vimt_sample_profile_bilin(v,static_cast<const vimt_image_2d_of<vxl_byte>&>(image_pyr(1)),p0,u,7);
   vcl_cout<<"Level 1: "<<v<<vcl_endl
-
           <<"Notice that the projection of the world coordinates "
           <<"into image coordinates is all handled for us.\n";
   return 0;

@@ -6,6 +6,7 @@
 #include <vul/vul_arg.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
+#include <vgl/vgl_point_3d.h>
 #include <ipts/ipts_scale_space_peaks.h>
 #include <ipts/ipts_draw.h>
 
@@ -23,7 +24,7 @@ int main( int argc, char* argv[] )
   vul_arg<float> threshold("-t","Threshold on DoG value",2.0f);
   vul_arg_parse(argc, argv);
 
-  if(in_path() == "")
+  if (in_path() == "")
   {
     print_usage();
     vul_arg_display_usage_and_exit();

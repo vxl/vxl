@@ -10,8 +10,9 @@
 
 #include <vcl_cstdlib.h>
 #include <vcl_string.h>
-// not used? #include <vcl_sstream.h>
 
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vimt/vimt_image_pyramid.h>
 #include <vil3d/algo/vil3d_gauss_reduce.h>
 #include <vcl_cassert.h>

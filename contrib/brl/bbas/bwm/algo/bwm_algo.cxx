@@ -2,6 +2,8 @@
 //:
 // \file
 #include <vgl/vgl_closest_point.h>
+#include <vgl/vgl_homg_point_3d.h>
+#include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/algo/vgl_homg_operators_3d.h>
 #include <vgl/algo/vgl_fit_plane_3d.h>
 
@@ -58,7 +60,7 @@ void bwm_algo::get_vertices_xy(vsol_polyline_2d_sptr poly2d,
 }
 
 void bwm_algo::get_vertices_xyz(vsol_polygon_3d_sptr poly3d,
-                                          double **x, double **y, double **z)
+                                double **x, double **y, double **z)
 {
   int n = poly3d->size();
   *x = (double*) malloc(sizeof(double) * n);
@@ -77,7 +79,8 @@ vsol_polygon_3d_sptr bwm_algo::move_points_to_plane(vsol_polygon_3d_sptr polygon
   vgl_fit_plane_3d<double> fitter;
   for (unsigned i=0; i<polygon->size(); i++) {
     fitter.add_point(polygon->vertex(i)->x(),
-      polygon->vertex(i)->y(), polygon->vertex(i)->z());
+                     polygon->vertex(i)->y(),
+                     polygon->vertex(i)->z());
   }
 
   vgl_homg_plane_3d<double> plane;
@@ -96,7 +99,8 @@ vsol_polygon_3d_sptr bwm_algo::move_points_to_plane(vsol_polygon_3d_sptr polygon
   vcl_vector<vsol_point_3d_sptr> points;
   for (unsigned i=0; i<polygon->size(); i++) {
     vgl_homg_point_3d<double> hp(polygon->vertex(i)->x(),
-      polygon->vertex(i)->y(), polygon->vertex(i)->z());
+                                 polygon->vertex(i)->y(),
+                                 polygon->vertex(i)->z());
     vgl_homg_point_3d<double> p = vgl_closest_point(plane, hp);
     points.push_back(new vsol_point_3d(p.x()/p.w(), p.y()/p.w(), p.z()/p.w()));
   }
@@ -110,7 +114,8 @@ vsol_polygon_3d_sptr bwm_algo::move_points_to_plane(vcl_vector<vsol_point_3d_spt
   vcl_cout << "fitting----------------" << vcl_endl;
   for (unsigned i=0; i<points.size(); i++) {
     fitter.add_point(points[i]->x(),
-      points[i]->y(), points[i]->z());
+                     points[i]->y(),
+                     points[i]->z());
     vcl_cout << *(points[i]) << vcl_endl;
   }
 

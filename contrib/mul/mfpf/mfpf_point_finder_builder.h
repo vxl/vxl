@@ -10,7 +10,7 @@
 #include <vcl_memory.h>
 
 #include <vimt/vimt_image_2d_of.h>
-#include <vgl/vgl_vector_2d.h>
+#include <vgl/vgl_fwd.h>
 
 class mfpf_point_finder;
 class mbl_read_props_type;
@@ -28,7 +28,7 @@ class mfpf_point_finder_builder
   //: Number of points either side of centre to search
   int search_nj_;
 
-  //: Define N. angles (ie try at A+idA, i in [-nA,+nA]) 
+  //: Define N. angles (ie try at A+idA, i in [-nA,+nA])
   unsigned search_nA_;
 
   //: Angle step size (ie try at A+idA, i in [-nA,+nA])
@@ -64,7 +64,7 @@ class mfpf_point_finder_builder
   double step_size() const { return step_size_; }
 
   //: Define region size in world co-ordinates
-  //  Sets up ROI to cover given box (with samples at step_size()), 
+  //  Sets up ROI to cover given box (with samples at step_size()),
   //  with ref point at centre.
   virtual void set_region_size(double wi, double wj) = 0;
 
@@ -82,7 +82,7 @@ class mfpf_point_finder_builder
   int search_ni() const { return search_ni_; }
   int search_nj() const { return search_nj_; }
 
-  //: Number of angles to search at (ie try at A+idA, i in [-nA,+nA]) 
+  //: Number of angles to search at (ie try at A+idA, i in [-nA,+nA])
   unsigned search_nA() const { return search_nA_; }
 
   //: Angle step size (ie try at A+idA, i in [-nA,+nA])

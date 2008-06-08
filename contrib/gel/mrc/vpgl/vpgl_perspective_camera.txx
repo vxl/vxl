@@ -3,16 +3,20 @@
 #define vpgl_perspective_camera_txx_
 //:
 // \file
+
+#include "vpgl_perspective_camera.h"
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
+#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_line_3d_2_points.h>
+#include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vnl/vnl_det.h>
 #include <vnl/algo/vnl_qr.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3x4.h>
-#include "vpgl_perspective_camera.h"
 
 #include <vgl/io/vgl_io_point_3d.h>
 #include <vnl/io/vnl_io_matrix_fixed.h>
@@ -65,13 +69,14 @@ vgl_line_3d_2_points<T> vpgl_perspective_camera<T>::backproject(
   // First find a point in front of the camera that projects to "image_point".
   vnl_vector_fixed<T,4> vnl_wp = this->svd()->solve(
     vnl_vector_fixed<T,3>( image_point.x(), image_point.y(), 1.0 ) );
-  vgl_homg_point_3d<T> wp_homg( vnl_wp[0], vnl_wp[1], vnl_wp[2], vnl_wp[3] ); 
+  vgl_homg_point_3d<T> wp_homg( vnl_wp[0], vnl_wp[1], vnl_wp[2], vnl_wp[3] );
   vgl_point_3d<T> wp;
   if ( !wp_homg.ideal() )
     wp.set( wp_homg.x()/wp_homg.w(), wp_homg.y()/wp_homg.w(), wp_homg.z()/wp_homg.w() );
   else
-    wp.set( camera_center_.x()+wp_homg.x(), 
-      camera_center_.y()+wp_homg.y(), camera_center_.z()+wp_homg.z() );
+    wp.set( camera_center_.x()+wp_homg.x(),
+            camera_center_.y()+wp_homg.y(),
+            camera_center_.z()+wp_homg.z() );
   if ( is_behind_camera( vgl_homg_point_3d<T>( wp ) ) )
     wp = camera_center_ + ( camera_center_-wp );
 

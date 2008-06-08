@@ -6,6 +6,7 @@
 #include <vgl/vgl_distance.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
+#include <vgl/vgl_point_2d.h>
 #include <vimt/vimt_transform_2d.h>
 
 #ifndef LEAVE_FILES_BEHIND

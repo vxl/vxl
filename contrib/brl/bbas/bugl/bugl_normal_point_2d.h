@@ -11,6 +11,7 @@
 // \endverbatim
 
 #include <vbl/vbl_ref_count.h>
+#include <vgl/vgl_point_2d.h>
 #include <bugl/bugl_gaussian_point_2d.h>
 
 //: a specification of template class bugl_gaussian_point_2d

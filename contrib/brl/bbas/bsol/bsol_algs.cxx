@@ -17,6 +17,8 @@
 #include <vsol/vsol_box_3d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_digital_curve_2d.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_intersection.h>
 #include <vgl/algo/vgl_convex_hull_2d.h>
@@ -181,14 +183,14 @@ bool bsol_algs::hull_of_poly_set(vcl_vector<vsol_polygon_2d_sptr> const& polys,
     return false;
   vcl_vector<vgl_point_2d<double> > points;
   for (vcl_vector<vsol_polygon_2d_sptr>::const_iterator pit = polys.begin();
-      pit != polys.end(); pit++)
-    {
-      if (!(*pit))
-        return false;
-      for (unsigned int i=0; i<(*pit)->size(); ++i)
-        points.push_back(vgl_point_2d<double>((*pit)->vertex(i)->x(),
-                                              (*pit)->vertex(i)->y()));
-    }
+       pit != polys.end(); pit++)
+  {
+    if (!(*pit))
+      return false;
+    for (unsigned int i=0; i<(*pit)->size(); ++i)
+      points.push_back(vgl_point_2d<double>((*pit)->vertex(i)->x(),
+                                            (*pit)->vertex(i)->y()));
+  }
   vgl_convex_hull_2d<double> ch(points);
   vgl_polygon<double> h = ch.hull();
   hull = bsol_algs::poly_from_vgl(h);
@@ -389,29 +391,29 @@ void bsol_algs::tangent(vsol_digital_curve_2d_sptr const& dc, unsigned index,
                         double& dx, double& dy)
 {
   dx = 0; dy = 0;
-  if(!dc)
+  if (!dc)
     return;
   unsigned n = dc->size();
   //cases
-  if(index>=n)
+  if (index>=n)
     return;
-  if(index == 0)// first point on curve
-    {
-      vsol_point_2d_sptr p_n0 = dc->point(0);
-      vsol_point_2d_sptr p_n1 = dc->point(1);
-      dx = p_n1->x()-p_n0->x();
-      dy = p_n1->y()-p_n0->y();
-      return;
-    }
-  
-  if(index == n-1)// last point on curve
-    {
-      vsol_point_2d_sptr p_n1 = dc->point(n-1);
-      vsol_point_2d_sptr p_n2 = dc->point(n-2);
-      dx = p_n1->x()-p_n2->x();
-      dy = p_n1->y()-p_n2->y();
-      return;
-    }
+  if (index == 0)// first point on curve
+  {
+    vsol_point_2d_sptr p_n0 = dc->point(0);
+    vsol_point_2d_sptr p_n1 = dc->point(1);
+    dx = p_n1->x()-p_n0->x();
+    dy = p_n1->y()-p_n0->y();
+    return;
+  }
+
+  if (index == n-1)// last point on curve
+  {
+    vsol_point_2d_sptr p_n1 = dc->point(n-1);
+    vsol_point_2d_sptr p_n2 = dc->point(n-2);
+    dx = p_n1->x()-p_n2->x();
+    dy = p_n1->y()-p_n2->y();
+    return;
+  }
   //the normal case
   vsol_point_2d_sptr p_m1 = dc->point(index-1);
   vsol_point_2d_sptr p_p1 = dc->point(index+1);

@@ -19,8 +19,9 @@
 
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_fwd.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_homg_point_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
-#include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vcl_iosfwd.h>
 
 #include "vpgl_proj_camera.h"

@@ -5,6 +5,8 @@
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_distance.h>
 #include <mil3d/mil3d_transform_3d.h>
 

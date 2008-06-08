@@ -44,6 +44,7 @@
 #include <vgel/vgel_multi_view_data.h>
 #include <vgel/vgel_multi_view_data_vertex_sptr.h>
 #include <vgel/vgel_kl.h>
+#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <rsdl/rsdl_point.h>
 #include <rsdl/rsdl_kd_tree.h>

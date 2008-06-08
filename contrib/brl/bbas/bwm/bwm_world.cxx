@@ -6,6 +6,7 @@
 #include <vcl_cstdio.h>
 
 #include <vul/vul_file.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vgui/vgui_dialog.h>
 
 #include "bwm_observable.h"
@@ -569,12 +570,12 @@ void bwm_world::save_kml_collada()
     if (obj->type_name().compare("bwm_observable_textured_mesh") == 0) {
       bwm_observable_textured_mesh* tm_obj = static_cast<bwm_observable_textured_mesh*>(obj.as_pointer());
       tm_obj->save_kml_collada(dae_fp, &lvcs, geometry_ids[idx],
-                                                    geometry_position_ids[idx],
-                                                    geometry_position_array_ids[idx],
-                                                    geometry_uv_ids[idx],
-                                                    geometry_uv_array_ids[idx],
-                                                    geometry_vertex_ids[idx],
-                                                    material_names[idx]);
+                               geometry_position_ids[idx],
+                               geometry_position_array_ids[idx],
+                               geometry_uv_ids[idx],
+                               geometry_uv_array_ids[idx],
+                               geometry_vertex_ids[idx],
+                               material_names[idx]);
     }
 
     vcl_fprintf(dae_fp,"</p>\n");

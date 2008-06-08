@@ -13,6 +13,7 @@
 
 #include <vcl_vector.h>
 #include <vcl_string.h>
+#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <brct/brct_plane_corr_sptr.h>

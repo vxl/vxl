@@ -8,7 +8,6 @@
 #include <vcl_fstream.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
-#include <vgl/vgl_point_3d.h>
 
 //: Constructor
 vpgl_save_rational_camera_process::vpgl_save_rational_camera_process()
@@ -53,7 +52,7 @@ vpgl_save_rational_camera_process::execute()
     dynamic_cast<vpgl_rational_camera<double>*>(input0->value().ptr());
 
   if (!cam) {
-    vcl_cerr << "error: could not convert camera input to a vpgl_rational_camera" << vcl_endl;
+    vcl_cerr << "error: could not convert camera input to a vpgl_rational_camera\n";
     return false;
   }
 

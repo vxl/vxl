@@ -5,6 +5,8 @@
 #include "video/bwm_video_corr.h"
 #include "algo/bwm_soview2D_cross.h"
 #include <vcl_sstream.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_distance.h>
 #include <vgui/vgui.h>
 #include <vul/vul_timer.h>
@@ -112,8 +114,9 @@ void bwm_observer_video::display_current_frame()
     if (bwm_observer_mgr::instance()->in_corr_picking()){
       img_tab_->lock_linenum(true);
       bwm_observer_img::lock_vgui_status(true);
-    }else{
-      if(!bwm_observer_img::vgui_status_on())
+    }
+    else{
+      if (!bwm_observer_img::vgui_status_on())
         img_tab_->lock_linenum(false);
       bwm_observer_img::lock_vgui_status(false);
     }
@@ -248,7 +251,7 @@ bool bwm_observer_video::find_selected_video_corr(unsigned& frame,
   bool found = false;
   for (; fit != corr_soview_map_.end()&&!found; ++fit)
     for (vcl_map<unsigned, bwm_soview2D_cross*>::iterator mit = (*fit).second.begin();
-        mit != (*fit).second.end()&&!found; ++mit)
+         mit != (*fit).second.end()&&!found; ++mit)
       if ((*mit).second == cross)
       {
         found = true;

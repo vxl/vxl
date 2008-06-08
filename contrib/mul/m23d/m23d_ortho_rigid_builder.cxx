@@ -10,6 +10,7 @@
 
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
+#include <vgl/vgl_vector_3d.h>
 
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
@@ -27,8 +28,8 @@ void m23d_ortho_rigid_builder::reconstruct(const vcl_vector< vcl_vector< vgl_poi
   {
     if ( (unsigned)n0!= pt_vec_list[i].size() )
     {
-      vcl_cerr<<"ERROR m23d_ortho_rigid_builder::reconstruct()"<<vcl_endl
-              <<"problem with different numbers of pts"<<vcl_endl
+      vcl_cerr<<"ERROR m23d_ortho_rigid_builder::reconstruct()\n"
+              <<"problem with different numbers of pts\n"
               <<"pt_vec_list[0].size()= "<<pt_vec_list[0].size()<<vcl_endl
               <<"pt_vec_list["<<i<<"].size()= "<<pt_vec_list[i].size()<<vcl_endl;
       vcl_abort();
@@ -266,7 +267,7 @@ void m23d_ortho_rigid_builder::find_correction_matrix_alt( vnl_matrix<double>& Q
 
 //: find matrix Q using constraints on matrix P which must contain orthonormal projects in each (2*3) submatrix for each frame
 void m23d_ortho_rigid_builder::find_correction_matrix( vnl_matrix<double>& Q,
-                                                        const vnl_matrix<double>& P)
+                                                       const vnl_matrix<double>& P)
 {
   int nf= P.rows()/2;
 
@@ -420,7 +421,7 @@ void m23d_ortho_rigid_builder::refine()
 //: Return 3d rigid pts
 // I.e., aligned with first frame
 void m23d_ortho_rigid_builder::mat_to_3d_pts(vcl_vector< vgl_point_3d<double> >& pt_vec,
-                                                  const vnl_matrix<double>& M) const
+                                             const vnl_matrix<double>& M) const
 {
   // get pts out of P3D_ matrix
   if ( M.rows() != 3 )

@@ -6,6 +6,7 @@
 // \file
 
 #include "FMPlanarComputeNonLinear.h"
+#include <vgl/vgl_homg_point_2d.h>
 #include <mvl/PairSetCorner.h>
 #include <mvl/FMatrixPlanar.h>
 #include <mvl/FMPlanarNonLinFun.h>

@@ -2,6 +2,9 @@
 #define bwm_rat_proj_camera_h_
 //:
 // \file
+
+#include <vgl/vgl_point_3d.h>
+#include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/algo/vpgl_camera_compute.h>

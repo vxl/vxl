@@ -20,6 +20,7 @@
 
 #include <vcl_string.h>
 
+#include <vgl/vgl_point_3d.h>
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vsol/vsol_point_3d.h>
 

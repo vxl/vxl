@@ -8,6 +8,7 @@
 
 #include <vcl_vector.h>
 
+#include <vgl/vgl_point_3d.h>
 #include <vsol/vsol_digital_curve_3d.h>
 #include <vsol/vsol_digital_curve_3d_sptr.h>
 #include <vsol/vsol_point_3d.h>

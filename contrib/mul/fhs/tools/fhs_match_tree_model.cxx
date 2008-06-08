@@ -22,7 +22,6 @@
 #include <vimt/vimt_gaussian_pyramid_builder_2d.h>
 #include <vimt/vimt_image_pyramid.h>
 #include <vimt/vimt_crop.h>
-//#include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
 #include <vil/vil_load.h>
 #include <vul/vul_string.h>
@@ -34,6 +33,8 @@
 #include <vil/vil_convert.h>
 #include <vil/vil_resample_bilin.h>
 #include <vnl/vnl_math.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 #include <fhs/fhs_searcher.h>
 #include <vimt/algo/vimt_normalised_correlation_2d.h>
 #include <mbl/mbl_draw_line.h>

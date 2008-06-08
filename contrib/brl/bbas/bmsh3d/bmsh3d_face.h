@@ -19,8 +19,9 @@
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
 #include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_box_3d.h>
-//#include <vgl/algo/vgl_fit_plane_3d.h>
 
 #include "bmsh3d_utils.h"
 #include "bmsh3d_vertex.h"
@@ -164,7 +165,7 @@ class bmsh3d_face : public vispt_elm
 
   //: Given a vertex V and a halfedge of this face incident to V, find the other halfedge of this face incident to V.
   bmsh3d_halfedge* find_other_HE (const bmsh3d_vertex* inputV,
-                                   const bmsh3d_halfedge* inputHE) const;
+                                  const bmsh3d_halfedge* inputHE) const;
 
   //: Given a vertex V and an edge of this face incident to V, find the next edge (following the circular halfedge list) of this face incident to V.
   bmsh3d_edge* find_next_E (const bmsh3d_vertex* inputV,
@@ -172,7 +173,7 @@ class bmsh3d_face : public vispt_elm
 
   //: Given a vertex V and a halfedge of this face incident to V, find the next halfedge (following the circular halfedge list) of this face incident to V.
   bmsh3d_halfedge* find_next_HE (const bmsh3d_vertex* inputV,
-                                  const bmsh3d_halfedge* inputHE) const;
+                                 const bmsh3d_halfedge* inputHE) const;
 
   double angle_at_V (const bmsh3d_vertex* inputV) const;
 
@@ -301,8 +302,8 @@ void _delete_HE_chain (bmsh3d_halfedge* & he_head,
 
 //: Given the face, current halfedge, and current eV, find the next halfedge given in the vector<>.
 bmsh3d_halfedge* _find_next_halfedge (bmsh3d_halfedge* HE,
-                                       bmsh3d_vertex* eV,
-                                       vcl_vector<bmsh3d_halfedge*>& inc_hes);
+                                      bmsh3d_vertex* eV,
+                                      vcl_vector<bmsh3d_halfedge*>& inc_hes);
 
 //: Assume the mesh face is planar and compute a 2D planar coordinate for it.
 void get_2d_coord (const vcl_vector<bmsh3d_vertex*>& vertices,

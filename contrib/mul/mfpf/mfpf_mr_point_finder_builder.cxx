@@ -8,6 +8,8 @@
 
 #include <vimt/vimt_image_pyramid.h>
 #include <vnl/vnl_math.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 #include <vcl_cmath.h>
 #include <vcl_algorithm.h>
 #include <vcl_cassert.h>
@@ -71,7 +73,7 @@ void mfpf_mr_point_finder_builder::set(
   delete_all();
   builders_.resize(builders.size());
   for (unsigned i=0;i<builders.size();++i)
-    builders_[i]=builders[i]->clone(); 
+    builders_[i]=builders[i]->clone();
 }
 
 //: Set up n builders, with step size step0*scale_step^L
@@ -87,7 +89,7 @@ void mfpf_mr_point_finder_builder::set(
   builders_.resize(n);
   for (unsigned i=0;i<n;++i)
   {
-    builders_[i]=builder0.clone(); 
+    builders_[i]=builder0.clone();
     builder(i).set_step_size(step0*vcl_pow(scale_step,int(i)));
   }
 
@@ -268,7 +270,7 @@ void mfpf_mr_point_finder_builder::b_read(vsl_b_istream& bfs)
     case (1):
       vsl_b_read(bfs,n);
       builders_.resize(n);
-      for (unsigned i=0;i<n;++i) 
+      for (unsigned i=0;i<n;++i)
       {
         builders_[i]=0;
         vsl_b_read(bfs,builders_[i]);

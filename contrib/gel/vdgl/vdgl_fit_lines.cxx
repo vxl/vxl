@@ -8,6 +8,8 @@
 #include <vdgl/vdgl_interpolator_sptr.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_line_segment_2d.h>
 
 //--------------------------------------------------------------------------
 //:

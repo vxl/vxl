@@ -35,6 +35,7 @@
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/vgl_homg_line_3d_2_points.h>
+#include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_line_segment_2d.h>
 #include <vgl/vgl_line_segment_3d.h>
 #include <vgl/algo/vgl_homg_operators_3d.h> // for p_matrix_ * vgl_homg_point_3d

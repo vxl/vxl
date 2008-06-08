@@ -2,9 +2,13 @@
 #include "vsol_conic_2d.h"
 //:
 // \file
+
 #include <vnl/vnl_math.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsol/vsol_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
+#include <vgl/vgl_homg_point_2d.h>
+#include <vgl/vgl_homg_line_2d.h>
 #include <vgl/io/vgl_io_conic.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vcl_cmath.h> // for vcl_abs(double)

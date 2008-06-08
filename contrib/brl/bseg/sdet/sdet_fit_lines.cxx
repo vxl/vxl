@@ -2,12 +2,13 @@
 #include "sdet_fit_lines.h"
 //:
 // \file
-//
 // \verbatim
-//  Modifications 
-//  Bing Yu 1/23/2008 ---- make sure line is not length 0 in function fit_lines()
+//  Modifications
+//   Bing Yu 1/23/2008 ---- make sure line is not length 0 in function fit_lines()
 // \endverbatim
 
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_line_segment_2d.h>
 #include <vsol/vsol_line_2d.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vdgl/vdgl_digital_curve.h>
@@ -82,8 +83,8 @@ bool sdet_fit_lines::fit_lines()
     {
       vsol_line_2d_sptr line = new vsol_line_2d(*sit);
       // make sure the start point and end point of line are not the same
-      if( line->length() != 0.0 )
-          line_segs_.push_back(line);
+      if ( line->length() != 0.0 )
+        line_segs_.push_back(line);
     }
   }
   segs_valid_ = true;

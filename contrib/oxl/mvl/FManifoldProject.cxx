@@ -16,6 +16,7 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_diag_matrix.h>
 #include <vnl/vnl_math.h>
+#include <vgl/vgl_homg_point_2d.h>
 
 #include <mvl/HomgPoint2D.h>
 #include <mvl/FMatrix.h>

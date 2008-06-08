@@ -5,6 +5,7 @@
 
 #include <vsol/vsol_point_3d.h>
 #include <vcl_iostream.h>
+#include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_distance.h>
 #include <vsl/vsl_vector_io.h>

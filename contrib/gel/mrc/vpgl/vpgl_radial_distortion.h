@@ -15,6 +15,7 @@
 #include "vpgl_lens_distortion.h"
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
+#include <vgl/vgl_homg_point_2d.h>
 
 //: A base class for radial lens distortions
 template <class T>

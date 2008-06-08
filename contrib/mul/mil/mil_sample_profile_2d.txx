@@ -10,6 +10,8 @@
 
 #include <mil/mil_bilin_interp_2d.h>
 #include <vnl/vnl_vector.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 
 inline bool mil_profile_in_image(const vgl_point_2d<double>& p0,
                                  const vgl_point_2d<double>& p1,

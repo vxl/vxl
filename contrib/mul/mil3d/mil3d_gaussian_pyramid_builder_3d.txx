@@ -13,6 +13,8 @@
 
 #include <mil/mil_image_pyramid.h>
 #include <mil3d/mil3d_gauss_reduce_3d.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 

@@ -13,6 +13,8 @@
 
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h> // for sqrt2
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 #include <vil/algo/vil_gauss_reduce.h>
 #include <mbl/mbl_exception.h>
 #include <vimt/vimt_image_pyramid.h>
@@ -42,8 +44,8 @@ void vimt_gaussian_pyramid_builder_2d<T>::set_max_levels(int max_l)
 {
   if (max_l<1)
   {
-    vcl_cerr<<"vimt_gaussian_pyramid_builder_2d<T>::setMaxLevels() ";
-    vcl_cerr<<"Must be >=1\n";
+    vcl_cerr << "vimt_gaussian_pyramid_builder_2d<T>::setMaxLevels() "
+             << "Must be >=1\n";
     vcl_abort();
   }
   max_levels_ = max_l;
@@ -96,8 +98,8 @@ void vimt_gaussian_pyramid_builder_2d<T>::gauss_reduce(const vimt_image_2d_of<T>
       vil_gauss_reduce(src_im.image(),dest_im.image(),work_im_.image());
       break;
     default:
-      vcl_cerr<<"vimt_gaussian_pyramid_builder_2d<T>::gauss_reduce() "
-              <<"cannot cope with filter width of "<<filter_width_<<'\n';
+      vcl_cerr << "vimt_gaussian_pyramid_builder_2d<T>::gauss_reduce() "
+               << "cannot cope with filter width of "<<filter_width_<<'\n';
       vcl_abort();
   }
 
@@ -145,8 +147,8 @@ void vimt_gaussian_pyramid_builder_2d<T>::build(vimt_image_pyramid& image_pyr,
 {
   //  Require image vimt_image_2d_of<T>
   if (!im.is_class(work_im_.is_a()))
-    throw mbl_exception_abort("vimt_gaussian_pyramid_builder_2d<T>::build(): Expected a " 
-      + work_im_.is_a() + ", but got a " + im.is_a() );
+    throw mbl_exception_abort("vimt_gaussian_pyramid_builder_2d<T>::build(): Expected a "
+                              + work_im_.is_a() + ", but got a " + im.is_a() );
 
   const vimt_image_2d_of<T>& base_image = static_cast<const vimt_image_2d_of<T>&>(im);
 
@@ -312,8 +314,8 @@ void vimt_gaussian_pyramid_builder_2d<T>::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,filter_width_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vimt_gaussian_pyramid_builder_2d<T>::b_read(vsl_b_istream&)\n";
-    vcl_cerr << "           Unknown version number "<< version << "\n";
+    vcl_cerr << "I/O ERROR: vimt_gaussian_pyramid_builder_2d<T>::b_read(vsl_b_istream&)\n"
+             << "           Unknown version number "<< version << '\n';
     bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }

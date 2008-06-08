@@ -5,8 +5,7 @@
 
 #include <vcl_iosfwd.h>
 
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_homg_point_3d.h>
+#include <vgl/vgl_fwd.h>
 
 #include <vpgl/vpgl_proj_camera.h>
 

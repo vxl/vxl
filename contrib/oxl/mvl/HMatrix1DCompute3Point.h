@@ -9,6 +9,7 @@
 // \author fsm
 //
 
+#include <vgl/vgl_fwd.h>
 #include "HMatrix1DCompute.h"
 
 class HMatrix1DCompute3Point : public HMatrix1DCompute

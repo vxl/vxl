@@ -22,6 +22,7 @@
 //*****************************************************************************
 
 #include <vsol/vsol_polygon_3d.h>
+#include <vgl/vgl_fwd.h>
 #include <vcl_iosfwd.h>
 
 class vsol_triangle_3d : public vsol_polygon_3d

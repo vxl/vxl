@@ -10,6 +10,7 @@
 #include <vil/vil_sample_grid_bicub.h>
 #include <vil/vil_bicub_interp.h>
 #include <vnl/vnl_vector.h>
+#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 
 inline bool vimt_grid_corner_in_image(const vgl_point_2d<double>& p,

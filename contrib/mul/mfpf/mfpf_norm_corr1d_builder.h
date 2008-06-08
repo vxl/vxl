@@ -7,6 +7,7 @@
 
 #include <mfpf/mfpf_point_finder_builder.h>
 #include <vnl/vnl_vector.h>
+#include <vgl/vgl_fwd.h>
 #include <vcl_iosfwd.h>
 
 //: Builder for mfpf_norm_corr1d objects.
@@ -37,8 +38,8 @@ class mfpf_norm_corr1d_builder : public mfpf_point_finder_builder
   void set_kernel_size(int ilo, int ihi);
 
   //: Define region size in world co-ordinates
-  //  Sets up ROI to cover given box (with samples at step_size()), 
-  //  with ref point at centre.  
+  //  Sets up ROI to cover given box (with samples at step_size()),
+  //  with ref point at centre.
   //  Sets ihi = ceil(wi/2*step_size), ilo=-ihi
   virtual void set_region_size(double wi, double wj);
 

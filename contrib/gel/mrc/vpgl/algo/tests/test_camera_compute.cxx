@@ -8,6 +8,7 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
+#include <vgl/algo/vgl_rotation_3d.h>
 #include <vpgl/algo/vpgl_camera_compute.h>
 #include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/vpgl_affine_camera.h>
@@ -226,10 +227,10 @@ void test_rational_camera_approx(vcl_string dir_base)
    vpgl_scale_offset<double> soz2 = rat_cam2->scl_off(vpgl_rational_camera<double>::Z_INDX);
 
   vgl_point_3d<double> pmin2(sox2.offset()-sox2.scale(),
-                            soy2.offset()-soy2.scale(), 0);
+                             soy2.offset()-soy2.scale(), 0);
   vgl_point_3d<double> pmax2(sox2.offset()+sox2.scale(),
                              soy2.offset()+soy2.scale(),
-                           soz2.scale()/2);
+                             soz2.scale()/2);
   vgl_box_3d<double> approx_vol2(pmin2, pmax2);
 
   vpgl_perspective_camera<double> pc2;

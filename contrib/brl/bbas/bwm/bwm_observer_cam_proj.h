@@ -6,7 +6,12 @@
 #include <vcl_iosfwd.h>
 
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_homg_point_3d.h>
+#if 0
+#include <vgl/vgl_homg_point_2d.h>
+#include <vgl/vgl_homg_plane_3d.h>
+#endif
 
 #include <vpgl/vpgl_proj_camera.h>
 

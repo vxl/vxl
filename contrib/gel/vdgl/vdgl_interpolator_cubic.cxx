@@ -13,6 +13,7 @@
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_inverse.h>
+#include <vgl/vgl_point_2d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vdgl/vdgl_edgel.h>
 #include <vdgl/vdgl_edgel_chain.h>
@@ -328,7 +329,7 @@ closest_point_on_curve ( vsol_point_2d_sptr p )
     return 0;
   double px = p->x(), py = p->y(), dmin = vnl_numeric_traits<double>::maxval;
   int imin = 0;
-  for(unsigned int i = 0; i<n; i++)
+  for (unsigned int i = 0; i<n; i++)
   {
     double x = (*chain_)[i].x(), y = (*chain_)[i].y();
     double d = vcl_sqrt((x-px)*(x-px) + (y-py)*(y-py));

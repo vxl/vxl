@@ -5,6 +5,7 @@
 
 #include <vcl_vector.h>
 #include <vcl_iosfwd.h>
+#include <vgl/vgl_fwd.h>
 
 #include "bwm_observer.h"
 #include "bwm_observer_cam.h"
@@ -34,7 +35,7 @@ class bwm_observer_mgr
 
   vcl_vector<bwm_observer_cam*> observers_cam();
   vcl_vector<bwm_observer_rat_cam*> observers_rat_cam();
-  
+
 
   void add(bwm_observer* o);
 

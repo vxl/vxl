@@ -3,7 +3,6 @@
 // \brief Builder for mfpf_norm_corr2d objects.
 // \author Tim Cootes
 
-
 #include <mfpf/mfpf_norm_corr2d_builder.h>
 #include <mfpf/mfpf_norm_corr2d.h>
 #include <vsl/vsl_binary_loader.h>
@@ -18,6 +17,8 @@
 #include <vil/vil_math.h>
 #include <vil/io/vil_io_image_view.h>
 #include <vnl/vnl_math.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 
 //=======================================================================
 // Dflt ctor
@@ -72,7 +73,7 @@ void mfpf_norm_corr2d_builder::set_kernel_size(unsigned ni, unsigned nj)
 }
 
 //: Define region size in world co-ordinates
-//  Sets up ROI to cover given box (with samples at step_size()), 
+//  Sets up ROI to cover given box (with samples at step_size()),
 //  with ref point at centre.
 void mfpf_norm_corr2d_builder::set_region_size(double wi, double wj)
 {
@@ -114,8 +115,8 @@ static void normalize(vil_image_view<double>& im)
 
 //: Add one example to the model
 void mfpf_norm_corr2d_builder::add_one_example(const vimt_image_2d_of<float>& image,
-                        const vgl_point_2d<double>& p,
-                        const vgl_vector_2d<double>& u)
+                                               const vgl_point_2d<double>& p,
+                                               const vgl_vector_2d<double>& u)
 {
   vgl_vector_2d<double> u1=step_size_*u;
   vgl_vector_2d<double> v1(-u1.y(),u1.x());
@@ -130,8 +131,8 @@ void mfpf_norm_corr2d_builder::add_one_example(const vimt_image_2d_of<float>& im
   vgl_vector_2d<double> im_v = s_w2i.delta(p0, v1);
 
   vil_resample_bilin(image.image(),sample,
-                      im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
-                      im_v.x(),im_v.y(),ni_,nj_);
+                     im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
+                     im_v.x(),im_v.y(),ni_,nj_);
 
   normalize(sample);
   if (n_added_==0) sum_.deep_copy(sample);
@@ -141,8 +142,8 @@ void mfpf_norm_corr2d_builder::add_one_example(const vimt_image_2d_of<float>& im
 
 //: Add one example to the model
 void mfpf_norm_corr2d_builder::add_example(const vimt_image_2d_of<float>& image,
-                        const vgl_point_2d<double>& p,
-                        const vgl_vector_2d<double>& u)
+                                           const vgl_point_2d<double>& p,
+                                           const vgl_vector_2d<double>& u)
 {
   if (nA_==0)
   {
@@ -201,7 +202,7 @@ bool mfpf_norm_corr2d_builder::set_from_stream(vcl_istream &is)
     props.erase("nj");
   }
 
-  overlap_f_=vul_string_atof(props.get_optional_property("overlap_f","1.0"));
+  overlap_f_=vul_string_atof(props.get_optional_property("overlap_f", "1.0"));
 
   if (props.find("ref_x")!=props.end())
   {
@@ -257,10 +258,10 @@ mfpf_point_finder_builder* mfpf_norm_corr2d_builder::clone() const
 void mfpf_norm_corr2d_builder::print_summary(vcl_ostream& os) const
 {
   os << "{ size: " << ni_ << 'x' << nj_
-     << " nA: " << nA_ << " dA: " << dA_ <<" ";
+     << " nA: " << nA_ << " dA: " << dA_ <<' ';
   mfpf_point_finder_builder::print_summary(os);
-  os<<" overlap_f: "<<overlap_f_;
-  os << " }";
+  os <<" overlap_f: "<<overlap_f_
+     << " }";
 }
 
 //: Version number for I/O

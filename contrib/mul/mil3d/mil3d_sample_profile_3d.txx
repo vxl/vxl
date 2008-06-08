@@ -9,6 +9,8 @@
 #include "mil3d_sample_profile_3d.h"
 #include <mil3d/mil3d_trilin_interp_3d.h>
 #include <vnl/vnl_vector.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
 
 inline bool mil3d_profile_in_image(const vgl_point_3d<double>& p0,
                                    const vgl_point_3d<double>& p1,

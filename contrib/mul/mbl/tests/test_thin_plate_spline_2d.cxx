@@ -2,6 +2,7 @@
 #include <vcl_iostream.h>
 #include <mbl/mbl_thin_plate_spline_2d.h>
 #include <vnl/vnl_random.h>
+#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_distance.h>
 #include <testlib/testlib_test.h>
 

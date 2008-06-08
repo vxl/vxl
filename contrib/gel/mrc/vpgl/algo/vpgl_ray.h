@@ -8,11 +8,9 @@
 // \date Dec 22, 2007
 
 #include <vpgl/vpgl_rational_camera.h>
-#include <vgl/vgl_fwd.h>
 #include <vnl/vnl_double_3.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
-
 
 class vpgl_ray
 {

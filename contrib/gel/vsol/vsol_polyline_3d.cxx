@@ -1,9 +1,11 @@
 // This is gel/vsol/vsol_polyline_3d.cxx
-#include <vsl/vsl_vector_io.h>
 #include "vsol_polyline_3d.h"
 //:
 // \file
+
 #include <vsol/vsol_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
+#include <vsl/vsl_vector_io.h>
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 

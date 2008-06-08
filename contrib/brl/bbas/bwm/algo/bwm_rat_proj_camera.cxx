@@ -2,10 +2,12 @@
 //:
 // \file
 
-//#include <vgl/vgl_homg_line_3d_2_points.h>
-//#include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
+#if 0
+#include <vgl/vgl_homg_point_2d.h>
+#include <vgl/vgl_homg_point_3d.h>
+#endif
 
 bwm_rat_proj_camera::bwm_rat_proj_camera(vpgl_rational_camera<double>& rat_cam)
 : rat_cam_(rat_cam)

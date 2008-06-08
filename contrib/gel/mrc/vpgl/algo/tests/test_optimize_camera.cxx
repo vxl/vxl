@@ -1,5 +1,8 @@
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>

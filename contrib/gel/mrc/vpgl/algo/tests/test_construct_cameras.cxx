@@ -3,7 +3,11 @@
 #include <vcl_cmath.h> // for std::abs
 
 #include <mrc/vpgl/algo/vpgl_construct_cameras.h>
-#include <vnl/vnl_fwd.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_homg_point_2d.h>
+#include <vgl/vgl_homg_point_3d.h>
+#include <vgl/algo/vgl_rotation_3d.h>
 
 static void test_construct_cameras()
 {
@@ -52,9 +56,9 @@ static void test_construct_cameras()
              << "\n\nEstimated camera center (up to scale):\n" << t_est << '\n';
 
     TEST_NEAR( "rotation matrix equivalent",
-      (testcase.get_camera2().get_rotation().as_matrix()-R_true.as_matrix()).frobenius_norm(), 0, .1 );
+               (testcase.get_camera2().get_rotation().as_matrix()-R_true.as_matrix()).frobenius_norm(), 0, .1 );
     TEST_NEAR( "camera center proper direction",
-      vcl_abs(r1-r2)+vcl_abs(r2-r3)+vcl_abs(r3-r1), 0, .1 );
+               vcl_abs(r1-r2)+vcl_abs(r2-r3)+vcl_abs(r3-r1), 0, .1 );
     TEST( "camera center proper sign", r1 > 0 && r2 > 0 && r3 > 0, true );
 }
 

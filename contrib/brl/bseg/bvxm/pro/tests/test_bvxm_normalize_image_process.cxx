@@ -21,7 +21,9 @@
 #include <vil/vil_save.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_float_3.h>
+#include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
+#include <vgl/algo/vgl_rotation_3d.h>
 
 #include <brip/brip_vil_float_ops.h>
 #include <vul/vul_file.h>

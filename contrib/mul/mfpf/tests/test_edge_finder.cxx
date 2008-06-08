@@ -16,6 +16,8 @@
 #include <mfpf/mfpf_add_all_loaders.h>
 #include <mfpf/mfpf_edge_finder.h>
 #include <mfpf/mfpf_edge_finder_builder.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 #include <vil/vil_bilin_interp.h>
 
 //=======================================================================
@@ -129,7 +131,7 @@ void test_edge_finder()
 
     vsl_b_ofstream bfs_out("test_edge_finder.bvl.tmp");
     TEST ("Created test_edge_finder.bvl.tmp for writing",
-             (!bfs_out), false);
+          (!bfs_out), false);
     vsl_b_write(bfs_out, edge_finder);
     vsl_b_write(bfs_out, base_ptr);
     bfs_out.close();

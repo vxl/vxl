@@ -16,6 +16,8 @@
 #include <mil/mil_image_2d_of.h>
 #include <mil/mil_image_pyramid.h>
 #include <vsl/vsl_indent.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 #include <vcl_cmath.h>
 
 //=======================================================================

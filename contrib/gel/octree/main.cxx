@@ -24,7 +24,9 @@
 #include <vnl/vnl_int_3.h>
 #include <vnl/vnl_double_3.h>
 
+#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_polygon.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 
 #include <vil1/vil1_load.h>

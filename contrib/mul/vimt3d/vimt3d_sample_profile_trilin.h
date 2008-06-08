@@ -8,6 +8,7 @@
 #include <vimt3d/vimt3d_image_3d_of.h>
 #include <vil3d/vil3d_sample_profile_trilin.h>
 #include <vnl/vnl_vector.h>
+#include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 
 //: Sample along profile, using trilinear interpolation
@@ -36,7 +37,7 @@ void vimt3d_sample_profile_trilin(
 
   // Sample along profile between im_p0 and im_p1
   vil3d_sample_profile_trilin(v,image.image(),
-    im_p0.x(),im_p0.y(),im_p0.z(),dx,dy,dz,n);
+                              im_p0.x(),im_p0.y(),im_p0.z(),dx,dy,dz,n);
 }
 
 
@@ -66,7 +67,7 @@ void vimt3d_sample_profile_trilin_extend(
 
   // Sample along profile between im_p0 and im_p1
   vil3d_sample_profile_trilin_extend(v, image.image(),
-    im_p0.x(),im_p0.y(),im_p0.z(),dx,dy,dz,n);
+                                     im_p0.x(),im_p0.y(),im_p0.z(),dx,dy,dz,n);
 }
 
 #endif // vimt3d_sample_profile_trilin_h_

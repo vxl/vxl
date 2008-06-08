@@ -16,6 +16,7 @@
 //-----------------------------------------------------------------------------
 
 #include <vbl/vbl_ref_count.h>
+#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_line_segment_2d.h>
 

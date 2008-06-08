@@ -14,6 +14,7 @@
 #include <vil/file_formats/vil_tiff.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_inverse.h>
+#include <vgl/vgl_point_3d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
 
@@ -100,7 +101,7 @@ void bwm_observer_lidar::set_lvcs(double lat, double lon, double elev)
 }
 
 void bwm_observer_lidar::set_trans_matrix(vil_geotiff_header* gtif,
-                                      vcl_vector<vcl_vector<double> > tiepoints)
+                                          vcl_vector<vcl_vector<double> > tiepoints)
 {
 //return;//JLM Kludge
 //#if 0
@@ -155,14 +156,14 @@ void bwm_observer_lidar::set_trans_matrix(vil_geotiff_header* gtif,
     vcl_cout << trans_matrix_ << vcl_endl;
   }
   else {
-    vcl_cerr << "Transform matrix cannot be formed.. " << vcl_endl;
+    vcl_cerr << "Transform matrix cannot be formed..\n";
   }
 //#endif
 }
 
 //: transforms a given 3d world point to image plane
 void bwm_observer_lidar::proj_point(vsol_point_3d_sptr p3d,
-                                     vsol_point_2d_sptr& p2d)
+                                    vsol_point_2d_sptr& p2d)
 {
   vnl_vector<double> v(4), res(4);
   double lat, lon, gz;
@@ -186,7 +187,7 @@ void bwm_observer_lidar::proj_point(vsol_point_3d_sptr p3d,
 
 //: transforms a given 3d world point to image plane
 void bwm_observer_lidar::backproj_point(vsol_point_2d_sptr p2d,
-                                         vsol_point_3d_sptr &p3d)
+                                        vsol_point_3d_sptr &p3d)
 {
   vnl_vector<double> v(4), res(4);
   v[0] = tiepoints[0][3] + p2d->x();
@@ -207,7 +208,7 @@ void bwm_observer_lidar::backproj_point(vsol_point_2d_sptr p2d,
 }
 
 void bwm_observer_lidar::proj_poly(vsol_polygon_3d_sptr poly3d,
-                                    vsol_polygon_2d_sptr& poly2d)
+                                   vsol_polygon_2d_sptr& poly2d)
 {
   vcl_vector<vsol_point_2d_sptr> vertices;
   for (unsigned i=0; i<poly3d->size(); i++) {
@@ -225,7 +226,7 @@ void bwm_observer_lidar::proj_poly(vsol_polygon_3d_sptr poly3d,
 }
 
 void bwm_observer_lidar::backproj_poly(vsol_polygon_2d_sptr poly2d,
-                                        vsol_polygon_3d_sptr& poly3d)
+                                       vsol_polygon_3d_sptr& poly3d)
 {
   vcl_vector<vsol_point_3d_sptr> vertices;
   for (unsigned i=0; i<poly2d->size(); i++) {
@@ -244,7 +245,7 @@ void bwm_observer_lidar::backproj_poly(vsol_polygon_2d_sptr poly2d,
     // now find a 3d coordinates by bgeo_lvcs
     double lx, ly, lz;
     lvcs_->global_to_local(p3d->x(), p3d->y(), p3d->z(), bgeo_lvcs::wgs84,
-      lx, ly, lz, bgeo_lvcs::DEG,bgeo_lvcs::METERS);
+                           lx, ly, lz, bgeo_lvcs::DEG,bgeo_lvcs::METERS);
     vsol_point_3d_sptr p = new vsol_point_3d(lx, ly, lz);
     vertices.push_back(p);
   }
@@ -274,7 +275,7 @@ void bwm_observer_lidar::set_ground_plane(unsigned int x1, unsigned int y1, unsi
 }
 
 void bwm_observer_lidar::get_img_to_wgs(const unsigned i, const unsigned j,
-                                     double& lon, double& lat, double& elev)
+                                        double& lon, double& lat, double& elev)
 {
   this->img_to_wgs(i, j, lon, lat);
   if (i < img_view_.ni() && j < img_view_.nj())
@@ -282,7 +283,7 @@ void bwm_observer_lidar::get_img_to_wgs(const unsigned i, const unsigned j,
 }
 
 void bwm_observer_lidar::img_to_wgs(const unsigned i, const unsigned j,
-                                     double& lon, double& lat)
+                                    double& lon, double& lat)
 {
   vnl_vector<double> v(4), res(4);
   v[0] = tiepoints[0][3] + i;
@@ -296,9 +297,9 @@ void bwm_observer_lidar::img_to_wgs(const unsigned i, const unsigned j,
 }
 
 bool bwm_observer_lidar::get_point_cloud(const float x1, const float y1,
-                                          const float x2, const float y2,
-                                          bgeo_lvcs& lvcs,
-                                          vcl_vector<vsol_point_3d_sptr>& points)
+                                         const float x2, const float y2,
+                                         bgeo_lvcs& lvcs,
+                                         vcl_vector<vsol_point_3d_sptr>& points)
 {
   if (!img_view_)
     return false;

@@ -5,6 +5,7 @@
 #include <vcl_vector.h>
 #include <vcl_fstream.h>
 #include <brct/brct_algos.h>
+#include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_sphere_3d.h>
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
@@ -90,7 +91,7 @@ static void generate_points(vcl_vector<vgl_point_3d<double> >& pts,
         vgl_point_3d<double> p(x(theta, psi, phi),
                                y(theta, psi, phi),
                                z(theta, psi, phi)
-                               );
+                              );
         pts.push_back(p);
         double cr = (psi-psi_min)/(psi_max-psi_min)+0.5;
         double cg = (phi-phi_min)/(phi_max-phi_min)+0.5;
@@ -127,7 +128,7 @@ void generate_polylines(vcl_vector<vcl_vector<vgl_point_3d<double> > >& polys,
         vgl_point_3d<double> p(x(theta, psi, phi),
                                y(theta, psi, phi),
                                z(theta, psi, phi)
-                               );
+                              );
         temp.push_back(p);
       }
       polys.push_back(temp);
@@ -219,16 +220,16 @@ void generate_d_polylines(vcl_vector<vcl_vector<vgl_point_3d<double> > >& polys,
 //generate surfaces of constant theta in the algebra
 static
 void generate_da_polylines(vcl_vector<vcl_vector<vgl_point_3d<double> > >& polys,
-                          vcl_vector<vgl_point_3d<float> >& polycolors,
-                          const double theta_min,
-                          const double theta_max,
-                          const double psi_min,
-                          const double psi_max,
-                          const double phi_min,
-                          const double phi_max,
-                          const double theta_inc,
-                          const double psi_inc,
-                          const double phi_inc)
+                           vcl_vector<vgl_point_3d<float> >& polycolors,
+                           const double theta_min,
+                           const double theta_max,
+                           const double psi_min,
+                           const double psi_max,
+                           const double phi_min,
+                           const double phi_max,
+                           const double theta_inc,
+                           const double psi_inc,
+                           const double phi_inc)
 {
   polys.clear();
   polycolors.clear();
@@ -364,8 +365,8 @@ int main(int argc,char * argv[])
                        theta_inc, psi_inc, phi_inc);
   write_polylines(point_ostr, polylines, polycolors);
   generate_da_polylines(polylines, polycolors, theta_min, theta_max,
-                       psi_min, psi_max, phi_min, phi_max,
-                       theta_inc, psi_inc, phi_inc);
+                        psi_min, psi_max, phi_min, phi_max,
+                        theta_inc, psi_inc, phi_inc);
   write_polylines(point_ostr, polylines, polycolors);
   write_spheres(point_ostr);
 

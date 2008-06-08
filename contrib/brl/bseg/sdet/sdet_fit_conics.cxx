@@ -2,6 +2,9 @@
 #include "sdet_fit_conics.h"
 //:
 // \file
+
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_conic_segment_2d.h>
 #include <vsol/vsol_conic_2d.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vdgl/vdgl_digital_curve.h>
@@ -53,46 +56,45 @@ bool sdet_fit_conics::fit_conics()
   fitter_.set_min_fit_length(min_fit_length_);
   fitter_.set_rms_error_tol(rms_distance_);
   for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges_.begin();
-      eit != edges_.end(); eit++)
+       eit != edges_.end(); eit++)
+  {
+    vsol_curve_2d_sptr c = (*eit)->curve();
+    vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
+    if (!dc)
+      continue;
+    vdgl_interpolator_sptr intp = dc->get_interpolator();
+    vdgl_edgel_chain_sptr ec = intp->get_edgel_chain();
+    fitter_.clear();
+    int nedgl = ec->size();
+    if (nedgl<min_fit_length_)
+      continue;
+    for (int i=0; i<nedgl; i++)
     {
-      vsol_curve_2d_sptr c = (*eit)->curve();
-      vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
-      if (!dc)
-        continue;
-      vdgl_interpolator_sptr intp = dc->get_interpolator();
-      vdgl_edgel_chain_sptr ec = intp->get_edgel_chain();
-      fitter_.clear();
-      int nedgl = ec->size();
-      if(nedgl<min_fit_length_)
-        continue;
-      for (int i=0; i<nedgl; i++)
-        {
-          vgl_point_2d<double> p((*ec)[i].x(), (*ec)[i].y());
-          fitter_.add_point(p);
-        }
-
-      fitter_.fit();
-      vcl_vector<vgl_conic_segment_2d<double> >& segs = fitter_.get_conic_segs();
-      for (vcl_vector<vgl_conic_segment_2d<double> >::iterator sit=segs.begin();
-          sit != segs.end(); sit++)
-        {
-          vsol_conic_2d_sptr conic = new vsol_conic_2d(*sit);
-          vcl_cout << "Fitted a conic of type " << conic->real_type() << '\n';
-          //adding a condition on aspect ratio
-          if (conic->real_type() != 1)
-          {
-              conic_segs_.push_back(conic);
-          }
-          else
-          {
-               double cx, cy, width, height, angle;
-              conic->ellipse_parameters(cx,cy,angle,width,height);
-                  if ((width/height)<aspect_ratio_)
-            conic_segs_.push_back(conic);
-          }
-          
-        }
+      vgl_point_2d<double> p((*ec)[i].x(), (*ec)[i].y());
+      fitter_.add_point(p);
     }
+
+    fitter_.fit();
+    vcl_vector<vgl_conic_segment_2d<double> >& segs = fitter_.get_conic_segs();
+    for (vcl_vector<vgl_conic_segment_2d<double> >::iterator sit=segs.begin();
+         sit != segs.end(); sit++)
+    {
+      vsol_conic_2d_sptr conic = new vsol_conic_2d(*sit);
+      vcl_cout << "Fitted a conic of type " << conic->real_type() << '\n';
+      //adding a condition on aspect ratio
+      if (conic->real_type() != 1)
+      {
+          conic_segs_.push_back(conic);
+      }
+      else
+      {
+        double cx, cy, width, height, angle;
+        conic->ellipse_parameters(cx,cy,angle,width,height);
+        if (width/height < aspect_ratio_)
+          conic_segs_.push_back(conic);
+      }
+    }
+  }
   segs_valid_ = true;
   return true;
 }
