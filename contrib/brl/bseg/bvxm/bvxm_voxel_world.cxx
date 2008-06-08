@@ -16,6 +16,7 @@
 #include <vpgl/vpgl_camera.h>
 #include <vul/vul_file.h>
 
+#include <vgl/vgl_homg_point_2d.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_linear.h>
 
 #include <vil/algo/vil_median.h>
@@ -73,8 +74,7 @@ vcl_ostream&  operator<<(vcl_ostream& s, bvxm_voxel_world const& vox_world)
 //: save the occupancy grid as an 8-bit 3-d vff image
 bool bvxm_voxel_world::save_occupancy_vff(vcl_string filename)
 {
-
-// open file for binary writing
+  // open file for binary writing
   vcl_fstream ofs(filename.c_str(),vcl_ios::binary | vcl_ios::out);
   if (!ofs.is_open()) {
     vcl_cerr << "error opening file " << filename << " for write!\n";
@@ -93,24 +93,24 @@ bool bvxm_voxel_world::save_occupancy_vff(vcl_string filename)
 
   // write header
   vcl_stringstream header;
-  header << "ncaa\n";
-  header << "title=bvxm occupancy probabilities;\n";
-  header << "rank=3;\n";
-  header << "type=raster;\n";
-  header << "format=slice;\n";
-  header << "bits=8;\n";
-  header << "bands=1;\n";
-  header << "extent=" << nx << " " << ny << " " << nz << ";\n";
-  header << "size=" << nx << " " << ny << " " << nz << ";\n";
-  header << "aspect=1.0 1.0 1.0;\n";
-  header << "origin=0 0 0;\n";
-  header << "rawsize=" << nx*ny*nz << ";\n\f\n";
+  header << "ncaa\n"
+         << "title=bvxm occupancy probabilities;\n"
+         << "rank=3;\n"
+         << "type=raster;\n"
+         << "format=slice;\n"
+         << "bits=8;\n"
+         << "bands=1;\n"
+         << "extent=" << nx << ' ' << ny << ' ' << nz << ";\n"
+         << "size=" << nx << ' ' << ny << ' ' << nz << ";\n"
+         << "aspect=1.0 1.0 1.0;\n"
+         << "origin=0 0 0;\n"
+         << "rawsize=" << nx*ny*nz << ";\n\f\n";
 
   vcl_string header_string = header.str();
   unsigned header_len = header_string.size();
 
   ofs.write(header_string.c_str(),header_len);
- 
+
   // write data
   // iterate through slabs and fill in memory array
   char *ocp_array = new char[nx*ny*nz];
@@ -214,7 +214,7 @@ bool bvxm_voxel_world::save_edges_raw(vcl_string filename)
   vcl_cout << "Saving edges to RAW file: " << vcl_endl;
   bvxm_voxel_grid<edges_datatype>::iterator edges_it = edges_grid->begin();
   for (unsigned k=0; edges_it != edges_grid->end(); ++edges_it, ++k) {
-    vcl_cout << ".";
+    vcl_cout << '.';
     for (unsigned i=0; i<(*edges_it).nx(); ++i) {
       for (unsigned j=0; j < (*edges_it).ny(); ++j) {
         edges_array[i*ny*nz + j*nz + k] = (unsigned char)((*edges_it)(i,j) * 255.0);;
@@ -383,7 +383,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
 #ifdef DEBUG
     vcl_stringstream ss1, ss2;
     ss1 << "PL_" << k_idx <<".tiff";
-    ss2 <<"PX_" << k_idx <<".tiff";
+    ss2 << "PX_" << k_idx <<".tiff";
     bvxm_util::write_slab_as_image(PL,ss1.str());
     bvxm_util::write_slab_as_image(*ocp_slab_it,ss2.str());
 #endif
@@ -401,7 +401,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
 #ifdef DEBUG
     vcl_stringstream plpx, vis, prex;
     plpx << "PLPX_" << k_idx <<".tiff";
-    vis << "visX_" << k_idx <<".tiff";
+    vis  << "visX_" << k_idx <<".tiff";
     prex << "preX_" << k_idx <<".tiff";
     bvxm_util::write_slab_as_image(PLPX_img,plpx.str());
     bvxm_util::write_slab_as_image(visX_accum,vis.str());
@@ -435,7 +435,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
   bvxm_util::write_slab_as_image(preX_accum,prex2.str());
 #endif
 
-  vcl_cout << vcl_endl << "Pass 2: " << vcl_endl;
+  vcl_cout << "\nPass 2: " << vcl_endl;
   PLvisX_slab_it = PLvisX.begin();
   preX_slab_it = preX.begin();
   bvxm_voxel_grid<ocp_datatype>::iterator ocp_slab_it2 = ocp_grid->begin();
@@ -467,7 +467,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
         *PX_it = max_vox_prob;
     }
   }
-  vcl_cout << vcl_endl << "done." << vcl_endl;
+  vcl_cout << "\ndone." << vcl_endl;
 
   if (return_prob) {
     // fill pixel_probabilities with preX_accum
@@ -530,8 +530,8 @@ bool bvxm_voxel_world::update_edges(bvxm_image_metadata const& metadata)
 
   float min_edge_prob = this->get_params()->min_occupancy_prob();
   float max_edge_prob = this->get_params()->max_occupancy_prob();
-  for(unsigned i=0; i<image_image.nx(); i++){
-    for(unsigned j=0; j<image_image.ny(); j++){
+  for (unsigned i=0; i<image_image.nx(); i++) {
+    for (unsigned j=0; j<image_image.ny(); j++) {
       image_image(i,j) = min_edge_prob + (image_image(i,j)*(max_edge_prob-min_edge_prob));
     }
   }
@@ -604,8 +604,7 @@ bool bvxm_voxel_world::update_edges(bvxm_image_metadata const& metadata)
       (*edges_slab_it_it) = (*edges_slab_it_it) * ((*image_slab_it)/(*marginal_slab_it));
     }
   }
-  vcl_cout << vcl_endl;
-  vcl_cout << "Done: " << vcl_endl;
+  vcl_cout << "\nDone: " << vcl_endl;
   return true;
 }
 
@@ -744,7 +743,7 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
   vil_image_view_base_sptr heightmap_rough_img_sptr = heightmap_rough_img;
   bvxm_util::slab_to_img(heightmap_rough,heightmap_rough_img_sptr);
 
-  // first, median filter heightmap 
+  // first, median filter heightmap
   vil_image_view<float> heightmap_med_img(heightmap.ni(),heightmap.nj());
   vcl_vector<int> strel_vec;
   for (int i=-medfilt_halfsize; i <= medfilt_halfsize; ++i)
@@ -826,42 +825,42 @@ vgl_point_3d<float> bvxm_voxel_world::voxel_index_to_xyz(unsigned vox_i, unsigne
 
 void bvxm_voxel_world::compute_plane_image_H(vpgl_camera_double_sptr const& cam, unsigned k_idx, vgl_h_matrix_2d<double> &H_plane_to_image, vgl_h_matrix_2d<double> &H_image_to_plane)
 {
-    vgl_vector_3d<unsigned int> grid_size = params_->num_voxels();
+  vgl_vector_3d<unsigned int> grid_size = params_->num_voxels();
 
-    vcl_vector<vgl_homg_point_2d<double> > voxel_corners_img;
-    vcl_vector<vgl_homg_point_2d<double> > voxel_corners_vox;
+  vcl_vector<vgl_homg_point_2d<double> > voxel_corners_img;
+  vcl_vector<vgl_homg_point_2d<double> > voxel_corners_vox;
 
-    // create vectors containing four corners of grid, and their projections into the image
-    double u=0, v=0;
-    vgl_point_3d<float> corner_world;
+  // create vectors containing four corners of grid, and their projections into the image
+  double u=0, v=0;
+  vgl_point_3d<float> corner_world;
 
-    voxel_corners_vox.push_back(vgl_homg_point_2d<double>(0,0));
-    corner_world = this->voxel_index_to_xyz(0,0,k_idx);
-    cam->project(corner_world.x(),corner_world.y(),corner_world.z(),u,v);
-    voxel_corners_img.push_back(vgl_homg_point_2d<double>(u,v));
+  voxel_corners_vox.push_back(vgl_homg_point_2d<double>(0,0));
+  corner_world = this->voxel_index_to_xyz(0,0,k_idx);
+  cam->project(corner_world.x(),corner_world.y(),corner_world.z(),u,v);
+  voxel_corners_img.push_back(vgl_homg_point_2d<double>(u,v));
 
-    voxel_corners_vox.push_back(vgl_homg_point_2d<double>(grid_size.x()-1,0));
-    corner_world = this->voxel_index_to_xyz(grid_size.x()-1,0,k_idx);
-    cam->project(corner_world.x(),corner_world.y(),corner_world.z(),u,v);
-    voxel_corners_img.push_back(vgl_homg_point_2d<double>(u,v));
+  voxel_corners_vox.push_back(vgl_homg_point_2d<double>(grid_size.x()-1,0));
+  corner_world = this->voxel_index_to_xyz(grid_size.x()-1,0,k_idx);
+  cam->project(corner_world.x(),corner_world.y(),corner_world.z(),u,v);
+  voxel_corners_img.push_back(vgl_homg_point_2d<double>(u,v));
 
-    voxel_corners_vox.push_back(vgl_homg_point_2d<double>(grid_size.x()-1,grid_size.y()-1));
-    corner_world = this->voxel_index_to_xyz(grid_size.x()-1,grid_size.y()-1,k_idx);
-    cam->project(corner_world.x(),corner_world.y(),corner_world.z(),u,v);
-    voxel_corners_img.push_back(vgl_homg_point_2d<double>(u,v));
+  voxel_corners_vox.push_back(vgl_homg_point_2d<double>(grid_size.x()-1,grid_size.y()-1));
+  corner_world = this->voxel_index_to_xyz(grid_size.x()-1,grid_size.y()-1,k_idx);
+  cam->project(corner_world.x(),corner_world.y(),corner_world.z(),u,v);
+  voxel_corners_img.push_back(vgl_homg_point_2d<double>(u,v));
 
-    voxel_corners_vox.push_back(vgl_homg_point_2d<double>(0,(grid_size.y()-1)));
-    corner_world = this->voxel_index_to_xyz(0,grid_size.y()-1,k_idx);
-    cam->project(corner_world.x(),corner_world.y(),corner_world.z(),u,v);
-    voxel_corners_img.push_back(vgl_homg_point_2d<double>(u,v));
+  voxel_corners_vox.push_back(vgl_homg_point_2d<double>(0,(grid_size.y()-1)));
+  corner_world = this->voxel_index_to_xyz(0,grid_size.y()-1,k_idx);
+  cam->project(corner_world.x(),corner_world.y(),corner_world.z(),u,v);
+  voxel_corners_img.push_back(vgl_homg_point_2d<double>(u,v));
 
 
-    vgl_h_matrix_2d_compute_linear comp_4pt;  
-    if (!comp_4pt.compute(voxel_corners_img,voxel_corners_vox, H_image_to_plane)) {
-      vcl_cerr << "ERROR computing homography from image to voxel slice.\n";
-    }
-    if (!comp_4pt.compute(voxel_corners_vox,voxel_corners_img, H_plane_to_image)) {
-      vcl_cerr << "ERROR computing homography from voxel slice to image.\n";
-    }
-    return;
+  vgl_h_matrix_2d_compute_linear comp_4pt;
+  if (!comp_4pt.compute(voxel_corners_img,voxel_corners_vox, H_image_to_plane)) {
+    vcl_cerr << "ERROR computing homography from image to voxel slice.\n";
+  }
+  if (!comp_4pt.compute(voxel_corners_vox,voxel_corners_img, H_plane_to_image)) {
+    vcl_cerr << "ERROR computing homography from voxel slice to image.\n";
+  }
+  return;
 }

@@ -62,6 +62,7 @@
 #include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_ref_count.h>
 
+#include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>

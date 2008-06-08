@@ -13,7 +13,6 @@
 //                                - also added a version number and updated binary load and save methods to read and write new parameters
 //                                  since there was no version number previously, the parameters written previous to this update won't be readable
 //                                  the version number will be 2 and one may switch to previous version temporarily and rebuilt to read the previous version and write back in version two
-//
 // \endverbatim
 
 #include <vcl_string.h>
@@ -23,6 +22,7 @@
 #include <vbl/vbl_ref_count.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_box_3d.h>
 
 #include <vsl/vsl_binary_io.h>
 #include <vgl/io/vgl_io_vector_3d.h>
@@ -57,14 +57,14 @@ class bvxm_world_params : public vbl_ref_count
   inline void set_corner(vgl_point_3d<float>& new_c) { corner_ = new_c; }
 
   inline vgl_point_3d<float> rpc_origin() { return rpc_origin_; }
-  inline void set_rpc_origin(vgl_point_3d<float>& new_rpc_origin) { 
+  inline void set_rpc_origin(vgl_point_3d<float>& new_rpc_origin) {
     vgl_point_3d<float> old_corner = corner();
     vgl_point_3d<float> new_corner(
       old_corner.x() + new_rpc_origin.x() - rpc_origin_.x(),
       old_corner.y() + new_rpc_origin.y() - rpc_origin_.y(),
       old_corner.z() + new_rpc_origin.z() - rpc_origin_.z());
     set_corner(new_corner);
-    rpc_origin_ = new_rpc_origin; 
+    rpc_origin_ = new_rpc_origin;
   }
 
   inline vgl_vector_3d<unsigned int> num_voxels(unsigned scale=0) {

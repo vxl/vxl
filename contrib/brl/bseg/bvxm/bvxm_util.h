@@ -19,6 +19,7 @@
 
 #include <vpgl/vpgl_camera.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
+#include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
 
 #include <vnl/vnl_math.h>
