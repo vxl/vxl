@@ -15,7 +15,7 @@
 //   9/27/2007  Ricardo Fabbri   Imposed order of 1) rank-enforcement and 2) de-normalization.
 // \endverbatim
 
-/#include <vgl/vgl_homg_point_2d.h>/
+#include <vgl/vgl_homg_point_2d.h>
 #include <vpgl/vpgl_fundamental_matrix.h>
 
 class vpgl_fm_compute_8_point
