@@ -31,6 +31,8 @@
 #include <mfpf/mfpf_sample_region.h>
 #include <mfpf/mfpf_searcher.h>
 #include <mfpf/mfpf_sort_matches.h>
+#include <mfpf/mfpf_ssd_vec_cost.h>
+#include <mfpf/mfpf_ssd_vec_cost_builder.h>
 #include <mfpf/mfpf_vec_cost.h>
 #include <mfpf/mfpf_vec_cost_builder.h>
 
