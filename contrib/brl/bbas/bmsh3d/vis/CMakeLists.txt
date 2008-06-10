@@ -20,5 +20,7 @@ ADD_LIBRARY(bmsh3d_vis ${bmsh3d_vis_sources})
 
 TARGET_LINK_LIBRARIES( bmsh3d_vis bmsh3d bmsh3d_algo bmsh3d_pro )
 
+SUBDIRS( tests )
+
 ENDIF (HAS_BGUI3D)
 
