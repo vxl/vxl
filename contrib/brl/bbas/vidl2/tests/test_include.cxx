@@ -37,4 +37,6 @@
 #include <vidl2/vidl2_v4l_params.h>
 #endif // 0
 
+#include <vidl2/gui/vidl2_gui_param_dialog.h>
+
 int main() { return 0; }
