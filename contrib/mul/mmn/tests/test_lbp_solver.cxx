@@ -8,6 +8,7 @@
 #include <vcl_numeric.h>
 #include <vcl_iterator.h>
 #include <vcl_cmath.h>
+#include <vcl_cassert.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 
@@ -355,10 +356,9 @@ void test_best_xy_line()
         {
             const double STRENGTH_FACTOR=1/20.0;
             double ampprob=1.0-vcl_exp(-raw_data[j].amplitude * STRENGTH_FACTOR);
-            if(ampprob<1.0E-8)
+            if (ampprob<1.0E-8)
                 ampprob=1.0E-8;
             node_cost[istage][j]=ampprob;
-            
         }
 
         if (istage>=1)
@@ -424,7 +424,7 @@ void test_best_xy_line()
     for (unsigned i=0;i<n;++i)
     {
         TEST("Correct node value",x[i],xDP[i]);
-        vcl_cout<<"x["<<i<<"]="<<x[i]<<"\t"<<locations[i][x[i]]<<"\t prior prob: "<<vcl_exp(-node_cost[i][x[i]])<<vcl_endl;
+        vcl_cout<<"x["<<i<<"]="<<x[i]<<'\t'<<locations[i][x[i]]<<"\t prior prob: "<<vcl_exp(-node_cost[i][x[i]])<<vcl_endl;
     }
 }
 
@@ -440,23 +440,23 @@ void test_5x5grid_easy()
     const double DG=100.0;
     for (unsigned iy=0;iy<NSTAGES;++iy)
     {
-        for(unsigned ix=0;ix<NSTAGES;++ix)
+        for (unsigned ix=0;ix<NSTAGES;++ix)
         {
             unsigned nodeId= NSTAGES*iy+ix;
             unsigned nodeIdRight=nodeId+1;
             unsigned nodeIdAbove=nodeId+NSTAGES;
 
-            if(ix<NSTAGES-1)
+            if (ix<NSTAGES-1)
             {
                 arcs.push_back(mmn_arc(nodeId,nodeIdRight));
             }
-            if(iy<NSTAGES-1)
+            if (iy<NSTAGES-1)
             {
                 arcs.push_back(mmn_arc(nodeId,nodeIdAbove));
             }
         }
     }
-            
+
     vcl_vector<vnl_vector<double> > node_costs(n);
     vcl_vector<vnl_matrix<double> > pair_costs(arcs.size());
 
@@ -464,7 +464,7 @@ void test_5x5grid_easy()
 
     //Create some point data
 
-    //First create some random samplers 
+    //First create some random samplers
     vpdfl_gaussian_builder gbuilder;
     pdf1d_gaussian pdf_amp(10.0,16.0);
 
@@ -481,8 +481,8 @@ void test_5x5grid_easy()
     vnl_vector<double> means(2,0.0);
     gbuilder.buildFromCovar(pdf_data,means,covar);
 
-    
-    covar.put(0,0, var); 
+
+    covar.put(0,0, var);
     covar.put(1,1, var);
     gbuilder.buildFromCovar(pdf_model,means,covar);
 
@@ -497,59 +497,59 @@ void test_5x5grid_easy()
 
     vcl_vector<vcl_vector<vgl_point_2d<double > > > locations(n);
 
-    for(int inode=0;inode<n;++inode)
+    for (int inode=0;inode<n;++inode)
     {
         unsigned ix = inode % NSTAGES;
         unsigned iy = inode / NSTAGES;
         unsigned nodeId=NSTAGES*iy+ix;
         assert(nodeId==inode);
-        
+
         vcl_vector<point_data> raw_data(NPOINTS_PER_NODE);
         vnl_vector<double> amps(NPOINTS_PER_NODE);
         vnl_vector<double> error(2);
         amp_sampler->get_samples(amps);
-        
+
         vgl_point_2d<double> gridPoint(DG*double(ix),DG*double(iy));
         node_costs[nodeId].set_size(NPOINTS_PER_NODE);
         locations[nodeId].reserve(NPOINTS_PER_NODE);
         const double STRENGTH_FACTOR=1/20.0;
-        for(int ipt=0;ipt<NPOINTS_PER_NODE;ipt++)
+        for (int ipt=0;ipt<NPOINTS_PER_NODE;ipt++)
         {
             loc_sampler->sample(error);
             double amplitude = amps[ipt];
-            //place it on a semi random grid, 
+            //place it on a semi random grid,
 
-            vgl_point_2d<double > location = vgl_point_2d<double>(gridPoint.x()+error[0], 
+            vgl_point_2d<double > location = vgl_point_2d<double>(gridPoint.x()+error[0],
                                                                   gridPoint.y()+error[1]);
-            
+
             locations[nodeId].push_back(location);
             double ampprob=1.0-vcl_exp(-amplitude * STRENGTH_FACTOR);
-            if(ampprob<1.0E-8)
+            if (ampprob<1.0E-8)
                 ampprob=1.0E-8;
 
             node_costs[nodeId][ipt]=ampprob;
         }
-    
+
         //Raw data points are go.......
     }
     vcl_cout<<"Have created points grid and node costs..."<<vcl_endl;
-    
-    for(unsigned i=0; i<arcs.size();i++)
+
+    for (unsigned i=0; i<arcs.size();i++)
     {
         unsigned node1=arcs[i].min_v();
         unsigned node2=arcs[i].max_v();
         unsigned arcId=i;
         pair_costs[arcId].set_size(NPOINTS_PER_NODE,NPOINTS_PER_NODE);
-        for(unsigned iLabel=0;iLabel<NPOINTS_PER_NODE;++iLabel)
+        for (unsigned iLabel=0;iLabel<NPOINTS_PER_NODE;++iLabel)
         {
-            for(unsigned jLabel=0;jLabel<NPOINTS_PER_NODE;++jLabel)
+            for (unsigned jLabel=0;jLabel<NPOINTS_PER_NODE;++jLabel)
             {
                 double& pairCost=pair_costs[arcId](iLabel,jLabel);
                 vgl_vector_2d<double> d=locations[node2][jLabel]-locations[node1][iLabel];
                 vnl_vector<double > delta(2);
                 double dgx=0.0;
                 double dgy=0.0;
-                if(node1 % NSTAGES == node2 % NSTAGES) //x coord same so must be a y arc
+                if (node1 % NSTAGES == node2 % NSTAGES) //x coord same so must be a y arc
                 {
                     dgy=100.0;
                 }
@@ -559,13 +559,12 @@ void test_5x5grid_easy()
                 }
                 else
                 {
-                    vcl_cout<<"WARNING - inconsistent node numbering on arc "<<i<<"\tlinking\t"<<node1<<"\t"<<node2<<vcl_endl;
-                    assert(0);
+                    vcl_cout<<"WARNING - inconsistent node numbering on arc "<<i<<"\tlinking\t"<<node1<<'\t'<<node2<<vcl_endl;
+                    assert(false);
                 }
                 delta[0] = d.x()-dgx; delta[1]=d.y()-dgy;
                 double linkProb=pdf_model(delta);
                 pairCost=vcl_log(linkProb);
-                
             }
         }
     }
@@ -573,30 +572,29 @@ void test_5x5grid_easy()
     vcl_cout<<"Have computed all node and arc costs"<<vcl_endl;
     convert_to_minus_log_probs(node_costs);
 
-    for(unsigned i=0;i<n;++i)
+    for (unsigned i=0;i<n;++i)
     {
         vcl_copy(node_costs[i].begin(),node_costs[i].end(),
                  vcl_ostream_iterator<double >(vcl_cout,"\t"));
         vcl_cout<<vcl_endl;
-                 
     }
     vcl_vector<vnl_matrix<double  > > pair_costs_neg=pair_costs;
 
-    for(unsigned i=0;i<pair_costs_neg.size();++i)
+    for (unsigned i=0;i<pair_costs_neg.size();++i)
     {
-        for(unsigned j=0; j<pair_costs_neg[i].rows();j++)
+        for (unsigned j=0; j<pair_costs_neg[i].rows();j++)
         {
-            for(unsigned k=0; k<pair_costs_neg[i].cols();k++)
+            for (unsigned k=0; k<pair_costs_neg[i].cols();k++)
             {
                 pair_costs_neg[i](j,k)= -1.0*pair_costs_neg[i](j,k);
             }
         }
     }
-    
+
     mmn_lbp_solver solver;
     solver.set_arcs(n,arcs);
     solver.set_verbose(true);
-    
+
     vcl_cout<<"Run solver."<<vcl_endl;
 
     vcl_vector<unsigned> x;
@@ -607,45 +605,45 @@ void test_5x5grid_easy()
     unsigned badCount=0;
     for (unsigned iy=0;iy<NSTAGES;++iy)
     {
-        for(unsigned ix=0;ix<NSTAGES;++ix)
+        for (unsigned ix=0;ix<NSTAGES;++ix)
         {
             unsigned nodeId=iy*NSTAGES + ix;
             unsigned nodeIdRight=nodeId+1;
             unsigned nodeIdAbove=nodeId+NSTAGES;
 
-            vcl_cout<<"x["<<nodeId<<"]="<<x[nodeId]<<"\t"<<locations[nodeId][x[nodeId]]<<"\t prior prob: "<<vcl_exp(-node_costs[nodeId][x[nodeId]])<<vcl_endl;
+            vcl_cout<<"x["<<nodeId<<"]="<<x[nodeId]<<'\t'<<locations[nodeId][x[nodeId]]<<"\t prior prob: "<<vcl_exp(-node_costs[nodeId][x[nodeId]])<<vcl_endl;
 
             unsigned i0=x[nodeId];
-            if(ix<NSTAGES-1)
+            if (ix<NSTAGES-1)
             {
                 unsigned iR=x[nodeIdRight];
 
                 vgl_vector_2d<double> dR=locations[nodeIdRight][iR]-locations[nodeId][i0];
-                TEST_NEAR("Grid Point dx to Right", fabs(dR.x()-DG),0.0,2.0*twoSigma);
-                TEST_NEAR("Grid Point dy to Right", fabs(dR.y()),0.0,2.0*twoSigma);
-                if(fabs(dR.x()-DG)>twoSigma || fabs(dR.y())>twoSigma)
+                TEST_NEAR("Grid Point dx to Right", vcl_fabs(dR.x()-DG),0.0,2.0*twoSigma);
+                TEST_NEAR("Grid Point dy to Right", vcl_fabs(dR.y()),0.0,2.0*twoSigma);
+                if (vcl_fabs(dR.x()-DG)>twoSigma || vcl_fabs(dR.y())>twoSigma)
                 {
                     ++badCount;
                 }
             }
-            if(iy<NSTAGES-1)
+            if (iy<NSTAGES-1)
             {
                 unsigned iA=x[nodeIdAbove];
                 vgl_vector_2d<double> dA=locations[nodeIdAbove][iA]-locations[nodeId][i0];
-                TEST_NEAR("Grid Point dx to Above", fabs(dA.x()),0.0,2.0*twoSigma);
-                TEST_NEAR("Grid Point dy to Above", fabs(dA.y()-DG),0.0,2.0*twoSigma);
-                
-                if(fabs(dA.y()-DG)>twoSigma || fabs(dA.x())>twoSigma)
+                TEST_NEAR("Grid Point dx to Above", vcl_fabs(dA.x()),0.0,2.0*twoSigma);
+                TEST_NEAR("Grid Point dy to Above", vcl_fabs(dA.y()-DG),0.0,2.0*twoSigma);
+
+                if (vcl_fabs(dA.y()-DG)>twoSigma || vcl_fabs(dA.x())>twoSigma)
                 {
                     ++badCount;
-                }            
+                }
             }
         }
     }
     vcl_cout<<"Number of unusual grid point separations= "<<badCount<<vcl_endl;
     TEST("Unusual grid point separation count",badCount<3,true);
-
 }
+
 void test_5x5grid_hard()
 {
     const unsigned NSTAGES=5;
@@ -658,23 +656,23 @@ void test_5x5grid_hard()
     const double DG=100.0;
     for (unsigned iy=0;iy<NSTAGES;++iy)
     {
-        for(unsigned ix=0;ix<NSTAGES;++ix)
+        for (unsigned ix=0;ix<NSTAGES;++ix)
         {
             unsigned nodeId= NSTAGES*iy+ix;
             unsigned nodeIdRight=nodeId+1;
             unsigned nodeIdAbove=nodeId+NSTAGES;
 
-            if(ix<NSTAGES-1)
+            if (ix<NSTAGES-1)
             {
                 arcs.push_back(mmn_arc(nodeId,nodeIdRight));
             }
-            if(iy<NSTAGES-1)
+            if (iy<NSTAGES-1)
             {
                 arcs.push_back(mmn_arc(nodeId,nodeIdAbove));
             }
         }
     }
-            
+
     vcl_vector<vnl_vector<double> > node_costs(n);
     vcl_vector<vnl_matrix<double> > pair_costs(arcs.size());
 
@@ -682,7 +680,7 @@ void test_5x5grid_hard()
 
     //Create some point data
 
-    //First create some random samplers 
+    //First create some random samplers
     vpdfl_gaussian_builder gbuilder;
     pdf1d_gaussian pdf_amp(10.0,16.0);
 
@@ -700,15 +698,15 @@ void test_5x5grid_hard()
     vnl_vector<double> means(2,0.0);
     gbuilder.buildFromCovar(pdf_data,means,covar);
 
-    
-    covar.put(0,0, var); 
+
+    covar.put(0,0, var);
     covar.put(1,1, var);
     gbuilder.buildFromCovar(pdf_model,means,covar);
 
     covar.put(0,0, 25.0*var);
     covar.put(0,0, 25.0*var);
     gbuilder.buildFromCovar(pdf_data_outlier,means,covar);
-    
+
     vpdfl_sampler_base* loc_sampler = pdf_data.new_sampler();
     vpdfl_sampler_base* loc_sampler_outlier = pdf_data.new_sampler();
     pdf1d_sampler* amp_sampler = pdf_amp.new_sampler();
@@ -724,68 +722,68 @@ void test_5x5grid_hard()
     vcl_vector<double> all_responses;
     all_responses.reserve(NALL);
     locations.reserve(NALL);
-    
-    for(int inode=0;inode<n;++inode)
+
+    for (int inode=0;inode<n;++inode)
     {
         unsigned ix = inode % NSTAGES;
         unsigned iy = inode / NSTAGES;
         unsigned nodeId=NSTAGES*iy+ix;
         assert(nodeId==inode);
-        
+
         vcl_vector<point_data> raw_data(NPOINTS_PER_NODE);
         vnl_vector<double> amps(NPOINTS_PER_NODE);
         vnl_vector<double> error(2);
         amp_sampler->get_samples(amps);
-        
+
         vgl_point_2d<double> gridPoint(DG*double(ix),DG*double(iy));
         node_costs[nodeId].set_size(NALL);
         const double STRENGTH_FACTOR=1/20.0;
-        for(int ipt=0;ipt<NPOINTS_PER_NODE;ipt++)
+        for (int ipt=0;ipt<NPOINTS_PER_NODE;ipt++)
         {
-            if(ipt<NPOINTS_PER_NODE-2)
-            //if(1)
+            if (ipt<NPOINTS_PER_NODE-2)
+            //if (true)
                 loc_sampler->sample(error);
             else
                 loc_sampler_outlier->sample(error);
             double amplitude = amps[ipt];
-            //place it on a semi random grid, 
+            //place it on a semi random grid,
 
-            vgl_point_2d<double > location = vgl_point_2d<double>(gridPoint.x()+error[0], 
+            vgl_point_2d<double > location = vgl_point_2d<double>(gridPoint.x()+error[0],
                                                                   gridPoint.y()+error[1]);
-            
+
             locations.push_back(location);
             double ampprob=1.0-vcl_exp(-amplitude * STRENGTH_FACTOR);
-            if(ampprob<1.0E-8)
+            if (ampprob<1.0E-8)
                 ampprob=1.0E-8;
             all_responses.push_back(ampprob);
         }
-    
+
         //Raw data points are go.......
     }
-    
+
     assert(all_responses.size()==NALL);
     assert(locations.size()==NALL);
-    vcl_cout<<"Have created points grid and node costs..."<<vcl_endl;
-    vcl_cout<<"Now doing dumb assignment of all responses to every node..."<<vcl_endl;
-    for(int inode=0;inode<n;++inode)
+    vcl_cout<<"Have created points grid and node costs...\n"
+            <<"Now doing dumb assignment of all responses to every node..."<<vcl_endl;
+    for (int inode=0;inode<n;++inode)
     {
         node_costs[inode].set_size(NALL);
         vcl_copy(all_responses.begin(),all_responses.end(),
                  node_costs[inode].begin());
     }
-    for(unsigned i=0; i<arcs.size();i++)
+    for (unsigned i=0; i<arcs.size();i++)
     {
         unsigned node1=arcs[i].min_v();
         unsigned node2=arcs[i].max_v();
         unsigned arcId=i;
         pair_costs[arcId].set_size(NALL,NALL);
-        for(unsigned iLabel=0;iLabel<locations.size();++iLabel)
+        for (unsigned iLabel=0;iLabel<locations.size();++iLabel)
         {
-            for(unsigned jLabel=0;jLabel<locations.size();++jLabel)
+            for (unsigned jLabel=0;jLabel<locations.size();++jLabel)
             {
                 double& pairCost=pair_costs[arcId](iLabel,jLabel);
-                //if(iLabel==jLabel)
-                if(0)
+                //if (iLabel==jLabel)
+                if (false)
                 {
                     pairCost=-1.0E-20;
                 }
@@ -795,7 +793,7 @@ void test_5x5grid_hard()
                     vnl_vector<double > delta(2);
                     double dgx=0.0;
                     double dgy=0.0;
-                    if(node1 % NSTAGES == node2 % NSTAGES) //x coord same so must be a y arc
+                    if (node1 % NSTAGES == node2 % NSTAGES) //x coord same so must be a y arc
                     {
                         dgy=100.0;
                     }
@@ -805,8 +803,8 @@ void test_5x5grid_hard()
                     }
                     else
                     {
-                        vcl_cout<<"WARNING - inconsistent node numbering on arc "<<i<<"\tlinking\t"<<node1<<"\t"<<node2<<vcl_endl;
-                        assert(0);
+                        vcl_cout<<"WARNING - inconsistent node numbering on arc "<<i<<"\tlinking\t"<<node1<<'\t'<<node2<<vcl_endl;
+                        assert(false);
                     }
                     delta[0] = d.x()-dgx; delta[1]=d.y()-dgy;
                     pairCost=pdf_model.log_p(delta);
@@ -821,17 +819,17 @@ void test_5x5grid_hard()
 
     vcl_vector<vnl_matrix<double  > > pair_costs_neg=pair_costs;
 
-    for(unsigned i=0;i<pair_costs_neg.size();++i)
+    for (unsigned i=0;i<pair_costs_neg.size();++i)
     {
-        for(unsigned j=0; j<pair_costs_neg[i].rows();j++)
+        for (unsigned j=0; j<pair_costs_neg[i].rows();j++)
         {
-            for(unsigned k=0; k<pair_costs_neg[i].cols();k++)
+            for (unsigned k=0; k<pair_costs_neg[i].cols();k++)
             {
                 pair_costs_neg[i](j,k)= -1.0*pair_costs_neg[i](j,k);
             }
         }
     }
-    
+
     mmn_lbp_solver solver;
     solver.set_arcs(n,arcs);
     solver.set_smooth_on_cycling(true);
@@ -846,46 +844,45 @@ void test_5x5grid_hard()
     unsigned badCount=0;
     for (unsigned iy=0;iy<NSTAGES;++iy)
     {
-        for(unsigned ix=0;ix<NSTAGES;++ix)
+        for (unsigned ix=0;ix<NSTAGES;++ix)
         {
             unsigned nodeId=iy*NSTAGES + ix;
             unsigned nodeIdRight=nodeId+1;
             unsigned nodeIdAbove=nodeId+NSTAGES;
-            
-            vcl_cout<<"x["<<nodeId<<"]="<<x[nodeId]<<"\t"<<locations[x[nodeId]]<<"\t prior prob: "<<vcl_exp(-node_costs[nodeId][x[nodeId]])<<vcl_endl;
+
+            vcl_cout<<"x["<<nodeId<<"]="<<x[nodeId]<<'\t'<<locations[x[nodeId]]<<"\t prior prob: "<<vcl_exp(-node_costs[nodeId][x[nodeId]])<<vcl_endl;
 
             unsigned i0=x[nodeId];
-            if(ix<NSTAGES-1)
+            if (ix<NSTAGES-1)
             {
                 unsigned iR=x[nodeIdRight];
 
                 vgl_vector_2d<double> dR=locations[iR]-locations[i0];
-                TEST_NEAR("Grid Point dx to Right", fabs(dR.x()-DG),0.0,2.0*twoSigma);
-                TEST_NEAR("Grid Point dy to Right", fabs(dR.y()),0.0,2.0*twoSigma);
-                if(fabs(dR.x()-DG)>twoSigma || fabs(dR.y())>twoSigma)
+                TEST_NEAR("Grid Point dx to Right", vcl_fabs(dR.x()-DG),0.0,2.0*twoSigma);
+                TEST_NEAR("Grid Point dy to Right", vcl_fabs(dR.y()),0.0,2.0*twoSigma);
+                if (vcl_fabs(dR.x()-DG)>twoSigma || vcl_fabs(dR.y())>twoSigma)
                 {
                     ++badCount;
                 }
             }
-            if(iy<NSTAGES-1)
+            if (iy<NSTAGES-1)
             {
                 unsigned iA=x[nodeIdAbove];
                 vgl_vector_2d<double> dA=locations[iA]-locations[i0];
-                TEST_NEAR("Grid Point dx to Above", fabs(dA.x()),0.0,2.0*twoSigma);
-                TEST_NEAR("Grid Point dy to Above", fabs(dA.y()-DG),0.0,2.0*twoSigma);
-                
-                if(fabs(dA.y()-DG)>twoSigma || fabs(dA.x())>twoSigma)
+                TEST_NEAR("Grid Point dx to Above", vcl_fabs(dA.x()),0.0,2.0*twoSigma);
+                TEST_NEAR("Grid Point dy to Above", vcl_fabs(dA.y()-DG),0.0,2.0*twoSigma);
+
+                if (vcl_fabs(dA.y()-DG)>twoSigma || vcl_fabs(dA.x())>twoSigma)
                 {
                     ++badCount;
-                }            
+                }
             }
         }
     }
     vcl_cout<<"Number of unusual grid point separations= "<<badCount<<vcl_endl;
     TEST("Unusual grid point separation count",badCount<3,true);
-
-    
 }
+
 void test_lbp_solver()
 {
     test_lbp_solver_a();
