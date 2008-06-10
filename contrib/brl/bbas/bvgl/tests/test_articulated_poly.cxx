@@ -7,8 +7,9 @@
 //: Test the articulated poly
 static void test_articulated_poly()
 {
-  // default constr. not allowed to be used - GT
-  //bvgl_articulated_poly a;
+#if 0 // default constr. not allowed to be used - GT
+  bvgl_articulated_poly a;
+#endif
   vcl_cout << "Not implemented yet\n";
   TEST("Test articulated poly ", 1, 1);
 }
