@@ -70,4 +70,25 @@
 #include <vil1/vil1_scale_intensities_image_impl.h>
 #include <vil1/vil1_skip_image_impl.h>
 
+#include <vil1/file_formats/vil1_bmp.h>
+#include <vil1/file_formats/vil1_bmp_core_header.h>
+#include <vil1/file_formats/vil1_bmp_file_header.h>
+#include <vil1/file_formats/vil1_bmp_info_header.h>
+#include <vil1/file_formats/vil1_gen.h>
+#include <vil1/file_formats/vil1_gif.h>
+#include <vil1/file_formats/vil1_iris.h>
+#include <vil1/file_formats/vil1_jpeg.h>
+#include <vil1/file_formats/vil1_jpeg_compressor.h>
+#include <vil1/file_formats/vil1_jpeg_decompressor.h>
+#include <vil1/file_formats/vil1_jpeg_destination_mgr.h>
+#include <vil1/file_formats/vil1_jpeg_source_mgr.h>
+#include <vil1/file_formats/vil1_mit.h>
+#include <vil1/file_formats/vil1_png.h>
+#include <vil1/file_formats/vil1_pnm.h>
+#include <vil1/file_formats/vil1_ras.h>
+#include <vil1/file_formats/vil1_tiff.h>
+#include <vil1/file_formats/vil1_viff.h>
+#include <vil1/file_formats/vil1_viff_support.h>
+#include <vil1/file_formats/vil1_viffheader.h>
+
 int main() { return 0; }

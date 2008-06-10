@@ -53,6 +53,12 @@
 #include <vil3d/vil3d_trilin_interp.h>
 #include <vil3d/vil3d_transform.h>
 
+#include <vil3d/file_formats/vil3d_analyze_format.h>
+#include <vil3d/file_formats/vil3d_dicom.h>
+#include <vil3d/file_formats/vil3d_gen_synthetic.h>
+#include <vil3d/file_formats/vil3d_gipl_format.h>
+#include <vil3d/file_formats/vil3d_slice_list.h>
+
 #include <vil3d/vil3d_fwd.h>
 
 int main() { return 0; }
