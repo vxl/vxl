@@ -3,15 +3,16 @@
 #define bvxm_ocp_compare_process_h_
 //:
 // \file
-// \brief A class for comparing to occupancey grid for the probability 
-//        values. It makes a search in the kxkxk neighborhood and returns 
-//        the higher value. If the value is higher, the similarity is bigger.
-//        -  Input:
-//             - bvxm_voxel_world_sptr
-//             - bvxm_voxel_world_sptr
+// \brief A class for comparing to occupancy grid for the probability values.
 //
-//        -  Output:
-//             - double    the similarity measure
+// It makes a search in the kxkxk neighborhood and returns the higher value.
+// If the value is higher, the similarity is bigger.
+//   -  Input:
+//      * bvxm_voxel_world_sptr
+//      * bvxm_voxel_world_sptr
+//
+//   -  Output:
+//      * double    the similarity measure
 //
 // \author  Gamze D. Tunali
 // \date    05/15/2008
@@ -50,7 +51,7 @@ class bvxm_ocp_compare_process : public bprb_process
   bool init() { return true; }
   bool execute();
   bool finish() { return true; }
-private:
+ private:
   double compare(bvxm_voxel_world_sptr w1, bvxm_voxel_world_sptr w2, unsigned n);
   bool save_raw(char *ocp_array, int x, int y, int z, vcl_string filename);
 };
