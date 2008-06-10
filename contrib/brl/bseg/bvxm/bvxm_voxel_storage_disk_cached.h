@@ -11,7 +11,6 @@
 #endif
 //#include <vcl_fstream.h>
 #include <vgl/vgl_vector_3d.h>
-#include <vcl_map.h>
 
 #include "bvxm_voxel_storage.h"
 #include "bvxm_voxel_storage_disk.h" // for header
@@ -54,12 +53,9 @@ class bvxm_voxel_storage_disk_cached : public bvxm_voxel_storage<T>
 #else //BVXM_USE_FSTREAM64
   vil_stream_fstream *fio_;
 #endif //BVXM_USE_FSTREAM64
-  
 
   //: convert slab start index to file position
   vil_streampos slab_filepos(unsigned slab_index);
-  
 };
 
-
-#endif
+#endif // bvxm_voxel_storage_disk_cached_h_
