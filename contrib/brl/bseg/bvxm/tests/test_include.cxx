@@ -18,4 +18,7 @@
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_world_params.h>
 
+#include <bvxm/io/bvxm_io_voxel_world.h>
+#include <bvxm/io/bvxm_io_world_params.h>
+
 int main() { return 0; }
