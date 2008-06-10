@@ -14,4 +14,9 @@
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_reg_fundamental_matrix.h>
 
+#include <vpgl/io/vpgl_io_camera.h>
+#include <vpgl/io/vpgl_io_local_rational_camera.h>
+#include <vpgl/io/vpgl_io_proj_camera.h>
+#include <vpgl/io/vpgl_io_rational_camera.h>
+
 int main() { return 0; }
