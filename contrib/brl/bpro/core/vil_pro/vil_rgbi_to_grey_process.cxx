@@ -4,9 +4,6 @@
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vil/vil_save.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_image_view_base.h>
 
@@ -25,8 +22,8 @@ vil_rgbi_to_grey_process::vil_rgbi_to_grey_process()
   output_data_.resize(1,brdb_value_sptr(0));
   output_types_.resize(1);
   output_types_[0]="vil_image_view_base_sptr";
-
 }
+
 //: Destructor
 vil_rgbi_to_grey_process::~vil_rgbi_to_grey_process()
 {
