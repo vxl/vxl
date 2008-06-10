@@ -3,7 +3,9 @@
 #include <vbl/vbl_smart_ptr.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_bounding_box.h>
+#ifndef VCL_VC_6
 #include <vbl/vbl_shared_pointer.h>
+#endif
 #include <vbl/vbl_triple.h>
 #include <vbl/vbl_quadruple.h>
 
