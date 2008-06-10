@@ -19,4 +19,8 @@
 #include <vpgl/io/vpgl_io_proj_camera.h>
 #include <vpgl/io/vpgl_io_rational_camera.h>
 
+#include <vpgl/xio/vpgl_xio_calibration_matrix.h>
+
+#include <vpgl/file_formats/vpgl_nitf_rational_camera.h>
+
 int main() { return 0; }

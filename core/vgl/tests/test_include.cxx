@@ -34,12 +34,14 @@
 #include <vgl/vgl_polygon_test.h>
 #include <vgl/vgl_region_scan_iterator.h>
 #include <vgl/vgl_sphere_3d.h>
+#include <vgl/vgl_tolerance.h>
 #include <vgl/vgl_triangle_3d.h>
 #include <vgl/vgl_triangle_scan_iterator.h>
 #include <vgl/vgl_triangle_test.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_window_scan_iterator.h>
+
 #include <vgl/algo/vgl_conic_2d_regression.h>
 #include <vgl/algo/vgl_convex_hull_2d.h>
 #include <vgl/algo/vgl_fit_conics_2d.h>
@@ -69,6 +71,10 @@
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/algo/vgl_p_matrix.h>
 #include <vgl/algo/vgl_rtree.h>
-#include <vgl/vgl_tolerance.h>
+
+#include <vgl/xio/vgl_xio_box_3d.h>
+#include <vgl/xio/vgl_xio_point_2d.h>
+#include <vgl/xio/vgl_xio_point_3d.h>
+#include <vgl/xio/vgl_xio_vector_3d.h>
 
 int main() { return 0; }

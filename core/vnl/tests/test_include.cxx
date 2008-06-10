@@ -114,6 +114,10 @@
 #include <vnl/vnl_vector_ref.h>
 #include <vnl/vnl_vector_fixed_ref.h>
 
+#include <vnl/xio/vnl_xio_matrix_fixed.h>
+#include <vnl/xio/vnl_xio_quaternion.h>
+#include <vnl/xio/vnl_xio_vector.h>
+#include <vnl/xio/vnl_xio_vector_fixed.h>
 
 // Put vnl_config.h at the end, to verify that none of the above implicitly depend on it
 #include <vnl/vnl_config.h>
