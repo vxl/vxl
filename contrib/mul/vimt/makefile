@@ -11,6 +11,7 @@ MANPAGE_SOURCES += vimt_image_2d_of.txx
 SOURCES += vimt_image_pyramid.cxx
 SOURCES += vimt_image_pyramid_builder.cxx
 SOURCES += vimt_transform_2d.cxx
+SOURCES += vimt_transform_util_2d.cxx
 SOURCES += vimt_add_all_binary_loaders.cxx
 SOURCES += vimt_load_transform.cxx
 SOURCES += vimt_vil_v2i.cxx
