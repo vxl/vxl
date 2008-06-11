@@ -24,6 +24,7 @@
 #include <vimt/vimt_sample_profile_bilin.h>
 #include <vimt/vimt_scale_pyramid_builder_2d.h>
 #include <vimt/vimt_transform_2d.h>
+#include <vimt/vimt_transform_util_2d.h>
 #include <vimt/vimt_vil_v2i.h>
 
 int main() { return 0; }
