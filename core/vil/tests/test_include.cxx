@@ -63,13 +63,11 @@
 #include <vil/vil_view_as.h>
 #include <vil/vil_warp.h>
 
+// Image file format interface headers:
 #include <vil/file_formats/vil_bmp.h>
 #include <vil/file_formats/vil_bmp_core_header.h>
 #include <vil/file_formats/vil_bmp_file_header.h>
 #include <vil/file_formats/vil_bmp_info_header.h>
-#include <vil/file_formats/vil_dicom.h>
-#include <vil/file_formats/vil_dicom_header.h>
-#include <vil/file_formats/vil_dicom_stream.h>
 #include <vil/file_formats/vil_iris.h>
 #include <vil/file_formats/vil_j2k_image.h>
 #include <vil/file_formats/vil_jpeg.h>
@@ -104,14 +102,24 @@
 #include <vil/file_formats/vil_pnm.h>
 #include <vil/file_formats/vil_pyramid_image_list.h>
 #include <vil/file_formats/vil_ras.h>
-#include <vil/file_formats/vil_tiff.h>
-#include <vil/file_formats/vil_tiff_header.h>
 #include <vil/file_formats/vil_viff.h>
 #include <vil/file_formats/vil_viff_support.h>
 #include <vil/file_formats/vil_viffheader.h>
-
+// Only the following ones need library-specific #includes:
+#if HAS_JPEG2000
+#include <vil/file_formats/NCSJPCVilIOStream.h>
+#endif
+#if HAS_DCMTK
+#include <vil/file_formats/vil_dicom.h>
+#include <vil/file_formats/vil_dicom_header.h>
+#include <vil/file_formats/vil_dicom_stream.h>
+#endif
+#if HAS_TIFF
+#include <vil/file_formats/vil_tiff.h>
+#include <vil/file_formats/vil_tiff_header.h>
 #ifdef HAS_GEOTIFF
 #include <vil/file_formats/vil_geotiff_header.h>
-#endif // HAS_GEOTIFF
+#endif
+#endif
 
 int main() { return 0; }
