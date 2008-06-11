@@ -272,6 +272,9 @@ SOURCE=.\Templates/vgl_io_cylinder+double-.cxx
 # Begin Source File
 SOURCE=.\Templates/vsl_vector_io+vcl_vector+vgl_cylinder+double---.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_vector_io+vgl_line_segment_2d+double--.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
