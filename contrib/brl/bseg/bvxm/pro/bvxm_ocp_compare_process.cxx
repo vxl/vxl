@@ -117,7 +117,7 @@ double bvxm_ocp_compare_process::compare(bvxm_voxel_world_sptr w1,
         }
         N = (N/num)*grid_size.x()*grid_size.y()*grid_size.z();
         vcl_cout << "k=" << k << "  j=" << j1 << "  i=" << i1 << "-->" << N << vcl_endl;
-        comp_array[(i1+n)*dim*dim + (j1+n)*dim + (k+n)] = (N/14927.35)*255.0;
+        comp_array[(i1+n)*dim*dim + (j1+n)*dim + k+n] = char((N/14927.35)*255);
       }
     }
   }
