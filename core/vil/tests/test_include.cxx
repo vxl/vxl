@@ -70,7 +70,6 @@
 #include <vil/file_formats/vil_dicom.h>
 #include <vil/file_formats/vil_dicom_header.h>
 #include <vil/file_formats/vil_dicom_stream.h>
-#include <vil/file_formats/vil_geotiff_header.h>
 #include <vil/file_formats/vil_iris.h>
 #include <vil/file_formats/vil_j2k_image.h>
 #include <vil/file_formats/vil_jpeg.h>
@@ -110,5 +109,9 @@
 #include <vil/file_formats/vil_viff.h>
 #include <vil/file_formats/vil_viff_support.h>
 #include <vil/file_formats/vil_viffheader.h>
+
+#ifdef HAS_GEOTIFF
+#include <vil/file_formats/vil_geotiff_header.h>
+#endif // HAS_GEOTIFF
 
 int main() { return 0; }
