@@ -8,7 +8,6 @@
 
 #include <vcl_cmath.h>
 #include <vcl_cassert.h>
-//#include <vcl_sstream.h>
 
 #include <vil/vil_math.h>
 #include <vil/vil_resample_bilin.h>
@@ -126,23 +125,23 @@ bil_scale_image<T>::build_gaussian(const vil_image_view<T>& image,
   double init_sigma = init_scale_ * vcl_sqrt(k*k - 1.0);
 
   // create the Gaussian Pyramid
-  for (unsigned int oct=0; oct<data_.size(); ++oct)
+  for (unsigned int oc=0; oc<data_.size(); ++oc)
   {
-    if (oct > 0){
-      temp = data_[oct][0] = down_sample(data_[oct-1][num_levels_]);
+    if (oc > 0){
+      temp = data_[oc][0] = down_sample(data_[oc-1][num_levels_]);
     }
     sigma = init_sigma;
     for (unsigned int lvl=0; lvl<num_levels_+2; ++lvl){
-      vcl_cout << "img("<<oct<<','<<lvl<<") - ("<<data_[oct][lvl].ni()<<','<<data_[oct][lvl].nj()<<") "<< sigma <<vcl_endl;
+      vcl_cout << "img("<<oc<<','<<lvl<<") - ("<<data_[oc][lvl].ni()<<','<<data_[oc][lvl].nj()<<") "<< sigma <<vcl_endl;
       if (lvl<num_levels_+1)
-        temp = data_[oct][lvl+1] = vil_image_view<T>(temp.ni(),temp.nj(),temp.nplanes());
+        temp = data_[oc][lvl+1] = vil_image_view<T>(temp.ni(),temp.nj(),temp.nplanes());
       else
         temp = vil_image_view<T>(temp.ni(),temp.nj(),temp.nplanes());
       // Smooth with a Gaussian filter
-      smooth(sigma, data_[oct][lvl], temp);
+      smooth(sigma, data_[oc][lvl], temp);
       // compute DoG image if requested
       if (diff)
-        vil_math_image_difference( temp, data_[oct][lvl], (*diff)(oct+this->first_octave_,lvl));
+        vil_math_image_difference( temp, data_[oc][lvl], (*diff)(oc+this->first_octave_,lvl));
 
       // compute sigma for the next level
       sigma *= k;
@@ -170,11 +169,11 @@ bil_scale_image<T>::compute_gradients(bil_scale_image<T>& orientation,
                          vcl_vector< vil_image_view< T > >(this->num_levels_+2));
 
   // compute the gradient magnitude and orientation of each image in the gauss pyramid
-  for (unsigned int oct=0; oct<data_.size(); ++oct)
+  for (unsigned int oc=0; oc<data_.size(); ++oc)
     for (unsigned int lvl=0; lvl<num_levels_+2; ++lvl)
-      vil_orientations_from_sobel( data_[oct][lvl],
-                                   orientation(oct+this->first_octave_, lvl),
-                                   magnitude(oct+this->first_octave_, lvl) );
+      vil_orientations_from_sobel( data_[oc][lvl],
+                                   orientation(oc+this->first_octave_, lvl),
+                                   magnitude(oc+this->first_octave_, lvl) );
 }
 
 
