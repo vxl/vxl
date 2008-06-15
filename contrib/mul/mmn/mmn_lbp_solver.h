@@ -13,7 +13,8 @@
 #include <mmn/mmn_arc.h>
 #include <mmn/mmn_graph_rep1.h>
 //: Run loopy belief to estimate overall marginal probabilities of all node states
-//: Then use converged LBP messages to also estimate overall most likely configuration
+//  Then use converged LBP messages to also estimate overall most likely configuration
+//
 // Can use this for non-tree graphs, but convergence to optimum is not absolutely guaranteed
 // Should converge if there is at most one loop in the graph
 // The input graph is converted to form mmn_graph_rep1 from the input arcs
@@ -25,11 +26,11 @@ class mmn_lbp_solver
 
     //: Inner vector indexed by target node state ID
     typedef vcl_map<unsigned,vnl_vector<double > > message_set_t;
-    
+
     //: Matrix referenced by [source node state ID][target node state ID]
     // Map ID is target node ID
     typedef vcl_map<unsigned, vnl_matrix<double > > neigh_arc_cost_t;
-    
+
     //:Store in graph form (so each node's neighbours are conveniently to hand)
     mmn_graph_rep1 graph_;
 
@@ -50,7 +51,7 @@ class mmn_lbp_solver
 
     //: Node costs (outer vector is node ID, inner vnl_vector is by state value)
     vcl_vector<vnl_vector<double> > node_costs_;
-    
+
     //: belief prob for each state of each node
     // Assumes input node costs are well-normalised for these to be proper probabilities
     vcl_vector<vnl_vector<double> > belief_;
@@ -59,7 +60,7 @@ class mmn_lbp_solver
     //: previous N solutions (used to trap cycling)
     vcl_deque<vcl_vector<unsigned  > > soln_history_;
 
-        //: previous max_delta values(used to check still descending)
+    //: previous max_delta values(used to check still descending)
     vcl_deque<double  > max_delta_history_;
 
     //: Current iteration count
@@ -79,7 +80,7 @@ class mmn_lbp_solver
 
     //: count of number of times a solution in history is revisited
     unsigned nrevisits_;
-    
+
     //: cycle condition detected
     bool isCycling_;
 
@@ -106,7 +107,7 @@ class mmn_lbp_solver
     //: Magic numbers for cycle detection
     static const unsigned NHISTORY_;
     static const unsigned NCYCLE_DETECT_;
-    
+
     //: Check if we carry on
     bool continue_propagation(vcl_vector<unsigned>& x);
 
@@ -126,7 +127,7 @@ class mmn_lbp_solver
 
     //: update beliefs and calculate changes therein
     void calculate_beliefs(vcl_vector<unsigned>& x);
-   public:
+ public:
     //: Default constructor
     mmn_lbp_solver();
 
@@ -135,7 +136,7 @@ class mmn_lbp_solver
 
     //: Input the arcs that define the graph
     void set_arcs(unsigned num_nodes,const vcl_vector<mmn_arc>& arcs);
-    
+
     //: Find values for each node with minimise the total cost
     //  \param node_cost: node_cost[i][j] is cost of selecting value j for node i
     //  \param pair_cost: pair_cost[a](i,j) is cost of selecting values (i,j) for nodes at end of arc a.
@@ -144,7 +145,7 @@ class mmn_lbp_solver
     // with the node with the lowest index being the first parameter.  Thus if
     // v1 has value i1, v2 has value i2, then the cost of this choice is
     // (v1<v2?pair_cost(i1,i2):pair_cost(i2,i1))
-    // 
+    //
     // Returns the minimum cost. Note that internally we deal with a maximisation
     // after negating the input costs, which are assumed to represent -log probabilities
     // If the states of a node in node_cost are not well normalised as a probability
@@ -156,8 +157,9 @@ class mmn_lbp_solver
                       const vcl_vector<vnl_matrix<double> >& arc_cost,
                       vcl_vector<unsigned>& x);
 
-    //: return the beliefs, i.e. the marginal probabilities of each node's states 
+    //: return the beliefs, i.e. the marginal probabilities of each node's states
     const vcl_vector<vnl_vector<double>  >&  belief() const {return belief_;}
+
     //: final iteration count
     unsigned count() const {return count_;}
 
