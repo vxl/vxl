@@ -46,6 +46,22 @@ class mbl_stl_pred_index_adapter : public vcl_unary_function<unsigned, bool>
   }
 };
 
+template <class T, class Pred>
+class mbl_stl_pred_index_adapter_n : public vcl_unary_function<unsigned, bool>
+{
+  //:const reference to vector used to store the objects indexed
+  const vnl_vector<T >& vec_;
+  //: The predicate to really be applied
+  Pred Op_;
+ public:
+  mbl_stl_pred_index_adapter_n(vnl_vector<T> const& v, Pred Op):vec_(v),Op_(Op){}
+
+  inline bool operator()(const unsigned& i) const
+  {
+    return Op_(vec_[i]);
+  }
+};
+
 //: Helper function to create an index adapter of the appropriate type
 // As this is a function not a class, it saves some template gobbledegook in the class name
 // Vec is assumed vector<T> where T is the type associated with the constructed adapter
@@ -54,6 +70,15 @@ template <class T, class Pred>
 inline mbl_stl_pred_index_adapter<T,Pred> mbl_stl_pred_create_index_adapter(const vcl_vector<T>& v, Pred Op)
 {
   return  mbl_stl_pred_index_adapter<T,Pred>(v,Op);
+};
+//: Helper function to create an index adapter of the appropriate type
+// As this is a function not a class, it saves some template gobbledegook in the class name
+// Vec is assumed vector<T> where T is the type associated with the constructed adapter
+//However note that using this means an extra copy of the predicate functor will occur
+template <class T, class Pred>
+inline mbl_stl_pred_index_adapter_n<T,Pred> mbl_stl_pred_create_index_adapter(const vnl_vector<T>& v, Pred Op)
+{
+  return  mbl_stl_pred_index_adapter_n<T,Pred>(v,Op);
 };
 
 //: Adapt a predicate over a vector to the operation specified on an index into that vector
@@ -181,6 +206,20 @@ class mbl_stl_pred_is_a : public vcl_unary_function<T, bool>
   {
       return (p->is_a()==ctype_) ? true : false;
   }
+};
+
+class mbl_stl_pred_is_near : public vcl_unary_function<double, bool>
+{
+    double epsilon_;
+    double xtarget_;
+ public:
+    mbl_stl_pred_is_near(double xtarget,double epsilon=1.0E-12):
+        xtarget_(xtarget),epsilon_(epsilon)
+        {}
+    inline bool operator()(const double& x) const
+    {
+        return ((fabs(x-xtarget_)<epsilon_) ? true : false);
+    }    
 };
 
 #endif
