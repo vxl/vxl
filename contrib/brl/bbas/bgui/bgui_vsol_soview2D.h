@@ -28,6 +28,7 @@
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
+#include <vsol/vsol_poly_set_2d_sptr.h>
 #include <vsol/vsol_digital_curve_2d_sptr.h>
 
 #include <vgui/vgui_soview2D.h>
@@ -233,6 +234,36 @@ class bgui_vsol_soview2D_polygon : public bgui_vsol_soview2D
   void translate(float x, float y);
 };
 
+//: vsol_polygon_2d
+class bgui_vsol_soview2D_polygon_set : public bgui_vsol_soview2D
+{
+ public:
+  //: Constructor - creates a view of a vdgl_polygon
+  bgui_vsol_soview2D_polygon_set(vsol_poly_set_2d_sptr const& e);
+
+  //: Deconstructor
+  ~bgui_vsol_soview2D_polygon_set() {}
+
+  //: Returns the type of this class ('bgui_vsol_soview2D_polygon').
+  static vcl_string type_name_() { return "bgui_vsol_soview2D_polygon_set"; }
+  vcl_string type_name() const { return type_name_(); }
+
+  // Returns a smart pointer to the polygon set 
+  // \note cast from a vsol_spatial_object_2d_sptr in the base class
+  vsol_poly_set_2d_sptr sptr() const;
+
+  //: Render this 2D digital_curve on the display.
+  void draw() const;
+
+  //: Returns the distance squared from this 2D digital_curve to the given position.
+  virtual float distance_squared(float x, float y) const;
+
+  //: Returns the centroid of this 2D digital_curve.
+  void get_centroid(float* x, float* y) const;
+
+  //: Translate this 2D digital_curve by the given x and y distances.
+  void translate(float x, float y);
+};
 
 //: vsol_digital_curve_2d
 class bgui_vsol_soview2D_digital_curve : public bgui_vsol_soview2D

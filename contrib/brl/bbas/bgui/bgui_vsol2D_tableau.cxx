@@ -118,6 +118,19 @@ bgui_vsol2D_tableau::add_vsol_polygon_2d(vsol_polygon_2d_sptr const& pline,
   return obj;
 }
 
+bgui_vsol_soview2D_polygon_set*
+bgui_vsol2D_tableau::add_vsol_polygon_2d_set(vsol_poly_set_2d_sptr const& set,
+                                             const vgui_style_sptr& style)
+{
+  bgui_vsol_soview2D_polygon_set* obj =
+      new bgui_vsol_soview2D_polygon_set(set);
+  add(obj);
+  if (style)
+    obj->set_style( style );
+  else
+    obj->set_style( polyline_style_ );
+  return obj;
+}
 
 bgui_vsol_soview2D_digital_curve*
 bgui_vsol2D_tableau::add_digital_curve(vsol_digital_curve_2d_sptr const& dc,

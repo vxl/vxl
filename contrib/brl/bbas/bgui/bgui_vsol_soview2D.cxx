@@ -20,6 +20,7 @@
 #include <vsol/vsol_conic_2d.h>
 #include <vsol/vsol_polyline_2d.h>
 #include <vsol/vsol_polygon_2d.h>
+#include <vsol/vsol_poly_set_2d.h>
 #include <vsol/vsol_digital_curve_2d.h>
 
 //--------------------------------------------------------------------------
@@ -546,5 +547,58 @@ void bgui_vsol_soview2D_polygon::translate( float x , float y )
   {
     sptr()->vertex(i)->set_x( sptr()->vertex(i)->x() + x );
     sptr()->vertex(i)->set_y( sptr()->vertex(i)->y() + y );
+  }
+}
+
+bgui_vsol_soview2D_polygon_set::bgui_vsol_soview2D_polygon_set(vsol_poly_set_2d_sptr const& e)
+: bgui_vsol_soview2D(e.ptr())
+{
+}
+
+vsol_poly_set_2d_sptr bgui_vsol_soview2D_polygon_set::sptr() const
+{
+  return sptr_->cast_to_region()->cast_to_poly_set();
+}
+
+void bgui_vsol_soview2D_polygon_set::draw() const
+{
+  unsigned int n = sptr()->size();
+  for (unsigned int i=0; i<n;i++)
+  {
+    bgui_vsol_soview2D_polygon poly(sptr()->poly(i));
+    poly.draw();
+  }
+}
+
+float bgui_vsol_soview2D_polygon_set::distance_squared( float x , float y ) const
+{
+  unsigned int n = sptr()->size();
+  float d=0;
+  for (unsigned int i=0; i<n;i++)
+  {
+    bgui_vsol_soview2D_polygon poly(sptr()->poly(i));
+    d += poly.distance_squared(x,y);
+  }
+
+  return (d/n);
+}
+
+void bgui_vsol_soview2D_polygon_set::get_centroid( float* x, float* y ) const
+{
+  unsigned int n = sptr()->size();
+  for (unsigned int i=0; i<n;i++)
+  {
+    bgui_vsol_soview2D_polygon poly(sptr()->poly(i));
+    poly.get_centroid(x,y);
+  }
+}
+
+void bgui_vsol_soview2D_polygon_set::translate(float x , float y)
+{
+  unsigned int n = sptr()->size();
+  for (unsigned int i=0; i<n;i++)
+  {
+    bgui_vsol_soview2D_polygon poly(sptr()->poly(i));
+    poly.translate(x,y);
   }
 }

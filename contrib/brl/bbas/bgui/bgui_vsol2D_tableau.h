@@ -31,6 +31,7 @@
 #include <vsol/vsol_conic_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
+#include <vsol/vsol_poly_set_2d_sptr.h>
 #include <vsol/vsol_digital_curve_2d_sptr.h>
 
 #include <vdgl/vdgl_digital_curve_sptr.h>
@@ -47,6 +48,7 @@ class bgui_vsol_soview2D_line_seg;
 class bgui_vsol_soview2D_conic_seg;
 class bgui_vsol_soview2D_polyline;
 class bgui_vsol_soview2D_polygon;
+class bgui_vsol_soview2D_polygon_set;
 class bgui_vsol_soview2D_digital_curve;
 class bgui_vsol_soview2D_edgel_curve;
 
@@ -90,6 +92,11 @@ class bgui_vsol2D_tableau : public vgui_easy2D_tableau
   bgui_vsol_soview2D_polygon*
     add_vsol_polygon_2d(vsol_polygon_2d_sptr const& pline,
                         const vgui_style_sptr& style = NULL);
+
+  //: display for vsol_polygon_2d
+  bgui_vsol_soview2D_polygon_set*
+    add_vsol_polygon_2d_set(vsol_poly_set_2d_sptr const& set,
+                            const vgui_style_sptr& style = NULL);
 
   //: display for vsol_digital_curve_2d
   bgui_vsol_soview2D_digital_curve*
