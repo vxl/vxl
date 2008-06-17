@@ -48,7 +48,7 @@ else
     exit 0;
   }
   $FILES = `find $VXLROOT/vcl $VXLROOT/core $VXLROOT/contrib $VXLROOT/v3p/Qv -type f \\\( -name \\\*.cxx -o -name \\\*.txx -o -name \\\*.cc -o -name \\\*.cpp -o -name \\\*.c -o -name \\\*.h \\\) -print`;
-  @FILES = grep { ! m!/b3p/expatpp/! } split /\s+/, $FILES;
+  @FILES = grep { ! m!/b3p/expatp*/! } split /\s+/, $FILES;
 }
 
 # In what follows, $f is the name of the file, $file is the file content, and $file_s is a comment-stripped version of $file.
@@ -202,8 +202,10 @@ foreach $f (@FILES)
           $f !~ m!/vcl/tests/test_stlfwd\.cxx$! &&
           $f !~ m!/cmake/config/vxl_platform_tests\.cxx$! &&
           $f !~ m!/v.l/io/tests/golden_test_v.l_io\.cxx$! &&
+          $f !~ m!/vnl/vnl_sse.h$! &&
          "$f-$j" !~ m!\bv3p/netlib/triangle\.c\-math\.h$! &&
          "$f-$j" !~ m!\bv3p/png/tests/pngtest\.c\-time\.h$! &&
+         "$f-$j" !~ m!\bbgui3d_file_io\.cxx-Inventor/! &&
           $j !~ m!^(stdlib|varargs|sys/types|stdio|windows|GL/glu?t?)\.h$!);
     $jj = $j; $i = $j;
     next unless ($i =~ s!^(v[bginpsu]l|vil1|vgui|vidl|vidl_vil1|vtol|vsol|vdgl|vipl/vipl_with_[a-z_]+|vipl|vepl2?|mbl|pdf1d|vpdfl|mil|mil3d|vimt|vimt3d|gevd|bsol|btol|bugl|bvnl|bvgl|bgui|bdgl|rrel|rsdl|rgrl)/(file_formats/|algo/|io/|internals/|filter/|section/|vrml/|impl/(X|glut|gtk|mfc)/|)(.*)\.h!$4! || $i =~ s!^(v[cx]l_[a-z]+)\.h$!$1!);
@@ -386,7 +388,7 @@ foreach $f (@FILES)
     elsif ($j eq 'vnl/algo/vnl_algo_fwd.h') { $i='vnl_(svd|qr|matrix_inverse|symmetric_eigensystem|cholesky|complex_eigensystem|conjugate_gradient|cpoly_roots|lbfgs|levenberg_marquardt)'; }
     elsif ($j eq 'vnl/algo/vnl_chi_squared.h') { $i.='_[a-z]+'; }
     elsif ($j eq 'vnl/algo/vnl_fft.h') { $i.='(|_(|set)gpfa)'; }
-    elsif ($j eq 'vnl/algo/vnl_netlib.h') { $i='vnl_netlib_(svd|qrdc|qrsl)_(proto|params)|v3p_netlib_(cg|simpru|zgeev|rpoly|dchscdf|dpofa|dposl|dpoco|dpodi|dgpfa|rsg|dgges|lbfgs|lmdif|lsqr|qrdc|qrsl|rs|rg|dnlaso|svdc)_'; }
+    elsif ($j eq 'vnl/algo/vnl_netlib.h') { $i='vnl_netlib_(svd|qrdc|qrsl)_(proto|params)|v3p_netlib_(cg|simpru|zgeev|rpoly|dchscdf|dpofa|dposl|dpoco|dpodi|dgpfa|rsg|dgges|lbfgs|lmdif|lsqr|qrdc|qrsl|rs|rg|dnlaso|svdc|setulb)_'; }
     elsif ($j eq 'vnl/algo/vnl_symmetric_eigensystem.h') { $i.='(|_compute)'; }
     elsif ($j eq 'vnl/algo/vnl_discrete_diff.h') { $i.='(_sym|_fwd|_test_lsf)'; }
     elsif ($j eq 'vnl/algo/vnl_solve_qp.h') { $i.='_(zero_sum|no_neg_sum_one|with_(equality|non_neg)_constraints)'; }
@@ -600,8 +602,7 @@ foreach $f (@FILES)
                     | accp\S+
                     | accura[^ct]\S*
                     | adaptati[^no]\S*
-                    | \w*(sss
-                    | ettt)\w*
+                    | \w*(sss|ettt)\w*
                     | alement
                     | alife
                     | anj\b
@@ -639,10 +640,8 @@ foreach $f (@FILES)
                     | compilant
                     | condt\S+
                     | conju[^gnr]\S*
-                    | (con
-                    | de)stuct\S*
-                    | (con
-                    | de)truct\S*
+                    | (con|de)stuct\S*
+                    | (con|de)truct\S*
                     | containins
                     | continou\S*
                     | contrain\S+
@@ -651,12 +650,11 @@ foreach $f (@FILES)
                     | controled
                     | coordi[^n]\S*
                     | cores\S+
-                    | corr[a-dfghj-np-tv-z]\w+\b
+                    | corr[a-dfghj-np-tv-z]\w{3,}\b
                     | corrosp\S+
                     | decend\S*
                     | (de)?compos[^aei]\S*
                     | defau[^l]\S*
-                    | dependan\S*
                     | dependen[^ct]\S*
                     | desct\S*
                     | despatch
@@ -764,8 +762,7 @@ foreach $f (@FILES)
                     | represe[^n]\S*
                     | reps\w{2,}
                     | retrei\S*
-                    | rre\w*q\S*
-                    | samp[a-km-rt-z]\w*
+                    | samp[a-kmnp-rt-z]\w*
                     | seciton
                     | seting
                     | severl\S*
@@ -809,7 +806,7 @@ foreach $f (@FILES)
                     | writted
                     | yei\S*
                     )!ix
-        && $1 ne "valush" && $1 ne "IntInfo" && $1 ne "InitInstance" && $1 ne "posinf," && $1 ne "sss" && $1 ne "ttt" && $1 ne "sssHdddmmss" && $1 !~ m!^(.*GlassSel.*)$!);
+        && $1 ne 'valush' && $1 ne 'IntInfo' && $1 ne 'InitInstance' && $1 ne 'posinf,' && $1 ne 'sss' && $1 ne 'ttt' && $1 ne 'sssHdddmmss' && $1 ne 'sampNumCoef' && $1 !~ m!ClassSel|classSo|\bcorrs_!);
 
 # 9. spurious #pragma interface or #pragma implementation
   &msg(1, "contains $1 without #ifdef VCL_NEEDS_PRAGMA_INTERFACE")
@@ -903,6 +900,7 @@ foreach $f (@FILES)
         "$1" ne "VCL_INSTANTIATE_INLINE");
 # Check correct file name of *.cxx files in Templates directories
   $file_s =~ s!VCL_DO_NOT_INSTANTIATE!VCL_do_not_INSTANTIATE!g;
+  if ($f =~ m!/Templates/!) { while ($file_s =~ s!\btypedef\s+([^;]*)\s(\w+)\s*\;!!) { $A=$1; $B=$2; $file_s =~ s!\b$B\b!$A!g; } }
   if ($f =~ m!/Templates/! &&
       $f !~ m!vcl/Templates/(complex|string)-instances\.cxx$! &&
       $f !~ m!core/vnl/algo/Templates/fsm_pack\.cxx$! &&
@@ -914,8 +912,8 @@ foreach $f (@FILES)
     $class =~ s!\bvcl_(swap|containable)\s*\<!vcl_algorithm\<!g;
     $class =~ s!\bvcl_sort\s*\<[^,]+\,!vcl_algorithm\<!g;
     $class =~ s!\bvcl_find(_if)?\s*\<\s*vcl_(vector|list)\s*\<([^\005]+)\005\s*(const_)?iterator.+!vcl_algorithm\<$3!g;
-    while ($file_s =~ s!\btypedef\s+([^;]*)\s(\S+)\s*\;!!)
-    { $A=$1; $B=$2; $B =~ s!([][{}()|*+/\\])!\\$1!g; $class =~ s!\b$B\b!$A!g; }
+#   while ($file_s =~ s!\btypedef\s+([^;]*)\s(\w+)\s*\;!!)
+#   { $A=$1; $B=$2; $B =~ s!([][{}()|*+/\\])!\\$1!g; $class =~ s!\b$B\b!$A!g; }
 #   $class =~ s!\bconst\b!!g;
     $class =~ s!\s!!g;
     $class =~ s!\bconstchar!const_char!g; $class =~ s!(\w)const([^r])!$1_const$2!g;
@@ -928,6 +926,8 @@ foreach $f (@FILES)
     $class_q = $class; $class_q =~ s!([.+~-])!\\$1!g;
     $class =~ s!unsigned!u!g; $class =~ s!signed!s!g; $class =~ s!longd!long_d!g;
     $class =~ s!vxl_(s?byte|u?int)!$1!g;
+    $class =~ s!^brdb_value\+(.*)\.\003\-!brdb_value_t+$1-!;
+    $class =~ s!^bbgm_image\+!bbgm_image_of+!;
     $class_r = $class; $class_r =~ s!([.+~-])!\\$1!g;
     $class_s = $class_q; $class_s =~ s!signed!signed_!g; $class_s =~ s!long!long_!g;
     &msg(1, "should be renamed to $class.cxx")
@@ -937,16 +937,18 @@ foreach $f (@FILES)
   }
 
 # 14. Missing vcl_
-  foreach $wd (split(' ',"abort exit"))
+  foreach $wd (qw(abort exit))
   {
     if ($cpp_file && $file_s =~ m!\b$wd\s*(\s*)\(!)
     {
       &msg(1, "$wd$1() must be vcl_$wd()")
-        unless ($f =~ m!/cmake/config/vxl_platform_tests\.cxx$!);
+        unless ($f =~ m!/cmake/config/vxl_platform_tests\.cxx$! ||
+                $f =~ m!/bwm_tableau_mgr\.(cxx|h)$! ||
+                $f =~ m!/bwm_menu\.h$!);
     }
   }
 
-  foreach $wd (split(' ',"complex real imag conj arg polar min max abs acos asin atan atan2 ceil cos cosh exp fabs floor fmod frexp ldexp log log10 modf pow sin sinh sqrt tan tanh printf fprintf sprintf scanf fscanf sscanf fopen fclose fread fwrite memchr memcpy memcmp memmove memset qsort strcat strncat strcpy strncpy strchr strcmp strncmp strcoll strcspn strerror strlen strpbrk strrchr strspn strstr strtok strxfrm isspace isprint iscntrl isupper islower isalpha isgraph isdigit ispunct isxdigit isalnum isgraph toupper tolower"))
+  foreach $wd (qw(complex real imag conj arg polar min max abs acos asin atan atan2 ceil cos cosh exp fabs floor fmod frexp ldexp log log10 modf pow sin sinh sqrt tan tanh printf fprintf sprintf scanf fscanf sscanf fopen fclose fread fwrite memchr memcpy memcmp memmove memset qsort strcat strncat strcpy strncpy strchr strcmp strncmp strcoll strcspn strerror strlen strpbrk strrchr strspn strstr strtok strxfrm isspace isprint iscntrl isupper islower isalpha isgraph isdigit ispunct isxdigit isalnum isgraph toupper tolower))
   {
     &msg(1, "$wd$1() must be vcl_$wd()")
       if ($cpp_file &&
@@ -960,6 +962,7 @@ foreach $f (@FILES)
           "$f.$wd" !~ m!\bvnl_finite\.h\.(exp|log|pow)$! &&
           "$f.$wd" !~ m!\bvil1?_rgb\.(h|txx)\.(min|max)$! &&
           "$f.$wd" !~ m!\bvbl_bounding_box\.(h|txx)\.(min|max)$! &&
+          "$f.$wd" !~ m!\bvnl_sse\.h\.(min|max)$! &&
           "$f.$wd" !~ m!\bvgel/kl/base\.h\.(min|max)$! &&
           "$f.$wd" !~ m!\bmbl_stats_1d\.h\.(min|max)$! &&
           "$f.$wd" !~ m!\brgrl_spline\.cxx\.(ceil|floor|min|max)$! &&
@@ -967,12 +970,13 @@ foreach $f (@FILES)
           "$f.$wd" !~ m!\bmvl/HomgConic\.(h|cxx)\.polar$! &&
           "$f.$wd" !~ m!\bbdgl_curve_clustering\.(cxx|h)\.(min|max)$! &&
           "$f.$wd" !~ m!\bbsta_histogram\.h\.(min|max)$! &&
+          "$f.$wd" !~ m!\bbvxm_lidar_processor\.cxx\.(min|max)$! &&
           "$f.$wd" !~ m!\bvidl2_pixel_format\.h\.(min|max)$! &&
           "$f.$wd" !~ m!\balgo/vnl_rn?poly_(solve|roots)\.h\.(real|imag)$! &&
           "$f"     !~ m!/cmake/config/vxl_platform_tests\.cxx$! &&
           $file_s =~ m![^.\005\006]\b$wd(\s*)\(! ); # \005 is :: and \006 is ->
   }
-  foreach $wd (split(' ',"cin cout cerr clog endl ends flush ios istream ostream fstream ifstream ofstream strstream ostrstream streambuf streamoff streamsize fpos streampos stringstream"))
+  foreach $wd (qw(cin cout cerr clog endl ends flush ios istream ostream fstream ifstream ofstream strstream ostrstream streambuf streamoff streamsize fpos streampos stringstream))
   {
     &msg(1, "$wd must be vcl_$wd")
       if ($cpp_file && $f !~ m!\bvcl/Templates/stream-instances\.cxx$! &&
@@ -980,29 +984,30 @@ foreach $f (@FILES)
           $f !~ m!/cmake/config/vxl_platform_tests\.cxx$! &&
           $file_s =~ m![^ .]\s*\b$wd\b\s*[^ (]! );
   }
-  foreach $wd (split(' ',"basefield floatfield adjustfield fmtflags seekdir"))
+  foreach $wd (qw(basefield floatfield adjustfield fmtflags seekdir))
   {
     &msg(1, "$wd must be vcl_ios_$wd")
       if ($cpp_file && $file_s =~ m![^ .]\s*\b$wd\b\s*[^ (]!);
   }
-  foreach $wd (split(' ',"beg cur end"))
+  foreach $wd (qw(beg cur end))
   {
     &msg(1, "$wd must be vcl_ios_$wd")
       if ($cpp_file &&
           ($wd !~ m!end! ||
            ($f !~ m!\boxp/oxp_mpeg_codec\.cxx$! &&
             $f !~ m!\bvil3d_slice_list\.cxx$! &&
+            $f !~ m!\bvgui_dir_dialog\.cxx$! &&
             $f !~ m!\b(rrel/rrel_util|rsdl/rsdl_borgefors)\.txx$! ) ) &&
           $file_s =~ m!,\s*$wd\s*\)! );
   }
-  foreach $wd (split(' ',"boolalpha noboolalpha showbase noshowbase showpoint noshowpoint showpos noshowpos skipws noskipws uppercase nouppercase"))
+  foreach $wd (qw(boolalpha noboolalpha showbase noshowbase showpoint noshowpoint showpos noshowpos skipws noskipws uppercase nouppercase))
   {
     &msg(1, "$wd must be vcl_ios_$wd")
       if ($cpp_file && $file_s =~ m![^ .]\s*\b$wd\b\s*[^ (]!);
     &msg(1, "$wd() must be vcl_$wd()")
       if ($cpp_file && $file_s =~ m!\b$wd\s*\(!);
   }
-  foreach $wd (split(' ',"internal left right"))
+  foreach $wd (qw(internal left right))
   {
     &msg(1, "$wd must be vcl_ios_$wd")
       if ($cpp_file &&
@@ -1013,6 +1018,8 @@ foreach $f (@FILES)
             $f !~ m!\bvtol_extract_topology\.(h|cxx|txx)$! &&
             $f !~ m!\brgrl_invariant_match\.(cxx|h)$! &&
             $f !~ m!\brsdl_(bins_2d|kd_tree)\.h$! &&
+            $f !~ m!\bbgui3d_algo\.(h|cxx)$! &&
+            $f !~ m!\bbgui3d_examiner_tableau\.cxx$! &&
             $f !~ m!\brsdl/(rsdl_kd_tree|tests/test_bins_2d|tests/test_kd_tree)\.cxx$! ) ) &&
           $file_s =~ m![^ .>]\s*\b$wd\s*[|),]! );
     &msg(1, "vcl_ios_$wd must be used together with vcl_ios_adjustfield")
@@ -1023,9 +1030,10 @@ foreach $f (@FILES)
     &msg(1, "$wd() must be vcl_$wd()")
       if ($cpp_file &&
           ($f !~ m!\boxl/oxp/vsl_conic_points\.cxx$! || $wd !~ m!(left|right)! ) &&
+          $f !~ m!\bbgui3d_(algo|examiner_tableau)\.cxx$! &&
           $file_s =~ m!\b$wd\s*\(!);
   }
-  foreach $wd (split(' ',"dec hex oct"))
+  foreach $wd (qw(dec hex oct))
   {
     &msg(1, "$wd must be vcl_ios_$wd")
       if ($cpp_file && $file_s =~ m!\b$wd\s*[|),]!);
@@ -1035,7 +1043,7 @@ foreach $f (@FILES)
     &msg(1, "$wd() must be vcl_$wd()")
       if ($cpp_file && $file_s =~ m!\b$wd\s*\(!);
   }
-  foreach $wd (split(' ',"scientific fixed"))
+  foreach $wd (qw(scientific fixed))
   {
     &msg(1, "$wd must be vcl_ios_$wd")
       if ($cpp_file &&
@@ -1048,12 +1056,12 @@ foreach $f (@FILES)
     &msg(1, "$wd() must be vcl_$wd()")
       if ($cpp_file && $file_s =~ m!\b$wd\s*\(!);
   }
-  foreach $wd (split(' ',"size_t ptrdiff_t clock_t time_t"))
+  foreach $wd (qw(size_t ptrdiff_t clock_t time_t))
   {
     &msg(1, "$wd must be vcl_$wd")
       if ($cpp_file && $file_s =~ m!\b$wd\b!);
   }
-  foreach $wd (split(' ',"iterator_traits back_insert_iterator front_insert_iterator insert_iterator input_iterator_tag output_iterator_tag forward_iterator_tag bidirectional_iterator_tag random_access_iterator_tag"))
+  foreach $wd (qw(iterator_traits back_insert_iterator front_insert_iterator insert_iterator input_iterator_tag output_iterator_tag forward_iterator_tag bidirectional_iterator_tag random_access_iterator_tag))
   {
     &msg(1, "$wd must be vcl_$wd")
       if ($cpp_file && $f !~ m!\bvcl/.*\bvcl_iterator\.(h|txx)$! && $file_s =~ m!\b$wd\b!);
