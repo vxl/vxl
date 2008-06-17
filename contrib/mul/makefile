@@ -30,6 +30,9 @@ SUBDIRS += mcal
 # msm
 SUBDIRS += msm
 
+# mipa
+SUBDIRS += mipa
+
 ################################
 include ${VXLROOT}/config/top.mk
 ################################
