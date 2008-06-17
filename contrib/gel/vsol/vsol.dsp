@@ -285,10 +285,13 @@ SOURCE=.\Templates/vbl_smart_ptr+vsol_volume_3d-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+vsol_polyline_3d-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_map+uint.vsol_digital_curve_2d_sptr--.cxx
+SOURCE=.\Templates/vbl_smart_ptr+vsol_poly_set_2d-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vcl_map+uint.vsol_line_2d_sptr--.cxx
+SOURCE=.\Templates/vcl_map+uint.vcl_vector+vsol_digital_curve_2d_sptr--.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vcl_map+uint.vcl_vector+vsol_line_2d_sptr--.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vsol_box_2d.cxx
@@ -379,6 +382,9 @@ SOURCE=.\vsol_spatial_object.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\vsol_orient_box_3d.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\vsol_poly_set_2d.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -586,6 +592,12 @@ SOURCE=.\vsol_orient_box_3d.h
 # End Source File
 # Begin Source File
 SOURCE=.\vsol_orient_box_3d_sptr.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsol_poly_set_2d.h
+# End Source File
+# Begin Source File
+SOURCE=.\vsol_poly_set_2d_sptr.h
 # End Source File
 # End Group
 # End Target

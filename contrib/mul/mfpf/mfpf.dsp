@@ -204,6 +204,12 @@ SOURCE=.\mfpf_ssd_vec_cost.cxx
 # Begin Source File
 SOURCE=.\mfpf_ssd_vec_cost_builder.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\mfpf_hog_box_finder.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_hog_box_finder_builder.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -317,6 +323,12 @@ SOURCE=.\mfpf_ssd_vec_cost.h
 # End Source File
 # Begin Source File
 SOURCE=.\mfpf_ssd_vec_cost_builder.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_hog_box_finder.h
+# End Source File
+# Begin Source File
+SOURCE=.\mfpf_hog_box_finder_builder.h
 # End Source File
 # End Group
 # End Target
