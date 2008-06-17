@@ -1,0 +1,148 @@
+#ifndef mfpf_hog_box_finder_builder_h_
+#define mfpf_hog_box_finder_builder_h_
+//:
+// \file
+// \brief Builder for mfpf_region_finder objects.
+// \author Tim Cootes
+
+#include <mfpf/mfpf_point_finder_builder.h>
+#include <mfpf/mfpf_vec_cost_builder.h>
+#include <mbl/mbl_cloneable_ptr.h>
+#include <mbl/mbl_chord.h>
+#include <vcl_iosfwd.h>
+#include <mfpf/mfpf_region_form.h>
+
+//: Builder for mfpf_region_finder objects.
+// Text for configuring:
+// \verbatim
+// mfpf_hog_box_finder_builder { shape: ellipse { ri: 5 rj: 3  }
+//  vec_cost_builder: mfpf_sad_vec_cost_builder { min_mad: 1.0 }
+//  norm: linear
+//  search_ni: 5 search_nj: 4
+// }
+// Alternative for shape:
+//   shape: box { ni: 5 nj: 3 ref_x: 2.5 ref_y: 1.5 }
+// \endverbatim
+class mfpf_hog_box_finder_builder : public mfpf_point_finder_builder
+{
+ private:
+  //: Kernel reference point (usually centre of sampled region [0,ni)
+  double ref_x_;
+  //: Kernel reference point (usually centre of sampled region) [0,nj)
+  double ref_y_;
+
+  //: Number of angle bins in histogram of orientations
+  unsigned nA_bins_;
+
+  //: When true, angles are 0-360, else 0-180
+  bool full360_;
+
+  //: Size of each cell for basic histogram is nc x nc
+  unsigned nc_;
+
+  //: Size of region is 2*ni by 2*nj cells (each cell is nc*nc)
+  unsigned ni_;
+  //: Size of region is 2*ni by 2*nj cells (each cell is nc*nc)
+  unsigned nj_;
+
+  //: Builder for cost model
+  mbl_cloneable_ptr<mfpf_vec_cost_builder> cost_builder_;
+
+  //: Which normalisation to use (0=none, 1=linear)
+  short norm_method_;
+
+  //: Number of angles either side of 0 to sample at
+  unsigned nA_;
+
+  //: Angle displacement
+  double dA_;
+
+  //: Relative size of region used for estimating overlap
+  //  If 0.5, then overlap requires pt inside central 50% of region.
+  double overlap_f_;
+
+  //: Define default values
+  void set_defaults();
+
+  //: Add one example to the model
+  void add_one_example(const vimt_image_2d_of<float>& image,
+                        const vgl_point_2d<double>& p,
+                        const vgl_vector_2d<double>& u);
+
+ public:
+
+  // Dflt ctor
+  mfpf_hog_box_finder_builder();
+
+  // Destructor
+  virtual ~mfpf_hog_box_finder_builder();
+
+  //: Define number of angle bins and size of cells over which to pool 
+  //  If use360 is true, angles range [0,360), otherwise [0,180)
+  //  (ie wrap-around occurs at 180,  5==185).
+  void set_angle_bins(unsigned nA_bins, bool full360, unsigned cell_size);
+
+  //: Define model region as an ni x nj box
+  void set_as_box(unsigned ni, unsigned nj,
+                  double ref_x, double ref_y,
+                  const mfpf_vec_cost_builder& builder);
+
+  //: Define model region as an ni x nj box
+  //  Ref. point in centre.
+  void set_as_box(unsigned ni, unsigned nj,
+                  const mfpf_vec_cost_builder& builder);
+
+  //: Define model region as an ni x nj box
+  void set_as_box(unsigned ni, unsigned nj,
+                  double ref_x, double ref_y);
+
+  //: Define region size in world co-ordinates
+  //  Sets up ROI to cover given box (with samples at step_size()), 
+  //  with ref point at centre.
+  //  Currently just defines as a box
+  virtual void set_region_size(double wi, double wj);
+
+  //: Builder for PDF
+  mfpf_vec_cost_builder& cost_builder() { return cost_builder_; }
+
+  //: Create new mfpf_region_finder on heap
+  virtual mfpf_point_finder* new_finder() const;
+
+  //: Initialise building
+  // Must be called before any calls to add_example(...)
+  virtual void clear(unsigned n_egs);
+
+  //: Add one example to the model
+  virtual void add_example(const vimt_image_2d_of<float>& image,
+                           const vgl_point_2d<double>& p,
+                           const vgl_vector_2d<double>& u);
+
+  //: Build object from the data supplied in add_example()
+  virtual void build(mfpf_point_finder&);
+
+  //: Initialise from a string stream
+  virtual bool set_from_stream(vcl_istream &is);
+
+  //: Name of the class
+  virtual vcl_string is_a() const;
+
+  //: Create a copy on the heap and return base class pointer
+  virtual mfpf_point_finder_builder* clone() const;
+
+  //: Print class to os
+  virtual void print_summary(vcl_ostream& os) const;
+
+  //: Prints ASCII representation of shape to os
+  void print_shape(vcl_ostream& os) const;
+
+  //: Version number for I/O
+  short version_no() const;
+
+  //: Save class to binary file stream
+  virtual void b_write(vsl_b_ostream& bfs) const;
+
+  //: Load class from binary file stream
+  virtual void b_read(vsl_b_istream& bfs);
+};
+
+#endif

@@ -21,6 +21,8 @@ SET(mfpf_sources
   mfpf_region_pdf_builder.h      mfpf_region_pdf_builder.cxx
   mfpf_region_finder.h           mfpf_region_finder.cxx
   mfpf_region_finder_builder.h   mfpf_region_finder_builder.cxx
+  mfpf_hog_box_finder.h          mfpf_hog_box_finder.cxx
+  mfpf_hog_box_finder_builder.h  mfpf_hog_box_finder_builder.cxx
 
   mfpf_vec_cost.h                mfpf_vec_cost.cxx
   mfpf_sad_vec_cost.h            mfpf_sad_vec_cost.cxx
@@ -51,7 +53,7 @@ SET(mfpf_sources
 
 AUX_SOURCE_DIRECTORY(Templates mfpf_sources)
 ADD_LIBRARY(mfpf ${mfpf_sources} )
-TARGET_LINK_LIBRARIES(mfpf vimt vpdfl mbl)
+TARGET_LINK_LIBRARIES(mfpf mipa vimt vpdfl mbl)
 
 #SUBDIRS(tools)
 
