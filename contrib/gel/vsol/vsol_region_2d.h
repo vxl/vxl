@@ -21,6 +21,7 @@
 #include <vsol/vsol_spatial_object_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 class vsol_polygon_2d;
+class vsol_poly_set_2d;
 
 class vsol_region_2d : public vsol_spatial_object_2d
 {
@@ -28,6 +29,7 @@ class vsol_region_2d : public vsol_spatial_object_2d
   enum vsol_region_2d_type
   { REGION_NO_TYPE=0,
     POLYGON,
+    POLYGON_SET,
     NUM_REGION_TYPES
   };
 
@@ -61,6 +63,8 @@ class vsol_region_2d : public vsol_spatial_object_2d
   virtual vsol_polygon_2d* cast_to_polygon(void) { return 0; }
   virtual vsol_polygon_2d const* cast_to_polygon(void) const { return 0; }
 
+  virtual vsol_poly_set_2d* cast_to_poly_set(void) { return 0; }
+  virtual vsol_poly_set_2d const* cast_to_poly_set(void) const { return 0; }
   //***************************************************************************
   // Status report
   //***************************************************************************
