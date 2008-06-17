@@ -13,6 +13,7 @@ SOURCES += bwm_soview2D_cross.cxx
 MANPAGE_SOURCES += bwm_soview2D_vertex.h
 SOURCES += bwm_utils.cxx
 SOURCES += bwm_utm_lat_lon.cxx
+SOURCES += bwm_delaunay_tri.cxx
 endif
 
 ################################

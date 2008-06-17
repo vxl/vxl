@@ -34,6 +34,7 @@ MANPAGE_SOURCES += vsol_region_2d.h
 SOURCES += vsol_polygon_2d.cxx
 SOURCES += vsol_triangle_2d.cxx
 SOURCES += vsol_rectangle_2d.cxx
+SOURCES += vsol_poly_set_2d.cxx
 
 # embedding dimension 3
 SOURCES += vsol_spatial_object_3d.cxx
@@ -81,6 +82,7 @@ MANPAGE_SOURCES += vsol_polyhedron_sptr.h
 MANPAGE_SOURCES += vsol_polyline_2d_sptr.h
 MANPAGE_SOURCES += vsol_polyline_3d_sptr.h
 MANPAGE_SOURCES += vsol_rectangle_2d_sptr.h
+MANPAGE_SOURCES += vsol_poly_set_2d_sptr.h
 MANPAGE_SOURCES += vsol_rectangle_3d_sptr.h
 MANPAGE_SOURCES += vsol_region_2d_sptr.h
 MANPAGE_SOURCES += vsol_region_3d_sptr.h

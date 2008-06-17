@@ -40,6 +40,8 @@ SOURCES += mfpf_dp_snake.cxx
 SOURCES += mfpf_max_finder.cxx
 SOURCES += mfpf_ssd_vec_cost.cxx
 SOURCES += mfpf_ssd_vec_cost_builder.cxx
+SOURCES += mfpf_hog_box_finder.cxx
+SOURCES += mfpf_hog_box_finder_builder.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
