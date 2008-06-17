@@ -22,7 +22,7 @@ SET(vsol_sources
  # 2-D
                             vsol_region_2d.h         vsol_region_2d_sptr.h
  vsol_polygon_2d.cxx        vsol_polygon_2d.h        vsol_polygon_2d_sptr.h
- vsol_poly_set_2d.cxx        vsol_poly_set_2d.h        
+ vsol_poly_set_2d.cxx       vsol_poly_set_2d.h       vsol_poly_set_2d_sptr.h
  vsol_triangle_2d.cxx       vsol_triangle_2d.h       vsol_triangle_2d_sptr.h
  vsol_rectangle_2d.cxx      vsol_rectangle_2d.h      vsol_rectangle_2d_sptr.h
 
@@ -39,7 +39,7 @@ SET(vsol_sources
  vsol_polyline_3d.cxx       vsol_polyline_3d.h       vsol_polyline_3d_sptr.h
  vsol_digital_curve_3d.cxx  vsol_digital_curve_3d.h  vsol_digital_curve_3d_sptr.h
  vsol_cylinder.cxx          vsol_cylinder.h          vsol_cylinder_sptr.h
- 
+
  # 2-D
                             vsol_surface_3d.h        vsol_surface_3d_sptr.h
                             vsol_region_3d.h         vsol_region_3d_sptr.h
