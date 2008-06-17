@@ -181,6 +181,9 @@ SOURCE=.\generate_tiff_pyramids.cxx
 # Begin Source File
 SOURCE=.\generate_tiff_rset.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\gen_tiff_rset_dir.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
