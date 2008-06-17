@@ -15,10 +15,7 @@ SET(bwm_algo_sources
                                   bwm_soview2D_vertex.h
    bwm_image_processor.cxx        bwm_image_processor.h
    bwm_utils.cxx                  bwm_utils.h
-#  bwm_backgroundTaskDialog.cxx   bwm_backgroundTaskDialog.h
-#  bwm_site_creation_process.cxx  bwm_site_creation_process.h
-#  bwm_site.h
-#  StdAfx.cpp                     StdAfx.h
+   bwm_delaunay_tri.cxx           bwm_delaunay_tri.h
 )
 
 
