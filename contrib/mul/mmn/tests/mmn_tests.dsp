@@ -137,6 +137,12 @@ SOURCE=.\test_order_cost.cxx
 # Begin Source File
 SOURCE=.\test_include.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_csp_solver.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_diffusion_solver.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
