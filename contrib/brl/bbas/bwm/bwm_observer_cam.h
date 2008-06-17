@@ -31,7 +31,8 @@ class bwm_observer_cam : public bwm_observer_vgui
 
   bwm_observer_cam(bgui_image_tableau_sptr const& img, vpgl_camera<double> *camera, vcl_string cam_path)
     : bwm_observer_vgui(img), proj_plane_(vgl_plane_3d<double>(0, 0, 1, 0)),
-    camera_(camera), cam_path_(cam_path), cam_adjusted_(false), extrude_mode_(false),show_geo_position_(false){}
+    camera_(camera), cam_path_(cam_path), cam_adjusted_(false), extrude_mode_(false),show_geo_position_(false)
+    {}
 
   // set the initial projection plane to z=0
   bwm_observer_cam(bgui_image_tableau_sptr const& img, const char* n="unnamed")
@@ -96,6 +97,9 @@ class bwm_observer_cam : public bwm_observer_vgui
 
   void proj_point(vgl_point_3d<double> world_pt,
                   vgl_point_2d<double> &image_pt);
+  
+  void proj_line(vsol_line_3d_sptr line_3d,
+                 vsol_line_2d_sptr &line_2d);
 
   void proj_poly(vsol_polygon_3d_sptr poly3d,
                  vsol_polygon_2d_sptr& poly2d);
@@ -154,6 +158,13 @@ class bwm_observer_cam : public bwm_observer_vgui
 
   void geo_position_vertex();
 
+  void create_terrain(vsol_polygon_2d_sptr boundary);
+
+  void set_mesh_mode() { mode_ = bwm_observer_vgui::MODE_MESH; update_all();}
+  void set_face_mode() { mode_ = bwm_observer_vgui::MODE_FACE; update_all();}
+  void set_edge_mode() { mode_ = bwm_observer_vgui::MODE_EDGE; update_all();}
+  void set_vertex_mode() { mode_ = bwm_observer_vgui::MODE_VERTEX; update_all();}
+
   virtual vcl_ostream& print_camera(vcl_ostream& s) {return s;}
 
  protected:
@@ -174,6 +185,9 @@ class bwm_observer_cam : public bwm_observer_vgui
   bwm_observable_sptr extrude_obj_;
 
   bool show_geo_position_;
+
+  // list of selected soview objects after the last deselect_all
+  vcl_vector<vgui_soview*> selected_soviews_;
 
   bool geo_position(double u, double v, double& x, double& y, double& z);
 
@@ -205,6 +219,9 @@ class bwm_observer_cam : public bwm_observer_vgui
   unsigned find_index_of_v(bwm_soview2D_vertex* vertex, bgui_vsol_soview2D_polygon* polygon);
 
   void make_object_selectable(bwm_observable_sptr obj, bool status);
+
+  // deselects all the selected objects and sets their styles back to mesh
+  void deselect();
 };
 
 #endif
