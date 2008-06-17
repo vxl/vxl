@@ -624,12 +624,12 @@ void bwm_site_mgr::save_site()
         t->cam_path = new_cam_path;
       }
     }
-    site->tableaus_.push_back(active_tableaus_[i]);
+    site->tableaus_.push_back(active_tableaus_[i]->clone());
   }
 
   // add the inactive tableaux
   for (unsigned i=0; i<inactive_tableaus_.size(); i++) {
-    site->tableaus_.push_back(inactive_tableaus_[i]);
+    site->tableaus_.push_back(inactive_tableaus_[i]->clone());
   }
 
   // add the correspondences if any
