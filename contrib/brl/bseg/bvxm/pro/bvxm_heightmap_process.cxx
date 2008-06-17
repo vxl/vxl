@@ -1,7 +1,7 @@
 #include "bvxm_heightmap_process.h"
 #include "bvxm_voxel_world.h"
 
-#include <vil/vil_convert.h>
+#include <vil/vil_image_view.h>
 #include <bprb/bprb_parameters.h>
 
 bvxm_heightmap_process::bvxm_heightmap_process()
