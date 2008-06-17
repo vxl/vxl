@@ -18,8 +18,8 @@
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vsol/vsol_digital_curve_2d_sptr.h>
 
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_save.h>
+//#include <vil/vil_image_view_base.h>
+#include <vil/vil_image_resource.h>
 
 void bwm_image_processor::hist_plot(bgui_image_tableau_sptr img)
 {
@@ -48,7 +48,7 @@ void bwm_image_processor::hist_plot(bgui_image_tableau_sptr img)
   char location[100];
   vcl_sprintf(location, "Intensity Histogram");
   vgui_dialog* ip_dialog = g->popup_graph(location);
- 
+
   if (!ip_dialog->ask())
   {
     delete ip_dialog;
@@ -58,25 +58,26 @@ void bwm_image_processor::hist_plot(bgui_image_tableau_sptr img)
 }
 
 void bwm_image_processor::intensity_profile(bgui_image_tableau_sptr img,
-                                            float start_col, float start_row, 
+                                            float start_col, float start_row,
                                             float end_col, float end_row)
 {
-  if (img) {
+  if (img)
+  {
     unsigned n_p = img->get_image_resource()->nplanes();
     bgui_graph_tableau_sptr g = bgui_graph_tableau_new(512, 512);
-    if(n_p==1){
-    vcl_vector<double> pos, vals;
-    img->image_line(start_col, start_row, end_col, end_row, pos, vals);
-    g->update(pos, vals);
+    if (n_p==1) {
+      vcl_vector<double> pos, vals;
+      img->image_line(start_col, start_row, end_col, end_row, pos, vals);
+      g->update(pos, vals);
     }
-    else if( n_p ==3 || n_p == 4)
-      {  
-        vcl_vector<double> pos;
-        vcl_vector<vcl_vector<double> > vals;
-        img->image_line(start_col, start_row, end_col, end_row, pos, vals);
-        vcl_vector<vcl_vector<double> > mpos(n_p, pos);
-        g->update(mpos, vals);
-      }
+    else if ( n_p ==3 || n_p == 4)
+    {
+      vcl_vector<double> pos;
+      vcl_vector<vcl_vector<double> > vals;
+      img->image_line(start_col, start_row, end_col, end_row, pos, vals);
+      vcl_vector<vcl_vector<double> > mpos(n_p, pos);
+      g->update(mpos, vals);
+    }
     //popup a profile graph
     char location[100];
     vcl_sprintf(location, "scan:(%d, %d)<->(%d, %d)",
@@ -85,7 +86,7 @@ void bwm_image_processor::intensity_profile(bgui_image_tableau_sptr img,
                 static_cast<unsigned>(end_col),
                 static_cast<unsigned>(end_row));
     vgui_dialog* ip_dialog = g->popup_graph(location);
-    if (!ip_dialog->ask()){
+    if (!ip_dialog->ask()) {
       delete ip_dialog;
       return;
     }
