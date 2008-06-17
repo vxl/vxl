@@ -379,15 +379,14 @@ void bwm_observer_vgui::update_all()
   }
 }
 
-//: Select a polygon before you call this method.
-// If it is a multiface object, it deletes the object where the selected polygon belongs to
+//: Select a mesh (only in MESH mode) before you call this method.
 void bwm_observer_vgui::delete_object()
 {
   // first get the selected polygon
   vcl_vector<vgui_soview*> select_list = this->get_selected_soviews();
 
   if ((select_list.size() == 1) &&
-    (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon") == 0)) {
+    (select_list[0]->type_name().compare("bgui_vsol_soview2D_polygon_set") == 0)) {
       unsigned face_id;
       bwm_observable_sptr obj = find_object(select_list[0]->get_id(), face_id);
       if (obj) {
@@ -657,8 +656,9 @@ void bwm_observer_vgui::label_wall()
   obs->label_wall(face_id);
 }
 
+#if 0 // not used currently
 //: makes the polygon a little smaller to prevent the face edges overlapping
-/*vsol_polygon_2d_sptr bwm_observer_vgui::shrink_face(vsol_polygon_2d_sptr poly)
+vsol_polygon_2d_sptr bwm_observer_vgui::shrink_face(vsol_polygon_2d_sptr poly)
 {
   double ratio = 0.95;
   vcl_vector<vsol_point_2d_sptr> new_points;
@@ -673,8 +673,8 @@ void bwm_observer_vgui::label_wall()
   }
   vsol_polygon_2d_sptr new_polygon = new vsol_polygon_2d(new_points);
   return new_polygon;
-}*/
-
+}
+#endif
 //: only is implemented for a single polygonal face
 void bwm_observer_vgui::select_object(bwm_observable_sptr const& obj)
 {
