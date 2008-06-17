@@ -20,6 +20,7 @@
 
 #include <vsol/vsol_polygon_3d_sptr.h>
 #include <vsol/vsol_point_3d_sptr.h>
+#include <vsol/vsol_line_3d_sptr.h>
 #include <vpgl/bgeo/bgeo_lvcs.h>
 
 class SoSeparator;
@@ -56,9 +57,13 @@ class bwm_observable : public vgui_observable, public vbl_ref_count
 
   virtual vsol_polygon_3d_sptr extract_face(unsigned i)=0;
 
+  virtual vsol_polygon_3d_sptr extract_bottom_face()=0;
+
   virtual vgl_plane_3d<double> get_plane(unsigned face_id)=0;
 
   virtual vcl_map<int, vsol_polygon_3d_sptr> extract_faces()=0;
+
+  virtual vcl_map<int, vsol_line_3d_sptr> extract_edges()=0;
 
   virtual vcl_vector<vsol_point_3d_sptr> extract_vertices()=0;
 

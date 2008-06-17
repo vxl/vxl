@@ -12,6 +12,8 @@
 #include <vgui/vgui_message.h>
 #include <vsol/vsol_polygon_3d.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
+#include <vsol/vsol_line_3d_sptr.h>
+#include <vsol/vsol_point_3d_sptr.h>
 
 #include <bmsh3d/bmsh3d_mesh_mc.h>
 #include <bmsh3d/bmsh3d_face_mc.h>
@@ -80,11 +82,15 @@ class bwm_observable_mesh : public bwm_observable
 
   vsol_polygon_3d_sptr extract_face(unsigned i);
 
+  vcl_map<int, vsol_line_3d_sptr> extract_edges();
+
   vcl_vector<vsol_point_3d_sptr> extract_vertices();
 
   vcl_map<int, vsol_polygon_3d_sptr> extract_inner_faces(bmsh3d_face_mc* face);
 
   vcl_map<int, vsol_polygon_3d_sptr> extract_inner_faces(int face_id);
+
+  vsol_polygon_3d_sptr extract_bottom_face(void);
 
   void divide_face(unsigned face_id, vgl_point_3d<double> l1, vgl_point_3d<double> l2,
                    vgl_point_3d<double> p1, vgl_point_3d<double> l3,
@@ -105,6 +111,9 @@ class bwm_observable_mesh : public bwm_observable
   void create_interior();
 
   void triangulate();
+
+  void create_mesh_surface(vcl_vector<vgl_point_3d<double> > vertices,
+                           vcl_vector<vgl_point_3d<int> > triangles);
 
   SoSeparator* convert_coin3d(bool b_shape_hints, float transp, int colorcode);
 

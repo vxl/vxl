@@ -22,6 +22,8 @@
 #include <vgl/vgl_distance.h>
 
 #include <vsol/vsol_point_3d.h>
+#include <vsol/vsol_line_3d.h>
+#include <vsol/vsol_box_3d.h>
 
 #include <bmsh3d/bmsh3d_textured_mesh_mc.h>
 #include <bmsh3d/vis/bmsh3d_vis_backpt.h>
@@ -346,6 +348,26 @@ vsol_polygon_3d_sptr bwm_observable_mesh::extract_face(unsigned i)
   return poly;
 }
 
+vsol_polygon_3d_sptr bwm_observable_mesh::extract_bottom_face()
+{
+  vcl_map<int, bmsh3d_face*>::iterator it = object_->facemap().begin();
+  vcl_map<int, vsol_polygon_3d_sptr> faces;
+  double min_z=1e6;
+  vsol_polygon_3d_sptr bottom;
+  for (; it != object_->facemap().end(); it++) {
+    bmsh3d_face_mc* face = (bmsh3d_face_mc*) (*it).second;
+    //vcl_cout << "face " << face->id() << vcl_endl;
+    vcl_vector<bmsh3d_vertex*> vertices;
+    vsol_polygon_3d_sptr poly = this->extract_face(face, vertices);
+    vsol_box_3d_sptr bb = poly->get_bounding_box();
+    if (min_z > bb->get_min_z()) {
+      min_z = bb->get_min_z();
+      bottom = poly;
+    }
+  }
+  return bottom;
+}
+
 vcl_map<int, vsol_polygon_3d_sptr> bwm_observable_mesh::extract_faces()
 {
   vcl_map<int, bmsh3d_face*>::iterator it = object_->facemap().begin();
@@ -359,6 +381,23 @@ vcl_map<int, vsol_polygon_3d_sptr> bwm_observable_mesh::extract_faces()
     faces[face->id()] = poly;
   }
   return faces;
+}
+
+vcl_map<int, vsol_line_3d_sptr> bwm_observable_mesh::extract_edges()
+{
+  vcl_map<int, bmsh3d_edge*>::iterator it = object_->edgemap().begin();
+  vcl_map<int, vsol_line_3d_sptr> edges;
+
+  for (; it != object_->edgemap().end(); it++) {
+    bmsh3d_edge* edge = (bmsh3d_edge*) (*it).second;
+    bmsh3d_vertex* V0 = edge->vertices(0);
+    bmsh3d_vertex* V1 = edge->vertices(1);
+    vsol_point_3d_sptr v0 = new vsol_point_3d(V0->pt().x(),V0->pt().y(),V0->pt().z());
+    vsol_point_3d_sptr v1 = new vsol_point_3d(V1->pt().x(),V1->pt().y(),V1->pt().z());
+    vsol_line_3d_sptr e = new vsol_line_3d(v0, v1);
+    edges[edge->id()] = e;
+  }
+  return edges;
 }
 
 vcl_vector<vsol_point_3d_sptr> bwm_observable_mesh::extract_vertices()
@@ -745,6 +784,50 @@ void bwm_observable_mesh::create_mesh_HE(vsol_polygon_3d_sptr polygon,
   }
 
   print_faces();
+}
+void bwm_observable_mesh::create_mesh_surface(vcl_vector<vgl_point_3d<double> > vertices,
+                                              vcl_vector<vgl_point_3d<int> > triangles)
+{
+  object_ = new bmsh3d_mesh_mc();
+  // create vertices
+  vcl_vector<bmsh3d_vertex* > v_list(vertices.size());
+
+  // first create the vertices
+  for (unsigned i=0; i<vertices.size(); i++) {
+    bmsh3d_vertex* v = (bmsh3d_vertex*) object_->_new_vertex ();
+    v->set_pt (vgl_point_3d<double> (vertices[i].x(), vertices[i].y(), vertices[i].z()));
+    object_->_add_vertex (v);
+    v_list[i] = v;
+  }
+
+  // create the triangles and edges
+  for (unsigned i=0; i<triangles.size(); i++) {
+    int index1 = triangles[i].x();
+    int index2 = triangles[i].y();
+    int index3 = triangles[i].z();
+    bmsh3d_edge* e1 = E_sharing_2V (v_list[index1], v_list[index2]);
+    if (!e1) {
+      e1 = object_->add_new_edge(v_list[index1], v_list[index2]);
+    }
+
+    bmsh3d_edge* e2 = E_sharing_2V (v_list[index2], v_list[index3]);
+    if (!e2) {
+      e2 = object_->add_new_edge(v_list[index2], v_list[index3]);
+    }
+
+    bmsh3d_edge* e3 = E_sharing_2V (v_list[index3], v_list[index1]);
+    if (!e3) {
+      e3 = object_->add_new_edge(v_list[index3], v_list[index1]);
+    }
+    bmsh3d_face_mc* f0 = object_->_new_mc_face ();
+    _connect_F_E_end(f0, e1);
+    _connect_F_E_end(f0, e2);
+    _connect_F_E_end(f0, e3);
+    object_->_add_face (f0);
+    f0->_sort_HEs_circular();
+  }
+  
+  send_update();
 }
 
 void bwm_observable_mesh::attach_inner_face(unsigned face_id, vsol_polygon_3d_sptr poly)

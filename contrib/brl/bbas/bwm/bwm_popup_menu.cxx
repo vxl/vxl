@@ -146,13 +146,27 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
     vcl_string on = "[x] ", off = "[ ] ";
     mesh_submenu.add( ((cam_tab->show_vertices_)?on:off)+"show vertices",
       new bwm_vertex_toggle_command(cam_tab, &(cam_tab->show_vertices_)));
+    
+    vgui_menu draw_menu;
+    draw_menu.add("Mesh...", new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::set_mesh_mode));
+    draw_menu.add("Face...", new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::set_face_mode));
+    draw_menu.add("Edge...", new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::set_edge_mode));
+    draw_menu.add("Vertex...", new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::set_vertex_mode));
+    mesh_submenu.separator();
+
+    mesh_submenu.add("Set Draw Mode", draw_menu);
+    mesh_submenu.separator();
+
+    mesh_submenu.add("Create Terrain",
+    new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::create_terrain),
+    vgui_key('t'), vgui_modifier(vgui_SHIFT) );
     mesh_submenu.separator();
 
     mesh_submenu.add("Create Mesh Polygon",
-      new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::create_polygon_mesh),
-      vgui_key('p'), vgui_modifier(vgui_SHIFT) );
-
+    new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::create_polygon_mesh),
+    vgui_key('p'), vgui_modifier(vgui_SHIFT) );
     mesh_submenu.separator();
+
     mesh_submenu.add("Triangulate..",
       new vgui_command_simple<bwm_tableau_cam>(cam_tab,&bwm_tableau_cam::triangulate_mesh),
       vgui_key('t'), vgui_modifier(vgui_SHIFT));

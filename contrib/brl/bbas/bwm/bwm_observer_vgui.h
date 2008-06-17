@@ -33,6 +33,8 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
 
   typedef bwm_observer_img base;
 
+  enum DRAW_MODE {MODE_MESH, MODE_FACE, MODE_EDGE, MODE_VERTEX};
+
   bwm_observer_vgui(bgui_image_tableau_sptr const& img);
 
   virtual ~bwm_observer_vgui() {}
@@ -74,6 +76,9 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
   virtual void proj_poly(vsol_polygon_3d_sptr poly3d,
                          vsol_polygon_2d_sptr& poly2d) = 0;
 
+  virtual void proj_line(vsol_line_3d_sptr line_3d,
+                         vsol_line_2d_sptr &line_2d)=0;
+
   virtual void proj_point(vgl_point_3d<double> world_pt,
                           vgl_point_2d<double> &image_pt) = 0;
 
@@ -102,15 +107,20 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
 
   bwm_observer_vgui() { corr_.second = 0; show_vertices_ = true; }
 
+  enum DRAW_MODE mode_; 
+
   vgui_style_sptr mesh_style_;
   vgui_style_sptr vertex_style_;
+  vgui_style_sptr select_style_;
+
   bool show_vertices_;
   bool corr_valid_;
   //: the current correspondence point
   vcl_pair<vgl_point_2d<double>, bwm_soview2D_cross * > corr_;
 
   //: objects are kept as a triple (bwm_observable *, face_id, bgui_vsol_soview2D_polygon*)
-  vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D_polygon* > > objects_;
+  //vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D_polygon* > > objects_;
+  vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D* > > objects_;
 
   //: vertices are kept as a pair (bwm_observable *, vector<bwm_soview2D_vertex*> )
   vcl_map<bwm_observable_sptr, vcl_vector<bwm_soview2D_vertex* > > object_verts_;
@@ -129,12 +139,18 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
   void print_selected_vertex();
 
   //: makes the polygon a little smaller to prevent the face edges overlapping
-  vsol_polygon_2d_sptr shrink_face(vsol_polygon_2d_sptr poly);
+  //vsol_polygon_2d_sptr shrink_face(vsol_polygon_2d_sptr poly);
 
   void draw_mesh(bwm_observable_sptr observable,
-                 vcl_map<unsigned, bgui_vsol_soview2D_polygon* > &poly_list,
+                 vcl_map<unsigned, bgui_vsol_soview2D* > &poly_list,
                  vcl_vector<bwm_soview2D_vertex*> &vertx_list,
                  vcl_vector<vsol_point_2d_sptr> &vertx_xy_list);
+
+  void draw_vertices(bwm_observable_sptr observable,
+                   vcl_map<unsigned, bgui_vsol_soview2D* > list,
+                   bool selectable,              
+                   vcl_vector<bwm_soview2D_vertex*> &vertx_list,
+                   vcl_vector<vsol_point_2d_sptr> &vertx_xy_list);
 };
 
 #endif

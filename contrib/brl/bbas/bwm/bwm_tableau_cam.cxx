@@ -282,6 +282,18 @@ void bwm_tableau_cam::geo_position_vertex()
   my_observer_->geo_position_vertex();
 }
 
+void bwm_tableau_cam::create_terrain()
+{
+  this->lock();
+  //1. pick a boundary for the terrain as a polygon
+  bwm_observer_mgr::instance()->stop_corr();
+  vsol_polygon_2d_sptr poly2d;
+  set_color(1, 0, 0);
+  pick_polygon(poly2d);
+  my_observer_->create_terrain(poly2d);
+  this->unlock();
+}
+
 void bwm_tableau_cam::help_pop()
 {
   bwm_tableau_text* text = new bwm_tableau_text(500, 500);
