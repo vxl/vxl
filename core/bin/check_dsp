@@ -96,13 +96,17 @@ foreach $dir (@DIRS)
   # verify #includes in test_include.cxx
   if (-f "$dir/test_include.cxx" && $dir =~ m!^/!)
   {
-    if ($dir !~ m!/v(i|n|pg)l/tests$! && opendir(UPDIR,"$dir/../algo")) {
-      @updir_files = map { "algo/$_" } readdir(UPDIR);
-      closedir(UPDIR);
-    }
+    @updir_files = ();
     if (opendir(UPDIR,"$dir/..")) {
       push @updir_files, readdir(UPDIR);
       closedir(UPDIR);
+    }
+    foreach $subdir (qw(algo io file_formats gui pro vis xio))
+    {
+      if (! -d "$dir/../$subdir/tests" && opendir(UPDIR,"$dir/../$subdir")) {
+        push @updir_files, map { "$subdir/$_" } readdir(UPDIR);
+        closedir(UPDIR);
+      }
     }
     $prefix=$dir; $prefix =~ s![^/]*$!!; $prefix =~ s!^.*/(vcl|core|contrib/brl/(bbas|bseg)|contrib/gel/mrc|contrib/[^/]*)/!!;
     @updir_files = sort
