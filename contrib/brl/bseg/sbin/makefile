@@ -9,6 +9,7 @@ MINI_PROG_SOURCES += negate.cxx
 MINI_PROG_SOURCES += vil_convert.cxx
 MINI_PROG_SOURCES += generate_tiff_pyramids.cxx
 MINI_PROG_SOURCES += generate_tiff_rset.cxx
+MINI_PROG_SOURCES += gen_tiff_rset_dir.cxx
 
 ################################
 include ${VXLROOT}/config/top.mk
