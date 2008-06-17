@@ -74,34 +74,35 @@ double bvxm_ocp_compare_process::compare(bvxm_voxel_world_sptr w1,
 
   vgl_vector_3d<unsigned int> grid_size = w1->get_params()->num_voxels();
 
+  int m = int(n); // using this m instead of n will avoid compiler warnings
   double maxN=0;
-  int dim=2*n+1, imax=0, jmax=0, kmax=0;
+  int dim=2*m+1, imax=0, jmax=0, kmax=0;
   char *comp_array = new char[dim*dim*dim];
-  for (int k=-1*n; k<=n; k++)
+  for (int k=-m; k<=m; ++k)
   {
     vcl_cout << k << vcl_endl;
-    for (int j1=-1*n; j1<=n; j1++)
+    for (int j1=-m; j1<=m; ++j1)
     {
-      for (int i1=-1*n; i1<=n; i1++)
+      for (int i1=-m; i1<=m; ++i1)
       {
         double N=0;
-        int num=0;
+        int num=0,
+            size_x=grid_size.x(), size_y=grid_size.y(), size_z=grid_size.z();
         ocp_slab_it1 = ocp_grid1->begin();
-        for (unsigned k_idx = 0; k_idx < (unsigned)grid_size.z(); ++k_idx, ++ocp_slab_it1)
+        for (int kdx=0; kdx<size_z; ++kdx, ++ocp_slab_it1)
         {
-          //vcl_cout << ;
-          int kdx = k+k_idx;
-          if ((kdx >= 0) && (kdx < grid_size.z())) {
-            bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it2 = ocp_grid2->slab_iterator(k+k_idx);
+          //vcl_cout << kdx;
+          if (kdx >= k && kdx < k + size_z) {
+            bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it2 = ocp_grid2->slab_iterator(kdx);
             bvxm_voxel_slab<float> slab1 = *ocp_slab_it1;
             bvxm_voxel_slab<float> slab2 = *ocp_slab_it2;
-            for (unsigned i=0; i<grid_size.x(); i++) {
-              for (unsigned j=0; j<grid_size.y(); j++) {
+            for (int i=0; i<size_x; ++i) {
+              for (int j=0; j<size_y; ++j) {
                 //vcl_cout << '[' << i << ',' << j << ']' << vcl_endl;
                 int idx = i+i1;
                 int jdx = j+j1;
-                if ((idx<grid_size.x()) && (idx>=0) &&
-                  (jdx<grid_size.y()) && (jdx>=0)){
+                if (idx<size_x && idx>=0 &&
+                    jdx<size_y && jdx>=0) {
                   N += slab1(i,j)*slab2(idx,jdx);
                   num++;
                   if (N>maxN) {
@@ -115,9 +116,9 @@ double bvxm_ocp_compare_process::compare(bvxm_voxel_world_sptr w1,
             }
           }
         }
-        N = (N/num)*grid_size.x()*grid_size.y()*grid_size.z();
+        N = (N/num)*size_x*size_y*size_z;
         vcl_cout << "k=" << k << "  j=" << j1 << "  i=" << i1 << "-->" << N << vcl_endl;
-        comp_array[(i1+n)*dim*dim + (j1+n)*dim + k+n] = char((N/14927.35)*255);
+        comp_array[(i1+m)*dim*dim + (j1+m)*dim + k+m] = char((N/14927.35)*255);
       }
     }
   }
