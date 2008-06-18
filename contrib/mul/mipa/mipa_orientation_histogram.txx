@@ -7,6 +7,8 @@
 
 #include "mipa_orientation_histogram.h"
 #include <vcl_cmath.h>
+#include <vnl/vnl_math.h> // for pi
+#include <vcl_cassert.h>
 
 //: Generate an image containing histograms of oriented gradients (HOG)
 //  At each pixel in src, compute angle and quantise into n_angles.
@@ -21,19 +23,18 @@
 //  within src.  Thus hog_image.ni()=(src.ni()-2)/cell_size.
 template<class srcT, class sumT>
 void mipa_orientation_histogram(const vil_image_view<srcT>& src,
-                               vil_image_view<sumT>& hog_image,
-                               unsigned n_angles,
-                               unsigned cell_size,
-                               bool full360)
+                                vil_image_view<sumT>& hog_image,
+                                unsigned n_angles,
+                                unsigned cell_size,
+                                bool full360)
 {
   assert(src.nplanes()==1);
 
-  unsigned ni=src.ni(), nj=src.nj();
   unsigned h_ni=(src.ni()-2)/cell_size;
   unsigned h_nj=(src.nj()-2)/cell_size;
 
   // Create image with correct size of memory, with interleaved planes
-  vil_image_view<sumT> h_im0(h_ni,h_nj,1,n_angles); 
+  vil_image_view<sumT> h_im0(h_ni,h_nj,1,n_angles);
   h_im0.fill(0);
 
   // This forces hog_image to have interleaved planes.
@@ -44,14 +45,14 @@ void mipa_orientation_histogram(const vil_image_view<srcT>& src,
   double sA;
   if (full360)
   {
-    sA=n_angles/6.2831853;
+    sA=n_angles/vnl_math::pi/2;
   }
   else
   {
     // Allow for wrap at 180
-    sA=n_angles/3.1415927;
+    sA=n_angles/vnl_math::pi;
   }
-  double dA=6.2831853 - 0.5/sA;
+  double dA=2*vnl_math::pi - 0.5/sA;
 
   // Process each block
   const srcT* s_row = &src(1,1);
@@ -91,12 +92,9 @@ void mipa_orientation_histogram(const vil_image_view<srcT>& src,
 #undef MIPA_ORIENTATION_HISTOGRAM_INSTANTIATE
 #define MIPA_ORIENTATION_HISTOGRAM_INSTANTIATE(srcT, sumT) \
 template void mipa_orientation_histogram(const vil_image_view<srcT >& src, \
-                               vil_image_view<sumT >& hog_image, \
-                               unsigned n_angles, \
-                               unsigned cell_size, \
-                               bool full360);
-
-
+                                         vil_image_view<sumT >& hog_image, \
+                                         unsigned n_angles, \
+                                         unsigned cell_size, \
+                                         bool full360)
 
 #endif // vaip_orientation_histogram_txx_
-
