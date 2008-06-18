@@ -12,6 +12,8 @@
 #include <vcl_vector.h>
 #include <vcl_string.h>
 #include <vcl_utility.h>
+#include <vcl_cmath.h>
+#include <vnl/vnl_vector.h>
 
 //: Return true if a string contains a substring
 // Note without this you'd need bind2nd mem_fun which can cause reference to reference compile errors
@@ -180,19 +182,19 @@ struct mbl_stl_pred_pair_order : public vcl_binary_function<vcl_pair<T1,T2>,vcl_
 {
   inline bool  operator()(const vcl_pair<T1,T2>& pair1, const vcl_pair<T1,T2>& pair2 ) const
   {
-      if(pair1.first < pair2.first)
-          return true;
-      else if(pair1.first > pair2.first)
-          return false;
-      else
-          return pair1.second < pair2.second; //Primaries are equal so order on secondary
+    if (pair1.first < pair2.first)
+      return true;
+    else if (pair1.first > pair2.first)
+      return false;
+    else
+      return pair1.second < pair2.second; //Primaries are equal so order on secondary
   }
 };
 
 //See if a test pointer is the class type required
 //Note the template type T would normally be of pointer type but might also be
-//something supporting operator->() in a pointer like way 
-//(e.g. auto_ptr mbl_cloneable_ptr etc) 
+//something supporting operator->() in a pointer like way
+//(e.g. auto_ptr mbl_cloneable_ptr etc)
 template <class T>
 //NB assumes templated class provides is_a to return its typename
 class mbl_stl_pred_is_a : public vcl_unary_function<T, bool>
@@ -210,16 +212,16 @@ class mbl_stl_pred_is_a : public vcl_unary_function<T, bool>
 
 class mbl_stl_pred_is_near : public vcl_unary_function<double, bool>
 {
-    double epsilon_;
-    double xtarget_;
+  double epsilon_;
+  double xtarget_;
  public:
-    mbl_stl_pred_is_near(double xtarget,double epsilon=1.0E-12):
-        xtarget_(xtarget),epsilon_(epsilon)
-        {}
-    inline bool operator()(const double& x) const
-    {
-        return ((fabs(x-xtarget_)<epsilon_) ? true : false);
-    }    
+  mbl_stl_pred_is_near(double xtarget,double epsilon=1.0E-12)
+  : epsilon_(epsilon), xtarget_(xtarget)
+  {}
+  inline bool operator()(const double& x) const
+  {
+    return vcl_fabs(x-xtarget_)<epsilon_;
+  }
 };
 
 #endif
