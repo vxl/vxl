@@ -1,4 +1,4 @@
-// This is gel/vsol/vsol_polyline_2d.h
+// This is gel/vsol/vsol_poly_set_2d.h
 #ifndef vsol_poly_set_2d_h_
 #define vsol_poly_set_2d_h_
 //*****************************************************************************
