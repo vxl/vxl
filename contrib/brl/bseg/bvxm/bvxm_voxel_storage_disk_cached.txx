@@ -20,7 +20,7 @@
 
 template <class T>
 bvxm_voxel_storage_disk_cached<T>::bvxm_voxel_storage_disk_cached(vcl_string storage_filename, vgl_vector_3d<unsigned int> grid_size, vxl_int_64 max_cache_size)
-:  bvxm_voxel_storage<T>(grid_size), storage_fname_(storage_filename), first_cache_slice_(-1), last_cache_slice_(-1), fio_(0)
+:  bvxm_voxel_storage<T>(grid_size), first_cache_slice_(-1), last_cache_slice_(-1), storage_fname_(storage_filename), fio_(0)
 {
   //set up cache
   vxl_int_64 slice_size = sizeof(T)*grid_size.x()*grid_size.y();
