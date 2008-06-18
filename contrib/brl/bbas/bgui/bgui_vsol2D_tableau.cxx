@@ -241,7 +241,7 @@ add_spatial_object(vsol_spatial_object_2d_sptr const& sos,
     else if (sos->cast_to_curve()->cast_to_conic())
     {
       vsol_conic_2d_sptr conic = sos->cast_to_curve()->cast_to_conic();
-      
+
       // make sure the endpoints are already defined
       assert(conic->p0() && conic->p1());
 
@@ -271,7 +271,8 @@ void bgui_vsol2D_tableau::set_vsol_spatial_object_2d_style(vsol_spatial_object_2
 {
   if (sos->cast_to_point()) {
     set_vsol_point_2d_style(style);
-  } else if (sos->cast_to_curve()) {
+  }
+  else if (sos->cast_to_curve()) {
     set_digital_curve_style(style);
   }
 }
