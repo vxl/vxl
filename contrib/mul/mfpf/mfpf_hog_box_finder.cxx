@@ -246,10 +246,9 @@ double mfpf_hog_box_finder::search_one_pose(const vimt_image_2d_of<float>& image
   vgl_vector_2d<double> im_v = s_w2i.delta(p0, v1);
 
   // Sample region of interest
-  vil_resample_bilin(image.image(),sample,
-                      im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
-                      im_v.x(),im_v.y(),
-                      nsi,nsj);
+  vil_resample_bilin(image.image(), sample,
+                     im_p0.x(),im_p0.y(), im_u.x(),im_u.y(), im_v.x(),im_v.y(),
+                     nsi, nsj);
 
   // Compute image of histograms (each cell is pool of nc x nc)
   vil_image_view<float> histo_im;
@@ -262,9 +261,9 @@ double mfpf_hog_box_finder::search_one_pose(const vimt_image_2d_of<float>& image
 
   double best_r=9.99e9;
   int best_i=0,best_j=0;
-  for (unsigned j=0;j<(unsigned)nj;++j)
+  for (unsigned j=0;j<nj;++j)
   {
-    for (int i=0;i<ni;++i)
+    for (unsigned int i=0;i<ni;++i)
     {
       mipa_sample_histo_boxes_3L(histo_im,i,j,v,ni_,nj_);
       if (norm_method_==1) mfpf_norm_histo_vec(v,nA_bins_);
