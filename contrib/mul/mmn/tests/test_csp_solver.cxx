@@ -238,21 +238,21 @@ void test_best_xydp_line()
     vcl_vector<vcl_vector<vgl_point_2d<double > > > locations(NSTAGES);
 
     vcl_vector<point_data> prev_raw_data(NPOINTS_PER_STAGE);
-    for (int istage=0;istage<NSTAGES;istage++)
+    for (unsigned int istage=0;istage<NSTAGES;++istage)
     {
         vcl_vector<point_data> raw_data(NPOINTS_PER_STAGE);
         vnl_vector<double> amps(NPOINTS_PER_STAGE);
         vnl_vector<double> error(2);
         amp_sampler->get_samples(amps);
 
-        for (int ipt=0;ipt<NPOINTS_PER_STAGE;ipt++)
+        for (unsigned int ipt=0;ipt<NPOINTS_PER_STAGE;++ipt)
         {
             loc_sampler->sample(error);
             raw_data[ipt].amplitude = amps[ipt];
             //place it on a semi random grid, which widens in x as each stage goes up in y
 //            raw_data[ipt].loc = vgl_point_2d<double>((100.0-2*double(istage))*double(ipt-5) + error[0],
 //                                                    100.0*istage + error[1]);
-            raw_data[ipt].loc = vgl_point_2d<double>((100.0-2*double(ipt-5)  + 4.0*error[0]),
+            raw_data[ipt].loc = vgl_point_2d<double>((100.0-2*(double(ipt)-5.0)  + 4.0*error[0]),
                                                      100.0*istage + error[1]);
 
             locations[istage].push_back(raw_data[ipt].loc);
@@ -319,7 +319,7 @@ void test_best_xydp_line()
     vcl_cout<<"Run DP solver."<<vcl_endl;
 
     vcl_vector<unsigned> xDP;
-    double min_costdp = dpSolver.solve(node_cost,pair_costs_neg,xDP);
+    /* double min_costdp = */ dpSolver.solve(node_cost,pair_costs_neg,xDP);
 
     vcl_vector<mmn_csp_solver::label_subset_t > node_labels_subset(n);
     for (unsigned i=0; i<n;i++)
@@ -420,7 +420,6 @@ void test_5x5grid()
     vpdfl_gaussian pdf_model;
     vnl_matrix<double> covar(2,2);
     double sigma = 10.0;
-    double twoSigma = 2.0*sigma;
     double var=sigma*sigma;
     covar.put(0,0, 4.0*var);
     covar.put(1,1, 4.0*var);
@@ -445,7 +444,7 @@ void test_5x5grid()
 
     vcl_vector<vcl_vector<vgl_point_2d<double > > > locations(n);
 
-    for (int inode=0;inode<n;++inode)
+    for (unsigned int inode=0;inode<n;++inode)
     {
         unsigned ix = inode % NSTAGES;
         unsigned iy = inode / NSTAGES;
@@ -461,7 +460,7 @@ void test_5x5grid()
         node_costs[nodeId].set_size(NPOINTS_PER_NODE);
         locations[nodeId].reserve(NPOINTS_PER_NODE);
         const double STRENGTH_FACTOR=1/20.0;
-        for (int ipt=0;ipt<NPOINTS_PER_NODE;ipt++)
+        for (unsigned int ipt=0;ipt<NPOINTS_PER_NODE;++ipt)
         {
             loc_sampler->sample(error);
             double amplitude = amps[ipt];
@@ -539,7 +538,7 @@ void test_5x5grid()
     vcl_cout<<"Run Loopy Belief Solver."<<vcl_endl;
 
     vcl_vector<unsigned> x;
-    double min_cost = LBPsolver(node_costs,pair_costs_neg,x);
+    /* double min_cost = */ LBPsolver(node_costs,pair_costs_neg,x);
 
     vnl_vector<double> states(n);
     usampler->get_samples(states);

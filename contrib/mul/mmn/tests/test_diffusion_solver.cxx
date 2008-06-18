@@ -347,21 +347,21 @@ void test_diff_best_xy_line()
     vcl_vector<vcl_vector<vgl_point_2d<double > > > locations(NSTAGES);
 
     vcl_vector<point_data> prev_raw_data(NPOINTS_PER_STAGE);
-    for (int istage=0;istage<NSTAGES;istage++)
+    for (unsigned int istage=0;istage<NSTAGES;++istage)
     {
         vcl_vector<point_data> raw_data(NPOINTS_PER_STAGE);
         vnl_vector<double> amps(NPOINTS_PER_STAGE);
         vnl_vector<double> error(2);
         amp_sampler->get_samples(amps);
 
-        for (int ipt=0;ipt<NPOINTS_PER_STAGE;ipt++)
+        for (unsigned int ipt=0;ipt<NPOINTS_PER_STAGE;++ipt)
         {
             loc_sampler->sample(error);
             raw_data[ipt].amplitude = amps[ipt];
             //place it on a semi random grid, which widens in x as each stage goes up in y
 //            raw_data[ipt].loc = vgl_point_2d<double>((100.0-2*double(istage))*double(ipt-5) + error[0],
 //                                                    100.0*istage + error[1]);
-            raw_data[ipt].loc = vgl_point_2d<double>((100.0-2*double(ipt-5)  + 4.0*error[0]),
+            raw_data[ipt].loc = vgl_point_2d<double>((100.0-2*(double(ipt)-5.0)  + 4.0*error[0]),
                                                      100.0*istage + error[1]);
 
             locations[istage].push_back(raw_data[ipt].loc);
@@ -520,7 +520,7 @@ void test_diff_5x5grid_easy()
 
     vcl_vector<vcl_vector<vgl_point_2d<double > > > locations(n);
 
-    for (int inode=0;inode<n;++inode)
+    for (unsigned int inode=0;inode<n;++inode)
     {
         unsigned ix = inode % NSTAGES;
         unsigned iy = inode / NSTAGES;
@@ -536,7 +536,7 @@ void test_diff_5x5grid_easy()
         node_costs[nodeId].set_size(NPOINTS_PER_NODE);
         locations[nodeId].reserve(NPOINTS_PER_NODE);
         const double STRENGTH_FACTOR=1/20.0;
-        for (int ipt=0;ipt<NPOINTS_PER_NODE;ipt++)
+        for (unsigned int ipt=0;ipt<NPOINTS_PER_NODE;++ipt)
         {
             loc_sampler->sample(error);
             double amplitude = amps[ipt];
@@ -749,7 +749,7 @@ void test_diff_5x5grid_hard()
     all_responses.reserve(NALL);
     locations.reserve(NALL);
 
-    for (int inode=0;inode<n;++inode)
+    for (unsigned int inode=0;inode<n;++inode)
     {
         unsigned ix = inode % NSTAGES;
         unsigned iy = inode / NSTAGES;
@@ -764,9 +764,9 @@ void test_diff_5x5grid_hard()
         vgl_point_2d<double> gridPoint(DG*double(ix),DG*double(iy));
         node_costs[nodeId].set_size(NALL);
         const double STRENGTH_FACTOR=1/20.0;
-        for (int ipt=0;ipt<NPOINTS_PER_NODE;ipt++)
+        for (unsigned int ipt=0;ipt<NPOINTS_PER_NODE;++ipt)
         {
-            if (ipt<NPOINTS_PER_NODE-2) // if (true)
+            if (ipt+2<NPOINTS_PER_NODE) // if (true)
                 loc_sampler->sample(error);
             else
                 loc_sampler_outlier->sample(error);
@@ -789,7 +789,7 @@ void test_diff_5x5grid_hard()
     assert(locations.size()==NALL);
     vcl_cout<<"Have created points grid and node costs..."<<vcl_endl
             <<"Now doing dumb assignment of all responses to every node..."<<vcl_endl;
-    for (int inode=0;inode<n;++inode)
+    for (unsigned int inode=0;inode<n;++inode)
     {
         node_costs[inode].set_size(NALL);
         vcl_copy(all_responses.begin(),all_responses.end(),
