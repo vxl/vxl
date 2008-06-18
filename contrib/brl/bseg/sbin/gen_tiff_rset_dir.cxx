@@ -1,4 +1,4 @@
-// .../contrib/brl/bseg/sbin/gen_tiff_rset_dir.cxx
+// This is brl/bseg/sbin/gen_tiff_rset_dir.cxx
 
 #include <vcl_string.h>
 #include <vcl_cstdlib.h>
@@ -57,61 +57,60 @@ int main(int argc,char * argv[])
 #endif
 
   if (argc<4)
+  {
+    vcl_cout<<"Usage : gen_tiff_rset_dir.exe base_dir base_image_extension nlevels\n";
+    return -1;
+  }
+  else
+  {
+    vcl_string base_dir(argv[1]);
+    vcl_string base_image_extension(argv[2]);
+    unsigned nlevels = vcl_atoi(argv[3]);
+
+    vcl_cout << base_dir << vcl_endl
+             << base_image_extension << vcl_endl
+             << nlevels << vcl_endl;
+
+    if (nlevels<2)
     {
-      vcl_cout<<"Usage : gen_tiff_rset_dir.exe base_dir base_image_extension nlevels\n";
-      return -1;
+      vcl_cout << "Must have at least 2 levels\n";
+      return 0;
     }
 
-    else
+    vcl_string file_template = base_dir + slash + "*." +base_image_extension;
+
+    for (vul_file_iterator fn=file_template; fn; ++fn)
     {
-      vcl_string base_dir(argv[1]);
-      vcl_string base_image_extension(argv[2]);
-      unsigned nlevels = vcl_atoi(argv[3]);
+      vcl_string dir_plus_filename = fn();
+      vcl_string filename = vul_file::strip_directory(dir_plus_filename);
+      vcl_string filebase = vul_file::strip_extension(filename);
+      vcl_string new_dir  = vul_file::strip_extension(dir_plus_filename);
 
-      vcl_cout << base_dir << vcl_endl;
-      vcl_cout << base_image_extension << vcl_endl;
-      vcl_cout << nlevels << vcl_endl;
+      bool success = vul_file::make_directory(new_dir);
 
-      if (nlevels<2)
+      vcl_string dir = vul_file::dirname(dir_plus_filename);
+
+      vcl_string pyramid_dir = dir + slash + filebase;
+
+      vcl_string new_filename = base_dir + slash + filebase + slash +
+                                filebase + "_0." + base_image_extension;
+
+      vcl_string command = "move " + dir_plus_filename + " " + new_filename;
+
+      system(command.c_str());    // execute file move & rename
+
+      success = vul_file::change_directory(pyramid_dir); // change to pyramid dir
+
+      vcl_cout << "Creating pyramid for: " << new_filename << vcl_endl;
+
+      if (!generate_rset(pyramid_dir, base_image_extension, nlevels))
       {
-        vcl_cout << "Must have at least 2 levels\n";
-        return 0;
+        vcl_cout << "Generate R Set failed for file" << pyramid_dir << vcl_endl;
+        return -1;
       }
 
-	  vcl_string file_template = base_dir + slash + "*." +base_image_extension;
-	  
-	  for(vul_file_iterator fn=file_template; fn; ++fn)
-	  {
-		  vcl_string dir_plus_filename = fn();
-		  vcl_string filename = vul_file::strip_directory(dir_plus_filename);
-		  vcl_string filebase = vul_file::strip_extension(filename);
-		  vcl_string new_dir  = vul_file::strip_extension(dir_plus_filename);
-		  
-		  bool success = vul_file::make_directory(new_dir);
-		  
-		  vcl_string dir = vul_file::dirname(dir_plus_filename);
-			  
-		  vcl_string pyramid_dir = dir + slash + filebase;
-		  
-		  vcl_string new_filename = base_dir + slash + filebase + slash +
-		  			filebase + "_0." + base_image_extension;
-					
-		  vcl_string command = "move " + dir_plus_filename + " " + new_filename;
-			  
-		  system(command.c_str());		// execute file move & rename
-		  
-		  success = vul_file::change_directory(pyramid_dir); // change to pyramid dir
-
-		  vcl_cout << "Creating pyramid for: " << new_filename << vcl_endl;
-		  
-		  if (!generate_rset(pyramid_dir, base_image_extension, nlevels))
-		  {
-			vcl_cout << "Generate R Set failed for file" << pyramid_dir << vcl_endl;
-			return -1;
-		  }
-		  
-		  success = vul_file::change_directory(base_dir);  // back to base dir
-      }
+      success = vul_file::change_directory(base_dir);  // back to base dir
     }
-    return 0;
+  }
+  return 0;
 }
