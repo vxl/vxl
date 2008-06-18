@@ -4,6 +4,7 @@
 #include <vcl_iterator.h>
 #include <vcl_sstream.h>
 #include <mbl/mbl_exception.h>
+#include <mbl/mbl_stl.h>
 //:
 // \file
 // \brief Run loopy belief propagation to estimate maximum marginal probabilities of all node states
@@ -16,7 +17,8 @@ const unsigned mmn_lbp_solver::NCYCLE_DETECT_=7;
 mmn_lbp_solver::mmn_lbp_solver()
     : nnodes_(0), max_iterations_(100), min_simple_iterations_(25),
       epsilon_(1E-6), alpha_(0.6), smooth_on_cycling_(true),
-      max_cycle_detection_count_(3), verbose_(false)
+      max_cycle_detection_count_(3), verbose_(false),
+      msg_upd_mode_(mmn_lbp_solver::eRANDOM_SERIAL)
 {
     init();
 }
@@ -25,7 +27,8 @@ mmn_lbp_solver::mmn_lbp_solver()
 mmn_lbp_solver::mmn_lbp_solver(unsigned num_nodes,const vcl_vector<mmn_arc>& arcs)
     : max_iterations_(100), min_simple_iterations_(25),
       epsilon_(1E-6), alpha_(0.6), smooth_on_cycling_(true),
-      max_cycle_detection_count_(3), verbose_(false)
+      max_cycle_detection_count_(3), verbose_(false),
+      msg_upd_mode_(mmn_lbp_solver::eRANDOM_SERIAL)
 {
     init();
     set_arcs(num_nodes,arcs);
@@ -141,15 +144,41 @@ double mmn_lbp_solver::operator()(const vcl_vector<vnl_vector<double> >& node_co
 
     messages_upd_ = messages_;
 
+    //Now keep repeating message passing 
+    vcl_vector<unsigned > random_indices(nnodes_,0);
+    mbl_stl_increments(random_indices.begin(),random_indices.end(),0);
+
     do
     {
         max_delta_=-1.0;
-        for (unsigned inode=0; inode<nnodes_;++inode)
+        switch(msg_upd_mode_)
         {
-            update_messages_to_neighbours(inode,node_costs_[inode]);
+            case eALL_PARALLEL:
+            {
+                //Calculate all updates in parallel using only previous iteration messages
+                for(unsigned inode=0; inode<nnodes_;++inode)
+                {
+                    update_messages_to_neighbours(inode,node_costs_[inode]);
+                }
+                messages_ = messages_upd_;
+            }
+            break;
+        
+            case eRANDOM_SERIAL:
+            default:
+            {
+                vcl_random_shuffle(random_indices.begin(),random_indices.end());
+                //Randomise the order of inter-node messages
+                //May help avoid looping
+                for(unsigned knode=0; knode<nnodes_;++knode)
+                {
+                    unsigned inode=random_indices[knode];
+                    update_messages_to_neighbours(inode,node_costs_[inode]);
+                    messages_[inode] = messages_upd_[inode]; //immediate update for this node
+                }
+            }
         }
-
-        messages_ = messages_upd_;
+        
         if (verbose_)
         {
             vcl_cout<<"Max message delta at iteration "<<count_<<"\t is "<<max_delta_<<vcl_endl;

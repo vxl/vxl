@@ -21,6 +21,9 @@
 
 class mmn_lbp_solver
 {
+ public:
+    //: Message update mode type (all in parallel, or randomised node order with immediate effect}
+    enum msg_update_t {eALL_PARALLEL,eRANDOM_SERIAL};
  private:
     //: in below the map is indexed by the neighbour's node id
 
@@ -104,6 +107,8 @@ class mmn_lbp_solver
     //:verbose debug output
     bool verbose_;
 
+    msg_update_t msg_upd_mode_;
+
     //: Magic numbers for cycle detection
     static const unsigned NHISTORY_;
     static const unsigned NCYCLE_DETECT_;
@@ -170,6 +175,10 @@ class mmn_lbp_solver
     void set_max_cycle_detection_count_(unsigned max_cycle_detection_count) {max_cycle_detection_count_=max_cycle_detection_count;}
 
     void set_verbose(bool verbose) {verbose_=verbose;}
+
+    //: Set message update mode (parallel or randomised serial}
+    void set_msg_upd_mode(msg_update_t msg_upd_mode) {msg_upd_mode_ = msg_upd_mode;}
+
 };
 
 #endif // mmn_lbp_solver_h_
