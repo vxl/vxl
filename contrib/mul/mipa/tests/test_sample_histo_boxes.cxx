@@ -1,4 +1,4 @@
-// This is mul/mipa/tests/test_pose.cxx
+// This is mul/mipa/tests/test_sample_histo_boxes.cxx
 //=======================================================================
 //
 //  Copyright: (C) 2007 The University of Manchester
@@ -6,14 +6,12 @@
 //=======================================================================
 #include <testlib/testlib_test.h>
 #include <mipa/mipa_sample_histo_boxes.h>
+#include <vcl_iostream.h>
 
 //:
 // \file
 // \author Tim Cootes
 // \brief test mipa_sample_histo_boxes
-
-#include <vcl_iostream.h>
-#include <mipa/mipa_sample_histo_boxes.h>
 
 float sum_over_box(const vil_image_view<float>& im,
                    unsigned i0, unsigned j0, unsigned k,
@@ -88,8 +86,6 @@ void test_sample_histo_boxes()
     float sum=sum_over_box(histo,1,1,k,2*nbi,2*nbj);
     TEST_NEAR("Total sum",v0[5*nbi*nbj*nb+k],sum,1e-6);
   }
-
-
 }
 
 TESTMAIN(test_sample_histo_boxes);
