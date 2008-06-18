@@ -17,7 +17,6 @@
 #include <mbl/mbl_stl.h>
 #include <mbl/mbl_stl_pred.h>
 
-
 //Static magic numbers
 unsigned mmn_diffusion_solver::gNCONVERGED=3;
 unsigned mmn_diffusion_solver::gACS_CHECK_PERIOD=10;
@@ -31,8 +30,8 @@ mmn_diffusion_solver::mmn_diffusion_solver()
 }
 
 //: Construct with arcs
-mmn_diffusion_solver::mmn_diffusion_solver(unsigned num_nodes,const vcl_vector<mmn_arc>& arcs):
-  epsilon_(1.0E-5), min_iterations_(200), max_iterations_(2000), verbose_(false)
+mmn_diffusion_solver::mmn_diffusion_solver(unsigned num_nodes,const vcl_vector<mmn_arc>& arcs)
+: max_iterations_(2000), min_iterations_(200), epsilon_(1.0E-5), verbose_(false)
 {
     init();
     set_arcs(num_nodes,arcs);
