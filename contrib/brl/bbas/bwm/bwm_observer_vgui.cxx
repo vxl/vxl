@@ -8,9 +8,9 @@
 
 #include "bwm_tableau_mgr.h"
 
+#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_box_2d.h>
 
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_polygon_2d.h>
@@ -95,7 +95,7 @@ void bwm_observer_vgui::corr_image_pt(float& x, float& y)
 //: the current location of the correspondence point, if corr is valid
 bool bwm_observer_vgui::corr_image_pt(vgl_point_2d<double>& pt)
 {
-  if (corr_valid_){
+  if (corr_valid_) {
     pt = corr_.first;
     return true;
   }
@@ -160,7 +160,7 @@ void bwm_observer_vgui::draw_mesh(bwm_observable_sptr observable,
   if (observable) {
     if (mode_ == MODE_FACE) {
       vcl_map<int, vsol_polygon_3d_sptr> faces = observable->extract_faces();
-      
+
       vcl_map<int, vsol_polygon_3d_sptr>::iterator iter = faces.begin();
       while (iter != faces.end()) {
         // project the new object with the given camera
@@ -188,8 +188,9 @@ void bwm_observer_vgui::draw_mesh(bwm_observable_sptr observable,
       if (show_vertices_) {
         draw_vertices(observable, list, false, vertx_list, vertx_xy_list);
       }
-
-    } else if (mode_ == MODE_EDGE) {
+    }
+    else if (mode_ == MODE_EDGE)
+    {
        vcl_map<int, vsol_line_3d_sptr> edges = observable->extract_edges();
        vcl_vector<vsol_point_3d_sptr> vertices = observable->extract_vertices();
 
@@ -208,7 +209,8 @@ void bwm_observer_vgui::draw_mesh(bwm_observable_sptr observable,
        if (show_vertices_) {
         draw_vertices(observable, list, false, vertx_list, vertx_xy_list);
        }
-    } else if (mode_ == MODE_VERTEX) {
+    }
+    else if (mode_ == MODE_VERTEX) {
        vcl_map<int, vsol_line_3d_sptr> edges = observable->extract_edges();
        vcl_vector<vsol_point_3d_sptr> vertices = observable->extract_vertices();
 
@@ -228,11 +230,12 @@ void bwm_observer_vgui::draw_mesh(bwm_observable_sptr observable,
        if (show_vertices_) {
         draw_vertices(observable, list, true, vertx_list, vertx_xy_list);
        }
-    } else if (mode_ == MODE_MESH) {
+    }
+    else if (mode_ == MODE_MESH) {
        vcl_map<int, vsol_line_3d_sptr> edges = observable->extract_edges();
        vcl_vector<vsol_point_3d_sptr> vertices = observable->extract_vertices();
        vcl_map<int, vsol_polygon_3d_sptr> faces = observable->extract_faces();
-      
+
        vcl_map<int, vsol_polygon_3d_sptr>::iterator iter = faces.begin();
        vsol_group_2d_sptr group = new vsol_group_2d();
        vcl_vector<vsol_polygon_2d_sptr> mesh;
@@ -246,7 +249,7 @@ void bwm_observer_vgui::draw_mesh(bwm_observable_sptr observable,
          iter++;
        }
        vsol_poly_set_2d_sptr p = new vsol_poly_set_2d(mesh);
-       list[0] = this->add_vsol_polygon_2d_set(p); 
+       list[0] = this->add_vsol_polygon_2d_set(p);
        if (show_vertices_) {
         draw_vertices(observable, list, false, vertx_list, vertx_xy_list);
        }
@@ -255,10 +258,10 @@ void bwm_observer_vgui::draw_mesh(bwm_observable_sptr observable,
 }
 
 void bwm_observer_vgui::draw_vertices(bwm_observable_sptr observable,
-                   vcl_map<unsigned, bgui_vsol_soview2D* > list,
-                   bool selectable,              
-                   vcl_vector<bwm_soview2D_vertex*> &vertx_list,
-                   vcl_vector<vsol_point_2d_sptr> &vertx_xy_list)
+                                      vcl_map<unsigned, bgui_vsol_soview2D* > list,
+                                      bool selectable,
+                                      vcl_vector<bwm_soview2D_vertex*> &vertx_list,
+                                      vcl_vector<vsol_point_2d_sptr> &vertx_xy_list)
 {
   vcl_vector<vsol_point_3d_sptr> vertices = observable->extract_vertices();
   for (unsigned i=0; i<vertices.size(); i++) {
@@ -337,7 +340,8 @@ void bwm_observer_vgui::handle_update(vgui_message const& msg,
       objects_[observable] = poly_list;
       object_verts_[observable] = poly_verts;
       object_verts_xy_[observable] = poly_verts_xy;
-    } else if ((str->compare("update") == 0) || (str->compare("move") == 0)){
+    }
+    else if ((str->compare("update") == 0) || (str->compare("move") == 0)) {
       vcl_map<unsigned, bgui_vsol_soview2D* > p = objects_[observable];
       vcl_vector<bwm_soview2D_vertex* > ov = object_verts_[observable];
       vcl_map<unsigned, bgui_vsol_soview2D* >::iterator it =  p.begin();
@@ -486,11 +490,11 @@ void bwm_observer_vgui::translate(vgl_vector_3d<double> T,
   while (iter != objects_.end()) {
     bwm_observable_sptr obs = iter->first;
     if (obs==0) continue;
-    if (object==0){
+    if (object==0) {
       obs->translate(T);
       continue;
     }
-    else if (obs == object){
+    else if (obs == object) {
       obs->translate(T);
     return;
     }
@@ -549,16 +553,17 @@ unsigned bwm_observer_vgui::get_selected_3d_vertex_index(unsigned poly_id)
   bwm_observable_sptr found_obj = 0;
   unsigned found_poly_index = 0;
   for (vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D* > >::iterator
-    oit = objects_.begin();
-    oit != objects_.end(); ++oit) {
-      unsigned pindex = 0;
-      vcl_map<unsigned, bgui_vsol_soview2D* > polys = oit->second;
-      for (vcl_map<unsigned, bgui_vsol_soview2D* >::iterator pit = polys.begin();
-           pit != polys.end(); ++pit, ++pindex)
-        if (pit->second && pit->second->get_id() == poly_id) {
-          found_obj = oit->first;
-          found_poly_index = pindex;
-        }
+       oit = objects_.begin();
+       oit != objects_.end(); ++oit)
+  {
+    unsigned pindex = 0;
+    vcl_map<unsigned, bgui_vsol_soview2D* > polys = oit->second;
+    for (vcl_map<unsigned, bgui_vsol_soview2D* >::iterator pit = polys.begin();
+         pit != polys.end(); ++pit, ++pindex)
+      if (pit->second && pit->second->get_id() == poly_id) {
+        found_obj = oit->first;
+        found_poly_index = pindex;
+      }
   }
 
   if (!found_obj)
@@ -585,9 +590,9 @@ vsol_point_3d_sptr bwm_observer_vgui::selected_vertex()
     unsigned list_index = 0;
     bool found = false;
     for (vcl_vector<vgui_soview*>::iterator sit = select_list.begin();
-      sit != select_list.end(); ++sit,++list_index)
+         sit != select_list.end(); ++sit,++list_index)
       if ((*sit)->type_name()!= "bgui_vsol_soview2D_polygon")
-          continue;
+        continue;
       else {
         found = true;
         break;
