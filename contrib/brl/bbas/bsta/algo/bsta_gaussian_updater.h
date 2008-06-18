@@ -9,7 +9,8 @@
 //
 // \verbatim
 //  Modifications
-//   (none yet)
+//   6/18/08  --  Matt Leotta  --  Adjusted such that min_var is a hard minimum
+//                                 instead of a minimum in the limit
 // \endverbatim
 
 #include <bsta/bsta_gaussian_sphere.h>
@@ -24,7 +25,7 @@
 // \note if rho = 1/(num observations) then this just an online cumulative average
 template <class T>
 void bsta_update_gaussian(bsta_gaussian_sphere<T,1>& gaussian, T rho,
-                            const T& sample )
+                          const T& sample )
 {
   // the complement of rho (i.e. rho+rho_comp=1.0)
   T rho_comp = 1.0 - rho;
@@ -44,7 +45,7 @@ void bsta_update_gaussian(bsta_gaussian_sphere<T,1>& gaussian, T rho,
 // \note if rho = 1/(num observations) then this just an online cumulative average
 template <class T, unsigned n>
 void bsta_update_gaussian(bsta_gaussian_sphere<T,n>& gaussian, T rho,
-                            const vnl_vector_fixed<T,n>& sample )
+                          const vnl_vector_fixed<T,n>& sample )
 {
   // the complement of rho (i.e. rho+rho_comp=1.0)
   T rho_comp = 1.0 - rho;
@@ -64,7 +65,7 @@ void bsta_update_gaussian(bsta_gaussian_sphere<T,n>& gaussian, T rho,
 // \note if rho = 1/(num observations) then this just an online cumulative average
 template <class T, unsigned n>
 void bsta_update_gaussian(bsta_gaussian_indep<T,n>& gaussian, T rho,
-                            const vnl_vector_fixed<T,n>& sample )
+                          const vnl_vector_fixed<T,n>& sample )
 {
   // the complement of rho (i.e. rho+rho_comp=1.0)
   T rho_comp = 1.0 - rho;
@@ -85,7 +86,7 @@ void bsta_update_gaussian(bsta_gaussian_indep<T,n>& gaussian, T rho,
 // \note if rho = 1/(num observations) then this just an online cumulative average
 template <class T, unsigned n>
 void bsta_update_gaussian(bsta_gaussian_full<T,n>& gaussian, T rho,
-                            const vnl_vector_fixed<T,n>& sample )
+                          const vnl_vector_fixed<T,n>& sample )
 {
   // the complement of rho (i.e. rho+rho_comp=1.0)
   T rho_comp = 1.0 - rho;
@@ -107,46 +108,25 @@ void bsta_update_gaussian(bsta_gaussian_full<T,n>& gaussian, T rho,
 // If the same sample is observed repeatedly, the variances will
 // converge to the minimum value parameter rather than zero.
 
-//: Update the statistics given a 1D Gaussian distribution and a learning rate
-// \param min_var forces the variance to stay above this limit
-// \note if rho = 1/(num observations) then this just an online cumulative average
-template <class T>
-void bsta_update_gaussian(bsta_gaussian_sphere<T,1>& gaussian, T rho,
-                            const T& sample, T min_var)
-    {
-  // the complement of rho (i.e. rho+rho_comp=1.0)
-  T rho_comp = T(1) - rho;
-  // compute the updated mean
-  const T& old_mean = gaussian.mean();
 
-  T diff = sample - old_mean;
-  T new_var = rho_comp * gaussian.var();
-  new_var += (rho * rho_comp) * vcl_max(diff*diff,min_var);
-  gaussian.set_var(new_var);
-  gaussian.set_mean((old_mean) +  (rho * diff));
+template <class T>
+inline T element_max(const T& a, const T& b)
+{
+  return vcl_max(a,b);
 }
 
 
-//: Update the statistics given a Gaussian distribution and a learning rate
-// \param min_var forces the variance to stay above this limit
-// \note if rho = 1/(num observations) then this just an online cumulative average
+//: element-wise minimum of vector.
 template <class T, unsigned n>
-void bsta_update_gaussian(bsta_gaussian_sphere<T,n>& gaussian, T rho,
-                            const vnl_vector_fixed<T,n>& sample,
-                            T min_var)
+vnl_vector_fixed<T,n> element_max(const vnl_vector_fixed<T,n>& a_vector,
+                                  const T& b)
 {
-  // the complement of rho (i.e. rho+rho_comp=1.0)
-  T rho_comp = (T)1 - rho;
-  // compute the updated mean
-  const vnl_vector_fixed<T,n>& old_mean = gaussian.mean();
-
-  vnl_vector_fixed<T,n> diff(sample - old_mean);
-
-  T new_var = rho_comp * gaussian.var();
-  new_var += (rho * rho_comp) * vcl_max(dot_product(diff,diff),min_var);
-
-  gaussian.set_var(new_var);
-  gaussian.set_mean((old_mean) +  (rho * diff));
+  vnl_vector_fixed<T,n> min_vector;
+  T* r = min_vector.data_block();
+  const T* a = a_vector.data_block();
+  for (unsigned i=0; i<n; ++i, ++r, ++a)
+    *r = vcl_max(*a,b);
+  return min_vector;
 }
 
 
@@ -165,7 +145,22 @@ vnl_vector_fixed<T,n> element_max(const vnl_vector_fixed<T,n>& a_vector,
 }
 
 
-//: element-wise minimum of vector.
+//: element-wise minimum on the matrix diagonal.
+template <class T, unsigned n>
+vnl_matrix_fixed<T,n,n> element_max(const vnl_matrix_fixed<T,n,n>& a_matrix,
+                                    const T& b)
+{
+  vnl_matrix_fixed<T,n,n> min_matrix(a_matrix);
+  T* r = min_matrix.data_block();
+  const T* a = a_matrix.data_block();
+  const unsigned step = n+1;
+  for (unsigned i=0; i<n; ++i, r+=step, a+=step)
+    *r = vcl_max(*a,b);
+  return min_matrix;
+}
+
+
+//: element-wise minimum of matrix.
 template <class T, unsigned n>
 vnl_matrix_fixed<T,n,n> element_max(const vnl_matrix_fixed<T,n,n>& a_matrix,
                                     const vnl_matrix_fixed<T,n,n>& b_matrix)
@@ -174,79 +169,50 @@ vnl_matrix_fixed<T,n,n> element_max(const vnl_matrix_fixed<T,n,n>& a_matrix,
   T* r = min_matrix.data_block();
   const T* a = a_matrix.data_block();
   const T* b = b_matrix.data_block();
-  for (unsigned i=0; i<n*n; ++i, ++r, ++a, ++b)
+  const unsigned num_elements = n*n;
+  for (unsigned i=0; i<num_elements; ++i, ++r, ++a, ++b)
     *r = vcl_max(*a,*b);
   return min_matrix;
 }
 
 
 //: Update the statistics given a Gaussian distribution and a learning rate
-// \param min_vars forces the variances to stay above this limit
+// \param min_covar forces the covariance to stay above this limit
 // \note if rho = 1/(num observations) then this just an online cumulative average
-template <class T, unsigned n>
-void bsta_update_gaussian(bsta_gaussian_indep<T,n>& gaussian, T rho,
-                            const vnl_vector_fixed<T,n>& sample,
-                            const vnl_vector_fixed<T,n>& min_vars)
+template <class gauss_>
+inline void bsta_update_gaussian(gauss_& gaussian,
+                          typename gauss_::math_type rho,
+                          const typename gauss_::vector_type& sample,
+                          const typename gauss_::covar_type& min_covar)
 {
-  // the complement of rho (i.e. rho+rho_comp=1.0)
-  T rho_comp = T(1) - rho;
-  // compute the updated mean
-  const vnl_vector_fixed<T,n>& old_mean = gaussian.mean();
-
-  vnl_vector_fixed<T,n> diff(sample - old_mean);
-
-  vnl_vector_fixed<T,n> new_covar(rho_comp * gaussian.diag_covar());
-  new_covar += (rho * rho_comp) * element_max(element_product(diff,diff),min_vars);
-
-  gaussian.set_covar(new_covar);
-  gaussian.set_mean((old_mean) +  (rho * diff));
+  bsta_update_gaussian(gaussian, rho, sample);
+  gaussian.set_covar(element_max(gaussian.covar(),min_covar));
 }
+
 
 //: Update the statistics given a Gaussian distribution and a learning rate
 // \param min_var forces all the variances to stay above this limit
 // \note if rho = 1/(num observations) then this just an online cumulative average
 template <class T, unsigned n>
-void bsta_update_gaussian(bsta_gaussian_indep<T,n>& gaussian, T rho,
-                            const vnl_vector_fixed<T,n>& sample,
-                            T min_var)
+inline void bsta_update_gaussian(bsta_gaussian_indep<T,n>& gaussian, T rho,
+                          const vnl_vector_fixed<T,n>& sample,
+                          T min_var)
 {
-  bsta_update_gaussian(gaussian,rho,sample,vnl_vector_fixed<T,n>(min_var));
+  bsta_update_gaussian(gaussian, rho, sample);
+  gaussian.set_covar(element_max(gaussian.covar(),min_var));
 }
 
-
-//: Update the statistics given a Gaussian distribution and a learning rate
-// \param min_covar forces the covariance to stay above this limit
-// \note if rho = 1/(num observations) then this just an online cumulative average
-template <class T, unsigned n>
-void bsta_update_gaussian(bsta_gaussian_full<T,n>& gaussian, T rho,
-                            const vnl_vector_fixed<T,n>& sample,
-                            const vnl_matrix_fixed<T,n,n>& min_covar)
-{
-  // the complement of rho (i.e. rho+rho_comp=1.0)
-  T rho_comp = T(1) - rho;
-  // compute the updated mean
-  const vnl_vector_fixed<T,n>& old_mean = gaussian.mean();
-
-  vnl_vector_fixed<T,n> diff(sample - old_mean);
-
-  vnl_matrix_fixed<T,n,n> new_covar(rho_comp * gaussian.covar());
-  new_covar += (rho * rho_comp) * element_max(outer_product(diff,diff),min_covar);
-
-  gaussian.set_covar(new_covar);
-  gaussian.set_mean(( old_mean) +  (rho * diff));
-}
 
 //: Update the statistics given a Gaussian distribution and a learning rate
 // \param min_var forces the diagonal covariance to stay above this limit
 // \note if rho = 1/(num observations) then this just an online cumulative average
 template <class T, unsigned n>
-void bsta_update_gaussian(bsta_gaussian_full<T,n>& gaussian, T rho,
-                            const vnl_vector_fixed<T,n>& sample,
-                            T min_var)
+inline void bsta_update_gaussian(bsta_gaussian_full<T,n>& gaussian, T rho,
+                          const vnl_vector_fixed<T,n>& sample,
+                          T min_var)
 {
-  vnl_matrix_fixed<T,n,n> covar(T(0));
-  for (unsigned i=0; i<n; ++i) covar(i,i) = min_var;
-  bsta_update_gaussian(gaussian,rho,sample,covar);
+  bsta_update_gaussian(gaussian, rho, sample);
+  gaussian.set_covar(element_max(gaussian.covar(),min_var));
 }
 
 
