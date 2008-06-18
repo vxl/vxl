@@ -10,16 +10,14 @@
 #include <vil/vil_image_view.h>
 #include <mipa/mipa_orientation_histogram.h>
 #include <vil/vil_convert.h>
-#include <vil/vil_plane.h>
 #include <vul/vul_arg.h>
-#include <vcl_algorithm.h>
 
 void print_usage()
 {
-  vcl_cout<<"mipa_orient_histo  -i src_image -o out_image -c 4"<<vcl_endl;
-  vcl_cout<<"Tool to compute a orientation histogram image from an input image."<<vcl_endl;
-  vcl_cout<<"Uses 4 orientation bins, outputs 3-plane image with first three."<<vcl_endl;
-  vcl_cout<<"Each histogram is computed from pixels in square of size cell_size"<<vcl_endl;
+  vcl_cout<<"mipa_orient_histo  -i src_image -o out_image -c 4\n"
+          <<"Tool to compute a orientation histogram image from an input image.\n"
+          <<"Uses 4 orientation bins, outputs 3-plane image with first three.\n"
+          <<"Each histogram is computed from pixels in square of size cell_size"<<vcl_endl;
 }
 
 int main(int argc, char** argv)
