@@ -10,13 +10,9 @@
 #include <mmn/mmn_arc.h>
 #include <mmn/mmn_dependancy.h>
 #include <mmn/mmn_graph_rep1.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
-#include <vil/vil_image_view.h>
 #include <mbl/mbl_stl_pred.h>
 
-//: Given (sparse?) graph eliminate invalid arcs and nodes until
-//  a kernel of arc-consistent nodes and arcs remains
+//: Given (sparse?) graph eliminate invalid arcs and nodes until a kernel of arc-consistent nodes and arcs remains
 //  See Werner 2007 paper in IEEE Trans on Pattern Recognition and Machine Intelligence
 //  Can be used to see if Max Sum problem has been reduced to "trivial" form
 //  i.e. if the maximal nodes are joined up via maximal arcs
@@ -29,7 +25,7 @@ class mmn_csp_solver
  public:
     //: Subset of labels present for each node
     typedef vcl_set<unsigned>  label_subset_t;
-    
+
     //: Define the subset of labels linked
     // For each original arc (outer vector), the inner set gives all the
     // corresponding node labels actually linked
@@ -41,7 +37,7 @@ class mmn_csp_solver
     //Similar but multiset with partial ordering by second label
     typedef vcl_multiset<vcl_pair<unsigned ,unsigned >,
         mbl_stl_pred_pair_value_order<vcl_pair<unsigned ,unsigned > > >  arc_labels_subset_t2;
-       
+
  private:
     unsigned nnodes_;
 
@@ -88,8 +84,6 @@ class mmn_csp_solver
 
     void set_verbose(bool verbose) {verbose_=verbose;}
     const vcl_vector<label_subset_t >& kernel_node_labels() const {return node_labels_present_;}
-    
-  
 };
 
 #endif // mmn_csp_solver_h_
