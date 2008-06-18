@@ -66,14 +66,16 @@ bool bwm_observer_cam::handle(const vgui_event &e)
   float x, y;
   pi.window_to_image_coordinates(e.wx, e.wy, x, y);
 
-  /*if (e.type == vgui_MOTION){
+#if 0
+  if (e.type == vgui_MOTION) {
     vcl_vector<vgui_soview*> so;
     so = get_selected_soviews();
     for (unsigned i=0; i<so.size(); i++) {
       so[i]->set_line_width(5.0); //_style(select_style_);
       so[i]->draw();
     }
-  }*/
+  }
+#endif // 0
 
   if (e.type == vgui_BUTTON_DOWN && e.button == vgui_MIDDLE &&
       e.modifier == vgui_SHIFT)
@@ -101,7 +103,7 @@ bool bwm_observer_cam::handle(const vgui_event &e)
             moving_p_ = (bgui_vsol_soview2D*) select_list[0];
             moving_face_ = obj;
             vsol_polygon_3d_sptr poly3d = obj->extract_face(face_id);
-            if (poly3d){
+            if (poly3d) {
             vgl_homg_plane_3d<double> plane = poly3d->plane();
             moving_face_plane_ = plane;
             }
@@ -128,7 +130,7 @@ bool bwm_observer_cam::handle(const vgui_event &e)
             moving_p_ = poly;
             moving_face_ = obj;
             vsol_polygon_3d_sptr poly3d = obj->extract_face(face_id);
-            if (poly3d){
+            if (poly3d) {
             vgl_homg_plane_3d<double> plane = poly3d->plane();
             moving_face_plane_ = plane;
             }
@@ -174,7 +176,8 @@ bool bwm_observer_cam::handle(const vgui_event &e)
       moving_v_->translate(x_diff, y_diff);
       polygon->sptr()->vertex(i)->set_x(polygon->sptr()->vertex(i)->x() + x_diff );
       polygon->sptr()->vertex(i)->set_y(polygon->sptr()->vertex(i)->y() + y_diff );
-    } else {
+    }
+    else {
       vcl_cerr << moving_p_->type_name() << " is NOT movable!!!!\n";
     }
 
@@ -308,7 +311,8 @@ void bwm_observer_cam::select_proj_plane()
     bwm_observable_sptr obs = find_object(polygon->get_id(), face_id);
     vgl_plane_3d<double> plane = obs->get_plane(face_id);
     set_proj_plane(plane);
-  } else
+  }
+  else
     vcl_cerr << "Select a face for projection plane\n";
 }
 
@@ -894,7 +898,8 @@ void bwm_observer_cam::extrude_face(vsol_point_2d_sptr pt)
         vcl_cerr << "backprojected vertices are not adjacent\n";
         return;
       }
-    } else {
+    }
+    else {
       unsigned next_index = (index2 == 0) ? face->size()-1 : index2+1;
       if (next_index != index1) {
         vcl_cerr << "backprojected vertices are not adjacent\n";
@@ -1008,7 +1013,8 @@ void bwm_observer_cam::extrude_face()
     extrude_mode_ = true;
     extrude_obj_ = obs;
     obs->extrude(face_id);
-  } else {
+  }
+  else {
     this->deselect();
     vcl_cout << "The face is not extrudable, it should be parallel to the ground!" << vcl_endl;
   }
@@ -1253,7 +1259,8 @@ void bwm_observer_cam::scan_regions()
              vertices[i]->get_centroid(&x, &y);
              polygon.push_back(x,y);
            }
-        } else {
+        }
+        else {
           vcl_vector<vgl_point_2d<double> > points;
           for (unsigned i=0; i<vertices.size(); i++) {
              float x, y;
@@ -1302,7 +1309,7 @@ void bwm_observer_cam::set_selection(bool status)
 void bwm_observer_cam::show_geo_position()
 {
   show_geo_position_ = !show_geo_position_;
-  if (!show_geo_position_){
+  if (!show_geo_position_) {
     img_tab_->lock_linenum(false);
     bwm_observer_img::set_vgui_status_on(false);
     bwm_observer_img::lock_vgui_status(false);
@@ -1350,7 +1357,7 @@ void bwm_observer_cam::create_terrain(vsol_polygon_2d_sptr boundary)
   vgl_plane_3d<double> plane = bwm_world::instance()->world_plane();
   backproj_poly(boundary, p3d, plane);
 
-  // add boundary points 
+  // add boundary points
   vcl_vector<vgl_point_2d<double> > points;
   vcl_vector<vgl_point_3d<double> > points_3d;
   for (unsigned i=0; i<p3d->size(); i++) {
@@ -1369,30 +1376,29 @@ void bwm_observer_cam::create_terrain(vsol_polygon_2d_sptr boundary)
       points_3d.push_back(v->get_p());
     }
   }
-  
+
   // add the correspondence points
 
   // triangulate
   bwm_delaunay_tri tri;
-  vcl_vector<vgl_point_3d<int> > v; 
+  vcl_vector<vgl_point_3d<int> > v;
   int ntri;
   tri.triangulate(points_3d, v, ntri);
   vcl_cout << "Number of Triangles:" << ntri << vcl_endl;
   for (unsigned i=0; i<ntri; i++) {
     vcl_cout << i << "==>" << v[i] << vcl_endl;
   }
-  
+
   bwm_observable_mesh_sptr terrain = new bwm_observable_mesh(bwm_observable_mesh::BWM_MESH_TERRAIN);
   bwm_world::instance()->add(terrain);
   bwm_observer_mgr::instance()->attach(terrain);
-  terrain->create_mesh_surface(points_3d, v); 
-
+  terrain->create_mesh_surface(points_3d, v);
 }
 
 void bwm_observer_cam::deselect()
 {
  this->deselect_all();
- for(unsigned i=0; i<selected_soviews_.size(); i++) {
+ for (unsigned i=0; i<selected_soviews_.size(); i++) {
   selected_soviews_[i]->set_style(mesh_style_);
  }
   selected_soviews_.clear();

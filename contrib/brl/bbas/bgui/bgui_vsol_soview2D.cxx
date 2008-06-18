@@ -382,7 +382,7 @@ bgui_vsol_soview2D_edgel_curve::bgui_vsol_soview2D_edgel_curve(vdgl_digital_curv
 
 vdgl_digital_curve_sptr bgui_vsol_soview2D_edgel_curve::sptr() const
 {
-  return ( vdgl_digital_curve*)(sptr_.ptr());
+  return (vdgl_digital_curve*)(sptr_.ptr());
 }
 
 void bgui_vsol_soview2D_edgel_curve::draw() const
@@ -580,7 +580,7 @@ float bgui_vsol_soview2D_polygon_set::distance_squared( float x , float y ) cons
     d += poly.distance_squared(x,y);
   }
 
-  return (d/n);
+  return d/n;
 }
 
 void bgui_vsol_soview2D_polygon_set::get_centroid( float* x, float* y ) const
