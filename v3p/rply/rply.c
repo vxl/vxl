@@ -1294,12 +1294,12 @@ static int oascii_uint16(p_ply ply, double value) {
 
 static int oascii_int32(p_ply ply, double value) {
     if (value > PLY_INT32_MAX || value < PLY_INT32_MIN) return 0;
-    return fprintf(ply->fp, "%d ", (t_ply_int32) value) > 0;
+    return fprintf(ply->fp, "%ld ", (t_ply_int32) value) > 0;
 }
 
 static int oascii_uint32(p_ply ply, double value) {
     if (value > PLY_UINT32_MAX || value < 0) return 0;
-    return fprintf(ply->fp, "%d ", (t_ply_uint32) value) > 0;
+    return fprintf(ply->fp, "%ld ", (t_ply_uint32) value) > 0;
 }
 
 static int oascii_float32(p_ply ply, double value) {
