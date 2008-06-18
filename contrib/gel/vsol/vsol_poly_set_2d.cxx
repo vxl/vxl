@@ -7,7 +7,6 @@
 #include <vcl_cassert.h>
 #include <vcl_cmath.h>
 #include <vsol/vsol_polygon_2d.h>
-#include <vgl/vgl_vector_2d.h>
 
 //***************************************************************************
 // Initialization
@@ -58,7 +57,8 @@ vsol_spatial_object_2d* vsol_poly_set_2d::clone(void) const
 // Safe casting
 //***************************************************************************
 
-/*vsol_poly_set_2d* vsol_poly_set_2d::cast_to_poly_set(void)
+#if 0
+vsol_poly_set_2d* vsol_poly_set_2d::cast_to_poly_set(void)
 {
   if (!cast_to_triangle()||!cast_to_rectangle())
     return this;
@@ -75,16 +75,12 @@ const vsol_poly_set_2d* vsol_poly_set_2d::cast_to_poly_set(void) const
 }
 
 vsol_triangle_2d* vsol_poly_set_2d::cast_to_triangle(void){return 0;}
-const vsol_triangle_2d* vsol_poly_set_2d::cast_to_triangle(void) const
-{
-  return 0;
-}
+const vsol_triangle_2d* vsol_poly_set_2d::cast_to_triangle(void) const{return 0;}
 
 vsol_rectangle_2d* vsol_poly_set_2d::cast_to_rectangle(void){return 0;}
-const vsol_rectangle_2d* vsol_poly_set_2d::cast_to_rectangle(void) const
-{
-  return 0;
-}*/
+const vsol_rectangle_2d* vsol_poly_set_2d::cast_to_rectangle(void) const{return 0;}
+
+#endif // 0
 
 //***************************************************************************
 // Access
@@ -173,39 +169,38 @@ double vsol_poly_set_2d::area(void) const
 //---------------------------------------------------------------------------
 //: Return the centroid of `this'
 //---------------------------------------------------------------------------
-// The centroid is computed by using Green's theorem to compute the 
+// The centroid is computed by using Green's theorem to compute the
 // area-weighted 1st moments of the poly_set.
 //  Green's theorem relates the surface integral to the line integral around
-//  the boundary as:  
+//  the boundary as:
 //     Int(surface) x dxdy = 0.5 * Int(boundary) x*x dy
 //     Int(surface) y dxdy = 0.5 * Int(boundary) y*y dx
 //  The centroid is given by
 //     xc = Int(surface) x dxdy / Int(surface) dxdy  = Int(surface) x dxdy/area
 //     yc = Int(surface) y dxdy / Int(surface) dxdy  = Int(surface) y dxdy/area
-// 
+//
 //  For a poly_set: with vertices x[i], y[i]
-//   0.5 * Int(boundary) x*x dy = 
+//   0.5 * Int(boundary) x*x dy =
 //   1/6 * Sum(i)( x[i+1] + x[i] ) * ( x[i] * y[i+1] - x[i+1] * y[i] )
-// 
-//   0.5 * Int(boundary) y*y dx = 
+//
+//   0.5 * Int(boundary) y*y dx =
 //   1/6 * Sum(i)( y[i+1] + y[i] ) * ( x[i] * y[i+1] - x[i+1] * y[i] )
-// 
+//
 //  In the case of degenerate poly_sets, where area == 0, return the average of
 //  the vertex locations.
 //
 vsol_point_2d_sptr vsol_poly_set_2d::centroid(void) const
 {
-  
   vcl_vector<vsol_point_2d_sptr> p;
   for (unsigned int i=0; i<storage_->size(); ++i)
-    {
-      vsol_point_2d_sptr c = (*storage_)[i]->centroid();
-      p.push_back(c);
-    }
+  {
+    vsol_point_2d_sptr c = (*storage_)[i]->centroid();
+    p.push_back(c);
+  }
   vsol_polygon_2d poly(p);
   return poly.centroid();
 }
-    
+
 //---------------------------------------------------------------------------
 //: Is `this' convex ?
 // A poly_set is convex if the direction of "turning" at every vertex is
@@ -214,22 +209,19 @@ vsol_point_2d_sptr vsol_poly_set_2d::centroid(void) const
 //---------------------------------------------------------------------------
 bool vsol_poly_set_2d::is_convex(void) const
 {
-   
+  // First find a non-zero cross product.  This is certainly present,
+  // unless the poly_set collapses to a line segment.
+  // Note that cross-product=0 means that two edges are parallel, which
+  // is perfectly valid, but the other "turnings" should still all be in
+  // the same direction.  An earlier implementation allowed for turning
+  // in the other direction after a cross-product=0.
 
-   // First find a non-zero cross product.  This is certainly present,
-   // unless the poly_set collapses to a line segment.
-   // Note that cross-product=0 means that two edges are parallel, which
-   // is perfectly valid, but the other "turnings" should still all be in
-   // the same direction.  An earlier implementation allowed for turning
-   // in the other direction after a cross-product=0.
-
-   double n = 0.0;
-   for (unsigned int i=0; i<storage_->size(); ++i)
-   {
-     if ((*storage_)[i]->is_convex())
-       return true;
-   }
-   return false;
+  for (unsigned int i=0; i<storage_->size(); ++i)
+  {
+    if ((*storage_)[i]->is_convex())
+      return true;
+  }
+  return false;
 }
 
 //----------------------------------------------------------------
