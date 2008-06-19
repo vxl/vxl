@@ -5,13 +5,13 @@
   #include <dbgapi.h>
   #define assert ASSERT
 #else
+  #include <cstring> // for std::strlen() & strcmp()
   #include <string>
   using namespace std;
   #include <assert.h>
 #endif
 #include "expatpp.h"
 
-  
 // may be defined in xmltchar.h or elsewhere
 #ifndef tcscmp
   #ifdef XML_UNICODE
@@ -58,7 +58,7 @@ expatpp::SetupHandlers()
   ::XML_SetElementDeclHandler(mParser, elementDeclCallback);
   ::XML_SetEntityDeclHandler(mParser, entityDeclCallback);
   ::XML_SetSkippedEntityHandler(mParser, skippedEntityCallback);
-  ::XML_SetXmlDeclHandler(mParser, xmlDeclCallback);      
+  ::XML_SetXmlDeclHandler(mParser, xmlDeclCallback);
 #endif
 }
 
@@ -74,7 +74,7 @@ expatpp::~expatpp()
   Provide single point that will call XML_ParserFree.
   Nothing else in this code should call XML_ParserFree!
 */
-void 
+void
 expatpp::ReleaseParser()
 {
   ::XML_ParserFree(mParser);
@@ -87,10 +87,10 @@ expatpp::ReleaseParser()
   Provide single point that will call XML_ParserReset.
   Guarded against trivial reset before use in case that breaks
   expat or creates overhead.
-  
+
   \todo pass in encoding to XML_ParserReset when we support encodings
 */
-void 
+void
 expatpp::ResetParser()
 {
 #ifdef EXPATPP_COMPATIBLE_EXPAT12
@@ -110,9 +110,9 @@ expatpp::ResetParser()
 */
 XML_Status
 expatpp::parseFile(FILE* inFile)
-{ 
+{
   ResetParser();
-  
+
   char buf[BUFSIZ];
   int done;
   if (!inFile)
@@ -166,51 +166,51 @@ expatpp::XML_GetCurrentColumnNumber()
 
 /**
   Parse string which is assumed to be entire XML document.
-  Written to stop stupid errors of being off by one in the string length causing 
+  Written to stop stupid errors of being off by one in the string length causing
   wasted debugging time, such as:
-\verbatim 
+\verbatim
   const char[] kSampleSettings = "<settings/>";
   const int sampleSize = sizeof(kSampleSettings)-1;  // unless you remember to subtract one here will get invalid token error
   if (!parser.XML_Parse(kSampleSettings, sampleSize, 1)) {
-\endverbatim  
+\endverbatim
 */
 XML_Status
 expatpp::parseString(const char* inString)
 {
   ResetParser();
   const int inLen = strlen(inString);
-  return XML_Parse(inString, inLen, 1); 
+  return XML_Parse(inString, inLen, 1);
 }
 
-void 
+void
 expatpp::startElementCallback(void *userData, const XML_Char* name, const XML_Char** atts)
 {
   ((expatpp*)userData)->startElement(name, atts);
 }
 
 
-void 
+void
 expatpp::endElementCallback(void *userData, const XML_Char* name)
 {
   ((expatpp*)userData)->endElement(name);
 }
 
 
-void 
+void
 expatpp::startNamespaceCallback(void *userData, const XML_Char* prefix, const XML_Char* uri)
 {
   ((expatpp*)userData)->startNamespace(prefix, uri);
 }
 
 
-void 
+void
 expatpp::endNamespaceCallback(void *userData, const XML_Char* prefix)
 {
   ((expatpp*)userData)->endNamespace(prefix);
 }
 
 
-void 
+void
 expatpp::charDataCallback(void *userData, const XML_Char* s, int len)
 {
   ((expatpp*)userData)->charData(s, len);
@@ -252,27 +252,27 @@ expatpp::notationDeclCallback(void *userData, const XML_Char* notationName, cons
 }
 
 
-void 
+void
 expatpp::startElement(const XML_Char*, const XML_Char**)
 {}
 
 
-void 
+void
 expatpp::endElement(const XML_Char*)
 {}
 
 
-void 
+void
 expatpp::startNamespace(const XML_Char* /* prefix */, const XML_Char* /* uri */)
 {}
 
 
-void 
+void
 expatpp::endNamespace(const XML_Char*)
 {}
 
 
-void 
+void
 expatpp::charData(const XML_Char*, int )
 {
 }
@@ -309,7 +309,7 @@ expatpp::notationDecl(const XML_Char*, const XML_Char*, const XML_Char*, const X
 }
 
 
-int 
+int
 expatpp::skipWhiteSpace(const XML_Char* startFrom)
 {
   // use our own XML definition of white space
@@ -329,13 +329,13 @@ expatpp::skipWhiteSpace(const XML_Char* startFrom)
   Iterate the paired attribute name/value until find a pair with matching name.
   \return pointer to the value or null if not found.
 */
-const XML_Char* 
+const XML_Char*
 expatpp::getAttribute(const XML_Char* matchingName, const XML_Char** atts)
 {
   for (int i=0; atts[i]; i++) {
     const XML_Char* attributeName = atts[i++];
     assert(attributeName);  // shouldn't fail this because of loop test above
-    if(tcscmp(attributeName, matchingName)==0) {  
+    if(tcscmp(attributeName, matchingName)==0) {
       return atts[i];  // if 2nd item was missing, this returns 0 safely indicating failure
     }
   }
@@ -346,7 +346,7 @@ expatpp::getAttribute(const XML_Char* matchingName, const XML_Char** atts)
 /**
 \bug will always return 0 for PPC
 */
-bool 
+bool
 expatpp::getIntegerAttribute(const XML_Char *matchingName, const XML_Char **atts, int& outAtt)
 {
   const XML_Char* attStr = getAttribute(matchingName, atts);
@@ -366,7 +366,7 @@ fail to compile because need this now
 /**
 \bug will always return 0 for PPC
 */
-bool 
+bool
 expatpp::getDoubleAttribute(const XML_Char *matchingName, const XML_Char **atts, double& outAtt)
 {
   const XML_Char* attStr = getAttribute(matchingName, atts);
@@ -383,20 +383,20 @@ fail to compile because need this now
 }
 
 
-bool 
+bool
 expatpp::emptyCharData(const XML_Char *s, int len)
 {
 // usually call from top of overriden charData methods
   if (len==0)
     return true;  //*** early exit - empty string, may never occur??
-    
+
 // skip newline and empty whitespace
   if (
     ((len==1) && ( (s[0]=='\n') || (s[0]=='\r')) ) ||  // just CR or just LF
     ((len==2) && (s[0]=='\r') && (s[1]=='\n'))  // DOS-style CRLF
   )
     return true;  //*** early exit - newline
-    
+
   const int lastCharAt = len-1;
   if (s[lastCharAt]==' ') {  // maybe all whitespace
     int i;
@@ -413,7 +413,7 @@ expatpp::emptyCharData(const XML_Char *s, int len)
 
 //-------- Added for expat 1.95.5---------------
 void
-expatpp::attlistDeclCallback(void *userData, 
+expatpp::attlistDeclCallback(void *userData,
   const XML_Char *elname,
   const XML_Char *attname,
   const XML_Char *att_type,
@@ -482,7 +482,7 @@ expatpp::startCdataSectionCallback(void *userData)
 
 
 void
-expatpp::startDoctypeDeclCallback(void *userData, 
+expatpp::startDoctypeDeclCallback(void *userData,
     const XML_Char *doctypeName,
         const XML_Char *sysid,
         const XML_Char *pubid,
@@ -502,7 +502,7 @@ expatpp::xmlDeclCallback(void *userData, const XML_Char      *version,
 
 
 void
-expatpp::attlistDecl( 
+expatpp::attlistDecl(
   const XML_Char *elname,
   const XML_Char *attname,
   const XML_Char *att_type,
@@ -524,7 +524,7 @@ expatpp::elementDecl( const XML_Char *name, XML_Content *model)
 }
 
 
-void 
+void
 expatpp::endCdataSection()
 {
 }
@@ -556,7 +556,7 @@ expatpp::skippedEntity( const XML_Char *entityName, int is_parameter_entity)
 }
 
 
-void 
+void
 expatpp::startCdataSection()
 {
 }
@@ -586,22 +586,22 @@ expatpp::xmlDecl( const XML_Char      *version,
 // -------------------------------------------------------
 /**
   \param parent can be null in which case this is root parser
-  
+
   \note The handlers set in here MUST be also set in SetupHandlers
   which is a virtual method invoked by expatpp::ResetParser. Otherwise
   you can have subtle bugs with a nested parser not properly returning
   after reusing a parser (nasty and found rapidly only via extensive unit
   tests and plentiful assertions!).
-  
-  \WARNING 
-  The assumption that is not obvious here is that if you want to use 
+
+  \WARNING
+  The assumption that is not obvious here is that if you want to use
   nested parsers, then your topmost parser must also be an expatppNesting
-  subclass, NOT an expatpp subclass, because we need the 
+  subclass, NOT an expatpp subclass, because we need the
   nestedStartElementCallback and nestedEndElementCallback
   callbacks to override those in the expatpp ctor.
-  
-  
-  
+
+
+
   \todo go back over code in detail and confirm above warning still valid
   I think if we used expat's functions to invoke the registered callback
   might be safer - the explicit function call we have in nestedEndElementCallback
@@ -611,7 +611,7 @@ expatppNesting::expatppNesting(expatppNesting* parent) :
   expatpp(parent==0),  // don't create parser - we're taking over from parent if given
   mDepth(0),
   mSelfDeleting(true),
-  mParent(parent),  
+  mParent(parent),
   mOwnedChild(0)
 {
   if ( parent )
@@ -624,7 +624,7 @@ expatppNesting::expatppNesting(expatppNesting* parent) :
     // No parent - the expatpp constructor will have created a new mParser (expat parser)
     ::XML_SetElementHandler(mParser, nestedStartElementCallback, nestedEndElementCallback);
   }
-  assert(mParser);  // either we created above or expatpp 
+  assert(mParser);  // either we created above or expatpp
 }
 
 
@@ -684,17 +684,17 @@ expatppNesting::RegisterWithParentXMLParser()
 
 
 /**
-  User code (typically the startElement handler of user parsers derived from expatppNesting) 
-  may call 
+  User code (typically the startElement handler of user parsers derived from expatppNesting)
+  may call
     switchToNewSubParser( new UserChildParser() );
   to hand off the current document to a child parser that understands the next segment of XML.
-  Control will be returned to the original (parent) parser when the end of the child element 
+  Control will be returned to the original (parent) parser when the end of the child element
   is reached.
-  In its lifetime a 'parent' parser may switch control to several child parsers (one at a time 
+  In its lifetime a 'parent' parser may switch control to several child parsers (one at a time
   of course) as it moves through the document encoutering various types of child element.
-  
+
   A child to which older code (eg: OOFILE) has just switched control by
-  new childParser(this) will be self-deleting and will clear our mOwnedChild in its dtor. 
+  new childParser(this) will be self-deleting and will clear our mOwnedChild in its dtor.
 */
 void expatppNesting::switchToNewSubParser( expatppNesting* pAdoptedChild )
 {
@@ -708,7 +708,7 @@ void expatppNesting::switchToNewSubParser( expatppNesting* pAdoptedChild )
   If this is root parser, nestedEndElementCallback won't call returnToParent.
   Therefore it is safe to put parsers on the stack.
 */
-expatppNesting* 
+expatppNesting*
 expatppNesting::returnToParent()
 {
   expatppNesting* ret = mParent;
@@ -723,7 +723,7 @@ expatppNesting::returnToParent()
 }
 
 
-void 
+void
 expatppNesting::nestedStartElementCallback(void *userData, const XML_Char* name, const XML_Char** atts)
 {
   assert(userData);
@@ -738,18 +738,18 @@ expatppNesting::nestedStartElementCallback(void *userData, const XML_Char* name,
   except for when we call it.
   \param userData should be non-nil except for specific case of ending root
 */
-void 
+void
 expatppNesting::nestedEndElementCallback(void *userData, const XML_Char* name)
 {
   if (!userData)
     return;  //  end tag for root
-    
+
   expatppNesting* nestedParser = (expatppNesting*)userData;
-// we don't know until we hit a closing tag 'outside' us that our run is done   
+// we don't know until we hit a closing tag 'outside' us that our run is done
   if (nestedParser->mDepth==0) {
     expatppNesting* parentParser = nestedParser->returnToParent();
-    nestedEndElementCallback(parentParser, name);   // callbacks for expatppNesting stay registered, so safe 
-    //if we don't invoke their callback, they will not balance their mDepth   
+    nestedEndElementCallback(parentParser, name);   // callbacks for expatppNesting stay registered, so safe
+    //if we don't invoke their callback, they will not balance their mDepth
   }
   else {
   // end of an element this parser has started - normal case
@@ -763,19 +763,19 @@ expatppNesting::nestedEndElementCallback(void *userData, const XML_Char* name)
   Called by switchToNewSubParser to indicate a newly created child parser
   is now the currently active child for adoptingParent and the child
   isn't expected to be self deleting.
-  
+
   Normal code to create an owned child would be either
     switchToNewSubParser( new UserChildParser(this) );
   where this is the currently active parser and you want to be deleting it, or
     new UserChildParser(this);
   to have a child parser self-delete
-  
+
   \par Important Safety Note
-  Copes with the situation of people forgetting to pass 
+  Copes with the situation of people forgetting to pass
   in the parent parser (and hence creating a new one by default)
   if invoked by switchToNewSubParser( new UserChildParser() )
   by somewhat wastefully deleting the parser created in expatpp::expatpp
-  by us being a root parser.  
+  by us being a root parser.
 */
 void
 expatppNesting::BeAdopted(expatppNesting* adoptingParent)
@@ -790,7 +790,4 @@ expatppNesting::BeAdopted(expatppNesting* adoptingParent)
   }
   mSelfDeleting = false;
 }
-
-
-
 
