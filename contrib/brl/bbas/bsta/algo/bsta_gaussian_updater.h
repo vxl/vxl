@@ -28,7 +28,7 @@ void bsta_update_gaussian(bsta_gaussian_sphere<T,1>& gaussian, T rho,
                           const T& sample )
 {
   // the complement of rho (i.e. rho+rho_comp=1.0)
-  T rho_comp = 1.0 - rho;
+  T rho_comp = 1.0f - rho;
   // compute the updated mean
   const T& old_mean = gaussian.mean();
 
@@ -48,7 +48,7 @@ void bsta_update_gaussian(bsta_gaussian_sphere<T,n>& gaussian, T rho,
                           const vnl_vector_fixed<T,n>& sample )
 {
   // the complement of rho (i.e. rho+rho_comp=1.0)
-  T rho_comp = 1.0 - rho;
+  T rho_comp = 1.0f - rho;
   // compute the updated mean
   const vnl_vector_fixed<T,n>& old_mean = gaussian.mean();
 
@@ -68,7 +68,7 @@ void bsta_update_gaussian(bsta_gaussian_indep<T,n>& gaussian, T rho,
                           const vnl_vector_fixed<T,n>& sample )
 {
   // the complement of rho (i.e. rho+rho_comp=1.0)
-  T rho_comp = 1.0 - rho;
+  T rho_comp = 1.0f - rho;
   // compute the updated mean
   const vnl_vector_fixed<T,n>& old_mean = gaussian.mean();
 
@@ -89,7 +89,7 @@ void bsta_update_gaussian(bsta_gaussian_full<T,n>& gaussian, T rho,
                           const vnl_vector_fixed<T,n>& sample )
 {
   // the complement of rho (i.e. rho+rho_comp=1.0)
-  T rho_comp = 1.0 - rho;
+  T rho_comp = 1.0f - rho;
   // compute the updated mean
   const vnl_vector_fixed<T,n>& old_mean = gaussian.mean();
 
@@ -181,9 +181,9 @@ vnl_matrix_fixed<T,n,n> element_max(const vnl_matrix_fixed<T,n,n>& a_matrix,
 // \note if rho = 1/(num observations) then this just an online cumulative average
 template <class gauss_>
 inline void bsta_update_gaussian(gauss_& gaussian,
-                          typename gauss_::math_type rho,
-                          const typename gauss_::vector_type& sample,
-                          const typename gauss_::covar_type& min_covar)
+                                 typename gauss_::math_type rho,
+                                 const typename gauss_::vector_type& sample,
+                                 const typename gauss_::covar_type& min_covar)
 {
   bsta_update_gaussian(gaussian, rho, sample);
   gaussian.set_covar(element_max(gaussian.covar(),min_covar));
@@ -195,8 +195,8 @@ inline void bsta_update_gaussian(gauss_& gaussian,
 // \note if rho = 1/(num observations) then this just an online cumulative average
 template <class T, unsigned n>
 inline void bsta_update_gaussian(bsta_gaussian_indep<T,n>& gaussian, T rho,
-                          const vnl_vector_fixed<T,n>& sample,
-                          T min_var)
+                                 const vnl_vector_fixed<T,n>& sample,
+                                 T min_var)
 {
   bsta_update_gaussian(gaussian, rho, sample);
   gaussian.set_covar(element_max(gaussian.covar(),min_var));
@@ -208,8 +208,8 @@ inline void bsta_update_gaussian(bsta_gaussian_indep<T,n>& gaussian, T rho,
 // \note if rho = 1/(num observations) then this just an online cumulative average
 template <class T, unsigned n>
 inline void bsta_update_gaussian(bsta_gaussian_full<T,n>& gaussian, T rho,
-                          const vnl_vector_fixed<T,n>& sample,
-                          T min_var)
+                                 const vnl_vector_fixed<T,n>& sample,
+                                 T min_var)
 {
   bsta_update_gaussian(gaussian, rho, sample);
   gaussian.set_covar(element_max(gaussian.covar(),min_var));
@@ -223,12 +223,10 @@ inline void bsta_update_gaussian(bsta_gaussian_full<T,n>& gaussian, T rho,
 template <class gauss_>
 class bsta_gaussian_updater
 {
-  private:
     typedef bsta_num_obs<gauss_> obs_gauss_;
     typedef typename gauss_::math_type T;
     typedef vnl_vector_fixed<T,gauss_::dimension> vector_;
   public:
-
     //: The main function
     // make the appropriate type casts and call a helper function
     void operator() ( obs_gauss_& d, const vector_& sample ) const
@@ -245,12 +243,10 @@ class bsta_gaussian_updater
 template <class gauss_>
 class bsta_gaussian_window_updater
 {
-  private:
     typedef bsta_num_obs<gauss_> obs_gauss_;
     typedef typename gauss_::math_type T;
     typedef vnl_vector_fixed<T,gauss_::dimension> vector_;
   public:
-
     //: Constructor
     bsta_gaussian_window_updater(unsigned int ws) : window_size(ws) {}
 
