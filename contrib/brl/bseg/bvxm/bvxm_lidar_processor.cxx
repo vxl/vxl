@@ -7,7 +7,6 @@
 #include <vcl_cassert.h>
 #endif
 
-#include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_box_2d.h>
 #include <vil/vil_image_view.h>
 
@@ -39,15 +38,15 @@ bvxm_lidar_processor::prob_density(float z_dim,  bvxm_voxel_slab<float> const& o
   // Option 2: As in thesis.
   assert( obs.nz() == 1 ); // Code assumes this.
   int search_rad = 4;
-  for ( unsigned i = 0; i < obs.nx(); i++ ){
-    for ( unsigned j = 0; j < obs.ny(); j++ ){
+  for ( unsigned i = 0; i < obs.nx(); i++ ) {
+    for ( unsigned j = 0; j < obs.ny(); j++ ) {
       int min_i = i-search_rad; if ( min_i < 0 ) min_i = 0;
       int min_j = j-search_rad; if ( min_j < 0 ) min_j = 0;
       int max_i = i+search_rad; if ( max_i >= (int)obs.nx() ) max_i = obs.nx()-1;
       int max_j = j+search_rad; if ( max_j >= (int)obs.ny() ) max_j = obs.ny()-1;
       float min_d;
-      for ( int ni = min_i; ni <= max_i; ni++ ){
-        for ( int nj = min_j; nj <= max_j; nj++ ){
+      for ( int ni = min_i; ni <= max_i; ni++ ) {
+        for ( int nj = min_j; nj <= max_j; nj++ ) {
           float d = obs(ni,nj,0)-z_dim;
           d = vcl_sqrt( d*d + (ni-min_i)*(ni-min_i)*voxel_width*voxel_width + (nj-min_j)*(nj-min_j)*voxel_width*voxel_width );
           if ( ni == min_i || nj == min_j ) min_d = d;
@@ -65,38 +64,35 @@ bvxm_lidar_processor::prob_density(float z_dim,  bvxm_voxel_slab<float> const& o
 }
 
 float bvxm_lidar_processor::prob_density(vil_image_view_base_sptr lidar,
-                                        float z_dim,//vgl_point_3d<float>& mean,
-                                        vnl_vector_fixed<float,3>& covar,  // sigma vals
-                                        vgl_box_2d<double> lidar_roi,
-                                        float voxel_width) 
+                                         float z_dim,//vgl_point_3d<float>& mean,
+                                         vnl_vector_fixed<float,3>& covar,  // sigma vals
+                                         vgl_box_2d<double> lidar_roi,
+                                         float voxel_width)
 {
-  
-  vgl_point_2d<double> roi_min(lidar_roi.min_x(), lidar_roi.min_y());
-  vgl_point_2d<double> roi_max(lidar_roi.max_x(), lidar_roi.max_y());
+  vnl_vector_fixed<float,3> min(lidar_roi.min_x(), lidar_roi.min_y(), z_dim-0.5f*voxel_width);//half of voxel size!!!
+  vnl_vector_fixed<float,3> max(lidar_roi.max_x(), lidar_roi.max_y(), z_dim+0.5f*voxel_width);
 
-  vnl_vector_fixed<float,3> min(lidar_roi.min_x(), lidar_roi.min_y(), z_dim-0.5*voxel_width);//multiply 1/2 with voxel size!!!1
-  vnl_vector_fixed<float,3> max(lidar_roi.max_x(), lidar_roi.max_y(), z_dim+0.5*voxel_width);
-  
-  int min_i = (int) vcl_floor(lidar_roi.min_x()); if( min_i < 0 ) min_i = 0;
-  int min_j = (int) vcl_floor(lidar_roi.min_y()); if( min_j < 0 ) min_j = 0;
-  int max_i = (int) vcl_ceil(lidar_roi.max_x()); if( max_i >= (int)lidar->ni() ) max_i = lidar->ni()-1;
-  int max_j = (int) vcl_ceil(lidar_roi.max_y()); if( max_j >= (int)lidar->nj() ) max_j = lidar->nj()-1;
+  int min_i = (int)vcl_floor(lidar_roi.min_x()); if ( min_i < 0 ) min_i = 0;
+  int min_j = (int)vcl_floor(lidar_roi.min_y()); if ( min_j < 0 ) min_j = 0;
+  int max_i = (int) vcl_ceil(lidar_roi.max_x()); if ( max_i >= (int)lidar->ni() ) max_i = lidar->ni()-1;
+  int max_j = (int) vcl_ceil(lidar_roi.max_y()); if ( max_j >= (int)lidar->nj() ) max_j = lidar->nj()-1;
 
-  float p = 1.0, d;
-  for( int ni = min_i; ni < max_i; ni++ ){
-    for( int nj = min_j; nj < max_j; nj++ ){
+  float p = 1.0f, d;
+  for ( int ni = min_i; ni < max_i; ni++ ) {
+    for ( int nj = min_j; nj < max_j; nj++ ) {
       if (lidar->pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
-        if (vil_image_view<unsigned char> *img_view = dynamic_cast<vil_image_view<unsigned char>*>(lidar.ptr())) 
-          d = (*img_view)(ni, nj);
-      } else if (lidar->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
-        if (vil_image_view<float> *img_view = dynamic_cast<vil_image_view<float>*>(lidar.ptr())) 
+        if (vil_image_view<unsigned char> *img_view = dynamic_cast<vil_image_view<unsigned char>*>(lidar.ptr()))
           d = (*img_view)(ni, nj);
       }
-      vnl_vector_fixed<float,3> m(ni+0.5, nj+0.5, d-2);
+      else if (lidar->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
+        if (vil_image_view<float> *img_view = dynamic_cast<vil_image_view<float>*>(lidar.ptr()))
+          d = (*img_view)(ni, nj);
+      }
+      vnl_vector_fixed<float,3> m(ni+0.5f, nj+0.5f, d-2);
       bsta_gauss_if3 gauss(m, covar);
       float p1 = gauss.probability(min,max);
-      p *= 1.0 - p1;
+      p *= 1.0f - p1;
    }
   }
-  return (1 - p);
+  return 1-p;
 }
