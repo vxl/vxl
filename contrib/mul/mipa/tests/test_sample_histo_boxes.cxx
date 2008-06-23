@@ -24,6 +24,32 @@ float sum_over_box(const vil_image_view<float>& im,
   return sum;
 }
 
+void mipa_print_h_vec(const vnl_vector<double>& v, 
+                    unsigned ni, unsigned nj, unsigned nb)
+{
+  unsigned c=0;
+  for (unsigned j=0;j<2*nj;++j)
+  {
+    for (unsigned i=0;i<2*ni;++i)
+    {
+      for (unsigned k=0;k<nb;++k,++c)  vcl_cout<<v[c]<<" ";
+      vcl_cout<<"  ";
+    }
+    vcl_cout<<vcl_endl;
+  }
+  for (unsigned j=0;j<nj;++j)
+  {
+    for (unsigned i=0;i<ni;++i)
+    {
+      for (unsigned k=0;k<nb;++k,++c)  vcl_cout<<v[c]<<" ";
+      vcl_cout<<"  ";
+    }
+    vcl_cout<<vcl_endl;
+
+  }
+  for (unsigned k=0;k<nb;++k,++c)  vcl_cout<<v[c]<<" ";
+  vcl_cout<<vcl_endl;
+}
 void test_sample_histo_boxes()
 {
   vcl_cout << "***********************\n"
@@ -49,10 +75,15 @@ void test_sample_histo_boxes()
   vnl_vector<double> v0;
   mipa_sample_histo_boxes_3L(histo,0,0,v0,nbi,nbj);
 
+  mipa_print_h_vec(v0,nbi,nbj,nb);
+
   TEST("Size of v0",v0.size(),nb*(5*nbi*nbj+1));
   TEST_NEAR("First element",v0[0],0.0,1e-6);
   TEST_NEAR("2nd element",v0[1],1.0,1e-6);
   TEST_NEAR("3rd element",v0[2],10.0,1e-6);
+
+  TEST_NEAR("a",v0[2*nb*nbi],histo(0,1,0),1e-6);
+  TEST_NEAR("b",v0[2*nb*nbi+1],histo(0,1,1),1e-6);
 
   for (unsigned k=0;k<nb;++k)
   {
@@ -69,6 +100,7 @@ void test_sample_histo_boxes()
   vcl_cout<<"Test at (1,1):"<<vcl_endl;
 
   mipa_sample_histo_boxes_3L(histo,1,1,v0,nbi,nbj);
+  mipa_print_h_vec(v0,nbi,nbj,nb);
 
   TEST("Size of v0",v0.size(),nb*(5*nbi*nbj+1));
   TEST_NEAR("First element",v0[0],110.0,1e-6);

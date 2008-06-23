@@ -30,10 +30,14 @@ void mipa_sample_histo_boxes_3L(const vil_image_view<srcT>& h_im,
   unsigned nA=h_im.nplanes();
   vec.set_size(nA*(5*ni*nj+1));
 
+assert(h_im.planestep()==1);
+assert(h_im.istep()==nA);
+
   // Set up some pointers and offsets so that we
   // can do everything in one pass.
   vT *v = vec.data_block();
-  unsigned dv1=nA,dv2=ni*nA,dv3=dv1+dv2;
+  unsigned dv1=nA,dv2=2*ni*nA,dv3=dv1+dv2;
+
   vT *w = v + 4*nA*ni*nj;  // Start of data for 2x2 blocks
   vT *sum = w + nA*ni*nj;  // Start of data for total summation
 
@@ -44,7 +48,7 @@ void mipa_sample_histo_boxes_3L(const vil_image_view<srcT>& h_im,
   vcl_ptrdiff_t hj_step = 2*h_im.jstep();
   unsigned dh1=nA,dh2=nA*h_im.ni(),dh3=dh1+dh2;
 
-  for (unsigned j=0;j<nj;++j,h_row+=hj_step)
+  for (unsigned j=0;j<nj;++j,h_row+=hj_step,v+=dv2)
   {
     // Set pointers to start of each pair of rows
     const srcT *h = h_row;
