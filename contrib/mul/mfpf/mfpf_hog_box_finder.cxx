@@ -13,6 +13,7 @@
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_indent.h>
 #include <vcl_algorithm.h>
+#include <vnl/vnl_math.h>
 
 #include <mipa/mipa_orientation_histogram.h>
 #include <mipa/mipa_sample_histo_boxes.h>
@@ -116,8 +117,11 @@ double mfpf_hog_box_finder::evaluate(const vimt_image_2d_of<float>& image,
   vgl_vector_2d<double> v1(-u1.y(),u1.x());
 
   assert(image.image().nplanes()==1);
+
   // Set up sample area with 1 unit border
-  vil_image_view<float> sample(2+nc_*ni_,2+nc_*nj_);
+  unsigned sni = 2+2*nc_*ni_;
+  unsigned snj = 2+2*nc_*nj_;
+  vil_image_view<float> sample(sni,snj);
 
   const vgl_point_2d<double> p0 = p-(1+nc_*ref_x_)*u1-(1+nc_*ref_y_)*v1;
 
@@ -129,7 +133,7 @@ double mfpf_hog_box_finder::evaluate(const vimt_image_2d_of<float>& image,
   vil_resample_bilin(image.image(),sample,
                       im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
                       im_v.x(),im_v.y(),
-                      2+nc_*ni_,2+nc_*nj_);
+                      sni,snj);
 
   vil_image_view<float> histo_im;
   mipa_orientation_histogram(sample,histo_im,nA_bins_,nc_,full360_);
@@ -160,8 +164,10 @@ void mfpf_hog_box_finder::evaluate_region(
   // So work out how many steps that is, rounding up
   unsigned sni = (nc_+search_ni_-1)/nc_;
   unsigned snj = (nc_+search_nj_-1)/nc_;
-  int nsi = nc_*(2*sni + ni_);
-  int nsj = nc_*(2*snj + nj_);
+
+  // Total size of region to sample
+  int nsi = 2*nc_*(sni + ni_)+2;
+  int nsj = 2*nc_*(snj + nj_)+2;
 
   assert(image.image().nplanes()==1);
   // Set up sample area with 1 unit border
@@ -201,6 +207,14 @@ void mfpf_hog_box_finder::evaluate_region(
       mipa_sample_histo_boxes_3L(histo_im,i,j,v,ni_,nj_);
       if (norm_method_==1) mfpf_norm_histo_vec(v,nA_bins_);
       r[i] = cost().evaluate(v);
+      if (vnl_math_isnan(r[i]))
+      {
+        vcl_cerr<<is_a()<<"::evaluate_region: Response is NaN."<<vcl_endl;
+        vcl_cerr<<*this<<vcl_endl;
+        vcl_cerr<<"i,j="<<i<<","<<j<<vcl_endl;
+        vcl_cerr<<"v.sum()="<<v.sum()<<vcl_endl;
+        vcl_abort();
+      }
     }
   }
 
@@ -229,8 +243,10 @@ double mfpf_hog_box_finder::search_one_pose(const vimt_image_2d_of<float>& image
   // So work out how many steps that is, rounding up
   unsigned sni = (nc_+search_ni_-1)/nc_;
   unsigned snj = (nc_+search_nj_-1)/nc_;
-  int nsi = nc_*(2*sni + ni_);
-  int nsj = nc_*(2*snj + nj_);
+
+  // Total size of region to sample
+  int nsi = 2*nc_*(sni + ni_)+2;
+  int nsj = 2*nc_*(snj + nj_)+2;
 
   assert(image.image().nplanes()==1);
   // Set up sample area with 1 unit border
@@ -284,7 +300,7 @@ bool mfpf_hog_box_finder::is_inside(const mfpf_pose& pose,
 {
   // Set transform model frame -> World
   vimt_transform_2d t1;
-  t1.set_similarity(nc_*step_size()*pose.u(),pose.p());
+  t1.set_similarity(2*nc_*step_size()*pose.u(),pose.p());
   // Compute position of p in model frame
   vgl_point_2d<double> q=t1.inverse()(p);
   q.x()/=f; q.y()/=f;  // To check that q in the central fraction f
@@ -310,15 +326,16 @@ bool mfpf_hog_box_finder::overlap(const mfpf_pose& pose1,
 //  Used for display purposes.
 void mfpf_hog_box_finder::get_outline(vcl_vector<vgl_point_2d<double> >& pts) const
 {
+  double s=2*nc_;
   pts.resize(7);
-  vgl_vector_2d<double> r(nc_*ref_x_,nc_*ref_y_);
-  pts[0]=vgl_point_2d<double>(0,nc_*nj_)-r;
+  vgl_vector_2d<double> r(s*ref_x_,s*ref_y_);
+  pts[0]=vgl_point_2d<double>(0,s*nj_)-r;
   pts[1]=vgl_point_2d<double>(0,0);
-  pts[2]=vgl_point_2d<double>(nc_*ni_,nc_*nj_)-r;
-  pts[3]=vgl_point_2d<double>(0,nc_*nj_)-r;
+  pts[2]=vgl_point_2d<double>(s*ni_,s*nj_)-r;
+  pts[3]=vgl_point_2d<double>(0,s*nj_)-r;
   pts[4]=vgl_point_2d<double>(0,0)-r;
-  pts[5]=vgl_point_2d<double>(nc_*ni_,0)-r;
-  pts[6]=vgl_point_2d<double>(nc_*ni_,nc_*nj_)-r;
+  pts[5]=vgl_point_2d<double>(s*ni_,0)-r;
+  pts[6]=vgl_point_2d<double>(s*ni_,s*nj_)-r;
 }
 
 
@@ -343,10 +360,13 @@ mfpf_point_finder* mfpf_hog_box_finder::clone() const
 
 void mfpf_hog_box_finder::print_summary(vcl_ostream& os) const
 {
-  os << "{  size: "<<ni_<<" x "<<nj_
-     << " cell_size: "<<nc_
-     << " ref_pt: ("<<ref_x_<<','<<ref_y_<<')'<<vcl_endl;
+  os << "{ "<<vcl_endl;
   vsl_indent_inc(os);
+  os<<vsl_indent()<<"size: " << ni_ << 'x' << nj_
+     << " nc: " << nc_ <<" nA_bins: "<<nA_bins_
+     << " ref_pt: (" << ref_x_ << ',' << ref_y_ << ')' <<vcl_endl;
+  if (full360_) os<<vsl_indent()<<"Angle range: 0-360"<<vcl_endl;
+  else          os<<vsl_indent()<<"Angle range: 0-180"<<vcl_endl;
   if (norm_method_==0) os<<vsl_indent()<<"norm: none"<<vcl_endl;
   else                 os<<vsl_indent()<<"norm: linear"<<vcl_endl;
   os <<vsl_indent()<< "cost: ";

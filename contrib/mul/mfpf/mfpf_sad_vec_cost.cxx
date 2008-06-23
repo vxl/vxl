@@ -82,7 +82,9 @@ mfpf_vec_cost* mfpf_sad_vec_cost::clone() const
 
 void mfpf_sad_vec_cost::print_summary(vcl_ostream& os) const
 {
-  os<<"Size: "<<mean_.size();
+  os<<"Size: "<<mean_.size()
+    <<" mean.sum():"<<mean_.sum()
+    <<" wts.sum():"<<wts_.sum();
 }
 
 //=======================================================================

@@ -16,6 +16,7 @@
 #include <mbl/mbl_exception.h>
 
 #include <vil/vil_resample_bilin.h>
+#include <vil/vil_print.h>
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_indent.h>
 #include <vcl_algorithm.h>
@@ -87,10 +88,10 @@ void mfpf_hog_box_finder_builder::set_angle_bins(unsigned nA_bins,
 //  with ref point at centre.
 void mfpf_hog_box_finder_builder::set_region_size(double wi, double wj)
 {
-  wi/=(nc_*step_size());
-  wj/=(nc_*step_size());
-  int ni = vcl_max(1,int(0.99+wi));
-  int nj = vcl_max(1,int(0.99+wj));
+  wi/=(2*nc_*step_size());
+  wj/=(2*nc_*step_size());
+  int ni = vcl_max(2,int(0.99+wi));
+  int nj = vcl_max(2,int(0.99+wj));
   set_as_box(unsigned(ni),unsigned(nj),0.5*(ni-1),0.5*(nj-1));
 }
 
@@ -141,8 +142,11 @@ void mfpf_hog_box_finder_builder::add_one_example(
   vgl_vector_2d<double> v1(-u1.y(),u1.x());
 
   assert(image.image().nplanes()==1);
+
   // Set up sample area with 1 unit border
-  vil_image_view<float> sample(2+nc_*ni_,2+nc_*nj_);
+  unsigned sni = 2+2*nc_*ni_;
+  unsigned snj = 2+2*nc_*nj_;
+  vil_image_view<float> sample(sni,snj);
 
   const vgl_point_2d<double> p0 = p-(1+nc_*ref_x_)*u1-(1+nc_*ref_y_)*v1;
 
@@ -154,7 +158,7 @@ void mfpf_hog_box_finder_builder::add_one_example(
   vil_resample_bilin(image.image(),sample,
                       im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
                       im_v.x(),im_v.y(),
-                      2+nc_*ni_,2+nc_*nj_);
+                      sni,snj);
 
   vil_image_view<float> histo_im;
   mipa_orientation_histogram(sample,histo_im,nA_bins_,nc_,full360_);
@@ -202,6 +206,8 @@ void mfpf_hog_box_finder_builder::build(mfpf_point_finder& pf)
   set_base_parameters(rp);
   rp.set_overlap_f(overlap_f_);
 
+vcl_cout<<"Model: "<<rp<<vcl_endl;
+
   // Tidy up
   delete cost;
 }
@@ -240,8 +246,22 @@ bool mfpf_hog_box_finder_builder::set_from_stream(vcl_istream &is)
     props.erase("norm");
   }
 
-  overlap_f_=vul_string_atof(props.get_optional_property("overlap_f",
-                                                         "1.0"));
+  overlap_f_=vul_string_atof(props.get_optional_property("overlap_f","1.0"));
+
+  if (props.find("ref_x")!=props.end())
+  {
+    ref_x_=vul_string_atof(props["ref_x"]);
+    props.erase("ref_x");
+  }
+  else ref_x_=0.5*(ni_-1);
+
+  if (props.find("ref_y")!=props.end())
+  {
+    ref_y_=vul_string_atof(props["ref_y"]);
+    props.erase("ref_y");
+  }
+  else ref_y_=0.5*(nj_-1);
+
 
   if (props.find("nA")!=props.end())
   {
@@ -291,10 +311,13 @@ mfpf_point_finder_builder* mfpf_hog_box_finder_builder::clone() const
 
 void mfpf_hog_box_finder_builder::print_summary(vcl_ostream& os) const
 {
-  os << "{ size: " << ni_ << 'x' << nj_
+  os << "{ "<<vcl_endl;
+  vsl_indent_inc(os);
+  os<<vsl_indent()<<"size: " << ni_ << 'x' << nj_
      << " nc: " << nc_ <<" nA_bins: "<<nA_bins_
      << " ref_pt: (" << ref_x_ << ',' << ref_y_ << ')' <<vcl_endl;
-  vsl_indent_inc(os);
+  if (full360_) os<<vsl_indent()<<"Angle range: 0-360"<<vcl_endl;
+  else          os<<vsl_indent()<<"Angle range: 0-180"<<vcl_endl;
   if (norm_method_==0) os<<vsl_indent()<<"norm: none"<<vcl_endl;
   else                 os<<vsl_indent()<<"norm: linear"<<vcl_endl;
   os <<vsl_indent()<< "cost_builder: ";

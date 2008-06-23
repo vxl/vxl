@@ -189,6 +189,16 @@ void mfpf_mr_point_finder::multi_search_and_prune(
     = static_cast<const vimt_image_2d_of<float>&>(im_pyr(im_L));
   finder(L0).multi_search(image,pose0.p(),pose0.u(),poses,fits);
 
+  if (poses.size()==0)
+  {
+    vcl_cerr<<"Warning: No poses returned by mfpf_point_finder"<<vcl_endl;
+    // Perform search to find single good point
+    vgl_point_2d<double> new_p;
+    double f = finder(L0).search_one_pose(image,pose0.p(),pose0.u(),new_p);
+    poses.resize(1); poses[0]=mfpf_pose(new_p,pose0.u());
+    fits.resize(1); fits[0]=f;
+  }
+
   if (L0==prune_level)
     mfpf_prune_overlaps(finder(L0),poses,fits);
 
