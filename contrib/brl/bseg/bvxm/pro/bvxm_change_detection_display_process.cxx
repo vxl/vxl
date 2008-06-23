@@ -77,13 +77,31 @@ bool bvxm_change_detection_display_process::execute()
   vil_image_view<unsigned char> input_image(img0);
   vil_image_view<float> prob_image(img1);
   vil_image_view<bool> mask_image(img2);
+  vil_image_view<unsigned char> prob_img_byte( image_width, image_height, 1 );
   vil_image_view<unsigned char> output_image0( image_width, image_height, 3 );
   vil_image_view<unsigned char> output_image1( image_width, image_height, 1 );
 
   float prob_thresh = .50f;
   float prob_image_scale = .7f;
+  float max_prob = 0.0f;
+
   parameters()->get_value("prob_thresh",prob_thresh);
   parameters()->get_value("prob_image_scale",prob_image_scale);
+
+  //obtain max probability
+  for ( unsigned int i = 0; i < image_width; i++ ) {
+    for ( unsigned int j = 0; j < image_height; j++ ) {
+       if(prob_image(i , j) > max_prob)
+          max_prob = prob_image(i,j);
+    }
+  }
+
+  //map to 0-255 range
+    for ( unsigned int i = 0; i < image_width; i++ ) {
+    for ( unsigned int j = 0; j < image_height; j++ ) {
+       prob_img_byte(i,j) = (unsigned)vcl_floor((prob_image(i,j)/max_prob) * 255.0f);
+    }
+  }
 
   for ( unsigned int i = 0; i < image_width; i++ ) {
     for ( unsigned int j = 0; j < image_height; j++ ) {
@@ -93,6 +111,7 @@ bool bvxm_change_detection_display_process::execute()
 #endif
       float this_prob = 1.0f;
       float original_prob = 0.0f;
+      unsigned original_prob_byte = 0;
 
       if ( prob_image(i,j) < prob_thresh && mask_image(i,j)) {
         original_prob = prob_image (i, j);
@@ -104,13 +123,15 @@ bool bvxm_change_detection_display_process::execute()
       output_image0(i,j,2) = (int)vcl_floor( input_image(i,j)*this_prob );
 
       if (mask_image(i,j)) {
-        original_prob = prob_image(i,j) * 128.0f;
-        if ( original_prob > 255.0f)
-          original_prob = 255.0f;
+       original_prob_byte = prob_img_byte(i,j);
+        if ( original_prob_byte > 255)
+          original_prob_byte = 255;
       }
-      output_image1(i,j) = (int)(original_prob);
+      output_image1(i,j) = original_prob_byte;
     }
   }
+
+  vcl_cout << "Max prob: " << max_prob;
 
   brdb_value_sptr output0 =
     new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<unsigned char>(output_image0));
