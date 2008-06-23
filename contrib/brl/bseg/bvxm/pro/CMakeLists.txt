@@ -36,6 +36,7 @@ SET(bvxm_pro_sources
     bvxm_compare_rpc_process.h              bvxm_compare_rpc_process.cxx
     bvxm_ocp_compare_process.h              bvxm_ocp_compare_process.cxx
     bvxm_ocp_hist_process.h                 bvxm_ocp_hist_process.cxx
+    bvxm_roc_process.h                      bvxm_roc_process.cxx
 
 )
 
