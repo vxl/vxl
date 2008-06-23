@@ -943,7 +943,14 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
   vil_image_view<float>::iterator pix_prob_it = pixel_probability.begin();
   bvxm_voxel_slab<float>::const_iterator preX_accum_it = preX_accum.begin();
   bvxm_voxel_slab<float>::const_iterator visX_accum_it = visX_accum.begin();
+  
   for (; pix_prob_it != pixel_probability.end(); ++pix_prob_it, ++preX_accum_it, ++visX_accum_it) {
+   
+    //avoid division by zero, the values in this region shouldn't matter size it 
+    //belongs to voxels outside the mask
+    if (*visX_accum_it == 1.0f)
+      *visX_accum_it == 0.5f;
+      
     *pix_prob_it = *preX_accum_it / (1.0f - *visX_accum_it);
   }
 
