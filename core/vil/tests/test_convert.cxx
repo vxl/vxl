@@ -6,6 +6,7 @@
 #include <vil/vil_print.h>
 #include <vil/vil_load.h>
 #include <vil/vil_math.h>
+#include <vil/vil_exception.h>
 #include <testlib/testlib_test.h>
 
 static void test_convert1(const char * golden_data_dir)
@@ -167,11 +168,41 @@ static void test_convert_to_n_planes()
   testlib_test_perform( minp==0 && maxp==65535);
 
 
+#if !defined VXL_LEGACY_ERROR_REPORTING && VCL_HAS_EXCEPTIONS
+  bool caught_exception = false;
+  try
+  {
+    vil_image_view<vil_rgb<float> >(f_image_dest_sptr)?true:false;
+  }
+  catch (const vil_exception_pixel_formats_incompatible &e)
+  {
+    caught_exception = true;
+    vcl_cout << "Exception: " << e.what() << vcl_endl;
+  }
+  TEST("Plane image cannot be directly converted to components", caught_exception, true);
+  caught_exception = false;
+  vil_image_view<vil_rgb<float> > rgb_image;
+  try
+  {
+    rgb_image = vil_convert_to_component_order(f_image_dest_sptr);
+  }
+  catch (const vil_exception_pixel_formats_incompatible &e)
+  {
+    caught_exception = true;
+    vcl_cout << "Exception: " << e.what() << vcl_endl;
+  }
+  TEST("implict vil_convert_to_component_order API", caught_exception, false);
+#else
   TEST("Plane image cannot be directly converted to components",
        vil_image_view<vil_rgb<float> >(f_image_dest_sptr)?true:false, false);
   vil_image_view<vil_rgb<float> > rgb_image =
     vil_convert_to_component_order(f_image_dest_sptr);
   TEST("implict vil_convert_to_component_order API", rgb_image?true:false, true);
+#endif
+
+
+
+
   TEST("implict vil_convert_to_component_order correct",
        vil_image_view_deep_equality(vil_image_view<float>(rgb_image), f_image_dest),
        true);
