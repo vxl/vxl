@@ -98,6 +98,7 @@ bool bvxm_detect_changes_process::execute()
   float threshold_value = 0.5;
   float min_value = 0, max_value = 0;
   vil_math_value_range(prob_map, min_value, max_value);
+
   threshold_value = (min_value+max_value)/2;
   vil_image_view<bool> binary_img;
   vil_threshold_above<float>(prob_map, binary_img, threshold_value);

@@ -948,10 +948,12 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
    
     //avoid division by zero, the values in this region shouldn't matter size it 
     //belongs to voxels outside the mask
-    if (*visX_accum_it == 1.0f)
-      *visX_accum_it == 0.5f;
-      
-    *pix_prob_it = *preX_accum_it / (1.0f - *visX_accum_it);
+    float visX_a = *visX_accum_it;
+    if (visX_a >= 1.0f){
+      visX_a = 0.5f;
+     }
+
+    *pix_prob_it = *preX_accum_it / (1.0f - visX_a);
   }
 
   // fill mask values
