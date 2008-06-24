@@ -97,6 +97,14 @@ IF (BUILD_CORE_GEOMETRY AND BUILD_CORE_NUMERICS)
   ENDIF (BUILD_CORE_UTILITIES AND BUILD_CORE_SERIALISATION)
 ENDIF (BUILD_CORE_GEOMETRY AND BUILD_CORE_NUMERICS)
 
+# Optionally use old error reporting methods, rather than exceptions.
+# The main use is in vil which often uses/used null images to imply an error.
+OPTION (VXL_LEGACY_ERROR_REPORTING "Use old error reporting methods rather than exceptions?" YES)
+IF (VXL_LEGACY_ERROR_REPORTING)
+  ADD_DEFINITIONS( -DVXL_LEGACY_ERROR_REPORTING )
+ENDIF (VXL_LEGACY_ERROR_REPORTING)
+
+
 
 # Options to build no longer maintained libraries.
 # It is still useful to have the dashboard check that they are correct,

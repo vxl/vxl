@@ -14,6 +14,7 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_new.h>
 #include <vil/vil_fill.h>
+#include <vil/vil_exception.h>
 
 template <class S, class T>
 void test_image_view_rgba(vil_image_view<S> & /*image2*/, vil_image_view<T> & /*image7*/)
@@ -25,8 +26,23 @@ VCL_DEFINE_SPECIALIZATION
 void test_image_view_rgba(vil_image_view<vxl_byte> &image2, vil_image_view<float> &image7)
 {
   image2.set_size(10,10,2);
-  vil_image_view<vil_rgba<vxl_byte> > image6 = image2;
+  vil_image_view<vil_rgba<vxl_byte> > image6;
+#if !defined VXL_LEGACY_ERROR_REPORTING && VCL_HAS_EXCEPTIONS
+  bool caught_exception = false;
+  try
+  {
+    image6 = image2;
+  }
+  catch (const vil_exception_pixel_formats_incompatible &e)
+  {
+    caught_exception = true;
+    vcl_cout << "Exception: " << e.what() << vcl_endl;
+  }
+  TEST("Can't assign a 3 plane images to rgba view", caught_exception, true);
+#else
+  image6 = image2;
   TEST("Can't assign a 3 plane images to rgba view", image6?true:false, false);
+#endif
 
   vil_convert_cast(image7, image6);
   TEST("vil_convert_cast<float, rgba<byte> >", image6?true:false, true);
@@ -55,8 +71,25 @@ VCL_DEFINE_SPECIALIZATION
 void test_image_view_rgba(vil_image_view<float> &image2, vil_image_view<double> &image7)
 {
   image2.set_size(10,10,2);
-  vil_image_view<vil_rgba<float> > image6 = image2;
+  vil_image_view<vil_rgba<float> > image6;
+
+#if !defined VXL_LEGACY_ERROR_REPORTING && VCL_HAS_EXCEPTIONS
+  bool caught_exception = false;
+  try
+  {
+    image6 = image2;
+  }
+  catch (const vil_exception_pixel_formats_incompatible &e)
+  {
+    caught_exception = true;
+    vcl_cout << "Exception: " << e.what() << vcl_endl;
+  }
+  TEST("Can't assign a 3 plane images to rgba view", caught_exception, true);
+#else
+  image6 = image2;
   TEST("Can't assign a 3 plane images to rgba view", image6?true:false, false);
+#endif
+
 
   vil_convert_cast(image7, image6);
   TEST("vil_convert_cast<double,rgba<float> >", image6?true:false, true);
@@ -442,6 +475,28 @@ static void test_image_view_assignment_operator()
   // reference count is non-zero, but that's private information.
   //
   testlib_test_perform( true );
+
+
+  // Test error reporting on dodgy type assignment.
+
+#if !defined VXL_LEGACY_ERROR_REPORTING && VCL_HAS_EXCEPTIONS
+  bool caught_exception = false;
+  try
+  {
+    vil_image_view<float> float_im = *im1p;
+  }
+  catch (const vil_exception_pixel_formats_incompatible &e)
+  {
+    caught_exception = true;
+    vcl_cout << "Exception: " << e.what() << vcl_endl;
+  }
+  TEST ("Successfully caught expected exception", caught_exception, true);
+#else
+    vil_image_view<float> float_im = *im1p;
+    TEST ("Successfully detected dodgy assignment", float_im?true:false, false);
+#endif
+
+
 }
 
 

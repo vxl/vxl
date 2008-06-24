@@ -20,10 +20,10 @@
 template <class T>
 void vil_exception_error(T exception)
 {
-  vcl_cerr << "\nERROR: " << exception.what() << vcl_endl;
-#if !defined VIL_EXCEPTIONS_DISABLE  && VCL_HAS_EXCEPTIONS
+#if !defined VXL_LEGACY_ERROR_REPORTING && VCL_HAS_EXCEPTIONS
   throw exception;
 #else
+  vcl_cerr << "\nERROR: " << exception.what() << vcl_endl;
   vcl_abort();
 #endif
 }
@@ -34,30 +34,32 @@ void vil_exception_error(T exception)
 template <class T>
 void vil_exception_warning(T exception)
 {
-  vcl_cerr << "\nWARNING: " << exception.what() << vcl_endl;
-#if !defined VIL_EXCEPTIONS_DISABLE  && VCL_HAS_EXCEPTIONS
+#if !defined VXL_LEGACY_ERROR_REPORTING && VCL_HAS_EXCEPTIONS
   throw exception;
+#else
+  vcl_cerr << "\nWARNING: " << exception.what() << vcl_endl;
 #endif
 }
 
-  //: Indicates that an image assignment failed because the pixel types were incompatible.
-  class vil_exception_assignment_pixel_formats_incompatible
+  //: Indicates that a function call failed because the pixel types were incompatible.
+  class vil_exception_pixel_formats_incompatible
 #if VCL_HAS_EXCEPTIONS
   : public vcl_logic_error
 #endif
   {
    public:
     enum vil_pixel_format src_type, dest_type;
-    vil_exception_assignment_pixel_formats_incompatible(
-      enum vil_pixel_format src, enum vil_pixel_format dest) :
+    vcl_string operation_name;
+    vil_exception_pixel_formats_incompatible(
+      enum vil_pixel_format src, enum vil_pixel_format dest, const vcl_string& operation) :
 #if VCL_HAS_EXCEPTIONS
-      vcl_logic_error(vcl_string("Pixel formats incompatible during assignment operation.")),
+    vcl_logic_error(operation + ": Pixel formats incompatible."),
 #endif
-      src_type(src), dest_type(dest) {}
+      src_type(src), dest_type(dest), operation_name(operation) {}
 #if VCL_HAS_EXCEPTIONS
-    virtual ~vil_exception_assignment_pixel_formats_incompatible() throw() {}
+    virtual ~vil_exception_pixel_formats_incompatible() throw() {}
 #else
-    const char * what() const {return "Pixel formats incompatible during assignment operation.";}
+    const char * what() const {return "Pixel formats incompatible.";}
 #endif
   };
 

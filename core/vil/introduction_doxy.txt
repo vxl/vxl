@@ -210,6 +210,12 @@ vil_image_view<vxl_byte> filtered_image = vil_transpose(tmp_image2);
 * - vil_vil1_to_image_view(vil1_memory_image_of<T>): creates a vil_image_view<T>.
 * - vil_vil1_from_image_view(vil_image_view<T>): creates a vil1_memory_image_of<T>.
 *
+* \section Error Reporting
+*
+* Currently most error reporting either happens by calling vcl_abort, or by returning
+* a null image. The null images reporting in particular will transition to exception-based
+* reporting. You can retain the old behaiour by setting VXL_LEGACY_ERROR_REPORTING with CMake.
+*
 * \section algo Algorithms and Image Processing
 * Some simple algorithms for manipulating images are included in the algo sub-directory.
 * Note that the argument order is typically of the form vil_f(src_im,dest_im,params).

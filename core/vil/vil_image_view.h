@@ -106,7 +106,8 @@ class vil_image_view : public vil_image_view_base
   // components. You can assign a vil_image_view<T> to a vil_image_view<compound_type<T>>
   // when the underlying data is formatted appropriately and the lhs has
   // as many components as the rhs has planes. O(1).
-  // If the view types are not compatible this object will be set to empty.
+  // \throws vil_exception_pixel_formats_incompatible if view types are not compatible. Or
+  // returns a null image if exceptions are disabled.
   vil_image_view(const vil_image_view_base_sptr& rhs);
 
   //  Destructor

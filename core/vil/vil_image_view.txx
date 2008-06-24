@@ -25,6 +25,7 @@
 #include <vcl_cmath.h>
 #include <vcl_ostream.h>
 #include <vil/vil_pixel_format.h>
+#include <vil/vil_exception.h>
 #include <vcl_cstring.h>
 #include <vcl_algorithm.h>
 
@@ -543,6 +544,8 @@ const vil_image_view<T> & vil_image_view<T>::operator= (const vil_image_view_bas
   if (convert_planes_from_components(*this, rhs))
     return *this;
 
+  vil_exception_warning(vil_exception_pixel_formats_incompatible(
+    rhs.pixel_format(), this->pixel_format(), "vil_image_view::operator =") );
   set_to_memory(0, 0, 0, 0, 0, 0, 0);
   return *this;
 }
