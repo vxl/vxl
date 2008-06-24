@@ -5,6 +5,7 @@
 #include <vcl_complex.h>
 #include <vcl_vector.h>
 #include <vcl_cmath.h>
+#include <vcl_cstdlib.h>
 
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>

@@ -24,6 +24,7 @@
 #include <vsol/vsol_line_2d.h>
 
 #include <vil/vil_load.h>
+#include <vil/vil_image_view.h>
 #include <vil/vil_blocked_image_resource.h>
 #include <vil/vil_pyramid_image_resource.h>
 
