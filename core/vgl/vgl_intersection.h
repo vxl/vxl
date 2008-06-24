@@ -62,6 +62,16 @@ vgl_point_3d<T> vgl_intersection(const vgl_plane_3d<T>& p1,
                                  const vgl_plane_3d<T>& p2,
                                  const vgl_plane_3d<T>& p3);
 
+//: Return true if any point on [p1,p2] is within tol of [q1,q2]
+//  Tests two line segments for intersection or near intersection
+//  (within given tolerance).
+// \author Dan jackson
+template <class T>
+bool vgl_intersection(vgl_point_2d<T> const& p1,
+                      vgl_point_2d<T> const& p2,
+                      vgl_point_2d<T> const& q1,
+                      vgl_point_2d<T> const& q2,
+                      double tol = 1e-6);
 
 #define VGL_INTERSECTION_INSTANTIATE(T) extern "please include vgl/vgl_intersection.txx first"
 #define VGL_INTERSECTION_BOX_INSTANTIATE(T) extern "please include vgl/vgl_intersection.txx first"

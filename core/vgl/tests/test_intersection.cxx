@@ -61,6 +61,65 @@ static void test_lines_intersection()
   TEST("lines intersection does not exist", is_intersection, false );
 }
 
+static void test_lines_intersect_in_tol()
+{ 
+  vcl_cout<<"Testing intersection of two line segments with tolerance."<<vcl_endl;
+
+  // intersection: should return true, 
+  vgl_point_2d<double> p1(0,0), p2(2,2), q1(2,1), q2(1,2);
+  TEST("Line Intersection 1a", vgl_intersection(p1,p2,q1,q2),true);
+  TEST("Line Intersection 1b", vgl_intersection(p2,p1,q1,q2),true);
+  TEST("Line Intersection 1c", vgl_intersection(p1,p2,q2,q1),true);
+  TEST("Line Intersection 1d", vgl_intersection(p2,p1,q2,q1),true);
+  // q1 or q2 lies within tolerance of line (p1,p2)
+  p1.set(0,0);
+  p2.set(2,2);
+  q1.set(1,1 + 1e-7);
+  q2.set(0,2);
+  TEST("Line Intersection 2a", vgl_intersection(p1,p2,q1,q2),true);
+  TEST("Line Intersection 2b", vgl_intersection(p2,p1,q1,q2),true);
+  TEST("Line Intersection 2c", vgl_intersection(p1,p2,q2,q1),true);
+  TEST("Line Intersection 2d", vgl_intersection(p2,p1,q2,q1),true);
+  // p1 or p2 lies within tolerance of line (q1,q2)
+  p1.set(0,0);
+  p2.set(2,2);
+  q1.set(-1,-1+1e-7);
+  q2.set(2.5,2.5+1e-7);
+  TEST("Line Intersection 3a", vgl_intersection(p1,p2,q1,q2),true);
+  TEST("Line Intersection 3b", vgl_intersection(p2,p1,q1,q2),true);
+  TEST("Line Intersection 3c", vgl_intersection(p1,p2,q2,q1),true);
+  TEST("Line Intersection 3d", vgl_intersection(p2,p1,q2,q1),true);
+  // lines have 1 common point, should return false : no intersection
+  p1.set(0,0);
+  p2.set(2,2);
+  q1.set(2,2);
+  q2.set(4,4);
+  TEST("Line Intersection 4a", vgl_intersection(p1,p2,q1,q2),true);
+  TEST("Line Intersection 4b", vgl_intersection(p2,p1,q1,q2),true);
+  TEST("Line Intersection 4c", vgl_intersection(p1,p2,q2,q1),true);
+  TEST("Line Intersection 4d", vgl_intersection(p2,p1,q2,q1),true);
+  // should return intersection
+  p1.set(0,0);
+  p2.set(2,2);
+  q1.set(0,0);
+  q2.set(4,4);
+  TEST("Line Intersection 5a", vgl_intersection(p1,p2,q1,q2),true);
+  TEST("Line Intersection 5b", vgl_intersection(p2,p1,q1,q2),true);
+  TEST("Line Intersection 5c", vgl_intersection(p1,p2,q2,q1),true);
+  TEST("Line Intersection 5d", vgl_intersection(p2,p1,q2,q1),true);
+  // should return intersection
+  p1.set(0,0);
+  p2.set(2.25,2.25);
+  q1.set(0,0);
+  q2.set(2,2);
+  TEST("Line Intersection 6a", vgl_intersection(p1,p2,q1,q2),true);
+  TEST("Line Intersection 6b", vgl_intersection(p2,p1,q1,q2),true);
+  TEST("Line Intersection 6c", vgl_intersection(p1,p2,q2,q1),true);
+  TEST("Line Intersection 6d", vgl_intersection(p2,p1,q2,q1),true);
+  
+}
+
+
 void test_intersection()
 {
   vcl_cout << "**************************\n"
@@ -69,6 +128,7 @@ void test_intersection()
   test_plane_intersection();
   test_three_planes();
   test_lines_intersection();
+  test_lines_intersect_in_tol();
 }
 
 TESTMAIN(test_intersection);

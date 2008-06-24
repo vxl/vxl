@@ -315,6 +315,113 @@ vgl_point_3d<T> vgl_intersection(const vgl_plane_3d<T>& p1,
   return p;
 }
 
+//: Return true if any point on [p1,p2] is within tol of [q1,q2]
+//  Tests two line segments for intersection or near intersection
+//  (within given tolerance).
+// \author Dan jackson
+template <class T>
+bool vgl_intersection(vgl_point_2d<T> const& p1, 
+                      vgl_point_2d<T> const& p2,
+                      vgl_point_2d<T> const& q1,
+                      vgl_point_2d<T> const& q2,
+                      double tol)
+{
+  vgl_vector_2d<T> u = p2 - p1;
+  double L2 = u.x()*u.x() + u.y()*u.y();  // Square of length p1-p2
+  vgl_vector_2d<T> v(-u.y(),u.x());
+
+  double uq1 = dot_product(q1 - p1,u);
+  double vq1 = dot_product(q1 - p1,v);
+  double tol2 = tol*tol;
+
+  // Check if q1 is in central band (either side of line p1-p2
+  if (uq1 > 0 && uq1 < L2)
+  {
+    // Check if q1 is within tol of the line, ie |vq1/L| < tol
+    if (vq1*vq1 <=tol2*L2) return true;
+  }
+  else
+  {
+    // Check if q1 is within tol of either end of line
+    if ( (q1-p1).sqr_length() <= tol2 || (q1-p2).sqr_length() <= tol2 )
+      return true;
+  }
+
+  // Repeat test for q2
+  double uq2 = dot_product(q2 - p1,u);
+  double vq2 = dot_product(q2 - p1,v);
+
+  // Check if q2 is in central band (either side of line p1-p2
+  if (uq2 > 0 && uq2 < L2)
+  {
+    // Check if q1 is within tol of the line, ie |vq1/L| < tol
+    if (vq2*vq2 <=tol2*L2)
+      return true;
+  }
+  else
+  {
+    // Check if q1 is within tol of either end of line
+    if ( (q2-p1).sqr_length() <= tol2 || (q2-p2).sqr_length() <= tol2 )
+      return true;
+  }
+
+  // The points q1 and q2 do not lie within the tolerance region 
+  // around line segment (p1,p2)
+  // Now repeat the test the other way around, 
+  // testing whether points p1 and p2 lie in tolerance region 
+  // of line (q1,q2)
+
+  u = q2 - q1;
+  L2 = u.x()*u.x() + u.y()*u.y();  // Square of length p1-p2
+  v.set(-u.y(),u.x());
+
+  double up1 = dot_product(p1 - q1,u);
+  double vp1 = dot_product(p1 - q1,v);
+
+  // Check if p1 is in central band either side of line q1-q2
+  if (up1 > 0 && up1 < L2)
+  {
+    // Check if p1 is within tol of the line, ie |vp1/L| < tol
+    if (vp1*vp1 <=tol2*L2)
+      return true;
+  }
+  else
+  {
+    // Check if p1 is within tol of either end of line
+    if ( (p1-q1).sqr_length() <= tol2 || (p1-q2).sqr_length() <= tol2 )
+      return true;
+  }
+
+  double up2 = dot_product(p2 - q1,u);
+  double vp2 = dot_product(p2 - q1,v);
+
+  // Check if p2 is in central band either side of line q1-q2
+  if (up2 > 0 && up2 < L2)
+  {
+    // Check if p1 is within tol of the line, ie |vp1/L| < tol
+    if (vp2*vp2 <=tol2*L2)
+      return true;
+  }
+  else
+  {
+    // Check if p2 is within tol of either end of line
+    if ( (p2-q1).sqr_length() <= tol2 || (p2-q2).sqr_length() <= tol2)
+      return true;
+  }
+
+  // Now check for actual intersection 
+  if (vq1*vq2 >= 0)
+    return false;
+  else
+  {
+    if(vp1*vp2 >= 0)
+      return false;
+    else
+      return true;
+  }
+}
+
+
 #undef VGL_INTERSECTION_INSTANTIATE
 #define VGL_INTERSECTION_INSTANTIATE(T) \
 template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_line_3d_2_points<T > const&); \
@@ -322,7 +429,8 @@ template bool vgl_intersection(vgl_line_segment_3d<T > const&,vgl_line_segment_3
 template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_plane_3d<T > const&); \
 template vgl_point_3d<T > vgl_intersection(const vgl_plane_3d<T >&,const vgl_plane_3d<T >&,const vgl_plane_3d<T >&); \
 template bool vgl_intersection(const vgl_box_2d<T >&, const vgl_line_2d<T >& line, vgl_point_2d<T >& p0, vgl_point_2d<T >&); \
-template bool vgl_intersection(const vgl_line_2d<T > &line0, const vgl_line_2d<T > &line1, vgl_point_2d<T > &intersection_point )
+template bool vgl_intersection(const vgl_line_2d<T > &line0, const vgl_line_2d<T > &line1, vgl_point_2d<T > &intersection_point ); \
+template bool vgl_intersection(vgl_point_2d<T> const&,vgl_point_2d<T> const&,vgl_point_2d<T> const&,vgl_point_2d<T> const&,double);
 
 //: Instantiate only functions suitable for integer instantiation.
 #undef VGL_INTERSECTION_BOX_INSTANTIATE
