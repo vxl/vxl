@@ -28,6 +28,7 @@ SOURCES += bvxm_heightmap_process.cxx
 SOURCES += bvxm_compare_rpc_process.cxx
 SOURCES += bvxm_ocp_compare_process.cxx
 SOURCES += bvxm_ocp_hist_process.cxx
+SOURCES += bvxm_roc_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk
