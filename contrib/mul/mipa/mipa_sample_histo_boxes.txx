@@ -6,6 +6,7 @@
 // \author Tim Cootes
 
 #include "mipa_sample_histo_boxes.h"
+#include <vcl_cassert.h>
 
 //: Extract data from an image of histograms over nested boxes
 //  Assume h_im(i,j,A) gives frequency stored in angle bin A
@@ -30,8 +31,8 @@ void mipa_sample_histo_boxes_3L(const vil_image_view<srcT>& h_im,
   unsigned nA=h_im.nplanes();
   vec.set_size(nA*(5*ni*nj+1));
 
-assert(h_im.planestep()==1);
-assert(h_im.istep()==nA);
+  assert(h_im.planestep()==1);
+  assert(h_im.istep()==nA);
 
   // Set up some pointers and offsets so that we
   // can do everything in one pass.
