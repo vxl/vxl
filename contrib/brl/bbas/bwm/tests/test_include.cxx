@@ -1,4 +1,5 @@
 #include <bwm/algo/bwm_algo.h>
+#include <bwm/algo/bwm_delaunay_tri.h>
 #include <bwm/algo/bwm_image_processor.h>
 #include <bwm/algo/bwm_lidar_algo.h>
 #include <bwm/algo/bwm_plane_fitting_lsf.h>
