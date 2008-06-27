@@ -168,7 +168,10 @@ SOURCE=.\bvxm_ocp_compare_process.cxx
 SOURCE=.\bvxm_ocp_hist_process.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/brdb_value_t+bvxm_voxel_world_sptr.cxx
+SOURCE=.\bvxm_roc_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+bvxm_voxel_world_sptr-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/brdb_value_t+unsigned-.cxx
@@ -250,6 +253,9 @@ SOURCE=.\bvxm_ocp_compare_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_ocp_hist_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_roc_process.h
 # End Source File
 # End Group
 # End Target

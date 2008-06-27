@@ -93,13 +93,13 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
-SOURCE=.\Templates/mipa_orientation_histogram+byte-+float-.cxx
+SOURCE=.\Templates/mipa_orientation_histogram+byte.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/mipa_orientation_histogram+float-+float-.cxx
+SOURCE=.\Templates/mipa_orientation_histogram+float.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/mipa_sample_histo_boxes+float-+double-.cxx
+SOURCE=.\Templates/mipa_sample_histo_boxes+float.double-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
