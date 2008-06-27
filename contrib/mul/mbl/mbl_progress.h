@@ -105,7 +105,7 @@ class mbl_progress
 
  protected:
 
-  //: Called when set_estimate_iterations() is called for a given identifier.
+  //: Called when set_estimated_iterations() is called for a given identifier.
   //  Derived classes may take some action here.
   //  \param identifier The operation being monitored.
   virtual void on_set_estimated_iterations(const vcl_string& identifier,

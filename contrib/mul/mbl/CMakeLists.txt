@@ -64,6 +64,7 @@ SET(mbl_sources
   mbl_table.cxx                         mbl_table.h
   mbl_progress.cxx                      mbl_progress.h
   mbl_progress_text.cxx                 mbl_progress_text.h
+  mbl_progress_time.cxx                 mbl_progress_time.h
   mbl_progress_null.cxx                 mbl_progress_null.h
   mbl_progress_composite.cxx            mbl_progress_composite.h
   mbl_progress_hierarchy.cxx            mbl_progress_hierarchy.h
