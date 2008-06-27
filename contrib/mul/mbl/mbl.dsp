@@ -329,6 +329,9 @@ SOURCE=.\mbl_dyn_prog.cxx
 # Begin Source File
 SOURCE=.\mbl_progress_hierarchy.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\mbl_progress_time.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx;in"
@@ -604,6 +607,9 @@ SOURCE=.\mbl_save_text_file.h
 # End Source File
 # Begin Source File
 SOURCE=.\mbl_save_text_file.txx
+# End Source File
+# Begin Source File
+SOURCE=.\mbl_progress_time.h
 # End Source File
 # End Group
 # End Target
