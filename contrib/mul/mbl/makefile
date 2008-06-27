@@ -36,6 +36,7 @@ SOURCES += mbl_progress.cxx
 SOURCES += mbl_progress_composite.cxx
 SOURCES += mbl_progress_null.cxx
 SOURCES += mbl_progress_text.cxx
+SOURCES += mbl_progress_time.cxx
 SOURCES += mbl_rvm_regression_builder.cxx
 SOURCES += mbl_exception.cxx
 SOURCES += mbl_test.cxx
