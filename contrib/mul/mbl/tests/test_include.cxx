@@ -45,6 +45,7 @@
 #include <mbl/mbl_progress_hierarchy.h>
 #include <mbl/mbl_progress_null.h>
 #include <mbl/mbl_progress_text.h>
+#include <mbl/mbl_progress_time.h>
 #include <mbl/mbl_random_n_from_m.h>
 #include <mbl/mbl_rbf_network.h>
 #include <mbl/mbl_read_double.h>
