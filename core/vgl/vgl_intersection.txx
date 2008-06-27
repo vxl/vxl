@@ -320,7 +320,7 @@ vgl_point_3d<T> vgl_intersection(const vgl_plane_3d<T>& p1,
 //  (within given tolerance).
 // \author Dan jackson
 template <class T>
-bool vgl_intersection(vgl_point_2d<T> const& p1, 
+bool vgl_intersection(vgl_point_2d<T> const& p1,
                       vgl_point_2d<T> const& p2,
                       vgl_point_2d<T> const& q1,
                       vgl_point_2d<T> const& q2,
@@ -365,10 +365,10 @@ bool vgl_intersection(vgl_point_2d<T> const& p1,
       return true;
   }
 
-  // The points q1 and q2 do not lie within the tolerance region 
+  // The points q1 and q2 do not lie within the tolerance region
   // around line segment (p1,p2)
-  // Now repeat the test the other way around, 
-  // testing whether points p1 and p2 lie in tolerance region 
+  // Now repeat the test the other way around,
+  // testing whether points p1 and p2 lie in tolerance region
   // of line (q1,q2)
 
   u = q2 - q1;
@@ -409,16 +409,13 @@ bool vgl_intersection(vgl_point_2d<T> const& p1,
       return true;
   }
 
-  // Now check for actual intersection 
+  // Now check for actual intersection
   if (vq1*vq2 >= 0)
     return false;
+  else if (vp1*vp2 >= 0)
+    return false;
   else
-  {
-    if(vp1*vp2 >= 0)
-      return false;
-    else
-      return true;
-  }
+    return true;
 }
 
 
@@ -429,8 +426,8 @@ template bool vgl_intersection(vgl_line_segment_3d<T > const&,vgl_line_segment_3
 template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_plane_3d<T > const&); \
 template vgl_point_3d<T > vgl_intersection(const vgl_plane_3d<T >&,const vgl_plane_3d<T >&,const vgl_plane_3d<T >&); \
 template bool vgl_intersection(const vgl_box_2d<T >&, const vgl_line_2d<T >& line, vgl_point_2d<T >& p0, vgl_point_2d<T >&); \
-template bool vgl_intersection(const vgl_line_2d<T > &line0, const vgl_line_2d<T > &line1, vgl_point_2d<T > &intersection_point ); \
-template bool vgl_intersection(vgl_point_2d<T> const&,vgl_point_2d<T> const&,vgl_point_2d<T> const&,vgl_point_2d<T> const&,double);
+template bool vgl_intersection(const vgl_line_2d<T >&, const vgl_line_2d<T >&, vgl_point_2d<T >&); \
+template bool vgl_intersection(vgl_point_2d<T > const&,vgl_point_2d<T > const&,vgl_point_2d<T > const&,vgl_point_2d<T > const&,double)
 
 //: Instantiate only functions suitable for integer instantiation.
 #undef VGL_INTERSECTION_BOX_INSTANTIATE
