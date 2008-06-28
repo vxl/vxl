@@ -144,33 +144,33 @@ double mmn_lbp_solver::operator()(const vcl_vector<vnl_vector<double> >& node_co
 
     messages_upd_ = messages_;
 
-    //Now keep repeating message passing 
+    //Now keep repeating message passing
     vcl_vector<unsigned > random_indices(nnodes_,0);
     mbl_stl_increments(random_indices.begin(),random_indices.end(),0);
 
     do
     {
         max_delta_=-1.0;
-        switch(msg_upd_mode_)
+        switch (msg_upd_mode_)
         {
             case eALL_PARALLEL:
             {
                 //Calculate all updates in parallel using only previous iteration messages
-                for(unsigned inode=0; inode<nnodes_;++inode)
+                for (unsigned inode=0; inode<nnodes_;++inode)
                 {
                     update_messages_to_neighbours(inode,node_costs_[inode]);
                 }
                 messages_ = messages_upd_;
             }
             break;
-        
+
             case eRANDOM_SERIAL:
             default:
             {
                 vcl_random_shuffle(random_indices.begin(),random_indices.end());
                 //Randomise the order of inter-node messages
                 //May help avoid looping
-                for(unsigned knode=0; knode<nnodes_;++knode)
+                for (unsigned knode=0; knode<nnodes_;++knode)
                 {
                     unsigned inode=random_indices[knode];
                     update_messages_to_neighbours(inode,node_costs_[inode]);
@@ -178,7 +178,7 @@ double mmn_lbp_solver::operator()(const vcl_vector<vnl_vector<double> >& node_co
                 }
             }
         }
-        
+
         if (verbose_)
         {
             vcl_cout<<"Max message delta at iteration "<<count_<<"\t is "<<max_delta_<<vcl_endl;
@@ -426,7 +426,8 @@ bool mmn_lbp_solver::continue_propagation(vcl_vector<unsigned>& x)
     }
     else if (cycle_detection_count_<2 &&
              vcl_count_if(max_delta_history_.begin(),max_delta_history_.end(),
-                          vcl_bind1st(vcl_less<double >(),max_delta_))==max_delta_history_.size())
+                          vcl_bind1st(vcl_less<double >(),max_delta_))
+             == int(max_delta_history_.size()))
     {
         retstate =true; //delta is definitely decreasing so keep going unless we've had >2 cycles already
     }

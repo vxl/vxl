@@ -32,7 +32,7 @@ void mipa_sample_histo_boxes_3L(const vil_image_view<srcT>& h_im,
   vec.set_size(nA*(5*ni*nj+1));
 
   assert(h_im.planestep()==1);
-  assert(h_im.istep()==nA);
+  assert(h_im.istep()==int(nA));
 
   // Set up some pointers and offsets so that we
   // can do everything in one pass.
