@@ -21,7 +21,6 @@
 // \endverbatim
 
 #include <vcl_vector.h>
-#include <vil/file_formats/vil_tiff_header.h>
 #include <tiffio.h>
 #include <geotiffio.h>
 

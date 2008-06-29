@@ -17,7 +17,6 @@
 #include <mfpf/mfpf_norm_corr2d_builder.h>
 #include <mfpf/mfpf_region_finder_builder.h>
 #include <mfpf/mfpf_sad_vec_cost_builder.h>
-#include <vil/vil_bilin_interp.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 #include <mfpf/mfpf_mr_point_finder.h>

@@ -12,7 +12,6 @@
 #include <vil/file_formats/vil_tiff.h>
 #include <vil/vil_image_list.h>
 #include <vul/vul_file.h>
-#include <vil/file_formats/vil_tiff_header.h>
 #define DEBUG
 
 static void test_pyramid_image_resource()

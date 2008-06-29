@@ -5,7 +5,6 @@
 // \author Tim Cootes
 // \brief Builder for mfpf_mr_point_finder objects.
 
-#include <mbl/mbl_cloneable_ptr.h>
 #include <mfpf/mfpf_point_finder_builder.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_cassert.h>

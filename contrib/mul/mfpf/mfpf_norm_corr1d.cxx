@@ -1,19 +1,14 @@
+#include "mfpf_norm_corr1d.h"
 //:
 // \file
 // \brief Searches along a profile using normalised correllation
 // \author Tim Cootes
 
-
-#include <mfpf/mfpf_norm_corr1d.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_cmath.h> // for std::abs()
 #include <vcl_cassert.h>
 #include <vcl_algorithm.h>
 
-#include <mbl/mbl_parse_block.h>
-#include <mbl/mbl_read_props.h>
-
-#include <vimt/vimt_bilin_interp.h>
 #include <vimt/vimt_sample_profile_bilin.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vgl/vgl_point_2d.h>

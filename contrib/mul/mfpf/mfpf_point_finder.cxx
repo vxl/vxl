@@ -1,15 +1,11 @@
+#include "mfpf_point_finder.h"
 //:
 // \file
 // \brief Base for classes which locate feature points
 // \author Tim Cootes
 
-#include <mfpf/mfpf_point_finder.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
-
-#include <mbl/mbl_parse_block.h>
-#include <mbl/mbl_read_props.h>
-#include <mbl/mbl_cloneables_factory.h>
 
 #include <vcl_cmath.h>
 #include <vimt/algo/vimt_find_troughs.h>

@@ -7,7 +7,6 @@
 
 #include <mcal/mcal_component_analyzer.h>
 #include <mcal/mcal_single_basis_cost.h>
-#include <mbl/mbl_cloneable_ptr.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
 #include <mbl/mbl_data_wrapper.h>

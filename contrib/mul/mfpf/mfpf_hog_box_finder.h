@@ -8,7 +8,6 @@
 #include <mfpf/mfpf_point_finder.h>
 #include <mfpf/mfpf_vec_cost.h>
 #include <mbl/mbl_cloneable_ptr.h>
-#include <mbl/mbl_chord.h>
 #include <vcl_iosfwd.h>
 
 //: Searches for rectangular region using HOG features.
@@ -59,10 +58,10 @@ class mfpf_hog_box_finder : public mfpf_point_finder
 
   //: Define region and cost of region
   void set(unsigned nA_bins, bool full360,
-                          unsigned ni, unsigned nj, unsigned nc,
-                          double ref_x, double ref_y,
-                          const mfpf_vec_cost& cost,
-                          short norm_method);
+           unsigned ni, unsigned nj, unsigned nc,
+           double ref_x, double ref_y,
+           const mfpf_vec_cost& cost,
+           short norm_method);
 
   //: Relative size of region used for estimating overlap
   //  If 0.5, then overlap requires pt inside central 50% of region.
@@ -96,14 +95,14 @@ class mfpf_hog_box_finder : public mfpf_point_finder
                                const vgl_vector_2d<double>& u,
                                vimt_image_2d_of<double>& response);
 
-  //: Search given image around p, using u to define scale and angle 
-  //  On exit, new_p defines position of the best nearby match.  
+  //: Search given image around p, using u to define scale and angle
+  //  On exit, new_p defines position of the best nearby match.
   //  Returns a qualtity of fit measure at that
   //  point (the smaller the better).
   virtual double search_one_pose(const vimt_image_2d_of<float>& image,
-                        const vgl_point_2d<double>& p,
-                        const vgl_vector_2d<double>& u,
-                        vgl_point_2d<double>& new_p);
+                                 const vgl_point_2d<double>& p,
+                                 const vgl_vector_2d<double>& u,
+                                 vgl_point_2d<double>& new_p);
 
   // Returns true if p is inside region at given pose
   // Actually only checks if p is inside bounding box,

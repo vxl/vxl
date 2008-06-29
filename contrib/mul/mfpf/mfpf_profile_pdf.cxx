@@ -7,11 +7,6 @@
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_cmath.h> // for std::abs
 
-#include <mbl/mbl_parse_block.h>
-#include <mbl/mbl_read_props.h>
-#include <mbl/mbl_cloneables_factory.h>
-
-#include <vimt/vimt_bilin_interp.h>
 #include <vimt/vimt_sample_profile_bilin.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/vnl_vector_ref.h>

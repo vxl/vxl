@@ -1,10 +1,9 @@
+#include "mfpf_norm_corr1d_builder.h"
 //:
 // \file
 // \brief Builder for mfpf_norm_corr1d objects.
 // \author Tim Cootes
 
-
-#include <mfpf/mfpf_norm_corr1d_builder.h>
 #include <mfpf/mfpf_norm_corr1d.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
@@ -14,7 +13,6 @@
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
 
-#include <vimt/vimt_bilin_interp.h>
 #include <vimt/vimt_sample_profile_bilin.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vgl/vgl_point_2d.h>
@@ -58,7 +56,7 @@ void mfpf_norm_corr1d_builder::set_kernel_size(int ilo, int ihi)
 }
 
 //: Define region size in world co-ordinates
-//  Sets up ROI to cover given box (with samples at step_size()), 
+//  Sets up ROI to cover given box (with samples at step_size()),
 //  with ref point at centre.
 void mfpf_norm_corr1d_builder::set_region_size(double wi, double)
 {
@@ -77,8 +75,8 @@ void mfpf_norm_corr1d_builder::clear(unsigned n_egs)
 
 //: Add one example to the model
 void mfpf_norm_corr1d_builder::add_example(const vimt_image_2d_of<float>& image,
-                        const vgl_point_2d<double>& p,
-                        const vgl_vector_2d<double>& u)
+                                           const vgl_point_2d<double>& p,
+                                           const vgl_vector_2d<double>& u)
 {
   int n=1+ihi_-ilo_;
   vnl_vector<double> v(n);

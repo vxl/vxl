@@ -15,7 +15,6 @@
 #include <vnl/vnl_complex_traits.h>
 #include <vnl/vnl_numeric_traits.h>
 
-#include <vnl/vnl_config.h>
 #include <vnl/vnl_sse.h>
 
 template <class T>

@@ -8,7 +8,6 @@
 #include <mfpf/mfpf_point_finder_builder.h>
 #include <mfpf/mfpf_vec_cost_builder.h>
 #include <mbl/mbl_cloneable_ptr.h>
-#include <mbl/mbl_chord.h>
 #include <vcl_iosfwd.h>
 #include <mfpf/mfpf_region_form.h>
 
@@ -20,7 +19,9 @@
 //  norm: linear
 //  search_ni: 5 search_nj: 4
 // }
+// \endverbatim
 // Alternative for shape:
+// \verbatim
 //   shape: box { ni: 5 nj: 3 ref_x: 2.5 ref_y: 1.5 }
 // \endverbatim
 class mfpf_hog_box_finder_builder : public mfpf_point_finder_builder
@@ -66,8 +67,8 @@ class mfpf_hog_box_finder_builder : public mfpf_point_finder_builder
 
   //: Add one example to the model
   void add_one_example(const vimt_image_2d_of<float>& image,
-                        const vgl_point_2d<double>& p,
-                        const vgl_vector_2d<double>& u);
+                       const vgl_point_2d<double>& p,
+                       const vgl_vector_2d<double>& u);
 
  public:
 
@@ -77,7 +78,7 @@ class mfpf_hog_box_finder_builder : public mfpf_point_finder_builder
   // Destructor
   virtual ~mfpf_hog_box_finder_builder();
 
-  //: Define number of angle bins and size of cells over which to pool 
+  //: Define number of angle bins and size of cells over which to pool
   //  If use360 is true, angles range [0,360), otherwise [0,180)
   //  (ie wrap-around occurs at 180,  5==185).
   void set_angle_bins(unsigned nA_bins, bool full360, unsigned cell_size);
@@ -97,7 +98,7 @@ class mfpf_hog_box_finder_builder : public mfpf_point_finder_builder
                   double ref_x, double ref_y);
 
   //: Define region size in world co-ordinates
-  //  Sets up ROI to cover given box (with samples at step_size()), 
+  //  Sets up ROI to cover given box (with samples at step_size()),
   //  with ref point at centre.
   //  Currently just defines as a box
   virtual void set_region_size(double wi, double wj);

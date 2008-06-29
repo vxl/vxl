@@ -1,16 +1,11 @@
+#include "mfpf_ssd_vec_cost.h"
 //:
 // \file
 // \brief Computes weighted sum of square differences to a mean
 // \author Tim Cootes
 
-
-#include "mfpf_ssd_vec_cost.h"
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_cassert.h>
-
-#include <mbl/mbl_parse_block.h>
-#include <mbl/mbl_read_props.h>
-#include <mbl/mbl_cloneables_factory.h>
 
 #include <vnl/io/vnl_io_vector.h>
 

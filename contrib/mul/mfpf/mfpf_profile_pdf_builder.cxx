@@ -1,9 +1,9 @@
+#include "mfpf_profile_pdf_builder.h"
 //:
 // \file
 // \brief Builder for mfpf_profile_pdf objects.
 // \author Tim Cootes
 
-#include <mfpf/mfpf_profile_pdf_builder.h>
 #include <mfpf/mfpf_profile_pdf.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
@@ -16,7 +16,6 @@
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_data_array_wrapper.h>
 
-#include <vimt/vimt_bilin_interp.h>
 #include <vimt/vimt_sample_profile_bilin.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vsl/vsl_vector_io.h>
