@@ -9,7 +9,6 @@
 // \brief a templated 3-tuple
 // \author fsm
 
-#include <vcl_utility.h>
 #include <vcl_iosfwd.h>
 
 //: a templated 3-tuple
