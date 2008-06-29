@@ -7,7 +7,7 @@
 // \author Graham Vincent
 
 #include "vimt3d_sample_grid_trilin.h"
-#include <vimt3d/vimt3d_trilin_interp.h>
+#include <vil3d/vil3d_trilin_interp.h>
 #include <vnl/vnl_vector.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
