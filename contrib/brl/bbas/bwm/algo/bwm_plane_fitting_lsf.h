@@ -10,15 +10,13 @@
 //
 // \verbatim
 //  Modifications
+//   <none yet>
 // \endverbatim
 
 #include "../bwm_observer_cam.h"
 
 #include <vnl/vnl_least_squares_function.h>
-#include <vnl/algo/vnl_levenberg_marquardt.h>
-
 #include <vgl/vgl_homg_plane_3d.h>
-
 #include <vsol/vsol_point_2d.h>
 
 class bwm_plane_fitting_lsf : public vnl_least_squares_function
@@ -27,11 +25,13 @@ class bwm_plane_fitting_lsf : public vnl_least_squares_function
 
   //: 1 unknown (d of projection plane ax+by+cx=d), 1 residual (distance between the current and the destination point)
   bwm_plane_fitting_lsf(double a, double b, double c, double d,
-    vsol_point_2d_sptr master_img_pt, vsol_point_2d_sptr new_pt,
-    bwm_observer_cam* master_obs, bwm_observer_cam* sec_obs)
-    : vnl_least_squares_function(1, 1, no_gradient), a_(a), b_(b), c_(c), d_(d),
-    master_img_pt_(master_img_pt), new_pt_(new_pt),
-    master_obs_(master_obs), sec_obs_(sec_obs){}
+                        vsol_point_2d_sptr master_img_pt, vsol_point_2d_sptr new_pt,
+                        bwm_observer_cam* master_obs, bwm_observer_cam* sec_obs)
+  : vnl_least_squares_function(1, 1, no_gradient),
+    a_(a), b_(b), c_(c), d_(d),
+    master_obs_(master_obs), sec_obs_(sec_obs),
+    master_img_pt_(master_img_pt), new_pt_(new_pt)
+  {}
 
   virtual ~bwm_plane_fitting_lsf() {}
 
