@@ -2,7 +2,7 @@
 
 #include <testlib/testlib_test.h>
 #include <vcl_iostream.h>
-#include <vimt/vimt_image_2d.h>
+#include <vimt/vimt_transform_2d.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_box_2d.h>

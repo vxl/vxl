@@ -9,6 +9,7 @@
 #include <vil/vil_print.h>
 #include <vil/vil_decimate.h>
 #include <vil/vil_transpose.h>
+#include <vimt/vimt_transform_2d.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_resample_bilin.h>
 #include <vgl/vgl_point_2d.h>

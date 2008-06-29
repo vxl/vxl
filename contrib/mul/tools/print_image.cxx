@@ -8,7 +8,7 @@
 #include <vul/vul_arg.h>
 #include <mbl/mbl_log.h>
 #include <vil/vil_load.h>
-#include <vimt/vimt_image_2d.h>
+#include <vimt/vimt_transform_2d.h>
 #include <vimt/vimt_load_transform.h>
 #include <vimt/vimt_add_all_binary_loaders.h>
 #include <vgl/vgl_point_2d.h>

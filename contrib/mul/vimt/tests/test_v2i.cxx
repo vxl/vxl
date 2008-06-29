@@ -14,6 +14,7 @@
 #include <vil/vil_image_resource.h>
 #include <vil/vil_property.h>
 #include <vimt/vimt_vil_v2i.h>
+#include <vimt/vimt_transform_2d.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_add_all_binary_loaders.h>
 
@@ -58,14 +59,14 @@ static void test_v2i()
   TEST( "Successfully loaded complicated v2i image",!ir3, false);
   vimt_image_2d_of<float> im3(ir3->get_view(), vimt_load_transform(ir3));
   TEST("Loaded complicated image has correct pixel values",
-    vil_image_view_deep_equality(im3.image(), im2), true);
+       vil_image_view_deep_equality(im3.image(), im2), true);
   TEST("Loaded complicated image has correct transform",
-    (im3.world2im().matrix()- tr2.matrix()).frobenius_norm() < 1e-6 , true);
+       (im3.world2im().matrix()- tr2.matrix()).frobenius_norm() < 1e-6 , true);
 
   float size[2];
   TEST("get_property()", ir3->get_property(vil_property_pixel_size, size), true);
   TEST("vil_property_pixel_size is correct", size[0] == 0.5 &&
-    size[1] == 0.5, true);
+       size[1] == 0.5, true);
   vpl_unlink(fname2.c_str());
 
   vil_image_view<float> im4(3,4,6);
