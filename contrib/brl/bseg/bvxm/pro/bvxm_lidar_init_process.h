@@ -31,7 +31,7 @@
 #include <bgeo/bgeo_lvcs_sptr.h>
 #include <bprb/bprb_process.h>
 #include <vpgl/vpgl_local_rational_camera.h>
-#include <vil/vil_image_view.h>
+#include <vil/vil_image_view_base.h>
 #include <vil/vil_image_resource_sptr.h>
 
 #include <bvxm/bvxm_world_params.h>

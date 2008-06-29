@@ -7,7 +7,6 @@
 #include <vcl_iostream.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
-#include <vil/vil_image_view_base.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_load.h>
 #include <vil/file_formats/vil_nitf2_image.h>
@@ -56,26 +55,26 @@ vpgl_load_rational_camera_nitf_process::execute()
 
   vcl_string nitf_image_path = input0->value();
 
-      vil_image_resource_sptr image =
+  vil_image_resource_sptr image =
         vil_load_image_resource(nitf_image_path.c_str());
-    if (!image)
-    {
-        vcl_cout << "NITF image load failed in vpgl_load_rational_camera_nitf_process\n";
-        return 0;
-    }
+  if (!image)
+  {
+    vcl_cout << "NITF image load failed in vpgl_load_rational_camera_nitf_process\n";
+    return 0;
+  }
 
-    vcl_string format = image->file_format();
-    vcl_string prefix = format.substr(0,4);
-    
-    if (prefix != "nitf")
-    {
-        vcl_cout << "source image is not NITF in vpgl_load_rational_camera_nitf_process\n";
-        return 0;
-    }
+  vcl_string format = image->file_format();
+  vcl_string prefix = format.substr(0,4);
 
-    //cast to an nitf2_image
-    vil_nitf2_image *nitf_image = static_cast<vil_nitf2_image*>(image.ptr());
-  vpgl_camera_double_sptr ratcam = new vpgl_nitf_rational_camera(nitf_image, true); 
+  if (prefix != "nitf")
+  {
+    vcl_cout << "source image is not NITF in vpgl_load_rational_camera_nitf_process\n";
+    return 0;
+  }
+
+  //cast to an nitf2_image
+  vil_nitf2_image *nitf_image = static_cast<vil_nitf2_image*>(image.ptr());
+  vpgl_camera_double_sptr ratcam = new vpgl_nitf_rational_camera(nitf_image, true);
 
   if ( !ratcam.as_pointer() ) {
     vcl_cerr << "Failed to load rational camera from file" << nitf_image_path << vcl_endl;

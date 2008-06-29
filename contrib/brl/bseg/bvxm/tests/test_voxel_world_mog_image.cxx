@@ -8,7 +8,7 @@
 #include "../bvxm_voxel_world.h"
 #include "../bvxm_world_params.h"
 #include "../bvxm_mog_grey_processor.h"
-#include <vil/vil_image_resource_sptr.h>
+#include <vil/vil_math.h>
 #include <vil/vil_image_view.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
@@ -71,7 +71,9 @@ static void test_voxel_world_mog_image()
       else {
         plane_img(i,j) = 1.0;
       }
-      //plane_img(i,j) = plane_img(i,j) + ((0.2f*i)/(float)nx + (0.2f*j)/(float)ny);
+#if 0
+      plane_img(i,j) = plane_img(i,j) + ((0.2f*i)/(float)nx + (0.2f*j)/(float)ny);
+#endif
     }
   }
   typedef bvxm_voxel_traits<APM_MOG_GREY>::voxel_datatype mog_type;
@@ -143,4 +145,3 @@ static void test_voxel_world_mog_image()
 }
 
 TESTMAIN( test_voxel_world_mog_image );
-
