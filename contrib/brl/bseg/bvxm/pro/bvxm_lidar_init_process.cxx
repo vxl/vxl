@@ -1,4 +1,5 @@
 #include "bvxm_lidar_init_process.h"
+//:
 #include "bvxm_voxel_world.h"
 #include <bvxm/bvxm_util.h>
 
@@ -12,6 +13,7 @@
 
 #include <vil/vil_load.h>
 #include <vil/vil_image_resource.h>
+#include <vil/vil_image_view.h>
 #include <vil/vil_pixel_format.h>
 #include <vil/file_formats/vil_tiff.h>
 #include <vil/file_formats/vil_geotiff_header.h>
@@ -42,7 +44,7 @@ bvxm_lidar_init_process::bvxm_lidar_init_process()
   output_types_[j++]= "vil_image_view_base_sptr";  // second ret image ROI
   output_types_[j++]= "vil_image_view_base_sptr";  // mask
 
-  if (!parameters()->add( "Upper bound for Lidar differences" , "mask_thresh" , (float) 10.0 ))
+  if (!parameters()->add( "Upper bound for Lidar differences", "mask_thresh", 10.0f ))
     vcl_cout << "ERROR: Adding parameters in bvxm_lidar_init_process\n";
 }
 
@@ -222,14 +224,13 @@ bool bvxm_lidar_init_process::lidar_init(vil_image_resource_sptr lidar,
       camera->project(x,y,z,u,v);
       vgl_point_2d<double> p(u,v);
       roi_box.add(p);
-
     }
-    
+
     brip_roi broi(tiff_img->ni(), tiff_img->nj());
     vsol_box_2d_sptr bb = new vsol_box_2d();
     bb->add_point(roi_box.min_x(), roi_box.min_y());
     bb->add_point(roi_box.max_x(), roi_box.max_y());
-    
+
     bb = broi.clip_to_image_bounds(bb);
     roi = tiff_img->get_copy_view((unsigned int)bb->get_min_x(),
                                   (unsigned int)bb->width(),

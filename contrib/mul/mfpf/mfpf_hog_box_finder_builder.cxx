@@ -1,10 +1,9 @@
+#include "mfpf_hog_box_finder_builder.h"
 //:
 // \file
 // \brief Builder for mfpf_hog_box_finder objects.
 // \author Tim Cootes
 
-
-#include <mfpf/mfpf_hog_box_finder_builder.h>
 #include <mfpf/mfpf_hog_box_finder.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
@@ -16,7 +15,7 @@
 #include <mbl/mbl_exception.h>
 
 #include <vil/vil_resample_bilin.h>
-#include <vil/vil_print.h>
+#include <vil/vil_image_view.h>
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_indent.h>
 #include <vcl_algorithm.h>
@@ -75,8 +74,8 @@ mfpf_point_finder* mfpf_hog_box_finder_builder::new_finder() const
   return new mfpf_hog_box_finder();
 }
 
-void mfpf_hog_box_finder_builder::set_angle_bins(unsigned nA_bins, 
-          bool full360, unsigned cell_size)
+void mfpf_hog_box_finder_builder::set_angle_bins(unsigned nA_bins,
+                                                 bool full360, unsigned cell_size)
 {
   nA_bins_ = nA_bins;
   full360_  = full360;
@@ -84,7 +83,7 @@ void mfpf_hog_box_finder_builder::set_angle_bins(unsigned nA_bins,
 }
 
 //: Define region size in world co-ordinates
-//  Sets up ROI to cover given box (with samples at step_size()), 
+//  Sets up ROI to cover given box (with samples at step_size()),
 //  with ref point at centre.
 void mfpf_hog_box_finder_builder::set_region_size(double wi, double wj)
 {
@@ -98,8 +97,8 @@ void mfpf_hog_box_finder_builder::set_region_size(double wi, double wj)
 
 //: Define model region as an ni x nj box
 void mfpf_hog_box_finder_builder::set_as_box(unsigned ni, unsigned nj,
-                                         double ref_x, double ref_y,
-                                         const mfpf_vec_cost_builder& builder)
+                                             double ref_x, double ref_y,
+                                             const mfpf_vec_cost_builder& builder)
 {
   set_as_box(ni,nj,ref_x,ref_y);
   cost_builder_ = builder.clone();
@@ -107,7 +106,7 @@ void mfpf_hog_box_finder_builder::set_as_box(unsigned ni, unsigned nj,
 
 //: Define model region as an ni x nj box
 void mfpf_hog_box_finder_builder::set_as_box(unsigned ni, unsigned nj,
-                                         double ref_x, double ref_y)
+                                             double ref_x, double ref_y)
 {
   ni_=ni; nj_=nj;
 
@@ -118,7 +117,7 @@ void mfpf_hog_box_finder_builder::set_as_box(unsigned ni, unsigned nj,
 
 //: Define model region as an ni x nj box
 void mfpf_hog_box_finder_builder::set_as_box(unsigned ni, unsigned nj,
-                                  const mfpf_vec_cost_builder& builder)
+                                             const mfpf_vec_cost_builder& builder)
 {
   set_as_box(ni,nj, 0.5*(ni-1),0.5*(nj-1), builder);
 }
@@ -156,9 +155,9 @@ void mfpf_hog_box_finder_builder::add_one_example(
   vgl_vector_2d<double> im_v = s_w2i.delta(p0, v1);
 
   vil_resample_bilin(image.image(),sample,
-                      im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
-                      im_v.x(),im_v.y(),
-                      sni,snj);
+                     im_p0.x(),im_p0.y(),  im_u.x(),im_u.y(),
+                     im_v.x(),im_v.y(),
+                     sni,snj);
 
   vil_image_view<float> histo_im;
   mipa_orientation_histogram(sample,histo_im,nA_bins_,nc_,full360_);
@@ -173,8 +172,8 @@ void mfpf_hog_box_finder_builder::add_one_example(
 
 //: Add one example to the model
 void mfpf_hog_box_finder_builder::add_example(const vimt_image_2d_of<float>& image,
-                                          const vgl_point_2d<double>& p,
-                                          const vgl_vector_2d<double>& u)
+                                              const vgl_point_2d<double>& p,
+                                              const vgl_vector_2d<double>& u)
 {
   if (nA_==0)
   {
@@ -211,7 +210,6 @@ vcl_cout<<"Model: "<<rp<<vcl_endl;
   // Tidy up
   delete cost;
 }
-
 
 
 //=======================================================================
@@ -262,7 +260,6 @@ bool mfpf_hog_box_finder_builder::set_from_stream(vcl_istream &is)
   }
   else ref_y_=0.5*(nj_-1);
 
-
   if (props.find("nA")!=props.end())
   {
     nA_=vul_string_atoi(props["nA"]);
@@ -279,7 +276,7 @@ bool mfpf_hog_box_finder_builder::set_from_stream(vcl_istream &is)
   {
     vcl_istringstream b_ss(props["cost_builder"]);
     vcl_auto_ptr<mfpf_vec_cost_builder> bb =
-         mfpf_vec_cost_builder::create_from_stream(b_ss);
+      mfpf_vec_cost_builder::create_from_stream(b_ss);
     cost_builder_ = bb->clone();
     props.erase("cost_builder");
   }
@@ -313,7 +310,7 @@ void mfpf_hog_box_finder_builder::print_summary(vcl_ostream& os) const
 {
   os << "{ "<<vcl_endl;
   vsl_indent_inc(os);
-  os<<vsl_indent()<<"size: " << ni_ << 'x' << nj_
+  os << vsl_indent()<<"size: " << ni_ << 'x' << nj_
      << " nc: " << nc_ <<" nA_bins: "<<nA_bins_
      << " ref_pt: (" << ref_x_ << ',' << ref_y_ << ')' <<vcl_endl;
   if (full360_) os<<vsl_indent()<<"Angle range: 0-360"<<vcl_endl;
@@ -323,13 +320,13 @@ void mfpf_hog_box_finder_builder::print_summary(vcl_ostream& os) const
   os <<vsl_indent()<< "cost_builder: ";
   if (cost_builder_.ptr()==0) os << '-'<<vcl_endl;
   else                       os << cost_builder_<<vcl_endl;
-  os <<vsl_indent()<< "nA: " << nA_ << " dA: " << dA_ << ' '<<vcl_endl;
-  os <<vsl_indent();
+  os <<vsl_indent()<< "nA: " << nA_ << " dA: " << dA_ << ' '<<vcl_endl
+     <<vsl_indent();
   mfpf_point_finder_builder::print_summary(os);
-  os <<vcl_endl;
-  os <<vsl_indent()<<"overlap_f: "<<overlap_f_<<vcl_endl;
+  os <<vcl_endl
+     <<vsl_indent()<<"overlap_f: "<<overlap_f_<<vcl_endl;
   vsl_indent_dec(os);
-  os <<vsl_indent()<< "}";
+  os <<vsl_indent()<< '}';
 }
 
 //: Version number for I/O
