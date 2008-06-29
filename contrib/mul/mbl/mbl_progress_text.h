@@ -3,18 +3,14 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
-
 //:
 // \file
 // \brief Progress class that outputs simple text reporting on progress
 // \author Graham Vincent and Kevin de Souza
 // \date 25 Feb 2005
 
-
 #include <vcl_iostream.h>
 #include <mbl/mbl_progress.h>
-
 
 //========================================================================
 //: Progress object that outputs simple text reporting on progress

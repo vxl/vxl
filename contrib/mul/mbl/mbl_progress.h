@@ -3,7 +3,6 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif
-
 //:
 // \file
 // \brief  A base for classes which wish to take some action during a lengthy operation.
