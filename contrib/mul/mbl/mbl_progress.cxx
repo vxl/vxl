@@ -1,10 +1,10 @@
+#include "mbl_progress.h"
+//:
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
 
-#include "mbl_progress.h"
 #include <vcl_config_compiler.h>
-#include <vsl/vsl_indent.h>
 
 
 //=======================================================================
