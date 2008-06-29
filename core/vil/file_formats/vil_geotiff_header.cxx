@@ -1,6 +1,8 @@
 #include "vil_geotiff_header.h"
+//:
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
+#include <vcl_iostream.h>
 #include <geo_tiffp.h>
 #include <geotiffio.h>
 #include <geovalues.h>
