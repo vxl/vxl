@@ -1,7 +1,5 @@
 #include "bwm_lidar_algo.h"
 
-#include <vil/vil_image_resource.h>
-#include <vil/vil_image_resource_sptr.h>
 #include <vil/vil_image_view.h>
 #include <vil/algo/vil_histogram.h>
 
@@ -92,37 +90,37 @@ void bwm_lidar_algo::label_lidar(vil_image_view<float> first_ret,
     }
   }
 
-  // TODO: clean up with some morphology- MATLAB code:
+#if 0  // TODO: clean up with some morphology- MATLAB code:
 
-//veg = imdilate(imerode(veg0,ones(3)),ones(3));
-//
-//
-//% erode to try and disconect thin patches of trees
-//bld0 = imerode(bld0,ones(3));
-//
-//labeled = bwlabel(bld0);
-//props = regionprops(labeled,'area');
-//nregions = length(props);
-//bld1 = zeros(size(bld0));
-//for i=1:nregions
-//    if (props(i).Area > min_bld_area)
-//        bld1 = bld1 | (labeled == i);
-//    end
-//end
-//% dilate buildings to get edges back
-//bld2 = imdilate(bld1,ones(5)) & ~gnd & ~veg;
-//bld = bld2;
-//
-//
-//% dilate vegitation mask, dont overtake buldings
-//veg = imdilate(veg,ones(3)) & ~bld;
-//
-//% swallow up any small unclassified points with ground
-//gnd = imdilate(gnd,ones(3)) & ~(veg | bld);
-//
-//% label rest as vegitation
-//veg = veg | ~(bld | gnd);
+  veg = imdilate(imerode(veg0,ones(3)),ones(3));
 
+  % erode to try and disconect thin patches of trees
+  bld0 = imerode(bld0,ones(3));
+
+  labeled = bwlabel(bld0);
+  props = regionprops(labeled,'area');
+  nregions = length(props);
+  bld1 = zeros(size(bld0));
+  for i=1:nregions
+      if (props(i).Area > min_bld_area)
+          bld1 = bld1 | (labeled == i);
+      end
+  end
+  % dilate buildings to get edges back
+  bld2 = imdilate(bld1,ones(5)) & ~gnd & ~veg;
+  bld = bld2;
+
+
+  % dilate vegetation mask, dont overtake buldings
+  veg = imdilate(veg,ones(3)) & ~bld;
+
+  % swallow up any small unclassified points with ground
+  gnd = imdilate(gnd,ones(3)) & ~(veg | bld);
+
+  % label rest as vegitation
+  veg = veg | ~(bld | gnd);
+
+#endif // 0
 
   return;
 }

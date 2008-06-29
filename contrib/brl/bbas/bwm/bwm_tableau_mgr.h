@@ -18,9 +18,6 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_dialog_extensions.h>
-#if 0
-#include <vil/vil_image_resource_sptr.h>
-#endif
 
 #include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/vpgl_rational_camera.h>

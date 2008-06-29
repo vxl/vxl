@@ -8,7 +8,6 @@
 #include "../bvxm_world_params.h"
 #include "../bvxm_mog_grey_processor.h"
 #include <vil/vil_image_view.h>
-#include <vil/vil_image_resource_sptr.h>
 #include <vpgl/vpgl_proj_camera.h>
 
 
@@ -22,9 +21,9 @@ static void test_voxel_world_update()
   vgl_point_3d<float> grid_corner(0,0,0);
   vgl_vector_3d<unsigned> grid_size(300,300,120);
   float vox_len = 0.5;
-
-  //bvxm_world_params::appearance_model_type apm_type = bvxm_world_params::mog_grey;
-
+#if 0
+  bvxm_world_params::appearance_model_type apm_type = bvxm_world_params::mog_grey;
+#endif
 
   // create the world
   bvxm_voxel_world  world;
