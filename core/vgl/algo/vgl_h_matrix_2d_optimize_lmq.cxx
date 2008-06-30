@@ -38,7 +38,10 @@ optimize_h(vcl_vector<vgl_homg_point_2d<double> > const& points1,
   lm.set_f_tolerance(ftol_);
   lm.set_g_tolerance(gtol_);
   bool success = lm.minimize(hv);
-  lm.diagnose_outcome(vcl_cout);
+  if (verbose_) 
+  {
+    lm.diagnose_outcome(vcl_cout);
+  }
 
   if (success)
     h_optimized.set(hv.data_block());
