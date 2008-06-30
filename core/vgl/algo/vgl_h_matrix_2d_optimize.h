@@ -62,8 +62,8 @@ class projection_lsqf : public vnl_least_squares_function
       double xp = to_points_[i].x(), yp = to_points_[i].y();
       double xproj = p_proj.x(), yproj = p_proj.y();
       proj_err[k]=(xp-xproj);  proj_err[k+1]=(yp-yproj);
-      proj_err[2*n_]=1.0-hv.magnitude();
     }
+    proj_err[2*n_]=1.0-hv.magnitude();
   }
 };
 
