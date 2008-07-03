@@ -50,6 +50,9 @@
 //   Ibrahim Eden - 03/28/2008 - added the method:
 //           bool save_edges_raw(vcl_string filename);
 //
+//   Ibrahim Eden - 06/03/2008 - added the method:
+//           bool save_edges_vff(vcl_string filename);
+//
 //   Ozge C. Ozcanli - 04/18/2008 - added the method:
 //           bool mog_most_probable_image(bvxm_image_metadata const& camera, bvxm_voxel_slab_base_sptr& mog_image, unsigned bin_index);
 //
@@ -194,6 +197,9 @@ class bvxm_voxel_world: public vbl_ref_count
 
   //: save the edge probability grid in a ".raw" format readable by Drishti volume rendering software
   bool save_edges_raw(vcl_string filename);
+
+  //: save the edge probability grid as a 3-d tiff image
+  bool save_edges_vff(vcl_string filename);
 
   //: save the occupancy grid as a 3-d tiff image
   bool save_occupancy_vff(vcl_string filename);

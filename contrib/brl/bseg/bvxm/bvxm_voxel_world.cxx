@@ -182,6 +182,69 @@ bool bvxm_voxel_world::save_occupancy_raw(vcl_string filename)
   return true;
 }
 
+//: save the edge probability grid as an 8-bit 3-d vff image
+bool bvxm_voxel_world::save_edges_vff(vcl_string filename)
+{
+  // open file for binary writing
+  vcl_fstream ofs(filename.c_str(),vcl_ios::binary | vcl_ios::out);
+  if (!ofs.is_open()) {
+    vcl_cerr << "error opening file " << filename << " for write!\n";
+    return false;
+  }
+  bvxm_world_params_sptr params = this->get_params();
+
+  typedef bvxm_voxel_traits<EDGES>::voxel_datatype edges_datatype;
+
+  bvxm_voxel_grid<edges_datatype> *edges_grid =
+    dynamic_cast<bvxm_voxel_grid<edges_datatype>*>(get_grid<EDGES>(0).ptr());
+
+  vxl_uint_32 nx = edges_grid->grid_size().x();
+  vxl_uint_32 ny = edges_grid->grid_size().y();
+  vxl_uint_32 nz = edges_grid->grid_size().z();
+
+  // write header
+  vcl_stringstream header;
+  header << "ncaa\n"
+         << "title=bvxm edge probabilities;\n"
+         << "rank=3;\n"
+         << "type=raster;\n"
+         << "format=slice;\n"
+         << "bits=8;\n"
+         << "bands=1;\n"
+         << "extent=" << nx << ' ' << ny << ' ' << nz << ";\n"
+         << "size=" << nx << ' ' << ny << ' ' << nz << ";\n"
+         << "aspect=1.0 1.0 1.0;\n"
+         << "origin=0 0 0;\n"
+         << "rawsize=" << nx*ny*nz << ";\n\f\n";
+
+  vcl_string header_string = header.str();
+  unsigned header_len = header_string.size();
+
+  ofs.write(header_string.c_str(),header_len);
+
+  // write data
+  // iterate through slabs and fill in memory array
+  char *edges_array = new char[nx*ny*nz];
+
+  bvxm_voxel_grid<edges_datatype>::iterator edges_it = edges_grid->begin();
+  for (unsigned k=nz-1; edges_it != edges_grid->end(); ++edges_it, --k) {
+    vcl_cout << '.';
+    for (unsigned i=0; i<(*edges_it).nx(); ++i) {
+      for (unsigned j=0; j < (*edges_it).ny(); ++j) {
+        edges_array[k*nx*ny + j*nx + i] = (unsigned char)((*edges_it)(i,j) * 255.0);;
+      }
+    }
+  }
+  vcl_cout << vcl_endl;
+  ofs.write(reinterpret_cast<char*>(edges_array),sizeof(unsigned char)*nx*ny*nz);
+
+  ofs.close();
+
+  delete[] edges_array;
+
+  return true;
+}
+
 //: save the edge probability grid in a ".raw" format readable by Drishti volume rendering software
 bool bvxm_voxel_world::save_edges_raw(vcl_string filename)
 {
