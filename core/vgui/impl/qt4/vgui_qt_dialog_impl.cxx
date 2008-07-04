@@ -39,7 +39,6 @@ bool vgui_qt_dialog_impl::ask()
    bool use_ok_button = !ok_button_text_. empty ();
    bool use_cancel_button =  !cancel_button_text_. empty ();
 
-   QPushButton *ok, *cancel;
    QVBoxLayout* total = new QVBoxLayout;
    this->setLayout(total);
    QVBoxLayout* layout = new QVBoxLayout;
@@ -51,6 +50,7 @@ bool vgui_qt_dialog_impl::ask()
      total->addLayout(lower);
      lower->addStretch(1);
 
+     QPushButton *ok = 0;
      if (use_ok_button)
      {
        ok = new QPushButton( ok_button_text_.c_str(), this );
@@ -60,15 +60,15 @@ bool vgui_qt_dialog_impl::ask()
      }
      if (use_cancel_button)
      {
-       cancel = new QPushButton( cancel_button_text_.c_str(), this );
+       QPushButton *cancel = new QPushButton(cancel_button_text_.c_str(), this);
        connect( cancel, SIGNAL(clicked()), SLOT(reject()) );
        lower->addWidget(cancel, 0);
        lower->addStretch(1);
-     }
-     if (use_ok_button && use_cancel_button)
-     {
-       ok->setMinimumSize(cancel->width(), cancel->height());
-       ok->setMaximumSize(cancel->width(), cancel->height());
+       if (use_ok_button)
+       {
+         ok->setMinimumSize(cancel->width(), cancel->height());
+         ok->setMaximumSize(cancel->width(), cancel->height());
+       }
      }
    }
 
@@ -321,7 +321,6 @@ void vgui_qt_filebrowser_impl::get_a_file()
 vgui_qt_colorchooser_impl::vgui_qt_colorchooser_impl(QWidget* parent, const char* txt, vcl_string& val)
 : QGroupBox(txt, parent), value_(val)
 {
-
   frame_ = new QFrame;
   frame_->setFrameStyle(QFrame::Panel | QFrame::Raised);
   frame_->setMinimumSize( 32, 32 );
@@ -332,12 +331,12 @@ vgui_qt_colorchooser_impl::vgui_qt_colorchooser_impl(QWidget* parent, const char
   sval >> r >> g >> b;
   if (sval.good())
     sval >> a;
-  
+
   color_.setRgb(static_cast<int>(255*r),
                 static_cast<int>(255*g),
                 static_cast<int>(255*b),
                 static_cast<int>(255*a));
-  
+
   QPushButton* pick = new QPushButton("Pick");
   rbox_ = new QSpinBox;
   rbox_->setRange(0,255);
@@ -351,18 +350,18 @@ vgui_qt_colorchooser_impl::vgui_qt_colorchooser_impl(QWidget* parent, const char
   QGridLayout *grid = new QGridLayout;
   QHBoxLayout *hbox = new QHBoxLayout;
   hbox->addWidget(frame_);
-  hbox->addWidget(pick);  
+  hbox->addWidget(pick);
   grid->addLayout(hbox,1,0,1,4);
   grid->addWidget(new QLabel("R"),0,0);
   grid->addWidget(rbox_,0,1);
-  grid->addWidget(new QLabel("G"),0,2);  
+  grid->addWidget(new QLabel("G"),0,2);
   grid->addWidget(gbox_,0,3);
-  grid->addWidget(new QLabel("B"),0,4); 
+  grid->addWidget(new QLabel("B"),0,4);
   grid->addWidget(bbox_,0,5);
-  grid->addWidget(new QLabel("A"),1,4); 
+  grid->addWidget(new QLabel("A"),1,4);
   grid->addWidget(abox_,1,5);
   this->setLayout(grid);
-  
+
   update_color_string();
 
   connect(pick, SIGNAL(clicked()), this, SLOT(get_a_color()));
@@ -376,18 +375,18 @@ vgui_qt_colorchooser_impl::vgui_qt_colorchooser_impl(QWidget* parent, const char
 //-----------------------------------------------------------------------------
 void vgui_qt_colorchooser_impl::update_color_string()
 {
-  if(color_.isValid()){   
+  if (color_.isValid()) {
     int r,g,b,a;
     color_.getRgb(&r,&g,&b,&a);
     vcl_stringstream sval;
-    sval << r/255.0 << " " << g/255.0 << " " << b/255.0 << " " << a/255.0;
+    sval << r/255.0 << ' ' << g/255.0 << ' ' << b/255.0 << ' ' << a/255.0;
     value_ = sval.str();
-    
+
     rbox_->setValue(r);
     gbox_->setValue(g);
     bbox_->setValue(b);
     abox_->setValue(a);
-    
+
     frame_->setPalette(QPalette(color_,color_));
   }
 }
