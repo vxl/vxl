@@ -59,7 +59,7 @@ bool vidl_ffmpeg_codec::probe(vcl_string const& fname)
 
   // Find a video stream. Use the first one we find.
   vid_index_ = -1;
-  for ( int i = 0; i < fmt_cxt_->nb_streams; ++i ) {
+  for ( unsigned int i = 0; i < fmt_cxt_->nb_streams; ++i ) {
 #if LIBAVFORMAT_BUILD <= 4628
     AVCodecContext *enc = &fmt_cxt_->streams[i]->codec;
 #else
