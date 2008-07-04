@@ -65,8 +65,8 @@ void mbl_matrix_product_a_bt(vnl_matrix<double>& ABt,
                              const vnl_matrix<double>& B)
 {
   int nc1 = A.columns();
-  int nc2 = B.columns();
 #ifndef NDEBUG
+  int nc2 = B.columns();
   if ( nc2 != nc1 )
   {
     vcl_cerr<<"mbl_matrix_product_a_bt : B.columns != A.columns\n";

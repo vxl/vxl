@@ -12,6 +12,8 @@ INCLUDE_DIRECTORIES( ${vxl_BINARY_DIR}/contrib/mul )
 
 
 SET(mbl_sources
+  mbl_config.h.in
+
   mbl_add_all_loaders.cxx               mbl_add_all_loaders.h
   mbl_gamma.cxx                         mbl_gamma.h
   mbl_matrix_products.cxx               mbl_matrix_products.h
@@ -24,8 +26,8 @@ SET(mbl_sources
   mbl_stats_nd.cxx                      mbl_stats_nd.h
   mbl_sum_1d.cxx                        mbl_sum_1d.h
   mbl_parse_block.cxx                   mbl_parse_block.h
-  mbl_parse_sequence.h
-  mbl_parse_tuple.h
+                                        mbl_parse_sequence.h
+                                        mbl_parse_tuple.h
   mbl_read_props.cxx                    mbl_read_props.h
   mbl_read_multi_props.cxx              mbl_read_multi_props.h
   mbl_lda.cxx                           mbl_lda.h
@@ -35,7 +37,6 @@ SET(mbl_sources
   mbl_read_double.cxx                   mbl_read_double.h
   mbl_read_str.cxx                      mbl_read_str.h
   mbl_read_yes.cxx                      mbl_read_yes.h
-  # mbl_get.cxx                           mbl_get.h
   mbl_thin_plate_spline_2d.cxx          mbl_thin_plate_spline_2d.h
   mbl_thin_plate_spline_3d.cxx          mbl_thin_plate_spline_3d.h
   mbl_thin_plate_spline_weights_3d.cxx  mbl_thin_plate_spline_weights_3d.h
@@ -68,11 +69,11 @@ SET(mbl_sources
   mbl_progress_null.cxx                 mbl_progress_null.h
   mbl_progress_composite.cxx            mbl_progress_composite.h
   mbl_progress_hierarchy.cxx            mbl_progress_hierarchy.h
-  mbl_progress_callback.h
-  mbl_exception.h                       mbl_exception.cxx
+                                        mbl_progress_callback.h
+  mbl_exception.cxx                     mbl_exception.h
   mbl_rvm_regression_builder.cxx        mbl_rvm_regression_builder.h
-  mbl_test.h                            mbl_test.cxx
-  mbl_log.h                             mbl_log.cxx
+  mbl_test.cxx                          mbl_test.h
+  mbl_log.cxx                           mbl_log.h
 
   mbl_chord.h
   mbl_chord_3d.h
@@ -89,19 +90,14 @@ SET(mbl_sources
   mbl_stl_pred.h
   mbl_vector_distance.h
 
-  mbl_config.h.in
   mbl_mod_gram_schmidt.cxx             mbl_mod_gram_schmidt.h
   mbl_linear_interpolator.cxx          mbl_linear_interpolator.h
   mbl_minimum_spanning_tree.cxx        mbl_minimum_spanning_tree.h
   mbl_stepwise_regression.cxx          mbl_stepwise_regression.h
   mbl_dyn_prog.cxx                     mbl_dyn_prog.h
-  
-  # mbl_vector_txt_files.cxx             mbl_vector_txt_files.h
+
   mbl_save_text_file.txx               mbl_save_text_file.h
   mbl_load_text_file.txx               mbl_load_text_file.h
-  #  mbl_replace_string.cxx               mbl_replace_string.h
-  #  mbl_convert_vector_ims.cxx           mbl_convert_vector_ims.h
-
 )
 
 AUX_SOURCE_DIRECTORY(Templates mbl_sources)
