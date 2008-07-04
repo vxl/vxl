@@ -52,7 +52,7 @@
 * {
 *   vgui::init(argc, argv);
 *   vgui_image_tableau_new image("my-image.jpg");
-*   vgui_viewer2D_new viewer(image);
+*   vgui_viewer2D_tableau_new viewer(image);
 *   return vgui::run(viewer, image->width(), image->height());
 * }
 * \endverbatim
