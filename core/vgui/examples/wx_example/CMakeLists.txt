@@ -1,19 +1,21 @@
 PROJECT(wx_example)
 
-SET(WXWIDGETS_USE_LIBS base core gl)
-INCLUDE(${MODULE_PATH}/NewCMake/FindwxWidgets.cmake)
-IF(WXWIDGETS_FOUND)
-  IF(WXWIDGETS_INCLUDE_DIR)
-    INCLUDE_DIRECTORIES(${WXWIDGETS_INCLUDE_DIR})
-  ENDIF(WXWIDGETS_INCLUDE_DIR)
+#SET(WXWIDGETS_USE_LIBS base core gl)
+#FIND_PACKAGE(wxWidgets)
+#INCLUDE(${MODULE_PATH}/NewCMake/FindwxWidgets.cmake)
+FIND_PACKAGE(wxWidgets COMPONENTS base core gl)
+IF(wxWidgets_FOUND)
+  IF(wxWidgets_INCLUDE_DIRS)
+    INCLUDE_DIRECTORIES(${wxWidgets_INCLUDE_DIRS})
+  ENDIF(wxWidgets_INCLUDE_DIRS)
 
-  IF(WXWIDGETS_CXX_FLAGS)
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${WXWIDGETS_CXX_FLAGS}")
-  ENDIF(WXWIDGETS_CXX_FLAGS)
+  IF(wxWidgets_CXX_FLAGS)
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${wxWidgets_CXX_FLAGS}")
+  ENDIF(wxWidgets_CXX_FLAGS)
 
-  IF(WXWIDGETS_LINK_DIRECTORIES)
-    LINK_DIRECTORIES(${WXWIDGETS_LINK_DIRECTORIES})
-  ENDIF(WXWIDGETS_LINK_DIRECTORIES)
+  IF(wxWidgets_LINK_DIRECTORIES)
+    LINK_DIRECTORIES(${wxWidgets_LINK_DIRECTORIES})
+  ENDIF(wxWidgets_LINK_DIRECTORIES)
 
   # Simple example not using the Document/View architecture.
   SET(wx_childview_example_sources
@@ -23,9 +25,9 @@ IF(WXWIDGETS_FOUND)
 
   ADD_EXECUTABLE(wx_childview_example WIN32 ${wx_childview_example_sources})
   TARGET_LINK_LIBRARIES(wx_childview_example vgui)
-  IF(WXWIDGETS_LIBRARIES)
-    TARGET_LINK_LIBRARIES(wx_childview_example ${WXWIDGETS_LIBRARIES})
-  ENDIF(WXWIDGETS_LIBRARIES)
+  IF(wxWidgets_LIBRARIES)
+    TARGET_LINK_LIBRARIES(wx_childview_example ${wxWidgets_LIBRARIES})
+  ENDIF(wxWidgets_LIBRARIES)
 
   # Document/View architecture example
   SET(wx_docview_example_sources
@@ -37,7 +39,7 @@ IF(WXWIDGETS_FOUND)
 
   ADD_EXECUTABLE(wx_docview_example WIN32 ${wx_docview_example_sources})
   TARGET_LINK_LIBRARIES(wx_docview_example vgui)
-  IF(WXWIDGETS_LIBRARIES)
-    TARGET_LINK_LIBRARIES(wx_docview_example ${WXWIDGETS_LIBRARIES})
-  ENDIF(WXWIDGETS_LIBRARIES)
-ENDIF(WXWIDGETS_FOUND)
+  IF(wxWidgets_LIBRARIES)
+    TARGET_LINK_LIBRARIES(wx_docview_example ${wxWidgets_LIBRARIES})
+  ENDIF(wxWidgets_LIBRARIES)
+ENDIF(wxWidgets_FOUND)
