@@ -35,6 +35,8 @@
 #include <bvxm/pro/bvxm_compare_rpc_process.h>
 #include <bvxm/pro/bvxm_ocp_compare_process.h>
 #include <bvxm/pro/bvxm_ocp_hist_process.h>
+#include <bvxm/pro/bvxm_pmap_hist_process.h>
+#include <bvxm/pro/bvxm_pmap_ratio_process.h>
 #include <bvxm/pro/bvxm_roc_process.h>
 
 
@@ -81,8 +83,9 @@ register_processes(PyObject *self, PyObject *args)
   REG_PROCESS(bvxm_compare_rpc_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_ocp_compare_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_ocp_hist_process, bprb_batch_process_manager);
+  REG_PROCESS(bvxm_pmap_hist_process, bprb_batch_process_manager);
+  REG_PROCESS(bvxm_pmap_ratio_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_roc_process, bprb_batch_process_manager);
- 
 
   Py_INCREF(Py_None);
   return Py_None;
