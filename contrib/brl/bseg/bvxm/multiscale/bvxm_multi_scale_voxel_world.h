@@ -28,7 +28,7 @@
 #include <bvxm/bvxm_voxel_traits.h>
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_util.h>
-
+#include <bvxm/multiscale/bvxm_multiscale_util.h>
 // These includes are for the implementations of the templated methods,
 // which should be moved from the header file if possible.
 #include <vcl_iostream.h>
