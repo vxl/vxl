@@ -9,6 +9,7 @@
 #include <vcl_sstream.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_box_2d.h>
 
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vil/vil_image_view_base.h>
@@ -33,7 +34,7 @@
 #include "bvxm_image_metadata.h"
 #include "bvxm_util.h"
 #include "bvxm_lidar_camera.h"
-
+//#define DEBUG
 
 //: Destructor
 bvxm_voxel_world::~bvxm_voxel_world()
@@ -412,10 +413,10 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
 
   bvxm_voxel_grid<float>::iterator preX_slab_it = preX.begin();
   bvxm_voxel_grid<float>::iterator PLvisX_slab_it = PLvisX.begin();
-
+  double p_max = 0.0;
   for (unsigned k_idx=0; k_idx<(unsigned)grid_size.z(); ++k_idx, ++ocp_slab_it, ++preX_slab_it, ++PLvisX_slab_it)
   {
-    vcl_cout << '.';
+    vcl_cout << k_idx << vcl_endl;
 
     // backproject image onto voxel plane
     bvxm_util::warp_slab_bilinear(image_slab, H_plane_to_img[k_idx], frame_backproj);
@@ -431,9 +432,52 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
     bvxm_util::warp_slab_bilinear(visX_accum, H_plane_to_img[k_idx], visX);
 
     // initialize PLvisX with PL(X)
-    vgl_point_3d<float> local_xyz = voxel_index_to_xyz(0,0,k_idx);
-    bvxm_voxel_slab<float> PL = lidar_processor.prob_density(local_xyz.z(),frame_backproj);
+    
+    bvxm_voxel_slab<float> PL(frame_backproj.nx(), frame_backproj.ny(), frame_backproj.nz());
+    PL.fill(0.0);
+    vil_image_view_base_sptr lidar = metadata.img;
+    vnl_vector_fixed<float,3> sigmas(.5, .5, 0.0009);
+    vgl_point_3d<float> local_xyz = voxel_index_to_xyz(0, 0, k_idx);
 
+    for (unsigned i_idx=0; i_idx<frame_backproj.nx(); i_idx++){
+      for (unsigned j_idx=0; j_idx<frame_backproj.ny(); j_idx++) {
+        vcl_vector<vgl_homg_point_2d<double> > vp(4);
+        int i = i_idx+1;
+        int j = j_idx-1;
+        vp[0] = vgl_homg_point_2d<double>(i, j);
+        vp[1] = vgl_homg_point_2d<double>(i+1, j);
+        vp[2] = vgl_homg_point_2d<double>(i, j+1);
+        vp[3] = vgl_homg_point_2d<double>(i+1, j+1);
+
+        vgl_h_matrix_2d<double> h_max = H_plane_to_img[k_idx];
+        vgl_h_matrix_2d<double> h_min;
+        if (k_idx == (unsigned)grid_size.z()-1)
+          h_min = H_plane_to_img[k_idx];
+        else
+          h_min = H_plane_to_img[k_idx+1];
+        vgl_box_2d<double> lidar_roi;
+
+        for (unsigned i=0; i<4; i++) {
+          vgl_homg_point_2d<double> img_pos_h_min = h_min*vp[i];
+          vgl_point_2d<double> img_pos_min(img_pos_h_min);
+          lidar_roi.add(img_pos_min);
+        }
+
+        float p = lidar_processor.prob_density(lidar, local_xyz.z(), sigmas, lidar_roi, params_->voxel_length());
+#ifdef DEBUG
+        if (p > p_max) {
+          p_max = p;
+          vcl_cout << "-------------max_p=" << p << vcl_endl;
+        }
+        if (p >1.0) {
+          vcl_cout << "ERROR!" << vcl_endl;
+          p=max_vox_prob;
+        }
+#endif
+        PL(i_idx, j_idx) = p;
+      }
+    }
+    
     // now multiply by visX
     bvxm_util::multiply_slabs(visX,PL,*PLvisX_slab_it);
 
@@ -444,11 +488,13 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
     // multiply to get PLPX
     bvxm_util::multiply_slabs(PL,*ocp_slab_it,PLPX);
 #ifdef DEBUG
-    vcl_stringstream ss1, ss2;
+    vcl_stringstream ss1, ss2, ss3;
     ss1 << "PL_" << k_idx <<".tiff";
-    ss2 << "PX_" << k_idx <<".tiff";
+    ss2 <<"PX_" << k_idx <<".tiff";
+    ss3 << "PL_P" << k_idx <<".tiff";
     bvxm_util::write_slab_as_image(PL,ss1.str());
     bvxm_util::write_slab_as_image(*ocp_slab_it,ss2.str());
+    //bvxm_util::write_slab_as_image(PL_p,ss3.str());
 #endif
     // warp PLPX back to image domain
     bvxm_util::warp_slab_bilinear(PLPX, H_img_to_plane[k_idx], PLPX_img);
@@ -511,7 +557,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
     // transform visX_sum to current level
     bvxm_util::warp_slab_bilinear(visX_accum, H_plane_to_img[k_idx], visX_accum_vox);
 
-    const float preX_sum_thresh = 0.01f;
+    const float preX_sum_thresh = 0.0f;
 
     bvxm_voxel_slab<float>::const_iterator preX_it = preX_slab_it->begin(), PLvisX_it = PLvisX_slab_it->begin(), preX_sum_it = preX_accum_vox.begin(), visX_sum_it = visX_accum_vox.begin();
     bvxm_voxel_slab<float>::iterator PX_it = ocp_slab_it2->begin();
@@ -521,8 +567,8 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
       if (*preX_sum_it > preX_sum_thresh) {
         float multiplier = (*PLvisX_it + *preX_it) / *preX_sum_it;
         // leave out normalization for now - results seem a little better without it.  -DEC
-        float ray_norm = 1 - *visX_sum_it; //normalize based on probability that a surface voxel is located along the ray. This was not part of the original Pollard + Mundy algorithm.
-        *PX_it *= multiplier * ray_norm;
+        //float ray_norm = 1 - *visX_sum_it; //normalize based on probability that a surface voxel is located along the ray. This was not part of the original Pollard + Mundy algorithm.
+        *PX_it *= multiplier; // * ray_norm;
       }
       if (*PX_it < min_vox_prob)
         *PX_it = min_vox_prob;
