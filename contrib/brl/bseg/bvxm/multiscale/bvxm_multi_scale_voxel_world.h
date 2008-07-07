@@ -686,7 +686,7 @@ bool bvxm_multi_scale_voxel_world::inv_pixel_range_probability(bvxm_image_metada
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
     for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
     {
-      dbvxm_util::compute_plane_image_H(observation.camera,params,z,Hp2i,Hi2p);
+      bvxm_multiscale_util::compute_plane_image_H(observation.camera,params,z,Hp2i,Hi2p,scale);
       H_plane_to_img.push_back(Hp2i);
       H_img_to_plane.push_back(Hi2p);
     }
@@ -1034,7 +1034,7 @@ bool bvxm_multi_scale_voxel_world::virtual_view(bvxm_image_metadata const& origi
   {
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
     // real camera
-    bvxm_util::compute_plane_image_H(original_view.camera,params_,z,Hp2i,Hi2p);
+    bvxm_multiscale_util::compute_plane_image_H(original_view.camera,params_,z,Hp2i,Hi2p,scale);
     H_plane_to_img.push_back(Hp2i);
     H_img_to_plane.push_back(Hi2p);
     // virtual camera

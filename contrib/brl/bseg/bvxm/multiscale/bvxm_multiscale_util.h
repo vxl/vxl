@@ -83,11 +83,11 @@ class bvxm_multiscale_util
                                  vgl_h_matrix_2d<double> invH,
                                  bvxm_voxel_slab<T> &slab_out);
 
- /* template<class T>
+  template<class T>
   static void warp_slab_nearest_neighbour(bvxm_voxel_slab<T> const& slab_in,
                                vgl_h_matrix_2d<double> invH, bvxm_voxel_slab<T> &slab_out);
 
-  template<class T, unsigned N>
+ /* template<class T, unsigned N>
   static bool img_to_slab(vil_image_view_base_sptr image,
                           bvxm_voxel_slab<vnl_vector_fixed<T,N> > &slab);
 
