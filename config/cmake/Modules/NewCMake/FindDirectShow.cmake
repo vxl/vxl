@@ -97,6 +97,11 @@ SET(CMAKE_REQUIRED_LIBRARIES)
 #---------------------------------------------------------------------
 # FIXME: When cmake_minimum_version reaches 2.6.0 the
 #        FindPackageHandleStandardArgs module can be used.
+IF(CMAKE_MINIMUM_REQUIRED_VERSION GREATER 2.5)
+  MESSAGE(FATAL_ERROR
+    "Uncomment code below: FindPackageHandleStandardArgs is now available.")
+ENDIF(CMAKE_MINIMUM_REQUIRED_VERSION GREATER 2.5)
+
 #INCLUDE(FindPackageHandleStandardArgs)
 #FIND_PACKAGE_HANDLE_STANDARD_ARGS(
 #  DIRECTSHOW
