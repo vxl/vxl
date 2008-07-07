@@ -70,9 +70,9 @@ class bvxm_world_params : public vbl_ref_count
   inline vgl_vector_3d<unsigned int> num_voxels(unsigned scale=0) {
     vgl_vector_3d<unsigned int> num_voxels_scaled;
     double divisor=vcl_pow(2.0,-(double)scale); // actually, inverse of divisor
-    num_voxels_scaled.set((unsigned int)(num_voxels_.x()*divisor+1-1e-9),
-                          (unsigned int)(num_voxels_.y()*divisor+1-1e-9),
-                          (unsigned int)(num_voxels_.z()*divisor+1-1e-9));
+    num_voxels_scaled.set((unsigned int)(num_voxels_.x()*divisor),
+                          (unsigned int)(num_voxels_.y()*divisor),
+                          (unsigned int)(num_voxels_.z()*divisor));
     return num_voxels_scaled;
   }
 
