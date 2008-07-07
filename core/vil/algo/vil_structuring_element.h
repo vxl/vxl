@@ -38,7 +38,7 @@ class vil_structuring_element
   void set(const vcl_vector<int>& p_i,const vcl_vector<int>& p_j);
 
   //: Set to disk of radius r
-  //  Select pixels in disk s.t. x^x+y^y<=r^r
+  //  Select pixels in disk s.t. x^x+y^y<r^r
   void set_to_disk(double r);
 
   //: Set to line along i (ilo,0)..(ihi,0)
