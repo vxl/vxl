@@ -1,4 +1,3 @@
-
 #ifndef bvxm_multi_scale_voxel_world_h_
 #define bvxm_multi_scale_voxel_world_h_
 //:
@@ -10,6 +9,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <vcl_cassert.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vsl/vsl_binary_io.h>
@@ -64,7 +64,9 @@ class bvxm_multi_scale_voxel_world: public vbl_ref_count
   //: generate the expected image from the specified viewpoint. the expected image and mask should be allocated by the caller.
   template<bvxm_voxel_type APM_T>
   bool expected_image(bvxm_image_metadata const& camera,
-    vil_image_view_base_sptr &expected, vil_image_view<float> &mask, unsigned bin_index = 0,unsigned scale = 0);
+                      vil_image_view_base_sptr &expected,
+                      vil_image_view<float> &mask,
+                      unsigned bin_index = 0,unsigned scale = 0);
 
   //: update voxel grid for edges with data from image/camera pair and return the edge probability density of pixel values
   bool update_edges(bvxm_image_metadata const& metadata,unsigned int scale);
@@ -77,25 +79,36 @@ class bvxm_multi_scale_voxel_world: public vbl_ref_count
   // Default value of 0.008 is approximately two 8-bit levels in either direction (assuming intensity is normalized 0-1)
   template<bvxm_voxel_type APM_T>
   bool inv_pixel_range_probability(bvxm_image_metadata const& observation,
-    vil_image_view<float> &inv_prob, unsigned bin_index = 0,unsigned scale = 0,float pixel_range = 0.008f);
+                                   vil_image_view<float> &inv_prob,
+                                   unsigned bin_index = 0,
+                                   unsigned scale = 0,
+                                   float pixel_range = 0.008f);
 
   //: for each pixel, return the sum along the corresponding ray of voxels that the observation was produced by the voxel.
   // Based on algorithm published in Pollard + Mundy 06.
   // The returned values are approximate samples of a probability density, with the pixel values being the independent value.
   template<bvxm_voxel_type APM_T>
   bool pixel_probability_density(bvxm_image_metadata const& observation,
-    vil_image_view<float> &pixel_probability, vil_image_view<bool> &mask,unsigned bin_index = 0, unsigned scale = 0);
+                                 vil_image_view<float> &pixel_probability,
+                                 vil_image_view<bool> &mask,
+                                 unsigned bin_index = 0,
+                                 unsigned scale = 0);
 
   //: generate the mixture of gaussians slab from the specified viewpoint. the slab should be allocated by the caller.
   template<bvxm_voxel_type APM_T>
   bool mixture_of_gaussians_image(bvxm_image_metadata const& camera,
-    bvxm_voxel_slab_base_sptr& mog_image, unsigned bin_index = 0, unsigned scale =0);
+                                  bvxm_voxel_slab_base_sptr& mog_image,
+                                  unsigned bin_index = 0,
+                                  unsigned scale =0);
 
   //: return the original image, viewed from a new viewpoint
   template<bvxm_voxel_type APM_T>
   bool virtual_view(bvxm_image_metadata const& original_view,
-    const vpgl_camera_double_sptr virtual_camera,
-    vil_image_view_base_sptr &virtual_view, vil_image_view<float> &vis_prob, unsigned bin_index = 0, unsigned scale =0);
+                    const vpgl_camera_double_sptr virtual_camera,
+                    vil_image_view_base_sptr &virtual_view,
+                    vil_image_view<float> &vis_prob,
+                    unsigned bin_index = 0,
+                    unsigned scale =0);
 
   //: return a planar approximation to the world
   vgl_plane_3d<double> fit_plane();
@@ -144,8 +157,8 @@ class bvxm_multi_scale_voxel_world: public vbl_ref_count
 
   template<bvxm_voxel_type APM_T>
   bool update_impl(bvxm_image_metadata const& metadata,
-  bool return_prob, vil_image_view<float> &pix_prob_density,
-  bool return_mask, vil_image_view<bool> &mask, unsigned bin_index, unsigned scale);
+                   bool return_prob, vil_image_view<float> &pix_prob_density,
+                   bool return_mask, vil_image_view<bool> &mask, unsigned bin_index, unsigned scale);
 };
 
 
@@ -198,7 +211,7 @@ bvxm_voxel_grid_base_sptr bvxm_multi_scale_voxel_world::get_grid(unsigned bin_in
         vcl_map<unsigned, vcl_map<unsigned, bvxm_voxel_grid_base_sptr > > bin_map;
 
         // look for existing appearance model grids in the directory
-        
+
 
         vcl_string storage_directory = params_->model_dir();
 
@@ -235,7 +248,7 @@ bvxm_voxel_grid_base_sptr bvxm_multi_scale_voxel_world::get_grid(unsigned bin_in
                 vcl_map<unsigned, bvxm_voxel_grid_base_sptr > scale_map;
                 scale_map.insert(vcl_make_pair((unsigned)scale, grid));
 
-                if(bin_map.find(bin_idx)==bin_map.end())
+                if (bin_map.find(bin_idx)==bin_map.end())
                     bin_map.insert(vcl_make_pair((unsigned)bin_idx ,scale_map));
                 else
                     bin_map[bin_idx][scale]=grid;
@@ -278,7 +291,7 @@ bvxm_voxel_grid_base_sptr bvxm_multi_scale_voxel_world::get_grid(unsigned bin_in
         grid_map_[VOX_T].insert(vcl_make_pair(bin_index,scale_map));
     }
 
-    
+
     vcl_map<unsigned, bvxm_voxel_grid_base_sptr> scale_map = grid_map_[VOX_T][bin_index];
 
     if (scale_map.find(scale_idx) == scale_map.end())
@@ -301,7 +314,7 @@ bvxm_voxel_grid_base_sptr bvxm_multi_scale_voxel_world::get_grid(unsigned bin_in
 
         //Insert voxel grid into map
         bvxm_voxel_grid_base_sptr grid_sptr = grid;
-        
+
 
         grid_map_[VOX_T][bin_index].insert(vcl_make_pair(scale_idx, grid_sptr));
     }
@@ -323,7 +336,9 @@ bool bvxm_multi_scale_voxel_world::update(bvxm_image_metadata const& observation
 // Update a voxel grid with data from image/camera pair and return probability density of pixel values.
 template<bvxm_voxel_type APM_T>
 bool bvxm_multi_scale_voxel_world::update(bvxm_image_metadata const& observation,
-                              vil_image_view<float> &pix_prob_density, vil_image_view<bool> &mask, unsigned bin_index, unsigned scale)
+                                          vil_image_view<float> &pix_prob_density,
+                                          vil_image_view<bool> &mask,
+                                          unsigned bin_index, unsigned scale)
 {
     assert(scale < params_->max_scale());
   // check image sizes
@@ -340,10 +355,10 @@ bool bvxm_multi_scale_voxel_world::update(bvxm_image_metadata const& observation
 // Update voxel grid with data from image/camera pair and return probability density of pixel values.
 template<bvxm_voxel_type APM_T>
 bool bvxm_multi_scale_voxel_world::update_impl(bvxm_image_metadata const& metadata,
-                                   bool return_prob,
-                                   vil_image_view<float> &pix_prob_density,
-                                   bool return_mask,
-                                   vil_image_view<bool> &mask, unsigned bin_index, unsigned scale)
+                                               bool return_prob,
+                                               vil_image_view<float> &pix_prob_density,
+                                               bool return_mask,
+                                               vil_image_view<bool> &mask, unsigned bin_index, unsigned scale)
 {
     assert(scale < params_->max_scale());
   // datatype for current appearance model
@@ -551,10 +566,10 @@ bool bvxm_multi_scale_voxel_world::update_impl(bvxm_image_metadata const& metada
 
 template<bvxm_voxel_type APM_T>
 bool bvxm_multi_scale_voxel_world::expected_image(bvxm_image_metadata const& camera,
-                                      vil_image_view_base_sptr &expected,
-                                      vil_image_view<float> &mask,
-                                      unsigned bin_index,
-                                      unsigned scale)
+                                                  vil_image_view_base_sptr &expected,
+                                                  vil_image_view<float> &mask,
+                                                  unsigned bin_index,
+                                                  unsigned scale)
 {
     assert(scale < params_->max_scale());
   // datatype for current appearance model
@@ -657,10 +672,10 @@ bool bvxm_multi_scale_voxel_world::expected_image(bvxm_image_metadata const& cam
 
 template<bvxm_voxel_type APM_T>
 bool bvxm_multi_scale_voxel_world::inv_pixel_range_probability(bvxm_image_metadata const& observation,
-                                                   vil_image_view<float> &inv_prob,
-                                                   unsigned bin_index, unsigned scale, float pixel_range)
+                                                               vil_image_view<float> &inv_prob,
+                                                               unsigned bin_index, unsigned scale, float pixel_range)
 {
-    assert(scale < params_->max_scale());
+  assert(scale < params_->max_scale());
   // datatype for current appearance model
   typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype apm_datatype;
   typedef typename bvxm_voxel_traits<APM_T>::obs_datatype obs_datatype;
@@ -770,8 +785,8 @@ bool bvxm_multi_scale_voxel_world::inv_pixel_range_probability(bvxm_image_metada
 
 template<bvxm_voxel_type APM_T>
 bool bvxm_multi_scale_voxel_world::pixel_probability_density(bvxm_image_metadata const& observation,
-                                                 vil_image_view<float> &pixel_probability,vil_image_view<bool> &mask,
-                                                 unsigned bin_index, unsigned scale)
+                                                             vil_image_view<float> &pixel_probability,vil_image_view<bool> &mask,
+                                                             unsigned bin_index, unsigned scale)
 {
       assert(scale < params_->max_scale());
       // datatype for current appearance model
@@ -913,14 +928,12 @@ bool bvxm_multi_scale_voxel_world::pixel_probability_density(bvxm_image_metadata
   }
 
   return true;
-
-
 }
 
 //: generate the mixture of gaussians slab from the specified viewpoint. the slab should be allocated by the caller.
 template<bvxm_voxel_type APM_T>
 bool bvxm_multi_scale_voxel_world::mixture_of_gaussians_image(bvxm_image_metadata const& observation,
-                                                  bvxm_voxel_slab_base_sptr& mog_image, unsigned bin_index, unsigned scale)
+                                                              bvxm_voxel_slab_base_sptr& mog_image, unsigned bin_index, unsigned scale)
 {
     assert(scale <= params_->max_scale());
   // datatype for current appearance model
@@ -1009,11 +1022,11 @@ bool bvxm_multi_scale_voxel_world::mixture_of_gaussians_image(bvxm_image_metadat
 
 template<bvxm_voxel_type APM_T>
 bool bvxm_multi_scale_voxel_world::virtual_view(bvxm_image_metadata const& original_view,
-                                    const vpgl_camera_double_sptr virtual_camera,
-                                    vil_image_view_base_sptr &virtual_view, vil_image_view<float> &vis_prob,
-                                    unsigned bin_index, unsigned scale)
+                                                const vpgl_camera_double_sptr virtual_camera,
+                                                vil_image_view_base_sptr &virtual_view, vil_image_view<float> &vis_prob,
+                                                unsigned bin_index, unsigned scale)
 {
-    assert(scale <= params_->max_scale());
+  assert(scale <= params_->max_scale());
 
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
   typedef typename bvxm_voxel_traits<APM_T>::obs_datatype obs_datatype;
@@ -1058,7 +1071,7 @@ bool bvxm_multi_scale_voxel_world::virtual_view(bvxm_image_metadata const& origi
   max_prob_image.fill(0.0f);
 
   // get ocuppancy probability grid
-  bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0);
+  bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
   bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
@@ -1217,13 +1230,6 @@ bool bvxm_multi_scale_voxel_world::virtual_view(bvxm_image_metadata const& origi
   return true;
 }
 
-
-
-
-#include <vsl/vsl_binary_io.h>
-#include <vcl_iostream.h>
-
-
 //: Binary save parameters to stream.
 void vsl_b_write(vsl_b_ostream & os, bvxm_multi_scale_voxel_world const &world);
 
@@ -1235,7 +1241,6 @@ void vsl_print_summary(vcl_ostream &os, const bvxm_multi_scale_voxel_world &worl
 void vsl_b_read(vsl_b_istream& is, bvxm_multi_scale_voxel_world* p);
 
 void vsl_b_write(vsl_b_ostream& os, const bvxm_multi_scale_voxel_world* &p);
- 
+
 void vsl_print_summary(vcl_ostream& os, const bvxm_multi_scale_voxel_world* &p);
 #endif
-
