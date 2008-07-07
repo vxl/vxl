@@ -182,6 +182,7 @@ void* vgui_qt_dialog_impl::bool_field_widget(const char* txt, bool& v)
 
 
 //-----------------------------------------------------------------------------
+#undef max // picking up max defined in windef.h
 void* vgui_qt_dialog_impl::int_field_widget(const char* txt, int& v)
 {
    QSpinBox* widget = new QSpinBox(this);

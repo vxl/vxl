@@ -20,6 +20,9 @@
 #include <wx/log.h>
 #include <wx/wxchar.h>
 #include <wx/strconv.h>
+#ifdef __WXMSW__
+#include <wx/msw/private.h>
+#endif
 
 //-------------------------------------------------------------------------
 // Private helpers - declarations.
