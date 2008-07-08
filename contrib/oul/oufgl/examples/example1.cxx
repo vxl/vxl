@@ -1,3 +1,5 @@
+#include <vcl_cstdlib.h>
+#include <vcl_cstring.h>
 #include <vil1/vil1_memory_image.h>
 #include <vil1/vil1_save.h>
 #include <oufgl/frame_grabber_v4l.h>
@@ -12,22 +14,27 @@ int main(int argc, char *argv[])
   bool debug=false;
   int width=320, height=240;
   int num_to_grab=1;
-  char *camera_name = "/dev/video0";
+
+  const char * camera_name_default = "/dev/video0";
+  char * camera_name = new char[vcl_strlen(camera_name_default)+1];
+  vcl_strcpy (camera_name, camera_name_default);
+
   while ((opt=getopt(argc, argv, "x:y:n:c:d"))!=EOF)
   {
     switch (opt)
     {
      case 'x':
-      width = atoi(optarg);
+      width = vcl_atoi(optarg);
       break;
      case 'y':
-      height = atoi(optarg);
+      height = vcl_atoi(optarg);
       break;
      case 'n':
-      num_to_grab = atoi(optarg);
+      num_to_grab = vcl_atoi(optarg);
       break;
      case 'c':
-      camera_name = strdup(optarg);
+      camera_name = new char[vcl_strlen(optarg)+1];
+      vcl_strcpy (camera_name, optarg);
       break;
      case 'd':
       debug = !debug;
