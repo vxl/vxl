@@ -3,6 +3,7 @@
 //:
 // \file
 
+#include <vcl_cassert.h>
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
@@ -433,14 +434,14 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
     bvxm_util::warp_slab_bilinear(visX_accum, H_plane_to_img[k_idx], visX);
 
     // initialize PLvisX with PL(X)
-    
+
     bvxm_voxel_slab<float> PL(frame_backproj.nx(), frame_backproj.ny(), frame_backproj.nz());
     PL.fill(0.0);
     vil_image_view_base_sptr lidar = metadata.img;
     vnl_vector_fixed<float,3> sigmas(.5, .5, 0.0009);
     vgl_point_3d<float> local_xyz = voxel_index_to_xyz(0, 0, k_idx);
 
-    for (unsigned i_idx=0; i_idx<frame_backproj.nx(); i_idx++){
+    for (unsigned i_idx=0; i_idx<frame_backproj.nx(); i_idx++) {
       for (unsigned j_idx=0; j_idx<frame_backproj.ny(); j_idx++) {
         vcl_vector<vgl_homg_point_2d<double> > vp(4);
         int i = i_idx+1;
@@ -478,7 +479,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
         PL(i_idx, j_idx) = p;
       }
     }
-    
+
     // now multiply by visX
     bvxm_util::multiply_slabs(visX,PL,*PLvisX_slab_it);
 
@@ -521,7 +522,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
     // transform (1-P(X)) to image plane to accumulate visX for next level
     bvxm_util::warp_slab_bilinear(*ocp_slab_it, H_img_to_plane[k_idx], PX_img);
 
-    if (return_mask){
+    if (return_mask) {
       bvxm_util::add_slabs(PX_img,mask_slab,mask_slab);
     }
 
@@ -640,8 +641,8 @@ bool bvxm_voxel_world::update_edges(bvxm_image_metadata const& metadata, unsigne
 
   float min_edge_prob = this->get_params()->min_occupancy_prob();
   float max_edge_prob = this->get_params()->max_occupancy_prob();
-  for(unsigned i=0; i<image_image.nx(); i++){
-    for(unsigned j=0; j<image_image.ny(); j++){
+  for (unsigned i=0; i<image_image.nx(); i++) {
+    for (unsigned j=0; j<image_image.ny(); j++) {
       image_image(i,j) = min_edge_prob + (image_image(i,j)*(max_edge_prob-min_edge_prob));
     }
   }
@@ -761,15 +762,15 @@ bool bvxm_voxel_world::expected_edge_image(bvxm_image_metadata const& camera,vil
 
   float min_expected_edge_image = vcl_numeric_limits<float>::max();
   float max_expected_edge_image = vcl_numeric_limits<float>::min();
-  for(unsigned i=0; i<expected_edge_image.nx(); i++){
-    for(unsigned j=0; j<expected_edge_image.ny(); j++){
+  for (unsigned i=0; i<expected_edge_image.nx(); i++) {
+    for (unsigned j=0; j<expected_edge_image.ny(); j++) {
       min_expected_edge_image = vnl_math_min(min_expected_edge_image,expected_edge_image(i,j));
       max_expected_edge_image = vnl_math_max(max_expected_edge_image,expected_edge_image(i,j));
     }
   }
 
-  for(unsigned i=0; i<expected_edge_image.nx(); i++){
-    for(unsigned j=0; j<expected_edge_image.ny(); j++){
+  for (unsigned i=0; i<expected_edge_image.nx(); i++) {
+    for (unsigned j=0; j<expected_edge_image.ny(); j++) {
       expected_edge_image(i,j) = (expected_edge_image(i,j)-min_expected_edge_image)/(max_expected_edge_image-min_expected_edge_image);
     }
   }

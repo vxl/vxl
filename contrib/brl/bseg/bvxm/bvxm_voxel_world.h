@@ -60,9 +60,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <vcl_cassert.h>
 #include <vcl_string.h>
 #include <vcl_vector.h>
-#include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_ref_count.h>
 
 #include <vgl/vgl_point_3d.h>
@@ -226,9 +226,10 @@ class bvxm_voxel_world: public vbl_ref_count
                              unsigned grid_k,
                              vgl_h_matrix_2d<double> &H_plane_to_image,
                              vgl_h_matrix_2d<double> &H_image_to_plane, unsigned scale_idx=0);
-
+#if 0
   //: appearance model voxel storage
-  //://:vcl_map<bvxm_voxel_type, vcl_map<unsigned int, bvxm_voxel_grid_base_sptr> > grid_map_;
+  vcl_map<bvxm_voxel_type, vcl_map<unsigned int, bvxm_voxel_grid_base_sptr> > grid_map_;
+#endif
 
   //: map of a map of a map of voxel grids which is indexed by voxel type,illumination bin and scale
   vcl_map<bvxm_voxel_type, vcl_map<unsigned int, vcl_map<unsigned int, bvxm_voxel_grid_base_sptr> > > grid_map_;
@@ -243,7 +244,7 @@ class bvxm_voxel_world: public vbl_ref_count
                    bool return_prob, vil_image_view<float> &pix_prob_density,
                    bool return_mask, vil_image_view<bool> &mask, unsigned bin_index, unsigned scale_idx=0);
 
-  // Update voxel grid with data from LIDAR image/camera pair and return probability density of pixel values.
+  //: Update voxel grid with data from LIDAR image/camera pair and return probability density of pixel values.
   bool update_lidar_impl(bvxm_image_metadata const& metadata,
                          bool return_prob,
                          vil_image_view<float> &pix_prob_density,
@@ -287,125 +288,126 @@ void bvxm_voxel_world::increment_observations(unsigned int bin_idx, unsigned int
 template<bvxm_voxel_type VOX_T>
 bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index, unsigned scale_idx)
 {
-     assert(scale_idx <= params_->max_scale());
+  assert(scale_idx <= params_->max_scale());
 
-    vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale_idx);
-    //retrieve map for current bvxm_voxel_type
-    //if no map found create a new one
-    if (grid_map_.find(VOX_T) == grid_map_.end())
+  vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale_idx);
+  //retrieve map for current bvxm_voxel_type
+  //if no map found create a new one
+  if (grid_map_.find(VOX_T) == grid_map_.end())
+  {
+    //create map
+    vcl_map<unsigned, vcl_map<unsigned, bvxm_voxel_grid_base_sptr > > bin_map;
+
+    // look for existing appearance model grids in the directory
+
+
+    vcl_string storage_directory = params_->model_dir();
+
+    vcl_stringstream grid_glob;
+    vcl_string fname_prefix = bvxm_voxel_traits<VOX_T>::filename_prefix();
+    grid_glob << storage_directory << '/' << fname_prefix << "*.vox";
+
+    //insert grids
+    for (vul_file_iterator file_it = grid_glob.str().c_str(); file_it; ++file_it)
     {
-        //create map
-        vcl_map<unsigned, vcl_map<unsigned, bvxm_voxel_grid_base_sptr > > bin_map;
+      vcl_string match_str = file_it.filename();
+      unsigned idx_start = match_str.find("scale") + 6;
+      unsigned idx_end = match_str.find(".vox");
+      vcl_stringstream idx_str;
+      idx_str << match_str.substr(idx_start,idx_end - idx_start);
+      int scale = -1;
+      idx_str >> scale;
+      match_str.erase(idx_start,idx_end - idx_start);
 
-        // look for existing appearance model grids in the directory
+      unsigned bin_idx_start = match_str.find("bin") + 4;
+      unsigned bin_idx_end = match_str.find("scale") - 1;
 
+      vcl_stringstream bin_idx_str;
+      bin_idx_str <<  match_str.substr(bin_idx_start,bin_idx_end - bin_idx_start);
+      int bin_idx = -1;
+      bin_idx_str >> bin_idx;
 
-        vcl_string storage_directory = params_->model_dir();
+      if (scale < 0 || bin_idx <0) {
+        vcl_cerr << "error parsing filename " << file_it() << vcl_endl;
+      } else {
+        vgl_vector_3d<unsigned int> grid_size_scale = params_->num_voxels(scale);
+        // create voxel grid and insert into map
+        bvxm_voxel_grid_base_sptr grid = new bvxm_voxel_grid<typename bvxm_voxel_traits<VOX_T>::voxel_datatype>(file_it(),grid_size_scale);
 
-        vcl_stringstream grid_glob;
-        vcl_string fname_prefix = bvxm_voxel_traits<VOX_T>::filename_prefix();
-        grid_glob << storage_directory << '/' << fname_prefix << "*.vox";
+        vcl_map<unsigned, bvxm_voxel_grid_base_sptr > scale_map;
+        scale_map.insert(vcl_make_pair((unsigned)scale, grid));
 
-        //insert grids
-        for (vul_file_iterator file_it = grid_glob.str().c_str(); file_it; ++file_it) {
-            vcl_string match_str = file_it.filename();
-            unsigned idx_start = match_str.find("scale") + 6;
-            unsigned idx_end = match_str.find(".vox");
-            vcl_stringstream idx_str;
-            idx_str << match_str.substr(idx_start,idx_end - idx_start);
-            int scale = -1;
-            idx_str >> scale;
-            match_str.erase(idx_start,idx_end - idx_start);
-
-            unsigned bin_idx_start = match_str.find("bin") + 4;
-            unsigned bin_idx_end = match_str.find("scale") - 1;
-
-            vcl_stringstream bin_idx_str;
-            bin_idx_str <<  match_str.substr(bin_idx_start,bin_idx_end - bin_idx_start);
-            int bin_idx = -1;
-            bin_idx_str >> bin_idx;
-
-            if (scale < 0 || bin_idx <0) {
-                vcl_cerr << "error parsing filename " << file_it() << vcl_endl;
-            } else {
-                vgl_vector_3d<unsigned int> grid_size_scale = params_->num_voxels(scale);
-                // create voxel grid and insert into map
-                bvxm_voxel_grid_base_sptr grid = new bvxm_voxel_grid<typename bvxm_voxel_traits<VOX_T>::voxel_datatype>(file_it(),grid_size_scale);
-
-                vcl_map<unsigned, bvxm_voxel_grid_base_sptr > scale_map;
-                scale_map.insert(vcl_make_pair((unsigned)scale, grid));
-
-                if (bin_map.find(bin_idx)==bin_map.end())
-                    bin_map.insert(vcl_make_pair((unsigned)bin_idx ,scale_map));
-                else
-                    bin_map[bin_idx][scale]=grid;
-            }
-        }
-
-        grid_map_.insert(vcl_make_pair(VOX_T, bin_map));
+        if (bin_map.find(bin_idx)==bin_map.end())
+          bin_map.insert(vcl_make_pair((unsigned)bin_idx ,scale_map));
+        else
+          bin_map[bin_idx][scale]=grid;
+      }
     }
 
-    //retrieve map containing voxel_grid
-    vcl_map<unsigned, vcl_map<unsigned, bvxm_voxel_grid_base_sptr> > voxel_map = grid_map_[VOX_T];
+    grid_map_.insert(vcl_make_pair(VOX_T, bin_map));
+  }
 
-    /* retrieve voxel_grid for current bin
-    if no grid exists at bin location create one filled with default values*/
+  //retrieve map containing voxel_grid
+  vcl_map<unsigned, vcl_map<unsigned, bvxm_voxel_grid_base_sptr> > voxel_map = grid_map_[VOX_T];
 
-    if (voxel_map.find(bin_index) == voxel_map.end())
-    {
-        vcl_map<unsigned, bvxm_voxel_grid_base_sptr> scale_map;
+  /* retrieve voxel_grid for current bin
+  if no grid exists at bin location create one filled with default values*/
 
-        vcl_string storage_directory = params_->model_dir();
+  if (voxel_map.find(bin_index) == voxel_map.end())
+  {
+    vcl_map<unsigned, bvxm_voxel_grid_base_sptr> scale_map;
 
-        vcl_stringstream apm_fname;
-        vcl_string fname_prefix = bvxm_voxel_traits<VOX_T>::filename_prefix();
-        apm_fname << storage_directory << '/' << fname_prefix << "_bin_" << bin_index << "_scale_" << scale_idx  << ".vox";
+    vcl_string storage_directory = params_->model_dir();
 
-        typedef typename bvxm_voxel_traits<VOX_T>::voxel_datatype voxel_datatype;
-        bvxm_voxel_grid<voxel_datatype> *grid = new bvxm_voxel_grid<voxel_datatype>(apm_fname.str(),grid_size);
+    vcl_stringstream apm_fname;
+    vcl_string fname_prefix = bvxm_voxel_traits<VOX_T>::filename_prefix();
+    apm_fname << storage_directory << '/' << fname_prefix << "_bin_" << bin_index << "_scale_" << scale_idx  << ".vox";
 
-        // fill grid with default value
-        if (!grid->initialize_data(bvxm_voxel_traits<VOX_T>::initial_val())){
-            vcl_cerr << "error initializing voxel grid\n";
-            return bvxm_voxel_grid_base_sptr(0);
-        }
+    typedef typename bvxm_voxel_traits<VOX_T>::voxel_datatype voxel_datatype;
+    bvxm_voxel_grid<voxel_datatype> *grid = new bvxm_voxel_grid<voxel_datatype>(apm_fname.str(),grid_size);
 
-        //Insert voxel grid into map
-        //bvxm_voxel_grid_base_sptr grid_sptr = grid;
-        //
-        scale_map.insert(vcl_make_pair(scale_idx, grid));
-
-        grid_map_[VOX_T].insert(vcl_make_pair(bin_index,scale_map));
+    // fill grid with default value
+    if (!grid->initialize_data(bvxm_voxel_traits<VOX_T>::initial_val())){
+      vcl_cerr << "error initializing voxel grid\n";
+      return bvxm_voxel_grid_base_sptr(0);
     }
 
+    //Insert voxel grid into map
+    //bvxm_voxel_grid_base_sptr grid_sptr = grid;
+    //
+    scale_map.insert(vcl_make_pair(scale_idx, grid));
 
-    vcl_map<unsigned, bvxm_voxel_grid_base_sptr> scale_map = grid_map_[VOX_T][bin_index];
-
-    if (scale_map.find(scale_idx) == scale_map.end())
-    {
-        vcl_cout<<"\n Scale not found ";
-        vcl_string storage_directory = params_->model_dir();
-
-        vcl_stringstream apm_fname;
-        vcl_string fname_prefix = bvxm_voxel_traits<VOX_T>::filename_prefix();
-        apm_fname << storage_directory << '/' << fname_prefix << "_bin_" << bin_index << "_scale_" << scale_idx  << ".vox";
-
-        typedef typename bvxm_voxel_traits<VOX_T>::voxel_datatype voxel_datatype;
-        bvxm_voxel_grid<voxel_datatype> *grid = new bvxm_voxel_grid<voxel_datatype>(apm_fname.str(),grid_size);
-
-        // fill grid with default value
-        if (!grid->initialize_data(bvxm_voxel_traits<VOX_T>::initial_val())){
-            vcl_cerr << "error initializing voxel grid\n";
-            return bvxm_voxel_grid_base_sptr(0);
-        }
-
-        //Insert voxel grid into map
-        bvxm_voxel_grid_base_sptr grid_sptr = grid;
+    grid_map_[VOX_T].insert(vcl_make_pair(bin_index,scale_map));
+  }
 
 
-        grid_map_[VOX_T][bin_index].insert(vcl_make_pair(scale_idx, grid_sptr));
+  vcl_map<unsigned, bvxm_voxel_grid_base_sptr> scale_map = grid_map_[VOX_T][bin_index];
+
+  if (scale_map.find(scale_idx) == scale_map.end())
+  {
+    vcl_cout<<"\n Scale not found ";
+    vcl_string storage_directory = params_->model_dir();
+
+    vcl_stringstream apm_fname;
+    vcl_string fname_prefix = bvxm_voxel_traits<VOX_T>::filename_prefix();
+    apm_fname << storage_directory << '/' << fname_prefix << "_bin_" << bin_index << "_scale_" << scale_idx  << ".vox";
+
+    typedef typename bvxm_voxel_traits<VOX_T>::voxel_datatype voxel_datatype;
+    bvxm_voxel_grid<voxel_datatype> *grid = new bvxm_voxel_grid<voxel_datatype>(apm_fname.str(),grid_size);
+
+    // fill grid with default value
+    if (!grid->initialize_data(bvxm_voxel_traits<VOX_T>::initial_val())){
+      vcl_cerr << "error initializing voxel grid\n";
+      return bvxm_voxel_grid_base_sptr(0);
     }
-    return grid_map_[VOX_T][bin_index][scale_idx];
+
+    //Insert voxel grid into map
+    bvxm_voxel_grid_base_sptr grid_sptr = grid;
+
+
+    grid_map_[VOX_T][bin_index].insert(vcl_make_pair(scale_idx, grid_sptr));
+  }
+  return grid_map_[VOX_T][bin_index][scale_idx];
 }
 
 
@@ -767,7 +769,7 @@ template<bvxm_voxel_type APM_T>
 bool bvxm_voxel_world::inv_pixel_range_probability(bvxm_image_metadata const& observation,
                                                    vil_image_view<float> &inv_prob,
                                                    unsigned bin_index,unsigned scale_idx, float pixel_range
-                                                   )
+                                                  )
 {
   // datatype for current appearance model
   typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype apm_datatype;
@@ -1007,15 +1009,15 @@ bool bvxm_voxel_world::pixel_probability_density(bvxm_image_metadata const& obse
   vil_image_view<float>::iterator pix_prob_it = pixel_probability.begin();
   bvxm_voxel_slab<float>::const_iterator preX_accum_it = preX_accum.begin();
   bvxm_voxel_slab<float>::const_iterator visX_accum_it = visX_accum.begin();
-  
+
   for (; pix_prob_it != pixel_probability.end(); ++pix_prob_it, ++preX_accum_it, ++visX_accum_it) {
-   
-    //avoid division by zero, the values in this region shouldn't matter size it 
+
+    //avoid division by zero, the values in this region shouldn't matter size it
     //belongs to voxels outside the mask
     float visX_a = *visX_accum_it;
-    if (visX_a >= 1.0f){
+    if (visX_a >= 1.0f) {
       visX_a = 0.5f;
-     }
+    }
 
     *pix_prob_it = *preX_accum_it / (1.0f - visX_a);
   }
