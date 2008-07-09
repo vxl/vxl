@@ -14,7 +14,7 @@
 
 bvxm_render_virtual_view_process::bvxm_render_virtual_view_process()
 {
-  // process takes 5 inputs: 
+  // process takes 6 inputs: 
   //input[0]: The original frame
   //input[1]: The original camera
   //input[2]: The camera to render the virtual view from
@@ -22,6 +22,8 @@ bvxm_render_virtual_view_process::bvxm_render_virtual_view_process()
   //input[4]: The apperance model type. This input must be either apm_mog_grey or apm_mog_rgb
   //          any other string will initialize the value to apm_mog_grey
   //input[5]: The bin index to be updated
+      //input[6]: The scale index to be rendered
+
   input_data_.resize(6,brdb_value_sptr(0));
   input_types_.resize(6);
   input_types_[0] = "vil_image_view_base_sptr";
@@ -30,6 +32,7 @@ bvxm_render_virtual_view_process::bvxm_render_virtual_view_process()
   input_types_[3] = "bvxm_voxel_world_sptr";
   input_types_[4] = "vcl_string";
   input_types_[5] = "unsigned";
+  input_types_[6] = "unsigned";
 
   // process has 2 outputs:
   // output[0]: The rendered frame
@@ -70,8 +73,11 @@ bool bvxm_render_virtual_view_process::execute()
   vcl_string voxel_type = input4->value();
 
   brdb_value_t<unsigned>* input5 = 
-    static_cast<brdb_value_t<unsigned>* >(input_data_[4].ptr());
+    static_cast<brdb_value_t<unsigned>* >(input_data_[5].ptr());
   unsigned bin_index = input5->value();
+  brdb_value_t<unsigned>* input6 = 
+    static_cast<brdb_value_t<unsigned>* >(input_data_[6].ptr());
+  unsigned scale_index = input6->value();
 
   //create original image metadata:
   bvxm_image_metadata obs_og(img_og,camera_og);
@@ -101,14 +107,14 @@ bool bvxm_render_virtual_view_process::execute()
   bool result;
    if (voxel_type == "apm_mog_rgb"){
      if (img_og->nplanes() == 3)
-      result = world->virtual_view<APM_MOG_RGB>(obs_og,camera_virtual,virtual_img,*vis_prob_view, bin_index);
+      result = world->virtual_view<APM_MOG_RGB>(obs_og,camera_virtual,virtual_img,*vis_prob_view, bin_index,scale_index);
      else {
        vcl_cerr<< "error: bvxm_render_virtual_view_process: voxel_type(apm_mog_rgb) does not match, input image" << vcl_endl;
        return false;
      }
    }
    else {
-     result = world->virtual_view<APM_MOG_GREY>(obs_og,camera_virtual,virtual_img,*vis_prob_view, bin_index);
+     result = world->virtual_view<APM_MOG_GREY>(obs_og,camera_virtual,virtual_img,*vis_prob_view, bin_index,scale_index);
    }
 
   //store output

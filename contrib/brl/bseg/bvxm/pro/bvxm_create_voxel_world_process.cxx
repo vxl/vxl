@@ -62,6 +62,10 @@ bvxm_create_voxel_world_process::bvxm_create_voxel_world_process()
 
   if (!parameters()->add("Maximum Occupancy Probability", "max_ocp_prob", 1-1e-5f))
     vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << vcl_endl;
+
+    if (!parameters()->add("Maximum Scale", "max_scale", (unsigned) 0))
+      vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << vcl_endl;
+
 }
 
 //: Destructor
@@ -132,8 +136,10 @@ bvxm_create_voxel_world_process::execute()
   float min_ocp_prob = parameters()->value<float>("min_ocp_prob");
   float max_ocp_prob = parameters()->value<float>("max_ocp_prob");
 
+    float max_scale = parameters()->value<unsigned int>("max_scale");
+
   bvxm_world_params_sptr params = new bvxm_world_params();
-  params->set_params(vox_dir, corner, voxel_dims, vox_len, lvcs, min_ocp_prob, max_ocp_prob);
+  params->set_params(vox_dir, corner, voxel_dims, vox_len, lvcs, min_ocp_prob, max_ocp_prob,max_scale);
 
   bvxm_voxel_world_sptr vox_world = new bvxm_voxel_world;
   vox_world->set_params(params);

@@ -47,7 +47,7 @@ class bvxm_ocp_hist_process : public bprb_process
   bool execute();
   bool finish() { return true; }
 private:
-  bool compute(bvxm_voxel_world_sptr w, vcl_string path);
+  bool compute(bvxm_voxel_world_sptr w, unsigned scale, vcl_string path);
 };
 
 #endif // bvxm_ocp_hist_process_h_

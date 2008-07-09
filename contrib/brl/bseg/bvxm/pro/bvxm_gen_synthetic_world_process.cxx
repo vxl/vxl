@@ -580,10 +580,10 @@ void bvxm_gen_synthetic_world_process::gen_voxel_world_plane(vgl_vector_3d<unsig
 }
 
 bool
-bvxm_gen_synthetic_world_process::test_reconstructed_ocp(bvxm_voxel_world_sptr recon_world)
+bvxm_gen_synthetic_world_process::test_reconstructed_ocp(bvxm_voxel_world_sptr recon_world, unsigned scale)
 {
   bvxm_voxel_grid<float>* ocp_grid =
-    dynamic_cast<bvxm_voxel_grid<float>*>(recon_world->get_grid<OCCUPANCY>(0).ptr());
+    dynamic_cast<bvxm_voxel_grid<float>*>(recon_world->get_grid<OCCUPANCY>(0, scale).ptr());
 
   vxl_uint_32 nx = ocp_grid->grid_size().x();
   vxl_uint_32 ny = ocp_grid->grid_size().y();
@@ -650,16 +650,17 @@ bool bvxm_gen_synthetic_world_process::execute()
   world->clean_grids();
 
   unsigned int bin_num_1 = 0,bin_num_2 = 10;
+  unsigned scale=0;
 
   //create an mog grid for appearance model and use appearence model processor update to properly initialize it
   bvxm_voxel_grid<float>* ocp_grid = static_cast<bvxm_voxel_grid<float>* >
-    (world->get_grid<OCCUPANCY>(0).as_pointer());
+    (world->get_grid<OCCUPANCY>(0,scale).as_pointer());
 
   bvxm_voxel_grid<apm_datatype>* apm_grid_1 = static_cast<bvxm_voxel_grid<apm_datatype>* >
-    (world->get_grid<APM_MOG_GREY>(bin_num_1).as_pointer());
+    (world->get_grid<APM_MOG_GREY>(bin_num_1,scale).as_pointer());
 
   bvxm_voxel_grid<apm_datatype>* apm_grid_2 = static_cast<bvxm_voxel_grid<apm_datatype>* >
-    (world->get_grid<APM_MOG_GREY>(bin_num_2).as_pointer());
+    (world->get_grid<APM_MOG_GREY>(bin_num_2,scale).as_pointer());
 
   bvxm_voxel_grid<float>* intensity_grid = new bvxm_voxel_grid<float>
     (model_dir + "intensity.vox",grid_size);
@@ -751,12 +752,12 @@ bool bvxm_gen_synthetic_world_process::test()
 
   recon_world->set_params(recon_world_params);
   recon_world->clean_grids();
-
+  
   unsigned int bin_num_1 = 0, bin_num_2 = 10;
-
-  recon_world->get_grid<APM_MOG_GREY>(bin_num_1);
-  recon_world->get_grid<APM_MOG_GREY>(bin_num_2);
-  recon_world->get_grid<OCCUPANCY>(0);
+  unsigned scale=0;
+  recon_world->get_grid<APM_MOG_GREY>(bin_num_1,scale);
+  recon_world->get_grid<APM_MOG_GREY>(bin_num_2,scale);
+  recon_world->get_grid<OCCUPANCY>(0,scale);
 
   //reconstruct the world from synthetic images and the apm grid stored in bin bin_num_1
   vcl_vector <vil_image_view_base_sptr> image_set_1;

@@ -16,13 +16,14 @@
 
 bvxm_detect_changes_process::bvxm_detect_changes_process()
 {
-  //process takes 4 inputs
+  //process takes 6 inputs
   //input[0]: The observation to detect changes
   //input[1]: The camera of the observation
   //input[2]: The voxel world
   //input[3]: The apperance model type :this input must be either apm_mog_grey or apm_mog_rgb
   //          any other string will initialize the value for apm_mog_grey
   //input[4]: The bin index to be updated
+  //input[5]: The image scale index  detected
   input_data_.resize(5,brdb_value_sptr(0));
   input_types_.resize(5);
   input_types_[0] = "vil_image_view_base_sptr";
@@ -30,6 +31,7 @@ bvxm_detect_changes_process::bvxm_detect_changes_process()
   input_types_[2] = "bvxm_voxel_world_sptr";
   input_types_[3] = "vcl_string";
   input_types_[4] = "unsigned";
+  input_types_[5] = "unsigned";
 
    
   //output has 2 outputs
@@ -72,6 +74,10 @@ bool bvxm_detect_changes_process::execute()
     static_cast<brdb_value_t<unsigned>* >(input_data_[4].ptr());
   unsigned bin_index = input4->value();
 
+    brdb_value_t<unsigned>* input5 =
+    static_cast<brdb_value_t<unsigned>* >(input_data_[5].ptr());
+  unsigned scale_index = input5->value();
+
   //create metadata:
   bvxm_image_metadata observation(img,camera);
 
@@ -83,9 +89,9 @@ bool bvxm_detect_changes_process::execute()
 
 
   if (voxel_type == "apm_mog_rgb")
-    result = world->pixel_probability_density<APM_MOG_RGB>(observation,prob_map, mask, bin_index);
+    result = world->pixel_probability_density<APM_MOG_RGB>(observation,prob_map, mask, bin_index,scale_index);
    else
-    result = world->pixel_probability_density<APM_MOG_GREY>(observation,prob_map, mask, bin_index);
+    result = world->pixel_probability_density<APM_MOG_GREY>(observation,prob_map, mask, bin_index,scale_index);
     
    if(!result){
     vcl_cerr << "error bvxm_detect_changes_process: failed to detect changes" << vcl_endl;

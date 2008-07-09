@@ -9,13 +9,14 @@ bvxm_ocp_compare_process::bvxm_ocp_compare_process()
   // This process has 2 inputs:
   //input[0]: The voxel world
   //input[1]: The voxel world
-  input_data_.resize(3, brdb_value_sptr(0));
-  input_types_.resize(3);
+  input_data_.resize(4, brdb_value_sptr(0));
+  input_types_.resize(4);
 
   int i=0;
   input_types_[i++] = "bvxm_voxel_world_sptr";    // voxel_world for LIDAR ONLY update
   input_types_[i++] = "bvxm_voxel_world_sptr";    // voxel_world for IMAGE ONLY update
   input_types_[i++] = "unsigned";                 // search neighb. size
+  input_types_[i++] = "unsigned";                 // scale
 
   //output
   output_data_.resize(1,brdb_value_sptr(0));
@@ -45,8 +46,12 @@ bool bvxm_ocp_compare_process::execute()
   brdb_value_t<unsigned >* input2 =
     static_cast<brdb_value_t<unsigned >* >(input_data_[2].ptr());
   unsigned n = input2->value();
+  //scale 
+  brdb_value_t<unsigned >* input3 =
+    static_cast<brdb_value_t<unsigned >* >(input_data_[3].ptr());
+  unsigned scale = input3->value();
 
-  double val = compare(voxel_world1, voxel_world2, n);
+  double val = compare(voxel_world1, voxel_world2, n,scale);
 
   //store output
   brdb_value_sptr output0 =
@@ -58,21 +63,21 @@ bool bvxm_ocp_compare_process::execute()
 
 double bvxm_ocp_compare_process::compare(bvxm_voxel_world_sptr w1,
                                          bvxm_voxel_world_sptr w2,
-                                         unsigned n)
+                                         unsigned n, unsigned scale)
 {
   typedef bvxm_voxel_traits<LIDAR>::voxel_datatype lidar_datatype;
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
 
   // get ocuppancy probability grids
-  bvxm_voxel_grid_base_sptr ocp_grid_base1 = w1->get_grid<OCCUPANCY>(0);
+  bvxm_voxel_grid_base_sptr ocp_grid_base1 = w1->get_grid<OCCUPANCY>(0,scale);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid1  = static_cast<bvxm_voxel_grid<lidar_datatype>*>(ocp_grid_base1.ptr());
   bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it1 = ocp_grid1->begin();
 
-  bvxm_voxel_grid_base_sptr ocp_grid_base2 = w2->get_grid<OCCUPANCY>(0);
+  bvxm_voxel_grid_base_sptr ocp_grid_base2 = w2->get_grid<OCCUPANCY>(0,scale);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid2  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base2.ptr());
   bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it2 = ocp_grid2->begin();
 
-  vgl_vector_3d<unsigned int> grid_size = w1->get_params()->num_voxels();
+  vgl_vector_3d<unsigned int> grid_size = w1->get_params()->num_voxels(scale);
 
   int m = int(n); // using this m instead of n will avoid compiler warnings
   double maxN=0;

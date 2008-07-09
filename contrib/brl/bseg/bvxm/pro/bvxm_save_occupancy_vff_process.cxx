@@ -14,11 +14,14 @@ bvxm_save_occupancy_vff_process::bvxm_save_occupancy_vff_process()
   // process takes 2 inputs:
   //input[0]: The voxel world
   //input[1]: The filename to write to
+  //input[2]: Scale Index
 
-  input_data_.resize(2,brdb_value_sptr(0));
-  input_types_.resize(2);
+  input_data_.resize(3,brdb_value_sptr(0));
+  input_types_.resize(3);
   input_types_[0] = "bvxm_voxel_world_sptr";
   input_types_[1] = "vcl_string";
+  input_types_[2] = "unsigned";
+
 
   // process has 0 outputs.
   output_data_.resize(0,brdb_value_sptr(0));
@@ -41,7 +44,11 @@ bool bvxm_save_occupancy_vff_process::execute()
     static_cast<brdb_value_t<vcl_string>* >(input_data_[1].ptr());
   vcl_string filename = input1->value();
 
-  return world->save_occupancy_vff(filename);
+  brdb_value_t<unsigned>* input2 =
+    static_cast<brdb_value_t<unsigned>* >(input_data_[2].ptr());
+  unsigned scale_idx = input2->value();
+
+  return world->save_occupancy_vff(filename,scale_idx);
 }
 
 

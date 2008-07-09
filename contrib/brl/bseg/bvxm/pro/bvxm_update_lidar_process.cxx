@@ -17,14 +17,15 @@ bvxm_update_lidar_process::bvxm_update_lidar_process()
   //input[0]: The observation image
   //input[1]: The camera of the observation
   //input[2]: The voxel world
-  //input[3]: The lidar is-valid binary mask
+  //input[3]: scale index
   
-  input_data_.resize(3,brdb_value_sptr(0));
-  input_types_.resize(3);
+  input_data_.resize(4,brdb_value_sptr(0));
+  input_types_.resize(4);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "bvxm_voxel_world_sptr";
-  
+  input_types_[3] = "unsigned";
+
 //  input_types_[4] = "vil_image_view_base_sptr";
 
 
@@ -61,9 +62,9 @@ bool bvxm_update_lidar_process::execute()
   bvxm_voxel_world_sptr world = input2->value();
 
  
- // brdb_value_t<vil_image_view_base_sptr>* input3 = 
- //   static_cast<brdb_value_t<vil_image_view_base_sptr>* >(input_data_[4].ptr());
- // vil_image_view_base_sptr mask = input3->value();
+  brdb_value_t<unsigned>* input3 = 
+    static_cast<brdb_value_t<unsigned>* >(input_data_[3].ptr());
+  unsigned scale_idx = input3->value();
 
   //create metadata:
   bvxm_image_metadata observation(img,camera);
@@ -74,7 +75,7 @@ bool bvxm_update_lidar_process::execute()
   
   bool result; 
 
-  result = world->update_lidar(observation, prob_map, mask);
+  result = world->update_lidar(observation, prob_map, mask,scale_idx);
   
   if(!result){
     vcl_cerr << "error bvxm_update_lidar_process: failed to update observation" << vcl_endl;

@@ -18,13 +18,14 @@
 bvxm_normalize_image_process::bvxm_normalize_image_process()
 {
   //inputs
-  input_data_.resize(5,brdb_value_sptr(0));
-  input_types_.resize(5);
+  input_data_.resize(6,brdb_value_sptr(0));
+  input_types_.resize(6);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "bvxm_voxel_world_sptr";
   input_types_[3] = "vcl_string";
   input_types_[4] = "unsigned";
+  input_types_[5] = "unsigned";
 
   //output
   output_data_.resize(3,brdb_value_sptr(0));
@@ -77,9 +78,13 @@ bool bvxm_normalize_image_process::execute()
     static_cast<brdb_value_t<unsigned>* >(input_data_[4].ptr());
   unsigned bin_index = input4->value();
 
+    brdb_value_t<unsigned>* input5 =
+    static_cast<brdb_value_t<unsigned>* >(input_data_[5].ptr());
+  unsigned scale_index = input5->value();
+
   // if the world is not updated yet, we just return the input image
   if ((voxel_type == "apm_mog_rgb") ){
-    if (!world->num_observations<APM_MOG_RGB>(bin_index) ) {
+    if (!world->num_observations<APM_MOG_RGB>(bin_index,scale_index) ) {
       // return the input img
       brdb_value_sptr output0 = new brdb_value_t<vil_image_view_base_sptr>(input_img);
       output_data_[0] = output0;
@@ -169,9 +174,9 @@ bool bvxm_normalize_image_process::execute()
     typedef bvxm_voxel_traits<APM_MOG_RGB>::obs_datatype obs_datatype;
 
     if (most_prob) {
-      world->mog_most_probable_image<APM_MOG_RGB>(observation, mog_image, bin_index); 
+      world->mog_most_probable_image<APM_MOG_RGB>(observation, mog_image, bin_index,scale_index); 
     } else {
-      world->mixture_of_gaussians_image<APM_MOG_RGB>(observation, mog_image, bin_index);
+      world->mixture_of_gaussians_image<APM_MOG_RGB>(observation, mog_image, bin_index,scale_index);
     }
 
     bvxm_voxel_slab<mog_type>* mog_image_ptr = dynamic_cast<bvxm_voxel_slab<mog_type>*>(mog_image.ptr());
@@ -239,9 +244,9 @@ bool bvxm_normalize_image_process::execute()
     typedef bvxm_voxel_traits<APM_MOG_GREY>::obs_datatype obs_datatype;
 
     if (most_prob) {
-      world->mog_most_probable_image<APM_MOG_GREY>(observation, mog_image, bin_index); 
+      world->mog_most_probable_image<APM_MOG_GREY>(observation, mog_image, bin_index,scale_index); 
     } else {
-      world->mixture_of_gaussians_image<APM_MOG_GREY>(observation, mog_image, bin_index);
+      world->mixture_of_gaussians_image<APM_MOG_GREY>(observation, mog_image, bin_index,scale_index);
     }
     
     bvxm_voxel_slab<mog_type>* mog_image_ptr = dynamic_cast<bvxm_voxel_slab<mog_type>*>(mog_image.ptr());

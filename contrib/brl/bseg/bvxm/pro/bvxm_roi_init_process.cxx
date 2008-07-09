@@ -23,13 +23,14 @@ bvxm_roi_init_process::bvxm_roi_init_process()
 {
   //this process takes 3 input:
   //the filename of the image, the camera and the voxel world
-  input_data_.resize(3, brdb_value_sptr(0));
-  input_types_.resize(3);
+  input_data_.resize(4, brdb_value_sptr(0));
+  input_types_.resize(4);
 
   int i=0;
   input_types_[i++] = "vcl_string";                // NITF image path
   input_types_[i++] = "vpgl_camera_double_sptr";   // rational camera
   input_types_[i++] = "bvxm_voxel_world_sptr";     // voxel world spec
+  input_types_[i++] = "unsigned";     // voxel world spec
 
   //output
   output_data_.resize(2,brdb_value_sptr(0));
@@ -64,6 +65,11 @@ bool bvxm_roi_init_process::execute()
     static_cast<brdb_value_t<bvxm_voxel_world_sptr >* >(input_data_[2].ptr());
   bvxm_voxel_world_sptr voxel_world = input2->value();
 
+    //scale
+  brdb_value_t<unsigned >* input3 =
+    static_cast<brdb_value_t<unsigned >* >(input_data_[3].ptr());
+  unsigned scale = input3->value();
+
   // uncertainity (meters) -- SHOULD BE A PARAM
   float uncertainty=0;
   if (!parameters()->get_value("error", uncertainty))
@@ -80,7 +86,7 @@ bool bvxm_roi_init_process::execute()
   }
 
   vpgl_local_rational_camera<double> local_camera;
-  if (!roi_init(image_path, rat_camera, world_params, uncertainty, img_ptr, local_camera)) {
+  if (!roi_init(image_path, rat_camera, world_params, uncertainty, img_ptr, local_camera,scale)) {
     vcl_cerr << "The process has failed!\n";
     return false;
   }
@@ -102,7 +108,8 @@ bool bvxm_roi_init_process::roi_init(vcl_string const& image_path,
                                      bvxm_world_params_sptr world_params,
                                      float error,
                                      vil_image_view<unsigned char>* nitf_image_unsigned_char,
-                                     vpgl_local_rational_camera<double>& local_camera)
+                                     vpgl_local_rational_camera<double>& local_camera,
+                                     unsigned scale)
 {
   // read the image and extract the camera
   vil_image_resource_sptr img = vil_load_image_resource(image_path.c_str());
@@ -115,12 +122,12 @@ bool bvxm_roi_init_process::roi_init(vcl_string const& image_path,
 
   vil_nitf2_image* nitf =  static_cast<vil_nitf2_image*> (img.ptr());
 
-  vgl_vector_3d<unsigned int> dims = world_params->num_voxels();
+  vgl_vector_3d<unsigned int> dims = world_params->num_voxels(scale);
   int dimx = dims.x();
   int dimy = dims.y();
   int dimz = dims.z();
   double min_position[3];
-  float voxel_length = world_params->voxel_length();
+  float voxel_length = world_params->voxel_length(scale);
   min_position[0] = world_params->corner().x();
   min_position[1] = world_params->corner().y();
   min_position[2] = world_params->corner().z();

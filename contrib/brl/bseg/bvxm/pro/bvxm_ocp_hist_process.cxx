@@ -10,12 +10,13 @@ bvxm_ocp_hist_process::bvxm_ocp_hist_process()
   // This process has 2 inputs:
   //input[0]: The voxel world
   //input[1]: The path for the output file
-  input_data_.resize(2, brdb_value_sptr(0));
-  input_types_.resize(2);
+  input_data_.resize(3, brdb_value_sptr(0));
+  input_types_.resize(3);
 
   int i=0;
   input_types_[i++] = "bvxm_voxel_world_sptr";    // voxel_world for IMAGE ONLY update
   input_types_[i++] = "vcl_string";
+  input_types_[i++] = "unsigned";
 
   //output
   output_data_.resize(0,brdb_value_sptr(0));
@@ -41,23 +42,26 @@ bool bvxm_ocp_hist_process::execute()
   brdb_value_t<vcl_string >* input1 =
     static_cast<brdb_value_t<vcl_string >* >(input_data_[1].ptr());
   vcl_string path = input1->value();
-
-  compute(voxel_world, path);
+  //scale 
+  brdb_value_t<unsigned >* input2 =
+    static_cast<brdb_value_t<unsigned >* >(input_data_[2].ptr());
+  unsigned scale = input2->value();
+  compute(voxel_world,scale, path);
 
   return true;
 }
 
-bool bvxm_ocp_hist_process::compute(bvxm_voxel_world_sptr w,
+bool bvxm_ocp_hist_process::compute(bvxm_voxel_world_sptr w, unsigned scale,
                                     vcl_string path)
 {
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
 
   // get ocuppancy probability grids
-  bvxm_voxel_grid_base_sptr ocp_grid_base = w->get_grid<OCCUPANCY>(0);
+  bvxm_voxel_grid_base_sptr ocp_grid_base = w->get_grid<OCCUPANCY>(0, scale);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
   bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
 
-  vgl_vector_3d<unsigned int> grid_size = w->get_params()->num_voxels();
+  vgl_vector_3d<unsigned int> grid_size = w->get_params()->num_voxels(scale);
   bsta_histogram<double> hist(0.0, 1.0, 20, 0.0);
 
   for (unsigned k_idx = 0; k_idx < (unsigned)grid_size.z(); ++k_idx, ++ocp_slab_it) {

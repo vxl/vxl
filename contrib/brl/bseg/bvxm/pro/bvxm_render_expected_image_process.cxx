@@ -13,7 +13,7 @@
 
 bvxm_render_expected_image_process::bvxm_render_expected_image_process()
 {
-  // process takes 6 inputs:
+  // process takes 7 inputs:
   //input[0]: The camera to render the expected image from
   //input[1]: number of pixels (x)
   //input[2]: number of pixels (y)
@@ -21,6 +21,8 @@ bvxm_render_expected_image_process::bvxm_render_expected_image_process()
   //input[4]: The apperance model type :this input must be either apm_mog_grey or apm_mog_rgb
   //          any other string will initialize the value for apm_mog_grey
   //input[5]: The bin index to be updated
+      //input[6]: The scale index to be updated
+
   input_data_.resize(6,brdb_value_sptr(0));
   input_types_.resize(6);
   input_types_[0] = "vpgl_camera_double_sptr";
@@ -29,6 +31,7 @@ bvxm_render_expected_image_process::bvxm_render_expected_image_process()
   input_types_[3] = "bvxm_voxel_world_sptr";
   input_types_[4] = "vcl_string";
   input_types_[5] = "unsigned";
+  input_types_[6] = "unsigned";
 
   // process has 2 outputs:
   // output[0]: The rendered frame
@@ -70,6 +73,10 @@ bool bvxm_render_expected_image_process::execute()
     static_cast<brdb_value_t<unsigned>* >(input_data_[5].ptr());
   unsigned bin_index = input5->value();
 
+    brdb_value_t<unsigned>* input6 = 
+    static_cast<brdb_value_t<unsigned>* >(input_data_[6].ptr());
+  unsigned scale_index = input6->value();
+
 
   //create image metadata object (no image with camera, so just use dummy):
   vil_image_view_base_sptr dummy_img = 0;
@@ -81,11 +88,11 @@ bool bvxm_render_expected_image_process::execute()
 
   if (voxel_type == "apm_mog_rgb"){  
     expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,3);
-    result = world->expected_image<APM_MOG_RGB>(camera_metadata, expected_img, *mask_img, bin_index);
+    result = world->expected_image<APM_MOG_RGB>(camera_metadata, expected_img, *mask_img, bin_index,scale_index);
   }
   else {
     expected_img = new vil_image_view<vxl_byte>(npixels_x,npixels_y,1);
-    result = world->expected_image<APM_MOG_GREY>(camera_metadata, expected_img, *mask_img, bin_index);
+    result = world->expected_image<APM_MOG_GREY>(camera_metadata, expected_img, *mask_img, bin_index,scale_index);
   }
 
   //store output

@@ -103,7 +103,7 @@ class bvxm_gen_synthetic_world_process : public bprb_process
                              bvxm_voxel_grid<float>* intensity_grid,
                              unsigned nx, unsigned ny, unsigned nz);
 
-  bool test_reconstructed_ocp(bvxm_voxel_world_sptr recon_world);
+  bool test_reconstructed_ocp(bvxm_voxel_world_sptr recon_world, unsigned scale=0);
 };
 
 #endif // bvxm_gen_synthetic_world_process_h_

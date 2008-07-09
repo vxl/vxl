@@ -52,7 +52,7 @@ class bvxm_ocp_compare_process : public bprb_process
   bool execute();
   bool finish() { return true; }
  private:
-  double compare(bvxm_voxel_world_sptr w1, bvxm_voxel_world_sptr w2, unsigned n);
+  double compare(bvxm_voxel_world_sptr w1, bvxm_voxel_world_sptr w2, unsigned n, unsigned scale=0);
   bool save_raw(char *ocp_array, int x, int y, int z, vcl_string filename);
 };
 
