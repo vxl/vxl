@@ -64,7 +64,7 @@ bool bvxm_compare_3d_voxels_process::execute()
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
 
   // get ocuppancy probability grids
-  bvxm_voxel_grid_base_sptr gt_ocp_grid_base = main_world->get_grid<OCCUPANCY>(0);
+  bvxm_voxel_grid_base_sptr gt_ocp_grid_base = main_world->get_grid<OCCUPANCY>(0,0);
   bvxm_voxel_grid<ocp_datatype> *gt_ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(gt_ocp_grid_base.ptr());
   //bvxm_voxel_grid<ocp_datatype>::const_iterator l_ocp_slab_it = lidar_ocp_grid->begin();
 

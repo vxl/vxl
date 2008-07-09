@@ -17,8 +17,8 @@
 bvxm_detect_scale_process::bvxm_detect_scale_process()
 {
   //inputs
-  input_data_.resize(3,brdb_value_sptr(0));
-  input_types_.resize(3);
+  input_data_.resize(4,brdb_value_sptr(0));
+  input_types_.resize(4);
   input_types_[0] = "bvxm_voxel_world_sptr";   // world
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "vil_image_view_base_sptr";
