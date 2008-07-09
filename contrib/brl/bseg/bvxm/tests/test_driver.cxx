@@ -14,17 +14,17 @@ DECLARE( test_lidar_camera );
 
 void register_tests()
 {
-  //REGISTER( test_voxel_storage_mem );
-  //REGISTER( test_voxel_storage_disk );
+  REGISTER( test_voxel_storage_mem );
+  REGISTER( test_voxel_storage_disk );
   REGISTER( test_voxel_storage_disk_cached );
-  //REGISTER( test_apm_processors );
-  //REGISTER( test_lidar_processor );
+  REGISTER( test_apm_processors );
+  REGISTER( test_lidar_processor );
   REGISTER( test_voxel_grid );
-  //REGISTER( test_voxel_world );
-  //REGISTER( test_voxel_world_update );
-  //REGISTER( test_voxel_world_mog_image );
-  //REGISTER( test_gen_synthetic_world );
-  //REGISTER( test_lidar_camera );
+  REGISTER( test_voxel_world );
+  REGISTER( test_voxel_world_update );
+  REGISTER( test_voxel_world_mog_image );
+  REGISTER( test_gen_synthetic_world );
+  REGISTER( test_lidar_camera );
 }
 
 DEFINE_MAIN;
