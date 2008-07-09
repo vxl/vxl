@@ -4,7 +4,6 @@
 #include <bprb/bprb_parameters.h>
 
 #include <vil/vil_image_view_base.h>
-#include <vil/vil_convert.h>
 #include <brip/brip_vil_float_ops.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/algo/vpgl_backproject.h>
@@ -14,8 +13,6 @@
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_voxel_traits.h>
 #include <bvxm/bvxm_util.h>
-#include <vil/vil_new.h>
-#include <brip/brip_vil_float_ops.h>
 
 bvxm_detect_scale_process::bvxm_detect_scale_process()
 {
@@ -29,8 +26,7 @@ bvxm_detect_scale_process::bvxm_detect_scale_process()
   //output
   output_data_.resize(1,brdb_value_sptr(0));
   output_types_.resize(1);
-  output_types_[0]= "unsigned";      // output an expected image of the object at the highest prob location overlayed 
-
+  output_types_[0]= "unsigned";      // output an expected image of the object at the highest prob location overlayed
 }
 
 
@@ -57,10 +53,8 @@ bool bvxm_detect_scale_process::execute()
   double nj = static_cast<double>(input_img->nj());
 
   double image_diag = vcl_sqrt(ni*ni + nj*nj);
-  if(image_diag == 0)
+  if (image_diag == 0)
     return false;
-
-
 
   bgeo_lvcs_sptr lvcs=main_world->get_params()->lvcs();
 
@@ -78,14 +72,14 @@ bool bvxm_detect_scale_process::execute()
 
   vcl_cout<<"\n Success one";
 
-  if(!success)
+  if (!success)
     return false;
   success = vpgl_backproject::bproj_plane(camera.ptr(), lr,
                                                world_plane,
                                                world_point,
                                                wlr);
   vcl_cout<<"\n Success two";
-  if(!success)
+  if (!success)
     return false;
 
   //  // convert upper left position to meters
@@ -103,17 +97,17 @@ bool bvxm_detect_scale_process::execute()
 
   double world_diag = vcl_sqrt((wlr.x()-wul.x())*(wlr.x()-wul.x())+(wlr.y()-wul.y())*(wlr.y()-wul.y()));
   //shouldn't happen
-  if(world_diag==0)
+  if (world_diag==0)
     return false;
   double diag_gsd = world_diag/(image_diag*main_world->get_params()->voxel_length());
   vcl_cout<<"\n Success three";
   // scale should always be greater than 0
-  if(diag_gsd<0)
+  if (diag_gsd<0)
       return false;
   unsigned int scale=0;
-  if(diag_gsd>=1)
+  if (diag_gsd>=1)
       scale=(unsigned) vcl_ceil((vcl_log(diag_gsd)/vcl_log(2.0))-0.5);
-  vcl_cout<<"The scale of the current image is "<<scale<< "and  "<<diag_gsd <<"\n";
+  vcl_cout<<"The scale of the current image is "<<scale<< "and  "<<diag_gsd << vcl_endl;
   brdb_value_sptr output0 = new brdb_value_t<unsigned>(scale);
   output_data_[0] = output0;
 
