@@ -24,8 +24,8 @@ bvxm_detect_changes_process::bvxm_detect_changes_process()
   //          any other string will initialize the value for apm_mog_grey
   //input[4]: The bin index to be updated
   //input[5]: The image scale index  detected
-  input_data_.resize(5,brdb_value_sptr(0));
-  input_types_.resize(5);
+  input_data_.resize(6,brdb_value_sptr(0));
+  input_types_.resize(6);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "bvxm_voxel_world_sptr";
