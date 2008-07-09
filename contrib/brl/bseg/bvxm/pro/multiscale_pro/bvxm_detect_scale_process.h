@@ -1,9 +1,8 @@
-// This is contrib/bvxm/pro/bvxm_detect_scale_process.h
+// This is brl/bseg/bvxm/pro/multiscale_pro/bvxm_detect_scale_process.h
 #ifndef bvxm_detect_scale_process_h_
 #define bvxm_detect_scale_process_h_
 //:
 // \file
-//
 //
 //  CAUTION: Input image is assumed to have type vxl_byte
 //
@@ -11,16 +10,12 @@
 // \date 04/15/2008
 //
 // \verbatim
-// Modifications 
-//
-//
+//  Modifications
+//  <none yet>
 // \endverbatim
 
 #include <vcl_string.h>
-#include <vcl_algorithm.h>
 #include <bprb/bprb_process.h>
-
-#include <vil/vil_image_view.h>
 
 class bvxm_detect_scale_process : public bprb_process
 {

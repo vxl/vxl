@@ -1,4 +1,4 @@
-// This is brl/bseg/bvxm/pro/bvxm_save_multiscale_occupancy_raw_process.h
+// This is brl/bseg/bvxm/pro/multiscale_pro/bvxm_save_multiscale_occupancy_raw_process.h
 #ifndef bvxm_save_multiscale_occupancy_raw_process_h_
 #define bvxm_save_multiscale_occupancy_raw_process_h_
 //:
