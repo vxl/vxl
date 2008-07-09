@@ -80,9 +80,7 @@ bool bvxm_update_multiscale_process::execute()
     //static_cast<brdb_value_t<unsigned>* >(input_data_[6].ptr());
     unsigned max_scale = world->get_params()->max_scale();
 
-  char const* filename;
-  char const* file_format = ".tiff";
-  char const* temp_dir;
+
 
   typedef bvxm_voxel_traits<APM_MOG_GREY>::obs_datatype obs_datatype;
 
@@ -95,24 +93,12 @@ bool bvxm_update_multiscale_process::execute()
 
   for (unsigned scale = curr_scale;scale < max_scale;scale++)
   {
-      //bvxm_voxel_slab<obs_datatype> image_slab(img->ni(),img->nj(), 1);
-      //bvxm_util::img_to_slab(img,image_slab);
-
-      //bvxm_util::smooth_gaussian(image_slab,vcl_sqrt(vcl_pow(2.0,scale)),vcl_sqrt(vcl_pow(2.0,scale)));
-
-      //vil_image_view_base_sptr scale_img = img;
-
-      //bvxm_util::slab_to_img(image_slab,scale_img);
-      vil_image_view<float> prob_map(img->ni(),img->nj(),1);
+     vil_image_view<float> prob_map(img->ni(),img->nj(),1);
       vil_image_view<bool> mask(img->ni(),img->nj(),1);
-
-      vcl_cout<<"Scale is  "<<scale<<vcl_endl;
-      vcl_cout.flush();
-      if (scale!=curr_scale)
+      
+      if(scale!=curr_scale)
       {
-          //vil_save(*img.as_pointer(),"d:/scaledown.tiff");
           img=bvxm_multiscale_util::downsample_image_by_two(img);
-          //vil_save(*img.as_pointer(),"d:/scaleup.tiff");
           camera=bvxm_multiscale_util::downsample_camera( camera, scale);
           prob_map.set_size(img->ni(),img->nj());
           mask.set_size(img->ni(),img->nj());
