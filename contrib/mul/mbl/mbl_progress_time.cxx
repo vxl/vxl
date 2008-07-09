@@ -47,7 +47,7 @@ vcl_string mbl_progress_time::is_a() const
 void mbl_progress_time::on_set_estimated_iterations(const vcl_string& identifier,
                                                     const int /*total_iterations*/)
 { 
-  os_ << "Starting " << identifier << vcl_endl; 
+  os_ << "Starting mbl_progress_time \"" << identifier << "\"" << vcl_endl; 
   timer_.mark();
 }
 
@@ -59,7 +59,7 @@ void mbl_progress_time::on_set_progress(const vcl_string& identifier,
                                         const int progress)
 {
   double tsec = timer_.real()/1000.0;
-  os_ << "Elapsed time for " << identifier << ": " << tsec << " s" << vcl_endl;
+  os_ << "Elapsed time for mbl_progress_time \"" << identifier << "\": " << tsec << " s" << vcl_endl;
 }
 
 
@@ -68,5 +68,6 @@ void mbl_progress_time::on_set_progress(const vcl_string& identifier,
 //========================================================================
 void mbl_progress_time::on_end_progress(const vcl_string &identifier)
 { 
-  os_ << "Finishing " << identifier << vcl_endl; 
+  double tsec = timer_.real()/1000.0;
+  os_ << "Finishing mbl_progress_time \"" << identifier << "\" (total elapsed time: " << tsec << " s)" << vcl_endl; 
 }

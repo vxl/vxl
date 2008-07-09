@@ -42,7 +42,7 @@ vcl_string mbl_progress_text::is_a() const
 void mbl_progress_text::on_set_estimated_iterations(const vcl_string& identifier,
                                                     const int /*total_iterations*/)
 {
-  os_ << "Starting " << identifier << vcl_endl;
+  os_ << "Starting mbl_progress_text \"" << identifier << "\"" << vcl_endl;
 }
 
 
@@ -52,7 +52,7 @@ void mbl_progress_text::on_set_estimated_iterations(const vcl_string& identifier
 void mbl_progress_text::on_set_progress(const vcl_string& identifier,
                                         const int progress)
 {
-  os_ << "Progress for " << identifier << " is " << progress
+  os_ << "Progress for mbl_progress_text \"" << identifier << "\" is " << progress
       << " (out of " << estimated_iterations(identifier) << ')'
       << vcl_endl;
 }
@@ -63,5 +63,5 @@ void mbl_progress_text::on_set_progress(const vcl_string& identifier,
 //========================================================================
 void mbl_progress_text::on_end_progress(const vcl_string &identifier)
 {
-  os_ << "Finishing " << identifier << vcl_endl;
+  os_ << "Finishing mbl_progress_text \"" << identifier << "\"" << vcl_endl;
 }
