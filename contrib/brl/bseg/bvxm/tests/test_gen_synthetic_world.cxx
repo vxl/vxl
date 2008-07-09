@@ -574,8 +574,9 @@ void gen_voxel_world_plane(vgl_vector_3d<unsigned> grid_size,
 
 bool test_reconstructed_ocp(bvxm_voxel_world_sptr recon_world)
 {
+    unsigned scale=0;
   bvxm_voxel_grid<float>* ocp_grid =
-    dynamic_cast<bvxm_voxel_grid<float>*>(recon_world->get_grid<OCCUPANCY>(0).ptr());
+    dynamic_cast<bvxm_voxel_grid<float>*>(recon_world->get_grid<OCCUPANCY>(0,scale).ptr());
 
   vxl_uint_32 nx = ocp_grid->grid_size().x();
   vxl_uint_32 ny = ocp_grid->grid_size().y();
@@ -622,17 +623,18 @@ static void test_gen_synthetic_world()
   world->set_params(world_params);
   world->clean_grids();
 
+  unsigned scale=0;
   unsigned int bin_num_1 = 0,bin_num_2 = 10;
 
   //create an mog grid for appearance model and use appearence model processor update to properly initialize it
   bvxm_voxel_grid<float>* ocp_grid = static_cast<bvxm_voxel_grid<float>* >
-    (world->get_grid<OCCUPANCY>(0).as_pointer());
+    (world->get_grid<OCCUPANCY>(0,scale).as_pointer());
 
   bvxm_voxel_grid<apm_datatype>* apm_grid_1 = static_cast<bvxm_voxel_grid<apm_datatype>* >
-    (world->get_grid<APM_MOG_GREY>(bin_num_1).as_pointer());
+    (world->get_grid<APM_MOG_GREY>(bin_num_1,scale).as_pointer());
 
   bvxm_voxel_grid<apm_datatype>* apm_grid_2 = static_cast<bvxm_voxel_grid<apm_datatype>* >
-    (world->get_grid<APM_MOG_GREY>(bin_num_2).as_pointer());
+    (world->get_grid<APM_MOG_GREY>(bin_num_2,scale).as_pointer());
 
   bvxm_voxel_grid<float>* intensity_grid = new bvxm_voxel_grid<float>
     ("test_gen_synthetic_world/intensity.vox",grid_size);
@@ -658,9 +660,9 @@ static void test_gen_synthetic_world()
 
   recon_world->set_params(recon_world_params);
   recon_world->clean_grids();
-  recon_world->get_grid<APM_MOG_GREY>(bin_num_1);
-  recon_world->get_grid<APM_MOG_GREY>(bin_num_2);
-  recon_world->get_grid<OCCUPANCY>(0);
+  recon_world->get_grid<APM_MOG_GREY>(bin_num_1,scale);
+  recon_world->get_grid<APM_MOG_GREY>(bin_num_2,scale);
+  recon_world->get_grid<OCCUPANCY>(0,scale);
 
   //reconstruct the world from synthetic images and the apm grid stored in bin bin_num_1
   reconstruct_world(recon_world,cameras, image_set_1,bin_num_1);

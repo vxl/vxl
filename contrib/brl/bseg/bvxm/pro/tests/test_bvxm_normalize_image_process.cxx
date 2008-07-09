@@ -89,13 +89,13 @@ bvxm_voxel_slab_base_sptr create_mog_image_using_grey_processor(vcl_string model
   vgl_point_3d<float> corner(0,0,0);
   vgl_vector_3d<unsigned> num_voxels(nx,ny,nz);
   float voxel_length = 1.0f;
-
+  unsigned scale=0;
   // create a synthetic world
   bvxm_world_params_sptr params = new bvxm_world_params();
   params->set_params(model_dir, corner, num_voxels, voxel_length);
   vox_world = new bvxm_voxel_world(params);
 
-  bvxm_voxel_grid_base_sptr ocp_grid_ptr = vox_world->get_grid<OCCUPANCY>(0);
+  bvxm_voxel_grid_base_sptr ocp_grid_ptr = vox_world->get_grid<OCCUPANCY>(0,scale);
   bvxm_voxel_grid<float> *ocp_grid = dynamic_cast<bvxm_voxel_grid<float>*>(ocp_grid_ptr.ptr());
   // fill in grid with zeros to start
   ocp_grid->initialize_data(0.0f);
@@ -119,7 +119,7 @@ bvxm_voxel_slab_base_sptr create_mog_image_using_grey_processor(vcl_string model
 
   // iterate through layers of apm grid and update each level with the same synthetic image
   // if you want different levels to look different youll have to create a different image for each level
-  bvxm_voxel_grid_base_sptr apm_base = vox_world->get_grid<APM_MOG_GREY>(0);
+  bvxm_voxel_grid_base_sptr apm_base = vox_world->get_grid<APM_MOG_GREY>(0,scale);
   bvxm_voxel_grid<mog_type> *apm_grid = dynamic_cast<bvxm_voxel_grid<mog_type>*>(apm_base.ptr());
   // initialize the appearance model data to get rid of any previous data on disk
   apm_grid->initialize_data(bvxm_voxel_traits<APM_MOG_GREY>::initial_val());
@@ -279,6 +279,7 @@ MAIN( test_bvxm_normalize_image_process )
   brdb_value_sptr v2 = new brdb_value_t<bvxm_voxel_world_sptr>(vox_world);
   brdb_value_sptr v3 = new brdb_value_t<vcl_string>("apm_mog_grey");
   brdb_value_sptr v4 = new brdb_value_t<unsigned>(0);
+  brdb_value_sptr v5 = new brdb_value_t<unsigned>(0);
 
   //: inits with the default params
   bool good = bprb_batch_process_manager::instance()->init_process("bvxmNormalizeImageProcess");
@@ -287,6 +288,8 @@ MAIN( test_bvxm_normalize_image_process )
   good = good && bprb_batch_process_manager::instance()->set_input(2, v2);
   good = good && bprb_batch_process_manager::instance()->set_input(3, v3);
   good = good && bprb_batch_process_manager::instance()->set_input(4, v4);
+good = good && bprb_batch_process_manager::instance()->set_input(5, v5);
+
   good = good && bprb_batch_process_manager::instance()->run_process();
 
   unsigned id_img, id_a, id_b;

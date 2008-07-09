@@ -59,12 +59,15 @@ MAIN( test_bvxm_rpc_registration_process )
   brdb_value_sptr v3 = new brdb_value_t<bool>(true);
   brdb_value_sptr v4 = new brdb_value_t<bool>(true);
   brdb_value_sptr v5 = new brdb_value_t<bool>(false);
+  brdb_value_sptr v6 = new brdb_value_t<unsigned>(0);
+
   good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
   good = good && bprb_batch_process_manager::instance()->set_input(1, v1);
   good = good && bprb_batch_process_manager::instance()->set_input(2, v2);
   good = good && bprb_batch_process_manager::instance()->set_input(3, v3);
   good = good && bprb_batch_process_manager::instance()->set_input(4, v4);
   good = good && bprb_batch_process_manager::instance()->set_input(5, v5);
+    good = good && bprb_batch_process_manager::instance()->set_input(6, v6);
   good = good && bprb_batch_process_manager::instance()->run_process();
 
   unsigned id_cam, id_img;

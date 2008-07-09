@@ -49,11 +49,14 @@ MAIN( test_bvxm_roi_init_process )
   world->set_params(world_params);
   brdb_value_sptr v2 = new brdb_value_t<bvxm_voxel_world_sptr>(world);
 
+  brdb_value_sptr v3 = new brdb_value_t<unsigned>(0);
+
   bool good = bprb_batch_process_manager::instance()->init_process("bvxmRoiInitProcess");
   good = bprb_batch_process_manager::instance()->set_params("roi_params.xml");
   good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
   good = good && bprb_batch_process_manager::instance()->set_input(1, v1);
   good = good && bprb_batch_process_manager::instance()->set_input(2, v2);
+  good = good && bprb_batch_process_manager::instance()->set_input(3, v3);
   good = good && bprb_batch_process_manager::instance()->run_process();
   TEST("run roi process should be unsuccesful", good ,false);
 
