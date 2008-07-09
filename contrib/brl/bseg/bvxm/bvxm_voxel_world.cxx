@@ -73,7 +73,7 @@ vcl_ostream&  operator<<(vcl_ostream& s, bvxm_voxel_world const& vox_world)
 }
 
 //: save the occupancy grid as an 8-bit 3-d vff image
-bool bvxm_voxel_world::save_occupancy_vff(vcl_string filename)
+bool bvxm_voxel_world::save_occupancy_vff(vcl_string filename,unsigned scale_idx)
 {
   // open file for binary writing
   vcl_fstream ofs(filename.c_str(),vcl_ios::binary | vcl_ios::out);
@@ -86,7 +86,7 @@ bool bvxm_voxel_world::save_occupancy_vff(vcl_string filename)
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
 
   bvxm_voxel_grid<ocp_datatype> *ocp_grid =
-    dynamic_cast<bvxm_voxel_grid<ocp_datatype>*>(get_grid<OCCUPANCY>(0).ptr());
+    dynamic_cast<bvxm_voxel_grid<ocp_datatype>*>(get_grid<OCCUPANCY>(0,scale_idx).ptr());
 
   vxl_uint_32 nx = ocp_grid->grid_size().x();
   vxl_uint_32 ny = ocp_grid->grid_size().y();
@@ -136,8 +136,9 @@ bool bvxm_voxel_world::save_occupancy_vff(vcl_string filename)
 }
 
 //: save the occupancy grid in a ".raw" format readable by Drishti volume rendering software
-bool bvxm_voxel_world::save_occupancy_raw(vcl_string filename)
+bool bvxm_voxel_world::save_occupancy_raw(vcl_string filename,unsigned scale)
 {
+  assert(scale<=params_->max_scale());
   vcl_fstream ofs(filename.c_str(),vcl_ios::binary | vcl_ios::out);
   if (!ofs.is_open()) {
     vcl_cerr << "error opening file " << filename << " for write!\n";
@@ -149,7 +150,7 @@ bool bvxm_voxel_world::save_occupancy_raw(vcl_string filename)
   unsigned char data_type = 0; // 0 means unsigned byte
 
   bvxm_voxel_grid<ocp_datatype> *ocp_grid =
-    dynamic_cast<bvxm_voxel_grid<ocp_datatype>*>(get_grid<OCCUPANCY>(0).ptr());
+    dynamic_cast<bvxm_voxel_grid<ocp_datatype>*>(get_grid<OCCUPANCY>(0,scale).ptr());
 
   vxl_uint_32 nx = ocp_grid->grid_size().x();
   vxl_uint_32 ny = ocp_grid->grid_size().y();
@@ -184,7 +185,7 @@ bool bvxm_voxel_world::save_occupancy_raw(vcl_string filename)
 }
 
 //: save the edge probability grid as an 8-bit 3-d vff image
-bool bvxm_voxel_world::save_edges_vff(vcl_string filename)
+bool bvxm_voxel_world::save_edges_vff(vcl_string filename,unsigned scale)
 {
   // open file for binary writing
   vcl_fstream ofs(filename.c_str(),vcl_ios::binary | vcl_ios::out);
@@ -197,7 +198,7 @@ bool bvxm_voxel_world::save_edges_vff(vcl_string filename)
   typedef bvxm_voxel_traits<EDGES>::voxel_datatype edges_datatype;
 
   bvxm_voxel_grid<edges_datatype> *edges_grid =
-    dynamic_cast<bvxm_voxel_grid<edges_datatype>*>(get_grid<EDGES>(0).ptr());
+    dynamic_cast<bvxm_voxel_grid<edges_datatype>*>(get_grid<EDGES>(0,scale).ptr());
 
   vxl_uint_32 nx = edges_grid->grid_size().x();
   vxl_uint_32 ny = edges_grid->grid_size().y();
@@ -247,7 +248,7 @@ bool bvxm_voxel_world::save_edges_vff(vcl_string filename)
 }
 
 //: save the edge probability grid in a ".raw" format readable by Drishti volume rendering software
-bool bvxm_voxel_world::save_edges_raw(vcl_string filename)
+bool bvxm_voxel_world::save_edges_raw(vcl_string filename,unsigned scale)
 {
   vcl_fstream ofs(filename.c_str(),vcl_ios::binary | vcl_ios::out);
   if (!ofs.is_open()) {
@@ -260,7 +261,7 @@ bool bvxm_voxel_world::save_edges_raw(vcl_string filename)
   unsigned char data_type = 0; // 0 means unsigned byte
 
   bvxm_voxel_grid<edges_datatype> *edges_grid =
-    dynamic_cast<bvxm_voxel_grid<edges_datatype>*>(get_grid<EDGES>(0).ptr());
+    dynamic_cast<bvxm_voxel_grid<edges_datatype>*>(get_grid<EDGES>(0,scale).ptr());
 
   vxl_uint_32 nx = edges_grid->grid_size().x();
   vxl_uint_32 ny = edges_grid->grid_size().y();
@@ -311,17 +312,17 @@ bool bvxm_voxel_world::clean_grids()
 }
 
 // Update a voxel grid with data from lidar/camera pair
-bool bvxm_voxel_world::update_lidar(bvxm_image_metadata const& observation)
+bool bvxm_voxel_world::update_lidar(bvxm_image_metadata const& observation, unsigned scale)
 {
   vil_image_view<float> dummy;
   vil_image_view<bool> mask;
-  return this->update_lidar_impl(observation, false, dummy, false, mask);
+  return this->update_lidar_impl(observation, false, dummy, false, mask, scale);
 }
 
 
 // Update a voxel grid with data from lidar/camera pair and return probability density of pixel values.
 bool bvxm_voxel_world::update_lidar(bvxm_image_metadata const& observation,
-                                    vil_image_view<float> &pix_prob_density, vil_image_view<bool> &mask)
+                                    vil_image_view<float> &pix_prob_density, vil_image_view<bool> &mask, unsigned scale)
 {
   // check image sizes
   if ( (observation.img->ni() != pix_prob_density.ni()) || (observation.img->nj() != pix_prob_density.nj()) ) {
@@ -330,7 +331,7 @@ bool bvxm_voxel_world::update_lidar(bvxm_image_metadata const& observation,
   if ( (observation.img->ni() != mask.ni()) || (observation.img->nj() != mask.nj()) ) {
     vcl_cerr << "error: metadata image size does not match mask image size.\n";
   }
-  return this->update_lidar_impl(observation, true, pix_prob_density, true, mask);
+  return this->update_lidar_impl(observation, true, pix_prob_density, true, mask, scale);
 }
 
 // Update voxel grid with data from LIDAR image/camera pair and return probability density of pixel values.
@@ -338,7 +339,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
                                          bool return_prob,
                                          vil_image_view<float> &pix_prob_density,
                                          bool return_mask,
-                                         vil_image_view<bool> &mask)
+                                         vil_image_view<bool> &mask, unsigned scale)
 {
   typedef bvxm_voxel_traits<LIDAR>::voxel_datatype obs_datatype;
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
@@ -350,7 +351,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
   bvxm_lidar_processor lidar_processor(10);
 
   // parameters
-  vgl_vector_3d<unsigned int> grid_size = params_->num_voxels();
+  vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale);
   ocp_datatype min_vox_prob = params_->min_occupancy_prob();
   ocp_datatype max_vox_prob = params_->max_occupancy_prob();
 
@@ -361,7 +362,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
     for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
     {
-      compute_plane_image_H(metadata.camera,z,Hp2i,Hi2p);
+      compute_plane_image_H(metadata.camera,z,Hp2i,Hi2p, scale);
       H_plane_to_img.push_back(Hp2i);
       H_img_to_plane.push_back(Hi2p);
     }
@@ -405,7 +406,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
   vcl_cout << "Pass 1: " << vcl_endl;
 
   // get ocuppancy probability grid
-  bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0);
+  bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,  scale);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
 
@@ -610,12 +611,12 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
 }
 
 // update voxel grid for edges with data from image/camera pair and return the edge probability density of pixel values
-bool bvxm_voxel_world::update_edges(bvxm_image_metadata const& metadata)
+bool bvxm_voxel_world::update_edges(bvxm_image_metadata const& metadata, unsigned scale)
 {
   // datatype for current appearance model
   typedef bvxm_voxel_traits<EDGES>::voxel_datatype edges_datatype;
 
-  vgl_vector_3d<unsigned int> grid_size = params_->num_voxels();
+  vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale);
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
   vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
@@ -624,7 +625,7 @@ bool bvxm_voxel_world::update_edges(bvxm_image_metadata const& metadata)
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
     for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
     {
-      compute_plane_image_H(metadata.camera,z,Hp2i,Hi2p);
+      compute_plane_image_H(metadata.camera,z,Hp2i,Hi2p,  scale);
       H_plane_to_img.push_back(Hp2i);
       H_img_to_plane.push_back(Hi2p);
     }
@@ -656,7 +657,7 @@ bool bvxm_voxel_world::update_edges(bvxm_image_metadata const& metadata)
   image_slab.fill(0.0);
 
   // get edge probability grid
-  bvxm_voxel_grid_base_sptr edges_grid_base = this->get_grid<EDGES>(0);
+  bvxm_voxel_grid_base_sptr edges_grid_base = this->get_grid<EDGES>(0, scale);
   bvxm_voxel_grid<edges_datatype> *edges_grid  = static_cast<bvxm_voxel_grid<edges_datatype>*>(edges_grid_base.ptr());
 
   // Pass 1: to build the marginal
@@ -712,13 +713,13 @@ bool bvxm_voxel_world::update_edges(bvxm_image_metadata const& metadata)
   return true;
 }
 
-bool bvxm_voxel_world::expected_edge_image(bvxm_image_metadata const& camera,vil_image_view_base_sptr &expected)
+bool bvxm_voxel_world::expected_edge_image(bvxm_image_metadata const& camera,vil_image_view_base_sptr &expected, unsigned scale)
 {
   // datatype for current appearance model
   typedef bvxm_voxel_traits<EDGES>::voxel_datatype edges_datatype;
 
   // extract global parameters
-  vgl_vector_3d<unsigned int> grid_size = params_->num_voxels();
+  vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale);
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
   vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
@@ -726,7 +727,7 @@ bool bvxm_voxel_world::expected_edge_image(bvxm_image_metadata const& camera,vil
   for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
   {
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
-    compute_plane_image_H(camera.camera,z,Hp2i,Hi2p);
+    compute_plane_image_H(camera.camera,z,Hp2i,Hi2p, scale);
     H_plane_to_img.push_back(Hp2i);
     H_img_to_plane.push_back(Hi2p);
   }
@@ -738,7 +739,7 @@ bool bvxm_voxel_world::expected_edge_image(bvxm_image_metadata const& camera,vil
   edges_image.fill(0.0f);
 
   // get edges probability grid
-  bvxm_voxel_grid_base_sptr edges_grid_base = this->get_grid<EDGES>(0);
+  bvxm_voxel_grid_base_sptr edges_grid_base = this->get_grid<EDGES>(0, scale);
   bvxm_voxel_grid<edges_datatype> *edges_grid  = static_cast<bvxm_voxel_grid<edges_datatype>*>(edges_grid_base.ptr());
 
   bvxm_voxel_grid<edges_datatype>::const_iterator edges_slab_it(edges_grid->begin());
@@ -781,12 +782,12 @@ bool bvxm_voxel_world::expected_edge_image(bvxm_image_metadata const& camera,vil
 
 //: generate a heightmap from the viewpoint of a virtual camera
 // The pixel values are the z values of the most likely voxel intercepted by the corresponding camera ray
-bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_image_view<unsigned> &heightmap)
+bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_image_view<unsigned> &heightmap,unsigned scale_idx)
 {
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
 
   // extract global parameters
-  vgl_vector_3d<unsigned int> grid_size = params_->num_voxels();
+  vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale_idx);
 
 
   // compute homographies from voxel planes to image coordinates and vise-versa.
@@ -796,7 +797,7 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
   for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
   {
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
-    compute_plane_image_H(virtual_camera,z,Hp2i,Hi2p);
+    compute_plane_image_H(virtual_camera,z,Hp2i,Hi2p,scale_idx);
     H_plane_to_virtual_img.push_back(Hp2i);
     H_virtual_img_to_plane.push_back(Hi2p);
   }
@@ -812,7 +813,7 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
   max_prob_image.fill(0.0f);
 
   // get ocuppancy probability grid
-  bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0);
+  bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
   bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
@@ -924,10 +925,10 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
   return true;
 }
 
-vgl_point_3d<float> bvxm_voxel_world::voxel_index_to_xyz(unsigned vox_i, unsigned vox_j, unsigned vox_k)
+vgl_point_3d<float> bvxm_voxel_world::voxel_index_to_xyz(unsigned vox_i, unsigned vox_j, unsigned vox_k, unsigned scale_idx)
 {
-  float vox_len = params_->voxel_length();
-  vgl_vector_3d<unsigned> num_vox = params_->num_voxels();
+  float vox_len = params_->voxel_length(scale_idx);
+  vgl_vector_3d<unsigned> num_vox = params_->num_voxels(scale_idx);
 
   // corner in parameters refers to the bottom. we want the top since slice 0 is the top-most slice.
   vgl_point_3d<float> grid_origin = params_->corner() + vgl_vector_3d<float>(0.5f, 0.5f, vox_len*(num_vox.z() - 0.5f));
@@ -938,9 +939,9 @@ vgl_point_3d<float> bvxm_voxel_world::voxel_index_to_xyz(unsigned vox_i, unsigne
   return grid_origin + step_i*vox_i + step_j*vox_j + step_k*vox_k;
 }
 
-void bvxm_voxel_world::compute_plane_image_H(vpgl_camera_double_sptr const& cam, unsigned k_idx, vgl_h_matrix_2d<double> &H_plane_to_image, vgl_h_matrix_2d<double> &H_image_to_plane)
+void bvxm_voxel_world::compute_plane_image_H(vpgl_camera_double_sptr const& cam, unsigned k_idx, vgl_h_matrix_2d<double> &H_plane_to_image, vgl_h_matrix_2d<double> &H_image_to_plane, unsigned scale_idx)
 {
-  vgl_vector_3d<unsigned int> grid_size = params_->num_voxels();
+  vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale_idx);
 
   vcl_vector<vgl_homg_point_2d<double> > voxel_corners_img;
   vcl_vector<vgl_homg_point_2d<double> > voxel_corners_vox;
