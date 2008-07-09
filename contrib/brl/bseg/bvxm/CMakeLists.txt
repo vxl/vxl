@@ -14,29 +14,28 @@ ENDIF (WIN32 AND VXL_USE_LFS)
 
 SET(bvxm_sources
 
-    bvxm_memory_chunk.h             bvxm_memory_chunk.cxx 
-    bvxm_mog_grey_processor.h       bvxm_mog_grey_processor.cxx  
+    bvxm_memory_chunk.h             bvxm_memory_chunk.cxx
+    bvxm_mog_grey_processor.h       bvxm_mog_grey_processor.cxx
     bvxm_mog_rgb_processor.h        bvxm_mog_rgb_processor.cxx
     bvxm_lidar_processor.h          bvxm_lidar_processor.cxx
     bvxm_world_params.h             bvxm_world_params.cxx
     bvxm_voxel_slab_base.h
     bvxm_voxel_slab.h               bvxm_voxel_slab.txx
-    bvxm_voxel_storage.h           
+    bvxm_voxel_storage.h
     bvxm_voxel_storage_disk.h       bvxm_voxel_storage_disk.txx
-    bvxm_voxel_storage_disk_cached.h  bvxm_voxel_storage_disk_cached.txx  
+    bvxm_voxel_storage_disk_cached.h  bvxm_voxel_storage_disk_cached.txx
     bvxm_voxel_storage_mem.h        bvxm_voxel_storage_mem.txx
     bvxm_voxel_slab_iterator.h      bvxm_voxel_slab_iterator.txx
-    bvxm_voxel_grid_base.h          
+    bvxm_voxel_grid_base.h
     bvxm_voxel_grid.h               bvxm_voxel_grid.txx
     bvxm_voxel_traits.h
     bvxm_voxel_world.h              bvxm_voxel_world.cxx
     bvxm_image_metadata.h           bvxm_image_metadata.cxx
-    bvxm_util.h                     bvxm_util.cxx  
-
+    bvxm_util.h                     bvxm_util.cxx
 
     #multiscale
-    multiscale/bvxm_multi_scale_voxel_world.h	multiscale/bvxm_multi_scale_voxel_world.cxx
-    multiscale/bvxm_multiscale_util.h	multiscale/bvxm_multiscale_util.cxx
+    multiscale/bvxm_multi_scale_voxel_world.h multiscale/bvxm_multi_scale_voxel_world.cxx
+    multiscale/bvxm_multiscale_util.h multiscale/bvxm_multiscale_util.cxx
 )
 
 INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
@@ -50,7 +49,7 @@ IF(TIFF_FOUND)
     )
   ENDIF(GEOTIFF_FOUND)
 ENDIF(TIFF_FOUND)
-  
+
 AUX_SOURCE_DIRECTORY(Templates bvxm_sources)
 
 ADD_LIBRARY( bvxm ${bvxm_sources})
@@ -64,6 +63,3 @@ SUBDIRS( pro )
 IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
-
-
-
