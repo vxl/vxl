@@ -503,12 +503,13 @@ vpgl_camera_double_sptr bvxm_multiscale_util::downsample_camera(vpgl_camera_doub
     {
         vpgl_local_rational_camera<double>* new_rat_camera=new vpgl_local_rational_camera<double>(*rat_camera);
         double u_s,v_s;
+        float factor=  vcl_pow(2.0f,-((float)scale));   
         rat_camera->image_scale(u_s,v_s);
-        new_rat_camera->set_image_scale(u_s/vcl_pow(2.0,scale),v_s/vcl_pow(2.0,scale));
+        new_rat_camera->set_image_scale(u_s*factor,v_s*factor);
 
         double u_off,v_off;
         rat_camera->image_offset(u_off,v_off);
-        new_rat_camera->set_image_offset(u_off/vcl_pow(2.0,scale),v_off/vcl_pow(2.0,scale));
+        new_rat_camera->set_image_offset(u_off*factor,v_off*factor);
 
         return new_rat_camera;
 
@@ -529,8 +530,10 @@ vpgl_camera_double_sptr bvxm_multiscale_util::downsample_persp_camera(vpgl_camer
         vnl_matrix_fixed<double,3,4> camera_matrix = persp_camera->get_matrix();
         vnl_matrix_fixed<double,3,3> scale_matrix;
         scale_matrix.fill(0.0);
-        scale_matrix.put(0,0,1/vcl_pow(2.0,scale));
-        scale_matrix.put(1,1,1/vcl_pow(2.0,scale));
+                float factor=  vcl_pow(2.0f,-((float)scale));   
+
+        scale_matrix.put(0,0,1*factor);
+        scale_matrix.put(1,1,1*factor);
         scale_matrix.put(2,2,1.0);
 
         vnl_matrix_fixed<double,3,4> new_camera_matrix = scale_matrix*camera_matrix;
