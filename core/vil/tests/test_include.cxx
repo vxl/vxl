@@ -31,7 +31,7 @@
 #include <vil/vil_math.h>
 #include <vil/vil_memory_chunk.h>
 #include <vil/vil_memory_image.h>
-#include <vil/vil_nearest_neighbour_interp.h>
+#include <vil/vil_nearest_interp.h>
 #include <vil/vil_new.h>
 #include <vil/vil_open.h>
 #include <vil/vil_pixel_format.h>
@@ -41,6 +41,7 @@
 #include <vil/vil_property.h>
 #include <vil/vil_resample_bicub.h>
 #include <vil/vil_resample_bilin.h>
+#include <vil/vil_resample_nearest.h>
 #include <vil/vil_rgb.h>
 #include <vil/vil_rgba.h>
 #include <vil/vil_rotate.h>

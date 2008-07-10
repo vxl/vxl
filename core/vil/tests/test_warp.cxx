@@ -8,7 +8,7 @@
 static vxl_byte interpolator(vil_image_view<vxl_byte> const& view,
                              double x, double y, unsigned p)
 {
-  return vil_nearest_neighbour_interp_safe(view, x, y, p);
+  return vil_nearest_interp_safe(view, x, y, p);
 }
 
 void mapper(double ox, double oy, double &ix, double &iy)

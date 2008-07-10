@@ -192,7 +192,8 @@ SET( vil_sources ${vil_sources}
   vil_resample_bicub.txx                vil_resample_bicub.h
 
   # Nearest Neighbour Sampling Operations
-  vil_nearest_neighbour_interp.h
+  vil_nearest_interp.txx                vil_nearest_interp.h
+  vil_resample_nearest.txx              vil_resample_nearest.h
 
   # Stuff
   vil_border.h

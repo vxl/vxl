@@ -36,6 +36,11 @@ ADD_EXECUTABLE( vil_test_all
   test_sample_profile_bicub.cxx
   test_sample_grid_bicub.cxx
   test_resample_bicub.cxx
+  test_nearest_interp.cxx
+  # test_sample_profile_nearest.cxx
+  # test_sample_grid_nearest.cxx
+  test_resample_nearest.cxx
+
 
   # Math
   test_math_value_range.cxx
@@ -73,6 +78,8 @@ ADD_TEST( vil_test_bicub_interp             ${EXECUTABLE_OUTPUT_PATH}/vil_test_a
 ADD_TEST( vil_test_sample_profile_bicub     ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_sample_profile_bicub)
 ADD_TEST( vil_test_sample_grid_bicub        ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_sample_grid_bicub)
 ADD_TEST( vil_test_resample_bicub           ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_resample_bicub)
+ADD_TEST( vil_test_nearest_interp           ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_nearest_interp)
+ADD_TEST( vil_test_resample_nearest         ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_resample_nearest)
 
 # Math
 ADD_TEST( vil_test_math_value_range         ${EXECUTABLE_OUTPUT_PATH}/vil_test_all test_math_value_range)

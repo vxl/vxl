@@ -9,9 +9,11 @@ DECLARE( test_stream );
 DECLARE( test_image_view );
 DECLARE( test_image_resource );
 DECLARE( test_bilin_interp );
+DECLARE( test_nearest_interp );
 DECLARE( test_sample_profile_bilin );
 DECLARE( test_sample_grid_bilin );
 DECLARE( test_resample_bilin );
+DECLARE( test_resample_nearest );
 DECLARE( test_bicub_interp );
 DECLARE( test_sample_profile_bicub );
 DECLARE( test_sample_grid_bicub );
@@ -42,6 +44,7 @@ register_tests()
   REGISTER( test_image_view );
   REGISTER( test_image_resource );
   REGISTER( test_bilin_interp );
+  REGISTER( test_nearest_interp );
   REGISTER( test_sample_profile_bilin );
   REGISTER( test_sample_grid_bilin );
   REGISTER( test_resample_bilin );
@@ -49,6 +52,7 @@ register_tests()
   REGISTER( test_sample_profile_bicub );
   REGISTER( test_sample_grid_bicub );
   REGISTER( test_resample_bicub );
+  REGISTER( test_resample_nearest );
   REGISTER( test_memory_chunk );
   REGISTER( test_deep_copy_3_plane );
   REGISTER( test_rotate_image );
