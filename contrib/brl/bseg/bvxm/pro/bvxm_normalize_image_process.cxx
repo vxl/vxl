@@ -17,15 +17,16 @@
 
 bvxm_normalize_image_process::bvxm_normalize_image_process()
 {
+
   //inputs
   input_data_.resize(6,brdb_value_sptr(0));
   input_types_.resize(6);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "bvxm_voxel_world_sptr";
-  input_types_[3] = "vcl_string";
-  input_types_[4] = "unsigned";
-  input_types_[5] = "unsigned";
+  input_types_[3] = "vcl_string"; 
+  input_types_[4] = "unsigned";  
+  input_types_[5] = "unsigned"; 
 
   //output
   output_data_.resize(3,brdb_value_sptr(0));
@@ -325,11 +326,11 @@ bool bvxm_normalize_image_process::execute()
     return false;
   }
 
-  if (verbose) {
+  //if (verbose) {
     vcl_ofstream file;
     file.open("./normalization_parameters.txt", vcl_ofstream::app);
     file << a << ' ' << b <<'\n';
-  }
+  //}
 
  
 

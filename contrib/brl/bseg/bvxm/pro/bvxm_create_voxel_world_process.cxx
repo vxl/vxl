@@ -63,7 +63,7 @@ bvxm_create_voxel_world_process::bvxm_create_voxel_world_process()
   if (!parameters()->add("Maximum Occupancy Probability", "max_ocp_prob", 1-1e-5f))
     vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << vcl_endl;
 
-    if (!parameters()->add("Maximum Scale", "max_scale", (unsigned) 0))
+    if (!parameters()->add("Maximum Scale", "max_scale", (unsigned) 1))
       vcl_cerr << "ERROR: Adding parameters in " << __FILE__ << vcl_endl;
 
 }

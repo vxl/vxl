@@ -162,7 +162,12 @@ bool bvxm_roi_init_process::roi_init(vcl_string const& image_path,
   if (roi->pixel_format() == VIL_PIXEL_FORMAT_UINT_16)
   {
     vil_image_view<vxl_uint_16> nitf_image_vxl_uint_16(roi);
-    *nitf_image_unsigned_char = vil_image_view<unsigned char> (roi->ni(),roi->nj(),roi->nplanes());
+
+    //Isa: This is temoporary as for now there is no code supporting update for more than 3 colors
+    if(roi->nplanes() > 3)
+       *nitf_image_unsigned_char = vil_image_view<unsigned char> (roi->ni(),roi->nj(),3);
+    else
+      *nitf_image_unsigned_char = vil_image_view<unsigned char> (roi->ni(),roi->nj(),roi->nplanes());
 
     int bigendian = 0;
     { union { unsigned int i; char c[4]; } u; u.i = 1; bigendian = u.c[0] == 0; }
@@ -175,7 +180,7 @@ bool bvxm_roi_init_process::roi_init(vcl_string const& image_path,
         // we will ignore the most significant 5 bits and less significant 3 bits
           vxl_uint_16 curr_pixel_val = nitf_image_vxl_uint_16(m,n,p);
 
-#if 0 //Isa commented out this: This is temporarly commented out in order to reproduce Thom's initial results
+//#if 0 //Isa commented out this: This is temporarly commented out in order to reproduce Thom's initial results
           if (bigendian) {
             unsigned char* arr = (unsigned char*) &curr_pixel_val;
             // [defgh3][5abc]
@@ -194,16 +199,16 @@ bool bvxm_roi_init_process::roi_init(vcl_string const& image_path,
             // --> [abcdefgh]
             curr_pixel_val = curr_pixel_val >> 8;
           }
-#endif // 0
+//#endif // 0
 
           unsigned char pixel_val = static_cast<unsigned char> (curr_pixel_val);
 
-          //Temporary hack: Remove when Thom's results have been proved
-          int temp_pix_val = (int)vcl_floor(int(curr_pixel_val)*255.0/1500.0);
-          if (temp_pix_val > 255)
-            temp_pix_val =255;
-          pixel_val = static_cast<unsigned char>(temp_pix_val);
-          //end hack
+          ////Temporary hack: Remove when Thom's results have been proved
+          //int temp_pix_val = (int)vcl_floor(int(curr_pixel_val)*255.0/1500.0);
+          //if (temp_pix_val > 255)
+          //  temp_pix_val =255;
+          //pixel_val = static_cast<unsigned char>(temp_pix_val);
+          ////end hack
 
           (*nitf_image_unsigned_char)(m,n,p) = pixel_val;
         }
@@ -215,6 +220,12 @@ bool bvxm_roi_init_process::roi_init(vcl_string const& image_path,
   }
   else
     vcl_cout << "bvxm_roi_init_process - Unsupported Pixel Format = " << roi->pixel_format() << vcl_endl;
+
+  //isa:remove, currently there is no implementation for four colors only rgb
+  //*nitf_image_unsigned_char = vil_image_view<unsigned char>(vil_convert_to_n_planes(3, nitf_image_unsigned_char));
+ 
+  //rgb_img = new vil_image_view<unsigned char>(vil_convert_to_n_planes(3, img));
+   vil_save(*nitf_image_unsigned_char, "C:/Debug/rgb2.png");
 
   double u, v;
   camera->image_offset(u, v);

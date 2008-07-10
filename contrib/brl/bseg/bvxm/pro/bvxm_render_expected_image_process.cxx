@@ -23,8 +23,8 @@ bvxm_render_expected_image_process::bvxm_render_expected_image_process()
   //input[5]: The bin index to be updated
       //input[6]: The scale index to be updated
 
-  input_data_.resize(6,brdb_value_sptr(0));
-  input_types_.resize(6);
+  input_data_.resize(7,brdb_value_sptr(0));
+  input_types_.resize(7);
   input_types_[0] = "vpgl_camera_double_sptr";
   input_types_[1] = "unsigned";
   input_types_[2] = "unsigned";

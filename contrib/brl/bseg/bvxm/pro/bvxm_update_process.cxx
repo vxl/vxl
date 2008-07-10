@@ -20,7 +20,7 @@ bvxm_update_process::bvxm_update_process()
   //input[3]: The apperance model type :this input must be either apm_mog_grey or apm_mog_rgb
   //          any other string will initialize the value for apm_mog_grey
   //input[4]: The bin index to be updatet
-//input[5]: The scale index  of the voxel world to be updatet (default is 0)
+  //input[5]: The scale index  of the voxel world to be updatet (default is 0)
   input_data_.resize(6,brdb_value_sptr(0));
   input_types_.resize(6);
   input_types_[0] = "vil_image_view_base_sptr";
@@ -28,7 +28,7 @@ bvxm_update_process::bvxm_update_process()
   input_types_[2] = "bvxm_voxel_world_sptr";
   input_types_[3] = "vcl_string";
   input_types_[4] = "unsigned";
-input_types_[5] = "unsigned";
+  input_types_[5] = "unsigned";
 
   //output has 1 output
   //output[0] : The updated probability map

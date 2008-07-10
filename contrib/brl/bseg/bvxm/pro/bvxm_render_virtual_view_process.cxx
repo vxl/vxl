@@ -22,10 +22,10 @@ bvxm_render_virtual_view_process::bvxm_render_virtual_view_process()
   //input[4]: The apperance model type. This input must be either apm_mog_grey or apm_mog_rgb
   //          any other string will initialize the value to apm_mog_grey
   //input[5]: The bin index to be updated
-      //input[6]: The scale index to be rendered
+  //input[6]: The scale index to be rendered
 
-  input_data_.resize(6,brdb_value_sptr(0));
-  input_types_.resize(6);
+  input_data_.resize(7,brdb_value_sptr(0));
+  input_types_.resize(7);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "vpgl_camera_double_sptr";
