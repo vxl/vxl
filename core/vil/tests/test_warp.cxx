@@ -1,7 +1,7 @@
 // This is core/vil/tests/test_warp.cxx
 #include <testlib/testlib_test.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_nearest_neighbour_interp.h>
+#include <vil/vil_nearest_interp.h>
 #include <vil/vil_warp.h>
 #include <vil/vil_print.h>
 
