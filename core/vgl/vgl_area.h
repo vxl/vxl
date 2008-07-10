@@ -4,6 +4,7 @@
 // \file
 
 template <class T> class vgl_polygon;
+template <class T> class vgl_point_2d;
 
 //: Computes the signed area of a polygon.
 // The sign is positive if the polygon is oriented counter-clockwise
@@ -27,6 +28,10 @@ template <class T> T vgl_area(vgl_polygon<T> const& poly);
 // \sa vgl_area
 // \relates vgl_polygon
 template <class T> T vgl_area_enforce_orientation(vgl_polygon<T> const& poly);
+
+//: The area weighted center of a polygon
+//  In general this is different than the mean of the polygon's vertices
+template <class T> vgl_point_2d<T> vgl_centroid(vgl_polygon<T> const& poly);
 
 #define VGL_AREA_INSTANTIATE(T) extern "please include vgl/vgl_area.txx instead"
 

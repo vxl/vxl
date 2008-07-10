@@ -9,6 +9,9 @@ static void test_simple1()
   vgl_polygon<double> poly1(cont1, 4);
   TEST_NEAR("rectangle (ccw) signed", vgl_area_signed(poly1), 15, 1e-6);
   TEST_NEAR("rectangle (ccw) unsigned", vgl_area(poly1), 15, 1e-6);
+  vgl_point_2d<double> c = vgl_centroid(poly1);
+  TEST_NEAR("rectangle (ccw) centroid x", c.x(), 2.5, 1e-6);
+  TEST_NEAR("rectangle (ccw) centroid y", c.y(), 1.5, 1e-6);
 }
 
 static void test_simple2()
@@ -17,6 +20,9 @@ static void test_simple2()
   vgl_polygon<float> poly1(cont1, 4);
   TEST_NEAR("rectangle (cw) signed", vgl_area_signed(poly1), -20, 1e-6);
   TEST_NEAR("rectangle (cw) unsigned", vgl_area(poly1), 20, 1e-6);
+  vgl_point_2d<float> c = vgl_centroid(poly1);
+  TEST_NEAR("rectangle (cw) centroid x", c.x(), 2.0, 1e-6);
+  TEST_NEAR("rectangle (cw) centroid y", c.y(), 2.5, 1e-6);
 }
 
 static void test_holey()
@@ -27,6 +33,9 @@ static void test_holey()
   poly.add_contour(cont2, 4);
   TEST_NEAR("rectangle with rectgular cutout signed", vgl_area_signed(poly), 24, 1e-6);
   TEST_NEAR("rectangle with rectgular cutout unsigned", vgl_area(poly), 24, 1e-6);
+  vgl_point_2d<double> c = vgl_centroid(poly);
+  TEST_NEAR("rectangle with rectgular cutout centroid x", c.x(), 61.0/24.0, 1e-6);
+  TEST_NEAR("rectangle with rectgular cutout centroid y", c.y(), 61.0/24.0, 1e-6);
 }
 
 

@@ -6,6 +6,7 @@
 //:
 // \file
 #include <vgl/vgl_polygon.h>
+#include <vgl/vgl_point_2d.h>
 
 template <class T>
 T vgl_area_signed(vgl_polygon<T> const& poly)
@@ -17,6 +18,25 @@ T vgl_area_signed(vgl_polygon<T> const& poly)
       area += poly[s][j].x() * poly[s][i].y() - poly[s][i].x() * poly[s][j].y();
 
   return area/2;
+}
+
+//: The area weighted center of a polygon
+//  In general this is different than the mean of the polygon's vertices
+template <class T>
+vgl_point_2d<T> vgl_centroid(vgl_polygon<T> const& poly)
+{
+  T area = vgl_area_signed(poly);
+  T x = T(0), y = T(0);
+  for ( unsigned int s = 0; s < poly.num_sheets(); ++s ){
+    for ( unsigned int i = 0, j = poly[s].size()-1; i < poly[s].size(); j=i++ ){
+      T w = poly[s][j].x() * poly[s][i].y() - poly[s][i].x() * poly[s][j].y();
+      x += (poly[s][j].x() + poly[s][i].x())*w;
+      y += (poly[s][j].y() + poly[s][i].y())*w;
+    }
+  }
+  x /= 6*area;
+  y /= 6*area;
+  return vgl_point_2d<T>(x,y);
 }
 
 // This function is not implemented inline because the cost of a
@@ -89,6 +109,7 @@ template <class T> T vgl_area_enforce_orientation(vgl_polygon<T> const& poly)
 #define VGL_AREA_INSTANTIATE(T) \
 template T vgl_area(vgl_polygon<T > const&); \
 template T vgl_area_signed(vgl_polygon<T > const&); \
-template T vgl_area_enforce_orientation(vgl_polygon<T > const&)
+template T vgl_area_enforce_orientation(vgl_polygon<T > const&); \
+template vgl_point_2d<T> vgl_centroid(vgl_polygon<T> const& poly)
 
 #endif // vgl_area_txx_
