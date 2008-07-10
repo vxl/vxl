@@ -9,6 +9,7 @@
 
 #include <vcl_limits.h>
 #include <vcl_cassert.h>
+#include <vcl_cmath.h>
 
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_line_2d.h>
@@ -294,7 +295,7 @@ bool vgl_intersection( const vgl_line_2d<T> &line0,
 
   T delta, delta_x, delta_y, x, y;
   delta = a0*b1 - a1*b0;
-  if ( delta <= vgl_tolerance<T>::position ) // Lines are parallel
+  if ( vcl_abs(delta) <= vgl_tolerance<T>::position ) // Lines are parallel
     return false;
   delta_x = -c0*b1 + b0*c1; delta_y = -a0*c1 + a1*c0;
   x = delta_x / delta; y = delta_y / delta;
