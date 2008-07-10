@@ -81,6 +81,8 @@ bool bvxm_normalize_image_process::execute()
     brdb_value_t<unsigned>* input5 =
     static_cast<brdb_value_t<unsigned>* >(input_data_[5].ptr());
   unsigned scale_index = input5->value();
+  bool verbose = false;
+  parameters()->get_value("verbose", verbose);
 
   // if the world is not updated yet, we just return the input image
   if ((voxel_type == "apm_mog_rgb") ){
@@ -93,20 +95,31 @@ bool bvxm_normalize_image_process::execute()
       brdb_value_sptr output2 = new brdb_value_t<float>(0.0f); // b
       output_data_[1] = output1;
       output_data_[2] = output2;
+      if (verbose) {
+          vcl_ofstream file;
+          file.open("./normalization_parameters.txt", vcl_ofstream::app);
+          file << 1.0 << ' ' << 0.0 <<'\n';
+      }
 
       return true;
     }
   }
   if ((voxel_type == "apm_mog_grey") )
   {
-    if (!world->num_observations<APM_MOG_GREY>(bin_index))
+    if (!world->num_observations<APM_MOG_GREY>(bin_index,scale_index))
     {
       // return the input img
       brdb_value_sptr output0 = new brdb_value_t<vil_image_view_base_sptr>(input_img);
       output_data_[0] = output0;
-
       brdb_value_sptr output1 = new brdb_value_t<float>(1.0f); // a
       brdb_value_sptr output2 = new brdb_value_t<float>(0.0f); // b
+      if (verbose) {
+          vcl_ofstream file;
+          file.open("./normalization_parameters.txt", vcl_ofstream::app);
+          file << 1.0 << ' ' << 0.0 <<'\n';
+          file.close();
+      }
+
       output_data_[1] = output1;
       output_data_[2] = output2;
 
@@ -120,8 +133,6 @@ bool bvxm_normalize_image_process::execute()
   bool most_prob = true;
   parameters()->get_value("most_prob", most_prob);   // otherwise uses expected image
 
-  bool verbose = false;
-  parameters()->get_value("verbose", verbose);
   float a_start=0, a_end=0, a_inc=0;
   parameters()->get_value("a_start", a_start);
   parameters()->get_value("a_inc", a_inc);
