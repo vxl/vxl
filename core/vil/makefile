@@ -123,7 +123,7 @@ MANPAGE_SOURCES += vil_transform.h
 MANPAGE_SOURCES += vil_convert.h
 SOURCES += vil_decimate.cxx
 MANPAGE_SOURCES += vil_rotate.txx
-MANPAGE_SOURCES += vil_nearest_neighbour_interp.h
+MANPAGE_SOURCES += vil_nearest_interp.txx
 MANPAGE_SOURCES += vil_warp.h
 MANPAGE_SOURCES += vil_flatten.h
 
@@ -143,6 +143,7 @@ MANPAGE_SOURCES += vil_bicub_interp.txx
 MANPAGE_SOURCES += vil_sample_profile_bicub.txx
 MANPAGE_SOURCES += vil_sample_grid_bicub.txx
 MANPAGE_SOURCES += vil_resample_bicub.txx
+MANPAGE_SOURCES += vil_resample_nearest.txx
 
 # Stuff
 MANPAGE_SOURCES += vil_smart_ptr.txx

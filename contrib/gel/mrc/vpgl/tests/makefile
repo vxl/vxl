@@ -11,7 +11,7 @@ TESTS += test_fundamental_matrix.cxx
 TESTS += test_perspective_camera.cxx
 TESTS += test_poly_radial_distortion.cxx
 TESTS += test_proj_camera.cxx
-#TESTS += test_rational_camera.cxx
+TESTS += test_rational_camera.cxx
 TESTS += test_essential_matrix.cxx
 TESTS += test_local_rational_camera.cxx
 

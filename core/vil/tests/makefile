@@ -44,6 +44,8 @@ TESTS += test_bicub_interp.cxx
 TESTS += test_sample_profile_bicub.cxx
 TESTS += test_sample_grid_bicub.cxx
 TESTS += test_resample_bicub.cxx
+TESTS += test_nearest_interp.cxx
+TESTS += test_resample_nearest.cxx
 
 # Math
 TESTS += test_math_value_range.cxx

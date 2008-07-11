@@ -29,6 +29,15 @@ SOURCES += bvxm_compare_rpc_process.cxx
 SOURCES += bvxm_ocp_compare_process.cxx
 SOURCES += bvxm_ocp_hist_process.cxx
 SOURCES += bvxm_roc_process.cxx
+SOURCES += bvxm_pmap_hist_process.cxx
+SOURCES += bvxm_pmap_ratio_process.cxx
+
+SOURCES += multiscale_pro/bvxm_compare_3d_voxels_process.cxx
+SOURCES += multiscale_pro/bvxm_create_multiscale_voxel_world_process.cxx
+SOURCES += multiscale_pro/bvxm_detect_multiscale_process.cxx
+SOURCES += multiscale_pro/bvxm_detect_scale_process.cxx
+SOURCES += multiscale_pro/bvxm_save_multiscale_occupancy_raw_process.cxx
+SOURCES += multiscale_pro/bvxm_update_multiscale_process.cxx
 
 #######################################
 include ${VXLROOT}/config/top-params.mk

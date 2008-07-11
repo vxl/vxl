@@ -23,6 +23,9 @@ MANPAGE_SOURCES += bvxm_voxel_storage_disk.txx
 MANPAGE_SOURCES += bvxm_voxel_storage_disk_cached.txx
 MANPAGE_SOURCES += bvxm_voxel_storage_mem.txx
 
+SOURCES += multiscale/bvxm_multi_scale_voxel_world.cxx
+SOURCES += multiscale/bvxm_multiscale_util.cxx
+
 SUBDIRS += io pro
 
 #######################################
