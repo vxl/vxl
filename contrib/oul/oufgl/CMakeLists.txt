@@ -1,4 +1,4 @@
-# ./oul/oufgl/CMakeLists.txt
+# oul/oufgl/CMakeLists.txt
 
 SET(oufgl_sources
     frame_grabber_v4l.h    frame_grabber_v4l.cxx

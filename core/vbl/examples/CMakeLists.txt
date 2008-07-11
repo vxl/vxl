@@ -1,4 +1,4 @@
-# vxl/vbl/examples/CMakeLists.txt
+# core/vbl/examples/CMakeLists.txt
 
 SET( vbl_example_templates_sources
   # empty

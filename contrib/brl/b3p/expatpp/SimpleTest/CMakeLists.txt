@@ -1,4 +1,4 @@
-# This is /db3p/expatpp
+# This is brl/b3p/expatpp/SimpleTest
 
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/expatpp/expat/lib )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/expatpp/src_pp )
