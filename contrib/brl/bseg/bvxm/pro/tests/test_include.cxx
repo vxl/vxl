@@ -14,6 +14,8 @@
 #include <bvxm/pro/bvxm_normalize_image_process.h>
 #include <bvxm/pro/bvxm_ocp_compare_process.h>
 #include <bvxm/pro/bvxm_ocp_hist_process.h>
+#include <bvxm/pro/bvxm_pmap_hist_process.h>
+#include <bvxm/pro/bvxm_pmap_ratio_process.h>
 #include <bvxm/pro/bvxm_roc_process.h>
 #include <bvxm/pro/bvxm_render_expected_image_process.h>
 #include <bvxm/pro/bvxm_render_virtual_view_process.h>
