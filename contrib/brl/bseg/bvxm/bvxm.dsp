@@ -120,6 +120,12 @@ SOURCE=.\bvxm_lidar_camera.cxx
 SOURCE=.\bvxm_lidar_processor.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\multiscale/bvxm_multi_scale_voxel_world.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\multiscale/bvxm_multiscale_util.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/bvxm_voxel_grid+float-.cxx
 # End Source File
 # Begin Source File
@@ -196,6 +202,12 @@ SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+bsta_num_obs+bsta_mixture_fixe
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/bvxm_voxel_storage_disk_cached+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_io_smart_ptr+bvxm_multi_scale_voxel_world-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vbl_smart_ptr+bvxm_multi_scale_voxel_world-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -276,6 +288,12 @@ SOURCE=.\bvxm_voxel_storage_disk_cached.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_voxel_storage_disk_cached.txx
+# End Source File
+# Begin Source File
+SOURCE=.\multiscale/bvxm_multi_scale_voxel_world.h
+# End Source File
+# Begin Source File
+SOURCE=.\multiscale/bvxm_multiscale_util.h
 # End Source File
 # End Group
 # End Target

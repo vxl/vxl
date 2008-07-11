@@ -171,10 +171,37 @@ SOURCE=.\bvxm_ocp_hist_process.cxx
 SOURCE=.\bvxm_roc_process.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\bvxm_pmap_hist_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_pmap_ratio_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\multiscale_pro/bvxm_compare_3d_voxels_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\multiscale_pro/bvxm_create_multiscale_voxel_world_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\multiscale_pro/bvxm_detect_multiscale_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\multiscale_pro/bvxm_detect_scale_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\multiscale_pro/bvxm_save_multiscale_occupancy_raw_process.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\multiscale_pro/bvxm_update_multiscale_process.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/brdb_value_t+bvxm_voxel_world_sptr-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/brdb_value_t+unsigned-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/brdb_value_t+bvxm_multi_scale_voxel_world-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -256,6 +283,30 @@ SOURCE=.\bvxm_ocp_hist_process.h
 # End Source File
 # Begin Source File
 SOURCE=.\bvxm_roc_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_pmap_hist_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\bvxm_pmap_ratio_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\multiscale_pro/bvxm_compare_3d_voxels_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\multiscale_pro/bvxm_create_multiscale_voxel_world_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\multiscale_pro/bvxm_detect_multiscale_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\multiscale_pro/bvxm_detect_scale_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\multiscale_pro/bvxm_save_multiscale_occupancy_raw_process.h
+# End Source File
+# Begin Source File
+SOURCE=.\multiscale_pro/bvxm_update_multiscale_process.h
 # End Source File
 # End Group
 # End Target

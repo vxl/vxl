@@ -650,6 +650,48 @@ SOURCE=.\Templates/vil_resample_bilin+int_32.int_32-.cxx
 # Begin Source File
 SOURCE=.\Templates/vil_resample_bicub+float.float-.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_nearest_interp+bool-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_nearest_interp+byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_nearest_interp+double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_nearest_interp+float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_nearest_interp+int_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_nearest_interp+uint_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_resample_nearest+bool.bool-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_resample_nearest+byte.byte-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_resample_nearest+byte.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_resample_nearest+byte.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_resample_nearest+float.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_resample_nearest+float.float-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_resample_nearest+int_16.int_16-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vil_resample_nearest+uint_16.uint_16-.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -1027,6 +1069,18 @@ SOURCE=.\file_formats/vil_geotiff_header.h
 # End Source File
 # Begin Source File
 SOURCE=.\vil_chord.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_nearest_interp.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_nearest_interp.txx
+# End Source File
+# Begin Source File
+SOURCE=.\vil_resample_nearest.h
+# End Source File
+# Begin Source File
+SOURCE=.\vil_resample_nearest.txx
 # End Source File
 # Begin Source File
 SOURCE=.\vil_config.h.in

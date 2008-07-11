@@ -93,6 +93,12 @@ SOURCE=.\test_4_plane_tiff.cxx
 # Begin Source File
 SOURCE=.\test_math_median.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\test_nearest_interp.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\test_resample_nearest.cxx
+# End Source File
 # End Group
 # End Target
 # End Project
