@@ -435,6 +435,37 @@ void vimt3d_transform_3d::set_affine(double s_x, double s_y, double s_z,
 
   inv_uptodate_=false;
 }
+//=======================================================================
+
+void vimt3d_transform_3d::set_affine(double s_x, double s_y, double s_z,
+                                     vgl_vector_3d<double> c_x,
+                                     vgl_vector_3d<double> c_y,
+                                     vgl_vector_3d<double> c_z,
+                                     double t_x, double t_y, double t_z)
+{
+  form_=Affine;
+
+  // Set rotation matrix
+  xx_ = c_x.x(); xy_ = c_y.x(); xz_ = c_z.x();
+  yx_ = c_x.y(); yy_ = c_y.y(); yz_ = c_z.y();
+  zx_ = c_x.z(); zy_ = c_y.z(); zz_ = c_z.z();
+
+
+  // Account for scaling (this actually means that scaling was done BEFORE rotation)
+  xx_*=s_x;  xy_*=s_y;  xz_*=s_z;
+  yx_*=s_x;  yy_*=s_y;  yz_*=s_z;
+  zx_*=s_x;  zy_*=s_y;  zz_*=s_z;
+
+  // Set translation (first 3 elements of final column)
+  xt_=t_x;
+  yt_=t_y;
+  zt_=t_z;
+
+  // Set all other elements to defaults
+  tx_=0; ty_=0; tz_=0; tt_=1;
+
+  inv_uptodate_=false;
+}
 
 //=======================================================================
 

@@ -159,6 +159,25 @@ class vimt3d_transform_3d
                   double r_x, double r_y, double r_z,
                   double t_x, double t_y, double t_z);
 
+  //: Sets the transformation to be a special case of Affine: anisotropic scaling, followed by rotation, then translation.
+  // \param s_x  Scaling factor in x
+  // \param s_y  Scaling factor in y
+  // \param s_z  Scaling factor in z
+  // \param c_x  First column of rotation matrix
+  // \param c_y  Second column of rotation matrix
+  // \param c_z  Third column of rotation matrix
+  // \param t_x  Translation in x
+  // \param t_y  Translation in y
+  // \param t_z  Translation in z
+  // \note This creates a special case of Affine. Although this special case
+  // is separable, in general Affine transformations are not
+  // separable. The rotation matrix is assumed to be valid.
+  void set_affine(double s_x, double s_y, double s_z,
+                  vgl_vector_3d<double> c_x,
+                  vgl_vector_3d<double> c_y,
+                  vgl_vector_3d<double> c_z,
+                  double t_x, double t_y, double t_z);
+
   //: Sets the transformation to be a special case of Affine.
   // T(x,y,z) = p +x.u +y.v + z.w
   // \param p Origin point
