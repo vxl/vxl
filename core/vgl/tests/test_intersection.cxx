@@ -47,8 +47,8 @@ static void test_lines_intersection()
   bool is_intersection;
   vgl_point_2d<double> point_intersection(0,0);
   is_intersection = vgl_intersection( vgl_line_2d<double>( vgl_point_2d<double>(1,1),
-                                                           vgl_vector_2d<double>(0.5, vcl_sqrt(3)/2)),
-                                      vgl_line_2d<double>( -vcl_sqrt(2), vcl_sqrt(2), 0 ),
+                                                           vgl_vector_2d<double>(0.5, vcl_sqrt(3.0)/2)),
+                                      vgl_line_2d<double>( -vcl_sqrt(2.0), vcl_sqrt(2.0), 0 ),
                                       point_intersection );
   double intersection_error;
   intersection_error =  (point_intersection.x() - 1.0) * (point_intersection.x() - 1.0);
