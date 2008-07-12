@@ -4,6 +4,8 @@
 #include "bwm_observer_mgr.h"
 #include "bwm_tableau_mgr.h"
 #include "bwm_popup_menu.h"
+#include <vsl/vsl_binary_io.h>
+#include <vsl/vsl_vector_io.h>
 #include <vil/vil_save.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_box_2d.h>
@@ -58,10 +60,10 @@ void bwm_tableau_img::create_polygon()
   set_color(1, 0, 0);
   pick_polygon(poly2d);
   if (!poly2d)
-  {
-    vcl_cerr << "In bwm_tableau_img::create_polygon() - picking failed\n";
-    return;
-  }
+    {
+      vcl_cerr << "In bwm_tableau_img::create_polygon() - picking failed\n";
+      return;
+    }
   this->unlock();
 
   // add the polygon to the list
@@ -78,10 +80,10 @@ void bwm_tableau_img::create_polyline()
   set_color(1, 0, 0);
   this->pick_polyline(poly2d);
   if (!poly2d)
-  {
-    vcl_cerr << "In bwm_tableau_img::create_polyline() - picking failed\n";
-    return;
-  }
+    {
+      vcl_cerr << "In bwm_tableau_img::create_polyline() - picking failed\n";
+      return;
+    }
 
   this->unlock();
   // add the polygon to the list
@@ -175,17 +177,40 @@ void bwm_tableau_img::save_mask()
   }
 }
 
+void bwm_tableau_img::save_spatial_objects_2d()
+{
+  vcl_vector<vsol_spatial_object_2d_sptr> sos = 
+    my_observer_->get_spatial_objects_2d();
+  if(!sos.size())
+    return;
+  vgui_dialog save_dlg("Save Spatial Objects");
+  vcl_string ext, binary_filename;
+  save_dlg.file("Binary Filename", ext, binary_filename);
+  if(!save_dlg.ask())
+    return;
+  if(binary_filename == "")
+    return;
+  vsl_b_ofstream ostr(binary_filename);
+  if(!ostr){
+    vcl_cerr << "Failed to open output stream "
+             << binary_filename << vcl_endl;
+    return;
+  }
+  vsl_b_write(ostr, sos);
+}
+
+
 void bwm_tableau_img::help_pop()
 {
-  bwm_tableau_text* text = new bwm_tableau_text(500, 500);
+bwm_tableau_text* text = new bwm_tableau_text(500, 500);
 
-  text->set_text("C:\\lems\\lemsvxlsrc\\lemsvxlsrc\\contrib\\bwm\\doc\\doc\\HELP_cam.txt");
-  vgui_tableau_sptr v = vgui_viewer2D_tableau_new(text);
-  vgui_tableau_sptr s = vgui_shell_tableau_new(v);
-  vgui_dialog popup("CAMERA TABLEAU HELP");
-  popup.inline_tableau(s, 550, 550);
-  if (!popup.ask())
-    return;
+text->set_text("C:\\lems\\lemsvxlsrc\\lemsvxlsrc\\contrib\\bwm\\doc\\doc\\HELP_cam.txt");
+vgui_tableau_sptr v = vgui_viewer2D_tableau_new(text);
+vgui_tableau_sptr s = vgui_shell_tableau_new(v);
+vgui_dialog popup("CAMERA TABLEAU HELP");
+popup.inline_tableau(s, 550, 550);
+if (!popup.ask())
+  return;
 }
 
 void bwm_tableau_img::step_edges_vd()

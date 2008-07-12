@@ -261,6 +261,16 @@ vcl_vector<vgui_soview2D*> bwm_observer_img::get_selected_objects(vcl_string typ
   return objs;
 }
 
+vcl_vector<vsol_spatial_object_2d_sptr> 
+bwm_observer_img::get_spatial_objects_2d()
+{
+  vcl_vector<vsol_spatial_object_2d_sptr> sos;
+  for(vcl_map<unsigned, bgui_vsol_soview2D*>::iterator soit = obj_list.begin();
+      soit != obj_list.end(); ++soit)
+    sos.push_back((*soit).second->base_sptr());
+  return sos;
+}
+      
 void bwm_observer_img::delete_selected()
 {
   // first get the selected polygon

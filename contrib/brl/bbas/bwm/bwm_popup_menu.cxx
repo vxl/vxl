@@ -48,6 +48,12 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
   submenu.add("Point..",
     new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::create_point),
     vgui_key('t'), vgui_modifier(vgui_SHIFT) );
+
+  submenu.separator();
+
+  submenu.add( "Save 2D Spatial Objects (binary)",
+               new vgui_command_simple<bwm_tableau_img>(img_tab, 
+                                   &bwm_tableau_img::save_spatial_objects_2d));
   submenu.separator();
 
   // Delete 2D submenu
@@ -86,20 +92,22 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
 
   if (bwm_tableau_mgr::is_registered("bwm_tableau_video"))
   {
-    image_submenu.add( "Init Mask",
+    vgui_menu mask_menu;
+    mask_menu.add( "Init Mask",
       new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::init_mask));
 
-    image_submenu.add( "Add Region to Mask(selected poly)",
+    mask_menu.add( "Add Region to Mask(selected poly)",
       new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::add_poly_to_mask));
 
-    image_submenu.add( "Remove Region from Mask(selected poly)",
+    mask_menu.add( "Remove Region from Mask(selected poly)",
       new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::remove_poly_from_mask));
 
-    image_submenu.add( "Create Mask Image(bool)",
+    mask_menu.add( "Create Mask Image(bool)",
       new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::create_mask));
 
-    image_submenu.add( "Save Mask Image(bool)",
+    mask_menu.add( "Save Mask Image(bool)",
       new vgui_command_simple<bwm_tableau_img>(img_tab,&bwm_tableau_img::save_mask));
+    image_submenu.add("Mask Ops", mask_menu);
   }
   //image_submenu.separator();
 
