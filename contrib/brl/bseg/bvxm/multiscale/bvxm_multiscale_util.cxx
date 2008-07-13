@@ -1,4 +1,3 @@
-
 #include "bvxm_multiscale_util.h"
 
 #include <vcl_iostream.h>
@@ -12,19 +11,25 @@
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3x1.h>
 #endif
+#include <vil/vil_image_view.h>
+#include <vil/vil_convert.h>
 #include <vil/vil_resample_bilin.h>
 #include "bvxm_voxel_slab.h"
 #include "bvxm_world_params.h"
 
 
-void bvxm_multiscale_util::compute_plane_image_H(vpgl_camera_double_sptr const& cam, bvxm_world_params_sptr world_params, unsigned z_idx, vgl_h_matrix_2d<double> &H_plane_to_image, vgl_h_matrix_2d<double> &H_image_to_plane,unsigned scale)
+void bvxm_multiscale_util::compute_plane_image_H(vpgl_camera_double_sptr const& cam,
+                                                 bvxm_world_params_sptr world_params,
+                                                 unsigned z_idx,
+                                                 vgl_h_matrix_2d<double> &H_plane_to_image,
+                                                 vgl_h_matrix_2d<double> &H_image_to_plane,
+                                                 nsigned scale)
 {
   float vox_length = world_params->voxel_length(scale);
   vgl_vector_3d<unsigned int> grid_size = world_params->num_voxels(scale);
   vgl_point_3d<float> grid_corner_bottom = world_params->corner();
   // corner in parameters refers to the bottom. we want the top since slice 0 is the top-most slice.
   vgl_point_3d<float> grid_corner = grid_corner_bottom + vgl_vector_3d<float>(0.0f,0.0f,vox_length*(grid_size.z() - 0.5f));
-
 
   vcl_vector<vgl_homg_point_2d<double> > voxel_corners_img;
   vcl_vector<vgl_homg_point_2d<double> > voxel_corners_vox;
@@ -57,7 +62,6 @@ void bvxm_multiscale_util::compute_plane_image_H(vpgl_camera_double_sptr const& 
   cam->project(corner_world.x(),corner_world.y(),corner_world.z(),u,v);
   voxel_corners_img.push_back(vgl_homg_point_2d<double>(u,v));
 
-
   vgl_h_matrix_2d_compute_linear comp_4pt;
   if (!comp_4pt.compute(voxel_corners_img,voxel_corners_vox, H_image_to_plane)) {
     vcl_cerr << "ERROR computing homography from image to voxel slice.\n";
@@ -69,7 +73,10 @@ void bvxm_multiscale_util::compute_plane_image_H(vpgl_camera_double_sptr const& 
 }
 
 #if 0
-bool bvxm_multiscale_util::read_cameras(const vcl_string filename, std::vector<vnl_double_3x3> &Ks, std::vector<vnl_double_3x3> &Rs, std::vector<vnl_double_3x1> &Ts)
+bool bvxm_multiscale_util::read_cameras(const vcl_string filename,
+                                        std::vector<vnl_double_3x3> &Ks,
+                                        std::vector<vnl_double_3x3> &Rs,
+                                        std::vector<vnl_double_3x1> &Ts)
 {
   vcl_ifstream file_inp(filename.c_str());
   if (!file_inp.good()) {
@@ -96,7 +103,10 @@ bool bvxm_multiscale_util::read_cameras(const vcl_string filename, std::vector<v
 #endif // 0
 
 #if 0
-bool bvxm_multiscale_util::write_cameras(const vcl_string filename, std::vector<vnl_double_3x3> &Ks, std::vector<vnl_double_3x3> &Rs, std::vector<vnl_double_3x1> &Ts)
+bool bvxm_multiscale_util::write_cameras(const vcl_string filename,
+                                         std::vector<vnl_double_3x3> &Ks,
+                                         std::vector<vnl_double_3x3> &Rs,
+                                         std::vector<vnl_double_3x1> &Ts)
 {
   vcl_ofstream file_out(filename.c_str());
   if (!file_out.good()) {
@@ -120,7 +130,12 @@ bool bvxm_multiscale_util::write_cameras(const vcl_string filename, std::vector<
 #endif // 0
 
 
-void bvxm_multiscale_util::bilinear_weights(vgl_h_matrix_2d<double> invH, unsigned nx_out, unsigned ny_out, vnl_matrix<unsigned> &xvals, vnl_matrix<unsigned> &yvals, vnl_matrix<float> &weights)
+void bvxm_multiscale_util::bilinear_weights(vgl_h_matrix_2d<double> invH,
+                                            unsigned nx_out,
+                                            unsigned ny_out,
+                                            vnl_matrix<unsigned> &xvals,
+                                            vnl_matrix<unsigned> &yvals,
+                                            vnl_matrix<float> &weights)
 {
   // perform bilinear interpolation.
   vnl_matrix_fixed<float,3,3> H;
@@ -195,13 +210,15 @@ void bvxm_multiscale_util::smooth_gaussian(vil_image_view_base_sptr image, float
   vnl_vector<float> kernel_1dy(kernel_size_y);
   // fill in kernel
   for (unsigned i=0; i<kernel_size_y; ++i) {
-    kernel_1dy[i] = (float)(vnl_math::sqrt1_2 * vnl_math::two_over_sqrtpi * (0.5/stdy) * vcl_exp(-((((float)i-kernel_radius_y)*((float)i-kernel_radius_y))/(2*stdy*stdy))));
+    kernel_1dy[i] = float(vnl_math::sqrt1_2 * vnl_math::two_over_sqrtpi *
+                          (0.5/stdy) *
+                          vcl_exp(-((((float)i-kernel_radius_y)*((float)i-kernel_radius_y))/(2*stdy*stdy))));
   }
   // normalize kernel in case taps dont sum to exactly one
   kernel_1dy = kernel_1dy / kernel_1dy.sum();
-
-  //vcl_cout << "kernel co-eff sum: " << kernel_1dy.sum() << vcl_endl;
-
+#ifdef DEBUG
+  vcl_cout << "kernel co-eff sum: " << kernel_1dy.sum() << vcl_endl;
+#endif
   if (image->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
   {
     vil_image_view<unsigned char> *img_view = dynamic_cast<vil_image_view<unsigned char>*>(image.ptr());
@@ -239,7 +256,8 @@ void bvxm_multiscale_util::smooth_gaussian(vil_image_view_base_sptr image, float
           image_work(x,y) = vcl_ceil(sum);
         }
       }
-    } else {
+    }
+    else {
       // stdx was zero, just use original image.
       image_work.deep_copy(*img_view);
     }
@@ -364,7 +382,6 @@ vil_image_view_base_sptr bvxm_multiscale_util::downsample_image_by_two(vil_image
 {
   vil_image_view<float>*img_view_float = new vil_image_view<float>(image->ni(),image->nj());
 
-
   if (image->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
   {
     vil_image_view<unsigned char> *img_view_char = dynamic_cast<vil_image_view<unsigned char>*>(image.ptr());
@@ -396,8 +413,9 @@ vil_image_view_base_sptr bvxm_multiscale_util::downsample_image_by_two(vil_image
         (*img_view_out)(i,j)=0;
       else
         (*img_view_out)(i,j)=static_cast<vxl_byte>(output(i,j)+0.5);
-
-      //vcl_cout<<(*img_view_out)(i,j);
+#ifdef DEBUG
+      vcl_cout<<(*img_view_out)(i,j);
+#endif
     }
   ////vil_convert_stretch_range_limited<float>(output,*img_view_out,min_b,max_b);
   vil_image_view_base_sptr return_img=img_view_out;
