@@ -8,7 +8,7 @@
 bvxm_pmap_hist_process::bvxm_pmap_hist_process()
 {
   // This process has 2 inputs:
-  //input[0]: The voxel world 
+  //input[0]: The voxel world
   //input[1]: The path for the output file
   input_data_.resize(2, brdb_value_sptr(0));
   input_types_.resize(2);
@@ -20,7 +20,6 @@ bvxm_pmap_hist_process::bvxm_pmap_hist_process()
   //output
   output_data_.resize(0,brdb_value_sptr(0));
   output_types_.resize(0);
- 
 }
 
 bool bvxm_pmap_hist_process::execute()
@@ -47,23 +46,23 @@ bool bvxm_pmap_hist_process::execute()
 }
 
 bool bvxm_pmap_hist_process::compute(vcl_string pmap,
-                                      vcl_string path)
+                                     vcl_string path)
 {
-  
   vil_image_view_base_sptr img = vil_load(pmap.c_str());
   bsta_histogram<double> hist(0.0, 20.0, 60);
 
   float p;
-  for( int ni = 0; ni < img->ni(); ni++ ){
-    for( int nj = 0; nj < img->nj(); nj++ ){
+  for ( unsigned int ni = 0; ni < img->ni(); ++ni ){
+    for ( unsigned int nj = 0; nj < img->nj(); ++nj ){
       if (img->pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
-        if (vil_image_view<unsigned char> *img_view = dynamic_cast<vil_image_view<unsigned char>*>(img.ptr())) 
-          p = (*img_view)(ni, nj);
-      } else if (img->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
-        if (vil_image_view<float> *img_view = dynamic_cast<vil_image_view<float>*>(img.ptr())) 
+        if (vil_image_view<unsigned char> *img_view = dynamic_cast<vil_image_view<unsigned char>*>(img.ptr()))
           p = (*img_view)(ni, nj);
       }
-      
+      else if (img->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
+        if (vil_image_view<float> *img_view = dynamic_cast<vil_image_view<float>*>(img.ptr()))
+          p = (*img_view)(ni, nj);
+      }
+
       hist.upcount(p, 1);
     }
   }
