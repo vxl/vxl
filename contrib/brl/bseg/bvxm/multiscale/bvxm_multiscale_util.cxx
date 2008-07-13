@@ -237,7 +237,7 @@ void bvxm_multiscale_util::smooth_gaussian(vil_image_view_base_sptr image, float
           for (unsigned k=1; k<kernel_size_x; ++k) {
             sum += (*img_view)(x+k,y) * kernel_1dx[k];
           }
-          image_work(x+kernel_radius_x,y) = vcl_ceil(sum);
+          image_work(x+kernel_radius_x,y) = (unsigned char)(vcl_ceil(sum));
         }
         // left edge
         for (unsigned x=0; x<kernel_radius_x; ++x) {
@@ -245,7 +245,7 @@ void bvxm_multiscale_util::smooth_gaussian(vil_image_view_base_sptr image, float
           for (unsigned k=kernel_radius_x - x; k<kernel_size_x; ++k) {
             sum += (*img_view)(x+k-kernel_radius_x,y) * kernel_1dx[k];
           }
-          image_work(x,y) = vcl_ceil(sum);
+          image_work(x,y) = (unsigned char)(vcl_ceil(sum));
         }
         // right edge
         for (unsigned x=image->ni() - kernel_radius_x; x<image->ni(); ++x) {
@@ -253,7 +253,7 @@ void bvxm_multiscale_util::smooth_gaussian(vil_image_view_base_sptr image, float
           for (unsigned k=0; k<(image->ni() - x + kernel_radius_x); ++k) {
             sum += (*img_view)(x+k-kernel_radius_x,y) * kernel_1dx[k];
           }
-          image_work(x,y) = vcl_ceil(sum);
+          image_work(x,y) = (unsigned char)(vcl_ceil(sum));
         }
       }
     }
@@ -272,7 +272,7 @@ void bvxm_multiscale_util::smooth_gaussian(vil_image_view_base_sptr image, float
           for (unsigned k=1; k<kernel_size_y; ++k) {
             sum += image_work(x,y+k) * kernel_1dy[k];
           }
-          (*img_view)(x,y+kernel_radius_y) = vcl_ceil(sum);
+          (*img_view)(x,y+kernel_radius_y) = (unsigned char)(vcl_ceil(sum));
         }
         // top edge
         for (unsigned y=0; y<kernel_radius_y; ++y) {
@@ -280,7 +280,7 @@ void bvxm_multiscale_util::smooth_gaussian(vil_image_view_base_sptr image, float
           for (unsigned k=kernel_radius_y - y; k<kernel_size_y; ++k) {
             sum += image_work(x,y+k-kernel_radius_y) * kernel_1dy[k];
           }
-          (*img_view)(x,y) = vcl_ceil(sum);
+          (*img_view)(x,y) = (unsigned char)(vcl_ceil(sum));
         }
         // bottom edge
         for (unsigned y=image->nj()-kernel_radius_y; y<image->nj(); ++y) {
@@ -288,7 +288,7 @@ void bvxm_multiscale_util::smooth_gaussian(vil_image_view_base_sptr image, float
           for (unsigned k=0; k<(image->nj() - y + kernel_radius_y); ++k) {
             sum += image_work(x,y+k-kernel_radius_y) * kernel_1dy[k];
           }
-          (*img_view)(x,y) = vcl_ceil(sum);
+          (*img_view)(x,y) = (unsigned char)(vcl_ceil(sum));
         }
       }
     }
