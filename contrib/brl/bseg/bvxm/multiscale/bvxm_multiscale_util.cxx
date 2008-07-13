@@ -23,7 +23,7 @@ void bvxm_multiscale_util::compute_plane_image_H(vpgl_camera_double_sptr const& 
                                                  unsigned z_idx,
                                                  vgl_h_matrix_2d<double> &H_plane_to_image,
                                                  vgl_h_matrix_2d<double> &H_image_to_plane,
-                                                 nsigned scale)
+                                                 unsigned scale)
 {
   float vox_length = world_params->voxel_length(scale);
   vgl_vector_3d<unsigned int> grid_size = world_params->num_voxels(scale);
