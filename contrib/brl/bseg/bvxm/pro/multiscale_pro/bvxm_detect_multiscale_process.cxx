@@ -82,19 +82,16 @@ bool bvxm_detect_multiscale_process::execute()
     static_cast<brdb_value_t<unsigned>* >(input_data_[5].ptr());
   unsigned curr_scale = input5->value();
 
-    brdb_value_t<unsigned>* input6 =
+  brdb_value_t<unsigned>* input6 =
     static_cast<brdb_value_t<unsigned>* >(input_data_[6].ptr());
   unsigned max_scale = input6->value();
 
-    brdb_value_t<unsigned>* input7 =
+  brdb_value_t<unsigned>* input7 =
     static_cast<brdb_value_t<unsigned>* >(input_data_[7].ptr());
   unsigned req_scale = input7->value();
 
   if (req_scale<curr_scale || req_scale>max_scale)
-      return false;
-  char const* filename;
-  char const* file_format = ".tiff";
-  char const* temp_dir;
+    return false;
 
   typedef bvxm_voxel_traits<APM_MOG_GREY>::obs_datatype obs_datatype;
 
@@ -107,8 +104,8 @@ bool bvxm_detect_multiscale_process::execute()
   unsigned scale=curr_scale;
   while (scale!=req_scale)
   {
-      img=bvxm_multiscale_util::downsample_image_by_two(img);
-      scale++;
+    img=bvxm_multiscale_util::downsample_image_by_two(img);
+    scale++;
   }
   camera=bvxm_multiscale_util::downsample_camera( camera, req_scale);
   prob_map.set_size(img->ni(),img->nj());
@@ -119,10 +116,10 @@ bool bvxm_detect_multiscale_process::execute()
 
   if (voxel_type == "apm_mog_rgb")
     result = world->pixel_probability_density<APM_MOG_RGB>(observation,prob_map, mask, bin_index,req_scale);
-   else
+  else
     result = world->pixel_probability_density<APM_MOG_GREY>(observation,prob_map, mask, bin_index,req_scale);
 
-   if (!result){
+  if (!result) {
     vcl_cerr << "error bvxm_detect_changes_process: failed to detect changes\n";
     return false;
   }
@@ -135,18 +132,15 @@ bool bvxm_detect_multiscale_process::execute()
   vil_threshold_above<float>(prob_map, binary_img, threshold_value);
   vcl_cout<<"min "<< min_value <<" max "<<max_value<< vcl_endl;
   vil_convert_stretch_range_limited<float>(prob_map,gray_img,min_value,max_value);
-      //store output
-  brdb_value_sptr output0 =
+  //store output
+  output_data_[0] = 
     new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(prob_map));
-  output_data_[0] = output0;
 
-  brdb_value_sptr output1 =
+  output_data_[1] = 
     new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<bool>(mask));
-  output_data_[1] = output1;
 
-    brdb_value_sptr output2 =
+  output_data_[2] = 
     new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<vxl_byte>(gray_img));
-  output_data_[2] = output2;
 
   return true;
 }
@@ -154,21 +148,21 @@ bool bvxm_detect_multiscale_process::execute()
 
 vpgl_camera_double_sptr bvxm_detect_multiscale_process::downsample_camera_by_two(vpgl_camera_double_sptr camera)
 {
-    if ( vpgl_rational_camera<double>* rat_camera =    dynamic_cast<vpgl_rational_camera<double>*> (camera.as_pointer()))
-    {
-        vpgl_rational_camera<double>* new_rat_camera=new vpgl_rational_camera<double>(*rat_camera);
-        double u_s,v_s;
-        rat_camera->image_scale(u_s,v_s);
-        new_rat_camera->set_image_scale(u_s/2,v_s/2);
+  if ( vpgl_rational_camera<double>* rat_camera = dynamic_cast<vpgl_rational_camera<double>*> (camera.as_pointer()))
+  {
+    vpgl_rational_camera<double>* new_rat_camera=new vpgl_rational_camera<double>(*rat_camera);
+    double u_s,v_s;
+    rat_camera->image_scale(u_s,v_s);
+    new_rat_camera->set_image_scale(u_s/2,v_s/2);
 
-        double u_off,v_off;
-        rat_camera->image_offset(u_off,v_off);
-        new_rat_camera->set_image_offset(u_off/2,v_off/2);
+    double u_off,v_off;
+    rat_camera->image_offset(u_off,v_off);
+    new_rat_camera->set_image_offset(u_off/2,v_off/2);
 
-        return new_rat_camera;
-    }
-    else
-    {
-        return NULL;
-    }
+    return new_rat_camera;
+  }
+  else
+  {
+    return NULL;
+  }
 }
