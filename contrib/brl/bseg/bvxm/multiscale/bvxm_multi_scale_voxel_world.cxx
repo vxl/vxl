@@ -12,7 +12,7 @@
 
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vil/vil_image_view_base.h>
-#include <vil/vil_image_view.h>
+// not used? #include <vil/vil_image_view.h>
 #include <vpgl/vpgl_camera.h>
 #include <vul/vul_file.h>
 
@@ -151,7 +151,7 @@ bool bvxm_multi_scale_voxel_world::update_edges(bvxm_image_metadata const& metad
   // convert image to a voxel_slab
   bvxm_voxel_slab<edges_datatype> image_slab(metadata.img->ni(), metadata.img->nj(), 1);
   if (!bvxm_util::img_to_slab(metadata.img,image_slab)) {
-    vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type:" << EDGES << vcl_endl;
+    vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type: " << EDGES << vcl_endl;
     return false;
   }
 
@@ -162,7 +162,7 @@ bool bvxm_multi_scale_voxel_world::update_edges(bvxm_image_metadata const& metad
   bvxm_voxel_grid<edges_datatype> *edges_grid  = static_cast<bvxm_voxel_grid<edges_datatype>*>(edges_grid_base.ptr());
   bvxm_voxel_grid<edges_datatype>::iterator edges_slab_it = edges_grid->begin();
 
-  vcl_cout << "Updating Voxels for the Edge Model: " << vcl_endl;
+  vcl_cout << "Updating Voxels for the Edge Model:" << vcl_endl;
 
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++edges_slab_it)
   {
@@ -217,7 +217,7 @@ bool bvxm_multi_scale_voxel_world::expected_edge_image(bvxm_image_metadata const
 
   bvxm_voxel_grid<edges_datatype>::const_iterator edges_slab_it(edges_grid->begin());
 
-  vcl_cout << "Generating Expected Edge Image: " << vcl_endl;
+  vcl_cout << "Generating Expected Edge Image:" << vcl_endl;
   for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++edges_slab_it) {
     vcl_cout << '.';
     // warp slice_probability to image plane
@@ -237,7 +237,6 @@ bool bvxm_multi_scale_voxel_world::expected_edge_image(bvxm_image_metadata const
 
   return true;
 }
-
 
 
 //: Binary save parameters to stream.
