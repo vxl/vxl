@@ -64,31 +64,27 @@ bool bvxm_pmap_ratio_process::compute(vcl_string pmap1,
   vil_image_resource_sptr ratio_img = vil_new_image_resource(lidar_img->ni(), lidar_img->nj(), 1, VIL_PIXEL_FORMAT_FLOAT);
   assert((lidar_img->ni()==nonlidar_img->ni()) &&
          (lidar_img->nj()==nonlidar_img->nj()));
-  float p1, p2, p, pmax=0;
+  float pmax=0.0f;
   for ( unsigned int ni = 0; ni < lidar_img->ni(); ni++ ){
     for ( unsigned int nj = 0; nj < lidar_img->nj(); nj++ ){
       if (lidar_img->pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
         if (vil_image_view<unsigned char> *img_view = dynamic_cast<vil_image_view<unsigned char>*>(lidar_img.ptr()))
-          p1 = (*img_view)(ni, nj);
+          float p1 = (*img_view)(ni, nj);
           vil_image_view<unsigned char> *img_view2 = dynamic_cast<vil_image_view<unsigned char>*>(nonlidar_img.ptr());
-          p2 = (*img_view2)(ni, nj);
+          float p = 0.0f, p2 = (*img_view2)(ni, nj);
           if ((p1>0) && (p2>0))
             p=p1/p2;
-          else
-            p=0;
           vil_image_view<float> v = *(ratio_img->get_view());
           v(ni,nj) = p;
       }
       else if (lidar_img->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
         if (vil_image_view<float> *img_view = dynamic_cast<vil_image_view<float>*>(lidar_img.ptr()))
-          p1 = (*img_view)(ni, nj);
+          float p1 = (*img_view)(ni, nj);
           vil_image_view<float> *img_view2 = dynamic_cast<vil_image_view<float>*>(nonlidar_img.ptr());
-          p2 = (*img_view2)(ni, nj);
+          float p=0.0f, p2 = (*img_view2)(ni, nj);
 
           if ((p1>0) && (p2>0) && vnl_math_isfinite(p1) && vnl_math_isfinite(p2))
             p=vcl_log10(p1/p2);
-          else
-            p=0;
           if (p>pmax)
             pmax=p;
           vil_image_view<float> v = *(ratio_img->get_view());

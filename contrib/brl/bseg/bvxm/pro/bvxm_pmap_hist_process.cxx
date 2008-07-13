@@ -51,7 +51,7 @@ bool bvxm_pmap_hist_process::compute(vcl_string pmap,
   vil_image_view_base_sptr img = vil_load(pmap.c_str());
   bsta_histogram<double> hist(0.0, 20.0, 60);
 
-  float p;
+  float p = -1.0f;
   for ( unsigned int ni = 0; ni < img->ni(); ++ni ){
     for ( unsigned int nj = 0; nj < img->nj(); ++nj ){
       if (img->pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
