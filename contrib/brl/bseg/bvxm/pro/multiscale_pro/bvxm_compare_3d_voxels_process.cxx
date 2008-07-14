@@ -8,8 +8,6 @@
 #include <vpgl/algo/vpgl_backproject.h>
 
 #include <bvxm/bvxm_voxel_world.h>
-#include <multiscale/bvxm_multi_scale_voxel_world.h>
-#include <multiscale/bvxm_multiscale_util.h>
 
 #include <bvxm/bvxm_mog_grey_processor.h>
 #include <bvxm/bvxm_image_metadata.h>
