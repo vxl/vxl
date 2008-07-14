@@ -62,7 +62,7 @@ class bvxm_roi_init_process : public bprb_process
                 bvxm_world_params_sptr world_params,
                 float uncertainty,
                 vil_image_view<unsigned char>* nitf_image_unsigned_char,
-                vpgl_local_rational_camera<double>& local_camera, unsigned scale=0);
+                vpgl_local_rational_camera<double>& local_camera);
  private:
 
   //: projects the box on the image by taking the union of all the projected corners
