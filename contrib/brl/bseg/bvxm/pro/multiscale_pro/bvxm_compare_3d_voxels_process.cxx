@@ -25,7 +25,7 @@ bvxm_compare_3d_voxels_process::bvxm_compare_3d_voxels_process()
   input_data_.resize(4,brdb_value_sptr(0));
   input_types_.resize(4);
   input_types_[0] = "bvxm_voxel_world_sptr";   // world
-  input_types_[1] = "bvxm_multi_scale_voxel_world_sptr";
+  input_types_[1] = "bvxm_voxel_world_sptr";
   input_types_[2] = "unsigned";
   input_types_[3] = "vcl_string";
   ////output
@@ -46,9 +46,9 @@ bool bvxm_compare_3d_voxels_process::execute()
     static_cast<brdb_value_t<bvxm_voxel_world_sptr>* >(input_data_[0].ptr());
   bvxm_voxel_world_sptr main_world = input0->value();
 
-  brdb_value_t<bvxm_multi_scale_voxel_world_sptr>* input1 =
-    static_cast<brdb_value_t<bvxm_multi_scale_voxel_world_sptr>* >(input_data_[1].ptr());
-  bvxm_multi_scale_voxel_world_sptr multi_scale_world = input1->value();
+  brdb_value_t<bvxm_voxel_world_sptr>* input1 =
+    static_cast<brdb_value_t<bvxm_voxel_world_sptr>* >(input_data_[1].ptr());
+  bvxm_voxel_world_sptr multi_scale_world = input1->value();
 
    brdb_value_t<unsigned>* input2 =
     static_cast<brdb_value_t<unsigned>* >(input_data_[2].ptr());
