@@ -345,8 +345,8 @@ bool bvxm_rpc_registration_process::execute()
         if(curr_scale!=scale)
         {
             vil_image_view_base_sptr cedt_image_sptr = new vil_image_view<float>(cedt_image);
-            cedt_image_sptr=bvxm_multiscale_util::downsample_image_by_two(cedt_image_sptr);
-            vpgl_camera_double_sptr new_camera_out=bvxm_multiscale_util::downsample_camera( camera_out, curr_scale);
+            cedt_image_sptr=bvxm_util::downsample_image_by_two(cedt_image_sptr);
+            vpgl_camera_double_sptr new_camera_out=bvxm_util::downsample_camera( camera_out, curr_scale);
             bvxm_image_metadata camera_metadata_out(cedt_image_sptr,new_camera_out);
             result=vox_world->update_edges(camera_metadata_out, curr_scale);
 

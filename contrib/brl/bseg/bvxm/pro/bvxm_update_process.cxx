@@ -88,8 +88,8 @@ bool bvxm_update_process::execute()
       
       if(scale!=curr_scale)
       {
-          img=bvxm_multiscale_util::downsample_image_by_two(img);
-          camera=bvxm_multiscale_util::downsample_camera( camera, scale);
+          img=bvxm_util::downsample_image_by_two(img);
+          camera=bvxm_util::downsample_camera( camera, scale);
           prob_map.set_size(img->ni(),img->nj());
           mask.set_size(img->ni(),img->nj());
       }
