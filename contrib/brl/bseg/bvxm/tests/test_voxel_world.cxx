@@ -40,6 +40,8 @@ static void test_voxel_world()
   // initialize the data
   bvxm_mog_grey_processor::apm_datatype init_apm;
 
+
+
 #if 0
   float init_ocp = 1.0f/120;
   world.init_world(init_ocp,init_apm);
