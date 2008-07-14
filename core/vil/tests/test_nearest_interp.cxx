@@ -48,10 +48,10 @@ static void test_nearest_interp_byte()
   v = vil_nearest_interp_safe(image0,5,2);
   TEST("vil_nearest_interp_safe outside image",v==0,true);
   //TEST_NEAR("vil_nearest_interp_safe outside image",v,0,1e-8);
-  v = vil_nearest_interp_safe(image0,4.001,1);
+  v = vil_nearest_interp_safe(image0,4.500,1);
   TEST("vil_nearest_interp_safe outside image",v==0,true);
   //TEST_NEAR("vil_nearest_interp_safe outside image",v,0,1e-8);
-  v = vil_nearest_interp_safe(image0,1,4.001);
+  v = vil_nearest_interp_safe(image0,1,4.500);
   TEST("vil_nearest_interp_safe outside image",v==0,true);
   //TEST_NEAR("vil_nearest_interp_safe outside image",v,0,1e-8);
   

@@ -15,6 +15,12 @@
 #include "vil_resample_nearest.h"
 #include <vil/vil_nearest_interp.h>
 
+
+#ifdef VCL_VC 
+// Get rid of double to bool conversion warnings
+#pragma warning( disable : 4800 )
+#endif
+
 //: This function should not be the same in bicub and bilin
 inline bool vil_grid_corner_in_image(double x0, double y0,
                                      const vil_image_view_base& image)
@@ -79,7 +85,7 @@ void vil_resample_nearest(const vil_image_view<sType>& src_image,
         double x=x1, y=y1;  // Start of j-th row
         dType *dpt = row;
         for (int i=0;i<n1;++i,x+=dx1,y+=dy1,dpt+=d_istep)
-          *dpt = (dType) vil_nearest_interp_raw(x,y,plane0,ni,nj,istep,jstep);
+          *dpt = (dType) vil_nearest_interp_unsafe(x,y,plane0,ni,nj,istep,jstep);
       }
     }
     else
@@ -92,7 +98,7 @@ void vil_resample_nearest(const vil_image_view<sType>& src_image,
         for (int i=0;i<n1;++i,x+=dx1,y+=dy1,dpt+=d_istep)
         {
           for (unsigned int p=0;p<np;++p)
-            dpt[p*d_pstep] = (dType) vil_nearest_interp_raw(x,y,plane0+p*pstep,ni,nj,istep,jstep);
+            dpt[p*d_pstep] = (dType) vil_nearest_interp_unsafe(x,y,plane0+p*pstep,ni,nj,istep,jstep);
         }
       }
     }
