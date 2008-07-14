@@ -6,17 +6,27 @@
 // \author Tim Cootes
 
 #include <mfpf/mfpf_point_finder_builder.h>
+#include <mipa/mipa_vector_normaliser.h>
 #include <mfpf/mfpf_vec_cost_builder.h>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <vcl_iosfwd.h>
 #include <mfpf/mfpf_region_form.h>
+
 
 //: Builder for mfpf_region_finder objects.
 // Text for configuring:
 // \verbatim
 // mfpf_hog_box_finder_builder { shape: ellipse { ri: 5 rj: 3  }
 //  vec_cost_builder: mfpf_sad_vec_cost_builder { min_mad: 1.0 }
-//  norm: linear
+//  normaliser: mipa_ms_block_normaliser
+  // {
+  //   nscales: 2
+  //   include_overall_histogram: true
+  //   normaliser: mipa_l2norm_vector_normaliser
+  //   ni: 16
+  //   nj: 16
+  //   nc_per_block: 4
+  // }
 //  search_ni: 5 search_nj: 4
 // }
 // \endverbatim
@@ -24,6 +34,22 @@
 // \verbatim
 //   shape: box { ni: 5 nj: 3 ref_x: 2.5 ref_y: 1.5 }
 // \endverbatim
+//
+// // Alternative for shape and block normalise:
+// \verbatim
+//   shape: box { ni: 16 nj: 16 ref_x: 8 ref_y: 8 }
+// 
+//  normaliser: mipa_ms_block_normaliser
+  // {
+  //   nscales: 2
+  //   include_overall_histogram: true
+  //   normaliser: mipa_l2norm_vector_normaliser
+  //   ni: 16
+  //   nj: 16
+  //   nc_per_block: 4
+  // }
+// \endverbatim
+
 class mfpf_hog_box_finder_builder : public mfpf_point_finder_builder
 {
  private:
@@ -49,8 +75,11 @@ class mfpf_hog_box_finder_builder : public mfpf_point_finder_builder
   //: Builder for cost model
   mbl_cloneable_ptr<mfpf_vec_cost_builder> cost_builder_;
 
-  //: Which normalisation to use (0=none, 1=linear)
-  short norm_method_;
+  ////: Which normalisation to use (0=none, 1=linear)
+  //short norm_method_;
+
+  //: The normaliser
+  mbl_cloneable_nzptr<mipa_vector_normaliser> normaliser_;
 
   //: Number of angles either side of 0 to sample at
   unsigned nA_;
@@ -69,6 +98,9 @@ class mfpf_hog_box_finder_builder : public mfpf_point_finder_builder
   void add_one_example(const vimt_image_2d_of<float>& image,
                        const vgl_point_2d<double>& p,
                        const vgl_vector_2d<double>& u);
+
+  //: Ensure any  block normaliser is consistent with region sizing, bin numbers etc
+  void reconfigure_normaliser();
 
  public:
 

@@ -69,7 +69,7 @@ inline void mfpf_feature_vec_to_pose_set(const mfpf_feature_vec& feature_vec, mf
     pose_set.poses.clear();    pose_set.fits.clear();
     pose_set.poses.reserve(feature_vec.size()); pose_set.fits.reserve(feature_vec.size()); 
     mfpf_feature_vec::const_iterator featureIter=feature_vec.begin();
-    mfpf_feature_vec::const_iterator featureIterEnd=feature_vec.begin();
+    mfpf_feature_vec::const_iterator featureIterEnd=feature_vec.end();
 
     while(featureIter != featureIterEnd)
     {

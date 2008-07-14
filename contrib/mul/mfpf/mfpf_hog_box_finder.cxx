@@ -17,6 +17,8 @@
 
 #include <mipa/mipa_orientation_histogram.h>
 #include <mipa/mipa_sample_histo_boxes.h>
+#include <mipa/mipa_identity_normaliser.h>
+#include <mipa/mipa_block_normaliser.h>
 
 //: Divide elements of v by sum of last nA elements
 //  For histogram vectors these are the total sums
@@ -32,7 +34,7 @@ inline void mfpf_norm_histo_vec(vnl_vector<double>& v, unsigned nA)
 // Dflt ctor
 //=======================================================================
 
-mfpf_hog_box_finder::mfpf_hog_box_finder()
+mfpf_hog_box_finder::mfpf_hog_box_finder():normaliser_(mipa_identity_normaliser())
 {
   set_defaults();
 }
@@ -53,7 +55,7 @@ void mfpf_hog_box_finder::set_defaults()
   nj_=0;
   ref_x_=0;
   ref_y_=0;
-  norm_method_=0;
+//  norm_method_=0;
   overlap_f_=1.0;
 }
 
@@ -70,7 +72,7 @@ void mfpf_hog_box_finder::set(unsigned nA_bins, bool full360,
                           unsigned ni, unsigned nj, unsigned nc,
                           double ref_x, double ref_y,
                           const mfpf_vec_cost& cost,
-                          short norm_method)
+                          const mbl_cloneable_nzptr<mipa_vector_normaliser>& normaliser)
 {
   cost_ = cost.clone();
   ref_x_ = ref_x;
@@ -82,8 +84,18 @@ void mfpf_hog_box_finder::set(unsigned nA_bins, bool full360,
   nj_      = nj;
   nc_      = nc;
 
-  assert(norm_method>=0 && norm_method<=1);
-  norm_method_ = norm_method;
+  normaliser_ = normaliser;
+
+  //: Block normalisers (and their derivatives) typically need their regions copying from this
+  mipa_vector_normaliser* pNormaliser=normaliser_.ptr();
+  mipa_block_normaliser* pBlockNormaliser= dynamic_cast<mipa_block_normaliser*>(pNormaliser);
+  if(pBlockNormaliser)
+  {
+      pBlockNormaliser->set_region(2*ni_,2*nj_);
+      pBlockNormaliser->set_nbins(nA_bins_);
+  }
+  //assert(norm_method>=0 && norm_method<=1);
+  //norm_method_ = norm_method;
 }
 
 //: Relative size of region used for estimating overlap
@@ -141,7 +153,9 @@ double mfpf_hog_box_finder::evaluate(const vimt_image_2d_of<float>& image,
   vnl_vector<double> v;
   mipa_sample_histo_boxes_3L(histo_im,0,0,v,ni_,nj_);
 
-  if (norm_method_==1) mfpf_norm_histo_vec(v,nA_bins_);
+  normaliser_->normalise(v);
+  //if (norm_method_==1) mfpf_norm_histo_vec(v,nA_bins_);
+
 
   return cost().evaluate(v);
 }
@@ -205,7 +219,8 @@ void mfpf_hog_box_finder::evaluate_region(
     for (int i=0;i<ni;++i)
     {
       mipa_sample_histo_boxes_3L(histo_im,i,j,v,ni_,nj_);
-      if (norm_method_==1) mfpf_norm_histo_vec(v,nA_bins_);
+      //if (norm_method_==1) mfpf_norm_histo_vec(v,nA_bins_);
+      normaliser_->normalise(v);
       r[i] = cost().evaluate(v);
       if (vnl_math_isnan(r[i]))
       {
@@ -282,7 +297,8 @@ double mfpf_hog_box_finder::search_one_pose(const vimt_image_2d_of<float>& image
     for (unsigned int i=0;i<ni;++i)
     {
       mipa_sample_histo_boxes_3L(histo_im,i,j,v,ni_,nj_);
-      if (norm_method_==1) mfpf_norm_histo_vec(v,nA_bins_);
+      //if (norm_method_==1) mfpf_norm_histo_vec(v,nA_bins_);
+      normaliser_->normalise(v);
       double r = cost().evaluate(v);
       if (r<best_r) { best_r=r; best_i=i; best_j=j; }
     }
@@ -367,8 +383,12 @@ void mfpf_hog_box_finder::print_summary(vcl_ostream& os) const
      << " ref_pt: (" << ref_x_ << ',' << ref_y_ << ')' <<vcl_endl;
   if (full360_) os<<vsl_indent()<<"Angle range: 0-360"<<vcl_endl;
   else          os<<vsl_indent()<<"Angle range: 0-180"<<vcl_endl;
-  if (norm_method_==0) os<<vsl_indent()<<"norm: none"<<vcl_endl;
-  else                 os<<vsl_indent()<<"norm: linear"<<vcl_endl;
+  //if (norm_method_==0) os<<vsl_indent()<<"norm: none"<<vcl_endl;
+  //else                 os<<vsl_indent()<<"norm: linear"<<vcl_endl;
+
+  vcl_cout<<"The HOG's normaliser is:"<<vcl_endl;
+  normaliser_->print_summary(os);
+
   os <<vsl_indent()<< "cost: ";
   if (cost_.ptr()==0) os << "--"<<vcl_endl; else os << cost_<<vcl_endl;
   os<<vsl_indent();
@@ -397,7 +417,7 @@ void mfpf_hog_box_finder::b_write(vsl_b_ostream& bfs) const
   vsl_b_write(bfs,cost_);
   vsl_b_write(bfs,ref_x_);
   vsl_b_write(bfs,ref_y_);
-  vsl_b_write(bfs,norm_method_);
+  vsl_b_write(bfs,normaliser_);
   vsl_b_write(bfs,overlap_f_);
 }
 
@@ -423,7 +443,7 @@ void mfpf_hog_box_finder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,cost_);
       vsl_b_read(bfs,ref_x_);
       vsl_b_read(bfs,ref_y_);
-      vsl_b_read(bfs,norm_method_);
+      vsl_b_read(bfs,normaliser_);
       if (version==1) overlap_f_=1.0;
       else            vsl_b_read(bfs,overlap_f_);
       break;
@@ -442,7 +462,7 @@ bool mfpf_hog_box_finder::operator==(const mfpf_hog_box_finder& nc) const
   if (nc_!=nc.nc_) return false;
   if (ni_!=nc.ni_) return false;
   if (nj_!=nc.nj_) return false;
-  if (norm_method_!=nc.norm_method_) return false;
+  if (normaliser_->is_a()!=nc.normaliser_->is_a()) return false; //bit looser than true equality
   if (nA_bins_!=nc.nA_bins_) return false;
   if (full360_!=nc.full360_) return false;
   if (vcl_fabs(ref_x_-nc.ref_x_)>1e-6) return false;

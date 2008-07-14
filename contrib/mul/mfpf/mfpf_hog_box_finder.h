@@ -6,6 +6,7 @@
 // \author Tim Cootes
 
 #include <mfpf/mfpf_point_finder.h>
+#include <mipa/mipa_vector_normaliser.h>
 #include <mfpf/mfpf_vec_cost.h>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <vcl_iosfwd.h>
@@ -38,8 +39,11 @@ class mfpf_hog_box_finder : public mfpf_point_finder
   //: Cost for vector sampled over ROI
   mbl_cloneable_ptr<mfpf_vec_cost> cost_;
 
-  //: Which normalisation to use (0=none, 1=linear)
-  short norm_method_;
+  ////: Which normalisation to use (0=none, 1=linear)
+  //short norm_method_;
+
+    //: The normaliser
+  mbl_cloneable_nzptr<mipa_vector_normaliser> normaliser_;
 
   //: Relative size of region used for estimating overlap
   //  If 0.5, then overlap requires pt inside central 50% of region.
@@ -61,7 +65,7 @@ class mfpf_hog_box_finder : public mfpf_point_finder
            unsigned ni, unsigned nj, unsigned nc,
            double ref_x, double ref_y,
            const mfpf_vec_cost& cost,
-           short norm_method);
+           const mbl_cloneable_nzptr<mipa_vector_normaliser>& normaliser);
 
   //: Relative size of region used for estimating overlap
   //  If 0.5, then overlap requires pt inside central 50% of region.

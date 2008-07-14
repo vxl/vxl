@@ -22,6 +22,9 @@
 
 #include <mipa/mipa_orientation_histogram.h>
 #include <mipa/mipa_sample_histo_boxes.h>
+#include <mipa/mipa_identity_normaliser.h>
+#include <mipa/mipa_block_normaliser.h>
+#include <mipa/mipa_ms_block_normaliser.h>
 
 //: Divide elements of v by sum of last nA elements
 //  For histogram vectors these are the total sums
@@ -37,7 +40,7 @@ inline void mfpf_norm_histo_vec(vnl_vector<double>& v, unsigned nA)
 // Dflt ctor
 //=======================================================================
 
-mfpf_hog_box_finder_builder::mfpf_hog_box_finder_builder()
+mfpf_hog_box_finder_builder::mfpf_hog_box_finder_builder():normaliser_(mipa_identity_normaliser())
 {
   set_defaults();
 }
@@ -56,7 +59,7 @@ void mfpf_hog_box_finder_builder::set_defaults()
   nj_=0;
   ref_x_=0;
   ref_y_=0;
-  norm_method_=0;
+  //norm_method_=0;
   overlap_f_=1.0;
 }
 
@@ -80,6 +83,7 @@ void mfpf_hog_box_finder_builder::set_angle_bins(unsigned nA_bins,
   nA_bins_ = nA_bins;
   full360_  = full360;
   nc_      = cell_size;
+  reconfigure_normaliser();
 }
 
 //: Define region size in world co-ordinates
@@ -102,6 +106,7 @@ void mfpf_hog_box_finder_builder::set_as_box(unsigned ni, unsigned nj,
 {
   set_as_box(ni,nj,ref_x,ref_y);
   cost_builder_ = builder.clone();
+  reconfigure_normaliser();
 }
 
 //: Define model region as an ni x nj box
@@ -112,6 +117,7 @@ void mfpf_hog_box_finder_builder::set_as_box(unsigned ni, unsigned nj,
 
   ref_x_=ref_x;
   ref_y_=ref_y;
+  reconfigure_normaliser();
 }
 
 
@@ -120,6 +126,7 @@ void mfpf_hog_box_finder_builder::set_as_box(unsigned ni, unsigned nj,
                                              const mfpf_vec_cost_builder& builder)
 {
   set_as_box(ni,nj, 0.5*(ni-1),0.5*(nj-1), builder);
+  reconfigure_normaliser();
 }
 
 
@@ -165,7 +172,8 @@ void mfpf_hog_box_finder_builder::add_one_example(
   vnl_vector<double> v;
   mipa_sample_histo_boxes_3L(histo_im,0,0,v,ni_,nj_);
 
-  if (norm_method_==1) mfpf_norm_histo_vec(v,nA_bins_);
+  normaliser_->normalise(v);
+  //if (norm_method_==1) mfpf_norm_histo_vec(v,nA_bins_);
 
   cost_builder().add_example(v);
 }
@@ -201,7 +209,7 @@ void mfpf_hog_box_finder_builder::build(mfpf_point_finder& pf)
   cost_builder().build(*cost);
 
   rp.set(nA_bins_,full360_,ni_,nj_,nc_,
-         ref_x_,ref_y_,*cost,norm_method_);
+         ref_x_,ref_y_,*cost,normaliser_);
   set_base_parameters(rp);
   rp.set_overlap_f(overlap_f_);
 
@@ -234,12 +242,19 @@ bool mfpf_hog_box_finder_builder::set_from_stream(vcl_istream &is)
   ni_=vul_string_atoi(props.get_optional_property("ni","4"));
   nj_=vul_string_atoi(props.get_optional_property("nj","4"));
 
+  bool reonfigureNormaliser=false;
   if (props.find("norm")!=props.end())
   {
-    if (props["norm"]=="none") norm_method_=0;
-    else
-    if (props["norm"]=="linear") norm_method_=1;
-    else throw mbl_exception_parse_error("Unknown norm: "+props["norm"]);
+
+    vcl_istringstream ss2(props["norm"]);
+    mbl_read_props_type dummy_extra_props;
+    vcl_auto_ptr<mipa_vector_normaliser> norm = mipa_vector_normaliser::new_normaliser_from_stream(ss2, dummy_extra_props);
+    normaliser_=norm.release();
+    reonfigureNormaliser=true;
+    //if (props["norm"]=="none") norm_method_=0;
+    //else
+    //if (props["norm"]=="linear") norm_method_=1;
+    //else throw mbl_exception_parse_error("Unknown norm: "+props["norm"]);
 
     props.erase("norm");
   }
@@ -281,12 +296,38 @@ bool mfpf_hog_box_finder_builder::set_from_stream(vcl_istream &is)
     props.erase("cost_builder");
   }
 
+  //Some classes of normaliser may require reconfiguration (e.g. to pass on the region size)
+  if(reonfigureNormaliser)
+  {
+      reconfigure_normaliser();
+  }
   // Check for unused props
   mbl_read_props_look_for_unused_props(
       "mfpf_hog_box_finder_builder::set_from_stream", props, mbl_read_props_type());
   return true;
 }
-
+void mfpf_hog_box_finder_builder::reconfigure_normaliser()
+{
+    mipa_vector_normaliser* pNormaliser=normaliser_.ptr();
+    mipa_block_normaliser* pBlockNormaliser= dynamic_cast<mipa_block_normaliser*>(pNormaliser);
+    if(pBlockNormaliser)
+    {
+      pBlockNormaliser->set_region(2*ni_,2*nj_);
+      pBlockNormaliser->set_nbins(nA_bins_);
+      //Also this builder always uses 2 SIFT scales and a final overall histogram
+      mipa_ms_block_normaliser* pMSBlockNormaliser= dynamic_cast<mipa_ms_block_normaliser*>(pNormaliser);
+      if(pMSBlockNormaliser)
+      {
+          pMSBlockNormaliser->set_nscales(2);
+          pMSBlockNormaliser->set_include_overall_histogram(true);
+      }
+      else
+      {
+          vcl_cerr<<"WARNING from fpf_hog_box_finder_builder::reconfigure_normaliser..."<<vcl_endl;
+          vcl_cerr<<"The normaliser may not be multi-scale but this HOG Builder uses multi-scale histograms"<<vcl_endl;
+      }
+    }
+}
 //=======================================================================
 // Method: is_a
 //=======================================================================
@@ -315,8 +356,10 @@ void mfpf_hog_box_finder_builder::print_summary(vcl_ostream& os) const
      << " ref_pt: (" << ref_x_ << ',' << ref_y_ << ')' <<vcl_endl;
   if (full360_) os<<vsl_indent()<<"Angle range: 0-360"<<vcl_endl;
   else          os<<vsl_indent()<<"Angle range: 0-180"<<vcl_endl;
-  if (norm_method_==0) os<<vsl_indent()<<"norm: none"<<vcl_endl;
-  else                 os<<vsl_indent()<<"norm: linear"<<vcl_endl;
+  vcl_cout<<"The HOG's normaliser is:"<<vcl_endl;
+  normaliser_->print_summary(os);
+  //if (norm_method_==0) os<<vsl_indent()<<"norm: none"<<vcl_endl;
+  //else                 os<<vsl_indent()<<"norm: linear"<<vcl_endl;
   os <<vsl_indent()<< "cost_builder: ";
   if (cost_builder_.ptr()==0) os << '-'<<vcl_endl;
   else                       os << cost_builder_<<vcl_endl;
@@ -349,7 +392,7 @@ void mfpf_hog_box_finder_builder::b_write(vsl_b_ostream& bfs) const
   vsl_b_write(bfs,nA_);
   vsl_b_write(bfs,dA_);
   vsl_b_write(bfs,cost_builder_);
-  vsl_b_write(bfs,norm_method_);
+  vsl_b_write(bfs,normaliser_);
   vsl_b_write(bfs,overlap_f_);
 }
 
@@ -377,7 +420,7 @@ void mfpf_hog_box_finder_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,nA_);
       vsl_b_read(bfs,dA_);
       vsl_b_read(bfs,cost_builder_);
-      vsl_b_read(bfs,norm_method_);
+      vsl_b_read(bfs,normaliser_);
       if (version==1) overlap_f_=1.0;
       else            vsl_b_read(bfs,overlap_f_);
       break;
