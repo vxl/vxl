@@ -73,23 +73,29 @@ bool bvxm_update_lidar_process::execute()
   vil_image_view<float> prob_map(img->ni(),img->nj(),1);
   vil_image_view<bool> mask(img->ni(),img->nj(),1);
   
-  bool result; 
+  bool result=true;; 
 
-  result = world->update_lidar(observation, prob_map, mask,scale_idx);
-  
+  for(unsigned curr_scale=scale_idx;curr_scale<world->get_params()->max_scale();curr_scale++)
+  {
+      if(curr_scale==scale_idx)
+      {
+        result =result && world->update_lidar(observation, prob_map, mask,curr_scale);
+        brdb_value_sptr output0 = 
+            new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(prob_map));
+        output_data_[0] = output0;
+
+        brdb_value_sptr output1 = 
+            new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<bool>(mask));
+        output_data_[1] = output1;
+      }
+  }
   if(!result){
     vcl_cerr << "error bvxm_update_lidar_process: failed to update observation" << vcl_endl;
     return false;
   }
 
   //store output
-  brdb_value_sptr output0 = 
-    new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(prob_map));
-  output_data_[0] = output0;
 
-    brdb_value_sptr output1 = 
-    new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<bool>(mask));
-  output_data_[1] = output1;
 
   return true;
 }
