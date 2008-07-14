@@ -18,12 +18,15 @@
 //
 //  Number of cells (size of hog_image) chosen so every cell entirely
 //  within src.  Thus hog_image.ni()=(src.ni()-2)/cell_size.
+//  If  bilin_interp=true then histogram contributions are added to neighbouring bins
+//  with weights inversely related to distance to centre of bin
 template<class srcT, class sumT>
 void mipa_orientation_histogram(const vil_image_view<srcT>& src,
-                               vil_image_view<sumT>& hog_image,
-                               unsigned n_angles,
-                               unsigned cell_size,
-                               bool full360=true);
+                                vil_image_view<sumT>& hog_image,
+                                unsigned n_angles,
+                                unsigned cell_size,
+                                bool full360=true,
+                                bool bilin_interp=true);
 
 #endif // mipa_orientation_histogram_h_
 

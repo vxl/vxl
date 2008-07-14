@@ -29,4 +29,12 @@ void mipa_sample_histo_boxes_3L(const vil_image_view<srcT>& h_im,
                              vnl_vector<vT>& vec,
                              unsigned ni, unsigned nj);
 
+//: Performs inverse transform mapping from the sample vector back to a hist image
+// Note only the first 4*nA*ni*nj elements of v are accessed
+template<class srcT, class vT>
+void mipa_sample_histo_boxes_3L_inv(vil_image_view<srcT>& h_im,
+                                    unsigned i0, unsigned j0,
+                                    const vnl_vector<vT>& vec,
+                                    unsigned ni, unsigned nj);
+
 #endif // mipa_sample_histo_boxes_h_

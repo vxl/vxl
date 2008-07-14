@@ -26,7 +26,8 @@ void mipa_orientation_histogram(const vil_image_view<srcT>& src,
                                 vil_image_view<sumT>& hog_image,
                                 unsigned n_angles,
                                 unsigned cell_size,
-                                bool full360)
+                                bool full360,
+                                bool bilin_interp)
 {
   assert(src.nplanes()==1);
 
@@ -52,8 +53,9 @@ void mipa_orientation_histogram(const vil_image_view<srcT>& src,
     // Allow for wrap at 180
     sA=n_angles/vnl_math::pi;
   }
+  double binwid=1.0/sA;
   double dA=2*vnl_math::pi - 0.5/sA;
-
+  const double wrapNeg = full360 ? 2.0*vnl_math::pi : vnl_math::pi;
   // Process each block
   const srcT* s_row = &src(1,1);
   vcl_ptrdiff_t si_step = src.istep();
@@ -80,9 +82,36 @@ void mipa_orientation_histogram(const vil_image_view<srcT>& src,
           // Compute angle from gradient
           sumT gi = sumT(s[si_step]-s[-si_step]);
           sumT gj = sumT(s[sj_step]-s[-sj_step]);
-          unsigned A = unsigned((vcl_atan2(gj,gi)+dA)*sA);
-            // Update histo bin with gradient magnitude:
-          h[A%n_angles]+=sumT(vcl_sqrt(gi*gi+gj*gj));
+          double theta=vcl_atan2(gj,gi);
+          double magwt=vcl_sqrt(gi*gi+gj*gj);
+          if(!bilin_interp)
+          {
+              unsigned A = unsigned((theta+dA)*sA);
+              // Update histo bin with gradient magnitude:
+              h[A%n_angles]+=sumT(magwt);
+          }
+          else
+          {
+              //interpolate theta over the two neighbouring bins
+              //Note in this scheme we don't worry about the wrap around factor
+              //as twopi-epsilon gets evenly(ish) interpolated between the last and zero bins
+              if(theta<0.0) //convert to [0,2pi) or [0,pi)
+              {
+                  theta += wrapNeg; //add twopi (or pi if signs don't matter)
+              }
+              int iA = int(theta*sA);
+              
+              const double centre0 = 0.5*binwid;
+              double b0 = centre0+double(iA)*binwid; //bin centres
+              double d0 = theta-b0; //distances to bin centres
+              bool nextUp=(d0>0.0) ? true : false;
+              double w0 = 1.0-vcl_fabs(d0)*sA; //interpolation weights
+              double w1 = 1.0-w0;
+              
+              h[iA%n_angles]+=sumT(magwt*w0);
+              int iAnext=((nextUp) ? iA+1 : iA -1); //NB can be -1 for twopi-epsilon
+              h[(iAnext)%n_angles]+=sumT(magwt*w1); //NB -1 remapped to n-1 by mod n
+          }
         }
       }
     }
@@ -95,6 +124,7 @@ template void mipa_orientation_histogram(const vil_image_view<srcT >& src, \
                                          vil_image_view<sumT >& hog_image, \
                                          unsigned n_angles, \
                                          unsigned cell_size, \
-                                         bool full360)
+                                         bool full360, \
+                                         bool bilin_intrep)
 
 #endif // vaip_orientation_histogram_txx_
