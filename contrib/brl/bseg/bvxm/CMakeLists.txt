@@ -31,11 +31,10 @@ SET(bvxm_sources
     bvxm_voxel_traits.h
     bvxm_voxel_world.h              bvxm_voxel_world.cxx
     bvxm_image_metadata.h           bvxm_image_metadata.cxx
+
     bvxm_util.h                     bvxm_util.cxx
 
-    #multiscale
-    multiscale/bvxm_multi_scale_voxel_world.h multiscale/bvxm_multi_scale_voxel_world.cxx
-    multiscale/bvxm_multiscale_util.h multiscale/bvxm_multiscale_util.cxx
+
 )
 
 INCLUDE(${MODULE_PATH}/FindTIFF.cmake)
