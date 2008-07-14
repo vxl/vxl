@@ -25,7 +25,6 @@
 void mipa_block_normaliser::normalise(vnl_vector<double>& v) const
 {
 
-    vcl_cout<<"mipa_block_normaliser::normalise v.size= "<<v.size();
 
     //Assume layout is cell values (e.g. histogram), the columns most contiguous, then rows.
 
@@ -41,9 +40,6 @@ void mipa_block_normaliser::normalise(vnl_vector<double>& v) const
     //Working vector for a contiguous memory single block
 
     vnl_vector<double> vblock(nblockEls,0.0);
-    vcl_cout<<"vblock.size= "<<vblock.size()<<vcl_endl;;
-    vcl_cout<<"Region size ie nblockCols "<<nblockCols<<" nblockRows "<<nblockRows<<vcl_endl;
-       
     vcl_ptrdiff_t colStep=nA_; //Columns are contiguous
     vcl_ptrdiff_t rowStep=nA_*ni_region_;
 
@@ -64,17 +60,8 @@ void mipa_block_normaliser::normalise(vnl_vector<double>& v) const
                     pBlockTopLeft+= rowStep; //Next row of block source
                     pTarget+= nTargetColEls; //Next row of block target
                 }
-                vcl_cout<<"Now normalising the block for Row "<<jbRows<<" col "<<ibCols<<vcl_endl;
-                double rms=vblock.rms();
-                double min=*vcl_min_element(vblock.begin(),vblock.end());
-                double max=*vcl_max_element(vblock.begin(),vblock.end());
-                vcl_cout<<"Pre Norm rms= "<<rms<<" Min= "<<min<<" Max= "<<max<<vcl_endl;
                 
                 normaliser_->normalise(vblock);
-                 rms=vblock.rms();
-                 min=*vcl_min_element(vblock.begin(),vblock.end());
-                 max=*vcl_max_element(vblock.begin(),vblock.end());
-                vcl_cout<<"Post Norm rms= "<<rms<<" Min= "<<min<<" Max= "<<max<<vcl_endl;
 
             }
             //Now copy back into input vector
@@ -86,7 +73,6 @@ void mipa_block_normaliser::normalise(vnl_vector<double>& v) const
                 for(unsigned j=0;j<nc_per_block_;++j) //rows of this target block
                 {
                     //Copy all elements across the columns of the block
-                    vcl_cout<<"Copy back from block to v for row "<<j<<vcl_endl;
                     vcl_copy(pTarget,pTarget+nTargetColEls,pBlockTopLeft);
                     pBlockTopLeft+= rowStep; //Next row of block in overall normalised vecor
                     pTarget+= nTargetColEls; //Next row of block 
