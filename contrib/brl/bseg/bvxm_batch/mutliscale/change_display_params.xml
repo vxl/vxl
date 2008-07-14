@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<bvxmChangeDetectionDisplayProcess>
+<prob_thresh desc="Probability Threshold for detection" type="float" value="0.5" />
+<prob_image_scale desc="Probability Image Scale" type="float" value="0.5" />
+</bvxmChangeDetectionDisplayProcess>
