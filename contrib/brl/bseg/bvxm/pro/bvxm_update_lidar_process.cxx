@@ -77,9 +77,10 @@ bool bvxm_update_lidar_process::execute()
 
   for(unsigned curr_scale=scale_idx;curr_scale<world->get_params()->max_scale();curr_scale++)
   {
-      if(curr_scale==scale_idx)
-      {
+      
         result =result && world->update_lidar(observation, prob_map, mask,curr_scale);
+        if(curr_scale==scale_idx)
+      {
         brdb_value_sptr output0 = 
             new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<float>(prob_map));
         output_data_[0] = output0;
