@@ -1,5 +1,6 @@
 #include "bvxm_lidar_init_process.h"
 //:
+// \file
 #include "bvxm_voxel_world.h"
 #include <bvxm/bvxm_util.h>
 

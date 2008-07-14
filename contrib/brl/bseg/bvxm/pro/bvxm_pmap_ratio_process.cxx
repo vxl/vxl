@@ -69,7 +69,7 @@ bool bvxm_pmap_ratio_process::compute(vcl_string pmap1,
     for ( unsigned int nj = 0; nj < lidar_img->nj(); nj++ ) {
       if (lidar_img->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
         if (vil_image_view<unsigned char> *img_view = dynamic_cast<vil_image_view<unsigned char>*>(lidar_img.ptr()))
-	{
+        {
           float p1 = (*img_view)(ni, nj);
           vil_image_view<unsigned char> *img_view2 = dynamic_cast<vil_image_view<unsigned char>*>(nonlidar_img.ptr());
           float p = 0.0f, p2 = (*img_view2)(ni, nj);
