@@ -18,6 +18,8 @@
 #include <vcl_cmath.h>
 
 #include <vpgl/vpgl_camera.h>
+#include <vpgl/vpgl_rational_camera.h>
+#include <vpgl/vpgl_perspective_camera.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
@@ -110,6 +112,11 @@ class bvxm_util
   template<class T>
   static vcl_vector<vgl_point_3d<T> > corners_of_box_3d(vgl_box_3d<T> box);
 
+  static vil_image_view_base_sptr downsample_image_by_two(vil_image_view_base_sptr img);
+
+  static vpgl_camera_double_sptr downsample_camera(vpgl_camera_double_sptr camera,unsigned int scale);
+
+  static vpgl_camera_double_sptr downsample_persp_camera(vpgl_camera_double_sptr camera,unsigned int scale);
  protected:
 
   static void bilinear_weights(vgl_h_matrix_2d<double> invH,
