@@ -42,13 +42,13 @@
 
 // multiscale
 #include <bvxm/pro/multiscale_pro/bvxm_detect_scale_process.h>
-#include <bvxm/pro/multiscale_pro/bvxm_create_multiscale_voxel_world_process.h>
-#include <bvxm/pro/multiscale_pro/bvxm_update_multiscale_process.h>
-#include <bvxm/pro/multiscale_pro/bvxm_detect_multiscale_process.h>
+//#include <bvxm/pro/multiscale_pro/bvxm_create_multiscale_voxel_world_process.h>
+//#include <bvxm/pro/multiscale_pro/bvxm_update_multiscale_process.h>
+//#include <bvxm/pro/multiscale_pro/bvxm_detect_multiscale_process.h>
 #include <bvxm/pro/multiscale_pro/bvxm_compare_3d_voxels_process.h>
 
-#include <bvxm/multiscale/bvxm_multi_scale_voxel_world.h>
-#include <bvxm/pro/multiscale_pro/bvxm_save_multiscale_occupancy_raw_process.h>
+//#include <bvxm/multiscale/bvxm_multi_scale_voxel_world.h>
+//#include <bvxm/pro/multiscale_pro/bvxm_save_multiscale_occupancy_raw_process.h>
 
 // datatypes
 #include <vcl_string.h>
