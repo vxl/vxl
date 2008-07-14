@@ -124,7 +124,7 @@ register_datatypes(PyObject *self, PyObject *args)
   typedef vbl_smart_ptr<vpgl_camera<double> > vpgl_camera_double_sptr;
   REGISTER_DATATYPE( vpgl_camera_double_sptr );
   REGISTER_DATATYPE( bvxm_voxel_world_sptr );
-  REGISTER_DATATYPE( bvxm_multi_scale_voxel_world_sptr );
+  //REGISTER_DATATYPE( bvxm_multi_scale_voxel_world_sptr );
 
   Py_INCREF(Py_None);
   return Py_None;
