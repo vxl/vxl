@@ -415,7 +415,7 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index, unsigne
 template <bvxm_voxel_type APM_T>
 bool bvxm_voxel_world::update(bvxm_image_metadata const& observation, unsigned bin_index, unsigned scale_idx)
 {
-  assert(scale_idx<=params_->max_scale());
+  assert(scale_idx<params_->max_scale());
   vil_image_view<float> dummy;
   vil_image_view<bool> mask;
   return this->update_impl<APM_T>(observation, false, dummy, false, mask, bin_index,scale_idx);
