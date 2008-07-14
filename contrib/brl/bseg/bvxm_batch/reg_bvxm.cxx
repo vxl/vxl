@@ -4,6 +4,7 @@
 // processes
 #include <vil_pro/vil_load_image_view_process.h>
 #include <vil_pro/vil_save_image_view_process.h>
+#include <vil_pro/vil_rgbi_to_grey_process.h>
 #include <vpgl_pro/vpgl_load_proj_camera_process.h>
 #include <vpgl_pro/vpgl_load_perspective_camera_process.h>
 #include <vpgl_pro/vpgl_save_perspective_camera_process.h>
@@ -39,6 +40,15 @@
 #include <bvxm/pro/bvxm_pmap_ratio_process.h>
 #include <bvxm/pro/bvxm_roc_process.h>
 
+// multiscale
+#include <bvxm/pro/multiscale_pro/bvxm_detect_scale_process.h>
+#include <bvxm/pro/multiscale_pro/bvxm_create_multiscale_voxel_world_process.h>
+#include <bvxm/pro/multiscale_pro/bvxm_update_multiscale_process.h>
+#include <bvxm/pro/multiscale_pro/bvxm_detect_multiscale_process.h>
+#include <bvxm/pro/multiscale_pro/bvxm_compare_3d_voxels_process.h>
+
+#include <bvxm/multiscale/bvxm_multi_scale_voxel_world.h>
+#include <bvxm/pro/multiscale_pro/bvxm_save_multiscale_occupancy_raw_process.h>
 
 // datatypes
 #include <vcl_string.h>
@@ -52,6 +62,7 @@ register_processes(PyObject *self, PyObject *args)
 {
   REG_PROCESS(vil_load_image_view_process, bprb_batch_process_manager);
   REG_PROCESS(vil_save_image_view_process, bprb_batch_process_manager);
+  REG_PROCESS(vil_rgbi_to_grey_process, bprb_batch_process_manager);
   REG_PROCESS(vpgl_load_rational_camera_process, bprb_batch_process_manager);
   REG_PROCESS(vpgl_save_rational_camera_process, bprb_batch_process_manager);
   REG_PROCESS(vpgl_load_rational_camera_nitf_process, bprb_batch_process_manager);
@@ -86,6 +97,14 @@ register_processes(PyObject *self, PyObject *args)
   REG_PROCESS(bvxm_pmap_hist_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_pmap_ratio_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_roc_process, bprb_batch_process_manager);
+ 
+  //: multiscale
+  REG_PROCESS(bvxm_detect_scale_process, bprb_batch_process_manager);
+  //REG_PROCESS(bvxm_create_multiscale_voxel_world_process, bprb_batch_process_manager);
+  //REG_PROCESS(bvxm_update_multiscale_process, bprb_batch_process_manager);
+  //REG_PROCESS(bvxm_detect_multiscale_process, bprb_batch_process_manager);
+  REG_PROCESS(bvxm_compare_3d_voxels_process, bprb_batch_process_manager);
+
 
   Py_INCREF(Py_None);
   return Py_None;
@@ -105,6 +124,8 @@ register_datatypes(PyObject *self, PyObject *args)
   typedef vbl_smart_ptr<vpgl_camera<double> > vpgl_camera_double_sptr;
   REGISTER_DATATYPE( vpgl_camera_double_sptr );
   REGISTER_DATATYPE( bvxm_voxel_world_sptr );
+  REGISTER_DATATYPE( bvxm_multi_scale_voxel_world_sptr );
+
   Py_INCREF(Py_None);
   return Py_None;
 }
