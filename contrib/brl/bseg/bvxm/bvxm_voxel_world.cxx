@@ -439,7 +439,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
     PL.fill(0.0);
     vil_image_view_base_sptr lidar = metadata.img;
     vnl_vector_fixed<float,3> sigmas(.5, .5, 0.0009);
-    vgl_point_3d<float> local_xyz = voxel_index_to_xyz(0, 0, k_idx);
+    vgl_point_3d<float> local_xyz = voxel_index_to_xyz(0, 0, k_idx,scale);
 
     for (unsigned i_idx=0; i_idx<frame_backproj.nx(); i_idx++) {
       for (unsigned j_idx=0; j_idx<frame_backproj.ny(); j_idx++) {
@@ -465,7 +465,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
           lidar_roi.add(img_pos_min);
         }
 
-        float p = lidar_processor.prob_density(lidar, local_xyz.z(), sigmas, lidar_roi, params_->voxel_length());
+        float p = lidar_processor.prob_density(lidar, local_xyz.z(), sigmas, lidar_roi, params_->voxel_length(scale));
 #ifdef DEBUG
         if (p > p_max) {
           p_max = p;
@@ -1044,7 +1044,7 @@ vgl_point_3d<float> bvxm_voxel_world::voxel_index_to_xyz(unsigned vox_i, unsigne
   vgl_vector_3d<unsigned> num_vox = params_->num_voxels(scale_idx);
 
   // corner in parameters refers to the bottom. we want the top since slice 0 is the top-most slice.
-  vgl_point_3d<float> grid_origin = params_->corner() + vgl_vector_3d<float>(0.5f, 0.5f, vox_len*(num_vox.z() - 0.5f));
+  vgl_point_3d<float> grid_origin = params_->corner() + vgl_vector_3d<float>(0.0f, 0.0f, vox_len*(num_vox.z() - 0.5f));
   vgl_vector_3d<float> step_i = vox_len*params_->base_x();
   vgl_vector_3d<float> step_j = vox_len*params_->base_y();
   vgl_vector_3d<float> step_k = (-vox_len)*params_->base_z();
@@ -1064,22 +1064,22 @@ void bvxm_voxel_world::compute_plane_image_H(vpgl_camera_double_sptr const& cam,
   vgl_point_3d<float> corner_world;
 
   voxel_corners_vox.push_back(vgl_homg_point_2d<double>(0,0));
-  corner_world = this->voxel_index_to_xyz(0,0,k_idx);
+  corner_world = this->voxel_index_to_xyz(0,0,k_idx,scale_idx);
   cam->project(corner_world.x(),corner_world.y(),corner_world.z(),u,v);
   voxel_corners_img.push_back(vgl_homg_point_2d<double>(u,v));
 
   voxel_corners_vox.push_back(vgl_homg_point_2d<double>(grid_size.x()-1,0));
-  corner_world = this->voxel_index_to_xyz(grid_size.x()-1,0,k_idx);
+  corner_world = this->voxel_index_to_xyz(grid_size.x()-1,0,k_idx,scale_idx);
   cam->project(corner_world.x(),corner_world.y(),corner_world.z(),u,v);
   voxel_corners_img.push_back(vgl_homg_point_2d<double>(u,v));
 
   voxel_corners_vox.push_back(vgl_homg_point_2d<double>(grid_size.x()-1,grid_size.y()-1));
-  corner_world = this->voxel_index_to_xyz(grid_size.x()-1,grid_size.y()-1,k_idx);
+  corner_world = this->voxel_index_to_xyz(grid_size.x()-1,grid_size.y()-1,k_idx,scale_idx);
   cam->project(corner_world.x(),corner_world.y(),corner_world.z(),u,v);
   voxel_corners_img.push_back(vgl_homg_point_2d<double>(u,v));
 
   voxel_corners_vox.push_back(vgl_homg_point_2d<double>(0,(grid_size.y()-1)));
-  corner_world = this->voxel_index_to_xyz(0,grid_size.y()-1,k_idx);
+  corner_world = this->voxel_index_to_xyz(0,grid_size.y()-1,k_idx,scale_idx);
   cam->project(corner_world.x(),corner_world.y(),corner_world.z(),u,v);
   voxel_corners_img.push_back(vgl_homg_point_2d<double>(u,v));
 
