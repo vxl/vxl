@@ -23,6 +23,7 @@ SET(bvxm_pro_sources
     bvxm_illum_index_process.h              bvxm_illum_index_process.cxx
     bvxm_roi_init_process.h                 bvxm_roi_init_process.cxx
     bvxm_rpc_registration_process.h         bvxm_rpc_registration_process.cxx
+    bvxm_rpc_prob_registration_process.h    bvxm_rpc_prob_registration_process.cxx
     bvxm_save_edges_raw_process.h           bvxm_save_edges_raw_process.cxx
     bvxm_save_occupancy_raw_process.h       bvxm_save_occupancy_raw_process.cxx
     bvxm_save_occupancy_vff_process.h       bvxm_save_occupancy_vff_process.cxx

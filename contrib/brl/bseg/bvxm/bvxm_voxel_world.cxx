@@ -612,7 +612,7 @@ bool bvxm_voxel_world::update_lidar_impl(bvxm_image_metadata const& metadata,
 }
 
 // update voxel grid for edges with data from image/camera pair and return the edge probability density of pixel values
-bool bvxm_voxel_world::update_edges(bvxm_image_metadata const& metadata, unsigned scale)
+bool bvxm_voxel_world::update_edges_prob(bvxm_image_metadata const& metadata, unsigned scale)
 {
   // datatype for current appearance model
   typedef bvxm_voxel_traits<EDGES>::voxel_datatype edges_datatype;
@@ -626,7 +626,7 @@ bool bvxm_voxel_world::update_edges(bvxm_image_metadata const& metadata, unsigne
     vgl_h_matrix_2d<double> Hp2i, Hi2p;
     for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
     {
-      compute_plane_image_H(metadata.camera,z,Hp2i,Hi2p,  scale);
+      compute_plane_image_H(metadata.camera,z,Hp2i,Hi2p,scale);
       H_plane_to_img.push_back(Hp2i);
       H_img_to_plane.push_back(Hi2p);
     }
@@ -714,7 +714,66 @@ bool bvxm_voxel_world::update_edges(bvxm_image_metadata const& metadata, unsigne
   return true;
 }
 
-bool bvxm_voxel_world::expected_edge_image(bvxm_image_metadata const& camera,vil_image_view_base_sptr &expected, unsigned scale)
+// update voxel grid for edges with data from image/camera pair and return the edge probability density of pixel values
+bool bvxm_voxel_world::update_edges(bvxm_image_metadata const& metadata, unsigned scale)
+{
+  // datatype for current appearance model
+  typedef bvxm_voxel_traits<EDGES>::voxel_datatype edges_datatype;
+
+  vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale);
+
+  // compute homographies from voxel planes to image coordinates and vise-versa.
+  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
+  vcl_vector<vgl_h_matrix_2d<double> > H_img_to_plane;
+  {
+    vgl_h_matrix_2d<double> Hp2i, Hi2p;
+    for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
+    {
+      compute_plane_image_H(metadata.camera,z,Hp2i,Hi2p,scale);
+      H_plane_to_img.push_back(Hp2i);
+      H_img_to_plane.push_back(Hi2p);
+    }
+  }
+
+  // convert image to a voxel_slab
+  bvxm_voxel_slab<edges_datatype> image_slab(metadata.img->ni(), metadata.img->nj(), 1);
+  if (!bvxm_util::img_to_slab(metadata.img,image_slab)) {
+    vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type:" << EDGES << vcl_endl;
+    return false;
+  }
+
+  bvxm_voxel_slab<edges_datatype> frame_backproj(grid_size.x(),grid_size.y(),1);
+
+  // get edge probability grid
+  bvxm_voxel_grid_base_sptr edges_grid_base = this->get_grid<EDGES>(0,scale);
+  bvxm_voxel_grid<edges_datatype> *edges_grid  = static_cast<bvxm_voxel_grid<edges_datatype>*>(edges_grid_base.ptr());
+  bvxm_voxel_grid<edges_datatype>::iterator edges_slab_it = edges_grid->begin();
+
+  vcl_cout << "Updating Voxels for the Edge Model: " << vcl_endl;
+
+  for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++edges_slab_it)
+  {
+    vcl_cout << '.';
+    if ( (edges_slab_it == edges_grid->end()) ) {
+      vcl_cerr << "error: reached end of grid slabs at z = " << z << ".  nz = " << grid_size.z() << vcl_endl;
+      return false;
+    }
+
+    // backproject image onto voxel plane
+    bvxm_util::warp_slab_bilinear(image_slab, H_plane_to_img[z], frame_backproj);
+
+    bvxm_voxel_slab<edges_datatype>::iterator frame_backproj_it = frame_backproj.begin();
+    bvxm_voxel_slab<edges_datatype>::iterator edges_slab_it_it = (*edges_slab_it).begin();
+
+    for (; frame_backproj_it != frame_backproj.end(); ++frame_backproj_it, ++edges_slab_it_it) {
+      (*edges_slab_it_it) = (*edges_slab_it_it)*(*frame_backproj_it);
+    }
+  }
+  vcl_cout << vcl_endl;
+  return true;
+}
+
+bool bvxm_voxel_world::expected_edge_prob_image(bvxm_image_metadata const& camera,vil_image_view_base_sptr &expected, unsigned scale)
 {
   // datatype for current appearance model
   typedef bvxm_voxel_traits<EDGES>::voxel_datatype edges_datatype;
@@ -780,6 +839,59 @@ bool bvxm_voxel_world::expected_edge_image(bvxm_image_metadata const& camera,vil
 
   return true;
 }
+
+bool bvxm_voxel_world::expected_edge_image(bvxm_image_metadata const& camera,vil_image_view_base_sptr &expected, unsigned scale)
+{
+  // datatype for current appearance model
+  typedef bvxm_voxel_traits<EDGES>::voxel_datatype edges_datatype;
+
+  // extract global parameters
+  vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale);
+
+  // compute homographies from voxel planes to image coordinates and vise-versa.
+  vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
+  vcl_vector<vgl_h_matrix_2d<double> > H_img_to_plane;
+  for (unsigned z=0; z < (unsigned)grid_size.z(); ++z)
+  {
+    vgl_h_matrix_2d<double> Hp2i, Hi2p;
+    compute_plane_image_H(camera.camera,z,Hp2i,Hi2p,scale);
+    H_plane_to_img.push_back(Hp2i);
+    H_img_to_plane.push_back(Hi2p);
+  }
+
+  // allocate some images
+  bvxm_voxel_slab<edges_datatype> expected_edge_image(expected->ni(),expected->nj(),1);
+  bvxm_voxel_slab<edges_datatype> slice_edges(expected->ni(),expected->nj(),1);
+
+  expected_edge_image.fill(0.0f);
+
+  // get edges probability grid
+  bvxm_voxel_grid_base_sptr edges_grid_base = this->get_grid<EDGES>(0,scale);
+  bvxm_voxel_grid<edges_datatype> *edges_grid  = static_cast<bvxm_voxel_grid<edges_datatype>*>(edges_grid_base.ptr());
+
+  bvxm_voxel_grid<edges_datatype>::const_iterator edges_slab_it(edges_grid->begin());
+
+  vcl_cout << "Generating Expected Edge Image: " << vcl_endl;
+  for (unsigned z=0; z<(unsigned)grid_size.z(); ++z, ++edges_slab_it) {
+    vcl_cout << '.';
+    // warp slice_probability to image plane
+    bvxm_util::warp_slab_bilinear(*edges_slab_it, H_img_to_plane[z], slice_edges);
+
+    bvxm_voxel_slab<edges_datatype>::const_iterator slice_edges_it = slice_edges.begin();
+    bvxm_voxel_slab<edges_datatype>::iterator expected_edge_image_it = expected_edge_image.begin();
+
+    for (; expected_edge_image_it != expected_edge_image.end(); ++slice_edges_it, ++expected_edge_image_it) {
+      (*expected_edge_image_it) = vnl_math_max((*expected_edge_image_it),(*slice_edges_it));
+    }
+  }
+  vcl_cout << vcl_endl;
+
+  // convert back to vil_image_view
+  bvxm_util::slab_to_img(expected_edge_image, expected);
+
+  return true;
+}
+
 
 //: generate a heightmap from the viewpoint of a virtual camera
 // The pixel values are the z values of the most likely voxel intercepted by the corresponding camera ray

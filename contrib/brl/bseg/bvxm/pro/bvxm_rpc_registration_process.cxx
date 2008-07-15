@@ -11,16 +11,8 @@
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 
-#include <brip/brip_vil_float_ops.h>
-
-#include <vcl_cstdio.h>
-
-#include <vpgl/algo/vpgl_backproject.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_vector_3d.h>
-#include <vgl/vgl_plane_3d.h>
 #include <bvxm/multiscale/bvxm_multiscale_util.h>
+
 bvxm_rpc_registration_process::bvxm_rpc_registration_process()
 {
   // process takes 5 inputs:
@@ -28,19 +20,15 @@ bvxm_rpc_registration_process::bvxm_rpc_registration_process()
   //input[1]: The current camera
   //input[2]: The current edge image
   //input[3]: The flag indicating whether to correct offsets of input image (offsets are corrected if true)
-  //input[4]: The flag indicating whether to update the voxel world with the input image
-  //input[5]: The flag indicating whether to align the 3D voxel world along with image
-  //input[6]: Scale of the image
+  //input[4]: Scale of the image
 
-  input_data_.resize(7,brdb_value_sptr(0));
-  input_types_.resize(7);
+  input_data_.resize(5,brdb_value_sptr(0));
+  input_types_.resize(5);
   input_types_[0] = "bvxm_voxel_world_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "vil_image_view_base_sptr";
   input_types_[3] = "bool";
-  input_types_[4] = "bool";
-  input_types_[5] = "bool";
-  input_types_[6] = "unsigned";
+  input_types_[4] = "unsigned";
 
   // process has 2 outputs:
   // output[0]: The optimized camera
@@ -57,11 +45,6 @@ bvxm_rpc_registration_process::bvxm_rpc_registration_process()
 
 bool bvxm_rpc_registration_process::execute()
 {
-  bool ANALYZER_MODE = false;
-  char temp_string[1024];
-  vcl_ifstream file_inp;
-  vcl_ofstream file_out;
-
   // Sanity check
   if (!this->verify_inputs())
     return false;
@@ -73,57 +56,47 @@ bool bvxm_rpc_registration_process::execute()
   brdb_value_t<vpgl_camera_double_sptr>* input1 =  static_cast<brdb_value_t<vpgl_camera_double_sptr>* >(input_data_[1].ptr());
   // edge image
   brdb_value_t<vil_image_view_base_sptr>* input2 = static_cast<brdb_value_t<vil_image_view_base_sptr>* >(input_data_[2].ptr());
-  // boolean parameter specifying the correction state
+  // boolean parameter specifyi
   brdb_value_t<bool>* input3 = static_cast<brdb_value_t<bool>* >(input_data_[3].ptr());
-  // boolean parameter specifying the update state
-  brdb_value_t<bool>* input4 = static_cast<brdb_value_t<bool>* >(input_data_[4].ptr());
-  // boolean parameter specifying the voxel world alignment state
-  brdb_value_t<bool>* input5 = static_cast<brdb_value_t<bool>* >(input_data_[5].ptr());
-
-    brdb_value_t<unsigned>* input6 = static_cast<brdb_value_t<unsigned>* >(input_data_[6].ptr());
+  brdb_value_t<unsigned>* input4 = static_cast<brdb_value_t<unsigned>* >(input_data_[4].ptr());
 
   bvxm_voxel_world_sptr vox_world = input0->value();
-  vpgl_camera_double_sptr camera_inp = input1->value();
-  vil_image_view_base_sptr edge_image_sptr = input2->value();
-  vil_image_view<vxl_byte> edge_image(edge_image_sptr);
-  bool rpc_correction_flag = input3->value();
-  bool rpc_update_flag = input4->value();
-  bool rpc_shift_3d_flag = input5->value();
-  unsigned scale = input6->value();
 
-  // get parameters
-  double cedt_image_gaussian_sigma;
-  int offset_search_size;
-  if (!parameters()->get_value("cedt_image_gaussian_sigma", cedt_image_gaussian_sigma) ||
-      !parameters()->get_value("offset_search_size", offset_search_size)
-     )
-  {
-    vcl_cout << "problems in retrieving parameters\n";
-    return false;
-  }
+  vpgl_camera_double_sptr camera_inp = input1->value();
+
+  vil_image_view_base_sptr edge_image_sptr = input2->value();
+  bool rpc_correction_flag = input3->value();
+  unsigned scale = input4->value();
+
+  vil_image_view<vxl_byte> edge_image(edge_image_sptr);
 
   int num_observations = vox_world->num_observations<EDGES>(0,scale);
+
+  // get parameters
+  double cedt_image_gaussian_sigma=0.0;
+  int offset_search_size=0;
+  if (!parameters()->get_value("cedt_image_gaussian_sigma", cedt_image_gaussian_sigma) ||
+    !parameters()->get_value("offset_search_size", offset_search_size)) {
+      vcl_cout << "problems in retrieving parameters\n";
+      return false;
+  }
 
   int ni = edge_image.ni();
   int nj = edge_image.nj();
 
-  double best_offset_u = 0.0, best_offset_v = 0.0;
+  double max_prob = 0.0;
+  int max_u = 0, max_v = 0;
 
   vil_image_view<vxl_byte> expected_edge_image_output;
   expected_edge_image_output.set_size(ni,nj);
   expected_edge_image_output.fill(0);
-
-  if (ANALYZER_MODE) {
-    vcl_sprintf(temp_string,"edge_image_%d.jpg",num_observations);
-    vil_save(edge_image,temp_string);
-  }
 
   // part 1: correction
   // this part contains the correction rpc camera parameters using the expected edge image obtained
   // from the voxel model and edge map of the current image.
   // if the camera parameters are manually corrected by the user, this part should be omitted by setting the
   // "rpc_correction_flag" parameter to 0 (false).
-  if (rpc_correction_flag && num_observations > 0)
+  if (rpc_correction_flag)
   {
     //create image metadata object (no image with camera, so just use dummy):
     vil_image_view_base_sptr dummy_img;
@@ -131,7 +104,7 @@ bool bvxm_rpc_registration_process::execute()
 
     // render the edge image
     vil_image_view_base_sptr expected_edge_image_sptr = new vil_image_view<float>(ni,nj,1);
-    vox_world->expected_edge_image(camera_metadata_inp, expected_edge_image_sptr,scale);
+    vox_world->expected_edge_image(camera_metadata_inp, expected_edge_image_sptr, scale);
     vil_image_view<float> expected_edge_image(expected_edge_image_sptr);
 
     // setting the output edge image for viewing purposes
@@ -141,31 +114,22 @@ bool bvxm_rpc_registration_process::execute()
       }
     }
 
-    if (ANALYZER_MODE) {
-      vcl_sprintf(temp_string,"expected_image_%d.jpg",num_observations);
-      vil_save(expected_edge_image_output,temp_string);
-    }
-
-    double max_prob = vcl_numeric_limits<double>::min();
-    vnl_matrix<double> edge_fit_matrix(2*offset_search_size+1,2*offset_search_size+1,0.0);
-
-    // this is the two level offset search algorithm
-    int offset_lower_limit_u = -offset_search_size;
-    int offset_lower_limit_v = -offset_search_size;
-    int offset_upper_limit_u =  offset_search_size;
-    int offset_upper_limit_v =  offset_search_size;
     vcl_cout << "Estimating image offsets:" << vcl_endl;
+
+    // this a two level search algorithm
+    // the first level search for the optimal offset parameters in a large scale depending on the input offset search size
+    // the second level search for the optimal offset parameters in a small scale
+    int offset_step_size = vnl_math_min(((offset_search_size-1)/20)+1,3);
+    int offset_lower_limit_u = -offset_search_size+offset_step_size;
+    int offset_lower_limit_v = offset_lower_limit_u;
+    int offset_upper_limit_u = offset_search_size-offset_step_size;
+    int offset_upper_limit_v = offset_upper_limit_u;
+
     for (int level=1; level<=2; level++)
     {
-      for (int u=offset_lower_limit_u; u<=offset_upper_limit_u; u++) {
-        if (level==1 && (vnl_math_abs(u)%20)%((vnl_math_abs(u)/20)+1)!=0) {
-          continue;
-        }
+      for (int u=offset_lower_limit_u; u<=offset_upper_limit_u; u=u+offset_step_size) {
         vcl_cout << '.';
-        for (int v=offset_lower_limit_v; v<=offset_upper_limit_v; v++) {
-          if (level==1 && (vnl_math_abs(v)%20)%((vnl_math_abs(v)/20)+1)!=0) {
-            continue;
-          }
+        for (int v=offset_lower_limit_v; v<=offset_upper_limit_v; v=v+offset_step_size) {
           // for each offset pair (u,v)
           double prob = 0.0;
           // find the total probability of the edge image given the expected edge image
@@ -176,104 +140,23 @@ bool bvxm_rpc_registration_process::execute()
               }
             }
           }
-
-          edge_fit_matrix(u+offset_search_size,v+offset_search_size) = prob;
-
           // if maximum is found
           if (prob > max_prob) {
             max_prob = prob;
-            best_offset_u = (double)u;
-            best_offset_v = (double)v;
+            max_u = u;
+            max_v = v;
           }
         }
       }
-
-      int level_two_search_size = 2*vnl_math_max(vnl_math_abs(vnl_math_rnd(best_offset_u))/20,vnl_math_abs(vnl_math_rnd(best_offset_v))/20);
-      offset_lower_limit_u = vnl_math_max(-offset_search_size,vnl_math_rnd(best_offset_u)-level_two_search_size);
-      offset_lower_limit_v = vnl_math_max(-offset_search_size,vnl_math_rnd(best_offset_v)-level_two_search_size);
-      offset_upper_limit_u = vnl_math_min( offset_search_size,vnl_math_rnd(best_offset_u)+level_two_search_size);
-      offset_upper_limit_v = vnl_math_min( offset_search_size,vnl_math_rnd(best_offset_v)+level_two_search_size);
+      offset_lower_limit_u = max_u-offset_step_size;
+      offset_lower_limit_v = max_v-offset_step_size;
+      offset_upper_limit_u = max_u+offset_step_size;;
+      offset_upper_limit_v = max_v+offset_step_size;;
+      offset_step_size = 1;
     }
     vcl_cout << vcl_endl;
 
-    if (ANALYZER_MODE) {
-      double edge_fit_matrix_min = vcl_numeric_limits<double>::max();
-      double edge_fit_matrix_max = vcl_numeric_limits<double>::min();
-
-      for (unsigned i=0; i<edge_fit_matrix.rows(); i++) {
-        for (unsigned j=0; j<edge_fit_matrix.cols(); j++) {
-          if (edge_fit_matrix(i,j)>0.0) {
-            edge_fit_matrix_min = vnl_math_min(edge_fit_matrix_min,edge_fit_matrix(i,j));
-            edge_fit_matrix_max = vnl_math_max(edge_fit_matrix_max,edge_fit_matrix(i,j));
-          }
-        }
-      }
-
-      vil_image_view<vxl_byte> edge_fit_image(2*offset_search_size+1,2*offset_search_size+1);
-      edge_fit_image.fill(0);
-      for (unsigned i=0; i<edge_fit_matrix.rows(); i++) {
-        for (unsigned j=0; j<edge_fit_matrix.cols(); j++) {
-          if (edge_fit_matrix(i,j)>=edge_fit_matrix_min) {
-            edge_fit_image(i,j) = (int)(256.0*((edge_fit_matrix(i,j)-edge_fit_matrix_min)/(edge_fit_matrix_max-edge_fit_matrix_min)));
-          }
-        }
-      }
-
-      vcl_sprintf(temp_string,"edge_fit_image_%d.jpg",num_observations);
-      vil_save(edge_fit_image,temp_string);
-    }
-  }
-
-  if (ANALYZER_MODE) {
-    file_out.clear();
-    file_out.open("offsets.txt",vcl_ofstream::app);
-    file_out << best_offset_u << '\t' << best_offset_v << vcl_endl;
-    file_out.close();
-  }
-
-  float nlx,nly,nlz;
-  if (rpc_shift_3d_flag)
-  {
-    vpgl_local_rational_camera<double> *cam_input_temp = dynamic_cast<vpgl_local_rational_camera<double>*>(camera_inp.ptr());
-
-    vgl_point_3d<double> origin_3d(0.0,0.0,0.0);
-    vgl_point_2d<double> origin_2d = cam_input_temp->project(origin_3d);
-
-    vgl_plane_3d<double> curr_plane(0.0,0.0,1.0,-0.001);
-    vgl_point_3d<double> init_point(0.0,0.0,0.001);
-    vgl_point_3d<double> world_point;
-    vpgl_backproject::bproj_plane(cam_input_temp,origin_2d,curr_plane,init_point,world_point);
-
-    vgl_vector_3d<double> motion_plane_normal = world_point - origin_3d;
-    motion_plane_normal = normalize(motion_plane_normal);
-    vgl_plane_3d<double> motion_plane(motion_plane_normal,origin_3d);
-
-    init_point.set(origin_3d.x(),origin_3d.y(),origin_3d.z());
-    vgl_point_3d<double> moved_origin;
-    vgl_point_2d<double> origin_2d_shift(origin_2d.x()+best_offset_u,origin_2d.y()+best_offset_v);
-    vpgl_backproject::bproj_plane(cam_input_temp,origin_2d_shift,motion_plane,init_point,moved_origin);
-
-    vgl_vector_3d<double> motion = moved_origin - origin_3d;
-
-    double motion_mult = 1.0/((double)(num_observations+1));
-    motion = motion*motion_mult;
-
-    float lx,ly,lz;
-    vgl_point_3d<float> rpc_origin = vox_world->get_params()->rpc_origin();
-    lx = rpc_origin.x();
-    ly = rpc_origin.y();
-    lz = rpc_origin.z();
-
-    lx = lx*(1.0f-(float)motion_mult);
-    ly = ly*(1.0f-(float)motion_mult);
-    lz = lz*(1.0f-(float)motion_mult);
-
-    vgl_point_3d<double> pt_3d_est_vec(lx,ly,lz);
-    vgl_point_3d<double> pt_3d_updated = pt_3d_est_vec + motion;
-
-    nlx = (float)pt_3d_updated.x();
-    nly = (float)pt_3d_updated.y();
-    nlz = (float)pt_3d_updated.z();
+    vcl_cout << "Estimated changes in offsets (u,v)=(" << max_u << ',' << max_v << ')' << vcl_endl;
   }
 
   // correct the output for (local) rational camera using the estimated offset pair (max_u,max_v)
@@ -295,8 +178,8 @@ bool bvxm_rpc_registration_process::execute()
     vpgl_local_rational_camera<double> cam_out_local(*cam_inp_local);
     double offset_u,offset_v;
     cam_out_local.image_offset(offset_u,offset_v);
-    offset_u += best_offset_u;
-    offset_v += best_offset_v;
+    offset_u += (double)max_u;
+    offset_v += (double)max_v;
     cam_out_local.set_image_offset(offset_u,offset_v);
     camera_out = new vpgl_local_rational_camera<double>(cam_out_local);
   }
@@ -304,12 +187,12 @@ bool bvxm_rpc_registration_process::execute()
     vpgl_rational_camera<double> cam_out_rational(*cam_inp_rational);
     double offset_u,offset_v;
     cam_out_rational.image_offset(offset_u,offset_v);
-    offset_u += best_offset_u;
-    offset_v += best_offset_v;
+    offset_u += (double)max_u;
+    offset_v += (double)max_v;
     cam_out_rational.set_image_offset(offset_u,offset_v);
     camera_out = new vpgl_rational_camera<double>(cam_out_rational);
   }
-  else {
+  else{
     vcl_cerr << "error: process expects camera to be a vpgl_rational_camera or vpgl_local_rational_camera.\n";
     return false;
   }
@@ -320,9 +203,7 @@ bool bvxm_rpc_registration_process::execute()
   // if the camera parameters are manually corrected by the user, this part should be omitted by setting the
   // "rpc_correction_flag" parameter to 0 (false).
 
-  // update part work if the input camera parameters are not correct or the online algorithm flag
-  // "use_online_algorithm" is set to 1 (true) in the input parameter file
-  if (rpc_update_flag) {
+  if (!rpc_correction_flag) {
     vil_image_view<vxl_byte> edge_image_negated(edge_image);
     vil_math_scale_and_offset_values(edge_image_negated,-1.0,255);
 
@@ -338,42 +219,35 @@ bool bvxm_rpc_registration_process::execute()
         cedt_image(i,j) = (float)gaussian.G((double)cedt_image(i,j));
       }
     }
+
     unsigned max_scale=vox_world->get_params()->max_scale();
     for (unsigned curr_scale = scale;curr_scale < max_scale;curr_scale++)
     {
-        bool result;
-        if(curr_scale!=scale)
-        {
-            vil_image_view_base_sptr cedt_image_sptr = new vil_image_view<float>(cedt_image);
-            cedt_image_sptr=bvxm_util::downsample_image_by_two(cedt_image_sptr);
-            vpgl_camera_double_sptr new_camera_out=bvxm_util::downsample_camera( camera_out, curr_scale);
-            bvxm_image_metadata camera_metadata_out(cedt_image_sptr,new_camera_out);
-            result=vox_world->update_edges(camera_metadata_out, curr_scale);
+      bool result;
+      if(curr_scale!=scale)
+      {
+        vil_image_view_base_sptr cedt_image_sptr = new vil_image_view<float>(cedt_image);
+        cedt_image_sptr=bvxm_util::downsample_image_by_two(cedt_image_sptr);
+        vpgl_camera_double_sptr new_camera_out=bvxm_util::downsample_camera( camera_out, curr_scale);
+        bvxm_image_metadata camera_metadata_out(cedt_image_sptr,new_camera_out);
+        result=vox_world->update_edges(camera_metadata_out,curr_scale);
+      }
+      else
+      {
+        vil_image_view_base_sptr cedt_image_sptr = new vil_image_view<float>(cedt_image);
+        bvxm_image_metadata camera_metadata_out(cedt_image_sptr,camera_out);
+        result=vox_world->update_edges(camera_metadata_out,curr_scale);
+      }
 
-        }
-        else
-        {
+      // updates the edge probabilities in the voxel world
 
-            vil_image_view_base_sptr cedt_image_sptr = new vil_image_view<float>(cedt_image);
-            bvxm_image_metadata camera_metadata_out(cedt_image_sptr,camera_out);
-            result=vox_world->update_edges(camera_metadata_out, curr_scale);
-        }
-        
-
-        // updates the edge probabilities in the voxel world
-
-        if(!result){
-            vcl_cerr << "error bvxm_rpc_registration: failed to update edgeimage" << vcl_endl;
-            return false;
-        }
+      if(!result){
+        vcl_cerr << "error bvxm_rpc_registration: failed to update edgeimage" << vcl_endl;
+        return false;
+      }
     }
-
   }
 
-  if (rpc_shift_3d_flag) {
-    vgl_point_3d<float> new_rpc_origin(nlx,nly,nlz);
-    vox_world->get_params()->set_rpc_origin(new_rpc_origin);
-  }
   vox_world->increment_observations<EDGES>(0,scale);
 
   // update the camera and store
