@@ -87,19 +87,19 @@ bool bvxm_compare_3d_voxels_process::execute()
       for (unsigned j=0; j<grid_size.y(); j++) {
         double min_err=2;
 
-        for (int gt_i=i*factor-1;gt_i<=i*factor+1;gt_i++)
+        for (unsigned int gt_i=i*factor-1;gt_i<=i*factor+1;++gt_i)
         {
-          for (int gt_j=j*factor-1;gt_j<=j*factor+1;gt_j++)
+          for (unsigned int gt_j=j*factor-1;gt_j<=j*factor+1;++gt_j)
           {
-            if (gt_i>=0 && gt_j>=0 && gt_i<gt_grid_size.x() && gt_j<gt_grid_size.y())
+            if (gt_i<gt_grid_size.x() && gt_j<gt_grid_size.y())
             {
               if (m_slab(i,j)>multi_scale_world->get_params()->min_occupancy_prob() &&
                   gt_slab(gt_i,gt_j) >main_world->get_params()->min_occupancy_prob())
               {
-                 double err=2*vcl_fabs(m_slab(i,j)-gt_slab(gt_i,gt_j));
-                 err/=(m_slab(i,j)+gt_slab(gt_i,gt_j));
-                 if (err<min_err)
-                   min_err=err;
+                double err=2*vcl_fabs(m_slab(i,j)-gt_slab(gt_i,gt_j));
+                err/=(m_slab(i,j)+gt_slab(gt_i,gt_j));
+                if (err<min_err)
+                  min_err=err;
               }
             }
           }
