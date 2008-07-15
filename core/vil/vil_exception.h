@@ -64,6 +64,57 @@ void vil_exception_warning(T exception)
   };
 
 
+  //: Indicates that a function call failed because a pixel format could not be handled.
+  class vil_exception_unsupported_pixel_format
+#if VCL_HAS_EXCEPTIONS
+  : public vcl_logic_error
+#endif
+  {
+   public:
+    enum vil_pixel_format src_type;
+    vcl_string operation_name;
+    vil_exception_unsupported_pixel_format(
+      enum vil_pixel_format src, const vcl_string& operation) :
+#if VCL_HAS_EXCEPTIONS
+    vcl_logic_error(operation + ": Unsupported pixel format."),
+#endif
+      src_type(src), operation_name(operation) {}
+#if VCL_HAS_EXCEPTIONS
+    virtual ~vil_exception_unsupported_pixel_format() throw() {}
+#else
+    const char * what() const {return "Unsupported Pixel formats.";}
+#endif
+  };
+
+
+  //: Indicates that some reference was made to pixels beyond the bounds of an image.
+  // In most cases of out-of-bounds access, you will not get this exception. For efficiency
+  // reasons, vil may not test for this problem, or may if you are lucky trip an assert.
+  // This function is only used in cases where easy of use, and risk of mistakes are high,
+  // and inefficiency is very low.
+  class vil_exception_out_of_bounds
+#if VCL_HAS_EXCEPTIONS
+  : public vcl_logic_error
+#endif
+  {
+   public:
+    vcl_string operation_name;
+    vil_exception_out_of_bounds(
+      const vcl_string& operation) :
+#if VCL_HAS_EXCEPTIONS
+    vcl_logic_error(operation + ": Pixel access out-of-bounds."),
+#endif
+      operation_name(operation) {}
+#if VCL_HAS_EXCEPTIONS
+    virtual ~vil_exception_out_of_bounds() throw() {}
+#else
+    const char * what() const {return "Pixel access out-of-bounds.";}
+#endif
+  };
+
+
+
+
   //: Indicates that an image load or save operation failed.
   // Generally this should be thrown, only after checks on the image type
   // have been passed by the file format object, and while an
@@ -96,6 +147,10 @@ void vil_exception_warning(T exception)
     const char * what() const { return full_what.c_str(); }
 #endif
   };
+
+
+
+
 
 #endif // vil_exception_h_
 

@@ -86,6 +86,7 @@
 #include <vil/vil_math.h>
 #include <vil/vil_plane.h>
 #include <vil/vil_copy.h>
+#include <vil/vil_exception.h>
 
 //: Performs conversion between different pixel types.
 template <class In, class Out>
@@ -682,6 +683,8 @@ inline vil_image_view_base_sptr vil_convert_cast(outP /*dummy*/,
 #undef macro
 #endif // DOXYGEN_SHOULD_SKIP_THIS
     default:
+      vil_exception_warning(vil_exception_unsupported_pixel_format(
+        src->pixel_format(), "vil_convert_cast") );
       dest = 0;
   }
   return dest;
@@ -785,7 +788,10 @@ macro(VIL_PIXEL_FORMAT_FLOAT , float )
 macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
 #endif // DOXYGEN_SHOULD_SKIP_THIS
-  default: dest=0;
+  default:
+    vil_exception_warning(vil_exception_unsupported_pixel_format(
+      src->pixel_format(), "vil_convert_round") );    
+    dest=0;
   }
   return dest;
 }
@@ -835,7 +841,10 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
 #endif // DOXYGEN_SHOULD_SKIP_THIS
 
-    default: dest=0;
+    default:
+      vil_exception_warning(vil_exception_unsupported_pixel_format(
+        src->pixel_format(), "vil_convert_to_compound_order") );
+      dest=0;
   }
   return dest;
 }
@@ -922,7 +931,7 @@ inline vil_image_view_base_sptr vil_convert_to_grey_using_average(
   {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define macro( F , T ) \
-   case F: { \
+  case F: { \
     /* try to do it quickly */ \
     if (src->nplanes() == 1 && \
         vil_pixel_format_component_format(src->pixel_format())==1) \
@@ -932,22 +941,24 @@ inline vil_image_view_base_sptr vil_convert_to_grey_using_average(
     vil_image_view<T > src1 = *src; \
     vil_math_mean_over_planes(src1, dest, double()); \
     return vil_image_view_base_sptr(new vil_image_view<T >(dest)); }
-   macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
-   macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+  macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
+  macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
 #if VXL_HAS_INT_64 && !defined(VCL_VC_6)
-   macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
-   macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
+  macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
+  macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
 #endif
-   macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-   macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-   macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
-   macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-   macro(VIL_PIXEL_FORMAT_FLOAT , float )
-   macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+  macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+  macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+  macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+  macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+  macro(VIL_PIXEL_FORMAT_FLOAT , float )
+  macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
 #endif // DOXYGEN_SHOULD_SKIP_THIS
-   default:
-    return vil_image_view_base_sptr();
+  default:
+    vil_exception_warning(vil_exception_unsupported_pixel_format(
+      src->pixel_format(), "vil_convert_to_grey_using_average") );
+    return 0;
   }
 }
 
@@ -969,7 +980,7 @@ inline vil_image_view_base_sptr vil_convert_to_grey_using_rgb_weighting(
   {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define macro( F , T ) \
-   case F: { \
+  case F: { \
     /* try to do it quickly */ \
     if (src->nplanes() == 1 && \
         vil_pixel_format_num_components(src->pixel_format()) == 1) \
@@ -980,21 +991,23 @@ inline vil_image_view_base_sptr vil_convert_to_grey_using_rgb_weighting(
     vil_image_view<T > dest; \
     vil_convert_round(dest1,dest); \
     return vil_image_view_base_sptr(new vil_image_view<T >(dest)); }
-   macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
-   macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
+  macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
+  macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
 #if VXL_HAS_INT_64 && !defined(VCL_VC_6)
-   macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
-   macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
+  macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
+  macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
 #endif
-   macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
-   macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
-   macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
-   macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
-   macro(VIL_PIXEL_FORMAT_FLOAT , float )
-   macro(VIL_PIXEL_FORMAT_DOUBLE , double )
+  macro(VIL_PIXEL_FORMAT_UINT_32 , vxl_uint_32 )
+  macro(VIL_PIXEL_FORMAT_INT_32 , vxl_int_32 )
+  macro(VIL_PIXEL_FORMAT_UINT_16 , vxl_uint_16 )
+  macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
+  macro(VIL_PIXEL_FORMAT_FLOAT , float )
+  macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
 #endif // DOXYGEN_SHOULD_SKIP_THIS
-   default:
+  default:
+      vil_exception_warning(vil_exception_unsupported_pixel_format(
+        src->pixel_format(), "vil_convert_to_grey_using_rgb_weighting") );
     return vil_image_view_base_sptr();
   }
 }
@@ -1149,6 +1162,9 @@ inline vil_image_view_base_sptr vil_convert_to_n_planes(
 #undef macro
 #endif // DOXYGEN_SHOULD_SKIP_THIS
    default:
+     vil_exception_warning(vil_exception_unsupported_pixel_format(
+        src->pixel_format(), "vil_convert_to_n_planes") );
+
     return vil_image_view_base_sptr();
   }
 }
@@ -1213,8 +1229,12 @@ inline vil_image_view_base_sptr vil_convert_stretch_range(
    macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
 #endif // DOXYGEN_SHOULD_SKIP_THIS
-   default:
-    dest_ref.clear();
+  default:
+    vil_exception_warning(vil_exception_unsupported_pixel_format(
+      src->pixel_format(), "vil_convert_stretch_range") );
+
+
+     dest_ref.clear();
   }
   return dest;
 }

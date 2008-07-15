@@ -47,18 +47,10 @@ class vil_crop_image_resource : public vil_image_resource
 
 
   virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned n_i,
-                                                 unsigned j0, unsigned n_j) const
-  {
-    if (i0 + n_i > ni() || j0 + n_j > nj()) return 0;
-    return src_->get_copy_view(i0+i0_, n_i, j0+j0_, n_j);
-  }
+                                                 unsigned j0, unsigned n_j) const;
 
   virtual vil_image_view_base_sptr get_view(unsigned i0, unsigned n_i,
-                                            unsigned j0, unsigned n_j) const
-  {
-    if (i0 + n_i > ni() || j0 + n_j > nj()) return 0;
-    return src_->get_view(i0+i0_, n_i, j0+j0_, n_j);
-  }
+                                            unsigned j0, unsigned n_j) const;
 
 
   //: Put the data in this view back into the image source.

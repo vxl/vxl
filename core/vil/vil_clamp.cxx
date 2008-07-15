@@ -17,6 +17,7 @@
 #include <vcl_cstring.h>
 #include <vcl_cassert.h>
 #include <vil/vil_property.h>
+#include <vil/vil_exception.h>
 
 
 vil_image_resource_sptr vil_clamp(const vil_image_resource_sptr &src, double lo, double hi)
@@ -71,6 +72,8 @@ vil_image_view_base_sptr vil_clamp_image_resource::get_copy_view(unsigned i0, un
 // How might you clamp a vcl_complex image ?
 #undef macro
   default:
+    vil_exception_warning(vil_exception_unsupported_pixel_format(
+      vs->pixel_format(), "vil_clamp_image_resource::get_copy_view") );
     return 0;
   }
   return vs;
