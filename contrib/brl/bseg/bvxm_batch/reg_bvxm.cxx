@@ -21,6 +21,7 @@
 #include <bvxm/pro/bvxm_illum_index_process.h>
 #include <bvxm/pro/bvxm_create_local_rpc_process.h>
 #include <bvxm/pro/bvxm_clean_world_process.h>
+#include <bvxm/pro/bvxm_rpc_prob_registration_process.h>
 #include <bvxm/pro/bvxm_rpc_registration_process.h>
 #include <bvxm/pro/bvxm_generate_edge_map_process.h>
 #include <bvxm/pro/bvxm_save_edges_raw_process.h>
@@ -78,6 +79,7 @@ register_processes(PyObject *self, PyObject *args)
   REG_PROCESS(bvxm_normalize_image_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_illum_index_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_rpc_registration_process, bprb_batch_process_manager);
+  REG_PROCESS(bvxm_rpc_prob_registration_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_generate_edge_map_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_change_detection_display_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_clean_world_process, bprb_batch_process_manager);
