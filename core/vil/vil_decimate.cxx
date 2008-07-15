@@ -17,6 +17,7 @@
 #include <vcl_cassert.h>
 #include <vil/vil_copy.h>
 #include <vil/vil_crop.h>
+#include <vil/vil_exception.h>
 
 static const unsigned long large_image_limit = 1024ul * 1024ul * 8ul; //8M Pixels
 
@@ -53,7 +54,11 @@ vil_image_view_base_sptr vil_decimate_image_resource::get_copy_view(unsigned i0,
   else // do large image case.
   {
     if ((i0+ni)*i_factor_ > src_->ni() || (j0+nj)*j_factor_ > src_->nj())
+    {
+      vil_exception_warning(vil_exception_out_of_bounds(
+        "vil_decimate_image_resource::get_copy_view") );
       return 0;
+    }
 
     switch (src_->pixel_format())
     {
@@ -84,6 +89,8 @@ vil_image_view_base_sptr vil_decimate_image_resource::get_copy_view(unsigned i0,
       macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
 #undef macro
     default:
+      vil_exception_warning(vil_exception_unsupported_pixel_format(
+        src_->pixel_format(), "vil_decimate_image_resource::get_copy_view") );
       return 0;
     }
   }
@@ -133,6 +140,8 @@ vil_image_view_base_sptr vil_decimate(const vil_image_view_base_sptr im, unsigne
     macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
 #undef macro
   default:
+    vil_exception_warning(vil_exception_unsupported_pixel_format(
+      im->pixel_format(), "vil_decimate") );
     return 0;
   }
 }
@@ -141,7 +150,8 @@ vil_image_view_base_sptr vil_decimate(const vil_image_view_base_sptr im, unsigne
 #if 1
 bool vil_decimate_image_resource::put_view(const vil_image_view_base&, unsigned, unsigned)
 {
-  vcl_cerr << "ERROR: vil_decimate_image_resource::put_view not implemented\n";
+    vil_exception_warning(vil_exception_unsupported_operation(
+      "vil_decimate_image_resource::put_view") );
   return false;
 }
 #else // disable put_view, because current implementation

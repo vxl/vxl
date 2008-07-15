@@ -50,7 +50,7 @@ vil_image_view_base_sptr vil_crop_image_resource::get_view(unsigned i0, unsigned
   if (i0 + n_i > ni() || j0 + n_j > nj())
   {
      vil_exception_warning(vil_exception_out_of_bounds(
-        "vil_crop_image_resource::get_copy_view") );
+        "vil_crop_image_resource::get_view") );
     return 0;
   }
   return src_->get_view(i0+i0_, n_i, j0+j0_, n_j);

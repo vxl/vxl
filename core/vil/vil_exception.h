@@ -114,6 +114,31 @@ void vil_exception_warning(T exception)
 
 
 
+  //: Indicates that some operation is not supported.
+  // In most cases you will not get this exception. For efficiency
+  // reasons, vil may not test for this problem, or may if you are lucky trip an assert.
+  // This function is only used in cases where easy of use, and risk of mistakes are high,
+  // and inefficiency is very low.
+  class vil_exception_unsupported_operation
+#if VCL_HAS_EXCEPTIONS
+  : public vcl_logic_error
+#endif
+  {
+   public:
+    vcl_string operation_name;
+    vil_exception_unsupported_operation(
+      const vcl_string& operation) :
+#if VCL_HAS_EXCEPTIONS
+    vcl_logic_error(operation + ": Unsupported operation."),
+#endif
+      operation_name(operation) {}
+#if VCL_HAS_EXCEPTIONS
+    virtual ~vil_exception_unsupported_operation() throw() {}
+#else
+    const char * what() const {return "Unsupported operation.";}
+#endif
+  };
+
 
   //: Indicates that an image load or save operation failed.
   // Generally this should be thrown, only after checks on the image type
