@@ -387,7 +387,7 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index, unsigne
 
   if (scale_map.find(scale_idx) == scale_map.end())
   {
-    vcl_cout<<"\n Scale not found ";
+    //vcl_cout<<"\n Scale not found ";
     vcl_string storage_directory = params_->model_dir();
 
     vcl_stringstream apm_fname;
