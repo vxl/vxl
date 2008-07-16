@@ -74,7 +74,9 @@ vpgl_load_rational_camera_nitf_process::execute()
 
   //cast to an nitf2_image
   vil_nitf2_image *nitf_image = static_cast<vil_nitf2_image*>(image.ptr());
-  vpgl_camera_double_sptr ratcam = new vpgl_nitf_rational_camera(nitf_image, true);
+  vpgl_nitf_rational_camera *nitf_cam=new vpgl_nitf_rational_camera(nitf_image, true);
+
+  vpgl_camera_double_sptr ratcam ( dynamic_cast<vpgl_rational_camera<double>* >(nitf_cam));
 
   if ( !ratcam.as_pointer() ) {
     vcl_cerr << "Failed to load rational camera from file" << nitf_image_path << vcl_endl;
