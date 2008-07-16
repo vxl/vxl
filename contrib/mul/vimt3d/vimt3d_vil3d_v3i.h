@@ -15,7 +15,7 @@
 // vil3d/vimt3d image using the standard vil3d_load_* API is very useful.
 // The file format currently is that provided by the default vsl
 // serialisation scheme. There is an extra v3i-specific magic number to
-// avoid confusion with other vsl data files, and aversion number to allow
+// avoid confusion with other vsl data files, and a version number to allow
 // for a change in format.
 
 #include <vil3d/vil3d_file_format.h>

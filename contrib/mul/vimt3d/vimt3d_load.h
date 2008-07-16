@@ -20,7 +20,8 @@ vimt3d_transform_3d vimt3d_load_transform(const vil3d_image_resource_sptr &im,
 //: Load image from path into given image (forcing to given pixel type)
 template<class T>
 void vimt3d_load(const vcl_string& path,
-                 vimt3d_image_3d_of<T>& image)
+                 vimt3d_image_3d_of<T>& image,
+                 bool use_millimetres=false)
 {
   vil3d_image_resource_sptr ir = vil3d_load_image_resource(path.c_str());
   if (ir.ptr()==0)
@@ -31,8 +32,7 @@ void vimt3d_load(const vcl_string& path,
 
   image.image() = vil3d_convert_cast(T(), 
                                      ir->get_view(0,ir->ni(),0,ir->nj(),0,ir->nk()));
-  if (image.image().size()==0) return;
-  bool use_millimeters=true;
+
   image.set_world2im(vimt3d_load_transform(ir,use_millimeters));
 }
 
