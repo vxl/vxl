@@ -1,5 +1,6 @@
-// This is mul/vimt3d/vimt3d_save.cxx
-
+// This is mul/vimt3d/vimt3d_save.h
+#ifndef vimt3d_save_h_
+#define vimt3d_save_h_
 //:
 // \file
 // \author Ian Scott
@@ -7,15 +8,15 @@
 #include <vil3d/vil3d_image_resource.h>
 #include <vimt3d/vimt3d_transform_3d.h>
 #include <vimt3d/vimt3d_image_3d_of.h>
+#include <vimt3d/vimt3d_load.h>
 #include <vil3d/vil3d_load.h>
 #include <vil3d/vil3d_convert.h>
 
 //: Save values from a transform to an image resource.
 // The transform will be from world co-ordinates in metres to image co-ordinates (or mm if requested).
 void vimt3d_save_transform(vil3d_image_resource_sptr &ir,
-  const vimt3d_transform_3d& trans, bool use_millimetres =false);
-
-
+                           const vimt3d_transform_3d& trans,
+                           bool use_millimetres =false);
 
 //: Save image from path into given image (forcing to given pixel type)
 template<class T>
@@ -30,9 +31,11 @@ void vimt3d_save(const vcl_string& path,
     return;
   }
 
-  image.image() = vil3d_convert_cast(T(), 
+  image.image() = vil3d_convert_cast(T(),
                                      ir->get_view(0,ir->ni(),0,ir->nj(),0,ir->nk()));
 
   bool use_millimeters=true;
   image.set_world2im(vimt3d_load_transform(ir,use_millimeters));
 }
+
+#endif // vimt3d_save_h_
