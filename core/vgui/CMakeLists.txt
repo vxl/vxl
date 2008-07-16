@@ -21,7 +21,17 @@ IF (OPENGL_FOUND)
   # For (not) reporting an error below
   SET( CAN_BUILD_VGUI "YES" )
 
-  INCLUDE(${CMAKE_ROOT}/Modules/FindX11.cmake)
+  # Apple can use OpenGL either with or without X11
+  # Finding X11 can cause problems when the native
+  # Apple OpenGL is to be used.
+  IF(APPLE)
+    OPTION(VGUI_USE_X11 "Use OpenGL for X11" NO)
+    IF(VGUI_USE_X11)
+      INCLUDE(${CMAKE_ROOT}/Modules/FindX11.cmake)
+    ENDIF(VGUI_USE_X11)
+  ELSE(APPLE)
+    INCLUDE(${CMAKE_ROOT}/Modules/FindX11.cmake)
+  ENDIF(APPLE)
   # Qv needed by vrml only
   INCLUDE(${MODULE_PATH}/FindQv.cmake)
   # glut optionally used by vgui_text and by the glut toolkit
