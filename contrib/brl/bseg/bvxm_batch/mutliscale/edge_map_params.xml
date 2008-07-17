@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<bvxmGenerateEdgeMapProcess>
-<use_lines desc="use_lines" type="bool" value="0" />
-<edge_detection_gaussian_sigma desc="edge_detection_gaussian_sigma" type="double" value="2" />
-<line_fitting_min_length desc="line_fitting_min_length" type="double" value="10" />
-<line_fitting_error_tolerance desc="line_fitting_error_tolerance" type="double" value="0.2" />
-</bvxmGenerateEdgeMapProcess>
