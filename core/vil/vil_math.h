@@ -856,6 +856,39 @@ inline void vil_math_image_abs_difference(const vil_image_view<aT>& imA,
     }
   }
 }
+
+//: Compute  sum of absolute difference between two images (|imA-imB|)
+// \relates vil_image_view
+template<class aT, class bT>
+inline double vil_math_image_abs_difference(const vil_image_view<aT>& imA,
+                                          const vil_image_view<bT>& imB)
+{
+  double sum=0.0;
+  unsigned ni = imA.ni(),nj = imA.nj(),np = imA.nplanes();
+  assert(imB.ni()==ni && imB.nj()==nj && imB.nplanes()==np);
+
+  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
+  vcl_ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
+  const aT* planeA = imA.top_left_ptr();
+  const bT* planeB = imB.top_left_ptr();
+  for (unsigned p=0;p<np;++p,planeA += pstepA,planeB += pstepB)
+  {
+    const aT* rowA   = planeA;
+    const bT* rowB   = planeB;
+    for (unsigned j=0;j<nj;++j,rowA += jstepA,rowB += jstepB)
+    {
+      const aT* pixelA = rowA;
+      const bT* pixelB = rowB;
+      for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelB+=istepB)
+      {
+        // The following construction works for all types, including unsigned
+        sum += (*pixelA>*pixelB?(*pixelA-*pixelB):(*pixelB-*pixelA));
+      }
+    }
+  }
+  return sum;
+}
+
 //: Compute magnitude of two images taken as vector components, sqrt(A^2 + B^2)
 // \relates vil_image_view
 template<class aT, class bT, class magT>
