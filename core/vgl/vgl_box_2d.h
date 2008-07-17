@@ -277,6 +277,13 @@ vgl_box_2d<Type> intersect(vgl_box_2d<Type> const& a, vgl_box_2d<Type> const& b)
 template <class Type>
 vgl_box_2d<Type> vgl_intersection(vgl_box_2d<Type> const& a, vgl_box_2d<Type> const& b);
 
+//: Calculate the bounding box of a sequence of points or boxes.
+template <class T, class ITER>
+void vgl_box_2d_bounds(ITER begin, ITER end, vgl_box_2d<T>& bounding_box)
+{
+  for (;begin != end; ++begin)
+    bounding_box.add(*begin);
+}
 
 #define VGL_BOX_2D_INSTANTIATE(T) extern "please include vgl/vgl_box_2d.txx first"
 

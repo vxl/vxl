@@ -268,6 +268,15 @@ template <class T>
 vgl_box_3d<T> vgl_intersection(vgl_box_3d<T> const& a,
                                vgl_box_3d<T> const& b);
 
+//: Calculate the bounding box of a sequence of points or boxes.
+template <class T, class ITER>
+void vgl_box_3d_bounds(ITER begin, ITER end, vgl_box_3d<T>& bounding_box)
+{
+  for (;begin != end; ++begin)
+    bounding_box.add(*begin);
+}
+
+
 //: Write box to stream
 // \relates vgl_box_3d
 template <class Type>
