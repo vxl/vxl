@@ -69,6 +69,8 @@ bool vimt3d_save(const vcl_string& path,
   if (!ir)
     return false;
 
+  ir->put_view(ib);
+
   vimt3d_save_transform(ir, image.world2im(), use_millimetres);
   return true;
 }
