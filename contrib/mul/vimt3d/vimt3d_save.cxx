@@ -5,6 +5,11 @@
 
 #include "vimt3d_save.h"
 #include <mbl/mbl_log.h>
+#include <vil3d/vil3d_image_resource.h>
+#include <vil3d/vil3d_new.h>
+#include <vil3d/vil3d_save.h>
+#include <vimt3d/vimt3d_transform_3d.h>
+#include <vimt3d/vimt3d_image_3d_of.h>
 #include <vimt3d/vimt3d_vil3d_v3i.h>
 
 
@@ -47,4 +52,23 @@ void vimt3d_save_transform(vil3d_image_resource_sptr &ir,
   }
 
 
+}
+
+
+bool vimt3d_save(const vcl_string& path,
+                 vimt3d_image_3d& image,
+                 bool use_millimetres /*=false*/)
+{
+  const vimt3d_image_3d & iv = image;
+  const vil3d_image_view_base & ib = iv.image_base();
+
+  vil3d_image_resource_sptr ir = vil3d_new_image_resource(
+    path.c_str(), ib.ni(), ib.nj(), ib.nk(), ib.nplanes(), ib.pixel_format(),
+    vil3d_save_guess_file_format(path.c_str()));
+
+  if (!ir)
+    return false;
+
+  vimt3d_save_transform(ir, image.world2im(), use_millimetres);
+  return true;
 }
