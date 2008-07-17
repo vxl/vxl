@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <bvxmCreateVoxelWorldProcess>
-  <input_directory type="string" value="D:/projects/lockheed-voxel-world/baghdad-corrected/multiscale/dump"></input_directory>
+  <input_directory type="string" value="./world"></input_directory>
   <corner_x type="float" value="100"></corner_x>
   <corner_y type="float" value="100"></corner_y>
   <corner_z type="float" value="20"></corner_z>
@@ -12,5 +12,5 @@
   <apm_type type="unsigned" value="1"></apm_type>
   <min_ocp_prob type="float" value="0.001"></min_ocp_prob>
   <max_ocp_prob type="float" value="0.99"></max_ocp_prob>
-  <max_scale type="unsigned" value="3"></max_scale>
+  <max_scale type="unsigned" value="2"></max_scale>
 </bvxmCreateVoxelWorldProcess>
