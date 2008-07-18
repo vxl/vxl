@@ -35,6 +35,7 @@ bool bprb_batch_process_manager::init_process(vcl_string const& process_name)
     current_process_ = p;
     return true;
   }
+  vcl_cout << "ERROR!!!! Process: " << p->name() << " is not FOUND\n";
   return false;
 }
 
