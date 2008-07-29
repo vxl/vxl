@@ -40,6 +40,7 @@
 #include <bvxm/pro/bvxm_pmap_hist_process.h>
 #include <bvxm/pro/bvxm_pmap_ratio_process.h>
 #include <bvxm/pro/bvxm_roc_process.h>
+#include <bvxm/pro/bvxm_update_edges_lidar_process.h>
 
 // multiscale
 #include <bvxm/pro/multiscale_pro/bvxm_detect_scale_process.h>
@@ -56,7 +57,6 @@
 #include <vil/vil_image_view_base.h>
 #include <bvxm/bvxm_voxel_world.h>
 #include <vpgl/vpgl_camera.h>
-
 
 PyObject *
 register_processes(PyObject *self, PyObject *args)
@@ -99,6 +99,7 @@ register_processes(PyObject *self, PyObject *args)
   REG_PROCESS(bvxm_pmap_hist_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_pmap_ratio_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_roc_process, bprb_batch_process_manager);
+  REG_PROCESS(bvxm_update_edges_lidar_process, bprb_batch_process_manager);
  
   //: multiscale
   REG_PROCESS(bvxm_detect_scale_process, bprb_batch_process_manager);
@@ -106,7 +107,6 @@ register_processes(PyObject *self, PyObject *args)
   //REG_PROCESS(bvxm_update_multiscale_process, bprb_batch_process_manager);
   //REG_PROCESS(bvxm_detect_multiscale_process, bprb_batch_process_manager);
   REG_PROCESS(bvxm_compare_3d_voxels_process, bprb_batch_process_manager);
-
 
   Py_INCREF(Py_None);
   return Py_None;
