@@ -18,9 +18,14 @@
 #include <vil3d/vil3d_copy.h>
 #include <vil3d/vil3d_property.h>
 #include <vimt3d/vimt3d_image_3d_of.h>
-// v3i magic number
-const unsigned V3I_MAGIC = 987123873U;
 
+//: The magic number to identify a vsl stream as a v3i image.
+// You can create/read a v3i image using vsl by opening the stream,
+// reading/writing magic_number(), then reading/writing a pointer to a vimt_image.
+const unsigned vimt3d_vil3d_v3i_format::magic_number()
+{
+  return 987123873U;
+}
 
 vil3d_image_resource_sptr vimt3d_vil3d_v3i_format::make_input_image(const char *filename) const
 {
@@ -34,7 +39,7 @@ vil3d_image_resource_sptr vimt3d_vil3d_v3i_format::make_input_image(const char *
     if (!is) return 0;
     unsigned magic;
     vsl_b_read(is, magic);
-    if (magic != V3I_MAGIC) return 0;
+    if (magic != vimt3d_vil3d_v3i_format::magic_number()) return 0;
   }
   return new vimt3d_vil3d_v3i_image(file);
 }
@@ -82,7 +87,7 @@ vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image(vcl_auto_ptr<vcl_fstream> file):
 
   unsigned magic;
   vsl_b_read(is, magic);
-  assert(magic == V3I_MAGIC);
+  assert(magic == vimt3d_vil3d_v3i_format::magic_number());
 
   short version;
   vsl_b_read(is, version);
@@ -140,7 +145,7 @@ vimt3d_vil3d_v3i_image::~vimt3d_vil3d_v3i_image()
     file_->seekp(0);
     vsl_b_ostream os(file_);
 
-    vsl_b_write(os, V3I_MAGIC);
+    vsl_b_write(os, vimt3d_vil3d_v3i_format::magic_number());
 
     const short version = 1;
     vsl_b_write(os, version);

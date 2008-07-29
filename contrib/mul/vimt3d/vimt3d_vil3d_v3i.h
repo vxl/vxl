@@ -23,7 +23,6 @@
 #include <vcl_iosfwd.h>
 #include <vcl_memory.h>
 
-
 //: Reader/Writer for v3i format images.
 class vimt3d_vil3d_v3i_format: public vil3d_file_format
 {
@@ -45,6 +44,11 @@ class vimt3d_vil3d_v3i_format: public vil3d_file_format
 
   //: default filename tag for this image.
   virtual const char * tag() const {return "v3i";}
+
+  //: The magic number to identify a vsl stream as a v3i image.
+  // You can create/read a v3i image using vsl by opening the stream,
+  // reading/writing magic_number(), then reading/writing a pointer to a vimt_image.
+  static const unsigned magic_number();
 };
 
 
