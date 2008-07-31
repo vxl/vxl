@@ -41,6 +41,7 @@ SET(bvxm_pro_sources
     bvxm_pmap_ratio_process.h               bvxm_pmap_ratio_process.cxx
     bvxm_roc_process.h                      bvxm_roc_process.cxx
     bvxm_update_edges_lidar_process.h       bvxm_update_edges_lidar_process.cxx  
+    bvxm_edges_lidar_init_process.h         bvxm_edges_lidar_init_process.cxx
 
 
     # multiscale
