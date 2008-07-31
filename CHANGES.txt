@@ -5,6 +5,13 @@ aren't documented here, unless the bug-fix has a major observable
 effect.  If you change something in VXL, please document it here.
 
 ---------------------------------------------------------------------------
+***************************
+VXL 1.11.0      - July 2008
+***************************
+
+      - Note: there was a 1.10.0 release, but it didn't get noted in
+        CHANGES.txt. These changes include all since 1.9.0.
+
       - Added initial CMake configuration to help bring C++ 0x standard code
          (including TR1) into vcl.  This will remain experimental until fully
          tested and should not be used outside of vcl for now.
