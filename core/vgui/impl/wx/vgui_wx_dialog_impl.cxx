@@ -78,9 +78,9 @@ namespace
       wxString text = handles_[e.GetId()]->GetValue();
 
       wxColour color;
-      color.Set(int(red_value(text.mb_str())   * 255.0),
-                int(green_value(text.mb_str()) * 255.0),
-                int(blue_value(text.mb_str())  * 255.0));
+      color.Set(int(red_value(vcl_string(text.mb_str()))   * 255.0),
+                int(green_value(vcl_string(text.mb_str())) * 255.0),
+                int(blue_value(vcl_string(text.mb_str()))  * 255.0));
       wxColourData cdata;
       cdata.SetColour(color);
 
@@ -137,7 +137,7 @@ namespace
       if (field_)
       {
         dynamic_cast<wxTextCtrl*>(
-          m_validatorWindow)->SetValue(field_->current_value());
+          m_validatorWindow)->SetValue(wxString(field_->current_value().c_str(),wxConvUTF8));
       }
       return true;
     }
@@ -149,7 +149,7 @@ namespace
       if (field_)
       {
         field_->update_value(
-          dynamic_cast<wxTextCtrl*>(m_validatorWindow)->GetValue().mb_str());
+          vcl_string(dynamic_cast<wxTextCtrl*>(m_validatorWindow)->GetValue().mb_str()));
       }
       return true;
     }
@@ -281,7 +281,7 @@ void vgui_wx_dialog_impl::build_wx_dialog(void)
 
   dialog_ = new wxDialog(0,
                          wxID_ANY,
-                         wxString(title_),
+                         wxString(title_.c_str(),wxConvUTF8),
                          wxDefaultPosition,
                          wxDefaultSize,
                          wxDEFAULT_DIALOG_STYLE);
@@ -334,7 +334,7 @@ void vgui_wx_dialog_impl::build_wx_dialog(void)
       //holder->Add(separator_element(min_dialog_width), flags);
       holder->Add(new wxStaticText(dialog_,
                                    wxID_STATIC,
-                                   wxString(e->field->label)),
+                                   wxString(e->field->label.c_str(),wxConvUTF8)),
                   flags);
       //holder->Add(separator_element(min_dialog_width), flags);
       break;
@@ -449,7 +449,7 @@ bool vgui_wx_dialog_impl::has_changed(void) const
 
 int vgui_wx_dialog_impl::probe_for_max_label_width(void)
 {
-  wxStaticText temp(dialog_, wxID_ANY, wxString(""));
+  wxStaticText temp(dialog_, wxID_ANY, wxString());
   int max_width = temp.GetSize().GetX();
   for (vcl_vector<element>::const_iterator e = elements.begin();
        e != elements.end(); ++e)
@@ -462,7 +462,7 @@ int vgui_wx_dialog_impl::probe_for_max_label_width(void)
      case double_elem:
      case string_elem:
      case choice_elem:
-      temp.SetLabel(e->field->label);
+      temp.SetLabel(wxString(e->field->label.c_str(),wxConvUTF8));
       max_width = vcl_max(max_width, temp.GetSize().GetX());
       break;
     }
@@ -489,7 +489,7 @@ wxSizer* vgui_wx_dialog_impl::bool_element(vgui_dialog_field* field)
   bool* var = &dynamic_cast<vgui_bool_field*>(field)->var;
   cell->Add(new wxCheckBox(dialog_,
                            wxID_ANY,
-                           field->label,
+                           wxString(field->label.c_str(),wxConvUTF8),
                            wxDefaultPosition,
                            wxDefaultSize,
                            wxCHK_2STATE,
@@ -507,7 +507,7 @@ wxSizer* vgui_wx_dialog_impl::choice_element(vgui_dialog_field* field,
   wxSizer* cell = new wxBoxSizer(wxHORIZONTAL);
   wxStaticText* st = new wxStaticText(dialog_,
                                       wxID_STATIC,
-                                      field->label,
+                                      wxString(field->label.c_str(),wxConvUTF8),
                                       wxDefaultPosition,
                                       wxSize(max_label_width_, -1),
                                       wxALIGN_RIGHT);
@@ -517,7 +517,7 @@ wxSizer* vgui_wx_dialog_impl::choice_element(vgui_dialog_field* field,
   for (vcl_vector<vcl_string>::const_iterator label = choices->names.begin();
        label != choices->names.end(); ++label)
   {
-    choice_labels.Add(*label);
+    choice_labels.Add(wxString(label->c_str(),wxConvUTF8));
   }
 
   int* var = &dynamic_cast<vgui_int_field*>(field)->var;
@@ -542,7 +542,7 @@ wxSizer* vgui_wx_dialog_impl::text_element(vgui_dialog_field* field)
 
   wxStaticText* st = new wxStaticText(dialog_,
                                       wxID_STATIC,
-                                      field->label,
+                                      wxString(field->label.c_str(),wxConvUTF8),
                                       wxDefaultPosition,
                                       wxSize(max_label_width_, -1),
                                       wxALIGN_RIGHT);
@@ -551,7 +551,7 @@ wxSizer* vgui_wx_dialog_impl::text_element(vgui_dialog_field* field)
   wxTextCtrl* t_control;
   t_control = new wxTextCtrl(dialog_,
                              wxID_ANY,
-                             field->current_value(),
+                             wxString(field->current_value().c_str(),wxConvUTF8),
                              wxDefaultPosition,
                              wxDefaultSize,
                              0,
@@ -571,7 +571,7 @@ vgui_wx_dialog_impl::text_with_button_element(vgui_dialog_field* field,
 
   text_control = new wxTextCtrl(dialog_,
                                 wxID_ANY,
-                                field->current_value(),
+                                wxString(field->current_value().c_str(),wxConvUTF8),
                                 wxDefaultPosition,
                                 wxDefaultSize,
                                 0,
@@ -580,9 +580,9 @@ vgui_wx_dialog_impl::text_with_button_element(vgui_dialog_field* field,
   // ***** this constructor not available in wxWidgets-2.5.3
   //wxSizer* box = new wxStaticBoxSizer(wxVERTICAL, dialog_, field->label.c_str());
   wxSizer* box = new wxStaticBoxSizer(
-    new wxStaticBox(dialog_, wxID_ANY, field->label), wxVERTICAL);
+    new wxStaticBox(dialog_, wxID_ANY, wxString(field->label.c_str(),wxConvUTF8)), wxVERTICAL);
   box->Add(text_control, 0, wxGROW | wxALL, 2);
-  box->Add(new wxButton(dialog_, event_id, button),
+  box->Add(new wxButton(dialog_, event_id, wxString(button.c_str(),wxConvUTF8)),
            0, wxALIGN_RIGHT | wxALL, 2);
 
   return box;
@@ -594,12 +594,12 @@ wxSizer* vgui_wx_dialog_impl::exit_buttons_element(void)
   if (ok_button_text_ != "")
   {
     button_row->Add(
-      new wxButton(dialog_, wxID_OK, ok_button_text_));
+      new wxButton(dialog_, wxID_OK, wxString(ok_button_text_.c_str(),wxConvUTF8)));
   }
   if (cancel_button_text_ != "")
   {
     button_row->Add(
-      new wxButton(dialog_, wxID_CANCEL, cancel_button_text_));
+      new wxButton(dialog_, wxID_CANCEL, wxString(cancel_button_text_.c_str(),wxConvUTF8)));
   }
   return button_row;
 }

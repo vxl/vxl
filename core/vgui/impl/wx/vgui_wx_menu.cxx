@@ -81,12 +81,12 @@ wxMenuBar* vgui_wx_menu::create_wx_menubar(const vgui_menu& menu)
                   menu[i].short_cut.key,
                   menu[i].short_cut.mod);
 
-      menubar->Append(create_wx_submenu(submenu), menu[i].name);
+      menubar->Append(create_wx_submenu(submenu), wxString(menu[i].name.c_str(),wxConvUTF8));
     }
     else if (menu[i].is_submenu())
     {
       menubar->Append(
-        create_wx_submenu(*menu[i].menu), menu[i].name);
+        create_wx_submenu(*menu[i].menu), wxString(menu[i].name.c_str(),wxConvUTF8));
     }
   }
 
@@ -119,7 +119,7 @@ wxMenu* vgui_wx_menu::create_wx_submenu(const vgui_menu& menu)
       vcl_string menu_item = menu[i].name
                            + create_accelerator_string(menu[i]);
 
-      popup->Append(menu_id, menu_item);
+      popup->Append(menu_id, wxString(menu_item.c_str(),wxConvUTF8));
 
       // save the handle
       handlers_[menu_id] = static_cast<vgui_command_sptr>(menu[i].cmnd);
@@ -132,7 +132,7 @@ wxMenu* vgui_wx_menu::create_wx_submenu(const vgui_menu& menu)
     {
       popup->Append(
         menu_id,
-        menu[i].name,
+        wxString(menu[i].name.c_str(),wxConvUTF8),
         strip_extra_separators(create_wx_submenu(*menu[i].menu)));
     }
   }

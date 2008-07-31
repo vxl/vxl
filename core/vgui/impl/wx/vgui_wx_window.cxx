@@ -24,7 +24,7 @@
 //-------------------------------------------------------------------------
 //: Constructor - create a new window.
 vgui_wx_window::vgui_wx_window(int width, int height, const char* title)
-  : frame_(new wxFrame(0, wxID_ANY, title))//, wxDefaultPosition, wxSize(width, height)))
+  : frame_(new wxFrame(0, wxID_ANY, wxString(title,wxConvUTF8)))//, wxDefaultPosition, wxSize(width, height)))
   , menu_(0)
 {
   init_window();
@@ -36,7 +36,7 @@ vgui_wx_window::vgui_wx_window(int width,
                                int height,
                                const vgui_menu& menubar,
                                const char* title)
-  : frame_(new wxFrame(0, wxID_ANY, title, wxDefaultPosition, wxSize(width, height)))
+  : frame_(new wxFrame(0, wxID_ANY, wxString(title,wxConvUTF8), wxDefaultPosition, wxSize(width, height)))
   , menu_(0)
 {
   init_window();
@@ -168,7 +168,7 @@ void vgui_wx_window::reposition(int x, int y)
 //: Use the given text as the window title (if the window has a title).
 void vgui_wx_window::set_title(vcl_string const& title)
 {
-  frame_->SetTitle( wxString(title) );
+  frame_->SetTitle( wxString(title.c_str(), wxConvUTF8) );
 }
 
 //: Set the position of the horizontal scrollbar, returns old position.
