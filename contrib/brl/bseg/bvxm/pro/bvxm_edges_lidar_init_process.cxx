@@ -52,15 +52,13 @@ bool bvxm_edges_lidar_init_process::execute()
 
   // get the inputs:
   // image
-  brdb_value_t<vcl_string>* input0 = static_cast<brdb_value_t< vcl_string>* >(input_data_[0].ptr());
-  vcl_string image_first_return_str = input0->value();
-  vil_image_resource_sptr image_first_return_res = vil_load_image_resource(image_first_return_str.c_str());
-  vil_image_view<vxl_byte> image_first_return(image_first_return_res->get_view());
+  brdb_value_t<vil_image_view_base_sptr>* input0 = static_cast<brdb_value_t<vil_image_view_base_sptr>* >(input_data_[0].ptr());
+  vil_image_view_base_sptr image_first_return_base = input0->value();
+  vil_image_view<vxl_byte> image_first_return(image_first_return_base);
 
-  brdb_value_t<vcl_string>* input1 = static_cast<brdb_value_t< vcl_string>* >(input_data_[1].ptr());
-  vcl_string image_second_return_str = input1->value();
-  vil_image_resource_sptr image_second_return_res = vil_load_image_resource(image_second_return_str.c_str());
-  vil_image_view<vxl_byte> image_second_return(image_second_return_res->get_view());
+  brdb_value_t<vil_image_view_base_sptr>* input1 = static_cast<brdb_value_t<vil_image_view_base_sptr>* >(input_data_[1].ptr());
+  vil_image_view_base_sptr image_second_return_base = input1->value();
+  vil_image_view<vxl_byte> image_second_return(image_second_return_base);
 
   double threshold_edge_difference;
   if (!parameters()->get_value("threshold_edge_difference", threshold_edge_difference)) {
