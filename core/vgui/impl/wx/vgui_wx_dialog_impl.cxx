@@ -38,6 +38,7 @@
 #endif
 
 #include <vcl_iostream.h>
+#include <vcl_sstream.h>
 #include <vcl_algorithm.h>
 #include <vcl_map.h>
 #include <vcl_utility.h>
@@ -81,6 +82,7 @@ namespace
       color.Set(int(red_value(vcl_string(text.mb_str()))   * 255.0),
                 int(green_value(vcl_string(text.mb_str())) * 255.0),
                 int(blue_value(vcl_string(text.mb_str()))  * 255.0));
+      vcl_cout << "current color: "<<int(color.Red())<<" "<<int(color.Green())<<" "<<int(color.Blue())<<vcl_endl;
       wxColourData cdata;
       cdata.SetColour(color);
 
@@ -89,14 +91,17 @@ namespace
       if (color_dialog.ShowModal() == wxID_OK)
       {
         color = color_dialog.GetColourData().GetColour();
-
-        text.clear();
-        text << color.Red()   / 255.0 << ' '
+        
+        vcl_cout << "new color: "<<int(color.Red())<<" "<<int(color.Green())<<" "<<int(color.Blue())<<vcl_endl;
+        vcl_stringstream sstr;
+        //text.Clear();
+        sstr << color.Red() / 255.0 << ' '
              << color.Green() / 255.0 << ' '
-             << color.Blue()  / 255.0;
+             << color.Blue() / 255.0;
+        vcl_cout << "new color text: "<< sstr.str() << vcl_endl;
 
         // update wxTextCtrl value
-        handles_[e.GetId()]->SetValue(text);
+        handles_[e.GetId()]->SetValue(wxString(sstr.str().c_str(),wxConvUTF8));
       }
     }
 
