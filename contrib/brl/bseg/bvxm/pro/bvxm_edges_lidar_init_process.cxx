@@ -41,7 +41,7 @@ bvxm_edges_lidar_init_process::bvxm_edges_lidar_init_process()
   output_types_[2]= "vil_image_view_base_sptr";  // lidar edge probability
 
   // adding parameters
-  parameters()->add("threshold_edge_difference", "threshold_edge_difference", 10.0);
+  parameters()->add("threshold_edge_difference", "threshold_edge_difference", 10.0f);
 }
 
 bool bvxm_edges_lidar_init_process::execute()
@@ -76,7 +76,7 @@ bool bvxm_edges_lidar_init_process::execute()
   vil_image_view<float> image_second_return = *(vil_convert_cast(float(), image_second_return_base));
 
   // todo : check if this is given in meters
-  double threshold_edge_difference;
+  float threshold_edge_difference;
   if (!parameters()->get_value("threshold_edge_difference", threshold_edge_difference)) {
       vcl_cout << "problems in retrieving parameters\n";
       return false;
@@ -98,7 +98,8 @@ bool bvxm_edges_lidar_init_process::execute()
       if(curr_difference>threshold_edge_difference){
         edges_lidar(i,j) = image_first_return(i,j);
         edges_mask(i,j) = 255;
-        edges_prob(i,j) = curr_difference;
+        // todo : fix this probability estimation here
+        edges_prob(i,j) = 1.0f - 0.5f*(1.0f/(1.0f+curr_difference-threshold_edge_difference));
       }
     }
   }
