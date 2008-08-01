@@ -48,18 +48,11 @@ bool bvxm_update_edges_lidar_process::execute()
   bvxm_voxel_world_sptr world = (static_cast<brdb_value_t<bvxm_voxel_world_sptr>* >(input_data_[4].ptr()))->value();
   unsigned scale_idx = (static_cast<brdb_value_t<unsigned>* >(input_data_[5].ptr()))->value();
 
-  //create metadata:
-  bvxm_image_metadata observation(img_height,camera);
-
-  ////update
-  //vil_image_view<float> prob_map(img->ni(),img->nj(),1);
-  //vil_image_view<bool> mask(img->ni(),img->nj(),1);
-
   bool result = true; 
 
   for(unsigned curr_scale=scale_idx;curr_scale<world->get_params()->max_scale();curr_scale++)
   {
-    //result = result && world->update_lidar(observation, prob_map, mask,curr_scale);
+    result = result && world->update_edges_lidar(img_height,img_mask,img_prob,camera,curr_scale);
   }
 
   if(!result){

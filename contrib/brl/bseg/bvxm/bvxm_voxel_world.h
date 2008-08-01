@@ -56,6 +56,10 @@
 //   Ozge C. Ozcanli - 04/18/2008 - added the method:
 //           bool mog_most_probable_image(bvxm_image_metadata const& camera, bvxm_voxel_slab_base_sptr& mog_image, unsigned bin_index);
 //
+//   Ibrahim Eden - 08/01/2008 - added the method:
+//   bool update_edges_lidar(vil_image_view_base_sptr& img_height, vil_image_view_base_sptr& img_mask, vil_image_view_base_sptr& img_prob,
+//                           vpgl_camera_double_sptr& camera, unsigned scale_idx=0);
+//
 // \endverbatim
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -118,6 +122,10 @@ class bvxm_voxel_world: public vbl_ref_count
 
   //: update voxel grid wtih data from LIDAR/camera pair and return pixel probability densities.
   bool update_lidar(bvxm_image_metadata const& observation, vil_image_view<float> &pixel_prob_density, vil_image_view<bool> &mask, unsigned scale_idx=0);
+
+  //: update voxel grid edge probabilities with data from LIDAR/camera pair
+  bool update_edges_lidar(vil_image_view_base_sptr& img_height, vil_image_view_base_sptr& img_mask, vil_image_view_base_sptr& img_prob,
+                          vpgl_camera_double_sptr& camera, unsigned scale_idx=0);
 
   //: generate the expected image from the specified viewpoint. the expected image and mask should be allocated by the caller.
   template<bvxm_voxel_type APM_T>
