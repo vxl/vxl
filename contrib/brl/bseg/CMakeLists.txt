@@ -14,8 +14,8 @@ SUBDIRS(vpro)
 # tracking
 SUBDIRS(strk)
 
-# markov random fields
-SUBDIRS(bmrf)
+# This library is deprecated
+#SUBDIRS(bmrf)
 
 # misc
 #SUBDIRS(bcons)
