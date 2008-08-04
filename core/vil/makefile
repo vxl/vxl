@@ -123,7 +123,6 @@ MANPAGE_SOURCES += vil_transform.h
 MANPAGE_SOURCES += vil_convert.h
 SOURCES += vil_decimate.cxx
 MANPAGE_SOURCES += vil_rotate.txx
-MANPAGE_SOURCES += vil_nearest_interp.txx
 MANPAGE_SOURCES += vil_warp.h
 MANPAGE_SOURCES += vil_flatten.h
 
