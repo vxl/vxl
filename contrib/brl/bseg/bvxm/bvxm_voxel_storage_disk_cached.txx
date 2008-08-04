@@ -25,6 +25,9 @@ bvxm_voxel_storage_disk_cached<T>::bvxm_voxel_storage_disk_cached(vcl_string sto
   //set up cache
   vxl_int_64 slice_size = sizeof(T)*grid_size.x()*grid_size.y();
   n_cache_slices_ = (unsigned)(max_cache_size / slice_size);
+  if (n_cache_slices_ > this->grid_size_.z()) {
+    n_cache_slices_ = this->grid_size_.z();
+  }
   vxl_int_64 cache_size = slice_size * n_cache_slices_;
 
   vcl_cout << "allocating cache size of " << cache_size << " bytes ( " << n_cache_slices_ << " slices )." << vcl_endl;
@@ -74,6 +77,7 @@ template<class T>
 bvxm_voxel_storage_disk_cached<T>::~bvxm_voxel_storage_disk_cached()
 {
   // purge the cache
+  vcl_cout << " ------------ destructor: purging cache --------------" << vcl_endl;
   purge_cache();
 
   // this will delete the stream object
