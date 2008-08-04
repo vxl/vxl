@@ -40,18 +40,22 @@ SET(bvxm_pro_sources
     bvxm_pmap_hist_process.h                bvxm_pmap_hist_process.cxx
     bvxm_pmap_ratio_process.h               bvxm_pmap_ratio_process.cxx
     bvxm_roc_process.h                      bvxm_roc_process.cxx
-    bvxm_update_edges_lidar_process.h       bvxm_update_edges_lidar_process.cxx  
+    bvxm_update_edges_lidar_process.h       bvxm_update_edges_lidar_process.cxx
     bvxm_edges_lidar_init_process.h         bvxm_edges_lidar_init_process.cxx
 
-
     # multiscale
-    multiscale_pro/bvxm_detect_scale_process.h        		    multiscale_pro/bvxm_detect_scale_process.cxx
-    #multiscale_pro/bvxm_update_multiscale_process.h   		multiscale_pro/bvxm_update_multiscale_process.cxx
-    #multiscale_pro/bvxm_create_multiscale_voxel_world_process.h     multiscale_pro/bvxm_create_multiscale_voxel_world_process.cxx
-    #multiscale_pro/bvxm_save_multiscale_occupancy_raw_process.h     multiscale_pro/bvxm_save_multiscale_occupancy_raw_process.cxx
-    #multiscale_pro/bvxm_detect_multiscale_process.h                 multiscale_pro/bvxm_detect_multiscale_process.cxx
-    multiscale_pro/bvxm_compare_3d_voxels_process.h                 multiscale_pro/bvxm_compare_3d_voxels_process.cxx
-
+    multiscale_pro/bvxm_detect_scale_process.h
+    multiscale_pro/bvxm_detect_scale_process.cxx
+    multiscale_pro/bvxm_update_multiscale_process.h
+   #multiscale_pro/bvxm_update_multiscale_process.cxx
+    multiscale_pro/bvxm_create_multiscale_voxel_world_process.h
+   #multiscale_pro/bvxm_create_multiscale_voxel_world_process.cxx
+    multiscale_pro/bvxm_save_multiscale_occupancy_raw_process.h
+   #multiscale_pro/bvxm_save_multiscale_occupancy_raw_process.cxx
+    multiscale_pro/bvxm_detect_multiscale_process.h
+   #multiscale_pro/bvxm_detect_multiscale_process.cxx
+    multiscale_pro/bvxm_compare_3d_voxels_process.h
+    multiscale_pro/bvxm_compare_3d_voxels_process.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates bvxm_pro_sources)
@@ -64,7 +68,3 @@ IF( BUILD_TESTING )
   SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
 ENDIF(EXPAT_FOUND)
-
-
-
-
