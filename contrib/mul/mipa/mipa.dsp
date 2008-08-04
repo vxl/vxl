@@ -93,6 +93,24 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 # PROP Default_Filter "cxx"
 # Begin Source File
+SOURCE=.\mipa_block_normaliser.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mipa_identity_normaliser.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mipa_l2norm_vector_normaliser.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mipa_ms_block_normaliser.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mipa_vector_normaliser.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\mipa_add_all_loaders.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\Templates/mipa_orientation_histogram+byte.float-.cxx
 # End Source File
 # Begin Source File
@@ -100,6 +118,12 @@ SOURCE=.\Templates/mipa_orientation_histogram+float.float-.cxx
 # End Source File
 # Begin Source File
 SOURCE=.\Templates/mipa_sample_histo_boxes+float.double-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/mbl_cloneables_factory+mipa_vector_normaliser-.cxx
+# End Source File
+# Begin Source File
+SOURCE=.\Templates/vsl_binary_loader+mipa_vector_normaliser-.cxx
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -115,6 +139,24 @@ SOURCE=.\mipa_sample_histo_boxes.h
 # End Source File
 # Begin Source File
 SOURCE=.\mipa_sample_histo_boxes.txx
+# End Source File
+# Begin Source File
+SOURCE=.\mipa_add_all_loaders.h
+# End Source File
+# Begin Source File
+SOURCE=.\mipa_block_normaliser.h
+# End Source File
+# Begin Source File
+SOURCE=.\mipa_identity_normaliser.h
+# End Source File
+# Begin Source File
+SOURCE=.\mipa_l2norm_vector_normaliser.h
+# End Source File
+# Begin Source File
+SOURCE=.\mipa_ms_block_normaliser.h
+# End Source File
+# Begin Source File
+SOURCE=.\mipa_vector_normaliser.h
 # End Source File
 # End Group
 # End Target
