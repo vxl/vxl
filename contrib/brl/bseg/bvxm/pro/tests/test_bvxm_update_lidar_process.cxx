@@ -273,15 +273,17 @@ MAIN( test_bvxm_update_lidar_process )
     // set the inputs
     brdb_value_sptr v0 = new brdb_value_t<bvxm_voxel_world_sptr>(world_);
     brdb_value_sptr v1 = new brdb_value_t<vcl_string> (updated_world);
+    brdb_value_sptr v2 = new brdb_value_t<unsigned>(0);
 
 
     bool good = bprb_batch_process_manager::instance()->init_process("bvxmSaveOccupancyRaw");
     good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
     good = good && bprb_batch_process_manager::instance()->set_input(1, v1);
+    good = good && bprb_batch_process_manager::instance()->set_input(2, v2);
     good = good && bprb_batch_process_manager::instance()->run_process();
 
 
-    TEST("run save occupancy empty wolrd process", good ,true);
+    TEST("run save occupancy empty world process", good ,true);
   }
 
 #if 0
