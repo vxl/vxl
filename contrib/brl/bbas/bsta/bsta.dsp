@@ -147,6 +147,9 @@ SOURCE=.\Templates/vbl_smart_ptr+bsta_histogram_base-.cxx
 SOURCE=.\Templates/vbl_smart_ptr+bsta_joint_histogram_base-.cxx
 # End Source File
 # Begin Source File
+SOURCE=.\Templates/bsta_gaussian_indep+float.4-.cxx
+# End Source File
+# Begin Source File
 SOURCE=.\bsta_gauss.cxx
 # End Source File
 # Begin Source File

@@ -152,6 +152,9 @@ SOURCE=.\vimt3d_add_all_loaders.cxx
 # Begin Source File
 SOURCE=.\vimt3d_vil3d_v3i.cxx
 # End Source File
+# Begin Source File
+SOURCE=.\vimt3d_save.cxx
+# End Source File
 # End Group
 # Begin Group "Header Files"
 # PROP Default_Filter "h;txx"
@@ -217,6 +220,9 @@ SOURCE=.\vimt3d_gauss_reduce.h
 # End Source File
 # Begin Source File
 SOURCE=.\vimt3d_resample_trilinear.h
+# End Source File
+# Begin Source File
+SOURCE=.\vimt3d_save.h
 # End Source File
 # End Group
 # End Target
