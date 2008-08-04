@@ -651,24 +651,6 @@ SOURCE=.\Templates/vil_resample_bilin+int_32.int_32-.cxx
 SOURCE=.\Templates/vil_resample_bicub+float.float-.cxx
 # End Source File
 # Begin Source File
-SOURCE=.\Templates/vil_nearest_interp+bool-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_nearest_interp+byte-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_nearest_interp+double-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_nearest_interp+float-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_nearest_interp+int_16-.cxx
-# End Source File
-# Begin Source File
-SOURCE=.\Templates/vil_nearest_interp+uint_16-.cxx
-# End Source File
-# Begin Source File
 SOURCE=.\Templates/vil_resample_nearest+bool.bool-.cxx
 # End Source File
 # Begin Source File

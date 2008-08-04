@@ -106,9 +106,6 @@ SOURCE=.\test_build_info.cxx
 # Begin Group "Header Files"
 # PROP Default_Filter "h;in"
 # Begin Source File
-SOURCE=.\test_build_info.h
-# End Source File
-# Begin Source File
 SOURCE=.\test_build_info.h.in
 # End Source File
 # End Group
