@@ -14,6 +14,7 @@ TESTS += test_from_image_2d.cxx
 TESTS += test_resample.cxx
 TESTS += test_gauss_reduce.cxx
 TESTS += test_image_bounds_and_centre_3d.cxx
+TESTS += test_save.cxx
 
 MINI_PROG_SOURCES += test_include.cxx
 
