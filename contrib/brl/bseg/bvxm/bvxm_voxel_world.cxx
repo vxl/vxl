@@ -1044,7 +1044,7 @@ vgl_point_3d<float> bvxm_voxel_world::voxel_index_to_xyz(unsigned vox_i, unsigne
   vgl_vector_3d<unsigned> num_vox = params_->num_voxels(scale_idx);
 
   // corner in parameters refers to the bottom. we want the top since slice 0 is the top-most slice.
-  vgl_point_3d<float> grid_origin = params_->corner() + vgl_vector_3d<float>(0.0f, 0.0f, vox_len*(num_vox.z() - 0.5f));
+  vgl_point_3d<float> grid_origin = params_->corner() + (vgl_vector_3d<float>(0.5f, 0.5f, (num_vox.z() - 0.5f))*vox_len);
   vgl_vector_3d<float> step_i = vox_len*params_->base_x();
   vgl_vector_3d<float> step_j = vox_len*params_->base_y();
   vgl_vector_3d<float> step_k = (-vox_len)*params_->base_z();
