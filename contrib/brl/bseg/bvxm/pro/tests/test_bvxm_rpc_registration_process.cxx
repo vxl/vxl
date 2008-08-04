@@ -56,7 +56,7 @@ MAIN( test_bvxm_rpc_registration_process )
   brdb_value_sptr v0 = new brdb_value_t<bvxm_voxel_world_sptr>(voxel_world);
   brdb_value_sptr v1 = new brdb_value_t<vpgl_camera_double_sptr>(camera);
   brdb_value_sptr v2 = new brdb_value_t<vil_image_view_base_sptr>(img);
-  brdb_value_sptr v3 = new brdb_value_t<bool>(false);
+  brdb_value_sptr v3 = new brdb_value_t<bool>(true);
   brdb_value_sptr v4 = new brdb_value_t<unsigned>(0);
 
   good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
